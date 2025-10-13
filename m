@@ -1,110 +1,136 @@
-Return-Path: <linux-kselftest+bounces-42994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-42995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32DFBBD3843
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 16:30:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8194CBD3849
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 16:30:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 145E24F2AF2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 14:28:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCF91189ED48
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 14:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0E01E32CF;
-	Mon, 13 Oct 2025 14:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35EFB25487B;
+	Mon, 13 Oct 2025 14:30:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="XaYIeMNG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S/PRxUES"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E824C17F4F6
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 14:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93BFD2163B2
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 14:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760365702; cv=none; b=MqzrI5hwkzrlE0igIJfksaDMGWk6REYG3gMseYpAK9u/00GAZ8s2bOdZ0S87uq0F7Iz/U0z/KqQahxvVjUNAGSKVE0jel+ZtWly9tw972vkH8VKqeuA/3vwLaXxf70gINnpRkX0ws+PV4UDwnUi7sLmT7kdVznHqblmhvQwE1W4=
+	t=1760365837; cv=none; b=IjVTI3SdY4SkudMmBxEjEDG1tRzz+ipWxQfHyeustqmXFsxPbGMTKetxh/c39mshw26sAuTvIyRxE6wsLda4Xd+zNSqUeGtpAZIhIW74hByKvRFow19MTcX1g6i2l2jbRvMtzmXBHxJl1PFk6qOQkXUK9myfrcKjUO3xRj9i6YQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760365702; c=relaxed/simple;
-	bh=qSDOgIegj5/7OLJprxaVbbB0TVpZscq3uNLHReohDL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LhUvEf2sPrI9shD2aTCu9U9i++p8GrwurgE1GnoHkAeAhsKyDnHHKREURuKxc6dMNlOjwqHVvpjvrvhemWFGi8ak6isVcrzXtc921aBp6Q14m9L1ejr38fNC4OabAuYyHWjYub/xaCbPWbxfq4Y8JDuWRAwhhJOSGKuNnNcTS/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=XaYIeMNG; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3ee1381b835so2531086f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 07:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1760365699; x=1760970499; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5Wf2L6pRYl1VWb9gXubP9G4VQhPo6XTkf/wwxr/MaM=;
-        b=XaYIeMNGWaUgtVrfEHK9RXbqupkAyK6JPiln4+2GcmePr48TF0fHvRzCWLj3/zv31Z
-         PRLsfJbO2EnTlSd+UD0HoeN2IIZti1anOjPCG/a0hk2K16r0uqj5AFUyRJlVIxeQwoeY
-         hiAzVVSfdd08/3zoTYploLsWVggZUJCUmF7H19BA+HVLe+zDR2R8VHD7COhw73DqPlUs
-         Rypi7om5ai5boUK9AgHFspy5l9461mUrmn4FAShnBsAaKGmBl/T7cYZVoj6nXiHcFM+Z
-         NdSYLr7bFkx1sGczW9vJ1v4je0leAkEL8jwH/qoF4cqq8bebXqFF/ZXmyf5cDBQ3RSpF
-         Apiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760365699; x=1760970499;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=C5Wf2L6pRYl1VWb9gXubP9G4VQhPo6XTkf/wwxr/MaM=;
-        b=o7/NiaOH5HA+YW8GroNvHuNCsbBWZG7B7lJjC7Ct8gLlgIF11qEOEjqwYPeS/YTncY
-         atOoBN6/p68l9bbJcm4c6SpwlSz0F+AQJtRnT16eNU7ZQkL3NiHdZNXxbpr2fDZoi5Qd
-         GXDaXQva51ieUNJp9yaIAtYepJbM13omMN5xyscNQ1Gc/Rzmo8AbShrugECOftudTb3H
-         tFEqMNHXmA9oWz4vcLDeMa48HXAX7E/I/1wpo1kYfwMWieD6PlAt4tPBIv/G92BqBAjE
-         4gAWultHAuidIZRQp4GEMnfQb2qIDcCfNdeKQCbDZmyGq0FoRN+n+/7hEuAVnlYPPZSN
-         0/WQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVqhDRYacjiJ67x7DnIUjcoUSho+ZCNvmtw0HFqM/CMnnjIzKZvzmU4Xf9eAp4QLlMvUK7Zlk1jKeCehW/55cA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPlycNx9EIde/bnJoWQQrMT4f6cyFjcNX8Fn9VhoMu+wImZDlz
-	iaQTYTxdl08KkTGMgSm50BRvNwq7WYLiGjEURbElXaou/PRjXr8vncst9jPyABRxEpY=
-X-Gm-Gg: ASbGncuvGaDJhy7rUXtQdFkwYAnzoRDp5LsjO0uHT74mYpNxtEZPfmFaXKbABsNG0vI
-	RFIJMqMA/GepRx5y4cP7i1TbxE3iRkRp6cwh6s6YqpWb/ZwcoQv8G1LU2bfjjkiPjF67qPtJBzj
-	ANsfzNup9Kj/OZW8g3DcmUnEvPXBp8/qROoY0hOPNkKZgRM7NCw2V/syKTgunHdZdR5n+Q6NaoS
-	na8elCCEbLz0r4fbdbfTcIf+tA3NAmwDI/teyPBZ31z0LbK+I5+VH/tUY630WIDOqkRjqhomqeG
-	sPOAlWDsxz0xTRwyBhbZAnfyK3R7Uu40JhSKSJitt+ZtKYNJXDI7tPLGiGz1Hg01/kvvYD5eZD9
-	I7Jw+4ld9KPp1SyuJENqYKrzPdJw5/2h/6TJ/0jDXt/o3QJUBbM2g7EA=
-X-Google-Smtp-Source: AGHT+IGNKekYnqITqrySsaLWx5aXn7KMrPP6CFyNtZxLh4rMKjgJfx5OlzNfjh75l7Ry68CnQOurFw==
-X-Received: by 2002:a05:6000:2586:b0:425:73ef:b034 with SMTP id ffacd0b85a97d-4266e8f7f4cmr14241752f8f.36.1760365699040;
-        Mon, 13 Oct 2025 07:28:19 -0700 (PDT)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fb479c171sm188616535e9.0.2025.10.13.07.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Oct 2025 07:28:18 -0700 (PDT)
-Date: Mon, 13 Oct 2025 16:28:16 +0200
-From: Petr Mladek <pmladek@suse.com>
-To: Fushuai Wang <wangfushuai@baidu.com>
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-	joe.lawrence@redhat.com, shuah@kernel.org,
-	live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: livepatch: use canonical ftrace path
-Message-ID: <aO0MgOhfrMAoPchy@pathway.suse.cz>
-References: <20251010120727.20631-1-wangfushuai@baidu.com>
+	s=arc-20240116; t=1760365837; c=relaxed/simple;
+	bh=p7OPEdJE5ToR35hajbcxBsZGseYV7ErRLMU40tXYi4w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=MmLwEcWtI4RnofgvKiNZEzVIVA6QXJa/ItDTXWiYAQuMLLSN4nKow1IPMRebMwQyTUiJ0JkuJrMocZlUht97lzuHFgwgVT0ac/72SCv3rvMUAdO+H3WyBmd3c8bS+jfb39+RY3Zd/O/DwM07Rhh8IIDXSedj2Lpw22uJ46sJZAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S/PRxUES; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760365834;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BTlu2d/OCa7smgTdfnf6rps6xmzbDobGt8v/NuBgfVM=;
+	b=S/PRxUESMDeqfnjLeI9+xKE2kjdBkNYo+bZv4yNHsm7mr75O3uhqXWReWTSJEewzDI95ig
+	jqiEqTY7MLucH7abyLMHLDbtUtnoDLBS/sx0fwPbN7jX89N76A0jte4WsOgEoPESCTOT5u
+	GdD06NM9b1k6dvUI3gbp3BCotPknYb0=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-649-UK0ZfmzoNZq1a4f8nqpaHA-1; Mon,
+ 13 Oct 2025 10:30:31 -0400
+X-MC-Unique: UK0ZfmzoNZq1a4f8nqpaHA-1
+X-Mimecast-MFC-AGG-ID: UK0ZfmzoNZq1a4f8nqpaHA_1760365830
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AA96519560AE;
+	Mon, 13 Oct 2025 14:30:29 +0000 (UTC)
+Received: from fweimer-oldenburg.csb.redhat.com (unknown [10.44.32.50])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 414E01954107;
+	Mon, 13 Oct 2025 14:30:12 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Charles Mirabile <cmirabil@redhat.com>,  pjw@kernel.org,
+  Liam.Howlett@oracle.com,  a.hindborg@kernel.org,
+  akpm@linux-foundation.org,  alex.gaynor@gmail.com,
+  alexghiti@rivosinc.com,  aliceryhl@google.com,  alistair.francis@wdc.com,
+  andybnac@gmail.com,  aou@eecs.berkeley.edu,  arnd@arndb.de,
+  atishp@rivosinc.com,  bjorn3_gh@protonmail.com,  boqun.feng@gmail.com,
+  bp@alien8.de,  brauner@kernel.org,  broonie@kernel.org,
+  charlie@rivosinc.com,  cleger@rivosinc.com,  conor+dt@kernel.org,
+  conor@kernel.org,  corbet@lwn.net,  dave.hansen@linux.intel.com,
+  david@redhat.com,  devicetree@vger.kernel.org,  ebiederm@xmission.com,
+  evan@rivosinc.com,  gary@garyguo.net,  hpa@zytor.com,  jannh@google.com,
+  jim.shu@sifive.com,  kees@kernel.org,  kito.cheng@sifive.com,
+  krzk+dt@kernel.org,  linux-arch@vger.kernel.org,
+  linux-doc@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-mm@kvack.org,  linux-riscv@lists.infradead.org,
+  lorenzo.stoakes@oracle.com,  lossin@kernel.org,  mingo@redhat.com,
+  ojeda@kernel.org,  oleg@redhat.com,  palmer@dabbelt.com,
+  paul.walmsley@sifive.com,  peterz@infradead.org,
+  richard.henderson@linaro.org,  rick.p.edgecombe@intel.com,
+  robh@kernel.org,  rust-for-linux@vger.kernel.org,
+  samitolvanen@google.com,  shuah@kernel.org,  tglx@linutronix.de,
+  tmgross@umich.edu,  vbabka@suse.cz,  x86@kernel.org,  zong.li@sifive.com
+Subject: Re: [PATCH v19 00/27] riscv control-flow integrity for usermode
+In-Reply-To: <aN6sNFBzx8NPU3Th@debug.ba.rivosinc.com> (Deepak Gupta's message
+	of "Thu, 2 Oct 2025 09:45:40 -0700")
+References: <f953ee7b-91b3-f6f5-6955-b4a138f16dbc@kernel.org>
+	<20250926192919.349578-1-cmirabil@redhat.com>
+	<aNbwNN_st4bxwdwx@debug.ba.rivosinc.com>
+	<CABe3_aE4+06Um2x3e1D=M6Z1uX4wX8OjdcT48FueXRp+=KD=-w@mail.gmail.com>
+	<aNcAela5tln5KTUI@debug.ba.rivosinc.com>
+	<lhu3484i9en.fsf@oldenburg.str.redhat.com>
+	<aNxsWYYnj22G5xuX@debug.ba.rivosinc.com>
+	<lhuwm5dh6hf.fsf@oldenburg.str.redhat.com>
+	<aN6sNFBzx8NPU3Th@debug.ba.rivosinc.com>
+Date: Mon, 13 Oct 2025 16:30:09 +0200
+Message-ID: <lhujz0yoowe.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251010120727.20631-1-wangfushuai@baidu.com>
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Fri 2025-10-10 20:07:27, Fushuai Wang wrote:
-> Since v4.1 kernel, a new interface for ftrace called "tracefs" was
-> introduced, which is usually mounted in /sys/kernel/tracing. Therefore,
-> tracing files can now be accessed via either the legacy path
-> /sys/kernel/debug/tracing or the newer path /sys/kernel/tracing.
-> 
-> Signed-off-by: Fushuai Wang <wangfushuai@baidu.com>
+* Deepak Gupta:
 
-Looks good to me:
+> How will they contribute to CFI bringup without having a CFI compiled
+> usersapce?
 
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
+Build glibc themselves and then proceed one library at the time.
 
-Best Regards,
-Petr
+>>Another use case would be running container images with CFI on a
+>>distribution kernel which supports pre-RVA23 hardware.
+>
+> Container image with CFI will have glibc and ld (and all other
+> userspace) also compiled with shadow stack instructions in it. As soon
+> as you take this container image to a pre-RVA23 hardware, you won't
+> even reach vDSO. It'll break much before that, unless kernel is taking
+> a trap on all sspush/sspopchk instructions in prologue/epilogue of
+> functions in userspace (glibc, ld, etc)
+
+The idea is that you can use a stock distribution kernel to run CFI
+images (potentially form a different distribution or version of the
+distribution).
+
+But maybe none of this really matters.  How far out is CFI-checking
+hardware?  Is it going to arrive much later than the RVA23 flag day
+that people are suggesting?
+
+Thanks,
+Florian
+
 
