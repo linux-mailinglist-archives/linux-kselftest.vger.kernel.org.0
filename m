@@ -1,96 +1,108 @@
-Return-Path: <linux-kselftest+bounces-43004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0434BD5110
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 18:32:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 507E3BD4EB5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 18:20:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25476542930
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 15:56:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BE5018A69B5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 16:20:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA8D3101D5;
-	Mon, 13 Oct 2025 15:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05402278165;
+	Mon, 13 Oct 2025 16:16:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VixOhuDl"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="JQss/l/M"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BE113101C5
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 15:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4372B322A;
+	Mon, 13 Oct 2025 16:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760369780; cv=none; b=bPBWCPaHsT/F1koIU1L+ja4VvSTIp4H+OhZCvL3xMp3INSBIhUio5HHV4tDsqsfvWI6AvhGEvv4EcQIVESYK7Dh/ivZGq5tCv6o2gCf3j1SURfUtk2G0npyY8Rpe2htbeKm8B4bfTbCpvSi4RgDtYqDJ8BKNKwB5xEqMLvO1eEk=
+	t=1760372179; cv=none; b=AZDDHuLBbxqxVerBibP5BSk83EB+ALwiK7PoY5rt/r6Eszk4uv5VPNhXoJvGGqLpsLbjW9+0jDXcOM9Uu5Wh7DYX6QeEFuFmh6hIghv3+8NHL3Es2U6MXG3hG1F5WgfxWlVxsBVq8nnPieJkRsNiT78n3UgaXBSRhklyTBOP2c8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760369780; c=relaxed/simple;
-	bh=KnbiNEI6jdfFoyCXFlvrrBN2LNaWnjAsJojkaDAb3zY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=G93oHhcsxgcNM4U2NeAnwfgVYHa+xsqn+SEl3iPfQU78BXvS0RLgWCZvvRbUKI8uOyJ9xQ2iHDmG/Xe/s2hllAsTiOTftbLLVypoXpfWckXLogG47yyhkNFyEMSECWSWn61CmnejOI/cNCpYB3r+l4/KmEvHP4FiG7al7fpoCeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VixOhuDl; arc=none smtp.client-ip=209.85.128.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-46e3e177893so29497855e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 08:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760369777; x=1760974577; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FlFedRueswZiwwJSvXOIyDnT3oPzpw1Sfa+/cqnl83o=;
-        b=VixOhuDlRMASSH2Ew9mehjOzjWokkcGCCRdHf8AMO5OClJ0Fr0LOTdvRH0mi5A5XiH
-         kO4fsUFGI4vYu5qL7MloeBxssldw0PWI7+Zdu2aThISPeR89vLFbGncEXToXv9yEIht/
-         4qUoDYr2tizImnE9U5fOHCKUFwq/tB6vesJe8GcD9dorknx3kOaJqXvUuINv/xkiWkkA
-         m5n4yMELxn/8vlGCti/YwJdzZQccm6U64lVXjalFRZugh+iTkNibpfuwjmpyg4O8ztkr
-         UHRdtGiHjtK6ovbfur5eTWOaEGucxrG/oG9q4+pdXWVn9t3pDL2kdj/dVSoNGpQiDLeB
-         hhvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760369777; x=1760974577;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FlFedRueswZiwwJSvXOIyDnT3oPzpw1Sfa+/cqnl83o=;
-        b=KMMu94PRRwiSP951tnf1I5vmehh9cHHSIagw/dkUsk/BuP8ShGE+xttAGFI9f8yFaE
-         oaPVMN9NFNYOa6UcRVnVX/I+/uSPx8gPrfvUBANAL5lhgrGYc5Hm3sri1sgRq7a83I3H
-         CSsnt8Gln9QkgXoFlpLEhN2ab0eTuyf3PTa7cEkcKguIUXo24hyDFf7BRvvC4ycIPHDL
-         kJxP7OHQOX4764ag2D/uC3luQvbi8LS5kjdKMF2S3MVVi/gqv5SuHAtwmyD1XpOjKY9G
-         HeAAk0+6LzM4L+a/183BxXL5QigA+C/dGvcvTO+OLvHEvY0v4V/13yKz3v9PjNfSFpby
-         Y/Xw==
-X-Forwarded-Encrypted: i=1; AJvYcCVvIm/Q6QRU9+1R+jXg0FZJ6mOLHkBmqMK3c7HsMJxv5o27N01sMl0ujf0Rsnm8csQJXqJuyISl5FGib8PdGjk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7i26GkdBU0x9sYcke44N1h6D8XmzrOoolqeQluyTZe9XZMRG7
-	L6UCRVY1N5ffK5iZ7e1N89eWxwJIF2b1NrsAI1gm++AbUyJuUZCY4M/pdu6mwZWfnuAMYqRMkkv
-	mvVZ3zLGloLB5Ug==
-X-Google-Smtp-Source: AGHT+IHe33aTc6DLr2QuBitaWmdhOm2nkmbEu0YxgnPqOB4zoPd1RlYBlwwAqBGdVpW1YUG3fMQrmSmUYvbqkQ==
-X-Received: from wmby12.prod.google.com ([2002:a05:600c:c04c:b0:46e:3771:b9c9])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:a341:b0:46e:74bb:6bc with SMTP id 5b1f17b1804b1-46fa9a8932cmr136710475e9.5.1760369776743;
- Mon, 13 Oct 2025 08:36:16 -0700 (PDT)
-Date: Mon, 13 Oct 2025 15:36:16 +0000
-In-Reply-To: <20251013-l1tf-test-v1-2-583fb664836d@google.com>
+	s=arc-20240116; t=1760372179; c=relaxed/simple;
+	bh=q4TWi+EHOJV5TC7Iymk26iR2c2LUySOZ0b50x1RvGCo=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=e0pMzxrfjZfgGjV++sYwlXKVSERVdFVu0XGp55xOzYFoL0V4prVDCMk8vaezj0D1bwkqIFei1gk8c1l4sY7qbdk8sEAcxq+25P93UUqVyJss5ydaFFOxoyXHn4sEHnzcssIsaWZLP09VFSTlTD6UEoYNxgtAFTiDJoLKJEFdm8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=JQss/l/M; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 59DGEplg1360107
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Mon, 13 Oct 2025 09:14:52 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 59DGEplg1360107
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025092201; t=1760372093;
+	bh=MzpJMWVhNoOjgk4BJX8F1SShnKbckMn+Nc+zuR294Q0=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=JQss/l/MXShiySKzZWsav9VeArEu5N+uHoA047KLEMyntuwcMeK9wlN7HIQ0Tqk38
+	 JWP3hXYKNvikpWfX6arlx9W0uwDMOxRmDNvKTDAE5F6UoQRuW2UYdQH8FS/dmu5d3E
+	 IWsydJI7iSqT/4JiUB/QpAvO0m3CLOT54r0BnuzOxjwp1hTkoYG5cC2cXMzIqbFFu/
+	 hVeOMUm7eShn55+XGXxv1i0cXqiWlUTDXcOMz142IMJrmHCUqBtj9hGS3pSQf+YHB+
+	 vjYWunPASD2OmpmvS1CGd8ToW6X150kS6ymSlNwqvCNTUzUlIQ4v/fyvlZZe23Moc7
+	 PV1r9bSGOj9qg==
+Date: Mon, 13 Oct 2025 09:14:51 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Dave Hansen <dave.hansen@intel.com>,
+        =?ISO-8859-1?Q?Thomas_Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Shuah Khan <shuah@kernel.org>
+CC: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] vdso: Remove struct getcpu_cache
+User-Agent: K-9 Mail for Android
+In-Reply-To: <e95dc212-6fd3-43e3-aeb7-bf55917e0cd4@intel.com>
+References: <20251013-getcpu_cache-v2-1-880fbfa3b7cc@linutronix.de> <e95dc212-6fd3-43e3-aeb7-bf55917e0cd4@intel.com>
+Message-ID: <9F23DEFF-FCD7-488E-B31C-E891A7521D9E@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251013-l1tf-test-v1-0-583fb664836d@google.com> <20251013-l1tf-test-v1-2-583fb664836d@google.com>
-X-Mailer: aerc 0.21.0
-Message-ID: <DDHB06W60S97.3GDEC7DRZFQEJ@google.com>
-Subject: Re: [PATCH 2/2] KVM: x86: selftests: add an L1TF exploit test
-From: Brendan Jackman <jackmanb@google.com>
-To: Brendan Jackman <jackmanb@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>
-Cc: Alexandra Sandulescu <aesa@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>, 
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
-	<kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon Oct 13, 2025 at 3:13 PM UTC, Brendan Jackman wrote:
-> The test requirements are: the machine is vulnerable to L1TF and the
-> helper kernel module is loaded prior to the test execution.
-> The test should pass when the kernel enables asi (asi=on). 
+On October 13, 2025 7:06:55 AM PDT, Dave Hansen <dave=2Ehansen@intel=2Ecom>=
+ wrote:
+>On 10/13/25 02:20, Thomas Wei=C3=9Fschuh wrote:
+>> -int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu=
+_cache *unused);
+>> -int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu=
+_cache *unused)
+>> +int __vdso_getcpu(unsigned int *cpu, unsigned int *node, void *unused)=
+;
+>> +int __vdso_getcpu(unsigned int *cpu, unsigned int *node, void *unused)
+>>  {
+>>  	int cpu_id;
+>
+>It would ideally be nice to have a _bit_ more history on this about
+>how it became unused any why there is such high confidence that
+>userspace never tries to use it=2E
+>
+>Let's say someone comes along in a few years and wants to use this
+>'unused' parameter=2E Could they?
 
-Agh, sorry, I missed a bit when scrubbing the commit message, there
-should not be mentions of ASI in here.
+I believe it was a private storage area for the kernel to use=2E=2E=2E whi=
+ch it doesn't=2E Not doing anything at all with the pointer is perfectly le=
+gitimate=2E
 
