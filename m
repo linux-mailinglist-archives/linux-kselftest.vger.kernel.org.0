@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-43002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E16EBD49A3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 17:55:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD88DBD47D5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 17:47:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DB3B403D5D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 15:28:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C43974202D2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Oct 2025 15:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD7E30E83A;
-	Mon, 13 Oct 2025 15:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A6D31283C;
+	Mon, 13 Oct 2025 15:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kTK9m1xA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BgnmrADV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A186E30E0E9
-	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 15:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C0D830E828
+	for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 15:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760368547; cv=none; b=oH8/I/xW13E2dtKaG6smwSXOeIaN4aVVG3P7zuyVzf2WxrHXf0h/XOYgVomAcP0zpf1kN9EBwV8jgXQoqhqkmCO0imiNpBi15u6L9N2GAMYOqDy8sKerfdglrCYn00KeocaNif5w88k23VuTOTFu18q6corUsUY/8Lh4rul3/2M=
+	t=1760368550; cv=none; b=hnGHfGDRizRIzgqQZ1jWfLWqVbkEPDm9ANpUGxsWsoxpRy10RIN1CeldcEihDy18AzHm8uGcZj5xZKSXVU+fqGJBylwhSFsOkv4fGhsVtaQqOOwJlp3DhqVEuNvKidSaoe7gn6HuIv80WfnbF3hjbn+85IvbMJQVPNy5EjlcsdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760368547; c=relaxed/simple;
-	bh=lTDjButRkJ3Cx5uU/JAtEV++5t/e00mS8oYnDCNnkjk=;
+	s=arc-20240116; t=1760368550; c=relaxed/simple;
+	bh=AfUKt9Y64nk4DJCkkE4xk0dAPQmcJX1fmTUpYECF7XQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k/mASou0c0Kb0qXQN3umsE69PGozM/I2sShyi2dTOqvcQljHNcDRtCtGgrMAUY4iJ3bIgAoFesExu246yPZccNtHnTpsKymVnKX8boOaMxCy9+gs7cxOc5AHBRQ484o0QrqSOOV6lucbAyGJFahJZP9zO1mKtE3yk0IdL8k9hQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kTK9m1xA; arc=none smtp.client-ip=209.85.128.52
+	 MIME-Version; b=gc/cJLK0xlk/GOKfmM8BxjFchhrQ6wQXSdcq0h7HEUsla3tVa8DMeBBj3K4UzzituRc+oqYWRzadj1K5a8fyo/HUUQ1Kqc+VRZ+vBztE1bgOsCVmI9MygFIE6QDd9XFLU0wxbbwiLPXi+RR37Xp/OGz9uVr6n3HONY41E0euMTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BgnmrADV; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-46e6ba26c50so26159075e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 08:15:44 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-46fcf9f63b6so2643765e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 08:15:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760368543; x=1760973343; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1760368547; x=1760973347; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YCSrMFeSurFqrsJ2giFUs5nVIkyf5eYx9hKkmNRZA3A=;
-        b=kTK9m1xARwH2mQR/z2EuwHWBt+hbFrAXbuSLonnzyI4pegEQKYqhjEggDDjLkkeZnW
-         SYPYDzKDR6YpHOy4SAcBryllUMY9quUNTvuESSOLyJW3JfU+knwCwHDkYQfgfUN1TUkY
-         G0oX3wcxVAfwtpNDnbUuZBFLOYHAYO9aXtCcLTipKFKDU55xal1HLXIK+VmwQu0mojeR
-         Zrw6AIv/HMiR42zB6UUAI6SMTL6pmKLA0L8QvP0+4LgJa/QI1mWgCVMUb+a43+hWYl69
-         uAa4WcJ7bHxDMzAF8vPtFFjIcRkO/9AApi/sKXXSDAlGkIR224OrLqF9gqyVIG8sivTp
-         oeug==
+        bh=mzQnDluOQWqcbRXyu07+4Pf89SEymkI9ph5TfK7+5co=;
+        b=BgnmrADVG8gUrQACGHOnlAuw3ZUzfD5DdKxuFfhmStZ6yxMKplWDpwZnCFRgcGG8yu
+         tkAbRXxegbx1xF3+VVzCWjJnr82WRf/oiU6+qrvGdC2eoMFVWjNw0AVneVmmIVG4hCyp
+         +3JZ+jyeVhm8X/CJCkutqaFfYGC0j0XxLXnvNSphOdrMhvNaTmdEJRZLu6dlWAQBjEiX
+         e3cJIjGNgZBWi80wN6N3NMg9CaIqFgyqF1ytintQt3Rtg9BODNXLkiY7kZ6hsw9XnduD
+         WHaPBDy7rKK0mUT720K8uTsDZ65QThBssvARIT7pY/ZLPL0euKwbnU3ftczS7JOY1j3f
+         yl9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760368543; x=1760973343;
+        d=1e100.net; s=20230601; t=1760368547; x=1760973347;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YCSrMFeSurFqrsJ2giFUs5nVIkyf5eYx9hKkmNRZA3A=;
-        b=EOz5FurbBYNqGUwR54FOHSV3Sj/Gp49NBfohfT5KAbFKFH5Xtd4FqZADFft6lqS/gD
-         zuq1qiBcVa8k83XxoQP4qOWlMa/kb0MRCDddwlWrz1cUYleJ59wyVggF22ZwguZNF81U
-         MQZ+fPtOyLxBGYnPxSNmHzbWTbZnLPN1KZN4y9LZwo4xavlVhgEDffQYjqn3HvOX/M9k
-         PByYJcBilIlB8aG8U62fx1F1/GysdwCzX168ZXJcQFjasFhNEQf0T9FCiz4vUHb0oZUN
-         e3VRmQZprQdbICniWw0v0rJ8UswecU33LNVHaPOXdHoePGhcBRfBfejO0XC+ryCE+bCX
-         bE4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWMRqKypsjgllmlJIGxZeMGGEL0TReX+X7B04wwqwMJDvHOjTHLAwx0UCPvkhjOe7+E20aK1rAnS4sUltfoOyw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGiPF7YS/3nv0WLFOw7JKDeMvQvZc5jP5EjaCduVETmXZP4qiD
-	hoQTE4ow8jdBlllMguc4iyc/uor/KoTPmw9fLQFXUm5cvEdhqkVMSJsL
-X-Gm-Gg: ASbGnctD8vWqmv87MRVXQYDFL30oJomLafvCSWOtjSMLu12Cz9oBS1wgo/tIjOarzK/
-	5hcvBHG7aNIMpwl0RwRNuLfgu2SyqtvDGIMmQowN4wo/scXRl+TdtRj0FSXUAij5uSql3RrVXi/
-	n19P3Kc/ePPUBsDRiYI2ntW6JpgNmiu2IMtmeTP5JrlgDHF+DN+NucK8ebCfQq5WUfnp+1pLHtA
-	3xsjnzN/ZTnvvp67eQow4fw/WN0y/Fq0oYvO8/15fFuMYnkLBlMWemwY61Q3NURbnDAuVrlQjQo
-	wZ2WzxSO3D9BHUZ6FQDCZdS7Vc9gJcHyfZ4ziHpqUnqnM4/p37Gs1mtcUlb0MoD9wwfAYbhYN0L
-	JItStRTRZoTizsLkNCmjCN44Cmr4/nBRBF4VOimKIpSlWEnWGPd2XAw88uO6Ra8ebNeqaORnDxT
-	FkoIyGMuYetIEoaNo=
-X-Google-Smtp-Source: AGHT+IEt3rxThBLWKGN/jwmns/gxZmIihkaAQISXuC9Iitep8SFGSh4XAnm8RXbIElBPhI6EpEA2fw==
-X-Received: by 2002:a05:600c:8487:b0:45b:79fd:cb3d with SMTP id 5b1f17b1804b1-46fa9b13ab7mr150449805e9.36.1760368542783;
-        Mon, 13 Oct 2025 08:15:42 -0700 (PDT)
+        bh=mzQnDluOQWqcbRXyu07+4Pf89SEymkI9ph5TfK7+5co=;
+        b=sSJ7f3HOfif6uzud/nrnwyHS/Ielc0hQg3HDFfaUWz7Ydcm20FNMXdrGUG4HFkhXuO
+         aLyYpYRJDy51NnlCdG6Nl5eItk+zf5ak/bVbFpHIhnsU1Fro2cJqoRll4Mo9Pi/ClaFo
+         x08DvhbcBPyrG6QwxmiXRJ5m8va8ujCon8xuFLDh+D3Q9G0/E1jVnxwE1cKDmbgxdDXO
+         JdlZCRjeF+3uJ4i0X57vXoomskLPjhQ9XzYtKC53wJMMkEdHxwa7jUmmAP2DWh66oV9i
+         UDjw8Pn7bXnVvh8yQMf3tgtSAzRQTPRGuCe5aXOiE0uWk8ktQ2W08QYBqDv37I2WFLRT
+         guwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWNX4IpK4+n8IaxmQeYayHH2u8aRCfkg0SCr2fTdP1nnAhO9L0tt0E6oPS6ybNDCjF4GLY234lOE2cOchS96JQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7o40ggXkqr381SBtRWHqwNqBV1Dt3StKBZpGMFVOmdJGVN42t
+	kQ/N44dhhfUtTbc2mRxySmX3CMhKkNnexAk+i0FbDSABRG+EzTSEHCdk
+X-Gm-Gg: ASbGncu5lCUaYygRKfw8xdZaR991dmUcP4nP6q6wEjA2cmgC2FVs706bcvG+cgzxj4t
+	Xh4Gz95J8mBpnycNtPVlxDyTEhz18Agoe4A18uD8DOGysqPgwzsbgW5VG/Y+xZGb2U0g47gXCf+
+	CCgFKryeNAAVLQz+b4U5f81BcYgS2ozyvKKM5tEQmRliH3+uygUdc9w2RXA6zIi0abpp8rW5iZs
+	DIiolFiGm5A7J26drE7Z7+0hd99h5dPo/PzflOmXU9sxizl0ZF59CDMp1WHMLHO/wAh1jd5pxTQ
+	ahP6AJY3f8rhEAv8ViCnpcpJUwfnjgrQ00nBVXDLXZfdpEd14EG4DOjLW8Z5f1ttX0ZwUxGndNo
+	uUFHwP+86ll1NuOrGimkQbFa+osTdO5uLJzL5sfmGhGfQF/m/0okYz0ZEJLj8cVEE59y8sVN3O+
+	sgImMl0vHC4jAzysdaKZNntNklyA==
+X-Google-Smtp-Source: AGHT+IHgTeXKHH2vcpsvzOcBDeWFCxx7j6NWXF765EtO+25xvlfpvrezTIu3A7FfM3RO5CiMYA9Vog==
+X-Received: by 2002:a05:600c:1e85:b0:46e:39e4:1721 with SMTP id 5b1f17b1804b1-46fa9aa261amr141333095e9.12.1760368546663;
+        Mon, 13 Oct 2025 08:15:46 -0700 (PDT)
 Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.3.91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fab36a773sm135545825e9.0.2025.10.13.08.15.41
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fab36a773sm135545825e9.0.2025.10.13.08.15.45
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 13 Oct 2025 08:15:42 -0700 (PDT)
+        Mon, 13 Oct 2025 08:15:46 -0700 (PDT)
 From: Jack Thomson <jackabt.amazon@gmail.com>
 To: maz@kernel.org,
 	oliver.upton@linux.dev,
@@ -92,9 +92,9 @@ Cc: joey.gouly@arm.com,
 	roypat@amazon.co.uk,
 	kalyazin@amazon.co.uk,
 	jackabt@amazon.com
-Subject: [PATCH v2 3/4] KVM: selftests: Enable pre_fault_memory_test for arm64
-Date: Mon, 13 Oct 2025 16:15:00 +0100
-Message-ID: <20251013151502.6679-4-jackabt.amazon@gmail.com>
+Subject: [PATCH v2 4/4] KVM: selftests: Add option for different backing in pre-fault tests
+Date: Mon, 13 Oct 2025 16:15:01 +0100
+Message-ID: <20251013151502.6679-5-jackabt.amazon@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251013151502.6679-1-jackabt.amazon@gmail.com>
 References: <20251013151502.6679-1-jackabt.amazon@gmail.com>
@@ -108,167 +108,97 @@ Content-Transfer-Encoding: 8bit
 
 From: Jack Thomson <jackabt@amazon.com>
 
-Enable the pre_fault_memory_test to run on arm64 by making it work with
-different guest page sizes and testing multiple guest configurations.
-
-Update the test_assert to compare against the UCALL_EXIT_REASON, for
-portability, as arm64 exits with KVM_EXIT_MMIO while x86 uses
-KVM_EXIT_IO.
+Add a -m option to specify different memory backing types for the
+pre-fault tests (e.g., anonymous, hugetlb), allowing testing of the
+pre-fault functionality across different memory configurations.
 
 Signed-off-by: Jack Thomson <jackabt@amazon.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |  1 +
- .../selftests/kvm/pre_fault_memory_test.c     | 79 ++++++++++++++-----
- 2 files changed, 59 insertions(+), 21 deletions(-)
+ .../selftests/kvm/pre_fault_memory_test.c     | 31 ++++++++++++++++---
+ 1 file changed, 26 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 90f03f00cb04..4db1737fad04 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -180,6 +180,7 @@ TEST_GEN_PROGS_arm64 += memslot_perf_test
- TEST_GEN_PROGS_arm64 += mmu_stress_test
- TEST_GEN_PROGS_arm64 += rseq_test
- TEST_GEN_PROGS_arm64 += steal_time
-+TEST_GEN_PROGS_arm64 += pre_fault_memory_test
- 
- TEST_GEN_PROGS_s390 = $(TEST_GEN_PROGS_COMMON)
- TEST_GEN_PROGS_s390 += s390/memop
 diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-index 0350a8896a2f..ed9848a8af60 100644
+index ed9848a8af60..22e2e53945d9 100644
 --- a/tools/testing/selftests/kvm/pre_fault_memory_test.c
 +++ b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-@@ -10,19 +10,29 @@
- #include <test_util.h>
- #include <kvm_util.h>
- #include <processor.h>
-+#include <guest_modes.h>
+@@ -76,6 +76,7 @@ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 gpa, u64 size,
+ struct test_params {
+ 	unsigned long vm_type;
+ 	bool private;
++	enum vm_mem_backing_src_type mem_backing_src;
+ };
  
- /* Arbitrarily chosen values */
--#define TEST_SIZE		(SZ_2M + PAGE_SIZE)
--#define TEST_NPAGES		(TEST_SIZE / PAGE_SIZE)
-+#define TEST_BASE_SIZE		SZ_2M
- #define TEST_SLOT		10
- 
-+/* Storage of test info to share with guest code */
-+struct test_config {
-+	int page_size;
-+	uint64_t test_size;
-+	uint64_t test_num_pages;
-+};
-+
-+struct test_config test_config;
-+
- static void guest_code(uint64_t base_gpa)
- {
- 	volatile uint64_t val __used;
-+	struct test_config *config = &test_config;
- 	int i;
- 
--	for (i = 0; i < TEST_NPAGES; i++) {
--		uint64_t *src = (uint64_t *)(base_gpa + i * PAGE_SIZE);
-+	for (i = 0; i < config->test_num_pages; i++) {
-+		uint64_t *src = (uint64_t *)(base_gpa + i * config->page_size);
- 
- 		val = *src;
- 	}
-@@ -63,11 +73,17 @@ static void pre_fault_memory(struct kvm_vcpu *vcpu, u64 gpa, u64 size,
- 					    "KVM_PRE_FAULT_MEMORY", ret, vcpu->vm);
- }
- 
--static void __test_pre_fault_memory(unsigned long vm_type, bool private)
-+struct test_params {
-+	unsigned long vm_type;
-+	bool private;
-+};
-+
-+static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
- {
-+	struct test_params *p = arg;
- 	const struct vm_shape shape = {
--		.mode = VM_MODE_DEFAULT,
--		.type = vm_type,
-+		.mode = guest_mode,
-+		.type = p->vm_type,
- 	};
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_run *run;
-@@ -78,10 +94,17 @@ static void __test_pre_fault_memory(unsigned long vm_type, bool private)
+ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
+@@ -94,7 +95,11 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
  	uint64_t guest_test_virt_mem;
  	uint64_t alignment, guest_page_size;
  
-+	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(guest_mode));
++	size_t backing_src_pagesz = get_backing_src_pagesz(p->mem_backing_src);
 +
+ 	pr_info("Testing guest mode: %s\n", vm_guest_mode_string(guest_mode));
++	pr_info("Testing memory backing src type: %s\n",
++		vm_mem_backing_src_alias(p->mem_backing_src)->name);
+ 
  	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, guest_code);
  
--	alignment = guest_page_size = vm_guest_mode_params[VM_MODE_DEFAULT].page_size;
--	guest_test_phys_mem = (vm->max_gfn - TEST_NPAGES) * guest_page_size;
-+	guest_page_size = vm_guest_mode_params[guest_mode].page_size;
-+
-+	test_config.page_size = guest_page_size;
-+	test_config.test_size = TEST_BASE_SIZE + test_config.page_size;
-+	test_config.test_num_pages = vm_calc_num_guest_pages(vm->mode, test_config.test_size);
-+
-+	guest_test_phys_mem = (vm->max_gfn - test_config.test_num_pages) * test_config.page_size;
- #ifdef __s390x__
- 	alignment = max(0x100000UL, guest_page_size);
+@@ -110,10 +115,11 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
  #else
-@@ -91,22 +114,31 @@ static void __test_pre_fault_memory(unsigned long vm_type, bool private)
+ 	alignment = SZ_2M;
+ #endif
++	alignment = max(alignment, backing_src_pagesz);
+ 	guest_test_phys_mem = align_down(guest_test_phys_mem, alignment);
  	guest_test_virt_mem = guest_test_phys_mem & ((1ULL << (vm->va_bits - 1)) - 1);
  
- 	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
--				    guest_test_phys_mem, TEST_SLOT, TEST_NPAGES,
--				    private ? KVM_MEM_GUEST_MEMFD : 0);
--	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, TEST_NPAGES);
--
--	if (private)
--		vm_mem_set_private(vm, guest_test_phys_mem, TEST_SIZE);
--	pre_fault_memory(vcpu, guest_test_phys_mem, SZ_2M, 0);
--	pre_fault_memory(vcpu, guest_test_phys_mem + SZ_2M, PAGE_SIZE * 2, PAGE_SIZE);
--	pre_fault_memory(vcpu, guest_test_phys_mem + TEST_SIZE, PAGE_SIZE, PAGE_SIZE);
-+				    guest_test_phys_mem, TEST_SLOT, test_config.test_num_pages,
-+				    p->private ? KVM_MEM_GUEST_MEMFD : 0);
-+	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, test_config.test_num_pages);
-+
-+	if (p->private)
-+		vm_mem_set_private(vm, guest_test_phys_mem, test_config.test_size);
-+	pre_fault_memory(vcpu, guest_test_phys_mem, TEST_BASE_SIZE, 0);
-+	/* Test pre-faulting over an already faulted range */
-+	pre_fault_memory(vcpu, guest_test_phys_mem, TEST_BASE_SIZE, 0);
-+	pre_fault_memory(vcpu, guest_test_phys_mem + TEST_BASE_SIZE,
-+			 test_config.page_size * 2, test_config.page_size);
-+	pre_fault_memory(vcpu, guest_test_phys_mem + test_config.test_size,
-+			 test_config.page_size, test_config.page_size);
- 
- 	vcpu_args_set(vcpu, 1, guest_test_virt_mem);
-+
-+	/* Export the shared variables to the guest. */
-+	sync_global_to_guest(vm, test_config);
-+
- 	vcpu_run(vcpu);
- 
- 	run = vcpu->run;
--	TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
--		    "Wanted KVM_EXIT_IO, got exit reason: %u (%s)",
-+	TEST_ASSERT(run->exit_reason == UCALL_EXIT_REASON,
-+		    "Wanted %s, got exit reason: %u (%s)",
-+		    exit_reason_str(UCALL_EXIT_REASON),
- 		    run->exit_reason, exit_reason_str(run->exit_reason));
- 
- 	switch (get_ucall(vcpu, &uc)) {
-@@ -130,7 +162,12 @@ static void test_pre_fault_memory(unsigned long vm_type, bool private)
- 		return;
- 	}
- 
--	__test_pre_fault_memory(vm_type, private);
-+	struct test_params p = {
-+		.vm_type = vm_type,
-+		.private = private,
-+	};
-+
-+	for_each_guest_mode(__test_pre_fault_memory, &p);
+-	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
++	vm_userspace_mem_region_add(vm, p->mem_backing_src,
+ 				    guest_test_phys_mem, TEST_SLOT, test_config.test_num_pages,
+ 				    p->private ? KVM_MEM_GUEST_MEMFD : 0);
+ 	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem, test_config.test_num_pages);
+@@ -155,7 +161,8 @@ static void __test_pre_fault_memory(enum vm_guest_mode guest_mode, void *arg)
+ 	kvm_vm_free(vm);
  }
  
- int main(int argc, char *argv[])
+-static void test_pre_fault_memory(unsigned long vm_type, bool private)
++static void test_pre_fault_memory(unsigned long vm_type, enum vm_mem_backing_src_type backing_src,
++				  bool private)
+ {
+ 	if (vm_type && !(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(vm_type))) {
+ 		pr_info("Skipping tests for vm_type 0x%lx\n", vm_type);
+@@ -165,6 +172,7 @@ static void test_pre_fault_memory(unsigned long vm_type, bool private)
+ 	struct test_params p = {
+ 		.vm_type = vm_type,
+ 		.private = private,
++		.mem_backing_src = backing_src,
+ 	};
+ 
+ 	for_each_guest_mode(__test_pre_fault_memory, &p);
+@@ -174,10 +182,23 @@ int main(int argc, char *argv[])
+ {
+ 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
+ 
+-	test_pre_fault_memory(0, false);
++	int opt;
++	enum vm_mem_backing_src_type backing = VM_MEM_SRC_ANONYMOUS;
++
++	while ((opt = getopt(argc, argv, "m:")) != -1) {
++		switch (opt) {
++		case 'm':
++			backing = parse_backing_src_type(optarg);
++			break;
++		default:
++			break;
++		}
++	}
++
++	test_pre_fault_memory(0, backing, false);
+ #ifdef __x86_64__
+-	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, false);
+-	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, true);
++	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, false);
++	test_pre_fault_memory(KVM_X86_SW_PROTECTED_VM, backing, true);
+ #endif
+ 	return 0;
+ }
 -- 
 2.43.0
 
