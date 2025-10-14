@@ -1,260 +1,176 @@
-Return-Path: <linux-kselftest+bounces-43143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FC88BDB6B5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 23:33:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C5FC9BDB758
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 23:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F32483AF1C6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 21:33:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AB4942235A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 21:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9176239E7D;
-	Tue, 14 Oct 2025 21:33:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACCD62E5427;
+	Tue, 14 Oct 2025 21:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Aq7GbwkQ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mpTFkBez"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011069.outbound.protection.outlook.com [40.93.194.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31EDF1FC3
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 21:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760477599; cv=none; b=kqk+fKbEnfh+cu/PT2I3p8vpArEPL6Ef2nWa7fCarSKV0DHYtHoJ+TKO/yXpXsPjSJ7z/D20mFZZ04Mprw3nfUd3F6eu4UmrOhpRlxEYxBoFcGIousAou9cMn2MpD/Ywp0b1+rpxF2fp6omGYSOY85sMd4hPtMODiB3KQBEkTYg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760477599; c=relaxed/simple;
-	bh=jn4dzshEK0b/q4LSAmrY5+2g0zSY/o3rLvb537ZUDJk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zl3NBULeVg3YLTAolZLl5qZitIDxGRahjA9v7/BiQnymx2h6ow6pVsDOhWN7VrHmgouJbjwgW6nLJ9kM/4aQofARbxLXmIMS6jFz6L8zIWCuy2eXyZjRSBjPQ7TvayhGEKxJYRyUi1UAWSGzxER2zyY1+1w5wtckeJxjy5dqMQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Aq7GbwkQ; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2681645b7b6so20865ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 14:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760477597; x=1761082397; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DRskKZpnIRIllGR+ESE73jq8/mOCylC4thtJYDQxpyE=;
-        b=Aq7GbwkQPnBR7SsQUnDAs+E9GY84TGGgKkvtWtR87H8BNyryZqGKcQ8r1Ya5bA8f6x
-         6C5zOwHHV27K8KtqMK+mYu+J0iZf5yQSdwSMTNmhjwT82BFEnlPJncKrSG9lqlYO6GBZ
-         wU3v1ZGk3SiGi1bT6Z5LOipgE0c9NB5eVRhpbgDUaHLrF7Gx4/mzuHB5dXycsR4hkw/6
-         HrZSDC4J/hyweMrwjQf1VfL4y8KOtUl8imYQdzzh0ZT6ht3TAC4j+m/CNBNXKpxtSu38
-         TlOQHqvbBPk/6PteaxPqv+1Jl53FM85+bAILVl5uTsAAee0u/TpDF3uAqXPcy3hCtrsM
-         LWnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760477597; x=1761082397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DRskKZpnIRIllGR+ESE73jq8/mOCylC4thtJYDQxpyE=;
-        b=JzEWrS8vXVIlF9ywfHruo/fKWklMpLZ33/YOJY8gunBCypkLUpK+lgj6uVShakRBca
-         /xDY3x/xIfoNFsHMAS0O66Y+kh1msIZHJvEvBFMIUJ8J/6Mul47aeXelvW9m7okrbT/w
-         S3FtBF1FZIfwHiMMAWjtg9REZdqC2m1NwyyQhpL7rou9TxquntOK83bcLhG5aDXMga+t
-         5QYU1Zcl1fq739hlCRc7Qa537NQODJCWjGJoDN+sDxgkfG1VTu8mdjhPhokRjI0zt5ei
-         SyAQ2r8S3iMEX+kfIKiFK09U/XCP36JRftY2d/xRBV9nsJS8PM2wgKo9UxBwON24hQ7y
-         bzgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUY/lDJIoRxM0yLiZRZqfbRSkBxz7zJ30aWzmfN8x2cPejFhI1xDkLtOTl/86RYjtZ0P0sVSLCApwMzYEWoHU8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxzxKhSU8ICJXlO6tMtbpvJJ4XiA3gKcrRG6QzY5rH0ooGxgs/
-	pUPp9tg307ytgzOVMQ2+M3wZeF8Z9c8ZoN9akK37FJ6R4Z05efOhnYvq+ldSPS9IsuomNeGkZwQ
-	DmSyeyYAS8WxURA/LSi857L9WB76tgkDUi4LAP+Rn
-X-Gm-Gg: ASbGncsvatyU8jtv0yDuchCP4Dm2KIivowO0WxH12ViF8+8qXJVbtccT7ClpouTRJPR
-	vrjRhxhouBCsn+osd5KBIcweLPZJ+8aEOAa6anC7eH/ZQ1MwaSvcxu406S4dVE0N2ODB9d//TqF
-	tJQQggdxV84eclVrrSX1lZ6fQvc5ICzUnVgiGMrAKBy8cNYd33f2Vtz3Nw6S0aL4ftP7EL4BT0p
-	xq2DyzN4z5iOyFPO2iXMjDDyZLTKjbjlPBXlYiBBA3NmXLj9DJLlm5zSrS3Dg==
-X-Google-Smtp-Source: AGHT+IEHrs850EG3XMez/7ngys4coZSDbG9AXxNVFTWtUr9iNSb9QVL8mjJjo5KQMcuY6Vt1JkM1o+A/H66y4AjU968=
-X-Received: by 2002:a17:903:3d06:b0:274:1a09:9553 with SMTP id
- d9443c01a7336-29087a16a7fmr1160785ad.6.1760477597088; Tue, 14 Oct 2025
- 14:33:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD93257AD3;
+	Tue, 14 Oct 2025 21:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760478552; cv=fail; b=pNXz/clLNKPha/s6xwDBhWwzcgEUxoNi6q64OBDuXwcOB2KwOd6dXsqLdjRr+i6sPG+t3KFx/HMdwNlpfo0xaUD9rnn3IMloGzwg6Yro0hpA734qevBY1VumXrP+3FRHlCCFX+B90HDonO53oYcLUmY0E14lFf6I2WJiqkpKtaU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760478552; c=relaxed/simple;
+	bh=4wAU+xCn+Jc5eFrb8HJlJOKggdTA2wlmOXMEW/Wgn5w=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=N3GYH+Gixt2e5UYLvFgsfmL8IOcRsKNgEz9ANMli4oqsByeuabMu1UrkQdqeL9KkPf0VhBQZ8yFjG5g2gBhQKJS+Hj0gYN2wf5plOM5HZaT8YUqkFUxD+FiNvvi1p5KVJDPxPorQ6VMpoz5Tc6VgX27QPsJz7cWYvbBeJdgHFPw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mpTFkBez; arc=fail smtp.client-ip=40.93.194.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=KRlTDg7kfLPFeROY02YGJjR6R0optBGQX/G5INJRRHWOhFHALHtsOwG+ZTOv7IhwwyYewcoD9mcSUaxig42u/ez4mWGWloTL4SvLeLZTlsIgh/q5zIWewxWt3ZsG5TlrDqR1Y+e9Ic3WtMkPJlrBKQKqCdRG4bB37yeJM1FXT5s8F7pteR+hMDvDyAAYEN6xRtYuyZLxvUCWq4X4/gODP4FMBNv1zoDAPIehNga2V9Z8T8vx8AleVwVl9qDTctJ/oTaQwdSahGC9od7yKc92QxOt9VUQX7ucwV2GtmatcwDZdEPU7Ia7qVp/d6tz6bn4JSzrmLy2Rosw+TAF4SNblw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H8xq3Hb7LtIz6P1CF0eKvwTABDkKqzWdOgqZBgg2W0M=;
+ b=ah70ind63fmhno1MV3kjPMpB7hWyYSHiZjTQRNgd9PDrcVYS7ZRIr+x9p1h04PBmK+vGEeIDKxrNZ7+SwG0QnRtiiIpOBcn7uhcKEXm+wVzbRd+XMFdeD9aaWYAZ5WFlMfvsf3TsMLOfxeBEEn6E86wriysXo5Da+VdTNjqFc9Z9FRWiO7BDMhOt7Q5jUcuLacfBFikOsmmzRxuKWTEbEV+ZJuvafPd5XhMYBQGO4LNMGWV2ZwZhBOe/WN+tBxD9I5Al3pro5oKtlfprWxGK8b3+0nSRSl5cZ9TyhAXV/Erk6bTlJnTFl3lxBlIDSPYJ5+d3b9k4sUb4IOH5KiMWqQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H8xq3Hb7LtIz6P1CF0eKvwTABDkKqzWdOgqZBgg2W0M=;
+ b=mpTFkBezyC6+bS4+0m572Y58aDjdYksx7ONkjBC7ihx0hSpzIMahhX6WfkbbW7/B1VJe9Zl8uytEKMnDz1lYoDBlRBWl5XYfnL9whwTuvgdHs7eQmDxlsWWyxjS2EMjcAHhCsG99zIrl4RhnoN145tbgXNfXTYQRk/+NGFbaAmIbI5YW1rJ9SeNTc6+jlC+IJ+rMF0IuV+48FLYz9C0rq4idtYHzXqrMut9a6okBWU2KDn1oy70/i90PvauXCXu0Vu88BzfV+PV0KosvtDBJ7RC3gTZrM0xNFhnXE14ydhQDrdDjzxYBF2AyhxCeCYwxN29GcNVpPQu7sFnQi9mrCQ==
+Received: from SJ0PR03CA0160.namprd03.prod.outlook.com (2603:10b6:a03:338::15)
+ by DS0PR12MB6631.namprd12.prod.outlook.com (2603:10b6:8:d1::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9203.13; Tue, 14 Oct
+ 2025 21:49:03 +0000
+Received: from SJ1PEPF000023D6.namprd21.prod.outlook.com
+ (2603:10b6:a03:338:cafe::c8) by SJ0PR03CA0160.outlook.office365.com
+ (2603:10b6:a03:338::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9182.20 via Frontend Transport; Tue,
+ 14 Oct 2025 21:49:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SJ1PEPF000023D6.mail.protection.outlook.com (10.167.244.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9253.0 via Frontend Transport; Tue, 14 Oct 2025 21:49:03 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.14; Tue, 14 Oct
+ 2025 14:48:51 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.20; Tue, 14 Oct 2025 14:48:51 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.12) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Tue, 14 Oct 2025 14:48:50 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>
+CC: <shuah@kernel.org>, <alessandro.zanni87@gmail.com>,
+	<iommu@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH rc] iommufd/selftest: Fix ioctl return value in _test_cmd_trigger_vevents()
+Date: Tue, 14 Oct 2025 14:48:46 -0700
+Message-ID: <20251014214847.1113759-1-nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251013235259.589015-1-kaleshsingh@google.com>
- <20251013235259.589015-2-kaleshsingh@google.com> <144f3ee6-1a5f-57fc-d5f8-5ce54a3ac139@google.com>
-In-Reply-To: <144f3ee6-1a5f-57fc-d5f8-5ce54a3ac139@google.com>
-From: Kalesh Singh <kaleshsingh@google.com>
-Date: Tue, 14 Oct 2025 14:33:05 -0700
-X-Gm-Features: AS18NWDEXIzf0W_8NyXmtodW3cUhtebQNJZvZW7z0zEtzur244eg_ScikaZgMeo
-Message-ID: <CAC_TJvdLxPRC5r+Ae+h2Zmc68B5+s40+413Xo4SjvXH2x2F6hg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/5] mm: fix off-by-one error in VMA count limit checks
-To: Hugh Dickins <hughd@google.com>
-Cc: akpm@linux-foundation.org, minchan@kernel.org, lorenzo.stoakes@oracle.com, 
-	david@redhat.com, Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de, 
-	kernel-team@android.com, android-mm@google.com, stable@vger.kernel.org, 
-	SeongJae Park <sj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Kees Cook <kees@kernel.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Jann Horn <jannh@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, 
-	Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D6:EE_|DS0PR12MB6631:EE_
+X-MS-Office365-Filtering-Correlation-Id: 327ee119-6000-4ffd-15f0-08de0b6b7de6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?XzywI7YFs+Wsn3ThyOrVxpnKQ6juBnQvnJY9/NZcnR4UOT+hFRu7GTuZ1Bsw?=
+ =?us-ascii?Q?dBuRAMkObjI3wkwOQzP0V/8iIwnX0gOx4M2ieb99nx5lajXoduJbPaf34ovE?=
+ =?us-ascii?Q?atVFmDx5D3UQsHH7ANnVoKeExaT7/CU7Ms9UgCNGyRJ3O8RqUglE2qo3Nyzu?=
+ =?us-ascii?Q?WLGVox9Vuq3yczv42ZdaE9vyvG1sKQ1zCg9za+P1Gs9s9DZkIJs0xB8+Xhq5?=
+ =?us-ascii?Q?HeSJaAZ2dJYEAcpKve+YTIeGOpWLFZViS0aRYEVLN0GmUvHa5lmy/eqVdj+K?=
+ =?us-ascii?Q?1Y94xTVuCBkRLGh/QJL4R9Mtme5z5N0Xnat5WzaVD24UMV3B9OlSAQ4tw7Sk?=
+ =?us-ascii?Q?puULYSZL1zmzB4zWG6qUM97l7QHXQUrELaErNSDkmOB2TU+Hra4tH21noc+l?=
+ =?us-ascii?Q?XfSut6t4p8V20W0C4r9bafP+p95Yqy1IiBPNDJK9dLz4kzXjA6IoSXHFMD9s?=
+ =?us-ascii?Q?o+JrcnthjMzNic2bsPrdyUB3SNBPURj7qGj+R1uLzvIXOLfdZGiWsM0rAboL?=
+ =?us-ascii?Q?CajPzMi0w+kfEWXjZWteVqHSjtBHHhnzY0TjvMj4zxMzI+MCBaHPCdVxMPly?=
+ =?us-ascii?Q?pu+VGmLf7mpPzo/ahwFsDRB76i00/TfxMnHhe2pGPf3VPZGVNHiTtPFa2IFI?=
+ =?us-ascii?Q?4KZv2D09kwapp++Snp+xY+Amz29KCvstCbEuI+4atpSlyV7KbhOqYqlN5doR?=
+ =?us-ascii?Q?jpjYGw2xMroUkBaciFg0euZM1xf4rFscf3WDgg+9Kr7r8GQWHtHpZ2Jz4PuJ?=
+ =?us-ascii?Q?hELNgw0rbBi8FNyRLR20oCFl49EIodNa/YZYBdGSmc0wJ7VNrrRtneX9i4jY?=
+ =?us-ascii?Q?ERxtRcuB87s+sgL+8FJTECFQyJvtpKXrjmeUganPtOeFmuXXkoOw+icHdNP0?=
+ =?us-ascii?Q?YfCn93ljj1nAD1v5GT7+TnDHsR8xrytbIGPGJ8HnHXZmwxHAkp0mRqQogzbd?=
+ =?us-ascii?Q?aPJW+0+xd+l/27sMrPY7YU02zPVJzAZFHqi/0Tl+YDhumlOj29E/H0nh42hy?=
+ =?us-ascii?Q?1pLUStdSf7uup3at5swm2XIKRmGVdZ8C3krAh9fidxKaqSIud492scSH5mTY?=
+ =?us-ascii?Q?5wZi7uIs9RevcNx5+eIyQpoHpO0q0DQL43rzgdgRMJ47Vb3THDAFHtMZ4ovG?=
+ =?us-ascii?Q?H0tSr08KMffwnkixrWSDvtCJmt3UaHPuyawU9J2LKuG11PTcI85B8kbT3dVb?=
+ =?us-ascii?Q?+tJrNBro4jWxGbHdBBzOd0s6pPEzPwMIIWKdkVlZTIds5z/Ztf99drFDKTCt?=
+ =?us-ascii?Q?Pc/V8GBaJ23QnXdRnLWyZOQZZ2pWw8j5uMpKKOeEgyzPbPZM9O7bj9Yv/9l8?=
+ =?us-ascii?Q?GjXnOoF+S6d2MiZlM9n4ri26Lwye9Y4SN3KzYUFipNfjHOC874wF7HXQQlwO?=
+ =?us-ascii?Q?2PDpjo+u7f+CubGMHf73fLo7F8CYqZOYWkQRzzi9kqHXHjTj13z/jbeaPOQ8?=
+ =?us-ascii?Q?vAV9mIOVGXz6MZxBXgfbUM+kAFZLB+V4flwqjsOWkNfB/bzaN9DLNoztJhAp?=
+ =?us-ascii?Q?KJsFbD3/YK3vuq9yJgJv0jiy4gr2YT/DcApWMlH3rCVkyKtrBa9+66rpAJM9?=
+ =?us-ascii?Q?wzbNO6u+m8KDAm9JMdY=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2025 21:49:03.4660
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 327ee119-6000-4ffd-15f0-08de0b6b7de6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000023D6.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6631
 
-On Mon, Oct 13, 2025 at 11:28=E2=80=AFPM Hugh Dickins <hughd@google.com> wr=
-ote:
->
-> On Mon, 13 Oct 2025, Kalesh Singh wrote:
->
-> > The VMA count limit check in do_mmap() and do_brk_flags() uses a
-> > strict inequality (>), which allows a process's VMA count to exceed
-> > the configured sysctl_max_map_count limit by one.
-> >
-> > A process with mm->map_count =3D=3D sysctl_max_map_count will incorrect=
-ly
-> > pass this check and then exceed the limit upon allocation of a new VMA
-> > when its map_count is incremented.
-> >
-> > Other VMA allocation paths, such as split_vma(), already use the
-> > correct, inclusive (>=3D) comparison.
-> >
-> > Fix this bug by changing the comparison to be inclusive in do_mmap()
-> > and do_brk_flags(), bringing them in line with the correct behavior
-> > of other allocation paths.
-> >
-> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > Cc: <stable@vger.kernel.org>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: David Hildenbrand <david@redhat.com>
-> > Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-> > Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > Cc: Mike Rapoport <rppt@kernel.org>
-> > Cc: Minchan Kim <minchan@kernel.org>
-> > Cc: Pedro Falcato <pfalcato@suse.de>
-> > Reviewed-by: David Hildenbrand <david@redhat.com>
-> > Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > Reviewed-by: Pedro Falcato <pfalcato@suse.de>
-> > Acked-by: SeongJae Park <sj@kernel.org>
-> > Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> > ---
-> >
-> > Changes in v3:
-> >  - Collect Reviewed-by and Acked-by tags.
-> >
-> > Changes in v2:
-> >  - Fix mmap check, per Pedro
-> >
-> >  mm/mmap.c | 2 +-
-> >  mm/vma.c  | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/mm/mmap.c b/mm/mmap.c
-> > index 644f02071a41..da2cbdc0f87b 100644
-> > --- a/mm/mmap.c
-> > +++ b/mm/mmap.c
-> > @@ -374,7 +374,7 @@ unsigned long do_mmap(struct file *file, unsigned l=
-ong addr,
-> >               return -EOVERFLOW;
-> >
-> >       /* Too many mappings? */
-> > -     if (mm->map_count > sysctl_max_map_count)
-> > +     if (mm->map_count >=3D sysctl_max_map_count)
-> >               return -ENOMEM;
-> >
-> >       /*
-> > diff --git a/mm/vma.c b/mm/vma.c
-> > index a2e1ae954662..fba68f13e628 100644
-> > --- a/mm/vma.c
-> > +++ b/mm/vma.c
-> > @@ -2797,7 +2797,7 @@ int do_brk_flags(struct vma_iterator *vmi, struct=
- vm_area_struct *vma,
-> >       if (!may_expand_vm(mm, vm_flags, len >> PAGE_SHIFT))
-> >               return -ENOMEM;
-> >
-> > -     if (mm->map_count > sysctl_max_map_count)
-> > +     if (mm->map_count >=3D sysctl_max_map_count)
-> >               return -ENOMEM;
-> >
-> >       if (security_vm_enough_memory_mm(mm, len >> PAGE_SHIFT))
-> > --
-> > 2.51.0.760.g7b8bcc2412-goog
->
-> Sorry for letting you go so far before speaking up (I had to test what
-> I believed to be true, and had hoped that meanwhile one of your many
-> illustrious reviewers would say so first, but no): it's a NAK from me.
->
-> These are not off-by-ones: at the point of these checks, it is not
-> known whether an additional map/vma will have to be added, or the
-> addition will be merged into an existing map/vma.  So the checks
-> err on the lenient side, letting you get perhaps one more than the
-> sysctl said, but not allowing any more than that.
->
-> Which is all that matters, isn't it? Limiting unrestrained growth.
->
-> In this patch you're proposing to change it from erring on the
-> lenient side to erring on the strict side - prohibiting merges
-> at the limit which have been allowed for many years.
->
-> Whatever one thinks about the merits of erring on the lenient versus
-> erring on the strict side, I see no reason to make this change now,
-> and most certainly not with a Fixes Cc: stable. There is no danger
-> in the current behaviour; there is danger in prohibiting what was
-> allowed before.
->
-> As to the remainder of your series: I have to commend you for doing
-> a thorough and well-presented job, but I cannot myself see the point in
-> changing 21 files for what almost amounts to a max_map_count subsystem.
-> I call it misdirected effort, not at all to my taste, which prefers the
-> straightforward checks already there; but accept that my taste may be
-> out of fashion, so won't stand in the way if others think it worthwhile.
+The ioctl returns 0 upon success, so !0 returning -1 breaks the selftest.
 
-Hi Hugh,
+Drop the '!' to fix it.
 
-Thanks for the detailed review and for taking the time to test the behavior=
-.
+Fixes: 1d235d849425 ("iommu/selftest: prevent use of uninitialized variable")
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+---
+ tools/testing/selftests/iommu/iommufd_utils.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-You've raised a valid point. I wasn't aware of the history behind the
-lenient check for merges. The lack of a comment, like the one that
-exists for exceeding the limit in munmap(), led me to misinterpret
-this as an off-by-one bug. The convention makes sense if we consider
-potential merges.
+diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
+index 772ca1db6e597..9f472c20c1905 100644
+--- a/tools/testing/selftests/iommu/iommufd_utils.h
++++ b/tools/testing/selftests/iommu/iommufd_utils.h
+@@ -1044,8 +1044,8 @@ static int _test_cmd_trigger_vevents(int fd, __u32 dev_id, __u32 nvevents)
+ 	};
+ 
+ 	while (nvevents--) {
+-		if (!ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
+-			    &trigger_vevent_cmd))
++		if (ioctl(fd, _IOMMU_TEST_CMD(IOMMU_TEST_OP_TRIGGER_VEVENT),
++			  &trigger_vevent_cmd))
+ 			return -1;
+ 	}
+ 	return 0;
+-- 
+2.43.0
 
-If it was in-fact the intended behavior, then I agree we should keep
-it lenient. It would mean though, that munmap() being able to free a
-VMA if a split is required (by permitting exceeding the limit by 1)
-would not work in the case where we have already exceeded the limit. I
-find this to be inconsistent but this is also the current behavior ...
-
-I will drop this patch and the patch that introduces the
-vma_count_remaining() helper, as I see your point about it potentially
-being unnecessary overhead.
-
-Regarding your feedback on the rest of the series, I believe the 3
-remaining patches are still valuable on their own.
-
- - The selftest adds a comprehensive tests for VMA operations at the
-sysctl_max_map_count limit. This will self-document the exact behavior
-expected, including the leniency for potential merges that you
-highlighted, preventing the kind of misunderstanding that led to my
-initial patch.
-
- - The rename of mm_struct->map_count to vma_count, is a
-straightforward cleanup for code clarity that makes the purpose of the
-field more explicit.
-
- - The tracepoint adds needed observability for telemetry, allowing us
-to see when processes are failing in the field due to VMA count limit.
-
-The  selftest, is what  makes up a large portion of the diff you
-sited, and with vma_count_remaining() gone the series will not touch
-nearly as many files.
-
-Would this be an acceptable path forward?
-
-Thanks,
-Kalesh
-
->
-> Hugh
 
