@@ -1,119 +1,117 @@
-Return-Path: <linux-kselftest+bounces-43117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22734BD815C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 10:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 13E5DBD84F5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 10:56:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 649F419239C4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 08:05:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 667A7189C0D3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 08:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C517230F53A;
-	Tue, 14 Oct 2025 08:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B782C2DFF33;
+	Tue, 14 Oct 2025 08:56:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i8JihYcI"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X55Luj6j"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A87C155322
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 08:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DB52DE6E1
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 08:56:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760429011; cv=none; b=mBZyRmXIJiko+N4VjMsPz1Iz/rcSWRmZqnZPJKSnO8bwY+ZKGa2AkVUnBwqTLKX2Skt0FU2Y86fTOaoPm7kvW11r5WH8m11o7YsGBSkDWbMstqbX4K0cbwzpu1kNk0oALEhgQ+gBlF+ATaCshIZYL6JzeD8OLdkhgTx4n29Hjsw=
+	t=1760432189; cv=none; b=QrkUIlPz3ApS2K6dsWh5fzpohPYkp0qyxbrr3NGqgPkHac7K60w/vsJZoMDlj1DwOoxrJKLIZVFdDTiN9HjvDm/1G+QY6FsNSY87VI8nYryxrzo2yoiQCInGJxagB22GxksaxsAhsiaQNUKYkh0zL1q/6bEw93VYVfka94XYcy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760429011; c=relaxed/simple;
-	bh=xcIHiyrY6zpd/QJ5ecaxifkvV6PL2HbfdLFpHH8rkSg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QT1259QoyEETDu2LkDGpV27bD5bQPwUpYHoJ4o0XHUQFFtK9DHy4p70XZtm4+AfanyBBp4mCVgMSeFDxuTK4Op9De41EynUR1e0EdiF552TbgoWynZmhp1k3SEGDZRM/crBZcD3/3T1Ne2Y6WQH+8WR0kYwoydFzN4eWk4qJHAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i8JihYcI; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3324523dfb2so4878151a91.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 01:03:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760429009; x=1761033809; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pZ0YZ6ERdNgsUMAEbLjWSRV62CkKEzgpgQpU/84KBjs=;
-        b=i8JihYcIqvmIZJhuIORaE7v2Y7pbqfEaZuru1fH3S8d1haJq9SDJX76PTLf84dFW8c
-         AIQfYT6EJhaP6w2pQ6QOue6RVKtShff8SIZwVgkr42BVhNd1/xgoxiZ0xMI/+BZainj6
-         NqaaOQUc9JfWBUeAZnlj9Si1FGqcqxosvvpFqWGIVa5LbITzCIJeyVYKqwKEx5+y7GtQ
-         SeyPT9d4mBX+RMR88yCYwPkxccp0mbEDt7/iye3eulS5OK9/WGrgT0ZluJ7mM36NgLLh
-         zireUlg2nFNYlEczF2HBs73npsPCUiPht7jvUFJEWiWOOFTg61jVMAQHKcfibkXH/dsR
-         XT5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760429009; x=1761033809;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pZ0YZ6ERdNgsUMAEbLjWSRV62CkKEzgpgQpU/84KBjs=;
-        b=Y8RWg6RRZr3tuGg942/f0R+xeiU9F3nH5KnMVB7S1+OAznqMU4PPngtkaYwLGlICEx
-         syDDE3aGF2035Sjxw45bY2FkQOQYO/q3tpAhJjlSlI9vS2l8y6a+EKvdCODbmgnvtNrx
-         splHX65OVCPpv5H9F9ZgIQdOojFfJDVh5F+IZmUqNQyts0mtPXJsZRt9E0r3BBVV76Km
-         FrTOlwjFApXBtrZZJKc46ovPhg6mrSHVfOmXztAJjUWnyJoDmgqH+eB/BUg+go+0owvQ
-         0xdI1kMEFrWiiLezfDwJUQQtQo36gzDINLQ8urgLyc7mF0LkxP8WggZwfF65RWNhuJvE
-         6hQA==
-X-Gm-Message-State: AOJu0YwlUaXrVdUT9veQT2tuiYIRg3Tp0CkdQmZJzvsDfdNvld8Zjapg
-	RqVuI22jcOjnkyT/pb/pOVbjIOctIshHTbCTfM4eaSa9eFHQRgxqstQ5
-X-Gm-Gg: ASbGncv2231GaqNlKcOYyAjam37vFpgdjpmOUWavzjUwt40hYDUXuAlMB/BsYJoDPa/
-	jMAt70ujLSFtNR9sihmd1Qdl0Wif9AC6NLFNiSYm8xhd7QcOwqXo1zT8+xtzniAZImtGGbMlTuF
-	uXRIP1bh/OmwS4LgK+3ZvJEMfeJVWnCB0qwGvfUsK1q2/RH4lex+moM41M3k3P7y29sd+1MqJSN
-	RuJJSxp10dBzO8jqxST5uV80O6NGQGur8zufkHK8iKwcV79E2THox5fpF5k2HVQc40oPOzKjczW
-	fc0ANRVXUTY5lSmXVr1zg0luhwKtOwVEetd4AZyI9gPY0bHfih9B+X71dBCUvBTtbURHq91opfy
-	YXbTEdYC2A9tINfMLqqnAdRBkLiWI6QMQJgFZvnuQlMbE3BwMtg4A6KWcD3ce
-X-Google-Smtp-Source: AGHT+IFPgNTqNpjyUZ+iocqEkYenDoDPdOqlpKuMh6WhWwfOvgcL2peErJ3UypjvuONEB5mk54U2ZQ==
-X-Received: by 2002:a17:902:f64a:b0:260:3c5d:9c2 with SMTP id d9443c01a7336-290272e46bfmr292801235ad.48.1760429009236;
-        Tue, 14 Oct 2025 01:03:29 -0700 (PDT)
-Received: from localhost ([192.19.38.250])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-33b626e8bf5sm14635088a91.23.2025.10.14.01.03.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Oct 2025 01:03:28 -0700 (PDT)
-From: Xing Guo <higuoxing@gmail.com>
-To: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	ast@kernel.org,
-	sveiss@meta.com,
-	andrii@kernel.org,
-	Xing Guo <higuoxing@gmail.com>
-Subject: [PATCH] selftests: arg_parsing: Ensure data is flushed to disk before reading.
-Date: Tue, 14 Oct 2025 16:03:23 +0800
-Message-ID: <20251014080323.1660391-1-higuoxing@gmail.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1760432189; c=relaxed/simple;
+	bh=Gx9Z6mn6RyElOVVuTuwoqX8a6quS8JbkEQ2dofakRLs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=gThDegmMmZw/yITT+jEd7IDucflVQOcF/Io7NSPtPTLlAycv/RW1JcM1Og0mY21I//F4VCUk53jQNHc/nZjfntUsTu9XQ2qkFbFUiIgq5PZFm4WvQFvTPdF0A9QL6NJIpwZCARq9K+6WhXPy9XCN8fFMg8yTrs06msgt5jKbGBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X55Luj6j; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760432187;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SzW2cWfpQXuLGQqbaNqxu1i17z4sh2RC+KzHuoIl4BY=;
+	b=X55Luj6jCw/64HPkjvs++7Yb6ir0mlGrrK8czElPWTRJp3BYfLKk/iQ1dugN+V5eQaDnDH
+	bPdH+nJtJuzap+1Y+Delbmk5Ari7NzB7Zsd8+hCwqZs17L2Ivu4z4K2D+TSItKc2sxnZqq
+	EggxPyeqDUJAlQILBU9hC3oKhgXRBPo=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-301-88ZyZhZiPSKzb3dgMZdLLQ-1; Tue,
+ 14 Oct 2025 04:56:22 -0400
+X-MC-Unique: 88ZyZhZiPSKzb3dgMZdLLQ-1
+X-Mimecast-MFC-AGG-ID: 88ZyZhZiPSKzb3dgMZdLLQ_1760432179
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8A5F2180045C;
+	Tue, 14 Oct 2025 08:56:17 +0000 (UTC)
+Received: from fweimer-oldenburg.csb.redhat.com (unknown [10.44.33.199])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E4B5F19560A2;
+	Tue, 14 Oct 2025 08:56:08 +0000 (UTC)
+From: Florian Weimer <fweimer@redhat.com>
+To: Andy Lutomirski <luto@kernel.org>
+Cc: Dave Hansen <dave.hansen@intel.com>,  Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
+ <thomas.weissschuh@linutronix.de>,  Huacai Chen <chenhuacai@kernel.org>,
+  WANG Xuerui <kernel@xen0n.name>,  Heiko Carstens <hca@linux.ibm.com>,
+  Vasily Gorbik <gor@linux.ibm.com>,  Alexander Gordeev
+ <agordeev@linux.ibm.com>,  Christian Borntraeger
+ <borntraeger@linux.ibm.com>,  Sven Schnelle <svens@linux.ibm.com>,  Thomas
+ Gleixner <tglx@linutronix.de>,  Ingo Molnar <mingo@redhat.com>,  Borislav
+ Petkov <bp@alien8.de>,  Dave Hansen <dave.hansen@linux.intel.com>,
+  x86@kernel.org,  "H. Peter Anvin" <hpa@zytor.com>,  Richard Weinberger
+ <richard@nod.at>,  Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+  Johannes Berg <johannes@sipsolutions.net>,  Vincenzo Frascino
+ <vincenzo.frascino@arm.com>,  Shuah Khan <shuah@kernel.org>,
+  loongarch@lists.linux.dev,  linux-kernel@vger.kernel.org,
+  linux-s390@vger.kernel.org,  linux-um@lists.infradead.org,
+  linux-api@vger.kernel.org,  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] vdso: Remove struct getcpu_cache
+In-Reply-To: <CALCETrV2W3cZEJ2yy7F-F9=e_8HLP84ZWrOJCzUYn_ASb0+M6A@mail.gmail.com>
+	(Andy Lutomirski's message of "Mon, 13 Oct 2025 10:14:58 -0700")
+References: <20251013-getcpu_cache-v2-1-880fbfa3b7cc@linutronix.de>
+	<e95dc212-6fd3-43e3-aeb7-bf55917e0cd4@intel.com>
+	<CALCETrV2W3cZEJ2yy7F-F9=e_8HLP84ZWrOJCzUYn_ASb0+M6A@mail.gmail.com>
+Date: Tue, 14 Oct 2025 10:56:06 +0200
+Message-ID: <lhu5xchq2u1.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Recently, I noticed a selftest failure in my local environment. The
-test_parse_test_list_file writes some data to
-/tmp/bpf_arg_parsing_test.XXXXXX and parse_test_list_file() will read
-the data back.  However, after writing data to that file, we forget to
-call fsync() and it's causing testing failure in my laptop.  This patch
-helps fix it by adding the missing fsync() call.
+* Andy Lutomirski:
 
-Signed-off-by: Xing Guo <higuoxing@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/arg_parsing.c | 1 +
- 1 file changed, 1 insertion(+)
+> The theory is that people thought that getcpu was going to be kind of
+> slow, so userspace would allocate a little cache (IIRC per-thread) and
+> pass it in, and the vDSO would do, well, something clever to return
+> the right value.  The something clever was probably based on the idea
+> that you can't actually tell (in general) if the return value from
+> getcpu is stale, since you might well get migrated right as the
+> function returns anyway, so the cache could be something silly like
+> (jiffies, cpu).
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-index bb143de68875..4f071943ffb0 100644
---- a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-@@ -140,6 +140,7 @@ static void test_parse_test_list_file(void)
- 	fprintf(fp, "testA/subtest2\n");
- 	fprintf(fp, "testC_no_eof_newline");
- 	fflush(fp);
-+	fsync(fd);
- 
- 	if (!ASSERT_OK(ferror(fp), "prepare tmp"))
- 		goto out_fclose;
--- 
-2.51.0
+It probably had to do something with per-CPU or per-node mappings of the
+vDSO.  Or may some non-coherent cache line in the vDSO.  As far as I
+understand it, the cache has zero chance of working with the way vDSO
+data is currently implemented.
+
+We have the CPU ID and node ID in the restartable sequences area now
+(although glibc does not use the node ID yet).  It's not a cache.  So
+this clearly supersedes whatever struct getcpu_cache tried to achieve.
+
+Thanks,
+Florian
 
 
