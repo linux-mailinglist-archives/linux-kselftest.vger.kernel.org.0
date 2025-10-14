@@ -1,281 +1,319 @@
-Return-Path: <linux-kselftest+bounces-43071-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43072-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56698BD7674
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 07:19:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7541BD768F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 07:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8BA144E61DF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 05:19:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B8773A96F0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 05:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552F829B764;
-	Tue, 14 Oct 2025 05:19:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3561D2874E1;
+	Tue, 14 Oct 2025 05:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qdkbjjxh"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p8leib+/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52A42877EE
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 05:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D2F279335
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 05:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760419148; cv=none; b=BsdrRXvuqG1y1jQuMC6IJVmvwR0eblqIMldwx2gwbARulWFyZBd7iV/0yZsMYORIrLTDXSQ9xwBf3ToiJKykjWmWRJE3BkATPYmUuDGBP1Q9cwgaczs7szpboNfsClPuiEZOBFzAtGuF8dtOOoOOt5HOj0/mv/YfXtCg2pF693o=
+	t=1760419464; cv=none; b=SiJ3QK3GYd1q2LCOPhnl15/7KaqJI+vS3a2w7BW42YwEPdWMsSFrxHKO1/C3SYKky39Eb906+0U7//ma6sbZ3zf1Sh6BWkoygq7RN3bBB6ohxFkpR/d0NUDQRZqxDgtJ7g8labr5mUD+91BFOnQ3R79B+f8AuhvotTOXcbHyz1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760419148; c=relaxed/simple;
-	bh=0891Evs5lqD54TbgKetbZhn/3ldOwvcF7ftrNN99I78=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pMcSRDWBhSE5PYymOn7FKsUubbc4sIyJbj088xjytIumnSwqu75PVIRrfIw/ID3le4xJ6+v9088deLOkyIO4zUH1Tz3OzCna+Kz/iAJ8Z2iIWQmB/Rj12X3CEbE/0pviI8D7da0wR6Q5PrawPzqdWGa9wo4sOI8PH8Nqcb9Ejfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qdkbjjxh; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-27ee41e074dso56928235ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 22:19:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760419144; x=1761023944; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MS5ghyNqywnKYwR1bU0C0clme92ktuteU3RH8OfSvOI=;
-        b=QdkbjjxhdW4ZmN8gxnQQbO/cQj4D0WY4LXASd61YIkENfjTXuSUAO8QghELRXDU1hz
-         kR3FlzWIc1q5NY01QC9QpJ5G/NPih3QJe+AhCHj/jq5zER2bdJw0nAjW2I6A/6xuKrn9
-         DFQIaWLBR3HqTHpYxTmOvangy+LecEfkssa6eXPIeBkFwP3GL+5csLMimZeSQCbR6tsM
-         rd19r8vW00odjbdD4yed1yQobrtzgdGqe39BjjqQ6+d2Z06uARSY+Y/Oxwu0vzsmIxiH
-         UWxMh4gaValILSG4DaNEpgfwkpFZOTkFWTdwKmnTsH2fQXaRyzsRVS8VQGQn9xRkEZ/f
-         5RAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760419144; x=1761023944;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MS5ghyNqywnKYwR1bU0C0clme92ktuteU3RH8OfSvOI=;
-        b=w+9vdCZCwWA5ucY1bB8VNgmkdr0Vq9lGoGWzYHKt/2Q/FRVjWuJ1LUknedCK6G3DJq
-         KGJZhyihWVFhFUYTwdrgUjcAHPmcVOvWTnvXragYaLzXrIStxGRbkhpvRlKjCL/Rh/4j
-         sVckro6n5luA3GJjO1JEWeRZdDAF3mc16R7oe7JjTEj5GAPZaaCBE5UhcOPv1Qv5IeMO
-         nuYUUVwVy0pDZt4ASTr5lMSPHhl8lpIJKgz/sAihGDBhs/WxDOYGC8co4gzn0LRxKsPX
-         X9LWPvEbeKEoVV0y69c3Zah65txo5H9EfL9XUSYybECZioACAjBHgZyRI7H0ToRpY8S9
-         tN4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW4D6828Cheq4WFStBzp05AkOjdZ+iMKC4ubN8ojbAdPcSG6yXH7k7Sa44MTtnn6J+k0CFYhl/zMxXNls6H+zU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM/KA43oI5C6ITEfp9DxBih9tWtRKafIA0f7EVAyn1ApIq5xYf
-	C3tcT+c3wJ+CSsHp0ziWiLmfGTTp16K9e0edUeuY/Bx7HrOelaD9mHgw
-X-Gm-Gg: ASbGncsFAyjIID3iW8RCrQzK2+pLSnGVXOAvARCoDYdc0+VJMwau27lWZCUoch+pqsS
-	Qt4cwgnnPaIGMFP6kCgrHKiFinf2tYmlPhEoMDUya65FLn6PMTIcQ3e3ijhgb94otSbDBPMy0zc
-	SOG6c4meiKazQHRiI9BVhG79xxhynR1hRAQGg5a2wSJsnNYrH7rqebKOva0TGiGnLi4KKwQ8H//
-	rzYJlE8qEQG7FXi1nUHZxxUvE1MvKMPpYsodB8JdZB1QMNXfwtCqA4PKYKXXlwPmbeVio5nV+nE
-	JpRSNGpQIrWPrWSxvUGFEsQw8NMngmfMGtI/ZbmqLzyjZpcj8xN6x1lWnr92vHeYng/kuZS9o04
-	22BMg8nfow+gPAXoc2fS1YwR6+I4AE4WATLvfAsNQXiia/eAe6g==
-X-Google-Smtp-Source: AGHT+IHpU6mGXZfoT5qQhUchdAk9g8Q+a7l0nInuSHiJEbwP4Nc8pJjP1AfMYRqiNiWA/AF+l9MMYg==
-X-Received: by 2002:a17:902:ef11:b0:251:5900:9803 with SMTP id d9443c01a7336-2902723b876mr300456215ad.21.1760419143758;
-        Mon, 13 Oct 2025 22:19:03 -0700 (PDT)
-Received: from fedora ([159.196.5.243])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034f08d0fsm151575385ad.63.2025.10.13.22.18.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Oct 2025 22:19:03 -0700 (PDT)
-From: Wilfred Mallawa <wilfred.opensource@gmail.com>
-To: linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Subject: [PATCH net-next v5 2/2] selftests: tls: add tls record_size_limit test
-Date: Tue, 14 Oct 2025 15:18:27 +1000
-Message-ID: <20251014051825.1084403-4-wilfred.opensource@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251014051825.1084403-2-wilfred.opensource@gmail.com>
-References: <20251014051825.1084403-2-wilfred.opensource@gmail.com>
+	s=arc-20240116; t=1760419464; c=relaxed/simple;
+	bh=BGq6gtuVw1ZkzpsV6xc9p1v0Lm/eZZH90GULnLK4vPM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
+	 In-Reply-To:Content-Type; b=fVRGWQ1aVQJSs4cQlvZQwNC8rm3UIB4kLoP1JPDDJYnfF7P/mCeFgqBbZ4w+rMIXpHD/H++k+A1Jq7dgV1ORwlLkw8yT+gnyl31LkSaqAeb4XHbsYfsU5IvfhUeX6slWn+Zj3YDfF10LXPBD+lTcUrINE4kWKYiTehGiSgnKACg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p8leib+/; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <588c1935-835f-4cab-9679-f31c1e903a9a@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1760419449;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rpX3fKP+qE+Cx5wSUCGxJKl073ySrCz333lfcH4KD3U=;
+	b=p8leib+/+Uzn8bRajg1xnIwVcJSrt3m0lLnVFEIkwQAkMvKJQmbU9EGJUvpUGsXfHbBKMz
+	ViA1mGiVwlTmDegFHZtPQpjF1hQMZ/LGvEipWPUwAW24TAK7NbpWInZInaEKhsMcGnXez2
+	/yS+HTRDNOUcLHOMcRQGei7svVjH4HY=
+Date: Tue, 14 Oct 2025 13:23:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH][v3] hung_task: Panic after fixed number of hung tasks
+Content-Language: en-US
+To: lirongqing <lirongqing@baidu.com>
+References: <20251012115035.2169-1-lirongqing@baidu.com>
+Cc: wireguard@lists.zx2c4.com, linux-arm-kernel@lists.infradead.org,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, linux-doc@vger.kernel.org,
+ David Hildenbrand <david@redhat.com>, Randy Dunlap <rdunlap@infradead.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, linux-aspeed@lists.ozlabs.org,
+ Andrew Jeffery <andrew@codeconstruct.com.au>, Joel Stanley <joel@jms.id.au>,
+ Russell King <linux@armlinux.org.uk>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <shuah@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Jonathan Corbet <corbet@lwn.net>,
+ Petr Mladek <pmladek@suse.com>, Joel Granados <joel.granados@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Phil Auld <pauld@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Masami Hiramatsu <mhiramat@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+ Simon Horman <horms@kernel.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>,
+ Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+ Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ "Paul E . McKenney" <paulmck@kernel.org>,
+ Feng Tang <feng.tang@linux.alibaba.com>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <20251012115035.2169-1-lirongqing@baidu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+Thanks for the patch!
 
-Test that outgoing plaintext records respect the tls TLS_TX_MAX_PAYLOAD_LEN
-set using setsockopt(). The limit is set to be 128, thus, in all received
-records, the plaintext must not exceed this amount.
+I noticed the implementation panics only when N tasks are detected
+within a single scan, because total_hung_task is reset for each
+check_hung_uninterruptible_tasks() run.
 
-Also test that setting a new record size limit whilst a pending open
-record exists is handled correctly by discarding the request.
+So some suggestions to align the documentation with the code's
+behavior below :)
 
-Suggested-by: Sabrina Dubroca <sd@queasysnail.net>
-Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
----
-Changes V4 -> V5:
-	- Cleanup unused variables
-	- Use ASSERT_EQ more aptly
+On 2025/10/12 19:50, lirongqing wrote:
+> From: Li RongQing <lirongqing@baidu.com>
+> 
+> Currently, when 'hung_task_panic' is enabled, the kernel panics
+> immediately upon detecting the first hung task. However, some hung
+> tasks are transient and the system can recover, while others are
+> persistent and may accumulate progressively.
+> 
+> This patch extends the 'hung_task_panic' sysctl to allow specifying
+> the number of hung tasks that must be detected before triggering
+> a kernel panic. This provides finer control for environments where
+> transient hangs may occur but persistent hangs should still be fatal.
+> 
+> The sysctl can be set to:
+> - 0: disabled (never panic)
+> - 1: original behavior (panic on first hung task)
+> - N: panic when N hung tasks are detected
+> 
+> This maintains backward compatibility while providing more flexibility
+> for handling different hang scenarios.
+> 
+> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+> ---
+> Diff with v2: not add new sysctl, extend hung_task_panic
+> 
+>   Documentation/admin-guide/kernel-parameters.txt      | 20 +++++++++++++-------
+>   Documentation/admin-guide/sysctl/kernel.rst          |  3 ++-
+>   arch/arm/configs/aspeed_g5_defconfig                 |  2 +-
+>   kernel/configs/debug.config                          |  2 +-
+>   kernel/hung_task.c                                   | 16 +++++++++++-----
+>   lib/Kconfig.debug                                    | 10 ++++++----
+>   tools/testing/selftests/wireguard/qemu/kernel.config |  2 +-
+>   7 files changed, 35 insertions(+), 20 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index a51ab46..7d9a8ee 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1992,14 +1992,20 @@
+>   			the added memory block itself do not be affected.
+>   
+>   	hung_task_panic=
+> -			[KNL] Should the hung task detector generate panics.
+> -			Format: 0 | 1
+> +			[KNL] Number of hung tasks to trigger kernel panic.
+> +			Format: <int>
+> +
+> +			Set this to the number of hung tasks that must be
+> +			detected before triggering a kernel panic.
+> +
+> +			0: don't panic
+> +			1: panic immediately on first hung task
+> +			N: panic after N hung tasks are detect
 
-V4: https://lore.kernel.org/netdev/20250923053207.113938-2-wilfred.opensource@gmail.com/
----
- tools/testing/selftests/net/tls.c | 141 ++++++++++++++++++++++++++++++
- 1 file changed, 141 insertions(+)
+The description should be more specific :)
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index e788b84551ca..158dec851176 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -2791,6 +2791,147 @@ TEST_F(tls_err, oob_pressure)
- 		EXPECT_EQ(send(self->fd2, buf, 5, MSG_OOB), 5);
- }
- 
-+/*
-+ * Parse a stream of TLS records and ensure that each record respects
-+ * the specified @max_payload_len.
-+ */
-+static size_t parse_tls_records(struct __test_metadata *_metadata,
-+				const __u8 *rx_buf, int rx_len, int overhead,
-+				__u16 max_payload_len)
-+{
-+	const __u8 *rec = rx_buf;
-+	size_t total_plaintext_rx = 0;
-+	const __u8 rec_header_len = 5;
-+
-+	while (rec < rx_buf + rx_len) {
-+		__u16 record_payload_len;
-+		__u16 plaintext_len;
-+
-+		/* Sanity check that it's a TLS header for application data */
-+		ASSERT_EQ(rec[0], 23);
-+		ASSERT_EQ(rec[1], 0x3);
-+		ASSERT_EQ(rec[2], 0x3);
-+
-+		memcpy(&record_payload_len, rec + 3, 2);
-+		record_payload_len = ntohs(record_payload_len);
-+		ASSERT_GE(record_payload_len, overhead);
-+
-+		plaintext_len = record_payload_len - overhead;
-+		total_plaintext_rx += plaintext_len;
-+
-+		/* Plaintext must not exceed the specified limit */
-+		ASSERT_LE(plaintext_len, max_payload_len);
-+		rec += rec_header_len + record_payload_len;
-+	}
-+
-+	return total_plaintext_rx;
-+}
-+
-+TEST(tx_max_payload_len)
-+{
-+	struct tls_crypto_info_keys tls12;
-+	int cfd, ret, fd, overhead;
-+	size_t total_plaintext_rx = 0;
-+	__u8 tx[1024], rx[2000];
-+	__u16 limit = 128;
-+	__u16 opt = 0;
-+	unsigned int optlen = sizeof(opt);
-+	bool notls;
-+
-+	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_CCM_128,
-+			     &tls12, 0);
-+
-+	ulp_sock_pair(_metadata, &fd, &cfd, &notls);
-+
-+	if (notls)
-+		exit(KSFT_SKIP);
-+
-+	/* Don't install keys on fd, we'll parse raw records */
-+	ret = setsockopt(cfd, SOL_TLS, TLS_TX, &tls12, tls12.len);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = setsockopt(cfd, SOL_TLS, TLS_TX_MAX_PAYLOAD_LEN, &limit,
-+			 sizeof(limit));
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = getsockopt(cfd, SOL_TLS, TLS_TX_MAX_PAYLOAD_LEN, &opt, &optlen);
-+	EXPECT_EQ(ret, 0);
-+	EXPECT_EQ(limit, opt);
-+	EXPECT_EQ(optlen, sizeof(limit));
-+
-+	memset(tx, 0, sizeof(tx));
-+	ASSERT_EQ(send(cfd, tx, sizeof(tx), 0), sizeof(tx));
-+	close(cfd);
-+
-+	ret = recv(fd, rx, sizeof(rx), 0);
-+
-+	/*
-+	 * 16B tag + 8B IV -- record header (5B) is not counted but we'll
-+	 * need it to walk the record stream
-+	 */
-+	overhead = 16 + 8;
-+	total_plaintext_rx = parse_tls_records(_metadata, rx, ret, overhead,
-+					       limit);
-+
-+	ASSERT_EQ(total_plaintext_rx, sizeof(tx));
-+	close(fd);
-+}
-+
-+TEST(tx_max_payload_len_open_rec)
-+{
-+	struct tls_crypto_info_keys tls12;
-+	int cfd, ret, fd, overhead;
-+	size_t total_plaintext_rx = 0;
-+	__u8 tx[1024], rx[2000];
-+	__u16 tx_partial = 256;
-+	__u16 og_limit = 512, limit = 128;
-+	bool notls;
-+
-+	tls_crypto_info_init(TLS_1_2_VERSION, TLS_CIPHER_AES_CCM_128,
-+			     &tls12, 0);
-+
-+	ulp_sock_pair(_metadata, &fd, &cfd, &notls);
-+
-+	if (notls)
-+		exit(KSFT_SKIP);
-+
-+	/* Don't install keys on fd, we'll parse raw records */
-+	ret = setsockopt(cfd, SOL_TLS, TLS_TX, &tls12, tls12.len);
-+	ASSERT_EQ(ret, 0);
-+
-+	ret = setsockopt(cfd, SOL_TLS, TLS_TX_MAX_PAYLOAD_LEN, &og_limit,
-+			 sizeof(og_limit));
-+	ASSERT_EQ(ret, 0);
-+
-+	memset(tx, 0, sizeof(tx));
-+	ASSERT_EQ(send(cfd, tx, tx_partial, MSG_MORE), tx_partial);
-+
-+	/*
-+	 * Changing the payload limit with a pending open record should
-+	 * not be allowed.
-+	 */
-+	ret = setsockopt(cfd, SOL_TLS, TLS_TX_MAX_PAYLOAD_LEN, &limit,
-+			 sizeof(limit));
-+	ASSERT_EQ(ret, -1);
-+	ASSERT_EQ(errno, EBUSY);
-+
-+	ASSERT_EQ(send(cfd, tx + tx_partial, sizeof(tx) - tx_partial, MSG_EOR),
-+		  sizeof(tx) - tx_partial);
-+	close(cfd);
-+
-+	ret = recv(fd, rx, sizeof(rx), 0);
-+
-+	/*
-+	 * 16B tag + 8B IV -- record header (5B) is not counted but we'll
-+	 * need it to walk the record stream
-+	 */
-+	overhead = 16 + 8;
-+	total_plaintext_rx = parse_tls_records(_metadata, rx, ret, overhead,
-+					       og_limit);
-+	ASSERT_EQ(total_plaintext_rx, sizeof(tx));
-+	close(fd);
-+}
-+
- TEST(non_established) {
- 	struct tls12_crypto_info_aes_gcm_256 tls12;
- 	struct sockaddr_in addr;
--- 
-2.51.0
+N: panic after N hung tasks are detected in a single scan
+
+Would it be better and cleaner?
+
+>   
+> -			A value of 1 instructs the kernel to panic when a
+> -			hung task is detected. The default value is controlled
+> -			by the CONFIG_BOOTPARAM_HUNG_TASK_PANIC build-time
+> -			option. The value selected by this boot parameter can
+> -			be changed later by the kernel.hung_task_panic sysctl.
+> +			The default value is controlled by the
+> +			CONFIG_BOOTPARAM_HUNG_TASK_PANIC build-time option. The value
+> +			selected by this boot parameter can be changed later by the
+> +			kernel.hung_task_panic sysctl.
+>   
+>   	hvc_iucv=	[S390]	Number of z/VM IUCV hypervisor console (HVC)
+>   				terminal devices. Valid values: 0..8
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index f3ee807..0a8dfab 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -397,7 +397,8 @@ a hung task is detected.
+>   hung_task_panic
+>   ===============
+>   
+> -Controls the kernel's behavior when a hung task is detected.
+> +When set to a non-zero value, a kernel panic will be triggered if the
+> +number of detected hung tasks reaches this value
+
+Hmm... that is also ambiguous ...
+
++When set to a non-zero value, a kernel panic will be triggered if the
++number of hung tasks found during a single scan reaches this value.
+
+>   This file shows up if ``CONFIG_DETECT_HUNG_TASK`` is enabled.
+>   
+>   = =================================================
+> diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
+> index 61cee1e..c3b0d5f 100644
+> --- a/arch/arm/configs/aspeed_g5_defconfig
+> +++ b/arch/arm/configs/aspeed_g5_defconfig
+> @@ -308,7 +308,7 @@ CONFIG_PANIC_ON_OOPS=y
+>   CONFIG_PANIC_TIMEOUT=-1
+>   CONFIG_SOFTLOCKUP_DETECTOR=y
+>   CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+> -CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
+> +CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
+>   CONFIG_WQ_WATCHDOG=y
+>   # CONFIG_SCHED_DEBUG is not set
+>   CONFIG_FUNCTION_TRACER=y
+> diff --git a/kernel/configs/debug.config b/kernel/configs/debug.config
+> index e81327d..9f6ab7d 100644
+> --- a/kernel/configs/debug.config
+> +++ b/kernel/configs/debug.config
+> @@ -83,7 +83,7 @@ CONFIG_SLUB_DEBUG_ON=y
+>   #
+>   # Debug Oops, Lockups and Hangs
+>   #
+> -# CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
+> +CONFIG_BOOTPARAM_HUNG_TASK_PANIC=0
+>   # CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+>   CONFIG_DEBUG_ATOMIC_SLEEP=y
+>   CONFIG_DETECT_HUNG_TASK=y
+> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+> index b2c1f14..3929ed9 100644
+> --- a/kernel/hung_task.c
+> +++ b/kernel/hung_task.c
+> @@ -81,7 +81,7 @@ static unsigned int __read_mostly sysctl_hung_task_all_cpu_backtrace;
+>    * hung task is detected:
+>    */
+>   static unsigned int __read_mostly sysctl_hung_task_panic =
+> -	IS_ENABLED(CONFIG_BOOTPARAM_HUNG_TASK_PANIC);
+> +	CONFIG_BOOTPARAM_HUNG_TASK_PANIC;
+>   
+>   static int
+>   hung_task_panic(struct notifier_block *this, unsigned long event, void *ptr)
+> @@ -218,8 +218,11 @@ static inline void debug_show_blocker(struct task_struct *task, unsigned long ti
+>   }
+>   #endif
+>   
+> -static void check_hung_task(struct task_struct *t, unsigned long timeout)
+> +static void check_hung_task(struct task_struct *t, unsigned long timeout,
+> +		unsigned long prev_detect_count)
+>   {
+> +	unsigned long total_hung_task;
+> +
+>   	if (!task_is_hung(t, timeout))
+>   		return;
+>   
+> @@ -229,9 +232,11 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
+>   	 */
+>   	sysctl_hung_task_detect_count++;
+>   
+> +	total_hung_task = sysctl_hung_task_detect_count - prev_detect_count;
+>   	trace_sched_process_hang(t);
+>   
+> -	if (sysctl_hung_task_panic) {
+> +	if (sysctl_hung_task_panic &&
+> +			(total_hung_task >= sysctl_hung_task_panic)) {
+>   		console_verbose();
+>   		hung_task_show_lock = true;
+>   		hung_task_call_panic = true;
+> @@ -300,6 +305,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+>   	int max_count = sysctl_hung_task_check_count;
+>   	unsigned long last_break = jiffies;
+>   	struct task_struct *g, *t;
+> +	unsigned long prev_detect_count = sysctl_hung_task_detect_count;
+>   
+>   	/*
+>   	 * If the system crashed already then all bets are off,
+> @@ -320,7 +326,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+>   			last_break = jiffies;
+>   		}
+>   
+> -		check_hung_task(t, timeout);
+> +		check_hung_task(t, timeout, prev_detect_count);
+>   	}
+>    unlock:
+>   	rcu_read_unlock();
+> @@ -389,7 +395,7 @@ static const struct ctl_table hung_task_sysctls[] = {
+>   		.mode		= 0644,
+>   		.proc_handler	= proc_dointvec_minmax,
+>   		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= SYSCTL_ONE,
+> +		.extra2		= SYSCTL_INT_MAX,
+>   	},
+>   	{
+>   		.procname	= "hung_task_check_count",
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 3034e294..077b9e4 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1258,12 +1258,14 @@ config DEFAULT_HUNG_TASK_TIMEOUT
+>   	  Keeping the default should be fine in most cases.
+>   
+>   config BOOTPARAM_HUNG_TASK_PANIC
+> -	bool "Panic (Reboot) On Hung Tasks"
+> +	int "Number of hung tasks to trigger kernel panic"
+>   	depends on DETECT_HUNG_TASK
+> +	default 0
+>   	help
+> -	  Say Y here to enable the kernel to panic on "hung tasks",
+> -	  which are bugs that cause the kernel to leave a task stuck
+> -	  in uninterruptible "D" state.
+> +	  The number of hung tasks must be detected to trigger kernel panic.
+> +
+> +	  - 0: Don't trigger panic
+> +	  - N: Panic when N hung tasks are detected
+
++	  - N: Panic when N hung tasks are detected in a single scan
+
+With these documentation changes, this patch would accurately describe 
+its behavior, IMHO.
+
+>   
+>   	  The panic can be used in combination with panic_timeout,
+>   	  to cause the system to reboot automatically after a
+> diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
+> index 936b18b..0504c11 100644
+> --- a/tools/testing/selftests/wireguard/qemu/kernel.config
+> +++ b/tools/testing/selftests/wireguard/qemu/kernel.config
+> @@ -81,7 +81,7 @@ CONFIG_WQ_WATCHDOG=y
+>   CONFIG_DETECT_HUNG_TASK=y
+>   CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+>   CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+> -CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
+> +CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
+>   CONFIG_PANIC_TIMEOUT=-1
+>   CONFIG_STACKTRACE=y
+>   CONFIG_EARLY_PRINTK=y
 
 
