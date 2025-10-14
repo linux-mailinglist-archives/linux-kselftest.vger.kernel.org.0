@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-43080-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99BFABD7A4E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 08:50:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3488CBD7B0B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 08:51:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 546E63B9500
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 06:50:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80C4019219CE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 06:51:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B3B30DEC9;
-	Tue, 14 Oct 2025 06:49:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2EB230EF74;
+	Tue, 14 Oct 2025 06:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YvnFnbNR";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JKJ+DVqa"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aVyOhzFX";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="93A0Pupj"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51702D5937;
-	Tue, 14 Oct 2025 06:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7047F30DEB2;
+	Tue, 14 Oct 2025 06:49:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760424560; cv=none; b=eDjhQWG6098KsE0JHlZOsjejfprl+sQ4iFGUZnylsXFDlSQY4aCc61G/pNcSzWqJsfq/60PLab+sHfKeiyFcwUDE+D9288iKeUWiEgaNePDhlKapGg8sXbqpdb/hpDIRaRtGwYysuCkdmuNcv/OkVSasXGmQ/bEzPNc/o9kikLM=
+	t=1760424562; cv=none; b=MTa0Nz/Xduj1orGJhAUBuJ8DKRzvBQGR9c9s1EhVOgKPwvZdRyjLkJheFvwogTTsq4iTbnyuqv1kvx/xsUQ6Z5mhdEkMy0RK7zn743a9ZJVyOcML/BMHfCKWtTxP7N4uXshR8XuNdHRjBg3C1tPhfE5XV76BbcY+HC075iPbTT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760424560; c=relaxed/simple;
-	bh=f5r014iYxv+SmOkywIQ3OnuCpdceOsjOT2ht3554OW4=;
+	s=arc-20240116; t=1760424562; c=relaxed/simple;
+	bh=gCxoA74I68jSl8hq9TPM97UMjmPrbJiPbnyKM8TAfkA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j6AvvGzdk2TH0QHwzaCEDm6fCNhSEGBGuvjfsO5AaRQiA8WwybPpX7amV2ps/IuF/FYRDCcHQSyh8E+NTb8P335O9+r/ACi2f73jEC4XKsm5OWX59bwZNJVmwQPXrC3J15Jt1wfby3SinG6XreD5nySM7TcWFm4J1OZ6WXznh4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YvnFnbNR; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JKJ+DVqa; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=LONsTJu/5xX1BCUW1+Y+Xc095YBsuN8P+oVHqDJXfb3jN2mpImnw1pHRevdHxwjqyW7/Ushm/fxzW8o0y6b0Gx29QBduimBD+l2HCdGrJinoCfpfUfqQ+AlMBdhWFR3QDLMXFiGyV2vfILmN1Wkim4odYta0m3lHkPl/shTN8hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aVyOhzFX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=93A0Pupj; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,24 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TSceSQr50i4xNZcTEIWaHybDT9YH0OmRRb7tINfcZQo=;
-	b=YvnFnbNRVGk+HZ+36YKyS9jzZmAuOT/qRssQEBgYLtXDMYBaMa0rlJh1zZOK+RZ4tN0QRE
-	jPa9mDGkBsEneIwH06F0YgK+5xBpiy+XdoplBkhgzzqcWlBMHyBHgTiioLrDVxQkCNJ4AD
-	QMp8khhzLM/gnIbYniBVz3aQahHqwFYkkLla8+ntFqWK2nvE7LtjElRFeH+FCtzWY8ZWVa
-	598B73YJ0/ROiQ3wOhc9Jz74BhZrCub8vxhAiQKmrCwSWoh1qQguCng6nUAVOOR5J/gkE1
-	dbOaym2swRWZYEMAhKy1OYK5K7NhYCXjvn077QP0V6VWCzClyVIR3whhnjcs2Q==
+	bh=OKFAR6pTteHeDNIXFD4VW70Ndlry08cGog9KlECLSuA=;
+	b=aVyOhzFXfn/6Sklao9CQTvk+ikFPSP4E5e/x6X5/aBK51XERII6rwWaFWRIesuf/7Ibp3c
+	62Tw9JYip6pMrX0T3+URNjJGAaQBYlfmFq5pv51B2dPnOkfVxHORFeAC/e+EYmtNHlwDsr
+	Sz2uirxiPJjjbaJsUKltc2Xc4W+kfvXKE15yEPbPp0Oa9lyQfH8DiHM/zWIjJg3WvtK1h7
+	g+reIaFCIYAktmc8/yQ3aJyGTfOB44Z4nCNEsCCvD+EsOrOFptllWOJ82C0Ag0+5nQTGkn
+	u52+hbuCIjZhi2xP5c/9Nbv9b3DxAMICkbq92UtL4FmdSgpuDVvcXV78yzPhWg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1760424550;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TSceSQr50i4xNZcTEIWaHybDT9YH0OmRRb7tINfcZQo=;
-	b=JKJ+DVqalM2n1UIcVv0DQ7DdY0WF0ulGXHhJ4F78q3cvnexhPDkO4lzlNUg2XAM/8bjq6b
-	X+ybZ1U6WW3j+sBw==
-Date: Tue, 14 Oct 2025 08:48:52 +0200
-Subject: [PATCH v4 06/35] powerpc/vdso/gettimeofday: Explicitly include
- vdso/time32.h
+	bh=OKFAR6pTteHeDNIXFD4VW70Ndlry08cGog9KlECLSuA=;
+	b=93A0PupjU1m7nesioE1Tos0VwbAOr8oarXvpNc0kvfhHfw8TFUheof84DChW+FjWzqxT5a
+	/bxDRXuuXaEXQ+AA==
+Date: Tue, 14 Oct 2025 08:48:53 +0200
+Subject: [PATCH v4 07/35] powerpc/vdso: Explicitly include asm/cputable.h
+ and asm/feature-fixups.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251014-vdso-sparc64-generic-2-v4-6-e0607bf49dea@linutronix.de>
+Message-Id: <20251014-vdso-sparc64-generic-2-v4-7-e0607bf49dea@linutronix.de>
 References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
 In-Reply-To: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -94,39 +94,42 @@ Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
  linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760424546; l=953;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760424546; l=1151;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=f5r014iYxv+SmOkywIQ3OnuCpdceOsjOT2ht3554OW4=;
- b=knVOAm+H7RDlq04Q/DZYK3tF6OVw0eO7HWwlITyjSqFNyMoNWo5Ecexq0IkBiEfjl2Cij6nx/
- DRMVz2T4GxaAYg7hPgB/wAifnCAGcWUPRAS0ol3TrT5omHHhPVL4Szp
+ bh=gCxoA74I68jSl8hq9TPM97UMjmPrbJiPbnyKM8TAfkA=;
+ b=ErSbWsbptiRFVQ2OuvWgIME8FbDtQqeR4bNDjcvIjX2tlqGeRUrUzaTyzk7W7+t5o6pzk/8s6
+ bo01/vvS+uqAaz+1E3Td/IRTqKtYfwcyvWspCGwnull2AOGyPml55aO
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The usage of 'struct old_timespec32' requires vdso/time32.h. Currently
-this header is included transitively, but that transitive inclusion is
-about to go away.
+The usage of ASM_FTR_IFCLR(CPU_TR_ARCH_31) requires asm/cputable.h and
+asm/feature-fixups.h. Currently these headers are included transitively,
+but that transitive inclusion is about to go away.
 
-Explicitly include the header.
+Explicitly include the headers.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 Tested-by: Andreas Larsson <andreas@gaisler.com>
 Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 ---
- arch/powerpc/include/asm/vdso/gettimeofday.h | 1 +
- 1 file changed, 1 insertion(+)
+ arch/powerpc/include/asm/vdso/processor.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
-index ab3df12c8d947ed3a5b0b173567ca8469afbf2d6..b2f0e971076acaea8bc70107fc0f5b2d23e0b312 100644
---- a/arch/powerpc/include/asm/vdso/gettimeofday.h
-+++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
-@@ -8,6 +8,7 @@
- #include <asm/barrier.h>
- #include <asm/unistd.h>
- #include <uapi/linux/time.h>
-+#include <vdso/time32.h>
+diff --git a/arch/powerpc/include/asm/vdso/processor.h b/arch/powerpc/include/asm/vdso/processor.h
+index c1f3d7aaf3ee970699fa73731412137631da347b..4c6802c3a58083efc01b4759dbdaa3612903df6a 100644
+--- a/arch/powerpc/include/asm/vdso/processor.h
++++ b/arch/powerpc/include/asm/vdso/processor.h
+@@ -4,6 +4,9 @@
  
- #define VDSO_HAS_CLOCK_GETRES		1
+ #ifndef __ASSEMBLER__
  
++#include <asm/cputable.h>
++#include <asm/feature-fixups.h>
++
+ /* Macros for adjusting thread priority (hardware multi-threading) */
+ #ifdef CONFIG_PPC64
+ #define HMT_very_low()		asm volatile("or 31, 31, 31	# very low priority")
 
 -- 
 2.51.0
