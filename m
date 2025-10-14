@@ -1,183 +1,350 @@
-Return-Path: <linux-kselftest+bounces-43069-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E5AFBD7028
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 03:52:02 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8E96BD7668
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 07:19:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CAC894E334A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 01:52:00 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3001434E907
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 05:19:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7345D2609DC;
-	Tue, 14 Oct 2025 01:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C88A296BDA;
+	Tue, 14 Oct 2025 05:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="DhO0hF6g"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jV8F+kJC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E671CEACB;
-	Tue, 14 Oct 2025 01:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA7C26FA56
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 05:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760406716; cv=none; b=h5QfhYH21j373uLqmpSac5KEePTB39m3oyb1YVtdJJmds5feeYGaYV+uTnKLnJSUSb7jDz6D5o8pW5U96XAtFNNrHDB3DSKDAEhNFcvm8eWsjwHBhXWmoBdVjeqad4yjhPqzxYsumLpGfqZnwP5eCEgnw68G8hcW2LlXXEVzV5I=
+	t=1760419133; cv=none; b=pVnjQMQqCcQgKR658Vk7TmtkhQlMM7ZWwqUyUjlIY0lcdl8tnvF8Auo0HjP/TAtBLegyS2GXQTcFeNM9tVv0WQWuGNHtuBf1au2iNKz3i/lhlEFo6ZbhRU751sQdqHbXruhKbpm/1x8YRzRaPajiEn7tMpudSExQTtegtEtaJKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760406716; c=relaxed/simple;
-	bh=D5pq7pWAQYFwhyzSZxyrhL2+MSp19sOiqhoesc+kuCg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q8tal22yz/gOiwBhSJ2lCQ0H7mMhSjy54WW2c3uzK0y8uNOxZ8mSI9MF29HGmrAOrwPvi8xxbflAjlRNED53KG42JxSQZ0Rvg3JnbW+1J72yS/MKScfmjHbqdvdebHRRxQxPPfqcWtvTTNnspWfZJZB8cy+yhk15eKeyed2RE08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=DhO0hF6g; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=GdHHVHX1eK4OumztheWLpvPpWCbLWAPVj4gP9BXPPI8=; b=DhO0hF6gqhy8rmkGEl7on7+oJv
-	VtSUYvYuPcOlDu5fO8rCTFa2F1N/jdAP20m8Nb67fTrBo/fW7xZkTs3E4kNWHnFynKs20G0xEsolC
-	MqH/ufxF3g2GzV+W64oAUH6OPetfyV6FPMJEqWTE/ij6PONb6v3EHCJOmal94Lc0Bi4hK+35ayHKR
-	mt+8n05mNcD2DsFYZBume6lwYieckkKHhLNsYjifIvTzRXNk9td5Pk/x3BSq6HPF1OGCgGKUidim1
-	8H0TuKmkhlQR6ai4NxMDf9cGRmyXPY/ia4v6vaMJvdCXmK4AZRsHC3b9HHij78SAmfr3e1ZC9jXim
-	CxkRoeLg==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1v8UCc-0000000EvJR-1Gkr;
-	Tue, 14 Oct 2025 01:51:50 +0000
-Message-ID: <3efcf624-58f1-4390-b6e2-a0aa5e62a9a3@infradead.org>
-Date: Mon, 13 Oct 2025 18:51:49 -0700
+	s=arc-20240116; t=1760419133; c=relaxed/simple;
+	bh=3CsbX3ia7XbNNJuEoF3K6A0LkheE9pazmG+LEn8/eYo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=chovDyoY5xWNmgxqZNgZhln7GzH0VKsRImZ9sjt/+HWn9QIrsYdrQiKRQg5R4iPnNBvHwbgdj3zoXzOoG4zYHWHFIhvRhmn988CVfefz1GY6x3/tPnYZJfeMhUPIRODRRnLhOGTw/SRymgFOsa7kqdwpnivzJbFgN6QpTa0MK2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jV8F+kJC; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b57bffc0248so3461514a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 Oct 2025 22:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760419130; x=1761023930; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5YUjn19/CQ3vmkmWPkMBT30HWcB60PaZmZPU21N9sok=;
+        b=jV8F+kJChhMemODZzFCIkE9v+fPGj1db+dQyE6NTrl5dQ7fXgM7UiE3DOAEJhqS2JH
+         /9suU/GKVjtDN0XogYMDhMba8PZZQovjLESk36ih6NR6pLBKK+pBdtbdaQsTEm9z45X/
+         Vru4fyaPtlag8qTcddr/wwqNEOD4/LA4dM6G2q7AhHXDn78xj1yV7j7gJQTLLxXIC9W2
+         32NNDtORZsVVxN+vdFDI1aoQTerVZBNFgw6udjWUKfEFrptiMXExgDxEB7nVIkukFJV8
+         wEQZ/nEDfyrUrmjR4YN3sBBnsCfFOX6vDlsaCJAzLoMfxzIviCh+vtfhLLawPSFhNskh
+         i46Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760419130; x=1761023930;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5YUjn19/CQ3vmkmWPkMBT30HWcB60PaZmZPU21N9sok=;
+        b=kkBbWWjlYa/yOxfSGZe/4TkpgrJIPrEC+Mio4AL+QiEXMBFjNEVQch3pV/knBbAI51
+         mKjDkM4MX2pCgcIZ8OGOqRfCxbthhQlVpCUtJQ2l4VPTMNlU8f1jAFQ/Ze0NtLJ8zjfG
+         EhfV+21G6Y7OhK9xrhuU+BJ4paoW3RoKlRilmU9aMS0VPMYaeQOm6A/4M8JpiHGZXQcj
+         2XkvoArkDTRvzHBKS1SFK2B9ma2g4edG5SCdNA1fL62OmLmaOtm6vaXGaJ6CHBzrDwYl
+         h0CFQ/gbQTuxyghIwIfb9RFVxcdeqJpveEXvEBnPenRTYF7tNYUU7YDdIqYcIle6PhPn
+         ZAhw==
+X-Forwarded-Encrypted: i=1; AJvYcCX6Ugy4XRqbH/D3DZeoyI/k2nn66Zns9pg4+9YlDvDMbiBG49oeFECHjLQCBWdsttcqj4Kz6+0OvgvIzd9BnCk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyklNkH0QBtcSn8owTLCAYBnX7/U6zz+8ueFIFkPvJN7wDXkfWC
+	mKRpczTdOQvgTjogsSoagAvSI+It/KTTdXVr9A9jBpFHc1CchMxNN/K173uuymov
+X-Gm-Gg: ASbGncuQaDhJmR+UGCU1uJCT5TAQJgzwm7YKbPr2ij/WNbSWCvfsiTdqLSo6fVb0l1k
+	o4lScIrb/sIRA1liier3skrIhdEqHDNHBLPZD0pB8y9tuOxYb4BkVr3OA/+JeX6FFzSUNssjonV
+	HEjCeP5PMsbu339rdd7vEXb5XAwDf4Pqi+TfKICdWGzoeUPKmjTWkoQ95LPbhLxnD4DEDRj/Vpq
+	nzXnGVFIc+ac4BK4Fnfr+ajwO466EC8+p5reZ66FsrdKuNxF/iAl+tD/ax9tYdp3RkwTXNCCVyq
+	idzIC7t4r+ULRTqaVkTJO+TZQZzX/zAKAA43ubwMzNpeQC31SRMQZB9oEi6caSGISmOrrLau5LP
+	RKMEdEIFR80SLLiX6eZDRNKTzgSy/Sxe6nj5hOsWWXNVaZW17MOMfbNSsPcoc
+X-Google-Smtp-Source: AGHT+IGaEbm5lxh/HwCuu1DSYJL44jeb5U5tWSz8nBNZJovVDaU49e+AZFJiTTKfmSUnqgzmD+dUbQ==
+X-Received: by 2002:a17:902:fa0e:b0:28e:cbbd:975f with SMTP id d9443c01a7336-28ecbbd9928mr202109685ad.1.1760419129464;
+        Mon, 13 Oct 2025 22:18:49 -0700 (PDT)
+Received: from fedora ([159.196.5.243])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034f08d0fsm151575385ad.63.2025.10.13.22.18.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Oct 2025 22:18:49 -0700 (PDT)
+From: Wilfred Mallawa <wilfred.opensource@gmail.com>
+To: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Sabrina Dubroca <sd@queasysnail.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Wilfred Mallawa <wilfred.mallawa@wdc.com>
+Subject: [PATCH net-next v5 1/2] net/tls: support setting the maximum payload size
+Date: Tue, 14 Oct 2025 15:18:25 +1000
+Message-ID: <20251014051825.1084403-2-wilfred.opensource@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] Documentation: kvm: new UAPI for handling SEA
-To: Jiaqi Yan <jiaqiyan@google.com>, maz@kernel.org, oliver.upton@linux.dev
-Cc: duenwen@google.com, rananta@google.com, jthoughton@google.com,
- vsethi@nvidia.com, jgg@nvidia.com, joey.gouly@arm.com,
- suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com,
- will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org,
- kvm@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20251013185903.1372553-1-jiaqiyan@google.com>
- <20251013185903.1372553-4-jiaqiyan@google.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251013185903.1372553-4-jiaqiyan@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
 
+During a handshake, an endpoint may specify a maximum record size limit.
+Currently, the kernel defaults to TLS_MAX_PAYLOAD_SIZE (16KB) for the
+maximum record size. Meaning that, the outgoing records from the kernel
+can exceed a lower size negotiated during the handshake. In such a case,
+the TLS endpoint must send a fatal "record_overflow" alert [1], and
+thus the record is discarded.
 
-On 10/13/25 11:59 AM, Jiaqi Yan wrote:
-> Document the new userspace-visible features and APIs for handling
-> synchronous external abort (SEA)
-> - KVM_CAP_ARM_SEA_TO_USER: How userspace enables the new feature.
-> - KVM_EXIT_ARM_SEA: exit userspace gets when it needs to handle SEA
->   and what userspace gets while taking the SEA.
-> 
-> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> ---
->  Documentation/virt/kvm/api.rst | 61 ++++++++++++++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 6ae24c5ca5598..43bc2a1d78e01 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -7272,6 +7272,55 @@ exit, even without calls to ``KVM_ENABLE_CAP`` or similar.  In this case,
->  it will enter with output fields already valid; in the common case, the
->  ``unknown.ret`` field of the union will be ``TDVMCALL_STATUS_SUBFUNC_UNSUPPORTED``.
->  Userspace need not do anything if it does not wish to support a TDVMCALL.
-> +
-> +::
-> +		/* KVM_EXIT_ARM_SEA */
-> +		struct {
-> +  #define KVM_EXIT_ARM_SEA_FLAG_GPA_VALID   (1ULL << 0)
-> +			__u64 flags;
-> +			__u64 esr;
-> +			__u64 gva;
-> +			__u64 gpa;
-> +		} arm_sea;
-> +
-> +Used on arm64 systems. When the VM capability KVM_CAP_ARM_SEA_TO_USER is
-> +enabled, a VM exit is generated if guest causes a synchronous external abort
-> +(SEA) and the host APEI fails to handle the SEA.
-> +
-> +Historically KVM handles SEA by first delegating the SEA to host APEI as there
-> +is high chance that the SEA is caused by consuming uncorrected memory error.
-> +However, not all platforms support SEA handling in APEI, and KVM's fallback
-> +is to inject an asynchronous SError into the guest, which usually panics
-> +guest kernel unpleasantly. As an alternative, userspace can participate into
+Upcoming Western Digital NVMe-TCP hardware controllers implement TLS
+support. For these devices, supporting TLS record size negotiation is
+necessary because the maximum TLS record size supported by the controller
+is less than the default 16KB currently used by the kernel.
 
-                                                                           in
+Currently, there is no way to inform the kernel of such a limit. This patch
+adds support to a new setsockopt() option `TLS_TX_MAX_PAYLOAD_LEN` that
+allows for setting the maximum plaintext fragment size. Once set, outgoing
+records are no larger than the size specified. This option can be used to
+specify the record size limit.
 
-> +the SEA handling by enabling KVM_CAP_ARM_SEA_TO_USER at VM creation, after
-> +querying the capability. Once enabled, when KVM has to handle the guest
+[1] https://www.rfc-editor.org/rfc/rfc8449
 
-                                                                     guest-
-> +caused SEA, it returns to userspace with KVM_EXIT_ARM_SEA, with details
-> +about the SEA available in 'arm_sea'.
-> +
-> +The 'esr' field holds the value of the exception syndrome register (ESR) while
-> +KVM taking the SEA, which tells userspace the character of the current SEA,
-   KVM takes
+Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+---
+Changes V4 -> V5
+	- Change the socket option to TLS_TX_MAX_PAYLOAD_LEN, such that we can
+          limit the payload length in a generic way, as pposed to strictly
+          specifying record size limit. No functional changes other than
+          removing TLS 1.3 content byte length checks for this argument.
 
-> +such as its Exception Class, Synchronous Error Type, Fault Specific Code and
-> +so on. For more details on ESR, check the Arm Architecture Registers
-> +documentation.
-> +
-> +The following values are defined for the 'flags' field
+        - Lock the socket when calling do_tls_setsockopt_tx_payload_len()
 
-Above needs an ending like '.' or ':'.
-(or maybe "::" depending how it is processed by Sphinx)
+V4: https://lore.kernel.org/netdev/20250923053207.113938-1-wilfred.opensource@gmail.com/
+---
+ Documentation/networking/tls.rst | 11 ++++++
+ include/net/tls.h                |  3 ++
+ include/uapi/linux/tls.h         |  2 ++
+ net/tls/tls_device.c             |  2 +-
+ net/tls/tls_main.c               | 62 ++++++++++++++++++++++++++++++++
+ net/tls/tls_sw.c                 |  2 +-
+ 6 files changed, 80 insertions(+), 2 deletions(-)
 
-> +
-> +  - KVM_EXIT_ARM_SEA_FLAG_GPA_VALID -- the faulting guest physical address
-> +    is valid and userspace can get its value in the 'gpa' field.
-> +
-> +Note userspace can tell whether the faulting guest virtual address is valid
-> +from the FnV bit in 'esr' field. If FnV bit in 'esr' field is not set, the
-> +'gva' field hols the valid faulting guest virtual address.
-
-               holds (or contains)> +
-> +Userspace needs to take actions to handle guest SEA synchronously, namely in
-> +the same thread that runs KVM_RUN and receives KVM_EXIT_ARM_SEA. One of the
-> +encouraged approaches is to utilize the KVM_SET_VCPU_EVENTS to inject the SEA
-> +to the faulting VCPU. This way, the guest has the opportunity to keep running
-> +and limit the blast radius of the SEA to the particular guest application that
-> +caused the SEA. Userspace may also emulate the SEA to VM by itself using the
-> +KVM_SET_ONE_REG API. In this case, it can use the valid values from 'gva' and
-> +'gpa' fields to manipulate VCPU's registers (e.g. FAR_EL1, HPFAR_EL1).
-> +
->  ::
->  
->  		/* Fix the size of the union. */
-> @@ -8689,6 +8738,18 @@ This capability indicate to the userspace whether a PFNMAP memory region
->  can be safely mapped as cacheable. This relies on the presence of
->  force write back (FWB) feature support on the hardware.
->  
-> +7.45 KVM_CAP_ARM_SEA_TO_USER
-> +----------------------------
-> +
-> +:Architecture: arm64
-> +:Target: VM
-> +:Parameters: none
-> +:Returns: 0 on success, -EINVAL if unsupported.
-> +
-> +This capability, if KVM_CHECK_EXTENSION indicates that it is available, means
-> +that KVM has an implementation that allows userspace to participate in handling
-> +synchronous external abort caused by VM, by an exit of KVM_EXIT_ARM_SEA.
-> +
->  8. Other capabilities.
->  ======================
->  
-
+diff --git a/Documentation/networking/tls.rst b/Documentation/networking/tls.rst
+index 36cc7afc2527..dabab17ab84a 100644
+--- a/Documentation/networking/tls.rst
++++ b/Documentation/networking/tls.rst
+@@ -280,6 +280,17 @@ If the record decrypted turns out to had been padded or is not a data
+ record it will be decrypted again into a kernel buffer without zero copy.
+ Such events are counted in the ``TlsDecryptRetry`` statistic.
+ 
++TLS_TX_MAX_PAYLOAD_LEN
++~~~~~~~~~~~~~~~~~~~~~~
++
++Sets the maximum size for the plaintext of a protected record.
++
++When this option is set, the kernel enforces this limit on all transmitted TLS
++records, ensuring no plaintext fragment exceeds the specified size. This can be
++used to specify the TLS Record Size Limit [1].
++
++[1] https://datatracker.ietf.org/doc/html/rfc8449
++
+ Statistics
+ ==========
+ 
+diff --git a/include/net/tls.h b/include/net/tls.h
+index 857340338b69..f2af113728aa 100644
+--- a/include/net/tls.h
++++ b/include/net/tls.h
+@@ -53,6 +53,8 @@ struct tls_rec;
+ 
+ /* Maximum data size carried in a TLS record */
+ #define TLS_MAX_PAYLOAD_SIZE		((size_t)1 << 14)
++/* Minimum record size limit as per RFC8449 */
++#define TLS_MIN_RECORD_SIZE_LIM		((size_t)1 << 6)
+ 
+ #define TLS_HEADER_SIZE			5
+ #define TLS_NONCE_OFFSET		TLS_HEADER_SIZE
+@@ -226,6 +228,7 @@ struct tls_context {
+ 	u8 rx_conf:3;
+ 	u8 zerocopy_sendfile:1;
+ 	u8 rx_no_pad:1;
++	u16 tx_max_payload_len;
+ 
+ 	int (*push_pending_record)(struct sock *sk, int flags);
+ 	void (*sk_write_space)(struct sock *sk);
+diff --git a/include/uapi/linux/tls.h b/include/uapi/linux/tls.h
+index b66a800389cc..b8b9c42f848c 100644
+--- a/include/uapi/linux/tls.h
++++ b/include/uapi/linux/tls.h
+@@ -41,6 +41,7 @@
+ #define TLS_RX			2	/* Set receive parameters */
+ #define TLS_TX_ZEROCOPY_RO	3	/* TX zerocopy (only sendfile now) */
+ #define TLS_RX_EXPECT_NO_PAD	4	/* Attempt opportunistic zero-copy */
++#define TLS_TX_MAX_PAYLOAD_LEN	5	/* Maximum plaintext size */
+ 
+ /* Supported versions */
+ #define TLS_VERSION_MINOR(ver)	((ver) & 0xFF)
+@@ -194,6 +195,7 @@ enum {
+ 	TLS_INFO_RXCONF,
+ 	TLS_INFO_ZC_RO_TX,
+ 	TLS_INFO_RX_NO_PAD,
++	TLS_INFO_TX_MAX_PAYLOAD_LEN,
+ 	__TLS_INFO_MAX,
+ };
+ #define TLS_INFO_MAX (__TLS_INFO_MAX - 1)
+diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
+index a64ae15b1a60..c6289c73cffc 100644
+--- a/net/tls/tls_device.c
++++ b/net/tls/tls_device.c
+@@ -461,7 +461,7 @@ static int tls_push_data(struct sock *sk,
+ 	/* TLS_HEADER_SIZE is not counted as part of the TLS record, and
+ 	 * we need to leave room for an authentication tag.
+ 	 */
+-	max_open_record_len = TLS_MAX_PAYLOAD_SIZE +
++	max_open_record_len = tls_ctx->tx_max_payload_len +
+ 			      prot->prepend_size;
+ 	do {
+ 		rc = tls_do_allocation(sk, ctx, pfrag, prot->prepend_size);
+diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+index a3ccb3135e51..b481d1add14e 100644
+--- a/net/tls/tls_main.c
++++ b/net/tls/tls_main.c
+@@ -544,6 +544,28 @@ static int do_tls_getsockopt_no_pad(struct sock *sk, char __user *optval,
+ 	return 0;
+ }
+ 
++static int do_tls_getsockopt_tx_payload_len(struct sock *sk, char __user *optval,
++					    int __user *optlen)
++{
++	struct tls_context *ctx = tls_get_ctx(sk);
++	u16 payload_len = ctx->tx_max_payload_len;
++	int len;
++
++	if (get_user(len, optlen))
++		return -EFAULT;
++
++	if (len < sizeof(payload_len))
++		return -EINVAL;
++
++	if (put_user(sizeof(payload_len), optlen))
++		return -EFAULT;
++
++	if (copy_to_user(optval, &payload_len, sizeof(payload_len)))
++		return -EFAULT;
++
++	return 0;
++}
++
+ static int do_tls_getsockopt(struct sock *sk, int optname,
+ 			     char __user *optval, int __user *optlen)
+ {
+@@ -563,6 +585,9 @@ static int do_tls_getsockopt(struct sock *sk, int optname,
+ 	case TLS_RX_EXPECT_NO_PAD:
+ 		rc = do_tls_getsockopt_no_pad(sk, optval, optlen);
+ 		break;
++	case TLS_TX_MAX_PAYLOAD_LEN:
++		rc = do_tls_getsockopt_tx_payload_len(sk, optval, optlen);
++		break;
+ 	default:
+ 		rc = -ENOPROTOOPT;
+ 		break;
+@@ -812,6 +837,30 @@ static int do_tls_setsockopt_no_pad(struct sock *sk, sockptr_t optval,
+ 	return rc;
+ }
+ 
++static int do_tls_setsockopt_tx_payload_len(struct sock *sk, sockptr_t optval,
++					    unsigned int optlen)
++{
++	struct tls_context *ctx = tls_get_ctx(sk);
++	struct tls_sw_context_tx *sw_ctx = tls_sw_ctx_tx(ctx);
++	u16 value;
++
++	if (sw_ctx->open_rec)
++		return -EBUSY;
++
++	if (sockptr_is_null(optval) || optlen != sizeof(value))
++		return -EINVAL;
++
++	if (copy_from_sockptr(&value, optval, sizeof(value)))
++		return -EFAULT;
++
++	if (value < TLS_MIN_RECORD_SIZE_LIM || value > TLS_MAX_PAYLOAD_SIZE)
++		return -EINVAL;
++
++	ctx->tx_max_payload_len = value;
++
++	return 0;
++}
++
+ static int do_tls_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+ 			     unsigned int optlen)
+ {
+@@ -833,6 +882,11 @@ static int do_tls_setsockopt(struct sock *sk, int optname, sockptr_t optval,
+ 	case TLS_RX_EXPECT_NO_PAD:
+ 		rc = do_tls_setsockopt_no_pad(sk, optval, optlen);
+ 		break;
++	case TLS_TX_MAX_PAYLOAD_LEN:
++		lock_sock(sk);
++		rc = do_tls_setsockopt_tx_payload_len(sk, optval, optlen);
++		release_sock(sk);
++		break;
+ 	default:
+ 		rc = -ENOPROTOOPT;
+ 		break;
+@@ -1022,6 +1076,7 @@ static int tls_init(struct sock *sk)
+ 
+ 	ctx->tx_conf = TLS_BASE;
+ 	ctx->rx_conf = TLS_BASE;
++	ctx->tx_max_payload_len = TLS_MAX_PAYLOAD_SIZE;
+ 	update_sk_prot(sk, ctx);
+ out:
+ 	write_unlock_bh(&sk->sk_callback_lock);
+@@ -1111,6 +1166,12 @@ static int tls_get_info(struct sock *sk, struct sk_buff *skb, bool net_admin)
+ 			goto nla_failure;
+ 	}
+ 
++	err = nla_put_u16(skb, TLS_INFO_TX_MAX_PAYLOAD_LEN,
++			  ctx->tx_max_payload_len);
++
++	if (err)
++		goto nla_failure;
++
+ 	rcu_read_unlock();
+ 	nla_nest_end(skb, start);
+ 	return 0;
+@@ -1132,6 +1193,7 @@ static size_t tls_get_info_size(const struct sock *sk, bool net_admin)
+ 		nla_total_size(sizeof(u16)) +	/* TLS_INFO_TXCONF */
+ 		nla_total_size(0) +		/* TLS_INFO_ZC_RO_TX */
+ 		nla_total_size(0) +		/* TLS_INFO_RX_NO_PAD */
++		nla_total_size(sizeof(u16)) +   /* TLS_INFO_TX_MAX_PAYLOAD_LEN */
+ 		0;
+ 
+ 	return size;
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index daac9fd4be7e..e76ea38b712a 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -1079,7 +1079,7 @@ static int tls_sw_sendmsg_locked(struct sock *sk, struct msghdr *msg,
+ 		orig_size = msg_pl->sg.size;
+ 		full_record = false;
+ 		try_to_copy = msg_data_left(msg);
+-		record_room = TLS_MAX_PAYLOAD_SIZE - msg_pl->sg.size;
++		record_room = tls_ctx->tx_max_payload_len - msg_pl->sg.size;
+ 		if (try_to_copy >= record_room) {
+ 			try_to_copy = record_room;
+ 			full_record = true;
 -- 
-~Randy
+2.51.0
 
 
