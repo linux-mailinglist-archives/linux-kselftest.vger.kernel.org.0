@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-43094-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67C5DBD7B8F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 08:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 986FABD7B53
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 08:52:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63FCE189DAD2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 06:52:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 120EB188910C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 06:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FDFD30F81F;
-	Tue, 14 Oct 2025 06:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1AEB30F54C;
+	Tue, 14 Oct 2025 06:49:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xwpgAjCw";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YFGw/5OT"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="g18P+WOA";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZmhdKmCp"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF74F30EF70;
-	Tue, 14 Oct 2025 06:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418FE30BF52;
+	Tue, 14 Oct 2025 06:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760424565; cv=none; b=EboQnQz6oswO05o49Lb+/C/faMZZpMwzwy4VS9Qk0bYj7pElVp1B3WmSG84/dZ9lK9xRFo1ZfsOK3U1NBbHX84399zo2tYP/1BkWPjcZr6dnRxq7vID9b90+gRd7Nsd5k0WWt7jPhffXvSR2BIQA/dlWCPvDj/ZjX+/AdWPJILk=
+	t=1760424564; cv=none; b=qyF9zTgRTKuE/lKL0ODiO0PXTYoheOR4j14r2H3DHyTqDbDd1Fs3hhKC3b1EVu+qLFcO9ENvqbpsjBabkb3DmupBau9S9jimY7KUujVN/8uHZlYBjLLeAuD+TNOrZOF3rz16QR+3w0bricXFxHkCW/Q/h9SkvoWZXWs7/4N9I9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760424565; c=relaxed/simple;
-	bh=Yjs06k6xtXBqaQesLwEwImUgnZrxr+a65u05KeyUpws=;
+	s=arc-20240116; t=1760424564; c=relaxed/simple;
+	bh=nnfqDyJKV+11Uo9x3MwHeHQO2C8dr6iNLVlc2B+leBE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cKiRIMn7E+jtEPde87GZ9bJfDW99weVuqJIAdSe0nBoNd9F6aLjLSzWzLoBYwjlWP29BvzZz541XJWG7jH4woryqT9OjflFXspBdxaRlBuPUNV2x++33aoeFUm2aaDnLCVJbG6mYOPc5T2XfsbYe3G4atF9bQAuUEsDbO3ZPJEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xwpgAjCw; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YFGw/5OT; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=bzIVxKADg8mgEFXTZgHX/9FLeWl6WmmvKGHuJ7fgHhgwgYga4gqeXCRsKNxJrhor1DWnVHHKprvd83OxEsRFMX6SomwWyy27LSnEX9GvtRfhR7vAWOBJKMKcjrm9DT2+h5OX2fLZ3v56lrmEfWysKFQJ2nxaNNVMBceGMLff/+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=g18P+WOA; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZmhdKmCp; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1760424558;
+	s=2020; t=1760424559;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pR/zA7NHuz/iSgfuExTYGBCAYU1piUOghds7Ej4rutQ=;
-	b=xwpgAjCw/ps+pinXuuk2/1dUDVRTBDHyfrLLMo8MlWkHEttiN3Lme9z3POyxQgkpIBnlH2
-	bfPLMPbmonasAP8/h3DqUcWmWdTXpcMp+PURdY/aodql4tRR7iLuAfceTvw5qLAfvhNUi9
-	kjFwk/qplrwr+RHSIqMxc1sefFqio7IBE1qrCch3a5MvboPVK+rdu1F2vR2lBsOdw2DFmF
-	vn/v76sttztESWoDAoBxDE20ZNauwK6nlVs303NrJpH7lTfqX1lHGkoz7dU38hNgNyutWX
-	7seC/Ivqdv/wEqDL7QgRy/it5N0QMmlz7ca94RhyOuyknwXYeKlBwVSBOPaZwA==
+	bh=0B7YkbPIlqSoj0P/D9keGEmA0f3ObTbURi5IRJM/pXM=;
+	b=g18P+WOA9isRa1q1ErK/+Ni0DSDbiUSz46aMlyVMqFRNyuDIjttQarw+NnCLDCsGXbGcv2
+	zBHvYbrRn7BYMGI6xIl2Hxwsb6WUrlTwyvlUXTlZp/SBuwMpZptodZR+Og66AWIjWQvr4B
+	5x64SQUzl48VgMhOuuL+cmcqJzqVVRoCHd6iwA7NRUJZjo7v+WZvjubCAykqdwiBC1BgTJ
+	NohLtu1i+xl3Qd6JUhiQ19uYYH4G1Cq2PHl+XfY39RhAp65uc8bpP4wp8z8Po1MVmse0Xg
+	cwnKHpNHEjcSi6+f70KM8n+Gti0rS7TI9dLX2chgKTNKg1v9NI2O8ANFLR/yfA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1760424558;
+	s=2020e; t=1760424559;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pR/zA7NHuz/iSgfuExTYGBCAYU1piUOghds7Ej4rutQ=;
-	b=YFGw/5OTU7+qFg7O1bPcZy+A26sSqbjmgTFySDLn8C+zWb7h8CXgac6r1GEKgHexeNhCWM
-	Rt5a8gCQztnFyzDw==
-Date: Tue, 14 Oct 2025 08:49:04 +0200
-Subject: [PATCH v4 18/35] random: vDSO: split out datapage update into
- helper functions
+	bh=0B7YkbPIlqSoj0P/D9keGEmA0f3ObTbURi5IRJM/pXM=;
+	b=ZmhdKmCplihRjev/0HTyNhVWyr48rcMK3goPwlJUcagSoKZIwh8A8aIdu05En5O/uZyrIv
+	Go9ZYU4cwyY3T4Dg==
+Date: Tue, 14 Oct 2025 08:49:05 +0200
+Subject: [PATCH v4 19/35] random: vDSO: only access vDSO datapage after
+ random_init()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251014-vdso-sparc64-generic-2-v4-18-e0607bf49dea@linutronix.de>
+Message-Id: <20251014-vdso-sparc64-generic-2-v4-19-e0607bf49dea@linutronix.de>
 References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
 In-Reply-To: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -94,99 +94,80 @@ Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
  linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760424546; l=3858;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760424546; l=2362;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=Yjs06k6xtXBqaQesLwEwImUgnZrxr+a65u05KeyUpws=;
- b=Z/fYMJVpB38ZTotx7ngQAg3m8vGxBbu5vNnNCk1ITkJ/S1Sy7ZizJ/fsfLPddfumk6a8XDGxg
- z6DZxy1Cm6ICrTMT0W+xc8eyJIN6lJAMQL3zaONjy9S1b8GrM/mVYP5
+ bh=nnfqDyJKV+11Uo9x3MwHeHQO2C8dr6iNLVlc2B+leBE=;
+ b=9Zc+eDNvdU8Y1XXdl92hx+AHY0om4okx8W7VD3j9btvvcp//mfZoeahs/MWKI+i2U7MedlgvM
+ gI3hUZcK2rtCeyuuQdxrnYmdkEzCsknL0QxeFHy4aDh8lo7PSj31/UZ
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Some upcoming changes will introduce additional callers of them.
+Upcoming changes to the generic vDSO library will mean that the vDSO
+datapage will not yet be usable during early boot.
+
+Introduce a static key which prevents early accesses.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Tested-by: Andreas Larsson <andreas@gaisler.com>
 Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 ---
- drivers/char/random.c | 51 +++++++++++++++++++++++++++++++++------------------
- 1 file changed, 33 insertions(+), 18 deletions(-)
+ drivers/char/random.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/char/random.c b/drivers/char/random.c
-index b0b88c6f6a1afcdb770e39b7a64cb3408e33bd2c..73c53a4fb949bfd2ed723fa3cec3fe0d066a7fa3 100644
+index 73c53a4fb949bfd2ed723fa3cec3fe0d066a7fa3..f39524fb076a0c77bab228d4f2d45fee37291eb0 100644
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
-@@ -246,6 +246,37 @@ static unsigned int crng_reseed_interval(void)
- /* Used by crng_reseed() and crng_make_state() to extract a new seed from the input pool. */
- static void extract_entropy(void *buf, size_t len);
+@@ -88,6 +88,7 @@ static DEFINE_STATIC_KEY_FALSE(crng_is_ready);
+ static DECLARE_WAIT_QUEUE_HEAD(crng_init_wait);
+ static struct fasync_struct *fasync;
+ static ATOMIC_NOTIFIER_HEAD(random_ready_notifier);
++static DEFINE_STATIC_KEY_FALSE(random_vdso_is_ready);
  
-+/* This updates the generation in the vDSO data page */
-+static void random_vdso_update_generation(unsigned long next_gen)
-+{
-+	if (!IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+ /* Control how we warn userspace. */
+ static struct ratelimit_state urandom_warning =
+@@ -252,6 +253,9 @@ static void random_vdso_update_generation(unsigned long next_gen)
+ 	if (!IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+ 		return;
+ 
++	if (!static_branch_likely(&random_vdso_is_ready))
 +		return;
 +
-+	/* base_crng.generation's invalid value is ULONG_MAX, while
-+	 * vdso_k_rng_data->generation's invalid value is 0, so add one to the
-+	 * former to arrive at the latter. Use smp_store_release so that this
-+	 * is ordered with the write above to base_crng.generation. Pairs with
-+	 * the smp_rmb() before the syscall in the vDSO code.
-+	 *
-+	 * Cast to unsigned long for 32-bit architectures, since atomic 64-bit
-+	 * operations are not supported on those architectures. This is safe
-+	 * because base_crng.generation is a 32-bit value. On big-endian
-+	 * architectures it will be stored in the upper 32 bits, but that's okay
-+	 * because the vDSO side only checks whether the value changed, without
-+	 * actually using or interpreting the value.
-+	 */
-+	smp_store_release((unsigned long *)&vdso_k_rng_data->generation, next_gen + 1);
-+}
-+
-+/* This sets is_ready in the vDSO data page */
-+static void random_vdso_set_ready(void)
-+{
-+	if (!IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+ 	/* base_crng.generation's invalid value is ULONG_MAX, while
+ 	 * vdso_k_rng_data->generation's invalid value is 0, so add one to the
+ 	 * former to arrive at the latter. Use smp_store_release so that this
+@@ -274,6 +278,9 @@ static void random_vdso_set_ready(void)
+ 	if (!IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+ 		return;
+ 
++	if (!static_branch_likely(&random_vdso_is_ready))
 +		return;
 +
-+	WRITE_ONCE(vdso_k_rng_data->is_ready, true);
-+}
-+
- /* This extracts a new crng key from the input pool. */
- static void crng_reseed(struct work_struct *work)
- {
-@@ -272,22 +303,7 @@ static void crng_reseed(struct work_struct *work)
- 	if (next_gen == ULONG_MAX)
- 		++next_gen;
- 	WRITE_ONCE(base_crng.generation, next_gen);
--
--	/* base_crng.generation's invalid value is ULONG_MAX, while
--	 * vdso_k_rng_data->generation's invalid value is 0, so add one to the
--	 * former to arrive at the latter. Use smp_store_release so that this
--	 * is ordered with the write above to base_crng.generation. Pairs with
--	 * the smp_rmb() before the syscall in the vDSO code.
--	 *
--	 * Cast to unsigned long for 32-bit architectures, since atomic 64-bit
--	 * operations are not supported on those architectures. This is safe
--	 * because base_crng.generation is a 32-bit value. On big-endian
--	 * architectures it will be stored in the upper 32 bits, but that's okay
--	 * because the vDSO side only checks whether the value changed, without
--	 * actually using or interpreting the value.
--	 */
--	if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
--		smp_store_release((unsigned long *)&vdso_k_rng_data->generation, next_gen + 1);
-+	random_vdso_update_generation(next_gen);
+ 	WRITE_ONCE(vdso_k_rng_data->is_ready, true);
+ }
  
- 	if (!static_branch_likely(&crng_is_ready))
- 		crng_init = CRNG_READY;
-@@ -741,8 +757,7 @@ static void __cold _credit_init_bits(size_t bits)
- 		if (static_key_initialized && system_unbound_wq)
- 			queue_work(system_unbound_wq, &set_ready);
- 		atomic_notifier_call_chain(&random_ready_notifier, 0, NULL);
--		if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
--			WRITE_ONCE(vdso_k_rng_data->is_ready, true);
+@@ -925,6 +932,9 @@ void __init random_init(void)
+ 	_mix_pool_bytes(&entropy, sizeof(entropy));
+ 	add_latent_entropy();
+ 
++	if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
++		static_branch_enable(&random_vdso_is_ready);
++
+ 	/*
+ 	 * If we were initialized by the cpu or bootloader before jump labels
+ 	 * or workqueues are initialized, then we should enable the static
+@@ -934,8 +944,10 @@ void __init random_init(void)
+ 		crng_set_ready(NULL);
+ 
+ 	/* Reseed if already seeded by earlier phases. */
+-	if (crng_ready())
++	if (crng_ready()) {
+ 		crng_reseed(NULL);
 +		random_vdso_set_ready();
- 		wake_up_interruptible(&crng_init_wait);
- 		kill_fasync(&fasync, SIGIO, POLL_IN);
- 		pr_notice("crng init done\n");
++	}
+ 
+ 	WARN_ON(register_pm_notifier(&pm_notifier));
+ 
 
 -- 
 2.51.0
