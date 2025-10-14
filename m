@@ -1,213 +1,217 @@
-Return-Path: <linux-kselftest+bounces-43131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB9A2BD9D8F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 16:02:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A31C1BDA066
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 16:35:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E170E3BE935
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 14:02:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D20FD19A1362
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 14:36:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E50313552;
-	Tue, 14 Oct 2025 14:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15DE52D8DD0;
+	Tue, 14 Oct 2025 14:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nedNbgJF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MIMc37OI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69F326E701;
-	Tue, 14 Oct 2025 14:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4562E7F39
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 14:35:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760450549; cv=none; b=Y+Zqf+JVWga+1uKvT/v9a777A9hC9DcitaZ56HrIt8zjv4syhxxngf32s4f+xJp4AQPSCDC9i1enck/TxkQR0s9MFnVuAoapl5lUD266BXOK/qNoCapo1LuuxL0ASlv6VYxK07cfgClnFl/PJBk9OYgqKOMChoTt8L0AqNsvS0o=
+	t=1760452555; cv=none; b=bpJ/dx4YoOTp3/Jf6t2ki9yy+ijRGby9WEdB4Y7aqxw+8rRUpLf5SxcUMdEc6DIThmw0A5HbEXG7liBYltQa7U+A0CsB8a9QhN/FM3glUqMl6oPzckgk7dNmAUb5yKpUbP1dyRWzEeynoGyWJvSO3rETjLD1Vx9PBHkPbYyTPkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760450549; c=relaxed/simple;
-	bh=gIcKOwx7EBDgW8Sx478GJcKsfrDPtNKXx+9x9gVAaNU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kUZzrAhuna4iwpAcgqIm5baVTACq7QtMj6ay18TKL0D5FW7b4uanHPt9BNoZ/SrY2hQhb+4UAs5XMytb0doB8jwtfJ5Tlf8h5OVFMAAT2Xmd0DLnPhZRhedNBYzxOvktu+lQJ6usluljC/VLq2KOAxKdXRHX6dnqqH+okdVBuXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nedNbgJF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07C1C4CEE7;
-	Tue, 14 Oct 2025 14:02:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760450549;
-	bh=gIcKOwx7EBDgW8Sx478GJcKsfrDPtNKXx+9x9gVAaNU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nedNbgJFCTR6PipWLNxn35PwEW/5hZVqWfKAmrr3PQTFbhqOtXh31W1eTJt64QDus
-	 xvMIKJU/k6xj78Ekk3e12lofNXOkh7w+qaf7Hdp6SgQPx9MjfdIimwYCqNBb7zuGwi
-	 r8Sns5mQq9jdDdi9Y8VTVT7tOEH9+AyyXfMoVm1N8kcbZ0243CKWDRkZimAmcJWSNj
-	 nnnEi+xwdKvIudYbEO5BlLGsjW2F6dIWlvVrvJlfPOmCiikS9AN3CYnqnwnUlsysO4
-	 /fDtRzrpbVjKaaUnLOVBge7UDWVynh6unm/MWnT5u7pnUXDKUvW1Roy9MvvuuTEwOB
-	 ghx4UEbVOAg2g==
-Date: Tue, 14 Oct 2025 15:02:23 +0100
-From: Simon Horman <horms@kernel.org>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Sabrina Dubroca <sdubroca@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Ido Schimmel <idosch@nvidia.com>,
-	Shuah Khan <shuah@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Stanislav Fomichev <stfomichev@gmail.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Ahmed Zaki <ahmed.zaki@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv4 net-next 1/4] net: add a common function to compute
- features from lowers devices
-Message-ID: <aO5X7368r8veRe5J@horms.kernel.org>
-References: <20251014080217.47988-1-liuhangbin@gmail.com>
- <20251014080217.47988-2-liuhangbin@gmail.com>
+	s=arc-20240116; t=1760452555; c=relaxed/simple;
+	bh=smKJmBdlgPVHcFrF7jSBvUjhAqz577pFj83leCW2Ra4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=b3oe6CPYNDmUF1I1Mv6xJD652YmLYX2B1lkT4cG0jZVrLiRHzptJoIfjnuvsnNk7x+PSZVrgqN7FxoNLUilYF0JqRdLZ0kE0ZoLmlRn3cw2mg+r+XWJo2Gey3N8CAaf1lOzERMCLigNXA2fA8Cowd/Io0aU7MsZSqmBagzimH3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MIMc37OI; arc=none smtp.client-ip=209.85.221.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-3f3c118cbb3so5378395f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 07:35:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760452551; x=1761057351; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bHNEr90mGpAMRqoIVdbDY10uCx0QdvNkq5/JQ1Hhwfo=;
+        b=MIMc37OI/OAX5y0nwlN9vsIJ1ALebpyoe03U4xlrhJZ/s3Fq6utESZIKmOGauX50bb
+         FPemWxDrC5mwoycM5Yqg+0XlA+XqgVfTh5Is66q+4widsZBfAEHBF/2wf9yr6iFkekG/
+         AOjOW5kYab7N8IGSSjsAfurAZKfxNmBJ4Qam1Zz1aT9MZxlhffg/Q3kT3CePKXEDPtkp
+         gYDJCwZgt0PcGQ1rY1JoUChEAVlgjIWfWaLT3tKgCmlZ304FKjXrwRPxA/UNWhKPv0q2
+         OBj+dCqP1Zy62YfbBcqU57oRQVu/Z6sIacAipTiaZSt5xDhnhbRLEVo9ytXuULcUNZdd
+         aQoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760452551; x=1761057351;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bHNEr90mGpAMRqoIVdbDY10uCx0QdvNkq5/JQ1Hhwfo=;
+        b=jU64xJf6tLhp1hiZreatFhbuYFNtYi7MjjoZr3acTTWlY8Hk5uK9jXZKNAL7YVx67W
+         JKja3jorUmoJzxvQ4ly988TtO3cMXoOGNO8QobCuKlIoqCvdfBO7F8Vg4EtOur23IOK1
+         cpzLAWz5RN43JYmvOJSmGMmzscA+OWSosK5JRGwfNyGQY45QJwa9NLrezkqoRIH5tLzt
+         GgzFjpDHSSySqpUxUMWVCCIU1X70/V9OmKhTPg15Ovi+qCKUykznZbFdmFVLzNAbKzsv
+         cwNs9BCnpaTerUrgh7j/mNrneXjnKDISxCaVAlz6mrei8fXJMFYEtgoIFlw113swks1D
+         yMXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXsaRzyXdtJpdn3MoSlF0DonsIyDZeSQKV4RLeal0CFTGpr1Y91wNz2UNbp3srHFP/S9DpUAUzCCdVrAlWtJrU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCW0YEsjOsLTQ+PlRWL1py/veHGO+FR4vAyQv8tEZlI6FMf98C
+	8RytvX/i8MnQgwoK1qcfJejXZFkTZM2zmDCJNXq6RkQOKDu02zgaC2hUV12SncnO/zOXTQH04Vc
+	tCMa5Xz+j8nKY5g==
+X-Google-Smtp-Source: AGHT+IGhF9ZB6/Y6kRfKUT4L5E8KWE7b6QPh1ffSf76NgvsrvtGUIUm2HKpx63xXq3ojibgQADjjP4YO+TEBmg==
+X-Received: from wrbdf2.prod.google.com ([2002:a5d:5b82:0:b0:402:ec26:76f8])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a5d:64c3:0:b0:3e7:4197:c99d with SMTP id ffacd0b85a97d-42667363e76mr15467393f8f.15.1760452550726;
+ Tue, 14 Oct 2025 07:35:50 -0700 (PDT)
+Date: Tue, 14 Oct 2025 14:35:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251014080217.47988-2-liuhangbin@gmail.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIALxf7mgC/4WNTQ6CMBBGr0Jm7Zi28mNceQ/DgtYpTETGTAnRE
+ O5u5QIu30u+962QSJkSXIoVlBZOLFMGdyggDN3UE/I9MzjjKmtMg77ER4ozkqooyoSx4xFNcMG
+ fXFmb0kLevpQiv/furc08cJpFP/vNYn/2X3GxaLGxPprqHKu6dtdepB/pGOQJ7bZtX1HK/S67A AAA
+X-Change-Id: 20251007-b4-ksft-error-on-fail-0c2cb3246041
+X-Mailer: b4 0.14.2
+Message-ID: <20251014-b4-ksft-error-on-fail-v2-1-b3e2657237b8@google.com>
+Subject: [PATCH v2] selftests/run_kselftest.sh: exit with error if tests fail
+From: Brendan Jackman <jackmanb@google.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: "=?utf-8?q?Thomas_Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, Oct 14, 2025 at 08:02:14AM +0000, Hangbin Liu wrote:
+Parsing KTAP is quite an inconvenience, but most of the time the thing
+you really want to know is "did anything fail"?
 
-...
+Let's give the user the his information without them needing
+to parse anything.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index a64cef2c537e..54f0e792fbd2 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -12616,6 +12616,101 @@ netdev_features_t netdev_increment_features(netdev_features_t all,
->  }
->  EXPORT_SYMBOL(netdev_increment_features);
->  
-> +/**
-> + *	netdev_compute_features_from_lowers - compute feature from lowers
-> + *	@dev: the upper device
-> + *	@update_header: whether to update upper device's header_len/headroom/tailroom
-> + *
-> + *	Recompute the upper device's feature based on all lower devices.
-> + */
-> +void netdev_compute_features_from_lowers(struct net_device *dev, bool update_header)
-> +{
-> +	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
-> +	netdev_features_t gso_partial_features = VIRTUAL_DEV_GSO_PARTIAL_FEATURES;
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +	netdev_features_t xfrm_features = VIRTUAL_DEV_XFRM_FEATURES;
-> +#endif
+Because of the use of subshells and namespaces, this needs to be
+communicated via a file. Just write arbitrary data into the file and
+treat non-empty content as a signal that something failed.
 
-Hi Hangbin,
+In case any user depends on the current behaviour, such as running this
+from a script with `set -e` and parsing the result for failures
+afterwards, add a flag they can set to get the old behaviour, namely
+--no-error-on-fail.
 
-It would be nice to avoid the #ifdefs in this function.
+Signed-off-by: Brendan Jackman <jackmanb@google.com>
+---
+Changes in v2:
+- Fixed bug in report_failure()
+- Made error-on-fail the default
+- Link to v1: https://lore.kernel.org/r/20251007-b4-ksft-error-on-fail-v1-1-71bf058f5662@google.com
+---
+ tools/testing/selftests/kselftest/runner.sh | 14 ++++++++++----
+ tools/testing/selftests/run_kselftest.sh    | 14 ++++++++++++++
+ 2 files changed, 24 insertions(+), 4 deletions(-)
 
-Could xfrm_features be declared unconditoinally.
-And then used behind if(IS_ENABLED(CONFIG_XFRM_OFFLOAD)) conditions?
-This would increase compile coverage (and readability IMHO).
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 2c3c58e65a419f5ee8d7dc51a37671237a07fa0b..3a62039fa6217f3453423ff011575d0a1eb8c275 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -44,6 +44,12 @@ tap_timeout()
+ 	fi
+ }
+ 
++report_failure()
++{
++	echo "not ok $*"
++	echo "$*" >> "$kselftest_failures_file"
++}
++
+ run_one()
+ {
+ 	DIR="$1"
+@@ -105,7 +111,7 @@ run_one()
+ 	echo "# $TEST_HDR_MSG"
+ 	if [ ! -e "$TEST" ]; then
+ 		echo "# Warning: file $TEST is missing!"
+-		echo "not ok $test_num $TEST_HDR_MSG"
++		report_failure "$test_num $TEST_HDR_MSG"
+ 	else
+ 		if [ -x /usr/bin/stdbuf ]; then
+ 			stdbuf="/usr/bin/stdbuf --output=L "
+@@ -123,7 +129,7 @@ run_one()
+ 				interpreter=$(head -n 1 "$TEST" | cut -c 3-)
+ 				cmd="$stdbuf $interpreter ./$BASENAME_TEST"
+ 			else
+-				echo "not ok $test_num $TEST_HDR_MSG"
++				report_failure "$test_num $TEST_HDR_MSG"
+ 				return
+ 			fi
+ 		fi
+@@ -137,9 +143,9 @@ run_one()
+ 			echo "ok $test_num $TEST_HDR_MSG # SKIP"
+ 		elif [ $rc -eq $timeout_rc ]; then \
+ 			echo "#"
+-			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
++			report_failure "$test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
+ 		else
+-			echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
++			report_failure "$test_num $TEST_HDR_MSG # exit=$rc"
+ 		fi)
+ 		cd - >/dev/null
+ 	fi
+diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+index 0443beacf3621ae36cb12ffd57f696ddef3526b5..cc1b4190edacedadafd9b993a351e4cfbf17ccd5 100755
+--- a/tools/testing/selftests/run_kselftest.sh
++++ b/tools/testing/selftests/run_kselftest.sh
+@@ -33,6 +33,7 @@ Usage: $0 [OPTIONS]
+   -c | --collection COLLECTION	Run all tests from COLLECTION
+   -l | --list			List the available collection:test entries
+   -d | --dry-run		Don't actually run any tests
++  -f | --no-error-on-fail	Don't exit with an error just because tests failed
+   -n | --netns			Run each test in namespace
+   -h | --help			Show this usage info
+   -o | --override-timeout	Number of seconds after which we timeout
+@@ -44,6 +45,7 @@ COLLECTIONS=""
+ TESTS=""
+ dryrun=""
+ kselftest_override_timeout=""
++ERROR_ON_FAIL=true
+ while true; do
+ 	case "$1" in
+ 		-s | --summary)
+@@ -65,6 +67,9 @@ while true; do
+ 		-d | --dry-run)
+ 			dryrun="echo"
+ 			shift ;;
++		-f | --no-error-on-fail)
++			ERROR_ON_FAIL=false
++			shift ;;
+ 		-n | --netns)
+ 			RUN_IN_NETNS=1
+ 			shift ;;
+@@ -105,9 +110,18 @@ if [ -n "$TESTS" ]; then
+ 	available="$(echo "$valid" | sed -e 's/ /\n/g')"
+ fi
+ 
++kselftest_failures_file=$(mktemp --tmpdir kselftest-failures-XXXXXX)
++export kselftest_failures_file
++
+ collections=$(echo "$available" | cut -d: -f1 | sort | uniq)
+ for collection in $collections ; do
+ 	[ -w /dev/kmsg ] && echo "kselftest: Running tests in $collection" >> /dev/kmsg
+ 	tests=$(echo "$available" | grep "^$collection:" | cut -d: -f2)
+ 	($dryrun cd "$collection" && $dryrun run_many $tests)
+ done
++
++failures="$(cat "$kselftest_failures_file")"
++rm "$kselftest_failures_file"
++if "$ERROR_ON_FAIL" && [ "$failures" ]; then
++	exit 1
++fi
 
-> +	netdev_features_t mpls_features = VIRTUAL_DEV_MPLS_FEATURES;
-> +	netdev_features_t vlan_features = VIRTUAL_DEV_VLAN_FEATURES;
-> +	netdev_features_t enc_features = VIRTUAL_DEV_ENC_FEATURES;
-> +	unsigned short max_header_len = ETH_HLEN;
-> +	unsigned int tso_max_size = TSO_MAX_SIZE;
-> +	u16 tso_max_segs = TSO_MAX_SEGS;
-> +	struct net_device *lower_dev;
-> +	unsigned short max_headroom;
-> +	unsigned short max_tailroom;
-> +	struct list_head *iter;
-> +
-> +	mpls_features = netdev_base_features(mpls_features);
-> +	vlan_features = netdev_base_features(vlan_features);
-> +	enc_features = netdev_base_features(enc_features);
-> +
-> +	netdev_for_each_lower_dev(dev, lower_dev, iter) {
-> +		gso_partial_features = netdev_increment_features(gso_partial_features,
-> +								 lower_dev->gso_partial_features,
-> +								 VIRTUAL_DEV_GSO_PARTIAL_FEATURES);
-> +
-> +		vlan_features = netdev_increment_features(vlan_features,
-> +							  lower_dev->vlan_features,
-> +							  VIRTUAL_DEV_VLAN_FEATURES);
-> +
-> +		enc_features = netdev_increment_features(enc_features,
-> +							 lower_dev->hw_enc_features,
-> +							 VIRTUAL_DEV_ENC_FEATURES);
-> +
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +		xfrm_features = netdev_increment_features(xfrm_features,
-> +							  lower_dev->hw_enc_features,
-> +							  VIRTUAL_DEV_XFRM_FEATURES);
-> +#endif
-> +
-> +		mpls_features = netdev_increment_features(mpls_features,
-> +							  lower_dev->mpls_features,
-> +							  VIRTUAL_DEV_MPLS_FEATURES);
-> +
-> +		dst_release_flag &= lower_dev->priv_flags;
-> +
-> +		if (update_header) {
-> +			max_header_len = max_t(unsigned short, max_header_len,
-> +					lower_dev->hard_header_len);
+---
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+change-id: 20251007-b4-ksft-error-on-fail-0c2cb3246041
 
-Both the type of max_header_len and .hard_header_len is unsigned short.
-So I think max() can be used here instead of max_t(). Likewise for the
-following two lines.
+Best regards,
+-- 
+Brendan Jackman <jackmanb@google.com>
 
-> +			max_headroom = max_t(unsigned short, max_headroom,
-> +					lower_dev->needed_headroom);
-
-Max Headroom [1] is used uninitialised the first time we reach here.
-Likewise for max_tailroom below.
-
-[1] https://en.wikipedia.org/wiki/Max_Headroom
-
-Flagged by Smatch.
-
-> +			max_tailroom = max_t(unsigned short, max_tailroom,
-> +					lower_dev->needed_tailroom);
-> +		}
-> +
-> +		tso_max_size = min(tso_max_size, lower_dev->tso_max_size);
-> +		tso_max_segs = min(tso_max_segs, lower_dev->tso_max_segs);
-> +	}
-> +
-> +	dev->gso_partial_features = gso_partial_features;
-> +	dev->vlan_features = vlan_features;
-> +	dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
-> +				    NETIF_F_HW_VLAN_CTAG_TX |
-> +				    NETIF_F_HW_VLAN_STAG_TX;
-> +#ifdef CONFIG_XFRM_OFFLOAD
-> +	dev->hw_enc_features |= xfrm_features;
-> +#endif
-> +	dev->mpls_features = mpls_features;
-> +
-> +	dev->priv_flags &= ~IFF_XMIT_DST_RELEASE;
-> +	if ((dev->priv_flags & IFF_XMIT_DST_RELEASE_PERM) &&
-> +	    dst_release_flag == (IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM))
-> +		dev->priv_flags |= IFF_XMIT_DST_RELEASE;
-> +
-> +	if (update_header) {
-> +		dev->hard_header_len = max_header_len;
-> +		dev->needed_headroom = max_headroom;
-> +		dev->needed_tailroom = max_tailroom;
-
-Also, maybe it can't happen in practice. But I think that max_headroom and
-max_tailroom will may be used uninitialised here if the previous
-'update_header' condition is never reached/met.
-
-Also flagged by Smatch.
-
-> +	}
-> +
-> +	netif_set_tso_max_segs(dev, tso_max_segs);
-> +	netif_set_tso_max_size(dev, tso_max_size);
-> +
-> +	netdev_change_features(dev);
-> +}
-> +EXPORT_SYMBOL(netdev_compute_features_from_lowers);
-> +
-
-...
 
