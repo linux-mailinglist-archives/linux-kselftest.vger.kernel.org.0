@@ -1,196 +1,166 @@
-Return-Path: <linux-kselftest+bounces-43137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25088BDAF99
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 20:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A02F2BDB1E6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 21:50:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94DD818A787B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 18:52:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6CEA19252EB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 19:51:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2194A29ACF7;
-	Tue, 14 Oct 2025 18:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 200BA30146C;
+	Tue, 14 Oct 2025 19:50:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cgftkfUr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7304327979A;
-	Tue, 14 Oct 2025 18:51:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9B52FF144
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 19:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760467916; cv=none; b=Q6z6qZQhhXmzpOCY6ewGnd5KNyZUV9Sd5Ve7YMuaY8jnXQbxg9dVQe2l5eLkwsLynOPE2UpI1QYhxIWZAq775QOnv2Irvh+9FLyJ8ASB4Q+f5kXgmzGb5m7Khu+W9uFKbht3mdRdI++DOBQlt4jTD0QUwPL8R/+qKQwJGDKlF7M=
+	t=1760471429; cv=none; b=N3fVWwUcD0RwXMQDaks5g457jV03Qh5N/3KPItty8n3Q2WYEcoa5bUKpHfbnimEElC+PMhhsc4QjmyXs2EFQCOmi49YyXnlAtEDec0yQDdO+sYEjOFwt/nYnkTh1o/buOHmYGSengw7/QMPAdJ/ZsWMvVuVYk2OpM9/h1U3+/Xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760467916; c=relaxed/simple;
-	bh=QPziPp2Y/4S3ux1cLbRCxq0EGdLI32mUmWMci0N66Tk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bSJjBd59Zyd/j/34PQ5mu0KCE3T8baqjPVINWWLyTEfVZLRnbHX5r/0EDtg/ABp9Z4ilbB5ukB+VGkuX7tAneSr+gFL3ERtr8/+WLTbehgDO0GfAPXXsW5VksOhSxAoMJsbKAKPzfREEXr1YoPjsWIdNYbVmtL4O+eTcByLRH8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id 10CFE1A0A0E;
-	Tue, 14 Oct 2025 18:51:46 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id 4472F1D;
-	Tue, 14 Oct 2025 18:51:44 +0000 (UTC)
-Date: Tue, 14 Oct 2025 14:51:49 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Shuah Khan <skhan@linuxfoundation.org>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH] selftests/tracing: Add basic test for trace_marker_raw file
-Message-ID: <20251014145149.3e3c1033@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1760471429; c=relaxed/simple;
+	bh=Mnlqh6Cht/0getfLLNgLfhatm+njIti5tG7bquUeZAc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=EjPc6Tz2Xea+aXlAPLss5X86i0P2/+UHS1t3kE9Bn5DZicmyK9Ugh4noYf0/HZbqNfISJYqHtpsfkydSqfg933T5b2MPLNix6m3mrQFBqETgr7W+Vf8ll+P4sbvUEUi4yFncnTDt4Z6RIX1BMJ+lJAeVYYi8Tqzh3vH75BTZaLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cgftkfUr; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-46e491a5b96so32878015e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 12:50:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760471425; x=1761076225; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MkhCJA/dXOXcwZ7S2jDqDvDpKsjxlEMR9YOOSuHW/cQ=;
+        b=cgftkfUrpBNXzTTeo0/ikV9tskeeIguaI3V0sJZ79Cukn//qku+8pdYbrG425mKXMV
+         h6xKmNN0ziNJqdxfFBQIcbjrgxkmrrZwINIBhN9B1+gqJiBkvuQqt9LC+j+leOfHoTCA
+         Y8LaLip7EtHsmM1QGZ7OI7/OhU/8I2EGKN7wiTV8uef8YzG6vZUXA5zjiZKm3oJ6Vd+Y
+         OJdLaCnu819G1HgdCAAdHy84xV36P64djs3s98R3PrAFaL4WHfIa1pZyctAROrDH17hN
+         55BOkYJhmPxtPpHpzFUcs1GKhfB6KQleljvT7zSgTGdw+r3NMworGUz/Q7twEpUjTAPw
+         qXrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760471425; x=1761076225;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MkhCJA/dXOXcwZ7S2jDqDvDpKsjxlEMR9YOOSuHW/cQ=;
+        b=eHwd3LSSobd+OKVlVPcsKf7YEV6OBdXaQ5uDk51icuIcWBEv+QchblQ9IRIj/Izp6p
+         A6wIqAIW2YasMJudpj+1B/I205wOIYT9a7jXIxPwR/B9CbhKRjvougGYRNUAGaUVmXZ0
+         L6o/Q3c3TWMoy7ObLBbIlVarzYr0k03SlXZyVF/LMXp90DZT+eEHY3GDUjnKSHiGb1ZY
+         cD5p4F60J/RwTjRiqHwqvyroPV0QANTV865zSo75f2oJH+3AEbBysp9FgeM8PURTY3bT
+         UvXPjpYg+gO9LebSHDbZhbfYgqyj+CzVRGN6X0Vh+W/XG4pneqwch+ZyTglGckwRNy0c
+         AsrA==
+X-Gm-Message-State: AOJu0YzVv3GJUScnbqsQqXLifQ24tCSjL0yLsGZAnBZp0127ZpC4TFe7
+	IvfsFQAkkD3Qq5sv6Fo1LtQVLJlkQ3g6Dvhc2XsH77mI8MH8hHUC7/OM
+X-Gm-Gg: ASbGncs1e8qdIw/w3G4P3XnghCv1KQb3+DD5Zm3CRzW0iPqHHwNhQcjUb0LUJfoypMX
+	Nnyv/uuY6CQYOxe/IH9o9WLPT8jrAKFn+v68XzZkiGL/jaUuVQ1gH73P8y5Us1lMoLNcWry8La+
+	KYPxkfzQ5LVn6N/eIJFpiH3A+X/xTkrnapsM0+nTtOxPJay449uz/Mn90uhk4RBOaOjmNUmjZzB
+	RjxkXPsmUKH7gK/3U5z4rHoszkdBH8QZHY59+4cs0upPHJBoOhzt+vlZqYDJ9Jn3G9Ju1lU2/rw
+	pCyZMQNZxvJQ6Lsw5CXKs+yFHkdoXACY7S/Kme6Fxr32/FfXmPFBH29OVwSLTiZUKg04JnmqyBN
+	rY/bunZbNdjbUcbGVv+XsFEQYg20eqggeddG1kgIUw4o9k0zEDm8gqgI7qpc6K5fN1EqH02zwrJ
+	aAgQoDsqcz/RCHE/A4SOJq/tTTRRagiw==
+X-Google-Smtp-Source: AGHT+IHvY3jSRZiPAPUTjqLzv3in2vImFrsh3WPQgcjJugI6dCptqZos5H5Y/+xsV4lVpQrYH25Z3g==
+X-Received: by 2002:a05:600c:1e86:b0:46e:6a6a:5cf7 with SMTP id 5b1f17b1804b1-46fa9aa0f6dmr179572755e9.12.1760471425371;
+        Tue, 14 Oct 2025 12:50:25 -0700 (PDT)
+Received: from localhost.localdomain (bzq-79-177-131-159.red.bezeqint.net. [79.177.131.159])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-46fb49d03e2sm257969595e9.19.2025.10.14.12.50.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Oct 2025 12:50:23 -0700 (PDT)
+From: Itamar-Dalal <dalalitamar@gmail.com>
+To: linux-mm@kvack.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	akpm@linux-foundation.org,
+	david@redhat.com,
+	lorenzo.stoakes@oracle.com,
+	riel@surriel.com,
+	Liam.Howlett@oracle.com,
+	vbabka@suse.cz,
+	harry.yoo@oracle.com,
+	jannh@google.com,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	Itamar-Dalal <dalalitamar@gmail.com>
+Subject: [PATCH] =?UTF-8?q?Add=20a=20new=20test=20'migrate.cow=5Fafter=5Ff?= =?UTF-8?q?ork'=20that=20verifies=20correct=20RMAP=20handling=20of=20Copy-?= =?UTF-8?q?On-Write=20pages=20after=20fork().=20Before=20a=20write,=20pare?= =?UTF-8?q?nt=20and=20child=20share=20the=20same=20PFN;=20after=20a=20writ?= =?UTF-8?q?e,=20the=20child=E2=80=99s=20PFN=20differs,=20confirming=20prop?= =?UTF-8?q?er=20COW=20duplication.?=
+Date: Tue, 14 Oct 2025 22:49:44 +0300
+Message-Id: <20251014194944.20341-1-dalalitamar@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: pi796r5gp5a9dyokoteerb7q33mg895o
-X-Rspamd-Server: rspamout07
-X-Rspamd-Queue-Id: 4472F1D
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX188w3gjNYMIg9igDGwdo5voCscms+OlKYU=
-X-HE-Tag: 1760467904-669601
-X-HE-Meta: U2FsdGVkX1948sCl9BJdloqdJfA/6qYieyXUsiZ7JKyudSU7UQLD+/aRHiDdijP3AHy8vWjDDsx6kc5XTnQ/c7xBfKvHbog83HoVoWjq8Z1n4CTxFDF2zMP+4M6OtJi97032hQP4Puu4rJFzMuErSbVhn0Re4uncC7MP1Zxyi9VHMxelgbdK9L8KjHkj7ivtoOj7kVW7KAnPIWlbC9+2v1kPkghiKe8W3JGeo1Vr8ztdEWztVuSdokwToXR4qQ7FiTMQSiZ6/0lqqkpYufcIYT+lnrB6smDGgtWdDc4yhQRaaWXlAR8dEba/g5MMzLusI4zl9ZeBmCU9EmwizA3a5amzCDZGm0vB/1MLff2/9koYwhTT3ovHBURSmJo3Z8+lMTyh4M926Fmr8lg471A0JKCUWnxzps68
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Steven Rostedt <rostedt@goodmis.org>
-
-Commit 64cf7d058a00 ("tracing: Have trace_marker use per-cpu data to read
-user space") made an update that fixed both trace_marker and
-trace_marker_raw. But the small difference made to trace_marker_raw had a
-blatant bug in it that any basic testing would have uncovered.
-Unfortunately, the self tests have tests for trace_marker but nothing for
-trace_marker_raw which allowed the bug to get upstream.
-
-Add basic selftests to test trace_marker_raw so that this doesn't happen
-again.
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Signed-off-by: Itamar-Dalal <dalalitamar@gmail.com>
 ---
- .../ftrace/test.d/00basic/trace_marker_raw.tc | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+ tools/testing/selftests/mm/rmap.c | 45 ++++++++++++++++++++++++++++++-
+ 1 file changed, 44 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-new file mode 100644
-index 000000000000..7daf7292209e
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-@@ -0,0 +1,107 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Basic tests on writing to trace_marker_raw
-+# requires: trace_marker_raw
-+# flags: instance
+diff --git a/tools/testing/selftests/mm/rmap.c b/tools/testing/selftests/mm/rmap.c
+index 13f7bccfd0a9..2ba3361fecf0 100644
+--- a/tools/testing/selftests/mm/rmap.c
++++ b/tools/testing/selftests/mm/rmap.c
+@@ -430,4 +430,47 @@ TEST_F(migrate, ksm)
+ 	propagate_children(_metadata, data);
+ }
+ 
+-TEST_HARNESS_MAIN
++TEST_F(migrate, cow_after_fork)
++{
++	struct global_data *data = &self->data;
++	int status;
++	pid_t pid;
++	unsigned long parent_pfn, child_pfn;
++	int pagemap_fd;
++	char *region;
 +
-+is_little_endian() {
-+	if lscpu | grep -q 'Little Endian'; then
-+		echo 1;
-+	else
-+		echo 0;
-+	fi
++	/* Map private anonymous memory and fault it in */
++	region = mmap(NULL, data->mapsize, PROT_READ | PROT_WRITE,
++		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(region, MAP_FAILED);
++	memset(region, 0xaa, data->mapsize);
++
++	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
++	ASSERT_NE(pagemap_fd, -1);
++	parent_pfn = pagemap_get_pfn(pagemap_fd, region);
++	close(pagemap_fd);
++
++	pid = fork();
++	ASSERT_NE(pid, -1);
++
++	if (pid == 0) {
++		/* Child: write to trigger COW */
++		region[0] = 0xbb;
++
++		pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
++		ASSERT_NE(pagemap_fd, -1);
++		child_pfn = pagemap_get_pfn(pagemap_fd, region);
++		close(pagemap_fd);
++
++		/* Expect PFN to differ after write (COW happened) */
++		if (child_pfn == parent_pfn)
++			_exit(FAIL_ON_CHECK);
++		_exit(0);
++	}
++
++	waitpid(pid, &status, 0);
++	ASSERT_EQ(WEXITSTATUS(status), 0);
++	munmap(region, data->mapsize);
 +}
 +
-+little=`is_little_endian`
-+
-+make_str() {
-+	id=$1
-+	cnt=$2
-+
-+	if [ $little -eq 1 ]; then
-+		val=`printf "\\%03o\\%03o\\%03o\\%03o" \
-+			$(($id & 0xff)) \
-+			$((($id >> 8) & 0xff)) \
-+			$((($id >> 16) & 0xff)) \
-+			$((($id >> 24) & 0xff))`
-+	else
-+		val=`printf "\\%03o\\%03o\\%03o\\%03o" \
-+			$((($id >> 24) & 0xff)) \
-+			$((($id >> 16) & 0xff)) \
-+			$((($id >> 8) & 0xff)) \
-+			$(($id & 0xff))`
-+	fi
-+
-+	data=`printf -- 'X%.0s' $(seq $cnt)`
-+
-+	printf "${val}${data}"
-+}
-+
-+write_buffer() {
-+	id=$1
-+	size=$2
-+
-+	# write the string into the raw marker
-+	make_str $id $size > trace_marker_raw
-+}
-+
-+
-+test_multiple_writes() {
-+
-+	# Write a bunch of data where the id is the count of
-+	# data to write
-+	for i in `seq 1 10` `seq 101 110` `seq 1001 1010`; do
-+		write_buffer $i $i
-+	done
-+
-+	# add a little buffer
-+	echo stop > trace_marker
-+
-+	# Check to make sure the number of entries is the id (rounded up by 4)
-+	awk '/.*: # [0-9a-f]* / {
-+			print;
-+			cnt = -1;
-+			for (i = 0; i < NF; i++) {
-+				# The counter is after the "#" marker
-+				if ( $i == "#" ) {
-+					i++;
-+					cnt = strtonum("0x" $i);
-+					num = NF - (i + 1);
-+					# The number of items is always rounded up by 4
-+					cnt2 = int((cnt + 3) / 4) * 4;
-+					if (cnt2 != num) {
-+						exit 1;
-+					}
-+					break;
-+				}
-+			}
-+		}
-+	// { if (NR > 30) { exit 0; } } ' trace_pipe;
-+}
-+
-+
-+get_buffer_data_size() {
-+	sed -ne 's/^.*data.*size:\([0-9][0-9]*\).*/\1/p' events/header_page
-+}
-+
-+test_buffer() {
-+
-+	# The id must be four bytes, test that 3 bytes fails a write
-+	if echo -n abc > ./trace_marker_raw ; then
-+		echo "Too small of write expected to fail but did not"
-+		exit_fail
-+	fi
-+
-+	size=`get_buffer_data_size`
-+	echo size = $size
-+
-+	# Now add a little more than what it can handle
-+
-+	if write_buffer 0xdeadbeef $size ; then
-+		echo "Too big of write expected to fail but did not"
-+		exit_fail
-+	fi
-+}
-+
-+test_buffer
-+test_multiple_writes
++TEST_HARNESS_MAIN
+\ No newline at end of file
 -- 
-2.51.0
+2.34.1
 
 
