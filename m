@@ -1,87 +1,117 @@
-Return-Path: <linux-kselftest+bounces-43127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB007BD9614
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 14:39:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64513BD9A58
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 15:18:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FD23545FC9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 12:39:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E29F919A2FCD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Oct 2025 13:14:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ECEF31282E;
-	Tue, 14 Oct 2025 12:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C0631352D;
+	Tue, 14 Oct 2025 13:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WbEmLxNY"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gXjyZpFN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767E62D4B5E
-	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 12:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC804305958
+	for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 13:09:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760445580; cv=none; b=trLj2JO+k78LJ51vIlA6nN9LRiqi2NqNXR7DS5wChU1dPnx0yNEr/GpL8y3W4WjSwvZqsUzz7Ul/ogrbaBYus0PSnno7POHA38OG169JIZ6icoOL0seGltG2kjyhoSod+oD0qqXTTIKUuXuEh2vJlABFQ0VoRN7Rn4I0/uFfLe8=
+	t=1760447357; cv=none; b=RmoZ3hjU/uiEYlLy2zyDgnLnZL1jiEMFHgiPpc1QLUYpUuekZXXcbwy2aX5OYv1utgrpRrinRXoh4qCMjwXELPtKTFZLnvve1J5I+XtwJ/y79uTW+UYuU8vsYduVTzf33YXEQKLN1iB/6+Gcq1Rk8nfBMB1P7G+q3rRmcQiP1UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760445580; c=relaxed/simple;
-	bh=Nh8d18yC3F1kVol5wJ2x8b4hEbrylXUjjaWq7mzK5pU=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q3PVxNIE1h+kEDdA8KRkDlTSXA0fIAzyY4I3EZs0WrQBHf70vX4oOZxFuNu1vD+k09RpQ843zyAZxz7yZUjAeoXBbsR4nMsyciEilXF/kr+vr7PrXcauTFxtZukphuL29l6tQIF+z1MziwDB5Vt12+CrT3aF0hBxNMAKNCGLDBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WbEmLxNY; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b54f55a290cso743706666b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 05:39:37 -0700 (PDT)
+	s=arc-20240116; t=1760447357; c=relaxed/simple;
+	bh=cT09hkWb6p1Q5laBg5r/C0k/WyFKDN1nFOp/f0E9EIE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k7CdUjXCUp+33uyPamcQNFV4/US8o/S/Rty7YsYjl7ti2syktNMKc88PpL6tJKD4rCfhTEy98iRisEt/m3OykfPmYtXCW/sz8LeTr657ltZfq2X7u6xHna+Z77b3ew/bEE8hrEqKdRkAGA7hEyHqwHty1KTH3Tz89SVnPk5cplg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gXjyZpFN; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-46f53f88e0bso30160395e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 06:09:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760445576; x=1761050376; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1760447353; x=1761052153; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iOKsSRK0fMY53Nno3tXGDrP+nfAG/MScFpySFc8rN2Q=;
-        b=WbEmLxNYEeVpBmJQNFGLvmO8pi3NWaNjeh6F6rAwtXlkmC5Zq0y8HvuxTu72loa3Qk
-         0DPqZHspoSktweJ5z4WdeAOZO7kqV9gEE4vt/fJyhAL/yIkWd0fnkPp+TqSaqlRh08Xp
-         f1cSecJ53U1r5nHoE7cJ2OFKWeCv0184VJ73HAO6ySVdd6V9jWy67k4oJqMk0brNpFHU
-         LgUy44vgJFjCkUdFZm3HUWrbYAAHsDPOoFtazbJcRe5w6P8miNArs3IYwkLSUiXbH86+
-         EC+Yd3cjwYO1/d05ixrBm2l6q/dSuBrY1EAdOt15gOoPPQBKl22FW8Xl66QJtxeDvYqb
-         nnZQ==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XBmndkyEtmuH2zqfJVf2MipvEX2Eu2YJsa5R9Svl5+o=;
+        b=gXjyZpFN7dPRuh+vX/6yZxiZDGG1mugCc3Ys83+jGOIfZiPoIIu6Muk8Bi6bRDciqQ
+         kEqlVA/S/G90lP17leDC4Xhue0LATzQolxuZts/beHU2j7OUgIzJWtmUS32qc87vibUp
+         dPTL96RLpIEagq8GNTPPHHZAWEVfm/fmLgrEGdBuR7P/Osj42j7USzNa1nOqQcZVoSTc
+         v21buuptH8kZmQ9Eh+FXeVWwRu3m3iEeyX/JzdpVc3+idFRM04kgaWuciIeBBKJI2tRB
+         LCWMX/t4aOA2bj69rpM2+hUlxQKGvylIkIaGRj3M661jQVHB7UfLKMgAgOGiCg8WMUxl
+         rNNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760445576; x=1761050376;
+        d=1e100.net; s=20230601; t=1760447353; x=1761052153;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iOKsSRK0fMY53Nno3tXGDrP+nfAG/MScFpySFc8rN2Q=;
-        b=gQKZKCr7ZzN7Urg8GYUsNcTlJMD6QvaIuRFeHBKyCmBsDDOEeKvXQ5i27NB9wRmVze
-         ZX7f6HpFb+pMRgaMN1lXNDkOC1Cj0fBTpJD2nMOxz/bRMHtX1h5B5nF8NobXdTH+PoPG
-         87M2xpekkHJGWRHwwV27j1b+8wUQyW/ld6U/p4PCdeiQxfkantWt4uXFkl7ww3AERRZl
-         ANQIvqMmdAvDk5Kd9jTC/1rgI2tcmJjXJphseKFPh+4fsKTaxJNTBQ8Qmzbna3jZQJQL
-         NVnSpsKXr4j3GGnsGvGyxfe2NBQeh+lVmu4+PbEhmYAufO2LPvpGJYlUPo19A3ukvDKH
-         bjEA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHJtiQu+nh2JMb+kUAtKEDNIQTlbupUQ0l/aW9BMTaA5yQg2NXNIE9+SGxTD60Alv2rpdYgeX6YrIjAjxaAUQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGVjlcDAK4NChn3jcNUZpKadZj27xnOoyIUVsegIVdoZQBqHmK
-	5wHFjLPEGO+UJ0IpOW9LIwfcxtO+jTYgKePgK708upxTEyjP7m+i9HEb
-X-Gm-Gg: ASbGncsdPoa5JGzANqcvG2ZFQEeVYh9mUQpEL23/6sAU+V/uEF9u4byp2RlkDSmfQxv
-	803BLZIQtMCZpRmCplTp3td0tJRC7FvhZxyCNqSwE/RUEK7pot/A3PsVXxUDe6xeUV3wX8ppu+i
-	tvrA/zNwj7spBysehw3kAmsrJUk8V06FPXR/O1RTFVLujUnmnuWOVYQ+UhjQzktMR76L3Vgc0Jq
-	lB4chSl2zfUC9eNQnJBDZ0h5aaQVnvXUtFWAwPyeyo98ycHczHNZsse32yoVCmjGZrw0dQPi3uI
-	aJxhr9uVJkH09qCcXExfbTM/pIDx7AR+lUoWNbNwQhK7DgC2LcddIhdubZrSMCf2UAEL8W3xGaJ
-	lM1TP5D+RIP0JBxI=
-X-Google-Smtp-Source: AGHT+IF+gfoV6etSNY7UeTP7Wc3+ofAlLWgPgvHBVhEL5oHqglkksCzccfY0Fb9cv0GW9CsFU/0Fqg==
-X-Received: by 2002:a17:907:25c9:b0:b45:a88e:d6de with SMTP id a640c23a62f3a-b50ad132c58mr2337451366b.65.1760445575586;
-        Tue, 14 Oct 2025 05:39:35 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::31e0])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-63a5c134141sm11098458a12.34.2025.10.14.05.39.34
+        bh=XBmndkyEtmuH2zqfJVf2MipvEX2Eu2YJsa5R9Svl5+o=;
+        b=HejHhXpjTov3WmCU+IAOHLq7BLXFlr9+DCZKxKggU9gyGmTa81Ay2Ka4vK2rsb5LOn
+         2fchvK2HjyJlYJK58yUd8tG+gGu4hxZwAkYBy15uATjIEmpo7DaOgGpuxXQQlABZGqKn
+         JcvHgDzdRsznbai449Y4WdSC/FBF5noNR4TGQDXKaWBeipm8a9Ye+3IN94bVXLQYFRt0
+         rFvV1PfKy8arvmYTZK9E3X9yq5AhAOJDIlqRcc6RdVh+2nBfen4/VytxIAqk9ELZFMaR
+         wtjQxLhhL+7HwwYDgt0vI82qZitWDBN0pOzPkZCMIzIC94FnGMq1JjssIk4mzBOtf0a2
+         sspQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWYCGvIWoRaRHkf/aahgbPnxETRA7TKN2M5gPkfF3miXgToDQY4OJQfh4YawGG6hGeDnUZ3PHhDwvtcAKJclVg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzzkFwxLlzUn8k2eaIUrw2x2eBkWzB0BxDH5w1xW9T/qGefYJ1q
+	zRoCx4KB1N/ZMZezzM0iZ/s/hd3+SzKSyIJC7aZfKGXoyjg50Qfu+xFlYenbsTo4iZU=
+X-Gm-Gg: ASbGncsURv0ZotPB7uTbxm/s+oVX7B5ifvuF0KoyTOwKUc5TH41GMPNVSRaOMkfECYr
+	wKDiA4CiBI3eMZLL8/dHX3r+eKl8gVvQRsdfoBPBw+wY5tkBVvjrC10uein0eDX5s/GizTEmAli
+	wOgUh7RdU98nHJ+55QYRR4TvEYCHAB8QXVN5neojc6iB5UbfUvCjryYDfG0hDleJV2q3CbZRsXV
+	fbUOApvsjtxR18/gqHQvv7YXwaPg5Pa7NV8fHW3zLQHr4ZB5bKjg/BJZGvi2Z58dKMzVdBrZ/QJ
+	V+bZpi/tK4vVmROxObU2N0MC/X4gi5wLlJss7BfBT24L9/AlOQDo+7fqT8edPBMB4awdouYAa/W
+	FacLGiuJBDK4L/DTh997aLMdiXiakodCN/5yfua8J6FfkbTsIHQ/5qigkdu5SJjTcqIlPvw==
+X-Google-Smtp-Source: AGHT+IFGpYfRWYGhqIaSZxufyw3cU/D950Wt8EiMNsuJCAolvX6QytVu1nn4m6ZLSmt3VXgOJE+wuQ==
+X-Received: by 2002:a05:6000:43d4:20b0:426:ed9d:4072 with SMTP id ffacd0b85a97d-426ed9d43d7mr1534097f8f.21.1760447352714;
+        Tue, 14 Oct 2025 06:09:12 -0700 (PDT)
+Received: from pathway.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426ce5cf70fsm22846162f8f.27.2025.10.14.06.09.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 05:39:35 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 14 Oct 2025 14:39:33 +0200
-To: Xing Guo <higuoxing@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, ast@kernel.org,
-	sveiss@meta.com, andrii@kernel.org
-Subject: Re: [PATCH] selftests: arg_parsing: Ensure data is flushed to disk
- before reading.
-Message-ID: <aO5EhTBn9Oq_MP2C@krava>
-References: <20251014080323.1660391-1-higuoxing@gmail.com>
+        Tue, 14 Oct 2025 06:09:12 -0700 (PDT)
+Date: Tue, 14 Oct 2025 15:09:10 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: "Li,Rongqing" <lirongqing@baidu.com>
+Cc: Lance Yang <lance.yang@linux.dev>,
+	"wireguard@lists.zx2c4.com" <wireguard@lists.zx2c4.com>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	David Hildenbrand <david@redhat.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	"linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Joel Stanley <joel@jms.id.au>, Russell King <linux@armlinux.org.uk>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Joel Granados <joel.granados@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Phil Auld <pauld@redhat.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Simon Horman <horms@kernel.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Florian Westphal <fw@strlen.de>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Feng Tang <feng.tang@linux.alibaba.com>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [????] Re: [PATCH][v3] hung_task: Panic after fixed number of
+ hung tasks
+Message-ID: <aO5Ldv4U8QSGgfog@pathway.suse.cz>
+References: <20251012115035.2169-1-lirongqing@baidu.com>
+ <588c1935-835f-4cab-9679-f31c1e903a9a@linux.dev>
+ <aO4boXFaIb0_Wiif@pathway.suse.cz>
+ <e3f7ddf68c2e42d7abf8643f34d84a18@baidu.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,65 +120,75 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251014080323.1660391-1-higuoxing@gmail.com>
+In-Reply-To: <e3f7ddf68c2e42d7abf8643f34d84a18@baidu.com>
 
-On Tue, Oct 14, 2025 at 04:03:23PM +0800, Xing Guo wrote:
-> Recently, I noticed a selftest failure in my local environment. The
-> test_parse_test_list_file writes some data to
-> /tmp/bpf_arg_parsing_test.XXXXXX and parse_test_list_file() will read
-> the data back.  However, after writing data to that file, we forget to
-> call fsync() and it's causing testing failure in my laptop.  This patch
-> helps fix it by adding the missing fsync() call.
+On Tue 2025-10-14 10:49:53, Li,Rongqing wrote:
 > 
-> Signed-off-by: Xing Guo <higuoxing@gmail.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/arg_parsing.c | 1 +
->  1 file changed, 1 insertion(+)
+> > On Tue 2025-10-14 13:23:58, Lance Yang wrote:
+> > > Thanks for the patch!
+> > >
+> > > I noticed the implementation panics only when N tasks are detected
+> > > within a single scan, because total_hung_task is reset for each
+> > > check_hung_uninterruptible_tasks() run.
+> > 
+> > Great catch!
+> > 
+> > Does it make sense?
+> > Is is the intended behavior, please?
+> > 
 > 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-> index bb143de68875..4f071943ffb0 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-> @@ -140,6 +140,7 @@ static void test_parse_test_list_file(void)
->  	fprintf(fp, "testA/subtest2\n");
->  	fprintf(fp, "testC_no_eof_newline");
->  	fflush(fp);
-> +	fsync(fd);
+> Yes, this is intended behavior
+> 
+> > > So some suggestions to align the documentation with the code's
+> > > behavior below :)
+> > 
+> > > On 2025/10/12 19:50, lirongqing wrote:
+> > > > From: Li RongQing <lirongqing@baidu.com>
+> > > >
+> > > > Currently, when 'hung_task_panic' is enabled, the kernel panics
+> > > > immediately upon detecting the first hung task. However, some hung
+> > > > tasks are transient and the system can recover, while others are
+> > > > persistent and may accumulate progressively.
+> > 
+> > My understanding is that this patch wanted to do:
+> > 
+> >    + report even temporary stalls
+> >    + panic only when the stall was much longer and likely persistent
+> > 
+> > Which might make some sense. But the code does something else.
+> > 
+> 
+> A single task hanging for an extended period may not be a critical
+> issue, as users might still log into the system to investigate.
+> However, if multiple tasks hang simultaneously-such as in cases
+> of I/O hangs caused by disk failures-it could prevent users from
+> logging in and become a serious problem, and a panic is expected.
+
+I see. This another approach and it makes sense as well.
+An this is much more clear description than the original text.
+
+I would also update the subject to something like:
+
+    hung_task: Panic when there are more than N hung tasks at the same time
 
 
-could we just close the fp stream instead flushing it twice?
 
-maybe something like below, but not sure ferror will work
-after the fclose call
+That said, I think that both approaches make sense.
 
-jirka
+Your approach would trigger the panic when many processes are stuck.
+Note that it still might be a transient state. But I agree that
+the more stuck processes exist the more serious the problem
+likely is for the heath of the system.
 
+My approach would trigger panic when a single process hangs
+for a long time. It will trigger more likely only when the problem
+is persistent. The seriousness depends on which particular process
+get stuck.
 
----
-diff --git a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-index bb143de68875..5a4c1bca2a1e 100644
---- a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-@@ -139,10 +139,10 @@ static void test_parse_test_list_file(void)
- 	fprintf(fp, "testA/subtest # subtest duplicate\n");
- 	fprintf(fp, "testA/subtest2\n");
- 	fprintf(fp, "testC_no_eof_newline");
--	fflush(fp);
-+	fclose(fp);
- 
- 	if (!ASSERT_OK(ferror(fp), "prepare tmp"))
--		goto out_fclose;
-+		goto out_remove;
- 
- 	init_test_filter_set(&set);
- 
-@@ -160,8 +160,6 @@ static void test_parse_test_list_file(void)
- 
- 	free_test_filter_set(&set);
- 
--out_fclose:
--	fclose(fp);
- out_remove:
- 	remove(tmpfile);
- }
+I am fine with your approach. Just please, make more clear that
+the number means the number of hung tasks at the same time.
+And mention the problems to login, ...
+
+Best Regards,
+Petr
 
