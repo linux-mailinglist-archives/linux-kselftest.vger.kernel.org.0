@@ -1,251 +1,142 @@
-Return-Path: <linux-kselftest+bounces-43161-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43162-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E0C5BDC3FC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 05:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F91FBDC9A4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 07:31:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D14E5421B60
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 03:03:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2AA53C6C8A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 05:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF302571B8;
-	Wed, 15 Oct 2025 03:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26DC302CC0;
+	Wed, 15 Oct 2025 05:31:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LBJovzoS"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="N3ukWesV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890487263E
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 03:03:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABE514B96E
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 05:31:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760497425; cv=none; b=j6ZTaTOrjeFqZRDpu305f5WcnH678PkSgtA1JIxeWmPeNvUVI61lIwnOwHP3u9bUUxX6larWjX2pyuA2ARCfJBxgEtGhz2VT6AjZUOIcuKBkpccGAvrc12mBVTdsLjJLCaMlGJTbviuEpA1Z2UmazzfET0jfb89cBwCT6uf6h5A=
+	t=1760506286; cv=none; b=SNttqxoIQhY3pIH8quqeHg7HNhxyCnZgsDwJ+1c/yLH5b9E/+WbTKDT3vC6hZbUy4KPXqPUi6Beap/1sJJl3MFa+bZQViQSsRh29zmjX9iQYuHo+NOH7BCITA4wPnLsFvjR/VV6RAXyeP1I9df5eBtzLIw4P2l6gmvkS3i2fKyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760497425; c=relaxed/simple;
-	bh=IKc+jkIsO9mgc1GUn3H5nunONRgZo9m8m6soz3UG1+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t/fkqhOcoGjkzOEsoe0i4zp02WPLJpjGhWMDpDUKoid038VzCO7ABsSUWzyLLtMwsAuecvh0skiE/YmHMz0A8UPXLa2cXZoHkWDvc+KYLJPvUsRuihyBwslZElAfVXXW7rPuxJKDykmE7Lx0KYjgqNOOQu6Kpjd7M3Co6unoro4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LBJovzoS; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b60971c17acso4797828a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 20:03:43 -0700 (PDT)
+	s=arc-20240116; t=1760506286; c=relaxed/simple;
+	bh=FC2x9/tDvjdm6NlGJ48dWxXsYmuCn6FstQTJWM2NJk4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=oaUhgZtPsdUMb3igp8Gl5sHDuZ1vIUH5VT2NcYwmCCW9tdPfuRw6OryOhlwOUFOgkm/yxQBQkfSPYLHjm+HWN+NlNaZmC4F67nmMpLwWBO8DCmsbMwu9oirC0CjXzI/SWH6LAvdlOZeqDIMRfyl5uLputhKNkAG/tjGiUz9mJCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=N3ukWesV; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-799572d92b0so81639736d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 22:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760497422; x=1761102222; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AJRtMauxgy5L7Cll4qsdqgeV1KauSjYifSS43lZLtuI=;
-        b=LBJovzoSqKf9udA9UVg1Cvs40Lg3rqzWMX4+mjgwALr7lGviVDbLiAAlBZVS/2J6Rl
-         JrImUUk/S9W4si2WQzt4wNjVXPN2yRtX6hxFT8tr2z26ZgprQvBmoMcbf9lUNXCb0wj+
-         AvKiRAsjOEzZI+9HUImYm7N4W1imwYU7CQaGjAAFi5EWPwSy2wkm4q/kp5T8NpUcrem3
-         muZ4ijrnu5kc0HgnpVszC9irmF93um5fceZ2E5eJcNZ86K8yJMaGPHs7y53yo5Yn2HEp
-         6xC+w7BKssxUZFeitSc6udwqnjCLJIMu/DvcFquuEREM0oldecMBPDyS/ihMtgPiQLne
-         hd6g==
+        d=soleen.com; s=google; t=1760506284; x=1761111084; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ks0TQAnc2WQfMRFVV4u+78N4hNnTBxLoURgsapwl7yY=;
+        b=N3ukWesVTltoMTYiIWCEBoZDLoJDSLAedyquDPHHnK+I+zqa4qMNKEVYcEsrVmqSOV
+         THVHeHwnEMk8+FEh5AyjZmF6g3XoTwY5bUkKvFd4NIjjivNVAAH01jzn6SnRI5P5lSYT
+         3VjpsmmXjYPjhe6/Ar1OZnIxXmprb/mHIwkDMxII3L6yop0CaF0STgcwAiBsnSd4dxTO
+         MnrAqxAMZ9altr+vZqexLvV9lEPnxr6E2qOhAnBcWarDNn47Dd/MFkAVmRtD9U7GG3bJ
+         54XUlmQ4RCwyDcjCotZIjRMmOKHh+xceoRfJB3s1Y1tUsKIVFuS+fxJVMjlDQyhpe7hI
+         pYOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760497422; x=1761102222;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AJRtMauxgy5L7Cll4qsdqgeV1KauSjYifSS43lZLtuI=;
-        b=MjuB7YKGFBM3w0YEA7QApnc3a3OHDnJDlStuTxGY/5N6wASe6dmcrttQR2TF6mY7VF
-         uqnFQ6APLH4/pkNotXkTIyubz/WWwYj0W8FVWn/2UiTKyRKQz378ZgoBknF7xKeqtVaE
-         8GGWiG4JwORYd2OrIOSyB74hph7kMFjQtaALsJ3el5xNfe+Zc5XwdSAm5+pSJP4Xo5OM
-         LxIj4dKsFZTQWT3ptvYMY86NBMMPvS/3LixGf9JYMV28z7/FjZJ99pingLTI0mbsbmRq
-         VvSEsDQjRFltyNGaUBh5fHzrI5LPfOFODgItNuCxbKO/lDnxUK1dwboWD4fYlab2hBTk
-         3TAw==
-X-Forwarded-Encrypted: i=1; AJvYcCUtnd5rcsTMm7lQHAM59aQHcFJcN0UcijBb9V9dh3e/uiIX51IYlLo8ifO9mWD628TFSJOaygRl2Ilbhn2mso8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBF/Py8hbFIghJKYsCwlF6XoKtceKxTNrjj83mRoz8v3YiW+Zg
-	WiupGNBg9ODefbQpxZMv8zQ98DgwJKc5IZKONA5O6JERZjkDbb63GoKm
-X-Gm-Gg: ASbGncvh3qPZdmaOwQcCKoYn8E7VlcLZRCS3vkBqGxgZngcj6beKW+kicgV0CKSozyX
-	U3P34MsKwhrIlywbrKUiBWjiDmMS9rwZa151us5Dk9o+YJg2aOp0NBBmRsNJzZKm4ljSOBIo1Nf
-	PUhMaUqqage7m5F0czjhoT6JDAGTjNwTMVwT5z+L1aKiBp1nluRMULHEvZnVVJgMvzJz/t+yLxC
-	393mFEMhCOqj+IIDFSGoEJ/rpsKbtM6lTgCybN7HsZtH+m7/Ho8wezUItrkzPc2k+DBulQYP7qJ
-	T+8Q8AlrM+yZsuBaclGAQQe/jYzX5cqhsfS2iFkacCZ4rknlpslTpzXIRJw6aEvlm6NG3X8QyKv
-	7427ftYCvj7Th0ag62kNlvGKGDBPRX5DovuhuMSNz0GsJlA==
-X-Google-Smtp-Source: AGHT+IGeFwOgcx2BiZRTvdSnQWCMeJtnp0M7gNlhEon3I1UQqUGSTj5fxR7SdCplRAQzjxgQdmFNIA==
-X-Received: by 2002:a17:902:d58f:b0:290:2735:7285 with SMTP id d9443c01a7336-2902735728emr343125225ad.47.1760497422453;
-        Tue, 14 Oct 2025 20:03:42 -0700 (PDT)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034f08de5sm180126235ad.83.2025.10.14.20.03.36
+        d=1e100.net; s=20230601; t=1760506284; x=1761111084;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ks0TQAnc2WQfMRFVV4u+78N4hNnTBxLoURgsapwl7yY=;
+        b=aSWnG9VLOH+2m/uCnY26EqhtVWDGrXPuIZYuZQgOMX3F7QtvOE8Ch4x17qnpsHlRuD
+         /3ICiIGhaFaDNXc/QJmr+bdH+grfly55aYQ13asd8EA6QMaC0CUB0whDWedn4TSxo3us
+         uUqA5L4ob8zU9emzmGry4mKCKVN0bMESskNCmLQHvQfA1DRlDvmn6cSmvMUI2itvdwVP
+         BlMfRVFqkTYIXbXwN/U+JZVkZw6zCiIhT3gtXgTgVakxjdth3x9IPFhVvAkXHkg43p7v
+         aPUEiJB7cvU9kv4Iv+6S60g8Y443yRQhhsF33+Rh14E/CEDd7M6auhEL82gqFz/vnkv+
+         KdFA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+pXZ4/wTMFhO/xd/KUPbFy/yMrlTkeHHpHGPNUfLLSxbWlceTwUFJqafSskGRdwD8qcM9TTxDJ8KEQHSaYw4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/UDtbV65ocA/arkWIld78yLVxMkR7fMY6QWnt+mgAJrXrbhNX
+	lf0NA9mJEVPOfRHwZUqjANzMNhX1CL9VYQ/nnNphKPIeQXnwFrBkuMGk9uKv+mH2bpI=
+X-Gm-Gg: ASbGncuqSmSSso6oE/9MXn7Fvo5u7AVCFRSUEXpXgQihbxFnI0CT9jhxVUBce8oRbzU
+	ilBKKmklREx7P2dl8CEs5Tb9B3CnYtgV0wYLG9EcQ4TbEQQpMcWib97byPp+/J0ugfCQe9z/cPP
+	mTkz756GNSA1b9JeJGcdNuy+B6FkxNCz9vkpjOdU9V5vUJbaA9+ZFWMV3UPz9g0+yjCh7QaWA4/
+	H1Fwgz9Kj9Z025dsLtl3MXsm7aGDZToN95dQYR+uAWMx8V3WuBve3fTenfVpWhd0/J4XmuLNLal
+	jEOrZQ7yRxSnnDEBvVturrJXij5uWfguEWDoEmWqt4nJJgLACvCgxnlMHklr1YWf/ANy/NpuFHA
+	6/Vp3YkdeabObFXYQxgfGBI9oPfRk3yLRLFe6a6Vll4J7CAkRnEabUUIveG/DS06VY1566RpXc2
+	wbEMSWXK0HY+OBR3kusLv2AUrppoVWZbcd48BWj+lrtWRMmqjBAYyx9c5qG1I=
+X-Google-Smtp-Source: AGHT+IFFjRfzxETp9modlQvk46r/Xd97DWmwBK2yN4Skk/yXeTLEsqZNHWkGihrbcaSsTXWHRc93BQ==
+X-Received: by 2002:a05:622a:1a9d:b0:4e3:25d7:57d4 with SMTP id d75a77b69052e-4e6ead754ebmr314014531cf.80.1760506283865;
+        Tue, 14 Oct 2025 22:31:23 -0700 (PDT)
+Received: from soleen.us-east4-b.c.cloudtop-prod-us-east.internal (53.47.86.34.bc.googleusercontent.com. [34.86.47.53])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e881d01f5asm12572661cf.27.2025.10.14.22.31.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 20:03:41 -0700 (PDT)
-Date: Wed, 15 Oct 2025 03:03:32 +0000
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Sabrina Dubroca <sdubroca@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Ido Schimmel <idosch@nvidia.com>,
-	Shuah Khan <shuah@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Stanislav Fomichev <stfomichev@gmail.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	bridge@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCHv4 net-next 1/4] net: add a common function to compute
- features from lowers devices
-Message-ID: <aO8PBOMk_EqyaGKN@fedora>
-References: <20251014080217.47988-1-liuhangbin@gmail.com>
- <20251014080217.47988-2-liuhangbin@gmail.com>
- <aO5X7368r8veRe5J@horms.kernel.org>
+        Tue, 14 Oct 2025 22:31:23 -0700 (PDT)
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+To: akpm@linux-foundation.org,
+	brauner@kernel.org,
+	corbet@lwn.net,
+	graf@amazon.com,
+	jgg@ziepe.ca,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	masahiroy@kernel.org,
+	ojeda@kernel.org,
+	pasha.tatashin@soleen.com,
+	pratyush@kernel.org,
+	rdunlap@infradead.org,
+	rppt@kernel.org,
+	tj@kernel.org,
+	jasonmiu@google.com,
+	dmatlack@google.com,
+	skhawaja@google.com
+Subject: [PATCH 0/2] KHO: Fix metadata allocation in scratch area
+Date: Wed, 15 Oct 2025 01:31:19 -0400
+Message-ID: <20251015053121.3978358-1-pasha.tatashin@soleen.com>
+X-Mailer: git-send-email 2.51.0.788.g6d19910ace-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aO5X7368r8veRe5J@horms.kernel.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Simon,
+This series fixes a memory corruption bug in KHO that occurs when KFENCE
+is enabled.
 
-Thanks for the comments, I will fix all of them.
+The root cause is that KHO metadata, allocated via kzalloc(), can be
+randomly serviced by kfence_alloc(). When a kernel boots via KHO, the
+early memblock allocator is restricted to a "scratch area". This forces
+the KFENCE pool to be allocated within this scratch area, creating a
+conflict. If KHO metadata is subsequently placed in this pool, it gets
+corrupted during the next kexec operation.
 
-Regards
-Hangbin
-On Tue, Oct 14, 2025 at 03:02:23PM +0100, Simon Horman wrote:
-> On Tue, Oct 14, 2025 at 08:02:14AM +0000, Hangbin Liu wrote:
-> 
-> ...
-> 
-> > diff --git a/net/core/dev.c b/net/core/dev.c
-> > index a64cef2c537e..54f0e792fbd2 100644
-> > --- a/net/core/dev.c
-> > +++ b/net/core/dev.c
-> > @@ -12616,6 +12616,101 @@ netdev_features_t netdev_increment_features(netdev_features_t all,
-> >  }
-> >  EXPORT_SYMBOL(netdev_increment_features);
-> >  
-> > +/**
-> > + *	netdev_compute_features_from_lowers - compute feature from lowers
-> > + *	@dev: the upper device
-> > + *	@update_header: whether to update upper device's header_len/headroom/tailroom
-> > + *
-> > + *	Recompute the upper device's feature based on all lower devices.
-> > + */
-> > +void netdev_compute_features_from_lowers(struct net_device *dev, bool update_header)
-> > +{
-> > +	unsigned int dst_release_flag = IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM;
-> > +	netdev_features_t gso_partial_features = VIRTUAL_DEV_GSO_PARTIAL_FEATURES;
-> > +#ifdef CONFIG_XFRM_OFFLOAD
-> > +	netdev_features_t xfrm_features = VIRTUAL_DEV_XFRM_FEATURES;
-> > +#endif
-> 
-> Hi Hangbin,
-> 
-> It would be nice to avoid the #ifdefs in this function.
-> 
-> Could xfrm_features be declared unconditoinally.
-> And then used behind if(IS_ENABLED(CONFIG_XFRM_OFFLOAD)) conditions?
-> This would increase compile coverage (and readability IMHO).
-> 
-> > +	netdev_features_t mpls_features = VIRTUAL_DEV_MPLS_FEATURES;
-> > +	netdev_features_t vlan_features = VIRTUAL_DEV_VLAN_FEATURES;
-> > +	netdev_features_t enc_features = VIRTUAL_DEV_ENC_FEATURES;
-> > +	unsigned short max_header_len = ETH_HLEN;
-> > +	unsigned int tso_max_size = TSO_MAX_SIZE;
-> > +	u16 tso_max_segs = TSO_MAX_SEGS;
-> > +	struct net_device *lower_dev;
-> > +	unsigned short max_headroom;
-> > +	unsigned short max_tailroom;
-> > +	struct list_head *iter;
-> > +
-> > +	mpls_features = netdev_base_features(mpls_features);
-> > +	vlan_features = netdev_base_features(vlan_features);
-> > +	enc_features = netdev_base_features(enc_features);
-> > +
-> > +	netdev_for_each_lower_dev(dev, lower_dev, iter) {
-> > +		gso_partial_features = netdev_increment_features(gso_partial_features,
-> > +								 lower_dev->gso_partial_features,
-> > +								 VIRTUAL_DEV_GSO_PARTIAL_FEATURES);
-> > +
-> > +		vlan_features = netdev_increment_features(vlan_features,
-> > +							  lower_dev->vlan_features,
-> > +							  VIRTUAL_DEV_VLAN_FEATURES);
-> > +
-> > +		enc_features = netdev_increment_features(enc_features,
-> > +							 lower_dev->hw_enc_features,
-> > +							 VIRTUAL_DEV_ENC_FEATURES);
-> > +
-> > +#ifdef CONFIG_XFRM_OFFLOAD
-> > +		xfrm_features = netdev_increment_features(xfrm_features,
-> > +							  lower_dev->hw_enc_features,
-> > +							  VIRTUAL_DEV_XFRM_FEATURES);
-> > +#endif
-> > +
-> > +		mpls_features = netdev_increment_features(mpls_features,
-> > +							  lower_dev->mpls_features,
-> > +							  VIRTUAL_DEV_MPLS_FEATURES);
-> > +
-> > +		dst_release_flag &= lower_dev->priv_flags;
-> > +
-> > +		if (update_header) {
-> > +			max_header_len = max_t(unsigned short, max_header_len,
-> > +					lower_dev->hard_header_len);
-> 
-> Both the type of max_header_len and .hard_header_len is unsigned short.
-> So I think max() can be used here instead of max_t(). Likewise for the
-> following two lines.
-> 
-> > +			max_headroom = max_t(unsigned short, max_headroom,
-> > +					lower_dev->needed_headroom);
-> 
-> Max Headroom [1] is used uninitialised the first time we reach here.
-> Likewise for max_tailroom below.
-> 
-> [1] https://en.wikipedia.org/wiki/Max_Headroom
-> 
-> Flagged by Smatch.
-> 
-> > +			max_tailroom = max_t(unsigned short, max_tailroom,
-> > +					lower_dev->needed_tailroom);
-> > +		}
-> > +
-> > +		tso_max_size = min(tso_max_size, lower_dev->tso_max_size);
-> > +		tso_max_segs = min(tso_max_segs, lower_dev->tso_max_segs);
-> > +	}
-> > +
-> > +	dev->gso_partial_features = gso_partial_features;
-> > +	dev->vlan_features = vlan_features;
-> > +	dev->hw_enc_features = enc_features | NETIF_F_GSO_ENCAP_ALL |
-> > +				    NETIF_F_HW_VLAN_CTAG_TX |
-> > +				    NETIF_F_HW_VLAN_STAG_TX;
-> > +#ifdef CONFIG_XFRM_OFFLOAD
-> > +	dev->hw_enc_features |= xfrm_features;
-> > +#endif
-> > +	dev->mpls_features = mpls_features;
-> > +
-> > +	dev->priv_flags &= ~IFF_XMIT_DST_RELEASE;
-> > +	if ((dev->priv_flags & IFF_XMIT_DST_RELEASE_PERM) &&
-> > +	    dst_release_flag == (IFF_XMIT_DST_RELEASE | IFF_XMIT_DST_RELEASE_PERM))
-> > +		dev->priv_flags |= IFF_XMIT_DST_RELEASE;
-> > +
-> > +	if (update_header) {
-> > +		dev->hard_header_len = max_header_len;
-> > +		dev->needed_headroom = max_headroom;
-> > +		dev->needed_tailroom = max_tailroom;
-> 
-> Also, maybe it can't happen in practice. But I think that max_headroom and
-> max_tailroom will may be used uninitialised here if the previous
-> 'update_header' condition is never reached/met.
-> 
-> Also flagged by Smatch.
-> 
-> > +	}
-> > +
-> > +	netif_set_tso_max_segs(dev, tso_max_segs);
-> > +	netif_set_tso_max_size(dev, tso_max_size);
-> > +
-> > +	netdev_change_features(dev);
-> > +}
-> > +EXPORT_SYMBOL(netdev_compute_features_from_lowers);
-> > +
-> 
-> ...
+The series is structured in two parts:
+Patch 1/2 introduces a debug-only feature (CONFIG_KEXEC_HANDOVER_DEBUG)
+that adds checks to detect and fail any operation that attempts to place
+KHO metadata or preserved memory within the scratch area. This serves as
+a validation and diagnostic tool to confirm the problem without
+affecting production builds.
+
+Patch 2/2 provides the fix by modifying KHO to allocate its metadata
+directly from the buddy allocator instead of SLUB. This bypasses the
+KFENCE interception entirely.
+
+Pasha Tatashin (2):
+  liveupdate: kho: warn and fail on metadata or preserved memory in
+    scratch area
+  liveupdate: kho: allocate metadata directly from the buddy allocator
+
+ kernel/liveupdate/Kconfig                   | 15 ++++++
+ kernel/liveupdate/kexec_handover.c          | 51 ++++++++++++++++-----
+ kernel/liveupdate/kexec_handover_debug.c    | 18 ++++++++
+ kernel/liveupdate/kexec_handover_internal.h |  9 ++++
+ 4 files changed, 81 insertions(+), 12 deletions(-)
+
+
+base-commit: 0b2f041c47acb45db82b4e847af6e17eb66cd32d
+-- 
+2.51.0.788.g6d19910ace-goog
+
 
