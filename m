@@ -1,120 +1,144 @@
-Return-Path: <linux-kselftest+bounces-43250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCBF7BE032B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 20:34:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7615BDFFC6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 20:06:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B00048691A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 18:34:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7D5719A833C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 18:06:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 421303016E2;
-	Wed, 15 Oct 2025 18:34:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95837301482;
+	Wed, 15 Oct 2025 18:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JOEDk1TK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hiY5QYtE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086CC298CD7;
-	Wed, 15 Oct 2025 18:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75918301468
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 18:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760553250; cv=none; b=M/ClbbH54KoLFdsIKSlRlvgtVymD8Ig0FTsd+1MRb6Q0FsrlIP0N/qW0zoUw9tYa20UMzaJP+qrRpSB7sUMr2ccTViPLD/rd13biWyyl3+xnvl+aqxdu5yctPkmzUIOABwMeHT4w3fsVP+95+OZIicngwvr82hv+ZeaGKRMUils=
+	t=1760551559; cv=none; b=PyOi+dDCgUfk4ijEOGSfRlPG0X2e+yjq4Zq/oJ0EJBACEzXGxyH0o9kxYYepWUDrMzGhszMzLI+8k0g8PBcz6f0twsEiLawg/cDOcV7JClmpjpSEIA4jVyMe7z6sbJqyU5cVUk0HS0p3l910YxMqku1d01O+vzZSSgWvesOwk0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760553250; c=relaxed/simple;
-	bh=UYiRQSvgs+jqwo1HIyxcSuFqSwz8wIVukPHpImMwyIA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=laf96pLFXewziEelQJSVKS7xEIUhxQKZkL8i7RBQEgbBiUA3N/+fnpWYmkDYYD+n79/cZ3ofQARxanueKtk2bVMnMFckl4MGq9n8rO/G9BDOLy3SqjaXk3EHdwfMpFFhtoD4VAaBD5rqPfTU9p2a3hAwQFoHRuw95aJa/DPj65Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JOEDk1TK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37C68C4CEF8;
-	Wed, 15 Oct 2025 18:34:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760553249;
-	bh=UYiRQSvgs+jqwo1HIyxcSuFqSwz8wIVukPHpImMwyIA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=JOEDk1TKOjy+sC4x4jD08sMX/9cOzdUAu2Drq6EqtlqtkOXstKVfDB3o1we/whMWc
-	 NYuCMn5I5HwyzfBwDCkpx+eAR7TCllmtTVbSGyeBTvghTNqiIb35VmH/iFlaOkHxnw
-	 /o14sS8HvwFWWx6aE1cB/SqXmMJAjhPotn2E3o9Qd8iCctD9xNtcMnw25OqLesbHdf
-	 bFE+KISodttgwOsCT4rEK0o38x06cmfw7n0NfaqvQCUo2UOYqm2lWjAL9jVWLPkZMf
-	 8Ha1ZwQ7XsYExqR+70kRUYkoGFBx+9A79cE9ZZ8aRJy5qZeENg+MGhD+l3iAgZlogf
-	 RIA24f459PU9A==
-From: Mark Brown <broonie@kernel.org>
-Date: Wed, 15 Oct 2025 18:56:38 +0100
-Subject: [PATCH v2 3/3] kselftest/arm64: Cover disabling streaming mode
- without SVE in fp-ptrace
+	s=arc-20240116; t=1760551559; c=relaxed/simple;
+	bh=ozdKul5OP276A3h3Wjm2x2XarpQcUWp1UVCAyeuTdSY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=EY13QlapK3FKUhoa5euOvRGUiGbofUOcgj8rI1Ct69pZ6WHh/25lWa5ZEjOYfj3hOFx2Y3NL/8WDuhdmzsuHDluoqwFeMy+VU3/3jLID1e2Fq3JO6VOd8gjGkHJXXM4nERVu8XWnEnpJu0El9uAlXUfNkguxowOSSLokEe08fAs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hiY5QYtE; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2908b2ecc19so11931035ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 11:05:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1760551557; x=1761156357; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wj/ujD0eXtGvKYdVuuqLrx+hKA4SG0aPTcTudPvMU20=;
+        b=hiY5QYtEpveuJQ3GbSnBDDXz5b7tFq/FMKy0gFT20cj6giwmL8q4Mh0LFH56veNEYF
+         JGywApRFaF3M3jB/LxzaK5TYG3wiIPdyLA019g7yKN4nOQ5/e10ISsVrWEz7iperQzdV
+         oZX2RznS+iz83f0ymdb26UtOTr0XrQMcNh+WRgQMPZoGpNln5z+dSnS/rPq7YJkZCL7e
+         ClrlWThmjmQQxohicODRYSlyv33ENTwTqHqIBf1A1TBzcuisSBRbNV43V5lJudqs4xYC
+         S0dS5lG8OAygmR+OVmej7Qqp9sS98SLfTWn7dlNyPLpqViCGxu06AKz0VeOR5mKQtyCs
+         eS3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760551557; x=1761156357;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wj/ujD0eXtGvKYdVuuqLrx+hKA4SG0aPTcTudPvMU20=;
+        b=eEz8OpGT461BZcmTaYHIK2GXEaRXVC8HahdXQUY+tfOdT67PZ4GvSkQ6fC+KMlOQTw
+         Bs/CON88kzVcLxJ3ZlZgqLTD4rATXjRlGXoheV5EQuG5agazhGcjDbCbQh4Os4P3ZpL1
+         HFQL+jaRtfKySgR7+Q3M7XKF9bUlKi0sPZMUcRanlflc5f05iUNa4hjvmXn87QyvmlNH
+         BvVVp38AYyk80SzIYE1/evrViFtozkNbRcMOAsJWNBg1XhDmlsoVROmE6zE5lrsLF6xa
+         PWwN0qhlJpUJfZEMD9InwcGbXKZRRHfgzF4hl6+6ZFQuGFGVdQshF3H7D/saQJd3fC6J
+         3E3w==
+X-Forwarded-Encrypted: i=1; AJvYcCWDyyYtWR93D2qia/UBN3l+3C2mjxKZ4ohBa6fN9ZnDwZlSItqmZOrJEegRXA/0ehrfjV0hrkwDd76Rvn0hRdw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw80A83fuwZHIpZTwBSeP0hxS8eOuXVab1Pt3DS8eCpE5NgQJ8+
+	W6N296qc/+lreKTve+k3d9UvS5DcLxqRXv+lBbsQMDCEx4k/HgbQHhWQge00/CHVsL/g3163Y6r
+	ddaoEig==
+X-Google-Smtp-Source: AGHT+IH/Mc5bux0nHPu+CkauZuwZIYiV046udmQ4p4yB6kgoXdVfplmR64sQJckJg1s2r9B+yaVqVDHEGb8=
+X-Received: from pjrv8.prod.google.com ([2002:a17:90a:bb88:b0:32e:b34b:92eb])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:3d05:b0:26e:49e3:55f1
+ with SMTP id d9443c01a7336-29027373d9amr366930845ad.18.1760551555936; Wed, 15
+ Oct 2025 11:05:55 -0700 (PDT)
+Date: Wed, 15 Oct 2025 11:02:44 -0700
+In-Reply-To: <20250827175247.83322-2-shivankg@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20250827175247.83322-2-shivankg@amd.com>
+X-Mailer: git-send-email 2.51.0.788.g6d19910ace-goog
+Message-ID: <176055105546.1527431.3611256810380818215.b4-ty@google.com>
+Subject: Re: [PATCH kvm-next V11 0/7] Add NUMA mempolicy support for KVM guest-memfd
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, willy@infradead.org, akpm@linux-foundation.org, 
+	david@redhat.com, pbonzini@redhat.com, shuah@kernel.org, vbabka@suse.cz, 
+	Shivank Garg <shivankg@amd.com>
+Cc: brauner@kernel.org, viro@zeniv.linux.org.uk, dsterba@suse.com, 
+	xiang@kernel.org, chao@kernel.org, jaegeuk@kernel.org, clm@fb.com, 
+	josef@toxicpanda.com, kent.overstreet@linux.dev, zbestahu@gmail.com, 
+	jefflexu@linux.alibaba.com, dhavale@google.com, lihongbo22@huawei.com, 
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, rppt@kernel.org, 
+	surenb@google.com, mhocko@suse.com, ziy@nvidia.com, matthew.brost@intel.com, 
+	joshua.hahnjy@gmail.com, rakie.kim@sk.com, byungchul@sk.com, 
+	gourry@gourry.net, ying.huang@linux.alibaba.com, apopple@nvidia.com, 
+	tabba@google.com, ackerleytng@google.com, paul@paul-moore.com, 
+	jmorris@namei.org, serge@hallyn.com, pvorel@suse.cz, bfoster@redhat.com, 
+	vannapurve@google.com, chao.gao@intel.com, bharata@amd.com, nikunj@amd.com, 
+	michael.day@amd.com, shdhiman@amd.com, yan.y.zhao@intel.com, 
+	Neeraj.Upadhyay@amd.com, thomas.lendacky@amd.com, michael.roth@amd.com, 
+	aik@amd.com, kalyazin@amazon.com, peterx@redhat.com, jack@suse.cz, 
+	hch@infradead.org, cgzones@googlemail.com, ira.weiny@intel.com, 
+	rientjes@google.com, roypat@amazon.co.uk, chao.p.peng@intel.com, 
+	amit@infradead.org, ddutile@redhat.com, dan.j.williams@intel.com, 
+	ashish.kalra@amd.com, gshan@redhat.com, jgowans@amazon.com, 
+	pankaj.gupta@amd.com, papaluri@amd.com, yuzhao@google.com, 
+	suzuki.poulose@arm.com, quic_eberman@quicinc.com, 
+	linux-bcachefs@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-coco@lists.linux.dev, Jason Gunthorpe <jgg@ziepe.ca>
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251015-arm64-sme-ptrace-sme-only-v2-3-33c7b2f27cbf@kernel.org>
-References: <20251015-arm64-sme-ptrace-sme-only-v2-0-33c7b2f27cbf@kernel.org>
-In-Reply-To: <20251015-arm64-sme-ptrace-sme-only-v2-0-33c7b2f27cbf@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>, Oleg Nesterov <oleg@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, 
- David Spickett <david.spickett@arm.com>, 
- Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
- Luis Machado <luis.machado.foss@gmail.com>, 
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-2a268
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1409; i=broonie@kernel.org;
- h=from:subject:message-id; bh=UYiRQSvgs+jqwo1HIyxcSuFqSwz8wIVukPHpImMwyIA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBo7+kUW7mFnAgXj0oaG5JSKhdvIsEUwyyPyt8j1
- wi+2EsZtxCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaO/pFAAKCRAk1otyXVSH
- 0DQbB/976gT7Mug2JIPAZ1WwQXFgHP1WlsQ7C2JzCVbO6aQakwbYHMPhSyqLJm9LVSIr3iTdhu9
- O/xfa/bTdYTIXC3Cadu/kSL4Gd/eM5q9Sf5qyxIIv9T9ox4hq/XunynZMyX+8JbvopLCor1qaQX
- yCWVTuIzBf8esBtIy8tObX/pKuU9T1YxJy8LMtGmA1QSDtF5OzrWIcb6TLzwu4XJxS3L96bTYo3
- Gsj5FhAnm5gA12AH2E3ekO5mpyBgquSV3/XTHKiXiV9ewXGtEsvqCKoTTegojjICtY0JGkZVybZ
- DtksaYcL99KTtZ9Ht+3IElE4WC2qeczhQ9cX+pwXIIbAmv4Q
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On a system which support SME but not SVE we can now disable streaming mode
-via ptrace by writing FPSIMD formatted data through NT_ARM_SVE with a VL of
-0. Extend fp-ptrace to cover rather than skip these cases, relax the check
-for SVE writes of FPSIMD format data to not skip if SME is supported and
-accept 0 as the VL when performing the ptrace write.
+On Wed, 27 Aug 2025 17:52:41 +0000, Shivank Garg wrote:
+> This series introduces NUMA-aware memory placement support for KVM guests
+> with guest_memfd memory backends. It builds upon Fuad Tabba's work (V17)
+> that enabled host-mapping for guest_memfd memory [1] and can be applied
+> directly applied on KVM tree [2] (branch kvm-next, base commit: a6ad5413,
+> Merge branch 'guest-memfd-mmap' into HEAD)
+> 
+> == Background ==
+> KVM's guest-memfd memory backend currently lacks support for NUMA policy
+> enforcement, causing guest memory allocations to be distributed across host
+> nodes  according to kernel's default behavior, irrespective of any policy
+> specified by the VMM. This limitation arises because conventional userspace
+> NUMA control mechanisms like mbind(2) don't work since the memory isn't
+> directly mapped to userspace when allocations occur.
+> Fuad's work [1] provides the necessary mmap capability, and this series
+> leverages it to enable mbind(2).
+> 
+> [...]
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/fp/fp-ptrace.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+Applied the non-KVM change to kvm-x86 gmem.  We're still tweaking and iterating
+on the KVM changes, but I fully expect them to land in 6.19.
 
-diff --git a/tools/testing/selftests/arm64/fp/fp-ptrace.c b/tools/testing/selftests/arm64/fp/fp-ptrace.c
-index a85c19e9524e..0114108ab25f 100644
---- a/tools/testing/selftests/arm64/fp/fp-ptrace.c
-+++ b/tools/testing/selftests/arm64/fp/fp-ptrace.c
-@@ -1071,7 +1071,7 @@ static bool sve_write_supported(struct test_config *config)
- 
- static bool sve_write_fpsimd_supported(struct test_config *config)
- {
--	if (!sve_supported())
-+	if (!sve_supported() && !sme_supported())
- 		return false;
- 
- 	if ((config->svcr_in & SVCR_ZA) != (config->svcr_expected & SVCR_ZA))
-@@ -1231,9 +1231,6 @@ static void sve_write_fpsimd(pid_t child, struct test_config *config)
- 	vl = vl_expected(config);
- 	vq = __sve_vq_from_vl(vl);
- 
--	if (!vl)
--		return;
--
- 	iov.iov_len = SVE_PT_SIZE(vq, SVE_PT_REGS_FPSIMD);
- 	iov.iov_base = malloc(iov.iov_len);
- 	if (!iov.iov_base) {
+Holler if you object to taking these through the kvm tree.
 
--- 
-2.47.2
+[1/7] mm/filemap: Add NUMA mempolicy support to filemap_alloc_folio()
+      https://github.com/kvm-x86/linux/commit/601aa29f762f
+[2/7] mm/filemap: Extend __filemap_get_folio() to support NUMA memory policies
+      https://github.com/kvm-x86/linux/commit/2bb25703e5bd
+[3/7] mm/mempolicy: Export memory policy symbols
+      https://github.com/kvm-x86/linux/commit/e1b4cf7d6be3
 
+--
+https://github.com/kvm-x86/linux/tree/next
 
