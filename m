@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-43237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43238-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCAFBBE01DA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 20:21:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59687BE01F8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 20:21:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A347E3AE350
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 18:19:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D2DE583E3B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 18:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5BCE338F30;
-	Wed, 15 Oct 2025 18:14:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76718350D45;
+	Wed, 15 Oct 2025 18:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="ZW663iHC"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="GjYN+CL3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B898C343D72
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 18:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570B734DCF5
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 18:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760552070; cv=none; b=dtth5QR8bloqemiD6Q7715/WEXCgEPXJDmzaaXCUjbQX+oMlCgX/mUBohnNXLa5bNKfo5Ev0QLZevsdEWsNS4axiCLtIlhGD+xXYjbSk1eaVcy4gTpk+ONGIWcWeKi5I76CCi4Fdf75CLZbOxFO5pwovx5dzd0WEGhKipxUHINE=
+	t=1760552073; cv=none; b=qIjvutlazQlXTvAEn5G4pQiSCz69JRDYsw8Fuir91xO8zMQtr6JMGwLW5m6fLQGKroRufQKzYkpycC20ORYTYkeNPR9fOIL86y54pEJBj0ISp/6S69RoABxXj/51WbDqC+K8jWjkaZ5dGbOnb3umMu8FaprU6XB1oWxX/Sa10bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760552070; c=relaxed/simple;
-	bh=Lgv2+2JEKJz8I+eOPU23ZhagSpES8G7xWPFmmF1jXYI=;
+	s=arc-20240116; t=1760552073; c=relaxed/simple;
+	bh=I1jqcPRPd1hxfvYCXrKsXB3tX7WWaFK9J8/4Z0z3BE8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rAItrTuQXfgOTGao97/TvVniG8GBg81nGmi4HXw83eyT2paQsk/G+GUtVoBLIFr8cfRisMnxR5gsL1nrZ0H8Cnr6vJP93ZR4jM3mFrO0uQFlK8XY3ZAwvKqJ+CZ25Cliq7Lal13Xz9spZDwX4aJhcpyxLNNtX4txp6qAj1Sr8wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=ZW663iHC; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:To:Cc; b=OmnEj67Toern7WswbFCQUKACPa9zIdGatLyBv9IsJTfeKKQYbbcHLSjv2bt3fPFXc7BadFSqaRs+estzY/FUz4yyr2sYI72zpOkNQPZxMzSx5jSJH7SwMbWSF6VtbfHmxYtIVE5kStt+zmEy3DD/JmxDsC2LClSVHOEECXxME0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=GjYN+CL3; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2907948c1d2so32509895ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 11:14:27 -0700 (PDT)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-26983b5411aso47567875ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 11:14:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1760552067; x=1761156867; darn=vger.kernel.org;
+        d=rivosinc.com; s=google; t=1760552069; x=1761156869; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=orzOOXGj405YiK6przhe0GQbSZ5JqsOFQ3WhV+5/r+M=;
-        b=ZW663iHCdhduqq6zWBbQt0SOE6jSbp2UO93sZJXJmt0hS7g6dGPPwnu3b9IG6ayOum
-         PtliE/f+CpxWDmPCXHJppMOFvuOmPFXClnWptdl6lPJz7wR5vf1+lb9nXrvYoMwUK1CH
-         XwUjx+Yqaqm43Gsb3MJ/yehgsBqeRSaBN8sfYnPQL7XrQmwW1rBX55KNZdjTeOCllQkg
-         QBW/3hHjrZrERqy3YrSzPLGCgj3Vrntsa1KAszWaQj2XL0ZsGfADzcBlDNazNBlKhvvC
-         1bz8voZ7fbQf4wQ+J0ao0UzaTlOxz2ntounsqSBdODrmOLZfSdakRaKTH5xA7N/1YVgb
-         THNA==
+        bh=tlTCabZFxINt6Lm9QbVDHZ4MzlWsICTGzKM8x7gyE4c=;
+        b=GjYN+CL3jeLDRhF3Z66apJUIhzmco+PPsSywbdqybXmwSgTEvMmUhuzAPgDMYELbzo
+         NZm2DOu+c9smkjaJFkFzaJHwOusXqzJlxTe+xc1X9Hlgd4fTRNMvqRnh5qZ3ZbSjUJQ2
+         MzQPKqAz0iVpC1dkcnQYWNEj42S8WZRV29tA0hUKpGtx7asQAbwVfwsYtm9ccdHPSeFj
+         9PM5983xku0jqQq5ULbsr3eh8QmwMej9l5e8lrOZQoxdeZPVkYeVEutCfE7fvKFTcHJu
+         44y36eaR7tl7HyVUw2eUWol4SA2kHvfxfa3Prg0c19MQ033rPaIJ4Uott+jGORpDYDBu
+         ud3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760552067; x=1761156867;
+        d=1e100.net; s=20230601; t=1760552069; x=1761156869;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=orzOOXGj405YiK6przhe0GQbSZ5JqsOFQ3WhV+5/r+M=;
-        b=KXpwAmiemHs1/sKr4w9kX58+nJZ0z4Z4TRZzDwvY8fYCK8tveDJNtOHninDnABN1K8
-         fSVMFwEXQmFrooF8dJ3PqpB/5Gro8j63erzCKFPMkOmEwyJL3LYitoXT2NdnTj8YKJS1
-         NCchJJqb4Phk7ZaMbG5IvSU8kV+J2A4muG5/VwZTFoE3016cGRvWYEUV9+/m/y0c2oPR
-         b6/xzxzXm6L8/DTZRpmdb9O0wvF1ajejQ2c7dXoWSdFOCOAwxad790wMgX/LCI8pW7Ah
-         kt0FuRykF0b7zSLZn7FdFaOP1R153ymRvri9AM9tZXAQqUqpRLyANzQilJv4ey473YzX
-         g4UQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVAT5m/euouAp2UI8Fmf4lwZ4A377CSnGYCNhS141M9jgpzYb6fveveT0tkkg5DDAwViqld2r64udO5zRqm2jU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhATtK9uYwxVUU4jqymR4mnY3aOR95KxjCLKTcZwtim5G+MWAU
-	ZTzoFVXhKIRo3ALFVCa7UcbJKKmmmwRSiHMsSIzytWsiha4YoqFp9Ekevl4NgRBUU4s=
-X-Gm-Gg: ASbGncv1OAKM3mzSNdPFD5dW1rkf5FveB9w/FIADAtN4mmI1GwcGxauL8n/gSNG3fJ9
-	KKp4FAWV4OdV7YrQHL6Rw9qiM+pJmpV4A+kurgp9+IsfiQnCDlFfYdXOT2AJlLyVwodjK9/uLzd
-	0pAc4hqUvwjvUzS2FTpmj+fdbQDB+OdR7Yacu+/8DleMIpAPAqkYL6IjgtbcbU6h6OQ0IZov7H6
-	lY/OnVWMgKd7bfKxN66r7S8MxOMmdKFmpcl7jfDm2Fgh1NVzrWkjzH69p/XhxXiNhoSaet90RnT
-	OLl5PCukMauM/fzOjRGfkyLMuYHVKGLOl5KmRVrTU+U1Se5240laF7q6PdNT62KRSxn8dy0AOjM
-	VvmGioLTZUwhyqBwKNIqrhl+7INDENOPWDykDZHjZXmwPeepuX9xEM3PhT+Wh/w==
-X-Google-Smtp-Source: AGHT+IGp8dmOujqeHT5ky5r4JSw2mUnM+dUHBRmklFJcUmcq0u1vTX9Vh99gqlmXdW6iH8dJGBpruQ==
-X-Received: by 2002:a17:903:4b46:b0:27e:ec72:f6d with SMTP id d9443c01a7336-2902721325emr357480185ad.11.1760552067036;
-        Wed, 15 Oct 2025 11:14:27 -0700 (PDT)
+        bh=tlTCabZFxINt6Lm9QbVDHZ4MzlWsICTGzKM8x7gyE4c=;
+        b=HUr1C7LIViBfcOPz5+KflGyjnZdZuXqHFmZ0p6TuaqFfmQ+jLZxr7K5GJssLvlSuSj
+         vejvyjLJvsv9fSubx6QF4Ax/Xr39OJzDl8iO/LWm0L+/KXN4No+V63jjjaguMJ9O8O6n
+         rb63a1Sodo7U3P7t3E8FkjPHyVdz/4Jo966H48EY6eTQK1wcRGBbO6nfs1ClNH+qoaTt
+         1FOK2QUkua9h1iwC8VTl7lGXt5k+dfZs8cGXmgvjVjZ5AuQaIHgo3JkvsqwsqKhn3sk4
+         8hS0nJ1C2fHSenHA5Ymj+yPcDPMWniMl74r3+LMb8+bDZmOJlFnnwXhd5CALh7qTluHt
+         B9Ig==
+X-Forwarded-Encrypted: i=1; AJvYcCXcfaIbcI4ndqezNGgTBpdYo0gGmKyexieYEbTqEkEucefuA7SqjTpSvKyZvzRa2EG66yCtVFPB1ZS3aEdoKI4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxY/tC/15T9Z4hME1OJUErL6Mt1TzVS5/yhp0W5P7KjPCNCb5bv
+	wzaR7WUskJdOI8l+TvQfyQmuvSvQm1M7979MLjxf5D1n2Kd718VxtPTkQkBlu1tJxw8=
+X-Gm-Gg: ASbGncv499D/3KsFu7oAovcjjmLn43zrGaSaHsXydvn6rW0qF+EliV/zBSOWH1BPI32
+	Bxe11nx0wyaJB+B3wbVygQRNeedlkW+7tabTNsHwkjT0XArg8XJ984ge3UiDdNjTwaIP6lsWryU
+	A1YeVfGHQFQpkJPwmwZk5Rfd5oaCzAKdsz1oPEgh77a50eJZS1rKqKf39UsvURa9kOC/QwQ89ua
+	ND9ZI4H39VO8SGM/NRgo9lOxkc+pnb2/FJpgGMNIF3s47KeTuRoHCuSHN4Mu1kZAVopX/EEciwy
+	XxvtVIDU0Et0kRktYQRzScBA0/igtNiGj6NHoUSBZLcvSqPJgnN866vhGpjQ/NXoeNSt6eLSAaF
+	QAYwsgLosi7/xduIdGSPq3bV4ZwjuFvs+4GXlqmLurYNNAI+0Jug=
+X-Google-Smtp-Source: AGHT+IHEXT5xfzaQ9E7GA47DV8y7VdpAtjfIT1LAxVPzv4De3A/Ut9fEGvcfd0ReXWhAXtZ/RL7Blw==
+X-Received: by 2002:a17:903:2acb:b0:268:1034:ac8b with SMTP id d9443c01a7336-2902739ad00mr410312175ad.26.1760552069224;
+        Wed, 15 Oct 2025 11:14:29 -0700 (PDT)
 Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2909930a72esm3126625ad.21.2025.10.15.11.14.24
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2909930a72esm3126625ad.21.2025.10.15.11.14.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Oct 2025 11:14:26 -0700 (PDT)
+        Wed, 15 Oct 2025 11:14:28 -0700 (PDT)
 From: Deepak Gupta <debug@rivosinc.com>
-Date: Wed, 15 Oct 2025 11:13:51 -0700
-Subject: [PATCH v21 19/28] riscv/ptrace: riscv cfi status and state via
- ptrace and in core files
+Date: Wed, 15 Oct 2025 11:13:52 -0700
+Subject: [PATCH v21 20/28] riscv/hwprobe: zicfilp / zicfiss enumeration in
+ hwprobe
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251015-v5_user_cfi_series-v21-19-6a07856e90e7@rivosinc.com>
+Message-Id: <20251015-v5_user_cfi_series-v21-20-6a07856e90e7@rivosinc.com>
 References: <20251015-v5_user_cfi_series-v21-0-6a07856e90e7@rivosinc.com>
 In-Reply-To: <20251015-v5_user_cfi_series-v21-0-6a07856e90e7@rivosinc.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
@@ -118,206 +118,44 @@ Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
  atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
  alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
  rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
- Deepak Gupta <debug@rivosinc.com>
+ Zong Li <zong.li@sifive.com>, Deepak Gupta <debug@rivosinc.com>
 X-Mailer: b4 0.13.0
 
-Expose a new register type NT_RISCV_USER_CFI for risc-v cfi status and
-state. Intentionally both landing pad and shadow stack status and state
-are rolled into cfi state. Creating two different NT_RISCV_USER_XXX would
-not be useful and wastage of a note type. Enabling, disabling and locking
-of feature is not allowed via ptrace set interface. However setting `elp`
-state or setting shadow stack pointer are allowed via ptrace set interface
-. It is expected `gdb` might have use to fixup `elp` state or `shadow
-stack` pointer.
+Adding enumeration of zicfilp and zicfiss extensions in hwprobe syscall.
 
+Reviewed-by: Zong Li <zong.li@sifive.com>
 Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 ---
- arch/riscv/include/uapi/asm/ptrace.h | 30 ++++++++++++
- arch/riscv/kernel/ptrace.c           | 95 ++++++++++++++++++++++++++++++++++++
- include/uapi/linux/elf.h             |  2 +
- 3 files changed, 127 insertions(+)
+ arch/riscv/include/uapi/asm/hwprobe.h | 2 ++
+ arch/riscv/kernel/sys_hwprobe.c       | 2 ++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/arch/riscv/include/uapi/asm/ptrace.h b/arch/riscv/include/uapi/asm/ptrace.h
-index 261bfe70f60a..b2a18dfeb2fb 100644
---- a/arch/riscv/include/uapi/asm/ptrace.h
-+++ b/arch/riscv/include/uapi/asm/ptrace.h
-@@ -131,6 +131,36 @@ struct __sc_riscv_cfi_state {
- 	unsigned long ss_ptr;   /* shadow stack pointer */
- };
- 
-+#define PTRACE_CFI_LP_EN_BIT	0
-+#define PTRACE_CFI_LP_LOCK_BIT	1
-+#define PTRACE_CFI_ELP_BIT	2
-+#define PTRACE_CFI_SS_EN_BIT	3
-+#define PTRACE_CFI_SS_LOCK_BIT	4
-+#define PTRACE_CFI_SS_PTR_BIT	5
-+
-+#define PTRACE_CFI_LP_EN_STATE		(1 << PTRACE_CFI_LP_EN_BIT)
-+#define PTRACE_CFI_LP_LOCK_STATE	(1 << PTRACE_CFI_LP_LOCK_BIT)
-+#define PTRACE_CFI_ELP_STATE		(1 << PTRACE_CFI_ELP_BIT)
-+#define PTRACE_CFI_SS_EN_STATE		(1 << PTRACE_CFI_SS_EN_BIT)
-+#define PTRACE_CFI_SS_LOCK_STATE	(1 << PTRACE_CFI_SS_LOCK_BIT)
-+#define PTRACE_CFI_SS_PTR_STATE	(1 << PTRACE_CFI_SS_PTR_BIT)
-+
-+#define PRACE_CFI_STATE_INVALID_MASK	~(PTRACE_CFI_LP_EN_STATE | \
-+					  PTRACE_CFI_LP_LOCK_STATE | \
-+					  PTRACE_CFI_ELP_STATE | \
-+					  PTRACE_CFI_SS_EN_STATE | \
-+					  PTRACE_CFI_SS_LOCK_STATE | \
-+					  PTRACE_CFI_SS_PTR_STATE)
-+
-+struct __cfi_status {
-+	__u64 cfi_state;
-+};
-+
-+struct user_cfi_state {
-+	struct __cfi_status	cfi_status;
-+	__u64 shstk_ptr;
-+};
-+
- #endif /* __ASSEMBLER__ */
- 
- #endif /* _UAPI_ASM_RISCV_PTRACE_H */
-diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-index 8e86305831ea..56b9e3871862 100644
---- a/arch/riscv/kernel/ptrace.c
-+++ b/arch/riscv/kernel/ptrace.c
-@@ -19,6 +19,7 @@
- #include <linux/regset.h>
- #include <linux/sched.h>
- #include <linux/sched/task_stack.h>
-+#include <asm/usercfi.h>
- 
- enum riscv_regset {
- 	REGSET_X,
-@@ -31,6 +32,9 @@ enum riscv_regset {
- #ifdef CONFIG_RISCV_ISA_SUPM
- 	REGSET_TAGGED_ADDR_CTRL,
- #endif
-+#ifdef CONFIG_RISCV_USER_CFI
-+	REGSET_CFI,
-+#endif
- };
- 
- static int riscv_gpr_get(struct task_struct *target,
-@@ -184,6 +188,87 @@ static int tagged_addr_ctrl_set(struct task_struct *target,
- }
- #endif
- 
-+#ifdef CONFIG_RISCV_USER_CFI
-+static int riscv_cfi_get(struct task_struct *target,
-+			 const struct user_regset *regset,
-+			 struct membuf to)
-+{
-+	struct user_cfi_state user_cfi;
-+	struct pt_regs *regs;
-+
-+	memset(&user_cfi, 0, sizeof(user_cfi));
-+	regs = task_pt_regs(target);
-+
-+	if (is_indir_lp_enabled(target)) {
-+		user_cfi.cfi_status.cfi_state |= PTRACE_CFI_LP_EN_STATE;
-+		user_cfi.cfi_status.cfi_state |= is_indir_lp_locked(target) ?
-+						 PTRACE_CFI_LP_LOCK_STATE : 0;
-+		user_cfi.cfi_status.cfi_state |= (regs->status & SR_ELP) ?
-+						PTRACE_CFI_ELP_STATE : 0;
-+	}
-+
-+	if (is_shstk_enabled(target)) {
-+		user_cfi.cfi_status.cfi_state |= (PTRACE_CFI_SS_EN_STATE |
-+						  PTRACE_CFI_SS_PTR_STATE);
-+		user_cfi.cfi_status.cfi_state |= is_shstk_locked(target) ?
-+						 PTRACE_CFI_SS_LOCK_STATE : 0;
-+		user_cfi.shstk_ptr = get_active_shstk(target);
-+	}
-+
-+	return membuf_write(&to, &user_cfi, sizeof(user_cfi));
-+}
-+
-+/*
-+ * Does it make sense to allowing enable / disable of cfi via ptrace?
-+ * Not allowing enable / disable / locking control via ptrace for now.
-+ * Setting shadow stack pointer is allowed. GDB might use it to unwind or
-+ * some other fixup. Similarly gdb might want to suppress elp and may want
-+ * to reset elp state.
-+ */
-+static int riscv_cfi_set(struct task_struct *target,
-+			 const struct user_regset *regset,
-+			 unsigned int pos, unsigned int count,
-+			 const void *kbuf, const void __user *ubuf)
-+{
-+	int ret;
-+	struct user_cfi_state user_cfi;
-+	struct pt_regs *regs;
-+
-+	regs = task_pt_regs(target);
-+
-+	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &user_cfi, 0, -1);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Not allowing enabling or locking shadow stack or landing pad
-+	 * There is no disabling of shadow stack or landing pad via ptrace
-+	 * rsvd field should be set to zero so that if those fields are needed in future
-+	 */
-+	if ((user_cfi.cfi_status.cfi_state &
-+	     (PTRACE_CFI_LP_EN_STATE | PTRACE_CFI_LP_LOCK_STATE |
-+	      PTRACE_CFI_SS_EN_STATE | PTRACE_CFI_SS_LOCK_STATE)) ||
-+	     (user_cfi.cfi_status.cfi_state & PRACE_CFI_STATE_INVALID_MASK))
-+		return -EINVAL;
-+
-+	/* If lpad is enabled on target and ptrace requests to set / clear elp, do that */
-+	if (is_indir_lp_enabled(target)) {
-+		if (user_cfi.cfi_status.cfi_state &
-+		    PTRACE_CFI_ELP_STATE) /* set elp state */
-+			regs->status |= SR_ELP;
-+		else
-+			regs->status &= ~SR_ELP; /* clear elp state */
-+	}
-+
-+	/* If shadow stack enabled on target, set new shadow stack pointer */
-+	if (is_shstk_enabled(target) &&
-+	    (user_cfi.cfi_status.cfi_state & PTRACE_CFI_SS_PTR_STATE))
-+		set_active_shstk(target, user_cfi.shstk_ptr);
-+
-+	return 0;
-+}
-+#endif
-+
- static const struct user_regset riscv_user_regset[] = {
- 	[REGSET_X] = {
- 		USER_REGSET_NOTE_TYPE(PRSTATUS),
-@@ -224,6 +309,16 @@ static const struct user_regset riscv_user_regset[] = {
- 		.set = tagged_addr_ctrl_set,
- 	},
- #endif
-+#ifdef CONFIG_RISCV_USER_CFI
-+	[REGSET_CFI] = {
-+		.core_note_type = NT_RISCV_USER_CFI,
-+		.align = sizeof(__u64),
-+		.n = sizeof(struct user_cfi_state) / sizeof(__u64),
-+		.size = sizeof(__u64),
-+		.regset_get = riscv_cfi_get,
-+		.set = riscv_cfi_set,
-+	},
-+#endif
- };
- 
- static const struct user_regset_view riscv_user_native_view = {
-diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
-index 819ded2d39de..ee30dcd80901 100644
---- a/include/uapi/linux/elf.h
-+++ b/include/uapi/linux/elf.h
-@@ -545,6 +545,8 @@ typedef struct elf64_shdr {
- #define NT_RISCV_VECTOR	0x901		/* RISC-V vector registers */
- #define NN_RISCV_TAGGED_ADDR_CTRL "LINUX"
- #define NT_RISCV_TAGGED_ADDR_CTRL 0x902	/* RISC-V tagged address control (prctl()) */
-+#define NN_RISCV_USER_CFI	"LINUX"
-+#define NT_RISCV_USER_CFI	0x903		/* RISC-V shadow stack state */
- #define NN_LOONGARCH_CPUCFG	"LINUX"
- #define NT_LOONGARCH_CPUCFG	0xa00	/* LoongArch CPU config registers */
- #define NN_LOONGARCH_CSR	"LINUX"
+diff --git a/arch/riscv/include/uapi/asm/hwprobe.h b/arch/riscv/include/uapi/asm/hwprobe.h
+index 5d30a4fae37a..0efc9c7d1199 100644
+--- a/arch/riscv/include/uapi/asm/hwprobe.h
++++ b/arch/riscv/include/uapi/asm/hwprobe.h
+@@ -82,6 +82,8 @@ struct riscv_hwprobe {
+ #define		RISCV_HWPROBE_EXT_ZAAMO		(1ULL << 56)
+ #define		RISCV_HWPROBE_EXT_ZALRSC	(1ULL << 57)
+ #define		RISCV_HWPROBE_EXT_ZABHA		(1ULL << 58)
++#define		RISCV_HWPROBE_EXT_ZICFILP	(1ULL << 59)
++#define		RISCV_HWPROBE_EXT_ZICFISS	(1ULL << 60)
+ #define RISCV_HWPROBE_KEY_CPUPERF_0	5
+ #define		RISCV_HWPROBE_MISALIGNED_UNKNOWN	(0 << 0)
+ #define		RISCV_HWPROBE_MISALIGNED_EMULATED	(1 << 0)
+diff --git a/arch/riscv/kernel/sys_hwprobe.c b/arch/riscv/kernel/sys_hwprobe.c
+index 000f4451a9d8..d13d9d0d1669 100644
+--- a/arch/riscv/kernel/sys_hwprobe.c
++++ b/arch/riscv/kernel/sys_hwprobe.c
+@@ -114,6 +114,8 @@ static void hwprobe_isa_ext0(struct riscv_hwprobe *pair,
+ 		EXT_KEY(ZCMOP);
+ 		EXT_KEY(ZICBOM);
+ 		EXT_KEY(ZICBOZ);
++		EXT_KEY(ZICFILP);
++		EXT_KEY(ZICFISS);
+ 		EXT_KEY(ZICNTR);
+ 		EXT_KEY(ZICOND);
+ 		EXT_KEY(ZIHINTNTL);
 
 -- 
 2.43.0
