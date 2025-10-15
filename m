@@ -1,102 +1,98 @@
-Return-Path: <linux-kselftest+bounces-43209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2080BDF459
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 17:08:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62045BDF570
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 17:27:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCE6D3A9C11
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 15:05:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1D5A189AEBD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 15:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5F42D739A;
-	Wed, 15 Oct 2025 15:05:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48662FCBEB;
+	Wed, 15 Oct 2025 15:27:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aYGsImU3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DXr5fnfO"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F33B2046BA;
-	Wed, 15 Oct 2025 15:05:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0A424395C;
+	Wed, 15 Oct 2025 15:27:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760540702; cv=none; b=QCOr22Dt9Gu8fyC2a+Vop28Ik5KmbWKnj21A1Al691Gi+2L0qZhBTZGSOR6K99Qv/RPovZueVPJfI/JpwyU922xANs+MC0BFBc2DLguLR8gJh1RT3HRM9deh6bmvCsXSkRELo1LFYREf/8aR/BOHTIRh+BJJEXeRL1NcZmA60fg=
+	t=1760542055; cv=none; b=TimOhUdmJS2JLAEsTxh+59L22EP0FbK/fMS/3BZf57ZyiWsyIYghw6kpDNix5ygQGcM/T3sISO/0mQWz9TfOIcfcQ3Z/WotShQvoWi9F5C6NG5kQF2fyVyzLLUX2fRNBBVdqfxH1SAJfWoxkMM8ut9Ub45ypanMuCofhdmUFTL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760540702; c=relaxed/simple;
-	bh=Wdbu91UHG7NXXe6k08cBk3T/+pvUqlyl9VvW3phwgNc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZcUN7JG+uA06W536WkbobNGVp6FD9q4dMVetKp+WFbc4Sju1Uk++AadgP5iCrr9JjpmofIakMi3sg4cP1hkHAG130FfveH710CmflnkfzVlZQFB+isHGvml5CxgRMHNCMVSkABCsEYxBVyFBdueHgnYBHVq/huvIQRAM2QvOXTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aYGsImU3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842CFC4CEF8;
-	Wed, 15 Oct 2025 15:05:00 +0000 (UTC)
+	s=arc-20240116; t=1760542055; c=relaxed/simple;
+	bh=pXjv/FZhWR4n2Yfb++gguKHpAI6OOMdbZJ7zMRvXI5M=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=E2kHjvni7yPQFJ3dCEx6wWXIv6grN3z4WIQj5+2gnS/Tn+PJKPqDlCtXtGiMjcZbUCd+hEEjjgsPJ0R+iWP4YQQdvttaF5LIml5UcaWUSAWBC/iXwEgOQYay4JveAu6BWY5Vgw8G5U/J9Q/yZpTdJFvyW8MGQsvpC7lc+mTUzOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DXr5fnfO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B054C4CEFB;
+	Wed, 15 Oct 2025 15:27:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760540701;
-	bh=Wdbu91UHG7NXXe6k08cBk3T/+pvUqlyl9VvW3phwgNc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aYGsImU3Per5JLsRWKEDgSU53GVias3oxkv3lcMOJyTF2/c5lzyw2mtJxaYSCavuH
-	 wbaCEkmbUtHKcgzV8+Rd9HkAU542mDJJNLVv7ZLIwh7hHX65uxF02j6/qf+HBCWCr5
-	 a3SDnYLcIaJLj3CG8shPVh1uDD9PGHxB0uwfo6dsz01FKRPCdWlYOJ5Fr2Ur+oEy8m
-	 HzxrY4ov7Z1kbMBdW2sPJBcEDJVajDnhRpxhR69uKn2pllOAh6ktBWAQvIYb8QmygG
-	 i9hUEjmhdzalFSGO5bNoADPFDFBTlJjew3xdACovDj0EokV3my/h3MUgQn0EZN/yiO
-	 mzmbfLOBm1LVw==
-Date: Wed, 15 Oct 2025 08:04:59 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: =?UTF-8?B?0K/QvdCwINCR0LDRiNC70YvQutC+0LLQsA==?= <yana2bsh@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-riscv@lists.infradead.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- lvc-project@linuxtesting.org
-Subject: Re: [PATCH 6.1 00/15] genetlink: Test Netlink subsystem of Linux
- v6.1
-Message-ID: <20251015080459.6e681582@kernel.org>
-In-Reply-To: <CAEP49o+-=HeW4NgB5a0H6gM9tPJg=oNeUA1iCbXq_1qZPPaGnA@mail.gmail.com>
-References: <20250912195339.20635-1-yana2bsh@gmail.com>
-	<20250912131722.74658ec0@kernel.org>
-	<CAEP49o+-=HeW4NgB5a0H6gM9tPJg=oNeUA1iCbXq_1qZPPaGnA@mail.gmail.com>
+	s=k20201202; t=1760542054;
+	bh=pXjv/FZhWR4n2Yfb++gguKHpAI6OOMdbZJ7zMRvXI5M=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=DXr5fnfOS82QY9401usex4XLXhOxaEBt0eXgzFtuTDlXb4PqipMiNIiPu053lQNr/
+	 7Zi2w2nJbyQ4tWVeZzYIHtkbFFTbS42y6FO1O/AA1lL0KWQ1mI9F2SpR4axFishxRw
+	 y7StUCjfoja7lfmPUlKTWeKlH59FlxsS80NV33uMWP8k8c2MRbjwn6ZU2Kp1LlSj8W
+	 DBVol0Cp9OzVx12FkiUV7OKkU4ZVf1k5XcwDqSVR085YL9LZ0AuuKURtZQhyAQB2vJ
+	 4DfR9uUTKTUwxrYmn4nlNtrwNPtzwZJFeHVapsJaK8WUE3dSf5HKZLsSkixsb5XNNd
+	 xepTZGDxDRV9A==
+Date: Wed, 15 Oct 2025 17:27:32 +0200 (CEST)
+From: Jiri Kosina <jikos@kernel.org>
+To: Benjamin Tissoires <bentiss@kernel.org>
+cc: Shuah Khan <shuah@kernel.org>, Peter Hutterer <peter.hutterer@who-t.net>, 
+    linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 0/2] HID: multitouch: fix sticky-fingers quirks
+In-Reply-To: <20251008-fix-sticky-fingers-v1-0-760f1f26fce3@kernel.org>
+Message-ID: <41s6pp01-1947-n4pq-1866-820n84so4op1@xreary.bet>
+References: <20251008-fix-sticky-fingers-v1-0-760f1f26fce3@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
 
-On Wed, 15 Oct 2025 17:49:22 +0300 =D0=AF=D0=BD=D0=B0 =D0=91=D0=B0=D1=88=D0=
-=BB=D1=8B=D0=BA=D0=BE=D0=B2=D0=B0 wrote:
-> The motivation for this work is to improve the test coverage and
-> reliability of the Netlink subsystem, specifically for the core
-> af_netlink.c and genetlink.c components. While the subsystem is
-> critical for kernel-userspace communication, its coverage by the
-> existing selftests is quite limited.
->=20
-> To quantify the improvement, these new selftests achieve the following
-> line coverage (as measured by gcov):
-> - net/netlink/af_netlink.c: 84.0%
-> - net/netlink/genetlink.c: 88.8%
+On Wed, 8 Oct 2025, Benjamin Tissoires wrote:
 
-For what it's worth syzbot has:
+> According to Peter, we've had for a very long time an issue on some
+> mutltiouch touchpads where the fingers were stuck in a scrolling mode,
+> or 3 fingers gesture mode. I was unable to debug it because it was
+> rather hard to reproduce.
+> 
+> Recently, some people raised the issue again on libinput, and this time
+> added a recording of the actual bug.
+> 
+> It turns out that the sticky finger quirk that was introduced back in
+> 2017 was only checking the last report, and that those missing releases
+> also happen when moving from 3 to 1 finger (only 1 is released instead
+> of 2).
+> 
+> This solution seems to me to be the most sensible, because we could also
+> add the NSMU quirk to win8 multitouch touchpads, but this would involve
+> a lot more computations at each report for rather annoying corner cases.
+> 
+> Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/1194
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> ---
+> Benjamin Tissoires (2):
+>       HID: multitouch: fix sticky fingers
+>       selftests/hid: add tests for missing release on the Dell Synaptics
+> 
+>  drivers/hid/hid-multitouch.c                       | 27 ++++++-----
+>  .../testing/selftests/hid/tests/test_multitouch.py | 55 ++++++++++++++++++++++
+>  2 files changed, 69 insertions(+), 13 deletions(-)
 
-    af_netlink.c  91%
-    genetlink.c   68%
+Now queued in for-6.18/upstream-fixes. Thanks,
 
-Without a line of code added to the kernel. Of course it's not
-functional testing.
+-- 
+Jiri Kosina
+SUSE Labs
 
-> Integrating these tests into the upstream suite will provide long-term
-> stability and make it safer to refactor or add new features to the
-> Netlink core in the future.
-
-Happy to hear from others if they disagree but what kernel tests get
-merged into the tree is pretty subjective. Do we have a lot of bugs=20
-in genetlink? Are you planning to do major development in this area
-and want to catch regressions? If the answers to both of those questions
-is "no" IMHO this 7kLoC is not worth carrying in the tree.
 
