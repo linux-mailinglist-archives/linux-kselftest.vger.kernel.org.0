@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-43263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64EECBE0CDC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 23:23:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70592BE0CEB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 23:26:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 172123AFAED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:23:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B0BD403688
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A7952F49FB;
-	Wed, 15 Oct 2025 21:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3082A3002D6;
+	Wed, 15 Oct 2025 21:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Xn7t0kHD"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JAHsTxCf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57BB2DC79E
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 21:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D93302151;
+	Wed, 15 Oct 2025 21:25:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760563426; cv=none; b=HkFdqNIyYtVLF5wO69iQJoIVkl5Myi8/wGKjOWCaECFL8yWS4uHW0Tm1hRQESvxDNyYTzCDF5gDcjF6zomPVl8Qi+xUhQUxrTznZoaV97xHTxwRx00A1871CjpIEBtymE8mltO+s6iBBL/z8HeoHwsv2EGrerppiwSQhaYN3oLs=
+	t=1760563527; cv=none; b=p1aTI4qQEywkyw7766HYD0RmWSxD+7b9M191EX/d3pdH+pRI9WeGz/z8RWzBuCE2Ajly9VKBIeqUahR20wNVulGj8GPOdmf0Olt25Ek3UOooOyw5inBplBGoccuSI1oSjuoQpxhdloOistDP594rtMyKqhC1j2erV+LechK2H3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760563426; c=relaxed/simple;
-	bh=z/ZAt/JqimvxhupKM/WQo3eIZ02qoztm40C2hOIV7Q4=;
+	s=arc-20240116; t=1760563527; c=relaxed/simple;
+	bh=vlperFRmGm5rMepd+J5F6AuE/+fROGgAHN/Gu6ExyzA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nfXstZoboO3pVvM+MP8CVlixPIfYfuHhD5ir+3rNE4QKPn+eeeuf4xNZmBnDbgNRtED9lu6pLB/L7/2UZaOEYLErHffME2xp1YMDcXmRDyRXP6vnIr5nkwjVwwS1eD6nNungtzzAYERui4+od9Zcb/FZMPQH3nHgxDd9jM5PC+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Xn7t0kHD; arc=none smtp.client-ip=91.218.175.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=cSJzBNdPrtT+64AINAWsWKKZ7u8Jlq+av7etak0Fw5KHPdqKDawG95U0n6TU/VyUdR2EUL2mpmgHMne0Sc9HH5MMrhr31taWjJQblDh+PD/WIFqydEmH2jaYeO1MsQ6G1QpJS2sN0uUFBgtQoa4gW1V5I0DsSGYECe0sJP/jGn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JAHsTxCf; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 15 Oct 2025 21:23:25 +0000
+Date: Wed, 15 Oct 2025 21:25:03 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1760563411;
+	t=1760563512;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=tpCIpMhKpNVFUq8XLpVJcsrRwbNZaA4mgV8CdcBWnWs=;
-	b=Xn7t0kHDndE+FUUNhj8T81D2rk2Y1bR1K7lKc6/YmhNojKZ6yQL6q+ao44Uavl7ZygojFY
-	bOUY6SZD9WLXZGFKMo8nqi9exheJRxF0mtQUeHtwFYf14/QcXSDTvxgql7+4f4sll6fuDN
-	wfmAzX13sMa+07OIyfrjE1Gkyr4L6d4=
+	bh=Tn/3KXYx81kR8zr8zH3iYa7nW5h+i0lrVU0IbFeu+KY=;
+	b=JAHsTxCfH6C4SHupYo8m49eFdiXIBEHTpwieWaypQuGhmYoAS52ZEzbiEM+jWHALUR3Ss/
+	xhD2NKwvypJIolIolfJkRX0DYAg8jdCCkUA2zIzsLWH9ZjL8+M05m7u3dvmXoB7LsCXGMB
+	Jmz+Aq0/MktXPAK6PwfbpT3U69Wql0g=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Yosry Ahmed <yosry.ahmed@linux.dev>
 To: Jim Mattson <jmattson@google.com>
@@ -51,7 +51,7 @@ Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
 	Kai Huang <kai.huang@intel.com>, Eric Auger <eric.auger@redhat.com>, linux-kernel@vger.kernel.org, 
 	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH 3/4] KVM: selftests: Add VM_MODE_PXXV57_4K VM mode
-Message-ID: <l7txoioo3gntu3lyl542jg3n3wvkqruf2qh33xy7lmr5mjgfq5@iw4wsfdurlc7>
+Message-ID: <2mtjboekfjxmuougyiypg4azeurhqxlk7fovzacv5c74hrmzrb@krfinussf2zd>
 References: <20250917215031.2567566-1-jmattson@google.com>
  <20250917215031.2567566-4-jmattson@google.com>
 Precedence: bulk
@@ -114,6 +114,10 @@ On Wed, Sep 17, 2025 at 02:48:39PM -0700, Jim Mattson wrote:
 >  		vm->va_bits = 48;
 >  #else
 >  		TEST_FAIL("VM_MODE_PXXV48_4K not supported on non-x86 platforms");
+
+We should probably update TEST_ASSERT(vm->va_bits == 48 || vm->va_bits == 57)
+above to only assert 48 bits now, right?
+
 > +#endif
 > +		break;
 > +	case VM_MODE_PXXV57_4K:
@@ -131,10 +135,6 @@ On Wed, Sep 17, 2025 at 02:48:39PM -0700, Jim Mattson wrote:
 > +			 vm->pa_bits);
 > +		vm->pgtable_levels = 5;
 > +		vm->va_bits = 57;
-
-We assert that vm->va_bits is 57, and then we set it here again. Seems
-like we're doing the same for VM_MODE_PXXV48_4K too.
-
 > +#else
 > +		TEST_FAIL("VM_MODE_PXXV57_4K not supported on non-x86 platforms");
 >  #endif
@@ -220,12 +220,6 @@ like we're doing the same for VM_MODE_PXXV48_4K too.
 >  	TEST_ASSERT((nested_paddr >> 48) == 0,
 > -		    "Nested physical address 0x%lx requires 5-level paging",
 > +		    "Nested physical address 0x%lx is > 48-bits and requires 5-level EPT",
-
-Shouldn't this assertion be updated now? We technically support 5-level
-EPT so it should only fire if the mode is VM_MODE_PXXV48_4K. Maybe we
-should use vm->va_bits?
-
-
 >  		    nested_paddr);
 >  	TEST_ASSERT((nested_paddr % page_size) == 0,
 >  		    "Nested physical address not on page boundary,\n"
