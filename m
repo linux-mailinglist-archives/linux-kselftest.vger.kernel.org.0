@@ -1,74 +1,73 @@
-Return-Path: <linux-kselftest+bounces-43204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 096ACBDEFDE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 16:22:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC89CBDEFF6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 16:23:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D871485E83
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 14:20:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CAE01887146
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 14:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B41B921885A;
-	Wed, 15 Oct 2025 14:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D61CB25B695;
+	Wed, 15 Oct 2025 14:23:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="j7zNdEsk"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Ewu4UUlH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B002264B9
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 14:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B94934BA37
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 14:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760537988; cv=none; b=hShT9tsDTfyeEd9ilEx2addT7KdhAE4EanXVURZpYqTylQ6OEVYJKSJZ7GqxZdDoy5HuWtib6oV3neBuIl/HB1MMsKOhiMpnSf6zYKhvMtBU5U60uCmjR07irNikicUcSCE1tzGLWrCHSMwlyWFUwmkFCigZ/ClUXSTlMEGdUrM=
+	t=1760538188; cv=none; b=ppm/lowvd4lfb2CJscD5DHmCfluE1Lj0OhxwGyaEjF598MzEv7f6T3rRzbSZKl8eGvMde63RDrzgZ2Mmh+TOJTf2KFuVshe3zpLsxf/oRD+4gPhK32BCMcDkweUPRt0Tug7jZdJ6rbXlIGsEJMHecg5j00q3EyU37TxYxbjNDQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760537988; c=relaxed/simple;
-	bh=hUApJ/d2jv5ytp4hpBk/UGF4vKaPuPbb12BM57vyuxY=;
+	s=arc-20240116; t=1760538188; c=relaxed/simple;
+	bh=PAtt6LJWXf75EYio9dz/gTvlM96/DYgKuXEluISNUPw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YnBpLOyc0MjiZ8QMPcwblSl/3RYDEfaqNGXODUnJ7mKHz7pRAZMRFPvOVZVZFCGIgDzDpGY9pVgjxrZriVaMg8XzjV2SNuIUYnqQufyL150sbKzGg54pnfQCzX0kjk3t7cZfgGD0bY06z3cI8vClNgbOvTYdQcye+DmuHegZ484=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=j7zNdEsk; arc=none smtp.client-ip=209.85.208.46
+	 To:Cc:Content-Type; b=Tq+CEb4WXfOxCS92mSKH7cGFEyy0so37X6Z8rFiDKJbTkiYt9u4YKh1oIyk85KHwt7PBpWyMpvI2BC1Izn1HJnVBB0/6rjIEcCSa/ox0Jiaqhu8hP3BVFjMUpMTMqQniBKDJKYLPQAxZwyU+iE/3aIV0VyHlea2jXzucoIMTKFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Ewu4UUlH; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-636de696e18so4624210a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 07:19:46 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-63bdc7d939fso3230168a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 07:23:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1760537985; x=1761142785; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hUApJ/d2jv5ytp4hpBk/UGF4vKaPuPbb12BM57vyuxY=;
-        b=j7zNdEskECDJJH5K3ciuC1zujG7UXNwEsOLmYaie8Kc/8EWsniGZhtIYREoC3ZNxeF
-         m/Kmuk+dbR2Ddq1OcDoywHeo09iwS7s5UD4/IiNwC7X7miTxiQylt0mi+hJVTcFt13DH
-         rtmhugiBwSpgSszmr8PHZCd770njjL08Ajl7lk4iA2j1IPX8MRlSDhN1RVkimSm7ml0h
-         ycC16MyhWEIxSDiMFozFU3gZnpUILtUSwR5sOaEDw8gkS8ssmilcx57AkdwIW+bISsoR
-         B/aoBZ0YjLLgZU27FPTxzf5BeSt1ZEDAw1YQMKnEeSHWctnRE7Aqtunj2wOrnfwDyJTo
-         ukgg==
+        d=soleen.com; s=google; t=1760538185; x=1761142985; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PAtt6LJWXf75EYio9dz/gTvlM96/DYgKuXEluISNUPw=;
+        b=Ewu4UUlH+4pBSo9+9WLd3Fc1lhrubptln5vECsDvqMML0lxV3mn/0IGWx5a/WvBeVo
+         4RaV4Bzuwodbclq7xpOk5uHZgse2exRR1RKJ/mtlCqitoF0r8Dczop3Zx/wtlf+xk/7S
+         xiMX04fBVZ77Z/bMd11JzGwnaQUnmvbzbemZpIOUl1vrC17f5pm+Bd44EmsllE8RzJAM
+         urnlJ83WYpPLA3vwO9r85oa70Cn7dQGT1wuEIrNV91cRRYJk/E7l6XnU8x8LPUhEFqvP
+         cNeBGytia/N9JrUtkHrN59QlRZPB1OcP2TT4PmyvkEL7K4p1MUewjIrkIURhEstTmxab
+         Ef1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760537985; x=1761142785;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hUApJ/d2jv5ytp4hpBk/UGF4vKaPuPbb12BM57vyuxY=;
-        b=BkD0/O/Cnv3Ai23+EwjU8cUWFowStSVPJ6uC9GAPcR176g+BPKD635OcWRSwDplbxU
-         LfKzKzESLXLW6Y6KnyUmG/NWneoOJaESrgfX/rRGJIKYc8IQxQXdwpnvxaeeNqEh2CZS
-         u+39XvGi4PcXm0I2ygbudAxPiWHRnHUZTTRSXOs0Dfc9XVWmH4aC4E6Eps937Wpnhp7n
-         vlt2jcWlXKWCKGijhJzw60iiPWari4XWS5hKobkuEK1/8woSP/LhxmFiGSSzi+EGL4vU
-         TeyWdhPRbKDskdjvtOCYSqj0yREwn+jTjy+12PQC5ELg/r7FdJLYrP1n8zSaUevSBvxW
-         Fq4w==
-X-Forwarded-Encrypted: i=1; AJvYcCUqAQqYwBrVTC/+OTbMYPCXpquLLC44R85FujNtk7pB2DO5jGB0wvFiWsN0qkvbWUWIhSc6ckBkgjryRCaYOt0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPhY6urfY9k9e1Vctp4CepOcYTrZyt/b7XAeHEkwcqxAywe6WP
-	K/QVblqcCfQBU8gGa5wo9lt8Q2iiL+CKWhnUy3+W+LBWwv+AQHhBYCHcWIV6UHl6QpLy436v7bT
-	nENwrTBV10mXZUo70tnH5qsvJfUb0MXXwM3OA4ipZFw==
-X-Gm-Gg: ASbGnctX2yq4/poS4bnbQdoa8Ze8V+Zi5JaH8mdw7dnGTWVZOGw0cMrVmXxoZl4buoU
-	tu3Tv3Uek46LcNN/63qJbW8HA+QKU5NtoBjkOrUXF6xC+WHSHN64qJlSY5JC45s4dGpsMHywqZy
-	B+CrOAq1nA+oRImEP4yXgFgl8lti8quUA4v1NY5FGZ4wnQUVauF+HWfVBnHhTPt0y1w8+0YH31o
-	+J7AbPiLQg2yioUntN98acQloDU3YA+QA==
-X-Google-Smtp-Source: AGHT+IFgvnWABvFp2YO4aybRqOy0KXXsuvYtzVtzjFu719w6HusoLk54zzREdfAYZlsXpNluTDl3s5anm94ec20FQEM=
-X-Received: by 2002:a05:6402:5244:b0:634:544b:a755 with SMTP id
- 4fb4d7f45d1cf-639d5c3294cmr29350078a12.19.1760537985003; Wed, 15 Oct 2025
- 07:19:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760538185; x=1761142985;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PAtt6LJWXf75EYio9dz/gTvlM96/DYgKuXEluISNUPw=;
+        b=KKzHcn02BPWNR7bwXYjhabrG7EozqPl8EcH678Pga8NYLpX+MGCh+8iA0nRqQHwVE4
+         +KIts3+OPGY20L0kAlm8TaQ8ce2B8JhA7PHss7liJ7C88lszyLT2wt+ADvPal5zFSOpJ
+         fB/kIn7fFAwe/okiB8cRxH8FaTi9xkk3V0dqS5BOGdMR0WSbUzUm2p9KCJcU4xC7wWjk
+         kRJ+C3uJexTHh/xmh32NirIMVOUfIo9r0Zq/Roq6qNK0Zp4SraCxY3flWb3oAcWhzeA2
+         0DVFy+j9w1fxJemkl0yAzDgoGyJnxD/m0TKoSVmeucU+FOUMYvVIL8fcvG/UsrLHchmj
+         a4ZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSTKx/KColZXSLW84YZCKUp9taBnsSTMgZwQQB9PPhCVtMTmi7OaaPQwOZnCfGtGba44nAt9jHp7PTNvC+2Us=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/ghkuKu8py4KJ7I7NCw07DGdKxVtO8IzIm+tam1dLbXGa/66t
+	piyTWxLGrothjGE5z2uaFuiFkIfreMMLAYtLjWZ3Z3uUsL0E9yKCIB06a0W3LTAFID24VxjVxwf
+	0tow9Mjcn9biXL6SxIg1Pjz9WvQZHIrFtnErmlSwuyA==
+X-Gm-Gg: ASbGncv3qqPvXa608n7rI9tjmFAks3wqco+fX47zzipPOjftyeXKuYZYcSjiX1ie86G
+	UGSY5M3n0bGSkioo9JJu1zAd/4F41c6q+3BnqTf2y/OSbTahEoc1jX8+zJTy/9rMLz/uIDVkAAF
+	9ccvc0y84djBZmVQomwJ+tM8GqZTUKX/1G303hQyoKTPNrOoehvbRWJOJ06F+J5NZdaBm2ApPXq
+	EISk/J2Q9I9HrmMCtqNiTUnEmwihiXL9g==
+X-Google-Smtp-Source: AGHT+IHt07hyRkueoFkR4F0w+xF9Gbyc+PiDwaAgXzfFVpNxzbBZcK46A+MFwX9oxnYBoVi3/21yDow56czseXIBw9E=
+X-Received: by 2002:a05:6402:27ca:b0:639:4e0b:2724 with SMTP id
+ 4fb4d7f45d1cf-639d5c31fbfmr28772103a12.24.1760538185250; Wed, 15 Oct 2025
+ 07:23:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,9 +78,9 @@ References: <20251015053121.3978358-1-pasha.tatashin@soleen.com>
  <20251015053121.3978358-3-pasha.tatashin@soleen.com> <mafs0v7kgjoxq.fsf@kernel.org>
 In-Reply-To: <mafs0v7kgjoxq.fsf@kernel.org>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Wed, 15 Oct 2025 10:19:08 -0400
-X-Gm-Features: AS18NWBj8W1b8VguIoFufUrvIsQUXiGHkQ32JE7FqsyGBasY6kmjvm5a_9MOZ2k
-Message-ID: <CA+CK2bCG011xf7v9nGMq4WQAUta9wDt05+W8KmRuc-JE7ZTwqg@mail.gmail.com>
+Date: Wed, 15 Oct 2025 10:22:28 -0400
+X-Gm-Features: AS18NWArNFoBhagluGBh83EOX5thK2VCtA_UuHBzGdmFvoOqbuMsR--L8cHX_oM
+Message-ID: <CA+CK2bAHk2JnQwfA0fJo1qmcwoO_9eeG5_DSL_6OC+-pyT=7Jg@mail.gmail.com>
 Subject: Re: [PATCH 2/2] liveupdate: kho: allocate metadata directly from the
  buddy allocator
 To: Pratyush Yadav <pratyush@kernel.org>
@@ -92,34 +91,35 @@ Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
 	jasonmiu@google.com, dmatlack@google.com, skhawaja@google.com, 
 	glider@google.com, elver@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 15, 2025 at 9:05=E2=80=AFAM Pratyush Yadav <pratyush@kernel.org=
-> wrote:
+> > As part of this change, the metadata bitmap size is increased from 512
+> > bytes to PAGE_SIZE to align with the page-based allocations from the
+> > buddy system.
 >
-> +Cc Marco, Alexander
+> The implication of this change is that preservation metadata becomes
+> less memory-efficient when preserved pages are sparse. Mainly because if
+> only one bit is set in the bitmap, now 4k bytes of memory is used
+> instead of 512 bytes.
 >
-> On Wed, Oct 15 2025, Pasha Tatashin wrote:
->
-> > KHO allocates metadata for its preserved memory map using the SLUB
-> > allocator via kzalloc(). This metadata is temporary and is used by the
-> > next kernel during early boot to find preserved memory.
-> >
-> > A problem arises when KFENCE is enabled. kzalloc() calls can be
-> > randomly intercepted by kfence_alloc(), which services the allocation
-> > from a dedicated KFENCE memory pool. This pool is allocated early in
-> > boot via memblock.
->
-> At some point, we'd probably want to add support for preserving slab
-> objects using KHO. That wouldn't work if the objects can land in scratch
-> memory. Right now, the kfence pools are allocated right before KHO goes
-> out of scratch-only and memblock frees pages to buddy.
+> It is hard to say what difference this makes in practice without
+> sampling real workloads, but perhaps still worth mentioning in the
+> commit message?
 
-If we do that, most likely we will add a GFP flag that goes with it,
-so the slab can use a special pool of pages that are preservable.
-Otherwise, we are going to be leaking memory from the old kernel in
-the unpreserved parts of the pages. If we do that, kfence can ignore
-allocations with that new preservable GFP flag.
+Forgot to reply to the other part:
 
+I agree, however, I suspect the implication is going to be minimal, it
+is strange to preserve fragmented state and expect a fast reboot. Most
+likely, we are going to be optimizing the preservation pools, such as
+using 1G order pages for guest memory.
+
+Also, we are moving toward preserving 4K bitmaps as part of the
+Stateless KHO patch series, so I think we will make this change
+anyway, as part of this fix or as part of transitioning to radix-tree
+stateless KHO.
+
+
+> Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
+
+Thank you.
 Pasha
 
