@@ -1,245 +1,180 @@
-Return-Path: <linux-kselftest+bounces-43265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BAA2BE0D1E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 23:32:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A925BBE0DA5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 23:46:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 77D364E6267
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:32:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F28363BC743
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10592D97A9;
-	Wed, 15 Oct 2025 21:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D362A302CC9;
+	Wed, 15 Oct 2025 21:46:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NFaG+w1z"
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="SO/erE3w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4F72D24AC
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 21:32:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62082C234E
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 21:46:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760563940; cv=none; b=SzTFN3XwU3YDDlKiFZAA42EipBFXH+1vec7YE0UY4UsKLEhWE8Gv+zH0QQWKDybtI9fVEZl/FE7lDcrvb9oWvOqKuC2sBDPtPdaTnKX0duZTu6J3McGBlbswQBs35T6hdQbL881BJsOexkZMhjscL3AFqpNTmX/7/sKdvdRuwWw=
+	t=1760564764; cv=none; b=W9rDwb++75hqYK5TEcR8Z6OmR4VQC56CN1Zrd2+MQTEeFqidNkO1qjWvigVy4wAgUm24BBWChKWu2p1cW4KGD9o4NkYC8fmO/78+stg54SqVYa+A2qyA0B6drwyNq1kw6gTHhbthoXdCTq8QzDTfitK2ojGogVb6ntbZEN5zNQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760563940; c=relaxed/simple;
-	bh=8zVysIIXaYtcWT2JOEzeVWG1yxNu517cXTEwo7Q8FUY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q8W3lbm7lSyDvzcA2lK3ld9sqrX6P7gF870ejRAvfEnk5H+c8pXg85THGzYAHxOW7dls4ZLhVvjIXj0Zmqe7Oueu3Zftuy/82+F1pqmR2U2jWUncvjsE0kmTqg4dWdWsCnJsccXknT6M55+a8z9q5se2I0I2Fd2r4675uIVs4Mc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NFaG+w1z; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-63bdc7d939fso27594a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 14:32:18 -0700 (PDT)
+	s=arc-20240116; t=1760564764; c=relaxed/simple;
+	bh=4aIc9dx+BqTIrEkxhdIkDUsdv2I7S3jqyih5WAzO4pU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mjiSjWey9r1XdwHYijncmzX0+8FcKQKbUQvEcSEUplf5Gesibwiz7MCCT3qYMC/0dM0NuZ/BDRGGbyeWvgpgM4ChoQOw9AsqbsMftyRhCUC4qQ9M9lrZ36PCf2CgJ1WFsNgZ49MOuqCgHnHAg3jUTNjJO+zY5h3j9s1qSuEFByk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=SO/erE3w; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-85ed0a1b35dso5189385a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 14:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760563937; x=1761168737; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=an2G/9d47hEEnOP9myHHqMnuHCaBvnAN8tAqBfiHYNY=;
-        b=NFaG+w1zWBaUITqy6ANSkJbjhx3mDovIPeKnsVQO0+q04BFqVFrY+y0R77QHzBRgrN
-         wXPw7Z970ihngnXZxDDQQIFzOijSTsGz5sKux5yD9vHbXP/bMm5Qre67qk/hfqFJlTJQ
-         Rn6GjOXt2lUupc3F1EKitigK7hY0uPZ5WRBXZyJva3lAEEc9tdjyoWqFCO7y7FYMkvQJ
-         9kAfsmdbQvut95/TLvWOeSL6N0RrGlMcD5m3Li5QcXnCZlXB2TOk6ZtrVHVdP7lCjevh
-         O3Evd2Y12moDZ9hoil2zB7ikeOwB2aVGOu03e3ddvs9aMz5xzbGijDiDTzZN6Eq8RfxO
-         z5lQ==
+        d=gourry.net; s=google; t=1760564762; x=1761169562; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L3FMg1FEv7ZUbFziIBjfrlMH5r4d6/IdcxKlJL9nOzQ=;
+        b=SO/erE3wHFHNuhgXeAZMBhu+vRvj7I6znm+CPL4BUW4goPdcy4g1QHzQL69WLJ2s8q
+         E9XIlB5UDV6XaLXR+adHFPpFzFQAPnRiZz6c1pVa3Vsf+/ObMAds6HiemfQpTm77nYiX
+         I6v+DY9WOXM1LxV1Fv/BRfRPH1bdCqOMm+9RClKU2i2IGD4sGuWvM/C120Vfy9E5poDt
+         k+j7Bgbt+84RvIqxSqPtJtsBhEKo8Y+qfc05eLBmKC6Etw8GH5T2DQp1zPzMIAxWDB06
+         +L7Y9jibEw/rFQ+iPZIo5d0xG27yM1nM0UtT98rjkS1AB30KI0SO5nAuyvgshUiJahfv
+         QRCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760563937; x=1761168737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=an2G/9d47hEEnOP9myHHqMnuHCaBvnAN8tAqBfiHYNY=;
-        b=MSvAnBael7vCL0E+89fo9mc2qNQn7AivKAykFquZBIixZtlFjnlRYLRRbXSncpnSLp
-         d1GA9/KSUGyqLfOBAQ66QwRKhbMK19l9f1ZFq9WrGXYplknD6HP0GGhe87lWB7YN0VG9
-         cY7qwZd+jTu0AmVy9bWaPNDH95Bll8cuWF7ipsdLtFatAt/eK9T+ycUbNh+X39JcJLrP
-         rauF6gFhMbs2mEQfV/34+2N7SbtvTUxtgiSpvHkBDwj7fc8u+F+y4ijogrvYXvQGVXkv
-         nObiEHf+k1Wvl45ZnvA3+b2OO8KqKSa/XzHIGjVGBA0NKd/PLkNgqv1B/mTNgV3GcE/s
-         zOaw==
-X-Forwarded-Encrypted: i=1; AJvYcCWhdZN0ffPqrZDizVqqpoMYLSVeQ8w6VACCF5/n/UHjmr5djoHZcHwIBZUWKalk2mA1OXSjIMRZMElRiYuyeI0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCw1Di23iyx5WxwvKXr+G+x1+8h1Ajbp2aCWQtI84Evimjwzrm
-	X71ZHb54JSkXRGo/2LMGxoA73ZndVxMnjWxYy/4iJ2dzEYyOsgTjKgwFQXKtrWj4ACKIaCQepih
-	rmQYOvkwFPAU0GuyTM2YOZdNKy6HPn0Q=
-X-Gm-Gg: ASbGncuuh2efkqjNgcE+xljaflYJUV7YPBKvq2f5ZGNxYGpYLI4fUvY80M6TaeJsHwn
-	p8bSTXT+00RiZi9R5tvNmSAAB9QgjRb/XOoaHRBX8sAnFojjEmctvbkl9NXtJjtUEP79PYMtFE8
-	ZQdfT5TL6CL/iezuZ0ifAUllFijyWwmH1zMYKAe/V8GwZ6+EsBh+Jj0o1Us89ah/UYTOoK5hgna
-	8BH/4zB+xCaO4pSwONh4xEo39j5mZqO7g==
-X-Google-Smtp-Source: AGHT+IETKXp4XkWEQ4U32sIWCcsCD1bfRNMB8NWYLayln3kcDdXtKdJRAQEty2d2BGBYtgl6wpMhbm29twcjTOJnDpM=
-X-Received: by 2002:a05:6402:34d1:b0:63c:343:2485 with SMTP id
- 4fb4d7f45d1cf-63c03439d20mr349068a12.3.1760563936779; Wed, 15 Oct 2025
- 14:32:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760564762; x=1761169562;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=L3FMg1FEv7ZUbFziIBjfrlMH5r4d6/IdcxKlJL9nOzQ=;
+        b=j/A/gzR75bs6YkKnY5IN97GOnpF5CxRHdKs5vfyfSOBLfoO6d1gQgVkoo42S6L2jeE
+         uxtmSESBu4QUKYtSJtlbxayKpBEr6dwhknnhTCuiK+c8Lexnssuw0gRpT4wJkprlNMe0
+         VLbgMkt9eNsQcFKqxsbrK0eRJqwZlqA3Xh46NjEC5EKdqi7WIZIQ/g42YddPXHq8PJG6
+         IS8QWwzP2HkJhPg+Ed4qG4cc5IACDq0BxPzd7IEUV1oxPyviTpe99dZNkhddw7NFu8va
+         fQ4ylmd8tV3HT/F6n/F7xf84vKPyVdBkksr9dwjQH6la2PCHrW7qaxUC2UzeBN8Dq/ml
+         9eog==
+X-Forwarded-Encrypted: i=1; AJvYcCUgE13Lk1WwptSNXgvoY4aHQoHDuYXzDB9n72/RlgO6526+jYHCZLzscnUSPgDG8niq0GDWA0G0yqy3ljq2MYE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdPVxhB2qlUqfdENSI2WuPm0q/dbUHjfw+6J+EOT4lSXohGCoE
+	arZuUg19or2xTErSs1SSxN3KvwgmHrmNWSff8aNM/9XezTSCuYqeUFrjA1NUqWvYSBI=
+X-Gm-Gg: ASbGncucyPS+zTF6ApKsnxYMhV1OuV4SQO3NiTM2pHBPgv0DvfXtsLb2nQzoH605i/g
+	sJkh6fYx3dcG/qmodpBL0TLpUfOWSsWjZvKUb+ggOWZoL6KnywvqcV6REviF7ivPKx59x2+1ckT
+	uhT4Dt7ofnMHCIF4L43etSEyts9QaEgSyjt/WPy7GssGvm3fC47mSFVodTKAvQm8VEKDAV/Lsg6
+	k64mfC8/t2TpDp1bPVwcOxAMhVWkeKhqK247Q+dsKS3A9D5uXfsWb4IVhN8UErL+f2iW2c/FJqD
+	fvsOq/v4LXWHI+fSFu0WBaw17pWOxW8Hnqu2ytZs15RHuDhdGxCmV2E8bit6YqWmT3r4ln+dgp4
+	546QHaP/1b7DCzFpgI8IrJ82wkN10YeM3iY5WSzeBbhlDUzUGkfLkhxZ7y/bHzgJ4jUGW8fKYKC
+	ffy6v6U7tj2Fz5idUhi6ezOC9L3h0Z9Fr4pdIvjkB3q0IdSeaRtReqO5L3r9J1JdRhem0epQ==
+X-Google-Smtp-Source: AGHT+IGFaJmIXEF9qOWREfnISohaPtcOawCiX32gOo0axLN0cRb3DCKNrFn66v9UE7KAPGfO0N4wTQ==
+X-Received: by 2002:a05:620a:1a02:b0:88e:86a3:98f1 with SMTP id af79cd13be357-88e86a39b78mr380325385a.45.1760564761659;
+        Wed, 15 Oct 2025 14:46:01 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-96-255-20-138.washdc.ftas.verizon.net. [96.255.20.138])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-88f37e50ebasm56360985a.31.2025.10.15.14.45.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Oct 2025 14:46:00 -0700 (PDT)
+Date: Wed, 15 Oct 2025 17:45:57 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Shivank Garg <shivankg@amd.com>, jgowans@amazon.com, mhocko@suse.com,
+	jack@suse.cz, kvm@vger.kernel.org, david@redhat.com,
+	linux-btrfs@vger.kernel.org, aik@amd.com, papaluri@amd.com,
+	kalyazin@amazon.com, peterx@redhat.com, linux-mm@kvack.org,
+	clm@fb.com, ddutile@redhat.com, linux-kselftest@vger.kernel.org,
+	shdhiman@amd.com, gshan@redhat.com, ying.huang@linux.alibaba.com,
+	shuah@kernel.org, roypat@amazon.co.uk, matthew.brost@intel.com,
+	linux-coco@lists.linux.dev, zbestahu@gmail.com,
+	lorenzo.stoakes@oracle.com, linux-bcachefs@vger.kernel.org,
+	ira.weiny@intel.com, dhavale@google.com, jmorris@namei.org,
+	willy@infradead.org, hch@infradead.org, chao.gao@intel.com,
+	tabba@google.com, ziy@nvidia.com, rientjes@google.com,
+	yuzhao@google.com, xiang@kernel.org, nikunj@amd.com,
+	serge@hallyn.com, amit@infradead.org, thomas.lendacky@amd.com,
+	ashish.kalra@amd.com, chao.p.peng@intel.com, yan.y.zhao@intel.com,
+	byungchul@sk.com, michael.day@amd.com, Neeraj.Upadhyay@amd.com,
+	michael.roth@amd.com, bfoster@redhat.com, bharata@amd.com,
+	josef@toxicpanda.com, Liam.Howlett@oracle.com,
+	ackerleytng@google.com, dsterba@suse.com, viro@zeniv.linux.org.uk,
+	jefflexu@linux.alibaba.com, jaegeuk@kernel.org,
+	dan.j.williams@intel.com, surenb@google.com, vbabka@suse.cz,
+	paul@paul-moore.com, joshua.hahnjy@gmail.com, apopple@nvidia.com,
+	brauner@kernel.org, quic_eberman@quicinc.com, rakie.kim@sk.com,
+	cgzones@googlemail.com, pvorel@suse.cz,
+	linux-erofs@lists.ozlabs.org, kent.overstreet@linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net, pankaj.gupta@amd.com,
+	linux-security-module@vger.kernel.org, lihongbo22@huawei.com,
+	linux-fsdevel@vger.kernel.org, pbonzini@redhat.com,
+	akpm@linux-foundation.org, vannapurve@google.com,
+	suzuki.poulose@arm.com, rppt@kernel.org, jgg@nvidia.com
+Subject: Re: [f2fs-dev] [PATCH kvm-next V11 6/7] KVM: guest_memfd: Enforce
+ NUMA mempolicy using shared policy
+Message-ID: <aPAWFQyFLK4EKWVK@gourry-fedora-PF4VCD3F>
+References: <20250827175247.83322-2-shivankg@amd.com>
+ <20250827175247.83322-9-shivankg@amd.com>
+ <aNVQJqYLX17v-fsf@google.com>
+ <aNbrO7A7fSjb4W84@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251007115840.2320557-1-geomatsi@gmail.com> <20251007115840.2320557-5-geomatsi@gmail.com>
- <CAFTtA3MObvXRHxbULghGcT=ThrBDeFDJzUY7LOhgNnarzpYeGg@mail.gmail.com>
-In-Reply-To: <CAFTtA3MObvXRHxbULghGcT=ThrBDeFDJzUY7LOhgNnarzpYeGg@mail.gmail.com>
-From: Andy Chiu <andybnac@gmail.com>
-Date: Wed, 15 Oct 2025 16:32:05 -0500
-X-Gm-Features: AS18NWAGi9Py3C8rtbFuAwojqdEayvWFLUvCpApDZcPh7rosVGDCcfhgBNv2VKo
-Message-ID: <CAFTtA3NoOZEMqYD6+vjP=09T15GiThjVy1LeDX0U8CC-4HMKOA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/6] riscv: vector: allow to force vector context save
-To: Sergey Matyukevich <geomatsi@gmail.com>
-Cc: linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Jisheng Zhang <jszhang@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Thomas Huth <thuth@redhat.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Han Gao <rabenda.cn@gmail.com>, 
-	Samuel Holland <samuel.holland@sifive.com>, Nam Cao <namcao@linutronix.de>, 
-	Joel Granados <joel.granados@kernel.org>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aNbrO7A7fSjb4W84@google.com>
 
-On Wed, Oct 15, 2025 at 3:18=E2=80=AFPM Andy Chiu <andybnac@gmail.com> wrot=
-e:
->
-> On Tue, Oct 7, 2025 at 6:58=E2=80=AFAM Sergey Matyukevich <geomatsi@gmail=
-.com> wrote:
-> >
-> > When ptrace updates vector CSR registers for a traced process, the
-> > changes may not be immediately visible to the next ptrace operations
-> > due to vector context switch optimizations.
-> >
-> > The function 'riscv_v_vstate_save' saves context only if mstatus.VS is
-> > 'dirty'. However mstatus.VS of the traced process context may remain
-> > 'clean' between two breakpoints, if no vector instructions were execute=
-d
-> > between those two breakpoints. In this case the vector context will not
-> > be saved at the second breakpoint. As a result, the second ptrace may
-> > read stale vector CSR values.
->
-> IIUC, the second ptrace should not get the stale vector CSR values.
-> The second riscv_vr_get() should be reading from the context memory
-> (vstate), which is updated from the last riscv_vr_set(). The user's
-> vstate should remain the same since last riscv_vr_set(). Could you
-> explain more on how this bug is observed and why only CSRs are
-> affected but not v-regs as well?
+On Fri, Sep 26, 2025 at 12:36:27PM -0700, Sean Christopherson via Linux-f2fs-devel wrote:
+> > 
+> > static struct mempolicy *kvm_gmem_get_policy(struct vm_area_struct *vma,
+> > 					     unsigned long addr, pgoff_t *pgoff)
+> > {
+> > 	*pgoff = vma->vm_pgoff + ((addr - vma->vm_start) >> PAGE_SHIFT);
+> > 
+> > 	return __kvm_gmem_get_policy(GMEM_I(file_inode(vma->vm_file)), *pgoff);
+> 
+> Argh!!!!!  This breaks the selftest because do_get_mempolicy() very specifically
+> falls back to the default_policy, NOT to the current task's policy.  That is
+> *exactly* the type of subtle detail that needs to be commented, because there's
+> no way some random KVM developer is going to know that returning NULL here is
+> important with respect to get_mempolicy() ABI.
+> 
 
-From looking into your test, I can see that you were trying to set an
-invalid configuration to Vetor CSRs and expect vill to be reflected
-upon next read. Yes, this is not happening on the current
-implementation as it was not expecting invalid input from the user,
-which should be taken into consideration. Thanks for spotting the
-case!
+Do_get_mempolicy was designed to be accessed by the syscall, not as an in-kernel ABI.
 
-According to the spec, "The use of vtype encodings with LMUL <
-SEWMIN/ELEN is reserved, implementations can set vill if they do not
-support these configurations." This mean the implementation may
-actually support this configuration. If that is the case, I think we
-should not allow this to be configured through the vector ptrace
-interface, which is designed to support 1.0 (and 0.7) specs. That
-means, we should not allow this problematic configuration to pass
-through riscv_vr_set(), reach user space, then the forced save.
+get_task_policy also returns the default policy if there's nothing
+there, because that's what applies.
 
-I would opt for validating all CSR configurations in the first place.
-Could you also help enforce checks on other reserved bits as well?
+I have dangerous questions:
 
-Thanks,
-Andy
+why is __kvm_gmem_get_policy using
+	mpol_shared_policy_lookup()
+instead of
+	get_vma_policy()
 
->
-> Thanks,
-> Andy
->
-> >
-> > Fix this by introducing a TIF flag that forces vector context save on
-> > the next context switch, regardless of mstatus.VS state. Set this
-> > flag on ptrace oprations that modify vector CSR registers.
-> >
-> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> > ---
-> >  arch/riscv/include/asm/thread_info.h | 2 ++
-> >  arch/riscv/include/asm/vector.h      | 3 +++
-> >  arch/riscv/kernel/process.c          | 2 ++
-> >  arch/riscv/kernel/ptrace.c           | 5 +++++
-> >  4 files changed, 12 insertions(+)
-> >
-> > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/=
-asm/thread_info.h
-> > index 836d80dd2921..e05e9aa89c43 100644
-> > --- a/arch/riscv/include/asm/thread_info.h
-> > +++ b/arch/riscv/include/asm/thread_info.h
-> > @@ -118,7 +118,9 @@ int arch_dup_task_struct(struct task_struct *dst, s=
-truct task_struct *src);
-> >
-> >  #define TIF_32BIT                      16      /* compat-mode 32bit pr=
-ocess */
-> >  #define TIF_RISCV_V_DEFER_RESTORE      17      /* restore Vector befor=
-e returing to user */
-> > +#define TIF_RISCV_V_FORCE_SAVE         13      /* force Vector context=
- save */
-> >
-> >  #define _TIF_RISCV_V_DEFER_RESTORE     BIT(TIF_RISCV_V_DEFER_RESTORE)
-> > +#define _TIF_RISCV_V_FORCE_SAVE                BIT(TIF_RISCV_V_FORCE_S=
-AVE)
-> >
-> >  #endif /* _ASM_RISCV_THREAD_INFO_H */
-> > diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/v=
-ector.h
-> > index b61786d43c20..d3770e13da93 100644
-> > --- a/arch/riscv/include/asm/vector.h
-> > +++ b/arch/riscv/include/asm/vector.h
-> > @@ -370,6 +370,9 @@ static inline void __switch_to_vector(struct task_s=
-truct *prev,
-> >  {
-> >         struct pt_regs *regs;
-> >
-> > +       if (test_and_clear_tsk_thread_flag(prev, TIF_RISCV_V_FORCE_SAVE=
-))
-> > +               __riscv_v_vstate_dirty(task_pt_regs(prev));
-> > +
-> >         if (riscv_preempt_v_started(prev)) {
-> >                 if (riscv_v_is_on()) {
-> >                         WARN_ON(prev->thread.riscv_v_flags & RISCV_V_CT=
-X_DEPTH_MASK);
-> > diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
-> > index 31a392993cb4..47959c55cefb 100644
-> > --- a/arch/riscv/kernel/process.c
-> > +++ b/arch/riscv/kernel/process.c
-> > @@ -183,6 +183,7 @@ void flush_thread(void)
-> >         kfree(current->thread.vstate.datap);
-> >         memset(&current->thread.vstate, 0, sizeof(struct __riscv_v_ext_=
-state));
-> >         clear_tsk_thread_flag(current, TIF_RISCV_V_DEFER_RESTORE);
-> > +       clear_tsk_thread_flag(current, TIF_RISCV_V_FORCE_SAVE);
-> >  #endif
-> >  #ifdef CONFIG_RISCV_ISA_SUPM
-> >         if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SUPM))
-> > @@ -205,6 +206,7 @@ int arch_dup_task_struct(struct task_struct *dst, s=
-truct task_struct *src)
-> >         memset(&dst->thread.vstate, 0, sizeof(struct __riscv_v_ext_stat=
-e));
-> >         memset(&dst->thread.kernel_vstate, 0, sizeof(struct __riscv_v_e=
-xt_state));
-> >         clear_tsk_thread_flag(dst, TIF_RISCV_V_DEFER_RESTORE);
-> > +       clear_tsk_thread_flag(dst, TIF_RISCV_V_FORCE_SAVE);
-> >
-> >         return 0;
-> >  }
-> > diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-> > index 906cf1197edc..569f756bef23 100644
-> > --- a/arch/riscv/kernel/ptrace.c
-> > +++ b/arch/riscv/kernel/ptrace.c
-> > @@ -148,6 +148,11 @@ static int riscv_vr_set(struct task_struct *target=
-,
-> >         if (vstate->vlenb !=3D ptrace_vstate.vlenb)
-> >                 return -EINVAL;
-> >
-> > +       if (vstate->vtype !=3D ptrace_vstate.vtype ||
-> > +           vstate->vcsr !=3D ptrace_vstate.vcsr ||
-> > +           vstate->vl !=3D ptrace_vstate.vl)
-> > +               set_tsk_thread_flag(target, TIF_RISCV_V_FORCE_SAVE);
-> > +
-> >         vstate->vstart =3D ptrace_vstate.vstart;
-> >         vstate->vl =3D ptrace_vstate.vl;
-> >         vstate->vtype =3D ptrace_vstate.vtype;
-> > --
-> > 2.51.0
-> >
+get_vma_policy does this all for you
+
+struct mempolicy *get_vma_policy(struct vm_area_struct *vma,
+                                 unsigned long addr, int order, pgoff_t *ilx)
+{
+        struct mempolicy *pol;
+
+        pol = __get_vma_policy(vma, addr, ilx);
+        if (!pol)
+                pol = get_task_policy(current);
+        if (pol->mode == MPOL_INTERLEAVE ||
+            pol->mode == MPOL_WEIGHTED_INTERLEAVE) {
+                *ilx += vma->vm_pgoff >> order;
+                *ilx += (addr - vma->vm_start) >> (PAGE_SHIFT + order);
+        }
+        return pol;
+}
+
+Of course you still have the same issue: get_task_policy will return the
+default, because that's what applies.
+
+do_get_mempolicy just seems like the completely incorrect interface to
+be using here.
+
+~Gregory
 
