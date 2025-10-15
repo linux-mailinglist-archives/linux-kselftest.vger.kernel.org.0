@@ -1,229 +1,245 @@
-Return-Path: <linux-kselftest+bounces-43264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43265-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70592BE0CEB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 23:26:09 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BAA2BE0D1E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 23:32:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B0BD403688
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:26:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 77D364E6267
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3082A3002D6;
-	Wed, 15 Oct 2025 21:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A10592D97A9;
+	Wed, 15 Oct 2025 21:32:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JAHsTxCf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NFaG+w1z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D93302151;
-	Wed, 15 Oct 2025 21:25:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4F72D24AC
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 21:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760563527; cv=none; b=p1aTI4qQEywkyw7766HYD0RmWSxD+7b9M191EX/d3pdH+pRI9WeGz/z8RWzBuCE2Ajly9VKBIeqUahR20wNVulGj8GPOdmf0Olt25Ek3UOooOyw5inBplBGoccuSI1oSjuoQpxhdloOistDP594rtMyKqhC1j2erV+LechK2H3A=
+	t=1760563940; cv=none; b=SzTFN3XwU3YDDlKiFZAA42EipBFXH+1vec7YE0UY4UsKLEhWE8Gv+zH0QQWKDybtI9fVEZl/FE7lDcrvb9oWvOqKuC2sBDPtPdaTnKX0duZTu6J3McGBlbswQBs35T6hdQbL881BJsOexkZMhjscL3AFqpNTmX/7/sKdvdRuwWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760563527; c=relaxed/simple;
-	bh=vlperFRmGm5rMepd+J5F6AuE/+fROGgAHN/Gu6ExyzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cSJzBNdPrtT+64AINAWsWKKZ7u8Jlq+av7etak0Fw5KHPdqKDawG95U0n6TU/VyUdR2EUL2mpmgHMne0Sc9HH5MMrhr31taWjJQblDh+PD/WIFqydEmH2jaYeO1MsQ6G1QpJS2sN0uUFBgtQoa4gW1V5I0DsSGYECe0sJP/jGn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JAHsTxCf; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Wed, 15 Oct 2025 21:25:03 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1760563512;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Tn/3KXYx81kR8zr8zH3iYa7nW5h+i0lrVU0IbFeu+KY=;
-	b=JAHsTxCfH6C4SHupYo8m49eFdiXIBEHTpwieWaypQuGhmYoAS52ZEzbiEM+jWHALUR3Ss/
-	xhD2NKwvypJIolIolfJkRX0DYAg8jdCCkUA2zIzsLWH9ZjL8+M05m7u3dvmXoB7LsCXGMB
-	Jmz+Aq0/MktXPAK6PwfbpT3U69Wql0g=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jim Mattson <jmattson@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Sean Christopherson <seanjc@google.com>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Andrew Jones <ajones@ventanamicro.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
-	Kai Huang <kai.huang@intel.com>, Eric Auger <eric.auger@redhat.com>, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/4] KVM: selftests: Add VM_MODE_PXXV57_4K VM mode
-Message-ID: <2mtjboekfjxmuougyiypg4azeurhqxlk7fovzacv5c74hrmzrb@krfinussf2zd>
-References: <20250917215031.2567566-1-jmattson@google.com>
- <20250917215031.2567566-4-jmattson@google.com>
+	s=arc-20240116; t=1760563940; c=relaxed/simple;
+	bh=8zVysIIXaYtcWT2JOEzeVWG1yxNu517cXTEwo7Q8FUY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=q8W3lbm7lSyDvzcA2lK3ld9sqrX6P7gF870ejRAvfEnk5H+c8pXg85THGzYAHxOW7dls4ZLhVvjIXj0Zmqe7Oueu3Zftuy/82+F1pqmR2U2jWUncvjsE0kmTqg4dWdWsCnJsccXknT6M55+a8z9q5se2I0I2Fd2r4675uIVs4Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NFaG+w1z; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-63bdc7d939fso27594a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 14:32:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760563937; x=1761168737; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=an2G/9d47hEEnOP9myHHqMnuHCaBvnAN8tAqBfiHYNY=;
+        b=NFaG+w1zWBaUITqy6ANSkJbjhx3mDovIPeKnsVQO0+q04BFqVFrY+y0R77QHzBRgrN
+         wXPw7Z970ihngnXZxDDQQIFzOijSTsGz5sKux5yD9vHbXP/bMm5Qre67qk/hfqFJlTJQ
+         Rn6GjOXt2lUupc3F1EKitigK7hY0uPZ5WRBXZyJva3lAEEc9tdjyoWqFCO7y7FYMkvQJ
+         9kAfsmdbQvut95/TLvWOeSL6N0RrGlMcD5m3Li5QcXnCZlXB2TOk6ZtrVHVdP7lCjevh
+         O3Evd2Y12moDZ9hoil2zB7ikeOwB2aVGOu03e3ddvs9aMz5xzbGijDiDTzZN6Eq8RfxO
+         z5lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760563937; x=1761168737;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=an2G/9d47hEEnOP9myHHqMnuHCaBvnAN8tAqBfiHYNY=;
+        b=MSvAnBael7vCL0E+89fo9mc2qNQn7AivKAykFquZBIixZtlFjnlRYLRRbXSncpnSLp
+         d1GA9/KSUGyqLfOBAQ66QwRKhbMK19l9f1ZFq9WrGXYplknD6HP0GGhe87lWB7YN0VG9
+         cY7qwZd+jTu0AmVy9bWaPNDH95Bll8cuWF7ipsdLtFatAt/eK9T+ycUbNh+X39JcJLrP
+         rauF6gFhMbs2mEQfV/34+2N7SbtvTUxtgiSpvHkBDwj7fc8u+F+y4ijogrvYXvQGVXkv
+         nObiEHf+k1Wvl45ZnvA3+b2OO8KqKSa/XzHIGjVGBA0NKd/PLkNgqv1B/mTNgV3GcE/s
+         zOaw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhdZN0ffPqrZDizVqqpoMYLSVeQ8w6VACCF5/n/UHjmr5djoHZcHwIBZUWKalk2mA1OXSjIMRZMElRiYuyeI0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCw1Di23iyx5WxwvKXr+G+x1+8h1Ajbp2aCWQtI84Evimjwzrm
+	X71ZHb54JSkXRGo/2LMGxoA73ZndVxMnjWxYy/4iJ2dzEYyOsgTjKgwFQXKtrWj4ACKIaCQepih
+	rmQYOvkwFPAU0GuyTM2YOZdNKy6HPn0Q=
+X-Gm-Gg: ASbGncuuh2efkqjNgcE+xljaflYJUV7YPBKvq2f5ZGNxYGpYLI4fUvY80M6TaeJsHwn
+	p8bSTXT+00RiZi9R5tvNmSAAB9QgjRb/XOoaHRBX8sAnFojjEmctvbkl9NXtJjtUEP79PYMtFE8
+	ZQdfT5TL6CL/iezuZ0ifAUllFijyWwmH1zMYKAe/V8GwZ6+EsBh+Jj0o1Us89ah/UYTOoK5hgna
+	8BH/4zB+xCaO4pSwONh4xEo39j5mZqO7g==
+X-Google-Smtp-Source: AGHT+IETKXp4XkWEQ4U32sIWCcsCD1bfRNMB8NWYLayln3kcDdXtKdJRAQEty2d2BGBYtgl6wpMhbm29twcjTOJnDpM=
+X-Received: by 2002:a05:6402:34d1:b0:63c:343:2485 with SMTP id
+ 4fb4d7f45d1cf-63c03439d20mr349068a12.3.1760563936779; Wed, 15 Oct 2025
+ 14:32:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917215031.2567566-4-jmattson@google.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20251007115840.2320557-1-geomatsi@gmail.com> <20251007115840.2320557-5-geomatsi@gmail.com>
+ <CAFTtA3MObvXRHxbULghGcT=ThrBDeFDJzUY7LOhgNnarzpYeGg@mail.gmail.com>
+In-Reply-To: <CAFTtA3MObvXRHxbULghGcT=ThrBDeFDJzUY7LOhgNnarzpYeGg@mail.gmail.com>
+From: Andy Chiu <andybnac@gmail.com>
+Date: Wed, 15 Oct 2025 16:32:05 -0500
+X-Gm-Features: AS18NWAGi9Py3C8rtbFuAwojqdEayvWFLUvCpApDZcPh7rosVGDCcfhgBNv2VKo
+Message-ID: <CAFTtA3NoOZEMqYD6+vjP=09T15GiThjVy1LeDX0U8CC-4HMKOA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] riscv: vector: allow to force vector context save
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Cc: linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Jisheng Zhang <jszhang@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Thomas Huth <thuth@redhat.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Han Gao <rabenda.cn@gmail.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Nam Cao <namcao@linutronix.de>, 
+	Joel Granados <joel.granados@kernel.org>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 17, 2025 at 02:48:39PM -0700, Jim Mattson wrote:
-> Add a new VM mode, VM_MODE_PXXV57_4K, to support tests that require
-> 5-level paging on x86. This mode sets up a 57-bit virtual address
-> space and sets CR4.LA57 in the guest.
-> 
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> ---
->  .../testing/selftests/kvm/include/kvm_util.h  |  1 +
->  tools/testing/selftests/kvm/lib/kvm_util.c    | 21 +++++++++++++++++
->  .../testing/selftests/kvm/lib/x86/processor.c | 23 ++++++++++++-------
->  tools/testing/selftests/kvm/lib/x86/vmx.c     |  7 +++---
->  4 files changed, 41 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index 23a506d7eca3..b6ea5d966715 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -175,6 +175,7 @@ enum vm_guest_mode {
->  	VM_MODE_P40V48_16K,
->  	VM_MODE_P40V48_64K,
->  	VM_MODE_PXXV48_4K,	/* For 48bits VA but ANY bits PA */
-> +	VM_MODE_PXXV57_4K,	/* For 48bits VA but ANY bits PA */
->  	VM_MODE_P47V64_4K,
->  	VM_MODE_P44V64_4K,
->  	VM_MODE_P36V48_4K,
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index c3f5142b0a54..6b0e499c6e91 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -232,6 +232,7 @@ const char *vm_guest_mode_string(uint32_t i)
->  		[VM_MODE_P40V48_16K]	= "PA-bits:40,  VA-bits:48, 16K pages",
->  		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
->  		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
-> +		[VM_MODE_PXXV57_4K]	= "PA-bits:ANY, VA-bits:57,  4K pages",
->  		[VM_MODE_P47V64_4K]	= "PA-bits:47,  VA-bits:64,  4K pages",
->  		[VM_MODE_P44V64_4K]	= "PA-bits:44,  VA-bits:64,  4K pages",
->  		[VM_MODE_P36V48_4K]	= "PA-bits:36,  VA-bits:48,  4K pages",
-> @@ -259,6 +260,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
->  	[VM_MODE_P40V48_16K]	= { 40, 48,  0x4000, 14 },
->  	[VM_MODE_P40V48_64K]	= { 40, 48, 0x10000, 16 },
->  	[VM_MODE_PXXV48_4K]	= {  0,  0,  0x1000, 12 },
-> +	[VM_MODE_PXXV57_4K]	= {  0,  0,  0x1000, 12 },
->  	[VM_MODE_P47V64_4K]	= { 47, 64,  0x1000, 12 },
->  	[VM_MODE_P44V64_4K]	= { 44, 64,  0x1000, 12 },
->  	[VM_MODE_P36V48_4K]	= { 36, 48,  0x1000, 12 },
-> @@ -358,6 +360,25 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
->  		vm->va_bits = 48;
->  #else
->  		TEST_FAIL("VM_MODE_PXXV48_4K not supported on non-x86 platforms");
+On Wed, Oct 15, 2025 at 3:18=E2=80=AFPM Andy Chiu <andybnac@gmail.com> wrot=
+e:
+>
+> On Tue, Oct 7, 2025 at 6:58=E2=80=AFAM Sergey Matyukevich <geomatsi@gmail=
+.com> wrote:
+> >
+> > When ptrace updates vector CSR registers for a traced process, the
+> > changes may not be immediately visible to the next ptrace operations
+> > due to vector context switch optimizations.
+> >
+> > The function 'riscv_v_vstate_save' saves context only if mstatus.VS is
+> > 'dirty'. However mstatus.VS of the traced process context may remain
+> > 'clean' between two breakpoints, if no vector instructions were execute=
+d
+> > between those two breakpoints. In this case the vector context will not
+> > be saved at the second breakpoint. As a result, the second ptrace may
+> > read stale vector CSR values.
+>
+> IIUC, the second ptrace should not get the stale vector CSR values.
+> The second riscv_vr_get() should be reading from the context memory
+> (vstate), which is updated from the last riscv_vr_set(). The user's
+> vstate should remain the same since last riscv_vr_set(). Could you
+> explain more on how this bug is observed and why only CSRs are
+> affected but not v-regs as well?
 
-We should probably update TEST_ASSERT(vm->va_bits == 48 || vm->va_bits == 57)
-above to only assert 48 bits now, right?
+From looking into your test, I can see that you were trying to set an
+invalid configuration to Vetor CSRs and expect vill to be reflected
+upon next read. Yes, this is not happening on the current
+implementation as it was not expecting invalid input from the user,
+which should be taken into consideration. Thanks for spotting the
+case!
 
-> +#endif
-> +		break;
-> +	case VM_MODE_PXXV57_4K:
-> +#ifdef __x86_64__
-> +		kvm_get_cpu_address_width(&vm->pa_bits, &vm->va_bits);
-> +		kvm_init_vm_address_properties(vm);
-> +		/*
-> +		 * For 5-level paging, KVM requires LA57 to be enabled, which
-> +		 * requires a 57-bit virtual address space.
-> +		 */
-> +		TEST_ASSERT(vm->va_bits == 57,
-> +			    "Linear address width (%d bits) not supported for VM_MODE_PXXV57_4K",
-> +			    vm->va_bits);
-> +		pr_debug("Guest physical address width detected: %d\n",
-> +			 vm->pa_bits);
-> +		vm->pgtable_levels = 5;
-> +		vm->va_bits = 57;
-> +#else
-> +		TEST_FAIL("VM_MODE_PXXV57_4K not supported on non-x86 platforms");
->  #endif
->  		break;
->  	case VM_MODE_P47V64_4K:
-> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> index 433365c8196d..d566190ea488 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> @@ -124,10 +124,11 @@ bool kvm_is_tdp_enabled(void)
->  
->  void virt_arch_pgd_alloc(struct kvm_vm *vm)
->  {
-> -	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
-> -		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
-> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
-> +		    vm->mode == VM_MODE_PXXV57_4K,
-> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
->  
-> -	/* If needed, create page map l4 table. */
-> +	/* If needed, create the top-level page table. */
->  	if (!vm->pgd_created) {
->  		vm->pgd = vm_alloc_page_table(vm);
->  		vm->pgd_created = true;
-> @@ -187,8 +188,9 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
->  	uint64_t *pte = &vm->pgd;
->  	int current_level;
->  
-> -	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K,
-> -		    "Unknown or unsupported guest mode, mode: 0x%x", vm->mode);
-> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
-> +		    vm->mode == VM_MODE_PXXV57_4K,
-> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
->  
->  	TEST_ASSERT((vaddr % pg_size) == 0,
->  		    "Virtual address not aligned,\n"
-> @@ -279,8 +281,9 @@ uint64_t *__vm_get_page_table_entry(struct kvm_vm *vm, uint64_t vaddr,
->  	TEST_ASSERT(*level >= PG_LEVEL_NONE && *level < PG_LEVEL_NUM,
->  		    "Invalid PG_LEVEL_* '%d'", *level);
->  
-> -	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
-> -		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
-> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
-> +		    vm->mode == VM_MODE_PXXV57_4K,
-> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
->  	TEST_ASSERT(sparsebit_is_set(vm->vpages_valid,
->  		(vaddr >> vm->page_shift)),
->  		"Invalid virtual address, vaddr: 0x%lx",
-> @@ -481,7 +484,9 @@ static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_sregs sregs;
->  
-> -	TEST_ASSERT_EQ(vm->mode, VM_MODE_PXXV48_4K);
-> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
-> +		    vm->mode == VM_MODE_PXXV57_4K,
-> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
->  
->  	/* Set mode specific system register values. */
->  	vcpu_sregs_get(vcpu, &sregs);
-> @@ -495,6 +500,8 @@ static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
->  	sregs.cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
->  	if (kvm_cpu_has(X86_FEATURE_XSAVE))
->  		sregs.cr4 |= X86_CR4_OSXSAVE;
-> +	if (vm->pgtable_levels == 5)
-> +		sregs.cr4 |= X86_CR4_LA57;
->  	sregs.efer |= (EFER_LME | EFER_LMA | EFER_NX);
->  
->  	kvm_seg_set_unusable(&sregs.ldt);
-> diff --git a/tools/testing/selftests/kvm/lib/x86/vmx.c b/tools/testing/selftests/kvm/lib/x86/vmx.c
-> index d4d1208dd023..1b6d4a007798 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/vmx.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/vmx.c
-> @@ -401,11 +401,12 @@ void __nested_pg_map(struct vmx_pages *vmx, struct kvm_vm *vm,
->  	struct eptPageTableEntry *pt = vmx->eptp_hva, *pte;
->  	uint16_t index;
->  
-> -	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
-> -		    "unknown or unsupported guest mode, mode: 0x%x", vm->mode);
-> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
-> +		    vm->mode == VM_MODE_PXXV57_4K,
-> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
->  
->  	TEST_ASSERT((nested_paddr >> 48) == 0,
-> -		    "Nested physical address 0x%lx requires 5-level paging",
-> +		    "Nested physical address 0x%lx is > 48-bits and requires 5-level EPT",
->  		    nested_paddr);
->  	TEST_ASSERT((nested_paddr % page_size) == 0,
->  		    "Nested physical address not on page boundary,\n"
-> -- 
-> 2.51.0.470.ga7dc726c21-goog
-> 
+According to the spec, "The use of vtype encodings with LMUL <
+SEWMIN/ELEN is reserved, implementations can set vill if they do not
+support these configurations." This mean the implementation may
+actually support this configuration. If that is the case, I think we
+should not allow this to be configured through the vector ptrace
+interface, which is designed to support 1.0 (and 0.7) specs. That
+means, we should not allow this problematic configuration to pass
+through riscv_vr_set(), reach user space, then the forced save.
+
+I would opt for validating all CSR configurations in the first place.
+Could you also help enforce checks on other reserved bits as well?
+
+Thanks,
+Andy
+
+>
+> Thanks,
+> Andy
+>
+> >
+> > Fix this by introducing a TIF flag that forces vector context save on
+> > the next context switch, regardless of mstatus.VS state. Set this
+> > flag on ptrace oprations that modify vector CSR registers.
+> >
+> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> > ---
+> >  arch/riscv/include/asm/thread_info.h | 2 ++
+> >  arch/riscv/include/asm/vector.h      | 3 +++
+> >  arch/riscv/kernel/process.c          | 2 ++
+> >  arch/riscv/kernel/ptrace.c           | 5 +++++
+> >  4 files changed, 12 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/=
+asm/thread_info.h
+> > index 836d80dd2921..e05e9aa89c43 100644
+> > --- a/arch/riscv/include/asm/thread_info.h
+> > +++ b/arch/riscv/include/asm/thread_info.h
+> > @@ -118,7 +118,9 @@ int arch_dup_task_struct(struct task_struct *dst, s=
+truct task_struct *src);
+> >
+> >  #define TIF_32BIT                      16      /* compat-mode 32bit pr=
+ocess */
+> >  #define TIF_RISCV_V_DEFER_RESTORE      17      /* restore Vector befor=
+e returing to user */
+> > +#define TIF_RISCV_V_FORCE_SAVE         13      /* force Vector context=
+ save */
+> >
+> >  #define _TIF_RISCV_V_DEFER_RESTORE     BIT(TIF_RISCV_V_DEFER_RESTORE)
+> > +#define _TIF_RISCV_V_FORCE_SAVE                BIT(TIF_RISCV_V_FORCE_S=
+AVE)
+> >
+> >  #endif /* _ASM_RISCV_THREAD_INFO_H */
+> > diff --git a/arch/riscv/include/asm/vector.h b/arch/riscv/include/asm/v=
+ector.h
+> > index b61786d43c20..d3770e13da93 100644
+> > --- a/arch/riscv/include/asm/vector.h
+> > +++ b/arch/riscv/include/asm/vector.h
+> > @@ -370,6 +370,9 @@ static inline void __switch_to_vector(struct task_s=
+truct *prev,
+> >  {
+> >         struct pt_regs *regs;
+> >
+> > +       if (test_and_clear_tsk_thread_flag(prev, TIF_RISCV_V_FORCE_SAVE=
+))
+> > +               __riscv_v_vstate_dirty(task_pt_regs(prev));
+> > +
+> >         if (riscv_preempt_v_started(prev)) {
+> >                 if (riscv_v_is_on()) {
+> >                         WARN_ON(prev->thread.riscv_v_flags & RISCV_V_CT=
+X_DEPTH_MASK);
+> > diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> > index 31a392993cb4..47959c55cefb 100644
+> > --- a/arch/riscv/kernel/process.c
+> > +++ b/arch/riscv/kernel/process.c
+> > @@ -183,6 +183,7 @@ void flush_thread(void)
+> >         kfree(current->thread.vstate.datap);
+> >         memset(&current->thread.vstate, 0, sizeof(struct __riscv_v_ext_=
+state));
+> >         clear_tsk_thread_flag(current, TIF_RISCV_V_DEFER_RESTORE);
+> > +       clear_tsk_thread_flag(current, TIF_RISCV_V_FORCE_SAVE);
+> >  #endif
+> >  #ifdef CONFIG_RISCV_ISA_SUPM
+> >         if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SUPM))
+> > @@ -205,6 +206,7 @@ int arch_dup_task_struct(struct task_struct *dst, s=
+truct task_struct *src)
+> >         memset(&dst->thread.vstate, 0, sizeof(struct __riscv_v_ext_stat=
+e));
+> >         memset(&dst->thread.kernel_vstate, 0, sizeof(struct __riscv_v_e=
+xt_state));
+> >         clear_tsk_thread_flag(dst, TIF_RISCV_V_DEFER_RESTORE);
+> > +       clear_tsk_thread_flag(dst, TIF_RISCV_V_FORCE_SAVE);
+> >
+> >         return 0;
+> >  }
+> > diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+> > index 906cf1197edc..569f756bef23 100644
+> > --- a/arch/riscv/kernel/ptrace.c
+> > +++ b/arch/riscv/kernel/ptrace.c
+> > @@ -148,6 +148,11 @@ static int riscv_vr_set(struct task_struct *target=
+,
+> >         if (vstate->vlenb !=3D ptrace_vstate.vlenb)
+> >                 return -EINVAL;
+> >
+> > +       if (vstate->vtype !=3D ptrace_vstate.vtype ||
+> > +           vstate->vcsr !=3D ptrace_vstate.vcsr ||
+> > +           vstate->vl !=3D ptrace_vstate.vl)
+> > +               set_tsk_thread_flag(target, TIF_RISCV_V_FORCE_SAVE);
+> > +
+> >         vstate->vstart =3D ptrace_vstate.vstart;
+> >         vstate->vl =3D ptrace_vstate.vl;
+> >         vstate->vtype =3D ptrace_vstate.vtype;
+> > --
+> > 2.51.0
+> >
 
