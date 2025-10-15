@@ -1,428 +1,235 @@
-Return-Path: <linux-kselftest+bounces-43262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B449EBE0B88
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 22:57:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64EECBE0CDC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 23:23:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 975211A22F96
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 20:57:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 172123AFAED
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:23:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08BB2D3220;
-	Wed, 15 Oct 2025 20:57:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A7952F49FB;
+	Wed, 15 Oct 2025 21:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="DoRvfCr6"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Xn7t0kHD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705B52C187
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 20:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57BB2DC79E
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 21:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760561826; cv=none; b=LvnlEc/QlwLZDqcpgJRpQ6o0cxAnwP71P5Lv+u5m+qzvY5Gn57XoO4yfdg6Xw5fttvQACA+TSqPE+WIIBQ+6hY25++VadIoUUuMlDJqbJ2qGJAfff5+JBAKbdeYmhRPPZC1nysyBsMu4Wbh+sOL3KmhXuqwr0ehIrNeAYvgz5gk=
+	t=1760563426; cv=none; b=HkFdqNIyYtVLF5wO69iQJoIVkl5Myi8/wGKjOWCaECFL8yWS4uHW0Tm1hRQESvxDNyYTzCDF5gDcjF6zomPVl8Qi+xUhQUxrTznZoaV97xHTxwRx00A1871CjpIEBtymE8mltO+s6iBBL/z8HeoHwsv2EGrerppiwSQhaYN3oLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760561826; c=relaxed/simple;
-	bh=A78iN+rgxSiV6lxKErBK8A+jZK/Hr9J1s3+XCMErbAY=;
+	s=arc-20240116; t=1760563426; c=relaxed/simple;
+	bh=z/ZAt/JqimvxhupKM/WQo3eIZ02qoztm40C2hOIV7Q4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZyynkG1W1iCsi41avgLAFMpnCOG1dhfLsXTeZh6GfAxqCH4eCxbnCHdVbyW4vV1irOLNIC9mJA3C9WJ3NARU08bZRMW5HtmjoYUoVN2dxksSp8pubxUZFU+ozQrxX6lyKxM/3xbbpO9Crr9uPnkMjecwwvwDTaNjXXKiE+hEQNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=DoRvfCr6; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7841da939deso51086b3a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 13:57:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1760561823; x=1761166623; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JtJ7DaV1gwJQgtXjwIR5eEbDMXGgeP8Qy25oJGnYRdI=;
-        b=DoRvfCr6TdQyvjdaCJZZIuijkoGey/zl2c+DrYqXrATTbR6IvXdyUynZFVqU8hVECu
-         8dD8j7YihRCJV1Xg+pa5bQuji0MIjhlpnTv1wIrKfWCYhQt6kmlT4pW6IwmYkh+tkwU9
-         NydG9snL0RHqCyKrYRD0KzckjRRiMkWppi3G3jsp0faghrAmhQcPm0txLTviPk13cElc
-         R8oxIkiv3b+450aOXvVGAupTzRGiarkj3kxVxVd1Aacp9j+QXwRkPRZTGNXzAsSf6nYU
-         tl+F7EfR4r1O1Xi4SCZO4wD2XXNtreSP3y6SCCc9eIH8hc3QgyG5don5peS7SqbYUam/
-         yUpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760561823; x=1761166623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JtJ7DaV1gwJQgtXjwIR5eEbDMXGgeP8Qy25oJGnYRdI=;
-        b=qosogPMApnk3IqHDui92VRf3yME3RIijWN5F1Pb2QRwnZklsFOwMfoh2g27Wx1Bweh
-         cjHMYor2xo6c+9jqqH5mLnJmzhPhioDQkDRoyDMjj+dXQjKVc0GrEv/HjKnDMsKcxQ8W
-         gkyh9q7eA4isx42MSGre5N3Ns/bn+DuBeMaZnd5LTY9JMq+WRaSMg72Om1kzL+DbrtTa
-         sdX/jaKar/Qjr+bC074fr/iqevrlMsxyJOYNlEFFT+RH8RQSg6WVF0txcmuz7qCNrTrd
-         Yp447NKSyCA+RVQ+E+5JbdUZP6U/pWEfFLzOU6WIUYXxUdKDHjsPsj0W7op5WhlIwrQa
-         v9FA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHHir7owCe5lK39Rs9VsoCwBWxpah9rax94Q5LYXOBxJzenC96rQWBut5ws9MguIJ22La+b1J13QcYYcL1jbY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV9Q2ENRpwawbHAuhxCSs/zarjAb8jP+boF3KJGqRUj/ttHGXU
-	y9zJkQOvLGkePMMpULQkhs3Ie1KMWKQBaJ733PvbdxqvRgxz2d2+KYZVAVu3kVew6mE=
-X-Gm-Gg: ASbGncuHwvq1ylQYbQRVYCeognhPI2zuv/Lpfi1BTZiWa0lEVfx5VcLFGqlCz/N10Kz
-	/CTNWSJfjPtn3raRQ2PEDtKVRwC3j/gIaP530x04WzmLLMCH2CiPfT8M8sFMmM+1nCWW0HJX3a8
-	DDrggxPnFGeOJf+6kt/RYmnZPs3Do4xMmY7dLO1I1tm5G6DIOjp/KPtqCcATNhlCUz7/NO62B7J
-	J3nclf6e7kYjS5hDzkg31kx8vnVYsS5p6Inv5Gj1wTg9XNyD3abJmEJzY0er+9kWOQEAPqGJtP2
-	OR5tF6ngz3aTSktb2DRWZdLQvwzDZ2jh1IwGGnSGlcey8k+P+VclutoYv7VhVaCEMxj8EcWUvh+
-	UucG9dFOePC7hTdpUglWTReXmbp9CH9wjdtQxCT2GTDJ3kcOp3kPuP+/5GXZOLA==
-X-Google-Smtp-Source: AGHT+IGB+5aNaGhvYx/i7SuLRZMzUGb9z0qxzWuFI5LtrYeUM1k/B64dlkgzbMPNLYbYv0YwsW+Slg==
-X-Received: by 2002:a05:6a21:3396:b0:334:8f45:8e99 with SMTP id adf61e73a8af0-3348f459868mr3796560637.35.1760561822048;
-        Wed, 15 Oct 2025 13:57:02 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7992b06075fsm20255047b3a.17.2025.10.15.13.56.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Oct 2025 13:57:01 -0700 (PDT)
-Date: Wed, 15 Oct 2025 13:56:56 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Charles Mirabile <cmirabil@redhat.com>
-Cc: Liam.Howlett@oracle.com, a.hindborg@kernel.org,
-	akpm@linux-foundation.org, alex.gaynor@gmail.com,
-	alexghiti@rivosinc.com, aliceryhl@google.com,
-	alistair.francis@wdc.com, andybnac@gmail.com, aou@eecs.berkeley.edu,
-	arnd@arndb.de, atishp@rivosinc.com, bjorn3_gh@protonmail.com,
-	boqun.feng@gmail.com, bp@alien8.de, brauner@kernel.org,
-	broonie@kernel.org, charlie@rivosinc.com, cleger@rivosinc.com,
-	conor+dt@kernel.org, conor@kernel.org, corbet@lwn.net,
-	dave.hansen@linux.intel.com, devicetree@vger.kernel.org,
-	ebiederm@xmission.com, evan@rivosinc.com, gary@garyguo.net,
-	hpa@zytor.com, jannh@google.com, jim.shu@sifive.com,
-	kees@kernel.org, kito.cheng@sifive.com, krzk+dt@kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, lorenzo.stoakes@oracle.com,
-	lossin@kernel.org, mingo@redhat.com, ojeda@kernel.org,
-	oleg@redhat.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
-	peterz@infradead.org, richard.henderson@linaro.org,
-	rick.p.edgecombe@intel.com, robh@kernel.org,
-	rust-for-linux@vger.kernel.org, samitolvanen@google.com,
-	shuah@kernel.org, tglx@linutronix.de, tmgross@umich.edu,
-	vbabka@suse.cz, x86@kernel.org
-Subject: Re: [PATCH v20 24/28] arch/riscv: dual vdso creation logic and
- select vdso based on hw
-Message-ID: <aPAKmCwDeXXvU7VD@debug.ba.rivosinc.com>
-References: <20251013-v5_user_cfi_series-v20-24-b9de4be9912e@rivosinc.com>
- <20251015203611.2572538-1-cmirabil@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nfXstZoboO3pVvM+MP8CVlixPIfYfuHhD5ir+3rNE4QKPn+eeeuf4xNZmBnDbgNRtED9lu6pLB/L7/2UZaOEYLErHffME2xp1YMDcXmRDyRXP6vnIr5nkwjVwwS1eD6nNungtzzAYERui4+od9Zcb/FZMPQH3nHgxDd9jM5PC+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Xn7t0kHD; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Wed, 15 Oct 2025 21:23:25 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1760563411;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tpCIpMhKpNVFUq8XLpVJcsrRwbNZaA4mgV8CdcBWnWs=;
+	b=Xn7t0kHDndE+FUUNhj8T81D2rk2Y1bR1K7lKc6/YmhNojKZ6yQL6q+ao44Uavl7ZygojFY
+	bOUY6SZD9WLXZGFKMo8nqi9exheJRxF0mtQUeHtwFYf14/QcXSDTvxgql7+4f4sll6fuDN
+	wfmAzX13sMa+07OIyfrjE1Gkyr4L6d4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yosry Ahmed <yosry.ahmed@linux.dev>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Sean Christopherson <seanjc@google.com>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Andrew Jones <ajones@ventanamicro.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
+	Kai Huang <kai.huang@intel.com>, Eric Auger <eric.auger@redhat.com>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 3/4] KVM: selftests: Add VM_MODE_PXXV57_4K VM mode
+Message-ID: <l7txoioo3gntu3lyl542jg3n3wvkqruf2qh33xy7lmr5mjgfq5@iw4wsfdurlc7>
+References: <20250917215031.2567566-1-jmattson@google.com>
+ <20250917215031.2567566-4-jmattson@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251015203611.2572538-1-cmirabil@redhat.com>
+In-Reply-To: <20250917215031.2567566-4-jmattson@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hi Charles,
+On Wed, Sep 17, 2025 at 02:48:39PM -0700, Jim Mattson wrote:
+> Add a new VM mode, VM_MODE_PXXV57_4K, to support tests that require
+> 5-level paging on x86. This mode sets up a 57-bit virtual address
+> space and sets CR4.LA57 in the guest.
+> 
+> Signed-off-by: Jim Mattson <jmattson@google.com>
+> ---
+>  .../testing/selftests/kvm/include/kvm_util.h  |  1 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    | 21 +++++++++++++++++
+>  .../testing/selftests/kvm/lib/x86/processor.c | 23 ++++++++++++-------
+>  tools/testing/selftests/kvm/lib/x86/vmx.c     |  7 +++---
+>  4 files changed, 41 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index 23a506d7eca3..b6ea5d966715 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -175,6 +175,7 @@ enum vm_guest_mode {
+>  	VM_MODE_P40V48_16K,
+>  	VM_MODE_P40V48_64K,
+>  	VM_MODE_PXXV48_4K,	/* For 48bits VA but ANY bits PA */
+> +	VM_MODE_PXXV57_4K,	/* For 48bits VA but ANY bits PA */
+>  	VM_MODE_P47V64_4K,
+>  	VM_MODE_P44V64_4K,
+>  	VM_MODE_P36V48_4K,
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index c3f5142b0a54..6b0e499c6e91 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -232,6 +232,7 @@ const char *vm_guest_mode_string(uint32_t i)
+>  		[VM_MODE_P40V48_16K]	= "PA-bits:40,  VA-bits:48, 16K pages",
+>  		[VM_MODE_P40V48_64K]	= "PA-bits:40,  VA-bits:48, 64K pages",
+>  		[VM_MODE_PXXV48_4K]	= "PA-bits:ANY, VA-bits:48,  4K pages",
+> +		[VM_MODE_PXXV57_4K]	= "PA-bits:ANY, VA-bits:57,  4K pages",
+>  		[VM_MODE_P47V64_4K]	= "PA-bits:47,  VA-bits:64,  4K pages",
+>  		[VM_MODE_P44V64_4K]	= "PA-bits:44,  VA-bits:64,  4K pages",
+>  		[VM_MODE_P36V48_4K]	= "PA-bits:36,  VA-bits:48,  4K pages",
+> @@ -259,6 +260,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+>  	[VM_MODE_P40V48_16K]	= { 40, 48,  0x4000, 14 },
+>  	[VM_MODE_P40V48_64K]	= { 40, 48, 0x10000, 16 },
+>  	[VM_MODE_PXXV48_4K]	= {  0,  0,  0x1000, 12 },
+> +	[VM_MODE_PXXV57_4K]	= {  0,  0,  0x1000, 12 },
+>  	[VM_MODE_P47V64_4K]	= { 47, 64,  0x1000, 12 },
+>  	[VM_MODE_P44V64_4K]	= { 44, 64,  0x1000, 12 },
+>  	[VM_MODE_P36V48_4K]	= { 36, 48,  0x1000, 12 },
+> @@ -358,6 +360,25 @@ struct kvm_vm *____vm_create(struct vm_shape shape)
+>  		vm->va_bits = 48;
+>  #else
+>  		TEST_FAIL("VM_MODE_PXXV48_4K not supported on non-x86 platforms");
+> +#endif
+> +		break;
+> +	case VM_MODE_PXXV57_4K:
+> +#ifdef __x86_64__
+> +		kvm_get_cpu_address_width(&vm->pa_bits, &vm->va_bits);
+> +		kvm_init_vm_address_properties(vm);
+> +		/*
+> +		 * For 5-level paging, KVM requires LA57 to be enabled, which
+> +		 * requires a 57-bit virtual address space.
+> +		 */
+> +		TEST_ASSERT(vm->va_bits == 57,
+> +			    "Linear address width (%d bits) not supported for VM_MODE_PXXV57_4K",
+> +			    vm->va_bits);
+> +		pr_debug("Guest physical address width detected: %d\n",
+> +			 vm->pa_bits);
+> +		vm->pgtable_levels = 5;
+> +		vm->va_bits = 57;
+
+We assert that vm->va_bits is 57, and then we set it here again. Seems
+like we're doing the same for VM_MODE_PXXV48_4K too.
+
+> +#else
+> +		TEST_FAIL("VM_MODE_PXXV57_4K not supported on non-x86 platforms");
+>  #endif
+>  		break;
+>  	case VM_MODE_P47V64_4K:
+> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+> index 433365c8196d..d566190ea488 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+> @@ -124,10 +124,11 @@ bool kvm_is_tdp_enabled(void)
+>  
+>  void virt_arch_pgd_alloc(struct kvm_vm *vm)
+>  {
+> -	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
+> -		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
+> +		    vm->mode == VM_MODE_PXXV57_4K,
+> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
+>  
+> -	/* If needed, create page map l4 table. */
+> +	/* If needed, create the top-level page table. */
+>  	if (!vm->pgd_created) {
+>  		vm->pgd = vm_alloc_page_table(vm);
+>  		vm->pgd_created = true;
+> @@ -187,8 +188,9 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
+>  	uint64_t *pte = &vm->pgd;
+>  	int current_level;
+>  
+> -	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K,
+> -		    "Unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
+> +		    vm->mode == VM_MODE_PXXV57_4K,
+> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
+>  
+>  	TEST_ASSERT((vaddr % pg_size) == 0,
+>  		    "Virtual address not aligned,\n"
+> @@ -279,8 +281,9 @@ uint64_t *__vm_get_page_table_entry(struct kvm_vm *vm, uint64_t vaddr,
+>  	TEST_ASSERT(*level >= PG_LEVEL_NONE && *level < PG_LEVEL_NUM,
+>  		    "Invalid PG_LEVEL_* '%d'", *level);
+>  
+> -	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
+> -		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
+> +		    vm->mode == VM_MODE_PXXV57_4K,
+> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
+>  	TEST_ASSERT(sparsebit_is_set(vm->vpages_valid,
+>  		(vaddr >> vm->page_shift)),
+>  		"Invalid virtual address, vaddr: 0x%lx",
+> @@ -481,7 +484,9 @@ static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+>  {
+>  	struct kvm_sregs sregs;
+>  
+> -	TEST_ASSERT_EQ(vm->mode, VM_MODE_PXXV48_4K);
+> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
+> +		    vm->mode == VM_MODE_PXXV57_4K,
+> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
+>  
+>  	/* Set mode specific system register values. */
+>  	vcpu_sregs_get(vcpu, &sregs);
+> @@ -495,6 +500,8 @@ static void vcpu_init_sregs(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+>  	sregs.cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
+>  	if (kvm_cpu_has(X86_FEATURE_XSAVE))
+>  		sregs.cr4 |= X86_CR4_OSXSAVE;
+> +	if (vm->pgtable_levels == 5)
+> +		sregs.cr4 |= X86_CR4_LA57;
+>  	sregs.efer |= (EFER_LME | EFER_LMA | EFER_NX);
+>  
+>  	kvm_seg_set_unusable(&sregs.ldt);
+> diff --git a/tools/testing/selftests/kvm/lib/x86/vmx.c b/tools/testing/selftests/kvm/lib/x86/vmx.c
+> index d4d1208dd023..1b6d4a007798 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/vmx.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/vmx.c
+> @@ -401,11 +401,12 @@ void __nested_pg_map(struct vmx_pages *vmx, struct kvm_vm *vm,
+>  	struct eptPageTableEntry *pt = vmx->eptp_hva, *pte;
+>  	uint16_t index;
+>  
+> -	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
+> -		    "unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+> +	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
+> +		    vm->mode == VM_MODE_PXXV57_4K,
+> +		    "Unknown or unsupported guest mode: 0x%x", vm->mode);
+>  
+>  	TEST_ASSERT((nested_paddr >> 48) == 0,
+> -		    "Nested physical address 0x%lx requires 5-level paging",
+> +		    "Nested physical address 0x%lx is > 48-bits and requires 5-level EPT",
+
+Shouldn't this assertion be updated now? We technically support 5-level
+EPT so it should only fire if the mode is VM_MODE_PXXV48_4K. Maybe we
+should use vm->va_bits?
 
 
-On Wed, Oct 15, 2025 at 04:36:11PM -0400, Charles Mirabile wrote:
->Hi Deepak -
->
->On Mon, Oct 13, 2025 at 02:56:16PM -0700, Deepak Gupta wrote:
->> Shadow stack instructions are taken from zimop (mandated on RVA23).
->> Any hardware prior to RVA23 profile will fault on shado stack instruction.
->> Any userspace with shadow stack instruction in it will fault on such
->> hardware. Thus such userspace can't be brought onto such a hardware.
->>
->> It's not known how userspace will respond to such binary fragmentation.
->> However in order to keep kernel portable across such different hardware,
->> `arch/riscv/kernel/vdso_cfi` is created which has logic (Makefile) to
->> compile `arch/riscv/kernel/vdso` sources with cfi flags and then changes
->> in `arch/riscv/kernel/vdso.c` for selecting appropriate vdso depending
->> on whether underlying hardware(cpu) implements zimop extension. Offset
->> of vdso symbols will change due to having two different vdso binaries,
->> there is added logic to include new generated vdso offset header and
->> dynamically select offset (like for rt_sigreturn).
->
->This looks great. As kernel test robot highlighted, the code doesn't build
->when the config is off, but I was able to fix it with the attached patch.
-
-Yes sorry about that. Locally include/generated had both files and that's how
-I missed it.
-
->
->Assuming that these changes or equivalent are folded in, you have my:
->
-
-Yes v21 changes are equivalent to what you proposed.
-
->Acked-by: Charles Mirabile <cmirabil@redhat.com>
-
-If I send another version due to some other issue, I'll collect your tag.
-
-Else
-Paul,
-
-Can you apply the tag when you take it in.
-
--Deepak
-
->
->As merely a user whose previous concerns have been addressed, I am not
->sure what that is worth, but I appreciate your effort on this.
-
-Thanks.
-
->
->>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> ---
->>  arch/riscv/Makefile                        |  3 +++
->>  arch/riscv/include/asm/vdso.h              |  7 ++++++-
->>  arch/riscv/kernel/Makefile                 |  1 +
->>  arch/riscv/kernel/vdso.c                   |  7 +++++++
->>  arch/riscv/kernel/vdso/Makefile            | 29 ++++++++++++++++++++---------
->>  arch/riscv/kernel/vdso/gen_vdso_offsets.sh |  4 +++-
->>  arch/riscv/kernel/vdso_cfi/Makefile        | 25 +++++++++++++++++++++++++
->>  arch/riscv/kernel/vdso_cfi/vdso-cfi.S      | 11 +++++++++++
->>  8 files changed, 76 insertions(+), 11 deletions(-)
->>
->> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
->> index f60c2de0ca08..b74b63da16a7 100644
->> --- a/arch/riscv/Makefile
->> +++ b/arch/riscv/Makefile
->> @@ -176,6 +176,8 @@ ifeq ($(CONFIG_MMU),y)
->>  prepare: vdso_prepare
->>  vdso_prepare: prepare0
->>  	$(Q)$(MAKE) $(build)=arch/riscv/kernel/vdso include/generated/vdso-offsets.h
->> +	$(if $(CONFIG_RISCV_USER_CFI),$(Q)$(MAKE) \
->> +		$(build)=arch/riscv/kernel/vdso_cfi include/generated/vdso-cfi-offsets.h)
->>  	$(if $(CONFIG_COMPAT),$(Q)$(MAKE) \
->>  		$(build)=arch/riscv/kernel/compat_vdso include/generated/compat_vdso-offsets.h)
->>
->> @@ -183,6 +185,7 @@ endif
->>  endif
->>
->>  vdso-install-y			+= arch/riscv/kernel/vdso/vdso.so.dbg
->> +vdso-install-$(CONFIG_RISCV_USER_CFI)	+= arch/riscv/kernel/vdso_cfi/vdso-cfi.so.dbg
->>  vdso-install-$(CONFIG_COMPAT)	+= arch/riscv/kernel/compat_vdso/compat_vdso.so.dbg
->>
->>  BOOT_TARGETS := Image Image.gz Image.bz2 Image.lz4 Image.lzma Image.lzo Image.zst Image.xz loader loader.bin xipImage vmlinuz.efi
->> diff --git a/arch/riscv/include/asm/vdso.h b/arch/riscv/include/asm/vdso.h
->> index f80357fe24d1..3fc8f72b8bfb 100644
->> --- a/arch/riscv/include/asm/vdso.h
->> +++ b/arch/riscv/include/asm/vdso.h
->> @@ -18,9 +18,13 @@
->>
->>  #ifndef __ASSEMBLER__
->>  #include <generated/vdso-offsets.h>
->> +#include <generated/vdso-cfi-offsets.h>
->>
->>  #define VDSO_SYMBOL(base, name)							\
->> -	(void __user *)((unsigned long)(base) + __vdso_##name##_offset)
->> +	((IS_ENABLED(CONFIG_RISCV_USER_CFI) &&					\
->> +	  riscv_has_extension_unlikely(RISCV_ISA_EXT_ZIMOP)) ?			\
->> +	  (void __user *)((unsigned long)(base) + __vdso_##name##_cfi_offset) :	\
->> +	  (void __user *)((unsigned long)(base) + __vdso_##name##_offset))
->>
->>  #ifdef CONFIG_COMPAT
->>  #include <generated/compat_vdso-offsets.h>
->> @@ -33,6 +37,7 @@ extern char compat_vdso_start[], compat_vdso_end[];
->>  #endif /* CONFIG_COMPAT */
->>
->>  extern char vdso_start[], vdso_end[];
->> +extern char vdso_cfi_start[], vdso_cfi_end[];
->>
->>  #endif /* !__ASSEMBLER__ */
->>
->> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
->> index 2d0e0dcedbd3..9026400cba10 100644
->> --- a/arch/riscv/kernel/Makefile
->> +++ b/arch/riscv/kernel/Makefile
->> @@ -72,6 +72,7 @@ obj-y	+= vendor_extensions/
->>  obj-y	+= probes/
->>  obj-y	+= tests/
->>  obj-$(CONFIG_MMU) += vdso.o vdso/
->> +obj-$(CONFIG_RISCV_USER_CFI) += vdso_cfi/
->>
->>  obj-$(CONFIG_RISCV_MISALIGNED)	+= traps_misaligned.o
->>  obj-$(CONFIG_RISCV_MISALIGNED)	+= unaligned_access_speed.o
->> diff --git a/arch/riscv/kernel/vdso.c b/arch/riscv/kernel/vdso.c
->> index 3a8e038b10a2..bf080e519101 100644
->> --- a/arch/riscv/kernel/vdso.c
->> +++ b/arch/riscv/kernel/vdso.c
->> @@ -98,6 +98,13 @@ static struct __vdso_info compat_vdso_info __ro_after_init = {
->>
->>  static int __init vdso_init(void)
->>  {
->> +	/* Hart implements zimop, expose cfi compiled vdso */
->> +	if (IS_ENABLED(CONFIG_RISCV_USER_CFI) &&
->> +		riscv_has_extension_unlikely(RISCV_ISA_EXT_ZIMOP)) {
->> +		vdso_info.vdso_code_start = vdso_cfi_start;
->> +		vdso_info.vdso_code_end = vdso_cfi_end;
->> +	}
->> +
->>  	__vdso_init(&vdso_info);
->>  #ifdef CONFIG_COMPAT
->>  	__vdso_init(&compat_vdso_info);
->> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
->> index 272f1d837a80..a842dc034571 100644
->> --- a/arch/riscv/kernel/vdso/Makefile
->> +++ b/arch/riscv/kernel/vdso/Makefile
->> @@ -20,6 +20,10 @@ endif
->>  ifdef VDSO_CFI_BUILD
->>  CFI_MARCH = _zicfilp_zicfiss
->>  CFI_FULL = -fcf-protection=full
->> +CFI_SUFFIX = -cfi
->> +OFFSET_SUFFIX = _cfi
->> +ccflags-y += -DVDSO_CFI=1
->> +asflags-y += -DVDSO_CFI=1
->>  endif
->>
->>  # Files to link into the vdso
->> @@ -48,13 +52,20 @@ endif
->>  CFLAGS_hwprobe.o += -fPIC
->>
->>  # Build rules
->> -targets := $(obj-vdso) vdso.so vdso.so.dbg vdso.lds
->> +vdso_offsets := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),)-offsets.h
->> +vdso_o := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).o
->> +vdso_so := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).so
->> +vdso_so_dbg := vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).so.dbg
->> +vdso_lds := vdso.lds
->> +
->> +targets := $(obj-vdso) $(vdso_so) $(vdso_so_dbg) $(vdso_lds)
->> +
->>  obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
->>
->> -obj-y += vdso.o
->> -CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
->> +obj-y += vdso$(if $(VDSO_CFI_BUILD),$(CFI_SUFFIX),).o
->> +CPPFLAGS_$(vdso_lds) += -P -C -U$(ARCH)
->>  ifneq ($(filter vgettimeofday, $(vdso-syms)),)
->> -CPPFLAGS_vdso.lds += -DHAS_VGETTIMEOFDAY
->> +CPPFLAGS_$(vdso_lds) += -DHAS_VGETTIMEOFDAY
->>  endif
->>
->>  # Disable -pg to prevent insert call site
->> @@ -63,12 +74,12 @@ CFLAGS_REMOVE_getrandom.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
->>  CFLAGS_REMOVE_hwprobe.o = $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS)
->>
->>  # Force dependency
->> -$(obj)/vdso.o: $(obj)/vdso.so
->> +$(obj)/$(vdso_o): $(obj)/$(vdso_so)
->>
->>  # link rule for the .so file, .lds has to be first
->> -$(obj)/vdso.so.dbg: $(obj)/vdso.lds $(obj-vdso) FORCE
->> +$(obj)/$(vdso_so_dbg): $(obj)/$(vdso_lds) $(obj-vdso) FORCE
->>  	$(call if_changed,vdsold_and_check)
->> -LDFLAGS_vdso.so.dbg = -shared -soname=linux-vdso.so.1 \
->> +LDFLAGS_$(vdso_so_dbg) = -shared -soname=linux-vdso.so.1 \
->>  	--build-id=sha1 --eh-frame-hdr
->>
->>  # strip rule for the .so file
->> @@ -79,9 +90,9 @@ $(obj)/%.so: $(obj)/%.so.dbg FORCE
->>  # Generate VDSO offsets using helper script
->>  gen-vdsosym := $(src)/gen_vdso_offsets.sh
->>  quiet_cmd_vdsosym = VDSOSYM $@
->> -	cmd_vdsosym = $(NM) $< | $(gen-vdsosym) | LC_ALL=C sort > $@
->> +	cmd_vdsosym = $(NM) $< | $(gen-vdsosym) $(OFFSET_SUFFIX) | LC_ALL=C sort > $@
->>
->> -include/generated/vdso-offsets.h: $(obj)/vdso.so.dbg FORCE
->> +include/generated/$(vdso_offsets): $(obj)/$(vdso_so_dbg) FORCE
->>  	$(call if_changed,vdsosym)
->>
->>  # actual build commands
->> diff --git a/arch/riscv/kernel/vdso/gen_vdso_offsets.sh b/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
->> index c2e5613f3495..bd5d5afaaa14 100755
->> --- a/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
->> +++ b/arch/riscv/kernel/vdso/gen_vdso_offsets.sh
->> @@ -2,4 +2,6 @@
->>  # SPDX-License-Identifier: GPL-2.0
->>
->>  LC_ALL=C
->> -sed -n -e 's/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define \2_offset\t0x\1/p'
->> +SUFFIX=${1:-""}
->> +sed -n -e \
->> +'s/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define \2'$SUFFIX'_offset\t0x\1/p'
->> diff --git a/arch/riscv/kernel/vdso_cfi/Makefile b/arch/riscv/kernel/vdso_cfi/Makefile
->> new file mode 100644
->> index 000000000000..8ebd190782b0
->> --- /dev/null
->> +++ b/arch/riscv/kernel/vdso_cfi/Makefile
->> @@ -0,0 +1,25 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +# RISC-V VDSO CFI Makefile
->> +# This Makefile builds the VDSO with CFI support when CONFIG_RISCV_USER_CFI is enabled
->> +
->> +# setting VDSO_CFI_BUILD triggers build for vdso differently
->> +VDSO_CFI_BUILD := 1
->> +
->> +# Set the source directory to the main vdso directory
->> +src := $(srctree)/arch/riscv/kernel/vdso
->> +
->> +# Copy all .S and .c files from vdso directory to vdso_cfi object build directory
->> +vdso_c_sources := $(wildcard $(src)/*.c)
->> +vdso_S_sources := $(wildcard $(src)/*.S)
->> +vdso_c_objects := $(addprefix $(obj)/, $(notdir $(vdso_c_sources)))
->> +vdso_S_objects := $(addprefix $(obj)/, $(notdir $(vdso_S_sources)))
->> +
->> +$(vdso_S_objects): $(obj)/%.S: $(src)/%.S
->> +	$(Q)cp $< $@
->> +
->> +$(vdso_c_objects): $(obj)/%.c: $(src)/%.c
->> +	$(Q)cp $< $@
->> +
->> +# Include the main VDSO Makefile which contains all the build rules and sources
->> +# The VDSO_CFI_BUILD variable will be passed to it to enable CFI compilation
->> +include $(src)/Makefile
->> diff --git a/arch/riscv/kernel/vdso_cfi/vdso-cfi.S b/arch/riscv/kernel/vdso_cfi/vdso-cfi.S
->> new file mode 100644
->> index 000000000000..d426f6accb35
->> --- /dev/null
->> +++ b/arch/riscv/kernel/vdso_cfi/vdso-cfi.S
->> @@ -0,0 +1,11 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright 2025 Rivos, Inc
->> + */
->> +
->> +#define	vdso_start	vdso_cfi_start
->> +#define	vdso_end	vdso_cfi_end
->> +
->> +#define __VDSO_PATH "arch/riscv/kernel/vdso_cfi/vdso-cfi.so"
->> +
->> +#include "../vdso/vdso.S"
->>
->> --
->> 2.43.0
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
->---
->diff --git a/arch/riscv/include/asm/vdso.h b/arch/riscv/include/asm/vdso.h
->index 3fc8f72b8bfb..9cfbb390270f 100644
->--- a/arch/riscv/include/asm/vdso.h
->+++ b/arch/riscv/include/asm/vdso.h
->@@ -18,13 +18,21 @@
->
-> #ifndef __ASSEMBLER__
-> #include <generated/vdso-offsets.h>
->+#if IS_ENABLED(CONFIG_RISCV_USER_CFI)
->+
-> #include <generated/vdso-cfi-offsets.h>
->
-> #define VDSO_SYMBOL(base, name)							\
->-	((IS_ENABLED(CONFIG_RISCV_USER_CFI) &&					\
->-	  riscv_has_extension_unlikely(RISCV_ISA_EXT_ZIMOP)) ?			\
->-	  (void __user *)((unsigned long)(base) + __vdso_##name##_cfi_offset) :	\
->-	  (void __user *)((unsigned long)(base) + __vdso_##name##_offset))
->+	(riscv_has_extension_unlikely(RISCV_ISA_EXT_ZIMOP)) ?			\
->+	 (void __user *)((unsigned long)(base) + __vdso_##name##_cfi_offset) :	\
->+	 (void __user *)((unsigned long)(base) + __vdso_##name##_offset)
->+
->+#else /* !CONFIG_RISCV_USER_CFI */
->+
->+#define VDSO_SYMBOL(base, name)							\
->+	(void __user *)((unsigned long)(base) + __vdso_##name##_offset)
->+
->+#endif /* CONFIG_RISCV_USER_CFI */
->
-> #ifdef CONFIG_COMPAT
-> #include <generated/compat_vdso-offsets.h>
->
+>  		    nested_paddr);
+>  	TEST_ASSERT((nested_paddr % page_size) == 0,
+>  		    "Nested physical address not on page boundary,\n"
+> -- 
+> 2.51.0.470.ga7dc726c21-goog
+> 
 
