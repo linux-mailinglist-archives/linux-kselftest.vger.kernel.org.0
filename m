@@ -1,188 +1,163 @@
-Return-Path: <linux-kselftest+bounces-43258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43259-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C082BE04C3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 91000BE08DF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:54:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A41D854648E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 19:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 461583AE907
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 19:54:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30CBA309DB0;
-	Wed, 15 Oct 2025 19:00:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4752FE05A;
+	Wed, 15 Oct 2025 19:54:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nOQlqytK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmHAfKiq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCDE306B1C
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 19:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58A51D90DF
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 19:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760554856; cv=none; b=MPzCpZaTrJCro8hX9tOgrf9dB+xiih+yAEyg4Enl8buXjV+9CmtSRqR0LI1PqY4CuHYcsvUcvaas4yn9z+vdBMz/pFYiyu5QIyJoMgiWO9YBykWruZZJc6GVnOegf1RqZq8zs9dKaCv2UD1qKqXu/ShSSsDWWmvUHwJWmSwMl+0=
+	t=1760558095; cv=none; b=cEuaY3wjRd+UrRjNz4+eRvj/kSmLHh+eDvJAy2WfLepzxAXx9RkPgcGM6l9tPSgobjLEcx1sCZ7AuHaiUttGAm2pybNyEASoicLtzSz8JV7Z0nmYob/qLoqVGWPJNmaRF+VLVDJT6vObwtO9TgtN8uIeAdaE/ganqkR52bbsdS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760554856; c=relaxed/simple;
-	bh=1H/TAjStyaI6entLwQUNBGgnkdgglmJ5EvafY9K9xl4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CsnZVVWSVZ0cvTkLK2q41Dov3wdj2cUvVaEWxGv8lld8x4oDtyzTALDxMX1mAEXS1nZlFzVfjt5YLKaO0Uxqe3D5vNSjplYTRKzo92KSwm+OD0TKAeXH9pW9tKAuxiA7mHrNkkCI6VWiWcaNVsOkW09z/I8WC6KMEdLFHQFbRW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nOQlqytK; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wyihan.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-32eddb7e714so9529656a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 12:00:54 -0700 (PDT)
+	s=arc-20240116; t=1760558095; c=relaxed/simple;
+	bh=7cERwAYvh7kapEYt4KUJoU/OdetumyCby/e4pAxQs3c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=K13soJSNGUkqcogcW1Rhvz0n+PqQY8gK9Kz2L6j+00RaqkSC+5MSRWaKIptwGJ7NayMsse5QjDzlH0vttnarDLRVeXTBoTyw+wRPIpcBjUGhNqdkm3yKajIpjNcGRXeV7P1VmRhYzEJwq5WmtxLZ89/7vplyswuYxrEPRZnoN9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmHAfKiq; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-634b774f135so11258040a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 12:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760554854; x=1761159654; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r/50hzPJcz2Tgtv5Q95r1Wz9trycmcqvXu8eukDbYxw=;
-        b=nOQlqytKfKqDbqgekUBKQYaPTWU8+8mhtxzQsEGATxZ3zCnoGIaMyt+sYGA5mpF6RC
-         qCU8KFQAf/7UQG81ghuhznRYNrkudy3BxZa6r9UaqSfUxDQUDdKWyvOaAKxqqWFnksk7
-         rDAut6Xc84/nibvyW3MBn6u9rI/yqMf783XMw4/DiCd4Q8cjassSvoTLz2sIzJ3AAPwA
-         OPPQ3CIL3qH6W0F3fzpVCwV2LlAVQh4NFACQo49cX092tXHOc0vn7zcArEb7d6QJtMLB
-         7MHgNlDvl8NAF33OdjL/n635sxf4bz54ojwl0yZyM0kwJSnvXqxrJxLJ3APbnrGMmvmn
-         qTKw==
+        d=gmail.com; s=20230601; t=1760558092; x=1761162892; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6txPrWGJQKba/YBePw8USSq9dZr1PQIVujAd1UbYZG0=;
+        b=KmHAfKiqqueh6WZSce87x0aXV3RfnrIQvUruY1h1ljjkpf4i0/0Xyj0TJEIBTnWg/5
+         PWiboW7YtuqNJdakENSbmeKdh3Lhh0zJShIEKfMaqWyGi/hEJ6gppytElA1jOG+Uf+Ii
+         gwazGNWoDSYcbn+1EMcWT+k8048BxlsF7R4x2eqzQ9Ja58tsFr34CNFUmmb8n4HMOlZ1
+         B3nzj1XbWMMoVpn9c2/COuUKsjeJtD1rQEZjvDRxIPK+YZBOCf1Ehg4jkkXUIqoRPaQw
+         Kp0wzpeIjZC+Q4ItxcqXry1Mzr6h2B8NOJcacqNmH20b7oNSbP53JrlEKJTFkz+j35ph
+         oCNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760554854; x=1761159654;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r/50hzPJcz2Tgtv5Q95r1Wz9trycmcqvXu8eukDbYxw=;
-        b=u31dTXqdAqMYQkc8y20iWAygi9MewHDuDxBpUDsR8b1nVIR7Sttnr0/5QQTYx7EdfH
-         RnvTlxHplMGdjglxBshqPY1tQu7FJk5Wady1EllmgB9kKdlJyFY0ankAMkRdddedNHiH
-         VvKYP3N1/tkSDibqKJJ3VS5Z2qL5gKM/8lv3Xi1ru9YnjNm3NAYOEXkxB2qqR2Zag3cl
-         dimAcFD4iUahpDEk76S/7OAnvJraBURWw6TH/D0ALGV8wC0CsHIXhrfHIMZ9QXnk0D02
-         5SD5D45EKn2ve6SqP8Uw84axHmtNoMUIlcszAOUAsUGyEj+3Of82Y7To52BMI5m5sE+C
-         jj4w==
-X-Forwarded-Encrypted: i=1; AJvYcCWA/D8qlQsphWeGT8GWi18ylkTxjnedj3gh/MtecPFL9MmrF8OhgxNVa9gGWtbglQAZhJTW+8P0xJ4iVOYsTZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC5XoMEsJlJdx5DFgJ4T/Wzcoi5HswIgoaCxdpBF4uZc9USV1i
-	seMmGt1B1SHyy+Q/5xopnocAeKfbDbDbxB6QcMAkdXLjGCSJCbr2kEg6P5VlMnwi6/VKfCVzfU4
-	faVYNQA==
-X-Google-Smtp-Source: AGHT+IF0aq3dEuFrF7ECI0NlSr0qYUf7fzC5xMEvWlZqMU7mOZwkC2btj1VQ3xgFa8CghlVjLKHevu9vhKE=
-X-Received: from pjbfs17.prod.google.com ([2002:a17:90a:f291:b0:32e:bcc3:ea8e])
- (user=wyihan job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4b81:b0:33b:6ef4:c904
- with SMTP id 98e67ed59e1d1-33b6ef4cbbcmr19120239a91.20.1760554853833; Wed, 15
- Oct 2025 12:00:53 -0700 (PDT)
-Date: Wed, 15 Oct 2025 18:58:57 +0000
-In-Reply-To: <cover.1760551864.git.wyihan@google.com>
+        d=1e100.net; s=20230601; t=1760558092; x=1761162892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6txPrWGJQKba/YBePw8USSq9dZr1PQIVujAd1UbYZG0=;
+        b=DWZ36BYVt1hW+n4taHU+pZVA+Rfo8Op7IJTDZaJdSTsWoPBOJs8Iz4OHab1N9bT9rz
+         Ts+IGVCnFJW6pEaKzytElHGvckxmd8twi6B8zTqF/qVpA2xRArqjaTd0qsGmsFa++OlH
+         NYxk0GX3yEiyZi1YRrW+tb6z4PJ6+XLbH/niPKbOW4aZjBBvcTGVRslggKb9WBcs84Si
+         0RD48A8XHadGqsJW5Pkbq8urZ5GuLRXcGbDIxYOAMkLmcJGCUAI7dJ7IDdsFbrvFNG0a
+         xAFvD4a5XZgzj8u0jyIPVqRogIS/R93SnytbMClSi0lyst9I19nFEH4a/e9VS/92ro2C
+         bwTA==
+X-Forwarded-Encrypted: i=1; AJvYcCVnFrLl0rcdxlcx9WijKM07hxcvfIUrEtUJEAdxhYVzZDIzZoZU6OmgE54+5rtAbuhbxqZvINHvJouK5UpIXg0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaPsC7VjreN1Eqq+P5UBHooJyIYDd/zdNPT5VUIhYYwL8QbxmN
+	VaF2/1M5zKU/CUBf4wvoAEwVVF6e0Hk2XTg6qfd8lisxyyICkxuBLRFCxHqSpj/rGMEzdPpxuI+
+	BVgVxM9uiWRtzV8MyNCw74huMHd65ZaQ=
+X-Gm-Gg: ASbGncttrRHgt5ETGpVAs/9HCXAVmIKEu8FE78PsJPzdDfGkrrrjdkF3VoCy3Px2HjZ
+	MOMITlqzutQYNaQb52jTx+C+SPemDJG7okrj2mZMlRk8eqxWl2bVo2oaULfBu1zxYvocEK0iu25
+	cj50KA6jvtoqKo381m0LKtCwYsIOn7qENy8vzgALBw/88ETHswte3qZLbcI/W/JoKVGBtKe5Qv3
+	FbVfYpLRkGCsSlaKBOtpzIEknVCuNuhqg==
+X-Google-Smtp-Source: AGHT+IEUqo0R2GZOT/KXkXAx0vTk4GL7xiLp5gkL3ByIOaHhbjRuEg2HqJikmhAYuLgjjr/94NEnrgCCj3+qDPfl2F4=
+X-Received: by 2002:a05:6402:50c7:b0:634:ab36:3c74 with SMTP id
+ 4fb4d7f45d1cf-639d5b80653mr28131910a12.9.1760558091971; Wed, 15 Oct 2025
+ 12:54:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1760551864.git.wyihan@google.com>
-X-Mailer: git-send-email 2.51.0.788.g6d19910ace-goog
-Message-ID: <0ec7349858142439ed0a250e6c04edf84cb0f488.1760551864.git.wyihan@google.com>
-Subject: [RFC PATCH RESEND 3/3] KVM: selftests: Test guest_memfd behavior with
- respect to stage 2 page tables
-From: Lisa Wang <wyihan@google.com>
-To: linmiaohe@huawei.com, nao.horiguchi@gmail.com, akpm@linux-foundation.org, 
-	pbonzini@redhat.com, shuah@kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Cc: david@redhat.com, rientjes@google.com, seanjc@google.com, 
-	ackerleytng@google.com, vannapurve@google.com, michael.roth@amd.com, 
-	jiaqiyan@google.com, tabba@google.com, dave.hansen@linux.intel.com, 
-	Lisa Wang <wyihan@google.com>
+MIME-Version: 1.0
+References: <20251007115840.2320557-1-geomatsi@gmail.com> <20251007115840.2320557-7-geomatsi@gmail.com>
+In-Reply-To: <20251007115840.2320557-7-geomatsi@gmail.com>
+From: Andy Chiu <andybnac@gmail.com>
+Date: Wed, 15 Oct 2025 14:54:39 -0500
+X-Gm-Features: AS18NWAHrDSUKeL_x2zKeFwwB6V8GhrxKoLsuT-6g2e1OqQMu1bXWZWGOV6Nh_U
+Message-ID: <CAFTtA3PyEnscQx+JtM3wBb0YZJxFjoJp4JB6QJQXbN6q3HVFyA@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] riscv: vector: initialize vlenb on the first
+ context switch
+To: Sergey Matyukevich <geomatsi@gmail.com>
+Cc: linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Jisheng Zhang <jszhang@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Thomas Huth <thuth@redhat.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Han Gao <rabenda.cn@gmail.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Nam Cao <namcao@linutronix.de>, 
+	Joel Granados <joel.granados@kernel.org>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	Conor Dooley <conor.dooley@microchip.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Test that
-+ memory failure handling results in unmapping of bad memory from stage
-  2 page tables, hence requiring faulting on next guest access
-+ when the guest tries to fault a poisoned page from guest_memfd, the
-  userspace VMM informed with EHWPOISON
+Hi Sergey,
 
-Co-developed-by: Ackerley Tng <ackerleytng@google.com>
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-Signed-off-by: Lisa Wang <wyihan@google.com>
----
- .../testing/selftests/kvm/guest_memfd_test.c  | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
+On Tue, Oct 7, 2025 at 6:58=E2=80=AFAM Sergey Matyukevich <geomatsi@gmail.c=
+om> wrote:
+>
+> The vstate in thread_struct is zeroed when the vector context is
+> initialized. That includes read-only register vlenb, which holds
+> the vector register length in bytes. This zeroed state persists
+> until mstatus.VS becomes 'dirty' and a context switch saves the
+> actual hardware values.
+>
+> This can expose the zero vlenb value to the user-space in early
+> debug scenarios, e.g. when ptrace attaches to a traced process
+> early, before any vector instruction except the first one was
+> executed.
+>
+> Fix this by forcing the vector context save on the first context switch.
+>
+> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> ---
+>  arch/riscv/kernel/vector.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
+> index 901e67adf576..3dd22a71aa18 100644
+> --- a/arch/riscv/kernel/vector.c
+> +++ b/arch/riscv/kernel/vector.c
+> @@ -120,6 +120,7 @@ static int riscv_v_thread_zalloc(struct kmem_cache *c=
+ache,
+>
+>         ctx->datap =3D datap;
+>         memset(ctx, 0, offsetof(struct __riscv_v_ext_state, datap));
+> +
+>         return 0;
+>  }
+>
+> @@ -216,8 +217,11 @@ bool riscv_v_first_use_handler(struct pt_regs *regs)
+>                 force_sig(SIGBUS);
+>                 return true;
+>         }
+> +
+>         riscv_v_vstate_on(regs);
+>         riscv_v_vstate_set_restore(current, regs);
+> +       set_tsk_thread_flag(current, TIF_RISCV_V_FORCE_SAVE);
+> +
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 7bcf8d2d5d4d..dc3398e22edd 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -539,6 +539,70 @@ static void test_guest_memfd_guest(void)
- 	kvm_vm_free(vm);
- }
- 
-+static void __guest_code_read(uint8_t *mem)
-+{
-+	READ_ONCE(*mem);
-+	GUEST_DONE();
-+}
-+
-+static void guest_read(struct kvm_vcpu *vcpu, uint64_t gpa, int expected_errno)
-+{
-+	vcpu_arch_set_entry_point(vcpu, __guest_code_read);
-+	vcpu_args_set(vcpu, 1, gpa);
-+
-+	if (expected_errno) {
-+		TEST_ASSERT_EQ(_vcpu_run(vcpu), -1);
-+		TEST_ASSERT_EQ(errno, expected_errno);
-+	} else {
-+		vcpu_run(vcpu);
-+		TEST_ASSERT_EQ(get_ucall(vcpu, NULL), UCALL_DONE);
-+	}
-+}
-+
-+static void test_memory_failure_guest(void)
-+{
-+	const uint64_t gpa = SZ_4G;
-+	const int slot = 1;
-+
-+	unsigned long memory_failure_pfn;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	uint8_t *mem;
-+	size_t size;
-+	int fd;
-+
-+	if (!kvm_has_cap(KVM_CAP_GUEST_MEMFD_FLAGS))
-+		return;
-+
-+	vm = __vm_create_shape_with_one_vcpu(VM_SHAPE_DEFAULT, &vcpu, 1, __guest_code_read);
-+
-+	size = vm->page_size;
-+	fd = vm_create_guest_memfd(vm, size, GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED);
-+	vm_set_user_memory_region2(vm, slot, KVM_MEM_GUEST_MEMFD, gpa, size, NULL, fd, 0);
-+
-+	mem = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(mem != MAP_FAILED, "mmap() for guest_memfd should succeed.");
-+	virt_pg_map(vm, gpa, gpa);
-+
-+	/* Fault in page to read pfn, then unmap page for testing. */
-+	READ_ONCE(*mem);
-+	memory_failure_pfn = addr_to_pfn(mem);
-+	munmap(mem, size);
-+
-+	/* Fault page into stage2 page tables. */
-+	guest_read(vcpu, gpa, 0);
-+
-+	mark_memory_failure(memory_failure_pfn, 0);
-+
-+	guest_read(vcpu, gpa, EHWPOISON);
-+	munmap(mem, size);
-+
-+	close(fd);
-+	kvm_vm_free(vm);
-+
-+	unmark_memory_failure(memory_failure_pfn, 0);
-+}
-+
- int main(int argc, char *argv[])
- {
- 	unsigned long vm_types, vm_type;
-@@ -559,4 +623,5 @@ int main(int argc, char *argv[])
- 		test_guest_memfd(vm_type);
- 
- 	test_guest_memfd_guest();
-+	test_memory_failure_guest();
- }
--- 
-2.51.0.788.g6d19910ace-goog
+I am afraid that this approach can result in a security issue where a
+context switch happens before the v-restore part of the current
+process, cheating the kernel to store stale v-regs onto the current
+context memory. Please note that this handler is run with irq enabled
+so preemption is allowed.
 
+I would expect simply initializing the vleb in riscv_v_thread_zalloc,
+perhaps dropping the "z" in the name to prevent confusion.
+
+>         return true;
+>  }
+>
+> --
+> 2.51.0
+>
+
+Thanks,
+Andy
 
