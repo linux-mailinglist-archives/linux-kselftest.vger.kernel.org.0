@@ -1,213 +1,309 @@
-Return-Path: <linux-kselftest+bounces-43164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0952CBDC9B3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 07:31:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAA87BDCC4C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 08:40:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71B4319A3343
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 05:32:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFE193B0DF2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 06:40:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF28A305953;
-	Wed, 15 Oct 2025 05:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="ixTTt9g0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE27A31326B;
+	Wed, 15 Oct 2025 06:40:34 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from baidu.com (mx24.baidu.com [111.206.215.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBD4303CAB
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 05:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0BD43126CE;
+	Wed, 15 Oct 2025 06:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.206.215.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760506289; cv=none; b=YX4CR0tOwz/sRc2K97n4t8tCyFIYbL/legnkudYzTx4qK51+15bbOoc6EhQA8Ght5nim+t9MthlvSJU9ZZxnULs7qhhf6Ff0t8gIK5LKHOpL/n+n2jtihkxXAX1S3Y7Jw6A1eUb9UdBXvdHBJolsXOuQWspcN/q7ekruqSCl+2w=
+	t=1760510434; cv=none; b=tlHskyFuxrX4PZESdCL6dlmdE174+WIHQoHv8H8TLjQ1ud1lLPqLdnS/vIe3x1nKIz9mHA+9Iq7o9Bb44cTBmGoooxRykBYpSvBeIgaOO3jLI7wlUH9gfmcJgs8fGGevTMqatQAW3gqc0OybcemLny0V98ZaSH/JEJG7fn7EPoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760506289; c=relaxed/simple;
-	bh=BdnosJBafIBbr/NCbnwo7SIL/Sjz77dLU/WcbJ2dFgA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=POzyMy66W+yrXHibs9tLdmgMB/dGhCbWBqJHCO+kdOvT5ZBkI9gvr3+Z6tmVFIEnuU9KsZAnhN79MgzmI5wU1v0H6+8DAa+MCHYascVZBkc2nSJzzG1GwPOyBnzqw0s5ztPUhYwU10bgS7B5ertWZOl6Lu27VZlFB+wbcsPxdOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=ixTTt9g0; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-795773ac2a2so75584426d6.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Oct 2025 22:31:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1760506286; x=1761111086; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FafVbqPqqghkiY9qF9XINT78tn3vhuL4HedTbB/bm7U=;
-        b=ixTTt9g0G2y0V7I4orxzVgIMGtKfbvOk2ycqz/hTtAzU57YSxV1wZu0YhYKoEeUrcV
-         8NfM8smgkwi3qSfiPd83Hc/hunooAhf0O1gLzbmb1ocN5apqoHL8L0ioEpVo67fXJ7QL
-         4odGpNHYjMRrgvdltCN0QgqTWev18CRlaDRKcEn//GWF13gfvIhqzTl35Sib4qG5ZgBK
-         SrmZeeb0o4v6epqSl/+C0OOz+5GcUotvIv+iROu6e1S/3GdaRhz9cIN0MFDzncDi7XJZ
-         rTIGpLzi+B+iRG0xIkGFeT4Qp3WUlineyWfP00ytfcur+8gpxTvTaep2lV5tEiMV+9Gu
-         0Zug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760506286; x=1761111086;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FafVbqPqqghkiY9qF9XINT78tn3vhuL4HedTbB/bm7U=;
-        b=IKdGheHJlp6+0WzuDtEMDWlfOqo5lrj1kO8ENMdOspxhp2eVoOo37/wSAFLq0L+AvP
-         J23tHyNmUyUNrwvpIIchjwGsBaNailVD386gtf478YLqyKpccIIbIkzRyqBeR7Vmyz26
-         gCBMA9dEp5mPMxnrUMP9As6WbAVZ+Yx8LMQh2NN+fa3oTwN98aoQiKHEX61obVRyuDEi
-         EaLnRNbAM8gUwDpBYSvxkHuZp8PtBCfsgCVxZFlbK/QSm8loXsKSiJkCvAAuJVH2yrqS
-         7DVnbXP4M/V7/+I8LwtFSe0it9lZ1SdxggqSeMmAaAKkukifEDX1zgwbCC0R4BxQLFfg
-         FfRw==
-X-Forwarded-Encrypted: i=1; AJvYcCWXMU3aAom8H1PAJXsbKGxMzJsLKVvkYBgUURJo9RaxlB1N80H2r3TMwXYfi1Z8Fbn+TN8tXHcyQzsdpspCekQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyP9OajogTPETZsRU4MKOh/GLg8kKOaxyrPbGAwfwZheVUbBmI7
-	9jYxNm/xVlNz497+qXvIcZo1iUHFCrpX/BNdsvlXusvjoLMvTWA3OYglQzC55h3Jewo=
-X-Gm-Gg: ASbGncuz7fI+8HIHPBkfUMqqH6Nkv4CFHHTUnLpnDPjowB7MgE5ZuWV3rJM3LQL2u8X
-	NRtVLmBGUCvC7NZ9ssbSYpXunncH8zxJBdnJvaa2pT8htgMgJbx8pVzqzzTsstbhhthOM1fx9XH
-	hOPnJ7YosNL7j8kER/0CJAmuwMAN/tYr7LNru7QDZzicQFEQykpS+S35mknSyCzg+30eeDtKed0
-	qpUMExnvg/bT8deLwmrKhEHHorSEO3AsKY/uG0G2rfueIiYzDIZIeLJ2fYnf7NpYqnjpPnowtz4
-	QSN08bTPhqVdwmdJT5sIQAGDxEqgsEcaCMIaBGcmKIN2OHIcoA/Ae7RwGPLA/+9EFwwL7gFaAjO
-	aAlWzTQeIBXBU7ciUbtzj9lB0EBARP5u7UhAEOO0Gr5Ejtu0FxQPp4Q4jhWodkB1dS7d6fKHjlq
-	toaQmU7TPK622jYSuSGtLk1hkOyeQF7MrKAV2vOjGrOdWDatO3CF28+RppdWA2QOkLmwZA7Q==
-X-Google-Smtp-Source: AGHT+IGvaOjtebHTY4xqeM9VAkjbOuxZRyjyvVAjhxRq1HVqYOgUVhQRKbC9OgNICKBqZLQgdl0h1Q==
-X-Received: by 2002:ac8:578c:0:b0:4e7:20d3:ca6a with SMTP id d75a77b69052e-4e720d3ce13mr138489011cf.1.1760506286449;
-        Tue, 14 Oct 2025 22:31:26 -0700 (PDT)
-Received: from soleen.us-east4-b.c.cloudtop-prod-us-east.internal (53.47.86.34.bc.googleusercontent.com. [34.86.47.53])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e881d01f5asm12572661cf.27.2025.10.14.22.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Oct 2025 22:31:25 -0700 (PDT)
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-To: akpm@linux-foundation.org,
-	brauner@kernel.org,
-	corbet@lwn.net,
-	graf@amazon.com,
-	jgg@ziepe.ca,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	masahiroy@kernel.org,
-	ojeda@kernel.org,
-	pasha.tatashin@soleen.com,
-	pratyush@kernel.org,
-	rdunlap@infradead.org,
-	rppt@kernel.org,
-	tj@kernel.org,
-	jasonmiu@google.com,
-	dmatlack@google.com,
-	skhawaja@google.com
-Subject: [PATCH 2/2] liveupdate: kho: allocate metadata directly from the buddy allocator
-Date: Wed, 15 Oct 2025 01:31:21 -0400
-Message-ID: <20251015053121.3978358-3-pasha.tatashin@soleen.com>
-X-Mailer: git-send-email 2.51.0.788.g6d19910ace-goog
-In-Reply-To: <20251015053121.3978358-1-pasha.tatashin@soleen.com>
-References: <20251015053121.3978358-1-pasha.tatashin@soleen.com>
+	s=arc-20240116; t=1760510434; c=relaxed/simple;
+	bh=WKmoCAdhwJeXGa3LefrmfEnCthO+1fO4s7DJYsIMQTA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=S0tfa3xL5fsHoYl2XY2UiVb1jlWUq0lZzmwlCiep68kdBZLOD9DNeacLfYl3XR2RmpkewhcN37StpCwwb3vGrVoWqnzsCOCQz6Q5Z86a+x4sTRz5VZhkycsbOW2/ztYKcr7R9Czj+B51SMf1azFBJ9L2M1f0lMSCHib+5mrV+3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com; spf=pass smtp.mailfrom=baidu.com; arc=none smtp.client-ip=111.206.215.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
+From: lirongqing <lirongqing@baidu.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Lance Yang
+	<lance.yang@linux.dev>, Masami Hiramatsu <mhiramat@kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-doc@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-aspeed@lists.ozlabs.org>, <wireguard@lists.zx2c4.com>,
+	<netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, Li RongQing
+	<lirongqing@baidu.com>, Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Anshuman Khandual <anshuman.khandual@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+	David Hildenbrand <david@redhat.com>, Florian Wesphal <fw@strlen.de>, Jakub
+ Kacinski <kuba@kernel.org>, "Jason A . Donenfeld" <jason@zx2c4.com>, Joel
+ Granados <joel.granados@kernel.org>, Joel Stanley <joel@jms.id.au>, Jonathan
+ Corbet <corbet@lwn.net>, Kees Cook <kees@kernel.org>, Liam Howlett
+	<liam.howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Paul E . McKenney" <paulmck@kernel.org>, Pawan Gupta
+	<pawan.kumar.gupta@linux.intel.com>, Petr Mladek <pmladek@suse.com>, Phil
+ Auld <pauld@redhat.com>, Randy Dunlap <rdunlap@infradead.org>, Russell King
+	<linux@armlinux.org.uk>, Shuah Khan <shuah@kernel.org>, Simon Horman
+	<horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt
+	<rostedt@goodmis.org>
+Subject: [PATCH][v4] hung_task: Panic when there are more than N hung tasks at the same time
+Date: Wed, 15 Oct 2025 14:36:15 +0800
+Message-ID: <20251015063615.2632-1-lirongqing@baidu.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: bjhj-exc9.internal.baidu.com (172.31.3.19) To
+ bjkjy-exc3.internal.baidu.com (172.31.50.47)
+X-FEAS-Client-IP: 172.31.50.47
+X-FE-Policy-ID: 52:10:53:SYSTEM
 
-KHO allocates metadata for its preserved memory map using the SLUB
-allocator via kzalloc(). This metadata is temporary and is used by the
-next kernel during early boot to find preserved memory.
+From: Li RongQing <lirongqing@baidu.com>
 
-A problem arises when KFENCE is enabled. kzalloc() calls can be
-randomly intercepted by kfence_alloc(), which services the allocation
-from a dedicated KFENCE memory pool. This pool is allocated early in
-boot via memblock.
+Currently, when 'hung_task_panic' is enabled, the kernel panics
+immediately upon detecting the first hung task. However, some hung
+tasks are transient and allow system recovery, while persistent hangs
+should trigger a panic when accumulating beyond a threshold.
 
-When booting via KHO, the memblock allocator is restricted to a "scratch
-area", forcing the KFENCE pool to be allocated within it. This creates a
-conflict, as the scratch area is expected to be ephemeral and
-overwriteable by a subsequent kexec. If KHO metadata is placed in this
-KFENCE pool, it leads to memory corruption when the next kernel is
-loaded.
+Extend the 'hung_task_panic' sysctl to accept a threshold value
+specifying the number of hung tasks that must be detected before
+triggering a kernel panic. This provides finer control for environments
+where transient hangs may occur but persistent hangs should be fatal.
 
-To fix this, modify KHO to allocate its metadata directly from the buddy
-allocator instead of SLUB.
+The sysctl now accepts:
+- 0: don't panic (maintains original behavior)
+- 1: panic on first hung task (maintains original behavior)
+- N > 1: panic after N hung tasks are detected in a single scan
 
-As part of this change, the metadata bitmap size is increased from 512
-bytes to PAGE_SIZE to align with the page-based allocations from the
-buddy system.
+This maintains backward compatibility while providing flexibility for
+different hang scenarios.
 
-Fixes: fc33e4b44b27 ("kexec: enable KHO support for memory preservation")
-Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+Cc: Andrew Jeffery <andrew@codeconstruct.com.au>
+Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Florian Wesphal <fw@strlen.de>
+Cc: Jakub Kacinski <kuba@kernel.org>
+Cc: Jason A. Donenfeld <jason@zx2c4.com>
+Cc: Joel Granados <joel.granados@kernel.org>
+Cc: Joel Stanley <joel@jms.id.au>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Lance Yang <lance.yang@linux.dev>
+Cc: Liam Howlett <liam.howlett@oracle.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: "Paul E . McKenney" <paulmck@kernel.org>
+Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Phil Auld <pauld@redhat.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Russell King <linux@armlinux.org.uk>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Simon Horman <horms@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: Steven Rostedt <rostedt@goodmis.org>
 ---
- kernel/liveupdate/kexec_handover.c | 23 +++++++++++++----------
- 1 file changed, 13 insertions(+), 10 deletions(-)
+diff with v3: comments modification, suggested by Lance, Masami, Randy and Petr
+diff with v2: do not add a new sysctl, extend hung_task_panic, suggested by Kees Cook
 
-diff --git a/kernel/liveupdate/kexec_handover.c b/kernel/liveupdate/kexec_handover.c
-index ef1e6f7a234b..519de6d68b27 100644
---- a/kernel/liveupdate/kexec_handover.c
-+++ b/kernel/liveupdate/kexec_handover.c
-@@ -66,10 +66,10 @@ early_param("kho", kho_parse_enable);
-  * Keep track of memory that is to be preserved across KHO.
-  *
-  * The serializing side uses two levels of xarrays to manage chunks of per-order
-- * 512 byte bitmaps. For instance if PAGE_SIZE = 4096, the entire 1G order of a
-- * 1TB system would fit inside a single 512 byte bitmap. For order 0 allocations
-- * each bitmap will cover 16M of address space. Thus, for 16G of memory at most
-- * 512K of bitmap memory will be needed for order 0.
-+ * PAGE_SIZE byte bitmaps. For instance if PAGE_SIZE = 4096, the entire 1G order
-+ * of a 8TB system would fit inside a single 4096 byte bitmap. For order 0
-+ * allocations each bitmap will cover 128M of address space. Thus, for 16G of
-+ * memory at most 512K of bitmap memory will be needed for order 0.
-  *
-  * This approach is fully incremental, as the serialization progresses folios
-  * can continue be aggregated to the tracker. The final step, immediately prior
-@@ -77,7 +77,7 @@ early_param("kho", kho_parse_enable);
-  * successor kernel to parse.
+ Documentation/admin-guide/kernel-parameters.txt      | 20 +++++++++++++-------
+ Documentation/admin-guide/sysctl/kernel.rst          |  9 +++++----
+ arch/arm/configs/aspeed_g5_defconfig                 |  2 +-
+ kernel/configs/debug.config                          |  2 +-
+ kernel/hung_task.c                                   | 15 ++++++++++-----
+ lib/Kconfig.debug                                    |  9 +++++----
+ tools/testing/selftests/wireguard/qemu/kernel.config |  2 +-
+ 7 files changed, 36 insertions(+), 23 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a51ab46..492f0bc 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -1992,14 +1992,20 @@
+ 			the added memory block itself do not be affected.
+ 
+ 	hung_task_panic=
+-			[KNL] Should the hung task detector generate panics.
+-			Format: 0 | 1
++			[KNL] Number of hung tasks to trigger kernel panic.
++			Format: <int>
++
++			When set to a non-zero value, a kernel panic will be triggered if
++			the number of detected hung tasks reaches this value.
++
++			0: don't panic
++			1: panic immediately on first hung task
++			N: panic after N hung tasks are detected in a single scan
+ 
+-			A value of 1 instructs the kernel to panic when a
+-			hung task is detected. The default value is controlled
+-			by the CONFIG_BOOTPARAM_HUNG_TASK_PANIC build-time
+-			option. The value selected by this boot parameter can
+-			be changed later by the kernel.hung_task_panic sysctl.
++			The default value is controlled by the
++			CONFIG_BOOTPARAM_HUNG_TASK_PANIC build-time option. The value
++			selected by this boot parameter can be changed later by the
++			kernel.hung_task_panic sysctl.
+ 
+ 	hvc_iucv=	[S390]	Number of z/VM IUCV hypervisor console (HVC)
+ 				terminal devices. Valid values: 0..8
+diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+index f3ee807..0065a55 100644
+--- a/Documentation/admin-guide/sysctl/kernel.rst
++++ b/Documentation/admin-guide/sysctl/kernel.rst
+@@ -397,13 +397,14 @@ a hung task is detected.
+ hung_task_panic
+ ===============
+ 
+-Controls the kernel's behavior when a hung task is detected.
++When set to a non-zero value, a kernel panic will be triggered if the
++number of hung tasks found during a single scan reaches this value.
+ This file shows up if ``CONFIG_DETECT_HUNG_TASK`` is enabled.
+ 
+-= =================================================
++= =======================================================
+ 0 Continue operation. This is the default behavior.
+-1 Panic immediately.
+-= =================================================
++N Panic when N hung tasks are found during a single scan.
++= =======================================================
+ 
+ 
+ hung_task_check_count
+diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
+index 61cee1e..c3b0d5f 100644
+--- a/arch/arm/configs/aspeed_g5_defconfig
++++ b/arch/arm/configs/aspeed_g5_defconfig
+@@ -308,7 +308,7 @@ CONFIG_PANIC_ON_OOPS=y
+ CONFIG_PANIC_TIMEOUT=-1
+ CONFIG_SOFTLOCKUP_DETECTOR=y
+ CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+-CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
++CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
+ CONFIG_WQ_WATCHDOG=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_FUNCTION_TRACER=y
+diff --git a/kernel/configs/debug.config b/kernel/configs/debug.config
+index e81327d..9f6ab7d 100644
+--- a/kernel/configs/debug.config
++++ b/kernel/configs/debug.config
+@@ -83,7 +83,7 @@ CONFIG_SLUB_DEBUG_ON=y
+ #
+ # Debug Oops, Lockups and Hangs
+ #
+-# CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
++CONFIG_BOOTPARAM_HUNG_TASK_PANIC=0
+ # CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+ CONFIG_DEBUG_ATOMIC_SLEEP=y
+ CONFIG_DETECT_HUNG_TASK=y
+diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+index b2c1f14..84b4b04 100644
+--- a/kernel/hung_task.c
++++ b/kernel/hung_task.c
+@@ -81,7 +81,7 @@ static unsigned int __read_mostly sysctl_hung_task_all_cpu_backtrace;
+  * hung task is detected:
   */
+ static unsigned int __read_mostly sysctl_hung_task_panic =
+-	IS_ENABLED(CONFIG_BOOTPARAM_HUNG_TASK_PANIC);
++	CONFIG_BOOTPARAM_HUNG_TASK_PANIC;
  
--#define PRESERVE_BITS (512 * 8)
-+#define PRESERVE_BITS (PAGE_SIZE * 8)
+ static int
+ hung_task_panic(struct notifier_block *this, unsigned long event, void *ptr)
+@@ -218,8 +218,11 @@ static inline void debug_show_blocker(struct task_struct *task, unsigned long ti
+ }
+ #endif
  
- struct kho_mem_phys_bits {
- 	DECLARE_BITMAP(preserve, PRESERVE_BITS);
-@@ -131,18 +131,21 @@ static struct kho_out kho_out = {
- 
- static void *xa_load_or_alloc(struct xarray *xa, unsigned long index, size_t sz)
+-static void check_hung_task(struct task_struct *t, unsigned long timeout)
++static void check_hung_task(struct task_struct *t, unsigned long timeout,
++		unsigned long prev_detect_count)
  {
-+	unsigned int order;
- 	void *elm, *res;
++	unsigned long total_hung_task;
++
+ 	if (!task_is_hung(t, timeout))
+ 		return;
  
- 	elm = xa_load(xa, index);
- 	if (elm)
- 		return elm;
+@@ -229,9 +232,10 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
+ 	 */
+ 	sysctl_hung_task_detect_count++;
  
--	elm = kzalloc(sz, GFP_KERNEL);
-+	order = get_order(sz);
-+	elm = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
- 	if (!elm)
- 		return ERR_PTR(-ENOMEM);
++	total_hung_task = sysctl_hung_task_detect_count - prev_detect_count;
+ 	trace_sched_process_hang(t);
  
--	if (WARN_ON(kho_scratch_overlap(virt_to_phys(elm), sz))) {
--		kfree(elm);
-+	if (WARN_ON(kho_scratch_overlap(virt_to_phys(elm),
-+					PAGE_SIZE << order))) {
-+		free_pages((unsigned long)elm, order);
- 		return ERR_PTR(-EINVAL);
+-	if (sysctl_hung_task_panic) {
++	if (sysctl_hung_task_panic && total_hung_task >= sysctl_hung_task_panic) {
+ 		console_verbose();
+ 		hung_task_show_lock = true;
+ 		hung_task_call_panic = true;
+@@ -300,6 +304,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 	int max_count = sysctl_hung_task_check_count;
+ 	unsigned long last_break = jiffies;
+ 	struct task_struct *g, *t;
++	unsigned long prev_detect_count = sysctl_hung_task_detect_count;
+ 
+ 	/*
+ 	 * If the system crashed already then all bets are off,
+@@ -320,7 +325,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+ 			last_break = jiffies;
+ 		}
+ 
+-		check_hung_task(t, timeout);
++		check_hung_task(t, timeout, prev_detect_count);
  	}
+  unlock:
+ 	rcu_read_unlock();
+@@ -389,7 +394,7 @@ static const struct ctl_table hung_task_sysctls[] = {
+ 		.mode		= 0644,
+ 		.proc_handler	= proc_dointvec_minmax,
+ 		.extra1		= SYSCTL_ZERO,
+-		.extra2		= SYSCTL_ONE,
++		.extra2		= SYSCTL_INT_MAX,
+ 	},
+ 	{
+ 		.procname	= "hung_task_check_count",
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 3034e294..3976c90 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1258,12 +1258,13 @@ config DEFAULT_HUNG_TASK_TIMEOUT
+ 	  Keeping the default should be fine in most cases.
  
-@@ -151,7 +154,7 @@ static void *xa_load_or_alloc(struct xarray *xa, unsigned long index, size_t sz)
- 		res = ERR_PTR(xa_err(res));
+ config BOOTPARAM_HUNG_TASK_PANIC
+-	bool "Panic (Reboot) On Hung Tasks"
++	int "Number of hung tasks to trigger kernel panic"
+ 	depends on DETECT_HUNG_TASK
++	default 0
+ 	help
+-	  Say Y here to enable the kernel to panic on "hung tasks",
+-	  which are bugs that cause the kernel to leave a task stuck
+-	  in uninterruptible "D" state.
++	  When set to a non-zero value, a kernel panic will be triggered
++	  if the number of hung tasks found during a single scan reaches
++	  this value.
  
- 	if (res) {
--		kfree(elm);
-+		free_pages((unsigned long)elm, order);
- 		return res;
- 	}
- 
-@@ -357,7 +360,7 @@ static struct khoser_mem_chunk *new_chunk(struct khoser_mem_chunk *cur_chunk,
- {
- 	struct khoser_mem_chunk *chunk;
- 
--	chunk = kzalloc(PAGE_SIZE, GFP_KERNEL);
-+	chunk = (void *)get_zeroed_page(GFP_KERNEL);
- 	if (!chunk)
- 		return ERR_PTR(-ENOMEM);
- 
+ 	  The panic can be used in combination with panic_timeout,
+ 	  to cause the system to reboot automatically after a
+diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
+index 936b18b..0504c11 100644
+--- a/tools/testing/selftests/wireguard/qemu/kernel.config
++++ b/tools/testing/selftests/wireguard/qemu/kernel.config
+@@ -81,7 +81,7 @@ CONFIG_WQ_WATCHDOG=y
+ CONFIG_DETECT_HUNG_TASK=y
+ CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+ CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+-CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
++CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
+ CONFIG_PANIC_TIMEOUT=-1
+ CONFIG_STACKTRACE=y
+ CONFIG_EARLY_PRINTK=y
 -- 
-2.51.0.788.g6d19910ace-goog
+2.9.4
 
 
