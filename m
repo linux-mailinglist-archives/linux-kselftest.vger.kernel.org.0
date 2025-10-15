@@ -1,86 +1,87 @@
-Return-Path: <linux-kselftest+bounces-43172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FBE3BDD81D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 10:49:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F6B4BDD831
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 10:50:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0E7BE4FBF6E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 08:49:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11F225430B7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 08:50:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9133176EB;
-	Wed, 15 Oct 2025 08:47:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4E33195E7;
+	Wed, 15 Oct 2025 08:50:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WQL/nZo9"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S69IcqyS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E393148CA
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 08:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379A63164AB
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 08:50:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760518050; cv=none; b=jhCAZ42rUFpbKZ4MKX6n6AR3dF9FuMmjzV/tHAW8KTfYLrBgYAsMbKMSteiDQPN1Lgfceg+HLzLys9XmtfWwrAEurEN/kpqzGkQ1AWo7Bxi/GQ4JxD2CLzuPfgA8zRd1zSwbYWAfZ/OSRUbjU7msIv7zh9lz6MzNPT+8HfG77bA=
+	t=1760518216; cv=none; b=ThZOo831SJW00AZ+PZK/tFCIORbVBSdB7cp2po6N72yu+DQTzCgo+O1JQ+2S7BtR7J2TiMjpen+Hhbc7WowUTfXPjSq14Vo9FeMJU1sdgayliF8qqKMQ/sU2+RTFzUFy1V8tSJIvwSgAiGenvoPl9BW/oEa39yw9Id18w97bQI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760518050; c=relaxed/simple;
-	bh=14n35NeqXA882vKlokyVCkeUKE/sM8X/UlP5wTGO0LQ=;
+	s=arc-20240116; t=1760518216; c=relaxed/simple;
+	bh=rjV41cN3aYKmhVkBt2Knej3M+tWKSYPeVxPuPt2pbRI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=i63W//YlkPr1h7UDcDKMJTbdsWmpi1IyNHRiFZY3kI3uYznWubcBywjQeR7UyyIX+oasJHIzOUl4LtaBhhDcdFzb3/anYASEVRPG/rbC9eWVDynr2IBkdKSlt8W0OWW2JY1/Zr8sc13KUC9JHTeRCjiZncyLbnl+H0mX+iO99lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WQL/nZo9; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=toA29xCPgt564YnbY/CLwXqkJdo+NiR16npz+rg/yCrIlbTV74GTUNj1sGtbBwiy4D0lgM53x1TyoAARU2mxz7R0pwz7gTL51pwucjiUFQHl0Wvz28ysATd7591kit5zrlra9IhXgrStH/4dtOU7JcxdHlZyjaL9vee/p3d2FrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S69IcqyS; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760518047;
+	s=mimecast20190719; t=1760518206;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=mvDmNeoCngAvqfFphlxRaIVqa4lNYICD47e+Hsgb9Ec=;
-	b=WQL/nZo9V7BHXTvmO6LR4Od4qoVUeNxOlHbh5Bp8qAAwtEqHybbBJZKv03+MFSi/1TwuXH
-	SNWjjAznDesJboh0BLvZfOKpATQCcjjwT2odJjgCUmasaVTVhgm4W4wDJ/jvC8qxEaz3hw
-	ugSN+cMnRsqUDsdWCVpNJR6Fz53yH4A=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=U2xYcEDiEp3Ua92vFalk7I21nwEzPa4pjb/oKqCkfyw=;
+	b=S69IcqySVpN6ziJvnLDGn8n97R3vU4yn3apzPn9UfO6cMGPeVwhYT2On5kBD+iCSJXKodS
+	a2Cd81a+chYoeR4Ha/unTGn7zUmKXfdz9TmgB8CdRhtNhz0QxBgORAAT7G4rcT4oJtT5c3
+	fYMlSGuGOFae8peKvNCPPBJLIgeaAIk=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-118-RA7TlTgbPTylM5IaH70dWg-1; Wed, 15 Oct 2025 04:47:26 -0400
-X-MC-Unique: RA7TlTgbPTylM5IaH70dWg-1
-X-Mimecast-MFC-AGG-ID: RA7TlTgbPTylM5IaH70dWg_1760518046
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-88e133107adso207991085a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 01:47:26 -0700 (PDT)
+ us-mta-241-mkgLAnF-No20xxSfbBBxcQ-1; Wed, 15 Oct 2025 04:50:04 -0400
+X-MC-Unique: mkgLAnF-No20xxSfbBBxcQ-1
+X-Mimecast-MFC-AGG-ID: mkgLAnF-No20xxSfbBBxcQ_1760518202
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-32eaa47c7c8so9741470a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 01:50:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760518046; x=1761122846;
+        d=1e100.net; s=20230601; t=1760518202; x=1761123002;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mvDmNeoCngAvqfFphlxRaIVqa4lNYICD47e+Hsgb9Ec=;
-        b=aG4uMW//7mJim98gHvB5CCoO+HoNTvPI1concfmQaiTJ1wmGTmYBMIZPPcZCZRaAfp
-         jxsfRL0vbcnnrH0g8pQUrl0JG3SmkXaV1Be9fDfJjUePX5WBVkjBx+S7+cxyyFU6QrHE
-         8VyLKg4yEDugcxuq3BOGarl3S5RNZmklrfLITBhVPDk+2z5pEG/SdIY5YAsWH1fbbPOk
-         JwzB+43FzIbvmieQD3ryzFf7iVB61oJvCbVcoXGgyFt/Q4yurMnIaQaJymTmafn/lK30
-         WJ+j4zFCtqjmRmpXYIDb7Noeh7OXUHqBHzNyvPLiiw3ZTnZejdxRBTl24Oq5TWBghvJj
-         zTdw==
-X-Forwarded-Encrypted: i=1; AJvYcCWRxG/p49PQg/09h1SC6nhwUhIEMb6qX9gIVDgxVYYCYH+T6yPyFLEL90m+shu4EaBmh4LY0fxPjUDfZW7KvOg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwR3QK4JqJU6LYpRKTOlVT+3zklfvyvuaqdU+ZiKlgOKSy4SRDj
-	g/Ue+Ar1oQcRDN/ZqZYKVaBc3zqXp68t0+Covr5GGY/B1bWTi6mCe0qvVHXZXKNCnUMDgfJCJtm
-	VjUyWcBIRkRJLOU4XxzqpLop9hzx8zUqwhx5KFuyYVHOtnLXEJvzQc6gzOYJJ8xL54zlAEw==
-X-Gm-Gg: ASbGncuvhXTIhUNU7EvzKOl+jnarlKBz52uyNOtO3irGdaQ92EmwQtiGCE0h0TKTXFT
-	NM0a/wKeZ6GoB8r50J/U+YIRLS+pcGvyUqCzVCSMIsRCLGuv7CPznOYxPnUCpW0qdQ4VYo7zv8P
-	WEVhNdyYygIglv20hIorK3zFGIKBb0iDfYLHsHZE2eOBrE9XLhD9ZvsxytAlaifAZ7I9vHseDuV
-	20Waa0MT3ZoHPvDPDjUSUvVISCXkJcLMibvwaxc/6fpSjBVf5hYDAjY/LBfpp3NL3wumRnWL6TS
-	iZ+owU+1kClK/aPu2rh8SVrKcTZsjKntSxDo2MP91A3JS+7V83GI/D+/bGrEfJc=
-X-Received: by 2002:a05:620a:288f:b0:862:ab87:ce6e with SMTP id af79cd13be357-88353846127mr3526612985a.27.1760518045766;
-        Wed, 15 Oct 2025 01:47:25 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHyPR7ITdiSnustS+ancsME8Nm74/0O7iLaBKc+qKE60Y+nTtzXmrVeAynkx03IohwzGSYLUg==
-X-Received: by 2002:a05:620a:288f:b0:862:ab87:ce6e with SMTP id af79cd13be357-88353846127mr3526611385a.27.1760518045338;
-        Wed, 15 Oct 2025 01:47:25 -0700 (PDT)
+        bh=U2xYcEDiEp3Ua92vFalk7I21nwEzPa4pjb/oKqCkfyw=;
+        b=rOMAB+xVC5d3tNCHdkQmZgYEDFLamcsZuzKuHzVfwDN0avwzyNgCyQPKZFMVoJGv1/
+         5kxS/6/ZJnct6TfUagMrFgwn1gxRWAvQ2Tf1wXGNF5lNJYMMy5+uLKWzapNe9BmKc5Ac
+         jufZP0YepVmOOyY+RypJWdHdaQlhqt1VId/OeF5V3MzOLSYnoHZczYP/zpP7YeUP56HZ
+         B+MAhQneK+MTnRoQhi6j6fsc2Nz9+Qleo6psp6WPNby5cAneA1Uev50P/FTDJmHPUBbY
+         KoFz7kzw48BLcFs9OrI4H/JuNHZ8P8XoUFU7aWhlcgpPUB0ng7GO1PPPlIvPaPfSSH2v
+         /h7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWvCgLs/yt743mgKx718AmDoPVUt7/jzVR1SyVGj08npWLm4OXkfjoIF2RczYC9ho0yjNebYv+CYEd954BOoSI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyLPzo5biP/JiQ4XywzARMxk2qgvKxN89jTfu0euMCKyE1rNk7
+	+11LbEX0291GkElDJIRpBqsnFgG/XjVLIze8V8Eb4KsdQf0PW/5wcdKDH0hrZSeuRWqCGc5rzle
+	rzqzBaSUNg8RgjkjyBckmJNkvU0VHZEQLiZlqLwsS6t3aBCuLwm4zEi2t8xb3IbLGPJVtQw==
+X-Gm-Gg: ASbGncv+x6+V1tAuioL/lHlu7sOqhziDiplSyFK+sqdvUga6FSlY53qYMUs/KOYlr8q
+	pjRA8pir5xjTpkox/FIJ3TN1v30s9kEfccf3mL37JCrdZzgJT7xTQ1kXK1OV9i0lKLqcZV7CoeI
+	obxciJjd/ygQO98eFFBuL56zbdmDDXhY4wlUAqEVUfQV+Lf6mv2mr+yGvoQohv2Ba5PrwqVx/Zb
+	kC+rtirSU4vI+DeYZgUgw2CT1WsUhHaj7PmEMF9MYyHvWiTVEqwC/bPLR5axcwkcVn8TChACs3M
+	baXmB6cblD9l8387S6e5I8fWPA8tfZ/CjbF8SoiUGcjRMrqfxVyJK8dVK8WQwCzgVMu4IpSw7kM
+	iltkLcEGfrTlZX0jEtWNRfA==
+X-Received: by 2002:a17:90b:4b8c:b0:32b:6cf2:a2cf with SMTP id 98e67ed59e1d1-33b5111895amr38382005a91.14.1760518202346;
+        Wed, 15 Oct 2025 01:50:02 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEVbUHqU3QKHS+2fc/9YjRXO1Nbn0rMLG6Td+fbVm4EuDdA25uLsveQIn0KOX3/VuwxdqJbmA==
+X-Received: by 2002:a17:90b:4b8c:b0:32b:6cf2:a2cf with SMTP id 98e67ed59e1d1-33b5111895amr38381981a91.14.1760518201947;
+        Wed, 15 Oct 2025 01:50:01 -0700 (PDT)
 Received: from [10.32.64.156] (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8849f9adb31sm1357375685a.19.2025.10.15.01.47.22
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33b61a3cc5csm18897294a91.10.2025.10.15.01.49.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Oct 2025 01:47:24 -0700 (PDT)
-Message-ID: <9c323deb-ded8-480a-ab96-34ea47194a16@redhat.com>
-Date: Wed, 15 Oct 2025 10:47:21 +0200
+        Wed, 15 Oct 2025 01:50:01 -0700 (PDT)
+Message-ID: <8c2c9721-e2ca-488b-b7be-c58170f6ceba@redhat.com>
+Date: Wed, 15 Oct 2025 10:49:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,13 +91,20 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: selftests/mm/rmap: verify correct RMAP handling of COW pages
  after fork()
-To: Itamar Dalal <dalalitamar@gmail.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- akpm@linux-foundation.org, lorenzo.stoakes@oracle.com, riel@surriel.com,
- Liam.Howlett@oracle.com, vbabka@suse.cz, harry.yoo@oracle.com,
- jannh@google.com, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
- shuah@kernel.org
-References: <CAJoePDqCd6F0ai1itmVATawqMQzB+JRi4NUtMJtxyeOVOT56VQ@mail.gmail.com>
+To: Itamar Dalal <dalalitamar@gmail.com>,
+ "linux-mm@kvack.org" <linux-mm@kvack.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+ "lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
+ "riel@surriel.com" <riel@surriel.com>,
+ "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+ "vbabka@suse.cz" <vbabka@suse.cz>,
+ "harry.yoo@oracle.com" <harry.yoo@oracle.com>,
+ "jannh@google.com" <jannh@google.com>, "rppt@kernel.org" <rppt@kernel.org>,
+ "surenb@google.com" <surenb@google.com>, "mhocko@suse.com"
+ <mhocko@suse.com>, "shuah@kernel.org" <shuah@kernel.org>
+References: <SN6PR04MB4048CF9A242A640B29A588EDFEE8A@SN6PR04MB4048.namprd04.prod.outlook.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -143,11 +151,11 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <CAJoePDqCd6F0ai1itmVATawqMQzB+JRi4NUtMJtxyeOVOT56VQ@mail.gmail.com>
+In-Reply-To: <SN6PR04MB4048CF9A242A640B29A588EDFEE8A@SN6PR04MB4048.namprd04.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 15.10.25 10:33, Itamar Dalal wrote:
+On 15.10.25 10:43, Itamar Dalal wrote:
 > Add a new test `migrate.cow_after_fork` that verifies correct RMAP handling
 > of Copy-On-Write (COW) pages after fork().
 > 
@@ -155,81 +163,23 @@ On 15.10.25 10:33, Itamar Dalal wrote:
 > child’s PFN differs. This confirms that proper COW duplication occurred and
 > that RMAP correctly tracks page ownership transitions during COW events.
 > 
-> Signed-off-by: Itamar-Dalal <dalalitamar@gmail.com 
-> <mailto:dalalitamar@gmail.com>>
+> Signed-off-by: Itamar-Dalal <dalalitamar@gmail.com>
 > ---
->   tools/testing/selftests/mm/rmap.c | 45 ++++++++++++++++++++++++++++++-
->   1 file changed, 44 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/mm/rmap.c b/tools/testing/ 
-> selftests/mm/rmap.c
-> index 13f7bccfd0a9..2ba3361fecf0 100644
-> --- a/tools/testing/selftests/mm/rmap.c
-> +++ b/tools/testing/selftests/mm/rmap.c
-> @@ -430,4 +430,47 @@ TEST_F(migrate, ksm)
->          propagate_children(_metadata, data);
->   }
-> 
-> -TEST_HARNESS_MAIN
-> +TEST_F(migrate, cow_after_fork)
-> +{
-> +       struct global_data *data = &self->data;
-> +       int status;
-> +       pid_t pid;
-> +       unsigned long parent_pfn, child_pfn;
-> +       int pagemap_fd;
-> +       char *region;
-> +
-> +       /* Map private anonymous memory and fault it in */
-> +       region = mmap(NULL, data->mapsize, PROT_READ | PROT_WRITE,
-> +               MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +       ASSERT_NE(region, MAP_FAILED);
-> +       memset(region, 0xaa, data->mapsize);
-> +
-> +       pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-> +       ASSERT_NE(pagemap_fd, -1);
-> +       parent_pfn = pagemap_get_pfn(pagemap_fd, region);
-> +       close(pagemap_fd);
-> +
-> +       pid = fork();
-> +       ASSERT_NE(pid, -1);
-> +
-> +       if (pid == 0) {
-> +               /* Child: write to trigger COW */
-> +               region[0] = 0xbb;
-> +
-> +               pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-> +               ASSERT_NE(pagemap_fd, -1);
-> +               child_pfn = pagemap_get_pfn(pagemap_fd, region);
-> +               close(pagemap_fd);
-> +
-> +               /* Expect PFN to differ after write (COW happened) */
-> +               if (child_pfn == parent_pfn)
-> +                       _exit(FAIL_ON_CHECK);
-> +               _exit(0);
-> +       }
-> +
-> +       waitpid(pid, &status, 0);
-> +       ASSERT_EQ(WEXITSTATUS(status), 0);
-> +       munmap(region, data->mapsize);
-> +}
 
-We have excessive cow tests in cow.c, that are independent of any PFN 
-checks.
+Se my reply to your other patch.
 
-So I don't think we need this.
+For the next time
 
-BTW, I never received a mail that shows up right-aligned in my mail client.
+a) Use git-format-patch that will automatically add [PATCH]
 
-Seems to be because of
+b) Use versioning, e.g., [PATCH v1], explain changes since the last 
+version under the "---" the
 
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+c) Use RESEND for resends, e.g., [PATCH v1 RESEND]
 
-<div dir=3D"rtl"
+d) Use git-send-email to send mails out
 
-The whole attachment should be dropped. Did you send this with 
-git-send-email? :)
+The b4 tool might help as well.
 
 -- 
 Cheers
