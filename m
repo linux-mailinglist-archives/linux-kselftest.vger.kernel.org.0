@@ -1,180 +1,187 @@
-Return-Path: <linux-kselftest+bounces-43266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43267-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A925BBE0DA5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 23:46:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B08BE0F7F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 00:43:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F28363BC743
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 21:46:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4836519C1708
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Oct 2025 22:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D362A302CC9;
-	Wed, 15 Oct 2025 21:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB36B3115A0;
+	Wed, 15 Oct 2025 22:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="SO/erE3w"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="FqhVJ7WC";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DLrCdUvz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E62082C234E
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 21:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE2F2E1F02;
+	Wed, 15 Oct 2025 22:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760564764; cv=none; b=W9rDwb++75hqYK5TEcR8Z6OmR4VQC56CN1Zrd2+MQTEeFqidNkO1qjWvigVy4wAgUm24BBWChKWu2p1cW4KGD9o4NkYC8fmO/78+stg54SqVYa+A2qyA0B6drwyNq1kw6gTHhbthoXdCTq8QzDTfitK2ojGogVb6ntbZEN5zNQE=
+	t=1760568227; cv=none; b=cJQP9C9S3avavBaezihsrzlvMKzTwIhFPte14th19paeZDwSF8hBj/TU/fksXlClU/KEjVn40XycyinbJwoOlCpn5VLFPtGtS+FmpoXsvB0e8xbEVuuahnC1JkvMf10stZZy2vkyB9n0xpuCQkOJKhSM3EkWuVxJuX7WlPXeKm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760564764; c=relaxed/simple;
-	bh=4aIc9dx+BqTIrEkxhdIkDUsdv2I7S3jqyih5WAzO4pU=;
+	s=arc-20240116; t=1760568227; c=relaxed/simple;
+	bh=2B5d/DNK2MDj2tgCsKOW6zvpdYahTcXjjQFhoYn+WR8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mjiSjWey9r1XdwHYijncmzX0+8FcKQKbUQvEcSEUplf5Gesibwiz7MCCT3qYMC/0dM0NuZ/BDRGGbyeWvgpgM4ChoQOw9AsqbsMftyRhCUC4qQ9M9lrZ36PCf2CgJ1WFsNgZ49MOuqCgHnHAg3jUTNjJO+zY5h3j9s1qSuEFByk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=SO/erE3w; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-85ed0a1b35dso5189385a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 14:46:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1760564762; x=1761169562; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=L3FMg1FEv7ZUbFziIBjfrlMH5r4d6/IdcxKlJL9nOzQ=;
-        b=SO/erE3wHFHNuhgXeAZMBhu+vRvj7I6znm+CPL4BUW4goPdcy4g1QHzQL69WLJ2s8q
-         E9XIlB5UDV6XaLXR+adHFPpFzFQAPnRiZz6c1pVa3Vsf+/ObMAds6HiemfQpTm77nYiX
-         I6v+DY9WOXM1LxV1Fv/BRfRPH1bdCqOMm+9RClKU2i2IGD4sGuWvM/C120Vfy9E5poDt
-         k+j7Bgbt+84RvIqxSqPtJtsBhEKo8Y+qfc05eLBmKC6Etw8GH5T2DQp1zPzMIAxWDB06
-         +L7Y9jibEw/rFQ+iPZIo5d0xG27yM1nM0UtT98rjkS1AB30KI0SO5nAuyvgshUiJahfv
-         QRCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760564762; x=1761169562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L3FMg1FEv7ZUbFziIBjfrlMH5r4d6/IdcxKlJL9nOzQ=;
-        b=j/A/gzR75bs6YkKnY5IN97GOnpF5CxRHdKs5vfyfSOBLfoO6d1gQgVkoo42S6L2jeE
-         uxtmSESBu4QUKYtSJtlbxayKpBEr6dwhknnhTCuiK+c8Lexnssuw0gRpT4wJkprlNMe0
-         VLbgMkt9eNsQcFKqxsbrK0eRJqwZlqA3Xh46NjEC5EKdqi7WIZIQ/g42YddPXHq8PJG6
-         IS8QWwzP2HkJhPg+Ed4qG4cc5IACDq0BxPzd7IEUV1oxPyviTpe99dZNkhddw7NFu8va
-         fQ4ylmd8tV3HT/F6n/F7xf84vKPyVdBkksr9dwjQH6la2PCHrW7qaxUC2UzeBN8Dq/ml
-         9eog==
-X-Forwarded-Encrypted: i=1; AJvYcCUgE13Lk1WwptSNXgvoY4aHQoHDuYXzDB9n72/RlgO6526+jYHCZLzscnUSPgDG8niq0GDWA0G0yqy3ljq2MYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdPVxhB2qlUqfdENSI2WuPm0q/dbUHjfw+6J+EOT4lSXohGCoE
-	arZuUg19or2xTErSs1SSxN3KvwgmHrmNWSff8aNM/9XezTSCuYqeUFrjA1NUqWvYSBI=
-X-Gm-Gg: ASbGncucyPS+zTF6ApKsnxYMhV1OuV4SQO3NiTM2pHBPgv0DvfXtsLb2nQzoH605i/g
-	sJkh6fYx3dcG/qmodpBL0TLpUfOWSsWjZvKUb+ggOWZoL6KnywvqcV6REviF7ivPKx59x2+1ckT
-	uhT4Dt7ofnMHCIF4L43etSEyts9QaEgSyjt/WPy7GssGvm3fC47mSFVodTKAvQm8VEKDAV/Lsg6
-	k64mfC8/t2TpDp1bPVwcOxAMhVWkeKhqK247Q+dsKS3A9D5uXfsWb4IVhN8UErL+f2iW2c/FJqD
-	fvsOq/v4LXWHI+fSFu0WBaw17pWOxW8Hnqu2ytZs15RHuDhdGxCmV2E8bit6YqWmT3r4ln+dgp4
-	546QHaP/1b7DCzFpgI8IrJ82wkN10YeM3iY5WSzeBbhlDUzUGkfLkhxZ7y/bHzgJ4jUGW8fKYKC
-	ffy6v6U7tj2Fz5idUhi6ezOC9L3h0Z9Fr4pdIvjkB3q0IdSeaRtReqO5L3r9J1JdRhem0epQ==
-X-Google-Smtp-Source: AGHT+IGFaJmIXEF9qOWREfnISohaPtcOawCiX32gOo0axLN0cRb3DCKNrFn66v9UE7KAPGfO0N4wTQ==
-X-Received: by 2002:a05:620a:1a02:b0:88e:86a3:98f1 with SMTP id af79cd13be357-88e86a39b78mr380325385a.45.1760564761659;
-        Wed, 15 Oct 2025 14:46:01 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-96-255-20-138.washdc.ftas.verizon.net. [96.255.20.138])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-88f37e50ebasm56360985a.31.2025.10.15.14.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Oct 2025 14:46:00 -0700 (PDT)
-Date: Wed, 15 Oct 2025 17:45:57 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Shivank Garg <shivankg@amd.com>, jgowans@amazon.com, mhocko@suse.com,
-	jack@suse.cz, kvm@vger.kernel.org, david@redhat.com,
-	linux-btrfs@vger.kernel.org, aik@amd.com, papaluri@amd.com,
-	kalyazin@amazon.com, peterx@redhat.com, linux-mm@kvack.org,
-	clm@fb.com, ddutile@redhat.com, linux-kselftest@vger.kernel.org,
-	shdhiman@amd.com, gshan@redhat.com, ying.huang@linux.alibaba.com,
-	shuah@kernel.org, roypat@amazon.co.uk, matthew.brost@intel.com,
-	linux-coco@lists.linux.dev, zbestahu@gmail.com,
-	lorenzo.stoakes@oracle.com, linux-bcachefs@vger.kernel.org,
-	ira.weiny@intel.com, dhavale@google.com, jmorris@namei.org,
-	willy@infradead.org, hch@infradead.org, chao.gao@intel.com,
-	tabba@google.com, ziy@nvidia.com, rientjes@google.com,
-	yuzhao@google.com, xiang@kernel.org, nikunj@amd.com,
-	serge@hallyn.com, amit@infradead.org, thomas.lendacky@amd.com,
-	ashish.kalra@amd.com, chao.p.peng@intel.com, yan.y.zhao@intel.com,
-	byungchul@sk.com, michael.day@amd.com, Neeraj.Upadhyay@amd.com,
-	michael.roth@amd.com, bfoster@redhat.com, bharata@amd.com,
-	josef@toxicpanda.com, Liam.Howlett@oracle.com,
-	ackerleytng@google.com, dsterba@suse.com, viro@zeniv.linux.org.uk,
-	jefflexu@linux.alibaba.com, jaegeuk@kernel.org,
-	dan.j.williams@intel.com, surenb@google.com, vbabka@suse.cz,
-	paul@paul-moore.com, joshua.hahnjy@gmail.com, apopple@nvidia.com,
-	brauner@kernel.org, quic_eberman@quicinc.com, rakie.kim@sk.com,
-	cgzones@googlemail.com, pvorel@suse.cz,
-	linux-erofs@lists.ozlabs.org, kent.overstreet@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net, pankaj.gupta@amd.com,
-	linux-security-module@vger.kernel.org, lihongbo22@huawei.com,
-	linux-fsdevel@vger.kernel.org, pbonzini@redhat.com,
-	akpm@linux-foundation.org, vannapurve@google.com,
-	suzuki.poulose@arm.com, rppt@kernel.org, jgg@nvidia.com
-Subject: Re: [f2fs-dev] [PATCH kvm-next V11 6/7] KVM: guest_memfd: Enforce
- NUMA mempolicy using shared policy
-Message-ID: <aPAWFQyFLK4EKWVK@gourry-fedora-PF4VCD3F>
-References: <20250827175247.83322-2-shivankg@amd.com>
- <20250827175247.83322-9-shivankg@amd.com>
- <aNVQJqYLX17v-fsf@google.com>
- <aNbrO7A7fSjb4W84@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mWGw5c0kunPD+/JNUD+EKlp3GjQ+iMZg//GrnH43ifOYpOB/tNjqn4hLwOrAkvQrUj+pyD9mntMgEtX2FPIpkb9o/o51SZxK3s/brit5UKwil7Aydz0kBD7zjyEjprX2RoZQ8vDf82DPKyYJ8xeJ3Yvg20/EamZ68UWV1WZih2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=FqhVJ7WC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DLrCdUvz; arc=none smtp.client-ip=202.12.124.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfout.stl.internal (Postfix) with ESMTP id 868001D00109;
+	Wed, 15 Oct 2025 18:43:42 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Wed, 15 Oct 2025 18:43:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1760568222; x=
+	1760654622; bh=RZ7g3F3t9IBrmhQNcaWUuHVEd50extydIwUW9LGNnFE=; b=F
+	qhVJ7WCGbPwoc2LOHWLjXBsH+uU1KonxRUTdwyzX7ESM4w8uSsSDC7rodgp8xwiS
+	955cEz3e1XPd9+HnX8jCtMCySXKrd6vCL6WDGT95RecjNsDf7iIcXGjzStHBkuM4
+	hDZ12SivkxG81NfzbhGr7/8hYXr1Cz62C/fN+kUfyK5UfpWHFLjuOvIq+9CGlRmO
+	o1Uc+W0D0iwkLhPYlYv5hY/jtGtFEgwlPP9KQreHpZHA82a1T/TqF24at3Vm2/Lw
+	VCB21UpIgJAaABu4M3HgLfwyqI5vCEusqCkFpVTWA2M22uFk0/u5gPwpA5r4F2BB
+	3FX7ifX2dpb0gKjKMTcbA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1760568222; x=1760654622; bh=RZ7g3F3t9IBrmhQNcaWUuHVEd50extydIwU
+	W9LGNnFE=; b=DLrCdUvzhsqs58F+d8DuE20GgqkBdH51uJhSoWxbvjHfOAgfk2c
+	nYKnKDw7BrVFsSDSBenbU2+F3Rm6wHIHe1sClSKD8N6sgdKxonx8Pyzqz1F3pwR4
+	dA1zzsjJ7Nk9jx8fEO9wb9OgwVbBk4CQnuWcbu7QQ7UYy5N5SZ35wMyROcwUpg/q
+	rDAqCmcIVfpdwf9My5DqXkmkkVHysVG4F2kH2CBLqvQ6zXFDL4eCa0VH40cVrpiX
+	GeyUm0NsoNcx/mDbdh27ZKm6T0yhTP53h5zRDyTOOSaT9dgNIpbbTJcwkeg0l+H3
+	30A3jQC95rs9CdaOg+8TjbRg4I5MpnfiXzQ==
+X-ME-Sender: <xms:nSPwaAKOiPZXlNyNhRO_DjqxN3KW-J4M0l44FGfYw1xC1WIuXUHgmg>
+    <xme:nSPwaHsSJKQzjquCns-8cTeoSZXdLK7Zsq_2EjtFTz1yg5DnQjzrP5Itq05hZLQdP
+    Q4QyH5RWWAOOCvSOlBNF-I_JCqRZ3GGhfVOmSapw_cN6Gm8Shbeww>
+X-ME-Received: <xmr:nSPwaAVrBRoS9gpLw-04gfB1HgU-O6qf25fhfjkqKuvD07fY1Wq9-iyIrq8v>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduvdegieegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
+    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopeduhedpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtohepfihilhhfrhgvugdrohhpvghnshhouhhrtg
+    gvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehlihhnuhigqdguohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtg
+    hpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtoheplhhinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgt
+    phhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepvgguuh
+    hmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehprggsvghnihesrhgvughh
+    rghtrdgtohhm
+X-ME-Proxy: <xmx:nSPwaKJuxKT6pHOuWXA29Lbxi80U2C1H0ttC2-9MqzYxC-Y4ZXDfbQ>
+    <xmx:nSPwaN8usjD_lWOuU_TbOdEpugD-hY21P4CXHcWn2hDhjx5Qbpnl1A>
+    <xmx:nSPwaAONFEl8k487AtCZTiwz3KcRzisNp5tAJwudxkPr3N_uD-Bmig>
+    <xmx:nSPwaB3YMKNnopdMMPVs0sQ145brnxrPxs07gVwEk5KMb3a4f_TLVg>
+    <xmx:niPwaKqQsxBWSJEywjfIwFrCnt1fc3VZJT-PlvHrUO_gZgO1JHrp_vGV>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 15 Oct 2025 18:43:41 -0400 (EDT)
+Date: Thu, 16 Oct 2025 00:43:39 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Wilfred Mallawa <wilfred.opensource@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>
+Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Wilfred Mallawa <wilfred.mallawa@wdc.com>,
+	syzbot@syzkaller.appspotmail.com
+Subject: Re: [PATCH net-next v6 1/2] net/tls: support setting the maximum
+ payload size
+Message-ID: <aPAjm1tKMKxIdUlj@krikkit>
+References: <20251015015243.72259-2-wilfred.opensource@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aNbrO7A7fSjb4W84@google.com>
+In-Reply-To: <20251015015243.72259-2-wilfred.opensource@gmail.com>
 
-On Fri, Sep 26, 2025 at 12:36:27PM -0700, Sean Christopherson via Linux-f2fs-devel wrote:
-> > 
-> > static struct mempolicy *kvm_gmem_get_policy(struct vm_area_struct *vma,
-> > 					     unsigned long addr, pgoff_t *pgoff)
-> > {
-> > 	*pgoff = vma->vm_pgoff + ((addr - vma->vm_start) >> PAGE_SHIFT);
-> > 
-> > 	return __kvm_gmem_get_policy(GMEM_I(file_inode(vma->vm_file)), *pgoff);
-> 
-> Argh!!!!!  This breaks the selftest because do_get_mempolicy() very specifically
-> falls back to the default_policy, NOT to the current task's policy.  That is
-> *exactly* the type of subtle detail that needs to be commented, because there's
-> no way some random KVM developer is going to know that returning NULL here is
-> important with respect to get_mempolicy() ABI.
-> 
+2025-10-15, 11:52:43 +1000, Wilfred Mallawa wrote:
+> diff --git a/Documentation/networking/tls.rst b/Documentation/networking/tls.rst
+> index 36cc7afc2527..dabab17ab84a 100644
+> --- a/Documentation/networking/tls.rst
+> +++ b/Documentation/networking/tls.rst
+> @@ -280,6 +280,17 @@ If the record decrypted turns out to had been padded or is not a data
+>  record it will be decrypted again into a kernel buffer without zero copy.
+>  Such events are counted in the ``TlsDecryptRetry`` statistic.
+>  
+> +TLS_TX_MAX_PAYLOAD_LEN
+> +~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Sets the maximum size for the plaintext of a protected record.
+> +
+> +When this option is set, the kernel enforces this limit on all transmitted TLS
+> +records, ensuring no plaintext fragment exceeds the specified size. This can be
+> +used to specify the TLS Record Size Limit [1].
 
-Do_get_mempolicy was designed to be accessed by the syscall, not as an in-kernel ABI.
+Since this is now "max payload" instead of directly the record size,
+we should probably add something to describe how to derive the value
+to pass to TLS_TX_MAX_PAYLOAD_LEN from the record size limit:
 
-get_task_policy also returns the default policy if there's nothing
-there, because that's what applies.
+    For TLS1.2, the record size limit can be used directly.
+    For TLS1.3, limit-1 should be passed, as the record size limit
+    includes 1B for the ContentType.
 
-I have dangerous questions:
 
-why is __kvm_gmem_get_policy using
-	mpol_shared_policy_lookup()
-instead of
-	get_vma_policy()
+And possibly mention that TLS1.3 record padding is currently
+unsupported, so whether it should be counted in the value passed via
+this setsockopt or not is undecided. (I'm not sure we need to go that
+far. Jakub, WDYT?)
 
-get_vma_policy does this all for you
 
-struct mempolicy *get_vma_policy(struct vm_area_struct *vma,
-                                 unsigned long addr, int order, pgoff_t *ilx)
-{
-        struct mempolicy *pol;
+[...]
+> +static int do_tls_setsockopt_tx_payload_len(struct sock *sk, sockptr_t optval,
+> +					    unsigned int optlen)
+> +{
+> +	struct tls_context *ctx = tls_get_ctx(sk);
+> +	struct tls_sw_context_tx *sw_ctx = tls_sw_ctx_tx(ctx);
+> +	u16 value;
+> +
+> +	if (sw_ctx && sw_ctx->open_rec)
+> +		return -EBUSY;
+> +
+> +	if (sockptr_is_null(optval) || optlen != sizeof(value))
+> +		return -EINVAL;
+> +
+> +	if (copy_from_sockptr(&value, optval, sizeof(value)))
+> +		return -EFAULT;
+> +
+> +	if (value < TLS_MIN_RECORD_SIZE_LIM || value > TLS_MAX_PAYLOAD_SIZE)
 
-        pol = __get_vma_policy(vma, addr, ilx);
-        if (!pol)
-                pol = get_task_policy(current);
-        if (pol->mode == MPOL_INTERLEAVE ||
-            pol->mode == MPOL_WEIGHTED_INTERLEAVE) {
-                *ilx += vma->vm_pgoff >> order;
-                *ilx += (addr - vma->vm_start) >> (PAGE_SHIFT + order);
-        }
-        return pol;
-}
+For 1.3, should we allow TLS_MIN_RECORD_SIZE_LIM-1? The smallest valid
+record size limit (according to rfc8449) is 64
+(TLS_MIN_RECORD_SIZE_LIM), so after userspace subtracts 1 we would get
+TLS_MIN_RECORD_SIZE_LIM-1?
 
-Of course you still have the same issue: get_task_policy will return the
-default, because that's what applies.
+(but this would bring back one "are we 1.2 or 1.3?" check :/)
 
-do_get_mempolicy just seems like the completely incorrect interface to
-be using here.
+> +		return -EINVAL;
+> +
+> +	ctx->tx_max_payload_len = value;
+> +
+> +	return 0;
+> +}
 
-~Gregory
+-- 
+Sabrina
 
