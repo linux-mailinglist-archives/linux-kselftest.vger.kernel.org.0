@@ -1,249 +1,175 @@
-Return-Path: <linux-kselftest+bounces-43327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 669B3BE3D63
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 16:01:38 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61A6BBE3DD1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 16:17:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77FAA1883F3B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 14:01:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 96A494EA6C7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 14:17:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 790391C84BC;
-	Thu, 16 Oct 2025 14:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B52339B3E;
+	Thu, 16 Oct 2025 14:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="dwCRqlcK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25D43146585;
-	Thu, 16 Oct 2025 14:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CA6F510
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 14:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760623281; cv=none; b=PaHj1gA4/YXXKNaEqttTyNXMAsNsJGaJc/FlQR0g38P1VJmeHTN5xDO76zCU4jU2uAS9TMiP1Y+nv0NlCYNRRHZCB9K653iYKFkdMRqPYcNFql2Anj9CaHQWdv4GT7vq5AWcjrT+NQL0Eul7nV6BknuOBcybBrhea+n1xrQRUkA=
+	t=1760624253; cv=none; b=jNga+svVsBZhsApjvPHvvUxILghJc7U3N8Cs51X2Fz1vI7ry4+OqTlzbR4qikdxYgKwydGiH+5/E/nibhBxK/B47jJWZqzc6ez+H+alffwLOfSp7O1FDl3CNKPX0rw7df9KiAIrrenegX1/Ku7WDCC8s7o2sDyNy9Ex424rTDII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760623281; c=relaxed/simple;
-	bh=589DrFu9KazghOPguQIWPB5Q4KJLDcH3rsDrzmHjzCY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mMe/CcTWqxKqVvkGR0LGJHdDlk75z4Z5HTZnzZpVMQorKJNGPP+vO69lKFIYZK/XrKfJXJ1q8lCE7YAcnmjkQJXwhP4Mlkr5jzY/G85raMoEp9nMqUP59IrN6DU8UhUUz0frpMRQIBTuLc2HdwljsrY0XtamCrug+ZOd9F6wCRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 954AF1688;
-	Thu, 16 Oct 2025 07:01:10 -0700 (PDT)
-Received: from [10.57.2.131] (unknown [10.57.2.131])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 61C663F738;
-	Thu, 16 Oct 2025 07:01:16 -0700 (PDT)
-Message-ID: <808b30b8-a85a-4fe3-be49-bf11414cef93@arm.com>
-Date: Thu, 16 Oct 2025 15:01:14 +0100
+	s=arc-20240116; t=1760624253; c=relaxed/simple;
+	bh=MjX01ygQ/3tk/sGwgwk/36ebQMdAkveFRCJrUinD/Og=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UhiJ5ns/YGC4Wt9FZ0HJzn4DlN9IXLL7BB05pA1bwjVOisKXFrnVLJLvFigM/usXukWsqeJeB9CbvmGPyiejklTkF7u4YgrCxRyjh9WJMvyuOqrRhuuEyp/0ogJ9lYbidFq3PS030+FCS7VOdJ6mqExESO3rZFvD+JwQB+Bh+gM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=dwCRqlcK; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-87c1a760df5so11184136d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 07:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1760624251; x=1761229051; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vDx8+7T+MYrCmWnRteKVa1iC6/sCWZvHc99T+OB8RqU=;
+        b=dwCRqlcKPsDQVOHquk4yaz5Cv4fPtBLRWee5G2rzxUKcdtZMxVfMRjn0mDOxVrewwz
+         KhG5boJn1F0EHcgdAzDtOfdzxeKOTi86FsXlAOWzMrmH+qmHPIjPHnnbJKnBial5NN2b
+         4s7Z9es5jhpxKD0kAxJ8BkzNr5E/4oEnPzEGRDR69OAByvk0p7UU3lTzxrx7vGBSf9Z3
+         oFPf1jGc9s4O18ef3Jiycd7b1+QVMzmqQadgc3U4egLfYhQRJcWQGXsUfbZhQjhFupIc
+         gADI612o9/2HT+1Ux5P4OzN0RB9D9sj32O8DTRenmNW2We4+C8H08EuCwSxwVtoUYDcS
+         l0Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760624251; x=1761229051;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vDx8+7T+MYrCmWnRteKVa1iC6/sCWZvHc99T+OB8RqU=;
+        b=Rso0PuGlfnbdcn6iQPgmI6Afxz3LZxSUIEs1RV8XekrMxOTl543Gan0LmrdUCg2T86
+         OC09oaA25aiDXL1AfZNZKkC9EXfMtCdEOqJ+gZP0cNndVvmhl2QH3wqAUbVrBugyoeCw
+         4K7FhoCvfOrCtJc81b1ZNQlGnQkxNeunOx58nBkvnpqg7jmJyjHvJfkBIiHS0WZbUqn7
+         yvLRb4IhGD5/gu/40fEZBcUyWUzT4GAbkgokAvc4/OR9XfNZdtHGHsxHsvbHSkdbP1e9
+         1TtZDY3GHANjy0pdsk97MsY7Nlma/Kw0wwrDks4yXLWxElTeG/YjqRK7E27OGcDeLbuJ
+         nxLA==
+X-Forwarded-Encrypted: i=1; AJvYcCV5G91e8NooDyswy+5EbtZm9cv4HzduZ6swzUs428CrJgOnc3Qxl+WQPMItzp3OGK4L5iP+cZuInPl6mn3q2iI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgzjqOW7k2JOH+hQudlFA678rsJodSKS+oHLiiCI0hWAMdCH9Q
+	FdMIsqhHudSZ4W/MHvxooGQ6sHCUZ1CwY/sjeco+lc8T07bVvPCwsJecxr5HCxSGTlA=
+X-Gm-Gg: ASbGncsx9smevThS83qavk1lDQtlbGDnzF3kyqDzu2GqRHpho4aikEDXZL394D2c1dh
+	5KlBUnpSPCNjaGJ76w/1YkYlm7Pmn38JPA1d04etyPiCry4+lk9V+El9HvV2Zv/67juqqkR6iTg
+	M9to0axSaI5/KhqjFJNrZlU+ALzPwLMOYajVhl/DQIJf6T3g0GrIQJl/ewxl4eyTvAkp5ZgFEyo
+	ATQ9FB0bUQAwXzkeooaIztPiOjIq+HJYed3KOVsM6fHt6yLGMZ+0+oHWFBVgyCR7qEFYFVHGMbW
+	CdGCoLOd/pFVPKB86B09pO/QrDEua0QdguL1Ho1JcaLwb1FMI50NILp8KMj37vs2ImsmaiSQZlH
+	3Zx1M3RaZgbcSR6qLyKNgApp8mZLB2wZFfmq9o7ZwwpUBTj00MEa5NPqZ6jYGiQa75RZsU4+uZo
+	Fn0C4LA3787jJgEH71yhY8I8pQEkfmUZBXP9JW7KGKJR5MDsq5jOLXYb+IypyZNs+aGOhGVg==
+X-Google-Smtp-Source: AGHT+IEMapVQRI0ck2KCGxvEYuBB3a+08a/2JspNz86EbcND1SGuRInp+B2xwxF3NumJMeFQLVJPkQ==
+X-Received: by 2002:ac8:5883:0:b0:4e8:99b0:b35e with SMTP id d75a77b69052e-4e89d263140mr4179321cf.30.1760624250594;
+        Thu, 16 Oct 2025 07:17:30 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-96-255-20-138.washdc.ftas.verizon.net. [96.255.20.138])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e8955b07e9sm13309541cf.27.2025.10.16.07.17.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Oct 2025 07:17:29 -0700 (PDT)
+Date: Thu, 16 Oct 2025 10:17:25 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Shivank Garg <shivankg@amd.com>, jgowans@amazon.com, mhocko@suse.com,
+	jack@suse.cz, kvm@vger.kernel.org, david@redhat.com,
+	linux-btrfs@vger.kernel.org, aik@amd.com, papaluri@amd.com,
+	kalyazin@amazon.com, peterx@redhat.com, linux-mm@kvack.org,
+	clm@fb.com, ddutile@redhat.com, linux-kselftest@vger.kernel.org,
+	shdhiman@amd.com, gshan@redhat.com, ying.huang@linux.alibaba.com,
+	shuah@kernel.org, roypat@amazon.co.uk, matthew.brost@intel.com,
+	linux-coco@lists.linux.dev, zbestahu@gmail.com,
+	lorenzo.stoakes@oracle.com, linux-bcachefs@vger.kernel.org,
+	ira.weiny@intel.com, dhavale@google.com, jmorris@namei.org,
+	willy@infradead.org, hch@infradead.org, chao.gao@intel.com,
+	tabba@google.com, ziy@nvidia.com, rientjes@google.com,
+	yuzhao@google.com, xiang@kernel.org, nikunj@amd.com,
+	serge@hallyn.com, amit@infradead.org, thomas.lendacky@amd.com,
+	ashish.kalra@amd.com, chao.p.peng@intel.com, yan.y.zhao@intel.com,
+	byungchul@sk.com, michael.day@amd.com, Neeraj.Upadhyay@amd.com,
+	michael.roth@amd.com, bfoster@redhat.com, bharata@amd.com,
+	josef@toxicpanda.com, Liam.Howlett@oracle.com,
+	ackerleytng@google.com, dsterba@suse.com, viro@zeniv.linux.org.uk,
+	jefflexu@linux.alibaba.com, jaegeuk@kernel.org,
+	dan.j.williams@intel.com, surenb@google.com, vbabka@suse.cz,
+	paul@paul-moore.com, joshua.hahnjy@gmail.com, apopple@nvidia.com,
+	brauner@kernel.org, quic_eberman@quicinc.com, rakie.kim@sk.com,
+	cgzones@googlemail.com, pvorel@suse.cz,
+	linux-erofs@lists.ozlabs.org, kent.overstreet@linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net, pankaj.gupta@amd.com,
+	linux-security-module@vger.kernel.org, lihongbo22@huawei.com,
+	linux-fsdevel@vger.kernel.org, pbonzini@redhat.com,
+	akpm@linux-foundation.org, vannapurve@google.com,
+	suzuki.poulose@arm.com, rppt@kernel.org, jgg@nvidia.com
+Subject: Re: [f2fs-dev] [PATCH kvm-next V11 6/7] KVM: guest_memfd: Enforce
+ NUMA mempolicy using shared policy
+Message-ID: <aPD-dbl5KWNSHu5R@gourry-fedora-PF4VCD3F>
+References: <20250827175247.83322-2-shivankg@amd.com>
+ <20250827175247.83322-9-shivankg@amd.com>
+ <aNVQJqYLX17v-fsf@google.com>
+ <aNbrO7A7fSjb4W84@google.com>
+ <aPAWFQyFLK4EKWVK@gourry-fedora-PF4VCD3F>
+ <aPAkxp67-R9aQ8oN@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] KVM: arm64: Add pre_fault_memory implementation
-Content-Language: en-GB
-To: Jack Thomson <jackabt.amazon@gmail.com>, maz@kernel.org,
- oliver.upton@linux.dev, pbonzini@redhat.com
-Cc: joey.gouly@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com,
- will@kernel.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, isaku.yamahata@intel.com,
- roypat@amazon.co.uk, kalyazin@amazon.co.uk, jackabt@amazon.com
-References: <20251013151502.6679-1-jackabt.amazon@gmail.com>
- <20251013151502.6679-2-jackabt.amazon@gmail.com>
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20251013151502.6679-2-jackabt.amazon@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aPAkxp67-R9aQ8oN@google.com>
 
-Hi
-
-On 13/10/2025 16:14, Jack Thomson wrote:
-> From: Jack Thomson <jackabt@amazon.com>
+On Wed, Oct 15, 2025 at 03:48:38PM -0700, Sean Christopherson wrote:
+> On Wed, Oct 15, 2025, Gregory Price wrote:
+> > why is __kvm_gmem_get_policy using
+> > 	mpol_shared_policy_lookup()
+> > instead of
+> > 	get_vma_policy()
 > 
-> Add kvm_arch_vcpu_pre_fault_memory() for arm64. The implementation hands
-> off the stage-2 faulting logic to either gmem_abort() or
-> user_mem_abort().
+> With the disclaimer that I haven't followed the gory details of this series super
+> closely, my understanding is...
 > 
-> Add an optional page_size output parameter to user_mem_abort() to
-> return the VMA page size, which is needed when pre-faulting.
+> Because the VMA is a means to an end, and we want the policy to persist even if
+> the VMA goes away.
 > 
-> Update the documentation to clarify x86 specific behaviour.
 
-Thanks for the patch ! Do we care about faulting beyond the requested 
-range ? I understand this doesn't happen for anything that is not
-backed by gmem (which might change with hugetlbfs support) or normal
-VMs. But for coco VMs this might affect the measurement or even cause
-failure in "pre-faulting" because of the extra security checks.
-(e.g., trying to fault in twice, because the range is backed by say,
-1G page).
+Ah, you know, now that i've taken a close look, I can see that you've
+essentially modeled this after ipc/shm.c | mm/shmem.c pattern.
 
-Of course these could be addressed via a separate patch, when this
-becomes a real requirement.
+What's had me scratching my chin is that shm/shmem already has a
+mempolicy pattern which ends up using folio_alloc_mpol() where the
+relationship is
 
-One way to solve this could be pass on the "pagesize" as the input
-parameter which could force the backend to limit the vma_pagesize
-that gets used for the stage2 mapping.
+tmpfs: sb_info->mpol = default set by user
+  create_file: inode inherits copy of sb_info->mpol
+    fault:    mpol = shmem_get_pgoff_policy(info, index, order, &ilx);
+             folio = folio_alloc_mpol(gfp, order, mpol, ilx, numa_node_id())
 
-> 
-> Signed-off-by: Jack Thomson <jackabt@amazon.com>
-> ---
->   Documentation/virt/kvm/api.rst |  3 +-
->   arch/arm64/kvm/Kconfig         |  1 +
->   arch/arm64/kvm/arm.c           |  1 +
->   arch/arm64/kvm/mmu.c           | 73 ++++++++++++++++++++++++++++++++--
->   4 files changed, 73 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index c17a87a0a5ac..9e8cc4eb505d 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6461,7 +6461,8 @@ Errors:
->   KVM_PRE_FAULT_MEMORY populates KVM's stage-2 page tables used to map memory
->   for the current vCPU state.  KVM maps memory as if the vCPU generated a
->   stage-2 read page fault, e.g. faults in memory as needed, but doesn't break
-> -CoW.  However, KVM does not mark any newly created stage-2 PTE as Accessed.
-> +CoW.  However, on x86, KVM does not mark any newly created stage-2 PTE as
-> +Accessed.
->   
->   In the case of confidential VM types where there is an initial set up of
->   private guest memory before the guest is 'finalized'/measured, this ioctl
-> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
-> index bff62e75d681..1ac0605f86cb 100644
-> --- a/arch/arm64/kvm/Kconfig
-> +++ b/arch/arm64/kvm/Kconfig
-> @@ -25,6 +25,7 @@ menuconfig KVM
->   	select HAVE_KVM_CPU_RELAX_INTERCEPT
->   	select KVM_MMIO
->   	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
-> +	select KVM_GENERIC_PRE_FAULT_MEMORY
->   	select KVM_XFER_TO_GUEST_WORK
->   	select KVM_VFIO
->   	select HAVE_KVM_DIRTY_RING_ACQ_REL
-> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> index 888f7c7abf54..65654a742864 100644
-> --- a/arch/arm64/kvm/arm.c
-> +++ b/arch/arm64/kvm/arm.c
-> @@ -322,6 +322,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->   	case KVM_CAP_IRQFD_RESAMPLE:
->   	case KVM_CAP_COUNTER_OFFSET:
->   	case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
-> +	case KVM_CAP_PRE_FAULT_MEMORY:
->   		r = 1;
->   		break;
->   	case KVM_CAP_SET_GUEST_DEBUG2:
-> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> index a36426ccd9b5..82f122e4b08c 100644
-> --- a/arch/arm64/kvm/mmu.c
-> +++ b/arch/arm64/kvm/mmu.c
-> @@ -1597,8 +1597,8 @@ static int gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
->   
->   static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
->   			  struct kvm_s2_trans *nested,
-> -			  struct kvm_memory_slot *memslot, unsigned long hva,
-> -			  bool fault_is_perm)
-> +			  struct kvm_memory_slot *memslot, long *page_size,
-> +			  unsigned long hva, bool fault_is_perm)
->   {
->   	int ret = 0;
->   	bool topup_memcache;
-> @@ -1871,6 +1871,9 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
->   	kvm_release_faultin_page(kvm, page, !!ret, writable);
->   	kvm_fault_unlock(kvm);
->   
-> +	if (page_size)
-> +		*page_size = vma_pagesize;
-> +
->   	/* Mark the page dirty only if the fault is handled successfully */
->   	if (writable && !ret)
->   		mark_page_dirty_in_slot(kvm, memslot, gfn);
-> @@ -2069,8 +2072,8 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
->   		ret = gmem_abort(vcpu, fault_ipa, nested, memslot,
->   				 esr_fsc_is_permission_fault(esr));
->   	else
-> -		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, hva,
-> -				     esr_fsc_is_permission_fault(esr));
-> +		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, NULL,
-> +				     hva, esr_fsc_is_permission_fault(esr));
->   	if (ret == 0)
->   		ret = 1;
->   out:
-> @@ -2446,3 +2449,65 @@ void kvm_toggle_cache(struct kvm_vcpu *vcpu, bool was_enabled)
->   
->   	trace_kvm_toggle_cache(*vcpu_pc(vcpu), was_enabled, now_enabled);
->   }
-> +
-> +long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
-> +				    struct kvm_pre_fault_memory *range)
-> +{
-> +	int ret, idx;
-> +	hva_t hva;
-> +	phys_addr_t end;
-> +	struct kvm_memory_slot *memslot;
-> +	struct kvm_vcpu_fault_info stored_fault, *fault_info;
-> +
-> +	long page_size = PAGE_SIZE;
-> +	phys_addr_t ipa = range->gpa;
-> +	gfn_t gfn = gpa_to_gfn(range->gpa);
-> +
-> +	idx = srcu_read_lock(&vcpu->kvm->srcu);
-> +
-> +	if (ipa >= kvm_phys_size(vcpu->arch.hw_mmu)) {
-> +		ret = -ENOENT;
-> +		goto out_unlock;
-> +	}
-> +
-> +	memslot = gfn_to_memslot(vcpu->kvm, gfn);
-> +	if (!memslot) {
-> +		ret = -ENOENT;
-> +		goto out_unlock;
-> +	}
-> +
-> +	fault_info = &vcpu->arch.fault;
-> +	stored_fault = *fault_info;
-> +
-> +	/* Generate a synthetic abort for the pre-fault address */
-> +	fault_info->esr_el2 = FIELD_PREP(ESR_ELx_EC_MASK, ESR_ELx_EC_DABT_CUR);
+So this inode mempolicy in guest_memfd is really acting more as a the
+filesystem-default mempolicy, which you want to survive even if userland
+never maps the memory/unmaps the memory.
 
-minor nit: Any reason why we don't use ESR_ELx_EC_DABT_LOW ? We always
-get that for a data abort from the guest. Otherwise, this looks
-good to me.
+So the relationship is more like
 
-Suzuki
+guest_memfd -> creates fd/inode <- copies task mempolicy (if set)
+  vm:  allocates memory via filemap_get_folio_mpol()
+  userland mmap(fd):
+  	creates new inode<->vma mapping
+	vma->mpol = kvm_gmem_get_policy()
+	calls to set/get_policy/mbind go through kvm_gmem 
 
+This makes sense, sorry for the noise.  Have been tearing apart
+mempolicy lately and I'm disliking the general odor coming off
+it as a whole.  I had been poking at adding mempolicy support to
+filemap and you got there first.  Overall I think there are still
+other problems with mempolicy, but this all looks fine as-is.
 
-> +	fault_info->esr_el2 &= ~ESR_ELx_ISV;
-> +	fault_info->esr_el2 |= ESR_ELx_FSC_FAULT_L(KVM_PGTABLE_LAST_LEVEL);
-> +
-> +	fault_info->hpfar_el2 = HPFAR_EL2_NS |
-> +		FIELD_PREP(HPFAR_EL2_FIPA, ipa >> 12);
-> +
-> +	if (kvm_slot_has_gmem(memslot)) {
-> +		ret = gmem_abort(vcpu, ipa, NULL, memslot, false);
-> +	} else {
-> +		hva = gfn_to_hva_memslot_prot(memslot, gfn, NULL);
-> +		if (kvm_is_error_hva(hva)) {
-> +			ret = -EFAULT;
-> +			goto out;
-> +		}
-> +		ret = user_mem_abort(vcpu, ipa, NULL, memslot, &page_size, hva,
-> +				     false);
-> +	}
-> +
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	end = (range->gpa & ~(page_size - 1)) + page_size;
-> +	ret = min(range->size, end - range->gpa);
-> +
-> +out:
-> +	*fault_info = stored_fault;
-> +out_unlock:
-> +	srcu_read_unlock(&vcpu->kvm->srcu, idx);
-> +	return ret;
-> +}
-m
-
+~Gregory
 
