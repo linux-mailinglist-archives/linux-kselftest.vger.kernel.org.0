@@ -1,130 +1,225 @@
-Return-Path: <linux-kselftest+bounces-43276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF543BE1643
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 05:53:42 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58977BE17D8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 07:05:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5854A486DE9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 03:53:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AD5114EDF08
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 05:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52A92205E3B;
-	Thu, 16 Oct 2025 03:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86A67221721;
+	Thu, 16 Oct 2025 05:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="caIVXEoP"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BPE3gqlm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71BE156F20
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 03:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9779C21FF48
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 05:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760586819; cv=none; b=dOeoMGQRdTTtaHX1ixscVuiv9wAV0DdRz2wR2tCy4lva/R9Ht6rQ7EvbqGe0UliDPY6YBmseID5RqS9rEn95RDtz1eB9YDa5BhnmJs32GgE6GAJRfLzR1QjCCqlkJX7tPl/oqeDDoF0tMu0fIvEsUTK1cvJo+GQX3VFU2rT4DdM=
+	t=1760591137; cv=none; b=g87Rl9knIrU3r/nXgk1DUJkQmnnM/hUxs8YkasjfNVp7OqhgN5xL9VcQm5jJO1zyXQZAe6yrgG+1CwmBJMnRtJqGBNN/NNPTsWRpFp1a9L6fQSXZvl5Zt9zM/+XPtgs+Vm4hbJJvjn5Lu6HZrruAyZrNVcIDhDUsPtVwHHP/02g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760586819; c=relaxed/simple;
-	bh=+Bi0k7yeEVhElVYsr9bEFjVbio42J+whEdTcbqgJylY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gfIanjOqtD4/gyfoRNmjcxAfpT8KEQ24gip+i2Vew7pCIU3kESWhJkrNvElRWNBz6KEWkKQQ5Lqt+Xw4JqORXGgGJYWZ5UbzhaQxlVCi4wFm6uUfESM5OCRqThMh+/1zMQ0f3kW9bzmDH5ftdIIPy7hCz/Dbg4dfeuyIzru9BrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=caIVXEoP; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-794e300e20dso1325950b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 20:53:37 -0700 (PDT)
+	s=arc-20240116; t=1760591137; c=relaxed/simple;
+	bh=v/niRFXGHLbuHdz9SVJ/KCn6aLK8QZaKQTmiLUVJvaw=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=GoWcpv8tLyOGKUFG/Rj6b42xbHu4/uhRXo4xMf3FsaNYiK0hMa5oNDeoORRs+EXXCZDDCSKZ22lAuK/zjDD2H6hPv4YOWaJHCXACokJXt/aG9Ze64pznB7M1FpjFp+8MDoq5jN6Wfb7ed5YO9clotVWWZJBvWkHiSlo0jtK+ADA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BPE3gqlm; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-781421f5bf5so3389087b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Oct 2025 22:05:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760586817; x=1761191617; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BjH/Xk+Vw9IhbcZ1lknKGKFAYoqovFnR+/YWG7tmcfk=;
-        b=caIVXEoP5MWayTqnL+Mr1J4qxOaPiRdidDy2At10CWfnKdI9njcVZVtLN7Hk20A9m9
-         VQNCR+pw5aM14/Ty6UpG42LoAyBSU3DPhAMu4uWRF3yvfqDaU5Fv5rXCvGaH/orznudO
-         7PoeM7Lm6wRY8NdEF9xioiXQsyb1xOCRg4hxttcNFCIjRb9RJfqHIom8nkJZB0bEsoA/
-         meTdJIbNgcwOGVh3iOyCC/I0o0OPMyZOr9zJggPeZrepn/3+NHC1t/PuC8w35qt2Skq0
-         fMHHreFkw8rvVbOjnjCLjY3S4p02REXTsKiLwhQiq9RPW+AJ9KKX/i1t/A8EKVGJ62RP
-         ri/A==
+        d=google.com; s=20230601; t=1760591134; x=1761195934; darn=vger.kernel.org;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SL78+SZbXELe5OjpiYZ40otsTW6VBbAoBUm1tT/or+E=;
+        b=BPE3gqlmQf+4JlGxMT7EW2MW0GM5EFCnc6GDMGjXh/G5oRjtztsh9oMVU00h20CBqQ
+         IyY1rF330o3VZzVb7qjj6NltbD9EvEYrxoqcF2fQDhMyFzsGcBmTE7WObD6P+viqa85U
+         v5QBqzupTD4aoxHlK1kEsFk+D3AyHMYoP9S0yV5tiPXymD82uR4Fwh67Uj98fbrs4wsd
+         xU5Ao4N24rPCeJVVnmbXKrX1wfHcsRRJdCEjbD6CGEDlY2KELLYAG/P0gp01BWBj5k/G
+         31dAxzlFE6XmcxHpAYtcr1M+LHdyskdXQovGGS6rqX7n0/+Qj7NUDYEAuTJYrA2lbzVO
+         ZasQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760586817; x=1761191617;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BjH/Xk+Vw9IhbcZ1lknKGKFAYoqovFnR+/YWG7tmcfk=;
-        b=jMrgtAafwajbv3ncUvh5symu58VhKGYbBmefBl6GRWP+CCQutSy3U8+h5qarewvsaE
-         ocCTpZvbqe9/ReSMAPTwRJ2WxJr9uwA8V3T5wPif6orkUlbzTUt+RR5fx3dTcmc8iWxA
-         kzfiWpn3iC5iukZ8z/GhD1C3V0ipjD6mYCN30WcFDBeZaqU/QM2Qe/h6XOVkVjJDfnjw
-         SvLTvcXJ4jSklb3j/ZT2cEc9gFy9kl3esUaPXcitg4/goqRnTA7nd7sgELYsK6r0acU1
-         v7T90NGQltw34Zd0cWweRVx/EumSz7t9PoHfftlvSBgIXuHXg/rbWZSNU+8UlUOItg2x
-         Gsfg==
-X-Forwarded-Encrypted: i=1; AJvYcCWq5+VlhYBxcxeED9tMdsiA8dSv0EnGXp95N8KRo9sVPkCndUJ7o48VP267tF7ul6fjt+0hK+wE3LK9ucA696o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo+YpVRAcu5MeeqApUl1u8Aj7YbMtGvj0vb89TNhtzN+5MLNe8
-	Cu+o7TQw9fFR/Qt3fgjWuJACJc16H2kNgTjsQvEASKQ7yEQlFXUQ2OEiFKCB7UifBZYggA==
-X-Gm-Gg: ASbGncsbPfmxEgnm2y4R9iV/IYkuWCoLjLrUvkAQMeD1egeRBEY8XWxvKExxHC4/Os+
-	lsmtXPUl6KM5fxedQyoNf2Gey8Ef1gOEVXBrCbzR8jHMwfV/EnQt698K9PVQmeZMtOQi+rOUDRe
-	sL9Zq79aEcHCpr/35VJ98hy6RJWuabLNk6JG8C87Q2T9UWmudRAnibJAGvBYc26uinGq/7I6XPK
-	l3rDFZ4tsy4xUzj0FThEtjdWRluMK78B0qCe4zVLhclOMxAk6oTK23MRfcNyzAbGuPBu4MfXDG+
-	mvfKq1v6euzwlKlVUJdaGaHtE9opA/aXyzPNDvTINBYKAjA7hu2RLPNBbklLaaKEvViqPEcvMTi
-	Q3J+MGxAJ04auX+WpLxPj1qXfY5VDIaSPmp6VOlpfDdTob/xRszMwp+CvSqNwD2rDRCaI9vg9Fj
-	bESpjUSDUyHfi9A2WG5q3R0Uw9AgTET1fCAHtqQ7dGW0GcskzjhA==
-X-Google-Smtp-Source: AGHT+IF5L3KREyHjFSPQncpJROTSoshms/ZTe2ibdM8WJ0gkfy/b4DYL+CIu7RSZ9C1y3z7bKhMfXA==
-X-Received: by 2002:a05:6a20:938c:b0:2b9:6b0b:66be with SMTP id adf61e73a8af0-33495d82c1dmr3487745637.14.1760586816941;
-        Wed, 15 Oct 2025 20:53:36 -0700 (PDT)
-Received: from laptop.dhcp.broadcom.net ([192.19.38.250])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33bb6632e72sm16065a91.19.2025.10.15.20.53.33
+        d=1e100.net; s=20230601; t=1760591134; x=1761195934;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SL78+SZbXELe5OjpiYZ40otsTW6VBbAoBUm1tT/or+E=;
+        b=Fu6+YzQs+Xoarlr2qynuLlbnb5CttRTJ4UiGaFoiUc1GsBCdHKSXnpPzZjuqr3h1oD
+         zAefEhyW8DebDeoiW8vKHeJ4lEt840gXdMCL7QC1NGBSTKTlN54vOzuuaNDgebPgii/X
+         Oxub6yrrTJXwMGOZ9DYBqnC/rLhUJxPtGTv71I3cechPC3s7Ny37dNeXZB3mMkV33we0
+         1ZUlBljBSyFBAOJk7QViVlpXq35SqG3WQo2nGnqrHpJHxDqk4gbHqEOI07sKihZAt89C
+         GFuiFW3bdLEKQBLnjsw/0Q2XeRamowTPSiepoqVSVNEsGoNBcHQtHi9bYYRlpDKIQRZv
+         NL1w==
+X-Forwarded-Encrypted: i=1; AJvYcCXlPQcHJYzr1qXQ8XOFyQPvGyH70CC8BH/uAsZCVfqPFl0c3ZSRITm4cSltmzHNJOqj1lprnBnGfKsZ8b+pZhw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjmxtRXVnY8UhjAHYT6/xoV3kihDavPeKHGFJefr58+6ppUVF8
+	JRZeFsZjMMrYqKri/0Pn3EJEyC3lpiaaeKfIjHMsFLZjEK8B+rVWrjplcCy8QCIDUA==
+X-Gm-Gg: ASbGncslSSwi9gF0M/tG2aBr3+ko6MRCTJA6H0E1V3ViqHp5/r1CrxY5LFS6IKhyv/L
+	Zxk7Wuz+RtlInxzfhARZndIwCtg2pnhdQQSb/+OKrPopkRO85YZVtPJLEg3Nz+dK4hclx7Rjdnf
+	79n22HbRnt2fJqcXiSNuDR0MJjuovqBTplLJsd4zvCsRure/zFJzHiseM1qvo/4xN/Brg0ZTYEo
+	4E+kxBKjFkyDFZPHNevlfMkwMMPat2veyVDgCLB47LAFVOlbS6Cd26dCONnVTdosl7e21OX90Jr
+	32ZQ8AnhN2/uDn4zWCxYVd2m+UCGjt7eXBIV+UOKCVK8xkguWP0P315QFH6c7fAHW51/etTdlDV
+	jQdbLCKVStfe2uNlCJDrYO2MO7fhb9BVgwUSychS2bMYz1UMrCyjOsJigrkHuTmwqXlqJHqofpX
+	Vgd6aZj688ZhFRp1HmWyUOQz/GuIGpab90lyC1VjVm/iml1p42NfN7Y/BfGNqgKuflUj+omiHoN
+	DfJvlWsah+Jjzw=
+X-Google-Smtp-Source: AGHT+IGKHjTCfZs9WliaOHICesM+L1X3EuoBynLJInRo210xgEeIFS6mewEtS3BfqWgQnxUg9wNNRQ==
+X-Received: by 2002:a05:690c:670b:b0:783:116b:fc5 with SMTP id 00721157ae682-783116b1024mr9954377b3.33.1760591134146;
+        Wed, 15 Oct 2025 22:05:34 -0700 (PDT)
+Received: from darker.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7828d7b9deesm4928007b3.26.2025.10.15.22.05.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Oct 2025 20:53:36 -0700 (PDT)
-From: Xing Guo <higuoxing@gmail.com>
-To: andrii.nakryiko@gmail.com
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	higuoxing@gmail.com,
-	linux-kselftest@vger.kernel.org,
-	olsajiri@gmail.com,
-	sveiss@meta.com
-Subject: [PATCH bpf v6] selftests: arg_parsing: Ensure data is flushed to disk before reading.
-Date: Thu, 16 Oct 2025 11:53:30 +0800
-Message-ID: <20251016035330.3217145-1-higuoxing@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <CAEf4BzaSPbsWGw9XiFq7qt7P0m0Yoquuxca39QrvorKFeS+LAg@mail.gmail.com>
-References: <CAEf4BzaSPbsWGw9XiFq7qt7P0m0Yoquuxca39QrvorKFeS+LAg@mail.gmail.com>
+        Wed, 15 Oct 2025 22:05:32 -0700 (PDT)
+Date: Wed, 15 Oct 2025 22:05:20 -0700 (PDT)
+From: Hugh Dickins <hughd@google.com>
+To: Kalesh Singh <kaleshsingh@google.com>
+cc: Hugh Dickins <hughd@google.com>, akpm@linux-foundation.org, 
+    minchan@kernel.org, lorenzo.stoakes@oracle.com, david@redhat.com, 
+    Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de, 
+    kernel-team@android.com, android-mm@google.com, stable@vger.kernel.org, 
+    SeongJae Park <sj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+    Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+    Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
+    Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+    Jann Horn <jannh@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+    Masami Hiramatsu <mhiramat@kernel.org>, 
+    Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+    Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+    Juri Lelli <juri.lelli@redhat.com>, 
+    Vincent Guittot <vincent.guittot@linaro.org>, 
+    Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+    Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+    Valentin Schneider <vschneid@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+    linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+    linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] mm: fix off-by-one error in VMA count limit
+ checks
+In-Reply-To: <CAC_TJvdLxPRC5r+Ae+h2Zmc68B5+s40+413Xo4SjvXH2x2F6hg@mail.gmail.com>
+Message-ID: <af0618c0-03c5-9133-bb14-db8ddb72b8de@google.com>
+References: <20251013235259.589015-1-kaleshsingh@google.com> <20251013235259.589015-2-kaleshsingh@google.com> <144f3ee6-1a5f-57fc-d5f8-5ce54a3ac139@google.com> <CAC_TJvdLxPRC5r+Ae+h2Zmc68B5+s40+413Xo4SjvXH2x2F6hg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="-1463770367-1513627236-1760591132=:18627"
 
-test_parse_test_list_file writes some data to
-/tmp/bpf_arg_parsing_test.XXXXXX and parse_test_list_file() will read
-the data back.  However, after writing data to that file, we forget to
-call fsync() and it's causing testing failure in my laptop.  This patch
-helps fix it by adding the missing fsync() call.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Fixes: 64276f01dce8 ("selftests/bpf: Test_progs can read test lists from file")
-Signed-off-by: Xing Guo <higuoxing@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/arg_parsing.c | 3 +++
- 1 file changed, 3 insertions(+)
+---1463770367-1513627236-1760591132=:18627
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-index fbf0d9c2f58b..e27d66b75fb1 100644
---- a/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arg_parsing.c
-@@ -144,6 +144,9 @@ static void test_parse_test_list_file(void)
- 	if (!ASSERT_OK(ferror(fp), "prepare tmp"))
- 		goto out_fclose;
- 
-+	if (!ASSERT_OK(fsync(fileno(fp)), "fsync tmp"))
-+		goto out_fclose;
-+
- 	init_test_filter_set(&set);
- 
- 	if (!ASSERT_OK(parse_test_list_file(tmpfile, &set, true), "parse file"))
--- 
-2.51.0
+On Tue, 14 Oct 2025, Kalesh Singh wrote:
+> On Mon, Oct 13, 2025 at 11:28=E2=80=AFPM Hugh Dickins <hughd@google.com> =
+wrote:
+> >
+> > Sorry for letting you go so far before speaking up (I had to test what
+> > I believed to be true, and had hoped that meanwhile one of your many
+> > illustrious reviewers would say so first, but no): it's a NAK from me.
+> >
+> > These are not off-by-ones: at the point of these checks, it is not
+> > known whether an additional map/vma will have to be added, or the
+> > addition will be merged into an existing map/vma.  So the checks
+> > err on the lenient side, letting you get perhaps one more than the
+> > sysctl said, but not allowing any more than that.
+> >
+> > Which is all that matters, isn't it? Limiting unrestrained growth.
+> >
+> > In this patch you're proposing to change it from erring on the
+> > lenient side to erring on the strict side - prohibiting merges
+> > at the limit which have been allowed for many years.
+> >
+> > Whatever one thinks about the merits of erring on the lenient versus
+> > erring on the strict side, I see no reason to make this change now,
+> > and most certainly not with a Fixes Cc: stable. There is no danger
+> > in the current behaviour; there is danger in prohibiting what was
+> > allowed before.
+> >
+> > As to the remainder of your series: I have to commend you for doing
+> > a thorough and well-presented job, but I cannot myself see the point in
+> > changing 21 files for what almost amounts to a max_map_count subsystem.
+> > I call it misdirected effort, not at all to my taste, which prefers the
+> > straightforward checks already there; but accept that my taste may be
+> > out of fashion, so won't stand in the way if others think it worthwhile=
+=2E
+>=20
+> Hi Hugh,
+>=20
+> Thanks for the detailed review and for taking the time to test the behavi=
+or.
+>=20
+> You've raised a valid point. I wasn't aware of the history behind the
+> lenient check for merges. The lack of a comment, like the one that
+> exists for exceeding the limit in munmap(), led me to misinterpret
+> this as an off-by-one bug. The convention makes sense if we consider
+> potential merges.
 
+Yes, a comment there would be helpful (and I doubt it's worth more
+than adding a comment); but I did not understand at all, Liam's
+suggestion for the comment "to state that the count may not change".
+
+>=20
+> If it was in-fact the intended behavior, then I agree we should keep
+> it lenient. It would mean though, that munmap() being able to free a
+> VMA if a split is required (by permitting exceeding the limit by 1)
+> would not work in the case where we have already exceeded the limit. I
+> find this to be inconsistent but this is also the current behavior ...
+
+You're saying that once we go one over the limit, say with a new mmap,
+an munmap check makes it impossible to munmap that or any other vma?
+
+If that's so, I do agree with you, that's nasty, and I would hate any
+new code to behave that way.  In code that's survived as long as this
+without troubling anyone, I'm not so sure: but if it's easily fixed
+(a more lenient check at the munmap end?) that would seem worthwhile.
+
+Ah, but reading again, you say "if a split is required": I guess
+munmapping the whole vma has no problem; and it's fine for a middle
+munmap, splitting into three before munmapping the middle, to fail.
+I suppose it would be nicer if munmaping start or end succeeeded,
+but I don't think that matters very much in this case.
+
+>=20
+> I will drop this patch and the patch that introduces the
+> vma_count_remaining() helper, as I see your point about it potentially
+> being unnecessary overhead.
+>=20
+> Regarding your feedback on the rest of the series, I believe the 3
+> remaining patches are still valuable on their own.
+>=20
+>  - The selftest adds a comprehensive tests for VMA operations at the
+> sysctl_max_map_count limit. This will self-document the exact behavior
+> expected, including the leniency for potential merges that you
+> highlighted, preventing the kind of misunderstanding that led to my
+> initial patch.
+>=20
+>  - The rename of mm_struct->map_count to vma_count, is a
+> straightforward cleanup for code clarity that makes the purpose of the
+> field more explicit.
+>=20
+>  - The tracepoint adds needed observability for telemetry, allowing us
+> to see when processes are failing in the field due to VMA count limit.
+>=20
+> The  selftest, is what  makes up a large portion of the diff you
+> sited, and with vma_count_remaining() gone the series will not touch
+> nearly as many files.
+>=20
+> Would this be an acceptable path forward?
+
+Possibly, if others like it: my concern was to end a misunderstanding
+(I'm generally much too slow to get involved in cleanups).
+
+Though given that the sysctl is named "max_map_count", I'm not very
+keen on renaming everything else from map_count to vma_count
+(and of course I'm not suggesting to rename the sysctl).
+
+Hugh
+---1463770367-1513627236-1760591132=:18627--
 
