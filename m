@@ -1,175 +1,153 @@
-Return-Path: <linux-kselftest+bounces-43328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61A6BBE3DD1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 16:17:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A70F7BE3FB1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 16:47:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 96A494EA6C7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 14:17:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C800F19C1111
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 14:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B52339B3E;
-	Thu, 16 Oct 2025 14:17:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="dwCRqlcK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B5F33CEB5;
+	Thu, 16 Oct 2025 14:47:04 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CA6F510
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 14:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4AB1DFCB
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 14:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760624253; cv=none; b=jNga+svVsBZhsApjvPHvvUxILghJc7U3N8Cs51X2Fz1vI7ry4+OqTlzbR4qikdxYgKwydGiH+5/E/nibhBxK/B47jJWZqzc6ez+H+alffwLOfSp7O1FDl3CNKPX0rw7df9KiAIrrenegX1/Ku7WDCC8s7o2sDyNy9Ex424rTDII=
+	t=1760626024; cv=none; b=LDyBmvEbNFCF6yHeVLiPL1ZMQd+zEueRwCbBD9XaUZnFSGto8sx+LpbZ0s4yO/BWpivh13sopuU9T8wLK7N2JO0FNb0iPWjWChSKuIZaJW4TVySpjGFyLt8Zoq+FZiu0R4zksgyefXHVk7aSwn4XKfo2cNXedCsVgJ2/HpM+l2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760624253; c=relaxed/simple;
-	bh=MjX01ygQ/3tk/sGwgwk/36ebQMdAkveFRCJrUinD/Og=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UhiJ5ns/YGC4Wt9FZ0HJzn4DlN9IXLL7BB05pA1bwjVOisKXFrnVLJLvFigM/usXukWsqeJeB9CbvmGPyiejklTkF7u4YgrCxRyjh9WJMvyuOqrRhuuEyp/0ogJ9lYbidFq3PS030+FCS7VOdJ6mqExESO3rZFvD+JwQB+Bh+gM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=dwCRqlcK; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-87c1a760df5so11184136d6.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 07:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1760624251; x=1761229051; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vDx8+7T+MYrCmWnRteKVa1iC6/sCWZvHc99T+OB8RqU=;
-        b=dwCRqlcKPsDQVOHquk4yaz5Cv4fPtBLRWee5G2rzxUKcdtZMxVfMRjn0mDOxVrewwz
-         KhG5boJn1F0EHcgdAzDtOfdzxeKOTi86FsXlAOWzMrmH+qmHPIjPHnnbJKnBial5NN2b
-         4s7Z9es5jhpxKD0kAxJ8BkzNr5E/4oEnPzEGRDR69OAByvk0p7UU3lTzxrx7vGBSf9Z3
-         oFPf1jGc9s4O18ef3Jiycd7b1+QVMzmqQadgc3U4egLfYhQRJcWQGXsUfbZhQjhFupIc
-         gADI612o9/2HT+1Ux5P4OzN0RB9D9sj32O8DTRenmNW2We4+C8H08EuCwSxwVtoUYDcS
-         l0Xw==
+	s=arc-20240116; t=1760626024; c=relaxed/simple;
+	bh=sA59ZYLqRjQRcEDrdphsOdS3J6yviy7YDv1qUdw1/7I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e+ydRvgGzslby1N/S1RCom2d6VLZnnT9/4lDlorITyHhUSTPXS7BAV7+sWYEni4ko4O3s3Jxx0ozYf7Vff4PctEmHIXV512b1/gLCg6u4F0BgfyCu4qWP8UH+HcwyQAdtK2k0LUglniOs4BDLbzKN2QNchapt89Xl55zUecfH6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=yonch.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=yonch.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7bc626c5467so522543a34.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 07:47:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760624251; x=1761229051;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vDx8+7T+MYrCmWnRteKVa1iC6/sCWZvHc99T+OB8RqU=;
-        b=Rso0PuGlfnbdcn6iQPgmI6Afxz3LZxSUIEs1RV8XekrMxOTl543Gan0LmrdUCg2T86
-         OC09oaA25aiDXL1AfZNZKkC9EXfMtCdEOqJ+gZP0cNndVvmhl2QH3wqAUbVrBugyoeCw
-         4K7FhoCvfOrCtJc81b1ZNQlGnQkxNeunOx58nBkvnpqg7jmJyjHvJfkBIiHS0WZbUqn7
-         yvLRb4IhGD5/gu/40fEZBcUyWUzT4GAbkgokAvc4/OR9XfNZdtHGHsxHsvbHSkdbP1e9
-         1TtZDY3GHANjy0pdsk97MsY7Nlma/Kw0wwrDks4yXLWxElTeG/YjqRK7E27OGcDeLbuJ
-         nxLA==
-X-Forwarded-Encrypted: i=1; AJvYcCV5G91e8NooDyswy+5EbtZm9cv4HzduZ6swzUs428CrJgOnc3Qxl+WQPMItzp3OGK4L5iP+cZuInPl6mn3q2iI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgzjqOW7k2JOH+hQudlFA678rsJodSKS+oHLiiCI0hWAMdCH9Q
-	FdMIsqhHudSZ4W/MHvxooGQ6sHCUZ1CwY/sjeco+lc8T07bVvPCwsJecxr5HCxSGTlA=
-X-Gm-Gg: ASbGncsx9smevThS83qavk1lDQtlbGDnzF3kyqDzu2GqRHpho4aikEDXZL394D2c1dh
-	5KlBUnpSPCNjaGJ76w/1YkYlm7Pmn38JPA1d04etyPiCry4+lk9V+El9HvV2Zv/67juqqkR6iTg
-	M9to0axSaI5/KhqjFJNrZlU+ALzPwLMOYajVhl/DQIJf6T3g0GrIQJl/ewxl4eyTvAkp5ZgFEyo
-	ATQ9FB0bUQAwXzkeooaIztPiOjIq+HJYed3KOVsM6fHt6yLGMZ+0+oHWFBVgyCR7qEFYFVHGMbW
-	CdGCoLOd/pFVPKB86B09pO/QrDEua0QdguL1Ho1JcaLwb1FMI50NILp8KMj37vs2ImsmaiSQZlH
-	3Zx1M3RaZgbcSR6qLyKNgApp8mZLB2wZFfmq9o7ZwwpUBTj00MEa5NPqZ6jYGiQa75RZsU4+uZo
-	Fn0C4LA3787jJgEH71yhY8I8pQEkfmUZBXP9JW7KGKJR5MDsq5jOLXYb+IypyZNs+aGOhGVg==
-X-Google-Smtp-Source: AGHT+IEMapVQRI0ck2KCGxvEYuBB3a+08a/2JspNz86EbcND1SGuRInp+B2xwxF3NumJMeFQLVJPkQ==
-X-Received: by 2002:ac8:5883:0:b0:4e8:99b0:b35e with SMTP id d75a77b69052e-4e89d263140mr4179321cf.30.1760624250594;
-        Thu, 16 Oct 2025 07:17:30 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-96-255-20-138.washdc.ftas.verizon.net. [96.255.20.138])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4e8955b07e9sm13309541cf.27.2025.10.16.07.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Oct 2025 07:17:29 -0700 (PDT)
-Date: Thu, 16 Oct 2025 10:17:25 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Shivank Garg <shivankg@amd.com>, jgowans@amazon.com, mhocko@suse.com,
-	jack@suse.cz, kvm@vger.kernel.org, david@redhat.com,
-	linux-btrfs@vger.kernel.org, aik@amd.com, papaluri@amd.com,
-	kalyazin@amazon.com, peterx@redhat.com, linux-mm@kvack.org,
-	clm@fb.com, ddutile@redhat.com, linux-kselftest@vger.kernel.org,
-	shdhiman@amd.com, gshan@redhat.com, ying.huang@linux.alibaba.com,
-	shuah@kernel.org, roypat@amazon.co.uk, matthew.brost@intel.com,
-	linux-coco@lists.linux.dev, zbestahu@gmail.com,
-	lorenzo.stoakes@oracle.com, linux-bcachefs@vger.kernel.org,
-	ira.weiny@intel.com, dhavale@google.com, jmorris@namei.org,
-	willy@infradead.org, hch@infradead.org, chao.gao@intel.com,
-	tabba@google.com, ziy@nvidia.com, rientjes@google.com,
-	yuzhao@google.com, xiang@kernel.org, nikunj@amd.com,
-	serge@hallyn.com, amit@infradead.org, thomas.lendacky@amd.com,
-	ashish.kalra@amd.com, chao.p.peng@intel.com, yan.y.zhao@intel.com,
-	byungchul@sk.com, michael.day@amd.com, Neeraj.Upadhyay@amd.com,
-	michael.roth@amd.com, bfoster@redhat.com, bharata@amd.com,
-	josef@toxicpanda.com, Liam.Howlett@oracle.com,
-	ackerleytng@google.com, dsterba@suse.com, viro@zeniv.linux.org.uk,
-	jefflexu@linux.alibaba.com, jaegeuk@kernel.org,
-	dan.j.williams@intel.com, surenb@google.com, vbabka@suse.cz,
-	paul@paul-moore.com, joshua.hahnjy@gmail.com, apopple@nvidia.com,
-	brauner@kernel.org, quic_eberman@quicinc.com, rakie.kim@sk.com,
-	cgzones@googlemail.com, pvorel@suse.cz,
-	linux-erofs@lists.ozlabs.org, kent.overstreet@linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net, pankaj.gupta@amd.com,
-	linux-security-module@vger.kernel.org, lihongbo22@huawei.com,
-	linux-fsdevel@vger.kernel.org, pbonzini@redhat.com,
-	akpm@linux-foundation.org, vannapurve@google.com,
-	suzuki.poulose@arm.com, rppt@kernel.org, jgg@nvidia.com
-Subject: Re: [f2fs-dev] [PATCH kvm-next V11 6/7] KVM: guest_memfd: Enforce
- NUMA mempolicy using shared policy
-Message-ID: <aPD-dbl5KWNSHu5R@gourry-fedora-PF4VCD3F>
-References: <20250827175247.83322-2-shivankg@amd.com>
- <20250827175247.83322-9-shivankg@amd.com>
- <aNVQJqYLX17v-fsf@google.com>
- <aNbrO7A7fSjb4W84@google.com>
- <aPAWFQyFLK4EKWVK@gourry-fedora-PF4VCD3F>
- <aPAkxp67-R9aQ8oN@google.com>
+        d=1e100.net; s=20230601; t=1760626021; x=1761230821;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lUqEP1dwmUVPaxUfPgQ2bKqmT6S9ky2aoE0uUBHPT0g=;
+        b=n+94GDrDkzd/ebTYC00sveAauSgIYFI6BqtPxH17+iLLgzFvshkIz0MJxikoDJustd
+         vr7GOMN11hZehw6nQoX32lFlZRTc5qTqHy4/EohMACIS/A5P77aaKwhcqJC8NotrbLE5
+         tW5CY+mNn3Q8lDM0u6bOCSowaRrqu/rvnYo+9FtDnoPnylBJqx6/SkpjnYj4m6U6Xd7X
+         UhmShPlGE+LyVPfJDLG9aKqyVQ2xxHlLh2Z9qifbvflcKdDpotJNndUR/E+ascTObZRV
+         pcmnpOtMtrMBTppBEaH6/C5mmGRINeuwL5iPtD18alwal6av6/BHkM8tue4wzr9pL9xW
+         lmCA==
+X-Gm-Message-State: AOJu0YwkuI6HCrlOKtAXD+eLz7LjEfT7MErDuzzd5S+n8q8VHG1talln
+	D8xJR7j/pLdHkDJl+4eiShFjCC7DrweNvvKjUrserDK0KD+xdqaudoEM
+X-Gm-Gg: ASbGnctnyM1X8akX3Wb8YW8Vnj8o3Z3pE4hBhBrRmf5A8keIYnvSttbNZbuB69qFx45
+	4cztkHueE7lNZIZoLo/dGJtrZvMdH4qWJvwjmznjgO4pNx8cnZNdhjv8TQn5ENtPH0XzLH+p8uk
+	efghNs9iayEmXdVEt7D+i0L1SXbFKr7e1OtFbZJYiTQz6X0xbq/kK/zNiPLUIE31v8pZSzHPRl6
+	Rjf57aC1gSUiiXMp8r2MVdOyLcrNdSGjXcX7sWoa24R314pfav26vxzbYFNxeVBQmYo54VAwMTW
+	NdE/p5CkFyjQZLyNU/bfHJhnna5PKMfZgysw+VmBMwfvsRJHpCM4NRzQeiQ6tQfo2609CCgpg+P
+	xf2afNUHYjkId3EGQ64zX6ljMqhhOuvSPLYiUKf+r0frNgTPWNXp3VY8Aw/nRz/yJPMQTW47sjY
+	WLEUVSwj32fFwrH41mC66t+6oujA8HWrfwLMMy+tnnjQNFuM6OTmDrmXwrNBzc5nZx3H8=
+X-Google-Smtp-Source: AGHT+IF9DW0Z61L6docyCir97py3czxMKDh5vf9yDUOUUa5eqZnxxy3L15m2srpQ+v03IN0vXX5rpA==
+X-Received: by 2002:a05:6808:30a2:b0:438:3350:8d25 with SMTP id 5614622812f47-443a2ff491dmr103652b6e.40.1760626021433;
+        Thu, 16 Oct 2025 07:47:01 -0700 (PDT)
+Received: from localhost.localdomain (syn-067-079-108-173.biz.spectrum.com. [67.79.108.173])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-441cc812f24sm3678018b6e.12.2025.10.16.07.47.00
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 16 Oct 2025 07:47:01 -0700 (PDT)
+From: Jonathan Perry <yonch@yonch.com>
+To: Tony Luck <tony.luck@intel.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	James Morse <james.morse@arm.com>,
+	Roman Storozhenko <romeusmeister@gmail.com>,
+	Jonathan Perry <yonch@yonch.com>
+Subject: [PATCH 0/8] resctrl: Add perf PMU for resctrl monitoring
+Date: Thu, 16 Oct 2025 09:46:48 -0500
+Message-ID: <20251016144656.74928-1-yonch@yonch.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aPAkxp67-R9aQ8oN@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 15, 2025 at 03:48:38PM -0700, Sean Christopherson wrote:
-> On Wed, Oct 15, 2025, Gregory Price wrote:
-> > why is __kvm_gmem_get_policy using
-> > 	mpol_shared_policy_lookup()
-> > instead of
-> > 	get_vma_policy()
-> 
-> With the disclaimer that I haven't followed the gory details of this series super
-> closely, my understanding is...
-> 
-> Because the VMA is a means to an end, and we want the policy to persist even if
-> the VMA goes away.
-> 
+Expose resctrl monitoring data via a lightweight perf PMU. 
 
-Ah, you know, now that i've taken a close look, I can see that you've
-essentially modeled this after ipc/shm.c | mm/shmem.c pattern.
+Background: The kernel's initial cache-monitoring interface shipped via 
+perf (commit 4afbb24ce5e7, 2015). That approach tied monitoring to tasks
+and cgroups. Later, cache control was designed around the resctrl 
+filesystem to better match hardware semantics, and the incompatible perf 
+CQM code was removed (commit c39a0e2c8850, 2017). This series implements
+a thin, generic perf PMU that _is_ compatible with resctrl.
 
-What's had me scratching my chin is that shm/shmem already has a
-mempolicy pattern which ends up using folio_alloc_mpol() where the
-relationship is
+Motivation: perf support enables measuring cache occupancy and memory 
+bandwidth metrics on hrtimer (high resolution timer) interrupts via eBPF.
+Compared with polling from userspace, hrtimer-based reads remove 
+scheduling jitter and context switch overhead. Further, PMU reads can be 
+parallel, since the PMU read path need not lock resctrl's rdtgroup_mutex.
+Parallelization and reduced jitter enable more accurate snapshots of
+cache occupancy and memory bandwidth. [1] has more details on the 
+motivation and design.
 
-tmpfs: sb_info->mpol = default set by user
-  create_file: inode inherits copy of sb_info->mpol
-    fault:    mpol = shmem_get_pgoff_policy(info, index, order, &ilx);
-             folio = folio_alloc_mpol(gfp, order, mpol, ilx, numa_node_id())
+Design: The "resctrl" PMU is a small adapter on top of resctrl's 
+monitoring path:
+- Event selection uses `attr.config` to pass an open `mon_data` fd
+  (e.g. `mon_L3_00/llc_occupancy`).
+- Events must be CPU-bound within the file's domain. Perf is responsible 
+  the read executes on the bound CPU.
+- Event init resolves and pins the rdtgroup, prepares struct rmid_read via
+  mon_event_setup_read(), and validates the bound CPU is in the file's 
+  domain CPU mask.
+- Sampling is not supported; reads match the `mon_data` file contents.
+- If the rdtgroup is deleted, reads return 0.
 
-So this inode mempolicy in guest_memfd is really acting more as a the
-filesystem-default mempolicy, which you want to survive even if userland
-never maps the memory/unmaps the memory.
+Includes a new selftest (tools/testing/selftests/resctrl/pmu_test.c)
+to validate the PMU event init path, and adds PMU testing to existing 
+CMT tests.
 
-So the relationship is more like
+Example usage (see Documentation/filesystems/resctrl.rst):
+Open a monitoring file and pass its fd in `perf_event_attr.config`, with
+`attr.type` set to the `resctrl` PMU type.
 
-guest_memfd -> creates fd/inode <- copies task mempolicy (if set)
-  vm:  allocates memory via filemap_get_folio_mpol()
-  userland mmap(fd):
-  	creates new inode<->vma mapping
-	vma->mpol = kvm_gmem_get_policy()
-	calls to set/get_policy/mbind go through kvm_gmem 
+The patches are based on top of v6.18-rc1 (commit 3a8660878839).
 
-This makes sense, sorry for the noise.  Have been tearing apart
-mempolicy lately and I'm disliking the general odor coming off
-it as a whole.  I had been poking at adding mempolicy support to
-filemap and you got there first.  Overall I think there are still
-other problems with mempolicy, but this all looks fine as-is.
+[1] https://www.youtube.com/watch?v=4BGhAMJdZTc
 
-~Gregory
+Jonathan Perry (8):
+  resctrl: Pin rdtgroup for mon_data file lifetime
+  resctrl/mon: Split RMID read init from execution
+  resctrl/mon: Select cpumask before invoking mon_event_read()
+  resctrl/mon: Create mon_event_setup_read() helper
+  resctrl: Propagate CPU mask validation error via rr->err
+  resctrl/pmu: Introduce skeleton PMU and selftests
+  resctrl/pmu: Use mon_event_setup_read() and validate CPU
+  resctrl/pmu: Implement .read via direct RMID read; add LLC selftest
+
+ Documentation/filesystems/resctrl.rst         |  64 ++++
+ fs/resctrl/Makefile                           |   2 +-
+ fs/resctrl/ctrlmondata.c                      | 118 ++++---
+ fs/resctrl/internal.h                         |  24 +-
+ fs/resctrl/monitor.c                          |   8 +-
+ fs/resctrl/pmu.c                              | 217 +++++++++++++
+ fs/resctrl/rdtgroup.c                         | 131 +++++++-
+ tools/testing/selftests/resctrl/cache.c       |  94 +++++-
+ tools/testing/selftests/resctrl/cmt_test.c    |  17 +-
+ tools/testing/selftests/resctrl/pmu_test.c    | 292 ++++++++++++++++++
+ tools/testing/selftests/resctrl/pmu_utils.c   |  32 ++
+ tools/testing/selftests/resctrl/resctrl.h     |   4 +
+ .../testing/selftests/resctrl/resctrl_tests.c |   1 +
+ 13 files changed, 948 insertions(+), 56 deletions(-)
+ create mode 100644 fs/resctrl/pmu.c
+ create mode 100644 tools/testing/selftests/resctrl/pmu_test.c
+ create mode 100644 tools/testing/selftests/resctrl/pmu_utils.c
+
 
