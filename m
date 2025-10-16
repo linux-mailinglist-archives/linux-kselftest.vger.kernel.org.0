@@ -1,345 +1,207 @@
-Return-Path: <linux-kselftest+bounces-43308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7498BE2048
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 09:51:09 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4561BE20A8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 09:55:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D17A03B0B97
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 07:50:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 462154F984C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 07:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B49319870;
-	Thu, 16 Oct 2025 07:46:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BD53009E7;
+	Thu, 16 Oct 2025 07:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iNfMiG2A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VhnjvLRt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF713195E1;
-	Thu, 16 Oct 2025 07:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760600790; cv=none; b=ZD1ebMxhImEdRGcrOhhPr2T/QjkiuO/CbGcWP84T7sPsWqy1xqYabS9UoEi9Wbs5Y6Seodkxmpd7DBA7KoNs/zEixQ13Aovx5fAaLWiWM6MLT+uCXE8b5LKoSq9beHpJC+e1Bl8CMIMV7/PvynTZKvEIbKFDg8hgsYV838wDqBU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760600790; c=relaxed/simple;
-	bh=h604/0gPdQgeIgxXDAkaljJ0Od0j2JsTghTy+N+3pX4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dHs8BonHDU/jpQ7YrelP7zYpAmo4zwElQ3bnvP1UMiE1vcZlxOEGxHflbW3yIg73xr63TQwEhyHlIT0swDBNsGajxkvlbzJwH3e3DOLg6jI2xEBZ1hiWGeMcFGBLB6zwpDM07TyT4Ra2RQ0dov6MGooIfmddC1Yb4myeQJxwLmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iNfMiG2A; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 23F0FC0358A;
-	Thu, 16 Oct 2025 07:46:07 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 533E16062C;
-	Thu, 16 Oct 2025 07:46:26 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 28F07102F22AA;
-	Thu, 16 Oct 2025 09:46:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760600785; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=h+bGwFdB2RinX88+7xXz9AJVRdq645xgVOTya+QXTIM=;
-	b=iNfMiG2Ac4ClCjJoAdTBmoKFtOHoT3OP8r0RkqQSlsA5V6ydkNGXB4j8cBHDqdM+Otau8d
-	8M+2c1Vw5BLpRQs7xs7MlA0Zvx74tIguVPrtr3ffbI93Pali3dVj/T5xBsFjx8dNxOJF2v
-	1kYzy1M05CU6mWHHWWd2cwrLYZNhcmx87xjzgd5i1Ra8JHUrgs6m/rUdWNKLX4XP1ZM3AT
-	IC9n+hjjLOnOTnWeEp8L4mI8UCMe7O62bV+YfzcrzSvQ6/8+O/dXqOqnodkKDheph1RMGS
-	dXADsQPipypKxyvoM0T8rftK9o0YNjoMFAq2cmZTNXKLOfHQe04wV0TP4328IA==
-From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Thu, 16 Oct 2025 09:45:44 +0200
-Subject: [PATCH bpf-next v5 15/15] selftests/bpf: test_xsk: Integrate
- test_xsk.c to test_progs framework
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA302FDC4E;
+	Thu, 16 Oct 2025 07:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760600846; cv=fail; b=sDVNTVPP82mKZAsEY2zKIKjkV0RxNudOSydtMVuWeSWyVFYpnuqsx+8p9lTrY6nlIW1QvpVdIqXqGiRV9cz0l3olMO1qtmBSREuzkMD+iTCMxMFGFk5c94kLRloBFXGc2o244wOfUHf8q4eX/L8y7gy2Om4VYDDXz/49QORPCZE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760600846; c=relaxed/simple;
+	bh=g54Rvx4gsm7M/pp4TwqX7c/a9WkRxgdaimQXmX+HgPg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=OhdAg7meVCzXhjkJyrToau5a4aIlSwClquRbz2ApE468qn/jEqAAmu53evK/ZjtneXCgXN2YMsecYgIY2mZOJ8bT9SrsmeJCTQSdEokZINoJArx3V0PXFA6vKbLIrX2p6PeXnem3pLNo6xSa7P2q2+eRdBSI100TxR5Umy2l5lw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VhnjvLRt; arc=fail smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760600845; x=1792136845;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=g54Rvx4gsm7M/pp4TwqX7c/a9WkRxgdaimQXmX+HgPg=;
+  b=VhnjvLRthztZsk9aSrgqIOFnll6lfLIqrSPYZ0ul+h5LWG7tOpplP2Uk
+   TDzFaa/yNeAEzSQyxhmjI/jqoMFYg2gD5tCWlfP5sddcUOfRiuNyeTlWH
+   D76CWJ3U9KbbA2qbLkgkDTVF1i3tqBbqysr64RWEenjwDNEyiZqZn5S2F
+   vQZUtE++JbL80NbEjI6dRVhbLfvz18kOo9mBMhdTYAgHMoWm21FDvya6/
+   7TrqCRtFZvzQp2Mbq7FIAh+BkgFQOS0vcCzxcv0S58HaMjLWGAMtoHzBU
+   d8vj1G1GUTvHS7hG8POBZ/mVH5dEQhhtk7UmtoDIKaiUZH/aUbFVJw6u+
+   Q==;
+X-CSE-ConnectionGUID: bqj70GCMRhK7hD1xuLBU3Q==
+X-CSE-MsgGUID: goYMxRatTxuO1lW1PiTQXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="62826175"
+X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
+   d="scan'208";a="62826175"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 00:47:24 -0700
+X-CSE-ConnectionGUID: pOVEnrsiTGKxKO6Ri+Zdww==
+X-CSE-MsgGUID: LXDo4EwlR1m5k+Lbnf0x3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
+   d="scan'208";a="181596517"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 00:47:24 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Thu, 16 Oct 2025 00:47:23 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27 via Frontend Transport; Thu, 16 Oct 2025 00:47:23 -0700
+Received: from CY3PR05CU001.outbound.protection.outlook.com (40.93.201.52) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Thu, 16 Oct 2025 00:47:23 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xBPNcI1GZc5/XFhbdTmFXxrAixRTrJwaPI+HF1rV88yDlTraOZMw00ZwS5C9GQ4EX4lYCgtO6/4a2hjy8GyVfBmFvQSdxiZjLVic6v11sVXUZyHZvT5skSH2kqBRzoGvuD9a06lwtGvBzipLpW1o+Bsv+rm5BnOx06stex5qP3J8SFc4n7nSkywH6vOYpb0+S3rCqTelb8knVkeU77g/UlOGLYnwFcp/ni/7YHP2jKGnl8UTbbgDb/vCX+5hddJyrcxko8pjaiVIXfR8eMEppUk7RN3iqkp/dJGv/rKa/pjRCp0REkTCQnkZv51q7Ydrv1vDmg2TkDU+ykHwNAS5uQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g54Rvx4gsm7M/pp4TwqX7c/a9WkRxgdaimQXmX+HgPg=;
+ b=gB83xsQ1QstWaIez6gyI3MnfvM+NaWxU9nZwxZbMuJ3QaqgnBWI7EOkv8SJVp6p/xevfHzeMav2iGq+Qqro7OYFFkm/DJCKfmhiVWVuAjQBCBoea3KpCWuk0OE5KD/1BOTXvMeZzizjcfwyMqDA6mENXBz0s00UUx9h8J4NMOB2vo8WXfuanzFXshrqQweAkY2OIF1Axki+8yDfck03u525847ueAieH/lg9f/7OpYR/XwriB0w6EwY90nXrT08gnh4PnsfrxHWOrt1W1NhTPj7lotNKYJTXSE3OwrsOkADDiWlOS0BOu8dABHU+xQaPgLH1BtS9ronrqd+wXr6eoA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by MW5PR11MB5787.namprd11.prod.outlook.com (2603:10b6:303:192::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.12; Thu, 16 Oct
+ 2025 07:47:20 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::b576:d3bd:c8e0:4bc1%5]) with mapi id 15.20.9228.012; Thu, 16 Oct 2025
+ 07:47:20 +0000
+From: "Tian, Kevin" <kevin.tian@intel.com>
+To: Nicolin Chen <nicolinc@nvidia.com>, "jgg@nvidia.com" <jgg@nvidia.com>
+CC: "shuah@kernel.org" <shuah@kernel.org>, "alessandro.zanni87@gmail.com"
+	<alessandro.zanni87@gmail.com>, "iommu@lists.linux.dev"
+	<iommu@lists.linux.dev>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH rc] iommufd/selftest: Fix ioctl return value in
+ _test_cmd_trigger_vevents()
+Thread-Topic: [PATCH rc] iommufd/selftest: Fix ioctl return value in
+ _test_cmd_trigger_vevents()
+Thread-Index: AQHcPVRnkLZe3dbGA0qfw2AZydGM8LTEZ2yQ
+Date: Thu, 16 Oct 2025 07:47:20 +0000
+Message-ID: <BN9PR11MB5276834E90A7990269EBBF608CE9A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20251014214847.1113759-1-nicolinc@nvidia.com>
+In-Reply-To: <20251014214847.1113759-1-nicolinc@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MW5PR11MB5787:EE_
+x-ms-office365-filtering-correlation-id: 4645af4b-958a-42ab-8aa6-08de0c883c79
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700021;
+x-microsoft-antispam-message-info: =?us-ascii?Q?7lDQdiUR9i3TtJLQEBP9uX5GOQSXHf/N+t34LnEuvnUN0gE2+/phxsmkhVXr?=
+ =?us-ascii?Q?6tGh63bsyReRTa0jXeLytiJXYksz+b1IaQWUHGk/+E4ZTtI6bsdcodAFIx6F?=
+ =?us-ascii?Q?RyNnhDsvit0DS2cb/vnc7Y/d1nSc3d6wgEKy90e4W+1r3sT9NVpKiEhI2crE?=
+ =?us-ascii?Q?zo8IHLz8r+VbrGtNejExYWUsOsw2xnfeEw0t9XGkVL/SMMVDiTIbXZyEoZa6?=
+ =?us-ascii?Q?1kTxbdGrxyFuZkOCca2VOXGCQEdtGzvWhusJsTIM4m2EHQ9Tl/2h/5v0Sfwc?=
+ =?us-ascii?Q?EwAWUSGB4kjy97p5SUQyz+Rv8lpCdYxKeMcD3hVdzu4TdYDmJuj52Gk6rcLL?=
+ =?us-ascii?Q?hvu6XkW1MsGYpt9IzVYEPKJA9VzrtLnDHalNk8EnYWWIxNQdjOJzes7+QcEH?=
+ =?us-ascii?Q?FRSztxIXEIQYgz22aH6IywE8tGGqI8jSSj/aIA9UUmq9Qr1135VUqLHr6ids?=
+ =?us-ascii?Q?RVMNqaHV4K9D7uD/fa2FIdWzo1JGU39tyz31o01Knb2ivKPqCMGm+CAEFsYV?=
+ =?us-ascii?Q?4nFUyTWPSWUZuXhfdUZ+um20nm7exEak+orh8Tv6vLRDfQ0/rnny7uI0P0+p?=
+ =?us-ascii?Q?o3hupbhobpDtlyNXL4KDiidMev5T16KPQMKbsuObzwJWoPVwp5ipEIiZtPKX?=
+ =?us-ascii?Q?jruL+W1K6SoUmXPa5/YRe+egym7bgC1Usyr7hIOM+tseJeV26P1emm9/+7zZ?=
+ =?us-ascii?Q?Wm7SiTJAQrMcZY8pmvz5fJBSHzQSfQNHX2cN4tCEiDG6Cvck3sVUB5UwztiY?=
+ =?us-ascii?Q?IEzbiVIyuEp5hTRAuwr22ziCJamD0QC5nulfl+mSJ53QqHsjPTx+vtFGkxLr?=
+ =?us-ascii?Q?YzknYSg9KqY/Yidki1kdubdeE1A508JPIp4Rz1vBf3Z+XFNd/w8tlQSKkBpK?=
+ =?us-ascii?Q?CQ8FhycRzQnqN1quKsYn3H+qNVnUG5509hPTDWrDVijBpofUu0i5xC+2vquG?=
+ =?us-ascii?Q?xHuf3qwTXyNBj4ruJJlBe8kNEiwaChlafB4L50GGcZiski6rXnlmkmOz9ha3?=
+ =?us-ascii?Q?0SZPI4FboduVMwu6Z41FDTLUMm0l5CUWKs4MRzz1iOvrXZ8t+D7a7J2CQ8eV?=
+ =?us-ascii?Q?HZAFbRzpCp3U5GpstwyiW5YujUPwcmaW/5jhQA6nC6J78gMeFz8rQjgyBUSH?=
+ =?us-ascii?Q?Krz3KeA8xkh+QGj9JnfKR8KO2q0BizN8KWu7aAAKeDfrCD7nDWgZ11HcyEqd?=
+ =?us-ascii?Q?S3iWEDtIt8AvsDsYRLhIeHTbIziaD/SqkAOkHawH1VqaeOP7uHr4jtXdsuOO?=
+ =?us-ascii?Q?p4OjDqmY6J7/C4hBYDdQGDTXPAtYjMPNU/WTXhwr5wbv9Ie0O1Qvk9t4OC9N?=
+ =?us-ascii?Q?8auoBt0uhmRYoXm2TxpW89NerHSjUw13OQmZjhrU63X49G9yX6Iqd9hNfmjk?=
+ =?us-ascii?Q?kFKo1HvYES6M8xd6M6UlDRI1yPr303A8+eELNkG6uz22bEzuR+yyeCITwByn?=
+ =?us-ascii?Q?yimznljqngo80UpIgMVcGzUSoTdrVmUMbRwPg12MQWqVx7XoJ4eYwfmcYkOP?=
+ =?us-ascii?Q?aS5XN8eMUQfbiH2qZGQduaeDcZqMOcCzztYJ?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8e7pN55iEsjQikyFsf3BZpTOBTrczi51/ExKHIeLfP/3kSVQAQEhsOHlQIE2?=
+ =?us-ascii?Q?rbJB4rzty1/A4WUOa2yLbQFCaOWJKiXBFieqWtkTIYj5ZrsDFoandesAb+nY?=
+ =?us-ascii?Q?ApF1bvkxTv5qoSe8GSsla6EQuXlELR5gISAAPgOqK4JE/uKOMkX/sshROvGR?=
+ =?us-ascii?Q?ZdUbAIrjREJYQNh1V2Ev0gv5rP7wyyVt533/AMWXr+xu2OpFG2iAhMZ1ejzD?=
+ =?us-ascii?Q?7ATAoBdsMDPkSHBvPggrUQD/s0VEEWOjyvCqkhelFSlzSWEXrBEpK7KpjPVT?=
+ =?us-ascii?Q?KtIe92uLn+8V44G8PPJv73TxrXyaTgsUcREWeF2oRUXzrze+x7kxHCkduxXl?=
+ =?us-ascii?Q?ZrmAD/J8l6a1aFj3Y3quT9d5evnmPe1wlgPp9NHlNhe+Ndqckc+okevnzm1j?=
+ =?us-ascii?Q?6HUkknGGtB2WsZwJEQijyHlCQBq9ODQvP683xg9e5JkucOWYLRXWrCj0pQrc?=
+ =?us-ascii?Q?BIXl+57+3GNs6ziLvOkjcTsgB+v8738F1CJNPk4S/KmwV44maKavHxWbCLQC?=
+ =?us-ascii?Q?kHkwUBcDMsnJJ29yux0liHS5AQYMQ3+UN/LUXbuNUKzZ8O2QaDGof+0rpTEd?=
+ =?us-ascii?Q?VDPa06LxbXih38viY8ghQ5a1Ppy8azVC9IRjqiog/VaWj8/jUW+b377iTdHy?=
+ =?us-ascii?Q?YgTYVLpoiRE/tPaxh+y/NZzic9Ae9KQPpZISt9kYcpvaTMr2ErtQGzIMLjCY?=
+ =?us-ascii?Q?TfMiqrb4Fod1DBQ8t0yD4nhGPwZYO/kIG69D8J5SOmaRjNsop804NPp0qEvA?=
+ =?us-ascii?Q?VEz/2L6xjJ2NriUqmS6BYZkKGZBlFCElGfi3RvRkVfQNp8ouD9LGnBOFiVr1?=
+ =?us-ascii?Q?eyX5Wk6t4YPAQi3pSEefbgIXzcwMUsRjTa3jWOL3BbD4tGs0VrIkTp7sa2Oa?=
+ =?us-ascii?Q?5NQGt1ZztjFnk6pH3gecaYrjETcjwD7Mv7PIQcjs4SxFjBZO3leNOaFpWCFW?=
+ =?us-ascii?Q?gyBgN48hOcUvs+9sXdoargr/O/xPmfx+2jCCgf8R6wyhSIpBly7dfEIRHG4v?=
+ =?us-ascii?Q?zxrKwSDY5swtd2bukiQIPNY1CQlUigs99ycg/6yZkNQxSj5nM5D3P0omjPPG?=
+ =?us-ascii?Q?iHrSOJnhKf3dvVPUV6wAXUFLbHyT0ccfXRcwHApJEeVgR+iQ+U25zfP8C2Kr?=
+ =?us-ascii?Q?4li9U6c+CYHbUSnJaHfT+++Pi4aMVBIrqLVRQ1ljClE24nDgzwoYPc5bSyp4?=
+ =?us-ascii?Q?yvpHxu5o9vi/77UM9MxHWFapqGGdsTrn9iNP1hlucwc+mmvyPiY05iPXW76n?=
+ =?us-ascii?Q?uZozvbTKYrAu7MjZq83Zam6HtFmd0gv3C9SJNHdWzRTGHTS+zj4ahNfoye60?=
+ =?us-ascii?Q?f84nJuJw+gjVog76UpNOjSTKog+bVjasaimJhqubcr5Va663EslzMFygI7sl?=
+ =?us-ascii?Q?GGujlyYmLlwpoOspKeyxSULx3SfJPupf0QPNHU4BStpvFeO9sGS474Rlq1U1?=
+ =?us-ascii?Q?TtfKiSFCQY0epOQu1TwPri+LRFlLw4PJJcukydq64yymcej+lXE4vx/fFDVg?=
+ =?us-ascii?Q?qqon2HheM9clvI0EbDd/o5IqENK/0+A84Vc2h++wYmU4sCOYjKlZAyh/YuQ7?=
+ =?us-ascii?Q?oBnoB90vtuDgAb9KNY5M4Vwu2gUFFx0Hc9SjeGza?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251016-xsk-v5-15-662c95eb8005@bootlin.com>
-References: <20251016-xsk-v5-0-662c95eb8005@bootlin.com>
-In-Reply-To: <20251016-xsk-v5-0-662c95eb8005@bootlin.com>
-To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Magnus Karlsson <magnus.karlsson@intel.com>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
- Jonathan Lemon <jonathan.lemon@gmail.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Alexis Lothore <alexis.lothore@bootlin.com>, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-X-Mailer: b4 0.14.2
-X-Last-TLS-Session-Version: TLSv1.3
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4645af4b-958a-42ab-8aa6-08de0c883c79
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2025 07:47:20.2423
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cgR4dNYRdEZ8AuMMnWGT9xljDHFnq+olTgbYK+dw9AwFxGfZH4X0hTYKz84AnuWgQzja+37cjPEJCAfb/paUXw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5787
+X-OriginatorOrg: intel.com
 
-test_xsk.c isn't part of the test_progs framework.
+> From: Nicolin Chen <nicolinc@nvidia.com>
+> Sent: Wednesday, October 15, 2025 5:49 AM
+>=20
+> The ioctl returns 0 upon success, so !0 returning -1 breaks the selftest.
+>=20
+> Drop the '!' to fix it.
+>=20
+> Fixes: 1d235d849425 ("iommu/selftest: prevent use of uninitialized variab=
+le")
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 
-Integrate the tests defined by test_xsk.c into the test_progs framework
-through a new file : prog_tests/xsk.c. ZeroCopy mode isn't tested in it
-as veth peers don't support it.
-
-Move test_xsk{.c/.h} to prog_tests/.
-
-Add the find_bit library to test_progs sources in the Makefile as it is
-is used by test_xsk.c
-
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
----
- tools/testing/selftests/bpf/Makefile               |  13 +-
- .../selftests/bpf/{ => prog_tests}/test_xsk.c      |   0
- .../selftests/bpf/{ => prog_tests}/test_xsk.h      |   0
- tools/testing/selftests/bpf/prog_tests/xsk.c       | 146 +++++++++++++++++++++
- tools/testing/selftests/bpf/xskxceiver.c           |   2 +-
- 5 files changed, 158 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index f7369ab5b1dc33585aa84268620885547c802ab0..160faa2f1cb42b76f83bfd34f9b3c43f3605792d 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -543,6 +543,8 @@ TRUNNER_TEST_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.test.o,	\
- 				 $$(notdir $$(wildcard $(TRUNNER_TESTS_DIR)/*.c)))
- TRUNNER_EXTRA_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
- 				 $$(filter %.c,$(TRUNNER_EXTRA_SOURCES)))
-+TRUNNER_LIB_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
-+				 $$(filter %.c,$(TRUNNER_LIB_SOURCES)))
- TRUNNER_EXTRA_HDRS := $$(filter %.h,$(TRUNNER_EXTRA_SOURCES))
- TRUNNER_TESTS_HDR := $(TRUNNER_TESTS_DIR)/tests.h
- TRUNNER_BPF_SRCS := $$(notdir $$(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c))
-@@ -686,6 +688,10 @@ $(TRUNNER_EXTRA_OBJS): $(TRUNNER_OUTPUT)/%.o:				\
- 	$$(call msg,EXT-OBJ,$(TRUNNER_BINARY),$$@)
- 	$(Q)$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
- 
-+$(TRUNNER_LIB_OBJS): $(TRUNNER_OUTPUT)/%.o:$(TOOLSDIR)/lib/%.c
-+	$$(call msg,LIB-OBJ,$(TRUNNER_BINARY),$$@)
-+	$(Q)$$(CC) $$(CFLAGS) -c $$< $$(LDLIBS) -o $$@
-+
- # non-flavored in-srctree builds receive special treatment, in particular, we
- # do not need to copy extra resources (see e.g. test_btf_dump_case())
- $(TRUNNER_BINARY)-extras: $(TRUNNER_EXTRA_FILES) | $(TRUNNER_OUTPUT)
-@@ -699,6 +705,7 @@ $(OUTPUT)/$(TRUNNER_BINARY): | $(TRUNNER_BPF_OBJS)
- 
- $(OUTPUT)/$(TRUNNER_BINARY): $(TRUNNER_TEST_OBJS)			\
- 			     $(TRUNNER_EXTRA_OBJS) $$(BPFOBJ)		\
-+			     $(TRUNNER_LIB_OBJS)			\
- 			     $(RESOLVE_BTFIDS)				\
- 			     $(TRUNNER_BPFTOOL)				\
- 			     $(OUTPUT)/veristat				\
-@@ -745,6 +752,7 @@ TRUNNER_EXTRA_SOURCES := test_progs.c		\
- 			 $(VERIFY_SIG_HDR)		\
- 			 flow_dissector_load.h	\
- 			 ip_check_defrag_frags.h
-+TRUNNER_LIB_SOURCES := find_bit.c
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read				\
- 		       $(OUTPUT)/liburandom_read.so			\
- 		       $(OUTPUT)/xdp_synproxy				\
-@@ -782,6 +790,7 @@ endif
- TRUNNER_TESTS_DIR := map_tests
- TRUNNER_BPF_PROGS_DIR := progs
- TRUNNER_EXTRA_SOURCES := test_maps.c
-+TRUNNER_LIB_SOURCES :=
- TRUNNER_EXTRA_FILES :=
- TRUNNER_BPF_BUILD_RULE := $$(error no BPF objects should be built)
- TRUNNER_BPF_CFLAGS :=
-@@ -803,8 +812,8 @@ $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
- 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
- 
- # Include find_bit.c to compile xskxceiver.
--EXTRA_SRC := $(TOOLSDIR)/lib/find_bit.c
--$(OUTPUT)/xskxceiver: $(EXTRA_SRC) test_xsk.c test_xsk.h xskxceiver.c xskxceiver.h $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
-+EXTRA_SRC := $(TOOLSDIR)/lib/find_bit.c prog_tests/test_xsk.c prog_tests/test_xsk.h
-+$(OUTPUT)/xskxceiver: $(EXTRA_SRC) xskxceiver.c xskxceiver.h $(OUTPUT)/network_helpers.o $(OUTPUT)/xsk.o $(OUTPUT)/xsk_xdp_progs.skel.h $(BPFOBJ) | $(OUTPUT)
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
- 
-diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-similarity index 100%
-rename from tools/testing/selftests/bpf/test_xsk.c
-rename to tools/testing/selftests/bpf/prog_tests/test_xsk.c
-diff --git a/tools/testing/selftests/bpf/test_xsk.h b/tools/testing/selftests/bpf/prog_tests/test_xsk.h
-similarity index 100%
-rename from tools/testing/selftests/bpf/test_xsk.h
-rename to tools/testing/selftests/bpf/prog_tests/test_xsk.h
-diff --git a/tools/testing/selftests/bpf/prog_tests/xsk.c b/tools/testing/selftests/bpf/prog_tests/xsk.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..7ce5ddd7d3fc848df27534f00a6a9f82fbc797c5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xsk.c
-@@ -0,0 +1,146 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <net/if.h>
-+#include <stdarg.h>
-+
-+#include "network_helpers.h"
-+#include "test_progs.h"
-+#include "test_xsk.h"
-+#include "xsk_xdp_progs.skel.h"
-+
-+#define VETH_RX "veth0"
-+#define VETH_TX "veth1"
-+#define MTU	1500
-+
-+int setup_veth(bool busy_poll)
-+{
-+	SYS(fail,
-+	"ip link add %s numtxqueues 4 numrxqueues 4 type veth peer name %s numtxqueues 4 numrxqueues 4",
-+	VETH_RX, VETH_TX);
-+	SYS(fail, "sysctl -wq net.ipv6.conf.%s.disable_ipv6=1", VETH_RX);
-+	SYS(fail, "sysctl -wq net.ipv6.conf.%s.disable_ipv6=1", VETH_TX);
-+
-+	if (busy_poll) {
-+		SYS(fail, "echo 2 > /sys/class/net/%s/napi_defer_hard_irqs", VETH_RX);
-+		SYS(fail, "echo 200000 > /sys/class/net/%s/gro_flush_timeout", VETH_RX);
-+		SYS(fail, "echo 2 > /sys/class/net/%s/napi_defer_hard_irqs", VETH_TX);
-+		SYS(fail, "echo 200000 > /sys/class/net/%s/gro_flush_timeout", VETH_TX);
-+	}
-+
-+	SYS(fail, "ip link set %s mtu %d", VETH_RX, MTU);
-+	SYS(fail, "ip link set %s mtu %d", VETH_TX, MTU);
-+	SYS(fail, "ip link set %s up", VETH_RX);
-+	SYS(fail, "ip link set %s up", VETH_TX);
-+
-+	return 0;
-+
-+fail:
-+	return -1;
-+}
-+
-+void delete_veth(void)
-+{
-+	SYS_NOFAIL("ip link del %s", VETH_RX);
-+	SYS_NOFAIL("ip link del %s", VETH_TX);
-+}
-+
-+int configure_ifobj(struct ifobject *tx, struct ifobject *rx)
-+{
-+	rx->ifindex = if_nametoindex(VETH_RX);
-+	if (!ASSERT_OK_FD(rx->ifindex, "get RX ifindex"))
-+		return -1;
-+
-+	tx->ifindex = if_nametoindex(VETH_TX);
-+	if (!ASSERT_OK_FD(tx->ifindex, "get TX ifindex"))
-+		return -1;
-+
-+	tx->shared_umem = false;
-+	rx->shared_umem = false;
-+
-+
-+	return 0;
-+}
-+
-+static void test_xsk(const struct test_spec *test_to_run, enum test_mode mode)
-+{
-+	struct ifobject *ifobj_tx, *ifobj_rx;
-+	struct test_spec test;
-+	int ret;
-+
-+	ifobj_tx = ifobject_create();
-+	if (!ASSERT_OK_PTR(ifobj_tx, "create ifobj_tx"))
-+		return;
-+
-+	ifobj_rx = ifobject_create();
-+	if (!ASSERT_OK_PTR(ifobj_rx, "create ifobj_rx"))
-+		goto delete_tx;
-+
-+	if (!ASSERT_OK(setup_veth(false), "setup veth"))
-+		goto delete_rx;
-+
-+	if (!ASSERT_OK(configure_ifobj(ifobj_tx, ifobj_rx), "conigure ifobj"))
-+		goto delete_veth;
-+
-+	ret = get_hw_ring_size(ifobj_tx->ifname, &ifobj_tx->ring);
-+	if (!ret) {
-+		ifobj_tx->hw_ring_size_supp = true;
-+		ifobj_tx->set_ring.default_tx = ifobj_tx->ring.tx_pending;
-+		ifobj_tx->set_ring.default_rx = ifobj_tx->ring.rx_pending;
-+	}
-+
-+	if (!ASSERT_OK(init_iface(ifobj_rx, worker_testapp_validate_rx), "init RX"))
-+		goto delete_veth;
-+	if (!ASSERT_OK(init_iface(ifobj_tx, worker_testapp_validate_tx), "init TX"))
-+		goto delete_veth;
-+
-+	test_init(&test, ifobj_tx, ifobj_rx, 0, &tests[0]);
-+
-+	test.tx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
-+	if (!ASSERT_OK_PTR(test.tx_pkt_stream_default, "TX pkt generation"))
-+		goto delete_veth;
-+	test.rx_pkt_stream_default = pkt_stream_generate(DEFAULT_PKT_CNT, MIN_PKT_SIZE);
-+	if (!ASSERT_OK_PTR(test.rx_pkt_stream_default, "RX pkt generation"))
-+		goto delete_veth;
-+
-+
-+	test_init(&test, ifobj_tx, ifobj_rx, mode, test_to_run);
-+	ret = test.test_func(&test);
-+	if (ret != TEST_SKIP)
-+		ASSERT_OK(ret, "Run test");
-+	pkt_stream_restore_default(&test);
-+
-+	if (ifobj_tx->hw_ring_size_supp)
-+		hw_ring_size_reset(ifobj_tx);
-+
-+	pkt_stream_delete(test.tx_pkt_stream_default);
-+	pkt_stream_delete(test.rx_pkt_stream_default);
-+	xsk_xdp_progs__destroy(ifobj_tx->xdp_progs);
-+	xsk_xdp_progs__destroy(ifobj_rx->xdp_progs);
-+
-+delete_veth:
-+	delete_veth();
-+delete_rx:
-+	ifobject_delete(ifobj_rx);
-+delete_tx:
-+	ifobject_delete(ifobj_tx);
-+}
-+
-+void test_ns_xsk_skb(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		if (test__start_subtest(tests[i].name))
-+			test_xsk(&tests[i], TEST_MODE_SKB);
-+	}
-+}
-+
-+void test_ns_xsk_drv(void)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		if (test__start_subtest(tests[i].name))
-+			test_xsk(&tests[i], TEST_MODE_DRV);
-+	}
-+}
-+
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 8707f4a0fac64e1ebb6a4241edf8e874a1eb67c3..a54904783c757d282e3b99194aaed5f74d510763 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -90,7 +90,7 @@
- #include <sys/mman.h>
- #include <sys/types.h>
- 
--#include "test_xsk.h"
-+#include "prog_tests/test_xsk.h"
- #include "xsk_xdp_progs.skel.h"
- #include "xsk.h"
- #include "xskxceiver.h"
-
--- 
-2.51.0
-
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 
