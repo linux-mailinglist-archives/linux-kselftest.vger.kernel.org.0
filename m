@@ -1,171 +1,196 @@
-Return-Path: <linux-kselftest+bounces-43278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDECDBE17E6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 07:08:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EFCCBE187E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 07:43:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 121A14E68A5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 05:07:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03B8A424978
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 05:43:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8261E2222B6;
-	Thu, 16 Oct 2025 05:07:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077AE23BD1A;
+	Thu, 16 Oct 2025 05:42:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="geBJxByL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YdAVMJ1v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E997221FB4
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 05:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CF2FC0A;
+	Thu, 16 Oct 2025 05:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760591278; cv=none; b=O4vmLXPQBx7maxRNyKo/GEOxmPCRqr+Zlwg42ZARuONpPLjSkgmPMaNDhVFMHt/0z24Ls/x8Qh5194FqNTqMvnvrlIMe5LiHVsrx6tJE3H2x8nIDVMyYlh1UJqYJLEd/e0HFR3kvuDAoGPW2neENfHmnkx27Cq29eKH20F4UAUY=
+	t=1760593372; cv=none; b=FpIEKpuJTauXdWRcnJI9uFdmWpJWDUqZsE6ybJY77NTRSp73HSGZgaGVQQ9WsDgk4f7yzy5rzEZkZk4zDbU4I7i31FBOHbHGTYZ7sYe2UzDcJu1uVrsWDWydunaahYCW3kDPSx3cXHzVTmJdOF1MwniRviATOVzProY8lsZI9Og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760591278; c=relaxed/simple;
-	bh=BUn/w7Ujb8/rDnrs/nT1AxSoHEFiEVHXe9U2H1NnrMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RjrjNgbiOzxeR4OO/YE2ppj1Ode0b4eOghzk/lrySnpH7XmjDSi7k8ri1f4nBS97ztQB36HJafiH+VYxfhKIuCzEt20E5tv1Hnw4G6/5KkP+01av6phfQRXPXjnruMTfLBd0mAQq1+Ck7XhWwHw8g0x3o4MmWEj7AqpC8tu54ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=geBJxByL; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <4db3bd26-1f74-4096-84fd-f652ec9a4d27@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1760591263;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SCAq3Tpy90yiw+VRqp/jzmhdqwWtKZRonlnTXaNao8c=;
-	b=geBJxByLcvWBiujKOiaOahCqNyndVoWuu2mZ45TF8xE284+jE46+6ntqZCrEJOY3tjLJtS
-	CA04TcSdtSgMTu+1LyL0JCiZYt8KyHlnhHzez+oDkOoqTGathzLcXzzn8tcestdiOMA31r
-	Wv+r/T6z/ByuejbAoTutxC4uLBsXkfs=
-Date: Thu, 16 Oct 2025 13:07:23 +0800
+	s=arc-20240116; t=1760593372; c=relaxed/simple;
+	bh=LIPgLcnDoKwiJT3fL31O5/TGn+k0lyGm30zywB5UpaI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V3ldJ6Hn/PQB22tHH8yZvL1RbHQDTbVFXvKSWjm19iwR5ugSYgtR2WGY+qaaS8kg1sS8F/LVtJH6mk4rrhEkCecFjamjH+0T/qayIVTAvCs3/Ndg+hmdgaszxXgSg7RvodS2AOMcoDaIgSqTMZusxZvf1pXcQhWEM59oYPtSbEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YdAVMJ1v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C154CC4CEFB;
+	Thu, 16 Oct 2025 05:42:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760593372;
+	bh=LIPgLcnDoKwiJT3fL31O5/TGn+k0lyGm30zywB5UpaI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YdAVMJ1vVeElNdBHu8jK1la4d3L5qiBX7aqIl+vGhie2FLfVESNYtuEur9/6lCc+P
+	 E8rvVtB4DKEgAXq8TcD+tSSas0JtWi86DoYpv0NDuvNzo2M8bgi0aS6NdK/yMOLIuL
+	 6oaxpXH2eywY9j6izvqEaUsdRIron/chS6l9DQKoFqr7T2vo8kT+mAF5IXG8XXqQp0
+	 6IjQJHNV7GvRDb3yOuSJ+av+VSEpdfwTIWDl+ksWvwcY7MxOIVaoQ7rnVdSUchrAP2
+	 XLyhRJl+NZRrJ8Vgt3dCwfnKhFUBj4eDEoPG4kX28Xyoma3Vqod5/Wvk22Bw28xBMC
+	 GlrgA163xTvlA==
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Benson Leung <bleung@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	tzungbi@kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH v5 0/7] platform/chrome: Fix a possible UAF via revocable
+Date: Thu, 16 Oct 2025 05:41:57 +0000
+Message-ID: <20251016054204.1523139-1-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.51.0.788.g6d19910ace-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH][v4] hung_task: Panic when there are more than N hung
- tasks at the same time
-Content-Language: en-US
-To: lirongqing <lirongqing@baidu.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-aspeed@lists.ozlabs.org, wireguard@lists.zx2c4.com,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Andrew Jeffery <andrew@codeconstruct.com.au>,
- Anshuman Khandual <anshuman.khandual@arm.com>, Arnd Bergmann
- <arnd@arndb.de>, David Hildenbrand <david@redhat.com>,
- Florian Wesphal <fw@strlen.de>, Jakub Kacinski <kuba@kernel.org>,
- "Jason A . Donenfeld" <jason@zx2c4.com>,
- Joel Granados <joel.granados@kernel.org>, Joel Stanley <joel@jms.id.au>,
- Jonathan Corbet <corbet@lwn.net>, Kees Cook <kees@kernel.org>,
- Liam Howlett <liam.howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Paul E . McKenney" <paulmck@kernel.org>,
- Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
- Petr Mladek <pmladek@suse.com>, Phil Auld <pauld@redhat.com>,
- Randy Dunlap <rdunlap@infradead.org>, Russell King <linux@armlinux.org.uk>,
- Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt <rostedt@goodmis.org>,
- linux-kernel@vger.kernel.org
-References: <20251015063615.2632-1-lirongqing@baidu.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <20251015063615.2632-1-lirongqing@baidu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-LGTM. It works as expected, thanks!
+This is a follow-up series of [1].  It tries to fix a possible UAF in the
+fops of cros_ec_chardev after the underlying protocol device has gone by
+using revocable.
 
-On 2025/10/15 14:36, lirongqing wrote:
-> From: Li RongQing <lirongqing@baidu.com>
+The 1st patch introduces the revocable which is an implementation of ideas
+from the talk [2].
 
-For the commit message, I'd suggest the following for better clarity:
+The 2nd and 3rd patches add test cases for revocable in Kunit and selftest.
 
-```
-The hung_task_panic sysctl is currently a blunt instrument: it's all
-or nothing.
+The 4th patch converts existing protocol devices to resource providers
+of cros_ec_device.
 
-Panicking on a single hung task can be an overreaction to a transient
-glitch. A more reliable indicator of a systemic problem is when multiple
-tasks hang simultaneously.
+The 5th - 7th are PoC patches for showing the use case of "Replace file
+operations" below.
 
-Extend hung_task_panic to accept an integer threshold, allowing the kernel
-to panic only when N hung tasks are detected in a single scan. This
-provides finer control to distinguish between isolated incidents and
-system-wide failures.
+---
 
-The accepted values are:
-- 0: Don't panic (unchanged)
-- 1: Panic on the first hung task (unchanged)
-- N > 1: Panic after N hung tasks are detected in a single scan
+I came out with 2 possible usages of revocable.
 
-The original behavior is preserved for values 0 and 1, maintaining full
-backward compatibility.
-```
+1. Use primitive APIs
 
-If you agree, likely no need to resend - Andrew could pick it up
-directly when applying :)
+Use the primitive APIs of revocable directly.
 
-> 
-> Currently, when 'hung_task_panic' is enabled, the kernel panics
-> immediately upon detecting the first hung task. However, some hung
-> tasks are transient and allow system recovery, while persistent hangs
-> should trigger a panic when accumulating beyond a threshold.
-> 
-> Extend the 'hung_task_panic' sysctl to accept a threshold value
-> specifying the number of hung tasks that must be detected before
-> triggering a kernel panic. This provides finer control for environments
-> where transient hangs may occur but persistent hangs should be fatal.
-> 
-> The sysctl now accepts:
-> - 0: don't panic (maintains original behavior)
-> - 1: panic on first hung task (maintains original behavior)
-> - N > 1: panic after N hung tasks are detected in a single scan
-> 
-> This maintains backward compatibility while providing flexibility for
-> different hang scenarios.
-> 
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
-> Cc: Andrew Jeffery <andrew@codeconstruct.com.au>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Florian Wesphal <fw@strlen.de>
-> Cc: Jakub Kacinski <kuba@kernel.org>
-> Cc: Jason A. Donenfeld <jason@zx2c4.com>
-> Cc: Joel Granados <joel.granados@kernel.org>
-> Cc: Joel Stanley <joel@jms.id.au>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Kees Cook <kees@kernel.org>
-> Cc: Lance Yang <lance.yang@linux.dev>
-> Cc: Liam Howlett <liam.howlett@oracle.com>
-> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-> Cc: "Paul E . McKenney" <paulmck@kernel.org>
-> Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: Phil Auld <pauld@redhat.com>
-> Cc: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Russell King <linux@armlinux.org.uk>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Simon Horman <horms@kernel.org>
-> Cc: Stanislav Fomichev <sdf@fomichev.me>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> ---
+The file operations make sure the resources are available when using them.
 
-So:
+This is what the series original proposed[3][4].  Even though it has the
+finest grain for accessing the resources, it makes the user code verbose.
+Per feedback from the community, I'm looking for some subsystem level
+helpers so that user code can be simlper.
 
-Reviewed-by: Lance Yang <lance.yang@linux.dev>
-Tested-by: Lance Yang <lance.yang@linux.dev>
+2. Replace file operations
 
-Cheers,
-Lance
+Replace filp->f_op to revocable-aware warppers.
+
+The warppers make sure the resources are available in the file operations.
+
+The user code needs to provide a callback .try_access() to tell the wrappers
+where/how to *save* the pointers of resources.
+
+Known drawback:
+- The warppers reserve the resources for all file operations even if they
+  might be unused.
+- The user code still needs to be revocable-aware.
+- The whole file operation becomes a SRCU read-side critical section.  Are
+  there any functions can't be called in the critical section?  If there is,
+  the file operations may not be awared of that.
+
+See 5th - 7th patches for an example usage.
+
+[1] https://lore.kernel.org/chrome-platform/20250721044456.2736300-6-tzungbi@kernel.org
+[2] https://lpc.events/event/17/contributions/1627/
+[3] https://lore.kernel.org/chrome-platform/20250912081718.3827390-5-tzungbi@kernel.org/
+[4] https://lore.kernel.org/chrome-platform/20250912081718.3827390-6-tzungbi@kernel.org/
+
+v5:
+- Rebase onto next-20251015.
+- Add more context about the PoC.
+- Support multiple revocable providers in the PoC.
+
+v4: https://lore.kernel.org/chrome-platform/20250923075302.591026-1-tzungbi@kernel.org
+- Rebase onto next-20250922.
+- Remove the 5th patch from v3.
+- Add fops replacement PoC in 5th - 7th patches.
+
+v3: https://lore.kernel.org/chrome-platform/20250912081718.3827390-1-tzungbi@kernel.org
+- Rebase onto https://lore.kernel.org/chrome-platform/20250828083601.856083-1-tzungbi@kernel.org
+  and next-20250912.
+- The 4th patch changed accordingly.
+
+v2: https://lore.kernel.org/chrome-platform/20250820081645.847919-1-tzungbi@kernel.org
+- Rename "ref_proxy" -> "revocable".
+- Add test cases in Kunit and selftest.
+
+v1: https://lore.kernel.org/chrome-platform/20250814091020.1302888-1-tzungbi@kernel.org
+
+Tzung-Bi Shih (7):
+  revocable: Revocable resource management
+  revocable: Add Kunit test cases
+  selftests: revocable: Add kselftest cases
+  platform/chrome: Protect cros_ec_device lifecycle with revocable
+  revocable: Add fops replacement
+  char: misc: Leverage revocable fops replacement
+  platform/chrome: cros_ec_chardev: Secure cros_ec_device via revocable
+
+ .../driver-api/driver-model/index.rst         |   1 +
+ .../driver-api/driver-model/revocable.rst     |  87 +++++++
+ MAINTAINERS                                   |   9 +
+ drivers/base/Kconfig                          |   8 +
+ drivers/base/Makefile                         |   5 +-
+ drivers/base/revocable.c                      | 233 ++++++++++++++++++
+ drivers/base/revocable_test.c                 | 110 +++++++++
+ drivers/char/misc.c                           |   8 +
+ drivers/platform/chrome/cros_ec.c             |   5 +
+ drivers/platform/chrome/cros_ec_chardev.c     |  22 +-
+ fs/Makefile                                   |   2 +-
+ fs/fs_revocable.c                             | 154 ++++++++++++
+ include/linux/fs.h                            |   2 +
+ include/linux/fs_revocable.h                  |  21 ++
+ include/linux/miscdevice.h                    |   4 +
+ include/linux/platform_data/cros_ec_proto.h   |   4 +
+ include/linux/revocable.h                     |  53 ++++
+ tools/testing/selftests/Makefile              |   1 +
+ .../selftests/drivers/base/revocable/Makefile |   7 +
+ .../drivers/base/revocable/revocable_test.c   | 116 +++++++++
+ .../drivers/base/revocable/test-revocable.sh  |  39 +++
+ .../base/revocable/test_modules/Makefile      |  10 +
+ .../revocable/test_modules/revocable_test.c   | 188 ++++++++++++++
+ 23 files changed, 1086 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/driver-api/driver-model/revocable.rst
+ create mode 100644 drivers/base/revocable.c
+ create mode 100644 drivers/base/revocable_test.c
+ create mode 100644 fs/fs_revocable.c
+ create mode 100644 include/linux/fs_revocable.h
+ create mode 100644 include/linux/revocable.h
+ create mode 100644 tools/testing/selftests/drivers/base/revocable/Makefile
+ create mode 100644 tools/testing/selftests/drivers/base/revocable/revocable_test.c
+ create mode 100755 tools/testing/selftests/drivers/base/revocable/test-revocable.sh
+ create mode 100644 tools/testing/selftests/drivers/base/revocable/test_modules/Makefile
+ create mode 100644 tools/testing/selftests/drivers/base/revocable/test_modules/revocable_test.c
+
+-- 
+2.51.0.788.g6d19910ace-goog
+
 
