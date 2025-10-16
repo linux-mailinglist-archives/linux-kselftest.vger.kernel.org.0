@@ -1,207 +1,336 @@
-Return-Path: <linux-kselftest+bounces-43309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43310-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4561BE20A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 09:55:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4313BE2136
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 10:02:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 462154F984C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 07:51:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E4084220AC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 08:02:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BD53009E7;
-	Thu, 16 Oct 2025 07:47:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC982FBDF8;
+	Thu, 16 Oct 2025 08:02:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VhnjvLRt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ty129H83"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA302FDC4E;
-	Thu, 16 Oct 2025 07:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760600846; cv=fail; b=sDVNTVPP82mKZAsEY2zKIKjkV0RxNudOSydtMVuWeSWyVFYpnuqsx+8p9lTrY6nlIW1QvpVdIqXqGiRV9cz0l3olMO1qtmBSREuzkMD+iTCMxMFGFk5c94kLRloBFXGc2o244wOfUHf8q4eX/L8y7gy2Om4VYDDXz/49QORPCZE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760600846; c=relaxed/simple;
-	bh=g54Rvx4gsm7M/pp4TwqX7c/a9WkRxgdaimQXmX+HgPg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=OhdAg7meVCzXhjkJyrToau5a4aIlSwClquRbz2ApE468qn/jEqAAmu53evK/ZjtneXCgXN2YMsecYgIY2mZOJ8bT9SrsmeJCTQSdEokZINoJArx3V0PXFA6vKbLIrX2p6PeXnem3pLNo6xSa7P2q2+eRdBSI100TxR5Umy2l5lw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VhnjvLRt; arc=fail smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1760600845; x=1792136845;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=g54Rvx4gsm7M/pp4TwqX7c/a9WkRxgdaimQXmX+HgPg=;
-  b=VhnjvLRthztZsk9aSrgqIOFnll6lfLIqrSPYZ0ul+h5LWG7tOpplP2Uk
-   TDzFaa/yNeAEzSQyxhmjI/jqoMFYg2gD5tCWlfP5sddcUOfRiuNyeTlWH
-   D76CWJ3U9KbbA2qbLkgkDTVF1i3tqBbqysr64RWEenjwDNEyiZqZn5S2F
-   vQZUtE++JbL80NbEjI6dRVhbLfvz18kOo9mBMhdTYAgHMoWm21FDvya6/
-   7TrqCRtFZvzQp2Mbq7FIAh+BkgFQOS0vcCzxcv0S58HaMjLWGAMtoHzBU
-   d8vj1G1GUTvHS7hG8POBZ/mVH5dEQhhtk7UmtoDIKaiUZH/aUbFVJw6u+
-   Q==;
-X-CSE-ConnectionGUID: bqj70GCMRhK7hD1xuLBU3Q==
-X-CSE-MsgGUID: goYMxRatTxuO1lW1PiTQXQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11583"; a="62826175"
-X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
-   d="scan'208";a="62826175"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 00:47:24 -0700
-X-CSE-ConnectionGUID: pOVEnrsiTGKxKO6Ri+Zdww==
-X-CSE-MsgGUID: LXDo4EwlR1m5k+Lbnf0x3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,233,1754982000"; 
-   d="scan'208";a="181596517"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2025 00:47:24 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Thu, 16 Oct 2025 00:47:23 -0700
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27 via Frontend Transport; Thu, 16 Oct 2025 00:47:23 -0700
-Received: from CY3PR05CU001.outbound.protection.outlook.com (40.93.201.52) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Thu, 16 Oct 2025 00:47:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xBPNcI1GZc5/XFhbdTmFXxrAixRTrJwaPI+HF1rV88yDlTraOZMw00ZwS5C9GQ4EX4lYCgtO6/4a2hjy8GyVfBmFvQSdxiZjLVic6v11sVXUZyHZvT5skSH2kqBRzoGvuD9a06lwtGvBzipLpW1o+Bsv+rm5BnOx06stex5qP3J8SFc4n7nSkywH6vOYpb0+S3rCqTelb8knVkeU77g/UlOGLYnwFcp/ni/7YHP2jKGnl8UTbbgDb/vCX+5hddJyrcxko8pjaiVIXfR8eMEppUk7RN3iqkp/dJGv/rKa/pjRCp0REkTCQnkZv51q7Ydrv1vDmg2TkDU+ykHwNAS5uQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g54Rvx4gsm7M/pp4TwqX7c/a9WkRxgdaimQXmX+HgPg=;
- b=gB83xsQ1QstWaIez6gyI3MnfvM+NaWxU9nZwxZbMuJ3QaqgnBWI7EOkv8SJVp6p/xevfHzeMav2iGq+Qqro7OYFFkm/DJCKfmhiVWVuAjQBCBoea3KpCWuk0OE5KD/1BOTXvMeZzizjcfwyMqDA6mENXBz0s00UUx9h8J4NMOB2vo8WXfuanzFXshrqQweAkY2OIF1Axki+8yDfck03u525847ueAieH/lg9f/7OpYR/XwriB0w6EwY90nXrT08gnh4PnsfrxHWOrt1W1NhTPj7lotNKYJTXSE3OwrsOkADDiWlOS0BOu8dABHU+xQaPgLH1BtS9ronrqd+wXr6eoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by MW5PR11MB5787.namprd11.prod.outlook.com (2603:10b6:303:192::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.12; Thu, 16 Oct
- 2025 07:47:20 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1%5]) with mapi id 15.20.9228.012; Thu, 16 Oct 2025
- 07:47:20 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Nicolin Chen <nicolinc@nvidia.com>, "jgg@nvidia.com" <jgg@nvidia.com>
-CC: "shuah@kernel.org" <shuah@kernel.org>, "alessandro.zanni87@gmail.com"
-	<alessandro.zanni87@gmail.com>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH rc] iommufd/selftest: Fix ioctl return value in
- _test_cmd_trigger_vevents()
-Thread-Topic: [PATCH rc] iommufd/selftest: Fix ioctl return value in
- _test_cmd_trigger_vevents()
-Thread-Index: AQHcPVRnkLZe3dbGA0qfw2AZydGM8LTEZ2yQ
-Date: Thu, 16 Oct 2025 07:47:20 +0000
-Message-ID: <BN9PR11MB5276834E90A7990269EBBF608CE9A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20251014214847.1113759-1-nicolinc@nvidia.com>
-In-Reply-To: <20251014214847.1113759-1-nicolinc@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MW5PR11MB5787:EE_
-x-ms-office365-filtering-correlation-id: 4645af4b-958a-42ab-8aa6-08de0c883c79
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700021;
-x-microsoft-antispam-message-info: =?us-ascii?Q?7lDQdiUR9i3TtJLQEBP9uX5GOQSXHf/N+t34LnEuvnUN0gE2+/phxsmkhVXr?=
- =?us-ascii?Q?6tGh63bsyReRTa0jXeLytiJXYksz+b1IaQWUHGk/+E4ZTtI6bsdcodAFIx6F?=
- =?us-ascii?Q?RyNnhDsvit0DS2cb/vnc7Y/d1nSc3d6wgEKy90e4W+1r3sT9NVpKiEhI2crE?=
- =?us-ascii?Q?zo8IHLz8r+VbrGtNejExYWUsOsw2xnfeEw0t9XGkVL/SMMVDiTIbXZyEoZa6?=
- =?us-ascii?Q?1kTxbdGrxyFuZkOCca2VOXGCQEdtGzvWhusJsTIM4m2EHQ9Tl/2h/5v0Sfwc?=
- =?us-ascii?Q?EwAWUSGB4kjy97p5SUQyz+Rv8lpCdYxKeMcD3hVdzu4TdYDmJuj52Gk6rcLL?=
- =?us-ascii?Q?hvu6XkW1MsGYpt9IzVYEPKJA9VzrtLnDHalNk8EnYWWIxNQdjOJzes7+QcEH?=
- =?us-ascii?Q?FRSztxIXEIQYgz22aH6IywE8tGGqI8jSSj/aIA9UUmq9Qr1135VUqLHr6ids?=
- =?us-ascii?Q?RVMNqaHV4K9D7uD/fa2FIdWzo1JGU39tyz31o01Knb2ivKPqCMGm+CAEFsYV?=
- =?us-ascii?Q?4nFUyTWPSWUZuXhfdUZ+um20nm7exEak+orh8Tv6vLRDfQ0/rnny7uI0P0+p?=
- =?us-ascii?Q?o3hupbhobpDtlyNXL4KDiidMev5T16KPQMKbsuObzwJWoPVwp5ipEIiZtPKX?=
- =?us-ascii?Q?jruL+W1K6SoUmXPa5/YRe+egym7bgC1Usyr7hIOM+tseJeV26P1emm9/+7zZ?=
- =?us-ascii?Q?Wm7SiTJAQrMcZY8pmvz5fJBSHzQSfQNHX2cN4tCEiDG6Cvck3sVUB5UwztiY?=
- =?us-ascii?Q?IEzbiVIyuEp5hTRAuwr22ziCJamD0QC5nulfl+mSJ53QqHsjPTx+vtFGkxLr?=
- =?us-ascii?Q?YzknYSg9KqY/Yidki1kdubdeE1A508JPIp4Rz1vBf3Z+XFNd/w8tlQSKkBpK?=
- =?us-ascii?Q?CQ8FhycRzQnqN1quKsYn3H+qNVnUG5509hPTDWrDVijBpofUu0i5xC+2vquG?=
- =?us-ascii?Q?xHuf3qwTXyNBj4ruJJlBe8kNEiwaChlafB4L50GGcZiski6rXnlmkmOz9ha3?=
- =?us-ascii?Q?0SZPI4FboduVMwu6Z41FDTLUMm0l5CUWKs4MRzz1iOvrXZ8t+D7a7J2CQ8eV?=
- =?us-ascii?Q?HZAFbRzpCp3U5GpstwyiW5YujUPwcmaW/5jhQA6nC6J78gMeFz8rQjgyBUSH?=
- =?us-ascii?Q?Krz3KeA8xkh+QGj9JnfKR8KO2q0BizN8KWu7aAAKeDfrCD7nDWgZ11HcyEqd?=
- =?us-ascii?Q?S3iWEDtIt8AvsDsYRLhIeHTbIziaD/SqkAOkHawH1VqaeOP7uHr4jtXdsuOO?=
- =?us-ascii?Q?p4OjDqmY6J7/C4hBYDdQGDTXPAtYjMPNU/WTXhwr5wbv9Ie0O1Qvk9t4OC9N?=
- =?us-ascii?Q?8auoBt0uhmRYoXm2TxpW89NerHSjUw13OQmZjhrU63X49G9yX6Iqd9hNfmjk?=
- =?us-ascii?Q?kFKo1HvYES6M8xd6M6UlDRI1yPr303A8+eELNkG6uz22bEzuR+yyeCITwByn?=
- =?us-ascii?Q?yimznljqngo80UpIgMVcGzUSoTdrVmUMbRwPg12MQWqVx7XoJ4eYwfmcYkOP?=
- =?us-ascii?Q?aS5XN8eMUQfbiH2qZGQduaeDcZqMOcCzztYJ?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8e7pN55iEsjQikyFsf3BZpTOBTrczi51/ExKHIeLfP/3kSVQAQEhsOHlQIE2?=
- =?us-ascii?Q?rbJB4rzty1/A4WUOa2yLbQFCaOWJKiXBFieqWtkTIYj5ZrsDFoandesAb+nY?=
- =?us-ascii?Q?ApF1bvkxTv5qoSe8GSsla6EQuXlELR5gISAAPgOqK4JE/uKOMkX/sshROvGR?=
- =?us-ascii?Q?ZdUbAIrjREJYQNh1V2Ev0gv5rP7wyyVt533/AMWXr+xu2OpFG2iAhMZ1ejzD?=
- =?us-ascii?Q?7ATAoBdsMDPkSHBvPggrUQD/s0VEEWOjyvCqkhelFSlzSWEXrBEpK7KpjPVT?=
- =?us-ascii?Q?KtIe92uLn+8V44G8PPJv73TxrXyaTgsUcREWeF2oRUXzrze+x7kxHCkduxXl?=
- =?us-ascii?Q?ZrmAD/J8l6a1aFj3Y3quT9d5evnmPe1wlgPp9NHlNhe+Ndqckc+okevnzm1j?=
- =?us-ascii?Q?6HUkknGGtB2WsZwJEQijyHlCQBq9ODQvP683xg9e5JkucOWYLRXWrCj0pQrc?=
- =?us-ascii?Q?BIXl+57+3GNs6ziLvOkjcTsgB+v8738F1CJNPk4S/KmwV44maKavHxWbCLQC?=
- =?us-ascii?Q?kHkwUBcDMsnJJ29yux0liHS5AQYMQ3+UN/LUXbuNUKzZ8O2QaDGof+0rpTEd?=
- =?us-ascii?Q?VDPa06LxbXih38viY8ghQ5a1Ppy8azVC9IRjqiog/VaWj8/jUW+b377iTdHy?=
- =?us-ascii?Q?YgTYVLpoiRE/tPaxh+y/NZzic9Ae9KQPpZISt9kYcpvaTMr2ErtQGzIMLjCY?=
- =?us-ascii?Q?TfMiqrb4Fod1DBQ8t0yD4nhGPwZYO/kIG69D8J5SOmaRjNsop804NPp0qEvA?=
- =?us-ascii?Q?VEz/2L6xjJ2NriUqmS6BYZkKGZBlFCElGfi3RvRkVfQNp8ouD9LGnBOFiVr1?=
- =?us-ascii?Q?eyX5Wk6t4YPAQi3pSEefbgIXzcwMUsRjTa3jWOL3BbD4tGs0VrIkTp7sa2Oa?=
- =?us-ascii?Q?5NQGt1ZztjFnk6pH3gecaYrjETcjwD7Mv7PIQcjs4SxFjBZO3leNOaFpWCFW?=
- =?us-ascii?Q?gyBgN48hOcUvs+9sXdoargr/O/xPmfx+2jCCgf8R6wyhSIpBly7dfEIRHG4v?=
- =?us-ascii?Q?zxrKwSDY5swtd2bukiQIPNY1CQlUigs99ycg/6yZkNQxSj5nM5D3P0omjPPG?=
- =?us-ascii?Q?iHrSOJnhKf3dvVPUV6wAXUFLbHyT0ccfXRcwHApJEeVgR+iQ+U25zfP8C2Kr?=
- =?us-ascii?Q?4li9U6c+CYHbUSnJaHfT+++Pi4aMVBIrqLVRQ1ljClE24nDgzwoYPc5bSyp4?=
- =?us-ascii?Q?yvpHxu5o9vi/77UM9MxHWFapqGGdsTrn9iNP1hlucwc+mmvyPiY05iPXW76n?=
- =?us-ascii?Q?uZozvbTKYrAu7MjZq83Zam6HtFmd0gv3C9SJNHdWzRTGHTS+zj4ahNfoye60?=
- =?us-ascii?Q?f84nJuJw+gjVog76UpNOjSTKog+bVjasaimJhqubcr5Va663EslzMFygI7sl?=
- =?us-ascii?Q?GGujlyYmLlwpoOspKeyxSULx3SfJPupf0QPNHU4BStpvFeO9sGS474Rlq1U1?=
- =?us-ascii?Q?TtfKiSFCQY0epOQu1TwPri+LRFlLw4PJJcukydq64yymcej+lXE4vx/fFDVg?=
- =?us-ascii?Q?qqon2HheM9clvI0EbDd/o5IqENK/0+A84Vc2h++wYmU4sCOYjKlZAyh/YuQ7?=
- =?us-ascii?Q?oBnoB90vtuDgAb9KNY5M4Vwu2gUFFx0Hc9SjeGza?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74CB52641D8;
+	Thu, 16 Oct 2025 08:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760601738; cv=none; b=O7jm9Fq/6DGvwvGwhihNUG6BP7eslBwZbHk5hM558HqjPtTsoTfmTb422eA9g6qRvNAEZRxHY2DuGQGtYILw0FZMWmUyt9jZ+pr0sQB4Px+By2uZKB9gVavOqsg57T6cMLNoWR67z7tH179gJlatHklQmjgGulmfgmUqJU8mNOA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760601738; c=relaxed/simple;
+	bh=T/QAZeUOl1WroCJzhqOuuzeJ0heu4oxs6E+NuNYSyJ4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=IyOHDrtAByExjNezsOkmnKIuxdyGc2YcEv7wpWsOMXG9EXkZEb4Vm8G4PZryfhOLZo/S3e1t12+lGHNBHR1W3r1Zkw5d7gt31kIcTKpAYMFKpS2R16o3F+mekCeHSJh1jI65s0L1ND7xS+hQPjdE+qkPTeKEnATWr/eaago/tKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ty129H83; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F2A4C4CEF1;
+	Thu, 16 Oct 2025 08:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760601738;
+	bh=T/QAZeUOl1WroCJzhqOuuzeJ0heu4oxs6E+NuNYSyJ4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ty129H83xsriYCQCtEDyF8wzp/ar6C6Ib5FFd7wTqimz3iGENAWUYHmSTehnbC/wq
+	 LhCNUhxKGJXjVYxCa7i6nOT4pEH8CEVCGAVqFog7+Typi8flSNFXoUy51tp74l++uj
+	 6wQp/KUN7qeqLH/Q6jwnhV6hyUy34r2AIUOLlMpW856vtyVHcMVpDbso6A/gsWbBJs
+	 LN+SOz1tIlXv/oL2m7BK+KtQgW/0U/xlFhC3udqi+oc+vTTq9gslKu6vFmby17qyju
+	 S/iGBjXRBFrmVX/MnCnb2PLlSVjKSF4i9PdMmAx31JM6c9b1GRf735QldRy8nPQz7X
+	 T5PK50pcnMZtQ==
+Date: Thu, 16 Oct 2025 17:02:12 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: lirongqing <lirongqing@baidu.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Lance Yang
+ <lance.yang@linux.dev>, <linux-kernel@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-aspeed@lists.ozlabs.org>, <wireguard@lists.zx2c4.com>,
+ <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, Andrew Jeffery
+ <andrew@codeconstruct.com.au>, Anshuman Khandual
+ <anshuman.khandual@arm.com>, Arnd Bergmann <arnd@arndb.de>, David
+ Hildenbrand <david@redhat.com>, Florian Wesphal <fw@strlen.de>, Jakub
+ Kacinski <kuba@kernel.org>, "Jason A . Donenfeld" <jason@zx2c4.com>, Joel
+ Granados <joel.granados@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Jonathan Corbet <corbet@lwn.net>, Kees Cook <kees@kernel.org>, Liam Howlett
+ <liam.howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Paul E . McKenney" <paulmck@kernel.org>, Pawan Gupta
+ <pawan.kumar.gupta@linux.intel.com>, Petr Mladek <pmladek@suse.com>, Phil
+ Auld <pauld@redhat.com>, Randy Dunlap <rdunlap@infradead.org>, Russell King
+ <linux@armlinux.org.uk>, Shuah Khan <shuah@kernel.org>, Simon Horman
+ <horms@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Steven Rostedt
+ <rostedt@goodmis.org>
+Subject: Re: [PATCH][v4] hung_task: Panic when there are more than N hung
+ tasks at the same time
+Message-Id: <20251016170212.65e2ad95b80cdeeb6f7d7ce3@kernel.org>
+In-Reply-To: <20251015063615.2632-1-lirongqing@baidu.com>
+References: <20251015063615.2632-1-lirongqing@baidu.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4645af4b-958a-42ab-8aa6-08de0c883c79
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2025 07:47:20.2423
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cgR4dNYRdEZ8AuMMnWGT9xljDHFnq+olTgbYK+dw9AwFxGfZH4X0hTYKz84AnuWgQzja+37cjPEJCAfb/paUXw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR11MB5787
-X-OriginatorOrg: intel.com
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Wednesday, October 15, 2025 5:49 AM
->=20
-> The ioctl returns 0 upon success, so !0 returning -1 breaks the selftest.
->=20
-> Drop the '!' to fix it.
->=20
-> Fixes: 1d235d849425 ("iommu/selftest: prevent use of uninitialized variab=
-le")
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+On Wed, 15 Oct 2025 14:36:15 +0800
+lirongqing <lirongqing@baidu.com> wrote:
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> From: Li RongQing <lirongqing@baidu.com>
+> 
+> Currently, when 'hung_task_panic' is enabled, the kernel panics
+> immediately upon detecting the first hung task. However, some hung
+> tasks are transient and allow system recovery, while persistent hangs
+> should trigger a panic when accumulating beyond a threshold.
+> 
+> Extend the 'hung_task_panic' sysctl to accept a threshold value
+> specifying the number of hung tasks that must be detected before
+> triggering a kernel panic. This provides finer control for environments
+> where transient hangs may occur but persistent hangs should be fatal.
+> 
+> The sysctl now accepts:
+> - 0: don't panic (maintains original behavior)
+> - 1: panic on first hung task (maintains original behavior)
+> - N > 1: panic after N hung tasks are detected in a single scan
+> 
+> This maintains backward compatibility while providing flexibility for
+> different hang scenarios.
+
+Looks good to me.
+
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you,
+
+> 
+> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+> Cc: Andrew Jeffery <andrew@codeconstruct.com.au>
+> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Florian Wesphal <fw@strlen.de>
+> Cc: Jakub Kacinski <kuba@kernel.org>
+> Cc: Jason A. Donenfeld <jason@zx2c4.com>
+> Cc: Joel Granados <joel.granados@kernel.org>
+> Cc: Joel Stanley <joel@jms.id.au>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Kees Cook <kees@kernel.org>
+> Cc: Lance Yang <lance.yang@linux.dev>
+> Cc: Liam Howlett <liam.howlett@oracle.com>
+> Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+> Cc: "Paul E . McKenney" <paulmck@kernel.org>
+> Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Phil Auld <pauld@redhat.com>
+> Cc: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Russell King <linux@armlinux.org.uk>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Simon Horman <horms@kernel.org>
+> Cc: Stanislav Fomichev <sdf@fomichev.me>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> ---
+> diff with v3: comments modification, suggested by Lance, Masami, Randy and Petr
+> diff with v2: do not add a new sysctl, extend hung_task_panic, suggested by Kees Cook
+> 
+>  Documentation/admin-guide/kernel-parameters.txt      | 20 +++++++++++++-------
+>  Documentation/admin-guide/sysctl/kernel.rst          |  9 +++++----
+>  arch/arm/configs/aspeed_g5_defconfig                 |  2 +-
+>  kernel/configs/debug.config                          |  2 +-
+>  kernel/hung_task.c                                   | 15 ++++++++++-----
+>  lib/Kconfig.debug                                    |  9 +++++----
+>  tools/testing/selftests/wireguard/qemu/kernel.config |  2 +-
+>  7 files changed, 36 insertions(+), 23 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index a51ab46..492f0bc 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1992,14 +1992,20 @@
+>  			the added memory block itself do not be affected.
+>  
+>  	hung_task_panic=
+> -			[KNL] Should the hung task detector generate panics.
+> -			Format: 0 | 1
+> +			[KNL] Number of hung tasks to trigger kernel panic.
+> +			Format: <int>
+> +
+> +			When set to a non-zero value, a kernel panic will be triggered if
+> +			the number of detected hung tasks reaches this value.
+> +
+> +			0: don't panic
+> +			1: panic immediately on first hung task
+> +			N: panic after N hung tasks are detected in a single scan
+>  
+> -			A value of 1 instructs the kernel to panic when a
+> -			hung task is detected. The default value is controlled
+> -			by the CONFIG_BOOTPARAM_HUNG_TASK_PANIC build-time
+> -			option. The value selected by this boot parameter can
+> -			be changed later by the kernel.hung_task_panic sysctl.
+> +			The default value is controlled by the
+> +			CONFIG_BOOTPARAM_HUNG_TASK_PANIC build-time option. The value
+> +			selected by this boot parameter can be changed later by the
+> +			kernel.hung_task_panic sysctl.
+>  
+>  	hvc_iucv=	[S390]	Number of z/VM IUCV hypervisor console (HVC)
+>  				terminal devices. Valid values: 0..8
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index f3ee807..0065a55 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -397,13 +397,14 @@ a hung task is detected.
+>  hung_task_panic
+>  ===============
+>  
+> -Controls the kernel's behavior when a hung task is detected.
+> +When set to a non-zero value, a kernel panic will be triggered if the
+> +number of hung tasks found during a single scan reaches this value.
+>  This file shows up if ``CONFIG_DETECT_HUNG_TASK`` is enabled.
+>  
+> -= =================================================
+> += =======================================================
+>  0 Continue operation. This is the default behavior.
+> -1 Panic immediately.
+> -= =================================================
+> +N Panic when N hung tasks are found during a single scan.
+> += =======================================================
+>  
+>  
+>  hung_task_check_count
+> diff --git a/arch/arm/configs/aspeed_g5_defconfig b/arch/arm/configs/aspeed_g5_defconfig
+> index 61cee1e..c3b0d5f 100644
+> --- a/arch/arm/configs/aspeed_g5_defconfig
+> +++ b/arch/arm/configs/aspeed_g5_defconfig
+> @@ -308,7 +308,7 @@ CONFIG_PANIC_ON_OOPS=y
+>  CONFIG_PANIC_TIMEOUT=-1
+>  CONFIG_SOFTLOCKUP_DETECTOR=y
+>  CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+> -CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
+> +CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
+>  CONFIG_WQ_WATCHDOG=y
+>  # CONFIG_SCHED_DEBUG is not set
+>  CONFIG_FUNCTION_TRACER=y
+> diff --git a/kernel/configs/debug.config b/kernel/configs/debug.config
+> index e81327d..9f6ab7d 100644
+> --- a/kernel/configs/debug.config
+> +++ b/kernel/configs/debug.config
+> @@ -83,7 +83,7 @@ CONFIG_SLUB_DEBUG_ON=y
+>  #
+>  # Debug Oops, Lockups and Hangs
+>  #
+> -# CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
+> +CONFIG_BOOTPARAM_HUNG_TASK_PANIC=0
+>  # CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+>  CONFIG_DEBUG_ATOMIC_SLEEP=y
+>  CONFIG_DETECT_HUNG_TASK=y
+> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
+> index b2c1f14..84b4b04 100644
+> --- a/kernel/hung_task.c
+> +++ b/kernel/hung_task.c
+> @@ -81,7 +81,7 @@ static unsigned int __read_mostly sysctl_hung_task_all_cpu_backtrace;
+>   * hung task is detected:
+>   */
+>  static unsigned int __read_mostly sysctl_hung_task_panic =
+> -	IS_ENABLED(CONFIG_BOOTPARAM_HUNG_TASK_PANIC);
+> +	CONFIG_BOOTPARAM_HUNG_TASK_PANIC;
+>  
+>  static int
+>  hung_task_panic(struct notifier_block *this, unsigned long event, void *ptr)
+> @@ -218,8 +218,11 @@ static inline void debug_show_blocker(struct task_struct *task, unsigned long ti
+>  }
+>  #endif
+>  
+> -static void check_hung_task(struct task_struct *t, unsigned long timeout)
+> +static void check_hung_task(struct task_struct *t, unsigned long timeout,
+> +		unsigned long prev_detect_count)
+>  {
+> +	unsigned long total_hung_task;
+> +
+>  	if (!task_is_hung(t, timeout))
+>  		return;
+>  
+> @@ -229,9 +232,10 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
+>  	 */
+>  	sysctl_hung_task_detect_count++;
+>  
+> +	total_hung_task = sysctl_hung_task_detect_count - prev_detect_count;
+>  	trace_sched_process_hang(t);
+>  
+> -	if (sysctl_hung_task_panic) {
+> +	if (sysctl_hung_task_panic && total_hung_task >= sysctl_hung_task_panic) {
+>  		console_verbose();
+>  		hung_task_show_lock = true;
+>  		hung_task_call_panic = true;
+> @@ -300,6 +304,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+>  	int max_count = sysctl_hung_task_check_count;
+>  	unsigned long last_break = jiffies;
+>  	struct task_struct *g, *t;
+> +	unsigned long prev_detect_count = sysctl_hung_task_detect_count;
+>  
+>  	/*
+>  	 * If the system crashed already then all bets are off,
+> @@ -320,7 +325,7 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
+>  			last_break = jiffies;
+>  		}
+>  
+> -		check_hung_task(t, timeout);
+> +		check_hung_task(t, timeout, prev_detect_count);
+>  	}
+>   unlock:
+>  	rcu_read_unlock();
+> @@ -389,7 +394,7 @@ static const struct ctl_table hung_task_sysctls[] = {
+>  		.mode		= 0644,
+>  		.proc_handler	= proc_dointvec_minmax,
+>  		.extra1		= SYSCTL_ZERO,
+> -		.extra2		= SYSCTL_ONE,
+> +		.extra2		= SYSCTL_INT_MAX,
+>  	},
+>  	{
+>  		.procname	= "hung_task_check_count",
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 3034e294..3976c90 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1258,12 +1258,13 @@ config DEFAULT_HUNG_TASK_TIMEOUT
+>  	  Keeping the default should be fine in most cases.
+>  
+>  config BOOTPARAM_HUNG_TASK_PANIC
+> -	bool "Panic (Reboot) On Hung Tasks"
+> +	int "Number of hung tasks to trigger kernel panic"
+>  	depends on DETECT_HUNG_TASK
+> +	default 0
+>  	help
+> -	  Say Y here to enable the kernel to panic on "hung tasks",
+> -	  which are bugs that cause the kernel to leave a task stuck
+> -	  in uninterruptible "D" state.
+> +	  When set to a non-zero value, a kernel panic will be triggered
+> +	  if the number of hung tasks found during a single scan reaches
+> +	  this value.
+>  
+>  	  The panic can be used in combination with panic_timeout,
+>  	  to cause the system to reboot automatically after a
+> diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
+> index 936b18b..0504c11 100644
+> --- a/tools/testing/selftests/wireguard/qemu/kernel.config
+> +++ b/tools/testing/selftests/wireguard/qemu/kernel.config
+> @@ -81,7 +81,7 @@ CONFIG_WQ_WATCHDOG=y
+>  CONFIG_DETECT_HUNG_TASK=y
+>  CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
+>  CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=y
+> -CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y
+> +CONFIG_BOOTPARAM_HUNG_TASK_PANIC=1
+>  CONFIG_PANIC_TIMEOUT=-1
+>  CONFIG_STACKTRACE=y
+>  CONFIG_EARLY_PRINTK=y
+> -- 
+> 2.9.4
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
