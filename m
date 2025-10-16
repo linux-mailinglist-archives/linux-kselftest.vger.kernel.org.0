@@ -1,542 +1,179 @@
-Return-Path: <linux-kselftest+bounces-43337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D704BE4002
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 16:49:24 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAE91BE4342
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 17:24:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 523E6587E9D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 14:48:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E970F4E906F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Oct 2025 15:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818AE34AAFB;
-	Thu, 16 Oct 2025 14:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 683232D2499;
+	Thu, 16 Oct 2025 15:22:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eBOZSI+m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010057.outbound.protection.outlook.com [52.101.46.57])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9CF2346A01
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 14:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760626033; cv=none; b=SLPucB+DqPfg0/tkspP1PUHC6bk17bDCF2ZDPnD28xZoXhDqa90PwAjv1TLFLL1lmOent7PFTFvLjUI83hiuWIWqR822Bf/WXdFwj3okh4MBUU4KlZbry1PHPT2P5bPE1wR6I+9AKHFtO2s/qa18zR1KK5JNOrhB93HANTOKYNE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760626033; c=relaxed/simple;
-	bh=YGEk3Vxt0xAsLuoBTBKmO6oTHhcJNPGtkDPzHjbgv8I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SSxPbkQ8pYNMmGZEfSKC7MVeb/cMUO0CHFY48s0kRrrH4WWpa6ILmwOrL3qu48Zrq+KI9kbxSVvvr80rUQheZME/7/yCO9lhNFJvOLqHsdBwE4KpnCjvglNQHfNzhHSGimkFydDaLt2Q3eRznF6V7j/gOWahfk2atTV9c9gSAsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=yonch.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=yonch.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-43f86ddb3f4so286428b6e.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Oct 2025 07:47:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760626029; x=1761230829;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4PBE8tsArPgVuwR9rYRWZy1yTOJeVVE4k+vcOQXANQY=;
-        b=pwZ/NtIwD+MH+b4GHNNmF2GBNX1EbvshHNS42mk4WeHf+UJcx+/Lh9JdcMdPQfbVio
-         eLIN5yHu+y/ZkUFUYDiuhJa0+hQv85j4HMv/y7GqxvV38xbR76E978d7Q99jiAAdQe+q
-         Jc9aYmLz7m3QZI00zCq+P6g2brMjpNyVujUviq1iPyEWm/At/DNTrYKWlnLwBcbWAGBy
-         ajH0GHbFqwRA6zUwWpi1LoH1OShqPaD6kbN478T1VjSbpv1OInveSr540t1uQ5duc4I+
-         HrV5jQSNxjadbKxRlE1ETGldWZHSaDD0L2SqZQ0qj+AVsgyLv/mYXpEOI9gPVPMitz2R
-         6dhA==
-X-Gm-Message-State: AOJu0YxWrVHY9Lg2QMmAU9y4y3PeNwCeZIOx5HR9aUoVi+0ZOPxRxoKJ
-	xj8ww5MgZKTH5YrOc9mJw6pjoCQHaAZMR+W3Ycw/edGFywlhFI/i66Sa
-X-Gm-Gg: ASbGncsux7xiR+sdIme87vHDNaBvxDuJu1owoVNn4aSLPe8MDK+2QpL4gy8McRNmU+e
-	9sHq/9r5QvjnOZM+7Vr/kGlJgXmx17SHpf+hTuG74HXmoqqt2Pxk4pGNrqYaHxGHCB3Dvw4umYV
-	o7BN1CLZUdp8/Is1inIS+GdnzJkRd9kRFnQ17CDozwxAwUPd0XWW5FtoDX8pvIrBT9xooOufzOH
-	Y2ffLX568H5OZC9Y4C7wvHrYgLRSS4w7tJbh/dL816iCl8Jt0w4HjI1mtwbU/hFT3xDmuSbhMHa
-	NoFpDuD1BXlLXrzcj+d2HGzANEgI9TKNMp6X4mQ2cIZH3bI6gd9Fl3Ovgk9+aMuOfgKeoRrPCuv
-	W+wYn0Kyk/w2avzfR5U3vLi6PTweY88uC/VW3vj2FXezF3ExPP6jHW2NFYHjvhWvSnFSBaEp23t
-	Q6gi6ourd+22LmrwatLdS8A27nX4nVQgiShnTTFiSohpdRSdMnNO8n9mvy
-X-Google-Smtp-Source: AGHT+IG5UTBXBR0mcF3hbn7sH8I5dAxaCZxah8MRjFva13+8nwHEh6GWtPkvzNt+eztgSnV1vDranQ==
-X-Received: by 2002:a05:6808:8953:b0:43f:4f34:dd52 with SMTP id 5614622812f47-443a2dd8953mr141131b6e.3.1760626029452;
-        Thu, 16 Oct 2025 07:47:09 -0700 (PDT)
-Received: from localhost.localdomain (syn-067-079-108-173.biz.spectrum.com. [67.79.108.173])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-441cc812f24sm3678018b6e.12.2025.10.16.07.47.08
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 16 Oct 2025 07:47:08 -0700 (PDT)
-From: Jonathan Perry <yonch@yonch.com>
-To: Tony Luck <tony.luck@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	James Morse <james.morse@arm.com>,
-	Roman Storozhenko <romeusmeister@gmail.com>,
-	Jonathan Perry <yonch@yonch.com>
-Subject: [PATCH 8/8] resctrl/pmu: Implement .read via direct RMID read; add LLC selftest
-Date: Thu, 16 Oct 2025 09:46:56 -0500
-Message-ID: <20251016144656.74928-9-yonch@yonch.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20251016144656.74928-1-yonch@yonch.com>
-References: <20251016144656.74928-1-yonch@yonch.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87414C9D;
+	Thu, 16 Oct 2025 15:22:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760628156; cv=fail; b=boMmrWdlGy30L9gKTuW7HeZXJBUa37OYMui1PfxJOY2VUpC4r11tleMPySFYm4gD2gJqzGWUjvfZ4s1rzyBvXvHPeh8FdDHqoDwojbvPjDuu1Vwq4NSta3HnGPf5h7K5hgnmmUZxJ/mjJftvlB9doe68Q/oq99QuySZwXWd0vCg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760628156; c=relaxed/simple;
+	bh=4pzezHOOI2aPcvAb22U11XNZHKdn1xtxhpBoNOf1p3U=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UpPhFiE/b62uhZsWPIJmW1LSA/guFRmGc9r1/ulIUMLUrnbCBX41t3XHX4dxPuEtTdW13abwV0yfnfw/mk+R3mZpk8laKb50r7/Nog14ozkOtmzG/R2J9klVvjjNimS1z2mLJMvSCih/u8eISbM7WLd0lD5A+xNAeFgipgRbtaU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eBOZSI+m; arc=fail smtp.client-ip=52.101.46.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=a0CS1bVxkCSD5JbSLWECCgPb29lFiAbr0BYqqPbvn6WpjcgI/Nn2Gxq0pqHoygyh9ZXwyYqlH3BCF0zijwR7UHkiGw8OTQZJ596FH2WR58pkylEO1Y3fAGDR5vlPPELGGWyEmS3472KBTZwQQN+/YsP34tZC0gsdXStpqDHriS5s7XHXfJLdjaYAXy4a1ebvlLoi5kkFn+PtEfEsJPnF4q77yREHdpsBZWQRIXfQ1251OxWAOs82NejgBga/BHU5fdmLEiFjtZpAaBrUEWfx3+lJ9h5LL1rFVBXpM5Kj+K1ALJXs3RDoOp8r0Y5UU7JTsIdpAgNzClVTBViP4TWEig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p8tYLxsfCD6uVPBGHv6AcKUvMSDzwj2PAo6zQl3bvEM=;
+ b=MwxhdTv9f5vc9rDX2nB54gyHHAdpDwOtxJ8RL2mCGXh19inK8IBsA1gOH/zBljD34eOQF8lpYWjQ7Nzs41/iwGH6f/T3iMiYW+awxBdrpufm51T6X5dF0HkgvOrbfOvndSmTjVxbtvMr9ncfeTzrpG9WSJiPYD6gg7NNW4WqHB0QhipEInUV4rI+m7u6Ir9fhFCYnCrs6U9Fuv8n3PVouj85kZgr/3g0ds4O75ifn6ULU8Ep9N0efQPZ/vaLuDzERYOOWlcgmak5ibUsrcjyar4E+RAAgSAlb2efWno1vc+LWu3yVMDGW67AMcVVKIYuiVj9FtsyiWIvpr+nKzzg8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p8tYLxsfCD6uVPBGHv6AcKUvMSDzwj2PAo6zQl3bvEM=;
+ b=eBOZSI+m5RaB77Xc1IbopV+dcxrDgPpX/z5foUvAa/JOgZhQtQSAyNsnOSb7R2aj3Emo4toPkqpH4j5ZFr2FUV8agN+5bbpLMI8l509PsIcNLOPhqG3EAGaN5tpbNEiiYQkavYyIkf7PCNnkENi7urVCa4RcokARNU7wJY23N9zEc/1/mYgH+DZfv+RiGDPCzUtf7E2TNn3MZzIRXIyGiPXgyNfa9fekzd+xyIv4bgeZJxGV9VKXCSbcOjht0dFVKapj9vkYR/OMTLEBXS7bcsSB3ijYgYN63DD6gY3FKh3BSI0pJ3yR1mHLmVH+TRfnb9UAvYAzvBXNSfoZN43jqw==
+Received: from BLAPR03CA0129.namprd03.prod.outlook.com (2603:10b6:208:32e::14)
+ by PH7PR12MB6761.namprd12.prod.outlook.com (2603:10b6:510:1ab::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.13; Thu, 16 Oct
+ 2025 15:22:27 +0000
+Received: from BN1PEPF00004683.namprd03.prod.outlook.com
+ (2603:10b6:208:32e:cafe::1f) by BLAPR03CA0129.outlook.office365.com
+ (2603:10b6:208:32e::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9203.13 via Frontend Transport; Thu,
+ 16 Oct 2025 15:22:27 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN1PEPF00004683.mail.protection.outlook.com (10.167.243.89) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9228.7 via Frontend Transport; Thu, 16 Oct 2025 15:22:26 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.34; Thu, 16 Oct
+ 2025 08:22:10 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Thu, 16 Oct
+ 2025 08:22:09 -0700
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Thu, 16 Oct 2025 08:22:09 -0700
+Date: Thu, 16 Oct 2025 08:22:07 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Alessandro Zanni <alessandrozanni.dev@gmail.com>
+CC: "Tian, Kevin" <kevin.tian@intel.com>, "jgg@nvidia.com" <jgg@nvidia.com>,
+	"shuah@kernel.org" <shuah@kernel.org>, "alessandro.zanni87@gmail.com"
+	<alessandro.zanni87@gmail.com>, "iommu@lists.linux.dev"
+	<iommu@lists.linux.dev>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH rc] iommufd/selftest: Fix ioctl return value in
+ _test_cmd_trigger_vevents()
+Message-ID: <aPENnxVR+wtlGVAJ@Asurada-Nvidia>
+References: <20251014214847.1113759-1-nicolinc@nvidia.com>
+ <BN9PR11MB5276834E90A7990269EBBF608CE9A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <gn4l62kroj74d765uojx2vmu4tugxbmwnhodckfbath2pafeuz@nw2kudzcucv2>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <gn4l62kroj74d765uojx2vmu4tugxbmwnhodckfbath2pafeuz@nw2kudzcucv2>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004683:EE_|PH7PR12MB6761:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee92dad4-846e-4d4b-007d-08de0cc7d08a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?MHFccf+jbshrJ3sWmh6489mDLd4A2VolxBf2RxMyIR89SUsDdkZ4tmFe2Nxt?=
+ =?us-ascii?Q?ETGbuRnARTgjkvbiVMcwFqJGRotVL58XIY6tTJHwHS3+nWQe8hgT8km0fD/w?=
+ =?us-ascii?Q?nNEwYfJmXWoI19Cqtck5lPfyekdhtcPZYQqpNlw0BYcEanbTesWetOq1tIHK?=
+ =?us-ascii?Q?SqGiHIYILValWFzQPhXrZudCxhQVhcyInsMLGc8u4h5oODr0ZIoShvKDrno7?=
+ =?us-ascii?Q?G3t4BwFztWAyPnUQxSgMuu8spIrmuqYO+X+d5y9FVrOiG04cyQMT6/DAMdPn?=
+ =?us-ascii?Q?e/wnLD9gTEZG8zIYuzeiUrfWY3O0FXVINdUYUn0guEzPaj6fd1da4xNRMs0Y?=
+ =?us-ascii?Q?bVvwuRomIpUO01/4YHE48uJPijSuOaRruYOllR3jTEHL2o4f2nDUB2reti/Z?=
+ =?us-ascii?Q?q0ygwXeWfAkJeXmlLOn7cARWdcZlwgtTNmeEGnhY8Nv1WzoHpIN81k3V0iyx?=
+ =?us-ascii?Q?XM56STUsnHjLfcldBA4DWxYrBoT1/j3WJDuh0iP0XfoAZXvSGvfhxCLNOVsu?=
+ =?us-ascii?Q?zzViHj5ErgmB3iL8ymdZSZPGJ5jaAKk+Ix1Wbp5WSTBm6nwm2wFsh60Vj+cN?=
+ =?us-ascii?Q?TtuEAiAB48a2dFov43cgwUf2+oW94wMdn/IcKDjRMq9WCq1IeTDJpQLEFf9x?=
+ =?us-ascii?Q?Yyl1//2ARo9nGTDXrIs9pe8dje9/SIuezYitMneiM+EVZliJ6uD19z20Rx8T?=
+ =?us-ascii?Q?Hom1yk/m5DvFwkFrWtRjNcuWOiwGfAuHc2xA45vtz47ZJxLHDUGJ/7+FmCoH?=
+ =?us-ascii?Q?pKlj2faF/2YGhkXIkrPpnHfTp1YV+OCyh0i3jFIUfw3L/VbWt/JEbJz8WKsd?=
+ =?us-ascii?Q?tj//oBlCHOnWa2kSicZbxe91V+JLtuTNb8tgOmzuTCFImLb462o+I4hylNEg?=
+ =?us-ascii?Q?o7g3H/vldYhnC98vrEeQMgHiTPx4ZjLUFC+JqPfhKTCArCpSJo3/IsSj/wvz?=
+ =?us-ascii?Q?WvhPfU8sz/nnGrsUCCFFmSzwx/Zu8kKzru39+xjLpeSAsiCSz4aOY6IkJMgt?=
+ =?us-ascii?Q?KhOBSpegyzW9uu5sbS5HrrQiSlqysZ8nCUyjvklRA4Qn052WQr+fBu9o785q?=
+ =?us-ascii?Q?L38l/2r9p2NFNX2NCjwO7gVVzLiaIpq+P569Bqtw2cEmGkQtItm5XW8etXZi?=
+ =?us-ascii?Q?47khkNmeR8gbaI4QBLIbRDNP6Y7tk0qETo2B/N22MBqIKYPAlBEuLU87Xjww?=
+ =?us-ascii?Q?kJZOfpJeoEf7PIJJD4HCRbl7CG87oHUuXRcHvqHiFWhBNmSpNHrSow6duEKu?=
+ =?us-ascii?Q?cO1qQIgwDZeb+SxmDUD737x63A86Ir7+zhrD2/j0v8JIOjLRHeoh4iZU9NzR?=
+ =?us-ascii?Q?VsLYihVizMSxgJniEdqVYWs+PNFNwpTLz9XwNj8RzJKPdkV2WbATg40wQfJL?=
+ =?us-ascii?Q?qn1ua2yne2EdFMHo6Wvebm8wTBpq6QGEGz+MMlS3RMtVZA7zaqk0mPcyJ8UM?=
+ =?us-ascii?Q?4NKeZkQciFBy+Hi58itW4Cpb90HHndIi6rWYiwzQcy70rSejo83glp18EvTW?=
+ =?us-ascii?Q?nwONiTG+JZ9Xh5WhAyuxHslx6kK/zr8G2dszw4NwilsRjBzWQbilrB7DXZrt?=
+ =?us-ascii?Q?SlU/PjG7sqkKx/GN3xI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2025 15:22:26.8029
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee92dad4-846e-4d4b-007d-08de0cc7d08a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004683.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6761
 
-Implement reads of monitored values in resctrl_event_update().
+On Thu, Oct 16, 2025 at 11:09:59AM +0200, Alessandro Zanni wrote:
+> On Thu, Oct 16, 2025 at 07:47:20AM +0000, Tian, Kevin wrote:
+> > > From: Nicolin Chen <nicolinc@nvidia.com>
+> > > Sent: Wednesday, October 15, 2025 5:49 AM
+> > > 
+> > > The ioctl returns 0 upon success, so !0 returning -1 breaks the selftest.
+> > > 
+> > > Drop the '!' to fix it.
+> > > 
+> > > Fixes: 1d235d849425 ("iommu/selftest: prevent use of uninitialized variable")
+> > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> > 
+> > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> 
+> With this fix a positive value returned by the ioctl() ends the loop and returns -1
+> to the assert.
 
-If the rdtgroup was deleted, read zero. On RMID read errors, emit a
-WARN_ONCE and read zero.
+Not with this particular ioctl(). And in fact, I don't recall we
+have an ioctl in iommufd uAPI that returns a positive value. All
+the other ioctls in selftest check "if (ret)".
 
-Introduce mon_event_read_this_cpu() to call mon_event_count() directly,
-with no IPI, as perf infra would ensure .read runs on the bound CPU.
-
-Augment the existing LLC occupancy selftest to also test the PMU.
-
-Document PMU usage in resctrl.rst.
-
-Signed-off-by: Jonathan Perry <yonch@yonch.com>
----
- Documentation/filesystems/resctrl.rst       | 64 ++++++++++++++
- fs/resctrl/ctrlmondata.c                    | 17 ++++
- fs/resctrl/internal.h                       |  1 +
- fs/resctrl/pmu.c                            | 31 ++++++-
- tools/testing/selftests/resctrl/cache.c     | 94 ++++++++++++++++++++-
- tools/testing/selftests/resctrl/cmt_test.c  | 17 +++-
- tools/testing/selftests/resctrl/pmu_test.c  | 28 +-----
- tools/testing/selftests/resctrl/pmu_utils.c | 32 +++++++
- tools/testing/selftests/resctrl/resctrl.h   |  3 +
- 9 files changed, 253 insertions(+), 34 deletions(-)
- create mode 100644 tools/testing/selftests/resctrl/pmu_utils.c
-
-diff --git a/Documentation/filesystems/resctrl.rst b/Documentation/filesystems/resctrl.rst
-index b7f35b07876a..8f91ba7d622b 100644
---- a/Documentation/filesystems/resctrl.rst
-+++ b/Documentation/filesystems/resctrl.rst
-@@ -628,6 +628,70 @@ Resource monitoring rules
-    "mon_data" group.
- 
- 
-+Perf PMU access (resctrl PMU)
-+=============================
-+
-+resctrl registers a perf PMU named "resctrl", which provides read-only access
-+to the same monitoring values exposed via the "mon_data" files. The PMU
-+enables access from eBPF and allows parallelizing reads as it does not lock
-+the system-wide `rdtgroup_mutex`.
-+
-+Selection and usage
-+-------------------
-+- Event selection is performed by passing the file descriptor of a
-+  resctrl monitoring file, for example
-+  "mon_data/mon_L3_00/llc_occupancy", in the `perf_event_attr.config`
-+  field when calling perf_event_open().
-+- The perf event must be CPU-bound (pid = -1 and cpu >= 0).
-+- The chosen CPU must be valid for the domain represented by the
-+  monitoring file:
-+
-+  - For a domain-specific file such as "mon_L3_00/...", choose a CPU that
-+    belongs to that domain.
-+  - For files that provide a sum across domains that share the same L3
-+    cache instance (for example on SNC systems), choose a CPU that
-+    shares that L3 cache instance. See the "Cache IDs" section for the
-+    concepts and mapping.
-+- Exclude flags must be zero. perf_event_open() fails if any exclude
-+  flags are set.
-+
-+Semantics
-+---------
-+- The values from the resctrl PMU match the values what would be
-+  read from the corresponding "mon_data" file at the time of the read.
-+- Sampling is not supported. The PMU provides counts that can be read
-+  on demand; there are no periodic interrupts or per-context filtering
-+  semantics.
-+- It is safe to read a perf event whose underlying resctrl group has been
-+  deleted. However, the returned values are unspecified: the current
-+  implementation returns zeros, but this may change in the future.
-+
-+Discovering the PMU and example
-+-------------------------------
-+- The PMU type is exposed at
-+  "/sys/bus/event_source/devices/resctrl/type" and must be placed in
-+  `perf_event_attr.type`.
-+- A minimal example of opening a resctrl PMU event by passing a
-+  monitoring file descriptor in `config`::
-+
-+      int pmu_type = read_int("/sys/bus/event_source/devices/resctrl/type");
-+      int mon_fd = open("/sys/fs/resctrl/mon_data/mon_L3_00/llc_occupancy", O_RDONLY);
-+      struct perf_event_attr pe = { 0 };
-+
-+      pe.type = pmu_type;
-+      pe.size = sizeof(pe);
-+      pe.config = mon_fd;  /* select event via resctrl file descriptor */
-+      pe.disabled = 1;
-+
-+      int cpu = /* a CPU in the L3_00 domain (see Cache IDs) */;
-+      int fd = perf_event_open(&pe, -1 /* pid */, cpu /* cpu */, -1, 0);
-+
-+      ioctl(fd, PERF_EVENT_IOC_ENABLE, 0);
-+      uint64_t val;
-+      read(fd, &val, sizeof(val));
-+      ioctl(fd, PERF_EVENT_IOC_DISABLE, 0);
-+
-+
- Notes on cache occupancy monitoring and control
- ===============================================
- When moving a task from one group to another you should remember that
-diff --git a/fs/resctrl/ctrlmondata.c b/fs/resctrl/ctrlmondata.c
-index d1e4cf6f2128..02f8f256c680 100644
---- a/fs/resctrl/ctrlmondata.c
-+++ b/fs/resctrl/ctrlmondata.c
-@@ -594,6 +594,23 @@ void mon_event_read(struct rmid_read *rr, cpumask_t *cpumask)
- 		resctrl_arch_mon_ctx_free(rr->r, rr->evtid, rr->arch_mon_ctx);
- }
- 
-+void mon_event_read_this_cpu(struct rmid_read *rr)
-+{
-+	/* Ensure we're not in a CPU hotplug race */
-+	lockdep_assert_cpus_held();
-+
-+	rr->arch_mon_ctx = resctrl_arch_mon_ctx_alloc(rr->r, rr->evtid);
-+	if (IS_ERR(rr->arch_mon_ctx)) {
-+		rr->err = -EINVAL;
-+		return;
-+	}
-+
-+	/* Direct call on current CPU - no IPI needed */
-+	mon_event_count(rr);
-+
-+	resctrl_arch_mon_ctx_free(rr->r, rr->evtid, rr->arch_mon_ctx);
-+}
-+
- int mon_event_setup_read(struct rmid_read *rr, cpumask_t **cpumask,
- 			 struct mon_data *md, struct rdtgroup *rdtgrp)
- {
-diff --git a/fs/resctrl/internal.h b/fs/resctrl/internal.h
-index 8cc3a3747c2f..c4adb6eaf101 100644
---- a/fs/resctrl/internal.h
-+++ b/fs/resctrl/internal.h
-@@ -383,6 +383,7 @@ void rmid_read_init(struct rmid_read *rr, struct rdt_resource *r,
- int mon_event_setup_read(struct rmid_read *rr, cpumask_t **cpumask,
- 			 struct mon_data *md, struct rdtgroup *rdtgrp);
- void mon_event_read(struct rmid_read *rr, cpumask_t *cpumask);
-+void mon_event_read_this_cpu(struct rmid_read *rr);
- 
- int resctrl_mon_resource_init(void);
- 
-diff --git a/fs/resctrl/pmu.c b/fs/resctrl/pmu.c
-index bdca0b3a5b0b..e6f5f13f29d2 100644
---- a/fs/resctrl/pmu.c
-+++ b/fs/resctrl/pmu.c
-@@ -132,8 +132,35 @@ static void resctrl_event_destroy(struct perf_event *event)
- 
- static void resctrl_event_update(struct perf_event *event)
- {
--	/* Currently just a stub - would read actual cache occupancy here */
--	local64_set(&event->hw.prev_count, 0);
-+	struct resctrl_pmu_event *resctrl_event = event->pmu_private;
-+	struct rdtgroup *rdtgrp = resctrl_event->rdtgrp;
-+	struct rmid_read rr;
-+	u64 value = 0;
-+
-+	/* Check if rdtgroup has been deleted */
-+	if (rdtgrp->flags & RDT_DELETED) {
-+		local64_set(&event->count, 0);
-+		return;
-+	}
-+
-+	/* Setup rmid_read structure with current parameters */
-+	rr = resctrl_event->rr;
-+	rr.val = 0;
-+	rr.err = 0;
-+
-+	/* Take cpus read lock only around the actual RMID read */
-+	cpus_read_lock();
-+	mon_event_read_this_cpu(&rr);
-+	cpus_read_unlock();
-+
-+	/* Update counter value based on read result */
-+	if (!rr.err)
-+		value = rr.val;
-+	else
-+		WARN_ONCE(1, "resctrl PMU: RMID read error (err=%d) for closid=%u, rmid=%u, evtid=%d\n",
-+			  rr.err, rdtgrp->closid, rdtgrp->mon.rmid, rr.evtid);
-+
-+	local64_set(&event->count, value);
- }
- 
- static void resctrl_event_start(struct perf_event *event, int flags)
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index 1ff1104e6575..826c11589d34 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <stdint.h>
-+#include <fcntl.h>
- #include "resctrl.h"
- 
- char llc_occup_path[1024];
-@@ -92,12 +93,62 @@ static int get_llc_occu_resctrl(unsigned long *llc_occupancy)
- 	return 0;
- }
- 
-+/*
-+ * get_llc_occu_resctrl_pmu - Read LLC occupancy via resctrl PMU
-+ *
-+ * Uses the PMU to read LLC occupancy from the monitored resource given by the
-+ * global variable llc_occup_path.
-+ *
-+ * Return: =0 on success. <0 on failure.
-+ */
-+static int get_llc_occu_resctrl_pmu(unsigned long *llc_occupancy_pmu)
-+{
-+	int pmu_type, mon_fd = -1, perf_fd = -1;
-+	struct perf_event_attr pe = { 0 };
-+	__u64 value = 0;
-+
-+	if (!llc_occup_path[0])
-+		return -1;
-+
-+	pmu_type = resctrl_find_pmu_type("resctrl");
-+	if (pmu_type < 0)
-+		return -1;
-+
-+	mon_fd = open(llc_occup_path, O_RDONLY);
-+	if (mon_fd < 0)
-+		return -1;
-+
-+	memset(&pe, 0, sizeof(pe));
-+	pe.type = pmu_type;
-+	pe.config = mon_fd; /* Pass the monitoring fd */
-+	pe.size = sizeof(pe);
-+	pe.disabled = 0; /* Start enabled */
-+
-+	perf_fd = perf_event_open(&pe, -1, 0, -1, 0);
-+	if (perf_fd < 0)
-+		goto out_close_mon;
-+
-+	if (read(perf_fd, &value, sizeof(value)) != sizeof(value))
-+		goto out_close_all;
-+
-+	*llc_occupancy_pmu = (unsigned long)value;
-+
-+	close(perf_fd);
-+	close(mon_fd);
-+	return 0;
-+
-+out_close_all:
-+	close(perf_fd);
-+out_close_mon:
-+	close(mon_fd);
-+	return -1;
-+}
-+
- /*
-  * print_results_cache:	the cache results are stored in a file
-  * @filename:		file that stores the results
-  * @bm_pid:		child pid that runs benchmark
-- * @llc_value:		perf miss value /
-- *			llc occupancy value reported by resctrl FS
-+ * @llc_value:		perf miss value
-  *
-  * Return:		0 on success, < 0 on error.
-  */
-@@ -121,6 +172,37 @@ static int print_results_cache(const char *filename, pid_t bm_pid, __u64 llc_val
- 	return 0;
- }
- 
-+/*
-+ * print_results_llc:	prints LLC measurements to a file
-+ * @filename:		file that stores the results
-+ * @bm_pid:		child pid that runs benchmark
-+ * @fs_value:		llc occupancy value reported by resctrl FS
-+ * @pmu_value:		llc occupancy value reported by resctrl PMU
-+ *
-+ * Return:		0 on success, < 0 on error.
-+ */
-+static int print_results_llc(const char *filename, pid_t bm_pid,
-+			     unsigned long fs_value, unsigned long pmu_value)
-+{
-+	FILE *fp;
-+
-+	if (strcmp(filename, "stdio") == 0 || strcmp(filename, "stderr") == 0) {
-+		printf("Pid: %d \t llc_value: %lu\t pmu_value: %lu\n",
-+		       (int)bm_pid, fs_value, pmu_value);
-+	} else {
-+		fp = fopen(filename, "a");
-+		if (!fp) {
-+			ksft_perror("Cannot open results file");
-+			return -1;
-+		}
-+		fprintf(fp, "Pid: %d \t llc_value: %lu\t pmu_value: %lu\n",
-+			(int)bm_pid, fs_value, pmu_value);
-+		fclose(fp);
-+	}
-+
-+	return 0;
-+}
-+
- /*
-  * perf_event_measure - Measure perf events
-  * @filename:	Filename for writing the results
-@@ -164,13 +246,19 @@ int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
- int measure_llc_resctrl(const char *filename, pid_t bm_pid)
- {
- 	unsigned long llc_occu_resc = 0;
-+	unsigned long llc_occu_pmu = 0;
- 	int ret;
- 
- 	ret = get_llc_occu_resctrl(&llc_occu_resc);
- 	if (ret < 0)
- 		return ret;
- 
--	return print_results_cache(filename, bm_pid, llc_occu_resc);
-+	/* Try to get PMU value as well */
-+	ret = get_llc_occu_resctrl_pmu(&llc_occu_pmu);
-+	if (ret < 0)
-+		return ret;
-+
-+	return print_results_llc(filename, bm_pid, llc_occu_resc, llc_occu_pmu);
- }
- 
- /*
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index d09e693dc739..28250903bbf0 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -78,6 +78,7 @@ static int check_results(struct resctrl_val_param *param, size_t span, int no_of
- {
- 	char *token_array[8], temp[512];
- 	unsigned long sum_llc_occu_resc = 0;
-+	unsigned long sum_llc_occu_pmu = 0;
- 	int runs = 0;
- 	FILE *fp;
- 
-@@ -100,12 +101,24 @@ static int check_results(struct resctrl_val_param *param, size_t span, int no_of
- 
- 		/* Field 3 is llc occ resc value */
- 		sum_llc_occu_resc += strtoul(token_array[3], NULL, 0);
-+
-+		/* Field 5: llc occupancy from PMU */
-+		sum_llc_occu_pmu += strtoul(token_array[5], NULL, 0);
- 		runs++;
- 	}
- 	fclose(fp);
- 
--	return show_results_info(sum_llc_occu_resc, no_of_bits, span,
--				 MAX_DIFF, MAX_DIFF_PERCENT, runs, true);
-+	/* Filesystem-based results */
-+	ksft_print_msg("CMT (resctrl fs):\n");
-+	int ret_fs = show_results_info(sum_llc_occu_resc, no_of_bits, span,
-+				       MAX_DIFF, MAX_DIFF_PERCENT, runs, true);
-+
-+	/* PMU-based results */
-+	ksft_print_msg("CMT (PMU):\n");
-+	int ret_pmu = show_results_info(sum_llc_occu_pmu, no_of_bits, span,
-+					MAX_DIFF, MAX_DIFF_PERCENT, runs, true);
-+
-+	return ret_fs || ret_pmu;
- }
- 
- static void cmt_test_cleanup(void)
-diff --git a/tools/testing/selftests/resctrl/pmu_test.c b/tools/testing/selftests/resctrl/pmu_test.c
-index fb3eec721e43..e4d75a8c0a6c 100644
---- a/tools/testing/selftests/resctrl/pmu_test.c
-+++ b/tools/testing/selftests/resctrl/pmu_test.c
-@@ -16,32 +16,6 @@
- 
- #define RESCTRL_PMU_NAME "resctrl"
- 
--static int find_pmu_type(const char *pmu_name)
--{
--	char path[256];
--	FILE *file;
--	int type;
--
--	snprintf(path, sizeof(path), "/sys/bus/event_source/devices/%s/type",
--		 pmu_name);
--
--	file = fopen(path, "r");
--	if (!file) {
--		ksft_print_msg("Failed to open %s: %s\n", path,
--			       strerror(errno));
--		return -1;
--	}
--
--	if (fscanf(file, "%d", &type) != 1) {
--		ksft_print_msg("Failed to read PMU type from %s\n", path);
--		fclose(file);
--		return -1;
--	}
--
--	fclose(file);
--	return type;
--}
--
- static bool is_allowed_file(const char *filename)
- {
- 	const char *base;
-@@ -288,7 +262,7 @@ static int pmu_run_test(const struct resctrl_test *test,
- 	ksft_print_msg("Testing resctrl PMU file access safety\n");
- 
- 	/* Find the resctrl PMU type */
--	pmu_type = find_pmu_type(RESCTRL_PMU_NAME);
-+	pmu_type = resctrl_find_pmu_type(RESCTRL_PMU_NAME);
- 	if (pmu_type < 0) {
- 		ksft_print_msg("Resctrl PMU not found - PMU is not registered?\n");
- 		return -1;
-diff --git a/tools/testing/selftests/resctrl/pmu_utils.c b/tools/testing/selftests/resctrl/pmu_utils.c
-new file mode 100644
-index 000000000000..2d65d8b6e9e3
---- /dev/null
-+++ b/tools/testing/selftests/resctrl/pmu_utils.c
-@@ -0,0 +1,32 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "resctrl.h"
-+#include <stdio.h>
-+
-+int resctrl_find_pmu_type(const char *pmu_name)
-+{
-+	char path[256];
-+	FILE *file;
-+	int type;
-+
-+	if (!pmu_name)
-+		return -1;
-+
-+	snprintf(path, sizeof(path), "/sys/bus/event_source/devices/%s/type",
-+		 pmu_name);
-+
-+	file = fopen(path, "r");
-+	if (!file) {
-+		ksft_print_msg("Failed to open %s: %s\n", path, strerror(errno));
-+		return -1;
-+	}
-+
-+	if (fscanf(file, "%d", &type) != 1) {
-+		ksft_print_msg("Failed to read PMU type from %s\n", path);
-+		fclose(file);
-+		return -1;
-+	}
-+
-+	fclose(file);
-+	return type;
-+}
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 5b0e6074eaba..d1d2891081cf 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -205,6 +205,9 @@ void signal_handler_unregister(void);
- unsigned int count_bits(unsigned long n);
- int snc_kernel_support(void);
- 
-+/* PMU utilities */
-+int resctrl_find_pmu_type(const char *pmu_name);
-+
- void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
- void perf_event_initialize_read_format(struct perf_event_read *pe_read);
- int perf_open(struct perf_event_attr *pea, pid_t pid, int cpu_no);
+Nicolin
 
