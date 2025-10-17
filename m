@@ -1,153 +1,194 @@
-Return-Path: <linux-kselftest+bounces-43389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EE17BEA8C1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 18:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DAD06BEA962
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 18:17:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A7C795A87D4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 16:01:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 07E265836D6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 16:08:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B7963370F8;
-	Fri, 17 Oct 2025 15:59:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765062550CC;
+	Fri, 17 Oct 2025 16:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="AfXnsY+y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5w/i+f9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D103370E3
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 15:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FAC251795;
+	Fri, 17 Oct 2025 16:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760716796; cv=none; b=Gk3oUQkYtESNCwYz4hSkHfPHExZ6x+O1gyBF/tziEIFruRodBMFaomnqRULGEVS2B6NREs8Sr9aqfwBEc2z5/aeuzOk37xjljf4lODvZRzOji9hh9GZSNK+/tZ5n0xbeX+PQdLjz5K+eOHRnoY4pHwAhv9jC7bvQsV+Bfatx88U=
+	t=1760717284; cv=none; b=H7/VwMU+lQlNhZFjNjKkYTfO/aYPvt5MailT3bCtN60V5bGPX+KJ1yMmvHLRhRXvTfsFyG9yOAnuT2piaX+C4Ts0ZGtDEAQbnXFTM1FtO/wfx5viHqYZP0pNUtUapSXSVlXViTCNOFcP18FrGyZY90lipp8lXZMh4d2OD+qYbb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760716796; c=relaxed/simple;
-	bh=mljYXy3IxITmRqF+iKLm3Yh6cbzzCUWnVlBHoIsPH6M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XKz0UE7l592er1ATJkMkg74qtbF3L8LGVdBLthIT90pU783W+fPCpHk/I2Bl8cmNM1U9swpp0eWmDbPyx0NciCRdVNiYMIZwwNjdckk8ZIX5cK9mWrv3+7qttudgtmYCPZJXdhHJG1xIDoYi0cLe0oqbCsJv44kDkrpy7R8BxdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=AfXnsY+y; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-33be037cf73so815960a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 08:59:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1760716794; x=1761321594; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fOxr4kUrx3o2qKQ3zJr2xwhR1Y/B5zgWnTBkv0V7+0s=;
-        b=AfXnsY+yJIHoIpXkMV9L3FrJE3DZiAZcjorvfPvtTweIvH0z6Fevs8BE08qTIY7xaA
-         rsUBpZNI/4OnFBbhW/1LoM2jZbTbbtxeYpzUxHzvpS9astL1S1fvBsN6M2HBgmLaIzn+
-         lSokbQVvN99pghh0Udt3AIluKAYiIBeduQ7FZVpqN3Q0PkEG9hwhPfD1SXdcXOGAkNwo
-         0Pufjp97h5SEedsqZR6OEHa+JZFME1iq3VC3y62chg60qCntZHKLjd/5WSlr2aAVSVxC
-         QU8sYRMny4hj9FDBPE2T3f7UAj8vbXFiM6auzIX60+rLK5kltJNpQrrgMIBnHf+stLLN
-         dXlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760716794; x=1761321594;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fOxr4kUrx3o2qKQ3zJr2xwhR1Y/B5zgWnTBkv0V7+0s=;
-        b=GdrwFJ5A/Coc5ky8YNkimtLBiHVqJSfB4q367kAIRvIkc3H7GLTePjuYxY+yVeNSIE
-         CQNEVe8LvPU7/UG1okDsxrXSZNIqeRL6uWwN8ouFRXTihjLOtG/W7DsqwXYEWkjWuT8j
-         ae/VAoyvEwjwhL2EiqAkZO+8asJRFXVC2BQ3cFpShKCubNJOfRGNNFIvl24E9D1FTQvk
-         MAsjFxqy9g5qk4StKugwN9efEWhPXvSa0PTMxYOylP4MRLTxYjTq02PbUS9F8+x1661X
-         3+f1P3WvuM8UhzKIPAK9gcgNpJA2X1GXNpoDaeKLIpn/T9eiGdo11wPo1z0N1XoAAhse
-         VsKw==
-X-Forwarded-Encrypted: i=1; AJvYcCXkcLHLdbuZAPQH0uQnP1oxwakuJCpO7oC6arrR7NWVAsnySrm7C9R+GrihOt2tBASP8Lqws0ny/wvxL2zRbF8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyt2t07lUzFHr+wuwIO0fbfZEE+jdW1KJoDHYNZ3kXZL1Iet1mw
-	ZFMcihbG4uDajLW9kbbx4+7TIBAu39+enLgQtRi5GTbigxHHGdZLOsnwUlEcGXSPfv4=
-X-Gm-Gg: ASbGncsKRj+wParOKx3pLvZEWXJz1IHEaNbYd1apktiDO/uOFwN3Ll2GMl3xEWY/9pg
-	ZbjAp+nX3Oeticcg2P9vly9XEi8yaS2gCF/ehv68by7AKsbEyqXmrpWwWuf5zWU3X6i01D1bjvN
-	qmNi4u1edQeHHi11hzRp1NbfKDmGko6w/J3jE3NGGYcRbxlnMLfQ9x2mumha90In0Aru/apMQMC
-	seSxVwH6zj2Eg6HMoAeNf4GOJyZKpmT2HwD7hu3VVHAuSDg6Ti+s53o++Xx+q5myH++EzFgtqz+
-	BpZTYKMEqtqpyagm2uhgvmdIow7e83LlDJca1E9zpA+0eZRbKs58uj55sFEyv2CNOLcLsqxjHz5
-	7VYpqw+8d8IRjyU5ZJEMxNknZVgqmSEE96/3+zyVGS++vBbfoABx6DDz6viv8B/AKGYq5HXt24w
-	0TBHLVeN19xfJf4EbsReCI9+dPVocBeHa6
-X-Google-Smtp-Source: AGHT+IFoCPBiPeGQQLQ+fG7ai4z/yEAOOUIjHcz+WvJaH5Mkp92XTCRypBxB5qA/CcWwuixBEctClg==
-X-Received: by 2002:a17:90b:2690:b0:33b:a5d8:f1b8 with SMTP id 98e67ed59e1d1-33bcf86ce26mr4729546a91.15.1760716794026;
-        Fri, 17 Oct 2025 08:59:54 -0700 (PDT)
-Received: from localhost.localdomain ([122.171.18.129])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6a7669392csm151067a12.18.2025.10.17.08.59.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 08:59:53 -0700 (PDT)
-From: Anup Patel <apatel@ventanamicro.com>
-To: Atish Patra <atish.patra@linux.dev>,
-	Andrew Jones <ajones@ventanamicro.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Anup Patel <anup@brainfault.org>,
-	kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH 4/4] KVM: riscv: selftests: Add SBI MPXY extension to get-reg-list
-Date: Fri, 17 Oct 2025 21:29:25 +0530
-Message-ID: <20251017155925.361560-5-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251017155925.361560-1-apatel@ventanamicro.com>
-References: <20251017155925.361560-1-apatel@ventanamicro.com>
+	s=arc-20240116; t=1760717284; c=relaxed/simple;
+	bh=HqjY6m4D2rtLDZQzYhepgOuofMmASG3H7EfDU2kJMB4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oqdorGffqbZYXX9CQEIO6KeupSzgy0Ud2eNodOncklAPuqeRxkpLlmtDf3rd/fQyrvEVOG5Zii7C5gsRuOlmSrSTAvD3vzdJ19aOw3C17JbG+3TOX3ZmMsRRio710pZd/6bCXR4x/TIr1H8geRQqDgwGJYn1NgVk8FGe8JxSRi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5w/i+f9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2852C4CEE7;
+	Fri, 17 Oct 2025 16:08:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760717283;
+	bh=HqjY6m4D2rtLDZQzYhepgOuofMmASG3H7EfDU2kJMB4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T5w/i+f9TZp7C+F8S8KSixlOYUFd6GgOHtP7QKqP24S2FV1WdkmTi7cqVVCjbcj7h
+	 NgIjEGH4azEXnCHiH3N/BXph4TBu+en56bkX86o71rWjYqSggMTtX+eSMFfKgmVRgY
+	 7oe/3t1bxPW0/ut7mJcOa9bkTMylXpIuCuzv0hk7KS/ukI68um0W8mAeMWegEgCAWF
+	 hh204sIm0qnVOVkpyyFLgY50C4LDXnFt2XigIaaXGCC4rlhEZm/zfWV9vsfJclLaHJ
+	 x6tpoASNLn3MEEn2kJeoQy83ZoNE/QVuKOTFJVH3ukTZPoefZVeEcpj9kTrMVaVyf5
+	 uaUMYUFD0D9pw==
+Date: Sat, 18 Oct 2025 00:07:58 +0800
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Benson Leung <bleung@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
+Message-ID: <aPJp3hP44n96Rug9@tzungbi-laptop>
+References: <20251016054204.1523139-1-tzungbi@kernel.org>
+ <20251016054204.1523139-6-tzungbi@kernel.org>
+ <20251016123149.GA88213@nvidia.com>
+ <aPGryj-V5PQZRtoI@google.com>
+ <20251017134916.GK3901471@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251017134916.GK3901471@nvidia.com>
 
-The KVM RISC-V allows SBI MPXY extensions for Guest/VM so add
-it to the get-reg-list test.
+On Fri, Oct 17, 2025 at 10:49:16AM -0300, Jason Gunthorpe wrote:
+> On Fri, Oct 17, 2025 at 02:36:58AM +0000, Tzung-Bi Shih wrote:
+> > Imagining the following example:
+> > 
+> > /* res1 and res2 are provided by hot-pluggable devices. */
+> > struct filp_priv {
+> >     void *res1;
+> >     void *res2;
+> > };
+> > 
+> > /* In .open() fops */
+> > priv = kzalloc(sizeof(struct filp_priv), ...);
+> > priv->res1 = ...;
+> > priv->res2 = ...;
+> > filp->private_data = priv;
+> > 
+> > /* In .read() fops */
+> > priv = filp->private_data;
+> > priv->res1    // could result UAF if the device has gone
+> > priv->res2    // could result UAF if the device has gone
+> > 
+> > 
+> > How does the bool * work for the example?
+> 
+> You are thinking about it completely wrong, you are trying to keep the
+> driver running conccurrently after it's remove returns - but that
+> isn't how Linux drivers are designed.
+> 
+> We have a whole family of synchronous fencing APIs that drivers call
+> in their remove() callback to shut down their concurrency. Think of
+> things like free_irq(), cancel_work_sync(), timer_shutdown_sync(),
+> sysfs_remove_files(). All of these guarentee the concurrent callbacks
+> are fenced before returning.
+> 
+> The only issue with cros_ec is this:
+> 
+> static void cros_ec_chardev_remove(struct platform_device *pdev)
+> {
+>         struct miscdevice *misc = dev_get_drvdata(&pdev->dev);
+> 
+>         misc_deregister(misc);
+> }
+> 
+> It doesn't fence the cdevs! Misc is a hard API to use because it
+> doesn't have a misc_deregister_sync() variation!
+> 
+> Dan/Laurent's point and proposal was that mis_deregister() does not
+> work like this! It is an anomaly that driver authors typically over
+> look.
+> 
+> So the proposal was to add some way to get a:
+>   misc_deregister_sync()
+> 
+> What gives the fence. Under your proposal it would lock the SRCU and
+> change the bool. After it returns no cdev related threads are running
+> in fops touching res1/res2. I think your proposal to replace the fops
+> and that related machinery is smart and has a chance to succeed.
+> 
+> From this perspective your example is malformed. Resources should not
+> become revoked concurrently *while a driver is bound*. The driver
+> should be unbound, call misc_deregister_sync()/etc, and return from
+> remove() guaranteeing it no longer touches any resources.
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Imagining:
+- Driver X provides the res1.
+- Driver Y provides the res2.
+- Driver Z provides the chardev /dev/zzz.  The file operations use res1
+  and res2.
+- A userspace program opened /dev/zzz.
 
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 705ab3d7778b..cb54a56990a0 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -133,6 +133,7 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_SUSP:
- 	case KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_STA:
- 	case KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_FWFT:
-+	case KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_MPXY:
- 	case KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_EXPERIMENTAL:
- 	case KVM_REG_RISCV_SBI_EXT | KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_VENDOR:
- 		return true;
-@@ -639,6 +640,7 @@ static const char *sbi_ext_single_id_to_str(__u64 reg_off)
- 		KVM_SBI_EXT_ARR(KVM_RISCV_SBI_EXT_SUSP),
- 		KVM_SBI_EXT_ARR(KVM_RISCV_SBI_EXT_STA),
- 		KVM_SBI_EXT_ARR(KVM_RISCV_SBI_EXT_FWFT),
-+		KVM_SBI_EXT_ARR(KVM_RISCV_SBI_EXT_MPXY),
- 		KVM_SBI_EXT_ARR(KVM_RISCV_SBI_EXT_EXPERIMENTAL),
- 		KVM_SBI_EXT_ARR(KVM_RISCV_SBI_EXT_VENDOR),
- 	};
-@@ -1142,6 +1144,7 @@ KVM_SBI_EXT_SUBLIST_CONFIG(sta, STA);
- KVM_SBI_EXT_SIMPLE_CONFIG(pmu, PMU);
- KVM_SBI_EXT_SIMPLE_CONFIG(dbcn, DBCN);
- KVM_SBI_EXT_SIMPLE_CONFIG(susp, SUSP);
-+KVM_SBI_EXT_SIMPLE_CONFIG(mpxy, MPXY);
- KVM_SBI_EXT_SUBLIST_CONFIG(fwft, FWFT);
- 
- KVM_ISA_EXT_SUBLIST_CONFIG(aia, AIA);
-@@ -1222,6 +1225,7 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_sbi_pmu,
- 	&config_sbi_dbcn,
- 	&config_sbi_susp,
-+	&config_sbi_mpxy,
- 	&config_sbi_fwft,
- 	&config_aia,
- 	&config_fp_f,
--- 
-2.43.0
+In the approach, what is .remove() of driver X supposed to do when driver X
+is unbinding (e.g. due to device unplug)?
 
+If it ends up call misc_deregister_sync(), should the synchronous function
+wait for the userspace program to close the FD?
+
+
+The design behind revocable: the driver X waits via synchronize_srcu(), and
+then it is free to go.  The subsequent accesses to res1 will get NULL, and
+should fail gracefully.
+
+> For this specific cros_ec driver it's "res" is this:
+> 
+>         struct cros_ec_dev *ec = dev_get_drvdata(pdev->dev.parent);
+>         struct cros_ec_platform *ec_platform = dev_get_platdata(ec->dev);
+
+In fact, no, the "res" we are concerning is struct cros_ec_device, e.g. [1].
+(I knew the naming cros_ec_device vs. cros_ec_dev is somehow easy to confuse.)
+
+[1] https://elixir.bootlin.com/linux/v6.17/source/drivers/platform/chrome/cros_ec_spi.c#L752
+
+> This is already properly lifetime controlled!
+> 
+> It *HAS* to be, and even your patches are assuming it by blindly
+> reaching into the parent's memory!
+> 
+> +	misc->rps[0] = ec->ec_dev->revocable_provider;
+> 
+> If the parent driver has been racily unbound at this point the
+> ec->ec_dev is already a UAF!
+
+Not really, it uses the fact that the caller is from probe().  I think the
+driver can't be unbound when it is still in probe().
+(Probe protocol device -> register the MFD device ->
+ add cros-ec-chardev device and probe.)
+
+> For cros it is safe because the cros_ec driver is a child of a MFD and
+> the MFD logic ensures that the children are unbound as part of
+> destroying the parent. So 'ec' is guarenteed valid from probe() to
+> remove() return.
+> 
+> IHMO auto-revoke is a terrible idea, if you go down that path then why
+> is misc special? You need to auto-revoke irqs, timers, work queues,
+> etc too? That's a mess.
+
+To be clear, I'm using misc as an example which is also the real crash we
+observed.  If the file operations use other resources provided by a
+hot-pluggable device, it'd need to use revocable APIs to prevent the UAFs.
 
