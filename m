@@ -1,110 +1,154 @@
-Return-Path: <linux-kselftest+bounces-43374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ACBDBE7EAA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 11:57:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D72FFBE8757
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 13:52:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 106094EB072
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 09:57:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DC2D19A0B89
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 11:52:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB8E2DC357;
-	Fri, 17 Oct 2025 09:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1D02D73B4;
+	Fri, 17 Oct 2025 11:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="BAHf8r5r"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MZBqarfl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DEAD2D6E71
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 09:57:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7E127B34D
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 11:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760695023; cv=none; b=BeGaWil5EeLDIhuoata88wkMixZ5WBll9K00FZ7NhNBU30G6rcQiziz1HnOjTz/MGIfv+2bpZbdDJzfAAeFWtV0682wQPBZXp3t/VIjIt2iUv9xT62lP/pSebIerDC4tw3fodWRYsde7TR5o3DVXowfVxEd5l1cFs/Ry3OVSxFM=
+	t=1760701939; cv=none; b=oxb3h6p1YkSfr6MYi6gbC7a9Ekempj3BZ7OYnjm3jKkqjixu2PMzoGj75zW/HeMfSV4EYp3sLm0rGccQ3jA+KVGUOJgsjE6RyqP+7KuculgkDVMM3auFV5iSA+nNq4GBug0XQLm7ZjcjqYOGyusvj9wVWVdl2WdVPyvL9zsEscA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760695023; c=relaxed/simple;
-	bh=xwkxvH1FPDvwbJfFaw1wRPhCDrLbmhSWOofttyY7r+A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZiCw8pvNr06Lh6A+wjUHf6W3tddUqrK1d1LY7j6e1GT9O5QQMPJrteEyMPfyK/bgENUWRnF5/jbQVnaQe/57md63vjs/5XPlkSrz5y9jMXo+IPDuF9vSQznbNDgodLa5nLyPBx2yYdkjnEBhQMuX9TNkgxTFRNH307BYojB/nCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=BAHf8r5r; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3ee64bc6b85so1667113f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 02:57:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1760695020; x=1761299820; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KjcGQpb5leVMb/C6XggUPD/+kfrKFLcG6qmnmp/+GHE=;
-        b=BAHf8r5rrdAtbmmJ5i4mZuX0iZEU5vMCa1JxAlVrpOGqc4Y7yKVK7QARNchOKrkqN4
-         cqEiizDpzOXvM0UfBlD7EjXtpSJ8sJ0/H+JWMQTqxVe209mYorVwNGjajs0qIXFnQX/B
-         BZ345OwhlfUlSwurJvnpwowRoD31CxcHFKdiFwfP3qyzY7mRCSZ0NiVoDKnlYaP2adMk
-         5KULHxddnIKlFBCWhFGCK/mJN1FVNmENGNnu27ejTVlx/PhJDURDSou0wWSIF96GcvJh
-         /t10BvpxKN6uyKoggmH3RCcQHLNLtQbatN/ZBz60JCSzkAg5AWXfNglmGexNoBN8INqU
-         4Rgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760695020; x=1761299820;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KjcGQpb5leVMb/C6XggUPD/+kfrKFLcG6qmnmp/+GHE=;
-        b=W6lRY4KpqGfqwyWI94drWC5l3KSG8ZwEXxcJLW3R0wC7KZ4VUW1D43N2awDA3u7DOj
-         AkZSyXpTv3xJxArqZgOP73Yt3v/JJfFJVvj2IuJLJUxApY8LbUAtehB7gr4HiAl1aB6H
-         AvVR8H/azX6dmY9gywRi9O1KJUkGA1kN9z+DGkBan1jSHTk73Nkb2ylPCQnhC0JIMzuT
-         QPcnQQkaHTb9mj51RLH9k1kdk6G7Xdwd49DEU4wA+NBtqZYo513h2mOT6n8f3hZnmYpb
-         HGYYFlhzveu0/zqoW052DBOO92kbw8uGIWprotNlGI3XQZfaeqQyhJVxFIGAZvaaHXjl
-         0qpA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhNdnq61M9Xh+Jth6FU+pWLyG4tbY4Zkc+HvfgUL9MghwwKGjCpIneQu/6SG181dOKckMdXcrhDgNuUJJAZBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeyKNVUS16tuVkRdfKrnWlSB5vltjS/DUQqumKZzlDJ7ca6jLN
-	HwUahx3UrVCZg2gILt/ayn67n2sQiEmDySbx48k+izuzl2QlzbWdnScD/GZffgHQW1s=
-X-Gm-Gg: ASbGncuJ6qbhhMGtES8H0kefsNM9drwzcovQO8CkZLn4Ri9mfgmLbNIZnT1BS9L7tJv
-	uuxZvdSmUnDcBz/cyIopiPt0c1bA34rfG0BO/5M0trTbAzwVUvp/W/MR+N5GZIUUEV+9y1xxcfC
-	2OE9gDNUJwSWlpedJCSoBqhv8zXnSYwW3lw7Dy1V7nZUN7lVExf+1rw6YSHRBOJCeXl5q2vBLwH
-	tdRro31hckzkdi7rpXGREljmF8dmbEr2DqJRH0xSXR4F4ZHkcUlQ8Kril9u/+3ZHVatQGHgW8J1
-	yLrCeMo4LZWAa5naHWDA7P9h2UAfOsNq3mmz8zPfo8x9PEVl8rrB1dwrUoBHAmFaDAKsziqt2ck
-	zmQGEwrr/5sl5GUN6kUpgPS/cervP1f0TreTfeywvGl7N5vz3MFJTF97rMpTIt6o9g40dgpNYbo
-	aqz8j23UtVdv+7z4J59tiuMSHk27CGDNa2hFhP/Q==
-X-Google-Smtp-Source: AGHT+IEeZDP2fZLW2njiX0+fFCA2KIjPFuvYhRMWhYWRWctEosSmZW5GRuJTpVFprjQALkK02Vuvcw==
-X-Received: by 2002:a05:6000:24c3:b0:3fa:ff5d:c34a with SMTP id ffacd0b85a97d-42704da9deamr2388563f8f.39.1760695019334;
-        Fri, 17 Oct 2025 02:56:59 -0700 (PDT)
-Received: from jiri-mlt.client.nvidia.com ([140.209.217.211])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42704a929acsm5791355f8f.18.2025.10.17.02.56.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 02:56:58 -0700 (PDT)
-Date: Fri, 17 Oct 2025 11:56:55 +0200
-From: Jiri Pirko <jiri@resnulli.us>
-To: Nikolay Aleksandrov <razor@blackwall.org>
-Cc: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org, 
-	Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Stephen Hemminger <stephen@networkplumber.org>, David Ahern <dsahern@gmail.com>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] bonding: show master index when dumping slave
- info
-Message-ID: <7quap7umeeksodg62bbv4ob4344edplb7f33yiebs2hvhrrdvf@wndrzz7rxi7v>
-References: <20251017030310.61755-1-liuhangbin@gmail.com>
- <0be57e07-3b90-44f7-85d5-97a90ac13831@blackwall.org>
+	s=arc-20240116; t=1760701939; c=relaxed/simple;
+	bh=FOca5tTbFWcePAHAl7Eifc2AqcyrN6pW9+HT0gDqUKQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jckLeIv1pd6wqUDOuedAdbv4zGT0o9zFp/dtDNxts+lsjWRxVy41ypgFiuE4qkTXa5jVGjZYWTYOzgVAYh7BAZQa7is9MSPiyOL0d3MSwcrQ2ZXV+u0zam8yiu7N2WHATxvDy+/zunziEuzTiX5mIbU8YfRUcn7up8jIT/gTA+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MZBqarfl; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760701936;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OG8S2hI/eYRMbUZLperrVpe30F/q5Fz9fS8hkEhL7K0=;
+	b=MZBqarfl4OeLo0bxtUH8yuWvJvwe7WBk5l3WgSYsiVY8GPZM8k7g6x+9ptucdEp2sVBUsb
+	8Nw6WkmScSuY8tAKg++YD0Bu69c5DwSe+DE1E60G/MSIB9b1NAu43qYVazd6FnimtCDqzJ
+	rRnowcQub81jl0HWvmO1PYWl25E5VUQ=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-616-RYk5Gup1OZWjnU9IFjMxUg-1; Fri,
+ 17 Oct 2025 07:52:13 -0400
+X-MC-Unique: RYk5Gup1OZWjnU9IFjMxUg-1
+X-Mimecast-MFC-AGG-ID: RYk5Gup1OZWjnU9IFjMxUg_1760701932
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C21DD195608A;
+	Fri, 17 Oct 2025 11:52:11 +0000 (UTC)
+Received: from gmonaco-thinkpadt14gen3.rmtit.csb (unknown [10.44.33.41])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8549A30001A2;
+	Fri, 17 Oct 2025 11:52:08 +0000 (UTC)
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Nam Cao <namcao@linutronix.de>
+Cc: Gabriele Monaco <gmonaco@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	John Kacur <jkacur@redhat.com>,
+	Waylon Cude <wcude@redhat.com>,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 0/2] selftests/verification: Add initial RV tests
+Date: Fri, 17 Oct 2025 13:52:01 +0200
+Message-ID: <20251017115203.140080-1-gmonaco@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0be57e07-3b90-44f7-85d5-97a90ac13831@blackwall.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Fri, Oct 17, 2025 at 08:10:09AM +0200, razor@blackwall.org wrote:
->On 10/17/25 06:03, Hangbin Liu wrote:
->> Currently, there is no straightforward way to obtain the master/slave
->> relationship via netlink. Users have to retrieve all slaves through sysfs
->> to determine these relationships.
->> 
->
->How about IFLA_MASTER? Why not use that?
+Add a series of tests to validate the RV tracefs API and basic
+functionality.
 
-It's been there for a decade. Plus is, it exposes master for all
-slave-master devices. Odd that you missed it.
+* available monitors:
+    Check that all monitors (from the monitors folder) appear as
+    available and have a description. Works with nested monitors.
+
+* enable/disable:
+    Enable and disable all monitors and validate both the enabled file
+    and the enabled_monitors. Check that enabling container monitors
+    enables all nested monitors.
+
+* reactors:
+    Set all reactors and validate the setting, also for nested monitors.
+
+* wwnr with printk:
+    wwnr is broken on purpose, run it with a load and check that the
+    printk reactor works. Also validate disabling reacting_on or
+    monitoring_on prevents reactions.
+
+These tests use the ftracetest suite. The first patch of the series
+adapts ftracetest to make this possible.
+
+The enable/disable test cannot pass on upstream without the application
+of the fix in [1].
+
+Changes since V1:
+- run stressors based on the cpu count on the wwnr/printk test
+
+[1] - https://lore.kernel.org/lkml/87tt0t4u19.fsf@yellow.woof
+
+To: Steven Rostedt <rostedt@goodmis.org>
+To: Nam Cao <namcao@linutronix.de>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: John Kacur <jkacur@redhat.com>
+Cc: Waylon Cude <wcude@redhat.com>
+Cc: linux-trace-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+Gabriele Monaco (2):
+  selftest/ftrace: Generalise ftracetest to use with RV
+  selftests/verification: Add initial RV tests
+
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/ftrace/ftracetest     | 34 ++++++---
+ .../ftrace/test.d/00basic/mount_options.tc    |  2 +-
+ .../testing/selftests/ftrace/test.d/functions |  6 +-
+ .../testing/selftests/verification/.gitignore |  2 +
+ tools/testing/selftests/verification/Makefile |  8 ++
+ tools/testing/selftests/verification/config   |  1 +
+ tools/testing/selftests/verification/settings |  1 +
+ .../selftests/verification/test.d/functions   | 39 ++++++++++
+ .../test.d/rv_monitor_enable_disable.tc       | 75 +++++++++++++++++++
+ .../verification/test.d/rv_monitor_reactor.tc | 68 +++++++++++++++++
+ .../test.d/rv_monitors_available.tc           | 18 +++++
+ .../verification/test.d/rv_wwnr_printk.tc     | 30 ++++++++
+ .../verification/verificationtest-ktap        |  8 ++
+ 14 files changed, 279 insertions(+), 14 deletions(-)
+ create mode 100644 tools/testing/selftests/verification/.gitignore
+ create mode 100644 tools/testing/selftests/verification/Makefile
+ create mode 100644 tools/testing/selftests/verification/config
+ create mode 100644 tools/testing/selftests/verification/settings
+ create mode 100644 tools/testing/selftests/verification/test.d/functions
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitor_enable_disable.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitor_reactor.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_monitors_available.tc
+ create mode 100644 tools/testing/selftests/verification/test.d/rv_wwnr_printk.tc
+ create mode 100644 tools/testing/selftests/verification/verificationtest-ktap
+
+
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+-- 
+2.51.0
+
 
