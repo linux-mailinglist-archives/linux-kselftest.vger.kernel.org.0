@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-43387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43388-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 563F5BEA70E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 18:04:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEEF3BEADD9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 18:50:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5660119A227F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 16:01:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CCBB9629A3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 16:00:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A29336ECD;
-	Fri, 17 Oct 2025 15:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06CF3336EE3;
+	Fri, 17 Oct 2025 15:59:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="SHeU5cES"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="Of2NuEBY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D624336EC0
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 15:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73825336ED1
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 15:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760716789; cv=none; b=p/MAlOV6DoF09O85jSEq4TtbSR3Pyr+w+60PcNB+sNXwKNWqeSt+fXM03X24PlaglDqt2rK8hsJGZCvz8kfaDVyUTl0N921jlbWSd1VbhxOwfiJfn2ZqpVnjhL/DhJBe6L+13V/7pOLipgrg/5Is4DLwqoy4qgza3fN9bMeefv4=
+	t=1760716791; cv=none; b=jqcchO8JpOj6S4r/84wsZ76nFP3qkzRmo7aLMouB5w2AJuy3GGoyxYBCN7gPdLfftnu3z6dOIfNJTQQjq5Ht5cnAErW0jkghraBBIjjWDDv03AsblUFXedJvd7OAnE6xLM1ludV6LReJX0HDgCit9rCaFk7Br7ZzlOA/MSyp084=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760716789; c=relaxed/simple;
-	bh=VauSt0uAycrcY3nlPmUv8mw69nRyhNX8TjKVsezUOqc=;
+	s=arc-20240116; t=1760716791; c=relaxed/simple;
+	bh=TZPcRasNMeLsIZK1JLiv9Hygp+bbQA2e5mO/bhGFgio=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZzXvNWnZKyIlV9E1BCgWq4wPIExHRCq9iY08ND8eBD2G+gPQvRZ2Q6xhr+EeTttWMXHKK4iVL2SBR/cebkcOn8+LeXHPt9yq17vGq+RGqXd6QJgN315FFyWvsBb73nkrhNUGbLAn527FHt4pUbSr5rAZKRzPZt8J5X+L9bUf9f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=SHeU5cES; arc=none smtp.client-ip=209.85.210.180
+	 MIME-Version; b=RsojcsUah6ozklwgJbbfcn1fmmho7a6JA4qkwpqFY1wCZLh6gEuErftlo5EAnzFhFcC9XrRDk56s/j9dnPljybn60p0WFZzrolTv/4FbQzlmfq9R9V/iyW4pTWzTAVLp4Ep/uWmnTxcho9rSBfWWEKWp62k59/optHN9BykKaDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=Of2NuEBY; arc=none smtp.client-ip=209.85.215.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-782023ca359so2140906b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 08:59:47 -0700 (PDT)
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b62e7221351so1716353a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 08:59:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1760716787; x=1761321587; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1760716790; x=1761321590; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7YO6UzdALBp15BcoYG5LkyhqHChXHZ3HPbY8ifkU6tw=;
-        b=SHeU5cESp/bYhZx31CNpfGT035STe6p9kMQbJ+o32xJna8Kf0r7JVHCynygGgm8LJA
-         TMusansS/ctst5/OQD0Fntnsi1pnxm9iXYpxxwzJCR2V11XEULG3zEtr6gbhyC/VAISY
-         /MMMO5M68MVRPJ+7/g55+LS28t4220ZP3ufvrM6XEHUG/Z0SWdcECMtl1ELETt8D7myK
-         vjdSaTIhoIHtcZ8GYDQ9N0+ZYhDWMxjfLzFdJ2i8jm+UQbR1OKNxAYCqJ6kbHpTeyqY4
-         jknSjvahBsRMQ+aZjGOpjFPBTCIPkZKhOovtcx6gtiFHZA9RsEUoogH30LgTUS6YFDEQ
-         bP+A==
+        bh=XGrq7dE9mGPhrWe1XWbI1ElRSHZxTOfH8a4rxkkGojA=;
+        b=Of2NuEBYUj2qVwwb/HbRPJwXN3sAUM3RD4HMAWD1O3c5ZT9JMlo6TYbnF/rbwiWzkS
+         6EKMOq76nbbRTMdYbH7WOWc9gJncUB6zyUyT02ltzSnSKYDvKTjyQaeEPqAQRxObTQJY
+         IZhZBKcyehIXUtOTKqWbdjnwrPHwhxLRxXiIfOT5VmVSj58S3M4oGufbHQa291QVZQsU
+         Q36bXNc48kPe6Fm/IEbg/571WAAH6xzueNgDdH5qOZ1PFHEiX8/EEd14yduKZX3M8wRB
+         VJ+hTmVmkazZH3w+bxakpF4tNWr/3GiUIcaYoC7noBGOZFPj+EXcrVQdc/7TGWoprYfm
+         VUkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760716787; x=1761321587;
+        d=1e100.net; s=20230601; t=1760716790; x=1761321590;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7YO6UzdALBp15BcoYG5LkyhqHChXHZ3HPbY8ifkU6tw=;
-        b=PNZ59qhyARd43sKzf0eMcUtEXH8XrNa+V1cDSq6iB+o+BHlEn8ypYSzYzSf8Hye2hI
-         sPHUvjtLR+S8P6geLul9RL87eaK6GaMOdsv5k9ocIGb7eGcQDXPsRyqyJgX7lk7zva/h
-         NVCVHwKKI8manjOaZ+ple1h+wIStM13P7bWLjWY+EM20EspnBKCcEEPKQknPg8r9o/88
-         Pt3fTIWI6lIB+N8G82vy0K77ZdaRLF4J3cQa0QaxasBolBkiO1Hdpt6rz3DjvGwZMlzq
-         lnRTAYkTllYuBgOP+GtDqGsybQhX8Zv4DsHhXFUXKEtPPqAzVJS1UtlwjYmo5m839mZR
-         eLvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUmiiWiFyQpE1N0+VMdoiii3rspmECaFK1kneGkCSP8uA92+0m52mf7mMAxgxOM/p74QGWc0tptD66L6h7b94=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoBInNGoQiGwapoc/BLUvZ5GDkvJi/7u89zZeTAZyx6/bKqW24
-	vz3BnReWihii4dFOCSOrikeRPECj96M159JbUd8Sf5QMdCiUqG2TJ/T3N+8WC4UI2Uc=
-X-Gm-Gg: ASbGnculjGc873foVqgt4ON6+YKt+iAcLdOETo7Yia7fQ4QQ7NxVOhukkdqxu7KBEQX
-	0zbAk4GVtwrui/ql+ymtskb34DLR7Y7pFTNdCkDCXM+1o8FoE/8R+KvGCFUQoT1Ca2uRuzKFjRM
-	SWn4Rp8TNf80ZFkYvgYbcprvLb+NqPHEBou7ZyiGWlKmswqi10eMfWmAZhZ8yIl3a6Wc/L8MDBu
-	x795ogXRDO7C3qEekkizGda1KT3OL8z9HHY4SkTb8yTJKhZOdCj37U3GYoX+J9kBGBarYIanomk
-	GTqXEpH06lFxsyFS81pFOnrWbR2SZxenUm5VbpgtfzzMp0HHURMu5tMwOTTBOkJlTQZfUR0VazB
-	hxpxMET2hwWwxV6Wp2rz8JiGllJ/SVTdgEHWfETbP5Ir+w22qtpxU53rwBs544bslYw+vEymvOK
-	KnTnOramWKDgLkMCY+VWjE/ib0kz6VFIUxvhDfSWQO6nvu5mROEF92fw==
-X-Google-Smtp-Source: AGHT+IGyl9gTUlhqKvf7bWFyXToKYsATj7SdvLFGZ0eSD3zQLgSjQNxd1CMPXeNXJkwX2bLubLMF4Q==
-X-Received: by 2002:a05:6a21:9997:b0:334:9e5e:c2c2 with SMTP id adf61e73a8af0-334a84c81famr5765358637.13.1760716785208;
-        Fri, 17 Oct 2025 08:59:45 -0700 (PDT)
+        bh=XGrq7dE9mGPhrWe1XWbI1ElRSHZxTOfH8a4rxkkGojA=;
+        b=lvR66tDAsMKeZzCODQCSA+wE8H9xsfkrM/fgVhPE1xED2+S+2RZg5k9HN/sfpXYJG3
+         bDw5WdEez8NxPe3HtVzIxOxN7HDPKDP9e98JTHgr1smq9cE9IumXyCINkyySuyzJYJjn
+         +DWqTzbQaUXotqyk20QjfZn8L6h5w/anTxsFSbyigvvGmSAjk5/wmahibV0a/AGx1+3F
+         3PnesWBZSb29lT90itwr8GkEKop06mFDCOYrcfYiOCdsKfDJwfpnK8uiKp58Sz/xkhNH
+         N8zdqrBuhvyd8vPoCVxiOe1V5bqdTfweMU7SfR4EBJdaMYoASfoAjPV1zMtVihX6TxPW
+         f21A==
+X-Forwarded-Encrypted: i=1; AJvYcCWo8Ru2TFio6mhAlFRJw4albcq/pXfGRXRXgJfu+sM/TufN6dKZnAjji6n1rxSc6lCX4Or1sPfNQWfObOmIqYE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGUYzFjVz9gthNbElk2VXj1bt6vf8mw7fzg59nqaTaCASxDLJ7
+	MITBrFox2DVI9CH83+GHaOxVsDBPB6XNvxJZUx6TAL2baa9FzpUiAXuSpnBUM7YruUk=
+X-Gm-Gg: ASbGncvHXatxg3hNezJOdbFSj8kZgeoZv2iwHytr161rcftFqG7BeRDUCfh+OTpbJ+r
+	e/rhm1WCHY8AILW7VAxuKZEdyk6+04VMYu2LFDKPaGvYZ2ZKFVYwOq/gnnhwZNQNcCQyg4BeZ8J
+	VrEwvRiMXyy6GjmspckHPxTKWQAQeN10vWacPspb+w11AQ7vW0d2HbZsLRvqx96mVvW3i8s+Ulv
+	PRlgJ2GDJyjpY6hEIj1BYPgqLvJx9wJk35D4zOtyErtyuvTjToAZBSF5NlDk2v5fGSJQZR3RI0W
+	V+J5MMr+gyCJxUDnJPffFSNiwQHBaPXqblpSpbEelK7c3ST3A7Lrn1KJm0x4L5S2EogI3akBdSZ
+	Jjg85nb5u5IG+/NsyZr7O1v1JE3wKHT5hIF4vdoqZ7duso+n/37BpvsfmynMTo8FZB8lUVo06+R
+	jqWDzoBTgdLgRqZdQ6nAtZne6AM2x4cbv5ZDH389tcEH4=
+X-Google-Smtp-Source: AGHT+IEjhb0cA2r/R2/eGguQc8wJ0VGA660zoYKsRyUrDokrj4BSrZrFe4SkzJzL8cy+UNwStJFbqg==
+X-Received: by 2002:a05:6a20:958f:b0:334:8335:9d87 with SMTP id adf61e73a8af0-334a856e41amr6075209637.19.1760716789785;
+        Fri, 17 Oct 2025 08:59:49 -0700 (PDT)
 Received: from localhost.localdomain ([122.171.18.129])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6a7669392csm151067a12.18.2025.10.17.08.59.41
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6a7669392csm151067a12.18.2025.10.17.08.59.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 08:59:44 -0700 (PDT)
+        Fri, 17 Oct 2025 08:59:49 -0700 (PDT)
 From: Anup Patel <apatel@ventanamicro.com>
 To: Atish Patra <atish.patra@linux.dev>,
 	Andrew Jones <ajones@ventanamicro.com>
@@ -89,9 +89,9 @@ Cc: Palmer Dabbelt <palmer@dabbelt.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH 2/4] RISC-V: KVM: Add separate source for forwarded SBI extensions
-Date: Fri, 17 Oct 2025 21:29:23 +0530
-Message-ID: <20251017155925.361560-3-apatel@ventanamicro.com>
+Subject: [PATCH 3/4] RISC-V: KVM: Add SBI MPXY extension support for Guest
+Date: Fri, 17 Oct 2025 21:29:24 +0530
+Message-ID: <20251017155925.361560-4-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251017155925.361560-1-apatel@ventanamicro.com>
 References: <20251017155925.361560-1-apatel@ventanamicro.com>
@@ -103,98 +103,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a separate source vcpu_sbi_forward.c for SBI extensions
-which are entirely forwarded to KVM user-space.
+The SBI MPXY extension is a platform-level functionality so KVM only
+needs to forward SBI MPXY calls to KVM user-space.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- arch/riscv/kvm/Makefile           |  1 +
- arch/riscv/kvm/vcpu_sbi_base.c    | 12 ------------
- arch/riscv/kvm/vcpu_sbi_forward.c | 27 +++++++++++++++++++++++++++
- arch/riscv/kvm/vcpu_sbi_replace.c |  7 -------
- 4 files changed, 28 insertions(+), 19 deletions(-)
- create mode 100644 arch/riscv/kvm/vcpu_sbi_forward.c
+ arch/riscv/include/asm/kvm_vcpu_sbi.h | 1 +
+ arch/riscv/include/uapi/asm/kvm.h     | 1 +
+ arch/riscv/kvm/vcpu_sbi.c             | 4 ++++
+ arch/riscv/kvm/vcpu_sbi_forward.c     | 7 +++++++
+ 4 files changed, 13 insertions(+)
 
-diff --git a/arch/riscv/kvm/Makefile b/arch/riscv/kvm/Makefile
-index 07197395750e..3b8afb038b35 100644
---- a/arch/riscv/kvm/Makefile
-+++ b/arch/riscv/kvm/Makefile
-@@ -27,6 +27,7 @@ kvm-y += vcpu_onereg.o
- kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_pmu.o
- kvm-y += vcpu_sbi.o
- kvm-y += vcpu_sbi_base.o
-+kvm-y += vcpu_sbi_forward.o
- kvm-y += vcpu_sbi_fwft.o
- kvm-y += vcpu_sbi_hsm.o
- kvm-$(CONFIG_RISCV_PMU_SBI) += vcpu_sbi_pmu.o
-diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-index ca489f2dfbdf..06fdd5f69364 100644
---- a/arch/riscv/kvm/vcpu_sbi_base.c
-+++ b/arch/riscv/kvm/vcpu_sbi_base.c
-@@ -70,15 +70,3 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
- 	.extid_end = SBI_EXT_BASE,
- 	.handler = kvm_sbi_ext_base_handler,
+diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+index 446f4a8eb3cd..c1a7e3b40d9c 100644
+--- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
++++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+@@ -107,6 +107,7 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_dbcn;
+ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_susp;
+ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_sta;
+ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_fwft;
++extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_mpxy;
+ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
+ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
+ 
+diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
+index 759a4852c09a..37213d86c0d1 100644
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@ -211,6 +211,7 @@ enum KVM_RISCV_SBI_EXT_ID {
+ 	KVM_RISCV_SBI_EXT_STA,
+ 	KVM_RISCV_SBI_EXT_SUSP,
+ 	KVM_RISCV_SBI_EXT_FWFT,
++	KVM_RISCV_SBI_EXT_MPXY,
+ 	KVM_RISCV_SBI_EXT_MAX,
  };
--
--const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental = {
--	.extid_start = SBI_EXT_EXPERIMENTAL_START,
--	.extid_end = SBI_EXT_EXPERIMENTAL_END,
--	.handler = kvm_riscv_vcpu_sbi_forward_handler,
--};
--
--const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor = {
--	.extid_start = SBI_EXT_VENDOR_START,
--	.extid_end = SBI_EXT_VENDOR_END,
--	.handler = kvm_riscv_vcpu_sbi_forward_handler,
--};
+ 
+diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+index fd4106c276d8..46ab7b989432 100644
+--- a/arch/riscv/kvm/vcpu_sbi.c
++++ b/arch/riscv/kvm/vcpu_sbi.c
+@@ -82,6 +82,10 @@ static const struct kvm_riscv_sbi_extension_entry sbi_ext[] = {
+ 		.ext_idx = KVM_RISCV_SBI_EXT_FWFT,
+ 		.ext_ptr = &vcpu_sbi_ext_fwft,
+ 	},
++	{
++		.ext_idx = KVM_RISCV_SBI_EXT_MPXY,
++		.ext_ptr = &vcpu_sbi_ext_mpxy,
++	},
+ 	{
+ 		.ext_idx = KVM_RISCV_SBI_EXT_EXPERIMENTAL,
+ 		.ext_ptr = &vcpu_sbi_ext_experimental,
 diff --git a/arch/riscv/kvm/vcpu_sbi_forward.c b/arch/riscv/kvm/vcpu_sbi_forward.c
-new file mode 100644
-index 000000000000..dbfa70c2c775
---- /dev/null
+index dbfa70c2c775..5a3c75eb23c5 100644
+--- a/arch/riscv/kvm/vcpu_sbi_forward.c
 +++ b/arch/riscv/kvm/vcpu_sbi_forward.c
-@@ -0,0 +1,27 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2025 Ventana Micro Systems Inc.
-+ */
+@@ -25,3 +25,10 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_dbcn = {
+ 	.default_disabled = true,
+ 	.handler = kvm_riscv_vcpu_sbi_forward_handler,
+ };
 +
-+#include <linux/kvm_host.h>
-+#include <asm/kvm_vcpu_sbi.h>
-+#include <asm/sbi.h>
-+
-+const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental = {
-+	.extid_start = SBI_EXT_EXPERIMENTAL_START,
-+	.extid_end = SBI_EXT_EXPERIMENTAL_END,
-+	.handler = kvm_riscv_vcpu_sbi_forward_handler,
-+};
-+
-+const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor = {
-+	.extid_start = SBI_EXT_VENDOR_START,
-+	.extid_end = SBI_EXT_VENDOR_END,
-+	.handler = kvm_riscv_vcpu_sbi_forward_handler,
-+};
-+
-+const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_dbcn = {
-+	.extid_start = SBI_EXT_DBCN,
-+	.extid_end = SBI_EXT_DBCN,
++const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_mpxy = {
++	.extid_start = SBI_EXT_MPXY,
++	.extid_end = SBI_EXT_MPXY,
 +	.default_disabled = true,
 +	.handler = kvm_riscv_vcpu_sbi_forward_handler,
 +};
-diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
-index 2c456e26f6ca..506a510b6bff 100644
---- a/arch/riscv/kvm/vcpu_sbi_replace.c
-+++ b/arch/riscv/kvm/vcpu_sbi_replace.c
-@@ -185,10 +185,3 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_srst = {
- 	.extid_end = SBI_EXT_SRST,
- 	.handler = kvm_sbi_ext_srst_handler,
- };
--
--const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_dbcn = {
--	.extid_start = SBI_EXT_DBCN,
--	.extid_end = SBI_EXT_DBCN,
--	.default_disabled = true,
--	.handler = kvm_riscv_vcpu_sbi_forward_handler,
--};
 -- 
 2.43.0
 
