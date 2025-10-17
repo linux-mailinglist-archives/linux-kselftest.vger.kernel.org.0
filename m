@@ -1,128 +1,149 @@
-Return-Path: <linux-kselftest+bounces-43444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43445-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEC21BEBD54
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 23:42:05 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9787BEBD8A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 23:50:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92A0A189B3FB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 21:42:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C3C924E1793
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 21:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BBB2285C88;
-	Fri, 17 Oct 2025 21:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9A82D3EE0;
+	Fri, 17 Oct 2025 21:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ui97tMPp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sznj/c7v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF24523184A;
-	Fri, 17 Oct 2025 21:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84AA2C21E1
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 21:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760737322; cv=none; b=iDRM2MSscX6UZX5SQBp8SjedLVbUNpg92ESBlBN+Tcz9czY0ocP3Iry3gcjjvYNQixK5lZVXlm4JbnrqkwU5g0OKU93gLUE62GrRWiYtNEBGM/bw5atiQcjVTwhTPqKDNl02lJKRCAMaFGYqV7v8BG7up76zPFDZUkyMd5onA6Y=
+	t=1760737837; cv=none; b=bMSbyredrvWFSr9OOn3dTDtYCw3zZYdATVa67u9NRxvslxAmCJVdWwZaqqkbnj4BCTjZnGUlbJ+EAjMlPzw7dCDP1OMl4QCV25Osh6CYm1+Vi28Us+xTKZ35JRqikiD0WyfeS+yz5wPxOzSy6GQ2WfwDU+zuK+IdRh0BlUbcTX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760737322; c=relaxed/simple;
-	bh=NLiqceOlHQmsom02gVpkpbYtvUKxr7b4ZoMng8qNyLg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=EhzmpDf0Ek4pQGKWj13sgbB7jRFM6VOkKALeih5T3PaTBU/cN/7dRZVp9pyGLdEY7Rwr6UQvx0BJ9o7v4b64TVwBd/4a1lTtV8rtuhBl8TskykvB5Ph3+3Uh0T7Shne3+ZLyM0gzXyv15ovH1+J1dS0WefPvnknKAMlw41c7nps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ui97tMPp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC11C4CEE7;
-	Fri, 17 Oct 2025 21:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760737321;
-	bh=NLiqceOlHQmsom02gVpkpbYtvUKxr7b4ZoMng8qNyLg=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=Ui97tMPpQpzMT2zJyaSneZDqt7EWGTXci0QQOmYDl+1bF/roKz2+P/3IJ3uaq0KYR
-	 WRvAeFREUYF9Y86L02m42uolFqVWFYFQRHTQYCxpUwcozWm9VCaORQKif2+H+958Ut
-	 1pFdz2Dk1CspwKzAwO2HDQDIGlAo9hPbdt/mtRU0kAN2qkKeYeV980O5RzKRS2V0Pt
-	 c15lwC0EOfqz19uExbgmMmJAE0zUZwIgYtfG0Uds+Kh2XEUDNnjUG04rHTJklAntC2
-	 siIpq1e8AbDlDCYinLisEq/ZJGxaT/8GNQ8qxCG41HIKyTA+Vhe9mPoKrocQXlH+L1
-	 VkR642d1SbcdA==
+	s=arc-20240116; t=1760737837; c=relaxed/simple;
+	bh=uyqps5tD92U8m+2+xoFVTwq4VnX2jZ4eC7e5viKgXQE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QVb0e0W3gQr1Bn5Fk9d3apYPGCpY8j5M7uTb+4P4K0JXH7iEJNLdADPSZ6aVUnhi4eWgqoGk6AHYZeKeMDi1aKjb0XpLxHUXK/9nIwpZo9kFtiXR8n3Qa0fOuTJmd9Wg2IH65EVo95j+qHacsuLkf/yN035xnbhTx3WHZ+d23Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sznj/c7v; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-63c3c7d3d53so1332972a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 14:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760737834; x=1761342634; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WXowAklNfKjPPLcmHrBPzos0N/jOzPaWiX92u6a/mNs=;
+        b=Sznj/c7vVkTWR2hGSw5z8nxA9As5WWtPrnbdcQoltk/bkOt3yBFjLNMa9cgkwRhBZC
+         YmwcrspYC6Fg1/kjgbxCq9HZJe6YD/jAb0LftYxtnyaGe333urK2fUzh8F66e2GrsHLF
+         +TcaeokO7FilLbr+XRRAaiYrWPA7Lk/+0r7ZnXlKp4IBhbSuxUljjvZimD2+uHkDYgb9
+         I5ISU/Y+psxAtnvyLx1sUCHRFNxvvDU4/imxtEq/HE7G0osUKTVEVoWV76OjKiN+omIy
+         1NRIdHfMvZav75g0zgr839qR8Lvu3g94Heu3O6hYg7yo/9mCliUF4/NWUvSAt3rS9BPf
+         UxRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760737834; x=1761342634;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WXowAklNfKjPPLcmHrBPzos0N/jOzPaWiX92u6a/mNs=;
+        b=mP/mQyl1LMCMySIcnZsncmeA0TuEPr6ji0FnlxIw09K4loEjMJw0tP6Whe5Lkqlndp
+         aw3JG9Nu3xThg1ZHEiyL2khWCS4a6sWemieNUUCVJl8JKWo3EEHnUum2pm0FCuSHGCpL
+         F38tDBid1HFT2P93Lg76+rqydXLMGjjJFr7dJFwDFRs6yp3wejH5+BN8Gco9mRG13ZMm
+         HxhNF/kNvjN9nwX5HPhrzuaF+CjM9Q5BSrVnKYISrEe72aueoFOG8wlPP5T2sw+VqRoT
+         Kpfv7DKRQ7BFW6h3UhgmbVsmAUFWNM0e31vL/oS3AjWtgrvcwVoKBfjQRMlhVkSGwAoi
+         I7fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVR4zbopXTrngf1E+pNluDjBeJaWchddmYUefWwg6Xsz95UByqCGjTu06kGuOhet6pjBeFIJbDvctznd0YfrHI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ8NOmeOo2GfAcjFCELqPFNDj3ulsaBmeQLbQQQBSslZiLdrr3
+	fu8TfRtzhPXWedtNXYucHvs0Q1WZaS3NVHcFYc226FSuVI82QbsracfQIRC1I521XxGHU8LGJ1W
+	QcBBVJQ3n8MaG03bCz2MsGH0haiZ0gzI=
+X-Gm-Gg: ASbGncsudG9C9U1NQnOOYfKzYKO2LJZfYodJa2F39xYwcQvBohqJ6s8KWFKurojB+3F
+	t5gS9z8wyUhEXVo9AxeZj3B5DpDIcgz+vB6hXP3L5NBOacLFpL5VemcW59ln2ndfCeA0V14xUVs
+	DsRzdcC6gbg2mRd00FAEO7dDUbcFAyvPE5EuHnvsncW81bHjQnbfxxPMcsgOQPbT7I2DJpmvQ5C
+	RnaNRr62bfs6TJrjvahw/NQJi4lzgS+i0pwvpc129pnKCwfqLtaieQh5UOifVFm1JpuYGAZQ0AD
+	LBM7
+X-Google-Smtp-Source: AGHT+IGDex2b2+/U0zVKVr2/MzWeSzQhJyHr6KzFEHvW5oCnc4bul8RVh0QOd8xsaqk3b7DaOTMOmuMeLkfSMN3JHFA=
+X-Received: by 2002:a05:6402:35c7:b0:634:ad98:669e with SMTP id
+ 4fb4d7f45d1cf-63c1f64cb6fmr4928070a12.3.1760737833857; Fri, 17 Oct 2025
+ 14:50:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20251013091318.467864-1-yongxuan.wang@sifive.com>
+In-Reply-To: <20251013091318.467864-1-yongxuan.wang@sifive.com>
+From: Andy Chiu <andybnac@gmail.com>
+Date: Fri, 17 Oct 2025 16:50:22 -0500
+X-Gm-Features: AS18NWA82u5T2BvACLlWQSx3oMVZ8fIoOSroipFBZryvzDVMCHFcr14soughxtU
+Message-ID: <CAFTtA3OW6nDDZP=bZXeBa8ua05QiXO1L92tKvf77WUuJGoengg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Optimize the allocation of vector regset
+To: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kselftest@vger.kernel.org, greentime.hu@sifive.com, 
+	vincent.chen@sifive.com, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Alexandre Ghiti <alex@ghiti.fr>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 17 Oct 2025 23:41:56 +0200
-Message-Id: <DDKXACTUJ9IT.3W11J2HE7SLJW@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
-Cc: "Tzung-Bi Shih" <tzungbi@kernel.org>, "Benson Leung"
- <bleung@chromium.org>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>, "Jonathan Corbet"
- <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <chrome-platform@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
- "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>, "Bartosz
- Golaszewski" <brgl@bgdev.pl>, "Wolfram Sang"
- <wsa+renesas@sang-engineering.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Dan Williams" <dan.j.williams@intel.com>
-To: "Jason Gunthorpe" <jgg@nvidia.com>
-References: <20251016054204.1523139-1-tzungbi@kernel.org>
- <20251016054204.1523139-6-tzungbi@kernel.org>
- <20251016123149.GA88213@nvidia.com> <aPGryj-V5PQZRtoI@google.com>
- <20251017134916.GK3901471@nvidia.com> <aPJp3hP44n96Rug9@tzungbi-laptop>
- <009c8e5e-02d3-4017-bb84-e3a8f01b9dc9@kernel.org>
- <20251017163738.GB316284@nvidia.com>
- <bee969ed-c050-43a4-961c-07443a45943c@kernel.org>
- <20251017184415.GE316284@nvidia.com>
-In-Reply-To: <20251017184415.GE316284@nvidia.com>
 
-On Fri Oct 17, 2025 at 8:44 PM CEST, Jason Gunthorpe wrote:
-> On Fri, Oct 17, 2025 at 08:19:06PM +0200, Danilo Krummrich wrote:
->> On 10/17/25 6:37 PM, Jason Gunthorpe wrote:
->> > On Fri, Oct 17, 2025 at 06:29:10PM +0200, Danilo Krummrich wrote:
->> >=20
->> >> I'm not sure about MISC device though. Unless there's a good reason,
->> >> I think MISC device should be "fenced" instead.
->> >=20
->> > misc is a very small wrapper around raw fops, and raw fops are
->> > optimized for performance. Adding locking that many important things
->> > like normal files don't need to all fops would not be agreed.
->> >=20
->> > The sketch in this series where we have a core helper to provide a
->> > shim fops that adds on the lock is smart and I think could be an
->> > agreeable way to make a synchronous misc and cdev unregister for
->> > everyone to trivially use.
->>=20
->> Sure, for MISC devices without a parent for instance there are no device
->> resources to access anyways.
+On Mon, Oct 13, 2025 at 4:13=E2=80=AFAM Yong-Xuan Wang <yongxuan.wang@sifiv=
+e.com> wrote:
 >
-> There are many situations with misc that can get people into trouble with=
-out
-> parent:
+> The vector regset uses the maximum possible vlenb 8192 to allocate a
+> 2^18 bytes buffer to copy the vector register. But most platforms
+> don=E2=80=99t support the largest vlenb.
 >
->  misc_deregister(x);
->  timer_shutdown_sync(y);
->  kfree(z);
+> The regset has 2 users, ptrace syscall and coredump. When handling the
+> PTRACE_GETREGSET requests from ptrace syscall, Linux will prepare a
+> kernel buffer which size is min(user buffer size, limit). A malicious
+> user process might overwhelm a memory-constrainted system when the
+> buffer limit is very large. The coredump uses regset_get_alloc() to
+> get the context of vector register. But this API allocates buffer
+> before checking whether the target process uses vector extension, this
+> wastes time to prepare a large memory buffer.
 >
-> For example. It is is buggy if the fops touch y or z.
+> The buffer limit can be determined after getting platform vlenb in the
+> early boot stage, this can let the regset buffer match real hardware
+> limits. Also add .active callbacks to let the coredump skip vector part
+> when target process doesn't use it.
 >
-> This is why a _sync version is such a nice clean idea because with 5
-> letters the above can just be fixed.
->
-> Wrapping everything in a revocable would be a huge PITA.
+> After this patchset, userspace process needs 2 ptrace syscalls to
+> retrieve the vector regset with PTRACE_GETREGSET. The first ptrace call
+> only reads the header to get the vlenb information. Then prepare a
+> suitable buffer to get the register context. The new vector ptrace
+> kselftest demonstrates it.
 
-That's a bit of a different problem though. Revocable clearly isn't the
-solution. _sync() works, but doesn't account for the actual problem, which =
-is
-that the file private has at least shared ownership of y and z.
+For the entire series:
+Tested-by: Andy Chiu <andybnac@gmail.com>
 
-So, it's more of an ownership / lifetime problem. The file private data sho=
-uld
-either own y and z entirely or a corresponding reference count that is drop=
-ped
-in fops release().
+[on rv64 v enabled qemu]
 
-Device resources are different though, since we can't just hold on to them =
-with
-a reference count etc.; they're strictly gone once the bus device is unboun=
-d,
-hence revocable when there is no _sync().
+Thanks!
+
+>
+> ---
+> v2:
+> - fix issues in vector ptrace kselftest (Andy)
+>
+> Yong-Xuan Wang (2):
+>   riscv: ptrace: Optimize the allocation of vector regset
+>   selftests: riscv: Add test for the Vector ptrace interface
+>
+>  arch/riscv/include/asm/vector.h               |   1 +
+>  arch/riscv/kernel/ptrace.c                    |  24 +++-
+>  arch/riscv/kernel/vector.c                    |   2 +
+>  tools/testing/selftests/riscv/vector/Makefile |   5 +-
+>  .../selftests/riscv/vector/vstate_ptrace.c    | 134 ++++++++++++++++++
+>  5 files changed, 162 insertions(+), 4 deletions(-)
+>  create mode 100644 tools/testing/selftests/riscv/vector/vstate_ptrace.c
+>
+> --
+> 2.43.0
+>
 
