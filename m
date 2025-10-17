@@ -1,116 +1,187 @@
-Return-Path: <linux-kselftest+bounces-43392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B53EEBEACBF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 18:38:25 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E1C0BEAA49
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 18:22:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C5E385C0374
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 16:21:29 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BE88035F037
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 16:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 841F8285056;
-	Fri, 17 Oct 2025 16:17:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1162836A4;
+	Fri, 17 Oct 2025 16:20:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="XmsHA4iR"
+	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="GDvHiytV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.197.217.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD146283C9E
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 16:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A20323536B;
+	Fri, 17 Oct 2025 16:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.197.217.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760717841; cv=none; b=aaKxlnfkKjXuoNaivzTGCjBJ+zInss0ZSRYAa/gkhkKWabH4HqIOJWDzM8v14VGaAPmQIwAAKPgyebGzMUeQ/1LI+0oLQR5IzezwTeU3TV73kUqy9UzAOcJdiG46604HYOZKPonaWGs4Q6RAtOKvMJZVF8mSIxg+WNG8OEKDIh0=
+	t=1760718003; cv=none; b=u4zq1yPewQAyys5Eb6rh/1ZqqScfiXzpnbt9trgT4G7u8aJfJQH4hLBlIiJ6n+rOX2y2yC0ZIthhmId1CZlb/EKQIhgko/G5zT6T5xFxz2Zh79itFXVl6EcRvxzJPpWtC1e32jWvz0Ht2AlFM3wJol8+tBhar5U4u4vWqnXDkZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760717841; c=relaxed/simple;
-	bh=pPbWyGESoeFda9PL7qjMzI+KDFiJUk2WW07WgvOC0eo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=twCFdWsmKn+ZxxfO/XsTQrbaUJZHeaIR00va5pAlUgU6rO7S8t/6vQ4EpFZnMI2VxWCcUiVR1p0yBGHQT2ERMticoSNCk0rNnie8AfKh+V+/8dcf6rMO+I9NS3jS7hpQc6EhgUYHLv5D0T+eAVwYzO/1CWw7onAMRv1pdLrSPzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=XmsHA4iR; arc=none smtp.client-ip=209.85.166.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-430abca3354so18726225ab.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 09:17:19 -0700 (PDT)
+	s=arc-20240116; t=1760718003; c=relaxed/simple;
+	bh=/SgEYq5zZ6091CkGidwkN4U+TaXlaYnsAjqJEsJKnQs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=g4C5ns04PI2LHPNfFoYUi9Rj8Bvcv3MOBlmBUJquDT+gvWDQB6wRyieErDppYCOygjQAUkpRxW+SMCgMO1Hd5Jx+/iJ0bjG8/NPghaUGG3zWMXdOFEX2mk7Z60fa0W95ks7Uo8QSKNbWcSX8Ffh0bil0Jw570degoQ9yKuGZW40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=GDvHiytV; arc=none smtp.client-ip=18.197.217.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1760717839; x=1761322639; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SE59U9D9FBD2TsP2y/MjrBzEhIdNihINvSqWeLt6f7A=;
-        b=XmsHA4iRMCoUXkqoAhZz91mStbZj7/xZ0iyoONrFgdOm+jKx2lxaEn9Bc9f0rGxOuf
-         9TISpV5P6qO8uTPgf6zJCqv+r8fhg8OVHCKf6oJGNjc16iBIiZt11YPTbnFmz5Xe+5kK
-         IXUHAFPnBwQ7CbtyhIULtonUKMoPq0CMgcCRSo2Kojsn+wp4m+bCSRXg7Hy0QftbjPHP
-         RXvTCpWz5U0Xp2XxOlKCSMfgi9TQQIm4V9f2ItyBVPkqA00asRhSutVjKgSy4vVfcBDH
-         nQyIKlJZDPZ1c8LrumBep6Im4uutjqMDVxG6UV0fOiRHzuXkaVCe0yTODZhTSn8kN1xX
-         JMuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760717839; x=1761322639;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SE59U9D9FBD2TsP2y/MjrBzEhIdNihINvSqWeLt6f7A=;
-        b=bfZrVCxQxar6F5Oa/tvljRp9iOS0va1WsxvZPgk4zpahQ96t1kEGGE3B/cShDhT8aQ
-         IafnUX+LQTkCm3MqoloJedaGMnLD7C8mJwFA25Q8xMnC0dxe6xBfjE1lmBznqgSACQHT
-         m258l9SpIVomd+vTE9Q24VLOpnWVMRilIGy3iu7S3GRHf1spYvEFoofFYtdNpmrYY7YE
-         0n6MG4Coxmv65Q7KAyciWTFAyqDIYLA6yZFUp4PYQtS3Cr83WFw7TIAc3s37twSOQqqE
-         uGo8YmXG5vcrqarV7W2m2VaKpIWnx6LYuhMryCfVLC/QzxmfoYJOmGmABLJOstD1ck60
-         xD3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUYo0GZA33lvRZnhn6/iHGtW++gljGtQhZhr5u7NC8MeyFO00hAFcqt5Mezmn1FFoW+lE8VZPEnjT3lNbPZDt0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtcViZcJQsDgoNF7G/GaVn/DmBhabkwgnTcDaWOdxAOiMTUL4z
-	6mFcswuOHk3GIr6TdvGsQ5e/3kkuhZNYBRU0ijntP5wgh+IywYUh379s04x+66Tr3SV+ZPUQI3u
-	mQpxdMdw=
-X-Gm-Gg: ASbGncsZGchsB+8yh0m9haFY1Ukls8MpqDFhFRr4tXqNnBW4xFDF2ozGclZESfNdDTO
-	kWiB2jYHgKPNfqPUaKWZkjY/vzbulCSWCCdgx36jFxI45mROiJuMdzWrUCuetqs4yBykELFv5gx
-	M51XFhDKS/pmcMlPBb6QwIIea5BWNiznvWYYwuAZIzW1ch+ey8UrEDWmvu0WA33ZrW3I9Ag/acZ
-	qkmfURu1Tja7c7ovijz5fA3dBhcawrQAhFe31wgQWoG5Ypbxc46bxlPZECcbEq6odzwTj9rbaWA
-	KQEdfuJGM4e2nAeW/QaHUsYvfJy9A3rk9UGmPnYHtPfjyenluaquuiWSwyHlNVfD2CochGyDU9e
-	FkOsnOBjToJ7l7o/qjJQrIxAD7mON0NZelw0eHZKsXS23BoO6Gdlq+FgErG1xvP3/778+3M2eHG
-	BOHg==
-X-Google-Smtp-Source: AGHT+IE/MHK6bGWFUML6lB8EABvgh/StOgVAz5yCP4m6sZL2slTHOrBxRy/hwICm8V+ly8yQelL67Q==
-X-Received: by 2002:a05:6e02:b44:b0:430:ae1a:3375 with SMTP id e9e14a558f8ab-430c529df57mr60456845ab.26.1760717838760;
-        Fri, 17 Oct 2025 09:17:18 -0700 (PDT)
-Received: from localhost ([140.82.166.162])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5a8a979ab14sm8576173.65.2025.10.17.09.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 09:17:18 -0700 (PDT)
-Date: Fri, 17 Oct 2025 11:17:17 -0500
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Atish Patra <atish.patra@linux.dev>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] RISC-V: KVM: Add separate source for forwarded SBI
- extensions
-Message-ID: <20251017-68a09a4da911ec4eec058592@orel>
-References: <20251017155925.361560-1-apatel@ventanamicro.com>
- <20251017155925.361560-3-apatel@ventanamicro.com>
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
+  t=1760718001; x=1792254001;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=D2nJT0TPpGHrtCf3T2K40DMg+dwtxR+G/m4g1KLFCNo=;
+  b=GDvHiytVXINQz59/zDIdOdYdSwXPMBcvb4GPRyp7oBJSFgqOa0FR9x37
+   5hgaxFkSbqDjWMku/yTsgGkb8I4bzvsAV7nQKK7GtMHbcOE1igdWMxtPZ
+   Zu0AZdW0TAYUJSjahMNKX8vLnb7NW5vNLZPHO17WE0ioxDF3yjri5phat
+   G2zn3s+qjPTbvL698n6UPPSef/EfldRkJPwW44cUt0tD1DNYLjLRutA1N
+   TMPPv1eik0UtVLOCyLsUvxMAA8QwS7fnpFEuPT1m4F0hrSWIQvGwouB5I
+   iBqhhZUAeZU/hlNPoKGTkQJPpzvhtwccIHj0mwbBfziZaH2rMOze9sR6f
+   A==;
+X-CSE-ConnectionGUID: dnjg3YGdSkepofo0QlGplw==
+X-CSE-MsgGUID: /EwhAQ4yRa6TpPU6AkX5EA==
+X-IronPort-AV: E=Sophos;i="6.19,236,1754956800"; 
+   d="scan'208";a="3779950"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-006.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2025 16:19:50 +0000
+Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.225:21471]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.18.241:2525] with esmtp (Farcaster)
+ id 580d473a-31d3-407f-bbb8-194dd70ae947; Fri, 17 Oct 2025 16:19:50 +0000 (UTC)
+X-Farcaster-Flow-ID: 580d473a-31d3-407f-bbb8-194dd70ae947
+Received: from EX19D016EUA001.ant.amazon.com (10.252.50.245) by
+ EX19MTAEUC001.ant.amazon.com (10.252.51.155) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Fri, 17 Oct 2025 16:19:40 +0000
+Received: from amazon.com (10.1.212.14) by EX19D016EUA001.ant.amazon.com
+ (10.252.50.245) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20; Fri, 17 Oct 2025
+ 16:19:35 +0000
+From: Maximilian Dittgen <mdittgen@amazon.de>
+To: <maz@kernel.org>, <oliver.upton@linux.dev>
+CC: <pbonzini@redhat.com>, <shuah@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<mdittgen@amazon.de>, <epetron@amazon.de>, <nh-open-source@amazon.com>,
+	Maximilian Dittgen <mdittgen@amazon.com>
+Subject: [PATCH] KVM: selftests: fix ITS collection target addresses in vgic_lpi_stress
+Date: Fri, 17 Oct 2025 18:19:18 +0200
+Message-ID: <20251017161918.40711-1-mdittgen@amazon.de>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251017155925.361560-3-apatel@ventanamicro.com>
+X-ClientProxiedBy: EX19D038UWB003.ant.amazon.com (10.13.139.157) To
+ EX19D016EUA001.ant.amazon.com (10.252.50.245)
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 17, 2025 at 09:29:23PM +0530, Anup Patel wrote:
-> Add a separate source vcpu_sbi_forward.c for SBI extensions
-> which are entirely forwarded to KVM user-space.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/kvm/Makefile           |  1 +
->  arch/riscv/kvm/vcpu_sbi_base.c    | 12 ------------
->  arch/riscv/kvm/vcpu_sbi_forward.c | 27 +++++++++++++++++++++++++++
->  arch/riscv/kvm/vcpu_sbi_replace.c |  7 -------
->  4 files changed, 28 insertions(+), 19 deletions(-)
->  create mode 100644 arch/riscv/kvm/vcpu_sbi_forward.c
->
+When mapping guest ITS collections, vgic_lpi_stress iterates over
+integers in the range [0, nr_cpus), passing them as the target_addr
+parameter to its_send_mapc_cmd(). These integers correspond to the
+selftest userspace vCPU IDs that we intend to map each ITS collection
+to.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+However, its_encode_target() within its_send_mapc_cmd() expects a
+vCPU's redistributor address--not the vCPU ID--as the target_addr
+parameter. This is evident from how its_encode_target() encodes the
+target_addr parameter as:
+
+        its_mask_encode(&cmd->raw_cmd[2], target_addr >> 16, 51, 16)
+
+This shows that we right-shift the input target_addr parameter by 16
+bits before encoding it. This makes sense when the parameter refers to
+redistributor addresses (e.g., 0x20000, 0x30000) but not vCPU IDs
+(e.g., 0x2, 0x3).
+
+The current impact of passing vCPU IDs to its_send_mapc_cmd() is that
+all vCPU IDs become 0x0 after the bit shift. Thus, when
+vgic_its_cmd_handle_mapc() receives the ITS command in vgic-its.c, it
+always interprets the collection's target_vcpu as 0. All interrupts
+sent to collections will be processed by vCPU 0, which defeats the
+purpose of this multi-vCPU test.
+
+Fix by left-shifting the vCPU parameter received by its_send_mapc_cmd
+16 bits before passing it into its_encode_target for encoding.
+
+Signed-off-by: Maximilian Dittgen <mdittgen@amazon.com>
+---
+To validate the patch, I added the following debug code at the top of vgic_its_cmd_handle_mapc:
+
+	u64 raw_cmd2 = le64_to_cpu(its_cmd[2]);
+	u32 target_addr = its_cmd_get_target_addr(its_cmd);
+
+	kvm_info("MAPC: coll_id=%d, raw_cmd[2]=0x%llx, parsed_target=%u\n", 
+		coll_id, raw_cmd2, target_addr);
+	vcpu = kvm_get_vcpu_by_id(kvm, its_cmd_get_target_addr(its_cmd));
+	kvm_info("MAPC: coll_id=%d, vcpu_id=%d\n", coll_id, vcpu ? vcpu->vcpu_id : -1);
+
+I then ran `./vgic_lpi_stress -v 3` to trigger the stress selftest with 3 vCPUs.
+
+Before the patch, the debug logs read:
+kvm [20832]: MAPC: coll_id=0, raw_cmd[2]=0x8000000000000000, parsed_target=0
+kvm [20832]: MAPC: coll_id=0, vcpu_id=0
+kvm [20832]: MAPC: coll_id=1, raw_cmd[2]=0x8000000000000001, parsed_target=0
+kvm [20832]: MAPC: coll_id=1, vcpu_id=0
+kvm [20832]: MAPC: coll_id=2, raw_cmd[2]=0x8000000000000002, parsed_target=0
+kvm [20832]: MAPC: coll_id=2, vcpu_id=0
+
+Note the last bit of the cmd string reflects the collection ID, but the rest of the cmd string reads 0. The handler parses out vCPU 0 for all 3 mapc calls.
+
+After the patch, the debug logs read:
+kvm [20019]: MAPC: coll_id=0, raw_cmd[2]=0x8000000000000000, parsed_target=0
+kvm [20019]: MAPC: coll_id=0, vcpu_id=0
+kvm [20019]: MAPC: coll_id=1, raw_cmd[2]=0x8000000000010001, parsed_target=1
+kvm [20019]: MAPC: coll_id=1, vcpu_id=1
+kvm [20019]: MAPC: coll_id=2, raw_cmd[2]=0x8000000000020002, parsed_target=2
+kvm [20019]: MAPC: coll_id=2, vcpu_id=2
+
+Note that the target vcpu and target collection are both visible in the cmd string. The handler parses out the correct vCPU for all 3 mapc calls.
+---
+ tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c b/tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c
+index 09f270545646..23c46ad17221 100644
+--- a/tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c
++++ b/tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c
+@@ -15,6 +15,8 @@
+ #include "gic_v3.h"
+ #include "processor.h"
+ 
++#define GITS_COLLECTION_TARGET_SHIFT 16
++
+ static u64 its_read_u64(unsigned long offset)
+ {
+ 	return readq_relaxed(GITS_BASE_GVA + offset);
+@@ -217,7 +219,7 @@ void its_send_mapc_cmd(void *cmdq_base, u32 vcpu_id, u32 collection_id, bool val
+ 
+ 	its_encode_cmd(&cmd, GITS_CMD_MAPC);
+ 	its_encode_collection(&cmd, collection_id);
+-	its_encode_target(&cmd, vcpu_id);
++	its_encode_target(&cmd, vcpu_id << GITS_COLLECTION_TARGET_SHIFT);
+ 	its_encode_valid(&cmd, valid);
+ 
+ 	its_send_cmd(cmdq_base, &cmd);
+-- 
+2.50.1 (Apple Git-155)
+
+
+
+
+Amazon Web Services Development Center Germany GmbH
+Tamara-Danz-Str. 13
+10243 Berlin
+Geschaeftsfuehrung: Christian Schlaeger
+Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
+Sitz: Berlin
+Ust-ID: DE 365 538 597
+
 
