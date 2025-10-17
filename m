@@ -1,68 +1,92 @@
-Return-Path: <linux-kselftest+bounces-43390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAD06BEA962
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 18:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 752BABEAA55
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 18:22:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 07E265836D6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 16:08:08 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 95DEB5A409F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Oct 2025 16:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765062550CC;
-	Fri, 17 Oct 2025 16:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F39284884;
+	Fri, 17 Oct 2025 16:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T5w/i+f9"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="N9ZoNCVH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FAC251795;
-	Fri, 17 Oct 2025 16:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38C228B4FE
+	for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 16:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760717284; cv=none; b=H7/VwMU+lQlNhZFjNjKkYTfO/aYPvt5MailT3bCtN60V5bGPX+KJ1yMmvHLRhRXvTfsFyG9yOAnuT2piaX+C4Ts0ZGtDEAQbnXFTM1FtO/wfx5viHqYZP0pNUtUapSXSVlXViTCNOFcP18FrGyZY90lipp8lXZMh4d2OD+qYbb4=
+	t=1760717666; cv=none; b=IWRyB04ukO1eTvUdLSyDQOOE0X6QuueMTWl2UFauzf0G4bNDvHdP/UscWT3MeKj2a38xpw/B3itQUHuQu9KmIDqdW97STlFVA5e5DgGYLgaQtn/l525iniBsgEEPhOhBjG0AMRrTIOhfGphzM9sTiKG1wQ4LpQ1/nzAMRcdL6+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760717284; c=relaxed/simple;
-	bh=HqjY6m4D2rtLDZQzYhepgOuofMmASG3H7EfDU2kJMB4=;
+	s=arc-20240116; t=1760717666; c=relaxed/simple;
+	bh=QwO/GQIB5TFceUxQ6cipVkamdhm/GpF7xHuLsZZzLwQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oqdorGffqbZYXX9CQEIO6KeupSzgy0Ud2eNodOncklAPuqeRxkpLlmtDf3rd/fQyrvEVOG5Zii7C5gsRuOlmSrSTAvD3vzdJ19aOw3C17JbG+3TOX3ZmMsRRio710pZd/6bCXR4x/TIr1H8geRQqDgwGJYn1NgVk8FGe8JxSRi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T5w/i+f9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2852C4CEE7;
-	Fri, 17 Oct 2025 16:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760717283;
-	bh=HqjY6m4D2rtLDZQzYhepgOuofMmASG3H7EfDU2kJMB4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T5w/i+f9TZp7C+F8S8KSixlOYUFd6GgOHtP7QKqP24S2FV1WdkmTi7cqVVCjbcj7h
-	 NgIjEGH4azEXnCHiH3N/BXph4TBu+en56bkX86o71rWjYqSggMTtX+eSMFfKgmVRgY
-	 7oe/3t1bxPW0/ut7mJcOa9bkTMylXpIuCuzv0hk7KS/ukI68um0W8mAeMWegEgCAWF
-	 hh204sIm0qnVOVkpyyFLgY50C4LDXnFt2XigIaaXGCC4rlhEZm/zfWV9vsfJclLaHJ
-	 x6tpoASNLn3MEEn2kJeoQy83ZoNE/QVuKOTFJVH3ukTZPoefZVeEcpj9kTrMVaVyf5
-	 uaUMYUFD0D9pw==
-Date: Sat, 18 Oct 2025 00:07:58 +0800
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Benson Leung <bleung@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
-Message-ID: <aPJp3hP44n96Rug9@tzungbi-laptop>
-References: <20251016054204.1523139-1-tzungbi@kernel.org>
- <20251016054204.1523139-6-tzungbi@kernel.org>
- <20251016123149.GA88213@nvidia.com>
- <aPGryj-V5PQZRtoI@google.com>
- <20251017134916.GK3901471@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IKgeeNeyNaAolPDQn932qyihsz9Gxbcs5RyGImbKzgv/kXNCzdOleP/WMDDRcnYSb5AXFN2XiYKtKfPJfzLGtHAVb4UrgZgjPOkYZrPr2a1G4xHwFnliP0i6WPuSgMV6gASirOcRh7oaIBpyvw5dBNBzAbHtoApEYj8/cdyo3C8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=N9ZoNCVH; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-42d7ef9a402so15973445ab.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 09:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1760717664; x=1761322464; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZcRYGr52a4tOVgKtqMlXN+kBqCdQJvh2IsOMcMv7JGg=;
+        b=N9ZoNCVHC2qpY7HfuaoMyHNiBbjchaffvgPDkXUtMDrTvQ2JLDrGhqpaQqKt9WdmSZ
+         2J+LUNB8StClrR2aLrfN6iPFZqkUdvRWE9UI6WL3q3ZIRAn6M7/prN5PeTXlm1mnSyYS
+         uywcFkInZMBf5dYBqP0jV2H8i6D5mhBBA1ab9V1Ys+g5E28lY9R9WX95qDpzkUeDCFbG
+         LwYrscFCLjYjN7IJov1HstbD7yqieFX0IhBnrHJ7b8jGCHlBIueLvOB/B9LKnXsIvhjd
+         h31jx7dIXzu8ZVCIchBfEwCghsgSBb/R6nHwVvbzS1jD9/LiDOlUzpFPi1tJf39z/OeC
+         Niiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760717664; x=1761322464;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZcRYGr52a4tOVgKtqMlXN+kBqCdQJvh2IsOMcMv7JGg=;
+        b=jaA4kJuBZstrklbNdsLzlYfgZJGXHeQAdyP+a26FE+1C9bML6AJvUy3xy9aVstFmPI
+         554i/rTfEZ4LFTXHKpCC1c3W4Yvl3ewkwDoTxpGIcMFZk1hjJhugy4hGvMCsSmpMuKvs
+         0WYf/O+3CKg8+ko1Bdx7TnfHLgVnigVJY+F3uM2eixNaXJAK4Tw7zXt+Jbr+db3/FLeN
+         NbWg1uFnfQZP0hVQ8qAvu4oxB9YfqcMS2NslJW6Wr7f4tJs5vp1fAUY1n5KdndMhvH+q
+         TQ9cF6YJeTrT+1k1A5LY7oo+1NAmnWKOnoRB7FQzLQSHUsRJiGGm8vGj1gubeNxs7p5K
+         S1Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCXs/Mi6IU1wPKp43udNo71MW8yxUh6pqZGpl2S25WR4cxPPWqGNQ/D/dDiE/XIFYR8NROx7gmQINV12JYm+iEY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWVPGNe3rhmZKvZdp8W+edC64vm5+xCTZt92cp8VmlVrG34x2E
+	50AiHYi5pXUNBhxfE7FrrT/dDlBpC47z8wBMsr71cm2N3SnRYZtly8WLkXPI3d+ZP9o=
+X-Gm-Gg: ASbGncs2z8xGT1r4cfmObYtwdUzfIJnIiMQW5rhUW1kyHKCWqkxo5saKmaG8hGScIot
+	hy3k+8e3FWzSYbKvK5Hob1iBkJWv7Z3Vdw2TpWEDx+cmgRnCw54CHC0e/y+kitC6UqrXx40VDGD
+	67wPzqu8GsmjHsJnhza4pF+jL0rbnC0Rj9Pq3HYvvhFdJ8kpkVhqCBq9UVyLKy0PkVKok8M7nSG
+	hPqcJE14RPB7JBqVCXio54YlQuGj8IlB22BNBNFSTfE837OlM/3pem6N7lfZCNjV6pN8fBPDPoC
+	bGdWf3GX9wnugzMRrpYudHVBryvJ9mVRl5WVyNSCP1L6PuvAUcf9UdxH+4/9x8xqdS9Cx0/Jipj
+	d8mnYAza+TIiELIXjLneexUGuyJARSzkLu75fZv0KLsxJRgzhH+tT6fbnKRuEoQEFcVixvPjpYl
+	fYGg==
+X-Google-Smtp-Source: AGHT+IG8NcfyQvR4Ib9EQoaH4QfobDX+a05XY4rSJHsCAlxEkbmXVJHbo70zGFdtD5RzLgfxV/T+lw==
+X-Received: by 2002:a05:6e02:178b:b0:430:9918:e69f with SMTP id e9e14a558f8ab-430b41eb013mr122131225ab.4.1760717663752;
+        Fri, 17 Oct 2025 09:14:23 -0700 (PDT)
+Received: from localhost ([140.82.166.162])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5a8a9768bfbsm8636173.48.2025.10.17.09.14.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Oct 2025 09:14:23 -0700 (PDT)
+Date: Fri, 17 Oct 2025 11:14:22 -0500
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Anup Patel <apatel@ventanamicro.com>
+Cc: Atish Patra <atish.patra@linux.dev>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Alexandre Ghiti <alex@ghiti.fr>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/4] RISC-V: KVM: Convert kvm_riscv_vcpu_sbi_forward()
+ into extension handler
+Message-ID: <20251017-161e4ec373e5f7c41364a4d3@orel>
+References: <20251017155925.361560-1-apatel@ventanamicro.com>
+ <20251017155925.361560-2-apatel@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,124 +95,178 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251017134916.GK3901471@nvidia.com>
+In-Reply-To: <20251017155925.361560-2-apatel@ventanamicro.com>
 
-On Fri, Oct 17, 2025 at 10:49:16AM -0300, Jason Gunthorpe wrote:
-> On Fri, Oct 17, 2025 at 02:36:58AM +0000, Tzung-Bi Shih wrote:
-> > Imagining the following example:
-> > 
-> > /* res1 and res2 are provided by hot-pluggable devices. */
-> > struct filp_priv {
-> >     void *res1;
-> >     void *res2;
-> > };
-> > 
-> > /* In .open() fops */
-> > priv = kzalloc(sizeof(struct filp_priv), ...);
-> > priv->res1 = ...;
-> > priv->res2 = ...;
-> > filp->private_data = priv;
-> > 
-> > /* In .read() fops */
-> > priv = filp->private_data;
-> > priv->res1    // could result UAF if the device has gone
-> > priv->res2    // could result UAF if the device has gone
-> > 
-> > 
-> > How does the bool * work for the example?
+On Fri, Oct 17, 2025 at 09:29:22PM +0530, Anup Patel wrote:
+> All uses of kvm_riscv_vcpu_sbi_forward() also updates retdata->uexit so
+> to further reduce code duplication move retdata->uexit assignment to
+> kvm_riscv_vcpu_sbi_forward() and convert it into SBI extension handler.
 > 
-> You are thinking about it completely wrong, you are trying to keep the
-> driver running conccurrently after it's remove returns - but that
-> isn't how Linux drivers are designed.
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> ---
+>  arch/riscv/include/asm/kvm_vcpu_sbi.h |  4 +++-
+>  arch/riscv/kvm/vcpu_sbi.c             |  6 +++++-
+>  arch/riscv/kvm/vcpu_sbi_base.c        | 20 +++-----------------
+>  arch/riscv/kvm/vcpu_sbi_replace.c     | 27 +--------------------------
+>  arch/riscv/kvm/vcpu_sbi_system.c      |  4 +---
+>  arch/riscv/kvm/vcpu_sbi_v01.c         |  3 +--
+>  6 files changed, 14 insertions(+), 50 deletions(-)
 > 
-> We have a whole family of synchronous fencing APIs that drivers call
-> in their remove() callback to shut down their concurrency. Think of
-> things like free_irq(), cancel_work_sync(), timer_shutdown_sync(),
-> sysfs_remove_files(). All of these guarentee the concurrent callbacks
-> are fenced before returning.
-> 
-> The only issue with cros_ec is this:
-> 
-> static void cros_ec_chardev_remove(struct platform_device *pdev)
-> {
->         struct miscdevice *misc = dev_get_drvdata(&pdev->dev);
-> 
->         misc_deregister(misc);
-> }
-> 
-> It doesn't fence the cdevs! Misc is a hard API to use because it
-> doesn't have a misc_deregister_sync() variation!
-> 
-> Dan/Laurent's point and proposal was that mis_deregister() does not
-> work like this! It is an anomaly that driver authors typically over
-> look.
-> 
-> So the proposal was to add some way to get a:
->   misc_deregister_sync()
-> 
-> What gives the fence. Under your proposal it would lock the SRCU and
-> change the bool. After it returns no cdev related threads are running
-> in fops touching res1/res2. I think your proposal to replace the fops
-> and that related machinery is smart and has a chance to succeed.
-> 
-> From this perspective your example is malformed. Resources should not
-> become revoked concurrently *while a driver is bound*. The driver
-> should be unbound, call misc_deregister_sync()/etc, and return from
-> remove() guaranteeing it no longer touches any resources.
+> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> index 3497489e04db..446f4a8eb3cd 100644
+> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
+> @@ -69,7 +69,9 @@ struct kvm_vcpu_sbi_extension {
+>  			     unsigned long reg_size, const void *reg_val);
+>  };
+>  
+> -void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run);
+> +int kvm_riscv_vcpu_sbi_forward_handler(struct kvm_vcpu *vcpu,
+> +				       struct kvm_run *run,
+> +				       struct kvm_vcpu_sbi_return *retdata);
+>  void kvm_riscv_vcpu_sbi_system_reset(struct kvm_vcpu *vcpu,
+>  				     struct kvm_run *run,
+>  				     u32 type, u64 flags);
+> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
+> index 1b13623380e1..fd4106c276d8 100644
+> --- a/arch/riscv/kvm/vcpu_sbi.c
+> +++ b/arch/riscv/kvm/vcpu_sbi.c
+> @@ -120,7 +120,9 @@ static bool riscv_vcpu_supports_sbi_ext(struct kvm_vcpu *vcpu, int idx)
+>  	return sext && scontext->ext_status[sext->ext_idx] != KVM_RISCV_SBI_EXT_STATUS_UNAVAILABLE;
+>  }
+>  
+> -void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run)
+> +int kvm_riscv_vcpu_sbi_forward_handler(struct kvm_vcpu *vcpu,
+> +				       struct kvm_run *run,
+> +				       struct kvm_vcpu_sbi_return *retdata)
+>  {
+>  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+>  
+> @@ -137,6 +139,8 @@ void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run)
+>  	run->riscv_sbi.args[5] = cp->a5;
+>  	run->riscv_sbi.ret[0] = SBI_ERR_NOT_SUPPORTED;
+>  	run->riscv_sbi.ret[1] = 0;
+> +	retdata->uexit = true;
+> +	return 0;
+>  }
+>  
+>  void kvm_riscv_vcpu_sbi_system_reset(struct kvm_vcpu *vcpu,
+> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
+> index 5bc570b984f4..ca489f2dfbdf 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_base.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
+> @@ -41,8 +41,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  			 * For experimental/vendor extensions
+>  			 * forward it to the userspace
+>  			 */
+> -			kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> -			retdata->uexit = true;
+> +			return kvm_riscv_vcpu_sbi_forward_handler(vcpu, run, retdata);
+>  		} else {
+>  			sbi_ext = kvm_vcpu_sbi_find_ext(vcpu, cp->a0);
+>  			*out_val = sbi_ext && sbi_ext->probe ?
+> @@ -72,27 +71,14 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base = {
+>  	.handler = kvm_sbi_ext_base_handler,
+>  };
+>  
+> -static int kvm_sbi_ext_forward_handler(struct kvm_vcpu *vcpu,
+> -				       struct kvm_run *run,
+> -				       struct kvm_vcpu_sbi_return *retdata)
+> -{
+> -	/*
+> -	 * Both SBI experimental and vendor extensions are
+> -	 * unconditionally forwarded to userspace.
+> -	 */
+> -	kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> -	retdata->uexit = true;
+> -	return 0;
+> -}
+> -
+>  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental = {
+>  	.extid_start = SBI_EXT_EXPERIMENTAL_START,
+>  	.extid_end = SBI_EXT_EXPERIMENTAL_END,
+> -	.handler = kvm_sbi_ext_forward_handler,
+> +	.handler = kvm_riscv_vcpu_sbi_forward_handler,
+>  };
+>  
+>  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor = {
+>  	.extid_start = SBI_EXT_VENDOR_START,
+>  	.extid_end = SBI_EXT_VENDOR_END,
+> -	.handler = kvm_sbi_ext_forward_handler,
+> +	.handler = kvm_riscv_vcpu_sbi_forward_handler,
+>  };
+> diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
+> index b490ed1428a6..2c456e26f6ca 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_replace.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_replace.c
+> @@ -186,34 +186,9 @@ const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_srst = {
+>  	.handler = kvm_sbi_ext_srst_handler,
+>  };
+>  
+> -static int kvm_sbi_ext_dbcn_handler(struct kvm_vcpu *vcpu,
+> -				    struct kvm_run *run,
+> -				    struct kvm_vcpu_sbi_return *retdata)
+> -{
+> -	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
+> -	unsigned long funcid = cp->a6;
+> -
+> -	switch (funcid) {
+> -	case SBI_EXT_DBCN_CONSOLE_WRITE:
+> -	case SBI_EXT_DBCN_CONSOLE_READ:
+> -	case SBI_EXT_DBCN_CONSOLE_WRITE_BYTE:
+> -		/*
+> -		 * The SBI debug console functions are unconditionally
+> -		 * forwarded to the userspace.
+> -		 */
+> -		kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> -		retdata->uexit = true;
+> -		break;
+> -	default:
+> -		retdata->err_val = SBI_ERR_NOT_SUPPORTED;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_dbcn = {
+>  	.extid_start = SBI_EXT_DBCN,
+>  	.extid_end = SBI_EXT_DBCN,
+>  	.default_disabled = true,
+> -	.handler = kvm_sbi_ext_dbcn_handler,
+> +	.handler = kvm_riscv_vcpu_sbi_forward_handler,
+>  };
+> diff --git a/arch/riscv/kvm/vcpu_sbi_system.c b/arch/riscv/kvm/vcpu_sbi_system.c
+> index 359be90b0fc5..c6f7e609ac79 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_system.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_system.c
+> @@ -47,9 +47,7 @@ static int kvm_sbi_ext_susp_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  		kvm_riscv_vcpu_sbi_request_reset(vcpu, cp->a1, cp->a2);
+>  
+>  		/* userspace provides the suspend implementation */
+> -		kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> -		retdata->uexit = true;
+> -		break;
+> +		return kvm_riscv_vcpu_sbi_forward_handler(vcpu, run, retdata);
+>  	default:
+>  		retdata->err_val = SBI_ERR_NOT_SUPPORTED;
+>  		break;
+> diff --git a/arch/riscv/kvm/vcpu_sbi_v01.c b/arch/riscv/kvm/vcpu_sbi_v01.c
+> index 368dfddd23d9..188d5ea5b3b8 100644
+> --- a/arch/riscv/kvm/vcpu_sbi_v01.c
+> +++ b/arch/riscv/kvm/vcpu_sbi_v01.c
+> @@ -32,8 +32,7 @@ static int kvm_sbi_ext_v01_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
+>  		 * The CONSOLE_GETCHAR/CONSOLE_PUTCHAR SBI calls cannot be
+>  		 * handled in kernel so we forward these to user-space
+>  		 */
+> -		kvm_riscv_vcpu_sbi_forward(vcpu, run);
+> -		retdata->uexit = true;
+> +		ret = kvm_riscv_vcpu_sbi_forward_handler(vcpu, run, retdata);
+>  		break;
+>  	case SBI_EXT_0_1_SET_TIMER:
+>  #if __riscv_xlen == 32
+> -- 
+> 2.43.0
+>
 
-Imagining:
-- Driver X provides the res1.
-- Driver Y provides the res2.
-- Driver Z provides the chardev /dev/zzz.  The file operations use res1
-  and res2.
-- A userspace program opened /dev/zzz.
-
-In the approach, what is .remove() of driver X supposed to do when driver X
-is unbinding (e.g. due to device unplug)?
-
-If it ends up call misc_deregister_sync(), should the synchronous function
-wait for the userspace program to close the FD?
-
-
-The design behind revocable: the driver X waits via synchronize_srcu(), and
-then it is free to go.  The subsequent accesses to res1 will get NULL, and
-should fail gracefully.
-
-> For this specific cros_ec driver it's "res" is this:
-> 
->         struct cros_ec_dev *ec = dev_get_drvdata(pdev->dev.parent);
->         struct cros_ec_platform *ec_platform = dev_get_platdata(ec->dev);
-
-In fact, no, the "res" we are concerning is struct cros_ec_device, e.g. [1].
-(I knew the naming cros_ec_device vs. cros_ec_dev is somehow easy to confuse.)
-
-[1] https://elixir.bootlin.com/linux/v6.17/source/drivers/platform/chrome/cros_ec_spi.c#L752
-
-> This is already properly lifetime controlled!
-> 
-> It *HAS* to be, and even your patches are assuming it by blindly
-> reaching into the parent's memory!
-> 
-> +	misc->rps[0] = ec->ec_dev->revocable_provider;
-> 
-> If the parent driver has been racily unbound at this point the
-> ec->ec_dev is already a UAF!
-
-Not really, it uses the fact that the caller is from probe().  I think the
-driver can't be unbound when it is still in probe().
-(Probe protocol device -> register the MFD device ->
- add cros-ec-chardev device and probe.)
-
-> For cros it is safe because the cros_ec driver is a child of a MFD and
-> the MFD logic ensures that the children are unbound as part of
-> destroying the parent. So 'ec' is guarenteed valid from probe() to
-> remove() return.
-> 
-> IHMO auto-revoke is a terrible idea, if you go down that path then why
-> is misc special? You need to auto-revoke irqs, timers, work queues,
-> etc too? That's a mess.
-
-To be clear, I'm using misc as an example which is also the real crash we
-observed.  If the file operations use other resources provided by a
-hot-pluggable device, it'd need to use revocable APIs to prevent the UAFs.
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
