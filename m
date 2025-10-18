@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-43464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB949BEC238
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 02:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D4EABEC23E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 02:13:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74A9D6E6CDF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 00:10:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 752BC6E747A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 00:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 545B2225413;
-	Sat, 18 Oct 2025 00:07:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2935B2288E3;
+	Sat, 18 Oct 2025 00:07:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="unQdP2H0"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2t7dpM7x"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D3CB21FF5B
-	for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 00:07:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F969223323
+	for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 00:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760746069; cv=none; b=mS12hpbTKnbPYEMGxjwr7V2jNElgU4LZ5EElbllFc3ROpF3Zi5BCRriWU9Mo8EKU2fCh9FEQk0Na3BRWZe7efzZm9akHSPeWZTyqWldpLHSrgCi7SLqMDc+qe1JRsJXyY/XicpG3Ti7/mKyWGHrZ1Osyml+pciXoigxvRh47/1c=
+	t=1760746069; cv=none; b=sFZfVS9lWytyWs0/T7WXN0ManX/Oafl6JePtCIoC+GAXqUHLZnQdJnLMKWX4gHSYa1btR9XuBlZpwolD6FDxZh9KNBAM74BdrmXOw/uzblVI1s49Qd6XTjInqo4PpowBW+wUsaQ/adHoB2PaXhiZKaIQiZjw1wPAbZ0IMkC3aZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760746069; c=relaxed/simple;
-	bh=MLaNeyY6LKintgVULMgBH+iRQ/MeqKVKP+ROzIUgMg0=;
+	bh=MFgRpcmSvyiNW2ycsfOMqpytwYLNdswjkflUzJbVBqM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=fNXTmbNPOMGodk9sHNDEqL7j5IvRIE7XEG9JvyqhXwxOpe8zKjtw26gplFthilGkpzac3qLv828JyDFt89Elwscvc+R2EhgLXT2gHUjmQetRjKE92PCoJU0jCbmhdeN04kZG+qkYqoSc+mjbXK2c9WEn4Ytrbew4egPbEvGIKwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=unQdP2H0; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=ktFXoXfu294K4c0fz4PX+r4rZe5vWhoau1widDaKbAPxSyjwoJczgGB+dh0795PvAx274W6xHAWF4ghv7RQw/VzOsrxduG5qk4HZIqVXtun6ghjoUT3uEiZcHMrEmv77s/CF2mO2+YQ04HeK1dW2PN6Ar/aOPxqPBkJCq/54t6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2t7dpM7x; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-33428befc08so5267307a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 17:07:46 -0700 (PDT)
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-27c62320f16so25882645ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 17:07:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760746066; x=1761350866; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1760746067; x=1761350867; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h58y0LF9F4O7H0FAiRUz8ZqJ6jT9O63uu0+3MjjbyTk=;
-        b=unQdP2H0pbmZMm7YAowZVqfrE6Wv87+7CAw/5Eu+skmj/IV97GCqzyF0V0l1my7KUr
-         vohx3U5P7hQHnCsarv8YpAcABmgotcGlEKRIwQLhn0E3sa6Q7eDGgVgLSh4GNq/Lqzdh
-         9fPUfA8OMd2WR4ik7vJWWW3Exx19mSGn4LDAbMaba4mrfd7ZqsCkd9DY7OmCSUasQ5Ov
-         q4uIke6rNIxBOpcnejH3KzX3HHH/Ybg0aPX7A+9o7RlBsqwqS6eSXz+a9VJ0ou7zKUZU
-         hIlPSjDS0D51i+Ab953yQnwp6oHN12hRLWNEofptrqp4sV2/OvP1ChcqfbbHmbPPuZGK
-         tGvw==
+        bh=KHCY6sFzZWLKuVo4O6MQDE+yc4FJeSrGIRkXpfAjMjg=;
+        b=2t7dpM7xT5sRj2dzjCC8tHWBvbeIYM/D6BaPLa0/AOxR9uvIiAtcnb5rnAbini1hg/
+         26rgE89UsuEuSf1DfU/RLE9E6xE/RK/sb37FddbHPk7cfRvnhP7HDuwpTUCa4yDfKIXS
+         vXid0/Rp+MuN6zN/mYhVAKIsz8kFYCyU/3UvvCR1Csc97mnOEJCaIA4J6jwrckWfIny7
+         3ErNQRSnXAP8QfQdTTL/4dMBpGQaRA0f0yodX6ffxoF2LSsD/Fp4cCNBuNqhNFSrGtwi
+         YW4suCx+CdutDtj8oRUVL00xfHWKRSJtmCB/6sr5pVPxrufxwz4V8khpmWENSCJc2XWH
+         cWiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760746066; x=1761350866;
+        d=1e100.net; s=20230601; t=1760746067; x=1761350867;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h58y0LF9F4O7H0FAiRUz8ZqJ6jT9O63uu0+3MjjbyTk=;
-        b=Y6NL/Z8r28dYyTV2PyzVDMXm3H40I22fRWvq9gxna5HCDXz6kxjS7HF0U+oojgrQ0F
-         TaTfy1MdMa8FeYqA3oL/xXgYD1JszEY32FyeoWt2cXl1oNEyeuqU3LO9BEn7aJruz6HF
-         8XRANDPJr1/Xh+mwmQON0Ub7DdeJJKfemzR2ZpgkFcoA5sXQiHKYV+FREPf/j1nCwwX+
-         w2wR9s+YkJT3BvTkTllRRiRMP0drzjwwfXI+ubx2bz/FiMiLnkZD4LFqggQjwgN48Q/a
-         k6ubiZnswWqUoM0aB81+nXjRzUfAlCny0qICpQv89qN3pLDWjTYNCn91TO/p23b1cqL4
-         LfrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUWomWS/iZytF93DhDVQz3zHCPKG2a3WA0Gh0NN9QqXU/Hh3rTJmIOstw++DMgSojOMz3IzXZNsoQCeOMRlGhg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+mBhbgQSiZblfbG50fi61AQrpR65ZJThcxTnDyMwk16/4Jlg3
-	cPRU2+VFjhMuxsUAMlwJ6eBU9fpn3v10r1IqywdBki/P1e4vphR0lS92rHfazI0K905nBWrJfuq
-	ZLRd16+g4cg==
-X-Google-Smtp-Source: AGHT+IHXxYwtGcIKbQ0OizZ3waxlwzCfsSoob6MqMnOla+ZwoMWcozqueK+AEj/juH0UNpmrqm1CfPxSTVkf
-X-Received: from pjbrv22.prod.google.com ([2002:a17:90b:2c16:b0:329:6ac4:ea2e])
- (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3c88:b0:338:3d07:5174
- with SMTP id 98e67ed59e1d1-33bcf85d01dmr6153736a91.5.1760746065605; Fri, 17
- Oct 2025 17:07:45 -0700 (PDT)
-Date: Fri, 17 Oct 2025 17:07:05 -0700
+        bh=KHCY6sFzZWLKuVo4O6MQDE+yc4FJeSrGIRkXpfAjMjg=;
+        b=q7BLB81Amr2tFJZmTRNhXHXsuu2KQag2A4PBn9KCQKfhlaDIEzr1Ol8kkDKf3G6CTr
+         Q2rgiS7qJN0F5vTLryCvqOkpFmjK54QorSNxoZBnM/OL7b58WjYXxSNzAm+79h+oBMxg
+         pNJC30yuK/D6FJEeg6/+k4NDGWRb4aWWdCoLJu6onKqzfpBGNhI1/FRdCvvzh8vGGbJD
+         1GTdYYdGDmPqsDkXf0dUe3Z082xDqLdU9TvIwAmaW0PaRBSsUtzSbrO5wr65u9fR8gPy
+         ptg9HTWyqFnkWiY7qBr6LKwPNn1KzlqCXslfc21cKN0WtUCP/wKKV8ehqOW5aLvLzunF
+         jfAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW2XWSD/ueceUWcVUgmksFd3qf90ZK+845HPEMIpAtUseHwHg8sxjzNF0vTegk+EYuB1C7W84JY2S+Cso51YYo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8ZDgVoGpUxT8Qzo7kijw3bFYpfQ/4+P9/2zwBLl5ksGlvz34Z
+	1MLqz6F648PrtVNpcunbO4FKAg634iYdri/CRnhd8ucBdcp7dg+LI2DwuOqmiFel9JDktkinTQl
+	vrjECmX7YKw==
+X-Google-Smtp-Source: AGHT+IHm9Bkb4nNH3Rfeek7ZAO48gSccBg2tRk1yFiUzJut212ExP9VQ22QXBuOVaPaAWO2qNwfDgLkRrWNJ
+X-Received: from pjff13.prod.google.com ([2002:a17:90b:562d:b0:33d:69cf:1f82])
+ (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f64f:b0:248:e3fb:4dc8
+ with SMTP id d9443c01a7336-290ca8d04f4mr63505285ad.39.1760746067402; Fri, 17
+ Oct 2025 17:07:47 -0700 (PDT)
+Date: Fri, 17 Oct 2025 17:07:06 -0700
 In-Reply-To: <20251018000713.677779-1-vipinsh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,9 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251018000713.677779-1-vipinsh@google.com>
 X-Mailer: git-send-email 2.51.0.858.gf9c4a03a3a-goog
-Message-ID: <20251018000713.677779-14-vipinsh@google.com>
-Subject: [RFC PATCH 13/21] vfio/pci: Preserve VFIO PCI config space through
- live update
+Message-ID: <20251018000713.677779-15-vipinsh@google.com>
+Subject: [RFC PATCH 14/21] vfio/pci: Skip device reset on live update restored device.
 From: Vipin Sharma <vipinsh@google.com>
 To: bhelgaas@google.com, alex.williamson@redhat.com, pasha.tatashin@soleen.com, 
 	dmatlack@google.com, jgg@ziepe.ca, graf@amazon.com
@@ -89,136 +88,97 @@ Cc: pratyush@kernel.org, gregkh@linuxfoundation.org, chrisl@kernel.org,
 	Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Save and restore vconfig, pci_config_map, and rbar members of the struct
-vfio_pci_core_device{} during live update. Use the max size of PCI
-config space i.e. 4096 bytes for storing vconfig and pci_config_map
-irrespective of the exact size. Store the current config size which is
-present in the struct pci_dev{} also, to know how much actual data is
-present in the vconfig and the pci_config_map.
+Do not reset the device when a live update preserved VFIO PCI device is
+opened for the first time after kexec.
 
-vconfig represents virtual PCI config used by VFIO to virtualize certain
-bits of the config space in the PCI device. This should be preserved as
-those virtualized bits cannot be retrieved from reading hardware.
-
-pci_config_map is used to identify starting point of a capability. This
-is not strictly needed to be preserved and can be recreated after kexec
-but saving it in kHO reduces the code change.  Currently, pci_config_map
-is populated in the same code where vconfig gets initialized. If
-pci_config_map is not saved then a separate flow need to be added for
-just populating pci_config_map.
-
-rbar is used to restore BARs after a reset. This value needs to be
-preserved as reset will lose this information.
+Save 'reset_works' to the device serialized state. If not saved then
+this value can only be restored by performing an actual reset, which is
+not desired during live update. If a device can be reset before live
+update then most likely it can be reset after live update unless some
+reset methods have been removed. In that case when actual reset is tried
+it will return an error.
 
 Signed-off-by: Vipin Sharma <vipinsh@google.com>
 ---
- drivers/vfio/pci/vfio_pci_config.c     | 17 ++++++++++++
- drivers/vfio/pci/vfio_pci_liveupdate.c | 38 ++++++++++++++++++++++++++
- drivers/vfio/pci/vfio_pci_priv.h       |  5 ++++
- 3 files changed, 60 insertions(+)
+ drivers/vfio/pci/vfio_pci_core.c       | 15 ++++++++++-----
+ drivers/vfio/pci/vfio_pci_liveupdate.c |  9 +++++++++
+ drivers/vfio/pci/vfio_pci_priv.h       |  2 ++
+ 3 files changed, 21 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-index 8f02f236b5b4..36a71fc3d526 100644
---- a/drivers/vfio/pci/vfio_pci_config.c
-+++ b/drivers/vfio/pci/vfio_pci_config.c
-@@ -1756,6 +1756,23 @@ int vfio_config_init(struct vfio_pci_core_device *vdev)
- 	vdev->pci_config_map = map;
- 	vdev->vconfig = vconfig;
+diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+index 29236b015242..186a669b68a4 100644
+--- a/drivers/vfio/pci/vfio_pci_core.c
++++ b/drivers/vfio/pci/vfio_pci_core.c
+@@ -486,12 +486,17 @@ int vfio_pci_core_enable(struct vfio_pci_core_device *vdev)
+ 	if (ret)
+ 		goto out_power;
  
+-	/* If reset fails because of the device lock, fail this path entirely */
+-	ret = pci_try_reset_function(pdev);
+-	if (ret == -EAGAIN)
+-		goto out_disable_device;
 +	if (vdev->liveupdate_restore) {
-+		ret = vfio_pci_liveupdate_restore_config(vdev);
-+		if (ret)
-+			goto out;
-+		/*
-+		 * Liveupdate might have started after userspace writes to BARs
-+		 * but before VFIO sanitizes them which happens when BARs are
-+		 * read next time.
-+		 *
-+		 * Assume BARs are dirty so that VFIO will sanitize them
-+		 * unconditionally next time and avoid giving userspace wrong
-+		 * value.
-+		 */
-+		vdev->bardirty = true;
-+		return 0;
-+	}
++		vfio_pci_liveupdate_restore_device(vdev);
++	} else {
++		/* If reset fails because of the device lock, fail this path entirely */
++		ret = pci_try_reset_function(pdev);
++		if (ret == -EAGAIN)
++			goto out_disable_device;
 +
- 	memset(map, PCI_CAP_ID_BASIC, PCI_STD_HEADER_SIZEOF);
- 	memset(map + PCI_STD_HEADER_SIZEOF, PCI_CAP_ID_INVALID,
- 	       pdev->cfg_size - PCI_STD_HEADER_SIZEOF);
++		vdev->reset_works = !ret;
++	}
+ 
+-	vdev->reset_works = !ret;
+ 	pci_save_state(pdev);
+ 	vdev->pci_saved_state = pci_store_saved_state(pdev);
+ 	if (!vdev->pci_saved_state)
 diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vfio_pci_liveupdate.c
-index 6cc94d9a0386..824dba2750fe 100644
+index 824dba2750fe..82ff9f178fdc 100644
 --- a/drivers/vfio/pci/vfio_pci_liveupdate.c
 +++ b/drivers/vfio/pci/vfio_pci_liveupdate.c
-@@ -18,12 +18,43 @@
- 
- struct vfio_pci_core_device_ser {
- 	u16 bdf;
-+	u32 cfg_size;
-+	u8 pci_config_map[PCI_CFG_SPACE_EXP_SIZE];
-+	u8 vconfig[PCI_CFG_SPACE_EXP_SIZE];
-+	u32 rbar[7];
+@@ -22,6 +22,7 @@ struct vfio_pci_core_device_ser {
+ 	u8 pci_config_map[PCI_CFG_SPACE_EXP_SIZE];
+ 	u8 vconfig[PCI_CFG_SPACE_EXP_SIZE];
+ 	u32 rbar[7];
++	u8 reset_works;
  } __packed;
  
-+static int vfio_pci_liveupdate_deserialize_config(struct vfio_pci_core_device *vdev,
-+						  struct vfio_pci_core_device_ser *ser)
-+{
-+	struct pci_dev *pdev = vdev->pdev;
-+
-+	if (WARN_ON_ONCE(pdev->cfg_size != ser->cfg_size)) {
-+		dev_err(&pdev->dev, "Config size in serialized (%d) not matching the one pci_dev (%d)",
-+			ser->cfg_size, pdev->cfg_size);
-+		return -EINVAL;
-+	}
-+
-+	memcpy(vdev->pci_config_map, ser->pci_config_map, ser->cfg_size);
-+	memcpy(vdev->vconfig, ser->vconfig, ser->cfg_size);
-+	memcpy(vdev->rbar, ser->rbar, sizeof(vdev->rbar));
-+	return 0;
-+}
-+
-+static void vfio_pci_liveupdate_serialize_config(struct vfio_pci_core_device *vdev,
-+						 struct vfio_pci_core_device_ser *ser)
-+{
-+	ser->cfg_size = vdev->pdev->cfg_size;
-+	memcpy(ser->pci_config_map, vdev->pci_config_map, ser->cfg_size);
-+	memcpy(ser->vconfig, vdev->vconfig, ser->cfg_size);
-+	memcpy(ser->rbar, vdev->rbar, sizeof(vdev->rbar));
-+}
-+
- static int vfio_pci_lu_serialize(struct vfio_pci_core_device *vdev,
- 				 struct vfio_pci_core_device_ser *ser)
+ static int vfio_pci_liveupdate_deserialize_config(struct vfio_pci_core_device *vdev,
+@@ -55,6 +56,7 @@ static int vfio_pci_lu_serialize(struct vfio_pci_core_device *vdev,
  {
  	ser->bdf = pci_dev_id(vdev->pdev);
-+	vfio_pci_liveupdate_serialize_config(vdev, ser);
+ 	vfio_pci_liveupdate_serialize_config(vdev, ser);
++	ser->reset_works = vdev->reset_works;
  	return 0;
  }
  
-@@ -221,3 +252,10 @@ void __init vfio_pci_liveupdate_init(void)
- 	if (err)
- 		pr_err("VFIO PCI liveupdate file handler register failed, error %d.\n", err);
+@@ -259,3 +261,10 @@ int vfio_pci_liveupdate_restore_config(struct vfio_pci_core_device *vdev)
+ 
+ 	return vfio_pci_liveupdate_deserialize_config(vdev, ser);
  }
 +
-+int vfio_pci_liveupdate_restore_config(struct vfio_pci_core_device *vdev)
++void vfio_pci_liveupdate_restore_device(struct vfio_pci_core_device *vdev)
 +{
 +	struct vfio_pci_core_device_ser *ser = vdev->liveupdate_restore;
 +
-+	return vfio_pci_liveupdate_deserialize_config(vdev, ser);
++	vdev->reset_works = ser->reset_works;
 +}
 diff --git a/drivers/vfio/pci/vfio_pci_priv.h b/drivers/vfio/pci/vfio_pci_priv.h
-index 7779fd744ff5..0d5aca6c2471 100644
+index 0d5aca6c2471..ee1c7c229020 100644
 --- a/drivers/vfio/pci/vfio_pci_priv.h
 +++ b/drivers/vfio/pci/vfio_pci_priv.h
-@@ -109,8 +109,13 @@ static inline bool vfio_pci_is_vga(struct pci_dev *pdev)
- 
+@@ -110,12 +110,14 @@ static inline bool vfio_pci_is_vga(struct pci_dev *pdev)
  #ifdef CONFIG_LIVEUPDATE
  void vfio_pci_liveupdate_init(void);
-+int vfio_pci_liveupdate_restore_config(struct vfio_pci_core_device *vdev);
+ int vfio_pci_liveupdate_restore_config(struct vfio_pci_core_device *vdev);
++void vfio_pci_liveupdate_restore_device(struct vfio_pci_core_device *vdev);
  #else
  static inline void vfio_pci_liveupdate_init(void) { }
-+int vfio_pci_liveupdate_restore_config(struct vfio_pci_core_device *vdev)
-+{
-+	return -EINVAL;
-+}
+ int vfio_pci_liveupdate_restore_config(struct vfio_pci_core_device *vdev)
+ {
+ 	return -EINVAL;
+ }
++void vfio_pci_liveupdate_restore_device(struct vfio_pci_core_device *vdev) { }
  #endif /* CONFIG_LIVEUPDATE */
  
  #endif
