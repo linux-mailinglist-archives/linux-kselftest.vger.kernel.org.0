@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-43505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B09CBEDBAE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 22:45:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED145BEDBBA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 22:45:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF05519C19BA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 20:45:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74667407DD2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 20:45:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93EBB2DA758;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B252DF14C;
 	Sat, 18 Oct 2025 20:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FDYx4y6w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tz4vjciH"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692322D94A4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF36A2DC32A;
 	Sat, 18 Oct 2025 20:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760820293; cv=none; b=o6mqlpx8CyoTaKA86R/7Pxn5UAQiKAaXg4+dV4WpzMOMuVJ/fkK/MJ8reCGlBqzFv70//hWDx9j39wdaUr9csBju7opsGi3dfyc2J0Ox2A7u0vfdKKcNSjmE2nBFnFAxouz+Ph4akdjePRR8X46P1UPBvJFc6q2sZEL55nP+uos=
+	t=1760820293; cv=none; b=tHdMQEfA/d/aS3h58MJegir9uAnNYZa66+PrgtZ2KQpyrIGervHOnzypwqlivwtZcWgBvcM6RQgmNIT2jSMjqMblCmeB3HiaoRbCjXqZr9iNXNOJKW6HhfBFZGF7w0NO41Medr6evK059V1eGpjOVEC2Etlu9PRWG4aslzZhI1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760820293; c=relaxed/simple;
-	bh=JDAR5vBDfrQKj9l07eWZCbXqGebT8PFUKr3f9iHJS+U=;
+	bh=mizIUChAFsqpIHY6nU9Fx3Ot5p8OeQz4ge3WLnGs1IU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G6Z7OYbbhp1EOJd29luNKmbvyXJQhGo6hwkT8fOOlWsECH2J/CWbZcp7E1lzGTTJgKl8nY3ZwvGYbRW692PxBsq1IvP/nOtsZ5wDjncfVpsj+1UpyqkwM8a+SyxfqNDoSNREkiR1a1F4uxUfnN23+SxLb/OdcpgrcHHMlzt282Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FDYx4y6w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBCFC116B1;
-	Sat, 18 Oct 2025 20:44:52 +0000 (UTC)
+	 MIME-Version; b=WF2Jsdnf6hlSUDONhr2T0pWsCVoQBmxMyJiUEENMj0gLyVZ0Ra8UtqMeGDiuzOhMBnUbg/PIWEE89WPtulVHZgn/EcFRBrZ1D7aLybOnOjAgqH0nANsAH/rBcewc+MwHTpfvhw3CS3Zp7PbgqvRU3LC1uiu6YiUYJlc3NLR0mXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tz4vjciH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35164C116D0;
+	Sat, 18 Oct 2025 20:44:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1760820293;
-	bh=JDAR5vBDfrQKj9l07eWZCbXqGebT8PFUKr3f9iHJS+U=;
+	bh=mizIUChAFsqpIHY6nU9Fx3Ot5p8OeQz4ge3WLnGs1IU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FDYx4y6wSdB04oRFCmuLkrqCOm3Fdh8tM9f3mb5PxueJPZaw3cNorfkUUjXq3urLg
-	 rDb2Tc+3mneR9llm1GcWC8cykf95pS34V1lznO4Fg0mY+vwnvWE75g7wNVHTPFTYvY
-	 OBpUeWqpKSiInr6pk+r6ZIRj6JV8O2DL2wiMr312gb9eYm5KC8b3Wr+HC9tlJCpfNk
-	 qmtwKre01Sj23dLd0x7T3Q5mgi8UkQT4IUd77sqYhuXR+7n5WMkY+7LQbqA77Q3jZY
-	 ZXCR7lZgxHbg/WIEVZCGMM7VnS9CwlHAlTLDrf3NC6paaJ42GTHSvt9WdHtGVHFslT
-	 rqedKtWmBI8NQ==
+	b=Tz4vjciHPBEgfaX0+unXfY0pbZzsgdubL0xREO960MitKSNo2qjvSeprQbr0KDQDa
+	 ppYb90xfdAuxt9ZFBXz7sY6oAPlkEXN3li/QaiuGOqm42LMPxif5zkfCYsy2oXMjqx
+	 +Mlc0NS27oc3EM5T3Zr0Vp9JJRWo69rdYMo7RLYvBK1Av71FctMfjRe0jMvEphocwL
+	 UETH5IWUq0i4A1qRLJsrHI6M47syyAaAsUjMQDTa+5V3Bl/PFFw2bEA1TgVxPI2LNv
+	 JXvdJuDg+nAapHXSGEnkMYIaisS5+hoC20rx2jKjVlA9tnC+4J1wsx5vfD0aFl9rC1
+	 xy0HB2Ep75THQ==
 From: SeongJae Park <sj@kernel.org>
 To: 
 Cc: SeongJae Park <sj@kernel.org>,
@@ -51,9 +51,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [RFC PATCH 3/4] sysfs.py: extend assert_ctx_committed() for monitoring targets
-Date: Sat, 18 Oct 2025 13:44:44 -0700
-Message-ID: <20251018204448.8906-4-sj@kernel.org>
+Subject: [RFC PATCH 4/4] selftests/damon/sysfs: add obsolete_target test
+Date: Sat, 18 Oct 2025 13:44:45 -0700
+Message-ID: <20251018204448.8906-5-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251018204448.8906-1-sj@kernel.org>
 References: <20251018204448.8906-1-sj@kernel.org>
@@ -65,44 +65,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-assert_ctx_committed() is not asserting monitoring targets commitment,
-since all existing callers of the function assumes no target changes.
-Extend it for future usage.
+A new DAMON sysfs file for pin-point target removal, namely
+obsolete_target, has been added.  Add a test for the functionality.  It
+starts DAMON with three monitoring target processes, mark one in the
+middle as obsolete, commit it, and confirm the internal DAMON status is
+updated to remove the target in the middle.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/testing/selftests/damon/sysfs.py | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/damon/sysfs.py | 37 ++++++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
 diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index 2666c6f0f1a5..fd8d3698326e 100755
+index fd8d3698326e..b34aea0a6775 100755
 --- a/tools/testing/selftests/damon/sysfs.py
 +++ b/tools/testing/selftests/damon/sysfs.py
-@@ -164,6 +164,16 @@ def assert_monitoring_attrs_committed(attrs, dump):
-     assert_true(dump['max_nr_regions'] == attrs.max_nr_regions,
-                 'max_nr_regions', dump)
+@@ -279,5 +279,42 @@ def main():
  
-+def assert_monitoring_target_committed(target, dump):
-+    # target.pid is the pid "number", while dump['pid'] is 'struct pid'
-+    # pointer, and hence cannot be compared.
-+    assert_true(dump['obsolete'] == target.obsolete, 'target obsolete', dump)
-+
-+def assert_monitoring_targets_committed(targets, dump):
-+    assert_true(len(targets) == len(dump), 'len_targets', dump)
-+    for idx, target in enumerate(targets):
-+        assert_monitoring_target_committed(target, dump[idx])
-+
- def assert_ctx_committed(ctx, dump):
-     ops_val = {
-             'vaddr': 0,
-@@ -172,6 +182,7 @@ def assert_ctx_committed(ctx, dump):
-             }
-     assert_true(dump['ops']['id'] == ops_val[ctx.ops], 'ops_id', dump)
-     assert_monitoring_attrs_committed(ctx.monitoring_attrs, dump['attrs'])
-+    assert_monitoring_targets_committed(ctx.targets, dump['adaptive_targets'])
-     assert_schemes_committed(ctx.schemes, dump['schemes'])
+     kdamonds.stop()
  
- def assert_ctxs_committed(ctxs, dump):
++    # test obsolete_target.
++    proc1 = subprocess.Popen(['sh'], stdout=subprocess.PIPE,
++                             stderr=subprocess.PIPE)
++    proc2 = subprocess.Popen(['sh'], stdout=subprocess.PIPE,
++                             stderr=subprocess.PIPE)
++    proc3 = subprocess.Popen(['sh'], stdout=subprocess.PIPE,
++                             stderr=subprocess.PIPE)
++    kdamonds = _damon_sysfs.Kdamonds(
++            [_damon_sysfs.Kdamond(
++                contexts=[_damon_sysfs.DamonCtx(
++                    ops='vaddr',
++                    targets=[
++                        _damon_sysfs.DamonTarget(pid=proc1.pid),
++                        _damon_sysfs.DamonTarget(pid=proc2.pid),
++                        _damon_sysfs.DamonTarget(pid=proc3.pid),
++                        ],
++                    schemes=[_damon_sysfs.Damos()],
++                    )])])
++    err = kdamonds.start()
++    if err is not None:
++        print('kdamond start failed: %s' % err)
++        exit(1)
++    kdamonds.kdamonds[0].contexts[0].targets[1].obsolete = True
++    kdamonds.kdamonds[0].commit()
++
++    status, err = dump_damon_status_dict(kdamonds.kdamonds[0].pid)
++    if err is not None:
++        print(err)
++        kdamonds.stop()
++        exit(1)
++
++    del kdamonds.kdamonds[0].contexts[0].targets[1]
++
++    assert_ctxs_committed(kdamonds.kdamonds[0].contexts, status['contexts'])
++
++    kdamonds.stop()
++
+ if __name__ == '__main__':
+     main()
 -- 
 2.47.3
 
