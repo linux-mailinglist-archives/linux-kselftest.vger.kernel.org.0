@@ -1,122 +1,123 @@
-Return-Path: <linux-kselftest+bounces-43474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 062C8BEC35B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 03:18:17 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8986BEC6DC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 06:04:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 653FC3524E0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 01:18:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 42DB74E14BD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 04:04:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D351C3BFC;
-	Sat, 18 Oct 2025 01:18:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="ks4TLhHz"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8437824DFF3;
+	Sat, 18 Oct 2025 04:04:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F397E5464D
-	for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 01:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1A31946C8;
+	Sat, 18 Oct 2025 04:04:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760750292; cv=none; b=PbAjAM4w0L5Djln5xYmCUBrrCS+8dOEp2ks1WLEt4TGDoeAEmkVpKRimJuCMJZ8BsSkaVD7ZUUBsMfn5Z33IAc5ts5ynHG0K5qq43Moi/QYNqWbsnjRJRRNfE4TWNOKofwN0FtK9mLvuWiNUoBIQnP7pYgqjSYrc6G8k/CdQcak=
+	t=1760760286; cv=none; b=JSZrvzX5G50qSk3FC0W8cM4v9lxQ4qe2sTWODdXGIXPT3Dsvql/3qNxv8l+jeZKvyfl22WWaMWbR4mww8OwwuYPBZt4xwjNV8L323kL1pJp+/IsaU9zcmcg+Aa0oBJYJzKhCSVragXxKwicjxTU3u9sq+RxiQ+jdqwIu8QoFdQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760750292; c=relaxed/simple;
-	bh=DHdGUzF8HJaPv18p21SsIM1JCykWw1BNQ9xVxBJ/ey8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CqSM4WWnlDTiuIccLV7k5Dipjfaj+rWQOg+z/GkxyjGpwPCPu28ylohs0IWfjq+sv0//a9wqh/3J9VME8/HOyQ63kPV2wDu2wfKo2T+Y7p25RIpM74+diRidJXSmZB3GwNki+BSx86V9VaXP3Jk6w/6x2hmPYTSuzXn3+ojlqyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=ks4TLhHz; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7930132f59aso3475076b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 18:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1760750290; x=1761355090; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oNutzwJGGtfhc2UYuDqaLjoiYjQ+nZ6lcP1TgamaqJo=;
-        b=ks4TLhHzMRGq5iK+19/UBva82f9kt72PVDnoEQdcYvPozcrn8A/O1q6e+8cci/mz9M
-         lo/I7bRAOeS//Ycjd1Dvyyyz57WzCyX8HDPzUhT5DZZX0kP67tOSkkWUtbXP/phq2RV1
-         BqtPHAT3Fr6IHoDUUupjumYLkqXimvaM7W53A0xFdzPnIaEqepc4+JwQVW+ByLcBqGYi
-         uSz7dmUlzaZMk6amEsFMOCcgoUyRhmZUaXsvp6STm3ZT9RuI39YarVoEJiTyoXE3F+cT
-         nbU06X7LRxxNrA9kauon7xYFVkaQMBbaXtujcdE7R38atvKualKVWhl6eOfbIZgXDaii
-         IX7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760750290; x=1761355090;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oNutzwJGGtfhc2UYuDqaLjoiYjQ+nZ6lcP1TgamaqJo=;
-        b=ufJdtH7IGYyetuMrqqqsqFJnCBi2UwQtdU9BqXvZ8GTV3eeV/YOplsPRvPZzfRcrpG
-         nlUNArVdgZGCS1kwZ7mB2HH4yWjXyME5/Bg/Ru0K3FR0s7kD3PGYxdUJYBdYKADgsBkS
-         pEaZKdVSFenEdmFzKfFZU3q71l+BauNUocVx68cAjna2o1UoFH49U7iARfdc86Gn0rhI
-         sHly9WWFe1hzEspXz4WvE+MznYQorwtr4MK7UGXqaAZjZBfLwn0h/DD8Rhzn+kG+toDM
-         0FZY0io/thxsf8ZppVh6p2aNfEtBsLZ3Xmz+EB2Hl+rRqhIa86Jk+A4rrKjMqtB7fd5r
-         CWMg==
-X-Forwarded-Encrypted: i=1; AJvYcCX0Hu6HO1VYWFTbdwqA26IPZfvNabaL1uBB2IUCTJbk/2j+dgdUtOT49ozu94QX+Td78jOBd7JtWaoyleFKiZU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywqq06OvNuRUZdMKgvdEPet7Dp0EPLCs6U4dlQcmzXOK9hBWtib
-	S0PZTVtygmUXEikZDd7hHQ8gT41zD5OXrAFmhgJbVJ8qrhHTnRzxkzYPzZ/5sWszxjg=
-X-Gm-Gg: ASbGncvoAHKs30psQd6XdOc2RvZF0adx+aoToYZBHYbsHBW/yqVfpzLzjXulza7mxZw
-	+svy8fFCNI7nHqmmjeakvfSUzCvY7RQlFDz3k/BcJRI6IXFvMb05Yy9vwcdDIsEs7xmjVZwZEJy
-	8+dvhN2N6ci0hDHuk0bYnPG8sF0L+C0k5za1gDbZhLUWfklVfLnDsLl2L6Q22nm1PE+0x23EjCB
-	YbsD98/IEDEo5jSjUzqz6SUeNQNgXs7YcaywqdXS8KmtFv1UqifRGBJA8UnWfucxxAXr0SS5JD8
-	0jfUgWSNFDRxeC+9U8tj3FsaSGYC11adMcxwdWyy5ZYHSjUXYObhUjqH2EkV75dzJPVBSY5ybBE
-	8T4URNSg5SFBw/ZIjWY20UZHXi4QjBMqAalcVq8/o/H8NYnq0yI6/nMCels1pOCbG4VWTSGYVN0
-	gHR7BQ7WvISnTHgkFWabZOiAdWLfnphw+0ItoljYo=
-X-Google-Smtp-Source: AGHT+IEBHV34cIapWYpa+I+Wb10CFFQfqZKuWXTnhL9/HOSdDCwgovS/YaG2tbmsQYyCsMNOIzfxAA==
-X-Received: by 2002:a05:6a20:394c:b0:32b:6f9e:d62e with SMTP id adf61e73a8af0-334a85baeeemr7079575637.47.1760750289698;
-        Fri, 17 Oct 2025 18:18:09 -0700 (PDT)
-Received: from phoenix.lan (204-195-96-226.wavecable.com. [204.195.96.226])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b6a7664a462sm1122826a12.8.2025.10.17.18.18.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Oct 2025 18:18:09 -0700 (PDT)
-Date: Sat, 18 Oct 2025 01:57:22 -0700
-From: Stephen Hemminger <stephen@networkplumber.org>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, Jay Vosburgh <jv@jvosburgh.net>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, David Ahern
- <dsahern@gmail.com>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH iproute2-next] bond: slave: print master name
-Message-ID: <20251018015722.1df7f4a6@phoenix.lan>
-In-Reply-To: <20251017030509.61794-1-liuhangbin@gmail.com>
-References: <20251017030310.61755-1-liuhangbin@gmail.com>
-	<20251017030509.61794-1-liuhangbin@gmail.com>
+	s=arc-20240116; t=1760760286; c=relaxed/simple;
+	bh=w2OmXz1GYaTaIzFM+thfbsMflKNe20SMlAQTjTWdBQ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=W/7aSfd0R1d0ekNtxuPnEGcqPUnL7d8m5ELXHNTNPh5gCcvdoIudQIii+gYVWC8wC+1O12yYIEHu9iLoQt0gwEjn8u+IpJ+FNeH09z0+1jc7IvqPJOwks2UXWmn0Wb+LZEvTWvKyR087/KT1gsrc5uIbmFRGolzF8MYI24Om6/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4cpSjc3KbQzYQtj5;
+	Sat, 18 Oct 2025 12:03:48 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 84FA01A0D82;
+	Sat, 18 Oct 2025 12:04:35 +0800 (CST)
+Received: from k-arm6401.huawei.com (unknown [7.217.19.243])
+	by APP2 (Coremail) with SMTP id Syh0CgA32UHPEfNoOeb+Ag--.21556S2;
+	Sat, 18 Oct 2025 12:04:33 +0800 (CST)
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Yonghong Song <yhs@fb.com>,
+	Song Liu <song@kernel.org>
+Subject: [PATCH bpf-next v3 0/3] bpf: Add overwrite mode for BPF ring buffer 
+Date: Sat, 18 Oct 2025 11:57:35 +0800
+Message-ID: <20251018035738.4039621-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgA32UHPEfNoOeb+Ag--.21556S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7AFWxJw4DGr18Xw43JFWkWFg_yoW8Ww43pa
+	n5KFy5Krn2ka4xWw1fu3W7tryrtw4kZw1rKw1fXw1fZrWUJFyrXF4Igr13Zrn8JrWxtr1Y
+	k34jgr95W34jva7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Sb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r1q6r43MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxV
+	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+	6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
+	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+	1UYxBIdaVFxhVjvjDU0xZFpf9x07jeLvtUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On Fri, 17 Oct 2025 03:05:09 +0000
-Hangbin Liu <liuhangbin@gmail.com> wrote:
+When the BPF ring buffer is full, a new event cannot be recorded until one
+or more old events are consumed to make enough space for it. In cases such
+as fault diagnostics, where recent events are more useful than older ones,
+this mechanism may lead to critical events being lost.
 
-> diff --git a/ip/iplink_bond_slave.c b/ip/iplink_bond_slave.c
-> index c88100e248dd..55deaadf5fe2 100644
-> --- a/ip/iplink_bond_slave.c
-> +++ b/ip/iplink_bond_slave.c
-> @@ -92,6 +92,17 @@ static void bond_slave_print_opt(struct link_util *lu, FILE *f, struct rtattr *t
->  	if (!tb)
->  		return;
->  
-> +	if (tb[IFLA_BOND_SLAVE_MASTER]) {
-> +		unsigned int ifindex = rta_getattr_u32(tb[IFLA_BOND_SLAVE_MASTER]);
-> +
-> +		if (ifindex) {
-> +			print_string(PRINT_ANY,
-> +				     "master",
-> +				     "master %s ",
-> +				     ll_index_to_name(ifindex));
-> +		}
-> +	}
+So add overwrite mode for BPF ring buffer to address it. In this mode, the
+new event overwrites the oldest event when the buffer is full.
 
-You should use print_color_string(PRINT_ANY, COLOR_IFNAME, ...) here
+v3:
+- remove half-round wakeup, drop unnecessary min in ringbuf_avail_data_sz(),
+  switch to smp_load_acquire, update tests and fix typos, etc (Andrii)
+- rebase and re-collect performance data
+
+v2:
+https://lore.kernel.org/bpf/20250905150641.2078838-1-xukuohai@huaweicloud.com/
+- remove libbpf changes (Andrii)
+- update overwrite benchmark
+
+v1:
+https://lore.kernel.org/bpf/20250804022101.2171981-1-xukuohai@huaweicloud.com/
+
+Xu Kuohai (3):
+  bpf: Add overwrite mode for BPF ring buffer
+  selftests/bpf: Add overwrite mode test for BPF ring buffer
+  selftests/bpf/benchs: Add overwrite mode benchmark for BPF ring buffer
+
+ include/uapi/linux/bpf.h                      |   4 +
+ kernel/bpf/ringbuf.c                          | 109 +++++++++++++++---
+ tools/include/uapi/linux/bpf.h                |   4 +
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ .../selftests/bpf/benchs/bench_ringbufs.c     |  66 ++++++++++-
+ .../bpf/benchs/run_bench_ringbufs.sh          |   4 +
+ .../selftests/bpf/prog_tests/ringbuf.c        |  64 ++++++++++
+ .../selftests/bpf/progs/ringbuf_bench.c       |  11 ++
+ .../bpf/progs/test_ringbuf_overwrite.c        |  98 ++++++++++++++++
+ 9 files changed, 337 insertions(+), 26 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_overwrite.c
+
+-- 
+2.43.0
+
 
