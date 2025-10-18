@@ -1,159 +1,300 @@
-Return-Path: <linux-kselftest+bounces-43472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 980ADBEC22C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 02:12:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D037BEC287
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 02:18:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 253B61AE1838
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 00:13:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1FD419A5F06
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 00:18:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B223925524D;
-	Sat, 18 Oct 2025 00:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ECF94A1A;
+	Sat, 18 Oct 2025 00:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HmVv89H6"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p7dIm0Ta"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABF524EA81
-	for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 00:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D516DEAE7
+	for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 00:18:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760746082; cv=none; b=iakOqEQkmpABXV2GdmQzCXxvk2TgdOyET+6CNOeDSVJg7p2hSVb4iGWiI/K3MP1sYbHRvxlDcqLxCrg1d0XHsmSZ42dA29/7Y09M7MnhzE8/6Ej9GEL3WFPFQN8A8pG72xGfsYD5vBESEmDrBh8QFxeS4lb8cFVFlWZ4pCJM04o=
+	t=1760746705; cv=none; b=KEI/SU1tt+iy8de/t7fbApxHifBNZX0zgDr3g0V1DYrAxE/ffJ5JMKHO3Ik5WwHsVgcApjsMNuC2NGljcSzLsNEOkieGMdiwEBXntd7j7q7E/MsKy5xMupBQ/rmSSkIPJpnqfaqa+5A164Z84PhhsS/9BV5fNC7OwiGPDUCi9Sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760746082; c=relaxed/simple;
-	bh=AadBcH6XuFUx3o/uyM4DKBt13sMey6ABFLv07q0/8bs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=l92qTMBwNYiaLvLyzSTCwu9sBtF2UeTlgrUWvLdczkqqgDSV9ILJusJMmuZydjgYo73Vzp3T0pF9wQSzBbzSboYdj6UfKrqyQJgUzvGJjiwrRMz/WwNeygdzS8eLTkri5Ioah/tPK0kLClHCwT8XA0p4LmcNepmfV4bYqjYoQFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HmVv89H6; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--vipinsh.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b57cf8dba28so2240527a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Oct 2025 17:08:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760746080; x=1761350880; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wf0V49FB2cemzthaMtFIU/EunA9kfJDBrs1ERauwF5c=;
-        b=HmVv89H6ag/Qjal6jKnudJV076pe8pdNfdacsyF/qqidCkLPbYJLAOef/hhR85QBRb
-         lOAbqn90v8jNs78lWIBwom7ceWAsdd41xE+TSnD4iq5+vsvUy3/J+3pM1STK4tMvl/tT
-         X6ZF5ZiIgwUgTdI5q1GA9jWmWwhe8nBzyrqPU85q1YTQCeFU2/RGDfYS9/9uK0poSJio
-         FCX0zwsW6B2ZoJu+IUitB0wLLMfrI1kzDzwW0Bhj9v/phQfrRzGCTOgbRNkQtt310g2D
-         qKeO9yhNfKjoH69dNQ/6GZSZq46ICoXb7lZjb9qf2mVs1oSPHWVFJa01P00Tnjk+i2kt
-         ca2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760746080; x=1761350880;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wf0V49FB2cemzthaMtFIU/EunA9kfJDBrs1ERauwF5c=;
-        b=t4eqktYkWBRSG5KIAFjX+7GAaIoyZIZ4iajWIhJfuEePbsD3a1xLEsbKtPuO4SYzku
-         CSSz4WquN19VK8Cb33JwCDJ/hmFc/x8NOhi2faAr2mD0ZH+EYoUv9fWuNrpcT2iYmKU6
-         BQ2hT4ESO415RtCZ1q/RHSUZXSLBfnRt1J7gHJg3ivP9GUOjU2RulPjsmqoTB1quvucJ
-         st9N39ZTSodTM58iN2gZauHQwNdh9I1YTjZsB+V0dF9vOJh7cl1aREAkK/MP02OPBxh8
-         uguQ4uefLQHz5VA/14OTkHvWdZTaGYLLDdTj5wKsAddxIQTfLgoG3iUcQ6jdTVaUXaCm
-         REKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUSc4rKZrpeCu9ry8xABosFNFPG63RudVh79kXJnfFFFDtY+W69GiIyXZncEGzN00LwutWTBEHTRorUq3cuXiA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjBukWvY4D2I5kOaLZzPgOEwI0+PxFoMQjgcBtIyjumBy21DGQ
-	Zq1VzVCH+ykPSm0lGas3Z+GCYlfqZ/qIWDVb0MR70bfSXdHtpRC4OhyAD8ZfHIzIYkDKD4h1f8S
-	IixQkfhn1hA==
-X-Google-Smtp-Source: AGHT+IH3PSOfb25TFSyUmjh3MfKE86e6WefuP65fW8Nk0BjyxdVOlYJQBG/sYV/zeL2CFmcYNYIQrzD32GyP
-X-Received: from pjbfs17.prod.google.com ([2002:a17:90a:f291:b0:32e:bcc3:ea8e])
- (user=vipinsh job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:3c8e:b0:334:9c41:bdcb
- with SMTP id adf61e73a8af0-334a86445ddmr6954433637.58.1760746080171; Fri, 17
- Oct 2025 17:08:00 -0700 (PDT)
-Date: Fri, 17 Oct 2025 17:07:13 -0700
-In-Reply-To: <20251018000713.677779-1-vipinsh@google.com>
+	s=arc-20240116; t=1760746705; c=relaxed/simple;
+	bh=CGw9xWYqOW+o68UETTfD6QUmQVMrMtp51mAo/MmhcUc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sy23S8qz3oPEenfHsk0xYI6dnpJG1pBVdBxnBwy8pRkOdvOOZlCLq+kPalwVRVOcTOSNLCb1RKyxmLLUj1Dl8LGGJY5saEAqo+qGgN5Js92NJHwkrSbemDMv3ZOCOCyqntrAfnSfe/mDBdBLxE19pLs4k1Yae+7y8u8v5QrGU6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p7dIm0Ta; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <2477894b-3325-4bc2-9d3c-a066b3cbb8f6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1760746689;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZRAptiG2pEbnyn+aHlYXZkW59iPRAHiYEpRTGXEyySU=;
+	b=p7dIm0TawqAQ+AJWSjD9OnsTwPM458XRuu9MIXZR+wLIbsaGGGThweH5015Z6Qy4edv+3t
+	lvz5Q+O5PW/T7GrutvM+p7S4xL63KhRramMI5UCWqiIEqmm+gN8+OX4ApSvda7tt4js4XI
+	QR0cbW1OB2Vl4w2YmP7MAnP8h1ZR5Ro=
+Date: Fri, 17 Oct 2025 17:18:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251018000713.677779-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.51.0.858.gf9c4a03a3a-goog
-Message-ID: <20251018000713.677779-22-vipinsh@google.com>
-Subject: [RFC PATCH 21/21] vfio: selftests: Validate vconfig preservation of
- VFIO PCI device during live update
-From: Vipin Sharma <vipinsh@google.com>
-To: bhelgaas@google.com, alex.williamson@redhat.com, pasha.tatashin@soleen.com, 
-	dmatlack@google.com, jgg@ziepe.ca, graf@amazon.com
-Cc: pratyush@kernel.org, gregkh@linuxfoundation.org, chrisl@kernel.org, 
-	rppt@kernel.org, skhawaja@google.com, parav@nvidia.com, saeedm@nvidia.com, 
-	kevin.tian@intel.com, jrhilke@google.com, david@redhat.com, 
-	jgowans@amazon.com, dwmw2@infradead.org, epetron@amazon.de, 
-	junaids@google.com, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: integrate test_tc_tunnel.sh
+ tests into test_progs
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251017-tc_tunnel-v1-0-2d86808d86b2@bootlin.com>
+ <20251017-tc_tunnel-v1-4-2d86808d86b2@bootlin.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20251017-tc_tunnel-v1-4-2d86808d86b2@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Test preservation of a VFIO PCI device virtual config (vconfig in struct
-vfio_pci_core_device{}) during the live update. Write some random data
-to PCI_INTERRUPT_LINE register which is virtualized by VFIO and verify
-that the same data is read after kexec.
+On 10/17/25 7:29 AM, Alexis Lothoré (eBPF Foundation) wrote:
+> The test_tc_tunnel.sh script checks that a large variety of tunneling
+> mechanisms handled by the kernel can be handled as well by eBPF
+> programs. While this test shares similarities with test_tunnel.c (which
+> is already integrated in test_progs), those are testing slightly
+> different things:
+> - test_tunnel.c creates a tunnel interface, and then get and set tunnel
+>    keys in packet metadata, from BPF programs.
+> - test_tc_tunnels.sh manually parses/crafts packets content
+> 
+> Bring the tests covered by test_tc_tunnel.sh into the test_progs
+> framework, by creating a dedicated test_tc_tunnel.sh. This new test
+> defines a "generic" runner which, for each test configuration:
+> - will bring the relevant veth pair, each of those isolated in a
+>    dedicated namespace
+> - will check that traffic will fail if there is only an encapsulating
+>    program attached to one veth egress
+> - will check that traffic succeed if we enable some decapsulation module
+>    on kernel side
+> - will check that traffic still succeeds if we replace the kernel
+>    decapsulation with some eBPF ingress decapsulation.
+> 
+> Example of the new test execution:
+> 
+>    # ./test_progs -a tc_tunnel
+>    #447/1   tc_tunnel/ipip_none:OK
+>    #447/2   tc_tunnel/ipip6_none:OK
+>    #447/3   tc_tunnel/ip6tnl_none:OK
+>    #447/4   tc_tunnel/sit_none:OK
+>    #447/5   tc_tunnel/vxlan_eth:OK
+>    #447/6   tc_tunnel/ip6vxlan_eth:OK
+>    #447/7   tc_tunnel/gre_none:OK
+>    #447/8   tc_tunnel/gre_eth:OK
+>    #447/9   tc_tunnel/gre_mpls:OK
+>    #447/10  tc_tunnel/ip6gre_none:OK
+>    #447/11  tc_tunnel/ip6gre_eth:OK
+>    #447/12  tc_tunnel/ip6gre_mpls:OK
+>    #447/13  tc_tunnel/udp_none:OK
+>    #447/14  tc_tunnel/udp_eth:OK
+>    #447/15  tc_tunnel/udp_mpls:OK
+>    #447/16  tc_tunnel/ip6udp_none:OK
+>    #447/17  tc_tunnel/ip6udp_eth:OK
+>    #447/18  tc_tunnel/ip6udp_mpls:OK
+>    #447     tc_tunnel:OK
+>    Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
 
-Certain bits in the config space are virtualized by VFIO, so write to
-them don't go to the device PCI config instead they are stored in
-memory. After live update, vconfig should have the value same as prior
-to kexec, which means vconfig should be saved in KHO and later retrieved
-to restore the device.
+Thanks for working on this!
 
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
----
- .../testing/selftests/vfio/vfio_pci_liveupdate_test.c  | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+One high level comment is to minimize switching netns to make the test 
+easier to follow.
 
-diff --git a/tools/testing/selftests/vfio/vfio_pci_liveupdate_test.c b/tools/testing/selftests/vfio/vfio_pci_liveupdate_test.c
-index 9fd0061348e0..2d80fdcb1ef7 100644
---- a/tools/testing/selftests/vfio/vfio_pci_liveupdate_test.c
-+++ b/tools/testing/selftests/vfio/vfio_pci_liveupdate_test.c
-@@ -15,12 +15,14 @@
- 
- #define SESSION_NAME "multi_file_session"
- #define TOKEN 1234
-+#define RANDOM_DATA 0x12
- 
- static void run_pre_kexec(int luo_fd, const char *bdf)
- {
- 	struct vfio_pci_device *device;
- 	int session_fd;
- 	u16 command;
-+	u8 data;
- 
- 	device = vfio_pci_device_init(bdf, "iommufd");
- 
-@@ -30,6 +32,10 @@ static void run_pre_kexec(int luo_fd, const char *bdf)
- 	vfio_pci_config_writew(device, PCI_COMMAND,
- 			       command | PCI_COMMAND_MASTER);
- 
-+	vfio_pci_config_writeb(device, PCI_INTERRUPT_LINE, RANDOM_DATA);
-+	data = vfio_pci_config_readb(device, PCI_INTERRUPT_LINE);
-+	VFIO_ASSERT_EQ(data, RANDOM_DATA);
-+
- 	session_fd = luo_create_session(luo_fd, SESSION_NAME);
- 	VFIO_ASSERT_GE(session_fd, 0, "Failed to create session %s",
- 		       SESSION_NAME);
-@@ -51,6 +57,7 @@ static void run_post_kexec(int luo_fd, const char *bdf)
- 	int vfio_fd;
- 	struct vfio_pci_device *device;
- 	u16 command;
-+	u8 data;
- 
- 
- 	session_fd = luo_retrieve_session(luo_fd, SESSION_NAME);
-@@ -74,6 +81,9 @@ static void run_post_kexec(int luo_fd, const char *bdf)
- 
- 	command = vfio_pci_config_readw(device, PCI_COMMAND);
- 	VFIO_ASSERT_TRUE(command & PCI_COMMAND_MASTER);
-+
-+	data = vfio_pci_config_readb(device, PCI_INTERRUPT_LINE);
-+	VFIO_ASSERT_EQ(data, RANDOM_DATA);
- 	vfio_pci_device_cleanup(device);
- }
- 
--- 
-2.51.0.858.gf9c4a03a3a-goog
+Some ideas...
+
+> +static void stop_server(struct subtest_cfg *cfg)
+> +{
+> +	struct nstoken *nstoken = open_netns(SERVER_NS);
+> +
+> +	close(*cfg->server_fd);
+> +	cfg->server_fd = NULL;
+> +	close_netns(nstoken);
+> +}
+> +
+> +static int check_server_rx_data(struct subtest_cfg *cfg,
+> +				struct connection *conn, int len)
+> +{
+> +	struct nstoken *nstoken = open_netns(SERVER_NS);
+> +	int err;
+> +
+> +	memset(rx_buffer, 0, BUFFER_LEN);
+> +	err = recv(conn->server_fd, rx_buffer, len, 0);
+> +	close_netns(nstoken);
+> +	if (!ASSERT_EQ(err, len, "check rx data len"))
+> +		return 1;
+> +	if (!ASSERT_MEMEQ(tx_buffer, rx_buffer, len, "check received data"))
+> +		return 1;
+> +	return 0;
+> +}
+> +
+> +static struct connection *connect_client_to_server(struct subtest_cfg *cfg)
+> +{
+> +	struct network_helper_opts opts = {.timeout_ms = 500};
+> +	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
+> +	struct nstoken *nstoken = open_netns(CLIENT_NS);
+> +	struct connection *conn = NULL;
+> +	int client_fd, server_fd;
+> +
+> +	client_fd = connect_to_addr_str(family, SOCK_STREAM, cfg->server_addr,
+> +					TEST_PORT, &opts);
+> +	close_netns(nstoken);
+> +
+> +	if (client_fd < 0)
+> +		return NULL;
+> +
+> +	nstoken = open_netns(SERVER_NS);
+
+Understood that the server is in another netns but I don't think it 
+needs to switch back to SERVER_NS to use its fd like accept(server_fd). 
+It can be done in client_ns. Please check.
+
+The same for the above check_server_rx_data and stop_server.
+  > +	server_fd = accept(*cfg->server_fd, NULL, NULL);
+> +	close_netns(nstoken);
+> +	if (server_fd < 0)
+> +		return NULL;
+> +
+> +	conn = malloc(sizeof(struct connection));
+> +	if (conn) {
+> +		conn->server_fd = server_fd;
+> +		conn->client_fd = client_fd;
+> +	}
+> +
+> +	return conn;
+> +}
+> +
+> +static void disconnect_client_from_server(struct subtest_cfg *cfg,
+> +					  struct connection *conn)
+> +{
+> +	struct nstoken *nstoken;
+> +
+> +	nstoken = open_netns(SERVER_NS);
+
+same here.
+
+> +	close(conn->server_fd);
+> +	close_netns(nstoken);
+> +	nstoken = open_netns(CLIENT_NS);
+
+and here.
+
+> +	close(conn->client_fd);
+> +	close_netns(nstoken);
+> +	free(conn);
+> +}
+> +
+> +static int send_and_test_data(struct subtest_cfg *cfg, bool must_succeed)
+
+See if this whole function can work in client_ns alone or may be the 
+caller run_test() can stay with the CLIENT_NS instead of...
+
+> +{
+> +	struct nstoken *nstoken = NULL;
+> +	struct connection *conn;
+> +	int err, res = -1;
+> +
+> +	conn = connect_client_to_server(cfg);
+> +	if (!must_succeed && !ASSERT_EQ(conn, NULL, "connection that must fail"))
+> +		goto end;
+> +	else if (!must_succeed)
+> +		return 0;
+> +
+> +	if (!ASSERT_NEQ(conn, NULL, "connection that must succeed"))
+> +		return 1;
+> +
+> +	nstoken = open_netns(CLIENT_NS);
+
+switching here...
+
+> +	err = send(conn->client_fd, tx_buffer, DEFAULT_TEST_DATA_SIZE, 0);
+> +	close_netns(nstoken);
+> +	if (!ASSERT_EQ(err, DEFAULT_TEST_DATA_SIZE, "send data from client"))
+> +		goto end;
+> +	if (check_server_rx_data(cfg, conn, DEFAULT_TEST_DATA_SIZE))
+> +		goto end;
+> +
+> +	if (!cfg->test_gso) {
+> +		res = 0;
+> +		goto end;
+> +	}
+> +
+> +	nstoken = open_netns(CLIENT_NS);
+
+and here.
+> +static void run_test(struct subtest_cfg *cfg)
+> +{
+
+See if it can open_netns(CLIENT_NS) once at the beginning.
+
+> +	if (!ASSERT_OK(run_server(cfg), "run server"))
+
+The run_server and configure_* can open/close SERVER_NS when needed. 
+open_netns should have saved the previous netns (i.e. CLIENT_NS) such 
+that it knows which one to restore during close_netns(). I don't think I 
+have tried that though but should work. Please check.
+
+> +		goto fail;
+> +
+> +	// Basic communication must work
+
+Consistent comment style. Stay with /* */
+
+> +	if (!ASSERT_OK(send_and_test_data(cfg, true), "connect without any encap"))
+> +		goto fail;
+> +
+> +	// Attach encapsulation program to client, communication must fail
+> +	if (!ASSERT_OK(configure_encapsulation(cfg), "configure encapsulation"))
+> +		return;
+> +	if (!ASSERT_OK(send_and_test_data(cfg, false), "connect with encap prog only"))
+> +		goto fail;
+> +
+> +	/* Insert kernel decap module, connection must succeed */
+> +	if (!ASSERT_OK(configure_kernel_decapsulation(cfg), "configure kernel decapsulation"))
+> +		goto fail;
+> +	if (!ASSERT_OK(send_and_test_data(cfg, !cfg->expect_kern_decap_failure),
+> +		       "connect with encap prog and kern decap"))
+> +		goto fail;
+> +
+> +	// Replace kernel module with BPF decap, test must pass
+> +	if (!ASSERT_OK(configure_ebpf_decapsulation(cfg), "configure ebpf decapsulation"))
+> +		goto fail;
+> +	ASSERT_OK(send_and_test_data(cfg, true), "connect with encap and decap progs");
+> +
+> +fail:
+> +	stop_server(cfg);
+> +}
+
+>struct subtest_cfg subtests_cfg[] = {
+static
+
+> +int subtests_count = sizeof(subtests_cfg)/sizeof(struct subtest_cfg);
+
+ARRAY_SIZE(subtests_cfg)
+
+pw-bot: cr
 
 
