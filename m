@@ -1,133 +1,106 @@
-Return-Path: <linux-kselftest+bounces-43486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43487-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4751ABED1E5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 17:02:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73D63BED28D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 17:28:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 009AB5E380E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 15:02:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BC2619A4458
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Oct 2025 15:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608251A9F91;
-	Sat, 18 Oct 2025 15:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1A51DF246;
+	Sat, 18 Oct 2025 15:28:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RR2NUjUA"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="R+2LR/ps"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D5A2A1CA
-	for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 15:02:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D175840855
+	for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 15:28:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760799744; cv=none; b=DNn3b2YT9R9EILCX+hddJpr+kI4LtHKYvF589YbuF6KOs9svAm9gQ9vVwqjc5RU6qxbw8ju4zHz2MeJL9T2sqZTLuMDahC9EraJ246WTyoad7GvZM8zz4b3vntmfYevDV98c6YtuI1DqpEdptQjfen64JQwCIhgvxSVMubITlWM=
+	t=1760801331; cv=none; b=oVm7mhCOaesKcWEfE3Dgn2HUq9PzbmfNQi6ZGCadhzizqAcjQMZTV7QaKv0DP6zhYIUZFZE7s20wcKO/fe56L5Qx2jZGGQDxDqbgYzYy4rYQOQk5L3f2DqvH61qApTCbyTb6ga1FJHuEepftyvi9hPjeOjptTFp4NGFcXt6jC1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760799744; c=relaxed/simple;
-	bh=GUccLFSXbotA/iDSpiMw+QMvX11XGngTX7WaLv4NefM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MNZtpObGRlum5pa8Gtr5PUTjB1HYWrc8ZzlTaIZGrubOgWajpx3Nx4SgeWTrRkoN7LSkoqO4zNyLjXQJJ66eoXLH3IxAR7AyGGvCIG1RJmAI0mroo0URiFYsLP3eHMuT0qterbgC/rUfB3bZu+7g03sT3HJWp6o8lt1hnjnbnM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RR2NUjUA; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-290d48e9f1fso105665ad.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 08:02:22 -0700 (PDT)
+	s=arc-20240116; t=1760801331; c=relaxed/simple;
+	bh=Jp9qkiE962EqU6AuwTutKC7YuQQ5b1pauuoLKIDWLOA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Peb1NYwDhwdSAI9HUiusUX08R/ucQJmKXDglWDE3tcdWP6fIoL9BgBAkhnbCfW0kPlhGM8ifnZ4nehznQS1QcA1Z1haJtXeYAlpHSqaSGVI0NiKEOBFjpBSDMsr26LfbK1UUs+DOIGuOuX5RN+QJdU0p8rcKVIxS7/dGgAPJf44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=R+2LR/ps; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-63c12ff0c5eso5731528a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Oct 2025 08:28:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760799742; x=1761404542; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KlYuLpH1igkPNR16V+kXqlzDPd/shpYRQgfcrIfBZBU=;
-        b=RR2NUjUAJ77pdrDHYOvN4jaSMOMgPnsU9ae663heVzNop2tUnTFkfEjCpMiFSWE3Xw
-         KQKBSm4fXJZY6KAlphRul9mG1Wv9xepeQKbeTg1PjlZ4E1hNx3SIBu2gn+KE9OSzxxnZ
-         y4YSWRGHHwp5GvdB6gk+0bM48MlkpXUTyjhr8wLjO/KAYAKm+Pow92X8dnSgiK0sP+IV
-         Ddp0CPjUiqKTkFALCODS5LD4NtCQNEMgpaBv/ownu7uIwpb3TDm0JeKduGYCfnUBkB9j
-         1XPydKmSIhjolij1FAyKEyVhkW2rjTY0jHUDswLbwXM0yDMGk1ccVQeUzWHphk7fUtSC
-         QQfw==
+        d=soleen.com; s=google; t=1760801328; x=1761406128; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jp9qkiE962EqU6AuwTutKC7YuQQ5b1pauuoLKIDWLOA=;
+        b=R+2LR/psxUR8y/nMybdUNZLtDGmVeVO0lTySF+1grod7fQgCk/SLqbD+ZGw8MZfgjU
+         8pvDFxV5x1GC7iREGB3Hbz/0QIY/LggFAXHZJwuR3mZO14Zs9ijl2MxCVYRyYOVdNiwL
+         ZZ+bDIlbeK5aXQ8Lm3OZFOZP+uAYRO9v9ozIwTkPtEE9/FMfvN7CCRY2DpipFYhYHqiB
+         Pu47SorntMYwq1f/A1Req17yif1WG+TxzmTQ2QxLcJ7NTnf4nZ/59+lW6amXi1ryIJvV
+         jmSYk92kgvB6vS0Ucc7lWL69XuLedpa+kCzEm4Isv8/EqoA98U/sigh+CTbkbP7NR50T
+         LguQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760799742; x=1761404542;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KlYuLpH1igkPNR16V+kXqlzDPd/shpYRQgfcrIfBZBU=;
-        b=w3BBphG4hhils+RABmYt3mSkg8H0QqfkMB8uK1pUmOPPg59V8ANfVJDAK00JhvoDzF
-         PXbkJwLDLjSIWtx3E9ozoHAT3PS4bz5Y8hUpKHg7yL0z+I7s7QGMkLbHOJz02Q4Kr4Jy
-         qJqKMomU5QFJ+0hGeX0RG5bBndx0lPNXtfAOyQozO9sm+qLCl8gWv91YGDfAJUPt8IEb
-         2MT1oYarYKnO0uY2n73kLTDFW7OdU0rfarU4rhUuI1iF43VtpqiC2HMTo0xTFWyy5yAn
-         6Ny96KrqeUhMysQU+7UYTzf7l5i3EcqX4WWAElGXJFYzVwAqNDDdFtDCHvGjxIT+HtZo
-         Vyng==
-X-Forwarded-Encrypted: i=1; AJvYcCVZnUfrE/ha3ha676WXTFZ3khg0z17V6D009CR7rHtJOHXVBA71Lfrkv4Qq3pOm8n9gU+3kHeMFnVbDUZTmxDs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFRcFL5A0Zsg7jz3OC16/sj9PljSN6OqYF0CG2vogKqcgOZEoF
-	SSfxGGbRt72DQCbBkwtIYtJUkwgIMxZzpOjbxeWsZz+OklIESq+Uzu973PbfMZiBuQ==
-X-Gm-Gg: ASbGncufovtOVTC4pyuKv3cSr1EykIel7QKgE7/daks2LSrYeHOgzRvpN8hkQ+/YsGH
-	AFXH94jShBUIdp69MEPnHgS46tNNJShvc0qo7SylXoFoY3F4vFoCPfMDZmyIFRyk1B9YdARXdQ8
-	ymGuqG0jCfOsz34YFcPy1GFg9RFS6a6na8m+nh2gr6K3T1Y/IK73HKexDja6NrjGnGJOwyURiG9
-	tUdt3nnmaLKGQkQYOFi9iLx0TgDv6ZGDBUvAwq+/j28Q+YG48zbAsJDvzcrfbUoRLAxMmkumK8y
-	dH7cGdwvwGxAc3ETy7iHZz3dUD2948T+iTp9urCtZzs+gnl3HOG9H0hISCyk50qhv3gI1pk6qdg
-	h2uBQPvF37DaSJGB8Z4Hy7eAMRW1Vk//a4RnHDL8ZzAY951ga9Uwaz2bvBcaDB4f9Isj6xyoPe/
-	nFxAENx4EgG29KQHgIisZFDgBhc3Zzb9oiUIdCPNPYS5xc
-X-Google-Smtp-Source: AGHT+IHn/cXDBeHEtC727RudKIBdwOBJikUhHVFuXlibJ3GijDu2a51IVN94hK+dTzRmzOM6IF+O1A==
-X-Received: by 2002:a17:902:db01:b0:290:d7fd:6297 with SMTP id d9443c01a7336-290d7fd6551mr9621395ad.2.1760799741386;
-        Sat, 18 Oct 2025 08:02:21 -0700 (PDT)
-Received: from google.com (60.89.247.35.bc.googleusercontent.com. [35.247.89.60])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33d5ddea9e1sm2918623a91.5.2025.10.18.08.02.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 18 Oct 2025 08:02:20 -0700 (PDT)
-Date: Sat, 18 Oct 2025 08:02:17 -0700
-From: Vipin Sharma <vipinsh@google.com>
-To: bhelgaas@google.com, alex.williamson@redhat.com,
-	pasha.tatashin@soleen.com, dmatlack@google.com, jgg@ziepe.ca,
-	graf@amazon.com
-Cc: pratyush@kernel.org, gregkh@linuxfoundation.org, chrisl@kernel.org,
-	rppt@kernel.org, skhawaja@google.com, parav@nvidia.com,
-	saeedm@nvidia.com, kevin.tian@intel.com, jrhilke@google.com,
-	david@redhat.com, jgowans@amazon.com, dwmw2@infradead.org,
-	epetron@amazon.de, junaids@google.com, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 16/21] vfio/pci: Save and restore the PCI state of
- the VFIO device
-Message-ID: <20251018150217.GB1034710.vipinsh@google.com>
-References: <20251018000713.677779-1-vipinsh@google.com>
- <20251018000713.677779-17-vipinsh@google.com>
+        d=1e100.net; s=20230601; t=1760801328; x=1761406128;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jp9qkiE962EqU6AuwTutKC7YuQQ5b1pauuoLKIDWLOA=;
+        b=P3tNTHylGZA845fzSXkV4uBEJO5eHS+6gKoZchJS3QS1kEtIJ4MOvKe7QWesvllQM3
+         btdABHyng8OFxHXUKNLftwxhM0fTv5SeKqk1E/uIriw43ki7Q5AOJXXmILYVE6ULC1ht
+         Wr03BLWj8U64BfgokIpqwM0pxh59l1vTmEu9ZUpDQfBsHegaN2MBuuGMYUuLtez1Jugt
+         D5xGN9lSr0a9Fsdacm51gAaSsf4Vks4j07PZoek+ZbIUaPQbTeo2h+hKpSp50wmch51u
+         /12ZasqJC1ZQfzffQJ1QoA4emuwmAa40HemsyaLUB2ZKoJ2CmpwkAXWkEqKwF2WK7y/2
+         jbmA==
+X-Forwarded-Encrypted: i=1; AJvYcCVYb1nfzwlnf0KcrjLldpgOYa1t1Bdf0u6eJgmdBCa083sohp/rlygm4oai71HGfybd6DPIE+jI4nh2dqsNpzQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfMsgx/RdWvqjgyGzf+D3zIvFXut5Mj8T6y+IK1K4ZnNwaRYTn
+	LfmQRtK8sgXMUEkMccmbc3acUlz2J8QzfDzF+XIr3RNjiHewyiXom/ccJ1zP/QqgjBkL5xyAwbx
+	MU6AVbHA/xg6Cj+uK1/4oAHfEt//0m0zLzTV8hQAU2Q==
+X-Gm-Gg: ASbGnctooq907pno43tjfYmZZ2e7R0I17ZT4jC3Xi/wAA31PZiBEyG5EWyElv2K7Jin
+	QBWG8OjQc1kfQ4z+K06Gtc30U7eK5PUjOAs9GpSZWF1vrw6NCUr3REqLJqDo+wUor6J05BOR/9w
+	puLtghEs1NWwM/ZRg1yl0YOqUqAtuzWUdh1XXpj1swClWDTMQSjs4/q2CkwI72t2UE1LZB2zVvX
+	whHUgCp0zCx4rCKEHjxLy4TQS3uW4pq85FVyt6/RMPWfW8gDpiEgnk/3b9Zv9vIWIp88E81OHLe
+	AsoHp8tA3PTOl/Y5
+X-Google-Smtp-Source: AGHT+IGD+GIZ6cxCDQx+cpZ1B+6x/CWUhSAiqtZJo+SqncV9lu3xa66p7nHm+gyAAx9koD78PZnXe2MMWr42HEQvxQw=
+X-Received: by 2002:a05:6402:2713:b0:639:e5da:637e with SMTP id
+ 4fb4d7f45d1cf-63c1e1f212fmr6981739a12.6.1760801328092; Sat, 18 Oct 2025
+ 08:28:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251018000713.677779-17-vipinsh@google.com>
+References: <20251015053121.3978358-1-pasha.tatashin@soleen.com>
+ <20251015053121.3978358-2-pasha.tatashin@soleen.com> <aO9ZiERHff7vQiBL@kernel.org>
+ <CA+CK2bA5Eyz6TUMTy3pa5HBvZ7KkiHX3EHn17T=d6LX_X5i3bg@mail.gmail.com>
+In-Reply-To: <CA+CK2bA5Eyz6TUMTy3pa5HBvZ7KkiHX3EHn17T=d6LX_X5i3bg@mail.gmail.com>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Sat, 18 Oct 2025 11:28:11 -0400
+X-Gm-Features: AS18NWC5SixWaTv6tISYyRfabBu0M2TA5NSlq-EJV7berBAV8wLpo3xmXCWe7Kw
+Message-ID: <CA+CK2bA=g3r7V92NCYZDWNKPguCM5EYdroqHxEH2YxUy68iDyg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] liveupdate: kho: warn and fail on metadata or
+ preserved memory in scratch area
+To: Mike Rapoport <rppt@kernel.org>
+Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net, 
+	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org, 
+	ojeda@kernel.org, pratyush@kernel.org, rdunlap@infradead.org, tj@kernel.org, 
+	jasonmiu@google.com, dmatlack@google.com, skhawaja@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 2025-10-17 17:07:08, Vipin Sharma wrote:
-> --- a/drivers/vfio/pci/vfio_pci_priv.h
-> +++ b/drivers/vfio/pci/vfio_pci_priv.h
-> @@ -110,14 +110,18 @@ static inline bool vfio_pci_is_vga(struct pci_dev *pdev)
->  #ifdef CONFIG_LIVEUPDATE
->  void vfio_pci_liveupdate_init(void);
->  int vfio_pci_liveupdate_restore_config(struct vfio_pci_core_device *vdev);
-> -void vfio_pci_liveupdate_restore_device(struct vfio_pci_core_device *vdev);
-> +int vfio_pci_liveupdate_restore_device(struct vfio_pci_core_device *vdev);
->  #else
->  static inline void vfio_pci_liveupdate_init(void) { }
->  int vfio_pci_liveupdate_restore_config(struct vfio_pci_core_device *vdev)
->  {
->  	return -EINVAL;
->  }
-> -void vfio_pci_liveupdate_restore_device(struct vfio_pci_core_device *vdev) { }
-> +int vfio_pci_liveupdate_restore_device(struct vfio_pci_core_device *vdev)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
+> > Can't we check this in __kho_preseve_order() and not duplicate the code?
+>
+> Yes, that is possible, I will move it in the next version.
 
-This should also be static inline.
+Actually, I decided against this. The check might be expensive
+depending on how sparse scratch area. Why make it even more expensive
+for kho_preserve_pages() case, which might be calling
+__kho_preserve_order() multiple times.
 
->  #endif /* CONFIG_LIVEUPDATE */
->  
->  #endif
-> -- 
-> 2.51.0.858.gf9c4a03a3a-goog
-> 
+Pasha
 
