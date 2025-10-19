@@ -1,228 +1,163 @@
-Return-Path: <linux-kselftest+bounces-43515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43516-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D07C6BEE846
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Oct 2025 17:08:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAE49BEED88
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Oct 2025 23:29:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F2313A402E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Oct 2025 15:08:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73558188F87A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Oct 2025 21:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDAD92E5405;
-	Sun, 19 Oct 2025 15:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE30B21C9E5;
+	Sun, 19 Oct 2025 21:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFkeUTdu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jmQQsFKL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E912A1CF;
-	Sun, 19 Oct 2025 15:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D5219D074
+	for <linux-kselftest@vger.kernel.org>; Sun, 19 Oct 2025 21:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760886528; cv=none; b=uF99jg5D6geupWRPhQfxb8KNIaLv3Nz39GF+N0+xdCojUJhSjxwT7ZGSbJYhmdyV8B9jZ4hxqwTRKpHcXyGrFyibaiphNKKvrG1IVlGulLRx9J1oomrk6MOPlb5HahK+TU7MgRUJpSUM9WM0lEGmezASET3wfPFZm7MuXRrI+lI=
+	t=1760909351; cv=none; b=CYdUaZGWBjAEKo4G4xIG6U/1UvPOQuu7OW93hE3sKSpe18aYtYFXCSc+kaPtwfa+LfL+MqZNWs9L3AQ67GLNxePlbBipkOY1PyKtc8DNYU+oxD+Dd825Roe9N84vdu1q5T9gT8jGNr+Zw2O6NWssVq0Er+GovJTE4ng7lsuOxPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760886528; c=relaxed/simple;
-	bh=kTauBeDoTqIQz3NxrorvMMaU0rVxHo/z/FhTS23ebJA=;
+	s=arc-20240116; t=1760909351; c=relaxed/simple;
+	bh=n0ZFk2h5cOLfIw1uzK5Zqx67icJ+/4pMJI75wAypSKI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mo39N9XBI4ViA2fYLUGCP4y5+JVKnBORZNcsU3XriyGCdyoGiHd/cmgRl1DhR6SZNvWKJ3wJDcOJzAIjoSDVbFUVd1IG5S5GZY1hYAlVPi4vmbBVlPfbpnzETxP4Fkf72BIwCHjTRCln54udfrGFY9RQ+CHugPzucvgSx4RKI4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFkeUTdu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF62CC4CEE7;
-	Sun, 19 Oct 2025 15:08:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760886528;
-	bh=kTauBeDoTqIQz3NxrorvMMaU0rVxHo/z/FhTS23ebJA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SFkeUTduqPWU0avJTtFPkGsRKVFcPOBcbnbKE+M46qxoyD9O5/qKsMT/NBcOoPpsZ
-	 u98CZX0J+sOA2zePt6Gf5g9mCcPYeCgUdEiB6l0SX3Xlc5We+6l1FufO1HG5yqNXzX
-	 CHD7nGnDM8h4MxvLaU6zzDlddkQ8UX/jTOruRLMoe/u0QMMGSDS0sBA+4O5RnyIOml
-	 8Q2QDHKyblrCGUK75aK24+CYQAK0uNA7KhP/WddiNiX/3dxHW6fRJXqePJzs/9Zmvk
-	 EJOOLMM7IQYXatPnGTn8CkEmHMxHp7kKlFZ63os1beAAzYD5Xu3X8rf8lLAX61jNDh
-	 yRHMGO8wofQpA==
-Date: Sun, 19 Oct 2025 23:08:29 +0800
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Benson Leung <bleung@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
-Message-ID: <aPT-7TTgW_Xop99j@tzungbi-laptop>
-References: <20251016054204.1523139-1-tzungbi@kernel.org>
- <20251016054204.1523139-6-tzungbi@kernel.org>
- <20251016123149.GA88213@nvidia.com>
- <aPGryj-V5PQZRtoI@google.com>
- <20251017134916.GK3901471@nvidia.com>
- <aPJp3hP44n96Rug9@tzungbi-laptop>
- <20251017162116.GA316284@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uWjcZvBQehCSFkARNK70loUdB4mMAEqb4Kcuhm4YCfUZG5KBtOMk3jtdJihvQbIxR6bwsFBqb10zyydp9gptCcE8uSCxZvI9UWLsJdItQzN8T2VSMTjxk090DG25iOVKpZj/NYystJ9290gwuZfE4D9jqMocOHN0AkuW0Iwzxe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jmQQsFKL; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-58d29830058so4459563e87.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 19 Oct 2025 14:29:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760909348; x=1761514148; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pZgFs4FqCijykpFkWDu4oRoguWT7PdOtyygPCwJLRbY=;
+        b=jmQQsFKLzS3BL/0SDhdu3AltnTwAG1auHVAcsrHYfMQYsgx4Jczp/RHK3V0hTbgdyD
+         h2+IUvd49irRXLn88Hal9Hlo82LwspmGT2MoFAnXhPGsgYHvCn9kkuBvVaJf1ipIhzJP
+         FHvxSDUx72PTv4oZsz1klWV7AtiRWl9KQPVGqFtao1pTGto7bQJqfJUGGwg2Dl7Y6d6h
+         YGX8jwRNPXAXCuXzE049wZvcO3o0O3VldevVqABapAhuapY81bKfxOPe7XonUf+OLYSq
+         +6oO4LxNzMGMXY7+jB54imVbzbvuHB8Na3uXjnJF9Z7X2mtz0x9sc9/+wR7q/uML9CGW
+         a8IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760909348; x=1761514148;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pZgFs4FqCijykpFkWDu4oRoguWT7PdOtyygPCwJLRbY=;
+        b=NMsI6QB2J9hJZtJW50CUP6btDOkYBPO0otZ9PkRMYQeh5N8fxpuZU+HPkCmjxDTMHI
+         CRV94D2Ws8V931l+2LhjPEGDQLXfdo9D28sG2DTAMqKCR4KHYCeor3TpiENStikK63E7
+         was8VQj0AmsRYnSH+MrLVkn6zbHoyoiHxekDhI01i6Cq9M//7rBtkwm7FY1CDLETzRc0
+         z6RyUrMxmcOWGQXxgq/LYJsaZDc5si+KWAFPhZE04lQvtcLNtGzdlQrP9oGRyPyjt6QS
+         BCJmOTDwdG05T1hYErErR6jWl1+OJ29DIGPFzmf0CdTc2mUXo6CdwnqGueDWcRDOgicA
+         m4bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXVoH5mAw0e24JCv/EfiHtMpSTKzGNW8YO4jF2TAptFD9gGvbIy2YLv1wL88mdQSTuqGIvWrD6iC7VXGzfw8gk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkBUD7Rn7p6RG+y/pX3dkhJLTYUrRS0MV2ecUe7izzC+1D/yY9
+	SSZroYeebI3DogV5ivAoB1Uecj4E/6iqG6Ry6eY3uKjCemlLfJMjFtDi
+X-Gm-Gg: ASbGncuQCeY1pwjFDD2REp5fNfdVRMrauNV4hutDN7CBGdwP3MX+ooDxlJK9QwQS1tq
+	fDDWCcDfXrV9/GsOH9e8ce1CnSWtH0l7wvFl4aGdRf3ultKbOOvN5QnfV6EVhTlJp4ltJYirEtb
+	/VbIU9/GRVgsFkpQJdasOdZiGorFGSQvf3b9tBV26dPBLCqVYlszw93bw0Hrzm1iOZMQ4urzK5m
+	XxgeCxoX9phwZGaaz3C+ZDoFpm7h2ccXfOb/bRmdISmYVSxbhBt59vI6ZB1pyXA+lzwI9zr9U1F
+	yvJEGJDiXoFYtUZHOqvL9gAb1FkO4rx46oL03cJELqBBPBC/fOGHB/SwWTMpGqqA0lYYrdOztlz
+	DQaQiYrp4Tl2mFL0ZUC5yCFUiywMeIrtXoB9oTNiao5LNTirX+oUNRBIJsfbwVqtc25w=
+X-Google-Smtp-Source: AGHT+IH+I9jBbkDr97iE8CLeVNtuiq8X8wVyPEdeyjvp5fA2TYxHDV4mbw9+9KOh4C6CfUUvY8XePA==
+X-Received: by 2002:a05:6512:2251:b0:57b:fb1d:616e with SMTP id 2adb3069b0e04-591d85661b0mr3583795e87.39.1760909347750;
+        Sun, 19 Oct 2025 14:29:07 -0700 (PDT)
+Received: from curiosity ([5.188.167.4])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-591def25a51sm1875026e87.107.2025.10.19.14.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Oct 2025 14:29:06 -0700 (PDT)
+Date: Mon, 20 Oct 2025 00:29:04 +0300
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: Andy Chiu <andybnac@gmail.com>
+Cc: linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Thomas Huth <thuth@redhat.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Han Gao <rabenda.cn@gmail.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Nam Cao <namcao@linutronix.de>,
+	Joel Granados <joel.granados@kernel.org>,
+	=?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v2 4/6] riscv: vector: allow to force vector context save
+Message-ID: <aPVYIOz8XRZ-737r@curiosity>
+References: <20251007115840.2320557-1-geomatsi@gmail.com>
+ <20251007115840.2320557-5-geomatsi@gmail.com>
+ <CAFTtA3MObvXRHxbULghGcT=ThrBDeFDJzUY7LOhgNnarzpYeGg@mail.gmail.com>
+ <CAFTtA3NoOZEMqYD6+vjP=09T15GiThjVy1LeDX0U8CC-4HMKOA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251017162116.GA316284@nvidia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFTtA3NoOZEMqYD6+vjP=09T15GiThjVy1LeDX0U8CC-4HMKOA@mail.gmail.com>
 
-On Fri, Oct 17, 2025 at 01:21:16PM -0300, Jason Gunthorpe wrote:
-> On Sat, Oct 18, 2025 at 12:07:58AM +0800, Tzung-Bi Shih wrote:
-> > > This is already properly lifetime controlled!
-> > > 
-> > > It *HAS* to be, and even your patches are assuming it by blindly
-> > > reaching into the parent's memory!
-> > > 
-> > > +	misc->rps[0] = ec->ec_dev->revocable_provider;
-> > > 
-> > > If the parent driver has been racily unbound at this point the
-> > > ec->ec_dev is already a UAF!
-> > 
-> > Not really, it uses the fact that the caller is from probe().  I think the
-> > driver can't be unbound when it is still in probe().
+On Wed, Oct 15, 2025 at 04:32:05PM -0500, Andy Chiu wrote:
+> On Wed, Oct 15, 2025 at 3:18 PM Andy Chiu <andybnac@gmail.com> wrote:
+> >
+> > On Tue, Oct 7, 2025 at 6:58 AM Sergey Matyukevich <geomatsi@gmail.com> wrote:
+> > >
+> > > When ptrace updates vector CSR registers for a traced process, the
+> > > changes may not be immediately visible to the next ptrace operations
+> > > due to vector context switch optimizations.
+> > >
+> > > The function 'riscv_v_vstate_save' saves context only if mstatus.VS is
+> > > 'dirty'. However mstatus.VS of the traced process context may remain
+> > > 'clean' between two breakpoints, if no vector instructions were executed
+> > > between those two breakpoints. In this case the vector context will not
+> > > be saved at the second breakpoint. As a result, the second ptrace may
+> > > read stale vector CSR values.
+> >
+> > IIUC, the second ptrace should not get the stale vector CSR values.
+> > The second riscv_vr_get() should be reading from the context memory
+> > (vstate), which is updated from the last riscv_vr_set(). The user's
+> > vstate should remain the same since last riscv_vr_set(). Could you
+> > explain more on how this bug is observed and why only CSRs are
+> > affected but not v-regs as well?
 > 
-> Right, but that's my point you are already relying on driver binding
-> lifetime rules to make your access valid. You should continue to rely
-> on that and fix the lack of synchronous remove to fix the bug.
+> From looking into your test, I can see that you were trying to set an
+> invalid configuration to Vetor CSRs and expect vill to be reflected
+> upon next read. Yes, this is not happening on the current
+> implementation as it was not expecting invalid input from the user,
+> which should be taken into consideration. Thanks for spotting the
+> case!
+> 
+> According to the spec, "The use of vtype encodings with LMUL <
+> SEWMIN/ELEN is reserved, implementations can set vill if they do not
+> support these configurations." This mean the implementation may
+> actually support this configuration. If that is the case, I think we
+> should not allow this to be configured through the vector ptrace
+> interface, which is designed to support 1.0 (and 0.7) specs. That
+> means, we should not allow this problematic configuration to pass
+> through riscv_vr_set(), reach user space, then the forced save.
+> 
+> I would opt for validating all CSR configurations in the first place.
+> Could you also help enforce checks on other reserved bits as well?
 
-I think what you're looking for is something similar to the following
-patches.
+Just to clarify, the suggestion is to drop the TIF_RISCV_V_FORCE_SAVE
+entirely and use only careful validation of input parameter in riscv_vr_set,
+rather than using both checks. Is that correct?
 
-- Instead of having a real resource to protect with revocable, use the
-  subsystem device itself as a virtual resource.  Revoke the virtual
-  resource when unregistering the device from the subsystem.
+If that is correct, then I assume we can rely on the simple rule ELEN == XLEN
+to validate vsew/vlmul supported combinations. Additionally, reserved vsew
+values (see 3.4.1 in spec) should also be rejected.
 
-- Exit earlier if the virtual resource is NULL (i.e. the subsystem device
-  has been unregistered) in the file operation wrappers.
-
-By doing so, we don't need to provide a misc_deregister_sync() which could
-probably maintain a list of opening files in miscdevice and handle with all
-opening files when unregistering.  The device unbound is free to go and
-doesn't need to wait for closing or interrupting all opening files.
-
-
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index 27078541489f..bc4d249c4d0f 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -173,8 +175,12 @@ static int misc_open(struct inode *inode, struct file *file)
-         */
-        file->private_data = c;
- 
--       err = 0;
-        replace_fops(file, new_fops);
-+
-+       err = fs_revocable_replace(c->rp, file);
-+       if (err)
-+               goto fail;
-+
-        if (file->f_op->open)
-                err = file->f_op->open(inode, file);
- fail:
-@@ -234,6 +240,10 @@ int misc_register(struct miscdevice *misc)
-                return -EINVAL;
-        }
- 
-+       misc->rp = revocable_provider_alloc(misc);
-+       if (!misc->rp)
-+               return -ENOMEM;
-+
-        INIT_LIST_HEAD(&misc->list);
- 
-        mutex_lock(&misc_mtx);
-@@ -291,6 +291,8 @@ EXPORT_SYMBOL(misc_register);
-
- void misc_deregister(struct miscdevice *misc)
- {
-+       revocable_provider_revoke(misc->rp);
-+
-        mutex_lock(&misc_mtx);
-        list_del_init(&misc->list);
-        device_destroy(&misc_class, MKDEV(MISC_MAJOR, misc->minor));
-
-diff --git a/fs/fs_revocable.c b/fs/fs_revocable.c
-new file mode 100644
-...
-+struct fs_revocable_replacement {
-+       struct revocable *rev;
-+       const struct file_operations *orig_fops;
-+       struct file_operations fops;
-+};
-+
-+static ssize_t fs_revocable_read(struct file *filp, char __user *buffer,
-+                                size_t length, loff_t *offset)
-+{
-+       void *any;
-+       struct fs_revocable_replacement *rr = filp->f_rr;
-+
-+       REVOCABLE_TRY_ACCESS_WITH(rr->rev, any) {
-+               if (!any)
-+                       return -ENODEV;
-+               return rr->orig_fops->read(filp, buffer, length, offset);
-+       }
-+}
-...
-+int fs_revocable_replace(struct revocable_provider *rp, struct file *filp)
-+{
-+       struct fs_revocable_replacement *rr;
-+
-+       rr = kzalloc(sizeof(*rr), GFP_KERNEL);
-+       if (!rr)
-+               return -ENOMEM;
-+
-+       rr->rev = revocable_alloc(rp);
-+       if (!rr->rev)
-+               goto free_rr;
-+
-+       rr->orig_fops = filp->f_op;
-+       memcpy(&rr->fops, filp->f_op, sizeof(rr->fops));
-+       rr->fops.release = fs_revocable_release;
-+
-+       if (rr->fops.read)
-+               rr->fops.read = fs_revocable_read;
-+       if (rr->fops.poll)
-+               rr->fops.poll = fs_revocable_poll;
-+       if (rr->fops.unlocked_ioctl)
-+               rr->fops.unlocked_ioctl = fs_revocable_unlocked_ioctl;
-+
-+       filp->f_rr = rr;
-+       filp->f_op = &rr->fops;
-+       return 0;
-+free_rr:
-+       kfree(rr);
-+       return -ENOMEM;
-+}
-+EXPORT_SYMBOL_GPL(fs_revocable_replace);
-
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index a6de8d93838d..163496a5df6c 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -1066,6 +1066,7 @@ struct file {
-                freeptr_t               f_freeptr;
-        };
-        /* --- cacheline 3 boundary (192 bytes) --- */
-+       struct fs_revocable_replacement *f_rr;
- } __randomize_layout
-   __attribute__((aligned(4))); /* lest something weird decides that 2 is OK */
-
-diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
-index aca911687bd5..c98b97f84c07 100644
---- a/include/linux/miscdevice.h
-+++ b/include/linux/miscdevice.h
-@@ -94,6 +94,7 @@ struct miscdevice  {
-        const struct attribute_group **groups;
-        const char *nodename;
-        umode_t mode;
-+       struct revocable_provider *rp;
- };
+Thanks,
+Sergey
 
