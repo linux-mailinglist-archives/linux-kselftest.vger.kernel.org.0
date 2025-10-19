@@ -1,152 +1,228 @@
-Return-Path: <linux-kselftest+bounces-43514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91C67BEE131
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Oct 2025 10:51:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D07C6BEE846
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Oct 2025 17:08:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C0B93E4328
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Oct 2025 08:51:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F2313A402E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Oct 2025 15:08:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DC329D29B;
-	Sun, 19 Oct 2025 08:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDAD92E5405;
+	Sun, 19 Oct 2025 15:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IJVgo4VR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFkeUTdu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B3B19D074;
-	Sun, 19 Oct 2025 08:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E912A1CF;
+	Sun, 19 Oct 2025 15:08:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760863886; cv=none; b=VJslqvHtTHEtRIGQxap0c8JTbcDvMf1SYRFMH99otkJCOoPJlUKzGtCSSFfCFHaAGd2yazLYOfshmpqxFV+UEgg0E8wE+b0vFV5+mD9Fulz8U0gKZ8D8/UHoBhH3yn0nnAHBVCOMcnWcN3LueQrIOPWXuwVq2IYO2t2LTPPLPus=
+	t=1760886528; cv=none; b=uF99jg5D6geupWRPhQfxb8KNIaLv3Nz39GF+N0+xdCojUJhSjxwT7ZGSbJYhmdyV8B9jZ4hxqwTRKpHcXyGrFyibaiphNKKvrG1IVlGulLRx9J1oomrk6MOPlb5HahK+TU7MgRUJpSUM9WM0lEGmezASET3wfPFZm7MuXRrI+lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760863886; c=relaxed/simple;
-	bh=Y0pWpuDrYmI4OMUjMbc/jTMaeVXhpIIYiTNqLlufnk8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=tw935j5X1ZV2SMF9h1xYECwqxrMbzBiqUqHob9UZKSww/37nlkQeuhLCTq6zU6qkPLaq1q81KrHLO1E21UCXLYREunrBX5QmYmdeCXsz3DiOVRkZsG3IIMULCDFF1769HKM4bgYaFcbqifEu9GbHWdWGTGZZQjft7SHqZNBLdIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IJVgo4VR; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 77B9FC09A03;
-	Sun, 19 Oct 2025 08:45:27 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B06B3606D5;
-	Sun, 19 Oct 2025 08:45:46 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6FBC1102F238D;
-	Sun, 19 Oct 2025 10:45:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1760863543; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Jyv8Ny3eYcuzCA4QCGmdA/mqKgQJfhy3966PAg5VYa4=;
-	b=IJVgo4VRUdHkSOpbpwbI4i3XQUiKYBTZbjOnqcTfBFPYwedIkVoTNmOoOLwUNgNqslwEpl
-	HoNbo4pVnSZtX0VkqX7Ztqd9rvSv4nn3E9r41u3YWvBLY7CS1ys2HSmtC0Ua0l4Zy9V5oG
-	yFX0WhKjsXmmAaeoEuYOVx7zcv1Y0KWm09SdA2cbpgjgObfBNxAXW/zHL+0w5SK/O2sEm2
-	vGeo0SLjcN+hZWGLDT3w9+ZaVSYEXXEte+8Zsv5Hs5DGFMJufsz3POym+NFXp0niX1upx/
-	ZQG/jSrBhI6FItdxYjf4zN586DDvBw7SPY9prcBP7uFVjrJUg9g5EQBsY0SmvA==
+	s=arc-20240116; t=1760886528; c=relaxed/simple;
+	bh=kTauBeDoTqIQz3NxrorvMMaU0rVxHo/z/FhTS23ebJA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mo39N9XBI4ViA2fYLUGCP4y5+JVKnBORZNcsU3XriyGCdyoGiHd/cmgRl1DhR6SZNvWKJ3wJDcOJzAIjoSDVbFUVd1IG5S5GZY1hYAlVPi4vmbBVlPfbpnzETxP4Fkf72BIwCHjTRCln54udfrGFY9RQ+CHugPzucvgSx4RKI4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFkeUTdu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF62CC4CEE7;
+	Sun, 19 Oct 2025 15:08:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760886528;
+	bh=kTauBeDoTqIQz3NxrorvMMaU0rVxHo/z/FhTS23ebJA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SFkeUTduqPWU0avJTtFPkGsRKVFcPOBcbnbKE+M46qxoyD9O5/qKsMT/NBcOoPpsZ
+	 u98CZX0J+sOA2zePt6Gf5g9mCcPYeCgUdEiB6l0SX3Xlc5We+6l1FufO1HG5yqNXzX
+	 CHD7nGnDM8h4MxvLaU6zzDlddkQ8UX/jTOruRLMoe/u0QMMGSDS0sBA+4O5RnyIOml
+	 8Q2QDHKyblrCGUK75aK24+CYQAK0uNA7KhP/WddiNiX/3dxHW6fRJXqePJzs/9Zmvk
+	 EJOOLMM7IQYXatPnGTn8CkEmHMxHp7kKlFZ63os1beAAzYD5Xu3X8rf8lLAX61jNDh
+	 yRHMGO8wofQpA==
+Date: Sun, 19 Oct 2025 23:08:29 +0800
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Benson Leung <bleung@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
+Message-ID: <aPT-7TTgW_Xop99j@tzungbi-laptop>
+References: <20251016054204.1523139-1-tzungbi@kernel.org>
+ <20251016054204.1523139-6-tzungbi@kernel.org>
+ <20251016123149.GA88213@nvidia.com>
+ <aPGryj-V5PQZRtoI@google.com>
+ <20251017134916.GK3901471@nvidia.com>
+ <aPJp3hP44n96Rug9@tzungbi-laptop>
+ <20251017162116.GA316284@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 19 Oct 2025 10:45:28 +0200
-Message-Id: <DDM60XIK0NUQ.S2QMK9E7HQ2U@bootlin.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
- Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
- <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
- <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Martin KaFai Lau" <martin.lau@linux.dev>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: integrate test_tc_tunnel.sh
- tests into test_progs
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20251017-tc_tunnel-v1-0-2d86808d86b2@bootlin.com>
- <20251017-tc_tunnel-v1-4-2d86808d86b2@bootlin.com>
- <2477894b-3325-4bc2-9d3c-a066b3cbb8f6@linux.dev>
-In-Reply-To: <2477894b-3325-4bc2-9d3c-a066b3cbb8f6@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251017162116.GA316284@nvidia.com>
 
-Hello Martin,
+On Fri, Oct 17, 2025 at 01:21:16PM -0300, Jason Gunthorpe wrote:
+> On Sat, Oct 18, 2025 at 12:07:58AM +0800, Tzung-Bi Shih wrote:
+> > > This is already properly lifetime controlled!
+> > > 
+> > > It *HAS* to be, and even your patches are assuming it by blindly
+> > > reaching into the parent's memory!
+> > > 
+> > > +	misc->rps[0] = ec->ec_dev->revocable_provider;
+> > > 
+> > > If the parent driver has been racily unbound at this point the
+> > > ec->ec_dev is already a UAF!
+> > 
+> > Not really, it uses the fact that the caller is from probe().  I think the
+> > driver can't be unbound when it is still in probe().
+> 
+> Right, but that's my point you are already relying on driver binding
+> lifetime rules to make your access valid. You should continue to rely
+> on that and fix the lack of synchronous remove to fix the bug.
 
-On Sat Oct 18, 2025 at 2:18 AM CEST, Martin KaFai Lau wrote:
-> On 10/17/25 7:29 AM, Alexis Lothor=C3=A9 (eBPF Foundation) wrote:
->> The test_tc_tunnel.sh script checks that a large variety of tunneling
->> mechanisms handled by the kernel can be handled as well by eBPF
->> programs. While this test shares similarities with test_tunnel.c (which
->> is already integrated in test_progs), those are testing slightly
->> different things:
->> - test_tunnel.c creates a tunnel interface, and then get and set tunnel
->>    keys in packet metadata, from BPF programs.
->> - test_tc_tunnels.sh manually parses/crafts packets content
->>=20
->> Bring the tests covered by test_tc_tunnel.sh into the test_progs
->> framework, by creating a dedicated test_tc_tunnel.sh. This new test
->> defines a "generic" runner which, for each test configuration:
->> - will bring the relevant veth pair, each of those isolated in a
->>    dedicated namespace
->> - will check that traffic will fail if there is only an encapsulating
->>    program attached to one veth egress
->> - will check that traffic succeed if we enable some decapsulation module
->>    on kernel side
->> - will check that traffic still succeeds if we replace the kernel
->>    decapsulation with some eBPF ingress decapsulation.
->>=20
->> Example of the new test execution:
->>=20
->>    # ./test_progs -a tc_tunnel
->>    #447/1   tc_tunnel/ipip_none:OK
->>    #447/2   tc_tunnel/ipip6_none:OK
->>    #447/3   tc_tunnel/ip6tnl_none:OK
->>    #447/4   tc_tunnel/sit_none:OK
->>    #447/5   tc_tunnel/vxlan_eth:OK
->>    #447/6   tc_tunnel/ip6vxlan_eth:OK
->>    #447/7   tc_tunnel/gre_none:OK
->>    #447/8   tc_tunnel/gre_eth:OK
->>    #447/9   tc_tunnel/gre_mpls:OK
->>    #447/10  tc_tunnel/ip6gre_none:OK
->>    #447/11  tc_tunnel/ip6gre_eth:OK
->>    #447/12  tc_tunnel/ip6gre_mpls:OK
->>    #447/13  tc_tunnel/udp_none:OK
->>    #447/14  tc_tunnel/udp_eth:OK
->>    #447/15  tc_tunnel/udp_mpls:OK
->>    #447/16  tc_tunnel/ip6udp_none:OK
->>    #447/17  tc_tunnel/ip6udp_eth:OK
->>    #447/18  tc_tunnel/ip6udp_mpls:OK
->>    #447     tc_tunnel:OK
->>    Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
->
-> Thanks for working on this!
+I think what you're looking for is something similar to the following
+patches.
 
-Thanks for the prompt and detailed review !
->
-> One high level comment is to minimize switching netns to make the test=20
-> easier to follow.
+- Instead of having a real resource to protect with revocable, use the
+  subsystem device itself as a virtual resource.  Revoke the virtual
+  resource when unregistering the device from the subsystem.
 
-Yeah, all the NS switches make the overall setup a bit tedious. I'll give a
-try to your suggestions and see if we can reduce the number of NS
-open/close pairs.
+- Exit earlier if the virtual resource is NULL (i.e. the subsystem device
+  has been unregistered) in the file operation wrappers.
 
-Alexis
+By doing so, we don't need to provide a misc_deregister_sync() which could
+probably maintain a list of opening files in miscdevice and handle with all
+opening files when unregistering.  The device unbound is free to go and
+doesn't need to wait for closing or interrupting all opening files.
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
+diff --git a/drivers/char/misc.c b/drivers/char/misc.c
+index 27078541489f..bc4d249c4d0f 100644
+--- a/drivers/char/misc.c
++++ b/drivers/char/misc.c
+@@ -173,8 +175,12 @@ static int misc_open(struct inode *inode, struct file *file)
+         */
+        file->private_data = c;
+ 
+-       err = 0;
+        replace_fops(file, new_fops);
++
++       err = fs_revocable_replace(c->rp, file);
++       if (err)
++               goto fail;
++
+        if (file->f_op->open)
+                err = file->f_op->open(inode, file);
+ fail:
+@@ -234,6 +240,10 @@ int misc_register(struct miscdevice *misc)
+                return -EINVAL;
+        }
+ 
++       misc->rp = revocable_provider_alloc(misc);
++       if (!misc->rp)
++               return -ENOMEM;
++
+        INIT_LIST_HEAD(&misc->list);
+ 
+        mutex_lock(&misc_mtx);
+@@ -291,6 +291,8 @@ EXPORT_SYMBOL(misc_register);
+
+ void misc_deregister(struct miscdevice *misc)
+ {
++       revocable_provider_revoke(misc->rp);
++
+        mutex_lock(&misc_mtx);
+        list_del_init(&misc->list);
+        device_destroy(&misc_class, MKDEV(MISC_MAJOR, misc->minor));
+
+diff --git a/fs/fs_revocable.c b/fs/fs_revocable.c
+new file mode 100644
+...
++struct fs_revocable_replacement {
++       struct revocable *rev;
++       const struct file_operations *orig_fops;
++       struct file_operations fops;
++};
++
++static ssize_t fs_revocable_read(struct file *filp, char __user *buffer,
++                                size_t length, loff_t *offset)
++{
++       void *any;
++       struct fs_revocable_replacement *rr = filp->f_rr;
++
++       REVOCABLE_TRY_ACCESS_WITH(rr->rev, any) {
++               if (!any)
++                       return -ENODEV;
++               return rr->orig_fops->read(filp, buffer, length, offset);
++       }
++}
+...
++int fs_revocable_replace(struct revocable_provider *rp, struct file *filp)
++{
++       struct fs_revocable_replacement *rr;
++
++       rr = kzalloc(sizeof(*rr), GFP_KERNEL);
++       if (!rr)
++               return -ENOMEM;
++
++       rr->rev = revocable_alloc(rp);
++       if (!rr->rev)
++               goto free_rr;
++
++       rr->orig_fops = filp->f_op;
++       memcpy(&rr->fops, filp->f_op, sizeof(rr->fops));
++       rr->fops.release = fs_revocable_release;
++
++       if (rr->fops.read)
++               rr->fops.read = fs_revocable_read;
++       if (rr->fops.poll)
++               rr->fops.poll = fs_revocable_poll;
++       if (rr->fops.unlocked_ioctl)
++               rr->fops.unlocked_ioctl = fs_revocable_unlocked_ioctl;
++
++       filp->f_rr = rr;
++       filp->f_op = &rr->fops;
++       return 0;
++free_rr:
++       kfree(rr);
++       return -ENOMEM;
++}
++EXPORT_SYMBOL_GPL(fs_revocable_replace);
+
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index a6de8d93838d..163496a5df6c 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -1066,6 +1066,7 @@ struct file {
+                freeptr_t               f_freeptr;
+        };
+        /* --- cacheline 3 boundary (192 bytes) --- */
++       struct fs_revocable_replacement *f_rr;
+ } __randomize_layout
+   __attribute__((aligned(4))); /* lest something weird decides that 2 is OK */
+
+diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
+index aca911687bd5..c98b97f84c07 100644
+--- a/include/linux/miscdevice.h
++++ b/include/linux/miscdevice.h
+@@ -94,6 +94,7 @@ struct miscdevice  {
+        const struct attribute_group **groups;
+        const char *nodename;
+        umode_t mode;
++       struct revocable_provider *rp;
+ };
 
