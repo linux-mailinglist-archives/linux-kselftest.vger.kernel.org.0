@@ -1,171 +1,125 @@
-Return-Path: <linux-kselftest+bounces-43631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7019BF3FA8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 01:02:18 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF17BF3FE7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 01:14:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0262A34DE02
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 23:02:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 76AD94E61D4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 23:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78D442F5311;
-	Mon, 20 Oct 2025 23:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98D7F2F6919;
+	Mon, 20 Oct 2025 23:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="MWpw2QPC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jXW0Im8x"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012021.outbound.protection.outlook.com [40.107.209.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2322D979F;
-	Mon, 20 Oct 2025 23:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761001335; cv=fail; b=ZybjmmDBjl+laJdajRSpU+I0Q8/fc19Q2/lpHPe/3+3TllmttywGKuQQPn6g34RteAHrdwUasj4R0MbWdZOjzX8F1d4S7ukrofUespQC4SxWDWCHKDEkkqNsCcgC0n4t8gmc01tc/NfFvMvu4tQOg/LqDK8MTlnNbZcL/JQiQ54=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761001335; c=relaxed/simple;
-	bh=ge+c/VdzQVaEex3Mao63FNz8sMizU7RGBhK/pZGTTKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=dh3F6I9+I3pMlv6nmXrKMmLWDWjYfUGRBbVSAxaC939MMOBPXQwZaiMlvPVsiWmcqhsIeRIK7X98X2aRU+oSk5lrPBekgeH6pbub1r3K6JbZD7o4/fDIKk/ymmQp15BNRBQA83O3T4ULz/OgbFIYUiL2dO2gPMk+0yLWg6Ufr/Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=MWpw2QPC; arc=fail smtp.client-ip=40.107.209.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HxjP2yWgsXN7HjKQYtkC5VRK9ZBHREX34a373IQiqWEDa34y32F2IoCdeMEU/bxIcI6yqwF90kxiVKWGdb/Dn3CfVXlI9TLwAMxzJp052zJA44TbeyeyLlzNRs/JmPZY69Ic0z9h9OrC1kU9LYoh3r99cY9jR2n5Ep3uZ0LOv1PuJF7ECmMEvRsbWO/uy4Z1vzqbT0cNrNR7mFmWo2aWs2zMEup9B172OBVnmShNFx1MXeR8kpFZrM/+30/6ExneRwpYVOmTO7SYrQbbkTjbQoUGDqCr0D4GnQ6xcIAVRNaBD+d9709e9T0jgUkDX40NBpx8dLpzDkXem/UYmC8+bg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PH40EOb57t2rxkE4EXmpRtlxbrtXRVmR6Vm3INrakXM=;
- b=VdhBt+YzjfDnAH3QsmeahmMT/tS1cfjrr7zFyhYXZaT8uGf5gsUWzUfk1BXPGICm4kGB8ZfQLqHDwjBc4kZT5mJ6IN0WeMqjh35yaFsIqQZXslMwlTaf0yTnTRl66fGRKUElV3n3yXcJ3gUma26xLpCs0v30KzVNUU2dWxvRsmgVoNkjSswFv7k/gL0RJR4ObxwpLbz4NJfwoC1Gqj5q0ZPJkysuHXMMgcdnDVTjF4OK3XcG3J5j6gSBbZzICbj9t3fTmIzyyOfdtjeD7K8wLDFZQjZvagZUW65OJDKMBhWXheYH9ppmMHkRFqnRd3BkQS6fm+2b006GQ3mTEzLbCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PH40EOb57t2rxkE4EXmpRtlxbrtXRVmR6Vm3INrakXM=;
- b=MWpw2QPCq3JREMZWmB/IndxUcWDcS1cQzWfJ+AquHtc36FvBOFVGAzOY437PzKxcyXh/Fu8TvXextEINkH9We46etPlyozmHk2vVI1mwUBcOCcIP1JA3xQo9vg3U5fkaShRvS/cX939MOYgGI01/9cNkjD784bv9ZSYD3PKkvFY/52YR8KNJOQ6n+d+QlTimcxVdmZU/hNS8oJBjh6iQvgQ1OkmRiYnQempHWNYqhLWrR/wdJh31X3A85IWf3w+kM82ijAsruiX9QgYPsvRqwM6czhGXrvOTmXfkSt0IhNpXcFw9KNkGnWftREecRjv49N/gZTjs4HYbevp3f17DpA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
- by MN2PR12MB4333.namprd12.prod.outlook.com (2603:10b6:208:1d3::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.17; Mon, 20 Oct
- 2025 23:02:09 +0000
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9228.015; Mon, 20 Oct 2025
- 23:02:09 +0000
-Date: Mon, 20 Oct 2025 20:01:58 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, shuah@kernel.org, alessandro.zanni87@gmail.com,
-	iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH rc] iommufd/selftest: Fix ioctl return value in
- _test_cmd_trigger_vevents()
-Message-ID: <20251020230158.GF316284@nvidia.com>
-References: <20251014214847.1113759-1-nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251014214847.1113759-1-nicolinc@nvidia.com>
-X-ClientProxiedBy: SJ0PR03CA0021.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::26) To MN2PR12MB3613.namprd12.prod.outlook.com
- (2603:10b6:208:c1::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BF22F5328
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 23:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761002088; cv=none; b=dnB+3cn7djHjG6jTk4hvLQmi5nZNSwHLlmyzojC1YwfAXMMMU7mOzdRGIHrwi8GZu7pdSq0Rb6YnzYwhC60NvOsOftA3L7kPSjUALOxlB62PFCw3PztH0dSL5RcFxK2b5pdHAmziOjbBlc2eJnZ5x8ORP7UYAZGdnBX8YA0CMcM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761002088; c=relaxed/simple;
+	bh=F9XmdbMoYNlCr4el47J3Bv0ZE391rmUeYD178V6unOs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DOrnsChq1k+p1J/Eptdl7nBbhbxUxs+W/D+dVmA9pZBpfxv2wp0zgmlryTtMqyLqsKFypVBz4eHhVgW/PK+iILL9KPN5bl2UlJNoet1qekuV5LJVJOWJyJ9Uk7C6+8+zKbSf1eJ0sG1myTIqp6GnrHiAruGo3/9cIbsmhn/t8NY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jXW0Im8x; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47112edf9f7so22411165e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 16:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761002085; x=1761606885; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GkTarXuXdqwnRmmvR/7gRtPxkDyx0bQrkvu8spcNQuM=;
+        b=jXW0Im8xftFMOJXYzU0n6ULhX+irbQkpzeCfToouT9J0J7qOqlTcwNLv4rnrywLgkz
+         KJvApIotTDEhiZ+GUAtDFGRAbJkN1unJWYSE+DtMND8UC+Ibs3Hxp1oIkJ6JMKfXBTuf
+         +YZwR7vjWH016zf48z39EdNzOsfbaE7noDWuTTv/x/SAQbG2z4mrYKrX5E+eMbUcPjTS
+         vtq6Cw98xkyW8C/oPHsxW1T1hDmoH6VDrGcVsj6wdJZ1sgEJGOSGW8ynU/GnksRzn6ue
+         761rlNBKr85NI3CQAZdPS/S/ttPbTaMqb9M+9vbHw/qI7gQIRZyZboV4k6zTUjU3gF3k
+         pYxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761002085; x=1761606885;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GkTarXuXdqwnRmmvR/7gRtPxkDyx0bQrkvu8spcNQuM=;
+        b=ac9UzDK1UneEAhL6N5igiMq2HpD3yEapFQ3vcQPDffF7GI2oA0d1oXmEhk5FXo12M9
+         /CwvOBgN9Y7VS/RwFUSacC2LSIexHEqlcW5mUZm/OWOGxhD3CpC3ZGc2m/ovdJBy7qx/
+         C+6a04LbrK8mgDMtvTRYiImcI8UqSRjQ11amVT8pLVAaIUI6mPM8Et/LXyRcqAHhNbzS
+         neeJT0UuAWevcJgilXh57YzAgjyjH5UO5uHHQn6p/im6wba5WN5ETveW9mYggn/oA4/W
+         9pl9Pe5tKpmZrYTMo5/MrWiuHIhEBxDAiucmLcOYosKIuGcN92uwwD8+R5dJN17V9Ny/
+         GseA==
+X-Forwarded-Encrypted: i=1; AJvYcCWuwQThqKfubWic+Dgdu5uT4Cuaux/wQliuTE2udIVJhs4lpIGMwoy/37M9+OffZUHIf8QPl1na7SRnH8FPUy4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzk0xdKSywt6n7RIQCB1yTUyWfFUUQyxtK7Xd7ydFFknZDgNLgW
+	JUQ8T6AOrm8a7308W5z2C/AoCAOTZkGGmuAgdtLnp+5caJTr/rtk3zEn
+X-Gm-Gg: ASbGncsh2Pacja9n/9Ouh/bk3zOrTu8kigbWxQ4OZow9cPZ3w/gRVX/z9EwPsMiLMZM
+	EWKBzs3iwfFiJv7EdCgdckxe9VcDl0w0Fn80WkXTiVAhbkDWE9e6Z4E27FcbUaRZGSPbzpZP4u+
+	hoedO2xg7xiijngfI4oufxJrvDWJCuP5iZPEeG/r3BrtHj5U6TjRvEfqwSpDjfNZIrzXK4ohYQD
+	4TwOXGVu3Z6ZhSy4p70gjd/3bioMw6W1oobs62nQGVNwTdTC5kTZ5ytodnF4UMg6FK3VrvHe1rY
+	cFBwH5TZQ9lmQ1sQctPMuVrz/fPNRfze+LnfBpM0RmLZrdusK/u4G6IuOJPA6vsG5RbLEA7aLdG
+	JmtE2M13CFYVVOZAotcy6Bszw7lzdfzy7d2YSXPQo/DpE4AqDLj3//yShNU592A/PU8l2VNcnvI
+	mp37gkvA2+s/AXFKSsdA==
+X-Google-Smtp-Source: AGHT+IEo9EX3KYMSBA1tzRcWECn+Ied0y6jeP/WpvATQ9dbq7Lz/7CbUrDecochWfyk3s8hotzootA==
+X-Received: by 2002:a5d:5849:0:b0:426:eef2:fa86 with SMTP id ffacd0b85a97d-42704d83873mr10529691f8f.11.1761002084931;
+        Mon, 20 Oct 2025 16:14:44 -0700 (PDT)
+Received: from archlinux ([143.58.192.81])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427ea5b3c34sm17204706f8f.17.2025.10.20.16.14.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Oct 2025 16:14:43 -0700 (PDT)
+Date: Tue, 21 Oct 2025 00:14:42 +0100
+From: Andre Carvalho <asantostc@gmail.com>
+To: Gustavo Luiz Duarte <gustavold@gmail.com>
+Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Matthew Wood <thepacketgeek@gmail.com>, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 1/2] selftests: netconsole: Add race condition test
+ for userdata corruption
+Message-ID: <uaxu3wlt5jqhzibmhjy44sb5mlekdezqbt5b3p2e5zza25jcpu@uqxdynirj3lp>
+References: <20251020-netconsole-fix-race-v1-0-b775be30ee8a@gmail.com>
+ <20251020-netconsole-fix-race-v1-1-b775be30ee8a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|MN2PR12MB4333:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b97185e-041e-47bc-144e-08de102cb2aa
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?xVPHbQvd1D40Gu3IwajQBewGRGtlb0aV8b2tDAMabfcR2K06PEQYnJB/+3E+?=
- =?us-ascii?Q?XOEvn63I/1nWl+w1zHip5wuSVHDeAQH2hiS9TvchPPtF9Ali9j+edWW+p8bU?=
- =?us-ascii?Q?mIVKS5ymatk7RdazuOuyFGzIOtfR2/fLskzcr1f+zTEY2+GAlUaJKJYIHHLc?=
- =?us-ascii?Q?CLHGz4aicivJ1dm07gBAOiy/yzqK7hwpLroS8ny1h4gqpPvITgMSUm2aX+QY?=
- =?us-ascii?Q?xyICVwpMvXtbmrX+oxnga3finJNQcoarPe0RHqBSvBTicbISQ2NcNz7gInnX?=
- =?us-ascii?Q?IJtUMnUkfAEoTdhw7Smji4JuNdx59SCjxmyo7/Vu/W/gKiYDcMDdpiJamIr/?=
- =?us-ascii?Q?Ys/BDMUDbgqgMKgVo9YKLKzK/v2s0++IlqT8YLA4hSQD8MPc/LrZJPokWPkY?=
- =?us-ascii?Q?tc8sPAArypiTzQOZVaJa/QmTT9/ECByVt19L4jZcRPCO7a4TmX4XAsQVbDlX?=
- =?us-ascii?Q?676rZ9Z5F7y9EhJvf8EII74UhTCaYjRgci/aTP4CemcUCxTYnJC1XBqHkpnJ?=
- =?us-ascii?Q?cSbgMilRmXs3QdVebmiQEpuHX46tmVskt7Zt/GynAD5I07GQWKJY7zp1s5x5?=
- =?us-ascii?Q?0Bs1M4787gFGnSIoWDjb8dt11xVlsx+k9xFolX4VfrGdHw1pe3R7vEWFHrpG?=
- =?us-ascii?Q?OUy2rubdlIzhdTSRCTg48Ksbm9MJRCGyM3VLBQWBZnjI4V7Np2yneGX3e9Az?=
- =?us-ascii?Q?IxNYEs2E8OKJm5UwBUtPlBHh01OmuN2961Ev4t2vffj/h2Ons0hr5KYdFuy7?=
- =?us-ascii?Q?lpidVWIi30gzlbdce+2Ketfj8GoI8NrPV80oJwcIlk434WcubCkfaXELy2hS?=
- =?us-ascii?Q?iNfam+FolSUeoAgnH7IvpKnNFvdg5MD2qTg5XWI7BOxIWGcFmNrPAaxejite?=
- =?us-ascii?Q?lWqYbM7a3FUelQoL2vCq5RmstuuyrsWxCwgOf4wtdWpuavVk+re8XkL05Mp9?=
- =?us-ascii?Q?hA7wllqdyAPvLhDrssQ6TAdkgFuDMlErzTzE51M40lZYEWKFMiPLWO7hQdcO?=
- =?us-ascii?Q?RGFRR9X5hxYfg0akoHtjsopSFhH+m0JDWyyYVzU+eb7po46J/CFeESrpt5XH?=
- =?us-ascii?Q?EmL7MdmIl4CCtmr0p3NmHoxaLIM+QMhS4NmAqS4BTT+Cp8b24jYFPLhV5PUB?=
- =?us-ascii?Q?NcwIB7yTBzn30HQyVwNVnFaBCv5uBLIqcqcsCluYjvVEGfQq90xmSgTLB3+P?=
- =?us-ascii?Q?sAGJJReWpXdm4UXGprjoQmlL5wkxPh6xjMIhSChkeMK1X65vh0JHCki0wY0z?=
- =?us-ascii?Q?UKG5R2pP2ZCpv6qBb6Q+w9KC6weLVspcJAiywndHWroMjlYVdJfIO4B4cyNA?=
- =?us-ascii?Q?jXC5fUbp9Yf0BSKDxYWNDECNYMnfI3SAaq8p+jmbDj2MwsHvIvvrzwmZq5b2?=
- =?us-ascii?Q?2PcYAoIF8WeMqDcSPwK+FbtcCB/uzH5U/v6bBAbS3vHUq9OtJdXWekcgaDR9?=
- =?us-ascii?Q?XG44/+8YQF4UbIdI2C8az/+8YtnfLneL?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Wmx4s0y9hk/FVwZBvIpt6TCaH8Ra9tcWyia38Mo/zMomPuOz8437nTEt83BI?=
- =?us-ascii?Q?0s89662ocHKFJMy1TCAD7qzQVr/9fReQw4uWLEES/7fbsrRrEl6M1W7fVfAX?=
- =?us-ascii?Q?CuBqLiQ9OC6ww1XDpQhDcS9XFjDAeacNtQuw98BXJI+WckNM+LghyAszPZcq?=
- =?us-ascii?Q?FdGOn7yU4jSF9Zd7DXEU+El5VZUQAJ7DS60mZPhVM6YJ/23WSczM2CjH65JV?=
- =?us-ascii?Q?6E13DeSvgrnCAupgdM6dT/+bVbe0/53CmUYK579+XrgRozhPtvHNaFwxLzNx?=
- =?us-ascii?Q?ZvG1VxnvkRyyIiFzqO4wcKz0MGD/Hq5Doa5YyZko6n6PQcEPEmirio/Bsk+U?=
- =?us-ascii?Q?mJxugN7CfOZjIDa1ATVPUaXv+5kRSXvr0OmkJVT3JWb/4TrknjdrREB6LTCZ?=
- =?us-ascii?Q?RbF9zNsx1rExbfrQ1eVV+JOnE+Ux306hIwWlqLQfp71Ik8t51P4po2SCBpju?=
- =?us-ascii?Q?/Klis1SdN66By06l85swuQ1Hbe0LDXuE62TiA3ZxdXFyrSWNxR40eAYluCyU?=
- =?us-ascii?Q?XKYeaGX9R1BTwtbmulGZZ5UeuL02Lxwm/M/B4Oy9Pb17+6rWkowMVoYgxV05?=
- =?us-ascii?Q?VKxLfjQYuDTb5DkOCL14ZF6DZK5vJ7waoK4I+ozwK/ycWK1MzDikcxB0l4zn?=
- =?us-ascii?Q?5VY+4OlK/W3kUUnMeQazB/m6tuDcm8hhzWMR1I5NdHiY3Fs7WA6f0ct19n+n?=
- =?us-ascii?Q?esudHB9Vqetoh4QBtaE9JKIotudYaJX72GKNgJxyWSfpEwimkt5ofvBFIWQE?=
- =?us-ascii?Q?KUTuRrKlVH2LuJK7ZGciCEW43TYwQubrCu7oGueK/mqam+q6rr0tHGBOnjfK?=
- =?us-ascii?Q?wKA1kWDrJuOpwonKQ6zj0cVhnLBPFJjpnyHwGdAm2ItYuEyG8E57homnajhl?=
- =?us-ascii?Q?blVGXpkVfOhkcYikdHY2KFmi5QXiTTPSFwSdGlcftddRlvQN9lro04CKwpSY?=
- =?us-ascii?Q?x7197ke0p+YljKcMc6br6Y7l6LS5hveeSErzAFrb/95oghg0eAK6rwOpD6vS?=
- =?us-ascii?Q?cO1ELOEw8I8kjbWuBWRDWarGISKIxC4FzFa2NEg7ZoaFTFZVE7Z573+t2Xeb?=
- =?us-ascii?Q?WXo6B7UVbfBxvSmdm+8dHfo3Qp1rT+LpBVowptE9/qhbcB86u8BN8pr/2f3V?=
- =?us-ascii?Q?a6+paeDJSRAVv4N14PM50XaaKaKa65rMSCtIY8XjE0Pjsu6WhNItjSRLLCo3?=
- =?us-ascii?Q?5OX0R3V9cUJJaxHBpR1EThhMp/m2hZuv0W1VMKKoSvs2nEVOqrg14BazrIdQ?=
- =?us-ascii?Q?vg43LFgh8VJVTLtN7LEgHcP0X5F10nUjBHcolCtcK+pMRcbY8fXhpX5NA6vQ?=
- =?us-ascii?Q?fmzfas9Yeokw7LNqWJDqY1sryGKARKoxZeNiIOOBth4jEpxf9sSvL/zcesz7?=
- =?us-ascii?Q?bqLkejLN5iE6Gb4rT1ZaQS7gop168W2QyGUrfZWkekq/NQngsmTP9Hay2in4?=
- =?us-ascii?Q?pJSPIOqah8H5CAu7avUxhhKotgKcL/DyW0Io1JTLoBzVBqokvmOuFlObBpqC?=
- =?us-ascii?Q?/xOmk3ZY3Mrgpc4tCOhC4EUx98z517Q7Bd+iMxUe7XaH6IpZ4oE6+i4qkT19?=
- =?us-ascii?Q?AIsQLB5HKXaI2xr37TULvX084/xNxyJTPN8JiTZF?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b97185e-041e-47bc-144e-08de102cb2aa
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2025 23:02:09.6517
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: M9pqM3xSPcHMCq5rvE9X7h1ZMULkWdlGyvD9BXV5FzKApqTt+l7pi6UPCjRQLhmL
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4333
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251020-netconsole-fix-race-v1-1-b775be30ee8a@gmail.com>
 
-On Tue, Oct 14, 2025 at 02:48:46PM -0700, Nicolin Chen wrote:
-> The ioctl returns 0 upon success, so !0 returning -1 breaks the selftest.
-> 
-> Drop the '!' to fix it.
-> 
-> Fixes: 1d235d849425 ("iommu/selftest: prevent use of uninitialized variable")
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  tools/testing/selftests/iommu/iommufd_utils.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Hi Gustavo,
 
-Applied to for-rc, thanks
+On Mon, Oct 20, 2025 at 02:22:34PM -0700, Gustavo Luiz Duarte wrote:
+> This test validates the fix for potential race conditions in the
+> netconsole userdata path and serves as a regression test to prevent
+> similar issues in the future.
 
-Jason
+I noticed the test was not added to the TEST_PROGS in the Makefile like other
+selftests. Is that intentional? 
+
+You might also need to change the order of the patches in the series to
+make sure the test passes in CI.
+
+> +cleanup_children() {
+> +	pkill_socat
+> +	# Remove the namespace, interfaces and netconsole target
+> +	cleanup
+> +	kill $child1 $child2 2> /dev/null || true
+> +	wait $child1 $child2 2> /dev/null || true
+> +}
+
+Calling cleanup before stopping loop_set_userdata causes writing the userdata to
+fail. You might want to move the kill and wait lines to before call to cleanup.
+Additionally, shellcheck also suggests wrapping $child1 and $child2 with double
+quotes.
+
 
