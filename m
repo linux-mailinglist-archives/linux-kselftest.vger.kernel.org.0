@@ -1,184 +1,213 @@
-Return-Path: <linux-kselftest+bounces-43574-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43575-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD974BF33B5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 21:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E5DBBF357F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 22:12:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D60918C2FAB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 19:36:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E089918C16F8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 20:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55FD32F770;
-	Mon, 20 Oct 2025 19:35:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5890F2DC353;
+	Mon, 20 Oct 2025 20:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U/XWckUa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OF3yDw5m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3F22DAFC7
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 19:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9BB02D6400
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 20:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760988944; cv=none; b=iNyh5/7eSHgJ6OV7geasvJgiXzhVZbPpiqk+aJgvgD7LvYE6ruUt6KLwYIHDCBEwcsLoIz9ZYh/zr3PVNr7x4yrK6QavSJbgNbRqH54uC/6e0N/AjQblhjFZyGWJQgOUYDEd/k+TNCUR6kjWMxvtdRIk4RYu1x7YYheoHnf+t+8=
+	t=1760991153; cv=none; b=hqfnExGl13PdHyFBwpW1PrD/1di+83t3RyET9537F8L06Kuy+49O1gSxtvInVUB6EkUh947eBJ64aM3tklZWYt01g8qUeiZAWfljFCGKhVzzd+7OMp6GfkY6SgjzBYTh4xaG323I1Wg8UppUf5XYAc8kYgzhchOTssvk+aKP7GE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760988944; c=relaxed/simple;
-	bh=TstNcT24iidk65qQwuHBm8MLWpw+Rgs03+06matpxa4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ewL8rMBuXZpi54HRy3vprDS0fCjq6QUZ4ot1N3eWbmXcj2nHqpdHH2QHOE1UpHLKxEZwc3XYLO3VGbgMUc2gHtFjkmIPWC+WknMT8l2ToMJK1dh52NfcbGYl+M6ZiAP6jvtM4oFl9Nc5c3Bp7J5Yj8UBnkg4/trl8y8GpDEI7DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U/XWckUa; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760988941;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=IZ4KHrVXGbKOyfWQ4VuLHo93xGYeDh1z6yDjQj1rykE=;
-	b=U/XWckUan8Y4NRNee+WrFmcITFLpMz1xChjjjSwOfyMd1j5wJD1OmR9DhgR3CNYg8j6ltY
-	IepoyMyCmlfGe//X17Z5oSUsuWjY/tjIt7fd17Cbvmwrf9ma+KI4HWS/jYhgvl2xZxkZsc
-	mHRZGXi6O7qw+C5v4Mp6TED6nAUCZWQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-347-KcWXAj8IPTWLXHKxw_tO_Q-1; Mon, 20 Oct 2025 15:35:40 -0400
-X-MC-Unique: KcWXAj8IPTWLXHKxw_tO_Q-1
-X-Mimecast-MFC-AGG-ID: KcWXAj8IPTWLXHKxw_tO_Q_1760988939
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-47107fcb257so70843265e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 12:35:40 -0700 (PDT)
+	s=arc-20240116; t=1760991153; c=relaxed/simple;
+	bh=XDW8E1K3bkQ9i4Kqx7G5/637yEd2blJb+FQsNxfJ8dE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z54aFXNnBE0uEEgg6dp2D1yWQ1oZAeVkeTeWhQoWuoEU0MrhksDVmpWGfijCTarVJ+XnVa/4suSpjZajsLIOVp+PHRQa56TCQ28UKObxjwb42TDhKTHnJFJPThoDMXmKl6SgpjNkeE0gbDrlvuPHsyx0aAW7dg5iDGsyqTi7m3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OF3yDw5m; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b4fb8d3a2dbso3302316a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 13:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760991151; x=1761595951; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NtJl8gwJ8fJtUB7up03kcnGklNDXDEpKtP8NLBXeBeI=;
+        b=OF3yDw5mM1Azc3YVlHqYaTLvCfwHmzoYsbTzBSIqM9mGP4USBWVD1FIkrFqJoOu6Ra
+         oiR7gyrEYLAlFeWL/2zAv/QNXNYUprZexOTGli2gYaOUOnys542HBbq6xAm6DwWBtKdG
+         miGEe/P8cW7OquDTUol7WuQm5HEc4kziekCY3Kn1J5WcoUsEn0GgYFAmS0GkY4t5MS9e
+         EcYtHH9LT/6lWLEx+O8+2u/h5rhrEXKJ0YarPnLRVwqpZrEHEHasEq6mOZIrSVW9j3G4
+         soXxP2moUs61hbshFQMMPhy6y9EKtBxkAgrHTq0pO9DtHxlzoMGsgqROhdomyXay/uih
+         FHhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760988939; x=1761593739;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IZ4KHrVXGbKOyfWQ4VuLHo93xGYeDh1z6yDjQj1rykE=;
-        b=qUV440sEq/3qWemh2gcQuQO6IKjnya95/T5ZEH/Gm3sEVTlFHbFjoAofmvckZmBMbq
-         RnAmPF7KriUAGHTIEohRiSQg6oiAZm6oz+p+N6uZW21cQaVila0UCnNdf0JjV7XrvVwE
-         3Kh0son1P8P5gKpNquaDr/JDBc0O9WOzZ6a5Uqrx7/4lbxlu3TKwx6Jz949aMhfjNZDw
-         WA7W1P6nDqF6tbHeJ4ucdeJXBF6LcOR6Hngk2BHisTqDZZ0yjXcUu4jirwFLwJtKySMW
-         dLaw7NVc+N9p06w4BygwDcwR7kBvdb9gEDHeoDN7FoRAOkodmlsOTs761M2u1seHcAWT
-         oUCA==
-X-Forwarded-Encrypted: i=1; AJvYcCWPUAUUJLeEaAMlOUR3bq8cuHMUcfpGV46eX1F1TVSA895RbVzKicLqFj1+kq23st6K3TVIIftsoL4IT+S7OZE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOpcF8R0Mx9yYkGgyU6OyLY38IWW0hE4Jd3U4AAEA6VdiUNiRD
-	VCq4dYRHCoX5BEb3O9vWM1xaiBO2pmaHL9VO/TDD+ldk0itDzM5X7GroX7FMWQCS2mBs/torFaV
-	5nBExxXLlEr6z0SgK9H24yp2M8jmROlSt+FxDECN8KlzIL3Hd4N6ap38ZVgEtHsQCHYN6/A==
-X-Gm-Gg: ASbGncsFCgnEpIajRUtKziiw/1+4Zgsd9LvVwlAtHQtmJZdSPdctmr4N2/4xCsC0TU+
-	xLn7EgcjtPNE2gkrY2D4e9KgG1u3HkAQdnkMBfHlyRnQrm4278xeqzVvlf4iHGE+Te/zelqD0DG
-	f0Rhbpvv1AOLnj9BtwdL7ccx1L83WoOOcKJgmXZYGxFlSDvxEvLbHXlpRHQkkMuzAa+6qkWlh9g
-	97Gic4tme8hPJO5vdHRFU1ifISB/4triFSbTKBy8fgAWqHZKIc/2lsOQ252chAgSGJWRd2PFofO
-	DLqy4WWsPHSQ59+jPsP1Oxm0L6nUeDCTzwVKLo4aTP6V85i1mykY+cF85pPeEA8rpxgeWUkVivn
-	TqOUyKpy7X9O0jOStaRDZCT23vEZ1jtVFSJh9wFcqISIp76pjPewBwjyzbfmwi0p950KiFUyfFg
-	URDLnwP3sPhQQWvYxxnrHAvYiZ2Z0=
-X-Received: by 2002:a05:600c:528e:b0:471:7a:7905 with SMTP id 5b1f17b1804b1-4711791cba1mr138573225e9.34.1760988939344;
-        Mon, 20 Oct 2025 12:35:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHUD1Q58X1dirbdln4YyEHe+ZrBTn2g3MQBkfJH1bO18P6uDwJ35vA6zo0kQDMsN8QQTSSzUg==
-X-Received: by 2002:a05:600c:528e:b0:471:7a:7905 with SMTP id 5b1f17b1804b1-4711791cba1mr138573155e9.34.1760988938928;
-        Mon, 20 Oct 2025 12:35:38 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f0c:c200:fa4a:c4ff:1b32:21ce? (p200300d82f0cc200fa4ac4ff1b3221ce.dip0.t-ipconnect.de. [2003:d8:2f0c:c200:fa4a:c4ff:1b32:21ce])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f00cdf6csm16661954f8f.43.2025.10.20.12.35.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Oct 2025 12:35:38 -0700 (PDT)
-Message-ID: <85166a8a-ad54-42d0-a09f-43e0044cf4f4@redhat.com>
-Date: Mon, 20 Oct 2025 21:35:37 +0200
+        d=1e100.net; s=20230601; t=1760991151; x=1761595951;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NtJl8gwJ8fJtUB7up03kcnGklNDXDEpKtP8NLBXeBeI=;
+        b=gcqLCmAr6Y/Af68QBii3m3zXwZqvY7EL9x08ARo+ftJpYnkNwDlvsg0qAWELj8zYlS
+         lM9jhu+W9q25bugzXNTYlIb2WulsD4pIPGVzABTo6r88shIOnBVPi2XXGyGKY4la2LTJ
+         OAhMz8jsrewOMbVi/EOdmjuLsbnqXokqHJdWHm8K8fiescEFyY/x+Ozv2M9XyjduXLZR
+         XdXItyvVrl0uXnsHgIUvBbnLxY+SD3aLeUh9VoR2/gq6XzYBP8oKQlHXYRpIHPmJ/Iq4
+         Eqz5mZMhhodmTjniw8qqPelDF8dIimaRAEgUKF3/tLOaUfpGuNPvuy81+5OTQhfi/6yU
+         agkg==
+X-Forwarded-Encrypted: i=1; AJvYcCXXDJwsDWBjSEl6xAQjEVRWxpOP1cWZTeW5g22EAsVjxVWHwBEUhbT+l0G7ew/mq6MXLYIZgy/DQUIL4jHCGY4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtTdvoBpRspN1MpRVakKlM8eWbuMVnRA3cyF2pE8J3LCB7RE3v
+	rDXfob53iyBc2j19qRIV682JW47CgmVom28iTkykRTLEpCFbG5Q1z8HwkjOGA8XhN6Eo1xojirI
+	5PztCUt6+XratibfNaJk+Bx5sb8ddztg=
+X-Gm-Gg: ASbGncvbOJOM8mtc94g5S27yBpJUBGKMhLmA/ljzbC3hKAC4xpUdOX4yBfpOaV0v31A
+	z0UM0EqNrARN1lT1NiLSM2eXtDz6cd0M/TXOE0YKXwPnIINSGhbpDjooaCWs/t0n7jpUyKssexI
+	dVV+jLGizwJW8oEmU6FvIL0JTbDxh3XVvbt58vrVLnl21M1VNXSl1VUN59Eao/E1OWLKzwlikUZ
+	IM7OcQxWOgYDdUd163DbA42RM5REzfEmFzIE1/2kqkL0wXMiFlyl7ni+4NtglJUtE9yfAji0oXx
+	PiBvrux0zuM=
+X-Google-Smtp-Source: AGHT+IFzr63scrASjGpXgPHvF1iqfssnD2ptyGNMsO9gT08qsXSIRnbt8kE6ZV+uKwVDPzXJQKWadxwBnTHGnSrz99s=
+X-Received: by 2002:a17:902:e78b:b0:288:e46d:b325 with SMTP id
+ d9443c01a7336-290caf858bcmr172651785ad.43.1760991150823; Mon, 20 Oct 2025
+ 13:12:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v2 PATCH 1/3] Documentation: add guidelines for writing
- testable code specifications
-To: Jonathan Corbet <corbet@lwn.net>, Gabriele Paoloni <gpaoloni@redhat.com>,
- shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- gregkh@linuxfoundation.org
-Cc: linux-mm@kvack.org, safety-architecture@lists.elisa.tech,
- acarmina@redhat.com, kstewart@linuxfoundation.org, chuckwolber@gmail.com
-References: <20250910170000.6475-1-gpaoloni@redhat.com>
- <20250910170000.6475-2-gpaoloni@redhat.com> <878qifgxbj.fsf@trenco.lwn.net>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- qIws/H2t
-In-Reply-To: <878qifgxbj.fsf@trenco.lwn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <CAEf4Bza6ynjUHanEEqQZ_mke3oBCzSitxBt9Jb5tx8rxt8q4vg@mail.gmail.com>
+ <20251020085918.1604034-1-higuoxing@gmail.com> <CAADnVQLDQpNEa0bT6nyX3UfGTE94YxrM4gPD+PirmqHwXRB15Q@mail.gmail.com>
+In-Reply-To: <CAADnVQLDQpNEa0bT6nyX3UfGTE94YxrM4gPD+PirmqHwXRB15Q@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 20 Oct 2025 13:12:16 -0700
+X-Gm-Features: AS18NWAes5P_XPnKYSlRrr7vtNNOsfz7WT3J-c3JQinfMqjOVU5S3FZqCyldy_k
+Message-ID: <CAEf4BzZbCE4tLoDZyUf_aASpgAGFj75QMfSXX4a4dLYixnOiLg@mail.gmail.com>
+Subject: Re: strace log before the fix, with fsync fix and with fclose fix.
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Xing Guo <higuoxing@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Jiri Olsa <olsajiri@gmail.com>, sveiss@meta.com, 
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
->> +------------
->> +The Documentation/doc-guide/kernel-doc.rst chapter describes how to document the code using the kernel-doc format, however it does not specify the criteria to be followed for writing testable specifications; i.e. specifications that can be used to for the semantic description of low level requirements.
-> 
-> Please, for any future versions, stick to the 80-column limit; this is
-> especially important for text files that you want humans to read.
-> 
-> As a nit, you don't need to start by saying what other documents don't
-> do, just describe the purpose of *this* document.
-> 
-> More substantially ... I got a way into this document before realizing
-> that you were describing an addition to the format of kerneldoc
-> comments.  That would be good to make clear from the outset.
-> 
-> What I still don't really understand is what is the *purpose* of this
-> formalized text?  What will be consuming it?  You're asking for a fair
-> amount of effort to write and maintain these descriptions; what's in it
-> for the people who do that work?
++linux-fsdevel
 
-I might be wrong, but sounds to me like someone intends to feed this to 
-AI to generate tests or code.
+On Mon, Oct 20, 2025 at 9:28=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Oct 20, 2025 at 1:59=E2=80=AFAM Xing Guo <higuoxing@gmail.com> wr=
+ote:
+> >
+> > Test with fsync:
+>
+> I doubt people will be reading this giant log.
+> Please bisect it instead.
+> Since it's not reproducible when /tmp is backed by tmpfs
+> it's probably some change in vfs or in the file system that
+> your laptop is using for /tmp.
+> It changes a user visible behavior of the file system and
+> needs to be investigated, since it may affect more code than
+> just this selftest.
 
-In that case, no thanks.
+dmesg output was certainly too much, but I filtered all that out. Here
+are relevant pieces of strace log.
 
-I'm pretty sure we don't want this.
+BEFORE (FAILING)
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+openat(AT_FDCWD, "/tmp/bpf_arg_parsing_test.Pf280c",
+O_RDWR|O_CREAT|O_EXCL, 0600) =3D 4
+fcntl(4, F_GETFL)                       =3D 0x8002 (flags O_RDWR|O_LARGEFIL=
+E)
+fstat(4, {st_mode=3DS_IFREG|0600, st_size=3D0, ...}) =3D 0
+write(4, "# comment\n  test_with_spaces    "..., 175) =3D 175
+openat(AT_FDCWD, "/tmp/bpf_arg_parsing_test.Pf280c", O_RDONLY) =3D 5
+fstat(5, {st_mode=3DS_IFREG|0600, st_size=3D0, ...}) =3D 0
+read(5, "", 8192)                       =3D 0
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -- THIS IS BAD, NO CONTENTS
+close(5)                                =3D 0
+close(4)                                =3D 0
+unlink("/tmp/bpf_arg_parsing_test.Pf280c") =3D 0
 
--- 
-Cheers
+WITH SYNC
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+openat(AT_FDCWD, "/tmp/bpf_arg_parsing_test.UK5nUq",
+O_RDWR|O_CREAT|O_EXCL, 0600) =3D 4
+fcntl(4, F_GETFL)                       =3D 0x8002 (flags O_RDWR|O_LARGEFIL=
+E)
+fstat(4, {st_mode=3DS_IFREG|0600, st_size=3D0, ...}) =3D 0
+write(4, "# comment\n  test_with_spaces    "..., 175) =3D 175
+fsync(4)                                =3D 0
+openat(AT_FDCWD, "/tmp/bpf_arg_parsing_test.UK5nUq", O_RDONLY) =3D 5
+fstat(5, {st_mode=3DS_IFREG|0600, st_size=3D175, ...}) =3D 0
+read(5, "# comment\n  test_with_spaces    "..., 8192) =3D 175
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -- GOOD,
+because fsync(4) before second openat()
+read(5, "", 8192)                       =3D 0
+close(5)                                =3D 0
+close(4)                                =3D 0
+unlink("/tmp/bpf_arg_parsing_test.UK5nUq") =3D 0
 
-David / dhildenb
+WITH CLOSE
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+openat(AT_FDCWD, "/tmp/bpf_arg_parsing_test.WavYEa",
+O_RDWR|O_CREAT|O_EXCL, 0600) =3D 4
+fcntl(4, F_GETFL)                       =3D 0x8002 (flags O_RDWR|O_LARGEFIL=
+E)
+fstat(4, {st_mode=3DS_IFREG|0600, st_size=3D0, ...}) =3D 0
+write(4, "# comment\n  test_with_spaces    "..., 175) =3D 175
+close(4)                                =3D 0
+openat(AT_FDCWD, "/tmp/bpf_arg_parsing_test.WavYEa", O_RDONLY) =3D 4
+fstat(4, {st_mode=3DS_IFREG|0600, st_size=3D175, ...}) =3D 0
+read(4, "# comment\n  test_with_spaces    "..., 8192) =3D 175
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ -- GOOD,
+because close(4) before second openat()
+read(4, "", 8192)                       =3D 0
+close(4)                                =3D 0
+unlink("/tmp/bpf_arg_parsing_test.WavYEa") =3D 0
 
+
+So as can be seen above, kernel does see the write(4, <175 bytes of
+content>) in all cases (so libc's fflush(fp) works as expected), but
+without either fsync(4) or close(4), kernel won't return those 175
+bytes if we open() same file (returning FD 5 this time).
+
+Is that a reasonable behavior of the kernel? I don't know, it would be
+good for FS folks to double check/confirm. The complication here is
+that we have two FDs open against the same underlying file (so my
+assumption is that kernel should share underlying page cache data),
+and documentation I've found isn't particularly clear on guarantees in
+that case.
+
+write()'s man page states:
+
+  > POSIX requires that a read(2) which can be proved to occur after a
+write() has returned returns the new data. Note that not all file
+systems are POSIX conforming.
+
+(but this doesn't clarify if all this is applied only within the same *FD*)
+
+POSIX itself says:
+
+  > Writes can be serialized with respect to other reads and writes.
+If a read() of file data can be proven (by any means) to occur after a
+write() of the data, it must reflect that write(), even if the calls
+are made by different processes. A similar requirement applies to
+multiple write operations to the same file position. This is needed to
+guarantee the propagation of data from write() calls to subsequent
+read() calls. This requirement is particularly significant for
+networked file systems, where some caching schemes violate these
+semantics.
+
+But again, no mention of multiple FDs opened against the same underlying fi=
+le.
+
+So unclear, which is why it would be nice for FS folks to double
+check. It's certainly a change in behavior, it used to work reliably
+before. [0] is the source code of the test (and note that we now added
+fsync(), without it the test is now broken).
+
+  [0] https://github.com/torvalds/linux/blob/master/tools/testing/selftests=
+/bpf/prog_tests/arg_parsing.c
 
