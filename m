@@ -1,309 +1,140 @@
-Return-Path: <linux-kselftest+bounces-43535-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AC4CBEF678
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 08:08:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 562A7BEFB8D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 09:45:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 567BC3BFD25
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 06:06:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95F14189CFB4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 07:45:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD242D6607;
-	Mon, 20 Oct 2025 06:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 013042DFA21;
+	Mon, 20 Oct 2025 07:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GD/xJmWM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (unknown [147.136.157.2])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCF92D4805;
-	Mon, 20 Oct 2025 06:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB892D7DFC;
+	Mon, 20 Oct 2025 07:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760940341; cv=none; b=UCUf4pM/FoVo7582M2g79ks3+VPdB2UPVEUlwHniWjwCq9cFnXPQ4u3MkiVKpU8+VJOJ58tNSUOtJOX2LnkWavaBPqVOwjlZH/vSgGzaXF6ICaTMp0KqJq6lXVbnuT7nAd4FTnoTrwrZhYC4/B63KZXGITkGaPxrjDy3pVI5qoc=
+	t=1760946226; cv=none; b=UWOFO6iSPhNMHpGmL7GLeqXL9eKeKCYW5bGvdjMHpOqxrnz71mT7vRzzAlqFaIAQTH8rd1XYuxIXcrcKNxauA7cxm5l5JuKunJiyPzJQJm1b6Luk8wiXsRSS+qFahDlICdPaoLMHez+U3LWW7KGK9v4s2FM78y6co3JcvtUFkdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760940341; c=relaxed/simple;
-	bh=0xWUgvoYVThWm9A2Y2ByUD9kt4NG4IBE0bg1e6gg3qU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=INpFpJHlTBXN5XJ4j7f5US7w1kJkkIbewhII6jh7SkpgqjTICtS09A17hcegYUp7D/R52bILC/yFA6kbWI4mqJSAA4nxeLqMGoyC76xeFogxiTBWd4bsW3A5d1vnbpa5LBoXQPUnwI4r2iIzMd3H1eEMPHnpGb+j/VuLBX/7VDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
-Received: by localhost.localdomain (Postfix, from userid 1007)
-	id 9F3DE8B2A5C; Mon, 20 Oct 2025 14:05:37 +0800 (+08)
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: mptcp@lists.linux.dev,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Willem de Bruijn <willemb@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Florian Westphal <fw@strlen.de>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 3/3] selftests/bpf: Add mptcp test with sockmap
-Date: Mon, 20 Oct 2025 14:04:48 +0800
-Message-ID: <20251020060503.325369-4-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251020060503.325369-1-jiayuan.chen@linux.dev>
-References: <20251020060503.325369-1-jiayuan.chen@linux.dev>
+	s=arc-20240116; t=1760946226; c=relaxed/simple;
+	bh=BO5RsfQHWdqK/8/bY6nMyHmhnk8uSPRdfDihSgALoXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ca+BT+Ceo5Em14SmfrkHu+Sh1pqYvwuyOs/5LQGvY/M1iSzzwLP9+ybMwBbUX91dKDZevN0sEgxAYZdcgENFyYVG55xkIp9ZCH9T6LYMJwXLF8vAf/q5xfNNiqSDxHVpTCMAUF7o8vosYPOjr1O0+dHVC0nz3DAMShfQH//b8DQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GD/xJmWM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CE9C4CEF9;
+	Mon, 20 Oct 2025 07:43:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760946226;
+	bh=BO5RsfQHWdqK/8/bY6nMyHmhnk8uSPRdfDihSgALoXM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GD/xJmWMNtkh88BpkeuZO9yKhhM9JSXE1JpFOPv1KpkAbGOpAqegh5/3YqEzdjD9U
+	 lTDl/Wc/FLZlR7lIYuS/F9qHTmoOqCqlfyOz8E/7GPfVByVjvtdRqIoowyu/Hfp6Fg
+	 JlaRoqtVIPTNEybkOLgRTXPQsrW1Vo/iyAE0LJx9BKj4adC4ynSIfSVa9zPrNBa/PP
+	 Q0XnfmCuVfH7qcVTl6Y0ZA564yFmOYs7icu9Y2C2f9M4joMHOcHgl2aJ6rrRSyrVyB
+	 FVUyJ3vkkEKu8OQPHvfKuu6JfyV/spsBiSFRe6yYeyXd7idtvn/0H69T9cKglcej1L
+	 egDCQfHTw7v4g==
+Date: Mon, 20 Oct 2025 10:43:37 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
+	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	masahiroy@kernel.org, ojeda@kernel.org, pratyush@kernel.org,
+	rdunlap@infradead.org, tj@kernel.org, jasonmiu@google.com,
+	dmatlack@google.com, skhawaja@google.com
+Subject: Re: [PATCH v6 01/10] kho: allow to drive kho from within kernel
+Message-ID: <aPXoKRVAyGWCNj8I@kernel.org>
+References: <20251018171756.1724191-1-pasha.tatashin@soleen.com>
+ <20251018171756.1724191-2-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251018171756.1724191-2-pasha.tatashin@soleen.com>
 
-Add test cases to verify that when MPTCP falls back to plain TCP sockets,
-they can properly work with sockmap.
+On Sat, Oct 18, 2025 at 01:17:47PM -0400, Pasha Tatashin wrote:
+> Allow to do finalize and abort from kernel modules, so LUO could
 
-Additionally, add test cases to ensure that sockmap correctly rejects
-MPTCP sockets as expected.
+We surely don't want modules being able to drive that. Maybe
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../testing/selftests/bpf/prog_tests/mptcp.c  | 136 ++++++++++++++++++
- .../selftests/bpf/progs/mptcp_sockmap.c       |  43 ++++++
- 2 files changed, 179 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/mptcp_sockmap.c
+   allow kernel to drive finalize and abort without requiring triggers
+   from the userspace
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index f8eb7f9d4fd2..54459b385439 100644
---- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -6,11 +6,14 @@
- #include <netinet/in.h>
- #include <test_progs.h>
- #include <unistd.h>
-+#include <error.h>
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
-+#include "socket_helpers.h"
- #include "mptcp_sock.skel.h"
- #include "mptcpify.skel.h"
- #include "mptcp_subflow.skel.h"
-+#include "mptcp_sockmap.skel.h"
- 
- #define NS_TEST "mptcp_ns"
- #define ADDR_1	"10.0.1.1"
-@@ -436,6 +439,137 @@ static void test_subflow(void)
- 	close(cgroup_fd);
- }
- 
-+/* Test sockmap on MPTCP server handling non-mp-capable clients. */
-+static void test_sockmap_with_mptcp_fallback(struct mptcp_sockmap *skel)
-+{
-+	int listen_fd = -1, client_fd1 = -1, client_fd2 = -1;
-+	int server_fd1 = -1, server_fd2 = -1, sent, recvd;
-+	char snd[9] = "123456789";
-+	char rcv[10];
-+
-+	listen_fd = start_mptcp_server(AF_INET, NULL, 0, 0);
-+	if (!ASSERT_OK_FD(listen_fd, "redirect:start_mptcp_server"))
-+		return;
-+
-+	skel->bss->trace_port = ntohs(get_socket_local_port(listen_fd));
-+	skel->bss->sk_index = 0;
-+	client_fd1 = connect_to_fd_opts(listen_fd, NULL);
-+	if (!ASSERT_OK_FD(client_fd1, "redirect:connect_to_fd"))
-+		goto end;
-+	server_fd1 = xaccept_nonblock(listen_fd, NULL, NULL);
-+	skel->bss->sk_index = 1;
-+	client_fd2 = connect_to_fd_opts(listen_fd, NULL);
-+	if (!ASSERT_OK_FD(client_fd2, "redirect:connect_to_fd"))
-+		goto end;
-+	server_fd1 = xaccept_nonblock(listen_fd, NULL, NULL);
-+	/* test normal redirect behavior: the data sent by client_fd1 can be
-+	 * received by client_fd2
-+	 */
-+	skel->bss->redirect_idx = 1;
-+	sent = xsend(client_fd1, snd, sizeof(snd), 0);
-+	if (!ASSERT_EQ(sent, sizeof(snd), "redirect:xsend(client_fd1)"))
-+		goto end;
-+
-+	/* try to recv more byte to avoid truncation check */
-+	recvd = recv_timeout(client_fd2, rcv, sizeof(rcv), MSG_DONTWAIT, 2);
-+	if (!ASSERT_EQ(recvd, sizeof(snd), "redirect:recv(client_fd2)"))
-+		goto end;
-+
-+end:
-+	if (client_fd1 > 1)
-+		close(client_fd1);
-+	if (client_fd2 > 1)
-+		close(client_fd2);
-+	if (server_fd1 > 0)
-+		close(server_fd1);
-+	if (server_fd2 > 0)
-+		close(server_fd2);
-+	close(listen_fd);
-+}
-+
-+static void test_sockmap_reject_mptcp(struct mptcp_sockmap *skel)
-+{
-+	int listen_fd = -1, server_fd = -1;
-+	int client_fd1 = -1, client_fd2 = -1;
-+	int err, zero = 0;
-+
-+	listen_fd = start_mptcp_server(AF_INET, NULL, 0, 0);
-+	if (!ASSERT_OK_FD(listen_fd, "start_mptcp_server"))
-+		return;
-+
-+	skel->bss->trace_port = ntohs(get_socket_local_port(listen_fd));
-+	skel->bss->sk_index = 0;
-+	client_fd1 = connect_to_fd(listen_fd, 0);
-+	if (!ASSERT_OK_FD(client_fd1, "connect_to_fd client_fd1"))
-+		goto end;
-+	/* sockmap helper called from sockops prog should reject mptcp sk */
-+	if (ASSERT_EQ(skel->bss->helper_ret, -EOPNOTSUPP, "should reject"))
-+		goto end;
-+
-+	/* skip sockops prog */
-+	skel->bss->trace_port = -1;
-+	client_fd2 = connect_to_fd(listen_fd, 0);
-+	if (!ASSERT_OK_FD(client_fd2, "connect_to_fd client_fd2"))
-+		goto end;
-+
-+	server_fd = xaccept_nonblock(listen_fd, NULL, NULL);
-+	err = bpf_map_update_elem(bpf_map__fd(skel->maps.sock_map),
-+				  &zero, &server_fd, BPF_NOEXIST);
-+	if (ASSERT_EQ(err, -EOPNOTSUPP, "should reject"))
-+		goto end;
-+end:
-+	if (client_fd1 > 0)
-+		close(client_fd1);
-+	if (client_fd2 > 0)
-+		close(client_fd2);
-+	if (server_fd > 0)
-+		close(server_fd);
-+	close(listen_fd);
-+}
-+
-+static void test_mptcp_sockmap(void)
-+{
-+	struct mptcp_sockmap *skel;
-+	struct netns_obj *netns;
-+	int cgroup_fd, err;
-+
-+	cgroup_fd = test__join_cgroup("/mptcp_sockmap");
-+	if (!ASSERT_OK_FD(cgroup_fd, "join_cgroup: mptcp_sockmap"))
-+		return;
-+
-+	skel = mptcp_sockmap__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_load: mptcp_sockmap"))
-+		goto close_cgroup;
-+
-+	skel->links.mptcp_sockmap_inject =
-+		bpf_program__attach_cgroup(skel->progs.mptcp_sockmap_inject, cgroup_fd);
-+	if (!ASSERT_OK_PTR(skel->links.mptcp_sockmap_inject, "attach sockmap"))
-+		goto skel_destroy;
-+
-+	err = bpf_prog_attach(bpf_program__fd(skel->progs.mptcp_sockmap_redirect),
-+			      bpf_map__fd(skel->maps.sock_map),
-+			      BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach stream verdict"))
-+		goto skel_destroy;
-+
-+	netns = netns_new(NS_TEST, true);
-+	if (!ASSERT_OK_PTR(netns, "netns_new: mptcp_sockmap"))
-+		goto skel_destroy;
-+
-+	if (endpoint_init("subflow") < 0)
-+		goto close_netns;
-+
-+	test_sockmap_with_mptcp_fallback(skel);
-+	test_sockmap_reject_mptcp(skel);
-+
-+close_netns:
-+	netns_free(netns);
-+skel_destroy:
-+	mptcp_sockmap__destroy(skel);
-+close_cgroup:
-+	close(cgroup_fd);
-+}
-+
- void test_mptcp(void)
- {
- 	if (test__start_subtest("base"))
-@@ -444,4 +578,6 @@ void test_mptcp(void)
- 		test_mptcpify();
- 	if (test__start_subtest("subflow"))
- 		test_subflow();
-+	if (test__start_subtest("sockmap"))
-+		test_mptcp_sockmap();
- }
-diff --git a/tools/testing/selftests/bpf/progs/mptcp_sockmap.c b/tools/testing/selftests/bpf/progs/mptcp_sockmap.c
-new file mode 100644
-index 000000000000..d4eef0cbadb9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/mptcp_sockmap.c
-@@ -0,0 +1,43 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "bpf_tracing_net.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int sk_index;
-+int redirect_idx;
-+int trace_port;
-+int helper_ret;
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SOCKMAP);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+	__uint(max_entries, 100);
-+} sock_map SEC(".maps");
-+
-+SEC("sockops")
-+int mptcp_sockmap_inject(struct bpf_sock_ops *skops)
-+{
-+	struct bpf_sock *sk;
-+
-+	/* only accept specified connection */
-+	if (skops->local_port != trace_port ||
-+	    skops->op != BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB)
-+		return 1;
-+
-+	sk = skops->sk;
-+	if (!sk)
-+		return 1;
-+
-+	/* update sk handler */
-+	helper_ret = bpf_sock_map_update(skops, &sock_map, &sk_index, BPF_NOEXIST);
-+
-+	return 1;
-+}
-+
-+SEC("sk_skb/stream_verdict")
-+int mptcp_sockmap_redirect(struct __sk_buff *skb)
-+{
-+	/* redirect skb to the sk under sock_map[redirect_idx] */
-+	return bpf_sk_redirect_map(skb, &sock_map, redirect_idx, 0);
-+}
+> drive the KHO sequence via its own state machine.
+> 
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
+> ---
+>  include/linux/kexec_handover.h | 15 +++++++
+>  kernel/kexec_handover.c        | 74 ++++++++++++++++++++--------------
+>  2 files changed, 59 insertions(+), 30 deletions(-)
+
+...
+
+> diff --git a/kernel/kexec_handover.c b/kernel/kexec_handover.c
+> index 76f0940fb485..76c34ea923f0 100644
+> --- a/kernel/kexec_handover.c
+> +++ b/kernel/kexec_handover.c
+> @@ -1067,7 +1067,7 @@ static int kho_out_update_debugfs_fdt(void)
+>  	return err;
+>  }
+>  
+> -static int kho_abort(void)
+> +static int __kho_abort(void)
+>  {
+>  	int err;
+>  	unsigned long order;
+> @@ -1100,7 +1100,27 @@ static int kho_abort(void)
+>  	return err;
+>  }
+>  
+> -static int kho_finalize(void)
+> +int kho_abort(void)
+> +{
+> +	int ret = 0;
+> +
+> +	if (!kho_enable)
+> +		return -EOPNOTSUPP;
+> +
+> +	guard(mutex)(&kho_out.lock);
+
+Please include linux/cleanup.h explicitly
+
+> +	if (!kho_out.finalized)
+> +		return -ENOENT;
+> +
+
+...
+
+> -unlock:
+> -	mutex_unlock(&kho_out.lock);
+> -	return ret;
+> +	return (!!_val) ? kho_finalize() : kho_abort();
+
+An 'if' would be cleared IMO:
+
+	if (val)
+		return kho_finalize();
+	else
+		return kho_abort();
+
+and we can rename u64 _val to u64 val as we are dropping the boolean.
+
+>  }
+
 -- 
-2.43.0
-
+Sincerely yours,
+Mike.
 
