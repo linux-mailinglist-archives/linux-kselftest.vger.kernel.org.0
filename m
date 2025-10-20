@@ -1,174 +1,184 @@
-Return-Path: <linux-kselftest+bounces-43573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43574-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92D8BBF31E9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 21:11:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD974BF33B5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 21:35:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C71B40046B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 19:11:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D60918C2FAB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 19:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCAD624729A;
-	Mon, 20 Oct 2025 19:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55FD32F770;
+	Mon, 20 Oct 2025 19:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="J1KvD47Y"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U/XWckUa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E95A926;
-	Mon, 20 Oct 2025 19:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA3F22DAFC7
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 19:35:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760987506; cv=none; b=SKnjiOush79qWHKFYYd0tmM8nBM36LyH7JZWqN7n1PwATYT3B8kybwZ+AY1+ZAPbhcGpIBZIixF16GiJ9Fb6EbUccVHytpFDwyumRno1GC3kN77heGAlNinM9fxoGTULBcMBMNI9gavOdU7lH7E3OJwGQ+/nEH3JlfC7Ey+1vaA=
+	t=1760988944; cv=none; b=iNyh5/7eSHgJ6OV7geasvJgiXzhVZbPpiqk+aJgvgD7LvYE6ruUt6KLwYIHDCBEwcsLoIz9ZYh/zr3PVNr7x4yrK6QavSJbgNbRqH54uC/6e0N/AjQblhjFZyGWJQgOUYDEd/k+TNCUR6kjWMxvtdRIk4RYu1x7YYheoHnf+t+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760987506; c=relaxed/simple;
-	bh=O1Qi6nhG/zHyyZZ5m3S3q50NgcDPuwBjbUjZcPeZgGw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f5eQ5lIO5TqDTPcDyOMRsj36wvSjKsYZxvg9p36rPwLkTV7lP984L4ER8WAuPnTuy21vijacDp9KSfBAFinAmE56knFNquc22n+3FxxKQ4SHt35R/8UOwynLde/aer8yukvzMMC0h03nZwGmcqKyLznbmp6s+j1dN2xxy9zKMjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=J1KvD47Y; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59KFk1Ip011392;
-	Mon, 20 Oct 2025 19:11:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=RsElIDttcWvAo74H8bTGmkSCUHxJ8
-	gnNR8dvyyJmZ8w=; b=J1KvD47YbOn0PZY60UxRZGljB3j4wGqNTlycvKghbw/rO
-	RjWLC+NgDQKK7GMlrGxVA1svoZgpdwv6pux+YUtm6dxilv/8Uz2S+FXrqdhgiuAw
-	pj22G/by16TcKfJhh8UsXaBJE6IsxEJIbq0uVIQaEZpOVHSRy3rRZPWYofUyygdM
-	Ja6Y411NnwCmpSl8wY6OuOYOcYTx8SPlEzML+yElEbMKlZwUqzUmGujoE66fLNse
-	Kchd+rXvmMbR3sVUy20EVRUnB46l6jIRc+UsefqLQIWY4oHd3pycii14ikhJdQ0Y
-	o9Nw6qM1AHfB9GUNbijIv4NKkG8/qxhWb+/hoL/mQ==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 49v2yptwft-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 20 Oct 2025 19:11:41 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59KI1cm2025438;
-	Mon, 20 Oct 2025 19:11:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 49v1bb1y8m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 20 Oct 2025 19:11:40 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 59KJBenh030711;
-	Mon, 20 Oct 2025 19:11:40 GMT
-Received: from ca-dev110.us.oracle.com (ca-dev110.us.oracle.com [10.129.136.45])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 49v1bb1y8f-1;
-	Mon, 20 Oct 2025 19:11:40 +0000
-From: Yifei Liu <yifei.l.liu@oracle.com>
-To: mingo@kernel.org, shuah@kernel.org
-Cc: yifei.l.liu@oracle.com, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v2 1/1] selftest/sched: skip the test if smt is not enabled
-Date: Mon, 20 Oct 2025 12:11:07 -0700
-Message-ID: <20251020191107.714245-1-yifei.l.liu@oracle.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1760988944; c=relaxed/simple;
+	bh=TstNcT24iidk65qQwuHBm8MLWpw+Rgs03+06matpxa4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ewL8rMBuXZpi54HRy3vprDS0fCjq6QUZ4ot1N3eWbmXcj2nHqpdHH2QHOE1UpHLKxEZwc3XYLO3VGbgMUc2gHtFjkmIPWC+WknMT8l2ToMJK1dh52NfcbGYl+M6ZiAP6jvtM4oFl9Nc5c3Bp7J5Yj8UBnkg4/trl8y8GpDEI7DY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U/XWckUa; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760988941;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=IZ4KHrVXGbKOyfWQ4VuLHo93xGYeDh1z6yDjQj1rykE=;
+	b=U/XWckUan8Y4NRNee+WrFmcITFLpMz1xChjjjSwOfyMd1j5wJD1OmR9DhgR3CNYg8j6ltY
+	IepoyMyCmlfGe//X17Z5oSUsuWjY/tjIt7fd17Cbvmwrf9ma+KI4HWS/jYhgvl2xZxkZsc
+	mHRZGXi6O7qw+C5v4Mp6TED6nAUCZWQ=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-347-KcWXAj8IPTWLXHKxw_tO_Q-1; Mon, 20 Oct 2025 15:35:40 -0400
+X-MC-Unique: KcWXAj8IPTWLXHKxw_tO_Q-1
+X-Mimecast-MFC-AGG-ID: KcWXAj8IPTWLXHKxw_tO_Q_1760988939
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-47107fcb257so70843265e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 12:35:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760988939; x=1761593739;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IZ4KHrVXGbKOyfWQ4VuLHo93xGYeDh1z6yDjQj1rykE=;
+        b=qUV440sEq/3qWemh2gcQuQO6IKjnya95/T5ZEH/Gm3sEVTlFHbFjoAofmvckZmBMbq
+         RnAmPF7KriUAGHTIEohRiSQg6oiAZm6oz+p+N6uZW21cQaVila0UCnNdf0JjV7XrvVwE
+         3Kh0son1P8P5gKpNquaDr/JDBc0O9WOzZ6a5Uqrx7/4lbxlu3TKwx6Jz949aMhfjNZDw
+         WA7W1P6nDqF6tbHeJ4ucdeJXBF6LcOR6Hngk2BHisTqDZZ0yjXcUu4jirwFLwJtKySMW
+         dLaw7NVc+N9p06w4BygwDcwR7kBvdb9gEDHeoDN7FoRAOkodmlsOTs761M2u1seHcAWT
+         oUCA==
+X-Forwarded-Encrypted: i=1; AJvYcCWPUAUUJLeEaAMlOUR3bq8cuHMUcfpGV46eX1F1TVSA895RbVzKicLqFj1+kq23st6K3TVIIftsoL4IT+S7OZE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOpcF8R0Mx9yYkGgyU6OyLY38IWW0hE4Jd3U4AAEA6VdiUNiRD
+	VCq4dYRHCoX5BEb3O9vWM1xaiBO2pmaHL9VO/TDD+ldk0itDzM5X7GroX7FMWQCS2mBs/torFaV
+	5nBExxXLlEr6z0SgK9H24yp2M8jmROlSt+FxDECN8KlzIL3Hd4N6ap38ZVgEtHsQCHYN6/A==
+X-Gm-Gg: ASbGncsFCgnEpIajRUtKziiw/1+4Zgsd9LvVwlAtHQtmJZdSPdctmr4N2/4xCsC0TU+
+	xLn7EgcjtPNE2gkrY2D4e9KgG1u3HkAQdnkMBfHlyRnQrm4278xeqzVvlf4iHGE+Te/zelqD0DG
+	f0Rhbpvv1AOLnj9BtwdL7ccx1L83WoOOcKJgmXZYGxFlSDvxEvLbHXlpRHQkkMuzAa+6qkWlh9g
+	97Gic4tme8hPJO5vdHRFU1ifISB/4triFSbTKBy8fgAWqHZKIc/2lsOQ252chAgSGJWRd2PFofO
+	DLqy4WWsPHSQ59+jPsP1Oxm0L6nUeDCTzwVKLo4aTP6V85i1mykY+cF85pPeEA8rpxgeWUkVivn
+	TqOUyKpy7X9O0jOStaRDZCT23vEZ1jtVFSJh9wFcqISIp76pjPewBwjyzbfmwi0p950KiFUyfFg
+	URDLnwP3sPhQQWvYxxnrHAvYiZ2Z0=
+X-Received: by 2002:a05:600c:528e:b0:471:7a:7905 with SMTP id 5b1f17b1804b1-4711791cba1mr138573225e9.34.1760988939344;
+        Mon, 20 Oct 2025 12:35:39 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHUD1Q58X1dirbdln4YyEHe+ZrBTn2g3MQBkfJH1bO18P6uDwJ35vA6zo0kQDMsN8QQTSSzUg==
+X-Received: by 2002:a05:600c:528e:b0:471:7a:7905 with SMTP id 5b1f17b1804b1-4711791cba1mr138573155e9.34.1760988938928;
+        Mon, 20 Oct 2025 12:35:38 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f0c:c200:fa4a:c4ff:1b32:21ce? (p200300d82f0cc200fa4ac4ff1b3221ce.dip0.t-ipconnect.de. [2003:d8:2f0c:c200:fa4a:c4ff:1b32:21ce])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f00cdf6csm16661954f8f.43.2025.10.20.12.35.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 20 Oct 2025 12:35:38 -0700 (PDT)
+Message-ID: <85166a8a-ad54-42d0-a09f-43e0044cf4f4@redhat.com>
+Date: Mon, 20 Oct 2025 21:35:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-20_05,2025-10-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 spamscore=0
- adultscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510020000
- definitions=main-2510200159
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDE4MDAyMyBTYWx0ZWRfX8yyhV4cedz3X
- xV9CBD5dLMslu33FPdp+yhe8GwI5C9NkmWyf/ibqISJTj0LtwQUNJFbn+OcZM7ycHyhcE+pkFUL
- 5YwD1NTTd5kWiDf++XkbOgXR22uUZ4OCydpLU3lI7UqAGQ6ER/KRoiV/g9+Lr9QiMJ4CMyRcKpC
- VsLOTjDSpUM9yv8oYo14iiZmCgjlGru3MaJmXQSBqddFnlr51QlJ2BRV7Fk/i/z3L7dlxHbOEBA
- M0Vnor+W8OJQ/5igosRfpsTu/1Jh9iStNPPwm/MFu2QHvkT2zir5K5HlmvbdLV/6WlTYHutvNj8
- vLDq+cwNDaHhNTEoRXUtzsf83q8YgByJVU4+3s39mQsJqD8bLgGyXWhHPiAa4JoY8EKRucPWF0h
- eNcV770QvKGYGkKI56yF7fDugxTXjA==
-X-Proofpoint-GUID: clhdCPniDogBct12OO7Qj1YuEQqpEERW
-X-Authority-Analysis: v=2.4 cv=Db8aa/tW c=1 sm=1 tr=0 ts=68f6896d cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=S9UabVrJeSShYSHE:21 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=NSVNPXkua3VteFUyN44A:9
-X-Proofpoint-ORIG-GUID: clhdCPniDogBct12OO7Qj1YuEQqpEERW
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC v2 PATCH 1/3] Documentation: add guidelines for writing
+ testable code specifications
+To: Jonathan Corbet <corbet@lwn.net>, Gabriele Paoloni <gpaoloni@redhat.com>,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ gregkh@linuxfoundation.org
+Cc: linux-mm@kvack.org, safety-architecture@lists.elisa.tech,
+ acarmina@redhat.com, kstewart@linuxfoundation.org, chuckwolber@gmail.com
+References: <20250910170000.6475-1-gpaoloni@redhat.com>
+ <20250910170000.6475-2-gpaoloni@redhat.com> <878qifgxbj.fsf@trenco.lwn.net>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <878qifgxbj.fsf@trenco.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The core scheduling is for smt enabled cpus. It is not returns
-failure and gives plenty of error messages and not clearly points
-to the smt issue if the smt is disabled. It just mention
-"not a core sched system" and many other messages. For example:
+>> +------------
+>> +The Documentation/doc-guide/kernel-doc.rst chapter describes how to document the code using the kernel-doc format, however it does not specify the criteria to be followed for writing testable specifications; i.e. specifications that can be used to for the semantic description of low level requirements.
+> 
+> Please, for any future versions, stick to the 80-column limit; this is
+> especially important for text files that you want humans to read.
+> 
+> As a nit, you don't need to start by saying what other documents don't
+> do, just describe the purpose of *this* document.
+> 
+> More substantially ... I got a way into this document before realizing
+> that you were describing an addition to the format of kerneldoc
+> comments.  That would be good to make clear from the outset.
+> 
+> What I still don't really understand is what is the *purpose* of this
+> formalized text?  What will be consuming it?  You're asking for a fair
+> amount of effort to write and maintain these descriptions; what's in it
+> for the people who do that work?
 
-Not a core sched system
-tid=210574, / tgid=210574 / pgid=210574: ffffffffffffffff
-Not a core sched system
-    tid=210575, / tgid=210575 / pgid=210574: ffffffffffffffff
-Not a core sched system
-        tid=210577, / tgid=210575 / pgid=210574: ffffffffffffffff
+I might be wrong, but sounds to me like someone intends to feed this to 
+AI to generate tests or code.
 
-(similar things many other times)
+In that case, no thanks.
 
-In this patch, the test will first read /sys/devices/system/cpu/smt/active,
-if the file cannot be opened or its value is 0, the test is skipped with
-an explanatory message. This helps developers understand why it is skipped
-and avoids unnecessary attention when running the full selftest suite.
+I'm pretty sure we don't want this.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Yifei Liu <yifei.l.liu@oracle.com>
----
- tools/testing/selftests/sched/cs_prctl_test.c | 23 ++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 52d97fae4dbd..7ce8088cde6a 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -32,6 +32,8 @@
- #include <stdlib.h>
- #include <string.h>
- 
-+#include "../kselftest.h"
-+
- #if __GLIBC_PREREQ(2, 30) == 0
- #include <sys/syscall.h>
- static pid_t gettid(void)
-@@ -109,6 +111,22 @@ static void handle_usage(int rc, char *msg)
- 	exit(rc);
- }
- 
-+int check_smt(void)
-+{
-+	int c = 0;
-+	FILE *file;
-+
-+	file = fopen("/sys/devices/system/cpu/smt/active", "r");
-+	if (!file)
-+		return 0;
-+	c = fgetc(file) - 0x30;
-+	fclose(file);
-+	if (c == 0 || c == 1)
-+		return c;
-+	//if fgetc returns EOF or -1 for correupted files, return 0.
-+	return 0;
-+}
-+
- static unsigned long get_cs_cookie(int pid)
- {
- 	unsigned long long cookie;
-@@ -271,7 +289,10 @@ int main(int argc, char *argv[])
- 		delay = -1;
- 
- 	srand(time(NULL));
--
-+	if (!check_smt()) {
-+		ksft_test_result_skip("smt not enabled\n");
-+		return 1;
-+	}
- 	/* put into separate process group */
- 	if (setpgid(0, 0) != 0)
- 		handle_error("process group");
 -- 
-2.50.1
+Cheers
+
+David / dhildenb
 
 
