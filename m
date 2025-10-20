@@ -1,135 +1,128 @@
-Return-Path: <linux-kselftest+bounces-43567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95E17BF29D6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 19:11:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B119BF2A78
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 19:15:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C85BC18A42DD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 17:11:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C55574609FD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 17:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D763314DA;
-	Mon, 20 Oct 2025 17:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A97A3321C9;
+	Mon, 20 Oct 2025 17:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UwkgW0U2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iM1jAKgR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C7F32B9A8
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 17:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7523321C6
+	for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 17:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760980271; cv=none; b=HzmcDzYlWz59PbaPO1Dnuu2wng3zJhPlcugueRAWj2ODaY53BDhCza8i/dM3WBpPkY0guINMPB+PVDFT5T8F2CzmfK1STvJ0ZFV7LSPYDPNEhAa8/GqGu2iDfaYDHxu+x8ENTitEtkiieGnJBvjLX9V+IiwluXyUcOmiYtWrPBI=
+	t=1760980402; cv=none; b=mHZHw9nKKg00PHTtYPXkJycy1nU3bDM45hYvVkKVadjOJ4gkDF5ygkjtvIGhq/8YWwkpZgAw26V754ZMC35I7FpssJ7CEQ4KKkstWlA7HnSwbAshWr+7XLEwi5KVhubzpXUzxMIEljFr2MdHkcb5f98AptcJPUXhELhZTwkrlZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760980271; c=relaxed/simple;
-	bh=AxIWE6iyO7Ox6m/9nhJ9NldPxg6UR5QmtIrf8wdrwwY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JUGUzL0Jvy29qJY+Y5IklGqmj8Q663la+kABjB/mRrYe2Z9VXOeeOOhWN7cUgD8qwExjQiBxnwjj1kB5x8Gw1OHluutnIe/3unalLm6xNiVb/RxjzAiWe7xYizs+1HcB9Kx05Y5DD5EsF6SqSxL+nP9Dz7Jts87lLzglOpm39Ro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UwkgW0U2; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Mon, 20 Oct 2025 17:10:50 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1760980256;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aSf8ZuG7Eh6WV3v9wcYX32BSw6mgJdJhb5+lBU8QmAY=;
-	b=UwkgW0U2aqd2eVZG5BGxiBBExVol2fh5Kz30LAnbxEyJcJ5KEnj7Ff7Cn0SGvLeMYibadi
-	kaVV4pHYJ+VdkAWg/bsEXO8bD9AZm824XXzokeWNRDfBhGJ7OZ3NGxgN/s89b6dYadc5uK
-	N78AmE1Ya0s9fiphyhUtDkFX2dp3E2s=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yosry Ahmed <yosry.ahmed@linux.dev>
-To: Jim Mattson <jmattson@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Sean Christopherson <seanjc@google.com>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Andrew Jones <ajones@ventanamicro.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
-	Kai Huang <kai.huang@intel.com>, Eric Auger <eric.auger@redhat.com>, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/4] KVM: selftests: Use a loop to create guest page
- tables
-Message-ID: <bbppzosz2alycri5o75fibahsqeb2y4bq5n6b3b23amrgtlrro@ppp5vwu2uoat>
-References: <20250917215031.2567566-1-jmattson@google.com>
- <20250917215031.2567566-2-jmattson@google.com>
+	s=arc-20240116; t=1760980402; c=relaxed/simple;
+	bh=qdhd4fAQohIjlG3EgHDubuZx3bxc7SthTqZLWrGkZjQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AjRv75xPUDO8gQePfI40ufj8oVh3ffcxl/gMQudraW1SJyg7LXqvOc3KtKeEwuZqhmR4qfU2JEwTlcpYvkFhnsKO/II0LhaJna5FJ3DGOJkNZdcyPvkOWN3VD5Ho4tVoUj0E869+FTVeqhgmagBxaKyPEorZkb4sZu9gxGpegN4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iM1jAKgR; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3ee64bc6b90so2960106f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 10:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1760980398; x=1761585198; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RGI6Q7BTAs/HMJAhH5ug/+5JV+NNvoV5bQjyt72+yc0=;
+        b=iM1jAKgR1m1AIPLkhYC7seTiDoDHL3KG3BcmIL7UT35Ei3Hlb+MtLsjjEYtxRmpIoU
+         ih5heAOWw7z2BamSEuIofAm/Bw6mKs1vY/0JQi1++FWi6AH2dR7Fm6Ouca5eO7nLMUHV
+         Ylw30JTbsva+Fol6eB6BErrzVRAoR9cuZ/qBJxwc2ACLK8yfhlkcWXixdmhyGkHdkDmK
+         V4run7cslRKiSAuj213bYMtkQdVq2NlBvLvPk/VGefpIAK1tp6btPYbAMvjZXQ9NBhkb
+         gtn50x+dJGqSsbQjQmWLk6Ng36WdMWa1TnJjvH5jiH9A+71XAcn0sTICm5/DlvgSMKrj
+         KjvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760980398; x=1761585198;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RGI6Q7BTAs/HMJAhH5ug/+5JV+NNvoV5bQjyt72+yc0=;
+        b=IIVctYxMThGcnaRRVkhMe4nYWo/fcHxzhpBqXaxLtLlx/WzdaBRIwmhGLGCR6XeV5S
+         znbImoS+RXh+oh7cRT/EWhVR7XX09h1OwSdcQeY47VSeQaHVTLVUIzb6J3MCAmJ3qY45
+         PZ20POhjhyINcON/vHVqGpZz01VMw/5qJMDT79gXpCaw+kqOixqn/EP5KOXIhU8trWkP
+         JwDp17rhDatyD2pQ/0fnYZjjuXQxrmtwF3UMYu7+w07cnQosrGeTsFd6U8jwNu0gPPfD
+         ZDvodL1EbTITTMbHHqAoD4CUKOW/coJv3vQY79To1gcCGmOwm9FMfEsA/ZpIm4Xjae9N
+         4sAA==
+X-Forwarded-Encrypted: i=1; AJvYcCUI/LBgL6HOU3t6FjuacRTxxFbxDm1vwxIuncuWwKAO5GOLIDE+gO7MNeKPkR/0LV0PCvCg2W4XmxERjT+ceHg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0ExBDqN74YAAvYk5GZtWv5F8tvUeNpJ+IKqCu8iK72lJblb/G
+	iorYgmrnMaelL+dk+bAy2jvtERPqrSYN+F5wWe3cwXeFTSp9bXJAu2Y8ueHQRemNJtCm58IP+h/
+	3K0IU+3c4s1Pvx9pmy04S3OWwCZlGSY8=
+X-Gm-Gg: ASbGncvFEBhpWUH8wcg1RX5YYs88Dq94qUZ2CF28KA0onhArzoNsBo/l4s4KevlPSYO
+	BYOk4I8kyJvln11gMgfm22rd6iflkjC8DKE12XCLKL3NSmWYBFSX5PHw4rkEfIzz6ODcik1LqYk
+	iWqXLl3sQ2tAp7fgH0yr9Hmg8u5LsGryJRZdxcPKdcicQsBP7PQEuZ6+EZ5Lq63FAb4CWXlanX0
+	VPbcJUFQwLZksmba98pJcQHr5faOmq6MXW+j6A4a2O7NxL4Wa/q7yVm6g==
+X-Google-Smtp-Source: AGHT+IEodoyCQ4s3ezeiwvbSuedTGQrnQgPdmuDQggu8D72dLZWaeRuVepbyTu1eDOJWleQ/3mxUOhbhAORfmNTXRPQ=
+X-Received: by 2002:a05:6000:2f84:b0:425:7179:16eb with SMTP id
+ ffacd0b85a97d-42704d87ee4mr8625832f8f.17.1760980398375; Mon, 20 Oct 2025
+ 10:13:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250917215031.2567566-2-jmattson@google.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20250929172724.75108-1-sj@kernel.org> <75584276-6d30-4e35-9e59-e084c60d1c5f@linuxfoundation.org>
+In-Reply-To: <75584276-6d30-4e35-9e59-e084c60d1c5f@linuxfoundation.org>
+From: Nhat Pham <nphamcs@gmail.com>
+Date: Mon, 20 Oct 2025 10:13:07 -0700
+X-Gm-Features: AS18NWD-XcABY9AYH26aivrP7s7U2VJn_xaY3Jej0bnRhuMSCHP69gzanE8702w
+Message-ID: <CAKEwX=PBrcPnEkEhWQn_CTtT04qaKY2WsWXjDSSyPUGX4yY-sw@mail.gmail.com>
+Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under label
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: hannes@cmpxchg.org, nathan@kernel.org, shuah@kernel.org, morbo@google.com, 
+	justinstitt@google.com, nick.desaulniers+lkml@gmail.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, david.hunter.linux@gmail.com, 
+	Sidharth Seela <sidharthseela@gmail.com>, SeongJae Park <sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 17, 2025 at 02:48:37PM -0700, Jim Mattson wrote:
-> Walk the guest page tables via a loop when creating new mappings,
-> instead of using unique variables for each level of the page tables.
-> 
-> This simplifies the code and makes it easier to support 5-level paging
-> in the future.
-> 
-> Signed-off-by: Jim Mattson <jmattson@google.com>
-> ---
->  .../testing/selftests/kvm/lib/x86/processor.c | 22 +++++++------------
->  1 file changed, 8 insertions(+), 14 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
-> index d4c19ac885a9..0238e674709d 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
-> @@ -184,8 +184,8 @@ static uint64_t *virt_create_upper_pte(struct kvm_vm *vm,
->  void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
->  {
->  	const uint64_t pg_size = PG_LEVEL_SIZE(level);
-> -	uint64_t *pml4e, *pdpe, *pde;
-> -	uint64_t *pte;
-> +	uint64_t *pte = &vm->pgd;
-> +	int current_level;
->  
->  	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K,
->  		    "Unknown or unsupported guest mode, mode: 0x%x", vm->mode);
-> @@ -209,20 +209,14 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
->  	 * Allocate upper level page tables, if not already present.  Return
->  	 * early if a hugepage was created.
->  	 */
-> -	pml4e = virt_create_upper_pte(vm, &vm->pgd, vaddr, paddr, PG_LEVEL_512G, level);
-> -	if (*pml4e & PTE_LARGE_MASK)
-> -		return;
-> -
-> -	pdpe = virt_create_upper_pte(vm, pml4e, vaddr, paddr, PG_LEVEL_1G, level);
-> -	if (*pdpe & PTE_LARGE_MASK)
-> -		return;
-> -
-> -	pde = virt_create_upper_pte(vm, pdpe, vaddr, paddr, PG_LEVEL_2M, level);
-> -	if (*pde & PTE_LARGE_MASK)
-> -		return;
-> +	for (current_level = vm->pgtable_levels; current_level > 0; current_level--) {
+On Fri, Oct 10, 2025 at 1:07=E2=80=AFPM Shuah Khan <skhan@linuxfoundation.o=
+rg> wrote:
+>
+> On 9/29/25 11:27, SeongJae Park wrote:
+> > On Mon, 29 Sep 2025 17:24:06 +0530 Sidharth Seela <sidharthseela@gmail.=
+com> wrote:
+> >
+> >> Fix warning caused from declaration under a case label. The proper way
+> >> is to declare variable at the beginning of the function. The warning
+> >> came from running clang using LLVM=3D1; and is as follows:
+> >> --
+> >> -test_cachestat.c:260:3: warning: label followed by a declaration is a=
+ C23 extension [-Wc23-extensions]
+> >>    260 |                 char *map =3D mmap(NULL, filesize, PROT_READ =
+| PROT_WRITE,
+> >>        |
+> >>
+> >> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
+> >
+> > Reviewed-by: SeongJae Park <sj@kernel.org>
+> >
+> >
+>
+> Johannes and Nhat,
+>
+> Assuming this will go through cachestat tree
+>
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+>
 
-I think the condition here should be: "current_level > PG_LEVEL_4K" or
-"current_level >= PG_LEVEL_2M". PG_LEVEL_4K is 1, so right now we will
-call virt_create_upper_pte() for PG_LEVEL_4K and skip the logic after
-the logic after the loop.
+Hi Shuah.
 
-I think it still accidentally works for most cases, but we shouldn't
-rely on that.
-
-> +		pte = virt_create_upper_pte(vm, pte, vaddr, paddr, current_level, level);
-> +		if (*pte & PTE_LARGE_MASK)
-> +			return;
-> +	}
->  
->  	/* Fill in page table entry. */
-> -	pte = virt_get_pte(vm, pde, vaddr, PG_LEVEL_4K);
-> +	pte = virt_get_pte(vm, pte, vaddr, PG_LEVEL_4K);
->  	TEST_ASSERT(!(*pte & PTE_PRESENT_MASK),
->  		    "PTE already present for 4k page at vaddr: 0x%lx", vaddr);
->  	*pte = PTE_PRESENT_MASK | PTE_WRITABLE_MASK | (paddr & PHYSICAL_PAGE_MASK);
-> -- 
-> 2.51.0.470.ga7dc726c21-goog
-> 
+LGTM:
+Acked-by: Nhat Pham <nphamcs@gmail.com>
 
