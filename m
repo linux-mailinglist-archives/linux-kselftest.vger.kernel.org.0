@@ -1,118 +1,119 @@
-Return-Path: <linux-kselftest+bounces-43540-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CDFFBEFF9D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 10:34:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5452BF00C1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 10:55:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BBC9A34A18F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 08:34:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6E5B3BBC6D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Oct 2025 08:55:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0DB22E972E;
-	Mon, 20 Oct 2025 08:34:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6282ECE9F;
+	Mon, 20 Oct 2025 08:55:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ir95mbod"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PQ/pB4pm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9EE62E336E;
-	Mon, 20 Oct 2025 08:34:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794741643B;
+	Mon, 20 Oct 2025 08:55:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760949251; cv=none; b=C1oqGlNFiSX05zHf/SgJ/PXkv9YMkm9atW7mh4FiQRjyGWf1mxGaxPT72affg1Mx60HxM2hKzdjILhs8eqLji6ZCK4aDvlQFBd0bNzM/L+JS+XcI7pEZ6yC4ML1Qlxhl1Pf5CATDI5sMTqUkgjvuLIWFnD0Tucwo/Y8601uFrS0=
+	t=1760950511; cv=none; b=eAxs7oODDHFHvTKVUOEAOodcp94ZOib9lW40jvkQRgWrbmGL3y4uJtUlU7FTkRkZP/IZPvO6VRBFrMHxWL9LxgNBF9t6t11N9mDUTFMCRRwD3SWZ6moGSU5sWtd7hQQAMVqkG1Iw8TO4/EAv/3ZNEEib6465NPK0GqOsZaCYvTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760949251; c=relaxed/simple;
-	bh=Xvry6+L+zYDKF402OGrEL2Sp57xE5MGQjq5jn1pdWmo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tw81OZMp83J/lJN90VkPTooIhvzzpody7QauSIAiRmgObl+LoIRIVGvEo/AAbcl6HNOMtIf7qv8wrZzrhHlu4A+ifIgw9ilhnmPyei7EfPoo6WUnhSQ6XnW1+Ildjt5AedWvL02QoEdT+sMHuUf6W5HXzpVW8AiChkIyvKOkcJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ir95mbod; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00BCEC4CEF9;
-	Mon, 20 Oct 2025 08:34:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760949249;
-	bh=Xvry6+L+zYDKF402OGrEL2Sp57xE5MGQjq5jn1pdWmo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ir95mbodFzEwdGgwaKAzCgUv1XVRzdu9N9eZyzDR/WCkVPnpeeIjeoz9Le4z5eQbY
-	 0WwGobTOrVlGgvWyVLGTJB7rbHA0OAe0s620+sG/9uCOWGIxujoIrKxY9K59KUBDCU
-	 btD4n4yf1TIDPeec7eQ4wHImOmHQRsh3hlAY/+qlElIsCAXNRvyWyR9LLESWSDrpaV
-	 RkUcMIzUHHcFGOCi1IR2vUdSJyyFxdRpxIozSjdaE2mDfhAfhnqDXLddsrBuqytJ3S
-	 7HC7RiSk7Qr7XxXRTX2jFQDIUi6ZF2zZ3JNQt3SEdvPRf87wcSh/fdCZLEvfAl/RTH
-	 nCrftv2oclFEQ==
-Date: Mon, 20 Oct 2025 11:34:00 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
-	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	masahiroy@kernel.org, ojeda@kernel.org, pratyush@kernel.org,
-	rdunlap@infradead.org, tj@kernel.org, jasonmiu@google.com,
-	dmatlack@google.com, skhawaja@google.com
-Subject: Re: [PATCH v6 00/10] liveupdate: Rework KHO for in-kernel users &
- Fix memory corruption
-Message-ID: <aPXz-IPDRniMHN0u@kernel.org>
-References: <20251018171756.1724191-1-pasha.tatashin@soleen.com>
+	s=arc-20240116; t=1760950511; c=relaxed/simple;
+	bh=wU69FWg0HnxDv6ekq3BFRwg1waREh/mUKaxeSy9S7QU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
+	 References:In-Reply-To; b=W111cHSAWZ39GC/eLPwM0mqdqwp3nrGHLeoR58zDC/HfJheUPDRoMQMoS/RLQoPOr1RjuO+Hct8VE4iT8/I0ygiksztMgvNeCP3bBkQhCn6vkdJz8s25CWghnYT68pqAA4BAzgMhoKXcD2dIL+k15FJacm121PRtqNPMbyksSEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PQ/pB4pm; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id ADBFF1A1533;
+	Mon, 20 Oct 2025 08:55:00 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8243D606D5;
+	Mon, 20 Oct 2025 08:55:00 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9D53C102F23A9;
+	Mon, 20 Oct 2025 10:54:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1760950495; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=wU69FWg0HnxDv6ekq3BFRwg1waREh/mUKaxeSy9S7QU=;
+	b=PQ/pB4pmgNCRHVAktZEPxdSjsFln8znIep9nVHYg0FN3yjap5mnMRj7EN0NH0KYjolciuP
+	p/xR3bUJDhAwNc2gFTfPwedGqaUA67zh09BL9bffEXWZ1D/T078oTOhwNuHqKMJE+ohmAB
+	Kd0f/pR2Ac4wTl3uY0wt+1H6x7eJ/BsEzDZ0F3cA895sAvfj5SvK6PwdxGgQuKmTynKgQx
+	9lTRvAwCa/2VEGnemb+143wjJDRJWFOm8UETAh29tJsKilPKyrVI2ZqO+wPCWtPgyFmB4X
+	b9RlL4FfH94f41DzhKL4IosQVLP8I3I4YdPHzaiVT+Mi3RJjYnB8clyIgg++6w==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251018171756.1724191-1-pasha.tatashin@soleen.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 20 Oct 2025 10:54:40 +0200
+Message-Id: <DDN0UIQ05A22.1SDXOW1K83VYY@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Martin KaFai Lau" <martin.lau@linux.dev>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>
+Subject: Re: [PATCH bpf-next 2/5] selftests/bpf: add tc helpers
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251017-tc_tunnel-v1-0-2d86808d86b2@bootlin.com>
+ <20251017-tc_tunnel-v1-2-2d86808d86b2@bootlin.com>
+ <a49ebaad-cc79-4ade-aa4a-ad37fcf81dee@linux.dev>
+In-Reply-To: <a49ebaad-cc79-4ade-aa4a-ad37fcf81dee@linux.dev>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Sat, Oct 18, 2025 at 01:17:46PM -0400, Pasha Tatashin wrote:
-> This series addresses comments and combines into one the two
-> series [1] and [2], and adds review-bys.
-> 
-> This series refactors the KHO framework to better support in-kernel
-> users like the upcoming LUO. The current design, which relies on a
-> notifier chain and debugfs for control, is too restrictive for direct
-> programmatic use.
-> 
-> The core of this rework is the removal of the notifier chain in favor of
-> a direct registration API. This decouples clients from the shutdown-time
-> finalization sequence, allowing them to manage their preserved state
-> more flexibly and at any time.
-> 
-> Also, this series fixes a memory corruption bug in KHO that occurs when
-> KFENCE is enabled.
-> 
-> The root cause is that KHO metadata, allocated via kzalloc(), can be
-> randomly serviced by kfence_alloc(). When a kernel boots via KHO, the
-> early memblock allocator is restricted to a "scratch area". This forces
-> the KFENCE pool to be allocated within this scratch area, creating a
-> conflict. If KHO metadata is subsequently placed in this pool, it gets
-> corrupted during the next kexec operation.
-> 
-> [1] https://lore.kernel.org/all/20251007033100.836886-1-pasha.tatashin@soleen.com
-> [2] https://lore.kernel.org/all/20251015053121.3978358-1-pasha.tatashin@soleen.com
-> 
-> Mike Rapoport (Microsoft) (1):
->   kho: drop notifiers
-> 
-> Pasha Tatashin (9):
->   kho: allow to drive kho from within kernel
->   kho: make debugfs interface optional
->   kho: add interfaces to unpreserve folios and page ranes
->   kho: don't unpreserve memory during abort
->   liveupdate: kho: move to kernel/liveupdate
->   kho: move kho debugfs directory to liveupdate
->   liveupdate: kho: warn and fail on metadata or preserved memory in scratch area
->   liveupdate: kho: Increase metadata bitmap size to PAGE_SIZE
->   liveupdate: kho: allocate metadata directly from the buddy allocator
+On Sat Oct 18, 2025 at 1:26 AM CEST, Martin KaFai Lau wrote:
+>
+>
+> On 10/17/25 7:29 AM, Alexis Lothor=C3=A9 (eBPF Foundation) wrote:
+>> diff --git a/tools/testing/selftests/bpf/tc_helpers.c b/tools/testing/se=
+lftests/bpf/tc_helpers.c
+>> new file mode 100644
+>> index 0000000000000000000000000000000000000000..d668e10e3ebad8f8e04862f5=
+c2b3ccd487fe8fa6
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/tc_helpers.c
+>> @@ -0,0 +1,87 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +#define _GNU_SOURCE
+>> +
+>> +#include <net/if.h>
+>> +#include "tc_helpers.h"
+>> +#include "test_progs.h"
+>> +
+>> +static int attach_tc_prog(int ifindex, int igr_fd, int egr_fd)
+>
+> This one looks good but change it to "int tc_prog_attach(const char=20
+> *dev, int ingress_fd, int egress_fd)". Remove static. Take "const char=20
+> *dev" as the arg. Add it to network_helpers.[ch] instead of creating a=20
+> new source file.
 
-The fixes should go before the preparation for LUO or even better as a
-separate series.
+Nice, thanks for the hint, I missed this header
 
-I've reread the LUO preparation patches and I don't think they are useful
-on their own. They introduce a couple of unused interfaces and I think it's
-better to have them along with the rest of LUO patches.
+Alexis
 
--- 
-Sincerely yours,
-Mike.
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
