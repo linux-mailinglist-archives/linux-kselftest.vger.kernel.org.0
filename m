@@ -1,124 +1,140 @@
-Return-Path: <linux-kselftest+bounces-43690-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43691-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF421BF910C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 00:37:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B0D4BF929B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 00:56:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 81F8E4E72CD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 22:37:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F9F6188F475
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 22:56:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A81A2BD031;
-	Tue, 21 Oct 2025 22:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 482CB2BDC32;
+	Tue, 21 Oct 2025 22:56:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YhTJyNZ0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oz9DC/VV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BB427FD51
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 22:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC8D29B776
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 22:56:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761086246; cv=none; b=H8SUn4hlXW8nnit+I8oNGGz7Kigh1I5vjluBXB2JzSbtlj+yvtcE9zdfOnSYPoVl83q88FEB03n2vY9T6lZq9Z6ln3Sx1S+w+ifc+JoohzrBQ+guI6KCm9p9xZAlXwSAJ0K2CA3bQsiYV0yqEn8b3xrQm2T1gzO7gUEYgVT7nds=
+	t=1761087388; cv=none; b=a74huhUaPkqaprrBOzJXlo/vsSbRlFi/u8FKTpfhrlK2EW8oDeUdW/egmY/6+tWSAEIKD/m9MTFn0Ih4kgKRbfRo41DrIRTQRmPqctMI0Ar742mTdljZp7rSaSi76HoxrhhYaD0smZ9o6pB4X/ha12ppvW1BhA1t9L6HipVcCkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761086246; c=relaxed/simple;
-	bh=HCABZ0fSb2gwncRmR9GNGsqNXHTK6LESdR3hiZ/zCTI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KRqMwF9EHsZ0kVkpWMkc4oKYc6y+lw7ycof9VRXftbuRFg4+He6ND5Ngocz1ScKRttjRXCf5AzIkSjz5BnnLS9KU0F0OZQaMT7UqQS/rNTCq/FJmZrgUe+oJOdr4H26DRkdV+H/ZkPhmZMSoyEio9BA4fx9y1QfuV3SgrspQAwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YhTJyNZ0; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-63c2b48c201so2193a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 15:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761086243; x=1761691043; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wd0nSui/IVY+78Jp/2L3ftVcgcNhuYZhu3p7Z3L7toc=;
-        b=YhTJyNZ0jovG+khcIo5bCGupsDXJARvqx0MWiRDEy8WlEyFEt5F/lToIjHMxyPZmMw
-         YgcfuX5k6p7/o3ey0qhV7YVn2dzRhuHFFCZYyzAn7UTYOJr598yDc3BVJPJp/qqKQ8D+
-         zNLJZSWZsJ/f2D0igwLVNd4m+FihnK+AHuC8qkTBmsiW4f4rRvmDr+d3YuQv5tyPe1Xq
-         ls1MKrChNyPDf2uxWEqWQeBvG9ifgVAkHU0dPEEsFZmzrYLuQgerxwFHtHSaU6SgoRB6
-         ae4QiPHVWQGMSYVuyTiZtHd982v2gejckLhW9YVyGD5zvw8VI6+kklt4iwDEmjl3//Sn
-         eP0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761086243; x=1761691043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wd0nSui/IVY+78Jp/2L3ftVcgcNhuYZhu3p7Z3L7toc=;
-        b=vMJB8lRaR2qWyP7rp3eLb3OkdlzQw36Pm3qBRYPD0I/yuj3pCcSt7LZ7i5LF62i/6e
-         zcy0uzlNCgmiJ9MUJQteywDFurepinV/YWQgRfImbZZu7++qdelKu4PeHVzaSWqWT1xf
-         MSxLwYYwo3Id6Mf092HwhDYIwfT9UdnP6uLabk1JrJVrsyDAxsp917dE3zItufqoObVV
-         +iTfOLZpGVuoosiSXz6YO8j9sezCASlU0FPTINWE+tReb6uqJ/TCyCB7btPYDyzpDR1a
-         O+ANV+Vo5RiS9vM866lVjW5XvI5ObfwPYosW6RlzJ7Tk6KLgk8ONV1HEVMC1K61cPzE9
-         Tc7A==
-X-Forwarded-Encrypted: i=1; AJvYcCVODWT5eleZTruhQXCex5l0Vu9CMSBk2kzQgXOWsbXIvwvEzSfJLF0tM8T0OccR+qJzA4It1jOR0CjiehNNmO0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpUW7MQWGOc22klCRUKtnevhfbznNbl/cMSQo5j5hT0mZ73Utj
-	gkEIaE+YllewnnQkQM7DAyNs/K+DgVlumju/8fDbhrBXy5v6UF9fLPYfwG4XzsDC1n2mMGWMOpI
-	WVwaHwku4YfqpeyjaNc6xVXZ+BWczdyCcImLCdBZP
-X-Gm-Gg: ASbGncsot3js3ySCuQGZ0Bag7WKj2+HfKpwuzyEjWt6FhVaOwxQf7e7d7ImvCXaGUiw
-	Adqn6ZGjLZ1MzqEmhelNu1Dwa37bKQ0wsn8CXrJ1rCoab4YjtFUFgWA1OK4CmOTvKReavPXQ+dT
-	eT5wBeWJR/jihpXXSZt0Ju1Ku41fj264VOGFeU2T45aQKIJp9dz/glVgYbnh2Buh5CYuvrr8cwA
-	dhshOK+7031fefY/ghcqUIfKlhTwWIuHCBLFzj0d0kemde4RH3hjwoV/KXzobuiN/aYf+0=
-X-Google-Smtp-Source: AGHT+IEInvFD+rNulexjDzzfxJhwDPmWVBfA30UjD5rmIsAKo7gUu1vHuokzwbQl+cd4r3IddtU+c3F0TtmyKxvdsVM=
-X-Received: by 2002:aa7:da47:0:b0:62f:c78f:d0d4 with SMTP id
- 4fb4d7f45d1cf-63e1970aba1mr33610a12.6.1761086242750; Tue, 21 Oct 2025
- 15:37:22 -0700 (PDT)
+	s=arc-20240116; t=1761087388; c=relaxed/simple;
+	bh=V4NkGznR2T3JDSWLjVwJZnSY0RygDlkJEpy+1BcVOcY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WfimtjsZ8mBdrqJpInu55WcBApfnDevi2hzsH835xTb4NE9xQZuwnJDGtnRVQpQeJvldo4MTKDzQUkUAJ/o0vxC1emhZPBEE7pJENyzn1vswHJQvVMbHt10D2lTVv0//LJScjXn318rcL3jNh1jShq48QRbKdShck3rAELc4Nkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oz9DC/VV; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 21 Oct 2025 22:56:06 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761087372;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NpRYlL+s+eEOejHoASihIL1oHT0zJD6g2o7SauG22IE=;
+	b=oz9DC/VV3MtrfOCesocIxygeMEGMSmJ+eFUdPd0IojRwOa6Nn9/TeiTREaDHgRZ7b8Lnfw
+	d9qvXN4phTu3fbIynOrV/lHEMn3XtMx+NM9/TfTyT2MOJb8vFCBuPBUmGp6WO1Yx9SqBmF
+	hA/okaduGDC5wtBfwut5SHzWY0Dd7+I=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yosry Ahmed <yosry.ahmed@linux.dev>
+To: Jim Mattson <jmattson@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Sean Christopherson <seanjc@google.com>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Andrew Jones <ajones@ventanamicro.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, "Pratik R. Sampat" <prsampat@amd.com>, 
+	Kai Huang <kai.huang@intel.com>, Eric Auger <eric.auger@redhat.com>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 3/4] KVM: selftests: Add VM_MODE_PXXV57_4K VM mode
+Message-ID: <ffph6d2gjnw3mboy5tm2ulkyhyq7zz5y66zrtdcuutqba75oh5@b7kktjtve2fs>
+References: <20250917215031.2567566-1-jmattson@google.com>
+ <20250917215031.2567566-4-jmattson@google.com>
+ <l7txoioo3gntu3lyl542jg3n3wvkqruf2qh33xy7lmr5mjgfq5@iw4wsfdurlc7>
+ <CALMp9eSPgy7RdT9TwKkRD5oh6-74XfCCP_UZ1mJWj6Nb9P4P7w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250917215031.2567566-1-jmattson@google.com> <20250917215031.2567566-4-jmattson@google.com>
- <aPAnWWmo555uB0-H@google.com> <aPA-60vV0WQUCmc2@google.com>
-In-Reply-To: <aPA-60vV0WQUCmc2@google.com>
-From: Jim Mattson <jmattson@google.com>
-Date: Tue, 21 Oct 2025 15:37:10 -0700
-X-Gm-Features: AS18NWBZoStzmHUAyoYpMbkWywDCeuQ7pVI5QsF3xxQE_nerMPa41G1gJLfsWo0
-Message-ID: <CALMp9eQ3VdsNVb73BfaL5=2z=W+8-3O5Nv=ucmK2D+_zKWbyxw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] KVM: selftests: Add VM_MODE_PXXV57_4K VM mode
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Andrew Jones <ajones@ventanamicro.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	"Pratik R. Sampat" <prsampat@amd.com>, Kai Huang <kai.huang@intel.com>, 
-	Eric Auger <eric.auger@redhat.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALMp9eSPgy7RdT9TwKkRD5oh6-74XfCCP_UZ1mJWj6Nb9P4P7w@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Oct 15, 2025 at 5:40=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Wed, Oct 15, 2025, Sean Christopherson wrote:
-> > On Wed, Sep 17, 2025, Jim Mattson wrote:
+On Tue, Oct 21, 2025 at 03:34:22PM -0700, Jim Mattson wrote:
+> On Wed, Oct 15, 2025 at 2:23 PM Yosry Ahmed <yosry.ahmed@linux.dev> wrote:
+> >
+> > On Wed, Sep 17, 2025 at 02:48:39PM -0700, Jim Mattson wrote:
 > > > Add a new VM mode, VM_MODE_PXXV57_4K, to support tests that require
 > > > 5-level paging on x86. This mode sets up a 57-bit virtual address
 > > > space and sets CR4.LA57 in the guest.
->
-> Thinking about this more, unless it's _really_ painful, e.g. because test=
-s assume
-> 4-level paging or 48-bit non-canonical address, I would rather turn VM_MO=
-DE_PXXV48_4K
-> into VM_MODE_PXXVXX_4K and have ____vm_create() create the "maximal" VM. =
- That
-> way tests don't need to go out of their way just to use 5-level paging, e=
-.g. a
-> "TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_LA57))" is all that is needed.  It =
-will also
-> gives quite a bit of coverage for free, e.g. that save/restore works with=
- and
-> without 5-level paging (contrived example, but you get the point).
->
-> The NONCANONICAL #define works for LA57, so hopefully making tests play n=
-ice with
-> LA57 is straightforward?
+> > >
+> > > Signed-off-by: Jim Mattson <jmattson@google.com>
+> > > ---
+> > >  .../testing/selftests/kvm/include/kvm_util.h  |  1 +
+> > >  tools/testing/selftests/kvm/lib/kvm_util.c    | 21 +++++++++++++++++
+> > >  .../testing/selftests/kvm/lib/x86/processor.c | 23 ++++++++++++-------
+> > >  tools/testing/selftests/kvm/lib/x86/vmx.c     |  7 +++---
+> > >  4 files changed, 41 insertions(+), 11 deletions(-)
+> > >
+> > > ...
+> > > diff --git a/tools/testing/selftests/kvm/lib/x86/vmx.c b/tools/testing/selftests/kvm/lib/x86/vmx.c
+> > > index d4d1208dd023..1b6d4a007798 100644
+> > > --- a/tools/testing/selftests/kvm/lib/x86/vmx.c
+> > > +++ b/tools/testing/selftests/kvm/lib/x86/vmx.c
+> > > @@ -401,11 +401,12 @@ void __nested_pg_map(struct vmx_pages *vmx, struct kvm_vm *vm,
+> > >       struct eptPageTableEntry *pt = vmx->eptp_hva, *pte;
+> > >       uint16_t index;
+> > >
+> > > -     TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
+> > > -                 "unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+> > > +     TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K ||
+> > > +                 vm->mode == VM_MODE_PXXV57_4K,
+> > > +                 "Unknown or unsupported guest mode: 0x%x", vm->mode);
+> > >
+> > >       TEST_ASSERT((nested_paddr >> 48) == 0,
+> > > -                 "Nested physical address 0x%lx requires 5-level paging",
+> > > +                 "Nested physical address 0x%lx is > 48-bits and requires 5-level EPT",
+> >
+> > Shouldn't this assertion be updated now? We technically support 5-level
+> > EPT so it should only fire if the mode is VM_MODE_PXXV48_4K. Maybe we
+> > should use vm->va_bits?
+> 
+> I did update the assertion! :)
+> 
+> init_vmcs_control_fields() hardcodes a page-walk-length of 4 in the
+> EPTP, and the loop in __nested_pg_map() counts down from
+> PG_LEVEL_512G. There is no support for 5-level EPT here.
 
-I will see what I can do. :)
+__nested_pg_map() will be gone with the series [1] moving nested
+mappings to use __virt_pg_map(), and with your series the latter does
+support 5-level EPTs. init_vmcs_control_fields() still hardcodes a
+page-walk-length of 4 tho.
+
+I actually just realized, my series will already drop these assertions
+and rely on the ones in __virt_pg_map(), which do use vm->page_shift, so
+the assertion won't fire if init_vmcs_control_fields() starts using
+5-level EPTs.
+
+TL;DR nothing to do here.
+
+[1]https://lore.kernel.org/kvm/20251021074736.1324328-1-yosry.ahmed@linux.dev/
+
+> 
+> >
+> > >                   nested_paddr);
+> > >       TEST_ASSERT((nested_paddr % page_size) == 0,
+> > >                   "Nested physical address not on page boundary,\n"
+> > > --
+> > > 2.51.0.470.ga7dc726c21-goog
+> > >
+> >
 
