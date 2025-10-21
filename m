@@ -1,87 +1,89 @@
-Return-Path: <linux-kselftest+bounces-43663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB15BBF792E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 18:05:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20625BF7979
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 18:09:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 779024E1A18
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 16:05:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9264423E3F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 16:08:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35CC43446DC;
-	Tue, 21 Oct 2025 16:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABF0B341AC1;
+	Tue, 21 Oct 2025 16:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="FIVtOlHx"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="QOcYgzWP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE6F341AC1
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 16:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D557E15A86D
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 16:08:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761062728; cv=none; b=BrHt+sIUSuOZ0IKYDY5zk5g0B4CIaWzRq6Q5zo0w05CQlhAtdtbESUkf2rvkeBO/ZU8ETk7yKJCkcNVHUEGDqvOageP0gmfTdI3bVBVSM7ALKUOZ474JQUS7z5D/tbCbiJAXmGCRkSuUibX+HOI3OMGolh94lkhqRUsZDauBr9o=
+	t=1761062922; cv=none; b=ojt9TYKz3olcULr/R5R8OCjqrrp3ezAxtKw4QXmh4JzF9JMDHjRZMqMUXh7ljxKv0/5BngdP06HLj7QBvsMsq1xtR0Ude2gHmF58rcxSGPiVzbh7lQgpboK6H+wGr3Ty7hym04W2SlCy+kh26aHV3ay6q9/cU2fmUKkh5pHSQFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761062728; c=relaxed/simple;
-	bh=bJwV/4fjdh41ZSy3se1KK9PXofaQ/FMRYPJpfMZGJi0=;
+	s=arc-20240116; t=1761062922; c=relaxed/simple;
+	bh=5u+TcudwikdJNDByxDFVDrH4Mrn0KzJNwyJDRm/gPc8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mVan9VV4jt74QH3BkXunsbWoWWDPLZPYxVBxpWpIhEvUhz47EhYru/OgKPb4Yy5cfLzYjyA3rbYK6XGL25s5Q7nmEXADotMho3ovSadgXUziz7WGmExiE0QaddKP5DLWplqS7vRpzOD51hfELwcRm4Dwr7IK0g2aOBWWI5y4T9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=FIVtOlHx; arc=none smtp.client-ip=209.85.208.44
+	 To:Cc:Content-Type; b=gYR4RZtTASsxspoPLmqvKe5guwtTVb+STCaos5NEU2VT0ec8JvT6j0DY+bggXEazJVWeJ1106HTtKE3L1q9ogodBGOvh/nS9O+fgL1jOEkChcPWBCc8UcMQ3BgVFJJGlVunYItOjY86qfSw3AorNpGlUxIAPal4flBTBfMBsEfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=QOcYgzWP; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-62fc0b7bf62so8542326a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 09:05:26 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-63c2d72581fso7247653a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 09:08:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1761062725; x=1761667525; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1761062919; x=1761667719; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h2rsp273D+5b2xXwhTqrhSGacsVEuhyzYQN7tg2ibaE=;
-        b=FIVtOlHxgbh+T/iD+qwgOmLsgMjeV2cNcfPrWTGx6bcrMx3GWhinUX1+xOn2UqYgPR
-         D7ehECyYMGq6WyuilvbiyPXLQjRucGeP7lYfejfG7m5krU85luIH2YO9w3L5Ahrtg0Cu
-         2ocCsnJGWQQMviSqiEyfcZ9MuuZLbIwX1Jm9fpwQhzIL5lkctIMHeIAVKZXOcSlx7Jbr
-         adVbfGC8WRQtQryjWVZycvV2I9A12axWXJhHX0uaSte+IEyNWzj1V3LS8QLyZwvAH6Ws
-         0xwJWXwOmibzhxV4UxbgVXTOssRH1AkQfZLn/jmvYA95g3LXqKPFZIM1YgOcAYEMg6xr
-         2ogw==
+        bh=jxaUYavdFNgjliOqAPTDoGj/sgS4UHn62o4psiKVfI4=;
+        b=QOcYgzWPBkIW+aImCI4XlR+l6J8W+mVOtWtjDHpcTIM64QQFdeFNRuL0q4ksV9leSC
+         ZHIo3UVUdxWLqjCZRzJRLOnRev6HYr7fij2i4HVr3JgaaUxEG3Hk/ExEuNWt6zGL7Epr
+         JbH1ia5blmrpchg+hQQwZ/+YxIhkWDsTy//xOzSybrGHTVwePRdQ4FZuKKZxtA+EDDFq
+         PeDJaYcDsEK87sNNSpCtUNkoEAVgCwl0XgdzGz+t4Y8dyFPlA5R85YyiLzrkDr53AU31
+         /ywd1KhhB6GzLVXyukna8q6HNPdg2bpk4i32H0JAqudCiEbLPiUq3rIJwWOXC2u+itZZ
+         iV/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761062725; x=1761667525;
+        d=1e100.net; s=20230601; t=1761062919; x=1761667719;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h2rsp273D+5b2xXwhTqrhSGacsVEuhyzYQN7tg2ibaE=;
-        b=j1Fp/kzpoenINMplsSb7Zsamv/gT9WPk+wj9QWvD8sb7V57y9JRTLAoDpGhtxHrgG9
-         vaYo6HuaPi/Gc6Jl6IAyYqTd618PYmyh+H8deaqj9bleHluaYCCL1J4pKtitW6FxacsB
-         b0T/0RJWqBBIsyJe/q22MFrkNcHtehsdpvdZEQIfIZTJ8Q+mlJckBE1itpLDGUQszk/y
-         V9ccrhVt/WLGbpY/ku02jOr3uySQtnPVndNX8gpBnl6/HODGJfTZgZxBXRM67/qVOjia
-         m84Xh7mJsZ70xpEpv6I2Ijwg0XjYSQqJ96GoJebb/JrM6Q8jk2OURyIh0DduJWwY0s29
-         WJsg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZ7nxN8En62YaLo1kezwQ0uLWmHADVGdrU2xBL00GxDr61RUgNYhNBWsMq9pYkOVHrsnY3Z8myBENqXSN5KSY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYWoCEJiKulDC263cf5B/h9A5EbfyN3Fs89Fy8TfJ7AJrfPfGA
-	YJINPCDjHYdYPE79JsX0Z4jN+aymfcd9rh4/J08Zrd+J2mKbzSqcbMM3CHhh8EEigPmaPDzlhiq
-	LXQGY2fX4fm4ueuTfxg6xstInUEHjzl0zmlyWWV4YhA==
-X-Gm-Gg: ASbGncvk449p1GW7XVRW6q5u7XwarBWJAi4cknCyC0ZELWdN81/gcQbJaPu/ZxRCbbD
-	NWAklu/3MJHM7eNmYpgIs0dl28LMeoGCw9PIkBoJSzF7SDntLI6/QecK08bF/uXcrXAX2R3eQ6h
-	TTEWGis08dorVwd05y6NhibhVZvix60z5oCEJ3B7b5YU/+qLu0A/KfiWl324f+01N4gHKXp5JVi
-	VRg7JT2xxd6NoaOjn4nuv6R2NzbeplT/LTkuis0rCPCC/1IiXTPBKZyXg==
-X-Google-Smtp-Source: AGHT+IEeLKgKPa2ao1C+DHLxoNObY+PUJkOnP4atEfZz4NGBJudxoOmpcHAQfeKUlWWXs9tatq7N0kg5qlHh96IaXc4=
-X-Received: by 2002:a05:6402:4316:b0:637:ee0d:383d with SMTP id
- 4fb4d7f45d1cf-63c1f62cad5mr17942304a12.3.1761062724284; Tue, 21 Oct 2025
- 09:05:24 -0700 (PDT)
+        bh=jxaUYavdFNgjliOqAPTDoGj/sgS4UHn62o4psiKVfI4=;
+        b=IjeXgXMEJhqLZYBXVfd2I1KAPMJLiPgOmc7FxlA9ERR7/GRYOnFtIRbH7fM0io4H6m
+         8/sF38nkpCuxtpyG7N5/1LecQci5VkV74qNIjFMoRQzSEb+/Fcd6aRau3DBqEaWQhOX7
+         Vll4xnB1k5xiIgtwDPYZ/G8UflRa2wdGHVgsyXAOyvFa4I6gOVxkxWVQ6YZN14g1PRSF
+         3M5NxbfEy2jmTmdlK4fk3X3+iv/SxzUbLdMRKtFtL6AZkhvJMkU3AhNm0XQuV45n1OW9
+         sVxF5VEXiBWIEAW4+XTO1iPp1pWeWJcfWzEyOdjS2yBy+u+I53tAqGWWnHYapkBO2sJR
+         UFiA==
+X-Forwarded-Encrypted: i=1; AJvYcCUTzxZ2OoXt5B82PLcM/v0oK4cYt0iK0TOWSB7yw8a7iFapncubsuwr/OuAGRut3xG3NaaLOUjc+GUBdJOjGcA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2drlihj8ig9l/B5xF7w34GJi8QSXBJJBwbBfXs1VHqGScWgVr
+	xPrLW9dY8IWU5FqvLUhlEhX8sO43Km188ofjUU400zYITrysmUxeBdcVPFi6STpAlNIduqyvYT4
+	kvgT6/LUS6IU2W4/zZcaBxu0rYXKZSKqkO6qHcZecOQ==
+X-Gm-Gg: ASbGnctIV27BM1tBmLlTIIIOnYFQEB3AvHTK/2X6+c/AMYuhBQJ6oJu8QJD1gbkCa6q
+	wjcqb1fC2PRwSYC9ckZHX06aByzumO5K7mNEbMaiISTlQ2ub6IYoJBDFRo/YoB6aHwMkN7DS0Qk
+	OKdYavgzEs83vM0CNREASG3dspaTi2wCThzMjvRSteOwnxFZJyCPQINsQqBCsWvDnMoYpv6eEi9
+	0WoxXCFN5qKnWKAbON3WeJGcYLW13A4cMVJxSQkwuIl1+0qVkDLUBdDtN6BsA0wY6540klIhtwh
+	pBo=
+X-Google-Smtp-Source: AGHT+IGYvj0cBBq3wGSoiNp1CoIJkYDF8ytokgZ/O7ati7otorbUHmL5FNnl4y1k4W4RaajJu5WCCQ85CcQM/eQSHZw=
+X-Received: by 2002:a05:6402:40c5:b0:637:e4d1:af00 with SMTP id
+ 4fb4d7f45d1cf-63c1f677665mr17049736a12.10.1761062919175; Tue, 21 Oct 2025
+ 09:08:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251021000852.2924827-1-pasha.tatashin@soleen.com> <aPchmxfh4ACM0vY2@kernel.org>
-In-Reply-To: <aPchmxfh4ACM0vY2@kernel.org>
+References: <20251018171756.1724191-1-pasha.tatashin@soleen.com>
+ <20251018171756.1724191-2-pasha.tatashin@soleen.com> <aPXoKRVAyGWCNj8I@kernel.org>
+In-Reply-To: <aPXoKRVAyGWCNj8I@kernel.org>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Tue, 21 Oct 2025 12:04:47 -0400
-X-Gm-Features: AS18NWCWk4RBaudjWOtzT3Lj31f5xnWLUFz70tsgIQAGYSdCdW8mVv8zsn8kkEQ
-Message-ID: <CA+CK2bAHH1tzMEGxAwbmrLnLTzJANMntRu=cp0J8-n101ER7Pw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] KHO: kfence + KHO memory corruption fix
+Date: Tue, 21 Oct 2025 12:08:02 -0400
+X-Gm-Features: AS18NWBcHGkJXGG0ZFCeY6uu-eAVSgeT1z_110jp41TVdiVY4QWXrqa-qnZgrXU
+Message-ID: <CA+CK2bD9RHEWZd+t7kWFxofOjBVLd-e+gQTheNJxZbSFy84rfA@mail.gmail.com>
+Subject: Re: [PATCH v6 01/10] kho: allow to drive kho from within kernel
 To: Mike Rapoport <rppt@kernel.org>
 Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net, 
 	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
@@ -91,65 +93,88 @@ Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Oct 21, 2025 at 2:01=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+On Mon, Oct 20, 2025 at 3:43=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
 te:
 >
-> On Mon, Oct 20, 2025 at 08:08:49PM -0400, Pasha Tatashin wrote:
-> > This series fixes a memory corruption bug in KHO that occurs when KFENC=
-E
-> > is enabled.
-> >
-> > The root cause is that KHO metadata, allocated via kzalloc(), can be
-> > randomly serviced by kfence_alloc(). When a kernel boots via KHO, the
-> > early memblock allocator is restricted to a "scratch area". This forces
-> > the KFENCE pool to be allocated within this scratch area, creating a
-> > conflict. If KHO metadata is subsequently placed in this pool, it gets
-> > corrupted during the next kexec operation.
-> >
-> > Patch 1/3 introduces a debug-only feature (CONFIG_KEXEC_HANDOVER_DEBUG)
-> > that adds checks to detect and fail any operation that attempts to plac=
-e
-> > KHO metadata or preserved memory within the scratch area. This serves a=
-s
-> > a validation and diagnostic tool to confirm the problem without
-> > affecting production builds.
-> >
-> > Patch 2/3 Increases bitmap to PAGE_SIZE, so buddy allocator can be used=
-.
-> >
-> > Patch 3/3 Provides the fix by modifying KHO to allocate its metadata
-> > directly from the buddy allocator instead of slab. This bypasses the
-> > KFENCE interception entirely.
-> >
-> > Pasha Tatashin (3):
-> >   liveupdate: kho: warn and fail on metadata or preserved memory in
-> >     scratch area
-> >   liveupdate: kho: Increase metadata bitmap size to PAGE_SIZE
-> >   liveupdate: kho: allocate metadata directly from the buddy allocator
+> On Sat, Oct 18, 2025 at 01:17:47PM -0400, Pasha Tatashin wrote:
+> > Allow to do finalize and abort from kernel modules, so LUO could
 >
-> With liveupdate: dropped from the subjects
-
-I noticed "liveupdate: " subject prefix left over only after sending
-these patches. Andrew, would you like me to resend them, or could you
-remove the prefix from these patches?
-
-> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> We surely don't want modules being able to drive that. Maybe
 >
-> >  include/linux/gfp.h              |  3 ++
-> >  kernel/Kconfig.kexec             |  9 ++++
-> >  kernel/Makefile                  |  1 +
-> >  kernel/kexec_handover.c          | 72 ++++++++++++++++++++------------
-> >  kernel/kexec_handover_debug.c    | 25 +++++++++++
-> >  kernel/kexec_handover_internal.h | 16 +++++++
-> >  6 files changed, 100 insertions(+), 26 deletions(-)
-> >  create mode 100644 kernel/kexec_handover_debug.c
-> >  create mode 100644 kernel/kexec_handover_internal.h
+>    allow kernel to drive finalize and abort without requiring triggers
+>    from the userspace
+
+done
+
+>
+> > drive the KHO sequence via its own state machine.
 > >
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
+> > ---
+> >  include/linux/kexec_handover.h | 15 +++++++
+> >  kernel/kexec_handover.c        | 74 ++++++++++++++++++++--------------
+> >  2 files changed, 59 insertions(+), 30 deletions(-)
+>
+> ...
+>
+> > diff --git a/kernel/kexec_handover.c b/kernel/kexec_handover.c
+> > index 76f0940fb485..76c34ea923f0 100644
+> > --- a/kernel/kexec_handover.c
+> > +++ b/kernel/kexec_handover.c
+> > @@ -1067,7 +1067,7 @@ static int kho_out_update_debugfs_fdt(void)
+> >       return err;
+> >  }
 > >
-> > base-commit: 6548d364a3e850326831799d7e3ea2d7bb97ba08
-> > --
-> > 2.51.0.869.ge66316f041-goog
+> > -static int kho_abort(void)
+> > +static int __kho_abort(void)
+> >  {
+> >       int err;
+> >       unsigned long order;
+> > @@ -1100,7 +1100,27 @@ static int kho_abort(void)
+> >       return err;
+> >  }
 > >
+> > -static int kho_finalize(void)
+> > +int kho_abort(void)
+> > +{
+> > +     int ret =3D 0;
+> > +
+> > +     if (!kho_enable)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     guard(mutex)(&kho_out.lock);
+>
+> Please include linux/cleanup.h explicitly
+
+That is going to be included via kfence fixes which will come before this p=
+atch.
+
+>
+> > +     if (!kho_out.finalized)
+> > +             return -ENOENT;
+> > +
+>
+> ...
+>
+> > -unlock:
+> > -     mutex_unlock(&kho_out.lock);
+> > -     return ret;
+> > +     return (!!_val) ? kho_finalize() : kho_abort();
+>
+> An 'if' would be cleared IMO:
+>
+>         if (val)
+>                 return kho_finalize();
+>         else
+>                 return kho_abort();
+>
+> and we can rename u64 _val to u64 val as we are dropping the boolean.
+
+done
+
+>
+> >  }
 >
 > --
 > Sincerely yours,
