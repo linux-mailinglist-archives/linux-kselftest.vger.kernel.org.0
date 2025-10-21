@@ -1,247 +1,206 @@
-Return-Path: <linux-kselftest+bounces-43665-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6319CBF79A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 18:14:15 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBC80BF7A7F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 18:28:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D68F93AFE06
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 16:14:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3E2B0500E0B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 16:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F7E34575F;
-	Tue, 21 Oct 2025 16:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 657C43491F8;
+	Tue, 21 Oct 2025 16:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eRqFA7nx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HePrGfpu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D06343202
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 16:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0AB73491E5
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 16:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761063250; cv=none; b=AD2kdoYKQMc9eSrDsOuWG87nyPlh8mbuUE1kwoJUPPdblQTeiPKlU3hf+kwUDa4VYwhlIjTA156+TR/v0hsSyayDp0isX9jMbvuyYhr+Ug2zCaEdHtxlNHGZp9QKlQQ6BF1HztYhvz+K69EtOd+YYUxeHflJOKsYSEIGH0t4mbw=
+	t=1761064078; cv=none; b=a0OIJ0N13AGQnlvKaFYEYlYS4wQSBQ2ficW2ULlrY++O1Z4HC24KPV1Cd8N8UeIqyPkYTrBUWS64Lov5aLRdWTT/L+ELjK2Qj9I3n/ks+MjOFabrBPDeKDT5CAvuld87vzyFE5/FbuaBmBo5cQxiiuhFe4hESpE0f/1haVeEHfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761063250; c=relaxed/simple;
-	bh=jwALCPRFruFeYmRfrp9Ri+SEZYzWo8ADyILKji9+IIo=;
+	s=arc-20240116; t=1761064078; c=relaxed/simple;
+	bh=0JL2p2qr9N1wihmhv2SB4/CNeAvlfQqJRTz8Itd3L7Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fo0vYAT5/XSv6kNO1ExNCaayhOSSBLN3uvIdv/vcdGr3MlVRbOZISBVKmkiDVSeaLIG9NejFOfawB20GtAyhV+QmHu0rAQDtIZ2g3HY02oOvIwunB81wWagOlL4yg60e1IB0brqA0arfcETPxoSTnjiW3ts+M94oNiL35Yn52Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eRqFA7nx; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-471005e2ba9so69945e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 09:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761063247; x=1761668047; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fzW2rY1I2AKLs/LU+wRizdzQ22+SHdlJ/3qusxmFBDE=;
-        b=eRqFA7nxiXlxzFYyinrIjOWTfDELwsBV1AoSpBTUDGBy0te9x+pKr07ARmFVjeYxfI
-         izlXOK933UZb5MVMGBpJ0ruVHZmx6+cwFAbwGtyVoKu8iUl/TyyCKt00HY2i2apYwgpe
-         qRcuVS3SJxTNpJeqSl/JEK2CQOG/eyh7HuxBG0WCQkw5v7X687un532/lAwiCWq+OkjR
-         N5dMASSffNPpOlAjMR3tBv0amjaWbC3btwEGFFodZ0qz0QF9VljRtEGmpE8jai/0HuAB
-         ANtRKE+yxZmA/jBiE+BfdjV+AXAxcqKgObe/CcATfkxBbS4IJN9Mq1iwKc9673U3fFaX
-         1aKg==
+	 To:Cc:Content-Type; b=t3LR7vedpzMAidIfQAHe3hz6pEo6gXF1rDfbdxW2o5PRNt/oytcM2Zgt78QGD1QHFIttvA3pykEeOuaXIZYhUZy5YEpFBWKeEq+EPBCv7e4RmDDW4LbMPkfxatR9MgREHmO6ZDuqKr4O4UQfYEavTIYv7+CA8x4CQ3lYwf/wRfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HePrGfpu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1761064075;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tvopacnigHBT8bombNvmTILspbaRSMSn7DFUJVL0nnc=;
+	b=HePrGfpuHO0NAddAtozFro9TTREwO+F54nL37qXG2k7lTjlfJStxQvEta9+ybgZD7SmAk2
+	KPVa2ai4eNz1hKabjPS514iAgO3Qx/HU1W6LMOb/1ah4PsnwQCHzt1f8BGaW+lgyetZ+NO
+	aFv9EkHLSvzw1BN1LgGX44fRN/tlp1M=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-467-Guv7J91cNlyepetKve3u0w-1; Tue, 21 Oct 2025 12:27:54 -0400
+X-MC-Unique: Guv7J91cNlyepetKve3u0w-1
+X-Mimecast-MFC-AGG-ID: Guv7J91cNlyepetKve3u0w_1761064074
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4e884663b25so2116081cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 09:27:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761063247; x=1761668047;
+        d=1e100.net; s=20230601; t=1761064074; x=1761668874;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fzW2rY1I2AKLs/LU+wRizdzQ22+SHdlJ/3qusxmFBDE=;
-        b=hTUPvUzTaa69awGpqRODbiCizIXiT02fQSuG3goyGSv6VEuSlAoGbNvrqD6T56BYid
-         hs99iWIy4SpNHBs7nmRMf+kIQQTxQBea/wLKheu2b2XHHd/TAHYLujEBkGOHDF/lOe6/
-         UsMzyBDw0B2mw/GgOoF0zg8oZbFmud0SZHF0vsOuzE+TABdcIc7OdNpaeeQBJa7BOOKH
-         qJR0BUitGK4QJJT3zP0geH1QHn7pmhC0hhR7uKtDm+C6awSsj3M3x2Si+x7JN/6cG0SK
-         Q2SNkqelPU5BIEoaC8fjBuiYOJURIiQtcbLcac2l89pnQfKwklTKnEMoMAz8EBZM3l2n
-         JYUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW+UW7/SoVVSVZxxn5NxASC5L6HEzZ0vcywD95Fjx89q3ey3WXuT5tsbnD4NF32NnwStRgdeZ10yb4X2Lu1m1I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmluZwye/Ynw5rzewPrXQMQ3DoD3DjmDkkBy6n1lZK/EPaNayY
-	hkHlY2XdrKdyUA8OEx6McJzFCXJpZreDER6YrC4gKGQYlrxh2etGXN0Dx5nZ4vaTeMl9jseoUgB
-	DiE3BGPVlGiA8TjM/sDDChh7Rj2u9LfGjLbqbzaP5
-X-Gm-Gg: ASbGncsYOMfHVNMcBeCwxV33ZkMroC5/vnqeu/EdTWYOOv5wfLs6QPDMoAwsSR50rJw
-	30lDyA46JJqBUOlHaUZnKeeacm0EJmVedxF+OUuT/Obbd4/heiCOxm4s4MX9HChV6neOv3HyYXi
-	PZj6LXPdJOTIQG17AP3HjYyO1i4lTJMpFTG+0RbSHMQ/rIyyPi1fEop10v2xBiIAuwmqBUZk4Z1
-	C5jCg7/SrYxfbzI7hlzHoSrSRN12o/q+ZsShlDYATWJUf0n7B9n5z6eb9D6ZtXU+/+AqayD36PZ
-	5RveOy+sEblN2jb7
-X-Google-Smtp-Source: AGHT+IE14qTEBghQgzjgcliX4306euS6iolIBF3AxWlF2cEnTAIMms5VkABvdFJelKcvqwketyvRe6yUthJZ0L6j/JI=
-X-Received: by 2002:a05:600c:8719:b0:46f:aa9f:e345 with SMTP id
- 5b1f17b1804b1-47497744bccmr724965e9.7.1761063246555; Tue, 21 Oct 2025
- 09:14:06 -0700 (PDT)
+        bh=tvopacnigHBT8bombNvmTILspbaRSMSn7DFUJVL0nnc=;
+        b=SQoLxSSdroRCgDTyCmhFbCVebGKvTUdY8TrB0f/3Sm7jjO1jeL+nRrK4zjYtAuslFj
+         ckYzAV1pPlV/DtpCPu7vwj6dZaeBkmOoxpBwhd7BxxSOfdoQGXAfW6MC5X5LGDY/qmCI
+         cjrgnucmvvbdObMCI7Yq+iQr6VDt8tXgQfK7xUWDmRxK8EUL8W+/8HqMggw9kBh9Wvzp
+         xMMYSN/ZeIhEP5NgdRM8d39lRFjcEzmfhP+v6fkZPxSN+EfwprmpBzI88uNxU6KCmlj2
+         X6EDK6tcY4tCrYD0L9LLdkOt3E/k9pvfRCibL2uaCZXUfqqzgIsmG9bcddCsfmO/eiSa
+         aODA==
+X-Forwarded-Encrypted: i=1; AJvYcCVQ2WC4i6F2f0mPz3kzo7uJY5ekptCdyA7EefCriCW32QN3N2rTM/m05388pOFhO7OjEeqSU38bPYm/kedJUbo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxbu8OJ6hZ/9VVLho8iCNUSOp1onwgP864+lCnd5hdt3bBa/bjh
+	1s+WV0PJufBDlPHacClfMCzjLGwidaDLsemk2VTKFDjZ+3lh9f9sa5MH6HrGmZRAG1KOrGNYp/J
+	tJS0hBpTZe4MjE9E/qWNwojSBhaxZcJGwSoLRE0V47FQ8d+OK2s/WI6qMcJRefCaNztqpCO5HW3
+	ga3pRf8prh2LeYeWDbpFgVL2ZxOUmhEzkyk21SPR+wn72f
+X-Gm-Gg: ASbGncuoUfoUiNr4Y4L19SWlVWAYAR23zGkxWn46qzfMKG4M916lW9OMbpX1MBzVTVp
+	i1Fis7wLkbVj514K2Ewi0mjXvbJAlYdLxTRrm7Hgv/12CNYdhxy3F+Wsovnw+DxKAIOijuymb+a
+	1MCkqvy22sUDz2kw1Ekqd7AagkNmJkmpNIBemqYLf87PJpZ5B+wGKskb5YKcFpuaqRkwsl90yre
+	oUe50ouAM3zvoY=
+X-Received: by 2002:a05:622a:5:b0:4e8:b4d1:ece2 with SMTP id d75a77b69052e-4e8b4d1f832mr136116901cf.18.1761064073679;
+        Tue, 21 Oct 2025 09:27:53 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF+4bhTh0R0rxAhz5svf4CCiuJcWStZnahyEqAUmkhny4II2PoiiE/S+8ADSs8/XKYkUEz/fKi6H3YvlEckWRM=
+X-Received: by 2002:a05:622a:5:b0:4e8:b4d1:ece2 with SMTP id
+ d75a77b69052e-4e8b4d1f832mr136116461cf.18.1761064073103; Tue, 21 Oct 2025
+ 09:27:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251013185903.1372553-1-jiaqiyan@google.com> <20251013185903.1372553-4-jiaqiyan@google.com>
- <3efcf624-58f1-4390-b6e2-a0aa5e62a9a3@infradead.org>
-In-Reply-To: <3efcf624-58f1-4390-b6e2-a0aa5e62a9a3@infradead.org>
-From: Jiaqi Yan <jiaqiyan@google.com>
-Date: Tue, 21 Oct 2025 09:13:55 -0700
-X-Gm-Features: AS18NWBrgiqcwjUkY7yriOgg09EsrU9gzSKpZPzp6diSIUTDX5ipeIw05uqw6vQ
-Message-ID: <CACw3F53cqiwtGyeJw+baS23sK3byenC8R5ddzW6Q1e_Bzk8tJA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] Documentation: kvm: new UAPI for handling SEA
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: maz@kernel.org, oliver.upton@linux.dev, duenwen@google.com, 
-	rananta@google.com, jthoughton@google.com, vsethi@nvidia.com, jgg@nvidia.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
-	shuah@kernel.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20250910170000.6475-1-gpaoloni@redhat.com> <20250910170000.6475-2-gpaoloni@redhat.com>
+ <878qifgxbj.fsf@trenco.lwn.net> <85166a8a-ad54-42d0-a09f-43e0044cf4f4@redhat.com>
+ <CAB=6tBQP3aCDWch4ZcEYMqFsJ4OKXSyC_hb9V9hA7ZZty7vFeQ@mail.gmail.com> <042629f9-f295-494e-8fbd-e8751fcbe7c0@redhat.com>
+In-Reply-To: <042629f9-f295-494e-8fbd-e8751fcbe7c0@redhat.com>
+From: Gabriele Paoloni <gpaoloni@redhat.com>
+Date: Tue, 21 Oct 2025 18:27:42 +0200
+X-Gm-Features: AS18NWCYr1SX4wkTTAv1mmDjb6o7jALXBoi79rLo1c5c8AJEkanUrVwY-K7NzHM
+Message-ID: <CA+wEVJYLF9T21-V2k0Y0zxcF0zcRG64QUVrM=qHDWHz7+4+ptw@mail.gmail.com>
+Subject: Re: [RFC v2 PATCH 1/3] Documentation: add guidelines for writing
+ testable code specifications
+To: David Hildenbrand <david@redhat.com>
+Cc: Chuck Wolber <chuckwolber@gmail.com>, Jonathan Corbet <corbet@lwn.net>, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, gregkh@linuxfoundation.org, linux-mm@kvack.org, 
+	safety-architecture@lists.elisa.tech, acarmina@redhat.com, 
+	kstewart@linuxfoundation.org, chuck@wolber.net
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 13, 2025 at 6:51=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org=
+Hi David
+
+On Tue, Oct 21, 2025 at 5:37=E2=80=AFPM David Hildenbrand <david@redhat.com=
 > wrote:
 >
->
->
-> On 10/13/25 11:59 AM, Jiaqi Yan wrote:
-> > Document the new userspace-visible features and APIs for handling
-> > synchronous external abort (SEA)
-> > - KVM_CAP_ARM_SEA_TO_USER: How userspace enables the new feature.
-> > - KVM_EXIT_ARM_SEA: exit userspace gets when it needs to handle SEA
-> >   and what userspace gets while taking the SEA.
+> On 20.10.25 23:02, Chuck Wolber wrote:
+> > [Reposting with apologies for the dup and those inflicted by the broken=
+ Gmail
+> > defaults. I have migrated away from Gmail, but some threads are still s=
+tuck
+> > there.]
 > >
-> > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > ---
-> >  Documentation/virt/kvm/api.rst | 61 ++++++++++++++++++++++++++++++++++
-> >  1 file changed, 61 insertions(+)
-> >
-> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/ap=
-i.rst
-> > index 6ae24c5ca5598..43bc2a1d78e01 100644
-> > --- a/Documentation/virt/kvm/api.rst
-> > +++ b/Documentation/virt/kvm/api.rst
-> > @@ -7272,6 +7272,55 @@ exit, even without calls to ``KVM_ENABLE_CAP`` o=
-r similar.  In this case,
-> >  it will enter with output fields already valid; in the common case, th=
-e
-> >  ``unknown.ret`` field of the union will be ``TDVMCALL_STATUS_SUBFUNC_U=
-NSUPPORTED``.
-> >  Userspace need not do anything if it does not wish to support a TDVMCA=
-LL.
-> > +
-> > +::
-> > +             /* KVM_EXIT_ARM_SEA */
-> > +             struct {
-> > +  #define KVM_EXIT_ARM_SEA_FLAG_GPA_VALID   (1ULL << 0)
-> > +                     __u64 flags;
-> > +                     __u64 esr;
-> > +                     __u64 gva;
-> > +                     __u64 gpa;
-> > +             } arm_sea;
-> > +
-> > +Used on arm64 systems. When the VM capability KVM_CAP_ARM_SEA_TO_USER =
-is
-> > +enabled, a VM exit is generated if guest causes a synchronous external=
- abort
-> > +(SEA) and the host APEI fails to handle the SEA.
-> > +
-> > +Historically KVM handles SEA by first delegating the SEA to host APEI =
-as there
-> > +is high chance that the SEA is caused by consuming uncorrected memory =
-error.
-> > +However, not all platforms support SEA handling in APEI, and KVM's fal=
-lback
-> > +is to inject an asynchronous SError into the guest, which usually pani=
-cs
-> > +guest kernel unpleasantly. As an alternative, userspace can participat=
-e into
->
->                                                                          =
-  in
->
-> > +the SEA handling by enabling KVM_CAP_ARM_SEA_TO_USER at VM creation, a=
-fter
-> > +querying the capability. Once enabled, when KVM has to handle the gues=
-t
->
->                                                                      gues=
-t-
-> > +caused SEA, it returns to userspace with KVM_EXIT_ARM_SEA, with detail=
+> > On Mon, Oct 20, 2025 at 7:35=E2=80=AFPM David Hildenbrand <david@redhat=
+.com> wrote:
+> >>
+> >>>> +------------
+> >>>> +The Documentation/doc-guide/kernel-doc.rst chapter describes how to=
+ document the code using the kernel-doc format, however it does not specify=
+ the criteria to be followed for writing testable specifications; i.e. spec=
+ifications that can be used to for the semantic description of low level re=
+quirements.
+> >>>
+> >>> Please, for any future versions, stick to the 80-column limit; this i=
 s
-> > +about the SEA available in 'arm_sea'.
-> > +
-> > +The 'esr' field holds the value of the exception syndrome register (ES=
-R) while
-> > +KVM taking the SEA, which tells userspace the character of the current=
- SEA,
->    KVM takes
->
-> > +such as its Exception Class, Synchronous Error Type, Fault Specific Co=
-de and
-> > +so on. For more details on ESR, check the Arm Architecture Registers
-> > +documentation.
-> > +
-> > +The following values are defined for the 'flags' field
->
-> Above needs an ending like '.' or ':'.
-> (or maybe "::" depending how it is processed by Sphinx)
->
-> > +
-> > +  - KVM_EXIT_ARM_SEA_FLAG_GPA_VALID -- the faulting guest physical add=
-ress
-> > +    is valid and userspace can get its value in the 'gpa' field.
-> > +
-> > +Note userspace can tell whether the faulting guest virtual address is =
-valid
-> > +from the FnV bit in 'esr' field. If FnV bit in 'esr' field is not set,=
- the
-> > +'gva' field hols the valid faulting guest virtual address.
->
->                holds (or contains)> +
-> > +Userspace needs to take actions to handle guest SEA synchronously, nam=
-ely in
-> > +the same thread that runs KVM_RUN and receives KVM_EXIT_ARM_SEA. One o=
-f the
-> > +encouraged approaches is to utilize the KVM_SET_VCPU_EVENTS to inject =
-the SEA
-> > +to the faulting VCPU. This way, the guest has the opportunity to keep =
-running
-> > +and limit the blast radius of the SEA to the particular guest applicat=
-ion that
-> > +caused the SEA. Userspace may also emulate the SEA to VM by itself usi=
-ng the
-> > +KVM_SET_ONE_REG API. In this case, it can use the valid values from 'g=
-va' and
-> > +'gpa' fields to manipulate VCPU's registers (e.g. FAR_EL1, HPFAR_EL1).
-> > +
-> >  ::
+> >>> especially important for text files that you want humans to read.
+> >>>
+> >>> As a nit, you don't need to start by saying what other documents don'=
+t
+> >>> do, just describe the purpose of *this* document.
+> >>>
+> >>> More substantially ... I got a way into this document before realizin=
+g
+> >>> that you were describing an addition to the format of kerneldoc
+> >>> comments.  That would be good to make clear from the outset.
+> >>>
+> >>> What I still don't really understand is what is the *purpose* of this
+> >>> formalized text?  What will be consuming it?  You're asking for a fai=
+r
+> >>> amount of effort to write and maintain these descriptions; what's in =
+it
+> >>> for the people who do that work?
+> >>
+> >> I might be wrong, but sounds to me like someone intends to feed this t=
+o
+> >> AI to generate tests or code.
 > >
-> >               /* Fix the size of the union. */
-> > @@ -8689,6 +8738,18 @@ This capability indicate to the userspace whethe=
-r a PFNMAP memory region
-> >  can be safely mapped as cacheable. This relies on the presence of
-> >  force write back (FWB) feature support on the hardware.
+> > Absolutely not the intent. This is about the lossy process of convertin=
+g human
+> > ideas to code. Reliably going from code to test requires an understandi=
+ng of
+> > what was lost in translation. This project is about filling that gap.
+>
+> Thanks for clarifying. I rang my alarm bells too early :)
+>
+> I saw the LPC talk on this topic:
+>
+> https://lpc.events/event/19/contributions/2085/
+>
+> With things like "a test case can be derived from the testable
+> expectation" one wonders how we get from the the doc to an actual test ca=
+se.
+
+Probably it is the term derived that can be a bit misleading. The point is =
+that
+we need documented expectations that can be used to review and verify the
+test cases against; so maybe better to say "a test case can be verified aga=
+inst
+the testable expectation"
+
+>
+> IIRC, with things like formal verification we usually don't write  in
+> natural language, because it's too imprecise. But my formal verification
+> knowledge is a bit rusty.
+>
 > >
-> > +7.45 KVM_CAP_ARM_SEA_TO_USER
-> > +----------------------------
-> > +
-> > +:Architecture: arm64
-> > +:Target: VM
-> > +:Parameters: none
-> > +:Returns: 0 on success, -EINVAL if unsupported.
-> > +
-> > +This capability, if KVM_CHECK_EXTENSION indicates that it is available=
-, means
-> > +that KVM has an implementation that allows userspace to participate in=
- handling
-> > +synchronous external abort caused by VM, by an exit of KVM_EXIT_ARM_SE=
-A.
-> > +
-> >  8. Other capabilities.
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > >
+> >> In that case, no thanks.
+> >>
+> >> I'm pretty sure we don't want this.
+> >
+> > Nor I. If you find any references in our work that amount to a validati=
+on of
+> > your concerns, please bring them to our attention.
+>
+> I guess, as the discussion with me and Jonathan showed, the cover letter
+> is a bit short on the motivation, making people like me speculate a bit
+> too much about the intentions.
+
+Right, I'll keep this in mind for v2 and I will improve the motivation aspe=
+ct
+(also leveraging the response I gave to Jonathan).
+
+Many thanks for your feedbacks!
+Gab
+
 >
 > --
-> ~Randy
+> Cheers
+>
+> David / dhildenb
 >
 
-Thanks for your quick review, Randy. I have queued fixes and am
-waiting for reviews on other commits in this PATCH.
 
