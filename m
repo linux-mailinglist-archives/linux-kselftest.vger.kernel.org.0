@@ -1,155 +1,140 @@
-Return-Path: <linux-kselftest+bounces-43670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B3AEBF7C6E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 18:48:02 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E899BF7CB0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 18:55:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C529C425462
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 16:46:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AE9874E9321
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 16:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 067483446C7;
-	Tue, 21 Oct 2025 16:46:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087A234A762;
+	Tue, 21 Oct 2025 16:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gsG/gyUz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNRc5cnX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FCE235360;
-	Tue, 21 Oct 2025 16:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CDA347BC0
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 16:55:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761065208; cv=none; b=j+R7zWUBF3IDZJ+RRHD8W1XuyuiDsem6xjAojxKFLxmRFd4M379s1b3szuW0/Cn5tKFE1ElBeNZHSUacznBZ78kfw1Wx0TPuM58F9e+1ioYHIDtWMfteltrTALOv+fOLhMyx7YGgFIWlOWLSogPmOgSIJlTbIzsIYmFZFPAwiCo=
+	t=1761065707; cv=none; b=DqLccU4HwwdGSrTatgoiDTRqcmA2PnWgYVHhZQ94h9GvT5wiCJ7koaEn3rbrT71nIoxUPrajf9vUgOJy1B8rJpG3iyHLErq0XuKoQeAkRJ3w2/FTwp56eu2mP50dqQMaayD0G9W3SrxMoRw1pYlmc7UjyBlGg8MKALezuAu4htU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761065208; c=relaxed/simple;
-	bh=arHrvou9uQqGbHOB/p6IMtkA2TNGKttCri6QEWXzjxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qTB8RfSNOqbqhxjhre52mK5R4qwigxTmyC7syXXOb2LQSFOo9HHbDXM0hBl5tAXeLZgrJUL1xVxJL7MUUIeZwYM5ue1hIP+DXaGZmlNy7aeSDA2PyqR4bUqRL2VykcS1C1WN2i5nGFzx2GwoMWaU6j+O+wmKkpKJQMFDtqcuFaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gsG/gyUz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA3D6C4CEF1;
-	Tue, 21 Oct 2025 16:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1761065208;
-	bh=arHrvou9uQqGbHOB/p6IMtkA2TNGKttCri6QEWXzjxg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gsG/gyUzuDKYqVOuHlctFQ/BUjwTW8253Q/OoKIbt8mKs/yJaITjMj3rQBa+JAdBX
-	 LVtTd8QQm91N5li/9P0LkppGSfZPs5ib5VMM+6C4hFggchYFS9xviUSlWZgEt6KWtm
-	 mkaP3Qaoi7DjgfO5kNC5Z8otPquVU9IvBZcuvBbg=
-Date: Tue, 21 Oct 2025 18:46:45 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Gabriele Paoloni <gpaoloni@redhat.com>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, corbet@lwn.net,
-	linux-doc@vger.kernel.org, linux-mm@kvack.org,
-	safety-architecture@lists.elisa.tech, acarmina@redhat.com,
-	kstewart@linuxfoundation.org, chuckwolber@gmail.com
-Subject: Re: [RFC PATCH v2 0/3] Add testable code specifications
-Message-ID: <2025102124-punctuate-kilogram-da50@gregkh>
-References: <20250910170000.6475-1-gpaoloni@redhat.com>
- <2025102111-facility-dismay-322e@gregkh>
- <CA+wEVJZEho_9kvaGYstc=5f6iHGi69x=_0zT+jrC2EqSFUQMWQ@mail.gmail.com>
+	s=arc-20240116; t=1761065707; c=relaxed/simple;
+	bh=MD15u5LqqmayWloxdzFGq0sNLTBc1b1Ii0ATLOQcv8U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qhNFx56vWnC3sWUk0pfIgMI0ZYu2QROFSaicsY+E2pwhv8pNXnXhkM5eZDejfO5bzfTiGVTMZjJl22p3Fnxs6ArtYB3BIajsr4r+lCff/6cN4bwqB8U4GvdrNkNIu9Bf53iykdpwmcidTuZBRFxum53pkj+6CGM1JmPUEIocock=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNRc5cnX; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-426edfffc66so59086f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 09:55:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761065704; x=1761670504; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qn9OLNMyl8gChDp28IqA1MLvsXpL32JwaHFC00xTtCc=;
+        b=NNRc5cnXLfbWheS5JvW+1vO5mWwePGxYnLtn01PAfA8vOtmQgEH3BXpgbYE8SclLYk
+         8a4pbZfjxmSgujPZLxwhP4zb96V/v8PsjkxYq1YdTF7DUAnudpRCWr0wK4tJOu59Hc0G
+         09WR0FfLVoRl0GkpwNk+vbcDMiSEGpRwRZ84fgxqepsGR4WGySjqrbof4L8qqRsutft4
+         ndac/Fn9/YZEYqqiLSXOskn3N0ca1MHiHvZOZQMHxqqE+zgiIlcm5aQMd4QGEx7qktQH
+         g1opwS5cWzwg2yrN7pyEQq5CR+69rPX0HDQBjYnXAISKd8JS4rrhIh0DjmEPMDfGXccI
+         dy/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761065704; x=1761670504;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qn9OLNMyl8gChDp28IqA1MLvsXpL32JwaHFC00xTtCc=;
+        b=K2oSQYA7qldeHmPd8+mVEWhqzQbE8IVYEJBOS0Yj95uLCG5o/Rq+s7h//UGKDaBzBF
+         TqZAqeLadddeP0gc1VOcziMRsyzMvJShnd1grOYeXSWwRvOPTQcrxTtOvnhImMzZVfyH
+         0aNolATPq41EPSS0FI3JO0aF7MJFLcMSgwE2N/8XhHoOWndWO1bwpc94IV54l8+G29hh
+         BuiJEhUczlt9eO3bCj/tPW8J7u9CIFTVOzgatZd9Tx0UnXbHoigUlOV5+U8L94tU0Nrl
+         ah620/+X3Eg2J8PNP30HDtkZUSGd8nO1+Swg1MChvR2+wz3lwTOtbVLDXO34StD5880C
+         dRww==
+X-Forwarded-Encrypted: i=1; AJvYcCWCXWZ6Anpw/4yXOii3wQpWZWjr5zKNX8W/DCQYiz10ChdD6yU5INDB20gICM3gpFdx6H3agUobO1VDOYGkEx8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhUGMLlXseuYQA3HY4GBP3hzyO2MspMaMkPfx14E6whJgNffY1
+	XqFCZ+e9EF7nIgsa7SovtD5gnCPJGDZGvaWhoPPBOGPy+m+DaPspR5Se
+X-Gm-Gg: ASbGnctYK8BmuNBbOh6VPw790GJfig5zLIrM9PTmdAgKzbp9lLLhJp8xSbvoPefnssP
+	cppZnnlXbN7XrDUuVVlPsp/6YZ+/ozn2VVlO0xEJhOmLFBWzRNH716JuTHlNs3xU+zc+WsIOjsT
+	3+9aqIyYehSbhU3H8H0w9Hj886LpmknFfNUoSYSfAJQN3/353R3u6D3oDPwhO4Q/qXfBK1Af1VM
+	nj2cQeC50lyYAoDJP7Z/9knAjZCp+QV0nT2Wgpn5f9aNmUTYdj09GmtbyIKcyTEy8Pip46mT2J5
+	C/qk+ppNlxZpxcFj0GGYN7XhjUEOx/mUp54irJ8TecztPeMJ+55FTXq/eyfR5C6BlMUNdMmvssr
+	9HPgvUt6EmVr1WmfYFDlJgHAbvqE+FZIBVxxP8W3UHJExVtBuHvRBuJfVKGKg6Jk3/Uts4wXIVw
+	Tk/m83wJdkd2SbTKEGQfEs+u5OzHDn+75dT69DOpmFzMA1RJhM8NVy7bpV2EUw4tWsjSy8Xw==
+X-Google-Smtp-Source: AGHT+IFB8n84f69J64AkWR9VGuZDwOZaYOeLxR1PP9RJZ4VLcpx4xH2b3szKu1AMRcrRkxak/JLlHg==
+X-Received: by 2002:a5d:5847:0:b0:3dc:1473:17fb with SMTP id ffacd0b85a97d-428531c8828mr255369f8f.20.1761065704306;
+        Tue, 21 Oct 2025 09:55:04 -0700 (PDT)
+Received: from alessandro-pc.station (net-2-37-207-41.cust.vodafonedsl.it. [2.37.207.41])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475c427f77bsm1649005e9.3.2025.10.21.09.55.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Oct 2025 09:55:04 -0700 (PDT)
+From: Alessandro Zanni <alessandro.zanni87@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org
+Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftest: net: prevent use of uninitialized variable
+Date: Tue, 21 Oct 2025 18:54:33 +0200
+Message-ID: <20251021165451.32984-1-alessandro.zanni87@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+wEVJZEho_9kvaGYstc=5f6iHGi69x=_0zT+jrC2EqSFUQMWQ@mail.gmail.com>
 
-On Tue, Oct 21, 2025 at 11:42:24AM +0200, Gabriele Paoloni wrote:
-> Hi Greg
-> 
-> On Tue, Oct 21, 2025 at 9:35 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Sep 10, 2025 at 06:59:57PM +0200, Gabriele Paoloni wrote:
-> > > [1] was an initial proposal defining testable code specifications for
-> > > some functions in /drivers/char/mem.c.
-> > > However a Guideline to write such specifications was missing and test
-> > > cases tracing to such specifications were missing.
-> > > This patchset represents a next step and is organised as follows:
-> > > - patch 1/3 contains the Guideline for writing code specifications
-> > > - patch 2/3 contains examples of code specfications defined for some
-> > >   functions of drivers/char/mem.c
-> > > - patch 3/3 contains examples of selftests that map to some code
-> > >   specifications of patch 2/3
-> > >
-> > > [1] https://lore.kernel.org/all/20250821170419.70668-1-gpaoloni@redhat.com/
-> >
-> > "RFC" implies there is a request.  I don't see that here, am I missing
-> > that?  Or is this "good to go" and want us to seriously consider
-> > accepting this?
-> 
-> I assumed that an RFC (as in request for comments) that comes with proposed
-> changes to upstream files would be interpreted as a request for feedbacks
-> associated with the proposed changes (what is wrong or what is missing);
-> next time I will communicate the request explicitly.
-> 
-> WRT this specific patchset, the intent is to introduce formalism in specifying
-> code behavior (so that the same formalism can also be used to write and
-> review test cases), so my high level asks would be:
-> 
-> 1) In the first part of patch 1/3 we explain why we are doing this and the high
-> level goals. Do you agree with these? Are these clear?
+Fix to avoid the usage of the `ret` variable uninitialized in the
+following macro expansions.
 
-No, and no.
+It solves the following warning:
 
-I think this type of thing is, sadly, folly.  You are entering into a
-path that never ends with no clear goal that you are conveying here to
-us.
+In file included from netlink-dumps.c:21:
+netlink-dumps.c: In function ‘dump_extack’:
+../kselftest_harness.h:788:35: warning: ‘ret’ may be used uninitialized [-Wmaybe-uninitialized]
+  788 |                         intmax_t  __exp_print = (intmax_t)__exp; \
+      |                                   ^~~~~~~~~~~
+../kselftest_harness.h:631:9: note: in expansion of macro ‘__EXPECT’
+  631 |         __EXPECT(expected, #expected, seen, #seen, ==, 0)
+      |         ^~~~~~~~
+netlink-dumps.c:169:9: note: in expansion of macro ‘EXPECT_EQ’
+  169 |         EXPECT_EQ(ret, FOUND_EXTACK);
+      |         ^~~~~~~~~
 
-I might be totally wrong, but I fail to see what you want to have happen
-in the end.
+The issue can be reproduced, building the tests, with the command:
+make -C tools/testing/selftests TARGETS=net
 
-Every in-kernel api documented in a "formal" way like this?  Or a
-subset?  If a subset, which ones specifically?  How many?  And who is
-going to do that?  And who is going to maintain it?  And most
-importantly, why is it needed at all?
+Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+---
+ tools/testing/selftests/net/netlink-dumps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-For some reason Linux has succeeded in pretty much every place an
-operating system is needed for cpus that it can run on (zephyr for those
-others that it can not.)  So why are we suddenly now, after many
-decades, requiring basic user/kernel stuff to be formally documented
-like this?
+diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
+index 7618ebe528a4..8ebb8b1b9c5c 100644
+--- a/tools/testing/selftests/net/netlink-dumps.c
++++ b/tools/testing/selftests/net/netlink-dumps.c
+@@ -112,7 +112,7 @@ static const struct {
+ TEST(dump_extack)
+ {
+ 	int netlink_sock;
+-	int i, cnt, ret;
++	int i, cnt, ret = 0;
+ 	char buf[8192];
+ 	int one = 1;
+ 	ssize_t n;
+-- 
+2.43.0
 
-In the past, when we have had "validating bodies" ask for stuff like
-this, the solution is to provide it in a big thick book, outside of the
-kernel, by the company that wishes to sell such a product to that
-organization to justify the cost of doing that labor.  In every instance
-that I know of, that book sits on a shelf and gathers dust, while Linux
-is just updated over the years in those sites to new versions and the
-book goes quickly out of date as no one really cares about it, except
-it having been a check-box for a purchase order requirement.
-
-That's business craziness, no need to get us involved in all of that.
-Heck, look at the stuff around FIPS certification for more insanity.
-That's a check-box that is required by organizations and then totally
-ignored and never actually run at all by the user.  I feel this is much
-the same.
-
-So step back, and tell us exactly what files and functions and apis are
-needed to be documented in this stilted and formal way, who exactly is
-going to be doing all of that work, and why we should even consider
-reviewing and accepting and most importantly, maintaining such a thing
-for the next 40+ years.
-
-> 2) In the rest of the patchset we introduce the formalism, we propose some
-> specs (in patch 2) and associated selftests (in patch 3). Please let us know
-> if there is something wrong, missing or to be improved.
-
-I made many comments on patch 3, the most important one being that the
-tests created do not seem to follow any of the standards we have for
-Linux kernel tests for no documented reason.
-
-The irony of submitting tests for formal specifications that do not
-follow documented policies is rich :)
-
-thanks,
-
-greg k-h
 
