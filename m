@@ -1,146 +1,157 @@
-Return-Path: <linux-kselftest+bounces-43658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6B34BF6655
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 14:19:00 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CC07BF683B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 14:45:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 01FA2503979
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 12:17:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id ED12134599B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 12:45:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74A5204C36;
-	Tue, 21 Oct 2025 12:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FD7F3314C4;
+	Tue, 21 Oct 2025 12:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HKL5p3Pz"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="P2TSt6sH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vMqbhdBh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E2017BED0
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 12:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE9A330B0B;
+	Tue, 21 Oct 2025 12:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761049017; cv=none; b=W2IrPbiqnky9ufVTlSyeo0MM3sbaGh06SDZN1vYvje3O/oUTJ6ltQCUwg6Fp2hJYrIkJ2Vd5HiZJEQ2nE9isLPBLW3Avc5gqQpyDxyQC2WizBhmO0OMBLK6700A/5cIStO66UJXDCBIwtkQOY7CnUY9WWi1tVbaCsP1ywWj2YLs=
+	t=1761050708; cv=none; b=G12YY22il6WTAeVBFOT7y6ElsFxbGfMXhoBCMicdLkGs6Vbl5dZKzcGD0lpODOZs/4n0GO0F0YP/jS7X+rnBC2fWASUhJvGydKeJrfVbX2u7sce4pyJSbSjiJHJmL8/PU1LMUO9FuqwEj2ZL6HvyOtRXVlpT06t2sL7OKYFM9CQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761049017; c=relaxed/simple;
-	bh=PZPgEIrqSEsFtFBAc9XPMhwq3tBIfsIZD0Sxnshjqx8=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=TIkcQNtYZ0XO5MWCqcybhCNyj6c8LnSV5a6VdToGHG4s9rcFyRO3Jx0VPx2gbtWHjxJ9R15sbmEtXaNkulR7t29G7TqzYiANRXIIwHlZELjJ1zYDy4JEv7nR/4fSZWBzJcPyuPeiImQ45gHLXBM/qP3/OnBYY2A7EkSJPGP63WA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HKL5p3Pz; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1761050708; c=relaxed/simple;
+	bh=R2kJsOH4TDONKCo/+SareOThYcnZIqqWXQFph/AdTYE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BBxvlJUKRBitdARPt5G2Yc7+zET8zP+h/oRuUPo7Sb8+1eknI8LVw90wWITkYDEKNDYfey7UeMo9+hyhxO3BffdIAkhmiQi5etRSieA1CjH5p8FMny2AFFbONUG3YjBmB06WY40NAsirQf2FxCi69/Py6Q/9cMjfkbKtkTA/Hj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=P2TSt6sH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vMqbhdBh; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfout.stl.internal (Postfix) with ESMTP id 9C4561D000BF;
+	Tue, 21 Oct 2025 08:45:01 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-10.internal (MEProxy); Tue, 21 Oct 2025 08:45:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm3; t=1761050701; x=
+	1761137101; bh=VJQvSbwrg6PINiCTEISqmNZW2C/OLur61op4W7UVtDI=; b=P
+	2TSt6sHjjBDDorM42j9GKt4/tgcMBn1FXxZ7HhlOL7z7Q8Vb7kZDh+FU7SnlVOUi
+	AeLVe7Z0Qjhi6csKEJ+4lukk2Gq4JwAXIDw5hdRpa1YmoEE+XOE+sRnCgRSvYdXp
+	USJ/jNU4vMFRFG+eHUF+hT1sCAFRs7yKGAqHVEvp1EObA/gQho0hgdgFrhzqs/Ws
+	FQ7DuqLIim4qE0zqoNujHFnkTUGeE48bn0xbl3wMgg+L9NN+RJXTiy/caRLiWHJM
+	VYYb1liFB2twI1J1LbHxSqxqn0tNIojF02WWuqzueBP94f1rj5h0+KX2+mTpDSlB
+	tmOFzLN/dUGp2BV2Z++Vw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1761050701; x=1761137101; bh=VJQvSbwrg6PINiCTEISqmNZW2C/OLur61op
+	4W7UVtDI=; b=vMqbhdBhiisP9/h906Pa93HVoN1eHWP6+PCfpqY1ZJipF9Ekzb8
+	l5/QmJUYATXKLcLugOeBtKh6vKeKyeY75KbwGuYHmR3kbiqSAVgv/rU3JExBqDtz
+	JLG+QShw6uSimDNyOm0RPneOtzElg6xGkmRA7B+pnyB1CSNOYdamqrPSlCkE7dVw
+	OGnDIcsVvWb2r5YYeKqFt3QFoBfnp3UDv0kc3up4qGaPshhPNnUlV9PC/AUSrPH3
+	F/J/iY0OrxHha+PYenITLu7ZEReecwV5jashTOmGUZzZYC+MEKksqxIp4ZnvoTbZ
+	IEeeM5fMnbiVU1XX6QzNGC3Eqx+J3sVhjJw==
+X-ME-Sender: <xms:TID3aJLtBfJPrcK55rpKBVyE-jiiq7j0uG1pTfOghs-4aOud14q6Jw>
+    <xme:TID3aBjTbz8i_yRwEa2N5rBO-jhYbq6feEcJyCvqiECQ1aygy71K5yYCczXrqUhaW
+    UJVO0Fanuh7mkCA7cws-hdto3-dyekpChwmqs3LU1sUGJMPWEfQPw>
+X-ME-Received: <xmr:TID3aGICICdxniT7o8tqvlsFb4siRwfYZ6NM3fVy6vTzBs6mRFE-C0U-36g0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddugedtjeefucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
+    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedugedpmhho
+    uggvpehsmhhtphhouhhtpdhrtghpthhtohepfihilhhfrhgvugdrohhpvghnshhouhhrtg
+    gvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqughotgesvhhgvghrrdhkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgv
+    thdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtoh
+    epkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvughh
+    rghtrdgtohhm
+X-ME-Proxy: <xmx:TID3aIgkUiBTsH-6aK2KRGnVCp7Oorqdm7VtIyRSvlkaAwxziLPqgw>
+    <xmx:TID3aM1d8tmPbNB_pJgsycnVQfcxxA1FWF7h3txsCOml3IXlVLx80w>
+    <xmx:TID3aGhC2-YFYWeUZqYVc3UDZyUMJaVUrnJg0o-rgmVG0j8toWIY8w>
+    <xmx:TID3aF-7D0UvCz7lGrFOuPvJpETkWvYlK86vL_1-SGpZqAxVxSElzA>
+    <xmx:TYD3aBCdKB9q3gzfEsv-AdpflRZjXBqpzcg7KPJfs0hzt5ryLPbRyjPE>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 21 Oct 2025 08:45:00 -0400 (EDT)
+Date: Tue, 21 Oct 2025 14:44:58 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Wilfred Mallawa <wilfred.opensource@gmail.com>
+Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Simon Horman <horms@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Wilfred Mallawa <wilfred.mallawa@wdc.com>
+Subject: Re: [PATCH net-next v7 1/2] net/tls: support setting the maximum
+ payload size
+Message-ID: <aPeASl1RRAKMmuhC@krikkit>
+References: <20251021092917.386645-2-wilfred.opensource@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761049003;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zYvStWX6Ci/N/2j+0vFU9W5LcAG8n9087r7VsvwlyY4=;
-	b=HKL5p3PzWCZI9q1Dgkjkaz8op07T5e3Xs3ru6Ia2dbqiu0C3py7r9TnSNZAmgS71junlgo
-	hbFLl5R4TcEXK2/SW8anS5goRXfCJoHSf0V58rYDUnEPTXng0dCSraKUuI4oSMPVaDMIM0
-	cVVoFcUI1EeF/ctDh/G0mUu0e9UwbCQ=
-Date: Tue, 21 Oct 2025 12:16:33 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <f03db434053928c2bc19fe8ffbae06cd06425668@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH net v2 2/3] bpf,sockmap: disallow MPTCP sockets from
- sockmap updates
-To: "Jakub Sitnicki" <jakub@cloudflare.com>
-Cc: mptcp@lists.linux.dev, netdev@vger.kernel.org, bpf@vger.kernel.org, "Eric
- Dumazet" <edumazet@google.com>, "Kuniyuki Iwashima" <kuniyu@google.com>,
- "Paolo Abeni" <pabeni@redhat.com>, "Willem de Bruijn"
- <willemb@google.com>, "John Fastabend" <john.fastabend@gmail.com>, "David
-  S. Miller" <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>,
- "Simon Horman" <horms@kernel.org>, "Matthieu Baerts"
- <matttbe@kernel.org>, "Mat Martineau" <martineau@kernel.org>, "Geliang
- Tang" <geliang@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin  KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "KP  Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao  Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Florian
- Westphal" <fw@strlen.de>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-In-Reply-To: <87cy6gwmvk.fsf@cloudflare.com>
-References: <20251020060503.325369-1-jiayuan.chen@linux.dev>
- <20251020060503.325369-3-jiayuan.chen@linux.dev>
- <87cy6gwmvk.fsf@cloudflare.com>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251021092917.386645-2-wilfred.opensource@gmail.com>
 
-October 21, 2025 at 18:49, "Jakub Sitnicki" <jakub@cloudflare.com mailto:=
-jakub@cloudflare.com?to=3D%22Jakub%20Sitnicki%22%20%3Cjakub%40cloudflare.=
-com%3E > wrote:
+2025-10-21, 19:29:17 +1000, Wilfred Mallawa wrote:
+> diff --git a/net/tls/tls_main.c b/net/tls/tls_main.c
+> index 39a2ab47fe72..b234d44bd789 100644
+> --- a/net/tls/tls_main.c
+> +++ b/net/tls/tls_main.c
+> @@ -541,6 +541,32 @@ static int do_tls_getsockopt_no_pad(struct sock *sk, char __user *optval,
+>  	return 0;
+>  }
+>  
+> +static int do_tls_getsockopt_tx_payload_len(struct sock *sk, char __user *optval,
+> +					    int __user *optlen)
+> +{
+> +	struct tls_context *ctx = tls_get_ctx(sk);
+> +	u16 payload_len = ctx->tx_max_payload_len;
+> +	int len;
+> +
+> +	if (get_user(len, optlen))
+> +		return -EFAULT;
+> +
+> +	/* For TLS 1.3 payload length includes ContentType */
+> +	if (ctx->prot_info.version == TLS_1_3_VERSION)
+> +		payload_len++;
 
->=20
->=20On Mon, Oct 20, 2025 at 02:04 PM +08, Jiayuan Chen wrote:
->=20
->=20>=20
->=20> MPTCP creates subflows for data transmission, and these sockets sho=
-uld not
-> >  be added to sockmap because MPTCP sets specialized data_ready handle=
-rs
-> >  that would be overridden by sockmap.
-> >=20
->=20>  Additionally, for the parent socket of MPTCP subflows (plain TCP s=
-ocket),
-> >  MPTCP sk requires specific protocol handling that conflicts with soc=
-kmap's
-> >  operation(mptcp_prot).
-> >=20
->=20>  This patch adds proper checks to reject MPTCP subflows and their p=
-arent
-> >  sockets from being added to sockmap, while preserving compatibility =
-with
-> >  reuseport functionality for listening MPTCP sockets.
-> >=20
->=20>  Fixes: 0b4f33def7bb ("mptcp: fix tcp fallback crash")
-> >  Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> >  ---
-> >  net/core/sock_map.c | 9 +++++++++
-> >  1 file changed, 9 insertions(+)
-> >=20
->=20>  diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-> >  index 5947b38e4f8b..da21deb970b3 100644
-> >  --- a/net/core/sock_map.c
-> >  +++ b/net/core/sock_map.c
-> >  @@ -535,6 +535,15 @@ static bool sock_map_redirect_allowed(const str=
-uct sock *sk)
-> >=20=20
->=20>  static bool sock_map_sk_is_suitable(const struct sock *sk)
-> >  {
-> >  + if ((sk_is_tcp(sk) && sk_is_mptcp(sk)) /* subflow */ ||
-> >  + (sk->sk_protocol =3D=3D IPPROTO_MPTCP && sk->sk_state !=3D TCP_LIS=
-TEN)) {
-> >  + /* Disallow MPTCP subflows and their parent socket.
-> >  + * However, a TCP_LISTEN MPTCP socket is permitted because
-> >  + * sockmap can also serve for reuseport socket selection.
-> >  + */
-> >  + pr_err_once("sockmap: MPTCP sockets are not supported\n");
-> >  + return false;
-> >  + }
-> >  return !!sk->sk_prot->psock_update_sk_prot;
-> >  }
-> >=20
->=20You're checking sk_state without sk_lock held. That doesn't seem righ=
-t.
-> Take a look how we always call sock_map_sk_state_allowed() after
-> grabbing the lock.
-> Same might apply to sk_is_mptcp(). Please double check.
->
+I'm not sure why you introduced this compared to v6?
 
-Thank you for the suggestion. It seems more appropriate to place this log=
-ic
-inside sock_map_sk_state_allowed().
+The ContentType isn't really payload (stuff passed to send() by
+userspace), so I think the setsockopt behavior (ignoring the extra 1B)
+makes more sense.
+
+Either way, we should really avoid this asymmetry between getsockopt
+and setsockopt. Whatever value is fed through setsockopt should be
+what we get back with getsockopt. Otherwise, the API gets quite
+confusing for users.
+
+
+The rest of the patch looks ok.
+
+-- 
+Sabrina
 
