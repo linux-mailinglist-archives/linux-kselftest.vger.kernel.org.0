@@ -1,216 +1,134 @@
-Return-Path: <linux-kselftest+bounces-43645-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43646-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A406BF4BD5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 08:50:26 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF848BF4FD1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 09:35:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8653189E09F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 06:50:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 37153351F92
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Oct 2025 07:35:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5387E2690D9;
-	Tue, 21 Oct 2025 06:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C27927FD7D;
+	Tue, 21 Oct 2025 07:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m/SHKOpc"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oGm9Zg6Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1EF2609FC
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 06:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2915A27FB1E;
+	Tue, 21 Oct 2025 07:35:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761029422; cv=none; b=a4NJTXY4qtXnguC4H8L9MhWu/oZUEACKra7F1G+nUbDtE6uHrnSU8kxYFMLfUZVMSrUhp6pqNujkJ5EsLHKgs3ieEge8xumfY4y8rPbtVwxdwmSzPqE0E0+023apDgpThQfoPWX22WnVpBeD0tJa+qfvARqdRh44Kbr6CmHYJKk=
+	t=1761032109; cv=none; b=UdaLrNcPx00TWFI2sjLEQ6vTxv/3A8j6yLLDS3Teti9j4fs8XHZoQj7mV05jRjb4CWVM8fQY2oC+j5nOFkMatJlcowAYAgCIJXRxY/rJzfnGS746On9NBBDiFaAucBBBJQzr5n8RFgnyoIvzKN4h68NVMD/bJw6EuXX8k6RHEjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761029422; c=relaxed/simple;
-	bh=EGoZKpbM+QtF0hOU52LnSPJPmRWtYvvIwHoAVKTEOlU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rWSqxsScqH4eeP1rP8F8yBr7y8Z6vJ4zjhen/LeTS9xnDfMK3kN3OQYayfQ1i4sO7/s7sgXwrCJJ4sm2At23hUrGkvrAJRz0lIHvXd+qSQ8D05P9CQuRkZpRrWbuNOgqLmHUOOV6GJWpDUtwyl2Mh3M+pQqWT1ksQE5F/E2uvdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m/SHKOpc; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-7946137e7a2so91155406d6.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Oct 2025 23:50:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761029419; x=1761634219; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EGoZKpbM+QtF0hOU52LnSPJPmRWtYvvIwHoAVKTEOlU=;
-        b=m/SHKOpc9pm0wlmtbwnakLa0TyTqCDiwH7/RV8ok1o5qqADnUps/Vcd4GTRWmXp7ES
-         iB1w3HPiDGurqOMK11f2GW8OhI3Nr+ukbV3nvjXEbA7Lwn0XW/pqgDGSkp2z3AMLaIFw
-         ypIbdFn7oBxjKC1t9PqP3Iqn213Hdq9y4s5Y2cAezfFtsf6HkmK1ukrZ3ScN4zEQo5IK
-         t2JVT8B6pJgdhp3Pr5u1n92ktxdyU0C8+ycqlhCTYIygQlXc79WyqrRS0C6lsdGKdxhv
-         ceIGHUCfU81uEBrDFvFbaFydXOJi3quAi8bS3WH5GljdB01B44J20AIFKDIU1fm69VpB
-         FEfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761029419; x=1761634219;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EGoZKpbM+QtF0hOU52LnSPJPmRWtYvvIwHoAVKTEOlU=;
-        b=fINwWrixYDZ83ZG8pmtRASH/n5wZjwyg+QzgWvjSW+pddPJEUBECvp5ehgsRq4svRJ
-         DgJHoPxovwMy2a1NVHabRx9q1pWBjK47djSjrU766T/qlCVkVrCx96uefVfsOEjojWtr
-         TsJcE8RX5gx/rJ6Ra0gQFzdz8p79VimN33DFUkrjUVutynSQcjEBFrQKjIK+y9VKSAlm
-         ctfGPLZg8yJxinqyJemqxZ3nu48vlX8rWI8s1ZOtgc4eBuPLje0k4EwN1SbLtFKV1VpJ
-         QUxbN/WezC7lQI2nOUTheAjM7YSZSxRFITKON5I6Xa00571clK17J/wML/jUzHgv6WX4
-         HWBw==
-X-Forwarded-Encrypted: i=1; AJvYcCUpzthrO3BRg7vVmujJ6npT+mkar3QQEQpKazbSxDp2kGpteZD/xErQ+9SghtZMVSO4MpvWTeGnYVrLpHlM48Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJwRlE/uqWl+r3JAJCMm1sEkg54aIgTwdF6blhzq1uAWmSxOBm
-	jTpGzAs81lF9W7DckZMGrK7hmdRtMDUz8nMTkdfqNjiRxi2GZenNQj37LmNP3mPejAft6umy8ta
-	Pj7bAV50vP6ve9PO8Y1fOBc2Q3wETq3jVQp/AVurN
-X-Gm-Gg: ASbGncvUd1QKaHwcW1Z9aDkrbGEKHapQtRQKLd+WGHx+Rjlw4hMI3JITcpYO/rcg6b8
-	8ck/BRo4c1xPhjIKFX8+2W6menqlvh+TCywKLUKzut2q3Nw9AfHFVU6ND67DZk8wgxavz1Yz+Cv
-	7IXlChtqQ+wDTxdBGcuiOzxmRKF8NOQktqP4Ys1tsUawh3M2vs1X4woy1QvCCUs8YtRBohGGH0F
-	i/mPP0SnhSejBmzlQWQIQREPpYZ5yklpfKicqmpbjmoWIVwoH6Sc7Zp0WQkrv4cuNZGVsJ99Grf
-	Ldp9
-X-Google-Smtp-Source: AGHT+IEwdOY2JJFd/djDV/tCyhcmpRjDflrZmOLD/8/gl9y78vUgJEeourUfBnKg6Fzp3WkWdc7W8o4vveQ7Pvu4VV8=
-X-Received: by 2002:a05:6214:3da0:b0:87c:20f5:84ea with SMTP id
- 6a1803df08f44-87c20f586bcmr209779886d6.18.1761029419224; Mon, 20 Oct 2025
- 23:50:19 -0700 (PDT)
+	s=arc-20240116; t=1761032109; c=relaxed/simple;
+	bh=OwWy/3ZyBvLhFE9XTope3GptLHE7g08KOIFUWZ8LOy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IrrD8kS7nNiQrWnscztZ+FdxeJTx1vJXnHIcBx8j3LL6E3OO1EZhwOgpApP2jZ/eJ6Q/IIqDqrHqTitUyyxbrJxDfF9XsLkjzJCy4DwEpuwhAfqQUTDrNc98Pb6WQjS7bpr3bv+M+KuhvnTa/dO1UsogGemC447gzbUnPWSKU44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oGm9Zg6Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B579C4CEF1;
+	Tue, 21 Oct 2025 07:35:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761032108;
+	bh=OwWy/3ZyBvLhFE9XTope3GptLHE7g08KOIFUWZ8LOy0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oGm9Zg6QNmBnyYDKSNuh+6126gcu3ZMM6EpoP1L1PuAkqeV8G/boG3UPhStUiPMZ1
+	 8E2dt2anosX9UlipJg6yUoon4DMlSs/l/I7K0/PjFpojYP0UpFuPGxN7KiYP8emIwx
+	 a9kvCFnBDWMfKrg3pTa6raPQNOUAMunC4qrf/cgQ=
+Date: Tue, 21 Oct 2025 09:35:05 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Gabriele Paoloni <gpaoloni@redhat.com>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, corbet@lwn.net,
+	linux-doc@vger.kernel.org, linux-mm@kvack.org,
+	safety-architecture@lists.elisa.tech, acarmina@redhat.com,
+	kstewart@linuxfoundation.org, chuckwolber@gmail.com
+Subject: Re: [RFC v2 PATCH 3/3] selftests/devmem: initial testset
+Message-ID: <2025102151-distill-operate-a748@gregkh>
+References: <20250910170000.6475-1-gpaoloni@redhat.com>
+ <20250910170000.6475-4-gpaoloni@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251021030605.41610-1-ishikawa.yuy-00@jp.fujitsu.com>
-In-Reply-To: <20251021030605.41610-1-ishikawa.yuy-00@jp.fujitsu.com>
-From: David Gow <davidgow@google.com>
-Date: Tue, 21 Oct 2025 14:50:07 +0800
-X-Gm-Features: AS18NWDYePtgOThCzeGcYSGFxHF2hIfPwo5RJMeELAwIWDtxVneNg3-FT1KJPcU
-Message-ID: <CABVgOSmC5jONnuNHt3YZvMyFK83Y26KWYYFwP6TAoOKnCwAGeA@mail.gmail.com>
-Subject: Re: [PATCH] Documentation: kunit: add description of kunit.enable parameter
-To: Yuya Ishikawa <ishikawa.yuy-00@jp.fujitsu.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	misono.tomohiro@fujitsu.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000001fad50641a59d1b"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250910170000.6475-4-gpaoloni@redhat.com>
 
---00000000000001fad50641a59d1b
-Content-Type: text/plain; charset="UTF-8"
+On Wed, Sep 10, 2025 at 07:00:00PM +0200, Gabriele Paoloni wrote:
+> From: Alessandro Carminati <acarmina@redhat.com>
+> 
+> This patch introduces a new series of tests for devmem.
+> Test cases are mapped against the tested Function's expectations
+> defined in /drivers/char/mem.c.
 
-On Tue, 21 Oct 2025 at 11:02, Yuya Ishikawa
-<ishikawa.yuy-00@jp.fujitsu.com> wrote:
->
-> The current KUnit documentation does not mention the kunit.enable
-> kernel parameter, making it unclear how to troubleshoot cases where
-> KUnit tests do not run as expected.
-> Add a note explaining kunit.enable parmaeter. Disabling this parameter
-> prevents all KUnit tests from running even if CONFIG_KUNIT is enabled.
->
-> Signed-off-by: Yuya Ishikawa <ishikawa.yuy-00@jp.fujitsu.com>
+Cool, but:
+
+> 
+> Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
 > ---
+>  tools/testing/selftests/Makefile         |   1 +
+>  tools/testing/selftests/devmem/Makefile  |  13 +
+>  tools/testing/selftests/devmem/debug.c   |  25 +
+>  tools/testing/selftests/devmem/debug.h   |  14 +
+>  tools/testing/selftests/devmem/devmem.c  | 200 ++++++++
+>  tools/testing/selftests/devmem/ram_map.c | 250 ++++++++++
+>  tools/testing/selftests/devmem/ram_map.h |  38 ++
+>  tools/testing/selftests/devmem/secret.c  |  46 ++
+>  tools/testing/selftests/devmem/secret.h  |  13 +
+>  tools/testing/selftests/devmem/tests.c   | 569 +++++++++++++++++++++++
+>  tools/testing/selftests/devmem/tests.h   |  45 ++
+>  tools/testing/selftests/devmem/utils.c   | 379 +++++++++++++++
+>  tools/testing/selftests/devmem/utils.h   | 119 +++++
 
-Looks good to me, thanks!
+That's a lot of files for a "simple" test.  Doesn't LTP have tests for
+this api already?  Why not use that here instead?
 
-Reviewed-by: David Gow <davidgow@google.com>
+Also, this is userspace testing, not kunit testing, right, is that
+intentional?  You are documenting internal apis and then writing
+userspace tests for those apis, which feels a bit odd.
 
-Cheers,
--- David
+Also /dev/mem should not be used on "modern" systems, so how was this
+tested?
 
---00000000000001fad50641a59d1b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> +// SPDX-License-Identifier: GPL-2.0+
 
-MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-Dxz3AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHZtY3XkWtC2
-e2Idfk+0JyK7BLzzMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBo
-hqjbVaHxZoT6HHUuwQcTlbgXpuVi59bQPrSwb/6Pn1t3h3SLeuUCvOYpoQjxlWy/FexsPW+nWS0I
-PUmWpt6sxbIRTKPfb7cPk32XezfnA0jexucybiXzkZKTrbI7zoMOzDIWpTKYZAonB9Zzi7Dso4An
-ZOtz/E3yhdR/q1MK30d5fiCS0vorEd0Oy8Jzcc7TJ2HGMzEEXiFFvVrJYJHvfYOeXE4ywAG6YWO0
-x78+bXeB9vkeWHhOYKyYXuAXrnHASddEICg1QlJCHDAISMC1Wn/tjqTMTt3sDAe+dhi9V1FEGTbG
-g9PxPVP4huJEMIBu/MWNMzHfiW4E7eCHVPrmtX7CFDlMik7qsgQBbO5h6EcxBamhIflfMgoISsRJ
-Vyll2E5BNVwkNstMgU3WMg5yIaQcuGFgFnMTrQcaLEEFPV3cCP9pgXovYDirnB7FKNdCZNHfeBY1
-HEXJ2jIPDP6nWSbYoRry0TvPgxh5ZeM5+sc1L7kY75C8U4FV3t4qdC+p7rgqfAggdvDPa5BJbTRg
-KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
-IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
-Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgl/37TsJww6uYTrVOgW9sID+DjtHn
-rdyuStNoe0LMjPswGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
-MDIxMDY1MDE5WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAewi32D4KDRvho6C/m5xiegr6jfa/giZJ56gmyrwBX1crso8/k78mGoq3UZdGgqeD
-H8Jd4JEo+/D6EuUpzzaFk7OdvWvaEpVGJRMKSza3IK1rdgAeevi4k5/nb0LPJ/5GkwsGMLO9EHMa
-QNxVLj71zNsVnqEDz2Te1Vjm4a+XyMYYh9YZN98Bnpao5BJ2g3t8LrfNFmQMV7fsQoxsAdz87cfl
-HMmAZF9sOmY8jVrBAL5e5ultutG3lTEthJU2RhkhD/XgeGi5M0ljQbtfmqGnIrF0VJWUczxvzsP5
-aQvcun/r57mVqrwROnc7/hFVf8eFrKxqP304RsUVKvN2B1EjAw==
---00000000000001fad50641a59d1b--
+Are you _sure_ you want GPLv2+?  I have to ask, sorry.
+
+> +/*
+> + * devmem test debug.c
+> + *
+> + * Copyright (C) 2025 Red Hat, Inc. All Rights Reserved.
+> + * Written by Alessandro Carminati (acarmina@redhat.com)
+> + */
+> +
+> +#include <stdio.h>
+> +#include <stdarg.h>
+> +
+> +#define DEBUG_FLAG 0
+> +int pdebug = DEBUG_FLAG;
+
+That's a funny define that is never used elsewhere.  I'm guessing this
+was cut/pasted from some other userspace code somewhere?
+
+> +
+> +void deb_printf(const char *fmt, ...)
+
+Who is "deb"?  You have more letters, always use them :)
+
+Also, why debugging for just this one set of tests?  Don't kselftests
+already have debugging logic?  if not, why is this unique to require it?
+
+And am I missing something, or does this new tool not tie into the
+kselftest framework properly?  I see lots of printing to output, but not
+in the proper test framework format, am I just missing that somewhere?
+
+thanks,
+
+greg k-h
 
