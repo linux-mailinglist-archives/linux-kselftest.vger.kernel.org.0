@@ -1,36 +1,36 @@
-Return-Path: <linux-kselftest+bounces-43755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28B19BFBA77
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 13:34:45 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B1E0BFBA80
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 13:34:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C7E2480600
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 11:34:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 741054EEF5A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 11:34:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3262532E6A5;
-	Wed, 22 Oct 2025 11:34:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01EFE33DEC5;
+	Wed, 22 Oct 2025 11:34:45 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (unknown [147.136.157.3])
+Received: from localhost.localdomain (unknown [147.136.157.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9550FCA6B;
-	Wed, 22 Oct 2025 11:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C99530CDB6;
+	Wed, 22 Oct 2025 11:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761132874; cv=none; b=f3tIX2dCDVf/qYeNiH6Ym4yeM+YV2svdw3eGpqZSCEpE+mABG4mCrlX3tvyfpSVLCUc5rsoURE3S/KNa68QiSxwLWQsMBb4m4tVbSpMunKxMlFL4XahuYfL7IwaBCHhKKksde1W1QWGBV0j+Fqc3flARBPzakZPHcfBt5+lTKM4=
+	t=1761132884; cv=none; b=Ia3D+jJLNBufi4wJZrgQ/ctIs9FTJUBZkLddgD8mT8ZOo9FfP//uJuVGLLCU3wNzJdh5uB+Zhn6UgmZIhp4ObChQmbC+pmfm08GJLNnhGqj92ZeUtbTYKWZaySBLg/u/+lmuHEyJDs7kni5SKnqo8QjQT6vJg+b525hgSh7MNzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761132874; c=relaxed/simple;
-	bh=lqZuVsh6cqTUJ2qP8Rezj8NoXhCSbR1HxzDKh5rwqi4=;
+	s=arc-20240116; t=1761132884; c=relaxed/simple;
+	bh=EFLTxYn/t3qvVUjg05TyQt+35aYS6vx75JWI4UEGH6w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SE04Y89hDHp3mzf+tmWUlbgD3XFNm27mG2dhaJNzq/B03w6WTgWXJJ/XWGetfcul6iWXL0wqdV4jU95YYEfpNUAw7PWF+bskKhqfxvaC+gWtyvOu5sg3rssMEzsgCg5k5atzsaZtHmd59Z1HmQsYRWwLQF0O6LMv6e4TWHdOh80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.3
+	 MIME-Version; b=hB6Egu6RLQxcFfuwqF9PUa6xHhpvO1+8+0XzyjoOFqHMMB6k3WCFKfWFFc6VYgIM1OHeqPhEwgX4zSeFeDLmgj4GOP3Qwq22Z73uwSJHzxgzZ+WjsExCqp3utvx94OHVgSQUPTN7HS/dVlwXm68AtpYo5fwcoQq2phIkXunsRog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
 Received: by localhost.localdomain (Postfix, from userid 1007)
-	id D7B758B2A0D; Wed, 22 Oct 2025 19:34:30 +0800 (+08)
+	id BBA718B2A0E; Wed, 22 Oct 2025 19:34:41 +0800 (+08)
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
@@ -49,9 +49,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 1/2] bpf: Add kfuncs for detecting execution context
-Date: Wed, 22 Oct 2025 19:33:32 +0800
-Message-ID: <20251022113412.352307-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Add selftests for context detection kfuncs
+Date: Wed, 22 Oct 2025 19:33:33 +0800
+Message-ID: <20251022113412.352307-3-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251022113412.352307-1-jiayuan.chen@linux.dev>
 References: <20251022113412.352307-1-jiayuan.chen@linux.dev>
@@ -63,86 +63,96 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This path introduces several kfuncs to help BPF programs determine their
-current execution context. When hooking functions for statistics, we often
-need to use current->comm to get the process name.
+Add selftests for the newly introduced context detection kfuncs.
 
-However, these hooked functions can be called from either process context
-or interrupt context. When called from interrupt context, the current we
-obtain may refer to the process that was interrupted, which may not be
-what we need.
-
-These new kfuncs expose APIs that allow users to determine the actual
-execution context.
+The tests verify that each kfunc correctly identifies its respective
+execution context by triggering different contexts
 
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- kernel/bpf/helpers.c | 45 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ .../selftests/bpf/prog_tests/context.c        | 32 ++++++++++++++++++
+ .../selftests/bpf/progs/context_prog.c        | 33 +++++++++++++++++++
+ 2 files changed, 65 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/context.c
+ create mode 100644 tools/testing/selftests/bpf/progs/context_prog.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b9ec6ee21c94..e09c70b4eaea 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4252,6 +4252,47 @@ __bpf_kfunc int bpf_task_work_schedule_resume(struct task_struct *task, struct b
- 	return bpf_task_work_schedule(task, tw, map__map, callback, aux__prog, TWA_RESUME);
- }
- 
-+/**
-+ * bpf_in_nmi_context - Check whether we are serving NMI
-+ *
-+ * Return: true if we are serving NMI
-+ */
-+__bpf_kfunc bool bpf_in_nmi_context(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/context.c b/tools/testing/selftests/bpf/prog_tests/context.c
+new file mode 100644
+index 000000000000..f09d24069941
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/context.c
+@@ -0,0 +1,32 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <error.h>
++#include <test_progs.h>
++#include "context_prog.skel.h"
++
++void test_context(void)
 +{
-+	return in_nmi();
++	struct context_prog *skel = NULL;
++
++	skel = context_prog__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "loading prog fail"))
++		return;
++
++	context_prog__attach(skel);
++	getuid();
++	sleep(5);
++
++	if (!ASSERT_EQ(1, skel->bss->in_hardirq, "hardirq not triggered"))
++		goto out;
++	if (!ASSERT_EQ(1, skel->bss->in_softriq, "softirq not triggered"))
++		goto out;
++	if (!ASSERT_EQ(1, skel->bss->in_task, "task context not triggered"))
++		goto out;
++out:
++	context_prog__destroy(skel);
 +}
 +
-+/**
-+ * bpf_in_hardirq_context - Check whether we are serving hard irq
-+ *
-+ * Return: true if we are serving hard irq
-+ */
-+__bpf_kfunc bool bpf_in_hardirq_context(void)
++void test_bpf_context(void)
 +{
-+	return in_hardirq();
++	if (test__start_subtest("context"))
++		test_context();
++}
+diff --git a/tools/testing/selftests/bpf/progs/context_prog.c b/tools/testing/selftests/bpf/progs/context_prog.c
+new file mode 100644
+index 000000000000..81e21f684a84
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/context_prog.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++#include "bpf_experimental.h"
++
++int in_hardirq = 0;
++int in_softriq = 0;
++int in_task = 0;
++
++SEC("tp/irq/irq_handler_entry")
++int trace_irq_handler_entry(const void *ctx)
++{
++	in_hardirq = bpf_in_hardirq_context();
++	return 0;
 +}
 +
-+/**
-+ * bpf_in_softirq_context - Check whether we are serving soft irq
-+ *
-+ * Return: true if we are serving soft irq
-+ */
-+__bpf_kfunc bool bpf_in_softirq_context(void)
++SEC("tp/irq/softirq_entry")
++int trace_softirq_entry(const void *ctx)
 +{
-+	/* in_softirq() has been deprecated */
-+	return in_serving_softirq();
++	in_softriq = bpf_in_softirq_context();
++	return 0;
 +}
 +
-+/**
-+ * bpf_in_task_context - Check whether we are in task context
-+ *
-+ * Return: true if we are in task context
-+ */
-+__bpf_kfunc bool bpf_in_task_context(void)
++SEC("tp/syscalls/sys_enter_getuid")
++int trace_syscall(const void *ctx)
 +{
-+	return in_task();
++	in_task = bpf_in_task_context();
++	return 0;
 +}
 +
- __bpf_kfunc_end_defs();
- 
- static void bpf_task_work_cancel_scheduled(struct irq_work *irq_work)
-@@ -4429,6 +4470,10 @@ BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
- BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_TRUSTED_ARGS)
- BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_TRUSTED_ARGS)
-+BTF_ID_FLAGS(func, bpf_in_softirq_context)
-+BTF_ID_FLAGS(func, bpf_in_hardirq_context)
-+BTF_ID_FLAGS(func, bpf_in_task_context)
-+BTF_ID_FLAGS(func, bpf_in_nmi_context)
- BTF_KFUNCS_END(common_btf_ids)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
++char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
