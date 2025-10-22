@@ -1,369 +1,111 @@
-Return-Path: <linux-kselftest+bounces-43773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1BE0BFD846
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 19:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 85080BFD928
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 19:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF8594226C0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 16:54:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C1B23B0603
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 17:13:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE3C235B120;
-	Wed, 22 Oct 2025 16:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A101027B32C;
+	Wed, 22 Oct 2025 17:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OX80Dl0z"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fM26tfZs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6848935B151
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 16:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B6961B7F4;
+	Wed, 22 Oct 2025 17:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761151914; cv=none; b=W67OxdAZDC6DQ5/Fm+A/5DMCtAsahbU+E9MNW4DdUDuX0oftiTF6mQ2Rn11FImE71QPcHoWB5yqkQiZJtsqEDTtWsxvN+9upVf/WbZ+BkLXxWicd+XgYtSjg+2Kqj+l027jrEAoXXu/hYbaiYC095rafNJIMZux1rUS78duCehY=
+	t=1761153205; cv=none; b=Axyst1VYT6UrfEN3qsmpuW3l4DhF3ZFPavgLBKVqszJ9qzW228jYrWOTmRkG+LU/Xh8YJnk4Fm3TNhLvsGhRurAPSo0q6xV/5X8VdmXPJn5eBZqVXy43oqhG5SQ9tOxCgmvyJG9w5vvRKeRud1jbgvBzgFaB1gG33icOrEOh4+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761151914; c=relaxed/simple;
-	bh=ZA7nje4u8+QZXJw4GXGWPqWw+cfk8JcJt8Wa4NE0azQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=GHQm1ddz/lDXb/ATuHhfjklgevAifx+pjss6MqZ/hBLPgMgIh5ILQ1otBbg4w5I3MHj3tW+p74r/Hj5gw0rvV9mUWe8bUE0EqFtTy5Vhsw9VBl/00tC5kHZxNfqd1lTKem/Pd+6IhT8143u9TdHkBxZcP4B2DSQ4JlPriYIu7Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OX80Dl0z; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-33be4db19cfso11476686a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 09:51:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761151912; x=1761756712; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lR6q3Jz4wEvNB1U/dBjL6AFCbuh1MpNj7/+QxukudLk=;
-        b=OX80Dl0zMNbTeDU0khi460DytX3OSC7bH/euG7VzjpUCZZAEs+rRgY24UErx2lSctW
-         soZ0k8yooG2GLEbc1lAKaKlRbnwtkZMQShD9iq4L4xf6dDeg/D2qXfwscFu6z4B5k4/I
-         tWqrsKPznnq1XUXwWnqAiltb4pV3KfhayqiF5R/DaPlwN9BlRm9F0bDYWedT2UR2F2dH
-         8FwIMcYwYiNe0afWV8CvlVh9NKSNuV/zwuSa0v8xW4Mbnn6UpWmM65cTJAwFR1MHDa+T
-         QWOyBZLYt6NYNT8ZDzkWOT8NfqdgCAw8GHR56qF/IsWjOABCvcRKnpdrofEcwoqRXGHF
-         d32A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761151912; x=1761756712;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lR6q3Jz4wEvNB1U/dBjL6AFCbuh1MpNj7/+QxukudLk=;
-        b=Y5R0t97CItI+hLjKiCLjbiGldRFBFDcixeTYQolw5IVXWNO14PZ9EhrhoTykd+NCE2
-         N/jXClWf92KLlgkReM0jZ+DjlIz9zJebUoRezQjP9hnQoSG9/G6XUPnKvEor5hWbmAPc
-         nUU+KbTvW7fwNwRJ5v6meqJg+E32Wmlar5raPtZdQ+9uc6AazDX2L6KuXbnY2hEHQNOU
-         JooLIXFUCwURDC5q2I70Iv6mgrQGMv9ZM5t+2LDi11UhsqZFQ2HTEg4dOnAtV1V0xWOx
-         zv0EO8stVedyMr0yY3Da6vlLgWd+cvavkxLuajmvQ2F7vQ9bfvoY334zv/XQr+5FCpmE
-         j0yg==
-X-Forwarded-Encrypted: i=1; AJvYcCVS85RS/Hu/K46glqSjgCnS+MulwWTDn+qlrmpUR0yFp+xm2NxJp3Z80Fr2gPgXc6OBbgu1iThfbuIK+FeId+0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQR08eBnrd9xrozW1zb+fFO9pKote0TWbQ7z0Kho/AFXYe0JLU
-	YSbCt6k+iLnsoK2ftAFQFe7U9AZXG/tHsTLldZzDi+Iqxx8lHWdj1IaHsCjUaNrLBUL2og1MJ8Y
-	rbT/cViuVCvpoTPiCmMFNFxw2dg==
-X-Google-Smtp-Source: AGHT+IGwxAeNTPtzLvu/Zk8STiamMAryG8fKxvXZatC28J4mfBlAiSQlIt+hBpVpayKRInn/obOZc8kpR+KnyIdqIw==
-X-Received: from pjbiq12.prod.google.com ([2002:a17:90a:fb4c:b0:32b:ae4c:196c])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:2d8b:b0:32e:23fe:fa51 with SMTP id 98e67ed59e1d1-33bcf867404mr28930141a91.9.1761151911659;
- Wed, 22 Oct 2025 09:51:51 -0700 (PDT)
-Date: Wed, 22 Oct 2025 09:51:49 -0700
-In-Reply-To: <2457cb3b-5dde-4ca1-b75d-174b5daee28a@arm.com>
+	s=arc-20240116; t=1761153205; c=relaxed/simple;
+	bh=Oc5cL4PM3GS59XiGaVYHm7x2QglMaN7Tq26+NOil5DE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sTFRvby2F3zThc/bSbR2DA+v/KU96ZCSUemnOcTBxRuj9XUumIRg/youb2fkskFbi0H4TB2YieHvWU5Y2UflSGi5KklPAMLDsc/+TlraJQAVMSiXEh4lqY572zJlKu9N5SHOzShENXScTsrxZegLXk2pY6sb06rroZozViiYlNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fM26tfZs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32FAAC4CEE7;
+	Wed, 22 Oct 2025 17:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761153204;
+	bh=Oc5cL4PM3GS59XiGaVYHm7x2QglMaN7Tq26+NOil5DE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fM26tfZs84ldeAddOmNXArn5RbP7iEp+oNUSPg92OafLdEp2A2CltfwxTYDTDbSBt
+	 yhtDIrkROBstCq84hJRIv0uvNE852TNVAVBfnIvhjfb5K+f+sBF1WJ88PbKKep8MPs
+	 rsTBFdIzM2FKvPUMhlYOGddUPz2hWCETV98K98SI=
+Date: Wed, 22 Oct 2025 19:13:19 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Gabriele Paoloni <gpaoloni@redhat.com>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, corbet@lwn.net,
+	linux-doc@vger.kernel.org, linux-mm@kvack.org,
+	safety-architecture@lists.elisa.tech, acarmina@redhat.com,
+	kstewart@linuxfoundation.org, chuckwolber@gmail.com
+Subject: Re: [RFC PATCH v2 0/3] Add testable code specifications
+Message-ID: <2025102211-wolverine-cradling-b4ec@gregkh>
+References: <20250910170000.6475-1-gpaoloni@redhat.com>
+ <2025102111-facility-dismay-322e@gregkh>
+ <CA+wEVJZEho_9kvaGYstc=5f6iHGi69x=_0zT+jrC2EqSFUQMWQ@mail.gmail.com>
+ <2025102124-punctuate-kilogram-da50@gregkh>
+ <CA+wEVJajSGzb85YTiv98yAY3bcJFS0Qp_xjLc++wnU8t=wDAOg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1760731772.git.ackerleytng@google.com> <8ee16fbf254115b0fd72cc2b5c06d2ccef66eca9.1760731772.git.ackerleytng@google.com>
- <2457cb3b-5dde-4ca1-b75d-174b5daee28a@arm.com>
-Message-ID: <diqz4irqg9qy.fsf@google.com>
-Subject: Re: [RFC PATCH v1 07/37] KVM: Introduce KVM_SET_MEMORY_ATTRIBUTES2
-From: Ackerley Tng <ackerleytng@google.com>
-To: Steven Price <steven.price@arm.com>, cgroups@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, x86@kernel.org
-Cc: akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de, 
-	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org, 
-	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com, 
-	david@redhat.com, dmatlack@google.com, erdemaktas@google.com, 
-	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org, 
-	hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com, 
-	isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com, 
-	jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com, 
-	jroedel@suse.de, jthoughton@google.com, jun.miao@intel.com, 
-	kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev, 
-	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com, 
-	mail@maciej.szmigiero.name, maobibo@loongson.cn, 
-	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org, 
-	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev, 
-	nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev, palmer@dabbelt.com, 
-	pankaj.gupta@amd.com, paul.walmsley@sifive.com, pbonzini@redhat.com, 
-	peterx@redhat.com, pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, 
-	qperret@google.com, richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, 
-	rientjes@google.com, rostedt@goodmis.org, roypat@amazon.co.uk, 
-	rppt@kernel.org, seanjc@google.com, shakeel.butt@linux.dev, shuah@kernel.org, 
-	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com, 
-	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com, 
-	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com, 
-	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org, wyihan@google.com, 
-	xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com, 
-	yuzenghui@huawei.com, zhiquan1.li@intel.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+wEVJajSGzb85YTiv98yAY3bcJFS0Qp_xjLc++wnU8t=wDAOg@mail.gmail.com>
 
-Steven Price <steven.price@arm.com> writes:
+On Wed, Oct 22, 2025 at 04:06:10PM +0200, Gabriele Paoloni wrote:
+> > Every in-kernel api documented in a "formal" way like this?  Or a
+> > subset?  If a subset, which ones specifically?  How many?  And who is
+> > going to do that?  And who is going to maintain it?  And most
+> > importantly, why is it needed at all?
+> >
+> > For some reason Linux has succeeded in pretty much every place an
+> > operating system is needed for cpus that it can run on (zephyr for those
+> > others that it can not.)  So why are we suddenly now, after many
+> > decades, requiring basic user/kernel stuff to be formally documented
+> > like this?
+> 
+> Let me try to answer starting from the "why".
 
-> On 17/10/2025 21:11, Ackerley Tng wrote:
->> 
->> [...snip...]
->> 
->> @@ -5366,15 +5375,35 @@ static long kvm_vm_ioctl(struct file *filp,
->>  	}
->>  #endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
->>  #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
->> +	case KVM_SET_MEMORY_ATTRIBUTES2:
->>  	case KVM_SET_MEMORY_ATTRIBUTES: {
->> -		struct kvm_memory_attributes attrs;
->> +		struct kvm_memory_attributes2 attrs;
->> +		unsigned long size;
->> +
->> +		if (ioctl == KVM_SET_MEMORY_ATTRIBUTES) {
->> +			/*
->> +			 * Fields beyond struct kvm_userspace_memory_region shouldn't be
->> +			 * accessed, but avoid leaking kernel memory in case of a bug.
->> +			 */
->> +			memset(&mem, 0, sizeof(mem));
->
-> s/mem/attrs/g
->
->> +			size = sizeof(struct kvm_set_memory_attributes);
->> +		} else {
->> +			size = sizeof(struct kvm_set_memory_attributes2);
->
-> s/kvm_set_memory_attributes/kvm_memory_attributes/ (on both sizeof lines
-> above and in the SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD macro).
->
->> +		}
->> +
->> +		/* Ensure the common parts of the two structs are identical. */
->> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(slot);
->> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(flags);
->> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(guest_phys_addr);
->> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(memory_size);
->> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(userspace_addr);
->
-> The fields are:
->   * address
->   * size
->   * attributes
->   * flags
->
-> The list you've got appears to match struct kvm_userspace_memory_region
-> - copy/paste error?
->
+Let's ignore the "why" for now, and get to the "how" and "what" which
+you skipped from my questions above.
 
-Yes I did copy/paste this from KVM_SET_USER_MEMORY_REGION2.
+_Exactly_ how many in-kernel functions are you claiming is needed to be
+documented in this type of way before Linux would become "acceptable" to
+these regulatory agencies, and which ones _specifically_ are they?
 
-Thanks for catching this! I missed out build-testing this with
-CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+Without knowing that, we could argue about the format all day long, and
+yet have nothing to show for it.
 
-I've done that and here's a replacement patch.
+And then, I have to ask, exactly "who" is going to do that work.
 
-> Thanks,
-> Steve
->
->> 
->> [...snip...]
->> 
+I'll point at another "you must do this for reasons" type of request we
+have had in the past, SPDX.  Sadly that task was never actually finished
+as it looks like no one really cared to do the real work involved.  We
+got other benefits out of that effort, but the "goal" that people
+started that effort with was never met.  Part of that is me not pushing
+back hard enough on the "who is going to do the work" part of that
+question, which is important in stuff like this.
 
-From 31283972574bde2ffa1960d30c80286f8467c594 Mon Sep 17 00:00:00 2001
-From: Ackerley Tng <ackerleytng@google.com>
-Date: Thu, 16 Oct 2025 11:48:01 -0700
-Subject: [PATCH] KVM: Introduce KVM_SET_MEMORY_ATTRIBUTES2
+If you never complete the effort, your end goal of passing Linux off to
+those customers will never happen.
 
-Introduce a "version 2" of KVM_SET_MEMORY_ATTRIBUTES to support returning
-information back to userspace.
+So, try to answer that, with lots and lots of specifics, and then, if we
+agree that it is a sane thing to attempt (i.e. you are going to do all
+the work and it actually would be possible to complete), then we can
+argue about the format of the text :)
 
-This new ioctl and structure will, in a later patch, be shared as a
-guest_memfd ioctl, where the padding in the new kvm_memory_attributes2
-structure will be for writing the response from the guest_memfd ioctl to
-userspace.
+thanks,
 
-A new ioctl is necessary for these reasons:
-
-1. KVM_SET_MEMORY_ATTRIBUTES is currently a write-only ioctl and does not
-   allow userspace to read fields. There's nothing in code (yet?) that
-   validates this, but using _IOWR for consistency would be prudent.
-
-2. KVM_SET_MEMORY_ATTRIBUTES, when used as a guest_memfd ioctl, will need
-   an additional field to provide userspace with more error details.
-
-Alternatively, a completely new ioctl could be defined, unrelated to
-KVM_SET_MEMORY_ATTRIBUTES, but using the same ioctl number and struct for
-the vm and guest_memfd ioctls streamlines the interface for userspace. In
-addition, any memory attributes, implemented on the vm or guest_memfd
-ioctl, can be easily shared with the other.
-
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Change-Id: I50cd506d9a28bf68a90e659015603de579569bc1
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- Documentation/virt/kvm/api.rst | 32 ++++++++++++++++++++++++++++++++
- include/uapi/linux/kvm.h       | 12 ++++++++++++
- virt/kvm/kvm_main.c            | 34 +++++++++++++++++++++++++++++++---
- 3 files changed, 75 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index 754b662a453c3..a812769d79bf6 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6355,6 +6355,8 @@ S390:
- Returns -EINVAL if the VM has the KVM_VM_S390_UCONTROL flag set.
- Returns -EINVAL if called on a protected VM.
- 
-+.. _KVM_SET_MEMORY_ATTRIBUTES:
-+
- 4.141 KVM_SET_MEMORY_ATTRIBUTES
- -------------------------------
- 
-@@ -6512,6 +6514,36 @@ the capability to be present.
- 
- `flags` must currently be zero.
- 
-+4.144 KVM_SET_MEMORY_ATTRIBUTES2
-+---------------------------------
-+
-+:Capability: KVM_CAP_MEMORY_ATTRIBUTES2
-+:Architectures: x86
-+:Type: vm ioctl
-+:Parameters: struct kvm_memory_attributes2 (in/out)
-+:Returns: 0 on success, <0 on error
-+
-+KVM_SET_MEMORY_ATTRIBUTES2 is an extension to
-+KVM_SET_MEMORY_ATTRIBUTES that supports returning (writing) values to
-+userspace.  The original (pre-extension) fields are shared with
-+KVM_SET_MEMORY_ATTRIBUTES identically.
-+
-+Attribute values are shared with KVM_SET_MEMORY_ATTRIBUTES.
-+
-+::
-+
-+  struct kvm_memory_attributes2 {
-+	__u64 address;
-+	__u64 size;
-+	__u64 attributes;
-+	__u64 flags;
-+	__u64 reserved[4];
-+  };
-+
-+  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
-+
-+See also: :ref: `KVM_SET_MEMORY_ATTRIBUTES`.
-+
- 
- .. _kvm_run:
- 
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 52f6000ab0208..c300e38c7c9cd 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -963,6 +963,7 @@ struct kvm_enable_cap {
- #define KVM_CAP_RISCV_MP_STATE_RESET 242
- #define KVM_CAP_ARM_CACHEABLE_PFNMAP_SUPPORTED 243
- #define KVM_CAP_GUEST_MEMFD_FLAGS 244
-+#define KVM_CAP_MEMORY_ATTRIBUTES2 245
- 
- struct kvm_irq_routing_irqchip {
- 	__u32 irqchip;
-@@ -1617,4 +1618,15 @@ struct kvm_pre_fault_memory {
- 	__u64 padding[5];
- };
- 
-+/* Available with KVM_CAP_MEMORY_ATTRIBUTES2 */
-+#define KVM_SET_MEMORY_ATTRIBUTES2              _IOWR(KVMIO,  0xd6, struct kvm_memory_attributes2)
-+
-+struct kvm_memory_attributes2 {
-+	__u64 address;
-+	__u64 size;
-+	__u64 attributes;
-+	__u64 flags;
-+	__u64 reserved[4];
-+};
-+
- #endif /* __LINUX_KVM_H */
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 35166754a22b4..95aa51b334a70 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -2621,7 +2621,7 @@ static int kvm_vm_set_mem_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
- 	return r;
- }
- static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
--					   struct kvm_memory_attributes *attrs)
-+					   struct kvm_memory_attributes2 *attrs)
- {
- 	gfn_t start, end;
- 
-@@ -4959,6 +4959,7 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
- 	case KVM_CAP_DEVICE_CTRL:
- 		return 1;
- #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
-+	case KVM_CAP_MEMORY_ATTRIBUTES2:
- 	case KVM_CAP_MEMORY_ATTRIBUTES:
- 		if (!vm_memory_attributes)
- 			return 0;
-@@ -5184,6 +5185,14 @@ do {										\
- 		     sizeof_field(struct kvm_userspace_memory_region2, field));	\
- } while (0)
- 
-+#define SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(field)				\
-+do {										\
-+	BUILD_BUG_ON(offsetof(struct kvm_memory_attributes, field) !=		\
-+		     offsetof(struct kvm_memory_attributes2, field));		\
-+	BUILD_BUG_ON(sizeof_field(struct kvm_memory_attributes, field) !=	\
-+		     sizeof_field(struct kvm_memory_attributes2, field));	\
-+} while (0)
-+
- static long kvm_vm_ioctl(struct file *filp,
- 			   unsigned int ioctl, unsigned long arg)
- {
-@@ -5366,15 +5375,34 @@ static long kvm_vm_ioctl(struct file *filp,
- 	}
- #endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
- #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
-+	case KVM_SET_MEMORY_ATTRIBUTES2:
- 	case KVM_SET_MEMORY_ATTRIBUTES: {
--		struct kvm_memory_attributes attrs;
-+		struct kvm_memory_attributes2 attrs;
-+		unsigned long size;
-+
-+		if (ioctl == KVM_SET_MEMORY_ATTRIBUTES) {
-+			/*
-+			 * Fields beyond struct kvm_userspace_memory_region shouldn't be
-+			 * accessed, but avoid leaking kernel memory in case of a bug.
-+			 */
-+			memset(&attrs, 0, sizeof(attrs));
-+			size = sizeof(struct kvm_memory_attributes);
-+		} else {
-+			size = sizeof(struct kvm_memory_attributes2);
-+		}
-+
-+		/* Ensure the common parts of the two structs are identical. */
-+		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(address);
-+		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(size);
-+		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(attributes);
-+		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(flags);
- 
- 		r = -ENOTTY;
- 		if (!vm_memory_attributes)
- 			goto out;
- 
- 		r = -EFAULT;
--		if (copy_from_user(&attrs, argp, sizeof(attrs)))
-+		if (copy_from_user(&attrs, argp, size))
- 			goto out;
- 
- 		r = kvm_vm_ioctl_set_mem_attributes(kvm, &attrs);
--- 
-2.51.0.915.g61a8936c21-goog
-
+greg k-h
 
