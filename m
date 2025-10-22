@@ -1,142 +1,354 @@
-Return-Path: <linux-kselftest+bounces-43803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38468BFE5A1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 23:51:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39A61BFE718
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 00:45:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D10313A8CF3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 21:51:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D21251A0563C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 22:46:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D2EB303A03;
-	Wed, 22 Oct 2025 21:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4A2D296BDF;
+	Wed, 22 Oct 2025 22:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="xXVX6YRy";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="T9qlZ4P4"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ps5i16Lv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C9927B354;
-	Wed, 22 Oct 2025 21:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACAE35B156
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 22:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761169896; cv=none; b=COxvKno0rElx0kHIwQnb65MMicMc1jNOiq0TOfvcSHLS27TRkzoLjap5PzmrcQRPFgY7vdtHKTqlhIo05mx3A7mKPQlY9OQLxwM3n2onV8i68ah9KUsz70kghwIKiXv9p21Yv2+G26JS6lR89bnwwjwSRbhf2qp6lp9WIBjsN5g=
+	t=1761173132; cv=none; b=iKOKKK72RpDBToN8eQP/Z91Rxzc6WBl1BpgmnQGk550xcG0rRI6F1xHMEv2cpm0+ZKrw/LNkVpdywISoGXgEZahzg0vjphEYXhqT/dTxNHciSDwfYRwMlM3orQ/iXe6Lq30q/qZ54VDFAktGbDt2BysPyxOWJqJQl9851NV0qv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761169896; c=relaxed/simple;
-	bh=Csgx4084U4YDwsPrv6JpNx5OAIwV3UyzmT8/vFsITOI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BvXg4iRVTj+Ti1NDL7tOa50eWdYO79EUCJnADDFHs1+m1qv/lDn0UydacIfBTH1iHDcrXq7sOgpt+Sauyj/dRyV1oxpOe4veinqKWolVWrhW9V8vEP8IQaB1Dv5Bv881QH0GWyxphJmXNgICSUcw6c6plewh0dakidYstvspfD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=xXVX6YRy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=T9qlZ4P4; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
-	by mailfout.stl.internal (Postfix) with ESMTP id 72BE51D0009F;
-	Wed, 22 Oct 2025 17:51:33 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-09.internal (MEProxy); Wed, 22 Oct 2025 17:51:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1761169893; x=
-	1761256293; bh=RCNv2Xdr29ryAQQMTausXK/triuxRIwwwzMKrwP1sU4=; b=x
-	XVX6YRyhmqDB3V7gO9zZBGw8EnUMjrS6Kjxw+fFYnwg67fQFZspl7Vbtgc7/X+2e
-	rs5nBlXxTXKn0P75a4JMwRsNDLzOdKWFo0qS5HdamudV9nUIgDdqImXMR6NQW6++
-	DkjoUcGBW1dshHaawXHNLtsz9APH9uXwv37DcjlDFOH+MQWUsZNfGy5rAVMZNH9c
-	R4f5yTyAJc5JWc9Bq8TJIuQukuhii/E1BLl3JuZuh0TN3AhNrtEX144P1xYpjvWm
-	vq3wbGlj54hgTHhLF6jvCxov48xmy7K1pUGDEeLla+uO6B9TFB6yZpGK75DbHO+K
-	O4fohGVFWYEdu6tvNYsog==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1761169893; x=1761256293; bh=RCNv2Xdr29ryAQQMTausXK/triuxRIwwwzM
-	KrwP1sU4=; b=T9qlZ4P4hpsNSuXNZOh10BEp2+Z4K5AmR9rhdTeW81z2pJxrmA9
-	e16JBzTJeRCSrEemIAerX6f16Zr0Xq+SrFREma8+e70s/21lDPa0XPp3k4OZQZ61
-	u/OCU0u28/LCMZcClV/QGkO3IR6ACq38GyYpEvMKoMhRfXeKzym3XoVxvWI+vTw1
-	bpX7P7k8d2an6A3yAzz/mUj+A4AkYhajPzNbsIQIqXBDto/xR5D3agO+JbYSAluP
-	45DyXIOL5GtCCU/3bNcdESLc9lNr7iCo5V+nC6/7tl6uaOf2eMXl+Pk9FZq14ZXU
-	0np5azoAxUhKlIlFzW0sbCbMVZY+l+0pBGA==
-X-ME-Sender: <xms:5FH5aKmrR35NBcaOHtH-ZnU13VZ4KvdtyOrOd9OPx51oz6nnXdJ2ew>
-    <xme:5FH5aONsajfHEwLJUu24DwEwcZ48TRHzgehvE2hlSoH9trYsydTM2w0Iq4oycC4iS
-    qagW7_6RsXTqvc6iUWIMhQ6W5akqdqMKu1FgPJim8Sun5Yl1mAkj9Y>
-X-ME-Received: <xmr:5FH5aNHfI7Qv9jVyvkvZVJAggnk8W6BWLwqvrP5SrY7HTSTdX10ERsLtqq7P>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddugeegjedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
-    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedugedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepfihilhhfrhgvugdrohhpvghnshhouhhrtg
-    gvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqughotgesvhhgvghrrdhkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgv
-    thdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtoh
-    epkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvughh
-    rghtrdgtohhm
-X-ME-Proxy: <xmx:5FH5aMsmPQgFdYa9xUmgCswYELwoaQ0d3GVbxVf0rRe1ufilzCrJsA>
-    <xmx:5FH5aFSGzuya7gYYqqkTKbjQQWr3dAsDHeHWwQPbyXckOXFcrULu4g>
-    <xmx:5FH5aOPNdSmW7vOaMRqqTxkgyzw2FTLj44KrvyE9b_lDRBbeT3UEaA>
-    <xmx:5FH5aL6gkbkmqN9FYGfvLM-uVpJu4tRvUltwYiYppc2oGzP9zq4bbw>
-    <xmx:5VH5aC8GjaelXwU53UjKdSoNjXuU-TVFVJunSqBp9AYWR9cPWoQrxYRl>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Oct 2025 17:51:32 -0400 (EDT)
-Date: Wed, 22 Oct 2025 23:51:30 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Wilfred Mallawa <wilfred.opensource@gmail.com>
-Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Simon Horman <horms@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Subject: Re: [PATCH net-next v8 2/2] selftests: tls: add tls
- record_size_limit test
-Message-ID: <aPlR4l220mtkjM5B@krikkit>
-References: <20251022001937.20155-1-wilfred.opensource@gmail.com>
- <20251022001937.20155-2-wilfred.opensource@gmail.com>
+	s=arc-20240116; t=1761173132; c=relaxed/simple;
+	bh=V5Zc0HlkBIosrLePMk48I+xG6HyK0OvSh8a8dnHIO80=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Rppi/iAenc84quj1e6V/nU189SQWCKT2h5+pMIDH5BA3sOXVVMYzCkEYubMX5Lbb40cqx1Bx+SXYqu8peR8EiBzLHGqnTageFB6WGfkjo7PtcsR9W/5w65c6JIzDmZze4wzP1lsC4OYthT0ScSzPlmX0zrhZVnba/32NUf6w5pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ps5i16Lv; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-277f0ea6fbaso1428705ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 15:45:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761173130; x=1761777930; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gGF3nY+bQhEuJksVeN/ApJVbDNkeBuYq31H02jFVpBo=;
+        b=ps5i16Lv1zKL9/XFMVts0n4wGDIzrh0w5Bb0iMcHwe17/Bn/MfXvNpfKwgxWyfyd3S
+         2WX0Wi5J15awVyYZb0IWIQAiUQsWCgsC656RbO04esie6zAWC88+HIJQq8Da7EDDmU3T
+         rn6VPN/jfAdNxFmF+wwRRxasVdFa8sE3JiCuYx8fywZXGYuwzvpZn7AKV5XKS1CeRFct
+         SV1o2HoGwwSTmB5jrKDu2uKEQhQZTvnyylFTASo/G3JAGNpqTkBAL9XgGcXpsbdohHKO
+         E8iqsSqnZUNBxWJzdY9AeeghbDFWU5rIIM4wGV/6xTzaQbuXvCY8LOJuEfJjXN2bG9br
+         q+XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761173130; x=1761777930;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gGF3nY+bQhEuJksVeN/ApJVbDNkeBuYq31H02jFVpBo=;
+        b=kgLO8Ex5Loa1/8V2/NYPN3p2QkQP8zM+6JM/B7mPD45kQmHkr8njh/ZkDmm7XuCdas
+         HYwCPUL1AaOmatiW8Dtr23Ygjf4ZzLeJ0BuKxLbBBebZ0ek1V8xakSD13/3dKDs0JV1Q
+         dq+Rbs8qBM1GR5WJcqQSKWV1wwE7rzGpQtJBRaLKSd4ARv67YhxOYUhVqPmpt4G1E7G7
+         HYa6tBUxEN4LZ1WjamsZ4vspyBA0F7wX5phSMIzs8NVZowcmQiTb7OoYYpzbjy0hLT34
+         skDgPcAt0znOk1KP+z0wCN4ovU3L5u3btAY9VaxmXpwxxS87WKUtOqcA8Hg3j3PiHTv+
+         AhuA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcs2sQQLxODExnebHOprwx8MXFzzBG6J2nwVnN5GozWQyabMf78kLrbz/YKpvFUflKf8H/mdz4hn/nl4q2JO0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJHQ5XFXU7PGIwsGehEP39g+bS/taHrMgU44QO/YrJORuPEpE9
+	2pUQPZB1oVO+6nGlIHM6ZbEJykCK3+JSgp2aLLCkhdBs7eX+xs929yQAT5VFkni3jf5ElGMhXHP
+	CWzxCi3cMOYQ9zpXQ8O1DbL1NfA==
+X-Google-Smtp-Source: AGHT+IHD5TZ3PlH4BoXojkeR7Hq6pa25rPFAC44tSG4hp0SVSWugJiynOfGyj0/LVdH6RcIi4tLRlKxt4/SfCTBJBg==
+X-Received: from pjbfv10.prod.google.com ([2002:a17:90b:e8a:b0:33b:ab61:4f71])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:f70b:b0:283:c950:a76f with SMTP id d9443c01a7336-290cc2f91d2mr289431935ad.43.1761173129640;
+ Wed, 22 Oct 2025 15:45:29 -0700 (PDT)
+Date: Wed, 22 Oct 2025 15:45:28 -0700
+In-Reply-To: <diqz4irqg9qy.fsf@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251022001937.20155-2-wilfred.opensource@gmail.com>
+Mime-Version: 1.0
+References: <cover.1760731772.git.ackerleytng@google.com> <8ee16fbf254115b0fd72cc2b5c06d2ccef66eca9.1760731772.git.ackerleytng@google.com>
+ <2457cb3b-5dde-4ca1-b75d-174b5daee28a@arm.com> <diqz4irqg9qy.fsf@google.com>
+Message-ID: <diqzy0p2eet3.fsf@google.com>
+Subject: Re: [RFC PATCH v1 07/37] KVM: Introduce KVM_SET_MEMORY_ATTRIBUTES2
+From: Ackerley Tng <ackerleytng@google.com>
+To: Steven Price <steven.price@arm.com>, cgroups@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, x86@kernel.org
+Cc: akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de, 
+	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org, 
+	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com, 
+	david@redhat.com, dmatlack@google.com, erdemaktas@google.com, 
+	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org, 
+	hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com, 
+	isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com, 
+	jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com, 
+	jthoughton@google.com, jun.miao@intel.com, kai.huang@intel.com, 
+	keirf@google.com, kent.overstreet@linux.dev, liam.merwick@oracle.com, 
+	maciej.wieczor-retman@intel.com, mail@maciej.szmigiero.name, 
+	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
+	mhiramat@kernel.org, mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, 
+	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au, 
+	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es, 
+	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com, 
+	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com, 
+	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, qperret@google.com, 
+	richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org, seanjc@google.com, 
+	shakeel.butt@linux.dev, shuah@kernel.org, suzuki.poulose@arm.com, 
+	tabba@google.com, tglx@linutronix.de, thomas.lendacky@amd.com, 
+	vannapurve@google.com, vbabka@suse.cz, viro@zeniv.linux.org.uk, 
+	vkuznets@redhat.com, will@kernel.org, willy@infradead.org, wyihan@google.com, 
+	xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com, 
+	yuzenghui@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 
-2025-10-22, 10:19:37 +1000, Wilfred Mallawa wrote:
-> From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-> 
-> Test that outgoing plaintext records respect the tls TLS_TX_MAX_PAYLOAD_LEN
-> set using setsockopt(). The limit is set to be 128, thus, in all received
-> records, the plaintext must not exceed this amount.
-> 
-> Also test that setting a new record size limit whilst a pending open
-> record exists is handled correctly by discarding the request.
-> 
-> Suggested-by: Sabrina Dubroca <sd@queasysnail.net>
-> Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-> ---
-> V7 -> V8:
->  - Drop TLS 1.3 tests for the removed getsockopt() changes from V7 
-> ---
->  tools/testing/selftests/net/tls.c | 141 ++++++++++++++++++++++++++++++
->  1 file changed, 141 insertions(+)
+Ackerley Tng <ackerleytng@google.com> writes:
 
-Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
+Found another issue with KVM_CAP_MEMORY_ATTRIBUTES2.
 
+KVM_CAP_MEMORY_ATTRIBUTES2 was defined to do the same thing as
+KVM_CAP_MEMORY_ATTRIBUTES, but that's wrong since
+KVM_CAP_MEMORY_ATTRIBUTES2 should indicate the presence of
+KVM_SET_MEMORY_ATTRIBUTES2 and struct kvm_memory_attributes2.
+
+Usage is kind of weird and I hope to get feedback on this as
+well.
+
+This describes the difference between the previous version of this patch
+and the one attached below.
+
+I also added this to the changelog
+
+  Add KVM_CAP_MEMORY_ATTRIBUTES2 to indicate that struct
+  kvm_memory_attributes2 exists and can be used either with
+  KVM_SET_MEMORY_ATTRIBUTES2 via the vm or guest_memfd ioctl.
+
+  Since KVM_SET_MEMORY_ATTRIBUTES2 is not limited to be used only with the vm
+  ioctl, return 1 for KVM_CAP_MEMORY_ATTRIBUTES2 as long as struct
+  kvm_memory_attributes2 and KVM_SET_MEMORY_ATTRIBUTES2 can be
+  used. KVM_CAP_MEMORY_ATTRIBUTES must still be used to actually get valid
+  attributes.
+
+  Handle KVM_CAP_MEMORY_ATTRIBUTES2 and return 1 regardless of
+  CONFIG_KVM_VM_MEMORY_ATTRIBUTES, since KVM_SET_MEMORY_ATTRIBUTES2 is not
+  limited to a vm ioctl and can also be used with the guest_memfd ioctl.
+
+
+Here's the entire patch so hopefully it's easy to swap out this entire
+patch over the original one.
+
+
+
+From 8887ba58f6fd97c529c8152d6f18e5e26651dbec Mon Sep 17 00:00:00 2001
+From: Ackerley Tng <ackerleytng@google.com>
+Date: Thu, 16 Oct 2025 11:48:01 -0700
+Subject: [PATCH] KVM: Introduce KVM_SET_MEMORY_ATTRIBUTES2
+
+Introduce a "version 2" of KVM_SET_MEMORY_ATTRIBUTES to support returning
+information back to userspace.
+
+This new ioctl and structure will, in a later patch, be shared as a
+guest_memfd ioctl, where the padding in the new kvm_memory_attributes2
+structure will be for writing the response from the guest_memfd ioctl to
+userspace.
+
+A new ioctl is necessary for these reasons:
+
+1. KVM_SET_MEMORY_ATTRIBUTES is currently a write-only ioctl and does not
+   allow userspace to read fields. There's nothing in code (yet?) that
+   validates this, but using _IOWR for consistency would be prudent.
+
+2. KVM_SET_MEMORY_ATTRIBUTES, when used as a guest_memfd ioctl, will need
+   an additional field to provide userspace with more error details.
+
+Alternatively, a completely new ioctl could be defined, unrelated to
+KVM_SET_MEMORY_ATTRIBUTES, but using the same ioctl number and struct for
+the vm and guest_memfd ioctls streamlines the interface for userspace. In
+addition, any memory attributes, implemented on the vm or guest_memfd
+ioctl, can be easily shared with the other.
+
+Add KVM_CAP_MEMORY_ATTRIBUTES2 to indicate that struct
+kvm_memory_attributes2 exists and can be used either with
+KVM_SET_MEMORY_ATTRIBUTES2 via the vm or guest_memfd ioctl.
+
+Since KVM_SET_MEMORY_ATTRIBUTES2 is not limited to be used only with the vm
+ioctl, return 1 for KVM_CAP_MEMORY_ATTRIBUTES2 as long as struct
+kvm_memory_attributes2 and KVM_SET_MEMORY_ATTRIBUTES2 can be
+used. KVM_CAP_MEMORY_ATTRIBUTES must still be used to actually get valid
+attributes.
+
+Handle KVM_CAP_MEMORY_ATTRIBUTES2 and return 1 regardless of
+CONFIG_KVM_VM_MEMORY_ATTRIBUTES, since KVM_SET_MEMORY_ATTRIBUTES2 is not
+limited to a vm ioctl and can also be used with the guest_memfd ioctl.
+
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Change-Id: I50cd506d9a28bf68a90e659015603de579569bc1
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+---
+ Documentation/virt/kvm/api.rst | 32 ++++++++++++++++++++++++++++++++
+ include/uapi/linux/kvm.h       | 12 ++++++++++++
+ virt/kvm/kvm_main.c            | 34 +++++++++++++++++++++++++++++++---
+ 3 files changed, 75 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 754b662a453c3..a812769d79bf6 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -6355,6 +6355,8 @@ S390:
+ Returns -EINVAL if the VM has the KVM_VM_S390_UCONTROL flag set.
+ Returns -EINVAL if called on a protected VM.
+ 
++.. _KVM_SET_MEMORY_ATTRIBUTES:
++
+ 4.141 KVM_SET_MEMORY_ATTRIBUTES
+ -------------------------------
+ 
+@@ -6512,6 +6514,36 @@ the capability to be present.
+ 
+ `flags` must currently be zero.
+ 
++4.144 KVM_SET_MEMORY_ATTRIBUTES2
++---------------------------------
++
++:Capability: KVM_CAP_MEMORY_ATTRIBUTES2
++:Architectures: x86
++:Type: vm ioctl
++:Parameters: struct kvm_memory_attributes2 (in/out)
++:Returns: 0 on success, <0 on error
++
++KVM_SET_MEMORY_ATTRIBUTES2 is an extension to
++KVM_SET_MEMORY_ATTRIBUTES that supports returning (writing) values to
++userspace.  The original (pre-extension) fields are shared with
++KVM_SET_MEMORY_ATTRIBUTES identically.
++
++Attribute values are shared with KVM_SET_MEMORY_ATTRIBUTES.
++
++::
++
++  struct kvm_memory_attributes2 {
++	__u64 address;
++	__u64 size;
++	__u64 attributes;
++	__u64 flags;
++	__u64 reserved[4];
++  };
++
++  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
++
++See also: :ref: `KVM_SET_MEMORY_ATTRIBUTES`.
++
+ 
+ .. _kvm_run:
+ 
+diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+index 52f6000ab0208..c300e38c7c9cd 100644
+--- a/include/uapi/linux/kvm.h
++++ b/include/uapi/linux/kvm.h
+@@ -963,6 +963,7 @@ struct kvm_enable_cap {
+ #define KVM_CAP_RISCV_MP_STATE_RESET 242
+ #define KVM_CAP_ARM_CACHEABLE_PFNMAP_SUPPORTED 243
+ #define KVM_CAP_GUEST_MEMFD_FLAGS 244
++#define KVM_CAP_MEMORY_ATTRIBUTES2 245
+ 
+ struct kvm_irq_routing_irqchip {
+ 	__u32 irqchip;
+@@ -1617,4 +1618,15 @@ struct kvm_pre_fault_memory {
+ 	__u64 padding[5];
+ };
+ 
++/* Available with KVM_CAP_MEMORY_ATTRIBUTES2 */
++#define KVM_SET_MEMORY_ATTRIBUTES2              _IOWR(KVMIO,  0xd6, struct kvm_memory_attributes2)
++
++struct kvm_memory_attributes2 {
++	__u64 address;
++	__u64 size;
++	__u64 attributes;
++	__u64 flags;
++	__u64 reserved[4];
++};
++
+ #endif /* __LINUX_KVM_H */
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 35166754a22b4..d083011744eba 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2621,7 +2621,7 @@ static int kvm_vm_set_mem_attributes(struct kvm *kvm, gfn_t start, gfn_t end,
+ 	return r;
+ }
+ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+-					   struct kvm_memory_attributes *attrs)
++					   struct kvm_memory_attributes2 *attrs)
+ {
+ 	gfn_t start, end;
+ 
+@@ -4957,6 +4957,7 @@ static int kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+ 	case KVM_CAP_BINARY_STATS_FD:
+ 	case KVM_CAP_SYSTEM_EVENT_DATA:
+ 	case KVM_CAP_DEVICE_CTRL:
++	case KVM_CAP_MEMORY_ATTRIBUTES2:
+ 		return 1;
+ #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+ 	case KVM_CAP_MEMORY_ATTRIBUTES:
+@@ -5184,6 +5185,14 @@ do {										\
+ 		     sizeof_field(struct kvm_userspace_memory_region2, field));	\
+ } while (0)
+ 
++#define SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(field)				\
++do {										\
++	BUILD_BUG_ON(offsetof(struct kvm_memory_attributes, field) !=		\
++		     offsetof(struct kvm_memory_attributes2, field));		\
++	BUILD_BUG_ON(sizeof_field(struct kvm_memory_attributes, field) !=	\
++		     sizeof_field(struct kvm_memory_attributes2, field));	\
++} while (0)
++
+ static long kvm_vm_ioctl(struct file *filp,
+ 			   unsigned int ioctl, unsigned long arg)
+ {
+@@ -5366,15 +5375,34 @@ static long kvm_vm_ioctl(struct file *filp,
+ 	}
+ #endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
+ #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
++	case KVM_SET_MEMORY_ATTRIBUTES2:
+ 	case KVM_SET_MEMORY_ATTRIBUTES: {
+-		struct kvm_memory_attributes attrs;
++		struct kvm_memory_attributes2 attrs;
++		unsigned long size;
++
++		if (ioctl == KVM_SET_MEMORY_ATTRIBUTES) {
++			/*
++			 * Fields beyond struct kvm_userspace_memory_region shouldn't be
++			 * accessed, but avoid leaking kernel memory in case of a bug.
++			 */
++			memset(&attrs, 0, sizeof(attrs));
++			size = sizeof(struct kvm_memory_attributes);
++		} else {
++			size = sizeof(struct kvm_memory_attributes2);
++		}
++
++		/* Ensure the common parts of the two structs are identical. */
++		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(address);
++		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(size);
++		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(attributes);
++		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(flags);
+ 
+ 		r = -ENOTTY;
+ 		if (!vm_memory_attributes)
+ 			goto out;
+ 
+ 		r = -EFAULT;
+-		if (copy_from_user(&attrs, argp, sizeof(attrs)))
++		if (copy_from_user(&attrs, argp, size))
+ 			goto out;
+ 
+ 		r = kvm_vm_ioctl_set_mem_attributes(kvm, &attrs);
 -- 
-Sabrina
+2.51.1.838.g19442a804e-goog
+
 
