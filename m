@@ -1,131 +1,137 @@
-Return-Path: <linux-kselftest+bounces-43723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43724-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E60FBF9704
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 02:15:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDB99BF9711
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 02:18:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A1E719A7022
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 00:16:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98E783B1599
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 00:18:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A6C42056;
-	Wed, 22 Oct 2025 00:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD951922DD;
+	Wed, 22 Oct 2025 00:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="G3Bqj0g0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LEYxaRC6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0817E339A8
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 00:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BD61509A0
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 00:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761092144; cv=none; b=UiyBj3lgPpeoaRe/rSlSlfdaJIMo9n4Mfy1DE6et8jd4nCrNVBfc+//Jio1sLKcvdyXcGb/+kMwfjGUnCHGceTDtnNU0LFqbZPY9Ka9dWmkVFjpsBCYMgxVXNa/aqmpw9JkP9ny3q+DHhBGxhnBVsOq6SsNjsmzuInUqfdtHV4A=
+	t=1761092323; cv=none; b=adIiwAGlLNelnn/fosXYkt4j9/wLckzzlNXHlQprwxxX8j6krtOW4evHAXDtNbvWEZgU6SMuQX22C62cPBmGvJ7ehCHghAm50B+W7i5SijdQqyVQGl+vh/EDAKuzxXELN7WBquB2c9evXxy4+S0IrfjSnmEJSzdQdKpt+a3RngY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761092144; c=relaxed/simple;
-	bh=QYMZVxBtPxYE6EZ33C1HyrkU93u+VGFDqSaut8Tc8WU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lah+h5lPhDwHdkNj4YIGa6Oyi/fdhnsV3BYJu0WNoNushJqkDjj22VOxn4PdCMdCCj8sArjQrc78pxxAqrKWb2vl5a/HGUjo5To++Nva0JLAotkAnsPFQkR6AySxNcLVhOWUEBMjEarHmluCj/3zXiBHeg/4AmZOVs6mfYUH65k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=G3Bqj0g0; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-61feb87fe26so10062246a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 17:15:42 -0700 (PDT)
+	s=arc-20240116; t=1761092323; c=relaxed/simple;
+	bh=e7zZqGzrVyuJ5QFyUVE7eGJWKcfl4COyVHk9MxNeNKI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ppfo/mMTiTznZQZewWViep6jOjvUolBF+bsxZcNbwg/RpRcezztsIiETGY58tozqcc+qEJse7KmFNib+EvwCPjEPkuShAfAh7h6SwLbl4V3MNZmmHCs3VXv7TqPbOBc7dXl2BotAi4/VEGcSs6H3eSjh+mm10dT/04UXVxFEx3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LEYxaRC6; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-784826b75a4so44030257b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 17:18:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1761092141; x=1761696941; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lLtBMolvhxZ2nYZ7lKeFnDTLrdScVQzTUS7wwB8pSBo=;
-        b=G3Bqj0g0xeWEZUc5Zh8TZGPqunr0+nw/v+B/GQzXSSE3VnxL90ic5vKhcPSEKcWZAb
-         clhmQQJLDOj1LU2nE0RfCYy2T4w/SQ0VN2DwLPOodO2R9T8ghuiX4qLm3mXAk7UH6NpS
-         qKrnE9g3avFQEuGRqq4v4uQUTd1rhIStJsFpJKlY3EDWgiYMcIV0nsPW9UL3PZT7SX8e
-         GfDescpzt0BMIt2sZY48QG+KVWBcy32yJjBoPjBcHffNyAsOxV16iVLxkVq8X2tMVi5j
-         qA9M0o6uoWEZSme5FIzzn5U3/QDqCoSKqi5zEnCVlli6RoXuKBlaE28o1mOYxZXfGMSf
-         NutA==
+        d=gmail.com; s=20230601; t=1761092320; x=1761697120; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/VVHhrbKGyn2rHkoA+yo5pqhCOh1qQTtBCOhpEVSIKI=;
+        b=LEYxaRC6RrM323rjsaoom5Qmq/bAc2SaTJQX8GJ41fF9wS6dF+ydCMuObV/5vRa9eB
+         SYzYEkaIUsxJnYJGDOSck7f5EU9vx9otxlhq1x+6sXovUgcPoHhzkS1/sr+MeTTofOqm
+         kaqUIhe3CEayD/uRA/QRjxQKOf5/hfvNSSFokoiA062H/g1f6d4cgxhk8wQ2qHOqAWA1
+         eVHfFwRFvzlDceNZFLxCxEXtyF1o/6x4+magzUtAbYoQ1/0Hwm2zFzVNHt/0gaLM4WR/
+         +Bg6rdX7+JB7kTTKBRV1FQh/ebFcOfaNMgNs1sN5dVUKU0p7jMbVBrQMcaEqRjUmbe0p
+         fT4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761092141; x=1761696941;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lLtBMolvhxZ2nYZ7lKeFnDTLrdScVQzTUS7wwB8pSBo=;
-        b=i9co6/kLLxEDp7QzR39fWTum1UmmT8k4lUEsHwblEnLHUQvqo4BhT1osSPqLsnl8CX
-         wga8Hby5YAO2CiA7nvOKEnGXF3ZhLFjDJIfNHCaMNXeFSlw/JqPSUqcqp3wDLJ8vtQmK
-         w4nxStLEh4IOshndz3d3bEIDERMTNnUm/+PLIpwEDOH+YiEoZE9eRIWsgNcud5mkUvMa
-         CsIOKqHZKvIhHpcMYvqhWvu8WzmYYRiNC3EApGHCq1XBJatHXAKWVRDntyBC0XZBiwRI
-         LX3Oib+jzHVeIa+cvau9J+FyfghV7sfiHZyIIewFVAVP5dO6bY/X8q1xIEqNxtvdDgGG
-         ODiA==
-X-Forwarded-Encrypted: i=1; AJvYcCWAJfbU72CuBmtkk6pxh8kqs3IS7D31MnRDUIb3Kt+yAjD4+CsIpc7cYjJNphhKhU/EjhU4U+5jlRraEOQxQio=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNmllsk/EJhxXGVmfs4iTShe7YmSUQq3EIqV0JwRrt3DTaGQ33
-	tQ26U99j0lwsn0ovNdLrIes+08qV/Snq6IMsnPtGS8hYk3o0QyJpBTy119f2hBcGCcM0zkSSToq
-	ulJK+HBwbbZlq8nASHpkXj11IBpNSuNT9hUOrM5xXmg==
-X-Gm-Gg: ASbGncsV6aX97JQwRHTpCMT7tCJDQ4VEJ1h8dGNg+V3APsPfEtzq/NBVuZr8S8Zeotw
-	rlTPr71rFFg8oQQzq+4nVInmROQ8Arq4oqOgXCbkQQ7DXzltEMnuswj9SbrZ2ll4m47nPc6xOwX
-	LAYLZ6mS5efuZiioZVz1LNex/KuX+NCphxas7xw3L9TFJV/wg04gTBK67sG8kfmiIW3RSB6OnBh
-	I9PCN3yZOuoRTQkBFMlgSD11yGJG7gbdhzqqDFvyxUulBC3rEj9z0v4/FqWBaN7lVPy1vgKenUa
-	tqQ=
-X-Google-Smtp-Source: AGHT+IGEuNUf1RCSQwHL6z3gwL7zUADiyfawv+wMX5M61bryfLVp3bld3mKFx8Y8DLsaMjtsAzBcptrVbG9BZA3Wnzk=
-X-Received: by 2002:a05:6402:d09:b0:633:7b1e:9aa3 with SMTP id
- 4fb4d7f45d1cf-63c1f6f6269mr18383154a12.34.1761092141269; Tue, 21 Oct 2025
- 17:15:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761092320; x=1761697120;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/VVHhrbKGyn2rHkoA+yo5pqhCOh1qQTtBCOhpEVSIKI=;
+        b=RjJMtJY2y4d7y70AoaFyOF+Ys8+Xob4DZnd1HU3IsmU7n8f6QQPywJvDn3X1frWng2
+         u/m4eUd/yewiqOueHE8bSbRJbBa4iA6ZBl5Pxf7QcDoNqGuHw38vN2Wt5nCRyxc1VDjW
+         p/Zeq9LvTbnrusCmIVmdsJhnzxWgx92IJJLoWvN531R0pvoh2l1ajNVj2ITwHjhuZ4QR
+         8ukTRT1bRli2gjYyKQ+mKCUzOAgV/zNNFrxcYTos+GOA1kF39FxQovXH80kKn7c5ssn/
+         rLtzn26gupUlqpOaTgzRORST+GGITgTViCVEM9eQA+ySzt+o5VmJAQ19nK5c1THv65yG
+         Y3Aw==
+X-Forwarded-Encrypted: i=1; AJvYcCVMIcY+qXOCFImpyRufbMvW+wLBhauqXTNBkO/SNBxKVRC5vVJ0Nf88Ox+QFHQxjniLUCzOGVpwFrEodmbdQVw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFhGr4R7EmIDJUgteM3onWH60ATiaEUyeT48hj0GC9x0c5pKez
+	N6pcXkjCym+LpOaamLPTz+WGp11dJpZs+0wc75DMkI2B+da3bZb8hcxM
+X-Gm-Gg: ASbGncu6EqrGoHThJuBeql4NbACAjFH9uvfPHMp0Z+xUyMW1wg114OsNwzqDgmWE7+3
+	n/8uch/rRqrIpLtC/8uXWLWQsA8JmpDysXAdvlRjpawzn/AAAtnIb3QvHaBhicqGzMYD9jeyzD9
+	IxQmBR88azSHY9HqhcOfm9S4HjH1xg6j1mVelqc/p6XJrbj3/hB0YgdB3lR4ixoU3TEWoiBVDP3
+	dqs0B2bRWRtXBDalo374JdtrY3RJ8kxYytA1GfR1WHEaQWvdH2n+r7zQjxKXKP0b70dSPmsabaP
+	7/VnKrJMo9yjwXI735FxM0IQGsP9diRy99mi5WoWKnXcN91Xyxa8oZOwxsj3iyAa3DiEh0Bm77P
+	rBO4CKVqiF5ED5KpZTmVCU6TM1QqwCXz4w7NxgymryceL+WPlk/x9NtLxv3ZYdjjUSorsKP0dND
+	Ct9/ZYVes6JweIOkp0A/88kSC7LGhdWrm+PN1J0Ob1i9JDRhw=
+X-Google-Smtp-Source: AGHT+IEqYiiuWqadmrSa+ocB1xo5kZsyd7pE12wgODlf319TseLh48deAbNiLMyHfUUvkPdfF1Gc1A==
+X-Received: by 2002:a05:690c:45c3:b0:783:7266:58ef with SMTP id 00721157ae682-7837266619dmr152519147b3.5.1761092320133;
+        Tue, 21 Oct 2025 17:18:40 -0700 (PDT)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:59::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7846a6cc14bsm32765777b3.60.2025.10.21.17.18.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Oct 2025 17:18:39 -0700 (PDT)
+Date: Tue, 21 Oct 2025 17:18:38 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v7 08/26] selftests/vsock: improve logging in
+ vmtest.sh
+Message-ID: <aPgi3vSJGGfBovRf@devvm11784.nha0.facebook.com>
+References: <20251021-vsock-vmtest-v7-0-0661b7b6f081@meta.com>
+ <20251021-vsock-vmtest-v7-8-0661b7b6f081@meta.com>
+ <20251021170147.7c0d96b2@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251021000852.2924827-1-pasha.tatashin@soleen.com>
- <aPchmxfh4ACM0vY2@kernel.org> <CA+CK2bAHH1tzMEGxAwbmrLnLTzJANMntRu=cp0J8-n101ER7Pw@mail.gmail.com>
- <20251021135331.8e0185a173a5fa40add60802@linux-foundation.org>
-In-Reply-To: <20251021135331.8e0185a173a5fa40add60802@linux-foundation.org>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Tue, 21 Oct 2025 20:15:04 -0400
-X-Gm-Features: AS18NWDlyfI6cWth3r_g0r1Pr5LDh2e3c5ckbdEBRacQjSIvh3eM9w5sLU_efF0
-Message-ID: <CA+CK2bDPLAS7EM--stHkZkx8FSgYBjDOz6FdvWBYrdHwZpZZjw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/3] KHO: kfence + KHO memory corruption fix
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mike Rapoport <rppt@kernel.org>, brauner@kernel.org, corbet@lwn.net, graf@amazon.com, 
-	jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, masahiroy@kernel.org, ojeda@kernel.org, 
-	pratyush@kernel.org, rdunlap@infradead.org, tj@kernel.org, 
-	jasonmiu@google.com, dmatlack@google.com, skhawaja@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251021170147.7c0d96b2@kernel.org>
 
-On Tue, Oct 21, 2025 at 4:53=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Tue, 21 Oct 2025 12:04:47 -0400 Pasha Tatashin <pasha.tatashin@soleen.=
-com> wrote:
->
-> > > With liveupdate: dropped from the subjects
-> >
-> > I noticed "liveupdate: " subject prefix left over only after sending
-> > these patches. Andrew, would you like me to resend them, or could you
-> > remove the prefix from these patches?
->
-> No problem.
->
-> What should we do about -stable kernels?
->
-> It doesn't seem worthwhile to backport a 3-patch series for a pretty
-> obscure bug.  Perhaps we could merge a patch which disables this
+On Tue, Oct 21, 2025 at 05:01:47PM -0700, Jakub Kicinski wrote:
+> On Tue, 21 Oct 2025 16:46:51 -0700 Bobby Eshleman wrote:
+> > Improve usability of logging functions. Remove the test name prefix from
+> > logging functions so that logging calls can be made deeper into the call
+> > stack without passing down the test name or setting some global. Teach
+> > log function to accept a LOG_PREFIX variable to avoid unnecessary
+> > argument shifting.
+> > 
+> > Remove log_setup() and instead use log_host(). The host/guest prefixes
+> > are useful to show whether a failure happened on the guest or host side,
+> > but "setup" doesn't really give additional useful information. Since all
+> > log_setup() calls happen on the host, lets just use log_host() instead.
+> 
+> And this cannot be posted separately / before the rest? I don't think
+> this series has to be 26 patches long.
+> 
+> I'm dropping this from PW, please try to obey the local customs :(
 
-We are using KHO and have had obscure crashes due to this memory
-corruption, with stacks all over the place. I would prefer this fix to
-be properly backported to stable so we can also automatically consume
-it once we switch to the upstream KHO. I do not think disabling kfence
-in the Google fleet to resolve this problem would work for us, so if
-it is not going to be part of stable, we would have to backport it
-manually anyway.
+Sorry about that, since these selftest changes were all part of one
+messier patch in the previous rev, I wasn't sure if the custom was to
+keep them in the original series or break them out into another series.
 
-Thanks,
-Pasha
-
-> combination in Kconfig, as a 6.18-rcX hotfix with a cc:stable.
->
-> Then for 6.19-rc1 we add this series and a fourth patch which undoes
-> that Kconfig change?
+I'll break them out and resend.
 
