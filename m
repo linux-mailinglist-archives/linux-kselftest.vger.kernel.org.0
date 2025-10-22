@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-43752-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 033CABFB8E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 13:10:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15907BFB945
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 13:15:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C075419A57BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 11:11:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 414E01A0548F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 11:16:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF8B32B9A2;
-	Wed, 22 Oct 2025 11:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D0A32E126;
+	Wed, 22 Oct 2025 11:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s2x9nB+t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ou7Su6GC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625BB32C931;
-	Wed, 22 Oct 2025 11:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BFD7296BC9;
+	Wed, 22 Oct 2025 11:15:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761131431; cv=none; b=ONvcgxrQd+xI2rj9G66LLmuhDY0627ZZ+U5smMWOlxFtZrw5qKr6tcyDn9ilTfdkO8/j+vyxZ3IyzCOkhEj2tfFs4F43TaGAaxZXey/Raz8kps0S4P3ajWLOA8wFg0sxZYc/ZJMAOKsNAw41jbvbBVFb6rUr++kF4ssQ7zXsXns=
+	t=1761131734; cv=none; b=QkddCopblNa7B8/PPwYRq5Qytew1seGirXk4UDMvKzngi44ZDg24GLBg/yEgHo2QUq78IZA8CyqlQoYgumqWOcRw8f2LRq3/X1Ba6RHtjU8lpYcC5iIoC7lI0PMCm+IYmB6kE0Vv1B02n+tcx7JQZfc6wjgqy/QILjYmP61EAXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761131431; c=relaxed/simple;
-	bh=giaDzXJ7amEHAt5NKhtODhVh96Dnm7DoUD4EN0sU/+k=;
+	s=arc-20240116; t=1761131734; c=relaxed/simple;
+	bh=QJH5l7/QfRaBN4zYaquzGrr8H9aALZ24iuSHMe+PgVA=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KRJ4WSuK3Z35Zjq95oEuYzPF2koQd64jAF34rF/ElVIA2tPRXO9ci6TFCH2HFbMl+yxLbsaTxHt3gKwqFnqOMMz8W52VINrAxyjyJZu7ffV/XU0sMJJQtlBE0saV7vx7HTuVSZqhJChL1dacL4QFdxdUU7NwTajcZzRs8dcrfPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s2x9nB+t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE5DAC4CEE7;
-	Wed, 22 Oct 2025 11:10:28 +0000 (UTC)
+	 MIME-Version:Content-Type; b=YadxIlUikcqxw3ItqgA/SHkJEhvz0CVlKo59pd6Lcz6y1PEItBs8ujbmR9f1NLZ+QTvogyoQZ73iheHv64S8kUr43w0JbQt9Ily4He/QVxyFQa+njA4h5DHbl/Zj3W89LOHat7gIGF7D6MN5Om8f+K+zf07gIhF/0Ep6s7K9kK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ou7Su6GC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9767EC4CEE7;
+	Wed, 22 Oct 2025 11:15:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761131431;
-	bh=giaDzXJ7amEHAt5NKhtODhVh96Dnm7DoUD4EN0sU/+k=;
+	s=k20201202; t=1761131733;
+	bh=QJH5l7/QfRaBN4zYaquzGrr8H9aALZ24iuSHMe+PgVA=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=s2x9nB+tMQXedvK2A3nU6LG3ZS3Zwaf9Lhc69LHbXA+sz0XqRD7W4846RILATPcdL
-	 c3hd2gGd8XGhz9pEkHOdzPHaE9y1VKHC3hsyj/NKDzCKfYGeHmyHgsViixRFSkWUm0
-	 4/1IXFJoFaYn2P4KYwsVZD3tRdhBwmB7xY3ygFeCAtjtSa0zwMojKW9Q+Iz+ti5i7e
-	 PHSpqW5McRd/l/pjinSq86xSNDSh2jBCs8INTzgAb+pLYdKfMnwrvQGgmKlGrWQxFe
-	 WziF4GRnncev9IXdlEYaov3ZEyGsXh4rEJdtv9JtlYHWierxqAyqU8hVUN3evQPcWr
-	 hDn8Ya6YwT4Mg==
+	b=ou7Su6GC0HgcXE91A7ybE8rVrAL/ds7lBgRUPKFdr8xf8W+ro3p5Rf0JTKAuV/7pM
+	 tav/40d80NMF8uKrh1eiYH4tUq9156kNTU+Zhe4c/4v8n76653PSTWQPQwsSJAAfdH
+	 n+ikFBTgaZHETW3x/XzFgaNcAq4+I8uZk5lVqZ5FVFr5JvgAdDBhGohZqXw6BJKvWx
+	 cUUMNRCLxMQJc5eIcMOsfGzUj3u+E/590ZdrPxib7whbxMhb3GKMN4G4uGXbfqKcYA
+	 RqdfcClr06xWf6PGxHO6MenJi67hnRqmmGPrGpglmeCA1YstxY1n4HfRCZnZWkHIMd
+	 QDw1JYkizpolQ==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>
 Cc: akpm@linux-foundation.org,  brauner@kernel.org,  corbet@lwn.net,
@@ -48,14 +48,13 @@ Cc: akpm@linux-foundation.org,  brauner@kernel.org,  corbet@lwn.net,
   linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
   masahiroy@kernel.org,  ojeda@kernel.org,  pratyush@kernel.org,
   rdunlap@infradead.org,  rppt@kernel.org,  tj@kernel.org
-Subject: Re: [PATCHv7 4/7] kho: add interfaces to unpreserve folios and page
- ranges
-In-Reply-To: <20251022005719.3670224-5-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Tue, 21 Oct 2025 20:57:16 -0400")
+Subject: Re: [PATCHv7 5/7] kho: don't unpreserve memory during abort
+In-Reply-To: <20251022005719.3670224-6-pasha.tatashin@soleen.com> (Pasha
+	Tatashin's message of "Tue, 21 Oct 2025 20:57:17 -0400")
 References: <20251022005719.3670224-1-pasha.tatashin@soleen.com>
-	<20251022005719.3670224-5-pasha.tatashin@soleen.com>
-Date: Wed, 22 Oct 2025 13:10:27 +0200
-Message-ID: <mafs0ecqvfazg.fsf@kernel.org>
+	<20251022005719.3670224-6-pasha.tatashin@soleen.com>
+Date: Wed, 22 Oct 2025 13:15:30 +0200
+Message-ID: <mafs0a51jfar1.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -67,60 +66,34 @@ Content-Type: text/plain
 
 On Tue, Oct 21 2025, Pasha Tatashin wrote:
 
-> Allow users of KHO to cancel the previous preservation by adding the
-> necessary interfaces to unpreserve folio and pages.
+> KHO allows clients to preserve memory regions at any point before the
+> KHO state is finalized. The finalization process itself involves KHO
+> performing its own actions, such as serializing the overall
+> preserved memory map.
+>
+> If this finalization process is aborted, the current implementation
+> destroys KHO's internal memory tracking structures
+> (`kho_out.ser.track.orders`). This behavior effectively unpreserves
+> all memory from KHO's perspective, regardless of whether those
+> preservations were made by clients before the finalization attempt
+> or by KHO itself during finalization.
+>
+> This premature unpreservation is incorrect. An abort of the
+> finalization process should only undo actions taken by KHO as part of
+> that specific finalization attempt. Individual memory regions
+> preserved by clients prior to finalization should remain preserved,
+> as their lifecycle is managed by the clients themselves. These
+> clients might still need to call kho_unpreserve_folio() or
+> kho_unpreserve_phys() based on their own logic, even after a KHO
+> finalization attempt is aborted.
+
+I think you also need to update test_kho and reserve_mem to do this
+since right now they assume all memory gets unpreserved on failure.
+
 >
 > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 > ---
->  include/linux/kexec_handover.h | 12 +++++
->  kernel/kexec_handover.c        | 85 ++++++++++++++++++++++++++++------
->  2 files changed, 84 insertions(+), 13 deletions(-)
->
 [...]
->  
-> +/**
-> + * kho_unpreserve_pages - unpreserve contiguous pages.
-> + * @page: first page in the list.
-> + * @nr_pages: number of pages.
-> + *
-> + * Instructs KHO to unpreserve @nr_pages contigious  pages starting from @page.
-
-s/contigious/contiguous. Also drop the extra space after it.
-
-> + * This call must exactly match a granularity at which memory was originally
-> + * preserved by kho_preserve_pages, call with the same @page and
-> + * @nr_pages). Unpreserving arbitrary sub-ranges of larger preserved blocks is
-
-Stray closing parenthesis here. Perhaps a rewording to: "This must be
-called with the same @page and @nr_pages as the corresponding
-kho_preserve_pages() call. Unpreserving arbitrary..."
-
-Other than this,
-
-Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
-
-> + * not supported.
-> + *
-> + * Return: 0 on success, error code on failure
-> + */
-> +int kho_unpreserve_pages(struct page *page, unsigned int nr_pages)
-> +{
-> +	struct kho_mem_track *track = &kho_out.track;
-> +	const unsigned long start_pfn = page_to_pfn(page);
-> +	const unsigned long end_pfn = start_pfn + nr_pages;
-> +
-> +	if (kho_out.finalized)
-> +		return -EBUSY;
-> +
-> +	__kho_unpreserve(track, start_pfn, end_pfn);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(kho_unpreserve_pages);
-> +
->  struct kho_vmalloc_hdr {
->  	DECLARE_KHOSER_PTR(next, struct kho_vmalloc_chunk *);
->  };
 
 -- 
 Regards,
