@@ -1,40 +1,78 @@
-Return-Path: <linux-kselftest+bounces-43763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43764-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4796DBFCDA2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 17:24:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F7E0BFCE68
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 17:33:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6500D3A6335
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 15:22:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F35553A978A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 15:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82CC434CFCC;
-	Wed, 22 Oct 2025 15:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01D9C34FF44;
+	Wed, 22 Oct 2025 15:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SveC/HNh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F8F309F1E;
-	Wed, 22 Oct 2025 15:21:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CCB34BA52
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 15:27:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761146525; cv=none; b=sdtKywCdL0WGdIzjC7zGuZGHd1Udtg++sr2PFaIsvDaeEkhDG+PlvfKLgtnQ18B6xYWCuGKZnUcR3RWewMu0BAuqUgxZsa1QXkcOv9Tese7nJUBHaiaCjWObNKVZ8+eTUCjU9b929rC0V788TI0ArM/DO+xRATg6npcxz4k1k1Q=
+	t=1761146848; cv=none; b=VgYc7ktmv2XwvYfu3runDlApxox2Vk0RuuzSWSO/mZe9ITxRFa935Rvzk1Auz6aJainhW+/sS49ByXasE5HkamiNdN4mky7jypPvdlwl/255ul09klKiw6mg0moD1DRU4hnkDQLvfACvHhORxuMvg25p6lQMeHrrt0qzE+VpX4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761146525; c=relaxed/simple;
-	bh=SHH0MKNc1HKkLyjtbC1hAyqEI4+sWFaedr6WKmlv1kQ=;
+	s=arc-20240116; t=1761146848; c=relaxed/simple;
+	bh=kNgL40BudYWuJuAsmdNvcDtZ0OwcI9RxNTByNbcVNcw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aLxodu2AHlu6Hkn1n0RdJ416l4IAEF8iynMxtZYTWlKit0MkQbohbG9+lrsESWClav/4ZkSzruN7oxrbdUv01zOui0fUZGqh4M3Tw1jSrm/j3SkIFVTe5UXUFhC54MMr5QAy2Nj26EbTItk/uj/2tTW8tHEFbH3LduPKDtLOuhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE29E1063;
-	Wed, 22 Oct 2025 08:21:49 -0700 (PDT)
-Received: from [10.57.33.187] (unknown [10.57.33.187])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C94A13F63F;
-	Wed, 22 Oct 2025 08:21:37 -0700 (PDT)
-Message-ID: <2457cb3b-5dde-4ca1-b75d-174b5daee28a@arm.com>
-Date: Wed, 22 Oct 2025 16:21:34 +0100
+	 In-Reply-To:Content-Type; b=lw94q/DMSzFncx2J9G+lbx0EAW43+qcQj5/RbGN8YtxEsbk0sMfFn3Hb6oAZVMLCtwHcd93PwIUBXZgfUvgNVcjjE3NR7h1rgsoTA9hsS9DdaH4H70sVC/GpzodX9o9z0oBLLOk7wkDrDc485TYvyKT/6F0LpVc1AkoQuS2h6IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SveC/HNh; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-430d06546d3so43144005ab.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 08:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1761146845; x=1761751645; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zoALVDG9RnT7BAOdsnJMe54/Tt3GRwf2SgNb0DV4KSQ=;
+        b=SveC/HNh42OvRzv5MOYg+5Yqc5Ot+StYw/SM1sELFEHMOk0qF9C2YTFPQdirFHlfZ7
+         Xfxeww8wvM+Nzmll4DCkWDne4961S9L8z28yGMhdGunyDdl0nnytO+L4wfpPfSeIWgPQ
+         bdiJuLjPp4PtQJJzSKqPX8VjpXby3TV6j3fKU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761146845; x=1761751645;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zoALVDG9RnT7BAOdsnJMe54/Tt3GRwf2SgNb0DV4KSQ=;
+        b=hxpQ0gOy8WtnsIKfPFWEa7gW4Cd/uCFFsE+Qr4pOnrki7uYOhJYmKNE2+BoxrCM+Uj
+         rrgZC907BpYmm2mHM8FeZOcLCzrt6h5azGW+wrgql346y/X9GGBOrIkqIfxkb+9vG4aH
+         w02syM6xQxMmz5B0fvNwtbWDAqwYt3/rAoYgHQ9n12Xl47SjraDb2em/Ti3ILsi/BCtf
+         RWT5BrxjuUGilrx8eyiT0k5Bd+g15kUxzp+8PaqpUZgo53eHGmXPU6rWBcI9rM2PD6tN
+         121R3lQB3I2zHTUTg6Gp8+ESkvGqiPtaNi6sQAuRf3djrgEDNR8fX1aTwlM17uqcBg3o
+         Q5qQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVaPYYtGv/6K/2M/u04f7fHFIOmMuuvqihHLZyL9+AnLTNLcLRhOwOS1OMH9V295HQ21cD//ddJeXyRJkOud14=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/eGD12WMRHOUA7LDuD3WoTFMGd+EsszA8+DPP6A4K10uH9I8j
+	5F8uF7458T8UVPhiaLS0A3Oul4OtF4EYP1KKEPPtsQEA0bdYtfJxUeSCy20tRS5XCKo=
+X-Gm-Gg: ASbGncsUiPOVDmfIzs0yQ1HkfKoqv5mbKTfdaQfpzJPIBXbTFBfwbyZRsbGXTJaZGmo
+	pjq3mYUh21/XllwcEA7kCi6aVeRekL8nbh95aiXOMF04SPDmYna6Nj4jkYv7bEfJ0eLXS59brk/
+	iyChQgTP7sJ3vZL/r+DoI6K3XIJdSNRjia6AzVsppSbJOUux1ez9ZEbqg0/MhJ07k8vtckn0KAC
+	fUt7WkdBUkJ+uXXhhJRk1kEIblI5zux3BlQWsGgqv4QmibpXwQaj/64mkxmPVFu6enxB3s4Ypmy
+	3/YHDrDgUc8J6jk8PM0UcuXnmCELj84GhhOCpm+M4BltbQ/uDZdCfcowRtvsJHgPHFnpFq4yd8l
+	xiT4EgCvhiNzi0HVTe6dXNWHWOkB2f1en0cSIAFAfAWf2XWlgIn49iSFJYFo73D0vKvKgNn4KuJ
+	02VU0hu6jGkj3t
+X-Google-Smtp-Source: AGHT+IFHrNAgETUq7iHXWj4LaXPG7j1qD4lSrv4wnohCO6eo9eW67OevdQz1fzSz9sygsvW/JqehtA==
+X-Received: by 2002:a05:6e02:3101:b0:431:d76b:d133 with SMTP id e9e14a558f8ab-431d76bd17cmr27048295ab.12.1761146845007;
+        Wed, 22 Oct 2025 08:27:25 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5a8a964a8a8sm5288976173.29.2025.10.22.08.27.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Oct 2025 08:27:24 -0700 (PDT)
+Message-ID: <cb30af9e-c22b-485a-a83c-f395880cd799@linuxfoundation.org>
+Date: Wed, 22 Oct 2025 09:27:23 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,143 +80,47 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 07/37] KVM: Introduce KVM_SET_MEMORY_ATTRIBUTES2
-To: Ackerley Tng <ackerleytng@google.com>, cgroups@vger.kernel.org,
- kvm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, x86@kernel.org
-Cc: akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
- brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org,
- corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com,
- david@redhat.com, dmatlack@google.com, erdemaktas@google.com,
- fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org,
- hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com,
- isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com,
- jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com,
- jroedel@suse.de, jthoughton@google.com, jun.miao@intel.com,
- kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev,
- liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
- mail@maciej.szmigiero.name, maobibo@loongson.cn,
- mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
- mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, mingo@redhat.com,
- mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev,
- nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev,
- palmer@dabbelt.com, pankaj.gupta@amd.com, paul.walmsley@sifive.com,
- pbonzini@redhat.com, peterx@redhat.com, pgonda@google.com, prsampat@amd.com,
- pvorel@suse.cz, qperret@google.com, richard.weiyang@gmail.com,
- rick.p.edgecombe@intel.com, rientjes@google.com, rostedt@goodmis.org,
- roypat@amazon.co.uk, rppt@kernel.org, seanjc@google.com,
- shakeel.butt@linux.dev, shuah@kernel.org, steven.sistare@oracle.com,
- suzuki.poulose@arm.com, tabba@google.com, tglx@linutronix.de,
- thomas.lendacky@amd.com, vannapurve@google.com, vbabka@suse.cz,
- viro@zeniv.linux.org.uk, vkuznets@redhat.com, wei.w.wang@intel.com,
- will@kernel.org, willy@infradead.org, wyihan@google.com,
- xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com,
- yuzenghui@huawei.com, zhiquan1.li@intel.com
-References: <cover.1760731772.git.ackerleytng@google.com>
- <8ee16fbf254115b0fd72cc2b5c06d2ccef66eca9.1760731772.git.ackerleytng@google.com>
-From: Steven Price <steven.price@arm.com>
-Content-Language: en-GB
-In-Reply-To: <8ee16fbf254115b0fd72cc2b5c06d2ccef66eca9.1760731772.git.ackerleytng@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v1] selftests: cachestat: Fix warning on declaration under
+ label
+To: Dev Jain <dev.jain@arm.com>, Sidharth Seela <sidharthseela@gmail.com>,
+ nphamcs@gmail.com, hannes@cmpxchg.org, nathan@kernel.org, shuah@kernel.org,
+ morbo@google.com, justinstitt@google.com, nick.desaulniers+lkml@gmail.com
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ david.hunter.linux@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20250929115405.25695-2-sidharthseela@gmail.com>
+ <486e0d6b-799e-4fec-9e6d-3ddfdd64418c@arm.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <486e0d6b-799e-4fec-9e6d-3ddfdd64418c@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 17/10/2025 21:11, Ackerley Tng wrote:
-> Introduce a "version 2" of KVM_SET_MEMORY_ATTRIBUTES to support returning
-> information back to userspace.
+On 9/29/25 22:52, Dev Jain wrote:
 > 
-> This new ioctl and structure will, in a later patch, be shared as a
-> guest_memfd ioctl, where the padding in the new kvm_memory_attributes2
-> structure will be for writing the response from the guest_memfd ioctl to
-> userspace.
+> On 29/09/25 5:24 pm, Sidharth Seela wrote:
+>> Fix warning caused from declaration under a case label. The proper way
+>> is to declare variable at the beginning of the function. The warning
+>> came from running clang using LLVM=1; and is as follows:
+>> -- 
+
+Sidharth,
+
+Make sure to not use "---" in your commit logs. Everything after
+this line gets thrown away. I had to go fix it manually.
+
+>> -test_cachestat.c:260:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
+>>    260 |                 char *map = mmap(NULL, filesize, PROT_READ | PROT_WRITE,
+>>        |
+>>
+>> Signed-off-by: Sidharth Seela <sidharthseela@gmail.com>
+>> ---
+>>
 > 
-> A new ioctl is necessary for these reasons:
+> Reviewed-by: Dev Jain <dev.jain@arm.com>
 > 
-> 1. KVM_SET_MEMORY_ATTRIBUTES is currently a write-only ioctl and does not
->    allow userspace to read fields. There's nothing in code (yet?) that
->    validates this, but using _IOWR for consistency would be prudent.
-> 
-> 2. KVM_SET_MEMORY_ATTRIBUTES, when used as a guest_memfd ioctl, will need
->    an additional field to provide userspace with more error details.
-> 
-> Alternatively, a completely new ioctl could be defined, unrelated to
-> KVM_SET_MEMORY_ATTRIBUTES, but using the same ioctl number and struct for
-> the vm and guest_memfd ioctls streamlines the interface for userspace. In
-> addition, any memory attributes, implemented on the vm or guest_memfd
-> ioctl, can be easily shared with the other.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> ---
->  Documentation/virt/kvm/api.rst | 32 +++++++++++++++++++++++++++++++
->  include/uapi/linux/kvm.h       | 12 ++++++++++++
->  virt/kvm/kvm_main.c            | 35 +++++++++++++++++++++++++++++++---
->  3 files changed, 76 insertions(+), 3 deletions(-)
-> 
-[...]
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index 52f6000ab0208..c300e38c7c9cd 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-[...]
-> @@ -5366,15 +5375,35 @@ static long kvm_vm_ioctl(struct file *filp,
->  	}
->  #endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
->  #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
-> +	case KVM_SET_MEMORY_ATTRIBUTES2:
->  	case KVM_SET_MEMORY_ATTRIBUTES: {
-> -		struct kvm_memory_attributes attrs;
-> +		struct kvm_memory_attributes2 attrs;
-> +		unsigned long size;
-> +
-> +		if (ioctl == KVM_SET_MEMORY_ATTRIBUTES) {
-> +			/*
-> +			 * Fields beyond struct kvm_userspace_memory_region shouldn't be
-> +			 * accessed, but avoid leaking kernel memory in case of a bug.
-> +			 */
-> +			memset(&mem, 0, sizeof(mem));
+Applied to linux-kselftest fixes branch for next rc.
 
-s/mem/attrs/g
-
-> +			size = sizeof(struct kvm_set_memory_attributes);
-> +		} else {
-> +			size = sizeof(struct kvm_set_memory_attributes2);
-
-s/kvm_set_memory_attributes/kvm_memory_attributes/ (on both sizeof lines
-above and in the SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD macro).
-
-> +		}
-> +
-> +		/* Ensure the common parts of the two structs are identical. */
-> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(slot);
-> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(flags);
-> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(guest_phys_addr);
-> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(memory_size);
-> +		SANITY_CHECK_MEMORY_ATTRIBUTES_FIELD(userspace_addr);
-
-The fields are:
-  * address
-  * size
-  * attributes
-  * flags
-
-The list you've got appears to match struct kvm_userspace_memory_region
-- copy/paste error?
-
-Thanks,
-Steve
-
->  
->  		r = -ENOTTY;
->  		if (!vm_memory_attributes)
->  			goto out;
->  
->  		r = -EFAULT;
-> -		if (copy_from_user(&attrs, argp, sizeof(attrs)))
-> +		if (copy_from_user(&attrs, argp, size))
->  			goto out;
->  
->  		r = kvm_vm_ioctl_set_mem_attributes(kvm, &attrs);
-
+thanks,
+-- Shuah
 
