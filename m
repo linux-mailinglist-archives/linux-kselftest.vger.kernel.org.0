@@ -1,93 +1,131 @@
-Return-Path: <linux-kselftest+bounces-43722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EA16BF96BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 02:01:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E60FBF9704
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 02:15:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CFB93A6F24
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 00:01:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A1E719A7022
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 00:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BF2C9460;
-	Wed, 22 Oct 2025 00:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A6C42056;
+	Wed, 22 Oct 2025 00:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pme7V+h4"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="G3Bqj0g0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27A017D2;
-	Wed, 22 Oct 2025 00:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0817E339A8
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 00:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761091310; cv=none; b=JUROphAgUSjJaBu4JYcsoYpP8JiCR4ZoCJ6ty2eJ5mLp358cBbRFteHq4UWeyX+L7cRyCmscApymJJCxkiJovEPmhGsZQOkRUPFftG9siojrkIVa2OsmnP/zSDdc9laa0cGkzrLPKIs3IXCK2O5WBG2uZBCzmFwziR3cXQTqwnE=
+	t=1761092144; cv=none; b=UiyBj3lgPpeoaRe/rSlSlfdaJIMo9n4Mfy1DE6et8jd4nCrNVBfc+//Jio1sLKcvdyXcGb/+kMwfjGUnCHGceTDtnNU0LFqbZPY9Ka9dWmkVFjpsBCYMgxVXNa/aqmpw9JkP9ny3q+DHhBGxhnBVsOq6SsNjsmzuInUqfdtHV4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761091310; c=relaxed/simple;
-	bh=p+ZizTiGxIaoODfuSopyyeSnYFPc7WE7M0A6WnSxqmE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u4D6ewPeEo0w+gDdVDpwYtsOc19W8ec8CXh6Qogqr3WdIDSkCsF+94zy3L+JqQRRRj9K+BsSGwTTFcgrYwev+f8EsIHEAfN5BrnAPRavNgiRhfzCmqhLuuTCeoII75fNYNofDDmnUz9L9kU7Sdjofcbqr77XsVUay3Enuvrht4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pme7V+h4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49BA4C4CEF1;
-	Wed, 22 Oct 2025 00:01:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761091309;
-	bh=p+ZizTiGxIaoODfuSopyyeSnYFPc7WE7M0A6WnSxqmE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Pme7V+h4OVfRJg7agdV9osvbp48/KAdTtFv4m7ugnYlgC5tWftPij+MItChJ57SjV
-	 7+vRyzH+x4ac7qLh3UVJiDFqn7TAbluRfOWOgCOC4JToXzg8IXAiR5og2hUEI1/CEf
-	 kqkEmJ6uNAqhIn4DFo0iBEh0SajTNqk6ThpRxCjDt7IF9wWhMwmvahIi3Yzbd4VTcw
-	 GDV/Nd519/dZwYtNrpCBd+GJQ6vl5ZSST8D047hX/uOxLgDCXVM4Nz94I+Kez97U0K
-	 vNDOKNWZaJS+21bEFY0HZ57CeeUmRZHMKU4okd21jA65Z454Qy/qmSPHHHqKgxAI+x
-	 Z2JSVzIsvys4Q==
-Date: Tue, 21 Oct 2025 17:01:47 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, "Michael S.
- Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Eugenio =?UTF-8?B?UMOpcmV6?=
- <eperezma@redhat.com>, "K. Y. Srinivasan" <kys@microsoft.com>, Haiyang
- Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui
- <decui@microsoft.com>, Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa
- <vishnu.dasa@broadcom.com>, Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-hyperv@vger.kernel.org, berrange@redhat.com, Bobby Eshleman
- <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v7 08/26] selftests/vsock: improve logging in
- vmtest.sh
-Message-ID: <20251021170147.7c0d96b2@kernel.org>
-In-Reply-To: <20251021-vsock-vmtest-v7-8-0661b7b6f081@meta.com>
-References: <20251021-vsock-vmtest-v7-0-0661b7b6f081@meta.com>
-	<20251021-vsock-vmtest-v7-8-0661b7b6f081@meta.com>
+	s=arc-20240116; t=1761092144; c=relaxed/simple;
+	bh=QYMZVxBtPxYE6EZ33C1HyrkU93u+VGFDqSaut8Tc8WU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lah+h5lPhDwHdkNj4YIGa6Oyi/fdhnsV3BYJu0WNoNushJqkDjj22VOxn4PdCMdCCj8sArjQrc78pxxAqrKWb2vl5a/HGUjo5To++Nva0JLAotkAnsPFQkR6AySxNcLVhOWUEBMjEarHmluCj/3zXiBHeg/4AmZOVs6mfYUH65k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=G3Bqj0g0; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-61feb87fe26so10062246a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Oct 2025 17:15:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1761092141; x=1761696941; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lLtBMolvhxZ2nYZ7lKeFnDTLrdScVQzTUS7wwB8pSBo=;
+        b=G3Bqj0g0xeWEZUc5Zh8TZGPqunr0+nw/v+B/GQzXSSE3VnxL90ic5vKhcPSEKcWZAb
+         clhmQQJLDOj1LU2nE0RfCYy2T4w/SQ0VN2DwLPOodO2R9T8ghuiX4qLm3mXAk7UH6NpS
+         qKrnE9g3avFQEuGRqq4v4uQUTd1rhIStJsFpJKlY3EDWgiYMcIV0nsPW9UL3PZT7SX8e
+         GfDescpzt0BMIt2sZY48QG+KVWBcy32yJjBoPjBcHffNyAsOxV16iVLxkVq8X2tMVi5j
+         qA9M0o6uoWEZSme5FIzzn5U3/QDqCoSKqi5zEnCVlli6RoXuKBlaE28o1mOYxZXfGMSf
+         NutA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761092141; x=1761696941;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lLtBMolvhxZ2nYZ7lKeFnDTLrdScVQzTUS7wwB8pSBo=;
+        b=i9co6/kLLxEDp7QzR39fWTum1UmmT8k4lUEsHwblEnLHUQvqo4BhT1osSPqLsnl8CX
+         wga8Hby5YAO2CiA7nvOKEnGXF3ZhLFjDJIfNHCaMNXeFSlw/JqPSUqcqp3wDLJ8vtQmK
+         w4nxStLEh4IOshndz3d3bEIDERMTNnUm/+PLIpwEDOH+YiEoZE9eRIWsgNcud5mkUvMa
+         CsIOKqHZKvIhHpcMYvqhWvu8WzmYYRiNC3EApGHCq1XBJatHXAKWVRDntyBC0XZBiwRI
+         LX3Oib+jzHVeIa+cvau9J+FyfghV7sfiHZyIIewFVAVP5dO6bY/X8q1xIEqNxtvdDgGG
+         ODiA==
+X-Forwarded-Encrypted: i=1; AJvYcCWAJfbU72CuBmtkk6pxh8kqs3IS7D31MnRDUIb3Kt+yAjD4+CsIpc7cYjJNphhKhU/EjhU4U+5jlRraEOQxQio=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNmllsk/EJhxXGVmfs4iTShe7YmSUQq3EIqV0JwRrt3DTaGQ33
+	tQ26U99j0lwsn0ovNdLrIes+08qV/Snq6IMsnPtGS8hYk3o0QyJpBTy119f2hBcGCcM0zkSSToq
+	ulJK+HBwbbZlq8nASHpkXj11IBpNSuNT9hUOrM5xXmg==
+X-Gm-Gg: ASbGncsV6aX97JQwRHTpCMT7tCJDQ4VEJ1h8dGNg+V3APsPfEtzq/NBVuZr8S8Zeotw
+	rlTPr71rFFg8oQQzq+4nVInmROQ8Arq4oqOgXCbkQQ7DXzltEMnuswj9SbrZ2ll4m47nPc6xOwX
+	LAYLZ6mS5efuZiioZVz1LNex/KuX+NCphxas7xw3L9TFJV/wg04gTBK67sG8kfmiIW3RSB6OnBh
+	I9PCN3yZOuoRTQkBFMlgSD11yGJG7gbdhzqqDFvyxUulBC3rEj9z0v4/FqWBaN7lVPy1vgKenUa
+	tqQ=
+X-Google-Smtp-Source: AGHT+IGEuNUf1RCSQwHL6z3gwL7zUADiyfawv+wMX5M61bryfLVp3bld3mKFx8Y8DLsaMjtsAzBcptrVbG9BZA3Wnzk=
+X-Received: by 2002:a05:6402:d09:b0:633:7b1e:9aa3 with SMTP id
+ 4fb4d7f45d1cf-63c1f6f6269mr18383154a12.34.1761092141269; Tue, 21 Oct 2025
+ 17:15:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20251021000852.2924827-1-pasha.tatashin@soleen.com>
+ <aPchmxfh4ACM0vY2@kernel.org> <CA+CK2bAHH1tzMEGxAwbmrLnLTzJANMntRu=cp0J8-n101ER7Pw@mail.gmail.com>
+ <20251021135331.8e0185a173a5fa40add60802@linux-foundation.org>
+In-Reply-To: <20251021135331.8e0185a173a5fa40add60802@linux-foundation.org>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Tue, 21 Oct 2025 20:15:04 -0400
+X-Gm-Features: AS18NWDlyfI6cWth3r_g0r1Pr5LDh2e3c5ckbdEBRacQjSIvh3eM9w5sLU_efF0
+Message-ID: <CA+CK2bDPLAS7EM--stHkZkx8FSgYBjDOz6FdvWBYrdHwZpZZjw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] KHO: kfence + KHO memory corruption fix
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Mike Rapoport <rppt@kernel.org>, brauner@kernel.org, corbet@lwn.net, graf@amazon.com, 
+	jgg@ziepe.ca, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, masahiroy@kernel.org, ojeda@kernel.org, 
+	pratyush@kernel.org, rdunlap@infradead.org, tj@kernel.org, 
+	jasonmiu@google.com, dmatlack@google.com, skhawaja@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 21 Oct 2025 16:46:51 -0700 Bobby Eshleman wrote:
-> Improve usability of logging functions. Remove the test name prefix from
-> logging functions so that logging calls can be made deeper into the call
-> stack without passing down the test name or setting some global. Teach
-> log function to accept a LOG_PREFIX variable to avoid unnecessary
-> argument shifting.
-> 
-> Remove log_setup() and instead use log_host(). The host/guest prefixes
-> are useful to show whether a failure happened on the guest or host side,
-> but "setup" doesn't really give additional useful information. Since all
-> log_setup() calls happen on the host, lets just use log_host() instead.
+On Tue, Oct 21, 2025 at 4:53=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
+n.org> wrote:
+>
+> On Tue, 21 Oct 2025 12:04:47 -0400 Pasha Tatashin <pasha.tatashin@soleen.=
+com> wrote:
+>
+> > > With liveupdate: dropped from the subjects
+> >
+> > I noticed "liveupdate: " subject prefix left over only after sending
+> > these patches. Andrew, would you like me to resend them, or could you
+> > remove the prefix from these patches?
+>
+> No problem.
+>
+> What should we do about -stable kernels?
+>
+> It doesn't seem worthwhile to backport a 3-patch series for a pretty
+> obscure bug.  Perhaps we could merge a patch which disables this
 
-And this cannot be posted separately / before the rest? I don't think
-this series has to be 26 patches long.
+We are using KHO and have had obscure crashes due to this memory
+corruption, with stacks all over the place. I would prefer this fix to
+be properly backported to stable so we can also automatically consume
+it once we switch to the upstream KHO. I do not think disabling kfence
+in the Google fleet to resolve this problem would work for us, so if
+it is not going to be part of stable, we would have to backport it
+manually anyway.
 
-I'm dropping this from PW, please try to obey the local customs :(
+Thanks,
+Pasha
+
+> combination in Kconfig, as a 6.18-rcX hotfix with a cc:stable.
+>
+> Then for 6.19-rc1 we add this series and a fourth patch which undoes
+> that Kconfig change?
 
