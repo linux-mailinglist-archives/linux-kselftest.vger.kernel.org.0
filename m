@@ -1,136 +1,87 @@
-Return-Path: <linux-kselftest+bounces-43782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DB2FBFDCB2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 20:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BC49BFDCFE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 20:25:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DE5D188704C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 18:15:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D388218C8B3C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 18:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAEB732BF48;
-	Wed, 22 Oct 2025 18:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D05F344042;
+	Wed, 22 Oct 2025 18:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EP15c+8Z"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="DnOyrUwt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A9D2E6CDA
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 18:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D17226D02;
+	Wed, 22 Oct 2025 18:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761156918; cv=none; b=YOK5kQwnLbegK+f3fWeIDFlfMChfyNovJKr2Ar/9vYGqRLGL+zV27W33QZ6C9mKERYgWiGBgIzNX6eiiEk9A90NN5JCybbLgCzZ6/v4WbVr9iiVEYoSYxr+k7Z40kYlewkQ7agF+1wQ8XwfZKH5mflkBT147tFyBDfxULXRPf3s=
+	t=1761157447; cv=none; b=JUMB4c/9h11U1czlfNSM8Ww5Vn/s1ef7fZmyK3y5qXafhVoopweVozVnAAi7uXeg7fk01EbNN+D+b0AyV/4OZHWNyewVPySRHk2SXwen/NOLElyNmoZb+wW7Sg1gG0xwhxE8117rPpS0A4nlGh4i0MpCkmlnYijKA14+gbjTi9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761156918; c=relaxed/simple;
-	bh=MXeNLNddQ4jvxUTQVwovWtDMVHVwhiulywOctMNy2mo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SwMs/yw9Lo1Wnz8HBqRBX42T8IkETV9cxegL+NoDXaX73ZasgevtpHoYTA/d1TPcU05tGKH7UaSp1L57v0jpA2fH2cxHzdfSXHRS/lcWcUAuqC3MCOVT9KRH7BrLqaENRzUxd0AMW7u7CGjMtGON04keuEEyYUYhF/vAWj2OHxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EP15c+8Z; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <39af9321-fb9b-4cee-84f1-77248a375e85@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761156904;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bjqzvxTmikL5FOmQCQrIY1gpsRGBxx0jwN7oqp/m/lM=;
-	b=EP15c+8ZpJlE8r0PhiZNqT3KJdeNs+10Yt6iGptu13afiLnb8HFR7i6FnQZKdTn4yZU/ZI
-	GUEGrDxO+YOSrVKQLKbYI6Epo2v5K2jLVJKhXhWWLAtyYNByFC6uZVrBEzzT1CJh3P2ozD
-	gU48vjKCer659VKfH4kJpnTTrf/oibU=
-Date: Wed, 22 Oct 2025 11:14:56 -0700
+	s=arc-20240116; t=1761157447; c=relaxed/simple;
+	bh=lN16kSfzrXPzyaR7YDMKSTzasvBepHm3SWk9ngJJhSs=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=OWJcScfrPH2zqIhrSWZah2mMZDyjpEOxmsnKDueUM9mFCraohO77QvrPKB2uHuPVKuv4bDyX+BdZtvDsVVmHZcjv4WSzTZxAaiOFN20WQBiP2fP8iSnn5Ne0Fat3lt9uXYUpU3yWHvbypGhjYNo2ORrGCsOigWmQ0WM08X80sxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=DnOyrUwt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7753C4CEE7;
+	Wed, 22 Oct 2025 18:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1761157446;
+	bh=lN16kSfzrXPzyaR7YDMKSTzasvBepHm3SWk9ngJJhSs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=DnOyrUwtRAwzJloHfIE5bmAiAyWXeBHZ9/k3vL9S6xEPKYSyTXIxJdo7XzKzTwln6
+	 ma4xd7hPWcgBS72Jz2UDN0ayuGVM3OSvZIFtEGhvHO+ZvznXRZKk5J4ZzfIpKfYb6C
+	 ISH/gBZ7zPEawCQIJXr8OpfNLdzCebnhUpJG2o0Y=
+Date: Wed, 22 Oct 2025 11:24:05 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, brauner@kernel.org,
+ corbet@lwn.net, graf@amazon.com, jgg@ziepe.ca,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, masahiroy@kernel.org, ojeda@kernel.org,
+ pratyush@kernel.org, rdunlap@infradead.org, tj@kernel.org,
+ jasonmiu@google.com, dmatlack@google.com, skhawaja@google.com
+Subject: Re: [PATCH v3 0/3] KHO: kfence + KHO memory corruption fix
+Message-Id: <20251022112405.8ef617335ba0387f0608188c@linux-foundation.org>
+In-Reply-To: <aPhwMitTY9De7md8@kernel.org>
+References: <20251021000852.2924827-1-pasha.tatashin@soleen.com>
+	<aPchmxfh4ACM0vY2@kernel.org>
+	<CA+CK2bAHH1tzMEGxAwbmrLnLTzJANMntRu=cp0J8-n101ER7Pw@mail.gmail.com>
+	<20251021135331.8e0185a173a5fa40add60802@linux-foundation.org>
+	<CA+CK2bDPLAS7EM--stHkZkx8FSgYBjDOz6FdvWBYrdHwZpZZjw@mail.gmail.com>
+	<aPhwMitTY9De7md8@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 1/2] bpf: Skip bounds adjustment for conditional
- jumps on same register
-Content-Language: en-GB
-To: KaFai Wan <kafai.wan@linux.dev>, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- paul.chaignon@gmail.com, m.shachnai@gmail.com, luis.gerhorst@fau.de,
- colin.i.king@gmail.com, harishankar.vishwanathan@gmail.com,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: Kaiyan Mei <M202472210@hust.edu.cn>, Yinhao Hu <dddddd@hust.edu.cn>
-References: <20251022164457.1203756-1-kafai.wan@linux.dev>
- <20251022164457.1203756-2-kafai.wan@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20251022164457.1203756-2-kafai.wan@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
+On Wed, 22 Oct 2025 08:48:34 +0300 Mike Rapoport <rppt@kernel.org> wrote:
 
+> > We are using KHO and have had obscure crashes due to this memory
+> > corruption, with stacks all over the place. I would prefer this fix to
+> > be properly backported to stable so we can also automatically consume
+> > it once we switch to the upstream KHO. I do not think disabling kfence
+> > in the Google fleet to resolve this problem would work for us, so if
+> > it is not going to be part of stable, we would have to backport it
+> > manually anyway.
+> 
+> The backport to stable is only relevant to 6.17 that's going to be EOL soon
+> anyway. Do you really think it's worth the effort?
 
-On 10/22/25 9:44 AM, KaFai Wan wrote:
-> When conditional jumps are performed on the same register (e.g., r0 <= r0,
-> r0 > r0, r0 < r0) where the register holds a scalar with range, the verifier
-> incorrectly attempts to adjust the register's min/max bounds. This leads to
-> invalid range bounds and triggers a BUG warning:
->
-> verifier bug: REG INVARIANTS VIOLATION (true_reg1): range bounds violation u64=[0x1, 0x0] s64=[0x1, 0x0] u32=[0x1, 0x0] s32=[0x1, 0x0] var_off=(0x0, 0x0)
-> WARNING: CPU: 0 PID: 93 at kernel/bpf/verifier.c:2731 reg_bounds_sanity_check+0x163/0x220
-> Modules linked in:
-> CPU: 0 UID: 0 PID: 93 Comm: repro-x-3 Tainted: G        W           6.18.0-rc1-ge7586577b75f-dirty #218 PREEMPT(full)
-> Tainted: [W]=WARN
-> Hardware name: QEMU Ubuntu 24.04 PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> RIP: 0010:reg_bounds_sanity_check+0x163/0x220
-> Call Trace:
->   <TASK>
->   reg_set_min_max.part.0+0x1b1/0x360
->   check_cond_jmp_op+0x1195/0x1a60
->   do_check_common+0x33ac/0x33c0
->   ...
->
-> The issue occurs in reg_set_min_max() function where bounds adjustment logic
-> is applied even when both registers being compared are the same. Comparing a
-> register with itself should not change its bounds since the comparison result
-> is always known (e.g., r0 == r0 is always true, r0 < r0 is always false).
->
-> Fix this by adding an early return in reg_set_min_max() when false_reg1 and
-> false_reg2 point to the same register, skipping the unnecessary bounds
-> adjustment that leads to the verifier bug.
->
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Closes: https://lore.kernel.org/all/1881f0f5.300df.199f2576a01.Coremail.kaiyanm@hust.edu.cn/
-> Fixes: 0df1a55afa83 ("bpf: Warn on internal verifier errors")
-> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
-> ---
->   kernel/bpf/verifier.c | 4 ++++
->   1 file changed, 4 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6d175849e57a..420ad512d1af 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -16429,6 +16429,10 @@ static int reg_set_min_max(struct bpf_verifier_env *env,
->   	if (false_reg1->type != SCALAR_VALUE || false_reg2->type != SCALAR_VALUE)
->   		return 0;
->   
-> +	/* If conditional jumps on the same register, skip the adjustment */
-> +	if (false_reg1 == false_reg2)
-> +		return 0;
+If some organization is basing their next kernel on 6.17 then they'd
+like it.
 
-Your change looks good. But this is a special case and it should not
-happen for any compiler generated code. So could you investigate
-why regs_refine_cond_op() does not work? Since false_reg1 and false_reg2
-is the same, so register refinement should keep the same. Probably
-some minor change in regs_refine_cond_op(...) should work?
-
-> +
->   	/* fallthrough (FALSE) branch */
->   	regs_refine_cond_op(false_reg1, false_reg2, rev_opcode(opcode), is_jmp32);
->   	reg_bounds_sync(false_reg1);
-
+Do we assume that all organizations follow the LTS schedule?  I haven't
+been doing that.
 
