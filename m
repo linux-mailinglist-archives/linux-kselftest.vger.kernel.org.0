@@ -1,112 +1,140 @@
-Return-Path: <linux-kselftest+bounces-43760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F8E2BFC933
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 16:36:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5DCCBFCC1E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 17:05:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 026844EEFC4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 14:36:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF06D1899C6C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Oct 2025 15:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593BC33373B;
-	Wed, 22 Oct 2025 14:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6A9734E747;
+	Wed, 22 Oct 2025 15:02:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iN44lxwi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wDGTaNJa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3075535BDAB;
-	Wed, 22 Oct 2025 14:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA2C34C9A1
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 15:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761143618; cv=none; b=k9Mte0JxI0kzSSgZkn/v8olnqxfGfamyeABM6ApZj7fK1zF++5yNwiMVmr0oBped35lVkO6F6Tqsg7URtSyaLlY+vv8YqHa+mKlIPgExVIFvzoP9chkNAVt5XLe3uT70yfk8oTPG/kr7cR8pGStuv/+N+gh3fLMEiAFequWV6hE=
+	t=1761145336; cv=none; b=SPw4n9rFqrgRkdvc+IJ8pViggL8UpnZg9CWX5FbCwZF95Kbxr8RrpFIFddPMUrhHJYQti07dZCjd8xyUxVGP6f6PCrq0PJNKjrZNT7rAq7IneFUySYHYAUquOtdCe9Jk7LzcGK9xnVky8M7Xsst53IG+/LrtDPmUYaHgF8wFQJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761143618; c=relaxed/simple;
-	bh=6tM2UgCr2gmFqK+uA4QQnT2L8cTSznjzpaJ4HgWK02o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rKgHvrRX+XGSCmB5bkloh94t88c6beGwCrXVnxlxW9e2oszpm/DWuP+dvwwIjjaxbMSoUdERyUZJy7/UqjeZ1rhJLFWrQEzi6GE2mM0ear2qJgDrHRVNGJa9mkYysNdn3yRb390kBNquh55Jg/XlE7beIMsqZCCLNltGq1/lrMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iN44lxwi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF73C4CEF5;
-	Wed, 22 Oct 2025 14:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761143618;
-	bh=6tM2UgCr2gmFqK+uA4QQnT2L8cTSznjzpaJ4HgWK02o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iN44lxwieBv6h4cuONVt50dPTps/aVmwhGwZEPLUssJmvggjnxIu0odWngHyBPA63
-	 43+DM30BIpWYEZhi6mN+G1Jv1Ub/ijL7FtR+fTr0DSs98UBOVFrs3XCHe2zQ3yJ3xH
-	 t+58J1z2c43f/UdAUz6B7OiYagzhFkMZ2BZ2xWweuaKweCRppznW/X2rAnJPiovWDS
-	 h7S174JwGpLZKuRlGa+7pKQsqvSJngt8nN+0azVqx5wL6RMwPSdprHBANRYWeiWwKY
-	 RWOIzc9C6Dfogr4io6832RQn2+SB/k1jOJnBp2C483uoLq9xm2fNrHFkaxPhxqYV/U
-	 j95A4faPEsGgg==
-Date: Wed, 22 Oct 2025 15:33:33 +0100
-From: Simon Horman <horms@kernel.org>
-To: Alessandro Zanni <alessandro.zanni87@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftest: net: prevent use of uninitialized variable
-Message-ID: <aPjrPehLi14L9zuQ@horms.kernel.org>
-References: <20251021165451.32984-1-alessandro.zanni87@gmail.com>
+	s=arc-20240116; t=1761145336; c=relaxed/simple;
+	bh=hdYfR8VgCU1ZspHH5xOZyDRebDxd3yGnO9egZSHcGHQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bI3XYKCtSQxmWz1UNQujrjmBb9ZYdqFMOnpnkM3fZglQ2Ersl1MIwOGhjcm73MjYVNuzPy/rypf86v9Ky8efs0JZLlQm5bTjSwRRsDUn04TZFSKbsOq/6S1EwFVWhGFynS/xkA6IGRfZHd+NKTlpUNZk3G1UaRuv17VS3RQdxvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wDGTaNJa; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-87bbee3ba76so2920506d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Oct 2025 08:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1761145333; x=1761750133; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BnIAOSj9hN5H1aKf2wyJor6fNQ1bM8Ks2ytqG7kDK1w=;
+        b=wDGTaNJafp0TkjV2WDjXy2XC8NiDYd9xJwapJG+UdY4c/LxxemLKX9PGb3hvImqsyA
+         3t6Yqz7BFatgFlPJBT5Neo9Ve3MOR2Sr14sAloMgwh3DQa1AC3acTxcbHxHZzE5RiIdA
+         Qj49gmV6weV95hYSBMqbgew1ONIMcWB5hyWpcz/v4Rr3wYhGZwCXdfiZdr3yGTuqJLDz
+         xdFcV23X/HYUnByVCsWdVllwxr/Qh2KCiLgePTkI17t+BNjYDOZs/VmMNEbaR44hYPAf
+         3nPdxdls3CotHnVozYv8a2POLaeWu8jiVitkr/J9sizkc3brm+5RF5JIkxyhI/oNAd3l
+         j7zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761145333; x=1761750133;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BnIAOSj9hN5H1aKf2wyJor6fNQ1bM8Ks2ytqG7kDK1w=;
+        b=ivv9JBcKrwRBXmia0LtacsufFrFW8tj/zgN8umeYiTMB3h3Yi7D2mcdoFYRJax+Zj/
+         KhZ8h3rBEyM18AOe0XeUOI/tiHaMCsxM7pNf8DvpxnAoqyinYZi/xKrpRZXWXcz2it6L
+         sntBdMNBibyXaHwdnsfHEGiFX/rrAiHVfveZqjVbtG0G6hxx2AqVQboD6L/WVM4mmojO
+         tcH42btP2XwDWJHjWyW4f/2aiX1FYxfVKz7EON217+bzNCS1Eo1pZS2t9wj6O6hai4CM
+         5ysBWZEEw9HfOSGc1c6SL/Kuijnz3sx69k5gdx5m3H5bUgdQKSRGpR2KQ8iyFI/Liehk
+         KiCA==
+X-Forwarded-Encrypted: i=1; AJvYcCWN6D/ahNAkNJ697hMjmxycUSuyFsB2tLkcCkmjzkBrXX1UPNM6+4XB2IzddCrQiUC3Oy67rUH1ZCZ4YNLQXcQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsvjIjLP2Dmm/nP1vFVa1KZR8N6JcofLjJws+RW/7VBmjrGTIc
+	vAijKDEpYJnk16vhf4VygXM8UMf4oLuN7OUOuEQbAnV46YnorqN3NcYC1FUy/CXrckHGx+eKpVg
+	y1wWA3kq7+l75zIiKi9oKKvLix4DSQb6+te3Q8LIkbg==
+X-Gm-Gg: ASbGncteeYWvqkmyF5U8EmfC97zHfJ392P7YRBZb4PWpzqmjp9FgxUYjh76/+LU8f8X
+	Ca5JHq8Mwm5O1OXEpoJfVm1hy3cHWKLjmP8IStnTZxZhlscuMsW2tzcgsU0/fC+2oDkbe1iiuOr
+	irM5QKVtFko7Auf6cNfIqaFduxEYzRLV2MSl8iwKchunaFFXcwVLr3QwkEAh+1s4ssDvMhf2cHt
+	pECzT3Dj2IfBJmGe3+Y9abCJTfP+z6YQRQ/Eq2EPHfotAn2Uo/mKbblTPk1fLrfMpdKpQ==
+X-Google-Smtp-Source: AGHT+IHDNBWFGq/lO9UqX3OiuCVmV8mj/OamM0dXHm9H8/TY++90uwy4eHmeOOO7ME2KeAOXQVNRoq9F5JuwtjkDp/g=
+X-Received: by 2002:a05:6214:19c6:b0:87d:f8d3:2456 with SMTP id
+ 6a1803df08f44-87df8d324a4mr21664096d6.2.1761145331914; Wed, 22 Oct 2025
+ 08:02:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251021165451.32984-1-alessandro.zanni87@gmail.com>
+References: <CA+G9fYvKjQcCBMfXA-z2YuL2L+3Qd-pJjEUDX8PDdz2-EEQd=Q@mail.gmail.com>
+ <20251022062948.162852-1-reddybalavignesh9979@gmail.com>
+In-Reply-To: <20251022062948.162852-1-reddybalavignesh9979@gmail.com>
+From: Anders Roxell <anders.roxell@linaro.org>
+Date: Wed, 22 Oct 2025 17:02:00 +0200
+X-Gm-Features: AS18NWDwE4wLtG7BZRqK8s-_yLrQzlCdiI_YRXplah4qDB6dhd-o_z_6gw0x-cw
+Message-ID: <CADYN=9KxQaQMWNbwDSftj7kcBYHjAQPacE+z7AVRZwxPTpexYQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests/x86: Add selftests include path for kselftest.h
+ after centralization
+To: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+Cc: naresh.kamboju@linaro.org, broonie@kernel.org, arnd@arndb.de, 
+	benjamin.copeland@linaro.org, bp@alien8.de, dan.carpenter@linaro.org, 
+	dave.hansen@linux.intel.com, hpa@zytor.com, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, lkft-triage@lists.linaro.org, 
+	mingo@redhat.com, regressions@lists.linux.dev, richard.weiyang@gmail.com, 
+	shuah@kernel.org, surenb@google.com, tglx@linutronix.de, x86@kernel.org, 
+	linux-kernel-mentees@lists.linux.dev, 
+	Linux Kernel Functional Testing <lkft@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Oct 21, 2025 at 06:54:33PM +0200, Alessandro Zanni wrote:
-> Fix to avoid the usage of the `ret` variable uninitialized in the
-> following macro expansions.
-> 
-> It solves the following warning:
-> 
-> In file included from netlink-dumps.c:21:
-> netlink-dumps.c: In function ‘dump_extack’:
-> ../kselftest_harness.h:788:35: warning: ‘ret’ may be used uninitialized [-Wmaybe-uninitialized]
->   788 |                         intmax_t  __exp_print = (intmax_t)__exp; \
->       |                                   ^~~~~~~~~~~
-> ../kselftest_harness.h:631:9: note: in expansion of macro ‘__EXPECT’
->   631 |         __EXPECT(expected, #expected, seen, #seen, ==, 0)
->       |         ^~~~~~~~
-> netlink-dumps.c:169:9: note: in expansion of macro ‘EXPECT_EQ’
->   169 |         EXPECT_EQ(ret, FOUND_EXTACK);
->       |         ^~~~~~~~~
-> 
-> The issue can be reproduced, building the tests, with the command:
-> make -C tools/testing/selftests TARGETS=net
-> 
-> Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+On Wed, 22 Oct 2025 at 08:29, Bala-Vignesh-Reddy
+<reddybalavignesh9979@gmail.com> wrote:
+>
+> The previous change centralizing kselftest.h include path in lib.mk
+> caused x86 selftests to fail, as x86 Makefile overwrites CFLAGS using
+> ":=", dropping the include path added in lib.mk. Therefore, helpers.h
+> could not find kselftest.h during compilation.
+>
+> Fix this by adding the tools/testing/sefltest to CFLAGS in x86 Makefile.
+>
+> Fixes: 4d89827dfb27 ("selftests: complete kselftest include centralization")
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://lore.kernel.org/lkml/CA+G9fYvKjQcCBMfXA-z2YuL2L+3Qd-pJjEUDX8PDdz2-EEQd=Q@mail.gmail.com/T/#m83fd330231287fc9d6c921155bee16c591db7360
+>
+> Signed-off-by: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>
+
+Yes, works.
+
+Tested-by: Anders Roxell <anders.roxell@linaro.org>
+
+
+Cheers,
+Anders
+
 > ---
->  tools/testing/selftests/net/netlink-dumps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
-> index 7618ebe528a4..8ebb8b1b9c5c 100644
-> --- a/tools/testing/selftests/net/netlink-dumps.c
-> +++ b/tools/testing/selftests/net/netlink-dumps.c
-> @@ -112,7 +112,7 @@ static const struct {
->  TEST(dump_extack)
->  {
->  	int netlink_sock;
-> -	int i, cnt, ret;
-> +	int i, cnt, ret = 0;
-
-Hi Alessandro,
-
-I suggest moving this line so that reverse xmas tree order - longest
-line to shortest - is preserved.
-
->  	char buf[8192];
->  	int one = 1;
->  	ssize_t n;
-> -- 
+>  tools/testing/selftests/x86/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+> index 83148875a12c..434065215d12 100644
+> --- a/tools/testing/selftests/x86/Makefile
+> +++ b/tools/testing/selftests/x86/Makefile
+> @@ -36,6 +36,7 @@ BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
+>  BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
+>
+>  CFLAGS := -O2 -g -std=gnu99 -pthread -Wall $(KHDR_INCLUDES)
+> +CFLAGS += -I $(top_srcdir)/tools/testing/selftests/
+>
+>  # call32_from_64 in thunks.S uses absolute addresses.
+>  ifeq ($(CAN_BUILD_WITH_NOPIE),1)
+> --
 > 2.43.0
-> 
+>
 
