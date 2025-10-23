@@ -1,299 +1,156 @@
-Return-Path: <linux-kselftest+bounces-43958-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 911D5C02FC6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 20:31:40 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 028AAC0304C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 20:36:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24B403B0524
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 18:31:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EBB3D567A46
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 18:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9C43355046;
-	Thu, 23 Oct 2025 18:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559CB34C9A3;
+	Thu, 23 Oct 2025 18:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U7n5lEqD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkbTB+21"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C814634B407
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 18:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D5634B198;
+	Thu, 23 Oct 2025 18:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761244111; cv=none; b=GLb+j4IJnJ6dbkaNhqOAgwsShsegojG0CM8/dWir8wbIYAtEq4nu4rdnzKssMLEXxo2J4ks+3hw+qrcM2GpGgLEN0bfEaU0BfbsKl5HUFcAH8H58FneBFKkVdk9PaaWUlYC31qLDq3iWOJhoAF8lR39lWWYPEUaXjuxD1Emayk8=
+	t=1761244211; cv=none; b=YY0VsXFc5by16Prb4jwpdOSYI3nC1NneFRUtt6W0Yb6Lx6qT2JTzPAKB4l+M889M585RPDoI93lB7xObrSTxOdeM7Ft3LSVXcnk42rxfyNysF4itqeGskgFmcXL71GfpksqtpRBa7Ag2jAn9T+O1GJD8zjwwj6RY/y6ExXUVNBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761244111; c=relaxed/simple;
-	bh=bXxBLfs7zprOHTZHXU6v9cfS97dNF6O/NmtSmg9Dcg4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uXJoHHBNVlUHB2EgXnxQmpGafEIv92z1r5lzJwMnLon+u099Z5O7nudmtjP/45FodsBeRlfzy88UPSg1Z3pZzMZ4czUxVa9k0IkniNDM0IZXqM9PCNgxjqEwT24YFXnbrVIa+fnfscdBsBODw4glWv7ffMo3n7qjc8Sfy0g6w+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U7n5lEqD; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-33ba2f134f1so1201708a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 11:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761244098; x=1761848898; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NCwbZALKzMmSW9iQhg2QB2KqAXC2Lr1Db59OQ7PdTpE=;
-        b=U7n5lEqDryM8SnXGwk8JtHrXP3CBhsmyffy0N0WIusMDCTAucg6hWgx5uDediDsY/L
-         E3WilLZk8Xo9rDl6uJ3Ysv80XEuDISXoWtcwJFmyZQKwSAroSaEWkGUYw6fnw0+YCYfh
-         EFk1x9osyk4LHHF7Ca1qChJ825VKfbccv7+qwUfad+6LAuU2UMJwsXuFGNCUzVRRe847
-         Wh1OqZpdF+2/uNr3q0y6R4kKgvJcK2BGFuv6uGUh2vLvMrMDNv6/mQ7RKZyv4D2eI9A8
-         h6iTldbIrjjXUgKpETA1jUnyU+oi9PCFx0REBwHBHjR6B9o2GsFlKudVG6kJBdqcaq5B
-         iw4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761244098; x=1761848898;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NCwbZALKzMmSW9iQhg2QB2KqAXC2Lr1Db59OQ7PdTpE=;
-        b=MEC4i+w1+qeUXhr9l4Af18lF2YMiYwV+Q/Uykqc4zshosGjHhqpHN2r59jP3cTi2wJ
-         ddnCyDULwMqbn4ifT/z4uAKZcNj7HPmgG07KwziBE2nAjbKJZqm4nWiy0NwkrhfBOwt8
-         dBQQvaVZ3DAUp5KV8kht+pHpXFEYnkSt4cd/hmgppecU1pV3I5Ihq/3HaNr1M5h4iBvY
-         eJc3oJMYtDE1lSpv2jK1/OO5zcJjMUWxxk+k3iRdWFo+cLm5zfDkc0LGZkumSmgpT6G8
-         O/O0SofPRtDS8JsmVLPCv00u0BRlGJxJPxk0ehjePQ4FDGQjVKGF6LcAYKs5JWttc3df
-         zaRg==
-X-Forwarded-Encrypted: i=1; AJvYcCUoVhc53HcSFDCJAcFucUQZ7uTmt+NvUu3Zhjte/i0UvJDKHevT6Ag/tSpSmUGJMjw5e6PQrXHHS8czlgg+JdI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdlDH7UAmI6LA3DorahBBfuUPFcuktsalNI602hkvkDcGrDL6h
-	kjsuykAKO5vYwwjWp0VFpKowB8y/YAnf92rlIxNQTmgI1izIsOvHLJqX
-X-Gm-Gg: ASbGncuKrdj5PmnN2XUpljBhiLfrrYFx/BB4YPHxX8u0jvPbPVEBLFY0jbZnK27iSaq
-	h6j4dMx33pvx02st1Qs1GXUDj3MpCzO2GU9zggAolKJHrsH37Cp7b8OA50dB+toPb8n9zcwi/kz
-	5uS8DkRMNQ8MN7XRBEsXFeb+Jmb55rY5/xEGpwPLMF6xh2KA8Fp49dGGCvMy/T1FDkPlUrzPiKy
-	Pg5qTfJB57EZHsTvoFoldot2KfZCfSi5KCj1airVmoV8KTi7x+7RkV+PqAbJwWw0wPahiNofbG2
-	gLKwYEdgKEtnuWVXQZ3Ii3+L3y/ihtCvz3hTUDkW5xwMsU03NrrH8JA4FV8/qqtz7okTv4uDY9d
-	WR26NipBZ0SuAPYPXLpNP3g4lWRDE06axZT1K5rmdMVQUnSDAj5t9+jKOWfCNcpVUbsySeS9HNC
-	GsEgD689c=
-X-Google-Smtp-Source: AGHT+IFx7yBJ75xjpC43+vM6BKxxk2sJHe/HPmtClbhgVqFNPtURD2tOiskQk/SLCG92Yy1QMi/lvA==
-X-Received: by 2002:a17:90b:3f8d:b0:32e:6fae:ba52 with SMTP id 98e67ed59e1d1-33bcf861b1amr32391331a91.6.1761244097816;
-        Thu, 23 Oct 2025 11:28:17 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:8::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33e224a2c3bsm6530615a91.20.2025.10.23.11.28.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Oct 2025 11:28:17 -0700 (PDT)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Thu, 23 Oct 2025 11:27:53 -0700
-Subject: [PATCH net-next v8 14/14] selftests/vsock: add tests for module
- loading order
+	s=arc-20240116; t=1761244211; c=relaxed/simple;
+	bh=ctSOOTT2O05fA9DTO6U9cx0ctplKI+PVoY2b8nJ8W74=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=tZXaxKeuvx6g+SqG1QTr69oeukWiUGyKekTm0uifw3oRXxIpp5/CZMtOIXTu62g/7G0eOr2jzhv53Zxsm9dgdDIceFWD3D1ELoNPEwQLwSmnp6WzjQdRLZP5JFQEr/70npv73q8Wryluk6cUDq2X5RxTQ4lBuKiP/H6paCQgtN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkbTB+21; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A765C4CEE7;
+	Thu, 23 Oct 2025 18:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761244208;
+	bh=ctSOOTT2O05fA9DTO6U9cx0ctplKI+PVoY2b8nJ8W74=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=SkbTB+21ChSHJquQXaq6RbYVwUsFJfRA8wQP1H2henPAllrtScPaYRaryg1bQh/9r
+	 TByAFl0SQ1Z5JrXhGowt53T8lzFXaMvFPcTzPnst6KFSfJOIrfM9jV4dNAZK9AUnk6
+	 AYfz2WVelWcmFdSTJLAm74R6Fc+cVj2KHk4hjj5LS4BC1HG19fCJ+6j41qtNMpH79F
+	 HSP+aL6PVHarIt7rfQLC+X8IRtp0p8U9JoVw7yPoiX687Zn9P3JI0/9wmTJVpc9rJz
+	 bGZby/ILpu3Lv+VI+gqtRkoBdxrPbuCdegh4UJnmpHJpidyV0FAEU/scKEv4QTdLrN
+	 CY1u3UMETiJjA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251023-vsock-vmtest-v8-14-dea984d02bb0@meta.com>
-References: <20251023-vsock-vmtest-v8-0-dea984d02bb0@meta.com>
-In-Reply-To: <20251023-vsock-vmtest-v8-0-dea984d02bb0@meta.com>
-To: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
- "K. Y. Srinivasan" <kys@microsoft.com>, 
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
- Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryan-bt.tan@broadcom.com>, 
- Vishnu Dasa <vishnu.dasa@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kvm@vger.kernel.org, linux-hyperv@vger.kernel.org, berrange@redhat.com, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 23 Oct 2025 20:30:03 +0200
+Message-Id: <DDPWYPG6IGBS.3K4HZRJN0UX0N@kernel.org>
+Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
+Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Tzung-Bi Shih"
+ <tzungbi@kernel.org>, "Benson Leung" <bleung@chromium.org>, "Rafael J .
+ Wysocki" <rafael@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
+ Khan" <shuah@kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <chrome-platform@lists.linux.dev>,
+ <linux-kselftest@vger.kernel.org>, "Laurent Pinchart"
+ <laurent.pinchart@ideasonboard.com>, "Bartosz Golaszewski" <brgl@bgdev.pl>,
+ "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Simona Vetter"
+ <simona.vetter@ffwll.ch>, "Dan Williams" <dan.j.williams@intel.com>
+To: "Jason Gunthorpe" <jgg@nvidia.com>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20251017162116.GA316284@nvidia.com>
+ <aPT-7TTgW_Xop99j@tzungbi-laptop> <20251020115734.GH316284@nvidia.com>
+ <aPcQ99MZse5zmv3o@google.com> <20251021121536.GG316284@nvidia.com>
+ <aPo6CZyT_IGWmu-O@tzungbi-laptop> <20251023145131.GI262900@nvidia.com>
+ <2025102321-struggle-fraying-52ff@gregkh>
+ <20251023155746.GL262900@nvidia.com>
+ <DDPU75QB8MQ6.3HZ5N0GYKQ9QU@kernel.org>
+ <20251023164809.GN262900@nvidia.com>
+In-Reply-To: <20251023164809.GN262900@nvidia.com>
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Thu Oct 23, 2025 at 6:48 PM CEST, Jason Gunthorpe wrote:
+> On Thu, Oct 23, 2025 at 06:20:02PM +0200, Danilo Krummrich wrote:
+>> On Thu Oct 23, 2025 at 5:57 PM CEST, Jason Gunthorpe wrote:
+>> > IMHO the rust code does it principally because the sync unregister
+>> > life cycle model does not fit naturally into rust.
+>>=20
+>> That's not the case.
+>>=20
+>> In fact, we try to give as much "sync" guarantees as possible. For insta=
+nce,
+>> when a driver registers an IRQ the irq::Registration API enforces that t=
+he IRQ
+>> is unregistered before the registering device is unbound.
+>>=20
+>> As a consequence, the IRQ callback can provide a &Device<Bound>, which a=
+cts as a
+>> "cookie" that proves that for this scope (IRQ callback) the device is gu=
+aranteed
+>> to be bound.
+>>=20
+>> With this "cookie" we can then directly access device resources (such as=
+ I/O
+>> memory) that is within a Devres (and hence a Revocable) container direct=
+ly,
+>> *without* any locking. I.e. we can safely bypass the Revocable and hence=
+ its
+>> overhead.
+>
+> It is good news to hear it, but I think you are making the point I was
+> trying to make.
+>
+> In rust if you have a Device<bound> and you skip the revocable
+> locking, I'd argue that you don't need "revocable" at all, just
+> enforcement of a Device<bound>.
+>
+> IOW the presence of revocable in rust, with all the locking, is
+> because the sync life cycle model is not available.
 
-Add tests to check that module loading order does not break
-vsock_loopback. Because vsock_loopback has some per-namespace data
-structure initialization that affects vsock namespace modes, lets make
-sure that namespace modes are respected and loopback sockets are
-functional even when the namespaces and modes are set prior to loading
-the vsock_loopback module.
+That's not the reason, it *is* available.
 
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
- tools/testing/selftests/vsock/vmtest.sh | 138 ++++++++++++++++++++++++++++++++
- 1 file changed, 138 insertions(+)
+Requiring a &Device<Bound> "cookie" to be able to access a device resource
+directly is one part of it. The other one is to ensure that the device reso=
+urce
+is actually released once the device is unbound.
 
-diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-index 014cecd93858..9aa3200b160f 100755
---- a/tools/testing/selftests/vsock/vmtest.sh
-+++ b/tools/testing/selftests/vsock/vmtest.sh
-@@ -68,6 +68,8 @@ readonly TEST_NAMES=(
- 	ns_delete_vm_ok
- 	ns_delete_host_ok
- 	ns_delete_both_ok
-+	ns_loopback_global_global_late_module_load_ok
-+	ns_loopback_local_local_late_module_load_fails
- )
- readonly TEST_DESCS=(
- 	# vm_server_host_client
-@@ -153,6 +155,12 @@ readonly TEST_DESCS=(
- 
- 	# ns_delete_both_ok
- 	"Check that deleting the VM and host's namespaces does not break the socket connection"
-+
-+	# ns_loopback_global_global_late_module_load_ok
-+	"Test that loopback still works in global namespaces initialized prior to loading the vsock_loopback kmod"
-+
-+	# ns_loopback_local_local_late_module_load_fails
-+	"Test that loopback connections still fail between local namespaces initialized prior to loading the vsock_loopback kmod"
- )
- 
- readonly USE_SHARED_VM=(vm_server_host_client vm_client_host_server vm_loopback)
-@@ -914,6 +922,30 @@ test_ns_diff_local_vm_connect_to_local_host_fails() {
- 	return "${KSFT_FAIL}"
- }
- 
-+unload_module() {
-+	local module=$1
-+	local retries=5
-+	readonly retries
-+	local delay=1
-+	local i
-+
-+	# Sometimes previously executed tests may result in a delayed release
-+	# of the reference to the vsock_loopback module and result in the
-+	# module being unremovable. For that reason, we use retries to allow
-+	# some time for those references to be dropped.
-+	for ((i = 0; i < ${retries}; i++)); do
-+		modprobe -r "${module}" 2>/dev/null || :
-+
-+		if [[ "$(lsmod | grep -c ${module})" -eq 0 ]]; then
-+			return 0
-+		fi
-+
-+		sleep ${delay}
-+	done
-+
-+	return 1
-+}
-+
- __test_loopback_two_netns() {
- 	local ns0=$1
- 	local ns1=$2
-@@ -1266,6 +1298,112 @@ test_ns_delete_both_ok() {
- 	check_ns_changes_dont_break_connection "both" "delete"
- }
- 
-+test_ns_loopback_global_global_late_module_load_ok() {
-+	declare -a pids
-+	local unixfile
-+	local ns0 ns1
-+	local pids
-+	local port
-+
-+	if ! unload_module vsock_loopback; then
-+		log_host "Unable to unload vsock_loopback, skipping..."
-+		return "${KSFT_SKIP}"
-+	fi
-+
-+	ns0=loopback_ns0
-+	ns1=loopback_ns1
-+
-+	ip netns del "${ns0}" &>/dev/null || :
-+	ip netns del "${ns1}" &>/dev/null || :
-+	ip netns add "${ns0}"
-+	ip netns add "${ns1}"
-+	ns_set_mode "${ns0}" global
-+	ns_set_mode "${ns1}" global
-+	ip netns exec "${ns0}" ip link set dev lo up
-+	ip netns exec "${ns1}" ip link set dev lo up
-+
-+	modprobe vsock_loopback &> /dev/null || :
-+
-+	unixfile=$(mktemp -u /tmp/XXXX.sock)
-+	port=321
-+	ip netns exec "${ns1}" \
-+		socat TCP-LISTEN:"${port}",fork \
-+			UNIX-CONNECT:"${unixfile}" &
-+	pids+=($!)
-+
-+	host_wait_for_listener "${ns1}" "${port}"
-+	ip netns exec "${ns0}" socat UNIX-LISTEN:"${unixfile}",fork \
-+		TCP-CONNECT:localhost:"${port}" &
-+	pids+=($!)
-+
-+	if ! host_vsock_test "${ns0}" "server" 1 "${port}"; then
-+		ip netns del "${ns0}" &>/dev/null || :
-+		ip netns del "${ns1}" &>/dev/null || :
-+		terminate_pids "${pids[@]}"
-+		return "${KSFT_FAIL}"
-+	fi
-+
-+	if ! host_vsock_test "${ns1}" "127.0.0.1" 1 "${port}"; then
-+		ip netns del "${ns0}" &>/dev/null || :
-+		ip netns del "${ns1}" &>/dev/null || :
-+		terminate_pids "${pids[@]}"
-+		return "${KSFT_FAIL}"
-+	fi
-+
-+	ip netns del "${ns0}" &>/dev/null || :
-+	ip netns del "${ns1}" &>/dev/null || :
-+	terminate_pids "${pids[@]}"
-+
-+	return "${KSFT_PASS}"
-+}
-+
-+test_ns_loopback_local_local_late_module_load_fails() {
-+	declare -a pids
-+	local ns0 ns1
-+	local outfile
-+	local pids
-+	local rc
-+
-+	if ! unload_module vsock_loopback; then
-+		log_host "Unable to unload vsock_loopback, skipping..."
-+		return "${KSFT_SKIP}"
-+	fi
-+
-+	ns0=loopback_ns0
-+	ns1=loopback_ns1
-+
-+	ip netns del "${ns0}" &>/dev/null || :
-+	ip netns del "${ns1}" &>/dev/null || :
-+	ip netns add "${ns0}"
-+	ip netns add "${ns1}"
-+	ns_set_mode "${ns0}" local
-+	ns_set_mode "${ns1}" local
-+
-+	modprobe vsock_loopback &> /dev/null || :
-+
-+	outfile=$(mktemp /tmp/XXXX.vmtest.out)
-+	ip netns exec "${ns0}" socat VSOCK-LISTEN:${port} STDOUT \
-+		> "${outfile}" 2>/dev/null &
-+	pids+=($!)
-+
-+	echo TEST | \
-+		ip netns exec "${ns1}" socat STDIN VSOCK-CONNECT:1:${port} \
-+			2>/dev/null
-+
-+	if grep -q "TEST" "${outfile}" 2>/dev/null; then
-+		rc="${KSFT_FAIL}"
-+	else
-+		rc="${KSFT_PASS}"
-+	fi
-+
-+	ip netns del "${ns0}" &>/dev/null || :
-+	ip netns del "${ns1}" &>/dev/null || :
-+	terminate_pids "${pids[@]}"
-+	rm -f "${outfile}"
-+
-+	return "${rc}"
-+}
-+
- shared_vm_test() {
- 	local tname
- 
+When a device is unbound the Revocable within a Devres container automatica=
+lly
+drops the device resource (i.e. calls the destructor, which, for instance,
+unmaps and releases an MMIO memory region).
 
--- 
-2.47.3
+Subsequently, it also ensures that the device resources can't be accessed
+anymore, even if a driver would hold on to the corresponding object instanc=
+e:
 
+Obviously, it can't be accessed with a &Device<Bound> anymore, because it i=
+s
+impossible that the caller is within a scope where a &Device<Bound> is pres=
+ent.
+
+And an access with Revocable::try_access() will fail as well, because Revoc=
+able
+knows internally that the destructor of the wrapped object was called alrea=
+dy.
+
+So, what we achieve is that as long as the driver uses safe code (i.e. no u=
+nsafe
+{}), there is no way for a driver to mess this up and produce a bug that af=
+fects
+the rest of the kernel.
+
+While at the same time there is zero overhead in "sync" scopes, and non-"sy=
+nc"
+scopes, which we unfortunately need in some rare cases, are still supported=
+ in a
+safe way.
+
+> Sounds like the idea is that the sync model will be widely available
+> and the revocable lock will rarely be used?
+
+That is correct.
 
