@@ -1,145 +1,116 @@
-Return-Path: <linux-kselftest+bounces-43960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6759BC03758
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 22:55:27 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D597FC03831
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 23:20:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D4CDB567400
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 20:54:18 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 49362357F5B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 21:20:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACD726FDBD;
-	Thu, 23 Oct 2025 20:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C4F246781;
+	Thu, 23 Oct 2025 21:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XPTBPTQi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PyfkBUm1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC4E238159
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 20:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D89635B138;
+	Thu, 23 Oct 2025 21:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761252847; cv=none; b=mNpQfp+7x/dIU1hs0d4Hfcu47ODoLwL10/nu9jgjjDFgDcMJy5xTbZLdt5CAS+SYf5B61Luh7IMBI7Ez4LlwCMyK0WblMJ0AU9ta00ndBfd8HEwB9oJ2LtiY4/Q26hJ+t/eJKnVHVPWg5gJgX8msOaZzI1dYc0yTeiLVlWZ+EOo=
+	t=1761254431; cv=none; b=B4NZHXKOea9cp3f+yZt+2zMKK/1sB0PrsEYwBQO/Wzi0Wrb22CcyfnjIBikkXu2NuwBzU1faHxhEctq6tu4O32SIzBQBEVr5X3RoKrDvEqib9IGF31v0ScbFFBOyWE/MJWOWMF7AQV47/llRwckY4U1YqV0OlnGHvCLd+oKgLu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761252847; c=relaxed/simple;
-	bh=hklffgyYK4VMFsD0CdS9XrqoU+fsq1a2y3wTFz4L+Mw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IKwl35cLoDm0bPBgPXZu3eZmop+NIyJMxT42qq1yNvdCjdQMV3TE4GNITOGp227iZQE2grWw+nAblNL/vyY34pAifeu64IZr6e6ZQ24POBQR1xja0Oc0EcGrdsKUVVxtlLdueeIS9cKYmXdtvADSB7Kda1Z/TaUw78t0W/QawJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XPTBPTQi; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-471b80b994bso18041675e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 13:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761252844; x=1761857644; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcTYeshnmr2jeZu3uYGRDZUvk+BEhVzCgVA2Gfj5vu8=;
-        b=XPTBPTQiS3KAtT2nBIuEMxUpB+mGeaoUnLN2NolR0ku26czbPRyR/orFs3oUBi6PCc
-         8qCz32Z9H3gG8QKSuR42x2SGmyLhCcfl8MlfTwbXAEnAdn2lKyQtton8WxQiac9Dzg2q
-         2FccvBUJzgvDNtc0AatZlLJ3ZgIbOEChIjzh5B1d4J3IR3A77GFBSs21GHQHCe6L7HYe
-         yTx98ms0AL73kzx/cq4CtTLu95gMShBFhOwwyKKD+hjDJ/IskAj1ERlQjgX7/g78tPHj
-         qeDo73mDNre1sitSZlYqxYWUfGArvqAHK1iYuk+as6laYhmaZsEHPTLRAtXmF9gB6N2P
-         DLRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761252844; x=1761857644;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wcTYeshnmr2jeZu3uYGRDZUvk+BEhVzCgVA2Gfj5vu8=;
-        b=tFxxYli47HgHs7+htSGkvmMbWR+h7agbPXxKyt/2PVjC2BHCEbwl2FYZuIqQ5HYEWl
-         a28FIVnsOyT0xuCEBclr0e4y38lCJrjOPPp9Ufw80ObW1ap3PpsWuO6+HxTGNPFHs5L/
-         hzKTyiOXPa9QztT7XO00VeUThyZNOxwVJIAwrAwc5QgVvELH+uW1qB0rGujO7jJbFPF2
-         7PRmoJUnrT0hD8u/b4bRC9g4jwarb8fAhuWVZLCxlnAAxo7/jHWJXHcu5qip3mquxEOB
-         f8QKWdjh/Uf/MyWKAZg4oofRxSaT8YligqmtX2vhUzw9SQLl4csIsE0jRD0GY3Ac2xGz
-         59Mw==
-X-Forwarded-Encrypted: i=1; AJvYcCXqbCKd/B7gDfcxC3hg5nPwq/WF6spaQtJrtWQAC4trGMOVcdoKDjW4pcjMuKeh3sehIZT/aF97pHH3sHOR1gM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxANS1nP9ndcJFAZXkHAkHAEvny73xFKq+tN8T1FKhMR0F58zpa
-	IyKyM0t4c+pW80P7nwPRZ7Y/Ym8NfMA6zQbvbXVEP9shZD77DGRih/Be
-X-Gm-Gg: ASbGncu22l46uxPTbLGmh6D+yQS6+hODBzkZnNefVQnN8kL8LQA3l4eMzGj9cqzWu/7
-	R/hLW7+kE7rbTuIMz0Ha7x+gWfYnqgYM/x277oYENdwWSdrQx6OsoruqYj7jNXByoWPWmX25RoB
-	/BOAd0g+1U/Jz/axr8ufZEgUJ68U59fayhdlP+EAbpuH7y4Wyux7AN8LbRSNl+vBFHTVKuWH4ux
-	83LqOPuRgfXlwG2rEC1dhqpmt8hwefZHPZbUOJyOFp5XQmcW3cpMM2bZXo2QEZcnQVGFR5LJdLV
-	BjUDmyIZyQThv+laADrqseoumxy5FOmqdhNULSt9M9pLT9CmacffP2pAzc94Z16VjomA+NmgRpn
-	tmeEuWZFHnNjsaPqP8hmwVcDtFu0Eq+68bGLQCAcLqaFOerOkwoOB5jGR0g9VTjkS3m7LdEyrQY
-	TNMT0NP7yGmp4aE700IB6OON1rSxQZurjrsZMBQdrWOVTcYzW2ANoErCkoAVduvMNkl7ZBiD55
-X-Google-Smtp-Source: AGHT+IGNcYfvgrEtyv7m+Z6cYdS9youXfDFaSCxmdJXoMuPMDUIma4zmYzmszUwxmllhSMsx0bTfvA==
-X-Received: by 2002:a05:6000:26d1:b0:408:d453:e40c with SMTP id ffacd0b85a97d-42704d8efa0mr18802626f8f.25.1761252843821;
-        Thu, 23 Oct 2025 13:54:03 -0700 (PDT)
-Received: from alessandro-pc.station (net-93-70-84-238.cust.vodafonedsl.it. [93.70.84.238])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429898add96sm5658143f8f.30.2025.10.23.13.54.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Oct 2025 13:54:03 -0700 (PDT)
-From: Alessandro Zanni <alessandro.zanni87@gmail.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org
-Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftest: net: prevent use of uninitialized variable
-Date: Thu, 23 Oct 2025 22:53:52 +0200
-Message-ID: <20251023205354.28249-1-alessandro.zanni87@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1761254431; c=relaxed/simple;
+	bh=CnOMQMjrqhKtD/EhlScExXFn3jDF3wbOMnBmzOuuz8s=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sKbqg+4YxW1wz1vufHDvm/L1vlyYkjwV0093SvMTTSW+pkZtdXHhfno/g3Uqo2PfrrciA5ruLUqMRdjhjT1BM35nksMn+a74DhTQ4lvP1j3G6d2tSq2rdANCimca0gor2VFcQOL/IdwN6DiU/ot8i2wYs6OGiQTK+OvHuRzHSMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PyfkBUm1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE34FC4CEFB;
+	Thu, 23 Oct 2025 21:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761254431;
+	bh=CnOMQMjrqhKtD/EhlScExXFn3jDF3wbOMnBmzOuuz8s=;
+	h=From:Date:Subject:To:Cc:From;
+	b=PyfkBUm1aFy2wRFZV4lD8D0CNFOxRgPgft1bZRCvlbGHjiTDOEDRSHPeaxJ4hs8mL
+	 Q0jiKSY7lNBab/qIAnfhp5rZzKA3f/XjXM+lKbDCV2QcQZ0uzMRt+fSLULsluNrdvK
+	 agcvDqY7q5cJVJYUSF4Wh2HIyZS5qjcZFTr9r52jHnmnQ1IUKhkoNA6X8gExYpe82b
+	 7HrKWlXLgLsgYDSdZhu4tSjag0qtLicxp3osJDmoAZQhJl0qxWInHWojzf4CsZ7mdJ
+	 BVSszA1Ve/HeM+IWLqL8P4gUyQumpvN6PSIrfDlICimkA0AuhZIN17BmGV8vgSunAq
+	 Cm5E2RJPk7d1A==
+From: Mark Brown <broonie@kernel.org>
+Date: Thu, 23 Oct 2025 22:19:29 +0100
+Subject: [PATCH] KVM: arm64: selftests: Add SCTLR2_EL2 to get-reg-list
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251023-b4-kvm-arm64-get-reg-list-sctlr-el2-v1-1-088f88ff992a@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOGb+mgC/x3NQQrCQAxG4auUrP2hTcciXkVcjDUdg9MqyVAKp
+ Xd3cPlt3tvJxVScrs1OJqu6fpaK7tTQ+IpLEuizmrjlc9dyj0fAe50RbR4CkhSYJGT1Ah9LNkh
+ mMLOEoZdLjBPV0tdk0u1/ud2P4weLEUR6dQAAAA==
+X-Change-ID: 20251023-b4-kvm-arm64-get-reg-list-sctlr-el2-222e463e8aaf
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-88d78
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1429; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=CnOMQMjrqhKtD/EhlScExXFn3jDF3wbOMnBmzOuuz8s=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBo+pwbFbGYn/J+XnOrZGFvXgcvTyRkw0UD8ItGS
+ HcdNtUNIyuJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaPqcGwAKCRAk1otyXVSH
+ 0KyIB/9Hifq35A9damYTTSqJ1l1r/u0aFiu0nLatsjdRqqy5ohdrChk54+ZgkggtTGEhEgfUmpR
+ c1KDMeSzsd0gkcrIH2V6OxPvd6q0uBkzZhdy/rfOakWyasCWU1jT1ecCVopPQvnSBMqAROgqOcK
+ /DADf3whJVgNl2m1Vbt9NWO5VDsygGuZKyXxm2dc+HoeWCB5HTh9tLNszdX1gUgDKn4YYFD+ty7
+ HMkuYLOKJiP6zCoAbwbW7/ZTZ4R3qqPxgvmIhkm01Stka/J+btGZ6SwvIPF9Crs+1N3O66Jyjig
+ IVjVSM2/9MCzdxXyL+rfw61UAeqmauigvno1wNf/XARiKQhb
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Fix to avoid the usage of the `ret` variable uninitialized in the
-following macro expansions.
+We recently added support for SCTLR2_EL2 to the kernel but did not add it
+to get-reg-list, resulting in it reporting the missing register when it
+is available. Add it.
 
-It solves the following warning:
-
-In file included from netlink-dumps.c:21:
-netlink-dumps.c: In function ‘dump_extack’:
-../kselftest_harness.h:788:35: warning: ‘ret’ may be used uninitialized [-Wmaybe-uninitialized]
-  788 |                         intmax_t  __exp_print = (intmax_t)__exp; \
-      |                                   ^~~~~~~~~~~
-../kselftest_harness.h:631:9: note: in expansion of macro ‘__EXPECT’
-  631 |         __EXPECT(expected, #expected, seen, #seen, ==, 0)
-      |         ^~~~~~~~
-netlink-dumps.c:169:9: note: in expansion of macro ‘EXPECT_EQ’
-  169 |         EXPECT_EQ(ret, FOUND_EXTACK);
-      |         ^~~~~~~~~
-
-The issue can be reproduced, building the tests, with the command:
-make -C tools/testing/selftests TARGETS=net
-
-Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
+ tools/testing/selftests/kvm/arm64/get-reg-list.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Notes:
-    v2: applied the reverse christmas tree order
+diff --git a/tools/testing/selftests/kvm/arm64/get-reg-list.c b/tools/testing/selftests/kvm/arm64/get-reg-list.c
+index c9b84eeaab6b..2abef0a86d46 100644
+--- a/tools/testing/selftests/kvm/arm64/get-reg-list.c
++++ b/tools/testing/selftests/kvm/arm64/get-reg-list.c
+@@ -63,6 +63,7 @@ static struct feature_id_reg feat_id_regs[] = {
+ 	REG_FEAT(HDFGWTR2_EL2,	ID_AA64MMFR0_EL1, FGT, FGT2),
+ 	REG_FEAT(ZCR_EL2,	ID_AA64PFR0_EL1, SVE, IMP),
+ 	REG_FEAT(SCTLR2_EL1,	ID_AA64MMFR3_EL1, SCTLRX, IMP),
++	REG_FEAT(SCTLR2_EL2,	ID_AA64MMFR3_EL1, SCTLRX, IMP),
+ 	REG_FEAT(VDISR_EL2,	ID_AA64PFR0_EL1, RAS, IMP),
+ 	REG_FEAT(VSESR_EL2,	ID_AA64PFR0_EL1, RAS, IMP),
+ 	REG_FEAT(VNCR_EL2,	ID_AA64MMFR4_EL1, NV_frac, NV2_ONLY),
+@@ -718,6 +719,7 @@ static __u64 el2_regs[] = {
+ 	SYS_REG(VMPIDR_EL2),
+ 	SYS_REG(SCTLR_EL2),
+ 	SYS_REG(ACTLR_EL2),
++	SYS_REG(SCTLR2_EL2),
+ 	SYS_REG(HCR_EL2),
+ 	SYS_REG(MDCR_EL2),
+ 	SYS_REG(CPTR_EL2),
 
- tools/testing/selftests/net/netlink-dumps.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+---
+base-commit: 211ddde0823f1442e4ad052a2f30f050145ccada
+change-id: 20251023-b4-kvm-arm64-get-reg-list-sctlr-el2-222e463e8aaf
 
-diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
-index 7618ebe528a4..7de360c029c6 100644
---- a/tools/testing/selftests/net/netlink-dumps.c
-+++ b/tools/testing/selftests/net/netlink-dumps.c
-@@ -111,8 +111,8 @@ static const struct {
- 
- TEST(dump_extack)
- {
-+	int i, cnt, ret = 0;
- 	int netlink_sock;
--	int i, cnt, ret;
- 	char buf[8192];
- 	int one = 1;
- 	ssize_t n;
--- 
-2.43.0
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
 
