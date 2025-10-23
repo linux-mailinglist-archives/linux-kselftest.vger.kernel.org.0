@@ -1,156 +1,145 @@
-Return-Path: <linux-kselftest+bounces-43959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 028AAC0304C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 20:36:43 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6759BC03758
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 22:55:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EBB3D567A46
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 18:33:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D4CDB567400
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 20:54:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559CB34C9A3;
-	Thu, 23 Oct 2025 18:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACD726FDBD;
+	Thu, 23 Oct 2025 20:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SkbTB+21"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XPTBPTQi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D5634B198;
-	Thu, 23 Oct 2025 18:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC4E238159
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 20:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761244211; cv=none; b=YY0VsXFc5by16Prb4jwpdOSYI3nC1NneFRUtt6W0Yb6Lx6qT2JTzPAKB4l+M889M585RPDoI93lB7xObrSTxOdeM7Ft3LSVXcnk42rxfyNysF4itqeGskgFmcXL71GfpksqtpRBa7Ag2jAn9T+O1GJD8zjwwj6RY/y6ExXUVNBQ=
+	t=1761252847; cv=none; b=mNpQfp+7x/dIU1hs0d4Hfcu47ODoLwL10/nu9jgjjDFgDcMJy5xTbZLdt5CAS+SYf5B61Luh7IMBI7Ez4LlwCMyK0WblMJ0AU9ta00ndBfd8HEwB9oJ2LtiY4/Q26hJ+t/eJKnVHVPWg5gJgX8msOaZzI1dYc0yTeiLVlWZ+EOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761244211; c=relaxed/simple;
-	bh=ctSOOTT2O05fA9DTO6U9cx0ctplKI+PVoY2b8nJ8W74=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=tZXaxKeuvx6g+SqG1QTr69oeukWiUGyKekTm0uifw3oRXxIpp5/CZMtOIXTu62g/7G0eOr2jzhv53Zxsm9dgdDIceFWD3D1ELoNPEwQLwSmnp6WzjQdRLZP5JFQEr/70npv73q8Wryluk6cUDq2X5RxTQ4lBuKiP/H6paCQgtN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SkbTB+21; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A765C4CEE7;
-	Thu, 23 Oct 2025 18:30:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761244208;
-	bh=ctSOOTT2O05fA9DTO6U9cx0ctplKI+PVoY2b8nJ8W74=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=SkbTB+21ChSHJquQXaq6RbYVwUsFJfRA8wQP1H2henPAllrtScPaYRaryg1bQh/9r
-	 TByAFl0SQ1Z5JrXhGowt53T8lzFXaMvFPcTzPnst6KFSfJOIrfM9jV4dNAZK9AUnk6
-	 AYfz2WVelWcmFdSTJLAm74R6Fc+cVj2KHk4hjj5LS4BC1HG19fCJ+6j41qtNMpH79F
-	 HSP+aL6PVHarIt7rfQLC+X8IRtp0p8U9JoVw7yPoiX687Zn9P3JI0/9wmTJVpc9rJz
-	 bGZby/ILpu3Lv+VI+gqtRkoBdxrPbuCdegh4UJnmpHJpidyV0FAEU/scKEv4QTdLrN
-	 CY1u3UMETiJjA==
+	s=arc-20240116; t=1761252847; c=relaxed/simple;
+	bh=hklffgyYK4VMFsD0CdS9XrqoU+fsq1a2y3wTFz4L+Mw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=IKwl35cLoDm0bPBgPXZu3eZmop+NIyJMxT42qq1yNvdCjdQMV3TE4GNITOGp227iZQE2grWw+nAblNL/vyY34pAifeu64IZr6e6ZQ24POBQR1xja0Oc0EcGrdsKUVVxtlLdueeIS9cKYmXdtvADSB7Kda1Z/TaUw78t0W/QawJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XPTBPTQi; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-471b80b994bso18041675e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 13:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761252844; x=1761857644; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wcTYeshnmr2jeZu3uYGRDZUvk+BEhVzCgVA2Gfj5vu8=;
+        b=XPTBPTQiS3KAtT2nBIuEMxUpB+mGeaoUnLN2NolR0ku26czbPRyR/orFs3oUBi6PCc
+         8qCz32Z9H3gG8QKSuR42x2SGmyLhCcfl8MlfTwbXAEnAdn2lKyQtton8WxQiac9Dzg2q
+         2FccvBUJzgvDNtc0AatZlLJ3ZgIbOEChIjzh5B1d4J3IR3A77GFBSs21GHQHCe6L7HYe
+         yTx98ms0AL73kzx/cq4CtTLu95gMShBFhOwwyKKD+hjDJ/IskAj1ERlQjgX7/g78tPHj
+         qeDo73mDNre1sitSZlYqxYWUfGArvqAHK1iYuk+as6laYhmaZsEHPTLRAtXmF9gB6N2P
+         DLRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761252844; x=1761857644;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wcTYeshnmr2jeZu3uYGRDZUvk+BEhVzCgVA2Gfj5vu8=;
+        b=tFxxYli47HgHs7+htSGkvmMbWR+h7agbPXxKyt/2PVjC2BHCEbwl2FYZuIqQ5HYEWl
+         a28FIVnsOyT0xuCEBclr0e4y38lCJrjOPPp9Ufw80ObW1ap3PpsWuO6+HxTGNPFHs5L/
+         hzKTyiOXPa9QztT7XO00VeUThyZNOxwVJIAwrAwc5QgVvELH+uW1qB0rGujO7jJbFPF2
+         7PRmoJUnrT0hD8u/b4bRC9g4jwarb8fAhuWVZLCxlnAAxo7/jHWJXHcu5qip3mquxEOB
+         f8QKWdjh/Uf/MyWKAZg4oofRxSaT8YligqmtX2vhUzw9SQLl4csIsE0jRD0GY3Ac2xGz
+         59Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCXqbCKd/B7gDfcxC3hg5nPwq/WF6spaQtJrtWQAC4trGMOVcdoKDjW4pcjMuKeh3sehIZT/aF97pHH3sHOR1gM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxANS1nP9ndcJFAZXkHAkHAEvny73xFKq+tN8T1FKhMR0F58zpa
+	IyKyM0t4c+pW80P7nwPRZ7Y/Ym8NfMA6zQbvbXVEP9shZD77DGRih/Be
+X-Gm-Gg: ASbGncu22l46uxPTbLGmh6D+yQS6+hODBzkZnNefVQnN8kL8LQA3l4eMzGj9cqzWu/7
+	R/hLW7+kE7rbTuIMz0Ha7x+gWfYnqgYM/x277oYENdwWSdrQx6OsoruqYj7jNXByoWPWmX25RoB
+	/BOAd0g+1U/Jz/axr8ufZEgUJ68U59fayhdlP+EAbpuH7y4Wyux7AN8LbRSNl+vBFHTVKuWH4ux
+	83LqOPuRgfXlwG2rEC1dhqpmt8hwefZHPZbUOJyOFp5XQmcW3cpMM2bZXo2QEZcnQVGFR5LJdLV
+	BjUDmyIZyQThv+laADrqseoumxy5FOmqdhNULSt9M9pLT9CmacffP2pAzc94Z16VjomA+NmgRpn
+	tmeEuWZFHnNjsaPqP8hmwVcDtFu0Eq+68bGLQCAcLqaFOerOkwoOB5jGR0g9VTjkS3m7LdEyrQY
+	TNMT0NP7yGmp4aE700IB6OON1rSxQZurjrsZMBQdrWOVTcYzW2ANoErCkoAVduvMNkl7ZBiD55
+X-Google-Smtp-Source: AGHT+IGNcYfvgrEtyv7m+Z6cYdS9youXfDFaSCxmdJXoMuPMDUIma4zmYzmszUwxmllhSMsx0bTfvA==
+X-Received: by 2002:a05:6000:26d1:b0:408:d453:e40c with SMTP id ffacd0b85a97d-42704d8efa0mr18802626f8f.25.1761252843821;
+        Thu, 23 Oct 2025 13:54:03 -0700 (PDT)
+Received: from alessandro-pc.station (net-93-70-84-238.cust.vodafonedsl.it. [93.70.84.238])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429898add96sm5658143f8f.30.2025.10.23.13.54.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Oct 2025 13:54:03 -0700 (PDT)
+From: Alessandro Zanni <alessandro.zanni87@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org
+Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftest: net: prevent use of uninitialized variable
+Date: Thu, 23 Oct 2025 22:53:52 +0200
+Message-ID: <20251023205354.28249-1-alessandro.zanni87@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 23 Oct 2025 20:30:03 +0200
-Message-Id: <DDPWYPG6IGBS.3K4HZRJN0UX0N@kernel.org>
-Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
-Cc: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>, "Tzung-Bi Shih"
- <tzungbi@kernel.org>, "Benson Leung" <bleung@chromium.org>, "Rafael J .
- Wysocki" <rafael@kernel.org>, "Jonathan Corbet" <corbet@lwn.net>, "Shuah
- Khan" <shuah@kernel.org>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <chrome-platform@lists.linux.dev>,
- <linux-kselftest@vger.kernel.org>, "Laurent Pinchart"
- <laurent.pinchart@ideasonboard.com>, "Bartosz Golaszewski" <brgl@bgdev.pl>,
- "Wolfram Sang" <wsa+renesas@sang-engineering.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Dan Williams" <dan.j.williams@intel.com>
-To: "Jason Gunthorpe" <jgg@nvidia.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20251017162116.GA316284@nvidia.com>
- <aPT-7TTgW_Xop99j@tzungbi-laptop> <20251020115734.GH316284@nvidia.com>
- <aPcQ99MZse5zmv3o@google.com> <20251021121536.GG316284@nvidia.com>
- <aPo6CZyT_IGWmu-O@tzungbi-laptop> <20251023145131.GI262900@nvidia.com>
- <2025102321-struggle-fraying-52ff@gregkh>
- <20251023155746.GL262900@nvidia.com>
- <DDPU75QB8MQ6.3HZ5N0GYKQ9QU@kernel.org>
- <20251023164809.GN262900@nvidia.com>
-In-Reply-To: <20251023164809.GN262900@nvidia.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu Oct 23, 2025 at 6:48 PM CEST, Jason Gunthorpe wrote:
-> On Thu, Oct 23, 2025 at 06:20:02PM +0200, Danilo Krummrich wrote:
->> On Thu Oct 23, 2025 at 5:57 PM CEST, Jason Gunthorpe wrote:
->> > IMHO the rust code does it principally because the sync unregister
->> > life cycle model does not fit naturally into rust.
->>=20
->> That's not the case.
->>=20
->> In fact, we try to give as much "sync" guarantees as possible. For insta=
-nce,
->> when a driver registers an IRQ the irq::Registration API enforces that t=
-he IRQ
->> is unregistered before the registering device is unbound.
->>=20
->> As a consequence, the IRQ callback can provide a &Device<Bound>, which a=
-cts as a
->> "cookie" that proves that for this scope (IRQ callback) the device is gu=
-aranteed
->> to be bound.
->>=20
->> With this "cookie" we can then directly access device resources (such as=
- I/O
->> memory) that is within a Devres (and hence a Revocable) container direct=
-ly,
->> *without* any locking. I.e. we can safely bypass the Revocable and hence=
- its
->> overhead.
->
-> It is good news to hear it, but I think you are making the point I was
-> trying to make.
->
-> In rust if you have a Device<bound> and you skip the revocable
-> locking, I'd argue that you don't need "revocable" at all, just
-> enforcement of a Device<bound>.
->
-> IOW the presence of revocable in rust, with all the locking, is
-> because the sync life cycle model is not available.
+Fix to avoid the usage of the `ret` variable uninitialized in the
+following macro expansions.
 
-That's not the reason, it *is* available.
+It solves the following warning:
 
-Requiring a &Device<Bound> "cookie" to be able to access a device resource
-directly is one part of it. The other one is to ensure that the device reso=
-urce
-is actually released once the device is unbound.
+In file included from netlink-dumps.c:21:
+netlink-dumps.c: In function ‘dump_extack’:
+../kselftest_harness.h:788:35: warning: ‘ret’ may be used uninitialized [-Wmaybe-uninitialized]
+  788 |                         intmax_t  __exp_print = (intmax_t)__exp; \
+      |                                   ^~~~~~~~~~~
+../kselftest_harness.h:631:9: note: in expansion of macro ‘__EXPECT’
+  631 |         __EXPECT(expected, #expected, seen, #seen, ==, 0)
+      |         ^~~~~~~~
+netlink-dumps.c:169:9: note: in expansion of macro ‘EXPECT_EQ’
+  169 |         EXPECT_EQ(ret, FOUND_EXTACK);
+      |         ^~~~~~~~~
 
-When a device is unbound the Revocable within a Devres container automatica=
-lly
-drops the device resource (i.e. calls the destructor, which, for instance,
-unmaps and releases an MMIO memory region).
+The issue can be reproduced, building the tests, with the command:
+make -C tools/testing/selftests TARGETS=net
 
-Subsequently, it also ensures that the device resources can't be accessed
-anymore, even if a driver would hold on to the corresponding object instanc=
-e:
+Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+---
 
-Obviously, it can't be accessed with a &Device<Bound> anymore, because it i=
-s
-impossible that the caller is within a scope where a &Device<Bound> is pres=
-ent.
+Notes:
+    v2: applied the reverse christmas tree order
 
-And an access with Revocable::try_access() will fail as well, because Revoc=
-able
-knows internally that the destructor of the wrapped object was called alrea=
-dy.
+ tools/testing/selftests/net/netlink-dumps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-So, what we achieve is that as long as the driver uses safe code (i.e. no u=
-nsafe
-{}), there is no way for a driver to mess this up and produce a bug that af=
-fects
-the rest of the kernel.
+diff --git a/tools/testing/selftests/net/netlink-dumps.c b/tools/testing/selftests/net/netlink-dumps.c
+index 7618ebe528a4..7de360c029c6 100644
+--- a/tools/testing/selftests/net/netlink-dumps.c
++++ b/tools/testing/selftests/net/netlink-dumps.c
+@@ -111,8 +111,8 @@ static const struct {
+ 
+ TEST(dump_extack)
+ {
++	int i, cnt, ret = 0;
+ 	int netlink_sock;
+-	int i, cnt, ret;
+ 	char buf[8192];
+ 	int one = 1;
+ 	ssize_t n;
+-- 
+2.43.0
 
-While at the same time there is zero overhead in "sync" scopes, and non-"sy=
-nc"
-scopes, which we unfortunately need in some rare cases, are still supported=
- in a
-safe way.
-
-> Sounds like the idea is that the sync model will be widely available
-> and the revocable lock will rarely be used?
-
-That is correct.
 
