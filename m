@@ -1,59 +1,59 @@
-Return-Path: <linux-kselftest+bounces-43848-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43849-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6111FBFF9F9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 09:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0964BFFA4A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 09:37:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E81453AE789
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 07:28:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3662D3ADD08
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 07:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF4B2D641C;
-	Thu, 23 Oct 2025 07:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19FAE26F29B;
+	Thu, 23 Oct 2025 07:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJfjDTDO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sSVEX1BB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 442722C11D6;
-	Thu, 23 Oct 2025 07:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6099236453;
+	Thu, 23 Oct 2025 07:32:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761204065; cv=none; b=Y5qyzsB25VtiT+sdqNXic6jQWU4MRwNeOKs/+f6ZtMmDUrY1TldLu/TX/ETqbm0jQvkSSiRImW/Xit3YPPjFvw4b81RWUNc8+89O+uM3zayyhQhtpue28bkvWEq0QVWKEYyP6DM0q9ObG4N/Q4x/U/h6occmFC5CyUueNoDDFeo=
+	t=1761204760; cv=none; b=PfiHi1r7X6EAUvUMS4qAz/VqhXZ2lOqLlsPSYpsPVX0sfU8j7U6uIOWJW8ubLzdif5NbkGulAV6wX3b8NiNLhrSx4Ss0q28X8JdPvfMPGlm0/oziGV5AHLMUJV8Aa3ubiXTkWb90v91ySxNYlyah4FEg7dFx9SwPAxAiIFrWgb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761204065; c=relaxed/simple;
-	bh=GEunqVYG6q61dM4benmxjxOVFq+a4931xrkxsYdnZ+Y=;
+	s=arc-20240116; t=1761204760; c=relaxed/simple;
+	bh=xRBUS1TSJmYzQmrk1wiwXar89QSiUa7yMM1lGDC//6U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WPB72xJ8yQIW2h7XoEOJpvKcvC7AMtUTqDW2I6AJbhmu1Jw5a1AVM1B1ItMUt1Yh43DBrZIReltpVO3qpUTmkwVVGZKaPgNVxpDBxFI/OtvFs64KWuhbYXUWoyTc8eo9rve08H5nUo+MTmNHnfnCuExopD/QrBZVRdnrgI8j5H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJfjDTDO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CF4C4CEE7;
-	Thu, 23 Oct 2025 07:20:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=fV8b6Ofp2LTsj/78BJVeBYXJUYNC0+mxJJLgHqz2MmZGvFX8xNhrmVBuOiFjFqfjgQ+/yRGKKJb5j5B+UlH4XvYuNXlywTo6SQTNCipSCx8TlGdU1ltkQ6X3Y//aeZbT9rfUnaF/tK1ARX7xz7yntTG73Es8Z6ywuiN/3ZGzjlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sSVEX1BB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE07C4CEE7;
+	Thu, 23 Oct 2025 07:32:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761204063;
-	bh=GEunqVYG6q61dM4benmxjxOVFq+a4931xrkxsYdnZ+Y=;
+	s=k20201202; t=1761204759;
+	bh=xRBUS1TSJmYzQmrk1wiwXar89QSiUa7yMM1lGDC//6U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XJfjDTDOyC/FjwMNQylaD5MrDantTgYxOhKCCP5U3juDPgS14qRbG2gc9z1//5vld
-	 U5qStXNYcvSwPpKgLhqJRC2eTZZPrGY8vYdl08nF14ofhNRa45ZtQD2z52X3pXJxEH
-	 jv0Nj2iq+tgTWN1+Xt30cECOfbsxtLCkXQ9EGo3wN2q6lvANrqmRuHbkjjqvwJ5cA1
-	 Suq++GZGLNfjSz91IkxN0TVeO+Y7npqe0mB+o0RP8Hqwf1b6KIlMLPvFoxVQ+Avj4K
-	 BjL4vzqg4vlgpK4F7uhQrPR8BYEnEKBuMU2gZu2D/YwId8MtYUZGBwx06E7gHtYVoZ
-	 p+cqXQjQvXWAQ==
-Date: Thu, 23 Oct 2025 10:20:54 +0300
+	b=sSVEX1BBZL4EYdbXIK7/OYABoeTs33pNLOL4VV35XeFw/ynPTswqUL5/NiYHEtnm5
+	 KsI4LwXerl2sJJDuGj3B4MZcs7PJy0PW3UKfBWjAUVYrr3BckXvbH/QEbg8Yttq27x
+	 yIkzONzrDTTft0S55AHtDG+rhA52K8r7D2fq+KFT33X3hGPBEIMwc8utSoiFtot6Y2
+	 k86br29Ap5DZaKWQ4yyfxuTMG9U4DFTGSDtrKKp25sEL6AwmYMsSylxMQTrAI/Ac5L
+	 fkwJhYwjN0wgEQKOXwsyeZ7Hr+1VDsTM7XEQfzR8CaZ52eWi7hP5YxJv96liuba/n5
+	 Dh3mwCE04ANGQ==
+Date: Thu, 23 Oct 2025 10:32:31 +0300
 From: Mike Rapoport <rppt@kernel.org>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, akpm@linux-foundation.org,
-	brauner@kernel.org, corbet@lwn.net, graf@amazon.com, jgg@ziepe.ca,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, masahiroy@kernel.org, ojeda@kernel.org,
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
+	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	masahiroy@kernel.org, ojeda@kernel.org, pratyush@kernel.org,
 	rdunlap@infradead.org, tj@kernel.org
-Subject: Re: [PATCHv7 5/7] kho: don't unpreserve memory during abort
-Message-ID: <aPnXVmD3cNmYNRF_@kernel.org>
+Subject: Re: [PATCHv7 7/7] liveupdate: kho: move kho debugfs directory to
+ liveupdate
+Message-ID: <aPnaDxwkvEKAFlRO@kernel.org>
 References: <20251022005719.3670224-1-pasha.tatashin@soleen.com>
- <20251022005719.3670224-6-pasha.tatashin@soleen.com>
- <mafs0a51jfar1.fsf@kernel.org>
+ <20251022005719.3670224-8-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,44 +62,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mafs0a51jfar1.fsf@kernel.org>
+In-Reply-To: <20251022005719.3670224-8-pasha.tatashin@soleen.com>
 
-On Wed, Oct 22, 2025 at 01:15:30PM +0200, Pratyush Yadav wrote:
-> On Tue, Oct 21 2025, Pasha Tatashin wrote:
-> 
-> > KHO allows clients to preserve memory regions at any point before the
-> > KHO state is finalized. The finalization process itself involves KHO
-> > performing its own actions, such as serializing the overall
-> > preserved memory map.
-> >
-> > If this finalization process is aborted, the current implementation
-> > destroys KHO's internal memory tracking structures
-> > (`kho_out.ser.track.orders`). This behavior effectively unpreserves
-> > all memory from KHO's perspective, regardless of whether those
-> > preservations were made by clients before the finalization attempt
-> > or by KHO itself during finalization.
-> >
-> > This premature unpreservation is incorrect. An abort of the
-> > finalization process should only undo actions taken by KHO as part of
-> > that specific finalization attempt. Individual memory regions
-> > preserved by clients prior to finalization should remain preserved,
-> > as their lifecycle is managed by the clients themselves. These
-> > clients might still need to call kho_unpreserve_folio() or
-> > kho_unpreserve_phys() based on their own logic, even after a KHO
-> > finalization attempt is aborted.
-> 
-> I think you also need to update test_kho and reserve_mem to do this
-> since right now they assume all memory gets unpreserved on failure.
+On Tue, Oct 21, 2025 at 08:57:19PM -0400, Pasha Tatashin wrote:
+> Now, that LUO and KHO both live under kernel/liveupdate, it makes
+> sense to also move the kho debugfs files to liveupdate/
 
-I agree. 
-
-> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> > ---
-> [...]
+But we don't have LUO yet :/
+ 
+> The old names:
+> /sys/kernel/debug/kho/out/
+> /sys/kernel/debug/kho/in/
 > 
-> -- 
-> Regards,
-> Pratyush Yadav
+> The new names:
+> /sys/kernel/debug/liveupdate/kho_out/
+> /sys/kernel/debug/liveupdate/kho_in/
+> 
+> Also, export the liveupdate_debufs_root, so future LUO selftests could
+> use it as well.
+
+Let's postpone this change until then.
+TBH, I don't see anything wrong with KHO and LUO selftest debugfs files living at the top
+level, i.e
+
+/sys/kernel/debug/kho/
+/sys/kernel/debug/luo_selftest
 
 -- 
 Sincerely yours,
