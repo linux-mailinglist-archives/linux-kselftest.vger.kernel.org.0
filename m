@@ -1,36 +1,36 @@
-Return-Path: <linux-kselftest+bounces-43861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43862-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C88D2C0139D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 14:55:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 011A2C013AC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 14:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 752644E65AB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 12:55:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0FD814F61BF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 12:55:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6726B314A70;
-	Thu, 23 Oct 2025 12:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1934C314A7B;
+	Thu, 23 Oct 2025 12:55:09 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (unknown [147.136.157.2])
+Received: from localhost.localdomain (unknown [147.136.157.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BE730F923;
-	Thu, 23 Oct 2025 12:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCBE314B6B;
+	Thu, 23 Oct 2025 12:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761224106; cv=none; b=syL+UwdX3rDxqUzZzgMtF96SsMViiQeDM3Y3EJr42I6m73QbipdXyYzS/WPLqW1Y4e/eAQN6/NUwq0qeCsbROEfbshFHsTKFNs67l4CuQFywMrxeewn1x81ZsThIkelq3hasEQZ2YVrnBpgGxqo7ScYg+QK5Kie7K1cnzN2smMM=
+	t=1761224109; cv=none; b=HheaBcaN6sBWy5IwN2jp9HGIleRrB/YWWFlsPl4eZ6xRO3ZqB7zMWLBWWMZdxkbLUWb/W0YLQPOYA+2drbyac0tc3L4itxy5E4pNKF1O/EXh3AAiuT6RlejV16pS6tGEcvCxoY2Y8maHDzAAoJZWe4nfyeHwGnZAiyYmq4SBzLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761224106; c=relaxed/simple;
-	bh=etMuBpTxIdlG/0pe4ZoTPFAIyHc5Bzq7Zr2u5b8H8Vg=;
+	s=arc-20240116; t=1761224109; c=relaxed/simple;
+	bh=W/LmQZFaC0hZ9FJnFTGtsVB8aix+jqzlSqyvRbr2McM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c9fJNIZ6ztQ0EeClSmmlQB4XTF3B00ttJCisxB5uNlIh6CIJKJz8zM+4EfskpUOYBBYXc4kuqV1M6ysgn552B5NdI3HTE9yueUYrrYeOjESoJqJKwPxtSKwOhsxvBZFDzfB8HO0LBRg6VNbF+sbAj1Pm2v3WpHfRkorKFvbxFek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.2
+	 MIME-Version; b=MVOx7MSBYoyDN0fFcnYSaDzPZY/5fKtPnEA7f0nniqcXaHekwa7GkbZD7oqF3uCE9FqOE3Ti3Q1xo7PJWN7UqguWtrJ73jNe9mYgAThiAnbQHxIGboEj+DkKF1rn2D+beqC+8jr1KwamQ2s/SqKLOLIVOYoDX45n7CFQavrPMT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
 Received: by localhost.localdomain (Postfix, from userid 1007)
-	id B43899291FE; Thu, 23 Oct 2025 20:54:56 +0800 (+08)
+	id 8C4249291FF; Thu, 23 Oct 2025 20:55:00 +0800 (+08)
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: mptcp@lists.linux.dev
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
@@ -64,9 +64,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v3 1/3] net,mptcp: fix proto fallback detection with BPF sockmap
-Date: Thu, 23 Oct 2025 20:54:32 +0800
-Message-ID: <20251023125450.105859-2-jiayuan.chen@linux.dev>
+Subject: [PATCH net v3 2/3] bpf,sockmap: disallow MPTCP sockets from sockmap
+Date: Thu, 23 Oct 2025 20:54:33 +0800
+Message-ID: <20251023125450.105859-3-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251023125450.105859-1-jiayuan.chen@linux.dev>
 References: <20251023125450.105859-1-jiayuan.chen@linux.dev>
@@ -78,53 +78,84 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When the server has MPTCP enabled but receives a non-MP-capable request
-from a client, it calls mptcp_fallback_tcp_ops().
+MPTCP creates subflows for data transmission, and these sockets should not
+be added to sockmap because MPTCP sets specialized data_ready handlers
+that would be overridden by sockmap.
 
-Since non-MPTCP connections are allowed to use sockmap, which replaces
-sk->sk_prot, using sk->sk_prot to determine the IP version in
-mptcp_fallback_tcp_ops() becomes unreliable. This can lead to assigning
-incorrect ops to sk->sk_socket->ops.
+Additionally, for the parent socket of MPTCP subflows (plain TCP socket),
+MPTCP sk requires specific protocol handling that conflicts with sockmap's
+operation(mptcp_prot).
 
-Additionally, when BPF Sockmap modifies the protocol handlers, the
-original WARN_ON_ONCE(sk->sk_prot != &tcp_prot) check would falsely
-trigger warnings.
+This patch adds proper checks to reject MPTCP subflows and their parent
+sockets from being added to sockmap, while preserving compatibility with
+reuseport functionality for listening MPTCP sockets.
 
-Fix this by using the more stable sk_family to distinguish between IPv4
-and IPv6 connections, ensuring correct fallback protocol operations are
-selected even when BPF Sockmap has modified the socket protocol handlers.
+We cannot add this logic to sock_map_sk_state_allowed() because the sockops
+path doesn't execute this function, and the socket state coming from
+sockops might be in states like SYN_RECV. So moving
+sock_map_sk_state_allowed() to sock_{map,hash}_update_common() is not
+appropriate. Instead, we introduce a new function to handle MPTCP checks.
 
 Fixes: 0b4f33def7bb ("mptcp: fix tcp fallback crash")
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
+Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
 ---
- net/mptcp/protocol.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ net/core/sock_map.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index 0292162a14ee..2393741bc310 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -61,11 +61,16 @@ static u64 mptcp_wnd_end(const struct mptcp_sock *msk)
- 
- static const struct proto_ops *mptcp_fallback_tcp_ops(const struct sock *sk)
- {
-+	/* When BPF sockmap is used, it may replace sk->sk_prot.
-+	 * Using sk_family is a reliable way to determine the IP version.
-+	 */
-+	unsigned short family = READ_ONCE(sk->sk_family);
-+
- #if IS_ENABLED(CONFIG_MPTCP_IPV6)
--	if (sk->sk_prot == &tcpv6_prot)
-+	if (family == AF_INET6)
- 		return &inet6_stream_ops;
- #endif
--	WARN_ON_ONCE(sk->sk_prot != &tcp_prot);
-+	WARN_ON_ONCE(family != AF_INET);
- 	return &inet_stream_ops;
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 5947b38e4f8b..5be38cdfb5cc 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -467,6 +467,27 @@ static int sock_map_get_next_key(struct bpf_map *map, void *key, void *next)
+ 	return 0;
  }
  
++/* Disallow MPTCP subflows and their parent sockets. However, a TCP_LISTEN
++ * MPTCP socket is permitted because sockmap can also serve for reuseport
++ * socket selection.
++ */
++static inline bool sock_map_sk_type_allowed(const struct sock *sk)
++{
++	/* MPTCP subflows are not intended for data I/O by user */
++	if (sk_is_tcp(sk) && sk_is_mptcp(sk))
++		goto disallow;
++
++	/* MPTCP parents use mptcp_prot - not supported with sockmap yet */
++	if (sk->sk_protocol == IPPROTO_MPTCP && sk->sk_state != TCP_LISTEN)
++		goto disallow;
++
++	return true;
++
++disallow:
++	pr_err_once("sockmap/sockhash: MPTCP sockets are not supported\n");
++	return false;
++}
++
+ static int sock_map_update_common(struct bpf_map *map, u32 idx,
+ 				  struct sock *sk, u64 flags)
+ {
+@@ -482,6 +503,9 @@ static int sock_map_update_common(struct bpf_map *map, u32 idx,
+ 	if (unlikely(idx >= map->max_entries))
+ 		return -E2BIG;
+ 
++	if (!sock_map_sk_type_allowed(sk))
++		return -EOPNOTSUPP;
++
+ 	link = sk_psock_init_link();
+ 	if (!link)
+ 		return -ENOMEM;
+@@ -1003,6 +1027,9 @@ static int sock_hash_update_common(struct bpf_map *map, void *key,
+ 	if (unlikely(flags > BPF_EXIST))
+ 		return -EINVAL;
+ 
++	if (!sock_map_sk_type_allowed(sk))
++		return -EOPNOTSUPP;
++
+ 	link = sk_psock_init_link();
+ 	if (!link)
+ 		return -ENOMEM;
 -- 
 2.43.0
 
