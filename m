@@ -1,184 +1,316 @@
-Return-Path: <linux-kselftest+bounces-43858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04F55C00903
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 12:46:59 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D108C00B64
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 13:27:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2D7A3A3C83
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 10:46:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4C7854E1F77
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 11:27:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2714309EEA;
-	Thu, 23 Oct 2025 10:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E1C30DD0C;
+	Thu, 23 Oct 2025 11:27:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MLokn6j7"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gzSWBXh2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622622765DC;
-	Thu, 23 Oct 2025 10:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD7230C375
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 11:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761216413; cv=none; b=J7acZ53Z08PuI0EZ94hojatEirftDrp9WXg5qkcBAkfJI3/SU8yJrIKpyeY84JfavYr9Pt7eA0VXrrfIZwTupibz/vbKJo1ZYsX43B99IwVxUTGis1V6vBqP55s2JalCr2mzwYIvKwLJIlZ/fojSOYLZjU0FUWhvb267sYP92JA=
+	t=1761218832; cv=none; b=lqFLyfeJCBOhRKcwxfUyulC+Bj5li4TyM0qf29qmeytJLva7473Ja+jMbQBGQk+vuODBAhOsCPVKRquywIPuEtiGz7BD8n5Ly6FcqW+IoYOl6m6ZoVJ5WYBq4a3lZNYWZkglLdOXTnLHB5upe4xNDz9ucODPXG1dz3XinJmy+UE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761216413; c=relaxed/simple;
-	bh=4Nycx1ORZclwlAUuSrDPm+Q6EH8JvLo9+c1zBeefgcA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CbHMTTQpLwl2OGBKFVjSqqSs5a7Kl03vI7CkwY/b+MOtlAdKnt80XVYlnIPw9fy+aqVGiGgUv0Eo8R0gZ4Ef4lHRZpI4TgpCPRs7CkHjpL98MI/jN8P97crQHkOOD1X62f310tNVtCXmzuyO8cpNGs/fohkpICcaRYMV4zVVX9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MLokn6j7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD9B7C4CEE7;
-	Thu, 23 Oct 2025 10:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761216412;
-	bh=4Nycx1ORZclwlAUuSrDPm+Q6EH8JvLo9+c1zBeefgcA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MLokn6j7bsPTtDKzR8pqjp2OIR+OMKA1rj3J/6jxNvlhgcsOoQ+moyQ5GdMJY0dDs
-	 Znmt5H3FHjRCN/E5Q2OiSn3Lge5IHCXD/l7T7/WJ6bkLphXMC2HXV8rhysZfDX6Sr+
-	 rNUl8sN5/1gEAa9ysrMEafdWcYQ0VQhevGk1H7BhaFT8iiTd5n9BTY4verf1aGvcpu
-	 2n7qQ7sTY81LVQ1UhGF1Gtff22NCJXEfiZHTApKvHY7cQr6tmKVbYlAGr+xV9kWFbP
-	 87li730Z1OQYtoHcpFjViMqnavqolBedQ+OYK4M6H1LebiK34NEzwo7Gy1V6/AuNf7
-	 96d0cS8eISSpA==
-Message-ID: <5b287ec6-72ff-4707-9040-3c84efc58b94@kernel.org>
-Date: Thu, 23 Oct 2025 12:46:45 +0200
+	s=arc-20240116; t=1761218832; c=relaxed/simple;
+	bh=VQHXvxNXXieiyxAj+UPLqv6snrQ4UCOBTE8bOgiNP5E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=CL16Ab7ut1mUGNjtgFGU2yQZb2ublTjoXGSE8o1pPOwH927vvhiHKFcUtgL+MOaHPsKsNHqILSdQqO9k/ztrIsb2C7i2AHyzy63FXnCy/LpD3Et2JI/ohZd2xEjiCWKmTuk/GHO5mtrNNAw8XQ5XXYsvru5bo/54eEyHQgRxmJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gzSWBXh2; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <0d267da41178f3ac4669621516888a06d6aa5665.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761218824;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VQHXvxNXXieiyxAj+UPLqv6snrQ4UCOBTE8bOgiNP5E=;
+	b=gzSWBXh2alDmwuvqum2TWqS+NAdEmEqfbzMmm/1opvObvWcyvQvKmJ5FsmwgNB36AmNMEI
+	TVOUdvvi/GmliJmb400ulV/icT0kvcAW0Q9Bcq+WnEUt6qkhARrRVIkH7OfyReGBF4BUiB
+	MXR6/hnnIkaBMuStBl/kaO3TVfsyEvk=
+Subject: Re: [PATCH bpf-next 1/2] bpf: Skip bounds adjustment for
+ conditional jumps on same register
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+	 <alexei.starovoitov@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, KP Singh
+ <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, Matan Shachnai
+ <m.shachnai@gmail.com>, Luis Gerhorst <luis.gerhorst@fau.de>, 
+ colin.i.king@gmail.com, Harishankar Vishwanathan
+ <harishankar.vishwanathan@gmail.com>, bpf <bpf@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, Kaiyan Mei <M202472210@hust.edu.cn>, 
+ Yinhao Hu <dddddd@hust.edu.cn>
+Date: Thu, 23 Oct 2025 19:26:48 +0800
+In-Reply-To: <abe1bd5def7494653d52425818815baa54a3628a.camel@gmail.com>
+References: <20251022164457.1203756-1-kafai.wan@linux.dev>
+	 <20251022164457.1203756-2-kafai.wan@linux.dev>
+	 <39af9321-fb9b-4cee-84f1-77248a375e85@linux.dev>
+	 <1d03174dfe2a7eab1166596c85a6b586a660dffc.camel@gmail.com>
+	 <CAADnVQKdMcOkkqNa3LbGWqsz9iHAODFSinokj6htbGi0N66h_Q@mail.gmail.com>
+	 <abe1bd5def7494653d52425818815baa54a3628a.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/32] pidfs: validate extensible ioctls
-To: Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Amir Goldstein <amir73il@gmail.com>, linux-fsdevel@vger.kernel.org
-Cc: Josef Bacik <josef@toxicpanda.com>, Jeff Layton <jlayton@kernel.org>,
- Mike Yuan <me@yhndnzj.com>, =?UTF-8?Q?Zbigniew_J=C4=99drzejewski-Szmek?=
- <zbyszek@in.waw.pl>, Lennart Poettering <mzxreary@0pointer.de>,
- Daan De Meyer <daan.j.demeyer@gmail.com>, Aleksa Sarai <cyphar@cyphar.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>, Jens Axboe <axboe@kernel.dk>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Chuck Lever <chuck.lever@oracle.com>, linux-nfs@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, netdev@vger.kernel.org
-References: <20250910-work-namespace-v1-0-4dd56e7359d8@kernel.org>
- <20250910-work-namespace-v1-1-4dd56e7359d8@kernel.org>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <20250910-work-namespace-v1-1-4dd56e7359d8@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 10. 09. 25, 16:36, Christian Brauner wrote:
-> Validate extensible ioctls stricter than we do now.
-> 
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> ---
->   fs/pidfs.c         |  2 +-
->   include/linux/fs.h | 14 ++++++++++++++
->   2 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/pidfs.c b/fs/pidfs.c
-> index edc35522d75c..0a5083b9cce5 100644
-> --- a/fs/pidfs.c
-> +++ b/fs/pidfs.c
-> @@ -440,7 +440,7 @@ static bool pidfs_ioctl_valid(unsigned int cmd)
->   		 * erronously mistook the file descriptor for a pidfd.
->   		 * This is not perfect but will catch most cases.
->   		 */
-> -		return (_IOC_TYPE(cmd) == _IOC_TYPE(PIDFD_GET_INFO));
-> +		return extensible_ioctl_valid(cmd, PIDFD_GET_INFO, PIDFD_INFO_SIZE_VER0);
+On Wed, 2025-10-22 at 13:30 -0700, Eduard Zingerman wrote:
+> On Wed, 2025-10-22 at 13:12 -0700, Alexei Starovoitov wrote:
+> > On Wed, Oct 22, 2025 at 12:46=E2=80=AFPM Eduard Zingerman <eddyz87@gmai=
+l.com> wrote:
+> > >=20
+> > > On Wed, 2025-10-22 at 11:14 -0700, Yonghong Song wrote:
+> > > >=20
+> > > > On 10/22/25 9:44 AM, KaFai Wan wrote:
+> > > > > When conditional jumps are performed on the same register (e.g., =
+r0 <=3D
+> > > > > r0,
+> > > > > r0 > r0, r0 < r0) where the register holds a scalar with range, t=
+he
+> > > > > verifier
+> > > > > incorrectly attempts to adjust the register's min/max bounds. Thi=
+s
+> > > > > leads to
+> > > > > invalid range bounds and triggers a BUG warning:
+> > > > >=20
+> > > > > verifier bug: REG INVARIANTS VIOLATION (true_reg1): range bounds
+> > > > > violation u64=3D[0x1, 0x0] s64=3D[0x1, 0x0] u32=3D[0x1, 0x0] s32=
+=3D[0x1, 0x0]
+> > > > > var_off=3D(0x0, 0x0)
+> > > > > WARNING: CPU: 0 PID: 93 at kernel/bpf/verifier.c:2731
+> > > > > reg_bounds_sanity_check+0x163/0x220
+> > > > > Modules linked in:
+> > > > > CPU: 0 UID: 0 PID: 93 Comm: repro-x-3 Tainted: G=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 W=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0
+> > > > > 6.18.0-rc1-ge7586577b75f-dirty #218 PREEMPT(full)
+> > > > > Tainted: [W]=3DWARN
+> > > > > Hardware name: QEMU Ubuntu 24.04 PC (i440FX + PIIX, 1996), BIOS
+> > > > > 1.16.3-debian-1.16.3-2 04/01/2014
+> > > > > RIP: 0010:reg_bounds_sanity_check+0x163/0x220
+> > > > > Call Trace:
+> > > > > =C2=A0 <TASK>
+> > > > > =C2=A0 reg_set_min_max.part.0+0x1b1/0x360
+> > > > > =C2=A0 check_cond_jmp_op+0x1195/0x1a60
+> > > > > =C2=A0 do_check_common+0x33ac/0x33c0
+> > > > > =C2=A0 ...
+> > > > >=20
+> > > > > The issue occurs in reg_set_min_max() function where bounds adjus=
+tment
+> > > > > logic
+> > > > > is applied even when both registers being compared are the same.
+> > > > > Comparing a
+> > > > > register with itself should not change its bounds since the compa=
+rison
+> > > > > result
+> > > > > is always known (e.g., r0 =3D=3D r0 is always true, r0 < r0 is al=
+ways
+> > > > > false).
+> > > > >=20
+> > > > > Fix this by adding an early return in reg_set_min_max() when
+> > > > > false_reg1 and
+> > > > > false_reg2 point to the same register, skipping the unnecessary b=
+ounds
+> > > > > adjustment that leads to the verifier bug.
+> > > > >=20
+> > > > > Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> > > > > Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> > > > > Closes:
+> > > > > https://lore.kernel.org/all/1881f0f5.300df.199f2576a01.Coremail.k=
+aiyanm@hust.edu.cn/
+> > > > > Fixes: 0df1a55afa83 ("bpf: Warn on internal verifier errors")
+> > > > > Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+> > > > > ---
+> > > > > =C2=A0 kernel/bpf/verifier.c | 4 ++++
+> > > > > =C2=A0 1 file changed, 4 insertions(+)
+> > > > >=20
+> > > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > > index 6d175849e57a..420ad512d1af 100644
+> > > > > --- a/kernel/bpf/verifier.c
+> > > > > +++ b/kernel/bpf/verifier.c
+> > > > > @@ -16429,6 +16429,10 @@ static int reg_set_min_max(struct
+> > > > > bpf_verifier_env *env,
+> > > > > =C2=A0=C2=A0=C2=A0 if (false_reg1->type !=3D SCALAR_VALUE || fals=
+e_reg2->type !=3D
+> > > > > SCALAR_VALUE)
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 return 0;
+> > > > >=20
+> > > > > +=C2=A0=C2=A0 /* If conditional jumps on the same register, skip =
+the adjustment
+> > > > > */
+> > > > > +=C2=A0=C2=A0 if (false_reg1 =3D=3D false_reg2)
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret=
+urn 0;
+> > > >=20
+> > > > Your change looks good. But this is a special case and it should no=
+t
+> > > > happen for any compiler generated code. So could you investigate
+> > > > why regs_refine_cond_op() does not work? Since false_reg1 and false=
+_reg2
+> > > > is the same, so register refinement should keep the same. Probably
+> > > > some minor change in regs_refine_cond_op(...) should work?
+> > > >=20
+> > > > > +
+> > > > > =C2=A0=C2=A0=C2=A0 /* fallthrough (FALSE) branch */
+> > > > > =C2=A0=C2=A0=C2=A0 regs_refine_cond_op(false_reg1, false_reg2, re=
+v_opcode(opcode),
+> > > > > is_jmp32);
+> > > > > =C2=A0=C2=A0=C2=A0 reg_bounds_sync(false_reg1);
+> > >=20
+> > > I think regs_refine_cond_op() is not written in a way to handle same
+> > > registers passed as reg1 and reg2. E.g. in this particular case the
+> > > condition is reformulated as "r0 < r0", and then the following branch
+> > > is taken:
+> > >=20
+> > > =C2=A0=C2=A0 static void regs_refine_cond_op(struct bpf_reg_state *re=
+g1, struct
+> > > bpf_reg_state *reg2,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u8 opcode, bool is_jmp32)
+> > > =C2=A0=C2=A0 {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 case BPF_JLT: // con=
+dition is rephrased as r0 < r0
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (is_jmp32) {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ ...
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else {
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ reg1->umax_value =3D min(reg1->umax_value, reg2-
+> > > >umax_value - 1);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+ reg2->umin_value =3D max(reg1->umin_value + 1,
+> > > reg2->umin_value);
+Yes, that's the root cause.
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 break;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ...
+> > > =C2=A0=C2=A0 }
+> > >=20
+> > > Note that intent is to adjust umax of the LHS (reg1) register and umi=
+n
+> > > of the RHS (reg2) register. But here it ends up adjusting the same
+> > > register.
+> > >=20
+> > > (a) before refinement: u64=3D[0x0, 0x80000000] s64=3D[0x0, 0x80000000=
+]
+> > > u32=3D[0x0, 0x80000000] s32=3D[0x80000000, 0x0]
+> > > (b) after=C2=A0 refinement: u64=3D[0x1, 0x7fffffff] s64=3D[0x0, 0x800=
+00000]
+> > > u32=3D[0x0, 0x80000000] s32=3D[0x80000000, 0x0]
+> > > (c) after=C2=A0 sync=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 : u64=3D[0x1, 0x0]=
+ s64=3D[0x1, 0x0] u32=3D[0x1, 0x0]
+> > > s32=3D[0x1, 0x0]
+> > >=20
+> > > At (b) the u64 range translated to s32 is > 0, while s32 range is <=
+=3D 0,
+> > > hence the invariant violation.
+> > >=20
+> > > I think it's better to move the reg1 =3D=3D reg2 check inside
+> > > regs_refine_cond_op(), or to handle this case in is_branch_taken().
+> >=20
+> > hmm. bu then regs_refine_cond_op() will skip it, yet reg_set_min_max()
+> > will still be doing pointless work with reg_bounds_sync() and sanity ch=
+eck.
+> > The current patch makes more sense to me.
+>=20
+> Well, if we want to avoid useless work, we need something like:
+>=20
+> @@ -16173,6 +16173,25 @@ static int is_pkt_ptr_branch_taken(struct
+> bpf_reg_state *dst_reg,
+> =C2=A0static int is_branch_taken(struct bpf_reg_state *reg1, struct bpf_r=
+eg_state
+> *reg2,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 u8 opcode, bool is_jmp32)
+> =C2=A0{
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (reg1 =3D=3D reg2) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 switch (opcode) {
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JGE:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JLE:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JSGE:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JSLE:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JEQ:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JSET:
 
-Hi,
+Others are fine, but BPF_JSET on the same register could be 0 (if value is =
+0).
+And it's unknown to take the branch if 0 within the range.
 
-this turned EINVAL (from pidfd_info()) into ENOTTY (from pidfd_ioctl()) 
-for at least LTP's:
-struct pidfd_info_invalid {
-	uint32_t dummy;
-};
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 1;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JGT:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JLT:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JSGT:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JSLT:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 case BPF_JNE:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 default:
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -1;
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 }
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>=20
+> But that's too much code for an artificial case.
+> Idk, either way is fine with me.
 
-#define PIDFD_GET_INFO_SHORT _IOWR(PIDFS_IOCTL_MAGIC, 11, struct 
-pidfd_info_invalid)
+There is is_scalar_branch_taken() in is_branch_taken(), I missed it. I'll a=
+)
+check the opcode one by one in is_scalar_branch_taken(), and b) keep this p=
+atch
+for unknown BPF_JSET branch.
 
-ioctl(pidfd, PIDFD_GET_INFO_SHORT, info_invalid) == EINVAL
-
-at:
-https://github.com/linux-test-project/ltp/blob/9bb94efa39bb1b08f37e56c7437db5fa13ddcae2/testcases/kernel/syscalls/ioctl/ioctl_pidfd05.c#L46
-
-Is this expected?
-
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -4023,4 +4023,18 @@ static inline bool vfs_empty_path(int dfd, const char __user *path)
->   
->   int generic_atomic_write_valid(struct kiocb *iocb, struct iov_iter *iter);
->   
-> +static inline bool extensible_ioctl_valid(unsigned int cmd_a,
-> +					  unsigned int cmd_b, size_t min_size)
-> +{
-> +	if (_IOC_DIR(cmd_a) != _IOC_DIR(cmd_b))
-> +		return false;
-> +	if (_IOC_TYPE(cmd_a) != _IOC_TYPE(cmd_b))
-> +		return false;
-> +	if (_IOC_NR(cmd_a) != _IOC_NR(cmd_b))
-> +		return false;
-> +	if (_IOC_SIZE(cmd_a) < min_size)
-> +		return false;
-> +	return true;
-> +}
-> +
->   #endif /* _LINUX_FS_H */
-> 
-
-thanks,
--- 
-js
-suse labs
-
+--=20
+Thanks,
+KaFai
 
