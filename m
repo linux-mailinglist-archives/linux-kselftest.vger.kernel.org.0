@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-43840-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43841-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF50BBFED84
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 03:27:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFC1FBFED69
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 03:26:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D9DAA5031D7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 01:26:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 964831891436
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 01:26:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB585232369;
-	Thu, 23 Oct 2025 01:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358F9239E9A;
+	Thu, 23 Oct 2025 01:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OntKqQFK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9w7oAey"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A049C1448D5;
-	Thu, 23 Oct 2025 01:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075E423814D;
+	Thu, 23 Oct 2025 01:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761182745; cv=none; b=FT23vGQEHh1zZWz7czzgMj7Tac8oiaw3f7IMlolzUfCDwD8TWah5kMWiZ020RhZ8BrBSQjC2wfrFHtONw9u0vVK4GD43DWOmSbEl6lm9HWEzPjNit/BR/nZai8R/VKjD2ZAqoZnEd04YRnh1tIw4NAhvLVJ7IrkCPtbcZ1MQoa4=
+	t=1761182746; cv=none; b=smhd4lFtZZKSyaLOxGQlRZHJji4LBBlEdwx1m/xU5PaqtUn0/vHE2gFZHAkx8TIK7XS96brEBkwkyTSmKK5BABNLnBXBEMf093CyZ/2gWHDJgNYQDtFHT9Uvc1NIsphNEkMbnSmRJBVWKCX0RwpWCd/bZJXl0zB8RsgaTjjH0EE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761182745; c=relaxed/simple;
-	bh=P5iwpdgt+gTVzJnYLVnDYTD/06YxCQbWf1lq1vcjQO8=;
+	s=arc-20240116; t=1761182746; c=relaxed/simple;
+	bh=/16NLG9ELNo7TPBr96lQkGZnNgiuxdJz+m68NvFaNcY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SY5a4CD/oWn24fxoSaAjyjWHWYZCjBkYoLVniZLDJwYqqYdFH31qlbSaSqiSIh+sIe+C+7Xcb9anow5+Mk7Od3UVzMuBZuqRiqbDikwBS8nBYkphbk7fD0h8fOYyWnRnj4JhvYFnqCa43XNa1gjjcPZu9V87NWfcPcMwnSEgDOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OntKqQFK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9905AC116C6;
-	Thu, 23 Oct 2025 01:25:44 +0000 (UTC)
+	 MIME-Version; b=ajmKoT01pxWyXh7bPFgWRnU0neILexO+XUZ66vsDWr/hoTy8CycVTEW9riD5K8ouRrUgZbj+SPq9EgmPWOyXBkjAPJbrsju8hAPhfEJ+0zHHgcgzkSA6grL1gAVXdPJKA5XBWltIi4OQ1GH5OxOSU8vwPN+GheBPcwbPvrTckl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9w7oAey; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC3FC19423;
+	Thu, 23 Oct 2025 01:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1761182745;
-	bh=P5iwpdgt+gTVzJnYLVnDYTD/06YxCQbWf1lq1vcjQO8=;
+	bh=/16NLG9ELNo7TPBr96lQkGZnNgiuxdJz+m68NvFaNcY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OntKqQFKQ90pkuMEJ/uMDhG0j6Z4ILHt3/h9jCwhJn2XcLvEVzlucWwTQpii3YZa8
-	 5OfOQMYEDdnpuEP4tcfbtcnasRYknDfI+5i6KPvinOCIHztJQHZmJJCLZYjDFh7PgD
-	 S6AkvF6lUdeJnjfMSm7ou4zLMZ406faHMxVfXLGrGwkY68iVu+8RQK0m0gAndhZvXQ
-	 1iWvSs0961w0nv43EfNMFsQWSY/gF/6yOUR33+Xs7daJcDK5EdK5xPzEarQI7Schyn
-	 HGrgGHA9Beb8bSqZkRsUHbYL73Oe2C8h2jj7E8H5DYBGKVZC9Lf9Kv1W/l2kI3UBx1
-	 WzP6VWC66XNIg==
+	b=T9w7oAeykIWaG2b8dcXHBbWDStlzXq/7msaN2BG0ZoTNk7bKVgmTlNnXZQ90CV8k8
+	 7+GsyqdsSIllGEvFwu70cYKwoYfNHtLJR/qy9lgrU14MfprVr+3k2c2f+eJwdRKIIR
+	 gHKpkNAISrjsytHVyrHbpxKZc6vA8NpNYhEKHjQzkGTUINgV4oqjiukQxz40jlh71s
+	 Lc0Fvw3UOoKn+IOT2GNcApT86fGUo9yw50N1NRsrG5YBVpbAvP0ZaKAAcW9s1XHrhy
+	 f8r8gElXIgE4GaDALfZ+5CvIn7vZZ7tM9RwwbLmeKdJ/CulqW5I4eMcd0bU0DRzZns
+	 j/TZzqWjTXPwA==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -50,9 +50,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 7/9] drgn_dump_damon_status: dump damon_target->obsolete
-Date: Wed, 22 Oct 2025 18:25:31 -0700
-Message-ID: <20251023012535.69625-8-sj@kernel.org>
+Subject: [PATCH 8/9] sysfs.py: extend assert_ctx_committed() for monitoring targets
+Date: Wed, 22 Oct 2025 18:25:32 -0700
+Message-ID: <20251023012535.69625-9-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251023012535.69625-1-sj@kernel.org>
 References: <20251023012535.69625-1-sj@kernel.org>
@@ -64,27 +64,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A new field of damon_target for pin-point target removal, namely
-obsolete, has newly been added.  Extend drgn_dump_damon_status.py to
-dump it, for easily writing a future DAMON selftests of it.
+assert_ctx_committed() is not asserting monitoring targets commitment,
+since all existing callers of the function assume no target changes.
+Extend it for future usage.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- tools/testing/selftests/damon/drgn_dump_damon_status.py | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/damon/sysfs.py | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/testing/selftests/damon/drgn_dump_damon_status.py b/tools/testing/selftests/damon/drgn_dump_damon_status.py
-index 7233369a3a44..cb4fdbe68acb 100755
---- a/tools/testing/selftests/damon/drgn_dump_damon_status.py
-+++ b/tools/testing/selftests/damon/drgn_dump_damon_status.py
-@@ -73,6 +73,7 @@ def target_to_dict(target):
-         ['pid', int],
-         ['nr_regions', int],
-         ['regions_list', regions_to_list],
-+        ['obsolete', bool],
-         ])
+diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
+index 2666c6f0f1a5..fd8d3698326e 100755
+--- a/tools/testing/selftests/damon/sysfs.py
++++ b/tools/testing/selftests/damon/sysfs.py
+@@ -164,6 +164,16 @@ def assert_monitoring_attrs_committed(attrs, dump):
+     assert_true(dump['max_nr_regions'] == attrs.max_nr_regions,
+                 'max_nr_regions', dump)
  
- def targets_to_list(targets):
++def assert_monitoring_target_committed(target, dump):
++    # target.pid is the pid "number", while dump['pid'] is 'struct pid'
++    # pointer, and hence cannot be compared.
++    assert_true(dump['obsolete'] == target.obsolete, 'target obsolete', dump)
++
++def assert_monitoring_targets_committed(targets, dump):
++    assert_true(len(targets) == len(dump), 'len_targets', dump)
++    for idx, target in enumerate(targets):
++        assert_monitoring_target_committed(target, dump[idx])
++
+ def assert_ctx_committed(ctx, dump):
+     ops_val = {
+             'vaddr': 0,
+@@ -172,6 +182,7 @@ def assert_ctx_committed(ctx, dump):
+             }
+     assert_true(dump['ops']['id'] == ops_val[ctx.ops], 'ops_id', dump)
+     assert_monitoring_attrs_committed(ctx.monitoring_attrs, dump['attrs'])
++    assert_monitoring_targets_committed(ctx.targets, dump['adaptive_targets'])
+     assert_schemes_committed(ctx.schemes, dump['schemes'])
+ 
+ def assert_ctxs_committed(ctxs, dump):
 -- 
 2.47.3
 
