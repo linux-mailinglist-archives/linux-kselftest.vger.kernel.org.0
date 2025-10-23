@@ -1,146 +1,235 @@
-Return-Path: <linux-kselftest+bounces-43845-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43846-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A77BBFF068
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 05:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B87DABFF77B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 09:14:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 138643A778F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 03:43:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E53C3A78A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 07:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FFE129D27F;
-	Thu, 23 Oct 2025 03:43:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E2A2BDC29;
+	Thu, 23 Oct 2025 07:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dOCpIJxB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OODg5w6E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CC1F20468D
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 03:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C56026F29B;
+	Thu, 23 Oct 2025 07:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761190989; cv=none; b=c/VVIkHaCJxN1dJP+LuANEUapyYTJELo6sBbeap4u+G+XwHnlu/yrGaoP1GD4WY8UP1EfLITgO9VxLDXXWfBddVsYLE37oca2ho5EKCTts7Jxu8AGf/1yCevJ5iEYE1yolq2TfVAPRarD2SK/SLOJe0nDSmyegmNpWQ11fV6fgc=
+	t=1761203638; cv=none; b=hM8vi0J7xDKrT6KLx7xMqiiQMbiH/I5psJzxwoJ7ZlO2VB5xe4Bb28Us5tJdc7CFQLyjiA7zzALO80eS4YUGGnZZ54ht6yTescULqG/zOtFM5KunZpIy8Zxw/HKilJ8hr/sPLjMCLXVL+ItR41XrLTsbqJkxhXRrDZxDgI+t3gM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761190989; c=relaxed/simple;
-	bh=056uXdqgwqieEClGZzofKTBO+ZAItkTj1Y/IlynwVNw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C9yp5J+V6ZJzZVSa8bAOay8L9dJaH9iM3xU4tmB1eu1+flSpsBW4Qb0jyVUeYaPs7iqLWJIhVhk+bnjFkDi8T3nomnpyBnajyYtG7hCIXzCvQ59pwtMsp67HpnlHZ5UhtYZGg/qVrP722C+U8fYuqbbUnLrAbkYZDWFO4wokrXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dOCpIJxB; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <84906f32-955d-4fda-b87d-56c052ddfd87@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761190983;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=BEEdoiySbKRfhgdihnabhC19qOOy3rtiDBHXYSkJ3YI=;
-	b=dOCpIJxBMdnvIUuz8sWluoZcX+X3diKDhqv/8ORjgvDO6I+RdnZA0p4aufksxSdOYOJj5M
-	XXKNQSk0Bq1TIeRPOmw1mv8g4/+rM/UG2gvJUItceqfhV6Ah0x4O8nIwO10NUHfmN2cBOP
-	SS8kGyC2BCAAAGrHx3Lfr2ttul2Vkt8=
-Date: Wed, 22 Oct 2025 20:42:54 -0700
+	s=arc-20240116; t=1761203638; c=relaxed/simple;
+	bh=2Z6faUlpxxg8NJ99mOXDv3nxN6IIqbuwazngqBJ2agg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qmlv5X32U2mGQ3BGHQmieRcI/dP+DgvsSZpSNZ79TQyr/1CixSRuI+MHUoJN4SmXAsl3VuprpYNjqnyhW0NraabieaukomzitbF1Pc+lqmroQrGiGn5qHuFj5XbQzsp8KTY9yXToaHaaiytFY05prpgckLBdVb26KOy7SFm2gdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OODg5w6E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24502C4CEE7;
+	Thu, 23 Oct 2025 07:13:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761203637;
+	bh=2Z6faUlpxxg8NJ99mOXDv3nxN6IIqbuwazngqBJ2agg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OODg5w6EFB/hjsGbHVp2Vq9m7F+hBZgNtIuU5LNZe2mYTpdNyCVCbIXUA3Vdvyk52
+	 ErhoZo9K7Z89GKXdanMvWKrAWUrbXY67tNn6zxtWL+7BzQSgaPo52fDLmUpan2VWdD
+	 rE2qNVF+7AsYdvGZDRWtc/a8+uxAsg54+3aw866XKzV9gBQuY2ujGksVFsgziH3ktL
+	 opVRerWZOfIvj8VhNQRP2iKDKInrAtXVwvVYm96tdy08q1RKVcXFwAqP524kuC2LgX
+	 DtWdWbTC1YhHlmVgdTf6JFxr4NPdwQYSVh2DnnrfeRw81pRGpc9vwOUINW3WpTOZVf
+	 BlAC0rtfGtWXA==
+Date: Thu, 23 Oct 2025 10:13:49 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
+	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	masahiroy@kernel.org, ojeda@kernel.org, pratyush@kernel.org,
+	rdunlap@infradead.org, tj@kernel.org
+Subject: Re: [PATCHv7 1/7] kho: allow to drive kho from within kernel
+Message-ID: <aPnVrZC4Fz273lLn@kernel.org>
+References: <20251022005719.3670224-1-pasha.tatashin@soleen.com>
+ <20251022005719.3670224-2-pasha.tatashin@soleen.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Guard addr_space_cast code
- with __BPF_FEATURE_ADDR_SPACE_CAST
-Content-Language: en-GB
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Puranjay Mohan <puranjay@kernel.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20251022071825.238909-1-jiayuan.chen@linux.dev>
- <6aa7fafd-30b1-4605-8b80-4a158934218d@linux.dev>
- <0643875cea56f4e4fd78c7e9222b24e269136155@linux.dev>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <0643875cea56f4e4fd78c7e9222b24e269136155@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251022005719.3670224-2-pasha.tatashin@soleen.com>
 
+On Tue, Oct 21, 2025 at 08:57:13PM -0400, Pasha Tatashin wrote:
+> Allow kernel to drive finalize and abort without requiring triggers
+> from the userspace.
+> 
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-On 10/22/25 8:33 PM, Jiayuan Chen wrote:
-> October 22, 2025 at 23:33, "Yonghong Song" <yonghong.song@linux.dev mailto:yonghong.song@linux.dev?to=%22Yonghong%20Song%22%20%3Cyonghong.song%40linux.dev%3E > wrote:
->
->
->> On 10/22/25 12:18 AM, Jiayuan Chen wrote:
->>
->>> When compiling the BPF selftests with Clang versions that do not support
->> If you are really using llvm18, then I found there are some other
->> build failures as well, e.g.,
->>
-> Yes i'm using llvm18
->
->> /home/yhs/work/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages'
->>   47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cnt,
->>   | ^
->> /home/yhs/work/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:160636:48: note: previous declaration is here
->>   160636 | extern void __attribute__((address_space(1))) *bpf_arena_alloc_pages(void *p__map, void __attribute__((address_space(1))) *addr__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
->>   | ^
->
-> I hadn't encountered this error before, but it started appearing after I upgraded LLVM to version 20.
->
->
-> $ make V=1
->
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/sbin/bpftool btf dump file /home/chenjiayuan/code/upstream/bpf-next/vmlinux format c > /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/.vmlinux.h.tmp
-> cmp -s /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/.vmlinux.h.tmp /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h || mv /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/.vmlinux.h.tmp /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h
-> clang  -g -Wall -Werror -D__TARGET_ARCH_x86 -mlittle-endian -I/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include -I/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf -I/home/chenjiayuan/code/upstream/bpf-next/tools/include/uapi -I/home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/usr/include -std=gnu11 -fno-strict-aliasing -Wno-compare-distinct-pointer-types -idirafter /usr/lib/llvm-20/lib/clang/20/include -idirafter /usr/local/include -idirafter /usr/include/x86_64-linux-gnu -idirafter /usr/include    -DENABLE_ATOMICS_TESTS   -O2 --target=bpfel -c progs/stream.c -mcpu=v3 -o /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/stream.bpf.o
-> In file included from progs/stream.c:8:
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:47:15: error: conflicting types for 'bpf_arena_alloc_pages'
->     47 | void __arena* bpf_arena_alloc_pages(void *map, void __arena *addr, __u32 page_cnt,
->        |               ^
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:152158:14: note: previous declaration is here
->   152158 | extern void *bpf_arena_alloc_pages(void *p__map, void *addr__ign, u32 page_cnt, int node_id, u64 flags) __weak __ksym;
->          |              ^
-> In file included from progs/stream.c:8:
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:49:5: error: conflicting types for 'bpf_arena_reserve_pages'
->     49 | int bpf_arena_reserve_pages(void *map, void __arena *addr, __u32 page_cnt) __ksym __weak;
->        |     ^
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:152160:12: note: previous declaration is here
->   152160 | extern int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u32 page_cnt) __weak __ksym;
->          |            ^
-> In file included from progs/stream.c:8:
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/bpf_arena_common.h:50:6: error: conflicting types for 'bpf_arena_free_pages'
->     50 | void bpf_arena_free_pages(void *map, void __arena *ptr, __u32 page_cnt) __ksym __weak;
->        |      ^
-> /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/tools/include/vmlinux.h:152159:13: note: previous declaration is here
->   152159 | extern void bpf_arena_free_pages(void *p__map, void *ptr__ign, u32 page_cnt) __weak __ksym;
->          |             ^
-> 3 errors generated.
-> make: *** [Makefile:761: /home/chenjiayuan/code/upstream/bpf-next/tools/testing/selftests/bpf/stream.bpf.o] Error 1
->
-> $ clang --version
-> Ubuntu clang version 20.1.8 (++20250804090239+87f0227cb601-1~exp1~20250804210352.139)
-> Target: x86_64-pc-linux-gnu
-> Thread model: posix
-> InstalledDir: /usr/lib/llvm-20/bin
->
-> $ pahole --version
-> v1.29
+> ---
+>  include/linux/kexec_handover.h | 15 +++++++
+>  kernel/kexec_handover.c        | 75 +++++++++++++++++++++-------------
+>  2 files changed, 61 insertions(+), 29 deletions(-)
+> 
+> diff --git a/include/linux/kexec_handover.h b/include/linux/kexec_handover.h
+> index 25042c1d8d54..04d0108db98e 100644
+> --- a/include/linux/kexec_handover.h
+> +++ b/include/linux/kexec_handover.h
+> @@ -67,6 +67,10 @@ void kho_memory_init(void);
+>  
+>  void kho_populate(phys_addr_t fdt_phys, u64 fdt_len, phys_addr_t scratch_phys,
+>  		  u64 scratch_len);
+> +
+> +int kho_finalize(void);
+> +int kho_abort(void);
+> +
+>  #else
+>  static inline bool kho_is_enabled(void)
+>  {
+> @@ -139,6 +143,17 @@ static inline void kho_populate(phys_addr_t fdt_phys, u64 fdt_len,
+>  				phys_addr_t scratch_phys, u64 scratch_len)
+>  {
+>  }
+> +
+> +static inline int kho_finalize(void)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+> +static inline int kho_abort(void)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +
+>  #endif /* CONFIG_KEXEC_HANDOVER */
+>  
+>  #endif /* LINUX_KEXEC_HANDOVER_H */
+> diff --git a/kernel/kexec_handover.c b/kernel/kexec_handover.c
+> index de4466b47455..6458f369a346 100644
+> --- a/kernel/kexec_handover.c
+> +++ b/kernel/kexec_handover.c
+> @@ -1087,7 +1087,7 @@ static int kho_out_update_debugfs_fdt(void)
+>  	return err;
+>  }
+>  
+> -static int kho_abort(void)
+> +static int __kho_abort(void)
+>  {
+>  	int err;
+>  	unsigned long order;
+> @@ -1120,7 +1120,27 @@ static int kho_abort(void)
+>  	return err;
+>  }
+>  
+> -static int kho_finalize(void)
+> +int kho_abort(void)
+> +{
+> +	int ret = 0;
+> +
+> +	if (!kho_enable)
+> +		return -EOPNOTSUPP;
+> +
+> +	guard(mutex)(&kho_out.lock);
+> +	if (!kho_out.finalized)
+> +		return -ENOENT;
+> +
+> +	ret = __kho_abort();
+> +	if (ret)
+> +		return ret;
+> +
+> +	kho_out.finalized = false;
+> +
+> +	return kho_out_update_debugfs_fdt();
+> +}
+> +
+> +static int __kho_finalize(void)
+>  {
+>  	int err = 0;
+>  	u64 *preserved_mem_map;
+> @@ -1163,12 +1183,32 @@ static int kho_finalize(void)
+>  abort:
+>  	if (err) {
+>  		pr_err("Failed to convert KHO state tree: %d\n", err);
+> -		kho_abort();
+> +		__kho_abort();
+>  	}
+>  
+>  	return err;
+>  }
+>  
+> +int kho_finalize(void)
+> +{
+> +	int ret;
+> +
+> +	if (!kho_enable)
+> +		return -EOPNOTSUPP;
+> +
+> +	guard(mutex)(&kho_out.lock);
+> +	if (kho_out.finalized)
+> +		return -EEXIST;
+> +
+> +	ret = __kho_finalize();
+> +	if (ret)
+> +		return ret;
+> +
+> +	kho_out.finalized = true;
+> +
+> +	return kho_out_update_debugfs_fdt();
+> +}
+> +
+>  static int kho_out_finalize_get(void *data, u64 *val)
+>  {
+>  	mutex_lock(&kho_out.lock);
+> @@ -1178,35 +1218,12 @@ static int kho_out_finalize_get(void *data, u64 *val)
+>  	return 0;
+>  }
+>  
+> -static int kho_out_finalize_set(void *data, u64 _val)
+> +static int kho_out_finalize_set(void *data, u64 val)
+>  {
+> -	int ret = 0;
+> -	bool val = !!_val;
+> -
+> -	mutex_lock(&kho_out.lock);
+> -
+> -	if (val == kho_out.finalized) {
+> -		if (kho_out.finalized)
+> -			ret = -EEXIST;
+> -		else
+> -			ret = -ENOENT;
+> -		goto unlock;
+> -	}
+> -
+>  	if (val)
+> -		ret = kho_finalize();
+> +		return kho_finalize();
+>  	else
+> -		ret = kho_abort();
+> -
+> -	if (ret)
+> -		goto unlock;
+> -
+> -	kho_out.finalized = val;
+> -	ret = kho_out_update_debugfs_fdt();
+> -
+> -unlock:
+> -	mutex_unlock(&kho_out.lock);
+> -	return ret;
+> +		return kho_abort();
+>  }
+>  
+>  DEFINE_DEBUGFS_ATTRIBUTE(fops_kho_out_finalize, kho_out_finalize_get,
+> -- 
+> 2.51.0.915.g61a8936c21-goog
+> 
 
-Please try pahole version 1.30.
-
->
->
-> I updated LLVM via https://apt.llvm.org/. Could this be caused by some binaries or libraries still using LLVM 18?
-
+-- 
+Sincerely yours,
+Mike.
 
