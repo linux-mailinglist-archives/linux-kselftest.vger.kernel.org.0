@@ -1,140 +1,159 @@
-Return-Path: <linux-kselftest+bounces-44006-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF896C07445
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 18:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CD69C073FA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 18:18:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BC5E6583959
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 16:17:58 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4CCC0566BA6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 16:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D79627E1D7;
-	Fri, 24 Oct 2025 16:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF7626D4DD;
+	Fri, 24 Oct 2025 16:15:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S9e/39w/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cYF0a2j3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B651DC997;
-	Fri, 24 Oct 2025 16:17:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B8D21C16E
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 16:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761322671; cv=none; b=tRIihwugBAxzB4La0XuLI0CD+NKWzOetd5FZOJLtuFVd/Vr02FzQPKxexf+bN8U7M4dXrF8ENFthMrcLyauVMbrg8PbCR8/Y+16YPVOl4MX/pLugMsfcr3saIkc81BJLiRhlyfYBIsam71kAyu9ICuUEtg0ju3ujKqlawGCO1Xw=
+	t=1761322518; cv=none; b=Rziv/kAlFzB8PrHtWJtnpL22JhtCi8h8QZzphCgsdQCsLXBN2NuOcNv+mcVfKpT4Pdim/OWvxaoIt3NtDNw37H0lWpgMvy+T8buowrmwTL15FMPp4hOSN5TX+nxjZZDecbas2elMzkUkRruw94K9grkcSNnAKH63L23sbrKHPak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761322671; c=relaxed/simple;
-	bh=wk66qIygkkbUUS4Vseh1sg6teJA5/ZT5GoMUU6R4qwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nNEi7vl7pHPbato9mJlZPWzY+G6M7Ep4qT0BEamPD/cwjSrjH7zg/HDV7kHsZmZ0XNw+b3OMwoZTn5UG+OoJV1y4NNWRnBOQuD630+DopEmlmmmmxHy4j4VSxzcp1vk4OFJI0s+CI4lULWvfKYbPLQKgev9X1SywSSqv9ZBIFo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S9e/39w/; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761322670; x=1792858670;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wk66qIygkkbUUS4Vseh1sg6teJA5/ZT5GoMUU6R4qwg=;
-  b=S9e/39w/1ASlPnXtSKu/WcGkTQZcG5b21wnI9KDxAr/3R2iXvU1aVd2L
-   Q8t1TtWA5AV2UhRhbXIsrxBMng/Uz4R32JZ6iqoVZckv2ekH6aqDGsPpq
-   /iYJpolBT7sMxTTj6Srm8CtiD0bggx81NYropnM6ZcyHDQh9hdjWwFb0B
-   o6zI1Xnvo4/Kj8MOBOmQN5+r4fF8WKf7KEst3uUUysXkZuFAHfyWR284e
-   N5lOfbKaDllFeoq1vbpDPrkbzRAWN9t8cxdj0U/D+OjDhb84AQ831VPU0
-   viZENhOAxuSKgKpMoDC304uI/YaVN+b7hWnzU4bamqB3tTfs0BXkqwVHC
-   w==;
-X-CSE-ConnectionGUID: RLw1A/tISsSQHsHa9f9qSw==
-X-CSE-MsgGUID: kCdlq5ZrQjGMYyg4+eAh9A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63412299"
-X-IronPort-AV: E=Sophos;i="6.19,252,1754982000"; 
-   d="scan'208";a="63412299"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 09:17:47 -0700
-X-CSE-ConnectionGUID: rox9pthtT9qkicVmkF+xRw==
-X-CSE-MsgGUID: OqN+FRlvSO2q/H4Vl8klIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,252,1754982000"; 
-   d="scan'208";a="183643221"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by orviesa006.jf.intel.com with ESMTP; 24 Oct 2025 09:17:38 -0700
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vCKS1-000Een-0H;
-	Fri, 24 Oct 2025 16:17:01 +0000
-Date: Sat, 25 Oct 2025 00:14:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: Add kfuncs for detecting execution
- context
-Message-ID: <202510242353.hCaLzqVt-lkp@intel.com>
-References: <20251022113412.352307-2-jiayuan.chen@linux.dev>
+	s=arc-20240116; t=1761322518; c=relaxed/simple;
+	bh=t2xB5w2D/C9kbb7Bzl1tMo0JOvGXNQKckLTMhZRtTuA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jz+hhGXgJSgWdgMmRGAyoMzL8YyvFaw2yfzmxdH5YEifTxHL4qOpDrk+TkfM6KnQmZDbysPg5DqUP2IQef+VOnFX/HH9wcGS8QPttO+LwdKvkVM5uCupFeHzdfSPCWBU4PRNETwOaI3CMs4GK+a/mNDoZ/RI+B+SZa7RqT+x4iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cYF0a2j3; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-4283be7df63so990109f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 09:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761322515; x=1761927315; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SX2wgXyhOFI2HLBtCIVzdgo/PaSKpitLRDyKKLcKuCo=;
+        b=cYF0a2j3+66lD8a9BZLpc03nLS8aOpIBqYGLHawJBswQzU875AvKVqifFqJo52QnBB
+         bj+aJMyjWhwIwGZ1HjsdecgUePoRwpp+H8SMqv8tgQBewNcTKZqFkX+67XLN0qv/elvB
+         fETsS9EJEHpfJEuLATxaT082lpkTS3bVZZsxqBa6jXboajU9xkSbSobgIDs17DwWAr0P
+         lORGwN9T0kp3LhQ+50prP7eRnC1IEtQwJzSz32tTpa6ezlDuqIwqvOZrDCheFsSsF24B
+         9G6t+VdLCAgDMFf+EnkWoic0TWJovp77Md8ke50V72nmtAOywCz4Is2Zphu0E9FDrxt5
+         acCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761322515; x=1761927315;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SX2wgXyhOFI2HLBtCIVzdgo/PaSKpitLRDyKKLcKuCo=;
+        b=gGDCOKcuYcKqrtUKhNZKcqhuPx89aFZLOnRF2jtE7PV6azNm9sVgP1pHYKMnJsX8jw
+         gPXCIBA9WVcFppJ8n8r+pBKKNOMtWak0FWP2AFkSCr08XxLK0PS30sHzMxGfDC+nAibn
+         Gqw+7F8zuTOkeguR/0yOqfcf8/keqTaXtR9dpH79YMNa9S4ZqQP3dSpPGtx6CAs88syN
+         A4YwbTPxTyXDroQ30ET70TrID35dyqQusehGChURdOmMg1BCyyF4l4xGrqOgKJSn8lcM
+         2PKksWd4uMbVSFrZIygzAwB/NIPyTznuC7XR4gMsLqJ6v13zAibsuA6tIvuEmvYFeaVq
+         lOGw==
+X-Forwarded-Encrypted: i=1; AJvYcCXCHnoo6MqNZTaPzz/dShcmFamZKOxWV6nzPsb6xAnihusfCU2UbK31dx0c6LocbE1hIJ+BQ2ZDPalKCFzahMA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPoU6ZZSdHXhH0zS2MG3v0edxxeEN2hlt6+jY1GaCQzscJcrTZ
+	MH9WKPdAP0ch53Bgwt1cdlEBLerj0OxjfWtyyxM1ehEQIk3wXeWD/MMfr9kU0uMyqnN6Ya4vot0
+	M7/4rtcIMKjxHL87fwRajglW1XDiCuls=
+X-Gm-Gg: ASbGncscAdTkSVHUJBhv7dHkU4WqmjnT5VApxx/S+LRR4n0Hk2Rf9xVxplkGy+ibcEY
+	Qh8MVA37w1TJqx5H0EPOmKe/GGwLxpJ7nmA/s1qUamcrl5Eowf1VJlKgOA/ynQMr1761NhprVrs
+	oXnRYVWxeQ6VNMp1MFHv/X+Ah0GIsqwstlCE/ApMFg4fg720Qds/XTCdP7BLL0t8LnNcuMRFH/w
+	uz7kAM2TVSdhWSONhiRoV0eyFZCpk9+5ZkBC9QzqFt3fKHwG/pHMLZfa2Lna5LDsPfk7dKeqTde
+	GHJqLE0WUoAFQZoFqw==
+X-Google-Smtp-Source: AGHT+IHYhQieymijbR97ThEWtTUuWIeWwcW7dASpktkOfhyJVrh56p292orZ26GtXJFfL041HGk3fWOBdTQaTUxeamY=
+X-Received: by 2002:a05:6000:2008:b0:3df:c5e3:55fe with SMTP id
+ ffacd0b85a97d-42704d9895amr20799373f8f.29.1761322514888; Fri, 24 Oct 2025
+ 09:15:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251022113412.352307-2-jiayuan.chen@linux.dev>
+References: <20251022-tc_tunnel-v2-0-a44a0bd52902@bootlin.com>
+ <20251022-tc_tunnel-v2-3-a44a0bd52902@bootlin.com> <DDOOS5LR0GZH.ITEM5495FPOX@bootlin.com>
+ <CAADnVQJ6zKbThz8B5bqBpwz=gyqeindZb1kwCmM90PsR4-7iQQ@mail.gmail.com> <DDQCVG55KXN7.3P6MCQTNID8K9@bootlin.com>
+In-Reply-To: <DDQCVG55KXN7.3P6MCQTNID8K9@bootlin.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 24 Oct 2025 09:15:02 -0700
+X-Gm-Features: AWmQ_bmLtVyHMC53pSRSYOJH_a_wCczVDxu-UPW_QXlFnFx1oBh0bRcOV9rTc7Q
+Message-ID: <CAADnVQKQRCC8KJZewRsakDYsFmGZBYuEVYV6xEL2X1Kg06+AYw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: integrate
+ test_tc_tunnel.sh tests into test_progs
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, ebpf@linuxfoundation.org, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+	Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jiayuan,
+On Thu, Oct 23, 2025 at 11:58=E2=80=AFPM Alexis Lothor=C3=A9
+<alexis.lothore@bootlin.com> wrote:
+>
+> Hi Alexei,
+>
+> On Wed Oct 22, 2025 at 6:44 PM CEST, Alexei Starovoitov wrote:
+> > On Wed, Oct 22, 2025 at 12:52=E2=80=AFAM Alexis Lothor=C3=A9
+> > <alexis.lothore@bootlin.com> wrote:
+>
+> [...]
+>
+> >> A note about test duration:
+> >> the overall test duration, in my setup (x86 qemu-based setup, running =
+on
+> >> x86), is around 13s. Reviews on similar series ([1]) shows that such a
+> >> duration is not really desirable for CI integration. I checked how to
+> >> reduce it, and it appears that most of it is due to the fact that for =
+each
+> >> subtest, we verify that if we insert bpf encapsulation (egress) progra=
+m,
+> >> and nothing on server side, we properly fail to connect client to serv=
+er.
+> >> This test then relies on timeout connection,  and I already reduced it=
+ as
+> >> much as possible, but I guess going below the current value (500ms) wi=
+ll
+> >> just start to make the whole test flaky.
+> >>
+> >> I took this "check connection failure" from the original script, and k=
+ind
+> >> of like it for its capacity to detect false negatives, but should I
+> >> eventually get rid of it ?
+> >
+> > I vote to get rid of it.
+> > I'd rather have test_progs that are quick enough to execute for CI and
+> > for all developers then more in depth coverage for the corner case.
+>
+> ACK. I' ll get rid of it. For the record, I drop down to ~3s in my testin=
+g
+> setup instead of ~13s when removing this "ensure connection failure test"=
+.
 
-kernel test robot noticed the following build warnings:
+Good. 3s is fine.
 
-[auto build test WARNING on bpf-next/master]
+> > Note that for the verifier range test we randomize the test coverage,
+> > since the whole permutation takes hours to run. Instead we randomly
+> > pick a couple tests and run only those. Since CI runs for every patch
+> > the overall coverage is good enough.
+> > Would something like that possible here ? and in the other xsk test?
+>
+> I see that test_verifier takes some "to" and "from" indexes, selecting th=
+e
+> range of tests that we are able to run. Is this the mechanism you are
+> referring to ? (and if so, I guess the rand part is handled by the CI
+> runner ?)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiayuan-Chen/bpf-Add-kfuncs-for-detecting-execution-context/20251022-193551
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20251022113412.352307-2-jiayuan.chen%40linux.dev
-patch subject: [PATCH bpf-next v1 1/2] bpf: Add kfuncs for detecting execution context
-config: alpha-randconfig-r123-20251023 (https://download.01.org/0day-ci/archive/20251024/202510242353.hCaLzqVt-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 11.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251024/202510242353.hCaLzqVt-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202510242353.hCaLzqVt-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
-   kernel/bpf/helpers.c:1199:21: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned long long ( *[usertype] callback_fn )( ... ) @@     got void [noderef] __rcu * @@
-   kernel/bpf/helpers.c:1199:21: sparse:     expected unsigned long long ( *[usertype] callback_fn )( ... )
-   kernel/bpf/helpers.c:1199:21: sparse:     got void [noderef] __rcu *
-   kernel/bpf/helpers.c:2480:18: sparse: sparse: symbol 'bpf_task_release_dtor' was not declared. Should it be static?
-   kernel/bpf/helpers.c:2510:18: sparse: sparse: symbol 'bpf_cgroup_release_dtor' was not declared. Should it be static?
->> kernel/bpf/helpers.c:4260:18: sparse: sparse: symbol 'bpf_in_nmi_context' was not declared. Should it be static?
-   kernel/bpf/helpers.c:2976:18: sparse: sparse: context imbalance in 'bpf_rcu_read_lock' - wrong count at exit
-   kernel/bpf/helpers.c:2981:18: sparse: sparse: context imbalance in 'bpf_rcu_read_unlock' - unexpected unlock
-
-vim +/bpf_in_nmi_context +4260 kernel/bpf/helpers.c
-
-  4254	
-  4255	/**
-  4256	 * bpf_in_nmi_context - Check whether we are serving NMI
-  4257	 *
-  4258	 * Return: true if we are serving NMI
-  4259	 */
-> 4260	__bpf_kfunc bool bpf_in_nmi_context(void)
-  4261	{
-  4262		return in_nmi();
-  4263	}
-  4264	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I'm talking about SLOW_TESTS=3D1 in reg_bounds.c
 
