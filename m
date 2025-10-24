@@ -1,153 +1,122 @@
-Return-Path: <linux-kselftest+bounces-43988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A755C06FAE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 17:31:01 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5F5EC06FED
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 17:35:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53AAE3A93AE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 15:27:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BCCD7544F53
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 15:34:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF48631E101;
-	Fri, 24 Oct 2025 15:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B1A32A3C2;
+	Fri, 24 Oct 2025 15:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iXlFFD0e"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="CcCitAe7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B28190477;
-	Fri, 24 Oct 2025 15:27:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBD5324B0F
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 15:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761319629; cv=none; b=CLtJjxp9xGPRc7ZtKcii606/d/hm9u/Damka2jM0u0OIB6FYntHZ/C2xPTja30TaZaVzvvTlD3QwOHJLl7wTUIYhRRAynuYYdWTGWCHQaDKJKJ0z6z/WAP2xNGyQG+2wmCtz6yKGm2t7upCU7afye9EDgHI0Om1jMScuOxBBioo=
+	t=1761320049; cv=none; b=DXg2UUzHWC377beR/nNSmWlEDEj0RFL0qI4RZXxmw59g8NoXcqeSROL74UYVQgWDaxlkIXm5RRz5MwvMOPqwgt+3Hy4yvFiHiY+l5+lFQYX41I+wg4zGzxPD5FxaFRnGL6wh5babqpUNn8Vuqrv55P0f0vOIQ3f7+8YZdixPfBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761319629; c=relaxed/simple;
-	bh=K35xa85qxRDW/MqsnDVqFDx99T314O0XzeWHcoAYEJk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=twNjsXU5sDPPJzyhkwN9RmT5jxyCe5jpuHZ2bTzojh3j+5wmaOKC6NDS1fbj9Sxm9/Wcy+nu6/r2nITm2mOn7iZYT0diesFbKmYAOuBjDIlsQ1q8H1JHIuHQggcXnHa+sH7bwNFFCZb1csPfi6PfV9m/oLGESDIRUSpHwG6zBzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iXlFFD0e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3851C4CEF1;
-	Fri, 24 Oct 2025 15:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761319625;
-	bh=K35xa85qxRDW/MqsnDVqFDx99T314O0XzeWHcoAYEJk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=iXlFFD0esb38BGOypXdbuN+zB460cx6lQVQFOcp9+fqpdgc8/BzklLxqU0tUV1aqy
-	 xL0aS899x16VLYZJfBFr2VEl7oKFu03ulyUpav6KPwvjZpIpFY5QHFecc734nfoVIp
-	 +a3Bsr/6OFS340EhY15i9rgeogQdPodkMZtl0tezVqIibjM5wXKFIswHM7L+GxX2TS
-	 /YrHZLhO7wsFMWhFiALPyUvgGb6ZvIpMHjdYsOoO4LmOhYpOZERLrDFmm7wFw5CfBd
-	 66c/kloCqTYt33leVGEgrhBe0oAa0en0zTrue6n5wWhhUcUaXoQhYabx/5qG9pa2DE
-	 Cu8VJX1e0vQqg==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Mike Rapoport <rppt@kernel.org>,  Pratyush Yadav <pratyush@kernel.org>,
-  akpm@linux-foundation.org,  brauner@kernel.org,  corbet@lwn.net,
-  graf@amazon.com,  jgg@ziepe.ca,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
-  masahiroy@kernel.org,  ojeda@kernel.org,  rdunlap@infradead.org,
-  tj@kernel.org
-Subject: Re: [PATCHv7 5/7] kho: don't unpreserve memory during abort
-In-Reply-To: <CA+CK2bAvKrfuOXTa-RWtcuSR8rkPMhurwCn41NcUm44_vT63rA@mail.gmail.com>
-	(Pasha Tatashin's message of "Fri, 24 Oct 2025 09:28:33 -0400")
-References: <20251022005719.3670224-1-pasha.tatashin@soleen.com>
-	<20251022005719.3670224-6-pasha.tatashin@soleen.com>
-	<mafs0a51jfar1.fsf@kernel.org> <aPnXVmD3cNmYNRF_@kernel.org>
-	<CA+CK2bAvKrfuOXTa-RWtcuSR8rkPMhurwCn41NcUm44_vT63rA@mail.gmail.com>
-Date: Fri, 24 Oct 2025 17:27:01 +0200
-Message-ID: <mafs0wm4ke2wq.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1761320049; c=relaxed/simple;
+	bh=are2xt86yIlpc4HL3GdNhNk2Nk9IKxa3I/LJcQcthQo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=opsKN4Rk9cjOWmuqM0ENm5qm3bwcC1D/f7qhOZ3bckNOwxbjy9ecAVI+QZIxfTAbkHdndYOgEt/a/qxxcM6zBSiBfN1katYrFOY+tLVmXJrXgmaVvaaL9bZmLIXnZiE3FEdFVY4WCrjbpKyJgeVTYp4IR87KWVlmamRcyIXyxNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=CcCitAe7; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-63c11011e01so3578149a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 08:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1761320043; x=1761924843; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=are2xt86yIlpc4HL3GdNhNk2Nk9IKxa3I/LJcQcthQo=;
+        b=CcCitAe7h2YJ6QBV/Cay2BUOhxWYlSZRo9mEq4Zy5ZUSpbiiophcZUOiaPtMsYCUfP
+         Mht5GOxKq+FZhG/vnmH33NgDSKVM7YZa+rjMhmZfbUGU2OX8HFHJ/MgnLdrn1Qk3zbnd
+         ae+oVwsivjOJiIkjMh7/olmsnkkIioG2IHwfEgDfbAh09ygNWHv4rHjD2xyj38jUH1gX
+         o7QBbYoGbOQEj66AuiFj4q31edE9fTwQHT3BSK4A/LwhCN9OX1RENjb/BYOPe/YtKU9t
+         0OrAKtzD7EyXisFJr91ksDs3drdGdGAoxqnOR5Uvw+Py3U9Ity/c3Xur299S5WdTmSGw
+         0yOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761320043; x=1761924843;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=are2xt86yIlpc4HL3GdNhNk2Nk9IKxa3I/LJcQcthQo=;
+        b=Mor6U3EL3yInXsS4saPnEfnfZ6cx6ezQWnjusEQ2813f9iYM6c1NldM/v/Ib1tcd4j
+         zNXBljLhJIqA3kTvi/xElg75tHNdHtFs4+rRpEUpiP/x6tGsDqpIbLrkt1q27UM4AV7p
+         FpvK2bZrCjy32YAEEyMewdhNiM1N7OuNb8pEgqrXz79zipcNb9D92o6l6UTcFqmONgzt
+         3FfA+JTBRu7KDLyDOHX+p48l28W3a38+wj7kiGfc+aYKMmCHUo2vXBuo3nUrN+up+Ncp
+         i+sUvEPvPUEo+ygOqjm+c32O2tXwaeDYqIAVZdLlgAmdmHnB2PjAZFqLxhApGvXdsEXb
+         rgEA==
+X-Forwarded-Encrypted: i=1; AJvYcCV4vtNYv4ftI9hxw8EYnT18LhYeypg3fIZfJWk8R6c7T1tpxMKP2WjGyb2B32JvriGK1NVQmXnvwfMCafVJTZM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzurXy0C0NPBdNMldMhF9jZglcvy62fFN7IAn3T8N30/OE8TbeX
+	eDuxXEz0hrX5/8gHwB9oIoRq+s1cJrr5Gp9tnbcfKHIaLcOaFLor7LwptmKzcgw0boLEZgKDT+S
+	8YkKcstxDHgDmMUQPMlyhHcOADQN02CWAJ304VSaCLw==
+X-Gm-Gg: ASbGncvHbuV1a25vchsWQOt9AOckzabDrHIjb8CDUameoO0WYvTOEgwgG7nn0oYkDbZ
+	GhNzykO2/3MXIElPWzjV4E6ospADVd6v4cS1n6/SRtoc96Fzad99J4oHD19vjhFy/FLpGUVxtJ2
+	+MJpdrpcjLrlnSIMHTtlnUx2OB7fCz0hDPFbNnahNaI5AslxU9xBi6oMNFcVFQaczx+6ezYas6L
+	tMRLqmOyX1SECXqhajLJeo78c/u9lWAD1+97Vej4LIMeFar34dx4/iB+KsAedHh5hXu
+X-Google-Smtp-Source: AGHT+IFfTkje+cUGlXkTFymJUSte5krNn/bEG5EhN31gNJr/7cVMgJy9Ry/5kSN5HjqZ3SuvQkYNIfXAVoLsVbdbd8M=
+X-Received: by 2002:a05:6402:40c5:b0:637:e4d1:af00 with SMTP id
+ 4fb4d7f45d1cf-63c1f677665mr27513307a12.10.1761320043188; Fri, 24 Oct 2025
+ 08:34:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20251022005719.3670224-1-pasha.tatashin@soleen.com>
+ <20251022005719.3670224-6-pasha.tatashin@soleen.com> <mafs0a51jfar1.fsf@kernel.org>
+ <aPnXVmD3cNmYNRF_@kernel.org> <CA+CK2bAvKrfuOXTa-RWtcuSR8rkPMhurwCn41NcUm44_vT63rA@mail.gmail.com>
+ <mafs0wm4ke2wq.fsf@kernel.org>
+In-Reply-To: <mafs0wm4ke2wq.fsf@kernel.org>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Fri, 24 Oct 2025 11:33:26 -0400
+X-Gm-Features: AWmQ_bnJ5szaFV-enEeq3wfvmO3Zq6ympB-Z6lOOZF2BoJ-F4vXI0M6cDC_xrXY
+Message-ID: <CA+CK2bARUpZaymPTusZWM-kzXcUp_d1UK9nUudu3tHitpeAH5Q@mail.gmail.com>
+Subject: Re: [PATCHv7 5/7] kho: don't unpreserve memory during abort
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Mike Rapoport <rppt@kernel.org>, akpm@linux-foundation.org, brauner@kernel.org, 
+	corbet@lwn.net, graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org, 
+	ojeda@kernel.org, rdunlap@infradead.org, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Oct 24 2025, Pasha Tatashin wrote:
+> If any of the kho_preserve_pages() fails, the notifier block will fail,
+> cause an abort, and eventually all memory will be unpreserved.
 
-> On Thu, Oct 23, 2025 at 3:21=E2=80=AFAM Mike Rapoport <rppt@kernel.org> w=
-rote:
->>
->> On Wed, Oct 22, 2025 at 01:15:30PM +0200, Pratyush Yadav wrote:
->> > On Tue, Oct 21 2025, Pasha Tatashin wrote:
->> >
->> > > KHO allows clients to preserve memory regions at any point before the
->> > > KHO state is finalized. The finalization process itself involves KHO
->> > > performing its own actions, such as serializing the overall
->> > > preserved memory map.
->> > >
->> > > If this finalization process is aborted, the current implementation
->> > > destroys KHO's internal memory tracking structures
->> > > (`kho_out.ser.track.orders`). This behavior effectively unpreserves
->> > > all memory from KHO's perspective, regardless of whether those
->> > > preservations were made by clients before the finalization attempt
->> > > or by KHO itself during finalization.
->> > >
->> > > This premature unpreservation is incorrect. An abort of the
->> > > finalization process should only undo actions taken by KHO as part of
->> > > that specific finalization attempt. Individual memory regions
->> > > preserved by clients prior to finalization should remain preserved,
->> > > as their lifecycle is managed by the clients themselves. These
->> > > clients might still need to call kho_unpreserve_folio() or
->> > > kho_unpreserve_phys() based on their own logic, even after a KHO
->> > > finalization attempt is aborted.
->> >
->> > I think you also need to update test_kho and reserve_mem to do this
->> > since right now they assume all memory gets unpreserved on failure.
->>
->> I agree.
+This is a wrong behavior. Why should the memory that I preserved be
+unpreserved if there is finailziation failure or abort? reserve_mem
+should still keep memory as preserved in case KHO later will be
+finalized right? I have tested that this patch works with kho
+self-test: preserve, finalize, abort, finalize again, and the pages
+are properly preserved.
+
+KHO Test and memblock do not need to ever unpreserve pages, as they
+preserve them once during boot.
+
+> Now that there is no notifier, and thus no abort, the pages must be
+> unpreserved explicitly before returning.
 >
-> Hm, this makes no sense to me. So, KHO tried to finalize (i.e.,
-> convert xarray to sparse bitmap) and failed (e.g. due to OOM) or
-> aborted, so we aborted the finalization. But the preserved memory
-> stays preserved, and if user/caller retries finalization and it
-> succeeds, the preserved memory will still be passed to the next
-> kernel. Why would reserve_mem and test_kho depend on whether KHO
-> finalization succeeded or was canceled? It is possible that user
-> cancel only to add something else to preservation.
+> Similarly, for test_kho, kho_test_notifier() calls kho_preserve_folio()
+> and expects the abort to clean things up.
+>
+> Side note: test_kho also preserves folios from kho_test_save_data() and
+> doesn't clean them up on error, but that is a separate problem that this
+> series doesn't have to solve.
+>
+> I think patch 3/7 is the one that actually causes this problem since it
 
-On mainline, the reserve_mem kho_preserve_pages() calls come from the
-notifier chain. Any failure on the notifier chain causes an abort and
-thus automatically unpreserves all pages that were preserved.
+I updated that patch with your suggested fix.
 
-	static int reserve_mem_kho_finalize(struct kho_serialization *ser)
-	{
-		int err =3D 0, i;
-=09
-		for (i =3D 0; i < reserved_mem_count; i++) {
-                	[...]
-			err |=3D kho_preserve_pages(page, nr_pages);
-		}
-=09
-		err |=3D kho_preserve_folio(page_folio(kho_fdt));
-		err |=3D kho_add_subtree(ser, MEMBLOCK_KHO_FDT, page_to_virt(kho_fdt));
-=09
-		return notifier_from_errno(err);
-	}
-
-If any of the kho_preserve_pages() fails, the notifier block will fail,
-cause an abort, and eventually all memory will be unpreserved.
-
-Now that there is no notifier, and thus no abort, the pages must be
-unpreserved explicitly before returning.
-
-Similarly, for test_kho, kho_test_notifier() calls kho_preserve_folio()
-and expects the abort to clean things up.
-
-Side note: test_kho also preserves folios from kho_test_save_data() and
-doesn't clean them up on error, but that is a separate problem that this
-series doesn't have to solve.
-
-I think patch 3/7 is the one that actually causes this problem since it
-gets rid of the notifier. This is the wrong patch to complain about this
-but somehow I thought this is the one that triggers it.
-
---=20
-Regards,
-Pratyush Yadav
+Pasha
 
