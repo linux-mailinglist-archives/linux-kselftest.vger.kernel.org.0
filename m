@@ -1,240 +1,153 @@
-Return-Path: <linux-kselftest+bounces-43987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5858BC06E0F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 17:11:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A755C06FAE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 17:31:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 278934E792E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 15:11:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53AAE3A93AE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 15:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DD01323411;
-	Fri, 24 Oct 2025 15:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF48631E101;
+	Fri, 24 Oct 2025 15:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PdFL9bMR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iXlFFD0e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7334322A22
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 15:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B28190477;
+	Fri, 24 Oct 2025 15:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761318671; cv=none; b=sq4ir7kto+kgRTfoBjOQpcL7qJnlH6HJflu2MMkY+A6irVXfOVflp7lh67cii6921yxcmts5Q3Bn+MhQn3RQIz8Le7FjKa+2jMuup5mr1lwgydQXVK6Dq9b4VRLs2pbRWfkxrZcz5SDvIet/lCCj/z2CvhHHvhrOZ7vJgVTyc2Y=
+	t=1761319629; cv=none; b=CLtJjxp9xGPRc7ZtKcii606/d/hm9u/Damka2jM0u0OIB6FYntHZ/C2xPTja30TaZaVzvvTlD3QwOHJLl7wTUIYhRRAynuYYdWTGWCHQaDKJKJ0z6z/WAP2xNGyQG+2wmCtz6yKGm2t7upCU7afye9EDgHI0Om1jMScuOxBBioo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761318671; c=relaxed/simple;
-	bh=1nO7Q8hQyC3COpeoqfKQV1SPG1bRbzjE5pk6Pr0SPiE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XMAUSpd2ravnW7QLEb7fJ2xB1E884WxWr5ajnIZ/nGFRwF05ECA3HvuDytE391JiYwWTi72DQkuf/0gGGICKMM0FBwpEUsXetyRfDDXyE4wKjzXQGCrQaL3dwpR5CWSxL7LIqgIKDQa07EojPUQvcrdXt/Tsk0wT1BVFJUvXvP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PdFL9bMR; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-78104c8c8ddso1754100b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 08:11:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761318667; x=1761923467; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f8S1KonkShBOqtsinZhRSshiH2hzjBvvVn7bRME6LIQ=;
-        b=PdFL9bMRdmSav6wHntHEigspAqK5ZQVdmglszN15d48ilcnIRTiudjQWMnmee6O6XX
-         SixDILzdJAtbc0M55nkXkuOwd90KpMYbFrwDFzF9JQcm4OwKQHu/HOQo8KqWtjOj1LWr
-         1hDZZeTGn4KbT0aGbqDX+Ha7BIRUqKdYXOj9lC32OUAKdmq8//pp+Ao6NdS2b4tperTx
-         Ldb0XlNGK5/ze2XdkrR3rxHoXwa/cIx7ZxxsJHUG7eF3exUP/9R9Lm7KwD4FWTLYug6t
-         jx6qe+sq3BSS+NLmeXQuUPnmfbsAMTqNFUaGTuhZCCMhIjcsG7FGP8UajYFNhUZv/sbG
-         prbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761318667; x=1761923467;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f8S1KonkShBOqtsinZhRSshiH2hzjBvvVn7bRME6LIQ=;
-        b=sveDGOgXpL/cIlBNiGC5b0m20htjOVzlMlRLF466GkkZt5X0603GClYJT0+pSY+PtX
-         2S0IbXX6qHmw72YOyDStwLdm8p92TGW8y5WxYGvlQJOTQarKBcn3nZAHoZYw25WmeogT
-         s/y03OdEIdJzstTSWmay1U23KIbqOB/DfkUmWCVDUB0MJqmM0d7UatOeRv6IbRDtwkWZ
-         tpXcH5oO3vgwgjVH/ahaezzMRLZtWmiuRjTDxc2UFW1Q6lH97DWla8DuiHtKGaPQyDHn
-         78xo1zqdCNke63MoUhiIGGDXKWvMhyBFraYdi5Ctt29RDXbynNFEJP7pPhJQ67Emk5SF
-         FkrA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzyKYFS3J4cDUUIBNS1oBLERZt6by9y6sopIKVzRDvZO1kgcHr9O/8c0FmlMJlc0WFFuT+Hs6IYf1kNuNKwN8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNaTBBmGBiFJ299RyYj+29wJwwywgpuUghfxZcRi8TkPDcsmuv
-	Z4ha7/aa71cEqAHf4826F2ftctBe6HI/9igRQ5tKkKC4HaUlMF3preB2sUbsiJKD4MfJiG39Oay
-	yTBKl2g==
-X-Google-Smtp-Source: AGHT+IFmiZvDW9+VEv8fXtsDHeyqGJSro010YRSFD/DT0a4vYVNsrLONxsLbwaaV3B5ySTybgRqQQLvhvsY=
-X-Received: from pjbgg11.prod.google.com ([2002:a17:90b:a0b:b0:330:b9e9:7acc])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:a11c:b0:33e:779e:fa7f
- with SMTP id adf61e73a8af0-33e779efbf6mr1848603637.1.1761318666959; Fri, 24
- Oct 2025 08:11:06 -0700 (PDT)
-Date: Fri, 24 Oct 2025 08:11:05 -0700
-In-Reply-To: <diqzqzuse58c.fsf@google.com>
+	s=arc-20240116; t=1761319629; c=relaxed/simple;
+	bh=K35xa85qxRDW/MqsnDVqFDx99T314O0XzeWHcoAYEJk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=twNjsXU5sDPPJzyhkwN9RmT5jxyCe5jpuHZ2bTzojh3j+5wmaOKC6NDS1fbj9Sxm9/Wcy+nu6/r2nITm2mOn7iZYT0diesFbKmYAOuBjDIlsQ1q8H1JHIuHQggcXnHa+sH7bwNFFCZb1csPfi6PfV9m/oLGESDIRUSpHwG6zBzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iXlFFD0e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3851C4CEF1;
+	Fri, 24 Oct 2025 15:27:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761319625;
+	bh=K35xa85qxRDW/MqsnDVqFDx99T314O0XzeWHcoAYEJk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=iXlFFD0esb38BGOypXdbuN+zB460cx6lQVQFOcp9+fqpdgc8/BzklLxqU0tUV1aqy
+	 xL0aS899x16VLYZJfBFr2VEl7oKFu03ulyUpav6KPwvjZpIpFY5QHFecc734nfoVIp
+	 +a3Bsr/6OFS340EhY15i9rgeogQdPodkMZtl0tezVqIibjM5wXKFIswHM7L+GxX2TS
+	 /YrHZLhO7wsFMWhFiALPyUvgGb6ZvIpMHjdYsOoO4LmOhYpOZERLrDFmm7wFw5CfBd
+	 66c/kloCqTYt33leVGEgrhBe0oAa0en0zTrue6n5wWhhUcUaXoQhYabx/5qG9pa2DE
+	 Cu8VJX1e0vQqg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Mike Rapoport <rppt@kernel.org>,  Pratyush Yadav <pratyush@kernel.org>,
+  akpm@linux-foundation.org,  brauner@kernel.org,  corbet@lwn.net,
+  graf@amazon.com,  jgg@ziepe.ca,  linux-kernel@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
+  masahiroy@kernel.org,  ojeda@kernel.org,  rdunlap@infradead.org,
+  tj@kernel.org
+Subject: Re: [PATCHv7 5/7] kho: don't unpreserve memory during abort
+In-Reply-To: <CA+CK2bAvKrfuOXTa-RWtcuSR8rkPMhurwCn41NcUm44_vT63rA@mail.gmail.com>
+	(Pasha Tatashin's message of "Fri, 24 Oct 2025 09:28:33 -0400")
+References: <20251022005719.3670224-1-pasha.tatashin@soleen.com>
+	<20251022005719.3670224-6-pasha.tatashin@soleen.com>
+	<mafs0a51jfar1.fsf@kernel.org> <aPnXVmD3cNmYNRF_@kernel.org>
+	<CA+CK2bAvKrfuOXTa-RWtcuSR8rkPMhurwCn41NcUm44_vT63rA@mail.gmail.com>
+Date: Fri, 24 Oct 2025 17:27:01 +0200
+Message-ID: <mafs0wm4ke2wq.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1760731772.git.ackerleytng@google.com> <8ee16fbf254115b0fd72cc2b5c06d2ccef66eca9.1760731772.git.ackerleytng@google.com>
- <2457cb3b-5dde-4ca1-b75d-174b5daee28a@arm.com> <diqz4irqg9qy.fsf@google.com>
- <diqzy0p2eet3.fsf@google.com> <aPlpKbHGea90IebS@google.com>
- <diqzv7k5emza.fsf@google.com> <aPpEPZ4YfrRHIkal@google.com> <diqzqzuse58c.fsf@google.com>
-Message-ID: <aPuXCV0Aof0zihW9@google.com>
-Subject: Re: [RFC PATCH v1 07/37] KVM: Introduce KVM_SET_MEMORY_ATTRIBUTES2
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Steven Price <steven.price@arm.com>, cgroups@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, x86@kernel.org, 
-	akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de, 
-	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org, 
-	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com, 
-	david@redhat.com, dmatlack@google.com, erdemaktas@google.com, 
-	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org, 
-	hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com, 
-	isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com, 
-	jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com, 
-	jthoughton@google.com, jun.miao@intel.com, kai.huang@intel.com, 
-	keirf@google.com, kent.overstreet@linux.dev, liam.merwick@oracle.com, 
-	maciej.wieczor-retman@intel.com, mail@maciej.szmigiero.name, 
-	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
-	mhiramat@kernel.org, mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, 
-	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au, 
-	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es, 
-	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com, 
-	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com, 
-	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, qperret@google.com, 
-	richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org, 
-	shakeel.butt@linux.dev, shuah@kernel.org, suzuki.poulose@arm.com, 
-	tabba@google.com, tglx@linutronix.de, thomas.lendacky@amd.com, 
-	vannapurve@google.com, vbabka@suse.cz, viro@zeniv.linux.org.uk, 
-	vkuznets@redhat.com, will@kernel.org, willy@infradead.org, wyihan@google.com, 
-	xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com, 
-	yuzenghui@huawei.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 24, 2025, Ackerley Tng wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> >> 
-> >> [...snip...]
-> >> 
-> 
-> I've been thinking more about this:
-> 
->   #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
->   	case KVM_CAP_MEMORY_ATTRIBUTES2:
->   	case KVM_CAP_MEMORY_ATTRIBUTES:
->   		if (!vm_memory_attributes)
->   			return 0;
->   
->   		return kvm_supported_mem_attributes(kvm);
->   #endif
-> 
-> And the purpose of adding KVM_CAP_MEMORY_ATTRIBUTES2 is that
-> KVM_CAP_MEMORY_ATTRIBUTES2 tells userspace that
-> KVM_SET_MEMORY_ATTRIBUTES2 is available iff there are valid
-> attributes.
-> 
-> (So there's still a purpose)
-> 
-> Without valid attributes, userspace can't tell if it should use
-> KVM_SET_MEMORY_ATTRIBUTES or the 2 version.
+On Fri, Oct 24 2025, Pasha Tatashin wrote:
 
-To do what?  If there are no attributes, userspace can't do anything useful anyways.
+> On Thu, Oct 23, 2025 at 3:21=E2=80=AFAM Mike Rapoport <rppt@kernel.org> w=
+rote:
+>>
+>> On Wed, Oct 22, 2025 at 01:15:30PM +0200, Pratyush Yadav wrote:
+>> > On Tue, Oct 21 2025, Pasha Tatashin wrote:
+>> >
+>> > > KHO allows clients to preserve memory regions at any point before the
+>> > > KHO state is finalized. The finalization process itself involves KHO
+>> > > performing its own actions, such as serializing the overall
+>> > > preserved memory map.
+>> > >
+>> > > If this finalization process is aborted, the current implementation
+>> > > destroys KHO's internal memory tracking structures
+>> > > (`kho_out.ser.track.orders`). This behavior effectively unpreserves
+>> > > all memory from KHO's perspective, regardless of whether those
+>> > > preservations were made by clients before the finalization attempt
+>> > > or by KHO itself during finalization.
+>> > >
+>> > > This premature unpreservation is incorrect. An abort of the
+>> > > finalization process should only undo actions taken by KHO as part of
+>> > > that specific finalization attempt. Individual memory regions
+>> > > preserved by clients prior to finalization should remain preserved,
+>> > > as their lifecycle is managed by the clients themselves. These
+>> > > clients might still need to call kho_unpreserve_folio() or
+>> > > kho_unpreserve_phys() based on their own logic, even after a KHO
+>> > > finalization attempt is aborted.
+>> >
+>> > I think you also need to update test_kho and reserve_mem to do this
+>> > since right now they assume all memory gets unpreserved on failure.
+>>
+>> I agree.
+>
+> Hm, this makes no sense to me. So, KHO tried to finalize (i.e.,
+> convert xarray to sparse bitmap) and failed (e.g. due to OOM) or
+> aborted, so we aborted the finalization. But the preserved memory
+> stays preserved, and if user/caller retries finalization and it
+> succeeds, the preserved memory will still be passed to the next
+> kernel. Why would reserve_mem and test_kho depend on whether KHO
+> finalization succeeded or was canceled? It is possible that user
+> cancel only to add something else to preservation.
 
-> I also added KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES, which tells
-> userspace the valid attributes when calling KVM_SET_MEMORY_ATTRIBUTES2
-> on a guest_memfd:
+On mainline, the reserve_mem kho_preserve_pages() calls come from the
+notifier chain. Any failure on the notifier chain causes an abort and
+thus automatically unpreserves all pages that were preserved.
 
-Ya, and that KVM_SET_MEMORY_ATTRIBUTES2 is supported on guest_memfd.
-
->   #ifdef CONFIG_KVM_GUEST_MEMFD
->   	case KVM_CAP_GUEST_MEMFD:
->   		return 1;
->   	case KVM_CAP_GUEST_MEMFD_FLAGS:
->   		return kvm_gmem_get_supported_flags(kvm);
->   	case KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES:
->   		if (vm_memory_attributes)
->   			return 0;
->   
->   		return kvm_supported_mem_attributes(kvm);
->   #endif
->   
-> So to set memory attributes, userspace should
-
-Userspace *can*.  User could also decide it only wants to support guest_memfd
-attributes, e.g. because the platform admins controls the entire stack and built
-their entire operation around in-place conversion.
-
->   if (kvm_check_cap(KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES) > 0)
-> 	use KVM_SET_MEMORY_ATTRIBUTES2 with guest_memfd
->   else if (kvm_check_cap(KVM_CAP_MEMORY_ATTRIBUTES2) > 0)
->         use KVM_SET_MEMORY_ATTRIBUTES2 with VM fd
->   else if (kvm_check_cap(KVM_CAP_MEMORY_ATTRIBUTES) > 0)
-> 	use KVM_SET_MEMORY_ATTRIBUTES with VM fd
->   else
-> 	can't set memory attributes
-> 
-> Something like that?
-
-More or else, ya.
-
-> In selftests there's this, when KVM_SET_USER_MEMORY_REGION2 was
-> introduced:
-> 
->   #define TEST_REQUIRE_SET_USER_MEMORY_REGION2()			\
-> 	__TEST_REQUIRE(kvm_has_cap(KVM_CAP_USER_MEMORY2),	\
-> 		       "KVM selftests now require KVM_SET_USER_MEMORY_REGION2 (introduced in v6.8)")
-> 
-> But looks like there's no direct equivalent for the introduction of
-> KVM_SET_MEMORY_ATTRIBUTES2?
-
-KVM_CAP_USER_MEMORY2 is the equivalent.
-
-There's was no need to enumerate anything beyond yes/no, because
-SET_USER_MEMORY_REGION2 didn't introduce new flags, it expanded the size of the
-structure passed in from userspace so that KVM_CAP_GUEST_MEMFD could be introduced
-without breaking backwards compatibility.
-
-> The closest would be to add a TEST_REQUIRE_VALID_ATTRIBUTES() which
-> checks KVM_CAP_MEMORY_ATTRIBUTES2 or
-> KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES before making the vm or
-> guest_memfd ioctl respsectively.
-
-Yes.  This is what I did in my (never posted, but functional) version:
-
-@@ -486,6 +488,7 @@ struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
-        }
-        guest_rng = new_guest_random_state(guest_random_seed);
-        sync_global_to_guest(vm, guest_rng);
-+       sync_global_to_guest(vm, kvm_has_gmem_attributes);
- 
-        kvm_arch_vm_post_create(vm, nr_runnable_vcpus);
- 
-@@ -2319,6 +2333,8 @@ void __attribute((constructor)) kvm_selftest_init(void)
-        guest_random_seed = last_guest_seed = random();
-        pr_info("Random seed: 0x%x\n", guest_random_seed);
- 
-+       kvm_has_gmem_attributes = kvm_has_cap(KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES);
-+
-        kvm_selftest_arch_init();
- }
- 
-That way the core library code can pivot on gmem vs. VM attributes without having
-to rely on tests to define anything.  E.g.
-
-static inline void vm_mem_set_memory_attributes(struct kvm_vm *vm, uint64_t gpa,
-						uint64_t size, uint64_t attrs)
-{
-	if (kvm_has_gmem_attributes) {
-		off_t fd_offset;
-		uint64_t len;
-		int fd;
-
-		fd = kvm_gpa_to_guest_memfd(vm, gpa, &fd_offset, &len);
-		TEST_ASSERT(len >= size, "Setting attributes beyond the length of a guest_memfd");
-		gmem_set_memory_attributes(fd, fd_offset, size, attrs);
-	} else {
-		vm_set_memory_attributes(vm, gpa, size, attrs);
+	static int reserve_mem_kho_finalize(struct kho_serialization *ser)
+	{
+		int err =3D 0, i;
+=09
+		for (i =3D 0; i < reserved_mem_count; i++) {
+                	[...]
+			err |=3D kho_preserve_pages(page, nr_pages);
+		}
+=09
+		err |=3D kho_preserve_folio(page_folio(kho_fdt));
+		err |=3D kho_add_subtree(ser, MEMBLOCK_KHO_FDT, page_to_virt(kho_fdt));
+=09
+		return notifier_from_errno(err);
 	}
-}
+
+If any of the kho_preserve_pages() fails, the notifier block will fail,
+cause an abort, and eventually all memory will be unpreserved.
+
+Now that there is no notifier, and thus no abort, the pages must be
+unpreserved explicitly before returning.
+
+Similarly, for test_kho, kho_test_notifier() calls kho_preserve_folio()
+and expects the abort to clean things up.
+
+Side note: test_kho also preserves folios from kho_test_save_data() and
+doesn't clean them up on error, but that is a separate problem that this
+series doesn't have to solve.
+
+I think patch 3/7 is the one that actually causes this problem since it
+gets rid of the notifier. This is the wrong patch to complain about this
+but somehow I thought this is the one that triggers it.
+
+--=20
+Regards,
+Pratyush Yadav
 
