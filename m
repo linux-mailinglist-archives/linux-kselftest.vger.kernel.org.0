@@ -1,146 +1,343 @@
-Return-Path: <linux-kselftest+bounces-43981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A60D8C06ABB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 16:20:21 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0698BC06B93
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 16:36:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5724E3AF810
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 14:20:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6A3494E2F5B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 14:36:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 668EE1F4621;
-	Fri, 24 Oct 2025 14:20:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C15246793;
+	Fri, 24 Oct 2025 14:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="Gy90muF8"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="iDxjXFPG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-012.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-012.esa.eu-central-1.outbound.mail-perimeter.amazon.com [52.57.120.243])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C979A1F17E8
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 14:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1759F233D9E;
+	Fri, 24 Oct 2025 14:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.57.120.243
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761315618; cv=none; b=VUHGmlNQWOvsLPqXzGxGrWNlt+92Djxh+JXmdtkSnwrcuu+NNG85o8X9r0XwCWPRRuypzdQ815JmDhquiVZ3BFuNBVxn551MJWVHKSZDdX1H8Xraq1qAuIb4khC6YNlxjRtJXW7Lq8768nhRaHth0CNtVFcXXHDgjstAv3UG2ew=
+	t=1761316576; cv=none; b=o5yEAof/j8HZvOmvXz8TJQNbqcGjRwU2K+lIuE+ejDwFKyAdLJ+7Y5dK683GUe9lUE/h3ZRZpSRkaHmLUe/j8ZTftGJ5KyPo5DM1OSeayMgsmoLNAfnGa+0ZnLYwOiHqqg0e3H7HG8B+vbGM9mz5iHOwRKl5YSUA7g9zt+9rlSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761315618; c=relaxed/simple;
-	bh=iD9EcYwDrVZY7o7ShtNVS9E3sbreHS0SF+srlhNtBs4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a4KB3COr4i9uAhely5FDek9YwYeXmiEnH4nfgyDAKT8P7G7nOi2bsPpepH8/PL8dzSIc4DnDPSPD6Fi+rU3u/Zv3SMsATmwwtbsEXgHE1bkO15w18oyCii5XvazB7iDQD3wDnStiOtTjHYfGmXwDQy6BSLO6+C+AdNmW141BuJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=Gy90muF8; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-87c20106cbeso29450496d6.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 07:20:16 -0700 (PDT)
+	s=arc-20240116; t=1761316576; c=relaxed/simple;
+	bh=nzQF0MiiBQiu5ky7w7PrGFrUlAnMNsaAvg/nOWMF8Fo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=JiCn95f4klvoG2daqnkapACFWwoWzIkJ70/UzY2hbLvzUD8Wa6boigracoahlh4EVvPlPjsK9Jv5N8wTmMo1rm7xgLKJ6HMkP7n+w0hf5ipFRhTaHO88WvGlSyxcjOvG/k+28QXxGMZzec8pSgpLEXrgAAZAPu69auZ0lMKya08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=iDxjXFPG; arc=none smtp.client-ip=52.57.120.243
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1761315616; x=1761920416; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dMM6jx2qjRnMcPOV+lvbPLel1TW60YL6/vWevUW1Pqg=;
-        b=Gy90muF8DaifrQGdeSPbtW+2dxuKHzyBFhOrUhxm1oshtGGV0uzQxDBh3dlrUt3gpw
-         332U/YGT+myN1+ld10n7Qkp4wmLHcAlVLzfGrlDV0W6SZ11xl0uGNP6GYrR3Hqndq9g7
-         e1ZBTARMoW6x08d04Dtd2DMDGvTsbv6lCnG6tFArEwQnWAwfWdN4HI2XKf4L0LQNc2PW
-         vosboStfirT5M0kZPfTfVYgCPKsVDbbrtyJvkUbkwM5nwYrjKZ++IwJc9scfq1U4m2m3
-         0vRgSRLLtozKiM5WS7cOEEJH4B7korXWmFkP9csgxHdbf2hesHIIayX71s/VpsFVHhTW
-         Mdsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761315616; x=1761920416;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dMM6jx2qjRnMcPOV+lvbPLel1TW60YL6/vWevUW1Pqg=;
-        b=i3ceoGv7Ruq7qoyXXfq6w9MM/46l5gEW/n3brQSHpmV5HnLgjWTuaDYvU1/Q68M9XU
-         95yGnnOXdjlf3qfPim7PgaHFiSj7eCVAkwOUmB/X+wP0TiGUWqCmAUzXYi0APm7KA+8Q
-         aaPmWQv73YCYCveyUuyioyLbqobNud0E/1jRt1BueoemeG48tyybpr57BIY/K33OumZu
-         9VadcutlEfIVaCt7Fay4A75+/AmAvElLO1KWXuCOy0CrQV9D+NrDNtYkAmRIimLlPw2K
-         /UbsVZqbP8ZC0tK7ZX8kN3SIjiv3FcELILEqDYXz2R7CKmAi8VAojCk0TSeDIZbLnZsN
-         zSzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXL/J/yrKYInSp51nuM6BW+mu1v5pb6RGhi/IMdBOlOsYFu2tlCKEdzkjg48IbVkguNHcznKDZW+0XCQ/Hw/WY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyq+uzQ8NybAMMLQGdI01U2PFwe4wpi8GP0dDGSNua9xsR1+ccv
-	SfTlWYPGhkZRusXpR2RW9oHgJ8iW6Gz+JtzqHa1ju/hKfAZ5NrgZnemBkONRQITydwg=
-X-Gm-Gg: ASbGncuDwLs164QGQWOkXC0FmZtMaObLHpzQPf9asVK8vlubb8RhKWlxdEU0D2TEQdm
-	jlrOuX8+cfxQouJwMHMwi2Ajy3NZdOBabnb8Jw2K8Zwgl/1SC3BwXYjJHsJT3qwcmnpAt/PRW7s
-	PBiU3J761GfbMtqKPexraW/vXT3BlFHBxd0hOsQORwd2LB0MZRQ7ezT0mSbHvdB0RHBGXwofjtE
-	X3FNNk2nyuVaQFrDMA24gFG9rX5W2Ejwb5oQ+5aLz8lVtI7AGZcwglr0Lr1TT0H/v9tAibSbEQF
-	MHB/xnUIaUJMrlsqeS5Ip4XltiKCvcmmgY/i1rtWNiOjcBY0nUDCKyo92aT9sjf6b5pD+cMwDj7
-	q/J/wvPPuH12BR2adCKN6v2E4BsHPaCTaqMqk/FNrPaaxpHgqFKN1+qcqu4kdBAZqIqlsyQL3Eh
-	G5kYabdP19GCgVthVIsja406l7TP9jAVW+oCxjES3Px3SV1iWqa6ruq1U8
-X-Google-Smtp-Source: AGHT+IFeDksjp1ulZ1Jx2CLnCwxxUl6vBkLTwJZHNmUsnFK2qP03K8WdGRN+VgPtJR0tDr8FPMO6aw==
-X-Received: by 2002:a05:6214:2021:b0:87b:ca1c:1aa1 with SMTP id 6a1803df08f44-87fb6458d24mr22936406d6.46.1761315615589;
-        Fri, 24 Oct 2025 07:20:15 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-47-55-120-4.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.120.4])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-87f9e8237cdsm36788926d6.56.2025.10.24.07.20.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Oct 2025 07:20:15 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1vCIeM-00000003j94-10Nr;
-	Fri, 24 Oct 2025 11:20:14 -0300
-Date: Fri, 24 Oct 2025 11:20:14 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Pratyush Yadav <pratyush@kernel.org>, akpm@linux-foundation.org,
-	brauner@kernel.org, corbet@lwn.net, graf@amazon.com,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, masahiroy@kernel.org, ojeda@kernel.org,
-	rdunlap@infradead.org, rppt@kernel.org, tj@kernel.org,
-	jasonmiu@google.com, dmatlack@google.com, skhawaja@google.com,
-	glider@google.com, elver@google.com
-Subject: Re: [PATCH 2/2] liveupdate: kho: allocate metadata directly from the
- buddy allocator
-Message-ID: <20251024142014.GC760669@ziepe.ca>
-References: <20251015053121.3978358-1-pasha.tatashin@soleen.com>
- <20251015053121.3978358-3-pasha.tatashin@soleen.com>
- <mafs0v7kgjoxq.fsf@kernel.org>
- <CA+CK2bCG011xf7v9nGMq4WQAUta9wDt05+W8KmRuc-JE7ZTwqg@mail.gmail.com>
- <20251024132509.GB760669@ziepe.ca>
- <CA+CK2bA_Qb9csWvEQb-zpxgMg7vy+gw9eh0z88QBEdiFdtopMQ@mail.gmail.com>
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1761316574; x=1792852574;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=Qxk7463vFM1P5dU1IXgB3lSRX3aE4phUbxwzBEtbrPI=;
+  b=iDxjXFPGkg9xXIBW6blys1sxKLlhXkErD5Pa+Lus7nMi3OAeghk/2Bc1
+   OfgSBEq/773MaSG3+tOfNbmvKtVZ6SPaogN/cWwTpFVkoTIB+5W06ddU0
+   GIbLIhF15+UPJ4gEj49odX157APArHR0FdUi4AKXwG9Xk+mgy8CRwhwMB
+   J8lg3KY0KpP4iUK9ZUtgns7V75tv28g7JMWccCQrtdoxlEL8hXxsFJZYf
+   7UhZ5NrC0MTVxBugKBS8royuPaJyjqN4wzayW60bo7GtkRiFesHyJ4SMH
+   kj3ThX3e57aMckVDH56OdSMoxWKwNkCYJ+dwrICs06wfej8w1Nj75ozBP
+   w==;
+X-CSE-ConnectionGUID: wFrkUWdsQhyApZmscs2aBg==
+X-CSE-MsgGUID: d0QitL61TKq0bWUjo6ZXUw==
+X-IronPort-AV: E=Sophos;i="6.19,252,1754956800"; 
+   d="scan'208";a="4074722"
+Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
+  by internal-fra-out-012.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2025 14:36:04 +0000
+Received: from EX19MTAEUB002.ant.amazon.com [54.240.197.224:21718]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.3.26:2525] with esmtp (Farcaster)
+ id cfc190ed-a8d4-4eb6-b322-cbc2b4eabf12; Fri, 24 Oct 2025 14:36:04 +0000 (UTC)
+X-Farcaster-Flow-ID: cfc190ed-a8d4-4eb6-b322-cbc2b4eabf12
+Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
+ EX19MTAEUB002.ant.amazon.com (10.252.51.79) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.20;
+ Fri, 24 Oct 2025 14:35:40 +0000
+Received: from [192.168.3.241] (10.106.82.14) by EX19D022EUC002.ant.amazon.com
+ (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Fri, 24 Oct 2025
+ 14:35:39 +0000
+Message-ID: <8a28ddea-35c0-490e-a7d2-7fb612fdd008@amazon.com>
+Date: Fri, 24 Oct 2025 15:35:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+CK2bA_Qb9csWvEQb-zpxgMg7vy+gw9eh0z88QBEdiFdtopMQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v6 1/2] KVM: guest_memfd: add generic population via write
+To: Sean Christopherson <seanjc@google.com>, Nikita Kalyazin
+	<kalyazin@amazon.co.uk>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"david@redhat.com" <david@redhat.com>, "jthoughton@google.com"
+	<jthoughton@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
+	Jack Thomson <jackabt@amazon.co.uk>, Derek Manwaring <derekmn@amazon.com>,
+	Marco Cali <xmarcalx@amazon.co.uk>, <ackerleytng@google.com>, "Vishal
+ Annapurve" <vannapurve@google.com>
+References: <20251020161352.69257-1-kalyazin@amazon.com>
+ <20251020161352.69257-2-kalyazin@amazon.com> <aPpS2aqdobVTk_ed@google.com>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <aPpS2aqdobVTk_ed@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D008EUC002.ant.amazon.com (10.252.51.146) To
+ EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
-On Fri, Oct 24, 2025 at 09:57:24AM -0400, Pasha Tatashin wrote:
 
-> You're right the new kernel will eventually zero memory, but KHO
-> preserves at page granularity. If we preserve a single slab object,
-> the entire page is handed off. When the new kernel maps that page
-> (e.g., to userspace) to access the preserved object, it also exposes
-> the unpreserved portions of that same page. Those portions contain
-> stale data from the old kernel and won't have been zeroed yet,
-> creating an easy-to-miss data leak vector. 
 
-Do we zero any of the memory on KHO? Honestly, I wouldn't worry about
-the point it zeros, slab guarentees it will be zero when it should be
+On 23/10/2025 17:07, Sean Christopherson wrote:
+> On Mon, Oct 20, 2025, Nikita Kalyazin wrote:
+>> From: Nikita Kalyazin <kalyazin@amazon.com>
+
++ Vishal and Ackerley
+
+>>
+>> write syscall populates guest_memfd with user-supplied data in a generic
+>> way, ie no vendor-specific preparation is performed.  If the request is
+>> not page-aligned, the remaining bytes are initialised to 0.
+>>
+>> write is only supported for non-CoCo setups where guest memory is not
+>> hardware-encrypted.
+> 
+> Please include all of the "why".  The code mostly communicates the "what", but
+> it doesn't capture why write() support is at all interesting, nor does it explain
+> why read() isn't supported.
+
+Hi Sean,
+
+Thanks for the review.
+
+Do you think including the explanation from the cover letter would be 
+sufficient?  Shall I additionally say that read() isn't supported 
+because there is no use case for it as of now or would it be obvious?
+
+> 
+>> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+>> ---
+>>   virt/kvm/guest_memfd.c | 48 ++++++++++++++++++++++++++++++++++++++++++
+> 
+> There's a notable lack of uAPI and Documentation chanegs.  I.e. this needs a
+> GUEST_MEMFD_FLAG_xxx along with proper documentation.
+
+Would the following be ok in the doc?
+
+When the capability KVM_CAP_GUEST_MEMFD_WRITE is supported, the 'flags' 
+field
+supports GUEST_MEMFD_FLAG_WRITE. Setting this flag on guest_memfd creation
+enables write() syscall operations to populate guest_memfd memory from host
+userspace.
+
+When a write() operation is performed on a guest_memfd file descriptor 
+with the
+GUEST_MEMFD_FLAG_WRITE set, the syscall will populate the guest memory with
+user-supplied data in a generic way, without any vendor-specific 
+preparation.
+The write operation is only supported for non-CoCo (Confidential Computing)
+setups where guest memory is not hardware-encrypted. If the write request is
+not page-aligned, any remaining bytes within the page are initialized to 
 zero.
 
-> There's also the inefficiency. The unpreserved parts of that page are
-> unusable by the new kernel until the preserved object is freed.
+> 
+> And while it's definitely it's a-ok to land .write() in advance of the direct map
+> changes, we do need to at least map out how we want the two to interact, e.g. so
+> that we don't end up with constraints that are impossible to satisfy.
+> 
 
-Thats not how I see slab preservation working. When the slab page
-is unpreserved all the free space in that page should be immediately
-available to the sucessor kernel.
+write() shall not attempt to access a page that is not in the direct 
+map, which I believe can be achieved via kvm_kmem_gmem_write_begin() 
+consulting the KVM_GMEM_FOLIO_NO_DIRECT_MAP in folio->private 
+(introduced in [1]).
 
-> As I see it, the only robust solution is to use a special GFP flag.
-> This would force these allocations to come from a dedicated pool of
-> pages that are fully preserved, with no partial/mixed-use pages and
-> also retrieved as slabs.
+Do you think we should mention it in the commit message in some way? 
+What particular constraint are you cautious about?
 
-It is certainly more efficient to preserve fewer slab pages in total
-and pooling would help get there.
+[1] https://lore.kernel.org/kvm/20250924152214.7292-2-roypat@amazon.co.uk/
 
-> That said, I'm not sure preserving individual slab objects is a high
-> priority right now. It might be simpler to avoid it altogether.
+>>   1 file changed, 48 insertions(+)
+>>
+>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+>> index 94bafd6c558c..f4e218049afa 100644
+>> --- a/virt/kvm/guest_memfd.c
+>> +++ b/virt/kvm/guest_memfd.c
+>> @@ -380,6 +380,8 @@ static int kvm_gmem_mmap(struct file *file, struct vm_area_struct *vma)
+>>
+>>   static struct file_operations kvm_gmem_fops = {
+>>        .mmap           = kvm_gmem_mmap,
+>> +     .llseek         = default_llseek,
+>> +     .write_iter     = generic_perform_write,
+>>        .open           = generic_file_open,
+>>        .release        = kvm_gmem_release,
+>>        .fallocate      = kvm_gmem_fallocate,
+>> @@ -390,6 +392,49 @@ void kvm_gmem_init(struct module *module)
+>>        kvm_gmem_fops.owner = module;
+>>   }
+>>
+>> +static int kvm_kmem_gmem_write_begin(const struct kiocb *kiocb,
+>> +                                  struct address_space *mapping,
+>> +                                  loff_t pos, unsigned int len,
+>> +                                  struct folio **foliop,
+>> +                                  void **fsdata)
+> 
+> Over-aggressive wrapping, this can be
+> 
+> 
+> static int kvm_kmem_gmem_write_begin(const struct kiocb *kiocb,
+>                                       struct address_space *mapping, loff_t pos,
+>                                       unsigned int len, struct folio **folio,
+>                                       void **fsdata)
+> 
+> or
+> 
+> static int kvm_kmem_gmem_write_begin(const struct kiocb *kiocb,
+>                                       struct address_space *mapping,
+>                                       loff_t pos, unsigned int len,
+>                                       struct folio **folio, void **fsdata)
+> 
+> if we want to bundle pos+len.
 
-I think we will need something, a lot of the structs I'm seeing in
-other patches are small and allocating a whole page is pretty wasteful
-too.
+Ack.
 
-Jason
+> 
+>> +{
+>> +     struct file *file = kiocb->ki_filp;
+> 
+> ki_filp is already a file, and even if it were a "void *", there's no need for a
+> local variable.
+
+Ack.
+
+> 
+>> +     struct inode *inode = file_inode(file);
+>> +     pgoff_t index = pos >> PAGE_SHIFT;
+>> +     struct folio *folio;
+>> +
+>> +     if (!kvm_gmem_supports_mmap(inode))
+> 
+> Checking for MMAP is neither sufficient nor strictly necessary.  MMAP doesn't
+> imply SHARED, and it's not clear to me that mmap() support should be in any way
+> tied to WRITE support.
+
+As in my reply to the comment about doc, I plan to introduce 
+KVM_CAP_GUEST_MEMFD_WRITE and GUEST_MEMFD_FLAG_WRITE.  The 
+kvm_arch_supports_gmem_write() will be a weak symbol and relying on 
+!kvm_arch_has_private_mem() on x86, similar to 
+kvm_arch_supports_gmem_mmap().  Does it look right?
+
+> 
+>> +             return -ENODEV;
+>> +
+>> +     if (pos + len > i_size_read(inode))
+>> +             return -EINVAL;
+>> +
+>> +     folio = kvm_gmem_get_folio(inode, index);
+> 
+> Eh, since "index" is only used once, my vote is to use "pos" and do the shift
+> here, so that it's obvious that the input to kvm_gmem_get_folio() is being checked.
+
+Ack.
+
+> 
+>> +     if (IS_ERR(folio))
+>> +             return -EFAULT;
+> 
+> Why EFAULT?
+
+Will propagate the error like you suggest below.
+
+> 
+>> +
+>> +     *foliop = folio;
+> 
+> There shouldn't be any need for a local "folio".  What about having the "out"
+> param be just "folio"?
+> 
+> E.g.
+> 
+> static int kvm_kmem_gmem_write_begin(const struct kiocb *kiocb,
+>                                       struct address_space *mapping,
+>                                       loff_t pos, unsigned int len,
+>                                       struct folio **folio, void **fsdata)
+> {
+>          struct inode *inode = file_inode(kiocb->ki_filp);
+> 
+>          if (!kvm_gmem_supports_write(inode))
+>                  return -ENODEV;
+> 
+>          if (pos + len > i_size_read(inode))
+>                  return -EINVAL;
+> 
+>          *folio = kvm_gmem_get_folio(inode, pos >> PAGE_SHIFT);
+>          if (IS_ERR(*folio))
+>                  return PTR_ERR(*folio);
+> 
+>          return 0;
+> }
+
+Ack.
+
+> 
+> 
+>> +     return 0;
+>> +}
+>> +
+>> +static int kvm_kmem_gmem_write_end(const struct kiocb *kiocb,
+>> +                                struct address_space *mapping,
+>> +                                loff_t pos, unsigned int len,
+>> +                                unsigned int copied,
+>> +                                struct folio *folio, void *fsdata)
+>> +{
+>> +     if (copied && copied < len) {
+> 
+> Why check if "copied" is non-zero?  I don't see why KVM should behave differently
+> with respect to unwritten bytes if copy_folio_from_iter_atomic() fails on the
+> first byte or the Nth byte.
+
+No, I don't think there is a need for this check indeed.  It looks like 
+a leftover from my previous changes.
+
+> 
+>> +             unsigned int from = pos & ((1UL << folio_order(folio)) - 1);
+> 
+> Uh, isn't this just offset_in_folio()?
+> 
+>> +
+>> +             folio_zero_range(folio, from + copied, len - copied);
+> 
+> I'd probably be in favor of omitting "from" entirely, e.g.
+> 
+>          if (copied < len)
+>                  folio_zero_range(folio, offset_in_folio(pos) + copied,
+>                                   len - copied);
+> 
+
+Ack.
+
+>> +     }
+>> +
+>> +     folio_unlock(folio);
+>> +     folio_put(folio);
+>> +
+>> +     return copied;
+>> +}
+
 
