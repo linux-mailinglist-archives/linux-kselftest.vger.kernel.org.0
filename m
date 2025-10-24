@@ -1,153 +1,356 @@
-Return-Path: <linux-kselftest+bounces-44024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1739C08278
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 23:10:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7B36C0837B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 23:56:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C02374FAEBC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 21:10:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87FE43B4944
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 21:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A008F2FF163;
-	Fri, 24 Oct 2025 21:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F42A31327E;
+	Fri, 24 Oct 2025 21:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gUpoJA+Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EbAlT30D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44F92FF154
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 21:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0742A5478D;
+	Fri, 24 Oct 2025 21:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761340220; cv=none; b=SbNdBqSUmvtQthurQRCKC4uGIkFBKeHNu4/lEBmgl46Wjj30E08Pm3isTtN8rJp8jyNPoNhGckloRPTifTc1mzxFQOFKoQ7Jd17z8M5PMnrFEU+HWN/6WvOQwDQtnyvcjkVFPb+gnbzp5wBiomiU/kXB7Xk5cObDSkdzd+sMctY=
+	t=1761342959; cv=none; b=HpvHW8iHBvgAxJxzV7iilyGycrX/vuFR9ySOvuiaOXSFiaPu1QXSLVGN6BMDU+u63VWsu7yVABqfF93gcRJ8byCSkbYcd+do6jvC/ZVp4Jt2LKg1oH7BPRfdhiyI5Q9b30GC3ZApDyEUGxfv61Ag9S+NdpKYYmpxYeMrw/SGydE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761340220; c=relaxed/simple;
-	bh=vNar2fObJ/YjclckziN2OKibpLwZUVWKiZQDjIp4Y28=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gi5umBEGa66hdwHGEg/aO/IxUng7OcgTfLr+0y5plWCpPbecGWWtTjRrW+iinl7fm50U27J/s21q9IJsIe0AFMfkQ9fOVJlamn0K137UeQzGECO0GR6o3ZWUPxZHMiQwcUOEcY3k/0sN6QwJ2VqO5v6tDIFSkjtMn3hrWO/AGrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gUpoJA+Y; arc=none smtp.client-ip=74.125.224.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-63b919b3502so524852d50.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 14:10:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761340218; x=1761945018; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vNar2fObJ/YjclckziN2OKibpLwZUVWKiZQDjIp4Y28=;
-        b=gUpoJA+YjW2jYVo3Sr77vRSCQww0A1qCCfVJlCZb3Yd0jt/d/ml29d7FDlrg4Q3lB7
-         uAuI0OoyZmMIbOyR+epp8LFfS1YqCMrh5tIjq0/RuiQ3/+KRUooZpsJET0w+SHnacyZ3
-         srKb9nb1gbkAYoxTTfnv8YAFJaLU/bSVlYnsdT12vscN7/bnpwjQaINR52P7B7JmtcSS
-         +j+Eus64t7D7AWnCzLoeB/0vWFnTzfcMVOTS5dfmm7VahD+phncbf4OqX3yhgkqertvB
-         uF0xuaiwOmx7k4qXnb7XWmdVRt+GpchF/eLw/MAt/cL7XyPJTWBwIpppF6AyYPjUEw2G
-         h4vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761340218; x=1761945018;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vNar2fObJ/YjclckziN2OKibpLwZUVWKiZQDjIp4Y28=;
-        b=RGGEPN+u37zkrWSjRw/K68m07Sw/hbzwoQQF+E4cQFrR5k1abm4yVjU0Vuk9KRED97
-         /UXbPhQ4N7UeZ5oJbodcsDSx9HvYAK/omJBZf80LLQakayBR8pwCJfn1090hDF4nRQ2f
-         om3EY71h1CKl43d0p4fXwF7G80CeyvhGDIvYHIuw9/GVtHnvwzFWaQfE5xaaXRrHVWBU
-         AEfnV3f3tVQxdNrzZiuM2byNLjN5cyUiAwxSh0Q0lgLRSZhdtClBmqqxuHL+RwrK+/bL
-         wBpYGPOEn95hNKZsIT2SpOSvML5fE34MuWnjPOZwv9uvHFvebrJWNLN33OuIM+yU+Ppx
-         CgxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVJzTpw7miwB9fAIuK27kqa+Qt6uElFqldWED1mmnh9FkBky0HeJiOWcgWq0eesE5p80dtSLGVJE7bLxMcgXRE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKxOuXB96iM2C7ovEZwFB1PUJRJqkaX/VikyGuQUdfEd+fk6+L
-	hL4KiuB2bOsG4WLjVWlXe1dUhr44rC9dm3EdDOYAVp83CfLAxwsocLPKVGwIUbDOlD4cAG1orEZ
-	Jvd+6XjKZ2F2s3bzQAu3PL0nloP+BItc=
-X-Gm-Gg: ASbGncvOHdA+ndtgTlj0KKAzrRO58OoQiz/Hz/v+Dm50GFowUyI5A9O9+iTDDT4V94S
-	3+IxKibUlM3xP0gA+/dkjKAGZ2qUyoPldgF3ZG2pV7JRMwXTIvINrDLOBfViCzDVM5kdp6bXO9U
-	D/aUxMhloQnEzj+xYsJ/lwndhGALFLe0TFpszVBhE6qvVYhC+cuiR/8HaqwTv2d8mze/IgFwFmw
-	dhOEjUi0W+e4UTbCZDZ4KaUz6tipLGli1kdp+hDxqtGOw509Gp6XToA/QHa2hT/fUlkLbFqAsvz
-	k8VslzYWDG+udOQtX02th7KPqs5WY79onBTQiqk=
-X-Google-Smtp-Source: AGHT+IGPfQPQsWVBJditk8ZLoKodY2GSVcK/cYaKXa1sORKnZqTOEGqPHHErVJ7mIOsgE88o0wuqUj1jCIXLb4sNG1w=
-X-Received: by 2002:a05:690e:1182:b0:63e:3099:df3f with SMTP id
- 956f58d0204a3-63e9e043cccmr7400103d50.3.1761340217776; Fri, 24 Oct 2025
- 14:10:17 -0700 (PDT)
+	s=arc-20240116; t=1761342959; c=relaxed/simple;
+	bh=iPQSQbp6NYgiZEMWXqCyX/kQHChwhzEXnzNGV12eu8Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pYImATFAGL51QGW0nTdt8CsSsfPDno/CnmFuRqz9Tqv2d7jW9/2M/DGCNaPmE/MAPHNjg11BLFL0ktwkePTI53DySKsI5NMM9YLUU7MITE67yJfz+HeIQ26hPwr8pgOP51/xwFtpo7XG7wCMslVyPswxM6xmRT+uybHYhz31Yh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EbAlT30D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EBB2C4CEF1;
+	Fri, 24 Oct 2025 21:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761342958;
+	bh=iPQSQbp6NYgiZEMWXqCyX/kQHChwhzEXnzNGV12eu8Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EbAlT30Dv7lv/GkdjkfHpUbA47Qnedq2JXp3KoQI6jRx9UklO/8r+kchmtqI9kdNf
+	 FbahUOu7pKPnf0/9swP4icH3niRZqk79CFG/dtp3+YNeykOfY1j3mnW3fR238DAxOt
+	 DPYtmFZ71CeAck4vZ/Xq+2Jx5X2+R1EcbcfBNdbwQz9+zO1vfew2i1fhwsOQsOnVD0
+	 SR1LDXekTdPQjr80hgnG1OAeO5xwktMiyG18U1PDrqwV58DzLbUC8y+a8Ui5P22ebN
+	 QaPOufqgSS0vAIGI1x77BM4IS9WSkP6b17re/Xito6NT6OelWG3zr0fYil50q2uGZq
+	 Dy1TTUT+T2P9Q==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	andrew@lunn.ch,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: drv-net: replace the nsim ring test with a drv-net one
+Date: Fri, 24 Oct 2025 14:55:52 -0700
+Message-ID: <20251024215552.1249838-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251022-netconsole-fix-race-v2-0-337241338079@meta.com> <20251022180107.3a7d1198@kernel.org>
-In-Reply-To: <20251022180107.3a7d1198@kernel.org>
-From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Date: Fri, 24 Oct 2025 18:10:06 -0300
-X-Gm-Features: AS18NWDmyMF1rpsmyMWLaRl5q-bbLa3mCtN8Q3yda1FTKFDczsqf2piTCo-OGII
-Message-ID: <CAGSyskWm=jDOSPAh3LWEQQzjAxvc-Od7DkQyP7W9EynoMdDnMg@mail.gmail.com>
-Subject: Re: [PATCH net v2 0/2] netconsole: Fix userdata race condition
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Andre Carvalho <asantostc@gmail.com>, Simon Horman <horms@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Matthew Wood <thepacketgeek@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Oct 22, 2025 at 10:01=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
-rote:
->
-> On Wed, 22 Oct 2025 10:39:56 -0700 Gustavo Luiz Duarte wrote:
-> > This series fixes a race condition in netconsole's userdata handling
-> > where concurrent message transmission could read partially updated
-> > userdata fields, resulting in corrupted netconsole output.
-> >
-> > The first patch adds a selftest that reproduces the race condition by
-> > continuously sending messages while rapidly changing userdata values,
-> > detecting any torn reads in the output.
-> >
-> > The second patch fixes the issue by ensuring update_userdata() holds
-> > the target_list_lock while updating both extradata_complete and
-> > userdata_length, preventing readers from seeing inconsistent state.
-> >
-> > This targets net tree as it fixes a bug introduced in commit df03f830d0=
-99
-> > ("net: netconsole: cache userdata formatted string in netconsole_target=
-").
->
-> This test is skipping on debug kernel builds in netdev CI.
->
-> TAP version 13
-> 1..1
-> # overriding timeout to 360
-> # selftests: drivers/net: netcons_race_userdata.sh
-> # socat died before we could check 10000 messages. Skipping test.
-> ok 1 selftests: drivers/net: netcons_race_userdata.sh # SKIP
->
-> We can't have skips for SW tests.
->
-> I think Breno was fighting with a similar problem in the past.
-> Not sure what he ended up doing. Maybe just leave it at the print?
-> Don't actually mark the test as skipped?
->
-> Slightly more advanced option is to only do that if KSFT_MACHINE_SLOW
-> per:
-> https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-=
-style#dealing-with-slow-runners-in-performancelatency-tests
+We are trying to move away from netdevsim-only tests and towards
+tests which can be run both against netdevsim and real drivers.
 
-There are two reasons for hitting this skip.
-1. The hardcoded 2s timeout in listen_port_and_save_to() expired
-2. socat died or failed to start for mysterious reasons
+Replace the simple bash script we have for checking ethtool -g/-G
+on netdevsim with a Python test tweaking those params as well
+as channel count.
 
-#1 should probably be a success (we ran the test for this long and no
-corruption found), and for #2 we can try to return whatever exit code
-socat give us.
-Retrieving socat return code is a bit tricky because we are running it
-in a subshell, but we can save it in a temp file.
+The new test is not exactly equivalent to the netdevsim one,
+but real drivers don't often support random ring sizes,
+let alone modifying max values via debugfs.
 
-I can also send a follow up patch to use a longer timeout in
-listen_port_and_save_to() if KSFT_MACHINE_SLOW
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: andrew@lunn.ch
+CC: shuah@kernel.org
+CC: linux-kselftest@vger.kernel.org
+---
+ .../drivers/net/netdevsim/ethtool-ring.sh     |  85 ---------
+ .../selftests/drivers/net/ring_reconfig.py    | 167 ++++++++++++++++++
+ 2 files changed, 167 insertions(+), 85 deletions(-)
+ delete mode 100755 tools/testing/selftests/drivers/net/netdevsim/ethtool-ring.sh
+ create mode 100755 tools/testing/selftests/drivers/net/ring_reconfig.py
 
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-ring.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-ring.sh
+deleted file mode 100755
+index c969559ffa7a..000000000000
+--- a/tools/testing/selftests/drivers/net/netdevsim/ethtool-ring.sh
++++ /dev/null
+@@ -1,85 +0,0 @@
+-#!/bin/bash
+-# SPDX-License-Identifier: GPL-2.0-only
+-
+-source ethtool-common.sh
+-
+-function get_value {
+-    local query="${SETTINGS_MAP[$1]}"
+-
+-    echo $(ethtool -g $NSIM_NETDEV | \
+-        tail -n +$CURR_SETT_LINE | \
+-        awk -F':' -v pattern="$query:" '$0 ~ pattern {gsub(/[\t ]/, "", $2); print $2}')
+-}
+-
+-function update_current_settings {
+-    for key in ${!SETTINGS_MAP[@]}; do
+-        CURRENT_SETTINGS[$key]=$(get_value $key)
+-    done
+-    echo ${CURRENT_SETTINGS[@]}
+-}
+-
+-if ! ethtool -h | grep -q set-ring >/dev/null; then
+-    echo "SKIP: No --set-ring support in ethtool"
+-    exit 4
+-fi
+-
+-NSIM_NETDEV=$(make_netdev)
+-
+-set -o pipefail
+-
+-declare -A SETTINGS_MAP=(
+-    ["rx"]="RX"
+-    ["rx-mini"]="RX Mini"
+-    ["rx-jumbo"]="RX Jumbo"
+-    ["tx"]="TX"
+-)
+-
+-declare -A EXPECTED_SETTINGS=(
+-    ["rx"]=""
+-    ["rx-mini"]=""
+-    ["rx-jumbo"]=""
+-    ["tx"]=""
+-)
+-
+-declare -A CURRENT_SETTINGS=(
+-    ["rx"]=""
+-    ["rx-mini"]=""
+-    ["rx-jumbo"]=""
+-    ["tx"]=""
+-)
+-
+-MAX_VALUE=$((RANDOM % $((2**32-1))))
+-RING_MAX_LIST=$(ls $NSIM_DEV_DFS/ethtool/ring/)
+-
+-for ring_max_entry in $RING_MAX_LIST; do
+-    echo $MAX_VALUE > $NSIM_DEV_DFS/ethtool/ring/$ring_max_entry
+-done
+-
+-CURR_SETT_LINE=$(ethtool -g $NSIM_NETDEV | grep -i -m1 -n 'Current hardware settings' | cut -f1 -d:)
+-
+-# populate the expected settings map
+-for key in ${!SETTINGS_MAP[@]}; do
+-    EXPECTED_SETTINGS[$key]=$(get_value $key)
+-done
+-
+-# test
+-for key in ${!SETTINGS_MAP[@]}; do
+-    value=$((RANDOM % $MAX_VALUE))
+-
+-    ethtool -G $NSIM_NETDEV "$key" "$value"
+-
+-    EXPECTED_SETTINGS[$key]="$value"
+-    expected=${EXPECTED_SETTINGS[@]}
+-    current=$(update_current_settings)
+-
+-    check $? "$current" "$expected"
+-    set +x
+-done
+-
+-if [ $num_errors -eq 0 ]; then
+-    echo "PASSED all $((num_passes)) checks"
+-    exit 0
+-else
+-    echo "FAILED $num_errors/$((num_errors+num_passes)) checks"
+-    exit 1
+-fi
+diff --git a/tools/testing/selftests/drivers/net/ring_reconfig.py b/tools/testing/selftests/drivers/net/ring_reconfig.py
+new file mode 100755
+index 000000000000..2251efe63014
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/ring_reconfig.py
+@@ -0,0 +1,167 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""
++Test channel and ring size configuration via ethtool (-L / -G).
++"""
++
++from lib.py import ksft_run, ksft_exit, ksft_pr
++from lib.py import ksft_eq
++from lib.py import NetDrvEpEnv, EthtoolFamily, GenerateTraffic
++from lib.py import defer, NlError
++
++
++def channels(cfg) -> None:
++    """
++    Twiddle channel counts in various combinations of parameters.
++    We're only looking for driver adhering to the requested config
++    if the config is accepted and crashes.
++    """
++    ehdr = {'header':{'dev-index': cfg.ifindex}}
++    chans = cfg.eth.channels_get(ehdr)
++
++    all_keys = ["rx", "tx", "combined"]
++    mixes = [{"combined"}, {"rx", "tx"}, {"rx", "combined"}, {"tx", "combined"},
++             {"rx", "tx", "combined"},]
++
++    # Get the set of keys that device actually supports
++    restore = {}
++    supported = set()
++    for key in all_keys:
++        if key + "-max" in chans:
++            supported.add(key)
++            restore |= {key + "-count": chans[key + "-count"]}
++
++    defer(cfg.eth.channels_set, ehdr | restore)
++
++    def test_config(config):
++        try:
++            cfg.eth.channels_set(ehdr | config)
++            get = cfg.eth.channels_get(ehdr)
++            for k, v in config.items():
++                ksft_eq(get.get(k, 0), v)
++        except NlError as e:
++            failed.append(mix)
++            ksft_pr("Can't set", config, e)
++        else:
++            ksft_pr("Okay", config)
++
++    failed = []
++    for mix in mixes:
++        if not mix.issubset(supported):
++            continue
++
++        # Set all the values in the mix to 1, other supported to 0
++        config = {}
++        for key in all_keys:
++            config[key + "-count"] = 1 if key in mix else 0
++        test_config(config)
++
++    for mix in mixes:
++        if not mix.issubset(supported):
++            continue
++        if mix in failed:
++            continue
++
++        # Set all the values in the mix to max, other supported to 0
++        config = {}
++        for key in all_keys:
++            config[key + "-count"] = chans[key + '-max'] if key in mix else 0
++        test_config(config)
++
++
++def _configure_min_ring_cnt(cfg) -> None:
++    """ Try to configure a single Rx/Tx ring. """
++    ehdr = {'header':{'dev-index': cfg.ifindex}}
++    chans = cfg.eth.channels_get(ehdr)
++
++    all_keys = ["rx-count", "tx-count", "combined-count"]
++    restore = {}
++    config = {}
++    for key in all_keys:
++        if key in chans:
++            restore[key] = chans[key]
++            config[key] = 0
++
++    if chans.get('combined-count', 0) > 1:
++        config['combined-count'] = 1
++    elif chans.get('rx-count', 0) > 1 and chans.get('tx-count', 0) > 1:
++        config['tx-count'] = 1
++        config['rx-count'] = 1
++    else:
++        # looks like we're already on 1 channel
++        return
++
++    cfg.eth.channels_set(ehdr | config)
++    defer(cfg.eth.channels_set, ehdr | restore)
++
++
++def ringparam(cfg) -> None:
++    """
++    Tweak the ringparam configuration. Try to run some traffic over min
++    ring size to make sure it actually functions.
++    """
++    ehdr = {'header':{'dev-index': cfg.ifindex}}
++    rings = cfg.eth.rings_get(ehdr)
++
++    restore = {}
++    maxes = {}
++    params = set()
++    for key in rings.keys():
++        if 'max' in key:
++            param = key[:-4]
++            maxes[param] = rings[key]
++            params.add(param)
++            restore[param] = rings[param]
++
++    defer(cfg.eth.rings_set, ehdr | restore)
++
++    # Speed up the reconfig by configuring just one ring
++    _configure_min_ring_cnt(cfg)
++
++    # Try to reach min on all settings
++    for param in params:
++        val = rings[param]
++        while True:
++            try:
++                cfg.eth.rings_set({'header':{'dev-index': cfg.ifindex},
++                                   param: val // 2})
++                val //= 2
++                if val <= 1:
++                    break
++            except NlError:
++                break
++
++        get = cfg.eth.rings_get(ehdr)
++        ksft_eq(get[param], val)
++
++        ksft_pr(f"Reached min for '{param}' at {val} (max {rings[param]})")
++
++    GenerateTraffic(cfg).wait_pkts_and_stop(50000)
++
++    # Try max across all params, if the driver supports large rings
++    # this may OOM so we ignore errors
++    try:
++        ksft_pr("Applying max settings")
++        config = {p: maxes[p] for p in params}
++        cfg.eth.rings_set(ehdr | config)
++    except NlError as e:
++        ksft_pr("Can't set max params", config, e)
++    else:
++        GenerateTraffic(cfg).wait_pkts_and_stop(50000)
++
++
++def main() -> None:
++    """ Ksft boiler plate main """
++
++    with NetDrvEpEnv(__file__) as cfg:
++        cfg.eth = EthtoolFamily()
++
++        ksft_run([channels,
++                  ringparam],
++                 args=(cfg, ))
++    ksft_exit()
++
++
++if __name__ == "__main__":
++    main()
+-- 
+2.51.0
 
-> --
-> pw-bot: cr
 
