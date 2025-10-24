@@ -1,158 +1,136 @@
-Return-Path: <linux-kselftest+bounces-44009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B99DC0744E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 18:22:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB0AAC07535
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 18:32:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90DA118827D6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 16:21:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28ADE1C40EF4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 16:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B742B320CB1;
-	Fri, 24 Oct 2025 16:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC159264F9C;
+	Fri, 24 Oct 2025 16:32:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLryaIUk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQBvotmE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F309127A92D
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 16:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2541255F22;
+	Fri, 24 Oct 2025 16:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761322877; cv=none; b=beoaz5ygjfXAMNSHgA06kWP7AUnlYXRWIEMsVvMeC0ZmEs+tMhmXloJdfU7pQlRUrfmp428yIn/ztHK6ZGIDSnkCM3toFEGppOr4dYMaIaixTjsiPEnOLdunY4a4uf5Hp9FOPQmp3p+xr35irpEETkpusJH9ZXPFqvbfFtyl+z4=
+	t=1761323532; cv=none; b=XT/0NDqSJ/eHVVkM3IQg8LQB5pkXD37HkMW4ZU6zZOTfRUezUvs3rMuKFCjxeXbrRlQqfePvWEmbOuw+XXGXDrhx57DHakhOJk9omahmAh9FZC4Dbw/OMVjZNZEFK09KzXIjB6yq4MLBFdXzUADBnkdpvRd9oS+/ui69pQM8Kn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761322877; c=relaxed/simple;
-	bh=Q7C41lhBihbO6eY7lJVLyPsZrE6vKqwzWp8W165x1GY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QuXGqT2bvd+1dtfs5tDFkkyyO4YjwvNiScZh5iryTUCpG+GohDaUl2Z6YpXNBZLKjTQ6XuqwLruNTInO3mlMQcGwDKGwp9ANbBILDcokAmMhEhGU5o8wdAn+cMaOP21QQgTxFcTTFrRoV/UxTaWLDuxyX64oWnW16ISF1aumjw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLryaIUk; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2947d345949so18191565ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 09:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761322875; x=1761927675; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0jzYBOFf8ftFu+Gij8GYatzFYpDKEy+Zox8T/U74UNk=;
-        b=OLryaIUkz3yqs27H+kPdvODDhKCSq5jbqaJg6wuFPtz11VWaAAW1z0NDWwp3df0I1M
-         qxuqg6tl+5fkvz/wB2quCq6nic+7J/oTR/FYoH6TaRvvAWI1CvF4g3VZ6bByJhSSE2wE
-         7BdnUhFkCBRwQO7OgUWQbY6mvBya6LWrCxsY3GD78FlER2aEvY3hvknmlrtEImWhfSok
-         eqzRsjSF8cWuAXk6iPqS21tRU5xEBxCvfhPyzSB5KvQFNm9RZj1ctuBO6x0X1aUHcBME
-         v3r9BQS6vCkKawaS+v6p6iJ2pBYD8/b48S0efJEoJTiXoEnvJkjLu+UOg7BXEPE3huqQ
-         VjXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761322875; x=1761927675;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0jzYBOFf8ftFu+Gij8GYatzFYpDKEy+Zox8T/U74UNk=;
-        b=gIUO1TRDmia6KejAd15YPGXTf8FBcKPehcdK3c9S0GA6hQc5BSm+OQ1KytEokdmP1z
-         zEsJFJh80zp4CJUEWyJQSp8V0Miq792agiW5VsjI8u+O5DsR8TfolwYTlkrEgOj6Smfw
-         sgG088KQgJ8+hy0qy6progNm/lA4Zh/+uvSwC4x1O+5/BmE3EuAoCu3y16+9mIOEepzc
-         VyxWTpMmIsE0CbMDvQB14t7b7PV4QJ4fQ5fb8xqHXQoNoBp+KTRLOmdQHW0Q1Qv2hoIY
-         coJ4ZMASdX8uVjyIT92ZG24XWexAS9aDEkbf2E4JZSBUERbBmb33vtfHj3EzTyQ+0caP
-         TGlw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIq38cRUpO3BbkfNlmbrxlBBUEks5qbBsSdaOxh62UY6WYMcpMklYEITpAMPrfmVHCj9vBixi7R5Gt89jKg0Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQp4NAKhCzk+NE8SUknwoG6gIjevWeGrmcZHS07YxpljRB5N3C
-	SVF/cLJcmQ3O2R5bc8Revi1qFalxTxg/59oSElDC4PbFbXjIR/7RFjtZ
-X-Gm-Gg: ASbGncuYbjWTzyCIOrpwAFodDSMerNd20jAqe30OcT1XqD7w2Q72grN4yVClJQY7cMu
-	NKnHd9WnC92ot1ayS/NqoCL7ePFbKGvqf51yyPsgVdvy8QRoQW+IS99UnEBzTmfIAqflG9WXjvv
-	wuQyJTbRB8OOVWrbH0V2/t7Jhp3cXHfACGZrlI2AOgj2nHg8J6dUdKL0BxtDmAlrxEipBURofEr
-	ceYJzfT89F+3OsYP+PHk81+s35Hd+9mWNn6wmZxlcQwvooqMCdKSj3gaM8CTXtq/VKV4qF8Pr4h
-	Vdoff1hiha9K5lDiHi4u6qOjItDKx1vrGUU70M14N5cjGJM9Z1vn6Us41TeYw6Txygb9JT/hdUu
-	V6dXVUPJwiSx+4O7DHgAbWCRhI+QJRLih0sAUR+RTn3NhEch2obM+WPTnHNr30WW1q8xIJA2fSQ
-	==
-X-Google-Smtp-Source: AGHT+IFAgmYZ/QLJ2Js+LmpShKlirSGqfh1OuAaWLnctGpxxoW2mPPd9DPWroK3Bbm/J7OAwkt62Hw==
-X-Received: by 2002:a17:902:c942:b0:293:623:3241 with SMTP id d9443c01a7336-293062336a1mr135331655ad.58.1761322875085;
-        Fri, 24 Oct 2025 09:21:15 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2946de15fc6sm61018635ad.42.2025.10.24.09.21.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Oct 2025 09:21:14 -0700 (PDT)
-Message-ID: <0d98a2c754884e94c3367209680c071a8df4279d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Skip bounds adjustment for
- conditional jumps on same register
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: KaFai Wan <kafai.wan@linux.dev>, Alexei Starovoitov
-	 <alexei.starovoitov@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
- <john.fastabend@gmail.com>, Andrii Nakryiko	 <andrii@kernel.org>, Martin
- KaFai Lau <martin.lau@linux.dev>, Song Liu	 <song@kernel.org>, KP Singh
- <kpsingh@kernel.org>, Stanislav Fomichev	 <sdf@fomichev.me>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, Matan Shachnai
-	 <m.shachnai@gmail.com>, Luis Gerhorst <luis.gerhorst@fau.de>, 
-	colin.i.king@gmail.com, Harishankar Vishwanathan	
- <harishankar.vishwanathan@gmail.com>, bpf <bpf@vger.kernel.org>, LKML	
- <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"	
- <linux-kselftest@vger.kernel.org>, Kaiyan Mei <M202472210@hust.edu.cn>, 
- Yinhao Hu <dddddd@hust.edu.cn>
-Date: Fri, 24 Oct 2025 09:21:11 -0700
-In-Reply-To: <b190c9b2837b28cf579aa38126de50e29e0add32.camel@linux.dev>
-References: <20251022164457.1203756-1-kafai.wan@linux.dev>
-		 <20251022164457.1203756-2-kafai.wan@linux.dev>
-		 <39af9321-fb9b-4cee-84f1-77248a375e85@linux.dev>
-		 <1d03174dfe2a7eab1166596c85a6b586a660dffc.camel@gmail.com>
-		 <CAADnVQKdMcOkkqNa3LbGWqsz9iHAODFSinokj6htbGi0N66h_Q@mail.gmail.com>
-		 <abe1bd5def7494653d52425818815baa54a3628a.camel@gmail.com>
-		 <0d267da41178f3ac4669621516888a06d6aa5665.camel@linux.dev>
-		 <f0a52150bc99aa4da1a25d6181975cd3c80a717f.camel@gmail.com>
-	 <b190c9b2837b28cf579aa38126de50e29e0add32.camel@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1761323532; c=relaxed/simple;
+	bh=QJbCv3dorbwltFD/bJzgSaTHfSbrFysNBhH68NyQCsQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=qOuweu0J9d0owd139yf1lKQ12u8xAcdwnYsDx0sjcPkcADK0AbJS/J2b9Cb/WEdwSb9o8ZByZ9SjZ2drOVV5EQamyevJ/fHtTp4ZfiM1wmFEzi7R8whxMlq0++8LUiD8rqGmOLu8y2MV+0/G7tTUNIJy+h61oSd5v/d6JF9DdhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQBvotmE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2000DC4CEF1;
+	Fri, 24 Oct 2025 16:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761323532;
+	bh=QJbCv3dorbwltFD/bJzgSaTHfSbrFysNBhH68NyQCsQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=BQBvotmEc5dzMUOyFMp+OMBmfTgmrRhBErDoqsVtOUIac28Aei5feBsG+d6vWY+eH
+	 4rAwrLMrav/Om5Wu+34l5Zh/ZdiKAZNe/spxILBg7OvBrf96+1l1WkxlPvIpTqvRQ7
+	 o19C49hbbzpyKu3z4AaWqKMsgc3zYpt4hxwzt3IhoN+3GnU6ixD20eF3I/5RBJLXXV
+	 6iLI27UaGc5v+ZFG/JA+jKVBH4F0mjV5CP/w8IDhuoCcMoM7xc6rvJ1jlUDafQxdnm
+	 nHkhw2WOVMOY7nsK5QmVCTsQspttcngQFPoqSJzd4afy/wK447GLF80f+oEiQqctyz
+	 ak5vAp0wzFTwQ==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Pratyush Yadav <pratyush@kernel.org>,  akpm@linux-foundation.org,
+  brauner@kernel.org,  corbet@lwn.net,  graf@amazon.com,  jgg@ziepe.ca,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-mm@kvack.org,  masahiroy@kernel.org,  ojeda@kernel.org,
+  rdunlap@infradead.org,  rppt@kernel.org,  tj@kernel.org
+Subject: Re: [PATCHv7 3/7] kho: drop notifiers
+In-Reply-To: <CA+CK2bB_xPAsHXU62Hd5iBt-+Jf2BiXQM4M-QEL=AA_Xu-APhg@mail.gmail.com>
+	(Pasha Tatashin's message of "Fri, 24 Oct 2025 12:15:32 -0400")
+References: <20251022005719.3670224-1-pasha.tatashin@soleen.com>
+	<20251022005719.3670224-4-pasha.tatashin@soleen.com>
+	<mafs0ikg7fbez.fsf@kernel.org>
+	<CA+CK2bDrrg0UoJXpeN+Au2-sreYrZ+DHVcEUidzPw2Qk60orgg@mail.gmail.com>
+	<mafs0o6pwe1sy.fsf@kernel.org> <mafs0jz0ke1qd.fsf@kernel.org>
+	<CA+CK2bB_xPAsHXU62Hd5iBt-+Jf2BiXQM4M-QEL=AA_Xu-APhg@mail.gmail.com>
+Date: Fri, 24 Oct 2025 18:32:09 +0200
+Message-ID: <mafs0frb8dzw6.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, 2025-10-25 at 00:13 +0800, KaFai Wan wrote:
+On Fri, Oct 24 2025, Pasha Tatashin wrote:
 
-[...]
+> On Fri, Oct 24, 2025 at 11:52=E2=80=AFAM Pratyush Yadav <pratyush@kernel.=
+org> wrote:
+>>
+>> On Fri, Oct 24 2025, Pratyush Yadav wrote:
+>>
+>> > On Fri, Oct 24 2025, Pasha Tatashin wrote:
+>> >
+>> >>> > -int kho_add_subtree(struct kho_serialization *ser, const char *na=
+me, void *fdt)
+>> >>> > +int kho_add_subtree(const char *name, void *fdt)
+>> >>> >  {
+>> >>> > -     int err =3D 0;
+>> >>> > -     u64 phys =3D (u64)virt_to_phys(fdt);
+>> >>> > -     void *root =3D page_to_virt(ser->fdt);
+>> >>> > +     struct kho_sub_fdt *sub_fdt;
+>> >>> > +     int err;
+>> >>> >
+>> >>> > -     err |=3D fdt_begin_node(root, name);
+>> >>> > -     err |=3D fdt_property(root, PROP_SUB_FDT, &phys, sizeof(phys=
+));
+>> >>> > -     err |=3D fdt_end_node(root);
+>> >>> > +     sub_fdt =3D kmalloc(sizeof(*sub_fdt), GFP_KERNEL);
+>> >>> > +     if (!sub_fdt)
+>> >>> > +             return -ENOMEM;
+>> >>> >
+>> >>> > -     if (err)
+>> >>> > -             return err;
+>> >>> > +     INIT_LIST_HEAD(&sub_fdt->l);
+>> >>> > +     sub_fdt->name =3D name;
+>> >>> > +     sub_fdt->fdt =3D fdt;
+>> >>> >
+>> >>> > -     return kho_debugfs_fdt_add(&kho_out.dbg, name, fdt, false);
+>> >>> > +     mutex_lock(&kho_out.fdts_lock);
+>> >>> > +     list_add_tail(&sub_fdt->l, &kho_out.sub_fdts);
+>> >>> > +     err =3D kho_debugfs_fdt_add(&kho_out.dbg, name, fdt, false);
+>> >>>
+>> >>> I think you should remove sub_fdt from the list and kfree() it on er=
+ror
+>> >>> here. Otherwise we signal an error to the caller and they might free
+>> >>> sub_fdt->fdt, which will later result in a use-after-free at
+>> >>> __kho_finalize().
+>> >>
+>> >> I think, it is better to simply do:
+>> >> WARN_ON_ONCE(kho_debugfs_fdt_add(...));
+>> >> Now debugfs is optional, and there is no reason to return an error to
+>> >> a caller if kho_debugfs_fdt_add() fails
+>> >
+>> > Yeah, that works too.
+>>
+>> On a second thought, maybe pr_warn() instead of WARN_ON()? This isn't an
+>> assertion since the debugfs creation can fail for many reasons. It isn't
+>> expected to always succeed. So a full WARN_ON() splat seems overkill.
+>
+> I sent it with WARN_ON_ONCE(), I can change it to pr_warn_once() if
+> there is another revision, otherwise we can just send a separate patch
+> to make the change it is not that important.
 
-> For non-scalar cases we only allow pointer comparison on pkt_ptr, this ch=
-eck is before
-> is_branch_taken()
->=20
-> 	src_reg =3D &regs[insn->src_reg];
-> 	if (!(reg_is_pkt_pointer_any(dst_reg) && reg_is_pkt_pointer_any(src_reg)=
-) &&
-> 	    is_pointer_value(env, insn->src_reg)) {
-> 		verbose(env, "R%d pointer comparison prohibited\n",
-> 			insn->src_reg);
-> 		return -EACCES;
-> 	}=20
->=20
-> and in the end of check_cond_jmp_op() (after is_branch_taken()), we check=
-ed again
->=20
-> 	} else if (!try_match_pkt_pointers(insn, dst_reg, &regs[insn->src_reg],
-> 					   this_branch, other_branch) &&
-> 		   is_pointer_value(env, insn->dst_reg)) {
-> 		verbose(env, "R%d pointer comparison prohibited\n",
-> 			insn->dst_reg);
-> 		return -EACCES;
-> 	}
->=20
-> this time we=C2=A0check if it is valid comparison on pkt_ptr in try_match=
-_pkt_pointers().=C2=A0
->=20
-> Currently we just allow 4 opcode (BPF_JGT, BPF_JLT, BPF_JGE, BPF_JLE) on =
-pkt_ptr, and with
-> conditions. But we bypass these prohibits in privileged mode (is_pointer_=
-value() always=C2=A0
-> return false in privileged mode).
->=20
-> So the logic skip these prohibits for pkt_ptr in unprivileged mode.
+Yep, makes sense.
 
-Well, yes, but do you really need to do forbid `if r0 > r0 goto ...` in unp=
-riv?
+--=20
+Regards,
+Pratyush Yadav
 
