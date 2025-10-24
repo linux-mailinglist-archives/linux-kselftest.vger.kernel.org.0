@@ -1,139 +1,104 @@
-Return-Path: <linux-kselftest+bounces-43964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34538C03E96
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 01:59:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 194EEC0408F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 03:44:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13FFF1A67CBA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Oct 2025 23:59:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E05FA4E225F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 01:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D20C2E1EFF;
-	Thu, 23 Oct 2025 23:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E51DB1C701F;
+	Fri, 24 Oct 2025 01:44:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cBDI8FR2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ouUbOohm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780E7296BD4
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 23:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B056338FA6;
+	Fri, 24 Oct 2025 01:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761263956; cv=none; b=RtuC8TvTJPoVbc/2IsouCQ1M5okk06mTVrknW7iZ+RwbipQps3Hd5gLeXBTXRZutCmv5pqcYSijex0aWpAHK+Q3HMiyFZtQrJSoOsRugAhb95lhfGtSWME+5fKDW1PILRufOKO6tr/NVPmuBAIKHe4hMb7FvuArY5Nic5YnJANo=
+	t=1761270248; cv=none; b=mSxZQC8RsQse+ABlelLVc4Thu/868Idf8JLi0shmRTz035VvNaPNsxgB+a8X/5U4cFjmbqlI6G4mxGpUwKcLYDphd+eXQzFhhElsD8p195WEFfIRAg/kdcI/mZXQ4oyTO6mKYw7ZDZZKx2sEMv1mRlYysXojFlqro4NoE3mBLwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761263956; c=relaxed/simple;
-	bh=KRqFx1cZkwsyBUxEVPNGesO9wktbAXLUFJV2t0yuRh8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D+QJX3RhEgsX9sIGPkWpI7Q12Yoep/zVVO/0DnkkurP+f8+14hiW79QIKk8YN1CdwWdpmI3R/NTTNdqVUbojYoNWmyWoj6pkCy00WtnrqyvHsKa7DooRURYqz4cJoV9Qqp34cgRT1g0UqBCU7Bm+u9wj1jaUbLe52Z24y6jYPEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cBDI8FR2; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ea12242d2eso105231cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 16:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761263953; x=1761868753; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OWaPYvH94F3bazBBQR1mRrH2sncW+IAfzERpSr3zH6w=;
-        b=cBDI8FR2q8G+wj/K7qG8Xv1LOz52xdMF0mAjnX/UuhvnPwmNybAhHmkFcdjC0zTzdP
-         nOmxIwLxVyHLEv9ExgF6SgSPKfqHEIDkz+VsvHiWGB71OwQSL09CWKa2pN1lnMroIA1P
-         pks6bcR7Qp62Wqj2oL/y5U/ZX96fhXEU+E6wAJ9qnRWRHdZBqOuF6/8ARR4z3L7NIDH4
-         gazN6fvDW2A4wdKACHdVdEwITcCZenBPCIxIkabUmDEttmsyeQ8m3b972PSzKg8PuFQw
-         LD1O2J41f6W/ZIIIhysyF7VzPZCQHJUURKl3mpZa6umfRvD4FSqw7n41mssstow+83ho
-         IzVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761263953; x=1761868753;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OWaPYvH94F3bazBBQR1mRrH2sncW+IAfzERpSr3zH6w=;
-        b=aEkZE+rHuQw+N56oOuKrM1RSwxfEIU5u1Z2EUHZSYHN9ZRldMBVbieD5QZI2wqz/rp
-         RbK9V7RKtlLYn2369rmfgaaLzOim2zEm7vrujBEjyptByRQMRu7Qt91H09BnJxFtFbzW
-         kbqj4ctC0iM1guK73GaUarTVZcFy5KFt/Dqk59wT/Hx8viHSUtpvRaBJwW4qjVt4Y9c3
-         DrqSemcvWNikNPaPS1H/vl5V8egFgK+NBcauIJ7KEDDueiNklGamYFPKodIV0/3yGZ8R
-         caHzQdozk3nZoxfxd6bIYPBNuT31x1jpN1q3mk0iAkIWKfjH81aBD/HW/9ScRWl64e2B
-         r6dg==
-X-Gm-Message-State: AOJu0YwX1PvK5hxpZxO5121JWdwQuSYhgGPcVU7Ifh0yr150xgr9XEI8
-	lZ2Sn0aRgDLzUg4nBSjnB+vrUqRBsWOV/FRkYPov+kBZ/cc+BMWcIj6EoBlxIhEtqdEsIFK76xu
-	80cCxnqVJoXmyvDG0GZvdnt0e9NmZjaWi3SbvC/v1
-X-Gm-Gg: ASbGncsSQBobq3rnZlanbHJPcsVMHhpm4o66OCX/MMJIQOwrZhet8dBFKHSBl0rED+o
-	1MUXw6KpnlsBrOHqxX7YAaqc8Aa5fLbPp9Hnb8uf/aM75jPziOZ5vJ8q33w/YmO2awa6uqdCP6/
-	cAPuQ7Vz1UiuoOkVHao8G33bERN0VJn3PMIrpYFI6XkCOXsQpwhuFMjE3oFtZ5Z8EYf4PwpuhUN
-	ynXmbTxxaK0bppG1hqFkhoVu+UInKOvIosjoMYBPE6nxunnI92xTSsee1KJtMiL5uQwjD4+Hkzg
-	PFX85hcYB20PLAUPPondspdCOWig
-X-Google-Smtp-Source: AGHT+IFiCpGL8XfWTU0ddwConeQqYO4+/7UNnfpipr71hb3sds9xvvlkZExSlvxpN5YXK1dP6WJgpa5Frp79V38UrVw=
-X-Received: by 2002:a05:622a:1495:b0:4eb:75cb:a267 with SMTP id
- d75a77b69052e-4eb9251b2b5mr2286001cf.12.1761263953189; Thu, 23 Oct 2025
- 16:59:13 -0700 (PDT)
+	s=arc-20240116; t=1761270248; c=relaxed/simple;
+	bh=axiWZbssjlpH1aFl7mg+golcYlw6gkQMBkAvr0ja23s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZeTA389PaaahGBL02fBv6IMUKd37x0ZZl7YRXrQZpo/3Quqyzp2dyarnshhj2yPOmEjWJpcdB2HUd4hYtxSpk/sSenms6yE9eoEODSmanRURpEPvIUr+Y+W8o3cApO5AUlEFwrI9wPGuiWDashFKEHZBcbbxkvPdPxqR8pFYDWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ouUbOohm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 727FAC4CEE7;
+	Fri, 24 Oct 2025 01:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761270246;
+	bh=axiWZbssjlpH1aFl7mg+golcYlw6gkQMBkAvr0ja23s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ouUbOohmzSE5kKxvkHQ+qoiD369U/2WAfU+44lSxnZIB3JmmNxl2ypBy3UyIUbAU1
+	 W+BaQkk+B74MG9QlEmPVicFy3+nE8qt61HCrpeAKqU+1cVm97KU7ILDS85m+D421ks
+	 HD+n7f7zNOUm+zNd6ODja0+nhxjeJifwDXSOedHQ10hpTFI+zOQS7KEOq1a/Fwkc1m
+	 hdyNf//vazgKOqE8jumapXnzgSPuLmBrnW+1SCiHiShVyd124qTfA4M7p7ZS+Vne1w
+	 V1NB7tXEdfvu1F4gkvxtdYDtxky2pwLzmvM+E4G4nPK6vnoG4LbRVSWHPDIhuyB8s4
+	 ZhluJuGJTjPJg==
+Date: Thu, 23 Oct 2025 18:44:04 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Wilfred Mallawa <wilfred.opensource@gmail.com>, Sabrina Dubroca
+ <sd@queasysnail.net>
+Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, "David S .
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Simon Horman
+ <horms@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Wilfred Mallawa <wilfred.mallawa@wdc.com>
+Subject: Re: [PATCH net-next v8 1/2] net/tls: support setting the maximum
+ payload size
+Message-ID: <20251023184404.4dd617f0@kernel.org>
+In-Reply-To: <20251022001937.20155-1-wilfred.opensource@gmail.com>
+References: <20251022001937.20155-1-wilfred.opensource@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250925172851.606193-1-sagis@google.com> <20250925172851.606193-14-sagis@google.com>
- <68efcb7ee33e5_cab031002e@iweiny-mobl.notmuch>
-In-Reply-To: <68efcb7ee33e5_cab031002e@iweiny-mobl.notmuch>
-From: Sagi Shahar <sagis@google.com>
-Date: Thu, 23 Oct 2025 18:59:01 -0500
-X-Gm-Features: AS18NWB13mopkwuSS4JxlZadYovueuOn6EGZfluKJpeBEQ17CYTqorbiZz-kY7o
-Message-ID: <CAAhR5DGcz-2=a6Q2zZS_eP2ZjNNPs65jNG+K50tdVAQfC6AbbA@mail.gmail.com>
-Subject: Re: [PATCH v11 13/21] KVM: selftests: Add helpers to init TDX memory
- and finalize VM
-To: Ira Weiny <ira.weiny@intel.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>, 
-	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
-	Oliver Upton <oliver.upton@linux.dev>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Chao Gao <chao.gao@intel.com>, 
-	Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 15, 2025 at 11:25=E2=80=AFAM Ira Weiny <ira.weiny@intel.com> wr=
-ote:
->
-> Sagi Shahar wrote:
-> > From: Ackerley Tng <ackerleytng@google.com>
-> >
->
-> [snip]
->
-> > diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools=
-/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> > index 2551b3eac8f8..53cfadeff8de 100644
-> > --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> > @@ -270,3 +270,61 @@ void vm_tdx_init_vm(struct kvm_vm *vm, uint64_t at=
-tributes)
-> >
-> >       free(init_vm);
-> >  }
-> > +
->
-> [snip]
->
-> > +
-> > +void vm_tdx_finalize(struct kvm_vm *vm)
->
-> Why is this not a new kvm_arch_vm_finalize_vcpu() call?
+On Wed, 22 Oct 2025 10:19:36 +1000 Wilfred Mallawa wrote:
+> +TLS_TX_MAX_PAYLOAD_LEN
+> +~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Specifies the maximum size of the plaintext payload for transmitted TLS records.
+> +
+> +When this option is set, the kernel enforces the specified limit on all outgoing
+> +TLS records. No plaintext fragment will exceed this size. This option can be used
+> +to implement the TLS Record Size Limit extension [1].
+> +
+> +* For TLS 1.2, the value corresponds directly to the record size limit.
+> +* For TLS 1.3, the value should be set to record_size_limit - 1, since
+> +  the record size limit includes one additional byte for the ContentType
+> +  field.
+> +
+> +The valid range for this option is 64 to 16384 bytes for TLS 1.2, and 63 to
+> +16384 bytes for TLS 1.3. The lower minimum for TLS 1.3 accounts for the
+> +extra byte used by the ContentType field.
+> +
+> +[1] https://datatracker.ietf.org/doc/html/rfc8449
 
-What do you mean?
->
-> Ira
->
-> > +{
-> > +     load_td_private_memory(vm);
-> > +     vm_tdx_vm_ioctl(vm, KVM_TDX_FINALIZE_VM, 0, NULL);
-> > +}
-> > --
-> > 2.51.0.536.g15c5d4f767-goog
-> >
+Sorry for not paying attention to the last few revisions.
+
+So we decided to go with the non-RFC definition of the sockopt
+parameter? Is there a reason for that? I like how the "per RFC"
+behavior shifts any blame away from us :)
+
+> +	err = nla_put_u16(skb, TLS_INFO_TX_MAX_PAYLOAD_LEN,
+> +			  ctx->tx_max_payload_len);
+> +
+
+nit: unnecessary empty line 
+
+> +	if (err)
+> +		goto nla_failure;
+
 
