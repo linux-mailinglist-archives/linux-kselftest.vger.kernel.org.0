@@ -1,170 +1,359 @@
-Return-Path: <linux-kselftest+bounces-43966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-43967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30E24C04180
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 04:11:25 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE756C04335
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 05:00:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5761B3B797E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 02:11:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2D00F4F0F7C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 03:00:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E43622425B;
-	Fri, 24 Oct 2025 02:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8FD51D61B7;
+	Fri, 24 Oct 2025 03:00:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JHHH1mlM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zMcELTIj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE190221DB3
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 02:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1257629A2
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 03:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761271880; cv=none; b=e0OIQkZyMdNZrf4aGPxq0Fd6Cgoap0p1y+yl9iSvrf6f6rcSl7lehuf6VqohZ0zaWZF+e0UY0H+JgCVf6WYUH+Slehn3p3RsjS54kgG0FYh5gVPMTRIQ/z/i8q4pOP0ZkmgzZcGvxqJt9JOAxYMNiC7AOdXO6gfr+2EE++b/OFg=
+	t=1761274842; cv=none; b=Cegi+268NVCsMP/bn7B3n8EbmQCCJp+OeC1URYVksOVfyxECarEUhd00xPnR2OClxWv01S6XAymrYzuoWzrqbdXDlrldaX66Ndhz2V/XhhlwwiWqia2WVP6mmnzNIAMF+cLfuGM2IYryNKOllboXTUJ9bfRi+g6QHZ4YV34nb1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761271880; c=relaxed/simple;
-	bh=2HKWTq9bYPI9IRNhEkPDZsu1MxYbn9ll23LkJz1BkFo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uyK7+b5iq3mThi8llBBIhksGaL52km5q1q3ydX1ZJafYhbgEoV/5iLeQxw3L2mktMX/vYliF1e5yd3UeFiYNu4RpGG7FRL8k92WpQzcPZxN166z/6YPrXke69ZTlOZrEryJ/AC36xv8BHn2A5gH5AJuLv9m1nqz6TAgr/lDmkwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JHHH1mlM; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-3304dd2f119so1292631a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 19:11:18 -0700 (PDT)
+	s=arc-20240116; t=1761274842; c=relaxed/simple;
+	bh=rx0ws1SUpyQLxCqOpX2cHJCF3GCu07xIjjdT8hkeh/I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VHoh2l5mU/ltV19XM9xkhb3nXtKyno8PGPh5ZbFUE4XyNwKsceOb3lsAxKhqpIo/ogNvscfgfmbGFoZz4qFPFyuIOBK64Zao4505qg1IoyV3500vJoZEVDeqTIzX2tGC7KgBQyLNx5Zl5FFl5dnIERwPWS/4ApgPV7e7E0gH+cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zMcELTIj; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-27d4d6b7ab5so22533645ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Oct 2025 20:00:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761271878; x=1761876678; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=iIMtRFCdsmjJp3brOQhbUpPZt9mi1Wgypme0Ijm/Bxo=;
-        b=JHHH1mlMK93oKmK/c2QjFixiw/SNyytCpGn1CPrKYnc9R18YwdcXSxN6cbtjN+QcdT
-         SXjQvvn6WX4AFZcKE5g6CRIP7pIWcGwL28KXXYpz5ODyDCb4lB0bkXwRMPGfzMAKrB4U
-         2wfSfHh5hHzBfFkmADn+Xsp9DT6oExnZzXvnwo+JUqeakS5l56rHP9UV8WuYnEwJziZl
-         uxEtV7Z/peumHM3dF/+Qm0jSEmZ2P392CxU+eVRaKpS5N8gss2wCi6F9vp6QpcwTMTYg
-         byhV/4Nod27m+0EMGpsFQ2nAkz22TQDFUh22HM2zqx3n7akN9fpXcxQtqxDmRcXuR8+R
-         jZZQ==
+        d=google.com; s=20230601; t=1761274840; x=1761879640; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ytg8t1NA2HbwNdbywfdqRIZcojg/s4LnaoZSEoWgpTU=;
+        b=zMcELTIjOm4SuA/gy1VIRQQWvyXnGuNfjb37P2st2NZeW5WiV9uWkp01Jri+OFkBxz
+         MpA8/TtqKdMcVSTt/NxjxLgPiLHqxQl+Z+WaBtWa808ds2TZ6LbNUZIdHrv9cKZ299ZJ
+         Jb5/QKa8UiiFt6nIg5WRSQqrHI3xtmUGOkNF20FVvhMRfCiN8n01brnCcSacLdqrxHk7
+         Z9xEsL26I+/6mGuhPrAIsSrRKp6Evs57AbJJK2PX+denSkPHIGSt8plKDAKPgKNfvwOi
+         1sG4n1/MAWJZSCWtLBjQ8oi1+FfDfgip8AisH1gPeO7KDGLAx6/ufMCXp3s7BQ4KciKS
+         kn2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761271878; x=1761876678;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iIMtRFCdsmjJp3brOQhbUpPZt9mi1Wgypme0Ijm/Bxo=;
-        b=R/1BUJG0ReKn02qbup6KKIy79z0kCX6omWSYnR9cFodMPSIrjOgWMsw4ZrwcN1tS48
-         hYBRTyQSSkfOs8f5MKQWMj3M1XEB19I3aWvxPJyjZOvuNofgGsAO16mwKenGXjF5+D1U
-         SOAdbs8j4xRShBV5MZlEzM0fVNImjxyqezaRuU537/tA4VD0BHRBLuWZgfMTujowlWlW
-         mYU/HxpMENMQe3l1+YWu7jt9xnUNOC1t7hGNThC4JaDnnKB1VVKsmTTKrwJRkKd0OsCi
-         pDqyiIobvCyW6zt/Jf3Z60o4d87X9g8UKX44JDgIrptwU2wY2fR6kD90Lm9w0JgB8kHS
-         cyEA==
-X-Forwarded-Encrypted: i=1; AJvYcCW7G4JRqnP4wGUN/s1YN84aNQzJhQEjrnXxH57D22IL7erK5NkiigEtxlx/+y50iJ6tmHR470WSY/35Bfo0Pc4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyyi7uKD0eqvUAXiSLroHxZpBLBtAaD3rD2/XMKkDwAKjiGDRco
-	efGuxCqCeJofP/082ucne2fzOpeG1sPWHZaWy6IgB0QUw44Zlexv2g114KMuNSw/
-X-Gm-Gg: ASbGncvj/HqaBn9Ddx8CITlGpC66aw9iuwDef8EwCz5k4+pOkUi9d9lRWB6xcR5frwF
-	5TYdTOsfWMcbJH6XwvVJNLvaCAnkp+5W0O0/2HdwlOeEsfiXuJydlzNh15e8Fz09k0d/rfWyR7F
-	MZ6VYswLS6U5dojuF/zD4/JDmpjXgNHm/sgntc+iXnNear55hq7PdxGjBEu6hUm+E/ZifYlZaiD
-	n258ku4kaelR81uMxkhzEYA8aeYyyA2Zat9sOfEMGaw63rrv660V4RnA7GeP/EDeJZMha/l55mo
-	k4Zd+dFJjmOv50RAGGdwDMWHUDKALVWGtbVwFodyP1KI7IF/LK54YlA9YmAkNLblC70gDFoNWjx
-	qaQdk3VwErBrvKCjiyVcXpbV1fU5+Qa+g0LLbf/LOyTOkCP3JdEeeocTQzl8Zmo5K+pg43LqG/6
-	UKpo2YA7NtWp25rV92cZKIZ781rq23vkMfQRvO
-X-Google-Smtp-Source: AGHT+IFD75N03XrwMjNRmyxSMWMxZp+UXCEbbO3kw9IuJAvapfBkWSQMRThlDmpY+YsYkZGyYzgU0Q==
-X-Received: by 2002:a17:90b:48c8:b0:33b:ba55:f5dd with SMTP id 98e67ed59e1d1-33bcf93ab88mr29913628a91.37.1761271877829;
-        Thu, 23 Oct 2025 19:11:17 -0700 (PDT)
-Received: from [192.168.0.69] ([159.196.5.243])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33fb0196831sm3967266a91.20.2025.10.23.19.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Oct 2025 19:11:17 -0700 (PDT)
-Message-ID: <cd557c5b11b04da060f07d3849dc46e7b3625ed1.camel@gmail.com>
-Subject: Re: [PATCH net-next v8 1/2] net/tls: support setting the maximum
- payload size
-From: Wilfred Mallawa <wilfred.opensource@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>
-Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, "David S .
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>,  Jonathan Corbet	 <corbet@lwn.net>, Simon Horman
- <horms@kernel.org>, John Fastabend	 <john.fastabend@gmail.com>, Shuah Khan
- <shuah@kernel.org>
-Date: Fri, 24 Oct 2025 12:11:11 +1000
-In-Reply-To: <20251023184404.4dd617f0@kernel.org>
-References: <20251022001937.20155-1-wilfred.opensource@gmail.com>
-	 <20251023184404.4dd617f0@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+        d=1e100.net; s=20230601; t=1761274840; x=1761879640;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ytg8t1NA2HbwNdbywfdqRIZcojg/s4LnaoZSEoWgpTU=;
+        b=ZAtWZBH/PDC8rPi27rUXe0F6K1fzcSRhyVpaxSV/ew0MK75h5qxL/4m+2SXoQz44iK
+         k2WpApbr4opZqaepZjhiPI19Jib1swAqCczBHsd29b8JgrtBOhPB07OBAxk0ABA7G97G
+         sKrd/8132HC90pEVPScDOTdzhCymx3EipZA0nx46UK9XeI75DzZV2FFGaAv0OpdfQ0Th
+         XWnsfU+afAh947p9YUfdtd/ByX5qATyyy75HyCEmHXOWLi3zxVF2DVUrIafz7/iZQm1D
+         2FPfmNnVkGCFJz6PYfbEwiOfuqch9Oz2zaTqtb+c+2oOUDZUwSXmQKl4ez4xAVebWxfp
+         Jv4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV6CpvJ81MZPo0MSqDhcw3CHv/BpBbAQhWEIV3ZHNGjWN9ggvwKn5zvWt0AV0o88XWapxguRkIbi8QoksDOvpY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkcoOFCfKvcBLgiyT5IFNIONjtuDEH07/EMrtEmHcSHTvKepRJ
+	Rq3KCe4d3orTvjGGGir7TtLboiEqoAbEMisgF9oySorPYeZcGVs0bsmXexKKolQVBwFSEJiPL/m
+	eP/3utfCWM4TMPSs3Ev7ev4kCTAnB0L27Gk6CFl+7
+X-Gm-Gg: ASbGncuzrTvCUuDe94swuGabdUx8d7n4wU02uTpYwjoRAvLyX4HhTV33Zqa7EQ9YIgO
+	iok0CSQI+rQ9mDPtOS+WkLU66cOD3UvYxwE1z5Zuw/4R9hsN/k+9WarZ31BmNk5AvBoju5EhmWN
+	TF35KMakACcWLr/zYORHqVe1qU6zGHAj63deQTpMqtGOjZMNwOxR0EZajgWoVJ1RwwlEF4LyFjI
+	cVibJXV2/FFnVpe/f0uHwEGAoLhdpBE50n57rM8AbqHYcPy0D4/jOSyP/3K1YC16Pg6/UziVpuD
+	M38swg3t4g/cl04=
+X-Google-Smtp-Source: AGHT+IEjKz+o4zRszWREaWKQfE3zfa5mKZgELYaGHhFCsdxyYCPygqg7wIJLqcd7MDKvie8LROLAJlYMoFie0y4LpOw=
+X-Received: by 2002:a17:903:440c:b0:264:8a8d:92dd with SMTP id
+ d9443c01a7336-290c9cb8b95mr348230235ad.20.1761274839948; Thu, 23 Oct 2025
+ 20:00:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20251023165841.8164-1-adelodunolaoluwa.ref@yahoo.com> <20251023165841.8164-1-adelodunolaoluwa@yahoo.com>
+In-Reply-To: <20251023165841.8164-1-adelodunolaoluwa@yahoo.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Thu, 23 Oct 2025 20:00:28 -0700
+X-Gm-Features: AS18NWCPooRWM5F3yFVrYkOizgWMJPcRipp4qj9tu8QpgOd96rIWKXrebnLJf4o
+Message-ID: <CAAVpQUAX-+5cOCaZrA1DbMTLrUEhCsK=6JSHAQgSNhbOyQ06MA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/unix: Add test for ECONNRESET and EOF behaviour
+To: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, shuah@kernel.org, horms@kernel.org, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, 
+	david.hunter.linux@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2025-10-23 at 18:44 -0700, Jakub Kicinski wrote:
-> On Wed, 22 Oct 2025 10:19:36 +1000 Wilfred Mallawa wrote:
-> > +TLS_TX_MAX_PAYLOAD_LEN
-> > +~~~~~~~~~~~~~~~~~~~~~~
-> > +
-> > +Specifies the maximum size of the plaintext payload for
-> > transmitted TLS records.
-> > +
-> > +When this option is set, the kernel enforces the specified limit
-> > on all outgoing
-> > +TLS records. No plaintext fragment will exceed this size. This
-> > option can be used
-> > +to implement the TLS Record Size Limit extension [1].
-> > +
-> > +* For TLS 1.2, the value corresponds directly to the record size
-> > limit.
-> > +* For TLS 1.3, the value should be set to record_size_limit - 1,
-> > since
-> > +=C2=A0 the record size limit includes one additional byte for the
-> > ContentType
-> > +=C2=A0 field.
-> > +
-> > +The valid range for this option is 64 to 16384 bytes for TLS 1.2,
-> > and 63 to
-> > +16384 bytes for TLS 1.3. The lower minimum for TLS 1.3 accounts
-> > for the
-> > +extra byte used by the ContentType field.
-> > +
-> > +[1] https://datatracker.ietf.org/doc/html/rfc8449
->=20
-> Sorry for not paying attention to the last few revisions.
->=20
-> So we decided to go with the non-RFC definition of the sockopt
-> parameter? Is there a reason for that? I like how the "per RFC"
-> behavior shifts any blame away from us :)
->=20
+Thanks for adding tests.
 
-Hey Jakub,
+> [PATCH] selftests/unix: Add test for ECONNRESET and EOF behaviour
 
-We've made the change from record_size_limit to max_payload_len mainly
-because:
+nit: The common prefix is "selftest: af_unix:".
 
-In the previous record_size_limit approach for TLS 1.3, we need to
-account for the ContentType byte. Which complicates get/setsockopt()
-and tls_get_info(), where in setsockopt() for TLS 1.3 we need to
-subtract 1 to the user provided value and in getsockopt() we need add 1
-to keep the symmetry between the two (similarly in tls_get_info()). The
-underlying assumption was that userspace passes up directly what the
-endpoint specified as the record_size_limit.
 
-With this approach we don't need to worry about it and we can pass the
-responsibility to user-space as documented, which I think makes the
-kernel code simpler.
+On Thu, Oct 23, 2025 at 9:59=E2=80=AFAM Sunday Adelodun
+<adelodunolaoluwa@yahoo.com> wrote:
+>
+> Add selftests verifying the EOF and ECONNRESET behaviour of
+> UNIX domain sockets (SOCK_STREAM and SOCK_DGRAM). The tests document
+> Linux's semantics and clarify the long-standing differences with BSD.
+>
+> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+> ---
+>  tools/testing/selftests/net/unix/Makefile     |   5 +
+>  .../selftests/net/unix/test_unix_connreset.c  | 147 ++++++++++++++++++
+>  2 files changed, 152 insertions(+)
+>  create mode 100644 tools/testing/selftests/net/unix/Makefile
+>  create mode 100644 tools/testing/selftests/net/unix/test_unix_connreset.=
+c
 
-> > +	err =3D nla_put_u16(skb, TLS_INFO_TX_MAX_PAYLOAD_LEN,
-> > +			=C2=A0 ctx->tx_max_payload_len);
-> > +
->=20
-> nit: unnecessary empty line
+The test for af_unix is placed under tools/testing/selftests/net/af_unix.
 
-Ah! will fixup for V9
 
-Regards,
-Wilfred
+>
+> diff --git a/tools/testing/selftests/net/unix/Makefile b/tools/testing/se=
+lftests/net/unix/Makefile
+> new file mode 100644
+> index 000000000000..a52992ba23d9
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/unix/Makefile
+> @@ -0,0 +1,5 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +TEST_GEN_PROGS :=3D test_unix_connreset
+> +
+> +include ../../lib.mk
+> +
+> diff --git a/tools/testing/selftests/net/unix/test_unix_connreset.c b/too=
+ls/testing/selftests/net/unix/test_unix_connreset.c
+> new file mode 100644
+> index 000000000000..a8720c7565cb
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/unix/test_unix_connreset.c
+> @@ -0,0 +1,147 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Selftest for UNIX socket close and ECONNRESET behaviour.
 
->=20
-> > +	if (err)
-> > +		goto nla_failure;
+nit: s/UNIX/AF_UNIX/
+
+> + *
+> + * This test verifies that:
+> + *  1. SOCK_STREAM sockets return EOF when peer closes normally.
+> + *  2. SOCK_STREAM sockets return ECONNRESET if peer closes with unread =
+data.
+> + *  3. SOCK_DGRAM sockets do not return ECONNRESET when peer closes,
+> + *     unlike BSD where this error is observed.
+> + *
+> + * These tests document the intended Linux behaviour, distinguishing it =
+from BSD.
+
+I'd not mention BSD as it could be outdated again.
+
+
+> + *
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <fcntl.h>
+> +#include <unistd.h>
+> +#include <errno.h>
+> +#include <sys/socket.h>
+> +#include <sys/un.h>
+> +#include "../../kselftest_harness.h"
+> +
+> +#define SOCK_PATH "/tmp/test_unix_connreset.sock"
+> +
+> +static void remove_socket_file(void)
+> +{
+> +       unlink(SOCK_PATH);
+> +}
+> +
+> +/* Test 1: peer closes normally */
+> +TEST(stream_eof)
+
+I think most of the code can be shared by defining
+FIXTURE_VARIANT().
+
+e.g. variant->unread_data can consolidate Test 1&2.
+
+
+> +{
+> +       int server, client, child;
+> +       struct sockaddr_un addr =3D {0};
+> +       char buf[16] =3D {0};
+
+IIRC, {0} only initialises the first entry and we had a problem
+in kernel code, so simply use "=3D {};" everywhere.
+
+
+> +       ssize_t n;
+> +
+> +       server =3D socket(AF_UNIX, SOCK_STREAM, 0);
+
+Try using variant->type for SOCK_STREAM,
+SOCK_DGRAM, and SOCK_SEQPACKET.
+
+See unix_connect.c, or you could reuse the fixtures
+of err =3D=3D 0 there.
+
+> +       ASSERT_GE(server, 0);
+
+nit: The 1st arg is "expected", and the 2nd is "seen",
+so ASSERT_NE(-1, server) (or ASSERT_LT(-1, server)).
+
+Same for other places.
+
+
+> +
+> +       addr.sun_family =3D AF_UNIX;
+> +       strcpy(addr.sun_path, SOCK_PATH);
+> +       remove_socket_file();
+> +
+> +       ASSERT_EQ(bind(server, (struct sockaddr *)&addr, sizeof(addr)), 0=
+);
+
+I personally feel easy to read this style:
+
+err =3D bind();
+ASSERT_EQ(0, err);
+
+> +       ASSERT_EQ(listen(server, 1), 0);
+> +
+> +       client =3D socket(AF_UNIX, SOCK_STREAM, 0);
+> +       ASSERT_GE(client, 0);
+> +       ASSERT_EQ(connect(client, (struct sockaddr *)&addr, sizeof(addr))=
+, 0);
+> +
+> +       child =3D accept(server, NULL, NULL);
+> +       ASSERT_GE(child, 0);
+> +
+> +       /* Peer closes normally */
+> +       close(child);
+> +
+> +       n =3D recv(client, buf, sizeof(buf), 0);
+> +       EXPECT_EQ(n, 0);
+> +       TH_LOG("recv=3D%zd errno=3D%d (%s)", n, errno, strerror(errno));
+
+I printed errno just for visibility, and you can simply use
+ASSERT here too like
+
+if (n =3D=3D -1)
+    ASSERT_EQ(ECONNRESET, errno)
+
+(I'm assuming Test 1 & 2 will share most code)
+
+> +
+> +       close(client);
+> +       close(server);
+> +       remove_socket_file();
+
+This will not be executed if the program fails at ASSERT_XX(),
+so move it to FIXTURE_TEARDOWN().
+
+
+
+> +}
+> +
+> +/* Test 2: peer closes with unread data */
+> +TEST(stream_reset_unread)
+> +{
+> +       int server, client, child;
+> +       struct sockaddr_un addr =3D {0};
+> +       char buf[16] =3D {0};
+> +       ssize_t n;
+> +
+> +       server =3D socket(AF_UNIX, SOCK_STREAM, 0);
+> +       ASSERT_GE(server, 0);
+> +
+> +       addr.sun_family =3D AF_UNIX;
+> +       strcpy(addr.sun_path, SOCK_PATH);
+> +       remove_socket_file();
+> +
+> +       ASSERT_EQ(bind(server, (struct sockaddr *)&addr, sizeof(addr)), 0=
+);
+> +       ASSERT_EQ(listen(server, 1), 0);
+> +
+> +       client =3D socket(AF_UNIX, SOCK_STREAM, 0);
+> +       ASSERT_GE(client, 0);
+> +       ASSERT_EQ(connect(client, (struct sockaddr *)&addr, sizeof(addr))=
+, 0);
+> +
+> +       child =3D accept(server, NULL, NULL);
+> +       ASSERT_GE(child, 0);
+> +
+> +       /* Send data that will remain unread by client */
+> +       send(client, "hello", 5, 0);
+> +       close(child);
+> +
+> +       n =3D recv(client, buf, sizeof(buf), 0);
+> +       EXPECT_LT(n, 0);
+> +       EXPECT_EQ(errno, ECONNRESET);
+> +       TH_LOG("recv=3D%zd errno=3D%d (%s)", n, errno, strerror(errno));
+> +
+> +       close(client);
+> +       close(server);
+> +       remove_socket_file();
+> +}
+> +
+> +/* Test 3: SOCK_DGRAM peer close */
+> +TEST(dgram_reset)
+> +{
+> +       int server, client;
+> +       int flags;
+> +       struct sockaddr_un addr =3D {0};
+> +       char buf[16] =3D {0};
+> +       ssize_t n;
+> +
+> +       server =3D socket(AF_UNIX, SOCK_DGRAM, 0);
+> +       ASSERT_GE(server, 0);
+> +
+> +       addr.sun_family =3D AF_UNIX;
+> +       strcpy(addr.sun_path, SOCK_PATH);
+> +       remove_socket_file();
+> +
+> +       ASSERT_EQ(bind(server, (struct sockaddr *)&addr, sizeof(addr)), 0=
+);
+> +
+> +       client =3D socket(AF_UNIX, SOCK_DGRAM, 0);
+> +       ASSERT_GE(client, 0);
+> +       ASSERT_EQ(connect(client, (struct sockaddr *)&addr, sizeof(addr))=
+, 0);
+> +
+> +       send(client, "hello", 5, 0);
+> +       close(server);
+> +
+> +       flags =3D fcntl(client, F_GETFL, 0);
+> +       fcntl(client, F_SETFL, flags | O_NONBLOCK);
+
+You can save fcntl() with socket(..., ... | SOCK_NONBLOCK, ...).
+
+
+> +
+> +       n =3D recv(client, buf, sizeof(buf), 0);
+> +       TH_LOG("recv=3D%zd errno=3D%d (%s)", n, errno, strerror(errno));
+> +       /* Expect EAGAIN or EWOULDBLOCK because there is no datagram and =
+peer is closed. */
+> +       EXPECT_LT(n, 0);
+> +       EXPECT_TRUE(errno =3D=3D EAGAIN);
+> +
+> +       close(client);
+> +       remove_socket_file();
+> +}
+> +
+> +TEST_HARNESS_MAIN
+> +
+> --
+> 2.43.0
+>
 
