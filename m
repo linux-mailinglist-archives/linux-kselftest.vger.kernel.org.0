@@ -1,196 +1,121 @@
-Return-Path: <linux-kselftest+bounces-44022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44023-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E13DEC07B59
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 20:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B5337C07D50
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 21:01:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 868881C816C6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 18:21:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99C851894FDC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 19:01:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75F9A34C144;
-	Fri, 24 Oct 2025 18:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EFBC3375DD;
+	Fri, 24 Oct 2025 19:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bb7LhUYc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="byFivHe7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5834F34BA2A
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 18:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB32229B2E
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 19:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761329943; cv=none; b=ky43VkToq81eVgadaJCunNp5O8oBa6Gl4Bn3/yq3z4FkyOTf7SxwXUUYaz+OHa0iCsRFBSnGEe35VZqQgRO1uJnu74G0NzliKMyqlxGSYOCdaKT7Pv1ywF6ekmRqGmDUUVjQ/Mqw/2Pm5GtvVwRJRmw0Aj9hB9F2XTezElTsdrY=
+	t=1761332473; cv=none; b=bYW3+q7mDitr0i4Q35Zy5zBcLD1QSkqm2h0lOBGGf+VubK0BfxPucdS1YlJMzY5qMZg9htA8qt+dYg7y+Zl+12KXb1DJicSNzvF6V15HpO1TymFORLq4JZ+Ol+nnP5XAE0S6YN31ig+esXg3n1NdrNWUhUb36CSTUyzN+552tpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761329943; c=relaxed/simple;
-	bh=/MLpG4k/snGbFR7n6naVcLBN24KEMektQ9HLEgX83ME=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bKaLi9RYInTHc0fltBIlg8J93hSapMsY4pU3O57w2LAbflL7m4w5vOKF6zgAXKF0drxtI24rIbhJIFDpNW4uf6wmK95LvZrsUyimglh88mZql6xiDFgGiU7PWitYGYtuiKYnqqsBlX+Vda0V7o+uGaVneNTTLC7uUWPQI0u+SW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bb7LhUYc; arc=none smtp.client-ip=209.85.216.73
+	s=arc-20240116; t=1761332473; c=relaxed/simple;
+	bh=HX6EQnKcolO/j1E2XrmMEXhrxKNhp5wrM2JfBRBCHIY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=X1vxMoiaukVwJIzTPpfb5Edp6hl7c91iOOEAiUxicgeSe5DGDnbjpNJhfoVnFy3ntG4YkBwWRbztqTRuNm+WUxfGbZJ6YiKGfXlO66s+9KAjqJPSaBiaI5gNOiygMPQl9WyMWk6KjHdQS78eHtO5IvXDWuGUJAE+mHLG6C55MjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=byFivHe7; arc=none smtp.client-ip=209.85.214.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-32ee4998c50so1854177a91.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 11:19:01 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-29085106b99so24968475ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 12:01:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761329940; x=1761934740; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cdTxyUifw7MNQO0DnSkAJL4ChxKgMzzVSN+wxqVSJZ8=;
-        b=bb7LhUYc7dE1MlJ3hn4vSFw/3f96FJuo+jNnG7WwO5ZUBaMZUJ0Tfy37suXo4rj8Hq
-         GNJcqdfsLEWCouKJC/COnGEwC+7ohBE+e96qK40Fyy0hqKXmZsPkhtPuh7Xh1d+4J8gA
-         ktXwT/awnjJ9z0amxoHUcCpnNGpnr5AQ7Fu/JrKglgSTumQvK8egcyg/Q2hYeCLx7nNY
-         fomwoH72T/pflZECz6QDaBxf6LXwIJUi9qhGx+pf3ptByHW7qlBthw0T8HL4aYM2AQ2j
-         aS5NETrxHRoAsc7+sWpsbVQRRbc+iLLk6lwLpgOnLnqv/vBRiJAq/89SbRThBaE4/Xog
-         PkEg==
+        d=google.com; s=20230601; t=1761332471; x=1761937271; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=y8waxpIQ8zGohuhfEK0FchG05acb+4DM6iQ/kzGyRAg=;
+        b=byFivHe7514XbAHoCk6HePP2jOMeQQIk1Lhz4CtZnQjeRXZe866qfJysmj93QNJ85/
+         uz6Ld3wS4gVBbXMEIqK2AmGouE5AazHG6TjWjNw+5PFEu4HBs/7BEF5SPnTtkp6Mnajp
+         RvQHiOReNZ8P+vAhd6Kmo1V/uxEc8bhPwGAx4ai/+KdMR0+1s7KsKWQXJlw5yDUrYfZc
+         xIHyu5rtMRTqbmpu0eyOXDf2yldSDpN1Fho748bdYLi81acY/vPkM0o00aSA9iSG+SSq
+         7Dau4EMcEShsvkin25XD9/jVn/ByAV+0nxXrUs8Nlbf05L6ZeyHFz1k9RoKoJlduDn3/
+         nWJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761329940; x=1761934740;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cdTxyUifw7MNQO0DnSkAJL4ChxKgMzzVSN+wxqVSJZ8=;
-        b=XVNy7H62haLNBkzUlGW/Ckswt5yMRPkdP42ZQq8dfImiN51WY5fJnBG122XgpyoBgP
-         4sd46q+TnGMaxC6Vr24Lfe3Uo3F5gwqStzChTElnTp/8+CGZq3lmRCHOhGZvPdBhetbr
-         Wyo5Y0hfw34bLPQlnNQ9wW1hKzAOreFPUNVE/Lr5A2eNh14r9+1UpRx5/lkpR/agzgMQ
-         h++C+E2s/LNk2+Poxl2WGYVdSrJKFAfu2iDNEfZtgAcNQj7AEkCMpOjYsn2EvbjX1aNx
-         n/oZtX4x9jJw50txEOkx4a8RvCmvlTM+X/rFVGru7ci0f+A9BvGKnxE5IQBPaf2g7xCp
-         vgjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDoY31hg1xg1BflnXnicE4bWiqmzAYyO3GxMuKPxA/dT/BHROxOmgTElMDzzy2z81O3RpuAqY1cyn5OutOQ6E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKT2GRf53Xj+G+tt4Sz5qlFBh3VFJLiITbzYBj/s3vgkkmxSI+
-	BgZO64Zt2lSW007zvOQAgfGlWT3gxyic8ly8ewoDk+HYfI4QZ4tjGElMSMCEwVTJSjvVqBMv8tZ
-	sUDzLbg==
-X-Google-Smtp-Source: AGHT+IEwU7cgqhi7yxcDGgJmntbDXrYh2S5Lt4c3VipRpyfkwWodcxupSfQzFuZEDCpb4LtVbKjpe2rZJEE=
-X-Received: from pjob9.prod.google.com ([2002:a17:90a:8c89:b0:33b:8aa1:75ed])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2247:b0:32d:e780:e9d5
- with SMTP id 98e67ed59e1d1-33bcf8e5f10mr38003967a91.22.1761329940388; Fri, 24
- Oct 2025 11:19:00 -0700 (PDT)
-Date: Fri, 24 Oct 2025 11:18:58 -0700
-In-Reply-To: <diqzldl0dz5f.fsf@google.com>
+        d=1e100.net; s=20230601; t=1761332471; x=1761937271;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y8waxpIQ8zGohuhfEK0FchG05acb+4DM6iQ/kzGyRAg=;
+        b=GsVcPEBEKKA2ULqsBBH0F1q6pVOMQCY2eknmI+hjeNdjwYSm1Sj2c85uzjlPX7GIzM
+         mH1Bvr+ln5i0hC2VhKBfCnnH0v3GguUr7Xhr6hjoN4A9QHR1fuxILFuWRVgtL91ZqHy4
+         3n1XlflHQGlHIEl3i86IalNUOgfTmeNOtwX9NU7g2hK6I+BxziH4j7ocTpnmNNZKZ5vT
+         2V0JsiHDj4HRS/Q933oX/96/dyEklaNS4MYmpx2tkDTYM2V6g5b1cjZcyY9E/6yUT4oo
+         S6Q2U3hgle+QfIDrNGGgwKG1kK7EL7gGwKnso63pOeXHz5UEtn8mB10RNLjjM2OmatgL
+         BaPA==
+X-Forwarded-Encrypted: i=1; AJvYcCXEduwDzpEZBAT3LigoFqbCWcl4oxtTUmmnk4Y2qxYjk2SjbAkcz3NtONiC3ww+FgOKriIlAw+ARhQpLbl7iLE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0GtK4WTz/DpiIi2tvq+HEb3nVsgWiguolTZjI7vM5XmqEZGBU
+	CK/JYURgm9MJdQSxkbwVLMudO3AUT/KQV7uJO+CgZ+ZKilallkz7tUa+NdHYko2AVjovedRcVuh
+	v/+kKzRwcQBGlbg==
+X-Google-Smtp-Source: AGHT+IECkyz7QjtjqlIBCYpDRH8zhYEB/CRZQefpS4FJrV2eHd9B6iamp/NEmX8Y64PJXUVBOg33HFcIUmVKiA==
+X-Received: from plbjh6.prod.google.com ([2002:a17:903:3286:b0:290:b136:4f08])
+ (user=cmllamas job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:ceca:b0:292:fe19:8896 with SMTP id d9443c01a7336-2946e25e038mr94802595ad.52.1761332470917;
+ Fri, 24 Oct 2025 12:01:10 -0700 (PDT)
+Date: Fri, 24 Oct 2025 19:01:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <cover.1760731772.git.ackerleytng@google.com> <727482ec42baa50cb1488ad89d02e732defda3db.1760731772.git.ackerleytng@google.com>
- <diqzldl0dz5f.fsf@google.com>
-Message-ID: <aPvDEl0kGdZfcAD9@google.com>
-Subject: Re: [RFC PATCH v1 16/37] KVM: selftests: Add support for mmap() on
- guest_memfd in core library
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: cgroups@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org, akpm@linux-foundation.org, 
-	binbin.wu@linux.intel.com, bp@alien8.de, brauner@kernel.org, 
-	chao.p.peng@intel.com, chenhuacai@kernel.org, corbet@lwn.net, 
-	dave.hansen@intel.com, dave.hansen@linux.intel.com, david@redhat.com, 
-	dmatlack@google.com, erdemaktas@google.com, fan.du@intel.com, fvdl@google.com, 
-	haibo1.xu@intel.com, hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com, 
-	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com, jack@suse.cz, 
-	james.morse@arm.com, jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, 
-	jhubbard@nvidia.com, jroedel@suse.de, jthoughton@google.com, 
-	jun.miao@intel.com, kai.huang@intel.com, keirf@google.com, 
-	kent.overstreet@linux.dev, liam.merwick@oracle.com, 
-	maciej.wieczor-retman@intel.com, mail@maciej.szmigiero.name, 
-	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
-	mhiramat@kernel.org, mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, 
-	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au, 
-	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es, 
-	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com, 
-	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com, 
-	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, qperret@google.com, 
-	richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org, 
-	shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com, 
-	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com, 
-	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com, 
-	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com, 
-	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org, wyihan@google.com, 
-	xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com, 
-	yuzenghui@huawei.com, zhiquan1.li@intel.com
-Content-Type: text/plain; charset="us-ascii"
+X-Mailer: git-send-email 2.51.1.821.gb6fe4d2222-goog
+Message-ID: <20251024190101.2091549-1-cmllamas@google.com>
+Subject: [PATCH] kunit: prevent log overwrite in param_tests
+From: Carlos Llamas <cmllamas@google.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Marie Zhussupova <marievic@google.com>
+Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, 
+	Tiffany Yang <ynaffit@google.com>, Carlos Llamas <cmllamas@google.com>, 
+	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <linux-kselftest@vger.kernel.org>, 
+	"open list:KERNEL UNIT TESTING FRAMEWORK (KUnit)" <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Oct 24, 2025, Ackerley Tng wrote:
-> Ackerley Tng <ackerleytng@google.com> writes:
-> 
-> > From: Sean Christopherson <seanjc@google.com>
-> >
-> > Accept gmem_flags in vm_mem_add() to be able to create a guest_memfd within
-> > vm_mem_add().
-> >
-> > When vm_mem_add() is used to set up a guest_memfd for a memslot, set up the
-> > provided (or created) gmem_fd as the fd for the user memory region. This
-> > makes it available to be mmap()-ed from just like fds from other memory
-> > sources. mmap() from guest_memfd using the provided gmem_flags and
-> > gmem_offset.
-> >
-> > Add a kvm_slot_to_fd() helper to provide convenient access to the file
-> > descriptor of a memslot.
-> >
-> > Update existing callers of vm_mem_add() to pass 0 for gmem_flags to
-> > preserve existing behavior.
-> >
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > [For guest_memfds, mmap() using gmem_offset instead of 0 all the time.]
-> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/include/kvm_util.h |  7 ++++++-
-> >  tools/testing/selftests/kvm/lib/kvm_util.c     | 18 ++++++++++--------
-> >  .../kvm/x86/private_mem_conversions_test.c     |  2 +-
-> >  3 files changed, 17 insertions(+), 10 deletions(-)
-> >
-> > 
-> > [...snip...]
-> > 
-> > @@ -1050,13 +1049,16 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
-> >  	}
-> >  
-> >  	region->fd = -1;
-> > -	if (backing_src_is_shared(src_type))
-> > +	if (flags & KVM_MEM_GUEST_MEMFD && gmem_flags & GUEST_MEMFD_FLAG_MMAP)
-> > +		region->fd = kvm_dup(gmem_fd);
-> > +	else if (backing_src_is_shared(src_type))
-> >  		region->fd = kvm_memfd_alloc(region->mmap_size,
-> >  					     src_type == VM_MEM_SRC_SHARED_HUGETLB);
-> >  
-> 
-> Doing this makes it hard to test the legacy dual-backing case.
-> 
-> It actually broke x86/private_mem_conversions_test for the legacy
-> dual-backing case because there's no way to mmap or provide a
-> userspace_address from the memory provider that is not guest_memfd, as
-> determined by src_type.
+When running parameterized tests, each test case is initialized with
+kunit_init_test(). This function takes the test_case->log as a parameter
+but it clears it via string_stream_clear() on each iteration.
 
-Yes there is.  This patch is a giant nop.  The only thing that the core library
-doesn't support is mmap() on guest_memfd *and* the other src_type, and IMO that
-is big "don't care", because KVM doesn't even support that combination:
+This results in only the log from the last parameter being preserved in
+the test_case->log and the results from the previous parameters are lost
+from the debugfs entry.
 
-	if (kvm_gmem_supports_mmap(inode))
-		slot->flags |= KVM_MEMSLOT_GMEM_ONLY;
+Fix this by manually setting the param_test.log to the test_case->log
+after it has been initialized. This prevents kunit_init_test() from
+clearing the log on each iteration.
 
-I mean, we _could_ test that KVM ignores the hva for mapping, but that's a
-different and unique test entirely.
+Fixes: 4b59300ba4d2 ("kunit: Add parent kunit for parameterized test context")
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+---
+ lib/kunit/test.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I did break x86/private_mem_conversions_test (I could have sworn I tested, *sigh*),
-but the bug is in:
-
-  KVM: selftests: Provide function to look up guest_memfd details from gpa
-
-not here.  And it's a trivial /facepalm-style fix:
-
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index ee5b63f7cb50..23a8676fee6d 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -1680,7 +1680,7 @@ int kvm_gpa_to_guest_memfd(struct kvm_vm *vm, vm_paddr_t gpa, off_t *fd_offset,
-        gpa_offset = gpa - region->region.guest_phys_addr;
-        *fd_offset = region->region.guest_memfd_offset + gpa_offset;
-        *nr_bytes = region->region.memory_size - gpa_offset;
--       return region->fd;
-+       return region->region.guest_memfd;
- }
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index bb66ea1a3eac..62eb529824c6 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -745,7 +745,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+ 					.param_index = ++test.param_index,
+ 					.parent = &test,
+ 				};
+-				kunit_init_test(&param_test, test_case->name, test_case->log);
++				kunit_init_test(&param_test, test_case->name, NULL);
++				param_test.log = test_case->log;
+ 				kunit_run_case_catch_errors(suite, test_case, &param_test);
  
- /* Create an interrupt controller chip for the specified VM. */
+ 				if (param_desc[0] == '\0') {
+-- 
+2.51.1.821.gb6fe4d2222-goog
+
 
