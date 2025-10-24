@@ -1,201 +1,158 @@
-Return-Path: <linux-kselftest+bounces-44018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44019-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDC6DC0764F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 18:49:24 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CF08C0767C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 18:53:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78D861C276A8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 16:48:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4D8864E4FAC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Oct 2025 16:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78FB3376A7;
-	Fri, 24 Oct 2025 16:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89CC3338F52;
+	Fri, 24 Oct 2025 16:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3kE1an0p"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IiQWoUba"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80FB31960A
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 16:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7687E31CA6A
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 16:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761324497; cv=none; b=MZXy+OB2yEJ3zLd1t2DmUUQPOFi38tNh5MTCNr4A8xfKjm6CZUm/11gEInvDs+NbwmfCdx3cm+3ukhFbOHXke4tGtfjCmIPdvsIfZb3RlXTkjih0fpJLUXdC98cI04y1dQRJId6PeiFE+Niutc1tpOsWWbZF/kFm0wqXjCTpqE4=
+	t=1761324818; cv=none; b=N6vn4DFa+I1HQg6RYKIYaN0cT5Czhd4VVMtM/yWLN8Vp4TYd0yIOljshkQx8LjYz/EYuk39guZXHLy3/DB0bc6VI+pLB2gFMiW5Oki9t+ERvEaoSq9PIKmCokcX1v/HN0gjkezFNY1XOlR4VkCahGfY+1HjyhVfhlERkeBfe0qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761324497; c=relaxed/simple;
-	bh=f2a3PKTXtxiqGjxZTh9T4s+dCE9zdgxrYpNNXCt4lP4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=dDQEDwJd62oDpTekz7q78lfOiwC51UyedvDa25NqIWNo1JGKpoQUaviYwVgKINUiC9CcYaJSvB8GfUOc9mkTIn9CErDD547g7NAoRvviSOOTkd3AFLWt5MqWITSdqBsUHIdDromU1RV6TLEGdFNaHyzK9rHlRySXx9FMLheulLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3kE1an0p; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b6ceeea4addso1909381a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Oct 2025 09:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761324494; x=1761929294; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N0ZqooCPaM4r88VkiqaSJuwNdNXDKXHQHEd4a0Vhrkk=;
-        b=3kE1an0pZPerDXVZT/Eryt9uJLK3d3syqHXqx2U9sE68vp+cA0k//igGNp03uLI6v0
-         bWU0BPVXcZnbk5Cp1wLp0ziT+rVR2R+VT3VF9WQSRVuPO1rEDSDxx10EIkOV2bBqF29i
-         vO9SoLzY3B9//15oc0CnGQia/eN+qYvIaGyyg0xJN5PC6Ro7mmgEFr7rdnazQFjyfylC
-         V8Z/K65gdxDsiJOn7zA2L/fiI7N9ow9FzNYJmItwiEzsnpk9PBme5+h18wyva85Il8xv
-         DXn4xNKhzPIeDLEm07oce/QTQ1rLUINZ6X0qMvPgfRna8f7azAG05IzBLssyFwAa6ZfA
-         udoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761324494; x=1761929294;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N0ZqooCPaM4r88VkiqaSJuwNdNXDKXHQHEd4a0Vhrkk=;
-        b=M3r9kQuMMulTr2kglzqHbz9MP3nhziMuFOGM9K6QenkB6OPvpmpfJgWQcsx+qOyV1R
-         OQRYXMJZIAmwYZQ/MDz30/Lz8NRnIRc3I7pGyeZaF7erb0ERiaPMHudsgO1o6xM1g1ui
-         XbT2LTUkNfhvztZdIvvhvnkSEFqujcWAK+cb+uxaJ4A8wSv5TYMSa0Fg5YLppQEl9IDR
-         /oBI9ijcSFhYY8h+vHSuf2s0PsjpdBalxd1ivUJoolrS/2L1J6IV6x4n2hwfUAvtJyDX
-         shV8crlAOB1T+39XR60N+KQrTZB6aF4k59ZvTb7kn7kqlMzFiX5KdRIBJGoEOXOkH6eu
-         cwhg==
-X-Forwarded-Encrypted: i=1; AJvYcCXMryl09XOUzdRMQXebTHvOR0OogI2BL6I7AFUznZHtG/cH80b8OY5A0y4T53QW0on/qxjPfZAnYksMnju1Jo8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlceSkaEe9316OpHfjj0p6dJbiAismQKOJWoOPA5nWZqoHpY42
-	bDRi7yWNtex3ATpDCLQOtoozuJXmgyzEsHTMGcbFgicJf/KM8+KTO733KdjgEGh43W4nTREE/Bj
-	zczGKkW6ZJnWEDIKCBHImzdxzIg==
-X-Google-Smtp-Source: AGHT+IEK36TdUsL0vlOCqmspe4caiObjbOIOsGdu4QEVuayy/5SWQrXbR3hmNgi0EJY8rePbH10nOdC3ZkaAHHoKBw==
-X-Received: from pjyj23.prod.google.com ([2002:a17:90a:e617:b0:339:ae3b:2bc7])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:9988:b0:334:b8bb:b11d with SMTP id adf61e73a8af0-33dead4c65cmr3868140637.31.1761324494100;
- Fri, 24 Oct 2025 09:48:14 -0700 (PDT)
-Date: Fri, 24 Oct 2025 09:48:12 -0700
-In-Reply-To: <727482ec42baa50cb1488ad89d02e732defda3db.1760731772.git.ackerleytng@google.com>
+	s=arc-20240116; t=1761324818; c=relaxed/simple;
+	bh=DKUBl7W3huP6cGlFMGyhKUp/w1FwXrlf10EUmzCMMJM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=jPmaTvIrKRsb1i4Ud5B2jy/q3wId9o63qKHHpZsFb+Og8qBLgs9BylFLvCSY0d/gEA+zod1ljBi3/MveUsdVICsY53IdZ8v8PKrB2doZROZs+XL7iY+UanHsTxFw0nx5aZsZKA4BYZIJBz9VPOnTRCjN9akyV5OfSlBHlAMB5Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IiQWoUba; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <790be7b7d3752f26f2c4e62476acb0bfe448df84.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761324803;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DKUBl7W3huP6cGlFMGyhKUp/w1FwXrlf10EUmzCMMJM=;
+	b=IiQWoUbaLCLRE1Fxcnvuj23EB6VGiXYVfLI7g8+U9IuTiXRLuifR0gljXTy+CKeLCo20vT
+	ueXg5n8DPnwu6dVv5q9MfzaTLbr7OMmxK+5yrizvl+p+FCyPhQ7YrqNbvbRoFzeM8bnhYh
+	M9CnJoBoSICitxeXjd/t2J7QCIbhPcs=
+Subject: Re: [PATCH bpf-next 1/2] bpf: Skip bounds adjustment for
+ conditional jumps on same register
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song
+ <yonghong.song@linux.dev>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,  KP Singh
+ <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>,  Matan
+ Shachnai <m.shachnai@gmail.com>, Luis Gerhorst <luis.gerhorst@fau.de>,
+ colin.i.king@gmail.com,  Harishankar Vishwanathan
+ <harishankar.vishwanathan@gmail.com>, bpf <bpf@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>,  "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, Kaiyan Mei <M202472210@hust.edu.cn>, 
+ Yinhao Hu <dddddd@hust.edu.cn>
+Date: Sat, 25 Oct 2025 00:53:00 +0800
+In-Reply-To: <CAADnVQ+Tt4GkhV74P_bekvCWbZOBgR5PEYt7sQHEzMTDeE4j9w@mail.gmail.com>
+References: <20251022164457.1203756-1-kafai.wan@linux.dev>
+	 <20251022164457.1203756-2-kafai.wan@linux.dev>
+	 <39af9321-fb9b-4cee-84f1-77248a375e85@linux.dev>
+	 <1d03174dfe2a7eab1166596c85a6b586a660dffc.camel@gmail.com>
+	 <CAADnVQKdMcOkkqNa3LbGWqsz9iHAODFSinokj6htbGi0N66h_Q@mail.gmail.com>
+	 <abe1bd5def7494653d52425818815baa54a3628a.camel@gmail.com>
+	 <0d267da41178f3ac4669621516888a06d6aa5665.camel@linux.dev>
+	 <f0a52150bc99aa4da1a25d6181975cd3c80a717f.camel@gmail.com>
+	 <b190c9b2837b28cf579aa38126de50e29e0add32.camel@linux.dev>
+	 <0d98a2c754884e94c3367209680c071a8df4279d.camel@gmail.com>
+	 <90ec497a230584b0e627d12eaf172236b7a5165b.camel@linux.dev>
+	 <CAADnVQ+Tt4GkhV74P_bekvCWbZOBgR5PEYt7sQHEzMTDeE4j9w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cover.1760731772.git.ackerleytng@google.com> <727482ec42baa50cb1488ad89d02e732defda3db.1760731772.git.ackerleytng@google.com>
-Message-ID: <diqzldl0dz5f.fsf@google.com>
-Subject: Re: [RFC PATCH v1 16/37] KVM: selftests: Add support for mmap() on
- guest_memfd in core library
-From: Ackerley Tng <ackerleytng@google.com>
-To: cgroups@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-trace-kernel@vger.kernel.org, x86@kernel.org
-Cc: akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de, 
-	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org, 
-	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com, 
-	david@redhat.com, dmatlack@google.com, erdemaktas@google.com, 
-	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org, 
-	hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com, 
-	isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com, 
-	jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com, 
-	jroedel@suse.de, jthoughton@google.com, jun.miao@intel.com, 
-	kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev, 
-	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com, 
-	mail@maciej.szmigiero.name, maobibo@loongson.cn, 
-	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org, 
-	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev, 
-	nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev, palmer@dabbelt.com, 
-	pankaj.gupta@amd.com, paul.walmsley@sifive.com, pbonzini@redhat.com, 
-	peterx@redhat.com, pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, 
-	qperret@google.com, richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, 
-	rientjes@google.com, rostedt@goodmis.org, roypat@amazon.co.uk, 
-	rppt@kernel.org, seanjc@google.com, shakeel.butt@linux.dev, shuah@kernel.org, 
-	steven.price@arm.com, steven.sistare@oracle.com, suzuki.poulose@arm.com, 
-	tabba@google.com, tglx@linutronix.de, thomas.lendacky@amd.com, 
-	vannapurve@google.com, vbabka@suse.cz, viro@zeniv.linux.org.uk, 
-	vkuznets@redhat.com, wei.w.wang@intel.com, will@kernel.org, 
-	willy@infradead.org, wyihan@google.com, xiaoyao.li@intel.com, 
-	yan.y.zhao@intel.com, yilun.xu@intel.com, yuzenghui@huawei.com, 
-	zhiquan1.li@intel.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-Migadu-Flow: FLOW_OUT
 
-Ackerley Tng <ackerleytng@google.com> writes:
+On Fri, 2025-10-24 at 09:40 -0700, Alexei Starovoitov wrote:
+> On Fri, Oct 24, 2025 at 9:38=E2=80=AFAM KaFai Wan <kafai.wan@linux.dev> w=
+rote:
+> >=20
+> > On Fri, 2025-10-24 at 09:21 -0700, Eduard Zingerman wrote:
+> > > On Sat, 2025-10-25 at 00:13 +0800, KaFai Wan wrote:
+> > >=20
+> > > [...]
+> > >=20
+> > > > For non-scalar cases we only allow pointer comparison on pkt_ptr, t=
+his check is before
+> > > > is_branch_taken()
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0 src_reg =3D &regs[insn->src_reg];
+> > > > =C2=A0=C2=A0=C2=A0 if (!(reg_is_pkt_pointer_any(dst_reg) && reg_is_=
+pkt_pointer_any(src_reg)) &&
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 is_pointer_value(env, in=
+sn->src_reg)) {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+verbose(env, "R%d pointer comparison prohibited\n",
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 insn->src_reg);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+return -EACCES;
+> > > > =C2=A0=C2=A0=C2=A0 }
+> > > >=20
+> > > > and in the end of check_cond_jmp_op() (after is_branch_taken()), we=
+ checked again
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0 } else if (!try_match_pkt_pointers(insn, dst_reg=
+, &regs[insn->src_reg],
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 this_branch, other_branch) &&
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 is_pointer_value(env, insn->dst_reg)) {
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+verbose(env, "R%d pointer comparison prohibited\n",
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 insn->dst_reg);
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
+return -EACCES;
+> > > > =C2=A0=C2=A0=C2=A0 }
+> > > >=20
+> > > > this time we check if it is valid comparison on pkt_ptr in try_matc=
+h_pkt_pointers().
+> > > >=20
+> > > > Currently we just allow 4 opcode (BPF_JGT, BPF_JLT, BPF_JGE, BPF_JL=
+E) on pkt_ptr, and with
+> > > > conditions. But we bypass these prohibits in privileged mode (is_po=
+inter_value() always
+> > > > return false in privileged mode).
+> > > >=20
+> > > > So the logic skip these prohibits for pkt_ptr in unprivileged mode.
+> > >=20
+> > > Well, yes, but do you really need to do forbid `if r0 > r0 goto ...` =
+in unpriv?
+> >=20
+> > Currently `if r0 > r0 goto ...` is forbid in unpriv, but we can allow i=
+t.
+>=20
+> Let's not relax unpriv. We don't need new threads with researchers
+> whether such things can be exploited.
+>=20
+Ok, I'll keep the logic for both scalar and non-scalar cases.
 
-> From: Sean Christopherson <seanjc@google.com>
->
-> Accept gmem_flags in vm_mem_add() to be able to create a guest_memfd within
-> vm_mem_add().
->
-> When vm_mem_add() is used to set up a guest_memfd for a memslot, set up the
-> provided (or created) gmem_fd as the fd for the user memory region. This
-> makes it available to be mmap()-ed from just like fds from other memory
-> sources. mmap() from guest_memfd using the provided gmem_flags and
-> gmem_offset.
->
-> Add a kvm_slot_to_fd() helper to provide convenient access to the file
-> descriptor of a memslot.
->
-> Update existing callers of vm_mem_add() to pass 0 for gmem_flags to
-> preserve existing behavior.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> [For guest_memfds, mmap() using gmem_offset instead of 0 all the time.]
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> ---
->  tools/testing/selftests/kvm/include/kvm_util.h |  7 ++++++-
->  tools/testing/selftests/kvm/lib/kvm_util.c     | 18 ++++++++++--------
->  .../kvm/x86/private_mem_conversions_test.c     |  2 +-
->  3 files changed, 17 insertions(+), 10 deletions(-)
->
-> 
-> [...snip...]
-> 
-> @@ -1050,13 +1049,16 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
->  	}
->  
->  	region->fd = -1;
-> -	if (backing_src_is_shared(src_type))
-> +	if (flags & KVM_MEM_GUEST_MEMFD && gmem_flags & GUEST_MEMFD_FLAG_MMAP)
-> +		region->fd = kvm_dup(gmem_fd);
-> +	else if (backing_src_is_shared(src_type))
->  		region->fd = kvm_memfd_alloc(region->mmap_size,
->  					     src_type == VM_MEM_SRC_SHARED_HUGETLB);
->  
-
-Doing this makes it hard to test the legacy dual-backing case.
-
-It actually broke x86/private_mem_conversions_test for the legacy
-dual-backing case because there's no way to mmap or provide a
-userspace_address from the memory provider that is not guest_memfd, as
-determined by src_type.
-
-I didn't test the legacy dual-backing case before posting this RFC and
-probably should have.
-
-> -	region->mmap_start = kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE,
-> -				      vm_mem_backing_src_alias(src_type)->flag,
-> -				      region->fd);
-> +	mmap_offset = flags & KVM_MEM_GUEST_MEMFD ? gmem_offset : 0;
-> +	region->mmap_start = __kvm_mmap(region->mmap_size, PROT_READ | PROT_WRITE,
-> +					vm_mem_backing_src_alias(src_type)->flag,
-> +					region->fd, mmap_offset);
->  
->  	TEST_ASSERT(!is_backing_src_hugetlb(src_type) ||
->  		    region->mmap_start == align_ptr_up(region->mmap_start, backing_src_pagesz),
-> @@ -1117,7 +1119,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->  				 uint64_t gpa, uint32_t slot, uint64_t npages,
->  				 uint32_t flags)
->  {
-> -	vm_mem_add(vm, src_type, gpa, slot, npages, flags, -1, 0);
-> +	vm_mem_add(vm, src_type, gpa, slot, npages, flags, -1, 0, 0);
->  }
->  
->  /*
-> diff --git a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> index 1969f4ab9b280..41f6b38f04071 100644
-> --- a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> +++ b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> @@ -399,7 +399,7 @@ static void test_mem_conversions(enum vm_mem_backing_src_type src_type, uint32_t
->  	for (i = 0; i < nr_memslots; i++)
->  		vm_mem_add(vm, src_type, BASE_DATA_GPA + slot_size * i,
->  			   BASE_DATA_SLOT + i, slot_size / vm->page_size,
-> -			   KVM_MEM_GUEST_MEMFD, memfd, slot_size * i);
-> +			   KVM_MEM_GUEST_MEMFD, memfd, slot_size * i, 0);
->  
->  	for (i = 0; i < nr_vcpus; i++) {
->  		uint64_t gpa =  BASE_DATA_GPA + i * per_cpu_size;
-> -- 
-> 2.51.0.858.gf9c4a03a3a-goog
+--=20
+Thanks,
+KaFai
 
