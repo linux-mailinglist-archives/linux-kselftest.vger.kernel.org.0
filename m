@@ -1,147 +1,130 @@
-Return-Path: <linux-kselftest+bounces-44041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44042-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05958C092C3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Oct 2025 17:40:52 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B862C094AB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Oct 2025 18:18:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E2D014E3686
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Oct 2025 15:40:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2526334DA68
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Oct 2025 16:18:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E9C303A03;
-	Sat, 25 Oct 2025 15:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C521F308F35;
+	Sat, 25 Oct 2025 16:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="CF9FcJJ2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CViEQPWO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DCF21323C
-	for <linux-kselftest@vger.kernel.org>; Sat, 25 Oct 2025 15:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B18E304BAB;
+	Sat, 25 Oct 2025 16:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761406844; cv=none; b=t5sTihNx/QmtRtbI9FMKbM7To0RIOD6CedLDqi161gxiJ9JcSO9cF01RkSYK4jIsEhmm2bPGcGItgRjcJ/qkZaOcy3NH2VflzG+oCqt89XBybqDDqxHihjGsQnpBvI3kaDj9wkAhrmq0L+zmE/wGed2ZO4cRnBvSQpCrWcmunMM=
+	t=1761408945; cv=none; b=sm06iZ/dTvCl8K13ZWxmORyt/QmlL0EursT0wb1CNxu/cjsdYK5N0e7m4rCoA+8mp6SLsvM0OO5VQUCRwRwG7bSVfxmP335zVLx8StYgIMMW2jXSjVpMAqC4MZQjr3W4Y6tTz1ajpBYAoIivva7MLjuu03MX09RgcUkaEjH2qds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761406844; c=relaxed/simple;
-	bh=0HY16VFXZq4Fs4AqSUpKJwWPQq433JoGDwf5zAVL/Es=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E2S/LYoP+ZA8Pvk8JiOLn8QbDYL23UTIU6kQpbySaqpcqRu2rphQRbMsiuCMSx4JLcRAuzkYb9iexKtYcwiMF9t3kxQR5XbMPiaYcZZPCVFwzDxeDezNXoO35X8cKCtMVIIBa+zCwhyTvAAE849SJrms8pvG5HRnXlHQ4BQGPgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=CF9FcJJ2; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-63c2d72581fso4692486a12.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 25 Oct 2025 08:40:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1761406841; x=1762011641; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0HY16VFXZq4Fs4AqSUpKJwWPQq433JoGDwf5zAVL/Es=;
-        b=CF9FcJJ2OewgeQP7WyxBZYYfnEwmZ+nkpezxtdSQEItAnoc7TKycpodGV1UvYWdpcN
-         PKJj665ea+ijpXk88pukZgu4d/Jpwpl4sYbT3rSGMwtGCDYsDqObUVWucps/NcWzlpvu
-         m+K3gCpXJGJwtUJGTQNnywQ1TYEkfS+syDeS6wuJ7px282/ZNy/n6tSz49rYZH2bj+49
-         XKsqsLeDKpYV/OmH9Hj/V/6skast6sLChGgxnO0IGr2Z/JHMF73kB63WD4zr2OpF6KJF
-         LPnicjcWcsXh98d5ZNSiz459c/RzSqZauQJuSTivaBn3D1S5RFPqlPhuhHtkur1kXa7u
-         C3FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761406841; x=1762011641;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0HY16VFXZq4Fs4AqSUpKJwWPQq433JoGDwf5zAVL/Es=;
-        b=ZlbDaOuQADO5fcSkLOr7EEcX5yypN0GA+ljlOueOYsRoM8rO08eX6jt8v8410eWwRS
-         GQMd48Sx13z6aW86ZqM1319O8bdWmlpPUas0WPeVcTJgQEA08OmBx9aHwSuIa3wJ3fad
-         3YSKya1KAXx0HtG2Uq+aCuA/rP2irkK/XUw+ROUz+hHr7Xw/D3wU02kPWZoPpQsjPtok
-         E0RfhMqIZfajmTaBnovtLH0zBq7xQWFBSzrCCAB6HjJyrIzfY1RhFF/HEIxYqRTGHruT
-         Vg3gjgCJ0pvWPWYWtfH0x4h5C4V85SzRbG5zr+im5UhDDEBA4RE9uq2sQvA0zujt4I6x
-         XILA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdWf4QQm/5mb29/sxSgZmc4mQFuhSPsGwrTYvEz8foc7PXLgck3Y5KC3CqWjPecl7FNpPjyjoJ8/3vX0g/mCE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb/DL31WpDDz8Y8BtT2NqCqy82cK6TnYpnMr7lGwOdK6WSid+Q
-	1L1FW2ZQkXf0cGQShAYHHm21anpqBcGe+d8PT79PRLIoTye2iBjgFSE5ZzRRh/WZERqZYjmRPLC
-	lKrf/fUHcHLHufXKYRf3bSaf2zNhttTELULeMgneEKg==
-X-Gm-Gg: ASbGncvghXdVJLm31k2uwGfXd+A4g4YvSImb+ljbWq9uO7XG3YP4A5ZH02Ry+R7eaE4
-	j02glcjEiJYdNhOZqAWOoi5wScvPB4fE4Pw3c3YthMnyDt6/JGWQJhtPGuCgu4gLg85oW2/E/Gm
-	KkPJiu8YxVQmeEvSxRnZGsIBYB/EslOSk1rzZ3ytl7kUbvi2Uggji9CHri5e6vroEfp+NZwRAxA
-	VPMXuZo7KhjNet5nA3vtMF1QAs4pNzskbyTDRT3tkZVuoqew2uCg6bighzV0rA5OLeWCsFudZsq
-	TQYQh9K9NIqTY+r3+w==
-X-Google-Smtp-Source: AGHT+IHusR3pR0UReEeTXHeTWS5omMas6c+gaYiIEsLmjRg06Miw4AMQcuQX3fi9PVgOyyAmpc1NpRtLuc0jLuFpHKE=
-X-Received: by 2002:a05:6402:4504:b0:63c:103b:e1cf with SMTP id
- 4fb4d7f45d1cf-63c1f584283mr30192670a12.0.1761406840700; Sat, 25 Oct 2025
- 08:40:40 -0700 (PDT)
+	s=arc-20240116; t=1761408945; c=relaxed/simple;
+	bh=A9z2z6aFPOT4Km+WtJCwhpbdqVDx2t8vg8AQo423VXQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=d09q+t/eom3WrSBJS65gkItNuHR0XbedS7TS7e2KZS1sr2qyLL7yi9Pj1u0LLBNB0hjnzDlVEC7Qq7b+2JxckaK+sDCl7ogWtU3vTWgRBIekSOZd5rKCZDgexVdlJ5rTatXDu1M+pDqTfFJGiF+HUjAs5wX7SeL9rdfJ+SAhSXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CViEQPWO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CDBCC4CEFB;
+	Sat, 25 Oct 2025 16:15:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761408945;
+	bh=A9z2z6aFPOT4Km+WtJCwhpbdqVDx2t8vg8AQo423VXQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=CViEQPWO4qzONgLwo5q9qHDMMdaHftmFK//rqqg4KJf6+kv+G0ytdzhtTvmd92+WC
+	 va7NwpuRZH/lNjl+6QJgKX27Y+6sPrTpXYkUbF3ArnBgt9awwcursaxjd9jJzMO/cR
+	 7IVF8vRuRGZMTizHkOQICFTaN+JNfx1TlssI5Arbgbpswa5BpjwqqlqHr0nA/y5lWb
+	 mcPxC5eE0AW/VYTLD3uO36P4A3Z/qmvG701lRva+rdJYYAK/H1uQfJh5leco4Z4STL
+	 lz4+E/oe8b/MrGAl5hQVNJlp2FboBqA/pH/V2AvjQPejZvGJ9DD+TJATGaAaCcEvyb
+	 gNa17G1PAHVtQ==
+From: Sasha Levin <sashal@kernel.org>
+To: patches@lists.linux.dev,
+	stable@vger.kernel.org
+Cc: Nai-Chen Cheng <bleach1827@gmail.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.17-5.4] selftests/Makefile: include $(INSTALL_DEP_TARGETS) in clean target to clean net/lib dependency
+Date: Sat, 25 Oct 2025 11:56:15 -0400
+Message-ID: <20251025160905.3857885-144-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251025160905.3857885-1-sashal@kernel.org>
+References: <20251025160905.3857885-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <6-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
-In-Reply-To: <6-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Sat, 25 Oct 2025 11:40:04 -0400
-X-Gm-Features: AWmQ_bmCjfexrZLPPfdt56XAonJ2DbSa1CpJkmBpIfIxbAsyN_ouXa6sCMuBecc
-Message-ID: <CA+CK2bDZ1RX9o80x2+HTshix0zxLcruzDfW--NMS8CjWo1PfUg@mail.gmail.com>
-Subject: Re: [PATCH v7 06/15] iommupt: Add unmap_pages op
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, 
-	Joerg Roedel <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, 
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, Will Deacon <will@kernel.org>, 
-	Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez <alejandro.j.jimenez@oracle.com>, 
-	James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>, 
-	Michael Roth <michael.roth@amd.com>, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.17.5
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 23, 2025 at 2:20=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> unmap_pages removes mappings and any fully contained interior tables from
-> the given range. This follows the now-standard iommu_domain API definitio=
-n
-> where it does not split up larger page sizes into smaller. The caller mus=
-t
-> perform unmap only on ranges created by map or it must have somehow
-> otherwise determined safe cut points (eg iommufd/vfio use iova_to_phys to
-> scan for them)
->
-> A future work will provide 'cut' which explicitly does the page size spli=
-t
-> if the HW can support it.
+From: Nai-Chen Cheng <bleach1827@gmail.com>
 
-Are there plans to add "free" when a table becomes empty on an unmap?
-Not sure what would be an efficient implementation for that, maybe a
-refcnt for # entries in table?
+[ Upstream commit d3f7457da7b9527a06dbcbfaf666aa51ac2eeb53 ]
 
-> unmap is implemented with a recursive descent of the tree. If the caller
-> provides a VA range that spans an entire table item then the table memory
-> can be freed as well.
->
-> If an entire table item can be freed then this version will also check th=
-e
-> leaf-only level of the tree to ensure that all entries are present to
-> generate -EINVAL. Many of the existing drivers don't do this extra check.
->
-> This version sits under the iommu_domain_ops as unmap_pages() but does no=
-t
-> require the external page size calculation. The implementation is actuall=
-y
-> unmap_range() and can do arbitrary ranges, internally handling all the
-> validation and supporting any arrangment of page sizes. A future series
-> can optimize __iommu_unmap() to take advantage of this.
->
-> Freed page table memory is batched up in the gather and will be freed in
-> the driver's iotlb_sync() callback after the IOTLB flush completes.
->
-> Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+The selftests 'make clean' does not clean the net/lib because it only
+processes $(TARGETS) and ignores $(INSTALL_DEP_TARGETS). This leaves
+compiled objects in net/lib after cleaning, requiring manual cleanup.
 
-Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+Include $(INSTALL_DEP_TARGETS) in clean target to ensure net/lib
+dependency is properly cleaned.
+
+Signed-off-by: Nai-Chen Cheng <bleach1827@gmail.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Tested-by: Simon Horman <horms@kernel.org> # build-tested
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://patch.msgid.link/20250910-selftests-makefile-clean-v1-1-29e7f496cd87@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+
+LLM Generated explanations, may be completely bogus:
+
+YES – updating `tools/testing/selftests/Makefile:319` to iterate over
+`$(TARGETS) $(INSTALL_DEP_TARGETS)` brings the `clean` recipe in line
+with the existing `all` and `install` loops
+(`tools/testing/selftests/Makefile:211` and `:276`), so the implicit
+net/lib helper that gets built for networking selftests is now removed
+during `make clean`. This fixes a real annoyance where stale objects
+remain under `net/lib/` after cleaning, forcing manual removal and
+risking rebuild flakiness if headers or tooling change. The change is
+tiny, selftests-only, and mirrors logic already exercised in other
+targets, so regression risk is negligible. Just make sure the stable
+branch you target already carries the dependency hook that introduced
+`INSTALL_DEP_TARGETS` (commit b86761ff6374813cdf64ffd6b95ddd1813c435d8
+or equivalent); older branches without that infrastructure don’t need
+this patch. Natural follow-up: once backported, run `make -C
+tools/testing/selftests clean` after building the net tests to confirm
+the stale net/lib objects are cleared.
+
+ tools/testing/selftests/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 030da61dbff3a..a2d8e1093b005 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -314,7 +314,7 @@ gen_tar: install
+ 	@echo "Created ${TAR_PATH}"
+ 
+ clean:
+-	@for TARGET in $(TARGETS); do \
++	@for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+ 	done;
+-- 
+2.51.0
+
 
