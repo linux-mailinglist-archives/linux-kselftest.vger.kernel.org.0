@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-44039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57193C09299
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Oct 2025 17:25:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6047AC092B1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Oct 2025 17:30:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 898171A66310
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Oct 2025 15:25:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4DD3406353
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Oct 2025 15:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A1830216B;
-	Sat, 25 Oct 2025 15:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824AA302CBF;
+	Sat, 25 Oct 2025 15:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="INt4IXL2"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="WD/o5w9z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02883009C4
-	for <linux-kselftest@vger.kernel.org>; Sat, 25 Oct 2025 15:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7A8302CA2
+	for <linux-kselftest@vger.kernel.org>; Sat, 25 Oct 2025 15:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761405905; cv=none; b=gVwTv8rVFue6hMybGFPGa/44Qnva0wEA4ZJretDfJcDnhsLKFNeeA4k6s4hEUBWKfN98byt2ckyYtApJ+jhNNrdOphHu87eBz6Irhr0PjiccGoRrZgKPUPYK/ZcJ7e8fTbDY+v/tTKPQAHJd4fpSDmLzRksb6TTC/NKhcsqMrzA=
+	t=1761406231; cv=none; b=ZCJNEORRxiqxQ9/vlipJyy6GVu4l8E3FuLcIuF/I3O7OUouj1dqL/mP3C5swO+Q5zqkaVuzwZAZbDopffCkp9VcaSaTDoRhIyn/z8H40uXV+8wR1fNKUN/LbqgHY/A2sQz0rXVvTB90G2sp3llUf7UJ+3jNOuyYZc8sbDxriAbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761405905; c=relaxed/simple;
-	bh=xDRkpAn0D2lhlrXt3t3UOPRfnSga85kN6uhnRJl1ndk=;
+	s=arc-20240116; t=1761406231; c=relaxed/simple;
+	bh=YQe91ROlP9epeFIBAVeb7AxK2YjKLaeOQX5QP76voII=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GOTqWG35rPfwT/3U7bftMnNWetjLjllplSUczCYiI6k/MJen3om3MkWMIYoZqn1WGY2GTMljbnmp7DI9DHYD+7UJlHAXzFDxN53GFdM9HNT8JYtyHV/SvSEjt/gHH8H4IgT7hWYBE6RkC0T8gLqnH4kkqbfl6PwvoY62A3JIDbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=INt4IXL2; arc=none smtp.client-ip=209.85.218.41
+	 To:Cc:Content-Type; b=ApX5DOqNoTd+mBSOp91JLpAjIKW2x3moQMe9gDEowujy7/47cVjzsHJI95f4kN8aV16CyZnsZn8yXGbSqKXC+VWIAJyHS1ILdDULB6E3LEacJG2ULCGxHu3XWf+UqkkFMRESkoEHEde4RkPZwN3rthpk4hwhRXwBqe1sro8+/T8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=WD/o5w9z; arc=none smtp.client-ip=209.85.208.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b3c2c748bc8so377566666b.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 25 Oct 2025 08:25:02 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6399328ff1fso5611810a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 25 Oct 2025 08:30:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1761405901; x=1762010701; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1761406228; x=1762011028; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hEsLv/ORWjWt4JjusiVyw1pkRSWkY2jVnldvJ/kYxAc=;
-        b=INt4IXL21VYqDx7iKJKvvZKQiutlYwBCOhjkiXC9yDBFUqb62UGDfYUksjAXFv0mcY
-         XfiaRG4ZeGqwvGYfi0Z7VA+1ayJbFAnxNu1s20L5Klcur1fe+pFNyicBbrK5cY/fbpWi
-         mO4SXc8jGKTcAkNBwkWzXRrPVgIzy0PLubo3najaSeYOt1qhQ6sfZ8YTOUtUOaBs//Hq
-         F4okar97RHI6BlBxjoMFuYrIVmZb7UANxDTdvbUK2V6c+vYaACXe5gtHDLyyU6vQ98MH
-         omz2/I7YSnf0qTo4PgAN/O5LyTMSVUsrkxFwETt3Zs+mltCFms8gkrp8Zkn0Qt5J7phR
-         kGAA==
+        bh=YQe91ROlP9epeFIBAVeb7AxK2YjKLaeOQX5QP76voII=;
+        b=WD/o5w9z1wSGPe5tQTOcVGH8/2Xc0adxZs7tsn+UGgF+xOGoBUTIiz+tEcmtVOQ8v6
+         Ac7QvrH5lXCfthJ/Jt6UZJYuU/sEBnp/WRvJ8XtksENV7IYJihZpOLnuG+21mn9vMm5a
+         ZLexIuOJSHtchjxt0gu2v4bBPIBz3ekwhTslJquym9oB4qUkVoruPGMPlkV8XLP6z81v
+         KbFIeY34t9xSed24UlSwa7EG7rimVcZ4fVbGeu9IV9jjwyW3Wd7DBMrZh/67RYN5fDcj
+         yxoM5xR/RyKwpPpnEP2WEZdCaoxckTaBqISFcZOJUZxEkTMSG2h6KGL5b8CCWqn3p4qV
+         eyQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761405901; x=1762010701;
+        d=1e100.net; s=20230601; t=1761406228; x=1762011028;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hEsLv/ORWjWt4JjusiVyw1pkRSWkY2jVnldvJ/kYxAc=;
-        b=CSiZEkpAs8/PD4SN9zTlkWSYASKiBXA/D5/WASzAF2+INzo9WgWf9VcXtasT7P7vKr
-         w2veAERTVxxYjHUuAOSwuPQ9CW0EhpyZeXWJwwL8mlYAzt2Xv8v4sIq3sD7QPzgETHME
-         QoPybA8VFDs1tsUIJuhiQ8a2S6+neEbgpzaJnACF5EptHndcidxz2ZG6mZDCad6jqunx
-         mVQ9U9PyDEYc3/fgSoewbjrnP7KxGgHDLltVV1P4k/yWKZQWkN0OR90vgZw9+W7NGdJI
-         a/fgRiDTWXUgoqWCKvXL+l/X1MLaSDlqjkRSeEYIDWH7jsQD9QbGTsPGPta3+2zI9ID2
-         sOOg==
-X-Forwarded-Encrypted: i=1; AJvYcCXEhMBFJt7jEPWLyXUURsOHlUB/6r611rOYs5gUZOOkgpVFSBFlSO4F/Czg19eh4KDZV8W2806aRVaw2Gxn23A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVq+JoQzDbcGptPPamqYsLf9BLoxqBRh0XTrcoqYI4hP3eGVD1
-	DjrXjWm1AFWMO92XKJQ6dgwrBT24qjyKJAoa+bSqMR1YYy/bnTv5uxmthN9+VlOg2HzxPnl+C6m
-	c2sS5vioJrzahItNzVqceRLJbhY3jNfBq4Tn99s3+9w==
-X-Gm-Gg: ASbGnctyjYJRvbQoFSO2uY9rinb0YhW6lX9vt1B5A8gBOQFhZmOd3+52zVqrmH3nBJ1
-	44wdmQVB2m02B9Eh4yu+MoEEKlK22eoKpfTBec1BVLwTtPzqItMy2qo9r8/koRkXrSCEuUDM67q
-	qr7UHA17dHIxg25r+o87cvaTLy5eiCSzYKhkI9HRY2EIklygK7rrvT4B3VIS+dhd8TTaeiswr4m
-	wNgc4NqI3Wkcf4FsFZugpl6s35th1remlWzP44dskf5F+MZovsKPCblLbUkoUxTGqkqDvfJn6av
-	nXM/MWB6wo9ONar7wf+TVbPfyk/8
-X-Google-Smtp-Source: AGHT+IEkKuyMVmFsWXRY0bxtHWTNzex75v+WBGMxRJwOZQScs1xFZAgq+kDpvorbdJ+d0KcQ27kL7+tqDAzCdvkawvY=
-X-Received: by 2002:a17:907:da1:b0:b6d:5e64:c36b with SMTP id
- a640c23a62f3a-b6d6fe9fac7mr565664566b.29.1761405901273; Sat, 25 Oct 2025
- 08:25:01 -0700 (PDT)
+        bh=YQe91ROlP9epeFIBAVeb7AxK2YjKLaeOQX5QP76voII=;
+        b=Cj2zigQt/XXbPUG/hMOKo8Vvb4HqZkWi31oxqtUWStqG0Ykw0CYonuf0gcIOs1Va2U
+         Sp6pYCZZ2jEvlXCJQvpJZdpvyTtU6teef81wgu90j4y/ePwDh0nQDR8EP4XzGjL0EgCh
+         p7+p8ND2btaCXKmiT8wUG7me+QUe/S1sqICRKsBA5UA170dGrVQFfDICkMO+8XUT8ijf
+         MBP7C2ZUdCDujead+qZezMVba5vGOnqu7z3IDJRzhNBU+kAMIAImmpt+ONEQC3HijNAH
+         UMzqlsAzADfk4lcY2aKMCwBud+N2BQYsyf8yrDf6Q3rVs4sMTTTgzfHD1Xi6RzzJwicY
+         4m4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVyhwEynk570v6q5oCHWL/PJtW7TkFDGl7osMir+pD7IIUFyo7F+GooHYmXmzeezdcc+K1TAI5rZtcNN8Vl9yM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUnSh/O+F7VdGH0zqifxDJm16zNeG6RhFT6y29ygFj5yo48atR
+	vDuw105ILkCjxRwH0jo5/z583Zz8CO5Gc6y1/LG8hdHOD+k2RIdII4C6LIRLpdFJdh5Ju5bGfU5
+	M15zbcEj+JFzUxApbnOZBq0BQ+JpyiNXJvWhb1iWiZA==
+X-Gm-Gg: ASbGncthPsZP6hfWmAJEq15tn+pH68togUbSjg4L2sHjwm3dFfLsjhry5w+NCaTj+Hh
+	RxDnW5ZV5FYUrBxiAVGgi44x5NeOcuBAkBvAdNlELsFJ2XsI0wHPb+rU4WKibfzO6FlhMMMXf/8
+	qYh5VWmWagt682FV/Oqf85j1JiFjlrYnyAjf1owF6Siii8I9f/ZRCmZhS6IVt+t5m6zKAFA6YD1
+	KEJdfGsw5/J1o5XHSpbxCiCYuTpoQ8/AxFmuIFFU3rn8JKo2BaXoQKzC8nzEBCJrWXfWV4T4TbV
+	gGFm1GJzHvpM4qYzGB3dfGbdZCkQ
+X-Google-Smtp-Source: AGHT+IHyii/MACqqA1gMbxyh8CZfZM/MVeB0dSh2M8XUI9vv6+1k3VQ9IQ7FPNSu6S0HuT0ITqx9emJSEDbCLG+Yc0Y=
+X-Received: by 2002:a05:6402:350c:b0:61c:cf8d:e51d with SMTP id
+ 4fb4d7f45d1cf-63e6007d198mr5362602a12.22.1761406228044; Sat, 25 Oct 2025
+ 08:30:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <3-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
-In-Reply-To: <3-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <5-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <5-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Sat, 25 Oct 2025 11:24:25 -0400
-X-Gm-Features: AWmQ_bkMrpRaMfcHcpe107aX1k_bm11BfLXJjxsMDuts5-Fo-hDichMUKRxipls
-Message-ID: <CA+CK2bC5=rb1C6i5yMad_tG9JpbYYgSRxAX-vhYctuoLvcQbWg@mail.gmail.com>
-Subject: Re: [PATCH v7 03/15] iommupt: Add the basic structure of the iommu implementation
+Date: Sat, 25 Oct 2025 11:29:51 -0400
+X-Gm-Features: AWmQ_bmUOgV3_0ASbOM3QoMzXfGDVzgu3GeEUS2HtNMs-zqEXMaBdqidVXde5tM
+Message-ID: <CA+CK2bBHzGi-4dqXeQn+OvahYfm5miKEhSuVmYCpo=Z4cUdONw@mail.gmail.com>
+Subject: Re: [PATCH v7 05/15] iommupt: Add iova_to_phys op
 To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
 	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, 
@@ -99,69 +99,13 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 23, 2025 at 2:21=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
+On Thu, Oct 23, 2025 at 2:20=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
 ote:
 >
-> The existing IOMMU page table implementations duplicate all of the workin=
-g
-> algorithms for each format. By using the generic page table API a single =
-C
-> version of the IOMMU algorithms can be created and re-used for all of the
-> different formats used in the drivers. The implementation will provide a
-> single C version of the iommu domain operations: iova_to_phys, map, unmap=
-,
-> and read_and_clear_dirty.
+> iova_to_phys is a performance path for the DMA API and iommufd, implement
+> it using an unrolled get_user_pages() like function waterfall scheme.
 >
-> Further, adding new algorithms and techniques becomes easy to do across
-> the entire fleet of drivers and formats.
-
-It is an enabler for cross-arch page_table_check for IOMMU. There is
-also a long-standing issue where PT pages are not freed on unmap,
-leading to substantial overhead on some configurations, especially
-where IOVA is cycled through for security purposes (as it was done in
-our environment). Having a single, solid fix for this issue that
-affects all arches is very much desirable.
-
->
-> The C functions are drop in compatible with the existing iommu_domain_ops
-> using the IOMMU_PT_DOMAIN_OPS() macro. Each per-format implementation
-> compilation unit will produce exported symbols following the pattern
-> pt_iommu_FMT_map_pages() which the macro directly maps to the
-> iommu_domain_ops members. This avoids the additional function pointer
-> indirection like io-pgtable has.
->
-> The top level struct used by the drivers is pt_iommu_table_FMT. It
-> contains the other structs to allow container_of() to move between the
-> driver, iommu page table, generic page table, and generic format layers.
->
->    struct pt_iommu_table_amdv1 {
->        struct pt_iommu {
->               struct iommu_domain domain;
->        } iommu;
->        struct pt_amdv1 {
->               struct pt_common common;
->        } amdpt;
->    };
->
-> The driver is expected to union the pt_iommu_table_FMT with its own
-> existing domain struct:
->
->    struct driver_domain {
->        union {
->                struct iommu_domain domain;
->                struct pt_iommu_table_amdv1 amdv1;
->        };
->    };
->    PT_IOMMU_CHECK_DOMAIN(struct driver_domain, amdv1, domain);
->
-> To create an alias to avoid renaming 'domain' in a lot of driver code.
->
-> This allows all the layers to access all the necessary functions to
-> implement their different roles with no change to any of the existing
-> iommu core code.
->
-> Implement the basic starting point: pt_iommu_init(), get_info() and
-> deinit().
+> The implementation itself is fairly trivial.
 >
 > Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
 > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
