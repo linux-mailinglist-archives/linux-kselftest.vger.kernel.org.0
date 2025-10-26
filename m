@@ -1,131 +1,149 @@
-Return-Path: <linux-kselftest+bounces-44061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44062-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C498BC0A502
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Oct 2025 09:58:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C880DC0A53C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Oct 2025 10:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83AEC3ADBDD
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Oct 2025 08:58:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8323318A12F2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Oct 2025 09:13:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AC3828750C;
-	Sun, 26 Oct 2025 08:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 386B9289367;
+	Sun, 26 Oct 2025 09:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KMon76BZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SN2KKfDs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01C223D7E4
-	for <linux-kselftest@vger.kernel.org>; Sun, 26 Oct 2025 08:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22EC528314A
+	for <linux-kselftest@vger.kernel.org>; Sun, 26 Oct 2025 09:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761469134; cv=none; b=Q9JOaLOxkIDK0rvgiswlfwKtEboOOq8KBr+0aOGl+6HuNTgcFFI5N4+4jabii/DPV3kui2YTbRRsqMvYd6THzFB2yFtxwNzo94/qXZ7N/AzY124K78JhEuYMlsYqcNNk11jgHvWBSLw/Qdc8Bjys9BomY08KMlcp9uu9zuj31s4=
+	t=1761470002; cv=none; b=s1qE+5unE6QfZIoCmq5tP8X6QAAkErNopireYs5/Nsdyev71b2YUssjte+E2SslNS/FSK87j4wS5i3SXR331TkdlhrOEfriaqIY9Z+gAe0HtzBnJrxvj5DpYNQ/6+HaafIicALMkkKfCzOrskQu1tAKN5SCxzfaan77QKofOZf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761469134; c=relaxed/simple;
-	bh=5K4B7s96EMwwaDVEBzoytBv7iE1q9RzEsf4agH12XZM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DJJJADYjCYhh8yE/inm4egSO+Dt7uDGLu2t9AIbH2RMCAuPEJCIAfMC1VeJmcvIvNdoTJ5hNxEnghOvBTNsa9YHFlVpF5JQcm+YLefXVlucgEGe7RtOkC0Ib6HVjH+oIMemD5GHcspmv1PIu8AQV7lgprmWKBgX/L8VIqNlBpdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KMon76BZ; arc=none smtp.client-ip=209.85.215.169
+	s=arc-20240116; t=1761470002; c=relaxed/simple;
+	bh=5b5PYMxopEb8YY4FdGelcJUO0Yvn+/7BT0Giy57xNWo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sYi0uQ8Z8u+lXSXSHGrtfJiT+tM7Dz6qhMmL+WL3HNjcZLvmFmHoLuWAIsHYQuCsJ2jR/jnI8+Pjae3yMrJCvso6G/sHVX0Vl5j+eRmuxCW9+TjKkzlWQVyHO+PwpW2ddcVw3mvFZFVIJ7peO4gIQAOux5kiMcqUlF9DNLQd+YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SN2KKfDs; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b6a73db16efso3383311a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Oct 2025 01:58:52 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-33255011eafso3410320a91.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 26 Oct 2025 02:13:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761469132; x=1762073932; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5K4B7s96EMwwaDVEBzoytBv7iE1q9RzEsf4agH12XZM=;
-        b=KMon76BZA7iezln/XZHUxCJhQZRX9NLslCTWfW4lw5hmD2wCcGtMu4pKPaJ3VsdD9M
-         7uhj9fYLjxEBKBiZNR+C0qvElKvses1AxCRZv8V4LpiK5vB08UyCWdW8Oxmh1m1ybR9J
-         P4YbBSK5ZSr5ncBRV9s7d4eKpTIfWE4k4aLg6b8jphC+6CzzEXXM/lSjT5KN4j7ZGCma
-         NvUp/jOhal7A3Of8+GF3/TAdI0o7Z199/l9hqgBQLODggg164fypvwuZlBEZGYP6P5Py
-         qfb5tfmvzCWLni/vQ0rKyWlrQJIVtNJkXpJx2tYZrUyu0VZbtigNn/cEbgnAnZ9PM+/1
-         GOCg==
+        d=gmail.com; s=20230601; t=1761469999; x=1762074799; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vMX23+YLvbC4KKYE3owkIF/POC5qa9l7q+YDn+rGhBs=;
+        b=SN2KKfDsQkeTqdseEQyG/hCI7cTwgkEZdcfVDhayZ7m0K26eYWv62CVqOEhqj8S6GH
+         y3symXdmxE0YzyqQW1Ti1PAHRB+GHkK0kZa3HbLi3CVtHlPkMHfPg6Kqz43mvLXaIzHF
+         MMkTRx2ehLRvXhuO4Tc784kYtE1pX/xhrGrWmoMEXTeDEX7Rledc/GbVFqAqOjoo4aui
+         bqdcjmMetRx+BbiPX+gAd2dsd4/EVNlV/YsAf4OvdBXKEmL7zugyp6Q75Q/QVU12cqfJ
+         gEAta1gPws2MZSIEgn4E9Kr3r0GrpQdk5sDzDxZiHaxSMli9pVeUlzAnpqDV+K/nV47D
+         eo4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761469132; x=1762073932;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5K4B7s96EMwwaDVEBzoytBv7iE1q9RzEsf4agH12XZM=;
-        b=xH20udaFt/lPZAXfw3NO9ciZjmxZv+ToGC+/COeymQAXlUYX4pWDXAhaTO1SbRoFCo
-         TQ5ZxuRpmfkJTNsWrrCUDQBQ5z4Vw69jl4RITAGl4D8EoNhXXa7DUQd8yroj8jWN6Yee
-         7qpoyeLfcq/44/goxAdwGsIrs/HTTb6sC2VIx9UOETXn58qcmeQZbJXhXSXn0jt5nfj/
-         JtwGSoEa4WteW9azHou+sPAPLD/q2clvFb5gCmrxuRRdiBnjoU9C24e1KQJFSmwv60wj
-         g7udv/A2YZM9zfkK33ztjqJohSb8YNqAizYSSxmGsyWwp091iB7tau1oLSHwqzLiv8z7
-         HxQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXeHU9SkAs/C00YOP3q5n4ZDvC+uJBFa1urckejtwMX4FsP1mjBGyRpI7Jni1Vh+vdQ7lLiJKFm0u4FSbM1Hvs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoZXZ2vbu3MG6PT9cZYxxDGACsc/BiNnPvhZdw4VG8mqmB8Hwl
-	sfLu9DgFyAVS25iPLhUuvTL1LRpO/wGiP1M3Ax3qy9qFmO2n1DI2zhsE
-X-Gm-Gg: ASbGncuGTj17+iX74baz2N5RM4bZhWdtbeV5/k6IQh5VyG/lkmO8P9hf2bOiTHiF+qe
-	fj7Th4/IgPLXCelTnd9eBKc6GfyrXNiS7nfdM4eSDu9OM8/aQaSVCwq4F9rTOPn6E1PfNsw7hbP
-	CrgLauwBP2LfusO1Bew0f5ypBQ+GkIm5EB4VBu95cXVXSzgaFXmuclyeL++9wIuP4i0ETZ/LdDX
-	W3LsUq3joZR1xX+xhIK8a0bSbHutVAvCnUh4XR+VFnhmpXGT5Epv95L3KEaE8f1M2s/nGugbtDF
-	UIVmk+1q5mj73SnUc4qZ9WdUxPyTqmcfBEVx2ApfnHKpZPNOu8OmTAp3Lj5FP6mSaHMC4YtenVb
-	Zb8mgqhc1slpmMOgMdHSoE3fd3BdmL+gbSxkaqkbLTNltI5KY6+gh8uyMHT0Kjh3ZBCPeJNMWK9
-	f7khV8OP7w1agoIronkXwowxg3gQrz/7A6AI7WbUcXzhJDeZh3pLblhWKalVsW0f/oakM52u3OH
-	VNJzQmS6/iKe9ceYYtWHMkCCkAd0thR7A==
-X-Google-Smtp-Source: AGHT+IHbY4zR+pxQ2HAXsXrhA3W5dSP1Wj+vZRqqpwWFOwc/lu9gHcqd7/GoXq4UV6YsapVAtB9Wiw==
-X-Received: by 2002:a17:902:f690:b0:290:ac36:2ed6 with SMTP id d9443c01a7336-2948b97fd44mr101660985ad.14.1761469132156;
-        Sun, 26 Oct 2025 01:58:52 -0700 (PDT)
-Received: from ?IPV6:2606:4700:110:896a:5f1b:2412:be21:3a45? ([2a09:bac1:36e0:1c0::10c:2f])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-33fed70a83csm4611330a91.4.2025.10.26.01.58.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Oct 2025 01:58:51 -0700 (PDT)
-Message-ID: <da05d1d1-c241-49af-bed8-7db5e9968396@gmail.com>
-Date: Sun, 26 Oct 2025 14:28:46 +0530
+        d=1e100.net; s=20230601; t=1761469999; x=1762074799;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vMX23+YLvbC4KKYE3owkIF/POC5qa9l7q+YDn+rGhBs=;
+        b=mQqaa2pv9AG6qy2r/8Xp8NsaI69WMFvPo4uHQYSb2FAk+fgMNofp6aU/JU93ZvJkU/
+         kVXyiq4pubH8hgCo1sgI2h8q4UpSNNWeh2ZUW9K27dx5KaTPmJ9FFL+81ViagOhzD7dA
+         6Li8pnNmSjb+IzSIULhDF8H5HvI4d88Wer160hUEUUD0stp+G4bd2UNNbiZq5yN6mQmh
+         q0GIQlOqIj3PqSTPDqCv+SZObKDMM+CAwStYztzSHDqWCZw83ylh1CvgAeT8vKwUrPM1
+         umD63lMvBo/21LjRKeg/ia1IXWmIM3v42NWDboT+hr1w+p9701bcQ1w3/JBd6c7NreoO
+         VfFw==
+X-Forwarded-Encrypted: i=1; AJvYcCUqaDkromwnvdrveoN4P2ZFpZOq7IlNWvV40ktPuQwfySGguP7XluukTCQuAOZ8vUKF7R8fC2d9G0pSllCoERE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwriIC37iAgHmhMWT+CEBgBJ/ZgmxlHijJcddlQu7C2W73yCljf
+	WdqjeJeyJhgBKwl1BQjBmawYCe07kI3n5psXdlvk4e+J4CM76WqbGTQj
+X-Gm-Gg: ASbGncuLS/PSyK8c+zglLSBqpZpMcjb/NJ1vjlPlD0+39PpD1d2s0OATpaqKcTCUipZ
+	ShTPCGARZbQ42ukaVHCCeN1IHuLdPlzR469DZJThH9Q3JSw1NkmstD4IqkNUkga4ge7+pi+PEdQ
+	ACmXSQ+H4NeeMTMhX2fvShYzF158fzeGRoM7TjQh28dSc7NYcxYcU5bN2o3gnUn0Vx1pPEtU53H
+	Q9G/JxReaCXtHblXSvwBKggZz7sPiZquapUqCB+RSOO4//hOjudfnGBL5COS7uihYB1bHZ56xe+
+	VCmupNOh362EPIJIetY+eHndNrrrZQDyOWwkZ3QGeLvyEvgNJQ3TEjYk5lIxzyNiMPDURYv2ozz
+	M5txmdgzY8ckp5S8F+F8HmWaVS1w5Fho23osjs/XYagjUJIPSBnTEKR83yO7PWd3qPPIj1bckrg
+	T9fyKQ6OqHZFPSibVX3IawUDMiz7EdqItrAPEgn/GbLXofz/Y9Ost1wXU=
+X-Google-Smtp-Source: AGHT+IFQFXNUYIY4vSpSr/xv31CBewG848HOy0cOfx8lxhYhMoQ5KdF68P3/KWEwPTs9NKzCL3WWXg==
+X-Received: by 2002:a17:90b:5386:b0:33b:b308:7655 with SMTP id 98e67ed59e1d1-33bcf861fc3mr44925100a91.8.1761469999250;
+        Sun, 26 Oct 2025 02:13:19 -0700 (PDT)
+Received: from prakrititz-UB.. ([2a09:bac1:36e0:1c0::10c:2f])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a42aa5d9a6sm789558b3a.62.2025.10.26.02.13.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Oct 2025 02:13:18 -0700 (PDT)
+From: Nirbhay Sharma <nirbhay.lkd@gmail.com>
+To: Kees Cook <kees@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	khalid@kernel.org,
+	david.hunter.linux@gmail.com,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Jiri Olsa <olsajiri@gmail.com>,
+	sam@gentoo.org,
+	Nirbhay Sharma <nirbhay.lkd@gmail.com>
+Subject: [PATCH v2] selftests/seccomp: fix pointer type mismatch in UPROBE test
+Date: Sun, 26 Oct 2025 14:42:33 +0530
+Message-ID: <20251026091232.166638-2-nirbhay.lkd@gmail.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <aP0-k3vlEEWNUtF8@krava>
+References: <aP0-k3vlEEWNUtF8@krava>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/seccomp: fix pointer type mismatch in UPROBE
- test
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, khalid@kernel.org, david.hunter.linux@gmail.com,
- linux-kernel-mentees@lists.linuxfoundation.org
-References: <20251025184903.154755-2-nirbhay.lkd@gmail.com>
- <aP0-k3vlEEWNUtF8@krava>
-Content-Language: en-US
-From: Nirbhay Sharma <nirbhay.lkd@gmail.com>
-In-Reply-To: <aP0-k3vlEEWNUtF8@krava>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Fix compilation error in UPROBE_setup caused by pointer type mismatch
+in the ternary expression when compiled with -fcf-protection. The
+probed_uprobe function pointer has the __attribute__((nocf_check))
+attribute, which causes the conditional operator to fail when combined
+with the regular probed_uretprobe function pointer:
 
+  seccomp_bpf.c:5175:74: error: pointer type mismatch in conditional
+  expression [-Wincompatible-pointer-types]
 
-Hi Jiri,
+Cast both function pointers to 'const void *' to match the expected
+parameter type of get_uprobe_offset(), resolving the type mismatch
+while preserving the function selection logic.
 
-Thank you for the review and for catching that inaccuracy!
+This error appears with compilers that enable Control Flow Integrity
+(CFI) protection via -fcf-protection, such as Clang 19.1.2 (default
+on Fedora).
 
-On 10/26/25 2:48 AM, Jiri Olsa wrote:
-> just probed_uprobe right?
+Signed-off-by: Nirbhay Sharma <nirbhay.lkd@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Yes, you're absolutely correct. Only probed_uprobe has the
-__attribute__((nocf_check)) attribute. I apologize for the confusion
-in my original commit message. I'll fix this in v2.
-
-> curious what compiler do you see that with?
-
-I am seeing this error with Clang 19.1.2 on Fedora, which enables
--fcf-protection=full by default. As Sam confirmed, the error occurs
-specifically when CFI protection is enabled via -fcf-protection. GCC
-without this flag treats it as a warning or ignores the nocf_check
-attribute entirely.
-
-I'll send v2 with the corrected commit message.
-
-Thanks again for the review!
-
-Best regards,
-Nirbhay
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 874f17763536..e13ffe18ef95 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -5172,7 +5172,8 @@ FIXTURE_SETUP(UPROBE)
+ 		ASSERT_GE(bit, 0);
+ 	}
+ 
+-	offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
++	offset = get_uprobe_offset(variant->uretprobe ?
++		(const void *)probed_uretprobe : (const void *)probed_uprobe);
+ 	ASSERT_GE(offset, 0);
+ 
+ 	if (variant->uretprobe)
+-- 
+2.48.1
 
 
