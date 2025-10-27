@@ -1,152 +1,261 @@
-Return-Path: <linux-kselftest+bounces-44086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44087-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 543F7C0C423
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 09:14:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FA17C0C55E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 09:38:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E164C342BFD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 08:14:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09792188AC3C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 08:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55F492E7F17;
-	Mon, 27 Oct 2025 08:14:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51ACD2E88B7;
+	Mon, 27 Oct 2025 08:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZjY2ucJk"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KcsAYEQL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115072E7198
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 08:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7144B2E7BDA
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 08:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761552857; cv=none; b=tams5DPGgW6NPMpeu5+0oWVu9Xut0SlOkcLUMlVp559CIvMNNVdhITyrYl2FrFFj9nbcXrj3UBYDiiG3lrYc3djNRDDVpErSWm7khVL3Vnxzqjbj/vEsutNMBIw4n0cr1P8ywndgsgNB+gyD5yD7QjCBvQ0424qlGTWx97HM1Tc=
+	t=1761554301; cv=none; b=VCs0NTrBGXsvmnISPkBAtwFu7Zjtu7hHGxHn8hPhbFoHM6bRJ02HwK3Bv9oSgmnkR+2zEASJwjBKNWF3Xeo2A2IZfMheqGVeYazZrJQUtSk1RFdQtVOu7v3Na2FUQKVm32vPlEo2nOLZVFLfCA1dpEd7I3oCqEeFPEAJsVLqU8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761552857; c=relaxed/simple;
-	bh=etqLAq7gFst0cSiu6SvH9Ue38STXBB7ceWx2V9z48vY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JmlWqd4kv1ib3fvJntC2ByPWI8waPXPoZopRKDBjalr79458KYbQkjezhwEK2tKg4XahyXXuEZfsCtUuiQlj1migyfs8apJwRci6St6cvQu6TGfQ79zZL52ACpsphwpbU41JFHPs05B9ottlz3Ni1ec+VsC361NUlDBUn2mniTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZjY2ucJk; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4298b865f84so2320313f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 01:14:13 -0700 (PDT)
+	s=arc-20240116; t=1761554301; c=relaxed/simple;
+	bh=OKTK5Td5unCJUm93N+oEqzBTazmSzfmhbDzWfGTIQoM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p8vE0GMEiXB2sELbci8NGk76dUjG0yDmZ/WvRvKAjNT3HR3DNKA2j7VtksSkC9UieEAPvTKtlxu92FhLxsnEXRczdRLfJJXM/zoTg08ZvTfhGa/Hj5ibpYJ67ERdCYzp4FUTQfuyV/cwxacr8VKEM6sDSR6Wmo7PHeaWWGlbew8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KcsAYEQL; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2698384978dso28139715ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 01:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761552852; x=1762157652; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LSHu/ivuk7OTgOMQRpfxc8sNj6kHssvRHTUG1SNhELU=;
-        b=ZjY2ucJknPEr5TZb0i7UYyZcYgeYNPXQGodRT4eu7TGRopOFA0AWlOi8AVTlsaTB4o
-         V2RiziNFJwmQOHqu1DwDye9JY9Jukubo2DeawpB5RC7yMIFvTk9SUiK47mkLMCn9/Bn7
-         aSyybIFMzED2MSXcW6DjGc2M8cm0cOgh7bJGKFQ9vRUMjvXHbEKjsfgFNAAXLhlPbFBy
-         FBd5+zsZEIVyWGdOm9L4ArbqSSK7BXt/AXIY9vurTR+CxEZGXJWkK1RgxYhlOInayRe0
-         B9lrUw+NEMnqy431MnKpYrJVoU6Ezg7Tywuhq10ai6iTTmip3Ce4JKcFiqMSqgR8yvhS
-         pgug==
+        d=linaro.org; s=google; t=1761554299; x=1762159099; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MJP782NZwgmJ4qdpWQoW1rM/71H2DwiyXVLt9WngTyU=;
+        b=KcsAYEQL1t0H/gTKN/gQ/yaSQlRse00VV/a0fX/iI4JXt15CGU12pmkh/ob5l8N22T
+         ELfXh6Wfz+d42Mi1ytrEPuQvJPJYqUSDgwihKqQvrOhNt5YoTBdWSSWS6qALlWC43EMC
+         W5OPvCuv35Si74S4Ad8JUnVgK/jcJWJd0+L/jf2M/4TNwGrPIesPEQIQwqsuZLcu8XQM
+         5l/CaEsGuBga+UC1cjMPJTppEmjoHPfJ7vgbTd/PqGpQcae3Rkn/6CmXRFL3d+seBKXs
+         G+dOaHDXfkvkuZqsi5SUNGu+vBu0wFGxvvhf9M3NXm2HGn3R1Omyw3/k1cMdfDCHss1w
+         cZbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761552852; x=1762157652;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LSHu/ivuk7OTgOMQRpfxc8sNj6kHssvRHTUG1SNhELU=;
-        b=QmG9ksKbGWaZuy6DuYcZiIgrW4ebRl6pRo6dDhHAMY/U6j8FgjmHb6q3W2BbV0ZycO
-         ZHjARPGGTIp8qSRyC4Xk1V/ubS+eKB7K2A7ZZZSwolkpilVx+7J/FlpJVdsT+NuvA0tG
-         iiEfm2ZeAw898ngzkiY+vb6BVQ5PICPGJct9yhhXH3HipsNtR9Ote2hGlGcHEIU+Z+JB
-         JvLAtMCbAMI+8b41RojrpQg1qwBDEmob8aLbxRUIUNbKyT+eLmhT3kBQCRxrMkKyOjmq
-         6SGLNFPCtkt9aedxf68IZ2F0X7xbaPKF052NajVSW2aXWqSElB9dCDxFP54arKjty8oH
-         /lsg==
-X-Forwarded-Encrypted: i=1; AJvYcCUSnsVXpxaBaM/kBMK8+Nuoj3tvIXHVPxXvQ9AOXDn8aK8GfStvxtgKJqlf7WQzakRGMzi7kFUPF57I7gYCGSI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykI/YzuBg6ahjikQBWWdV8G70EbFdWPYcA+YervyH49PQrazm6
-	OU/os9nCPX/sJmQmstWdbROMUAwp5ZLHuxVCT/kxHhe/Q65MFNN8uGNX
-X-Gm-Gg: ASbGncvTAfL8tElxw/YJEPM4CPIDyPn1l2XnLdRes+y9/24UHy0Dr6q3tlrPWc38FCl
-	1T+A2OwEn5OcabJMdsj1ykMYEIBqwtYTRC/H/yJ+z/ZPN7eHx6t5ym+m9mW8gd/hU7aRdpr+U58
-	7RUyP77KbN5Jq6/F4/K6GkqYNJYUf+ogwU2cN1SU1Uwg3evZJo0M+0//LnTZczU1RimZiVK9dAh
-	tF+6Z4VpECibrg1ER9F3775+LmGCyOXSYzu3jI4O9YERy9eFFVc2Y63Sz99te9yrJIjNkxM4b0+
-	EBnhajuhjw+ejdnLAAFz/cPOinQG9QeqyeRlVNe1QLQVog2GV4LC+gu88briovOrNaZLjNWI4JI
-	/+jdEQHWPZvfrkvx49yXkhCOBb7egkw+sxe6fgz9fJNrFFk2Lfxi1BvOZXq3YdjFDnMXsyMs=
-X-Google-Smtp-Source: AGHT+IFFKQfLGx2QdYO29wjJqWg+dPw9x5/f0UKf4PSXFO3HYbVj3gV1HeTpZudQpFAVTpuMJ53ygg==
-X-Received: by 2002:a05:6000:4a09:b0:427:62b:7f3 with SMTP id ffacd0b85a97d-427062b07f9mr28406369f8f.33.1761552852032;
-        Mon, 27 Oct 2025 01:14:12 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952d5768sm13058047f8f.24.2025.10.27.01.14.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Oct 2025 01:14:11 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 27 Oct 2025 09:14:09 +0100
-To: Nirbhay Sharma <nirbhay.lkd@gmail.com>
-Cc: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org, llvm@lists.linux.dev, khalid@kernel.org,
-	david.hunter.linux@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Jiri Olsa <olsajiri@gmail.com>, sam@gentoo.org
-Subject: Re: [PATCH v2] selftests/seccomp: fix pointer type mismatch in
- UPROBE test
-Message-ID: <aP8p0Td0LLa6Odit@krava>
-References: <aP0-k3vlEEWNUtF8@krava>
- <20251026091232.166638-2-nirbhay.lkd@gmail.com>
+        d=1e100.net; s=20230601; t=1761554299; x=1762159099;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MJP782NZwgmJ4qdpWQoW1rM/71H2DwiyXVLt9WngTyU=;
+        b=tr+4wnbhFzc0sUzJyT+s8xBuJeOKGdv64E+VKmG9lAZhaC84gE882zCLTOApv2T0eh
+         WU0akSftnZozBFpcyIUnEaOG6Yg5/FBaZFjEzC2K2tU1hLEVrVW9U21H1XufN7Tr7mcL
+         hYmbtv61OwJqbXFeNONRABbRWs+Gad0ggjYI5DRlUjJr15Z1b1HsCai504kPGSmSos8m
+         MNNshvHnxAKLPmXc5nPplBa6Z6ok1o9hNZrs8PQLVAQGqeTfcDfMRhg3TE0ZRiU8bwwY
+         nC4L2SABE8vk85dNjhCqhVJ23TKdg03VoqZL3QyoTLLmR9YbfEFpGkziNoYm5eVIbjwJ
+         t+XA==
+X-Forwarded-Encrypted: i=1; AJvYcCVUisoa9YMw2W7FKncVGL2+VHhPhtCTzjivvdb9qrjy6+FajChjrSeHRH61zx9jBqOjPNAIu5mqDN6bty7AyJ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/4auXkMos3HyU0IZQNATtZo+DDPKVl+YdXUsQFF35UEYHuenC
+	XLwmX/AByNuCRUcL7kiJY9Z7hhi8PLBa9tGdqbun8kvPc8Z98aiLd1wb99uwgvhQUTsBSo0Ftw+
+	HZ/xXQhFNyjvUIea7fE+qI7ALv4U8imF5m4MT3Kx0nQ==
+X-Gm-Gg: ASbGncsxBHw/Fw+tY4ux7ikcP0uZMeIO8wGFBPY+0zccezo0GYngdEcnGW+NtzfSJSz
+	LE/77lcVpkDboMS3lvYjnyKQcKsedFNjRBkAZhYh2peuJPHYWCo6jfJCTC8BiwoPgunc+6X/Mza
+	ZUmwqrM0//AGdHG3ps5j5WzAlWHC42MBdfK2FDvHQK9lzY1n6KqSCECdc0C7+Q32K49ZSsSDFas
+	KaJIKxfw4sVUXnG8NQMoiQ6Hj8egJD1FM0JdkP+BsFRpjyi07cAjKs/8+Gn9eJyeB4v87qp3WLK
+	pfut+V00IqRQLqTPBl+zdkZRPOJNLLoOie38tLc5LjlvUOt4jNQ=
+X-Google-Smtp-Source: AGHT+IGlLaPRRc5ZN4TC96KOjDMG+YTLw6dssn/YPnBI0ecUO89EvzeEmDpxojyG/sc71/YMzaeujT8odPg9c/PnZjw=
+X-Received: by 2002:a17:902:e543:b0:267:99bf:6724 with SMTP id
+ d9443c01a7336-290caf830f9mr529461675ad.31.1761554298728; Mon, 27 Oct 2025
+ 01:38:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251026091232.166638-2-nirbhay.lkd@gmail.com>
+References: <CA+G9fYs8fn5URQx2+s2oNxdUgZkSrdLC0P1tNBW_n-6BaBkK2Q@mail.gmail.com>
+In-Reply-To: <CA+G9fYs8fn5URQx2+s2oNxdUgZkSrdLC0P1tNBW_n-6BaBkK2Q@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 27 Oct 2025 14:08:05 +0530
+X-Gm-Features: AWmQ_bm5CgS-nclzvBmLtRcEbtaR0irloEuFZYR8DYix4Gy4NzP49gtmxQFKcU8
+Message-ID: <CA+G9fYumAD1_G4UG2LDAPD3fRxN+WQnrm8tPx6pL8qF6wSOUrw@mail.gmail.com>
+Subject: Re: next-20251027: backlight.c:59:39: error: implicit declaration of
+ function 'of_find_node_by_name'; did you mean 'bus_find_device_by_name'?
+To: Thomas Zimmermann <tzimmermann@suse.de>, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, danielt@kernel.org, 
+	Lee Jones <lee@kernel.org>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Ben Copeland <benjamin.copeland@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Oct 26, 2025 at 02:42:33PM +0530, Nirbhay Sharma wrote:
-> Fix compilation error in UPROBE_setup caused by pointer type mismatch
-> in the ternary expression when compiled with -fcf-protection. The
-> probed_uprobe function pointer has the __attribute__((nocf_check))
-> attribute, which causes the conditional operator to fail when combined
-> with the regular probed_uretprobe function pointer:
-> 
->   seccomp_bpf.c:5175:74: error: pointer type mismatch in conditional
->   expression [-Wincompatible-pointer-types]
-> 
-> Cast both function pointers to 'const void *' to match the expected
-> parameter type of get_uprobe_offset(), resolving the type mismatch
-> while preserving the function selection logic.
-> 
-> This error appears with compilers that enable Control Flow Integrity
-> (CFI) protection via -fcf-protection, such as Clang 19.1.2 (default
-> on Fedora).
-> 
-> Signed-off-by: Nirbhay Sharma <nirbhay.lkd@gmail.com>
+On Mon, 27 Oct 2025 at 13:43, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> The following powerpc ppc6xx_defconfig build regressions noticed on the
+> Linux next-20251027 tag with gcc-14 and gcc-8.
+>
+> * powerpc, build
+>   - gcc-14-ppc6xx_defconfig
+>   - gcc-8-ppc6xx_defconfig
+>
+> First seen on next-20251027
+> Good: next-20251024
+> Bad: next-20251027
+>
+> Regression Analysis:
+> - New regression? yes
+> - Reproducibility? yes
+>
+> Build regression: next-20251027: backlight.c:59:39: error: implicit
+> declaration of function 'of_find_node_by_name'; did you mean
+> 'bus_find_device_by_name'?
+> Build regression: next-20251027: include/linux/math.h:167:43: error:
+> first argument to '__builtin_choose_expr' not a constant
+> Build regression: next-20251027: via-pmu-backlight.c:22:20: error:
+> 'FB_BACKLIGHT_LEVELS' undeclared here (not in a function)
+> Build regression: next-20251027: minmax.h:71:17: error: first argument
+> to '__builtin_choose_expr' not a constant
+> Build regression: next-20251027: compiler.h:168:17: error:
+> '__UNIQUE_ID_x__286' undeclared (first use in this function); did you
+> mean '__UNIQUE_ID_y__287'?
 
-Reviwed-by: Jiri Olsa <jolsa@kernel.org>
+Anders bisected this down to,
+# first bad commit:
+   [243ce64b2b371cdf2cbc39c9422cb3047cab6de7]
+   backlight: Do not include <linux/fb.h> in header file
 
-thanks,
-jirka
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> ## Build error
+> arch/powerpc/platforms/powermac/backlight.c: In function
+> 'pmac_has_backlight_type':
+> arch/powerpc/platforms/powermac/backlight.c:59:39: error: implicit
+> declaration of function 'of_find_node_by_name'; did you mean
+> 'bus_find_device_by_name'? [-Wimplicit-function-declaration]
+>    59 |         struct device_node* bk_node =
+> of_find_node_by_name(NULL, "backlight");
+>       |                                       ^~~~~~~~~~~~~~~~~~~~
+>       |                                       bus_find_device_by_name
+> arch/powerpc/platforms/powermac/backlight.c:59:39: error:
+> initialization of 'struct device_node *' from 'int' makes pointer from
+> integer without a cast [-Wint-conversion]
+> arch/powerpc/platforms/powermac/backlight.c:60:17: error: implicit
+> declaration of function 'of_property_match_string'
+> [-Wimplicit-function-declaration]
+>    60 |         int i = of_property_match_string(bk_node,
+> "backlight-control", type);
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+> arch/powerpc/platforms/powermac/backlight.c:62:9: error: implicit
+> declaration of function 'of_node_put'
+> [-Wimplicit-function-declaration]
+>    62 |         of_node_put(bk_node);
+>       |         ^~~~~~~~~~~
+> drivers/macintosh/via-pmu-backlight.c:22:20: error:
+> 'FB_BACKLIGHT_LEVELS' undeclared here (not in a function)
+>    22 | static u8 bl_curve[FB_BACKLIGHT_LEVELS];
+>       |                    ^~~~~~~~~~~~~~~~~~~
+> In file included from <command-line>:
+> drivers/macintosh/via-pmu-backlight.c: In function 'pmu_backlight_curve_lookup':
+> include/linux/compiler.h:168:17: error: '__UNIQUE_ID_x__286'
+> undeclared (first use in this function); did you mean
+> '__UNIQUE_ID_y__287'?
+>   168 |         __PASTE(__UNIQUE_ID_,                                   \
+>       |                 ^~~~~~~~~~~~
+> drivers/macintosh/via-pmu-backlight.c:45:23: note: in expansion of macro 'max'
+>    45 |                 max = max((int)bl_curve[i], max);
+>       |                       ^~~
+> include/linux/minmax.h:71:17: error: first argument to
+> '__builtin_choose_expr' not a constant
+>    71 |         (typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL,
+> 1L)))(ux) >= 0)
+>       |                 ^~~~~~~~~~~~~~~~~~~~~
+> include/linux/compiler_types.h:577:23: note: in definition of macro
+> '__compiletime_assert'
+>   577 |                 if (!(condition))
+>          \
+>       |                       ^~~~~~~~~
+> drivers/macintosh/via-pmu-backlight.c:45:23: note: in expansion of macro 'max'
+>    45 |                 max = max((int)bl_curve[i], max);
+>       |                       ^~~
+> include/linux/minmax.h:71:17: error: first argument to
+> '__builtin_choose_expr' not a constant
+>    71 |         (typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL,
+> 1L)))(ux) >= 0)
+>       |                 ^~~~~~~~~~~~~~~~~~~~~
+> include/linux/compiler_types.h:577:23: note: in definition of macro
+> '__compiletime_assert'
+>   577 |                 if (!(condition))
+>          \
+>       |                       ^~~~~~~~~
+> include/linux/minmax.h:112:25: note: in expansion of macro '__careful_cmp'
+>   112 | #define max(x, y)       __careful_cmp(max, x, y)
+>       |                         ^~~~~~~~~~~~~
+> drivers/macintosh/via-pmu-backlight.c:45:23: note: in expansion of macro 'max'
+>    45 |                 max = max((int)bl_curve[i], max);
+>       |                       ^~~
+> In file included from include/linux/kernel.h:27,
+>                  from arch/powerpc/include/asm/page.h:11,
+>                  from arch/powerpc/include/asm/thread_info.h:13,
+>                  from include/linux/thread_info.h:60,
+>                  from arch/powerpc/include/asm/ptrace.h:342,
+>                  from drivers/macintosh/via-pmu-backlight.c:11:
+> include/linux/math.h:162:17: error: first argument to
+> '__builtin_choose_expr' not a constant
+>   162 |                 __builtin_choose_expr(
+>          \
+>       |                 ^~~~~~~~~~~~~~~~~~~~~
+>
+> drivers/macintosh/via-pmu-backlight.c: In function
+> 'pmu_backlight_get_level_brightness':
+> drivers/macintosh/via-pmu-backlight.c:63:38: error: 'FB_BACKLIGHT_MAX'
+> undeclared (first use in this function); did you mean 'BACKLIGHT_RAW'?
+>    63 |         pmulevel = bl_curve[level] * FB_BACKLIGHT_MAX / MAX_PMU_LEVEL;
+>       |                                      ^~~~~~~~~~~~~~~~
+>       |                                      BACKLIGHT_RAW
+> drivers/macintosh/via-pmu-backlight.c:58:51: warning: parameter
+> 'level' set but not used [-Wunused-but-set-parameter]
+>    58 | static int pmu_backlight_get_level_brightness(int level)
+>       |                                               ~~~~^~~~~
+> drivers/macintosh/via-pmu-backlight.c: In function 'pmu_backlight_init':
+> drivers/macintosh/via-pmu-backlight.c:144:17: error: implicit
+> declaration of function 'of_machine_is_compatible'
+> [-Wimplicit-function-declaration]
+>   144 |                 of_machine_is_compatible("AAPL,3400/2400") ||
+>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/macintosh/via-pmu-backlight.c: At top level:
+> drivers/macintosh/via-pmu-backlight.c:22:11: warning: 'bl_curve'
+> defined but not used [-Wunused-variable]
+>    22 | static u8 bl_curve[FB_BACKLIGHT_LEVELS];
+>       |           ^~~~~~~~
+> make[5]: *** [scripts/Makefile.build:287:
+> drivers/macintosh/via-pmu-backlight.o] Error 1
+> make[5]: Target 'drivers/macintosh/' not remade because of errors.
+>
+>
+> ## Source
+> * Kernel version: 6.18.0-rc2-next-20251027
+> * Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
+> * Git describe: next-20251027
+> * Git commit: 8fec172c82c2b5f6f8e47ab837c1dc91ee3d1b87
+> * Architectures: powerpc
+> * Toolchains: gcc-14
+> * Kconfigs: defconfig
+>
+> ## Build
+> * Test log: https://storage.tuxsuite.com/public/linaro/lkft/builds/34dKrlb77LGOQQSoC8FHCiIEAZK/build.log
+> * Test details:
+> https://regressions.linaro.org/lkft/linux-next-master/next-20251027/build/gcc-14-ppc6xx_defconfig/
+> * Build plan: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/builds/34dKrlb77LGOQQSoC8FHCiIEAZK
+> * Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/34dKrlb77LGOQQSoC8FHCiIEAZK/
+> * Kernel config:
+> https://storage.tuxsuite.com/public/linaro/lkft/builds/34dKrlb77LGOQQSoC8FHCiIEAZK/config
+>
+> --
+> Linaro LKFT
 
-> ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 874f17763536..e13ffe18ef95 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -5172,7 +5172,8 @@ FIXTURE_SETUP(UPROBE)
->  		ASSERT_GE(bit, 0);
->  	}
->  
-> -	offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-> +	offset = get_uprobe_offset(variant->uretprobe ?
-> +		(const void *)probed_uretprobe : (const void *)probed_uprobe);
->  	ASSERT_GE(offset, 0);
->  
->  	if (variant->uretprobe)
-> -- 
-> 2.48.1
-> 
+- Naresh
 
