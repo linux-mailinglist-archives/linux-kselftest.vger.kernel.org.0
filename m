@@ -1,88 +1,87 @@
-Return-Path: <linux-kselftest+bounces-44144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44145-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58F61C11B1F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 23:29:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8933AC11E6F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 23:52:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F337A4E1D8D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 22:29:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC6F5580510
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 22:48:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19533320382;
-	Mon, 27 Oct 2025 22:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D35C9332ECD;
+	Mon, 27 Oct 2025 22:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kToQRqn+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XUievGYk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E952BEFE1
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 22:29:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 232D8334370
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 22:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761604177; cv=none; b=s+9oWi6/9n8hAkSjMNYSobLImjkEwirCTvoi4UJRDVQeSEBqxjGYEBrMUJ1B3sKEV8qbzTgr9sQGlXsBdBik9HrE+NEob/hoJfI4ati4o6hlwv2Rbt+OqopvCsva46jnPfMxiJBwCBP5VUvaMVJO8++JL9EP4/DuiT2p1J4J2JI=
+	t=1761605090; cv=none; b=cwv8vVxUuzw0Dv3NgQqF55gLOhIpNHfzP2Uuro7St2x9oAK8468c3t8URmRKu6cXjZZfQqYx1w2iwMJruLJswVXBXcoU36q3sN+kd4rUp3f4aHakdsHNLtiko4MDDuws+bCB6tOOEaictl9lfEBYn1LKIXKLefb/lOGh+i1fRs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761604177; c=relaxed/simple;
-	bh=qCctqqmuCWipVL8GughzbbRKWgiygHwz0qUsY2oTFoo=;
+	s=arc-20240116; t=1761605090; c=relaxed/simple;
+	bh=mpFgcIdHbFI/F7QbErGEpVQ+1+4Natrjp8cskIzQExM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S1bI+k+pDhxo94LQk1v619d8z4dH8oVo3Cm3cMO5Q01eepX+n4KjNY3xZgta+vHwT3AeK8qahFuSdtNhLRd1nwhUHqZTtf6pK1JJOiHjd+mHfAP8dZv6zAW1fn4QYAGUxyBd//l2QRS300qqK1Oy4QKm38TZdB6yFmNu27BL8Qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kToQRqn+; arc=none smtp.client-ip=209.85.167.50
+	 To:Cc:Content-Type; b=gFXCMgNEf06I78dOwKJHOeDn3jqlHo8JpH2J8DLf5eMfhUHCFy+xTDNvnB3G7EZT11OGS54cQ6IJ0xf/f+y09yuhuPICEbPn6y+mm0y4R/zQseIGTS7JYZjXHRCq6twcL38JOblnU+izzchL3AVSuaZTkAllMAik4GR0maPrj4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XUievGYk; arc=none smtp.client-ip=209.85.217.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-592f3630b69so6301444e87.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 15:29:35 -0700 (PDT)
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-5db24071011so5716608137.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 15:44:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761604174; x=1762208974; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1761605088; x=1762209888; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q8OllJa5cnTv18Hb5rtu0WqFYbEpD7McBb4G8sNHUxU=;
-        b=kToQRqn+PEEG+R3IvfTjjIqd+nquti/ZSLKp6Dc04aL3KGtosM4af0ue6FMMOto/Js
-         +PMUAAoSr6Bj4fKGKFJvPSHRnP5tUK5nAFtpPy6bueLjxPZD6eFRsEPevhLFaLBh/ogU
-         RTB4u9aVdraOaHrZ0mDq3Xf11ixRa1/Y/gv4Ot/892rUflWLYJueKJO63fjpeuxxcG1c
-         6TT6ia9cXfDDps3HplQm/aj3Pk2RzNVMhF/Ewy7pb4rOQx22BJFTGVovLRg+0+T/k+/s
-         3SDVNIDwbonnN53SylI6rEc/zQDeHGzIJk5mkJjd86GZ18eBfbCDwbwDKW28WsxlmhmJ
-         xhOg==
+        bh=mpFgcIdHbFI/F7QbErGEpVQ+1+4Natrjp8cskIzQExM=;
+        b=XUievGYkrGiE0sHUbJ8sPRwbOntBSBv59mlf82qg0knx8X5xWKiHUX4tHaMAOZOWq+
+         TfwspFMAjCcc461Ao9h4L7bYStuX24aqWk0rNTV+pkKiAXz6RdIMOPf8Aee7aps1Q2IV
+         njKTn4GkidWb3hNKU/XzO1TcqPTxWvTteSuKMvFnNrJMOqdQSyWrT+clT5bagXLHbNx3
+         1xcNUleY/4yZC+7gjuMv4zHMb4mQUdOyccXwBREztFu/dsJsH43n6hHOqpySQPf1tOJ7
+         AjsSb2qOUwOk9Ny+ScBSYkuPUWENytx2irXYLonqdozL7zq4b+E0aRH56gF86Xt0jAFp
+         fFYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761604174; x=1762208974;
+        d=1e100.net; s=20230601; t=1761605088; x=1762209888;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q8OllJa5cnTv18Hb5rtu0WqFYbEpD7McBb4G8sNHUxU=;
-        b=uSPbq6pULrImj3TPkKZFPeZAVcaMx2OkYPYz6KbLi0vce28u7xxVj/4dYngwEAkXag
-         FkWjlLOvACDXFrjLuW9QK+6GM2jEWtktXeaFIhbKIVPXDTTPWYIQDNEkCjj5mZoYvqny
-         MivrMJBgeNrBDB672feVHJ2uiYTPLYV47nfuoWgyU547keBpTOOite7acW8dF/d8/o74
-         IrDJFab+KzKFVuhn12JBwnxPJgU2xDehK+0IV/51NkBfwZGf1FXdOrwkVeP+7dd6U8Jd
-         izGMsT3xZW2ryGIWusfai7Hk0M+kGp+i8olu8bc3h4UCDZosCRZAIEQrZtKATw7MIqWZ
-         CvxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW8Uc6SQJXYqB1x6+bf4/fWuagpCIHtORj6Pt1kucy5zyM076fMZuzKVRTrlvz/GaRGRc9iUMeIMYSNpn08oYQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywz3bMfkyWir0OtO6CL79FN80+XrRIFYnKJ9vEcBzIR2Wrjl29y
-	Wr8xY3WS4i32wHtMQKV5FcF/PI3qKAjebfVvlKGbBPNPoesAbOEb8zF4TqBLe7Xlx149wq9aHcJ
-	NcS1FSs6skMhoWtODNf7a8HDw36jZVCOH4Co8tfUl
-X-Gm-Gg: ASbGncv2BeAEmu6Cc2OzFF/IgUTdWkwyIteIJ4VESRZn6p7M4Q3JR1aD6FX9YqMmziw
-	nTtwoO3QfnRoSPX/uTNRQBoB0x0Jzq6HXSmhiApBxTyhRPz9SPMV6bAR704TSRP7UPNxMV9e0bb
-	K8PBP5msP8/1XS6XrXJxTtczImkod9BxuSQFVw7Zxndqv2NDyiA+2i2rNgvn6Pst8J/4BN4yf7j
-	eVwi+6RtbqSEroIrUG7F6gJqzeY2zbN/7DOFhsPKxAdV0JU3ZY0NsDPX5MLxek29cHdgyA=
-X-Google-Smtp-Source: AGHT+IG3oQ1hLD3e0hS3PRFF5ObbhSTcrKhhLRIEURqvM4Ky9aK8pSzbBQH6dOSSLG+Z8K1fnWad+2c0m7IK5ji+AAc=
-X-Received: by 2002:a2e:9a0b:0:b0:376:49b1:7909 with SMTP id
- 38308e7fff4ca-379077694a9mr3618351fa.49.1761604173336; Mon, 27 Oct 2025
- 15:29:33 -0700 (PDT)
+        bh=mpFgcIdHbFI/F7QbErGEpVQ+1+4Natrjp8cskIzQExM=;
+        b=QFKXLUL0W/YqhKgIzFA8IvwSdMZ4BcxibhrqKMevZ6Ubt1rzZmkyLU0GO5THyd9OK6
+         tmLDPgr0tsSM6Yucdw3ZTxx9sACm6vq7chKWZ6lfiqbpUMnkW2vVUh+RMiOjWeUdbyZp
+         aIoyBNZLMrCTRQiaoaGyaBivb09VYD5X+j23dXNatO1jV65lo6jrbKP+BNF7mtn+FdnQ
+         PG+1PA7XytsF9EOIMSlNqjsMKedFRo8/EBXZFmzAhtQ6FWopYCThRhwL2Cl/k8OZ//ut
+         Nn0PxBSYAt34ROtb1NlrkoMmljTwZpy7JAQ2W2q/HhmAuQOdWTnUxN8GlSWxKrch7+ov
+         QDYg==
+X-Forwarded-Encrypted: i=1; AJvYcCXNLebtY7rXrPfa4sNa203vUo0xRr9c6nI/MocC02y0P1Au1xbBqsjZOPltgl6kZsPCrBRdWpoDX85ba0kKv1Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxyyKFB3kfv5Hihgq2coPuW5Q+jNycNnUr5PswAk9UVM+/56Ie
+	Y8oWiwMjeQPH1SEE/XlupBTw9L+7czMKS8ZEnkhEdomp3QBfcQgpZEbVb+wAQqWxcZHj+IOspw2
+	NMqAP7Ukf1FwQ9/O38b46UICoe2fuDsD1Nzv+mYUj
+X-Gm-Gg: ASbGncszCU99FBxBlXUuHY7S0ZTrslm2Yf9YtXDFDXFsLbP2ot9GO3LdPtP0qghBwAD
+	LQC5ci2SxpToMUuROujYMx9SEyx1fCl/x0KNrvvMzdBJRy5txSiM702ZKkiIPsLTOpr0FBCP6g5
+	x1UfGrGcIvNrpCGPKTaiCkZtvUbqjCe8YSKOxDBiqBZzSZmgy/F6699gFlzRxNvlGjawcUnM/oN
+	O8VZOdJ6tJkAqaHZteUZdPSLqIT40GEMFbiQVJCjEtamPC/xbTX0oCYrqNYDVxholbiAQU=
+X-Google-Smtp-Source: AGHT+IG8Ejwp50BSLB3roZMqzNKK3fdMxgSprm5enFcaaSJHsvTJPOSCN+WzTYJlIeeVTdHuRCAFpYySmA/1mTyvWxw=
+X-Received: by 2002:a05:6102:458f:b0:5cd:e513:384d with SMTP id
+ ada2fe7eead31-5db7ddfd811mr330196137.0.1761605087687; Mon, 27 Oct 2025
+ 15:44:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251021000852.2924827-1-pasha.tatashin@soleen.com> <20251021000852.2924827-2-pasha.tatashin@soleen.com>
-In-Reply-To: <20251021000852.2924827-2-pasha.tatashin@soleen.com>
+References: <20251021000852.2924827-1-pasha.tatashin@soleen.com> <20251021000852.2924827-3-pasha.tatashin@soleen.com>
+In-Reply-To: <20251021000852.2924827-3-pasha.tatashin@soleen.com>
 From: David Matlack <dmatlack@google.com>
-Date: Mon, 27 Oct 2025 15:29:05 -0700
-X-Gm-Features: AWmQ_blnDmlMSHWHiBFbsh6uAwbzzxnGfxP2Tc8ntIAjm82iRY3rUDbemvTKIT8
-Message-ID: <CALzav=egQiF6tanYxR9Tow7TnT_UK9bNAR_4DQ2P=2EJ+H4ZJA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] liveupdate: kho: warn and fail on metadata or
- preserved memory in scratch area
+Date: Mon, 27 Oct 2025 15:44:19 -0700
+X-Gm-Features: AWmQ_bm9flIwjCIEktZFbqFsVLPTvjpFwWRND4pJrUQRYbrA52ouzPHjdJgenhI
+Message-ID: <CALzav=cprjK-WutXYKii28e37R=F7jPZfA5_=_Qh4HH5p2Um=A@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] liveupdate: kho: Increase metadata bitmap size to PAGE_SIZE
 To: Pasha Tatashin <pasha.tatashin@soleen.com>
 Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net, 
 	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
@@ -92,41 +91,18 @@ Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 20, 2025 at 5:08=E2=80=AFPM Pasha Tatashin
+On Mon, Oct 20, 2025 at 5:09=E2=80=AFPM Pasha Tatashin
 <pasha.tatashin@soleen.com> wrote:
 >
-> It is invalid for KHO metadata or preserved memory regions to be located
-> within the KHO scratch area, as this area is overwritten when the next
-> kernel is loaded, and used early in boot by the next kernel. This can
-> lead to memory corruption.
->
-> Adds checks to kho_preserve_* and KHO's internal metadata allocators
-> (xa_load_or_alloc, new_chunk) to verify that the physical address of the
-> memory does not overlap with any defined scratch region. If an overlap
-> is detected, the operation will fail and a WARN_ON is triggered. To
-> avoid performance overhead in production kernels, these checks are
-> enabled only when CONFIG_KEXEC_HANDOVER_DEBUG is selected.
+> KHO memory preservation metadata is preserved in 512 byte chunks which
+> requires their allocation from slab allocator. Slabs are not safe to be
+> used with KHO because of kfence, and because partial slabs may lead
+> leaks to the next kernel. Change the size to be PAGE_SIZE.
 
-How many scratch regions are there in practice? Checking
-unconditionally seems like a small price to pay to avoid possible
-memory corruption. Especially since most KHO preservation should
-happen while the VM is still running (so does not have to by
-hyper-optimized).
+> -#define PRESERVE_BITS (512 * 8)
+> +#define PRESERVE_BITS (PAGE_SIZE * 8)
 
->  static void *xa_load_or_alloc(struct xarray *xa, unsigned long index, si=
-ze_t sz)
->  {
-> -       void *elm, *res;
-> +       void *res =3D xa_load(xa, index);
->
-> -       elm =3D xa_load(xa, index);
-> -       if (elm)
-> -               return elm;
-> +       if (res)
-> +               return res;
-> +
-> +       void *elm __free(kfree) =3D kzalloc(sz, GFP_KERNEL);
-
-nit: This breaks the local style of always declaring variables at the
-beginning of blocks.
+nit: A comment somewhere (maybe here?) about the requirement that KHO
+metadata are not stored on slabs would be helpful to avoid someone
+"optimizing" this back to 512 in the future.
 
