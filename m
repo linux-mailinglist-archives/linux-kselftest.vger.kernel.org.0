@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-44082-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94A62C0C02E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 07:57:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBD4C0C039
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 07:58:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 812CF3B4E7C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 06:56:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35A6B189CCC9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 06:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 399512BDC2B;
-	Mon, 27 Oct 2025 06:56:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D437127E06C;
+	Mon, 27 Oct 2025 06:58:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjcM76sN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WgYHd1gR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F93827E06C;
-	Mon, 27 Oct 2025 06:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DDF28682;
+	Mon, 27 Oct 2025 06:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761548201; cv=none; b=DF4RxrMlkWaXdFY5HhkNJG+uXSDulZ3nywJ0bPr2JC4rpb4YGk1+F+AIf3UrsZ/X+bOiBS0z7VNpT4T2vH5/ASyYIszadgDkxGE3zDKO6IvOx1YaC4S+BeqGuXrJDk3NOTWOmXGaBaf0oIrOJXlRquPSz7Yuhe0S5joEHXg26TE=
+	t=1761548298; cv=none; b=dK8wbTQ4j5UshwzjIs5dKKc12O7U/qC2LdQp1J+qzEJjRAVlQrBYgISsGks5Tjpy24C+ybmgqYthLnvds7ggkerFklPdS0CEkCLu3EizJg/RQ4YpSAueF1TB6qR7eRCdrxM8zqHIgujXUiv8aUtCx6KCRUBHIEUJcPNWz2ol3QM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761548201; c=relaxed/simple;
-	bh=3ozifgAZ+YfM5vcU5H0evJlif4ITKFrtPaxgfYBxwLs=;
+	s=arc-20240116; t=1761548298; c=relaxed/simple;
+	bh=lbGgWupkovq81DImc+Wfj/Z+qTggpqUzQ5AribnsI4Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nssAU8I+i8IWrOcVQ591WbmgsFRzhGJ50upfoUYknJ3auE6f1BRwCB/rlywSXsjR5Ok7yciq/fg4xTHkvnnO0dU8Z+9DL7Atbn/s6vrGMjuaLKXhpBocR/9+oR7GfGU6n8B00Yh/Yb3MzHQ6bEBIxsi8+Q5cXZzUXQMQDMGiY6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjcM76sN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 119D6C4CEF1;
-	Mon, 27 Oct 2025 06:56:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dV5ZvtJOA8Kthu4Uha+i/2ASB06y7EJlu2XZlqC0R4MpKloeESiBCGaP6bDtAnhOUDGRhVzqoODh5QzGmf+RdOth+TLqdqfjCsEkePOQaPCADpbt2g/rTl1PJFHJyUsMWQD3xc75sXmYsoIPEAhqHD3CN1JRaxwBL8CUTjxybls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WgYHd1gR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97AD3C4CEF1;
+	Mon, 27 Oct 2025 06:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761548200;
-	bh=3ozifgAZ+YfM5vcU5H0evJlif4ITKFrtPaxgfYBxwLs=;
+	s=k20201202; t=1761548297;
+	bh=lbGgWupkovq81DImc+Wfj/Z+qTggpqUzQ5AribnsI4Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QjcM76sNfamPIkrR3/MQCp/WntCpIJUiYEpCpq/4JhWqemR1cIy/wJ+5sW7z4pqGo
-	 X3TJ3oPuG8vIZ8sVRTz0+4JSnGa9GfwNZAYxHUc1xzqAA/aQMAGVc7dboRzEh6++GI
-	 X7WZGWE8MHt7RjnZPj4Df4TM0UBatj+5rEJspgIubyJh03Hp1NR+qoR5NMvWnvDbqk
-	 tUSLkhBsVUXu6eUq7/IYmNUdIpcwm0z1oA3jMsJmAT6PbZVKkSyaHZx+sAvqXP8Ih3
-	 6Gm9Yrt8Y4A8kHpMb4UZ4KELC9L+yFyLWROSIOC6awBHXa2EjYJayQEA6BJkF1sOMK
-	 RJoNydmW9CBow==
-Date: Mon, 27 Oct 2025 08:56:32 +0200
+	b=WgYHd1gRoMxFqKfxyVNMKdMBnx9LTmiWGz9jsusgML8qyb1cDoittaMKbRXdbKibm
+	 p3C6RKP/o0JYKQ2ITDj2QPCNF+39qqS3oj+PCGUyAR+Qa7GI0Pd45iPt0aSo3fcOZ1
+	 bOEXHU78SCT2qDR5iScbhySSNt4n9IdSiyHghmqANQwbeVeQK9P9Smyu58ciepIfJR
+	 nQLa6zLLFJMopTremXr7vWdGvhdPZL0ze/KJXCQz9zywcVPNoviWG+SMNVygDaaw96
+	 Q8/6D7q2pMOfzkBj6yg1KTjt2J2zW9q4x1RKZ6mXMyH7ijGHy1jJOMEAUGEwZyNbxV
+	 ohhV4WLdQZxlw==
+Date: Mon, 27 Oct 2025 08:58:08 +0200
 From: Mike Rapoport <rppt@kernel.org>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>
 Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
@@ -50,29 +50,84 @@ Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
 	masahiroy@kernel.org, ojeda@kernel.org, pratyush@kernel.org,
 	rdunlap@infradead.org, tj@kernel.org
 Subject: Re: [PATCH v8 8/8] memblock: Unpreserve memory in case of error
-Message-ID: <aP8XoIJmefrhxpe4@kernel.org>
+Message-ID: <aP8YADj4ha3trjJn@kernel.org>
 References: <20251024161002.747372-1-pasha.tatashin@soleen.com>
  <20251024161002.747372-9-pasha.tatashin@soleen.com>
+ <aP5Mcr9WCt5CHon6@kernel.org>
+ <CA+CK2bCUc5Q5PxCy3jGN9CC48Zz_evq51d7Hps7=r9g28z7tig@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251024161002.747372-9-pasha.tatashin@soleen.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CA+CK2bCUc5Q5PxCy3jGN9CC48Zz_evq51d7Hps7=r9g28z7tig@mail.gmail.com>
 
-On Fri, Oct 24, 2025 at 12:10:02PM -0400, Pasha Tatashin wrote:
->  	err |= fdt_end_node(fdt);
->  	err |= fdt_finish(fdt);
->  
-> -	err |= kho_preserve_folio(page_folio(fdt_page));
-> -
->  	if (!err)
-> +		err = kho_preserve_folio(page_folio(fdt_page));
+On Sun, Oct 26, 2025 at 01:41:30PM -0400, Pasha Tatashin wrote:
+> On Sun, Oct 26, 2025 at 12:29 PM Mike Rapoport <rppt@kernel.org> wrote:
+> >
+> > > @@ -2462,12 +2463,14 @@ static int __init prepare_kho_fdt(void)
+> > >
+> > >       err |= fdt_begin_node(fdt, "");
+> > >       err |= fdt_property_string(fdt, "compatible", MEMBLOCK_KHO_NODE_COMPATIBLE);
+> > > -     for (i = 0; i < reserved_mem_count; i++) {
+> > > +     for (i = 0; !err && i < reserved_mem_count; i++) {
+> > >               struct reserve_mem_table *map = &reserved_mem_table[i];
+> > >               struct page *page = phys_to_page(map->start);
+> > >               unsigned int nr_pages = map->size >> PAGE_SHIFT;
+> > >
+> > > -             err |= kho_preserve_pages(page, nr_pages);
+> > > +             err = kho_preserve_pages(page, nr_pages);
+> > > +             if (err)
+> > > +                     break;
+> >
+> > Please
+> >
+> >         goto err_unpreserve;
+> 
+> While we can do that, we loose some symmetry of not performing
+> fdt_end_node() and fdt_finish() if fdt lib ever adds some debugging
+> facility to make sure that open nodes/trees are properly clodes, this
+> is going to flag that. I prefer my current implementation.
 
-Since we are anyway changing the code here, lets use kho_preserve_pages()
+Why do we care about fdt that we are never going to use and that's freed a
+few lines below?
+
+> > >               err |= fdt_begin_node(fdt, map->name);
+> > >               err |= fdt_property_string(fdt, "compatible", RESERVE_MEM_KHO_NODE_COMPATIBLE);
+> > >               err |= fdt_property(fdt, "start", &map->start, sizeof(map->start));
+> >
+> >         if (err)
+> >                 goto err_unpreserve;
+> >
+> > and drop !err from the loop condition.
+> 
+> That is going to miss one 'nr_preserved++' . We cannot do that, we
+> could move it to the beginning of the loop, but I prefer keeping err
+> right in the condition.
+ 
+I very much dislike the error handling after this patch. From a single
+
+	if (err)
+		put_page()
+
+it grew into a complex beast with special variables just for the sake of
+it.
+
+What I'd like to see is something like
+
+err_unpreserve_fdt:
+	kho_unpreserve_folio(page_folio(fdt_page));
+err_unpreserve_mems:
+	for (unsigned int i = 0; i < nr_preserved; i++) {
+		/* unpreserve mem[i] */
+	}
+err_free_fdt:
+	put_page(fdt_page);
+	return err;
 
 -- 
 Sincerely yours,
