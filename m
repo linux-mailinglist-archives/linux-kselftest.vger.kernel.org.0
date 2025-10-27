@@ -1,349 +1,169 @@
-Return-Path: <linux-kselftest+bounces-44100-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44101-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA729C0E4E4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 15:14:37 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89E13C0EA6A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 15:56:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C0D819A39DF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 14:12:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 910564E3909
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 14:52:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06B230B511;
-	Mon, 27 Oct 2025 14:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61EBD2C21FB;
+	Mon, 27 Oct 2025 14:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eSQyY/o+";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HxBj57Va";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eSQyY/o+";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HxBj57Va"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="did5QFqQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDDB30B526
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 14:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325F2239567;
+	Mon, 27 Oct 2025 14:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761574095; cv=none; b=XZ9WplEujXLEaxQCBomNypaRp0hgvWwKAH00DHp8zmin6+vkTFobhiVJJgthtPRRiEU/07cNXIUAjzpjwyOzZisiXFWcTOndGJ6EM3wlZ55tRjfqvYyYENm+plfjiWVjfq+43Ii4f73tum7lnCUUROuyM4xcYlIXI+0luOY1YXo=
+	t=1761576740; cv=none; b=Qm9rzMvzkeLTCfp8UCcXtGd7xJ2qgpTOZQajTl44WphAzx6Drm51rh/TEX3Z2dh8Ue6sVPqD/LSEiQR8aoY8d1cvdRs7NUjtqoiHMEU80lsBNvo+3KQUEufYaPg7VLkMO8oyPxNFwFPIIHw9iTydayP3sXgKhiczeRfmu7Mfi/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761574095; c=relaxed/simple;
-	bh=zHzJFZSC/XVvaaKSpNtTtrYvmzQLyySdcDBERutAuvg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cS1QYlyFi9l+rFbDU+9H4JPy9TVnYxTgFw/l8rAczN9HHoR1ca6H26DXM2A+WaoGQA/7oOpD0Hmw46MN396LRrGkBShwTsyP3Y8yu4TEfrjgZ+P3CqrRn2xYz3glAT6+1e6s06p68WP1gOOGq9zFekUabgPUHTCaqIiXuYgIsfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eSQyY/o+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HxBj57Va; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eSQyY/o+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HxBj57Va; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id AEF7821A64;
-	Mon, 27 Oct 2025 14:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761574091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=yNDjf2ZkDcwefxbfbTlFfYFP26XA7S/G/BvwaqnvCqI=;
-	b=eSQyY/o+rh5mjPNza8tf5wvXXvFTAHFZ1tIxk6b6/A94hYeE6WXn7QUBjfw6SfYL43pz1I
-	LPBth3S8oOG96RZLQREXma5XiZpfYdXuI8NOjJzvkPWihYfKz8TtYU1icl9iyBa9i/fBB7
-	uzDoQaekE/lim/gISn2EydfFybLrYIE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761574091;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=yNDjf2ZkDcwefxbfbTlFfYFP26XA7S/G/BvwaqnvCqI=;
-	b=HxBj57VaFKgikDOWzpvAJS4F0WWYugR3TfeewtqV2ZQEDYebjVc60HUazYhD1qfFBHnvrB
-	aGJa1oMLhaShGuBg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761574091; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=yNDjf2ZkDcwefxbfbTlFfYFP26XA7S/G/BvwaqnvCqI=;
-	b=eSQyY/o+rh5mjPNza8tf5wvXXvFTAHFZ1tIxk6b6/A94hYeE6WXn7QUBjfw6SfYL43pz1I
-	LPBth3S8oOG96RZLQREXma5XiZpfYdXuI8NOjJzvkPWihYfKz8TtYU1icl9iyBa9i/fBB7
-	uzDoQaekE/lim/gISn2EydfFybLrYIE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761574091;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=yNDjf2ZkDcwefxbfbTlFfYFP26XA7S/G/BvwaqnvCqI=;
-	b=HxBj57VaFKgikDOWzpvAJS4F0WWYugR3TfeewtqV2ZQEDYebjVc60HUazYhD1qfFBHnvrB
-	aGJa1oMLhaShGuBg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 54B9913A9A;
-	Mon, 27 Oct 2025 14:08:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id NtFNE8t8/2i+eAAAD6G6ig
-	(envelope-from <tzimmermann@suse.de>); Mon, 27 Oct 2025 14:08:11 +0000
-Message-ID: <69215332-2bc7-464a-9d6e-4e9d8ec66511@suse.de>
-Date: Mon, 27 Oct 2025 15:08:10 +0100
+	s=arc-20240116; t=1761576740; c=relaxed/simple;
+	bh=5ORSopPHzqT+JQMXOWN/QIYFeXx9NCSwHQ9+XUHA56c=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=icmjEtput0cz39LlwFFkYn0ijd7cblvtqFl0+y9jUaR58offJYy1ztD3dAuY9j3na/kDXnjbKVAn2gW8v1Y4+KuFnmZ4eWmAXss20ZUMrJOMlNoqruhg4fZwf2Ch8LOwtNC/n3cLCMXQukglqR2IfzBKmhI/3LBt34O/fF3f+bY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=did5QFqQ; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 579E44E4136F;
+	Mon, 27 Oct 2025 14:52:15 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 26D0A6062C;
+	Mon, 27 Oct 2025 14:52:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 42DA2102F24D3;
+	Mon, 27 Oct 2025 15:52:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1761576733; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=DuHkXePUk6nSfSYEkcrN/kO/hmAFgCdpDzG5ZHaMNZ4=;
+	b=did5QFqQfV5fK6c2kzfEr3hbeKkU8TwiRbH00ElBxOpHW2BuT+Npt1XOUVgROzKpev9sik
+	gAPLEeVsQMGWgrh0bm40vLcYI9Ej5m+FU3R+h2G9mCWGky7RUAaYCZN8dBx+zpLy+MEbdg
+	6dEKUp+7c1Jkllp2seQoO0ZVO/c6dYBE0K6K1TbUNALyCWeELcRtMUA5Ev+dXYgd/Aj7XV
+	M42s48u0ifdS6YvbbXy1unf4pJaBdaymKUYjAu4au7Qlm3drW8u4eQ7tWocMA8AfVhYsLp
+	2OlUDpB/QIM3kOYj/xwRRoyVk1upMG0l3AwMj7Zp1DPtYfhvHxBinpQ1dzfdCg==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next v3 0/4] selftests/bpf: convert test_tc_tunnel.sh
+ to test_progs
+Date: Mon, 27 Oct 2025 15:51:52 +0100
+Message-Id: <20251027-tc_tunnel-v3-0-505c12019f9d@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: next-20251027: backlight.c:59:39: error: implicit declaration of
- function 'of_find_node_by_name'; did you mean 'bus_find_device_by_name'?
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
- linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- lkft-triage@lists.linaro.org, Linux Regressions <regressions@lists.linux.dev>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, danielt@kernel.org,
- Lee Jones <lee@kernel.org>, Simona Vetter <simona.vetter@ffwll.ch>,
- Ben Copeland <benjamin.copeland@linaro.org>, Arnd Bergmann <arnd@arndb.de>,
- Dan Carpenter <dan.carpenter@linaro.org>,
- Anders Roxell <anders.roxell@linaro.org>
-References: <CA+G9fYs8fn5URQx2+s2oNxdUgZkSrdLC0P1tNBW_n-6BaBkK2Q@mail.gmail.com>
- <CA+G9fYumAD1_G4UG2LDAPD3fRxN+WQnrm8tPx6pL8qF6wSOUrw@mail.gmail.com>
-Content-Language: en-US
-From: Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
- AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
- AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
- lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
- U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
- vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
- 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
- j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
- T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
- 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
- GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
- hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
- EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
- C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
- yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
- SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
- Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
- 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
-In-Reply-To: <CA+G9fYumAD1_G4UG2LDAPD3fRxN+WQnrm8tPx6pL8qF6wSOUrw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUBJECT_ENDS_QUESTION(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:url,linaro.org:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
-X-Spam-Level: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAmH/2gC/12NywrCMBBFf6XM2khm+jC68j9EpElTG6hJSWKol
+ P67saviZuBy7zmzQNDe6ACXYgGvkwnG2RzKQwFqaO1TM9PlDMSp5gKRRfWIb2v1yFSDZUWNKHs
+ UkPeT172ZN9cN5NQzq+cI99wMJkTnP9uThFv/8yHH086XkHFGnWgEF/lKukrn4mjsUbnX5km0Y
+ 4n2LGW2raqWy66mM/9j13X9As7eAbTqAAAA
+X-Change-ID: 20250811-tc_tunnel-c61342683f18
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi,
+Hello,
+this is the v3 of test_tc_tunnel conversion into test_progs framework.
+This new revision:
+- fixes a few issues spotted by the bot reviewer
+- removes any test ensuring connection failure (and so depending on a
+  timout) to keep the execution time reasonable
 
-fix is at 
-https://lore.kernel.org/dri-devel/20251027140646.227025-1-tzimmermann@suse.de/
+test_tc_tunnel.sh tests a variety of tunnels based on BPF: packets are
+encapsulated by a BPF program on the client egress. We then check that
+those packets can be decapsulated on server ingress side, either thanks
+to kernel-based or BPF-based decapsulation. Those tests are run thanks
+to two veths in two dedicated namespaces.
 
-Best regards
-Thomas
+- patches 1 and 2 are preparatory patches
+- patch 3 introduce tc_tunnel test into test_progs
+- patch 4 gets rid of the test_tc_tunnel.sh script
 
-Am 27.10.25 um 09:38 schrieb Naresh Kamboju:
-> On Mon, 27 Oct 2025 at 13:43, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->> The following powerpc ppc6xx_defconfig build regressions noticed on the
->> Linux next-20251027 tag with gcc-14 and gcc-8.
->>
->> * powerpc, build
->>    - gcc-14-ppc6xx_defconfig
->>    - gcc-8-ppc6xx_defconfig
->>
->> First seen on next-20251027
->> Good: next-20251024
->> Bad: next-20251027
->>
->> Regression Analysis:
->> - New regression? yes
->> - Reproducibility? yes
->>
->> Build regression: next-20251027: backlight.c:59:39: error: implicit
->> declaration of function 'of_find_node_by_name'; did you mean
->> 'bus_find_device_by_name'?
->> Build regression: next-20251027: include/linux/math.h:167:43: error:
->> first argument to '__builtin_choose_expr' not a constant
->> Build regression: next-20251027: via-pmu-backlight.c:22:20: error:
->> 'FB_BACKLIGHT_LEVELS' undeclared here (not in a function)
->> Build regression: next-20251027: minmax.h:71:17: error: first argument
->> to '__builtin_choose_expr' not a constant
->> Build regression: next-20251027: compiler.h:168:17: error:
->> '__UNIQUE_ID_x__286' undeclared (first use in this function); did you
->> mean '__UNIQUE_ID_y__287'?
-> Anders bisected this down to,
-> # first bad commit:
->     [243ce64b2b371cdf2cbc39c9422cb3047cab6de7]
->     backlight: Do not include <linux/fb.h> in header file
->
->> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->>
->> ## Build error
->> arch/powerpc/platforms/powermac/backlight.c: In function
->> 'pmac_has_backlight_type':
->> arch/powerpc/platforms/powermac/backlight.c:59:39: error: implicit
->> declaration of function 'of_find_node_by_name'; did you mean
->> 'bus_find_device_by_name'? [-Wimplicit-function-declaration]
->>     59 |         struct device_node* bk_node =
->> of_find_node_by_name(NULL, "backlight");
->>        |                                       ^~~~~~~~~~~~~~~~~~~~
->>        |                                       bus_find_device_by_name
->> arch/powerpc/platforms/powermac/backlight.c:59:39: error:
->> initialization of 'struct device_node *' from 'int' makes pointer from
->> integer without a cast [-Wint-conversion]
->> arch/powerpc/platforms/powermac/backlight.c:60:17: error: implicit
->> declaration of function 'of_property_match_string'
->> [-Wimplicit-function-declaration]
->>     60 |         int i = of_property_match_string(bk_node,
->> "backlight-control", type);
->>        |                 ^~~~~~~~~~~~~~~~~~~~~~~~
->> arch/powerpc/platforms/powermac/backlight.c:62:9: error: implicit
->> declaration of function 'of_node_put'
->> [-Wimplicit-function-declaration]
->>     62 |         of_node_put(bk_node);
->>        |         ^~~~~~~~~~~
->> drivers/macintosh/via-pmu-backlight.c:22:20: error:
->> 'FB_BACKLIGHT_LEVELS' undeclared here (not in a function)
->>     22 | static u8 bl_curve[FB_BACKLIGHT_LEVELS];
->>        |                    ^~~~~~~~~~~~~~~~~~~
->> In file included from <command-line>:
->> drivers/macintosh/via-pmu-backlight.c: In function 'pmu_backlight_curve_lookup':
->> include/linux/compiler.h:168:17: error: '__UNIQUE_ID_x__286'
->> undeclared (first use in this function); did you mean
->> '__UNIQUE_ID_y__287'?
->>    168 |         __PASTE(__UNIQUE_ID_,                                   \
->>        |                 ^~~~~~~~~~~~
->> drivers/macintosh/via-pmu-backlight.c:45:23: note: in expansion of macro 'max'
->>     45 |                 max = max((int)bl_curve[i], max);
->>        |                       ^~~
->> include/linux/minmax.h:71:17: error: first argument to
->> '__builtin_choose_expr' not a constant
->>     71 |         (typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL,
->> 1L)))(ux) >= 0)
->>        |                 ^~~~~~~~~~~~~~~~~~~~~
->> include/linux/compiler_types.h:577:23: note: in definition of macro
->> '__compiletime_assert'
->>    577 |                 if (!(condition))
->>           \
->>        |                       ^~~~~~~~~
->> drivers/macintosh/via-pmu-backlight.c:45:23: note: in expansion of macro 'max'
->>     45 |                 max = max((int)bl_curve[i], max);
->>        |                       ^~~
->> include/linux/minmax.h:71:17: error: first argument to
->> '__builtin_choose_expr' not a constant
->>     71 |         (typeof(__builtin_choose_expr(sizeof(ux) > 4, 1LL,
->> 1L)))(ux) >= 0)
->>        |                 ^~~~~~~~~~~~~~~~~~~~~
->> include/linux/compiler_types.h:577:23: note: in definition of macro
->> '__compiletime_assert'
->>    577 |                 if (!(condition))
->>           \
->>        |                       ^~~~~~~~~
->> include/linux/minmax.h:112:25: note: in expansion of macro '__careful_cmp'
->>    112 | #define max(x, y)       __careful_cmp(max, x, y)
->>        |                         ^~~~~~~~~~~~~
->> drivers/macintosh/via-pmu-backlight.c:45:23: note: in expansion of macro 'max'
->>     45 |                 max = max((int)bl_curve[i], max);
->>        |                       ^~~
->> In file included from include/linux/kernel.h:27,
->>                   from arch/powerpc/include/asm/page.h:11,
->>                   from arch/powerpc/include/asm/thread_info.h:13,
->>                   from include/linux/thread_info.h:60,
->>                   from arch/powerpc/include/asm/ptrace.h:342,
->>                   from drivers/macintosh/via-pmu-backlight.c:11:
->> include/linux/math.h:162:17: error: first argument to
->> '__builtin_choose_expr' not a constant
->>    162 |                 __builtin_choose_expr(
->>           \
->>        |                 ^~~~~~~~~~~~~~~~~~~~~
->>
->> drivers/macintosh/via-pmu-backlight.c: In function
->> 'pmu_backlight_get_level_brightness':
->> drivers/macintosh/via-pmu-backlight.c:63:38: error: 'FB_BACKLIGHT_MAX'
->> undeclared (first use in this function); did you mean 'BACKLIGHT_RAW'?
->>     63 |         pmulevel = bl_curve[level] * FB_BACKLIGHT_MAX / MAX_PMU_LEVEL;
->>        |                                      ^~~~~~~~~~~~~~~~
->>        |                                      BACKLIGHT_RAW
->> drivers/macintosh/via-pmu-backlight.c:58:51: warning: parameter
->> 'level' set but not used [-Wunused-but-set-parameter]
->>     58 | static int pmu_backlight_get_level_brightness(int level)
->>        |                                               ~~~~^~~~~
->> drivers/macintosh/via-pmu-backlight.c: In function 'pmu_backlight_init':
->> drivers/macintosh/via-pmu-backlight.c:144:17: error: implicit
->> declaration of function 'of_machine_is_compatible'
->> [-Wimplicit-function-declaration]
->>    144 |                 of_machine_is_compatible("AAPL,3400/2400") ||
->>        |                 ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/macintosh/via-pmu-backlight.c: At top level:
->> drivers/macintosh/via-pmu-backlight.c:22:11: warning: 'bl_curve'
->> defined but not used [-Wunused-variable]
->>     22 | static u8 bl_curve[FB_BACKLIGHT_LEVELS];
->>        |           ^~~~~~~~
->> make[5]: *** [scripts/Makefile.build:287:
->> drivers/macintosh/via-pmu-backlight.o] Error 1
->> make[5]: Target 'drivers/macintosh/' not remade because of errors.
->>
->>
->> ## Source
->> * Kernel version: 6.18.0-rc2-next-20251027
->> * Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
->> * Git describe: next-20251027
->> * Git commit: 8fec172c82c2b5f6f8e47ab837c1dc91ee3d1b87
->> * Architectures: powerpc
->> * Toolchains: gcc-14
->> * Kconfigs: defconfig
->>
->> ## Build
->> * Test log: https://storage.tuxsuite.com/public/linaro/lkft/builds/34dKrlb77LGOQQSoC8FHCiIEAZK/build.log
->> * Test details:
->> https://regressions.linaro.org/lkft/linux-next-master/next-20251027/build/gcc-14-ppc6xx_defconfig/
->> * Build plan: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/builds/34dKrlb77LGOQQSoC8FHCiIEAZK
->> * Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/34dKrlb77LGOQQSoC8FHCiIEAZK/
->> * Kernel config:
->> https://storage.tuxsuite.com/public/linaro/lkft/builds/34dKrlb77LGOQQSoC8FHCiIEAZK/config
->>
->> --
->> Linaro LKFT
-> - Naresh
+The new test has been executed both in some x86 local qemu machine, as
+well as in CI:
 
+  # ./test_progs -a tc_tunnel
+  #454/1   tc_tunnel/ipip_none:OK
+  #454/2   tc_tunnel/ipip6_none:OK
+  #454/3   tc_tunnel/ip6tnl_none:OK
+  #454/4   tc_tunnel/sit_none:OK
+  #454/5   tc_tunnel/vxlan_eth:OK
+  #454/6   tc_tunnel/ip6vxlan_eth:OK
+  #454/7   tc_tunnel/gre_none:OK
+  #454/8   tc_tunnel/gre_eth:OK
+  #454/9   tc_tunnel/gre_mpls:OK
+  #454/10  tc_tunnel/ip6gre_none:OK
+  #454/11  tc_tunnel/ip6gre_eth:OK
+  #454/12  tc_tunnel/ip6gre_mpls:OK
+  #454/13  tc_tunnel/udp_none:OK
+  #454/14  tc_tunnel/udp_eth:OK
+  #454/15  tc_tunnel/udp_mpls:OK
+  #454/16  tc_tunnel/ip6udp_none:OK
+  #454/17  tc_tunnel/ip6udp_eth:OK
+  #454/18  tc_tunnel/ip6udp_mpls:OK
+  #454     tc_tunnel:OK
+  Summary: 1/18 PASSED, 0 SKIPPED, 0 FAILED
+
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v3:
+- remove systematic "connection must fail" test part of each subtest
+- also remove kernel-based decap test for subtests supposed to fail on
+  kernel side
+- fix potential fd leak if connection structure allocation fails
+- fix wrong early return in run_test
+- Link to v2: https://lore.kernel.org/r/20251022-tc_tunnel-v2-0-a44a0bd52902@bootlin.com
+
+Changes in v2:
+- declare a single tc_prog_attach helper rather than multiple,
+  intermediate helpers
+- move the new helper to network_helpers.c rather than a dedicated
+  file
+- do not rename existing tc_helpers.c/h pair (drop patch)
+- keep only the minimal set of needed NS switches
+- Link to v1: https://lore.kernel.org/r/20251017-tc_tunnel-v1-0-2d86808d86b2@bootlin.com
+
+---
+Alexis Lothoré (eBPF Foundation) (4):
+      selftests/bpf: add tc helpers
+      selftests/bpf: make test_tc_tunnel.bpf.c compatible with big endian platforms
+      selftests/bpf: integrate test_tc_tunnel.sh tests into test_progs
+      selftests/bpf: remove test_tc_tunnel.sh
+
+ tools/testing/selftests/bpf/Makefile               |   1 -
+ tools/testing/selftests/bpf/network_helpers.c      |  45 ++
+ tools/testing/selftests/bpf/network_helpers.h      |  16 +
+ .../selftests/bpf/prog_tests/test_tc_tunnel.c      | 674 +++++++++++++++++++++
+ .../testing/selftests/bpf/prog_tests/test_tunnel.c | 107 +---
+ tools/testing/selftests/bpf/progs/test_tc_tunnel.c |  95 ++-
+ tools/testing/selftests/bpf/test_tc_tunnel.sh      | 320 ----------
+ 7 files changed, 790 insertions(+), 468 deletions(-)
+---
+base-commit: ecdeefe65eaeb82a1262e20401ba750b8c9e0b97
+change-id: 20250811-tc_tunnel-c61342683f18
+
+Best regards,
 -- 
---
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Frankenstrasse 146, 90461 Nuernberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nuernberg)
-
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
