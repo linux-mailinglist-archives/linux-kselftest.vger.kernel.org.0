@@ -1,63 +1,93 @@
-Return-Path: <linux-kselftest+bounces-44136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03629C0FEE7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 19:34:18 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 968EDC10B96
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 20:17:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DF4854E77C1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 18:34:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 54513507C15
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 19:11:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8526316918;
-	Mon, 27 Oct 2025 18:34:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 810A531BC85;
+	Mon, 27 Oct 2025 19:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hcOw3B6l"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hVSwdn4J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A066FBF;
-	Mon, 27 Oct 2025 18:34:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9526A2C11DF
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 19:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761590054; cv=none; b=g1Xtakq1V/K8BXiez/hYyskRjWbHUx0SoSvOuCxLNnC7z3jzBWzeAOvnFTTae+85exHifjFId6aSP/qZSjbed2lu0UNOAIiJQf7wxplEzK4H3MkGE5MQKw+xXuWyxn7w/8DwVs6JkEttae+8CF6aF9gQDNvyOSMTgEdo5o4i/lg=
+	t=1761592135; cv=none; b=IwOtnYsxlMRqOmpgUdMb2HN6zAe+fgVVG4DN4hy8B5iWZKdETiLIxSee9V92E1XjnDjzqT9kSrjmPeImI5KJ+ps7NrSwlGlEUarCZ3dztBRd5NFe0bsSMTxMPwxbi17v4MN6+YanX4OOztNHgoNoqJY22MNd9bMgdJ4yPnAh4Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761590054; c=relaxed/simple;
-	bh=Sjtta4buWzcQQnNBIyYVFESl5qf6B112yZ9sf+V7RlE=;
+	s=arc-20240116; t=1761592135; c=relaxed/simple;
+	bh=LwAmk/7MTnIWI2oZ7HDPyu3lp0S1pBrNDG9x+kH9r9M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a4GstgZ7o+OaApZejtqg/wqUXPHr03pZQpk6k6Xp/RCEKvifiHwa0aU41eum8Yp6HUeE7ChpWhD41Km+FipEVEOwfTWShzKepo38l7vrV3r40GXgItQkkiMTKx/ehuLY/5avByzyK64jzOvoWpuLfRlD+AhhG7TiG22AfoZ55Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hcOw3B6l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32138C4CEF1;
-	Mon, 27 Oct 2025 18:34:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761590053;
-	bh=Sjtta4buWzcQQnNBIyYVFESl5qf6B112yZ9sf+V7RlE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hcOw3B6lf9oxjJTjftncCDpwlUt2yrNGODV2N6B9UbzbWoYuWLIIfAJG8fGn55XDq
-	 XxUqYjtDesWP4JGFiTebJN74VNQk47kNcrSgL7ZZyJ/Sn7cSlbbA+DWgHdWwl2FqvO
-	 9g1wV05Ym5OBWOMFiBvPtcJR93d4W0mNeQICsbkJWSfiMqtdDVdiV4jyxaCikFVZaH
-	 3AxJFgdThBjGR/8FqQQ0rtNTgOvWDxvwbxQ4cG3ovGFkgePgBdOOz7bE7QPfcSMVtv
-	 P9fYGH8FzU3VGwM2da/CvNJk33SuLt54GCoggM9zF/1TuZbaXMwOZWTVwGGFeYClrD
-	 V42LSpx3BFjug==
-Date: Mon, 27 Oct 2025 20:34:09 +0200
-From: Leon Romanovsky <leon@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	dri-devel@lists.freedesktop.org, iommu@lists.linux.dev,
-	Joerg Roedel <joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
-	linux-media@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Will Deacon <will@kernel.org>, Nicolin Chen <nicolinc@nvidia.com>,
-	patches@lists.linux.dev, Simona Vetter <simona.vetter@ffwll.ch>,
-	Vivek Kasireddy <vivek.kasireddy@intel.com>,
-	Xu Yilun <yilun.xu@linux.intel.com>
-Subject: Re: [PATCH 0/8] Initial DMABUF support for iommufd
-Message-ID: <20251027183409.GO12554@unreal>
-References: <0-v1-64bed2430cdb+31b-iommufd_dmabuf_jgg@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EaDbjwX1QGVIF/zgHbp8J+O3iYdSuNXLDiv/nUnROW7+5F5/20gTY2HojhYD1vkkV84ekFdTiC72NxGcncEFacLvpymoRi87/7PGA7XG5rPJPThGI+gNdIf0kbdJ3TkPG6F3jyf9nFjPZooSTKsXCbgN3JPBQYjElZLwe4gTtNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hVSwdn4J; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-63e3568f90dso5263208d50.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 12:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761592132; x=1762196932; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lBa16o2HS8qCHNhSfYkAhXZ4L9FP6XeHVGIquo4j2vI=;
+        b=hVSwdn4JOcoqaHNLFfLQxTu7eWx01Rgqd59pBAURulTcRJlYT9XZil8D64vaoIKaOU
+         gfhxXps4MOYzdEvxMaV1knXwOsJHCSSn408048iYjmlqbWP/0AcrxiPSiyjj1Ssa8OPP
+         p7Lio09UtU4OeVO4jyJOTDKLcTpqHqFVjBhsUNQ0nesJO4M46fw4zBeXMfl5M8TyZhOg
+         E0/Zy38JkAphtr6W7H6oRnKX5ujQ/DAJqP9JlL8+Fmhd5ptzzNnOOqmaIhKJqyuKwyWy
+         9X146AywMJ0HzBTfXY5bZettFAhXL5zRIs/afSJUQRFwHucVtfLCnF7+aGlI4DkFiRGW
+         XE3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761592132; x=1762196932;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lBa16o2HS8qCHNhSfYkAhXZ4L9FP6XeHVGIquo4j2vI=;
+        b=elsnZ2rWPuofLFnxDFUwOY0EdbRXImeCkjQvEabWJigcSOqWQwKRNm/lW557ZgbJEs
+         qeQIug1IqQ1N8zHje3D6NF019E2DRSnz+hZ/f6hg8SfAKLvCe8boFRkj2/Mw3yqe+UGm
+         0/DvuXM9ldRrSE1JPWOymmJULyIgzd6dt12XWS4qbfqpe0b15ixeGtnufOZT6MdAPSP9
+         wUV6gOpZTUaIoWryxiQd1Ap7CQIqQ18BAPJ/OI+GYZBtLukv6Y5yl12SB/ngPlnoFNfX
+         sEOcKN04HbTpnLwxBBcIjcf8pNR+7/WeItJgOsXBOdShUEosqbpBdF8FwsqfSOxXmEAW
+         jWpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWvu/dnFH725ZOJlc3WYn+7LN3hi1K7c35C8QjjRGMpx1g3aRyrrYJjcr37Mqwi6ts9LY68aFce3XSCxwez3Wo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzf42e+hicuiLaJ7sPlIpmmGzl3fktLAshNEoQ0SVF6Jv0DnIuH
+	p2sYlIXMuQaWWgT5DBMf7/TEgiVzMidOl50mTGj106iPp0cEdRKNtUFd
+X-Gm-Gg: ASbGnctSrHMgrS8G90gtEWHu0T3Ryr99xW/iKWuqO+IIMyk1JzHyP+Ueket2qqZsDQa
+	wPz24IIiZI6e1Nn04xtGj/nMvNpFFbp41iYGd2PjFtfX0p+EqyrHbdAxwsBU3k3n0HPLNuKIUMo
+	kkDivI66C7LSNBHnuUM/XPdJyiPyaaGMetTEDMi0eztwizqI9xQ503EyXIXS4MVFBKAtLepjbjL
+	55inHg9eV7kCKu+JG65RHXPmAgsG1ZRpyLaehhvI0GZRt7kB5JYqJV141M6KQikCiUgxR6Fm2xv
+	qhKxMLrpWRYCBm0Ll1FUkB6m/HGgO+bumPqEThY3D3S+XaI7ulzJFIJw+JZMLb6jwNxHJvYBPvg
+	8AaEN8wJvGdY6tfB/JPqHHi5UePGV54gl5pO249op+oPMDZNKCftYs2hDw3g0N4vvNDwGIXgKpw
+	16NvUBU9tnRfSo7kLQ24EvgllQPTXmm5HqN3qpN19200ZASI4=
+X-Google-Smtp-Source: AGHT+IGyyVhNMyFPJ1iH6VB3LobfrBQTkhvZ12vnfHgjuauZlHjFnodUEDbnz8J1VMMlZEjH/eQK1A==
+X-Received: by 2002:a53:cd41:0:b0:63c:f5a6:f2ef with SMTP id 956f58d0204a3-63f6bab5662mr707347d50.65.1761592130958;
+        Mon, 27 Oct 2025 12:08:50 -0700 (PDT)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:56::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-63f4c441fe2sm2525648d50.15.2025.10.27.12.08.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Oct 2025 12:08:50 -0700 (PDT)
+Date: Mon, 27 Oct 2025 12:08:48 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Simon Horman <horms@kernel.org>
+Cc: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, virtualization@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 03/12] selftests/vsock: reuse logic for
+ vsock_test through wrapper functions
+Message-ID: <aP/DQLcX9uaY6kXN@devvm11784.nha0.facebook.com>
+References: <20251022-vsock-selftests-fixes-and-improvements-v1-0-edeb179d6463@meta.com>
+ <20251022-vsock-selftests-fixes-and-improvements-v1-3-edeb179d6463@meta.com>
+ <aP-kmqhvo4AFv1qm@horms.kernel.org>
+ <aP+zgF7zF9T3ovuS@devvm11784.nha0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -66,22 +96,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0-v1-64bed2430cdb+31b-iommufd_dmabuf_jgg@nvidia.com>
+In-Reply-To: <aP+zgF7zF9T3ovuS@devvm11784.nha0.facebook.com>
 
-On Mon, Oct 27, 2025 at 02:30:59PM -0300, Jason Gunthorpe wrote:
-> This series is the start of adding full DMABUF support to
-> iommufd. Currently it is limited to only work with VFIO's DMABUF exporter.
-> It sits on top of Leon's series to add a DMABUF exporter to VFIO:
+On Mon, Oct 27, 2025 at 11:01:36AM -0700, Bobby Eshleman wrote:
+> On Mon, Oct 27, 2025 at 04:58:02PM +0000, Simon Horman wrote:
+> > On Wed, Oct 22, 2025 at 06:00:07PM -0700, Bobby Eshleman wrote:
+> > > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > > 
+> > > Add wrapper functions vm_vsock_test() and host_vsock_test() to invoke
+> > > the vsock_test binary. This encapsulates several items of repeat logic,
+> > > such as waiting for the server to reach listening state and
+> > > enabling/disabling the bash option pipefail to avoid pipe-style logging
+> > > from hiding failures.
+> > > 
+> > > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > shellcheck has some (new) things to say about this patch too.
+> > Could you take a look over them?
+> > 
+> > ...
 > 
->   https://lore.kernel.org/all/cover.1760368250.git.leon@kernel.org/
 
-<...>
+It looks like the errors are SC2317 and SC2119, but are false-positives.
+Invoking a program as a variable (e.g., "${VSOCK_TEST}") is tripping
+SC2317 (command unreachable), and SC2119 is due to log_{guest,host}()
+being passed zero arguments (logging its stdin instead).
 
-> This is on github: https://github.com/jgunthorpe/linux/commits/iommufd_dmabuf
-> 
-> The branch has various modifications to Leon's series I've suggested.
+I also see that SC2317 has many other false positives elsewhere in the
+file (80+), reporting even lines like `rm "${QEMU_PIDFILE}"` as
+unreachable. I wonder if we should add a patch to this series to disable
+this check at the file-level?
 
-I'm working on v6 these days.
-
-Thanks
+Best,
+Bobby
 
