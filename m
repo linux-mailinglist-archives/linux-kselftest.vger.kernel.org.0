@@ -1,103 +1,100 @@
-Return-Path: <linux-kselftest+bounces-44152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44153-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 875EAC120DC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 00:32:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EC2AC12092
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 00:30:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DA15585EE8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 23:26:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38156188A984
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 23:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5C132E6B9;
-	Mon, 27 Oct 2025 23:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC1C532E15F;
+	Mon, 27 Oct 2025 23:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="p8Wf8c+3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PbDyd9J1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7466A32779A;
-	Mon, 27 Oct 2025 23:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF1E303A0D;
+	Mon, 27 Oct 2025 23:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761607523; cv=none; b=Ql8P8PxFJZZrYQc75v3WGBvdOeYu9xpCTEHpt9p3QUQglVrFHjhWhrAsQY5LUWOWAF4hfFYWO1SGL3kUk70OAvSkqgGLloqSNWt21G7LeXC8iKTpCB8jhBMNt8QbGmDhlDJjA2gOSLmegWtu+mfTVJ7Bt7mI9jrZhWJCtKl96RY=
+	t=1761607829; cv=none; b=ck+m3MqRQ80h7HgyYtRI0/RKcHbdgM0OWg1q2asV+Wt1mC2kqiVXPxBvhaYC1ubrIDcmmQpnQPa4EE87yY29iswHKYkYCwC0jMNcsIaIVO/b9B7sdLmuSKhccNcSH+x6PSYhkxZ7paX6pHqhZ1238HVbw7RysYA8ODGafFKBCV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761607523; c=relaxed/simple;
-	bh=1ZAtv1k7qLg8MgQOvSbxTtTfacA9rWU661BgI+pDVq4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=AIPhTS4pW52xGtKqnMB2ZTBM+PCi+SZwAKWFPdAX2gUVdLd0g+pTKMvVz0jv6+E5/jx7dhWhCf1wi3en6sP9Q78fVpJ/3UuiP5WyIZgwO9B9PAIwMeJdwH1PqTU/TGczYVhJKCeO80tYzZuY+6gpzNIi2XyBqOMX3wvCu3KBkyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=p8Wf8c+3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C715C4CEF1;
-	Mon, 27 Oct 2025 23:25:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1761607522;
-	bh=1ZAtv1k7qLg8MgQOvSbxTtTfacA9rWU661BgI+pDVq4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=p8Wf8c+3emDUEx/LKVNdgfy7OmdSHq8XWZ6wFAuaK1FwwE4aWRE5ucLMWzj4UouZG
-	 /34e/TnVpdrTlsD1PWMyzRg0VDxDMkVEYHyPNBW+lsL+tamb4jIR2A3LTpLCB/5Y6O
-	 n3lwF4kGPjgZRHinYZasxHvUwi1icLTF2VMUFhgc=
-Date: Mon, 27 Oct 2025 16:25:21 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, Wei Yang
- <richard.weiyang@gmail.com>, linux-kernel@vger.kernel.org,
- linux-kernel-mentees@lists.linuxfoundation.org, Steven Rostedt
- <rostedt@goodmis.org>
-Subject: Re: [PATCH] selftests/user_events: Avoid taking address of packed
- member in perf_test
-Message-Id: <20251027162521.c56c7f89f6ad4e3d639c408c@linux-foundation.org>
-In-Reply-To: <20251027113439.36059-1-ankitkhushwaha.linux@gmail.com>
-References: <20251027113439.36059-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1761607829; c=relaxed/simple;
+	bh=onOqGzfuh2lN+fnyKlYcERLypwTp8HMrJkvl5wLcOEA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Zzy20sszLoysMoyp7dJUIUKqXauaq8gnGErd+YhgX5YE4gX84SbNbTB3+/4TzUrhBrnFkrrif52A9LrdrrvApMSMbgtYlWd5QlKViDldkvi6pw1BWtmyyN0HYLV2hYytHqRddcsQnPJGfRxmCcr3er7HRRumctk17qX0h1RUED4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PbDyd9J1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5217C4CEF1;
+	Mon, 27 Oct 2025 23:30:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761607829;
+	bh=onOqGzfuh2lN+fnyKlYcERLypwTp8HMrJkvl5wLcOEA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=PbDyd9J1N/B4cFfl4t13Q3z7D9cqhAkdHWZH9apMj9EwLSXcv3iq0zC73hnhugnzq
+	 Fkera6yUyikTgZe3aWdk6Q6hgCt67nPgnDNdUrtz2/DA9ujriXPtn1shMlTybx9oOc
+	 LjssoLgCodIsFaWkljqrPHLoXjVlfZ5iPheyGbsRtgFi7TaSK9YfMw0OWKsavsqqre
+	 JWVP6NeQSeo3UvnouC/Ga4hQna/noW0q8l2/DuCj1k5saVFYtXziu+wqVoOjeiQ+0B
+	 F1COAHN2QcA+cy35zCJDOkE891ePTWgaH1UAs4GsWedej6JqhhcvkXNlNjHxs9fm0v
+	 KetjJOEeRh5MQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BF639D0C95;
+	Mon, 27 Oct 2025 23:30:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v8 1/2] net/tls: support setting the maximum
+ payload
+ size
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176160780701.1620997.1697978966670845263.git-patchwork-notify@kernel.org>
+Date: Mon, 27 Oct 2025 23:30:07 +0000
+References: <20251022001937.20155-1-wilfred.opensource@gmail.com>
+In-Reply-To: <20251022001937.20155-1-wilfred.opensource@gmail.com>
+To: Wilfred Mallawa <wilfred.opensource@gmail.com>
+Cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ corbet@lwn.net, horms@kernel.org, john.fastabend@gmail.com,
+ sd@queasysnail.net, shuah@kernel.org, wilfred.mallawa@wdc.com
 
-On Mon, 27 Oct 2025 17:04:39 +0530 Ankit Khushwaha <ankitkhushwaha.linux@gmail.com> wrote:
+Hello:
 
-> Accessing 'reg.write_index' directly triggers a -Waddress-of-packed-member
-> warning due to potential unaligned pointer access:
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 22 Oct 2025 10:19:36 +1000 you wrote:
+> From: Wilfred Mallawa <wilfred.mallawa@wdc.com>
 > 
-> perf_test.c:239:38: warning: taking address of packed member 'write_index'
-> of class or structure 'user_reg' may result in an unaligned pointer value 
-> [-Waddress-of-packed-member]
->   239 |         ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
->       |                                             ^~~~~~~~~~~~~~~ 
+> During a handshake, an endpoint may specify a maximum record size limit.
+> Currently, the kernel defaults to TLS_MAX_PAYLOAD_SIZE (16KB) for the
+> maximum record size. Meaning that, the outgoing records from the kernel
+> can exceed a lower size negotiated during the handshake. In such a case,
+> the TLS endpoint must send a fatal "record_overflow" alert [1], and
+> thus the record is discarded.
 > 
-> Use memcpy() instead to safely copy the value and avoid unaligned pointer
-> access across architectures.
-> 
-> ...
->
-> --- a/tools/testing/selftests/user_events/perf_test.c
-> +++ b/tools/testing/selftests/user_events/perf_test.c
-> @@ -201,6 +201,7 @@ TEST_F(user, perf_empty_events) {
->  	struct perf_event_mmap_page *perf_page;
->  	int page_size = sysconf(_SC_PAGESIZE);
->  	int id, fd;
-> +	__u32 write_index;
->  	__u32 *val;
->  
->  	reg.size = sizeof(reg);
-> @@ -236,7 +237,8 @@ TEST_F(user, perf_empty_events) {
->  	ASSERT_EQ(1 << reg.enable_bit, self->check);
->  
->  	/* Ensure write shows up at correct offset */
-> -	ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
-> +	memcpy(&write_index, &reg.write_index, sizeof(reg.write_index));
-> +	ASSERT_NE(-1, write(self->data_fd, &write_index,
->  	                    sizeof(reg.write_index)));
+> [...]
 
-Simply casting &write_index to void* would fix this?
+Here is the summary with links:
+  - [net-next,v8,1/2] net/tls: support setting the maximum payload size
+    https://git.kernel.org/netdev/net-next/c/82cb5be6ad64
+  - [net-next,v8,2/2] selftests: tls: add tls record_size_limit test
+    https://git.kernel.org/netdev/net-next/c/5f30bc470672
 
->  	val = (void *)(((char *)perf_page) + perf_page->data_offset);
->  	ASSERT_EQ(PERF_RECORD_SAMPLE, *val);
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
