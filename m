@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-44133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44134-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE052C0FD03
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 18:57:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F533C0FD1E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 19:01:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3AF804F6DF7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 17:56:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 420F019C7933
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 18:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DD9D319867;
-	Mon, 27 Oct 2025 17:55:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11E66311C15;
+	Mon, 27 Oct 2025 18:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNv7Tnmo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NjRWcGor"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C55E3164B6
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 17:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7EB195FE8
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 18:01:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761587758; cv=none; b=Qf4aiRhVRsD8+gvaSiAz7fzZGoprsZMdrr81x1wdK2Ay5MV637s2hvjFu/sAr1eIs2ruLxWAA3uxabzcYoExwNABmmdOzNVZkwqsIGzi77B9gYeHmJYPOr4hY0R0izpOW0oov8XZB7B6wDv0Qa1QEe0mRUOUq8ftzsTh4CsTTpY=
+	t=1761588073; cv=none; b=PAboEItNgCFJdwi7ENqG4ZX0MT36T84CG6jV3NAPLTk/ysSYJvdSNg9SvKMkT1bf9QUUHa3Kbdmlf0bIKaPugHr1NfwbOJCc9+25Ndwm3JzZJKT/Gl7NxkDXhHG/zIfkzwGGGVug+5D1PpTDY0EHaCcFNA5oIVRf9DEbE/u2loI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761587758; c=relaxed/simple;
-	bh=s0NTkuxgo9nTW1wwUPyDTmWbVEsjdGmA1omaFkoHwoA=;
+	s=arc-20240116; t=1761588073; c=relaxed/simple;
+	bh=dSzQwak3RBPC5y51ILTWEaSZmq/yqlFp0KvonW5s3MA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d0IZvmxRiLupzFPmhnhM5sU3fs/mj41zIx6FI0p1kNc/N2BnfACSpJCJw5vaGANghw9vBb5cjQdmBVW3c5YR1X1qy+LM/Jf0zCfFSooFxvnsJw1jN9Vl6JPqgZqafsLrqGhlCQTpO1hTl3+hljas2G2oeRfLALHVS0D2FqPgKu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNv7Tnmo; arc=none smtp.client-ip=209.85.128.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=DLjrPjfGWz62OmeGzwTOUCL+AuJrQDQAl1mrEI/ckGrkC7XErzC3cEV3J7rVYS/t6P1D7GBv3Y4U7oubyaoac4beSWnNNBlqft4B2xjnzVDvU9kaLxkEXDXDTiMmhx/x6sSBNlSwmkRAL8u0CiMJWUSmwYUv4uMsQ/rWz5cCvaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NjRWcGor; arc=none smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7861978aca2so1072427b3.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 10:55:55 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-71d60157747so47988017b3.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 11:01:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761587754; x=1762192554; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761588070; x=1762192870; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t90v++bIrJi1Md65JkXT8gm2ApX72FdJn0ubPYfRRrY=;
-        b=NNv7Tnmo+Azwrh0iUS0X2c0KZzVe6HOnkbfCcP3tFCY4MGEDOpb3X4nL4ifDr45dA0
-         EUcN5oQ6VdOxfOzZLS54nVnP7eXTd1Jl7oUrQiNbUlz+b/vF5XilYSc2ERfpX/LW4dNa
-         d9XEAbxlFydDrVh9Lps/H05SNJhrQxRcPXwmPu3Pgy8CAJlv18lbjo6Tfsb8O13GSxEP
-         6D4zYfFjd3xfcWtsB8QzTFIWhXKR74WsX6ZB9NNWoCHvGdf8QqJ6014YOcZ99tSrLIZu
-         rfdOBSw9WQyV+L9HTcgBnzvs33YsBCtPg2Tt6crbteGRjvBwwpTbAoObyHN/kkBOPcbT
-         /GFQ==
+        bh=OKDbmV9YEl1euYCGiiSOHAmi228vgH4DcrXIQXAImEM=;
+        b=NjRWcGorYJ2t1TNHCJoSB0Z0ydloHtrfZ06gOJt1tG+ON1eWeTZo3TtgHGBK+DwJQa
+         XUseEvwA9GsRWU5z/VR78PiXJStbuGjjPDQ+ClGtuCMdkwiGiZq4wH44Dt2dS+52D4E0
+         bx141hMG7Qn87LKrn9WOMEI3gis6Zk7TBaBa8oI84quy1T6VEUcz3Q20z7zZjQMq2kZI
+         NJC0rrGZ7l5kIGd2bSI9ydoA8Ll0+ZX/eQSJwyBLrKe+gMHlsBE74syQxM8T2EWJ0GQ4
+         j6gENU6VPCZkiyHO7TcfziL9n/x1TIaVI1jZi8KvqoQMF1FADchbAssaAXQaxF9UiQDj
+         Ko5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761587754; x=1762192554;
+        d=1e100.net; s=20230601; t=1761588070; x=1762192870;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t90v++bIrJi1Md65JkXT8gm2ApX72FdJn0ubPYfRRrY=;
-        b=dO2absf8m1bUQ5gFyOunB/JOVOvUhzv5+1hH0KpvZ3dmimHwsjBTH5Dt2QrTjBRWoi
-         QR/K4qi0K4W9rFGJbugRiAMgpoEQj0FJdHfujEXXBAGD2Pdon3cYmnqpFo5aMZRsMo1H
-         Pz1uPzdAJpYnlF0HiKqvgRB1vRwI+LvKO2Z5qO1KXOsWM9CM8JPJu4bi89hq/NjKmQ8C
-         gBjMar8pxa+LB1H2PNJhe9megrSp2svf2fLHH9k1JaKhPSOMd6utpJY+bt+e9J9r2d0g
-         3kuLoMQ8KtUDsvqBYEBGO7C2P4+39SCYmFANXl4Zf3+kibISUJ18uUvtlzOayuYBsdlh
-         rgew==
-X-Forwarded-Encrypted: i=1; AJvYcCVQ83PLx7XNPaVLlIhcuJckEUJy5UqT0WUgIxdgraQFoqbf6I+kVluQjqW4It+hEJpI9LcyDPbKsAcJGyCeiqA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk95tiBE6HvdeIM3ChbC82u3LkgQXzYxFWQPGdurXIgTRFD1qF
-	yq+NbDbcypba1jbILdOgF3VbbfvPu03msy738lQFL3qukoZR1AHHCMlI
-X-Gm-Gg: ASbGncsyL+5P6ky2TktUP8INa3eHnpmx0YgMf61W2wWejzKr9VhMEiwJ4qiZZt4vsb7
-	crvj9tufqlz6NUGbdXpcEpYAnN4q0EbI2z9/gLLxgs0ri97zexGqtgonPtIqfBkYojDz2NclAIk
-	mYJWNlDvQTwB/Irabi2dzPCKMIvY60enFeJBpnHryQXafK80vY8EOqPwaWQqV+kwH0GS7rha0Ls
-	IF5iXH//x9FmSVSrucu5s3BXG43NvbsIzycS1XhLcQWPj7FHYxqQd/PeCyxEo+LFBlS+iONPD4T
-	ASdNBTtdZb44XEbp/1/vi7uVB50doWsvYuEclXh88Qlxpv1GauWecXOZqeD5rKVDvrB9TA3Lt4s
-	qhyPg4XxOPJKF1xqsPpE39F9HHX5v6EeQ72tEwnI+4mzldsNTg96ZCoKSU1QX+oOeZh4TkrVOWQ
-	OGTsypTCqO8iZReZliExJ5vzM3U3FV86oXoiosIH1qM2fJYgc=
-X-Google-Smtp-Source: AGHT+IEnq7T6tW6sESfh2/pS/VtVB6j5wsUZrO0cK7EA3RoMmtv5EedE7kUOtkxVYgtnLyJeX69FZg==
-X-Received: by 2002:a05:690c:3510:b0:781:64f:2b74 with SMTP id 00721157ae682-786191bda08mr3102477b3.29.1761587754496;
-        Mon, 27 Oct 2025 10:55:54 -0700 (PDT)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:59::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-785ed1f2457sm20784977b3.58.2025.10.27.10.55.53
+        bh=OKDbmV9YEl1euYCGiiSOHAmi228vgH4DcrXIQXAImEM=;
+        b=QwDhJ+HUK4SP21mYiU7HnD16DzLQA5scyWE3KZ0ab4UCXAEKJOihgdhKMsXLvRtwFg
+         VIW7QdxtsIQf8fvA0oNCpTEpxOYfHt2m7H7JDkdS41yYB98wLCQc60g+nb1QvW+ph0AF
+         Gvq/Ti1jbAZZqI9w/noBEwNiwtit5wxMmBLBsBb4cAoCPeMwa+gLj9oVE+iQgL6/fFr4
+         wFD3wKOD2fvzm4XVt2E5Al1mwx0nLp8qaXgoMiRS9ENAe5pRGyV7LJUFSEeiP9/vR9f4
+         H2mzf7bZDiKz+8izRybuKdIh8A8VU68nS2StrsHSlPycyttzlo2OscpM+C9b7Nskr+sE
+         lSKQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXnMD1vPsRXkgShGuR0Ux1usK85PBaNi+STqC0oy+m+cJNRiRYoNShGV65zXDoErtqWbgt6WzLQsn/DNG+rB2o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRDEi2V8VZtKkf9DKOuYxATszOHnsTr7Cqk3jnp02N7TUA9zrt
+	n5yzlv1crqah/om2dqhxlHiCrKxv+F9FgOnwbqrkKj//XWEAicwUtibz
+X-Gm-Gg: ASbGncs6OR7QPdULBFiFiAUuCHnYJEoPvY1CEZhGSMNV6K3JS4O0moiVBLrami5Tikn
+	zz91x/4VkKEEQy0hpzEgD4yoFvPVYHyQ6nmBg8xHGAutNEjPYOEG54DkUL57ulvqtzYrJT2IPPW
+	K4egcnJTrKp4A/koFf/qco2e41lnlhGhtwrfIKxUezSVH5UEmv7VhXXI3CfuFHBz62Uvcgzpk3Q
+	PuzBXf+0pX/9cMM9Hz9aQDTGAgu7TlUTn0HcXUpHZSVYeWKrT/NdJb+wJUJ1XzlezLrE6Vi1UIs
+	r7hSbabJb9M0fxecYA3LajXP8MPpfeWeFtX1QsV8mgSKz5UqHmyLtC1CGPojzeG4Vbk+Y49QlFp
+	lmP//wd9rJqVoFQa4Kwrt5xEpF/CTy2JJd2ymrI/I/rzwvmjGmumzyf3mgjl1nnhcRXOnuuOdGA
+	YWoiOuMTlxBpvWj/V2i6RxHZ39NsZc5tAqRRWComsfuO2qjYs=
+X-Google-Smtp-Source: AGHT+IFWDCi2g1kdSTmc4R6F+QSoxN+p5e395OCPC0UeHMIqjdYpQhTxQQ2O31gfhQCi3Ezja/+T9A==
+X-Received: by 2002:a05:690c:4d4a:b0:76f:8f07:4908 with SMTP id 00721157ae682-78617ea3e56mr6919087b3.27.1761588070172;
+        Mon, 27 Oct 2025 11:01:10 -0700 (PDT)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:5d::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-785ed1b24e7sm20674147b3.35.2025.10.27.11.01.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Oct 2025 10:55:54 -0700 (PDT)
-Date: Mon, 27 Oct 2025 10:55:52 -0700
+        Mon, 27 Oct 2025 11:01:09 -0700 (PDT)
+Date: Mon, 27 Oct 2025 11:01:08 -0700
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
 To: Simon Horman <horms@kernel.org>
 Cc: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
@@ -81,12 +81,12 @@ Cc: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
 	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next 02/12] selftests/vsock: make wait_for_listener()
- work even if pipefail is on
-Message-ID: <aP+yKDYZR6+/kzI2@devvm11784.nha0.facebook.com>
+Subject: Re: [PATCH net-next 04/12] selftests/vsock: avoid multi-VM pidfile
+ collisions with QEMU
+Message-ID: <aP+zZMtf7FwwmqVF@devvm11784.nha0.facebook.com>
 References: <20251022-vsock-selftests-fixes-and-improvements-v1-0-edeb179d6463@meta.com>
- <20251022-vsock-selftests-fixes-and-improvements-v1-2-edeb179d6463@meta.com>
- <aP-iXJQVPBCjfPHi@horms.kernel.org>
+ <20251022-vsock-selftests-fixes-and-improvements-v1-4-edeb179d6463@meta.com>
+ <aP-keSURBFPZvNA_@horms.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,69 +95,41 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aP-iXJQVPBCjfPHi@horms.kernel.org>
+In-Reply-To: <aP-keSURBFPZvNA_@horms.kernel.org>
 
-On Mon, Oct 27, 2025 at 04:48:28PM +0000, Simon Horman wrote:
-> On Wed, Oct 22, 2025 at 06:00:06PM -0700, Bobby Eshleman wrote:
+On Mon, Oct 27, 2025 at 04:57:29PM +0000, Simon Horman wrote:
+> On Wed, Oct 22, 2025 at 06:00:08PM -0700, Bobby Eshleman wrote:
 > > From: Bobby Eshleman <bobbyeshleman@meta.com>
 > > 
-> > Save/restore pipefail to not mistakenly trip the if-condition
-> > in wait_for_listener().
+> > Change QEMU to use generated pidfile names instead of just a single
+> > globally-defined pidfile. This allows multiple QEMU instances to
+> > co-exist with different pidfiles. This is required for future tests that
+> > use multiple VMs to check for CID collissions.
 > > 
-> > awk doesn't gracefully handle SIGPIPE with a non-zero exit code, so grep
-> > exiting upon finding a match causes false-positives when the pipefail
-> > option is used. This will enable pipefail usage, so that we can losing
-> > failures when piping test output into log() functions.
-> > 
-> > Fixes: a4a65c6fe08b ("selftests/vsock: add initial vmtest.sh for vsock")
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > ---
-> >  tools/testing/selftests/vsock/vmtest.sh | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-> > index 561600814bef..ec3ff443f49a 100755
-> > --- a/tools/testing/selftests/vsock/vmtest.sh
-> > +++ b/tools/testing/selftests/vsock/vmtest.sh
-> > @@ -243,6 +243,7 @@ wait_for_listener()
-> >  	local port=$1
-> >  	local interval=$2
-> >  	local max_intervals=$3
-> > +	local old_pipefail
-> >  	local protocol=tcp
-> >  	local pattern
-> >  	local i
-> > @@ -251,6 +252,13 @@ wait_for_listener()
-> >  
-> >  	# for tcp protocol additionally check the socket state
-> >  	[ "${protocol}" = "tcp" ] && pattern="${pattern}0A"
-> > +
-> > +	# 'grep -q' exits on match, sending SIGPIPE to 'awk', which exits with
-> > +	# an error, causing the if-condition to fail when pipefail is set.
-> > +	# Instead, temporarily disable pipefail and restore it later.
-> > +	old_pipefail=$(set -o | awk '/^pipefail[[:space:]]+(on|off)$/{print $2}')
-> > +	set +o pipefail
-> > +
-> >  	for i in $(seq "${max_intervals}"); do
-> >  		if awk '{print $2" "$4}' /proc/net/"${protocol}"* | \
-> >  		   grep -q "${pattern}"; then
+> > Additionally, this also places the burden of killing the QEMU process
+> > and cleaning up the pidfile on the caller of vm_start(). To help with
+> > this, a function terminate_pidfiles() is introduced that callers use to
+> > perform the cleanup. The terminate_pidfiles() function supports multiple
+> > pidfile removals because future patches will need to process two
+> > pidfiles at a time.
 > 
-> Hi Bobby,
-> 
-> I agree this is a problem. But I'm wondering if you considered
-> moving the pattern matching into the awk script. I'm no awk expert.
-> But suspect that would lead to a more elegant solution.
+> It seems that this will no longer cleanup, via a trap, if
+> there is an early exit. Is that intentional?
 > 
 
-I bet you are right.
+Yes, intentional. We're trusting the vm_start() caller to do any cleanup
+now. The assumption being that with no "set -e", vm_start() should be
+able to return to the caller.
 
-Playing around with awk, I find that this seems to work:
+If that seems too bold, we could add some function like create_pidfile()
+that generates the pidfiles and registers them into an array that is
+cleaned up via trap.
 
-$ pattern=":$(printf '%04X' ${port}) 0A"
-$ awk -v pattern="${pattern}" 'BEGIN {rc=1} $2" "$4 ~ pattern {rc=0}
-	END {exit rc}' /proc/net/tcp && echo FOUND
+> This patch also changes the handling of QEMU_OPTS. I think
+> that should be mentioned in the commit message too.
+> 
 
-I think it beats doing the save/restore on pipefail?
+Sounds good.
 
 Best,
 Bobby
