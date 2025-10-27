@@ -1,131 +1,117 @@
-Return-Path: <linux-kselftest+bounces-44077-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44078-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E723C0BC37
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 04:38:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BDB6C0BC62
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 05:07:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A71E1888C5D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 03:39:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E3A6189B524
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 04:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5EE02D46B3;
-	Mon, 27 Oct 2025 03:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD636238145;
+	Mon, 27 Oct 2025 04:07:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="1pdv+HQ4"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Vqx/o+1l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B95A242D70
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 03:38:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0920D18AFD;
+	Mon, 27 Oct 2025 04:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761536314; cv=none; b=aszphaxVjrls3++4bEnSezKX/wwdWIUNWMa6CL639XpQPUIS3hKBlwtSsvJw+TaAcNXH2IO8IdITdPnLARbtO97P0e5HADvzaoKOrimilLkpyO/PxTp5TXQfN8mgMAH7YwkxHHbBS58mF0RSlydwahs30aZsUwwdjxZK2z+guE0=
+	t=1761538060; cv=none; b=io2rGhH7CRqcEpgdlHiAJL5ssZKA+H8iEHBgwJpqmXvtjP+V2C3yH9pXljssklBqsvbUAUF5U95dXY+w7jmoe89uy1/etxOIT2FSKeuvRDXioJnBN0czxn0aEUQ/Es0FPTW/F2layPqaPLg7mb+YjyzLQ93usmiPBDweiaKnvqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761536314; c=relaxed/simple;
-	bh=ykqsBz7ltNcPXKuQY9/QTGVQNnJRyRhhtKcA12vcA/Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I2xAlqmfERPaUqdsi8GpJKRCn0qC+dzX892mk3aLsK2N4Y7KjRzWeLlCytLrqbNgOJw5/79K2f76cckRcPj29RUPjYLhw9RPmizfuC0GCn+5rEiOPLb5OtRoGHzLGPl1bStyXUkG7v5ThvDsNFNuyHT3B7JIBUsM1bA7YDig4x4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=1pdv+HQ4; arc=none smtp.client-ip=209.85.166.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-93e7d3648a8so166334339f.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 Oct 2025 20:38:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1761536311; x=1762141111; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lLv/abQqhTrjCuxnsZKW6XWrZqaImCMO0bBeDuN7Ur0=;
-        b=1pdv+HQ4aRXCgsmvJPnow+5C4Cz+nYqKSF84oWDwNrqZkzWOgY1vJpCSBoUQHvFaKb
-         qTeZTgwpuIlaowcY9aganZJuJFKxNGadAK3y0Jr1vdnPJIH67l+oipfUDPeWoa3YJHo+
-         AJzJkeRMGpzaC3+MSNgzg8RR71I/mVIRpFRUTH/Ikk3yaoT3FhmIdpeg7U7g8kqk7UGb
-         xWMoIprbGVhBpwuAWutla9g0ZXsoGRsGgpHMn4g4afs5QHwKw3VfanFz9wihmHestkJl
-         Vhj5bbfVt/2rTDFHgambTncdd5iKkWp3Jkzk+ahYDuyv3/cuR9uBScjGYrn7TVB6SffO
-         DRSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761536311; x=1762141111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lLv/abQqhTrjCuxnsZKW6XWrZqaImCMO0bBeDuN7Ur0=;
-        b=jDR4cbB5Dy/DQOFloP6bP7Ukkot+vQfkBunkmWmXG3ttl7PURoUd1AWM7lQGTNCQvd
-         hhHWN/0Upv/c/XNlz97XehxMN9biN11fz7o8tIUuX7s4BUpImqnN/M0hkYw03RHzTK/W
-         VhUUDZGsP2xTBN+aVTBKp9BxfLYi5HHQWvqBxsq7HI4tQ615Pz/8TXC88vmvK0r/CFKn
-         4UJmNdg8uwjkMVxWaMYTTbf0NKlZbrOUbAeqB60Qdx07h+3Xqa8KR7O/CE+HVQcP9RKr
-         KOiZEOBhtgTAzz5KWpvfTxrFQpD8+bXrpS/2SpO+sm4I1OOWF7sIOSkGVv9s6RdxuESJ
-         AfNw==
-X-Forwarded-Encrypted: i=1; AJvYcCVkrc+wEvp88L8jwVVv44szEC+wiOjm3uoqMysHWrZwCplhj+AC97Ri6wx6yCf5PZRVDgbTBfpg8zkJ9vlMTWQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwpZZ78lAj0AfMy6H5lqaSSsHp0e3MzmWfAyzSvoE3w7giXkekZ
-	eDe5w3ssXNe2vueHHPP9fWw0DH1EByPy5ODI3jcJYU7VRgbsiO5qs1ZzpOorVWDZUekxzHbJ06+
-	PWbn20oJMgD5knFoJ1AGUPhKwcM4BkV5woZQ98Yc2qw==
-X-Gm-Gg: ASbGncuj+glsOrlBTlZxwQoBxjlgCzTpXtzGeNeatU+fH+2GCLVfkzutJUbZPvK85+z
-	Cl5yBUIVat5TX7Ema0hR7XjH3NF9eaXV0gNGaeelZm6w74g+xphVYEqy4565H4Ex7Q5dCrLUgV/
-	OlfCHiCn4Gy5MhTpEZ6hrdvrCr0y65sl5xmphfcv1xHeIU0RVr05fl+NtZwkTkVZZ8l2frXRmDS
-	rTp+0mjsPr8EvapOKtqEYw3WRbynmiWlt2Ign1bvrlIbi8Bx8OgpovvV194efFqphG/LFynDZSg
-	3ZuNqTczdBXkkj+6WEGsMlVy8MTUpcy5wgY7HIHtRyYFivi/dObo2C/7czBc
-X-Google-Smtp-Source: AGHT+IFXk1YUaLAdhvo8rgPkIKe5gLo/c+djIhEIA40LWqKcizzRXoBKOFj4cyggO2AuZkgxTRXbB8jToGSbWYc3oMw=
-X-Received: by 2002:a05:6e02:190c:b0:42f:9eb7:759b with SMTP id
- e9e14a558f8ab-430c5306894mr466704455ab.28.1761536310727; Sun, 26 Oct 2025
- 20:38:30 -0700 (PDT)
+	s=arc-20240116; t=1761538060; c=relaxed/simple;
+	bh=C592mbCQevtEPnS3JNbZTZV1xz2slqt/UhHNUknqmQk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=TUE7Im9FnnfsXC7ZGU99I01dunu4Zx9vF4G09g/H7vrVAPvseHhBfklqdcAoJ9CnYDc6yT1yMGIjCYvAK2QydMNhozj1PvPEt8D1M3ji78/ANSckOldcmdNcHF1shAo2Li0eoscaW/p9556Hg4Op6NlFajp/Fngy/5k2tUmS8ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Vqx/o+1l; arc=none smtp.client-ip=113.46.200.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=WFKhqbdplhNXw7kSiCO7XFmkhdB23FzCb114U3VJ2xw=;
+	b=Vqx/o+1l1i56f4oqksfKl/8KAwDsBBB8EYUoOsb2BWXaUg5+2AXGR5vvfPh6ykHb1DFCkPJuG
+	4Jw6xkoEFk2eqpToEIJCcjJ167BIkkpK7KZWDIPrx0OQUus21zN2evC/xKvzh0hX7MerZd4mVLJ
+	deyldtsTARnSqlZKb0CIdhs=
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4cw0M94Qcnz1K98C;
+	Mon, 27 Oct 2025 12:07:01 +0800 (CST)
+Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6EC901A0188;
+	Mon, 27 Oct 2025 12:07:28 +0800 (CST)
+Received: from huawei.com (10.50.85.128) by dggpemf500016.china.huawei.com
+ (7.185.36.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 27 Oct
+ 2025 12:07:27 +0800
+From: Wang Liang <wangliang74@huawei.com>
+To: <kuba@kernel.org>, <andrew+netdev@lunn.ch>, <davem@davemloft.net>,
+	<edumazet@google.com>, <pabeni@redhat.com>, <shuah@kernel.org>,
+	<acardace@redhat.com>
+CC: <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <yuehaibing@huawei.com>,
+	<zhangchangzhong@huawei.com>, <wangliang74@huawei.com>
+Subject: [PATCH net] selftests: netdevsim: Fix ethtool-coalesce.sh fail by installing ethtool-common.sh
+Date: Mon, 27 Oct 2025 12:30:07 +0800
+Message-ID: <20251027043007.1315917-1-wangliang74@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251017155925.361560-1-apatel@ventanamicro.com>
-In-Reply-To: <20251017155925.361560-1-apatel@ventanamicro.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Mon, 27 Oct 2025 09:08:19 +0530
-X-Gm-Features: AWmQ_bleYZ_iePePDvRC5d6Pe5JA_nbAbhQUpFmow4pTKUmpRz54E4-TMp1PLS4
-Message-ID: <CAAhSdy1+AFQepjrfKrcQvC8cxDpjOHfF500O6FXTYzf-iksCfw@mail.gmail.com>
-Subject: Re: [PATCH 0/4] SBI MPXY support for KVM Guest
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Atish Patra <atish.patra@linux.dev>, Andrew Jones <ajones@ventanamicro.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ dggpemf500016.china.huawei.com (7.185.36.197)
 
-On Fri, Oct 17, 2025 at 9:29=E2=80=AFPM Anup Patel <apatel@ventanamicro.com=
-> wrote:
->
-> This series adds SBI MPXY support for KVM Guest/VM which will
-> enable QEMU-KVM or KVMTOOL to emulate RPMI MPXY channels for the
-> Guest/VM.
->
-> These patches can also be found in riscv_kvm_sbi_mpxy_v1 branch
-> at: https://github.com/avpatel/linux.git
->
-> Anup Patel (4):
->   RISC-V: KVM: Convert kvm_riscv_vcpu_sbi_forward() into extension
->     handler
->   RISC-V: KVM: Add separate source for forwarded SBI extensions
->   RISC-V: KVM: Add SBI MPXY extension support for Guest
->   KVM: riscv: selftests: Add SBI MPXY extension to get-reg-list
->
->  arch/riscv/include/asm/kvm_vcpu_sbi.h         |  5 ++-
->  arch/riscv/include/uapi/asm/kvm.h             |  1 +
->  arch/riscv/kvm/Makefile                       |  1 +
->  arch/riscv/kvm/vcpu_sbi.c                     | 10 +++++-
->  arch/riscv/kvm/vcpu_sbi_base.c                | 28 +--------------
->  arch/riscv/kvm/vcpu_sbi_forward.c             | 34 +++++++++++++++++++
->  arch/riscv/kvm/vcpu_sbi_replace.c             | 32 -----------------
->  arch/riscv/kvm/vcpu_sbi_system.c              |  4 +--
->  arch/riscv/kvm/vcpu_sbi_v01.c                 |  3 +-
->  .../selftests/kvm/riscv/get-reg-list.c        |  4 +++
->  10 files changed, 56 insertions(+), 66 deletions(-)
->  create mode 100644 arch/riscv/kvm/vcpu_sbi_forward.c
->
+The script "ethtool-common.sh" is not installed in INSTALL_PATH, and
+triggers some errors when I try to run the test
+'drivers/net/netdevsim/ethtool-coalesce.sh':
 
-Queued this series for Linux-6.19
+  TAP version 13
+  1..1
+  # timeout set to 600
+  # selftests: drivers/net/netdevsim: ethtool-coalesce.sh
+  # ./ethtool-coalesce.sh: line 4: ethtool-common.sh: No such file or directory
+  # ./ethtool-coalesce.sh: line 25: make_netdev: command not found
+  # ethtool: bad command line argument(s)
+  # ./ethtool-coalesce.sh: line 124: check: command not found
+  # ./ethtool-coalesce.sh: line 126: [: -eq: unary operator expected
+  # FAILED /0 checks
+  not ok 1 selftests: drivers/net/netdevsim: ethtool-coalesce.sh # exit=1
 
-Thanks,
-Anup
+Install this file to avoid this error. After this patch:
+
+  TAP version 13
+  1..1
+  # timeout set to 600
+  # selftests: drivers/net/netdevsim: ethtool-coalesce.sh
+  # PASSED all 22 checks
+  ok 1 selftests: drivers/net/netdevsim: ethtool-coalesce.sh
+
+Fixes: fbb8531e58bd ("selftests: extract common functions in ethtool-common.sh")
+Signed-off-by: Wang Liang <wangliang74@huawei.com>
+---
+ tools/testing/selftests/drivers/net/netdevsim/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/testing/selftests/drivers/net/netdevsim/Makefile b/tools/testing/selftests/drivers/net/netdevsim/Makefile
+index daf51113c827..653141a654a0 100644
+--- a/tools/testing/selftests/drivers/net/netdevsim/Makefile
++++ b/tools/testing/selftests/drivers/net/netdevsim/Makefile
+@@ -20,4 +20,6 @@ TEST_PROGS := \
+ 	udp_tunnel_nic.sh \
+ # end of TEST_PROGS
+ 
++TEST_FILES := ethtool-common.sh
++
+ include ../../../lib.mk
+-- 
+2.34.1
+
 
