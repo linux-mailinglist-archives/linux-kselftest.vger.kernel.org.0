@@ -1,96 +1,96 @@
-Return-Path: <linux-kselftest+bounces-44098-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44099-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF32EC0E1D6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 14:41:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D836C0E398
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 15:04:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E80FC34E3D6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 13:41:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 258C23BB7E1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 13:56:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEBD4301005;
-	Mon, 27 Oct 2025 13:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0AB283C8E;
+	Mon, 27 Oct 2025 13:56:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uAJW/z40";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="FP44aS9i";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="uAJW/z40";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="FP44aS9i"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="JZnsBY5q";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="buInvN6u";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="JZnsBY5q";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="buInvN6u"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300782F6932
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 13:39:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008C6306B30
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 13:56:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761572371; cv=none; b=iJs1WptkEuVronKBOcn9Uv8Pvrq1y8tQK2al2l3jTO//i6isIewBUmlt975YYtP1V8DxyKBS+YLbYM2jIxmKUAD/kCyvnDyWVQJPxqO5yPs8hT2Vtf5FNUaRAmRZnSnZygAYU6ZqgJXxyMwZTnLfSRe4nRIubX7qiKwaF18ti40=
+	t=1761573404; cv=none; b=ND7XCzs/EKd0HdnF1DlJtbHw//LtA00KROv5oqGU6qx4dmh+Gpgj+d6hNB+Wic8XB//YVp5Xs2zPzAU972CU/8k4Fjd/comphFC0/Gwx5a8cc0/ZoxYA1nI+6YkGr4yXjjRDMquGlEgeg+x8Gsf1a9ie9m+zW2Ju5lgbybJvcz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761572371; c=relaxed/simple;
-	bh=9RgNrqv/mENwlNJwRQ4VQLL/ur0tFFoTDefG8DnppDk=;
+	s=arc-20240116; t=1761573404; c=relaxed/simple;
+	bh=Uq4z9N9k0Eq4+OZkPjdcMiH895Y/0vflcREhIMMB240=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UwFECcPe46GNDyJeL6/hwtD20NS1kiR6lD9WNGGxzNW442HDieUUA1TxjMeEqwGKcUNkxa8oLDaAjc7wCJWKeWUTAd46sIB9+tAJEKNQaJw1vqnxUfkf44lAlsFBTQFWSPuMSJxWD4KQg/psG1NWOlDemFtWsk6mfe7A+Wtz5/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uAJW/z40; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=FP44aS9i; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=uAJW/z40; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=FP44aS9i; arc=none smtp.client-ip=195.135.223.130
+	 In-Reply-To:Content-Type; b=jmVJpRpcLBrqdV1Ur+hNStO1CKdXrtbtkKgGWvgluP0wwM2Bgy02ubmB+xTNuenB5kS8pZm7zdjnjj1cXh0F/cKBpe9VLLFpyurbkSCVdjAn+5uzhcq6fX11pkUy6/5amFLosiKfkb1K418Utw0ayHQHZ4I3TP6HneArExTBPgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=JZnsBY5q; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=buInvN6u; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=JZnsBY5q; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=buInvN6u; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id EA91A21B21;
-	Mon, 27 Oct 2025 13:39:21 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 013E6219EE;
+	Mon, 27 Oct 2025 13:56:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1761572362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1761573400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=i27u97N4e73GoXPAJTcuvMQHbHuPQ9/roOonBRBxYNQ=;
-	b=uAJW/z40YgANMYhmD50708FHkiKIs2E+rgLkpZiPOVKlkoft9lcSiCB+KMwvkdTBJuBdzG
-	1UhGzq2JqoZjgk64YQEoitm2O+xU7kyYAzyXFfjZqOQD1GrLbQyjfVVeN1pq0lbMHR0hXh
-	0oM2jHeDfCNTIQWopnQnaAudiOnYeFw=
+	bh=uIeIX1/GfDr+PgyE+6keWOlaywVCkkDhuvCBLGIQkjk=;
+	b=JZnsBY5qPwthR5hhTqYWrvQ/1mdrWii+uV53ENK75DAwpaEmMVkY1w7ma9zUR4EfrKgGya
+	1OrddNE4houLjN+9NGiRv9Ozd+8+MPUs0gH+ZJvybrkKGQNKF9vc/lj/pE7n1YpSY9MF++
+	l6yXlVy8urdAKGUKAYjeRP/k3qZVpjA=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1761572362;
+	s=susede2_ed25519; t=1761573400;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=i27u97N4e73GoXPAJTcuvMQHbHuPQ9/roOonBRBxYNQ=;
-	b=FP44aS9ioBrt+HRJvuoeyP4iKpqxYiMu9h1hjOQq5L0lX0/5TSitUuEAxeFuZ1UVlMVZLq
-	5EXBdVJuMsSgBtDA==
+	bh=uIeIX1/GfDr+PgyE+6keWOlaywVCkkDhuvCBLGIQkjk=;
+	b=buInvN6u02YGaAWTrVv2bmsTWV0J4zrRKFc7h2f43S8FkaJ1xi2XImub14diqk0DM0Cfe/
+	2JuLCmtx1z16oXCg==
 Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="uAJW/z40";
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=FP44aS9i
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=JZnsBY5q;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=buInvN6u
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1761572362; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1761573400; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=i27u97N4e73GoXPAJTcuvMQHbHuPQ9/roOonBRBxYNQ=;
-	b=uAJW/z40YgANMYhmD50708FHkiKIs2E+rgLkpZiPOVKlkoft9lcSiCB+KMwvkdTBJuBdzG
-	1UhGzq2JqoZjgk64YQEoitm2O+xU7kyYAzyXFfjZqOQD1GrLbQyjfVVeN1pq0lbMHR0hXh
-	0oM2jHeDfCNTIQWopnQnaAudiOnYeFw=
+	bh=uIeIX1/GfDr+PgyE+6keWOlaywVCkkDhuvCBLGIQkjk=;
+	b=JZnsBY5qPwthR5hhTqYWrvQ/1mdrWii+uV53ENK75DAwpaEmMVkY1w7ma9zUR4EfrKgGya
+	1OrddNE4houLjN+9NGiRv9Ozd+8+MPUs0gH+ZJvybrkKGQNKF9vc/lj/pE7n1YpSY9MF++
+	l6yXlVy8urdAKGUKAYjeRP/k3qZVpjA=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1761572362;
+	s=susede2_ed25519; t=1761573400;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=i27u97N4e73GoXPAJTcuvMQHbHuPQ9/roOonBRBxYNQ=;
-	b=FP44aS9ioBrt+HRJvuoeyP4iKpqxYiMu9h1hjOQq5L0lX0/5TSitUuEAxeFuZ1UVlMVZLq
-	5EXBdVJuMsSgBtDA==
+	bh=uIeIX1/GfDr+PgyE+6keWOlaywVCkkDhuvCBLGIQkjk=;
+	b=buInvN6u02YGaAWTrVv2bmsTWV0J4zrRKFc7h2f43S8FkaJ1xi2XImub14diqk0DM0Cfe/
+	2JuLCmtx1z16oXCg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 60BDB136CF;
-	Mon, 27 Oct 2025 13:39:21 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 59550136CF;
+	Mon, 27 Oct 2025 13:56:39 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id lfDsFgl2/2gIWwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 27 Oct 2025 13:39:21 +0000
-Message-ID: <b73fdd99-befe-4e2b-b029-909c4b31902b@suse.cz>
-Date: Mon, 27 Oct 2025 14:39:20 +0100
+	id R598FRd6/2jGbAAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 27 Oct 2025 13:56:39 +0000
+Message-ID: <ce78da49-2525-44af-9cb8-301bf6a4658a@suse.cz>
+Date: Mon, 27 Oct 2025 14:56:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,8 +98,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 08/37] KVM: guest_memfd: Don't set FGP_ACCESSED
- when getting folios
+Subject: Re: [RFC PATCH v1 09/37] KVM: guest_memfd: Skip LRU for guest_memfd
+ folios
 Content-Language: en-US
 To: Ackerley Tng <ackerleytng@google.com>, cgroups@vger.kernel.org,
  kvm@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -135,7 +135,7 @@ Cc: akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
  xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com,
  yuzenghui@huawei.com, zhiquan1.li@intel.com
 References: <cover.1760731772.git.ackerleytng@google.com>
- <dc5f58f5d3427b6291486a24061b6301761dda3d.1760731772.git.ackerleytng@google.com>
+ <02aad35b728f4918e62dc6eb1d1d5546487b099e.1760731772.git.ackerleytng@google.com>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -176,11 +176,14 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <dc5f58f5d3427b6291486a24061b6301761dda3d.1760731772.git.ackerleytng@google.com>
+In-Reply-To: <02aad35b728f4918e62dc6eb1d1d5546487b099e.1760731772.git.ackerleytng@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: EA91A21B21
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: 013E6219EE
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spamd-Result: default: False [-3.01 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -189,68 +192,211 @@ X-Spamd-Result: default: False [-3.01 / 50.00];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
 	MX_GOOD(-0.01)[];
-	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:email,suse.cz:mid,suse.cz:dkim];
 	FROM_HAS_DN(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	MIME_TRACE(0.00)[0:+];
 	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
 	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_CC(0.00)[linux-foundation.org,linux.intel.com,alien8.de,kernel.org,intel.com,lwn.net,redhat.com,google.com,cmpxchg.org,infradead.org,zytor.com,suse.cz,arm.com,ziepe.ca,amazon.com,nvidia.com,suse.de,linux.dev,oracle.com,maciej.szmigiero.name,loongson.cn,efficios.com,digikod.net,amd.com,ellerman.id.au,amazon.es,dabbelt.com,sifive.com,gmail.com,goodmis.org,amazon.co.uk,linutronix.de,zeniv.linux.org.uk,huawei.com];
-	RCVD_TLS_ALL(0.00)[];
 	DKIM_TRACE(0.00)[suse.cz:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
 	TO_MATCH_ENVRCPT_SOME(0.00)[];
 	RCPT_COUNT_GT_50(0.00)[96];
 	RCVD_COUNT_TWO(0.00)[2];
 	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[];
 	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
 	R_RATELIMIT(0.00)[to_ip_from(RLit8ednp7j3q8s7mp5dsi7bwe)];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:dkim,suse.cz:mid]
 X-Spam-Score: -3.01
-X-Spam-Level: 
 
 On 10/17/25 22:11, Ackerley Tng wrote:
-> guest_memfd folios don't care about accessed flags since the memory is
-> unevictable and there is no storage to write back to, hence, cleanup the
-> allocation path by not setting FGP_ACCESSED.
+> filemap_add_folio(), called from filemap_grab_folio(), adds folios to
+> an LRU list. This is unnecessary for guest_memfd, which does not
+> participate in swapping.
+
+IIRC guest_memfd mappings are unevictable. That should mean they are not
+ultimately added to a list (see lruvec_add_folio()).
+
+> In addition, the LRU list takes a reference count on the folio. With
+
+IIUC the refcount is temporary while being on the percpu
+&cpu_fbatches.lru_add, added by __folio_batch_add_and_move(). When flushed
+via folio_batch_move_lru(), the refcount is removed and there's only the LRU
+folio flag that remains. The fbatch flushing can be triggered if you see an
+unexpected refcount increase. So it might be feasible to do without this
+patch (maybe it was already tried and there were substantial issues, in
+which case should be mentioned).
+
+> shared-to-private memory conversions for KVM guests dependent on folio
+> refcounts, this extra reference can cause conversions to fail due to
+> unexpected refcounts.
+> 
+> Rework kvm_gmem_get_folio() to manually allocate and insert the folio
+> into the page cache without placing it on the LRU. This is done by
+> calling __filemap_add_folio() directly.
+> 
+> The folio is then marked unevictable to avoid participation in
+> swapping. The ->free_folio() handler is modified to unset the
+> unevictable flag when the folio is released from guest_memfd.
+> 
+> This change ensures that LRU lists no longer take refcounts on
+> guest_memfd folios, significantly reducing the chance of elevated
+> refcounts during conversion.
+> 
+> To facilitate this, __filemap_add_folio is exported for KVM's use.
 > 
 > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> [sean: split to separate patch, write changelog]
 > Signed-off-by: Sean Christopherson <seanjc@google.com>
-
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
 > ---
->  virt/kvm/guest_memfd.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  mm/filemap.c           |  1 +
+>  mm/memcontrol.c        |  2 ++
+>  virt/kvm/guest_memfd.c | 60 +++++++++++++++++++++++++++++++++---------
+>  3 files changed, 50 insertions(+), 13 deletions(-)
 > 
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 03f223be575ca..60c7c95bbd7e6 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -954,6 +954,7 @@ noinline int __filemap_add_folio(struct address_space *mapping,
+>  	return xas_error(&xas);
+>  }
+>  ALLOW_ERROR_INJECTION(__filemap_add_folio, ERRNO);
+> +EXPORT_SYMBOL_FOR_MODULES(__filemap_add_folio, "kvm");
+>  
+>  int filemap_add_folio(struct address_space *mapping, struct folio *folio,
+>  				pgoff_t index, gfp_t gfp)
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 8dd7fbed5a942..fe8629414d0a9 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -4721,6 +4721,7 @@ int __mem_cgroup_charge(struct folio *folio, struct mm_struct *mm, gfp_t gfp)
+>  
+>  	return ret;
+>  }
+> +EXPORT_SYMBOL_FOR_MODULES(__mem_cgroup_charge, "kvm");
+>  
+>  /**
+>   * mem_cgroup_charge_hugetlb - charge the memcg for a hugetlb folio
+> @@ -4893,6 +4894,7 @@ void __mem_cgroup_uncharge(struct folio *folio)
+>  	uncharge_folio(folio, &ug);
+>  	uncharge_batch(&ug);
+>  }
+> +EXPORT_SYMBOL_FOR_MODULES(__mem_cgroup_uncharge, "kvm");
+>  
+>  void __mem_cgroup_uncharge_folios(struct folio_batch *folios)
+>  {
 > diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 855e682041311..2a9e9220a48aa 100644
+> index 2a9e9220a48aa..dab2b3ce78bc8 100644
 > --- a/virt/kvm/guest_memfd.c
 > +++ b/virt/kvm/guest_memfd.c
-> @@ -167,14 +167,13 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+> @@ -148,6 +148,41 @@ static struct mempolicy *kvm_gmem_get_folio_policy(struct gmem_inode *gi,
+>  #endif
+>  }
+>  
+> +static struct folio *__kvm_gmem_get_folio(struct address_space *mapping,
+> +					  pgoff_t index,
+> +					  struct mempolicy *policy)
+> +{
+> +	const gfp_t gfp = mapping_gfp_mask(mapping);
+> +	struct folio *folio;
+> +	int err;
+> +
+> +	folio = filemap_lock_folio(mapping, index);
+> +	if (!IS_ERR(folio))
+> +		return folio;
+> +
+> +	folio = filemap_alloc_folio(gfp, 0, policy);
+> +	if (!folio)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	err = mem_cgroup_charge(folio, NULL, gfp);
+> +	if (err)
+> +		goto err_put;
+> +
+> +	__folio_set_locked(folio);
+> +
+> +	err = __filemap_add_folio(mapping, folio, index, gfp, NULL);
+> +	if (err) {
+> +		__folio_clear_locked(folio);
+> +		goto err_put;
+> +	}
+> +
+> +	return folio;
+> +
+> +err_put:
+> +	folio_put(folio);
+> +	return ERR_PTR(err);
+> +}
+> +
+>  /*
+>   * Returns a locked folio on success.  The caller is responsible for
+>   * setting the up-to-date flag before the memory is mapped into the guest.
+> @@ -160,6 +195,7 @@ static struct mempolicy *kvm_gmem_get_folio_policy(struct gmem_inode *gi,
+>  static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
+>  {
+>  	/* TODO: Support huge pages. */
+> +	struct address_space *mapping = inode->i_mapping;
+>  	struct mempolicy *policy;
+>  	struct folio *folio;
+>  
+> @@ -167,16 +203,17 @@ static struct folio *kvm_gmem_get_folio(struct inode *inode, pgoff_t index)
 >  	 * Fast-path: See if folio is already present in mapping to avoid
 >  	 * policy_lookup.
 >  	 */
-> -	folio = __filemap_get_folio(inode->i_mapping, index,
-> -				    FGP_LOCK | FGP_ACCESSED, 0);
-> +	folio = filemap_lock_folio(inode->i_mapping, index);
+> -	folio = filemap_lock_folio(inode->i_mapping, index);
+> +	folio = filemap_lock_folio(mapping, index);
 >  	if (!IS_ERR(folio))
 >  		return folio;
 >  
 >  	policy = kvm_gmem_get_folio_policy(GMEM_I(inode), index);
->  	folio = __filemap_get_folio_mpol(inode->i_mapping, index,
-> -					 FGP_LOCK | FGP_ACCESSED | FGP_CREAT,
-> +					 FGP_LOCK | FGP_CREAT,
->  					 mapping_gfp_mask(inode->i_mapping), policy);
->  	mpol_cond_put(policy);
+> -	folio = __filemap_get_folio_mpol(inode->i_mapping, index,
+> -					 FGP_LOCK | FGP_CREAT,
+> -					 mapping_gfp_mask(inode->i_mapping), policy);
+> -	mpol_cond_put(policy);
 >  
+> +	do {
+> +		folio = __kvm_gmem_get_folio(mapping, index, policy);
+> +	} while (IS_ERR(folio) && PTR_ERR(folio) == -EEXIST);
+> +
+> +	mpol_cond_put(policy);
+>  	return folio;
+>  }
+>  
+> @@ -588,24 +625,21 @@ static int kvm_gmem_error_folio(struct address_space *mapping, struct folio *fol
+>  	return MF_DELAYED;
+>  }
+>  
+> -#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE
+>  static void kvm_gmem_free_folio(struct folio *folio)
+>  {
+> -	struct page *page = folio_page(folio, 0);
+> -	kvm_pfn_t pfn = page_to_pfn(page);
+> -	int order = folio_order(folio);
+> +	folio_clear_unevictable(folio);
+>  
+> -	kvm_arch_gmem_invalidate(pfn, pfn + (1ul << order));
+> -}
+> +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE
+> +	kvm_arch_gmem_invalidate(folio_pfn(folio),
+> +				 folio_pfn(folio) + folio_nr_pages(folio));
+>  #endif
+> +}
+>  
+>  static const struct address_space_operations kvm_gmem_aops = {
+>  	.dirty_folio = noop_dirty_folio,
+>  	.migrate_folio	= kvm_gmem_migrate_folio,
+>  	.error_remove_folio = kvm_gmem_error_folio,
+> -#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE
+>  	.free_folio = kvm_gmem_free_folio,
+> -#endif
+>  };
+>  
+>  static int kvm_gmem_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
 
 
