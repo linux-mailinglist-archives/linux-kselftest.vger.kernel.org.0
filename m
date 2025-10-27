@@ -1,230 +1,446 @@
-Return-Path: <linux-kselftest+bounces-44095-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44096-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6F09C0DD4A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 14:07:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A8B2C0E02D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 14:27:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA27019A59BB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 13:02:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C9093AD167
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 13:27:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 859CE24A04A;
-	Mon, 27 Oct 2025 12:58:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39AA328853A;
+	Mon, 27 Oct 2025 13:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="T2YjSzOt"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="TM9vO7Jc";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="85Ixpc4J";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Neqw/yzt";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="N5zhOPEQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012034.outbound.protection.outlook.com [52.101.53.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5F25246788;
-	Mon, 27 Oct 2025 12:58:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.34
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761569931; cv=fail; b=cKmxIqe8M9JgGcItyB40ypKAemSOprATUS8NWsNMR0k34jEwpF04+ElI/kFuSd1s0o0TOP64KKNuhy4R7lc37eAII37U3JxdFHkSZo8wqcAkgtmZUYpfjcXrTagL+pU4/4Mn69knXknjP14oug56sok8nKXQoPlq/sgeJVLlc5M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761569931; c=relaxed/simple;
-	bh=wXjUAWvMdRa+Jz7wuwriBY3w8JZ4OIs7aIr9zUhJGgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=T+eHDVBS0aYT4I6jADu27M7yU/abernz5U+hc6KZrSWUUvGt0DX0SmFpHU4glcPHbilvmeye1d6O17Bq+SdtVtPqiTy7oZ2oLXUsgWx3mHQHoTxSficFOni09ItTd1vSHafD5QkBE7nJmZtZfNXPc/aFY2awWywRODAv6uImBFY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=T2YjSzOt; arc=fail smtp.client-ip=52.101.53.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yomiQSUGHAcTYWrP+NOqLBU2sPl6R+JSbHZMeN+f9VAWgl2cUPoOFMaw2/fyGrGrEfTGFV0yT1N693aLucYF7JjwHzj6XohibGcJLCBH/wcXkQN0RdjcatrJ7Lwk99sPDoS68GH6NU4zk3QOyl52sjXJHI3+nmCMmXq6geQ+vL4f+2xCjrJlSAcGn71WSOIZnlvN6b+SGkn34zfBm67dTC0yWVTU+t8ShjQ7/eCuq2ce6LD0cJDcP5PKdD1YVOzeahaBDdsS7yiEdk1Bnnaqpijw4n/Wa4uBaHv2JAio8G1Wtxv1O2XBs6Ey3D+QW6MiQi/rjvikyzL+CFnVNtHjkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kuhnVnExQxAohyXiZL2EsV8bgeJO43P9Bsc5t9PK52Y=;
- b=dEqel94WtNnYWL89FnFvPpmoXyGubJFY1ByEeaEYkYxnDstgK50e6O+iVx8ZRT/xcniK9aeKoYYmtvW7vCfVJnL3vss7Qtyf8Y/p9jRM9yiXSYejoFlYrDeBgk+RAnAnEB4zw8UzTgUMfqltUGY7/qvQq3p5emqGfBSgx5TDL6XO39eBpWcwuV9U92KrgUjGWaTqmE/hDyF2gNtj1wi75K18jUBAYhJbagI5ZCRilhyrOQXkQzF1fNSr0OtYV3EuMl5F+mvHAxn4yL3cqMzDBq5p6a1lTXZrKWWBFnsR1Gh2Si4ev7m/6oasqemEvO9Uka6DUFdExeo/hC69Pr6TxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kuhnVnExQxAohyXiZL2EsV8bgeJO43P9Bsc5t9PK52Y=;
- b=T2YjSzOtlCpeM4B4zL5gDizxx+5ULdcpeE5olEjzqicbHMuFO0KyXqypNzVEb6x9NJ66UCe7+w9poAu9sZgSuZsxhdIXCSbU2p16HjqFtamYGBFL6IT0Mw86jRtzsKHeGqZ09aWN9l6+1FWJIocCkKN+i3CIPn0JBeqJNr9LbHXk9wI0/2tL+HSTsQ+nQaNVKGgl4hZlMwPg8qFyFVg4v8OqLK0cHtwMmBxUxCX/S8CKS1pvh6stpDGo+XTd7xVs7zwB/U/24EaJnHF4vw7+Zu79xFjKXAPMUYRIQKO+PNPRUiSrvDDzqdYnJqLZDUrucWsdbyx/Q7t0n5hWjst3nA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
- by DS2PR12MB9797.namprd12.prod.outlook.com (2603:10b6:8:2ba::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Mon, 27 Oct
- 2025 12:58:47 +0000
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9253.017; Mon, 27 Oct 2025
- 12:58:47 +0000
-Date: Mon, 27 Oct 2025 09:58:45 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
-	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
-	iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
-	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
-	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-	James Gowans <jgowans@amazon.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Michael Roth <michael.roth@amd.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v7 03/15] iommupt: Add the basic structure of the iommu
- implementation
-Message-ID: <20251027125845.GB896317@nvidia.com>
-References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
- <3-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
- <CA+CK2bC5=rb1C6i5yMad_tG9JpbYYgSRxAX-vhYctuoLvcQbWg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+CK2bC5=rb1C6i5yMad_tG9JpbYYgSRxAX-vhYctuoLvcQbWg@mail.gmail.com>
-X-ClientProxiedBy: BN9PR03CA0687.namprd03.prod.outlook.com
- (2603:10b6:408:10e::32) To MN2PR12MB3613.namprd12.prod.outlook.com
- (2603:10b6:208:c1::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCCDF27B4FA
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 13:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761571656; cv=none; b=iJ4IZWFQRR6fplc5qMuWg3R0zwp67JY6JqT9Zw8yx13Ok5VQoqB9xs8NbFCZHbqJ2C/uPJwlPqNRPNwqkKOElzW63AVtyBnu1ogd0WfotP0EEGH895UUCRqvaek0AKAcRcnJGny5SbFThE6jULRGZWX6ZX5aj8myLZJ++ntRzq0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761571656; c=relaxed/simple;
+	bh=o5Ho7ZZ2WaFp0JzdWDL0uVeZ8dGhvbT/ojp1hVOm93I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lEYJF2PkVwmImX8F/XRJsTXC4kuSO9/c75OhNkDs7448KcvQgVIZhU3rbOvPj8Kifvc/s7WOC9WjFRSGTD8l1PRYIQBvAjRNSEQzqJn6p0HPSG9v1BjwmC9Zka4M9dyku8iZ29m5PsDrEInFYdtTa+kwXXHw0NdJY5Yk7ksKmB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=TM9vO7Jc; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=85Ixpc4J; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Neqw/yzt; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=N5zhOPEQ; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id CF540219E4;
+	Mon, 27 Oct 2025 13:27:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1761571651; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=5XpAc/wnKhW7u09JNrLPt9PaFPUwXBy6MclCMVEFG2c=;
+	b=TM9vO7Jc61kw+VXUhOQ+PGjaEbab7kI7IqQsWiI8Becj2jWF0T18ysXykCJva50100qZiV
+	KxZS/IYk5nxsFp6WBXD0QGjZtXB7J+QsgAyu4CLo+QaJKwPfCZmam4WTXqa6eI4ABpLRp5
+	VFCL6kLowFxDpMiOc6vWqgGf19tN7GU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1761571651;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=5XpAc/wnKhW7u09JNrLPt9PaFPUwXBy6MclCMVEFG2c=;
+	b=85Ixpc4JK9GwDRQJK1w6m0apKLDqjn/tLJKiqOW/a2SWTiwaaxcoQIeZxANpbukVMYAZUC
+	Cq9BrhPHp0AEVPBQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="Neqw/yzt";
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=N5zhOPEQ
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1761571650; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=5XpAc/wnKhW7u09JNrLPt9PaFPUwXBy6MclCMVEFG2c=;
+	b=Neqw/yzt5jkjQeyE88ZObAB5rNiQRIMgkO1G/L0izC2JO31t3R8ruwVCycwb9ObjVlA3lC
+	NTdrolCFr07dGsBUvQQI10lxfPW+Paamqcryxl8G5O7pUW/xYZi2+FFmEIEyYZWKoN7Pm8
+	FuVlvhMX17+Qxsh8z81l6vY52dMCbA8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1761571650;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=5XpAc/wnKhW7u09JNrLPt9PaFPUwXBy6MclCMVEFG2c=;
+	b=N5zhOPEQviM9fOW+4dNYU4eUhqEyCo0EbRr9vYHizE0xAZESli17qpj+4h+HXMWzK0upNn
+	dbhf1I3lAqr0C5Bg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 38112136CF;
+	Mon, 27 Oct 2025 13:27:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id /r5bDUJz/2gfTwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 27 Oct 2025 13:27:30 +0000
+Message-ID: <33d350d9-b247-4181-b8c8-5e879acd35fe@suse.cz>
+Date: Mon, 27 Oct 2025 14:27:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|DS2PR12MB9797:EE_
-X-MS-Office365-Filtering-Correlation-Id: bb400feb-1b96-4295-2cc7-08de15589108
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?b1BYS1pPY2doTEFORkJpUnl6eWU2aEdEcWhBaWczY1NHVUFFYmJ0aHhkcHJH?=
- =?utf-8?B?OFl2bEp1VVFoRncrYVpQbXBQVHVNaXJ0MlEreFBIVW85Ukxsb2MwNGVTU0lq?=
- =?utf-8?B?WHVIcm9VdUQ1Q0tmNjVWb1hKQkRqS2cwTFRKSDJpWjlTZ21hTHdHSTFhMVox?=
- =?utf-8?B?bWNNNG5YTFRRNGUyM1NmcmdzZlltWko4SjdFdzEzNnRLZHNKYnJpSk02eTVk?=
- =?utf-8?B?T3U2WkFxLzBFM1JtRnFDNUVvU1RJY0dlMEV3RytBOXVrU3lybzdYOWJOWkhu?=
- =?utf-8?B?NDF4aDl3RXA5ekx0Sm9VS3hGcG94aFBGc2xjWXBtd1hPVmlKc0NVUzlKVU9k?=
- =?utf-8?B?eDRLMG5ST1dBVVoyRGlxQ2JYdjZqQVFHMy8yY1NqV0lnWDRJWmc1VUpVb0dP?=
- =?utf-8?B?ZUZ3cm1pcjZnTWo5dkliMFhkOUpZdWNsR1E0QVlSVmtIZFQvM2QzdGlmM0tL?=
- =?utf-8?B?UmRTdTJQZS9iQUhsUDNTSVZKYkVtR2lnczB1eU8vS2dWclVXNllVbnYrSnRz?=
- =?utf-8?B?TXY3QnlqQTZrT2tyeGowdENMWHZPZFZPcTJYVHR6VVBiY0VxQU91bHI5TGpQ?=
- =?utf-8?B?eUxiNzZldVhmbXY2RnE2elNJV2dabTFmdnphRjQzRStpcVF3ay9Kd0FCbEdO?=
- =?utf-8?B?Q1JYOE5iMkNkM29taEh4Mi9NakM3K0lVZGs1d0Q5NUx4SGgwTS9PTzZYVGVS?=
- =?utf-8?B?N1ZxZm45bGZoL3lheEhRSURjOTloUDJPbnhBbXZwOE55cG0rTGJjbTFQWW5E?=
- =?utf-8?B?clVOSEhpczc4VFdMK05HZ0NCYytodkZUSWZmcS9oQWdSS3pXM0M3MlN4VEtV?=
- =?utf-8?B?SXMzaVdUYUkwQjdxMTFJOFFKUkNDTUpaR2dUOEdsZDBucWE4K0xRcnR4ZEtG?=
- =?utf-8?B?ZzVZeW1aMTdxM2dQVkU0bmZISENJZElkZFI1NStsSml5QTlqNVQ1bXE0SW80?=
- =?utf-8?B?VkdURTNWL2tIZTNrS29FTmFuRFpNSUlmbEd5alBFbUYyWStXa1hJRHM0YWhP?=
- =?utf-8?B?cm5pMFFJZ3ErK01TZUFaM2RsSGpUd3dFMjU3Y3E4MElNTHlSbEZxYTVRdmNK?=
- =?utf-8?B?bXI3aStTOWlQSkpCRGd5dkhwRjhlek9maWt0aHY3eEhFNVpvSXFpZ1B3OVpD?=
- =?utf-8?B?eG45K3k4OElwRktxN2ZkQmZTNFN2RGZpZVViNzJwOG5ZZ0dKSHRuSTFmaXpB?=
- =?utf-8?B?U1lSU3NUK0ZmamNPcTJ3eHAyMXVsVUMwempJbmhpblo3eWJoT096cDlrcHhE?=
- =?utf-8?B?Tm9jY0RkWjlVV0xNUnFjcVIxTjNTNHNMS1UwdmlNeEN4RHFaZFJydVc0SWtw?=
- =?utf-8?B?YjdBSUpGNlJvYXhCZ3E3Yk1uaEk5UTZLa2dIVnVmY01OYUZ1Z3J2RHd3NEpC?=
- =?utf-8?B?TVBEUmxkZFZrQmE5ZitpV1ZpU2tNWjd0eUZIRGhORzI4TUhEM2dPeER4dGtN?=
- =?utf-8?B?NmFWS04xK1JoWVFxQVI5Y1B5UjQyNGJ0RW1jSC9zeXkxaEV4ZDY4Z1psdlVW?=
- =?utf-8?B?b1A5aXRSZlBhTTZjREFFS3dsQm44a3VPSVdVa3NLcG42dlViOTUxSEZJajJv?=
- =?utf-8?B?OC9PTGwxRzBIUld5OVYzcUwwUFhrcmk3eGkwb04wOEYybkR5clBkNnpxRlZ1?=
- =?utf-8?B?M1VvL3JoWGZPSWpmRUdFSnZ3a3k2SmEzMFluUTY1eGFGbXlPS2RsZ0FmUVpi?=
- =?utf-8?B?bGVwY05uUmVFdjQ2WjhUQlY4SXZzemRIM0J5M2h0ODJ0UGFaTWZKd09EZDdY?=
- =?utf-8?B?dWhMZkliV1Fod1JSazd5d2JNS2UrMG93VWNHN1Q3SGc4YmltcHo1WWs3eENP?=
- =?utf-8?B?ckQ3U0VXT1ZQZmlFMEFMZkFoQll1MWNDK2lyZDF3QWxqTUZPdTNQMUhqOUxl?=
- =?utf-8?B?Tm90bDJkTmFkVDQ2andaeGtudlNLSk9oeXFib3g2TXJWbTA2WXk2ODJRaklj?=
- =?utf-8?Q?F26JgqmOow0XfFLOrPlukw5McrQj7VRh?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NTlLRmJvemY1Q0o4c2ZhSk5SVVNJWXM0OUd3dTJPWGMzOHAveVZ2dmxMM3Aw?=
- =?utf-8?B?R2RmUWZGY3VYNlBibnNwVEJjWmZtYWVKcEwveHdQMW9zbUE3S1NDN3h3QzB5?=
- =?utf-8?B?aUJWbXU1NDFmN0VVeVZDamxZVWtGMy9Sc3BFemdVVVpGclhOOWZEMEI4QTFz?=
- =?utf-8?B?bS80endDdUpjQU5GUDJkdDNMU1dVUWNock5MbDA5Nk9YVEJQVWdiM2F1cFZw?=
- =?utf-8?B?aTF1b1F6TEx6MkpDeEh0UkNsMGZ6NjVEU3ZCdlhoVGQvZ2c3MjFGQ05uSXJI?=
- =?utf-8?B?aWYvZk0xRTFOWWZaL0VabnIybFUzZytianYyQmdsTS9HRGtpemg0bTFLOVJ3?=
- =?utf-8?B?NkwxL0dvOExyWUdLMTZRc1YrUmxVbzlBTkRpemQ0cXhBY1dFeG5sS3Zrc0Ur?=
- =?utf-8?B?VEhLcG9BM3hFMUNuWFdlN05SSmdwSlVDZGRhR2s4WU9jN2UvakJ3TC82YlRZ?=
- =?utf-8?B?aWo3TEVyYkpCNmdTaVJqTHppcTVUa055SWh6Wi9yaUswZDVSbjdMR2FEVHVu?=
- =?utf-8?B?M0dNOTNPSm15ZGx3dGIxcWdzWTBsMVFCcDl3MTgrbjdkaWJ5SVZZVjg5Ritu?=
- =?utf-8?B?akl0bmhkSkFZalJyNnFkNGYzK2JsRUlCQkJ6Q2FkRVhXTEh1SFRra284ODEv?=
- =?utf-8?B?T0dKOEpnS211YmF5VG1waXEwYjMrSnI1ckROUElva0I1d2F2TzhoRXlOdWp3?=
- =?utf-8?B?b0V5dTBMVFkvbTFEMWJCUmE5RmFKOUNjakNsMFFZaURQaGVSNE5BTUZVRzRO?=
- =?utf-8?B?Z3cyT2llcU1GT1N3YkJvSzhHNTJLejRvem1jZEx3WnMyTW9MSU52RldYek5U?=
- =?utf-8?B?TUNUeFluZVd0RjNWbHoxMHZBRU94aytQYUYwb2dia01SR3Q0bFpRekhySm95?=
- =?utf-8?B?bFpPMWFUS25aSXB3eVVqcHhrTk9zOS9sOFVPdHVaaXRMWUxaM3NPLy8yTjdB?=
- =?utf-8?B?UXdxUXdXT3lRMWlFZjB2VmVzekFKWmR2Q3lNOHZqMTBRd0E2VGdxOXJ4Rmps?=
- =?utf-8?B?bDNMZ3BFcWdZK0dZSm8rL1RCT0kxOWozZDhFZm5pbnRGcXlQM0JmZ1h3eVF0?=
- =?utf-8?B?WTg1aTQvck1ITzFucHBJRitwVDl6Q2pvNG5FaWdrazEzeFo2cDN0S3NFOVJM?=
- =?utf-8?B?OXJRclpTOTJ5U1Rja1VOYXI3dDB2UG1YOUJKVlBFSzJ5VEVMMmNwbDU5STlL?=
- =?utf-8?B?YXcvd2tndFpGbUdUdHVJTW5lVzFYeVpRUXlaNjMzKzgxdnhucE9XSmZxMWpE?=
- =?utf-8?B?SG1XdDM0RWVZek1SQjlGdHpWOVNOaE5ZSjRrbVhHdENKc09lYVpjdlBxQnVu?=
- =?utf-8?B?c0tIM3REWkRzaGFhbnBYcDQrUzJEZ1NlckpYeW5uNnIzL3RGZ0UzOVI5UFk3?=
- =?utf-8?B?bW1uekkrSzV2YUtrSWd0UWxzZzg2NVREYWZiWGtCYzVPNmIyNkhzQTgzbWJu?=
- =?utf-8?B?MThmMWwvTFo0Y3pIVzExbnE3TTBGcTdDS3Q0UGgzNmJodTJ5bVZnRnF4Q3NP?=
- =?utf-8?B?VkxoUjBPekFlTFRIQk5OMk1oSUVvZXB1RkZQdjZ1U1lZTVJHVEY4OTlLdllo?=
- =?utf-8?B?SWtScDhqcEtVaTFiRzlBQU1RRm1wRW5GaXk4eC8zWDVqTGlvVjdjOUE0cGIy?=
- =?utf-8?B?c3RIY29MbE9NVzd2WllEMWlGUUVTeGR0MndtcFVzTVVXN3J3OTJFdnNDc29y?=
- =?utf-8?B?Y0Noby9sQloyRkZ5cGc1Z3NyRTQzZzh6ZFJtWi9GTmZ2a3dYeUZqT0N4Q0dp?=
- =?utf-8?B?QkNIRC8xUmN0eVFtQ3ZLbjIyV1VHSGVOY3I4c0pFODlkZGZsRVlLUXpUNnlw?=
- =?utf-8?B?R0djdmNKTVNUc0pvdXJMcFBxYmNUZ3k5aDFtOTlPWkxXTzlpWHpzc29DdTBC?=
- =?utf-8?B?KytWcUhnRWZtSFdDbytyaVZlZFBNWHZjWUxRbXU3Wk5RWnpjWC9lWFZPNi9B?=
- =?utf-8?B?NFVDcUdJOEtlak15U1RNeHNHMHpWcjVDOFNHbVJXVmZGUDJsMlNHRFZFalpy?=
- =?utf-8?B?WDh0UU4vN1NQdkRkL1JRWUcvUVQ3WXVBV3BmbEtOaU1zTjJiT0k0aC9MbUF2?=
- =?utf-8?B?d2JVcEo5cExtUUhIK0ZDNmF6YmlBRVAyNFVVQTNvTW9kQkFzakhjSGdPUkc0?=
- =?utf-8?Q?MBRM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bb400feb-1b96-4295-2cc7-08de15589108
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2025 12:58:46.9329
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +yHimX5bRyYIP7thpH9WUm6vSewx8h7g0mmta+MQqfq3Abp53iL2f6goYu75dMxG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS2PR12MB9797
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 01/37] KVM: guest_memfd: Introduce per-gmem
+ attributes, use to guard user mappings
+Content-Language: en-US
+To: Ackerley Tng <ackerleytng@google.com>, cgroups@vger.kernel.org,
+ kvm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>
+Cc: akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de,
+ brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org,
+ corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com,
+ david@redhat.com, dmatlack@google.com, erdemaktas@google.com,
+ fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org,
+ hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com,
+ isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com,
+ jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com,
+ jroedel@suse.de, jthoughton@google.com, jun.miao@intel.com,
+ kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev,
+ liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
+ mail@maciej.szmigiero.name, maobibo@loongson.cn,
+ mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
+ mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, mingo@redhat.com,
+ mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev,
+ nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev,
+ palmer@dabbelt.com, pankaj.gupta@amd.com, paul.walmsley@sifive.com,
+ pbonzini@redhat.com, peterx@redhat.com, pgonda@google.com, prsampat@amd.com,
+ pvorel@suse.cz, qperret@google.com, richard.weiyang@gmail.com,
+ rick.p.edgecombe@intel.com, rientjes@google.com, rostedt@goodmis.org,
+ roypat@amazon.co.uk, rppt@kernel.org, seanjc@google.com,
+ shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com,
+ steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com,
+ tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com,
+ viro@zeniv.linux.org.uk, vkuznets@redhat.com, wei.w.wang@intel.com,
+ will@kernel.org, willy@infradead.org, wyihan@google.com,
+ xiaoyao.li@intel.com, yan.y.zhao@intel.com, yilun.xu@intel.com,
+ yuzenghui@huawei.com, zhiquan1.li@intel.com
+References: <cover.1760731772.git.ackerleytng@google.com>
+ <638600e19c6e23959bad60cf61582f387dff6445.1760731772.git.ackerleytng@google.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <638600e19c6e23959bad60cf61582f387dff6445.1760731772.git.ackerleytng@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: CF540219E4
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FREEMAIL_CC(0.00)[linux-foundation.org,linux.intel.com,alien8.de,kernel.org,intel.com,lwn.net,redhat.com,google.com,cmpxchg.org,infradead.org,zytor.com,suse.cz,arm.com,ziepe.ca,amazon.com,nvidia.com,suse.de,linux.dev,oracle.com,maciej.szmigiero.name,loongson.cn,efficios.com,digikod.net,amd.com,ellerman.id.au,amazon.es,dabbelt.com,sifive.com,gmail.com,goodmis.org,amazon.co.uk,linutronix.de,zeniv.linux.org.uk,huawei.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[98];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	R_RATELIMIT(0.00)[to_ip_from(RLit8ednp7j3q8s7mp5dsi7bwe)];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Action: no action
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Spam-Level: 
 
-On Sat, Oct 25, 2025 at 11:24:25AM -0400, Pasha Tatashin wrote:
-> On Thu, Oct 23, 2025 at 2:21 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> >
-> > The existing IOMMU page table implementations duplicate all of the working
-> > algorithms for each format. By using the generic page table API a single C
-> > version of the IOMMU algorithms can be created and re-used for all of the
-> > different formats used in the drivers. The implementation will provide a
-> > single C version of the iommu domain operations: iova_to_phys, map, unmap,
-> > and read_and_clear_dirty.
-> >
-> > Further, adding new algorithms and techniques becomes easy to do across
-> > the entire fleet of drivers and formats.
+On 10/17/25 22:11, Ackerley Tng wrote:
+> From: Sean Christopherson <seanjc@google.com>
 > 
-> It is an enabler for cross-arch page_table_check for IOMMU. There is
-> also a long-standing issue where PT pages are not freed on unmap,
-> leading to substantial overhead on some configurations, especially
-> where IOVA is cycled through for security purposes (as it was done in
-> our environment). Having a single, solid fix for this issue that
-> affects all arches is very much desirable.
+> Start plumbing in guest_memfd support for in-place private<=>shared
+> conversions by tracking attributes via a maple tree.  KVM currently tracks
+> private vs. shared attributes on a per-VM basis, which made sense when a
+> guest_memfd _only_ supported private memory, but tracking per-VM simply
+> can't work for in-place conversions as the shareability of a given page
+> needs to be per-gmem_inode, not per-VM.
+> 
+> Use the filemap invalidation lock to protect the maple tree, as taking the
+> lock for read when faulting in memory (for userspace or the guest) isn't
+> expected to result in meaningful contention, and using a separate lock
+> would add significant complexity (avoid deadlock is quite difficult).
 
-Yes, I have a simple low cost plan to fix the PMD/etc unfreeing
-problem, at least for iommufd.
++Cc Liam and maple-tree list, especially for this part.
 
-In iommufd there is an interval tree of IOVA used in the
-iommu_domain. When a range of IOVA is removed from the interval tree
-it can be normally unmapped. iommufd can then compute the empty span,
-this is the end of the prior populated range till the start of the
-next populated range and do a cleaning operation on the iommu domain
-with that range.
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Co-developed-by: Vishal Annapurve <vannapurve@google.com>
+> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> Co-developed-by: Fuad Tabba <tabba@google.com>
+> Signed-off-by: Fuad Tabba <tabba@google.com>
+> ---
+>  virt/kvm/guest_memfd.c | 119 +++++++++++++++++++++++++++++++++++------
+>  1 file changed, 103 insertions(+), 16 deletions(-)
+> 
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index b22caa8b530ab..26cec833766c3 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -4,6 +4,7 @@
+>  #include <linux/falloc.h>
+>  #include <linux/fs.h>
+>  #include <linux/kvm_host.h>
+> +#include <linux/maple_tree.h>
+>  #include <linux/mempolicy.h>
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/pagemap.h>
+> @@ -32,6 +33,7 @@ struct gmem_inode {
+>  	struct inode vfs_inode;
+> 
+>  	u64 flags;
+> +	struct maple_tree attributes;
+>  };
+> 
+>  static __always_inline struct gmem_inode *GMEM_I(struct inode *inode)
+> @@ -54,6 +56,23 @@ static inline kvm_pfn_t folio_file_pfn(struct folio *folio, pgoff_t index)
+>  	return folio_pfn(folio) + (index & (folio_nr_pages(folio) - 1));
+>  }
+> 
+> +static u64 kvm_gmem_get_attributes(struct inode *inode, pgoff_t index)
+> +{
+> +	void *entry = mtree_load(&GMEM_I(inode)->attributes, index);
+> +
+> +	return WARN_ON_ONCE(!entry) ? 0 : xa_to_value(entry);
+> +}
+> +
+> +static bool kvm_gmem_is_private_mem(struct inode *inode, pgoff_t index)
+> +{
+> +	return kvm_gmem_get_attributes(inode, index) & KVM_MEMORY_ATTRIBUTE_PRIVATE;
+> +}
+> +
+> +static bool kvm_gmem_is_shared_mem(struct inode *inode, pgoff_t index)
+> +{
+> +	return !kvm_gmem_is_private_mem(inode, index);
+> +}
+> +
+>  static int __kvm_gmem_prepare_folio(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  				    pgoff_t index, struct folio *folio)
+>  {
+> @@ -415,10 +434,13 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
+>  	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
+>  		return VM_FAULT_SIGBUS;
+> 
+> -	if (!(GMEM_I(inode)->flags & GUEST_MEMFD_FLAG_INIT_SHARED))
+> -		return VM_FAULT_SIGBUS;
+> +	filemap_invalidate_lock_shared(inode->i_mapping);
+> +	if (kvm_gmem_is_shared_mem(inode, vmf->pgoff))
+> +		folio = kvm_gmem_get_folio(inode, vmf->pgoff);
+> +	else
+> +		folio = ERR_PTR(-EACCES);
+> +	filemap_invalidate_unlock_shared(inode->i_mapping);
+> 
+> -	folio = kvm_gmem_get_folio(inode, vmf->pgoff);
+>  	if (IS_ERR(folio)) {
+>  		if (PTR_ERR(folio) == -EAGAIN)
+>  			return VM_FAULT_RETRY;
+> @@ -572,6 +594,46 @@ bool __weak kvm_arch_supports_gmem_init_shared(struct kvm *kvm)
+>  	return true;
+>  }
+> 
+> +static int kvm_gmem_init_inode(struct inode *inode, loff_t size, u64 flags)
+> +{
+> +	struct gmem_inode *gi = GMEM_I(inode);
+> +	MA_STATE(mas, &gi->attributes, 0, (size >> PAGE_SHIFT) - 1);
+> +	u64 attrs;
+> +	int r;
+> +
+> +	inode->i_op = &kvm_gmem_iops;
+> +	inode->i_mapping->a_ops = &kvm_gmem_aops;
+> +	inode->i_mode |= S_IFREG;
+> +	inode->i_size = size;
+> +	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
+> +	mapping_set_inaccessible(inode->i_mapping);
+> +	/* Unmovable mappings are supposed to be marked unevictable as well. */
+> +	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
+> +
+> +	gi->flags = flags;
+> +
+> +	mt_set_external_lock(&gi->attributes,
+> +			     &inode->i_mapping->invalidate_lock);
+> +
+> +	/*
+> +	 * Store default attributes for the entire gmem instance. Ensuring every
+> +	 * index is represented in the maple tree at all times simplifies the
+> +	 * conversion and merging logic.
+> +	 */
+> +	attrs = gi->flags & GUEST_MEMFD_FLAG_INIT_SHARED ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE;
+> +
+> +	/*
+> +	 * Acquire the invalidation lock purely to make lockdep happy. There
+> +	 * should be no races at this time since the inode hasn't yet been fully
+> +	 * created.
+> +	 */
+> +	filemap_invalidate_lock(inode->i_mapping);
+> +	r = mas_store_gfp(&mas, xa_mk_value(attrs), GFP_KERNEL);
+> +	filemap_invalidate_unlock(inode->i_mapping);
+> +
+> +	return r;
+> +}
+> +
+>  static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
+>  {
+>  	static const char *name = "[kvm-gmem]";
+> @@ -602,16 +664,9 @@ static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags)
+>  		goto err_fops;
+>  	}
+> 
+> -	inode->i_op = &kvm_gmem_iops;
+> -	inode->i_mapping->a_ops = &kvm_gmem_aops;
+> -	inode->i_mode |= S_IFREG;
+> -	inode->i_size = size;
+> -	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
+> -	mapping_set_inaccessible(inode->i_mapping);
+> -	/* Unmovable mappings are supposed to be marked unevictable as well. */
+> -	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
+> -
+> -	GMEM_I(inode)->flags = flags;
+> +	err = kvm_gmem_init_inode(inode, size, flags);
+> +	if (err)
+> +		goto err_inode;
+> 
+>  	file = alloc_file_pseudo(inode, kvm_gmem_mnt, name, O_RDWR, &kvm_gmem_fops);
+>  	if (IS_ERR(file)) {
+> @@ -798,9 +853,13 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  	if (!file)
+>  		return -EFAULT;
+> 
+> +	filemap_invalidate_lock_shared(file_inode(file)->i_mapping);
+> +
+>  	folio = __kvm_gmem_get_pfn(file, slot, index, pfn, &is_prepared, max_order);
+> -	if (IS_ERR(folio))
+> -		return PTR_ERR(folio);
+> +	if (IS_ERR(folio)) {
+> +		r = PTR_ERR(folio);
+> +		goto out;
+> +	}
+> 
+>  	if (!is_prepared)
+>  		r = kvm_gmem_prepare_folio(kvm, slot, gfn, folio);
+> @@ -812,6 +871,8 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  	else
+>  		folio_put(folio);
+> 
+> +out:
+> +	filemap_invalidate_unlock_shared(file_inode(file)->i_mapping);
+>  	return r;
+>  }
+>  EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_gmem_get_pfn);
+> @@ -925,13 +986,39 @@ static struct inode *kvm_gmem_alloc_inode(struct super_block *sb)
+> 
+>  	mpol_shared_policy_init(&gi->policy, NULL);
+> 
+> +	/*
+> +	 * Memory attributes are protected the filemap invalidation lock, but
+> +	 * the lock structure isn't available at this time.  Immediately mark
+> +	 * maple tree as using external locking so that accessing the tree
+> +	 * before its fully initialized results in NULL pointer dereferences
+> +	 * and not more subtle bugs.
+> +	 */
+> +	mt_init_flags(&gi->attributes, MT_FLAGS_LOCK_EXTERN);
+> +
+>  	gi->flags = 0;
+>  	return &gi->vfs_inode;
+>  }
+> 
+>  static void kvm_gmem_destroy_inode(struct inode *inode)
+>  {
+> -	mpol_free_shared_policy(&GMEM_I(inode)->policy);
+> +	struct gmem_inode *gi = GMEM_I(inode);
+> +
+> +	mpol_free_shared_policy(&gi->policy);
+> +
+> +	/*
+> +	 * Note!  Checking for an empty tree is functionally necessary to avoid
+> +	 * explosions if the tree hasn't been initialized, i.e. if the inode is
+> +	 * being destroyed before guest_memfd can set the external lock.
+> +	 */
+> +	if (!mtree_empty(&gi->attributes)) {
+> +		/*
+> +		 * Acquire the invalidation lock purely to make lockdep happy,
+> +		 * the inode is unreachable at this point.
+> +		 */
+> +		filemap_invalidate_lock(inode->i_mapping);
+> +		__mt_destroy(&gi->attributes);
+> +		filemap_invalidate_unlock(inode->i_mapping);
+> +	}
+>  }
+> 
+>  static void kvm_gmem_free_inode(struct inode *inode)
+> --
+> 2.51.0.858.gf9c4a03a3a-goog
 
-Cleaning will free any table levels that are fully included in the
-empty span. cleaning will run under the same 'range-locked' rules as
-map/unmap/iova_to_phys.
-
-This cleaning algorithm is already used as part of map, it just needs
-to be exposed as an independent op.
-
-Thanks,
-Jason
 
