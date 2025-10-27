@@ -1,88 +1,88 @@
-Return-Path: <linux-kselftest+bounces-44119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44120-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0285DC0F84B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 18:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 99ADAC0F8ED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 18:13:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9DF7E4E385C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 17:03:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0F5FB4F5C78
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 17:11:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C04B43126A2;
-	Mon, 27 Oct 2025 17:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ACC53128A1;
+	Mon, 27 Oct 2025 17:11:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SQjHH5vd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ddygaZdy"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0CC2301474
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 17:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A2432F693F
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 17:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761584619; cv=none; b=TsPZ/Nu2c0ihmGX8Q2E+Pzgat1OZkjsbuscA7TaQI8Shp9PrWaUwgyLrTUQol9Z8nECm7to/6tiIjionk9sbUrMQXiy4yW2MXTk6E017X9X/VG/uvHryZ3kfGhztVluFteCwWCcAg1DqSLHM0oJDtQ/BjVJ+hOJ8aJQ99iJPHCU=
+	t=1761585091; cv=none; b=dcs7GkgZArox/r6ZboPtXzIa56sBCMnvy0RcIEBBjwh3kBzmDgzL4/4J341at7hFxHSzwCqiD/eDFXfo8IiF6DXpAGwDPVDACs+XANFqyBdLx9z/2kZhuy1QSdNXGb9NlAYwKnga06XZM6OfT1Dk4y3dqyvtzf/Zc+Qs8jCtMgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761584619; c=relaxed/simple;
-	bh=76P57XRKfuzAKY1ciduC9CmiJBUvwKTZtkz3qwhdReE=;
+	s=arc-20240116; t=1761585091; c=relaxed/simple;
+	bh=J8ivzbU1Pp2OqalBPHzvW+ZBqRiBVxCwIlkRKZYdfyE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gWArevUs/12vAlOncr+AdmSJ+jv91RgoL5Sw6qxa7TsG1vs25+ClY/8JyTyPpl628PLkAVkh773S2xbppZ6ylSOwtABQRcHHKnlXT2CyzHNpa2U55souj3uaRVhqugIXpq1MaPAOdGDeftjh6K7pPivmKLP5P5UE12Mdbj2QhGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SQjHH5vd; arc=none smtp.client-ip=209.85.160.180
+	 To:Cc:Content-Type; b=VB0koEKOvqxsUcljZPeQnBRQlOvAKJzzenHTHZOBfXXXu7+dv29pVgNkzob9dy/mIYhpEeeNhForyyd/ucOYq68rjMgJqEQsneU9PttLEAqv1EAdilriIa5906f48WRjZtytWyekAPYVjJS/7HXyVmzHFvNWlsWhHk3ZtQm3Aqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ddygaZdy; arc=none smtp.client-ip=209.85.160.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4eccff716f4so17801cf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 10:03:37 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4ecfd66059eso24531cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 10:11:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761584616; x=1762189416; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1761585088; x=1762189888; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CuBWyV8t5IpeOQdEx4tKo7eHcJ5gDZZkmJ8Q6d4IQxs=;
-        b=SQjHH5vdDfQrMcEvDSkfF0LOtLgrZVCRUKP/U4O8kiZvO7EpTb6XRBJAWE4Vvo8b6u
-         aX3DemEBulu2gHUjTQ2ULYdZObIOLCRU95liZWcHosEGbWLuhaPRXxydNOXuKaQLuycD
-         TzTpqZcJ5IJTqppptW9RyFKAazVhIJkWHrdmjNzc5JyFHDv+E5BE7ZajMI9kO+AV7JW4
-         VYGByQf9gXeAHjzbzHdI9pNufrt5IiapZsaBHzDGK3s2JT3dM7yzv8qhKNhgsj3OeSSI
-         FnO5TEama3lm7wMQsW+NxID6epmKrDPY2l7AtcdR5eDOVTww2Jka7IeECPVzw2gtdJOv
-         Z7VQ==
+        bh=RkZmSx8dpTjoJY0itRm1I8yyUutbM3HifAA470MzOBE=;
+        b=ddygaZdy2d8znzeSKb/+/fUZFjXezai7bBTLZ8L2CV+tknpPFUtnUFH/1+i3fUKif+
+         jvBczY7pYOFA3mZLdAiQpa5ewDvHbSV/GDdbzLSSo3gQPnFbfAbvhdk8LGGpfBGK/khB
+         S4Kmo6pcLeshLfgVFxkn3ry6cTWFekVRG9gRAK8bwcGyJzoWMYgzYo+q149T6iXX2H3J
+         BfoKsL/d22PF8kSj/CvwoagVqG5Y38f4uglTrs5Zajow35dezrjnQGDbWhPY4l4Z3+p6
+         Fbv1hJXxnoAnEid9kjwnbZdBQeRqunDAzcwCswrlxrFFmhpox6Su28d7a4H+jkZFTbml
+         VBzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761584616; x=1762189416;
+        d=1e100.net; s=20230601; t=1761585088; x=1762189888;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CuBWyV8t5IpeOQdEx4tKo7eHcJ5gDZZkmJ8Q6d4IQxs=;
-        b=FBPGxf8PdXdWJ0qLpZdnUVbYO1fZpdrRWA+1PvbR8mEfUF6hMz/ETQGYflZIlg2kQq
-         Oe5RMkN2GdMgRMuO8ns28cUfTd82CJQO3+uLVzBvq37e40Qykh7g8Wg1l1ZlFR9Tq1r5
-         McPnUw3louZhEQYCXlutk4mcNjj2XfjimPfhoNcgK3Jof3VSOnDofDllOnXcc5U+ExkW
-         B6BSu+w/hU+/F1lsK8l6jjVKtEbH8A9UChZnPlALUOFDTgwBc/y1DsL/7YbPEFh08H53
-         AT2PpV1uua9Tz+MIrrjNfv5VcQcjGGrF/nz3BS9I3426FdMUUUqmnQpwDPQbGJrmFqhk
-         +/Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCVVKrgz/mtduwC7fcOH/SuOB/s9BrIErQiR9tF6XHHajTmvtAskfyRFqs2n+jZd6L8ibOrLCdcFmSeHPQ2eYu8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1jPun++oAxvwxl7J9wa0p3G/b50aZr4V6FnDETyipbOzCYIh6
-	9zOeTnxD6u2CiTsz9mzL3hsiIocN3LnfORwF6jT8oG8CVgwP8IKIVirYOMhpohIjRogHgiupyKz
-	0/aZWgqa+wd9TR9c7KfnaZEt7tTHNDVDMPVRZK97v
-X-Gm-Gg: ASbGnct7R6cADmx2W82RDpEsedeEJtmCC0yOjlLA23mtLtO6HxjFku2UItC5kiJhn2n
-	yXZtTbIQG4YxaXHLIUgQyqqJaiHa2EH+QY5wjXFiK6mJinaIK2QSoMwf6rmVG7ciIyK8S3Z9Y3W
-	Ym0MkrEaU7GE4ac0D3c/gb4Ag7WDk9etP9UCLEL9+2osd9peuMKhsF75DEhbCcgimRpVEZyU51m
-	XsXP47aAJGIAAjhEt9CZQpM/0fkZOzDSBgUE+x8rQN2EWU5txVK6kTkoW/BlYmIedtd7f2vm5Iq
-	Q6vQ026ON78YskE=
-X-Google-Smtp-Source: AGHT+IFN9TFkidqfzRB2fPd/REPEcFZal1bmTvuVA0pkE0hW3jE0igGvK+Re1w0TU5MjhMypj3WmJMEqZCFYaAXuhjI=
-X-Received: by 2002:a05:622a:1b20:b0:4e8:85ac:f7a7 with SMTP id
- d75a77b69052e-4ed06edaa9cmr1797841cf.9.1761584616175; Mon, 27 Oct 2025
- 10:03:36 -0700 (PDT)
+        bh=RkZmSx8dpTjoJY0itRm1I8yyUutbM3HifAA470MzOBE=;
+        b=wT9kJd77w7uRLEtkJ9gNWt6VGSoGQFE2MO4z2aVBi7qETcHiaO/7yF2ZwECfmT3NKy
+         3jwRn2A19ekKCAyJ+B0iSXdvbaqP98B1UMJk/k/dQ9iIo09WvevzLRcqp3zJ783ZnVgI
+         mGkBaJi4+kfHNZ0ZceAm2/+9KUfgVpH0AHDu4rV4pwDt4LYZ2E1wd+N+1hXz06zrb8GP
+         FEUPo/7NiHqc7pYJg/Fk2t7QLu1yi5LaEc7fkRI1Bh+uePfal32VZuiG6N6vlcHWqPkq
+         MFQrkpEkOAkeQQIh8wYwclf+zm0q/sP4wnCK9HzXWQvnfAplUdF/VVpbP5G7xShCTQD0
+         MTnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVkXIUqvPO11o/sC7iG9Yv6KJ0qm43EppYCP7wf7USqUbZ0aM43jRRgEI/Q4nk6m69QL/oXfiwIy6kvGksSZAs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLrIw28uuxDfDVlg//1RRT5s0svW2DjoFNqbPXYffx6AThiqD6
+	ksijXEkxhN7yevd9f1mqT7glH1/ey2l+WxoLj6M/VYbYcjOly5gNR51myP7cMpEV/laHbRB6uFo
+	PNT7eTkiBHNxvV8lT1z5C3JbB9s3QjxTfUme2I+b8
+X-Gm-Gg: ASbGncto7tl+q2RVsGi5bLYHFiQMwubElfvReXUglYUVhGRlxlbl/sFVCHxlEL8V8FO
+	npKMjyKBdvf6tKaNhJbdmllQzirEL6YZ63lPrg0K0oPz/KibOlHRGVPVOkKWzmqN0jZQhLNUv+f
+	Gf0OGRMkR6JprKr91pUiMKJyONtXTNfwwryFA96TsyGw2xR4hAnCIHC50dP8IGF/DOxXZ4VQLI1
+	XkCe/1de32YjXcyZD1uagjUPmAqFzxBI5cK786V0QLNn8w6pZ8yuKtZH5afs20cAz2hcQtRupQd
+	4Qhuan1GMVTzvLgcI7t1e37rAw==
+X-Google-Smtp-Source: AGHT+IFYZFQvUUcOg+pB8HvVWH4METdpuXNt2gqGTWS3aevv4uQCk/iv6mG/Y5YaeTAZw131jeBvrYZDxbIfiMD4pj0=
+X-Received: by 2002:a05:622a:145:b0:4eb:75cb:a267 with SMTP id
+ d75a77b69052e-4ed08f87205mr57611cf.12.1761585087737; Mon, 27 Oct 2025
+ 10:11:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <6-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
-In-Reply-To: <6-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com> <8-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
+In-Reply-To: <8-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
 From: Samiullah Khawaja <skhawaja@google.com>
-Date: Mon, 27 Oct 2025 10:03:24 -0700
-X-Gm-Features: AWmQ_bkzqL1J7Dno0EwBGFLGJfK57ZidX1YETIjkkxZGoaq69GR5cYhgBr0TIiw
-Message-ID: <CAAywjhQRTuXHGOmK90yL4iefVWCaUs_QgL6itgEy2n0fCzMYUw@mail.gmail.com>
-Subject: Re: [PATCH v7 06/15] iommupt: Add unmap_pages op
+Date: Mon, 27 Oct 2025 10:11:16 -0700
+X-Gm-Features: AWmQ_bnmBAjgowi7K5xJWke3P6tJnKzVPZ6u-N_-kXDu3goD3x7x_3nGpXOFItM
+Message-ID: <CAAywjhREjVt00WeMXV=VDfdFCLh4YhGQQM3TJOU9sbzXeiX3zQ@mail.gmail.com>
+Subject: Re: [PATCH v7 08/15] iommupt: Add read_and_clear_dirty op
 To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
 	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, 
@@ -103,270 +103,183 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Oct 23, 2025 at 11:21=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> w=
 rote:
 >
-> unmap_pages removes mappings and any fully contained interior tables from
-> the given range. This follows the now-standard iommu_domain API definitio=
-n
-> where it does not split up larger page sizes into smaller. The caller mus=
-t
-> perform unmap only on ranges created by map or it must have somehow
-> otherwise determined safe cut points (eg iommufd/vfio use iova_to_phys to
-> scan for them)
+> IOMMU HW now supports updating a dirty bit in an entry when a DMA writes
+> to the entry's VA range. iommufd has a uAPI to read and clear the dirty
+> bits from the tables.
 >
-> A future work will provide 'cut' which explicitly does the page size spli=
-t
-> if the HW can support it.
->
-> unmap is implemented with a recursive descent of the tree. If the caller
-> provides a VA range that spans an entire table item then the table memory
-> can be freed as well.
->
-> If an entire table item can be freed then this version will also check th=
-e
-> leaf-only level of the tree to ensure that all entries are present to
-> generate -EINVAL. Many of the existing drivers don't do this extra check.
->
-> This version sits under the iommu_domain_ops as unmap_pages() but does no=
-t
-> require the external page size calculation. The implementation is actuall=
-y
-> unmap_range() and can do arbitrary ranges, internally handling all the
-> validation and supporting any arrangment of page sizes. A future series
-> can optimize __iommu_unmap() to take advantage of this.
->
-> Freed page table memory is batched up in the gather and will be freed in
-> the driver's iotlb_sync() callback after the IOTLB flush completes.
+> This is a trivial recursive descent algorithm to read and optionally clea=
+r
+> the dirty bits. The format needs a function to tell if a contiguous entry
+> is dirty, and a function to clear a contiguous entry back to clean.
 >
 > Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
 > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
 > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 > ---
->  drivers/iommu/generic_pt/iommu_pt.h | 156 ++++++++++++++++++++++++++++
->  include/linux/generic_pt/iommu.h    |  10 +-
->  2 files changed, 164 insertions(+), 2 deletions(-)
+>  drivers/iommu/generic_pt/iommu_pt.h | 104 ++++++++++++++++++++++++++++
+>  include/linux/generic_pt/iommu.h    |   6 ++
+>  2 files changed, 110 insertions(+)
 >
 > diff --git a/drivers/iommu/generic_pt/iommu_pt.h b/drivers/iommu/generic_=
 pt/iommu_pt.h
-> index 5ff1b887928a46..e3d1b272723db0 100644
+> index f32e81509f4f09..448c5796d4a861 100644
 > --- a/drivers/iommu/generic_pt/iommu_pt.h
 > +++ b/drivers/iommu/generic_pt/iommu_pt.h
-> @@ -14,6 +14,29 @@
->  #include <linux/export.h>
->  #include <linux/iommu.h>
->  #include "../iommu-pages.h"
-> +#include <linux/cleanup.h>
-> +#include <linux/dma-mapping.h>
-> +
-> +static void gather_range_pages(struct iommu_iotlb_gather *iotlb_gather,
-> +                              struct pt_iommu *iommu_table, pt_vaddr_t i=
-ova,
-> +                              pt_vaddr_t len,
-> +                              struct iommu_pages_list *free_list)
-> +{
-> +       struct pt_common *common =3D common_from_iommu(iommu_table);
-> +
-> +       if (pt_feature(common, PT_FEAT_FLUSH_RANGE_NO_GAPS) &&
-> +           iommu_iotlb_gather_is_disjoint(iotlb_gather, iova, len)) {
-> +               iommu_iotlb_sync(&iommu_table->domain, iotlb_gather);
-> +               /*
-> +                * Note that the sync frees the gather's free list, so we=
- must
-> +                * not have any pages on that list that are covered by io=
-va/len
-> +                */
-> +       } else if (pt_feature(common, PT_FEAT_FLUSH_RANGE)) {
-> +               iommu_iotlb_gather_add_range(iotlb_gather, iova, len);
-> +       }
-> +
-> +       iommu_pages_list_splice(free_list, &iotlb_gather->freelist);
-> +}
->
->  #define DOMAIN_NS(op) CONCATENATE(CONCATENATE(pt_iommu_, PTPFX), op)
->
-> @@ -164,6 +187,139 @@ static inline struct pt_table_p *table_alloc_top(st=
-ruct pt_common *common,
->                 log2_to_int(pt_top_memsize_lg2(common, top_of_table)));
+> @@ -162,6 +162,108 @@ phys_addr_t DOMAIN_NS(iova_to_phys)(struct iommu_do=
+main *domain,
 >  }
+>  EXPORT_SYMBOL_NS_GPL(DOMAIN_NS(iova_to_phys), "GENERIC_PT_IOMMU");
 >
-> +struct pt_unmap_args {
-> +       struct iommu_pages_list free_list;
-> +       pt_vaddr_t unmapped;
+> +struct pt_iommu_dirty_args {
+> +       struct iommu_dirty_bitmap *dirty;
+> +       unsigned int flags;
 > +};
 > +
-> +static __maybe_unused int __unmap_range(struct pt_range *range, void *ar=
-g,
-> +                                       unsigned int level,
-> +                                       struct pt_table_p *table)
+> +static void record_dirty(struct pt_state *pts,
+> +                        struct pt_iommu_dirty_args *dirty,
+> +                        unsigned int num_contig_lg2)
 > +{
-> +       struct pt_state pts =3D pt_init(range, level, table);
-> +       struct pt_unmap_args *unmap =3D arg;
-> +       unsigned int num_oas =3D 0;
-> +       unsigned int start_index;
-> +       int ret =3D 0;
+> +       pt_vaddr_t dirty_len;
 > +
-> +       _pt_iter_first(&pts);
-> +       start_index =3D pts.index;
-> +       pts.type =3D pt_load_entry_raw(&pts);
-> +       /*
-> +        * A starting index is in the middle of a contiguous entry
-> +        *
-> +        * The IOMMU API does not require drivers to support unmapping pa=
-rts of
-> +        * large pages. Long ago VFIO would try to split maps but the cur=
-rent
-> +        * version never does.
-> +        *
-> +        * Instead when unmap reaches a partial unmap of the start of a l=
-arge
-> +        * IOPTE it should remove the entire IOPTE and return that size t=
-o the
-> +        * caller.
-> +        */
-> +       if (pts.type =3D=3D PT_ENTRY_OA) {
-> +               if (log2_mod(range->va, pt_entry_oa_lg2sz(&pts)))
-> +                       return -EINVAL;
-> +               /* Micro optimization */
-> +               goto start_oa;
+> +       if (num_contig_lg2 !=3D ilog2(1)) {
+> +               unsigned int index =3D pts->index;
+> +               unsigned int end_index =3D log2_set_mod_max_t(
+> +                       unsigned int, pts->index, num_contig_lg2);
+> +
+> +               /* Adjust for being contained inside a contiguous page */
+> +               end_index =3D min(end_index, pts->end_index);
+> +               dirty_len =3D (end_index - index) *
+> +                               log2_to_int(pt_table_item_lg2sz(pts));
+> +       } else {
+> +               dirty_len =3D log2_to_int(pt_table_item_lg2sz(pts));
 > +       }
 > +
-> +       do {
-> +               if (pts.type !=3D PT_ENTRY_OA) {
-> +                       bool fully_covered;
+> +       if (dirty->dirty->bitmap)
+> +               iova_bitmap_set(dirty->dirty->bitmap, pts->range->va,
+> +                               dirty_len);
 > +
-> +                       if (pts.type !=3D PT_ENTRY_TABLE) {
-> +                               ret =3D -EINVAL;
-> +                               break;
-> +                       }
+> +       if (!(dirty->flags & IOMMU_DIRTY_NO_CLEAR)) {
+> +               pt_entry_make_write_clean(pts);
+> +               iommu_iotlb_gather_add_range(dirty->dirty->gather,
+> +                                            pts->range->va, dirty_len);
+> +       }
+> +}
 > +
-> +                       if (pts.index !=3D start_index)
-> +                               pt_index_to_va(&pts);
-> +                       pts.table_lower =3D pt_table_ptr(&pts);
+> +static inline int __read_and_clear_dirty(struct pt_range *range, void *a=
+rg,
+> +                                        unsigned int level,
+> +                                        struct pt_table_p *table)
+> +{
+> +       struct pt_state pts =3D pt_init(range, level, table);
+> +       struct pt_iommu_dirty_args *dirty =3D arg;
+> +       int ret;
 > +
-> +                       fully_covered =3D pt_entry_fully_covered(
-> +                               &pts, pt_table_item_lg2sz(&pts));
-> +
-> +                       ret =3D pt_descend(&pts, arg, __unmap_range);
+> +       for_each_pt_level_entry(&pts) {
+> +               if (pts.type =3D=3D PT_ENTRY_TABLE) {
+> +                       ret =3D pt_descend(&pts, arg, __read_and_clear_di=
+rty);
 > +                       if (ret)
-> +                               break;
-> +
-> +                       /*
-> +                        * If the unmapping range fully covers the table =
-then we
-> +                        * can free it as well. The clear is delayed unti=
-l we
-> +                        * succeed in clearing the lower table levels.
-> +                        */
-> +                       if (fully_covered) {
-> +                               iommu_pages_list_add(&unmap->free_list,
-> +                                                    pts.table_lower);
-> +                               pt_clear_entries(&pts, ilog2(1));
-> +                       }
-> +                       pts.index++;
-> +               } else {
-> +                       unsigned int num_contig_lg2;
-> +start_oa:
-> +                       /*
-> +                        * If the caller requested an last that falls wit=
-hin a
-> +                        * single entry then the entire entry is unmapped=
- and
-> +                        * the length returned will be larger than reques=
-ted.
-> +                        */
-> +                       num_contig_lg2 =3D pt_entry_num_contig_lg2(&pts);
-> +                       pt_clear_entries(&pts, num_contig_lg2);
-> +                       num_oas +=3D log2_to_int(num_contig_lg2);
-> +                       pts.index +=3D log2_to_int(num_contig_lg2);
+> +                               return ret;
+> +                       continue;
 > +               }
-> +               if (pts.index >=3D pts.end_index)
-> +                       break;
-> +               pts.type =3D pt_load_entry_raw(&pts);
-> +       } while (true);
-> +
-> +       unmap->unmapped +=3D log2_mul(num_oas, pt_table_item_lg2sz(&pts))=
-;
-> +       return ret;
+> +               if (pts.type =3D=3D PT_ENTRY_OA && pt_entry_is_write_dirt=
+y(&pts))
+> +                       record_dirty(&pts, dirty,
+> +                                    pt_entry_num_contig_lg2(&pts));
+> +       }
+> +       return 0;
 > +}
 > +
 > +/**
-> + * unmap_pages() - Make a range of IOVA empty/not present
+> + * read_and_clear_dirty() - Manipulate the HW set write dirty state
 > + * @domain: Domain to manipulate
 > + * @iova: IO virtual address to start
-> + * @pgsize: Length of each page
-> + * @pgcount: Length of the range in pgsize units starting from @iova
-> + * @iotlb_gather: Gather struct that must be flushed on return
+> + * @size: Length of the IOVA
+> + * @flags: A bitmap of IOMMU_DIRTY_NO_CLEAR
+> + * @dirty: Place to store the dirty bits
 > + *
-> + * unmap_pages() will remove a translation created by map_pages(). It ca=
-nnot
-> + * subdivide a mapping created by map_pages(), so it should be called wi=
-th IOVA
-> + * ranges that match those passed to map_pages(). The IOVA range can agg=
-regate
-> + * contiguous map_pages() calls so long as no individual range is split.
+> + * Iterate over all the entries in the mapped range and record their wri=
+te dirty
+> + * status in iommu_dirty_bitmap. If IOMMU_DIRTY_NO_CLEAR is not specifie=
+d then
+> + * the entries will be left dirty, otherwise they are returned to being =
+not
+> + * write dirty.
 > + *
-> + * Context: The caller must hold a write range lock that includes
-> + * the whole range.
+> + * Context: The caller must hold a read range lock that includes @iova.
 > + *
-> + * Returns: Number of bytes of VA unmapped. iova + res will be the point
-> + * unmapping stopped.
+> + * Returns: -ERRNO on failure, 0 on success.
 > + */
-> +size_t DOMAIN_NS(unmap_pages)(struct iommu_domain *domain, unsigned long=
- iova,
-> +                             size_t pgsize, size_t pgcount,
-> +                             struct iommu_iotlb_gather *iotlb_gather)
+> +int DOMAIN_NS(read_and_clear_dirty)(struct iommu_domain *domain,
+> +                                   unsigned long iova, size_t size,
+> +                                   unsigned long flags,
+> +                                   struct iommu_dirty_bitmap *dirty)
 > +{
 > +       struct pt_iommu *iommu_table =3D
 > +               container_of(domain, struct pt_iommu, domain);
-> +       struct pt_unmap_args unmap =3D { .free_list =3D IOMMU_PAGES_LIST_=
-INIT(
-> +                                              unmap.free_list) };
-> +       pt_vaddr_t len =3D pgsize * pgcount;
+> +       struct pt_iommu_dirty_args dirty_args =3D {
+> +               .dirty =3D dirty,
+> +               .flags =3D flags,
+> +       };
 > +       struct pt_range range;
 > +       int ret;
 > +
+> +#if !IS_ENABLED(CONFIG_IOMMUFD_DRIVER) || !defined(pt_entry_is_write_dir=
+ty)
+> +       return -EOPNOTSUPP;
+> +#endif
+> +
 > +       ret =3D make_range(common_from_iommu(iommu_table), &range, iova, =
-len);
+size);
 > +       if (ret)
-> +               return 0;
+> +               return ret;
 > +
-> +       pt_walk_range(&range, __unmap_range, &unmap);
-> +
-> +       gather_range_pages(iotlb_gather, iommu_table, iova, len,
-> +                          &unmap.free_list);
-> +
-> +       return unmap.unmapped;
+> +       ret =3D pt_walk_range(&range, __read_and_clear_dirty, &dirty_args=
+);
+> +       PT_WARN_ON(ret);
+> +       return ret;
 > +}
-> +EXPORT_SYMBOL_NS_GPL(DOMAIN_NS(unmap_pages), "GENERIC_PT_IOMMU");
+> +EXPORT_SYMBOL_NS_GPL(DOMAIN_NS(read_and_clear_dirty), "GENERIC_PT_IOMMU"=
+);
 > +
->  static void NS(get_info)(struct pt_iommu *iommu_table,
->                          struct pt_iommu_info *info)
->  {
+>  struct pt_iommu_collect_args {
+>         struct iommu_pages_list free_list;
+>         /* Fail if any OAs are within the range */
+> @@ -1015,5 +1117,7 @@ EXPORT_SYMBOL_NS_GPL(pt_iommu_hw_info, "GENERIC_PT_=
+IOMMU");
+>  MODULE_LICENSE("GPL");
+>  MODULE_DESCRIPTION("IOMMU Page table implementation for " __stringify(PT=
+PFX_RAW));
+>  MODULE_IMPORT_NS("GENERIC_PT");
+> +/* For iommu_dirty_bitmap_record() */
+> +MODULE_IMPORT_NS("IOMMUFD");
+>
+>  #endif  /* __GENERIC_PT_IOMMU_PT_H */
 > diff --git a/include/linux/generic_pt/iommu.h b/include/linux/generic_pt/=
 iommu.h
-> index 5622856e199881..ceb6bc9cea37cd 100644
+> index 0d59423024d57f..03a906fbe12a83 100644
 > --- a/include/linux/generic_pt/iommu.h
 > +++ b/include/linux/generic_pt/iommu.h
-> @@ -9,6 +9,7 @@
->  #include <linux/iommu.h>
->  #include <linux/mm_types.h>
->
-> +struct iommu_iotlb_gather;
+> @@ -12,6 +12,7 @@
+>  struct iommu_iotlb_gather;
 >  struct pt_iommu_ops;
+>  struct pt_iommu_driver_ops;
+> +struct iommu_dirty_bitmap;
 >
 >  /**
-> @@ -119,6 +120,10 @@ struct pt_iommu_cfg {
->  #define IOMMU_PROTOTYPES(fmt)                                           =
-       \
->         phys_addr_t pt_iommu_##fmt##_iova_to_phys(struct iommu_domain *do=
-main, \
->                                                   dma_addr_t iova);      =
+>   * DOC: IOMMU Radix Page Table
+> @@ -182,6 +183,9 @@ struct pt_iommu_cfg {
+>                 struct iommu_domain *domain, unsigned long iova,         =
       \
-> +       size_t pt_iommu_##fmt##_unmap_pages(                             =
+>                 size_t pgsize, size_t pgcount,                           =
       \
-> +               struct iommu_domain *domain, unsigned long iova,         =
+>                 struct iommu_iotlb_gather *iotlb_gather);                =
       \
-> +               size_t pgsize, size_t pgcount,                           =
+> +       int pt_iommu_##fmt##_read_and_clear_dirty(                       =
       \
-> +               struct iommu_iotlb_gather *iotlb_gather);                =
+> +               struct iommu_domain *domain, unsigned long iova, size_t s=
+ize,  \
+> +               unsigned long flags, struct iommu_dirty_bitmap *dirty);  =
       \
 >         int pt_iommu_##fmt##_init(struct pt_iommu_##fmt *table,          =
       \
@@ -374,16 +287,12 @@ main, \
       \
 >                                   gfp_t gfp);                            =
       \
-> @@ -135,8 +140,9 @@ struct pt_iommu_cfg {
->   * A driver uses IOMMU_PT_DOMAIN_OPS to populate the iommu_domain_ops fo=
-r the
->   * iommu_pt
->   */
-> -#define IOMMU_PT_DOMAIN_OPS(fmt) \
-> -       .iova_to_phys =3D &pt_iommu_##fmt##_iova_to_phys,
-> +#define IOMMU_PT_DOMAIN_OPS(fmt)                        \
-> +       .iova_to_phys =3D &pt_iommu_##fmt##_iova_to_phys, \
-> +       .unmap_pages =3D &pt_iommu_##fmt##_unmap_pages
+> @@ -202,6 +206,8 @@ struct pt_iommu_cfg {
+>         .iova_to_phys =3D &pt_iommu_##fmt##_iova_to_phys, \
+>         .map_pages =3D &pt_iommu_##fmt##_map_pages,       \
+>         .unmap_pages =3D &pt_iommu_##fmt##_unmap_pages
+> +#define IOMMU_PT_DIRTY_OPS(fmt) \
+> +       .read_and_clear_dirty =3D &pt_iommu_##fmt##_read_and_clear_dirty
 >
 >  /*
 >   * The driver should setup its domain struct like
