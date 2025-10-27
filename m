@@ -1,173 +1,137 @@
-Return-Path: <linux-kselftest+bounces-44090-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CD72C0D287
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 12:33:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B82BBC0D296
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 12:35:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 684363BFBAB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 11:32:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0433E19A387E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 11:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89AB22F3C23;
-	Mon, 27 Oct 2025 11:32:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46A9E2F9DA2;
+	Mon, 27 Oct 2025 11:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="lf95dUxy";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qE4sf2xr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dfUk1juL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f195.google.com (mail-pg1-f195.google.com [209.85.215.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3C7029B8DC;
-	Mon, 27 Oct 2025 11:32:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3392F7AA0
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 11:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761564729; cv=none; b=C4WzqV6rc5SBq/Kwnv7t7gmNDHGVHe7RbI6QxRvOujGcbmaiL4dLlekDkgKsYo6aacgPA+ADgOGpEypNWf7dfzB8bnnuG3q93G6RQHAGJzYRKJBKuvwRd3U8xzSczmaZY9q/RV+6XO/RhZeXS5OTiI0Dq0pXComkqVc3tRa76v8=
+	t=1761564895; cv=none; b=G1ZPdedQMoSLJW6zys2MQLkzQlux/kETinD4QolZNrgGcc/yaSAn6ojCwEJ1+Eu502M7yVeLt6biYb122d3JrT3RcvAuE+74kpSvIg3CIG5a0Eabajm+Gh1YDfO0VPhxbIEQYD+jihfksvw4yHFHMSn/4523AD6AJoBrb50Zw1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761564729; c=relaxed/simple;
-	bh=mzJ6tgFelr1ieJHNluyutTvelTfoU7hmkhH46j4QKzQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E7OstRW7RBL8Eu+zagB4QwPo+72LMuLlOQop7oQJoj3G9iJUnNwe8XMKen/nBnFeemlkjxNTLuUjuvKdzLOeTG0GRdmIjFCLVwwpYY61IOd/lAwyaMfWjAHQ7Q2TVGuQZmwNNtDXNIJksDsPe1Nv9ikNDKg3wyxVONqopTWbyJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=lf95dUxy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qE4sf2xr; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-12.internal (phl-compute-12.internal [10.202.2.52])
-	by mailfout.stl.internal (Postfix) with ESMTP id C97351D00093;
-	Mon, 27 Oct 2025 07:32:04 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Mon, 27 Oct 2025 07:32:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1761564724; x=
-	1761651124; bh=t1ECxHugQwC1OkNvzakKYf0xv9CfVeGrcJAJJJWnXQ4=; b=l
-	f95dUxybDKtE608vj7RLT7i62smFIz3nrtU4wTY4OOQaXYZgHSGBfndRkcMXduRf
-	lr8b1VhQdqtBrUD9ClCgByggGW5KrLSo2TQgaPR/Luyral0dIRmYtegZPkmOjzA1
-	lKQKxgwm7aN+XXZZ8cMhMfyKmuH0YuhvW0enzMUUIdo/zjDm47R1ybfqIrK+ZNEh
-	oQGjcTnTUpvUn2IEnpopyl7SSiVVPhZUONVEbmCMFn3GvoIpsCDCEC44rglK40f5
-	39/JPw7/ERuR03yGZUOX0KgSmlbtG8zpN5+TB/unDFArEyAOph7erRoXbz0Gowa7
-	Nu7zNnEhD36r0RnvTzldg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1761564724; x=1761651124; bh=t1ECxHugQwC1OkNvzakKYf0xv9CfVeGrcJA
-	JJJWnXQ4=; b=qE4sf2xrq00QMi3aVUsYnK3KIjS3GMFE6dOCbg//QvvhOlYqXY+
-	OJe1p8lFwx7L1erlL01bgL7dcP+uvD6GBFhr26NvbB4o5WEr7uD2JQTJFTdUDOsd
-	de6/ncRvFhaqT4fleKbgnfDjT2tmG8xkrthVkEcLerC/wQQwk7DE3MLZq9qbjbZR
-	X/gINeklo9/tiOI5Kg+Bpp0SLQucyxfgdVge+jLSjJu9stzTLaXSDElzdbfQGDKP
-	4KSnZPUMHJuN4mTp9Q+yN1UqeUMR5IQGNPzLY+Xgn/oYNUVELx3Cdu9cEjXwasm6
-	u3fHrax5203zac5d2SXVVjvgc0As32vFUbA==
-X-ME-Sender: <xms:NFj_aL1JpDvxc60KWMktgBtFDfCKlKY_lZjlXQWnJzbkH-YJVOCd4A>
-    <xme:NFj_aNwmNX2HwbaL3dr_LhacYROHOO-hwlKGOiK8rMDhM7tyjsKNjeNEXpVCXgB8u
-    F63EZEc0Qj_9QlzZSWFy3JyeqyJv3hMzLRPpvWxIK33eERXmspWiMY>
-X-ME-Received: <xmr:NFj_aEiB0nL1qlfv1ohBS8DE5_QvA35kJsLnuz2IoZToQQgZVzxC6JEXZheH>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduheejkeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnheptefghfevheejueehgeekveeuueevgfeggfduieefhfffgfellefgteef
-    iefgvedtnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdr
-    nhgvthdpnhgspghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgtphhtth
-    hopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfihilhhfrhgvugdrohhp
-    vghnshhouhhrtggvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepnhgvthguvghvsehvgh
-    gvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqughotgesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshht
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesuggrvhgvmh
-    hlohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhm
-    pdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomh
-X-ME-Proxy: <xmx:NFj_aCMDqNK2xsTNO6WUNBa_TxtsPb2bU6qKM5GMhqEmTxCFcqvCLQ>
-    <xmx:NFj_aPdPCQL3S7GvrRZqvgH-KD44AaRzl9BgCxpYtEThfe-g1NmeMQ>
-    <xmx:NFj_aEw1ocP_UjgVnUf4zzM5tihv2VbpKNv2p17lV0BZYIH4LgPPBg>
-    <xmx:NFj_aM2MEQ6jwVwdcHDnWs44a3gxjU6FKHw5tPDnHBScnwMkfBQVZA>
-    <xmx:NFj_aFdre-8YRlbTSx6l6ru3Ovxa9seYmG63-sPmTz64duzxfKCs9QNn>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Oct 2025 07:32:03 -0400 (EDT)
-Date: Mon, 27 Oct 2025 12:32:02 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Wilfred Mallawa <wilfred.opensource@gmail.com>, netdev@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Simon Horman <horms@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
+	s=arc-20240116; t=1761564895; c=relaxed/simple;
+	bh=5TBB1dS0xdm96UtguSy0r3N+8c94aYIZTQ5p5Qhj/p8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jz21lhNrjys5bKoJRQz4ED72hwOyxmIRn2zVMz/qXBZdXgqSO1s8dMBr8xoB8qBpXS7qDGAeKWoIbcJEMrzISgHpv4LWoxmXJH2AnaYPSUMqwwAbSCw8588mwsRFwLxpMRY2Xkv0FHCo2stMLM2iAx+pmDuznsxKNKheNHuac6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dfUk1juL; arc=none smtp.client-ip=209.85.215.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f195.google.com with SMTP id 41be03b00d2f7-b6cea7c527bso4413709a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 04:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761564893; x=1762169693; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+bbEtFgvtdD4nIW4Ki4K8L2rFFyWkm5SaPEHBXu2tU4=;
+        b=dfUk1juLHkT8khrl2rfPRj/9bV1U7GNpn0ugRjQtcLwJsf9myJ6OXMTgXV9q5M9LyZ
+         u+WeCjwmXo3oqPwLRPb9gPMwisK0EPSPSGueIQ2ph1K9G4jDdsdJn/WiHBJvkwFAidt/
+         fnPiARrn8BJl7Ujxk4KdFlefz1ckXaDH0G/EDmt9GON9fwNTOSCaaNQ993+bFQ/1OnpY
+         g39pJre/LSDS8JKilExBcUgpzDY+B4248fKYveRQuV9/ISZnLXonmLVGFQld4dLRItZ/
+         ZdAf8SsZ9VafgvuUGqtJ6x/Cz84s5vvoAhENz6r5f97GdYPyeOwILdhkQZ7efGT1jaD4
+         jGBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761564893; x=1762169693;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+bbEtFgvtdD4nIW4Ki4K8L2rFFyWkm5SaPEHBXu2tU4=;
+        b=kh5P2QLgj9Jo8lHRlTETKM69mofNDIMPao1YUgpyRzsCfu6jtVHurZaNAq+2oGlfUC
+         wyT/VY4paamwCKXLib5qDeqPDTmni5Femku3KYs215x4Iecrq40ZGVcst0OrO99HCd62
+         NJNA8jkBTiM6OTstlxulvQ58GgcO8qIMOlNDx3cpOjrq44Ch68TechrnZXM2ZKMqL7r2
+         KrHDy1dM+f3dOuBDXk+qL7rNWwODSrDmub7If0HEj/guRZrK1E8xOKbg/27MRQNL+szt
+         IPh3LMnhasOlKDYO/Go/3ksM4M+MPfohxXI0OzXV/izpPJb6kZw1F7zFprdJsiij5kcl
+         xjAw==
+X-Gm-Message-State: AOJu0Yz1K0ZsdLG26Py9BTZFKXA+odBlyd0hIewoEVAG2RC4RBU4WnhB
+	Kz08T0owKAYCWkV8FvoxJkooaAKS9SB61zDOFGbXtwAbW7oXqpKdNEyxU9ZO8ojd2NU=
+X-Gm-Gg: ASbGnctap3RsMXL04lbqrzcEkUGW0nLqzs9Uivsvbc5DIQ96OOnYBbL8E5hcKkzLF53
+	4d06+L+VL6B00OH7SYQ6aBZCTXChuv+OUqAuzxgfKmnhCDdi1w3Zuyjmf4wSdgbHqMC3e1+IiT/
+	xeWf0aMBQR407s/7hiyUPL6h4CCr9avi9OxQm6TVwtAdVM7rm8erCbmRty/Zc+PxywLAmpJMV2Y
+	U/3frKojSTLWd9/HQnNZyX0kKEwIYyr8nXXdOBN610zn049n5gwoqCfdARadzhr7qDmMk/vgxiI
+	8fZhplrEnGHL3ilXwwT5XqPHC2+vHH1zPwLHy2d6jSb3NFg5532J0FcSjpraPqR4QkkVwKVO9j+
+	hPBPNkhveDxbF80nKrNM/s0WakFX64wJsGbksJZ4iraHwmu8qD4yj2rTU0liD6qOi5nlV1gdU0p
+	ZYEuAf8hpT/3Aqlgs1Sz/qJXOL486kTsqaAUoXAVT5
+X-Google-Smtp-Source: AGHT+IEXotOiXJpTCp/puthxXvnmCrnF43T4sh9Ukdwx3XQqsIiiaQDtaOtYzH9OodVVaE5Vc6YsYQ==
+X-Received: by 2002:a17:902:ec90:b0:293:a10:12ee with SMTP id d9443c01a7336-2930a1018a5mr217124005ad.15.1761564892811;
+        Mon, 27 Oct 2025 04:34:52 -0700 (PDT)
+Received: from fedora ([103.120.31.122])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498cf33f9sm78216485ad.22.2025.10.27.04.34.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Oct 2025 04:34:52 -0700 (PDT)
+From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+To: linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH net-next v8 1/2] net/tls: support setting the maximum
- payload size
-Message-ID: <aP9YMiW9V7Dkhu_1@krikkit>
-References: <20251022001937.20155-1-wilfred.opensource@gmail.com>
- <20251023184404.4dd617f0@kernel.org>
- <cd557c5b11b04da060f07d3849dc46e7b3625ed1.camel@gmail.com>
- <20251024163336.5fba5cd1@kernel.org>
+Cc: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Wei Yang <richard.weiyang@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Subject: [PATCH] selftests/user_events: Avoid taking address of packed member in perf_test
+Date: Mon, 27 Oct 2025 17:04:39 +0530
+Message-ID: <20251027113439.36059-1-ankitkhushwaha.linux@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251024163336.5fba5cd1@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-2025-10-24, 16:33:36 -0700, Jakub Kicinski wrote:
-> On Fri, 24 Oct 2025 12:11:11 +1000 Wilfred Mallawa wrote:
-> > In the previous record_size_limit approach for TLS 1.3, we need to
-> > account for the ContentType byte. Which complicates get/setsockopt()
-> > and tls_get_info(), where in setsockopt() for TLS 1.3 we need to
-> > subtract 1 to the user provided value and in getsockopt() we need add 1
-> > to keep the symmetry between the two (similarly in tls_get_info()). The
-> > underlying assumption was that userspace passes up directly what the
-> > endpoint specified as the record_size_limit.
-> > 
-> > With this approach we don't need to worry about it and we can pass the
-> > responsibility to user-space as documented, which I think makes the
-> > kernel code simpler.
-> 
-> But we haven't managed to avoid that completely:
-> 
-> +	if (value < TLS_MIN_RECORD_SIZE_LIM - (tls_13 ? 1 : 0) ||
+Accessing 'reg.write_index' directly triggers a -Waddress-of-packed-member
+warning due to potential unaligned pointer access:
 
-We could, by taking a smaller minimum payload size than what the RFC
-says (anything that allows us to make progress, maybe 8B?). ie, I
-don't think we have to be as strict as rfc8449 (leave the userspace
-library in charge of rejecting bogus values during negotiation of this
-extension).
+perf_test.c:239:38: warning: taking address of packed member 'write_index'
+of class or structure 'user_reg' may result in an unaligned pointer value 
+[-Waddress-of-packed-member]
+  239 |         ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
+      |                                             ^~~~~~~~~~~~~~~ 
 
-> I understand the motivation, the kernel code is indeed simpler.
+Use memcpy() instead to safely copy the value and avoid unaligned pointer
+access across architectures.
 
-Also more consistent: the kernel syscalls work with record payload (at
-the send()/recv() level). The rest is hidden. Userspace could try an
-approximation by sending max_payload-sized chunks with MSG_EOR.
+Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+---
+ tools/testing/selftests/user_events/perf_test.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-> Last night I read the RFC and then this patch, and it took me like
-> 10min to get all of it straight in my head.
-
-I don't find this stuff very clear either tbh, but maybe that's a
-problem in the RFC itself.
-
->  Maybe I was tried but
-> I feel like the user space developers will judge us harshly for 
-> the current uAPI.
-
-But userspace libraries have to do the same computations on their side
-if they want to implement this RFC. They have to figure out what the
-max payload size is as they're building the record, they can't just
-chop off a bit at the end after filling it.
-
-Quick grepping through gnutls got me to this:
-https://gitlab.com/gnutls/gnutls/-/blob/eb3c9febfa9969792b8ac0ca56ee9fbd9b0bd7ee/lib/ext/record_size_limit.c#L104-106
-
-So I have a slight preference for not being tied to a (kind of
-confusing) RFC.
-
+diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
+index 201459d8094d..e4385f4aa231 100644
+--- a/tools/testing/selftests/user_events/perf_test.c
++++ b/tools/testing/selftests/user_events/perf_test.c
+@@ -201,6 +201,7 @@ TEST_F(user, perf_empty_events) {
+ 	struct perf_event_mmap_page *perf_page;
+ 	int page_size = sysconf(_SC_PAGESIZE);
+ 	int id, fd;
++	__u32 write_index;
+ 	__u32 *val;
+ 
+ 	reg.size = sizeof(reg);
+@@ -236,7 +237,8 @@ TEST_F(user, perf_empty_events) {
+ 	ASSERT_EQ(1 << reg.enable_bit, self->check);
+ 
+ 	/* Ensure write shows up at correct offset */
+-	ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
++	memcpy(&write_index, &reg.write_index, sizeof(reg.write_index));
++	ASSERT_NE(-1, write(self->data_fd, &write_index,
+ 	                    sizeof(reg.write_index)));
+ 	val = (void *)(((char *)perf_page) + perf_page->data_offset);
+ 	ASSERT_EQ(PERF_RECORD_SAMPLE, *val);
 -- 
-Sabrina
+2.51.0
+
 
