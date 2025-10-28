@@ -1,147 +1,142 @@
-Return-Path: <linux-kselftest+bounces-44178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1821C1488A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 13:09:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41EB7C14BC4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 13:59:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4581948001A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 12:04:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E83A95603FF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 12:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 294EB32AACD;
-	Tue, 28 Oct 2025 12:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 114BA330326;
+	Tue, 28 Oct 2025 12:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iKRHWTXY"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="fzY7PG95"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F2C329C7E
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 12:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F06C32D0CE;
+	Tue, 28 Oct 2025 12:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761653049; cv=none; b=kwtK7dXmygA85RatgUL+ow1GopRnkr97UjAYbL482v7OHKdXtt9DfTqMbbzr9jsVujfVk85pwTBXGc4cq5ApsUSZxbBe5hzg0luOoHFvxLlv7/po4pqvbNSIIjTBHfiTAYGx25cIhp6rkPPAxWivU1omZuFKmzFdobmfdl1SVBM=
+	t=1761656268; cv=none; b=Bi98E/5fRNcB7WfSJ9/ZkIHXjnQI/aZW/8zXGPhYJChy71MP5As2UfB5owVpeNKGpIJyrZjEjgT3T5s+YjQzCFhOJm0liL4rALe/Cjvsi5Z3vVg6df+aJChRm3BZ0iDrB2DjuGnv3lKNdwMWZDuGOpld1Qab6m8djEmQDWoWqqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761653049; c=relaxed/simple;
-	bh=WskojuOBnwIjjigUBWEDMhf7Assmbp3QvliKc3R2txY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hOrIScd5DOJo00/I7ouqmK/vtCCEKV6cxEkqHzk5jnO66XjurqAXphfV9lgDRm0p2HFTzI407Ap799Dbn9t+k5UK5pw5JdL+8e2W8o2GMSPy92sauW8OC6pQOjRnjsWokkxavFgKbGgvkvYHdnJ5zkY08142LlgD67cPIZgNHrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iKRHWTXY; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761653046;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5xM3wpdALZDN/yyL3dIoanvrY9zgAvQNamISjAjH9Xc=;
-	b=iKRHWTXYRpHQZ27rlx7kGAwC2yo4XM2TpZMwucl0zC+hcG19lq94AlUPg0Vults/8Nn4R1
-	OvLhgzBT5Oc96e2HtXq0vWlECA8eDc60J/WmvNEeosRJGMQHEbOXET7NUa8hUpR5QNenC9
-	VUm/5wY0H96ee+N1SHdSMMMcyKVpepk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-292-hrlhAVh8PNG0KFrDMX4iOg-1; Tue, 28 Oct 2025 08:04:04 -0400
-X-MC-Unique: hrlhAVh8PNG0KFrDMX4iOg-1
-X-Mimecast-MFC-AGG-ID: hrlhAVh8PNG0KFrDMX4iOg_1761653043
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-47496b3c1dcso44549425e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 05:04:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761653042; x=1762257842;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5xM3wpdALZDN/yyL3dIoanvrY9zgAvQNamISjAjH9Xc=;
-        b=Bc+TnRcZeLQs/38LyQNUqI9TOwVwjeIBF2+TIpi6cpYUVT1qF2d+s2ve0+MQqSwulV
-         K9WRfGF3LlJ8PclWX9jLxYx4M6XDqNJ9WnfEWHOmmY+Kc/0zrTjeyXLBV1qvKvRm6ibk
-         WRE8dPPQm/zUKZB3/Ms/FPbiim2eV7J7gARYa//4mMQ22WGATICnoXEtHgs3CIWv6qhg
-         9oCGJCYkItYMYjx62LGGUAozoNLL30pQz57jliJS5lPlaKL3dIMUO+Moaa5IuEu1HqAQ
-         Y+s71zxNyT3pDbW7c7bryY3+gzNX7U50yWKquR+9gJF0gF5d0c2OFfqZetexWzXvbRsw
-         jxPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZiSVpBPFai31AVoW2EOXvnI4TLIZg4SmB4ji6DKondNBpS1LcyWmzd+gUD/oXop4Pf2jZhYz1ah4WTWNVnjU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy02bd0vBPiext6shiBmknRALxZJ7AG0yUnqjbUo9RPy2mn+L31
-	7DqSRKSIcj23CF2K3bIzSWX5I+Fppgx3gOq8+bFp24mUon09s1U2bawKR4jwx+zeWJlRTYGee4j
-	viMZzTjFwlwmlhiZ1ZoiT1/ZDujgbQ1XcCVkS4xrtMdlLAzsxPfNxAvsQIvOFkClyGSzhEg==
-X-Gm-Gg: ASbGnctw4FNKaBAkbLYE57C310zD8ncwInTzknM3H7WDAUZpiPrAFa5OAmvLHYkDneD
-	gLJGTNBdVSylFxk0Vsljuwsp/0ju0gLUas6r43azNq9NUJDJVOAI6JWJZLdnR4fRuH1Q9lDkGKY
-	tAeX+gU+aeLoaJV33z+MnlVv4jM0WXLK1jL96bnolswOJk3SATKTgkmQDKtBb38ax7ZY2ph6RhA
-	wwHhU4O4MPeOBZ4trKbwuWGq6agEniD5Y0+P6ElXlvWOrUfjcxLOjnjXc8a1kOjN7HFTUcKPec3
-	NlP7vFCGYm5grbQkgUbq82Hdf+T/U04CSrx1/3/Q6EVgop683SOTCtPddhGLXBGwVD/o2bZMfIy
-	3Y9IJ/Zkem/KW/2f+LQFxxgVEQ1KYu/z+0jeDtjN+zHouq3E=
-X-Received: by 2002:a05:600c:45d1:b0:46f:c55a:5a8d with SMTP id 5b1f17b1804b1-47717df9d11mr30659375e9.4.1761653042570;
-        Tue, 28 Oct 2025 05:04:02 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF6BMjF+yCSS1WwGmhw2kl9y9f0ddjV6c/A0RrHdROCvFXSSyoxTUbY0rSmrFqSolRY/cH10g==
-X-Received: by 2002:a05:600c:45d1:b0:46f:c55a:5a8d with SMTP id 5b1f17b1804b1-47717df9d11mr30658905e9.4.1761653042071;
-        Tue, 28 Oct 2025 05:04:02 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475dd035dc2sm196120995e9.5.2025.10.28.05.03.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Oct 2025 05:04:01 -0700 (PDT)
-Message-ID: <c5021188-593c-431c-bf01-6775f5b2b2ed@redhat.com>
-Date: Tue, 28 Oct 2025 13:03:58 +0100
+	s=arc-20240116; t=1761656268; c=relaxed/simple;
+	bh=TDkhGfvbFIsuApYl7W1PbBCVLsRu1y8MNTpUcv5nRhM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eS1P3HIcegyk4t9vMLGS173l0me+8JOqCeuLMUloNjx7J7y5a0QZEtqmN/fy3951Z1cU0biR3NhDjkc4LPqI5l932B7epy4IXwGJ9EAXXom/cFYaiUlNlrCTveid+zo1oDTmpUB4Vqg93yH63apntTQ7x8K/iCsPBMlOLpifbMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=fzY7PG95; arc=none smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59SBDfpI022540;
+	Tue, 28 Oct 2025 12:57:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=8WvFoOZGbWMBytz2CIESUyWMLaVfr
+	pK/d4NX1umlAeo=; b=fzY7PG95TDMM8U9KWcpZrEZC922s3gQUMPzz2n79xAQHE
+	oTAgzTtvxlBHEc4hfq2ZCR82kLcK6rQtrYkMUfk9d0OGFfO49lPpm4SFUefmmPV0
+	TxvEeE5h/qiuKsq1q08alDZANQJ3weaDDaScNGVO9ag7Hd5zzDQo0Jk5jvb4KAy3
+	n+HKPAoDU7U3NgocXe9eAbOkrmSFj8PU91LEz/4jUU8EBVRH8lTzviTwiaVPUcEk
+	BLjdc7OZ8QKC4L/KA0I4SOhagzDIygKl/Jv6M5YNcQT2zwpfsShyVASg8Q6Mw5tQ
+	shafDZTNa3Wd+1BdgNbC/1ssQHGrOneCgjZh6dE8g==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a232uuj5r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Oct 2025 12:57:14 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59SCfc3w009121;
+	Tue, 28 Oct 2025 12:57:12 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a0n0fcxa6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Oct 2025 12:57:12 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 59SCvCUs017359;
+	Tue, 28 Oct 2025 12:57:12 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4a0n0fcx93-1;
+	Tue, 28 Oct 2025 12:57:12 +0000
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To: bpf@vger.kernel.org
+Cc: alan.maguire@oracle.com,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [RFC bpf-next 0/2] Print map ID on successful creation
+Date: Tue, 28 Oct 2025 05:57:01 -0700
+Message-ID: <20251028125705.3586552-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 2/3] bpf,sockmap: disallow MPTCP sockets from
- sockmap
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev
-Cc: stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
- John Fastabend <john.fastabend@gmail.com>, Eric Dumazet
- <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Matthieu Baerts <matttbe@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20251023125450.105859-1-jiayuan.chen@linux.dev>
- <20251023125450.105859-3-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20251023125450.105859-3-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-28_04,2025-10-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ adultscore=0 phishscore=0 suspectscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2510020000 definitions=main-2510280108
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDI3MDA1MiBTYWx0ZWRfX7iMsTv2silQs
+ X+9QAz61nHIfFsR2c66WP7WYMq8GKJp+rVrcDnQudU1FGAgGVKg/bJ0ZxQKwYbP+o0Vh38U77hZ
+ nE6l4h5aBDHIynvBOxOADnLSHHbL+J5hkGoCswitSx+2Hr6dB+UHFOsriMD/DccOXVuWlRsHPc4
+ ddemrWqovr0OAVsH8CJUaoGiGQWeLrGVK5g/tgDr9M3x6E+epj3Iiv32IXb+AUBLIOhAO+nWzhq
+ cLX4aV9lbkeuBhhXpX0sogkMc3+2Ig+9ru0gXkSNFYRDvDa1VM6mDgperq3F3/tBg1aGGRUyXoH
+ Q5DHpBHZcmRC18uLF+6s/HMf6QPDuBXffX8DhwLhDv1n2yZFL9cFrsPb1yQT7DVQ3LCbTZ4HiI6
+ tgHx4XIY9bW09uiwIvOKua/JnyIY+XDOaIvBXoAfXi9NM90KJL4=
+X-Proofpoint-GUID: l-39kVYDrBr_mk6SEUkbGeqJhJ1RbdW-
+X-Proofpoint-ORIG-GUID: l-39kVYDrBr_mk6SEUkbGeqJhJ1RbdW-
+X-Authority-Analysis: v=2.4 cv=abVsXBot c=1 sm=1 tr=0 ts=6900bdaa b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8
+ a=KPTBQGuBHABK1rYve-oA:9 cc=ntf awl=host:12123
 
-On 10/23/25 2:54 PM, Jiayuan Chen wrote:
-> MPTCP creates subflows for data transmission, and these sockets should not
-> be added to sockmap because MPTCP sets specialized data_ready handlers
-> that would be overridden by sockmap.
-> 
-> Additionally, for the parent socket of MPTCP subflows (plain TCP socket),
-> MPTCP sk requires specific protocol handling that conflicts with sockmap's
-> operation(mptcp_prot).
-> 
-> This patch adds proper checks to reject MPTCP subflows and their parent
-> sockets from being added to sockmap, while preserving compatibility with
-> reuseport functionality for listening MPTCP sockets.
+Hi all,
 
-It's unclear to me why that is safe. sockmap is going to change the
-listener msk proto ops.
+I have tried looking at an issue from the bpftool repository:
+https://github.com/libbpf/bpftool/issues/121 and this RFC tries to add
+that enhancement.
 
-The listener could disconnect and create an egress connection, still
-using the wrong ops.
+Summary: Currently when a map creation is successful there is no message
+on the terminal, printing IDs on successful creation of maps can help
+notify the user and can be used in CI/CD.
 
-I think sockmap should always be prevented for mptcp socket, or at least
-a solid explanation of why such exception is safe should be included in
-the commit message.
+The first patch adds the logic for printing and the second patch adds a
+simple selftest for the same.
 
-Note that the first option allows for solving the issue entirely in the
-mptcp code, setting dummy/noop psock_update_sk_prot for mptcp sockets
-and mptcp subflows.
+The github issue is not fully solved with these two patches, as there
+are other bpf objects that might need similar additions. Would
+appreciate any inputs on this.
 
-/P
+Thank you very much.
+
+Regards,
+Harshit
+
+Harshit Mogalapalli (2):
+  bpftool: Print map ID upon creation and support JSON output
+  selftests/bpf: Add test for bpftool map ID printing
+
+ tools/bpf/bpftool/map.c                       | 24 +++++++++++---
+ .../testing/selftests/bpf/test_bpftool_map.sh | 32 +++++++++++++++++++
+ 2 files changed, 52 insertions(+), 4 deletions(-)
+
+-- 
+2.50.1
 
 
