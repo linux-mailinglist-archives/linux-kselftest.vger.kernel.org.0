@@ -1,146 +1,206 @@
-Return-Path: <linux-kselftest+bounces-44154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ECC9C1213C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 00:42:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 164DEC121F0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 01:00:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23EC1188BF90
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Oct 2025 23:42:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BA0184E261B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 00:00:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2400632D434;
-	Mon, 27 Oct 2025 23:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65F9F1EA65;
+	Tue, 28 Oct 2025 00:00:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eEke48V5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f3OfTkGF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3A6324B3B
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 23:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A302EC8CE
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 00:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761608534; cv=none; b=HS/ieuW+xPWa6JRwmMS8/CcUO1Li+50PoKevbOafpP4MlIuQk7u7Ult4xiIG1z3FI4nzAWcvdkfZnzBoE56Z6rVtdRpTzUqjnQhmmNrMwZ6ly4yGvElESexMvru96C3NFyQDYcONkJFKCUlyYYEs8Zoo0GucVK1le6FMQnSUYqA=
+	t=1761609623; cv=none; b=QTIv9MnDGqKVoX++BIrXdNj8+r8Wf0Oz4og52hXjdFYq53tMInPA4tV6cLvFOOGTH5xYi8TXYgAa0BnIBV4IXvpuBFjaBfcrK5vOuwi0TAAPBJrRewqG90Wz8CBPanDjWIyzxHsUyJCu8ShLaJWGXHh7C2UZOs3pyJc6Vpc2nYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761608534; c=relaxed/simple;
-	bh=puF+aGtYO5s2MYsxCALFC+9nUczVh0W5+txcOclIcsU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gGRsb9QIvSziz43A9lsDCvLrd4XH8hKCjs/Udc8Yd1BzUGXiYKfTrxuJ9wbbEBy+sC9/8XytdUFzjJT1TMAw+XJcyWf/Y5hOtXKO6uMJQaax2veomBlmSVXZWUsgq9DDhoEPaOiKkd/APkUtGsX/QqTnxdfd/yGTyDm8BXTn0kY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eEke48V5; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b55283ff3fcso3327180a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 16:42:12 -0700 (PDT)
+	s=arc-20240116; t=1761609623; c=relaxed/simple;
+	bh=44j1NMeztM3eKosxbeA0SuymPVYwCbHD5kCp3dOw4H8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U+o5wuJYsuX2LWkAc4iC24j2o7trQe9tbYe3ktighUCuC99I4XN/PCUvFWmb4nCHur5p5tGNBfGtrFiUaLRdou8OR3POSW9eLGmtSALyiYDJ8EMHi9XQKx0f5OW25IaoBBeg+J6POby+TGaLFyjlC716IAGOXXI0Y8zKxUlIPx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f3OfTkGF; arc=none smtp.client-ip=74.125.224.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-63d8788b18dso5798152d50.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 17:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761608532; x=1762213332; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aAmis02MY/SPD0Hs7vo+GbkUlTOrf3bzWV+l6BGfls8=;
-        b=eEke48V5ZE0jhBVHEC/ccmKP3wDct2lr3Lvu8bqRt7zfaCaJuThWKsJHTR+qtijNeq
-         DuixpMZmeuKSetJhIL6dw2CwQYA1gPKglpZjb0EjfC9BUU3w11W6SaUfc0IyPtTW5jZa
-         4pKUAqPKfKx6AjqcBNW3ACGhWf8zsVl3BtOnM9bdwPYrRGvPIY1UZ5GqiIpQn1/ehcaR
-         HZlRnXryedMm2mMD8OEBy+ofbacFCyBpBS7mx8rWh2d+Wly93gkORQzpTwGNMHEO1rjY
-         yiQEGOOa8C8io3r5E1GnhFx9Ao+slthWdciaDJMZ4aeBik8yD0CTWEl/v09IujpTTHX2
-         2POA==
+        d=gmail.com; s=20230601; t=1761609620; x=1762214420; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0jPekmeuStjVGpec/HMLm4gu4TE+ZdPOQZ7xh71HRHU=;
+        b=f3OfTkGFr+a3vsvahF5NqWkhzLxXStqnOTYADS+bgza1Gj/rDKIjX+kqOzP75aoOO5
+         j9+vqIfgCn3dD1F9OoA/KGTby3fCG3jaCS8P8eO9YzM7Xa1G9chcgJDC94Fg0WWP0m6r
+         9LKSfpiicMkjKAxJsJirAxTUKxdBpMJUY/lHP3RNjnqHPPufRdgpaZqmzz/R65sm6Xok
+         xBV6Q5DwWzOh5ziugYVTor9xgyMNvQwQB08zf/Xq8gw/3bmhXuCEngoyyixDv0JTUqwX
+         qyNIm77LVWc8vBzlOKFG3mvD2wTFH3IJUyZNBpe0Tn79LVAr+OFYNEEFDSKWVN8vhDzm
+         mHNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761608532; x=1762213332;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aAmis02MY/SPD0Hs7vo+GbkUlTOrf3bzWV+l6BGfls8=;
-        b=aRuzcjKdkHNr+zD9lN7rmYD4087JbIzQMF+fGHYWmA47Pt2c5vLecjPLZq1bnaWP1j
-         kiHuh+i6c5kdWyUm8+g+9fwuH7NuFKFhNA+sazArP4MktD1IDASu2ADEyNP3FUQ6LzEs
-         nQkafMcQEQ/WLVNgrGGZ13l8p34nOwNn9vhQKCJXqlg4y1POPzBOXuzcpMHpe3WKAhty
-         p0ioOrZXrvBiA9L3q+MH/I0ICvfM1s+zBpfmj1SanBhvrMm71EvRXPWakTQryfPRm4Rx
-         bkeYtHnsiCQcGVP/trx6JbECDWnAD2XbdI495+8hYaYoiynu97JtykzLmcTzNNOlhE40
-         7OKw==
-X-Forwarded-Encrypted: i=1; AJvYcCXE10HoahQ7/ItInXq/5M/wxXTxqxc5ZS93H4egPrmAdJbZocG8zoNYq9N943JPDo0eXJkDuAYSFvUCgThrv44=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+mp+m8XtKeWMWH7jYBhuKgefi6H/zc6vmnB63YUnhY87fDSvc
-	G2scy0GmtcFiyJ1WWBE5ijgKPcUjjaIck6TvYfXezUgvXx9UbpZZHgfL6dnyxnsYYbtgPX0Aa08
-	TsH6zNQ==
-X-Google-Smtp-Source: AGHT+IGYp8OSEh6n3uju+4I19uY+Q2quGSWM2e9It+MGilW2heCNkxOdmfwFxaiUgOrbP7KksK/kXcOhiO4=
-X-Received: from pjbsd4.prod.google.com ([2002:a17:90b:5144:b0:33b:51fe:1a93])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c40c:b0:290:bd15:24a8
- with SMTP id d9443c01a7336-294cb35eae8mr19734005ad.11.1761608531946; Mon, 27
- Oct 2025 16:42:11 -0700 (PDT)
-Date: Mon, 27 Oct 2025 16:42:10 -0700
-In-Reply-To: <68fff9328b74_1ffdeb100d8@iweiny-mobl.notmuch>
+        d=1e100.net; s=20230601; t=1761609620; x=1762214420;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0jPekmeuStjVGpec/HMLm4gu4TE+ZdPOQZ7xh71HRHU=;
+        b=BhK4/BfhRQo343PgEzf20UH0P8AphKBxUrhOVaQmVVnktIaUhg23C7KijUkt285XUy
+         KLppysgIc4BUBG6hWd+2DFnF/GEikr0tPkCIgZSHiC9UNN1s5jYcmDEo6nFy4yDyGAMt
+         hLsXaLTT9rAYu6punZV6uBDlhpU/McVRgCHWfIbBUskWq3jTa1KsTwCEfaKzyD1QW9il
+         yVvK3N7ljZysLydyuDG7NJdeEPmFS4oKVmPNcbbzkSLf59hnajOM83UG9LPsayeddMCS
+         VRBu8A9Ng22MW6blok6K+7WjijfIU8k1YE8qXz/aIkT0mQYPa6aCJwsuYphB6NtwGz78
+         It0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVVmehqG5B+MMsSmNJSbGRuCi8NiS/ZHXqoriwbSa6GUDJkgH6qRJWE0abEFfAnQFjvY2Gt7OmSuqYqpmK8+Xc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvjfVzIc1q7nIvFE4xZZLHSBmmX0/G8k2vJR4ld+GxCYpJnGy6
+	yY9tzhLDeW4bsTazqG8gb8uTNrTLPXkegZxig2IixgY1OcCLAbzhMcgn
+X-Gm-Gg: ASbGncsY6x3RGzKXkF3PDJglUT6w26n23O8AUhDAEq46WCHki2o9imUtAg4A9UIoJ1n
+	xBUHRhBjuhi0ndfwR0yXItr1hrlLY4+TgG+2jX+cvWgBek9RXOXgGilxclgFvqFGvbB5Yp1ChCD
+	ElQoIigk6Cc2ExQRhKVBotxZ2deqXjc9c3mkCC1jpwhtjfTe6AEZVRxD0mV44TiAPQw/o5PKQ1U
+	qrrDuANf+QJM8kLeQ8Mq+ItIOwQnH4tDUwtKB3kigTPI9paLXr9BbzE53S4Bna30dnWx044rQS+
+	nKwcDPlxTVHpoLF4YVwjiekPdtiTo7bbN9mxr9OKC1dPxNSiiJBTsp+4Xu/jDu/ncrvqscSVRfW
+	mGbLvB+ZxAenolrsXlu59/XplXCI+1xt9oqEs6lqq5+8aoDhEdDI1wZbWJsK8hOq+oocbsMsD4F
+	Fg/J0m9TlfFNwlnvuStVaC
+X-Google-Smtp-Source: AGHT+IHEOU6uhY0872obOeCg7UUipndO0NvC1yiY2mqs83o/mIpworn7pUKCrn5T0+gJY9mnhTcEvQ==
+X-Received: by 2002:a05:690e:d86:b0:63e:3420:5654 with SMTP id 956f58d0204a3-63f6b9b2f42mr1844475d50.1.1761609620489;
+        Mon, 27 Oct 2025 17:00:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:25ff:5f::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-63f4c441fe2sm2724061d50.15.2025.10.27.17.00.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Oct 2025 17:00:19 -0700 (PDT)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Shuah Khan <shuah@kernel.org>,
+	Boris Pismenny <borisp@nvidia.com>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v2 0/5] psp: track stats from core and provide a driver stats api
+Date: Mon, 27 Oct 2025 17:00:11 -0700
+Message-ID: <20251028000018.3869664-1-daniel.zahka@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250925172851.606193-1-sagis@google.com> <20250925172851.606193-22-sagis@google.com>
- <aPum5qJjFH49YVyy@google.com> <68fff9328b74_1ffdeb100d8@iweiny-mobl.notmuch>
-Message-ID: <aQADUmrDSRAydBhI@google.com>
-Subject: Re: [PATCH v11 21/21] KVM: selftests: Add TDX lifecycle test
-From: Sean Christopherson <seanjc@google.com>
-To: Ira Weiny <ira.weiny@intel.com>
-Cc: Sagi Shahar <sagis@google.com>, linux-kselftest@vger.kernel.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>, 
-	Andrew Jones <ajones@ventanamicro.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
-	Erdem Aktas <erdemaktas@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Roger Wang <runanwang@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
-	Oliver Upton <oliver.upton@linux.dev>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Chao Gao <chao.gao@intel.com>, 
-	Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 27, 2025, Ira Weiny wrote:
-> Sean Christopherson wrote:
-> > diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> > index af52cd938b50..af0b53987c06 100644
-> > --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> > +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> > @@ -210,6 +210,20 @@ kvm_static_assert(sizeof(struct vm_shape) == sizeof(uint64_t));
-> >  	shape;					\
-> >  })
-> >  
-> > +#define __VM_TYPE(__mode, __type)		\
-> > +({						\
-> > +	struct vm_shape shape = {		\
-> > +		.mode = (__mode),		\
-> > +		.type = (__type)		\
-> > +	};					\
-> > +						\
-> > +	shape;					\
-> > +})
-> > +
-> > +#define VM_TYPE(__type)				\
-> > +	__VM_TYPE(VM_MODE_DEFAULT, __type)
-> 
-> We already have VM_SHAPE()?  Why do we need this as well?
+This series introduces stats counters for psp. Device key rotations,
+and so called 'stale-events' are common to all drivers and are tracked
+by the core.
 
-VM_SHAPE() takes the "mode", and assumes a default type.  The alternative would
-be something like __VM_SHAPE(__type, __mode), but that's annoying, especially on
-x86 which only has one mode.
+A driver facing api is provided for reporting stats required by the
+"Implementation Requirements" section of the PSP Architecture
+Specification. Drivers must implement these stats.
 
-And __VM_SHAPE(__type) + ____VM_SHAPE(__type, __mode) feels even more weird.
+Lastly, implementations of the driver stats api for mlx5 and netdevsim
+are included.
 
-I'm definitely open to more ideas, VM_TYPE() isn't great either, just the least
-awful option I came up with.
+Here is the output of running the psp selftest suite and then
+printing out stats with the ynl cli on system with a psp-capable CX7:
 
-> >  #if defined(__aarch64__)
-> >  
-> >  extern enum vm_guest_mode vm_mode_default;
-> > diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-> > index 51cd84b9ca66..dd21e11e1908 100644
-> > --- a/tools/testing/selftests/kvm/include/x86/processor.h
-> > +++ b/tools/testing/selftests/kvm/include/x86/processor.h
-> > @@ -362,6 +362,10 @@ static inline unsigned int x86_model(unsigned int eax)
-> >  	return ((eax >> 12) & 0xf0) | ((eax >> 4) & 0x0f);
-> >  }
-> >  
-> > +#define VM_SHAPE_SEV		VM_TYPE(KVM_X86_SEV_VM)
-> > +#define VM_SHAPE_SEV_ES		VM_TYPE(KVM_X86_SEV_ES_VM)
-> > +#define VM_SHAPE_SNP		VM_TYPE(KVM_X86_SNP_VM)
-> 
-> FWIW I think the SEV bits should be pulled apart from the TDX bits and the
-> TDX bits squashed back into this series with the SEV as a per-cursor patch.
+  $ ./ksft-psp-stats/drivers/net/psp.py
+  TAP version 13
+  1..28
+  ok 1 psp.test_case # SKIP Test requires IPv4 connectivity
+  ok 2 psp.data_basic_send_v0_ip6
+  ok 3 psp.test_case # SKIP Test requires IPv4 connectivity
+  ok 4 psp.data_basic_send_v1_ip6
+  ok 5 psp.test_case # SKIP Test requires IPv4 connectivity
+  ok 6 psp.data_basic_send_v2_ip6 # SKIP ('PSP version not supported', 'hdr0-aes-gmac-128')
+  ok 7 psp.test_case # SKIP Test requires IPv4 connectivity
+  ok 8 psp.data_basic_send_v3_ip6 # SKIP ('PSP version not supported', 'hdr0-aes-gmac-256')
+  ok 9 psp.test_case # SKIP Test requires IPv4 connectivity
+  ok 10 psp.data_mss_adjust_ip6
+  ok 11 psp.dev_list_devices
+  ok 12 psp.dev_get_device
+  ok 13 psp.dev_get_device_bad
+  ok 14 psp.dev_rotate
+  ok 15 psp.dev_rotate_spi
+  ok 16 psp.assoc_basic
+  ok 17 psp.assoc_bad_dev
+  ok 18 psp.assoc_sk_only_conn
+  ok 19 psp.assoc_sk_only_mismatch
+  ok 20 psp.assoc_sk_only_mismatch_tx
+  ok 21 psp.assoc_sk_only_unconn
+  ok 22 psp.assoc_version_mismatch
+  ok 23 psp.assoc_twice
+  ok 24 psp.data_send_bad_key
+  ok 25 psp.data_send_disconnect
+  ok 26 psp.data_stale_key
+  ok 27 psp.removal_device_rx # XFAIL Test only works on netdevsim
+  ok 28 psp.removal_device_bi # XFAIL Test only works on netdevsim
+  # Totals: pass:19 fail:0 xfail:2 xpass:0 skip:7 error:0
+  #
+  # Responder logs (0):
+  # STDERR:
+  #  Set PSP enable on device 1 to 0x3
+  #  Set PSP enable on device 1 to 0x0
 
-Ya, that's my intent, "officially" post and land this SEV+ change, then have the
-TDX series build on top.  Or did you mean something else?
+  $ cd ynl/
+  $ ./pyynl/cli.py  --spec netlink/specs/psp.yaml --dump get-stats
+  [{'dev-id': 1,
+              'key-rotations': 5,
+              'rx-auth-fail': 21,
+              'rx-bad': 0,
+              'rx-bytes': 11844,
+              'rx-error': 0,
+              'rx-packets': 94,
+              'stale-events': 6,
+              'tx-bytes': 1128456,
+              'tx-error': 0,
+              'tx-packets': 780}]
+
+CHANGES:
+v2:
+  - don't return skb->len from psp_nl_get_stats_dumpit() on success and
+    EMSGSIZE
+  - use %pe to print PTR_ERR()
+v1: https://lore.kernel.org/netdev/20251022193739.1376320-1-daniel.zahka@gmail.com/
+
+Daniel Zahka (2):
+  selftests: drv-net: psp: add assertions on core-tracked psp dev stats
+  netdevsim: implement psp device stats
+
+Jakub Kicinski (3):
+  psp: report basic stats from the core
+  psp: add stats from psp spec to driver facing api
+  net/mlx5e: Add PSP stats support for Rx/Tx flows
+
+ Documentation/netlink/specs/psp.yaml          |  95 +++++++
+ .../mellanox/mlx5/core/en_accel/psp.c         | 239 ++++++++++++++++--
+ .../mellanox/mlx5/core/en_accel/psp.h         |  18 ++
+ .../mellanox/mlx5/core/en_accel/psp_rxtx.c    |   1 +
+ .../net/ethernet/mellanox/mlx5/core/en_main.c |   5 +
+ drivers/net/netdevsim/netdevsim.h             |   5 +
+ drivers/net/netdevsim/psp.c                   |  27 ++
+ include/net/psp/types.h                       |  35 +++
+ include/uapi/linux/psp.h                      |  18 ++
+ net/psp/psp-nl-gen.c                          |  19 ++
+ net/psp/psp-nl-gen.h                          |   2 +
+ net/psp/psp_main.c                            |   3 +-
+ net/psp/psp_nl.c                              |  94 +++++++
+ net/psp/psp_sock.c                            |   4 +-
+ tools/testing/selftests/drivers/net/psp.py    |  13 +
+ 15 files changed, 561 insertions(+), 17 deletions(-)
+
+-- 
+2.47.3
+
 
