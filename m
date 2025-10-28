@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-44163-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44164-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE310C12235
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 01:03:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 986EEC12241
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 01:04:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9826B1887BC9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 00:04:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6824188892A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 00:04:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A09191;
-	Tue, 28 Oct 2025 00:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58E728F5;
+	Tue, 28 Oct 2025 00:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="HqHpw3Ne"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Tn7f9yCQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E49A937
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 00:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14CAB672
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 00:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761609833; cv=none; b=khyJR05ZWSyXasxIje12RgRR6DVB27lEaOu1b6jowF64rt81wPkSNQD4w3gTUqIgkwdam5V0TKgMe4wq/AnXhErBOAiOITRLoHcbCWBbzMlctmHdA4Kt33Z5rEBjXYCZk8VEj8j0rlrdbILAAt6llxdX4fHwlGWKhtwpgK659wA=
+	t=1761609850; cv=none; b=anJkd5pt/AI4zlhWLP9RLSJ5Eyk00bgg9UTA4cpoVSh5cAqT+Rs8jvfenfFAFMJEaX3wli/hRSaSz+2xjtUyf87SbE3IN8+UUVmuCCzhHtVTK2nDJY2bGUJL1mrgE6vOzd1nq/9YeyjKHggc5JTBougR0Ap9qYCliL4LAhtPPOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761609833; c=relaxed/simple;
-	bh=1jYIhckYsIG0396E3JQfz5P20qWqblZQBv8T5hjwnTA=;
+	s=arc-20240116; t=1761609850; c=relaxed/simple;
+	bh=HhN/mHl/kffEeTqvKgtwVLeIzEoh4/retLUYk0OesL8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KPi84NzTBbhbNErinSOmg4zGmNKXNtJ9LzAkkVOd2gN6Fsu0DIoNq/iHsiVdx8PLFOwSE/nFHsYbnGkWEdtz7RPNx1CWQnJGHZ4b3G5h5DYP+6QnF1o3+ATwpS3C11+5PrI40BQ2cGyxiLlb348JMiGQTnckg9gzaLL3wJJhiyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=HqHpw3Ne; arc=none smtp.client-ip=209.85.208.44
+	 To:Cc:Content-Type; b=g/uyuWcD8ESOaHo4bxjr82ZzYQQ791v4/He440Yl+KqTTE7F8RMQ4Lf56TWGKxXoCQBxGUodzqVOFlCrLpxF5kproAlGCrLX2Q/gfjv/tLxlivN0h7Y4PwBFcOZTI6I/u83lZolnD5Vev4W6tcwQBwPpGPyMIGwpY9Q7WxCwKaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Tn7f9yCQ; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-63c3d913b3bso9084555a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 17:03:51 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-63c3c7d3d53so8144849a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 17:04:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1761609830; x=1762214630; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1761609847; x=1762214647; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eIf9RmyxDj8h+YpH5/36r1Zq7AreK8JR3usDRLV8Ek4=;
-        b=HqHpw3NelI2mCag9ovG6qv/Tch/ZpLZFtZ+rA0c2AE4Gy0MBYm6mIlyEJnPQX+/Xq+
-         8Sej4sc6BgCBJ5okV6+ILBUd9wqlM6aDtUuZiAah5MHAdhLz0ap8xnxa1Ae5JGzhaFuH
-         OkIQBDibHaiDm98C3cOf/dRezHZIRz5IY0D1aFRPswylD5QfysnZdc1qinRLeqQstvMQ
-         Oywgff+g4QjL24B0GJQBfEMBJbZ1uqi9f4ecUDTdgIa3JYu4eqAIpcZDvyIQS/uV8swu
-         loAZYA7FWwDN8PWptrALpYIhwlIOjeMad9NMK0FLQ+3CsWzVlf8h1A14xRPVYpzmtuaU
-         22kw==
+        bh=HhN/mHl/kffEeTqvKgtwVLeIzEoh4/retLUYk0OesL8=;
+        b=Tn7f9yCQWVdG/r3ho14VZKyB/48dXQU3HDqVKh3yGqKeq8ONhY4dObmDw8SSM8UOFu
+         5va7BJ/MdyxJXapcqrcvcBL02AEU4M3S42f73c+bYIQ1aAttyqUMJEuPxhmahd4kpYz/
+         QvfCQkvgZDjJF73j4YcUsPn5AzjIhSNBdOHi9qAbKIJ5itPEGNpPwY5a3QSznhxAVvic
+         gzxOu/M2D4sjEnwEYJwPTlqyA9JUh4Jck4ofier5hQ7lYgJLjBZEZNV9287AohbETMRZ
+         klR7hhmJenRG5pmA8klIR5ctsIQNi/6RRDR/tDKcc1O8HkaFVmOgv6tLQ51plMZW0ZMO
+         ga4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761609830; x=1762214630;
+        d=1e100.net; s=20230601; t=1761609847; x=1762214647;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eIf9RmyxDj8h+YpH5/36r1Zq7AreK8JR3usDRLV8Ek4=;
-        b=sfW/Cr9dd4uuh+i+rO3UIajGWK50CSw7eew5FWrhp8Z77YQoY3nNN9S3DUBxGOxBgg
-         UKpym8ymklCS1RlR72Z/n2uHXXqS66/UXD2s9YOrnvstsdxTyFRifQ/A312SR1BuX3s3
-         nmZNKGYua7g1ZKlO0iqZzb5KvQ4gPl4rlTgw2fpygfxlAReYAafSCtY2l7JQMV4q2GKl
-         1+4iSJC5JnyZoXv+uQMA2lML8v7Pe59C/pqqKHal+bjsKcuV3ThpD1rcwAtHJlUO5MZv
-         M2mo1KTkv0OlmH7BpTbIWORKAdCe1Ce1ClCha6YJ4cBc1EvMyyJc5Qc2mAAYaLwfQxWl
-         /s3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXyfrc0zHkSXGU3yrHpuYTnvnQit07y0Xi0sth/4OclYu6qSa+HuJvpFT+6zzbVjB4PC5D6w4BzecMT80cX3Cg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBXw3edKS4VIxccR7+AgYfiygYL8Z3wM5Eg0ME2jhQpegp/X1l
-	whIeLTiWRYlpbsayPejT3iN+0pfDxeHQ0XLPBCrWqMv0TJqyI/Pn/CtxZcfHnP03kaFJv2JHcbi
-	91eIiEDl5tNbH0It/4VhHwlqlz2eN6ASYJPzQypZXXQ==
-X-Gm-Gg: ASbGncvdK2RGUrmTEYB/HtJn5+//0HuRGSzCvSXB6s6iQvEB7rm6BGa87qef2swQZVv
-	7QqY8+bcNzKhxNvatu/+hiC6Ib6eJyjjUgPkhxBr+HVESx7bCM7GKy2aBUvtyS6YVT96RWFdOt+
-	fgfdW31DaB8+ssaUy0Z+INI/hVNkEt+2ngPa7BjSYpJKgM/jmM7t34JUjviMgvThZj33HfVWUQh
-	l0qofb0vVi/HTUWs837J3MmX6KJC66n5AqyT1Tn2ljbFP606tMXZkUp6g==
-X-Google-Smtp-Source: AGHT+IGRw73AgZE0pgL+h9bAcX5qxVKML+YkSwwVXL0+lNAI07sxHdi/1qytUtu817sC0wPtWFmC1YiZiNMsQzgmG+I=
-X-Received: by 2002:a05:6402:4313:b0:639:dbe7:37b6 with SMTP id
- 4fb4d7f45d1cf-63ed82669a3mr1767152a12.3.1761609830497; Mon, 27 Oct 2025
- 17:03:50 -0700 (PDT)
+        bh=HhN/mHl/kffEeTqvKgtwVLeIzEoh4/retLUYk0OesL8=;
+        b=gjiKhBPI3oIyWAlzZon2kGu3we6JGuUnJOe98Pu66eq9e4ZztCqjwenv9HByeM+DcN
+         E3/YmKbU7Xvq6azjkpRGX8TTn09lSXF4p+fAknC5apHS2RSdvNnzG366Pw6EPo3jeu11
+         3Qb7YvY0IKDJ849F4K4TFP7VE9Bo9Y5AeXE3ocdCJom1iKIPMY/VQ4sa7SpS5LhvFaEz
+         0igf962x5wVTgZaWrc9fvN80gk5qp+mGnHF627gGvkYfHgNOqDYw/+xK5M1Vih7vi4Ho
+         1QcWYl+dQr/xGNHp7jO4Hp3lVmw+KRil+k1zzwjr4TIpfyWBSmOZ8DNlWCs/qcuFrA4v
+         wnsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUyR51iXJiNyhQLkWbnYfbGUTrajUBO8h1iutr6anZKFAxy8FH7pz8f7pFP1Mk+OvQYWpusmnz0VxujwPBzcMc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlYK0RsPMzoFJP4/Agdh4fd5B7j5zEVe5C9MztMcR39gsq+iza
+	INUMn+iaTx0O4vWm2eJQI7Cww5kqWqE+X5d8bzhSRjzTX+bVh+/SOeTLtOxFCTAo645qeRqKeGx
+	nW89uBMwHNd1c0mZI6sflNxQ+dcu3FJIERm3AJEa/vQ==
+X-Gm-Gg: ASbGncuODBrKxUUZ3jTw0xnKDyYGecYxAW3UuDM7CAoUe7zNSWGPQkLy8ExSRAa8eCp
+	7t78Zy0h2oEWyV05ef+ebXmp9nGj+jUb4NtOaghQYNQMTfz6ApSrgVOKADX8LdrdMY5J4paMtGm
+	HkB7O96xgVONspi2icUJaCErUrD4NMZBa3tvq3dokkwD82T7JpAKjcBHLHRxflpf6Igdf3isB2t
+	U1cWpcbIF4JraHBjRGuQPi1QzX2nsctoM8Al2EG1ieMaN5DMUU9DbskUg==
+X-Google-Smtp-Source: AGHT+IFTSxT5C/qi2iJ4dW36Q64XxwPLdzowo6gGddt58jWhCVpKXMJqTgXpnFO8ktQqxcCj5WA5879rgg3vpN1c4fs=
+X-Received: by 2002:a05:6402:50c8:b0:634:b4cb:c892 with SMTP id
+ 4fb4d7f45d1cf-63ed82613ecmr1478635a12.32.1761609847331; Mon, 27 Oct 2025
+ 17:04:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,14 +76,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20251021000852.2924827-1-pasha.tatashin@soleen.com>
- <20251021000852.2924827-3-pasha.tatashin@soleen.com> <CALzav=fmTVGDxAUcuqmcegAtd8gEW4F3Zp3AGMQBtXrCQgp+aA@mail.gmail.com>
- <CALzav=fD47OCZRMNqDmHs798qpZzeU6eHHuNA+wyhmZ19aJ9vA@mail.gmail.com>
-In-Reply-To: <CALzav=fD47OCZRMNqDmHs798qpZzeU6eHHuNA+wyhmZ19aJ9vA@mail.gmail.com>
+ <20251021000852.2924827-4-pasha.tatashin@soleen.com> <CALzav=fa0rxnf-ufDmV0uhA+zhoOB2vp9ksfNpeE0amxnLt0jw@mail.gmail.com>
+In-Reply-To: <CALzav=fa0rxnf-ufDmV0uhA+zhoOB2vp9ksfNpeE0amxnLt0jw@mail.gmail.com>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Mon, 27 Oct 2025 20:03:13 -0400
-X-Gm-Features: AWmQ_bmun6_TBMsODMO_7WW-_vSEWe2X4Vt2vU_u_Hwqc2ubbYZU9T3vQlpJuDM
-Message-ID: <CA+CK2bAKjU8PmfuwGJwwOyj3U5bYaterE_KQa9uVu+mmmLmmew@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] liveupdate: kho: Increase metadata bitmap size to PAGE_SIZE
+Date: Mon, 27 Oct 2025 20:03:29 -0400
+X-Gm-Features: AWmQ_bn-zfKJHiglHnpNE8yXm_PQCrs_rUjFkmbehJKOvSAt70K516WwkjY9HeI
+Message-ID: <CA+CK2bAE5A4rvgxNzJbmdcTHWJ6LiyoQ5v8uMbTH4p6YxxToTg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] liveupdate: kho: allocate metadata directly from
+ the buddy allocator
 To: David Matlack <dmatlack@google.com>
 Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net, 
 	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
@@ -93,56 +93,41 @@ Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Oct 27, 2025 at 7:02=E2=80=AFPM David Matlack <dmatlack@google.com>=
+On Mon, Oct 27, 2025 at 7:05=E2=80=AFPM David Matlack <dmatlack@google.com>=
  wrote:
 >
-> On Mon, Oct 27, 2025 at 3:56=E2=80=AFPM David Matlack <dmatlack@google.co=
-m> wrote:
+> On Mon, Oct 20, 2025 at 5:09=E2=80=AFPM Pasha Tatashin
+> <pasha.tatashin@soleen.com> wrote:
 > >
-> > On Mon, Oct 20, 2025 at 5:09=E2=80=AFPM Pasha Tatashin
-> > <pasha.tatashin@soleen.com> wrote:
+> > KHO allocates metadata for its preserved memory map using the slab
+> > allocator via kzalloc(). This metadata is temporary and is used by the
+> > next kernel during early boot to find preserved memory.
 > >
-> > > -static void *xa_load_or_alloc(struct xarray *xa, unsigned long index=
-, size_t sz)
-> > > +static void *xa_load_or_alloc(struct xarray *xa, unsigned long index=
-)
-> > >  {
-> > >         void *res =3D xa_load(xa, index);
-> > >
-> > >         if (res)
-> > >                 return res;
-> > >
-> > > -       void *elm __free(kfree) =3D kzalloc(sz, GFP_KERNEL);
-> > > +       void *elm __free(kfree) =3D kzalloc(PAGE_SIZE, GFP_KERNEL);
-> > >
-> > >         if (!elm)
-> > >                 return ERR_PTR(-ENOMEM);
-> > >
-> > > -       if (WARN_ON(kho_scratch_overlap(virt_to_phys(elm), sz)))
-> > > +       if (WARN_ON(kho_scratch_overlap(virt_to_phys(elm), PAGE_SIZE)=
-))
-> > >                 return ERR_PTR(-EINVAL);
+> > A problem arises when KFENCE is enabled. kzalloc() calls can be
+> > randomly intercepted by kfence_alloc(), which services the allocation
+> > from a dedicated KFENCE memory pool. This pool is allocated early in
+> > boot via memblock.
 > >
-> > Reading xa_load_or_alloc() is a bit confusing now.
+> > When booting via KHO, the memblock allocator is restricted to a "scratc=
+h
+> > area", forcing the KFENCE pool to be allocated within it. This creates =
+a
+> > conflict, as the scratch area is expected to be ephemeral and
+> > overwriteable by a subsequent kexec. If KHO metadata is placed in this
+> > KFENCE pool, it leads to memory corruption when the next kernel is
+> > loaded.
 > >
-> > It seems very generic (returns a void *) but now hard-codes a size
-> > (PAGE_SIZE). You have to look at the caller to see it is allocating
-> > for a struct kho_mem_phys_bits, and then at the definition of struct
-> > kho_mem_phys_bits to see the static_assert() that this struct is
-> > always PAGE_SIZE.
+> > To fix this, modify KHO to allocate its metadata directly from the budd=
+y
+> > allocator instead of slab.
 > >
-> > I would either keep letting the caller passing in size (if you think
-> > this code is going to be re-used) or just commit to making
-> > xa_load_or_alloc() specific to kho_mem_phys_bits. e.g. Change the
-> > return type to struct kho_mem_phys_bits * and use sizeof() instead of
-> > PAGE_SIZE.
+> > Fixes: fc33e4b44b27 ("kexec: enable KHO support for memory preservation=
+")
+> > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> > Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 >
-> I see that you replace kzalloc() with get_zeroed_page() in the next
-> patch. So the latter option is probably better, and maybe move static
-> assert down here and use BUILD_BUG_ON()? That way readers can easily
-> see that we are allocating for struct kho_mem_phys_bits *and* that
-> that struct is guaranteed to be PAGE_SIZE'd.
+> Reviewed-by: David Matlack <dmatlack@google.com>
 
-The size is verified at build time via:
-+static_assert(sizeof(struct kho_mem_phys_bits) =3D=3D PAGE_SIZE);
+Thank you,
+Pasha
 
