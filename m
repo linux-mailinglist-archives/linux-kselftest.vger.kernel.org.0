@@ -1,452 +1,587 @@
-Return-Path: <linux-kselftest+bounces-44171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EED3C12AF8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 03:44:01 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43820C12B01
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 03:48:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38F7D1AA2FFE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 02:44:25 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BA44034F705
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 02:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8848925FA29;
-	Tue, 28 Oct 2025 02:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E65742741BC;
+	Tue, 28 Oct 2025 02:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fgeg/ez6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AwHicbBY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D6E20F08C
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 02:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E237F156237
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 02:48:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761619436; cv=none; b=RDouSWayfzbnFvq0OXzIeHZDkslBXG1QuJeyYlVQ6oGTQpUlae9fNLaWHUEffGElyqlAz0SdPUuAVlgyTGqWIseym22rA3s9j7ANyHlwdvlLG3sIb51jdJLqdXRBqf8ScK4Lb9fqHK6BVhHLEfeUaYlPmsuhSyggLZRO5K+hoZY=
+	t=1761619687; cv=none; b=N9kLQTI57udOIbeZzUVQCjHa0NWoPmNkG8j404GZcifEpE/fOgAawkac5LOnGq5QIvA0cw5hBXsjGVX1AoOVu+drDNVnuyj94Rm5ftuF9l3ZIJwMyGlj4UlX1dIfcC5U98qfmYgp/DSTI899ENkDN9sdwTRV9B42wocN7KzbnHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761619436; c=relaxed/simple;
-	bh=tghMfSE3EHspX9+jNAYWs92wXN0zAH7O2jSRkAxbNN8=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=R/dORM2T0bS+nFamdcK+RHfBj9hO6IlejTa1mRlKcUZ+KvVK4Ltwfd5ciN4wssqoFQBgHQkT7FwhRfAVvW5AAYhfS9mT6LalpY+vI3ysMvmGqMDeFnF4UH1c5kRa4HY3JjU4jngc5ZpgQ7x2/KH3FJECuNPeauhT2Jv6haEFE/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fgeg/ez6; arc=none smtp.client-ip=209.85.210.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7a440d38452so1240820b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 19:43:54 -0700 (PDT)
+	s=arc-20240116; t=1761619687; c=relaxed/simple;
+	bh=w+USCM3LY9ohDzmgy14e6xR4jWwooOa9gPxWLpvQy2w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nW2RJh15+Nadg7sBm8MoRmlvyur3WBUA6CU7ov9wheHgCDBodn8lFGQIIqIgm5E7y9VdbBKodAzdEd+BX/7X+c6XAdEglFjkAwWL26wBX1AWfVSu5Yac+4G+N0Lak84xWb9mPwVsm0OJaks264V1uQuWYAxbH4fAixyBn3B2lag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AwHicbBY; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-33255011eafso5135082a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Oct 2025 19:48:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761619434; x=1762224234; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RWt3MOdMZIZJhK7UKwqURBiqMY11Trzd8HN9uFL+aNc=;
-        b=fgeg/ez6GCG47PWdBf5vh4jKLCeOA7T0J7r6rPvBp4cVKy3TRPzBQxrjQYQ/CoiucH
-         tVRWT0R9wdDWauPu/ujTjemEwYxqvMBIzb9N6P+CUaf7rxZkUORc1yIxy2vdg4Bux0ky
-         kEhZ2GQgyHbUotfgFg9Yisy+mweYkggWoV+gtg/uiHdRwTzFGo3jwaUYwk0GTlIswlD3
-         F6d+0VeviKIkj39X0xj6FuxzIh/e+9wWPNvtDX7pNtt/WedMKNu27sQOk7SuW8aghufc
-         wSQdxJdq7M9ZjPLuuR5PUuT+Qe42IO1q1oJY8+sehwTwf5AqRN/gynypcnnq3YB9HZ2R
-         e1Qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761619434; x=1762224234;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1761619685; x=1762224485; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RWt3MOdMZIZJhK7UKwqURBiqMY11Trzd8HN9uFL+aNc=;
-        b=YwdlOJD3iLNOgoeACoprKoXZZ++4iEj5sihu91lM76VB8Vi1ef6nOC9hOHsnmzzwWe
-         uzWdCd/yMR9gt7VtLitRhbwAyXYES7f5bNCJ4iX7TvhPJzTd+Omz9pJYdo+viW55FoIp
-         W2QZnu4K5BUAAnDLkeWSdZIEJ3SOJrKllakSKn5T3Wymaa+wAetKCrX3BLZvvyXBEkbK
-         ghZz9w/8EvazqeIDzCQC7hLHz/j5DIVTq0BoIpNn3HeKP1+OcJFS34pVRPwXalc7VM9S
-         fo1ppNANEHoMnmANas3jIZ9ImqkV7eCMOKLZJ+1BUA9yLgCp9n33Rn7J8nHiTuVyMbdx
-         Q3nQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMFevMKSIKW0kqO4OPfsB4Jze5VHt4ZstfoWKTQmfPk2C1YT1kqdPtKB2K109WCVddT/wDMYLbIhD3eOzeWco=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVf/fPTma2TyUufgcaxcH9o1tM/WJopdltXbs0baHY2EV9c8qn
-	HLhQRp0cx6v3vvL8wMXm16N6NXcDkNnsIwUal6YbwHkLRuuA9Hj1sPYuRojxZ9aOkcsVrYi523w
-	/19uFdQ==
-X-Google-Smtp-Source: AGHT+IHn8JQMCx39XhUTdMUj0uxdX6P7u2GBTaflD6TfH1hjthj57ev/5FIOeWI3U4dnGHxRViGJ2Qr+Ihw=
-X-Received: from pfcs17.prod.google.com ([2002:a05:6a00:6fd1:b0:793:b157:af42])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:cca:b0:7a2:8111:7807
- with SMTP id d2e1a72fcca58-7a441b8fc81mr2315020b3a.5.1761619433991; Mon, 27
- Oct 2025 19:43:53 -0700 (PDT)
-Date: Tue, 28 Oct 2025 02:42:56 +0000
+        bh=zt4TQfTwKB5E13fts+rBc3XV1AjtBFD3OMw1USrDzOk=;
+        b=AwHicbBYsLKzLMbc95HDoV8PnldE/PRGf/oqq6aX2iBgRKEomnvkdsAWevwFIGbZRl
+         BUNEzyQE+HkWthUKhwrIgryZmDdj1MlIOr9T7vD0LYJp/Fxsv2eXcWGo6FZpq0TXjLK5
+         Lh6cnumn02Z2cwUyU9GDnQKU2LAOgZWThi0Bm7ZoveVsUzvO3mE0gC4hyb0BoV6DcwJO
+         EBz8fQKTsL/bnYHNnkTpy4Yab6t2UJQDt/NBDn0lYSA1ObdDjaDQVp2hf6N3MKREs0//
+         qAz7fRCKslT7eKnpiWfSpOq34/sD0O23NFgcV24gcoFR4QC74fEaCmKemJUad+LGoNR4
+         z6NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761619685; x=1762224485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zt4TQfTwKB5E13fts+rBc3XV1AjtBFD3OMw1USrDzOk=;
+        b=I7q/eRQfPdpoNE23A/bfErOi+P0EU9jItveeXX1aPWQN4Mdq8fSpLw1LanUlTCQ45Z
+         Pp0LIenRgyteTTtANJmq0yIEx2ULpX5TNLUwQODTsQUfIFkc74DjfgAbmiqnBfALm+bD
+         OfwUcMHPDrTbbMrNNFd6LLLk1VKuEh4KuF04QPgAgxtQoaNrPzDtXdOLdmNxpFHqQo67
+         D5980T1Fi+1OTngLNlwKI1BTD7lECNGrsLwVWPWk6L4nJuUEY1MyIVjgug7sn5zinCPM
+         VWOT32zY4Ojm9TACKc2WsU0QokISX68+MrSVAr3vQNCLTUQ0WtUIWa7zcNY0xCiJgwYb
+         pC5Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVzhlgw2vUmQk3KWcRVsrORKnksDdvl/JowW6f8afoyeIKM/T7TTmaNq6kbGwZdbsTYjisvjG8X/17woMo9/U0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGgWXh2iCpjZzD1FjYGuhrQQ+0on2R3tlMY8OL2t5wSCNQLa8q
+	IISKpiKoeB1fbBD/ZdqB0qZvUidycq7y99A9edQ14CUyMhkdssLS/dtrkm7IB2h4UTBxeUjMjAX
+	DDklT83q98NDeTLtSg2W27xRCYk7zFFM=
+X-Gm-Gg: ASbGncvK6uRXaNUr62n2NDRTVvZiFNP94M4R8S863jVYXZ97IBsGz/X+ToW4r+Mk9GT
+	dr6VqvI/oLmi5QE+dNhIVOyo/z0+13F5pg8g+hc7cYMMtPAwbrBxturvfOjS76uHU/kfCPc1x9W
+	kFZoD+ErLDVXxDKt5klYbLM0oOaD0bJvHBdJZa4CjSc8KSzcXW/x66ERWY9vN2pg8YBPDU6VMxV
+	h+hBKJkIXASSdSWfXWXc/exdqZ6DW2sxzd5zgA5uqWgTzk+UY+Lxz4SrGZg
+X-Google-Smtp-Source: AGHT+IHoksvZgeUosGMyGToIs9kU4CnjCQxNfwX4jL6e/9vvFSUZfsCuQ29bbkLJxFe4e5wsTYHYyEwkZbzhrWxe9dI=
+X-Received: by 2002:a17:90b:3c08:b0:33e:1ed8:334d with SMTP id
+ 98e67ed59e1d1-34027a09e32mr2388732a91.16.1761619684841; Mon, 27 Oct 2025
+ 19:48:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.1.838.g19442a804e-goog
-Message-ID: <20251028024339.2028774-1-kuniyu@google.com>
-Subject: [PATCH v2] selftests: harness: Support KCOV.
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, 
-	linux-kselftest@vger.kernel.org
+MIME-Version: 1.0
+References: <20251018035738.4039621-1-xukuohai@huaweicloud.com> <20251018035738.4039621-2-xukuohai@huaweicloud.com>
+In-Reply-To: <20251018035738.4039621-2-xukuohai@huaweicloud.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 27 Oct 2025 19:47:52 -0700
+X-Gm-Features: AWmQ_bknZJdbbO-dNIjyRI-vSXHy6pG3q79FmoA3aU8EtGKMsB9z5kmP42gqD-I
+Message-ID: <CAEf4BzZqHo0kOa1Zc-syy9GZHUhEHEK0_0zLxFFpMhSZUc2_Qg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf: Add overwrite mode for BPF ring buffer
+To: Xu Kuohai <xukuohai@huaweicloud.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>, 
+	Song Liu <song@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-While writing a selftest with kselftest_harness.h, I often want to
-check which paths are actually exercised.
-
-Let's support generating KCOV coverage data.
-
-We can specify the output directory via the KCOV_OUTPUT environment
-variable, and the number of instructions to collect via the KCOV_SLOTS
-environment variable.
-
-  # KCOV_OUTPUT=3D$PWD/kcov KCOV_SLOTS=3D$((4096 * 2)) \
-    ./tools/testing/selftests/net/af_unix/scm_inq
-
-Both variables can also be specified as the make variable.
-
-  # make -C tools/testing/selftests/ \
-    KCOV_OUTPUT=3D$PWD/kcov KCOV_SLOTS=3D$((4096 * 4)) \
-    kselftest_override_timeout=3D60 TARGETS=3Dnet/af_unix run_tests
-
-The coverage data can be simply decoded with addr2line:
-
-  $ cat kcov/* | sort | uniq | addr2line -e vmlinux | grep unix
-  net/unix/af_unix.c:1056
-  net/unix/af_unix.c:3138
-  net/unix/af_unix.c:3834
-  net/unix/af_unix.c:3838
-  net/unix/af_unix.c:311 (discriminator 2)
-  ...
-
-or more nicely with a script embedded in vock [0]:
-
-  $ cat kcov/* | sort | uniq > local.log
-  $ python3 ~/kernel/tools/vock/report.py \
-    --kernel-src ./ --vmlinux ./vmlinux \
-    --mode local --local-log local.log --filter unix
-  ...
-  ------------------------------- Coverage Report -------------------------=
--------
-  =F0=9F=93=84 net/unix/af_unix.c (276 lines)
-   ...
-  942 | static int unix_setsockopt(struct socket *sock, int level, int optn=
-ame,
-  943 | 			   sockptr_t optval, unsigned int optlen)
-  944 | {
-   ...
-  961 | 	switch (optname) {
-  962 | 	case SO_INQ:
-  963 > 		if (sk->sk_type !=3D SOCK_STREAM)
-  964 | 			return -EINVAL;
-  965 |
-  966 > 		if (val > 1 || val < 0)
-  967 | 			return -EINVAL;
-  968 |
-  969 > 		WRITE_ONCE(u->recvmsg_inq, val);
-  970 | 		break;
-
-Link: https://github.com/kzall0c/vock/blob/f3d97de9954f9df758c0ab287ca7e24e=
-654288c7/report.py #[0]
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
----
-v2: Support TEST()
-v1: https://lore.kernel.org/linux-kselftest/20251017084022.3721950-1-kuniyu=
-@google.com/
----
- Documentation/dev-tools/kselftest.rst       |  41 ++++++
- tools/testing/selftests/Makefile            |  14 ++-
- tools/testing/selftests/kselftest_harness.h | 133 +++++++++++++++++++-
- 3 files changed, 178 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tool=
-s/kselftest.rst
-index 18c2da67fae4..5c2b92ac4a30 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -200,6 +200,47 @@ You can look at the TAP output to see if you ran into =
-the timeout. Test
- runners which know a test must run under a specific time can then optional=
-ly
- treat these timeouts then as fatal.
-=20
-+KCOV for selftests
-+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-+
-+Selftests built with `kselftest_harness.h` natively support generating
-+KCOV coverage data.  See :doc:`KCOV: code coverage for fuzzing </dev-tools=
-/kcov>`
-+for prerequisites.
-+
-+You can specify the output directory with the `KCOV_OUTPUT` environment
-+variable.  Additionally, you can specify the number of instructions to
-+collect with the `KCOV_SLOTS` environment variable ::
-+
-+  # KCOV_OUTPUT=3D$PWD/kcov KCOV_SLOTS=3D$((4096 * 2)) \
-+        ./tools/testing/selftests/net/af_unix/scm_inq
-+
-+In the output directory, a coverage file is generated for each test
-+case in the selftest ::
-+
-+  $ ls kcov/
-+  scm_inq.dgram.basic  scm_inq.seqpacket.basic  scm_inq.stream.basic
-+
-+The default value of `KCOV_SLOTS` is `4096`, and `KCOV_SLOTS` multiplied
-+by `sizeof(unsigned long)` must be multiple of `4096`, so the smallest
-+value is `512`.
-+
-+Both `KCOV_OUTPUT` and `KCOV_SLOTS` can be specified as the variables
-+on the `make` command line ::
-+
-+  # make -C tools/testing/selftests/ \
-+        kselftest_override_timeout=3D60 \
-+        KCOV_OUTPUT=3D$PWD/kcov KCOV_SLOTS=3D$((4096 * 4)) \
-+        TARGETS=3Dnet/af_unix run_tests
-+
-+The collected data can be decoded with `addr2line` ::
-+
-+  $ cat kcov/* | sort | uniq | addr2line -e vmlinux | grep unix
-+  net/unix/af_unix.c:1056
-+  net/unix/af_unix.c:3138
-+  net/unix/af_unix.c:3834
-+  net/unix/af_unix.c:3838
-+  ...
-+
- Packaging selftests
- =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=20
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Mak=
-efile
-index c46ebdb9b8ef..40e70fb1a347 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -218,12 +218,14 @@ all:
- 	done; exit $$ret;
-=20
- run_tests: all
--	@for TARGET in $(TARGETS); do \
--		BUILD_TARGET=3D$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=3D$$BUILD_TARGET -C $$TARGET run_tests \
--				SRC_PATH=3D$(shell readlink -e $$(pwd)) \
--				OBJ_PATH=3D$(BUILD)                   \
--				O=3D$(abs_objtree);		    \
-+	@for TARGET in $(TARGETS); do				\
-+		BUILD_TARGET=3D$$BUILD/$$TARGET;			\
-+		$(MAKE) OUTPUT=3D$$BUILD_TARGET			\
-+			KCOV_OUTPUT=3D$(abspath $(KCOV_OUTPUT))	\
-+			-C $$TARGET run_tests			\
-+			SRC_PATH=3D$(shell readlink -e $$(pwd))	\
-+			OBJ_PATH=3D$(BUILD)			\
-+			O=3D$(abs_objtree);			\
- 	done;
-=20
- hotplug:
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/se=
-lftests/kselftest_harness.h
-index 3f66e862e83e..5b7a01722981 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -56,6 +56,8 @@
- #include <asm/types.h>
- #include <ctype.h>
- #include <errno.h>
-+#include <fcntl.h>
-+#include <linux/kcov.h>
- #include <linux/unistd.h>
- #include <poll.h>
- #include <stdbool.h>
-@@ -63,7 +65,9 @@
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
-+#include <sys/ioctl.h>
- #include <sys/mman.h>
-+#include <sys/stat.h>
- #include <sys/types.h>
- #include <sys/wait.h>
- #include <unistd.h>
-@@ -175,9 +179,12 @@
- 	static void test_name(struct __test_metadata *_metadata); \
- 	static void wrapper_##test_name( \
- 		struct __test_metadata *_metadata, \
--		struct __fixture_variant_metadata __attribute__((unused)) *variant) \
-+		struct __fixture_variant_metadata __attribute__((unused)) *variant, \
-+		char *test_full_name) \
- 	{ \
-+		enable_kcov(_metadata); \
- 		test_name(_metadata); \
-+		disable_kcov(_metadata, test_full_name); \
- 	} \
- 	static struct __test_metadata _##test_name##_object =3D \
- 		{ .name =3D #test_name, \
-@@ -401,7 +408,8 @@
- 		const FIXTURE_VARIANT(fixture_name) *variant); \
- 	static void wrapper_##fixture_name##_##test_name( \
- 		struct __test_metadata *_metadata, \
--		struct __fixture_variant_metadata *variant) \
-+		struct __fixture_variant_metadata *variant, \
-+		char *test_full_name) \
- 	{ \
- 		/* fixture data is alloced, setup, and torn down per call. */ \
- 		FIXTURE_DATA(fixture_name) self_private, *self =3D NULL; \
-@@ -430,7 +438,9 @@
- 			if (_metadata->exit_code) \
- 				_exit(0); \
- 			*_metadata->no_teardown =3D false; \
-+			enable_kcov(_metadata); \
- 			fixture_name##_##test_name(_metadata, self, variant->data); \
-+			disable_kcov(_metadata, test_full_name); \
- 			_metadata->teardown_fn(false, _metadata, self, variant->data); \
- 			_exit(0); \
- 		} else if (child < 0 || child !=3D waitpid(child, &status, 0)) { \
-@@ -470,6 +480,8 @@
- 		object->teardown_fn =3D &wrapper_##fixture_name##_##test_name##_teardown=
-; \
- 		object->termsig =3D signal; \
- 		object->timeout =3D tmout; \
-+		object->kcov_fd =3D -1; \
-+		object->kcov_slots =3D -1; \
- 		_##fixture_name##_##test_name##_object =3D object; \
- 		__register_test(object); \
- 	} \
-@@ -908,7 +920,8 @@ __register_fixture_variant(struct __fixture_metadata *f=
+On Fri, Oct 17, 2025 at 9:04=E2=80=AFPM Xu Kuohai <xukuohai@huaweicloud.com=
+> wrote:
+>
+> From: Xu Kuohai <xukuohai@huawei.com>
+>
+> When the BPF ring buffer is full, a new event cannot be recorded until on=
+e
+> or more old events are consumed to make enough space for it. In cases suc=
+h
+> as fault diagnostics, where recent events are more useful than older ones=
 ,
- struct __test_metadata {
- 	const char *name;
- 	void (*fn)(struct __test_metadata *,
--		   struct __fixture_variant_metadata *);
-+		   struct __fixture_variant_metadata *,
-+		   char *test_name);
- 	pid_t pid;	/* pid of test when being run */
- 	struct __fixture_metadata *fixture;
- 	void (*teardown_fn)(bool in_parent, struct __test_metadata *_metadata,
-@@ -923,6 +936,10 @@ struct __test_metadata {
- 	const void *variant;
- 	struct __test_results *results;
- 	struct __test_metadata *prev, *next;
-+	int kcov_fd;
-+	int kcov_slots;
-+	char *kcov_dir;
-+	unsigned long *kcov_mem;
- };
-=20
- static inline bool __test_passed(struct __test_metadata *metadata)
-@@ -1185,6 +1202,114 @@ static bool test_enabled(int argc, char **argv,
- 	return !has_positive;
- }
-=20
-+#define KCOV_SLOTS 4096
-+
-+static void enable_kcov(struct __test_metadata *t)
-+{
-+	char *slots;
-+	int err;
-+
-+	t->kcov_dir =3D getenv("KCOV_OUTPUT");
-+	if (!t->kcov_dir || *t->kcov_dir =3D=3D '\0')
-+		return;
-+
-+	slots =3D getenv("KCOV_SLOTS");
-+	if (slots && *slots !=3D '\0')
-+		sscanf(slots, "%d", &t->kcov_slots);
-+	if (t->kcov_slots <=3D 0)
-+		t->kcov_slots =3D KCOV_SLOTS;
-+
-+	t->kcov_fd =3D open("/sys/kernel/debug/kcov", O_RDWR);
-+	if (t->kcov_fd < 0) {
-+		ksft_print_msg("ERROR OPENING KCOV FD\n");
-+		goto err;
-+	}
-+
-+	err =3D ioctl(t->kcov_fd, KCOV_INIT_TRACE, t->kcov_slots);
-+	if (err) {
-+		ksft_print_msg("ERROR INITIALISING KCOV\n");
-+		goto err;
-+	}
-+
-+	t->kcov_mem =3D mmap(NULL, sizeof(unsigned long) * t->kcov_slots,
-+			   PROT_READ | PROT_WRITE, MAP_SHARED, t->kcov_fd, 0);
-+	if ((void *)t->kcov_mem =3D=3D MAP_FAILED) {
-+		ksft_print_msg("ERROR ALLOCATING MEMORY FOR KCOV\n");
-+		goto err;
-+	}
-+
-+	err =3D ioctl(t->kcov_fd, KCOV_ENABLE, KCOV_TRACE_PC);
-+	if (err) {
-+		ksft_print_msg("ERROR ENABLING KCOV\n");
-+		goto err;
-+	}
-+
-+	__atomic_store_n(&t->kcov_mem[0], 0, __ATOMIC_RELAXED);
-+	return;
-+err:
-+	t->exit_code =3D KSFT_FAIL;
-+	_exit(KSFT_FAIL);
-+}
-+
-+static void disable_kcov(struct __test_metadata *t, char *test_name)
-+{
-+	int slots, err, dir, fd, i;
-+
-+	if (t->kcov_fd =3D=3D -1)
-+		return;
-+
-+	slots =3D __atomic_load_n(&t->kcov_mem[0], __ATOMIC_RELAXED);
-+	if (slots =3D=3D t->kcov_slots - 1)
-+		ksft_print_msg("Set KCOV_SLOTS to a value greater than %d\n", t->kcov_sl=
-ots);
-+
-+	err =3D ioctl(t->kcov_fd, KCOV_DISABLE, 0);
-+	if (err) {
-+		ksft_print_msg("ERROR DISABLING KCOV\n");
-+		goto out;
-+	}
-+
-+	err =3D mkdir(t->kcov_dir, 0755);
-+	if (err =3D=3D -1 && errno !=3D EEXIST) {
-+		ksft_print_msg("ERROR CREATING '%s'\n", t->kcov_dir);
-+		goto out;
-+	}
-+	err =3D 0;
-+
-+	dir =3D open(t->kcov_dir, O_DIRECTORY);
-+	if (dir < 0) {
-+		ksft_print_msg("ERROR OPENING %s\n", t->kcov_dir);
-+		err =3D dir;
-+		goto out;
-+	}
-+
-+	fd =3D openat(dir, test_name, O_RDWR | O_CREAT | O_TRUNC);
-+
-+	close(dir);
-+
-+	if (fd =3D=3D -1) {
-+		ksft_print_msg("ERROR CREATING '%s' at '%s'\n", test_name, t->kcov_dir);
-+		err =3D fd;
-+		goto out;
-+	}
-+
-+	for (i =3D 0; i < slots; i++) {
-+		char buf[64];
-+		int size;
-+
-+		size =3D snprintf(buf, 64, "0x%lx\n", t->kcov_mem[i + 1]);
-+		write(fd, buf, size);
-+	}
-+
-+out:
-+	munmap(t->kcov_mem, sizeof(t->kcov_mem[0]) * t->kcov_slots);
-+	close(t->kcov_fd);
-+
-+	if (err) {
-+		t->exit_code =3D KSFT_FAIL;
-+		_exit(KSFT_FAIL);
-+	}
-+}
-+
- static void __run_test(struct __fixture_metadata *f,
- 		       struct __fixture_variant_metadata *variant,
- 		       struct __test_metadata *t)
-@@ -1216,7 +1341,7 @@ static void __run_test(struct __fixture_metadata *f,
- 		t->exit_code =3D KSFT_FAIL;
- 	} else if (child =3D=3D 0) {
- 		setpgrp();
--		t->fn(t, variant);
-+		t->fn(t, variant, test_name);
- 		_exit(t->exit_code);
- 	} else {
- 		t->pid =3D child;
---=20
-2.51.1.838.g19442a804e-goog
+> this mechanism may lead to critical events being lost.
+>
+> So add overwrite mode for BPF ring buffer to address it. In this mode, th=
+e
+> new event overwrites the oldest event when the buffer is full.
+>
+> The basic idea is as follows:
+>
+> 1. producer_pos tracks the next position to record new event. When there
+>    is enough free space, producer_pos is simply advanced by producer to
+>    make space for the new event.
+>
+> 2. To avoid waiting for consumer when the buffer is full, a new variable,
+>    overwrite_pos, is introduced for producer. It points to the oldest eve=
+nt
+>    committed in the buffer. It is advanced by producer to discard one or =
+more
+>    oldest events to make space for the new event when the buffer is full.
+>
+> 3. pending_pos tracks the oldest event to be committed. pending_pos is ne=
+ver
+>    passed by producer_pos, so multiple producers never write to the same
+>    position at the same time.
+>
+> The following example diagrams show how it works in a 4096-byte ring buff=
+er.
+>
+> 1. At first, {producer,overwrite,pending,consumer}_pos are all set to 0.
+>
+>    0       512      1024    1536     2048     2560     3072     3584     =
+  4096
+>    +---------------------------------------------------------------------=
+--+
+>    |                                                                     =
+  |
+>    |                                                                     =
+  |
+>    |                                                                     =
+  |
+>    +---------------------------------------------------------------------=
+--+
+>    ^
+>    |
+>    |
+> producer_pos =3D 0
+> overwrite_pos =3D 0
+> pending_pos =3D 0
+> consumer_pos =3D 0
+>
+> 2. Now reserve a 512-byte event A.
+>
+>    There is enough free space, so A is allocated at offset 0. And produce=
+r_pos
+>    is advanced to 512, the end of A. Since A is not submitted, the BUSY b=
+it is
+>    set.
+>
+>    0       512      1024    1536     2048     2560     3072     3584     =
+  4096
+>    +---------------------------------------------------------------------=
+--+
+>    |        |                                                            =
+  |
+>    |   A    |                                                            =
+  |
+>    | [BUSY] |                                                            =
+  |
+>    +---------------------------------------------------------------------=
+--+
+>    ^        ^
+>    |        |
+>    |        |
+>    |    producer_pos =3D 512
+>    |
+> overwrite_pos =3D 0
+> pending_pos =3D 0
+> consumer_pos =3D 0
+>
+> 3. Reserve event B, size 1024.
+>
+>    B is allocated at offset 512 with BUSY bit set, and producer_pos is ad=
+vanced
+>    to the end of B.
+>
+>    0       512      1024    1536     2048     2560     3072     3584     =
+  4096
+>    +---------------------------------------------------------------------=
+--+
+>    |        |                 |                                          =
+  |
+>    |   A    |        B        |                                          =
+  |
+>    | [BUSY] |      [BUSY]     |                                          =
+  |
+>    +---------------------------------------------------------------------=
+--+
+>    ^                          ^
+>    |                          |
+>    |                          |
+>    |                   producer_pos =3D 1536
+>    |
+> overwrite_pos =3D 0
+> pending_pos =3D 0
+> consumer_pos =3D 0
+>
+> 4. Reserve event C, size 2048.
+>
+>    C is allocated at offset 1536, and producer_pos is advanced to 3584.
+>
+>    0       512      1024    1536     2048     2560     3072     3584     =
+  4096
+>    +---------------------------------------------------------------------=
+--+
+>    |        |                 |                                   |      =
+  |
+>    |    A   |        B        |                 C                 |      =
+  |
+>    | [BUSY] |      [BUSY]     |               [BUSY]              |      =
+  |
+>    +---------------------------------------------------------------------=
+--+
+>    ^                                                              ^
+>    |                                                              |
+>    |                                                              |
+>    |                                                    producer_pos =3D =
+3584
+>    |
+> overwrite_pos =3D 0
+> pending_pos =3D 0
+> consumer_pos =3D 0
+>
+> 5. Submit event A.
+>
+>    The BUSY bit of A is cleared. B becomes the oldest event to be committ=
+ed, so
+>    pending_pos is advanced to 512, the start of B.
+>
+>    0       512      1024    1536     2048     2560     3072     3584     =
+  4096
+>    +---------------------------------------------------------------------=
+--+
+>    |        |                 |                                   |      =
+  |
+>    |    A   |        B        |                 C                 |      =
+  |
+>    |        |      [BUSY]     |               [BUSY]              |      =
+  |
+>    +---------------------------------------------------------------------=
+--+
+>    ^        ^                                                     ^
+>    |        |                                                     |
+>    |        |                                                     |
+>    |   pending_pos =3D 512                                  producer_pos =
+=3D 3584
+>    |
+> overwrite_pos =3D 0
+> consumer_pos =3D 0
+>
+> 6. Submit event B.
+>
+>    The BUSY bit of B is cleared, and pending_pos is advanced to the start=
+ of C,
+>    which is now the oldest event to be committed.
+>
+>    0       512      1024    1536     2048     2560     3072     3584     =
+  4096
+>    +---------------------------------------------------------------------=
+--+
+>    |        |                 |                                   |      =
+  |
+>    |    A   |        B        |                 C                 |      =
+  |
+>    |        |                 |               [BUSY]              |      =
+  |
+>    +---------------------------------------------------------------------=
+--+
+>    ^                          ^                                   ^
+>    |                          |                                   |
+>    |                          |                                   |
+>    |                     pending_pos =3D 1536               producer_pos =
+=3D 3584
+>    |
+> overwrite_pos =3D 0
+> consumer_pos =3D 0
+>
+> 7. Reserve event D, size 1536 (3 * 512).
+>
+>    There are 2048 bytes not being written between producer_pos (currently=
+ 3584)
+>    and pending_pos, so D is allocated at offset 3584, and producer_pos is=
+ advanced
+>    by 1536 (from 3584 to 5120).
+>
+>    Since event D will overwrite all bytes of event A and the first 512 by=
+tes of
+>    event B, overwrite_pos is advanced to the start of event C, the oldest=
+ event
+>    that is not overwritten.
+>
+>    0       512      1024    1536     2048     2560     3072     3584     =
+  4096
+>    +---------------------------------------------------------------------=
+--+
+>    |                 |        |                                   |      =
+  |
+>    |      D End      |        |                 C                 | D Beg=
+in|
+>    |      [BUSY]     |        |               [BUSY]              | [BUSY=
+] |
+>    +---------------------------------------------------------------------=
+--+
+>    ^                 ^        ^
+>    |                 |        |
+>    |                 |   pending_pos =3D 1536
+>    |                 |   overwrite_pos =3D 1536
+>    |                 |
+>    |             producer_pos=3D5120
+>    |
+> consumer_pos =3D 0
+>
+> 8. Reserve event E, size 1024.
+>
+>    Although there are 512 bytes not being written between producer_pos an=
+d
+>    pending_pos, E cannot be reserved, as it would overwrite the first 512
+>    bytes of event C, which is still being written.
+>
+> 9. Submit event C and D.
+>
+>    pending_pos is advanced to the end of D.
+>
+>    0       512      1024    1536     2048     2560     3072     3584     =
+  4096
+>    +---------------------------------------------------------------------=
+--+
+>    |                 |        |                                   |      =
+  |
+>    |      D End      |        |                 C                 | D Beg=
+in|
+>    |                 |        |                                   |      =
+  |
+>    +---------------------------------------------------------------------=
+--+
+>    ^                 ^        ^
+>    |                 |        |
+>    |                 |   overwrite_pos =3D 1536
+>    |                 |
+>    |             producer_pos=3D5120
+>    |             pending_pos=3D5120
+>    |
+> consumer_pos =3D 0
+>
+> The performance data for overwrite mode will be provided in a follow-up
+> patch that adds overwrite-mode benchmarks.
+>
+> A sample of performance data for non-overwrite mode, collected on an x86_=
+64
+> CPU and an arm64 CPU, before and after this patch, is shown below. As we =
+can
+> see, no obvious performance regression occurs.
+>
+> - x86_64 (AMD EPYC 9654)
+>
+> Before:
+>
+> Ringbuf, multi-producer contention
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> rb-libbpf nr_prod 1  11.623 =C2=B1 0.027M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 2  15.812 =C2=B1 0.014M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 3  7.871 =C2=B1 0.003M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 4  6.703 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 8  2.896 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 12 2.054 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 16 1.864 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 20 1.580 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 24 1.484 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 28 1.369 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 32 1.316 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 36 1.272 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 40 1.239 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 44 1.226 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 48 1.213 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 52 1.193 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+>
+> After:
+>
+> Ringbuf, multi-producer contention
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> rb-libbpf nr_prod 1  11.845 =C2=B1 0.036M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 2  15.889 =C2=B1 0.006M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 3  8.155 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 4  6.708 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 8  2.918 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 12 2.065 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 16 1.870 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 20 1.582 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 24 1.482 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 28 1.372 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 32 1.323 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 36 1.264 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 40 1.236 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 44 1.209 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 48 1.189 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 52 1.165 =C2=B1 0.002M/s (drops 0.000 =C2=B1 0.000M/s)
+>
+> - arm64 (HiSilicon Kunpeng 920)
+>
+> Before:
+>
+> Ringbuf, multi-producer contention
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> rb-libbpf nr_prod 1  11.310 =C2=B1 0.623M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 2  9.947 =C2=B1 0.004M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 3  6.634 =C2=B1 0.011M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 4  4.502 =C2=B1 0.003M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 8  3.888 =C2=B1 0.003M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 12 3.372 =C2=B1 0.005M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 16 3.189 =C2=B1 0.010M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 20 2.998 =C2=B1 0.006M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 24 3.086 =C2=B1 0.018M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 28 2.845 =C2=B1 0.004M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 32 2.815 =C2=B1 0.008M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 36 2.771 =C2=B1 0.009M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 40 2.814 =C2=B1 0.011M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 44 2.752 =C2=B1 0.006M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 48 2.695 =C2=B1 0.006M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 52 2.710 =C2=B1 0.006M/s (drops 0.000 =C2=B1 0.000M/s)
+>
+> After:
+>
+> Ringbuf, multi-producer contention
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> rb-libbpf nr_prod 1  11.283 =C2=B1 0.550M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 2  9.993 =C2=B1 0.003M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 3  6.898 =C2=B1 0.006M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 4  5.257 =C2=B1 0.001M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 8  3.830 =C2=B1 0.005M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 12 3.528 =C2=B1 0.013M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 16 3.265 =C2=B1 0.018M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 20 2.990 =C2=B1 0.007M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 24 2.929 =C2=B1 0.014M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 28 2.898 =C2=B1 0.010M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 32 2.818 =C2=B1 0.006M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 36 2.789 =C2=B1 0.012M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 40 2.770 =C2=B1 0.006M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 44 2.651 =C2=B1 0.007M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 48 2.669 =C2=B1 0.005M/s (drops 0.000 =C2=B1 0.000M/s)
+> rb-libbpf nr_prod 52 2.695 =C2=B1 0.009M/s (drops 0.000 =C2=B1 0.000M/s)
+>
+> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+> ---
+>  include/uapi/linux/bpf.h       |   4 ++
+>  kernel/bpf/ringbuf.c           | 109 +++++++++++++++++++++++++++------
+>  tools/include/uapi/linux/bpf.h |   4 ++
+>  3 files changed, 98 insertions(+), 19 deletions(-)
+>
 
+[...]
+
+> @@ -72,6 +73,8 @@ struct bpf_ringbuf {
+>          */
+>         unsigned long consumer_pos __aligned(PAGE_SIZE);
+>         unsigned long producer_pos __aligned(PAGE_SIZE);
+> +       /* points to the record right after the last overwritten one */
+> +       unsigned long overwrite_pos;
+
+I moved this after pending_pos, as all these fields are actually
+exposed to the user space, so didn't want to unnecessarily shift
+pending_pos.
+
+>         unsigned long pending_pos;
+>         char data[] __aligned(PAGE_SIZE);
+>  };
+> @@ -166,7 +169,7 @@ static void bpf_ringbuf_notify(struct irq_work *work)
+>   * considering that the maximum value of data_sz is (4GB - 1), there
+>   * will be no overflow, so just note the size limit in the comments.
+>   */
+> -static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_no=
+de)
+> +static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t data_sz, int numa_no=
+de, bool overwrite_mode)
+>  {
+>         struct bpf_ringbuf *rb;
+>
+> @@ -183,17 +186,25 @@ static struct bpf_ringbuf *bpf_ringbuf_alloc(size_t=
+ data_sz, int numa_node)
+>         rb->consumer_pos =3D 0;
+>         rb->producer_pos =3D 0;
+>         rb->pending_pos =3D 0;
+> +       rb->overwrite_mode =3D overwrite_mode;
+>
+>         return rb;
+>  }
+>
+>  static struct bpf_map *ringbuf_map_alloc(union bpf_attr *attr)
+>  {
+> +       bool overwrite_mode =3D false;
+>         struct bpf_ringbuf_map *rb_map;
+>
+>         if (attr->map_flags & ~RINGBUF_CREATE_FLAG_MASK)
+>                 return ERR_PTR(-EINVAL);
+>
+> +       if (attr->map_flags & BPF_F_RB_OVERWRITE) {
+> +               if (attr->map_type =3D=3D BPF_MAP_TYPE_USER_RINGBUF)
+
+this seemed error prone if we ever add another ringbuf type (unlikely,
+but still), so I inverted this all to allow BPF_F_RB_OVERWRITE only
+for BPF_MAP_TYPE_RINGBUF. We should try to be as strict as possible by
+default.
+
+> +                       return ERR_PTR(-EINVAL);
+> +               overwrite_mode =3D true;
+> +       }
+> +
+>         if (attr->key_size || attr->value_size ||
+>             !is_power_of_2(attr->max_entries) ||
+>             !PAGE_ALIGNED(attr->max_entries))
+> @@ -205,7 +216,7 @@ static struct bpf_map *ringbuf_map_alloc(union bpf_at=
+tr *attr)
+>
+>         bpf_map_init_from_attr(&rb_map->map, attr);
+>
+> -       rb_map->rb =3D bpf_ringbuf_alloc(attr->max_entries, rb_map->map.n=
+uma_node);
+> +       rb_map->rb =3D bpf_ringbuf_alloc(attr->max_entries, rb_map->map.n=
+uma_node, overwrite_mode);
+>         if (!rb_map->rb) {
+>                 bpf_map_area_free(rb_map);
+>                 return ERR_PTR(-ENOMEM);
+> @@ -293,13 +304,25 @@ static int ringbuf_map_mmap_user(struct bpf_map *ma=
+p, struct vm_area_struct *vma
+>         return remap_vmalloc_range(vma, rb_map->rb, vma->vm_pgoff + RINGB=
+UF_PGOFF);
+>  }
+>
+> +/* Return an estimate of the available data in the ring buffer.
+
+Fixed up comment style
+
+[...]
+
+>  static u32 ringbuf_total_data_sz(const struct bpf_ringbuf *rb)
+> @@ -402,11 +425,41 @@ bpf_ringbuf_restore_from_rec(struct bpf_ringbuf_hdr=
+ *hdr)
+>         return (void*)((addr & PAGE_MASK) - off);
+>  }
+>
+> +static bool bpf_ringbuf_has_space(const struct bpf_ringbuf *rb,
+> +                                 unsigned long new_prod_pos,
+> +                                 unsigned long cons_pos,
+> +                                 unsigned long pend_pos)
+> +{
+> +       /* no space if oldest not yet committed record until the newest
+> +        * record span more than (ringbuf_size - 1).
+> +        */
+
+same, keep in mind that we now use kernel-wide comment style with /*
+on separate line. Fixed up all other places as well.
+
+> +       if (new_prod_pos - pend_pos > rb->mask)
+> +               return false;
+> +
+> +       /* ok, we have space in overwrite mode */
+> +       if (unlikely(rb->overwrite_mode))
+> +               return true;
+> +
+> +       /* no space if producer position advances more than (ringbuf_size=
+ - 1)
+> +        * ahead of consumer position when not in overwrite mode.
+> +        */
+> +       if (new_prod_pos - cons_pos > rb->mask)
+> +               return false;
+> +
+> +       return true;
+> +}
+> +
+
+[...]
 
