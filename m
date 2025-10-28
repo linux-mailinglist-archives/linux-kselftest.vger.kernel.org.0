@@ -1,176 +1,129 @@
-Return-Path: <linux-kselftest+bounces-44181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABADCC14BAC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 13:58:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45BE4C14D81
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 14:29:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 610FD4FD489
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 12:58:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B0511B2818B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 13:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0224E3314A4;
-	Tue, 28 Oct 2025 12:57:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA87332900;
+	Tue, 28 Oct 2025 13:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="n3UVXJto"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="K95auNhv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F0D330B3B;
-	Tue, 28 Oct 2025 12:57:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E24B3314DD
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 13:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761656270; cv=none; b=LC3pW1/26pgdx9Dv+3rucFfJKfrN+cl4kTlVPIzpA/2d1e0eySSzR3cTFWrdMnLHS9SXp5FOv8SA1sYoVY8/gV+2duqJbbJYvWc1NkFSqcz11jOtxVumoYcoof97CDzV/m5kiCUpvyCjlRt9f5JBxW/pGCK7xSwhZyA6KXoAwx8=
+	t=1761658140; cv=none; b=Kklu1OOZvdSK8Sa6v4pFFieE+d8XuXSbpoQcUmPGAJHm30Lr0m7bioDjnPo5oxQSnGh8cwwnWjSrv9nlfN0u2+UnbHOJ2I+KDQnDhENyxxysRk9Zc43CrJCzSncjlE6065EHM7U1oG1MWqUJD9TE6+Q5X4obHtbGDzvEcWl0mVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761656270; c=relaxed/simple;
-	bh=c0lVYLey1J54j8+LzkyiF7aV7X/OiaCcAORzUDvclqE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OC1IthX56FW2XKawmshsblc9oXpoyWNbvQagOIp31CqPHDuCWRYChXUQOga93cPD3asBuky92qJ0/l4bLF3fCsXDNeZDbhjbN3ST37tfN1RMZGTZBLS7moMpXGDMMXUoWBkjQeCiYoXl7y81Ior1fct3wLCB8HL5WOdsacHREvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=n3UVXJto; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59SBDY6g015469;
-	Tue, 28 Oct 2025 12:57:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=warw8
-	LcEpdVD1yZ6NqTjeOLsG3Gxja9LpBG0FJuLtoo=; b=n3UVXJtoKRP1tgQaroxsp
-	ZijJICAMc+P7SwJrE/bU8PTrqitCz2BWkGQS1ajOESlsN/1Bp75CDl4vva265YDm
-	qmkKfEsJht0txhlacPcnheOfrSr0nhMv+dfT3ZQYmo8gRTEuYaYRh8AcXi/JsVt+
-	JKfE9Kxn1Sx6Kf50NvDYlOfMdklRTLdmyYQ7zz2eG7tqigJhqXm3zuvCqTlDHxwi
-	z+Rjn0uZQaY5fZ8k0LZmS+O0MWzA9qPH3xxEk8xfWYavq0OGiYxISIpfjVrAJ6Eh
-	20hKPnTVyXXuZ66ekmn7udZdfClBbCqbudRKUIquQoSVu6mw7iKEbCeSK4+kBpLK
-	A==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a0n4yp5pm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Oct 2025 12:57:21 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59SBslZc009120;
-	Tue, 28 Oct 2025 12:57:20 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a0n0fcxcu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Oct 2025 12:57:20 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 59SCvCUw017359;
-	Tue, 28 Oct 2025 12:57:19 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4a0n0fcx93-3;
-	Tue, 28 Oct 2025 12:57:19 +0000
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To: bpf@vger.kernel.org
-Cc: alan.maguire@oracle.com,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [RFC bpf-next 2/2] selftests/bpf: Add test for bpftool map ID printing
-Date: Tue, 28 Oct 2025 05:57:03 -0700
-Message-ID: <20251028125705.3586552-3-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251028125705.3586552-1-harshit.m.mogalapalli@oracle.com>
-References: <20251028125705.3586552-1-harshit.m.mogalapalli@oracle.com>
+	s=arc-20240116; t=1761658140; c=relaxed/simple;
+	bh=dtsFeSDKqGyLml+fTdEtUCa8bBm3GwmPyBM2/lNmOXI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B1ehZdP+RKCK2a5RVcJO+Uv7p6Gw2D/7IuVnplJV+hfxuoXJCUUqxoINnh2PcF6pAyJVz8L5Bxgkdt0m5DkvEWO27h6NZyvS4a5JkO5wAZsDw8NrwvpXH8uVS3PNABFIttW3gyj8fPwYilbRj0/i2/VcYZukfbv6Aw/2I+XQcc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=K95auNhv; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-89e7a7e0256so470347585a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 06:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1761658137; x=1762262937; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dtsFeSDKqGyLml+fTdEtUCa8bBm3GwmPyBM2/lNmOXI=;
+        b=K95auNhvrSFR6PPDg2ibB+mdTp2motrPFwy4va//VFphBGbf/4LZapakAXGoOkez92
+         +AhFNhjlkgSbj2HMewM0Dat39X0k7WeXiUlhUIX+BSs49FIoqxxs1QjxEt2dQLPv6SCQ
+         bLvy0Rbo8HeAM+TxfWfHlBGlE8Xhouu3jsMCc6LWd8NVW8c00G/buUgePHr4ZjTt4WGE
+         B8vDDf7tawyGnwMDnI9CpypUocmYloFMI3NlNOA4sQnCmqD+G094F+7MFS9BHtgWdh0T
+         9FscgUMGPE9hiPXfDsLqc85DmN3rfWgzEcOekZ3IQne1k/cWy4aDNSWFfIGosHxZ2gOD
+         RAlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761658137; x=1762262937;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dtsFeSDKqGyLml+fTdEtUCa8bBm3GwmPyBM2/lNmOXI=;
+        b=hAIgEWdzszvhJMLuLj/62WoZAR69d/xD37Ta1WC4LJejKTjfxuUEa/VTUFMzLZUdXI
+         EFdM/4BLF/wcIgmREBnvfNAGjyk5KWkhwlp0GPvQm4zSOva+F3NY9necbr1RMz3RHbrt
+         Q206eK/24mne0q9zogUGyFwRUtD8oNxm73RqfhibfKbacg/OCQyUlw9DGm7daJeWGTin
+         OEbdGJSv40q6uER7nDRv1kBpNUg8HvB5jkZKiVtWuOHZ2TM+FC1LsyH+QiazB4Tan3ta
+         Fm2shGghhxDORhyEwAA0bBIWWIs3vA7zNmKoVBMOlP0D/DJyWwqVWVr5PQF7kUqw9V7v
+         Jrog==
+X-Forwarded-Encrypted: i=1; AJvYcCUbRCdStkyEpXrVcdd/18KQiYaW1SNHrVZx//ce9yOLC5kByQpobGdWd5Ge6HLvJKT6R44qE0Bt3feU9CvpatE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4MMA6p1YvnazKYxHG9EIe6/b2+G9qsMJdP+pBkWofmUy0Kfcp
+	jZIoY6NOWte+k5ldVDrgWAl0654dEnzb/642TxkJ4h66ZPmLiLJ1Jo5zvl3+xGUIAMM=
+X-Gm-Gg: ASbGncvYjSUP7U9eeMvF7FFW/U/0qrh/MOaIIHQu8+ZBFsaAWCD7N4qpqJkwIXiVoHL
+	BE2QUTEE49NAHAgJUBUB8RuEcW+sw9x6OtLlYOE9Oiyp8uW8hq1A3DcA3EFTWblCQ2pfEDDpvkW
+	T9P5b4GtTPeC5iXF++8iGdgG/9yRUiDWFlyKMcu9JIsIuSMGy0gMfQXbSDYtgTF+09CMDJyMoHk
+	M1HhfuKtc8h4MYb40M5SC+o1NAWGWuKik4Njp8YEAMYvFwJfM1ZZaIUppZe3FHbmW5FCD5fG2fr
+	fyezQ+2iZQuijydZDnDeOiNl697gwP6+xS82NwlGgOLT9APnXoVNrmGd8QJsb5ZZQqWq0Lju0HF
+	dqm1KjPDg4ZF9aA/RdeN36by9hJQoI6ZoauB3ReuB6Rpl0gyAjz/yKQPy/BLpIdjTP8kGQnmh+b
+	juFW/Pv1/rKreHc7SWz1ivrAXIYUWWve9f3uceGhXT2l3W2yfbEmpljL7X
+X-Google-Smtp-Source: AGHT+IGShJMC1iBLkVMVTtmAgFjNgDYF2kS2KrAPaxSmW4rJSZvLRhN0tZlnppqE/frY25q7IEUPHg==
+X-Received: by 2002:a05:620a:462a:b0:8a5:6ca3:d56 with SMTP id af79cd13be357-8a6f63c48a7mr436299885a.39.1761658137149;
+        Tue, 28 Oct 2025 06:28:57 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-120-4.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.120.4])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-89f24cd5617sm829595185a.19.2025.10.28.06.28.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Oct 2025 06:28:55 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1vDjkt-00000004PA5-0Sy6;
+	Tue, 28 Oct 2025 10:28:55 -0300
+Date: Tue, 28 Oct 2025 10:28:55 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Jacob Pan <jacob.pan@linux.microsoft.com>
+Cc: Vipin Sharma <vipinsh@google.com>, bhelgaas@google.com,
+	alex.williamson@redhat.com, pasha.tatashin@soleen.com,
+	dmatlack@google.com, graf@amazon.com, pratyush@kernel.org,
+	gregkh@linuxfoundation.org, chrisl@kernel.org, rppt@kernel.org,
+	skhawaja@google.com, parav@nvidia.com, saeedm@nvidia.com,
+	kevin.tian@intel.com, jrhilke@google.com, david@redhat.com,
+	jgowans@amazon.com, dwmw2@infradead.org, epetron@amazon.de,
+	junaids@google.com, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 06/21] vfio/pci: Accept live update preservation
+ request for VFIO cdev
+Message-ID: <20251028132855.GJ760669@ziepe.ca>
+References: <20251018000713.677779-1-vipinsh@google.com>
+ <20251018000713.677779-7-vipinsh@google.com>
+ <20251027134430.00007e46@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-10-28_04,2025-10-22_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- adultscore=0 phishscore=0 suspectscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2510020000 definitions=main-2510280108
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDI1MDAxMyBTYWx0ZWRfXx5KHZTgsI3sh
- Ysi24Y1RM6CA/KQ4aNIxmfZB5h99QvcO4kol0Owj8okFK1bWeqz1gWFc7M0CfsklqhzHRpmKtrp
- vxxJ7NEcwJCCAP3q94tPDNmcVD2CK2vEv2HD62Uunx/ASXxIB1WO7Pm6FJOgM3Ow0rwEOnv4cuW
- MSRYgt4Y+BFri5n460HxEK8sFT8jo+rZCWYdNv/GbnvhGIXCvSCUziM0UbSPzGSButvT85jZgPM
- +bM9Vkfcw3O64h01DAcU4mzTJwI+mKaA79pJ0FASWSSKuLcJKzbavIXiyUeYgkg4p+mPgcOIHFJ
- MpXZWvO30wV3Dwj488thFKewNMjoisos3rQi7chObqjOWf0Wh5tQzjvx3esPk3uogArC3vogikN
- S3kb4lqAN60rIbtvogXrx/mq8ey/dOMkF31dGOhOPblYlVhKDkQ=
-X-Authority-Analysis: v=2.4 cv=Z9vh3XRA c=1 sm=1 tr=0 ts=6900bdb1 b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=yPCof4ZbAAAA:8
- a=zZ8rhmji2bsAaRzR-ewA:9 cc=ntf awl=host:12123
-X-Proofpoint-ORIG-GUID: xCGF6xnaL5i6aiMdNhkkeDs-L6C7a6YQ
-X-Proofpoint-GUID: xCGF6xnaL5i6aiMdNhkkeDs-L6C7a6YQ
+In-Reply-To: <20251027134430.00007e46@linux.microsoft.com>
 
-Add selftest to check if Map ID is printed on successful creation in
-both plain text and json formats.
+On Mon, Oct 27, 2025 at 01:44:30PM -0700, Jacob Pan wrote:
+> I have a separate question regarding noiommu devices. I’m currently
+> working on adding noiommu mode support for VFIO cdev under iommufd.
 
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
- .../testing/selftests/bpf/test_bpftool_map.sh | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
+Oh how is that going? I was just thinking about that again..
 
-diff --git a/tools/testing/selftests/bpf/test_bpftool_map.sh b/tools/testing/selftests/bpf/test_bpftool_map.sh
-index 515b1df0501e..013a64e96cbf 100755
---- a/tools/testing/selftests/bpf/test_bpftool_map.sh
-+++ b/tools/testing/selftests/bpf/test_bpftool_map.sh
-@@ -361,6 +361,40 @@ test_map_access_with_btf_list() {
- 	fi
- }
- 
-+# Function to test map ID printing
-+# Parameters:
-+#   $1: bpftool path
-+#   $2: BPF_DIR
-+test_map_id_printing() {
-+	local bpftool_path="$1"
-+	local bpf_dir="$2"
-+	local test_map_name="test_map_id"
-+	local test_map_path="$bpf_dir/$test_map_name"
-+
-+	local output
-+	output=$("$bpftool_path" map create "$test_map_path" type hash key 4 \
-+		value 8 entries 128 name "$test_map_name")
-+	if echo "$output" | grep -q "Map successfully created with ID:"; then
-+		echo "PASS: Map ID printed in plain text output."
-+	else
-+		echo "FAIL: Map ID not printed in plain text output."
-+		exit 1
-+	fi
-+
-+	rm -f "$test_map_path"
-+
-+	output=$("$bpftool_path" map create "$test_map_path" type hash key 4 \
-+		value 8 entries 128 name "$test_map_name" --json)
-+	if echo "$output" | jq -e 'has("id")' >/dev/null 2>&1; then
-+		echo "PASS: Map ID printed in JSON output."
-+	else
-+		echo "FAIL: Map ID not printed in JSON output."
-+		exit 1
-+	fi
-+
-+	rm -f "$test_map_path"
-+}
-+
- set -eu
- 
- trap cleanup_skip EXIT
-@@ -395,4 +429,6 @@ test_map_creation_and_map_of_maps "$BPFTOOL_PATH" "$BPF_DIR"
- 
- test_map_access_with_btf_list "$BPFTOOL_PATH"
- 
-+test_map_id_printing "$BPFTOOL_PATH" "$BPF_DIR"
-+
- exit 0
--- 
-2.50.1
+After writing the generic pt self test it occured to me we now have
+enough infrastructure for iommufd to internally create its own
+iommu_domain with a AMDv1 page table for the noiommu devices. It would
+then be so easy to feed that through the existing machinery and have
+all the pinning/etc work.
 
+Then only an ioctl to read back the physical addresses from this
+special domain would be needed
+
+It actually sort of feels pretty easy..
+
+Jason
 
