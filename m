@@ -1,353 +1,126 @@
-Return-Path: <linux-kselftest+bounces-44208-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95B9DC1678C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 19:28:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF24C16A3D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 20:40:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 01FBF34A70F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 18:28:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FBBA3A899C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 19:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12155314B80;
-	Tue, 28 Oct 2025 18:28:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4634234FF65;
+	Tue, 28 Oct 2025 19:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YTz29piu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i/HR/dWG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-qk1-f202.google.com (mail-qk1-f202.google.com [209.85.222.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A50D239567
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 18:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E9E834F24B
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 19:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761676109; cv=none; b=mr+F6QaYBOiqYue3pietRr1NrOHvK21Agyzd2uCRMexpWAt5crcfBETSe2+Gjw4KzlFlF1eIokb1AqKJCuqtBh286zkhpGIEbwtHZ8tpMvZlawrXAaBVRaz19qCJbyCVfm9DXgb6y4evCaykaM4+MJ68Cxgr3DzVsToVNAF01bw=
+	t=1761680435; cv=none; b=BlLxvs2wegva6lWwSDPL73KIStgRwiesY/HyRsJP/uCxNRKmiaaoUCvaboNGGvLgst0EIdQcUYrI58ouvqrZ6MR4wk/fmrBHn/Vy9DwljGvKwk8VX2JZCO+Fmu6GM2Lq9ZfNZVPL9EceyP0oHzCEWHgjq7nP6e/uuMl4YTaYrO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761676109; c=relaxed/simple;
-	bh=2a2XJVs9ZstRVlMwHGaX/LzLjoMWBC1o41QfM3zzQls=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SjaXI0+mmdHD+xKkoNFuuNObqCU8GThnLu1Irwc99+rcdGvjyeyNrgRHhH/FFi8hnMgP2u5Pvr1mfZUW7ld0TvaDOYKX8pcPLSk4wHKL4JeimBaO1pZzdNqORFQp+bAdbzeGAxYubDgKCtL8DSSBByD6Lup7IBU6Q5iLD6hpUqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YTz29piu; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1761680435; c=relaxed/simple;
+	bh=To5acIYuKxLI7VmWBBln4+MVx0ugLM3XHMdYhItqD6k=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YJlMe4yUYbKFNcOBH5nrFs/HgOPbwooEoKWNxP5crDTdycIVbTGCGN34S8kovzH+3McngHIMrKJ/NAq6AeJXIPQL6dvqi7ou2jy0sUMUOw+aylrn11x9T8FnbANWNpYjYsNjg25D6YUV9kzH8Pkajs0KZonEeUjiRWZW+gc+NO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i/HR/dWG; arc=none smtp.client-ip=209.85.222.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-29490944023so45201035ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 11:28:27 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com
+Received: by mail-qk1-f202.google.com with SMTP id af79cd13be357-8a194ded475so408019985a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 12:40:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761676106; x=1762280906; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JwwqbizLme2jEhCIP8tyn9yg6ZUbIw3HVu7qFcIaTlE=;
-        b=YTz29piuOCg+8uK1h4ozQLgivuKvzIO25hPhFzPkYaX5xPUEUUMT0NYzUsDmmGUxHZ
-         ZSi7gE9C7lM0TlthlA6J0SP5nZFf9jGfnlBChuWp5j1RVqZhEU5ncZP3K4EAAM2S63ed
-         xqVeFB4DCZohSuFyemHTIXxF3BEz/PwiAISzH5EsBYtfWx6kSWN5kj8alm4UMmSSq3HF
-         gPm7wv47cOqU2Cdra0q8yJb3fDLoaFqOvQFvGztG3vmUols6ihFm8KMb0PdCPWcOtquw
-         4WVzTcZUQWRGS/hGpcEsZP2iaBXr0sJOD5excu3lSq82RPPnYTGS/neZHMf7rphoFUcd
-         UIjw==
+        d=google.com; s=20230601; t=1761680432; x=1762285232; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=klmAEOBgnK8V0krntMXnjM4cr8IdVdSgq5C2UUbnczQ=;
+        b=i/HR/dWGVm3Dmsu8GTZTkgpRirSKGhbSVtGpvnSeAivjw2oQ4/yyYpvA1wIXRz32IO
+         FRcV01jX/Pm/gsVAG7FeqGgeBLvUgeGFVqPvKcZDYOMSeEeFgGt6QsjkVrdjCwJCTnpY
+         XMPdYusGbdT0cFZDBasuL9AdqQHkonMKOPj/36vCkY8KtgeL/J/q6HrLXPNzYuMdC/6K
+         KIm4enTWIOIQbMjKVsBhTI0pjNyYm5f8obmQ7+xoy9C+3xzUG+yUby60BlfrXDtn8axM
+         8u0e/eNn3wCv5yROYSu1PfgI5XAFl7rokvxwtwTm6svM74YCLQlWxVjL0ydCY3NONBgb
+         BM5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761676106; x=1762280906;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JwwqbizLme2jEhCIP8tyn9yg6ZUbIw3HVu7qFcIaTlE=;
-        b=la25/o9mpP+xKrLvBUrgQK5/P5BtdxJrG2UlMDv0JCHfrEVSVY8SXkBK4Zq8nlNF0n
-         050BNOJN8sPnaoqbZxwyKjM6kJjuowwu4Pf0T3mqvwx4Lyt5Xo1l+oOTqa4tJCiXh+Nc
-         PGnKlxungXVc89z0aAN7EwCvGX09IRnE6pZM31HgKrjrpF34WPQy0pOIju4wXnKYj5cb
-         JAcow5wEWi+K1mWTq1R/48QThZwJ5rp3fBShOXSttKd+5PTyzTmPHbia8YFFXX8QXXvw
-         0s2TvrNvZVPvVEzxWLom6nVtG9J1aTlBoGLrrcHNjAmqdQL7xhLrbb5hKpy4NfgsTt23
-         vg1w==
-X-Forwarded-Encrypted: i=1; AJvYcCWMKjkHFx3k2BbVEBfMZZ+tDJp6msQb/tB5PywsCrrnGhUa3u5LRLu2onjqxEC8uWTgsJDfvBKh8ZQ2fWzZ4Pg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhEjm78lJLVAAUuW80CVqf0Q6yktJ2o82te/GLExvmgviZlsCW
-	qP/tzb+U4yt9uvm+RCCjAaiPshBkxMw9weC7+XCwfCdyyZkH5H7Y1FiYSH2PZ33DXSrY531KrRw
-	kvKaGusR5QjCLFrymZ5nhfpEcua1vNOR+9ugBovF1
-X-Gm-Gg: ASbGncvoxtzff+LMjz/w8stZ73f4S13enJZG9YQjXz4mzrmyJyEZ93GNJP2twQkTXkQ
-	CkFOpxXA2XmqYINqmou2grdYTDP6htCHRPRFS0WCw6OXjoMvE0yajN7Fo5AqvvqCrTq/RNeSRIp
-	R/k6ZkHVM9VpGnoORHWI4ZdZ6ddV2SB2lNx2rp/SthgBXSWvyHQ8i1kLenG/9w1y9UGpUkAxzDG
-	n5vydb5qxFD6LzTsYeYfqztervSrq2JFCsfCwBKBbw8gfbuBK6PKJcn6s6N4x1c6j7pfHBDxqik
-	lOIyA7n8ZW0XU2Q=
-X-Google-Smtp-Source: AGHT+IHGQgiHurQaRm5BB7XlGFbutHXsTrKesjHVFoO64zS/IwuXtf9Zc3l3Dd5HGQS+OWR2w/kG1Uyuv84suWGXdkw=
-X-Received: by 2002:a17:902:e802:b0:279:fa:30fe with SMTP id
- d9443c01a7336-294dee25c62mr1768945ad.26.1761676105954; Tue, 28 Oct 2025
- 11:28:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1761680432; x=1762285232;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=klmAEOBgnK8V0krntMXnjM4cr8IdVdSgq5C2UUbnczQ=;
+        b=u3swp7OqpZf54mq7/k+f/m9gKih5IHr+ekIXQIzAQ8G04Z2g3Je0XasMNrRZ1z7PW6
+         7nLBMbAdHd5gBeHRXOPUDNUbXIETHJYcHrzKqBNCL2XJBaGuTD32bd6j9JJSOI8V9/u6
+         D2Qoxc/+V4BY6AQ/iMuMF3P7PQtBBjvlqfZNi640OPxeaGcM9lo4HEEOjSn0y2S3Daq2
+         vOTeI7k0DEb/a7RpkcNcUc9q/XANbvf5ztkOlCmj8wpXIDLea7vr/0JUeSJp+BrQIxcN
+         YcLmo7178vQrKm3SS8F+puKz5WgPoHuY+avwhc5IjqVIgE/vOzvmDF9/YZ7RXqRD5RQk
+         IXCQ==
+X-Gm-Message-State: AOJu0Yx7v3AZJe6fknUM9GW5Zf20VfugavhCd5FJjhR5s0O0x+eyMZXv
+	woPM8+0J0LJ+ek7oy7ATZ6K5h9jdk+PkPu7973f8ud37HX8hHjKiNruSljwsO/cKT9t88sACI68
+	1dg==
+X-Google-Smtp-Source: AGHT+IFVO1CqGnWuA7TXA7gqNnWQ0zNCmjHiQKbhFId0ZmPSRBmELfYFPsXfnUDloIvO5lq/eIrrgreMPw==
+X-Received: from qknqa3.prod.google.com ([2002:a05:620a:6483:b0:859:f095:3f58])
+ (user=rmoar job=prod-delivery.src-stubby-dispatcher) by 2002:a05:620a:4016:b0:8a3:f8c2:5f01
+ with SMTP id af79cd13be357-8a8e5d92995mr76595385a.72.1761680432512; Tue, 28
+ Oct 2025 12:40:32 -0700 (PDT)
+Date: Tue, 28 Oct 2025 19:40:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251025190256.11352-1-adelodunolaoluwa.ref@yahoo.com> <20251025190256.11352-1-adelodunolaoluwa@yahoo.com>
-In-Reply-To: <20251025190256.11352-1-adelodunolaoluwa@yahoo.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Tue, 28 Oct 2025 11:28:14 -0700
-X-Gm-Features: AWmQ_bnalw5IhlnCx13TaCPkqkExXAVy8q757FeR1BQMDD21F7CRcXs2Z3K0uq0
-Message-ID: <CAAVpQUAbDfaiAZ_NCppGE5vsafWoU7V1xvnqtQQM44cwv6jHsA@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: af_unix: Add tests for ECONNRESET and EOF semantics
-To: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-Cc: "=David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	David Hunter <david.hunter.linux@gmail.com>, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel-mentees@lists.linuxfoundation.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.851.g4ebd6896fd-goog
+Message-ID: <20251028194010.519411-1-rmoar@google.com>
+Subject: [PATCH] MAINTAINERS: Update KUnit email address for Rae Moar
+From: Rae Moar <rmoar@google.com>
+To: shuah@kernel.org, davidgow@google.com
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 25, 2025 at 12:03=E2=80=AFPM Sunday Adelodun
-<adelodunolaoluwa@yahoo.com> wrote:
->
-> Add selftests to verify and document Linux=E2=80=99s intended behaviour f=
-or
-> UNIX domain sockets (SOCK_STREAM and SOCK_DGRAM) when a peer closes.
-> The tests cover:
->
->   1. EOF returned when a SOCK_STREAM peer closes normally.
->   2. ECONNRESET returned when a SOCK_STREAM peer closes with unread data.
->   3. SOCK_DGRAM sockets not returning ECONNRESET on peer close.
->
-> This follows up on review feedback suggesting a selftest to clarify
-> Linux=E2=80=99s semantics.
->
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-> ---
-> Changelog:
->
-> Changes made from v1:
->
-> - Patch prefix updated to selftest: af_unix:.
->
-> - All mentions of =E2=80=9CUNIX=E2=80=9D changed to AF_UNIX.
->
-> - Removed BSD references from comments.
->
-> - Shared setup refactored using FIXTURE_VARIANT().
->
-> - Cleanup moved to FIXTURE_TEARDOWN() to always run.
->
-> - Tests consolidated to reduce duplication: EOF, ECONNRESET, SOCK_DGRAM p=
-eer close.
->
-> - Corrected ASSERT usage and initialization style.
->
-> - Makefile updated for new directory af_unix.
->
->  tools/testing/selftests/net/af_unix/Makefile  |   1 +
->  .../selftests/net/af_unix/unix_connreset.c    | 161 ++++++++++++++++++
->  2 files changed, 162 insertions(+)
->  create mode 100644 tools/testing/selftests/net/af_unix/unix_connreset.c
->
-> diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing=
-/selftests/net/af_unix/Makefile
-> index de805cbbdf69..5826a8372451 100644
-> --- a/tools/testing/selftests/net/af_unix/Makefile
-> +++ b/tools/testing/selftests/net/af_unix/Makefile
-> @@ -7,6 +7,7 @@ TEST_GEN_PROGS :=3D \
->         scm_pidfd \
->         scm_rights \
->         unix_connect \
-> +       unix_connreset \
->  # end of TEST_GEN_PROGS
->
->  include ../../lib.mk
-> diff --git a/tools/testing/selftests/net/af_unix/unix_connreset.c b/tools=
-/testing/selftests/net/af_unix/unix_connreset.c
-> new file mode 100644
-> index 000000000000..c65ec997d77d
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/af_unix/unix_connreset.c
-> @@ -0,0 +1,161 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Selftest for AF_UNIX socket close and ECONNRESET behaviour.
-> + *
-> + * This test verifies that:
-> + *  1. SOCK_STREAM sockets return EOF when peer closes normally.
-> + *  2. SOCK_STREAM sockets return ECONNRESET if peer closes with unread =
-data.
-> + *  3. SOCK_DGRAM sockets do not return ECONNRESET when peer closes.
-> + *
-> + * These tests document the intended Linux behaviour.
-> + *
-> + */
-> +
-> +#define _GNU_SOURCE
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <fcntl.h>
-> +#include <unistd.h>
-> +#include <errno.h>
-> +#include <sys/socket.h>
-> +#include <sys/un.h>
-> +#include "../../kselftest_harness.h"
-> +
-> +#define SOCK_PATH "/tmp/af_unix_connreset.sock"
-> +
-> +static void remove_socket_file(void)
-> +{
-> +       unlink(SOCK_PATH);
-> +}
-> +
-> +FIXTURE(unix_sock)
-> +{
-> +       int server;
-> +       int client;
-> +       int child;
-> +};
-> +
-> +FIXTURE_VARIANT(unix_sock)
-> +{
-> +       int socket_type;
-> +       const char *name;
-> +};
-> +
-> +/* Define variants: stream and datagram */
-> +FIXTURE_VARIANT_ADD(unix_sock, stream) {
-> +       .socket_type =3D SOCK_STREAM,
-> +       .name =3D "SOCK_STREAM",
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(unix_sock, dgram) {
-> +       .socket_type =3D SOCK_DGRAM,
-> +       .name =3D "SOCK_DGRAM",
-> +};
+Update Rae's email address for the KUnit entry. Also add an entry to
+.mailmap to map former google email to current gmail address.
 
-Let's add coverage for SOCK_SEQPACKET,
-which needs listen() / connect() but other semantics
-are similar to SOCK_DGRAM.
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+I am leaving Google and am going through and cleaning up my @google.com
+address in the relevant places. Note that Friday, November 7 2025 is my
+last day at Google after which I will lose access to this email account
+so any future updates or comments after Friday will come from my
+@gmail.com account.
 
+ .mailmap    | 1 +
+ MAINTAINERS | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-> +
-> +FIXTURE_SETUP(unix_sock)
-> +{
-> +       struct sockaddr_un addr =3D {};
-> +       int err;
-> +
-> +       addr.sun_family =3D AF_UNIX;
-> +       strcpy(addr.sun_path, SOCK_PATH);
-> +
-> +       self->server =3D socket(AF_UNIX, variant->socket_type, 0);
-> +       ASSERT_LT(-1, self->server);
-> +
-> +       err =3D bind(self->server, (struct sockaddr *)&addr, sizeof(addr)=
-);
-> +       ASSERT_EQ(0, err);
-> +
-> +       if (variant->socket_type =3D=3D SOCK_STREAM) {
-> +               err =3D listen(self->server, 1);
-> +               ASSERT_EQ(0, err);
-> +
-> +               self->client =3D socket(AF_UNIX, SOCK_STREAM, 0);
-> +               ASSERT_LT(-1, self->client);
-> +
-> +               err =3D connect(self->client, (struct sockaddr *)&addr, s=
-izeof(addr));
-> +               ASSERT_EQ(0, err);
-> +
-> +               self->child =3D accept(self->server, NULL, NULL);
-> +               ASSERT_LT(-1, self->child);
-> +       } else {
-> +               /* Datagram: bind and connect only */
-> +               self->client =3D socket(AF_UNIX, SOCK_DGRAM | SOCK_NONBLO=
-CK, 0);
-> +               ASSERT_LT(-1, self->client);
-> +
-> +               err =3D connect(self->client, (struct sockaddr *)&addr, s=
-izeof(addr));
-> +               ASSERT_EQ(0, err);
-> +       }
-> +}
-> +
-> +FIXTURE_TEARDOWN(unix_sock)
-> +{
-> +       if (variant->socket_type =3D=3D SOCK_STREAM)
-> +               close(self->child);
-> +
-> +       close(self->client);
-> +       close(self->server);
-> +       remove_socket_file();
-> +}
-> +
-> +/* Test 1: peer closes normally */
-> +TEST_F(unix_sock, eof)
-> +{
-> +       char buf[16] =3D {};
-> +       ssize_t n;
-> +
-> +       if (variant->socket_type !=3D SOCK_STREAM)
-> +               SKIP(return, "This test only applies to SOCK_STREAM");
+diff --git a/.mailmap b/.mailmap
+index d2edd256b19d..2fcf7e4a5cfd 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -642,6 +642,7 @@ Qais Yousef <qyousef@layalina.io> <qais.yousef@arm.com>
+ Quentin Monnet <qmo@kernel.org> <quentin.monnet@netronome.com>
+ Quentin Monnet <qmo@kernel.org> <quentin@isovalent.com>
+ Quentin Perret <qperret@qperret.net> <quentin.perret@arm.com>
++Rae Moar <raemoar63@gmail.com> <rmoar@google.com>
+ Rafael J. Wysocki <rjw@rjwysocki.net> <rjw@sisk.pl>
+ Rajeev Nandan <quic_rajeevny@quicinc.com> <rajeevny@codeaurora.org>
+ Rajendra Nayak <quic_rjendra@quicinc.com> <rnayak@codeaurora.org>
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 46126ce2f968..eefcff990987 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13601,7 +13601,7 @@ F:	fs/smb/server/
+ KERNEL UNIT TESTING FRAMEWORK (KUnit)
+ M:	Brendan Higgins <brendan.higgins@linux.dev>
+ M:	David Gow <davidgow@google.com>
+-R:	Rae Moar <rmoar@google.com>
++R:	Rae Moar <raemoar63@gmail.com>
+ L:	linux-kselftest@vger.kernel.org
+ L:	kunit-dev@googlegroups.com
+ S:	Maintained
 
-Instead of skipping, let's define final ASSERT() results
-for each type.
+base-commit: 9de5f847ef8fa205f4fd704a381d32ecb5b66da9
+-- 
+2.51.1.851.g4ebd6896fd-goog
 
-Same for other 2 tests.
-
-
-> +
-> +       /* Peer closes normally */
-> +       close(self->child);
-> +
-> +       n =3D recv(self->client, buf, sizeof(buf), 0);
-> +       TH_LOG("%s: recv=3D%zd errno=3D%d (%s)", variant->name, n, errno,=
- strerror(errno));
-> +       if (n =3D=3D -1)
-> +               ASSERT_EQ(ECONNRESET, errno);
-
-... otherwise, we don't see an error here
-
-> +
-> +       if (n !=3D -1)
-> +               ASSERT_EQ(0, n);
-
-and this can be checked unconditionally.
-
-
-> +}
-> +
-> +/* Test 2: peer closes with unread data */
-> +TEST_F(unix_sock, reset_unread)
-> +{
-> +       char buf[16] =3D {};
-> +       ssize_t n;
-> +
-> +       if (variant->socket_type !=3D SOCK_STREAM)
-> +               SKIP(return, "This test only applies to SOCK_STREAM");
-> +
-> +       /* Send data that will remain unread by client */
-> +       send(self->client, "hello", 5, 0);
-> +       close(self->child);
-> +
-> +       n =3D recv(self->client, buf, sizeof(buf), 0);
-> +       TH_LOG("%s: recv=3D%zd errno=3D%d (%s)", variant->name, n, errno,=
- strerror(errno));
-> +       ASSERT_EQ(-1, n);
-> +       ASSERT_EQ(ECONNRESET, errno);
-> +}
-> +
-> +/* Test 3: SOCK_DGRAM peer close */
-> +TEST_F(unix_sock, dgram_reset)
-> +{
-> +       char buf[16] =3D {};
-> +       ssize_t n;
-> +
-> +       if (variant->socket_type !=3D SOCK_DGRAM)
-> +               SKIP(return, "This test only applies to SOCK_DGRAM");
-> +
-> +       send(self->client, "hello", 5, 0);
-> +       close(self->server);
-> +
-> +       n =3D recv(self->client, buf, sizeof(buf), 0);
-> +       TH_LOG("%s: recv=3D%zd errno=3D%d (%s)", variant->name, n, errno,=
- strerror(errno));
-> +       /* Expect EAGAIN because there is no datagram and peer is closed.=
- */
-> +       ASSERT_EQ(-1, n);
-> +       ASSERT_EQ(EAGAIN, errno);
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> +
-> --
-> 2.43.0
->
 
