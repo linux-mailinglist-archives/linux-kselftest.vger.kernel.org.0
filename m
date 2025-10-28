@@ -1,87 +1,81 @@
-Return-Path: <linux-kselftest+bounces-44175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44176-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4482C14638
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 12:33:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F196C146E6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 12:44:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CED24688ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 11:31:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8B981AA4542
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 11:44:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E600130DEA3;
-	Tue, 28 Oct 2025 11:30:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01BE830AD0B;
+	Tue, 28 Oct 2025 11:44:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A5gZQ4j0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A/U0TorO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418A82ED871
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 11:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F095D30AAC4
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 11:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761651039; cv=none; b=d+wM1vdgJE/Pon6qQEyx9F3isq65Oux9npSpfRuP77RgSiP5Mxw14sYM9fdJy+Nhlqqjb7MRI984BlX1p5SH4y+7A719ovDT6h/3FuXykALmjAv4v1iBAFw8rLy7ZDGWAQtNWwcRSx5/NVvEgxXWEuwThqYfdbloa/5Hdic8kgM=
+	t=1761651852; cv=none; b=Syq9YCpOM8ZxCIQh/luyQVQ5aAsL/s2agmGCjoctbMtr4WuJP41KrBpt5ZkL0qpKpjQrrB9dyCrZiXPHToTPrP37ADVSzusnitNFFxSiitHmdKt/gtFzOt1NaBP8UnOH4vQ1Qe0yL17UnwVB0mgNHbmFqSNcuQDhFZA8qgyr7Wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761651039; c=relaxed/simple;
-	bh=uLz1nCOc13P72Z9cLqgJATuBA1im88R9TxqI9YQCXBY=;
+	s=arc-20240116; t=1761651852; c=relaxed/simple;
+	bh=poij8wlwwOv2xQkmm5yAYpdmtg97F2oQvtny01XIVT8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=co7yjDbkaH/D/qqgDeyclaM3H4g6jdjYtqVnWIJo+rUHcxwDYKFvT7LuRNlFoY5GZP0Q9Om6mcH1RMvtG6HJ02Ese4J5FbU5Jre2zT7wbJn2++UN2/89jetw6VKX2wAvgoLlwDPtsXPecNq9tYUao/k6GKOKX8Mf960XDtaRk1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A5gZQ4j0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1761651034;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6wj7YAztZrM6wj1+S+3q5JHWOPj4KIXwKeK9N2bqLfU=;
-	b=A5gZQ4j0xLIsGcgO2HUNkY0U3Ui72riAn6/pLfsfJd7vhw4IgnyBoh2JVae9HT6iOgOwoJ
-	uVgnFuqWFL97Ame9GmTrOYjQ87bSePLcY3PN9MgPT014WDkm7JiVKr7Uh4Lx3s00auQPUV
-	rOJPnxtTyj+5Q5dRTbHvP5VcPmJ8v5M=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-205-Gj9jV6ClM56hyc364RyH4g-1; Tue, 28 Oct 2025 07:30:32 -0400
-X-MC-Unique: Gj9jV6ClM56hyc364RyH4g-1
-X-Mimecast-MFC-AGG-ID: Gj9jV6ClM56hyc364RyH4g_1761651032
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-475ddd57999so27020935e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 04:30:32 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=spQ5YI6as9wQJ/j2JhubcWpxBpSvGL1yHV/ihgEat/zvhjjBjlmt4dj2EQXsxSxVVysH7C1HbFujTTMYkuaueXO8gFp5bBNY4Tknin8JQB4AcDuhK+orz29WNLWfupY1ol4iiuVahJP63b0AgBUJJOrotQvhaIK2IJuIsTUpTKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A/U0TorO; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-427060bc0f5so3212117f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 04:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761651848; x=1762256648; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PWcMpUbr5EvoYwg6OCCvCq3zKJMQIWwwgnasyRi2T/U=;
+        b=A/U0TorO7PrsxQeinvfhEFb9UyHeKrRVY7hk2S62o4940PtjH6EZmpImgQ/4lD0pJK
+         iX1BwBOyBQEzZzyxMPAO7N9WJo72WyOlsrdnFMU1ACnVNTD6wfLy0fLFAXOA9BV51STc
+         8EkB+WH6CT5YKbxiho6HUEC0dSgpHvtDrFt4XWaNd3AYtkPTgR4pueUNj0vTu0dCZJ/A
+         9v8jdMjzDB10a5IEP7YwpoZI/lYQIDf3CXVbAjn3ZIcGIrgsr4jOrYwsqvkNfPojH3Jk
+         2mrLDyJAowyX2piNDhaGRF2hCz8+nwee1dFvuZqxZMVIyCoTWWJVRc4WXaQq9CF72jZJ
+         Oqfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761651032; x=1762255832;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1761651848; x=1762256648;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6wj7YAztZrM6wj1+S+3q5JHWOPj4KIXwKeK9N2bqLfU=;
-        b=drdIV1O5feLNS6qGzHblq3w6DpcMczBa305F7qrZfzkhp8Vp2AFeSYUrmLdba0/CGU
-         0lxbexvETX2jV5OXEy5B+AcepKZoHaNcaM/fgfZOQDPWqGwxLTqWc/dwzzFxyjd69iFu
-         WF/IzLwNwlvzyGguVUs8N9Us4TmXdNF9H1pOqtJj/wD2wwRCaE/qJMoJdNzyO1b1Pmu5
-         p2uveuA/Bybf6iEz+UBp2AUPzenjxb0JeqGBHKVxHpA5LLKUFw11OAcb08iezDUzUuNd
-         YBReKjq3h/USG9jT04AlKCa36MDPJBW0sHvpfKJ0wwOYcYg5qAJ+ZyMnc/T/OzMGI0jq
-         Edpw==
-X-Forwarded-Encrypted: i=1; AJvYcCVRlFVgFUdhheHyc9cDc4/TYylZNBMyvqGfFQJ6Y1BJ7Z1dWGSyOLozcwsVksCQEF9UZBM1zhW9CcmDRwTkp78=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBq0/P6qMrebk5H34KF6+QQPMFFUT3Wu9Z15hgC54MMtjOaegY
-	ql+J05vpwMpUQEfRXlj95yCzR6ycdmbfGFPNjmygl12CrFF3cxDiUry9Or/AlyiH3mYKmw4Ksch
-	lBbdLe1dOL+9tAq/CerbhqvOmQxMW/gPhbsdSj/MPKc+YfEVO42oInD7vv9xtg5NDZ2sh2A==
-X-Gm-Gg: ASbGnctamR892ysSfmA0hSaByOQ4TCH7K/h72oCwUvGYXrgGzYmk1aCWAOla3Gtvz2c
-	bBqh6w3CGd8Jqit6Wxg/tyJ4tocOttyAgRVU3wSWBLilzsF5AzhuViTcmquPRyHCef3yFLX5htj
-	YgH7yvZktJlGAY+yKWbXJ6GZfYbk4uY/T9ve2mVnK4gF1bzd5wbBjzkbWTD+NPiGHzM/XFwQl53
-	FTcrHvauTRhKWHbbJxhWA5CWA4kAPMDobwKsj0y+9ugCx5TO1275kA30kqIlXYfsVzJz2ShzlIX
-	H3v+pB0ZIk5bjSE7ctg9586MNGYECWQHumrj6F1yYzQko9XSUMiYZU8KZZgghqLV0MpAlA1dRPI
-	mmifm8lqimY0UkJ0qtOZTr9sIIYaIsm+5TcqPBVVWGCKmNC4=
-X-Received: by 2002:a05:600c:4446:b0:475:da13:2566 with SMTP id 5b1f17b1804b1-47717e6095fmr25034855e9.35.1761651031656;
-        Tue, 28 Oct 2025 04:30:31 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG1UoWkDkAxEnPYbIqlYF36LNiS1od7f4r/oylsQ8lGjLYMkIaaEI5SdiPojR2VWZlNQPGbIA==
-X-Received: by 2002:a05:600c:4446:b0:475:da13:2566 with SMTP id 5b1f17b1804b1-47717e6095fmr25034235e9.35.1761651031148;
-        Tue, 28 Oct 2025 04:30:31 -0700 (PDT)
-Received: from ?IPV6:2a0d:3344:2712:7e10:4d59:d956:544f:d65c? ([2a0d:3344:2712:7e10:4d59:d956:544f:d65c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-475dd489fa4sm187152685e9.16.2025.10.28.04.30.28
+        bh=PWcMpUbr5EvoYwg6OCCvCq3zKJMQIWwwgnasyRi2T/U=;
+        b=NWbxCHgesFtac+OPSqDCXbcPGYneZylVlD1DnsHEebaRZzn6Iy/iW0k1YokO+Tb6+t
+         4VXrNkMvTFvCm60OHyp3wDuAkf7O8BcZ4YrOdg/G4oxG2aqBnqDVkRrwoi4PxHmqyu7o
+         F2O6t3olHDon1ipYJ7WMMYL18C9DeBOgrZUJFSRjxkm7CvoK98kieYs//MyuW9gp6R95
+         XdaPZyebFdNjdjX138N8IuRu7K/WYaWQq3ngwu8LVKx1LdvwaEvp18bkA32sqhWQRKMc
+         LR7wWMmnlm5aoMH7rGk0QaHAl7S9S8FIhn0WmRmptjdHOw9ECvoLMQQR/ENAfcWqEAvi
+         LIZg==
+X-Forwarded-Encrypted: i=1; AJvYcCWKDIXgEcO5C2TEol0U3sb+F6IHf21lasimbNK+deYhbPXtmf712kPKjFyW3hS3MS2WwEkWwSct14gwpeK0Oa4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBdHLmmDWYbFIYeuFSzgpepD8XCMt1pBeXHk5ZRPp+4F9VhSdn
+	GR/7B5P/ZmptDew66/ZgbvsQPfLD6ZypE8qEUdGwACcSCSakCPqPEVRC
+X-Gm-Gg: ASbGnct3NEkixIVBLzbTNy0F0fDQctTAETG/fyRxJC+Ds0Hh42Lrf1Qz3fd/Rm8oqUg
+	y6chuk20+hbF6vGIOBIlPo03kCzaKF0AndW1F5dk0t7U7WDbOpU9q33aKHfsaOSQ2VqvJkm9blb
+	VqZJeLbAZuLucqa0ckFoZxakE7qiBSW05TZC9qYKXykQ1gAbSWUaJcwk2yzyrm1XPFvB5FEeztn
+	Z4WogaqoXA4JD5U+8cekNyZi+30sTJOt5oVZGbJs2SBXw8cE2UssDPS+3KlZwbZpFKOCiG0buZW
+	7Efnwn/Eo01wPsqnxAV0XV13pDJ5FfrqKR66hBS7HaVlAxe4BLm7Mx0+xgaNCimieJpAgYNF2xD
+	4AqePxioSA8jcUx0Uhn1aRvixDVf9wmcGxYaO2/pZy7uTcLmMMrVKKTOPHrsZ5k9pDRZ4hVOtcz
+	5rppIYWeUdMy6NTUnJtRAk
+X-Google-Smtp-Source: AGHT+IGWKlgpP2z1QhsSUQHXl7C4b+OW6D0eUSaDQiNKqIYxyLK5t9gJfLBx15l4AM6BkXPesoBDGw==
+X-Received: by 2002:a05:6000:3103:b0:429:8cda:dd4e with SMTP id ffacd0b85a97d-429a7e732bdmr2556153f8f.32.1761651847905;
+        Tue, 28 Oct 2025 04:44:07 -0700 (PDT)
+Received: from [10.24.67.204] ([15.248.3.88])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429952b7b43sm20301815f8f.6.2025.10.28.04.44.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Oct 2025 04:30:30 -0700 (PDT)
-Message-ID: <c10939d2-437e-47fb-81e9-05723442c935@redhat.com>
-Date: Tue, 28 Oct 2025 12:30:27 +0100
+        Tue, 28 Oct 2025 04:44:07 -0700 (PDT)
+Message-ID: <c52db7bf-494f-49a8-9829-3805db6dda7c@gmail.com>
+Date: Tue, 28 Oct 2025 11:44:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,47 +83,102 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 1/3] net,mptcp: fix proto fallback detection with
- BPF sockmap
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev
-Cc: stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
- John Fastabend <john.fastabend@gmail.com>, Eric Dumazet
- <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
- Willem de Bruijn <willemb@google.com>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Simon Horman <horms@kernel.org>, Matthieu Baerts <matttbe@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20251023125450.105859-1-jiayuan.chen@linux.dev>
- <20251023125450.105859-2-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20251023125450.105859-2-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v2 2/4] KVM: selftests: Fix unaligned mmap allocations
+Content-Language: en-GB
+To: Sean Christopherson <seanjc@google.com>
+Cc: maz@kernel.org, oliver.upton@linux.dev, pbonzini@redhat.com,
+ joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+ catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ isaku.yamahata@intel.com, roypat@amazon.co.uk, kalyazin@amazon.co.uk,
+ jackabt@amazon.com
+References: <20251013151502.6679-1-jackabt.amazon@gmail.com>
+ <20251013151502.6679-3-jackabt.amazon@gmail.com>
+ <aPpi1c-8EpWuo87B@google.com>
+From: "Thomson, Jack" <jackabt.amazon@gmail.com>
+In-Reply-To: <aPpi1c-8EpWuo87B@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/23/25 2:54 PM, Jiayuan Chen wrote:
-> When the server has MPTCP enabled but receives a non-MP-capable request
-> from a client, it calls mptcp_fallback_tcp_ops().
+
+
+On 23/10/2025 6:16 pm, Sean Christopherson wrote:
+> On Mon, Oct 13, 2025, Jack Thomson wrote:
+>> From: Jack Thomson <jackabt@amazon.com>
+>>
+>> When creating a VM using mmap with huge pages, and the memory amount does
+>> not align with the underlying page size. The stored mmap_size value does
+>> not account for the fact that mmap will automatically align the length
+>> to a multiple of the underlying page size. During the teardown of the
+>> test, munmap is used. However, munmap requires the length to be a
+>> multiple of the underlying page size.
 > 
-> Since non-MPTCP connections are allowed to use sockmap, which replaces
-> sk->sk_prot, using sk->sk_prot to determine the IP version in
-> mptcp_fallback_tcp_ops() becomes unreliable. This can lead to assigning
-> incorrect ops to sk->sk_socket->ops.
+> What happens when selftests use the wrong map_size?  E.g. is munmap() silently
+> failing?  If so, then I should probably take this particular patch through
+> kvm-x86/gmem, otherwise it means we'll start getting asserts due to:
+> 
+>    3223560c93eb ("KVM: selftests: Define wrappers for common syscalls to assert success")
+> 
+> If munmap() isn't failing, then that begs the question of what this patch is
+> actually doing :-)
+> 
 
-I don't see how sockmap could modify the to-be-accepted socket sk_prot
-before mptcp_fallback_tcp_ops(), as such call happens before the fd is
-installed, and AFAICS sockmap can only fetch sockets via fds.
+Hi Sean, sorry I completely missed your reply.
 
-Is this patch needed?
+Yeah currently with a misaligned map_size it causes munmap() to fail, I
+noticed when tested with different backings.
 
-/P
+>> Update the vm_mem_add method to ensure the mmap_size is aligned to the
+>> underlying page size.
+>>
+>> Signed-off-by: Jack Thomson <jackabt@amazon.com>
+>> ---
+>>   tools/testing/selftests/kvm/lib/kvm_util.c | 12 +++++-------
+>>   1 file changed, 5 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+>> index c3f5142b0a54..b106fbed999c 100644
+>> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+>> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+>> @@ -1051,7 +1051,6 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>>   	/* Allocate and initialize new mem region structure. */
+>>   	region = calloc(1, sizeof(*region));
+>>   	TEST_ASSERT(region != NULL, "Insufficient Memory");
+>> -	region->mmap_size = mem_size;
+>>   
+>>   #ifdef __s390x__
+>>   	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
+>> @@ -1060,6 +1059,11 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>>   	alignment = 1;
+>>   #endif
+>>   
+>> +	alignment = max(backing_src_pagesz, alignment);
+>> +	region->mmap_size = align_up(mem_size, alignment);
+>> +
+>> +	TEST_ASSERT_EQ(guest_paddr, align_up(guest_paddr, backing_src_pagesz));
+>> +
+>>   	/*
+>>   	 * When using THP mmap is not guaranteed to returned a hugepage aligned
+>>   	 * address so we have to pad the mmap. Padding is not needed for HugeTLB
+>> @@ -1067,12 +1071,6 @@ void vm_mem_add(struct kvm_vm *vm, enum vm_mem_backing_src_type src_type,
+>>   	 * page size.
+>>   	 */
+>>   	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
+>> -		alignment = max(backing_src_pagesz, alignment);
+>> -
+>> -	TEST_ASSERT_EQ(guest_paddr, align_up(guest_paddr, backing_src_pagesz));
+>> -
+>> -	/* Add enough memory to align up if necessary */
+>> -	if (alignment > 1)
+>>   		region->mmap_size += alignment;
+>>   
+>>   	region->fd = -1;
+>> -- 
+>> 2.43.0
+>>
 
+-- 
+Thanks,
+Jack
 
