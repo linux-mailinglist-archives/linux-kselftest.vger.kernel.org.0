@@ -1,250 +1,552 @@
-Return-Path: <linux-kselftest+bounces-44167-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99A9EC12834
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 02:16:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FCDBC129C4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 03:00:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D8541A274D3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 01:16:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 846F45813FC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Oct 2025 01:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6604B21D3E8;
-	Tue, 28 Oct 2025 01:16:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1B692652A4;
+	Tue, 28 Oct 2025 01:59:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C1aEWdKr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="au9vA5YJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D4121CA0D;
-	Tue, 28 Oct 2025 01:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CD924169F
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Oct 2025 01:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761614184; cv=fail; b=g8RFQXa+ShtuJscI6h3aKAmNlaUf641xTjJ02W2db0b6fqrPckMKSKWLMNSfwXruSyUWWx5/oAYM549xvTnODvrr1OA94kNWeVMvnI2TZNV+65lkZstF5M0L3MfZGPz55RRLo2ltxOh+cpKlETiba6xmrMVhumq99bKdtM8qNb8=
+	t=1761616785; cv=fail; b=hzFm6iMf6te/EdGv4s13YzIqosm1rRRHPS5l68I/h1Q+MmMhr9p2IcygyMSgbhEzyQjEVETbmrvXkUJ4Fq8TT6Bi07qmMQl5/hh6cpRLO6a3hVSY18LF9p+6ysZm5Y4hSLMB3F53QLrOt05w9ofDnZiCHIdpJlVTfkQzr8hBveQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761614184; c=relaxed/simple;
-	bh=kb6/kORm7Bwf8XXOmQXYlVYV4/bgcv3/xSFehETDk6I=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=VBetmxGugklo/JloiTCQG5+e7o9sx3GOU7FT74l61pgVbKFT0VXQBZxmZaw7+6+KUP0qKXA+sxysCcoHryTzO1HHER9nxUrkInw6CWBTUpFzWUz6H+9ahmp+SfQHvMq3Gkq0L5WBdoZkany+E4/601Bg1z3X75bxJuEJQ87yaCw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C1aEWdKr; arc=fail smtp.client-ip=192.198.163.14
+	s=arc-20240116; t=1761616785; c=relaxed/simple;
+	bh=Wz6tBoHotMKlUtHcp6a1sQnIFihIOb/RxwXY2+FZcFg=;
+	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=NyX3vM6RiuX95MYcLaYhjDux37WfXPUQCfwuZKnCYYptxo+ED/6jItblu/32ONGpIVCgccEdlHGB1BenPIGzleoHVCZ4A5Cfqv+zvqGd75T+2A7/3/kAfueKcRvvD4N1UmcNdL1Y9euC9MKCU9kVlsE9dC+r7vhjNxz+fleLVpU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=au9vA5YJ; arc=fail smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761614181; x=1793150181;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=kb6/kORm7Bwf8XXOmQXYlVYV4/bgcv3/xSFehETDk6I=;
-  b=C1aEWdKr/hHUcoU3PGKGeIlI5uTW3vPKRS0E0ql0wgLLF6E47VGpqtM9
-   Y2YfX3SeKZ611h9uNSgtLqYI/BvbLQUnyIcnHSrQkFg/F/VLi1xIpWlkY
-   JHgFZYEqRhubCqDBwI5ghMGK8VZGb4HP96+xiYnrwu+i6PBBjiq5tMVRR
-   iatFmiNht3sefIl0G6U2hH4ivQA5egsx8oXz96aXs5ev0EdkHbCYUC0Do
-   cgU+vNj0YQDVN9eO5S1z37PLPcmflgkoSB8XQUS8ehbLdUfWnWayGeJDb
-   UowQQqXkmVEPv5ZnJD+QCKlJyEPd0zO/jMzI09KhzbS64xpcf7P0ZpoBT
-   g==;
-X-CSE-ConnectionGUID: ugKxtuLvTTW62Bu0wr4sJg==
-X-CSE-MsgGUID: NKnAFxLTTbyV27tNfc+IJg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="63742552"
-X-IronPort-AV: E=Sophos;i="6.19,260,1754982000"; 
-   d="scan'208";a="63742552"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 18:16:21 -0700
-X-CSE-ConnectionGUID: PKhJ73hXQeCNQ/m3IxdCUQ==
-X-CSE-MsgGUID: WZlyWw78QuOiLHnRfJRADQ==
+  t=1761616783; x=1793152783;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   mime-version;
+  bh=Wz6tBoHotMKlUtHcp6a1sQnIFihIOb/RxwXY2+FZcFg=;
+  b=au9vA5YJZyQRTY1jrND8pI/JEA534bBlMeMpGRB7x+zJnhzJXNkP30Hx
+   U/2c8QIRdn64b9YhmApYKJ0dAnEfBI/qbOC7TVWr61N3Djmio3JEWOt9w
+   F/ouc8ZAHj6/vnYqWr8jhcRk9hqE7gm56T34Y7rcdhpete7f0hwBafYH6
+   YBis1kFZXCPxvpjHXmatolFZmsoguKMyfpH63uLS71FZO0+tTlE9IXb81
+   TEAQKUII/horQGjSDgu56Gk+6m6f5CkrULNu0Dn9Zs2Eggw9fX0CT4QlX
+   a3410KFeHqjbhWfDnnwgJYGu/KqkKW2zy1NVWZ0/BRcUqDOP8IHHjWyro
+   w==;
+X-CSE-ConnectionGUID: Dswta7IoRz660OC76VCX5Q==
+X-CSE-MsgGUID: lCm1AoSuQdGEX6xT9ME76g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63634904"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63634904"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 18:59:43 -0700
+X-CSE-ConnectionGUID: 9fOMfzb8S0aUyfqNYrfLYQ==
+X-CSE-MsgGUID: WRoFXTLfRZWmSgLHfUA5Ow==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,260,1754982000"; 
-   d="scan'208";a="185663022"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 18:16:20 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Mon, 27 Oct 2025 18:16:19 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+   d="scan'208";a="189265186"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa003.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2025 18:59:42 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
  ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27 via Frontend Transport; Mon, 27 Oct 2025 18:16:19 -0700
-Received: from BL2PR02CU003.outbound.protection.outlook.com (52.101.52.8) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ 15.2.2562.27; Mon, 27 Oct 2025 18:59:41 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Mon, 27 Oct 2025 18:16:19 -0700
+ 15.2.2562.27 via Frontend Transport; Mon, 27 Oct 2025 18:59:41 -0700
+Received: from PH7PR06CU001.outbound.protection.outlook.com (52.101.201.39) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Mon, 27 Oct 2025 18:59:41 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cgeRxSQelDjyfogj7lHhsATdQhWQJnK14vR6ujh9LgxWfRalyo0bzTOjCwD1NY+97yT+XmrU1jzrVBQ6CQTsUpZvhM7uTPH9h4xo2xkl7MQPrTiBl4xquKm3yMtYkJh3stgmzgRBwPNnHEb1Oy40jcc3wQrv4PPKQ56l2ZNls3phVjgc4LF0nqaf5sbZJvbmzbfsusPfPtmbwObIsBXQX5sjwXkebTgRLYgYA9Ja80XCqXwHDTWp9sRpU+me+0DD8v/d1dx6QhMhDOWZqtDc+a+2Fgv61n3sFvtonHt+ks37MpcwjhRfXiQD+gP768EL0vzaMnYYue58WWkDuaLbeg==
+ b=TZNKrLvstuKmxe+ynwnj9SEdFY/GhLydq7bxQG9w4+xro/8v75NtRqt4WSpeJAk5ZU99LcftvOe7v7rpvYbcGUaOBQ5XJ6b1CbIZ99arZy3WG4ALxTPWU7DvCfVVtG9zTru6opf8h9WV+Lbs3X5kZACBXHRuvCecVE8J9aZVwEHbq0WrrntuCxnFPG2aMFmpCywZLKcpKtBa2hrzDdqED6KSTO9IU+P5x6ovW42GpNgeTU/LFkA9asyT2GcqJ5EZmp7b2DZ4h7M7SGZ8EHVBUJxwLxRiaoCnFPUzqRspF79Bfwniy5mb8Ow0ajRLpRdbERUuJVylOa6nJEjPk/1n4Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VrbhTJ0r4PO83vR/0raUGTVlVlaAwRq2EDzHSPqsPe8=;
- b=XS4eCy7aLBbc4pMhMpdOpYPNU9gqxloFCDqnZaJPoHjkFgscLFCFlmisfgkurziy05e4EKF+F8y4hO3Q1UUGt7J7qLuHHjOeUfWGDglGtEWz2YpYvWbONTH5BnQtycX/gb5sMk7YIZqrZ5uLBilmcildxARPHLuC3PhWcmCQvdjjsmihNBmgJvESpqU3s1v0Joh7Rgd/LsQ4vSAZW7sDez82+P5kEv25RorOfiLmEdC813oQV2/MdjgEaBD2nupo1s0lDzBlo3ZNMjxw/NnGdrVxeBGlZDKLRI+rzgrpW/xeB941RCSkWe4APrSLMsRjRveGYXGDj8f9TBXkXEEIgg==
+ bh=6qd+bgrWOho5PGMdm5ulwvYNI9Sq5lUVnR6I1w3m5qI=;
+ b=sC4+r3PSGSnAKkwYpQfKj41lfQu83Ibb+nj3ew6u+E0Mqox3c+FVgjE4tSOgpbd9v2gfB5k+Jp2HAa1IV6u5hTACErPn4Ixq5erQD5Z4wpEP537CG+2B06q2d83zGmjhvF1y2cVASwTToqHQwHfKmIF017MsLYGwXtrky6Ksx76XrLFKOLzaF1urW4XtnovRK0kiOPKIcO1S71qGnp6s3YkUIV6EzpPeNZJxZU5Rj2Oye1n4J44Ar/Ongt6FN+gNWZ6BEjVIdmjSeQRhP/K4VZu/z8XIEeDeR1ik5r/G4A9hwIWzNbXEWpKWwU39Dp8OY8itsd6lACjkwB2Vk8CkEw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DM4PR11MB6456.namprd11.prod.outlook.com (2603:10b6:8:bc::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.17; Tue, 28 Oct
- 2025 01:16:15 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1%5]) with mapi id 15.20.9253.018; Tue, 28 Oct 2025
- 01:16:15 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, Alexandre Ghiti <alex@ghiti.fr>, "Anup
- Patel" <anup@brainfault.org>, Albert Ou <aou@eecs.berkeley.edu>, "Jonathan
- Corbet" <corbet@lwn.net>, "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	Joerg Roedel <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>, Bill Wendling
-	<morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<nick.desaulniers+lkml@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, "Palmer
- Dabbelt" <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>, Robin Murphy
-	<robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Suravee Suthikulpanit
-	<suravee.suthikulpanit@amd.com>, Will Deacon <will@kernel.org>
-CC: Alexey Kardashevskiy <aik@amd.com>, Alejandro Jimenez
-	<alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, "Michael
- Roth" <michael.roth@amd.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
-	"patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: RE: [PATCH v7 07/15] iommupt: Add map_pages op
-Thread-Topic: [PATCH v7 07/15] iommupt: Add map_pages op
-Thread-Index: AQHcREnZveRzU+0FVE2mIi5+sC2lDLTWyCug
-Date: Tue, 28 Oct 2025 01:16:15 +0000
-Message-ID: <BN9PR11MB52764CD5E4E461D36FFD2B668CFDA@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <0-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
- <7-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
-In-Reply-To: <7-v7-ab019a8791e2+175b8-iommu_pt_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
+Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DM4PR11MB6456:EE_
-x-ms-office365-filtering-correlation-id: c2f9317e-b979-429a-2c3f-08de15bf9788
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700021|921020;
-x-microsoft-antispam-message-info: =?us-ascii?Q?NfTBZBHf6S4vVrbT1xYykNcsY1p8ksYZCrWKGebXOUl5eq6IGmPHyA2JOkm1?=
- =?us-ascii?Q?t4azf0W0bc7ekZlnCEKsMZTWcFklmdNuXE2drhQZ+F/OhKxaqN5wtcTuXx/v?=
- =?us-ascii?Q?Oyk4zE04wbHS9+rjJuHn71vGzLTacEKQddcRkC8STv0AQ4dw0ZYiB5mx0v8e?=
- =?us-ascii?Q?4p93jrCReL38582C2Cj1/dDeTixycOn+DeIilkR/vmDKRuOrgtTVFwSpJdtF?=
- =?us-ascii?Q?QKhlwfbAgxgVO4y4CnEKvv0/tk4TsjVOcGSV0TEHmq7r/zkvjTg/6PaYi2tV?=
- =?us-ascii?Q?D3pYpK6b0z+FNs7dLHuHzly5gUnspuI5mSw9KQPRB4N058pRRaTzEL34pLkk?=
- =?us-ascii?Q?kBlwAv78o/ZmRMUjGwqsj+2KIxEkCaPD0JEAwK54K/Q1tEz9LwH0GAPK6zJW?=
- =?us-ascii?Q?mkToXbW1GgTGT6EjlESR+INoFRBk/oLh9617aMxeVygPZTNl2hfrXVHdC/M2?=
- =?us-ascii?Q?56/bhX2p1zsJHoiPimexc7M+a68zy2kAxueFLeI44Er92iVgsBCYvtaJzOYG?=
- =?us-ascii?Q?YFJr8gEvcXHA8IS6BF+ds6XfjaVX8wGsC/8igPsZkUjnedZ2FAhvtinZIqeL?=
- =?us-ascii?Q?LNMo6YlA1ElSFe09YmWiIXwhc6Fx59IZ6U+ySsD7z4/2S8v+gU+00cTnfE9M?=
- =?us-ascii?Q?gEsXijyohifd3NrWYS/qSetlTvXlZXQmcn/zIsLwchNLjWfY47eY/Mdpy6j3?=
- =?us-ascii?Q?Nnv1Fvn22ImDmI3zQM4JATzO6iLLLtKrOhcSpbhVwfa9USaDLx/BHA+8USRB?=
- =?us-ascii?Q?HxxjMFhxcfb58+UNIXzfj54FbjnOG50O1YHjb+hMUo4r7eA+DLAUc3sybrvV?=
- =?us-ascii?Q?t/hgpcebWRdI06A1+b6wpQg19uMkkiYUPlrqfaO5jFQkich5vLhB86/ISHEY?=
- =?us-ascii?Q?4MLGg4oprSQjGRj48XTbUxhN4H401Zfi2sf/YYaI7AFwb+3vpGWBuXCRSWP4?=
- =?us-ascii?Q?1iltYK4wwOC3F+f1uBGDp8HGN8259AgsOtYZIhmyxJF3RVEGGRDyeDoUM0qL?=
- =?us-ascii?Q?hpIdU5oHTTsanvRUjHEY+StuFl+xTtZkDW1m1AcjMCOIQ1tAkVMprhJtFti8?=
- =?us-ascii?Q?AampHtsm7IJiYirL6XX7PZTT5No/aL1arvezs0GqwgHOJjTfoDcNoYOQjYo3?=
- =?us-ascii?Q?cAtK1qWExX6iymhIaZtv68d5WV2brc8syTr/D09nh2CG0xyxj5gDWrLrV1fr?=
- =?us-ascii?Q?DOD+IN078FgBFygjlaFjarML00reDHoKj7sRJRrgqTf8Vj71h8TSIAsr5Mmj?=
- =?us-ascii?Q?Ni4mnTULaL1vHSmj5HCjyWENhpMQLneMDmxfeoMvJvxAl4nVHHUM4T3Cpmey?=
- =?us-ascii?Q?l/lcZWGk+yiqgppzF/vSWVHnt2VPtk8MMN2NR3PWqgntBMwk/tyi9vuyi6pN?=
- =?us-ascii?Q?y+eCEja8EHKJZNKeodg3tiaCGxJeC0iR3ZYxFrN35gAaGkX5EbPLEWjeAtkl?=
- =?us-ascii?Q?WesKgullCKwyvuyUc1LDtSMY10FjlqdJJ2A+wymVkuUvcnErg8cUKCp15fG6?=
- =?us-ascii?Q?a8oTRRpo7LhyD0lNV3Dl2QG4mpInguIY4OivZSu/MXz3G23VBKuhPlJQgQ?=
- =?us-ascii?Q?=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700021)(921020);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?stYO6gC+aOlPLz8CbzJb2+OPIqMLgRdVt7/tQWHZh6YmdU/EWQ8zpaIMNV5H?=
- =?us-ascii?Q?cv0kfisVkSI3VPTshGZXv+uUpbisIbJ/LDEr6jDeZdY+5+yCy5ZkeoToJdWS?=
- =?us-ascii?Q?3tR1dFVWNnfjx1L87Q2kuhJe6Vrxmpuxr++M58emoSPAQdIgPI0Ia7r8VDp4?=
- =?us-ascii?Q?hYs2Pc5wVA7EohK+wZZivwc5KcsI3PaNhGucKuNi/oBQI2kZuErvHr8/pILx?=
- =?us-ascii?Q?XXRCu3PT7CQ1PSZYU1fTmOPtdhxQYe315VpUvpPrTTI1LLLotMQSAEYzhVIE?=
- =?us-ascii?Q?uY6XB7SJFaZIeynGfjIrQerjueP/ZnEpi0WD4qZ3YwT52rn9Dzf0eYZrh/al?=
- =?us-ascii?Q?sEemoYQL/JFJXLiSiWqrYQIsITmrUBgoCnvtOEMdkZlIIuU3xiXlyfzhBhVQ?=
- =?us-ascii?Q?q99atXo2fyPxp/LrtlqQlSI7BFUf3dOPH7LyW2xp+6s7NQC0y1E7F1ZQsDKJ?=
- =?us-ascii?Q?0Qfm5jwH/zKv5KjX8Q0niNtOrnRklC5G4UBxqpnPYvLq0z/IXWDlb+jMjRsG?=
- =?us-ascii?Q?RH99s7glr+bb++/3hmLnhkqIlzgTDnaYmbLKYyX7N7gqxSwycghlc/Ljb6XX?=
- =?us-ascii?Q?sGlw6jQ4P6dmj2STtESXIcckCuLbR3XH6tCuMoWvNXYV54PKVcBDjxUTlGVw?=
- =?us-ascii?Q?YKrENBMKsijiENCsvi7OPJTzczhcSi0bgBZjDbsDtonvkXPg7ss/R5wbvAGy?=
- =?us-ascii?Q?PyEXREplRgsR9YkvU1NRJAgk1+cGPx/09elqn19ODkJdSIswkNVkALFYkqD9?=
- =?us-ascii?Q?nneQiUKduihqYXItyShfb+gxKvZJDMjnrTQO2sTR8hRyZGRZadPP+TJJu6wZ?=
- =?us-ascii?Q?G87NEQQREhX1o5k6LekL0+xD4bFJOeHk5UPAYrvUvbcM4/7jouzj6scOfCJW?=
- =?us-ascii?Q?mFfFx8Wwiz6OOiteOVWzfszhKk3vk26l1OzP4vN/iwKNZlfMknN7x28Plxt4?=
- =?us-ascii?Q?fD/+E5R+/mZfITKjlI68wQFZVPJiI8RNEObhBH+Ffi+hxx9ko8e7dbJESTin?=
- =?us-ascii?Q?g8X92JIr2KRuquO6FBUMtg1AIRXwTbcfK6fPzjzvG86se59NVE+VqQrBKSNA?=
- =?us-ascii?Q?1aB4rbABipNHTwOXozLK1Sh2Ud3qBfYfmr6BN/F7ldB3Xs49eygzgcDSJXVp?=
- =?us-ascii?Q?+FC6UVfwb3cAT1BJyea8olxd1vavs4KD46xEBLvyeqaJTNjAhHZgHMJna1eP?=
- =?us-ascii?Q?EKhidvgXF6QhrKHsJ8VO9YR94gkprYOOINeOH03q+TlAVNa3qa9dOjKzedTl?=
- =?us-ascii?Q?fbMqD+S1Ri3v3y3xkJmlZ+A4EsN78PHQMXUgBGXoQ3nio94H6b83xhsw6OUX?=
- =?us-ascii?Q?UkiHJtJmVlhNr09BtnAqP/5qAOP9/SaB/hlMQ76uxC3GlXpRBp/cTk7bjknR?=
- =?us-ascii?Q?Z7Qocga8m0ZBRP+BWWmvznw8mwl8NbNHQjbZ3mXoi0eWX2gn/JkOQARpKrI4?=
- =?us-ascii?Q?sVD9XGLVf5vEKqyPysEasOnAv1u16TzlSavWVJWdIODYXU6FEqdFocuLbK+P?=
- =?us-ascii?Q?fJEbKEMzdU14fp9CWZpCQJEpgPY9MSJt5zOem0PSGt2jKbtbYoTTgAGySvVJ?=
- =?us-ascii?Q?4od5AsK4BrpxIkYsDibc2vTs8PsoGJbNAUunw6Wn?=
+Received: from BY5PR11MB4165.namprd11.prod.outlook.com (2603:10b6:a03:18c::26)
+ by PH7PR11MB5864.namprd11.prod.outlook.com (2603:10b6:510:136::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9253.18; Tue, 28 Oct
+ 2025 01:59:39 +0000
+Received: from BY5PR11MB4165.namprd11.prod.outlook.com
+ ([fe80::d9f7:7a66:b261:8891]) by BY5PR11MB4165.namprd11.prod.outlook.com
+ ([fe80::d9f7:7a66:b261:8891%7]) with mapi id 15.20.9253.011; Tue, 28 Oct 2025
+ 01:59:39 +0000
+Date: Tue, 28 Oct 2025 09:59:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>, Shuah Khan
+	<skhan@linuxfoundation.org>
+CC: <oe-kbuild-all@lists.linux.dev>, Kuniyuki Iwashima <kuniyu@google.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] selftests: harness: Support KCOV.
+Message-ID: <aQAjgRwd8P+YZSa6@rli9-mobl>
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+In-Reply-To: <20251017084022.3721950-1-kuniyu@google.com>
+X-ClientProxiedBy: SG2PR04CA0161.apcprd04.prod.outlook.com (2603:1096:4::23)
+ To BY5PR11MB4165.namprd11.prod.outlook.com (2603:10b6:a03:18c::26)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR11MB4165:EE_|PH7PR11MB5864:EE_
+X-MS-Office365-Filtering-Correlation-Id: a9f63c08-a2ab-4d7c-e121-08de15c5a609
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?7LbOjpjLEa+BsJCr7RCBs7G9z2IRR+X42A10xd6zR0C2LoE2zJhaqsSbbYSZ?=
+ =?us-ascii?Q?/rcUGzfx6dzPNVGC0HJOPgRDl3QDxSzk4BkuBoGMJ3VIcpAG2qv9/47OgTnh?=
+ =?us-ascii?Q?E0E4g7TSN9HSkXNypH1gz9eTHX7giNqmK/Sl26GRmOOA2aYG4dudqEgbK5EP?=
+ =?us-ascii?Q?hYMmJXGaewAI4evhbctI2xz5Uq5qaXyUozV5Hh4PhPmj1/H6sfZcJ/cVox0H?=
+ =?us-ascii?Q?dnQVBj5C28x/FGsurUv8pd8f+mWLDHaSjtgyomEHCLhcnQaHtL9sMWP0hyae?=
+ =?us-ascii?Q?7xHq/MioICCd1jg1gJ/eYEAYwqJbbeoqVOTYc4C9/U2s2bI3CBwlNw2728FB?=
+ =?us-ascii?Q?NzyLXe6LxQSd8uQyISHQEklurgAb48aA/SGF67SreGa0VT3A98doX3rOrOSt?=
+ =?us-ascii?Q?tmBMOJn/GPKaOaczblbhzYsS5XxHplovi/5m7NwoyKaBYiI7CKRzyHDL+jfl?=
+ =?us-ascii?Q?bcwyj6v6fRTe5GXvCMCMMQrWrp+691+ve9/xLGbl+zKUTVk6RkzBauVwFeCl?=
+ =?us-ascii?Q?QevQP8pfFa+NzkUYrsec/ioq4cpkVzlz0cNfAeGAhJQz5n51f9sefCvbj3Cx?=
+ =?us-ascii?Q?9y7ja+BNuoy1hOGHXQkFRDhuuH9QbDFrItAg2PFpB+gH2FVSW6+Khr8E4nZH?=
+ =?us-ascii?Q?GSTTLWYlzenrie0iI/+6a3pYGcONne5QSK2Oyx+Da7ei/Z4taZzzORSJ7R+9?=
+ =?us-ascii?Q?fffdmAB8Oou3E24LSaB25mlEmJiRIIplkJiNesUXeuhgdWrOD5zqpkIRWk5c?=
+ =?us-ascii?Q?D6+DZK+g3LnRGWAznQ9SCJcUn2lRM8GB/BwdtiHv+5epMuX6dKOAOW8f9RFB?=
+ =?us-ascii?Q?cSexn5qRd/T7JdYMUlB8aV6BnV3HHDoQuLq35x94kkXRdKTPva/s6gWEGsJl?=
+ =?us-ascii?Q?kQF6Yz2LRcIW9222c7AL4RGYYItitr9Dy8i4sFauQYlascYl1yAbV8tAsVX0?=
+ =?us-ascii?Q?Eumzwi4+Y70ZgYgVMHKcr+gHzb6ZZzdI+BvleIJeoLUDRnnYtZQxNVYTjyUU?=
+ =?us-ascii?Q?CZBkn5ieomMBxrXr3Cd5c7SO5iaZz21KeDyyNifJIKcvb+ajvyd05LK0Y+06?=
+ =?us-ascii?Q?vlp3ZO74Po2fP0nt3bN9ug9mHJD9fBBquxqhqr2dzEOsyxihvJQQo9fqP1W8?=
+ =?us-ascii?Q?aCX3thNzgKvh+99E0ZGl2ZZuvLYqTo4WlOxmkDwF2BzRfQ2PKbnQX43IL1up?=
+ =?us-ascii?Q?AsJOHYrKJK+L2m3gVIkBI6KDgfdIutaixE2j1LKJ5ATTk0RYNWuSST9l8xF0?=
+ =?us-ascii?Q?VN05S9wnwrRtw5uU/H3z2X5nT3t9+iytq2xF+nFbwTnHVw5oW00FX8VBXDHa?=
+ =?us-ascii?Q?YjwCuCYZQ+3FGI30yZWF7bBJIvjN5P8MPF1nc2z44F+7Ei716x4klLaKiOtK?=
+ =?us-ascii?Q?mGsxv9+f+0jLFV/GKx6mswrlR6mKFO2GwnbuPckjA80g5K9Vxs7O1HF1XxBZ?=
+ =?us-ascii?Q?886CV1rA0dE=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR11MB4165.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BuHaaflhnfmJvCAAYzJhHT4rrSP6Ur1dojxoWJa9daHlesvVuwkTiWLALPjX?=
+ =?us-ascii?Q?6RyyYSsmRIcrIaK8JTmwtSUF8Ew7vBt2FwWY2cCwWyuCv6BDG9BsItvZcNy9?=
+ =?us-ascii?Q?NE/M7Z/jMyvdXuJ8XREkQQm24Yh2gIRRaOlGpn+Sbs9AlxXugAV+In+o/JDH?=
+ =?us-ascii?Q?Rn807m1BGihpff4e6QZKbvUF3uWF2LcuVVUEgdYFXdzQbUDgblyb545jA3qd?=
+ =?us-ascii?Q?NB2i2IJ33pTqt8I+/P4d+SyrhwBiZXZygWXF8s1+M7Cem7wVMV2rzKDrVIef?=
+ =?us-ascii?Q?/dlm2gD+8u8TwFZzjsRK573AM/mj2Lvf6cbNxb0zDs5SeyNKLYyGkQTQL33O?=
+ =?us-ascii?Q?352luZzzGmy9Bohjjudw9UnrzanjBC7POXfeCSBgFgT+/oSxz4O2/wi3UJNc?=
+ =?us-ascii?Q?kkE+egRcM3bk7C99lg2ShjQiR+SBWVtJ6CjoOY24NMdL2BPbddCBWCM/Cgak?=
+ =?us-ascii?Q?BkLvL419YM6mFNkDs8RlTw/JLUnRdkXcTIrMQGMibASGbNvxrkxhs2oj6O93?=
+ =?us-ascii?Q?FpbKtAUXCSMtySzDwWvCT/gQ6pdFMc2LdVcf5PgRVZg9HmDXJ3bZcnlbia0W?=
+ =?us-ascii?Q?8dVZpFVb5mvbTClvVJFhtmS939l7yJqLe3yOPPK8+a2iYTYIRgN+E10K5sRZ?=
+ =?us-ascii?Q?73fbMtRf4dag21hpjhm3RVdNvIaSYMf56alOzPsBRa6lTOk/viIDqage4bos?=
+ =?us-ascii?Q?h7sJ57l7gYib3QRacGjoxLfuXc/4ELvIfnsD4I1ZbO5gg3P+ikzqlHsdfhrV?=
+ =?us-ascii?Q?LB/nvA8H5hJs+A66z97FOOqZJhMeLdxtwpN09S2nIJ24BGD7rs4uCvnyuVRb?=
+ =?us-ascii?Q?3N0B307QIqka2erIcIRHU1xz9jZc7XF0epnSGBwET7S4mOQzW4rWv5rwpgyw?=
+ =?us-ascii?Q?v+uVxoSTqbDmj+083nJ6FVBBVDeFGYLoHhS4qgCUEccm44Izv5gT9JhfCgPq?=
+ =?us-ascii?Q?TUuiKFb/IPJ7sKASr4zXOolLtm5rTz9by/PdikkIlFkrCwhSdnS2XuSNsld2?=
+ =?us-ascii?Q?eCKnSuht+Wj6ij/nR2fvgnduN/+oqGDSNvxyQ2GMcbTXPPucM9V/zzRmbGoX?=
+ =?us-ascii?Q?3jEz9tFtXdPoJV58a+LGYJgZRP503w+rHF/1zy3renfvjpwufXqEJ694bCmw?=
+ =?us-ascii?Q?b0oEr3lceExlP5XE8rzrBZiIiJFj6UAKAIsO80ttW7d4d79Gbnzo0+tB5bur?=
+ =?us-ascii?Q?l5VPW09EexGWwQNCdxrjEUqXLcrZb++MgfFXgHihdacuS28sGUuk9teE4jc7?=
+ =?us-ascii?Q?WZxh1aYF3bioF9prdPoxJmB7vrZscaRFcw7J2UpiuA25ozRK74klNEF3t4xQ?=
+ =?us-ascii?Q?eNLGaHlslKMy4e6U6okA8hl7FWcT501LTyOyyPG/4FF0x5tUNzc2EaHMqujJ?=
+ =?us-ascii?Q?kgh0OFpP+hBJQiZghsVoYX3sW9V35f7er7vZrv7y6IVkrfPTzTDjqkzPbgfC?=
+ =?us-ascii?Q?ppP3lqRZZyOkFoXNurJzkpwoyE4uQkz54kJzE2Dwl4hHOJpA6sZU5YLNDy1/?=
+ =?us-ascii?Q?3QxJATJU5qXfMCZMN2hhCSa9mxkUvAUXhxi4qVwkGTWFWUPF05AjsD0D+v9+?=
+ =?us-ascii?Q?zFLvcksfp1uEt3hZI8ob5TSXqYhLsANXb1qUZK1D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9f63c08-a2ab-4d7c-e121-08de15c5a609
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR11MB4165.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2f9317e-b979-429a-2c3f-08de15bf9788
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2025 01:16:15.8216
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2025 01:59:39.4021
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8Dc7vwM5K2Gu/7iy0W08Nr+OTwPAvDI11oGg7wCfh4ngob7SagRbF/3gyzhQde9iLOO8fykd8NS0OCzYxaKxww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6456
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gKTNiffRcOh339Vf9YOYvk2fwYdh7nbYNhkOrP3EMSMxSpOr7HT7rKcNYlkBYyx9VX08zDyCLYkJDJU8YHTpgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5864
 X-OriginatorOrg: intel.com
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Friday, October 24, 2025 2:21 AM
->=20
-> map is slightly complicated because it has to handle a number of special
-> edge cases:
->  - Overmapping a previously shared, but now empty, table level with an OA=
-.
->    Requries validating and freeing the possibly empty tables
->  - Doing the above across an entire to-be-created contiguous entry
->  - Installing a new shared table level concurrently with another thread
->  - Expanding the table by adding more top levels
->=20
-> Table expansion is a unique feature of AMDv1, this version is quite
-> similar except we handle racing concurrent lockless map. The table top
-> pointer and starting level are encoded in a single uintptr_t which ensure=
-s
-> we can READ_ONCE() without tearing. Any op will do the READ_ONCE() and
-> use
-> that fixed point as its starting point. Concurrent expansion is handled
-> with a table global spinlock.
->=20
-> When inserting a new table entry map checks that the entire portion of th=
-e
-> table is empty. This includes freeing any empty lower tables that will be
-> overwritten by an OA. A separate free list is used while checking and
-> collecting all the empty lower tables so that writing the new entry is
-> uninterrupted, either the new entry fully writes or nothing changes.
->=20
-> A special fast path for PAGE_SIZE is implemented that does a direct walk
-> to the leaf level and installs a single entry. This gives ~15% improvemen=
-t
-> for iommu_map() when mapping lists of single pages.
->=20
-> This version sits under the iommu_domain_ops as map_pages() but does not
-> require the external page size calculation. The implementation is actuall=
-y
-> map_range() and can do arbitrary ranges, internally handling all the
-> validation and supporting any arrangment of page sizes. A future series
-> can optimize iommu_map() to take advantage of this.
->=20
-> Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Hi Kuniyuki,
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes kees/for-next/seccomp linus/master v6.18-rc2 next-20251024]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/selftests-harness-Support-KCOV/20251017-164507
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20251017084022.3721950-1-kuniyu%40google.com
+patch subject: [PATCH] selftests: harness: Support KCOV.
+:::::: branch date: 9 days ago
+:::::: commit date: 9 days ago
+config: x86_64-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20251026/202510262116.jwyrgplV-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251026/202510262116.jwyrgplV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/r/202510262116.jwyrgplV-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from listmount_test.c:14:
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   listmount_test.c:23:1: note: in expansion of macro 'TEST'
+      23 | TEST(listmount_forward)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_listmount_forward_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   listmount_test.c:23:1: note: in expansion of macro 'TEST'
+      23 | TEST(listmount_forward)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   listmount_test.c:45:1: note: in expansion of macro 'TEST'
+      45 | TEST(listmount_backward)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_listmount_backward_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   listmount_test.c:45:1: note: in expansion of macro 'TEST'
+      45 | TEST(listmount_backward)
+         | ^~~~
+>> ../../kselftest_harness.h:1251:13: warning: 'disable_kcov' defined but not used [-Wunused-function]
+    1251 | static void disable_kcov(struct __test_metadata *t, char *test_name)
+         |             ^~~~~~~~~~~~
+>> ../../kselftest_harness.h:1204:13: warning: 'enable_kcov' defined but not used [-Wunused-function]
+    1204 | static void enable_kcov(struct __test_metadata *t)
+         |             ^~~~~~~~~~~
+--
+   In file included from futex_wait_timeout.c:22:
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_timeout.c:82:1: note: in expansion of macro 'TEST'
+      82 | TEST(wait_bitset)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_wait_bitset_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_timeout.c:82:1: note: in expansion of macro 'TEST'
+      82 | TEST(wait_bitset)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_timeout.c:108:1: note: in expansion of macro 'TEST'
+     108 | TEST(requeue_pi)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_requeue_pi_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_timeout.c:108:1: note: in expansion of macro 'TEST'
+     108 | TEST(requeue_pi)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_timeout.c:128:1: note: in expansion of macro 'TEST'
+     128 | TEST(lock_pi)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_lock_pi_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_timeout.c:128:1: note: in expansion of macro 'TEST'
+     128 | TEST(lock_pi)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_timeout.c:162:1: note: in expansion of macro 'TEST'
+     162 | TEST(waitv)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_waitv_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_timeout.c:162:1: note: in expansion of macro 'TEST'
+     162 | TEST(waitv)
+         | ^~~~
+>> ../../kselftest_harness.h:1251:13: warning: 'disable_kcov' defined but not used [-Wunused-function]
+    1251 | static void disable_kcov(struct __test_metadata *t, char *test_name)
+         |             ^~~~~~~~~~~~
+>> ../../kselftest_harness.h:1204:13: warning: 'enable_kcov' defined but not used [-Wunused-function]
+    1204 | static void enable_kcov(struct __test_metadata *t)
+         |             ^~~~~~~~~~~
+--
+   In file included from futex_wait_wouldblock.c:27:
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_wouldblock.c:31:1: note: in expansion of macro 'TEST'
+      31 | TEST(futex_wait_wouldblock)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_futex_wait_wouldblock_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_wouldblock.c:31:1: note: in expansion of macro 'TEST'
+      31 | TEST(futex_wait_wouldblock)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_wouldblock.c:48:1: note: in expansion of macro 'TEST'
+      48 | TEST(futex_waitv_wouldblock)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_futex_waitv_wouldblock_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_wouldblock.c:48:1: note: in expansion of macro 'TEST'
+      48 | TEST(futex_waitv_wouldblock)
+         | ^~~~
+>> ../../kselftest_harness.h:1251:13: warning: 'disable_kcov' defined but not used [-Wunused-function]
+    1251 | static void disable_kcov(struct __test_metadata *t, char *test_name)
+         |             ^~~~~~~~~~~~
+>> ../../kselftest_harness.h:1204:13: warning: 'enable_kcov' defined but not used [-Wunused-function]
+    1204 | static void enable_kcov(struct __test_metadata *t)
+         |             ^~~~~~~~~~~
+--
+   In file included from futex_requeue_pi_signal_restart.c:30:
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_requeue_pi_signal_restart.c:98:1: note: in expansion of macro 'TEST'
+      98 | TEST(futex_requeue_pi_signal_restart)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_futex_requeue_pi_signal_restart_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_requeue_pi_signal_restart.c:98:1: note: in expansion of macro 'TEST'
+      98 | TEST(futex_requeue_pi_signal_restart)
+         | ^~~~
+>> ../../kselftest_harness.h:1251:13: warning: 'disable_kcov' defined but not used [-Wunused-function]
+    1251 | static void disable_kcov(struct __test_metadata *t, char *test_name)
+         |             ^~~~~~~~~~~~
+>> ../../kselftest_harness.h:1204:13: warning: 'enable_kcov' defined but not used [-Wunused-function]
+    1204 | static void enable_kcov(struct __test_metadata *t)
+         |             ^~~~~~~~~~~
+--
+   In file included from futex_requeue_pi_mismatched_ops.c:28:
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_requeue_pi_mismatched_ops.c:44:1: note: in expansion of macro 'TEST'
+      44 | TEST(requeue_pi_mismatched_ops)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_requeue_pi_mismatched_ops_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_requeue_pi_mismatched_ops.c:44:1: note: in expansion of macro 'TEST'
+      44 | TEST(requeue_pi_mismatched_ops)
+         | ^~~~
+>> ../../kselftest_harness.h:1251:13: warning: 'disable_kcov' defined but not used [-Wunused-function]
+    1251 | static void disable_kcov(struct __test_metadata *t, char *test_name)
+         |             ^~~~~~~~~~~~
+>> ../../kselftest_harness.h:1204:13: warning: 'enable_kcov' defined but not used [-Wunused-function]
+    1204 | static void enable_kcov(struct __test_metadata *t)
+         |             ^~~~~~~~~~~
+--
+   In file included from futex_wait_uninitialized_heap.c:33:
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_uninitialized_heap.c:56:1: note: in expansion of macro 'TEST'
+      56 | TEST(futex_wait_uninitialized_heap)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_futex_wait_uninitialized_heap_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_uninitialized_heap.c:56:1: note: in expansion of macro 'TEST'
+      56 | TEST(futex_wait_uninitialized_heap)
+         | ^~~~
+>> ../../kselftest_harness.h:1251:13: warning: 'disable_kcov' defined but not used [-Wunused-function]
+    1251 | static void disable_kcov(struct __test_metadata *t, char *test_name)
+         |             ^~~~~~~~~~~~
+>> ../../kselftest_harness.h:1204:13: warning: 'enable_kcov' defined but not used [-Wunused-function]
+    1204 | static void enable_kcov(struct __test_metadata *t)
+         |             ^~~~~~~~~~~
+--
+   In file included from futex_wait_private_mapped_file.c:31:
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_private_mapped_file.c:59:1: note: in expansion of macro 'TEST'
+      59 | TEST(wait_private_mapped_file)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_wait_private_mapped_file_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait_private_mapped_file.c:59:1: note: in expansion of macro 'TEST'
+      59 | TEST(wait_private_mapped_file)
+         | ^~~~
+>> ../../kselftest_harness.h:1251:13: warning: 'disable_kcov' defined but not used [-Wunused-function]
+    1251 | static void disable_kcov(struct __test_metadata *t, char *test_name)
+         |             ^~~~~~~~~~~~
+>> ../../kselftest_harness.h:1204:13: warning: 'enable_kcov' defined but not used [-Wunused-function]
+    1204 | static void enable_kcov(struct __test_metadata *t)
+         |             ^~~~~~~~~~~
+--
+   In file included from futex_wait.c:14:
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait.c:39:1: note: in expansion of macro 'TEST'
+      39 | TEST(private_futex)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_private_futex_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait.c:39:1: note: in expansion of macro 'TEST'
+      39 | TEST(private_futex)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait.c:65:1: note: in expansion of macro 'TEST'
+      65 | TEST(anon_page)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_anon_page_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait.c:65:1: note: in expansion of macro 'TEST'
+      65 | TEST(anon_page)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: error: initialization of 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *, char *)' from incompatible pointer type 'void (*)(struct __test_metadata *, struct __fixture_variant_metadata *)' [-Wincompatible-pointer-types]
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait.c:101:1: note: in expansion of macro 'TEST'
+     101 | TEST(file_backed)
+         | ^~~~
+   ../../kselftest_harness.h:188:25: note: (near initialization for '_file_backed_object.fn')
+     188 |                   .fn = &wrapper_##test_name, \
+         |                         ^
+   ../../kselftest_harness.h:157:25: note: in expansion of macro '__TEST_IMPL'
+     157 | #define TEST(test_name) __TEST_IMPL(test_name, -1)
+         |                         ^~~~~~~~~~~
+   futex_wait.c:101:1: note: in expansion of macro 'TEST'
+     101 | TEST(file_backed)
+         | ^~~~
+>> ../../kselftest_harness.h:1251:13: warning: 'disable_kcov' defined but not used [-Wunused-function]
+    1251 | static void disable_kcov(struct __test_metadata *t, char *test_name)
+         |             ^~~~~~~~~~~~
+>> ../../kselftest_harness.h:1204:13: warning: 'enable_kcov' defined but not used [-Wunused-function]
+    1204 | static void enable_kcov(struct __test_metadata *t)
+         |             ^~~~~~~~~~~
+..
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
 
