@@ -1,120 +1,141 @@
-Return-Path: <linux-kselftest+bounces-44279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E49FC1B94F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 16:15:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 527E2C1B90D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 16:12:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D383C581590
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 13:55:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9857D5620DB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 14:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76DBF289E13;
-	Wed, 29 Oct 2025 13:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC6602DE70B;
+	Wed, 29 Oct 2025 14:07:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QLYfDHhi"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="VMBlA123"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0991C84A1
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 13:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D4725785A;
+	Wed, 29 Oct 2025 14:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761745471; cv=none; b=aMjsPojWW7D+fWh4kAReiIZqqUtuH83XO47rZlN5BTjL6OLMkfcS+f08kYYHf9p1M6WCkau1PoaGdiSxZgqVwjVeP2QAM+vmXoSqwbJMpWvsat8+XXdDYvajDVzsyhJ7zz8KCj4NcezaRNKwuSqY2HNz4pNZJZxV+gUGJdPlob0=
+	t=1761746843; cv=none; b=sQd+eQnzb/BEJTlcDJQfDIxzN2XFSvztWhyP9FJPl7yPypTwkCxNS3D6ywpqdIArnlp/jtZInD3I5t7vM2KlM27e1qzpesxfAGPnWLpxdgaEpUUuJ6HwU8afKypueIkKxD5sY6aibfATiYv0PeGoDuP6kkLPb/RF2mEFshnGoK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761745471; c=relaxed/simple;
-	bh=akTAlOlvCXgUUeWkN15YYuyCcdmX6JZE7gXZRKSDbwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GT5WTzKS4/DZsApKsfoEbgxt0cohCaSxWbuQiG0EYiwwk5JJY7wh1NeYq2aXy/gbiBimsYDq1UnTo6xlIFyeLllzleOwK2oL9MlZmO8Tdkocj8MhLTtAwRiqA+JPGPpKVjEirpdOyObPM0F2UegwB7hB/VMDmxOkdTrSDxF4lj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QLYfDHhi; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-93e2d42d9b4so306629639f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 06:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1761745469; x=1762350269; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zdhm4zDRyUmcL/+bkn0abpwAMWivZMM0K7ilDnHJ6Z8=;
-        b=QLYfDHhi5p+4MJ3s42KwufjiLMyEPRiywAqZhkzFNaatH+elh7n4qWz34qwXtkgOk+
-         jCeZnBmMM58OfFdksdU3PSK9qlrZhIJkZbgP2/7TBZaWdY2Oyp2c+TqUBax0rmGqoE+v
-         SDdHqjv4fcbr9uLHCFzGcG++spQypPQAP1WQs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761745469; x=1762350269;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdhm4zDRyUmcL/+bkn0abpwAMWivZMM0K7ilDnHJ6Z8=;
-        b=VxPFMwArmJrud8HQBUck079G1OxekYx4LAboIXtN1UW00Cx9GzXzMr2nPnzic9fS0P
-         gq8HtMjNIhqdxqXahp2XL+MTsI64k4GLLCEzVy3usrqz+LZRjnMI60UQeHy3NQHNDsfk
-         letXos5hz4Q6mh80joWJOqySNpMInOP0iiqdpwUwx165gewk+nvBYGtgvb3QJfewZ2S6
-         yU+TN+Orcx+/wT0sjZknR3NlCqscD5h96tnsu/SoTiqRH3eyiqRV6TTub+KzIxjIzA8b
-         l0+HTXCHkbl+lHdupJReJPNeKWoSr5ZgvA7KFMqjtMw/TrxTufz33zZSyAoYG68jkn7z
-         qvLg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTvCBYVfkOTy92ohk+cRkhMVCbJmr59IefGliGwS4dzMcvM2F2rGgJGn9/XYxOPthcIp5JBD2OkRGjplrnoAQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdZsswFe67s9HXsGPNUu+LqYjTtpg3G1jLpnipxY4Y8EV/c51E
-	9wA41dgSKI6r9T2AuMs0NuqtLq/l3IKbXO/q6WgXFSrBqRee3luIg8xlfM/RyAlEVUQ=
-X-Gm-Gg: ASbGncvgcN14BduAbGmzIGbufDFI1VNmhu//6rG01IUvahjoB0/g88ZUtCN9tMfprlO
-	DdUMNHvLJNb+cHxXBos170CI0aHpHItuhLBE+jzNIDEBEjNRqF4FJ5D4mjj7TE/cpCPyohbEZUv
-	q7HIHRN1tBvRKfkBoBLl5RPRikSjaMby6sxCbOHNiZC/+Y9iOvOr83dX0jaaxwG9wlQ/aRfrPWi
-	4Q4m+5RZ4kvv7fI+veBzKP/LFfUtTYjcVRbZ5+oSwYgOAPkL2po/OQ8iejjBkrF+8W/bcHve8EN
-	g2NH2WYl3UUnhq07uEMuZUEJUyhR/xnPQedKINlNbilgSvI2z3+svtdjEyiRcfGhJar+TXznHWY
-	X1HGAClRODbYw3eJxWDO43epIkOiP6PegZItT9DCPFdbMJhYVGu74Q5iHWRA2LNZ2hUirfGfUMA
-	uhJPZHqXEHA5As
-X-Google-Smtp-Source: AGHT+IHLYcDl503ydPp3Vo6nK53Sk01A2+YXNVgZQH4qpA8YmD8SAR5tkVmYDEsWC24bVzDxjEr3wQ==
-X-Received: by 2002:a05:6602:148a:b0:945:b86b:d810 with SMTP id ca18e2360f4ac-945c988a604mr450513439f.16.1761745468759;
-        Wed, 29 Oct 2025 06:44:28 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-94359f316basm466022139f.19.2025.10.29.06.44.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Oct 2025 06:44:28 -0700 (PDT)
-Message-ID: <e7fbebca-ffe6-409c-bd52-848cc2a3ad27@linuxfoundation.org>
-Date: Wed, 29 Oct 2025 07:44:27 -0600
+	s=arc-20240116; t=1761746843; c=relaxed/simple;
+	bh=jbDiRc1txlZTTk//UC1k3FW4pC0DVEyDhtcenS6QTzU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bkllNIFWieXV5qX7WMvYC9aQByp+xIX6Ag6jE6NFavcJGxWHQHVA35z4wXOWkBjppfggBkq5oAFr2w6qOnIXxDqGbPRY1nvhzzO8d8FlghGeRnEmzJh7nJNOFcXcbmzPfAakiHK5uGtnpaLMXICQE260P1m9FrM/0wDxhn0Im84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=VMBlA123; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=jbDiRc1txlZTTk//UC1k3FW4pC0DVEyDhtcenS6QTzU=;
+	t=1761746841; x=1762956441; b=VMBlA123oYDK6lnjS3/iOydwhEBhwAbGjDABq1MXLNLkVhX
+	i1C1XzHUmg3JumW6kuyvgYXnlKLq3fKX/zzKkFCNEZBzFUpi1kxq65iwg5oOhhipUwoooEr3pW2Pv
+	nyUVMn6N9QqjqPdyrWpEJyhBen1qHmQ6Qv8Z0/ZjMO26jI1UVSKVffgi0wjCwf8q7t82mEVoevCkd
+	Ier5OEwm7kJX/Kekr2AhT7waitdg3Tqr8+Ouz6PjN+vCkxZhF7SPG3Vkba+hb0Ov7qnbyh8irp9SS
+	J0C9l79vPNMUzFTV/W4qweSXz5Dm81+aS8ck46OWscqRdcdV1DpdbOWBC8+RTIfw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <benjamin@sipsolutions.net>)
+	id 1vE6pV-0000000EkWX-0O7N;
+	Wed, 29 Oct 2025 15:07:13 +0100
+Message-ID: <516b490d30be6d0676ffe3be5942954bc3c08a39.camel@sipsolutions.net>
+Subject: Re: [PATCH v3 09/12] um: use nolibc for the --showconfig
+ implementation
+From: Benjamin Berg <benjamin@sipsolutions.net>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: linux-um@lists.infradead.org, Willy Tarreau <w@1wt.eu>, 
+	linux-kselftest@vger.kernel.org, kernel test robot <lkp@intel.com>, Arnaldo
+ Carvalho de Melo	 <acme@redhat.com>, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Date: Wed, 29 Oct 2025 15:07:12 +0100
+In-Reply-To: <99359472-8b1e-4d51-adb8-5b16f1f90a9f@weissschuh.net>
+References: <aNaNtI+mbyc4zgFy@rli9-mobl>
+	 <99359472-8b1e-4d51-adb8-5b16f1f90a9f@weissschuh.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MAINTAINERS: Update KUnit email address for Rae Moar
-To: David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20251028194010.519411-1-rmoar@google.com>
- <CABVgOSkxLKkT7+sa53x4dUsCiG3m=uGmrd9ko3GwjnwGPmonfQ@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CABVgOSkxLKkT7+sa53x4dUsCiG3m=uGmrd9ko3GwjnwGPmonfQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 
-On 10/29/25 01:18, David Gow wrote:
-> On Wed, 29 Oct 2025 at 03:40, Rae Moar <rmoar@google.com> wrote:
->>
->> Update Rae's email address for the KUnit entry. Also add an entry to
->> .mailmap to map former google email to current gmail address.
->>
->> Signed-off-by: Rae Moar <rmoar@google.com>
->> ---
->> I am leaving Google and am going through and cleaning up my @google.com
->> address in the relevant places. Note that Friday, November 7 2025 is my
->> last day at Google after which I will lose access to this email account
->> so any future updates or comments after Friday will come from my
->> @gmail.com account.
->>
-> 
-> Thanks very much, Rae! Best of luck!
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
+Hi Thomas,
 
-Thank you Rae and best of luck. I will apply and send it up this week
-with kunit fixes update
+On Mon, 2025-10-20 at 17:21 +0300, Thomas Wei=C3=9Fschuh wrote:
+> Hi Benjamin,
+>=20
+> Sep 26, 2025 15:57:43 kernel test robot <lkp@intel.com>:
+>=20
+> > kernel test robot noticed the following build warnings:
+> >=20
+> > [auto build test WARNING on uml/next]
+> > [also build test WARNING on uml/fixes shuah-kselftest/next shuah-
+> > kselftest/fixes linus/master v6.17-rc7 next-20250925]
+> > [If your patch is applied to the wrong git tree, kindly drop us a
+> > note.
+> > And when submitting patch, we suggest to use '--base' as documented
+> > in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >=20
+> > url:=C2=A0=C2=A0=C2=A0
+> > https://github.com/intel-lab-lkp/linux/commits/Benjamin-Berg/tools-comp=
+iler-h-fix-__used-definition/20250924-222547
+> > base:=C2=A0=C2=A0
+> > https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux=C2=A0next
+> > patch link:=C2=A0=C2=A0=C2=A0
+> > https://lore.kernel.org/r/20250924142059.527768-10-benjamin%40sipsoluti=
+ons.net
+> > patch subject: [PATCH v3 09/12] um: use nolibc for the --showconfig
+> > implementation
+> > :::::: branch date: 2 days ago
+> > :::::: commit date: 2 days ago
+> > config: um-randconfig-r111-20250926
+> > (https://download.01.org/0day-ci/archive/20250926/202509261452.g5pe
+> > aXCc-lkp@intel.com/config)
+> > compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+> > reproduce (this is a W=3D1 build):
+> > (https://download.01.org/0day-ci/archive/20250926/202509261452.g5pe
+> > aXCc-lkp@intel.com/reproduce)
+> >=20
+> > If you fix the issue in a separate patch/commit (i.e. not just a
+> > new version of
+> > the same patch/commit), kindly add following tags
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Closes:
+> > > https://lore.kernel.org/r/202509261452.g5peaXCc-lkp@intel.com/
+> >=20
+> > sparse warnings: (new ones prefixed by >>)
+> > =C2=A0=C2=A0 command-line: note: in included file (through
+> > tools/include/nolibc/nolibc.h, tools/include/nolibc/stddef.h,
+> > arch/um/include/shared/user.h, builtin):
+> > > > tools/include/nolibc/sys.h:109:29: sparse: sparse: Using plain
+> > > > integer as NULL pointer
+> > =C2=A0=C2=A0unistd.h:70:30: sparse: sparse: Using plain integer as NULL
+> > pointer
+> > =C2=A0=C2=A0 tools/include/nolibc/unistd.h:70:33: sparse: sparse: Using=
+ plain
+> > integer as NULL pointer
+>=20
+> Do you intend to work on your UML with nolibc patches this cycle?
+> If not I would fix these sparse warnings in the nolibc tree and also
+> apply your nolibc patches.
 
-thanks,
--- Shuah
+We are not in a hurry for the UML part and while it shouldn't be too
+much work, I obviously didn't get around to it in the last week.
+
+So, feel free to pull the patches in via your tree. Then I'll submit
+the UML part again in the next cycle.
+
+Benjamin
 
