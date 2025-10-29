@@ -1,389 +1,276 @@
-Return-Path: <linux-kselftest+bounces-44322-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DB46C1C807
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 18:39:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28D30C1C771
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 18:34:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D33E643FD3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 16:49:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3276C584577
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 16:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1DE2848A8;
-	Wed, 29 Oct 2025 16:49:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C56233B6E5;
+	Wed, 29 Oct 2025 16:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EKwlFX0U"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HaCIRQV2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ozXywsM+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F5B176FB1;
-	Wed, 29 Oct 2025 16:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761756572; cv=none; b=NCndAbGp2HBtAbX4tYH5c+v+ajg1bEijTfYbwPbU/y2JT8E/YHmz8u84HS9Jp8njbjE0opBSU7+V3qrpmAnK77n1A4XZwvHSTK8Pr+AhlNPRHi8XmdmCFPtKpS3C8kuaq8gxfczc7WmxLR1TouWq2qbm1Aj90enjnm1jnK/OcjE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761756572; c=relaxed/simple;
-	bh=rhYRhUuBSlENWAjKgfd7BGOH0Spbe/wg1aHymUGStUI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n12z4J32THFIiuXFp09etIpUue0iZQgsF8t/P2iw6xoX2Ep8QtjDBYUmRfxbZZWv6KvjtsHPKzfS2vSdByKT++57xb3J1sNMUbU/soXCyucX6OEhsCPxr99uZfvPIVS2embYlbnsWk++Sikj5M0CbGV2hET3UecDUHIeLHxwCc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EKwlFX0U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2A9DC4CEF7;
-	Wed, 29 Oct 2025 16:49:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761756572;
-	bh=rhYRhUuBSlENWAjKgfd7BGOH0Spbe/wg1aHymUGStUI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EKwlFX0UnTghSaNOJ1dI4HCZhr3cL/96joGsABUYMnIwFdtjD1bVmnyYiNtNM/V7X
-	 fvrnFp+MVCGnful8aKg9j8S0y+9q1WhZ6IDrrPZI6Wdcmo05xiN3mTy8UfM65mObi7
-	 s2E0TMKbK2s5h+GVjB4pGxAiBV16zSuPCMl5WuB7u4S0/jCWYJnC9+dKyuWxnwsZQ/
-	 e70aCSkggdx/zMBLamNd78ujmc7OcAKe3ZlLRYAEHY3xsB538k2J9FIw7sRyjGsMMy
-	 xWL1ttlyi42sJ2KcQJIPxxPybC6ZmUGhQo5GQmWmAgDg32zUnMzt3BgCdp5Cnhe9/c
-	 kIfuy3qyCfncA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	andrew@lunn.ch,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v3] selftests: drv-net: replace the nsim ring test with a drv-net one
-Date: Wed, 29 Oct 2025 09:49:30 -0700
-Message-ID: <20251029164930.2923448-1-kuba@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C23F2F2914;
+	Wed, 29 Oct 2025 16:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761756690; cv=fail; b=LQYzJ4c/g1LIVsdQHoVdUAxuvr3/EoFqRSYz6GP4WFx6Ixl2pIM3Ro4JcSCnMhGI9h0Uio4U8mBJ84k50Lgazm06v42bEiW+itk22yHjO5II+4s9RjWNqPb/LpTP4M7Q8ecNT8AzKx+oSbyn6GDIyp1/daZcCBOBdnxw3hL5yMs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761756690; c=relaxed/simple;
+	bh=nQIg3PeOPDuy6OLd2zDYcsqTeT17N0N+AUtLt2A0nHU=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=AUGoCHnE1GnDrYoC6ebzjaPbdrml6W9toWLfMPb0xJ4gRbYYV27lYtAit0fWzrodaA9FCG7G+2P3cEM3m8uypIxGR9WtxbJlOjuiaAcZjn2InazPNB1nePMDRjFw7WtutpmPfaDe0lnDDaP3WrrnuES8mmHfr1jErfdxi2ZnEFs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HaCIRQV2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ozXywsM+; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59TGfwYH012503;
+	Wed, 29 Oct 2025 16:51:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=ly7rvMT6ZO1fAbSz
+	//cCni1NYOO1/TKZ57kY0wkEKtU=; b=HaCIRQV2qqlfVsruLK8FOwEX7vEmROuf
+	+9KcinKR4l6++PxG6mtDq5FXpR5WIj7uhTdmF1Y+EvBWp7t5zeLflzLbkCgEyFEb
+	8KiaqXlWCZLX5nxIJmflIyV0DdTLLhU1GXFrZ7Dh6U4o+Cg2D3PL/4Ew9zOU5MnX
+	7eraTJwei/oCmj2QdRyU5qzpwpS5VIyCyP2qsqNwP2+APcc+ZJ7Mq9Q3Gbew2OTV
+	ZfXgr8U37SVOm8UMpPeE5gt3Y2jXfMNcUUDnnCUdUm+WOzenJhgqALJbWQ0uoPZa
+	WjDp73HsP86WTGjDuIykHxS39ZzXriJ1WhVmCRGoF/VgTk1M9UOM/Q==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a3b4w1p41-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 29 Oct 2025 16:51:07 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59TFWEZF022996;
+	Wed, 29 Oct 2025 16:51:06 GMT
+Received: from bl0pr03cu003.outbound.protection.outlook.com (mail-eastusazon11012014.outbound.protection.outlook.com [52.101.53.14])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a33xyfvr6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 29 Oct 2025 16:51:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=xjZeS7enQ56lxmkB412h053aC/tS6PcJOhHIf4JV8j30AliFlpfYpHxGI0OSruCbas8ZwdDAqZT+5wVRrMItsikM5dUBIyWm56Iryra5+xCKWeSKpgHSSTK8zw3QBikjpej8XVmvNGiZS1lUL5j1Y4dWVpq1iKaCohQID8Caw+gD39gAZBAbTXr18T2w4DNtrU2YG26wULjTv1T9x28VKD/5JwTKBOE5ZagqaAeuGIMD3Xkg3rYx9eQnwDlIEp8AtdYe575MsyHOl8fxP2EsdFHkRiOI1Rl7kUmc9eRpbA+XvwV5sgtTbnZ6yD9gH28Z9vK3qckonyaxL6754bDk/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ly7rvMT6ZO1fAbSz//cCni1NYOO1/TKZ57kY0wkEKtU=;
+ b=QJq+Zlx3Rl5hhifVOeViEz2jrTLVhx8rpc13uDjyhFFM5nU8pZdUsyFyTr2FK2tnpShae7F2uZ++13MnwMw0Ls6ziKPlHWgfjeW5hp3YOpBwEK/DlTuDCHBbS6zgI+78HMz3VhWJ2w7DoOI6FUy+ceFXfrhdwadQ8EtXflb/nHVRFuHHeLzX5ZJhgOIm7QiBNZx+C4VXDYjZXv2TJzQ9UHjiWgh+QxjPaxb+bFEvD0AvWFAMoaLqVRQ43TdhiZ/C4Ioj9pWVGNOroBYM39wEhTG429K8vDmvwSzLQZdvjQjaU1akuc1Oxym0ADTH+EyX2AMdyRmL4rtkgmG7BzzY7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ly7rvMT6ZO1fAbSz//cCni1NYOO1/TKZ57kY0wkEKtU=;
+ b=ozXywsM+8ZDObqqFuas5mSD0Tbc8A6bF+Nn46OcOeoSavo/HUU4841MvvRFKMVBfFMrhSg0Sk4WrEYxojInmDRAWeT1Kt0jCF7+tu7M1/sFnnMuU7Kr7SNGTEv//oK2yGhiD9NBXMM6uz0gNLn8nwbvp5mXBRSHQWPG/ucXcJiA=
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
+ by DM6PR10MB4251.namprd10.prod.outlook.com (2603:10b6:5:21d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.12; Wed, 29 Oct
+ 2025 16:51:01 +0000
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2%2]) with mapi id 15.20.9253.018; Wed, 29 Oct 2025
+ 16:51:00 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrei Vagin <avagin@gmail.com>
+Subject: [PATCH 0/3] introduce VM_MAYBE_GUARD and make it sticky
+Date: Wed, 29 Oct 2025 16:50:30 +0000
+Message-ID: <cover.1761756437.git.lorenzo.stoakes@oracle.com>
 X-Mailer: git-send-email 2.51.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO2P265CA0427.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a0::31) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|DM6PR10MB4251:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1cf65f2d-92be-43a3-3612-08de170b5736
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ukRB1MRkcYeaGYiWqV9Vk56rGx/XpGVVzMXf1v2jl35sEODDm60V1ESWoUg0?=
+ =?us-ascii?Q?GMdndil7SUmT7BavSGL8VyqoQyLAjOqVV0obRdQKTRBnefXhI5oISG4gcIgR?=
+ =?us-ascii?Q?Olm4/z+H3M/XjkOg9kJwuiIRbo3RKiRsiMpQ0m81crilfGfNZX4/lCO4+NhJ?=
+ =?us-ascii?Q?D4J0hr9e+/NYrqPYpfUkEZrRY4Akq6qhcPMsB7Yq9ulfxfV1UXCP+S4HzVKg?=
+ =?us-ascii?Q?d8jSpeYFviempTXihjRTXkj0eJEv0Z3nR+p2eZ24LT4gvfllg7ijHZQXzsvZ?=
+ =?us-ascii?Q?R5DCkgiqlU4hO2p19v+oMgP02boeR5MQzjvSGgkfVtEfCutNpG2ssZUzrMGy?=
+ =?us-ascii?Q?QjDwypAfw+vP6DOncmHTe5GhW8+ZgVkc5E/lq4RwBX5cIs2u3OSBtVLfCFsM?=
+ =?us-ascii?Q?pbxyOLvOqHn+2Q9BGIKeMNqGr7VQsCRfTwma8C7Neo+tblckH191Hr5dAben?=
+ =?us-ascii?Q?/VtwOyGGbcwECpioobryY4oPT3LB0N5QIZ3QFG6ApZNJiuoPwtnqcq44YMOG?=
+ =?us-ascii?Q?q9jRfctXGr4BsGYCh3fnMOWiEOuqj/6LxdmnOm0q7O2S7Im4pRjbLBRQlYCW?=
+ =?us-ascii?Q?pnXG3kqXkvjQu4/uJ3WV+sZd+qMU55UJQ3lnnVOI2e/ydM79qG22Ct3Vb21t?=
+ =?us-ascii?Q?mvaKV9dpiXXcnk+2dQkY8CfzOuCRqXVY5NjHjyD9zZk0ibTW0lieaRv2XQzF?=
+ =?us-ascii?Q?LDDvD6hsirIj02ADumGyAb8sQWFCnM9/PuZssgJ0RopxER5+/M9orQFbx1kc?=
+ =?us-ascii?Q?nHssB0zuW3XW/I2a6FzmeG0X8b0HcXAuJFuNP+VrQxVfzTB7ESFKfkIkHRQY?=
+ =?us-ascii?Q?KcmXc6cTln79MzT2rA/2n6vygp+hS+hgMz79siqMcn16TuLNh9aZjvKXja0D?=
+ =?us-ascii?Q?VBh7X7nALAAZq/h/SPzd/j+eLHR7OM7KS/wqIk4iSq4/Lx+sXB8jh38Ajydm?=
+ =?us-ascii?Q?RsOqu0+b9yXHnMxb0hItOuFt0IBEIeoxTA8cmDdpun+G7SURx+Uk6K6VPmdJ?=
+ =?us-ascii?Q?v77bPfQRjcZrknl5WvFZ1OBvTsb8FAN5Hg30CDt+Q+DlgqalxUPzNIoLtNZA?=
+ =?us-ascii?Q?rtT+hv6xAaKh74XJp9qWrSQLzecFBAFn7BdTvAaWBOcX2kzd6gq4ETL51AXq?=
+ =?us-ascii?Q?7m1sYWuppNsB3UzRboEB6G3Y32mMEMSLL4avPQbC6Bw3kFbvLy7dd2tkWPa1?=
+ =?us-ascii?Q?E53W3FXfjVc5cNYP1fTuDRnO6Ti6Wbcr1sWcEIeZ1LF+3do7YEGhQti8xYNe?=
+ =?us-ascii?Q?AeEOZ+4qbJ5Giy6KfW5EmZaqCXsz2DN3P9dvT2+1ed7HU3IjklUEMJy0lsFA?=
+ =?us-ascii?Q?3857Tv+nUGF065RetGsBr7BQhg5q8CyBtyGw9mDIoSzhBBIKLr1glXRX7RLn?=
+ =?us-ascii?Q?30scr+5cIRlzR0iA1Kcm1E5DWB9wC759z7pKKGDTI+DVY+E8c3dvj9KUOUAb?=
+ =?us-ascii?Q?ISP8O2w3U9m6ak7Il0/C7S43ord+DiDb?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?wAhRjbzqLrzLHkxAsY0KPc3J31psGSWY2GogrMl95rdoFPKmpMkXMv/2MdMR?=
+ =?us-ascii?Q?KS4PN0HaONV/mg2psyrv8Wt+new3EfirLAz17LZ4cF8obnKJbF+eNUk0dWie?=
+ =?us-ascii?Q?8Jjexl9nOYjYDFJgDytFzs1FTf35cwr3oD8WxONmt+wG+Bb/QT8erK4s7kN0?=
+ =?us-ascii?Q?w6BFPrD4lKK7ZBqUJs5DpcYwe/txJKop6pu6mAgE3TQcc7i1Em9vVkjKFiQ+?=
+ =?us-ascii?Q?PWO1RBW4JdNBwysULzzGcQpeD7295/Up5zaW2MNgFuhbDvZ9+wT4VoPr0Asj?=
+ =?us-ascii?Q?qgGPGq+pnfk2JinKvHPQcDfl2rpZkIrZjVpAD6pxntS2ANUnQQvbFwsoExkr?=
+ =?us-ascii?Q?5hCBi1neHIwBLSsPh0RfAraCEoC74NNGbTuFa359MNgEGR4Rk+hqDgh9mHUT?=
+ =?us-ascii?Q?6iXZHG/ajLn7qB3fyL4QgTx8WrcDHPBBu5ewtU69DZxl3kSLmyimTbEs7zmc?=
+ =?us-ascii?Q?xhOIyhUSEymQq6xEJHAMoW450yrOjJKeicj3SlUW6WSMg/2biQDCr1r+KSG2?=
+ =?us-ascii?Q?/EhCH0zl3GCHN/Nd4bYbNBLU6M+K8Mg7ebwuQIm7NxDHzY4/kZar+8lCh9Dj?=
+ =?us-ascii?Q?yUHjKve9MlOtkBwwphQtI0O67pK9XxONCO+XQgZRYnFugckRTLSYo3tugDgF?=
+ =?us-ascii?Q?Nw0N0Rnc44eTLblhFQZPkLB+sWyQOMzM5GJz6o+ZTBMk3AWhdWyhHR++wuVS?=
+ =?us-ascii?Q?JRiHXr8dNcl/cQ8owaWpVt2M1btypFwaWWhQZq91KnPzdYIMsTt2HQMnu8OQ?=
+ =?us-ascii?Q?uiTsmZKPjgekfTOgbyrB3xEJX7ILXqZrH6waxiJb3YEG6zkKLUnCbljUzFoc?=
+ =?us-ascii?Q?6NkGqUgw+KvUWF6gVzbJB5k2ajn65Kr5JM/9lvMwmDrVy1WnrSfYNghOcACj?=
+ =?us-ascii?Q?slbIe9robq/v7fwL1Xuo0IrMahxqJOoftlZYrizu4bbozCfpHM76o73wmOKB?=
+ =?us-ascii?Q?/AQpP5F3vHPcEeCTwDe1PKmdki1PATcv/caOSup1Phl+2mgqcRFGvTZ3AeZ9?=
+ =?us-ascii?Q?DrMhERSM5QFdOlJ9JWMzP/SvGDJjaUwpasLzKyMsqh/mQyueo4Qj2j5Wrska?=
+ =?us-ascii?Q?RfKgCyOeX5qciST9C7JOkohb+XgzTv3AUvipvAeo+SImbjH2W4Xf1Db/kQXN?=
+ =?us-ascii?Q?55e/gxtgNwHOOm6WOHYM25HAINQfWqVzHl0hqDj8weTnrR1/913geEXr4TRX?=
+ =?us-ascii?Q?U8Z9HaMDSTez+ry0xiXXQGGNDVLujCdcUJvvYAmTVIyFMTUCv7MbrT5eWJU3?=
+ =?us-ascii?Q?nMT0A+sq12sWESz0wnbd4a7vY+dpaPLIeRSAs7vKSlSjzZZ6TQJMN0ZEGZ+p?=
+ =?us-ascii?Q?XlDyKj3jsGnuu5L4GUFrIF2PpLZ1G4DLUgAPrGKhYKVyiAo7zs4x39DIlUss?=
+ =?us-ascii?Q?c13MfS3cTPkavq0dzvZE33LwgD3qfZvvsC/V3DmfYBmXMRHqKkfCCrpCk7bE?=
+ =?us-ascii?Q?jmg1P+vb3Ywezw0Jn1MKrVmoii2ZeVYouTA51L4fuBkji+tMaVB0tuAFbE7H?=
+ =?us-ascii?Q?4MsxyavHe+urZCDQT8ag8KJPlPdsYe3szeR5G9lab8lgTttNSR/QzVL+04ao?=
+ =?us-ascii?Q?zPC/RkJtQTD02E7U/S9/9o03/gtCJ8gnhTMZ57XzM9JNFcICo3uPDRu9Uufr?=
+ =?us-ascii?Q?4Q=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	V06g2CwrJNiOZnOG+359JdFtdFC81xKCWkF4+Ydt+7MZrOllwwiMRkQ3USBj3KVvcmEBrVksvNWTzmOSQOr+8TuZM26iw15sQxMV3MQFmFSU7T5wudqqIDM0/gOa7hVoBFJ8LjfdhvNC+FDdw3q4WSW+J+yebhQF2EDq/tm4RHcU019kQEsk1pZuPBu9qktjVUu57KA2zYKbxLHNy9D2GbpP6Nd/jde3zhKKKlNFKYl+Ny/ax43fUuoh9p0vVD221+KtR9rzumlacIeSXSzrf3tWcGf9mX15LGiRVsw8Mlrn85iDXgCdhrGPPGfnMk2aJ+bhnzSI3Sw/5C+rpqyjrdWhnEpy+mw4FQg6XSbgHBTmb94O9XEAB3F39C1yXC5q6eFAHHrO1uJZOjJ2Zm9jCsN1FbW/Vh0Aw9O9OcbOh6HXnxEJ5wbJc8gnHVvT7PXvW35nPvBHAdV3HBEmftZfoFtv24MR8b953WZi22Ic31wKKoAIhVB2ZJzb9zSPLfH66KoBHx0ljZC4z8Mq+IGHmQfXtc7KI04IgbZfunpx9sQMACKKdUQJ5Kfz8JNtfhDfzthRg4JGxg7bfL4SV0oyIN4WuEJWrzXmdr9YAuxghww=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1cf65f2d-92be-43a3-3612-08de170b5736
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2025 16:51:00.9125
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: s1x0FVH2l7r9G04LMsgbWvQjzbPqMWsH7JWSRZ8mkArbWwXv5rfq0Kkx/DFHTsNzsdOPsGPISHZwVJZJPeJNbDlRF/VELCqNqoWJpfKnoj4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4251
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-10-29_06,2025-10-29_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
+ definitions=main-2510290133
+X-Authority-Analysis: v=2.4 cv=R9YO2NRX c=1 sm=1 tr=0 ts=690245fb cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=x6icFKpwvdMA:10
+ a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=_-iHkvAjI3e40l1ULnEA:9
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDI5MDAyNiBTYWx0ZWRfX+N1HxVr276Am
+ oSNVAhYd9eauLXjo2EljVZIMIDISCEKPFrHz9NxWPLbq4TLy2pCiWy65KgyjViFjhCwqtIfrAgK
+ e81536mPvRXk/SSG6Pp98tVHGIHLqvBOMzILUUgkCDk8PQ8PC3PqW+4+D36FR4wXLDO1elwcFlN
+ Y107+yAWzmuYDbiuQtnGvUDmDPyofN0WkgUVEmnOvM4WS1ZrXCCI1Erg9ffJikg6DNSi3osS1v9
+ ReuQrMMD0zp1C8qt4PFCvozf1gZenbfsJVdfkvnq2b9A1Sy4lR+bASh9ndrEMvLj7SPgEnxBhnC
+ t2TWJ7+Z4N0TByaO7FzQ0jl28zMLzzcqEM2bR3cTIzt5tTfYi6xMXRbmRApk940sxAFkjl27hxd
+ SiBXvQlAKiWayViGRdXHnJggNP94XQ==
+X-Proofpoint-ORIG-GUID: wONaKkuDG7YUwffc7T8G3koFzKSYYv8v
+X-Proofpoint-GUID: wONaKkuDG7YUwffc7T8G3koFzKSYYv8v
 
-We are trying to move away from netdevsim-only tests and towards
-tests which can be run both against netdevsim and real drivers.
+Currently, guard regions are not visible to users except through
+/proc/$pid/pagemap, with no explicit visibility at the VMA level.
 
-Replace the simple bash script we have for checking ethtool -g/-G
-on netdevsim with a Python test tweaking those params as well
-as channel count.
+This makes the feature less useful, as it isn't entirely apparent which
+VMAs may have these entries present, especially when performing actions
+which walk through memory regions such as those performed by CRIU.
 
-The new test is not exactly equivalent to the netdevsim one,
-but real drivers don't often support random ring sizes,
-let alone modifying max values via debugfs.
+This series addresses this issue by introducing the VM_MAYBE_GUARD flag
+which fulfils this role, updating the smaps logic to display an entry for
+these.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v3:
- - let ring sizes fall all the way down to 0
-v2: https://lore.kernel.org/20251027192131.2053792-1-kuba@kernel.org
- - add the new test to Makefile and remove the old one
-   turns out NIPA checking for Makefile presence was busted
-v1: https://lore.kernel.org/20251024215552.1249838-1-kuba@kernel.org
+The semantics of this flag are that a guard region MAY be present if set
+(we cannot be sure, as we can't efficiently track whether an
+MADV_GUARD_REMOVE finally removes all the guard regions in a VMA) - but if
+not set the VMA definitely does NOT have any guard regions present.
 
-CC: andrew@lunn.ch
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/drivers/net/Makefile  |   1 +
- .../selftests/drivers/net/netdevsim/Makefile  |   1 -
- .../drivers/net/netdevsim/ethtool-ring.sh     |  85 ---------
- .../selftests/drivers/net/ring_reconfig.py    | 167 ++++++++++++++++++
- 4 files changed, 168 insertions(+), 86 deletions(-)
- delete mode 100755 tools/testing/selftests/drivers/net/netdevsim/ethtool-ring.sh
- create mode 100755 tools/testing/selftests/drivers/net/ring_reconfig.py
+It's problematic to establish this flag without further action, because
+that means that VMAs with guard regions in them become non-mergeable with
+adjacent VMAs for no especially good reason.
 
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index 6e41635bd55a..68e0bb603a9d 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -22,6 +22,7 @@ TEST_PROGS := \
- 	ping.py \
- 	psp.py \
- 	queues.py \
-+	ring_reconfig.py \
- 	shaper.py \
- 	stats.py \
- 	xdp.py \
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/Makefile b/tools/testing/selftests/drivers/net/netdevsim/Makefile
-index daf51113c827..833abd8e6fdc 100644
---- a/tools/testing/selftests/drivers/net/netdevsim/Makefile
-+++ b/tools/testing/selftests/drivers/net/netdevsim/Makefile
-@@ -8,7 +8,6 @@ TEST_PROGS := \
- 	ethtool-features.sh \
- 	ethtool-fec.sh \
- 	ethtool-pause.sh \
--	ethtool-ring.sh \
- 	fib.sh \
- 	fib_notifications.sh \
- 	hw_stats_l3.sh \
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/ethtool-ring.sh b/tools/testing/selftests/drivers/net/netdevsim/ethtool-ring.sh
-deleted file mode 100755
-index c969559ffa7a..000000000000
---- a/tools/testing/selftests/drivers/net/netdevsim/ethtool-ring.sh
-+++ /dev/null
-@@ -1,85 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0-only
--
--source ethtool-common.sh
--
--function get_value {
--    local query="${SETTINGS_MAP[$1]}"
--
--    echo $(ethtool -g $NSIM_NETDEV | \
--        tail -n +$CURR_SETT_LINE | \
--        awk -F':' -v pattern="$query:" '$0 ~ pattern {gsub(/[\t ]/, "", $2); print $2}')
--}
--
--function update_current_settings {
--    for key in ${!SETTINGS_MAP[@]}; do
--        CURRENT_SETTINGS[$key]=$(get_value $key)
--    done
--    echo ${CURRENT_SETTINGS[@]}
--}
--
--if ! ethtool -h | grep -q set-ring >/dev/null; then
--    echo "SKIP: No --set-ring support in ethtool"
--    exit 4
--fi
--
--NSIM_NETDEV=$(make_netdev)
--
--set -o pipefail
--
--declare -A SETTINGS_MAP=(
--    ["rx"]="RX"
--    ["rx-mini"]="RX Mini"
--    ["rx-jumbo"]="RX Jumbo"
--    ["tx"]="TX"
--)
--
--declare -A EXPECTED_SETTINGS=(
--    ["rx"]=""
--    ["rx-mini"]=""
--    ["rx-jumbo"]=""
--    ["tx"]=""
--)
--
--declare -A CURRENT_SETTINGS=(
--    ["rx"]=""
--    ["rx-mini"]=""
--    ["rx-jumbo"]=""
--    ["tx"]=""
--)
--
--MAX_VALUE=$((RANDOM % $((2**32-1))))
--RING_MAX_LIST=$(ls $NSIM_DEV_DFS/ethtool/ring/)
--
--for ring_max_entry in $RING_MAX_LIST; do
--    echo $MAX_VALUE > $NSIM_DEV_DFS/ethtool/ring/$ring_max_entry
--done
--
--CURR_SETT_LINE=$(ethtool -g $NSIM_NETDEV | grep -i -m1 -n 'Current hardware settings' | cut -f1 -d:)
--
--# populate the expected settings map
--for key in ${!SETTINGS_MAP[@]}; do
--    EXPECTED_SETTINGS[$key]=$(get_value $key)
--done
--
--# test
--for key in ${!SETTINGS_MAP[@]}; do
--    value=$((RANDOM % $MAX_VALUE))
--
--    ethtool -G $NSIM_NETDEV "$key" "$value"
--
--    EXPECTED_SETTINGS[$key]="$value"
--    expected=${EXPECTED_SETTINGS[@]}
--    current=$(update_current_settings)
--
--    check $? "$current" "$expected"
--    set +x
--done
--
--if [ $num_errors -eq 0 ]; then
--    echo "PASSED all $((num_passes)) checks"
--    exit 0
--else
--    echo "FAILED $num_errors/$((num_errors+num_passes)) checks"
--    exit 1
--fi
-diff --git a/tools/testing/selftests/drivers/net/ring_reconfig.py b/tools/testing/selftests/drivers/net/ring_reconfig.py
-new file mode 100755
-index 000000000000..f9530a8b0856
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/ring_reconfig.py
-@@ -0,0 +1,167 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+Test channel and ring size configuration via ethtool (-L / -G).
-+"""
-+
-+from lib.py import ksft_run, ksft_exit, ksft_pr
-+from lib.py import ksft_eq
-+from lib.py import NetDrvEpEnv, EthtoolFamily, GenerateTraffic
-+from lib.py import defer, NlError
-+
-+
-+def channels(cfg) -> None:
-+    """
-+    Twiddle channel counts in various combinations of parameters.
-+    We're only looking for driver adhering to the requested config
-+    if the config is accepted and crashes.
-+    """
-+    ehdr = {'header':{'dev-index': cfg.ifindex}}
-+    chans = cfg.eth.channels_get(ehdr)
-+
-+    all_keys = ["rx", "tx", "combined"]
-+    mixes = [{"combined"}, {"rx", "tx"}, {"rx", "combined"}, {"tx", "combined"},
-+             {"rx", "tx", "combined"},]
-+
-+    # Get the set of keys that device actually supports
-+    restore = {}
-+    supported = set()
-+    for key in all_keys:
-+        if key + "-max" in chans:
-+            supported.add(key)
-+            restore |= {key + "-count": chans[key + "-count"]}
-+
-+    defer(cfg.eth.channels_set, ehdr | restore)
-+
-+    def test_config(config):
-+        try:
-+            cfg.eth.channels_set(ehdr | config)
-+            get = cfg.eth.channels_get(ehdr)
-+            for k, v in config.items():
-+                ksft_eq(get.get(k, 0), v)
-+        except NlError as e:
-+            failed.append(mix)
-+            ksft_pr("Can't set", config, e)
-+        else:
-+            ksft_pr("Okay", config)
-+
-+    failed = []
-+    for mix in mixes:
-+        if not mix.issubset(supported):
-+            continue
-+
-+        # Set all the values in the mix to 1, other supported to 0
-+        config = {}
-+        for key in all_keys:
-+            config[key + "-count"] = 1 if key in mix else 0
-+        test_config(config)
-+
-+    for mix in mixes:
-+        if not mix.issubset(supported):
-+            continue
-+        if mix in failed:
-+            continue
-+
-+        # Set all the values in the mix to max, other supported to 0
-+        config = {}
-+        for key in all_keys:
-+            config[key + "-count"] = chans[key + '-max'] if key in mix else 0
-+        test_config(config)
-+
-+
-+def _configure_min_ring_cnt(cfg) -> None:
-+    """ Try to configure a single Rx/Tx ring. """
-+    ehdr = {'header':{'dev-index': cfg.ifindex}}
-+    chans = cfg.eth.channels_get(ehdr)
-+
-+    all_keys = ["rx-count", "tx-count", "combined-count"]
-+    restore = {}
-+    config = {}
-+    for key in all_keys:
-+        if key in chans:
-+            restore[key] = chans[key]
-+            config[key] = 0
-+
-+    if chans.get('combined-count', 0) > 1:
-+        config['combined-count'] = 1
-+    elif chans.get('rx-count', 0) > 1 and chans.get('tx-count', 0) > 1:
-+        config['tx-count'] = 1
-+        config['rx-count'] = 1
-+    else:
-+        # looks like we're already on 1 channel
-+        return
-+
-+    cfg.eth.channels_set(ehdr | config)
-+    defer(cfg.eth.channels_set, ehdr | restore)
-+
-+
-+def ringparam(cfg) -> None:
-+    """
-+    Tweak the ringparam configuration. Try to run some traffic over min
-+    ring size to make sure it actually functions.
-+    """
-+    ehdr = {'header':{'dev-index': cfg.ifindex}}
-+    rings = cfg.eth.rings_get(ehdr)
-+
-+    restore = {}
-+    maxes = {}
-+    params = set()
-+    for key in rings.keys():
-+        if 'max' in key:
-+            param = key[:-4]
-+            maxes[param] = rings[key]
-+            params.add(param)
-+            restore[param] = rings[param]
-+
-+    defer(cfg.eth.rings_set, ehdr | restore)
-+
-+    # Speed up the reconfig by configuring just one ring
-+    _configure_min_ring_cnt(cfg)
-+
-+    # Try to reach min on all settings
-+    for param in params:
-+        val = rings[param]
-+        while True:
-+            try:
-+                cfg.eth.rings_set({'header':{'dev-index': cfg.ifindex},
-+                                   param: val // 2})
-+                if val == 0:
-+                    break
-+                val //= 2
-+            except NlError:
-+                break
-+
-+        get = cfg.eth.rings_get(ehdr)
-+        ksft_eq(get[param], val)
-+
-+        ksft_pr(f"Reached min for '{param}' at {val} (max {rings[param]})")
-+
-+    GenerateTraffic(cfg).wait_pkts_and_stop(10000)
-+
-+    # Try max across all params, if the driver supports large rings
-+    # this may OOM so we ignore errors
-+    try:
-+        ksft_pr("Applying max settings")
-+        config = {p: maxes[p] for p in params}
-+        cfg.eth.rings_set(ehdr | config)
-+    except NlError as e:
-+        ksft_pr("Can't set max params", config, e)
-+    else:
-+        GenerateTraffic(cfg).wait_pkts_and_stop(10000)
-+
-+
-+def main() -> None:
-+    """ Ksft boiler plate main """
-+
-+    with NetDrvEpEnv(__file__) as cfg:
-+        cfg.eth = EthtoolFamily()
-+
-+        ksft_run([channels,
-+                  ringparam],
-+                 args=(cfg, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
+To work around this, this series also introduces the concept of 'sticky'
+VMA flags - that is flags which:
+
+a. if set in one VMA and not in another still permit those VMAs to be
+   merged (if otherwise compatible).
+
+b. When they are merged, the resultant VMA must have the flag set.
+
+The VMA logic is updated to propagate these flags correctly.
+
+Additionally, VM_MAYBE_GUARD being an explicit VMA flag allows us to solve
+an issue with file-backed guard regions - previously these established an
+anon_vma object for file-backed mappings solely to have vma_needs_copy()
+correctly propagate guard region mappings to child processes.
+
+We introduce a new flag alias VM_COPY_ON_FORK (which currently only
+specifies VM_MAYBE_GUARD) and update vma_needs_copy() to check explicitly
+for this flag and to copy page tables if it is present, which resolves this
+issue.
+
+Finally we introduce extensive VMA userland tests to assert that the sticky
+VMA logic behaves correctly as well as guard region self tests to assert
+that smaps visibility is correctly implemented.
+
+Lorenzo Stoakes (3):
+  mm: introduce VM_MAYBE_GUARD and make visible for guard regions
+  mm: implement sticky, copy on fork VMA flags
+  selftests/mm/guard-regions: add smaps visibility test
+
+ Documentation/filesystems/proc.rst         |   1 +
+ fs/proc/task_mmu.c                         |   1 +
+ include/linux/mm.h                         |  33 ++++++
+ include/trace/events/mmflags.h             |   1 +
+ mm/madvise.c                               |  22 ++--
+ mm/memory.c                                |   3 +
+ mm/vma.c                                   |  22 ++--
+ tools/testing/selftests/mm/guard-regions.c | 120 +++++++++++++++++++++
+ tools/testing/selftests/mm/vm_util.c       |   5 +
+ tools/testing/selftests/mm/vm_util.h       |   1 +
+ tools/testing/vma/vma.c                    |  89 +++++++++++++--
+ tools/testing/vma/vma_internal.h           |  33 ++++++
+ 12 files changed, 303 insertions(+), 28 deletions(-)
+
+--
 2.51.0
-
 
