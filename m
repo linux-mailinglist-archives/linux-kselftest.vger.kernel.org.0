@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-44271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44272-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7867AC1914A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 09:36:33 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8050DC19235
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 09:44:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AED9C1C859CE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 08:30:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 85136500236
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 08:30:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 393B331A81B;
-	Wed, 29 Oct 2025 08:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D932B31B81D;
+	Wed, 29 Oct 2025 08:23:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L13SktAy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjF6nqiO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9442731A7F3
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 08:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E1731B10E
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 08:23:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761726185; cv=none; b=u09ya0Zl/ENYd6wX8LobTA5EPCB+HzUogfKuS/FFqdFSavSDlMbEnefpUJVZ/fK9lkXeSUxl/IgdQly9PIGUBwYLk0MPioeAaJ02Qog8KFeeaq/mt3eSlE3hcTcz0yAMRYyKS9jrHkEPtY1ruYp/8Qe5AHLFSotxHy9DAK2SN+M=
+	t=1761726191; cv=none; b=J1WhviVv8pySthbDGlc6iFplWCZsX3DSvbu/q1CfnxPmxIVlg3ixaO+zXgsGZvSCTef9JBh9eAjitDAymQRJGZL3H26kDJQW2/GpEx41KUsYCogfz9nIopIXV1DRRYpusVfyo5GCE5dVmvzHr6AtRGd0pMMRn/qB077LHNlFDyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761726185; c=relaxed/simple;
-	bh=utVy6JvlKERgKujYhOgnVpCTFIWZ2va0wC2CkiqbEWs=;
+	s=arc-20240116; t=1761726191; c=relaxed/simple;
+	bh=IFuBS7haZi+1kTM8IJzSktIKoNv8ReAXS+1kQ+tJtak=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GzGrrsx5yom8gQ7sgdXw1i6HAxicXkTSFdFaFueeznpw6pAea5mA/GTGQtH4xaxuXa8dGDYc2HSjYR/cCBtUm6dfG1UWurh5yqSOz5SQa/DmMPctW0f7FLrqsaWoz72uJcD3NL+zA3iyytqZXr4aUCEdvpswTuK+0OEX5y6IJVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L13SktAy; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=agc2iv0yblPDiMdYZSOvwWnYps9mDyRGeu4zS1MqKqzMsh800pYig61UIEv2bl60aObumif5WcDv7HRNVF5cg/qnDxbWZBcMQnLR0XyIQT5kRfn/BvPySDxDbvjUtGtd0gXJRR5k4frtRqKgzbRAWxlr08wudkC4R760ENjNLjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jjF6nqiO; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-290ab379d48so65341255ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 01:23:03 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-290b48e09a7so83713015ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 01:23:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761726183; x=1762330983; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761726189; x=1762330989; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=za7hYkkLPLqSVT9uZfocsnw3yWLzRulvJUyGOCLkCKY=;
-        b=L13SktAyCHfKdAyKlRiuooXieBpv6wayTeNRFob0aYzBgir8FcLsTd3mZI1pJt84Z+
-         ioiKiVTSZqRFjOcgjZG306hH139i8Pwqe3tvs2rqRSneboUCRp0QlUrq+tFZsUBvrMnO
-         J6bomQ1zYJSUc79e/tXNpuncK2C3RvrRH9YF1a8Ea6rJbFYGrXktqG/XXb3CSDUkRgI6
-         2lBgBv4LrYYV9LWibtYeEfmC+RfMNzBzUOEXlODZAQ7diGMNIos+5s8qyQ0sDaTHatsk
-         LL3j2VbDBcWKe7xVtFVP20dNPcZb6Vi8ZOnrHYTS2xxIef2UlV4yzPJM29FivK2QIcKb
-         +75Q==
+        bh=aaHhDa8PHuXgCu/CZ7lCayELGigeh4dQ1UWKLOa3cv4=;
+        b=jjF6nqiOy5y+9FrxgIVGL3Tt4hE8MQrOVvlig5qPexfEoZAktmRy2nXZoh6l1cEsgh
+         GIXCtrEWcJP2rqOF+1+S6VmAh2ZnsL4gatmOWv6Scomak+ZsgJ5R4wtrwEZNH93kAJr6
+         2kxx8ojwx81mHvOyoHKEdAyY7y2i0uWz6CLyhYcMPGcfTS+qTMYD8X+BUVQwIeCcpkXL
+         7j+ivMP8y9RfxWvECsAR2NeTeTd8dq7hDd0xqrtSXvIeKYFhOV6GqYq+pB6wxUGKpu0w
+         40IfIfRYGVDj6kbS7Eb6d8bckinbo4Frxt6WakpmPCdKAmfJt7VKD7wFA5NgUUk1m7mw
+         7tpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761726183; x=1762330983;
+        d=1e100.net; s=20230601; t=1761726189; x=1762330989;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=za7hYkkLPLqSVT9uZfocsnw3yWLzRulvJUyGOCLkCKY=;
-        b=wBmWwK9F7FuS0Tlr1r9aMbYx3Riy4AK029h8RbPxkCSQ06ky/7Flfz1gqDytsQGiom
-         0T3SDthGfCJfOENyv/KE5PlLAc7Qie9yIQdGzVlRe+wHa7iA5OxTagszAZubonw1xDSt
-         73Gq8KuDmIXX29KoshO70ITdAVuK86c7YzYcw2Fx4ahLPCyPFBQXs+VaP3JvrSjv37Rm
-         PZZAguMvNadHEuvjoqlWXoJlQGRQkymAD5IllWT7KxfQ3I4mfSY1tv2ZIIW42XF321sz
-         LxJ8beYqqTJHvB+cwl0SiTVF/t0Ws/ZkLbLnrMHaCEKSoO8v8LCNAiEjZLV2Tm0JoGRl
-         wfBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUeg2nRfkdO1wslhQjBNokdoEtGGFhR+eD+UcUhjsslaEgn1I3QELlwOK8iKSI4Hz6yisWf48c/t+tW4mdqd04=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3IXk7NHvvJ3xBr2gfPMytjBNnnwl3PXNBCCqSDy8M51nTICSZ
-	CJIgpZk/isx4KKLe/5kjjq1jl1yAslGSpABkV1puWtK4DtqP2qIA5KFE
-X-Gm-Gg: ASbGnctpfhC28TmhNpoucqWp8TwSO5kakTLeE7Q9+dCbFX1z5Oxv0ovar4VDNHN8mgx
-	rfqn62PFVcrGqBfUjwKVr8aKGWEvwv6Z3ENHJzsrgbSmScWFMqyI/BdCZi15Wtoj4F/ykGBoHum
-	Wh+lnCKY6qCTpD89K6DNFAS8+aH2jY6LHwhtFohOpAbSj1WglMu4xF0EauW10Usy5fiZZVWMIho
-	doILkhcnz89wFaZVyOUh7Dkdm9A5nRCFykPSihDbhGdCSPGVypyjj1dS/MLKY0WUElAKqFWIKjA
-	W+jAn7QqncGSbE+a/3JgQ1eSL1a0K3lfj+Q4NgL171J5ejcE51wkSmjmZI8U8K2VN6VGiMZ7vt0
-	XTktgGp2v4XFx8jbvm4n9FyBkacmYI7Q26mM1eS8A24c4JObJDJtBiWIO8+g+vw7e5CIKwIOiZr
-	IlmEMXagij76wstyc=
-X-Google-Smtp-Source: AGHT+IELDLicKMzwVGPxSzunKaHjKZ5b7HNcUcQ44DbmU71BO4kqKnfk4QDr6sZzaqPuCrB5RxEsvw==
-X-Received: by 2002:a17:903:3d0d:b0:290:78b2:675 with SMTP id d9443c01a7336-294def46d76mr24636355ad.41.1761726182753;
-        Wed, 29 Oct 2025 01:23:02 -0700 (PDT)
+        bh=aaHhDa8PHuXgCu/CZ7lCayELGigeh4dQ1UWKLOa3cv4=;
+        b=SG5Upfq6Y8yR1J9VDT3YBmwq3GR1uG97nt/xYtuP1lP8ToAuHWfpwyi3NDrV7Reor/
+         4MiV8fk0MOIxHi2kGHZrCQS8BcJjehD1KOI//7RMyeiqR8NCNb8AsPB3F1dF+3sT5R8x
+         yVD1Ai44ezIOuBu0TVT0C3P8MeNJDyqXMaypDmsMPbEmLsBhWTBDtgBSxte5nn4vJFUY
+         VcikFVJRz2gqTXi/8K8sjV+ILppZs1if/R/t42r3OmBWPUS0Xjl/DJw8Z401mPJRASK6
+         9CagCsnWMP8q0jyS3VqcqrpeBemzrRxDlsutoOsqF+QIGDMtWUrn564dzFB5EklZ1L7t
+         xMog==
+X-Forwarded-Encrypted: i=1; AJvYcCXivJaFHg+jTjoffVYpG5lYFEXxTcMyMrzDbomS4DgBjFKsRcaJ4AVAR0TMGHKiMbtFkllgsuh4FsDwJVNirD8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YycKCx+1hyoehZZFMN0UFy6cR9ekuzhHi28JInv5NpT774LPIwz
+	RITNchkVZQj2dH0qb829HcB9q3sQRKVx24c/et6o3gQP+TPV25k/ykiz
+X-Gm-Gg: ASbGncvOnQ74TDvAEPesd5z4uPtf2a6KcxUqcS1xC0DKds2ed8FiW+DmEwNAKOX9uTH
+	z3VTO5IZ8C2OXwWEiPu0zauN58CjlllZ2TSdw+I7c9UQ39TPa01aeluqF2G99Qi9mJpaNKlCpSN
+	R7oRGSejDLdlKkZyyWGJgijgNVDhMU4IPfRne3syWB6+EX7u7CnwElTnlO/P0LVeecqmqn2XRTG
+	OLHkb9IUHuueRxXQxioSYBpEJ7ot4GVtHpFO+/PEMCtYEv9bz7mXRv3T5cNrA6YVPZ5ufIPZ86h
+	CedcVf3nTo82oPN5CNrQfdI9HoBpUJ2RIqSw5zeZsHCjLxvNSfAPZYqCOMwwNwVnI1jvIuQAJZ/
+	phgtzDYJwOA1/97sDXbiDpOCDvyJ07YJMXq6KGhHr7IvyUuAcnhBvAVIFcteU3WISJEvfijzXPQ
+	42fjLA
+X-Google-Smtp-Source: AGHT+IGtSlDxg0T2oukXZlxpD3jzIWP+RA1AXUJtoVRhfHR08fUfLWt0lsrBketiOK0arzNKfhB91A==
+X-Received: by 2002:a17:902:e78c:b0:252:5220:46b4 with SMTP id d9443c01a7336-294dee991damr22816595ad.37.1761726189151;
+        Wed, 29 Oct 2025 01:23:09 -0700 (PDT)
 Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498d09958sm141906005ad.24.2025.10.29.01.22.56
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498d09958sm141906005ad.24.2025.10.29.01.23.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 01:23:02 -0700 (PDT)
+        Wed, 29 Oct 2025 01:23:08 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: Donald Hunter <donald.hunter@gmail.com>,
@@ -92,9 +92,9 @@ Cc: Donald Hunter <donald.hunter@gmail.com>,
 	Petr Machata <petrm@nvidia.com>,
 	linux-kselftest@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 1/3] tools: ynl: Add MAC address parsing support
-Date: Wed, 29 Oct 2025 08:22:43 +0000
-Message-ID: <20251029082245.128675-2-liuhangbin@gmail.com>
+Subject: [PATCH net-next 2/3] netlink: specs: update rt-rule src/dst attribute types to support IPv4 addresses
+Date: Wed, 29 Oct 2025 08:22:44 +0000
+Message-ID: <20251029082245.128675-3-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251029082245.128675-1-liuhangbin@gmail.com>
 References: <20251029082245.128675-1-liuhangbin@gmail.com>
@@ -106,35 +106,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add missing support for parsing MAC addresses when display_hint is 'mac'
-in the YNL library. This enables YNL CLI to accept MAC address strings
-for attributes like lladdr in rt-neigh operations.
+Similar with other rt-* family specs (rt-route, rt-addr, rt-neigh), change
+src and dst attributes in rt-rule.yaml from type u32 to type binary with
+display-hint ipv4 to properly support IPv4 address operations.
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/net/ynl/pyynl/lib/ynl.py | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ Documentation/netlink/specs/rt-rule.yaml | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/tools/net/ynl/pyynl/lib/ynl.py b/tools/net/ynl/pyynl/lib/ynl.py
-index 225baad3c8f8..36d36eb7e3b8 100644
---- a/tools/net/ynl/pyynl/lib/ynl.py
-+++ b/tools/net/ynl/pyynl/lib/ynl.py
-@@ -985,6 +985,15 @@ class YnlFamily(SpecFamily):
-                 raw = bytes.fromhex(string)
-             else:
-                 raw = int(string, 16)
-+        elif attr_spec.display_hint == 'mac':
-+            # Parse MAC address in format "00:11:22:33:44:55" or "001122334455"
-+            if ':' in string:
-+                mac_bytes = [int(x, 16) for x in string.split(':')]
-+            else:
-+                if len(string) % 2 != 0:
-+                    raise Exception(f"Invalid MAC address format: {string}")
-+                mac_bytes = [int(string[i:i+2], 16) for i in range(0, len(string), 2)]
-+            raw = bytes(mac_bytes)
-         else:
-             raise Exception(f"Display hint '{attr_spec.display_hint}' not implemented"
-                             f" when parsing '{attr_spec['name']}'")
+diff --git a/Documentation/netlink/specs/rt-rule.yaml b/Documentation/netlink/specs/rt-rule.yaml
+index bebee452a950..7ebd95312ee4 100644
+--- a/Documentation/netlink/specs/rt-rule.yaml
++++ b/Documentation/netlink/specs/rt-rule.yaml
+@@ -96,10 +96,12 @@ attribute-sets:
+     attributes:
+       -
+         name: dst
+-        type: u32
++        type: binary
++        display-hint: ipv4
+       -
+         name: src
+-        type: u32
++        type: binary
++        display-hint: ipv4
+       -
+         name: iifname
+         type: string
 -- 
 2.50.1
 
