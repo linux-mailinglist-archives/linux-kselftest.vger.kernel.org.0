@@ -1,104 +1,157 @@
-Return-Path: <linux-kselftest+bounces-44355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9FADC1D0ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 20:50:30 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 315F0C1D16B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 20:58:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F2D8734B1AE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 19:50:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 203464E31A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 19:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE9235A138;
-	Wed, 29 Oct 2025 19:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27ABB35BDC6;
+	Wed, 29 Oct 2025 19:56:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IaH0WiB+"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sRKiGKE4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340363596EB;
-	Wed, 29 Oct 2025 19:50:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0364A35BDCD
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 19:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761767425; cv=none; b=lq160BUIh/Od9M8cmFk+KFq0uwQn1lkmNawbLcue/W429MOX4TLm6uIHQcBWW4G3dhDQnu3u9vkfL/zpD5saAnLX4D1pLEb5T0McWsSkqjO58vkB8A/3kZtJk3hrXdf/lhUIwZngybpFqgfZu8+OWhWR+Y6PwYZ6PVsMD9O0+dw=
+	t=1761767811; cv=none; b=cSqcxgiTX1Q0zlesrHIXeCZkg2pmLsQ2SpNDSoiXePb/nNwaMzBhNSP/MwL2pY/qO3p/aO2xVN37mkJtxwUcUTwCRW6d8M+L5nBwNcoz9xBW7qJPBOfmAJnIWBlRMqrPehR3NQOvq4yKDzg4uR6JR5O5WQjfKh7YJFeKh5jxBw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761767425; c=relaxed/simple;
-	bh=x2OAfwS5H+/pyr4WR+Khtf97dsVmyBOZ4UxVwpJdZjo=;
+	s=arc-20240116; t=1761767811; c=relaxed/simple;
+	bh=qSqfO4GaIrR27fhgavCPzsBAMespcHyDtewzg+16dug=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lgwpfCKlA51ewHVnqTVmsk1UFWfsG1+Zk91lKZN7CTh5/nmU1sx2QpbB/suqQcYvXHopnniD4WVRQ/d4TLjE8jeJlvyk9xwlwY6zuFTNfqMs0QMA5a7N46+dRm47+xwpxNHlDggNjVJmi9iFOS3KCz8/97EQBD9Fe7rKI+G2WN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=IaH0WiB+; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=ywMRa9td/qLYvz0QLFt/dHlJeUkQz4iWrYlNlCayuSE=; b=IaH0WiB+Bb8bae/n25tIQisGQE
-	EwhH0nUvAY0WF68tV+bqAjeM5vt1+TFM+p9SWhDN7SSKHd71InQaX+spzoIsKsfRnYzLiPymBfv8b
-	G0YUSVRmmHR72tbVjz7S1JCp1h94cR+krcxjkfnjWvoj0qzTCwutfhbayHRtPzVCrp4DBQP6QMP7E
-	/5l7sL8Z4TbLmfGLBzrYSVUcbZopibwGw10l95Xv2hyvw2OljCjZDfVaA7JzI0kxcTG+eF758lStl
-	ZwIQstpTPU88RRMUCb5P0e0hsxC1roRLf9JTHYYZ9gSRvYXs7n8ZIZ62F6HWHDjILexzwXgNL7cbg
-	SLWmox1g==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vECBX-00000002fGY-0vOJ;
-	Wed, 29 Oct 2025 19:50:19 +0000
-Message-ID: <6c273611-e815-4a4a-822d-f6e55cec3810@infradead.org>
-Date: Wed, 29 Oct 2025 12:50:18 -0700
+	 In-Reply-To:Content-Type; b=K9rG7qDLrJh69gYtlDRe3oIdy8eMAr/VB55Z0qXbhoYhvM6TVFsgAAOzPqDZJ8irR0zpolGe4BeiTVl+57byvC6lt3Ar/a7SNdgzhfaLr4tQUVTmoz8PfZfJ5YwlpTveSZOAt4+pkMxS6WPaPaaUMnGF1o9R//ltGIJeGF5YXfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sRKiGKE4; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <1ac9d14e-4250-480c-b863-410be78ac6c6@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761767797;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=riRSf2R7xwaw3JNPyjOIY32N5sQTM0xVxav/eTpQzBA=;
+	b=sRKiGKE4PQuJxGC2AJi8XPaHhTU2mGX0xKY+eLSHxCSe/WQZYH6hqCf/wAY7KnIu10ZbYg
+	msvX550/fwGxa8JxO1t91w1jLjM/mysf5/i9IMwD0iOAnwE5CsOalsYN9/Jg5Xc1900cnt
+	cHBhB5PR8WGWB5uZa3y+KySLeK91gwc=
+Date: Wed, 29 Oct 2025 12:56:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] mm: introduce VM_MAYBE_GUARD and make visible for
- guard regions
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Andrei Vagin <avagin@gmail.com>
-References: <cover.1761756437.git.lorenzo.stoakes@oracle.com>
- <7de40603015dee82970f5d37332a6d5af7532063.1761756437.git.lorenzo.stoakes@oracle.com>
+Subject: Re: [PATCH bpf-next v3 3/4] selftests/bpf: integrate
+ test_tc_tunnel.sh tests into test_progs
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251027-tc_tunnel-v3-0-505c12019f9d@bootlin.com>
+ <20251027-tc_tunnel-v3-3-505c12019f9d@bootlin.com>
 Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <7de40603015dee82970f5d37332a6d5af7532063.1761756437.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20251027-tc_tunnel-v3-3-505c12019f9d@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+On 10/27/25 7:51 AM, Alexis Lothoré (eBPF Foundation) wrote:
+> +static int run_server(struct subtest_cfg *cfg)
+> +{
+> +	struct nstoken *nstoken = open_netns(SERVER_NS);
 
-On 10/29/25 9:50 AM, Lorenzo Stoakes wrote:
+It is unlikely but still better to check for open_netns failure. Just in 
+case that the network changes/traffic is accidentally done in the 
+original netns. There are a few netns switching in the test. Please 
+followup.
 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 4c3a7e09a159..a2c79ee43d68 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -1478,6 +1478,10 @@ vma_needs_copy(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
->  	if (src_vma->anon_vma)
->  		return true;
->  
-> +	/* Guard regions have momdified page tables that require copying. */
-
-	                      modified
-
-> +	if (src_vma->vm_flags & VM_MAYBE_GUARD)
-> +		return true;
+> +	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
 > +
->  	/*
->  	 * Don't copy ptes where a page fault will fill them correctly.  Fork
->  	 * becomes much lighter when there are big shared or private readonly
--- 
-~Randy
+> +	cfg->server_fd = start_reuseport_server(family, SOCK_STREAM,
+> +						cfg->server_addr, TEST_PORT,
+> +						TIMEOUT_MS, 1);
+
+Why reuseport is needed? Does it have issue in bind() to the same 
+ip/port in the later sub-test?
+> +	close_netns(nstoken);
+> +	if (!ASSERT_NEQ(cfg->server_fd, NULL, "start server"))
+
+I changed the check to ASSERT_OK_PTR. Also two other similar 
+ASSERT_[N]EQ(..., NULL, ...) usages.
+> +		return -1;
+> +
+> +	return 0;
+> +}
+> +
+> +static void stop_server(struct subtest_cfg *cfg)
+> +{
+> +	close(*cfg->server_fd);
+
+NULL check on cfg->server_fd is needed during the error path of 
+run_test(). cfg->server_fd is leaked also. I changed it to 
+free_fds(cfg->server_fd, 1) instead.
+
+> +	cfg->server_fd = NULL;
+
+I don't think cfg will be reused, so I skip this NULL assignment.
+
+> +}
+> +
+> +static int check_server_rx_data(struct subtest_cfg *cfg,
+> +				struct connection *conn, int len)
+> +{
+> +	int err;
+> +
+> +	memset(rx_buffer, 0, BUFFER_LEN);
+> +	err = recv(conn->server_fd, rx_buffer, len, 0);
+> +	if (!ASSERT_EQ(err, len, "check rx data len"))
+> +		return 1;
+> +	if (!ASSERT_MEMEQ(tx_buffer, rx_buffer, len, "check received data"))
+> +		return 1;
+> +	return 0;
+> +}
+> +
+> +static struct connection *connect_client_to_server(struct subtest_cfg *cfg)
+> +{
+> +	struct network_helper_opts opts = {.timeout_ms = 500};
+> +	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
+> +	struct connection *conn = NULL;
+> +	int client_fd, server_fd;
+> +
+> +	conn = malloc(sizeof(struct connection));
+> +	if (!conn)
+> +		return conn;
+> +
+> +	client_fd = connect_to_addr_str(family, SOCK_STREAM, cfg->server_addr,
+> +					TEST_PORT, &opts);
+> +
+> +	if (client_fd < 0) {
+> +		free(conn);
+> +		return NULL;
+> +	}
+> +
+> +	server_fd = accept(*cfg->server_fd, NULL, NULL);
+> +	if (server_fd < 0) {
+
+Fixed the client_fd leak.
+Applied. Thanks.
 
 
