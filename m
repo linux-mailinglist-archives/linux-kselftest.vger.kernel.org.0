@@ -1,131 +1,222 @@
-Return-Path: <linux-kselftest+bounces-44339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44340-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ECFEC1C8F6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 18:48:18 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B28AC1C9F4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 18:56:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 654E0564680
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 17:42:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 845F034BF4A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 17:56:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17AB35029D;
-	Wed, 29 Oct 2025 17:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C1F354704;
+	Wed, 29 Oct 2025 17:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AHLs89xZ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nrf0lCxh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47D12C029E
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 17:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D403035470C
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 17:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761759765; cv=none; b=PCjEiMELxBLawcxH3l1L611DRja8/3tynLBdvvjxmt2WA5N2xywIrmz5SmYQi+YdDRUHhOHj0aIJvWsX5HkVS4joPXGfd45eBQcm8XmQw/py62Mz/eXG2mpZ0awMwIEVSPlxA3jTksmVX8J5cK9n25b45Gjz5eopVmh/umB0XSw=
+	t=1761760596; cv=none; b=E5vQ1b6kQBfka3q6DVvqev669LH7fQQhQHVTQt6HRppN1sj76q3MG0k9dUhkSa32uSWKFjIQWISzWvp8vHb+OURtUTBbqHWorBGGgGjarMm+mYrSymesrfPyc9x/tuJk6vWooS8O+nscL6DB/MEOP2JgMfBMlFyK69vNzzvEJbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761759765; c=relaxed/simple;
-	bh=V7kuPF9joUeQ8XWRW+rj/yqrz4T8Boo0UelHGgj9rx4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JnHe1WdPYn5sxfCiDsXZbJx7H5zCN1nj8aCYxN4HS2FTYzeOtGNDgtKXrgui9HBn/0bWBTdVhRvXUSwmEqcphlW71Lh2f97KYCYajNATAdphfUx5w6w0NU4nQ8gySXL8f4Nn0969QN+ZE48PycTKJNPee2lflKjOEMju1ihWvgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AHLs89xZ; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-475e01db75aso637185e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 10:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761759762; x=1762364562; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pjzln4J5kcPTTRJhF2qiwK6MZG3KsRu1XVAD2+PA+Qw=;
-        b=AHLs89xZXh9GvdjfSwgDwCjOfFNTh8L3Oxwrvf7MBjw2H4nv7YKdfBVMxW/sC++LUW
-         rbyUzIRdCHdnEXET53XzMtQc9rkn8TJWI4KtZY1ftp/LHcWe7u0sfVluuS3K7ro2h7ri
-         iuUtl4+wdEk/nlYxPyAKfLAN4sh4TVPEcJhWVJTnQnOkgxeRs9LXNSFMa4J77C0b4EJK
-         5Nygh/CAQ7AJ4OrI4TY6X7w6hdVZwpDB+hdY5RMOBooJz0leAwW1WUZa0UhnU+wyT0y1
-         2S3vXlHNjD2fErz6x1rsR22Vd+0JV3RsxneYRhpL7hEmuRh5fwP+2hSJOu4xbLoW7BJS
-         f/iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761759762; x=1762364562;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pjzln4J5kcPTTRJhF2qiwK6MZG3KsRu1XVAD2+PA+Qw=;
-        b=kk3RZwBIudClc8lKp7PKvRZlxKDUFxzwRZmBShq+eAHn+seJk+NTX4YqiU6uDXgrNv
-         Ckqp8RW76lv5rhS9NXyA/q/6ZAkcZ0cLX3px4IRL6mbN4Lqb7I5HWdDgM+qllVVnn5vN
-         kLya2RiNisb9kFhq48JV8/0IqpQWo4yvREUAkrjrFjx5W32YFJd/H4G+o8mcKx+vABWq
-         t9rc4Pv2Xk7TuXEWYOvpDqDzlX+vxWYyYb+Tm+dXP3YywAOBVkoxNllVX4bDxfOl8AuQ
-         7Ioxs5vVrT3uDt6AGWcOj/Ska95qVsAAY8Lut9qPynYkJ79a9LRkbtz3KwxGLI/eHPV1
-         LNoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6zzKhsNceJTxNugq/x6IeGuCnCxmiYoCVmCLOFUi3vGeamzSGpEBf1hQm2qQtjC2HIuZET8LWVr+MWQNnI7k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxVB8lPNSXJzMG47wDqMk+ZffKxzRe7XHxdZQ+t4PgyXlRStPb
-	FlmNSqJhtlUoKEO2V4HZ+yjknlatYg7F4u00YhytZg1xexcZ/aRAJTbO
-X-Gm-Gg: ASbGnct1IvtNmmvX1IFDps2rtYVYItX9pTczlsLK86BL34tVO9UQK0w026s3sYPunQ1
-	FmmY5QQWzItzAvW72bPg99et/AxKBHkqmOfmaWx4hgzZWO2GHkYyGZRJQvgoMdJ3rlIviZuBykZ
-	WrBMHz9jLUodoU9hrvM1VVLhGPC9WQs1pBZ3DiF89gMpSEOk+xWk7M60oU/VpfFrlEcksM2b1qr
-	7CG2YsBZKFq0AOLepioBvAh9SCE28s/UVTqcgt69aYAqEE/V/9TKAPS1F1y+1aMHdJGFaa5Bl3J
-	Ujsc9dSyzQiSLhPLq9WYLWsOiQ6QSxQy4OBSIevIyz5fAGr6BlpSYyYUiPBCZCzX5BnvS5z17LL
-	0It1PqarLFNmykdctAmZlcxUqbHC5IW2z0+H6LyvmoWh9b8LmW/s5T8JiNUIsl3tCwIxZeaDwO/
-	RUYDoXppqLWOFtvnWRGB/CMegQ11SMYNu4ooOarMd6erd1JmNkDWfK0LOvNLzoxQ==
-X-Google-Smtp-Source: AGHT+IEN4QldBt4aEvjzF7PzzgMoUyn1ozN70jZtp4P8Jv6caxFHxkysIIvS/M+Oc3h94u8FRn/bVg==
-X-Received: by 2002:a05:600c:6207:b0:45d:f83b:96aa with SMTP id 5b1f17b1804b1-477208d1be0mr30581435e9.7.1761759761781;
-        Wed, 29 Oct 2025 10:42:41 -0700 (PDT)
-Received: from alessandro-pc.station (net-93-70-84-238.cust.vodafonedsl.it. [93.70.84.238])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4771e387aa9sm56953225e9.4.2025.10.29.10.42.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 10:42:41 -0700 (PDT)
-From: Alessandro Zanni <alessandro.zanni87@gmail.com>
-To: kees@kernel.org,
-	luto@amacapital.net,
-	wad@chromium.org,
-	shuah@kernel.org
-Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/seccomp: Fixed type mismatch warning
-Date: Wed, 29 Oct 2025 18:42:28 +0100
-Message-ID: <20251029174230.17184-1-alessandro.zanni87@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1761760596; c=relaxed/simple;
+	bh=dQC30MHTvswSnusn5NOPjHmGoeeb2j1cD3HcbesEOFs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b+B/70lLsa3QiXznSuo57JzHSC7EDkYbB7n6yXNdiASZ4ZB/deg6v/fuS2Tmjd3H1jBQjxvDEE9KkkbNS6jpjRiX8P+ZTFmC3QSUUYW6M+UJvVuEsHeeVf/hZvc+T9NYU+lst4aDq3/4dMUXTKfnPg0zBdLIaVgJ9xjTx040zHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nrf0lCxh; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <7a6be149-9e04-444e-a433-49450385d6a0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761760590;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ppd0RHap4q7bSCes82xlTLvMUFropcMpTg+3MxryB3c=;
+	b=nrf0lCxhmc2lqlJiWe4YAO99sFd0VWUhwpdBQuozQojjIKuPKXFjvPd6+SDExpptyAoSW+
+	rtEHu8cGVS5FatxkW3l8Xsu7eCTWzdvE0lP7zhPDwyP94kto5OW1YVfadpn2ys/7/3aVE5
+	jdxCVH0oM92ZV21XRgiZl07i28tmDoM=
+Date: Wed, 29 Oct 2025 10:56:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [RFC bpf-next 1/2] bpftool: Print map ID upon creation and
+ support JSON output
+Content-Language: en-GB
+To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+ bpf@vger.kernel.org
+Cc: alan.maguire@oracle.com, Quentin Monnet <qmo@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251028125705.3586552-1-harshit.m.mogalapalli@oracle.com>
+ <20251028125705.3586552-2-harshit.m.mogalapalli@oracle.com>
+ <89b12696-26ff-411f-9cd3-74361f0f1ecd@linux.dev>
+ <cc32d3db-60ef-4046-8988-289cd0cc8c26@oracle.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <cc32d3db-60ef-4046-8988-289cd0cc8c26@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Forced cast of the variable passed to the get_uprobe_offset()
-function either probed_uretprobe or probed_uprobe.
 
-The solved warning is as follows:
-  CC       seccomp_bpf
-seccomp_bpf.c: In function ‘UPROBE_setup’:
-seccomp_bpf.c:5175:74: warning: pointer type mismatch in conditional expression
- 5175 |         offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-      |
 
-Command to test it:
-make -C tools/testing/selftests TARGETS=seccomp
+On 10/29/25 9:05 AM, Harshit Mogalapalli wrote:
+> Hi Yonghong,
+>
+>
+> On 29/10/25 07:44, Yonghong Song wrote:
+>>
+>>
+>> On 10/28/25 5:57 AM, Harshit Mogalapalli wrote:
+>>> It is useful to print map ID on successful creation.
+>>>
+>>> JSON case:
+>>> $ ./bpftool -j map create /sys/fs/bpf/test_map4 type hash key 4 
+>>> value 8 entries 128 name map4
+>>> {"id":12}
+>>>
+>>> Generic case:
+>>> $ ./bpftool  map create /sys/fs/bpf/test_map5 type hash key 4 value 
+>>> 8 entries 128 name map5
+>>> Map successfully created with ID: 15
+>>>
+>>> Bpftool Issue: https://github.com/libbpf/bpftool/issues/121
+>>> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+>>> ---
+>>>   tools/bpf/bpftool/map.c | 24 ++++++++++++++++++++----
+>>>   1 file changed, 20 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+>>> index c9de44a45778..b6580f25361d 100644
+>>> --- a/tools/bpf/bpftool/map.c
+>>> +++ b/tools/bpf/bpftool/map.c
+>>> @@ -1251,6 +1251,8 @@ static int do_create(int argc, char **argv)
+>>>       LIBBPF_OPTS(bpf_map_create_opts, attr);
+>>>       enum bpf_map_type map_type = BPF_MAP_TYPE_UNSPEC;
+>>>       __u32 key_size = 0, value_size = 0, max_entries = 0;
+>>> +    struct bpf_map_info map_info = {};
+>>> +    __u32 map_info_len = sizeof(map_info);
+>>>       const char *map_name = NULL;
+>>>       const char *pinfile;
+>>>       int err = -1, fd;
+>>> @@ -1353,13 +1355,27 @@ static int do_create(int argc, char **argv)
+>>>       }
+>>>       err = do_pin_fd(fd, pinfile);
+>>> -    close(fd);
+>>> -    if (err)
+>>> +    if (err) {
+>>> +        close(fd);
+>>
+>> I think you can remove close(fd) here,
+>>
+>>>           goto exit;
+>>> +    }
+>>> -    if (json_output)
+>>> -        jsonw_null(json_wtr);
+>>> +    err = bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
+>>> +    if (err) {
+>>> +        p_err("Failed to fetch map info: %s\n", strerror(errno));
+>>> +        close(fd);
+>>
+>> and here
+>>
+>>> +        goto exit;
+>>> +    }
+>>> +    close(fd);
+>>
+>> and here,
+>>
+>>> +
+>>> +    if (json_output) {
+>>> +        jsonw_start_object(json_wtr);
+>>> +        jsonw_int_field(json_wtr, "id", map_info.id);
+>>> +        jsonw_end_object(json_wtr);
+>>> +    } else {
+>>> +        printf("Map successfully created with ID: %u\n", map_info.id);
+>>> +    }
+>>>   exit:
+>>
+>> and put close(fd) here.
+>
+> I think we need one more close_fd: label and then put a close(fd); 
+> here. As there are other gotos to exit earlier in this function when 
+> fd is uninitialized, which can the error like:
+>
+> map.c: In function ‘do_create’:
+> map.c:1375:9: warning: ‘fd’ may be used uninitialized 
+> [-Wmaybe-uninitialized]
+>  1375 |         close(fd);
+>       |         ^~~~~~~~~
+> map.c:1258:23: note: ‘fd’ was declared here
+>  1258 |         int err = -1, fd;
+>       |                       ^~
+>
+>
+>
+> So, maybe we could do something like this:
+>
+>         err = do_pin_fd(fd, pinfile);
+> -       close(fd);
+>         if (err)
+> -               goto exit;
+> +               goto close_fd;
+>
+> -       if (json_output)
+> -               jsonw_null(json_wtr);
+> +       err = bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
+> +       if (err) {
+> +               p_err("Failed to fetch map info: %s\n", strerror(errno));
+> +               goto close_fd;
+> +       }
+>
+> +       if (json_output) {
+> +               jsonw_start_object(json_wtr);
+> +               jsonw_int_field(json_wtr, "id", map_info.id);
+> +               jsonw_end_object(json_wtr);
+> +       } else {
+> +               printf("Map successfully created with ID: %u\n", 
+> map_info.id);
+> +       }
+> +close_fd:
+> +       close(fd);
+>  exit:
+>         if (attr.inner_map_fd > 0)
+>                 close(attr.inner_map_fd);
+>
+> I can prepare a v2 with this change, but wouldn't it be simpler to add a
+> direct close(fd); on the few error paths instead of introducing an
+> additional label for close(fd);?
 
-Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The above change LGTM. Thanks!
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 874f17763536..cd745a8a5b7e 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -5172,7 +5172,8 @@ FIXTURE_SETUP(UPROBE)
- 		ASSERT_GE(bit, 0);
- 	}
- 
--	offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
-+	offset = get_uprobe_offset(variant->uretprobe
-+		? (void *)probed_uretprobe : (void *)probed_uprobe);
- 	ASSERT_GE(offset, 0);
- 
- 	if (variant->uretprobe)
--- 
-2.43.0
+>
+> Thoughts/Suggestions ?
+>
+> Thanks,
+> Harshit
+>
+>>
+>>>       if (attr.inner_map_fd > 0)
+>>>           close(attr.inner_map_fd);
+>>
+>>
+>
+>
 
 
