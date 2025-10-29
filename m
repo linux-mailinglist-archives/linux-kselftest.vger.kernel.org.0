@@ -1,104 +1,104 @@
-Return-Path: <linux-kselftest+bounces-44354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99B6CC1D08D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 20:40:40 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9FADC1D0ED
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 20:50:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 36EF04E1216
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 19:40:39 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F2D8734B1AE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 19:50:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5907B3596FA;
-	Wed, 29 Oct 2025 19:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE9235A138;
+	Wed, 29 Oct 2025 19:50:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bdpYQXSk"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IaH0WiB+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A555345754;
-	Wed, 29 Oct 2025 19:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340363596EB;
+	Wed, 29 Oct 2025 19:50:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761766834; cv=none; b=QjdFXdFDuk0gdlxkzsQ8LKHAgjqNRB7zHiCpiDfBHlHD7cDydGl+tQfP4ZDX8noNescDS8egAqefRWrRX7m2ffn8OlNx94Awu2Ku3wzDVxP3MMxyiUNBgVIO1nM1C0vhzJgUqAoTltFRgNqOmSTIZHlX9gPnhpiWSvwW/OlJ2fc=
+	t=1761767425; cv=none; b=lq160BUIh/Od9M8cmFk+KFq0uwQn1lkmNawbLcue/W429MOX4TLm6uIHQcBWW4G3dhDQnu3u9vkfL/zpD5saAnLX4D1pLEb5T0McWsSkqjO58vkB8A/3kZtJk3hrXdf/lhUIwZngybpFqgfZu8+OWhWR+Y6PwYZ6PVsMD9O0+dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761766834; c=relaxed/simple;
-	bh=FPNNebRY/3BNB37M1f3dFBO6d/6gfDm+j/J2gEeRKSY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=a8R6foMSL8bogokmDUszsKi62sYwAibuT2XnVRLH0zLD659L3h8aA16VP8A43PAgCoj5+Wh70FN35oapUB8sNIMMPTyrls/RcT3oCVgx0+ABxxAwKzTBi096+nZ6exc2Goa5knjCohoSJF2cTFsYnX+DUglw4JumJRRIfcianSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bdpYQXSk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B91DC4CEF7;
-	Wed, 29 Oct 2025 19:40:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761766833;
-	bh=FPNNebRY/3BNB37M1f3dFBO6d/6gfDm+j/J2gEeRKSY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=bdpYQXSku1I5U5dOpYSUf+MtX0juFsvN0DaXvnrfTHgoUl9qWBpj1X0vsaaH6Jzbp
-	 JuRPlrlmLa74u1UcyoA7V8Sqfo7iHyP709ctNgntgXdT6uDODagH5NCfMsUT8idsp1
-	 KEGNUZ/kO4xtAM5qm9jEwEV3U9w3EbBZtG0y2Ep7F1yVXr/Dg6Lr2X+g0hyZuOZ4i7
-	 pY16AHHuPThfBUUHQnQZtvK4Atp0lFMxo0boccJ1L/4eQ/PfQ0pecyh+mplv0ukH39
-	 +iT2BkXICq9ExqR7FyLUySkcBRJQiMWQ45qOt7n+3Bwtc/3xW96Y0Yh3HboahAOtxP
-	 jaFj6v8aJZqTg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EBE283A549BD;
-	Wed, 29 Oct 2025 19:40:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1761767425; c=relaxed/simple;
+	bh=x2OAfwS5H+/pyr4WR+Khtf97dsVmyBOZ4UxVwpJdZjo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lgwpfCKlA51ewHVnqTVmsk1UFWfsG1+Zk91lKZN7CTh5/nmU1sx2QpbB/suqQcYvXHopnniD4WVRQ/d4TLjE8jeJlvyk9xwlwY6zuFTNfqMs0QMA5a7N46+dRm47+xwpxNHlDggNjVJmi9iFOS3KCz8/97EQBD9Fe7rKI+G2WN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=IaH0WiB+; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=ywMRa9td/qLYvz0QLFt/dHlJeUkQz4iWrYlNlCayuSE=; b=IaH0WiB+Bb8bae/n25tIQisGQE
+	EwhH0nUvAY0WF68tV+bqAjeM5vt1+TFM+p9SWhDN7SSKHd71InQaX+spzoIsKsfRnYzLiPymBfv8b
+	G0YUSVRmmHR72tbVjz7S1JCp1h94cR+krcxjkfnjWvoj0qzTCwutfhbayHRtPzVCrp4DBQP6QMP7E
+	/5l7sL8Z4TbLmfGLBzrYSVUcbZopibwGw10l95Xv2hyvw2OljCjZDfVaA7JzI0kxcTG+eF758lStl
+	ZwIQstpTPU88RRMUCb5P0e0hsxC1roRLf9JTHYYZ9gSRvYXs7n8ZIZ62F6HWHDjILexzwXgNL7cbg
+	SLWmox1g==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vECBX-00000002fGY-0vOJ;
+	Wed, 29 Oct 2025 19:50:19 +0000
+Message-ID: <6c273611-e815-4a4a-822d-f6e55cec3810@infradead.org>
+Date: Wed, 29 Oct 2025 12:50:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/4] selftests/bpf: convert test_tc_tunnel.sh
- to test_progs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176176681076.3187348.7903797974082135104.git-patchwork-notify@kernel.org>
-Date: Wed, 29 Oct 2025 19:40:10 +0000
-References: <20251027-tc_tunnel-v3-0-505c12019f9d@bootlin.com>
-In-Reply-To: <20251027-tc_tunnel-v3-0-505c12019f9d@bootlin.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@codeaurora.org,
-	=?utf-8?q?otlin=2Ecom=3E?=@codeaurora.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- ebpf@linuxfoundation.org, thomas.petazzoni@bootlin.com,
- bastien.curutchet@bootlin.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] mm: introduce VM_MAYBE_GUARD and make visible for
+ guard regions
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Andrei Vagin <avagin@gmail.com>
+References: <cover.1761756437.git.lorenzo.stoakes@oracle.com>
+ <7de40603015dee82970f5d37332a6d5af7532063.1761756437.git.lorenzo.stoakes@oracle.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <7de40603015dee82970f5d37332a6d5af7532063.1761756437.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
 
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
+On 10/29/25 9:50 AM, Lorenzo Stoakes wrote:
 
-On Mon, 27 Oct 2025 15:51:52 +0100 you wrote:
-> Hello,
-> this is the v3 of test_tc_tunnel conversion into test_progs framework.
-> This new revision:
-> - fixes a few issues spotted by the bot reviewer
-> - removes any test ensuring connection failure (and so depending on a
->   timout) to keep the execution time reasonable
-> 
-> [...]
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 4c3a7e09a159..a2c79ee43d68 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1478,6 +1478,10 @@ vma_needs_copy(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
+>  	if (src_vma->anon_vma)
+>  		return true;
+>  
+> +	/* Guard regions have momdified page tables that require copying. */
 
-Here is the summary with links:
-  - [bpf-next,v3,1/4] selftests/bpf: add tc helpers
-    https://git.kernel.org/bpf/bpf-next/c/1d5137c8d1ac
-  - [bpf-next,v3,2/4] selftests/bpf: make test_tc_tunnel.bpf.c compatible with big endian platforms
-    https://git.kernel.org/bpf/bpf-next/c/86433db93256
-  - [bpf-next,v3,3/4] selftests/bpf: integrate test_tc_tunnel.sh tests into test_progs
-    https://git.kernel.org/bpf/bpf-next/c/8517b1abe5ea
-  - [bpf-next,v3,4/4] selftests/bpf: remove test_tc_tunnel.sh
-    https://git.kernel.org/bpf/bpf-next/c/5d3591607da2
+	                      modified
 
-You are awesome, thank you!
+> +	if (src_vma->vm_flags & VM_MAYBE_GUARD)
+> +		return true;
+> +
+>  	/*
+>  	 * Don't copy ptes where a page fault will fill them correctly.  Fork
+>  	 * becomes much lighter when there are big shared or private readonly
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+~Randy
 
 
