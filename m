@@ -1,57 +1,57 @@
-Return-Path: <linux-kselftest+bounces-44286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62096C1B605
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 15:47:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6AD0C1B5FF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 15:47:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0244F5C0DB5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 14:00:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0C4355A3EE9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 14:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E060B347FE3;
-	Wed, 29 Oct 2025 13:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D2A03491D0;
+	Wed, 29 Oct 2025 13:52:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VRSn6uFW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Gq+jSTUI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D0C347BB4
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 13:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 546E9348440;
+	Wed, 29 Oct 2025 13:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761745975; cv=none; b=Hcz3kyDSvosBWhDVhxDZMAUvgFJSVVo6AP0zLc2oyDNzz51zfxMk3RnuLGBy3wXxdeChg+TosTI6Epv+B98/mHMN18KxZb94KUoLnKrhZeOboA86+fvsfulNXTEoY6Ej4iHfvr0h5di3YWMcnMP+22n2UrksPUE8iqmAEGEu+JM=
+	t=1761745977; cv=none; b=LuYLi0CtqoJg4AU/uX1ifyEI1wR9UGNpbzOnu/lQJtlrv4LTxC5Mf7ADQSV9Txfv/3lADiHn4ZEAe3Xg05+Rv3UGu9agzFa5GmU+tjX1382eg5Jkbd4cYfDQjw4i6hwCg9EtrrjDAacoCpMB32Qz3CTxpQWFydT6CeD8dIBx9Zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761745975; c=relaxed/simple;
-	bh=cDq9NFxMdJ1KoM2cm0BBx/55+lB4JI39tEo11K8xsCo=;
+	s=arc-20240116; t=1761745977; c=relaxed/simple;
+	bh=15E47hyvmQPrJWkj4LYQAs5VLKJP00bGmfww35DXTcY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PfH9FF1iyrCaGZOnawlYdxyGVmk58lcbFmEtrKObTvYaWBkV2+XqolvUH1iE/cg3sA9IY4vfvpQK6jH5+HU38VBn6UMc/px+A4uvyO1FuGQrZVLWyFP2y+KuHVMh8ghNLT6kXAyHwsxowT8+9coqWHHAmriO8WZOjx+TmOnXPOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VRSn6uFW; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=aM3yDVUUKwWtdMw+FNeiWLhbqMzGQa/40IiiFq2iWHSEZ+X+yimsD3WJ+rQ4wfcr577cWiDupUSkvDLapLqQ58CZ4V85ivxLYULZmdU3eIO+JTfa5DHawpWv6O18ekFle8eb+1y20FpdCBPjoeWOocL4NR46AkIxPNnWizbKQIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Gq+jSTUI; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 926264E413CF;
-	Wed, 29 Oct 2025 13:52:52 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id CEA56C0DBC0;
+	Wed, 29 Oct 2025 13:52:34 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 66D9F606E8;
-	Wed, 29 Oct 2025 13:52:52 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DAB63117F80F2;
-	Wed, 29 Oct 2025 14:52:47 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 31054606E8;
+	Wed, 29 Oct 2025 13:52:55 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 424AD117F80F6;
+	Wed, 29 Oct 2025 14:52:51 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761745970; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1761745973; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=V902gLTJ1tGfAR8hmV6KKVBGzcuYROlev8W1RLscgLg=;
-	b=VRSn6uFWtPDafjLBqDhTnWhG+YSmPPNgUEXN4qBiwS6fn5Qt/oeSkT6O8arlOpCAVDkLin
-	Ss38gIc/Sc0qV0q0ydotyBcneC3NG+o2HMrS23gxonkPxf2miRJk64zZgUbT4G6Vfe010K
-	Bqw0OgBMMUKwbWEWQfwDMi/rzZPC7ncSIrbiGS9+2ZYggP7rMp1MYfD5LHQMKLo8fHPH/6
-	MprSduMgifm8LyFvEU9TfSoJR5eOjtj59QxfpcJ47VRFuxAAJ7qlPvbd4mpgLBo0yf+/dT
-	rCXzjj0h5BJeOO8CtFa6shqJZfRrnqrLXV0MGQLUz24cmBYHSpdsxWsuhPY8nw==
+	bh=nw7naf5mx2NiW6CLXgmCEx5KgfTcyto6pFTnj3WONc8=;
+	b=Gq+jSTUINZ6XlvlSrzSTxwqdQLzlsNjbS2OYxyl+ZIK8hc7aZGNKHS4lJ7Q12aUYlT9Cx8
+	gHj3X3KG8Au2wX7qZv+7lU1RGPkc/hWMBfKQy7jw60CpTyqCrd9n6RvQPFaP8AaVxKvr0U
+	5YuKlzUnuws8CricpWVrwz70NKzcyqrwYoEIqASM0Sv35X86Ypt3hiQFHhkCcduszVW8Le
+	bsF9YJ2dPYhc7vcMFa3pv5dNXUPcGLIoUWQH+gq/F1eCwInc0jpush/pkV7/H+299QbYBZ
+	DvmiyGjADjQrir41ek5APwAAI/9ufFwt1CvBC4DuqRtZgIKgzjN89MXfcHHo8A==
 From: "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Date: Wed, 29 Oct 2025 14:52:27 +0100
-Subject: [PATCH bpf-next v6 06/15] selftests/bpf: test_xsk: Wrap test
- clean-up in functions
+Date: Wed, 29 Oct 2025 14:52:28 +0100
+Subject: [PATCH bpf-next v6 07/15] selftests/bpf: test_xsk: Release
+ resources when swap fails
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251029-xsk-v6-6-5a63a64dff98@bootlin.com>
+Message-Id: <20251029-xsk-v6-7-5a63a64dff98@bootlin.com>
 References: <20251029-xsk-v6-0-5a63a64dff98@bootlin.com>
 In-Reply-To: <20251029-xsk-v6-0-5a63a64dff98@bootlin.com>
 To: =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
@@ -85,73 +85,38 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-The clean-up done at the end of a test in __testapp_validate_traffic()
-isn't wrapped in a function. It isn't convenient if we want to use it
-somewhere else in the code.
+testapp_validate_traffic() doesn't release the sockets and the umem
+created by the threads if the test isn't currently in its last step.
+Thus, if the swap_xsk_resources() fails before the last step, the
+created resources aren't cleaned up.
 
-Wrap the clean-up in two new functions : the first deletes the sockets,
-the second releases the umem.
+Clean the sockets and the umem in case of swap_xsk_resources() failure.
 
 Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Signed-off-by: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 ---
- tools/testing/selftests/bpf/test_xsk.c | 36 ++++++++++++++++++++++------------
- 1 file changed, 24 insertions(+), 12 deletions(-)
+ tools/testing/selftests/bpf/test_xsk.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
-index d7cb2821469c62abd0d532821e836336a2177eb5..84b724731e26d0c7e67131ec1bd562e223d3d09d 100644
+index 84b724731e26d0c7e67131ec1bd562e223d3d09d..8fe75845d7a6aa5342229fa419fcbaa411ae9e70 100644
 --- a/tools/testing/selftests/bpf/test_xsk.c
 +++ b/tools/testing/selftests/bpf/test_xsk.c
-@@ -1679,6 +1679,27 @@ static void xsk_attach_xdp_progs(struct test_spec *test, struct ifobject *ifobj_
- 		xsk_reattach_xdp(ifobj_tx, test->xdp_prog_tx, test->xskmap_tx, test->mode);
+@@ -1866,8 +1866,13 @@ int testapp_xdp_prog_cleanup(struct test_spec *test)
+ 	if (testapp_validate_traffic(test))
+ 		return TEST_FAILURE;
+ 
+-	if (swap_xsk_resources(test))
++	if (swap_xsk_resources(test)) {
++		clean_sockets(test, test->ifobj_rx);
++		clean_sockets(test, test->ifobj_tx);
++		clean_umem(test, test->ifobj_rx, test->ifobj_tx);
+ 		return TEST_FAILURE;
++	}
++
+ 	return testapp_validate_traffic(test);
  }
  
-+static void clean_sockets(struct test_spec *test, struct ifobject *ifobj)
-+{
-+	u32 i;
-+
-+	if (!ifobj || !test)
-+		return;
-+
-+	for (i = 0; i < test->nb_sockets; i++)
-+		xsk_socket__delete(ifobj->xsk_arr[i].xsk);
-+}
-+
-+static void clean_umem(struct test_spec *test, struct ifobject *ifobj1, struct ifobject *ifobj2)
-+{
-+	if (!ifobj1)
-+		return;
-+
-+	testapp_clean_xsk_umem(ifobj1);
-+	if (ifobj2 && !ifobj2->shared_umem)
-+		testapp_clean_xsk_umem(ifobj2);
-+}
-+
- static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *ifobj1,
- 				      struct ifobject *ifobj2)
- {
-@@ -1734,18 +1755,9 @@ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *i
- 		pthread_join(t0, NULL);
- 
- 	if (test->total_steps == test->current_step || test->fail) {
--		u32 i;
--
--		if (ifobj2)
--			for (i = 0; i < test->nb_sockets; i++)
--				xsk_socket__delete(ifobj2->xsk_arr[i].xsk);
--
--		for (i = 0; i < test->nb_sockets; i++)
--			xsk_socket__delete(ifobj1->xsk_arr[i].xsk);
--
--		testapp_clean_xsk_umem(ifobj1);
--		if (ifobj2 && !ifobj2->shared_umem)
--			testapp_clean_xsk_umem(ifobj2);
-+		clean_sockets(test, ifobj1);
-+		clean_sockets(test, ifobj2);
-+		clean_umem(test, ifobj1, ifobj2);
- 	}
- 
- 	if (test->fail)
 
 -- 
 2.51.0
