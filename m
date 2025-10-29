@@ -1,141 +1,141 @@
-Return-Path: <linux-kselftest+bounces-44296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44300-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 527E2C1B90D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 16:12:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 103E5C1BDC0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 16:58:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9857D5620DB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 14:10:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 396245A9494
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 15:21:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC6602DE70B;
-	Wed, 29 Oct 2025 14:07:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D222B324B3E;
+	Wed, 29 Oct 2025 15:20:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="VMBlA123"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YO8wlahf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D4725785A;
-	Wed, 29 Oct 2025 14:07:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4594530E82B
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 15:20:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761746843; cv=none; b=sQd+eQnzb/BEJTlcDJQfDIxzN2XFSvztWhyP9FJPl7yPypTwkCxNS3D6ywpqdIArnlp/jtZInD3I5t7vM2KlM27e1qzpesxfAGPnWLpxdgaEpUUuJ6HwU8afKypueIkKxD5sY6aibfATiYv0PeGoDuP6kkLPb/RF2mEFshnGoK4=
+	t=1761751247; cv=none; b=XuGKb6gGFbmIxN99/etp3uz5rG02j79lfQBzfg5wrgwlU4uc3nd2JguaUu/Rw/YsbayD9zjvE/azXNtoFGtnr1YJ6a/bh0viT4wtCJf+AYpkepkgoX0kwfhA/deFAQjA07Nn5FLF03WfqAqJOWltLNZhDLJOpLTHUNKhc+gGwI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761746843; c=relaxed/simple;
-	bh=jbDiRc1txlZTTk//UC1k3FW4pC0DVEyDhtcenS6QTzU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bkllNIFWieXV5qX7WMvYC9aQByp+xIX6Ag6jE6NFavcJGxWHQHVA35z4wXOWkBjppfggBkq5oAFr2w6qOnIXxDqGbPRY1nvhzzO8d8FlghGeRnEmzJh7nJNOFcXcbmzPfAakiHK5uGtnpaLMXICQE260P1m9FrM/0wDxhn0Im84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=VMBlA123; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=jbDiRc1txlZTTk//UC1k3FW4pC0DVEyDhtcenS6QTzU=;
-	t=1761746841; x=1762956441; b=VMBlA123oYDK6lnjS3/iOydwhEBhwAbGjDABq1MXLNLkVhX
-	i1C1XzHUmg3JumW6kuyvgYXnlKLq3fKX/zzKkFCNEZBzFUpi1kxq65iwg5oOhhipUwoooEr3pW2Pv
-	nyUVMn6N9QqjqPdyrWpEJyhBen1qHmQ6Qv8Z0/ZjMO26jI1UVSKVffgi0wjCwf8q7t82mEVoevCkd
-	Ier5OEwm7kJX/Kekr2AhT7waitdg3Tqr8+Ouz6PjN+vCkxZhF7SPG3Vkba+hb0Ov7qnbyh8irp9SS
-	J0C9l79vPNMUzFTV/W4qweSXz5Dm81+aS8ck46OWscqRdcdV1DpdbOWBC8+RTIfw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1vE6pV-0000000EkWX-0O7N;
-	Wed, 29 Oct 2025 15:07:13 +0100
-Message-ID: <516b490d30be6d0676ffe3be5942954bc3c08a39.camel@sipsolutions.net>
-Subject: Re: [PATCH v3 09/12] um: use nolibc for the --showconfig
- implementation
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc: linux-um@lists.infradead.org, Willy Tarreau <w@1wt.eu>, 
-	linux-kselftest@vger.kernel.org, kernel test robot <lkp@intel.com>, Arnaldo
- Carvalho de Melo	 <acme@redhat.com>, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Date: Wed, 29 Oct 2025 15:07:12 +0100
-In-Reply-To: <99359472-8b1e-4d51-adb8-5b16f1f90a9f@weissschuh.net>
-References: <aNaNtI+mbyc4zgFy@rli9-mobl>
-	 <99359472-8b1e-4d51-adb8-5b16f1f90a9f@weissschuh.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	s=arc-20240116; t=1761751247; c=relaxed/simple;
+	bh=HtJoUupx6d/yAjUM+7GHFEp8E2bMSioh2TQ2z1eUvkg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uo3QTpNuxR6MvVgjjp3HwydUcfjHR2kN3z5ZwjbIiKMEbqSwkkAreqcEW8X6LAzbpWvrxKMnG/aj9iWABhnAdlROm03GurcsDwBWCEPpiBmZqmJLgF/DqSgkS39yr55UYP3oNwY8uImTH5dcAk+VYg0q26TeEj/iwZ4J0kjj0oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YO8wlahf; arc=none smtp.client-ip=209.85.214.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-290cd62acc3so82331245ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 08:20:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761751245; x=1762356045; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=StYPN+Xnv/FlnNbB7eCIIAuswaamCaMZ2VJSzNeBonw=;
+        b=YO8wlahfk7zhuSu1taBkNV56d397C4+ZSInUL/QkrdiaOsPQ5MA0soEKfiN1TYN4Qn
+         CVmAV0FikZzMfUd5O4x7D7OxEgG6fnDOv3H7rfs0hJRemFrbiibfJzRJIQ4dHMS5jQKS
+         Srl1pIJR42ieowOEibynXL6YaR8rd9bpVw7yDvaexC6ZxnDSViS+zAWs/ixP9306ZgnI
+         mHA+umwm3ksAqMkg+n9sGZ5r+5SWmMuBl3j+uz0RdkM/xVdZRgHRWyOOg1CN3uw41hC1
+         1OXydasfIbqaSRVSdu9PIhk2aWeweSg929CU5mfJSCKROZqApyga5796HyQf5hm9A/u7
+         usqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761751245; x=1762356045;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=StYPN+Xnv/FlnNbB7eCIIAuswaamCaMZ2VJSzNeBonw=;
+        b=hflQykAkgcoX62KMgJBy1Qs3oqnaQ002UQinZjFTYynjOlBj564heoZVhMDAk0zXnG
+         I6gmIfwtqGMFRVQjw+V3kVY+9ULCNkuVABrkBeuxBl1ASO8KxKQ3Kk77bQVEVqD2w4Qi
+         +KcXaEHM+1CB2fqJWveeOl4Lh2m3AKebTYnP6dFxWDNoWoYaBbM5txa95azArYEiL5NJ
+         fJ+2RhyOoiOWh29Pnr/7ANiupeX6LA7JgjAh7kN+7s75verAyLUJeHiBHhs66CK5Xp2+
+         YiInd7boSQOJpmlsWRwkVS4RqCz4SY+OrRJOzsjARRgk0elQ7EcK8OTmIGtarIOKi3LX
+         q9MQ==
+X-Gm-Message-State: AOJu0YxWhybWSdN/C5e0VDwsnbpzjf7EDQuCpP1TNP//7isINCrEuIFF
+	I9gSp4rnOFu3fCGGzbsrUWPyyyooFTW6ZwfbRGWLdZc7CHMVlVXKdlvG
+X-Gm-Gg: ASbGnct/81jf3OczSRZQ2CdNzfkh80XzeG14SGsVtdpdRJtJpsxPXobbhZSnlvaoQyU
+	S3wkOScAjMvutSfAXJAoFaE39zZKof3sT/cDTJ7a3cAHX3YtjegFjisY1T6WYI2wWEmAvaN/A5d
+	qtoxEHdd23pdzlqlwbf2OKNylundaZ7WGs1eC2oTTzaVoRwVWSjLaoRV5Rvb8dcP0SukyReVeDP
+	cG3DbTIEaeBQIHCeET1sJwz9PIfjE6rjwzPSMBFpViXBLJnZUhy1bWTsYOUsjUXzKWJtNe/bDfL
+	WZ+56990/sgqR3cbt0LyuSgR1H5pahxjn95/BkZfokeFIeAlEEdLoRCwzKKEyveIefMd0MjkkOV
+	pz2OMiw4pQG9RVK0URBr4znS0ycmzFgzzm5s1nI7oyj7863gB/SBm/qYVlfTmPaXcYLSa3ql2xJ
+	zjpIl4ype+ZqRnwsk5ATM=
+X-Google-Smtp-Source: AGHT+IEpwGryO+Dsdw+yBiLYzvfG216rbfuFmYTVEwK59maJasPtn26KCM1zCvZKBwTCZ0ScENApeA==
+X-Received: by 2002:a17:902:f550:b0:277:3488:787e with SMTP id d9443c01a7336-294dee0cebemr41194955ad.12.1761751245449;
+        Wed, 29 Oct 2025 08:20:45 -0700 (PDT)
+Received: from fedora ([103.120.31.122])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29498cf3bfesm157605975ad.4.2025.10.29.08.20.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Oct 2025 08:20:44 -0700 (PDT)
+Date: Wed, 29 Oct 2025 20:50:38 +0530
+From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+	Wei Yang <richard.weiyang@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH] selftests/user_events: Avoid taking address of packed
+ member in perf_test
+Message-ID: <aQIwxjBNonW5Py_I@fedora>
+References: <20251027113439.36059-1-ankitkhushwaha.linux@gmail.com>
+ <20251027162521.c56c7f89f6ad4e3d639c408c@linux-foundation.org>
+ <aQD2Igc3svAF3klc@fedora>
+ <20251028132605.2926d3ef5eb6ea60d22ceffe@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251028132605.2926d3ef5eb6ea60d22ceffe@linux-foundation.org>
 
-Hi Thomas,
+On Tue, Oct 28, 2025 at 01:26:05PM -0700, Andrew Morton wrote:
+> On Tue, 28 Oct 2025 22:28:10 +0530 Ankit Khushwaha <ankitkhushwaha.linux@gmail.com> wrote:
+> 
+> > > > @@ -236,7 +237,8 @@ TEST_F(user, perf_empty_events) {
+> > > >  	ASSERT_EQ(1 << reg.enable_bit, self->check);
+> > > >  
+> > > >  	/* Ensure write shows up at correct offset */
+> > > > -	ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
+> > > > +	memcpy(&write_index, &reg.write_index, sizeof(reg.write_index));
+> > > > +	ASSERT_NE(-1, write(self->data_fd, &write_index,
+> > > >  	                    sizeof(reg.write_index)));
+> > > 
+> > > Simply casting &write_index to void* would fix this?
+> > 
+> > yes, this hides the type mismatch from the compiler. But i think
+> > casting to void * will not fix the alignment mismatch for packed struct.
+> > It works on x86, but might break on other platform.
+> 
+> It's the second argument to write(2)!  write(2) expects a const char *,
+> but void* will work.
 
-On Mon, 2025-10-20 at 17:21 +0300, Thomas Wei=C3=9Fschuh wrote:
-> Hi Benjamin,
->=20
-> Sep 26, 2025 15:57:43 kernel test robot <lkp@intel.com>:
->=20
-> > kernel test robot noticed the following build warnings:
-> >=20
-> > [auto build test WARNING on uml/next]
-> > [also build test WARNING on uml/fixes shuah-kselftest/next shuah-
-> > kselftest/fixes linus/master v6.17-rc7 next-20250925]
-> > [If your patch is applied to the wrong git tree, kindly drop us a
-> > note.
-> > And when submitting patch, we suggest to use '--base' as documented
-> > in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >=20
-> > url:=C2=A0=C2=A0=C2=A0
-> > https://github.com/intel-lab-lkp/linux/commits/Benjamin-Berg/tools-comp=
-iler-h-fix-__used-definition/20250924-222547
-> > base:=C2=A0=C2=A0
-> > https://git.kernel.org/pub/scm/linux/kernel/git/uml/linux=C2=A0next
-> > patch link:=C2=A0=C2=A0=C2=A0
-> > https://lore.kernel.org/r/20250924142059.527768-10-benjamin%40sipsoluti=
-ons.net
-> > patch subject: [PATCH v3 09/12] um: use nolibc for the --showconfig
-> > implementation
-> > :::::: branch date: 2 days ago
-> > :::::: commit date: 2 days ago
-> > config: um-randconfig-r111-20250926
-> > (https://download.01.org/0day-ci/archive/20250926/202509261452.g5pe
-> > aXCc-lkp@intel.com/config)
-> > compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-> > reproduce (this is a W=3D1 build):
-> > (https://download.01.org/0day-ci/archive/20250926/202509261452.g5pe
-> > aXCc-lkp@intel.com/reproduce)
-> >=20
-> > If you fix the issue in a separate patch/commit (i.e. not just a
-> > new version of
-> > the same patch/commit), kindly add following tags
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Closes:
-> > > https://lore.kernel.org/r/202509261452.g5peaXCc-lkp@intel.com/
-> >=20
-> > sparse warnings: (new ones prefixed by >>)
-> > =C2=A0=C2=A0 command-line: note: in included file (through
-> > tools/include/nolibc/nolibc.h, tools/include/nolibc/stddef.h,
-> > arch/um/include/shared/user.h, builtin):
-> > > > tools/include/nolibc/sys.h:109:29: sparse: sparse: Using plain
-> > > > integer as NULL pointer
-> > =C2=A0=C2=A0unistd.h:70:30: sparse: sparse: Using plain integer as NULL
-> > pointer
-> > =C2=A0=C2=A0 tools/include/nolibc/unistd.h:70:33: sparse: sparse: Using=
- plain
-> > integer as NULL pointer
->=20
-> Do you intend to work on your UML with nolibc patches this cycle?
-> If not I would fix these sparse warnings in the nolibc tree and also
-> apply your nolibc patches.
+Hi Andrew,
+Indeed 
+`ASSERT_NE(-1, write(self->data_fd, (void *)&reg.write_index, 
+		     sizeof(reg.write_index)));`
 
-We are not in a hurry for the UML part and while it shouldn't be too
-much work, I obviously didn't get around to it in the last week.
+would work. However since `reg` is packed struct, directly taking the 
+address of its member  `&reg.write_index` may lead to unaligned access 
+on some architectures. as indicated by the compiler warning
 
-So, feel free to pull the patches in via your tree. Then I'll submit
-the UML part again in the next cycle.
+	perf_test.c:239:38: warning: taking address of packed member
+	'write_index' of class or structure 'user_reg' may result in 
+	an unaligned pointer value [-Waddress-of-packed-member]
+	239 |         ASSERT_NE(-1, write(self->data_fd, &reg.write_index,
+      	    |						  ^~~~~~~~~~~~~~~
 
-Benjamin
+Using `memcpy` avoids this by performing a byte-wise copy, which is safe 
+to use for packed structures.
+
+Thanks
+-- Ankit
 
