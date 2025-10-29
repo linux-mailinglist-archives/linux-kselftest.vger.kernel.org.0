@@ -1,127 +1,184 @@
-Return-Path: <linux-kselftest+bounces-44297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C261C1B501
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 15:43:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADBE3C1B3D3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 15:35:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AD4CF5A78A4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 14:25:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E62741A63534
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 14:26:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5249C27A462;
-	Wed, 29 Oct 2025 14:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6CCF29B778;
+	Wed, 29 Oct 2025 14:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rtnLJZah"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tyzeamCx"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DC626C39F;
-	Wed, 29 Oct 2025 14:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EAE279DAD;
+	Wed, 29 Oct 2025 14:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761747953; cv=none; b=DsDp0M1uypvLrEbynzel9FYeRkdFL1cphSXBXdGPT2DlgkDfbdZXmo6QpyMKT/njuQ+o26KDqQkowU9K7DTz5J0GyuH2SSPRb4qjxPdZU0eIiXelrqXWUjhzL3vMImXK/N8iFZbxY1IjMlIl+5bDFafnSg/bCqucpZrnpZWKHEI=
+	t=1761747957; cv=none; b=tCGMkbH0V0IzXg8+zcI+mHjnpq8xeqGpJ98gAiCPd5hYKIW09Mf20hzyUKHFLOSZoIdSeiiEdXuvBz3GyuBjdSLBs4xRpxXWK0S4N9PLbalSOkMzTMutdeP/VFGdUPAbqaJWWzqM9lOSdwcdqx+W52VfaUa6ESQ3/S+dN/lnftk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761747953; c=relaxed/simple;
-	bh=eX4MwDdVNFiSJIUIDmCiZKp9nu2G7K/VXocP8qjTRlw=;
+	s=arc-20240116; t=1761747957; c=relaxed/simple;
+	bh=/+m6iaLC0y8uWmkcCY6x46zjKoMEvP59Em2DnUNlUQQ=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=k51XZIZXEFlnu7PQKtXgNFl83Zd5pd5C4a+PmvY7HNgaFwVz/YUHjkmNEI+sZe2AEPg8BAz6mD10tnZ12luGwYnvYpAfTzrBb621hgTTgRa11SCcHlhKdYQhg03SSt8HSJBRFm1DC9jNCTwRMpIuK9MwQNuUEI7UACkpbA/IyIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rtnLJZah; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74334C4CEF7;
-	Wed, 29 Oct 2025 14:25:50 +0000 (UTC)
+	 Subject:From:To:Cc:Date; b=diA7VjPN++5vTwB68fQ9EfJuG5a5cuUzKZqkwu1/XX9TQ0y1PPnp+UKVIHa2TuofyXycddgTOwk02NA9RI+s64kHhU1wFppl6KqAyCj1mfgJFbmbdSc/fyj310GEVMtq7yERC07f9hrxIfQCj4IKHKFzbpt6tPVAbX1Obp/kwok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tyzeamCx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AEAC4CEF8;
+	Wed, 29 Oct 2025 14:25:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761747953;
-	bh=eX4MwDdVNFiSJIUIDmCiZKp9nu2G7K/VXocP8qjTRlw=;
+	s=k20201202; t=1761747957;
+	bh=/+m6iaLC0y8uWmkcCY6x46zjKoMEvP59Em2DnUNlUQQ=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=rtnLJZah0zkZY3E6GlkRXjyP9ZgcQTQOeXraInstDmxh/JWMNN1qhZVMoM6uCAAjl
-	 zwnFSbvoj5xyi84d88E3+p6/xWog3LorSHHeLWlKN8lpJe7uU00/Lsm4BvqtavBPR6
-	 idp/kNGr3VGLyq7WkqDSwI/aHNXl9LVD9chEboM+4MfCY4jvsFBSENBiDP9eS3gMk8
-	 XM4c4tD5euqtU9yxPlz8avj5nAB5iUbBpKEVt8dI4drAott6zUS+M/1XoXP2QcoLdH
-	 4Ik8K5o6zXtoIpVG2sPIqqVjbCSaLn3VBHPzluBYNwC41G/Xv0YBbXvej8uT8OqO0x
-	 gNDJBviXt7ulw==
-Content-Type: multipart/mixed; boundary="===============7495328656080687778=="
+	b=tyzeamCxzKQNjRoRx/GdN3bKl+3qM4dQEvmBtQC9RnsBFsXj+OmD29nwII9XnqHHS
+	 yp4CVGDsaxCKMYQbhRcdjjzWfmzs2aszsf/DSeQUoqIqftsQ6LCGdQiVwcbpx4p6Vh
+	 +4iu2EorZg668PD06pWjAmISJoPmG73YPbc4lZNhmkobdgjdii5pYAfGeENbiyNBsj
+	 c8JyOVD78DBgAf0RYVCyuAvRH8zoUWsUfcNLZuT8sbNH4WGqNaHT9xHbSKCGobzECi
+	 mor1Fg+QN/K51Q4Ki0r6X546M5fM12Oqo9VClqs08BWs6KaaYaBKHDOTcqIHI9V70S
+	 1eUYT3bn41r7w==
+Content-Type: multipart/mixed; boundary="===============3524767868395641498=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b13f0f29e5f3308b5b2d973237634a7a7ec7c7be034227a633d6e49ed9f657cd@mail.kernel.org>
-In-Reply-To: <20251029-xsk-v6-12-5a63a64dff98@bootlin.com>
-References: <20251029-xsk-v6-12-5a63a64dff98@bootlin.com>
-Subject: Re: [PATCH bpf-next v6 12/15] selftests/bpf: test_xsk: Don't exit immediately if validate_traffic fails
+Message-Id: <5c1c4101d42cc486366273556492d9be559f521d16629bbcd6b3adc6a4b746f0@mail.kernel.org>
+In-Reply-To: <20251029-xsk-v6-11-5a63a64dff98@bootlin.com>
+References: <20251029-xsk-v6-11-5a63a64dff98@bootlin.com>
+Subject: Re: [PATCH bpf-next v6 11/15] selftests/bpf: test_xsk: Don't exit immediately when workers fail
 From: bot+bpf-ci@kernel.org
 To: bastien.curutchet@bootlin.com,bjorn@kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,jonathan.lemon@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,mykolal@fb.com,shuah@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org
 Cc: thomas.petazzoni@bootlin.com,alexis.lothore@bootlin.com,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,bastien.curutchet@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Oct 2025 14:25:50 +0000 (UTC)
+Date: Wed, 29 Oct 2025 14:25:54 +0000 (UTC)
 
---===============7495328656080687778==
+--===============3524767868395641498==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 
 ```
-commit 5ed620bf5df1b2a38af461580d5207eadf5c552e
+commit f89231e503dc0b97c81f4bb32d28532fb3471acd
 Author: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
 
-selftests/bpf: test_xsk: Don't exit immediately if validate_traffic fails
+selftests/bpf: test_xsk: Don't exit immediately when workers fail
 
-This changes __testapp_validate_traffic() to return TEST_FAILURE instead
-of calling exit_with_error(), and adds cleanup for sockets and umem
-before returning on pthread_barrier_destroy() failure.
+This commit converts the test program from using exit_with_error()
+(which immediately terminates) to proper error propagation through
+return values. This allows the test suite to continue running after
+failures.
 
 > diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
-> index 2c392d5b9..18a6ce648 100644
+> index 2c955e109..2c392d5b9 100644
 > --- a/tools/testing/selftests/bpf/test_xsk.c
 > +++ b/tools/testing/selftests/bpf/test_xsk.c
-> @@ -1772,12 +1772,12 @@ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *i
->  	err = test_spec_set_mtu(test, test->mtu);
->  	if (err) {
->  		ksft_print_msg("Error, could not set mtu.\n");
-> -		exit_with_error(err);
-> +		return TEST_FAILURE;
->  	}
->
->  	if (ifobj2) {
->  		if (pthread_barrier_init(&barr, NULL, 2))
-> -			exit_with_error(errno);
-> +			return TEST_FAILURE;
->  		pkt_stream_reset(ifobj2->xsk->pkt_stream);
->  	}
->
 
 [ ... ]
 
-> @@ -1791,8 +1791,11 @@ static int __testapp_validate_traffic(struct test_spec *test, struct ifobject *i
+> @@ -759,7 +761,7 @@ static bool is_metadata_correct(struct pkt *pkt, void *buffer, u64 addr)
+>  	return true;
+>  }
 >
->  	if (ifobj2) {
->  		pthread_barrier_wait(&barr);
-> -		if (pthread_barrier_destroy(&barr))
-> -			exit_with_error(errno);
-> +		if (pthread_barrier_destroy(&barr)) {
-> +			clean_sockets(test, ifobj1);
-> +			clean_umem(test, ifobj1, NULL);
-> +			return TEST_FAILURE;
+> -static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
+> +static int is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx, bool *supported)
+>  {
+>  	struct bpf_map *data_map;
+>  	int adjust_value = 0;
+> @@ -769,19 +771,21 @@ static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
+>  	data_map = bpf_object__find_map_by_name(skel_rx->obj, "xsk_xdp_.bss");
+>  	if (!data_map || !bpf_map__is_internal(data_map)) {
+>  		ksft_print_msg("Error: could not find bss section of XDP program\n");
+> -		exit_with_error(errno);
+> +		return -EINVAL;
+>  	}
+>
+>  	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &key, &adjust_value);
+>  	if (ret) {
+>  		ksft_print_msg("Error: bpf_map_lookup_elem failed with error %d\n", ret);
+> -		exit_with_error(errno);
+> +		return ret;
+>  	}
+>
+>  	/* Set the 'adjust_value' variable to -EOPNOTSUPP in the XDP program if the adjust_tail
+>  	 * helper is not supported. Skip the adjust_tail test case in this scenario.
+>  	 */
+> -	return adjust_value != -EOPNOTSUPP;
+> +	*supported = adjust_value != -EOPNOTSUPP;
+> +
+> +	return 0;
+>  }
+
+[ ... ]
+
+> @@ -1584,29 +1614,41 @@ void *worker_testapp_validate_rx(void *arg)
+>  	int err;
+>
+>  	if (test->current_step == 1) {
+> -		thread_common_ops(test, ifobject);
+> +		err = thread_common_ops(test, ifobject);
+>  	} else {
+>  		xsk_clear_xskmap(ifobject->xskmap);
+>  		err = xsk_update_xskmap(ifobject->xskmap, ifobject->xsk->xsk, 0);
+> -		if (err) {
+> +		if (err)
+>  			ksft_print_msg("Error: Failed to update xskmap, error %s\n",
+>  				       strerror(-err));
+> -			exit_with_error(-err);
+> -		}
+>  	}
+>
+>  	pthread_barrier_wait(&barr);
+>
+> +	/* We leave only now in case of error to avoid getting stuck in the barrier */
+> +	if (err) {
+> +		test->fail = true;
+> +		pthread_exit(NULL);
+> +	}
+> +
+>  	err = receive_pkts(test);
+>
+>  	if (!err && ifobject->validation_func)
+>  		err = ifobject->validation_func(ifobject);
+>
+>  	if (err) {
+> -		if (test->adjust_tail && !is_adjust_tail_supported(ifobject->xdp_progs))
+> -			test->adjust_tail_support = false;
+> -		else
+> +		if (!test->adjust_tail) {
+>  			test->fail = true;
+> +		} else {
+> +			bool supported;
+> +
+> +			if (is_adjust_tail_supported(ifobject->xdp_progs, &supported))
+> +				test->fail = true;
+> +			if (!supported)
+> +				test->adjust_tail_support = false;
+> +			else
+> +				test->fail = true;
 > +		}
->
->  		/*Spawn TX thread */
->  		pthread_create(&t1, NULL, ifobj2->func_ptr, test);
+>  	}
 
-In __testapp_validate_traffic(), thread t0 is created via pthread_create()
-before the barrier operations. If pthread_barrier_destroy() fails, can this
-leak thread t0?
+Can the 'supported' variable be read uninitialized here? When
+is_adjust_tail_supported() returns an error (non-zero), it doesn't
+write to the *supported output parameter. The function returns early
+from either the data_map check or bpf_map_lookup_elem() failure without
+setting *supported. Then the code unconditionally checks "if (!supported)"
+which would read uninitialized stack memory.
 
-The pthread_create(&t0, ...) happens earlier in the function. The normal
-execution paths handle t0 via pthread_kill() or pthread_join(), but when
-pthread_barrier_destroy() fails, the new error path calls clean_sockets()
-and clean_umem() but never joins or kills t0 before returning TEST_FAILURE.
+The control flow is:
+  is_adjust_tail_supported() returns error
+  -> test->fail = true is set
+  -> execution continues to "if (!supported)"
+  -> reads uninitialized 'supported' variable
 
-The commit message says "Release the resource of the 1st thread if a
-failure happens between its creation and the creation of the second
-thread", but the code only releases sockets and umem.
+Should this be structured with an else clause to only check 'supported'
+when is_adjust_tail_supported() returns success?
 
 
 ```
@@ -130,8 +187,8 @@ thread", but the code only releases sockets and umem.
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-In-Reply-To-Subject: `selftests/bpf: test_xsk: Don't exit immediately if validate_traffic fails`
+In-Reply-To-Subject: `selftests/bpf: test_xsk: Don't exit immediately when workers fail`
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/18910697393
 
---===============7495328656080687778==--
+--===============3524767868395641498==--
 
