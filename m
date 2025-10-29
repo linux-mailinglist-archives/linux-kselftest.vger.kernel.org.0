@@ -1,194 +1,120 @@
-Return-Path: <linux-kselftest+bounces-44298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADBE3C1B3D3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 15:35:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E49FC1B94F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 16:15:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E62741A63534
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 14:26:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D383C581590
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Oct 2025 13:55:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6CCF29B778;
-	Wed, 29 Oct 2025 14:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76DBF289E13;
+	Wed, 29 Oct 2025 13:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tyzeamCx"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QLYfDHhi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EAE279DAD;
-	Wed, 29 Oct 2025 14:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0991C84A1
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 13:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761747957; cv=none; b=tCGMkbH0V0IzXg8+zcI+mHjnpq8xeqGpJ98gAiCPd5hYKIW09Mf20hzyUKHFLOSZoIdSeiiEdXuvBz3GyuBjdSLBs4xRpxXWK0S4N9PLbalSOkMzTMutdeP/VFGdUPAbqaJWWzqM9lOSdwcdqx+W52VfaUa6ESQ3/S+dN/lnftk=
+	t=1761745471; cv=none; b=aMjsPojWW7D+fWh4kAReiIZqqUtuH83XO47rZlN5BTjL6OLMkfcS+f08kYYHf9p1M6WCkau1PoaGdiSxZgqVwjVeP2QAM+vmXoSqwbJMpWvsat8+XXdDYvajDVzsyhJ7zz8KCj4NcezaRNKwuSqY2HNz4pNZJZxV+gUGJdPlob0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761747957; c=relaxed/simple;
-	bh=/+m6iaLC0y8uWmkcCY6x46zjKoMEvP59Em2DnUNlUQQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=diA7VjPN++5vTwB68fQ9EfJuG5a5cuUzKZqkwu1/XX9TQ0y1PPnp+UKVIHa2TuofyXycddgTOwk02NA9RI+s64kHhU1wFppl6KqAyCj1mfgJFbmbdSc/fyj310GEVMtq7yERC07f9hrxIfQCj4IKHKFzbpt6tPVAbX1Obp/kwok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tyzeamCx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5AEAC4CEF8;
-	Wed, 29 Oct 2025 14:25:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761747957;
-	bh=/+m6iaLC0y8uWmkcCY6x46zjKoMEvP59Em2DnUNlUQQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=tyzeamCxzKQNjRoRx/GdN3bKl+3qM4dQEvmBtQC9RnsBFsXj+OmD29nwII9XnqHHS
-	 yp4CVGDsaxCKMYQbhRcdjjzWfmzs2aszsf/DSeQUoqIqftsQ6LCGdQiVwcbpx4p6Vh
-	 +4iu2EorZg668PD06pWjAmISJoPmG73YPbc4lZNhmkobdgjdii5pYAfGeENbiyNBsj
-	 c8JyOVD78DBgAf0RYVCyuAvRH8zoUWsUfcNLZuT8sbNH4WGqNaHT9xHbSKCGobzECi
-	 mor1Fg+QN/K51Q4Ki0r6X546M5fM12Oqo9VClqs08BWs6KaaYaBKHDOTcqIHI9V70S
-	 1eUYT3bn41r7w==
-Content-Type: multipart/mixed; boundary="===============3524767868395641498=="
+	s=arc-20240116; t=1761745471; c=relaxed/simple;
+	bh=akTAlOlvCXgUUeWkN15YYuyCcdmX6JZE7gXZRKSDbwg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GT5WTzKS4/DZsApKsfoEbgxt0cohCaSxWbuQiG0EYiwwk5JJY7wh1NeYq2aXy/gbiBimsYDq1UnTo6xlIFyeLllzleOwK2oL9MlZmO8Tdkocj8MhLTtAwRiqA+JPGPpKVjEirpdOyObPM0F2UegwB7hB/VMDmxOkdTrSDxF4lj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QLYfDHhi; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-93e2d42d9b4so306629639f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 06:44:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1761745469; x=1762350269; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zdhm4zDRyUmcL/+bkn0abpwAMWivZMM0K7ilDnHJ6Z8=;
+        b=QLYfDHhi5p+4MJ3s42KwufjiLMyEPRiywAqZhkzFNaatH+elh7n4qWz34qwXtkgOk+
+         jCeZnBmMM58OfFdksdU3PSK9qlrZhIJkZbgP2/7TBZaWdY2Oyp2c+TqUBax0rmGqoE+v
+         SDdHqjv4fcbr9uLHCFzGcG++spQypPQAP1WQs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761745469; x=1762350269;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdhm4zDRyUmcL/+bkn0abpwAMWivZMM0K7ilDnHJ6Z8=;
+        b=VxPFMwArmJrud8HQBUck079G1OxekYx4LAboIXtN1UW00Cx9GzXzMr2nPnzic9fS0P
+         gq8HtMjNIhqdxqXahp2XL+MTsI64k4GLLCEzVy3usrqz+LZRjnMI60UQeHy3NQHNDsfk
+         letXos5hz4Q6mh80joWJOqySNpMInOP0iiqdpwUwx165gewk+nvBYGtgvb3QJfewZ2S6
+         yU+TN+Orcx+/wT0sjZknR3NlCqscD5h96tnsu/SoTiqRH3eyiqRV6TTub+KzIxjIzA8b
+         l0+HTXCHkbl+lHdupJReJPNeKWoSr5ZgvA7KFMqjtMw/TrxTufz33zZSyAoYG68jkn7z
+         qvLg==
+X-Forwarded-Encrypted: i=1; AJvYcCVTvCBYVfkOTy92ohk+cRkhMVCbJmr59IefGliGwS4dzMcvM2F2rGgJGn9/XYxOPthcIp5JBD2OkRGjplrnoAQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdZsswFe67s9HXsGPNUu+LqYjTtpg3G1jLpnipxY4Y8EV/c51E
+	9wA41dgSKI6r9T2AuMs0NuqtLq/l3IKbXO/q6WgXFSrBqRee3luIg8xlfM/RyAlEVUQ=
+X-Gm-Gg: ASbGncvgcN14BduAbGmzIGbufDFI1VNmhu//6rG01IUvahjoB0/g88ZUtCN9tMfprlO
+	DdUMNHvLJNb+cHxXBos170CI0aHpHItuhLBE+jzNIDEBEjNRqF4FJ5D4mjj7TE/cpCPyohbEZUv
+	q7HIHRN1tBvRKfkBoBLl5RPRikSjaMby6sxCbOHNiZC/+Y9iOvOr83dX0jaaxwG9wlQ/aRfrPWi
+	4Q4m+5RZ4kvv7fI+veBzKP/LFfUtTYjcVRbZ5+oSwYgOAPkL2po/OQ8iejjBkrF+8W/bcHve8EN
+	g2NH2WYl3UUnhq07uEMuZUEJUyhR/xnPQedKINlNbilgSvI2z3+svtdjEyiRcfGhJar+TXznHWY
+	X1HGAClRODbYw3eJxWDO43epIkOiP6PegZItT9DCPFdbMJhYVGu74Q5iHWRA2LNZ2hUirfGfUMA
+	uhJPZHqXEHA5As
+X-Google-Smtp-Source: AGHT+IHLYcDl503ydPp3Vo6nK53Sk01A2+YXNVgZQH4qpA8YmD8SAR5tkVmYDEsWC24bVzDxjEr3wQ==
+X-Received: by 2002:a05:6602:148a:b0:945:b86b:d810 with SMTP id ca18e2360f4ac-945c988a604mr450513439f.16.1761745468759;
+        Wed, 29 Oct 2025 06:44:28 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-94359f316basm466022139f.19.2025.10.29.06.44.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Oct 2025 06:44:28 -0700 (PDT)
+Message-ID: <e7fbebca-ffe6-409c-bd52-848cc2a3ad27@linuxfoundation.org>
+Date: Wed, 29 Oct 2025 07:44:27 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5c1c4101d42cc486366273556492d9be559f521d16629bbcd6b3adc6a4b746f0@mail.kernel.org>
-In-Reply-To: <20251029-xsk-v6-11-5a63a64dff98@bootlin.com>
-References: <20251029-xsk-v6-11-5a63a64dff98@bootlin.com>
-Subject: Re: [PATCH bpf-next v6 11/15] selftests/bpf: test_xsk: Don't exit immediately when workers fail
-From: bot+bpf-ci@kernel.org
-To: bastien.curutchet@bootlin.com,bjorn@kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,jonathan.lemon@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,mykolal@fb.com,shuah@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org
-Cc: thomas.petazzoni@bootlin.com,alexis.lothore@bootlin.com,netdev@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,bastien.curutchet@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 29 Oct 2025 14:25:54 +0000 (UTC)
-
---===============3524767868395641498==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] MAINTAINERS: Update KUnit email address for Rae Moar
+To: David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20251028194010.519411-1-rmoar@google.com>
+ <CABVgOSkxLKkT7+sa53x4dUsCiG3m=uGmrd9ko3GwjnwGPmonfQ@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CABVgOSkxLKkT7+sa53x4dUsCiG3m=uGmrd9ko3GwjnwGPmonfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+On 10/29/25 01:18, David Gow wrote:
+> On Wed, 29 Oct 2025 at 03:40, Rae Moar <rmoar@google.com> wrote:
+>>
+>> Update Rae's email address for the KUnit entry. Also add an entry to
+>> .mailmap to map former google email to current gmail address.
+>>
+>> Signed-off-by: Rae Moar <rmoar@google.com>
+>> ---
+>> I am leaving Google and am going through and cleaning up my @google.com
+>> address in the relevant places. Note that Friday, November 7 2025 is my
+>> last day at Google after which I will lose access to this email account
+>> so any future updates or comments after Friday will come from my
+>> @gmail.com account.
+>>
+> 
+> Thanks very much, Rae! Best of luck!
+> 
+> Reviewed-by: David Gow <davidgow@google.com>
 
-```
-commit f89231e503dc0b97c81f4bb32d28532fb3471acd
-Author: Bastien Curutchet (eBPF Foundation) <bastien.curutchet@bootlin.com>
+Thank you Rae and best of luck. I will apply and send it up this week
+with kunit fixes update
 
-selftests/bpf: test_xsk: Don't exit immediately when workers fail
-
-This commit converts the test program from using exit_with_error()
-(which immediately terminates) to proper error propagation through
-return values. This allows the test suite to continue running after
-failures.
-
-> diff --git a/tools/testing/selftests/bpf/test_xsk.c b/tools/testing/selftests/bpf/test_xsk.c
-> index 2c955e109..2c392d5b9 100644
-> --- a/tools/testing/selftests/bpf/test_xsk.c
-> +++ b/tools/testing/selftests/bpf/test_xsk.c
-
-[ ... ]
-
-> @@ -759,7 +761,7 @@ static bool is_metadata_correct(struct pkt *pkt, void *buffer, u64 addr)
->  	return true;
->  }
->
-> -static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
-> +static int is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx, bool *supported)
->  {
->  	struct bpf_map *data_map;
->  	int adjust_value = 0;
-> @@ -769,19 +771,21 @@ static bool is_adjust_tail_supported(struct xsk_xdp_progs *skel_rx)
->  	data_map = bpf_object__find_map_by_name(skel_rx->obj, "xsk_xdp_.bss");
->  	if (!data_map || !bpf_map__is_internal(data_map)) {
->  		ksft_print_msg("Error: could not find bss section of XDP program\n");
-> -		exit_with_error(errno);
-> +		return -EINVAL;
->  	}
->
->  	ret = bpf_map_lookup_elem(bpf_map__fd(data_map), &key, &adjust_value);
->  	if (ret) {
->  		ksft_print_msg("Error: bpf_map_lookup_elem failed with error %d\n", ret);
-> -		exit_with_error(errno);
-> +		return ret;
->  	}
->
->  	/* Set the 'adjust_value' variable to -EOPNOTSUPP in the XDP program if the adjust_tail
->  	 * helper is not supported. Skip the adjust_tail test case in this scenario.
->  	 */
-> -	return adjust_value != -EOPNOTSUPP;
-> +	*supported = adjust_value != -EOPNOTSUPP;
-> +
-> +	return 0;
->  }
-
-[ ... ]
-
-> @@ -1584,29 +1614,41 @@ void *worker_testapp_validate_rx(void *arg)
->  	int err;
->
->  	if (test->current_step == 1) {
-> -		thread_common_ops(test, ifobject);
-> +		err = thread_common_ops(test, ifobject);
->  	} else {
->  		xsk_clear_xskmap(ifobject->xskmap);
->  		err = xsk_update_xskmap(ifobject->xskmap, ifobject->xsk->xsk, 0);
-> -		if (err) {
-> +		if (err)
->  			ksft_print_msg("Error: Failed to update xskmap, error %s\n",
->  				       strerror(-err));
-> -			exit_with_error(-err);
-> -		}
->  	}
->
->  	pthread_barrier_wait(&barr);
->
-> +	/* We leave only now in case of error to avoid getting stuck in the barrier */
-> +	if (err) {
-> +		test->fail = true;
-> +		pthread_exit(NULL);
-> +	}
-> +
->  	err = receive_pkts(test);
->
->  	if (!err && ifobject->validation_func)
->  		err = ifobject->validation_func(ifobject);
->
->  	if (err) {
-> -		if (test->adjust_tail && !is_adjust_tail_supported(ifobject->xdp_progs))
-> -			test->adjust_tail_support = false;
-> -		else
-> +		if (!test->adjust_tail) {
->  			test->fail = true;
-> +		} else {
-> +			bool supported;
-> +
-> +			if (is_adjust_tail_supported(ifobject->xdp_progs, &supported))
-> +				test->fail = true;
-> +			if (!supported)
-> +				test->adjust_tail_support = false;
-> +			else
-> +				test->fail = true;
-> +		}
->  	}
-
-Can the 'supported' variable be read uninitialized here? When
-is_adjust_tail_supported() returns an error (non-zero), it doesn't
-write to the *supported output parameter. The function returns early
-from either the data_map check or bpf_map_lookup_elem() failure without
-setting *supported. Then the code unconditionally checks "if (!supported)"
-which would read uninitialized stack memory.
-
-The control flow is:
-  is_adjust_tail_supported() returns error
-  -> test->fail = true is set
-  -> execution continues to "if (!supported)"
-  -> reads uninitialized 'supported' variable
-
-Should this be structured with an else clause to only check 'supported'
-when is_adjust_tail_supported() returns success?
-
-
-```
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-In-Reply-To-Subject: `selftests/bpf: test_xsk: Don't exit immediately when workers fail`
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/18910697393
-
---===============3524767868395641498==--
+thanks,
+-- Shuah
 
