@@ -1,162 +1,127 @@
-Return-Path: <linux-kselftest+bounces-44397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 797B9C1FECC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 13:05:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5497C20035
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 13:29:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1B1A34EBB56
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 12:04:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77CB51A20113
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 12:27:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB15D335BAF;
-	Thu, 30 Oct 2025 12:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D383126AC;
+	Thu, 30 Oct 2025 12:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hEA+RQhV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8461831D377;
-	Thu, 30 Oct 2025 12:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283AF2F12CC
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 12:26:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761825803; cv=none; b=pSAEbGUG7FTZbLWPSWRVprkXBL1C3etSLWZ6ERK/bEJ5I8ERqd+utLW/61aWvLRkVxm727l0bKRozkvKpaR5R08k0XugDlRmqAE6buzxM0+Fpuo6YjP1+Ww2q6HVnywtXhm5smNet4Jp/Lo8HJSNRqEQX16IlmI5uThSvo2H23c=
+	t=1761827215; cv=none; b=JCqV0QJIGbs0+/m3oxk512qA+/uvJVU8tnR+iSTxZwgipNTnnCQ8wd08kiqZVlU/bcktUu//QtJhjtXHaz+/B/8tXnoUPJ2IdtvSc35uAULtQy6TY41Jn4UF+kdrfoeqFZxeh5sWw9RlaJlLUafG4g6V7JBXGkLCvDnUJ1YF//I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761825803; c=relaxed/simple;
-	bh=YTZHOtTHA/gNt2NqNII9StP3tPvo/XXImIK2lbKGRvk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ARqKmLHc8DBtrWe7y/PO15567F72521yodo28ybBh2C8okCwlDNT9PZkTg1An0n7QZcYLHb+uRuTGKk/LLxFKLayqUIBIPoWCfOV/Faf6aT4PPPlL0pLsLMzufh4SKJ9VxKXO3SobKdeLvFHtsE7m0LVB2wsbddoyr8n719wpJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4cy2m52xpBzKHMlw;
-	Thu, 30 Oct 2025 20:02:13 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id EB0A31A0847;
-	Thu, 30 Oct 2025 20:03:12 +0800 (CST)
-Received: from [10.67.111.192] (unknown [10.67.111.192])
-	by APP2 (Coremail) with SMTP id Syh0CgBH6UH6UwNpQHx+CA--.42489S3;
-	Thu, 30 Oct 2025 20:03:12 +0800 (CST)
-Message-ID: <5dab3b98-9134-4ee9-8cd1-2498c3eab49e@huaweicloud.com>
-Date: Thu, 30 Oct 2025 20:03:12 +0800
+	s=arc-20240116; t=1761827215; c=relaxed/simple;
+	bh=d9/zvrjKXYg+QYrj/8LeTZG6rpOZbM+r7q2gKiYKqJo=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=q56K5bkJlKN0+/4CQtU0Gwqcs0uvIv/WSTytlbGjmKcKjNaL2i38z5A/bsNd17Kd+CdG85jqNCjQmRj35xtOMR9ZfcET3wyrHPLYHRZtB/3eVuil/4Y+Vlip9iRJLz6WTeKxcLTYxH0TVmpK1rcGsu1HUq0c3SzAxFx3KsxYs5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hEA+RQhV; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4ed0aef49abso10202401cf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 05:26:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761827213; x=1762432013; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XK1leWk0uoFzx3ZfDZcnhZKJLtFjNiryXl9rvCCnzAQ=;
+        b=hEA+RQhVvaTCJNVXVSPTdZGCzPpEmBj3WG+f7SlT09yq50fbPrdveR60aidzhSyNmH
+         1p9zowtvvXi5G6boIvylTCcDYdAZHT/TWkNuvhzpn3R3F1Cj/3Nc9ax15srWSwpPZas6
+         DTyMv1hjn2FJwFlLhkDc8NDmUpV3mFhvCGFUCm0nfZQ2SoNOG1xhyd7zbR/LLNiHaRaV
+         bQnA8TE2vW0CF5sH4pMQby5A3eldEHLTo1VsLDSR/fHRgseEAWdpjTqUeCBiL5UGG+N1
+         ElDtlem11qSQr6LesPVdebPleBzc8BZMSkhqQj5+OSC038qEjhNPbYHxntSZUvLgxCoS
+         WWIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761827213; x=1762432013;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XK1leWk0uoFzx3ZfDZcnhZKJLtFjNiryXl9rvCCnzAQ=;
+        b=KIQF8uKjGERhomidmQV+qBUDZOlAiBVWlgdxeUW9HHF9CNzCYUeSWqSMsHC3sbCRH1
+         YmyfoQkflecgbTAfKDhRRMcULwQ7IU1W54Bf8mJnpzpYfZabvBzYG5Y9xdpVUWfnUzsJ
+         CR42R8Ze9ZsSI6WTWlGmQf/Cvxr3etPulY7unjPQMjKtzpenFZPVKH6AtsL/6hNCwuf3
+         Gf9ZnjvfMQ0uAP6PtV0gIkkbYq0Wi4paL+/ejtnDBGZxMF6rJkfWBba8iTDes5lrHRHm
+         sRKeBbOjX6TYtURJtcDOhVh1AzKuX+T69IaXwhO5x0EmoWxt2Ia0b/povq74zA0XOaLM
+         hM6g==
+X-Forwarded-Encrypted: i=1; AJvYcCWlz3nmETY0hW9yMOHO6n568G2E9EkITVEiFiCL6HakM0KK+Iqz+mURboH1ve7gI6W8UND+5OFVJ3F6rjO6v3g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAjIzGagzC5TZhhzaLI1sDR1aD0Ic6ymB32xezbtPZsAX8Q7E4
+	IEHfHUGcwGdcfiEI3pgVKfoTdTzmT2m0MYBCn9KFDt0ghV2yFyb9BKRq
+X-Gm-Gg: ASbGncuHc3ajsPYkQWJT+yZOteO5BF95rgn7e1IsSszoCv4K2z3TAj7XMXjssKFFca5
+	tAih2/si2pRFbAyZCd8Q5wq3vDENAfFBEz7gve5oJZ8qgEnZBPlybwbUaZCcGbamdtze3f4Iagt
+	hEvLQEfohyKdRTdho1XmeflPr91vYC4vzlisVzfnDd3P6s0GhzyO+aSTiM+if8UviouXgbdNw8o
+	u/lfY0GLM0AYMxFlmKB5X4PSBLM3Lp5aLmJZWFdfXsQwfS/vx8upmMDL+8rV7mkvfnnKgFpmDQv
+	73jcG2tZZjhg6O51rgAb8sZsJrR7HeWeKRIjZcmyVNrS+VfAq2qg3DyumR1TjicSjIF0NQo2qq4
+	YY1tGpGZKJsdYGUzypnLRrewDPRSzBVjFgIXp7dJ9RAhSn0Bo2/3nkqabX5Zuhw60DfWCY6YYfc
+	9xMip/dtWwHsG0FkjQ7rBFh6RYVBTq2yIGLVgQM/L7PWNf52eFFIKy
+X-Google-Smtp-Source: AGHT+IE3veiBOtkriA2O+bI9hXSGvHwgX2QoH8sB+O1LcfgeWybMR21FkAqWM/FAYBGpbjpV2ybS6A==
+X-Received: by 2002:a05:622a:198c:b0:4ec:4827:f601 with SMTP id d75a77b69052e-4ed2213c2f3mr34333001cf.26.1761827212916;
+        Thu, 30 Oct 2025 05:26:52 -0700 (PDT)
+Received: from gmail.com (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-4eba37d72ecsm114282391cf.9.2025.10.30.05.26.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Oct 2025 05:26:51 -0700 (PDT)
+Date: Thu, 30 Oct 2025 08:26:51 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Anubhav Singh <anubhavsinggh@google.com>, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Willem de Bruijn <willemb@google.com>, 
+ Coco Li <lixiaoyan@google.com>, 
+ Anubhav Singh <anubhavsinggh@google.com>
+Message-ID: <willemdebruijn.kernel.1ebc537b3da9e@gmail.com>
+In-Reply-To: <20251030062818.1562228-1-anubhavsinggh@google.com>
+References: <20251030055714.1553346-1-anubhavsinggh@google.com>
+ <20251030062818.1562228-1-anubhavsinggh@google.com>
+Subject: Re: [PATCH net v2] selftests/net: fix out-of-order delivery of FIN in
+ gro:tcp test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/3] selftests/bpf: Add overwrite mode test
- for BPF ring buffer
-Content-Language: en-US
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Yonghong Song <yhs@fb.com>, Song Liu <song@kernel.org>
-References: <20251018035738.4039621-1-xukuohai@huaweicloud.com>
- <20251018035738.4039621-3-xukuohai@huaweicloud.com>
- <CAEf4BzZQfSBTqPwHE7fMTO1CbuoCYkFthUkCGvq3qT5CnT3-Eg@mail.gmail.com>
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-In-Reply-To: <CAEf4BzZQfSBTqPwHE7fMTO1CbuoCYkFthUkCGvq3qT5CnT3-Eg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgBH6UH6UwNpQHx+CA--.42489S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxWry5JF1fWFW5tF1fCFWfZrb_yoW5Aw15pa
-	yrKFyYkrn2yFy2gr1fuFy2qFW09r1kArWFkr4xtw1rZr1UCFWxJryI9F4UKan3JrWFvr1F
-	y34jgF93u3WUKFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUPjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-	A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw
-	0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AK
-	xVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrx
-	kI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v2
-	6r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8Jw
-	CI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2uyIUUUU
-	U
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On 10/28/2025 10:47 AM, Andrii Nakryiko wrote:
-> On Fri, Oct 17, 2025 at 9:04 PM Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->>
->> From: Xu Kuohai <xukuohai@huawei.com>
->>
->> Add overwrite mode test for BPF ring buffer. The test creates a BPF ring
->> buffer in overwrite mode, then repeatedly reserves and commits records
->> to check if the ring buffer works as expected both before and after
->> overwriting occurs.
->>
->> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
->> ---
->>   tools/testing/selftests/bpf/Makefile          |  3 +-
->>   .../selftests/bpf/prog_tests/ringbuf.c        | 64 ++++++++++++
->>   .../bpf/progs/test_ringbuf_overwrite.c        | 98 +++++++++++++++++++
->>   3 files changed, 164 insertions(+), 1 deletion(-)
->>   create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_overwrite.c
->>
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index f00587d4ede6..43d133bf514d 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -498,7 +498,8 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h               \
->>
->>   LSKELS := fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c  \
->>          core_kern.c core_kern_overflow.c test_ringbuf.c                 \
->> -       test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c
->> +       test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
->> +       test_ringbuf_overwrite.c
->>
->>   LSKELS_SIGNED := fentry_test.c fexit_test.c atomics.c
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/ringbuf.c b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
->> index d1e4cb28a72c..5264af1dc768 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/ringbuf.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/ringbuf.c
->> @@ -17,6 +17,7 @@
->>   #include "test_ringbuf_n.lskel.h"
->>   #include "test_ringbuf_map_key.lskel.h"
->>   #include "test_ringbuf_write.lskel.h"
->> +#include "test_ringbuf_overwrite.lskel.h"
->>
->>   #define EDONE 7777
->>
->> @@ -497,6 +498,67 @@ static void ringbuf_map_key_subtest(void)
->>          test_ringbuf_map_key_lskel__destroy(skel_map_key);
->>   }
->>
->> +static void ringbuf_overwrite_mode_subtest(void)
->> +{
->> +       unsigned long size, len1, len2, len3, len4, len5;
->> +       unsigned long expect_avail_data, expect_prod_pos, expect_over_pos;
->> +       struct test_ringbuf_overwrite_lskel *skel;
->> +       int err;
->> +
->> +       skel = test_ringbuf_overwrite_lskel__open();
->> +       if (!ASSERT_OK_PTR(skel, "skel_open"))
->> +               return;
->> +
->> +       size = 0x1000;
+Anubhav Singh wrote:
+> Due to the gro_sender sending data packets and FIN packets
+> in very quick succession, these are received almost simultaneously
+> by the gro_receiver. FIN packets are sometimes processed before the
+> data packets leading to intermittent (~1/100) test failures.
 > 
-> this will fail on architecture with page size != 4KB, I adjusted this
-> to use page_size, len1 to page_size / 2 and len2 to page_size / 4
->
-
-Ah, good catch, thanks for fixing it!
-
->> +       len1 = 0x800;
->> +       len2 = 0x400;
->> +       len3 = size - len1 - len2 - BPF_RINGBUF_HDR_SZ * 3; /* 0x3e8 */
->> +       len4 = len3 - 8; /* 0x3e0 */
->> +       len5 = len3; /* retry with len3 */
->> +
+> This change adds a delay of 100ms before sending FIN packets
+> in gro:tcp test to avoid the out-of-order delivery. The same
+> mitigation already exists for the gro:ip test.
 > 
-> [...]
+> Fixes: 7d1575014a63 ("selftests/net: GRO coalesce test")
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
+> Signed-off-by: Anubhav Singh <anubhavsinggh@google.com>
+> ---
+> Changes in v2:
+>  - Add 'Shuah Khan <shuah@kernel.org>' to the CC list.
 
+Remember to not repost within 24 hours:
+
+https://kernel.org/doc/html/latest/process/maintainer-netdev.html#tl-dr
 
