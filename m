@@ -1,167 +1,127 @@
-Return-Path: <linux-kselftest+bounces-44437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDEF1C212EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 17:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33489C2130D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 17:30:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B3BE562405
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 16:26:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1AE8563302
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 16:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A98F366FCF;
-	Thu, 30 Oct 2025 16:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFA273678A2;
+	Thu, 30 Oct 2025 16:27:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Wr67yKJ4";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="D+oqUsGa";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Wr67yKJ4";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="D+oqUsGa"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PSfXjPME"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B4F3655FA
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 16:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16F425784A;
+	Thu, 30 Oct 2025 16:27:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761841565; cv=none; b=WWuB884LS/vg1scPAM7f2RldMxguPzOjJVsytLoRZF+/iI2JdF6DV8spPV9gXPYNRXrAu75xWzGDD5FkyxvtZgxd+j+sfK3OA69s+szWLQt3inYaIOTrEhDspMtoO+jN/YTR/2HJGPlluxX2HHVBViwo2EDHKLudud59fUB+toU=
+	t=1761841633; cv=none; b=FP3wK9M2Mr864NTNpPlZHR7+I9lxADBqCM9nelE+wXlUEtWpC8mdeSuJn+bi2Akqh5bnJPiIXWY4XZtFOUq1cy3sh0bzcHd1RxHkI2fJNCmhaKx/IABZAMxECO5MOPyBxqT0nBkddW83jympSdD6p+CFSi1zsIP8zNJcAfSwtAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761841565; c=relaxed/simple;
-	bh=tzp1RPz9J6cF5ewTGOUXuNYVp2WUlMURNL2v6N9EIjE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ElwefDwqZkGVk2mBR1n+qrYX50yehVwyX3jlPxV4QNijMwLBd1TmDs4JGSX403h5L2jcu/YbmCKCgT1ga848WDdXE8kh6bbgNMtq7ZcqsF4JGyOitlhyfzvft9ffGvBf2XMOxRG/PsczdF0WBvC4d8MgBjYYsXpXbg8KLwrRRYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Wr67yKJ4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=D+oqUsGa; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Wr67yKJ4; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=D+oqUsGa; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 6B776337A4;
-	Thu, 30 Oct 2025 16:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761841562; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y45ny24R7zem9vCEHKWr8/ZHpLbSWhPSrqSC/spGVIw=;
-	b=Wr67yKJ4CtPObOAKIVbuQJ9uY1Mk/MgeJUi4m6VsB6BWlU0F0w3slr/L7uxGX4UIVenmYG
-	FVooJOrHZxMD/LXTl1NWfVDmDpsPcFAepG2c3+9mRbdmLpk/tAp/3f6fhAHmZQkmiFApmK
-	dN1RFs/oz0bT5pWP2kremYVE/gbgeeQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761841562;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y45ny24R7zem9vCEHKWr8/ZHpLbSWhPSrqSC/spGVIw=;
-	b=D+oqUsGaCNVth5UJ+jVZ9a4MlY9qTQC2zol7+YlVgHZwEw4ExmMJUEvovqmF7TEqS4ZDTF
-	1G1QbvzD5qIGfHCg==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761841562; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y45ny24R7zem9vCEHKWr8/ZHpLbSWhPSrqSC/spGVIw=;
-	b=Wr67yKJ4CtPObOAKIVbuQJ9uY1Mk/MgeJUi4m6VsB6BWlU0F0w3slr/L7uxGX4UIVenmYG
-	FVooJOrHZxMD/LXTl1NWfVDmDpsPcFAepG2c3+9mRbdmLpk/tAp/3f6fhAHmZQkmiFApmK
-	dN1RFs/oz0bT5pWP2kremYVE/gbgeeQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761841562;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y45ny24R7zem9vCEHKWr8/ZHpLbSWhPSrqSC/spGVIw=;
-	b=D+oqUsGaCNVth5UJ+jVZ9a4MlY9qTQC2zol7+YlVgHZwEw4ExmMJUEvovqmF7TEqS4ZDTF
-	1G1QbvzD5qIGfHCg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0369B1396A;
-	Thu, 30 Oct 2025 16:25:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id rF/mOJeRA2m3FgAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Thu, 30 Oct 2025 16:25:59 +0000
-Date: Thu, 30 Oct 2025 16:25:54 +0000
-From: Pedro Falcato <pfalcato@suse.de>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH 2/3] mm: implement sticky, copy on fork VMA flags
-Message-ID: <jmyrkglrrdxtdkcnovmkcxbk64zgfpp6r3e33bquixkvoxl45r@zcnwp3v2ucbp>
-References: <cover.1761756437.git.lorenzo.stoakes@oracle.com>
- <ec71238fd1f735ca6e4970ccdc0abfbb60967596.1761756437.git.lorenzo.stoakes@oracle.com>
+	s=arc-20240116; t=1761841633; c=relaxed/simple;
+	bh=X8CIPBVv77pC1c5MspqiZdzd3lFev3oupZ96gyIju70=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
+	 References:In-Reply-To; b=gD10tqfzTkhyDh4g8Iq0N+8/8PMIKY/BOLXsLcf3WS9D55bgqa0Le2Nt7/9JcZ/1J0WRH7ALjPCR71Wjek8etJDY24AF+3SXHmXmRQIzFf+tYRdQrdOcv4p+Ssk8X0FQOMufp2lhCSjs2mSILNJSzRNrQ7xpve/9KP4WLWtkd8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PSfXjPME; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 0B6A84E413FD;
+	Thu, 30 Oct 2025 16:27:09 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id BC02560331;
+	Thu, 30 Oct 2025 16:27:08 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2FE7311808BEA;
+	Thu, 30 Oct 2025 17:27:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1761841627; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=lBi0Ye0OKMfCGldRnjSwq59CUYQYeOwgXqoWKNOC9sc=;
+	b=PSfXjPMETKW9F8bO8zUpxrANeYPbUILC+FMpzbLL5xoGDKcrR6yFMp+xk2eKdCSaJcBbAv
+	8a/PRmNlPVwH1EauDjmRQpmdQmpt/icwgLa/pWRQKVI+JRqbX7QQEtfYkHZholWfoJA2o9
+	AtwRKeVGP4wkcP6FfNoxb9F5LbjUADOOXjiVQL4mh2zyroRihO0tZ/M9Cmxzb2B/LSI5Ag
+	1FSpwy55lVL4a2z1JRd0uIRjmWlHbYPI4EH5ynClgRaoaQPZZdUgyFUyKwS6QPbaoDx5XK
+	NtI9+r0iEm9olhmqiU6LpI761/PAQtRxTS9yHoZJ0X7Lid+pzWJDdRAnQC/pQw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ec71238fd1f735ca6e4970ccdc0abfbb60967596.1761756437.git.lorenzo.stoakes@oracle.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:helo];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,redhat.com,oracle.com,suse.cz,kernel.org,google.com,suse.com,goodmis.org,efficios.com,vger.kernel.org,kvack.org,gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 30 Oct 2025 17:27:03 +0100
+Message-Id: <DDVSQC84SOHH.2R3VKM1MF6RMG@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Martin KaFai Lau" <martin.lau@linux.dev>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Subject: Re: [PATCH bpf-next v3 3/4] selftests/bpf: integrate
+ test_tc_tunnel.sh tests into test_progs
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <ebpf@linuxfoundation.org>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251027-tc_tunnel-v3-0-505c12019f9d@bootlin.com>
+ <20251027-tc_tunnel-v3-3-505c12019f9d@bootlin.com>
+ <1ac9d14e-4250-480c-b863-410be78ac6c6@linux.dev>
+ <DDVPPGIO5P1F.E3DWINA74BJ6@bootlin.com>
+ <efa3540a-1f52-46ca-9f49-e631a5e3e48c@linux.dev>
+In-Reply-To: <efa3540a-1f52-46ca-9f49-e631a5e3e48c@linux.dev>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Wed, Oct 29, 2025 at 04:50:32PM +0000, Lorenzo Stoakes wrote:
-> It's useful to be able to force a VMA to be copied on fork outside of the
-> parameters specified by vma_needs_copy(), which otherwise only copies page
-> tables if:
-> 
-> * The destination VMA has VM_UFFD_WP set
-> * The mapping is a PFN or mixed map
-> * The mapping is anonymous and forked in (i.e. vma->anon_vma is non-NULL)
-> 
-> Setting this flag implies that the page tables mapping the VMA are such
-> that simply re-faulting the VMA will not re-establish them in identical
-> form.
-> 
-> We introduce VM_COPY_ON_FORK to clearly identify which flags require this
-> behaviour, which currently is only VM_MAYBE_GUARD.
+On Thu Oct 30, 2025 at 5:21 PM CET, Martin KaFai Lau wrote:
+> On 10/30/25 7:04 AM, Alexis Lothor=C3=A9 wrote:
+>>>> +	int family =3D cfg->ipproto =3D=3D 6 ? AF_INET6 : AF_INET;
+>>>> +
+>>>> +	cfg->server_fd =3D start_reuseport_server(family, SOCK_STREAM,
+>>>> +						cfg->server_addr, TEST_PORT,
+>>>> +						TIMEOUT_MS, 1);
+>>>
+>>> Why reuseport is needed? Does it have issue in bind() to the same
+>>> ip/port in the later sub-test?
+>>=20
+>> Yes, I observed that is I use the bare start_server, I systematically ha=
+ve
+>> the first test passing, an all the others failing on the server startup
+>> with errno 98 (Address already in use). I have been assuming that it is =
+due
+>> to some TIME_WAIT state on the freshly closed socket, but I may be missi=
+ng
+>> something ?
+>
+> Thanks for confirming. You are right. It should be the TIME_WAIT. Using=
+=20
+> SO_REUSEPORT works but become confusing on what the test is trying to do=
+=20
+> by starting only 1 reuseport server. reuseport is usually used with >1=20
+> server listening on the same address. A better thing to do is to always=
+=20
+> setsockopt(SO_REUSEADDR) in start_server_addr for TCP.
 
-Do we want this to be sticky though? If you're looking for more granularity
-with this flag, the best option might be to stop merges from happening there.
-If not, I can imagine a VMA that merges with other VMAs far past the original
-guarded range, and thus you get no granularity (possibly, not even useful).
+Sure, I can go for start_server_addr + SO_REUSEADDR :) I'll add it as well
+in the incoming follow-up series, next to the missing open_netns checks.
 
-If you're _not_ looking for granularity, then maybe using a per-mm flag for
-guard ranges or some other solution would be superior?
+Thanks,
 
-The rest of the patch (superficially) looks good to me, though.
+Alexis
 
--- 
-Pedro
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
