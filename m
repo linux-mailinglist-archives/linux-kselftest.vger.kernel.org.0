@@ -1,187 +1,98 @@
-Return-Path: <linux-kselftest+bounces-44431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44432-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95E29C211F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 17:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3857C2122F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 17:22:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E02D1A2003A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 16:16:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8370188E607
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 16:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABB6D366FB3;
-	Thu, 30 Oct 2025 16:16:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAAE133C530;
+	Thu, 30 Oct 2025 16:21:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="IUpkgIJe";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="MZUpz6qf";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ooYG3jLR";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="40mu6gCN"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D+quNg75"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03CE3644B0
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 16:16:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7609279329
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 16:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761840987; cv=none; b=H4t9M2oC09JbC6r9NFNU6DBOg06WMqTNNwEmgkWUjzllmT7udiqmMJDMzjZR8VteGXL4sNETnja5E7whpbCQWuj3nnYgWnG52wYN1em7DW2KJQQajoj2HY3NpvHifQSjrSweMeudStML21TFSCsdoQs8r6tCnpu1egm4Mgol6h0=
+	t=1761841308; cv=none; b=EQeQbnbXucqwYYFNJ8D1KHlaYCh0i1C100U5jXrxocZzGUkR1Zo3B72XKv/RC20i3itna6KiUIyQl/+F3fqaOWKv77KmaHtj0+ckhLU22cH+QodAhgepGHmtjmUAS27P9/R6DmRE+DpkeGPSotKgXXovJFJ7H+NQslpIq2t5i7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761840987; c=relaxed/simple;
-	bh=9Q9U3TTzdCgbx/jFNysf9NDTmSrQdfgmS+5CjGCNQjg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U056tNOCm+rrAvfe93tMqSvYkEgkxhhNmsCJEqPXh9kphFV5k9gvksmIEODqeBLOtOFtt7DF7ROVBMVq4hK08+zhYMGdMtYHksfc3i8J7+PM/bn9ZCOcevCQrKsL547NUE71e0u/P6SiYTODj71m7NZA0A4TsB48ofS/4d2yI9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=IUpkgIJe; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=MZUpz6qf; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ooYG3jLR; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=40mu6gCN; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id EBB591FBB4;
-	Thu, 30 Oct 2025 16:16:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761840984; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	s=arc-20240116; t=1761841308; c=relaxed/simple;
+	bh=kX0cm2UnEiNJ+qzpBPfgy3+r4pATEZSTxmE6WFa7VM4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KsB/VoRp5Jn9H2fXA9cRRQlepgfgPqPSObTiwHgYeB6OpnxL4Ke3rUBTWMBI3MPhdgWLpW8K64xsmToFs8ubwyEbFScVvXrkrNiUfRL+8xKS/YoHLFLacSNz+TJ15UrwiSJHNuG3HcZZ3UOHpVTC2xfVcbBBadvOCMHFer3vQ4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D+quNg75; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <efa3540a-1f52-46ca-9f49-e631a5e3e48c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761841294;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ws2IvvSmb3F8a9GRXxvscM3N9dgSAoNfYV/0ReFtdwE=;
-	b=IUpkgIJev8v3zO2amlJkGs+PpsdjZJ0dw0DYHtfVKeeH95JvKqQjTP/tPpPvqp9UJqxVnG
-	liAPoJH7yFh8jWOGS63mW76eLNsk2D16i92YHghTy/UlXhWqlOirj9WrOsUzgW5R1QavOZ
-	chi5tqueUhw8JzVm1zPCWWJZcY/uU8c=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761840984;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ws2IvvSmb3F8a9GRXxvscM3N9dgSAoNfYV/0ReFtdwE=;
-	b=MZUpz6qfpTzlkFOwusQLGuFFnp1LFib8qcFoerV5LwFQ7EX4rt5pAA8WhvoEc1zsFCJ4Gp
-	EjNzL7OnoKaTMnCQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=ooYG3jLR;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=40mu6gCN
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1761840983; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ws2IvvSmb3F8a9GRXxvscM3N9dgSAoNfYV/0ReFtdwE=;
-	b=ooYG3jLRrNbV3eNsyUdEkT5PDDatPtyDKZmFfTMNozZ1Zhc8JHXjOTx+nUHGlWA48UfPG+
-	UTx9XmUK9Xm4fhQpPYIf6YxNxoXyyViPorxL4VSvMqNfelOGF45ZcNH7VOoIOuMaByAfcL
-	6pLXqMcu8Vo6mv8CVm6Y1QZwtUEcmOE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1761840983;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ws2IvvSmb3F8a9GRXxvscM3N9dgSAoNfYV/0ReFtdwE=;
-	b=40mu6gCN8AasVH7KDnpbe/VhfVmMfvxa23JAiN1+iiBYWANWgDtt7kXiyrbB/26anEKMOW
-	8OVBJjVROr1qK9BQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 984B51396A;
-	Thu, 30 Oct 2025 16:16:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id JEnYIVaPA2kRDQAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Thu, 30 Oct 2025 16:16:22 +0000
-Date: Thu, 30 Oct 2025 16:16:20 +0000
-From: Pedro Falcato <pfalcato@suse.de>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH 1/3] mm: introduce VM_MAYBE_GUARD and make visible for
- guard regions
-Message-ID: <xnsn5rfqigbm5ryjtbf2rtfotneiwygzesvyfdxiqrzlyzljdr@tmbht4ggnjcv>
-References: <cover.1761756437.git.lorenzo.stoakes@oracle.com>
- <7de40603015dee82970f5d37332a6d5af7532063.1761756437.git.lorenzo.stoakes@oracle.com>
+	bh=zMFZXp3tx2YPKZtWsOkoNrm9qO50YlAqRAEraxEEN8U=;
+	b=D+quNg75KVoxfK+nHvJSuj2ygg7TDLVMhoUvNdsp2A4jI2e8UFgRH8PNkDziKckOgJWo6m
+	XCjmHu5mbjBRYXqAEWVnZUdaXYPvszj58fBy+J+k8NbwQ19z9vnwjD4s2+UYBPL6BWxKY5
+	O9a8dqI3BXq/QQIFqi9CKuODhqbUuFk=
+Date: Thu, 30 Oct 2025 09:21:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7de40603015dee82970f5d37332a6d5af7532063.1761756437.git.lorenzo.stoakes@oracle.com>
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: EBB591FBB4
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	MISSING_XM_UA(0.00)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,redhat.com,oracle.com,suse.cz,kernel.org,google.com,suse.com,goodmis.org,efficios.com,vger.kernel.org,kvack.org,gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Score: -4.01
+Subject: Re: [PATCH bpf-next v3 3/4] selftests/bpf: integrate
+ test_tc_tunnel.sh tests into test_progs
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251027-tc_tunnel-v3-0-505c12019f9d@bootlin.com>
+ <20251027-tc_tunnel-v3-3-505c12019f9d@bootlin.com>
+ <1ac9d14e-4250-480c-b863-410be78ac6c6@linux.dev>
+ <DDVPPGIO5P1F.E3DWINA74BJ6@bootlin.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <DDVPPGIO5P1F.E3DWINA74BJ6@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Oct 29, 2025 at 04:50:31PM +0000, Lorenzo Stoakes wrote:
-> Currently, if a user needs to determine if guard regions are present in a
-> range, they have to scan all VMAs (or have knowledge of which ones might
-> have guard regions).
+On 10/30/25 7:04 AM, Alexis Lothoré wrote:
+>>> +	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
+>>> +
+>>> +	cfg->server_fd = start_reuseport_server(family, SOCK_STREAM,
+>>> +						cfg->server_addr, TEST_PORT,
+>>> +						TIMEOUT_MS, 1);
+>>
+>> Why reuseport is needed? Does it have issue in bind() to the same
+>> ip/port in the later sub-test?
 > 
-> Since commit 8e2f2aeb8b48 ("fs/proc/task_mmu: add guard region bit to
-> pagemap") and the related commit a516403787e0 ("fs/proc: extend the
-> PAGEMAP_SCAN ioctl to report guard regions"), users can use either
-> /proc/$pid/pagemap or the PAGEMAP_SCAN functionality to perform this
-> operation at a virtual address level.
-> 
-> This is not ideal, and it gives no visibility at a /proc/$pid/smaps level
-> that guard regions exist in ranges.
-> 
-> This patch remedies the situation by establishing a new VMA flag,
-> VM_MAYBE_GUARD, to indicate that a VMA may contain guard regions (it is
-> uncertain because we cannot reasonably determine whether a
-> MADV_GUARD_REMOVE call has removed all of the guard regions in a VMA, and
-> additionally VMAs may change across merge/split).
-> 
-> We utilise 0x800 for this flag which makes it available to 32-bit
-> architectures also, a flag that was previously used by VM_DENYWRITE, which
-> was removed in commit 8d0920bde5eb ("mm: remove VM_DENYWRITE") and hasn't
-> bee reused yet.
-> 
-> The MADV_GUARD_INSTALL madvise() operation now must take an mmap write
-> lock (and also VMA write lock) whereas previously it did not, but this
-> seems a reasonable overhead.
+> Yes, I observed that is I use the bare start_server, I systematically have
+> the first test passing, an all the others failing on the server startup
+> with errno 98 (Address already in use). I have been assuming that it is due
+> to some TIME_WAIT state on the freshly closed socket, but I may be missing
+> something ?
 
-Do you though? Could it be possible to simply atomically set the flag with
-the read lock held? This would make it so we can't split the VMA (and tightly
-define what "may have a guard page"), but it sounds much better than introducing
-lock contention. I don't think it is reasonable to add a write lock to a feature
-that may be used by such things as thread stack allocation, malloc, etc.
-
--- 
-Pedro
+Thanks for confirming. You are right. It should be the TIME_WAIT. Using 
+SO_REUSEPORT works but become confusing on what the test is trying to do 
+by starting only 1 reuseport server. reuseport is usually used with >1 
+server listening on the same address. A better thing to do is to always 
+setsockopt(SO_REUSEADDR) in start_server_addr for TCP.
 
