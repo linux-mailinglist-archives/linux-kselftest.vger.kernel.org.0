@@ -1,244 +1,716 @@
-Return-Path: <linux-kselftest+bounces-44380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73819C1E594
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 05:31:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 418A3C1E5DC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 05:35:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 514D84E1CF4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 04:31:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29E6B188F995
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 04:36:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E4D1F5433;
-	Thu, 30 Oct 2025 04:31:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D9BA2F0661;
+	Thu, 30 Oct 2025 04:35:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="FzDvOuj7";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="jffrvq1M"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2NxB4BGA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D80DC2E0;
-	Thu, 30 Oct 2025 04:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761798702; cv=fail; b=dav410PQvNPOnDYcA24/Z/b2hHvPR6ZSmtdIzUr4UK8AHse6wIoMwgaexO5EIcj3rY3yyL6vLcNh6qcMcRh1K0AvFdzi6mLuyqL9u7yN4IT+5itIfeTGXOuniDy90l3SjCDQKB7YtC70rDzjxjrX0mBrYn1Lzu5cGKJ0mF01QzU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761798702; c=relaxed/simple;
-	bh=gECV5kPrPbzw3qoaycePXaYyrnyArwGZUtIzqXj3JIE=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ngeLyFaN/SQb1O1oBrNPZzUbnCBE0e61xtf9NblXjp9zQXiNRVRHJ08vneVjEFU9C8bzsJhyJ/ThowCjp8D/U/BkSje7BstCqDhyoWpwTnjCO8wUdPeccPtUNvPBVbCs8tCvCtmnALDA8sQNRlEKcMviRkdIDbTqdvWuogFG5W4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=FzDvOuj7; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=jffrvq1M; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59U2ZNHQ025314;
-	Thu, 30 Oct 2025 04:31:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=R+ew75HTgDh5ULhv9UAtcNkF/ees84u9QbS7G3IYuGQ=; b=
-	FzDvOuj7OHC3Zt2ghxZ0G1uh3kJlTqnc0i9RYr6IpwGLueOBihDq1zD+2CmUtBRt
-	kYWBhCe6Zjur3kSP8durjgY+kYH54lPc6ty0ibep3Cv6GgFXCpunMYuXCoiRSsBX
-	WQucNwlSabau1U4rZod8gTmsZu5zqFxqBA2gSQjyk8uTUANhRfQmaiRQPdU5wKLG
-	7OEypYaPQbkhg1Gbbf2ng9pAXyr6OeaHZW3irqrU2sotqVHi7GKjMu1K2rHc94e2
-	6ISrzTEoRYq+niM2m1D+5/7mXK19vIHl6kdtgRLwc9uZEEIqAl9i4jl6hWPPzvih
-	n/Cc2knhtC+/b4R1+QSSlQ==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a3ybsr4mq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Oct 2025 04:31:26 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 59U4F6UM031573;
-	Thu, 30 Oct 2025 04:31:25 GMT
-Received: from ph7pr06cu001.outbound.protection.outlook.com (mail-westus3azon11010052.outbound.protection.outlook.com [52.101.201.52])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a34ectcyt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Oct 2025 04:31:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BEAAe/CM3Zk/aK7K2Ldw8yzHN+eMCZ/7goWdSLGBer5ZFlgpAZASa4pj1nW03Icy77Kh6Aq/nWMcIuPPkoLJnlM+yG+KJgFSGE50gpM/F8TnSE0M+djr5fFon9d9uQU5RLcmMLOy4th1KOrN8W51HmFnvIs6MeLqGaYMNx4JQuM1q35f9xSWyA+ScX1u3nbgOBnXJodUrocceFhtBU51wMvfNtUA3URteOHTmqLWx3hP2WOWWY983Ru63EnZ/aRp+tOZVWyxIgv3r/8cNBAU+pGHeVZv8heC0chONHRAlVjNOpU7M3H/st4zDhUWIgoLh6ddok4NO2R9R0khHWK13g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R+ew75HTgDh5ULhv9UAtcNkF/ees84u9QbS7G3IYuGQ=;
- b=EDiLrEsUfwSadG3Y35h6IjYG56gWHMtxuz13bWb+7Z7bihWrFTT/eEaCTBJZ7aYBGL7lKZ6MPT93+kq5XbNsh7ww8FJAWLd3OaBCgTWwrVdER6EWw3cWw4cQKHUekQjj9VF0HM8ZGqzepj4JZRvVCcdAAG81E2tQhe2d1opfrvnblz5+sPjehh7J6y9Tn5ytIoCupMIBFE1VkW+UaEk1oX8xUvOOrs9qgjxeLrm/x1SwlIyD7scLk0HWRuJTkI+kyBTkW8Z83Y6HFpphcxxUGQxVtrSHM4cJWrDXLRgmp2ayJ4AR/7RyqsJyDEOGTEesEG6t2M8NFdgVgTLhB8ajbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9876D134AB
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 04:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761798940; cv=none; b=HJzLQUqnxkifDVWNZFBYEZL2EvglToTNv8vImqb22gQEvCUYvnmnb8/wsTZif/S3BYmLc+iD9JrR9RoU/buZL5XmBk0M8mVXG0McVVhumk2nSD950OQfXCQaLwWH226jS5LdhTj5tvqNghP8fTrtZfQkhkFzx88qyuQbQGPzAMs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761798940; c=relaxed/simple;
+	bh=3grhviK8NzhGepSDu/62UDKwcEuYQ6YU4sYT7tqhkNs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l3ZcwsBmiikCu+jyGtO6w6pvEQr7DiXgTgDGv30kjfZFy8BslWeUlhw1ASpv0EwnrD91D7kuse15ncK2ARg4PDpIeN9VYpPvVkhbodLv4k4if6IyMCif6SE7tjkuwF8Z4qNExSsZ3r7lCAj65GXI6A+/G0E6wj6tm9Uwa1Htg6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2NxB4BGA; arc=none smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-4ed0c8e4dbcso135831cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 21:35:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R+ew75HTgDh5ULhv9UAtcNkF/ees84u9QbS7G3IYuGQ=;
- b=jffrvq1MK57hcxKbUg2+NzgDgDy4jINZbv9y0KpmO+Fa6li94PW9HTR09fhZ3SqbPsaqlq2OmQwNBgF4icJX20DMhECE6bazihwWLPzDYtUQiNzoZP/LcyOj5BhSSb8n13ySanI8cM+dlptGZkoUbEKn0hiktkL7TmYPhqvKTms=
-Received: from DS7PR10MB5328.namprd10.prod.outlook.com (2603:10b6:5:3a6::12)
- by MN6PR10MB7466.namprd10.prod.outlook.com (2603:10b6:208:477::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.14; Thu, 30 Oct
- 2025 04:31:21 +0000
-Received: from DS7PR10MB5328.namprd10.prod.outlook.com
- ([fe80::ea13:c6c1:9956:b29c]) by DS7PR10MB5328.namprd10.prod.outlook.com
- ([fe80::ea13:c6c1:9956:b29c%6]) with mapi id 15.20.9253.017; Thu, 30 Oct 2025
- 04:31:21 +0000
-Message-ID: <92cb16f0-20e8-4ef5-8b4e-3ec5de3e5fd3@oracle.com>
-Date: Thu, 30 Oct 2025 10:01:15 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [External] : [PATCH net-next v3] selftests: drv-net: replace the
- nsim ring test with a drv-net one
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-        andrew+netdev@lunn.ch, horms@kernel.org, andrew@lunn.ch,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20251029164930.2923448-1-kuba@kernel.org>
-Content-Language: en-US
-From: ALOK TIWARI <alok.a.tiwari@oracle.com>
-In-Reply-To: <20251029164930.2923448-1-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0009.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::8) To DS7PR10MB5328.namprd10.prod.outlook.com
- (2603:10b6:5:3a6::12)
+        d=google.com; s=20230601; t=1761798936; x=1762403736; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q7p5MBXVbiIkyou0h0j++mKUN2aZ5HCHJwUFRjJwF4A=;
+        b=2NxB4BGA4U6ztPSkV1X0Gevtnfcn/3eKUR6MhoWDw0sEqkiLw1DX4FkqTS36eNec7D
+         auv5VnnUglW+s4HAHojhD5j9axlPLLaFmP6ide0JQlaS1PZJ0PRZywELFkcgmMlj7S2X
+         gubTPH83jJk4rtVXF+3QsoO9/Tncbp90aR5ti5u5lqandadazsJd6YMEoFONUpXQbnaa
+         96tP/W7dc/7SIiTTxJMx1QCrTJ4YtCBc8sgT81YjGcdhofrjPiOrPYGX6VeY5nU8DcpV
+         I1z10Mp4ZA6CBi+bd4fj1XsfTvn7F1M4b3JyQLhAHjzYeXWV81dqNitJQdgY+1/uFdnb
+         Pd3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761798936; x=1762403736;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q7p5MBXVbiIkyou0h0j++mKUN2aZ5HCHJwUFRjJwF4A=;
+        b=C7FurATkr1Zen2g+Rntyconk14krWFyDYqrY3Bzr6TvyF2VPpJY893SCWICnlPD8sw
+         SCHpEpL1Klf3FdrFqQq02RZY2IJ75WeY194Ij+yvj0z1+Jvo34fA+6uGycBhZbW3kTbR
+         33gfL81BMepVv33VXaCEQFVT1p1zGkk2E+hZUlPDWN7cPqqIaMJ6HDXlhfgI/MPtEexz
+         +/vT8PohR/Mx+J0HXIqImK17FTLQ1DtyLH/WpUjk4KsIcsecVbUKz2QnJkwPHXjSQG6w
+         x6qvHz9sSY34LujJnv7So2ENOKNr83Fl26x4fYbZhbIhwdCGuz0c5+kF6Fkg75xWoZhO
+         9vmA==
+X-Forwarded-Encrypted: i=1; AJvYcCVGZ809X4v11lnaC2Gd2JTN2me4SL4vR5/DVR5B1tXIaURVVPqlkmIsArQDXoSXAmb4VXmeoy5dpVhLzwtEJlA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywc73+mVpnecDtHOyrY5/2NXOB+VQ7sDfgG7DTA7cY+NZi4zXNK
+	CQU9Dd2RNxbLsnbufxdIVASNeUolJHpDAmb8J+ZUUKE1Bk4XrIawaVmQQO8uHHopn/T0sUPCcob
+	L3eccmeYQnU24D254uhoaNtVSFAvFi+8ZJCglWsZv
+X-Gm-Gg: ASbGncszCbzmWQBMpbfJhKSGce3IXIBUYfoyFMJRbc/fTZidhfrt4z+7UrEwHxhKNNY
+	eBieR9N5L3L8iuUYW0HcbnV3E44zAhwdAXkEOE4+Cyl6ytXvfa7TF6uMH1BBJKxCCeKkPiQ+DlF
+	5SAet3lXOciT3w0anFC/+9kqyqUX6uGMd3knZn4AmSg12VpyZEE9SiVsjX9F/kMVGuY4MrE3TRE
+	V7h1jkUZ1hkGH141HyStSgRhzPtYkPU3tL2oUGkUg6F2oIOgit0GFu/y5ALf6TsIAjltw==
+X-Google-Smtp-Source: AGHT+IF1NWXnqQl2SyuyiBIcf9blyjA4VswiUlI25KGyv4hX6VC+UTqbvxsl0BdW2YgOgU9DPZO+oXCnbEVW5xaZUVE=
+X-Received: by 2002:ac8:7d12:0:b0:4b3:8ee:521b with SMTP id
+ d75a77b69052e-4ed23f77a45mr2547151cf.0.1761798935984; Wed, 29 Oct 2025
+ 21:35:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5328:EE_|MN6PR10MB7466:EE_
-X-MS-Office365-Filtering-Correlation-Id: 681d7776-aef7-44b4-8568-08de176d2d70
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Z0NLUXVSdmk0ZDg5RDNUNkIzMFpDVXB3Mjh5Y1ZQK3hkcHlHUXdta0xtaFRq?=
- =?utf-8?B?eDFXUWowcGhSTnV6NXN2SEdyYWJnekpOMGl2MUVENmI5eml3TWRMeXlYbnBs?=
- =?utf-8?B?Qll6c2JDcDRqem1DMTJSM3ZCSHgyK2o2b1JKTVk1SjZVWDNSR09IWlUwTHBz?=
- =?utf-8?B?dmh2dnZhMi9SVk5jMUJsL21aY2tlekxHMEVsL01FeVh1QVhIME9jZmhUa0tB?=
- =?utf-8?B?Z1YyOCs4Z0dmaU5pVTNkVHN0MDFnNzhCWnVTaGNhYnBITm93ckpWT3NmUEtG?=
- =?utf-8?B?aGVseFhJQ0ZXUDVaRFBPNlNUTzNNRU1udUc5VEs1cEg4dytzOTZXd3dzaVc2?=
- =?utf-8?B?S2R6cndwSnRQR0JEdlptVjZ0S0Q2YzRqbkl1MFR4VG5ERmhpd0ErNWJTWVQx?=
- =?utf-8?B?dFU5bGRUb2xsbndsY21IODdPMHZyYlpFWjJqTXhOc1ExZnA4R0ZJMktBT1Yv?=
- =?utf-8?B?WEFXKzBlZFF0RWMycE9OSHhFZGNqRDgwM3JxZ0lYZG5rcDZzZmZMZElnejYr?=
- =?utf-8?B?cTEvVWYzNjd3RWRCMDdRWmdLOFh0eVpkcFdHOVNlMEFsMjlyY1RVWTdmMWw3?=
- =?utf-8?B?b3lWVDRnY2FlUzFkVDNyclpYUzc4VS91RWNRakFPY2l0SVlKemhwVUpBbUNH?=
- =?utf-8?B?WmJyWk1NdmNYeHh5R2h1R3dZelNkL0xsUVlGM0QxUWNMYWhqcTl0dWExTE1n?=
- =?utf-8?B?bTlLck01cnk1VzJEQkcvUjZYSmdaamNJS1ZEUkZPcVFpb25UVlFacFhjcHo0?=
- =?utf-8?B?QlZKZ2FFekQ5elJMdlYxL3pVcVhWTlExY3lJcExUTUl5VytLOUJJaWR3T0Nu?=
- =?utf-8?B?SEJNdHV3Z0hzdFF5c3JxSFNlMi84eklOb0YvSHRmUVhGZ0RXSG9IbENjdjBl?=
- =?utf-8?B?RFpibTBxalVEeHpOMUw2ODFuTmxKNXpsaFhXY3VCZ1QvanpwaC9BWGdJRHZ1?=
- =?utf-8?B?cThtYXdjbW1kM0dTZUFyMkljcHV0T0lCTVpYWWtYNEZxSmZTZXFxYzlKMG5x?=
- =?utf-8?B?T09RYS92b0ZqL2pOb1IxTjJyUlZqVDhwNjRZbVcyTW1KZ1BwQUxNZU5FUUkw?=
- =?utf-8?B?VFU1bktUVHJEc2VhMitXQjk5eVlUR0R3UjQyVFBYSFFuNm9wNE9ndmNYYWhE?=
- =?utf-8?B?b0pkam1EZTlsUnBvRDB6ZUFwdnBRbElTdlNSQ3ZmK3JZOUtDb0FicVQxcC9R?=
- =?utf-8?B?TnR4QzIySkltd25ETmtrY25tME1hRXdBbGk1Ty9CVGxuU1FRenZPYzhhWCtF?=
- =?utf-8?B?NjFyYXBWdms1ZU53N1lMeDJwbCtSNGF6Q2FEVExLN1RKREE3cWpsUGIyME9T?=
- =?utf-8?B?S3QyYUljK3VwNS9IVGU0WkxWZm81NzVySURmNkh1cWJtVS8wdTc0WDJvQTQ1?=
- =?utf-8?B?R1ZzWGZNdDQzM3lERjgvSmU3UHpBNUJZWEJoUUpLbXpaWEtpN0M2L0lWelRM?=
- =?utf-8?B?MTRwYTM2cmxlQVIrbHh6V20zQldvTWcrU2ZFeU1MYzlwRFNZV1ppK1dpTlBK?=
- =?utf-8?B?ZTJvRFg2MTgwYWFWNFlxRkJHUTYzdjlSV2t5M2VORHRWZmZlUmpCRVJxekZQ?=
- =?utf-8?B?RHVDSFBwbWd5SWtHZmZtVGpQVWUwTFFqeG1iNUxzQVFFeG8vSUxYVmx5aTBR?=
- =?utf-8?B?RFpod01SUlRYZFAvZzhQaEY3eGt1N251bWhIcHZ4SVIvb3EwRldhSVJVZ05m?=
- =?utf-8?B?QXZZVS8xOVlITG1hc3lQRVorYTlOY2taNmZkUnVaSVpUZkUrWWhsZ1gyWjZt?=
- =?utf-8?B?UkhwM0l0YXRDQ2djWUVwdDA3YmdxQUQyWElobHdmWUdZQXRkcFNob0c1WWhE?=
- =?utf-8?B?Y1Zza3VZUzFsSER0bVF3TWtuMHRpYTY0ZVQ0c1lTTjhBdEcvaTFlWUhFNEY1?=
- =?utf-8?B?SUZHL05pekNhZVdSbUpRSU1wanNjN0VlL2lNeC9KTVVzcGxkR0pzS0pDbGU1?=
- =?utf-8?Q?CEe3dmxXpHNLZWU1DGLHTXWRgfBGBt0g?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5328.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?USs3cmc5Z2trdXNxTlJDRWlxaDZML3QzZ2FYR01zSGx6aGUwZ2JkamNYYUJq?=
- =?utf-8?B?M1ZNS1N2TG12Z0xLZVVTUTVHOTlBSGkzcWtxUmhYdzdxeXB6SUtZM2cvZG1B?=
- =?utf-8?B?UityYmVPL3I5eHZ4S1hlM0paTTRBUG43MFlOemZUVlhEb0hGR0JZSjhmUDJK?=
- =?utf-8?B?NHFzK3hGVGxiRTJZZEVId1pVbG52VjFZYUxoOXRRVjJaQ3FUZ3RhTkxJS0Yx?=
- =?utf-8?B?eVdhLzN5SmF3bENhdys0aW1UZXNteFFFQlNXekFRUlkrdGw5Mk1nSzFSYUNv?=
- =?utf-8?B?M2pJUC9YOXRhODNkU1ZIVGcvMyszeWY2YmFPZ2srclVKOVJyZjdITkZwSm9z?=
- =?utf-8?B?SDRuTmNCN3J2NnZYZ3hTdFc5WW90c2lPNnRGbFIzWEkramVFdUk2L05SVXBW?=
- =?utf-8?B?NzNjNW53Ti80REhjRCtlVG5vbVpxaFFmQ2Q5MEVwTUh2UG9JTlB4OG5Va0xY?=
- =?utf-8?B?VjdLZEdGYU5TbFJENG1raHpiSUdlRkVBNzlLdG9HSTRXRUh2NVBCQlF6SlZE?=
- =?utf-8?B?OTB4ckt1OTF0WUt2Tm9CMUprZWxlcE81QmxldWpMdGdyRkgvTlJyeW9NcUZT?=
- =?utf-8?B?QzVxQWdxUUZkTEhRTXRlbEtXeGNheERIbFZseGp2ZmMxTEdqL3pxM0RhdS9H?=
- =?utf-8?B?WGdHc0IyTzBiRkhDd1A2clVZUXNudnRyWkoxS3YyRVNkYzJFeVd1Z1R2UzFx?=
- =?utf-8?B?QUpkZ3JyZk5TS2xqMjI1N29CRTFLblVFd3R1ME1RTERCci9kS2llQTc4Zk82?=
- =?utf-8?B?ZVpJYzdGNHFQM1hOanYybTdLYmlGeEw5Qk1aMVBST2hkWUx1QVNDRGJTTk5s?=
- =?utf-8?B?a1ZBWldmMzVUSFd0Z3pJYVFCeWUxSVhCdlBJZW5VR1Z1RjJ6NytUcXM3MEVQ?=
- =?utf-8?B?Z0EwUlFSd2g2QlVWcXNPY3Q4OFJ4Z3RBQWJoSlZ1OFNHVlRMSlpPSGphNzBL?=
- =?utf-8?B?ZHk0L2RIM0JKZHRwVUZkY3pMNUpkVmRmWW5GdTJ6RXU2ZEl0Uy9ZNmNrWXlO?=
- =?utf-8?B?U28wY0xYamx5L0t4WjVtcHFjTXdsUWhZMHhFVmhWYVRoMUlzK2hsNmxLK1hY?=
- =?utf-8?B?UzFLV2hxR0RhVHJmSVFvUGJ0bUlQcHhWdHpNbHZ5OVJWQWRxODl1VTFGVDNs?=
- =?utf-8?B?MkVCTytpN2JOSmd5alBPNUExc1BkbFdaVmJtOW90N0FTNGlNTXFxc2dCd1JJ?=
- =?utf-8?B?bTVUMkh2QWZRWUhyWnA0Yld3Y3NsT1hVcDNxd3I0NGk5bFJtbk04Umh3dzVr?=
- =?utf-8?B?KzZxakVyaEUyRmlzZjJYcXVISGpBZHN3L0Npa01tVEpuSkVLK3NFRDFZT1NW?=
- =?utf-8?B?cnNvN3pkdHdYNENmSjlWU2pBN3hEeXVmaFRnTmt6Z3pFMFludTRXdGJpaSsr?=
- =?utf-8?B?VnBCYUZPV1RiZDZFdUw1cCtJb1Nzcnl0NDBRYUM2aUcrZmpnaDhJUXlMZnBh?=
- =?utf-8?B?RXduU2NaVU8wQkRZclhlQzVnWWhRdTc5VzZxYktLWnJvU3Y2Rmc2Yi80TTQz?=
- =?utf-8?B?V3JMVjAvSEFBZVMrbHl2dXhYQks4ZzBIK0ZaZFd0Uk0wMUFobDBuRXlQRkFp?=
- =?utf-8?B?MkpHRzMzbHBCNXV1RHlBZUpUeWVyaHZ0bWNZUThIUkNseFNGM1NJcTZDakRC?=
- =?utf-8?B?ZHFlWDc5eWkya0NnUDk1WXdVcWkwRHFRZjZGNUZNWG1zcWNIdlB5Tzlub3VF?=
- =?utf-8?B?UVZwa1dMTS9BeTVDNHN2YWd1Y3daVVJ6Vk9WVFF2aFNEMWJycndXN2FkM1BJ?=
- =?utf-8?B?ckpPNkR1RzhadnB1UWx3QUtDbzJWemtrci9pWDh1VTZGR243aXBOY2JmUjQ2?=
- =?utf-8?B?SzFveWJsNGI2ME9KNEhST0d1UkRWSTJJTUFqblE2NTMwL2dZR0JxVDZGUHNz?=
- =?utf-8?B?N3VMRm5UU1NSTVBrTzFKcTZSNkhpcjZ4RkJtOEhGY082eEJEQUxnNGwxYTVj?=
- =?utf-8?B?T3h2MWJiNjg5ekhHVGtIYUZ0cFpjc1ZKckxQRExycEZIa25iVHI0dU96Z1hl?=
- =?utf-8?B?bWM3RGluTFdqSGN6NExPNW8wN080UjRKUWloMFlkOGZaa2pnSXB2TkRtcmZu?=
- =?utf-8?B?Z2JXY211alljRWI1Zk1KRlJ1SnhjcXM0cW5RVThkRGZpRXpqMHdjejlmWkR6?=
- =?utf-8?B?S04xZ0RBQ1J1RHpwUFFhbU8vSm5sM1QyUCsrV2NIbEF6VmpPaTRYNmxiYlVR?=
- =?utf-8?B?ZUE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	QClZVKUdT2NdHVxHF+UYD/Zyg1oHUFJuCkWph1sTLDmyIydACgz9+uuJeUtWD+IV1yJNNWEqz1rCQffwCDQa+d184S1dpPmEFPJOuIMrzZNUguyJ1WHYFXMv/XwsH2uzjfu6bLNvIvazdXvpNItXUE73TikYo+5F6aAOnU1m7oWClvCQyf7Gzyx9z0sHa6bMpJoUJDW76sY4CzgPuOny7Q9PoZ4V94GnHX9Frzcgvp2a+AhOOHEqK16njSmud7sSPv56uYDG/vb5lgNqM7MsE4YdNagiekoN9KuEG2F8RlUzd0BPuwaEXCJOLTQ/7ONsKOZGpekeBMShI77ec+vqJvaCAbvnuo+lh8xG18r8gkfhA9Rcw3qfCfpmTYYvff1HkrVxhW6w1iBCMLm2CgW2P+lHBB50SWb7ZXv8DNKcvZakalihfuWib8gBVEoF5+/q67OWrajt5yKKuyPQIxVR4MSKLuQUJVsdGMiFvElf2N8cbRSeRt+IX5HxRVekGyOfYpweYeH6SSOw/PCExuvs8/IyYQOX+OGTrh82UoFR/1Ln1u35AZBVlDQ/ecty98DwSavfbUsOiHIQfRPbV2IaYPgMKo48uBuEckTc7J+1uYY=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 681d7776-aef7-44b4-8568-08de176d2d70
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5328.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2025 04:31:21.6059
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: RH2MCxLZNGIJbmnEANNXnlVovJPP60ymi1ZmNXGWlqVnp4G+FFN1C26+oj4H1WVh50N7DCTVi/EEzHNfMFbseBpbZsn+0/8hWF3BRGcHFZk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB7466
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-10-30_01,2025-10-29_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 adultscore=0 malwarescore=0
- mlxscore=0 phishscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2510300034
-X-Proofpoint-ORIG-GUID: SW2zGBzFVxiK47WkD2nLxbZ8u53BszdQ
-X-Proofpoint-GUID: SW2zGBzFVxiK47WkD2nLxbZ8u53BszdQ
-X-Authority-Analysis: v=2.4 cv=afxsXBot c=1 sm=1 tr=0 ts=6902ea1e b=1 cx=c_pps
- a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=1eEGUOzBzYLDoI95:21 a=xqWC_Br6kY4A:10
- a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=GoEa3M9JfhUA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Us-1UMrJcrhWnadwEOMA:9 a=QEXdDO2ut3YA:10
- a=ZXulRonScM0A:10 cc=ntf awl=host:13657
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDMwMDAxOSBTYWx0ZWRfXzBl4/8l4Opz9
- EP9+hfmOikpQDGc+kqkj/uV8rpJJEmnExsnJuQhUZgcLlLa+G8xlZt1aIVZZ34CRQtXO/hUk9b/
- /vY1wbF8Qi0f2wAYh1/BzUdAqmGk9bysG4kJ8G0sJzNmzF5i18UOQLNCdr9XdXw9hW7M61fL7pr
- 9u0OL1mIJHhVWZdQFLh1OZhlo4yk95x4WK6hHVi1GhTuLOr9GzoIfXhUBpu1e7rfQtoI0iC/3sY
- kOgp3T9AsqtcF5b7qUePRNlgHREZQabMUl170FrZFlvFzT8F8D38vsV+tGx4wH5hQZ02qMhgw8i
- BuboXK47BM/v9t3MBLYLBtPmbNLsJgpSdqZ5sg0YiOsETeyI4t+Y4FBhPEqyh7QGNRGx0i0CBj5
- i4jjIdlSSKOCnwORSlkUiA3j/Pj142npUsTUjrVHWChJq6YvaEA=
+References: <cover.1761756437.git.lorenzo.stoakes@oracle.com> <ec71238fd1f735ca6e4970ccdc0abfbb60967596.1761756437.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <ec71238fd1f735ca6e4970ccdc0abfbb60967596.1761756437.git.lorenzo.stoakes@oracle.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 29 Oct 2025 21:35:25 -0700
+X-Gm-Features: AWmQ_bkSCQc-YXoEndGYlWcpx02uslGWP6aPRR4XSkgpBao9QBAAzOBkh4kHurc
+Message-ID: <CAJuCfpEdFrPndQzF903zVQxFkyVdyXbFhxRT6YZd=j2MNgwUrA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mm: implement sticky, copy on fork VMA flags
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>, 
+	David Hildenbrand <david@redhat.com>, "Liam R . Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Andrei Vagin <avagin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Oct 29, 2025 at 9:51=E2=80=AFAM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+>
+> It's useful to be able to force a VMA to be copied on fork outside of the
+> parameters specified by vma_needs_copy(), which otherwise only copies pag=
+e
+> tables if:
+>
+> * The destination VMA has VM_UFFD_WP set
+> * The mapping is a PFN or mixed map
+> * The mapping is anonymous and forked in (i.e. vma->anon_vma is non-NULL)
+>
+> Setting this flag implies that the page tables mapping the VMA are such
+> that simply re-faulting the VMA will not re-establish them in identical
+> form.
+>
+> We introduce VM_COPY_ON_FORK to clearly identify which flags require this
+> behaviour, which currently is only VM_MAYBE_GUARD.
+>
+> Any VMA flags which require this behaviour are inherently 'sticky', that
+> is, should we merge two VMAs together, this implies that the newly merged
+> VMA maps a range that requires page table copying on fork.
+>
+> In order to implement this we must both introduce the concept of a 'stick=
+y'
+> VMA flag and adjust the VMA merge logic accordingly, and also have VMA
+> merge still successfully succeed should one VMA have the flag set and
+> another not.
 
+"successfully succeed" sounds weird. Just "succeed"?
 
-On 10/29/2025 10:19 PM, Jakub Kicinski wrote:
-> +def channels(cfg) -> None:
-> +    """
-> +    Twiddle channel counts in various combinations of parameters.
-> +    We're only looking for driver adhering to the requested config
-> +    if the config is accepted and crashes.
+>
+> Note that we update the VMA expand logic to handle new VMA merging, as th=
+is
+> function is the one ultimately called by all instances of merging of new
+> VMAs.
+>
+> This patch implements this, establishing VM_STICKY to contain all such
+> flags and VM_IGNORE_MERGE for those flags which should be ignored when
+> comparing adjacent VMA's flags for the purposes of merging.
+>
+> As part of this change we place VM_SOFTDIRTY in VM_IGNORE_MERGE as it
+> already had this behaviour, alongside VM_STICKY as sticky flags by
+> implication must not disallow merge.
+>
+> We update the VMA userland tests to account for the changes and,
+> furthermore, in order to assert that the functionality is workingly
 
-crashes.?
+s/workingly/working
 
-> +    """
-> +    ehdr = {'header':{'dev-index': cfg.ifindex}}
-> +    chans = cfg.eth.channels_get(ehdr)
+> correctly, update the new VMA and existing VMA merging logic to consider
+> every permutation of the flag being set/not set in all VMAs being
+> considered for merge.
+>
+> As a result of this change, VMAs with guard ranges will now not have thei=
+r
+> merge behaviour impacted by doing so and can be freely merged with other
+> VMAs without VM_MAYBE_GUARD set.
+>
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> ---
+>  include/linux/mm.h               | 32 ++++++++++++
+>  mm/memory.c                      |  3 +-
+>  mm/vma.c                         | 22 ++++----
+>  tools/testing/vma/vma.c          | 89 ++++++++++++++++++++++++++++----
+>  tools/testing/vma/vma_internal.h | 32 ++++++++++++
+>  5 files changed, 156 insertions(+), 22 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index f963afa1b9de..a8811ba57150 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -522,6 +522,38 @@ extern unsigned int kobjsize(const void *objp);
+>  #endif
+>  #define VM_FLAGS_CLEAR (ARCH_VM_PKEY_FLAGS | VM_ARCH_CLEAR)
+>
+> +/* Flags which should result in page tables being copied on fork. */
+> +#define VM_COPY_ON_FORK VM_MAYBE_GUARD
+> +
+> +/*
+> + * Flags which should be 'sticky' on merge - that is, flags which, when =
+one VMA
+> + * possesses it but the other does not, the merged VMA should nonetheles=
+s have
+> + * applied to it:
+> + *
+> + * VM_COPY_ON_FORK - These flags indicates that a VMA maps a range that =
+contains
+> + *                   metadata which should be unconditionally propagated=
+ upon
+> + *                   fork. When merging two VMAs, we encapsulate this ra=
+nge in
+> + *                   the merged VMA, so the flag should be 'sticky' as a=
+ result.
 
+It's probably worth noting that after a split, we do not remove
+"sticky" flags even if the VMA acquired them as a result of a previous
+merge.
 
-Thanks,
-Alok
+> + */
+> +#define VM_STICKY VM_COPY_ON_FORK
+> +
+> +/*
+> + * VMA flags we ignore for the purposes of merge, i.e. one VMA possessin=
+g one
+> + * of these flags and the other not does not preclude a merge.
+> + *
+> + * VM_SOFTDIRTY - Should not prevent from VMA merging, if we match the f=
+lags but
+> + *                dirty bit -- the caller should mark merged VMA as dirt=
+y. If
+> + *                dirty bit won't be excluded from comparison, we increa=
+se
+> + *                pressure on the memory system forcing the kernel to ge=
+nerate
+> + *                new VMAs when old one could be extended instead.
+> + *
+> + *    VM_STICKY - If one VMA has flags which most be 'sticky', that is o=
+nes
+
+s/most/must ?
+
+> + *                which should propagate to all VMAs, but the other does=
+ not,
+> + *                the merge should still proceed with the merge logic ap=
+plying
+> + *                sticky flags to the final VMA.
+> + */
+> +#define VM_IGNORE_MERGE (VM_SOFTDIRTY | VM_STICKY)
+> +
+>  /*
+>   * mapping from the currently active vm_flags protection bits (the
+>   * low four bits) to a page protection mask..
+> diff --git a/mm/memory.c b/mm/memory.c
+> index a2c79ee43d68..9528133e5147 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1478,8 +1478,7 @@ vma_needs_copy(struct vm_area_struct *dst_vma, stru=
+ct vm_area_struct *src_vma)
+>         if (src_vma->anon_vma)
+>                 return true;
+>
+> -       /* Guard regions have momdified page tables that require copying.=
+ */
+> -       if (src_vma->vm_flags & VM_MAYBE_GUARD)
+> +       if (src_vma->vm_flags & VM_COPY_ON_FORK)
+>                 return true;
+>
+>         /*
+> diff --git a/mm/vma.c b/mm/vma.c
+> index 919d1fc63a52..50a6909c4be3 100644
+> --- a/mm/vma.c
+> +++ b/mm/vma.c
+> @@ -89,15 +89,7 @@ static inline bool is_mergeable_vma(struct vma_merge_s=
+truct *vmg, bool merge_nex
+>
+>         if (!mpol_equal(vmg->policy, vma_policy(vma)))
+>                 return false;
+> -       /*
+> -        * VM_SOFTDIRTY should not prevent from VMA merging, if we
+> -        * match the flags but dirty bit -- the caller should mark
+> -        * merged VMA as dirty. If dirty bit won't be excluded from
+> -        * comparison, we increase pressure on the memory system forcing
+> -        * the kernel to generate new VMAs when old one could be
+> -        * extended instead.
+> -        */
+> -       if ((vma->vm_flags ^ vmg->vm_flags) & ~VM_SOFTDIRTY)
+> +       if ((vma->vm_flags ^ vmg->vm_flags) & ~VM_IGNORE_MERGE)
+>                 return false;
+>         if (vma->vm_file !=3D vmg->file)
+>                 return false;
+> @@ -809,6 +801,7 @@ static bool can_merge_remove_vma(struct vm_area_struc=
+t *vma)
+>  static __must_check struct vm_area_struct *vma_merge_existing_range(
+>                 struct vma_merge_struct *vmg)
+>  {
+> +       vm_flags_t sticky_flags =3D vmg->vm_flags & VM_STICKY;
+>         struct vm_area_struct *middle =3D vmg->middle;
+>         struct vm_area_struct *prev =3D vmg->prev;
+>         struct vm_area_struct *next;
+> @@ -901,11 +894,13 @@ static __must_check struct vm_area_struct *vma_merg=
+e_existing_range(
+>         if (merge_right) {
+>                 vma_start_write(next);
+>                 vmg->target =3D next;
+> +               sticky_flags |=3D (next->vm_flags & VM_STICKY);
+>         }
+>
+>         if (merge_left) {
+>                 vma_start_write(prev);
+>                 vmg->target =3D prev;
+> +               sticky_flags |=3D (prev->vm_flags & VM_STICKY);
+>         }
+>
+>         if (merge_both) {
+> @@ -975,6 +970,7 @@ static __must_check struct vm_area_struct *vma_merge_=
+existing_range(
+>         if (err || commit_merge(vmg))
+>                 goto abort;
+>
+> +       vm_flags_set(vmg->target, sticky_flags);
+>         khugepaged_enter_vma(vmg->target, vmg->vm_flags);
+>         vmg->state =3D VMA_MERGE_SUCCESS;
+>         return vmg->target;
+> @@ -1125,6 +1121,10 @@ int vma_expand(struct vma_merge_struct *vmg)
+>         bool remove_next =3D false;
+>         struct vm_area_struct *target =3D vmg->target;
+>         struct vm_area_struct *next =3D vmg->next;
+> +       vm_flags_t sticky_flags;
+> +
+> +       sticky_flags =3D vmg->vm_flags & VM_STICKY;
+> +       sticky_flags |=3D target->vm_flags & VM_STICKY;
+>
+>         VM_WARN_ON_VMG(!target, vmg);
+>
+> @@ -1134,6 +1134,7 @@ int vma_expand(struct vma_merge_struct *vmg)
+>         if (next && (target !=3D next) && (vmg->end =3D=3D next->vm_end))=
+ {
+>                 int ret;
+>
+> +               sticky_flags |=3D next->vm_flags & VM_STICKY;
+>                 remove_next =3D true;
+>                 /* This should already have been checked by this point. *=
+/
+>                 VM_WARN_ON_VMG(!can_merge_remove_vma(next), vmg);
+> @@ -1160,6 +1161,7 @@ int vma_expand(struct vma_merge_struct *vmg)
+>         if (commit_merge(vmg))
+>                 goto nomem;
+>
+> +       vm_flags_set(target, sticky_flags);
+>         return 0;
+>
+>  nomem:
+> @@ -1903,7 +1905,7 @@ static int anon_vma_compatible(struct vm_area_struc=
+t *a, struct vm_area_struct *
+>         return a->vm_end =3D=3D b->vm_start &&
+>                 mpol_equal(vma_policy(a), vma_policy(b)) &&
+>                 a->vm_file =3D=3D b->vm_file &&
+> -               !((a->vm_flags ^ b->vm_flags) & ~(VM_ACCESS_FLAGS | VM_SO=
+FTDIRTY)) &&
+> +               !((a->vm_flags ^ b->vm_flags) & ~(VM_ACCESS_FLAGS | VM_IG=
+NORE_MERGE)) &&
+>                 b->vm_pgoff =3D=3D a->vm_pgoff + ((b->vm_start - a->vm_st=
+art) >> PAGE_SHIFT);
+>  }
+>
+> diff --git a/tools/testing/vma/vma.c b/tools/testing/vma/vma.c
+> index 656e1c75b711..ee9d3547c421 100644
+> --- a/tools/testing/vma/vma.c
+> +++ b/tools/testing/vma/vma.c
+
+I prefer tests in a separate patch, but that might just be me. Feel
+free to ignore.
+
+> @@ -48,6 +48,8 @@ static struct anon_vma dummy_anon_vma;
+>  #define ASSERT_EQ(_val1, _val2) ASSERT_TRUE((_val1) =3D=3D (_val2))
+>  #define ASSERT_NE(_val1, _val2) ASSERT_TRUE((_val1) !=3D (_val2))
+>
+> +#define IS_SET(_val, _flags) ((_val & _flags) =3D=3D _flags)
+> +
+>  static struct task_struct __current;
+>
+>  struct task_struct *get_current(void)
+> @@ -441,7 +443,7 @@ static bool test_simple_shrink(void)
+>         return true;
+>  }
+>
+> -static bool test_merge_new(void)
+> +static bool __test_merge_new(bool is_sticky, bool a_is_sticky, bool b_is=
+_sticky, bool c_is_sticky)
+>  {
+>         vm_flags_t vm_flags =3D VM_READ | VM_WRITE | VM_MAYREAD | VM_MAYW=
+RITE;
+>         struct mm_struct mm =3D {};
+> @@ -469,23 +471,32 @@ static bool test_merge_new(void)
+>         struct vm_area_struct *vma, *vma_a, *vma_b, *vma_c, *vma_d;
+>         bool merged;
+>
+> +       if (is_sticky)
+> +               vm_flags |=3D VM_STICKY;
+> +
+>         /*
+>          * 0123456789abc
+>          * AA B       CC
+>          */
+>         vma_a =3D alloc_and_link_vma(&mm, 0, 0x2000, 0, vm_flags);
+>         ASSERT_NE(vma_a, NULL);
+> +       if (a_is_sticky)
+> +               vm_flags_set(vma_a, VM_STICKY);
+>         /* We give each VMA a single avc so we can test anon_vma duplicat=
+ion. */
+>         INIT_LIST_HEAD(&vma_a->anon_vma_chain);
+>         list_add(&dummy_anon_vma_chain_a.same_vma, &vma_a->anon_vma_chain=
+);
+>
+>         vma_b =3D alloc_and_link_vma(&mm, 0x3000, 0x4000, 3, vm_flags);
+>         ASSERT_NE(vma_b, NULL);
+> +       if (b_is_sticky)
+> +               vm_flags_set(vma_b, VM_STICKY);
+>         INIT_LIST_HEAD(&vma_b->anon_vma_chain);
+>         list_add(&dummy_anon_vma_chain_b.same_vma, &vma_b->anon_vma_chain=
+);
+>
+>         vma_c =3D alloc_and_link_vma(&mm, 0xb000, 0xc000, 0xb, vm_flags);
+>         ASSERT_NE(vma_c, NULL);
+> +       if (c_is_sticky)
+> +               vm_flags_set(vma_c, VM_STICKY);
+>         INIT_LIST_HEAD(&vma_c->anon_vma_chain);
+>         list_add(&dummy_anon_vma_chain_c.same_vma, &vma_c->anon_vma_chain=
+);
+>
+> @@ -520,6 +531,8 @@ static bool test_merge_new(void)
+>         ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma));
+>         ASSERT_EQ(mm.map_count, 3);
+> +       if (is_sticky || a_is_sticky || b_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma->vm_flags, VM_STICKY));
+>
+>         /*
+>          * Merge to PREVIOUS VMA.
+> @@ -537,6 +550,8 @@ static bool test_merge_new(void)
+>         ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma));
+>         ASSERT_EQ(mm.map_count, 3);
+> +       if (is_sticky || a_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma->vm_flags, VM_STICKY));
+>
+>         /*
+>          * Merge to NEXT VMA.
+> @@ -556,6 +571,8 @@ static bool test_merge_new(void)
+>         ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma));
+>         ASSERT_EQ(mm.map_count, 3);
+> +       if (is_sticky) /* D uses is_sticky. */
+> +               ASSERT_TRUE(IS_SET(vma->vm_flags, VM_STICKY));
+>
+>         /*
+>          * Merge BOTH sides.
+> @@ -574,6 +591,8 @@ static bool test_merge_new(void)
+>         ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma));
+>         ASSERT_EQ(mm.map_count, 2);
+> +       if (is_sticky || a_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma->vm_flags, VM_STICKY));
+>
+>         /*
+>          * Merge to NEXT VMA.
+> @@ -592,6 +611,8 @@ static bool test_merge_new(void)
+>         ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma));
+>         ASSERT_EQ(mm.map_count, 2);
+> +       if (is_sticky || c_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma->vm_flags, VM_STICKY));
+>
+>         /*
+>          * Merge BOTH sides.
+> @@ -609,6 +630,8 @@ static bool test_merge_new(void)
+>         ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma));
+>         ASSERT_EQ(mm.map_count, 1);
+> +       if (is_sticky || a_is_sticky || c_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma->vm_flags, VM_STICKY));
+>
+>         /*
+>          * Final state.
+> @@ -637,6 +660,20 @@ static bool test_merge_new(void)
+>         return true;
+>  }
+>
+> +static bool test_merge_new(void)
+> +{
+> +       int i, j, k, l;
+> +
+> +       /* Generate every possible permutation of sticky flags. */
+> +       for (i =3D 0; i < 2; i++)
+> +               for (j =3D 0; j < 2; j++)
+> +                       for (k =3D 0; k < 2; k++)
+> +                               for (l =3D 0; l < 2; l++)
+> +                                       ASSERT_TRUE(__test_merge_new(i, j=
+, k, l));
+> +
+> +       return true;
+> +}
+> +
+>  static bool test_vma_merge_special_flags(void)
+>  {
+>         vm_flags_t vm_flags =3D VM_READ | VM_WRITE | VM_MAYREAD | VM_MAYW=
+RITE;
+> @@ -973,9 +1010,11 @@ static bool test_vma_merge_new_with_close(void)
+>         return true;
+>  }
+>
+> -static bool test_merge_existing(void)
+> +static bool __test_merge_existing(bool prev_is_sticky, bool middle_is_st=
+icky, bool next_is_sticky)
+>  {
+>         vm_flags_t vm_flags =3D VM_READ | VM_WRITE | VM_MAYREAD | VM_MAYW=
+RITE;
+> +       vm_flags_t prev_flags =3D vm_flags;
+> +       vm_flags_t next_flags =3D vm_flags;
+>         struct mm_struct mm =3D {};
+>         VMA_ITERATOR(vmi, &mm, 0);
+>         struct vm_area_struct *vma, *vma_prev, *vma_next;
+> @@ -988,6 +1027,13 @@ static bool test_merge_existing(void)
+>         };
+>         struct anon_vma_chain avc =3D {};
+>
+> +       if (prev_is_sticky)
+> +               prev_flags |=3D VM_STICKY;
+> +       if (middle_is_sticky)
+> +               vm_flags |=3D VM_STICKY;
+> +       if (next_is_sticky)
+> +               next_flags |=3D VM_STICKY;
+> +
+>         /*
+>          * Merge right case - partial span.
+>          *
+> @@ -1000,7 +1046,7 @@ static bool test_merge_existing(void)
+>          */
+>         vma =3D alloc_and_link_vma(&mm, 0x2000, 0x6000, 2, vm_flags);
+>         vma->vm_ops =3D &vm_ops; /* This should have no impact. */
+> -       vma_next =3D alloc_and_link_vma(&mm, 0x6000, 0x9000, 6, vm_flags)=
+;
+> +       vma_next =3D alloc_and_link_vma(&mm, 0x6000, 0x9000, 6, next_flag=
+s);
+>         vma_next->vm_ops =3D &vm_ops; /* This should have no impact. */
+>         vmg_set_range_anon_vma(&vmg, 0x3000, 0x6000, 3, vm_flags, &dummy_=
+anon_vma);
+>         vmg.middle =3D vma;
+> @@ -1018,6 +1064,8 @@ static bool test_merge_existing(void)
+>         ASSERT_TRUE(vma_write_started(vma));
+>         ASSERT_TRUE(vma_write_started(vma_next));
+>         ASSERT_EQ(mm.map_count, 2);
+> +       if (middle_is_sticky || next_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma_next->vm_flags, VM_STICKY));
+>
+>         /* Clear down and reset. */
+>         ASSERT_EQ(cleanup_mm(&mm, &vmi), 2);
+> @@ -1033,7 +1081,7 @@ static bool test_merge_existing(void)
+>          *   NNNNNNN
+>          */
+>         vma =3D alloc_and_link_vma(&mm, 0x2000, 0x6000, 2, vm_flags);
+> -       vma_next =3D alloc_and_link_vma(&mm, 0x6000, 0x9000, 6, vm_flags)=
+;
+> +       vma_next =3D alloc_and_link_vma(&mm, 0x6000, 0x9000, 6, next_flag=
+s);
+>         vma_next->vm_ops =3D &vm_ops; /* This should have no impact. */
+>         vmg_set_range_anon_vma(&vmg, 0x2000, 0x6000, 2, vm_flags, &dummy_=
+anon_vma);
+>         vmg.middle =3D vma;
+> @@ -1046,6 +1094,8 @@ static bool test_merge_existing(void)
+>         ASSERT_EQ(vma_next->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma_next));
+>         ASSERT_EQ(mm.map_count, 1);
+> +       if (middle_is_sticky || next_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma_next->vm_flags, VM_STICKY));
+>
+>         /* Clear down and reset. We should have deleted vma. */
+>         ASSERT_EQ(cleanup_mm(&mm, &vmi), 1);
+> @@ -1060,7 +1110,7 @@ static bool test_merge_existing(void)
+>          * 0123456789
+>          * PPPPPPV
+>          */
+> -       vma_prev =3D alloc_and_link_vma(&mm, 0, 0x3000, 0, vm_flags);
+> +       vma_prev =3D alloc_and_link_vma(&mm, 0, 0x3000, 0, prev_flags);
+>         vma_prev->vm_ops =3D &vm_ops; /* This should have no impact. */
+>         vma =3D alloc_and_link_vma(&mm, 0x3000, 0x7000, 3, vm_flags);
+>         vma->vm_ops =3D &vm_ops; /* This should have no impact. */
+> @@ -1080,6 +1130,8 @@ static bool test_merge_existing(void)
+>         ASSERT_TRUE(vma_write_started(vma_prev));
+>         ASSERT_TRUE(vma_write_started(vma));
+>         ASSERT_EQ(mm.map_count, 2);
+> +       if (prev_is_sticky || middle_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma_prev->vm_flags, VM_STICKY));
+>
+>         /* Clear down and reset. */
+>         ASSERT_EQ(cleanup_mm(&mm, &vmi), 2);
+> @@ -1094,7 +1146,7 @@ static bool test_merge_existing(void)
+>          * 0123456789
+>          * PPPPPPP
+>          */
+> -       vma_prev =3D alloc_and_link_vma(&mm, 0, 0x3000, 0, vm_flags);
+> +       vma_prev =3D alloc_and_link_vma(&mm, 0, 0x3000, 0, prev_flags);
+>         vma_prev->vm_ops =3D &vm_ops; /* This should have no impact. */
+>         vma =3D alloc_and_link_vma(&mm, 0x3000, 0x7000, 3, vm_flags);
+>         vmg_set_range_anon_vma(&vmg, 0x3000, 0x7000, 3, vm_flags, &dummy_=
+anon_vma);
+> @@ -1109,6 +1161,8 @@ static bool test_merge_existing(void)
+>         ASSERT_EQ(vma_prev->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma_prev));
+>         ASSERT_EQ(mm.map_count, 1);
+> +       if (prev_is_sticky || middle_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma_prev->vm_flags, VM_STICKY));
+>
+>         /* Clear down and reset. We should have deleted vma. */
+>         ASSERT_EQ(cleanup_mm(&mm, &vmi), 1);
+> @@ -1123,10 +1177,10 @@ static bool test_merge_existing(void)
+>          * 0123456789
+>          * PPPPPPPPPP
+>          */
+> -       vma_prev =3D alloc_and_link_vma(&mm, 0, 0x3000, 0, vm_flags);
+> +       vma_prev =3D alloc_and_link_vma(&mm, 0, 0x3000, 0, prev_flags);
+>         vma_prev->vm_ops =3D &vm_ops; /* This should have no impact. */
+>         vma =3D alloc_and_link_vma(&mm, 0x3000, 0x7000, 3, vm_flags);
+> -       vma_next =3D alloc_and_link_vma(&mm, 0x7000, 0x9000, 7, vm_flags)=
+;
+> +       vma_next =3D alloc_and_link_vma(&mm, 0x7000, 0x9000, 7, next_flag=
+s);
+>         vmg_set_range_anon_vma(&vmg, 0x3000, 0x7000, 3, vm_flags, &dummy_=
+anon_vma);
+>         vmg.prev =3D vma_prev;
+>         vmg.middle =3D vma;
+> @@ -1139,6 +1193,8 @@ static bool test_merge_existing(void)
+>         ASSERT_EQ(vma_prev->anon_vma, &dummy_anon_vma);
+>         ASSERT_TRUE(vma_write_started(vma_prev));
+>         ASSERT_EQ(mm.map_count, 1);
+> +       if (prev_is_sticky || middle_is_sticky || next_is_sticky)
+> +               ASSERT_TRUE(IS_SET(vma_prev->vm_flags, VM_STICKY));
+>
+>         /* Clear down and reset. We should have deleted prev and next. */
+>         ASSERT_EQ(cleanup_mm(&mm, &vmi), 1);
+> @@ -1158,9 +1214,9 @@ static bool test_merge_existing(void)
+>          * PPPVVVVVNNN
+>          */
+>
+> -       vma_prev =3D alloc_and_link_vma(&mm, 0, 0x3000, 0, vm_flags);
+> +       vma_prev =3D alloc_and_link_vma(&mm, 0, 0x3000, 0, prev_flags);
+>         vma =3D alloc_and_link_vma(&mm, 0x3000, 0x8000, 3, vm_flags);
+> -       vma_next =3D alloc_and_link_vma(&mm, 0x8000, 0xa000, 8, vm_flags)=
+;
+> +       vma_next =3D alloc_and_link_vma(&mm, 0x8000, 0xa000, 8, next_flag=
+s);
+>
+>         vmg_set_range(&vmg, 0x4000, 0x5000, 4, vm_flags);
+>         vmg.prev =3D vma;
+> @@ -1203,6 +1259,19 @@ static bool test_merge_existing(void)
+>         return true;
+>  }
+>
+> +static bool test_merge_existing(void)
+> +{
+> +       int i, j, k;
+> +
+> +       /* Generate every possible permutation of sticky flags. */
+> +       for (i =3D 0; i < 2; i++)
+> +               for (j =3D 0; j < 2; j++)
+> +                       for (k =3D 0; k < 2; k++)
+> +                               ASSERT_TRUE(__test_merge_existing(i, j, k=
+));
+> +
+> +       return true;
+> +}
+> +
+>  static bool test_anon_vma_non_mergeable(void)
+>  {
+>         vm_flags_t vm_flags =3D VM_READ | VM_WRITE | VM_MAYREAD | VM_MAYW=
+RITE;
+> diff --git a/tools/testing/vma/vma_internal.h b/tools/testing/vma/vma_int=
+ernal.h
+> index e40c93edc5a7..3d9cb3a9411a 100644
+> --- a/tools/testing/vma/vma_internal.h
+> +++ b/tools/testing/vma/vma_internal.h
+> @@ -117,6 +117,38 @@ extern unsigned long dac_mmap_min_addr;
+>  #define VM_SEALED      VM_NONE
+>  #endif
+>
+> +/* Flags which should result in page tables being copied on fork. */
+> +#define VM_COPY_ON_FORK VM_MAYBE_GUARD
+> +
+> +/*
+> + * Flags which should be 'sticky' on merge - that is, flags which, when =
+one VMA
+> + * possesses it but the other does not, the merged VMA should nonetheles=
+s have
+> + * applied to it:
+> + *
+> + * VM_COPY_ON_FORK - These flags indicates that a VMA maps a range that =
+contains
+> + *                   metadata which should be unconditionally propagated=
+ upon
+> + *                   fork. When merging two VMAs, we encapsulate this ra=
+nge in
+> + *                   the merged VMA, so the flag should be 'sticky' as a=
+ result.
+> + */
+> +#define VM_STICKY VM_COPY_ON_FORK
+> +
+> +/*
+> + * VMA flags we ignore for the purposes of merge, i.e. one VMA possessin=
+g one
+> + * of these flags and the other not does not preclude a merge.
+> + *
+> + * VM_SOFTDIRTY - Should not prevent from VMA merging, if we match the f=
+lags but
+> + *                dirty bit -- the caller should mark merged VMA as dirt=
+y. If
+> + *                dirty bit won't be excluded from comparison, we increa=
+se
+> + *                pressure on the memory system forcing the kernel to ge=
+nerate
+> + *                new VMAs when old one could be extended instead.
+> + *
+> + *    VM_STICKY - If one VMA has flags which must be 'sticky', that is o=
+nes
+> + *                which should propagate to all VMAs, but the other does=
+ not,
+> + *                the merge should still proceed with the merge logic ap=
+plying
+> + *                sticky flags to the final VMA.
+> + */
+> +#define VM_IGNORE_MERGE (VM_SOFTDIRTY | VM_STICKY)
+> +
+>  #define FIRST_USER_ADDRESS     0UL
+>  #define USER_PGTABLES_CEILING  0UL
+>
+> --
+> 2.51.0
+>
 
