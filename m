@@ -1,117 +1,91 @@
-Return-Path: <linux-kselftest+bounces-44422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58AAAC20C90
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 15:59:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98FECC20F5E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 16:35:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36AB9460B5D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 14:59:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C2EF4642D1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 15:35:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DCC9286D7D;
-	Thu, 30 Oct 2025 14:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7137B3655D4;
+	Thu, 30 Oct 2025 15:34:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="K3ZQh7Np";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mGBM+Kse"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m9fDkfRa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABAEC2857F0;
-	Thu, 30 Oct 2025 14:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488853655CF;
+	Thu, 30 Oct 2025 15:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761836349; cv=none; b=sjd+1AK3rmy9iXvhIJX3WILelCkF13AG52zWCVjJJThz6XDECL91By2W9D3RHZ5CRKXxdaLbwkTqUA2FaPYazVfZC6N5fGqszVWabb0Xy2sLcpkahWr10iMlvc3Bmp99iHRvybYaEnWUGCDI6475OUi2r1zdM6dvuxphM7yI06s=
+	t=1761838488; cv=none; b=pylXX9DAM2r85WkkJV2u8P6v24jf8sbxUyAhEdFDm6bZxQoHPZ603bOMkie00nUj9FnUNC5onQ/TjamPzTeybTWNKwuvIU6LOTS1W5h+Jru5JF/dghc7OuwDf0TlKVMBA8n3ML72jSGUX5cgqMj5a4ChcOYJxi8aC629tlnK9LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761836349; c=relaxed/simple;
-	bh=iAMRPUbbYbZlhKn5in/HGlgUn+ksUFRcO6IEVrJCJv8=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=YeYzoeJiTCoMPllYrzsmdLZt200zq8+RUd8A42bbpOQ60nPvCAoUr2Do9UJMF/e+n2EQDIu1HvS8UfM3TILt5GTzLs6S9SC8rO/hNrDp3wN3btLD9POTwhQ/jNTOh7XCAbA8vk+UyFDMYmzswL0t6lhP4h2eMnFSKMYzU8nlg2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=K3ZQh7Np; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mGBM+Kse; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id D517E7A0160;
-	Thu, 30 Oct 2025 10:59:06 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Thu, 30 Oct 2025 10:59:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1761836346;
-	 x=1761922746; bh=iAMRPUbbYbZlhKn5in/HGlgUn+ksUFRcO6IEVrJCJv8=; b=
-	K3ZQh7NpKBLDq7TE6gR55oLH0KU4k0deEz2HPO8ED1FRL61uGon+/10mDd/7kdjo
-	ntwCNvSnSZxnDHS3Zruu/8WdtvMPuqMDmiL3r6E/qmAo54sI6qIBj1kIY8/iNKq1
-	TPcSD7WeCI7kMXW6VzBh4SPFnZEc8+FbXxrq9/J3qh0YeGjhYtMG3cMVV4qMpA5J
-	m7/o91j3JZXeC9Vf1VB3Da1BDX3BOY7NdcWIh6W1DSyp5JYP/lAvKbVyuXE1v0hp
-	I31Jm0vPgVK1Kr6On1a8KkMGW32mbedZb5c+rcxWRYinOXc+cMWCoyr9eztq3A3F
-	hrCBu5P9HLy1uqCsRytUrQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1761836346; x=
-	1761922746; bh=iAMRPUbbYbZlhKn5in/HGlgUn+ksUFRcO6IEVrJCJv8=; b=m
-	GBM+Ksesig0lHRYd2u+NiP7tq4MCftcyLnNRO3BF9Hu51hPLeouqX+vt6Z0gXOOT
-	OoROs34V3X8KN1Kxs36weBOzKdFqJlBEeoZUfeCzUzbGPigLkFYa2Q/msElyXbAz
-	KEyUQVUnnpsPNRBfQnYe4hNEz9RqT2Ot54sdzQv7PswL/LeGBwMwKpgKkJUPB9YR
-	jx0UFlQZxFT//O1A02jbdlQuaJYIHOftGuFi7zYby02bhRga1VHEkdwICmqkmIlf
-	TUnJXoLo7ojn0Wj7y//itXXzfGw7x87A2LLL8NKQGKjWBi6W97PUyD4Tn8XDkFGI
-	JZOhBIpjVNPYjsxTlfO5Q==
-X-ME-Sender: <xms:On0DafqdqH3uE0CmVlLRmjzh8Ghu8TdMl3Dye-o56p2boBUFrOOAfQ>
-    <xme:On0DaUezwEh-rmiMB3lUNChwjtqubDCNZT2Og4mL87c4ayTGSSUIWtlj3mqOn86yT
-    4F-G5mS5r-hCrJ_j3mscWAKuiaUkrf9519wMzBUow1IwFx_ZaYsBcQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduieeileduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefoggffhffvvefkjghfufgtgfesthhqre
-    dtredtjeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghr
-    nhgusgdruggvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvle
-    ehvddvgeejvdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpeefnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtth
-    hopeehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeifsedufihtrdgvuhdprhgt
-    phhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqd
-    hkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhig
-    qdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
-    hinhhugiesfigvihhsshhstghhuhhhrdhnvght
-X-ME-Proxy: <xmx:On0DaQ16PkpP0Kwq_CQZC7sOaVGXU4tPPehsNnvkl5piOPribijXrw>
-    <xmx:On0DaUD_OYwxvX4Wb1_aLsZFjizVLL870rHNFqZvtCDxk727vHONXg>
-    <xmx:On0DaUd2PvV2joyuJSX-dLKgI7-EQK9yFEvVYksV0E0UDdsAdOdkaA>
-    <xmx:On0DaZ5nwRzyJL_xbw5L3nkez0_lRV-ZzPkuK_X-SIL8K4TRGdWKUA>
-    <xmx:On0DaXbzgphq62Yu4ut5OZ3RQ4iWfB5E0UtQyDC4tVMB3J9-S2KZlWDJ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 5DEF9700063; Thu, 30 Oct 2025 10:59:06 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1761838488; c=relaxed/simple;
+	bh=0cI5L+2GoYgkgOTgvSKGNPMHZMHPezyi0/RCkUUrMvY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=USqr1xQepLqv0xRnTQGxgns2fF6azYOE9fDnQ5ewnWxjUrQI2bcSv+fo4NVw0rKZosuwjIIflzcsw/JvBH5AewRegrJRgHwYdb4Y3VK3kBBg3AxuvZuZI+7AkhuKnzZkqXn5/U4K+1judIaRThi6OyQojhmqcmMcIO3aTl0/JSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m9fDkfRa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065E6C113D0;
+	Thu, 30 Oct 2025 15:34:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761838487;
+	bh=0cI5L+2GoYgkgOTgvSKGNPMHZMHPezyi0/RCkUUrMvY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=m9fDkfRaNMJ7A0XCkjp6LZEMhnz+MmFhlftqSt0xcTJjIqo/rnsB+LUmC3/YkyEbP
+	 bhDRvvcITsJXszBPKD22+92IRNaNpI82Sh1LHYtuWNZtFgMQ0+/n9XVovXVzob4GK2
+	 UFJ2ZulPvlD/n3iWCIl/cmOJ4dWIxYOk4dq5biqSAFIrLFxrkguMn7YUPQiL8PBmuY
+	 sOxmI07SCILIS04ISQSq8PWU2T76LXoMoWv6Ym1YwQoiSI9OL59EnOM+BRDOhsymwa
+	 bh6+1QTaaI3HAJu2mGZznjqXPOkxEkORfhfQSsG48RBToJrnsBrzzxYSMbKk+0Em1e
+	 P3KGtIozugWEQ==
+Date: Thu, 30 Oct 2025 08:34:46 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jan Stancek
+ <jstancek@redhat.com>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+ =?UTF-8?B?QXNiasO4cm4=?= Sloth =?UTF-8?B?VMO4bm5lc2Vu?= <ast@fiberby.net>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, Ido
+ Schimmel <idosch@nvidia.com>, Guillaume Nault <gnault@redhat.com>, Petr
+ Machata <petrm@nvidia.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 2/3] netlink: specs: update rt-rule src/dst
+ attribute types to support IPv4 addresses
+Message-ID: <20251030083446.16b8cefb@kernel.org>
+In-Reply-To: <aQMHJlwcchqtoAa7@fedora>
+References: <20251029082245.128675-1-liuhangbin@gmail.com>
+	<20251029082245.128675-3-liuhangbin@gmail.com>
+	<20251029163742.3d96c18d@kernel.org>
+	<aQMHJlwcchqtoAa7@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Ao3O5_vZS4X7
-Date: Thu, 30 Oct 2025 15:58:45 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- "Willy Tarreau" <w@1wt.eu>, shuah <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <344a3ebe-f991-4d28-ae54-89e76725830d@app.fastmail.com>
-In-Reply-To: <20251029-nolibc-uapi-types-v1-5-e79de3b215d8@weissschuh.net>
-References: <20251029-nolibc-uapi-types-v1-0-e79de3b215d8@weissschuh.net>
- <20251029-nolibc-uapi-types-v1-5-e79de3b215d8@weissschuh.net>
-Subject: Re: [PATCH 05/12] tools/nolibc: remove now superfluous overflow check in
- llseek
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 29, 2025, at 17:02, Thomas Wei=C3=9Fschuh wrote:
-> As off_t is now always 64-bit wide this overflow can not happen anymor=
-e,
-> remove the check.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+On Thu, 30 Oct 2025 06:35:18 +0000 Hangbin Liu wrote:
+> > This will be annoying For C / C++, and you didn't set the max len 
+> > so I think we'll also have to malloc each time. Do we not support
+> > display-hint for scalars?  
+> 
+> Ah, I didn't notice this. Should we convert all the
+> 
+>  type: binary
+>  display-hint: ipv4
+> 
+> to
+> 
+>  type: u32
+>  byte-order: big-endian
+>  display-hint: ipv4
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+I think we should try. Technically it may change some kernel policies,
+but without min/max-like checks the byte-order should be a nop for the
+policy.
 
