@@ -1,212 +1,235 @@
-Return-Path: <linux-kselftest+bounces-44457-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44458-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E9E5C226EE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 22:37:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E13DC22769
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 22:48:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 805E2420811
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 21:37:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BFB842475C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 21:48:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B59263126D2;
-	Thu, 30 Oct 2025 21:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26B7F335541;
+	Thu, 30 Oct 2025 21:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RnENy23/"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CWwi1ZN2";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="IHT2QUyE";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="pHrXAb92";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="gl2zaOn8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6EB3090CE
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 21:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F603128CE
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 21:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761860245; cv=none; b=Mypzz5y4Uo2os/OK0UsJG34cyGVR9mT7JDIrZ5dCE61Lpyr2roS34wx/AhFxHBQgXMlo0/ZLe9cgAngCzrOeIx9kfok5z/Wkt32Pg4CHdEoSnfoIJTT0WFuajOv9LW68cWY2o66s0730r7O0BbPTZMGDkgahOriBwGdDuoeHyhQ=
+	t=1761860904; cv=none; b=UBszGVgYUWyTnI12w2h2JN1BqIK9XSieF+AYkghBEHuihxB+9IErj+vJwiO9d8lIJAdN5G7FgIHhUswRZ9NNrFLQjT8hTVPxON4EHiQASrnxsLUqTA/7KQtUxCNbUwfgw3Y8Li0HSXse8BmUBoz7NtVMSzeunh0pt7ucQQgD2J8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761860245; c=relaxed/simple;
-	bh=VAui8AWn8copQhC4kZGHA0swzDjJZpFxDyviY8QdSiU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=RGuGPUaiSxtWxgYcQXNqR/vxOG5S0YN1eM0mL+HwJgAotdhwTOHcN/qnz5sUOHS8Do99QjsTGzl8KKtJgzcRnIbYhVPc2+TFXCKXqSfhu0rkxsLfSpKmpBIx3XF8vgz7I8xT1e9RECNGOY20kZjj1t+SMi7K4b4CmXkbhgrKIAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RnENy23/; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7a285bb5376so1338491b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 14:37:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761860242; x=1762465042; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FjqH9fMyxc9+P0OjDrNByGI1LC2bpJVWLzcv83ocI04=;
-        b=RnENy23/e4lgXVayIyLNA7exwHRTKb4fJksMUWcVHeSosYHvOy/61GaUfOpPSrtqS8
-         NtOWnvTnxh2A54220FlAFteLRgXmeSkwSDndrNSl6Mm/zwBerLqhDcUPCri7kuWSsCDU
-         N1Gd5RpAXD90I9M/DhfzSikpavNSghllNeYcehp+lrg3r1PTm9/2or+RTA6cngCMYWaN
-         ljYoWz0q0cOPcoXAJbyVn6ORrvuzzAL+Go+/ItQmJdKOoMo22qh0AQDiKM9a+8UjXKVz
-         2+FNT8a38emNKBq4SeKUrSKW7jDnYlgdPl1s+fnQH1ASC2JfZkdsc5JqYS95Q6vQua/7
-         JSJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761860242; x=1762465042;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FjqH9fMyxc9+P0OjDrNByGI1LC2bpJVWLzcv83ocI04=;
-        b=Dzvie2mlKHKadirBwrvIvc/M0CgGrU1lnmCVR8EaDjrpv67eQ2qRbkZdZs3Rzl1PYG
-         eGOixzhi36DJOrRIr91Wh250FHqwaDIjQkbWKCnJ9DrPlykDzHYRZEhIC6sxqKQkQ+Oo
-         u+/Wru1k/45il8PrrDA2bnp6JTJteXEGPrKPXjbf5ekIZjEFjZ9zVCdY+sVnVpO5VLcQ
-         3V5VQpOwuF4/8+2K1vy6SznD3MPfvwrcf1Z1qMIaUfwvHfCqwtBu+y2haM4AkwRbPxEA
-         NoQQpzrJ/eLyxSgnuo5CePqQxU7sV18kINruBRywf+kcX4RD9WIJf1TrUU8/XgdDArxM
-         fpHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWUoqE3uDqs+SSQVJctELSjQFN99wm9e+zbN1W+9tsgIRmguAAb486tcgSjFDik93HDhNaJDEm/O2KK+84oh0o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRmlUAAxzOJETWsV5LGOrTlTvzhSiI0VLwjAjtcRQG+NOLITvF
-	/4zVNoREkLGhRcN6JQ1WFYyh5N/I8NRxh2n7Tn/x1IZKClgEXZtS4dWBOsUfkPnT2sGf0IKlLDo
-	PLvJfbw==
-X-Google-Smtp-Source: AGHT+IHQXCkASO98UAVSO9VjI2IZVkmCZ27+eNAxxCZJeBSQ6f5kJjB6Vk2Jfqs7FpDmqPvWjbxdho5Wjic=
-X-Received: from pjbbt5.prod.google.com ([2002:a17:90a:f005:b0:33b:e0b5:6112])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:1595:b0:341:5935:e209
- with SMTP id adf61e73a8af0-348cb9a0c1fmr1707096637.38.1761860242517; Thu, 30
- Oct 2025 14:37:22 -0700 (PDT)
-Date: Thu, 30 Oct 2025 14:37:20 -0700
-In-Reply-To: <8a28ddea-35c0-490e-a7d2-7fb612fdd008@amazon.com>
+	s=arc-20240116; t=1761860904; c=relaxed/simple;
+	bh=+/NcYQVFpWxt6wshCvjjvCLk6sanELYc+SWjBzJLCvs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IG1NE6DYIHnc6N9qqtqNJeqGJBb3r3LwsQpREQ+Xi+TlGZHgEl6yWeBT2/ge0LhHtE6ekGEhKZF+VNN1WvOxDn3/JFnZREMJTHmuo/dKgyYbKf8AQ+nihOItEar4yOSTzN3Gfqq8tuXPtFdqmkzl3H55iz99C5jWoc3RbQGWL/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CWwi1ZN2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=IHT2QUyE; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=pHrXAb92; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=gl2zaOn8; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 79F683371B;
+	Thu, 30 Oct 2025 21:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1761860900; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tuaScIMcrrhodAsQYWR/pzyJZ/yPqkjuHeawwOY4OSs=;
+	b=CWwi1ZN2PDFTwP6IG3/nrXaAJ4+t4nINrmYrPNce6qBHL0J2iVx7lxhLCq9GpNTRyIAJ6A
+	rJpbQA71fT3UkIT3Kq7DpQEPWdmSTxinb+bcWNmNp6yRx7qwmE/+QBNUJk26hx1Q1t4/YT
+	LLZzlYgDgu5ahbs0fhUaGjAoYFfgYTk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1761860900;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tuaScIMcrrhodAsQYWR/pzyJZ/yPqkjuHeawwOY4OSs=;
+	b=IHT2QUyEiqcakoGIjbGocHiZwUydx5+Eftk69hpX7lktrin2a0GX2AzuLVKaOVqsyiSOL2
+	v1K/wZXNT3OMWIBw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1761860899; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tuaScIMcrrhodAsQYWR/pzyJZ/yPqkjuHeawwOY4OSs=;
+	b=pHrXAb92ICzphAPnxytqi+TmNeixgbqlmWbEUBPedD0pzqam8mFVRPFGYI0xWMyOfmvo5L
+	AFetASCK7mKdCXhPIa09XQO3R0PbqOD0ojy5XMEmH3Q4A561bqvFJi0+hr7uYLgFnsRLX5
+	H94/KWFjSOO2d2uByy9iRE3gKP8Sqe0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1761860899;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=tuaScIMcrrhodAsQYWR/pzyJZ/yPqkjuHeawwOY4OSs=;
+	b=gl2zaOn8cwauq+PDCyUPOt26ZhOcJQ4sHH+24gTF7XlOpzPxeDtZGDf2UPPB6wAD2f9e/B
+	6C+tam/btvjyRbDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 489591396A;
+	Thu, 30 Oct 2025 21:48:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id DvAFESPdA2mQSQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 30 Oct 2025 21:48:19 +0000
+Message-ID: <a3bcac19-78b7-4918-81b3-641a65a19a9d@suse.cz>
+Date: Thu, 30 Oct 2025 22:48:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251020161352.69257-1-kalyazin@amazon.com> <20251020161352.69257-2-kalyazin@amazon.com>
- <aPpS2aqdobVTk_ed@google.com> <8a28ddea-35c0-490e-a7d2-7fb612fdd008@amazon.com>
-Message-ID: <aQPakDuteQkg0hTu@google.com>
-Subject: Re: [PATCH v6 1/2] KVM: guest_memfd: add generic population via write
-From: Sean Christopherson <seanjc@google.com>
-To: Nikita Kalyazin <kalyazin@amazon.com>
-Cc: Nikita Kalyazin <kalyazin@amazon.co.uk>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
-	"shuah@kernel.org" <shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "david@redhat.com" <david@redhat.com>, 
-	"jthoughton@google.com" <jthoughton@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>, 
-	Jack Thomson <jackabt@amazon.co.uk>, Derek Manwaring <derekmn@amazon.com>, 
-	Marco Cali <xmarcalx@amazon.co.uk>, ackerleytng@google.com, 
-	Vishal Annapurve <vannapurve@google.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] mm: introduce VM_MAYBE_GUARD and make visible for
+ guard regions
+Content-Language: en-US
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Pedro Falcato <pfalcato@suse.de>,
+ Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>,
+ David Hildenbrand <david@redhat.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
+ Barry Song <21cnbao@gmail.com>
+References: <cover.1761756437.git.lorenzo.stoakes@oracle.com>
+ <7de40603015dee82970f5d37332a6d5af7532063.1761756437.git.lorenzo.stoakes@oracle.com>
+ <xnsn5rfqigbm5ryjtbf2rtfotneiwygzesvyfdxiqrzlyzljdr@tmbht4ggnjcv>
+ <61ae955e-310d-488e-b350-59bb809f06e1@lucifer.local>
+ <c736tssdw3z57kamh6eqc23gr575q375n2o2nnszih64afnaf7@zwbqremsbhwf>
+ <053f3a04-9195-4f8d-8959-42e0c3ba077b@lucifer.local>
+ <72ee2324-d599-44b6-92ce-ed0afafed78f@suse.cz>
+ <3ae457cd-6c18-4870-a617-7f937b107cb4@suse.cz>
+ <88b72728-fa3f-4a70-9ea2-40ff50673047@lucifer.local>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <88b72728-fa3f-4a70-9ea2-40ff50673047@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.de,linux-foundation.org,lwn.net,redhat.com,oracle.com,kernel.org,google.com,suse.com,goodmis.org,efficios.com,vger.kernel.org,kvack.org,gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-On Fri, Oct 24, 2025, Nikita Kalyazin wrote:
+On 10/30/25 20:47, Lorenzo Stoakes wrote:
+> On Thu, Oct 30, 2025 at 07:47:34PM +0100, Vlastimil Babka wrote:
+>> >
+>> > Could we use MADVISE_VMA_READ_LOCK mode (would be actually an improvement
+>> > over the current MADVISE_MMAP_READ_LOCK), together with the atomic flag
+>> > setting? I think the places that could race with us to cause RMW use vma
+>> > write lock so that would be excluded. Fork AFAICS unfortunately doesn't (for
+>> > the oldmm) and it probably would't make sense to start doing it. Maybe we
+>> > could think of something to deal with this special case...
+>>
+>> During discussion with Pedro off-list I realized fork takes mmap lock for
+>> write on the old mm, so if we kept taking mmap sem for read, then vma lock
+>> for read in addition (which should be cheap enough, also we'd only need it
+>> in case VM_MAYBE_GUARD is not yet set), and set the flag atomicaly, perhaps
+>> that would cover all non-bening races?
+>>
+>>
 > 
+> We take VMA write lock in dup_mmap() on each mpnt (old VMA).
+
+Ah yes I thought it was the new one.
+
+> We take the VMA write lock (vma_start_write()) for each mpnt.
 > 
-> On 23/10/2025 17:07, Sean Christopherson wrote:
-> > On Mon, Oct 20, 2025, Nikita Kalyazin wrote:
-> > > From: Nikita Kalyazin <kalyazin@amazon.com>
+> We then vm_area_dup() the mpnt to the new VMA before calling:
 > 
-> + Vishal and Ackerley
+> copy_page_range()
+> -> vma_needs_copy()
 > 
-> > > 
-> > > write syscall populates guest_memfd with user-supplied data in a generic
-> > > way, ie no vendor-specific preparation is performed.  If the request is
-> > > not page-aligned, the remaining bytes are initialised to 0.
-> > > 
-> > > write is only supported for non-CoCo setups where guest memory is not
-> > > hardware-encrypted.
-> > 
-> > Please include all of the "why".  The code mostly communicates the "what", but
-> > it doesn't capture why write() support is at all interesting, nor does it explain
-> > why read() isn't supported.
+> Which is where the check is done.
 > 
-> Hi Sean,
+> So we are holding the VMA write lock, so a VMA read lock should suffice no?
+
+Yeah, even better!
+
+> For belts + braces we could atomically read the flag in vma_needs_copy(),
+> though note it's intended VM_COPY_ON_FORK could have more than one flag.
 > 
-> Thanks for the review.
-> 
-> Do you think including the explanation from the cover letter would be
-> sufficient?
+> We could drop that for now and be explicit.
 
-It's pretty close.  A few more details would be helpful, e.g. to explain that VMMs
-may use write() to populate the initial image
-
-> Shall I additionally say that read() isn't supported because there is no use
-> case for it as of now or would it be obvious?
-
-Hmm, I think if you want to exclude read() support, the changelog should explicitly
-state why.  E.g. "there's no use case" is quite different from "deliberately
-don't support read() for security reasons".
-
-> > > Signed-off-by: Nikitia Kalyazin <kalyazin@amazon.com>
-> > > ---
-> > >   virt/kvm/guest_memfd.c | 48 ++++++++++++++++++++++++++++++++++++++++++
-> > 
-> > There's a notable lack of uAPI and Documentation chanegs.  I.e. this needs a
-> > GUEST_MEMFD_FLAG_xxx along with proper documentation.
-> 
-> Would the following be ok in the doc?
-> 
-> When the capability KVM_CAP_GUEST_MEMFD_WRITE is supported, the 'flags'
-
-No capability is necessary, see d2042d8f96dd ("KVM: Rework KVM_CAP_GUEST_MEMFD_MMAP
-into KVM_CAP_GUEST_MEMFD_FLAGS").
-
-> field
-> supports GUEST_MEMFD_FLAG_WRITE. Setting this flag on guest_memfd creation
-> enables write() syscall operations to populate guest_memfd memory from host
-> userspace.
-> 
-> When a write() operation is performed on a guest_memfd file descriptor with
-> the
-> GUEST_MEMFD_FLAG_WRITE set, the syscall will populate the guest memory with
-> user-supplied data in a generic way, without any vendor-specific
-> preparation.
-> The write operation is only supported for non-CoCo (Confidential Computing)
-> setups where guest memory is not hardware-encrypted. 
-
-The restriction should be that guest memory must be SHARED, i.e. not PRIVATE.
-Strictly speaking, guest memory can be encrypted, e.g. with SME and TME (I think
-TME is still a thing?), but with a shared key and thus accessible from the host.
-
-Even if that weren't the case, we want to support this for CoCo VMs.
-
-> If the write request is not page-aligned, any remaining bytes within the page
-> are initialized to zero.
-
-Why?  (Honest question, e.g. is that standard file semantics?)
-
-> > And while it's definitely it's a-ok to land .write() in advance of the direct map
-> > changes, we do need to at least map out how we want the two to interact, e.g. so
-> > that we don't end up with constraints that are impossible to satisfy.
-> > 
-> 
-> write() shall not attempt to access a page that is not in the direct map,
-> which I believe can be achieved via kvm_kmem_gmem_write_begin() consulting
-> the KVM_GMEM_FOLIO_NO_DIRECT_MAP in folio->private (introduced in [1]).
-> 
-> Do you think we should mention it in the commit message in some way? What
-> particular constraint are you cautious about?
-
-I want to be cautious with respect to the ABI/uAPI.  Patrick's series also adds
-a flag, and guest_memfd doesn't currently provide a way to toggle flags after the
-file is created.  That begs the question of how GUEST_MEMFD_FLAG_NO_DIRECT_MAP
-will co-exist with GUEST_MEMFD_FLAG_WRITE.  Presumably the goal is to use write()
-to initialize memory, and _then_ nuke the direct map.
-
-I want line of sight to understanding the exact semantics/flows.  E.g. will KVM
-require userspace to clear GUEST_MEMFD_FLAG_WRITE before allowing
-NO_DIRECT_MAP?  Or will the write() simply fail?  How will the sequencing be
-achieved?
-
-> > > +     struct inode *inode = file_inode(file);
-> > > +     pgoff_t index = pos >> PAGE_SHIFT;
-> > > +     struct folio *folio;
-> > > +
-> > > +     if (!kvm_gmem_supports_mmap(inode))
-> > 
-> > Checking for MMAP is neither sufficient nor strictly necessary.  MMAP doesn't
-> > imply SHARED, and it's not clear to me that mmap() support should be in any way
-> > tied to WRITE support.
-> 
-> As in my reply to the comment about doc, I plan to introduce
-> KVM_CAP_GUEST_MEMFD_WRITE and GUEST_MEMFD_FLAG_WRITE.  The
-> kvm_arch_supports_gmem_write() will be a weak symbol and relying on
-> !kvm_arch_has_private_mem() on x86, similar to
-> kvm_arch_supports_gmem_mmap().  Does it look right?
-
-No.  As above, write() should be allowed iff memory is SHARED.  Relevant commits
-that are now in Linus' tree:
-
-  44c6cb9fe9888b371e31165b2854bd0f4e2787d4 KVM: guest_memfd: Allow mmap() on guest_memfd for x86 VMs with private memory
-  9aef71c892a55e004419923ba7129abe3e58d9f1 KVM: Explicitly mark KVM_GUEST_MEMFD as depending on KVM_GENERIC_MMU_NOTIFIER
-  5d3341d684be80892d8f6f9812f90f9274b81177 KVM: guest_memfd: Invalidate SHARED GPAs if gmem supports INIT_SHARED
+Great!
 
