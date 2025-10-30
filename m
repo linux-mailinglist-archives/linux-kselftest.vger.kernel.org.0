@@ -1,130 +1,168 @@
-Return-Path: <linux-kselftest+bounces-44386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36283C1E816
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 07:04:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EB59C1E867
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 07:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 763F64061E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 06:04:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE8A03B7000
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 06:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 251F12D2499;
-	Thu, 30 Oct 2025 06:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DB8F239086;
+	Thu, 30 Oct 2025 06:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NeU0wavb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TIs8y6JU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD4824167F
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 06:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C182EA48F;
+	Thu, 30 Oct 2025 06:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761804281; cv=none; b=oAIP9IKZNALNTT0bOP5ie5TCsUAYSPfMLsm7rHUJOzeRDnfBTRxevN/lTb9gl+0/+pbiS96NbyGRWkyNOOkzLPaYDm+eH42ft7ga89R2VifbA1CJf0lmLsRkGlabs4z8FBJ5gRMByVn/qCzwEahGnFVS8nPcPXUvHliBdxWWezQ=
+	t=1761804911; cv=none; b=gpEm1ZePjKIL2PgEjtByARj4Yvdp1uHvaGxAgK2Nd1cNhAUP0P+qE/w5l5TbT1AixSwaoib2uBkCr2iYradvgACdStdcd4tkpFsyiZiCkag/3npbjE5w9YPpcd+CiswBImNxHhMNydwIjcH3rM5/LOk2A81N30FNEdA/dGyhX+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761804281; c=relaxed/simple;
-	bh=kpksfO09plUqHZfhBOrA1UHz1XN2BzwOErG5nWhcw6Q=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jbMFyYEJ7WyO2lAG6uhHfXDaJ+yvdsGCtU80nS9yhAxnpsIxXMFegP8361zBdPsNwo17uwj0ES9rGaukwuDGOvnNlN1cKrwneuNZ/jhNXzMlKCHhr94AS4fhzfKSpZV/9IELHHS30VqjXajOnykLIIpnFW1YsT8nhlnkSlojbOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--anubhavsinggh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NeU0wavb; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--anubhavsinggh.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-277f0ea6ee6so5464825ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 23:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761804279; x=1762409079; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8KenTeuFZghwFOzI4z9sTRCJCtvmTwt55CZ56oQcVmc=;
-        b=NeU0wavbCVkM6GeRCoqbo1AzhbXPyUWuKJV/+tw14RYdAHUaI6SIX7SmZ7XzO9xQ2S
-         dcCkeN5tf8AyaoJV6D1CjTSJ8KHxPC1UI74ly+xAgHRcg/sTwVwk7qmDPTuPgBMR2FtX
-         i1DAloLqeZH1r+6K8EXJPvHYRMmpA1tDolDUOsl+dSQo647uWdi9Iwar9IIYf4gD6Vak
-         LnEtDDH+UlChvCgLRdB1ml0pvhfgfsvnrfxLBMPhP5XuIoP44S103IHQv6qL4RGXyACc
-         rX5u8vchdv6Om0Nkn/rjXvms+cv3u2xux/mTz554AKR2uJRvS6DhwKe+aQQ4KQxAYNwX
-         7O/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761804279; x=1762409079;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8KenTeuFZghwFOzI4z9sTRCJCtvmTwt55CZ56oQcVmc=;
-        b=hEukUDV1VvTpV3zvYXUcHdDL8LJ9QLlutk5rwKjVEVkZlL9vYVRsKX6jNZfjXpGD70
-         yjHRK9w678KmerPchVNh+Di7V0BSswUu3UyUWbw3E1NYdMzyZ1vyYzHzNtaGlvj4f6rK
-         rDm3H5TQcLAMxQPLkNlQma7kZunM8z9sFl66/iP0wuxYum25RAg4m+r4nAIsV3yOH+xB
-         QZW+zmRaQilqnWyShyUHENLIV5B1hCTPPkIAnRMsiw+rihFDRpSo3qlM9o0XsHnjPzSy
-         73HZX0FjXZIiXzfWwdxqcS0rzmrbpG04Bx9G6Igtv+m24EdozaLCbb7D3al+ILv9DwCE
-         SJSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWkoeXjZEHgL+bLNMYIf6JDxZDbE2h3CyUJo1imaka3jwQPh7/Pl0locUW9vv83zL+kEkZYdJ9XNEcFxK5hbRc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywu2LrYHqhGd0hhoOG0Ca5LjIDmJymCnSw54q9xU405Y7xrOmNl
-	yfb3r8kAfVuZU2TFyNC4tSehYLmSoy2YTikMraqA4dC8Ndk4Zoy5PUZQV8n9iHl4fyOPjZ8TQKI
-	+GpzBmOryOCvkwXxLSRornzWHwOdJ8PI8/Q==
-X-Google-Smtp-Source: AGHT+IH0HjFHKiAXhz+1Aqn8OGckSLv7hJX/WjMQP572dtv2RQdzjEv6Fsb8TGmjv+IeqkKXogU8JJ4vX49ImoNHZttk
-X-Received: from plek16.prod.google.com ([2002:a17:903:4510:b0:290:d109:f25a])
- (user=anubhavsinggh job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:c949:b0:27e:eabd:4b41 with SMTP id d9443c01a7336-294dedf467dmr65526705ad.7.1761804278747;
- Wed, 29 Oct 2025 23:04:38 -0700 (PDT)
-Date: Thu, 30 Oct 2025 06:04:36 +0000
+	s=arc-20240116; t=1761804911; c=relaxed/simple;
+	bh=krbFrkVMXm7p51EYFhLIkyy0cwGkTFQDJkzyAdJkSb8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hJtVkk4pHL4XkIIoxGd4kluoUc7DDkiikiuJmk8glNLxd2ZyD6MGi2GAf7DIFCkgxBIFQ7DokWdVsEtiIKXjP2sZQPGyOjVxU0xU3r4kGQO5NQt9J5ZA98Tjx7KQYz8EIQ7dTBhgBf/9fcD9m+JtWYF/3uTe9qag7Ih5j9C0te0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TIs8y6JU; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1761804910; x=1793340910;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=krbFrkVMXm7p51EYFhLIkyy0cwGkTFQDJkzyAdJkSb8=;
+  b=TIs8y6JU3alIS1oQYr5IqODYSKw/Toxr385fuaY9zjtznfSx8uhs+k8S
+   iK2RjFauc4re/hiLH2mHy3BsoI1jvdpws2xRkgHGl9nJBrkkO0Tsqwhra
+   nEqJKTSipWBK9ldpfGBxBrVi0sAr/b9CRJyWGwIecXyO5CVckYmA8HaUZ
+   2nOcfM0laf4EdeqWvvXvvNUpFTDo/2CesRuz9oMnWTUVwH+/9b8x+cIax
+   PCl/HAWCot8nz07XgrHof0x/+X3Dc+AkvVJRlzOI0VofjjQoStAXfwQDj
+   PtVFL99HC1cw/hu8BG0IS5UnYnMhCqGQHfAX5gUfYlpDv0cqZ7kQOY2NA
+   w==;
+X-CSE-ConnectionGUID: PxLYFthzTBe7BfQY1jeX9g==
+X-CSE-MsgGUID: 5iWuXWTwQgu2I64/n+UJlA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="63822406"
+X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
+   d="scan'208";a="63822406"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 23:15:08 -0700
+X-CSE-ConnectionGUID: hYvlWN5XTwuMZgnhYyqUWw==
+X-CSE-MsgGUID: NhhmkBpUQdK0Alu9/p/HKQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
+   d="scan'208";a="185123938"
+Received: from yinghaoj-desk.ccr.corp.intel.com (HELO [10.238.1.225]) ([10.238.1.225])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 23:15:03 -0700
+Message-ID: <f55516ea-b8de-4d77-a2c5-dffef2f66d7c@linux.intel.com>
+Date: Thu, 30 Oct 2025 14:15:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.1.851.g4ebd6896fd-goog
-Message-ID: <20251030060436.1556664-1-anubhavsinggh@google.com>
-Subject: [PATCH net] selftests/net: use destination options instead of hop-by-hop
-From: Anubhav Singh <anubhavsinggh@google.com>
-To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>, Coco Li <lixiaoyan@google.com>, 
-	Anubhav Singh <anubhavsinggh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 17/23] KVM: selftests: Call KVM_TDX_INIT_VCPU when
+ creating a new TDX vcpu
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
+ Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
+ Andrew Jones <ajones@ventanamicro.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>,
+ Erdem Aktas <erdemaktas@google.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>, Ira Weiny
+ <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org
+References: <20251028212052.200523-1-sagis@google.com>
+ <20251028212052.200523-18-sagis@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20251028212052.200523-18-sagis@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-The GRO self-test, gro.c, currently constructs IPv6 packets containing a
-Hop-by-Hop Options header (IPPROTO_HOPOPTS) to ensure the GRO path
-correctly handles IPv6 extension headers.
 
-However, network elements may be configured to drop packets with the
-Hop-by-Hop Options header (HBH). This causes the self-test to fail
-in environments where such network elements are present.
 
-To improve the robustness and reliability of this test in diverse
-network environments, switch from using IPPROTO_HOPOPTS to
-IPPROTO_DSTOPTS (Destination Options).
+On 10/29/2025 5:20 AM, Sagi Shahar wrote:
+> TDX VMs need to issue the KVM_TDX_INIT_VCPU ioctl for each vcpu after
+> vcpu creation.
+>
+> Since the cpuids for TD are managed by the TDX module, read the values
+> virtualized for the TD using KVM_TDX_GET_CPUID and set them in kvm using
+> KVM_SET_CPUID2 so that kvm has an accurate view of the VM cpuid values.
+>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> ---
+>   .../testing/selftests/kvm/lib/x86/processor.c | 35 ++++++++++++++-----
+>   1 file changed, 27 insertions(+), 8 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+> index 990f2769c5d8..036875fe140f 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+> @@ -722,6 +722,19 @@ vm_vaddr_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
+>   	return stack_vaddr;
+>   }
+>   
+> +static void vm_tdx_vcpu_add(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_cpuid2 *cpuid;
+> +
+> +	cpuid = allocate_kvm_cpuid2(MAX_NR_CPUID_ENTRIES);
+> +	vm_tdx_vcpu_ioctl(vcpu, KVM_TDX_GET_CPUID, 0, cpuid);
+> +	vcpu_init_cpuid(vcpu, cpuid);
+> +	free(cpuid);
+> +	vm_tdx_vcpu_ioctl(vcpu, KVM_TDX_INIT_VCPU, 0, NULL);
+> +
+> +	vm_tdx_load_vcpu_boot_parameters(vm, vcpu);
+> +}
+> +
+>   struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+>   {
+>   	struct kvm_mp_state mp_state;
+> @@ -729,15 +742,21 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id)
+>   	struct kvm_vcpu *vcpu;
+>   
+>   	vcpu = __vm_vcpu_add(vm, vcpu_id);
+> -	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> -	vcpu_init_sregs(vm, vcpu);
+> -	vcpu_init_xcrs(vm, vcpu);
+>   
+> -	/* Setup guest general purpose registers */
+> -	vcpu_regs_get(vcpu, &regs);
+> -	regs.rflags = regs.rflags | 0x2;
+> -	regs.rsp = kvm_allocate_vcpu_stack(vm);
+> -	vcpu_regs_set(vcpu, &regs);
+> +	if (is_tdx_vm(vm)) {
+> +		vm_tdx_vcpu_add(vm, vcpu);
+Nit:
+Since vcpu is added by  __vm_vcpu_add() above, using 'init' instead of 'add' in
+the function name makes it more clear.
 
-The Destination Options header is less likely to be dropped by
-intermediate routers and still serves the core purpose of the test:
-validating GRO's handling of an IPv6 extension header. This change
-ensures the test can execute successfully without being incorrectly
-failed by network policies outside the kernel's control.
-
-Fixes: 7d1575014a63 ("selftests/net: GRO coalesce test")
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Anubhav Singh <anubhavsinggh@google.com>
----
- tools/testing/selftests/net/gro.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
-index 2b1d9f2b3e9e..d8c29fe39c1d 100644
---- a/tools/testing/selftests/net/gro.c
-+++ b/tools/testing/selftests/net/gro.c
-@@ -754,11 +754,11 @@ static void send_ipv6_exthdr(int fd, struct sockaddr_ll *daddr, char *ext_data1,
- 	static char exthdr_pck[sizeof(buf) + MIN_EXTHDR_SIZE];
- 
- 	create_packet(buf, 0, 0, PAYLOAD_LEN, 0);
--	add_ipv6_exthdr(buf, exthdr_pck, IPPROTO_HOPOPTS, ext_data1);
-+	add_ipv6_exthdr(buf, exthdr_pck, IPPROTO_DSTOPTS, ext_data1);
- 	write_packet(fd, exthdr_pck, total_hdr_len + PAYLOAD_LEN + MIN_EXTHDR_SIZE, daddr);
- 
- 	create_packet(buf, PAYLOAD_LEN * 1, 0, PAYLOAD_LEN, 0);
--	add_ipv6_exthdr(buf, exthdr_pck, IPPROTO_HOPOPTS, ext_data2);
-+	add_ipv6_exthdr(buf, exthdr_pck, IPPROTO_DSTOPTS, ext_data2);
- 	write_packet(fd, exthdr_pck, total_hdr_len + PAYLOAD_LEN + MIN_EXTHDR_SIZE, daddr);
- }
- 
--- 
-2.51.1.851.g4ebd6896fd-goog
+> +	} else {
+> +		vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> +
+> +		vcpu_init_sregs(vm, vcpu);
+> +		vcpu_init_xcrs(vm, vcpu);
+> +
+> +		/* Setup guest general purpose registers */
+> +		vcpu_regs_get(vcpu, &regs);
+> +		regs.rflags = regs.rflags | 0x2;
+> +		regs.rsp = kvm_allocate_vcpu_stack(vm);
+> +		vcpu_regs_set(vcpu, &regs);
+> +	}
+>   
+>   	/* Setup the MP state */
+>   	mp_state.mp_state = 0;
 
 
