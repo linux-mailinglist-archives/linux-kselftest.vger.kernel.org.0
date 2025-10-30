@@ -1,98 +1,103 @@
-Return-Path: <linux-kselftest+bounces-44432-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44433-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3857C2122F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 17:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 006C4C212E3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 17:28:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8370188E607
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 16:22:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 448331A22D57
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 16:26:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAAE133C530;
-	Thu, 30 Oct 2025 16:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28C863678D9;
+	Thu, 30 Oct 2025 16:23:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="D+quNg75"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TiBhWSPL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7609279329
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 16:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE0F73678C9;
+	Thu, 30 Oct 2025 16:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761841308; cv=none; b=EQeQbnbXucqwYYFNJ8D1KHlaYCh0i1C100U5jXrxocZzGUkR1Zo3B72XKv/RC20i3itna6KiUIyQl/+F3fqaOWKv77KmaHtj0+ckhLU22cH+QodAhgepGHmtjmUAS27P9/R6DmRE+DpkeGPSotKgXXovJFJ7H+NQslpIq2t5i7w=
+	t=1761841402; cv=none; b=rFPl+wPEfNiTnce8k6kH5x5FuJ6PPj93Cp/nB1fZTw0CbIPfCuAHeb3c7zjWxK5SUUH9bjScU+5EAuU1X11iP3oQiQqdXDC6MVGXoUFB6Q/Cyy1/Rz5xhfyDbrlptqCiPC/EPGbUnDf2+9UdO91vWbTxbELdTHrtX/NTYiEgw84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761841308; c=relaxed/simple;
-	bh=kX0cm2UnEiNJ+qzpBPfgy3+r4pATEZSTxmE6WFa7VM4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KsB/VoRp5Jn9H2fXA9cRRQlepgfgPqPSObTiwHgYeB6OpnxL4Ke3rUBTWMBI3MPhdgWLpW8K64xsmToFs8ubwyEbFScVvXrkrNiUfRL+8xKS/YoHLFLacSNz+TJ15UrwiSJHNuG3HcZZ3UOHpVTC2xfVcbBBadvOCMHFer3vQ4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=D+quNg75; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <efa3540a-1f52-46ca-9f49-e631a5e3e48c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1761841294;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zMFZXp3tx2YPKZtWsOkoNrm9qO50YlAqRAEraxEEN8U=;
-	b=D+quNg75KVoxfK+nHvJSuj2ygg7TDLVMhoUvNdsp2A4jI2e8UFgRH8PNkDziKckOgJWo6m
-	XCjmHu5mbjBRYXqAEWVnZUdaXYPvszj58fBy+J+k8NbwQ19z9vnwjD4s2+UYBPL6BWxKY5
-	O9a8dqI3BXq/QQIFqi9CKuODhqbUuFk=
-Date: Thu, 30 Oct 2025 09:21:28 -0700
+	s=arc-20240116; t=1761841402; c=relaxed/simple;
+	bh=3mVsFGRun4oAv1HOPwIwD87Ig8SOJjYpKQmEns43giI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Opm9dkkZe5PwNEuxtumdsUTcjWrbn9k6LbHQB9cuCHxm/INdBc+4oNl5G4cGS1DtHED0zoNP++OApCPS/D1Y7zx8bCbtH7Gwyg7UyrxvI5VbEkyhjwlnRDWFK5epL2rzbfzToWPQwQJvCM5pie309hxM0hdzG+B5V4Pv5v4PG4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TiBhWSPL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40339C4CEF8;
+	Thu, 30 Oct 2025 16:23:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761841401;
+	bh=3mVsFGRun4oAv1HOPwIwD87Ig8SOJjYpKQmEns43giI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TiBhWSPLCAflTXcjYiLkGgfxYC0FbDSyKDcmjufpBBBTgkzj48TmUwH88BC89j6ac
+	 o0E9JagAXeECXemcuookI8berrAYWgUQVoXCpi2DbplEgmuhllFALmby5liZ9gsfm6
+	 +C9kdgNU1wnrf6iwWgoVz/0rCZknIDHdUObAnlxTAXxh3c+UeAAkSuP4s2B2bkipqj
+	 rRPIZVwmV8avDeeoqs1G+Rn/nVn6aDRMtvn6PCosvufatZgN25l5slp0DhyionzZfB
+	 MloNM8tswWnBE2uzph0RfHjpZf+quZdttcxPTMTMwi4ht9hsmaEUdLMSpOhAnVzZZK
+	 UKG7x9MJUrH9w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vEVQl-0000000139m-0ABi;
+	Thu, 30 Oct 2025 16:23:19 +0000
+From: Marc Zyngier <maz@kernel.org>
+To: oliver.upton@linux.dev,
+	Maximilian Dittgen <mdittgen@amazon.de>
+Cc: pbonzini@redhat.com,
+	shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	kvm@vger.kernel.org,
+	epetron@amazon.de,
+	nh-open-source@amazon.com
+Subject: Re: [PATCH v2] KVM: selftests: fix MAPC RDbase target formatting in vgic_lpi_stress
+Date: Thu, 30 Oct 2025 16:23:16 +0000
+Message-ID: <176184139607.2037623.16277571869059317798.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251020145946.48288-1-mdittgen@amazon.de>
+References: <20251020145946.48288-1-mdittgen@amazon.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 3/4] selftests/bpf: integrate
- test_tc_tunnel.sh tests into test_progs
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251027-tc_tunnel-v3-0-505c12019f9d@bootlin.com>
- <20251027-tc_tunnel-v3-3-505c12019f9d@bootlin.com>
- <1ac9d14e-4250-480c-b863-410be78ac6c6@linux.dev>
- <DDVPPGIO5P1F.E3DWINA74BJ6@bootlin.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <DDVPPGIO5P1F.E3DWINA74BJ6@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, mdittgen@amazon.de, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, epetron@amazon.de, nh-open-source@amazon.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 10/30/25 7:04 AM, Alexis Lothoré wrote:
->>> +	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
->>> +
->>> +	cfg->server_fd = start_reuseport_server(family, SOCK_STREAM,
->>> +						cfg->server_addr, TEST_PORT,
->>> +						TIMEOUT_MS, 1);
->>
->> Why reuseport is needed? Does it have issue in bind() to the same
->> ip/port in the later sub-test?
+On Mon, 20 Oct 2025 16:59:46 +0200, Maximilian Dittgen wrote:
+> Since GITS_TYPER.PTA == 0, the ITS MAPC command demands a CPU ID,
+> rather than a physical redistributor address, for its RDbase
+> command argument.
 > 
-> Yes, I observed that is I use the bare start_server, I systematically have
-> the first test passing, an all the others failing on the server startup
-> with errno 98 (Address already in use). I have been assuming that it is due
-> to some TIME_WAIT state on the freshly closed socket, but I may be missing
-> something ?
+> As such, when MAPC-ing guest ITS collections, vgic_lpi_stress iterates
+> over CPU IDs in the range [0, nr_cpus), passing them as the RDbase
+> vcpu_id argument to its_send_mapc_cmd().
+> 
+> [...]
 
-Thanks for confirming. You are right. It should be the TIME_WAIT. Using 
-SO_REUSEPORT works but become confusing on what the test is trying to do 
-by starting only 1 reuseport server. reuseport is usually used with >1 
-server listening on the same address. A better thing to do is to always 
-setsockopt(SO_REUSEADDR) in start_server_addr for TCP.
+Applied to fixes, thanks!
+
+[1/1] KVM: selftests: fix MAPC RDbase target formatting in vgic_lpi_stress
+      commit: a24f7afce048e724be072bd063ed864f124daf81
+
+Cheers,
+
+	M.
+-- 
+Without deviation from the norm, progress is not possible.
+
+
 
