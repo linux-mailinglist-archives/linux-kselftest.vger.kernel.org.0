@@ -1,139 +1,130 @@
-Return-Path: <linux-kselftest+bounces-44383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E350AC1E792
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 06:57:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3617C1E7D4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 07:00:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 210A54E263F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 05:57:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6DB1189D930
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 06:01:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A79C2F4A14;
-	Thu, 30 Oct 2025 05:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FAE822A4DA;
+	Thu, 30 Oct 2025 06:00:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Wh+J4Cdo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eVu1WSoz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7E42D063D
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 05:57:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076F5213E6A
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 06:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761803840; cv=none; b=oIXUgmk88hnB7RQJ5Jn2er82ZSXCvi0JrxYwNawtH1yC41xkAmIOdmc2GOdicM3Rxd1a6A+8BXJ2+wELrKhvwTyuCiZ8G7zNKIy+iTp5ygXkw0RoICUhXBJOMPey2p/bpel6RoSiO7/N+EOHi10ynAowMX0gF4ONSfUTtIz2dAM=
+	t=1761804035; cv=none; b=T+7CHnOVnP1QfUgYPZv2M4MAT2H4Huc+Tld+I1+5R7vFKaL7clux0M7nCwKzgyYTv4dLNepIFdeg+yjD9ZfvRq3Dl+KbSwS+qAVcFeioxMhjRuU4l74PK+3XuvWI7RgnQDBuVll1VeonwUOKRJBZcohxIwKhgzvyo+cP3gfPK6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761803840; c=relaxed/simple;
-	bh=6R8pG/tRTzNsUKnlVMNJEWzkJQEf3TAROqebWC6cqhg=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=o/QwB5W5kFqhleEZVcQd/zNFUag645OI6q73jw91ZgSm/j8rnRzhKDwbpb3ONImOoua5oINkzQ6yuxh4575LK1tO4onZ768fuiWcfr400ycYmEYaygMKNiunnbecE9zXQLf4mFU6vgHtyOVH28mwUhZn99cz8pHW8bNLDlyb/+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--anubhavsinggh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Wh+J4Cdo; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--anubhavsinggh.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-33bb4d11f5eso770917a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 22:57:18 -0700 (PDT)
+	s=arc-20240116; t=1761804035; c=relaxed/simple;
+	bh=XEAjlwYYF3NQuyc7FS9cFXhCUN5UMP++EuqVshoBY3U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZLjorGmBXoZJmVKpbRShU81ABVN+Yp7drSkikNK7wEhEUk+g4EjGfw9cHeN1QR8m2bpzHMjWnbP6Gsjta8SYDitem3P3AI1Ft2DXyoL4/pNp7d6YDppeCiDIXE8EfzW2JunhUBeYGLKUxlwOVsa4lVrGr14IJGbPGSyAR41lWzk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eVu1WSoz; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so684663b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 23:00:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761803838; x=1762408638; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9VEDGVLVJs2QlTOJvCsTEKqsco8Sca06dv1X5LS5W+Q=;
-        b=Wh+J4Cdow/qNQdNkOZyV53fcVhJzZtLLVBW5LhE8j2YO3jeUrWbFZfEgDdJa7KPPS5
-         6viiYpwq12W10QvferqaRRlPzKYxqJRlcwyOv9VdmXqxbkfSLOtsONapBZRh5mp2fCmE
-         V5rX3N5isZnMb5nwbGmPHEKQZKFfqhnqFQRmgOzpmy1v9PxY1doN3Rud+GZFSiPFvemb
-         q8IUKfUajsNqmB4LMGgNNWFy6Z/0DPksu1TV4QhuXJfkNpunwe3KRkCDAEP4VuWKKE2J
-         tOjf0PbBtwnz82pAztSRuyIbqC09KNAqg1p7DQ7zgLfjnhhxdWhyuxuUSsmosxmcMzMj
-         rHkA==
+        d=gmail.com; s=20230601; t=1761804033; x=1762408833; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4uR81dh1lUx0VLG29+RqKpRKmy+JaoTRfZUvtKc3mPg=;
+        b=eVu1WSozcmCeyuJlU2bjQPfHQ1lOyNLL+HY3Q+nBMSlouc9dXaDfLCOmjWHuq0O8I2
+         ZyW7qnypVTTPA3JoJEW1AhvlK36tVnzROvyRjn6B+BEy0qKmgo/Ce1J2gZsYDjDu7c1K
+         UTe3EPy4fO6XozrguzbztA/Iyi2BK7si9hT9XtoHM1Wy21cbFdCK3gaxmYDEq3oYfy/8
+         v02soMRh8clDGOorIUW6KedX4NwV+VhSG6cGSDpoWtNa5CXdJkiXo38r74TShJ99gnqD
+         Ibj/yX/JBN7gVR9xyXhMB1cwweNlPoZw1dR1ASlns0PgXvRbKMtRRQU8GejKvRQ1069X
+         5wNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761803838; x=1762408638;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9VEDGVLVJs2QlTOJvCsTEKqsco8Sca06dv1X5LS5W+Q=;
-        b=OwBxdKYaALoNDpSSJ1zWOmM4+eXy9zWEWGBf7lTpA5AT+ilwg286ymsvF8E23TuvGy
-         aNVzZIC0vjnZAEdeWhJCwEtVl7BmAwczJfOQqUGOkglQz4P1v6g9ImhkU/HqqiRmKCIm
-         cxjg6GWnfEfFHWQFXDbKM5HHrCNsSK6+4g0CDatqDtGwwPnzXuE4mR2PF77mCilV1XWq
-         2EqwXQmS6RK1j2ySxsyyPxGTunQdcYE+Es6VgB3w5bl30VWj6am1DUqA0vk3cEunx548
-         Vzn2Bf9ME6UgMxtMRhkje+syh37RU1aAhOKC4r7r3tYM3I0a4AnafutebxB+rX2Jxbmf
-         WXyw==
-X-Forwarded-Encrypted: i=1; AJvYcCXzaIj6VlYRcWa8Tw4ErcvXiKRFT7MAbij7gnotjSMWrYffUeCCxWzYz53TBwvgeYb3/L0wjvvg0gsYdd/id/8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwF8C7ocM6yDISVKjR1nOXvBKyx95UnC1GKcBhPg/8HbdCXY3dQ
-	zCG2EsZPOuO2UEFjWJ1fKzR3dqBJwFGivnf3I+qiAAL+stJO4HMr9ralNZyOzEioHIiwdjvuqC/
-	jgRXYn7bxv3b5WCZbEbooGVbA6nqQ5aZUWw==
-X-Google-Smtp-Source: AGHT+IFtBRiZlB3pV9ozMP4vakNPJihdirBvsYkwCxIfJJ9TsPihH5B52AqKrcsOJZAqPDhUY3Gm+gftjQTazsw/0roa
-X-Received: from pjbnr15.prod.google.com ([2002:a17:90b:240f:b0:32d:e264:a78e])
- (user=anubhavsinggh job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:518c:b0:338:3e6f:2d63 with SMTP id 98e67ed59e1d1-3404c3ff494mr2476345a91.6.1761803838208;
- Wed, 29 Oct 2025 22:57:18 -0700 (PDT)
-Date: Thu, 30 Oct 2025 05:57:14 +0000
+        d=1e100.net; s=20230601; t=1761804033; x=1762408833;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4uR81dh1lUx0VLG29+RqKpRKmy+JaoTRfZUvtKc3mPg=;
+        b=w6/9HXo+CMsowCqEKg1mRbqGqfEwa9WczqUdp+GRgB5+pzf/K+2BBTw8IGSaowZ57D
+         YWoqQ1naWb1cVLOsrFA0QWXja3LzOrNuEeccZeO6GGgYzMEeea6BOMFmP7eh1cOARIas
+         fO3pEfWsVtdwps/GD/Ss9wk2ZQkfCdVEvx4WkFE1LhhjZr9TZL9pT2V8cD54RH8UBln5
+         chHhj5P3HLixnQFMpM51jW8sfUNE3P0q1kmJr+v7Z5ygpEM+mCgo5tVEJ/5NwWYyd3hq
+         b9B6LUxmvVq2pIy9y4Xlbq9FwCAXctW85fyG5GFtxHMtzEw1RuIy3UwMyrujfbBOIK0D
+         pnfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVuBToHUH26hdyS16Yx/zHvxyjIemU1hUwuijdgNyTonFHclocgPkDHKdARSHR5fsG6h2N6ccV2o53mPDd0au0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0yalExKREC2mNBSIF3MmlIuLehfUAJFE4muEg9BxgPtumuO2l
+	W52l+/NfVTGtkE542UOCWFo6iEZczeY18u3fAs6uqakPGFSvGPc13PGP
+X-Gm-Gg: ASbGncsaYWU0u7SzAZpwvM8rrwW37/DX9uztmkgq8a5gZpSSII63gW+UnfC+YzkvPBZ
+	sX0U9pfQ+ztuM4w+qnANCkxtN9VyLbJgv65N93tRydmbEnyD3+D4lvcSJVb6ENOxX5JqK8zG5BN
+	KNAMAwCddHbGHQk5s1KGKtEjMuAMyd1Jqgjt6OBzrFZaXSYdnE5yQuXkAiTp5GONkCAGeK3Ja8B
+	NdxS65n4p11bSO0ewE/sWTdBSstAz+Tjgh9kBEsCmzExnGuyBgUXagav0r663+DUwIkmjq3UBZp
+	TimK5udIR1u/iVYTRSW1Uby6dv4vQe5SCzCp7oeEC1UTZF+mf99Zhok5REzoAQudM25/CGQFHc/
+	7ea+JpmiP9hGYySFcjsZPQ+oyssZNmOg27LtJUaY2Wbjpo3txdAUQ5+DvU96Hs0hg/AdpiKz71F
+	wKnl6nmEMAXRTAKEE=
+X-Google-Smtp-Source: AGHT+IHkrFWmM0YexxS5c3JBOQRGZUBm0Gg/W5HZtvWbmHHj7ZUGTnyMBtNr/t6pp99vomcNW46A6g==
+X-Received: by 2002:a05:6a21:3510:b0:2da:3fe0:3299 with SMTP id adf61e73a8af0-3477aba1180mr3086189637.7.1761804033077;
+        Wed, 29 Oct 2025 23:00:33 -0700 (PDT)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b71268bdd50sm16016865a12.0.2025.10.29.23.00.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Oct 2025 23:00:32 -0700 (PDT)
+Date: Thu, 30 Oct 2025 06:00:24 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jan Stancek <jstancek@redhat.com>,
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>,
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Guillaume Nault <gnault@redhat.com>,
+	Petr Machata <petrm@nvidia.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 3/3] selftests: net: add YNL test framework
+Message-ID: <aQL--I9z19zRJ4vo@fedora>
+References: <20251029082245.128675-1-liuhangbin@gmail.com>
+ <20251029082245.128675-4-liuhangbin@gmail.com>
+ <20251029164159.2dbc615a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.1.851.g4ebd6896fd-goog
-Message-ID: <20251030055714.1553346-1-anubhavsinggh@google.com>
-Subject: [PATCH net] selftests/net: fix out-of-order delivery of FIN in
- gro:tcp test
-From: Anubhav Singh <anubhavsinggh@google.com>
-To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Willem de Bruijn <willemb@google.com>, Coco Li <lixiaoyan@google.com>, 
-	Anubhav Singh <anubhavsinggh@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251029164159.2dbc615a@kernel.org>
 
-Due to the gro_sender sending data packets and FIN packets
-in very quick succession, these are received almost simultaneously
-by the gro_receiver. FIN packets are sometimes processed before the
-data packets leading to intermittent (~1/100) test failures.
+On Wed, Oct 29, 2025 at 04:41:59PM -0700, Jakub Kicinski wrote:
+> On Wed, 29 Oct 2025 08:22:45 +0000 Hangbin Liu wrote:
+> > Add a test framework for YAML Netlink (YNL) tools, covering both CLI and
+> > ethtool functionality. The framework includes:
+> > 
+> > 1) cli: family listing, netdev, ethtool, rt-* families, and nlctrl
+> >    operations
+> > 2) ethtool: device info, statistics, ring/coalesce/pause parameters, and
+> >    feature gettings
+> > 
+> > The current YNL syntax is a bit obscure, and end users may not always know
+> > how to use it. This test framework provides usage examples and also serves
+> > as a regression test to catch potential breakages caused by future changes.
+> 
+> Hm, my knee-jerk reaction was that we should avoid adding too much ynl
+> stuff to the kernel at this point. But looking closer it's not that
+> long.
+> 
+> Do I understand correctly, tho, that you're testing _system_ YNL?
+> Not what's in tree?
 
-This change adds a delay of 100ms before sending FIN packets
-in gro:tcp test to avoid the out-of-order delivery. The same
-mitigation already exists for the gro:ip test.
+Kind of. With this we can test both the system's YNL and also make sure the
+YNL interface has no regression.
 
-Fixes: 7d1575014a63 ("selftests/net: GRO coalesce test")
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-Signed-off-by: Anubhav Singh <anubhavsinggh@google.com>
----
- tools/testing/selftests/net/gro.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
-index 2b1d9f2b3e9e..3fa63bd85dea 100644
---- a/tools/testing/selftests/net/gro.c
-+++ b/tools/testing/selftests/net/gro.c
-@@ -989,6 +989,7 @@ static void check_recv_pkts(int fd, int *correct_payload,
- 
- static void gro_sender(void)
- {
-+	const int fin_delay_us = 100 * 1000;
- 	static char fin_pkt[MAX_HDR_LEN];
- 	struct sockaddr_ll daddr = {};
- 	int txfd = -1;
-@@ -1032,15 +1033,22 @@ static void gro_sender(void)
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 	} else if (strcmp(testname, "tcp") == 0) {
- 		send_changed_checksum(txfd, &daddr);
-+		/* Adding sleep before sending FIN so that it is not
-+		 * received prior to other packets.
-+		 */
-+		usleep(fin_delay_us);
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 
- 		send_changed_seq(txfd, &daddr);
-+		usleep(fin_delay_us);
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 
- 		send_changed_ts(txfd, &daddr);
-+		usleep(fin_delay_us);
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 
- 		send_diff_opt(txfd, &daddr);
-+		usleep(fin_delay_us);
- 		write_packet(txfd, fin_pkt, total_hdr_len, &daddr);
- 	} else if (strcmp(testname, "ip") == 0) {
- 		send_changed_ECN(txfd, &daddr);
--- 
-2.51.1.851.g4ebd6896fd-goog
-
+Thanks
+Hangbin
 
