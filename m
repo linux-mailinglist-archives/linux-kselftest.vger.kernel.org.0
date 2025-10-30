@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-44366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92748C1DF46
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 01:52:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A8BC1DF8C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 02:01:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D32FC4E599F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 00:51:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74FF5188E455
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 01:01:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E404721767D;
-	Thu, 30 Oct 2025 00:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F04246BA8;
+	Thu, 30 Oct 2025 01:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zt7er47q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SjvOMK3B"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4BE41F2382;
-	Thu, 30 Oct 2025 00:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA642459EA;
+	Thu, 30 Oct 2025 01:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761785446; cv=none; b=cU0COLxHCPWaq0+9pE4UZt2KRDLq+W31H8o3mY9qUuWqN0kugtSA5+pFy4C9Kchze75iHaSpNwpPn696iF60Kws378zqWUx+A6fziLlV8jwX+kcmL2LUBSmNccm6LfHsbK0uMoxbIPIUOXCvtnAHSLlgJFXWBJpN1efNK0ZDOXg=
+	t=1761786039; cv=none; b=rPT1B931J6dvMaV4jK3fsEAvrVAFwUvuBC0SbdaBYczGrxY8H3CabxKoF5+1DfSwS2ff9Zox+y3zdeOlwEjpOOSzs1v64K7xmOkyrmx7C5XpsXFHzto8pJJM78e7+MV9NX5aK6ymBL6QlqfksZ1pXcEMgYxq0JgYmvovsAkx9ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761785446; c=relaxed/simple;
-	bh=+DNxT3KQ5JB+d2Ywjk/LC5P+oSgjTwyQe1u8jQS7SRY=;
+	s=arc-20240116; t=1761786039; c=relaxed/simple;
+	bh=sDHL2SfL9e48SuVb3CsnFf6tl1w0ApA8EeIFwZChLms=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=kER6/alP64alLmO+yGXQ99kgHYP429+6Nb9ax8YhT7zwiyfOGENrimBBl1yAFYtzQlJB+IHDvKzKMASRqeeGU8yRta4UQkLiIEQn6L/p4jwEKMINDrS4LhauAHtSYxgUbghirwja9bd2xF/DaRkIXmVudnk2Mt+P5aDQzmb5hzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zt7er47q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B077C4CEF7;
-	Thu, 30 Oct 2025 00:50:46 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=dCMJVmy++sb1exfd2P4IiPenDrRAqTg/Rh7+Cq4XQiAICpaLReFe932r6W0tnLrEsMaU+RnSgxEJmjQkDt6nGdgRRMoZKOwFOkw1DPGommBOljl5yG1XxlV66IrY4VVQnvhLk45J8JVEoeqWUFIYex6a4GHzvfp8HyBZZZH+3pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SjvOMK3B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA3E2C4CEFF;
+	Thu, 30 Oct 2025 01:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761785446;
-	bh=+DNxT3KQ5JB+d2Ywjk/LC5P+oSgjTwyQe1u8jQS7SRY=;
+	s=k20201202; t=1761786039;
+	bh=sDHL2SfL9e48SuVb3CsnFf6tl1w0ApA8EeIFwZChLms=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Zt7er47q1NC7tLvAhddX50TUHGFIRO/3kEyQr221dntfSx1N6Wy+07rKL/Am45spE
-	 stbwe4yh1GZQmtWkH5VemZsxg4/g86pb7hbn6O6kI7eI8fkCrZVaMs9wsdkLXe+CX7
-	 bVR2SXlb0LLRTB7/Q4JTyUF/oFmYrMHaVDp4eo4DXUk8l9EYbqR14S3NV9NwG1J830
-	 0SAkAINje/L0Wvvo8GDz+CD3ibRWzjwwcEZd5pOVbcxojskNeHUAPrp7paxCrApjmy
-	 V8HXUi97wYNO9v+qXeOwhn9uo1uLtRDlDxyL4I423ezHcSmUHCUOiGU+Vu0RtcyllA
-	 2FstgBNyvcxlw==
+	b=SjvOMK3Bb8waaIba9bXVIPojOmkYM7oxWxaFQsHYMAdckUNP2SWTCsTNa5BxbRR8/
+	 K4Nnvhp/lVn+GFdPw+OFdFbNYwiUuv8x/d7RTuyfOGvJcDftMW0m3TKKQ/pmR2m7lT
+	 AYz6MdWCKyEs+kJsKuTVnXcyZXNzVCwSg78oBTjq2YNHGeX+nK3Mfh3Qkrighm2i+R
+	 qYyM4LakGkPc3i4ILOHCcVCgDPDUtcYJ6T7qJkM7GUxMcxJ0bpIayzMkSlACr5u94/
+	 3fAK2OBo1eETqv0zJW86tPkkGveszBHqu/GiJ/JeuIxZNhzGXytsC+7PAygtipOf4w
+	 O4qJo/2L3HmKA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 713243A55EC7;
-	Thu, 30 Oct 2025 00:50:24 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33BDE3A55EC7;
+	Thu, 30 Oct 2025 01:00:17 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,40 +52,37 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] selftest: net: fix socklen_t type mismatch in
- sctp_collision test
+Subject: Re: [PATCH 0/1] selftests: net: use BASH for bareudp testing
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <176178542306.3267234.14499254365702593744.git-patchwork-notify@kernel.org>
-Date: Thu, 30 Oct 2025 00:50:23 +0000
-References: <20251028172947.53153-1-ankitkhushwaha.linux@gmail.com>
-In-Reply-To: <20251028172947.53153-1-ankitkhushwaha.linux@gmail.com>
-To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Cc: pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de, phil@nwl.cc,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- usama.anjum@collabora.com
+ <176178601574.3269431.2615356628282051961.git-patchwork-notify@kernel.org>
+Date: Thu, 30 Oct 2025 01:00:15 +0000
+References: <20251027095710.2036108-1-po-hsu.lin@canonical.com>
+In-Reply-To: <20251027095710.2036108-1-po-hsu.lin@canonical.com>
+To: Po-Hsu Lin <po-hsu.lin@canonical.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ edoardo.canepa@canonical.com
 
 Hello:
 
-This patch was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 28 Oct 2025 22:59:47 +0530 you wrote:
-> Socket APIs like recvfrom(), accept(), and getsockname() expect socklen_t*
-> arg, but tests were using int variables. This causes -Wpointer-sign
-> warnings on platforms where socklen_t is unsigned.
+On Mon, 27 Oct 2025 17:57:09 +0800 you wrote:
+> The bareudp.sh script uses /bin/sh and it will load another lib.sh
+> BASH script at the very beginning.
 > 
-> Change the variable type from int to socklen_t to resolve the warning and
-> ensure type safety across platforms.
+> But on some operating systems like Ubuntu, /bin/sh is actually pointed to
+> DASH, thus it will try to run BASH commands with DASH and consequently
+> leads to syntax issues.
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2] selftest: net: fix socklen_t type mismatch in sctp_collision test
-    https://git.kernel.org/netdev/net-next/c/afb8f6567a5b
+  - [1/1] selftests: net: use BASH for bareudp testing
+    https://git.kernel.org/netdev/net/c/9311e9540a8b
 
 You are awesome, thank you!
 -- 
