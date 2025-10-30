@@ -1,191 +1,130 @@
-Return-Path: <linux-kselftest+bounces-44385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0BDEC1E7D7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 07:01:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36283C1E816
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 07:04:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6CCC234C07D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 06:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 763F64061E3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 06:04:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDF6122A4DA;
-	Thu, 30 Oct 2025 06:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 251F12D2499;
+	Thu, 30 Oct 2025 06:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dyk0noWO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NeU0wavb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA44213E6A;
-	Thu, 30 Oct 2025 06:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD4824167F
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Oct 2025 06:04:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761804076; cv=none; b=pzU/i4RZQdjog4rztjeYXTL8Z5SVUQsZhBU0WrLGGOavbuPpD3HUtEFhbsA5O/P+OQea4FyyxZ5MDgU2DNIw/19VLu7K/jX1BRNaBjJpoyW2IvH0Ooug7O217oDqDfJddR1pGcVW11SgguRbdV52EXgM4l8n6D/ZLsC4wlwJwdA=
+	t=1761804281; cv=none; b=oAIP9IKZNALNTT0bOP5ie5TCsUAYSPfMLsm7rHUJOzeRDnfBTRxevN/lTb9gl+0/+pbiS96NbyGRWkyNOOkzLPaYDm+eH42ft7ga89R2VifbA1CJf0lmLsRkGlabs4z8FBJ5gRMByVn/qCzwEahGnFVS8nPcPXUvHliBdxWWezQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761804076; c=relaxed/simple;
-	bh=9e/+tBi0j6rUqTntzoCnyjZDiCpqqm5t7HfJJgf9V6A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OI6rd3/iF/AVmOvObuQeD/wsJh7atEynfPr8dFop95Q+dck/JIk592Sj2nBTApoRmCiHhA1YKYrihdUBcZTA1yVYz9YFQf6Aum63evEJ7colyVV7qGSjU2YJJIlYJeP4RoDTaqtGb/X7r8DQtDDp9u/aX9yTUKA1FbZoHQES0SQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Dyk0noWO; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761804074; x=1793340074;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9e/+tBi0j6rUqTntzoCnyjZDiCpqqm5t7HfJJgf9V6A=;
-  b=Dyk0noWOZjQQcaToOkljkkK/xoDEwjIT05RRW2BsZccaoQIClHjcCMNO
-   cBZD+h9I6Iut/jzhNNrA5XY+yCo3dmqmHKASHQrcYYngQO9ugRs8cA8EQ
-   wF5K5doCEuwFys3jHDGBGxCXR5ofcJu1v/3JuNH+TBCkNyiD7uFkHbKr0
-   ZRTpFFkAbOB9z9XvtlEuhpNBNRTA+jIXRESoaADOfiSfxbQQuU+3KeBbe
-   t/MrDBXO5E1Rxcgp4t/MSOx6UIWFHPGGVOYo2Zl+G+AN+coQN81QwlG1z
-   EYwzuB9ioJTwIE1j0foaZM1qszjBJs8TdxPmIDNcnEDJYqKFUsxov7j+I
-   A==;
-X-CSE-ConnectionGUID: SArjKbZJRzia4ege4MWi2g==
-X-CSE-MsgGUID: BSqc1R45Q4GCCNWiy2K4wg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="74536875"
-X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
-   d="scan'208";a="74536875"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 23:01:13 -0700
-X-CSE-ConnectionGUID: b50VYDypSeiSH6znKCDt9A==
-X-CSE-MsgGUID: rx1C7SNQQ2SEzNnQLujYaA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
-   d="scan'208";a="185121584"
-Received: from yinghaoj-desk.ccr.corp.intel.com (HELO [10.238.1.225]) ([10.238.1.225])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 23:01:08 -0700
-Message-ID: <ccb1dcbc-7fc3-46a4-b7d2-571afea9e39d@linux.intel.com>
-Date: Thu, 30 Oct 2025 14:01:05 +0800
+	s=arc-20240116; t=1761804281; c=relaxed/simple;
+	bh=kpksfO09plUqHZfhBOrA1UHz1XN2BzwOErG5nWhcw6Q=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jbMFyYEJ7WyO2lAG6uhHfXDaJ+yvdsGCtU80nS9yhAxnpsIxXMFegP8361zBdPsNwo17uwj0ES9rGaukwuDGOvnNlN1cKrwneuNZ/jhNXzMlKCHhr94AS4fhzfKSpZV/9IELHHS30VqjXajOnykLIIpnFW1YsT8nhlnkSlojbOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--anubhavsinggh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NeU0wavb; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--anubhavsinggh.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-277f0ea6ee6so5464825ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Oct 2025 23:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761804279; x=1762409079; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8KenTeuFZghwFOzI4z9sTRCJCtvmTwt55CZ56oQcVmc=;
+        b=NeU0wavbCVkM6GeRCoqbo1AzhbXPyUWuKJV/+tw14RYdAHUaI6SIX7SmZ7XzO9xQ2S
+         dcCkeN5tf8AyaoJV6D1CjTSJ8KHxPC1UI74ly+xAgHRcg/sTwVwk7qmDPTuPgBMR2FtX
+         i1DAloLqeZH1r+6K8EXJPvHYRMmpA1tDolDUOsl+dSQo647uWdi9Iwar9IIYf4gD6Vak
+         LnEtDDH+UlChvCgLRdB1ml0pvhfgfsvnrfxLBMPhP5XuIoP44S103IHQv6qL4RGXyACc
+         rX5u8vchdv6Om0Nkn/rjXvms+cv3u2xux/mTz554AKR2uJRvS6DhwKe+aQQ4KQxAYNwX
+         7O/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761804279; x=1762409079;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8KenTeuFZghwFOzI4z9sTRCJCtvmTwt55CZ56oQcVmc=;
+        b=hEukUDV1VvTpV3zvYXUcHdDL8LJ9QLlutk5rwKjVEVkZlL9vYVRsKX6jNZfjXpGD70
+         yjHRK9w678KmerPchVNh+Di7V0BSswUu3UyUWbw3E1NYdMzyZ1vyYzHzNtaGlvj4f6rK
+         rDm3H5TQcLAMxQPLkNlQma7kZunM8z9sFl66/iP0wuxYum25RAg4m+r4nAIsV3yOH+xB
+         QZW+zmRaQilqnWyShyUHENLIV5B1hCTPPkIAnRMsiw+rihFDRpSo3qlM9o0XsHnjPzSy
+         73HZX0FjXZIiXzfWwdxqcS0rzmrbpG04Bx9G6Igtv+m24EdozaLCbb7D3al+ILv9DwCE
+         SJSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWkoeXjZEHgL+bLNMYIf6JDxZDbE2h3CyUJo1imaka3jwQPh7/Pl0locUW9vv83zL+kEkZYdJ9XNEcFxK5hbRc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywu2LrYHqhGd0hhoOG0Ca5LjIDmJymCnSw54q9xU405Y7xrOmNl
+	yfb3r8kAfVuZU2TFyNC4tSehYLmSoy2YTikMraqA4dC8Ndk4Zoy5PUZQV8n9iHl4fyOPjZ8TQKI
+	+GpzBmOryOCvkwXxLSRornzWHwOdJ8PI8/Q==
+X-Google-Smtp-Source: AGHT+IH0HjFHKiAXhz+1Aqn8OGckSLv7hJX/WjMQP572dtv2RQdzjEv6Fsb8TGmjv+IeqkKXogU8JJ4vX49ImoNHZttk
+X-Received: from plek16.prod.google.com ([2002:a17:903:4510:b0:290:d109:f25a])
+ (user=anubhavsinggh job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:902:c949:b0:27e:eabd:4b41 with SMTP id d9443c01a7336-294dedf467dmr65526705ad.7.1761804278747;
+ Wed, 29 Oct 2025 23:04:38 -0700 (PDT)
+Date: Thu, 30 Oct 2025 06:04:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 16/23] KVM: selftests: Setup memory regions for TDX on
- vm creation
-To: Ira Weiny <ira.weiny@intel.com>, Sagi Shahar <sagis@google.com>
-Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>, Ryan Afranji <afranji@google.com>,
- Andrew Jones <ajones@ventanamicro.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>,
- Erdem Aktas <erdemaktas@google.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Oliver Upton <oliver.upton@linux.dev>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org
-References: <20251028212052.200523-1-sagis@google.com>
- <20251028212052.200523-17-sagis@google.com>
- <6902141659442_20bb411003c@iweiny-mobl.notmuch>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <6902141659442_20bb411003c@iweiny-mobl.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.851.g4ebd6896fd-goog
+Message-ID: <20251030060436.1556664-1-anubhavsinggh@google.com>
+Subject: [PATCH net] selftests/net: use destination options instead of hop-by-hop
+From: Anubhav Singh <anubhavsinggh@google.com>
+To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Willem de Bruijn <willemb@google.com>, Coco Li <lixiaoyan@google.com>, 
+	Anubhav Singh <anubhavsinggh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
+The GRO self-test, gro.c, currently constructs IPv6 packets containing a
+Hop-by-Hop Options header (IPPROTO_HOPOPTS) to ensure the GRO path
+correctly handles IPv6 extension headers.
 
+However, network elements may be configured to drop packets with the
+Hop-by-Hop Options header (HBH). This causes the self-test to fail
+in environments where such network elements are present.
 
-On 10/29/2025 9:18 PM, Ira Weiny wrote:
-> Sagi Shahar wrote:
->> Guest registers are inaccessible to kvm for TDX VMs. In order to set
->> register values for TDX we use a special boot code which loads the
-> NIT: who is 'we'?
->
->> register values from memory and write them into the appropriate
->> registers.
->>
->> This patch sets up the memory regions used for the boot code and the
->> boot parameters for TDX.
-> NIT: This is not needed.  Use imperative mood.
->
->> Signed-off-by: Sagi Shahar <sagis@google.com>
->> ---
->>   tools/testing/selftests/kvm/lib/kvm_util.c | 9 ++++++++-
->>   1 file changed, 8 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
->> index 0e6a487ca7a4..086e8a2a4d99 100644
->> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
->> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
->> @@ -4,6 +4,7 @@
->>    *
->>    * Copyright (C) 2018, Google LLC.
->>    */
->> +#include "tdx/tdx_util.h"
->>   #include "test_util.h"
->>   #include "kvm_util.h"
->>   #include "processor.h"
->> @@ -435,7 +436,7 @@ void kvm_set_files_rlimit(uint32_t nr_vcpus)
->>   static bool is_guest_memfd_required(struct vm_shape shape)
->>   {
->>   #ifdef __x86_64__
->> -	return shape.type == KVM_X86_SNP_VM;
->> +	return (shape.type == KVM_X86_SNP_VM || shape.type == KVM_X86_TDX_VM);
-> This caused me to dig a bit to understand why this hunk was needed given
-> the commit message only discusses guest registers.  I did not recall any
-> use of is_guest_memfd_required() in the vm_tdx_setup_*() calls so I was a
-> bit confused.
->
-> With this hunk considered the changelog should read something like:
->
-> <commit message>
->
-> Guest memfd is required for the primary memory region of TDX VMs.
->
-> Furthermore, guest registers are inaccessible to kvm for TDX VMs.  TDX
-> must use use special boot code which loads the register values from memory
-> and writes them into the appropriate registers.
->
-> Use guest_memfd for the primary memory regions and call the TDX boot code
-> functions for TDX VMs.
->
-> </commit message>
->
-> This clearly explains why the change to is_guest_memfd_required() is
-> needed.
+To improve the robustness and reliability of this test in diverse
+network environments, switch from using IPPROTO_HOPOPTS to
+IPPROTO_DSTOPTS (Destination Options).
 
-+1
+The Destination Options header is less likely to be dropped by
+intermediate routers and still serves the core purpose of the test:
+validating GRO's handling of an IPv6 extension header. This change
+ensures the test can execute successfully without being incorrectly
+failed by network policies outside the kernel's control.
 
->
-> In addition, the structure of this series is a bit odd to me.  I assume
-> this patch exists after the setup calls were added to ensure
-> bisect-ability?
+Fixes: 7d1575014a63 ("selftests/net: GRO coalesce test")
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Anubhav Singh <anubhavsinggh@google.com>
+---
+ tools/testing/selftests/net/gro.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I think it's better to switch the order of this patch and patch 15.
-Patch 15 relies on the memory regions added by this patch for boot code and
-parameters.
-
-
->
-> Ira
->
->>   #else
->>   	return false;
->>   #endif
->> @@ -469,6 +470,12 @@ struct kvm_vm *__vm_create(struct vm_shape shape, uint32_t nr_runnable_vcpus,
->>   	for (i = 0; i < NR_MEM_REGIONS; i++)
->>   		vm->memslots[i] = 0;
->>   
->> +	if (is_tdx_vm(vm)) {
->> +		/* Setup additional mem regions for TDX. */
->> +		vm_tdx_setup_boot_code_region(vm);
->> +		vm_tdx_setup_boot_parameters_region(vm, nr_runnable_vcpus);
->> +	}
->> +
->>   	kvm_vm_elf_load(vm, program_invocation_name);
->>   
->>   	/*
->> -- 
->> 2.51.1.851.g4ebd6896fd-goog
->>
->
+diff --git a/tools/testing/selftests/net/gro.c b/tools/testing/selftests/net/gro.c
+index 2b1d9f2b3e9e..d8c29fe39c1d 100644
+--- a/tools/testing/selftests/net/gro.c
++++ b/tools/testing/selftests/net/gro.c
+@@ -754,11 +754,11 @@ static void send_ipv6_exthdr(int fd, struct sockaddr_ll *daddr, char *ext_data1,
+ 	static char exthdr_pck[sizeof(buf) + MIN_EXTHDR_SIZE];
+ 
+ 	create_packet(buf, 0, 0, PAYLOAD_LEN, 0);
+-	add_ipv6_exthdr(buf, exthdr_pck, IPPROTO_HOPOPTS, ext_data1);
++	add_ipv6_exthdr(buf, exthdr_pck, IPPROTO_DSTOPTS, ext_data1);
+ 	write_packet(fd, exthdr_pck, total_hdr_len + PAYLOAD_LEN + MIN_EXTHDR_SIZE, daddr);
+ 
+ 	create_packet(buf, PAYLOAD_LEN * 1, 0, PAYLOAD_LEN, 0);
+-	add_ipv6_exthdr(buf, exthdr_pck, IPPROTO_HOPOPTS, ext_data2);
++	add_ipv6_exthdr(buf, exthdr_pck, IPPROTO_DSTOPTS, ext_data2);
+ 	write_packet(fd, exthdr_pck, total_hdr_len + PAYLOAD_LEN + MIN_EXTHDR_SIZE, daddr);
+ }
+ 
+-- 
+2.51.1.851.g4ebd6896fd-goog
 
 
