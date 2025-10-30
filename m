@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-44372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 872A5C1E07A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 02:35:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19087C1E226
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 03:32:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3367C34B2A2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 01:35:22 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 62E5B4E6182
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Oct 2025 02:32:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D1D328727F;
-	Thu, 30 Oct 2025 01:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EC5232A3C8;
+	Thu, 30 Oct 2025 02:32:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nNII6Rx3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P4FS+I0l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D03D286D63;
-	Thu, 30 Oct 2025 01:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0237E32571E;
+	Thu, 30 Oct 2025 02:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761788116; cv=none; b=sPXW/WD20pgoecDM0j534tIHJGOnWAABzWjdY2w5RPlkMvtQbR9dO+p5A6JASy//HYuJD98Jjb65Mk1B5roKBfz/eZCLu8iWls9xJBn5+NZmWiblWxzX2/EGSWLgmeybAXZV7P5XDkddRzDRQqImSuA8/vzA//iAKX/KNMdGArA=
+	t=1761791539; cv=none; b=tJqafaGgRaL34+DjDTswhDpirzEiR2ODbDpoVbktx5JOm3tOyslbs41idwJ82Eqb2QHr5NckmzHX1TZBaloBngGpEXQtkqKhqjQwWjf/A2a6VsQ/gulYrFmSSr+wOwBDcKP8Ofj0OB50aR3G9by+mBAIjZgnspTc0nAThmi2pdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761788116; c=relaxed/simple;
-	bh=h5HItmxxtllaa4qYDcONQvigJygCAvXadjZ6K1zn5fY=;
+	s=arc-20240116; t=1761791539; c=relaxed/simple;
+	bh=AsRZmcnko9an9X3hiGxxbz4TEtlRNH7py8FQbHxj0Rk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sUbjweMPSw5W1qRwXnb5Fc5caOLly9UJ+kg9w8pFrnwpabQrCe/2wRSrcVYCR6+A2OHeQH2UybnXWzeoqBb2w04ax18e9IRvQbB/KsQza8UKeVKGF1BSyfPzZ3vcdCPoCQY52LtVmKWb9dcYr6qAp17NfPjf7bL/H3M57UnJc8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nNII6Rx3; arc=none smtp.client-ip=198.175.65.12
+	 In-Reply-To:Content-Type; b=hpEMiFrjFw6AMyPo81O2aQQWCXSA+kLcG8cCfc8B9fHz98xLFDe1uRmkjYiG+D5X+mgvKVb5iEHgLxV4p5Y9x8GGb9bYcWLHRS8d8f3GudFpUtKiJ/l4L8VFqkQ6hK5twXgA7RFg9u4hTSvNvHY/d9PeWWDIZSFjeDtxS9b+eto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P4FS+I0l; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761788112; x=1793324112;
+  t=1761791537; x=1793327537;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=h5HItmxxtllaa4qYDcONQvigJygCAvXadjZ6K1zn5fY=;
-  b=nNII6Rx3SNi3Q3iBTdkwKg2H0pUiZhF+0lhXb4HlS75ypfAwoUXt6Z0a
-   SxiHuCfPRzWTfhH+FOAXPj76KjSPn4MPw2bZVqdlF38HvCa4iT293lfpe
-   XhSY3eInL02dtqzTSeCscvOUzGkPHSJyMQyL/Vl5wXt+7Dq9UTxK5tq3S
-   j8/mMWL8sT8HkejUYzQbMnBz0KRrqRUQECT/6mZspaHRdoT6H4sSFazIh
-   vriR2B/OETV4fdaRdxeaaJI6p+D0WQVscMMiO1KYdBevnZCcqNeRo1obp
-   T+9r8iEDoBZPL1n0UlpLgEU8a+AvgSouGygoz/beIM7PiEl4n+3Aqq3bR
-   w==;
-X-CSE-ConnectionGUID: as8z8MheT7ecwESeW1fpmw==
-X-CSE-MsgGUID: ljvtp64pRLeFsbpsNTHjUA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="75371548"
+  bh=AsRZmcnko9an9X3hiGxxbz4TEtlRNH7py8FQbHxj0Rk=;
+  b=P4FS+I0lAk5glX/U7dCTbB0R8Vzk5RayvWxkRnwDeyZhRwr7kxHzjYjX
+   NRK7hN34nninzrXQFerd5UqqqXNG70apNgyrJrx9OUrhBisig7MNyQCZT
+   verzb2CwD5KsMPtW4bo9/VprbPBBEi6vRuv0QZh1e9wgLlbUlkZQYw3Aw
+   LjO0WggU5GMt12f5aTsVHbwo6m2Fo3fSObgZva1zUI0MJQLXwr51Oogr8
+   zhOTzXrsQzGnmcJXVXi2fYdms8CKIKCkK8bKUsniDQ35O3p/BTZm274eK
+   /z7Do0AEFEdQxX+E9XTLf0bv5V2wH1fl+0bxrTJeNHlX8mVU97dfPg6AU
+   A==;
+X-CSE-ConnectionGUID: 5sbU5hrAQFKVmX96sN5+cg==
+X-CSE-MsgGUID: SS/E2X7kSOOG+Gd2O6A1Sg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11597"; a="63625336"
 X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
-   d="scan'208";a="75371548"
+   d="scan'208";a="63625336"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 18:35:12 -0700
-X-CSE-ConnectionGUID: RC5MJzwKQhCcmrUa93TuXA==
-X-CSE-MsgGUID: 2O29+gOkRDGwcrhrp2Ga4A==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 19:32:16 -0700
+X-CSE-ConnectionGUID: fcnTKSNTS6S55PqSrqkHNw==
+X-CSE-MsgGUID: jgGGiN5cR8ujUDjVfRd3Zw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.19,265,1754982000"; 
-   d="scan'208";a="185075296"
+   d="scan'208";a="185083471"
 Received: from yinghaoj-desk.ccr.corp.intel.com (HELO [10.238.1.225]) ([10.238.1.225])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 18:35:07 -0700
-Message-ID: <d5b23bf0-aa77-4f11-9026-e664a8257a16@linux.intel.com>
-Date: Thu, 30 Oct 2025 09:35:05 +0800
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2025 19:32:11 -0700
+Message-ID: <c31cf2dc-b081-4adc-b227-a512f5d5a5bd@linux.intel.com>
+Date: Thu, 30 Oct 2025 10:32:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,8 +67,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 13/23] KVM: selftests: TDX: Use KVM_TDX_CAPABILITIES
- to validate TDs' attribute configuration
+Subject: Re: [PATCH v12 14/23] KVM: selftests: Add helpers to init TDX memory
+ and finalize VM
 To: Sagi Shahar <sagis@google.com>
 Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
  Shuah Khan <shuah@kernel.org>, Sean Christopherson <seanjc@google.com>,
@@ -84,67 +84,32 @@ Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
  Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org,
  kvm@vger.kernel.org
 References: <20251028212052.200523-1-sagis@google.com>
- <20251028212052.200523-14-sagis@google.com>
+ <20251028212052.200523-15-sagis@google.com>
 Content-Language: en-US
 From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20251028212052.200523-14-sagis@google.com>
+In-Reply-To: <20251028212052.200523-15-sagis@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 10/29/2025 5:20 AM, Sagi Shahar wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> From: Ackerley Tng <ackerleytng@google.com>
 >
-> Make sure that all the attributes enabled by the test are reported as
-> supported by the TDX module.
-More accurately, supported by both the TDX module and KVM.
-KVM filters out the attributes not supported by itself.
-
-Otherwise,
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-
+> TDX protected memory needs to be measured and encrypted before it can be
+> used by the guest. Traverse the VM's memory regions and initialize all
+> the protected ranges by calling KVM_TDX_INIT_MEM_REGION.
 >
-> This also exercises the KVM_TDX_CAPABILITIES ioctl.
+> Once all the memory is initialized, the VM can be finalized by calling
+> KVM_TDX_FINALIZE_VM.
 >
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Co-developed-by: Erdem Aktas <erdemaktas@google.com>
+> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
 > Co-developed-by: Sagi Shahar <sagis@google.com>
 > Signed-off-by: Sagi Shahar <sagis@google.com>
-> ---
->   tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
->
-> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> index 7a622b4810b1..2551b3eac8f8 100644
-> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
-> @@ -231,6 +231,18 @@ static void vm_tdx_filter_cpuid(struct kvm_vm *vm,
->   	free(tdx_cap);
->   }
->   
-> +static void tdx_check_attributes(struct kvm_vm *vm, uint64_t attributes)
-> +{
-> +	struct kvm_tdx_capabilities *tdx_cap;
-> +
-> +	tdx_cap = tdx_read_capabilities(vm);
-> +
-> +	/* Make sure all the attributes are reported as supported */
-> +	TEST_ASSERT_EQ(attributes & tdx_cap->supported_attrs, attributes);
-> +
-> +	free(tdx_cap);
-> +}
-> +
->   void vm_tdx_init_vm(struct kvm_vm *vm, uint64_t attributes)
->   {
->   	struct kvm_tdx_init_vm *init_vm;
-> @@ -250,6 +262,8 @@ void vm_tdx_init_vm(struct kvm_vm *vm, uint64_t attributes)
->   	memcpy(&init_vm->cpuid, cpuid, kvm_cpuid2_size(cpuid->nent));
->   	free(cpuid);
->   
-> +	tdx_check_attributes(vm, attributes);
-> +
->   	init_vm->attributes = attributes;
->   
->   	vm_tdx_vm_ioctl(vm, KVM_TDX_INIT_VM, 0, init_vm);
+
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+
 
 
