@@ -1,127 +1,210 @@
-Return-Path: <linux-kselftest+bounces-44541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05FE0C261B0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 17:27:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA98DC262D6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 17:43:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5CA51B24927
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 16:21:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E11DA189A82B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 16:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6CC2271459;
-	Fri, 31 Oct 2025 16:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EE612F0678;
+	Fri, 31 Oct 2025 16:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCSoX7Dk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E+Vfn4b3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DDD170826;
-	Fri, 31 Oct 2025 16:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F08992EC540
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 16:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761927649; cv=none; b=U+y1benfxJAD3A8yAQsU4rRKZlMt+BYzjU+G2vkM74XU4nGl1hTpHP8aCWy1ENpQxRbG3FpKlQ+EqHnVO0uE8ToiomW//HJT7//fYZmcO7U+RQeB1vG3guUgonoaGSEoD6/7t99JFCd0XO6cfwhSf9vYocFdog0TWQFf+K7Ks24=
+	t=1761928698; cv=none; b=qvSdF/8/1V+eNxRoeCyqsYYn2Xb7BHqlRjKm8mNzT6WbR7eA5NgHb1wfyHktNgsHldklDPbrX9sC2smxgP4nHCF6HBYNNweReOwtMID9z3xU/Mi9rJXfAWv5X3xxpxx/ljCfwYUHoXjNX7yQoskYHWLA+3w+O1HEuFz1qGhd7BA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761927649; c=relaxed/simple;
-	bh=Yb/w+7MPzDjhDPB34mgEUk5mobDcE3LsCSh5TaxunmU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=OwH5ghOobCp6oilBUdArEADRwoFk5rF6OvDfOQ+cCN8yPOxVcwmM1koC28eESOYWGv3pPmuoCO2nHzeBeVWI9f6TK5nemxFB5lMaMLoX9x5evL8jOgZTNj0h498F/+ySfWGd1vIhpBnSyOkC6cJtFOMzn3/aGtZ0OkGY31Br3E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iCSoX7Dk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04632C4CEE7;
-	Fri, 31 Oct 2025 16:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761927649;
-	bh=Yb/w+7MPzDjhDPB34mgEUk5mobDcE3LsCSh5TaxunmU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=iCSoX7DkJPWMSC6vPQmObXvrr+WIOnvIoemLZ4fEkqO0sGymPNXDSl2jcdm1e2XiY
-	 aEnH3/W5PPMpquXKNf5aLUKtPsy+0Onor2Xo430d6nzbRLyfhq5j/GXDsvMErQNerC
-	 w247H1RpO20FbE6LcDPj+G76ApLj9vCwScGmHJQdeJOVkWbRfMSk2v5xW9ws0b6uDk
-	 RZt4SyBMmp+GKCozRVX1MgANx0PWejuea5Tq9NrZH+ZYaukM7nWcKcXbhItDz729pk
-	 m0Msc9Dr2YfYzkriRGdWSTu6jttdKovCjJ8qEduLht78Hcb2O6MWxgjYE2++RNUMdg
-	 rDXkWfG23LlPw==
-Content-Type: multipart/mixed; boundary="===============7198071862224552361=="
+	s=arc-20240116; t=1761928698; c=relaxed/simple;
+	bh=p7vdofTGqu3x6DvvTHZIENYATo0Ig2XlNqgLI2N93SI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V7V6UbDhY5Gm/ZGZ3IFeAt3qXGuzNTTtCNNmNtOx4ZXH/jLF4eMAsAzl+ny9+pfHVsOyJLG097/PEnfjdyrFeqxnROvCfqfHWyVo6yf7qELmMbY6liYPGu9sFOzwLtDFL4zlJqnNXvjcLR/lkzqmkqT90UsxC4cUw9pENi/lulg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E+Vfn4b3; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3f0ae439b56so1492002f8f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 09:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761928687; x=1762533487; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=or8GDDYatTrrl85V6YGHNAw/hbsTDPW4OGinPVZC6ss=;
+        b=E+Vfn4b3ekT+IChBYxiXQHMPwpLOuBGOv43snic5wpcnaepJcV3A0Z3UJMd3CPb/iz
+         juvVlYTGbQ0DepWpWBC0MYFxrVlkJPWwd1VUk/cRScBjW7VauxE3F9ON41BitzWudmRC
+         2sPeYIAf0hK+Y5SOTy3TDk5oXj6sbO06c+UYRROL55fZOLz4U3tDGXI8vckvtraBafFc
+         6/sbzqrU+ntKkf/zRPlm1WL4q82RkMfvCer7OpsDzjcGfOtITZhmFiLgruUaFXAOKRCo
+         mBORYin9v/1N+dTTAECjm+hkTOPDTBXpRSChMht9HbtbnDVmdGOWeVZarumiwB/n0+37
+         R3GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761928687; x=1762533487;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=or8GDDYatTrrl85V6YGHNAw/hbsTDPW4OGinPVZC6ss=;
+        b=G91rHD9a37N+mbQZjCXQUicpbYvc/RLAt9wsY7fRosnOZ03wervG00G+Sq8VTrrppx
+         6AXwtVQcD37gtLi+xlaQnmxL7wYpz1c+TLPMYtJS3eiCEsCsVc/8PlDVidgrwh4R3jlp
+         x2AMmVasdw5+M/eWErdbd8tM0UDxUWwZ1ioZ857uSW2J84B1b/YxSTGr9QnihJEIDphk
+         PbFHwmC2hHrKrVGgzBOKnjD7/deTB6wAwmOw+3PPurkvlkSTPHRkNxrg56hlf/ztBV+z
+         SR0OWn+J9Yl+Dj8zVb3Nkkikz8jLXzBWt+BxD7zqU0ua70CTeQHPEESwEdd4NFIH8Uq7
+         uvfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyZC4GRtCyOyQEr7OGSL6fWI84DZZNmHyTOnoohUrZbMM3QQXuLf/SlF9MdzZzmrG++ZzhP3ZRp1xXUjrP7bs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXSeo6TdQj/oaYUAk1hZi5YkL3xexJCoKw8OK5b0/Vdqe1h75Q
+	vg50gnH0p6lR/o+2FgUf1rYMLVdS0zF5snLI8qmoLDlrnEE3AiL5Zmg28hxaFDUhGqTheleeVuu
+	W64LFuyZn+Wz560ym2Yy7obWk0Cmxqo0=
+X-Gm-Gg: ASbGncu1dkKZ8inmFkKTyFj9HNmjMBVDunaxqtlS/3suMBquBuUyWmChrOjYGhPTR5F
+	FrAj9Mpq3kHeDBBZFc/bBEjiHrfPk52/unQ+CCJCkvSaIIkFObsjjVi05BsWiyfuVTJ3x4NDP6y
+	cXGYi7TPLqki7aKsLwEyOcQqejbW+u7CuZZAV1NUq3uIv+0k9/PwGi08k+zC90Pk8r5PRY0+h2o
+	Jq8WOPEDquWLOUwxDFQIPIViSTVag6OYs17d1XX66j5v1e7YuB8r/n9oARrQrCkTr2Y3WLyWzS5
+	jHLnbypTTmzJ+zCF6eBJtkpJ3NwP
+X-Google-Smtp-Source: AGHT+IFBHh5rk74gwLSZ2LKe1jBxHjLUksqYeKCEGxnQHUNuc86p9MCP6sT8KBMTg23E0aT5bpyGxxtlW+e826OBh3M=
+X-Received: by 2002:a05:6000:178f:b0:429:ba6a:3a86 with SMTP id
+ ffacd0b85a97d-429bd6b2196mr3452799f8f.57.1761928687090; Fri, 31 Oct 2025
+ 09:38:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <09feef91b51f675195b5b1b9a854d844c9999c0cebb429d785fe60f6c787dc8b@mail.kernel.org>
-In-Reply-To: <20251031-tc_edt-v1-2-5d34a5823144@bootlin.com>
-References: <20251031-tc_edt-v1-2-5d34a5823144@bootlin.com>
-Subject: Re: [PATCH bpf-next 2/4] selftests/bpf: integrate test_tc_edt into test_progs
-From: bot+bpf-ci@kernel.org
-To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org
-Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 31 Oct 2025 16:20:49 +0000 (UTC)
+References: <20251031154107.403054-1-kafai.wan@linux.dev> <20251031154107.403054-2-kafai.wan@linux.dev>
+In-Reply-To: <20251031154107.403054-2-kafai.wan@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 31 Oct 2025 09:37:54 -0700
+X-Gm-Features: AWmQ_bl06Po1W4MOoS1jpCHAUNH8kXBIMxWHPf8qXw0QaexrF09WsuZ1bhbcqWc
+Message-ID: <CAADnVQ+4QoCU4gYEfTR6Ok122zkfG32s8AxRx-irMcCA1jEhvQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Skip bounds adjustment for
+ conditional jumps on same scalar register
+To: KaFai Wan <kafai.wan@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Paul Chaignon <paul.chaignon@gmail.com>, 
+	Matan Shachnai <m.shachnai@gmail.com>, Henriette Herzog <henriette.herzog@rub.de>, 
+	Luis Gerhorst <luis.gerhorst@fau.de>, 
+	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, colin.i.king@gmail.com, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Kaiyan Mei <M202472210@hust.edu.cn>, 
+	Yinhao Hu <dddddd@hust.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============7198071862224552361==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+On Fri, Oct 31, 2025 at 8:44=E2=80=AFAM KaFai Wan <kafai.wan@linux.dev> wro=
+te:
+>
+> When conditional jumps are performed on the same scalar register
+> (e.g., r0 <=3D r0, r0 > r0, r0 < r0), the BPF verifier incorrectly
+> attempts to adjust the register's min/max bounds. This leads to
+> invalid range bounds and triggers a BUG warning.
+>
+> The problematic BPF program:
+>    0: call bpf_get_prandom_u32
+>    1: w8 =3D 0x80000000
+>    2: r0 &=3D r8
+>    3: if r0 > r0 goto <exit>
+>
+> The instruction 3 triggers kernel warning:
+>    3: if r0 > r0 goto <exit>
+>    true_reg1: range bounds violation u64=3D[0x1, 0x0] s64=3D[0x1, 0x0] u3=
+2=3D[0x1, 0x0] s32=3D[0x1, 0x0] var_off=3D(0x0, 0x0)
+>    true_reg2: const tnum out of sync with range bounds u64=3D[0x0, 0xffff=
+ffffffffffff] s64=3D[0x8000000000000000, 0x7fffffffffffffff] var_off=3D(0x0=
+, 0x0)
+>
+> Comparing a register with itself should not change its bounds and
+> for most comparison operations, comparing a register with itself has
+> a known result (e.g., r0 =3D=3D r0 is always true, r0 < r0 is always fals=
+e).
+>
+> Fix this by:
+> 1. Enhance is_scalar_branch_taken() to properly handle branch direction
+>    computation for same register comparisons across all BPF jump operatio=
+ns
+> 2. Adds early return in reg_set_min_max() to avoid bounds adjustment
+>    for unknown branch directions (e.g., BPF_JSET) on the same register
+>
+> The fix ensures that unnecessary bounds adjustments are skipped, preventi=
+ng
+> the verifier bug while maintaining correct branch direction analysis.
+>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Closes: https://lore.kernel.org/all/1881f0f5.300df.199f2576a01.Coremail.k=
+aiyanm@hust.edu.cn/
+> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+> ---
+>  kernel/bpf/verifier.c | 33 +++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 542e23fb19c7..a571263f4ebe 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -15995,6 +15995,8 @@ static int is_scalar_branch_taken(struct bpf_reg_=
+state *reg1, struct bpf_reg_sta
+>
+>         switch (opcode) {
+>         case BPF_JEQ:
+> +               if (reg1 =3D=3D reg2)
+> +                       return 1;
+>                 /* constants, umin/umax and smin/smax checks would be
+>                  * redundant in this case because they all should match
+>                  */
+> @@ -16021,6 +16023,8 @@ static int is_scalar_branch_taken(struct bpf_reg_=
+state *reg1, struct bpf_reg_sta
+>                 }
+>                 break;
+>         case BPF_JNE:
+> +               if (reg1 =3D=3D reg2)
+> +                       return 0;
+>                 /* constants, umin/umax and smin/smax checks would be
+>                  * redundant in this case because they all should match
+>                  */
+> @@ -16047,6 +16051,12 @@ static int is_scalar_branch_taken(struct bpf_reg=
+_state *reg1, struct bpf_reg_sta
+>                 }
+>                 break;
+>         case BPF_JSET:
+> +               if (reg1 =3D=3D reg2) {
+> +                       if (tnum_is_const(t1))
+> +                               return t1.value !=3D 0;
+> +                       else
+> +                               return (smin1 <=3D 0 && smax1 >=3D 0) ? -=
+1 : 1;
+> +               }
+>                 if (!is_reg_const(reg2, is_jmp32)) {
+>                         swap(reg1, reg2);
+>                         swap(t1, t2);
+> @@ -16059,48 +16069,64 @@ static int is_scalar_branch_taken(struct bpf_re=
+g_state *reg1, struct bpf_reg_sta
+>                         return 0;
+>                 break;
+>         case BPF_JGT:
+> +               if (reg1 =3D=3D reg2)
+> +                       return 0;
+>                 if (umin1 > umax2)
+>                         return 1;
+>                 else if (umax1 <=3D umin2)
+>                         return 0;
+>                 break;
+>         case BPF_JSGT:
+> +               if (reg1 =3D=3D reg2)
+> +                       return 0;
 
-CmBgYApjb21taXQgZmIwYzVjZmFkMzdlYWFkMzBmNTg0Y2FhZjUzZmU5ODI0MDI2YmM5MgpBdXRo
-b3I6IEFsZXhpcyBMb3Rob3LDqSAoZUJQRiBGb3VuZGF0aW9uKSA8YWxleGlzLmxvdGhvcmVAYm9v
-dGxpbi5jb20+CgpzZWxmdGVzdHMvYnBmOiBpbnRlZ3JhdGUgdGVzdF90Y19lZHQgaW50byB0ZXN0
-X3Byb2dzCgpUaGlzIHBhdGNoIGNvbnZlcnRzIHRlc3RfdGNfZWR0LnNoIHRvIHRoZSB0ZXN0X3By
-b2dzIGZyYW1ld29yaywKY3JlYXRpbmcgYSBuZXcgdGVzdCB0aGF0IG1lYXN1cmVzIEJQRi1iYXNl
-ZCB0cmFmZmljIHNoYXBpbmcgdG8gdmVyaWZ5CnRoYXQgdGhlIHJlc3VsdGluZyByYXRlIG1hdGNo
-ZXMgNU1icHMgd2l0aGluIGEgMiUgZXJyb3IgbWFyZ2luLgoKPiBkaWZmIC0tZ2l0IGEvdG9vbHMv
-dGVzdGluZy9zZWxmdGVzdHMvYnBmL3Byb2dfdGVzdHMvdGVzdF90Y19lZHQuYyBiL3Rvb2xzL3Rl
-c3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Rlc3RfdGNfZWR0LmMKPiBuZXcgZmlsZSBt
-b2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMC4uYTc3ZTQ4ZmRmCj4gLS0tIC9kZXYvbnVsbAo+
-ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9nX3Rlc3RzL3Rlc3RfdGNfZWR0
-LmMKClsgLi4uIF0KCj4gKyNkZWZpbmUgVEFSR0VUX1JBVEVfTUJQUwk1LjAKPiArI2RlZmluZSBS
-QVRFX0VSUk9SX1BFUkNFTlQJMi4wCgpbIC4uLiBdCgo+ICtzdGF0aWMgdm9pZCBydW5fdGVzdCh2
-b2lkKQo+ICt7Cj4gKwlfX3U2NCByeF9ieXRlc19zdGFydCwgcnhfYnl0ZXNfZW5kOwo+ICsJZG91
-YmxlIHJhdGVfbWJwcywgcmF0ZV9lcnJvcjsKPiArCXB0aHJlYWRfdCBzZXJ2ZXJfdGhyZWFkID0g
-MDsKPiArCXN0cnVjdCBjb25uZWN0aW9uICpjb25uOwo+ICsJX191NjQgdHNfc3RhcnQsIHRzX2Vu
-ZDsKPiArCWludCByZXQ7Cj4gKwo+ICsKPiArCWNvbm4gPSBzZXR1cF9jb25uZWN0aW9uKCk7Cj4g
-KwlpZiAoIUFTU0VSVF9PS19QVFIoY29ubiwgInNldHVwIGNsaWVudCBhbmQgc2VydmVyIGNvbm5l
-Y3Rpb24iKSkKPiArCQlyZXR1cm47Cj4gKwo+ICsJcmV0ID0gcHRocmVhZF9jcmVhdGUoJnNlcnZl
-cl90aHJlYWQsIE5VTEwsIHJ1bl9zZXJ2ZXIsCj4gKwkJCSAgICAgKHZvaWQgKikoJmNvbm4tPnNl
-cnZlcl9jb25uX2ZkKSk7Cj4gKwlpZiAoIUFTU0VSVF9PSyhyZXQsICJzdGFydCBzZXJ2ZXIgcngg
-dGhyZWFkIikpCj4gKwkJZ290byBlbmRfY2xlYW51cF9jb25uOwo+ICsJaWYgKCFBU1NFUlRfT0so
-cmVhZF9yeF9ieXRlcygmcnhfYnl0ZXNfc3RhcnQpLCAicmVhZCByeF9ieXRlcyIpKQo+ICsJCWdv
-dG8gZW5kX2tpbGxfdGhyZWFkOwo+ICsJdHNfc3RhcnQgPSBnZXRfdGltZV9ucygpOwo+ICsJd2hp
-bGUgKHRydWUpIHsKPiArCQlzZW5kKGNvbm4tPmNsaWVudF9jb25uX2ZkLCAodm9pZCAqKXR4X2J1
-ZmZlciwgQlVGRkVSX0xFTiwgMCk7Cj4gKwkJdHNfZW5kID0gZ2V0X3RpbWVfbnMoKTsKPiArCQlp
-ZiAoKHRzX2VuZCAtIHRzX3N0YXJ0KS8xMDAwMDAgPj0gVElNRU9VVF9NUykgewogICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5eXl5eXgoKRG9lcyB0aGlzIHRpbWUgY29u
-dmVyc2lvbiB1c2UgdGhlIGNvcnJlY3QgZGl2aXNvcj8gVGhlIHRpbWVvdXQgY2hlY2sKYXBwZWFy
-cyB0byBkaXZpZGUgbmFub3NlY29uZHMgYnkgMTAwMDAwLCBidXQgVElNRU9VVF9NUyBpcyAyMDAw
-Cm1pbGxpc2Vjb25kcy4gQ29udmVydGluZyBuYW5vc2Vjb25kcyB0byBtaWxsaXNlY29uZHMgcmVx
-dWlyZXMgZGl2aWRpbmcKYnkgMTAwMDAwMCwgbm90IDEwMDAwMC4gV2l0aCB0aGUgY3VycmVudCBj
-YWxjdWxhdGlvbiwgdGhlIHRpbWVvdXQgd291bGQKdHJpZ2dlciBhZnRlciAyMDAgbWlsbGlzZWNv
-bmRzIHJhdGhlciB0aGFuIDIwMDAgbWlsbGlzZWNvbmRzLgoKPiArCQkJdHhfdGltZW91dCA9IHRy
-dWU7Cj4gKwkJCXJldCA9IHJlYWRfcnhfYnl0ZXMoJnJ4X2J5dGVzX2VuZCk7Cj4gKwkJCWlmICgh
-QVNTRVJUX09LKHJldCwgInJlYWRfcnhfYnl0ZXMiKSkKPiArCQkJCWdvdG8gZW5kX2NsZWFudXBf
-Y29ubjsKPiArCQkJYnJlYWs7Cj4gKwkJfQo+ICsJfQo+ICsKPiArCXJhdGVfbWJwcyA9IChyeF9i
-eXRlc19lbmQgLSByeF9ieXRlc19zdGFydCkgLwo+ICsJCSAgICAoKHRzX2VuZCAtIHRzX3N0YXJ0
-KSAvIDEwMDAuMCk7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF5eXl5e
-XgoKQ2FuIHRoaXMgcmF0ZSBjYWxjdWxhdGlvbiBwcm9kdWNlIHRoZSBjb3JyZWN0IHVuaXRzPyBU
-aGUgbnVtZXJhdG9yIGlzIGluCmJ5dGVzLCBhbmQgdGhlIGRlbm9taW5hdG9yIChuYW5vc2Vjb25k
-cyAvIDEwMDAuMCkgaXMgaW4gbWljcm9zZWNvbmRzLApnaXZpbmcgYnl0ZXMgcGVyIG1pY3Jvc2Vj
-b25kIHdoaWNoIGVxdWFscyBtZWdhYnl0ZXMgcGVyIHNlY29uZCAoTUIvcykuCkhvd2V2ZXIsIHRo
-ZSBjb21taXQgbWVzc2FnZSBzdGF0ZXMgdGhlIHRlc3QgdmVyaWZpZXMgIjVNYnBzIiAobWVnYWJp
-dHMKcGVyIHNlY29uZCksIGFuZCBUQVJHRVRfUkFURV9NQlBTIHN1Z2dlc3RzIHRoZSBzYW1lLiBD
-b252ZXJ0aW5nIE1CL3MgdG8KTWJwcyByZXF1aXJlcyBtdWx0aXBseWluZyBieSA4IChiaXRzIHBl
-ciBieXRlKSwgd2hpY2ggYXBwZWFycyB0byBiZQptaXNzaW5nLiBJcyB0aGUgdGVzdCBtZWFzdXJp
-bmcgaW4gdGhlIHdyb25nIHVuaXRzLCBvciBpcyB0aGVyZSBhIG5hbWluZwppbmNvbnNpc3RlbmN5
-PwoKPiArCXJhdGVfZXJyb3IgPQo+ICsJCWZhYnMoKHJhdGVfbWJwcyAtIFRBUkdFVF9SQVRFX01C
-UFMpICogMTAwLjAgLyBUQVJHRVRfUkFURV9NQlBTKTsKPiArCWZwcmludGYoc3RkZXJyLCAiUmF0
-ZTpcdCVmXG5FcnJvcjpcdCVmXG4iLCByYXRlX21icHMsIHJhdGVfZXJyb3IpOwo+ICsKPiArCUFT
-U0VSVF9MRShyYXRlX2Vycm9yLCBSQVRFX0VSUk9SX1BFUkNFTlQsCj4gKwkJICAicmF0ZSBlcnJv
-ciBpcyBsb3dlciB0aGFuIHRocmVzaG9sZCIpOwo+ICsKPiArZW5kX2tpbGxfdGhyZWFkOgo+ICsJ
-dHhfdGltZW91dCA9IHRydWU7Cj4gK2VuZF9jbGVhbnVwX2Nvbm46Cj4gKwljbGVhbnVwX2Nvbm5l
-Y3Rpb24oY29ubik7Cj4gK30KCgpgYGAKCi0tLQpBSSByZXZpZXdlZCB5b3VyIHBhdGNoLiBQbGVh
-c2UgZml4IHRoZSBidWcgb3IgZW1haWwgcmVwbHkgd2h5IGl0J3Mgbm90IGEgYnVnLgpTZWU6IGh0
-dHBzOi8vZ2l0aHViLmNvbS9rZXJuZWwtcGF0Y2hlcy92bXRlc3QvYmxvYi9tYXN0ZXIvY2kvY2xh
-dWRlL1JFQURNRS5tZAoKSW4tUmVwbHktVG8tU3ViamVjdDogYHNlbGZ0ZXN0cy9icGY6IGludGVn
-cmF0ZSB0ZXN0X3RjX2VkdCBpbnRvIHRlc3RfcHJvZ3NgCkNJIHJ1biBzdW1tYXJ5OiBodHRwczov
-L2dpdGh1Yi5jb20va2VybmVsLXBhdGNoZXMvYnBmL2FjdGlvbnMvcnVucy8xODk3ODE3MDk3Mgo=
+This is uglier than the previous version.
+reg1 =3D=3D reg2 is a syzbot territory.
+We shouldn't uglify the code everywhere because of it.
 
---===============7198071862224552361==--
+pw-bot: cr
 
