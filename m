@@ -1,125 +1,117 @@
-Return-Path: <linux-kselftest+bounces-44548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADC27C26B65
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 20:23:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7217C26C20
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 20:31:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D2961A24C49
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 19:23:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B0683A6C40
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 19:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B21432143F;
-	Fri, 31 Oct 2025 19:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC98C30EF72;
+	Fri, 31 Oct 2025 19:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5HDCi2R"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IEXhEahv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04B42D97B7;
-	Fri, 31 Oct 2025 19:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4FA2EFDA5
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 19:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761938552; cv=none; b=DD74Y5aMdn5jzFUxKEJqLEoshx1hJxxDMc/4qnP3Y7gSy+2cPHES79dpXZ70ll4GN+n26YKPqvnF5XqzDF2keVmn8Q0jY/gUtkKIGCgnasDf+1lNgerC7rEo484jpOoczB7Wl02aTmtfznssVMJAhIF8glrtUZuBqnEzu4MzOpI=
+	t=1761938956; cv=none; b=X327LyAq+pRln3dd0tLgZvY9wfryqGZxNLBXdKa+IXuhfguGuCo+nUQDHhS4z6Jo3DxIh5o1gASlvx7I9fu5ATDqirfVEUu7xvG/DXUY8rD7ZJbqbuT0rhu/mXZADJDRR50e2NLlLzM0bLz3APQCnRECK8NRZFRFd0eC9svCpFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761938552; c=relaxed/simple;
-	bh=aRO45gf5CfHW1/jbUbbLGsRCxWY7tHk3cFfnDvNsB6Y=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=IZEsEfGciCGn7YCUlhF+9OWVyY9PAO4purbzxVHeg6yD/GTVNfKoSLXV+aCWqpyTb7NXboRdqW3ytBWthejEdnrHMocqL8L4rlslaIBlByMP83BosNQXBPehuSzO3CaMi0Rd5igKsZ7BKJatoEA6WJiPTqq8QGT86zz5ECSSLL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5HDCi2R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB1DEC4CEE7;
-	Fri, 31 Oct 2025 19:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761938551;
-	bh=aRO45gf5CfHW1/jbUbbLGsRCxWY7tHk3cFfnDvNsB6Y=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=M5HDCi2R/696KAq+LQQDeEnnFTStWNLkXYwKUiU9FxJS0+SMep8pWFlpbWtMhCEDE
-	 3IqSttDBCsW639HgoIfXNDa5Rl5R2Eg3DPtIMGmbvxRmY4i0JiGYkRMvEIB/UsEAF/
-	 CpSxsd8YDaLo7qB+j1Vd4dXbW9wlxIEkOBpLnql/SBO5QE8BsCAMM0NgYXNNpBc0uG
-	 74Srbaun1zMez0S5J737hSGvZAiklmcFqDN9evPXeLKPQOTt4EkImzO1RV9Ab3ErMe
-	 U7GPDkqCNG4vnEozILb4d3SSdHavGo7+IHCu1Lfn9KlyQUdgHAk2dJZMnL8zRIQzci
-	 moNGNmIxIROuQ==
-Date: Fri, 31 Oct 2025 13:22:23 -0600 (MDT)
-From: Paul Walmsley <pjw@kernel.org>
-To: Deepak Gupta <debug@rivosinc.com>
-cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-    Vlastimil Babka <vbabka@suse.cz>, 
-    Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-    Paul Walmsley <paul.walmsley@sifive.com>, 
-    Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-    Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-    Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-    Christian Brauner <brauner@kernel.org>, 
-    Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
-    Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-    Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-    Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
-    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-    =?ISO-8859-15?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-    Andreas Hindborg <a.hindborg@kernel.org>, 
-    Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-    Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
-    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-    linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-    linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-    linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-    richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
-    kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
-    evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
-    samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
-    rust-for-linux@vger.kernel.org, Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH v22 03/28] riscv: zicfiss / zicfilp enumeration
-In-Reply-To: <20251023-v5_user_cfi_series-v22-3-1d53ce35d8fd@rivosinc.com>
-Message-ID: <9230fa65-6b8e-ebf6-f215-b3a3bb7357d9@kernel.org>
-References: <20251023-v5_user_cfi_series-v22-0-1d53ce35d8fd@rivosinc.com> <20251023-v5_user_cfi_series-v22-3-1d53ce35d8fd@rivosinc.com>
+	s=arc-20240116; t=1761938956; c=relaxed/simple;
+	bh=tap3GZK35XqIeGc0MtuZbkLTyyOpeW4BuzXhKgfHbG4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=h06pmDL8qSLfMUpFT2HzIf7lIY1AihEpD7L5cQYAbkoQCy6UCEWVj7oheFGFsbA/RH8GLzUKZR6waMGfFKvEk6TPZEu6txyhegljfSTkLyZP4BuluDbIo1FE3Dq+gj4tBqwUc8C16bv2OPfyKCH1DpOvij9+2FDdgwKzHV0W2OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IEXhEahv; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <d886e631-851b-4e2f-aecb-ecdb541dfedc@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1761938938;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8D2DjveBXCBvaI02wp6eCLUtpmu3etH8CmtWre82fK8=;
+	b=IEXhEahvBzCb9dsDqryxWKPeJMso0ZXHQY9gEyyNpqyl2hWF5u4qhEzAr0JRfRwCLqCIl1
+	HeCAPFGpEsGQIA//gcpJQ0XzjPttZU94W4D7OjE6FZ446D8MMTQ5ZLa0qTB/iNnEkJvQ9I
+	y+RDvv0IKt3SNjrcHkkaw2+ROSwlSv8=
+Date: Fri, 31 Oct 2025 12:28:50 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH bpf-next 2/4] selftests/bpf: integrate test_tc_edt into
+ test_progs
+To: alexis.lothore@bootlin.com
+Cc: ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
+ thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev,
+ bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
+References: <20251031-tc_edt-v1-2-5d34a5823144@bootlin.com>
+ <09feef91b51f675195b5b1b9a854d844c9999c0cebb429d785fe60f6c787dc8b@mail.kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <09feef91b51f675195b5b1b9a854d844c9999c0cebb429d785fe60f6c787dc8b@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 23 Oct 2025, Deepak Gupta wrote:
-
-> This patch adds support for detecting zicfiss and zicfilp. zicfiss and
-> zicfilp stands for unprivleged integer spec extension for shadow stack
-> and branch tracking on indirect branches, respectively.
+On 10/31/25 9:20 AM, bot+bpf-ci@kernel.org wrote:
+>> +static void run_test(void)
+>> +{
+>> +	__u64 rx_bytes_start, rx_bytes_end;
+>> +	double rate_mbps, rate_error;
+>> +	pthread_t server_thread = 0;
+>> +	struct connection *conn;
+>> +	__u64 ts_start, ts_end;
+>> +	int ret;
+>> +
+>> +
+>> +	conn = setup_connection();
+>> +	if (!ASSERT_OK_PTR(conn, "setup client and server connection"))
+>> +		return;
+>> +
+>> +	ret = pthread_create(&server_thread, NULL, run_server,
+>> +			     (void *)(&conn->server_conn_fd));
+>> +	if (!ASSERT_OK(ret, "start server rx thread"))
+>> +		goto end_cleanup_conn;
+>> +	if (!ASSERT_OK(read_rx_bytes(&rx_bytes_start), "read rx_bytes"))
+>> +		goto end_kill_thread;
+>> +	ts_start = get_time_ns();
+>> +	while (true) {
+>> +		send(conn->client_conn_fd, (void *)tx_buffer, BUFFER_LEN, 0);
+>> +		ts_end = get_time_ns();
+>> +		if ((ts_end - ts_start)/100000 >= TIMEOUT_MS) {
+>                                           ^^^^^^
 > 
-> This patch looks for zicfiss and zicfilp in device tree and accordinlgy
-> lights up bit in cpu feature bitmap. Furthermore this patch adds detection
-> utility functions to return whether shadow stack or landing pads are
-> supported by cpu.
-> 
-> Reviewed-by: Zong Li <zong.li@sifive.com>
-> Reviewed-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> Does this time conversion use the correct divisor? The timeout check
+> appears to divide nanoseconds by 100000, but TIMEOUT_MS is 2000
+> milliseconds. Converting nanoseconds to milliseconds requires dividing
+> by 1000000, not 100000. With the current calculation, the timeout would
+> trigger after 200 milliseconds rather than 2000 milliseconds.
 
-This patch introduces some 'checkpatch.pl --strict' messages:
+The report is correct, there is a typo in the denominator.
 
-CHECK: Alignment should match open parenthesis
-#68: FILE: arch/riscv/kernel/cpufeature.c:278:
-+static int riscv_cfilp_validate(const struct riscv_isa_ext_data *data,
-+			      const unsigned long *isa_bitmap)
+Use the send_recv_data() helper in network_helpers.c. It should simplify 
+this test and no need to pthread_create, while loop, ....etc. 
+send_recv_data limits by the number of bytes instead of the length of 
+time. There is a target rate in this test, so it should be easy to 
+convert from time limit to byte limit and reuse the send_recv_data.
 
-CHECK: Alignment should match open parenthesis
-#77: FILE: arch/riscv/kernel/cpufeature.c:287:
-+static int riscv_cfiss_validate(const struct riscv_isa_ext_data *data,
-+			      const unsigned long *isa_bitmap)
+pw-bot: cr
 
-
-I'll fix them up here in the event that v22 goes in, but please do the 
-same on your side in case a new version is needed.  
-
-
-thanks,
-
-- Paul 
 
