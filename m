@@ -1,139 +1,127 @@
-Return-Path: <linux-kselftest+bounces-44532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 281F3C25ED9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 16:57:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3775CC25F1E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 17:00:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B25C0406880
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 15:56:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E03444F627D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 15:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 557A62F3615;
-	Fri, 31 Oct 2025 15:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F83F2EB86D;
+	Fri, 31 Oct 2025 15:56:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NMVgH6ou"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FIVFPezx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344D92F28EB;
-	Fri, 31 Oct 2025 15:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721402EACF9
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 15:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761926136; cv=none; b=mV97t7kfWke//I00tCNRCTjY9UY8cfLvdgpfJsJeekrNGVQimpmdjkT+GHDkhyAVkeVJc049M2Z1/t1OdTKpNaLoN9xqE17lNCmZo5rIlC4SeeH3Jput0krIljtwOqHAzczfG+GTdYaThbKIqXpJJa/MWHNKO6gI5CK7vy8iCMQ=
+	t=1761926160; cv=none; b=bqgmVCMx1XhoN/UG42txlZgsd4ek9STHqxF1XE3zX6KTqxMbnHnFWuLbiIj8L04RQtaYuNB1mn4kGxxb38wuAt+Wm8nE9M7+PbWxGuErUeg5kj+RKmig0lQNdDtv/oNtzOebXbz0iZItGycMknL8zdKhVYqNBsM9Y3jBcgT9QTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761926136; c=relaxed/simple;
-	bh=DS7GdoyTSbp4Av0r2ONCH04vR0freNolpLYPdTzZ/dc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lI4p2PwG4Azllp/tKIhZDrLbrNX0YvTA0tIhs5C98lVUPxA7A045sY1iFwKq9Bf07CJtXREmy7pG2VHK+M7edsC0q9c11Z0q1dP81/7KFMPGF/sqhaNgcnADu0P9izTesW9tBVj2P/hTnIIsVG8nvylAoLlA4z0lUG8zb5WZwac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NMVgH6ou; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 1470AC0E95B;
-	Fri, 31 Oct 2025 15:55:12 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 97A9A60704;
-	Fri, 31 Oct 2025 15:55:32 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AFAFB11818066;
-	Fri, 31 Oct 2025 16:55:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761926131; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=/TNq8Noeo82uL94tALlA2YUHtpAfFnqYiA1L+FN+m5w=;
-	b=NMVgH6ourG6tGxcvYLakUnTebijMsJSQ16SZ9ctt+0ulVANK/wrAoz3XVv1Py78ujjDoCS
-	+vIs22BCxK36OLqECqtYWmcxxs6tzODcJ7FY6EDqXoAC8fd0s70+Hp8VOK9yDg5opi3xZK
-	vwY1sIIxbIcA/LOaQLn+u9gAqPbz3edShDiRSLGnt2z8GXYS5Sbyi9fHx/NPldk+hvRuww
-	vssH2eUzE8qZ1GdPOk7TAwKDUGxdAXttbgqy0AKCxaLwN8snUXFmTQMANXrrLrBG4pw6Vo
-	2bQhIpKGXfzJmos6i5gsMpc8tMRCiZ1ALgdm5wF5Ktvq5qYEZ8xjixfVH6JGtA==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Fri, 31 Oct 2025 16:55:16 +0100
-Subject: [PATCH bpf-next 4/4] selftests/bpf: do not hardcode target rate in
- test_tc_edt BPF program
+	s=arc-20240116; t=1761926160; c=relaxed/simple;
+	bh=t8Bki2mZlE4ZDwdVcMbMtVwPgZgWgPVZgc6TnvQRl9M=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=VsZYosECFUwVq26/GQyZofjuv5ZXnXBN4gxYzpkjrf3qmCHmSlTQLcqzTAxT4Ud/jo1IAp+xXr737WVPtk6tIUWKLLQZZpwfd6IXsHx8e1bNo01cjbalRFr47tFtgS4vyBwMTCls03lYejOYkzuu9YRIZZ/XbdwRLVsUkj+4Ntw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FIVFPezx; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3405e02ff45so2064779a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 08:55:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761926158; x=1762530958; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eSE6VWD4vxaaTE+0KBr/ChxCqFBWm8TM2v7b9di8yIw=;
+        b=FIVFPezx07D5IdTkgodTZt+ara/8KqP1yM/NoZHCUO5dX8b+CWQA1rdA2GqNExzreD
+         UNUrH9hDQjG3VqhGl3c2KAtRjZj0nGij0BEAbhC50QEAvFU2SRCAgXr+uagdl4aCcmuM
+         fkNdaiB2yom3IM6fsAB2WUOhIVNE1gICajl+0x7IjroHeCQEWiv3pB60cs9ScVaBn4FP
+         uMNLyfic0wWsaptlnVwwhohm2OnMjb6jhRS9fT7RfGhTAYkBV++KeY/EQwu9uCGmR0Fi
+         IeCD/HZgUXJcfY2cG7qjyLKEAG8Bf663v4unJvsyqWxiznFP2Xi0NM7tscSCTEHSblk3
+         Og5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761926158; x=1762530958;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eSE6VWD4vxaaTE+0KBr/ChxCqFBWm8TM2v7b9di8yIw=;
+        b=aHH5hLGkU2g0NQ0JWWowzpgTWV3Sp9Sa5XAPABB9W/jBTUbcIldbfhQNJVHxRv0e9F
+         DFt5VnG6bFZ8xszifGkmMH6Jfb/jbZ0G99So+UfLcQpm7jZ8E8HsGUrSFU+lnIazNIhn
+         /KZQSODR5YDOuBc9ukIfybFUP8d1WdfeqhLAlz5uPq9WERn4cl0jPeN0ik2G5PTTYxn4
+         kTY0Wt16nSZ75q4IvBkISdqQRYXOvGiRRPh2hqwI2aEt3249+U7OX10ZrRL/lAGyQorI
+         NYHj7maALyv4jJORhyNYIcp3JC2Hb/DC3w+hMEazryMzDO8+7Ci7Ltp1OAqn3NHL0Fkc
+         /jag==
+X-Gm-Message-State: AOJu0Ywr5bVJ9f2IMK8lSHODHmIsxAWYltju/2JnzXlCreBuGq2xXZ8H
+	S5jhmEWhXoysigtLqrWT5gmWYiVpAaRwAgBNsMVJByqvyHL4Bf8erEskkmqjNiHGQP1f5lurLc/
+	8sxmIyg==
+X-Google-Smtp-Source: AGHT+IHK5XrSj2/97kQFOhhQkT/88rHDWAg9SuzbdwRpl3MTETpFtRtdCwbGXG4UVT+AGrJf8RWbxI8IFXY=
+X-Received: from pjbnm10.prod.google.com ([2002:a17:90b:19ca:b0:32e:d644:b829])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3c12:b0:32e:f1c:e778
+ with SMTP id 98e67ed59e1d1-34082fce72amr5948234a91.3.1761926157852; Fri, 31
+ Oct 2025 08:55:57 -0700 (PDT)
+Date: Fri, 31 Oct 2025 08:55:56 -0700
+In-Reply-To: <20251028212052.200523-23-sagis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251031-tc_edt-v1-4-5d34a5823144@bootlin.com>
-References: <20251031-tc_edt-v1-0-5d34a5823144@bootlin.com>
-In-Reply-To: <20251031-tc_edt-v1-0-5d34a5823144@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Mime-Version: 1.0
+References: <20251028212052.200523-1-sagis@google.com> <20251028212052.200523-23-sagis@google.com>
+Message-ID: <aQTcDH9LRezI30dm@google.com>
+Subject: Re: [PATCH v12 22/23] KVM: selftests: Add ucall support for TDX
+From: Sean Christopherson <seanjc@google.com>
+To: Sagi Shahar <sagis@google.com>
+Cc: linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Ackerley Tng <ackerleytng@google.com>, 
+	Ryan Afranji <afranji@google.com>, Andrew Jones <ajones@ventanamicro.com>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Erdem Aktas <erdemaktas@google.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Oliver Upton <oliver.upton@linux.dev>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-test_tc_edt currently defines the target rate in both the userspace and
-BPF parts. This value could be defined once in the userspace part if we
-make it able to configure the BPF program before starting the test.
+On Tue, Oct 28, 2025, Sagi Shahar wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
+> 
+> ucalls for non-Coco VMs work by having the guest write to the rdi
+> register, then perform an io instruction to exit to the host. The host
+> then reads rdi using kvm_get_regs().
+> 
+> CPU registers can't be read using kvm_get_regs() for TDX, so TDX
+> guests use MMIO to pass the struct ucall's hva to the host. MMIO was
+> chosen because it is one of the simplest (hence unlikely to fail)
+> mechanisms that support passing 8 bytes from guest to host.
 
-Add a target_rate variable in the BPF part, and make the userspace part
-set it to the desired rate before attaching the shaping program.
+Uh, I beg to differ.  Stop following the GHCI verbatim.  The protocols defined by
+the GHCB and GHCI specs are horrific, but necessary, evils.  They exist to define
+guest<=>host ABIs+contracts so that guests can communicate with hypervisors,
+without massive fragmentation in the ecosystem.  But as mentioned in an ealier
+mail, KVM selftests don't care so much about ABIs and contracts because we control
+both the guest and the host.
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- tools/testing/selftests/bpf/prog_tests/test_tc_edt.c | 1 +
- tools/testing/selftests/bpf/progs/test_tc_edt.c      | 6 +++---
- 2 files changed, 4 insertions(+), 3 deletions(-)
+The GHCI matters only for the guest<=>KVM contract, it matters not at all for
+guest<=>VMM communication for KVM selfetsts.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c b/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
-index a77e48fdf4e4..72b51376df10 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tc_edt.c
-@@ -175,6 +175,7 @@ static int setup(struct test_tc_edt *skel)
- 	SYS(fail_close_client_ns, "ip -4 addr add " IP4_ADDR_VETH1 "/24 dev veth1");
- 	SYS(fail_close_client_ns, "ip link set veth1 up");
- 	SYS(fail_close_client_ns, "tc qdisc add dev veth1 root fq");
-+	skel->bss->target_rate = TARGET_RATE_MBPS * 1000 * 1000;
- 	ret = tc_prog_attach("veth1", -1, bpf_program__fd(skel->progs.tc_prog));
- 	if (!ASSERT_OK(ret, "attach bpf prog"))
- 		goto fail_close_client_ns;
-diff --git a/tools/testing/selftests/bpf/progs/test_tc_edt.c b/tools/testing/selftests/bpf/progs/test_tc_edt.c
-index 9b80109d5c3d..99bae5e20685 100644
---- a/tools/testing/selftests/bpf/progs/test_tc_edt.c
-+++ b/tools/testing/selftests/bpf/progs/test_tc_edt.c
-@@ -14,7 +14,6 @@
- #define TIME_HORIZON_NS (2000 * 1000 * 1000)
- #define NS_PER_SEC 1000000000
- #define ECN_HORIZON_NS 5000000
--#define THROTTLE_RATE_BPS (5 * 1000 * 1000)
- 
- /* flow_key => last_tstamp timestamp used */
- struct {
-@@ -24,12 +23,13 @@ struct {
- 	__uint(max_entries, 1);
- } flow_map SEC(".maps");
- 
-+__uint64_t target_rate;
-+
- static inline int throttle_flow(struct __sk_buff *skb)
- {
- 	int key = 0;
- 	uint64_t *last_tstamp = bpf_map_lookup_elem(&flow_map, &key);
--	uint64_t delay_ns = ((uint64_t)skb->len) * NS_PER_SEC /
--			THROTTLE_RATE_BPS;
-+	uint64_t delay_ns = ((uint64_t)skb->len) * NS_PER_SEC / target_rate;
- 	uint64_t now = bpf_ktime_get_ns();
- 	uint64_t tstamp, next_tstamp = 0;
- 
+Simply set RCX (the mask of GPRs to preserve) to the maximal value for _all_
+TDG.VP.VMCALL invocations.  There's zero reason for KVM selftests guests to hide
+state from the host.  Then TDX guests can do port I/O and pass the address of the
+ucall structure in RDX, just as regular guests do.  I.e. there's zero need to
+change ucall_arch_get_ucall(), at all.  We'll want to modify ucall_arch_do_ucall()
+so that we don't need to wire up a #VE handler for every test, but that's easy
+enough to do.
 
--- 
-2.51.1.dirty
+Side topic, that's also one of the easiest TDX selftests that can be written:
+verify the TDX-Module and KVM honor the spec and preserve registers according to
+RCX, e.g. that KVM doesn't clobber registers just because they're not defined to
+some magic purpose in the GHCI.
 
+SEV-ES+ will need to come up with a slightly different approach because there's
+no way to automagically expose RDI to the host, but that's an SEV-ES+ problem.
 
