@@ -1,134 +1,136 @@
-Return-Path: <linux-kselftest+bounces-44556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B91BC27108
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 22:41:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8091C271B9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 23:10:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC804400B0B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 21:41:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 714B24283C6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 22:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5233128B1;
-	Fri, 31 Oct 2025 21:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E7A32AAA2;
+	Fri, 31 Oct 2025 22:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KBc/56BT"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="4LMjaStg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FA41DDC37
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 21:41:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986CB1E8826;
+	Fri, 31 Oct 2025 22:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761946904; cv=none; b=fA+baeYbf8qUBZsJd9xhJKxoDjJ7C6EHLhtB/MuGTQXf4tY8ysqgd5n0jqXPYGJ+uoQd8FzBNQUDLViL5/GFHyUppKZf7YyIXpJoJlSMyztfyK89kFh4+eJSf85qxhcAoTFfQmFT1heKyaSYSkfaORzVatmcx7fgXawnh0cwjzs=
+	t=1761948636; cv=none; b=UBm09Ui2Ro9LdCXdQkDUQL1kv/GYtJlooqKmPuFCogzTEo0+VHbCkFT3fkjehgryUFjcMf7i+0ipnB/i5MfhClSBsFyn+R8A++lGT//VN481btNvfMrDtd+wjXFxTM0iNwh3HLu0yF4ka+ry0rGIH5B8dAdEz2/d7QSbeAzRbww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761946904; c=relaxed/simple;
-	bh=eLQIYWaVPW49aK17HBWd1NWzjca/Qm0rfLEwUldyuNA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rL+AhZClhh/8IqaQWcHUj3KwjjmymEmSubHJ7TEEmeV9ulMrtNDWvnhjhzB+YOc6maaLdJezwvkODJlZ1NKw9MuV5toJ/i8UIGbTWR8l9Lbm+k5n3MDrzSJgn0GfaPY87gwpalPcteQExnoziU2IT/Kyx1VxOmnWlQjIDfznFXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KBc/56BT; arc=none smtp.client-ip=209.85.222.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-9310a7b2668so988892241.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 14:41:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761946902; x=1762551702; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RgDmmhPmt8GWeeRC0I/+oZ9vobNYjk5v0/zKbM027nU=;
-        b=KBc/56BTegzCNHDAOB+1xs8j34IyNk/qcQe5fPQsUkoo+GOM3lpQNVq4mW9UP7hycf
-         q2UR3OT8M814DZaL3HzFVkOWaj9grlX5HvEWgpP6SSAibqoDH8OATtfSjNQpuuJ7CRAE
-         9wrWJMYKx3oQLrd3NU4iQfP7vK7sDFxzUOAzWERz/G5C19igImnOCvHf/r+NRvbyEZER
-         +FkHaMyrgHL5MQLPJr0UspXMuWJqf0ZtXES7m6LMH39erHXBpE0TH/IEY6mvEMtHzTuE
-         BZWoc8dIeKHFZABpqALwHV1mKKREO0RANklUkX6d4Yuqn9cQIbYU+dFMYe/SBOJDB5gs
-         Soyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761946902; x=1762551702;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RgDmmhPmt8GWeeRC0I/+oZ9vobNYjk5v0/zKbM027nU=;
-        b=jZby5vS6TP7uaRkYXKuu+tjsfjqnwx77Pb2E9DNS9QJP7+weVn0cmkafMkH0mJymT8
-         eNdWs9R/yudm2SYV80dAHRMeXfp0hYp7O/E7d2EKEWQ0KfS1IkeRoDNaxmOPpwO+fVsu
-         ZtTB19TIArqAmOjBr9X6LWgQ4dPPQMXJp5YPC8NpM6sU6KY019iv5mGUz9cPS0mSmpWp
-         ZmSxSqaJUV8fxz1LTXr9jv4UGDckibVX+4vWeazabrkt37JJBJHVBifJHkoriTi67Ntp
-         7y8NmmuVQTwvYOuF1N5bu2GS7sHX9m8/Kr5be0NBY5an3+nNiVfcroxpPQTjDCUakSDL
-         47Iw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0ANftTBBx1ThgjY6tbzPv9+XFyLZEyNbftJohNwc4opjgDUWiqa6PwOtQ0MnCXKvZJMIhIBpI8ljKU1/Ya3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKCfFjmOQW/96tq9gyVnObzMJIm6driOKVdq4e0Aka1Em+Otnv
-	5i7XLk+iQoyiQuFIDMlGubYiGWVaTKShiws9yIni6sqHwps3eitX33prcZKI+9rs+XTLNehI71Y
-	GuIWzU/oFamBHmnyfe8LkMnbBGR60QD8Z3j2rqgny
-X-Gm-Gg: ASbGncsJSbtKQY1y8Y9iMndxrigGONd0lvBttD9D6fqEIUCTRYWx6LS5g2uuf7eZCmg
-	oZMxn2obEfzoDtxHISU0Tdk00PmXsk7ZMdYBUjuHBwSs5ZCqs/zXlf6Xvudwl4zpfEkBBXOyblz
-	lsoiwgsExNoSv4oqUPRc/n7U4wX+9gOMfRtZcPplLN88TVQOYUUD2VB8DhT3estzbh/BL5YF6Hf
-	5An5ZWVnz8VXuq7F7ZJm6v8J+UR6uCZZJlxlTp7kiBhOfHvwLRTg9dvU7SSyvMNUWP/rQk=
-X-Google-Smtp-Source: AGHT+IFnL59KMQOmHhDnr7StsLJBnGLpWS8+HKPSaf+PGPTng/MnXyN3J3hLa7MWF1XMOBaYdatCX/yrEEtPHOOkEjI=
-X-Received: by 2002:a05:6102:38cc:b0:5db:3935:1636 with SMTP id
- ada2fe7eead31-5dbb12ee641mr1575830137.26.1761946901748; Fri, 31 Oct 2025
- 14:41:41 -0700 (PDT)
+	s=arc-20240116; t=1761948636; c=relaxed/simple;
+	bh=nKBOettWaa9pD6fqUbnve1xXwVoFQ9NnjoRR+YTMrQY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PrwlnALtqCjF5f2T6PxVcfYdYb37J3AT9A6fS5zytyn/0nVft9/Kbq5SpVZ5jqsSRdE0mncr72AEvAaNp2ZbIXbe0GRLFvzx55bm/Al189YQ7uCFZaXrDM7Cz8TpP6kzMSApfj+LxDYiuHwbCe9ePYj1j52a5Hg/w4m+Eq1isNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=4LMjaStg; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=RCA5EFSksST1h7GGV5nB7JZEARYhgQmdDRPr1+5iH94=; b=4LMjaStgwdzYsA1UwJNJJ6/6UM
+	hijNFvmA8DAWr0ggzHedHqV69LL+MWvx8ioToi7GH7JH2epZqmQATsQuVh6AyuqIVs0g2V1TY2xTA
+	0ef36pafwaYg4cWlw/y7og3ET9ZAenKPOTW9k88+zAkGN840SGV/OoexbROT3/y8kMSXrvvx67+67
+	Y0HcE9fwUx4PpigC/zFSJyYkpcHJcwcKNWtUtqaEQ46OTJ7n274hbQa/7VNfii/rQRTpMVSbEKBSX
+	vqBnk59X8AUujSJTxSfiETwwWcneFferjCEOHnFenDbpHRm3v2MEk8+fZHKKyyw/Lql05DVLWpTze
+	EtUDailQ==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vExJr-00000006qiy-0FlZ;
+	Fri, 31 Oct 2025 22:10:03 +0000
+Message-ID: <d442965b-8716-4f89-be88-bc62459af712@infradead.org>
+Date: Fri, 31 Oct 2025 15:10:01 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251018000713.677779-1-vipinsh@google.com> <20251018000713.677779-7-vipinsh@google.com>
- <20251027134430.00007e46@linux.microsoft.com> <aQPwSltoH7rRsnV9@google.com> <CA+CK2bD-E0HKsuE0SPpZqEoJyEK4=KJCBw-h1WFP7O1KEoKuNQ@mail.gmail.com>
-In-Reply-To: <CA+CK2bD-E0HKsuE0SPpZqEoJyEK4=KJCBw-h1WFP7O1KEoKuNQ@mail.gmail.com>
-From: David Matlack <dmatlack@google.com>
-Date: Fri, 31 Oct 2025 14:41:13 -0700
-X-Gm-Features: AWmQ_bktJi7f0hZJNBg0hayd2_71DzRkKbUhfBoiRXCBpPspKaQtLxcKUO1Amvo
-Message-ID: <CALzav=dd3eAgqiWM-MKhu77xq0iWRMrESkDaT9KgzNgSvcjeVQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 06/21] vfio/pci: Accept live update preservation
- request for VFIO cdev
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Jacob Pan <jacob.pan@linux.microsoft.com>, Vipin Sharma <vipinsh@google.com>, 
-	bhelgaas@google.com, alex.williamson@redhat.com, jgg@ziepe.ca, 
-	graf@amazon.com, pratyush@kernel.org, gregkh@linuxfoundation.org, 
-	chrisl@kernel.org, rppt@kernel.org, skhawaja@google.com, parav@nvidia.com, 
-	saeedm@nvidia.com, kevin.tian@intel.com, jrhilke@google.com, david@redhat.com, 
-	jgowans@amazon.com, dwmw2@infradead.org, epetron@amazon.de, 
-	junaids@google.com, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v22 17/28] riscv/signal: save and restore of shadow stack
+ for signal
+To: Paul Walmsley <pjw@kernel.org>, Deepak Gupta <debug@rivosinc.com>,
+ Andy Chiu <andybnac@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Christian Brauner <brauner@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+ Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
+ kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com,
+ evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com,
+ samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com,
+ rust-for-linux@vger.kernel.org
+References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com>
+ <20251023-v5_user_cfi_series-v22-17-1935270f7636@rivosinc.com>
+ <a8f469b8-5750-dfec-2390-09bad4515f99@kernel.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <a8f469b8-5750-dfec-2390-09bad4515f99@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 30, 2025 at 5:19=E2=80=AFPM Pasha Tatashin
-<pasha.tatashin@soleen.com> wrote:
-> On Thu, Oct 30, 2025 at 7:10=E2=80=AFPM David Matlack <dmatlack@google.co=
-m> wrote:
-> > On 2025-10-27 01:44 PM, Jacob Pan wrote:
-> > > On Fri, 17 Oct 2025 17:06:58 -0700 Vipin Sharma <vipinsh@google.com> =
-wrote:
-> > > > +   guard(mutex)(&device->dev_set->lock);
-> > > > +   return vfio_device_cdev_opened(device);
-> > >
-> > > IIUC, vfio_device_cdev_opened(device) will only return true after
-> > > vfio_df_ioctl_bind_iommufd(). Where it does:
-> > >       device->cdev_opened =3D true;
-> > >
-> > > Does this imply that devices not bound to an iommufd cannot be
-> > > preserved?
-> >
-> > Event if being bound to an iommufd is required, it seems wrong to check
-> > it in can_preserve(), as the device can just be unbound from the iommuf=
-d
-> > before preserve().
-> >
-> > I think can_preserve() just needs to check if this is a VFIO cdev file,
-> > i.e. vfio_device_from_file() returns non-NULL.
->
-> +1, can_preserve() must be fast, as it might be called on every single
-> FD that is being preserved, to check if type is correct.
-> So, simply check if "struct file" is cdev via ops check perhaps via
-> and thats it. It should be a very simple operation
 
-Small correction, vfio_device_from_file() checks if file->fops are
-&vfio_device_fops. But device files acquired via group FDs use the
-same ops. So I think we actually need to check "device &&
-!device->group" here to identify VFIO cdev files, and then check
-device->ops =3D=3D &vfio_pci_ops to make sure this is a vfio-pci device.
+
+On 10/31/25 1:07 PM, Paul Walmsley wrote:
+> On Thu, 23 Oct 2025, Deepak Gupta via B4 Relay wrote:
+> 
+>> From: Deepak Gupta <debug@rivosinc.com>
+>>
+>> Save shadow stack pointer in sigcontext structure while delivering signal.
+>> Restore shadow stack pointer from sigcontext on sigreturn.
+>>
+
+> 
+> This patch causes some 'checkpatch.pl --strict' messages:
+> 
+> CHECK: Comparison to NULL could be written "!saved_shstk_ptr"
+> #271: FILE: arch/riscv/kernel/usercfi.c:186:
+> +	if (saved_shstk_ptr == NULL)
+> 
+> CHECK: Lines should not end with a '('
+> #300: FILE: arch/riscv/kernel/usercfi.c:215:
+> +		pr_info_ratelimited(
+> 
+> I've fixed them up here in the event that v22 goes in, but please do the 
+> same on your side in case a new version is needed.
+
+Hi Paul,
+
+Is checkpatch.pl --strict the norm for arch/riscv/ ?
+
+If there are enough arch/riscv/-specific patch expectations,
+maybe they could be documented in Documentation/process/maintainer-riscv.rst
+(a new file).
+
+Thanks.
+-- 
+~Randy
+
 
