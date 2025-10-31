@@ -1,136 +1,125 @@
-Return-Path: <linux-kselftest+bounces-44557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44558-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8091C271B9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 23:10:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A91BC27205
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 23:29:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 714B24283C6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 22:10:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 29DBD4E61F9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 22:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E7A32AAA2;
-	Fri, 31 Oct 2025 22:10:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A53932B9B5;
+	Fri, 31 Oct 2025 22:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="4LMjaStg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kmqv0t4r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986CB1E8826;
-	Fri, 31 Oct 2025 22:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6864532ABF7
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 22:28:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761948636; cv=none; b=UBm09Ui2Ro9LdCXdQkDUQL1kv/GYtJlooqKmPuFCogzTEo0+VHbCkFT3fkjehgryUFjcMf7i+0ipnB/i5MfhClSBsFyn+R8A++lGT//VN481btNvfMrDtd+wjXFxTM0iNwh3HLu0yF4ka+ry0rGIH5B8dAdEz2/d7QSbeAzRbww=
+	t=1761949738; cv=none; b=oDDry/iznXMT3UXP8QVB4ZkHlfzB/zCZIpOJ0zPkpMuic0E+Qv1wCJE5WONd1YCL0LJL3wODMLi/De27W8JF+D8AiT9DxU5MslGCztnpbWFwFWx97VS3+B6bw6bzbWaSWmH2p/QzpDD1LtHMbIiUV8dlEZYp8L647j14oaSXtiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761948636; c=relaxed/simple;
-	bh=nKBOettWaa9pD6fqUbnve1xXwVoFQ9NnjoRR+YTMrQY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PrwlnALtqCjF5f2T6PxVcfYdYb37J3AT9A6fS5zytyn/0nVft9/Kbq5SpVZ5jqsSRdE0mncr72AEvAaNp2ZbIXbe0GRLFvzx55bm/Al189YQ7uCFZaXrDM7Cz8TpP6kzMSApfj+LxDYiuHwbCe9ePYj1j52a5Hg/w4m+Eq1isNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=4LMjaStg; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=RCA5EFSksST1h7GGV5nB7JZEARYhgQmdDRPr1+5iH94=; b=4LMjaStgwdzYsA1UwJNJJ6/6UM
-	hijNFvmA8DAWr0ggzHedHqV69LL+MWvx8ioToi7GH7JH2epZqmQATsQuVh6AyuqIVs0g2V1TY2xTA
-	0ef36pafwaYg4cWlw/y7og3ET9ZAenKPOTW9k88+zAkGN840SGV/OoexbROT3/y8kMSXrvvx67+67
-	Y0HcE9fwUx4PpigC/zFSJyYkpcHJcwcKNWtUtqaEQ46OTJ7n274hbQa/7VNfii/rQRTpMVSbEKBSX
-	vqBnk59X8AUujSJTxSfiETwwWcneFferjCEOHnFenDbpHRm3v2MEk8+fZHKKyyw/Lql05DVLWpTze
-	EtUDailQ==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vExJr-00000006qiy-0FlZ;
-	Fri, 31 Oct 2025 22:10:03 +0000
-Message-ID: <d442965b-8716-4f89-be88-bc62459af712@infradead.org>
-Date: Fri, 31 Oct 2025 15:10:01 -0700
+	s=arc-20240116; t=1761949738; c=relaxed/simple;
+	bh=VZXcKlS2NfJQUqJUaLkoMO31MbXfEPxVU5q67dhNYbY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aCdBPY3UrcAOWGWZ/Cdni0aAjQRdZdX7KfNMQ9tjeLZs3+vLPf/efeMiFTlH1D/ZDPZJWFHjHN9QGN5yaBmiRDrC35tf5YMlohlVMa4qkNMSKAMaCCohvAQZx9gSW03erx3X/NUJwJreB+Kii4rtP3IRZwJ/hGTNZDWpQjJA9aY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kmqv0t4r; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-57f0aa38aadso3977137e87.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 15:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761949734; x=1762554534; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A4VDPOkfEPN3V+mmkEOqmJfTYjVG4ZaMp9wTEce6ggY=;
+        b=kmqv0t4rwZ+OooujAZB89C6U1PE4NY/hxG/N3arnBNvt6gcdI5fjWrSGf9YrcyXxKN
+         yGg9J1HH/8TDQyiQiH1cwV2QnT74vWm7ZDyzcEYxuprajEkVaX4f/gJzwKnq1HfQ20ZI
+         X/H4W9dQ2Sgb7YJMKmtl9Y68AnxuYX3owuhcNhD5/lBrRXvnr8VB6MuiuH4tYrGBphz1
+         FtPytlwa3a6X1saOPHQg4ZaGJlMimZNSNYSsVunvrU6M11Y6f++bi+QoWO4mJJIvDi44
+         uv6MJFrni1aUExCr/m8s6EQTGCu1qWpjXecUUFYn+kyCivXg8JeMiTaqkLgHZZqwIxn1
+         jxhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761949734; x=1762554534;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A4VDPOkfEPN3V+mmkEOqmJfTYjVG4ZaMp9wTEce6ggY=;
+        b=um8RIp2f1MMTTMtZYB7I7bEfu04UM+mAYv7cOhC7e9uahrPqV+BoLdOPMfJS1B1cdV
+         1NzoZyZ0j4/wVEIY1ezGLY9dCviy8a+IyYKZ0HzkyHU5+P/EC2sATVpMjIbLbA/YQOOz
+         3WXgWJTLx8O45IaV4rBwj2ZdpNIwfJXxVAbIsYZIkqqo1icHuaQLxhpilp80HHXnJ+8R
+         79UNBufkcCgdL3iw1uPvkSg8/jWt3XtXxFyg17HuCb5U+UjnQu63KiSnPdHc4ooW9jnZ
+         t3/mn85w6gRu2zOy3GQetlmuakmRWDGN9fagSkSGq4xZ+TTyZ4cXJHs4WtAn7R38Uq/7
+         FSkA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPTUpzoueu/ZgbRhWVs/9WZvG3V+D7RQiO3vNLvs01zXR/841h8pZPF7iY31aSR7ziyN5EZBtIKzzYlRnApIg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJCerJhSeg2EcZ33IGV6uoTb/v/6OjFoBvfptFrphZiPOfyPBK
+	GTnjxrw6hC8nKwQcAOgCvsbACJ3c6rZ1AK2YCmKze9LmTdq83gvhlCO3cM1k7OQ13m3KQx/BM6e
+	lCJTGIQdCHq5sWwq+IeFGSeLqf018IHeZCMB8vQqX
+X-Gm-Gg: ASbGncuzM3T4GdoqxaaKR1uFaSGfbv+gS2YcsLwoy1EjsimsVchLJpv9JZUf/rFVlw8
+	7q4g8wAMrU58b+GsFl4p/neJoB/xfUUU0OmN8Qnz2u+JJMb2SvnU2MqsuItAUYZhIadT5vKDmMt
+	PAuL59KWY/1wZ3L1Q8Cgjgh/jTdk1UTqEa6cqmnsT3Z9RclGbZ/i7iaGILdzGQMr5W5v1ObQ+su
+	L/v6UvF8jAYydebFD3OT5vk9pPP8lwwEDpODFanBbhOpOGokJ3a40bkJAKNAZWbQqfoTKk=
+X-Google-Smtp-Source: AGHT+IFSwcMwTIDGFtEaqjdkz/AcJl72mmVl0IpQ+J78Aae+a4oANLR7hdtuxWyAxkV1yPdEbNFPfRUD01apBcVpx5M=
+X-Received: by 2002:a05:6512:15a1:b0:593:11bd:9af7 with SMTP id
+ 2adb3069b0e04-5941d5586cemr1780294e87.36.1761949734165; Fri, 31 Oct 2025
+ 15:28:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v22 17/28] riscv/signal: save and restore of shadow stack
- for signal
-To: Paul Walmsley <pjw@kernel.org>, Deepak Gupta <debug@rivosinc.com>,
- Andy Chiu <andybnac@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Christian Brauner <brauner@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-riscv@lists.infradead.org,
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
- kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com,
- evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com,
- samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com,
- rust-for-linux@vger.kernel.org
-References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com>
- <20251023-v5_user_cfi_series-v22-17-1935270f7636@rivosinc.com>
- <a8f469b8-5750-dfec-2390-09bad4515f99@kernel.org>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <a8f469b8-5750-dfec-2390-09bad4515f99@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251018000713.677779-1-vipinsh@google.com> <20251018000713.677779-6-vipinsh@google.com>
+In-Reply-To: <20251018000713.677779-6-vipinsh@google.com>
+From: David Matlack <dmatlack@google.com>
+Date: Fri, 31 Oct 2025 15:28:27 -0700
+X-Gm-Features: AWmQ_bkJhwWK8iLPcHy-hUK2RP4WggOSXosGGLXjIhn9TKPWrHQgEkrODFylvq4
+Message-ID: <CALzav=f9tjgyF7TBsfjCpmvRezkkgfQY-OXwj+TaebjeffK-0A@mail.gmail.com>
+Subject: Re: [RFC PATCH 05/21] vfio/pci: Register VFIO live update file
+ handler to Live Update Orchestrator
+To: Vipin Sharma <vipinsh@google.com>
+Cc: bhelgaas@google.com, pasha.tatashin@soleen.com, jgg@ziepe.ca, 
+	graf@amazon.com, pratyush@kernel.org, gregkh@linuxfoundation.org, 
+	chrisl@kernel.org, rppt@kernel.org, skhawaja@google.com, parav@nvidia.com, 
+	saeedm@nvidia.com, kevin.tian@intel.com, jrhilke@google.com, david@redhat.com, 
+	jgowans@amazon.com, dwmw2@infradead.org, epetron@amazon.de, 
+	junaids@google.com, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Alex Williamson <alex@shazbot.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Oct 17, 2025 at 5:07=E2=80=AFPM Vipin Sharma <vipinsh@google.com> w=
+rote:
+> +static const struct liveupdate_file_ops vfio_pci_luo_fops =3D {
+> +       .retrieve =3D vfio_pci_liveupdate_retrieve,
+> +       .can_preserve =3D vfio_pci_liveupdate_can_preserve,
+> +       .owner =3D THIS_MODULE,
+> +};
+> +
+> +static struct liveupdate_file_handler vfio_pci_luo_handler =3D {
+> +       .ops =3D &vfio_pci_luo_fops,
+> +       .compatible =3D "vfio-v1",
+> +};
+> +
+> +void __init vfio_pci_liveupdate_init(void)
+> +{
+> +       int err =3D liveupdate_register_file_handler(&vfio_pci_luo_handle=
+r);
+> +
+> +       if (err)
+> +               pr_err("VFIO PCI liveupdate file handler register failed,=
+ error %d.\n", err);
+> +}
 
-
-On 10/31/25 1:07 PM, Paul Walmsley wrote:
-> On Thu, 23 Oct 2025, Deepak Gupta via B4 Relay wrote:
-> 
->> From: Deepak Gupta <debug@rivosinc.com>
->>
->> Save shadow stack pointer in sigcontext structure while delivering signal.
->> Restore shadow stack pointer from sigcontext on sigreturn.
->>
-
-> 
-> This patch causes some 'checkpatch.pl --strict' messages:
-> 
-> CHECK: Comparison to NULL could be written "!saved_shstk_ptr"
-> #271: FILE: arch/riscv/kernel/usercfi.c:186:
-> +	if (saved_shstk_ptr == NULL)
-> 
-> CHECK: Lines should not end with a '('
-> #300: FILE: arch/riscv/kernel/usercfi.c:215:
-> +		pr_info_ratelimited(
-> 
-> I've fixed them up here in the event that v22 goes in, but please do the 
-> same on your side in case a new version is needed.
-
-Hi Paul,
-
-Is checkpatch.pl --strict the norm for arch/riscv/ ?
-
-If there are enough arch/riscv/-specific patch expectations,
-maybe they could be documented in Documentation/process/maintainer-riscv.rst
-(a new file).
-
-Thanks.
--- 
-~Randy
-
+Alex and Jason, should this go in the top-level VFIO directory? And
+then have all the preservation logic go through vfio_device_ops? That
+would make Live Update support for VFIO cdev files extensible to other
+drivers in the future.
 
