@@ -1,131 +1,134 @@
-Return-Path: <linux-kselftest+bounces-44555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0456AC27073
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 22:26:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B91BC27108
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 22:41:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8EF7465C97
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 21:24:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC804400B0B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Oct 2025 21:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C909E315D4E;
-	Fri, 31 Oct 2025 21:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5233128B1;
+	Fri, 31 Oct 2025 21:41:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="idIKCFR8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KBc/56BT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F5C3115BD
-	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 21:24:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FA41DDC37
+	for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 21:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761945881; cv=none; b=isC3BKfjhJJxrS1L93Ud6jLX7LlGzKiXIq5Lxp3wggCcaKbgIYn2TtExwTNMwg4V7B8IhxZkaCX1D3ijp3uIROJfavgmgrcFSxSj6TZIROeURJhueNQSNdFkBqOSHCLd354KdeG/fZDAsl7FvCUxqb5kiFxNhdXf086tN9OcP1Y=
+	t=1761946904; cv=none; b=fA+baeYbf8qUBZsJd9xhJKxoDjJ7C6EHLhtB/MuGTQXf4tY8ysqgd5n0jqXPYGJ+uoQd8FzBNQUDLViL5/GFHyUppKZf7YyIXpJoJlSMyztfyK89kFh4+eJSf85qxhcAoTFfQmFT1heKyaSYSkfaORzVatmcx7fgXawnh0cwjzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761945881; c=relaxed/simple;
-	bh=9s6lBULnUl/YSXyAoY1qCPq6/SaViqv68dbwmyDt25w=;
+	s=arc-20240116; t=1761946904; c=relaxed/simple;
+	bh=eLQIYWaVPW49aK17HBWd1NWzjca/Qm0rfLEwUldyuNA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dEXzWezXWDX4wOwOe3lksgzpKLdderbcqqw07OEa+rvKeCvNEZ1wJzhMT7NAIS6X48cyU0gByRpZFG45hE0ZFL71tYqJE7rZiKlONlw8oTh1ZmL1BOyBAmGO/dojY2l/azqTl4vp5+QhjmfDWuMyYVeOkhlfz6lh5c5j8GaPBsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=idIKCFR8; arc=none smtp.client-ip=209.85.222.43
+	 To:Cc:Content-Type; b=rL+AhZClhh/8IqaQWcHUj3KwjjmymEmSubHJ7TEEmeV9ulMrtNDWvnhjhzB+YOc6maaLdJezwvkODJlZ1NKw9MuV5toJ/i8UIGbTWR8l9Lbm+k5n3MDrzSJgn0GfaPY87gwpalPcteQExnoziU2IT/Kyx1VxOmnWlQjIDfznFXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KBc/56BT; arc=none smtp.client-ip=209.85.222.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-930ae1b2627so1835230241.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 14:24:39 -0700 (PDT)
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-9310a7b2668so988892241.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Oct 2025 14:41:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761945879; x=1762550679; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1761946902; x=1762551702; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WpjoY1kBRDb3U8mH54r0lGN10P1a/SXqiDQkhCichcA=;
-        b=idIKCFR8YC5UL1Un9CI2YkQgM2SRjJ+pKECR1yynggD1gm7kI54LAIapppmLBni5tt
-         LZ/52BUEhUG0RPwnB9x9seGY/wDOHbjCaqw4ISaE/xDiFGxaBBWnw3rJuEQuMZYmzXw9
-         KvcmNGcVDmu6qtMfeA/pKj/ny/oZ81ez2M5/5CLsBng4waeqdTSs7PlciUgye940GP9R
-         SU7vyNboObFckmC+dv/UqL6CYtUT9Q6GxpoqbUq+n5q6wHiBg9Iee8veGvM9WDxf2uOU
-         NN/ZcmER4yf5poKTLDBVAFTAJhLQszY1C9R3gVzOoGMDIEgfWeVBvaoO8oRe4v5hAoJh
-         Qr5w==
+        bh=RgDmmhPmt8GWeeRC0I/+oZ9vobNYjk5v0/zKbM027nU=;
+        b=KBc/56BTegzCNHDAOB+1xs8j34IyNk/qcQe5fPQsUkoo+GOM3lpQNVq4mW9UP7hycf
+         q2UR3OT8M814DZaL3HzFVkOWaj9grlX5HvEWgpP6SSAibqoDH8OATtfSjNQpuuJ7CRAE
+         9wrWJMYKx3oQLrd3NU4iQfP7vK7sDFxzUOAzWERz/G5C19igImnOCvHf/r+NRvbyEZER
+         +FkHaMyrgHL5MQLPJr0UspXMuWJqf0ZtXES7m6LMH39erHXBpE0TH/IEY6mvEMtHzTuE
+         BZWoc8dIeKHFZABpqALwHV1mKKREO0RANklUkX6d4Yuqn9cQIbYU+dFMYe/SBOJDB5gs
+         Soyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761945879; x=1762550679;
+        d=1e100.net; s=20230601; t=1761946902; x=1762551702;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WpjoY1kBRDb3U8mH54r0lGN10P1a/SXqiDQkhCichcA=;
-        b=wpbw+5FB4ZeoIoBMPWlz6vVcA4dwe0802foZBZ0zbGJY43mFyk/V1cd97SJjCCwV8z
-         Ao7eOR0H7JOTbncSkDu/IrtN79wAOT8ztQ4igcb3JLXIQhARP+9FGsNM0maHlJByiDYT
-         HX1Lt758bMZpaLWXPHfyv1gAOKQFfadVtMzStTSQvZwGOfhFu3CeQW+ERpzr9iKFdfKX
-         MCOGDJbrxgo8wZJEeRPmGcwe2Eq0IZM2dx6P8iOmT4epRQRql9MjBNuGsdm+OWJIWdzR
-         pqxoJchqNqBmPty/2+biYHFiyashIWTueLjVMG9cCQrSr+gcXWI+LpDZ1gdL3CfY63Jv
-         MYUA==
-X-Forwarded-Encrypted: i=1; AJvYcCVuMTCWC0pnzuIYmHF/VMH54lLldiXQuLV6/aJ4wgytg0PxWEi8QW7vU+rCvJRXWCKVUm15w4aSKXhD8iYshdE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLkAGw6QGTo9XMMEh/G6hFstxJjgYNRo0MWV391/2P5IX8QCTe
-	STsBBYcE8eSMVP+KsYoV+WLOwyxE7VlMypRh3Vhh4jJU3QltNUNopXOsTKfyuWluxH6E+NPdZBn
-	iwm7+Mh4CdVHt5HTaD875TklkVJOjwJaSF/ug744e
-X-Gm-Gg: ASbGncua/KrXAaROgkDDKceb/OwuRRKElBNUitsZFxnnohfLYrt1vRCD4L4PReOKmwc
-	fU4rGLEa/dOezPalK6E7tAC+rIIB3cvsBJvdZgAHsZw03SPiZ7fXDNF0j0caSvOZMtNDOy1SOXz
-	fO8ikKocnGEk2s9d/KgfjyVjBKFOO1oF5uwlMRyvmR91M1NLUpN9X3Gd5oyTdmx727mWyso/Faf
-	XEJsNKX8CJZvHrFq8vD5Yybs0UUIZCd72WglFN4i45UQ3JX1YH8AOxCkTTXII7tjJDeHNe79VLP
-	5r/L5Q==
-X-Google-Smtp-Source: AGHT+IEa8weTwiMv4+k9b5iS3dxJo7V7HJI0Y2IJFPjlhSxnxnH+h+0r1Y3lLUHs6JV9h5eOAClJX8/QV7LblzeB9fk=
-X-Received: by 2002:a05:6102:2926:b0:5d5:f6ae:38f9 with SMTP id
- ada2fe7eead31-5dbb13777d3mr2038618137.38.1761945878741; Fri, 31 Oct 2025
- 14:24:38 -0700 (PDT)
+        bh=RgDmmhPmt8GWeeRC0I/+oZ9vobNYjk5v0/zKbM027nU=;
+        b=jZby5vS6TP7uaRkYXKuu+tjsfjqnwx77Pb2E9DNS9QJP7+weVn0cmkafMkH0mJymT8
+         eNdWs9R/yudm2SYV80dAHRMeXfp0hYp7O/E7d2EKEWQ0KfS1IkeRoDNaxmOPpwO+fVsu
+         ZtTB19TIArqAmOjBr9X6LWgQ4dPPQMXJp5YPC8NpM6sU6KY019iv5mGUz9cPS0mSmpWp
+         ZmSxSqaJUV8fxz1LTXr9jv4UGDckibVX+4vWeazabrkt37JJBJHVBifJHkoriTi67Ntp
+         7y8NmmuVQTwvYOuF1N5bu2GS7sHX9m8/Kr5be0NBY5an3+nNiVfcroxpPQTjDCUakSDL
+         47Iw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0ANftTBBx1ThgjY6tbzPv9+XFyLZEyNbftJohNwc4opjgDUWiqa6PwOtQ0MnCXKvZJMIhIBpI8ljKU1/Ya3g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKCfFjmOQW/96tq9gyVnObzMJIm6driOKVdq4e0Aka1Em+Otnv
+	5i7XLk+iQoyiQuFIDMlGubYiGWVaTKShiws9yIni6sqHwps3eitX33prcZKI+9rs+XTLNehI71Y
+	GuIWzU/oFamBHmnyfe8LkMnbBGR60QD8Z3j2rqgny
+X-Gm-Gg: ASbGncsJSbtKQY1y8Y9iMndxrigGONd0lvBttD9D6fqEIUCTRYWx6LS5g2uuf7eZCmg
+	oZMxn2obEfzoDtxHISU0Tdk00PmXsk7ZMdYBUjuHBwSs5ZCqs/zXlf6Xvudwl4zpfEkBBXOyblz
+	lsoiwgsExNoSv4oqUPRc/n7U4wX+9gOMfRtZcPplLN88TVQOYUUD2VB8DhT3estzbh/BL5YF6Hf
+	5An5ZWVnz8VXuq7F7ZJm6v8J+UR6uCZZJlxlTp7kiBhOfHvwLRTg9dvU7SSyvMNUWP/rQk=
+X-Google-Smtp-Source: AGHT+IFnL59KMQOmHhDnr7StsLJBnGLpWS8+HKPSaf+PGPTng/MnXyN3J3hLa7MWF1XMOBaYdatCX/yrEEtPHOOkEjI=
+X-Received: by 2002:a05:6102:38cc:b0:5db:3935:1636 with SMTP id
+ ada2fe7eead31-5dbb12ee641mr1575830137.26.1761946901748; Fri, 31 Oct 2025
+ 14:41:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251018000713.677779-1-vipinsh@google.com> <20251018000713.677779-6-vipinsh@google.com>
-In-Reply-To: <20251018000713.677779-6-vipinsh@google.com>
+References: <20251018000713.677779-1-vipinsh@google.com> <20251018000713.677779-7-vipinsh@google.com>
+ <20251027134430.00007e46@linux.microsoft.com> <aQPwSltoH7rRsnV9@google.com> <CA+CK2bD-E0HKsuE0SPpZqEoJyEK4=KJCBw-h1WFP7O1KEoKuNQ@mail.gmail.com>
+In-Reply-To: <CA+CK2bD-E0HKsuE0SPpZqEoJyEK4=KJCBw-h1WFP7O1KEoKuNQ@mail.gmail.com>
 From: David Matlack <dmatlack@google.com>
-Date: Fri, 31 Oct 2025 14:24:09 -0700
-X-Gm-Features: AWmQ_blW-_jGmkpvjMwaGlbcIquIU3vgzEhEhObtmLexKwiUx2hVmj47uKbslig
-Message-ID: <CALzav=dmx9ykjujAN0EiM3FPE9dFVaX4oXk=3Er9frtzsUT+1A@mail.gmail.com>
-Subject: Re: [RFC PATCH 05/21] vfio/pci: Register VFIO live update file
- handler to Live Update Orchestrator
-To: Vipin Sharma <vipinsh@google.com>
-Cc: bhelgaas@google.com, alex.williamson@redhat.com, pasha.tatashin@soleen.com, 
-	jgg@ziepe.ca, graf@amazon.com, pratyush@kernel.org, 
-	gregkh@linuxfoundation.org, chrisl@kernel.org, rppt@kernel.org, 
-	skhawaja@google.com, parav@nvidia.com, saeedm@nvidia.com, 
-	kevin.tian@intel.com, jrhilke@google.com, david@redhat.com, 
+Date: Fri, 31 Oct 2025 14:41:13 -0700
+X-Gm-Features: AWmQ_bktJi7f0hZJNBg0hayd2_71DzRkKbUhfBoiRXCBpPspKaQtLxcKUO1Amvo
+Message-ID: <CALzav=dd3eAgqiWM-MKhu77xq0iWRMrESkDaT9KgzNgSvcjeVQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 06/21] vfio/pci: Accept live update preservation
+ request for VFIO cdev
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Jacob Pan <jacob.pan@linux.microsoft.com>, Vipin Sharma <vipinsh@google.com>, 
+	bhelgaas@google.com, alex.williamson@redhat.com, jgg@ziepe.ca, 
+	graf@amazon.com, pratyush@kernel.org, gregkh@linuxfoundation.org, 
+	chrisl@kernel.org, rppt@kernel.org, skhawaja@google.com, parav@nvidia.com, 
+	saeedm@nvidia.com, kevin.tian@intel.com, jrhilke@google.com, david@redhat.com, 
 	jgowans@amazon.com, dwmw2@infradead.org, epetron@amazon.de, 
 	junaids@google.com, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
 	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 17, 2025 at 5:07=E2=80=AFPM Vipin Sharma <vipinsh@google.com> w=
-rote:
+On Thu, Oct 30, 2025 at 5:19=E2=80=AFPM Pasha Tatashin
+<pasha.tatashin@soleen.com> wrote:
+> On Thu, Oct 30, 2025 at 7:10=E2=80=AFPM David Matlack <dmatlack@google.co=
+m> wrote:
+> > On 2025-10-27 01:44 PM, Jacob Pan wrote:
+> > > On Fri, 17 Oct 2025 17:06:58 -0700 Vipin Sharma <vipinsh@google.com> =
+wrote:
+> > > > +   guard(mutex)(&device->dev_set->lock);
+> > > > +   return vfio_device_cdev_opened(device);
+> > >
+> > > IIUC, vfio_device_cdev_opened(device) will only return true after
+> > > vfio_df_ioctl_bind_iommufd(). Where it does:
+> > >       device->cdev_opened =3D true;
+> > >
+> > > Does this imply that devices not bound to an iommufd cannot be
+> > > preserved?
+> >
+> > Event if being bound to an iommufd is required, it seems wrong to check
+> > it in can_preserve(), as the device can just be unbound from the iommuf=
+d
+> > before preserve().
+> >
+> > I think can_preserve() just needs to check if this is a VFIO cdev file,
+> > i.e. vfio_device_from_file() returns non-NULL.
+>
+> +1, can_preserve() must be fast, as it might be called on every single
+> FD that is being preserved, to check if type is correct.
+> So, simply check if "struct file" is cdev via ops check perhaps via
+> and thats it. It should be a very simple operation
 
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci=
-_core.c
->  static int __init vfio_pci_core_init(void)
->  {
->         /* Allocate shared config space permission data used by all devic=
-es */
-> +       vfio_pci_liveupdate_init();
->         return vfio_pci_init_perm_bits();
-
-The call to vfio_pci_liveupdate_init() should go before the comment
-associated with vfio_pci_init_perm_bits().
-
-> diff --git a/drivers/vfio/pci/vfio_pci_liveupdate.c b/drivers/vfio/pci/vf=
-io_pci_liveupdate.c
-> +static bool vfio_pci_liveupdate_can_preserve(struct liveupdate_file_hand=
-ler *handler,
-> +                                            struct file *file)
-> +{
-> +       return -EOPNOTSUPP;
-
-can_preserve() returns a bool, so this should be "return false". But I
-think we can just do the cdev fops check in this commit. It is a small
-enough change.
-
-> +static struct liveupdate_file_handler vfio_pci_luo_handler =3D {
-> +       .ops =3D &vfio_pci_luo_fops,
-> +       .compatible =3D "vfio-v1",
-
-This should probably be something like "vfio-pci-v1"?
+Small correction, vfio_device_from_file() checks if file->fops are
+&vfio_device_fops. But device files acquired via group FDs use the
+same ops. So I think we actually need to check "device &&
+!device->group" here to identify VFIO cdev files, and then check
+device->ops =3D=3D &vfio_pci_ops to make sure this is a vfio-pci device.
 
