@@ -1,82 +1,148 @@
-Return-Path: <linux-kselftest+bounces-44611-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44614-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70CB0C28647
-	for <lists+linux-kselftest@lfdr.de>; Sat, 01 Nov 2025 20:26:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 987B7C28686
+	for <lists+linux-kselftest@lfdr.de>; Sat, 01 Nov 2025 20:35:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 381E23A826D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Nov 2025 19:26:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D47D421A61
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Nov 2025 19:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D92C3002DA;
-	Sat,  1 Nov 2025 19:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20505298CB7;
+	Sat,  1 Nov 2025 19:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=msa.hinet.net header.i=@msa.hinet.net header.b="IKejDWX7"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ir6BRqpi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cdmsr2.hinet.net (210-65-1-144.hinet-ip.hinet.net [210.65.1.144])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AC3C3002B4
-	for <linux-kselftest@vger.kernel.org>; Sat,  1 Nov 2025 19:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.65.1.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73526296BB7;
+	Sat,  1 Nov 2025 19:34:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762025201; cv=none; b=IzQmgBlPR5qygL6SYlFJ5mfeSYs/AP47Zbpp068ZTd45vcRBlqjHrcjqMSiCoFR6QsfPGmkuJbJ5oddtL1Vq6L7AuD2pXYtUR9/VRBssDp3ubT96byCDpK23VBks4CAnt36Y92rabAxhJjCzUKGjiQxWCnGon1jhHsDzquHSrhQ=
+	t=1762025671; cv=none; b=sgvlBfxzakDgKevkTREbbSzxiUUi6Vnm43HUXF35NXlr2BxsKu0IaUdbqLNmqoOnVX7x1Niw5WUvjXpoV7IRiRpxBtTmjKx7gOdLuqQwWS4LA3QMCp2g8r0WVjh3k6/H3vrSHAkoJDUTD8TqnOjJ2GlRK1KIwCdxv82qs+nRo90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762025201; c=relaxed/simple;
-	bh=OlbjrUqrFESJO6tdOLRzQodCmGvYwxCCXLefB7mntyU=;
-	h=From:To:Subject:Message-ID:Date:MIME-Version:Content-Type; b=FrDUV6jwrKBTqPb8QcvLhEZmvArJU4s/2Uqbb5kw4I9/ihO9eWnlbfgAVMyuIzL+QTGHutjv22tSeIl00YwTE1ZcjrnxYmzRc2u95sHELySj/133AYHcFgNx05z6b7hRjesIJVnClvuPTAdf0SCiuwZw+bJogT+abgt53puXmwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=msa.hinet.net; spf=pass smtp.mailfrom=msa.hinet.net; dkim=pass (1024-bit key) header.d=msa.hinet.net header.i=@msa.hinet.net header.b=IKejDWX7; arc=none smtp.client-ip=210.65.1.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=msa.hinet.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=msa.hinet.net
-Received: from cmsr1.hinet.net ([10.199.216.80])
-	by cdmsr2.hinet.net (8.15.2/8.15.2) with ESMTPS id 5A1JQVmo701383
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-kselftest@vger.kernel.org>; Sun, 2 Nov 2025 03:26:37 +0800
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; d=msa.hinet.net;
-	s=default; t=1762025197; bh=AYxpddjpKrH3U1is927Vx5cemaI=;
-	h=From:To:Subject:Date;
-	b=IKejDWX7vYtCT9u+3xLRpzCo9avWj8GgkAtM6YxU7bhPDSSU2dIcoGmPnNKNmFJnF
-	 3dGs7Ew0cL/lXKyhOL5f8Bbh79tqIdIEx+CAZP1xI6oP4w3cJ/cIVyNEkgBIqOT4xU
-	 NBpvbV+iWhZM8eFG7TNWI7JaZDm9RiuxO0yJ/VM8=
-Received: from [127.0.0.1] (111-242-201-198.dynamic-ip.hinet.net [111.242.201.198])
-	by cmsr1.hinet.net (8.15.2/8.15.2) with ESMTPS id 5A1JJOZs211737
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-kselftest@vger.kernel.org>; Sun, 2 Nov 2025 03:22:33 +0800
-From: Procurement 05471 <Linux-kselftest@msa.hinet.net>
-To: linux-kselftest@vger.kernel.org
-Reply-To: Procurement <purchase@pathnsithu.com>
-Subject: =?UTF-8?B?TkVXIFBPIDgzMTk5IFNhdHVyZGF5LCBOb3ZlbWJlciAxLCAyMDI1IGF0IDA4OjIyOjMyIFBN?=
-Message-ID: <7705f6a7-84a1-2f3a-e624-e2d42196860f@msa.hinet.net>
-Content-Transfer-Encoding: 7bit
-Date: Sat, 01 Nov 2025 19:22:33 +0000
+	s=arc-20240116; t=1762025671; c=relaxed/simple;
+	bh=9q6vCz/5bPhsdaBKqGHSicsAwhDjoOHGYrh2mAOw+kI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iAJpqG/SSMmZjTC/etb9JD6lRP8K7CZAF8LIrNEfivGMUuejpZnzRST94dEArLudpFAb0sLZ59PKYXZnApr4pNawgrBlLfnXVAeJkx9GpFUMwOEcNLFtFw+H5N83bKMujWbkZScpwdseBUZw9X1HG1fyedEe1v+eu+uWKGhFjMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ir6BRqpi; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A1JVhov006631;
+	Sat, 1 Nov 2025 19:34:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2025-04-25; bh=Dc9F5frfU26RSb9GNsKNqcQjAhpyN
+	/KoW+lW1Wj6Lxc=; b=Ir6BRqpifKKQeZJ+jhWM0gqsTcMMsgo1MQvR0bRqbdzsE
+	sbqxpdmz9roydbF+OM/OkbBCWOhmqE1k892SX7zoAsmPqie9IT/tq8NCkyDaACMp
+	59dOmTeEZsc3YbAQljU7Pq40iszUEaDgHGm4Bgjt0G5wlaak93RXulgpQ96sLUj7
+	ArItluvLCPNL9LAkSgV9fxz+rxNFWyYNUwyC3rI5XabO+/yFTVZpz/ASVB9xFLEg
+	x3r5R90sR4j6pVPKNVZqgg73VGIfCM/AvdwwaX5nvyoltJk0rzQn6+K/VWpIWMn/
+	Ae6aeae0gJwiei40GilxnScDE4NGTLrIHwkb/5XHA==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a5rdgr023-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 01 Nov 2025 19:34:01 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A1HhnGD020948;
+	Sat, 1 Nov 2025 19:34:01 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a58n6s24y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 01 Nov 2025 19:34:01 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5A1JY0Gg007914;
+	Sat, 1 Nov 2025 19:34:00 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4a58n6s24r-1;
+	Sat, 01 Nov 2025 19:34:00 +0000
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+To: bpf@vger.kernel.org
+Cc: alan.maguire@oracle.com,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/2] Print map ID on successful creation
+Date: Sat,  1 Nov 2025 12:33:53 -0700
+Message-ID: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.4 cv=DN4s4DNb c=1 sm=1 tr=0 ts=69065dfa
-	a=cO7HC7VeERx3kDFW2GBoLg==:117 a=IkcTkHD0fZMA:10 a=5KLPUuaC_9wA:10
-	a=u3P4PbDkA_gY_gC8D5cA:9 a=QEXdDO2ut3YA:10
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-01_05,2025-10-29_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
+ definitions=main-2511010168
+X-Proofpoint-GUID: l-wTHLNXJ9g4ByYukzg-xBHhiJzgJx2y
+X-Proofpoint-ORIG-GUID: l-wTHLNXJ9g4ByYukzg-xBHhiJzgJx2y
+X-Authority-Analysis: v=2.4 cv=DoJbOW/+ c=1 sm=1 tr=0 ts=690660aa cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22 a=NEAV23lmAAAA:8
+ a=a9B3Gpd4lODhp7-wpV4A:9 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDE2OCBTYWx0ZWRfX4gvUmblxf5Y1
+ HaItr4o4bHjD6FB7ZLnOpG/nScdfzfotA0VdLrZmR/lwHyD0cP7CTUQeH+ztB6zhWPYlQfp1VvT
+ rYZfuktF7x1z22E5JsiS8rtxRkeMF99KiCG5IF7Y0rXoR4Xa44yQjz81W4ogjDkSI+KNPwrA2sV
+ ZO5nH9JwhwZbWz0LuJ5dZVErsDecCDqURu7v2jpJO5Gkd9JYfOnoIt6hfR3j8TWfZwo/OeI+oQI
+ K3y9KdmgSU1lw2BkGvLr9jzzO7mN3F83ha/mnkxWVzCSoeW9V+8fViFDda3ZdkNzRetQ3KtbU/G
+ c7Zgx2eLn6W83vfofbw/eJJG3qA3VrxF/tvpRpHb47Bz+eTumV5wATcPGf/8mTTz37tF8R1kDRc
+ GKpVieuREuh/99B+8xIlHDQKrDKjFQ==
 
-Hi Linux-kselftest,
+Hi all,
 
-Please provide a quote for your products:
+I have tried looking at an issue from the bpftool repository:
+https://github.com/libbpf/bpftool/issues/121 and this patch series
+tries to add that enhancement.
 
-Include:
-1.Pricing (per unit)
-2.Delivery cost & timeline
-3.Quote expiry date
+Summary: Currently when a map creation is successful there is no message
+on the terminal, printing IDs on successful creation of maps can help
+notify the user and can be used in CI/CD.
 
-Deadline: October
+The first patch adds the logic for printing and the second patch adds a
+simple selftest for the same.
 
-Thanks!
+Thank you very much.
 
-Danny Peddinti
+V1 --> V2: PATCH 1 updated [Thanks Yonghong for suggesting better way of
+error handling with a new label for close(fd); instead of calling
+multiple times]
 
-PathnSitu Trading
+V2 --> V3: Thanks to Quentin.
+	PATCH1: drop \n in p_err statement
+	PATCH2: Remove messages in cases of successful ID printing. Also
+	remove message with a "FAIL:" prefix to make it more consistent.
+
+Regards,
+Harshit
+
+
+Harshit Mogalapalli (2):
+  bpftool: Print map ID upon creation and support JSON output
+  selftests/bpf: Add test for bpftool map ID printing
+
+ tools/bpf/bpftool/map.c                       | 21 +++++++++---
+ .../testing/selftests/bpf/test_bpftool_map.sh | 32 +++++++++++++++++++
+ 2 files changed, 49 insertions(+), 4 deletions(-)
+
+-- 
+2.50.1
+
 
