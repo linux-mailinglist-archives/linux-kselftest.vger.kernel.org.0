@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-44571-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6552C280D5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 01 Nov 2025 15:24:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AD8FC280DE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 01 Nov 2025 15:24:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DCE554E90B7
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Nov 2025 14:24:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C4111A2118E
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Nov 2025 14:25:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52E482FB0BB;
-	Sat,  1 Nov 2025 14:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A0952FB99C;
+	Sat,  1 Nov 2025 14:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="gN7eycO8"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="bFlitAdO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811912F9DBC
-	for <linux-kselftest@vger.kernel.org>; Sat,  1 Nov 2025 14:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF88214A9B
+	for <linux-kselftest@vger.kernel.org>; Sat,  1 Nov 2025 14:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762007024; cv=none; b=r5txYUJX6C99hFMQIsrP3/J2Sei4oYPP7fhktBGwReEcoPqY/zVysRBOtjqwCPrRawIJnLLKmG4ueUf5WC8VsjEJHnzQqAIMIk51MEvVGQ3dY6Txb02/agIx0e+zhMMj58ySwwVsg6pTY4RHkwlCET3zmbU62c0nRsQqB1kfg4g=
+	t=1762007026; cv=none; b=sNyXFUlAb0eAvMwWKSgKGHBpWPAUtablrNbSSdcv7ut7360kwsLNVRGmtPpRwaUD2JGpWluv/T6KrYhxknLZgfOVC3FDuo+yGPY0wc0xHRg+7oMoJ29+e05eK8f4bJfNmpGP7i705mtJTqpjSJLv0ZJ+VQBMQvM2y5DiFQi68nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762007024; c=relaxed/simple;
-	bh=yHqwthdjQR9NASx0Os0y7RkZY+CTnqkZiedG/ZfbJsM=;
+	s=arc-20240116; t=1762007026; c=relaxed/simple;
+	bh=+LuQqkGCe84RIp2fAEq/d3OCjgqkDPmWEUoXD9tp6JQ=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q+dg7/Rk7Sh2C3qfImyVHRU8rv9PMst1Oj6DhxfSppMezyIlnT9kslYpQk1qnpC6LvCT0XHls41pKPf6KFUM5ODZGh0/5A8M/9bQ79W/WRl7aN/8kv2pR6Z/z/NGpEk6CmPom32aXZYgosOYoPdmQ0nyNr6HfqDug0l5rQ5Xwhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=gN7eycO8; arc=none smtp.client-ip=209.85.222.54
+	 MIME-Version; b=qmvtAMD365Be7dsvClOlurcXZYAV5xgwdbai2K9C46DdhWIOolbcmMVTlu2I/ZANusnhA5A7rrDM8cfjfcxo5e3Sp5742CFb+maY7blb6+ZxzvEEpG21rB1/6/Poy3nJpMNDqxGhnN/hTb3hLo7eg0S/T+dJxo9PohztmLSsBqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=bFlitAdO; arc=none smtp.client-ip=209.85.217.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-934e487a957so2826340241.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 01 Nov 2025 07:23:42 -0700 (PDT)
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5db52533e5eso2909987137.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 01 Nov 2025 07:23:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1762007021; x=1762611821; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1762007023; x=1762611823; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=57rygU5OjDWbT5PCPIwncZxw1NBlZuRuRnZzBsppy54=;
-        b=gN7eycO8W9hBtFwgbXMYmbIgawUgpGrbpoYURAUEQVZxFMrLP3ZULVAMwA7Tiw2n+q
-         JU+NG6nxEUVIXRvxGHETXXpimzRta9F449hquKKDghUSwY+LzjG4Xl0wPSUyBbklSCa+
-         hTa3YF2PA7nry36oNU3ZIt6WdDLaq15lguMUQfZGlstObc7CjRcPXPancdnK/v4wBy7V
-         47X/8tL6dlU4lx0tWCx+DlFlj46Z+dA2fPtxBIkTnVrp6/qxY+XqG6bAViRPFIca9TPD
-         nVo6F2YhIlUMbdWyl73lwoXZlMCosADB5wGnpf8RtzipK+9SAAKD+z0agucSl8q+RTyh
-         xNeg==
+        bh=/3sZsODYdE+lXQW6sSfXvI4QX3oinLZLnJVK+OowB7E=;
+        b=bFlitAdOMFOlBGqOhB/WtEoPPxWEoQnpku9XX5BdVj4stcmqVMraZiyeck1o8S6Hmc
+         ihe9wpxvUT/YnAwr1SUOMoWbe45W5NBVIgepJ9YLjhrFHogtoJIPnm31qlnwf5e1jzzU
+         /3/EH3VOnaoWdhkvNoMTGzlF5OdmWFhlEIsJkeItHKWL/W8KTqmyRjGbtzAPZnGzEARg
+         s/1x0SRDsyR/VjRHVvopZpXoTUTBhDp9kmYGm446N1CqUm+JjpyU5VRkxbtxLa7n5dyv
+         77Sz9h91Ca0i2Xx5wkoUP0Ib3YNaSP6KEMQ8P8tm8yybQ8moKDHUfM0gpTlykavElUOi
+         KFtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762007021; x=1762611821;
+        d=1e100.net; s=20230601; t=1762007023; x=1762611823;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=57rygU5OjDWbT5PCPIwncZxw1NBlZuRuRnZzBsppy54=;
-        b=MSdKrxy/MNggCykJ1xI7SRKQYfYxb8mDiWcLAtPooq8mLPUC57mZEJLfUCF5bUM/Hu
-         NS7tDpBMXRhmp3OkIFjmxPdxHxT77H2V6+2TODbzASO1q7COqV2EI8HXkF9MtG8BW1jW
-         nyDQEDNoBUBzRFxFkuMLpr2IMiTCWB0kHBc713dnYI7omyJ8WMO/7yfF9f1/av8SHxVR
-         QmnzrTpvfkN0RY10pjhCHo2x0vX6vLDG7iJVdgV0VXATq7V8y3h6vS8HjIcwu147vOJa
-         87PlcjD1zCG2L4el+3dCp7CQjnvJGNMF9umhlWF8n4noYKMiwidqCdWtkhx2PRUkX+ND
-         oklA==
-X-Forwarded-Encrypted: i=1; AJvYcCVfDttOvYsC1RVMhsGTWU4f3DN6zpnMLnZ4ZFYdEpfe1XLb1Nla534p9oBF1l/LkdG/yypRBLP4+kxwM4kn0uw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLFK40Ll3rfZ5f1F3gc+RXle4/O8Hn963jJfT8Q+lPomvQhvOJ
-	F5VbjEbh7CJ0LK8QAJVnlk97PMKlQ23KaflBoBFryxo2vD/r1yCxkoV+Td7BMswJTyc=
-X-Gm-Gg: ASbGncuhbaBP3LU/rqSHbeamvr6nCD8inyZy9PleuWIuSIAN1GLTGnpiLF6Z4b/idq8
-	sAqTGhTXnY8xdSA0g9Sp2aY3Fn6TZmllNhzYTR8zSpA2XTR5hnMadYarmLr+7RLvCDG50er4oBJ
-	roTiy0F44wmpESS/eTBjS+PgK6qQywgts+Uu/C5CBnG+f260MIHdqT/drhiI1Uu/qfGGSMSoJeC
-	5XYZaEieQKs9AnlhzJb+VdLf3OHWu+CB4REMPxequMLaJGiAZMYs8kP1gKvAfjHBK8hocahNQ05
-	vVfbEu279RH3W353gThIBUh8P8HvaQn9gwhM2O6Lt7Inc5PF3Os5egLgjKbMIdaaou9H8YtobEK
-	rSFA0csKltCZjiSh4kkEbEUDkFkcZtTkkKvhDCjU0V1veXQgfQA3BZCw/0y4t4+hKOSB0/q3Q2g
-	e1bQiZZLvPIKs5AlYMSNl0LlBSKA4EMvKLGgKDls7VDo6jOVs89Tz3eQ86x879
-X-Google-Smtp-Source: AGHT+IFHTA9MFhIfCaO4quOEqPC9MjBBViuMWnhpeFtjZfr2lHvftLMFFMHCzKtyyjM8DjV8X9i0hw==
-X-Received: by 2002:a05:6122:90c:b0:554:e4ba:4408 with SMTP id 71dfb90a1353d-5593e006778mr2627356e0c.0.1762007021390;
-        Sat, 01 Nov 2025 07:23:41 -0700 (PDT)
+        bh=/3sZsODYdE+lXQW6sSfXvI4QX3oinLZLnJVK+OowB7E=;
+        b=vjt34Vrkz3AYV6jdgNwJ8uoTgkXz/v2snQQOsXgIURi2knFDHdlV0nM979f3TC0S0h
+         dcybhi/2n8lgaOmtWF3jUu3Tt/HXxgZsM2IaPZpvuRCkJM5BBcvRgjNP1+m6ZHgagKWh
+         6CbKjEfarD9kWl4rg6kUHhkPJEn2C50yxRarz8w72tKtawq5TzydIBq90lb5kgnLAs+n
+         bBA2EkmkUj2QFHV8+pbsJoGJLzXaWygicYvcUqAEdQsiwwhhCpnDpZpTf9P3ppGy5O50
+         fgQ9sc8UdGdHkQm1vTs8s/dqR38rk43yC5phadzOqHP2djezopPuZKGkYpeCzBQBpJVe
+         1ZEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV9UH1J3t8tFXBLC4mNQMHpEzUOysGQn9j1Hd54Q3iB8K7iVpPtrLQCEVpvxL5urKpLsv5mxw9xA5PlHhmAX+c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi2RnjANPbFQ5sQ2vZiqBSQiC0KtmYrzNyD9blQjaF04YxYgt+
+	OY2MIlmTwE1EYRXBG6XwSAmd/Gbxf8iIERw7m7OhQWQKjq0WF4k9ng4cqzyPFpw6qC8=
+X-Gm-Gg: ASbGnctdZxe1rsC92Dq/xwqjbaQieUWI5skUVfZa+1vJ6wxXseF6dOdiY/me+MvhKVQ
+	Glx7dNwbUIbhpGPl6JqDzgBlaqia8LblLmJZXADgInjdvYRUfcfVSG+RSBd3xDb94S1F1ViGwLJ
+	9Y5RVpHs1mIHx4nyXT+4tnWKnESDHiY+7tw3GnKPdCtAP6DSicTXzZxglW8L5iTO+aklKNXHk8z
+	CWjwSMfVUXs5/6022b0ANqhPohfznw4XtOpJkALm80mynqc17SiiUJDguyMQAN6epElM7kjIXWV
+	pokQxMaxyd8V+XBHuMvPqmzXH2nuOiWBXy2ZkjJ0rt8ZBPSVif/C76hiJ3kzXuYxOzHjCJz0ATp
+	NSPzDkkDAXV1on8QzQx19ePwwbLGNZmt4H2Fbv4M2Iw+GF/4E2JaYhGvDVSEwAZ7jbDxyWPzHIW
+	N1nbUsOKX45ggovwsMmiZqgS1LWiXKgMWkmGPC6SHFQjGDm20z+YFqrU5oIQ5gBNJouaqaEbg=
+X-Google-Smtp-Source: AGHT+IEW1fTK12XGUTtqXJsef8/76poVKTgBxu4YxD9HHtSEN7ne/NH+yy5cGEPUcuJdr6fOnT+fYw==
+X-Received: by 2002:a05:6102:8349:20b0:59f:4f48:4e31 with SMTP id ada2fe7eead31-5dbb11f91c3mr1950860137.1.1762007023601;
+        Sat, 01 Nov 2025 07:23:43 -0700 (PDT)
 Received: from soleen.c.googlers.com.com (53.47.86.34.bc.googleusercontent.com. [34.86.47.53])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-559449647e0sm1776242e0c.3.2025.11.01.07.23.39
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-559449647e0sm1776242e0c.3.2025.11.01.07.23.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Nov 2025 07:23:40 -0700 (PDT)
+        Sat, 01 Nov 2025 07:23:42 -0700 (PDT)
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
 To: akpm@linux-foundation.org,
 	brauner@kernel.org,
@@ -91,9 +91,9 @@ To: akpm@linux-foundation.org,
 	rppt@kernel.org,
 	tj@kernel.org,
 	yanjun.zhu@linux.dev
-Subject: [PATCH v9 5/9] test_kho: Unpreserve memory in case of error
-Date: Sat,  1 Nov 2025 10:23:21 -0400
-Message-ID: <20251101142325.1326536-6-pasha.tatashin@soleen.com>
+Subject: [PATCH v9 6/9] kho: don't unpreserve memory during abort
+Date: Sat,  1 Nov 2025 10:23:22 -0400
+Message-ID: <20251101142325.1326536-7-pasha.tatashin@soleen.com>
 X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
 In-Reply-To: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
 References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
@@ -105,191 +105,69 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If there is an error half way through KHO memory preservation, we should
-rollback and unpreserve everything that is partially preserved.
+KHO allows clients to preserve memory regions at any point before the
+KHO state is finalized. The finalization process itself involves KHO
+performing its own actions, such as serializing the overall
+preserved memory map.
 
-Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+If this finalization process is aborted, the current implementation
+destroys KHO's internal memory tracking structures
+(`kho_out.ser.track.orders`). This behavior effectively unpreserves
+all memory from KHO's perspective, regardless of whether those
+preservations were made by clients before the finalization attempt
+or by KHO itself during finalization.
+
+This premature unpreservation is incorrect. An abort of the
+finalization process should only undo actions taken by KHO as part of
+that specific finalization attempt. Individual memory regions
+preserved by clients prior to finalization should remain preserved,
+as their lifecycle is managed by the clients themselves. These
+clients might still need to call kho_unpreserve_folio() or
+kho_unpreserve_phys() based on their own logic, even after a KHO
+finalization attempt is aborted.
+
 Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
 ---
- lib/test_kho.c | 103 +++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 73 insertions(+), 30 deletions(-)
+ kernel/kexec_handover.c | 21 +--------------------
+ 1 file changed, 1 insertion(+), 20 deletions(-)
 
-diff --git a/lib/test_kho.c b/lib/test_kho.c
-index 9f7cfa6ac855..025ea251a186 100644
---- a/lib/test_kho.c
-+++ b/lib/test_kho.c
-@@ -33,17 +33,28 @@ struct kho_test_state {
- 	unsigned int nr_folios;
- 	struct folio **folios;
- 	phys_addr_t *folios_info;
-+	struct kho_vmalloc folios_info_phys;
-+	int nr_folios_preserved;
- 	struct folio *fdt;
- 	__wsum csum;
- };
+diff --git a/kernel/kexec_handover.c b/kernel/kexec_handover.c
+index c514b300ebe6..3adf86c7c2db 100644
+--- a/kernel/kexec_handover.c
++++ b/kernel/kexec_handover.c
+@@ -1118,31 +1118,12 @@ EXPORT_SYMBOL_GPL(kho_restore_vmalloc);
  
- static struct kho_test_state kho_test_state;
- 
--static int kho_test_save_data(struct kho_test_state *state, void *fdt)
-+static void kho_test_unpreserve_data(struct kho_test_state *state)
-+{
-+	for (int i = 0; i < state->nr_folios_preserved; i++)
-+		kho_unpreserve_folio(state->folios[i]);
-+
-+	kho_unpreserve_vmalloc(&state->folios_info_phys);
-+	vfree(state->folios_info);
-+}
-+
-+static int kho_test_preserve_data(struct kho_test_state *state)
+ static int __kho_abort(void)
  {
--	phys_addr_t *folios_info __free(kvfree) = NULL;
- 	struct kho_vmalloc folios_info_phys;
 -	int err = 0;
-+	phys_addr_t *folios_info;
-+	int err;
- 
- 	folios_info = vmalloc_array(state->nr_folios, sizeof(*folios_info));
- 	if (!folios_info)
-@@ -51,64 +62,98 @@ static int kho_test_save_data(struct kho_test_state *state, void *fdt)
- 
- 	err = kho_preserve_vmalloc(folios_info, &folios_info_phys);
- 	if (err)
--		return err;
-+		goto err_free_info;
-+
-+	state->folios_info_phys = folios_info_phys;
-+	state->folios_info = folios_info;
- 
- 	for (int i = 0; i < state->nr_folios; i++) {
- 		struct folio *folio = state->folios[i];
- 		unsigned int order = folio_order(folio);
- 
- 		folios_info[i] = virt_to_phys(folio_address(folio)) | order;
+-	unsigned long order;
+-	struct kho_mem_phys *physxa;
 -
- 		err = kho_preserve_folio(folio);
- 		if (err)
--			break;
-+			goto err_unpreserve;
-+		state->nr_folios_preserved++;
+-	xa_for_each(&kho_out.track.orders, order, physxa) {
+-		struct kho_mem_phys_bits *bits;
+-		unsigned long phys;
+-
+-		xa_for_each(&physxa->phys_bits, phys, bits)
+-			kfree(bits);
+-
+-		xa_destroy(&physxa->phys_bits);
+-		kfree(physxa);
+-	}
+-	xa_destroy(&kho_out.track.orders);
+-
+ 	if (kho_out.preserved_mem_map) {
+ 		kho_mem_ser_free(kho_out.preserved_mem_map);
+ 		kho_out.preserved_mem_map = NULL;
  	}
  
-+	return 0;
-+
-+err_unpreserve:
-+	/*
-+	 * kho_test_unpreserve_data frees folio_info, bail out immediately to
-+	 * avoid double free
-+	 */
-+	kho_test_unpreserve_data(state);
-+	return err;
-+
-+err_free_info:
-+	vfree(folios_info);
-+	return err;
-+}
-+
-+static int kho_test_prepare_fdt(struct kho_test_state *state, ssize_t fdt_size)
-+{
-+	const char compatible[] = KHO_TEST_COMPAT;
-+	unsigned int magic = KHO_TEST_MAGIC;
-+	void *fdt = folio_address(state->fdt);
-+	int err;
-+
-+	err = fdt_create(fdt, fdt_size);
-+	err |= fdt_finish_reservemap(fdt);
-+	err |= fdt_begin_node(fdt, "");
-+	err |= fdt_property(fdt, "compatible", compatible, sizeof(compatible));
-+	err |= fdt_property(fdt, "magic", &magic, sizeof(magic));
-+
- 	err |= fdt_begin_node(fdt, "data");
- 	err |= fdt_property(fdt, "nr_folios", &state->nr_folios,
- 			    sizeof(state->nr_folios));
--	err |= fdt_property(fdt, "folios_info", &folios_info_phys,
--			    sizeof(folios_info_phys));
-+	err |= fdt_property(fdt, "folios_info", &state->folios_info_phys,
-+			    sizeof(state->folios_info_phys));
- 	err |= fdt_property(fdt, "csum", &state->csum, sizeof(state->csum));
- 	err |= fdt_end_node(fdt);
- 
--	if (!err)
--		state->folios_info = no_free_ptr(folios_info);
-+	err |= fdt_end_node(fdt);
-+	err |= fdt_finish(fdt);
- 
- 	return err;
- }
- 
--static int kho_test_prepare_fdt(struct kho_test_state *state)
-+static int kho_test_preserve(struct kho_test_state *state)
- {
--	const char compatible[] = KHO_TEST_COMPAT;
--	unsigned int magic = KHO_TEST_MAGIC;
- 	ssize_t fdt_size;
--	int err = 0;
--	void *fdt;
-+	int err;
- 
- 	fdt_size = state->nr_folios * sizeof(phys_addr_t) + PAGE_SIZE;
- 	state->fdt = folio_alloc(GFP_KERNEL, get_order(fdt_size));
- 	if (!state->fdt)
- 		return -ENOMEM;
- 
--	fdt = folio_address(state->fdt);
+-	if (err)
+-		pr_err("Failed to abort KHO finalization: %d\n", err);
 -
--	err |= kho_preserve_folio(state->fdt);
--	err |= fdt_create(fdt, fdt_size);
--	err |= fdt_finish_reservemap(fdt);
-+	err = kho_preserve_folio(state->fdt);
-+	if (err)
-+		goto err_free_fdt;
- 
--	err |= fdt_begin_node(fdt, "");
--	err |= fdt_property(fdt, "compatible", compatible, sizeof(compatible));
--	err |= fdt_property(fdt, "magic", &magic, sizeof(magic));
--	err |= kho_test_save_data(state, fdt);
--	err |= fdt_end_node(fdt);
-+	err = kho_test_preserve_data(state);
-+	if (err)
-+		goto err_unpreserve_fdt;
- 
--	err |= fdt_finish(fdt);
-+	err = kho_test_prepare_fdt(state, fdt_size);
-+	if (err)
-+		goto err_unpreserve_data;
- 
- 	err = kho_add_subtree(KHO_TEST_FDT, folio_address(state->fdt));
- 	if (err)
--		folio_put(state->fdt);
-+		goto err_unpreserve_data;
- 
+-	return err;
 +	return 0;
-+
-+err_unpreserve_data:
-+	kho_test_unpreserve_data(state);
-+err_unpreserve_fdt:
-+	kho_unpreserve_folio(state->fdt);
-+err_free_fdt:
-+	folio_put(state->fdt);
- 	return err;
  }
  
-@@ -174,14 +219,12 @@ static int kho_test_save(void)
- 	if (err)
- 		goto err_free_folios;
- 
--	err = kho_test_prepare_fdt(state);
-+	err = kho_test_preserve(state);
- 	if (err)
- 		goto err_free_folios;
- 
- 	return 0;
- 
--err_free_fdt:
--	folio_put(state->fdt);
- err_free_folios:
- 	kvfree(folios);
- 	return err;
+ int kho_abort(void)
 -- 
 2.51.1.930.gacf6e81ea2-goog
 
