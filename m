@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-44583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91FCFC2845E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 01 Nov 2025 18:57:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 096B9C28484
+	for <lists+linux-kselftest@lfdr.de>; Sat, 01 Nov 2025 19:01:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C8D61A21129
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Nov 2025 17:58:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C45CA3BF2E5
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Nov 2025 17:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7771B2FC009;
-	Sat,  1 Nov 2025 17:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EECE72FD1D3;
+	Sat,  1 Nov 2025 17:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LtXrg/Ph"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RN9fnZT2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47ACA2FBE1B;
-	Sat,  1 Nov 2025 17:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD0DE2FD1BA;
+	Sat,  1 Nov 2025 17:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762019835; cv=none; b=QLlItASY2BbOmQRw+bg6m2ojz3WGgX/GlWknK2rENV0dEhGDYO0fd0J4rT+WV9DRgov9xqI6vmry2nPf4Ol0qe9q3tDhtrgDA/DraSRSTbIQpz566yPFer5WSQr9lLAvdCxsvUGsNe60FwNNgwZWRFsmYpEouXoWEdaYWiJeJoQ=
+	t=1762019837; cv=none; b=oZejTx9iWr3MdFE8stJ/Gqanh1a83vt82R2SllbteabKmk4pAySp5sn6OUcMdr29Gw98xWjo3yTYXjV6ZSPjyqFO/6DfwlrusArNt4gPXi4W+WXrzZ5d0qui/8NZuh9s9fdlujJ6wTo9kK8+naVyziY3n6SpswD41riIb7wicwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762019835; c=relaxed/simple;
-	bh=FJL2HPrgfIL22xuRMCxFhchP9t64Srg/5u4D4oykfAA=;
+	s=arc-20240116; t=1762019837; c=relaxed/simple;
+	bh=4FJjDaN/bzVx1rmeRAMy6ePFb5sfpEyCI2M2+OEJJcc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fh9KNPof6+pWrK8oSPLiVENgRHIbk6lFRocKsKnnbT2HzKwJbVvC3kcxwl9bzllcvpsYK0eRfr4TM5QvD5mlme1fJKhULimp6YdM5X89pWjWqPza076FcFp7pJnsHwUxSlFLHZr5ao4ms7Tskneux9HkAk3hTXnbO+4rO0TKVg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LtXrg/Ph; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D50AC4CEFB;
-	Sat,  1 Nov 2025 17:57:12 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=GtlMz3F6PPKyxxjSX1lUp2ZfnohZKiC3mtKXO9X88xRiymDs8Qd802Q7mg//LAKIqxs4w1ht8LZcAZAQcQ3KF7lzbqV5+Kq6hBpu/x5ng0w85xNIgnEDcdu3qqkFXGTpu3T4xt7yqgdSxoreBfL9Z6/Oh0L7iEpWAFDApNdBNLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RN9fnZT2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21260C4CEF1;
+	Sat,  1 Nov 2025 17:57:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762019834;
-	bh=FJL2HPrgfIL22xuRMCxFhchP9t64Srg/5u4D4oykfAA=;
+	s=k20201202; t=1762019837;
+	bh=4FJjDaN/bzVx1rmeRAMy6ePFb5sfpEyCI2M2+OEJJcc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=LtXrg/PhUmaPeudO0vhduZUnOlrzA2CwiIVKaHDUGtqjjWrQSySEQ4GjnMtrA/34p
-	 GVXk13HCeMBaJbJDWpv7h8PRiNRFuxX0HeyxGsoR1GgDVNp7j1LtZt7mqP1t6cXRsi
-	 alL0YuyFjt3tD5117BYJ7fGcdqhW9G+W2Lk5v3ObvsSPo4+Zwo5wapiPVCortrKPxq
-	 MdDyltMM7bW1Q+5/B92/NP/sVLswl24M9p9JorKZSAcOhxYIGsMQkK5nqLsPyM/jAt
-	 j6CnECOVktAC7JCRtb/nBToeFdMLlFubGxk3UrB7LMqry5jXRxtJVp8djwLOgVJM6F
-	 abaeLOToM8xMQ==
+	b=RN9fnZT2ECi3EqvGKkB5hqVcmQjfuxgZNt7vSK/zKp401KRWPxlBrVQ7UppPR5HSO
+	 qo4LySLgtJFAqhKIy6aYziZVxYdcptedhZFaMd2pRF6dAwg4hldaoReTrq0NiWHkMd
+	 6GRpaDPDFb7+EELWm/yevNbUDjhkABMixggwQyb5wyp0nStXTWF7QTse8rQA+K5ddh
+	 8nTH9ZvebhY3kMn15OHtGbkyk3mFIFHpvVLpVPjRKWQGqJQ2W+vIF9ByiWDwfF4adl
+	 rSRHV0ZBkyr3q3ZwrPc1FL3135IZO5KpXQ7BfzHG4V/0rfIEHWOvK3KF5zVz7Q7MuF
+	 5LXE4N4Gkc97w==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Sat, 01 Nov 2025 18:56:52 +0100
-Subject: [PATCH net-next 2/4] mptcp: pm: in kernel: only use fullmesh endp
- if any
+Date: Sat, 01 Nov 2025 18:56:53 +0100
+Subject: [PATCH net-next 3/4] selftests: mptcp: join: do_transfer: reduce
+ code dup
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251101-net-next-mptcp-fm-endp-nb-bind-v1-2-b4166772d6bb@kernel.org>
+Message-Id: <20251101-net-next-mptcp-fm-endp-nb-bind-v1-3-b4166772d6bb@kernel.org>
 References: <20251101-net-next-mptcp-fm-endp-nb-bind-v1-0-b4166772d6bb@kernel.org>
 In-Reply-To: <20251101-net-next-mptcp-fm-endp-nb-bind-v1-0-b4166772d6bb@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -64,77 +64,98 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2545; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=FJL2HPrgfIL22xuRMCxFhchP9t64Srg/5u4D4oykfAA=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLZPN+tr1RjfnUv9W2XrU+3RrXz4g8GuyaXXQtetKFo9
- c2ijSZCHaUsDGJcDLJiiizSbZH5M59X8ZZ4+VnAzGFlAhnCwMUpABPxYWT4H/pozr69FufWxFTL
- vZY69v/1tlyW81Y+bE7+r7OCXqeXujMynMr82nqA5zyLwvzF+9YF/WwQZeyL1s8MPPrnzMYoKde
- NrAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3151; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=4FJjDaN/bzVx1rmeRAMy6ePFb5sfpEyCI2M2+OEJJcc=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLZPD9wmZ83yUmYGSt+Za3eljtrtzlcOuWbNH1OmtBT4
+ 4h9J3KMO0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACZy9wQjw33LZe+YtriwvHv6
+ TvNy/gxv/wYvubffWGP/e2+rfW0ld5Lhv8OlLw1V2y8GNTxiPhiSXrqxz+bcLf7D0aIu6tY7eWd
+ zcwMA
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Our documentation is saying that the in-kernel PM is only using fullmesh
-endpoints to establish subflows to announced addresses when at least one
-endpoint has a fullmesh flag. But this was not totally correct: only
-fullmesh endpoints were used if at least one endpoint *from the same
-address family as the received ADD_ADDR* has the fullmesh flag.
+The same extra long commands are present twice, with small differences:
+the variable for the stdin file is different.
 
-This is confusing, and it seems clearer not to have differences
-depending on the address family.
-
-So, now, when at least one MPTCP endpoint has a fullmesh flag, the local
-addresses are picked from all fullmesh endpoints, which might be 0 if
-there are no endpoints for the correct address family.
-
-One selftest needs to be adapted for this behaviour change.
+Use new dedicated variables in one command to avoid this code
+duplication.
 
 Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm_kernel.c                           | 10 +++-------
- tools/testing/selftests/net/mptcp/mptcp_join.sh |  6 +++++-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 30 +++++++++----------------
+ 1 file changed, 11 insertions(+), 19 deletions(-)
 
-diff --git a/net/mptcp/pm_kernel.c b/net/mptcp/pm_kernel.c
-index e2918c68ff02..e50721c670d0 100644
---- a/net/mptcp/pm_kernel.c
-+++ b/net/mptcp/pm_kernel.c
-@@ -609,15 +609,11 @@ fill_local_addresses_vec(struct mptcp_sock *msk, struct mptcp_addr_info *remote,
- 			 struct mptcp_pm_local *locals)
- {
- 	bool c_flag_case = remote->id && mptcp_pm_add_addr_c_flag_case(msk);
--	int i;
- 
- 	/* If there is at least one MPTCP endpoint with a fullmesh flag */
--	if (mptcp_pm_get_endp_fullmesh_max(msk)) {
--		i = fill_local_addresses_vec_fullmesh(msk, remote, locals,
--						      c_flag_case);
--		if (i)
--			return i;
--	}
-+	if (mptcp_pm_get_endp_fullmesh_max(msk))
-+		return fill_local_addresses_vec_fullmesh(msk, remote, locals,
-+							 c_flag_case);
- 
- 	/* If there is at least one MPTCP endpoint with a laminar flag */
- 	if (mptcp_pm_get_endp_laminar_max(msk))
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 78a1aa4ecff2..e7a498dd5a46 100755
+index e7a498dd5a46..4c9ee094381e 100755
 --- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
 +++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -2952,7 +2952,11 @@ mixed_tests()
- 		pm_nl_add_endpoint $ns1 10.0.1.1 flags signal
- 		speed=slow \
- 			run_tests $ns1 $ns2 dead:beef:2::1
--		chk_join_nr 1 1 1
-+		if mptcp_lib_kallsyms_has "mptcp_pm_get_endp_fullmesh_max$"; then
-+			chk_join_nr 0 0 0
-+		else
-+			chk_join_nr 1 1 1
-+		fi
+@@ -951,6 +951,8 @@ do_transfer()
+ 	local FAILING_LINKS=${FAILING_LINKS:-""}
+ 	local fastclose=${fastclose:-""}
+ 	local speed=${speed:-"fast"}
++	local listener_in="${sin}"
++	local connector_in="${cin}"
+ 	port=$(get_port)
+ 
+ 	:> "$cout"
+@@ -999,16 +1001,12 @@ do_transfer()
+ 
+ 	extra_srv_args="$extra_args $extra_srv_args"
+ 	if [ "$test_linkfail" -gt 1 ];then
+-		timeout ${timeout_test} \
+-			ip netns exec ${listener_ns} \
+-				./mptcp_connect -t ${timeout_poll} -l -p $port -s ${srv_proto} \
+-					$extra_srv_args "::" < "$sinfail" > "$sout" &
+-	else
+-		timeout ${timeout_test} \
+-			ip netns exec ${listener_ns} \
+-				./mptcp_connect -t ${timeout_poll} -l -p $port -s ${srv_proto} \
+-					$extra_srv_args "::" < "$sin" > "$sout" &
++		listener_in="${sinfail}"
+ 	fi
++	timeout ${timeout_test} \
++		ip netns exec ${listener_ns} \
++			./mptcp_connect -t ${timeout_poll} -l -p ${port} -s ${srv_proto} \
++				${extra_srv_args} "::" < "${listener_in}" > "${sout}" &
+ 	local spid=$!
+ 
+ 	mptcp_lib_wait_local_port_listen "${listener_ns}" "${port}"
+@@ -1020,6 +1018,7 @@ do_transfer()
+ 				./mptcp_connect -t ${timeout_poll} -p $port -s ${cl_proto} \
+ 					$extra_cl_args $connect_addr < "$cin" > "$cout" &
+ 	elif [ "$test_linkfail" -eq 1 ] || [ "$test_linkfail" -eq 2 ];then
++		connector_in="${cinsent}"
+ 		( cat "$cinfail" ; sleep 2; link_failure $listener_ns ; cat "$cinfail" ) | \
+ 			tee "$cinsent" | \
+ 			timeout ${timeout_test} \
+@@ -1027,6 +1026,7 @@ do_transfer()
+ 					./mptcp_connect -t ${timeout_poll} -p $port -s ${cl_proto} \
+ 						$extra_cl_args $connect_addr > "$cout" &
+ 	else
++		connector_in="${cinsent}"
+ 		tee "$cinsent" < "$cinfail" | \
+ 			timeout ${timeout_test} \
+ 				ip netns exec ${connector_ns} \
+@@ -1057,17 +1057,9 @@ do_transfer()
+ 		return 1
  	fi
  
- 	# fullmesh still tries to create all the possibly subflows with
+-	if [ "$test_linkfail" -gt 1 ];then
+-		check_transfer $sinfail $cout "file received by client" $trunc_size
+-	else
+-		check_transfer $sin $cout "file received by client" $trunc_size
+-	fi
++	check_transfer $listener_in $cout "file received by client" $trunc_size
+ 	retc=$?
+-	if [ "$test_linkfail" -eq 0 ];then
+-		check_transfer $cin $sout "file received by server" $trunc_size
+-	else
+-		check_transfer $cinsent $sout "file received by server" $trunc_size
+-	fi
++	check_transfer $connector_in $sout "file received by server" $trunc_size
+ 	rets=$?
+ 
+ 	[ $retc -eq 0 ] && [ $rets -eq 0 ]
 
 -- 
 2.51.0
