@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-44587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 407E9C2849A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 01 Nov 2025 19:20:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C1ECC284A3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 01 Nov 2025 19:20:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4DE73BA50A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Nov 2025 18:20:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3ACC189CF05
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Nov 2025 18:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10E6A2FB988;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2BD2FBDF0;
 	Sat,  1 Nov 2025 18:20:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+gwKDO0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QTwPfR0t"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30422FB620;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304D92FB99B;
 	Sat,  1 Nov 2025 18:20:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762021237; cv=none; b=Pfm0tWoRbJF54vzqrcHMOzL2lgWq7jSK8j+Nrj75R3igpkn1ULNoB8gozUUujZzjUrBwx0J9fVaf2FvyT2FAKR/YoNwGpHaH+JbW846OPP2Eap9m5n7CTFbmpwVUL+5pOTmU305Sm2HpLwy0j0XmBf3LAjKVnNBv9QUklMQxwtw=
+	t=1762021237; cv=none; b=BxCoGBiaDGvKApQMQOrqvcCvWbA8HEHjXlZ7HzNJs1AahkIqSXkI03QJhitlaSxsLi31BOAjFJ611xrwzk8m9869NtTYe6NlrfDMcSp2fL3r2d5NtBgmMrw70+YGPUjnsZxzFHxTdLKSd4ut0hTwnF4iBmlkVha6nSP8qr7NkYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762021237; c=relaxed/simple;
-	bh=LcoET9NixI9B2TvJ7D7SHN7zAnAoJR3IY93L52/J7TI=;
+	bh=ouIjUDY9hLvXA2FpIhXVT6nydcM4s8x+MSQlq+lUn6c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QeAvycqtA/3K9DIPxyCt8cS80tCbNRJgzNThUWeSkYjWWqCYqvOQm5DIxbGodesheT/BXTA28JpWoo0d+CsgXnlr2MB7jE4heS7I2ITnIgc4Gou49B4vOS4ZXVGUzxtEvd05Hu5qL6raJ1E7QD/zAOGZ8kaJ7vEaWUPlWR7I6mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+gwKDO0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D3DC113D0;
+	 MIME-Version; b=tm6KWzgZSK9SUTgU8qSXRIhxmqA8nmC2mil18tFF2WhvMrtjgmiDmS+E+w/LniZ7ENunxyfjBnCBz1qfvjc0w//pnoA3nYBN6xjv7dpaT3xJdazN0Bb2hAJ9V5GfZU/9QiJwXd9hc//XXtlJ1x4ecqFuVlBiSSq+vx+h9/DyH4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QTwPfR0t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EE15C116D0;
 	Sat,  1 Nov 2025 18:20:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1762021236;
-	bh=LcoET9NixI9B2TvJ7D7SHN7zAnAoJR3IY93L52/J7TI=;
+	bh=ouIjUDY9hLvXA2FpIhXVT6nydcM4s8x+MSQlq+lUn6c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p+gwKDO0ijHRuQy1R1itqxNm+fWJPJkcg/5tdoBhu/LO8YyfDY0i2qgW+/hhIxj69
-	 9Rg3qKTNE4us2cqc+1a+DFYugOQhB7N2SRM7IdhqFTRs34R3g6qdn5WsG1g6xVImok
-	 5iurUisrwIKPqPY65gaPTpPIasKBBnU+zO6jCcSZkDaG1bya6LYwX4QggkeFXYKNex
-	 aAgedJwYp5rbPFRxmt5Gg4UjK8i5ESF+JfDxIXKN+QV4LBfCUas5uxQqNsaImzNx4L
-	 LS7sW0uQ7/68s33NPWGKPlQl1IpS8C3pp2nuSJHEZ96inJdk45k4hbR5iZp5sQigHx
-	 fkluiQe984sww==
+	b=QTwPfR0tWlZ0xcg0bSAtUMV8xDBT9nY8XilWVFWUNCZHNu9tHdOoGMRwA9qgohWZI
+	 dSYyiLubnG1H6HR9e+bU10DycteR2XiegfvrDfa7hIH/BjSKAcrbFHWPolG6utILBT
+	 IIfYB2Lo7fpJnwwWqWfYU+o7KsFAdo79J3YdFlGAv6dhb30fH1yKH4NAWgM9DBSyAo
+	 g70JxduxlhMwOVe5dJcBi+f1dMV2lTtmY3PkAckdQzMrJIVNXr5R1/nzpUVANVa7EO
+	 Kz7RUnKtcTj+P+oo/wlfj2uqT1OM6yFZayxOldtxc0SdiygribF4CHq0u/pJUUVTwA
+	 JBGgM5PwTmfXg==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
-	"# 6 . 16 . x" <stable@vger.kernel.org>,
+	"# 5 . 15 . x" <stable@vger.kernel.org>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@google.com>,
 	damon@lists.linux.dev,
@@ -52,9 +52,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 01/22] mm/damon/tests/core-kunit: fix memory leak in damon_test_set_filters_default_reject()
-Date: Sat,  1 Nov 2025 11:19:55 -0700
-Message-ID: <20251101182021.74868-2-sj@kernel.org>
+Subject: [PATCH 02/22] mm/damon/tests/core-kunit: handle allocation failures in damon_test_regions()
+Date: Sat,  1 Nov 2025 11:19:56 -0700
+Message-ID: <20251101182021.74868-3-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251101182021.74868-1-sj@kernel.org>
 References: <20251101182021.74868-1-sj@kernel.org>
@@ -66,32 +66,42 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Kunit test function for damos_set_filters_default_reject() allocates two
-'struct damos_filter' objects and not deallocates those, so that the
-memory for the two objects are leaked for every time the test runs.  Fix
-this by deallocating those objects at the end of the test code.
+damon_test_regions() is assuming all dynamic memory allocation in it
+will succeed.  Those are indeed likely in the real use cases since those
+allocations are too small to fail, but theoretically those could fail.
+In the case, inappropriate memory access can happen.  Fix it by
+appropriately cleanup pre-allocated memory and skip the execution of the
+remaining tests in the failure cases.
 
-Fixes: 094fb14913c7 ("mm/damon/tests/core-kunit: add a test for damos_set_filters_default_reject()")
-Cc: <stable@vger.kernel.org> # 6.16.x
+Fixes: 17ccae8bb5c9 ("mm/damon: add kunit tests")
+Cc: <stable@vger.kernel.org> # 5.15.x
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/tests/core-kunit.h | 3 +++
- 1 file changed, 3 insertions(+)
+ mm/damon/tests/core-kunit.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
 diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 51369e35298b..69ca44f9270b 100644
+index 69ca44f9270b..a2c9ee7a5de1 100644
 --- a/mm/damon/tests/core-kunit.h
 +++ b/mm/damon/tests/core-kunit.h
-@@ -598,6 +598,9 @@ static void damon_test_set_filters_default_reject(struct kunit *test)
- 	 */
- 	KUNIT_EXPECT_EQ(test, scheme.core_filters_default_reject, false);
- 	KUNIT_EXPECT_EQ(test, scheme.ops_filters_default_reject, true);
-+
-+	damos_free_filter(anon_filter);
-+	damos_free_filter(target_filter);
- }
+@@ -20,11 +20,17 @@ static void damon_test_regions(struct kunit *test)
+ 	struct damon_target *t;
  
- static struct kunit_case damon_test_cases[] = {
+ 	r = damon_new_region(1, 2);
++	if (!r)
++		kunit_skip(test, "region alloc fail");
+ 	KUNIT_EXPECT_EQ(test, 1ul, r->ar.start);
+ 	KUNIT_EXPECT_EQ(test, 2ul, r->ar.end);
+ 	KUNIT_EXPECT_EQ(test, 0u, r->nr_accesses);
+ 
+ 	t = damon_new_target();
++	if (!t) {
++		damon_free_region(r);
++		kunit_skip(test, "target alloc fail");
++	}
+ 	KUNIT_EXPECT_EQ(test, 0u, damon_nr_regions(t));
+ 
+ 	damon_add_region(r, t);
 -- 
 2.47.3
 
