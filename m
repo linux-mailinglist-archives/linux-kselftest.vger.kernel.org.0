@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-44659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44660-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 248D3C2D280
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 17:34:19 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75733C2D262
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 17:33:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15B15188C58D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 16:33:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1B2D54E6470
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 16:33:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8263191CF;
-	Mon,  3 Nov 2025 16:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1EA31AF3C;
+	Mon,  3 Nov 2025 16:32:42 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 211AB3191C0;
-	Mon,  3 Nov 2025 16:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C37B131AF1B;
+	Mon,  3 Nov 2025 16:32:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762187558; cv=none; b=gEI7MuX/FsN4IAXhlfJI6ypN6+A4Uj5SvURRbecpy3KVopHrm+FkGolefIY337FDpWXQdTSvW6eZRyANxbBBaeVHStGK6sopdXifbYSo5QSYstJJq5kj6UYU2ysBP33cstFLzqn6W/obUz0QlY2oZ5rPPtQnVVUUcs1uYbXTQdI=
+	t=1762187562; cv=none; b=nQO5dyV0q8ivCZfcEgNg91yDVUJ7O0uTQH5pcSKY43mFyJlg4viPRWaCUFs6OTGqb1V4Ff4tgdPeC9d3hgJhT2+lk2EHvvCv71XyoiOM5KG3YbgK/w0aLfmR9eeTXFzBGuyYiuArsXn33+vzzDCRSdAse9s6BI/StPhg2nQz6fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762187558; c=relaxed/simple;
-	bh=MKadygP1lUHNKc/jE7Dp8GoOTd34OpPPkLdDG0S2Dm0=;
+	s=arc-20240116; t=1762187562; c=relaxed/simple;
+	bh=dCRw6WmlS1EPXO9RXPpnEeqeKYu5DaXOb+yI5nu93NE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bGBfdLfRSxfrcXVfqrgNSsv7AJaGDzXqCnvF4/Fz8My5JKs4uE4C+TW+aLLJCIwLcLX8xerZzSj931RQBKmnA7RhOlGy2MZA8Sd6ckQ3cnLFSt6crrmo9IlfBDfq8+oIQpfN3P1WXCpopnHIT8mgpnlkK5lAzPMplDY95o6gZ88=
+	 MIME-Version; b=YGqO5OWfQIV3M7ee0QtUqF3pg1kze+eMg9z5L9CmErfn4L6v3v3qsNhfbVjj9c4J1gFHNQN9KsUxXkrvyXKbRvi9POwTJv3CynZwoYhoqlaPhMtmW6ob03z1yjSjPs628FfY8845NoLLnvrqDRaUHS/Q7qcnHsRZfjveRdrzjGs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E65012BC6;
-	Mon,  3 Nov 2025 08:32:28 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 64A242BCB;
+	Mon,  3 Nov 2025 08:32:32 -0800 (PST)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 869853F694;
-	Mon,  3 Nov 2025 08:32:33 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 056783F694;
+	Mon,  3 Nov 2025 08:32:36 -0800 (PST)
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: catalin.marinas@arm.com,
 	will@kernel.org,
@@ -57,9 +57,9 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH v10 2/9] KVM: arm64: expose FEAT_LSUI to guest
-Date: Mon,  3 Nov 2025 16:32:17 +0000
-Message-Id: <20251103163224.818353-3-yeoreum.yun@arm.com>
+Subject: [PATCH v10 3/9] KVM: arm64: kselftest: set_id_regs: add test for FEAT_LSUI
+Date: Mon,  3 Nov 2025 16:32:18 +0000
+Message-Id: <20251103163224.818353-4-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251103163224.818353-1-yeoreum.yun@arm.com>
 References: <20251103163224.818353-1-yeoreum.yun@arm.com>
@@ -71,36 +71,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-expose FEAT_LSUI to guest.
+Add test coverage for FEAT_LSUI.
 
 Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-Acked-by: Marc Zyngier <maz@kernel.org>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
 ---
- arch/arm64/kvm/sys_regs.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kvm/arm64/set_id_regs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index e67eb39ddc11..c1ac45058fae 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -1790,7 +1790,7 @@ static u64 __kvm_read_sanitised_id_reg(const struct kvm_vcpu *vcpu,
- 		break;
- 	case SYS_ID_AA64ISAR3_EL1:
- 		val &= ID_AA64ISAR3_EL1_FPRCVT | ID_AA64ISAR3_EL1_LSFE |
--			ID_AA64ISAR3_EL1_FAMINMAX;
-+			ID_AA64ISAR3_EL1_FAMINMAX | ID_AA64ISAR3_EL1_LSUI;
- 		break;
- 	case SYS_ID_AA64MMFR2_EL1:
- 		val &= ~ID_AA64MMFR2_EL1_CCIDX_MASK;
-@@ -3231,6 +3231,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
- 					ID_AA64ISAR2_EL1_GPA3)),
- 	ID_WRITABLE(ID_AA64ISAR3_EL1, (ID_AA64ISAR3_EL1_FPRCVT |
- 				       ID_AA64ISAR3_EL1_LSFE |
-+				       ID_AA64ISAR3_EL1_LSUI |
- 				       ID_AA64ISAR3_EL1_FAMINMAX)),
- 	ID_UNALLOCATED(6,4),
- 	ID_UNALLOCATED(6,5),
+diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+index 5e24f77868b5..f5ba72127464 100644
+--- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
++++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+@@ -125,6 +125,7 @@ static const struct reg_ftr_bits ftr_id_aa64isar2_el1[] = {
+ 
+ static const struct reg_ftr_bits ftr_id_aa64isar3_el1[] = {
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ISAR3_EL1, FPRCVT, 0),
++	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ISAR3_EL1, LSUI, 0),
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ISAR3_EL1, LSFE, 0),
+ 	REG_FTR_BITS(FTR_LOWER_SAFE, ID_AA64ISAR3_EL1, FAMINMAX, 0),
+ 	REG_FTR_END,
 -- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
