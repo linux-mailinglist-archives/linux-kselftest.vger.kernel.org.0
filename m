@@ -1,37 +1,38 @@
-Return-Path: <linux-kselftest+bounces-44657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A316DC2D34F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 17:43:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CAA6C2D2FB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 17:38:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99C6E3A84CB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 16:32:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E52393BD97B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 16:32:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329913191A7;
-	Mon,  3 Nov 2025 16:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B451319848;
+	Mon,  3 Nov 2025 16:32:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A18930DEDE;
-	Mon,  3 Nov 2025 16:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA10430DEDE;
+	Mon,  3 Nov 2025 16:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762187552; cv=none; b=g75xWO7ewIC71h4aomhC3YnIOTR6eZ49b3YCktf5F7XRqeLBZ2bBSdcMXerOFjUtigIZjrmxns2fpInn1CXLmBkY0XPY5lI0yoX9c89bqvic35meZ0tg0w+GzCex5t7/QljXs2ZbaCQxOl1MiUABk2Tf/jXdX1ck2V4zhr4DjtM=
+	t=1762187555; cv=none; b=JksG3c82kwVHseIk/FgnXb1uYzpvQWtHb1xTsxu9Q447YrTQHN6/svELvR0L80skByCTQ9SyIOyGZeLmKyBPuoy5qnxoLNfclwbU9Hu/X3E8b5Se3r8o+eo8VnAemVAwWoj8Aa+upvrQumMJfgkjeEPyxuHDeJRhjowFF4Lrfzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762187552; c=relaxed/simple;
-	bh=VQ0WiX1TW6oTI7NKhfbFYkDH+GwDeBBWv2ibDv8P4hM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=L3v0rqAbm7fbGdiJyylW24oF21N1qixiSGJl1/zcSvA6cqSJufMTDa5ONMXqCvJf8wsYOxuzJjewN3faTPam9B3mN8AxjGOcOni8/5FpwGEL2v30/bGQhczUfeBDkaM0pObZ/5AfzPNGNRVJeZSj0iD2NxxYERhM7n3PAnc6Xgw=
+	s=arc-20240116; t=1762187555; c=relaxed/simple;
+	bh=jfSCeu5VpsP36dy+I/SiNaDwlpqYe/lcY/8xJQpbXiA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=g5xWN9QGy/dpesho9W20HqFIDz3fw/f/gQY4XDe6TAEG5uktu2haDdd493TbZVl5Q2Wn8SPBiEzf3GUFZBfMHrZh1MV8cVInHIP0eIk7mJ+3rNP9iN+YbCs99gL9K2dByvTQAgKpHe5nWwFe4U5FsRC9H309HFCJ8HVvv8EfUF8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BE2B1D14;
-	Mon,  3 Nov 2025 08:32:22 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7302A2A6B;
+	Mon,  3 Nov 2025 08:32:25 -0800 (PST)
 Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A43833F694;
-	Mon,  3 Nov 2025 08:32:26 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1BE343F694;
+	Mon,  3 Nov 2025 08:32:29 -0800 (PST)
 From: Yeoreum Yun <yeoreum.yun@arm.com>
 To: catalin.marinas@arm.com,
 	will@kernel.org,
@@ -56,10 +57,12 @@ Cc: linux-arm-kernel@lists.infradead.org,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [PATCH v10 0/9] support FEAT_LSUI
-Date: Mon,  3 Nov 2025 16:32:15 +0000
-Message-Id: <20251103163224.818353-1-yeoreum.yun@arm.com>
+Subject: [PATCH v10 1/9] arm64: cpufeature: add FEAT_LSUI
+Date: Mon,  3 Nov 2025 16:32:16 +0000
+Message-Id: <20251103163224.818353-2-yeoreum.yun@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20251103163224.818353-1-yeoreum.yun@arm.com>
+References: <20251103163224.818353-1-yeoreum.yun@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,106 +71,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since Armv9.6, FEAT_LSUI supplies the load/store instructions for
-previleged level to access to access user memory without clearing
-PSTATE.PAN bit.
+Since Armv9.6, FEAT_LSUI provides load/store instructions
+that allow privileged code to access user memory without
+clearing the PSTATE.PAN bit.
 
-This patchset support FEAT_LSUI and applies in futex atomic operation
-and user_swpX emulation where can replace from ldxr/st{l}xr
-pair implmentation with clearing PSTATE.PAN bit to correspondant
-load/store unprevileged atomic operation without clearing PSTATE.PAN bit.
+Add CPU feature detection for FEAT_LSUI.
 
+Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+---
+ arch/arm64/kernel/cpufeature.c | 10 ++++++++++
+ arch/arm64/tools/cpucaps       |  1 +
+ 2 files changed, 11 insertions(+)
 
-Patch Sequences
-================
-
-Patch #1 adds cpufeature for FEAT_LSUI
-
-Patch #2-#3 expose FEAT_LSUI to guest
-
-Patch #4 adds Kconfig for FEAT_LSUI
-
-Patch #5-#6 support futex atomic-op with FEAT_LSUI
-
-Patch #7-#9 support user_swpX emulation with FEAT_LSUI
-
-
-Patch History
-==============
-from v9 to v10:
-  - apply FEAT_LSUI to user_swpX emulation.
-  - add test coverage for LSUI bit in ID_AA64ISAR3_EL1
-  - rebase to v6.18-rc4
-  - https://lore.kernel.org/all/20250922102244.2068414-1-yeoreum.yun@arm.com/
-
-from v8 to v9:
-  - refotoring __lsui_cmpxchg64()
-  - rebase to v6.17-rc7
-  - https://lore.kernel.org/all/20250917110838.917281-1-yeoreum.yun@arm.com/
-
-from v7 to v8:
-  - implements futex_atomic_eor() and futex_atomic_cmpxchg() with casalt
-    with C helper.
-  - Drop the small optimisation on ll/sc futex_atomic_set operation.
-  - modify some commit message.
-  - https://lore.kernel.org/all/20250816151929.197589-1-yeoreum.yun@arm.com/
-
-from v6 to v7:
-  - wrap FEAT_LSUI with CONFIG_AS_HAS_LSUI in cpufeature
-  - remove unnecessary addition of indentation.
-  - remove unnecessary mte_tco_enable()/disable() on LSUI operation.
-  - https://lore.kernel.org/all/20250811163635.1562145-1-yeoreum.yun@arm.com/
-
-from v5 to v6:
-  - rebase to v6.17-rc1
-  - https://lore.kernel.org/all/20250722121956.1509403-1-yeoreum.yun@arm.com/
-
-from v4 to v5:
-  - remove futex_ll_sc.h futext_lsui and lsui.h and move them to futex.h
-  - reorganize the patches.
-  - https://lore.kernel.org/all/20250721083618.2743569-1-yeoreum.yun@arm.com/
-
-from v3 to v4:
-  - rebase to v6.16-rc7
-  - modify some patch's title.
-  - https://lore.kernel.org/all/20250617183635.1266015-1-yeoreum.yun@arm.com/
-
-from v2 to v3:
-  - expose FEAT_LUSI to guest
-  - add help section for LUSI Kconfig
-  - https://lore.kernel.org/all/20250611151154.46362-1-yeoreum.yun@arm.com/
-
-from v1 to v2:
-  - remove empty v9.6 menu entry
-  - locate HAS_LUSI in cpucaps in order
-  - https://lore.kernel.org/all/20250611104916.10636-1-yeoreum.yun@arm.com/
-
-
-Yeoreum Yun (9):
-  arm64: cpufeature: add FEAT_LSUI
-  KVM: arm64: expose FEAT_LSUI to guest
-  KVM: arm64: kselftest: set_id_regs: add test for FEAT_LSUI
-  arm64: Kconfig: Detect toolchain support for LSUI
-  arm64: futex: refactor futex atomic operation
-  arm64: futex: support futex with FEAT_LSUI
-  arm64: separate common LSUI definitions into lsui.h
-  arm64: armv8_deprecated: convert user_swpX to inline function
-  arm64: armv8_deprecated: apply FEAT_LSUI for swpX emulation.
-
- arch/arm64/Kconfig                            |   5 +
- arch/arm64/include/asm/futex.h                | 291 +++++++++++++++---
- arch/arm64/include/asm/lsui.h                 |  25 ++
- arch/arm64/kernel/armv8_deprecated.c          |  86 +++++-
- arch/arm64/kernel/cpufeature.c                |  10 +
- arch/arm64/kvm/sys_regs.c                     |   3 +-
- arch/arm64/tools/cpucaps                      |   1 +
- .../testing/selftests/kvm/arm64/set_id_regs.c |   1 +
- 8 files changed, 360 insertions(+), 62 deletions(-)
- create mode 100644 arch/arm64/include/asm/lsui.h
-
-
-base-commit: 6146a0f1dfae5d37442a9ddcba012add260bceb0
---
+diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
+index 5ed401ff79e3..fc014a1fb0e0 100644
+--- a/arch/arm64/kernel/cpufeature.c
++++ b/arch/arm64/kernel/cpufeature.c
+@@ -279,6 +279,7 @@ static const struct arm64_ftr_bits ftr_id_aa64isar2[] = {
+ 
+ static const struct arm64_ftr_bits ftr_id_aa64isar3[] = {
+ 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR3_EL1_FPRCVT_SHIFT, 4, 0),
++	ARM64_FTR_BITS(FTR_HIDDEN, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR3_EL1_LSUI_SHIFT, 4, ID_AA64ISAR3_EL1_LSUI_NI),
+ 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR3_EL1_LSFE_SHIFT, 4, 0),
+ 	ARM64_FTR_BITS(FTR_VISIBLE, FTR_NONSTRICT, FTR_LOWER_SAFE, ID_AA64ISAR3_EL1_FAMINMAX_SHIFT, 4, 0),
+ 	ARM64_FTR_END,
+@@ -3088,6 +3089,15 @@ static const struct arm64_cpu_capabilities arm64_features[] = {
+ 		.capability = ARM64_HAS_GICV5_LEGACY,
+ 		.matches = test_has_gicv5_legacy,
+ 	},
++#ifdef CONFIG_AS_HAS_LSUI
++	{
++		.desc = "Unprivileged Load Store Instructions (LSUI)",
++		.capability = ARM64_HAS_LSUI,
++		.type = ARM64_CPUCAP_SYSTEM_FEATURE,
++		.matches = has_cpuid_feature,
++		ARM64_CPUID_FIELDS(ID_AA64ISAR3_EL1, LSUI, IMP)
++	},
++#endif
+ 	{},
+ };
+ 
+diff --git a/arch/arm64/tools/cpucaps b/arch/arm64/tools/cpucaps
+index 1b32c1232d28..9a15784829f8 100644
+--- a/arch/arm64/tools/cpucaps
++++ b/arch/arm64/tools/cpucaps
+@@ -45,6 +45,7 @@ HAS_HCX
+ HAS_LDAPR
+ HAS_LPA2
+ HAS_LSE_ATOMICS
++HAS_LSUI
+ HAS_MOPS
+ HAS_NESTED_VIRT
+ HAS_BBML2_NOABORT
+-- 
 LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
 
 
