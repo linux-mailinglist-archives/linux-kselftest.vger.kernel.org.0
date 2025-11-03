@@ -1,138 +1,146 @@
-Return-Path: <linux-kselftest+bounces-44639-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2013BC2AF0A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 11:13:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C7C8C2B170
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 11:36:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC9FB1890D56
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 10:13:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D4653A7A00
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 10:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FC62FD1B1;
-	Mon,  3 Nov 2025 10:13:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B44502FF144;
+	Mon,  3 Nov 2025 10:35:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="kqMjXicZ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="w3onH9kl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bAh+hzmA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2EF2FCC1A;
-	Mon,  3 Nov 2025 10:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5262FD7BC
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Nov 2025 10:35:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762164795; cv=none; b=N5rGdhY8ujv1F2a0GRwRJwKiCjN3sjDNqcKXGaP8Sr95/5FxbEquoblmZYUeYEQZ39hfpD7XLg383N2JSbRn/AlMR9+/FJ3hlfBxc1K64j1EQ0hvpHRiE9FK+IFYYI4NnUkAdtgtctBPCjNpEPOrWxtmvxUUd/JQgl4BcO0x8Xk=
+	t=1762166142; cv=none; b=IUvLIk32eX9BxZHg0bw2rkJnFLmFycCle3CcBFid0k4xqGM+OUM02vbYeMIxWyaDBu9xwMY5Y8evMxNiL35f+T9Ebyz/0mWULJwkk/tXqqU/CctrrIjoCMIXc81V91RjvzXM9+VPqQcoP7kAdItaHYxW+GUfgVScTnkgSNIkWuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762164795; c=relaxed/simple;
-	bh=bpf2t2heDUODgJfZj+NZfgZ/cxrsVFEpR0CWsncHMTE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tcn6M/P5FBZhHQZyGrG3PVmM8wSMSC4eByxFwfz7JPVPRBUfx5MYAsFWtIqVlWB+D7MxC49aG1ZlOhnx37hGzn/on7UyHOQQK/sN+j+49vLEIKvNINyW4wW/swefA93mGtjVRNVSOiqQuDOMRUpOPh7QKpQPX59Seo5yyo59XeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=kqMjXicZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=w3onH9kl; arc=none smtp.client-ip=103.168.172.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 039381400073;
-	Mon,  3 Nov 2025 05:13:11 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Mon, 03 Nov 2025 05:13:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1762164790; x=
-	1762251190; bh=Ph7fd5U8yh1YN0vWovDGVRktrZteGa4WOq+oJ560qtY=; b=k
-	qMjXicZ457j5uRPF1+RRwxmdfk4N3W4pQ2okwpp96yU6dbVl95mdHOfGvt4a56K0
-	t64mpHoxKOFNcigoqyU4gGfzD3NRtYXFEDvSuLbcumRtpFIWmVxo6pblAJii6DpF
-	fZ5TnBwlIuMrNKxmlYj4V14eqdNjOFjL6asvjisHzsF4qHbkKrwvdy1hu7hxApvN
-	hOxjOO5mUjWL623EESMBfzUcOyR5AzP2cg32xLG/A3OVCkzGjbUWl32Gsz+wicHQ
-	XROZvLPaUvxzrqLkJO+dnMwAxQPtYgNCl/fKhRjeqCDZZx1QFoaXbV2vtH1XWFv7
-	QHE4E8CxAjZPjQmYCDI0Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1762164790; x=1762251190; bh=Ph7fd5U8yh1YN0vWovDGVRktrZteGa4WOq+
-	oJ560qtY=; b=w3onH9klcmbuEvZKBB7ydPw0bZUpTTIFVxRmmrJ1HZXvl3kDLjs
-	HpcHF/tKPoOCjvB8edxd+hkurQIZEZb0+ybnMMilbwEStT0ye7ZhWS/qEGMcU9iF
-	pWxCrQKp9MZy4uYDU+SHRyURaPy9q6H7hTFStzvWr8S/K0wzz11iqPgV7Hs+4T2H
-	PPisdcHS9SZtOMClFFHBVMDV9Fp9yAQlfBw+MfBRgRJcnpq8Fzx/2xXDVvvyBnxp
-	UKPM4TuTtyyee6WvP9ycvnX5JbJCCgXuLf7mtKcVH2wC2WZK9loD7TB3yGb8ea1A
-	qtos4/lNPkWEJ/SOPYX3og0qu+35SUFUrnA==
-X-ME-Sender: <xms:NoAIac9egyq_2UerKk1EVNRAWOJon-6HjdoIDZp1y_vQw5N5X4hyGg>
-    <xme:NoAIaRakmxeIX0za0LepgOZK6GSjAWghKp2vgMqJSKszh-zp6KExNgS3bbecK3oao
-    zQsQ_HiixCfZuyivKL4IbBrwW6lCjtxBVEjLxnY4RPmpWZITiMVKQA>
-X-ME-Received: <xmr:NoAIaV6E5rQoYvzwtc1e2vtdNLlOJebG1tSJBEUxMM_MADbkMjG1LDwu43Iy>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddujeejkeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
-    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopedufedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopeifrghnghhlihgrnhhgjeegsehhuhgrfigvihdrtghomhdprhgtphhtthho
-    pegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopegurghvvghmsegurghvvghmlh
-    hofhhtrdhnvghtpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdp
-    rhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtohepshhhuh
-    grhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhhorhhmsheskhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:NoAIaWnDgEn7KlPY5pLTfNlxQp_IH6paLXIvRNzUsiB_tqBqZUTSEA>
-    <xmx:NoAIaVHXpvWdSicvV2cvxJKdoqJCPi9khXfOru3g8f5aeAxXT081wA>
-    <xmx:NoAIafi6qGpwZzixLN4SNLqjQy2llzltK8_Rm9P1sqiPM9GiSutJJw>
-    <xmx:NoAIaajz3I0AR8aypVohRjf0yWqxfFdYCB96M3dAOP56CaZSrqijsg>
-    <xmx:NoAIaTTyHkciMSbClL_WaEmlA6rKzK686BOB21MfnBJPHLVH4Q2EqGXZ>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 3 Nov 2025 05:13:09 -0500 (EST)
-Date: Mon, 3 Nov 2025 11:13:08 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Wang Liang <wangliang74@huawei.com>, andrew@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	shuah@kernel.org, horms@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	yuehaibing@huawei.com, zhangchangzhong@huawei.com
-Subject: Re: [PATCH net] selftests: netdevsim: Fix ethtool-features.sh fail
-Message-ID: <aQiANPQU9ZEa0zCo@krikkit>
-References: <20251030032203.442961-1-wangliang74@huawei.com>
- <aQPxN5lQui5j8nK8@krikkit>
- <20251030170217.43e544ad@kernel.org>
+	s=arc-20240116; t=1762166142; c=relaxed/simple;
+	bh=8+P2mAiDVHSJp2el3mv9Dg4i98lSGdENhVxS8H1dViM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=F+0MPMIImx/qFNdAKzFhLQwXrWBj9VTSU+4WbCG78+HRvdZmwSk+KyyTjiZw65sWAsMpUfABhAC70GLPxH1WOlbotBzwmSf82CTbmQbMjYEOeV6E2PkhYKTbvp5Qi80npxdz+S6Te9onZbB3SQ9HTwh8ryEOVpjrFIaAiLL5P2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bAh+hzmA; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4770eded72cso15287335e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Nov 2025 02:35:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762166139; x=1762770939; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HIh+p2hn8CWwp1yzNpGitqYXRaRZUOuOWC3H0V0dQOo=;
+        b=bAh+hzmAkGwoEFOBG+v9yKOCVi3zavh23jHO+A0Bi5r/D7LMYkktgkY2Y2RyBLUgA0
+         xSGwERHygk1BrxIVKdOeDyF09DXGFkGXdgy+W2/hhV8vpJ+OpOzD6FgY6AQx/3lWYn12
+         utCNcPpSFHFdbgfBPUbIBF/QetYRgHSSnq9sO/i8cyMIbFCaAtzB+oxx/Oy2PhNQrV1N
+         DqRcNqisvLNoaNY2R10KbFb1tIauYOly1ThbyrmS9h13jYbcufakyKK2xoa+D84X1dHb
+         cpPHiCP+l7K6+t1vuz/gY20iCjSB0T/BJGC1M+3nROAW8WbSKCwuXs4Qg323yAKF/kYv
+         jsUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762166139; x=1762770939;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HIh+p2hn8CWwp1yzNpGitqYXRaRZUOuOWC3H0V0dQOo=;
+        b=xTz9siXLp9BcteooNriuFIwuOA+OwoOcoctjm4a8PBA6JHKJ5wy0CUdg9EH/hZtJW3
+         ZO6sVQV0kMy0AScnNKWb/H5sKKnQ67gco/73lNT+JCU2OagT1R/IBm9doRpxdg1HCcsv
+         byjBop03li05tnLHQYO87+jMQnnjvX/Qt/URBgJfkwOh40ttjP7YQm5vNe0iUYj3X3Rn
+         QU+XN9CX2pOPwI29id9q9jf91MdoTHztr6GFOkMQ0ud2kJlBs5S4pzhWEIpjNZxKCg+E
+         MqKhwCP/Xi76lRC6MNZyCgzh5ihMGhslJ8Zqvp4UcKfqe5RM5TQ4dDD5lTpnXOwdcyBc
+         rZ7A==
+X-Forwarded-Encrypted: i=1; AJvYcCWtRlYjtlh0jzwdIFlBsW1/c+oe7WtyZFVbsfplKiQdN41FQWpcwKCrY1Ivr8VjKll1YddUVYBHG9ojbw8/+q4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/aRSyG/IaWSzeXRDg69+7Gf6mnns9DLzL50yvXvf94SVUFX+6
+	3siWxQTPzi6IWs/nKUXj8GYGQXVelJWDI+uDwxmvd9XRNMhoTvGkn2aQwvhKX9duVN4vbXlb1pr
+	D73ISjR3HF8sUFg==
+X-Google-Smtp-Source: AGHT+IGsdQiHDuxdy1N3E7iEx3V3SXYmD4K71IvzTwmgh+q16FRulMDnGB/75cnoaLGyb09UfRoHjiberggitA==
+X-Received: from wmco10.prod.google.com ([2002:a05:600c:a30a:b0:477:cf9:f4a3])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:699a:b0:477:19af:31c2 with SMTP id 5b1f17b1804b1-477300d96c2mr124516735e9.9.1762166139059;
+ Mon, 03 Nov 2025 02:35:39 -0800 (PST)
+Date: Mon, 03 Nov 2025 10:35:38 +0000
+In-Reply-To: <aQXVNuBwEIRBtOc0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251030170217.43e544ad@kernel.org>
+Mime-Version: 1.0
+References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
+ <20250924152214.7292-1-roypat@amazon.co.uk> <20250924152214.7292-2-roypat@amazon.co.uk>
+ <DDWOP8GKHESP.2EOY2HGM9RXHU@google.com> <aQXVNuBwEIRBtOc0@kernel.org>
+X-Mailer: aerc 0.21.0
+Message-ID: <DDYZRG8A99D1.2MYZVGBKJNHJW@google.com>
+Subject: Re: [PATCH v7 05/12] KVM: guest_memfd: Add flag to remove from direct map
+From: Brendan Jackman <jackmanb@google.com>
+To: Mike Rapoport <rppt@kernel.org>, Brendan Jackman <jackmanb@google.com>
+Cc: "Roy, Patrick" <roypat@amazon.co.uk>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
+	"corbet@lwn.net" <corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, 
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>, "joey.gouly@arm.com" <joey.gouly@arm.com>, 
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com" <yuzenghui@huawei.com>, 
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>, 
+	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com" <mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>, 
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org" <willy@infradead.org>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, "david@redhat.com" <david@redhat.com>, 
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, 
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>, 
+	"surenb@google.com" <surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "song@kernel.org" <song@kernel.org>, 
+	"jolsa@kernel.org" <jolsa@kernel.org>, "ast@kernel.org" <ast@kernel.org>, 
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org" <andrii@kernel.org>, 
+	"martin.lau@linux.dev" <martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>, 
+	"yonghong.song@linux.dev" <yonghong.song@linux.dev>, 
+	"john.fastabend@gmail.com" <john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>, 
+	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>, "jgg@ziepe.ca" <jgg@ziepe.ca>, 
+	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>, 
+	"jannh@google.com" <jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>, 
+	"shuah@kernel.org" <shuah@kernel.org>, "seanjc@google.com" <seanjc@google.com>, 
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Cali, Marco" <xmarcalx@amazon.co.uk>, 
+	"Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "Thomson, Jack" <jackabt@amazon.co.uk>, 
+	"derekmn@amazon.co.uk" <derekmn@amazon.co.uk>, "tabba@google.com" <tabba@google.com>, 
+	"ackerleytng@google.com" <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-2025-10-30, 17:02:17 -0700, Jakub Kicinski wrote:
-> On Fri, 31 Oct 2025 00:13:59 +0100 Sabrina Dubroca wrote:
-> > >  set -o pipefail
-> > >  
-> > > +if ! ethtool --json -k $NSIM_NETDEV > /dev/null 2>&1; then  
-> > 
-> > I guess it's improving the situation, but I've got a system with an
-> > ethtool that accepts the --json argument, but silently ignores it for
-> >  -k (ie `ethtool --json -k $DEV` succeeds but doesn't produce a json
-> > output), which will still cause the test to fail later.
-> 
-> And --json was added to -k in Jan 2022, that's pretty long ago.
-> I'm not sure we need this aspect of the patch at all..
+On Sat Nov 1, 2025 at 9:39 AM UTC, Mike Rapoport wrote:
+> On Fri, Oct 31, 2025 at 05:30:12PM +0000, Brendan Jackman wrote:
+>> On Wed Sep 24, 2025 at 3:22 PM UTC, Patrick Roy wrote:
+>> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+>> > index 1d0585616aa3..73a15cade54a 100644
+>> > --- a/include/linux/kvm_host.h
+>> > +++ b/include/linux/kvm_host.h
+>> > @@ -731,6 +731,12 @@ static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+>> >  bool kvm_arch_supports_gmem_mmap(struct kvm *kvm);
+>> >  #endif
+>> >  
+>> > +#ifdef CONFIG_KVM_GUEST_MEMFD
+>> > +#ifndef kvm_arch_gmem_supports_no_direct_map
+>> > +#define kvm_arch_gmem_supports_no_direct_map can_set_direct_map
+>> > +#endif
+>> > +#endif /* CONFIG_KVM_GUEST_MEMFD */
+>> 
+>> The test robot seems happy so I think I'm probably mistaken here, but
+>> AFAICS can_set_direct_map only exists when ARCH_HAS_SET_DIRECT_MAP,
+>> which powerpc doesn't set.
+>
+> We have stubs returning 0 for architectures that don't have
+> ARCH_HAS_SET_DIRECT_MAP.
 
-Ok.  Then maybe a silly idea: for the tests that currently have some
-form of "$TOOL is too old" check, do we want to remove those after a
-while? If so, how long after the feature was introduced in $TOOL?
+I can't see any such stub for can_set_direct_map() specifically?
 
-Or should we leave them, but not accept new checks to exclude
-really-old versions of tools?  Do we need to document the cut-off ("we
-don't support tool versions older than 2 years for networking
-selftests" [or similar]) somewhere in Documentation/ ?
-
--- 
-Sabrina
+(But again, the bot seems happy, so I still suspect I'm wrong somehow or
+other).
 
