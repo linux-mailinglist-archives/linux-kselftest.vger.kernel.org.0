@@ -1,123 +1,170 @@
-Return-Path: <linux-kselftest+bounces-44679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32DEFC2E14B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 22:08:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4E5DC2E29B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 22:32:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B3CB3B98B7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 21:08:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A50C3A15E9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 21:32:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C762C21DE;
-	Mon,  3 Nov 2025 21:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA38D2C0F62;
+	Mon,  3 Nov 2025 21:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eCGCodej"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OC6zuqrU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BF42C21CA
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Nov 2025 21:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 857711917FB
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Nov 2025 21:32:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762204093; cv=none; b=CKhVN/HiQEruexkEvrwMVA+/TYmKj6BCh3yW/ZjmnSCqjSHzroVtDQJ9U4EEEslYtjVdG5lca2z/b4bTUOUPoAG67jXnPi25/Xp4Oyxd1SuoNAAmUagNQxO6IXht3zowPHeWv0ZMcxcXCDviSKkbtNnSE0fneBpxAYlWwJoBwtU=
+	t=1762205524; cv=none; b=HpZY665A13Lq+thxusqRU4CpbO57MmSTppb4CgYiMgtPwnjYAyJqI/jBZq6BbuiSvOn5K5PqOuVevihWWgmt6MTARwDdvhMJrA4xr8xfoz3vW57BuUVHO0FgQDb7Fa7O241kmia9L7uu9lkEWAOM/DPdvsLX3I904AVQtopZ8gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762204093; c=relaxed/simple;
-	bh=lqImQkBIX2RKNa9y7sFTmTERfIUIhbfGh0MuI1pu61o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Png0wwKMDx3jR20Q3LOh6VtR7zWow0vDs+H1oJ62XzNiCHn4XGSczYidVx0De811LnxZ9VkbsWkl94bSWbXGk52poSfd1Cak3bR3fc4WKrz50yQtN7bMZ/DlU/Rc/MgqX854hqYcMFzMw3ghM9elaiDGMhgCPVMN3+26JYhwN+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eCGCodej; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b471737e673so7914381a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Nov 2025 13:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762204091; x=1762808891; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l1jgaIFuU1qR4r59NFbF5NuManKscXsOZ/dpS/a+5oA=;
-        b=eCGCodejYxIbRi6xz1jEs9HBMB7LwkeyOzfAzlVXxjTM1twbMmA1yFNpWKFJaH5PDi
-         022sg5dtHoXgDiwJ4GS7iXHb8nHS2G+867udMtu7SrpOtECOzrkQLzZwM/YLP6zcwCHj
-         gldTYTQ6OT+DMnBpRRloew+OUe+2rKQGOi8PmCmq43YOyGzfObvz+t2YSer6GAMfl4wJ
-         4Pnqf5OPPCNl2Ida9wmsSvT9JutQcI83vYPFB5gbjlj/UC+X4LRwWiTpOMpBhQsvy/tS
-         rMtY4caX/ZYkyjy3Z4c5Fu1u01+Tq8rqxJW7CSoK6B3ErZ8bza16gs3IeOQGDmFcmlcx
-         VEtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762204091; x=1762808891;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l1jgaIFuU1qR4r59NFbF5NuManKscXsOZ/dpS/a+5oA=;
-        b=VM0smhWu64ObGdB5mgN8F2Y2ACN4uJ+h7+1RNApWEVybFrVwuzbw+gXBY6FQdzeN1P
-         i/Wx41VpPjqCWR6WDObsd7RKMSt04jdSlUV6PD32vo8eesGoCEwGnD1lY23IbykXNTVN
-         D/Pj9dznuQ7sYYgjbDhpS1O10/ZmfHQY6gkLsNk7OqmE6FRj9/DYsvUjDDhjIElnLMdF
-         seMc3f0VscU1BMlb2cb3ISpEHxcBtg6S0MqdG7DMKpjuC77CMUTYcriB+i+Lj2nSThVf
-         2wax/Bo9Mjjl5xJHMKP6fWxDy07setNQIpaGkraVZ5665rQ+EC7LSDhq9ALtCY1TXTFn
-         YO8A==
-X-Forwarded-Encrypted: i=1; AJvYcCWnAx08tBU6HEWMyyg/6iXLeRa64m1Yekpen/E2M3JDK9vvXltc0WefG5YVUWrBteOMXtGBaQ6SwLzwqUtVDBs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVkzw5CO15oazcCkaa+RBl+CgzV28g+rsXQ9/ayr2zSfIGGJXs
-	g9WXEGHYqANbnKLsyiaZQJeJ3jYStaPNTImlb9i7lRaCCpfieS4V/fwdEwrCzyruH6yxFqOw8G2
-	7FchlwQ==
-X-Google-Smtp-Source: AGHT+IFmLCYVwXdeteTbsVspNCQQNa07ZbCjVAqI5KUDK7A2fmNFJ3jDRmAVUCA7gp+ckzqh33TY6g3AxJw=
-X-Received: from plbmn15.prod.google.com ([2002:a17:903:a4f:b0:261:3bf9:662a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c947:b0:295:1e50:e7cb
- with SMTP id d9443c01a7336-2951e50eb4amr164854455ad.23.1762204090972; Mon, 03
- Nov 2025 13:08:10 -0800 (PST)
-Date: Mon, 3 Nov 2025 13:08:06 -0800
-In-Reply-To: <c52db7bf-494f-49a8-9829-3805db6dda7c@gmail.com>
+	s=arc-20240116; t=1762205524; c=relaxed/simple;
+	bh=y1bHnHxZ8o5Dd1cQWM8ILwcypoh8chi0Suf/1YawrUg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DHspghsupsc/Usf7p2063bmrAKsTEWjy1LLSS8iSXfhh5ryHNdZdAtAfsozQDrUsxNXOOGAPV93IIhRvVwWn3ZGb37O3PYcy5cJtonqKcCjihBMwUNBhcV44hrz0+PRgVqDrY+pWr6KQyqJB5bj0PIUPYaHDPqF48dKcVusHm/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OC6zuqrU; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <4cbabdf1-af2c-490a-a41a-b40c1539c1cb@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1762205519;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o0eVkO0xoYEQJcHTXL1+aFZNj8ZhyzfurWGGbsfOnHE=;
+	b=OC6zuqrUjjt/faS2IarINiMNZwHFE+oSeRGqYF3VFk0SSjrg5P5VbG/KvD7VF71Sdjkn6N
+	7IHvToe+S+hw0arru9lL91/xe/PKkoWgsfknfoTnFI1ZsWQAsZmWgkonqw52VxBkxXQBq8
+	00uPd1bkICk1tST5GGxSOdz3GCZkUVM=
+Date: Mon, 3 Nov 2025 13:31:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251013151502.6679-1-jackabt.amazon@gmail.com>
- <20251013151502.6679-3-jackabt.amazon@gmail.com> <aPpi1c-8EpWuo87B@google.com>
- <c52db7bf-494f-49a8-9829-3805db6dda7c@gmail.com>
-Message-ID: <aQkZtjLt6lIULffA@google.com>
-Subject: Re: [PATCH v2 2/4] KVM: selftests: Fix unaligned mmap allocations
-From: Sean Christopherson <seanjc@google.com>
-To: Jack Thomson <jackabt.amazon@gmail.com>
-Cc: maz@kernel.org, oliver.upton@linux.dev, pbonzini@redhat.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	isaku.yamahata@intel.com, roypat@amazon.co.uk, kalyazin@amazon.co.uk, 
-	jackabt@amazon.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: use start_server_str rather
+ than start_reuseport_server in tc_tunnel
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>
+References: <20251031-tc_tunnel_improv-v1-0-0ffe44d27eda@bootlin.com>
+ <20251031-tc_tunnel_improv-v1-3-0ffe44d27eda@bootlin.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20251031-tc_tunnel_improv-v1-3-0ffe44d27eda@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Oct 28, 2025, Jack Thomson wrote:
-> 
-> 
-> On 23/10/2025 6:16 pm, Sean Christopherson wrote:
-> > On Mon, Oct 13, 2025, Jack Thomson wrote:
-> > > From: Jack Thomson <jackabt@amazon.com>
-> > > 
-> > > When creating a VM using mmap with huge pages, and the memory amount does
-> > > not align with the underlying page size. The stored mmap_size value does
-> > > not account for the fact that mmap will automatically align the length
-> > > to a multiple of the underlying page size. During the teardown of the
-> > > test, munmap is used. However, munmap requires the length to be a
-> > > multiple of the underlying page size.
-> > 
-> > What happens when selftests use the wrong map_size?  E.g. is munmap() silently
-> > failing?  If so, then I should probably take this particular patch through
-> > kvm-x86/gmem, otherwise it means we'll start getting asserts due to:
-> > 
-> >    3223560c93eb ("KVM: selftests: Define wrappers for common syscalls to assert success")
-> > 
-> > If munmap() isn't failing, then that begs the question of what this patch is
-> > actually doing :-)
-> > 
-> 
-> Hi Sean, sorry I completely missed your reply.
-> 
-> Yeah currently with a misaligned map_size it causes munmap() to fail, I
-> noticed when tested with different backings.
 
-Exactly which tests fail?  I ask because I'm not sure we want to fix this by
-having vm_mem_add() paper over test issues (I vaguely recall looking at this in
-the past, but I can't find or recall the details).
+
+On 10/31/25 2:01 AM, Alexis Lothoré (eBPF Foundation) wrote:
+> test_tc_tunnel currently uses start_reuseport_server because it needs to
+> frequently start and stop the server, so we need SO_REUSEPORT to avoid
+> getting errors on server restart due to the socket being in TIME_WAIT
+> state. But the test is only using one server at a time, so it is a bit
+> confusing to use this API.
+> 
+> Replace start_reuseport with start_sever_str, and provided the relevant
+> callback to set SO_REUSEPORT.
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+>   .../selftests/bpf/prog_tests/test_tc_tunnel.c      | 24 +++++++++++++++-------
+>   1 file changed, 17 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> index deea90aaefad..8e3fe6dc6221 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> @@ -69,7 +69,7 @@ struct subtest_cfg {
+>   	int client_egress_prog_fd;
+>   	int server_ingress_prog_fd;
+>   	char extra_decap_mod_args[TUNNEL_ARGS_MAX_LEN];
+> -	int *server_fd;
+> +	int server_fd;
+>   };
+>   
+>   struct connection {
+> @@ -131,20 +131,30 @@ static void set_subtest_addresses(struct subtest_cfg *cfg)
+>   	}
+>   }
+>   
+> +static int reuseport_cb(int fd, void *opts)
+> +{
+> +	int one = 1;
+> +
+> +	return setsockopt(fd, SOL_SOCKET, SO_REUSEPORT, &one, sizeof(one));
+> +}
+> +
+>   static int run_server(struct subtest_cfg *cfg)
+>   {
+>   	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
+> +	struct network_helper_opts opts = {
+> +		.timeout_ms = TIMEOUT_MS,
+> +		.post_socket_cb	= reuseport_cb,
+> +	};
+>   	struct nstoken *nstoken;
+>   
+>   	nstoken = open_netns(SERVER_NS);
+>   	if (!ASSERT_OK_PTR(nstoken, "open server ns"))
+>   		return -1;
+>   
+> -	cfg->server_fd = start_reuseport_server(family, SOCK_STREAM,
+> -						cfg->server_addr, TEST_PORT,
+> -						TIMEOUT_MS, 1);
+> +	cfg->server_fd = start_server_str(family, SOCK_STREAM, cfg->server_addr,
+> +					  TEST_PORT, &opts);
+
+I meant to directly enable SO_REUSE"ADDR" in the start_server_addr()
+instead of each individual test using SO_REUSEPORT. I think all tcp server
+in test_progs should have it enabled. Something like this:
+
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index 8bb09167399a..e8b33d902bbc 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -97,7 +97,7 @@ int settimeo(int fd, int timeout_ms)
+  int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
+  		      const struct network_helper_opts *opts)
+  {
+-	int fd;
++	int fd, on = 1;
+  
+  	if (!opts)
+  		opts = &default_opts;
+@@ -111,6 +111,12 @@ int start_server_addr(int type, const struct sockaddr_storage *addr, socklen_t a
+  	if (settimeo(fd, opts->timeout_ms))
+  		goto error_close;
+  
++	if (type == SOCK_STREAM &&
++	    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &on, sizeof(on))) {
++		log_err("Failed to enable SO_REUSEADDR");
++		goto error_close;
++	}
++
+  	if (opts->post_socket_cb &&
+  	    opts->post_socket_cb(fd, opts->cb_opts)) {
+  		log_err("Failed to call post_socket_cb");
+
+
+I have applied patch 1 and 2.
 
