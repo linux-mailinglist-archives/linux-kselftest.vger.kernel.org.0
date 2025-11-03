@@ -1,105 +1,105 @@
-Return-Path: <linux-kselftest+bounces-44671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE25BC2D683
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 18:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 864B0C2D6AE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 18:17:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 679ED3AD139
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 17:08:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06D933A010C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 17:10:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F7A3191D6;
-	Mon,  3 Nov 2025 17:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QMW8zha/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B484E319605;
+	Mon,  3 Nov 2025 17:10:09 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AC622ACEB;
-	Mon,  3 Nov 2025 17:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E833195EC;
+	Mon,  3 Nov 2025 17:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762189693; cv=none; b=jBo2jLFwf7HEwEjY4PlrMunKVZyshGVT9YZHDMViHiuqGJraDzUytjBKEo7LwrMmcR2FOr2Yl2PIiTkTpUqt4foPZWNMFf8crVjGl180PndfjJMwytXZXAisHQ6YP+I11zhRrd+rZWxV7yONOnmVRvvtcsR6/QYrkrc69ncp440=
+	t=1762189809; cv=none; b=iv97ku0dqWpCRJCSqWncjGf6jmp7QE0oEjH1c0PHB5eQwhyUrauKgM5W1s9oUcthG6nV23fm+1loT9Mvwinft8RoSFhlBHa8XePqS6Oxw7HB27YYeSbr4sTfa7Z86CHnsGbB7biQcXA2UJE8bmh73Y09w2+FMTmU9GUeP4T0FaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762189693; c=relaxed/simple;
-	bh=R4htJzSMPqKUheWFqD30DrfQ176o4Yn8IJrGpqBlr/E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qUbZsHELn12LPa9hiMKGzdEOi/36HSqtc4jA/quePOfd/PLZWrUB6vkrZXsxlcENDvnScUNCHWHOvbHhJPl2d83BKN5TbUacWpIVzm8ucfHouqdyvGkMFt4vhqh7OBzAb/dTuzK1s1KN7zXxp+8RAGkdkokimflFyRW9ptV+ycA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QMW8zha/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB9BC4CEE7;
-	Mon,  3 Nov 2025 17:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762189692;
-	bh=R4htJzSMPqKUheWFqD30DrfQ176o4Yn8IJrGpqBlr/E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QMW8zha/pnUwa3tfZUaFK2bT4lDcoBh/DY32ySXAvx11GfxnxoQT76C+mWa83vMqn
-	 5dgf8xFQbeRRXfbsboE5M/KFKQz47hbPo+EnqmXiHpYBYZT/iaCMtvy2d2ha8kC2jD
-	 kgCM8jiflgzODz8WMWnAkyrMK8wZZiWSJ/y3RPWdIflBININGH3XfgJt3QlL3aOh04
-	 VQeOoh5daKWcZcWfgeCKy1wVXRC06BIkFwwa+6zb6ouw5miTUoZ6wRq1INFRkKwBf7
-	 9vBqWHAjIFRuHZBjJkRpVvwlCaqTdHMs8ANOEvnniMBCsaiTXLvOqKY52FCYC86mjb
-	 KIPEY48x9nSeg==
-Message-ID: <28a5b824-f415-461c-af88-cb474ed37df1@kernel.org>
-Date: Mon, 3 Nov 2025 18:08:01 +0100
+	s=arc-20240116; t=1762189809; c=relaxed/simple;
+	bh=LJh0yJmZew+j33AAQcg4a1FkrctIZBGiG0dRH5ntOVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=u73wIIP57NzDdw162XoWfqtlNRMQCHDOHu1lWV4BfI5X6SZZu6w7SQ4YFoi0JKzWT/KdOq6qHHivxInWTNrnQof/0cyKAA0OIER2Qz+BV0f2i3MlKSqcWd5jUM+V/sH2nqIJCuszXVKeGsusU2qTnelfqDuR1l/PeUdhoxK2ehI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 7C65487A07;
+	Mon,  3 Nov 2025 17:10:03 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id 8952F80009;
+	Mon,  3 Nov 2025 17:10:01 +0000 (UTC)
+Date: Mon, 3 Nov 2025 12:10:05 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org,
+ Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Linus Torvalds
+ <torvalds@linux-foundation.org>
+Subject: Re: [PATCH] selftests/tracing: Add basic test for trace_marker_raw
+ file
+Message-ID: <20251103121005.6399baf3@gandalf.local.home>
+In-Reply-To: <20251014161403.1443c21f@gandalf.local.home>
+References: <20251014145149.3e3c1033@gandalf.local.home>
+	<20251014161403.1443c21f@gandalf.local.home>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] mm: Document lenient map_count checks
-To: Kalesh Singh <kaleshsingh@google.com>, akpm@linux-foundation.org,
- minchan@kernel.org, lorenzo.stoakes@oracle.com, david@redhat.com,
- Liam.Howlett@oracle.com, rppt@kernel.org, pfalcato@suse.de
-Cc: rostedt@goodmis.org, hughd@google.com, kernel-team@android.com,
- android-mm@google.com, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- Kees Cook <kees@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Jann Horn <jannh@google.com>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- Valentin Schneider <vschneid@redhat.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20251028212528.681081-1-kaleshsingh@google.com>
- <20251028212528.681081-2-kaleshsingh@google.com>
-From: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20251028212528.681081-2-kaleshsingh@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Stat-Signature: hk76wpkzbpmcdotf97s3yti645x16htk
+X-Rspamd-Server: rspamout07
+X-Rspamd-Queue-Id: 8952F80009
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+OJjDpCCQZTaWuuqg4AxJH6/gz5MVPfM4=
+X-HE-Tag: 1762189801-800533
+X-HE-Meta: U2FsdGVkX18tWlsEVyMSMYef+Sj6KGHulrIOpw579zFEDGoqMVKtdR+08qaWO5ytMy55qtFbZYYWgh9bRoRJpaAI6g2Xn5pgtqYaG4PATyWXm0+XwAwPyA6M3JggK26NIZrFzp5MVfCkuTUqTlQEgdbpDZyvikEL7bsKIxuc62OPTe7nZEfhalu8OW2dWex0MhmkxxlY5g47jIBnEYllPOEc+rNzdqrxU7FvyLUUp8bsvNpsWzh02PpFc8MU18btNtT41HfeLRgyEkEpSYRJAsMwxZnO4Fum/CDVkTEZeLRT/DRsIMvpY5dkFM4SgbsgC445lUd0O5p680Jv5XX/s9Fd6nE5xqhNLwqEAF9lTEefg+jh9SdRZdOA18i3z28+C3paIifWpqnUC9pL6bJi0PMV7hMyH70S
 
-On 28.10.25 22:24, Kalesh Singh wrote:
-> Add comments to the map_count limit checks in do_mmap() and
-> do_brk_flags() to clarify their intended behavior.
+Masami,
+
+  Ping!
+
+-- Steve
+
+
+On Tue, 14 Oct 2025 16:14:03 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
+> Shuah,
 > 
-> The use of a strict inequality ('>') in these checks is intentional but
-> non-obvious. It allows these functions to succeed when the VMA count is
-> exactly at the sysctl_max_map_count limit. This historical behavior
-> accounts for cases where the operation might not create a new VMA, but
-> instead merge with or expand an existing one, in which case the VMA
-> count does not increase.
+> After Masami gives an ack, could you take this through your tree.
 > 
-> These comments clarify the long-standing behavior and will help prevent
-> future misinterpretation as an off-by-one error.
+> I don't think it's urgent, but I want to make sure it gets upstream.
 > 
-> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
-> ---
+> -- Steve
+> 
+> 
+> On Tue, 14 Oct 2025 14:51:49 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
+> 
+> > From: Steven Rostedt <rostedt@goodmis.org>
+> > 
+> > Commit 64cf7d058a00 ("tracing: Have trace_marker use per-cpu data to read
+> > user space") made an update that fixed both trace_marker and
+> > trace_marker_raw. But the small difference made to trace_marker_raw had a
+> > blatant bug in it that any basic testing would have uncovered.
+> > Unfortunately, the self tests have tests for trace_marker but nothing for
+> > trace_marker_raw which allowed the bug to get upstream.
+> > 
+> > Add basic selftests to test trace_marker_raw so that this doesn't happen
+> > again.
+> > 
+> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> >  
 
-
-Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
-
--- 
-Cheers
-
-David
 
