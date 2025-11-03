@@ -1,110 +1,150 @@
-Return-Path: <linux-kselftest+bounces-44674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5162AC2D947
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 19:05:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BD09C2D995
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 19:09:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11D8F18990DD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 18:06:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 115DA1899DA9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 18:10:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5436A271451;
-	Mon,  3 Nov 2025 18:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA98831B111;
+	Mon,  3 Nov 2025 18:09:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P0Q6iZmJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UnKrqmyv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DB3719ABDE;
-	Mon,  3 Nov 2025 18:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8833101DE
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Nov 2025 18:09:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762193153; cv=none; b=YGRjNe3iKY8ZUBBoiPUJe7F/CeBWkD24tFWloTYJXxdC4pYzo/Sx7PNzuSpxucM1aT8JT+Otyk36hNQp5qwVS7ulrxnXyuEuXSY/jV46RfYtWCP7KRK9legk9aKodUMotI3pYUwfrg3Er5JluaD4eGaMBjnYMM1plApdcX7xmts=
+	t=1762193369; cv=none; b=oKKrG5se2FEM24F7wehJl+3PZPCbxRNfVmuxBDDzNGmoac30FQigskg+/bbZ5jKmWGu07keyB8jxBnCCC7QO67stn99z0oEsOC6NykvB9zPoGeOYK89VXcTUynXIqYdefy1BuBxiaNnil7tB8qnAm8LyUUyUW+1p+brE0w5crSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762193153; c=relaxed/simple;
-	bh=+64iKrvV3aelQ+MDxd4Vv/MtBZ3N2qzpU9GTaRPio/U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=a9GdSf8OgvKX/d9gEBcAczchGMtTnl6qQW6d0QtQ+N7j8NX2jyzw7L2DlarwfeQrD53FZqYC8P94GlgJnkPjH5zTKB032z2DPdCoG9jfGHlREFA3GxVuEcePkkf7z1oi/G9umx6TBwuqVm1tOb3PVZ9Ni9CHr2Bp2RmWzQX/tGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P0Q6iZmJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AB36C4CEE7;
-	Mon,  3 Nov 2025 18:05:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762193153;
-	bh=+64iKrvV3aelQ+MDxd4Vv/MtBZ3N2qzpU9GTaRPio/U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=P0Q6iZmJK/NA+gbfeQInwBVD+j/Mn4E1i/RYRGFSSkO9j48VXUBSt4qX7JDbU9/sh
-	 oQaUywp3A+5CnhS2iXAStJ0jiuKL+Iz79AezYdKAOdkZHlIlnXylhHGjX+X6iqj+IF
-	 n6QlkUu4/grO0RvSCHPixVuKjT1yJPWqvv9s+/q1qzlfKkH/iNA1Tqe55xboZrNhm1
-	 LKekEXOUMr07Yqs22nUM1noYOwUY6u3H1N1Zz1ZLfekCtPCeFvHjyRJJ3G2jxZ6raM
-	 Gsh6bOPS3mkh2oaFKdjmn7dcQlkMDUwbWf+FxdzN1FWZHRr4dNx82XokKVxrHSed4T
-	 0zF60vTlv8V8g==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: akpm@linux-foundation.org,  brauner@kernel.org,  corbet@lwn.net,
-  graf@amazon.com,  jgg@ziepe.ca,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
-  masahiroy@kernel.org,  ojeda@kernel.org,  pratyush@kernel.org,
-  rdunlap@infradead.org,  rppt@kernel.org,  tj@kernel.org,
-  yanjun.zhu@linux.dev
-Subject: Re: [PATCH v9 3/9] kho: add interfaces to unpreserve folios, page
- ranges, and vmalloc
-In-Reply-To: <20251101142325.1326536-4-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Sat, 1 Nov 2025 10:23:19 -0400")
-References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
-	<20251101142325.1326536-4-pasha.tatashin@soleen.com>
-Date: Mon, 03 Nov 2025 19:05:49 +0100
-Message-ID: <mafs08qgnc7pe.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1762193369; c=relaxed/simple;
+	bh=dSZOek6ygkyM8kMLRCDVZKMdCPYWkaopn/XnCYI/Vb8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WUavSwq0lvwC9faf/rpbgLaWMtLMteda7r96R4QKuf8wLUgYjI3TFc+jtJ5NZk8D4lCdLrfN9J1tbHUvWUwSqq22BvceS1PAYBjSaSs7Dv21a6xtVYhUiD+pTUP5LVFGVVRpNHh+3Qj8Fgm98FcYCKdSNC1yKTbFaqa7YVlMXTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UnKrqmyv; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2951a817541so48437195ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Nov 2025 10:09:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762193367; x=1762798167; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6GMq24IVk2F3a28aOoFMSN6wPIMIYmOKkHFdluZNlp8=;
+        b=UnKrqmyvy6DUp++piPtr188PfaI7oNGWMAM7vbHHUoa8Z9eZ0AnIrrEfDDpRdehICM
+         SoAstZCyWWNpzruPp7eFAMTwRquJwBlqtZL56KudJ8l8Kb3l90Nkx4vxII++gEAjpC90
+         wkr+DtJr11CPMuL+LYZFP70v+H3ETgpNRqooepuWnrSZlFGu3OuFUkfcYWLnM9hNW+QU
+         S8XAKoQ9pJq4TB+PeDtcBwoAZGrKV9T6HI3AJx2PPG1HqBz4Yhd8M0NDjAeDYdhdFIqr
+         wJBRtfK87pOqOYL5EnjZWVoBQrCIMbKE/PacszEDIpNKzu2Yrs7zQOMPSNXizjJtOZQB
+         mwJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762193367; x=1762798167;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6GMq24IVk2F3a28aOoFMSN6wPIMIYmOKkHFdluZNlp8=;
+        b=DzRri8/QKbKxKETQ+1vF7TbUfeMTEVYN3oBec/lNWZy2ZbLRuj4lQj67EWyxqE5tsA
+         DwWHjzWp3DBJDUXSQylBhKpJsZvXa3pmek45E5TO3qQpQ1O4NkyxMLY41ceqxEpsoT9i
+         S7VO8lAhONjpQvWxHdm5QKUi0MUaCxvmKsyEpVaVq1RHY/I02uP6DeU9CMVefQsnikZk
+         0vm4hcdMHI7FsEnBkza5SliSABM2KHlC+bwvoN9s4JsHsazHOmm1vo2eh5EqM8ucnHTb
+         S9U14LvVnyuzSZiQSWR+oa7cmdAiB5y17lEplnkXbf8oR3Sqbl6fohepoJpWWLquNzQW
+         q/Bg==
+X-Forwarded-Encrypted: i=1; AJvYcCXfqufHErUhgTYS8sx+Nt5PVfn6ZEGW0+a5Q+lFPjAXWkOlOLeaHfzb4cclBjqG6AHv9B3OiaqFEAu079+zhoU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/GcedT9L1+IT0yz1xvRHbbztyYeiMMNuy3/eH5lCDqssPjyec
+	Sxv02EYqh9rePmgH3eX4nrVMc5KZ5U/E3PlTrVVvE8Tm7QEaECCzsWfv
+X-Gm-Gg: ASbGncu5ZktFx85I+x2BZ5ED8Kj4IWJSa0qeZoHJ9WN8oHP/1LRtLbGrgviqjGa+eHe
+	5EXc1aQ/zwNYqNrT42xzOD6+J1jHnHmZ7RXrP5Ojh6vb65bemvi2OvV2ggtZM/TFDgn6goc2BsE
+	gzu3V2jptd59YRJPD4c6FWZoPuakDCO4I+6K2nr4byEBa3ngVnLpE9OGBWl9UJ2+c0JHg4PgJQD
+	+HSVi4tmvk5Bc2q9rSEZINtUztNAAUf0OvibeQ28eltOyBPjfNnwGfLm6mzax1ZUgZTBKkeDV/K
+	jZY6SaQuksO4VlICa8N415SnhqNzF3Mmo+rFoqaAFphTgDO1kks3/0tORQZl99n7f3jE6gh6zgP
+	On/iWc5R8HOOxmyCoKrbyajUagwbNTunbGmkMYUmCUOTL9ZQ+558IAkCPXYRWJwTUiHp3vLYVlT
+	TqoPYc4MtcReOrw2DYsy3SxPNvSA==
+X-Google-Smtp-Source: AGHT+IGZrfXVBo54SYedR/Q9MDC4tdP/p2CLo6tbKfTLBQnHa03b/gxt/4AS9fp/eW4cLQ/lJm333A==
+X-Received: by 2002:a17:902:da87:b0:290:c94b:8381 with SMTP id d9443c01a7336-2951a3905e9mr148631275ad.7.1762193367176;
+        Mon, 03 Nov 2025 10:09:27 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:3eb6:963c:67a2:5992? ([2620:10d:c090:500::5:d721])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-341760c9476sm14136a91.4.2025.11.03.10.09.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Nov 2025 10:09:26 -0800 (PST)
+Message-ID: <a584d6e00a7b78927debb828f252280777d2da6a.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Skip bounds adjustment for
+ conditional jumps on same scalar register
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: KaFai Wan <kafai.wan@linux.dev>, ast@kernel.org, daniel@iogearbox.net, 
+	john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ song@kernel.org, 	yonghong.song@linux.dev, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, 	jolsa@kernel.org, shuah@kernel.org,
+ paul.chaignon@gmail.com, m.shachnai@gmail.com, 
+	harishankar.vishwanathan@gmail.com, colin.i.king@gmail.com,
+ luis.gerhorst@fau.de, 	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Cc: Kaiyan Mei <M202472210@hust.edu.cn>, Yinhao Hu <dddddd@hust.edu.cn>
+Date: Mon, 03 Nov 2025 10:09:23 -0800
+In-Reply-To: <20251103063108.1111764-2-kafai.wan@linux.dev>
+References: <20251103063108.1111764-1-kafai.wan@linux.dev>
+	 <20251103063108.1111764-2-kafai.wan@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
 
-Hi Pasha,
+On Mon, 2025-11-03 at 14:31 +0800, KaFai Wan wrote:
+> When conditional jumps are performed on the same scalar register
+> (e.g., r0 <=3D r0, r0 > r0, r0 < r0), the BPF verifier incorrectly
+> attempts to adjust the register's min/max bounds. This leads to
+> invalid range bounds and triggers a BUG warning.
+>=20
+> The problematic BPF program:
+>    0: call bpf_get_prandom_u32
+>    1: w8 =3D 0x80000000
+>    2: r0 &=3D r8
+>    3: if r0 > r0 goto <exit>
+>=20
+> The instruction 3 triggers kernel warning:
+>    3: if r0 > r0 goto <exit>
+>    true_reg1: range bounds violation u64=3D[0x1, 0x0] s64=3D[0x1, 0x0] u3=
+2=3D[0x1, 0x0] s32=3D[0x1, 0x0] var_off=3D(0x0, 0x0)
+>    true_reg2: const tnum out of sync with range bounds u64=3D[0x0, 0xffff=
+ffffffffffff] s64=3D[0x8000000000000000, 0x7fffffffffffffff] var_off=3D(0x0=
+, 0x0)
+>=20
+> Comparing a register with itself should not change its bounds and
+> for most comparison operations, comparing a register with itself has
+> a known result (e.g., r0 =3D=3D r0 is always true, r0 < r0 is always fals=
+e).
+>=20
+> Fix this by:
+> 1. Enhance is_scalar_branch_taken() to properly handle branch direction
+>    computation for same register comparisons across all BPF jump operatio=
+ns
+> 2. Adds early return in reg_set_min_max() to avoid bounds adjustment
+>    for unknown branch directions (e.g., BPF_JSET) on the same register
+>=20
+> The fix ensures that unnecessary bounds adjustments are skipped, preventi=
+ng
+> the verifier bug while maintaining correct branch direction analysis.
+>=20
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Closes: https://lore.kernel.org/all/1881f0f5.300df.199f2576a01.Coremail.k=
+aiyanm@hust.edu.cn/
+> Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
+> ---
 
-On Sat, Nov 01 2025, Pasha Tatashin wrote:
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-> Allow users of KHO to cancel the previous preservation by adding the
-> necessary interfaces to unpreserve folio, pages, and vmallocs.
->
-> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
-> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 [...]
-> +/**
-> + * kho_unpreserve_vmalloc - unpreserve memory allocated with vmalloc()
-> + * @preservation: preservation metadata returned by kho_preserve_vmalloc()
-> + *
-> + * Instructs KHO to unpreserve the area in vmalloc address space that was
-> + * previously preserved with kho_preserve_vmalloc().
-> + *
-> + * Return: 0 on success, error code on failure
-> + */
-> +int kho_unpreserve_vmalloc(struct kho_vmalloc *preservation)
-> +{
-> +	if (kho_out.finalized)
-> +		return -EBUSY;
-> +
-> +	kho_vmalloc_free_chunks(preservation);
-
-When reviewing this patch, I spotted that kho_vmalloc_free_chunks() is
-broken. Well it happens to work if all pages are 0-order, but breaks on
-higher-order allocations.
-
-I have sent a separate patch [0] to fix this on top of mm-stable. It
-doesn't have a conflict with this patch so it shouldn't cause trouble.
-And I **don't** think it should block this patch either. This is mostly
-a heads up.
-
-[0] https://lore.kernel.org/linux-mm/20251103180235.71409-2-pratyush@kernel.org/T/#u
-
--- 
-Regards,
-Pratyush Yadav
 
