@@ -1,155 +1,104 @@
-Return-Path: <linux-kselftest+bounces-44634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44635-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BE58C2A773
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 09:02:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F2A5C2AAA4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 09:59:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CBE1C4EE8A6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 07:57:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 564731889713
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 08:59:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F8F2D23A8;
-	Mon,  3 Nov 2025 07:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4BA32E370E;
+	Mon,  3 Nov 2025 08:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EyuFXS/5"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="sFhv3Gsf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6401F2D1907;
-	Mon,  3 Nov 2025 07:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044362DF6F8;
+	Mon,  3 Nov 2025 08:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762156643; cv=none; b=EF6QRezUPv4F58o2MmNVgGoVZI2R3qeuoni3vwsC7jJna2vEY2dkFw8Q6iXqK9sSZKMuwxV/IAHCiNCMSJscGp+h3JnmE42jKL3MBf58QDzoWneyN31z+V9XdFVS2OVabg4OHMcQd1bB5WZ+Ysg+eVwzb320vLfZK6tt+OB1+2M=
+	t=1762160329; cv=none; b=CI7YD+AikEmu2uD2Bdk1Hm0VxkTIXSqtQjMN32qPX+mslVOhAujT3d8ZAzHjPa6g5tOLXFw/U1MpwplB9BgYhk40hwsJVGNzKpqduamodRJGhJmgvINoEmlimnZnPb9LdT/QIgH34VUB/xRE0nbgybyoES71n6QxrOxrHWKuQiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762156643; c=relaxed/simple;
-	bh=HSj/Z5n0gDZ4meqwx9ffw43W8XomEOuc7B2mT893bzs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=N3M+ucM8M+7Ghcbz26qodnLJtUpcMl+eSg4WI2iWqmH4yKzGdg82SsxvJwrLUrzQczXL4+VEwiTTpfpwK2niD3tzYwUHQw6289ITNh2EyJp4wuOGgeIYCsT1MFRDiVG/OHAVu/8C0kIv9gW4s9NQMtGCgcY4YlHZzli/QASK16Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EyuFXS/5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A78AEC4CEE7;
-	Mon,  3 Nov 2025 07:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762156642;
-	bh=HSj/Z5n0gDZ4meqwx9ffw43W8XomEOuc7B2mT893bzs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=EyuFXS/5i8cjPsKl1fmDKJwxtvpzPfkDrVD/7Dw9cVg4MIRSZ9pwX9Mwp3TkQNtyw
-	 zoeqzLLyxPRNqLWKH6FXNg+6ZNo7vj4V4K1a2Q2k642McCDmgxisCjpK6A9S/QL1M+
-	 JohKsDSLySE14H0H5z5GG8d356N9+qgQ55m+uwsMsRoTogFqUE9iZVhmwTsjaJxJ0D
-	 rf7CiQwNGNOSkhhNm3a8Kegsyv/wACFQk0qTNci2kW/sBtJn3XjoC3JgBMB4DLxEd1
-	 BxbJrOVgc9EcBq/f6dV64raqbuuFvwCKqXqgbvNuoO3N0Gl4d4KOsuqDiCv8HqbTcE
-	 IGGXAlmxritEQ==
-X-Mailer: emacs 30.2 (via feedmail 11-beta-1 I)
-From: Aneesh Kumar K.V <aneesh.kumar@kernel.org>
-To: "Roy, Patrick" <roypat@amazon.co.uk>
-Cc: "Roy, Patrick" <roypat@amazon.co.uk>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"maz@kernel.org" <maz@kernel.org>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"willy@infradead.org" <willy@infradead.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"david@redhat.com" <david@redhat.com>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"vbabka@suse.cz" <vbabka@suse.cz>,
-	"rppt@kernel.org" <rppt@kernel.org>,
-	"surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>,
-	"song@kernel.org" <song@kernel.org>,
-	"jolsa@kernel.org" <jolsa@kernel.org>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"haoluo@google.com" <haoluo@google.com>,
-	"jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-	"peterx@redhat.com" <peterx@redhat.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"pfalcato@suse.de" <pfalcato@suse.de>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"seanjc@google.com" <seanjc@google.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Cali, Marco" <xmarcalx@amazon.co.uk>, "Kalyazin,
-	Nikita" <kalyazin@amazon.co.uk>, "Thomson,
-	Jack" <jackabt@amazon.co.uk>,
-	"derekmn@amazon.co.uk" <derekmn@amazon.co.uk>,
-	"tabba@google.com" <tabba@google.com>,
-	"ackerleytng@google.com" <ackerleytng@google.com>
-Subject: Re: [PATCH v7 05/12] KVM: guest_memfd: Add flag to remove from
- direct map
-In-Reply-To: <20250924152214.7292-2-roypat@amazon.co.uk>
-References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
- <20250924152214.7292-1-roypat@amazon.co.uk>
- <20250924152214.7292-2-roypat@amazon.co.uk>
-Date: Mon, 03 Nov 2025 13:27:04 +0530
-Message-ID: <yq5ajz07czvz.fsf@kernel.org>
+	s=arc-20240116; t=1762160329; c=relaxed/simple;
+	bh=JXPCsQTTxVnoh0TkP1LaQ3H1WCvGUkzl8sNo7rus+JQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pOdeot5EPzYYNJMcQVvhSoxckJc5xmfd4A/SNEcA5RwoGeAM0n4mcZr/Acv0vKqTFYMqx5tK3dRFi4ZQ7oG+KIYn8QvCQwFvz2U/jSM1KmrCp/X5E3u54gJZyy8OEDGCoPfQyMCzOsDUHpIvQXu7XoOcREUlg2WlzSPcMgx4lHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=sFhv3Gsf; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=vhZdASlHH+QeEq0UbVzWVoPF8l6AizkcGzyv7NcZ9Mk=;
+	b=sFhv3GsfQN1H1yy+8lqdJs/YTjxE/ctYLlpRHqbIF1HL8eVbhAa3uTGbSJfEK7Ap7X5qK2Vn7
+	symE54OrB7tDUT/1FniVkv2WM2Pe1+FwsRqZ2PoPlmHtorOtuW3sfSCwtF9Dw9DzF9laYu4UtYB
+	rJ8NDNTnYlIDS1bk3vJFhtc=
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4d0QSk5RT4zLlVC;
+	Mon,  3 Nov 2025 16:57:10 +0800 (CST)
+Received: from dggpemf500016.china.huawei.com (unknown [7.185.36.197])
+	by mail.maildlp.com (Postfix) with ESMTPS id 65DAE1A016C;
+	Mon,  3 Nov 2025 16:58:44 +0800 (CST)
+Received: from [10.174.177.19] (10.174.177.19) by
+ dggpemf500016.china.huawei.com (7.185.36.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 3 Nov 2025 16:58:43 +0800
+Message-ID: <2ea387c7-cd15-44cc-8789-af3fbe0460a3@huawei.com>
+Date: Mon, 3 Nov 2025 16:58:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] selftests: netdevsim: Fix ethtool-features.sh fail
+To: Sabrina Dubroca <sd@queasysnail.net>
+CC: <kuba@kernel.org>, <andrew@lunn.ch>, <davem@davemloft.net>,
+	<edumazet@google.com>, <pabeni@redhat.com>, <shuah@kernel.org>,
+	<horms@kernel.org>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<yuehaibing@huawei.com>, <zhangchangzhong@huawei.com>
+References: <20251030032203.442961-1-wangliang74@huawei.com>
+ <aQPxN5lQui5j8nK8@krikkit>
+From: Wang Liang <wangliang74@huawei.com>
+In-Reply-To: <aQPxN5lQui5j8nK8@krikkit>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ dggpemf500016.china.huawei.com (7.185.36.197)
 
-"Roy, Patrick" <roypat@amazon.co.uk> writes:
 
-....
+在 2025/10/31 7:13, Sabrina Dubroca 写道:
+> 2025-10-30, 11:22:03 +0800, Wang Liang wrote:
+>> This patch adds executable permission to script 'ethtool-features.sh', and
+>> check 'ethtool --json -k' support.
+> Those are two separate things, probably should be two separate patches.
 
-> +static int kvm_gmem_folio_zap_direct_map(struct folio *folio)
-> +{
-> +	if (kvm_gmem_folio_no_direct_map(folio))
-> +		return 0;
-> +
-> +	int r =3D set_direct_map_valid_noflush(folio_page(folio, 0), folio_nr_p=
-ages(folio),
-> +					 false);
-> +
-> +	if (!r) {
-> +		unsigned long addr =3D (unsigned long) folio_address(folio);
-> +		folio->private =3D (void *) ((u64) folio->private & KVM_GMEM_FOLIO_NO_=
-DIRECT_MAP);
-> +		flush_tlb_kernel_range(addr, addr + folio_size(folio));
-> +	}
-> +
-> +	return r;
-> +}
 
-These 'noflush' functions are actually doing flush_tlb_kernel
+Ok, I will extract the executable permission change to a new patch.
 
-[-]  =E2=88=98 flush_tlb_kernel_range
- |-[-]  =E2=86=90 __change_memory_common
- |  `-[-]  =E2=86=90 set_memory_valid
- |     `-   =E2=86=90 set_direct_map_valid_noflush
+>
+> [...]
+>> @@ -7,6 +7,11 @@ NSIM_NETDEV=$(make_netdev)
+>>   
+>>   set -o pipefail
+>>   
+>> +if ! ethtool --json -k $NSIM_NETDEV > /dev/null 2>&1; then
+> I guess it's improving the situation, but I've got a system with an
+> ethtool that accepts the --json argument, but silently ignores it for
+>   -k (ie `ethtool --json -k $DEV` succeeds but doesn't produce a json
+> output), which will still cause the test to fail later.
 
--aneesh
+
+That is indeed a bit strange.
+
+I'm not sure the best way to handle this situation now. Maybe update ethtool
+instead of checking the output is not a bad method.
+
 
