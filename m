@@ -1,102 +1,125 @@
-Return-Path: <linux-kselftest+bounces-44681-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44682-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FCDBC2E2B6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 22:34:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24082C2E3F2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 23:22:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 434853BC2A3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 21:34:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 987B61893D13
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 22:22:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D1E2D0606;
-	Mon,  3 Nov 2025 21:34:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 408A43002CB;
+	Mon,  3 Nov 2025 22:22:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y3Q1FgzP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I/Lp31yo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6501917FB;
-	Mon,  3 Nov 2025 21:34:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA2819A288;
+	Mon,  3 Nov 2025 22:22:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762205648; cv=none; b=gtxfM6w3GZfg9qw7zVBsdxDuwJL8TKYMc+5Qsn3ygqJRyd+fIV6yadB/w1txYp53J+1YCuRra/cRI/wVFd/H2Va+mbHxWbdGzFd+N6p78rGiFvIu+KVPqBBTHPdJ9Rtuc+J0WZClRNw7kw44iIlJ8CeGNh+LaM9c8tk+YvwR/xU=
+	t=1762208528; cv=none; b=pvf7cFpclCyUteNT5JBfqjCcZhWhnzFawmLetsdKZ4tAMMxGSQPMvrtH5fAiE0VFCO2Bc4rOSUU5p6m7jjkRVdEKaCfKAEi0afDYfhYD3lPT75hf+tLQz6fRMjrjoZxUmpXgksyP3bb5riG2BxAEzc2UlGy/ssXGt08+6evipaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762205648; c=relaxed/simple;
-	bh=aBD983yiNNOnZiq3ASuKn2fSq6CQ0BIh2bd/3QuiWcE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=daf1H23WQeiw7dehBn0r5DxizKGm+WgGMDB1wYZ9HIPTM0X0srecBgsW10nPF3ylu5vpoLTRFRewjOImuh2BRIdhgRil1I7yc3t8YW4IlSlJ0FM4lxd7R6kCtH1ny5LCF/FJ7+m/X0wch1nq6MSj2ndA5pcwh2rRdZw1euqJWKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y3Q1FgzP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9888AC4CEF8;
-	Mon,  3 Nov 2025 21:34:07 +0000 (UTC)
+	s=arc-20240116; t=1762208528; c=relaxed/simple;
+	bh=4+HwZyxB60cLLkwbbtQeqRTkzlhrRDxKz+l5ARqBSFw=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h/zNyUsOf1tDkfG6L78/xG9Lqsk6pAleR48U6xo2dm2stvgA7XtQXjRJ+Dn2acZGT0hJHECReTGaif8mR9WWx6YytkkW2QW2ee/NIAjMyN1r3DF4FnyAD6qEiaA6aJ5dsmJvxODJ4McEtHSMQuHx2WE9LXm2Aga+FDRhcDOU3gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I/Lp31yo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D9AFC4CEE7;
+	Mon,  3 Nov 2025 22:22:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762205647;
-	bh=aBD983yiNNOnZiq3ASuKn2fSq6CQ0BIh2bd/3QuiWcE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Y3Q1FgzPOTVfd50rVOXrHakdGLuazE7JhNzm3isFapNIr7TkSMRD9DlxX0m/JbJIW
-	 ilEAv4D9o2zDD4MVFr3Z/8i6JQeLkcn1SnUQrkVoci+ZoX4N5sU3yQAijLa64QOnC2
-	 XobW0xsbuzFG0BKPpM48+h3AdPioFG6Fg4aKk377czJhR8GmmiAxTCSoddek+gMdYW
-	 PGtLBSUsSdtgMDtsBIBANJIZ1xKaD/AoFmqZ2Ha2RYaDWb/hZ4IC/0V+uWX5YkPQJi
-	 3MPfMkbpixcUkpMimNRrh7Jyue3y8VVqaMapulgprtH2491fAD8yReIrayoLPdSI9H
-	 h1RXjuMn6nn3A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 340893809A88;
-	Mon,  3 Nov 2025 21:33:43 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1762208527;
+	bh=4+HwZyxB60cLLkwbbtQeqRTkzlhrRDxKz+l5ARqBSFw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=I/Lp31yoA+tIy3PALY99JfXTZS6tYX9J8PxGDjCegfDjzss4rKJoVJotvrVl6IZEw
+	 O+NjEs21yS9zEJjDSzc860V/hp6+VR11aam88MLXsVw0u2lWvLVVhPey2L4qqKKvza
+	 iABcTKLO4pKOM2S/pyT49b6YhJXNcJIQjp6vTSJRXsSTqyxi5WqSFByIxyotsB8CLV
+	 Etkqg60Rlmw7SV/CDP6sLHmqaHNBwZDYFtPSCfALy2BjB+QoFoLmaIJbI1YnnwMHc4
+	 FbE/1qyhWBcNv/c8EsZTKoaphJW0KdeOV25G5lW47zOpNAHdXSDlXDQFYkxvzRrsSU
+	 tnrDl1SQNkFMQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vG2w8-000000026Nh-3s7P;
+	Mon, 03 Nov 2025 22:22:05 +0000
+Date: Mon, 03 Nov 2025 22:22:04 +0000
+Message-ID: <86jz06vjsj.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jose Marinho <jose.marinho@arm.com>
+Cc: Jiaqi Yan <jiaqiyan@google.com>,
+	oliver.upton@linux.dev,
+	duenwen@google.com,
+	rananta@google.com,
+	jthoughton@google.com,
+	vsethi@nvidia.com,
+	jgg@nvidia.com,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	pbonzini@redhat.com,
+	corbet@lwn.net,
+	shuah@kernel.org,
+	kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] KVM: arm64: VM exit to userspace to handle SEA
+In-Reply-To: <7a61bcf9-a57d-a8e9-a9b8-4eacef80acd3@arm.com>
+References: <20251013185903.1372553-1-jiaqiyan@google.com>
+	<20251013185903.1372553-2-jiaqiyan@google.com>
+	<7a61bcf9-a57d-a8e9-a9b8-4eacef80acd3@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/3] selftests/bpf: small improvements on
- tc_tunnel
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176220562173.2193320.5516695846612752403.git-patchwork-notify@kernel.org>
-Date: Mon, 03 Nov 2025 21:33:41 +0000
-References: <20251031-tc_tunnel_improv-v1-0-0ffe44d27eda@bootlin.com>
-In-Reply-To: <20251031-tc_tunnel_improv-v1-0-0ffe44d27eda@bootlin.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9_=3Calexis=2Elothore=40bootlin=2Ecom=3E?=@codeaurora.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- ebpf@linuxfoundation.org, thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- bastien.curutchet@bootlin.com
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jose.marinho@arm.com, jiaqiyan@google.com, oliver.upton@linux.dev, duenwen@google.com, rananta@google.com, jthoughton@google.com, vsethi@nvidia.com, jgg@nvidia.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, shuah@kernel.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
-
-On Fri, 31 Oct 2025 10:01:40 +0100 you wrote:
-> Hello,
-> this series is a small follow-up to the test_tc_tunnel recent
-> integration, to address some small missing details raised during the
-> final review ([1]). This is mostly about adding some missing checks on
-> net namespaces management.
+On Mon, 03 Nov 2025 18:17:00 +0000,
+Jose Marinho <jose.marinho@arm.com> wrote:
 > 
-> [1] https://lore.kernel.org/bpf/1ac9d14e-4250-480c-b863-410be78ac6c6@linux.dev/
+> > +	/*
+> > +	 * Exit to userspace, and provide faulting guest virtual and physical
+> > +	 * addresses in case userspace wants to emulate SEA to guest by
+> > +	 * writing to FAR_ELx and HPFAR_ELx registers.
+> > +	 */
+> > +	memset(&run->arm_sea, 0, sizeof(run->arm_sea));
+> > +	run->exit_reason = KVM_EXIT_ARM_SEA;
+> > +	run->arm_sea.esr = esr & esr_mask;
+> > +
+> > +	if (!(esr & ESR_ELx_FnV))
+> > +		run->arm_sea.gva = kvm_vcpu_get_hfar(vcpu) > +
+> > +	ipa = kvm_vcpu_get_fault_ipa(vcpu);
+> > +	if (ipa != INVALID_GPA) {
+> > +		run->arm_sea.flags |= KVM_EXIT_ARM_SEA_FLAG_GPA_VALID;
+> > +		run->arm_sea.gpa = ipa;
 > 
-> [...]
+> Are we interested in the value of PFAR_EL2 (if FEAT_PFAR implemented)?
 
-Here is the summary with links:
-  - [bpf-next,1/3] selftests/bpf: skip tc_tunnel subtest if its setup fails
-    https://git.kernel.org/bpf/bpf-next/c/c076fd5bb4d7
-  - [bpf-next,2/3] selftests/bpf: add checks in tc_tunnel when entering net namespaces
-    https://git.kernel.org/bpf/bpf-next/c/e6e10c51fb17
-  - [bpf-next,3/3] selftests/bpf: use start_server_str rather than start_reuseport_server in tc_tunnel
-    (no matching commit)
+We don't have any support for PFAR, and I don't think we have any plan
+to support it in the near future. If anything, the rest of the kernel
+should start by growing support for it before we start dragging it
+into KVM.
 
-You are awesome, thank you!
+	M.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Without deviation from the norm, progress is not possible.
 
