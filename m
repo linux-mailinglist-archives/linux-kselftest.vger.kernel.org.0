@@ -1,101 +1,83 @@
-Return-Path: <linux-kselftest+bounces-44648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CFD9C2C34B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 14:44:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9ED20C2C6F2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 15:37:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F055B4F8D54
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 13:38:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84BFB3B6245
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 14:31:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53C732FF66A;
-	Mon,  3 Nov 2025 13:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D2D427FB1B;
+	Mon,  3 Nov 2025 14:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="H3R8xKzP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzcS0PW2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91F126C3BE;
-	Mon,  3 Nov 2025 13:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B7D1D7E5C;
+	Mon,  3 Nov 2025 14:31:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762176972; cv=none; b=tkv51i8ulP1tG5suBwHZ5kQhCN7tasqBDafolNmpIiD+ZFo6luNSJkLFJYaIsS3q24cuhK2PEoDr1SZRO1pRM6sxljj0pABbHSJy/Cg7C8XXm2qn+yT2IiaO4AiEoP20L/qAD1Dmy9X5BP9+3MleB7rIWj/TViv5saJOUwVBlvs=
+	t=1762180300; cv=none; b=Of7kIgijHUCViPMCSY9i7sD4GF0rw0queuwo2cqNArJ68Qe3uUMTZX2a3Or31v50l1Gs4+iiEMvobGqs4uMiJNumgOxKFZbKCdo8ErPiriVs5gynPl8DYAie+KKEbYcylbn41L4WxfEBxWcVTCCHJXFvD/l99l0OSY1K7S+C3Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762176972; c=relaxed/simple;
-	bh=hh4fQWQud1e+BB+JyZ3vB+KHwKuyZC0k6VLYceJN+9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L/yj7j4+75NdEBoubTH8EefFqfDTlSbd96i62H3ToYaa5MQ/VLN229ln2wr5R9yjt9c5/1SOAEChqblFR24gbn3oikGJBHr6nykxeOUlRvI1XV6P7nIMIbdV9nu158A6eWoubNMveOlQarJA9tw3b4DwmumoHFm90BmQhNJrnU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=H3R8xKzP; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=Zh9B4vB/7KSaXnJ8zZXyTQPM87A3PE1sYsd73K993Ks=; b=H3R8xKzPPH2KeZx3glli8KbhWw
-	Heg3m3N4/sh1hsd1oLCxREijpiXDcQ/Ljbk2XeUpI8QyYpOXQCy/skmsqxExZMLopP9CFbB+zmPol
-	Cxls+aFokjr0r5mH3DgLqzEaGuKnT0PbFIZAAPD6g2yPhYU1wJLpm86nYCDbXoeQADM0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1vFuj2-00Cmdm-Gw; Mon, 03 Nov 2025 14:36:00 +0100
-Date: Mon, 3 Nov 2025 14:36:00 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Sabrina Dubroca <sd@queasysnail.net>
-Cc: Jakub Kicinski <kuba@kernel.org>, Wang Liang <wangliang74@huawei.com>,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	shuah@kernel.org, horms@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	yuehaibing@huawei.com, zhangchangzhong@huawei.com
-Subject: Re: [PATCH net] selftests: netdevsim: Fix ethtool-features.sh fail
-Message-ID: <e014c4c5-105a-43cb-9411-ec139af2b2a1@lunn.ch>
-References: <20251030032203.442961-1-wangliang74@huawei.com>
- <aQPxN5lQui5j8nK8@krikkit>
- <20251030170217.43e544ad@kernel.org>
- <aQiANPQU9ZEa0zCo@krikkit>
+	s=arc-20240116; t=1762180300; c=relaxed/simple;
+	bh=rG9BK8r7AMUubNgGagpv0lfuxX9C5xmuAMy90Ex5TiI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZTW5Yg5Wgwbnco7Y1CIxhAkgfQB11uwVa+2sj7HlvNAHUW3ox3MjjZ2QweEt59CZlotGqta1Cg8RDgsdKyNeJE+IyjCZEmEb8J1WZF0vK2u5481Ck2YFLq6U3jTYoAz91yXegmNu5qRUukMFQil9RThAG8Qnn44oepXvMSN0kv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzcS0PW2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92E9C4CEE7;
+	Mon,  3 Nov 2025 14:31:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762180299;
+	bh=rG9BK8r7AMUubNgGagpv0lfuxX9C5xmuAMy90Ex5TiI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HzcS0PW23qTFpaEKorsVxP3PrZSvIUNYDyceZucSpzjq69PNo/8Lp1GNFHGyF40F9
+	 7wpInssjBvBnb3BRJn4Fd7XfWd7lOdAMPg0WQePpt27fibi6Y3p/xP8RDUpJdej2zr
+	 nvxgf/MMXu+/Q91Qpqte5zFt2Laj08oN9ktr87zGdm65OAAmWQcX3agdep+L0pqT06
+	 lr3CUM+uDqIpogJ7j5aJOrhoLc9Cq/7uyj+N+9Mdg8slvwr49HNhByutirdz/ub07Z
+	 LXfb5FdCQNkX2MCKS/PosuHgtKkTJ+uH05qhOFaQn14OdKcFuiWK9HkmwLVROfQMX3
+	 N5K+Ox4oTKDXQ==
+Message-ID: <f8e1ee1d-5750-48ed-bdff-97664484910b@kernel.org>
+Date: Mon, 3 Nov 2025 14:31:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aQiANPQU9ZEa0zCo@krikkit>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] selftests/bpf: Add test for bpftool map ID
+ printing
+To: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+ bpf@vger.kernel.org
+Cc: alan.maguire@oracle.com, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com>
+ <20251101193357.111186-3-harshit.m.mogalapalli@oracle.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20251101193357.111186-3-harshit.m.mogalapalli@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 03, 2025 at 11:13:08AM +0100, Sabrina Dubroca wrote:
-> 2025-10-30, 17:02:17 -0700, Jakub Kicinski wrote:
-> > On Fri, 31 Oct 2025 00:13:59 +0100 Sabrina Dubroca wrote:
-> > > >  set -o pipefail
-> > > >  
-> > > > +if ! ethtool --json -k $NSIM_NETDEV > /dev/null 2>&1; then  
-> > > 
-> > > I guess it's improving the situation, but I've got a system with an
-> > > ethtool that accepts the --json argument, but silently ignores it for
-> > >  -k (ie `ethtool --json -k $DEV` succeeds but doesn't produce a json
-> > > output), which will still cause the test to fail later.
-> > 
-> > And --json was added to -k in Jan 2022, that's pretty long ago.
-> > I'm not sure we need this aspect of the patch at all..
+On 01/11/2025 19:33, Harshit Mogalapalli wrote:
+> Add selftest to check if Map ID is printed on successful creation in
+> both plain text and json formats.
 > 
-> Ok.  Then maybe a silly idea: for the tests that currently have some
-> form of "$TOOL is too old" check, do we want to remove those after a
-> while? If so, how long after the feature was introduced in $TOOL?
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 
-Another option is to turn them into a hard fail, after X years. My
-guess is, tests which get skipped because the test tools are too old
-frequently get ignored. Tests which fail are more likely to be looked
-at, and the tools updated.
+Reviewed-by: Quentin Monnet <qmo@kernel.org>
 
-Another idea is have a dedicated test which simply tests the versions
-of all the tools. And it should only pass if the installed tools are
-sufficiently new that all test can pass. If you have tools which are
-in the grey zone between too old to cause skips, but not old enough to
-cause fails, you then just have one failing test you need to turn a
-blind eye to.
-
-	Andrew
+Thank you!
 
