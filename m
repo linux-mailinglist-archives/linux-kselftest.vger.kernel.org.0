@@ -1,195 +1,173 @@
-Return-Path: <linux-kselftest+bounces-44641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3930AC2B254
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 11:51:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C423C2B7E2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 12:48:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 719D73494E3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 10:51:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A4853A6E31
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 11:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D263009CA;
-	Mon,  3 Nov 2025 10:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB1F3054F8;
+	Mon,  3 Nov 2025 11:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dMmdPgR/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T7iFSoYt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1DDE2FFF8B;
-	Mon,  3 Nov 2025 10:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA6B2FC865
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Nov 2025 11:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762167064; cv=none; b=rsHJ0FzDCuv6X+wv3YOSvKNs4c5m2C6VGJRbvs2fmdnolF2b/EtDgdid6G/y0QMnGNaX1OLm9ZkrdfaOqE73DOmvFBIQg9DGsAp64rLFLQ88j0rPX68FEQ6OzjPnmOr6N+yPB5TLJfSjvoOOKfnBo1nFVc6vMLHGSVvJP/6II2E=
+	t=1762170311; cv=none; b=Sm8yiNoTY98v1k+6vE4ePKjVh31sVjm3KPmWEB3lGn67k+eVsB1ljUQS0NMTXEa+/HG0AqgWBUN6O/TLuneAP/na0z3vH9j4bJ4AWPy+PNE3HiaLfoKTRSUDOeESo6qvbOtkbmUpiBW3hy3OWjpYKRxnCiIXZWDgFqs7ZpdEj2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762167064; c=relaxed/simple;
-	bh=VQ4hXNs7+ujjrEuM6okI3GtAUk8U1jbFJcLICEJAusg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r+IMRzPsP5deAqMy5laEyBmeBns+us68jF5qOGFpcToZgKStW1MAUjx8Y+7rPGtdkEjL95jYsMi3AzB7D9jkLt+eYB2qEtNfkFNK3ZFAefEdEzipqyQkePeumsCiwhAA+y7e5ZxdwBBBuPwMQYviKQcdIC0/26qSRWAcwDPIEqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dMmdPgR/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3098C4CEE7;
-	Mon,  3 Nov 2025 10:50:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762167062;
-	bh=VQ4hXNs7+ujjrEuM6okI3GtAUk8U1jbFJcLICEJAusg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dMmdPgR/Ennl/LxZY9JqJ+rdcdE5xbtl2DS6YCfkT8tjg2C4Ok941GA3a0aGjjcbh
-	 N+VphgG9Mxrc/rwY9hDkjQyGMzokqLs2VkZpM811GklFiDmbuNyU/kx4IyYR4eQ6J4
-	 LYYuHJzAEuB/b9dp2zy3oLn35WeqIp2x8dQv1mg9ylraTpLP1Ncd6KNEOugD2aZg6d
-	 J7IOaVx49e5JS8rzKGoQ+bfFg7G0KZ5tWzMM2lCcQC4hMefqksB4zyYyXewfMGG/sH
-	 sf8iVfIkNndfACRLGLkcklSZ9SSPDp5SoTikAG2yQ/gnB6LeuVhTDfy3sIEh3BNm3K
-	 i5hySTuH4tUXA==
-Date: Mon, 3 Nov 2025 12:50:41 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: "Roy, Patrick" <roypat@amazon.co.uk>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"maz@kernel.org" <maz@kernel.org>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"willy@infradead.org" <willy@infradead.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"david@redhat.com" <david@redhat.com>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"vbabka@suse.cz" <vbabka@suse.cz>,
-	"surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>,
-	"song@kernel.org" <song@kernel.org>,
-	"jolsa@kernel.org" <jolsa@kernel.org>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"haoluo@google.com" <haoluo@google.com>,
-	"jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-	"peterx@redhat.com" <peterx@redhat.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"pfalcato@suse.de" <pfalcato@suse.de>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"seanjc@google.com" <seanjc@google.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Cali, Marco" <xmarcalx@amazon.co.uk>,
-	"Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
-	"Thomson, Jack" <jackabt@amazon.co.uk>,
-	"derekmn@amazon.co.uk" <derekmn@amazon.co.uk>,
-	"tabba@google.com" <tabba@google.com>,
-	"ackerleytng@google.com" <ackerleytng@google.com>
-Subject: Re: [PATCH v7 05/12] KVM: guest_memfd: Add flag to remove from
- direct map
-Message-ID: <aQiJAfO8wiVPko_N@kernel.org>
-References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
- <20250924152214.7292-1-roypat@amazon.co.uk>
- <20250924152214.7292-2-roypat@amazon.co.uk>
- <DDWOP8GKHESP.2EOY2HGM9RXHU@google.com>
- <aQXVNuBwEIRBtOc0@kernel.org>
- <DDYZRG8A99D1.2MYZVGBKJNHJW@google.com>
+	s=arc-20240116; t=1762170311; c=relaxed/simple;
+	bh=Snze6QioZdunD7PUrwavI51s5kZUyeRbHJ1WZVExJeQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Bq48YiOWjLb8iCtYE5UMfxR0VjaMy0GqJiUqZI+eRDz+hpYuUYRiblOhuJjL/zrOswMyhXn9UKQgjcBp6D5Zso6IV0tVkNYEo3HYv/tG2/Oe6/gmGow8adUwhPhK+2R+V0nLscBwvGwsPQglyySdDdcz7OoZAJIFt0LGFldWeLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T7iFSoYt; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-783c3400b5dso2819885b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Nov 2025 03:45:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762170309; x=1762775109; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+AxL6XsSqUIW3egu/GBVC/mr8ycUobBmvTaoJnifx9U=;
+        b=T7iFSoYtQhQBAtb75m0biqcMf+0yUCPE0NjyEhx0TL+BFlm6NQ6S7pr5+2SpFVOUC5
+         txV31+abEvAgAl+nFnAVWVk4T4m3lp683itXwISjY2+Njd4yFqgXhL0UNHOP1IHh4NaV
+         +oF+XzwI+tJ3RPD8997wZhxqHnYuqDg9BGo/+QCmVLWQiEd9ktEXrn0Ve8QwVzFxeBJ/
+         krMeEqLtRib0ONSehsThX1buFzNU1NSdqOKEq9IebOoe+Nir4ZQZkvnY3EAVZpjlEGD7
+         CfkpLTnBW7S3uFnpJOQ/2pB41JtYNixsdT5BpF2+BtrpiRlgu8m8OzEFsulC3CPhnmLX
+         vv3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762170309; x=1762775109;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+AxL6XsSqUIW3egu/GBVC/mr8ycUobBmvTaoJnifx9U=;
+        b=MsUStefDDymmligtmiPv6X1th3OSlWESLDbsfo9QyCxAuYpEDYej4RQ2CehO4psG5N
+         L2CpxIwKyrXNe4hgMdR3g85eA2SpanoRzV3JxPjrIOS130nT3s+8Fb+xTPFMyEjjLsIe
+         TiBehF60mAENN3rvjVbJPMKxP5xPQmLqhyJNm57tDo4EOtRbLJS2Z/+RVwGW1SNEwYvv
+         jU5484mS6OPEAr1qYj+ZOMn5Js07DCzwecLFoUzjXzgS6iUCLxrrS1uhAgzkuoMbJmd1
+         jBpHn7ihoqv2ZVrqImhmz4hwSlrcpFYL88WExQPfFEQ+iqlJCu+fCgjhvMjmzRB+vLPV
+         OFsA==
+X-Forwarded-Encrypted: i=1; AJvYcCX67jop8kPnZjqPi7Cxf8n6X7uKKrsYBgkPpNA+LFsz6ixZ43oMlR885Q/8iplroxMNg5xChUutkrAMsYPh5aE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8BAtR8Z0yKP5LtR9t485IwHuM1A18pKx4Wdk7k3wxNYVTfC+P
+	oaOCzOduD5FqB01IBPWkmRZHfn3OJVssrrDoWlJcXZ9oXfXgGXKoPY0ceYJGm2MpxaQKBN6GgN/
+	5zQ==
+X-Google-Smtp-Source: AGHT+IHjJmZ9wmMZ2ev1ZeENp/FvTCGuCpK99OFGTZI8mDpUAbscgPDrpPQmYTYpCewECCXeyZRPHMd3zA==
+X-Received: from pfbfb41.prod.google.com ([2002:a05:6a00:2da9:b0:7a1:f3d3:6658])
+ (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2191:b0:7aa:9e4d:b693
+ with SMTP id d2e1a72fcca58-7aa9e4db99dmr5369991b3a.17.1762170309058; Mon, 03
+ Nov 2025 03:45:09 -0800 (PST)
+Date: Mon,  3 Nov 2025 19:45:02 +0800
+In-Reply-To: <87o6r46xsw.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DDYZRG8A99D1.2MYZVGBKJNHJW@google.com>
+Mime-Version: 1.0
+References: <87o6r46xsw.ffs@tglx>
+X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
+Message-ID: <20251103114502.584940-1-wakel@google.com>
+Subject: [PATCH v2] selftests/timers: Clean up kernel version check in posix_timers
+From: Wake Liu <wakel@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, linux-kselftest@vger.kernel.org
+Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	John Stultz <jstultz@google.com>, Shuah Khan <shuah@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
+	linux-kernel@vger.kernel.org, wakel@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 03, 2025 at 10:35:38AM +0000, Brendan Jackman wrote:
-> On Sat Nov 1, 2025 at 9:39 AM UTC, Mike Rapoport wrote:
-> > On Fri, Oct 31, 2025 at 05:30:12PM +0000, Brendan Jackman wrote:
-> >> On Wed Sep 24, 2025 at 3:22 PM UTC, Patrick Roy wrote:
-> >> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> >> > index 1d0585616aa3..73a15cade54a 100644
-> >> > --- a/include/linux/kvm_host.h
-> >> > +++ b/include/linux/kvm_host.h
-> >> > @@ -731,6 +731,12 @@ static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-> >> >  bool kvm_arch_supports_gmem_mmap(struct kvm *kvm);
-> >> >  #endif
-> >> >  
-> >> > +#ifdef CONFIG_KVM_GUEST_MEMFD
-> >> > +#ifndef kvm_arch_gmem_supports_no_direct_map
-> >> > +#define kvm_arch_gmem_supports_no_direct_map can_set_direct_map
-> >> > +#endif
-> >> > +#endif /* CONFIG_KVM_GUEST_MEMFD */
-> >> 
-> >> The test robot seems happy so I think I'm probably mistaken here, but
-> >> AFAICS can_set_direct_map only exists when ARCH_HAS_SET_DIRECT_MAP,
-> >> which powerpc doesn't set.
-> >
-> > We have stubs returning 0 for architectures that don't have
-> > ARCH_HAS_SET_DIRECT_MAP.
-> 
-> I can't see any such stub for can_set_direct_map() specifically?
+Several tests in the posix_timers selftest which test timer behavior
+related to SIG_IGN fail on kernels older than 6.13. This is due to
+a refactoring of signal handling in commit caf77435dd8a ("signal:
+Handle ignored signals in do_sigaction(action != SIG_IGN)").
 
-include/linux/set_memory.h:
+A previous attempt to fix this by adding a kernel version check to each
+of the nine affected tests was suboptimal, as it resulted in emitting
+the same skip message nine times.
 
-#ifndef CONFIG_ARCH_HAS_SET_DIRECT_MAP
-static inline int set_direct_map_invalid_noflush(struct page *page)
-{
-	return 0;
-}
-static inline int set_direct_map_default_noflush(struct page *page)
-{
-	return 0;
-}
+Following the suggestion from Thomas Gleixner, this is refactored to
+perform a single version check in main(). To satisfy the kselftest
+framework's requirement for the test count to match the declared plan,
+the plan is now conditionally set to 10 (for older kernels) or 19.
 
-static inline int set_direct_map_valid_noflush(struct page *page,
-					       unsigned nr, bool valid)
-{
-	return 0;
-}
+While setting the plan conditionally may seem complex, it is the
+better approach to avoid the alternatives: either running tests on
+unsupported kernels that are known to fail, or emitting a noisy series
+of nine identical skip messages. A single informational message is now
+printed instead when the tests are skipped.
 
-static inline bool kernel_page_present(struct page *page)
-{
-	return true;
-}
-#else /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
-/*
- * Some architectures, e.g. ARM64 can disable direct map modifications at
- * boot time. Let them overrive this query.
- */
-#ifndef can_set_direct_map
-static inline bool can_set_direct_map(void)
-{
-	return true;
-}
-#define can_set_direct_map can_set_direct_map
-#endif
-#endif /* CONFIG_ARCH_HAS_SET_DIRECT_MAP */
+Link: https://lore.kernel.org/all/20250807085042.1690931-1-wakel@google.com/
+Signed-off-by: Wake Liu <wakel@google.com>
+---
+ tools/testing/selftests/timers/posix_timers.c | 32 +++++++++++++------
+ 1 file changed, 22 insertions(+), 10 deletions(-)
 
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+index f0eceb0faf34..a563c438ac79 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -18,6 +18,7 @@
+ #include <time.h>
+ #include <include/vdso/time64.h>
+ #include <pthread.h>
++#include <stdbool.h>
  
-> (But again, the bot seems happy, so I still suspect I'm wrong somehow or
-> other).
-
+ #include "../kselftest.h"
+ 
+@@ -670,8 +671,14 @@ static void check_timer_create_exact(void)
+ 
+ int main(int argc, char **argv)
+ {
++	bool run_sig_ign_tests = ksft_min_kernel_version(6, 13);
++
+ 	ksft_print_header();
+-	ksft_set_plan(19);
++	if (run_sig_ign_tests) {
++		ksft_set_plan(19);
++	} else {
++		ksft_set_plan(10);
++	}
+ 
+ 	ksft_print_msg("Testing posix timers. False negative may happen on CPU execution \n");
+ 	ksft_print_msg("based timers if other threads run on the CPU...\n");
+@@ -695,15 +702,20 @@ int main(int argc, char **argv)
+ 	check_timer_create(CLOCK_PROCESS_CPUTIME_ID, "CLOCK_PROCESS_CPUTIME_ID");
+ 	check_timer_distribution();
+ 
+-	check_sig_ign(0);
+-	check_sig_ign(1);
+-	check_rearm();
+-	check_delete();
+-	check_sigev_none(CLOCK_MONOTONIC, "CLOCK_MONOTONIC");
+-	check_sigev_none(CLOCK_PROCESS_CPUTIME_ID, "CLOCK_PROCESS_CPUTIME_ID");
+-	check_gettime(CLOCK_MONOTONIC, "CLOCK_MONOTONIC");
+-	check_gettime(CLOCK_PROCESS_CPUTIME_ID, "CLOCK_PROCESS_CPUTIME_ID");
+-	check_gettime(CLOCK_THREAD_CPUTIME_ID, "CLOCK_THREAD_CPUTIME_ID");
++	if (run_sig_ign_tests) {
++		check_sig_ign(0);
++		check_sig_ign(1);
++		check_rearm();
++		check_delete();
++		check_sigev_none(CLOCK_MONOTONIC, "CLOCK_MONOTONIC");
++		check_sigev_none(CLOCK_PROCESS_CPUTIME_ID, "CLOCK_PROCESS_CPUTIME_ID");
++		check_gettime(CLOCK_MONOTONIC, "CLOCK_MONOTONIC");
++		check_gettime(CLOCK_PROCESS_CPUTIME_ID, "CLOCK_PROCESS_CPUTIME_ID");
++		check_gettime(CLOCK_THREAD_CPUTIME_ID, "CLOCK_THREAD_CPUTIME_ID");
++	} else {
++		ksft_print_msg("Skipping SIG_IGN tests on kernel < 6.13\n");
++	}
++
+ 	check_overrun(CLOCK_MONOTONIC, "CLOCK_MONOTONIC");
+ 	check_overrun(CLOCK_PROCESS_CPUTIME_ID, "CLOCK_PROCESS_CPUTIME_ID");
+ 	check_overrun(CLOCK_THREAD_CPUTIME_ID, "CLOCK_THREAD_CPUTIME_ID");
 -- 
-Sincerely yours,
-Mike.
+2.51.1.930.gacf6e81ea2-goog
+
 
