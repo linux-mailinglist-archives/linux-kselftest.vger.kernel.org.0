@@ -1,95 +1,173 @@
-Return-Path: <linux-kselftest+bounces-44656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE5ECC2D1AC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 17:26:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A316DC2D34F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 03 Nov 2025 17:43:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E6831895F30
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 16:23:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99C6E3A84CB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Nov 2025 16:32:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7585A3168E0;
-	Mon,  3 Nov 2025 16:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LJHdEwDV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329913191A7;
+	Mon,  3 Nov 2025 16:32:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51310314D01
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Nov 2025 16:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A18930DEDE;
+	Mon,  3 Nov 2025 16:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762186955; cv=none; b=Jur6xc9jL8KPbgSUcVzZN/4B9ddPpc2LbkbQ+QZi/wkubhbVa/ZCJhp95Vq6oSBrWju2z1KtZrIcwz825cABgd12Q+0z1uz8HTBR1KdX19W6S8H0STFU+dNdPohWnBnYzxR/C29zBcwbCcSbtnoeLFNBNRER6AiCHGobOzKOy1g=
+	t=1762187552; cv=none; b=g75xWO7ewIC71h4aomhC3YnIOTR6eZ49b3YCktf5F7XRqeLBZ2bBSdcMXerOFjUtigIZjrmxns2fpInn1CXLmBkY0XPY5lI0yoX9c89bqvic35meZ0tg0w+GzCex5t7/QljXs2ZbaCQxOl1MiUABk2Tf/jXdX1ck2V4zhr4DjtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762186955; c=relaxed/simple;
-	bh=93FBKrK0toqosvLDln27pA8mtH7ilIFrTvv6JsRg2ss=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CHAf6me9Ush5fpG8AnfqNPY1oUh/jNC6GFOcrl4zMQqksuVVeYMGX6OAJ1sFJTkyQ6VzI/f/ii+aO7VswJBjyr+ux+CHc9+R4ox6CyX2gv3SKXpQpU1WDNJO+Blw8p4brCF02qpx4s15y1HfxFYGT80xrz8nucngY46R8sw9Mjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LJHdEwDV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1EDEC4CEE7;
-	Mon,  3 Nov 2025 16:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762186955;
-	bh=93FBKrK0toqosvLDln27pA8mtH7ilIFrTvv6JsRg2ss=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LJHdEwDV9C4QptAxVCFZz6DjBvfRwdYFCCEA1JO4GzFVJpaeF/mZoYwy3xP2fRKkd
-	 IdGMbAFwkOvGDurcVGnCenCOcoP4ygIh9XNhXh+rmMjiuqFpPSvzYiIhLd343CT3jf
-	 Q6moRwBooDU8gsg6reguK04iUT/v4Himfbh8MgWRP7OIIzso/c9ZkrYORJ8Z2T+rNX
-	 161FW2ZnK75SG3F69VI1PFR209K/IyhKflXWPr6ufX7iSBKe/xYUO40/M+VyGWd5bw
-	 OwF5EdYzMvXjDIs2hn4vp5/bbotv0a6kCC4VxJAi3A7tQO4UJebcKElOxAaoCqF4qD
-	 aNhq3528ce5VA==
-Date: Mon, 3 Nov 2025 16:22:32 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
-	linux-kselftest@vger.kernel.org, shuah@kernel.org, will@kernel.org
-Subject: Re: [PATCH] kselftest/arm64: Align zt-test register dumps
-Message-ID: <aQjWyM9Eyboav5R2@finisterre.sirena.org.uk>
-References: <20251103160417.1023545-1-mark.rutland@arm.com>
+	s=arc-20240116; t=1762187552; c=relaxed/simple;
+	bh=VQ0WiX1TW6oTI7NKhfbFYkDH+GwDeBBWv2ibDv8P4hM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=L3v0rqAbm7fbGdiJyylW24oF21N1qixiSGJl1/zcSvA6cqSJufMTDa5ONMXqCvJf8wsYOxuzJjewN3faTPam9B3mN8AxjGOcOni8/5FpwGEL2v30/bGQhczUfeBDkaM0pObZ/5AfzPNGNRVJeZSj0iD2NxxYERhM7n3PAnc6Xgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BE2B1D14;
+	Mon,  3 Nov 2025 08:32:22 -0800 (PST)
+Received: from e129823.cambridge.arm.com (e129823.arm.com [10.1.197.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A43833F694;
+	Mon,  3 Nov 2025 08:32:26 -0800 (PST)
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: catalin.marinas@arm.com,
+	will@kernel.org,
+	maz@kernel.org,
+	broonie@kernel.org,
+	oliver.upton@linux.dev,
+	miko.lenczewski@arm.com,
+	kevin.brodsky@arm.com,
+	ardb@kernel.org,
+	suzuki.poulose@arm.com,
+	lpieralisi@kernel.org,
+	yangyicong@hisilicon.com,
+	scott@os.amperecomputing.com,
+	joey.gouly@arm.com,
+	yuzenghui@huawei.com,
+	pbonzini@redhat.com,
+	shuah@kernel.org,
+	mark.rutland@arm.com
+Cc: linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH v10 0/9] support FEAT_LSUI
+Date: Mon,  3 Nov 2025 16:32:15 +0000
+Message-Id: <20251103163224.818353-1-yeoreum.yun@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5lnNBZ32XwriuUaA"
-Content-Disposition: inline
-In-Reply-To: <20251103160417.1023545-1-mark.rutland@arm.com>
-X-Cookie: A mushroom cloud has no silver lining.
+Content-Transfer-Encoding: 8bit
+
+Since Armv9.6, FEAT_LSUI supplies the load/store instructions for
+previleged level to access to access user memory without clearing
+PSTATE.PAN bit.
+
+This patchset support FEAT_LSUI and applies in futex atomic operation
+and user_swpX emulation where can replace from ldxr/st{l}xr
+pair implmentation with clearing PSTATE.PAN bit to correspondant
+load/store unprevileged atomic operation without clearing PSTATE.PAN bit.
 
 
---5lnNBZ32XwriuUaA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Patch Sequences
+================
 
-On Mon, Nov 03, 2025 at 04:04:17PM +0000, Mark Rutland wrote:
-> The zt-test output is awkward to read, as the 'Expected' value isn't
-> dumped on its own line and isn't aligned with the 'Got' value beneath.
+Patch #1 adds cpufeature for FEAT_LSUI
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Patch #2-#3 expose FEAT_LSUI to guest
 
-The other tests all print either a register or row number after the PID
-and iteration but there's nothing equivalent for ZT0, the newline got
-deleted along with those logs since it's wrapped into the number print.
+Patch #4 adds Kconfig for FEAT_LSUI
 
---5lnNBZ32XwriuUaA
-Content-Type: application/pgp-signature; name="signature.asc"
+Patch #5-#6 support futex atomic-op with FEAT_LSUI
 
------BEGIN PGP SIGNATURE-----
+Patch #7-#9 support user_swpX emulation with FEAT_LSUI
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkI1sQACgkQJNaLcl1U
-h9Cx7wf/bR6vlLy2s6mopoo2jg7WKsRYwpZil6D18mN+KgBkNsuHa37wpbcWa8KH
-LD5oRHAFT8yPH67RoQagBbgWJH08bbKJTChT/kzHGKN2M9RJvtNwZPRVO2g5SBmx
-666C2q1ROkLMTocaWaXmJb2I/ru/itfNwg5v4u1JtFol9k/i06BwjySrrHf3HslC
-7swocDKz1ucp3a+H3d0cWjJ0fZIMonVw7/kylOnxhHRA/Y9IthHKJRGOZHTnLAxT
-lX5JV2VhK2bLG2UM/DvSl4Itnxg2/XLCq7px1/TTL7APeP1Xt9whQKiQuDYqMIHJ
-JFicZpB956ZXA1VOkJqWixJKs+lrbg==
-=m3CS
------END PGP SIGNATURE-----
 
---5lnNBZ32XwriuUaA--
+Patch History
+==============
+from v9 to v10:
+  - apply FEAT_LSUI to user_swpX emulation.
+  - add test coverage for LSUI bit in ID_AA64ISAR3_EL1
+  - rebase to v6.18-rc4
+  - https://lore.kernel.org/all/20250922102244.2068414-1-yeoreum.yun@arm.com/
+
+from v8 to v9:
+  - refotoring __lsui_cmpxchg64()
+  - rebase to v6.17-rc7
+  - https://lore.kernel.org/all/20250917110838.917281-1-yeoreum.yun@arm.com/
+
+from v7 to v8:
+  - implements futex_atomic_eor() and futex_atomic_cmpxchg() with casalt
+    with C helper.
+  - Drop the small optimisation on ll/sc futex_atomic_set operation.
+  - modify some commit message.
+  - https://lore.kernel.org/all/20250816151929.197589-1-yeoreum.yun@arm.com/
+
+from v6 to v7:
+  - wrap FEAT_LSUI with CONFIG_AS_HAS_LSUI in cpufeature
+  - remove unnecessary addition of indentation.
+  - remove unnecessary mte_tco_enable()/disable() on LSUI operation.
+  - https://lore.kernel.org/all/20250811163635.1562145-1-yeoreum.yun@arm.com/
+
+from v5 to v6:
+  - rebase to v6.17-rc1
+  - https://lore.kernel.org/all/20250722121956.1509403-1-yeoreum.yun@arm.com/
+
+from v4 to v5:
+  - remove futex_ll_sc.h futext_lsui and lsui.h and move them to futex.h
+  - reorganize the patches.
+  - https://lore.kernel.org/all/20250721083618.2743569-1-yeoreum.yun@arm.com/
+
+from v3 to v4:
+  - rebase to v6.16-rc7
+  - modify some patch's title.
+  - https://lore.kernel.org/all/20250617183635.1266015-1-yeoreum.yun@arm.com/
+
+from v2 to v3:
+  - expose FEAT_LUSI to guest
+  - add help section for LUSI Kconfig
+  - https://lore.kernel.org/all/20250611151154.46362-1-yeoreum.yun@arm.com/
+
+from v1 to v2:
+  - remove empty v9.6 menu entry
+  - locate HAS_LUSI in cpucaps in order
+  - https://lore.kernel.org/all/20250611104916.10636-1-yeoreum.yun@arm.com/
+
+
+Yeoreum Yun (9):
+  arm64: cpufeature: add FEAT_LSUI
+  KVM: arm64: expose FEAT_LSUI to guest
+  KVM: arm64: kselftest: set_id_regs: add test for FEAT_LSUI
+  arm64: Kconfig: Detect toolchain support for LSUI
+  arm64: futex: refactor futex atomic operation
+  arm64: futex: support futex with FEAT_LSUI
+  arm64: separate common LSUI definitions into lsui.h
+  arm64: armv8_deprecated: convert user_swpX to inline function
+  arm64: armv8_deprecated: apply FEAT_LSUI for swpX emulation.
+
+ arch/arm64/Kconfig                            |   5 +
+ arch/arm64/include/asm/futex.h                | 291 +++++++++++++++---
+ arch/arm64/include/asm/lsui.h                 |  25 ++
+ arch/arm64/kernel/armv8_deprecated.c          |  86 +++++-
+ arch/arm64/kernel/cpufeature.c                |  10 +
+ arch/arm64/kvm/sys_regs.c                     |   3 +-
+ arch/arm64/tools/cpucaps                      |   1 +
+ .../testing/selftests/kvm/arm64/set_id_regs.c |   1 +
+ 8 files changed, 360 insertions(+), 62 deletions(-)
+ create mode 100644 arch/arm64/include/asm/lsui.h
+
+
+base-commit: 6146a0f1dfae5d37442a9ddcba012add260bceb0
+--
+LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+
 
