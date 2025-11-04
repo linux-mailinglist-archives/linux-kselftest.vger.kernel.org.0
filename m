@@ -1,140 +1,187 @@
-Return-Path: <linux-kselftest+bounces-44695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 909FCC2FB92
-	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 08:53:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 871B0C3010F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 09:53:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5FF1C4E382F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 07:53:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C19E0460F90
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 08:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD8930FF2F;
-	Tue,  4 Nov 2025 07:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C663128D6;
+	Tue,  4 Nov 2025 08:44:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4yROKUV"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="NIfzfLaK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E061430AAB8;
-	Tue,  4 Nov 2025 07:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F8D313524;
+	Tue,  4 Nov 2025 08:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762242784; cv=none; b=HpIv9uEBH4A1S3RR+xU4gP5mtJxKU1kAOLEvKMknty6u2NBuywqp6uWAUleGeKUa7KEGMAq3T6TvbqhOGNqqTnto1rNaAZ6lYPO8+ijNCb9h6lgRfe3dGK2tXZnDMGTGtBmEfBq8/f9/EQfGgSo95cacu01WeWQ1ZcjhAlO1MAk=
+	t=1762245887; cv=none; b=FVhpXDpjgEl3ncFWz67hVuLc170caS2QZHOhdMLoA11zOJ8vek153JqL9Js8ecopWrQzAebJGowYHl60YnIclpXjJIQZk3Ugwp0UzyTBbVQkQRNayFCxpxX7jNR+zHbe8iCzIPb4R7c2w+k7nV7k4Dus6gkjWHOGC0vVxCY/RpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762242784; c=relaxed/simple;
-	bh=lGIbceyVZgdKoxAlgrENOyuI7iqdDhBBFcc98C3lKn0=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=rqDe8JC8vWeexLCQcKgdzxPhgMKA1epB0ndkEktCccV8f0JCpZXq7EZiJd0BSWJpjvKZr2939WZQN65bETTpkn/rHe8lIh8C8J5GuIOOGy5SJr6rHHnnxDnWk5Jv1LQdSmeI/1gjeuV97huhReh/X5BS1bPQZqASI69VO1ZWzz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4yROKUV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8A2C4CEF7;
-	Tue,  4 Nov 2025 07:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762242780;
-	bh=lGIbceyVZgdKoxAlgrENOyuI7iqdDhBBFcc98C3lKn0=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=j4yROKUVgRxS9OZJC90/SHA8XCPDVvwVHDTgceh+mCs64FFENtqjNn3VC2cS3YHRS
-	 Vh89i49TvVRT0q9eqdMJYy6UnQ4flTEkFee+vNQ+LDBtPs6JzXOg9rqYQ1l4R+DhcE
-	 OKQGVXbTY9tU25yQyQP/GPDQop+9ZGgyxC6t3ereLkJQbDn6Ob5K1plMoN0NTftZxP
-	 H0zc0vdg/o5PK4tKAehZQ7H8UtwncmtwY6oH+6QVwjaU8ikukGQIRaxvlWW+ISd3QU
-	 to0NJLl+MiSLIdyT3IYNIGJSnGwpG80zYDO7P7ohAcYwUyIFI+7D4Iv2WyVwNsWwgM
-	 89d6ggsAvvugA==
-Date: Tue, 4 Nov 2025 00:52:53 -0700 (MST)
-From: Paul Walmsley <pjw@kernel.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-cc: Paul Walmsley <pjw@kernel.org>, Deepak Gupta <debug@rivosinc.com>, 
-    Andy Chiu <andybnac@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
-    Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-    Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-    "H. Peter Anvin" <hpa@zytor.com>, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-    Vlastimil Babka <vbabka@suse.cz>, 
-    Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-    Paul Walmsley <paul.walmsley@sifive.com>, 
-    Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-    Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-    Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-    Christian Brauner <brauner@kernel.org>, 
-    Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
-    Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-    Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-    Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
-    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-    =?ISO-8859-15?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-    Andreas Hindborg <a.hindborg@kernel.org>, 
-    Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-    Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
-    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-    linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-    linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-    linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-    richard.henderson@linaro.org, jim.shu@sifive.com, kito.cheng@sifive.com, 
-    charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com, 
-    cleger@rivosinc.com, alexghiti@rivosinc.com, samitolvanen@google.com, 
-    broonie@kernel.org, rick.p.edgecombe@intel.com, 
-    rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v22 17/28] riscv/signal: save and restore of shadow stack
- for signal
-In-Reply-To: <d442965b-8716-4f89-be88-bc62459af712@infradead.org>
-Message-ID: <febe1a8a-a68b-1af8-a9d5-1b5f510ecab3@kernel.org>
-References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com> <20251023-v5_user_cfi_series-v22-17-1935270f7636@rivosinc.com> <a8f469b8-5750-dfec-2390-09bad4515f99@kernel.org> <d442965b-8716-4f89-be88-bc62459af712@infradead.org>
+	s=arc-20240116; t=1762245887; c=relaxed/simple;
+	bh=NToKopaiiCorKnog1Ua+Guz58w6YXipmGADFT5V1BS8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=t1xXNMMMUwqyl7FyunoSk9XmT3YULkeEiVeY/pYtYhAzzmTYN5s8qN3BoWT47vXE3vpmIg67zTD5zRSmIlfR20LRGfQf6IiEVzBBas6i6xWFe0DurgoHryoSv1deDddIGbhXl9U2FctGmOj9pAFfeUuiDGDOoul6ESVPSjkw6l0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=NIfzfLaK; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20251104084442euoutp0102088d40135302607f87347b0dc37851~0wUsqg9XY0417804178euoutp01G;
+	Tue,  4 Nov 2025 08:44:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20251104084442euoutp0102088d40135302607f87347b0dc37851~0wUsqg9XY0417804178euoutp01G
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1762245882;
+	bh=4Fu9AdCheOvxz3Im1FXmK3GvN5Xitn31VIJ6mONdECE=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=NIfzfLaKbrHZu0Gnes91/bNFpnUi+PCBujRxqfn1+x6PF4bWcGMTESoPuAVb8BCNe
+	 TtlBUOWDuOkNSnmVQ30DXStAE0ZC8Og/doIluRR7N6u64puk7uGLaCr147tEyKOLdV
+	 mk1n6uHGDW++q0sGM+SWQUfE/wNIAUBaBoIJ+ACU=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287~0wUr8pCub0922509225eucas1p2b;
+	Tue,  4 Nov 2025 08:44:42 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20251104084440eusmtip27dfa57d3ff654ed50f16a811242c3a65~0wUqFptgI2591225912eusmtip2U;
+	Tue,  4 Nov 2025 08:44:39 +0000 (GMT)
+Message-ID: <e7f05748-a11c-47eb-b1fa-cdc9dc6d05e0@samsung.com>
+Date: Tue, 4 Nov 2025 09:44:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH v4 23/35] vdso/datastore: Map pages through struct page
+To: Mark Brown <broonie@kernel.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?=
+	<thomas.weissschuh@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
+	<arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, Andreas Larsson
+	<andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, John Stultz
+	<jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, John Paul Adrian
+	Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+	Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Russell King <linux@armlinux.org.uk>, Madhavan Srinivasan
+	<maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas
+	Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Thomas
+	Bogendoerfer <tsbogend@alpha.franken.de>, Heiko Carstens
+	<hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+	<agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>, Nagarathnam Muthusamy
+	<nagarathnam.muthusamy@oracle.com>, Shannon Nelson <sln@onemain.com>,
+	linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
+	Aishwarya.TCV@arm.com
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <aQjJNmwniQwwjeBR@finisterre.sirena.org.uk>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287
+X-EPHeader: CA
+X-CMS-RootMailID: 20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287
+References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
+	<20251014-vdso-sparc64-generic-2-v4-23-e0607bf49dea@linutronix.de>
+	<aQjJNmwniQwwjeBR@finisterre.sirena.org.uk>
+	<CGME20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287@eucas1p2.samsung.com>
 
-Hi Randy,
+On 03.11.2025 16:24, Mark Brown wrote:
+> On Tue, Oct 14, 2025 at 08:49:09AM +0200, Thomas Weißschuh wrote:
+>
+>> An upcoming change will allocate the datapages dynamically instead of as
+>> part of the kernel image. Such pages can only be mapped through
+>> 'struct page' and not through PFNs.
+> I'm seeing some boot failures on some arm64 platforms in -next which are
+> bisecting to this patch in -next.  Unfortunately the diagnostics aren't
+> super useful, we seem to just stop making progress in userspace with no
+> obvious output.  One sample log from the FVP is:
+>
+>     https://lava.sirena.org.uk/scheduler/job/2036229#L1268
+>
+> which isn't super instructive.  Not all platforms seem to be affected,
+> I've seen this on at least the Arm FVP, Orion O6 and Libretech Renegade
+> Elite.  The diagnostics aren't very clear here but given that I'm seeing
+> the same issue and bisect result on multiple platforms it seemed worth
+> mentioning.  Some platforms do seem fine.
+>
+> We do have some other serious breakage affecting arm64 in -next which
+> are making it hard to get a clear picture of which platforms are
+> affected, at least the FVP and O6 are unaffected by those other issues
+> (due to using MTE on platforms that don't have it, those platforms do
+> have MTE).
 
-On Fri, 31 Oct 2025, Randy Dunlap wrote:
+I got almost the same result while bisecting on ARM 32bit Exynos-based 
+boards, so the issue with this patchset is not fully ARM64 specific. For 
+some reasons it also doesn't affect all systems though. It is even 
+worse, because it affected only a subset of boards, but different for 
+each tested commit. The observed failure looks exactly the same:
 
-> 
-> On 10/31/25 1:07 PM, Paul Walmsley wrote:
-> > On Thu, 23 Oct 2025, Deepak Gupta via B4 Relay wrote:
-> > 
-> >> Save shadow stack pointer in sigcontext structure while delivering signal.
-> >> Restore shadow stack pointer from sigcontext on sigreturn.
-> 
-> > This patch causes some 'checkpatch.pl --strict' messages:
-> > 
-> > CHECK: Comparison to NULL could be written "!saved_shstk_ptr"
-> > #271: FILE: arch/riscv/kernel/usercfi.c:186:
-> > +	if (saved_shstk_ptr == NULL)
-> > 
-> > CHECK: Lines should not end with a '('
-> > #300: FILE: arch/riscv/kernel/usercfi.c:215:
-> > +		pr_info_ratelimited(
-> > 
-> > I've fixed them up here in the event that v22 goes in, but please do the 
-> > same on your side in case a new version is needed.
-> 
-> Is checkpatch.pl --strict the norm for arch/riscv/ ?
+...
 
-I run it on every patch I review.  I usually implement the formatting 
-recommendations, in the interest of keeping the codebase formatted in a 
-standard way across submitters.
+[   10.199852] devtmpfs: mounted
+[   10.205013] Freeing unused kernel image (initmem) memory: 1024K
+[   10.210086] Run /sbin/init as init process
 
-> If there are enough arch/riscv/-specific patch expectations,
-> maybe they could be documented in Documentation/process/maintainer-riscv.rst
-> (a new file).
+INIT: version 2.88 booting
 
-It never occurred to me as being arch/riscv specific, in the sense that, 
-if --strict wasn't more broadly useful across the entire kernel tree, then 
-we should just remove it from checkpatch.pl entirely.  In other words, 
-probably everyone should use it.  There are false positive warnings, of 
-course, including at least one with this patch set; but then again, there 
-are regular false positive warnings with non-strict checkpatch (also with 
-this patch set).
+(no more messages)
 
-In any case, thanks for the suggestion, and will consider.
+The only difference is that bisecting on ARM32bit lead me to the next 
+patch (10d91dac2ea5 ("vdso/datastore: Allocate data pages dynamically") 
+/ [PATCH v4 24/35]).
 
+Then I've tested it on ARM64bit (RaspberrryPi3b+ board) and got the 
+following panic on 6a011a228293 ("vdso/datastore: Map pages through 
+struct page") commit:
 
-- Paul
+VFS: Mounted root (ext4 filesystem) on device 179:3. Trying to move old 
+root to /initrd ... okay devtmpfs: mounted Freeing unused kernel memory: 
+12672K Run /sbin/init as init process Unable to handle kernel paging 
+request at virtual address ffffffffc20b5d48 Mem abort info: ESR = 
+0x0000000096000006 EC = 0x25: DABT (current EL), IL = 32 bits SET = 0, 
+FnV = 0 EA = 0, S1PTW = 0 FSC = 0x06: level 2 translation fault Data 
+abort info: ISV = 0, ISS = 0x00000006, ISS2 = 0x00000000 CM = 0, WnR = 
+0, TnD = 0, TagAccess = 0 GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0 
+swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000000230b000 
+[ffffffffc20b5d48] pgd=0000000000000000, p4d=0000000003618403, 
+pud=0000000003619403, pmd=0000000000000000 Internal error: Oops: 
+0000000096000006 [#1] SMP Modules linked in: CPU: 2 UID: 0 PID: 1 Comm: 
+init Tainted: G W 6.18.0-rc1+ #16136 PREEMPT Tainted: [W]=WARN Hardware 
+name: Raspberry Pi 3 Model B (DT) pstate: 80000005 (Nzcv daif -PAN -UAO 
+-TCO -DIT -SSBS BTYPE=--) pc : vvar_fault+0x7c/0x17c lr : 
+vvar_fault+0x24/0x17c ... Call trace: vvar_fault+0x7c/0x17c (P) 
+special_mapping_fault+0x24/0xd0 __do_fault+0x3c/0x238 
+__handle_mm_fault+0xaa0/0x19e0 handle_mm_fault+0xcc/0x384 
+do_page_fault+0x1a0/0x720 do_translation_fault+0x60/0x6c 
+do_mem_abort+0x44/0x94 el0_da+0x54/0x230 el0t_64_sync_handler+0xd0/0xe4 
+el0t_64_sync+0x198/0x19c Code: f2d83fe0 8b010063 d34cfc63 8b031803 
+(f9400461) ---[ end trace 0000000000000000 ]--- Kernel panic - not 
+syncing: Attempted to kill init! exitcode=0x0000000b SMP: stopping 
+secondary CPUs Kernel Offset: disabled CPU features: 
+0x000000,00180000,40004000,0400421b Memory Limit: none ---[ end Kernel 
+panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
+
+Reverting "clocksource: Remove ARCH_CLOCKSOURCE_DATA", "vdso/datastore: 
+Allocate data pages dynamically" and "vdso/datastore: Map pages through 
+struct page" on top of linux-next fixes booting on all tested boards.
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
 
