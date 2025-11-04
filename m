@@ -1,215 +1,132 @@
-Return-Path: <linux-kselftest+bounces-44772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A15EC336B4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 00:48:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B6435C336CC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 00:49:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C3E554EE299
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 23:48:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 80A124EDDBA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 23:49:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1832634B19F;
-	Tue,  4 Nov 2025 23:47:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4400434B19B;
+	Tue,  4 Nov 2025 23:49:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GifgasKw"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="G3qF+QSD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF35E34B186;
-	Tue,  4 Nov 2025 23:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB5372605;
+	Tue,  4 Nov 2025 23:49:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762300073; cv=none; b=SE9yHuXH0s06MjgoBpDNhwXWO9k6Y1i9UyGw0rPp0lyIZyL4Ya8G2Y1S/E5Q23Ngl7bauTXNRSGt48UsJ7jjgzuVtntejNlWxav1wk2wNFmtbYHPFTnOiqHWkpDPfdv70BSru93af7hFg91P3UNOg/CtW35qPDNakjy1OnEUIEg=
+	t=1762300149; cv=none; b=RcIfzM5svmvJnY/fAP310PsQJtem2A5N99jIG2U4Wp+/0TFssPTwOek0hpqvIQX01LqFxbCeMDgRo5aPleR7kDvofDMblsj1T/VGpUzFKIdi9+Rx22uz1cG5CroDXDmSsc0V6TkDC638vUDSFhY8NIfZvIInZ3zoQas2rHBE+qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762300073; c=relaxed/simple;
-	bh=fEsn3jOrCN93c6qUqNl2qj5zUfUGbA4A30+4VyWcL6o=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=efrz6WCdt7jm5495H3m3TsARF0PKsah0TEZ4xytsODC6zp3wDJa+X3mO3DGd9jNTHO+Wd54s0mCwyQQLeODhQ1Uw4wy36aik7jBlye9O6VemWMWp0xbSmZvjI4OoTcrFatMRAWntqfYspsOYY4sjK+7ax7VqdF5ooHhjAPThZnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GifgasKw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2E2FC4CEF7;
-	Tue,  4 Nov 2025 23:47:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762300072;
-	bh=fEsn3jOrCN93c6qUqNl2qj5zUfUGbA4A30+4VyWcL6o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GifgasKwjeePbhflYlgd4hJiKOTL0PN8UFtOLFGNE50PA7Md4557Iix92WelIc1Jd
-	 B/+JIEV4c+OiRNjG35DM22q0ZKcwRokM6vBxdNth1Tg62rGSMSuBz/IgVHssX2RmPo
-	 WpZk/VmI4dYdYjihKj8ExggTH1olkoqD8WC127noU3KnSicUXgZDwr5BQFGe+oOS4l
-	 dn1qL+ZuszUWMtnEyEWr8VvTlouP4mVmhYmqBUitVqNmNGfei6O9MFRfsAh0UkS4uc
-	 p23ZfDJa8L32R8s6OAIwS6FqPcjgLXsJc/FHQWNeotIC3s9/5XN+BnGOkbgNPfDDiS
-	 zHuf30b9LyG9Q==
-Date: Wed, 5 Nov 2025 08:47:48 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org,
- Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Shuah Khan <skhan@linuxfoundation.org>,
- Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH] selftests/tracing: Add basic test for trace_marker_raw
- file
-Message-Id: <20251105084748.f34e1efec291d420a50a7b62@kernel.org>
-In-Reply-To: <20251014145149.3e3c1033@gandalf.local.home>
-References: <20251014145149.3e3c1033@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1762300149; c=relaxed/simple;
+	bh=Uv2GCoeYI+xVlJW1KgNgqJt6+DR1iHLTRs5Iv9bYUac=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y6hS4OOlXn5fa/apc/ZqjpKuRN8z0n7GWbd+1DLJtvDnBp/z5099eCQeDuGRYfhMsOYhnojXc6nyx0/ssxQ5cvSamXdzP6xN2WTU27+5CnaVCsbF4F8DTSQ8lr3OuMSSY9opYyTejyr/iT+Nsbb189zBlk6AHbBAc1sGWU9gSh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=G3qF+QSD; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=i63ehnnei9rWKWA2KJKI+guZ6phgMXfdcjPHS44W+e4=; b=G3qF+QSDeoGS+uQDnZMmZyNeAE
+	dqCrbZhSh6FKZyMmmZlDSCXvAES/Azg+e+yhoGgNkuAWhwT4/bl5Qvcu0k+GQL6UCLwFzVWFyFhK1
+	sSO+nca2ORM8u+BefKCO7ursEpUI4ZlP4wE1KGkTRtiLb1nKRiYY/qC16v9k9QvSUxrcu9pV/ijwo
+	icaBxLI+7xF1CRYoOjLaKSEV9HpFG5qDNndeq+I8ejUFF/7vpnerTPu97vkAkuN0l6BeMxy0213+i
+	UCBSohVjzv4jX4Amq/POD8tK48QlWq+x4XzBsa5NSea8y0Tj1ci1aL+Y/hUZZ2pGZyZcWEhqi1Nsx
+	NdBeN8VA==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vGQls-0000000CliN-0MMY;
+	Tue, 04 Nov 2025 23:49:04 +0000
+Message-ID: <0792f0d8-0ce5-4858-baa9-c76154c9fc9b@infradead.org>
+Date: Tue, 4 Nov 2025 15:49:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 02/15] genpt: Add Documentation/ files
+To: Jason Gunthorpe <jgg@nvidia.com>, Alexandre Ghiti <alex@ghiti.fr>,
+ Anup Patel <anup@brainfault.org>, Albert Ou <aou@eecs.berkeley.edu>,
+ Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev,
+ Joerg Roedel <joro@8bytes.org>, Justin Stitt <justinstitt@google.com>,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-riscv@lists.infradead.org, llvm@lists.linux.dev,
+ Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+ Will Deacon <will@kernel.org>
+Cc: Alexey Kardashevskiy <aik@amd.com>,
+ Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+ James Gowans <jgowans@amazon.com>, Kevin Tian <kevin.tian@intel.com>,
+ Michael Roth <michael.roth@amd.com>,
+ Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+ Samiullah Khawaja <skhawaja@google.com>, Vasant Hegde <vasant.hegde@amd.com>
+References: <2-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <2-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Tue, 14 Oct 2025 14:51:49 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hi Jason,
 
-> From: Steven Rostedt <rostedt@goodmis.org>
+On 11/4/25 10:30 AM, Jason Gunthorpe wrote:
+> Add some general description and pull in the kdoc comments from the source
+> file to index most of the useful functions.
 > 
-> Commit 64cf7d058a00 ("tracing: Have trace_marker use per-cpu data to read
-> user space") made an update that fixed both trace_marker and
-> trace_marker_raw. But the small difference made to trace_marker_raw had a
-> blatant bug in it that any basic testing would have uncovered.
-> Unfortunately, the self tests have tests for trace_marker but nothing for
-> trace_marker_raw which allowed the bug to get upstream.
-> 
-> Add basic selftests to test trace_marker_raw so that this doesn't happen
-> again.
-> 
-
-Looks good to me.
-
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thanks!
-
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> Reviewed-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Reviewed-by: Samiullah Khawaja <skhawaja@google.com>
+> Tested-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> Tested-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 > ---
->  .../ftrace/test.d/00basic/trace_marker_raw.tc | 107 ++++++++++++++++++
->  1 file changed, 107 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+>  Documentation/driver-api/generic_pt.rst | 142 ++++++++++++++++++++++++
+>  Documentation/driver-api/index.rst      |   1 +
+>  2 files changed, 143 insertions(+)
+>  create mode 100644 Documentation/driver-api/generic_pt.rst
 > 
-> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
+> diff --git a/Documentation/driver-api/generic_pt.rst b/Documentation/driver-api/generic_pt.rst
 > new file mode 100644
-> index 000000000000..7daf7292209e
+> index 00000000000000..210d1229aa1c1f
 > --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-> @@ -0,0 +1,107 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: Basic tests on writing to trace_marker_raw
-> +# requires: trace_marker_raw
-> +# flags: instance
+> +++ b/Documentation/driver-api/generic_pt.rst
+> @@ -0,0 +1,142 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +is_little_endian() {
-> +	if lscpu | grep -q 'Little Endian'; then
-> +		echo 1;
-> +	else
-> +		echo 0;
-> +	fi
-> +}
+> +========================
+> +Generic Radix Page Table
+> +========================
 > +
-> +little=`is_little_endian`
+> +.. kernel-doc:: include/linux/generic_pt/common.h
+> +	:doc: Generic Radix Page Table
 > +
-> +make_str() {
-> +	id=$1
-> +	cnt=$2
+> +.. kernel-doc:: drivers/iommu/generic_pt/pt_defs.h
+> +	:doc: Generic Page Table Language
 > +
-> +	if [ $little -eq 1 ]; then
-> +		val=`printf "\\%03o\\%03o\\%03o\\%03o" \
-> +			$(($id & 0xff)) \
-> +			$((($id >> 8) & 0xff)) \
-> +			$((($id >> 16) & 0xff)) \
-> +			$((($id >> 24) & 0xff))`
-> +	else
-> +		val=`printf "\\%03o\\%03o\\%03o\\%03o" \
-> +			$((($id >> 24) & 0xff)) \
-> +			$((($id >> 16) & 0xff)) \
-> +			$((($id >> 8) & 0xff)) \
-> +			$(($id & 0xff))`
-> +	fi
-> +
-> +	data=`printf -- 'X%.0s' $(seq $cnt)`
-> +
-> +	printf "${val}${data}"
-> +}
-> +
-> +write_buffer() {
-> +	id=$1
-> +	size=$2
-> +
-> +	# write the string into the raw marker
-> +	make_str $id $size > trace_marker_raw
-> +}
-> +
-> +
-> +test_multiple_writes() {
-> +
-> +	# Write a bunch of data where the id is the count of
-> +	# data to write
-> +	for i in `seq 1 10` `seq 101 110` `seq 1001 1010`; do
-> +		write_buffer $i $i
-> +	done
-> +
-> +	# add a little buffer
-> +	echo stop > trace_marker
-> +
-> +	# Check to make sure the number of entries is the id (rounded up by 4)
-> +	awk '/.*: # [0-9a-f]* / {
-> +			print;
-> +			cnt = -1;
-> +			for (i = 0; i < NF; i++) {
-> +				# The counter is after the "#" marker
-> +				if ( $i == "#" ) {
-> +					i++;
-> +					cnt = strtonum("0x" $i);
-> +					num = NF - (i + 1);
-> +					# The number of items is always rounded up by 4
-> +					cnt2 = int((cnt + 3) / 4) * 4;
-> +					if (cnt2 != num) {
-> +						exit 1;
-> +					}
-> +					break;
-> +				}
-> +			}
-> +		}
-> +	// { if (NR > 30) { exit 0; } } ' trace_pipe;
-> +}
-> +
-> +
-> +get_buffer_data_size() {
-> +	sed -ne 's/^.*data.*size:\([0-9][0-9]*\).*/\1/p' events/header_page
-> +}
-> +
-> +test_buffer() {
-> +
-> +	# The id must be four bytes, test that 3 bytes fails a write
-> +	if echo -n abc > ./trace_marker_raw ; then
-> +		echo "Too small of write expected to fail but did not"
-> +		exit_fail
-> +	fi
-> +
-> +	size=`get_buffer_data_size`
-> +	echo size = $size
-> +
-> +	# Now add a little more than what it can handle
-> +
-> +	if write_buffer 0xdeadbeef $size ; then
-> +		echo "Too big of write expected to fail but did not"
-> +		exit_fail
-> +	fi
-> +}
-> +
-> +test_buffer
-> +test_multiple_writes
-> -- 
-> 2.51.0
-> 
+> +-----
+> +Usage
+> +-----
 
+See Documentations/doc-guide/sphinx.rst for the usual order
+of heading adornments. Section beginning:
+
+* Please stick to this order of heading adornments:
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+~Randy
+
 
