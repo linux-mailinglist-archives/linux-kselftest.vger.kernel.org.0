@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-44765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA915C33435
-	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 23:40:43 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BE01C3346A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 23:41:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCF0818C4B0C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 22:40:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 193A64EEE34
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 22:40:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44ABB347FFB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6F02348462;
 	Tue,  4 Nov 2025 22:39:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="boJMujHm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tx/F4HeD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962133148BE
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 22:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2B8346FDC
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 22:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762295958; cv=none; b=Lf4BYKG63XXD+ByYYEZ8hnu7OafnYMHjzz6N8C59YPUKfCUlT1qgn8OlLQwOjaiXtbfVMeHBqc20yqSD9PCRWldQXPF60yB2wQgmhjeI+UrhsasXVXR1t5BZoUOsx2+Fsxz0KN3y1l7hqJJiA5lyr1UXe8LS0LtNwSKTCEFbpHU=
+	t=1762295959; cv=none; b=WVXS0v/lHfC6X6Erepy9prJmC+koiM/6a03TfTweau4w/yYYrwRJYIbbTIO8FoAXWwJDhTVjlqehBNvP+5ku/12Dv7wJea00qRiVvO2iBdzOG4L/UtEdyG0bQPRk6PFCEH3fMUXtaPilQuaxDVyp1IlbNFJEJZxfDdPfbaVufKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762295958; c=relaxed/simple;
-	bh=ZD+kE7Km9hitPWcu6/+QvjzHaUtwlQLzQuuF071Kneo=;
+	s=arc-20240116; t=1762295959; c=relaxed/simple;
+	bh=6JthngltpkcWftejwxT4QQ+XaYtKnwnkggaq1rsEx0E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IIpeNp/bc8sAUiK8UflFZMpHe8AzFbHDBddbrN386n4tpjXdE0OkytCTdCb8Z7XvJl25lIEoJWrLhRNrDNUKDj7TQSYPpTOZM9f8VMH+jLAnKciutHZ+iHiTQ2JHpSzdukaLBgCSMDk6PQ6O+i8vR3Ij0f5j1YP72WPV1/ks76U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=boJMujHm; arc=none smtp.client-ip=209.85.215.182
+	 In-Reply-To:To:Cc; b=XRPAV70M23Cdl9KChS5MGpTJZva0rQXS8TCW1dX5ee+0AxJpVrIXW05J4P3LLr1IL1aZpgDTLt1t9QGZVs5uIgiOgsnfB2MympNeTfZWpspCpONW2i7VbNFOekN0P4/lIIl3hqKfrsRnV9OvpMz5GhxTL7gIdIyoh4UO0Cmhlzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tx/F4HeD; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b95cdcacd95so2502354a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 14:39:16 -0800 (PST)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-34182b1c64bso750141a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 14:39:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762295956; x=1762900756; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762295957; x=1762900757; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+FdVSUjHTikcWcPgapXwx/mSIY+mfI9o+bTGGuyPCvg=;
-        b=boJMujHmu6Bt3LKiTEKgcbvVBfY7HcPy5K9KmLyUNkJUwTk265Cmn7PMMtaPVPgvPT
-         LvofcFT5lMfzwyGMvdGbYom+GUft2Z5DycWraiGGqDmDXqcsmeG00ItEEmsi0YygeyUX
-         wO9z3lMt/h+5S9P4xdTX7fRrmGLeJq3KSS2UdwC2Q2nVx3PcWMrHE9ujSEF0SeLSrX9H
-         CeOx97xEPD5sgQOcqL3l0LT8SdNkf2nXZQihKdQRyTHAV7J8oRF/PIm2pXsGMBGtQgbX
-         pIQiE1cuoIOxaIdqLsePaij/BsvjVbNTYLUZKaybC2v2zEiMoFTTUJ1qcyXVq8C+REU8
-         jW6Q==
+        bh=xDsH9kNNXBt4JKt5mitfCe2Rq8PZuvGot+36QHyMJvw=;
+        b=Tx/F4HeDm+BFKSyBmuLkmH5BodI95/gSDjsipVOfv/1NFukSwECQX8AkHkfoW84fUv
+         M8mflcwUkBtSASZAh/IsaJnrZlhTJbDgsEF+NHTcLtKPKH0R3ow7J6p5ucBl2EEOQCbQ
+         xs4lmoD1VuuG3yvLAsm2ef9ELx2oc5RPWHEe80LmGPsM8rXcslXx8WBMvXbaG7gJ0ZGf
+         PSpjxCY9Tkitb7ShVKCgiimy4bzjxUiJr+oomoAdaCNhOa8ocNnsLcXgSJeyflhxca36
+         x0rTLFYaiw6augijMlOWnaph9Clpdirpu3dexf/xi9laVdfpLeBG7UnzOR69znv5ocLt
+         wK1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762295956; x=1762900756;
+        d=1e100.net; s=20230601; t=1762295957; x=1762900757;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+FdVSUjHTikcWcPgapXwx/mSIY+mfI9o+bTGGuyPCvg=;
-        b=jj6DnqJFqgE7cgBTb4alw7GtUYzaPggh8takETaReJp2Qs0A8NosmP45/lTJH0C/rv
-         qwULQE0CGeDbDH4NBioik2nE7CNMl79Rf+i1mDEsKZeof+HZL/4cTSatxqOzVd0yjN6b
-         TyeR1h+b5GWh39LQQWa6bjTUYVsj0PtIWXk1i8q3svthN8C4WPQYU4vK/JoujpVCZsxh
-         ld0uN2Nk1UzAj3e7d4XgNPUQ3fBnlnJgeT8hWh3VKXipg/n2YNlB1zwRu6fbFX1VQyeT
-         ykKWifYQfpF/i7dp7d2k+5YI7/n3s2ydzr2+WiultNwNZ0qq5LUz9mwC2TNSOeVkEDu7
-         QF3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXVNfkre591qBQoVKn0gSf/KE5cVo886vcloK2wphWHRo5U6PJ00j0tNDquTcAPlq1DwV6q88RQsq1R/BH8O1c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywxc4W6SbbxV/MRZaoV9gTO85to13OCnOdRidKAVGI1bKe/xIe4
-	/877dBHgVowktbnE6SdU68yCNeMU+itubKZCs5Jpzhot64nYRvtJySPU
-X-Gm-Gg: ASbGncuY9OEJDicaSv996Vvnov8rVGf1N3N+1i/5tRdt5NMyWBYkCTh73oppY+CBzUG
-	z5otQHf8gjE0z2FX0Zq+1UWpks6iIdErA+/6OQSRKIy1JFInkBFhwdJu76AG7VA4NxGbanXMLNW
-	IUPjQn7OcPcS4Ui97xcxT5dstM8/jST07T2TD7OFf3Q0Uhvl8ZqEe4NFpaSeX0JZ1GVTRMFeOCj
-	9KaICvfn6BSyRzgXrkRyj4OwPv8dJbR2av4NHLNbfd/QWzCBq95mPu5VVIpg9qEAfr26EvNAToL
-	XWUdQHbvbOhgWghb3SaP36v4mBlFqLYzi8itewVOeYyoNhi62yjfdnhOmumOTXnt3e+w045HZt1
-	d4zCx/sv2p/WEVDGAt9AQhGcGlsUbujy8SH1Wbt4HT7YMcxyCxnUAmzh6GlY7NuitPmrD6KtrnA
+        bh=xDsH9kNNXBt4JKt5mitfCe2Rq8PZuvGot+36QHyMJvw=;
+        b=GHHGlk6CW86Qbr3Tvssbnsp1WA8gHHPgi/EQar++PnNUiKidRTXJ7Tg63M8uay5HqL
+         kJ24g+2b2cRJn3xps5XQ7oEB8Su6ssUSnSZyXbRmvZ2jMIz6eZKZJvLYC6IDh4Mut71l
+         /dKGIqx/U64f8AHQCD0CxW4QaECB32rRLGidnWTcAZcVQNUvHUDAELSW1mhXwiiLZqt1
+         Z0pnsTIfK7HoBUMR72jlU7acmGbvq9r5YORf5CnuXi3Wg581oegPoGpXPTb5lBKq6cZw
+         CMc+zuULoo9fmbi96DaogaDXD2NfmyUaF653YJ7CjWtzoFnj2TL7aDgQMuw6OrvetKQg
+         gPOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUM4iMF9jb8SICuCx1BZYlQdD4QOXEN+uL9tbzqavuuEvUpBTGXtVYD7gODM3FD3QIOL5q7Lmtpx8S9MyFoIT0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbtitY7X8kqP1vjzHvz+toefAhX060YvKYIZTYzWDd1D5TIIFb
+	QtOmSHT5kEC2ttAp5/hD/dwb27zV3KZtrOWdbX98vBWguU1AcKDRoURf
+X-Gm-Gg: ASbGncsBU/MEF0rRdhy4QopZmug8FlFTzPXuYhqWQNcngNEHuZZ4RLMy7VFl5f1Eadx
+	k4vnrlRV/Ed1OQFDIQNjyUfYk0yhed7mK/meG5C9cNU1IWPNNYe0E1/rFX9nbI/8pDFY3rqMU18
+	4iUjD/WYzQrvw97cwzLuCxZpy7wxSd0cAS2IATm+dbF5AoQp5MCg6Z0OWTiHLR1XB+RX0DQjVDr
+	p6LZMc4aihrIvEACycediGN1RAjbGZSl4PSHmUbe/HPYT9xkI03Z5AQFxHBpDOI09ElMVtSgCFp
+	0G6llzpFhAagk2Tp5g3HWIY3u4BTZSBKwG72w3B+9PzO+xX8ooee+RmhLvInT3+tXUmzbZHS15W
+	SYXULkQyHyar0tzkPZl5WZ9ZOvrZxiIi4JWgFzPzh+P3uPjJ+0GSYJvkOJVVgo14u7hKhxzuTLw
 	==
-X-Google-Smtp-Source: AGHT+IGE2AJdLQ3ih5rbl3nytu4JYVPoufSf2/AeWyCovMJpVIx4Pfkn2JQACMKcx394CGEglGnVnw==
-X-Received: by 2002:a17:903:2447:b0:295:b490:94bb with SMTP id d9443c01a7336-2962ae75808mr13019465ad.50.1762295955674;
-        Tue, 04 Nov 2025 14:39:15 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGmcX9KQhrwLWD8vDeS4NjjuNE+rklNtcRnYnJAg/yp6Cd7qau2TSc8kt5ZpkI4HpwFXvMX9w==
+X-Received: by 2002:a17:90b:3e4e:b0:33b:b078:d6d3 with SMTP id 98e67ed59e1d1-341a6db60ebmr937766a91.23.1762295956648;
+        Tue, 04 Nov 2025 14:39:16 -0800 (PST)
 Received: from localhost ([2a03:2880:2ff:45::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29601998893sm39091575ad.40.2025.11.04.14.39.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-341a68e4149sm638270a91.16.2025.11.04.14.39.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 14:39:15 -0800 (PST)
+        Tue, 04 Nov 2025 14:39:16 -0800 (PST)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Tue, 04 Nov 2025 14:38:57 -0800
-Subject: [PATCH net-next v2 07/12] selftests/vsock: add check_result() for
- pass/fail counting
+Date: Tue, 04 Nov 2025 14:38:58 -0800
+Subject: [PATCH net-next v2 08/12] selftests/vsock: identify and execute
+ tests that can re-use VM
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251104-vsock-selftests-fixes-and-improvements-v2-7-ca2070fd1601@meta.com>
+Message-Id: <20251104-vsock-selftests-fixes-and-improvements-v2-8-ca2070fd1601@meta.com>
 References: <20251104-vsock-selftests-fixes-and-improvements-v2-0-ca2070fd1601@meta.com>
 In-Reply-To: <20251104-vsock-selftests-fixes-and-improvements-v2-0-ca2070fd1601@meta.com>
 To: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
@@ -98,68 +98,112 @@ X-Mailer: b4 0.13.0
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Add check_result() function to reuse logic for incrementing the
-pass/fail counters. This function will get used by different callers as
-we add different types of tests in future patches (namely, namespace and
-non-namespace tests will be called at different places, and re-use this
-function).
+In preparation for future patches that introduce tests that cannot
+re-use the same VM, add functions to identify those that *can* re-use a
+VM.
+
+By continuing to re-use the same VM for these tests we can save time by
+avoiding the delay of booting a VM for every test.
 
 Reviewed-by: Simon Horman <horms@kernel.org>
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
- tools/testing/selftests/vsock/vmtest.sh | 32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ tools/testing/selftests/vsock/vmtest.sh | 63 ++++++++++++++++++++++++++-------
+ 1 file changed, 50 insertions(+), 13 deletions(-)
 
 diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-index 940e1260de28..4ce93cef32e9 100755
+index 4ce93cef32e9..678c19e089a2 100755
 --- a/tools/testing/selftests/vsock/vmtest.sh
 +++ b/tools/testing/selftests/vsock/vmtest.sh
-@@ -78,6 +78,26 @@ die() {
- 	exit "${KSFT_FAIL}"
+@@ -45,6 +45,8 @@ readonly TEST_DESCS=(
+ 	"Run vsock_test using the loopback transport in the VM."
+ )
+ 
++readonly USE_SHARED_VM=(vm_server_host_client vm_client_host_server vm_loopback)
++
+ VERBOSE=0
+ 
+ usage() {
+@@ -443,7 +445,44 @@ test_vm_loopback() {
+ 	return "${KSFT_PASS}"
  }
  
-+check_result() {
-+	local rc num
+-run_test() {
++shared_vm_test() {
++	local tname
 +
-+	rc=$1
-+	num=$(( cnt_total + 1 ))
++	tname="${1}"
 +
-+	if [[ ${rc} -eq $KSFT_PASS ]]; then
-+		cnt_pass=$(( cnt_pass + 1 ))
-+		echo "ok ${num} ${arg}"
-+	elif [[ ${rc} -eq $KSFT_SKIP ]]; then
-+		cnt_skip=$(( cnt_skip + 1 ))
-+		echo "ok ${num} ${arg} # SKIP"
-+	elif [[ ${rc} -eq $KSFT_FAIL ]]; then
-+		cnt_fail=$(( cnt_fail + 1 ))
-+		echo "not ok ${num} ${arg} # exit=$rc"
-+	fi
++	for testname in "${USE_SHARED_VM[@]}"; do
++		if [[ "${tname}" == "${testname}" ]]; then
++			return 0
++		fi
++	done
 +
-+	cnt_total=$(( cnt_total + 1 ))
++	return 1
 +}
 +
- vm_ssh() {
- 	ssh -q -o UserKnownHostsFile=/dev/null -p ${SSH_HOST_PORT} localhost "$@"
- 	return $?
-@@ -510,17 +530,7 @@ cnt_total=0
- for arg in "${ARGS[@]}"; do
- 	run_test "${arg}"
- 	rc=$?
--	if [[ ${rc} -eq $KSFT_PASS ]]; then
--		cnt_pass=$(( cnt_pass + 1 ))
--		echo "ok ${cnt_total} ${arg}"
--	elif [[ ${rc} -eq $KSFT_SKIP ]]; then
--		cnt_skip=$(( cnt_skip + 1 ))
--		echo "ok ${cnt_total} ${arg} # SKIP"
--	elif [[ ${rc} -eq $KSFT_FAIL ]]; then
--		cnt_fail=$(( cnt_fail + 1 ))
--		echo "not ok ${cnt_total} ${arg} # exit=$rc"
--	fi
--	cnt_total=$(( cnt_total + 1 ))
-+	check_result ${rc}
- done
++shared_vm_tests_requested() {
++	for arg in "$@"; do
++		if shared_vm_test "${arg}"; then
++			return 0
++		fi
++	done
++
++	return 1
++}
++
++run_shared_vm_tests() {
++	local arg
++
++	for arg in "$@"; do
++		if ! shared_vm_test "${arg}"; then
++			continue
++		fi
++
++		run_shared_vm_test "${arg}"
++		check_result $?
++	done
++}
++
++run_shared_vm_test() {
+ 	local host_oops_cnt_before
+ 	local host_warn_cnt_before
+ 	local vm_oops_cnt_before
+@@ -517,23 +556,21 @@ handle_build
  
- terminate_pidfiles "${pidfile}"
+ echo "1..${#ARGS[@]}"
+ 
+-log_host "Booting up VM"
+-pidfile="$(mktemp -u $PIDFILE_TEMPLATE)"
+-vm_start "${pidfile}"
+-vm_wait_for_ssh
+-log_host "VM booted up"
+-
+ cnt_pass=0
+ cnt_fail=0
+ cnt_skip=0
+ cnt_total=0
+-for arg in "${ARGS[@]}"; do
+-	run_test "${arg}"
+-	rc=$?
+-	check_result ${rc}
+-done
+ 
+-terminate_pidfiles "${pidfile}"
++if shared_vm_tests_requested "${ARGS[@]}"; then
++	log_host "Booting up VM"
++	pidfile=$(mktemp $PIDFILE_TEMPLATE)
++	vm_start "${pidfile}"
++	vm_wait_for_ssh
++	log_host "VM booted up"
++
++	run_shared_vm_tests "${ARGS[@]}"
++	terminate_pidfiles "${pidfile}"
++fi
+ 
+ echo "SUMMARY: PASS=${cnt_pass} SKIP=${cnt_skip} FAIL=${cnt_fail}"
+ echo "Log: ${LOG}"
 
 -- 
 2.47.3
