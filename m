@@ -1,141 +1,279 @@
-Return-Path: <linux-kselftest+bounces-44755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855DEC32E3D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 21:19:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98F65C33028
+	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 22:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 690224E1A83
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 20:19:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B01784210DF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 21:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7185323C4FA;
-	Tue,  4 Nov 2025 20:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6888B2F7469;
+	Tue,  4 Nov 2025 21:17:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ouz8IaxM"
+	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="DHQwgRYj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76642367D1
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 20:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619E62E7BB5
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 21:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762287554; cv=none; b=eNDlRb2YojtocGUT0yEob1X0XB2WP8m374KzOaPcL51RJoJjpy75Av5eqe288jq1XGVzy+/Mj5YbUltFYIgdRiXKGNv9oZsWKa1geOV2Z3LEGWOZbQaGyTjVb20JGDiJBp7bv/AkvLJ2TwY1LwwQxHv3+0OiYCFf2z08+BTCc10=
+	t=1762291062; cv=none; b=HAGe9IBuf2gHfK5ugWhkAtFkYbfz/OgDayAknqe6z4ufkxpkP032unRZNC31qahMWB9Zo4moTTkzr0Wdnt9QClry04Wb/w2fZTJ4aDYyWCmkf/4LEwzrPCsTGt9VTVl7ZcndSdVbxGxsCFeafj53oMEWLIKj6twUCAHPyXauRC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762287554; c=relaxed/simple;
-	bh=BqhHgAqSkG4l2z1eoyySaP6wFCFo56cQORvWEuGj/N0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qy/BDXEyJ+mZ/V4/ifupgIEBKMG7YimRRNgpc6DSgFuWIgSIIR2/kNy1m7O8eRyvKIx0B0/h7xLM41n9Cb6UKRuSMMCf5MHTCmBVqZh4k1eBnWvjLvwGEfbvJV+WscDJR6kvso9q0Fhu+mtinBEX8C+rWp99gl0k+T7WcgpFsaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ouz8IaxM; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3416dc5754fso2125474a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 12:19:12 -0800 (PST)
+	s=arc-20240116; t=1762291062; c=relaxed/simple;
+	bh=65/cD2ZSUAzPQab5ckwiZ9PtfoIo8XCpfmICSE+u320=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gW0awLlkUuqu6XuvdDBcy9tNqay+tqsujZHnsL+eqwyNSmM+ocYkpfB/rptumthEkpovXlrEL2OvZRaez+z5Yc/Nwe+7GT/fUnqDExEASViFJGyEkrJ46h/Zss433zE42LyNWLOhOEqNpyqlYCe8Pw+0nY/8utZNZmWsyx9u9b4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=DHQwgRYj; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2955623e6faso36412045ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 13:17:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762287552; x=1762892352; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4Bva0w0KbqgCJAJfbsSK/8FEB2ivKz4/LZ5P7kuzw0=;
-        b=ouz8IaxMFUS9COMgc5r7O7yMfYfLkzDVhfyQDJw66WRi7aH7pTDM/c+PbIRh3Syj8r
-         M5qJ3RaQqbAgvdxb9p8n6K0iwd1SCvK/3pvcRxDBu7Bqrd93vR+EDxSkvNqjCzf69vf1
-         7B2cDckKkmb0b+P+07esku1HAidJuD+k0r/2wqfmTV4xFOnIeTUdv+/QYQnxwn9Q/tgz
-         /OYtNHC7Mg+0wRCXoZhiFTdwE6C7fuBHrzl74rdgKNBS7b/Up6n8mx9Gc3lB54FsWZTh
-         RBEmlHHrDHWnhlqzE+bMnePI5cvs0zprXPS4USc1fR/P2S4IbV8ab2njU8dEaoRp98zz
-         2qSA==
+        d=rivosinc.com; s=google; t=1762291060; x=1762895860; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BGjWT2vMzqtOZS9xN5d6Q0YRIr9cvpctAWp7WzNW7AA=;
+        b=DHQwgRYjJfgGVZGDktDqb2za90/TsjArMQ1NacLYlwHmXd/GGDLWpWi+rrOWHejdeO
+         bOZA3WSK6EbyvSUKA6F8T6lRvmPe1AKpbLkUOloc2Tst0UYCTTFeDg7KukADO2Yj/A2x
+         VjlNc6mPtOm9G+zINbuXbfqVqcup5UGVd6CBFHln9rYQG5chwLRJ9MMpI6o3SNWk7C2R
+         r1dk2pojUd/Ehn9COBVI293w1sWbpesYVf6fABK3Fg8WgkV273Afy/JLAoncW7xFm6sg
+         pb1QWOvTMxB9lg61sqgTq3HRXYG5r20mHOxM3NrzfQvxOwjWGVTlMD0nb9VMl/PRFfBN
+         ZEqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762287552; x=1762892352;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4Bva0w0KbqgCJAJfbsSK/8FEB2ivKz4/LZ5P7kuzw0=;
-        b=RXO5hA/p/chaAYy37HYmfETvimBTvLzfX2MCXgjAlkIzadjrPSzlfZR/wZEJSKinJe
-         84JMZwM+Rp54mdHlrBTEkyGHzNHj131Xtb9j6VUo8YEeBOQqIqAXS2v4S4MV7OO7oY+K
-         QyoWAZeODbfcMdT7u0hA6X4mc7of5WOFizmkx8YCXdj8wiSSl57Skc+DTYWb1qmV6341
-         JVAbt3Ecvvart1s+T8EHyqgP0TVCI3DcPNp7VaxkLumI+NI2PpiA/0VtvodQyQ/WQrmz
-         wxTfWWXsorBNgj5FW3sbr5hVj7vBNSf3RIwx2Kh3xumzAvyX5NAT+hR5+e2DmARw7oUL
-         wgoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8CtMx52ZjI1yQ3RySxwWWXU8US3MjydOv6I1SPEsNMXpOBJJfR9RYI2SaPI+dKSEZtaiK6sxPylpGRAydnPQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzsmcrnn93sVIL2DOV4eUq5gPD0W8DIiuOSxZsP8e6IpaQt6M+X
-	uSx6BrNDP7bxNVCbAfh8D/M+tlvZ3GJ0V4AJyE8a4v+l2tHHS6xQQT+3RcwbVXZYv06S9Z1INa1
-	Pw/8BBQ==
-X-Google-Smtp-Source: AGHT+IGdgZKcyoQ0zGdQrLNOdi7+EjeBGpl2/tWI68ux+7RvDN8zvERNjHKEkloiI0RWSyl4SFGplL1NmQw=
-X-Received: from pjvf13.prod.google.com ([2002:a17:90a:da8d:b0:33b:e0b5:6112])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2c8b:b0:340:a961:80c5
- with SMTP id 98e67ed59e1d1-341a6defed9mr629130a91.32.1762287552241; Tue, 04
- Nov 2025 12:19:12 -0800 (PST)
-Date: Tue, 4 Nov 2025 12:19:10 -0800
-In-Reply-To: <0c3db907-7012-43c3-b7fc-36848789da52@gmail.com>
+        d=1e100.net; s=20230601; t=1762291060; x=1762895860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BGjWT2vMzqtOZS9xN5d6Q0YRIr9cvpctAWp7WzNW7AA=;
+        b=hOej1f3Rbltd7e4qJ6vcHSDZdBDBrCEg18bslfKK1mQoNlzRq4tIToaClLzR1PcG6P
+         FfYrpmRmrNuekk3YsZ5Qa27cELJ2UltgwhaDe3RMrj9ijxNk0WCjgoouqETIdeYE+KNB
+         3VqYfy3eESA1KBfCn42sxdZAg2JcxaooT4KLmtGEysgHgHRzP1cAhyS0e/XbxYdm06tI
+         yWJX/NF/c9M3RL8VYReKbNt6qgP8Io4dCp6LiVhxQf44dqNZpaxFoSHx3cr3W3Dm4Iyb
+         YQl5eb3QDpkFXpEvpKsfNg/GKqHozxDHCIo4OAKsJloUhzeJcwGO8SP7l7OXz6j+7Wh9
+         aXxA==
+X-Forwarded-Encrypted: i=1; AJvYcCXr8nAGkOBL4fhFDsgQASMSeX1S6ILf4HKptK6g2+spIi78pbC7Md9GKjbxvT+OAaxxQkHYqi7rYSKYyz2g6r8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywr+ix0vS0du3Xm4dHmJfaEnWAtrs5rYeYCeJdQ/TGnknYJE2ps
+	ajm7nhQ1uh6uamYCWNys4rw0Z5gI1ZlJFaHXR2GJbMJ7kSfjUv85bVilU7v7HBWeN28=
+X-Gm-Gg: ASbGncvm2ACmu4VqQrScOQ64LCERG5v3Fk3ZG6Z2OgbpC7qAzBXjCahc4mj8OdIyTc/
+	bTS+A1U+/3cMDYPHVf3vTQQYk9HInrSGGEFLLfLEyPVVN2GLuXNLTfnVA9evmK5nqaA4ZKvGC++
+	Fu1Tqqn80IAUpOrIif02zvtm28VLMRmPvh4M5dajo+vfUWdshwgStYMCOpVV2KnxR9AngsJzCZb
+	brrR25XGAdMfqF0MnrxNEVpg1++OAlalbT4SGVMH4Jeut2JUZxDUqmC2VZA/A/9tVFqNDqxyTOl
+	+NbAMy0sG9v0Mx+arB0sy5iRbUQ4dkZM7hZ3WJJjGTuz46Ph9kqvFy9SrFhzXE2Z8Dm/flA95iF
+	LAutGcVWTOs4sm+dZ78zwuaWfpn3L1WI59WHYBG2cfV3VysUFgaYy2uQNW1UDpXPz64xZUq4Zgy
+	j0FVA5f32pxSkYkau4pkEa
+X-Google-Smtp-Source: AGHT+IH3Rnr9KTQSewiyDJxZYVWcxdCwkU03H2gP4ZOo4Vy5LVvo5/dzAHr56LlVqfHqMMIhppMFyg==
+X-Received: by 2002:a17:902:ce01:b0:295:2c8e:8e44 with SMTP id d9443c01a7336-2962ae94470mr13204245ad.59.1762291059617;
+        Tue, 04 Nov 2025 13:17:39 -0800 (PST)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29601998eb6sm37348165ad.29.2025.11.04.13.17.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Nov 2025 13:17:39 -0800 (PST)
+Date: Tue, 4 Nov 2025 13:17:36 -0800
+From: Deepak Gupta <debug@rivosinc.com>
+To: Joel Stanley <joel@jms.id.au>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, jim.shu@sifive.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	Zong Li <zong.li@sifive.com>,
+	Michael Ellerman <mpe@tenstorrent.com>
+Subject: Re: [PATCH v22 00/28] riscv control-flow integrity for usermode
+Message-ID: <aQptcHayBOY1sw1J@debug.ba.rivosinc.com>
+References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com>
+ <CACPK8XeQf9UJuu39bGcm2mySWrKYvUadOgFRmpas+AS9fXA2WA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251013151502.6679-1-jackabt.amazon@gmail.com>
- <20251013151502.6679-3-jackabt.amazon@gmail.com> <aPpi1c-8EpWuo87B@google.com>
- <c52db7bf-494f-49a8-9829-3805db6dda7c@gmail.com> <aQkZtjLt6lIULffA@google.com>
- <0c3db907-7012-43c3-b7fc-36848789da52@gmail.com>
-Message-ID: <aQpfviS-oAmanqpq@google.com>
-Subject: Re: [PATCH v2 2/4] KVM: selftests: Fix unaligned mmap allocations
-From: Sean Christopherson <seanjc@google.com>
-To: Jack Thomson <jackabt.amazon@gmail.com>
-Cc: maz@kernel.org, oliver.upton@linux.dev, pbonzini@redhat.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	isaku.yamahata@intel.com, roypat@amazon.co.uk, kalyazin@amazon.co.uk, 
-	jackabt@amazon.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CACPK8XeQf9UJuu39bGcm2mySWrKYvUadOgFRmpas+AS9fXA2WA@mail.gmail.com>
 
-On Tue, Nov 04, 2025, Jack Thomson wrote:
-> On 03/11/2025 9:08 pm, Sean Christopherson wrote:
-> > On Tue, Oct 28, 2025, Jack Thomson wrote:
-> > > 
-> > > 
-> > > On 23/10/2025 6:16 pm, Sean Christopherson wrote:
-> > > > On Mon, Oct 13, 2025, Jack Thomson wrote:
-> > > > > From: Jack Thomson <jackabt@amazon.com>
-> > > > > 
-> > > > > When creating a VM using mmap with huge pages, and the memory amount does
-> > > > > not align with the underlying page size. The stored mmap_size value does
-> > > > > not account for the fact that mmap will automatically align the length
-> > > > > to a multiple of the underlying page size. During the teardown of the
-> > > > > test, munmap is used. However, munmap requires the length to be a
-> > > > > multiple of the underlying page size.
-> > > > 
-> > > > What happens when selftests use the wrong map_size?  E.g. is munmap() silently
-> > > > failing?  If so, then I should probably take this particular patch through
-> > > > kvm-x86/gmem, otherwise it means we'll start getting asserts due to:
-> > > > 
-> > > >     3223560c93eb ("KVM: selftests: Define wrappers for common syscalls to assert success")
-> > > > 
-> > > > If munmap() isn't failing, then that begs the question of what this patch is
-> > > > actually doing :-)
-> > > > 
-> > > 
-> > > Hi Sean, sorry I completely missed your reply.
-> > > 
-> > > Yeah currently with a misaligned map_size it causes munmap() to fail, I
-> > > noticed when tested with different backings.
-> > 
-> > Exactly which tests fail?  I ask because I'm not sure we want to fix this by
-> > having vm_mem_add() paper over test issues (I vaguely recall looking at this in
-> > the past, but I can't find or recall the details).
-> 
-> The test failures happened with pre_faulting tests after adding the
-> option to change the backing page size [1]. If you'd prefer to
-> have the test handle with this I'll update there instead.
+Hi Joel,
 
-Ah, yeah, that's a test bug introduced by your patch.  I can't find the thread,
-but the issue of hugepage aligntment in vm_mem_add() has come up in the past,
-and IIRC the conclusion was that tests need to handle the size+alignment, because
-having the library force the alignment risking papering over test bugs/flaws.
-And I think there may have even been cases where it introduced failures, as some
-tests deliberately wanted to do weird things?
+Thanks a lot for testing it out.
 
-E.g. not updating the pre-faulting test to use the "correct" size+alignment means
-the test is missing easy coverage for hugepages, since KVM won't create huge
-mappings in stage-2 due to the memslot not being sized+aligned.
+Comments inline.
+
+On Tue, Nov 04, 2025 at 05:34:11PM +1030, Joel Stanley wrote:
+>Hello Deepak,
+>
+>On Fri, 24 Oct 2025 at 03:31, Deepak Gupta via B4 Relay
+><devnull+debug.rivosinc.com@kernel.org> wrote:
+>>
+>> v22: fixing build error due to -march=zicfiss being picked in gcc-13 and above
+>> but not actually doing any codegen or recognizing instruction for zicfiss.
+>> Change in v22 makes dependence on `-fcf-protection=full` compiler flag to
+>> ensure that toolchain has support and then only CONFIG_RISCV_USER_CFI will be
+>> visible in menuconfig.
+>
+>Following our discussion at the riscv summit I spent some time with
+>this patch set with the goal of giving a test run on emulation. I only
+>got as far as qemu, as I couldn't get the selftests passing there.
+>
+>I had trouble running the podman container so I built a toolchain
+>using the riscv-gnu-toolchain branch (cfi-dev, d19f3009f6c2) you
+>pointed to.
+>
+>The opensbi branch was a bit old and wouldn't build with GCC 15, so I
+>tried to rebase and noticed the patches were already upstream. Have
+>you tested using v1.7 (or newer) there? Is there something I missed,
+>do we need more patches on upstream opensbi?
+>
+>I booted it in qemu 10.1.2 with the zicfi extensions both on and off.
+>
+>qemu-system-riscv64 -M virt,aia=aplic-imsic,aia-guests=5 \
+>  -cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
+>  -smp 8 -nographic -bios fw_dynamic.elf
+>  -m 1024M -kernel arch/riscv/boot/Image \
+>  -initrd selftests/selftests.cpio \
+>  -append 'init=mini-init command="cfitests"'
+>
+>My results:
+>
+>no zicfi, no z*mop (crash, as expected):
+>-------------------------------------------------
+>
+>Running command: cfitests
+>system_opcode_insn: Invalid opcode for CSR read/write instruction[
+>0.462709] cfitests[85]: unhandled signal 4 code 0x1 at
+>0x0000000000011c44 in cfitests[1c44,10000+6d000]
+>[    0.463141] CPU: 4 UID: 0 PID: 85 Comm: cfitests Not tainted
+>6.18.0-rc3-tt-defconfig-jms-00090-g6e2297f1edbc #93 NONE
+>[    0.463338] Hardware name: riscv-virtio,qemu (DT)
+>[    0.463573] epc : 0000000000011c44 ra : 00000000000104e0 sp :
+>00007fffebd0ddb0
+>...
+>[    0.465177] status: 0000000200004020 badaddr: 00000000ce104073
+>cause: 0000000000000002
+>[    0.465410] Code: 0893 05d0 4501 0073 0000 b7f5 4501 b7f9 0017 0000
+>(4073) ce10
+>
+>no zicfi, z*mop (failed to start, as expected):
+>-----------------------------------------------------------
+>
+>Running command: cfitests
+>TAP version 13
+># Starting risc-v CFI tests
+>Bail out! Get landing pad status failed with -22
+>
+>zicfi, z*mop (failed to start, unexpected):
+>-------------------------------------------------------
+>Running command: cfitests
+>TAP version 13
+># Starting risc-v CFI tests
+>Bail out! Get landing pad status failed with -22
+>
+>I went digging to see why the zicfi enabled kernel failed. The
+>userspace binary was built with CFI:
+>
+>$ riscv64-unknown-linux-gnu-readelf -n selftests/cfitests
+>
+>Displaying notes found in: .note.gnu.property
+>  Owner                Data size     Description
+>  GNU                  0x00000010    NT_GNU_PROPERTY_TYPE_0
+>      Properties: RISC-V AND feature: CFI_LP_UNLABELED, CFI_SS
+>
+>I then tested your opensbi tree with some hacks to get it built with a
+>newer compiler. This produced different results, which was unexpected:
+>
+
+Opensbi doesn't need to be built with new compiler. All it needs do are
+reflect MPELP bit back to S-mode (if its taking a trap and then reflecting
+back to S-mode) and ofcourse have SSE support. Both of these are upstream
+in opensbi.
+
+I'll test with upstream opensbi, test and report back.
+
+>Running command: cfitests
+>TAP version 13
+># Starting risc-v CFI tests
+>Bail out! Landing pad is not enabled, should be enabled via glibc
+># Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>
+>The selftest binary and the little toy init that starts it are both
+>statically linked and built against the toolchain's glibc, so I would
+>expect this to work.
+>
+>$ riscv64-unknown-linux-gnu-readelf -n sifive-cfi-build/sysroot/usr/lib/libc.a
+>
+>File: sifive-cfi-build/sysroot/usr/lib/libc.a(init-first.o)
+>
+>Displaying notes found in: .note.gnu.property
+>  Owner                Data size        Description
+>  GNU                  0x00000010       NT_GNU_PROPERTY_TYPE_0
+>      Properties: RISC-V AND feature: CFI_LP_UNLABELED, CFI_SS
+>
+>The kernel seems to have detected that CFI is available and is built with it:
+>
+>$ grep CFI .config
+>CONFIG_RISCV_USER_CFI=y
+>CONFIG_ARCH_SUPPORTS_CFI=y
+>
+>I did notice the func-sig-dev gcc branch is a few commits ahead of
+>what the sifive riscv-gnu-toolchain points to.
+
+Most likely PRCTL_* is not updated in cfi-dev branch? I'll take a look.
+
+>
+>I had to context switch to some other tasks at this point. I wanted to
+>do some more digging to work out what was wrong, but I haven't found
+>time, so here are my notes in the hope that they are useful. I'll let
+>you know if I discover anything further.
+
+Thanks once again.
+>
+>Cheers,
+>
+>Joel
+>
+>
+>> How to test this series
+>> =======================
+>>
+>> Toolchain
+>> ---------
+>> $ git clone git@github.com:sifive/riscv-gnu-toolchain.git -b cfi-dev
+>> $ riscv-gnu-toolchain/configure --prefix=<path-to-where-to-build> --with-arch=rv64gc_zicfilp_zicfiss --enable-linux --disable-gdb  --with-extra-multilib-test="rv64gc_zicfilp_zicfiss-lp64d:-static"
+>> $ make -j$(nproc)
+>>
+>> Qemu
+>> ----
+>> Get the lastest qemu
+>> $ cd qemu
+>> $ mkdir build
+>> $ cd build
+>> $ ../configure --target-list=riscv64-softmmu
+>> $ make -j$(nproc)
+>>
+>> Opensbi
+>> -------
+>> $ git clone git@github.com:deepak0414/opensbi.git -b v6_cfi_spec_split_opensbi
+>> $ make CROSS_COMPILE=<your riscv toolchain> -j$(nproc) PLATFORM=generic
+>>
+>> Linux
+>> -----
+>> Running defconfig is fine. CFI is enabled by default if the toolchain
+>> supports it.
+>>
+>> $ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc) defconfig
+>> $ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc)
+>>
+>> Running
+>> -------
+>>
+>> Modify your qemu command to have:
+>> -bios <path-to-cfi-opensbi>/build/platform/generic/firmware/fw_dynamic.bin
+>> -cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
 
