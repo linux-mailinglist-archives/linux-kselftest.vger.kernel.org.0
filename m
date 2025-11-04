@@ -1,154 +1,140 @@
-Return-Path: <linux-kselftest+bounces-44694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7695C2F8F8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 08:12:20 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 909FCC2FB92
+	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 08:53:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AC921894A92
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 07:12:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5FF1C4E382F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 07:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A2913016FF;
-	Tue,  4 Nov 2025 07:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BD8930FF2F;
+	Tue,  4 Nov 2025 07:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b="bWdHiT2c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4yROKUV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B52118024
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 07:12:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E061430AAB8;
+	Tue,  4 Nov 2025 07:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762240338; cv=none; b=HGfxo1vXFXggsUF95JSWd1jUiVwzN/j00XliE16ONgBP/NF+vqmXQYvRuVYQDIcw4peLbTVER54tRiidwBrYKgeZVTDAVSvSdy0Z7tRSZvNSeZ8R/DG2B3bin/XFHMJTwqVg3LoAIvo/QWfUoFJAVlOXcFLRtRbuc9teo1kYmN0=
+	t=1762242784; cv=none; b=HpIv9uEBH4A1S3RR+xU4gP5mtJxKU1kAOLEvKMknty6u2NBuywqp6uWAUleGeKUa7KEGMAq3T6TvbqhOGNqqTnto1rNaAZ6lYPO8+ijNCb9h6lgRfe3dGK2tXZnDMGTGtBmEfBq8/f9/EQfGgSo95cacu01WeWQ1ZcjhAlO1MAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762240338; c=relaxed/simple;
-	bh=wcrcbJjrAu4P0P/yoZVU7Hr4Ma2OCBe3j4vXga3skfk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HFH5D6dWe4fKxbEUoIT8aeNKyqeuo9CFSGSX/2lZIpbMBKLDJ2acxaKD9O1w3f/fZ37TvJylShxEuqNCXGQWAm7laX7ndUYbcGShvMNZYQsu0e04OGFGAwuIdWUuS6Ya1BpLT9eJAWIFnrnrY0027E2UL6kZUKma579YZIG0zaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au; spf=pass smtp.mailfrom=gmail.com; dkim=pass (1024-bit key) header.d=jms.id.au header.i=@jms.id.au header.b=bWdHiT2c; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jms.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-71d60157747so54248047b3.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Nov 2025 23:12:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google; t=1762240335; x=1762845135; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6DhNHinDEMKrStnZak8eWQGcaJ3OpsuOyGuzffapdkM=;
-        b=bWdHiT2c8MlIbDZhvYLdchQ09Ghv4kkMmtkJNuZoeMwrN5jINoTmgvEmD8PyA3HABF
-         C9Y64XRBqT2l1eeaeY51eke//Gb0lRP/A7jwx7hKKH+Q9NmrTTzwAm5DC2txqcX558+D
-         2VUzb9h8zBeXhe7Q4YVZLPlIhAolzl2t+oh8Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762240335; x=1762845135;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6DhNHinDEMKrStnZak8eWQGcaJ3OpsuOyGuzffapdkM=;
-        b=kyYKrAW/YKtG/3Gn0SuxrKRY2ZmcWHUX1ET6KlEUKefCGLqPeqega8DXaZyFURpmmy
-         ht0qs+8iEABOV3iJ0th8dlU02HexDWQIDe39rdzsnjsoxzs1GHgiFmiH2GQp4zeUvMzq
-         dPxX93MTidOSO6ESqQbnKB4aA+RaEwYQ33I6y5uSn8opIMdZxwQphFlgIESN4PJ6/0J8
-         8mUILpdgAbp/xlDlImQbeXkkLRs5bZIJR5h7toqoVNGDHhw/8dT5uYkVXBlPVL23de/i
-         pSP7kVTildWYCFXBQrK2gr53okkQfQE80f7UBqx4adHIzHDR8NMP84GsbY6mdHFZbbpF
-         AuYg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6jBb2Sq0o15WM5TLouEpJBCCOvpNTM7AnNgmEMZ4MLLp6cLmsJhcNiYgj0YoDASlTqXLM6BO/GGhr0+DxuF8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylJx6SAw9+pNRHfuw+NiLNpt0QkEHgnUN3psa9paRGo2tzC+mV
-	kFLJHX9AclAlAmjb3BF+npBrmWY0UFtZ0eZBcff6u9jtNL3SmHWZTwH3Ikv6bB3PMrkmuz2VYel
-	Z2HRCixWo3bqjRisVSEd+jhn97Unv6eo=
-X-Gm-Gg: ASbGncusZ2I1A7x+sy+w7VSDL/7CVyEA2Bk4YvA/lDa6T5jlqPvHkcdkYZ8leNX3b9S
-	f76RG9rg/AFiR+65CIDb8v8TaDbijOCQRo170octQJ1oaQJnt5mjFObFRJvhbDXgc7MwDe0NXDR
-	i5Rad55SdcHXA5Ux13hLCXO9UdUyhdH3XdSe4t6Gg3VcBF/4cpI+cYX7c9nPpByYsqSsTHGGGVC
-	hWZv6R75CJv9odO3bITqnIRMimhCsuiTmnhtI8418H16YgtIsQYy9IlNmVk
-X-Google-Smtp-Source: AGHT+IHWRyWNijx53xdxcYVGd10kXtulpgaOMtWFtsRlweynhoG6M9QlChpPQOzFPjUGlHnvC36yDWnuxBQleSiZzmI=
-X-Received: by 2002:a05:690c:e1b:b0:786:3528:7a1a with SMTP id
- 00721157ae682-7864842b407mr121635297b3.26.1762240335364; Mon, 03 Nov 2025
- 23:12:15 -0800 (PST)
+	s=arc-20240116; t=1762242784; c=relaxed/simple;
+	bh=lGIbceyVZgdKoxAlgrENOyuI7iqdDhBBFcc98C3lKn0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=rqDe8JC8vWeexLCQcKgdzxPhgMKA1epB0ndkEktCccV8f0JCpZXq7EZiJd0BSWJpjvKZr2939WZQN65bETTpkn/rHe8lIh8C8J5GuIOOGy5SJr6rHHnnxDnWk5Jv1LQdSmeI/1gjeuV97huhReh/X5BS1bPQZqASI69VO1ZWzz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4yROKUV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8A2C4CEF7;
+	Tue,  4 Nov 2025 07:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762242780;
+	bh=lGIbceyVZgdKoxAlgrENOyuI7iqdDhBBFcc98C3lKn0=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=j4yROKUVgRxS9OZJC90/SHA8XCPDVvwVHDTgceh+mCs64FFENtqjNn3VC2cS3YHRS
+	 Vh89i49TvVRT0q9eqdMJYy6UnQ4flTEkFee+vNQ+LDBtPs6JzXOg9rqYQ1l4R+DhcE
+	 OKQGVXbTY9tU25yQyQP/GPDQop+9ZGgyxC6t3ereLkJQbDn6Ob5K1plMoN0NTftZxP
+	 H0zc0vdg/o5PK4tKAehZQ7H8UtwncmtwY6oH+6QVwjaU8ikukGQIRaxvlWW+ISd3QU
+	 to0NJLl+MiSLIdyT3IYNIGJSnGwpG80zYDO7P7ohAcYwUyIFI+7D4Iv2WyVwNsWwgM
+	 89d6ggsAvvugA==
+Date: Tue, 4 Nov 2025 00:52:53 -0700 (MST)
+From: Paul Walmsley <pjw@kernel.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+cc: Paul Walmsley <pjw@kernel.org>, Deepak Gupta <debug@rivosinc.com>, 
+    Andy Chiu <andybnac@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
+    Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+    Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+    "H. Peter Anvin" <hpa@zytor.com>, 
+    Andrew Morton <akpm@linux-foundation.org>, 
+    "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+    Vlastimil Babka <vbabka@suse.cz>, 
+    Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+    Paul Walmsley <paul.walmsley@sifive.com>, 
+    Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+    Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+    Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+    Christian Brauner <brauner@kernel.org>, 
+    Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
+    Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+    Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+    Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
+    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+    =?ISO-8859-15?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+    Andreas Hindborg <a.hindborg@kernel.org>, 
+    Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+    Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+    linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+    linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+    linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+    richard.henderson@linaro.org, jim.shu@sifive.com, kito.cheng@sifive.com, 
+    charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com, 
+    cleger@rivosinc.com, alexghiti@rivosinc.com, samitolvanen@google.com, 
+    broonie@kernel.org, rick.p.edgecombe@intel.com, 
+    rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v22 17/28] riscv/signal: save and restore of shadow stack
+ for signal
+In-Reply-To: <d442965b-8716-4f89-be88-bc62459af712@infradead.org>
+Message-ID: <febe1a8a-a68b-1af8-a9d5-1b5f510ecab3@kernel.org>
+References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com> <20251023-v5_user_cfi_series-v22-17-1935270f7636@rivosinc.com> <a8f469b8-5750-dfec-2390-09bad4515f99@kernel.org> <d442965b-8716-4f89-be88-bc62459af712@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com> <20251023-v5_user_cfi_series-v22-28-1935270f7636@rivosinc.com>
-In-Reply-To: <20251023-v5_user_cfi_series-v22-28-1935270f7636@rivosinc.com>
-From: Joel Stanley <joel@jms.id.au>
-Date: Tue, 4 Nov 2025 17:42:04 +1030
-X-Gm-Features: AWmQ_bn-71oLlMqKX_VP5NpE8pEs2FlYkPOhgrus38FzpqsR57s_m7fjE9VyofY
-Message-ID: <CACPK8Xcm2SeSStk2EBEcUoyiUc0=d6ce_MfnP=ce3z6MMXyuiw@mail.gmail.com>
-Subject: Re: [PATCH v22 28/28] kselftest/riscv: kselftest for user mode cfi
-To: debug@rivosinc.com
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Peter Zijlstra <peterz@infradead.org>, Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
-	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
-	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
-	alexghiti@rivosinc.com, Michael Ellerman <mpe@tenstorrent.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, 24 Oct 2025 at 03:33, Deepak Gupta via B4 Relay
-<devnull+debug.rivosinc.com@kernel.org> wrote:
+Hi Randy,
 
-> diff --git a/tools/testing/selftests/riscv/cfi/Makefile b/tools/testing/selftests/riscv/cfi/Makefile
-> new file mode 100644
-> index 000000000000..55165a93845f
-> --- /dev/null
-> +++ b/tools/testing/selftests/riscv/cfi/Makefile
-> @@ -0,0 +1,16 @@
-> +CFLAGS += -I$(top_srcdir)/tools/include
-> +
-> +CFLAGS += -march=rv64gc_zicfilp_zicfiss -fcf-protection=full
-> +
-> +ifeq ($(shell $(CC) $(CFLAGS) -nostdlib -xc /dev/null -o /dev/null > /dev/null 2>&1; echo $$?),0)
-> +TEST_GEN_PROGS := cfitests|
+On Fri, 31 Oct 2025, Randy Dunlap wrote:
 
-I hacked this up a bit to get it working for me.
+> 
+> On 10/31/25 1:07 PM, Paul Walmsley wrote:
+> > On Thu, 23 Oct 2025, Deepak Gupta via B4 Relay wrote:
+> > 
+> >> Save shadow stack pointer in sigcontext structure while delivering signal.
+> >> Restore shadow stack pointer from sigcontext on sigreturn.
+> 
+> > This patch causes some 'checkpatch.pl --strict' messages:
+> > 
+> > CHECK: Comparison to NULL could be written "!saved_shstk_ptr"
+> > #271: FILE: arch/riscv/kernel/usercfi.c:186:
+> > +	if (saved_shstk_ptr == NULL)
+> > 
+> > CHECK: Lines should not end with a '('
+> > #300: FILE: arch/riscv/kernel/usercfi.c:215:
+> > +		pr_info_ratelimited(
+> > 
+> > I've fixed them up here in the event that v22 goes in, but please do the 
+> > same on your side in case a new version is needed.
+> 
+> Is checkpatch.pl --strict the norm for arch/riscv/ ?
 
-I added this at the top to use the local headers from a `make
-headers`. Without this the selftest lacked the required ptrace
-changes:
+I run it on every patch I review.  I usually implement the formatting 
+recommendations, in the interest of keeping the codebase formatted in a 
+standard way across submitters.
 
-+CFLAGS += $(KHDR_INCLUDES)
+> If there are enough arch/riscv/-specific patch expectations,
+> maybe they could be documented in Documentation/process/maintainer-riscv.rst
+> (a new file).
 
-I needed this before the ifeq so it used the cross compiler to perform
-the test, otherwise the test was always false:
+It never occurred to me as being arch/riscv specific, in the sense that, 
+if --strict wasn't more broadly useful across the entire kernel tree, then 
+we should just remove it from checkpatch.pl entirely.  In other words, 
+probably everyone should use it.  There are false positive warnings, of 
+course, including at least one with this patch set; but then again, there 
+are regular false positive warnings with non-strict checkpatch (also with 
+this patch set).
 
-+# Check for zicfli* extensions needs cross compiler
-+# which is not set until lib.mk is included
-+ifeq ($(LLVM)$(CC),cc)
-+CC := $(CROSS_COMPILE)gcc
-+endif
-+#nedif
+In any case, thanks for the suggestion, and will consider.
 
-Findally, a cosmetic one. If we set the name of the main test file to
-be the same as the test, the rule from lib.mk will give us neat
-output:
 
-     make[2]: Entering directory 'tools/testing/selftests/riscv/cfi'
-       CC       cfitests
+- Paul
 
---- a/tools/testing/selftests/riscv/cfi/Makefile
-+++ b/tools/testing/selftests/riscv/cfi/Makefile
-@@ -12,12 +12,11 @@ endif
- ifeq ($(shell $(CC) $(CFLAGS) -nostdlib -xc /dev/null -o /dev/null >
-/dev/null 2>&1; echo $$?),0)
- TEST_GEN_PROGS := cfitests
-
--include ../../lib.mk
-+$(OUTPUT)/cfitests: cfitests.c shadowstack.c
-
--$(OUTPUT)/cfitests: riscv_cfi_test.c shadowstack.c
--       $(CC) -o$@ $(CFLAGS) $(LDFLAGS) $^
- else
--include ../../lib.mk
-
- $(shell echo "Toolchain doesn't support CFI, skipping CFI kselftest." >&2)
- endif
-+
-+include ../../lib.mk
-
-I can push up a branch with my changes if you'd like.
 
