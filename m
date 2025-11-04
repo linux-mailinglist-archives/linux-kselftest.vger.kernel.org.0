@@ -1,139 +1,147 @@
-Return-Path: <linux-kselftest+bounces-44721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E662BC31E6F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 16:44:33 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51027C31E93
+	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 16:47:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B281F424CF6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 15:43:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B84644E5DE0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 15:47:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53CAF2FB619;
-	Tue,  4 Nov 2025 15:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD28B264638;
+	Tue,  4 Nov 2025 15:47:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rjbrvle2";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FojQgXp5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mCdInrer"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B3C2D29C7;
-	Tue,  4 Nov 2025 15:43:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730AE199385;
+	Tue,  4 Nov 2025 15:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762271023; cv=none; b=Y/Y4lewkevxOhzv6+HMjbwDEslplqnURklodDzYu4r/5F0GDkkxsu+HSU/KDfd38hgYZMn+jlshTlU+5624LsDpA5E9YGEP04kXRbfGu3CYoM83/Z7lHk7eF6S5rVhmWwkgZsFMVMA4D7M7PVGMP0Vg6DNv3C31rFIDV0d8l/qc=
+	t=1762271237; cv=none; b=YDbwe5RqLKE52vslYLlVuTcGof59RNIInzGeALaz+MZjN/HJGTyJwz9eHPsr9euQYas+gB1cE4uFznLWba+at963NtgvrFlTXCMwwGrOkzFh0Vw5m8h6N0MP9KBCGwzSzagmHRFx9miRTbheK1ki311NqRZ6VgnkjSDjigehZV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762271023; c=relaxed/simple;
-	bh=KLrPQSaIQNrnjth1rrMVwNhWXm2E0ayWA44G954ZxC4=;
+	s=arc-20240116; t=1762271237; c=relaxed/simple;
+	bh=sNvgLU2tT2QtYcE++dQwFqfrLanXeBmZ4oNa9dmXiuY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l+C224NIQ742598UMpcbVsNy+FS3HumGTiN5yvlwZAKRx5YtiRGTu4bETgoA9aWiX6iebd7DeY5wRRQHDLzqpfNO9qdnYt1flNqQPI1jisJ1tVHXqvUpM0JLt6fPvbj2pbW+wm6qZ3SyZJyNsZ/sMbsIBZpNX6G6uLOFO7kud1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rjbrvle2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FojQgXp5; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 4 Nov 2025 16:43:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1762271019;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6/0fonC1CcSFJ/vzCGw398TxXXxzhqjx7ZhCqclZhJI=;
-	b=rjbrvle2cRAQ2r1/E6AUyn/63AoNirT+MeY3CSkMLQkjVu4MZ9i9gsM5VaY1sb3+Qse+3E
-	k5Tsj3k0sX10MaW1Vt77Ml/iwrO90sXCi7ohIUnxBp8RCfq2diJY/ZCpc3gLIELLZkZ1gT
-	L/BTyFm2ieNoLfdbPm3joETfalKC7jCYGiBCKDuN65AUEULDiusUD1wLGQDHRp47rNGPSE
-	CNiRZhbWp4pKi5KAc4rKlwVrMeyIJALch4gPPlEKog+++hdtB+pAyXWGyDy2/FQb1lBsmj
-	YmFrBOIEWYHsmogSRF3LDckjk1IVIHNKXQ3GxfoNtiFlAXBk/A7zx0VxilqApg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1762271019;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6/0fonC1CcSFJ/vzCGw398TxXXxzhqjx7ZhCqclZhJI=;
-	b=FojQgXp5lZ7JuVC/TErfcQFIVgMu5YQg1OclEVtlB2s1//ebKD9BRtli3pju35zYRju4WW
-	6T9NeyF0VG7+qZCA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Mark Brown <broonie@kernel.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King <linux@armlinux.org.uk>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Aishwarya.TCV@arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=V717GHrEb1zvsSAByNRdpn4oDLFtcOhrTJG8f8UjMchiG04nQKyeayaJ9U2Imes5oRYSTzs7nc9U74gEQzp1ticxW0CuuaB2WnQA+ASGP9/hlcDHsDcCUdCcgoCAVTpAbdhi69+gz5pzVkkNUn2KTf3UDaS4t+TWhoo36odydDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mCdInrer; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EED2C116B1;
+	Tue,  4 Nov 2025 15:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762271237;
+	bh=sNvgLU2tT2QtYcE++dQwFqfrLanXeBmZ4oNa9dmXiuY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mCdInrer7LepIuBSWSpwRE+lkhLMT9QMw++9YEMTJILBagvaoNxLr+E0o5iuw+6qh
+	 4/wP2J/i3qQhy5Kft/3TosLdM1EgHmFfsDK6IfYfxoZle5eaUgdBPc4bBPcnGVDqCk
+	 KDErSYxmCqyp6oXXW1VrnfahWBgE9m/+PVH+EPJIt9FQkfqsuURo3cJDCqE+O2eLBm
+	 H5C/ACbilrOMnKgtI/iXeKepbvLqkq/7r0yYg60InC0JDZv2lD5lmhMJiKxwLDUaGU
+	 HnvSWLKkLYbiR9jWLoMXivF840mjsxtbmnf6d5oYx+LvesdpChJDbGY8UJRR9UTUBV
+	 x1K59OjL2V1Cw==
+Date: Tue, 4 Nov 2025 15:47:13 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Nick Alcock <nick.alcock@oracle.com>,
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Shuah Khan <shuah@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
+	Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-s390@vger.kernel.org, Aishwarya.TCV@arm.com
 Subject: Re: [PATCH v4 23/35] vdso/datastore: Map pages through struct page
-Message-ID: <20251104162009-8cffa62d-e95b-466b-9a27-c51b0f5257cd@linutronix.de>
+Message-ID: <aQogAfbrP9rTPLvI@finisterre.sirena.org.uk>
 References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
  <20251014-vdso-sparc64-generic-2-v4-23-e0607bf49dea@linutronix.de>
  <aQjJNmwniQwwjeBR@finisterre.sirena.org.uk>
  <CGME20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287@eucas1p2.samsung.com>
  <e7f05748-a11c-47eb-b1fa-cdc9dc6d05e0@samsung.com>
  <aQn8G9r2OWv_yEQp@finisterre.sirena.org.uk>
+ <20251104162009-8cffa62d-e95b-466b-9a27-c51b0f5257cd@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zVoWTguNpry6X+3h"
 Content-Disposition: inline
-In-Reply-To: <aQn8G9r2OWv_yEQp@finisterre.sirena.org.uk>
-
-On Tue, Nov 04, 2025 at 01:14:03PM +0000, Mark Brown wrote:
-> On Tue, Nov 04, 2025 at 09:44:38AM +0100, Marek Szyprowski wrote:
-> > On 03.11.2025 16:24, Mark Brown wrote:
-> 
-> > > We do have some other serious breakage affecting arm64 in -next which
-> > > are making it hard to get a clear picture of which platforms are
-> > > affected, at least the FVP and O6 are unaffected by those other issues
-> > > (due to using MTE on platforms that don't have it, those platforms do
-> > > have MTE).
-> 
-> > I got almost the same result while bisecting on ARM 32bit Exynos-based 
-> > boards, so the issue with this patchset is not fully ARM64 specific. For 
-> > some reasons it also doesn't affect all systems though. It is even 
-> > worse, because it affected only a subset of boards, but different for 
-> > each tested commit. The observed failure looks exactly the same:
-> 
-> I've now got the results for this specific commit, it looks like every
-> single arm64 system is failing.  I didn't test any other architectures.
-
-Which one do you mean exactly with "this specific commit"?
-
-6a011a228293 ("vdso/datastore: Map pages through struct page")
-10d91dac2ea5 ("vdso/datastore: Allocate data pages dynamically")
-
-> > Then I've tested it on ARM64bit (RaspberrryPi3b+ board) and got the 
-> > following panic on 6a011a228293 ("vdso/datastore: Map pages through 
-> > struct page") commit:
-> 
-> I'm seeing the same thing on at least some of the systems - this is with
-> arm64 defconfig (I suspect that's what Marek is doing too).  For
-> example:
-
-I can now reproduce this issue, too. Even on QEMU. But it goes away,
-as soon as the second commit is applied. The two commits should be merged.
-That could also explain the weird bisection results, landing on either one
-of the commits. However I can't reproduce the "silent freeze" issue on commit
-10d91dac2ea5 ("vdso/datastore: Allocate data pages dynamically") on my
-Raspberry Pi 3b+.
-
-Any chance I could get remote access to one of your test machines?
-I don't have access to the exact machines and that should reduce the chance
-of chasing down dead ends.
+In-Reply-To: <20251104162009-8cffa62d-e95b-466b-9a27-c51b0f5257cd@linutronix.de>
+X-Cookie: If in doubt, mumble.
 
 
-Thomas
+--zVoWTguNpry6X+3h
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Nov 04, 2025 at 04:43:34PM +0100, Thomas Wei=DFschuh wrote:
+> On Tue, Nov 04, 2025 at 01:14:03PM +0000, Mark Brown wrote:
+
+> > I've now got the results for this specific commit, it looks like every
+> > single arm64 system is failing.  I didn't test any other architectures.
+
+> Which one do you mean exactly with "this specific commit"?
+
+> 6a011a228293 ("vdso/datastore: Map pages through struct page")
+> 10d91dac2ea5 ("vdso/datastore: Allocate data pages dynamically")
+
+The one in the thread being replied to here, the first.
+
+> Any chance I could get remote access to one of your test machines?
+> I don't have access to the exact machines and that should reduce the chan=
+ce
+> of chasing down dead ends.
+
+I can let you submit LAVA jobs to my lab (there's an API, a web
+interface for (re)submitting jobs and a CLI tool for shoving jobs in) if
+that works?  That's how my own access to it works unless I go pull
+boards out.  You should be able to resubmit existing jobs, it downloads
+test binaries over HTTP.
+
+--zVoWTguNpry6X+3h
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkKIAEACgkQJNaLcl1U
+h9BXnwf8DrtoASOmIwCcathDthMIkBxak4gjtFCMM9nl89xoYXw0PBVjwG05q9Ug
+wRGz5y1/4Lw02ScLoNgGHwrQvg+j2UZaRq5bxFZ/sTsAIk/EGp6BPS0DkaQscGWH
+lua2F7kyuqAm4W68+aHxBoFfT/Tmj/IrNYJkAV0t1PSLxWAXckiHTsa8wpUsW857
+Dmv99n18VJcp32FYPy8Cdgxcdi86Uta8cpqOkA9IDA/ExbpWmveGN+IkJklF7zBA
+YdW9Z9zvjZ6yfNP4/HgLCx5G41XKX2Ra0iNKEvdrKC9mp5x5Ra2ogMPYFFYZDhBx
+mWcYg2iUelmLcPPYxVsizqjhauW2MA==
+=RR8q
+-----END PGP SIGNATURE-----
+
+--zVoWTguNpry6X+3h--
 
