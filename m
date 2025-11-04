@@ -1,279 +1,159 @@
-Return-Path: <linux-kselftest+bounces-44756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44757-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98F65C33028
-	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 22:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BE901C331BA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 22:51:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B01784210DF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 21:17:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2F1D426CE3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 21:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6888B2F7469;
-	Tue,  4 Nov 2025 21:17:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E193469F4;
+	Tue,  4 Nov 2025 21:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="DHQwgRYj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AmXKYd5G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619E62E7BB5
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 21:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC7334678F
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 21:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762291062; cv=none; b=HAGe9IBuf2gHfK5ugWhkAtFkYbfz/OgDayAknqe6z4ufkxpkP032unRZNC31qahMWB9Zo4moTTkzr0Wdnt9QClry04Wb/w2fZTJ4aDYyWCmkf/4LEwzrPCsTGt9VTVl7ZcndSdVbxGxsCFeafj53oMEWLIKj6twUCAHPyXauRC4=
+	t=1762293061; cv=none; b=CKgjISuHFn1kVm++oNkSMgXjVv3VqRaq5/IHOpdyEQcAfBYVdOvEHDg8tYusWCdzeIRFYE10hxrVjYJTFBPRCG30VfiwhJ6YEuN3lGqgjLukr3T8dRQqpP2zkdfL7lzYFvpQ782YMNrhc6M2avJvppWZIr7vCpRn0c+cl+dz9Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762291062; c=relaxed/simple;
-	bh=65/cD2ZSUAzPQab5ckwiZ9PtfoIo8XCpfmICSE+u320=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gW0awLlkUuqu6XuvdDBcy9tNqay+tqsujZHnsL+eqwyNSmM+ocYkpfB/rptumthEkpovXlrEL2OvZRaez+z5Yc/Nwe+7GT/fUnqDExEASViFJGyEkrJ46h/Zss433zE42LyNWLOhOEqNpyqlYCe8Pw+0nY/8utZNZmWsyx9u9b4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=DHQwgRYj; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2955623e6faso36412045ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 13:17:40 -0800 (PST)
+	s=arc-20240116; t=1762293061; c=relaxed/simple;
+	bh=DXUYPNNuTgtHcCDBcDsgLmjkqRHOB4mn9bzaBjoa9ec=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZKcQPhbPCGnBjjM9kkWBH7aqYYNHhaxxNSvt+4MVqUxGh9FjJyLy1uIswoSSh8vI2tJmbS5GOLqYOhB3E+pKccb+s0HCqB5PMOw2JxKy55yPeg2TUgS6GbeG/xcKSiHlrg13kZ4hHCWYLMZi7mpqsOJzep4Dv7VsDdx40W0ul0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AmXKYd5G; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-34101107cc8so2778892a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 13:50:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1762291060; x=1762895860; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BGjWT2vMzqtOZS9xN5d6Q0YRIr9cvpctAWp7WzNW7AA=;
-        b=DHQwgRYjJfgGVZGDktDqb2za90/TsjArMQ1NacLYlwHmXd/GGDLWpWi+rrOWHejdeO
-         bOZA3WSK6EbyvSUKA6F8T6lRvmPe1AKpbLkUOloc2Tst0UYCTTFeDg7KukADO2Yj/A2x
-         VjlNc6mPtOm9G+zINbuXbfqVqcup5UGVd6CBFHln9rYQG5chwLRJ9MMpI6o3SNWk7C2R
-         r1dk2pojUd/Ehn9COBVI293w1sWbpesYVf6fABK3Fg8WgkV273Afy/JLAoncW7xFm6sg
-         pb1QWOvTMxB9lg61sqgTq3HRXYG5r20mHOxM3NrzfQvxOwjWGVTlMD0nb9VMl/PRFfBN
-         ZEqw==
+        d=gmail.com; s=20230601; t=1762293059; x=1762897859; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V4qMVi7Ntt7sxkPeBtv45SX1Ju34QY/CHb+4bSpnhks=;
+        b=AmXKYd5GTokXZWFnKyzVfJiXx5PbN0ZHDE9iagQ4u6T/+3c6BrmkixKR4ROKiA4SiZ
+         k+WkA4APWB2HVU0y02lBa6KLVh3WSI2XwY4LWYaAaRFYoLlxlZL8bIaD5OBQCJ3yVisl
+         Huf4er+aYgLg2/8UxFHsACrJlEPkBTUgMmwZ4ExeYcon9rDUhMoLuJF6bC/cxvT7OExZ
+         aUNKCo8kG6wZKcuakDlkaw7dWW3S7Uf3gQzAUR46Yy0qj0oePYU/brx1KOIqVb/Hw8Qy
+         6wJqOZt+Qs1qzaXk2F6KtjBsxHS1uCJ2ESNiNEtbLBTB/kdLhY9yWdGJOH1K/6mkUaVy
+         RJ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762291060; x=1762895860;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BGjWT2vMzqtOZS9xN5d6Q0YRIr9cvpctAWp7WzNW7AA=;
-        b=hOej1f3Rbltd7e4qJ6vcHSDZdBDBrCEg18bslfKK1mQoNlzRq4tIToaClLzR1PcG6P
-         FfYrpmRmrNuekk3YsZ5Qa27cELJ2UltgwhaDe3RMrj9ijxNk0WCjgoouqETIdeYE+KNB
-         3VqYfy3eESA1KBfCn42sxdZAg2JcxaooT4KLmtGEysgHgHRzP1cAhyS0e/XbxYdm06tI
-         yWJX/NF/c9M3RL8VYReKbNt6qgP8Io4dCp6LiVhxQf44dqNZpaxFoSHx3cr3W3Dm4Iyb
-         YQl5eb3QDpkFXpEvpKsfNg/GKqHozxDHCIo4OAKsJloUhzeJcwGO8SP7l7OXz6j+7Wh9
-         aXxA==
-X-Forwarded-Encrypted: i=1; AJvYcCXr8nAGkOBL4fhFDsgQASMSeX1S6ILf4HKptK6g2+spIi78pbC7Md9GKjbxvT+OAaxxQkHYqi7rYSKYyz2g6r8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywr+ix0vS0du3Xm4dHmJfaEnWAtrs5rYeYCeJdQ/TGnknYJE2ps
-	ajm7nhQ1uh6uamYCWNys4rw0Z5gI1ZlJFaHXR2GJbMJ7kSfjUv85bVilU7v7HBWeN28=
-X-Gm-Gg: ASbGncvm2ACmu4VqQrScOQ64LCERG5v3Fk3ZG6Z2OgbpC7qAzBXjCahc4mj8OdIyTc/
-	bTS+A1U+/3cMDYPHVf3vTQQYk9HInrSGGEFLLfLEyPVVN2GLuXNLTfnVA9evmK5nqaA4ZKvGC++
-	Fu1Tqqn80IAUpOrIif02zvtm28VLMRmPvh4M5dajo+vfUWdshwgStYMCOpVV2KnxR9AngsJzCZb
-	brrR25XGAdMfqF0MnrxNEVpg1++OAlalbT4SGVMH4Jeut2JUZxDUqmC2VZA/A/9tVFqNDqxyTOl
-	+NbAMy0sG9v0Mx+arB0sy5iRbUQ4dkZM7hZ3WJJjGTuz46Ph9kqvFy9SrFhzXE2Z8Dm/flA95iF
-	LAutGcVWTOs4sm+dZ78zwuaWfpn3L1WI59WHYBG2cfV3VysUFgaYy2uQNW1UDpXPz64xZUq4Zgy
-	j0FVA5f32pxSkYkau4pkEa
-X-Google-Smtp-Source: AGHT+IH3Rnr9KTQSewiyDJxZYVWcxdCwkU03H2gP4ZOo4Vy5LVvo5/dzAHr56LlVqfHqMMIhppMFyg==
-X-Received: by 2002:a17:902:ce01:b0:295:2c8e:8e44 with SMTP id d9443c01a7336-2962ae94470mr13204245ad.59.1762291059617;
-        Tue, 04 Nov 2025 13:17:39 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29601998eb6sm37348165ad.29.2025.11.04.13.17.38
+        d=1e100.net; s=20230601; t=1762293059; x=1762897859;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V4qMVi7Ntt7sxkPeBtv45SX1Ju34QY/CHb+4bSpnhks=;
+        b=CYzCt+f+nxuYmaz3wfTnBsb98jKPqXg4A7GYrBK445vZJtaCKeWrOLoL27vGnZsi//
+         zIgX7UT/IotWg84PcCOKQjaX1LY4K0dVJQPOBb7feuP0Rpr6wDkAu5Xz47kfCRC6zgxa
+         nlNG40pRGEQ8nNbwkrxbB0tVgeVT0fIW4zocujfk5ZXl8h8XnbFSmYtGhN/1qpKLezE3
+         9lZGBEjTXDaKoq31lEu4dbe9SZUuqju8TlY2bQz9vaMSoRqPehux+bQTUHqske/iOrOs
+         ANQMAoOQTFlxzf3MUNFxeMruFD1GD9g1A+8bgrzLbH8l9RWfTKBHxg3GkwZaNdpjQ6cg
+         M+6A==
+X-Forwarded-Encrypted: i=1; AJvYcCWy3UiWqPWaVAYYcIa7dHdC0b8IumByHnHsQBJnwmy7t0rduMn33n0il54I5OOYKazBKv4+yjNJ3oM+7gvVI9A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz72W/GEoIJmK/LzLPstwHHkH/3o01PoYZZ7PBbhN7UATADGtc6
+	81MePYZ1CQo5Y2iqNH2R9AY3xyothaSWJvLUMza/2TD7K0/wIRYibXL4
+X-Gm-Gg: ASbGncuTXDOnvkyAzYfktTVG7N9KER+6AvJMKPNKp841xuRHlb+PgynKS/oF9W4NqWq
+	qYsjKSuwRXUMFJP9ckZWiktf5UyqBK8oDLTWb5Zp4RIfhRyyURoLAZJYqk8v/7YibdRZ4IQudrz
+	n2gg8vC+FlV/jEc97QwomZOZFNPx+jo/ekXbXWEA43GH4mkgHLPSkz3g6U3nQOL1TQuMqZrfos0
+	P/UGfopD6n5PlDa62Khb+bm0oehkwOphEuMsjML9vlAw7q42MxpuJ2J5ByAIDraPGVpkiM3G5eg
+	NhGl61tya0FHfy9UIF/DbQF9WE2tclLb7AsZ4sUlHts6iDFyZggGvv4mSoOVwBj46AG7t64tiI1
+	/ob7r/GcGpgu7IP0AI7B07I6P4o6FwpFlPYOg9Xyr6q2EgKW01QYC+TjCsAbv0wiJvXFfd2vmAi
+	DuarW8
+X-Google-Smtp-Source: AGHT+IG4BbWYnk20z2z4/g793VR2Hfh7SdkPN9v4GeXv79P10NM1Wo+bQlbkbGGW0rbOYQrtmo+WPw==
+X-Received: by 2002:a17:90a:e7cf:b0:340:c179:3657 with SMTP id 98e67ed59e1d1-341a6e0d9bfmr853384a91.33.1762293058733;
+        Tue, 04 Nov 2025 13:50:58 -0800 (PST)
+Received: from localhost ([2a03:2880:2ff::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3417bccad85sm1765781a91.5.2025.11.04.13.50.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 13:17:39 -0800 (PST)
-Date: Tue, 4 Nov 2025 13:17:36 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: Joel Stanley <joel@jms.id.au>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, jim.shu@sifive.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	Zong Li <zong.li@sifive.com>,
-	Michael Ellerman <mpe@tenstorrent.com>
-Subject: Re: [PATCH v22 00/28] riscv control-flow integrity for usermode
-Message-ID: <aQptcHayBOY1sw1J@debug.ba.rivosinc.com>
-References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com>
- <CACPK8XeQf9UJuu39bGcm2mySWrKYvUadOgFRmpas+AS9fXA2WA@mail.gmail.com>
+        Tue, 04 Nov 2025 13:50:58 -0800 (PST)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Date: Tue, 04 Nov 2025 13:50:50 -0800
+Subject: [PATCH net] selftests/vsock: avoid false-positives when checking
+ dmesg
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CACPK8XeQf9UJuu39bGcm2mySWrKYvUadOgFRmpas+AS9fXA2WA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251104-vsock-vmtest-dmesg-fix-v1-1-80c8db3f5dfe@meta.com>
+X-B4-Tracking: v=1; b=H4sIADl1CmkC/x2MwQqDMBAFf0X23AWTKmh/pfRgk6cuxViyIQjBf
+ zd4nIGZQoooUHo1hSKyqOyhgnk05NYpLGDxlcm2tjem7Tjr7n6ctwRN7DfowrMc/LWuH2H86J4
+ D1fgfUfU9flNAos95Xp98blVtAAAA
+To: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Bobby Eshleman <bobbyeshleman@meta.com>, Simon Horman <horms@kernel.org>
+X-Mailer: b4 0.13.0
 
-Hi Joel,
+From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Thanks a lot for testing it out.
+Sometimes VMs will have some intermittent dmesg warnings that are
+unrelated to vsock. Change the dmesg parsing to filter on strings
+containing 'vsock' to avoid false positive failures that are unrelated
+to vsock. The downside is that it is possible for some vsock related
+warnings to not contain the substring 'vsock', so those will be missed.
 
-Comments inline.
+Fixes: a4a65c6fe08b ("selftests/vsock: add initial vmtest.sh for vsock")
+Reviewed-by: Simon Horman <horms@kernel.org>
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+---
+Previously was part of the series:
+https://lore.kernel.org/all/20251022-vsock-selftests-fixes-and-improvements-v1-0-edeb179d6463@meta.com/
+---
+ tools/testing/selftests/vsock/vmtest.sh | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-On Tue, Nov 04, 2025 at 05:34:11PM +1030, Joel Stanley wrote:
->Hello Deepak,
->
->On Fri, 24 Oct 2025 at 03:31, Deepak Gupta via B4 Relay
-><devnull+debug.rivosinc.com@kernel.org> wrote:
->>
->> v22: fixing build error due to -march=zicfiss being picked in gcc-13 and above
->> but not actually doing any codegen or recognizing instruction for zicfiss.
->> Change in v22 makes dependence on `-fcf-protection=full` compiler flag to
->> ensure that toolchain has support and then only CONFIG_RISCV_USER_CFI will be
->> visible in menuconfig.
->
->Following our discussion at the riscv summit I spent some time with
->this patch set with the goal of giving a test run on emulation. I only
->got as far as qemu, as I couldn't get the selftests passing there.
->
->I had trouble running the podman container so I built a toolchain
->using the riscv-gnu-toolchain branch (cfi-dev, d19f3009f6c2) you
->pointed to.
->
->The opensbi branch was a bit old and wouldn't build with GCC 15, so I
->tried to rebase and noticed the patches were already upstream. Have
->you tested using v1.7 (or newer) there? Is there something I missed,
->do we need more patches on upstream opensbi?
->
->I booted it in qemu 10.1.2 with the zicfi extensions both on and off.
->
->qemu-system-riscv64 -M virt,aia=aplic-imsic,aia-guests=5 \
->  -cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
->  -smp 8 -nographic -bios fw_dynamic.elf
->  -m 1024M -kernel arch/riscv/boot/Image \
->  -initrd selftests/selftests.cpio \
->  -append 'init=mini-init command="cfitests"'
->
->My results:
->
->no zicfi, no z*mop (crash, as expected):
->-------------------------------------------------
->
->Running command: cfitests
->system_opcode_insn: Invalid opcode for CSR read/write instruction[
->0.462709] cfitests[85]: unhandled signal 4 code 0x1 at
->0x0000000000011c44 in cfitests[1c44,10000+6d000]
->[    0.463141] CPU: 4 UID: 0 PID: 85 Comm: cfitests Not tainted
->6.18.0-rc3-tt-defconfig-jms-00090-g6e2297f1edbc #93 NONE
->[    0.463338] Hardware name: riscv-virtio,qemu (DT)
->[    0.463573] epc : 0000000000011c44 ra : 00000000000104e0 sp :
->00007fffebd0ddb0
->...
->[    0.465177] status: 0000000200004020 badaddr: 00000000ce104073
->cause: 0000000000000002
->[    0.465410] Code: 0893 05d0 4501 0073 0000 b7f5 4501 b7f9 0017 0000
->(4073) ce10
->
->no zicfi, z*mop (failed to start, as expected):
->-----------------------------------------------------------
->
->Running command: cfitests
->TAP version 13
-># Starting risc-v CFI tests
->Bail out! Get landing pad status failed with -22
->
->zicfi, z*mop (failed to start, unexpected):
->-------------------------------------------------------
->Running command: cfitests
->TAP version 13
-># Starting risc-v CFI tests
->Bail out! Get landing pad status failed with -22
->
->I went digging to see why the zicfi enabled kernel failed. The
->userspace binary was built with CFI:
->
->$ riscv64-unknown-linux-gnu-readelf -n selftests/cfitests
->
->Displaying notes found in: .note.gnu.property
->  Owner                Data size     Description
->  GNU                  0x00000010    NT_GNU_PROPERTY_TYPE_0
->      Properties: RISC-V AND feature: CFI_LP_UNLABELED, CFI_SS
->
->I then tested your opensbi tree with some hacks to get it built with a
->newer compiler. This produced different results, which was unexpected:
->
+diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
+index edacebfc1632..e1732f236d14 100755
+--- a/tools/testing/selftests/vsock/vmtest.sh
++++ b/tools/testing/selftests/vsock/vmtest.sh
+@@ -389,9 +389,9 @@ run_test() {
+ 	local rc
+ 
+ 	host_oops_cnt_before=$(dmesg | grep -c -i 'Oops')
+-	host_warn_cnt_before=$(dmesg --level=warn | wc -l)
++	host_warn_cnt_before=$(dmesg --level=warn | grep -c -i 'vsock')
+ 	vm_oops_cnt_before=$(vm_ssh -- dmesg | grep -c -i 'Oops')
+-	vm_warn_cnt_before=$(vm_ssh -- dmesg --level=warn | wc -l)
++	vm_warn_cnt_before=$(vm_ssh -- dmesg --level=warn | grep -c -i 'vsock')
+ 
+ 	name=$(echo "${1}" | awk '{ print $1 }')
+ 	eval test_"${name}"
+@@ -403,7 +403,7 @@ run_test() {
+ 		rc=$KSFT_FAIL
+ 	fi
+ 
+-	host_warn_cnt_after=$(dmesg --level=warn | wc -l)
++	host_warn_cnt_after=$(dmesg --level=warn | grep -c -i vsock)
+ 	if [[ ${host_warn_cnt_after} -gt ${host_warn_cnt_before} ]]; then
+ 		echo "FAIL: kernel warning detected on host" | log_host "${name}"
+ 		rc=$KSFT_FAIL
+@@ -415,7 +415,7 @@ run_test() {
+ 		rc=$KSFT_FAIL
+ 	fi
+ 
+-	vm_warn_cnt_after=$(vm_ssh -- dmesg --level=warn | wc -l)
++	vm_warn_cnt_after=$(vm_ssh -- dmesg --level=warn | grep -c -i vsock)
+ 	if [[ ${vm_warn_cnt_after} -gt ${vm_warn_cnt_before} ]]; then
+ 		echo "FAIL: kernel warning detected on vm" | log_host "${name}"
+ 		rc=$KSFT_FAIL
 
-Opensbi doesn't need to be built with new compiler. All it needs do are
-reflect MPELP bit back to S-mode (if its taking a trap and then reflecting
-back to S-mode) and ofcourse have SSE support. Both of these are upstream
-in opensbi.
+---
+base-commit: 255d75ef029f33f75fcf5015052b7302486f7ad2
+change-id: 20251104-vsock-vmtest-dmesg-fix-b2c59e1d9c38
 
-I'll test with upstream opensbi, test and report back.
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
 
->Running command: cfitests
->TAP version 13
-># Starting risc-v CFI tests
->Bail out! Landing pad is not enabled, should be enabled via glibc
-># Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->
->The selftest binary and the little toy init that starts it are both
->statically linked and built against the toolchain's glibc, so I would
->expect this to work.
->
->$ riscv64-unknown-linux-gnu-readelf -n sifive-cfi-build/sysroot/usr/lib/libc.a
->
->File: sifive-cfi-build/sysroot/usr/lib/libc.a(init-first.o)
->
->Displaying notes found in: .note.gnu.property
->  Owner                Data size        Description
->  GNU                  0x00000010       NT_GNU_PROPERTY_TYPE_0
->      Properties: RISC-V AND feature: CFI_LP_UNLABELED, CFI_SS
->
->The kernel seems to have detected that CFI is available and is built with it:
->
->$ grep CFI .config
->CONFIG_RISCV_USER_CFI=y
->CONFIG_ARCH_SUPPORTS_CFI=y
->
->I did notice the func-sig-dev gcc branch is a few commits ahead of
->what the sifive riscv-gnu-toolchain points to.
-
-Most likely PRCTL_* is not updated in cfi-dev branch? I'll take a look.
-
->
->I had to context switch to some other tasks at this point. I wanted to
->do some more digging to work out what was wrong, but I haven't found
->time, so here are my notes in the hope that they are useful. I'll let
->you know if I discover anything further.
-
-Thanks once again.
->
->Cheers,
->
->Joel
->
->
->> How to test this series
->> =======================
->>
->> Toolchain
->> ---------
->> $ git clone git@github.com:sifive/riscv-gnu-toolchain.git -b cfi-dev
->> $ riscv-gnu-toolchain/configure --prefix=<path-to-where-to-build> --with-arch=rv64gc_zicfilp_zicfiss --enable-linux --disable-gdb  --with-extra-multilib-test="rv64gc_zicfilp_zicfiss-lp64d:-static"
->> $ make -j$(nproc)
->>
->> Qemu
->> ----
->> Get the lastest qemu
->> $ cd qemu
->> $ mkdir build
->> $ cd build
->> $ ../configure --target-list=riscv64-softmmu
->> $ make -j$(nproc)
->>
->> Opensbi
->> -------
->> $ git clone git@github.com:deepak0414/opensbi.git -b v6_cfi_spec_split_opensbi
->> $ make CROSS_COMPILE=<your riscv toolchain> -j$(nproc) PLATFORM=generic
->>
->> Linux
->> -----
->> Running defconfig is fine. CFI is enabled by default if the toolchain
->> supports it.
->>
->> $ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc) defconfig
->> $ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc)
->>
->> Running
->> -------
->>
->> Modify your qemu command to have:
->> -bios <path-to-cfi-opensbi>/build/platform/generic/firmware/fw_dynamic.bin
->> -cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
 
