@@ -1,150 +1,139 @@
-Return-Path: <linux-kselftest+bounces-44720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D607FC31D63
-	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 16:29:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E662BC31E6F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 04 Nov 2025 16:44:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CF05189FD7E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 15:30:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B281F424CF6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Nov 2025 15:43:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14868261B64;
-	Tue,  4 Nov 2025 15:29:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53CAF2FB619;
+	Tue,  4 Nov 2025 15:43:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="komXz4R+"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rjbrvle2";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FojQgXp5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B4F2CCC5
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Nov 2025 15:29:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B3C2D29C7;
+	Tue,  4 Nov 2025 15:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762270172; cv=none; b=msSUyoaSpW0w/BIK86zgyI7wYxE45G5lc4IPAi8aIsKSqsR3SLEuzmB6k3RdoXy/tI5lVMvYZJ4DZVKBPnSJe5g9EqkHLqB+seZ40YnAnuSXj/7swN0l5FwjAsB2f7Wc708cuRKz+UuU6tqBQCNrAs3eUxQJ0WgYNlfLXoKdvLo=
+	t=1762271023; cv=none; b=Y/Y4lewkevxOhzv6+HMjbwDEslplqnURklodDzYu4r/5F0GDkkxsu+HSU/KDfd38hgYZMn+jlshTlU+5624LsDpA5E9YGEP04kXRbfGu3CYoM83/Z7lHk7eF6S5rVhmWwkgZsFMVMA4D7M7PVGMP0Vg6DNv3C31rFIDV0d8l/qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762270172; c=relaxed/simple;
-	bh=8GNMbexAGe1nKqMzzLVClEkNd7j6DVDRkgcdOMp8ajQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iqo3CllkY/b9Q8yWn1hIGrvfd8by2SAxn5EdMUNIqlOmjlhdd7vFefHVW8Ls32abXPZvroQw8ZFQvyvPjza4XX93r05s/4mBMJQRd8qbjFKWgn8cp50qhqmTfhM0vEgwHgWAvVAkawe1HExtdl8Hyg/lBJxpCEyBTpo/xbV29S4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=komXz4R+; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2959197b68eso195605ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 07:29:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762270170; x=1762874970; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8GNMbexAGe1nKqMzzLVClEkNd7j6DVDRkgcdOMp8ajQ=;
-        b=komXz4R+41dzT/XSiGVn89xk28v1lVjn5ZUX4+R3Vry1fRFm0on3hzx47TViArkgsV
-         64igP4q74IHlHGz/e6WNOhIzO4NoXFVpzWZY5PT6xsU5aMt5urG5Tmgum3HpayNNAR7W
-         qMgE5xpOgsKWwcZiD/HiON3MyShaU7sEGd9iKE/mhwXRZZth+xK/SZMi8eNiy6M2u/JN
-         mu5mOt3DcNFAVsM5g7HUMIvWJa2e7uJ6jJGTK7/tdfqn1iuKZ03YmvQ6604ISnoZsI6F
-         EwQrKMGUNWm7ChO2CPB+o/p4InWbwf4bs/Ew38x9e09dHaSp+1R2iw0gthCKjcs7qe3Y
-         ZcNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762270170; x=1762874970;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8GNMbexAGe1nKqMzzLVClEkNd7j6DVDRkgcdOMp8ajQ=;
-        b=G5DbwJ9Bl3XV5bPsqtNzKQ+yVH+yKMN2bACFzIxD4WXMGznQcbIg4On8hxCC1rgOew
-         e55oApJVF5WtQjwSjRHayoxsMMZEPB1WEVRU3IJ5bdKr/ge+/wFK8w1r5mGyUknOFfhR
-         z9NgPMoSavW6ToYR561Vm6Ebqtwfq/cqUdfSTzRsmCM0C86X/m098peH2oe0wsI57e3o
-         9aMpker/GJL7BNhA+lbAy5NrYpPByxaSrPiVN8FY57nfm6QiFnpVSQ/Sj4rWGOs2YtQr
-         OMVu890pQt92cWSgPI/hYkY37A6NJRnXzXzHobih2C4fYQxQhlzMx1hxLkOq6Z5JuNIT
-         FU1g==
-X-Forwarded-Encrypted: i=1; AJvYcCXLjk8+0l+324ZVszxY/5usOhxutYv6VVmqdPL04PQ1jpXSX6Rz+3vyc93Oi8E7dkj/MJ7Pq0W5kdgJCImqKXU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEulVCQDR5MjgGGybm0QQgdfL0u+//fthDsIXzi08K1U60mVpj
-	ebk/an0nzXuO3A6Nc0vVebXE1Ok8pTGNXNoL+bwNz18ESX/GfJWC6M5SSV3CDE8OjI8NQsnOxdz
-	zFke7eyoTSAnYlruVNtEE9IX60ubiQcUr87jjp6Ex
-X-Gm-Gg: ASbGncu5mxeTrRfQcJceIVVUJr8VXbL3lNFSs2x2emfKuHkZ70iaU56wFTxZTjhspQn
-	vRpScNKT1kkGPHbbN01+Dscf3WL92jVTWN9xwKVQEbJwyLo0piLTSc6/Lcix4/7ICxX/vlbIP4s
-	iNV9Ns/Ay+rJ+8avU8thBpEkXo+pCwE6r28J/et9JCcmYmM1pLdLsKyRQgK+ALPS99BugOTln5k
-	lHuOpSqEFUA21g1Z39Frx26fHhI3PuTzwy9ZcA3E2Js4fQB/l0eVmWKbyPIA1iuygbP0kR0Y6pA
-	iReBcm2Xbyis0DU2HQ==
-X-Google-Smtp-Source: AGHT+IH4UAJnle8ScuJWqynVoBOWdaJhxSn6rAs6bqvidoqyAcb3/mjW+zeWXvxPSrbgnMnIJK48J8HHgBswCtIjjHM=
-X-Received: by 2002:a17:902:c412:b0:294:d42c:ca0f with SMTP id
- d9443c01a7336-295fd276d54mr4970305ad.2.1762270169379; Tue, 04 Nov 2025
- 07:29:29 -0800 (PST)
+	s=arc-20240116; t=1762271023; c=relaxed/simple;
+	bh=KLrPQSaIQNrnjth1rrMVwNhWXm2E0ayWA44G954ZxC4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l+C224NIQ742598UMpcbVsNy+FS3HumGTiN5yvlwZAKRx5YtiRGTu4bETgoA9aWiX6iebd7DeY5wRRQHDLzqpfNO9qdnYt1flNqQPI1jisJ1tVHXqvUpM0JLt6fPvbj2pbW+wm6qZ3SyZJyNsZ/sMbsIBZpNX6G6uLOFO7kud1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rjbrvle2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FojQgXp5; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 4 Nov 2025 16:43:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1762271019;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6/0fonC1CcSFJ/vzCGw398TxXXxzhqjx7ZhCqclZhJI=;
+	b=rjbrvle2cRAQ2r1/E6AUyn/63AoNirT+MeY3CSkMLQkjVu4MZ9i9gsM5VaY1sb3+Qse+3E
+	k5Tsj3k0sX10MaW1Vt77Ml/iwrO90sXCi7ohIUnxBp8RCfq2diJY/ZCpc3gLIELLZkZ1gT
+	L/BTyFm2ieNoLfdbPm3joETfalKC7jCYGiBCKDuN65AUEULDiusUD1wLGQDHRp47rNGPSE
+	CNiRZhbWp4pKi5KAc4rKlwVrMeyIJALch4gPPlEKog+++hdtB+pAyXWGyDy2/FQb1lBsmj
+	YmFrBOIEWYHsmogSRF3LDckjk1IVIHNKXQ3GxfoNtiFlAXBk/A7zx0VxilqApg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1762271019;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6/0fonC1CcSFJ/vzCGw398TxXXxzhqjx7ZhCqclZhJI=;
+	b=FojQgXp5lZ7JuVC/TErfcQFIVgMu5YQg1OclEVtlB2s1//ebKD9BRtli3pju35zYRju4WW
+	6T9NeyF0VG7+qZCA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Mark Brown <broonie@kernel.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King <linux@armlinux.org.uk>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Aishwarya.TCV@arm.com
+Subject: Re: [PATCH v4 23/35] vdso/datastore: Map pages through struct page
+Message-ID: <20251104162009-8cffa62d-e95b-466b-9a27-c51b0f5257cd@linutronix.de>
+References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
+ <20251014-vdso-sparc64-generic-2-v4-23-e0607bf49dea@linutronix.de>
+ <aQjJNmwniQwwjeBR@finisterre.sirena.org.uk>
+ <CGME20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287@eucas1p2.samsung.com>
+ <e7f05748-a11c-47eb-b1fa-cdc9dc6d05e0@samsung.com>
+ <aQn8G9r2OWv_yEQp@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1760731772.git.ackerleytng@google.com> <5a4dfc265a46959953e6c24730d22584972b1179.1760731772.git.ackerleytng@google.com>
- <aQnGJ5agTohMijj8@yzhao56-desk.sh.intel.com>
-In-Reply-To: <aQnGJ5agTohMijj8@yzhao56-desk.sh.intel.com>
-From: Vishal Annapurve <vannapurve@google.com>
-Date: Tue, 4 Nov 2025 07:29:14 -0800
-X-Gm-Features: AWmQ_bl_ayCFfhnMsugNyyrAbP6HSGsNUxGOugUtPG7U3zm3zMrinB0nHoIiMMY
-Message-ID: <CAGtprH9cajbGWrU9PAZWNKMeKJ9DyhoV=nEYk_DnYnR8Fyapww@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 11/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES
-To: Yan Zhao <yan.y.zhao@intel.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, cgroups@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, x86@kernel.org, 
-	akpm@linux-foundation.org, binbin.wu@linux.intel.com, bp@alien8.de, 
-	brauner@kernel.org, chao.p.peng@intel.com, chenhuacai@kernel.org, 
-	corbet@lwn.net, dave.hansen@intel.com, dave.hansen@linux.intel.com, 
-	david@redhat.com, dmatlack@google.com, erdemaktas@google.com, 
-	fan.du@intel.com, fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org, 
-	hch@infradead.org, hpa@zytor.com, hughd@google.com, ira.weiny@intel.com, 
-	isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com, 
-	jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com, 
-	jroedel@suse.de, jthoughton@google.com, jun.miao@intel.com, 
-	kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev, 
-	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com, 
-	mail@maciej.szmigiero.name, maobibo@loongson.cn, 
-	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org, 
-	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, mingo@redhat.com, 
-	mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev, 
-	nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev, palmer@dabbelt.com, 
-	pankaj.gupta@amd.com, paul.walmsley@sifive.com, pbonzini@redhat.com, 
-	peterx@redhat.com, pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, 
-	qperret@google.com, richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, 
-	rientjes@google.com, rostedt@goodmis.org, roypat@amazon.co.uk, 
-	rppt@kernel.org, seanjc@google.com, shakeel.butt@linux.dev, shuah@kernel.org, 
-	steven.price@arm.com, steven.sistare@oracle.com, suzuki.poulose@arm.com, 
-	tabba@google.com, tglx@linutronix.de, thomas.lendacky@amd.com, vbabka@suse.cz, 
-	viro@zeniv.linux.org.uk, vkuznets@redhat.com, wei.w.wang@intel.com, 
-	will@kernel.org, willy@infradead.org, wyihan@google.com, xiaoyao.li@intel.com, 
-	yilun.xu@intel.com, yuzenghui@huawei.com, zhiquan1.li@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aQn8G9r2OWv_yEQp@finisterre.sirena.org.uk>
 
-On Tue, Nov 4, 2025 at 1:27=E2=80=AFAM Yan Zhao <yan.y.zhao@intel.com> wrot=
-e:
->
-> On Fri, Oct 17, 2025 at 01:11:52PM -0700, Ackerley Tng wrote:
-> > For shared to private conversions, if refcounts on any of the folios
-> > within the range are elevated, fail the conversion with -EAGAIN.
-> >
-> > At the point of shared to private conversion, all folios in range are
-> > also unmapped. The filemap_invalidate_lock() is held, so no faulting
-> > can occur. Hence, from that point on, only transient refcounts can be
-> > taken on the folios associated with that guest_memfd.
-> >
-> > Hence, it is safe to do the conversion from shared to private.
-> >
-> > After conversion is complete, refcounts may become elevated, but that
-> > is fine since users of transient refcounts don't actually access
-> > memory.
-> >
-> > For private to shared conversions, there are no refcount checks. any
-> > transient refcounts are expected to drop their refcounts soon. The
-> > conversion process will spin waiting for these transient refcounts to
-> > go away.
-> Where's the code to spin?
+On Tue, Nov 04, 2025 at 01:14:03PM +0000, Mark Brown wrote:
+> On Tue, Nov 04, 2025 at 09:44:38AM +0100, Marek Szyprowski wrote:
+> > On 03.11.2025 16:24, Mark Brown wrote:
+> 
+> > > We do have some other serious breakage affecting arm64 in -next which
+> > > are making it hard to get a clear picture of which platforms are
+> > > affected, at least the FVP and O6 are unaffected by those other issues
+> > > (due to using MTE on platforms that don't have it, those platforms do
+> > > have MTE).
+> 
+> > I got almost the same result while bisecting on ARM 32bit Exynos-based 
+> > boards, so the issue with this patchset is not fully ARM64 specific. For 
+> > some reasons it also doesn't affect all systems though. It is even 
+> > worse, because it affected only a subset of boards, but different for 
+> > each tested commit. The observed failure looks exactly the same:
+> 
+> I've now got the results for this specific commit, it looks like every
+> single arm64 system is failing.  I didn't test any other architectures.
 
-When dealing with 4k pages, I think we don't need to spin waiting for
-transient refcounts to drop, that logic will be needed when dealing
-with huge folios in order to restructure them while handling
-conversion. So the specific part can be safely dropped from the commit
-message.
+Which one do you mean exactly with "this specific commit"?
+
+6a011a228293 ("vdso/datastore: Map pages through struct page")
+10d91dac2ea5 ("vdso/datastore: Allocate data pages dynamically")
+
+> > Then I've tested it on ARM64bit (RaspberrryPi3b+ board) and got the 
+> > following panic on 6a011a228293 ("vdso/datastore: Map pages through 
+> > struct page") commit:
+> 
+> I'm seeing the same thing on at least some of the systems - this is with
+> arm64 defconfig (I suspect that's what Marek is doing too).  For
+> example:
+
+I can now reproduce this issue, too. Even on QEMU. But it goes away,
+as soon as the second commit is applied. The two commits should be merged.
+That could also explain the weird bisection results, landing on either one
+of the commits. However I can't reproduce the "silent freeze" issue on commit
+10d91dac2ea5 ("vdso/datastore: Allocate data pages dynamically") on my
+Raspberry Pi 3b+.
+
+Any chance I could get remote access to one of your test machines?
+I don't have access to the exact machines and that should reduce the chance
+of chasing down dead ends.
+
+
+Thomas
 
