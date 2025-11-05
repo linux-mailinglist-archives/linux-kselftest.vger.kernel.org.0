@@ -1,130 +1,321 @@
-Return-Path: <linux-kselftest+bounces-44844-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44845-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2FC9C37BB6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 21:32:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DD9DC37CDB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 21:57:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FA5818946C1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 20:32:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9F703B4ED0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 20:57:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D42346760;
-	Wed,  5 Nov 2025 20:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2A6347BB5;
+	Wed,  5 Nov 2025 20:56:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TDA/2sjw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iDrI6EBZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4CA627815E
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 20:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B639F30EF7A;
+	Wed,  5 Nov 2025 20:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762374715; cv=none; b=BxL/DbrWhAtyblKWTbsct05popOYHkFCpFhSrJo42VxvYHWsi7Rrl7bIALRybxRCU6XeNJVRnBacT1BpWN9bhmr+CWnU4PxKjDa2F6IZG4JYdwbNKDTlbJtK+H+WvBeRi5V3CMWWktFPzf39nm4UvRIi/ptbgfQo3av208ZNrvY=
+	t=1762376215; cv=none; b=SvyxoRt1dzM90eVf+7BLVWrbItPqdDQJTa05+YcZe0Wawmj5vaqlbAFBg854ZTiI1+89h8ehkzCup+lid/1xHCGKIqzpxUmUacCk5OPFMtEc+B8072e8uICnvrWPog5hDYQp2CBLUH6TP/FGxLqx+9j/dBekpCIZ1/M6vcge7ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762374715; c=relaxed/simple;
-	bh=rX0i1XLBoCEYsD51u3EujN1NPLVkqf6eDzfc2Q1QSrU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lqc3oVnNUikheHbTC2SkaE7aw5jBVkLmA1ixhpQ5yKU8nlkIo7/XIIeb1A4UOtrgJgwMHwHf44vHvi1cXE3GUCphnE0/VhLk+bvV0y24TxAo0cp/E9meYG7w//0yae6sLRxcO1XNxFQEI5RPQAOI2mOtVTan8n4AXFjv6q/nXD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TDA/2sjw; arc=none smtp.client-ip=209.85.219.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-8803e8f440eso3328226d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 12:31:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762374713; x=1762979513; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q1J40dDi5Xqhpi8W0eJUyo7WqkdJ10bkSYB2k3R6lBI=;
-        b=TDA/2sjwCfcBFtaBhaHRkUwkRkSt0gelgppBRiFIFxrmA3vq2mY102Mb7f4WOIWcY2
-         3dgCPknxci+Lg/chVz5nnZAQ/YBdVncob8kih00/HNu9zRkdsD7uqNxp0tiWSG+MNpyj
-         f74sPCwb3ZVHIP1omCIN2aNH9InJa7b6xdzKumyjg1VMHuVklQBfdt7OBqeAEP1F1fcG
-         hTUJJQ+RShERRfpA1/U3SEYVymuMySKQBmxX9elazyGdkCj0gS0z2edqFzh1LYkOjxjg
-         oG15iNnASS8VhjHaDgdHZjB4Qm45JaRGVy0bDAOezwK8dCQKToqOAFHj6Sug6EYuonc/
-         H01g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762374713; x=1762979513;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q1J40dDi5Xqhpi8W0eJUyo7WqkdJ10bkSYB2k3R6lBI=;
-        b=fffVsgJGuZ+mqek1Nd2tkFhZvh6hSMv5BNu8Af1PonMyIHuEQrgmXKbZLzJkHjp6yk
-         ZmClytxhiiVezDXIcQ0RB3l31NuDM6O2q2xYJFTkeD6zZt9hfd3SRo4Qbrm8Y7hycfH2
-         +cz7E/Vpt/mlzFfAjspiNV0L6h0HeX6ouYaRf0W6VCvhLUxExyvget+IBDWtiDgKUbVY
-         4DmKD3PPjg63h7jHnEnCFS794GkZzqqgUOk1gh9wWbJ3+CtgTEAhnYzXboQ39bKB268Q
-         WLvmaTwqgEB7G3oNDJ81T2Zq+xyEqPfKpKB+HS4o88GrF0iA9PqbSFPLgdOBB+3+2Zuk
-         JZlw==
-X-Forwarded-Encrypted: i=1; AJvYcCWcMX6HfmoKfkzwg+cpjwns8PYVO/e1rDQ8i3lob3b4vtBS0ri15ShlboR7TNXemDknmL0zPfZjyKgv/D3td3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXCgwPPH8dK7UE4HKanUUEIuWkXAO+aLrDAgmlomd1SPfnHtMW
-	glxLFcKw5t3MqBacDVF3T0v6naeZoBBeutBmW1kgKJNnQzMq5n3kH2Fo
-X-Gm-Gg: ASbGncuaEHLOS3x+b1KbU9aZpy6Q8ey9+rqNs1G5Qx+4crIWeUQQjF+FyCd9QuvunSG
-	BS7LfmXK41tAIFO5OmyQ7GmolDliioItnb5/xKFpo3Q+DufkWAOcGzgSLTqEiDteklYR+r3+GT0
-	fg2BOJb0QOe7bikUi/oql0iKJ3FkTCk8NsoPJpBbeZI5KGTbm+sQPikImOKn8/DzKT9E28wIw8H
-	nX50g/0kdw/auDUEMh7ocpZy8uEV2TuoJOd4SEdy9VsES0djYT9SPfj6RThRHlvFzPiDVB4Q7mX
-	TUMmVsT+o203uMv6n9lvTmsYWCCLzruV4wQF3nhZXd5+IX3papuqIPEWX1xX+QaiH6EOdhM5TG4
-	Xj3d8BXYsTmyW02TqCCcufr/8VjtXyH0f/7s+WcxGoQ1D2ipuOz0bqk4/aSryGnOiFy8QgnS05g
-	bsf92njCTIIJIs+mtODSJtA2GhDGsQrdbA
-X-Google-Smtp-Source: AGHT+IGUlpcoRBIn88EG1QpBnJacxK5tJG77YxNu8Wkcq4QV3a6BQBAmriofH6cpZIRJt2HRzJPNFA==
-X-Received: by 2002:a05:6214:501c:b0:880:527f:b10f with SMTP id 6a1803df08f44-880710db7femr57256996d6.25.1762374712616;
-        Wed, 05 Nov 2025 12:31:52 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1145:4:27ac:3515:8298:b471? ([2620:10d:c091:500::4:37fe])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8808290ca3csm4231126d6.25.2025.11.05.12.31.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Nov 2025 12:31:52 -0800 (PST)
-Message-ID: <5d816624-dbfb-4851-a834-94d52677863d@gmail.com>
-Date: Wed, 5 Nov 2025 15:31:50 -0500
+	s=arc-20240116; t=1762376215; c=relaxed/simple;
+	bh=fC9X5qQj+U0WNsqsc7Qvk95wkvv4i6g0VGE+cP4MB1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t3m5pkRzozRZ2XAb0cEUycNq/BsqPr9VfKbHGoQ4TkfUOUlfrmAcTpJF7rffN9QqrgU42BUb4HeE88BjSZnExnetLhHGSy9MPy6mFPRO/CT4UqBQje1PWZ5mwOfA07t3EnDtznBuGrfR659SFSDCqwGZv7ERZx4IjrGYsDECsJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iDrI6EBZ; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762376213; x=1793912213;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fC9X5qQj+U0WNsqsc7Qvk95wkvv4i6g0VGE+cP4MB1g=;
+  b=iDrI6EBZ0pWtm5nfv4Lhmq3YD9VmB7PVC/aJZHx/f+Z7oIdKsiOTCiBO
+   U5s83ziGDDs+4YzmjvHBQX8FTpeFSdXXMY7vYxpssdHqryitMjI3i1xuj
+   4v2CasrDZEFeg7yxATEvngSufhO+vT6Q05IwJl6ecHp1k09jRfwnaCHep
+   K6I3+ne/a1kA7BWtL8hLXtG7yPJbyaugbp+UIMp2HArkq5mfH4hM/c/R9
+   carFsrwUTFjo7hL0u7HvVYLpcdGGAZvsd/azKAZ/sBpk46c1uxYazJ8Is
+   Sa1UgVc62FXFAjV6pnlxNXUDjuy/CVQlCJbuR30ubpn6DAs89Pn1Dk2Fg
+   A==;
+X-CSE-ConnectionGUID: WTOw55ZhS/msdhXRrV9FrA==
+X-CSE-MsgGUID: FzHckbY+TUq+CEmvAEPPtg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11604"; a="75618434"
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="75618434"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 12:56:53 -0800
+X-CSE-ConnectionGUID: AeMS6Am/TCalEZpqKR8AjA==
+X-CSE-MsgGUID: 3GJ74quFQrKrVc0jEipUHw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
+   d="scan'208";a="187401197"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 05 Nov 2025 12:56:48 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vGkYd-000T7m-1A;
+	Wed, 05 Nov 2025 20:56:46 +0000
+Date: Thu, 6 Nov 2025 04:55:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Mina Almasry <almasrymina@google.com>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v6 3/6] net: devmem: prepare for autorelease rx
+ token management
+Message-ID: <202511060345.AQs0FTNg-lkp@intel.com>
+References: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 4/5] net/mlx5e: Add PSP stats support for
- Rx/Tx flows
-To: Cosmin Ratiu <cratiu@nvidia.com>,
- "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
- Saeed Mahameed <saeedm@nvidia.com>, "davem@davemloft.net"
- <davem@davemloft.net>, Tariq Toukan <tariqt@nvidia.com>,
- "leon@kernel.org" <leon@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
- Mark Bloch <mbloch@nvidia.com>, "kuba@kernel.org" <kuba@kernel.org>,
- "horms@kernel.org" <horms@kernel.org>,
- "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
- Boris Pismenny <borisp@nvidia.com>, "edumazet@google.com"
- <edumazet@google.com>, "pabeni@redhat.com" <pabeni@redhat.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <20251028000018.3869664-1-daniel.zahka@gmail.com>
- <20251028000018.3869664-5-daniel.zahka@gmail.com>
- <0025ef2f3eb0787d6ee29111f936a86f865320cd.camel@nvidia.com>
-Content-Language: en-US
-From: Daniel Zahka <daniel.zahka@gmail.com>
-In-Reply-To: <0025ef2f3eb0787d6ee29111f936a86f865320cd.camel@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3@meta.com>
+
+Hi Bobby,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 255d75ef029f33f75fcf5015052b7302486f7ad2]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/net-devmem-rename-tx_vec-to-vec-in-dmabuf-binding/20251105-092703
+base:   255d75ef029f33f75fcf5015052b7302486f7ad2
+patch link:    https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3%40meta.com
+patch subject: [PATCH net-next v6 3/6] net: devmem: prepare for autorelease rx token management
+config: arc-nsimosci_hs_defconfig (https://download.01.org/0day-ci/archive/20251106/202511060345.AQs0FTNg-lkp@intel.com/config)
+compiler: arc-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251106/202511060345.AQs0FTNg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511060345.AQs0FTNg-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   net/ipv4/tcp.c: In function 'tcp_recvmsg_dmabuf':
+>> net/ipv4/tcp.c:2661:12: warning: 'refs' is used uninitialized [-Wuninitialized]
+    2661 |         if (refs > 0)
+         |            ^
+   net/ipv4/tcp.c:2496:13: note: 'refs' was declared here
+    2496 |         int refs;
+         |             ^~~~
 
 
+vim +/refs +2661 net/ipv4/tcp.c
 
-On 10/30/25 12:11 PM, Cosmin Ratiu wrote:
->> +static void
->> +mlx5e_psp_get_stats(struct psp_dev *psd, struct psp_dev_stats
->> *stats)
->> +{
->> +	struct mlx5e_priv *priv = netdev_priv(psd->main_netdev);
->> +	struct mlx5e_psp_stats nstats;
->> +
->> +	mlx5e_accel_psp_fs_get_stats_fill(priv, &nstats);
-> I don't see the point of the intermediate struct mlx5e_psp_stats, this
-> function could query counters directly into stats.
+  2481	
+  2482	/* On error, returns the -errno. On success, returns number of bytes sent to the
+  2483	 * user. May not consume all of @remaining_len.
+  2484	 */
+  2485	static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
+  2486				      unsigned int offset, struct msghdr *msg,
+  2487				      int remaining_len)
+  2488	{
+  2489		struct net_devmem_dmabuf_binding *binding = NULL;
+  2490		struct dmabuf_cmsg dmabuf_cmsg = { 0 };
+  2491		struct tcp_xa_pool tcp_xa_pool;
+  2492		unsigned int start;
+  2493		int i, copy, n;
+  2494		int sent = 0;
+  2495		int err = 0;
+  2496		int refs;
+  2497	
+  2498		tcp_xa_pool.max = 0;
+  2499		tcp_xa_pool.idx = 0;
+  2500		do {
+  2501			start = skb_headlen(skb);
+  2502	
+  2503			if (skb_frags_readable(skb)) {
+  2504				err = -ENODEV;
+  2505				goto out;
+  2506			}
+  2507	
+  2508			/* Copy header. */
+  2509			copy = start - offset;
+  2510			if (copy > 0) {
+  2511				copy = min(copy, remaining_len);
+  2512	
+  2513				n = copy_to_iter(skb->data + offset, copy,
+  2514						 &msg->msg_iter);
+  2515				if (n != copy) {
+  2516					err = -EFAULT;
+  2517					goto out;
+  2518				}
+  2519	
+  2520				offset += copy;
+  2521				remaining_len -= copy;
+  2522	
+  2523				/* First a dmabuf_cmsg for # bytes copied to user
+  2524				 * buffer.
+  2525				 */
+  2526				memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
+  2527				dmabuf_cmsg.frag_size = copy;
+  2528				err = put_cmsg_notrunc(msg, SOL_SOCKET,
+  2529						       SO_DEVMEM_LINEAR,
+  2530						       sizeof(dmabuf_cmsg),
+  2531						       &dmabuf_cmsg);
+  2532				if (err)
+  2533					goto out;
+  2534	
+  2535				sent += copy;
+  2536	
+  2537				if (remaining_len == 0)
+  2538					goto out;
+  2539			}
+  2540	
+  2541			/* after that, send information of dmabuf pages through a
+  2542			 * sequence of cmsg
+  2543			 */
+  2544			for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
+  2545				skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+  2546				struct net_iov *niov;
+  2547				u64 frag_offset;
+  2548				u32 token;
+  2549				int end;
+  2550	
+  2551				/* !skb_frags_readable() should indicate that ALL the
+  2552				 * frags in this skb are dmabuf net_iovs. We're checking
+  2553				 * for that flag above, but also check individual frags
+  2554				 * here. If the tcp stack is not setting
+  2555				 * skb_frags_readable() correctly, we still don't want
+  2556				 * to crash here.
+  2557				 */
+  2558				if (!skb_frag_net_iov(frag)) {
+  2559					net_err_ratelimited("Found non-dmabuf skb with net_iov");
+  2560					err = -ENODEV;
+  2561					goto out;
+  2562				}
+  2563	
+  2564				niov = skb_frag_net_iov(frag);
+  2565				if (!net_is_devmem_iov(niov)) {
+  2566					err = -ENODEV;
+  2567					goto out;
+  2568				}
+  2569	
+  2570				end = start + skb_frag_size(frag);
+  2571				copy = end - offset;
+  2572	
+  2573				if (copy > 0) {
+  2574					copy = min(copy, remaining_len);
+  2575	
+  2576					frag_offset = net_iov_virtual_addr(niov) +
+  2577						      skb_frag_off(frag) + offset -
+  2578						      start;
+  2579					dmabuf_cmsg.frag_offset = frag_offset;
+  2580					dmabuf_cmsg.frag_size = copy;
+  2581	
+  2582					binding = net_devmem_iov_binding(niov);
+  2583	
+  2584					if (!sk->sk_devmem_info.binding)
+  2585						sk->sk_devmem_info.binding = binding;
+  2586	
+  2587					if (sk->sk_devmem_info.binding != binding) {
+  2588						err = -EFAULT;
+  2589						goto out;
+  2590					}
+  2591	
+  2592					if (sk->sk_devmem_info.autorelease) {
+  2593						err = tcp_xa_pool_refill(sk, &tcp_xa_pool,
+  2594									 skb_shinfo(skb)->nr_frags - i);
+  2595						if (err)
+  2596							goto out;
+  2597	
+  2598						dmabuf_cmsg.frag_token =
+  2599							tcp_xa_pool.tokens[tcp_xa_pool.idx];
+  2600					} else {
+  2601						token = net_iov_virtual_addr(niov) >> PAGE_SHIFT;
+  2602						dmabuf_cmsg.frag_token = token;
+  2603					}
+  2604	
+  2605	
+  2606					/* Will perform the exchange later */
+  2607					dmabuf_cmsg.dmabuf_id = net_devmem_iov_binding_id(niov);
+  2608	
+  2609					offset += copy;
+  2610					remaining_len -= copy;
+  2611	
+  2612					err = put_cmsg_notrunc(msg, SOL_SOCKET,
+  2613							       SO_DEVMEM_DMABUF,
+  2614							       sizeof(dmabuf_cmsg),
+  2615							       &dmabuf_cmsg);
+  2616					if (err)
+  2617						goto out;
+  2618	
+  2619					if (sk->sk_devmem_info.autorelease) {
+  2620						atomic_long_inc(&niov->pp_ref_count);
+  2621						tcp_xa_pool.netmems[tcp_xa_pool.idx++] =
+  2622							skb_frag_netmem(frag);
+  2623					} else {
+  2624						if (atomic_inc_return(&niov->uref) == 1)
+  2625							atomic_long_inc(&niov->pp_ref_count);
+  2626						refs++;
+  2627					}
+  2628	
+  2629					sent += copy;
+  2630	
+  2631					if (remaining_len == 0)
+  2632						goto out;
+  2633				}
+  2634				start = end;
+  2635			}
+  2636	
+  2637			tcp_xa_pool_commit(sk, &tcp_xa_pool);
+  2638	
+  2639			if (!remaining_len)
+  2640				goto out;
+  2641	
+  2642			/* if remaining_len is not satisfied yet, we need to go to the
+  2643			 * next frag in the frag_list to satisfy remaining_len.
+  2644			 */
+  2645			skb = skb_shinfo(skb)->frag_list ?: skb->next;
+  2646	
+  2647			offset = offset - start;
+  2648		} while (skb);
+  2649	
+  2650		if (remaining_len) {
+  2651			err = -EFAULT;
+  2652			goto out;
+  2653		}
+  2654	
+  2655	out:
+  2656		tcp_xa_pool_commit(sk, &tcp_xa_pool);
+  2657	
+  2658		if (!sent)
+  2659			sent = err;
+  2660	
+> 2661		if (refs > 0)
+  2662			atomic_add(refs, &sk->sk_devmem_info.outstanding_urefs);
+  2663	
+  2664		return sent;
+  2665	}
+  2666	
 
-Just because mlx5_fc_query() populates packet and byte counts, but 
-psp_dev_stats required stats only have byte counts for two of the 
-categories.
-
-I'll address the rest of you comments on the respin. Thanks for taking a 
-look.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
