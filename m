@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-44810-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44811-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4026CC361CF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 15:41:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D94C2C361E2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 15:42:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B90F534ECF0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 14:41:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17ED1188F901
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 14:42:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD21331A44;
-	Wed,  5 Nov 2025 14:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7B532ED24;
+	Wed,  5 Nov 2025 14:40:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B1+/CXAN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="toIxm5f5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB6F330D5D;
-	Wed,  5 Nov 2025 14:40:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17E4132E140;
+	Wed,  5 Nov 2025 14:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762353616; cv=none; b=tOCyDOmXkbbHsTG7uf9LkdLtJfTlpAHadqMZoUEqkL0B407/AtPaBwEMNdEIITPezmK2sacUJFGE/L7H3CzK9/7petEVn3wQ83gPKmhE/ENEUhgfzC9iWyPPSAMRImu3KgLIKWR6XRFj5IAudOJ0s3IBCm4X225tjWshsdqAyfI=
+	t=1762353636; cv=none; b=MWm/ZSNewDddXI0RTOcOcxdov6QmHy5a9nTkZOyiIwtzx33wuuRFGopaGthJoNMLYtHLsQlpys2C/hVVALufW/u1qs4UE7/ZEef7io1G/XySII8z+LAS8NR8t5iikcB++StolAGTp/jD3R7clXLiZlpEhapunoe6TqL4NQj5u/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762353616; c=relaxed/simple;
-	bh=LxC6JZ6IAYufFfV+Ica6Pr8L7xM0hnP5X9lUGFFM+nA=;
+	s=arc-20240116; t=1762353636; c=relaxed/simple;
+	bh=pMttGpkkfeoluMHfyTi4oQM3hPzIQS+KBocEW/rgPTU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U61v3ofmxxVuZs9kRCdZDrt0QchErEO2lXIpMaJzXPbtuz2PvI9IsVXtN7XKnYIrnM06EdrzLAzJPXUFvqqRmN4WH+Wg8xOmtY92HDxSkhAH/79sRbjZJyTb73jjeaZKXoZyxoepo/oakzrBZK0AcSXN34xs32BJ8FxkKWy9T0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B1+/CXAN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C13C4CEF5;
-	Wed,  5 Nov 2025 14:40:07 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ET9voH+ahgaye+94x0sEip6vNb6jtvhU5xw7qs/DhBPX6ix7EiPF5MOgESN69VXVYIsR8ZHiUy1NunIETbaPByyNY3KFF6QiGHm2ex+QwqHuxTSVBBdtc3+EMLrXkycLy5/ISxGOsaqzyIEZ4f0Y3DXQX6GHq9EGUOPslaPckys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=toIxm5f5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAAE3C4CEF5;
+	Wed,  5 Nov 2025 14:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762353615;
-	bh=LxC6JZ6IAYufFfV+Ica6Pr8L7xM0hnP5X9lUGFFM+nA=;
+	s=k20201202; t=1762353635;
+	bh=pMttGpkkfeoluMHfyTi4oQM3hPzIQS+KBocEW/rgPTU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=B1+/CXAN+vz6Q7YS8cfEmCja3mv5g4DVUw07fdp2vNVG6yIpZ6QWRJR2VW/Xfhznp
-	 SZfpgIluWNKNKZgr6XZ2oGmyaKJ/MdqB+C+IAcLEUK9G73rdGnrHghDVdxrcDk5Ccl
-	 pZjauUN9ozGCQBSQuidTYDv6VuD9jo1Ppf3UpqDrsWjtMDStIOSAn8n1VsNA22DfkA
-	 LZvQ+RO3wlWqSTTZ0U/UJsxbSQyekmHhteZbIaxHvCKYT9F4DGb1ShgWKPejOLh4+r
-	 okDXuOijZ0jjG4BI3tOtvRKuWe0NatBKfrr9BM5JDelQHmwoXmli7vB3umXUYp2EqE
-	 sLyL84TjAc/ag==
-Message-ID: <7d12a5fb-f923-4176-901a-8dc967eda52e@kernel.org>
-Date: Wed, 5 Nov 2025 15:40:03 +0100
+	b=toIxm5f5vWaI0lvkyLXJ1YRYRAcfb85VeTyNIZp0BnDBQwLD46amy5sBV0p+lJfWP
+	 wi4DCNudq051kfFBe0LI/wANATzdvQlVfr5AASBV7P8ypS8C1Jd/rxinhu0vO00xro
+	 cd+efV5H0xzuuMYdCwMTnE/Jklc4wJMA6Gb0jHS0cgvqcQxJW64884k2H4tjo5fzRv
+	 niT4NcbxJIyrOOYxXBNk94CXFzYd24i5cTZH+NVntjiWDem1UnA4k68gd0qJDS7Ibz
+	 roOOcPvAp+bQZJZikssIkATNtHJi6P7l4C7EwnpQg0sbfCZ1SYX6MO7As/IMPClKXV
+	 DgD3eCJ8kHmWg==
+Message-ID: <665825df-b995-45ee-9e0c-2b40cc4897ee@kernel.org>
+Date: Wed, 5 Nov 2025 15:40:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,12 +50,10 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v4 2/3] net,mptcp: fix proto fallback detection with
- BPF
+Subject: Re: [PATCH net v4 3/3] selftests/bpf: Add mptcp test with sockmap
 Content-Language: en-GB, fr-BE
 To: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev
-Cc: stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
  Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
@@ -69,7 +67,7 @@ Cc: stable@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>,
  Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
  netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20251105113625.148900-1-jiayuan.chen@linux.dev>
- <20251105113625.148900-3-jiayuan.chen@linux.dev>
+ <20251105113625.148900-4-jiayuan.chen@linux.dev>
 From: Matthieu Baerts <matttbe@kernel.org>
 Autocrypt: addr=matttbe@kernel.org; keydata=
  xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
@@ -115,142 +113,181 @@ Autocrypt: addr=matttbe@kernel.org; keydata=
  JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
  lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
 Organization: NGI0 Core
-In-Reply-To: <20251105113625.148900-3-jiayuan.chen@linux.dev>
+In-Reply-To: <20251105113625.148900-4-jiayuan.chen@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 Hi Jiayuan,
 
+Thank you for this new test!
+
+I'm not very familiar with the BPF selftests: it would be nice if
+someone else can have a quick look.
+
 On 05/11/2025 12:36, Jiayuan Chen wrote:
-
-If you need to send a v5, please remove the 'net,' prefix from the
-title. And maybe good to mention 'sockmap', e.g.
-
-  mptcp: fix proto fallback detection with sockmap
-
-> The sockmap feature allows bpf syscall from userspace, or based
-> on bpf sockops, replacing the sk_prot of sockets during protocol stack
-> processing with sockmap's custom read/write interfaces.
-> '''
-> tcp_rcv_state_process()
->   syn_recv_sock()/subflow_syn_recv_sock()
->     tcp_init_transfer(BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB)
->       bpf_skops_established       <== sockops
->         bpf_sock_map_update(sk)   <== call bpf helper
->           tcp_bpf_update_proto()  <== update sk_prot
-> '''
+> Add test cases to verify that when MPTCP falls back to plain TCP sockets,
+> they can properly work with sockmap.
 > 
-> When the server has MPTCP enabled but the client sends a TCP SYN
-> without MPTCP, subflow_syn_recv_sock() performs a fallback on the
-> subflow, replacing the subflow sk's sk_prot with the native sk_prot.
-> '''
-> subflow_syn_recv_sock()
->   subflow_ulp_fallback()
->     subflow_drop_ctx()
->       mptcp_subflow_ops_undo_override()
-> '''
+> Additionally, add test cases to ensure that sockmap correctly rejects
+> MPTCP sockets as expected.
 > 
-> Then, this subflow can be normally used by sockmap, which replaces the
-> native sk_prot with sockmap's custom sk_prot. The issue occurs when the
-> user executes accept::mptcp_stream_accept::mptcp_fallback_tcp_ops().
-> Here, it uses sk->sk_prot to compare with the native sk_prot, but this
-> is incorrect when sockmap is used, as we may incorrectly set
-> sk->sk_socket->ops.
-> 
-> This fix uses the more generic sk_family for the comparison instead.
-> 
-> Additionally, this also prevents a WARNING from occurring:
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 388 at net/mptcp/protocol.c:68 \
-> mptcp_stream_accept+0x34c/0x380
-> Modules linked in:
-> RIP: 0010:mptcp_stream_accept+0x34c/0x380
-> RSP: 0018:ffffc90000cf3cf8 EFLAGS: 00010202
-> PKRU: 55555554
-> Call Trace:
->  <TASK>
->  do_accept+0xeb/0x190
->  ? __x64_sys_pselect6+0x61/0x80
->  ? _raw_spin_unlock+0x12/0x30
->  ? alloc_fd+0x11e/0x190
->  __sys_accept4+0x8c/0x100
->  __x64_sys_accept+0x1f/0x30
->  x64_sys_call+0x202f/0x20f0
->  do_syscall_64+0x72/0x9a0
->  ? switch_fpu_return+0x60/0xf0
->  ? irqentry_exit_to_user_mode+0xdb/0x1e0
->  ? irqentry_exit+0x3f/0x50
->  ? clear_bhb_loop+0x50/0xa0
->  ? clear_bhb_loop+0x50/0xa0
->  ? clear_bhb_loop+0x50/0xa0
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
->  </TASK>
-> ---[ end trace 0000000000000000 ]---
-> 
-> result from ./scripts/decode_stacktrace.sh:
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 337 at net/mptcp/protocol.c:68 mptcp_stream_accept \
-> (net-next/net/mptcp/protocol.c:4005)
-> Modules linked in:
-> ...
-> 
-> PKRU: 55555554
-> Call Trace:
-> <TASK>
-> do_accept (net-next/net/socket.c:1989)
-> __sys_accept4 (net-next/net/socket.c:2028 net-next/net/socket.c:2057)
-> __x64_sys_accept (net-next/net/socket.c:2067)
-> x64_sys_call (net-next/arch/x86/entry/syscall_64.c:41)
-> do_syscall_64 (net-next/arch/x86/entry/syscall_64.c:63 \
-> net-next/arch/x86/entry/syscall_64.c:94)
-> entry_SYSCALL_64_after_hwframe (net-next/arch/x86/entry/entry_64.S:130)
-> RIP: 0033:0x7f87ac92b83d
-> 
-> ---[ end trace 0000000000000000 ]---
-
-If you need to send a v5, please remove the non-decoded stacktrace, only
-the decoded one is interesting. You can also remove the 'net-next/'
-prefix in the paths. So only to keep 'net/mptcp/protocol.c:4005' for
-example.
-
-> 
-> Fixes: 0b4f33def7bb ("mptcp: fix tcp fallback crash")
-> Cc: <stable@vger.kernel.org>
 > Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
 > ---
->  net/mptcp/protocol.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  .../testing/selftests/bpf/prog_tests/mptcp.c  | 150 ++++++++++++++++++
+>  .../selftests/bpf/progs/mptcp_sockmap.c       |  43 +++++
+>  2 files changed, 193 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/mptcp_sockmap.c
 > 
-> diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-> index 4cd5df01446e..b5e5e130b158 100644
-> --- a/net/mptcp/protocol.c
-> +++ b/net/mptcp/protocol.c
-> @@ -61,11 +61,13 @@ static u64 mptcp_wnd_end(const struct mptcp_sock *msk)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> index f8eb7f9d4fd2..56c556f603cc 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> @@ -6,11 +6,14 @@
+>  #include <netinet/in.h>
+>  #include <test_progs.h>
+>  #include <unistd.h>
+> +#include <error.h>
+
+Do you use this new include?
+
+>  #include "cgroup_helpers.h"
+>  #include "network_helpers.h"
+> +#include "socket_helpers.h"
+>  #include "mptcp_sock.skel.h"
+>  #include "mptcpify.skel.h"
+>  #include "mptcp_subflow.skel.h"
+> +#include "mptcp_sockmap.skel.h"
 >  
->  static const struct proto_ops *mptcp_fallback_tcp_ops(const struct sock *sk)
->  {
-> +	unsigned short family = READ_ONCE(sk->sk_family);
-> +
->  #if IS_ENABLED(CONFIG_MPTCP_IPV6)
-> -	if (sk->sk_prot == &tcpv6_prot)
-> +	if (family == AF_INET6)
->  		return &inet6_stream_ops;
->  #endif
-> -	WARN_ON_ONCE(sk->sk_prot != &tcp_prot);
-> +	WARN_ON_ONCE(family != AF_INET);
-
-I wonder if it would be interesting to return NULL if the family is not
-AF_INET{,6}. But I guess this will cause a crash quickly after, no?
-
-If yes, probably better to continue returning &inet_stream_ops here.
-
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-
->  	return &inet_stream_ops;
+>  #define NS_TEST "mptcp_ns"
+>  #define ADDR_1	"10.0.1.1"
+> @@ -436,6 +439,151 @@ static void test_subflow(void)
+>  	close(cgroup_fd);
 >  }
 >  
+> +/* Test sockmap on MPTCP server handling non-mp-capable clients. */
+> +static void test_sockmap_with_mptcp_fallback(struct mptcp_sockmap *skel)
+> +{
+> +	int listen_fd = -1, client_fd1 = -1, client_fd2 = -1;
+> +	int server_fd1 = -1, server_fd2 = -1, sent, recvd;
+> +	char snd[9] = "123456789";
+> +	char rcv[10];
+> +
+> +	/* start server with MPTCP enabled */
+> +	listen_fd = start_mptcp_server(AF_INET, NULL, 0, 0);
+> +	if (!ASSERT_OK_FD(listen_fd, "redirect:start_mptcp_server"))
+> +		return;
+> +
+> +	skel->bss->trace_port = ntohs(get_socket_local_port(listen_fd));
+> +	skel->bss->sk_index = 0;
+> +	/* create client without MPTCP enabled */
+> +	client_fd1 = connect_to_fd_opts(listen_fd, NULL);
+> +	if (!ASSERT_OK_FD(client_fd1, "redirect:connect_to_fd"))
+> +		goto end;
+> +
+> +	server_fd1 = xaccept_nonblock(listen_fd, NULL, NULL);
+> +	skel->bss->sk_index = 1;
+> +	client_fd2 = connect_to_fd_opts(listen_fd, NULL);
+> +	if (!ASSERT_OK_FD(client_fd2, "redirect:connect_to_fd"))
+> +		goto end;
+> +
+> +	server_fd2 = xaccept_nonblock(listen_fd, NULL, NULL);
+> +	/* test normal redirect behavior: data sent by client_fd1 can be
+> +	 * received by client_fd2
+> +	 */
+> +	skel->bss->redirect_idx = 1;
+> +	sent = xsend(client_fd1, snd, sizeof(snd), 0);
+> +	if (!ASSERT_EQ(sent, sizeof(snd), "redirect:xsend(client_fd1)"))
+> +		goto end;
+> +
+> +	/* try to recv more bytes to avoid truncation check */
+> +	recvd = recv_timeout(client_fd2, rcv, sizeof(rcv), MSG_DONTWAIT, 2);
+> +	if (!ASSERT_EQ(recvd, sizeof(snd), "redirect:recv(client_fd2)"))
+> +		goto end;
+> +
+> +end:
+> +	if (client_fd1 > 1)
+> +		close(client_fd1);
+> +	if (client_fd2 > 1)
+> +		close(client_fd2);
+> +	if (server_fd1 > 0)
+> +		close(server_fd1);
+> +	if (server_fd2 > 0)
+> +		close(server_fd2);
+
+Why do you check if it is above 0 or 1? Should you not always check if
+it is >= 0 for each fd?
+
+
+> +	close(listen_fd);
+> +}
+> +
+> +/* Test sockmap rejection of MPTCP sockets - both server and client sides. */
+> +static void test_sockmap_reject_mptcp(struct mptcp_sockmap *skel)
+> +{
+> +	int client_fd1 = -1, client_fd2 = -1;
+> +	int listen_fd = -1, server_fd = -1;
+> +	int err, zero = 0;
+> +
+> +	/* start server with MPTCP enabled */
+> +	listen_fd = start_mptcp_server(AF_INET, NULL, 0, 0);
+> +	if (!ASSERT_OK_FD(listen_fd, "start_mptcp_server"))
+
+In test_sockmap_with_mptcp_fallback(), you prefixed each error with
+'redirect:'. Should you also have a different prefix here? 'sockmap-fb:'
+vs 'sockmap-mptcp:' eventually?
+
+> +		return;
+> +
+> +	skel->bss->trace_port = ntohs(get_socket_local_port(listen_fd));
+> +	skel->bss->sk_index = 0;
+> +	/* create client with MPTCP enabled */
+> +	client_fd1 = connect_to_fd(listen_fd, 0);
+> +	if (!ASSERT_OK_FD(client_fd1, "connect_to_fd client_fd1"))
+> +		goto end;
+> +
+> +	/* bpf_sock_map_update() called from sockops should reject MPTCP sk */
+> +	if (!ASSERT_EQ(skel->bss->helper_ret, -EOPNOTSUPP, "should reject"))
+> +		goto end;
+
+So here, the client is connected, but sockmap doesn't operate on it,
+right? So most likely, the connection is stalled until the userspace
+realises that and takes an action?
+
+> +	/* set trace_port = -1 to stop sockops */
+> +	skel->bss->trace_port = -1;
+
+What do you want to demonstrate from here? That without the sockmap
+injection, there are no new entries added? Is it worth checking that here?
+
+> +	client_fd2 = connect_to_fd(listen_fd, 0);
+> +	if (!ASSERT_OK_FD(client_fd2, "connect_to_fd client_fd2"))
+> +		goto end;
+> +
+> +	server_fd = xaccept_nonblock(listen_fd, NULL, NULL);
+> +	err = bpf_map_update_elem(bpf_map__fd(skel->maps.sock_map),
+> +				  &zero, &server_fd, BPF_NOEXIST);
+> +	if (!ASSERT_EQ(err, -EOPNOTSUPP, "server should be disallowed"))
+> +		goto end;
+> +
+> +	/* MPTCP client should also be disallowed */
+> +	err = bpf_map_update_elem(bpf_map__fd(skel->maps.sock_map),
+> +				  &zero, &client_fd1, BPF_NOEXIST);
+> +	if (!ASSERT_EQ(err, -EOPNOTSUPP, "client should be disallowed"))
+> +		goto end;
+> +end:
+> +	if (client_fd1 > 0)
+> +		close(client_fd1);
+> +	if (client_fd2 > 0)
+> +		close(client_fd2);
+> +	if (server_fd > 0)
+> +		close(server_fd);
+
+Same here: should it not be "*fd >= 0"?
+
+> +	close(listen_fd);
+> +}
+
+(...)
 
 Cheers,
 Matt
