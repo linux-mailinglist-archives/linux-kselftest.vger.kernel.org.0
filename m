@@ -1,152 +1,186 @@
-Return-Path: <linux-kselftest+bounces-44815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6247C36256
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 15:49:11 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3369EC3671C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 16:46:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2761D3451C1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 14:49:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5F6A75053EF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 15:36:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55D2123BCED;
-	Wed,  5 Nov 2025 14:49:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD9A032F774;
+	Wed,  5 Nov 2025 15:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KXj03Umm";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="lXSKymJZ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kJJvQMKS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF08239562
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 14:49:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B66332ED59;
+	Wed,  5 Nov 2025 15:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762354148; cv=none; b=H9Uhn/ifxFJ7D83+tyQmydufpH53mEUdh8mgLtkfvpS46oayI8qV8cq4GSCpuuf5JGNqaD6M9MnmCQV2aJrYgPeBFMn9nShqNHaztK6ys12o/FyvZ/GG2OH727dV9yXA/kXv9HQSeT8UJxZCqTyvl3Tla2Al8Ol522N8TXh180E=
+	t=1762356924; cv=none; b=KbbpuKd84dsh2rjhprRKKcc0IIFyAEFIjQShN5TI+GNyt5t07hdqIJt2Otwrt7M602Ko/Ir9fWhnqi4Gco0wC90YUfpIkRQIoEQWvPhweHfA2UashBlqEio1r9X6HcUDS3CpQXVA/QmmTOpXjzIXHbLnv/nUg7e54IkqTxCgrKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762354148; c=relaxed/simple;
-	bh=YfvMW72encoRkud0wVtm/A7j2WUacp04L3fsNBayHvo=;
+	s=arc-20240116; t=1762356924; c=relaxed/simple;
+	bh=GAY674z3y8mSrBwlMlG7DIFjeFbna0LxeOPt6MO26Q4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ESOOGHaxuTlRS/5nBewcb76pPcijo8nC4SaMmF2mJofQlETcwwWY31ivKUhocqVmSmo/XjYLFWQ1sv3GeVes1Uvgm41J5ugLL+LOBSENGlchBJQGmruzieRZhk8ByljFBz/FGjw7uBuP/xvxaxzgejdkuoJAwCXov0ODmuC1PQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KXj03Umm; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=lXSKymJZ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762354145;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=43sHUCklMiFn+SiCjLKJSBqe6MedMG8UZiB50DllYfo=;
-	b=KXj03Umm5zqC78KHtiI0lrsWdn1xNo2qS0DrCilMNvvmF6ZwBQzN8DzzIJbMkVC6pXGkiy
-	d0GYO8T2HoCh4nvWFcgWJ1pNZZ5JsG4iKvVT/OuHwM0h7VRj+BVxZHzYejhkcCt+POyNVQ
-	9ZAj5GcpKgBE0zZXy9zQrbrpKnFcpgQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-67-uvRwYGFTMWWneb85Hi4r2g-1; Wed, 05 Nov 2025 09:49:04 -0500
-X-MC-Unique: uvRwYGFTMWWneb85Hi4r2g-1
-X-Mimecast-MFC-AGG-ID: uvRwYGFTMWWneb85Hi4r2g_1762354143
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4774836c376so26797705e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 06:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762354143; x=1762958943; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=43sHUCklMiFn+SiCjLKJSBqe6MedMG8UZiB50DllYfo=;
-        b=lXSKymJZLRal60Vh76tTo85Oz6Ng9PEp/SrkcphQ9kZ7PQyiuc+90rnnuzfn3ne7/I
-         W3bc+6sREp9EkKnVgWIqvLfinym7NqMG1SW5b4isQkqah6R4F3w2yarBiutxX9/aeWqw
-         M5HuZQmfSN5rwol1BkpVuUJx7F1zLe/9SmHm/prlIoQacB68rzeImmNmKdQFOtYoma7Q
-         rnhIMZYmaGD8WdlBGq5g5Qr0jIqwf9dVxhhtX08Fjtv3RRUvGaVuOOLd7nIO9gtVGYw+
-         iHtjaHQ+bxMqxSA3vR0YTMRxEovgjgwVtWuR4fzykypPbZEGxykQJhlr7NoZiHP3Nb74
-         KwDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762354143; x=1762958943;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=43sHUCklMiFn+SiCjLKJSBqe6MedMG8UZiB50DllYfo=;
-        b=E1kLMxPdT+SCWnhEuTJk7DzD+9ICZhXPC04kFAY4Rwohe1y7zvtL/OeYOq3Bq+6h1D
-         9q6f0sa92LAGS7TVzL4KETWkZvr1kE+CULbwFYf8ZVXlhg64kuDylLK4WkdZABTzGEz5
-         QUQ5uBU/qSYCRLLeJ3J4BXZSynk3yU25H/r3XJ+g2A5pwpZGdIHk4FYwcFCAOfkmi2bK
-         EIatSBNTnxuFG2FIoWB/uQrxQ3vgPowabi4RdHtUEZqhN/9ftsGW1y6SmbJlZwuNyAkT
-         /tmosaDSJZ7DZDI4rniqK5yYnDGmPAAcdcDgPmNI+fFNqthwQePX3/F3GNKYdi48CE5h
-         ko0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVQ7xMEtu0Svz7OgXpkw33VxiKqdn2GFQk7PvvuWoASSnAFLZJZ2tjZMQuq374HafyxQ0dafIw8mq/0Z08dILw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWGTn+53mti7atEP+I+rzeGLoptyr5o49wR251MEz7nob/FUM1
-	zGicvqf842xYDcjTcfTBy+O5E97tcT+gSikFeJtlJg6KR5IGjiRjEtsJ+SqryjvttkJyMxR1t0A
-	TndmQBc0/nkBQdMlECjZ+zzD359pR4q+4e1RjjD+quap+s1vuMr4XOKT7oB1wjoXsIx1aDQ==
-X-Gm-Gg: ASbGncvI1gR6epli2ZQFqTt2dPgED/wCZs2nxxr7cXJybKp+Wc9g86xZodGa+owMMeE
-	iod/lvY7YeZENiDUHXdwiL7PS1P5OVdK0ZzWMqfPSk9ZGAx7ql+RvzmLs64Jc+rxjZqf9bfv3vu
-	/GjHIuenBrcIXN4Zstma5++LaxqcXWgiBrPmKXlV/9ctojPV5dg3d8mi2qmi4q9o8NSnJLhxdpl
-	9kwOUFfSUn36C9FIfyNK3qBRx6KTdQ9+tW4F2flfrtR5cO0H8JGJ+y3mZoPtOWBaHl0ZaFnwQGX
-	jiUUbsNoYJPkvPG0iVD8dv3ljT4/YW45hpRZDqJK2+81BDWN4rAeFuIys7JMuby+c+e2xLQbd90
-	=
-X-Received: by 2002:a05:600c:5403:b0:477:3543:3a3b with SMTP id 5b1f17b1804b1-4775cdad69fmr30953905e9.6.1762354143238;
-        Wed, 05 Nov 2025 06:49:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEJCkXVCaYKB38WQ9mVlW2atyii43mXLtD2rPfe/M0bgqyi++PixdCT104cVwdbGCHZnaBsew==
-X-Received: by 2002:a05:600c:5403:b0:477:3543:3a3b with SMTP id 5b1f17b1804b1-4775cdad69fmr30953665e9.6.1762354142802;
-        Wed, 05 Nov 2025 06:49:02 -0800 (PST)
-Received: from sgarzare-redhat ([5.77.88.64])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429dc18f41bsm10751085f8f.9.2025.11.05.06.49.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 06:49:01 -0800 (PST)
-Date: Wed, 5 Nov 2025 15:48:58 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	virtualization@lists.linux.dev, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Simon Horman <horms@kernel.org>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v2 11/12] selftests/vsock: add vsock_loopback
- module loading
-Message-ID: <ubfxj7koxuztrlrydfpjxenu7sdydq45rnhxkpmuurjfqvyh4j@mwzsqsioqzs5>
-References: <20251104-vsock-selftests-fixes-and-improvements-v2-0-ca2070fd1601@meta.com>
- <20251104-vsock-selftests-fixes-and-improvements-v2-11-ca2070fd1601@meta.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=dQw4mIY1UufyptZHmnfMSA+EV5esRdMantG3Rx9WMkxeVMdxGjHNKj6C58lXDalc4JsaydT2XryfSMkwM278nbiX7vVtL1oUhCT7ExfgcbPpTI2Zny7aDS+ik8eE+b/DwD71LffBV5vNyohCd3Uf3yEuKnd6JSuErJUtrAwUH9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kJJvQMKS; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A57hVAj007179;
+	Wed, 5 Nov 2025 15:34:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=mBCDjF
+	CtIralqPbaobJr9w45EqrrTPgVKXorpBh75DA=; b=kJJvQMKSobCn/AX0FM8hiu
+	lAg3CQC5+pPaGaYOYIf58zJOni1GZeBU5r+Ebpnwm1cT0Y2oN+LZHcCV1AQGy5ib
+	qF0K8CkDnXRO3u+NJ6fCUcRwPNyXTzebzR/1kBMjNE2Du5ppzZk6r0ed08NSlok4
+	BG42+N57/9Pz/7iG3qodXH/AVEVRn1lt7Wp+xfxzW8Mc8+KJtePmcayAgc/3sXkU
+	bEde9/gBVgl3qsanMHgkoEtEGfkLfYWvSabDJoCV796DtA5RfDDhBuG1gLBp65Hj
+	5kCUO4tHPdGz34RItxvzgRYx4bF2NhlaTB9c8EYikfmlyWRKpxX9/Grx/RPi1bBg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a57mr9vpe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Nov 2025 15:34:36 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5A5FQeET022630;
+	Wed, 5 Nov 2025 15:34:35 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a57mr9vpb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Nov 2025 15:34:35 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5A5ChDTP021482;
+	Wed, 5 Nov 2025 15:34:34 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4a5xrjrkr3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Nov 2025 15:34:34 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5A5FYURj53674336
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 5 Nov 2025 15:34:30 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A883920040;
+	Wed,  5 Nov 2025 15:34:30 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 13AF62004B;
+	Wed,  5 Nov 2025 15:34:29 +0000 (GMT)
+Received: from osiris (unknown [9.155.211.25])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed,  5 Nov 2025 15:34:28 +0000 (GMT)
+Date: Wed, 5 Nov 2025 16:34:26 +0100
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Nick Alcock <nick.alcock@oracle.com>, John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
+        Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v4 24/35] vdso/datastore: Allocate data pages dynamically
+Message-ID: <20251105153426.16228C13-hca@linux.ibm.com>
+References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
+ <20251014-vdso-sparc64-generic-2-v4-24-e0607bf49dea@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20251104-vsock-selftests-fixes-and-improvements-v2-11-ca2070fd1601@meta.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251014-vdso-sparc64-generic-2-v4-24-e0607bf49dea@linutronix.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: GGdzfD5G3hQ68-39VW7GakGxAH7MovxB
+X-Authority-Analysis: v=2.4 cv=MKhtWcZl c=1 sm=1 tr=0 ts=690b6e8c cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=8nJEP1OIZ-IA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=ebG-ZW-8AAAA:8 a=e1b3s80Sx_c-5AZqzBwA:9 a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10
+ a=Bj2TwAA_C77lQ_X2_dkp:22 a=DXsff8QfwkrTrK3sU8N1:22 a=Z5ABNNGmrOfJ6cZ5bIyy:22
+ a=bWyr8ysk75zN3GCy5bjg:22
+X-Proofpoint-ORIG-GUID: FA8Qn-I58re3Fj-7DCZVJVXwZ4DiaPYs
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTAxMDAwMSBTYWx0ZWRfX79q+aRjocr8A
+ WsJicIkrDzeZowDTKWdSRpdbbSTYSdnAKh3ClmRCNP0S8je+b6bwR4QAObGY+JaivfKMlj2hBVw
+ KLzTBb1GVj2u/8kaK8wfeBTBcwczqZx2uJUW94XwBBfiT1PIHgcud1V1IaGBQ7/80r1+m5QVf5y
+ 2MAbdeeWJFA/uN5CkUVEPIEOGTIF7nMUT8yZgz8qLQcWjKcDN5xrV+ylstwr289JOHk8UDvW+If
+ ZS0Vh+xa015UpwIHMHQi/pVyWTfCCQ7nEswkEgkvxtiBx1AXWt5u1z1b8gL7A+PMKBFcztnM0NI
+ NBBPJSUKiH3NfGjyVbk1no9yQUjK4mCZusqZxNsqflVQ6b/X2GCXdlXaNPmhI6deTnzJKGTxcvZ
+ 8le1/uj5xZfo4KJOYkdyfW8kJi0g6w==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-05_06,2025-11-03_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 malwarescore=0 adultscore=0 phishscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511010001
 
-On Tue, Nov 04, 2025 at 02:39:01PM -0800, Bobby Eshleman wrote:
->From: Bobby Eshleman <bobbyeshleman@meta.com>
->
->Add vsock_loopback module loading to the loopback test so that vmtest.sh
->can be used for kernels built with loopback as a module.
->
->This is not technically a fix as kselftest expects loopback to be
->built-in already (defined in selftests/vsock/config). This is useful
->only for using vmtest.sh outside of kselftest.
->
->Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->---
-> tools/testing/selftests/vsock/vmtest.sh | 2 ++
-> 1 file changed, 2 insertions(+)
+On Tue, Oct 14, 2025 at 08:49:10AM +0200, Thomas Weiﬂschuh wrote:
+> Allocating the datapages as part of the kernel image does not work on
+> SPARC. It is also problematic with regards to dcache aliasing as there is
+> no guarantee that the virtual addresses used by the kernel are compatible
+> with those used by userspace.
+> 
+> Allocate the data pages through the page allocator instead.
+> Unused pages in the vDSO VMA are still allocated to keep the virtual
+> addresses aligned.
+> 
+> These pages are used by both the timekeeping, random pool and architecture
+> initialization code. Introduce a new early initialization step, to make
+> sure they are available when needed.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> Tested-by: Andreas Larsson <andreas@gaisler.com>
+> Reviewed-by: Andreas Larsson <andreas@gaisler.com>
+> ---
+>  include/linux/vdso_datastore.h |  6 ++++++
+>  init/main.c                    |  2 ++
+>  lib/vdso/datastore.c           | 44 ++++++++++++++++++++++--------------------
+>  3 files changed, 31 insertions(+), 21 deletions(-)
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+...
 
->
->diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
->index 0657973b5067..cfb6b589bcba 100755
->--- a/tools/testing/selftests/vsock/vmtest.sh
->+++ b/tools/testing/selftests/vsock/vmtest.sh
->@@ -434,6 +434,8 @@ test_vm_client_host_server() {
-> test_vm_loopback() {
-> 	local port=60000 # non-forwarded local port
->
->+	vm_ssh -- modprobe vsock_loopback &> /dev/null || :
->+
-> 	if ! vm_vsock_test "server" 1 "${port}"; then
-> 		return "${KSFT_FAIL}"
-> 	fi
->
->-- 
->2.47.3
->
+> +void __init vdso_setup_data_pages(void)
+> +{
+> +	unsigned int order = get_order(VDSO_NR_PAGES * PAGE_SIZE);
+> +	struct folio *folio = folio_alloc(GFP_KERNEL, order);
 
+I'm seeing random hangs on s390 too with our CI, but unfortunately I cannot
+reproduce it manually. But looking at one of the dumps it looks to me like the
+vdso time page contains (more or less) random junk at the end. Or in other
+words, shouldn't this be:
+
+	struct folio *folio = folio_alloc(GFP_KERNEL | __GFP_ZERO, order);
+
+? At least that is a difference to before as far as I can tell.
 
