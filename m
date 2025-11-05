@@ -1,333 +1,103 @@
-Return-Path: <linux-kselftest+bounces-44782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01D33C33A72
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 02:25:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5EC8C33AAE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 02:31:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5933D464F19
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 01:24:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 626B618C5871
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 01:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1563F2877DE;
-	Wed,  5 Nov 2025 01:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A783A2571C5;
+	Wed,  5 Nov 2025 01:30:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S4qTPyPy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ticfRB0Z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33DFC26529A
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 01:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A9422F772;
+	Wed,  5 Nov 2025 01:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762305813; cv=none; b=GAlTdL3Hc52fjnwEHmjRb3uaTUcHv//PLNLk6++dxxM2mDOhh5/Fejj8KYA9lUqBZGn9E0kldFJPqiQ/0smff7ORRLxs2V/t2IR8Hu/G0pQcB6rWj5ePIhp9eNrQ+OVdQQcfJZvA4rG5esCY0/ruN2M/bbgJIpY9pVzRKo/DIME=
+	t=1762306250; cv=none; b=SYBjTke2cRPP9yYi9HNNPP/jEfcEDVaAqXYt+E8qNwpPMytThqFGrv6fE9BMlYcTBURrTTo76e2AGUEQtOjl06DV2pIeEWzDn2jhczmSl+IOBhPw/nTEhAOI9xWddVM//S0Yqk0rAxCX5FLgMsVvkAPCOaB64N4Q1lA+9yn15VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762305813; c=relaxed/simple;
-	bh=EUVr5JNK/GTAT1ttd11lgstVq87db7L7gS8Y83xgPYo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lLhZyw2JHmPElbLQKjNGHAZMTNBaVZmF11BIVKVGlPbPMjDZRMPJm9ZBtaSVb7WjWUIO08FT8K0bG6jf2dHS9zBo1/7VZTZkjJu+lhoJLzdnvTGUkfH0bnGz9UGXP/gVj6wu39CtPH58Fth91bkgvywJ6xnRQ2hGuTY41hIhtgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S4qTPyPy; arc=none smtp.client-ip=74.125.224.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-63e393c4a8aso5935002d50.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Nov 2025 17:23:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762305808; x=1762910608; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4eVDPnkuv2SP94dsK2EFl5pOIR+N6oa4rL2rsMVs/R8=;
-        b=S4qTPyPymyijDVhDyYOxTorfZgWjhzgv9UvEmkeogZrad0+Ni11qfJbH2VXOmsGQkT
-         WSRN7s725oc7WScFEClLyvYtiHkMENn1NLLdRaZ0MlPXMKxMDTnnbI6dxo8PUonPPnVu
-         Ia1cSW+GDU6XTsyY053c3jrI4HrViJipGWuQE92rDsVXIV9SC1MnG8Fsmnt3S5VDYCNj
-         C1mrFIV8JWo0ScXI/uGmBiLLwcHcgEeW7l5Uh+zl6LOwSJo8A4usOKIiN7SE5hUbPBm9
-         bPfFwN12J8klL5zDqH3t57kdeuhPmKjQERplVgBG0/dDL5py8YiVzmtrA5w+8o8GDzyc
-         aUtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762305808; x=1762910608;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4eVDPnkuv2SP94dsK2EFl5pOIR+N6oa4rL2rsMVs/R8=;
-        b=CUzDwKXzLvF+FqAXqKqswWdmHEEwmqpcDv3kLzIl6JpmiOEYgnCuZwXGQivDpknH4Q
-         QCiHS8Q0Q8iFOqF4BQKj85NYYtaskmuPVy1QiY7D2R6kh0ZSZRCkUMZpuJv7JAWnfbbV
-         KctDM/S1A/x0NiQRcpj5WCXAtz870fSRinGXE8n+kOIEmfbkJUEdJlIW14dsR0f6gDgH
-         s+V943wS6WHmhY4X/DBFwxWyG11QP8ygJugP1sZ+nwbS1orTJ5kFxqPEb7knA2lWGGZR
-         1QMno0X13yVwa2nL49T6D2Bu4IAsF/lRx4gLBYW+NAJBmm/P1KFIT4teY7W0W2QeABTA
-         kgFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV3yUqCVsM5h3NT6npDymaAw1O1PCPbGFvTUMTJlK+X+dc0gdNtfn9OTGezdKsE1Ido+gYSevBJrJEuKaJD5C4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoKrpUVKCUTlp/69ImL1mFBGj2YI3rpzNTDLLraUn7ezBGnRMB
-	cWJDa96dDKcE2zbOVGKuC4bg9SUFedOmYIzsEUB4D8InTmcVgtVCgtXA
-X-Gm-Gg: ASbGncvgJCf157mFpDscS1PhrNrcjorRfVM/LV2CqzI0RGe+ST0aJ17JZuJMzu8BhmQ
-	igCBBvbFCL0jJ/kwgPyIxb8+GoR5YRgFW/pozmdWRrVAXF5vwkTHmo0QzUitYisUw1pNT7oM8oU
-	VA/Mnm9YUWi8Bnub6OxultELfdapYrMdP1Vpf9M0zw0sqseax4omVoZzZw/ttXF9njQvs6XaXfA
-	CP/oQ8uJZvE5mX1nvdNOVjfr0xzb/OX/VUOv9WoEHXR75XaXnrcZO/0RiNRZ7IAhNkK9QmTQCSl
-	uhiaZbl34m529wKFMFKu/J/f7w/hwUaQCGNqNkcmGkPwc6sk22G5rD4fnKiIaF9advIx7huw/LQ
-	lfMMIVGjVLWNuTDVMYsgC+EuDUYbekLt+zJs/p4CeXibCuKa92YV8qCJ50dT4TT8sUWlXuoFZHx
-	1b35NS8h+LX8s=
-X-Google-Smtp-Source: AGHT+IEfDb+oJnGjarh+9F7GOHtv3gc1oPFaNFLIKdQInLnQKAgyBWcutw5Cbxj5+5Saxr4AJ66EZw==
-X-Received: by 2002:a05:690e:241c:b0:63f:9f5a:a555 with SMTP id 956f58d0204a3-63fd35a47ddmr1049504d50.50.1762305808562;
-        Tue, 04 Nov 2025 17:23:28 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:5f::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7869a7b978fsm9216057b3.2.2025.11.04.17.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Nov 2025 17:23:28 -0800 (PST)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Tue, 04 Nov 2025 17:23:25 -0800
-Subject: [PATCH net-next v6 6/6] net: devmem: add tests for
- SO_DEVMEM_AUTORELEASE socket option
+	s=arc-20240116; t=1762306250; c=relaxed/simple;
+	bh=vbSRopPRVbXInA0i1dBWh1lx3JnCNcqmOjpHZG+iyAs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=WBLzr3poUxzAb+lTwiEtfbrdg7BqI/hnrRq9efgZLZFGrehd0BANjwplFVVaRB3lyydz207x+5VMjvmTm8OamuyNm0JIKdjhYM50HXWHvc+suP2rCA4rSyJY4LGXybkvHj+rKzXkn0RUQSKPCWMfCJCogaHPzfMybY0nyY1J5k8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ticfRB0Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8EBDC4CEF7;
+	Wed,  5 Nov 2025 01:30:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762306250;
+	bh=vbSRopPRVbXInA0i1dBWh1lx3JnCNcqmOjpHZG+iyAs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ticfRB0ZT4sGSeD7ZTq9el29wpQcAgciwH9E9If9QrlHvq7M4WaT4a/vGWqjcArI2
+	 LnVkFuP6KOySdJ/aavL/E6B/IZNmA+353hmndsZ1a83UPamV3KD8LRtOdYQuwSqi8z
+	 oWpLCCfWryWh17z7c0iHchlc8dhRdXfTTy8S/gIWR6EiajbMFuSRD9trUlW+tLz/CA
+	 Hhi01mAx7FMCkCSWJEqtn+53W2SNocvhksziVzj1xdlPMyjIOK5amRVoFUfpePJ9GT
+	 rEaSFTKTzdmVy9dY5OAs5vK4CpeG6QcE0iEraHMWMXqq1kmcdFsVjkHzOSlWD4veJP
+	 5xPiQ7PtxxIfw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EADB5380AA54;
+	Wed,  5 Nov 2025 01:30:24 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-6-ea98cf4d40b3@meta.com>
-References: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com>
-In-Reply-To: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- Willem de Bruijn <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, 
- David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Shuah Khan <shuah@kernel.org>, Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/4] mptcp: pm: in-kernel: fullmesh endp nb +
+ bind
+ cases
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176230622373.3052151.5249584300932527660.git-patchwork-notify@kernel.org>
+Date: Wed, 05 Nov 2025 01:30:23 +0000
+References: 
+ <20251101-net-next-mptcp-fm-endp-nb-bind-v1-0-b4166772d6bb@kernel.org>
+In-Reply-To: 
+ <20251101-net-next-mptcp-fm-endp-nb-bind-v1-0-b4166772d6bb@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+Hello:
 
-Add -A flag to ncdevmem to set autorelease mode.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Add tests for the SO_DEVMEM_AUTORELEASE socket option:
+On Sat, 01 Nov 2025 18:56:50 +0100 you wrote:
+> Here is a small optimisation for the in-kernel PM, joined by a small
+> behavioural change to avoid confusions, and followed by a few more
+> tests.
+> 
+> - Patch 1: record fullmesh endpoints numbers, not to iterate over all
+>   endpoints to check if one is marked as fullmesh.
+> 
+> [...]
 
-New tests include:
-   - check_sockopt_autorelease_default: Verifies default value is 0
-   - check_sockopt_autorelease_set_0: Tests setting to 0 and reading
-     back
-   - check_sockopt_autorelease_set_1: Tests toggling from 0 to 1
-   - check_sockopt_autorelease_invalid: Tests invalid value (2) returns
-     EINVAL
-   - check_autorelease_disabled: Tests ncdevmem in manual token release
-     mode
-   - check_autorelease_enabled: Tests ncdevmem in autorelease mode
+Here is the summary with links:
+  - [net-next,1/4] mptcp: pm: in-kernel: record fullmesh endp nb
+    https://git.kernel.org/netdev/net-next/c/f88191c7f361
+  - [net-next,2/4] mptcp: pm: in kernel: only use fullmesh endp if any
+    https://git.kernel.org/netdev/net-next/c/e461e8a799a2
+  - [net-next,3/4] selftests: mptcp: join: do_transfer: reduce code dup
+    https://git.kernel.org/netdev/net-next/c/4a6220a453c8
+  - [net-next,4/4] selftests: mptcp: join: validate extra bind cases
+    https://git.kernel.org/netdev/net-next/c/5c59df126bae
 
-All check_sockopt tests gracefully skip with KsftSkipEx if
-SO_DEVMEM_AUTORELEASE is not supported by the kernel.
-
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
- tools/testing/selftests/drivers/net/hw/devmem.py  | 115 +++++++++++++++++++++-
- tools/testing/selftests/drivers/net/hw/ncdevmem.c |  20 +++-
- 2 files changed, 133 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
-index 45c2d49d55b6..29ec179d651f 100755
---- a/tools/testing/selftests/drivers/net/hw/devmem.py
-+++ b/tools/testing/selftests/drivers/net/hw/devmem.py
-@@ -1,6 +1,9 @@
- #!/usr/bin/env python3
- # SPDX-License-Identifier: GPL-2.0
- 
-+import socket
-+import errno
-+
- from os import path
- from lib.py import ksft_run, ksft_exit
- from lib.py import ksft_eq, KsftSkipEx
-@@ -63,12 +66,122 @@ def check_tx_chunks(cfg) -> None:
-     ksft_eq(socat.stdout.strip(), "hello\nworld")
- 
- 
-+@ksft_disruptive
-+def check_autorelease_disabled(cfg) -> None:
-+    """Test RX with autorelease disabled (requires manual token release in ncdevmem)"""
-+    require_devmem(cfg)
-+
-+    port = rand_port()
-+    socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},bind={cfg.remote_baddr}:{port}"
-+    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7 -A 0"
-+
-+    with bkg(listen_cmd, exit_wait=True) as ncdevmem:
-+        wait_port_listen(port)
-+        cmd(f"yes $(echo -e \x01\x02\x03\x04\x05\x06) | \
-+            head -c 1K | {socat}", host=cfg.remote, shell=True)
-+
-+    ksft_eq(ncdevmem.ret, 0)
-+
-+
-+@ksft_disruptive
-+def check_autorelease_enabled(cfg) -> None:
-+    """Test RX with autorelease enabled (requires token autorelease in ncdevmem)"""
-+    require_devmem(cfg)
-+
-+    port = rand_port()
-+    socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},bind={cfg.remote_baddr}:{port}"
-+    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7 -A 1"
-+
-+    with bkg(listen_cmd, exit_wait=True) as ncdevmem:
-+        wait_port_listen(port)
-+        cmd(f"yes $(echo -e \x01\x02\x03\x04\x05\x06) | \
-+            head -c 1K | {socat}", host=cfg.remote, shell=True)
-+
-+    ksft_eq(ncdevmem.ret, 0)
-+
-+
-+def check_sockopt_autorelease_default(cfg) -> None:
-+    """Test that SO_DEVMEM_AUTORELEASE default is 0"""
-+    SO_DEVMEM_AUTORELEASE = 85
-+
-+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-+    try:
-+        val = sock.getsockopt(socket.SOL_SOCKET, SO_DEVMEM_AUTORELEASE)
-+        ksft_eq(val, 0, "Default autorelease should be 0")
-+    except OSError as e:
-+        if e.errno == errno.ENOPROTOOPT:
-+            raise KsftSkipEx("SO_DEVMEM_AUTORELEASE not supported")
-+        raise
-+    finally:
-+        sock.close()
-+
-+
-+def check_sockopt_autorelease_set_0(cfg) -> None:
-+    """Test setting SO_DEVMEM_AUTORELEASE to 0"""
-+    SO_DEVMEM_AUTORELEASE = 85
-+
-+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-+    try:
-+        sock.setsockopt(socket.SOL_SOCKET, SO_DEVMEM_AUTORELEASE, 0)
-+        val = sock.getsockopt(socket.SOL_SOCKET, SO_DEVMEM_AUTORELEASE)
-+        ksft_eq(val, 0, "Autorelease should be 0 after setting")
-+    except OSError as e:
-+        if e.errno == errno.ENOPROTOOPT:
-+            raise KsftSkipEx("SO_DEVMEM_AUTORELEASE not supported")
-+        raise
-+    finally:
-+        sock.close()
-+
-+
-+def check_sockopt_autorelease_set_1(cfg) -> None:
-+    """Test setting SO_DEVMEM_AUTORELEASE to 1"""
-+    SO_DEVMEM_AUTORELEASE = 85
-+
-+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-+    try:
-+        # First set to 0
-+        sock.setsockopt(socket.SOL_SOCKET, SO_DEVMEM_AUTORELEASE, 0)
-+        # Then set back to 1
-+        sock.setsockopt(socket.SOL_SOCKET, SO_DEVMEM_AUTORELEASE, 1)
-+        val = sock.getsockopt(socket.SOL_SOCKET, SO_DEVMEM_AUTORELEASE)
-+        ksft_eq(val, 1, "Autorelease should be 1 after setting")
-+    except OSError as e:
-+        if e.errno == errno.ENOPROTOOPT:
-+            raise KsftSkipEx("SO_DEVMEM_AUTORELEASE not supported")
-+        raise
-+    finally:
-+        sock.close()
-+
-+
-+def check_sockopt_autorelease_invalid(cfg) -> None:
-+    """Test that SO_DEVMEM_AUTORELEASE rejects invalid values"""
-+    SO_DEVMEM_AUTORELEASE = 85
-+
-+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-+    try:
-+        try:
-+            sock.setsockopt(socket.SOL_SOCKET, SO_DEVMEM_AUTORELEASE, 2)
-+            raise Exception("setsockopt should have failed with EINVAL")
-+        except OSError as e:
-+            if e.errno == errno.ENOPROTOOPT:
-+                raise KsftSkipEx("SO_DEVMEM_AUTORELEASE not supported")
-+            ksft_eq(e.errno, errno.EINVAL, "Should fail with EINVAL for invalid value")
-+    finally:
-+        sock.close()
-+
-+
- def main() -> None:
-     with NetDrvEpEnv(__file__) as cfg:
-         cfg.bin_local = path.abspath(path.dirname(__file__) + "/ncdevmem")
-         cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
- 
--        ksft_run([check_rx, check_tx, check_tx_chunks],
-+        ksft_run([check_rx, check_tx, check_tx_chunks,
-+                  check_autorelease_enabled,
-+                  check_autorelease_disabled,
-+                  check_sockopt_autorelease_default,
-+                  check_sockopt_autorelease_set_0,
-+                  check_sockopt_autorelease_set_1,
-+                  check_sockopt_autorelease_invalid],
-                  args=(cfg, ))
-     ksft_exit()
- 
-diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-index 3288ed04ce08..34d608d07bec 100644
---- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-+++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-@@ -83,6 +83,10 @@
- #define MSG_SOCK_DEVMEM 0x2000000
- #endif
- 
-+#ifndef SO_DEVMEM_AUTORELEASE
-+#define SO_DEVMEM_AUTORELEASE 85
-+#endif
-+
- #define MAX_IOV 1024
- 
- static size_t max_chunk;
-@@ -97,6 +101,7 @@ static unsigned int ifindex;
- static unsigned int dmabuf_id;
- static uint32_t tx_dmabuf_id;
- static int waittime_ms = 500;
-+static int autorelease = -1;
- 
- /* System state loaded by current_config_load() */
- #define MAX_FLOWS	8
-@@ -890,6 +895,16 @@ static int do_server(struct memory_buffer *mem)
- 	if (enable_reuseaddr(socket_fd))
- 		goto err_close_socket;
- 
-+	if (autorelease >= 0) {
-+		ret = setsockopt(socket_fd, SOL_SOCKET, SO_DEVMEM_AUTORELEASE,
-+				 &autorelease, sizeof(autorelease));
-+		if (ret) {
-+			pr_err("SO_DEVMEM_AUTORELEASE failed");
-+			goto err_close_socket;
-+		}
-+		fprintf(stderr, "Set SO_DEVMEM_AUTORELEASE to %d\n", autorelease);
-+	}
-+
- 	fprintf(stderr, "binding to address %s:%d\n", server_ip,
- 		ntohs(server_sin.sin6_port));
- 
-@@ -1397,7 +1412,7 @@ int main(int argc, char *argv[])
- 	int is_server = 0, opt;
- 	int ret, err = 1;
- 
--	while ((opt = getopt(argc, argv, "ls:c:p:v:q:t:f:z:")) != -1) {
-+	while ((opt = getopt(argc, argv, "ls:c:p:v:q:t:f:z:A:")) != -1) {
- 		switch (opt) {
- 		case 'l':
- 			is_server = 1;
-@@ -1426,6 +1441,9 @@ int main(int argc, char *argv[])
- 		case 'z':
- 			max_chunk = atoi(optarg);
- 			break;
-+		case 'A':
-+			autorelease = atoi(optarg);
-+			break;
- 		case '?':
- 			fprintf(stderr, "unknown option: %c\n", optopt);
- 			break;
-
+You are awesome, thank you!
 -- 
-2.47.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
