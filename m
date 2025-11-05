@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-44793-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C57FC3514C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 11:26:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DFD0C35169
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 11:28:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15DC63BDD56
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 10:26:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B59C6189DA01
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 10:28:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C93230103C;
-	Wed,  5 Nov 2025 10:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B940301499;
+	Wed,  5 Nov 2025 10:28:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gxeq53K0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4NOZ3+F"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63CF30100B;
-	Wed,  5 Nov 2025 10:26:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A5F301007;
+	Wed,  5 Nov 2025 10:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762338397; cv=none; b=tWUuFLK3O9RqVqLQR4cwl8fyqWcAyqL9VirmvYpsQhyIKMBBt0bSNLne35Lj4ilkM+eu5giyHL5ArDS269zLXZqBNAvlp17oH4RULL9Nd+Y26ACkLsZsRRyTRiSOIJGlKvrFMsrUgsReWvAcGWJw0GelqJmx2gsYhxPvgLk4sF0=
+	t=1762338485; cv=none; b=KAAUkeROiV+Dv3hSKF6AING1r2OnaWItr3YMXKilFBAPnnaUSn8kFVZf0haU8X+lrMdX0INXRAXCVGfj+3GLjJ2juoGdDub2DsaogfkVP9qAERk3rFIxio3REX++xJav/vHbffT/pj4sTMSQQL7nvrbKWuesPB0HD4exxRJ1uGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762338397; c=relaxed/simple;
-	bh=I+3JMkmXub0Om9x1OdwocGKiSC8yEiSgXZyoFKMlEVw=;
+	s=arc-20240116; t=1762338485; c=relaxed/simple;
+	bh=iGm3ztCoHBoiX+8pTAlhDOq1wez0F7WKLBUyQq+ZXxo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=HCNYolk8/k764n58+DGxpdybZ02CB2p2122rFKOvbm352txjMB0PyPMsfMOnwq4P4KGITkNrGr21ek3uEIG+vBU5Sb2haoQ/03VHxV2dfJ6ORD6+2A00Eeb8L2R7KSJO/kBVj+smJ9ffeTTTa6BrzyfYbWF5d1oP2AO3SLpgQIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gxeq53K0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04B37C4CEFB;
-	Wed,  5 Nov 2025 10:26:34 +0000 (UTC)
+	 MIME-Version:Content-Type; b=TUmnCw07RZyUPzc9hIV+DPmCX7sNFmQ6K/6je1dS9O9XQkcQy8x0dOqbiixtukhvRvtBsfdsB3qLSMA4IOn2Hm6qHrCT9UVlkJAgR+OEzdLaQtYN7AUQS5bOuCVUlGt6C7f2y/i2gE7iZ77GxGESj/6NGo08bIme9V+J/BsNG3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4NOZ3+F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F36D3C4CEFB;
+	Wed,  5 Nov 2025 10:28:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762338397;
-	bh=I+3JMkmXub0Om9x1OdwocGKiSC8yEiSgXZyoFKMlEVw=;
+	s=k20201202; t=1762338485;
+	bh=iGm3ztCoHBoiX+8pTAlhDOq1wez0F7WKLBUyQq+ZXxo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=Gxeq53K0YO1rrLqRKi+ZKDxCWG/hCytZXm6QxtcTY10w3UtM/t4lFglfJW71RwS7z
-	 gJk9TjarlsPVgn2uvkEWUQT3sAh2Zf29TZeIYsl4JZ/DdloehsvLLvMdm0oSmtJJ4S
-	 lEMH3OdAF9ZrxxffeXERgioD0IEkvJIfLMJu9FeGR473c8ifRyXUvB2rDI05Ct83YG
-	 U4tNW0QlqxPdfuLjV5LyS6k3EZxD+PVPzas1hkDW3hzcUIH1jRJ10jHOGPZwH8YyjD
-	 OUDZyHxGBM6YcrHMPGRDojRusKwMYp4Ne/R6OaHIXbjiigR3mDnzOtM05ctjUqfe2j
-	 jU3eZPNpb814w==
+	b=J4NOZ3+F/wcCmEWLMyxtMF9GufxOdiPWEJI8FjD81Zi0epu/A0mcp8gt23izr6n4f
+	 86B1xrYhjtkwryopz9jIVKj4zX0kBJ0++ccJSdXCtujeMEIYOh3dvGUfB2ntWo3AAb
+	 kF/D7CDVvSaaGZpJuCFOkJEDRVWoHv39Vumf2zgRucUeJZVAADKyFzNS7hP23fCrCB
+	 HMHVLNFXfG3g0z0Z+9Ozuw6YB354HaP/w5eoPMvA3vJFuURb7VS+JlBokheQDS5HKG
+	 1hxJusWy8nEyoTDgDLLFEHYSTikww4QzLbCjZ90tylGShH+rC5VsGgNYutNKeRwAPC
+	 5k7ucS2PrYDHQ==
 From: Pratyush Yadav <pratyush@kernel.org>
 To: Pasha Tatashin <pasha.tatashin@soleen.com>
 Cc: akpm@linux-foundation.org,  brauner@kernel.org,  corbet@lwn.net,
@@ -49,13 +49,13 @@ Cc: akpm@linux-foundation.org,  brauner@kernel.org,  corbet@lwn.net,
   masahiroy@kernel.org,  ojeda@kernel.org,  pratyush@kernel.org,
   rdunlap@infradead.org,  rppt@kernel.org,  tj@kernel.org,
   yanjun.zhu@linux.dev
-Subject: Re: [PATCH v9 4/9] memblock: Unpreserve memory in case of error
-In-Reply-To: <20251101142325.1326536-5-pasha.tatashin@soleen.com> (Pasha
-	Tatashin's message of "Sat, 1 Nov 2025 10:23:20 -0400")
+Subject: Re: [PATCH v9 6/9] kho: don't unpreserve memory during abort
+In-Reply-To: <20251101142325.1326536-7-pasha.tatashin@soleen.com> (Pasha
+	Tatashin's message of "Sat, 1 Nov 2025 10:23:22 -0400")
 References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
-	<20251101142325.1326536-5-pasha.tatashin@soleen.com>
-Date: Wed, 05 Nov 2025 11:26:33 +0100
-Message-ID: <mafs0pl9wbwrq.fsf@kernel.org>
+	<20251101142325.1326536-7-pasha.tatashin@soleen.com>
+Date: Wed, 05 Nov 2025 11:28:01 +0100
+Message-ID: <mafs0ldkkbwpa.fsf@kernel.org>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -67,14 +67,28 @@ Content-Type: text/plain
 
 On Sat, Nov 01 2025, Pasha Tatashin wrote:
 
-> If there is an error half way through KHO memory preservation, we should
-> rollback and unpreserve everything that is partially preserved.
+> KHO allows clients to preserve memory regions at any point before the
+> KHO state is finalized. The finalization process itself involves KHO
+> performing its own actions, such as serializing the overall
+> preserved memory map.
+>
+> If this finalization process is aborted, the current implementation
+> destroys KHO's internal memory tracking structures
+> (`kho_out.ser.track.orders`). This behavior effectively unpreserves
+> all memory from KHO's perspective, regardless of whether those
+> preservations were made by clients before the finalization attempt
+> or by KHO itself during finalization.
+>
+> This premature unpreservation is incorrect. An abort of the
+> finalization process should only undo actions taken by KHO as part of
+> that specific finalization attempt. Individual memory regions
+> preserved by clients prior to finalization should remain preserved,
+> as their lifecycle is managed by the clients themselves. These
+> clients might still need to call kho_unpreserve_folio() or
+> kho_unpreserve_phys() based on their own logic, even after a KHO
+> finalization attempt is aborted.
 >
 > Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Suggested-by: Pratyush Yadav <pratyush@kernel.org>
-
-Nice! This is quite an improvement in readability compared to the
-previous version.
 
 Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 
