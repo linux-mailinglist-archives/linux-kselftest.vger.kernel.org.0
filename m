@@ -1,153 +1,224 @@
-Return-Path: <linux-kselftest+bounces-44821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44822-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36988C36A3A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 17:20:15 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E865BC36B66
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 17:34:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2AFB3501DF2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 16:11:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C83E84FE184
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 16:13:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E46843346BC;
-	Wed,  5 Nov 2025 16:11:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 647343358AA;
+	Wed,  5 Nov 2025 16:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YHbDbLIt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="baFM0iyx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E577C3218CF
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 16:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475B1337B8A
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 16:12:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762359095; cv=none; b=eVsmMcLUqiPgFPRUTKMNai/QDLthBABlNuPaSdE75711h1JB4OK9nkSPmgMLZGvQIQ5mlRLce278LLlhyLV7NKEUBj84e/ZTMeDeq3j350G5Rgy4vaiUdcmmSTJ+686cuEc0ddiYHXF4jCQAMxwRckCdGKTaSu/Ysn9mMuxtKHM=
+	t=1762359147; cv=none; b=RF3B8+kiRkFfUwOrjr9+4q+DmTFUvMPCOcUmZiB03bYGSGukB+JBw8iGrBU9C+HPR3x6xxgo1/IG4idKAxFNKGi9hJ0V3uVIvlzKQQKwx1bmCbz+cg7L2wvYIJgGGPt4UeBYIbs7ysHQMkIMPzXZJUumeTinanNoqr2r+vJ9WYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762359095; c=relaxed/simple;
-	bh=W3rIEqDAjFHWAwm+pwB74Wz+AVL3IfQgKO4Y4lo7W2o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I6NB33njjTku9B9LCI+A86fJIVhlr25Zo1sJc7A03a6hAFt6BJnIM9BIMoNj4He9Opts4lrvbH6+8JYs7Hq1EYoKH8EPd4BVHTnY44/SKqgE4nKqZHTlL/73rrJvJnmXK1/+Z+fjB5mYMzkUb7JToxETx/MS68tkjU1DmceL0gk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YHbDbLIt; arc=none smtp.client-ip=74.125.224.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-63e1e1bf882so9782d50.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 08:11:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762359093; x=1762963893; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ymZ6xdXrqo7vWAgf0QChueJMpmkC1T045PA4GVzRwIo=;
-        b=YHbDbLItjw4+eMXKEAHsY2z6+TDNrzIu7JCue8TYKGBW5rNDBDA4JyyM/UgPjyAf4M
-         5MqkGFSQxKclN7aJD+qGLJCYV8vCTg6YPemfsPJrI3AV/XQJqcMzkaKNo0t8msTKlFda
-         e0pVYvImharsbSWHL60w2PP/PvzOKgwAoZzx3jTNCWMoPWQBzVE8Htct92I7j5p4HMZE
-         BhFEFcR3GXgmVF4F6OGJ1AgDCO4C0Dk3QKjpQlQJvUykVFNLhQIEiM9DB7tiQ78fkYeL
-         41nBDihiXKZ3pD+aMvDrHd4Kdyc90F8YhaprnNZCz7GEXfN1+UFPvh2qp+b46wLn+QxX
-         /s6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762359093; x=1762963893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ymZ6xdXrqo7vWAgf0QChueJMpmkC1T045PA4GVzRwIo=;
-        b=fy2DzT0CJuwzGJR9+SEFUAbNd03L4eIu9BUrcEl9PEV/+TeMTkUBvwaMJyjZESJaDi
-         dQPS2vpcZytOPcOwoOKHRUwnen7wQulai+pkjt56oaWmI1Oyms5eJ5Jv6GpTZ02cQGnJ
-         imlm0L0qIUoQklEb4SJkXsvl0W+NWM6EQWaKj0+fRsmIL67KOTV2Vuflf4Nda9popIYu
-         78gve+u3CItwUTRIZCLav0CVjQ9NDYHv2uIl7zDzF7rifNLPt7BBOyT4p4ubWGYXhp6c
-         ZOvwkCTHyo9cEJNqcX3toiOwlYykEUsHHdrpRsL1Rv7hWy5+STlW3kyjTdRaKsriTiOL
-         WKBg==
-X-Forwarded-Encrypted: i=1; AJvYcCUHIEHTILTJzBGjq9zzmFEXF60kSuEbjVF45wf6PojijKFlRzICQaQIIi2WlLWCMBZxQe7boYXsqH32LfvwaN0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybfHmwrU+UCPd0NojecjdvRf82tbOJk9st3O3ZC56VB7aIQPNf
-	9MddON5nDfHUdvzaVfgR0UXELE4fMvqrLpcPVYxJEodPIqXBU5Nsn65BPUo7uEtr
-X-Gm-Gg: ASbGncskfDMphdUxeIhjuuqq80r9uh++tSSH2iP9f6oT40KMRyjrD60VMuMByB9oMo9
-	a2Qo5yKUwrjeGBAPvFODKx/l/lvR+3POMvncPbVe7yCaSxGPdoWHhPJwF1uS6+N3mGgnRGFEIEO
-	vKdz1hIMTWCchn6+mYRo4OvPnnE/QuhfQ/DoN1eFVWY1sDGSecdJa+ws6NIurSL6AZSAzQf9XXI
-	7lgzVWLQCt7FExRQYhMtv5i5WWrPcjrUi9Y5ReWItbez4P99pYVKuy9pogG1YAx3aUnJcbiPuqm
-	BOQBfSidCYDj+DQKIjuUnYJNcpMQHk+hRyBtx0Pw3fwZ7TH2F3bVz7tCPlj8/8PJzMdfpu09EZf
-	EJ6DdSEvuUvaqQPA9cfDRnYTW6akev/pMQLmRf+kKItj0aSzYFs74f73gj/vb7AUbaQVPhormLO
-	P+ZD/oOC4SXkyLlcHyisaCp+O/+SJubFFlXoo=
-X-Google-Smtp-Source: AGHT+IFO1Aj58ygyCOlI2zA+lUSTMddFikFOwBkJL3a+he6zkxfPMBnlF0h5B3IACmlOERHv2GNjEQ==
-X-Received: by 2002:a05:690c:9a0a:b0:786:581d:f24b with SMTP id 00721157ae682-786a41e29cemr57871067b3.47.1762359092678;
-        Wed, 05 Nov 2025 08:11:32 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:7::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78691d8f0b4sm20313777b3.4.2025.11.05.08.11.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 08:11:32 -0800 (PST)
-Date: Wed, 5 Nov 2025 08:11:26 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bobby Eshleman <bobbyeshleman@meta.com>,
-	Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH net] selftests/vsock: avoid false-positives when checking
- dmesg
-Message-ID: <aQt3LitYPBcD0MM+@devvm11784.nha0.facebook.com>
-References: <20251104-vsock-vmtest-dmesg-fix-v1-1-80c8db3f5dfe@meta.com>
- <oqglacowaadnhai4ts4pn4khaumxyoedqb5pieiwsvkqtk7cpr@ltjbthajbxyq>
+	s=arc-20240116; t=1762359147; c=relaxed/simple;
+	bh=JV1piMY9FWz2kSzJwBr1bGiqxTKtVt93I5kC9mSL670=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=tt4QP7Kh5dqaGIsR20DpZ483kmoxjiOd8QA2035cWFpLKhxK2PW3saRd25Gg6EAJIWZc8FLOq8ptnVV7vJirPEmQs5EShAXVRONVGcy8M5LbAzrNYJMwNXDkSk8nvxgLreIcOgN54gYiTlwjxtcI5pxVVRjblD2o5yi5Xc+s1Zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=baFM0iyx; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <oqglacowaadnhai4ts4pn4khaumxyoedqb5pieiwsvkqtk7cpr@ltjbthajbxyq>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1762359133;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WeV2eLUSuSC3/7iM2Op1hOrd03eB07H/sYIO5UnkqUc=;
+	b=baFM0iyx/644TXbP264AjlW1hrp+adGSBbouysT9eCsZZ3ETuFrLWy9FzSI4zuuvM5TFDC
+	newPzkAqxcA7ZDBXqoi8d/E8pyATVRRdcHzCBzxWE8i87FuUGdvMC8fy061exlb2zZie0x
+	K04dxU9GXpFjCfaBg0nPGYZqRdkyrcY=
+Date: Wed, 05 Nov 2025 16:12:08 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <b5f67a681be12833efa12e68fc3139954b409446@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH net v4 3/3] selftests/bpf: Add mptcp test with sockmap
+To: "Matthieu Baerts" <matttbe@kernel.org>, mptcp@lists.linux.dev
+Cc: "Mat Martineau" <martineau@kernel.org>, "Geliang Tang"
+ <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
+ "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
+ "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah
+ Khan" <shuah@kernel.org>, "Florian Westphal" <fw@strlen.de>,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+In-Reply-To: <665825df-b995-45ee-9e0c-2b40cc4897ee@kernel.org>
+References: <20251105113625.148900-1-jiayuan.chen@linux.dev>
+ <20251105113625.148900-4-jiayuan.chen@linux.dev>
+ <665825df-b995-45ee-9e0c-2b40cc4897ee@kernel.org>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Nov 05, 2025 at 12:16:42PM +0100, Stefano Garzarella wrote:
-> On Tue, Nov 04, 2025 at 01:50:50PM -0800, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > 
-> > Sometimes VMs will have some intermittent dmesg warnings that are
-> > unrelated to vsock. Change the dmesg parsing to filter on strings
-> > containing 'vsock' to avoid false positive failures that are unrelated
-> > to vsock. The downside is that it is possible for some vsock related
-> > warnings to not contain the substring 'vsock', so those will be missed.
-> > 
-> > Fixes: a4a65c6fe08b ("selftests/vsock: add initial vmtest.sh for vsock")
-> > Reviewed-by: Simon Horman <horms@kernel.org>
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > ---
-> > Previously was part of the series:
-> > https://lore.kernel.org/all/20251022-vsock-selftests-fixes-and-improvements-v1-0-edeb179d6463@meta.com/
-> > ---
-> > tools/testing/selftests/vsock/vmtest.sh | 8 ++++----
-> > 1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-> > index edacebfc1632..e1732f236d14 100755
-> > --- a/tools/testing/selftests/vsock/vmtest.sh
-> > +++ b/tools/testing/selftests/vsock/vmtest.sh
-> > @@ -389,9 +389,9 @@ run_test() {
-> > 	local rc
-> > 
-> > 	host_oops_cnt_before=$(dmesg | grep -c -i 'Oops')
-> > -	host_warn_cnt_before=$(dmesg --level=warn | wc -l)
-> > +	host_warn_cnt_before=$(dmesg --level=warn | grep -c -i 'vsock')
-> > 	vm_oops_cnt_before=$(vm_ssh -- dmesg | grep -c -i 'Oops')
-> > -	vm_warn_cnt_before=$(vm_ssh -- dmesg --level=warn | wc -l)
-> > +	vm_warn_cnt_before=$(vm_ssh -- dmesg --level=warn | grep -c -i 'vsock')
-> > 
-> > 	name=$(echo "${1}" | awk '{ print $1 }')
-> > 	eval test_"${name}"
-> > @@ -403,7 +403,7 @@ run_test() {
-> > 		rc=$KSFT_FAIL
-> > 	fi
-> > 
-> > -	host_warn_cnt_after=$(dmesg --level=warn | wc -l)
-> > +	host_warn_cnt_after=$(dmesg --level=warn | grep -c -i vsock)
-> 
-> In the previous hunk we quoted 'vsock', but here and in the next we did
-> not. Can we be consistent at least in the same patch ?
-> 
-> The rest LGTM.
-> 
-> Stefano
+November 5, 2025 at 22:40, "Matthieu Baerts" <matttbe@kernel.org mailto:m=
+atttbe@kernel.org?to=3D%22Matthieu%20Baerts%22%20%3Cmatttbe%40kernel.org%=
+3E > wrote:
 
-Just sent the update, sorry for the oversight.
 
-Best,
-Bobby
+>=20
+>=20Hi Jiayuan,
+>=20
+>=20Thank you for this new test!
+>=20
+>=20I'm not very familiar with the BPF selftests: it would be nice if
+> someone else can have a quick look.
+
+Thanks for the review. I've seen the feedback on the other patches(1/3, 2=
+/3) and will fix them up.
+
+
+> On 05/11/2025 12:36, Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> Add test cases to verify that when MPTCP falls back to plain TCP so=
+ckets,
+> >  they can properly work with sockmap.
+> >=20=20
+>=20>  Additionally, add test cases to ensure that sockmap correctly reje=
+cts
+> >  MPTCP sockets as expected.
+> >=20=20
+>=20>  Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> >  ---
+> >  .../testing/selftests/bpf/prog_tests/mptcp.c | 150 +++++++++++++++++=
++
+> >  .../selftests/bpf/progs/mptcp_sockmap.c | 43 +++++
+> >  2 files changed, 193 insertions(+)
+> >  create mode 100644 tools/testing/selftests/bpf/progs/mptcp_sockmap.c
+> >=20=20
+>=20>  diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tool=
+s/testing/selftests/bpf/prog_tests/mptcp.c
+> >  index f8eb7f9d4fd2..56c556f603cc 100644
+> >  --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> >  +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> >  @@ -6,11 +6,14 @@
+> >  #include <netinet/in.h>
+> >  #include <test_progs.h>
+> >  #include <unistd.h>
+> >  +#include <error.h>
+> >=20
+>=20Do you use this new include?
+
+"EOPNOTSUPP" I used was defined in error.h.
+
+> >=20
+>=20>  +
+> >  +end:
+> >  + if (client_fd1 > 1)
+> >  + close(client_fd1);
+> >  + if (client_fd2 > 1)
+> >  + close(client_fd2);
+> >  + if (server_fd1 > 0)
+> >  + close(server_fd1);
+> >  + if (server_fd2 > 0)
+> >  + close(server_fd2);
+> >=20
+>=20Why do you check if it is above 0 or 1? Should you not always check i=
+f
+> it is >=3D 0 for each fd?
+
+My bad, ">=3D0" is correct.
+
+> >=20
+>=20> + close(listen_fd);
+> >  +}
+> >  +
+> >  +/* Test sockmap rejection of MPTCP sockets - both server and client=
+ sides. */
+> >  +static void test_sockmap_reject_mptcp(struct mptcp_sockmap *skel)
+> >  +{
+> >  + int client_fd1 =3D -1, client_fd2 =3D -1;
+> >  + int listen_fd =3D -1, server_fd =3D -1;
+> >  + int err, zero =3D 0;
+> >  +
+> >  + /* start server with MPTCP enabled */
+> >  + listen_fd =3D start_mptcp_server(AF_INET, NULL, 0, 0);
+> >  + if (!ASSERT_OK_FD(listen_fd, "start_mptcp_server"))
+> >=20
+>=20In test_sockmap_with_mptcp_fallback(), you prefixed each error with
+> 'redirect:'. Should you also have a different prefix here? 'sockmap-fb:=
+'
+> vs 'sockmap-mptcp:' eventually?
+
+I will do it.
+
+> >=20
+>=20> + return;
+> >  +
+> >  + skel->bss->trace_port =3D ntohs(get_socket_local_port(listen_fd));
+> >  + skel->bss->sk_index =3D 0;
+> >  + /* create client with MPTCP enabled */
+> >  + client_fd1 =3D connect_to_fd(listen_fd, 0);
+> >  + if (!ASSERT_OK_FD(client_fd1, "connect_to_fd client_fd1"))
+> >  + goto end;
+> >  +
+> >  + /* bpf_sock_map_update() called from sockops should reject MPTCP s=
+k */
+> >  + if (!ASSERT_EQ(skel->bss->helper_ret, -EOPNOTSUPP, "should reject"=
+))
+> >  + goto end;
+> >=20
+>=20So here, the client is connected, but sockmap doesn't operate on it,
+> right? So most likely, the connection is stalled until the userspace
+> realises that and takes an action?
+>
+
+It depends. Sockmap usually runs as a bypass. The user app (like Nginx)
+has its own native forwarding logic, and sockmap just kicks in to acceler=
+ate
+it. So in known cases, turning off sockmap falls back to the native logic=
+.
+But if there's no native logic, the connection just stalls.
+
+
+> >=20
+>=20> + /* set trace_port =3D -1 to stop sockops */
+> >  + skel->bss->trace_port =3D -1;
+> >=20
+>=20What do you want to demonstrate from here? That without the sockmap
+> injection, there are no new entries added? Is it worth checking that he=
+re?
+
+That's redundant. I'll drop it.
+
+
+[...]
+> >  + if (client_fd1 > 0)
+> >  + close(client_fd1);
+> >  + if (client_fd2 > 0)
+> >  + close(client_fd2);
+> >  + if (server_fd > 0)
+> >  + close(server_fd);
+> >=20
+>=20Same here: should it not be "*fd >=3D 0"?
+
+I will fix it.
+
+Thanks.
 
