@@ -1,92 +1,78 @@
-Return-Path: <linux-kselftest+bounces-44820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44819-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 193B6C36D3D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 17:54:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66778C36A37
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 17:20:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B33FE641E3B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 16:05:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5149A1A27563
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 16:05:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAAFB33439B;
-	Wed,  5 Nov 2025 16:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WWxLLBhl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C17CB33439B;
+	Wed,  5 Nov 2025 16:04:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71305333745;
-	Wed,  5 Nov 2025 16:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED644321448
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 16:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762358705; cv=none; b=iFdFlfEDF9UgJtoo5HwmIYEJl63+VRCDcPIUdtZj+r6QhgsIzrmWjWEQ9X8NslnQvtdS4WBOBFXyjH1+em4WEDp9Dqht//a4MY4n2vVYCNtsi0ZOFUuTP5X8ukjr0ig3ptAe6Ptg2Zej5OJlRnpRsALsD1b1Q2YwNGSX5fuFGkI=
+	t=1762358688; cv=none; b=sbRuYdQlmTZoTLWP4vhY7hjrHyGS/ljo8WjweNbM5pGs8cRlj/rQny91UOH/lQaVfIFUQkxd9IljA3WHN+4zHAuSH9SwMhpfj9EK07KLjXqazuIwW+TOOnkl6z3l5yV6H9Grgw7NDs0zAFF4sCXxEZWkbBp+kDamfdRu3zaJS38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762358705; c=relaxed/simple;
-	bh=Vc8K3MrTyVwbjqp/DCwioUL/LWadEWrFyl8zAIAawBA=;
+	s=arc-20240116; t=1762358688; c=relaxed/simple;
+	bh=JofqSWCzl11ihkf1QS7aH5EerIGWNBW0jBvqMlbq2a8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SZjnpqfxb6jukRNbpicOg5pcCcfM0cC/zMR/vPHisCqezO4J+SOUHVfMPVKpZQx7joK6SrBKswVJtuTEDnrmIEMpuWYTRZq5MK08ZlfVscLzyU3t4kyG2In30X4s5YzhnAWpejyGtx98/6qFIBQ46hN3G4sp6cFZtFJD5ecF1O0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WWxLLBhl; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762358704; x=1793894704;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Vc8K3MrTyVwbjqp/DCwioUL/LWadEWrFyl8zAIAawBA=;
-  b=WWxLLBhl7yIK6JGmib04vE0mFhsfXn2YkEfHDIn3tYvE3K9Vb6Oll/Z0
-   52aZM8r060HRaAgwsy0C293rkhEsYxTLAV9Et6yH4NoJMjkqELH8cUIuX
-   AS3bCtrJA9vzvOD62VtMbkgxgsvKfOX0DP9pGp6IqVPdaty5Kq/jIqS8R
-   UacmOIcLvF6LSK5gAj9mO9Ezw01YoPQbS+hG9D+dRqrk96LEEGQbXtAuU
-   e0VgAVJD2RZ0wEkSfgRfJ4jXKO9JESZqV3TkdzmfdvoU/nkNW5sRgpZBO
-   r6oscRlb3jhPYu/wJLvBmyov8F94I7fsSmT/Ug8FY9M4r7Wz00fZ8MTvm
-   w==;
-X-CSE-ConnectionGUID: LuP+QlqfRtKVDcQsAF6BJw==
-X-CSE-MsgGUID: 4FKFNoJUQd+veTUGGHjH/g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11603"; a="75829680"
-X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="75829680"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2025 08:04:45 -0800
-X-CSE-ConnectionGUID: uKDzES6cQJ+/2F/g+UvqTw==
-X-CSE-MsgGUID: reYSz8GhRLO04UAr3rNsZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,282,1754982000"; 
-   d="scan'208";a="210969542"
-Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Nov 2025 08:04:40 -0800
-Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vGfzS-000SoS-0u;
-	Wed, 05 Nov 2025 16:04:24 +0000
-Date: Thu, 6 Nov 2025 00:02:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Mina Almasry <almasrymina@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v6 3/6] net: devmem: prepare for autorelease rx
- token management
-Message-ID: <202511052307.doTV8fDn-lkp@intel.com>
-References: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3@meta.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s4EKlXJ1ZszkMzm8Fx21yuaO0VEI4GZyUlhA5DmKUrWBMLBS9gQFnUy7CRBuBIaRb4irBT1jdVhW/556XgUja1EWibp4Jn6a5HSApxTB1ZXB3UStyVq1iPRY/9PZgMPBeqm/o98LSuzqZVeNKOnc9gk5OkOEfywl7IGOWt/MxT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b5b823b4f3dso1082711166b.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 08:04:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762358685; x=1762963485;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zQtbK0HPx+N0NDzFM7oR+NUAI3H2NYy2UQCcQpjJkTY=;
+        b=Ob2HU8p7Xw8tk9lHe8MZe+bDMqRWtwS8F0rfjlepZDxIZpVTwZXWhldWnCMYCoNJDJ
+         +0ym+wdnkcbGzg1/0rCT4I0+ppc8C+bT29X/0mi6F8kN9XtdcU7jhqpdkV7zfvXKOtCd
+         9M1x4Ufh8EPFz41OujvsUKhjlZ6LJbcnaMF5i+XudS3wsaZec2pkxtr+vRoEhFsb4cH0
+         bO77Dk8u80xHYKIWsAX5nM5lx5V5JlConK/EY1uGZiCsTmmtuCcGlt/VtVNX97Qa/F9D
+         o2FYXYy1eoN35aJcq0LPHzk98Dir0bJqWBSXSRnrI85M8mRM7Ta4ssbuZbMsiwSDBhc5
+         ES6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXh7cQi59zstc+/odegAT5Oq6nRGSn5HDm4zSerKU5QAMeBC02IETgJ+YDCmQwXZehidx6zCN3HRpMYw5Vme50=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynbOWfP231B9uJG4s8y+MWOLIBqP7+a2gGHP8fBWuDbdNH55L+
+	g5iYvWThYXSjduSKXsbp272Jf0zHn1ciwsiBZvrjDqoiWkeVTfAfvo0hKA9rzw==
+X-Gm-Gg: ASbGnctBoZc3q15foE5fJw9XAjx8SvFN09/z7/UNhtqBlq9FwsrOUChScPd0gTxwXyl
+	aq2XUvYtbisZ2lfNcXnQ7yVJUUN0pIzmU5LdnCL6yapd5yZTErMw6DBk+Twzq63hYE1w7Ej1FG/
+	8OLz7nXm/nLo4OfKNPgNpwNxmv1eXu+rW5YaOHjyregG+SoEb9q9RdMz0GbGce8C1aVnP9DuiMC
+	MuIfX+TOeRd/SVZktWAn6DTi2+4H4Pc+MdkgyUOFDA63au+ytqCW0p7s0ADatuMdoU4vXd2b1A4
+	U6/GKnvltPcLRMTHy1ynMqhvnqNl97vorLPjGHZOKM3hJzZ+/236UBZV74vKGKpxmmrUjHvJPRI
+	mkbLMf+NW3Q+xhqmieFUG4dkhkHXa18QGi9VD7eH++kCz/x0L+/mKnD8Cn6RTwdK+z9U=
+X-Google-Smtp-Source: AGHT+IFeg0PfZi72Z71d5ee0yOEa03D5xAyx6X2QALCBR3Xeog/mqq1XoLJB5RS10SM8/uMZFbIGPg==
+X-Received: by 2002:a17:907:9815:b0:b71:854:4e49 with SMTP id a640c23a62f3a-b72655edfabmr373939666b.56.1762358685029;
+        Wed, 05 Nov 2025 08:04:45 -0800 (PST)
+Received: from gmail.com ([2a03:2880:30ff:71::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b723f6e2597sm528556266b.45.2025.11.05.08.04.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 08:04:44 -0800 (PST)
+Date: Wed, 5 Nov 2025 08:04:42 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, david decotigny <decot@googlers.com>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, asantostc@gmail.com, efault@gmx.de, calvin@wbinvd.org, 
+	kernel-team@meta.com, jv@jvosburgh.net
+Subject: Re: [PATCH net v8 4/4] selftest: netcons: add test for netconsole
+ over bonded interfaces
+Message-ID: <sw7wovxj7l43rj2dkvapzl3w6rrbai5qje4zswz6xrxmmkyxtm@gym66qdsivwh>
+References: <20251104-netconsole_torture-v8-0-5288440e2fa0@debian.org>
+ <20251104-netconsole_torture-v8-4-5288440e2fa0@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,90 +81,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3@meta.com>
+In-Reply-To: <20251104-netconsole_torture-v8-4-5288440e2fa0@debian.org>
 
-Hi Bobby,
+On Tue, Nov 04, 2025 at 09:37:04AM -0800, Breno Leitao wrote:
+> diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
+> index 6bb290abd48bf..57f5a5d5cea67 100644
+> --- a/tools/testing/selftests/drivers/net/bonding/config
+> +++ b/tools/testing/selftests/drivers/net/bonding/config
+> @@ -1,5 +1,6 @@
+>  CONFIG_BONDING=y
+>  CONFIG_BRIDGE=y
+> +CONFIG_CONFIGFS_FS=y
+>  CONFIG_DUMMY=y
+>  CONFIG_INET_ESP=y
+>  CONFIG_INET_ESP_OFFLOAD=y
+> @@ -11,6 +12,9 @@ CONFIG_NET_CLS_FLOWER=y
+>  CONFIG_NET_CLS_MATCHALL=m
+>  CONFIG_NETDEVSIM=m
+>  CONFIG_NET_SCH_INGRESS=y
+> +CONFIG_NETCONSOLE=m
+> +CONFIG_NETCONSOLE_DYNAMIC=y
+> +CONFIG_NETCONSOLE_EXTENDED_LOG=y
 
-kernel test robot noticed the following build warnings:
+I've just realized that check_selftest discards the '_' when checking
+for the order. This means NETCONSOLE should come before
+CONFIG_NET_SCH_INGRESS.
 
-[auto build test WARNING on 255d75ef029f33f75fcf5015052b7302486f7ad2]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/net-devmem-rename-tx_vec-to-vec-in-dmabuf-binding/20251105-092703
-base:   255d75ef029f33f75fcf5015052b7302486f7ad2
-patch link:    https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3%40meta.com
-patch subject: [PATCH net-next v6 3/6] net: devmem: prepare for autorelease rx token management
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20251105/202511052307.doTV8fDn-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251105/202511052307.doTV8fDn-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511052307.doTV8fDn-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/core/sock.c:1107:12: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-    1107 |                                 return ret;
-         |                                        ^~~
-   net/core/sock.c:1095:9: note: initialize the variable 'ret' to silence this warning
-    1095 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
---
->> net/ipv4/tcp.c:2626:6: warning: variable 'refs' is uninitialized when used here [-Wuninitialized]
-    2626 |                                         refs++;
-         |                                         ^~~~
-   net/ipv4/tcp.c:2496:10: note: initialize the variable 'refs' to silence this warning
-    2496 |         int refs;
-         |                 ^
-         |                  = 0
-   1 warning generated.
-
-
-vim +/ret +1107 net/core/sock.c
-
-  1085	
-  1086	static noinline_for_stack int
-  1087	sock_devmem_dontneed_manual_release(struct sock *sk, struct dmabuf_token *tokens,
-  1088					    unsigned int num_tokens)
-  1089	{
-  1090		struct net_iov *niov;
-  1091		unsigned int i, j;
-  1092		netmem_ref netmem;
-  1093		unsigned int token;
-  1094		int num_frags = 0;
-  1095		int ret;
-  1096	
-  1097		if (!sk->sk_devmem_info.binding)
-  1098			return -EINVAL;
-  1099	
-  1100		for (i = 0; i < num_tokens; i++) {
-  1101			for (j = 0; j < tokens[i].token_count; j++) {
-  1102				token = tokens[i].token_start + j;
-  1103				if (token >= sk->sk_devmem_info.binding->dmabuf->size / PAGE_SIZE)
-  1104					break;
-  1105	
-  1106				if (++num_frags > MAX_DONTNEED_FRAGS)
-> 1107					return ret;
-  1108	
-  1109				niov = sk->sk_devmem_info.binding->vec[token];
-  1110				if (atomic_dec_and_test(&niov->uref)) {
-  1111					netmem = net_iov_to_netmem(niov);
-  1112					WARN_ON_ONCE(!napi_pp_put_page(netmem));
-  1113				}
-  1114				ret++;
-  1115			}
-  1116		}
-  1117	
-  1118		atomic_sub(ret, &sk->sk_devmem_info.outstanding_urefs);
-  1119	
-  1120		return ret;
-  1121	}
-  1122	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I will wait for additional review, before updating.
 
