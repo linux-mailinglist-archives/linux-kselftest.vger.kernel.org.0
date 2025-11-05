@@ -1,285 +1,164 @@
-Return-Path: <linux-kselftest+bounces-44805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44807-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0808FC36129
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 15:32:50 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D63DC36169
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 15:37:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 467321A20E3F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 14:33:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 27E994E5535
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 14:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14676314A83;
-	Wed,  5 Nov 2025 14:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ED4432D7F3;
+	Wed,  5 Nov 2025 14:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h9zx7wKt";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="lX/HD8u9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZQg2G6Zw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154E3314A93
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 14:32:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6A1320A33;
+	Wed,  5 Nov 2025 14:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762353157; cv=none; b=bTQAET/3V7lAd1EjOOpaPutDfyUCS5mCxyHHcnBkFfNaF3oX39qsyu08tt0o5Ccf/gbpjnR1r7q39SGyVQl3g6ypq9ydXb5Qazh0BrSy4G80mOyR01iGOkGqlsPHlzGLAXrNXSDoTjXIe7NYaV2zpmQHRGN/3AXraTrTEntZqi8=
+	t=1762353431; cv=none; b=DztR3T0pQfeSdbdRDKxyPb8N/NgS/VmXwsU70Cf0tsE8UnmMvKDx+vdmc9CZtj59iAGBdmvXWscI7SWQ69ad69JCe2hbDVfGGMRD6WuTYUScFy5Q6H4ZGfQPVFDsofVCDoJhvpyM5xk1SEQ2JAr4XNWeW8044fTtZYkYTbgPU78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762353157; c=relaxed/simple;
-	bh=RRH8LLT4tnEW2zr9zEsEkvqzLS8Y6JH+rXqaTOe68tw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BgxTu6PDw0N4RXoVCh87pHCeHaCHj8PvKN8REgpr0yIoYApWdqjiTw4Csw+4hs8/7ljWOE+thaoBGuveCaCEzTrBjTo5RVg/Hz9wQXYYRU1muJnWA1vClvs8clckzNrun9Y6I0nQwrpvTj6Xp5FllyU2ypVH3CjKG8YeDiGIiBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h9zx7wKt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=lX/HD8u9; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762353152;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kX3VzHZS/HGSzq6tZ4+jI+/5hajDd1Zm9Mx0FurYGLQ=;
-	b=h9zx7wKtHRmigojenr/5qF26pRVNYduw2OtFfzWdrFt6aZiPnSl/9nwukSQzRm7J2yh6Dm
-	O/qlTd9DR1P1v6QhP3PdXr7x+7emDknT1kgZpDapDPR0pgFSC8DebIgmj6UgianJXjL16x
-	o7S5DdrCDRQKZ+XNOZHE/zVpjOIhdGg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-399-0n_89HjgOGGWdaaQkJ6ZDw-1; Wed, 05 Nov 2025 09:32:28 -0500
-X-MC-Unique: 0n_89HjgOGGWdaaQkJ6ZDw-1
-X-Mimecast-MFC-AGG-ID: 0n_89HjgOGGWdaaQkJ6ZDw_1762353147
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4721b4f3afbso28069145e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 06:32:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762353147; x=1762957947; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kX3VzHZS/HGSzq6tZ4+jI+/5hajDd1Zm9Mx0FurYGLQ=;
-        b=lX/HD8u9AR9U/Ep9PpVlNwmA1tKoTONwTzUbF4DXMYq5vPRzCkhGBibl3cOt7lS7CP
-         QfcBFq6bfYtNnefmPtWkCMLIYZMJn3m35vmS+7q9ehqDVeN+riMZ1X5TzlingFIRx7pS
-         SoYsjxjXtxERIvpGHe3xMX2Jaxj2s7T6C13l/TK6ZTPjv2XI7yntrgWRNv37QFk/mmWf
-         Fmuf8dAfC2qIHFLOVHhfv1cIrzxJwKv7v+cTIQffqeWISuWWKi1WLIyuePG+GsV85vcl
-         2USWT2kBufXZ2ml5nYvm7aJ3WC7bp4wnpSJtU/GuVFWCwwmy/pNLZQdNliLOoyqYOpWb
-         8XaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762353147; x=1762957947;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kX3VzHZS/HGSzq6tZ4+jI+/5hajDd1Zm9Mx0FurYGLQ=;
-        b=NOFZajpAPnGuS7xrugVMdNVp4tdLTrNHrWamq/ehlwbgr36rFp/+84yHgrvwWj049K
-         lUvC/g5KbSuc0VRSrPh4E1h5oJdn1+DWXXTiznN+qDIwKKGdC1c2zSEwe3deyly8dXg3
-         ENWmAy4R+GB0NbaHuYAatFPum1Yy/BlnRwtJJ61ktzsBFMzmbigFB3vgbSb3QQBo96MK
-         dsm7jXbgd11w/xCsq1P4VXG6wmcv5C8rTiE7uM9Q31dBkYHQPpFBZly0Vs/51iMRRMrh
-         llMKmCWRhCqsHtYC9Xz2UfQxkh1iHj/pIiwft13bdQ8KIibtf6ycvDWUSipiXNTzBT7J
-         Lclw==
-X-Forwarded-Encrypted: i=1; AJvYcCWYNFGdl5UmJveDO/FR3DQ85O3rZo0HBP9w7/rmileEOG0lPa8x8Jh65A9Y4RGvC/fZNL/BVuYyfi+/LQB6Cv8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxviXkxLPMAq4kb3jZxivnRLAvrvbrY+5AhHKTc5eeKTdoqT0Qc
-	+gpShLI8BkiGQR21wjqlYmfSYwJVQebjxKE/47U9TU3t1aK/n8pHEaB265dWc/eiQ/K0Cy+qIbd
-	GWMgFPVwZ5g5Ip7ReAi38pdRaAk3TPCkybmGG+QdfRp/BxfR4ywDh4vzX750rsBlvIgMxAA==
-X-Gm-Gg: ASbGncuOXGqEDh7BF3YhezAjoQiM20Vx3gfULf2g5PHUpZN7PL9zeZnTaYAItL1v7jz
-	v5pC/u5VYDNvnEoIRYzQf84uwEmRRtjwt3SmlOTN5yT15knRutBDikTZclPGNYjq/2ZNwnsIQDs
-	rjzLjbzVXxhkgeqBC6K84IWIeMOq0thHaFxBb0rGofViI+YX6rTtxDVOW6NwJv6mNaoQNC+RtWS
-	limwCmL5TBjyEi8rDIzseayRYJCaik56+Lb1hQ/INpJD6hqNY8AM25UI1jTT+TsXYV04B9tZGLp
-	1QOmNxZaCiEBywBH6vsGXGMCZULhbr9PcUavgg4xR/lQFdXjEwT5V6zqSUqpVQH5O/dIM0oFOl8
-	=
-X-Received: by 2002:a05:600c:8b88:b0:471:145b:dd0d with SMTP id 5b1f17b1804b1-4775cde3b1cmr24454585e9.24.1762353147135;
-        Wed, 05 Nov 2025 06:32:27 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHWyogJkKQrbfKs51nTFgSZd3l651tt4j8gql/Hcm4StJEJE6IWfnkUPmlhXIXKjxU9KUzKHg==
-X-Received: by 2002:a05:600c:8b88:b0:471:145b:dd0d with SMTP id 5b1f17b1804b1-4775cde3b1cmr24454345e9.24.1762353146660;
-        Wed, 05 Nov 2025 06:32:26 -0800 (PST)
-Received: from sgarzare-redhat ([5.77.88.64])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477558d983fsm43454025e9.8.2025.11.05.06.32.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 06:32:25 -0800 (PST)
-Date: Wed, 5 Nov 2025 15:32:18 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	virtualization@lists.linux.dev, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Simon Horman <horms@kernel.org>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v2 04/12] selftests/vsock: avoid multi-VM
- pidfile collisions with QEMU
-Message-ID: <3osszz3giogog7jzs37pdqhakcrveayrqu6xduztuwrftkwrad@gjj3cyvmypw3>
-References: <20251104-vsock-selftests-fixes-and-improvements-v2-0-ca2070fd1601@meta.com>
- <20251104-vsock-selftests-fixes-and-improvements-v2-4-ca2070fd1601@meta.com>
+	s=arc-20240116; t=1762353431; c=relaxed/simple;
+	bh=Z5SbtMpM/KuQHHw5Ea+YCo1vcyY6brvzqA7sJIGK5EI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a1ko1o02nvGvmuxjBAaCwh5lLhyyKrBS9G28Klr5/umZxPtP/Rf0vd769sBlMHtflswvBwJDgIJTnUwN6zzE+HsnVoWtZgU4Zm9lIUbTxBGm0gBix0idig52oOu+sX7aM1sfPdmgpfZt3M0K4bqo3Hh/voQWNAsj7V8MOM3JKHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZQg2G6Zw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79221C4CEF5;
+	Wed,  5 Nov 2025 14:37:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762353430;
+	bh=Z5SbtMpM/KuQHHw5Ea+YCo1vcyY6brvzqA7sJIGK5EI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZQg2G6ZwBqsKwJRdiFkY/rYwCLGY/YnAR15qvZXZsuX4y0TDE4KR8dAsJ8J85IibG
+	 WLB2WTuVuiX6q8A8KJl/+PInySjninqSC4bIZS3GBKhEnr37ZwIA4DvDubyH3Amvi9
+	 95DIQri8tt9HcZcLouoAWZS0NXhixQx81nsXp+ErxgUfH9VEjqj8SK4HcUdMl8wb4m
+	 z+dSi5X64yhHDoQh7xFX/5g1ju2IPSsgDwTp02koedPRcUEG4DvEtULFsvqU65UKCc
+	 /oDflTneqEOewy9E0YuhiMejfBaSk101uUPyS1Ex1izb/CiN9zWJqk1XHFvKioWDuA
+	 f5csU76CxNB7A==
+Message-ID: <cc0592aa-a360-437b-bbd1-9a1dda14c132@kernel.org>
+Date: Wed, 5 Nov 2025 15:37:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20251104-vsock-selftests-fixes-and-improvements-v2-4-ca2070fd1601@meta.com>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v4 0/3] mptcp: Fix conflicts between MPTCP and sockmap
+Content-Language: en-GB, fr-BE
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev
+Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20251105113625.148900-1-jiayuan.chen@linux.dev>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20251105113625.148900-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 04, 2025 at 02:38:54PM -0800, Bobby Eshleman wrote:
->From: Bobby Eshleman <bobbyeshleman@meta.com>
->
->Change QEMU to use generated pidfile names instead of just a single
->globally-defined pidfile. This allows multiple QEMU instances to
->co-exist with different pidfiles. This is required for future tests that
->use multiple VMs to check for CID collissions.
->
->Additionally, this also places the burden of killing the QEMU process
->and cleaning up the pidfile on the caller of vm_start(). To help with
->this, a function terminate_pidfiles() is introduced that callers use to
->perform the cleanup. The terminate_pidfiles() function supports multiple
->pidfile removals because future patches will need to process two
->pidfiles at a time.
->
->Change QEMU_OPTS to be initialized inside the vm_start(). This allows the
->generated pidfile to passed to the string assignment, and prepares for
->future vm-specific options as well (e.g., cid).
->
->Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->---
->Changes in v2:
->- mention QEMU_OPTS changes in commit message (Simon)
->---
-> tools/testing/selftests/vsock/vmtest.sh | 53 +++++++++++++++++++--------------
-> 1 file changed, 30 insertions(+), 23 deletions(-)
->
->diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
->index 03dc4717ac3b..5637c98d5fe8 100755
->--- a/tools/testing/selftests/vsock/vmtest.sh
->+++ b/tools/testing/selftests/vsock/vmtest.sh
->@@ -23,7 +23,7 @@ readonly VSOCK_CID=1234
-> readonly WAIT_PERIOD=3
-> readonly WAIT_PERIOD_MAX=60
-> readonly WAIT_TOTAL=$(( WAIT_PERIOD * WAIT_PERIOD_MAX ))
->-readonly QEMU_PIDFILE=$(mktemp /tmp/qemu_vsock_vmtest_XXXX.pid)
->+readonly PIDFILE_TEMPLATE=/tmp/vsock_vmtest_XXXX.pid
->
-> # virtme-ng offers a netdev for ssh when using "--ssh", but we also need a
-> # control port forwarded for vsock_test.  Because virtme-ng doesn't support
->@@ -33,12 +33,6 @@ readonly QEMU_PIDFILE=$(mktemp /tmp/qemu_vsock_vmtest_XXXX.pid)
-> # add the kernel cmdline options that virtme-init uses to setup the interface.
-> readonly QEMU_TEST_PORT_FWD="hostfwd=tcp::${TEST_HOST_PORT}-:${TEST_GUEST_PORT}"
-> readonly QEMU_SSH_PORT_FWD="hostfwd=tcp::${SSH_HOST_PORT}-:${SSH_GUEST_PORT}"
->-readonly QEMU_OPTS="\
->-	 -netdev user,id=n0,${QEMU_TEST_PORT_FWD},${QEMU_SSH_PORT_FWD} \
->-	 -device virtio-net-pci,netdev=n0 \
->-	 -device vhost-vsock-pci,guest-cid=${VSOCK_CID} \
->-	 --pidfile ${QEMU_PIDFILE} \
->-"
-> readonly KERNEL_CMDLINE="\
-> 	virtme.dhcp net.ifnames=0 biosdevname=0 \
-> 	virtme.ssh virtme_ssh_channel=tcp virtme_ssh_user=$USER \
->@@ -89,17 +83,6 @@ vm_ssh() {
-> 	return $?
-> }
->
->-cleanup() {
->-	if [[ -s "${QEMU_PIDFILE}" ]]; then
->-		pkill -SIGTERM -F "${QEMU_PIDFILE}" > /dev/null 2>&1
->-	fi
->-
->-	# If failure occurred during or before qemu start up, then we need
->-	# to clean this up ourselves.
->-	if [[ -e "${QEMU_PIDFILE}" ]]; then
->-		rm "${QEMU_PIDFILE}"
->-	fi
->-}
->
-> check_args() {
-> 	local found
->@@ -188,10 +171,26 @@ handle_build() {
-> 	popd &>/dev/null
-> }
->
->+terminate_pidfiles() {
->+	local pidfile
->+
->+	for pidfile in "$@"; do
->+		if [[ -s "${pidfile}" ]]; then
->+			pkill -SIGTERM -F "${pidfile}" > /dev/null 2>&1
->+		fi
->+
->+		if [[ -e "${pidfile}" ]]; then
->+			rm -f "${pidfile}"
->+		fi
->+	done
->+}
->+
-> vm_start() {
->+	local pidfile=$1
-> 	local logfile=/dev/null
-> 	local verbose_opt=""
-> 	local kernel_opt=""
->+	local qemu_opts=""
-> 	local qemu
->
-> 	qemu=$(command -v "${QEMU}")
->@@ -201,6 +200,13 @@ vm_start() {
-> 		logfile=/dev/stdout
-> 	fi
->
->+	qemu_opts="\
->+		 -netdev user,id=n0,${QEMU_TEST_PORT_FWD},${QEMU_SSH_PORT_FWD} \
->+		 -device virtio-net-pci,netdev=n0 \
->+		 -device vhost-vsock-pci,guest-cid=${VSOCK_CID} \
->+		--pidfile ${pidfile}
->+	"
->+
-> 	if [[ "${BUILD}" -eq 1 ]]; then
-> 		kernel_opt="${KERNEL_CHECKOUT}"
-> 	fi
->@@ -209,14 +215,14 @@ vm_start() {
-> 		--run \
-> 		${kernel_opt} \
-> 		${verbose_opt} \
->-		--qemu-opts="${QEMU_OPTS}" \
->+		--qemu-opts="${qemu_opts}" \
-> 		--qemu="${qemu}" \
-> 		--user root \
-> 		--append "${KERNEL_CMDLINE}" \
-> 		--rw  &> ${logfile} &
->
-> 	if ! timeout ${WAIT_TOTAL} \
->-		bash -c 'while [[ ! -s '"${QEMU_PIDFILE}"' ]]; do sleep 1; done; exit 0'; then
->+		bash -c 'while [[ ! -s '"${pidfile}"' ]]; do sleep 1; done; exit 0'; then
-> 		die "failed to boot VM"
-> 	fi
-> }
->@@ -480,8 +486,6 @@ do
-> done
-> shift $((OPTIND-1))
->
->-trap cleanup EXIT
->-
+Hi Jiayuan,
 
-Why avoiding the cleanup on exit?
-Should we mention this change in commit description?
+On 05/11/2025 12:36, Jiayuan Chen wrote:
+> Overall, we encountered a warning [1] that can be triggered by running the
+> selftest I provided.
 
-Thanks,
-Stefano
+Thank you for the v4!
 
-> if [[ ${#} -eq 0 ]]; then
-> 	ARGS=("${TEST_NAMES[@]}")
-> else
->@@ -496,7 +500,8 @@ handle_build
-> echo "1..${#ARGS[@]}"
->
-> log_host "Booting up VM"
->-vm_start
->+pidfile="$(mktemp -u $PIDFILE_TEMPLATE)"
->+vm_start "${pidfile}"
-> vm_wait_for_ssh
-> log_host "VM booted up"
->
->@@ -520,6 +525,8 @@ for arg in "${ARGS[@]}"; do
-> 	cnt_total=$(( cnt_total + 1 ))
-> done
->
->+terminate_pidfiles "${pidfile}"
->+
-> echo "SUMMARY: PASS=${cnt_pass} SKIP=${cnt_skip} FAIL=${cnt_fail}"
-> echo "Log: ${LOG}"
->
->
->-- 
->2.47.3
->
+> sockmap works by replacing sk_data_ready, recvmsg, sendmsg operations and
+> implementing fast socket-level forwarding logic:
+> 1. Users can obtain file descriptors through userspace socket()/accept()
+>    interfaces, then call BPF syscall to perform these replacements.
+> 2. Users can also use the bpf_sock_hash_update helper (in sockops programs)
+>    to replace handlers when TCP connections enter ESTABLISHED state
+>   (BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB/BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB)
+> 
+> However, when combined with MPTCP, an issue arises: MPTCP creates subflow
+> sk's and performs TCP handshakes, so the BPF program obtains subflow sk's
+> and may incorrectly replace their sk_prot. We need to reject such
+> operations. In patch 1, we set psock_update_sk_prot to NULL in the
+> subflow's custom sk_prot.
+
+This new version looks good to me. I have some small comments on patches
+1 and 2 that can only be addressed if a v5 is needed I think.
+
+I have some questions for the 3rd patch. It would be good if someone
+else with more experience with the BPF selftests can also look at it.
+
+> Additionally, if the server's listening socket has MPTCP enabled and the
+> client's TCP also uses MPTCP, we should allow the combination of subflow
+> and sockmap. This is because the latest Golang programs have enabled MPTCP
+> for listening sockets by default [2]. For programs already using sockmap,
+> upgrading Golang should not cause sockmap functionality to fail.
+
+Note: even if these patches here are needed to avoid stream corruption
+and other issues, in your specific case with sockmap, I think it would
+be better to set this env var until MPTCP support is added to sockmap:
+
+  GODEBUG=multipathtcp=0
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
 
