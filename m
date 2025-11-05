@@ -1,126 +1,112 @@
-Return-Path: <linux-kselftest+bounces-44787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4362C345E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 08:59:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8970C34718
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 09:23:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 71EC54E2460
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 07:59:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78608426726
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 08:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C08DE2D12EC;
-	Wed,  5 Nov 2025 07:58:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EA9A285CB6;
+	Wed,  5 Nov 2025 08:23:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="0AZehmGW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="0uGmkydb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A19F2D0C64;
-	Wed,  5 Nov 2025 07:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4B5253B52
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 08:23:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762329531; cv=none; b=ZzsdB5ApXGp1bd8SeVNsqv+y9vFThyLb7HAg/shDV8A0YR0wVN3qoOfjZtGcL17hI+bBqzwTQcq79cx1e6/PuJqKB4Bn3R66oqCnh2LpK5rU2ZtkXvpFeLPX8ZJraQ8mHp/IH6iOm/n0x/CU5kXVpukPbEvyeHL9tXr3p5/bUgE=
+	t=1762330983; cv=none; b=Jxpq3GlEY9MHiHBNU8wQRGuA0GwnZl3Cw2v79BwPRM3U+z3XKj7WMKa2gbM9nbbPnoBPZT21I1PeST9ApJGBaUlNDuZxqVd/14i0hDu0uailw8cHJgyN4EDEPE07XT624IB3Pl0qcbPdTyYvYGpEg+iuEU6THgAY2mtX2LNhCpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762329531; c=relaxed/simple;
-	bh=ejmf0LYtGv54COp6AgkfEFUKHQrBNAEk+1crHgWUcek=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xr8DuPrV6Yu2qZQiWHLfe5dEv4cHdePq71o0k+Ue9KFr1MQrkPFEUgrZgAyaWvTBDciesdjE+YKZf9r2c02yXOSZbrbvRaWoH+y7khefabumVGxxZErOQKLKHiiB1itGfwtZLDERiyZzCcBVn+wI4VeDfPdty4Bz0/nHXuaWEDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=0AZehmGW; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A55L2GY465486;
-	Tue, 4 Nov 2025 23:58:30 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=s2048-2025-q2; bh=QP8yWRbPuUYOOh9yRKCF
-	fuc9UFzcFCHQzQMKDZyG7Lk=; b=0AZehmGWd32aDJd6DXaUMtefNtrVrBqOS89e
-	F10YjCxOKKdSXY9x0eqTh/G0Gx5vopS3oO00b7XFUjwqK8zeeXDXc5alExdMphMd
-	z6LpRPPOPppaBWry80zPz5pFv9neCY21BAGHfgYlWecpm1KRmYW6fbdbBedb5XhZ
-	IhXNoyFEFJsb9pTYSCX1Fp9UCjeHIUw618CUlKCZqDuqhvzeqw6SZV+849QsUf1w
-	fXNLnMdV0Hp7QNKg/oJHCDCcTPMfGFjylNJupPNGfrFXgFaJwXncpWmN//T9hKGf
-	MtkhFGvNZ5F6UtmCp/3UA4SULhJK2ueCbVGK+ADKuWhKnAr6zA==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4a80by0n04-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 04 Nov 2025 23:58:30 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::150d) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.20; Wed, 5 Nov 2025 07:58:28 +0000
-Date: Tue, 4 Nov 2025 23:58:24 -0800
-From: Alex Mastro <amastro@fb.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        <dri-devel@lists.freedesktop.org>, <iommu@lists.linux.dev>,
-        Joerg Roedel
-	<joro@8bytes.org>, Kevin Tian <kevin.tian@intel.com>,
-        <linaro-mm-sig@lists.linaro.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Shuah
- Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
-        Will Deacon
-	<will@kernel.org>, Leon Romanovsky <leon@kernel.org>,
-        Nicolin Chen
-	<nicolinc@nvidia.com>, <patches@lists.linux.dev>,
-        Simona Vetter
-	<simona.vetter@ffwll.ch>,
-        Vivek Kasireddy <vivek.kasireddy@intel.com>,
-        Xu
- Yilun <yilun.xu@linux.intel.com>
-Subject: Re: [PATCH 3/8] iommufd: Allow a DMABUF to be revoked
-Message-ID: <aQsDoHM+eGN0uLhk@devgpu015.cco6.facebook.com>
-References: <0-v1-64bed2430cdb+31b-iommufd_dmabuf_jgg@nvidia.com>
- <3-v1-64bed2430cdb+31b-iommufd_dmabuf_jgg@nvidia.com>
+	s=arc-20240116; t=1762330983; c=relaxed/simple;
+	bh=LcR2LkXnFWSGBITUBtkwsX5fkKZ+X5d6dkgDfXGDJh8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FmhtkmiJi8jK+agpWpTX2Tojs9WCSii6i6Xy1I9TSzsP5YJVf2kKh2XcPfTxZRGBNHuL6UlunjhYgUEiBXAZtfA7BLYxd6zUJZiPcr42GSvBhp5kpYTF+vkeOShlaTWMxBqu2qEIf4OUMglXIm4h6at2RFVdGNFky38uoR/8fDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=0uGmkydb; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id AFFEBC0E62F;
+	Wed,  5 Nov 2025 08:22:37 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 99DB460693;
+	Wed,  5 Nov 2025 08:22:58 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1DA5C10B51AE2;
+	Wed,  5 Nov 2025 09:22:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1762330977; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=ZVBJaTLbdq1MYmCxVHkNfsdDAKKhkahrr7FSCMfrqV4=;
+	b=0uGmkydb5ea4FmpHxXp6G7fCGCoDqeNeuz5/RhkZVBZ04xlcbhGRM1etUf0cEk3jJRgVYO
+	rBhnTcy+c7C/e8TeJl6d6nzajHMUUwtlBOqPwk1OgovCOKMbN1+MzJ6JnCIOPGEZ59cNbN
+	hpHNgZBvmPp2RXZ2HY4TvbauMRI0cNOUuRjYDtATDI6pj/bVMyDsXdBypf3uRry2TnY6UN
+	MxgDiAWUctXRBO/dmLSn41qqzczmyfXZnSUKeEmO53Ci52K9g+8kTzYCOUCu67CdS9S4xW
+	6NBCJR6YC5oFHt3tl0X4VG5QkwWWP11f5AygmtuokJSoFupRAD0CH1Qjai23iw==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next 0/2] selftests/bpf: enfoce SO_REUSEADDR in basic
+ test servers
+Date: Wed, 05 Nov 2025 09:22:47 +0100
+Message-Id: <20251105-start-server-soreuseaddr-v1-0-1bbd9c1f8d65@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <3-v1-64bed2430cdb+31b-iommufd_dmabuf_jgg@nvidia.com>
-X-Proofpoint-GUID: qZJProPDOAPs2uyJdjZB9QHuvfQJCGRs
-X-Proofpoint-ORIG-GUID: qZJProPDOAPs2uyJdjZB9QHuvfQJCGRs
-X-Authority-Analysis: v=2.4 cv=Y9X1cxeN c=1 sm=1 tr=0 ts=690b03a6 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=x0DUne6oTFOVQpvc-HAA:9 a=CjuIK1q_8ugA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDA1OCBTYWx0ZWRfX2Qkc85mMaTMS
- oxLfWawui3IoOYFhh3mRL4dGLEZ4TjPEvzvRlQ4RHYbQpqwxFiqFD+gAb+DaEuGCTjbQZzWLKo6
- fSK2287FfM4K6mzbY5PY20qKAH/XCFKBpJqMgh7LE1nAzPgxBBGv5U66r0e8ODUSxMkbWmUGtqR
- VK84opxtnPF8WiiETdTLdr97FbNeBDuSMrWUIiVt6Ago/eFd8Vu0LDa4IjZaPmaOsnc83nBjTS2
- XK0Lv+kBvo4fbIoxvPhF0SYIOWYwxX20dhlA7Fn7o2V8sGXbBF6Br5PDn00+d4W1OiTqujqfVUV
- 4NMYzgq8IxX67+S3VZGfSdoKjLGktqKsxpfmfsXOK8nRv9t7lvDURkqI8H2NdBPnGd6O6Buzxmj
- Tj1mxbkA0aSXWzLiIVpioH52IUEOBA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-05_03,2025-11-03_03,2025-10-01_01
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAFcJC2kC/x3MQQrCMBBG4auUWTvQxKmCVxEXqflbZ5OWmVgKp
+ Xc3uHyL7x3kMIXTozvIsKnrUlqES0fvTyozWHNrin0cQuiFvSar3NQGY18MX0fK2RgiUeSGmK9
+ 3anw1TLr/108a14kL9kqv8/wBrg204XQAAAA=
+X-Change-ID: 20251104-start-server-soreuseaddr-e442446e2d37
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Oct 27, 2025 at 02:31:02PM -0300, Jason Gunthorpe wrote:
-> @@ -1024,8 +1027,15 @@ static int iopt_fill_domain(struct io_pagetable *iopt,
->  			continue;
->  
->  		mutex_lock(&pages->mutex);
-> +		if (iopt_is_dmabuf(pages)) {
-> +			rc = iopt_dmabuf_track_domain(pages, area, domain);
-> +			if (rc)
-> +				goto out_unfill;
+Hello,
+This small series is another follow-up to [1], in which I misunderstood
+Martin's initial feedback (see [2]). I proposed to make tc-tunnel apply
+SO_REUSEPORT once server is brought up. This series updates
+start_server_addr to really apply Martin's proposal after his
+clarification [3]
 
-I think this error path results in locking pages->mutex recursively. Needs a
-mutex_unlock(&pages->mutex)?
+[1] https://lore.kernel.org/bpf/20251031-tc_tunnel_improv-v1-0-0ffe44d27eda@bootlin.com/
+[2] https://lore.kernel.org/bpf/efa3540a-1f52-46ca-9f49-e631a5e3e48c@linux.dev/
+[3] https://lore.kernel.org/bpf/4cbabdf1-af2c-490a-a41a-b40c1539c1cb@linux.dev/
 
-> +		}
->  		rc = iopt_area_fill_domain(area, domain);
->  		if (rc) {
-> +			if (iopt_is_dmabuf(pages))
-> +				iopt_dmabuf_untrack_domain(pages, area, domain);
->  			mutex_unlock(&pages->mutex);
->  			goto out_unfill;
->  		}
- 
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Alexis Lothoré (eBPF Foundation) (2):
+      selftests/bpf: systematically add SO_REUSEADDR in start_server_addr
+      selftests/bpf: use start_server_str rather than start_reuseport_server in tc_tunnel
+
+ tools/testing/selftests/bpf/network_helpers.c      |  9 +++++++-
+ .../selftests/bpf/prog_tests/test_tc_tunnel.c      | 27 ++++++++++++----------
+ 2 files changed, 23 insertions(+), 13 deletions(-)
+---
+base-commit: de0745f7cc98146c70a020bc3a1b73c7f3405282
+change-id: 20251104-start-server-soreuseaddr-e442446e2d37
+
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
