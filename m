@@ -1,187 +1,89 @@
-Return-Path: <linux-kselftest+bounces-44790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0B84C3472A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 09:23:58 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86B89C34889
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 09:45:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E7AF18C27CC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 08:23:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 753BC4EE78D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 08:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C3E2D46DD;
-	Wed,  5 Nov 2025 08:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECBC32DAFB8;
+	Wed,  5 Nov 2025 08:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="0rmCMxde"
+	dkim=pass (2048-bit key) header.d=8bytes.org header.i=@8bytes.org header.b="DdykuXFG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2D028A1E6
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 08:23:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16F8C2DA74D;
+	Wed,  5 Nov 2025 08:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.250.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762330985; cv=none; b=ml1v+1CMjUCNj/bfhnVtRcNvGUyU6AQRouTluj4BTSNAeKSF4ulLMHUfPi246gZ6DbR7dlVuypTW2nNv/hKt70tMWqCJ2Jxgdos6I6SAV3dDMSI2Qdy4UiAFnSZ2jWWCIKACzrp7K2eT8/V6Ptrw5DiA7UtYtKX9pazHxRy2sjU=
+	t=1762332311; cv=none; b=L2jT9y61sRKZPwgqn+WBZhx6CSPcIpHrmYZMYmqls8+z5z1Tu5BT5ZezK+KHcnut6WHEZspbCpEabX16PpGeky7ylkWmXuCrkISYrPu+sO4cXsGteT9+hy6x9YYE8lRkZZ8QjiJv3FaXhC7DnI8il/MvtMq8fz+4IN2BRza7RjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762330985; c=relaxed/simple;
-	bh=1UFFxHLngwWlfSIzQHo3B1yiskwv5UVLi/aHpHM5Dss=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KkOFdiPNyOIBfgWI3xxOzb6hJPnDHYCSb+/4kHmIr+OwtvOpJfSTsSQnUfbD+vm3m1PklrXJfR0KNNkCXtkq53urF46wnWNgXEpoQ+fIu/SWmjY5vk0M8jD41U7iZJhhNfyxibDwMnvi7YrxTz4Mp7yWP0US/fNGj5P39imwgGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=0rmCMxde; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 749B2C0E632;
-	Wed,  5 Nov 2025 08:22:41 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6AA9060693;
-	Wed,  5 Nov 2025 08:23:02 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0DCCA10B51983;
-	Wed,  5 Nov 2025 09:22:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1762330981; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=74ihADtTOc2tE2Hs2544UzjSxwkF3iKFwI1Cs+oyQf8=;
-	b=0rmCMxdeXj2jNn4Uo7ghVfAyZEat//FyRC+TGEL8oZLvuPgDGR0ALHKl38fc/K0zIhx0EH
-	tLOWNi3/TVADbf6xirizl4HuD8leOPvmRykDN10vmy7cME9FKAgjbY2+QrTkqMneiHkAoP
-	XaetKuZcGUKvvurCWOuS5oUHslIrMixuo2Q5/527u+PtxIk8WhSEC9EOIiUjEBPIWBvO68
-	oIsMQX2ZVHY+NPwYOsjVv/qbPCG1ZtoBhH3XLTssbainupZDEJwZQfA/BsRb8iMICgEmu9
-	cAE7buuf2kAXB7Al6tXojrExflx2Y9xK4jCEEpj1J7GgucXHbpsasLE8Th6dxw==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 05 Nov 2025 09:22:49 +0100
-Subject: [PATCH bpf-next 2/2] selftests/bpf: use start_server_str rather
- than start_reuseport_server in tc_tunnel
+	s=arc-20240116; t=1762332311; c=relaxed/simple;
+	bh=9634LwCOBvkVyltmD3yEImG3GLp+vauzcljqVmCfZXs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AcV3DqzrODryXzPQdlN08UhRmgKcenE3bUEZZA+CbFqn3GFz/P0ETuofudf10z1evqgiRUp5FN9bZ63063S3ySo702XzzZeudaRjTLHSWFseoTX7CnPzjgW0faPWkLzNbA60Qdh0cd1TZhbd4hx/TJ9mKOj1QQeecL2WetDT6Bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; dkim=pass (2048-bit key) header.d=8bytes.org header.i=@8bytes.org header.b=DdykuXFG; arc=none smtp.client-ip=85.214.250.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
+Received: from 8bytes.org (p549214ac.dip0.t-ipconnect.de [84.146.20.172])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.8bytes.org (Postfix) with ESMTPSA id 6462F5A90D;
+	Wed,  5 Nov 2025 09:45:08 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+	s=default; t=1762332308;
+	bh=9634LwCOBvkVyltmD3yEImG3GLp+vauzcljqVmCfZXs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DdykuXFGz4Kyzn2l8GzRhXbOwpemTjiqSY9NnkSJ5kXzDibcDKgk3Crya1dT+N1Ts
+	 UH7FaWWUF2fq6OpnbmFSDJXIvL5PdoqWz0jZZotf4VyXYy5InXO3QMRJdHGa6Rzaeb
+	 MxBIh4MUKJl+OcDL2c70JUQZv/F6/7aKR/7bsxHQuOEkn9h/bIqWxcBXiTQgrOnRku
+	 AipM7oV8uNY+j4VTR+A71+Lm/Bi/LEdJjrz9vYJsMnA4ATN+A/7oIdHQmvkac7W8aF
+	 xTWnLZwWkQ4WulMxLtSJf6QnV4ULuve0Bf0buUIZk7fVlBoEn9/SfE5IqaOkZRXopu
+	 eMENQjBRtCNbg==
+Date: Wed, 5 Nov 2025 09:45:07 +0100
+From: Joerg Roedel <joro@8bytes.org>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>, iommu@lists.linux.dev, 
+	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, llvm@lists.linux.dev, Bill Wendling <morbo@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <pjw@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Shuah Khan <shuah@kernel.org>, Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>, 
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>, 
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>, James Gowans <jgowans@amazon.com>, 
+	Kevin Tian <kevin.tian@intel.com>, Michael Roth <michael.roth@amd.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev, Samiullah Khawaja <skhawaja@google.com>, 
+	Vasant Hegde <vasant.hegde@amd.com>
+Subject: Re: [PATCH v8 00/15] Consolidate iommu page table implementations
+ (AMD)
+Message-ID: <3wwyr2kqhaj5icznsizcu372uzhygubkytko3vueamwnf6vzr2@hlas3nx53tps>
+References: <0-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251105-start-server-soreuseaddr-v1-2-1bbd9c1f8d65@bootlin.com>
-References: <20251105-start-server-soreuseaddr-v1-0-1bbd9c1f8d65@bootlin.com>
-In-Reply-To: <20251105-start-server-soreuseaddr-v1-0-1bbd9c1f8d65@bootlin.com>
-To: Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
 
-Now that start_server_str enforces SO_REUSEADDR, there's no need to keep
-using start_reusport_server in tc_tunnel, especially since it only uses
-one server at a time.
+On Tue, Nov 04, 2025 at 02:29:58PM -0400, Jason Gunthorpe wrote:
+> [Joerg, can you put this and vtd in linux-next please. The vtd series is still
+> good at v3 thanks]
 
-Replace start_reuseport_server with start_server_str in tc_tunnel test.
+Applied, thanks Jason. Please send the kdoc fixes which address Randys review
+on-top.
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
- .../selftests/bpf/prog_tests/test_tc_tunnel.c      | 27 ++++++++++++----------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+Regards,
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-index deea90aaefad..4d29256d8714 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-@@ -69,7 +69,7 @@ struct subtest_cfg {
- 	int client_egress_prog_fd;
- 	int server_ingress_prog_fd;
- 	char extra_decap_mod_args[TUNNEL_ARGS_MAX_LEN];
--	int *server_fd;
-+	int server_fd;
- };
- 
- struct connection {
-@@ -135,16 +135,18 @@ static int run_server(struct subtest_cfg *cfg)
- {
- 	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
- 	struct nstoken *nstoken;
-+	struct network_helper_opts opts = {
-+		.timeout_ms = TIMEOUT_MS
-+	};
- 
- 	nstoken = open_netns(SERVER_NS);
- 	if (!ASSERT_OK_PTR(nstoken, "open server ns"))
- 		return -1;
- 
--	cfg->server_fd = start_reuseport_server(family, SOCK_STREAM,
--						cfg->server_addr, TEST_PORT,
--						TIMEOUT_MS, 1);
-+	cfg->server_fd = start_server_str(family, SOCK_STREAM, cfg->server_addr,
-+					  TEST_PORT, &opts);
- 	close_netns(nstoken);
--	if (!ASSERT_OK_PTR(cfg->server_fd, "start server"))
-+	if (!ASSERT_OK_FD(cfg->server_fd, "start server"))
- 		return -1;
- 
- 	return 0;
-@@ -152,7 +154,7 @@ static int run_server(struct subtest_cfg *cfg)
- 
- static void stop_server(struct subtest_cfg *cfg)
- {
--	free_fds(cfg->server_fd, 1);
-+	close(cfg->server_fd);
- }
- 
- static int check_server_rx_data(struct subtest_cfg *cfg,
-@@ -188,7 +190,7 @@ static struct connection *connect_client_to_server(struct subtest_cfg *cfg)
- 		return NULL;
- 	}
- 
--	server_fd = accept(*cfg->server_fd, NULL, NULL);
-+	server_fd = accept(cfg->server_fd, NULL, NULL);
- 	if (server_fd < 0) {
- 		close(client_fd);
- 		free(conn);
-@@ -394,29 +396,30 @@ static void run_test(struct subtest_cfg *cfg)
- 
- 	/* Basic communication must work */
- 	if (!ASSERT_OK(send_and_test_data(cfg, true), "connect without any encap"))
--		goto fail;
-+		goto fail_close_server;
- 
- 	/* Attach encapsulation program to client */
- 	if (!ASSERT_OK(configure_encapsulation(cfg), "configure encapsulation"))
--		goto fail;
-+		goto fail_close_server;
- 
- 	/* If supported, insert kernel decap module, connection must succeed */
- 	if (!cfg->expect_kern_decap_failure) {
- 		if (!ASSERT_OK(configure_kernel_decapsulation(cfg),
- 					"configure kernel decapsulation"))
--			goto fail;
-+			goto fail_close_server;
- 		if (!ASSERT_OK(send_and_test_data(cfg, true),
- 			       "connect with encap prog and kern decap"))
--			goto fail;
-+			goto fail_close_server;
- 	}
- 
- 	/* Replace kernel decapsulation with BPF decapsulation, test must pass */
- 	if (!ASSERT_OK(configure_ebpf_decapsulation(cfg), "configure ebpf decapsulation"))
--		goto fail;
-+		goto fail_close_server;
- 	ASSERT_OK(send_and_test_data(cfg, true), "connect with encap and decap progs");
- 
- fail:
- 	stop_server(cfg);
-+fail_close_server:
- 	close_netns(nstoken);
- }
- 
-
--- 
-2.51.2
+	Joerg
 
 
