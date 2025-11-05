@@ -1,379 +1,260 @@
-Return-Path: <linux-kselftest+bounces-44846-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44847-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CAB1C38084
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 22:31:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0305EC380C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 22:35:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3F083BAEE5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 21:18:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 27EFC4F98D0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 21:32:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0885E2DE1FA;
-	Wed,  5 Nov 2025 21:16:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FB9E2DCC1C;
+	Wed,  5 Nov 2025 21:31:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="QVUjeqd3"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="K43++eXd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013049.outbound.protection.outlook.com [40.107.162.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05D12DC328
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 21:16:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762377384; cv=none; b=oI3Dkzt4zbKGmceZwmSqnw67ObzTORgoIS0AzskxNwKKJMlw/4pZyJKIHNh3ZuyTOzn1tFARuwPshnXri9d+izzRl+aGLMpeyrfwvYAaYe3lW6iQZyBeVxYpq/86Z0AlBA+m0CGvs3mjyrKpgEcOSHhvlEyESiExpOO6372UWpY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762377384; c=relaxed/simple;
-	bh=MUuSQMMFm7rsszh+tEpt1DpEUZIKd+AvF16JNtf+f78=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G1nVKd/0gj8bftzNSV4XbUb8VZT2kJIpHaqdaQ5NQ/gcrHjId2ryzin9Ms0WLIpXpzmJp/OSw+jLWHsgLX1rmKjH2rT5QCNGYYl6cB5OTmtZe1GyJu6BtSU5qBFrB65Ov2mI8aWYwBO646xt5VgIEuUM1a7cSd0efFn1KFu058Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=QVUjeqd3; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2957850c63bso3517595ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 13:16:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1762377382; x=1762982182; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=D1ax2+b/BmZMbWQLmn1abjqqCYtcXZuyWWUp9gYac88=;
-        b=QVUjeqd3I/ISPYvwHkX5zl1duD++foY7I87kyrugd7YXBcjkYcAkinbRTx3kbaeqm7
-         KEl3bLQqvgsTCcBLBI618uIRJN4lL2jU83HX0ZTeAglac/2A+VEk1Qjtc5Au8myQt1ui
-         sZZSdWUSLlBxtUt/X8+3jVl7aVtHWSZMausAKmO2GIOTFrGknwwyeQXxzbN8ICGuRX+0
-         3ISRol/N5YPyYbJXlG124y04aPpEq1HRGEPiC7cB+gJiJ5MXIBZVvLJXHdmFOXk7SB3X
-         maguTgO12M7aVkybsewzKpb5uyvizHvDM1Es0vFvuOP5y4Fp0z1JK2pr/fIUucbEEYdP
-         61JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762377382; x=1762982182;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D1ax2+b/BmZMbWQLmn1abjqqCYtcXZuyWWUp9gYac88=;
-        b=qs/VeT/QfiCYLhvvyu4zvlqjN/qQd91OWrpc5o3o90yo17r5TG7MKT95YjI/kmlIrd
-         bCzTrNCWd4C8l/B7W7dkvLVSFn/guSV7JzLsmuCQPU9PRsctQ5XxfH3yw7jnk0DUvG5y
-         q09kJY6lDT+wIgBd2LBpbAP1re2EZFKAQdQ1j6EN3tFgq3QAaG7Rvnc8w4PXWo6m5oq4
-         uUDGomm4ZJnxe7tuGDGn5lX80ycAYW8mgISJGqOVfnDphVoYg0YrGgJtSJXOWd9niQCg
-         U0/nq7WlxNxuA81jbDOsY2GBi7VRM3DedEEx1sCAg13H7BXlsbp8s1IFVKy8MIA1+M/9
-         7VrA==
-X-Forwarded-Encrypted: i=1; AJvYcCVFtocFRdMUjeCmAQIpPrLPd4ph0OoIqxlS6D2Lr8my3BKNcHh5RupokyOVzHqglAAWOhQwj4lnxsoYEeMuyMQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/ifzdVQb/VLaVcafUG5udAyS5016ILmjFpo7XbSq2puM17sA6
-	HFEOFHI1jYmPigEhySwHFWeGHDANaYsV/EdvyttLbTzNUXN18ENpECykn0NswphMjw4=
-X-Gm-Gg: ASbGnctU7x4PXl7FrjiIld+/S83yNMWasSj/aD7Nb5gruydGt1gh/y5QUANStJumaZ9
-	CzM8an06AjJTi6rGQiO0D9N0RK0HTLgn7RIZmKxtsjGTvcmeSy6386zK5HrlAwUyfjpp4k9Ep42
-	mcAfAsvcze0r/tZjetZa0HhUU18t+ScagshQKDTxy7BctG6s7+5ogjEyjp7FayO9M2NY9UG+oR4
-	uD3CrjrvS/x9GuGm7xzefYev6yEC9Gi2FmTdoLrppS/JMMpxjRojS7Jhm0h9zmcfcxE2M6pW4Vf
-	pZ8Jz25ljk0VDh2Fym8kBp7i5tZ1VpWcoymLOU0sbEdpaa1xnL0Dl0yH2bA1jEp4c6Uh4//xNu9
-	H9hB5wrdlOGDgGfnEx3JebaN4J5m0hpDs3GOBSJv6KxcNTpFKq9iXwouVYypWtO/IuyCxVk4Phg
-	Ct++nWLKUmQw==
-X-Google-Smtp-Source: AGHT+IGIZBQp5DjsGz3HmRAWZhPw8v6GqkWpZnGJFSt/AXCLpNaQaJyXUplBHQF5DvKtwaSJAHwvDg==
-X-Received: by 2002:a17:903:2304:b0:295:557e:7468 with SMTP id d9443c01a7336-2965173831dmr10789365ad.28.1762377381822;
-        Wed, 05 Nov 2025 13:16:21 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-296509682casm4836705ad.22.2025.11.05.13.16.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 13:16:21 -0800 (PST)
-Date: Wed, 5 Nov 2025 13:16:19 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: Joel Stanley <joel@jms.id.au>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, jim.shu@sifive.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	Zong Li <zong.li@sifive.com>, Jesse Huang <jesse.huang@sifive.com>,
-	Michael Ellerman <mpe@tenstorrent.com>
-Subject: Re: [PATCH v22 00/28] riscv control-flow integrity for usermode
-Message-ID: <aQu-o1-e6FK1dByM@debug.ba.rivosinc.com>
-References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com>
- <CACPK8XeQf9UJuu39bGcm2mySWrKYvUadOgFRmpas+AS9fXA2WA@mail.gmail.com>
- <aQuyiVdxyqWNooJ5@debug.ba.rivosinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82692DAFAA;
+	Wed,  5 Nov 2025 21:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762378306; cv=fail; b=Pa2aLbtgqsVOQn/HToKU2W5kPiQfl4yh/iJWIjIFNokYsz1kWEZfw2RDdz6bIz1DTaAG7dViHC6586QTrfcgpymwRRYjIXdjtffD+mWVrbfEe7/Xvmy70xVfBeY/oCdedk0hNmZxD2TPzY0xMXZmj6b34qjf3xPc0AhZ71Hl4co=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762378306; c=relaxed/simple;
+	bh=HX/4MDCk91YuMdOZgW7/WGIzgKgzf2N5fKndsfpYlhg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uRjCvuRu48WDszMrAp2CKoTn5vmOn62JKRw8ScIFzlC33MkP2zZy8KTzVJsBk7BViWaH5jxcrrApj0+hUJpINNqAeatPrbjhwEedgN7qn7QI3Ik/citxDZt4GXJK1p6OvEdJ0pNlftLtzM0jR5ZER2dInU/b+5g/r+RHyF/4Vqk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=K43++eXd; arc=fail smtp.client-ip=40.107.162.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=W6yPE+vg1Y0zN6BRmljOoCzavTKOQo9y2DEGaqQMDvpv08YOHlOATz5r2Jb7aBxAdOE0ir+fdociGUcF6z0VQUMkr0F4YsRgiE4MB8vJl9r/Ip6h9s5gFtHI9wz//lgraG6IvByc7d7yX/Qi/XgUSwpu9OiWiPFCfwfju6YPM3jy6/pu7ah53Kf47SEMJFh+TevxrzYO/lB/mm9kAbVDw8nKhIyvvCLbgpdKJZN2v6wQhBi3KhhAq/Gyb3nEVg3oVTbATOgXgaoXLnrokUqc9Xwl0r7YKNMjMDmnYybpzLfgIKdYhSEgcRGH+9TUAenhSFqqwAxM5NjdQcG3xm8IMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cw7oOsyCJa4SLdoqEGH/yqNERAqA9A5RjWoz8TuuYwc=;
+ b=V4AHSsMIbRWDOqXVw8Sh98hs3TnwhQF8do11pfpZ2H+Hk60gpfj7V9Eg/8ax4XeljGhLdTFZ/cD6qI55hHkh0/41kKymExaYcf4a9JUrtty9OAI1mAFPwY6MoIiS148h9xgbGgot1m6sfM9rJhiTtLia/4OsKOoQZ8gbQWnodg7iQfCfiPzq9okbla6HU+wM08M0w83qYIhYEsQXHCVOsqMcOwp++h0uj39ndOKllIwyKL5x10vvjMyXB7LP0IslZ05poaoF+kIlBKHE1Q0Xak1Rwdfq6fDDJI9MciUMPygyIFh/wz2HGCwJaXefkWd/k7iDoYyyP3HNWufMBCc8lQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Cw7oOsyCJa4SLdoqEGH/yqNERAqA9A5RjWoz8TuuYwc=;
+ b=K43++eXdEIzxKMFsHmWhYJ3M6Z2GI6UC4OR5YfUXtMA7XuxCyz2JlGgL0LI/nQhpfMFbGgCopsw431Iczp45N3w9WJvCna7QPR6WRrosGIi4CLffCoq191nzl7pFnH82QfLm2dZp1h8xYfZwEsOtlKxED8SbWYdqyP74bXDMk3OMV+t+iWLNb2vX8sHhHQ8Gm6dKhUr0lD3RHwZh0nXx8Bx6pn3AWLQPlY0TRlCLw5X67yNxpDWbLukAhER5ZiRVEiwb/0JJMP1agQmrT06qQUnzqNVeFkwoTaf0RthDtsXJ1ZPySFeo4X4VUXefbSQf28i3TXc30o1pCUkfQoWMyA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM8PR04MB7779.eurprd04.prod.outlook.com (2603:10a6:20b:24b::14)
+ by PAXPR04MB8367.eurprd04.prod.outlook.com (2603:10a6:102:1c7::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.8; Wed, 5 Nov
+ 2025 21:31:40 +0000
+Received: from AM8PR04MB7779.eurprd04.prod.outlook.com
+ ([fe80::b067:7ceb:e3d7:6f93]) by AM8PR04MB7779.eurprd04.prod.outlook.com
+ ([fe80::b067:7ceb:e3d7:6f93%5]) with mapi id 15.20.9298.007; Wed, 5 Nov 2025
+ 21:31:40 +0000
+Date: Wed, 5 Nov 2025 23:31:37 +0200
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: local_termination: Wait for interfaces
+ to come up
+Message-ID: <20251105213137.2knkuovcc3jpnhqv@skbuf>
+References: <20251104061723.483301-1-alexander.sverdlin@siemens.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251104061723.483301-1-alexander.sverdlin@siemens.com>
+X-ClientProxiedBy: VI1PR07CA0220.eurprd07.prod.outlook.com
+ (2603:10a6:802:58::23) To AM8PR04MB7779.eurprd04.prod.outlook.com
+ (2603:10a6:20b:24b::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aQuyiVdxyqWNooJ5@debug.ba.rivosinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM8PR04MB7779:EE_|PAXPR04MB8367:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4079eef6-5b0d-4557-2b95-08de1cb2b523
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|19092799006|10070799003|376014|7416014|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?bW5Mci+ePRDQYSr8bcEtnS47giEVJ2Gox3aJkxRE4d+3OmNsvPWjD4TsPGhY?=
+ =?us-ascii?Q?qXjAvHnVBgEE3/2UOIQmCvQJgL7XEwIlX4W2ez2dSa+Sv/THkWO8FY6QWOIF?=
+ =?us-ascii?Q?VXwTG9tTvlPm46cjKxKDhZ1x87Q1yvI2fo7bAg0NFIZAf22ZGIL1MNyc9G7a?=
+ =?us-ascii?Q?wt8AFfwUpyDrMRPvK5nvDrWWSt2wK47JHNZgz6cMKFAcJkUtpceNoonJ/U2h?=
+ =?us-ascii?Q?zfurXg/oQWVvY7dr/XEzor0SHkm6bWGZKG3h7NQynRM83F/EmRRu//dReq8l?=
+ =?us-ascii?Q?FFHcAB2aLVwroA3PE2MINv2g4WXMlRk63Du46DOK1VUdQhArFyNEmLfcWHF+?=
+ =?us-ascii?Q?gGFTU7QRh0p/925iuHjSFWAOuMNuoGD+w8MeczdFeYO1CWRAvLkJkSK6U90y?=
+ =?us-ascii?Q?vpbzUYJNlBhP3CKkjxDs+pUrJhYLZTgcBf3noZroOHzsUAwKa1FeSmRHjVPs?=
+ =?us-ascii?Q?oPNB5ljTeh1fm66UcH2ieZYUTD6Cq4Vg0mX1WJezP7ox+HdQH64s6rFC+XtX?=
+ =?us-ascii?Q?2y5C9NzGrvy0WXiMdfzgweW5gCu0imBpM7D9MNWNf2SH0RCh6uOD+KoOjjG7?=
+ =?us-ascii?Q?HJO6JoEGvLIpPl69avKPEhF/3P9r1p4VCx2Igc3vfW+GXUs5XC7P8+qmm/LI?=
+ =?us-ascii?Q?P6PI6UyWy4s4iuNVlC83kwn4tD7wfHh0Czyk/6UmX+vbP6AHqhpTvLiUXTKC?=
+ =?us-ascii?Q?I/XB8POEYmU7iX5laW7Yty1KSYkkaUzhYCsadJ2LRR6OwWQQ4dHw3Bm9wVVY?=
+ =?us-ascii?Q?Fnu3z1dl0evNv6sPjFnHvuzWWcCqZPQfPkaBZ+vMvgiB7Ula7ePlj2gNgWUa?=
+ =?us-ascii?Q?WtQlRW6b+t9u27UHjF+l8vgxwOeb7VHnZrB/xmso/s1k0PW6yYFA8a0pm5uA?=
+ =?us-ascii?Q?RzY/bAMTg0ugkTPxUUxbjF6RM4wQcnhXa86JgP+RE1eOhL9bRWD1vRXAQJJW?=
+ =?us-ascii?Q?E4df6k8WqpYU5b7TwquBqAHGINr+QEr2122RFJdabFXjmq2vT7NqlurN5TfI?=
+ =?us-ascii?Q?774t7FYB6V+WZ3Jh4Plb7yP5GYuYaW3IPNPOH+f81dcTelom5vDriFZXDYZC?=
+ =?us-ascii?Q?skmwfNE5V3V/HXbhfDvxo9rTZ0FXw0lmHLT40TXWEEg12FbQWl9EEh+8xpY6?=
+ =?us-ascii?Q?Wa+U4+m+i8DYmeXF0M8Q7IYQGH/UJWUjUZzqyipYnkdF7qu/elvs7a47MUdF?=
+ =?us-ascii?Q?AwYtTHNLgmWsR2YE/zkIxsAvbW1L8eYwpPkbJ68G1QyJ+FzwpYCZLoQ7Y06O?=
+ =?us-ascii?Q?rI2xLETIjvxQoP5uI0k6S6q76baMZCp+PNbaYU29eHP1B88mEfVwO7IagkR9?=
+ =?us-ascii?Q?ydLxtsCOuJSE3pfo6GVdvrhvOUw4Sn5KWdRVsqVQNJ5Z3vtmoW3RIsvrXwub?=
+ =?us-ascii?Q?pUskhJNO+pIkXjj0K98JWoxZM/lv9x5Us/1szItj9GQyZdW6SWWnO0CxhUXt?=
+ =?us-ascii?Q?oDLmQqHndREDM3k7rdL439ZbyI4tsfzo?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7779.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(10070799003)(376014)(7416014)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?8nWkhmcbqWQ3xlt2/8CoFhux2xd7y0Oz+bfQgmQe9B/TxIZjgtd2r3dq1tTp?=
+ =?us-ascii?Q?YsTNLdtJh94/TE5Fvg3RTvIjlNF4TtspGvNGxiknUQkUoRyN4sGfKOo5nWXH?=
+ =?us-ascii?Q?whKQxv+e1i4EhhLsQwTZRL2SNvbYrGsWez+7J0qH6G17LI6LyRz1+0OGiOnu?=
+ =?us-ascii?Q?4LTBGJLN72fJxxExt9EAokSpTxWKCq6W4MbQroqbU+RvBvdIFpAJa8W8oUXr?=
+ =?us-ascii?Q?8xmNzU2hQP5PFonG2oaB/R1g6t7nC2GEv6bw9iHEcJavJ/QNk/QraDM6FPTJ?=
+ =?us-ascii?Q?N4g+YRKS5MxJGpPvAwiTwgloAtrFZGvQ+OLDvb8OXdUbdjffWHH18xNqB2CI?=
+ =?us-ascii?Q?74EPSsQKFp0FjyO5TQA6aGugaaY0NlwzktO6nvi7Fryut4YMaeXla5f0slhb?=
+ =?us-ascii?Q?vMk41RZZb5gh4xdnY/2Q9DA/Y5BCIKzlaoLduzDPhageUnWhJQXnw+KkZaAf?=
+ =?us-ascii?Q?0fBcIqZWpcsiz/gm4zWTf1XS43mVgRMOBaytq22q8X4mpdCNT2X3fBUqO7BR?=
+ =?us-ascii?Q?SkQipbCxUSAFwVoVZyj3rLxE0gvyi0okoLewmkfT7j9LA4RwWG0ze1XoRWkf?=
+ =?us-ascii?Q?HlJdAYg8zZYoncMmBIYSuULAXRt4Ch6c/UNLlKCsU9Kl23kzTYVgcPdXq/Wp?=
+ =?us-ascii?Q?tgq877aRgnoWUUO4bI3g01bMaNjZhMzto2qfjAQSfn3ozLCgLfL1QoR5HtqP?=
+ =?us-ascii?Q?ZkmdEbZKOg4jClFUU8U9OFq/E5cTP+lA7lqDSlaa03JR7lPhkg/UTIenYD/6?=
+ =?us-ascii?Q?vZEdtl0NX/9p6OgK8IrfZUqnMG7WiDinYV7dJGUtAkksyuQgg5CjxmhwNnni?=
+ =?us-ascii?Q?ox4W7m0dei3rH9kKNbiooqTT3yBg8aMBRdxKiTcnhGxiAfBLv13W0IrIi3fA?=
+ =?us-ascii?Q?vqUOSTxjJolOrrrqBOJzr8RLPtKKnh/7WVSGq5CYDfd5tnqlzh1VbP0gCA2f?=
+ =?us-ascii?Q?6OPJDKNOI2VhSnGHyTiwG3zrEysctvQcou1Cb5uS3icIuhGbKF/jmenDJEQP?=
+ =?us-ascii?Q?TQtKW3DCxlvd5DuYQcIursm97tqudLEJavpljl5vZoEfWX1+S6XL7DLi6T16?=
+ =?us-ascii?Q?cSrYG5+pFbOjkxSh2vcNvyNQDg13WCHTEPiD8gjIPwTmHJlTP8UyT7Z0akdL?=
+ =?us-ascii?Q?fouNUZOf/cLhTVeGQLOXSIy5RTyDzTLVlg6LlzKI06xpa++XlKQluUIN6koa?=
+ =?us-ascii?Q?+rqCvsSzshAP7lPHkcm0m7UAUx+TWqeCuvJ7ZRoAsVdV6lLerp8quCNpib7D?=
+ =?us-ascii?Q?eN+LSjsMxLOoswnrPz7Va0kTDPT3HQJqTIaQYbfm+4O/uuS2Rat8YANluAOA?=
+ =?us-ascii?Q?kkV7zFIGSoIJ9CdXKOUcpVdBXDHbKwsVt9l3vQrecYNnIg8DUPmaTOwDK6L5?=
+ =?us-ascii?Q?5a67Bhp31pYBcNb9dYTAQlfpovcZpajTrQ8QNCe1FQ5kbgEFCSo2jZ40EaKO?=
+ =?us-ascii?Q?+Kq4euXaLZT2poaI/wpADHqJHG1gKxJnp7bmJL8sioeXz7B4X/0QydsyvrET?=
+ =?us-ascii?Q?Tw4t/uWbtmCq4CfTAI6UcY+kCw+g0wpOYTIqJxjKeet+75U9cK04LN/R7BWN?=
+ =?us-ascii?Q?CQBG1pqqRR8TkLID47II0d4LP8cBc2odlj8iJROrIunuFazNYxSnfPSeMbhL?=
+ =?us-ascii?Q?f1hZZPMgj0hUZR8p9FT9LjsvXxiY+9HdzIle0AocAqO8J4irdaRx7ZVTPbYj?=
+ =?us-ascii?Q?QuvHzQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4079eef6-5b0d-4557-2b95-08de1cb2b523
+X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7779.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Nov 2025 21:31:40.5363
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4J7r/vuK0sp6FipbA5hSdcPoJjAb8FgHM7hlzkOGR59HQf6fRgAAAMwmMFFmQdlfWW6zVwzJiqn8xWfyPNWuzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8367
 
-On Wed, Nov 05, 2025 at 12:24:41PM -0800, Deepak Gupta wrote:
->On Tue, Nov 04, 2025 at 05:34:11PM +1030, Joel Stanley wrote:
->>Hello Deepak,
->>
->>On Fri, 24 Oct 2025 at 03:31, Deepak Gupta via B4 Relay
->><devnull+debug.rivosinc.com@kernel.org> wrote:
->>>
->>>v22: fixing build error due to -march=zicfiss being picked in gcc-13 and above
->>>but not actually doing any codegen or recognizing instruction for zicfiss.
->>>Change in v22 makes dependence on `-fcf-protection=full` compiler flag to
->>>ensure that toolchain has support and then only CONFIG_RISCV_USER_CFI will be
->>>visible in menuconfig.
->>
->>Following our discussion at the riscv summit I spent some time with
->>this patch set with the goal of giving a test run on emulation. I only
->>got as far as qemu, as I couldn't get the selftests passing there.
->>
->>I had trouble running the podman container so I built a toolchain
->>using the riscv-gnu-toolchain branch (cfi-dev, d19f3009f6c2) you
->>pointed to.
->>
->>The opensbi branch was a bit old and wouldn't build with GCC 15, so I
->>tried to rebase and noticed the patches were already upstream. Have
->>you tested using v1.7 (or newer) there? Is there something I missed,
->>do we need more patches on upstream opensbi?
->>
->>I booted it in qemu 10.1.2 with the zicfi extensions both on and off.
->>
->>qemu-system-riscv64 -M virt,aia=aplic-imsic,aia-guests=5 \
->> -cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
->> -smp 8 -nographic -bios fw_dynamic.elf
->> -m 1024M -kernel arch/riscv/boot/Image \
->> -initrd selftests/selftests.cpio \
->> -append 'init=mini-init command="cfitests"'
->>
->>My results:
->>
->>no zicfi, no z*mop (crash, as expected):
->>-------------------------------------------------
->>
->>Running command: cfitests
->>system_opcode_insn: Invalid opcode for CSR read/write instruction[
->>0.462709] cfitests[85]: unhandled signal 4 code 0x1 at
->>0x0000000000011c44 in cfitests[1c44,10000+6d000]
->>[    0.463141] CPU: 4 UID: 0 PID: 85 Comm: cfitests Not tainted
->>6.18.0-rc3-tt-defconfig-jms-00090-g6e2297f1edbc #93 NONE
->>[    0.463338] Hardware name: riscv-virtio,qemu (DT)
->>[    0.463573] epc : 0000000000011c44 ra : 00000000000104e0 sp :
->>00007fffebd0ddb0
->>...
->>[    0.465177] status: 0000000200004020 badaddr: 00000000ce104073
->>cause: 0000000000000002
->>[    0.465410] Code: 0893 05d0 4501 0073 0000 b7f5 4501 b7f9 0017 0000
->>(4073) ce10
->>
->>no zicfi, z*mop (failed to start, as expected):
->>-----------------------------------------------------------
->>
->>Running command: cfitests
->>TAP version 13
->># Starting risc-v CFI tests
->>Bail out! Get landing pad status failed with -22
->>
->>zicfi, z*mop (failed to start, unexpected):
->>-------------------------------------------------------
->>Running command: cfitests
->>TAP version 13
->># Starting risc-v CFI tests
->>Bail out! Get landing pad status failed with -22
->>
->>I went digging to see why the zicfi enabled kernel failed. The
->>userspace binary was built with CFI:
->>
->>$ riscv64-unknown-linux-gnu-readelf -n selftests/cfitests
->>
->>Displaying notes found in: .note.gnu.property
->> Owner                Data size     Description
->> GNU                  0x00000010    NT_GNU_PROPERTY_TYPE_0
->>     Properties: RISC-V AND feature: CFI_LP_UNLABELED, CFI_SS
->>
->>I then tested your opensbi tree with some hacks to get it built with a
->>newer compiler. This produced different results, which was unexpected:
->>
->>Running command: cfitests
->>TAP version 13
->># Starting risc-v CFI tests
->>Bail out! Landing pad is not enabled, should be enabled via glibc
->># Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+On Tue, Nov 04, 2025 at 07:17:21AM +0100, A. Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+> 
+> It seems that most of the tests prepare the interfaces once before the test
+> run (setup_prepare()), rely on setup_wait() to wait for link and only then
+> run the test(s).
+> 
+> local_termination brings the physical interfaces down and up during test
+> run but never wait for them to come up. If the auto-negotiation takes
+> some seconds, first test packets are being lost, which leads to
+> false-negative test results.
 
-Ok so I think atleast I have narrowed down the issue. It seems like
-something is going on with how libc will initialize cfi in case of
-static compile.
-I enabled logging whenever prctl set/get are called and my rootfs
-binaries which are all dynamically linked are setting cfi prctls
-correctly. Except when I run statically compiled `cfitest`. It bails
-on "Shadow stack is not enabled" (unlike in your case where it bails
-saying landing pad is not enabled).
+Yes, sorry, dropping the link is an unfortunate, undesirable and
+unaccounted for side effect of simple_if_init and simple_if_fini,
+mainly used for moving the IP addresses from the physical to the various
+virtual upper interfaces.
 
-Shortlog
-"""
-Welcome to Buildroot
-buildroot login: root
-[   51.361564] login[129]: arch_set_shadow_stack_status set successfully, shadow stack base 7fffbb977000size 800000
-[   51.362708] login[129]: arch_set_indir_br_lp_status set successfully
-[   51.363805] login[129]: arch_get_indir_br_lp_status called
-[   51.364296] login[129]: arch_get_shadow_stack_status called
-[   51.448918] bash[129]: arch_set_shadow_stack_status set successfully, shadow stack base 7fff9b516000size 800000
-[   51.450030] bash[129]: arch_set_indir_br_lp_status set successfully
-[   51.450568] bash[129]: arch_get_indir_br_lp_status called
-[   51.451047] bash[129]: arch_get_shadow_stack_status called
-[   51.552710] id[130]: arch_set_shadow_stack_status set successfully, shadow stack base 7fff7fa2a000size 800000
-[   51.553798] id[130]: arch_set_indir_br_lp_status set successfully
-[   51.554306] id[130]: arch_get_indir_br_lp_status called
-[   51.554757] id[130]: arch_get_shadow_stack_status called
-# mount -t 9p -o trans=virtio,version=9p2000.L host0 /mnt
-[   65.484939] mount[131]: arch_set_shadow_stack_status set successfully, shadow stack base 7fffa71a0000size 800000
-[   65.487002] mount[131]: arch_set_indir_br_lp_status set successfully
-[   65.488482] mount[131]: arch_get_indir_br_lp_status called
-[   65.489346] mount[131]: arch_get_shadow_stack_status called
-# /mnt/cfitests
-[   74.235075] cfitests[132]: arch_set_indir_br_lp_status set successfully
-[   74.249763] cfitests[132]: arch_get_indir_br_lp_status called
-[   74.250823] cfitests[132]: arch_get_shadow_stack_status called
-TAP version 13
-# Starting risc-v tests
-[   74.374286] cfitests[132]: arch_get_indir_br_lp_status called
-[   74.375497] cfitests[132]: arch_get_shadow_stack_status called
-Bail out! Shadow stack is not enabled, should be enabled via glibc
-# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-#
-"""
+> 
+> Use setup_wait_dev() after corresponding simple_if_init() on physical
+> interfaces to make sure auto-negotiation has been completed and test
+> packets will not be lost because of the race against link establishment.
+> 
+> The wait has to be done in each individual test because the interfaces
+> have to be brough up first and only then we can wait for link (not
+> individually, because they are expected to be looped in pairs).
+> 
+> Fixes: 90b9566aa5cd3f ("selftests: forwarding: add a test for local_termination.sh")
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+> ---
+>  .../selftests/net/forwarding/local_termination.sh      | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/forwarding/local_termination.sh b/tools/testing/selftests/net/forwarding/local_termination.sh
+> index ecd34f364125c..369c8b2c1f4a2 100755
+> --- a/tools/testing/selftests/net/forwarding/local_termination.sh
+> +++ b/tools/testing/selftests/net/forwarding/local_termination.sh
+> @@ -430,6 +430,8 @@ standalone()
+>  	h1_create
+>  	h2_create
+>  	macvlan_create $h2
+> +	setup_wait_dev $h1
+> +	setup_wait_dev $h2
+>  
+>  	run_test $h1 $h2 $skip_ptp $no_unicast_flt "$h2"
+>  
+> @@ -448,6 +450,8 @@ test_bridge()
+>  	bridge_create $vlan_filtering
+>  	simple_if_init br0 $H2_IPV4/24 $H2_IPV6/64
+>  	macvlan_create br0
+> +	setup_wait_dev $h1
+> +	setup_wait_dev $h2
+>  
+>  	run_test $h1 br0 $skip_ptp $no_unicast_flt \
+>  		"vlan_filtering=$vlan_filtering bridge"
+> @@ -480,6 +484,8 @@ test_vlan()
+>  	h1_vlan_create
+>  	h2_vlan_create
+>  	macvlan_create $h2.100
+> +	setup_wait_dev $h1
+> +	setup_wait_dev $h2
+>  
+>  	run_test $h1.100 $h2.100 $skip_ptp $no_unicast_flt "VLAN upper"
+>  
+> @@ -505,6 +511,8 @@ vlan_over_bridged_port()
+>  	h2_vlan_create
+>  	bridge_create $vlan_filtering
+>  	macvlan_create $h2.100
+> +	setup_wait_dev $h1
+> +	setup_wait_dev $h2
+>  
+>  	run_test $h1.100 $h2.100 $skip_ptp $no_unicast_flt \
+>  		"VLAN over vlan_filtering=$vlan_filtering bridged port"
+> @@ -536,6 +544,8 @@ vlan_over_bridge()
+>  	simple_if_init br0
+>  	vlan_create br0 100 vbr0 $H2_IPV4/24 $H2_IPV6/64
+>  	macvlan_create br0.100
+> +	setup_wait_dev $h1
+> +	setup_wait_dev $h2
+>  
+>  	if [ $vlan_filtering = 1 ]; then
+>  		bridge vlan add dev $h2 vid 100 master
+> -- 
+> 2.51.1
+>
 
-Full log (with cfi prctls get/set) of boot at pastebin below
-https://pastebin.com/JbX2Yv5W
+Functionally I have nothing against this change.
 
-CCed: Jesse Huang who is leading glibc patches. Can help us figure out
-why statically compiled binaries are failing to set cfi prctls appropriately.
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Paul,
+Two ideas to minimize the delta in a more obviously correct way.
+They can perhaps be implemented together, independently of one another,
+or not at all:
 
-Given that it's not an issue in kernel changes, we should still be going ahead
-with it for 6.19
-
->>
->>The selftest binary and the little toy init that starts it are both
->>statically linked and built against the toolchain's glibc, so I would
->>expect this to work.
->>
->>$ riscv64-unknown-linux-gnu-readelf -n sifive-cfi-build/sysroot/usr/lib/libc.a
->>
->>File: sifive-cfi-build/sysroot/usr/lib/libc.a(init-first.o)
->>
->>Displaying notes found in: .note.gnu.property
->> Owner                Data size        Description
->> GNU                  0x00000010       NT_GNU_PROPERTY_TYPE_0
->>     Properties: RISC-V AND feature: CFI_LP_UNLABELED, CFI_SS
->>
->>The kernel seems to have detected that CFI is available and is built with it:
->>
->>$ grep CFI .config
->>CONFIG_RISCV_USER_CFI=y
->>CONFIG_ARCH_SUPPORTS_CFI=y
->>
->>I did notice the func-sig-dev gcc branch is a few commits ahead of
->>what the sifive riscv-gnu-toolchain points to.
->>
->>I had to context switch to some other tasks at this point. I wanted to
->>do some more digging to work out what was wrong, but I haven't found
->>time, so here are my notes in the hope that they are useful. I'll let
->>you know if I discover anything further.
->
->
->I have it working on my end with latest upstream opensbi (no hacks, same
->compiler)
->
->"""
->$ git log
->commit 38a6106b1099646f25657bba53cefb80886721a7 (HEAD -> master, origin/master, origin/HEAD)
->Author: Benoît Monin <benoit.monin@bootlin.com>
->Date:   Mon Oct 27 14:12:17 2025 +0100
->
->    lib: utils/ipi: mswi: add MIPS P8700 compatible
->....
->"""
->
->I am surprised that change of compiler on opensbi changed errorcode for userspace
->in your setup. That's quite bizarre.
->
->Output from cfitests (with toolchain that's on docker. I didn't compile from
->cfi-dev branch).
->
-># /mnt/cfitests
->TAP version 13
-># Starting risc-v tests
-># Landing pad and shadow stack are enabled for binary
-># cfi_ptrace_test, ptrace test succeeded
-># Executing RISC-V shadow stack self tests
->1..5
-># Exercising shadow stack fork test
-># Parent pid 133 and child pid 135
-># dummy calls for sspush and sspopchk in context of parent
-># Spewing out shadow stack ptr: 7fffbf4a9fb8
->  This is to ensure shadow stack is indeed enabled and working
-># Waiting on child to finish
-># dummy calls for sspush and sspopchk in context of child
-># Spewing out shadow stack ptr: 7fffbf4a9fb8
->  This is to ensure shadow stack is indeed enabled and working
->ok 1 shstk fork test
-># Exercising shadow stack map test
->ok 2 map shadow stack syscall
-># Exercising shadow stack gup tests
->ok 3 shadow stack gup tests
-># Exercising shadow stack signal test
->ok 4 shadow stack signal tests
-># Exercising shadow stack protection test (WPT)
->ok 5 memory protections of shadow stack memory
-># Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
->#
->
->Is there a place where I can grab your kselftest `cfitests` binary?
->
->Only difference I can see is that `cfitests` in my case is not statically
->compiled
->
->"""
->$ riscv64-unknown-linux-gnu-readelf -d /scratch/debug/sources/spectacles/cfitests | grep NEEDED
-> 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
->
->"""
->
->>
->>Cheers,
->>
->>Joel
->>
->>
->>>How to test this series
->>>=======================
->>>
->>>Toolchain
->>>---------
->>>$ git clone git@github.com:sifive/riscv-gnu-toolchain.git -b cfi-dev
->>>$ riscv-gnu-toolchain/configure --prefix=<path-to-where-to-build> --with-arch=rv64gc_zicfilp_zicfiss --enable-linux --disable-gdb  --with-extra-multilib-test="rv64gc_zicfilp_zicfiss-lp64d:-static"
->>>$ make -j$(nproc)
->>>
->>>Qemu
->>>----
->>>Get the lastest qemu
->>>$ cd qemu
->>>$ mkdir build
->>>$ cd build
->>>$ ../configure --target-list=riscv64-softmmu
->>>$ make -j$(nproc)
->>>
->>>Opensbi
->>>-------
->>>$ git clone git@github.com:deepak0414/opensbi.git -b v6_cfi_spec_split_opensbi
->>>$ make CROSS_COMPILE=<your riscv toolchain> -j$(nproc) PLATFORM=generic
->>>
->>>Linux
->>>-----
->>>Running defconfig is fine. CFI is enabled by default if the toolchain
->>>supports it.
->>>
->>>$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc) defconfig
->>>$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc)
->>>
->>>Running
->>>-------
->>>
->>>Modify your qemu command to have:
->>>-bios <path-to-cfi-opensbi>/build/platform/generic/firmware/fw_dynamic.bin
->>>-cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
+- setup_wait() could be used directly, as it waits for $NUM_NETIFS, aka
+  $h1 and $h2.
+- There is no case where run_test() does not need a prior setup_wait()
+  call, so it can just as well be placed as the first thing of that
+  function.
 
