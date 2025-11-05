@@ -1,152 +1,177 @@
-Return-Path: <linux-kselftest+bounces-44851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44852-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C8B4C3841F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 23:50:36 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D123C38434
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 23:52:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7023188C27C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 22:47:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 839EF34E058
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 22:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C31BB2D2384;
-	Wed,  5 Nov 2025 22:46:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306982D7DC6;
+	Wed,  5 Nov 2025 22:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eC6p5Eyl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8bBTb0S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E664324DCE2
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 22:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26E52D3728
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 22:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762382763; cv=none; b=Kr5KyL8aERuKjPO/ZsPPBtDrQerNDIjVaXwW/uUo/EKZ6elDwSRPqEc2O97pnkNu+MeALB37GdzuOtG/cUuXE9WU0klvyWAgYsBuyU1S7xNy4DnwhmP3DVjo8zWbLpuff4e/Kjf+dsKd33zmEXp1iaCNk2lBl8z0gN0uUB3GwFw=
+	t=1762383142; cv=none; b=pAOvm2sXPsQ11rTJIdcg2Mlz2Io2AMZHWNr6RP8zmN2+j5kakuGxHkd30jVL7xx1VbibnfDiF0GcdV4Mvj5mr7dhE+c5rVi19CmSZd+bzKsQq/HZmBsT1EFjfNiEf8Ld+XPi21TdN6JjkYroowjWI4ZPT6iCzgQVwZWO+0t39bI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762382763; c=relaxed/simple;
-	bh=kkDNyCXlipn1onJC4ich9C7JgWc17Nuo8XcxAWXvuiM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IhlFS2SXIUj5EZ6MG9AAGxqN0NJs9lq6CV4d1psEX+9h6TRcOuTjOgFp265QuOUEtGbGdwALj1mjRnXnqUK4C+Ea+ZDXrRP5VOYv201igjbcdRTJrm9A/9FP7zj7QPdsuLh0GvY/TCFFZifCYsPsjQMKaFX6+fGQ8bdXRC0U9B8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eC6p5Eyl; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1762383142; c=relaxed/simple;
+	bh=l5JUzmodHo5k0pjByQaXoLIRkMflBv6P4mXMmvNQqLg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BWxHSCMXsUmlE3z2Ems7PbUDC8i30FKk7mjDWmvgVQ1arQA7RUWsdC2m4wxycxddQoRwbhVPGryQHv06hlWFt+8Kh9asJ6VzMvi/VCcJ8c88SyPERvHTrFLj5gPvdbeqtVaFmnt0/ckKlIfj6+Vbw7d4w52VfsnFJQujzP4+xVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N8bBTb0S; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47755de027eso2512635e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 14:46:01 -0800 (PST)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-29555415c5fso4801585ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 14:52:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762382760; x=1762987560; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gGoN6Q1FGu70kxgsHRXjo5ei8Lx6D1HeRQOhJHTTWhA=;
-        b=eC6p5EylkYy/ZW4tzb0rWhTjt6g2gKWz8xUt6PQklcp5gBQO3jXukHiXs4wIJ5636R
-         8swaxwTpj9Puxe0HijMP/L1p/k2w1gqVu/CLAVCuh6wJDJuhIns9meg6t8MwpzNqx6ol
-         h6+bwAy+WXgfNVncowHZtUhiU9mVBBTP/uhWG/togNphF5Kv6ZYUwahAPDLIqLio+dji
-         4DuyE9Fb6rWW+t8WJQ9Vir+jmE6XWxL/1yIByhMLE4VzLamnQOG3Vg4AxtIRKxo96CO1
-         /KNutUp/2QLGZ7FLm+Ff9i+EYkiYl1ZgsZG1Wcr0+JPae7kmidRpPjYJ1dUA3wAnH3YC
-         jbBw==
+        d=gmail.com; s=20230601; t=1762383140; x=1762987940; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1FJexW1JYx6DxuL3q/fhfUe6qlvpO4i0LqL1JMZwwtI=;
+        b=N8bBTb0Szaaveb3zDVpKbBvHNVCGRJ0xJ2t5we6HPGE5IHv0PkzZrfLNhHT8OxJ3e7
+         qB6DYyKeK1rfqTMjtA7I8sYMoBK/o0NgTshTJ85wLgz+Gw9T2Cy9qX5OoRuiJBl45B7p
+         PiEAqVLDqKw8GkaUDX1mGJl1Uo0yQoHrucbZI/jYViEUnCPCKYL7xzs89s1D6hDm+GUA
+         YlDcYzGJ3E0PV2cVqKSXu4STvQ/hrefVaO6meEoovcAcF/xCa4v7/Zp5bUfTVDbryDDH
+         wXsj1nXU4hM4QTm+LXsudA6SDqj/+nNUmV3V0S5gWc/xRLoGhSZM7nfVlAoFMTv7OdZi
+         YDpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762382760; x=1762987560;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gGoN6Q1FGu70kxgsHRXjo5ei8Lx6D1HeRQOhJHTTWhA=;
-        b=HLKGCkBd+B5L2h+0fI0HPK3fTl1mfN4/JyEvFPYDtotUvHUiqETRLYJQfyKPX8W2qi
-         Mq3OTTOU1jexL2EbnU4tkH52Vml58mdj+Ef7ononJxp46moU0qi28v2LhbBk0aF1PuHi
-         nBxH+ZbWjGd9UY+RIbvLBWMP4+cPs7UN5SEl86WO7NLfGAAeHM4WhNELRvaze0gxhUVe
-         etFQBjq5lvtxw0EKe/7g8cDgn1RFxFa4Aqz3A3Ajujt5UDiTVNwTp098FgU0u9wu/cnl
-         NDEIkcujCRe616LAU7R+gB01wOS6fEpipb93RE0utkq78xdk48AbRYKqYcgb/FHzgkmh
-         nWFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVivaz+7WBxW0T2/DmVORRy1nJNey5gq2RZHIjwhlFd/1K+yLfnaBNQ0UpjQTBvM4uKveiPKDGeF3kT/FaKF6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/boCVsuYalANYqZaP+9S/xXt8oG01jNV+5q5bePaPDpQ2giJi
-	6AtShXcrz9Ri7GCRZj731P2WHSwyClO3lIrJK2805G2UxN1mWugmtlU+/2UOJUDPkbyNrNlGpoY
-	nhIQUFfD8sGOjASGJs9thqzWjQqrmQak=
-X-Gm-Gg: ASbGncs+vZntE9a8xEhzWR6mHv8D5geqHn+FkW6KAB8csZ6VwwH3OGSbAtRH6vMnHqK
-	IKGdF5Wj/RRgRlVbVkkUtJqfQtAZTpFYCOTMKoRC21ZnBr1GHN+AxgmtGBXOx5m6ot3A+EYqzop
-	qzoTusk7+U23Cl0QbzJqa59SFmm4XjfY9Txm1e2w+M02U4f29pV3VFGpK0G8vhH4iV66uTJGErV
-	oKE+LTkWtuQvTADo4xKqWXegmaVvnbQJuvNvjj8nAEd7VjNJGnsAEJRjT585xaxXZPuT7haB9Ue
-	O+GqhUxTW1N/VkiXbQ==
-X-Google-Smtp-Source: AGHT+IGjDwvUOY1Pq7XzI4RZbgF4ynfBtF8HaZiltB+4JMI7wP597W0WnGnQWn4EsO9dJ3ITS0umhzfO5f/LQShhu9Y=
-X-Received: by 2002:a05:6000:25c2:b0:429:cc1c:c1f with SMTP id
- ffacd0b85a97d-429e330bb48mr4108376f8f.48.1762382760149; Wed, 05 Nov 2025
- 14:46:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762383140; x=1762987940;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1FJexW1JYx6DxuL3q/fhfUe6qlvpO4i0LqL1JMZwwtI=;
+        b=FwDLYAraJYlbBT2lgYTCFdV4+AbUC6UfICMx2kSIagp93JBVOhcgm4NPuNokOC6MFo
+         X0jVRLMkBaJUlUiQVJyHMYPCIt8e5UouuZKb1XAH5Io23LLUhA79sg7x4991xntKuZUV
+         QizBxVxPvGJCto1TZgVpRZzig2YJfBVHK6eF3twPQBKBODpvKZM/M8FvoIzUFzEzXwDF
+         9ikQKVfEXpA26tAeCfoZzibefjt4WOsRpvZ/TM9AGvhlxAg4WlhBtLTAhevH72Jv+FpM
+         fUFaD6YHejtX0OScKj1630aOnY9uDMFaatfTR43b0aYeaNy0aquxZOAzTRJwSASccUqC
+         QwEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX1ofTmhuPxl7ypDeO5tcksXqSkAEA1mjsw4ha5kw35gKv3RekyA5sCubFVCI/lVTf1dOksTdmUtX4j/yonxWI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBlmKDQ1Z29GzXaE0+UjRcUazTotLIMEaXAUDluECHzPJVjuiF
+	BjjHNxr7akPvOTWmbaOPbW0SY4LpmUV0GDK/II7EKMF5jfg9EsXhdM1/
+X-Gm-Gg: ASbGncuvGe9SOpVrORQLEoW/d7zdb9xkUXFlKdg2VJkgYQ4nqg0vOUe2Yw+4wR6qbDQ
+	aaSSIz7HCwe+cJeOPWUO+uIc/gZ++6mRS8WYvM4vxMdTK5MMemoUENnAt1pNS5uHItul507qUc+
+	7FVZs29553JiK4yHYY8C1yGIKBnLt1Xqs/THR7p2V9850ZuNscbNYlVZWMId469sYYOJaltvEwd
+	yRpEgvi8JQbPVI0NVCgaNoUTVfux003/WibexgR2MpjokMh1YCy5D2vemJGrOicf/QMc1XKizIb
+	tjGViyJxu5tT6k4u2ak9c3YQCbLwRKPa+AKvroMrCykcq8si4RI3h/vHsiZLqjfoy8bLCtr2Sbw
+	2dn0EpJkE9Og9i8yj4YoDfXUlwIR3I8Sev7vdPafkIaunALiypSUbsVViEcGgrJ3fIK543Xoo91
+	YCCGmjMZZ28GO0APtx9XFoPDpsDRPMJEi/G8o=
+X-Google-Smtp-Source: AGHT+IFFcgx9KXj+jLf79Pju5kq5jwAVtbDiZ7dkTm0x2E6aEFwhvXO7JjhTU0TeYTFMldVIg3jsGQ==
+X-Received: by 2002:a17:902:cecd:b0:269:91b2:e9d6 with SMTP id d9443c01a7336-2962adb61b9mr78252305ad.46.1762383139845;
+        Wed, 05 Nov 2025 14:52:19 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:cdf2:29c1:f331:3e1? ([2620:10d:c090:500::6:8aee])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ba902c9d0d4sm346296a12.36.2025.11.05.14.52.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 14:52:19 -0800 (PST)
+Message-ID: <b3f13550169288578796548f12619e5e972c0636.camel@gmail.com>
+Subject: Re: [bpf-next] selftests/bpf: refactor snprintf_btf test to use
+ bpf_strncmp
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Hoyeon Lee
+	 <hoyeon.lee@suse.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  bpf <bpf@vger.kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>, Martin KaFai Lau	 <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh	 <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo	 <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,  "open list:KERNEL
+ SELFTEST FRAMEWORK"	 <linux-kselftest@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>
+Date: Wed, 05 Nov 2025 14:52:18 -0800
+In-Reply-To: <CAADnVQK7Qa5v=fkQtnx_A2OiXDDrWZAYY6qGi8ruVn_dOXmrUw@mail.gmail.com>
+References: <20251105201415.227144-1-hoyeon.lee@suse.com>
+	 <CAADnVQK7Qa5v=fkQtnx_A2OiXDDrWZAYY6qGi8ruVn_dOXmrUw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251105201415.227144-1-hoyeon.lee@suse.com>
-In-Reply-To: <20251105201415.227144-1-hoyeon.lee@suse.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 5 Nov 2025 14:45:48 -0800
-X-Gm-Features: AWmQ_bkCpm1oQayiN7axXx7bpB29hzAn2IfljyRcTIPVqCsMzM4KtipvyswazdA
-Message-ID: <CAADnVQK7Qa5v=fkQtnx_A2OiXDDrWZAYY6qGi8ruVn_dOXmrUw@mail.gmail.com>
-Subject: Re: [bpf-next] selftests/bpf: refactor snprintf_btf test to use bpf_strncmp
-To: Hoyeon Lee <hoyeon.lee@suse.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 5, 2025 at 12:14=E2=80=AFPM Hoyeon Lee <hoyeon.lee@suse.com> wr=
-ote:
->
-> The netif_receive_skb BPF program used in snprintf_btf test still uses
-> a custom __strncmp. This is unnecessary as the bpf_strncmp helper is
-> available and provides the same functionality.
->
-> This commit refactors the test to use the bpf_strncmp helper, removing
-> the redundant custom implementation.
->
-> Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
-> ---
->  .../selftests/bpf/progs/netif_receive_skb.c       | 15 +--------------
->  1 file changed, 1 insertion(+), 14 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/tool=
-s/testing/selftests/bpf/progs/netif_receive_skb.c
-> index 9e067dcbf607..186b8c82b9e6 100644
-> --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> @@ -31,19 +31,6 @@ struct {
->         __type(value, char[STRSIZE]);
->  } strdata SEC(".maps");
->
-> -static int __strncmp(const void *m1, const void *m2, size_t len)
-> -{
-> -       const unsigned char *s1 =3D m1;
-> -       const unsigned char *s2 =3D m2;
-> -       int i, delta =3D 0;
-> -
-> -       for (i =3D 0; i < len; i++) {
-> -               delta =3D s1[i] - s2[i];
-> -               if (delta || s1[i] =3D=3D 0 || s2[i] =3D=3D 0)
-> -                       break;
-> -       }
-> -       return delta;
-> -}
->
->  #if __has_builtin(__builtin_btf_type_id)
->  #define        TEST_BTF(_str, _type, _flags, _expected, ...)            =
-       \
-> @@ -69,7 +56,7 @@ static int __strncmp(const void *m1, const void *m2, si=
-ze_t len)
->                                        &_ptr, sizeof(_ptr), _hflags);   \
->                 if (ret)                                                \
->                         break;                                          \
-> -               _cmp =3D __strncmp(_str, _expectedval, EXPECTED_STRSIZE);=
+On Wed, 2025-11-05 at 14:45 -0800, Alexei Starovoitov wrote:
+> On Wed, Nov 5, 2025 at 12:14=E2=80=AFPM Hoyeon Lee <hoyeon.lee@suse.com> =
+wrote:
+> >=20
+> > The netif_receive_skb BPF program used in snprintf_btf test still uses
+> > a custom __strncmp. This is unnecessary as the bpf_strncmp helper is
+> > available and provides the same functionality.
+> >=20
+> > This commit refactors the test to use the bpf_strncmp helper, removing
+> > the redundant custom implementation.
+> >=20
+> > Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+> > ---
+> >  .../selftests/bpf/progs/netif_receive_skb.c       | 15 +--------------
+> >  1 file changed, 1 insertion(+), 14 deletions(-)
+> >=20
+> > diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.c b/to=
+ols/testing/selftests/bpf/progs/netif_receive_skb.c
+> > index 9e067dcbf607..186b8c82b9e6 100644
+> > --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+> > +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
+> > @@ -31,19 +31,6 @@ struct {
+> >         __type(value, char[STRSIZE]);
+> >  } strdata SEC(".maps");
+> >=20
+> > -static int __strncmp(const void *m1, const void *m2, size_t len)
+> > -{
+> > -       const unsigned char *s1 =3D m1;
+> > -       const unsigned char *s2 =3D m2;
+> > -       int i, delta =3D 0;
+> > -
+> > -       for (i =3D 0; i < len; i++) {
+> > -               delta =3D s1[i] - s2[i];
+> > -               if (delta || s1[i] =3D=3D 0 || s2[i] =3D=3D 0)
+> > -                       break;
+> > -       }
+> > -       return delta;
+> > -}
+> >=20
+> >  #if __has_builtin(__builtin_btf_type_id)
+> >  #define        TEST_BTF(_str, _type, _flags, _expected, ...)          =
+         \
+> > @@ -69,7 +56,7 @@ static int __strncmp(const void *m1, const void *m2, =
+size_t len)
+> >                                        &_ptr, sizeof(_ptr), _hflags);  =
  \
-> +               _cmp =3D bpf_strncmp(_str, EXPECTED_STRSIZE, _expectedval=
+> >                 if (ret)                                               =
+ \
+> >                         break;                                         =
+ \
+> > -               _cmp =3D __strncmp(_str, _expectedval, EXPECTED_STRSIZE=
 ); \
+> > +               _cmp =3D bpf_strncmp(_str, EXPECTED_STRSIZE, _expectedv=
+al); \
+>=20
+> Though it's equivalent, the point of the test is to be heavy
+> for the verifier with open coded __strncmp().
+>=20
+> pw-bot: cr
 
-Though it's equivalent, the point of the test is to be heavy
-for the verifier with open coded __strncmp().
+I double checked that before acking, the test was added as a part of [1].
+So it seems to be focused on bpf_snprintf_btf(), not on scalability.
+And it's not that heavy in terms of instructions budget:
 
-pw-bot: cr
+File                     Program                  Verdict  Insns  States
+-----------------------  -----------------------  -------  -----  ------
+netif_receive_skb.bpf.o  trace_netif_receive_skb  success  18152     629
+
+
+[1] https://lore.kernel.org/bpf/1601292670-1616-5-git-send-email-alan.magui=
+re@oracle.com/
 
