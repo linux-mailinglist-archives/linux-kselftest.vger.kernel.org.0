@@ -1,208 +1,297 @@
-Return-Path: <linux-kselftest+bounces-44825-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44826-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AD3DC36BED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 17:39:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D2E6C36D74
+	for <lists+linux-kselftest@lfdr.de>; Wed, 05 Nov 2025 17:57:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 40D92501599
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 16:29:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CEED64525A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 16:36:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649262248BE;
-	Wed,  5 Nov 2025 16:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9DF32E722;
+	Wed,  5 Nov 2025 16:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uXy3o1HA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXhlyXNl"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3156C310777;
-	Wed,  5 Nov 2025 16:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F247420B800;
+	Wed,  5 Nov 2025 16:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762360150; cv=none; b=fO03+xFI8Z1UjJsVySogj3L4hIUZ4rNA0w8UVDHEkRLeiaIEBM9HvPBQWOM4cvVb9S91wQplrIVxLllf+oq45m5ByfOAQ7Z909ehJYmni9Sn7R8Wg3yOTTOd/K0kIEo8QDxZ7l3nzUv7l312hoAd1sAdEdzyBuBPWEJRoklg8zs=
+	t=1762360571; cv=none; b=tyBvdNgeR7LFM7GN6vWKNr6jzFMoL5ldL7/N2OwVGn33/wVWVqJ/G0xxfmi7cR0j+gMMQfzZKSnogkBZUNKSEKae0FblC/a5vR7YgVoZ4m+s37mNKA4lB2espRYYD0R0UTWaQH7JNwey2msNWGJkhooBbhobK0IICZ/HpcJcu3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762360150; c=relaxed/simple;
-	bh=E2LyBpj7sEAtFQd7gW1xNRb7UeJ1t4NfeX3b6rOxki0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M8B/ORUAsuTrZBmdcxqGU2dZAYxvdWR8zzEZwCXjcG23lIGtdY6nuXe/BiUwatpOfMIz09wwlj2bUA+Rufzyg1aLxE+PfZg5DnDsXtJcbKFpL+z/+LU6TwbwLO+fbYDUdtaxTFrLNB9KdJfPyJOge+/24ieQAu7nkmkcChzwQ2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uXy3o1HA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB4AC4CEF5;
-	Wed,  5 Nov 2025 16:29:01 +0000 (UTC)
+	s=arc-20240116; t=1762360571; c=relaxed/simple;
+	bh=9vbIsqFg63pp3OvaNkYbiCmQzjxoPHaONUKKneVmdNM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JqE7dbFT64esU6EetlLT1KoHKlitSFktUyBaFWJt2wr6Y414PKhknCeQ1FNSPeTdXvb3qCwUcELyO4XmeBW782vCv8scnHznd1pBCk/TNdZQpiiPRR9HKX5BRSRPHNitLENMzTXzFrYVtDJR2PN9FiMbQa7q2gySDhkptT1G7no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GXhlyXNl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18354C116B1;
+	Wed,  5 Nov 2025 16:36:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762360147;
-	bh=E2LyBpj7sEAtFQd7gW1xNRb7UeJ1t4NfeX3b6rOxki0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=uXy3o1HAc6d9NI/8sxdtsN8Od/IF2mKpBo2M1OC8+7a3rPFFJIZE/1xZhMQdHrQgp
-	 B5ceNVcaf6DRseXBTphigutFYu/etkAPJ7PfbuTl8mE2KfMCBcFGj2Wz4qhUc5bryP
-	 NT43pikoDUCd7b8GznCic56vIWh/SXcB2c6HrjnwL+WV18Z8WsrLyE3BT2geKicNmH
-	 p3HjuaYnQzdgCDq7btUjfzN9ArS3DsgRn67LpXTmd4vyCZNw5kUHmVg6YDWHz/0UB9
-	 zAk3ljAqawT4zm3+WCQ+u8HBOx5H7bnBFEsQ7ZnTLC2afkeaZnZyr4DTRzxDE9mDEW
-	 ubpy0w4WfFllg==
-Message-ID: <cc5017b8-5802-4cf5-93b1-18b1e2bd8ae5@kernel.org>
-Date: Wed, 5 Nov 2025 17:28:57 +0100
+	s=k20201202; t=1762360570;
+	bh=9vbIsqFg63pp3OvaNkYbiCmQzjxoPHaONUKKneVmdNM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GXhlyXNl2qHtFph7OY3zRFXAz5ENfh99xMMIi1PtgRUHneUV5LPc0MuOGj4EK6VgL
+	 5WBoOjuCf8YqmTQQy7N6taZazKBN9OVc4n0N6W+/u5tPo3zeBNB4z789rD2FLFrzpt
+	 fujFTgz9qbkpa1+3EP2zfmWz3pvfqe8pIaxfGlrilf7cpfgO6svjsZ3bFcUr/BhZVQ
+	 DzB1PYm6cAA5yvG9dwGc4UicHEcB2UTG5Aj7Pl/wnN36RT6XOvTvVGb+tBRS9E45Y8
+	 ONctu0zdpm5Ce6Z/Vz1YwYyb7YXSjUnp4728aJg5WHpZdi0ViGxbniqBNxI2SFih1y
+	 S0AVwANjF63xA==
+Date: Wed, 5 Nov 2025 17:36:07 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	Phil Sutter <phil@nwl.cc>, Florian Westphal <fw@strlen.de>,
+	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH nf-next v8 2/3] net: netfilter: Add IPIP flowtable tx sw
+ acceleration
+Message-ID: <aQt89wl7jyJcxbMJ@lore-desk>
+References: <20251023-nf-flowtable-ipip-v8-0-5d5d8595c730@kernel.org>
+ <20251023-nf-flowtable-ipip-v8-2-5d5d8595c730@kernel.org>
+ <aQqDnjv8KLtQJaOW@calendula>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v4 3/3] selftests/bpf: Add mptcp test with sockmap
-Content-Language: en-GB, fr-BE
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev
-Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Florian Westphal <fw@strlen.de>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20251105113625.148900-1-jiayuan.chen@linux.dev>
- <20251105113625.148900-4-jiayuan.chen@linux.dev>
- <665825df-b995-45ee-9e0c-2b40cc4897ee@kernel.org>
- <b5f67a681be12833efa12e68fc3139954b409446@linux.dev>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
- YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
- c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
- WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
- CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
- nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
- TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
- nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
- VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
- 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
- YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
- AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
- EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
- /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
- MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
- cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
- iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
- jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
- 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
- VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
- BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
- ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
- 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
- 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
- 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
- mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
- Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
- Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
- Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
- x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
- V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
- Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
- HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
- 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
- Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
- voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
- KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
- UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
- vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
- mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
- JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <b5f67a681be12833efa12e68fc3139954b409446@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="XyXETZSSq+haRcmW"
+Content-Disposition: inline
+In-Reply-To: <aQqDnjv8KLtQJaOW@calendula>
 
-On 05/11/2025 17:12, Jiayuan Chen wrote:
-> November 5, 2025 at 22:40, "Matthieu Baerts" <matttbe@kernel.org mailto:matttbe@kernel.org?to=%22Matthieu%20Baerts%22%20%3Cmatttbe%40kernel.org%3E > wrote:
-> 
-> 
->>
->> Hi Jiayuan,
->>
->> Thank you for this new test!
->>
->> I'm not very familiar with the BPF selftests: it would be nice if
->> someone else can have a quick look.
-> 
-> Thanks for the review. I've seen the feedback on the other patches(1/3, 2/3) and will fix them up.
 
-Thanks!
+--XyXETZSSq+haRcmW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> On 05/11/2025 12:36, Jiayuan Chen wrote:
->>
->>>
->>> Add test cases to verify that when MPTCP falls back to plain TCP sockets,
->>>  they can properly work with sockmap.
->>>  
->>>  Additionally, add test cases to ensure that sockmap correctly rejects
->>>  MPTCP sockets as expected.
->>>  
->>>  Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->>>  ---
->>>  .../testing/selftests/bpf/prog_tests/mptcp.c | 150 ++++++++++++++++++
->>>  .../selftests/bpf/progs/mptcp_sockmap.c | 43 +++++
->>>  2 files changed, 193 insertions(+)
->>>  create mode 100644 tools/testing/selftests/bpf/progs/mptcp_sockmap.c
->>>  
->>>  diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
->>>  index f8eb7f9d4fd2..56c556f603cc 100644
->>>  --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
->>>  +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
->>>  @@ -6,11 +6,14 @@
->>>  #include <netinet/in.h>
->>>  #include <test_progs.h>
->>>  #include <unistd.h>
->>>  +#include <error.h>
->>>
->> Do you use this new include?
-> 
-> "EOPNOTSUPP" I used was defined in error.h.
+> On Thu, Oct 23, 2025 at 10:50:16AM +0200, Lorenzo Bianconi wrote:
+> [...]
+> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> > index 0355461960ce3c0db49e00a6f77f48b031a635dc..eb8058fd7139a2b54570081=
+46f979590f9f03c1d 100644
+> > --- a/include/linux/netdevice.h
+> > +++ b/include/linux/netdevice.h
+> > @@ -897,6 +897,9 @@ struct net_device_path {
+> >  			};
+> > =20
+> >  			u8	l3_proto;
+> > +			u8	tos;
+> > +			u8	ttl;
+> > +			__be16	df;
+> >  		} tun;
+> >  		struct {
+> >  			enum {
+> > diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfil=
+ter/nf_flow_table.h
+> > index 6d00a8aa52584ad96d200683297c1b02bf1f6d4f..fe792f5a8f0528de021c273=
+82b235688532614e4 100644
+> > --- a/include/net/netfilter/nf_flow_table.h
+> > +++ b/include/net/netfilter/nf_flow_table.h
+> > @@ -119,6 +119,9 @@ struct flow_offload_tunnel {
+> >  	};
+> > =20
+> >  	u8	l3_proto;
+> > +	u8	tos;
+> > +	u8	ttl;
+> > +	__be16	df;
+>=20
+> This is now included in the hash that is used for the lookup, is it
+> intentional to include these fields here? For rx, we cannot know ttl
+> of the received packet?
 
-Ah OK. I usually only include 'error.h' to use 'error()'.
-Is it not 'errno.h' (or 'linux/errno.h') you want instead?
+it is my mistake, I will fix that in v9. Do we really need to add tos, ttl =
+and
+df in tuple for tx and rx acceleration? If so we can move the ttl field aft=
+er
+the __hash placeholder.
 
-I'm just surprised it is not already included but another one above. But
-OK if it is not.
+>=20
+> Maybe this needs to be moved after the placeholder:
+>=20
+>         struct { }                      __hash;
+>=20
+> >  };
+> > =20
+> >  struct flow_offload_tuple {
+> [...]
+> > diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_t=
+able_ip.c
+> > index 76081d5d2f71c10e0c65e906b3fb2769e3ab1466..a66ffa0c7fbe780a9f9a545=
+e42d44dfe408e7cb2 100644
+> > --- a/net/netfilter/nf_flow_table_ip.c
+> > +++ b/net/netfilter/nf_flow_table_ip.c
+> [...]
+> > @@ -533,6 +589,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff =
+*skb,
+> >  	struct flow_offload *flow;
+> >  	struct neighbour *neigh;
+> >  	struct rtable *rt;
+> > +	__be32 dest;
+> >  	int ret;
+> > =20
+> >  	tuplehash =3D nf_flow_offload_lookup(&ctx, flow_table, skb);
+> > @@ -555,8 +612,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff =
+*skb,
+> > =20
+> >  	dir =3D tuplehash->tuple.dir;
+> >  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
+> > +	reply_tuple =3D &flow->tuplehash[!dir].tuple;
+>=20
+> Nit: I'd suggest 'other_tuple' instead 'reply_tuple' given this is not
+> strictly the reply tuple, just the tuple from the other direction.
 
-(...)
+ack, I will fix it in v9.
 
->>> + return;
->>>  +
->>>  + skel->bss->trace_port = ntohs(get_socket_local_port(listen_fd));
->>>  + skel->bss->sk_index = 0;
->>>  + /* create client with MPTCP enabled */
->>>  + client_fd1 = connect_to_fd(listen_fd, 0);
->>>  + if (!ASSERT_OK_FD(client_fd1, "connect_to_fd client_fd1"))
->>>  + goto end;
->>>  +
->>>  + /* bpf_sock_map_update() called from sockops should reject MPTCP sk */
->>>  + if (!ASSERT_EQ(skel->bss->helper_ret, -EOPNOTSUPP, "should reject"))
->>>  + goto end;
->>>
->> So here, the client is connected, but sockmap doesn't operate on it,
->> right? So most likely, the connection is stalled until the userspace
->> realises that and takes an action?
->>
-> 
-> It depends. Sockmap usually runs as a bypass. The user app (like Nginx)
-> has its own native forwarding logic, and sockmap just kicks in to accelerate
-> it. So in known cases, turning off sockmap falls back to the native logic.
-> But if there's no native logic, the connection just stalls.
+>=20
+> > -	if (nf_flow_encap_push(skb, &flow->tuplehash[!dir].tuple) < 0)
+> > +	if (nf_flow_encap_push(state->net, skb, reply_tuple))
+> >  		return NF_DROP;
+> > =20
+> >  	switch (tuplehash->tuple.xmit_type) {
+> > @@ -567,7 +625,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff =
+*skb,
+> >  			flow_offload_teardown(flow);
+> >  			return NF_DROP;
+> >  		}
+> > -		neigh =3D ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, flow->tuplehash[!=
+dir].tuple.src_v4.s_addr));
+> > +		dest =3D reply_tuple->tun_num ? reply_tuple->tun.src_v4.s_addr
+> > +					    : reply_tuple->src_v4.s_addr;
+> > +		neigh =3D ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, dest));
+> >  		if (IS_ERR(neigh)) {
+> >  			flow_offload_teardown(flow);
+> >  			return NF_DROP;
+> > diff --git a/net/netfilter/nf_flow_table_path.c b/net/netfilter/nf_flow=
+_table_path.c
+> > index bd5e9bf1ca393ab793976ba98a027b60f84882ba..cd0be2efe97596d0947621a=
+5ea604373d5b61da8 100644
+> > --- a/net/netfilter/nf_flow_table_path.c
+> > +++ b/net/netfilter/nf_flow_table_path.c
+> > @@ -190,7 +190,43 @@ static bool nft_flowtable_find_dev(const struct ne=
+t_device *dev,
+> >  	return found;
+> >  }
+> > =20
+> > -static void nft_dev_forward_path(struct nf_flow_route *route,
+> > +static int nft_flow_tunnel_update_route(const struct nft_pktinfo *pkt,
+> > +					struct nf_flow_route *route,
+> > +					enum ip_conntrack_dir dir)
+> > +{
+> > +	struct dst_entry *tun_dst =3D NULL;
+> > +	struct flowi fl =3D {};
+> > +
+> > +	switch (nft_pf(pkt)) {
+> > +	case NFPROTO_IPV4:
+> > +		fl.u.ip4.daddr =3D route->tuple[!dir].in.tun.src_v4.s_addr;
+> > +		fl.u.ip4.saddr =3D route->tuple[!dir].in.tun.dst_v4.s_addr;
+> > +		fl.u.ip4.flowi4_iif =3D nft_in(pkt)->ifindex;
+> > +		fl.u.ip4.flowi4_dscp =3D ip4h_dscp(ip_hdr(pkt->skb));
+> > +		fl.u.ip4.flowi4_mark =3D pkt->skb->mark;
+> > +		fl.u.ip4.flowi4_flags =3D FLOWI_FLAG_ANYSRC;
+> > +		break;
+> > +	case NFPROTO_IPV6:
+> > +		fl.u.ip6.daddr =3D route->tuple[!dir].in.tun.src_v6;
+> > +		fl.u.ip6.saddr =3D route->tuple[!dir].in.tun.dst_v6;
+> > +		fl.u.ip6.flowi6_iif =3D nft_in(pkt)->ifindex;
+> > +		fl.u.ip6.flowlabel =3D ip6_flowinfo(ipv6_hdr(pkt->skb));
+> > +		fl.u.ip6.flowi6_mark =3D pkt->skb->mark;
+> > +		fl.u.ip6.flowi6_flags =3D FLOWI_FLAG_ANYSRC;
+> > +		break;
+> > +	}
+> > +
+> > +	nf_route(nft_net(pkt), &tun_dst, &fl, false, nft_pf(pkt));
+> > +	if (!tun_dst)
+> > +		return -ENOENT;
+> > +
+> > +	nft_default_forward_path(route, tun_dst, dir);
+>=20
+> This overrides the previous dst that is set on here, is this leaking
+> such dst?
 
-Good to know, thanks!
+ack, right. I will fix it in v9.
 
-So MPTCP request might still be handled by the "native logic" if any?
+>=20
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static void nft_dev_forward_path(const struct nft_pktinfo *pkt,
+> > +				 struct nf_flow_route *route,
+> >  				 const struct nf_conn *ct,
+> >  				 enum ip_conntrack_dir dir,
+> >  				 struct nft_flowtable *ft)
+> > @@ -218,6 +254,12 @@ static void nft_dev_forward_path(struct nf_flow_ro=
+ute *route,
+> >  		route->tuple[!dir].in.tun.src_v6 =3D info.tun.dst_v6;
+> >  		route->tuple[!dir].in.tun.dst_v6 =3D info.tun.src_v6;
+> >  		route->tuple[!dir].in.tun.l3_proto =3D info.tun.l3_proto;
+> > +		route->tuple[!dir].in.tun.tos =3D info.tun.tos;
+> > +		route->tuple[!dir].in.tun.ttl =3D info.tun.ttl;
+> > +		route->tuple[!dir].in.tun.df =3D info.tun.df;
+> > +
+> > +		if (nft_flow_tunnel_update_route(pkt, route, dir))
+> > +			return;
+>=20
+> If tunnel route is found...
+>=20
+> >  	}
+> >
+> >  	route->tuple[!dir].in.num_encaps =3D info.num_encaps;
+>=20
+> ... num_encaps is never set?
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+ack, I will fix it in v9.
 
+>=20
+> Would you also extend the selftest to combine IPIP with vlan? Thanks.
+
+sure, I will add it in v9.
+
+Regards,
+Lorenzo
+
+>=20
+> > @@ -274,9 +316,9 @@ int nft_flow_route(const struct nft_pktinfo *pkt, c=
+onst struct nf_conn *ct,
+> >  	nft_default_forward_path(route, other_dst, !dir);
+> > =20
+> >  	if (route->tuple[dir].xmit_type	=3D=3D FLOW_OFFLOAD_XMIT_NEIGH)
+> > -		nft_dev_forward_path(route, ct, dir, ft);
+> > +		nft_dev_forward_path(pkt, route, ct, dir, ft);
+> >  	if (route->tuple[!dir].xmit_type =3D=3D FLOW_OFFLOAD_XMIT_NEIGH)
+> > -		nft_dev_forward_path(route, ct, !dir, ft);
+> > +		nft_dev_forward_path(pkt, route, ct, !dir, ft);
+> > =20
+> >  	return 0;
+> >  }
+> >=20
+> > --=20
+> > 2.51.0
+> >=20
+
+--XyXETZSSq+haRcmW
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaQt89wAKCRA6cBh0uS2t
+rJnTAQD16itUuoysg/7XGBe4RN/cphM7W1SSAQsMGtVJD5IqEwD+NJQIiodh10EI
+xRJQ4rg51TlHA+HpFUggzehVlbyBdAk=
+=PJWq
+-----END PGP SIGNATURE-----
+
+--XyXETZSSq+haRcmW--
 
