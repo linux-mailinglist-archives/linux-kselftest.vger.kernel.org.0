@@ -1,70 +1,50 @@
-Return-Path: <linux-kselftest+bounces-44998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB83CC3C133
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 16:34:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD989C3C253
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 16:45:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B98AD3A5CC8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 15:28:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B92713B294B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 15:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79ED292936;
-	Thu,  6 Nov 2025 15:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 556952BCF5D;
+	Thu,  6 Nov 2025 15:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fVgZ3Vcg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kxdYm7jM"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FB07285CBC;
-	Thu,  6 Nov 2025 15:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288F529D295;
+	Thu,  6 Nov 2025 15:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762442851; cv=none; b=BGP3QmW6JeTHjI7Bg61ewtlnD3QFk8huAVlB2n8elUjTVGgmJunH5NoViJtRc1cZJWPZYFXI5pgi49/sJJSFhG4WICPpLxZw6dZWJ5h9Cw2dzdVOP37+RHmGrpHebdLWX/ObIZWx6CKHCLkydKJlQd1Y8gHU74SVoXdZurxSL7Q=
+	t=1762443646; cv=none; b=h9orXzjs4GIOLJcG5Ao+lFsbHMi+noiCnGa8JrsLyND7WHtDwJXohBFE7nJdfIsaLI7CuNTAdYD9YREi7BzUxC1+L6ZGtc5DF5g2xxzV46q4yL1rjm1NM8hSOu5wlA2tFIdH0kn3MglddppHXaD406BjjQcu9aiuzaLZXEMEZac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762442851; c=relaxed/simple;
-	bh=GZJO0mqOhLSQMonvKqfXrhL4G4CZm9kSIbw5nb64HL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TULf/hCVdkZJ+vG2Nyn6y9k6YsdmMr0WwuXzW/xFFK+8lIHQ2o5SglyJIGYg7CqOmYIEFZIQv0+zsT5SlS6TCe8GLwUwN5ElfOaOH1iFnuhl7IxNtWENJfnMqIZuUnbqTV7TSsC7q6Ji6TjJWaMUtkSFxPjmqvOAFeAmcIf9dI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fVgZ3Vcg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DA66C19422;
-	Thu,  6 Nov 2025 15:27:28 +0000 (UTC)
+	s=arc-20240116; t=1762443646; c=relaxed/simple;
+	bh=Y6N7IJM2Oj/jWNX8r/1XtlsxcJDtxIZrO+3M+nZOCMg=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=eDeKJx2Jl88JUOGPSKxcWDywxtdlG9LPqM2Bk3aDN04+RO9vSNcYH8GO+jlx9ZTTytRTpyHA8ghMC3KHE3rnMvcaoNpAbAJ1U0oioEssdZ0dSeR5VwgDVK9fzYamablGSQH/gSV7SvkDHblR0DVdlMOGkk4+QWDoJ9rpqw/ZvB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kxdYm7jM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 068FEC116C6;
+	Thu,  6 Nov 2025 15:40:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762442851;
-	bh=GZJO0mqOhLSQMonvKqfXrhL4G4CZm9kSIbw5nb64HL8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fVgZ3VcgXUm1Vfifg+nUACrb949rRQWgwqaLhzAU+BpUX0a8E5VKAExuwogu3RmcU
-	 z3wYAFpND5Lw37fEcgUHyI3n0AlBU+RHpQozNY5vQSSvyqstLI+JJwwExc3xitCW2m
-	 /IGoTvjILYVg+cDeY6YkLMEVNK3AaU/MlvF1g1QcxAh9zMr6WnWXX8mhGhkFxCIdxJ
-	 o4TZ7VFYicnKdoqNiBSqJmWTHPNhCgLjNMFFkD5CBqnmwxqe+RfqKXA4Tb55vuCwAp
-	 wR1G2JwOv8uTn5ad+u0kAFuEn4tsoRn4oGqHPkMF+XQjE1UrChlicyFZ01YqLNspdG
-	 bR1YV9pAe9JWA==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Benson Leung <bleung@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	tzungbi@kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH v6 3/3] platform/chrome: cros_ec_chardev: Secure cros_ec_device via revocable
-Date: Thu,  6 Nov 2025 23:27:12 +0800
-Message-ID: <20251106152712.11850-4-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20251106152712.11850-1-tzungbi@kernel.org>
-References: <20251106152712.11850-1-tzungbi@kernel.org>
+	s=k20201202; t=1762443646;
+	bh=Y6N7IJM2Oj/jWNX8r/1XtlsxcJDtxIZrO+3M+nZOCMg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=kxdYm7jMdIXfmP4x6akdKEi8P7cGzhI0Xf05xXw5KTwGZq0JWdHKmUOOscFqwrsdJ
+	 D6G8mO+akEHsVB9Ceg1ktwlwkWJxVxz/9ytbRqAJRgF7iS0NtN97HNyqIW4NH6lxeB
+	 t+GsfAFKjmCk+cva2NTfnXAePAY/4HzkI24lJUaVuCt/+bvvjz8/251OgNL/pKAWPc
+	 JnPQHfZeeDvt6biRTnrZYUAln+XYHcvGY0F3yo7JjeM9xkGs/0aFcP50hEsmkwL6K2
+	 NMHwk3mSAVQ9OliVrTzYNAdUlVy5yYKpgjULamUSVctMkDWnDcl/VXucY13m2UcK7b
+	 PxUuWWuqxQWWA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D9F39EF947;
+	Thu,  6 Nov 2025 15:40:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,36 +52,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2] selftests/vsock: avoid false-positives when
+ checking dmesg
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176244361874.255671.14441717354801229577.git-patchwork-notify@kernel.org>
+Date: Thu, 06 Nov 2025 15:40:18 +0000
+References: <20251105-vsock-vmtest-dmesg-fix-v2-1-1a042a14892c@meta.com>
+In-Reply-To: <20251105-vsock-vmtest-dmesg-fix-v2-1-1a042a14892c@meta.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: sgarzare@redhat.com, shuah@kernel.org, kuba@kernel.org,
+ virtualization@lists.linux.dev, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bobbyeshleman@meta.com, horms@kernel.org
 
-Miscdevice now supports revocable fops replacement.  Use it to secure
-the cros_ec_device is available.
+Hello:
 
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
-v6:
-- Modify the API usage accordingly.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-v5: https://lore.kernel.org/chrome-platform/20251016054204.1523139-8-tzungbi@kernel.org
-- No primary changes but modify the API usage accordingly.
+On Wed, 05 Nov 2025 07:59:19 -0800 you wrote:
+> From: Bobby Eshleman <bobbyeshleman@meta.com>
+> 
+> Sometimes VMs will have some intermittent dmesg warnings that are
+> unrelated to vsock. Change the dmesg parsing to filter on strings
+> containing 'vsock' to avoid false positive failures that are unrelated
+> to vsock. The downside is that it is possible for some vsock related
+> warnings to not contain the substring 'vsock', so those will be missed.
+> 
+> [...]
 
-v4: https://lore.kernel.org/chrome-platform/20250923075302.591026-8-tzungbi@kernel.org
+Here is the summary with links:
+  - [net,v2] selftests/vsock: avoid false-positives when checking dmesg
+    https://git.kernel.org/netdev/net/c/3534e03e0ec2
 
- drivers/platform/chrome/cros_ec_chardev.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/platform/chrome/cros_ec_chardev.c b/drivers/platform/chrome/cros_ec_chardev.c
-index c9d80ad5b57e..a7543e1bc07a 100644
---- a/drivers/platform/chrome/cros_ec_chardev.c
-+++ b/drivers/platform/chrome/cros_ec_chardev.c
-@@ -385,6 +385,7 @@ static int cros_ec_chardev_probe(struct platform_device *pdev)
- 	misc->fops = &chardev_fops;
- 	misc->name = ec_platform->ec_name;
- 	misc->parent = pdev->dev.parent;
-+	misc->revocable = true;
- 
- 	dev_set_drvdata(&pdev->dev, misc);
- 
+You are awesome, thank you!
 -- 
-2.48.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
