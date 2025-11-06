@@ -1,128 +1,187 @@
-Return-Path: <linux-kselftest+bounces-45030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24112C3D968
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 23:25:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68DC4C3DD85
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 00:30:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAFC31890357
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 22:26:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0042E3A4563
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 23:30:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77AD7329396;
-	Thu,  6 Nov 2025 22:25:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD325347BC5;
+	Thu,  6 Nov 2025 23:29:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cJLY+pre"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rL7RkmA6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C5A32143E
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 22:25:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FD9222594
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 23:29:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762467943; cv=none; b=fPQaNkw/+dtmSrVApp6IRG07Arq7Y4wE4QFGpy0fR7dqJ3djEh9jGV6U9Iwul9hfdumymR9WViTAM6kbndSKky02C+y94oospUUHcJ5gCby2f8wht+uFxMpCCBydkV5Q9mfS2hTDhDxnFvkBsNXDXtoJlVgsVjEZ56xB2/Q/P/U=
+	t=1762471792; cv=none; b=XUyrkMDqj5DkgEhDzkTzqu3z2HmIJC8E07A5frR9x3nL5DGD18kRkboONtMc7civHq5hpSSd7Y14MIpvjNIwOqWl3MBi2v4eMLELW7o5EjtGl3ZAXg7/QHuS6J1+f8H2uDoqWTDav9mvpb385Bwp8o+yDECDA4n0kEE/S44Q99s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762467943; c=relaxed/simple;
-	bh=c3Lbyug0B8LC1SBsLJoiXKtGPHiW/sjp9Vcgo1geYE0=;
+	s=arc-20240116; t=1762471792; c=relaxed/simple;
+	bh=IZsbsvD6VdbkSJeqICAb4/zYF9wEny5Gu/vznxODllw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VkdvzfG/lbwLkmPL4GriR2GOMzv11ryVBc5toXskrsOye1mOjIYh4bDMJ44LxtCF6CjC2wFS92jwF3mBmLR9ukuiywDAA736gG4FemjFlBuwOy8+jl5wgbSKTu1IrEdUxEXWk1gr1uCtU+Es0Q6KeW1o1sAGV37wWiTqA8IXhMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cJLY+pre; arc=none smtp.client-ip=209.85.166.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-9486b567c18so5758139f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 14:25:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1762467940; x=1763072740; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nojW/UFZn0qbslE6OPGihe1YdAm5O0z1Y/2QE55GUN8=;
-        b=cJLY+preBPJZGlZ3bZLeWjLc3o+HaU47ziG3X/uFLhgBj5kWfPQ5mnUz+Lhfv6xlXt
-         YSwSPoHW0q+h21J0GQ5vJKj2GMcOZajq8Vh9+p54Z1v7G+urMj6SXnlXdRmAMY9RUpSP
-         8r0LG8SO2rtl06djLxZwPqibigGRqk+Jqi7jA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762467941; x=1763072741;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nojW/UFZn0qbslE6OPGihe1YdAm5O0z1Y/2QE55GUN8=;
-        b=ULn7I6XWEkOGTt51qAS4/z5JYgGw3wPDmG3590amqZPP56tdeIqriUd+/4d4HqxWU7
-         lu7qpyx4CWlVqAjvyc7TlFLmlM6xHJYuyW5bhkCpN1MsLewNjC56YPcND8gM+aGDHXQd
-         dnGX8T3DjTWFJIhHGF+Wsb+1surA7kaRAmpr7EdBHO9rs/BmRQjPFptPiHl6kkkSML0h
-         X0iDKQ9Zu9YSf6oR5l0DKkefdbVRwVafk0qgs+ilr3XDBUDJvdjYBfsZVrXiOOvtVBRe
-         fEByDJzkI9eO1mSRTPmYWNYdgANu7+CojqFgHPtohJ9Ru0PMF3GE9+DoIVMzySFzILEA
-         aRMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWrnWo27OYAfyFHE7WF0pBgJHcDrZChKmnFqOTVm6+JwsdQPhtTDE+XltrGfmgyttGy1i6lkwh81OqloLzl9z8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSi8NDOTJJcdPSbIk/xS0IsDe+r2YcWdo5oGYkZE2BwhMZgskM
-	zFKiQGMlo5gywaTnf9U5Hpn5rdU56xumxnS8bvh3ZXec3WLIZX7m1wf10PlTrWkN7C4=
-X-Gm-Gg: ASbGncuz7JvNQP/676G/ZuXOQYhMmLa5L/d3hZAMIq3EbOnqifwWlHuLJSb/fr4yDCX
-	ZBzgYbzIcdb7I5tv4yEPr+MRofxSEQwEu7Iv5IoISIO50f2bN6dhXFnVM1inaAzg7JTZNxaSE7P
-	a1tmyiEK72R4ISTWVWRh2aKDDPTIczxcZSHrzWKOkaHNXzIWH/qIBqI97xprkNc8KX33Xy+HBg/
-	i8tzJrf6Ox2zYL8Tv8c37zlOTqr6yiyTj5sl6X8lICftvA5fzLt/TGpuZQjhon6C4qZZ0l8eG81
-	5mBSMwDwVWJZJHmle3VszT94/4AqSSSyreyRCG71NDKALbnxupckFY7rSQj3nTlSU35C2OB3kMv
-	x0dlxrvJYIdh0JkFtl/xcUyMK+W+F+nvlJ5MO9fu1HNSAwGqnUmSir6wipoUojWQ+pCMeYD4JB4
-	N2lUGNF8vKYTRa
-X-Google-Smtp-Source: AGHT+IH0/3GJ4ianQvzZFggnE+5AVLuBjfhvBYg0/6brP9mgyD+T6dTbpZArnCJ/fgMPmOmGaPjq4Q==
-X-Received: by 2002:a05:6602:13ce:b0:945:aa01:bab7 with SMTP id ca18e2360f4ac-9488870ec4emr224804139f.5.1762467940613;
-        Thu, 06 Nov 2025 14:25:40 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-948889fae8dsm32195239f.0.2025.11.06.14.25.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Nov 2025 14:25:39 -0800 (PST)
-Message-ID: <0abf9a34-232b-4840-b592-672aa277509f@linuxfoundation.org>
-Date: Thu, 6 Nov 2025 15:25:38 -0700
+	 In-Reply-To:Content-Type; b=L4xs2yjXSvaP/aVDsmZ93MxUCHDFGY71SZXA2Zhe2jwsjrAAvvLvLqgDfrDPT2VeZUDeT4v4b6tG0MJUpcsn0A0fktjZAUyVxCiaEv41brj2BzhGTIpXOrYVoB2CWJEmRZTxRGqYmiccqYiD1cqp3j1aV+Il79MMvADif+YosF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rL7RkmA6; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <f7ef09d8-d48a-4df7-99b7-c5f3c422cfa3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1762471778;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kUfRbFpMkZjHgLZGCIbIhg4jivnYxpp+H4gCu5s3EEI=;
+	b=rL7RkmA6YseGsoWHt7KKIdbPnjxFzi5T/K7ev2MZ5hBT4rqgr8/C5HdsFMGyloV9LWpCxv
+	0b9+5l863s6QyQNvDIOSGpb+JgNmUTe1LuGMZ+Cv5z3CM2bhudToLb3ln4spVAzfOkgzVH
+	aPlT/etK4/4z88zv11NSw85PGvRfyvw=
+Date: Thu, 6 Nov 2025 15:29:31 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/tracing: Add basic test for trace_marker_raw
- file
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
- linux-kselftest@vger.kernel.org,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Linus Torvalds <torvalds@linux-foundation.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20251014145149.3e3c1033@gandalf.local.home>
- <20251105084748.f34e1efec291d420a50a7b62@kernel.org>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: use start_server_str rather
+ than start_reuseport_server in tc_tunnel
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ ebpf@linuxfoundation.org, Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251105-start-server-soreuseaddr-v1-0-1bbd9c1f8d65@bootlin.com>
+ <20251105-start-server-soreuseaddr-v1-2-1bbd9c1f8d65@bootlin.com>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20251105084748.f34e1efec291d420a50a7b62@kernel.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20251105-start-server-soreuseaddr-v1-2-1bbd9c1f8d65@bootlin.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 11/4/25 16:47, Masami Hiramatsu (Google) wrote:
-> On Tue, 14 Oct 2025 14:51:49 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+
+
+On 11/5/25 12:22 AM, Alexis Lothoré (eBPF Foundation) wrote:
+> Now that start_server_str enforces SO_REUSEADDR, there's no need to keep
+> using start_reusport_server in tc_tunnel, especially since it only uses
+> one server at a time.
 > 
->> From: Steven Rostedt <rostedt@goodmis.org>
->>
->> Commit 64cf7d058a00 ("tracing: Have trace_marker use per-cpu data to read
->> user space") made an update that fixed both trace_marker and
->> trace_marker_raw. But the small difference made to trace_marker_raw had a
->> blatant bug in it that any basic testing would have uncovered.
->> Unfortunately, the self tests have tests for trace_marker but nothing for
->> trace_marker_raw which allowed the bug to get upstream.
->>
->> Add basic selftests to test trace_marker_raw so that this doesn't happen
->> again.
->>
+> Replace start_reuseport_server with start_server_str in tc_tunnel test.
 > 
-> Looks good to me.
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+> ---
+>   .../selftests/bpf/prog_tests/test_tc_tunnel.c      | 27 ++++++++++++----------
+>   1 file changed, 15 insertions(+), 12 deletions(-)
 > 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> index deea90aaefad..4d29256d8714 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
+> @@ -69,7 +69,7 @@ struct subtest_cfg {
+>   	int client_egress_prog_fd;
+>   	int server_ingress_prog_fd;
+>   	char extra_decap_mod_args[TUNNEL_ARGS_MAX_LEN];
+> -	int *server_fd;
+> +	int server_fd;
+>   };
+>   
+>   struct connection {
+> @@ -135,16 +135,18 @@ static int run_server(struct subtest_cfg *cfg)
+>   {
+>   	int family = cfg->ipproto == 6 ? AF_INET6 : AF_INET;
+>   	struct nstoken *nstoken;
+> +	struct network_helper_opts opts = {
+> +		.timeout_ms = TIMEOUT_MS
+> +	};
+>   
+>   	nstoken = open_netns(SERVER_NS);
+>   	if (!ASSERT_OK_PTR(nstoken, "open server ns"))
+>   		return -1;
+>   
+> -	cfg->server_fd = start_reuseport_server(family, SOCK_STREAM,
+> -						cfg->server_addr, TEST_PORT,
+> -						TIMEOUT_MS, 1);
+> +	cfg->server_fd = start_server_str(family, SOCK_STREAM, cfg->server_addr,
+> +					  TEST_PORT, &opts);
+>   	close_netns(nstoken);
+> -	if (!ASSERT_OK_PTR(cfg->server_fd, "start server"))
+> +	if (!ASSERT_OK_FD(cfg->server_fd, "start server"))
+>   		return -1;
+>   
+>   	return 0;
+> @@ -152,7 +154,7 @@ static int run_server(struct subtest_cfg *cfg)
+>   
+>   static void stop_server(struct subtest_cfg *cfg)
+>   {
+> -	free_fds(cfg->server_fd, 1);
+> +	close(cfg->server_fd);
+>   }
+>   
+>   static int check_server_rx_data(struct subtest_cfg *cfg,
+> @@ -188,7 +190,7 @@ static struct connection *connect_client_to_server(struct subtest_cfg *cfg)
+>   		return NULL;
+>   	}
+>   
+> -	server_fd = accept(*cfg->server_fd, NULL, NULL);
+> +	server_fd = accept(cfg->server_fd, NULL, NULL);
+>   	if (server_fd < 0) {
+>   		close(client_fd);
+>   		free(conn);
+> @@ -394,29 +396,30 @@ static void run_test(struct subtest_cfg *cfg)
+>   
+>   	/* Basic communication must work */
+>   	if (!ASSERT_OK(send_and_test_data(cfg, true), "connect without any encap"))
+> -		goto fail;
+> +		goto fail_close_server;
+>   
+>   	/* Attach encapsulation program to client */
+>   	if (!ASSERT_OK(configure_encapsulation(cfg), "configure encapsulation"))
+> -		goto fail;
+> +		goto fail_close_server;
+>   
+>   	/* If supported, insert kernel decap module, connection must succeed */
+>   	if (!cfg->expect_kern_decap_failure) {
+>   		if (!ASSERT_OK(configure_kernel_decapsulation(cfg),
+>   					"configure kernel decapsulation"))
+> -			goto fail;
+> +			goto fail_close_server;
+>   		if (!ASSERT_OK(send_and_test_data(cfg, true),
+>   			       "connect with encap prog and kern decap"))
+> -			goto fail;
+> +			goto fail_close_server;
+>   	}
+>   
+>   	/* Replace kernel decapsulation with BPF decapsulation, test must pass */
+>   	if (!ASSERT_OK(configure_ebpf_decapsulation(cfg), "configure ebpf decapsulation"))
+> -		goto fail;
+> +		goto fail_close_server;
+>   	ASSERT_OK(send_and_test_data(cfg, true), "connect with encap and decap progs");
+>   
+>   fail:
+>   	stop_server(cfg);
+> +fail_close_server:
+
+The "fail" and "fail_close_server" ordering is incorrect. I took this 
+chance to simplify it by doing run_server() before open_netns().
+
+Applied. Thanks.
+>   	close_netns(nstoken);
+>   }
+>   
 > 
 
-Thanks. Applied to ksleftest next for 6.19-rc1.
-
-thanks,
--- Shuah
 
