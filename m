@@ -1,197 +1,139 @@
-Return-Path: <linux-kselftest+bounces-44869-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC0E5C38DC9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 03:25:59 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ACC9C38E14
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 03:34:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BA3DA4E1909
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 02:25:58 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 77AEE4E124B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 02:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80EF023BD1D;
-	Thu,  6 Nov 2025 02:25:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A02F21146C;
+	Thu,  6 Nov 2025 02:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rdb3Jc4m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AR2441du"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53457224234;
-	Thu,  6 Nov 2025 02:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B127154425
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 02:34:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762395956; cv=none; b=rWvZhZzZS6/w2RY2sLHEAXMnO+mC8RL7nWpZ9u7JB0PeSuM1Dt4SqAdjht0HT2oBUIF92fOQaHGi1mzyQhL0tY4YIzzPG4tXVAp5ZMvCYawfN3YkhqDI8TvvnmzbxZcbhtHZ43ctCI4RGOxB2iMnYM8bJmpDBL+TXa0uAgIoB3c=
+	t=1762396471; cv=none; b=MmEYvSrbhWxWpfqHV4j9ivTqAGapjRdbKCcxACy+MokQtanoBExxk9YUQs54QjglcPxqXecP2TpdW02PsKXFPua2AHuP4o+MCpDtGKg72c8sDdOt5CaE5YYWdBjW07gPCeSECcFE9Je/JWUZ5noV3hJGN6ip1s5hz47LB0PuHig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762395956; c=relaxed/simple;
-	bh=eVgK39ZeKae/dZ5DvJbKrnRO5CVKL0TeuGPKCJfDGwQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D4lB55uQpJFgQAqCcMfxWRMygVCtyHaeyJLQJVkYC3A7w/+WhAFNeLI459XK07oelDjNyx/vEkhsIMglGHe3lx4oY8G3L2lyniFhEM4eFhOIiaZv/l0WjZc8phReJKMb5Jf8dZ2uqscKJv1G/QxfG96N43/7pET+fNxwL8jF4JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rdb3Jc4m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B9DFC4CEF5;
-	Thu,  6 Nov 2025 02:25:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762395955;
-	bh=eVgK39ZeKae/dZ5DvJbKrnRO5CVKL0TeuGPKCJfDGwQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Rdb3Jc4mpMFDFzJGgwkWHAkmFDCVLABesE4Yj/dkTart+RWa5yAaY7x4FImRQm6mx
-	 KAIf8bKaKEDU+uewWE2Ewz+Ms8kOl50R1qCIyUsqw88wLayWbptXcPBCHpPUGV5XMs
-	 129ST2k1i1WZfaV8d/KA7EN6Yev3a+rGGyn73D4vW+timT1UKyHECp7nZ6tXL3eSBU
-	 3qavp+yyefK3XzL7DuQOtuwB67ukPYwVqYqdC0LqryplpZjSmoL2YxJ6Zm7hdhPoqv
-	 Wm8XZuXiGzJokyD6gXL9lht9Jy/4zUM5IzygIzBNe/maA0ux+zspJB7X4GotDJLZj/
-	 +vmLMsmUMBd5A==
-Message-ID: <667fb65c-d8d3-4af9-8efe-196e6d1befcc@kernel.org>
-Date: Thu, 6 Nov 2025 02:25:51 +0000
+	s=arc-20240116; t=1762396471; c=relaxed/simple;
+	bh=/0HeCEvC5ywVc1TxZhy5m0xXX0gMHssWLciURgR/kg4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OZwOHfMVtgcE3V80uwOqTpFe2tmnNzvckvaKSn0wAdUSAnySe+kY+MGiwks3TbMiyDW+fIV57Yeon6adF6MHiDbkoZTO35yBtfrCN4RiTLK2owdrK0jfIPcRqwdk7niS4JjnKapjEB6q7+J/Un6x+ufxQNwE1bh2p9Ep21BDgi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AR2441du; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7acd9a03ba9so499530b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 18:34:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762396469; x=1763001269; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=txcWfZhuPwzhOSfp8WaRWU09u1I97f97wCumcVKVe7w=;
+        b=AR2441duQcB7gTciGeufYF4RPAFLFKLu8vWiB9Vytg4r/lKZgW3FEK+IOETvNnOgsA
+         ChAal5k+5sP3A2LczQ37t4Kmsvv44KAbmidVm7fOtOzTj/H3d/UNVLlFTRvUsx7Lidtd
+         xEp8jmGp6OHA0lHagLnl8L6oDUHwL2BqpRGODdY+r3WB2xXWRotQXaWF0v1Rd3pIrjQH
+         0058jGft2kyCKeeQeZgeM0697aRujehKBP117PeC1cOqIkyJ5cMgp3BbT3db+BvycXzc
+         V8qft8aYraBNjHl7lo2Vrdli7VS2SaWENdKRz3NwTfcddvlgAypDHRaScEdC8yyBOXqx
+         p2TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762396469; x=1763001269;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=txcWfZhuPwzhOSfp8WaRWU09u1I97f97wCumcVKVe7w=;
+        b=lmQ2VQt5ttJKfUpVtpjjWp1gK/dbZ9AXa+QgGGSxAi3z+Bzav4MaYxO5XYzBmDJ+iH
+         xtSoYuJ1U9UEVvfRzdXaol1+GY62oE1xMXZ3KTkLuqwrwZjhu/1Ii7m+9m7dmHidJuLl
+         ummZT/ZAM7rhmpEh+ot2qgVOWI89wrbDTMuB+vbORnrwX5c7JrsbPASS0TVQRCS1YoQ1
+         LUvKn54vHeQU0j9AFBjR4D5HWE9EZSVCLafrli3kMkLQEAT5eHxDLFRPGA0ziejKF3pN
+         HWcFRj1qMl8dTsHKjIr25OKKPKV0oAMxmukJHl5iX2XUFj0sUVaeScZFJGIUO+v30JlR
+         gPTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWVqgXAM4tgkc66z8WfLcmvAE++yo8YSH+Mys4Pm7+nknvK79mlt+vj3b0LRKn+kL3AT0WtGoNhzY+uY7HQInI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8SmfS3kf+vIMBLWjelupr3dwJ+FbCamMkmp3rncF3yPpvWD0S
+	AblWLVi+S4aO59VnfelHbzwrIigIdbJfXEnyJaWRAzvxV0Qp+wZWUI2V
+X-Gm-Gg: ASbGncvzMRxiY6CiuQ6swkskFyxLScWAU33yv1YNpBKxobnECO80Buo/U6sy2RzAvD0
+	stERYticEedCqp8XANaawaDZLMDHEDygISi0O3fvvUTwz8DDmv/wpUMGsDMBCyrpfxzMS4HDNkF
+	UOLuwgChR9o5DDArrJcXZAYKWfIRpQc17sl7aTX2PU0X/YMRlFMIMXF5+Z44Ujbi9XAmrtA1RdG
+	P5LiZFdBZ+tr/sNNQWY7VXGBLRovblPHt9zZbeSp0pllkP/9HLVzcEt26R44PXVZXKz8nxtlpi0
+	b77rmgwwfYprcQd7+LG1hCVU/yxf5XSPBgUg/N3fzlwCJV7ci2nB7dBqHGZhc/LTKQDx0Kh7MdS
+	aDmkH6Ld+KObwpsWY5V787s8NEApv9mWz42YMn/gIwzPdHbv2TDh8buh7B0E/Fi0oVGBC1ErLVj
+	RXFY4V
+X-Google-Smtp-Source: AGHT+IEfL26ZpZwL+4ELjq2rRZeUe/MDbipLVfw3WCSyW00F6fVlo0CjA3/x1cnexjpQmNFiTwxw3A==
+X-Received: by 2002:a05:6a00:929b:b0:7ac:3529:afbb with SMTP id d2e1a72fcca58-7ae1f293af6mr5589400b3a.20.1762396469248;
+        Wed, 05 Nov 2025 18:34:29 -0800 (PST)
+Received: from fedora ([209.132.188.88])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7af826f9520sm824784b3a.56.2025.11.05.18.34.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 18:34:28 -0800 (PST)
+Date: Thu, 6 Nov 2025 02:34:20 +0000
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jan Stancek <jstancek@redhat.com>,
+	"Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+	=?iso-8859-1?Q?Asbj=F8rn_Sloth_T=F8nnesen?= <ast@fiberby.net>,
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Guillaume Nault <gnault@redhat.com>,
+	Petr Machata <petrm@nvidia.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 2/3] netlink: specs: update rt-rule src/dst
+ attribute types to support IPv4 addresses
+Message-ID: <aQwJLKka-_pBGq_g@fedora>
+References: <20251029082245.128675-1-liuhangbin@gmail.com>
+ <20251029082245.128675-3-liuhangbin@gmail.com>
+ <20251029163742.3d96c18d@kernel.org>
+ <aQnG8IYsY3oyYekf@fedora>
+ <20251104164804.540a9b8d@kernel.org>
+ <aQsDA7ufLlIwSf1h@fedora>
+ <20251105161319.0591f96e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] bpftool: Print map ID upon creation and support
- JSON output
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
- bpf <bpf@vger.kernel.org>, Alan Maguire <alan.maguire@oracle.com>,
- Yonghong Song <yonghong.song@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com>
- <20251101193357.111186-2-harshit.m.mogalapalli@oracle.com>
- <CAADnVQLe6a8Kae892sVaND-2p1DQDXGD5gqxHWHHUC85ntLCqw@mail.gmail.com>
- <e9d43dab-cfae-48a8-9039-e050ea392797@kernel.org>
- <CAADnVQKzSBZYaj0iMkNBk6FvaOket1mWPksX661zwC2rg2FBkQ@mail.gmail.com>
- <7874cfab-3f96-4cfb-9e52-b9d8108bc536@kernel.org>
- <CAADnVQL7cLYPKEQOLWi1DjTZjhE_Fy4zWLrWG+=NSeN821SyMw@mail.gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <CAADnVQL7cLYPKEQOLWi1DjTZjhE_Fy4zWLrWG+=NSeN821SyMw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251105161319.0591f96e@kernel.org>
 
-2025-11-05 18:14 UTC-0800 ~ Alexei Starovoitov
-<alexei.starovoitov@gmail.com>
-> On Wed, Nov 5, 2025 at 6:05 PM Quentin Monnet <qmo@kernel.org> wrote:
->>
->> 2025-11-05 17:29 UTC-0800 ~ Alexei Starovoitov
->> <alexei.starovoitov@gmail.com>
->>> On Wed, Nov 5, 2025 at 1:38 AM Quentin Monnet <qmo@kernel.org> wrote:
->>>>
->>>> 2025-11-04 09:54 UTC-0800 ~ Alexei Starovoitov
->>>> <alexei.starovoitov@gmail.com>
->>>>> On Sat, Nov 1, 2025 at 12:34 PM Harshit Mogalapalli
->>>>> <harshit.m.mogalapalli@oracle.com> wrote:
->>>>>>
->>>>>> It is useful to print map ID on successful creation.
->>>>>>
->>>>>> JSON case:
->>>>>> $ ./bpftool -j map create /sys/fs/bpf/test_map4 type hash key 4 value 8 entries 128 name map4
->>>>>> {"id":12}
->>>>>>
->>>>>> Generic case:
->>>>>> $ ./bpftool  map create /sys/fs/bpf/test_map5 type hash key 4 value 8 entries 128 name map5
->>>>>> Map successfully created with ID: 15
->>>>>>
->>>>>> Bpftool Issue: https://github.com/libbpf/bpftool/issues/121
->>>>>> Acked-by: Yonghong Song <yonghong.song@linux.dev>
->>>>>> Reviewed-by: Quentin Monnet <qmo@kernel.org>
->>>>>> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
->>>>>> ---
->>>>>> v2->v3: remove a line break("\n" ) in p_err statement. [Thanks Quentin]
->>>>>> ---
->>>>>>  tools/bpf/bpftool/map.c | 21 +++++++++++++++++----
->>>>>>  1 file changed, 17 insertions(+), 4 deletions(-)
->>>>>>
->>>>>> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
->>>>>> index c9de44a45778..f32ae5476d76 100644
->>>>>> --- a/tools/bpf/bpftool/map.c
->>>>>> +++ b/tools/bpf/bpftool/map.c
->>>>>> @@ -1251,6 +1251,8 @@ static int do_create(int argc, char **argv)
->>>>>>         LIBBPF_OPTS(bpf_map_create_opts, attr);
->>>>>>         enum bpf_map_type map_type = BPF_MAP_TYPE_UNSPEC;
->>>>>>         __u32 key_size = 0, value_size = 0, max_entries = 0;
->>>>>> +       struct bpf_map_info map_info = {};
->>>>>> +       __u32 map_info_len = sizeof(map_info);
->>>>>>         const char *map_name = NULL;
->>>>>>         const char *pinfile;
->>>>>>         int err = -1, fd;
->>>>>> @@ -1353,13 +1355,24 @@ static int do_create(int argc, char **argv)
->>>>>>         }
->>>>>>
->>>>>>         err = do_pin_fd(fd, pinfile);
->>>>>> -       close(fd);
->>>>>>         if (err)
->>>>>> -               goto exit;
->>>>>> +               goto close_fd;
->>>>>>
->>>>>> -       if (json_output)
->>>>>> -               jsonw_null(json_wtr);
->>>>>> +       err = bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
->>>>>> +       if (err) {
->>>>>> +               p_err("Failed to fetch map info: %s", strerror(errno));
->>>>>> +               goto close_fd;
->>>>>> +       }
->>>>>>
->>>>>> +       if (json_output) {
->>>>>> +               jsonw_start_object(json_wtr);
->>>>>> +               jsonw_int_field(json_wtr, "id", map_info.id);
->>>>>> +               jsonw_end_object(json_wtr);
->>>>>> +       } else {
->>>>>> +               printf("Map successfully created with ID: %u\n", map_info.id);
->>>>>> +       }
->>>>>
->>>>> bpftool doesn't print it today and some scripts may depend on that.
->>>>
->>>>
->>>> Hi Alexei, are you sure we can't add any input at all? I'm concerned
->>>> that users won't ever find the IDs for created maps they might want to
->>>> use, if they never see it in the plain output.
->>>>
->>>>
->>>>> Let's drop this 'printf'. Json can do it unconditionally, since
->>>>> json parsing scripts should filter things they care about.
->>>>
->>>> I'd say the risk is the same. Scripts should filter things, but in
->>>> practise they might just as well be comparing to "null" today, given
->>>> that we didn't have any other output for the command so far. Conversely,
->>>> what scripts should not do is rely on plain output, we've always
->>>> recommended using bpftool's JSON for automation (or the exit code, in
->>>> the case of map creation). So I'm not convinced it's justified to
->>>> introduce a difference between plain and JSON in the current case.
->>>
->>> tbh the "map create" feature suppose to create and pin and if both
->>> are successful then the map will be there and bpftool will
->>> exit with success.
->>> Now you're arguing that there could be a race with another
->>> bpftool/something that pins a different map in the same location
->>> and success of bpftool doesn't mean that exact that map is there.
->>> Other tool could have unpinned/deleted map, pinned another one, etc.
->>> Sure, such races are possible, but returning map id still
->>> looks pointless. It doesn't solve any race.
->>> So the whole 'lets print id' doesn't quite make sense to me.
->>
->> OK "solving races" is not accurate, but returning the ID gives a unique
->> handle to work with the map, if a user runs a follow-up invocation to
->> update entries using the ID they can be sure they're working with the
->> same map - whatever happened with the bpffs. Or they can have the update
->> fail if you really want that particular map but, for example, it's been
->> recreated in the meantime. At the moment there's no way to uniquely
->> identify the map we've created with bpftool, and that seems weird to me.
+On Wed, Nov 05, 2025 at 04:13:19PM -0800, Jakub Kicinski wrote:
+> On Wed, 5 Nov 2025 07:55:47 +0000 Hangbin Liu wrote:
+> > > > I just realize that most of the address/src/dst in rt-addr/route are
+> > > > dual stack. The same with FRA_DST. We can't simply change binary to u32.
+> > > > So can we keep this u32 -> binary change?  
+> > > 
+> > > Ah, should have looked at more context..
+> > > Yes, and in that case without the display-hint?  
+> > 
+> > The display-hint is required; otherwise, the displayed src and dst fields
+> > appear as binary data, and setting the rule’s src/dst values also fails. I
+> > haven’t checked the code yet, but with
+> >   - display-hint: ipv4
+> > the IPv6 addresses are also displayed correctly :)
 > 
-> ID is not unique. If somebody rm -rf bpffs. That ID will not point anywhere.
-> Also it's 31-bit space and folks in the past demonstrated an attack
-> to recycle the same ID.
-> So the users cannot be sure what ID is this.
-> 
+> Heh, we should have called the hint "ip" in that case :)
 
-Ah. I did assume it was unique :/. My bad, then in that case it doesn't
-make too much sense, indeed.
+I saw the display hit supports "ipv4-or-v6", but genetlink-c.yaml doesn't
+have "ipv4-or-v6". Do you know why?
+
+# grep -rn fddi Documentation/netlink
+Documentation/netlink/genetlink.yaml:188:                enum: [ hex, mac, fddi, ipv4, ipv6, uuid ]
+Documentation/netlink/genetlink-legacy.yaml:157:                enum: [ hex, mac, fddi, ipv4, ipv6, ipv4-or-v6, uuid ]
+Documentation/netlink/netlink-raw.yaml:160:                enum: [ hex, mac, fddi, ipv4, ipv6, uuid ]
+Documentation/netlink/genetlink-c.yaml:230:                enum: [ hex, mac, fddi, ipv4, ipv6, uuid ]
+
+Thanks
+Hangbin
 
