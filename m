@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-44918-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44919-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D833CC3A206
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 11:13:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86E43C3A236
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 11:14:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E908E188856B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 10:07:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98FDE3BA7EC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 10:07:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26BE031AF2E;
-	Thu,  6 Nov 2025 10:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3378931B830;
+	Thu,  6 Nov 2025 10:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="skVRgC4g";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="i1XQoQKJ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Wpn5TBFc";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MPlaJ2oX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B373168E4;
-	Thu,  6 Nov 2025 10:02:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51F53195F6;
+	Thu,  6 Nov 2025 10:02:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762423352; cv=none; b=XGOARkTQhhX0CKKEbrIjGiSbGZ8VOP+HvnOsv8YB7ASgSyyt7iUjdyvs02tZI7LSEM2Kd5B9nhxf1Au53BB3Z8vNuMaOA8bNHsWYWdFwbquLkhyLSL7RS09NVjL1i2sXSDLnroLD1k3Kka4ZO8gfJmw/Rri6PGIGc1TjTI/Zi8Y=
+	t=1762423353; cv=none; b=bmfv4UPrqVQV0Ak38MSVMyKVAThlWofg/cFwru+gez3zGlFssuRPYU4fsz8vhwsucmzj/GlOsPgX+NvyYPYlz4zHkFBpeG0XwPDzKUKvnRV+Jj6lPlS39Xb8Ni+rbZxtTtl4aQw8bSICGb5UXNDVzknm1M4OwMnCbAV0zIKsxtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762423352; c=relaxed/simple;
-	bh=i+D0m1xzFKLn45sG3YvmSAccyUMoIH83lYmvGLk5jvY=;
+	s=arc-20240116; t=1762423353; c=relaxed/simple;
+	bh=GDhW6FGM84lRP3KSHJ2KY17zwk8LQQyNxwfOvs9V2nc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kkpmUPBq/x6O86yJOrDWCQRRd4U8lCOvQw2H4QbuDMMpVxwB0+zlSLRGA2Xpwtty76F97Ju35KYtYF716G2PDZ45IN0627zfaMMRY5Qu2tpBaFQ5OAgKhkXGpVYYFQe5HppnOCmmsABi8JMtY8XLlbBZeDCZWm+22QlS0zIwl34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=skVRgC4g; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=i1XQoQKJ; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=XuIldnfIzdN5wmzilVanHxXCGGvdmV7+LNeVDmQ7UgaKrhDCfF4HEM1dE6raXB4PqnIM16hVisTj/xN2Buq9QgOS/ZfYVeE02/7nhzqjq3pC4qH8U8UA5BYWpERy531tGbQdhuVr6PcuvfR2M27dEHULpZYjid4RUhKHm3/Nky4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Wpn5TBFc; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MPlaJ2oX; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,23 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uwthaOGY1VLvaz+koev4FhKg8AeyDPmuh05iyUl1cmc=;
-	b=skVRgC4gH6P2zvvdBEhPvMceZicgLV7G3ARfHqsu7kote6DHRA1PtpLzA7tGQYqOXl6sqz
-	8mJd46SiCGNtgwx2XNiGcQi8CVKlhdj8BIJdAj/SrmYbOV4klkoXsKCBALWTVXnv/BNjYA
-	CZXpAqKp87ytTrKr73gbu4+wCARGw6q/rtMtx29iJP++LrV/GCT2ZrngzSGNuN+veor700
-	peaULKA70XOJ0BY/6bdYVVuVbCdiAwNOFPvLXByJoW7LFXU/jKAwn27R7bLxDexkUpyEPw
-	wzBO0dxniDk6roNkDEhnQSt60stDELuuEoO3kyuujunps/NdnvvWzFMesDpQzg==
+	bh=4Gwgq8AosyJkorQ2Vw4pdkWCqDOsbs+MKvc8HYWAt8Q=;
+	b=Wpn5TBFcz+TLf6k15Chy3nxL1iQZHa89Ifq3BgFDR3tjw2z5GT6b8ZeWW/PUdHhTX2ObXE
+	HLhC2bQCTL3+3t8eecSuCeDOPaeh01bd0ZpjKP+AiurqC4dRD6z0rAkaH2DjKkfZ192W5y
+	Gqi575+2GkY/36msQBVBwSxgpol6psVs7tkfhIYwr+7bALKk7VLV0nrvvT3v0eX/0C3zDt
+	1jCp7HGfZWFW/EJf804MykMkC8pBdu1KUNjq/+H5L4K9XykarmB1oxRXHRvITQApHW/wyQ
+	wTXVgZE4f07+RFx8lGOIxQ2rtWW5m/KIcYKYXHEcFtE3Ff6uGKuS0IGxgSZBSw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1762423346;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uwthaOGY1VLvaz+koev4FhKg8AeyDPmuh05iyUl1cmc=;
-	b=i1XQoQKJV2sbgKjkS47zedaQfY5QPp6KbbqYKW+POJnEjHLwRUHOmHy9fFFURqsCFCPQ/+
-	t1Y0kMeqhEW74XAg==
-Date: Thu, 06 Nov 2025 11:02:17 +0100
-Subject: [PATCH v5 24/34] sparc64: vdso: Link with -z noexecstack
+	bh=4Gwgq8AosyJkorQ2Vw4pdkWCqDOsbs+MKvc8HYWAt8Q=;
+	b=MPlaJ2oXDOC79k+wbKcStJe48ElKWz/4NdJV9VTVo8fV2mjuZEkEU3UnrQlMEfYFZBlLhI
+	m2HYzDURzmoQ5NBw==
+Date: Thu, 06 Nov 2025 11:02:18 +0100
+Subject: [PATCH v5 25/34] sparc64: vdso: Remove obsolete "fake section
+ table" reservation
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251106-vdso-sparc64-generic-2-v5-24-97ff2b6542f7@linutronix.de>
+Message-Id: <20251106-vdso-sparc64-generic-2-v5-25-97ff2b6542f7@linutronix.de>
 References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
 In-Reply-To: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -90,45 +91,101 @@ Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
  linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
- Arnd Bergmann <arnd@kernel.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1762423327; l=1559;
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762423327; l=2715;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=i+D0m1xzFKLn45sG3YvmSAccyUMoIH83lYmvGLk5jvY=;
- b=42sTJ2X7fGiMZ5Xu7zBc6SU+l12x/X0CKpjbGH10IJZD5almYA+auGYbhtGawL/Max8sluWXS
- orCrl7JSnOzCM27WaZ4mymSYVL9a/a9q3Bf824fP0Eq94V9mllhIkUR
+ bh=GDhW6FGM84lRP3KSHJ2KY17zwk8LQQyNxwfOvs9V2nc=;
+ b=zZfZYTdKl8XpGGMBfdQpIBy75in2sgaWAqUbbXJgw3wbrEZdfYUPvZgrq4x3BrA+K0lD7nhn2
+ r1+6qpM8QE/CceBH3mkFPM089UKvto97lGe1g75Z5BgV1cpdbFWBk2M
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The vDSO stack does not need to be executable. Prevent the linker from
-creating executable. For more background see commit ffcf9c5700e4 ("x86:
-link vdso and boot with -z noexecstack --no-warn-rwx-segments").
+When the vDSO logic was copied from x86 to SPARC some unused remnants of
+the fake section handling were copied, too. In x86 the original fake
+section handling had already been removed incompletely in commit
+da861e18eccc ("x86, vdso: Get rid of the fake section mechanism").
+On x86 the reservation was only cleaned up in commit 24b7c77bbb24
+("x86/vdso: Remove obsolete "fake section table" reservation").
 
-Also prevent the following warning from the linker:
-sparc64-linux-ld: warning: arch/sparc/vdso/vdso-note.o: missing .note.GNU-stack section implies executable stack
-sparc64-linux-ld: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
+Remove the reservation for SPARC, too.
 
-Suggested-by: Arnd Bergmann <arnd@kernel.org>
-Link: https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
 Fixes: 9a08862a5d2e ("vDSO for sparc")
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Tested-by: Andreas Larsson <andreas@gaisler.com>
 Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 Acked-by: Andreas Larsson <andreas@gaisler.com>
 ---
- arch/sparc/vdso/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/sparc/vdso/vdso-layout.lds.S | 21 ---------------------
+ arch/sparc/vdso/vdso2c.c          |  8 --------
+ 2 files changed, 29 deletions(-)
 
-diff --git a/arch/sparc/vdso/Makefile b/arch/sparc/vdso/Makefile
-index 1a4e585c91d7d03d8444cc2e4914fd10cd078fb8..2e911ccc9db71b2888ffc432d75ac8815ecce0f7 100644
---- a/arch/sparc/vdso/Makefile
-+++ b/arch/sparc/vdso/Makefile
-@@ -107,4 +107,4 @@ quiet_cmd_vdso = VDSO    $@
- 		       $(VDSO_LDFLAGS) $(VDSO_LDFLAGS_$(filter %.lds,$(^F))) \
- 		       -T $(filter %.lds,$^) $(filter %.o,$^)
+diff --git a/arch/sparc/vdso/vdso-layout.lds.S b/arch/sparc/vdso/vdso-layout.lds.S
+index d31e57e8a3bbffd3afb187cd631e2491fde64148..9e0804789d11696948f11be367480b530a1f18d9 100644
+--- a/arch/sparc/vdso/vdso-layout.lds.S
++++ b/arch/sparc/vdso/vdso-layout.lds.S
+@@ -4,16 +4,6 @@
+  * This script controls its layout.
+  */
  
--VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 -Bsymbolic --no-undefined
-+VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 -Bsymbolic --no-undefined -z noexecstack
+-#if defined(BUILD_VDSO64)
+-# define SHDR_SIZE 64
+-#elif defined(BUILD_VDSO32)
+-# define SHDR_SIZE 40
+-#else
+-# error unknown VDSO target
+-#endif
+-
+-#define NUM_FAKE_SHDRS 7
+-
+ SECTIONS
+ {
+ 	/*
+@@ -47,19 +37,8 @@ SECTIONS
+ 		*(.bss*)
+ 		*(.dynbss*)
+ 		*(.gnu.linkonce.b.*)
+-
+-		/*
+-		 * Ideally this would live in a C file: kept in here for
+-		 * compatibility with x86-64.
+-		 */
+-		VDSO_FAKE_SECTION_TABLE_START = .;
+-		. = . + NUM_FAKE_SHDRS * SHDR_SIZE;
+-		VDSO_FAKE_SECTION_TABLE_END = .;
+ 	}						:text
+ 
+-	.fake_shstrtab	: { *(.fake_shstrtab) }		:text
+-
+-
+ 	.note		: { *(.note.*) }		:text	:note
+ 
+ 	.eh_frame_hdr	: { *(.eh_frame_hdr) }		:text	:eh_frame_hdr
+diff --git a/arch/sparc/vdso/vdso2c.c b/arch/sparc/vdso/vdso2c.c
+index dc81240aab6fd31a72b8a751cc2a4a821a3c4e4e..b97af5ec9f35c01f2a976b6213b1768b677ad231 100644
+--- a/arch/sparc/vdso/vdso2c.c
++++ b/arch/sparc/vdso/vdso2c.c
+@@ -61,8 +61,6 @@ const char *outfilename;
+ /* Symbols that we need in vdso2c. */
+ enum {
+ 	sym_vvar_start,
+-	sym_VDSO_FAKE_SECTION_TABLE_START,
+-	sym_VDSO_FAKE_SECTION_TABLE_END,
+ };
+ 
+ struct vdso_sym {
+@@ -72,12 +70,6 @@ struct vdso_sym {
+ 
+ struct vdso_sym required_syms[] = {
+ 	[sym_vvar_start] = {"vvar_start", 1},
+-	[sym_VDSO_FAKE_SECTION_TABLE_START] = {
+-		"VDSO_FAKE_SECTION_TABLE_START", 0
+-	},
+-	[sym_VDSO_FAKE_SECTION_TABLE_END] = {
+-		"VDSO_FAKE_SECTION_TABLE_END", 0
+-	},
+ };
+ 
+ __attribute__((format(printf, 1, 2))) __attribute__((noreturn))
 
 -- 
 2.51.0
