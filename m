@@ -1,200 +1,91 @@
-Return-Path: <linux-kselftest+bounces-44856-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79828C38643
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 00:43:40 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AAECC3871B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 01:13:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4929A4E03D0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Nov 2025 23:43:39 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E44EC4E3BD2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 00:13:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1E82F6170;
-	Wed,  5 Nov 2025 23:43:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A382C7494;
+	Thu,  6 Nov 2025 00:13:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N3ixblNQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mQVj4e1C"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7C302D7DD9
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Nov 2025 23:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CA7CA52;
+	Thu,  6 Nov 2025 00:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762386211; cv=none; b=prkknv26YQGnMtVuQxlnGg//VJF2akurgGOe3WQzsxslCdffkMyYbkrL4S6uIuRtZQR0c8dZG0QIrKtbOkRE/Rf/M0y91ygtmHPfbOnZ9i8qTZAux9D7coY0fOBXh/Fa3l0FGQy7BgHlGGUIXgGXFEGkmXOb3i0HunvotL15awc=
+	t=1762388001; cv=none; b=RQa7uZpvp031+oJgU60f74muXgCuije9Z+bpVw9oQvsFhNqoKPrewfWFuGBl9NZLJfoZgmlJXWqc6KfvK/CKEb/kqF2AH2xjtspItvGwqiLcFZhk6CAM/AEnQbGWTkwv3EwxTq7kF7jLTvipWklA12yuOfNY06aKM427u6poGVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762386211; c=relaxed/simple;
-	bh=Ak0a/MofXeKeQ+l3St4/37wwo2EI1oYqy7US8b0zxnI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hTWbEDBAE88H4LWRM0SzakFS7rLG1s88YWo96ZF7n92nzRWvOCwCjgDB+/0sg2deolnErTqGkM50k13FBdkl2LKAIh5R8OBIjPSxoyzr/RsZ+B9KmYBhDJiwN/dv99KMeC3dGNXqiCMnmoy8FDV0s2J8kAChjwgj9zzIyQ1pYCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N3ixblNQ; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-429c19b5de4so288402f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 15:43:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762386207; x=1762991007; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IqjzYrKsdzYpWMG26lMkMc/ll/hhUuKrKyM2DREXhn8=;
-        b=N3ixblNQvBxpfJ6LwigQOd6qlBzlThhsyTAAjhyiAU1g6RZQvrm1pXEtma51wD5dqH
-         3VAuloJDwk3o0HuVegYYfokIC2/S+J+lZCvpe+iJ0V1YZ5xsiwN6SZKQDmR7qK6xaxiC
-         KkOO2dD+Gg9rJl3872bVYN1dQLgArfal6b1pQQEMfUVuxOej4t6wR808ekACKRwJFwTk
-         EJ90KVGfHGTG8YGtAt6yJz7QcplgoHsq4V3wJ1CqvREsJtrd97mTeeMGyKmRNoOQQoQw
-         Rj7xa4bB1e7R+rkvd3FfSzAxJbDEVPfDzbsdN4WS/04+jMB/rZJuA0P5j+xJqOsbFu66
-         pQzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762386207; x=1762991007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IqjzYrKsdzYpWMG26lMkMc/ll/hhUuKrKyM2DREXhn8=;
-        b=Q8iKCHbLQ4c5ESbltC9ev6Oi0Vza/7hZz3jKu7UxtFcnJI5pzfTe8/Q7FReCgJkdVl
-         bSs+vq5HGxjCvEJmNDnWPteamm0QbQsWlkWEJSowQjlf9bkRTsnMYvfrjhRK5+Mo/pKW
-         X472UC6DbArLPaVCzt5uFnI4M2iuDtGTHrip7iV9mBq71YcDAYgHy1lA7mHPCwvx8uRc
-         WjWVFcHK2iuGCynA+5aob25GH4XKTUXwyw6V3OO10Z6Ik0vteQmdmspTGRbSaPb5okxu
-         +ZiF3NnDXHtUZ7FlVBxwZCv74i34v6POjwG3VDvfZWYc1NlEHCk1cFINjel486Z4nqRw
-         8gYg==
-X-Forwarded-Encrypted: i=1; AJvYcCXzXeMQgxMweRUcpLPke+WF5wMfk/OjNl9lbG3u4szUg60d9QPLbKzHaMwH1rDVYZACGofgVZ89ucclzuYx1EM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkIHReH+2X7zUpNbARwpORcRFIfNG31p3Ose+XR/ugYIyB+FHh
-	Ueivv6Fj1xWUF130p0d65emmckOAM7DZ0GeJNcY7u2ezfpagY4TNWunMfP2tuevL7iEOmrXYdUG
-	hoxAMNUheMCnFboAFxMHlaSvfxEBXwfU=
-X-Gm-Gg: ASbGncsGwp8OtSFQa/3xaqoMUTkoH4fCe8qC3QgxYB2faFzTgikPTwxs6EpFYNnwYZV
-	037rVAaPc7iLYjSYWNc0YwMYypj6i3MsJZ2+VumNOBE9t/QhpEGQd2b0N7tQmHb0vZushIS6nM6
-	Jv2t/VWu114elc9Zh14Cqoi14f4UsYkf58p2xWcQe+KJOVu7c4Ne/hs7HBHywwqhxxlWKbvisJY
-	BGAKEWxwfGVfpUj9d9QuM1r9gqx3g8etyaWhVN565ju9dqOuj4r3FpZSw/2M5BAK02rdCrk2Hin
-	3Ny/waGwq4omVsfHXA==
-X-Google-Smtp-Source: AGHT+IHy2tfHNgJ6cQpCodGNfGYWTZ5F1i/eU0t3ocsIu6em6NiXgoAdtiWwWZT/GQIXmPMwErZiV6BOsWuGXGX8nJc=
-X-Received: by 2002:a05:6000:230e:b0:429:d170:b3ac with SMTP id
- ffacd0b85a97d-429e32dd82cmr5292052f8f.13.1762386207144; Wed, 05 Nov 2025
- 15:43:27 -0800 (PST)
+	s=arc-20240116; t=1762388001; c=relaxed/simple;
+	bh=ObVdtDfNvDGCloet95db6zbqxebwnJkzexi+flUko8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RmTiGrjlW5MIVLiyMcJ63qaEaixAA1y/p1aEGcgqPaeuaZTKe3HOZPevLRzh6a5Bwq174yFtOT1wJ7BH1IVbNLAUV08PO3c0S/p1kVmgm7vLcEGrtgkh6P9GRrO59SZDTuugbt4CbDckHw8xphMqG94cWgQ509i71zNL43M20Lg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mQVj4e1C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59DD2C4CEF5;
+	Thu,  6 Nov 2025 00:13:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762388001;
+	bh=ObVdtDfNvDGCloet95db6zbqxebwnJkzexi+flUko8k=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mQVj4e1CqHXE2KrtPx53ZQeScBDwV1Rf5YU9Fc/O9vVeMgIAa63r31XSygd6giq67
+	 Zc5A+f+pVh5SCF27BbWhobTDXU4ItXU1PEgPGDN+9UucBVxkogOttfueFkUKWTeXgc
+	 j6ay7C7XRbx+HRZou+6M2WqinlDAPDvjQ7C13zWlmmOqLj/q1n6YAYGQl07q5hKMxO
+	 QD84xz+Vufyh3rozCclUbbpdVtIhT/3BITTlCFCYRTkobnvPPkRtyuPuZ21azoyAtG
+	 GERrt5Yf3O5ddNnRLf0h9QOwyitqUnFNlKRR25ldBDVRRHJCxlCCtlHOP3pS3m0IJs
+	 nrff2hvLUMoXg==
+Date: Wed, 5 Nov 2025 16:13:19 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, Donald Hunter <donald.hunter@gmail.com>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Jan Stancek
+ <jstancek@redhat.com>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+ =?UTF-8?B?QXNiasO4cm4=?= Sloth =?UTF-8?B?VMO4bm5lc2Vu?= <ast@fiberby.net>,
+ Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, Ido
+ Schimmel <idosch@nvidia.com>, Guillaume Nault <gnault@redhat.com>, Petr
+ Machata <petrm@nvidia.com>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 2/3] netlink: specs: update rt-rule src/dst
+ attribute types to support IPv4 addresses
+Message-ID: <20251105161319.0591f96e@kernel.org>
+In-Reply-To: <aQsDA7ufLlIwSf1h@fedora>
+References: <20251029082245.128675-1-liuhangbin@gmail.com>
+	<20251029082245.128675-3-liuhangbin@gmail.com>
+	<20251029163742.3d96c18d@kernel.org>
+	<aQnG8IYsY3oyYekf@fedora>
+	<20251104164804.540a9b8d@kernel.org>
+	<aQsDA7ufLlIwSf1h@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251105201415.227144-1-hoyeon.lee@suse.com> <CAADnVQK7Qa5v=fkQtnx_A2OiXDDrWZAYY6qGi8ruVn_dOXmrUw@mail.gmail.com>
- <b3f13550169288578796548f12619e5e972c0636.camel@gmail.com>
- <CAADnVQJVYDbOCuJnf9jZWdFya7-PfFfPv2=d2M=75aA+VGGayg@mail.gmail.com> <8541c5bb758bc06e8c865aaa4f95456ac3238321.camel@gmail.com>
-In-Reply-To: <8541c5bb758bc06e8c865aaa4f95456ac3238321.camel@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 5 Nov 2025 15:43:15 -0800
-X-Gm-Features: AWmQ_bndYwW94kW--NSZQuJg-9ElD91TnXSYs-Z0mmovjayEfLI3uc8pkBOaK5I
-Message-ID: <CAADnVQL91xsujXt4GWjgCYC+PdBC-2ZH6GqefXws_YHiL7B7Sg@mail.gmail.com>
-Subject: Re: [bpf-next] selftests/bpf: refactor snprintf_btf test to use bpf_strncmp
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Hoyeon Lee <hoyeon.lee@suse.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 5, 2025 at 3:38=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com>=
- wrote:
->
-> On Wed, 2025-11-05 at 15:33 -0800, Alexei Starovoitov wrote:
-> > On Wed, Nov 5, 2025 at 2:52=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.=
-com> wrote:
-> > >
-> > > On Wed, 2025-11-05 at 14:45 -0800, Alexei Starovoitov wrote:
-> > > > On Wed, Nov 5, 2025 at 12:14=E2=80=AFPM Hoyeon Lee <hoyeon.lee@suse=
-.com> wrote:
-> > > > >
-> > > > > The netif_receive_skb BPF program used in snprintf_btf test still=
- uses
-> > > > > a custom __strncmp. This is unnecessary as the bpf_strncmp helper=
- is
-> > > > > available and provides the same functionality.
-> > > > >
-> > > > > This commit refactors the test to use the bpf_strncmp helper, rem=
-oving
-> > > > > the redundant custom implementation.
-> > > > >
-> > > > > Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
-> > > > > ---
-> > > > >  .../selftests/bpf/progs/netif_receive_skb.c       | 15 +--------=
-------
-> > > > >  1 file changed, 1 insertion(+), 14 deletions(-)
-> > > > >
-> > > > > diff --git a/tools/testing/selftests/bpf/progs/netif_receive_skb.=
-c b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> > > > > index 9e067dcbf607..186b8c82b9e6 100644
-> > > > > --- a/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> > > > > +++ b/tools/testing/selftests/bpf/progs/netif_receive_skb.c
-> > > > > @@ -31,19 +31,6 @@ struct {
-> > > > >         __type(value, char[STRSIZE]);
-> > > > >  } strdata SEC(".maps");
-> > > > >
-> > > > > -static int __strncmp(const void *m1, const void *m2, size_t len)
-> > > > > -{
-> > > > > -       const unsigned char *s1 =3D m1;
-> > > > > -       const unsigned char *s2 =3D m2;
-> > > > > -       int i, delta =3D 0;
-> > > > > -
-> > > > > -       for (i =3D 0; i < len; i++) {
-> > > > > -               delta =3D s1[i] - s2[i];
-> > > > > -               if (delta || s1[i] =3D=3D 0 || s2[i] =3D=3D 0)
-> > > > > -                       break;
-> > > > > -       }
-> > > > > -       return delta;
-> > > > > -}
-> > > > >
-> > > > >  #if __has_builtin(__builtin_btf_type_id)
-> > > > >  #define        TEST_BTF(_str, _type, _flags, _expected, ...)    =
-               \
-> > > > > @@ -69,7 +56,7 @@ static int __strncmp(const void *m1, const void=
- *m2, size_t len)
-> > > > >                                        &_ptr, sizeof(_ptr), _hfla=
-gs);   \
-> > > > >                 if (ret)                                         =
-       \
-> > > > >                         break;                                   =
-       \
-> > > > > -               _cmp =3D __strncmp(_str, _expectedval, EXPECTED_S=
-TRSIZE); \
-> > > > > +               _cmp =3D bpf_strncmp(_str, EXPECTED_STRSIZE, _exp=
-ectedval); \
-> > > >
-> > > > Though it's equivalent, the point of the test is to be heavy
-> > > > for the verifier with open coded __strncmp().
-> > > >
-> > > > pw-bot: cr
-> > >
-> > > I double checked that before acking, the test was added as a part of =
-[1].
-> > > So it seems to be focused on bpf_snprintf_btf(), not on scalability.
-> > > And it's not that heavy in terms of instructions budget:
-> > >
-> > > File                     Program                  Verdict  Insns  Sta=
-tes
-> > > -----------------------  -----------------------  -------  -----  ---=
----
-> > > netif_receive_skb.bpf.o  trace_netif_receive_skb  success  18152     =
-629
-> >
-> > Is this before or after?
-> > What is the % decrease in insn_processed?
-> > I'd like to better understand the impact of the change.
->
-> That's before, after the change it is as follows:
->
-> File                     Program                  Verdict  Insns  States
-> -----------------------  -----------------------  -------  -----  ------
-> netif_receive_skb.bpf.o  trace_netif_receive_skb  success   4353     235
-> -----------------------  -----------------------  -------  -----  ------
->
-> So, the overall impact is 18K -> 4K instructions processed.
+On Wed, 5 Nov 2025 07:55:47 +0000 Hangbin Liu wrote:
+> > > I just realize that most of the address/src/dst in rt-addr/route are
+> > > dual stack. The same with FRA_DST. We can't simply change binary to u=
+32.
+> > > So can we keep this u32 -> binary change? =20
+> >=20
+> > Ah, should have looked at more context..
+> > Yes, and in that case without the display-hint? =20
+>=20
+> The display-hint is required; otherwise, the displayed src and dst fields
+> appear as binary data, and setting the rule=E2=80=99s src/dst values also=
+ fails. I
+> haven=E2=80=99t checked the code yet, but with
+>   - display-hint: ipv4
+> the IPv6 addresses are also displayed correctly :)
 
-It's large enough impact for the verifier.
-I agree that the test was mainly focusing on testing
-bpf_snprintf_btf(), but it has a nice side effect by testing
-bounded loops too.
-I prefer to keep it as-is.
+Heh, we should have called the hint "ip" in that case :)
 
