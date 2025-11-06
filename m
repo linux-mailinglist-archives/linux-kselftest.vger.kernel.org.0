@@ -1,229 +1,143 @@
-Return-Path: <linux-kselftest+bounces-44978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45DE5C3BDE1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 15:51:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B22FC3BEAD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 15:59:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CD7A45020E7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 14:45:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 250B11B25C4F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 14:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6025345CAC;
-	Thu,  6 Nov 2025 14:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C578345CC5;
+	Thu,  6 Nov 2025 14:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="iIYqVCVW";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="cJfUt/5W";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="iIYqVCVW";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="cJfUt/5W"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PEzINZh4";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="RYUakjPF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740F4343208
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 14:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4A43254A6
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 14:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762440313; cv=none; b=Vp1bG2jUX6oM7pKDdepbAy3fn40nrpXk2zw6op4iSqfBv+VcXN1Amb9+d/hBMnAS1KENPp1wATd9oeAMwjtHCbXfww6xiwWJvmJvXyjkiUR9NawQgu2a3a52cm8w9qksbTLNARM2O7BuOGogVNYGJp5E4QkWDphtCWAorZeqbLk=
+	t=1762440798; cv=none; b=RAfhUUwBfBp3qbT9pnAnAkF7NEhCsYGUuiNx39pMFMLg6lcHwtHzuPPwHEbRBuLCjCu+nYQ/v1FldNTYG3e+6UgsZ9Vw6kHLOVpjDPn9U3DHujOxqUKvMjJmajOk2b784PmuUtDIWzBas79mSkrhtH2v0sTMDEEGNh/YM6QBDIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762440313; c=relaxed/simple;
-	bh=rHiQpD6Dguyzhqco5a71e3ZBXppCumTrPP+N3kV916Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P1PzpMvexoWqHkDTWrnxv9QQQ3xzzC15TStRaQQTydpaumHvullfY8Bqr5uBZgzw191WMZHT1INSmldd004i9rQRGuAmF7VMqwiscG+qPGYDdN4IONQm71zDi7th0CAkogxxOLt4HB+s/4VXjgYyGbfU9fXUKCtwZUx2hKhUg8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=iIYqVCVW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=cJfUt/5W; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=iIYqVCVW; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=cJfUt/5W; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9B3741F747;
-	Thu,  6 Nov 2025 14:45:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1762440309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	s=arc-20240116; t=1762440798; c=relaxed/simple;
+	bh=0Bi4LHwQ3Oz1+CJ2dXX3nYlqYoDS15IyYtJpQGkCX9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KRm9PzyOtnp6hNVJboc/SPeqN4tBp3utDJ64WVruFydwtxYkFlir5mzBZlyYXpnpYkfavWPT/MsflnoujweDjJZVihI4FlYnlbRSFa/m9F1D6CBeS5bra76GgfAEiWY/Gr1PDUWi2w2aJP55oQbmjXJulYUSVLF/uusLAVC7iv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PEzINZh4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=RYUakjPF; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762440795;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nKYZuLb6Nw7zZ6Jj1iayriDsnFotAsi2YnGGy/qZxaE=;
-	b=iIYqVCVW8trouxIau1Jb2p19gyPQLsOzO1T9vdE53k93FoKMpvRHjpW790I82MgSqiM7l5
-	lV9viSF/+SuKgoSxNvpQGlp+lA/4cEM1bu/0spHHY+6hnOEqgK7M3qH1WUoEoJCwdWdEaY
-	GELOWUe6yFpgvaxfGc5iPNviJy8PonQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1762440309;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nKYZuLb6Nw7zZ6Jj1iayriDsnFotAsi2YnGGy/qZxaE=;
-	b=cJfUt/5WY9dWjKauNGghYkyh6CE1i/Bw1taOd7vAPymyisRI4Wv7MWMPFElfXjs27hvHWq
-	FGCwOCOTNY6308CQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1762440309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nKYZuLb6Nw7zZ6Jj1iayriDsnFotAsi2YnGGy/qZxaE=;
-	b=iIYqVCVW8trouxIau1Jb2p19gyPQLsOzO1T9vdE53k93FoKMpvRHjpW790I82MgSqiM7l5
-	lV9viSF/+SuKgoSxNvpQGlp+lA/4cEM1bu/0spHHY+6hnOEqgK7M3qH1WUoEoJCwdWdEaY
-	GELOWUe6yFpgvaxfGc5iPNviJy8PonQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1762440309;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nKYZuLb6Nw7zZ6Jj1iayriDsnFotAsi2YnGGy/qZxaE=;
-	b=cJfUt/5WY9dWjKauNGghYkyh6CE1i/Bw1taOd7vAPymyisRI4Wv7MWMPFElfXjs27hvHWq
-	FGCwOCOTNY6308CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 52D9C13A31;
-	Thu,  6 Nov 2025 14:45:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id cLPwEHS0DGnJVQAAD6G6ig
-	(envelope-from <pfalcato@suse.de>); Thu, 06 Nov 2025 14:45:08 +0000
-Date: Thu, 6 Nov 2025 14:45:06 +0000
-From: Pedro Falcato <pfalcato@suse.de>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v2 2/5] mm: add atomic VMA flags, use VM_MAYBE_GUARD as
- such
-Message-ID: <y6a4qchmj7jnaogx6u5a3i6lni7v54lj25ipwb7tdtakcudakr@vm6vt7eumxax>
-References: <cover.1762422915.git.lorenzo.stoakes@oracle.com>
- <94935cf140e3279c234b39e0d976c4718c547c73.1762422915.git.lorenzo.stoakes@oracle.com>
+	bh=zoyCQ2/Ndn55B6FLT+akNdN3gz83tHokFqTe1vC7y18=;
+	b=PEzINZh4cDRhqRBdS0i6mmg0Cn/vA2ye6tMkPDFEoJOkcWzqAZzK1/vwwc23VGTE0CCZ+Q
+	uFl10R1F5kf6A89St/hfUqoNPOz9zENvTZICdOtj6DEMgexAB2+QQcutYo43vtpHYAIEAR
+	KMpjEpBzutqieFqVIPoFYuVxvdDKGh0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-79-XYwsL4BGPeGqT0p4oXLeSw-1; Thu, 06 Nov 2025 09:53:13 -0500
+X-MC-Unique: XYwsL4BGPeGqT0p4oXLeSw-1
+X-Mimecast-MFC-AGG-ID: XYwsL4BGPeGqT0p4oXLeSw_1762440792
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-429cdb0706aso768703f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 06:53:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1762440792; x=1763045592; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zoyCQ2/Ndn55B6FLT+akNdN3gz83tHokFqTe1vC7y18=;
+        b=RYUakjPFBI1nQ6ByJIzNvlePbCJqTmoLqWb7LSgbpmqjTaiLZjm2ODi+vkKuZFaxQF
+         tcSj9lqHgLHryg3k3gngUnIA6/KoyUKAiHdh9sBIS1OaCHaljiidS4oGDa/3Sy8uPBFT
+         xumpfatHv1vLrt0iERFlnOrt0a+GslFR5a+N6owhFDN0pytct6kpwceJci9ruD/bXetd
+         CAmCKK+PvwDcTDPhE+h32qUYk9GHJU4eDVsWHjCzKsEC8dEphFc0INFpajZD4bWm78fW
+         lmJSBhdOaDtMIycqhYAQE6akAgaoNQvI2OKrKBB95qllMWmK8tYyRMftjzTqBQLL9fTj
+         uXWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762440792; x=1763045592;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zoyCQ2/Ndn55B6FLT+akNdN3gz83tHokFqTe1vC7y18=;
+        b=SDG0dwO/jsaxuj+bo+AIIiUL5rkRAyumHRYmeTf34kQ5IBAtFD3LVGcYNrwKAEsiYM
+         7Ns7wUdUmXs2MlrDTkdc/9t5o7qvkapHSkEISdPncEsjPnXl4Ds41QKA3Lkp1UnXtmi4
+         iXZaktvWf/1iwTfv6toXPB4CVyLb/Xbp0oqm1kb7gkrBgMclsipqYbattLU6adZw7Ap6
+         3kLU0FLwzd0fT01aHJ5Z9Y6x/MQ96zgZwHhNJN0IsXhGR7mLkvGoJzKPQS5BIDS5rQ+D
+         V6QV6bS/QK09MEi22kVBbTVwOz2H+ndRbdfJcIFLfNK0Z5nizbvfdM7iVda3U1JLklTw
+         iDpA==
+X-Forwarded-Encrypted: i=1; AJvYcCW+pLI+X7bQWp+2KpWkYU6yDy3DUtMRH8YW1QGPwtaURktWFnsGtOSaD/oz0TuU655hylI2hRII3Emm46+iSp0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdlFCjheuuMLMEbUR25bDH9j3vbqmJG8iRfbhkWeCgmNGFGlqA
+	/07PSvPyMn0fLM4Q1i007rKCSTyJfcbViG2lhblwd3wRVBUsYTEG2oSMFO0nFCq/orDEwZyk3Od
+	b8Y/2UQf+tcUY6MUkoqZRbA77xuPHzfNz8abhB/X+F9+1YdnrDnJwg1i2EDmX64272csCJA==
+X-Gm-Gg: ASbGncsGeQsLcPR7sNmQkw/G3IHTFsP7hEtNBmkh9w1XTMWfArPJ53WB8Ks7SuYFoQK
+	BJKGE29ZUxxZS4qddCzLtvm059p3xzNBiR6lPMWsSvVvdXotLXgoUjhJ/jNw/ro7PK+pjQ6bQ62
+	xfg8TFCGw+guvKU0XTE9i6Km6R62L/P6FuUQ+DWQ7LqZ1HrQJns1eI9wyY9ISw42m3RY+90kQl9
+	hNrdtsXe9pIKVcwxQ0h5UDqJjNpwDBCElHd+A3FbynLXPBDGIzQksqM04SYmyAz6h4/S7EjOqNB
+	PBbOfOJd1goUSERLt2D/jF1Xk+APEX+G2fJeDt5eKDZF7U9vDynE7B6Z78YXPh1MPUBzQM5aeZX
+	Svw==
+X-Received: by 2002:a5d:5f56:0:b0:429:bac1:c7f5 with SMTP id ffacd0b85a97d-429e330aae1mr6387401f8f.44.1762440792102;
+        Thu, 06 Nov 2025 06:53:12 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGK5t7Fq6Zv4jWk7ndZnINKEE6SRIPfe793yxVRVTG7XMWpFYrBjzrI+ymWB1vQzl2d9MBt0g==
+X-Received: by 2002:a5d:5f56:0:b0:429:bac1:c7f5 with SMTP id ffacd0b85a97d-429e330aae1mr6387380f8f.44.1762440791658;
+        Thu, 06 Nov 2025 06:53:11 -0800 (PST)
+Received: from [192.168.88.32] ([212.105.155.83])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-429eb41102bsm5566783f8f.17.2025.11.06.06.53.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Nov 2025 06:53:11 -0800 (PST)
+Message-ID: <8d9c37d0-b238-4778-b18c-473bddd6481c@redhat.com>
+Date: Thu, 6 Nov 2025 15:53:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <94935cf140e3279c234b39e0d976c4718c547c73.1762422915.git.lorenzo.stoakes@oracle.com>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_ALL(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,redhat.com,oracle.com,suse.cz,kernel.org,google.com,suse.com,goodmis.org,efficios.com,vger.kernel.org,kvack.org,gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -3.80
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: net: local_termination: Wait for interfaces to
+ come up
+To: Vladimir Oltean <vladimir.oltean@nxp.com>,
+ "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org
+References: <20251104061723.483301-1-alexander.sverdlin@siemens.com>
+ <20251105213137.2knkuovcc3jpnhqv@skbuf>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20251105213137.2knkuovcc3jpnhqv@skbuf>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 06, 2025 at 10:46:13AM +0000, Lorenzo Stoakes wrote:
-> This patch adds the ability to atomically set VMA flags with only the mmap
-> read/VMA read lock held.
+On 11/5/25 10:31 PM, Vladimir Oltean wrote:
+> Functionally I have nothing against this change.
 > 
-> As this could be hugely problematic for VMA flags in general given that all
-> other accesses are non-atomic and serialised by the mmap/VMA locks, we
-> implement this with a strict allow-list - that is, only designated flags
-> are allowed to do this.
+> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 > 
-> We make VM_MAYBE_GUARD one of these flags, and then set it under the mmap
-> read flag upon guard region installation.
+> Two ideas to minimize the delta in a more obviously correct way.
+> They can perhaps be implemented together, independently of one another,
+> or not at all:
 > 
-> The places where this flag is used currently and matter are:
-> 
-> * VMA merge - performed under mmap/VMA write lock, therefore excluding
->   racing writes.
-> 
-> * /proc/$pid/smaps - can race the write, however this isn't meaningful as
->   the flag write is performed at the point of the guard region being
->   established, and thus an smaps reader can't reasonably expect to avoid
->   races. Due to atomicity, a reader will observe either the flag being set
->   or not. Therefore consistency will be maintained.
-> 
-> In all other cases the flag being set is irrelevant and atomicity
-> guarantees other flags will be read correctly.
+> - setup_wait() could be used directly, as it waits for $NUM_NETIFS, aka
+>   $h1 and $h2.
+> - There is no case where run_test() does not need a prior setup_wait()
+>   call, so it can just as well be placed as the first thing of that
+>   function.
 
-Probably important to write down that the only reason why this doesn't make
-KCSAN have a small stroke is that we are only changing one bit. i.e we can
-only have one bit of atomic flags before annotating every reader.
+I think both suggestions make a lot of sense, @Alexander: please send
+and updated version including them. You can retain Vladimir's RB tag.
 
-(Source: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/kcsan/permissive.h#n51)
+Thanks,
 
-> We additionally update madvise_guard_install() to ensure that
-> anon_vma_prepare() is set for anonymous VMAs to maintain consistency with
-> the assumption that any anonymous VMA with page tables will have an
-> anon_vma set, and any with an anon_vma unset will not have page tables
-> established.
+Paolo
 
-Isn't that what we already had? Or do you mean "*only* set for anonymous VMAs"?
-
-> 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-
-With the nits below and above addressed:
-Reviewed-by: Pedro Falcato <pfalcato@suse.de>
-
-> ---
->  include/linux/mm.h | 23 +++++++++++++++++++++++
->  mm/madvise.c       | 22 ++++++++++++++--------
->  2 files changed, 37 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 2a5516bff75a..2ea65c646212 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -518,6 +518,9 @@ extern unsigned int kobjsize(const void *objp);
->  /* This mask represents all the VMA flag bits used by mlock */
->  #define VM_LOCKED_MASK	(VM_LOCKED | VM_LOCKONFAULT)
->  
-> +/* These flags can be updated atomically via VMA/mmap read lock. */
-> +#define VM_ATOMIC_SET_ALLOWED VM_MAYBE_GUARD
-> +
->  /* Arch-specific flags to clear when updating VM flags on protection change */
->  #ifndef VM_ARCH_CLEAR
->  # define VM_ARCH_CLEAR	VM_NONE
-> @@ -860,6 +863,26 @@ static inline void vm_flags_mod(struct vm_area_struct *vma,
->  	__vm_flags_mod(vma, set, clear);
->  }
->  
-> +/*
-> + * Set VMA flag atomically. Requires only VMA/mmap read lock. Only specific
-> + * valid flags are allowed to do this.
-> + */
-> +static inline void vma_flag_set_atomic(struct vm_area_struct *vma,
-> +				       int bit)
-> +{
-> +	const vm_flags_t mask = BIT(bit);
-> +
-> +	/* mmap read lock/VMA read lock must be held. */
-> +	if (!rwsem_is_locked(&vma->vm_mm->mmap_lock))
-> +		vma_assert_locked(vma);
-> +
-> +	/* Only specific flags are permitted */
-> +	if (WARN_ON_ONCE(!(mask & VM_ATOMIC_SET_ALLOWED)))
-> +		return;
-
-VM_WARN_ON_ONCE?
-
--- 
-Pedro
 
