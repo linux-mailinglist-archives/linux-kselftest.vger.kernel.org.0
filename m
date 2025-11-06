@@ -1,443 +1,260 @@
-Return-Path: <linux-kselftest+bounces-44968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44969-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36DE3C3B838
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 15:00:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E3E4C3B8BA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 15:03:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 463D9623FF3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 13:47:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5B7964F8C3C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 13:57:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA69221544;
-	Thu,  6 Nov 2025 13:46:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B0EA334C25;
+	Thu,  6 Nov 2025 13:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="btnNVb/M";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AeC7lmf8";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="btnNVb/M";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AeC7lmf8"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lhSBiag2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CacJGXrB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3065E22129F
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 13:46:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762436808; cv=none; b=N4IDWX+Z5ef64xxrcdumyPhU7xsyNtgFkyfO30aPt1SOxx+tOtPnHS3Y/L6v5DV43gfGpDTYh+QRUauc3GnSt/VLFPcEJ49PRTlx3PptfUT4BXFdjUvj6aZqX+Wv5vlE4zMX1VVPjplffb7RUc4VIjuiLfUNlO5AxVvWxJA2kfc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762436808; c=relaxed/simple;
-	bh=DSY2Nsx3JJErEtfG5CUi3GqduJf1nXZtnyvAqUnvkw8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=db83r7HgSIs6XXFSjhbqeYTd/APA3ySvQxbeOo4Z4BpAyZwcqIvKKWL9iY2OJP32lY/WO/jrcQAb2b/HC6kLVpGcq4aYRwkTKW55AYfkz+nYYWxgz8e9+WRcyLZeFmBpxEYuqyFuI4vrmIctndlrX2Ik1zARTIo4Jc9GcXbWCVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=btnNVb/M; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AeC7lmf8; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=btnNVb/M; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AeC7lmf8; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 218C521133;
-	Thu,  6 Nov 2025 13:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762436799; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=srEru9BczoLVjnMr65S1BOS77cjygGQYHttJr4DpgI0=;
-	b=btnNVb/MvcugtbLI/y8eY2rdz3/5ii3+rhUQya3G10/nWA+eV6E4LsGmO8kEphHo0A+uRN
-	Q7fQUMQlyGifqop/NhGWXXUFZfyhha/ntXjM0XtORRGTOlYLTEbLaihpu7DhFhJ5D+MLL4
-	e7NB0P/PMytHVLFvoxRcHewgv83iIfs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762436799;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=srEru9BczoLVjnMr65S1BOS77cjygGQYHttJr4DpgI0=;
-	b=AeC7lmf8lSe1/oJTrHtSxTwFSJzpf7ddLRjRFeGMNwlaNj2FlDqujnnR3SGgC52QLBjDNq
-	bspam6diG7yY1cDQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762436799; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=srEru9BczoLVjnMr65S1BOS77cjygGQYHttJr4DpgI0=;
-	b=btnNVb/MvcugtbLI/y8eY2rdz3/5ii3+rhUQya3G10/nWA+eV6E4LsGmO8kEphHo0A+uRN
-	Q7fQUMQlyGifqop/NhGWXXUFZfyhha/ntXjM0XtORRGTOlYLTEbLaihpu7DhFhJ5D+MLL4
-	e7NB0P/PMytHVLFvoxRcHewgv83iIfs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762436799;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=srEru9BczoLVjnMr65S1BOS77cjygGQYHttJr4DpgI0=;
-	b=AeC7lmf8lSe1/oJTrHtSxTwFSJzpf7ddLRjRFeGMNwlaNj2FlDqujnnR3SGgC52QLBjDNq
-	bspam6diG7yY1cDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E0DD9139A9;
-	Thu,  6 Nov 2025 13:46:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 9yAzNb6mDGlgGwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 06 Nov 2025 13:46:38 +0000
-Message-ID: <3d423848-2b55-4797-bdab-a9b42a373a45@suse.cz>
-Date: Thu, 6 Nov 2025 14:46:38 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E50B334694;
+	Thu,  6 Nov 2025 13:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762437442; cv=fail; b=aBgvVL7AbvmXCmB+8Mgf9O4ZrUkzFIOd7RD3SpoChQO8UezrfxCFmzyp3ytiMyQk7+UyH4mRKDCiTHGgNjjTcRCSALB68/k9HkvPWlQFnGfwYUnzwk01m4nFO7V3lMhtw201pUzSm/VB0/PcQnUio8EMAUaIk+NxkUY14ZbSZqw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762437442; c=relaxed/simple;
+	bh=aX9eeGx0W80Sm0kO/MVAdRPgu2ASl1jjU5fe6UEfqa0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=REG7GiLHij0mQZD4luFVIVFixU9VbVBPFocody0oGKElzSSFje/+7OYhmH7LXtwhd4yXAwpooynTmTx1KA2icR+6bTlpqYBosqn8FO4pPeMkA14rbeqEXEt0kqmHRaNbGrd1Ui7fE7Wb6LrMtZtELtuq5O0OSa9V2XwTyNruxEs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lhSBiag2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=CacJGXrB; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A6CJjZI030467;
+	Thu, 6 Nov 2025 13:56:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=aX9eeGx0W80Sm0kO/M
+	VAdRPgu2ASl1jjU5fe6UEfqa0=; b=lhSBiag21Te/EmChwdb0TUrPD+0lyCV5bV
+	FXMTFD9p3CzWv5e0CFUa9zLvCvYKakiIz4n36lYOLGxKchNcRPJg2XTGwhrudbR8
+	RVbiK6sg+YCqvzFsPZMjaARxeCbyywexcgzD1sAq53qj0cYJhuWLsN6j2lAO0fEv
+	/3lZdR+MdEJ16dpvKyofM8lKv+6QiOo2ybd2Uccww47RsXGWZg/XtnEaNTDA4BD4
+	Gmlmqfzg6Xof9+8e9r3JQQJinwp67su2+ivWWvxPBTrZpXfLSLpuPJTcZ7ijfaVl
+	TwDKDvPVdlrSTB+a+IQz8/njw3KLGH4eD3SnLzSBVX0EWeScnJpg==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a89q42907-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 06 Nov 2025 13:56:55 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A6CXsaf010927;
+	Thu, 6 Nov 2025 13:56:54 GMT
+Received: from ch4pr04cu002.outbound.protection.outlook.com (mail-northcentralusazon11013013.outbound.protection.outlook.com [40.107.201.13])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4a58nce9vb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 06 Nov 2025 13:56:54 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ZTQpOHjFO2RZyLlIJZDmzjfm6jxJURCSvTRB9GyiAGvLK+PdEfVpVjzOFXZP8ZezDb2JycflouVCcuhduJJIBEVsWb27Jiytbog8WCa2VFOndrB/5x8BowaUFq4jrZyWiKOl1YHWRvxr4wWw49W2DClh3fDLAxc1KtnzKBO7l1KCxylwDRoR/frDWb9Jx1/SdVrghhq4IBpd4MreemZkilaz8vaiZ5EutCP0g9tVTRmo6QxkqJ0fFVYIAmRiOJqtyHKdXgPkmLsenGgkbRwyV3rZDQG+sULeGhc/6ALMkWPGIBRD/HdtQLLscIolgKCrlP2vei0j+nbZH4NS8CwBUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aX9eeGx0W80Sm0kO/MVAdRPgu2ASl1jjU5fe6UEfqa0=;
+ b=nVokhghZ3r7Zg4cWkRjuo+QRmF1Jg794V59xtmjg6Q6R7wbaNFg3Yrlw2zlhgUKLQftHOjV6zoheDYw+N/amf4OBMw9nultXdlOzZqwYrcFvjBMiFxWF28i8AcuO12sze6mGinM7BwWk0QMF4vp6KLTuLIQLPuqeedF+ra/V10dV3vPMLRbWQ1aw5W7e+7fV/4ZnVL7LQqm5JULSRoPe9TmcInxdNqGHf7t9yN+PJ9perYF2Kqxpi43V7BO4F5uu8xoGd8EPVHqZLNesKhQvEkx1EG6cLOWQVgEbdTZLaxU9R29DOZjpNW4ICs4+LFCWRsnEUKWHRh6RgldHSI0sxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aX9eeGx0W80Sm0kO/MVAdRPgu2ASl1jjU5fe6UEfqa0=;
+ b=CacJGXrB/eF9u37RiDXdDY56XEkMc+jj+fvIwHxVRb5Ncz9NkP90NjxWNcJfCAxrIOKxMI9PTPCKSQ7RqGdG7cAalJpiEWp/HqvPHBUk2z4Pdt6jYVPKv9dRrGmjBUZAMPx5MX79cNFSfmktOL+jOeOesZ2Ftxh5OQm9KNQ6CI8=
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
+ by SA2PR10MB4666.namprd10.prod.outlook.com (2603:10b6:806:112::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.14; Thu, 6 Nov
+ 2025 13:56:51 +0000
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2%6]) with mapi id 15.20.9275.015; Thu, 6 Nov 2025
+ 13:56:51 +0000
+Date: Thu, 6 Nov 2025 13:56:49 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v2 1/5] mm: introduce VM_MAYBE_GUARD and make visible in
+ /proc/$pid/smaps
+Message-ID: <32e6be58-1738-4f1f-9ce1-78209d4e5174@lucifer.local>
+References: <cover.1762422915.git.lorenzo.stoakes@oracle.com>
+ <fe38b1a43364f72d1ce7a6217e53a33c9c0bb0c5.1762422915.git.lorenzo.stoakes@oracle.com>
+ <30a9baa7-5368-4ef7-9091-80d170cfb5c6@suse.cz>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30a9baa7-5368-4ef7-9091-80d170cfb5c6@suse.cz>
+X-ClientProxiedBy: LO2P265CA0166.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:9::34) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/5] mm: implement sticky, copy on fork VMA flags
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Andrei Vagin <avagin@gmail.com>
-References: <cover.1762422915.git.lorenzo.stoakes@oracle.com>
- <9c9e9fb6b767556594b2cef023db01d45d8f8463.1762422915.git.lorenzo.stoakes@oracle.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <9c9e9fb6b767556594b2cef023db01d45d8f8463.1762422915.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[lwn.net,redhat.com,oracle.com,kernel.org,google.com,suse.com,goodmis.org,efficios.com,suse.de,vger.kernel.org,kvack.org,gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|SA2PR10MB4666:EE_
+X-MS-Office365-Filtering-Correlation-Id: d1b19e54-af28-4746-2db2-08de1d3c561a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?J6cWJXCizpJBgxrXgPl83sxqI9DAXYJCPtSoa9Wnjnth+C6mEU25hEeDErBP?=
+ =?us-ascii?Q?kiQkr7YpfbTIpnQxChp09ydhDvt1v4sBBlIuI2Ly2g1N9hsMMew5bDY8ZQIk?=
+ =?us-ascii?Q?JBOJ1LRQ+AdFKQbiLC5VT+tuteb8r87Ct384yrE3bspElc4yOxM6McJdP21b?=
+ =?us-ascii?Q?BAbocRwmAl+5hSBIhiraesQ4XYDurlJYCxsY0UlrgD6xyr+ChsoOcJ6N7osX?=
+ =?us-ascii?Q?kQNwRHZW1TljhQOgpQKBPUB18JLCy/JOpmgOMrDWW8kqZ9hkdY02HIPLBlEm?=
+ =?us-ascii?Q?F6lHhFjNaRWH9HvSWg2RfM0jA5iHqdjShgQS5dz5YD38EZSZBGD56SUBSWEh?=
+ =?us-ascii?Q?isDTwW4gDuhMcJauE131IsTTAfn7pTtvSMi6mDYKqc/d8cFRYlXzC4S/WLCy?=
+ =?us-ascii?Q?Gae9nnndFBTWK6M8BeBtkMXUr9l1tFmobnQXw4ja9DiVXgP8pU+kGSI/9fU+?=
+ =?us-ascii?Q?e/bH48/dYN3//9vb+VjM3L2S2r/mhGBaEqsnpz/z3+glDR/xrG+3FPJhMgiS?=
+ =?us-ascii?Q?GtVzbJ0/uO9cO8yfVfr2PM4NnWUXnaqrZURq2BMVR/lcaxriH33CbTrUxSkl?=
+ =?us-ascii?Q?oCjksD2uOVyiQ2bfm8D8N+1grndFn2ucty5frtyTIrA+U5TkJoWp7p8AkuB1?=
+ =?us-ascii?Q?rX3iyDf31O5/sBjgaZblaZ8E7z4euqSe6oBfMjhDOjjUku7dGDdLpPIBKERU?=
+ =?us-ascii?Q?FCOZjTRrNs+Rw/qhByHEMceTphdYep2scy9fDt996KpcK5Jyc6/EIalu3k5A?=
+ =?us-ascii?Q?aErfAlR6FUEsK2qvM6br2bRWYwzSeW6Dc0Jjh0/bM4ZR2IvwAic1g89eCU3O?=
+ =?us-ascii?Q?dcGY64o2LMTCn8VIUk1UlazNdOaN2BnQz1tpI1KT6C38V1H03W4uv8xSdJPV?=
+ =?us-ascii?Q?TldqZubJlaS6GqdjMQfDwZFSFMAS37xGx7YPbHAJ/92OEMhP9RjuVpXWg2EC?=
+ =?us-ascii?Q?A1r46K8tAzWoXqCe+5m+oGyzPryaVUrrnkyy5YWLouv3MTVQloRuCrxD60Bh?=
+ =?us-ascii?Q?+RDydIWAriaHh58QoHPg4uzjFlL+Ee2q06D5oRdPmyydVVj0yelOxp51MIDZ?=
+ =?us-ascii?Q?UKbHb6t7W6R9jxtOtiUffyKOzqUUQDDFljbT1UyfdMTcJH8NaCAvkb1f/pBL?=
+ =?us-ascii?Q?YnFIO0lR16PjeysBEF5byOgKoesfwl4ZF1/ZdS3dGGF7TVOCwwbqIIgP5vkj?=
+ =?us-ascii?Q?8lkBxQztwFzS3gZxbqMGtePPavfGIIwW3a7SHncWZtpVTAKBf6AB/aDdz0jB?=
+ =?us-ascii?Q?nChX/xoRuIrVjpIzBH2Syz3WOWkqAE2sF5zmrG9zfP07iO8LmoTG5X0zQGf2?=
+ =?us-ascii?Q?U/AGB0RVS8m9KFJoF9jNPOpjNl7nCgHfCaYUW64fD1vTl+1NJG8bZY9ahJr7?=
+ =?us-ascii?Q?lBl8z/MAHCZVRiFN/WnFM86bP8Lb75zQ+1gH04I4S2gdQvs0gtOCmYC8WPGp?=
+ =?us-ascii?Q?vCWrlTIUad17c7k9eXEz/PbE5+jdWuBn?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?iDHkYYERXgdcyMmHWNeOC5aGKleYsdpgiI1zG+We9ldH2j4y405HRWTAHf/m?=
+ =?us-ascii?Q?67nLfU2K9xq9xGLEDNwK4D+hWsx+/eD5vRMfv4bNM+9WDShnfUFMR3LW/6oW?=
+ =?us-ascii?Q?ZmfuISQbXbFgjPOIowGZDd6Dx150W2ZYGbZXbUV8y3MKLZN8KmElIylS9pag?=
+ =?us-ascii?Q?6S7k7vWVCq28ux4+ViYzGzIml7ePiaUXPRsJ6sM6CPjuXgRYxZDrin+fMF85?=
+ =?us-ascii?Q?+jwKZ940uO2BNdugBKwuyIB5BZsrPwoS1qPibEflub3e+EiRL1J07qVzBjNq?=
+ =?us-ascii?Q?+D/N5G0ROrZX1tRAjpqXb9MukY5f43MCrmnjp0KNxjfwlnkeHGBjA8IO6Lgm?=
+ =?us-ascii?Q?HGAiXipXKchumYe0tp+N/4TlJQ1QpqZItnRu7C1ifX/MQzFhD2gPrytvJsYn?=
+ =?us-ascii?Q?tkjA8tgZFNKkQ89yfatgNKWOhnjG9XI0lm+XaZ2mGCncP8jAcq8SPMTjlZPJ?=
+ =?us-ascii?Q?7fyxF15KN07c55QJ3ifSU5y/FfpFPxgRHpuBxKKI/WIGOC4zNbi0kFb4wy6R?=
+ =?us-ascii?Q?F39RV5gJlXkYtCyoQp0oo+TY8kdX3jhjDuTywBnPpr171FjgI3wmuPbnKgWQ?=
+ =?us-ascii?Q?Qyc6NDlVEfqZBOjNdZz2x1DktNHCWeIViKdDW+nhELSlMb5+8Fhj0vX6IMug?=
+ =?us-ascii?Q?YPAY7eFJiKqAltQlre+x9Z6YULmQegeik2OTHR4EM3seol0SmyXBFsMWFikY?=
+ =?us-ascii?Q?IkYnb777DsyYADTbnw8pFHppTiWx5LLDoExkivDxJ68d9ZWHtKmLyRZw9XDH?=
+ =?us-ascii?Q?V6R46NZRZIOLyRsv96M7xcZ13SJ9OC/vBf/Y8b4vDwNaDSeDYzIWTGD6TrJh?=
+ =?us-ascii?Q?nC5dNDTOW/GvS/dhNIeHjnY6UyqKEODNwQd4ZEK9pe5C8x99uJa6Moy6s2OW?=
+ =?us-ascii?Q?GXR6KGwacsHLqEKjdPOKtLYL2uG35apJZKiD8xwVbBcz0p8ZCGk4TJ2IeEpH?=
+ =?us-ascii?Q?CShmwEguq3VDilbbKKo9LFoLyQvgi7OkjtTsK0Vh5B3vDqROOQnkTaLx8J/c?=
+ =?us-ascii?Q?1YzmrbfYc5YDaeqA5KXrvADyy9b8cGCsRUjT0YvBfUuC9cS9+diTC0QL7g94?=
+ =?us-ascii?Q?rvwT2iJRqIuLQ/zv4BBX2J9+uwZlWA669ZM6bvUzEoKe6u4OqxV6/6+LbUfW?=
+ =?us-ascii?Q?yihAUKMa9dhIylr9cjupu+wyNiuvrlJYSKciTSxORgcmhIKfIeDft65YjFR5?=
+ =?us-ascii?Q?WX/BBs51HVj9Ce9tmI/gmN+3jzgY310g2aw5V+sEMJNJGeXapATm6Z86bsIE?=
+ =?us-ascii?Q?7NE2e0xmXX3+l6yZ1K770o7IYx/CnSH/5Z7A3tekUEHkMobbkesCVR6znzod?=
+ =?us-ascii?Q?DN/drLo1GJ3qvVI8ICJCsWz1NE9DPAQVOFYywRhwce6Hl1/ETLyWlpVT7O4W?=
+ =?us-ascii?Q?3MSxUT0F/BfuLx0ZpI7harE2wXHOSA8U11e42GmMRAj0xw26tQ6Cvoi1VG6D?=
+ =?us-ascii?Q?da3cOjS316uJlWjU+UY+DBTKTMqt1TZ+VfvepWVSJdiLRYJNLnVNP59GVaFR?=
+ =?us-ascii?Q?YrgNIlxoNjFUO2ukiyuzc/zBhXNUHPF1Zsa27CRzNbJam0GtBhnuYqE/UT/f?=
+ =?us-ascii?Q?+0NqkNsmJFqJ0bUz75BQhtGB6/RBml7mXrOKhMje5uCylqpbN1lD6GgINDqj?=
+ =?us-ascii?Q?EA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Iy0lynZNHh6Z27ZjPQohtnnx7fy1AkROO5Vz5PoK33GtiY7BBCj1effzRoChRf+jandsED2a4aP/88kgVSscsBwHqqOKi61/eWMEOJZOcE1bhgGgbd7vjRtY65mAets6UHd+CKSUlarXxLeLHC1fPX4X/8gyLdaXjSnAhQWmOcOniuhAy9o+pDgKd6/wuJVU0TLei20oX7bO5eXij9ptmB8lbY92jChAW4DMGvyqVurkCEb9gRHWvua+uV9Eaw4ENYo0rpdp7AQ2CTF+fsx+xBqyw3ziEdWqnQz+lbwM2hnUW9/940M0tliYRtKBIrVybCto88O0Xe38hmvhjISru6mqgx9zyPcTkTpoSGg9xe1bE/7F9tPdKCFKCyevKNKg28tbiOlKj9PQ8SCIFPVIMDqBfTx3Gy5qDASUh4X5X/0/4rOJwsYqtCVkFEZW8hgmdw+qg003f+VzW5y0fiV4gIxhrRQsRWdtMheTUnMnq6UsUHxc1y5zHZqn9eNhqgU8/PUYkdScYrmh84YYQE69tC+cnjzFFOtVA3NjaO4qPjKFf/LAc8NvQ3L6uBuWQl+tearuuBWzUQNZrgF7txKMiWkK4gWBXiaWqbcAr0DAxcE=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d1b19e54-af28-4746-2db2-08de1d3c561a
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 13:56:51.3906
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SE19/020zIeXdffhAT6Zo9G4SxINtnb3UBFc+8mE2SkTSUsEgNAmQSo81xt4KaGEcBs62TYmS3wZbIjuMaNzOTHYBAamVUJMLVZgM9Xcy0E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4666
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-06_03,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 malwarescore=0
+ spamscore=0 suspectscore=0 mlxscore=0 adultscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
+ definitions=main-2511060110
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDEyMyBTYWx0ZWRfX8Nkz8Frlr0Zl
+ 6AqvSOKyCCpcfnJ8zeVxqBPaaNYIprQtzhXSz/oxw2VQE9OzCa+jh2DvvhLKKWKuo2DllNfQMIW
+ kR6LgqOgPjG60Xx3iZNtWaCL1+phAcdfA4i7sC6XCwOaWKDxCrXxJHO1FwJJPSwF/wWzzig+8ED
+ 0u+ZvcPzDPifkWr7QovfolzciiqM2EP9ajdZ5YJu+y97tkx6HxT3v1HlBfi3X1Fj3e+mrY7ZC7y
+ QnUaBG+J2YgG5+PM66lak9vIv0IEEi/qXAV1Q0iPW5xgseVGoM/3RdQPzadic2zQejdiEaVlNjH
+ AoE7Nij65h+ZiecwfUKQJpKANRS6Vl4JSaHYsmEcrCPBgzIp8vC6MV7BGSz+ZizXf4FqPccFn4E
+ C6X4fsurAdxtQups5kLpishJ++9zhw==
+X-Proofpoint-ORIG-GUID: NOW2lVyAYr6JTKK_flybggKFIL7Dub4R
+X-Proofpoint-GUID: NOW2lVyAYr6JTKK_flybggKFIL7Dub4R
+X-Authority-Analysis: v=2.4 cv=PcPyRyhd c=1 sm=1 tr=0 ts=690ca927 cx=c_pps
+ a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=yPCof4ZbAAAA:8 a=21C9bfrVPfUfU2NVX8EA:9 a=CjuIK1q_8ugA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
 
-On 11/6/25 11:46, Lorenzo Stoakes wrote:
-> It's useful to be able to force a VMA to be copied on fork outside of the
-> parameters specified by vma_needs_copy(), which otherwise only copies page
-> tables if:
-> 
-> * The destination VMA has VM_UFFD_WP set
-> * The mapping is a PFN or mixed map
-> * The mapping is anonymous and forked in (i.e. vma->anon_vma is non-NULL)
-> 
-> Setting this flag implies that the page tables mapping the VMA are such
-> that simply re-faulting the VMA will not re-establish them in identical
-> form.
-> 
-> We introduce VM_COPY_ON_FORK to clearly identify which flags require this
-> behaviour, which currently is only VM_MAYBE_GUARD.
-> 
-> Any VMA flags which require this behaviour are inherently 'sticky', that
-> is, should we merge two VMAs together, this implies that the newly merged
-> VMA maps a range that requires page table copying on fork.
-> 
-> In order to implement this we must both introduce the concept of a 'sticky'
-> VMA flag and adjust the VMA merge logic accordingly, and also have VMA
-> merge still successfully succeed should one VMA have the flag set and
-> another not.
-> 
-> Note that we update the VMA expand logic to handle new VMA merging, as this
-> function is the one ultimately called by all instances of merging of new
-> VMAs.
-> 
-> This patch implements this, establishing VM_STICKY to contain all such
-> flags and VM_IGNORE_MERGE for those flags which should be ignored when
-> comparing adjacent VMA's flags for the purposes of merging.
-> 
-> As part of this change we place VM_SOFTDIRTY in VM_IGNORE_MERGE as it
-> already had this behaviour, alongside VM_STICKY as sticky flags by
-> implication must not disallow merge.
-> 
-> As a result of this change, VMAs with guard ranges will now not have their
-> merge behaviour impacted by doing so and can be freely merged with other
-> VMAs without VM_MAYBE_GUARD set.
-> 
-> We also update the VMA userland tests to account for the changes.
-> 
-> Note that VM_MAYBE_GUARD being set atomically remains correct as
-> vma_needs_copy() is invoked with the mmap and VMA write locks held,
-> excluding any race with madvise_guard_install().
-> 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> ---
->  include/linux/mm.h               | 32 ++++++++++++++++++++++++++++++++
->  mm/memory.c                      |  3 +--
->  mm/vma.c                         | 22 ++++++++++++----------
->  tools/testing/vma/vma_internal.h | 32 ++++++++++++++++++++++++++++++++
->  4 files changed, 77 insertions(+), 12 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 2ea65c646212..4d80eaf4ef3b 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -527,6 +527,38 @@ extern unsigned int kobjsize(const void *objp);
->  #endif
->  #define VM_FLAGS_CLEAR	(ARCH_VM_PKEY_FLAGS | VM_ARCH_CLEAR)
->  
-> +/* Flags which should result in page tables being copied on fork. */
-> +#define VM_COPY_ON_FORK VM_MAYBE_GUARD
-> +
-> +/*
-> + * Flags which should be 'sticky' on merge - that is, flags which, when one VMA
-> + * possesses it but the other does not, the merged VMA should nonetheless have
-> + * applied to it:
-> + *
-> + * VM_COPY_ON_FORK - These flags indicates that a VMA maps a range that contains
-> + *                   metadata which should be unconditionally propagated upon
-> + *                   fork. When merging two VMAs, we encapsulate this range in
-> + *                   the merged VMA, so the flag should be 'sticky' as a result.
-> + */
-> +#define VM_STICKY VM_COPY_ON_FORK
+On Thu, Nov 06, 2025 at 12:12:10PM +0100, Vlastimil Babka wrote:
+> On 11/6/25 11:46, Lorenzo Stoakes wrote:
+> > Currently, if a user needs to determine if guard regions are present in a
+> > range, they have to scan all VMAs (or have knowledge of which ones might
+> > have guard regions).
+> >
+> > Since commit 8e2f2aeb8b48 ("fs/proc/task_mmu: add guard region bit to
+> > pagemap") and the related commit a516403787e0 ("fs/proc: extend the
+> > PAGEMAP_SCAN ioctl to report guard regions"), users can use either
+> > /proc/$pid/pagemap or the PAGEMAP_SCAN functionality to perform this
+> > operation at a virtual address level.
+> >
+> > This is not ideal, and it gives no visibility at a /proc/$pid/smaps level
+> > that guard regions exist in ranges.
+> >
+> > This patch remedies the situation by establishing a new VMA flag,
+> > VM_MAYBE_GUARD, to indicate that a VMA may contain guard regions (it is
+> > uncertain because we cannot reasonably determine whether a
+> > MADV_GUARD_REMOVE call has removed all of the guard regions in a VMA, and
+> > additionally VMAs may change across merge/split).
+> >
+> > We utilise 0x800 for this flag which makes it available to 32-bit
+> > architectures also, a flag that was previously used by VM_DENYWRITE, which
+> > was removed in commit 8d0920bde5eb ("mm: remove VM_DENYWRITE") and hasn't
+> > bee reused yet.
+> >
+> > We also update the smaps logic and documentation to identify these VMAs.
+> >
+> > Another major use of this functionality is that we can use it to identify
+> > that we ought to copy page tables on fork.
+> >
+> > We do not actually implement usage of this flag in mm/madvise.c yet as we
+> > need to allow some VMA flags to be applied atomically under mmap/VMA read
+> > lock in order to avoid the need to acquire a write lock for this purpose.
+> >
+> > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+>
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+>
 
-TBH I don't see why there should be always an implication that copying on
-fork implies stickiness in merging. Yeah, VM_MAYBE_GUARD is both, but in
-general, is there any underlying property that makes this a rule?
-
-> +/*
-> + * VMA flags we ignore for the purposes of merge, i.e. one VMA possessing one
-> + * of these flags and the other not does not preclude a merge.
-> + *
-> + * VM_SOFTDIRTY - Should not prevent from VMA merging, if we match the flags but
-> + *                dirty bit -- the caller should mark merged VMA as dirty. If
-> + *                dirty bit won't be excluded from comparison, we increase
-> + *                pressure on the memory system forcing the kernel to generate
-> + *                new VMAs when old one could be extended instead.
-
-So I wonder if VM_SOFTDIRTY should be actually also sticky and not just
-VM_IGNORE_MERGE. The way I understand the flag suggests it should.
-Right now AFAICS its rather undefined if the result of vma merge has the
-flag - depending on which of the two VMA's stays and which is removed by the
-merge. "the caller should mark merged VMA as dirty" in the comment you're
-moving here seems not really happening or I'm missing it. __mmap_complete()
-and do_brk_flags() do it, so any new areas are marked, but on pure merge of
-two vma's due to e.g. mprotect() this is really nondetermintic? AFAICT the
-sticky flag behavior would work perfectly for VM_SOFTDIRTY.
-
-> + *
-> + *    VM_STICKY - If one VMA has flags which most be 'sticky', that is ones
-> + *                which should propagate to all VMAs, but the other does not,
-> + *                the merge should still proceed with the merge logic applying
-> + *                sticky flags to the final VMA.
-> + */
-> +#define VM_IGNORE_MERGE (VM_SOFTDIRTY | VM_STICKY)
-> +
->  /*
->   * mapping from the currently active vm_flags protection bits (the
->   * low four bits) to a page protection mask..
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 334732ab6733..7582a88f5332 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -1480,8 +1480,7 @@ vma_needs_copy(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma)
->  	if (src_vma->anon_vma)
->  		return true;
->  
-> -	/* Guard regions have momdified page tables that require copying. */
-> -	if (src_vma->vm_flags & VM_MAYBE_GUARD)
-> +	if (src_vma->vm_flags & VM_COPY_ON_FORK)
->  		return true;
->  
->  	/*
-> diff --git a/mm/vma.c b/mm/vma.c
-> index 0c5e391fe2e2..6cb082bc5e29 100644
-> --- a/mm/vma.c
-> +++ b/mm/vma.c
-> @@ -89,15 +89,7 @@ static inline bool is_mergeable_vma(struct vma_merge_struct *vmg, bool merge_nex
->  
->  	if (!mpol_equal(vmg->policy, vma_policy(vma)))
->  		return false;
-> -	/*
-> -	 * VM_SOFTDIRTY should not prevent from VMA merging, if we
-> -	 * match the flags but dirty bit -- the caller should mark
-> -	 * merged VMA as dirty. If dirty bit won't be excluded from
-> -	 * comparison, we increase pressure on the memory system forcing
-> -	 * the kernel to generate new VMAs when old one could be
-> -	 * extended instead.
-> -	 */
-> -	if ((vma->vm_flags ^ vmg->vm_flags) & ~VM_SOFTDIRTY)
-> +	if ((vma->vm_flags ^ vmg->vm_flags) & ~VM_IGNORE_MERGE)
->  		return false;
->  	if (vma->vm_file != vmg->file)
->  		return false;
-> @@ -808,6 +800,7 @@ static bool can_merge_remove_vma(struct vm_area_struct *vma)
->  static __must_check struct vm_area_struct *vma_merge_existing_range(
->  		struct vma_merge_struct *vmg)
->  {
-> +	vm_flags_t sticky_flags = vmg->vm_flags & VM_STICKY;
->  	struct vm_area_struct *middle = vmg->middle;
->  	struct vm_area_struct *prev = vmg->prev;
->  	struct vm_area_struct *next;
-> @@ -900,11 +893,13 @@ static __must_check struct vm_area_struct *vma_merge_existing_range(
->  	if (merge_right) {
->  		vma_start_write(next);
->  		vmg->target = next;
-> +		sticky_flags |= (next->vm_flags & VM_STICKY);
->  	}
->  
->  	if (merge_left) {
->  		vma_start_write(prev);
->  		vmg->target = prev;
-> +		sticky_flags |= (prev->vm_flags & VM_STICKY);
->  	}
->  
->  	if (merge_both) {
-> @@ -974,6 +969,7 @@ static __must_check struct vm_area_struct *vma_merge_existing_range(
->  	if (err || commit_merge(vmg))
->  		goto abort;
->  
-> +	vm_flags_set(vmg->target, sticky_flags);
->  	khugepaged_enter_vma(vmg->target, vmg->vm_flags);
->  	vmg->state = VMA_MERGE_SUCCESS;
->  	return vmg->target;
-> @@ -1124,6 +1120,10 @@ int vma_expand(struct vma_merge_struct *vmg)
->  	bool remove_next = false;
->  	struct vm_area_struct *target = vmg->target;
->  	struct vm_area_struct *next = vmg->next;
-> +	vm_flags_t sticky_flags;
-> +
-> +	sticky_flags = vmg->vm_flags & VM_STICKY;
-> +	sticky_flags |= target->vm_flags & VM_STICKY;
->  
->  	VM_WARN_ON_VMG(!target, vmg);
->  
-> @@ -1133,6 +1133,7 @@ int vma_expand(struct vma_merge_struct *vmg)
->  	if (next && (target != next) && (vmg->end == next->vm_end)) {
->  		int ret;
->  
-> +		sticky_flags |= next->vm_flags & VM_STICKY;
->  		remove_next = true;
->  		/* This should already have been checked by this point. */
->  		VM_WARN_ON_VMG(!can_merge_remove_vma(next), vmg);
-> @@ -1159,6 +1160,7 @@ int vma_expand(struct vma_merge_struct *vmg)
->  	if (commit_merge(vmg))
->  		goto nomem;
->  
-> +	vm_flags_set(target, sticky_flags);
->  	return 0;
->  
->  nomem:
-> @@ -1902,7 +1904,7 @@ static int anon_vma_compatible(struct vm_area_struct *a, struct vm_area_struct *
->  	return a->vm_end == b->vm_start &&
->  		mpol_equal(vma_policy(a), vma_policy(b)) &&
->  		a->vm_file == b->vm_file &&
-> -		!((a->vm_flags ^ b->vm_flags) & ~(VM_ACCESS_FLAGS | VM_SOFTDIRTY)) &&
-> +		!((a->vm_flags ^ b->vm_flags) & ~(VM_ACCESS_FLAGS | VM_IGNORE_MERGE)) &&
->  		b->vm_pgoff == a->vm_pgoff + ((b->vm_start - a->vm_start) >> PAGE_SHIFT);
->  }
->  
-> diff --git a/tools/testing/vma/vma_internal.h b/tools/testing/vma/vma_internal.h
-> index ddf58a5e1add..984307a64ee9 100644
-> --- a/tools/testing/vma/vma_internal.h
-> +++ b/tools/testing/vma/vma_internal.h
-> @@ -119,6 +119,38 @@ extern unsigned long dac_mmap_min_addr;
->  #define VM_SEALED	VM_NONE
->  #endif
->  
-> +/* Flags which should result in page tables being copied on fork. */
-> +#define VM_COPY_ON_FORK VM_MAYBE_GUARD
-> +
-> +/*
-> + * Flags which should be 'sticky' on merge - that is, flags which, when one VMA
-> + * possesses it but the other does not, the merged VMA should nonetheless have
-> + * applied to it:
-> + *
-> + * VM_COPY_ON_FORK - These flags indicates that a VMA maps a range that contains
-> + *                   metadata which should be unconditionally propagated upon
-> + *                   fork. When merging two VMAs, we encapsulate this range in
-> + *                   the merged VMA, so the flag should be 'sticky' as a result.
-> + */
-> +#define VM_STICKY VM_COPY_ON_FORK
-> +
-> +/*
-> + * VMA flags we ignore for the purposes of merge, i.e. one VMA possessing one
-> + * of these flags and the other not does not preclude a merge.
-> + *
-> + * VM_SOFTDIRTY - Should not prevent from VMA merging, if we match the flags but
-> + *                dirty bit -- the caller should mark merged VMA as dirty. If
-> + *                dirty bit won't be excluded from comparison, we increase
-> + *                pressure on the memory system forcing the kernel to generate
-> + *                new VMAs when old one could be extended instead.
-> + *
-> + *    VM_STICKY - If one VMA has flags which must be 'sticky', that is ones
-> + *                which should propagate to all VMAs, but the other does not,
-> + *                the merge should still proceed with the merge logic applying
-> + *                sticky flags to the final VMA.
-> + */
-> +#define VM_IGNORE_MERGE (VM_SOFTDIRTY | VM_STICKY)
-> +
->  #define FIRST_USER_ADDRESS	0UL
->  #define USER_PGTABLES_CEILING	0UL
->  
-
+Thanks
 
