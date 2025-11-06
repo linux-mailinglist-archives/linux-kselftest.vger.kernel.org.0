@@ -1,187 +1,202 @@
-Return-Path: <linux-kselftest+bounces-44863-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44864-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E167AC387A7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 01:28:39 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9E1FC38B57
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 02:30:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 595964EDC69
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 00:27:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1104334EA6E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 01:30:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 567BE1FA859;
-	Thu,  6 Nov 2025 00:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4055225779;
+	Thu,  6 Nov 2025 01:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DqJ7nCpw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YwLE4WPR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C381E0B9C
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 00:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC2321EF38E
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 01:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762388778; cv=none; b=fig9tJP/37Sx4LhzM8V9jjpY70EDa9ZeXPF+WoL1tYdCJjKBMJ0GZk3xbs0BzASgvPnOQFFmpQp/MqdHQT7jN5sH4OP59uARJ/c4RhizL5LCysn25sfW1x2EPIdkMYT8pRaXr2TjUJPR8k7FRXBbNryGOq+RXns17Qi6t5vf3Jw=
+	t=1762392611; cv=none; b=KgSGZvVDjrGrHd/O1xBCEK06/2wGvWcO0w97aNeIY/ZMA6znIx4F0ZNt7pY+ex74oEsL4HtcHQqP1QvtVyUj+Sn3nogjOBKIVlZxrkvPqM92JtvIDDScsHDkkIOiC+fuvYqgHflmA0/nq7S0c+N894BT5A06lhgYYvnP9abCkKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762388778; c=relaxed/simple;
-	bh=wGvVM7e8xZCbRb4uflWfr7nVVAQ6uh8PxX4m7dh8VMQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hHA+rwpIO+Bu1qAfCdjN0ESil1g5esQv0ljKwEAn2ubjAXAI2xaXAksApYxXlmux1nu6QyfSqLpYD4My/k6JyJ0s/0cFKv2zWflI4X2nwNcsPTojFSXtwTWYaodkLVuH0sXvjSzrIqg/4sc01kwTcahHcwwa3aI06MfyLKlpdU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DqJ7nCpw; arc=none smtp.client-ip=209.85.128.171
+	s=arc-20240116; t=1762392611; c=relaxed/simple;
+	bh=NkA6YQMsd3cE26swPPj5IvSf4rNy6eveXek+exPauMk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fAcmO4HhjqHg0X8SaftTrM1gfIT38QzWkp0ckehgWRLnYBL0AJhR+gv/dRbCCJCWTajqXUGEja7NQZ47935dUTCkvsgZ6h5nMEDdiEFiWV7sGTXolfGmdHroSRpmEf9dfVNwzQ78xIERORj0UG99q9kLWTyLuVSWrANvAYk0Np0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YwLE4WPR; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-7868b7b90b8so3479477b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 16:26:15 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4711b95226dso4376105e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Nov 2025 17:30:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762388775; x=1762993575; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1762392608; x=1762997408; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rGlD8g27EXt4mLiXT/5plrbsHpmSwLaKSFuPthIm2Z8=;
-        b=DqJ7nCpwpP6G851RirENXTgAFErtvnG9OOA/hzbsZcCkh4i9khLOqF3IsGnx/c/Ck1
-         cqZ2psqTdLw5hma8Vj/Yfg1CDd03qTFxzKhG0FyZYmwVW44TTxHOJhFai7P5YDWgQZ44
-         X6Gq9LQd8spsWZUXPMjRdXAv6aI5ZDmcMl7zILarTjb29ZS0/1gJPdPqI71GpC1LZYvv
-         TzaJmm/2b4TKQgJsdiqDSCXN8ipBIiSmtgegQaKKVVy7KxHogIR8hIBk0W5b3/GA0GMv
-         uIet0WA2EweJuvjZEz/kvr+glBG1adMBV8TwBUui+503LMQNm9BshdHR/+AiI+BMXL0k
-         XZ1w==
+        bh=pglOosQTIvBfeYgOgvZ/bymKX6TWUK4RdH77mW1U80s=;
+        b=YwLE4WPR3u/wDpXwTRvR0NS0lZnR87Deef7IDOdx+hR1QW8D2ZYtzZ4hoD6uTGgBZb
+         eKp51udHCrcIcq2e12Ja/wFFYJEXE88vJxUgDRtXPCqVwjzuYwNegw8YrD93PuNzxb5H
+         DJYNJ9td6iN3Vny14OdwK9BXXbRP34RIT424nJPLWIOQo/L+NdSmQO4BAY9oenW/6Enn
+         PB1kicyRiDM7h8JQuB+FFy5PPNGRNroT/Knk+mLanK69LLPs+zIL8k2Q0lTGzY6gMthT
+         Br9/GE8Jmo+Xu7oJkJnsDyc3d9KxeMwXVozHRHUJ+0J/7wdXHTR2neciFabhMJwLmhMK
+         4AOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762388775; x=1762993575;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1762392608; x=1762997408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rGlD8g27EXt4mLiXT/5plrbsHpmSwLaKSFuPthIm2Z8=;
-        b=Pm+s3QFD8rZWNltvN4yCCuF6IixyRALoP2a7xhHsiAfk5GivO0MgRRqNIoGwUikT1D
-         lZ/JJQu/PgynFn3WGOBe/jBhw2JTVbgFupSUf8/3aOyGxZwtJXYD1YQL5+u34V/a+WA+
-         aJ3uAU7eCQYYTIpYDWjTwrw7XXVydXS+Qebh6KDJqQxlXmP4J8LXuPkTWv6Nw9bBMqnt
-         j8T2jcD7HS6avrryIU9JYNbyY14topFgRZIMjkkXxJZPf/AdffdPxyMRBI8fgx/cemBV
-         42gaXGxW2HW7tCBglRF3nfiIEtCKk+z4UMJ4tvWmhxcWRF54MqIdQYULr8coniPwvXcG
-         Y9Zg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbq5ft2czC2qY13CfA8ZtaqzTcf6nUhry3mHFO+joOf/Q5Nbml9g+4rmta+JIuW/YaYakLbQ5zUlCkkjijbJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX77mqhR8Wm1FCgRmElqxaALsHJFv9GgDMwIa/wRlGPvB0avA3
-	dFLtYCxb/dpqnL3VZlF1+Pk4Od7EXlJoTjtYJuL4OZYBIP+sqB9DfCRm
-X-Gm-Gg: ASbGncuah+9L1hMu1E5nsnpO0YoHrte0waFeeGsu3C0nI3Ki/zXZFWGgO2VnMwwDr/h
-	TrvjnPrNohCkd6xaPqC9PdsXpGF9fVT3uUGs++V5uF2hi2zeyyqc+3A8Bi22aBLNa8kNzXnMh3N
-	wEgJ1zGi1TgLojzxJ4TWgaehpAItPFOPiR+xcOfPDSnhOXjAOGn1c4Q8KFOdt2HFxwf8XB4tAxq
-	Q1c140ZdslDmZtHs/hFELGaclYxzZcXYs0xLoCCXsyeqMsCnZCghEgT2jbh0msYLv7azyESMH0B
-	z6kkuVlRGbzmMoxF8OV9VBfBseXhaU1KYvmpoz4ZXGx2gWGBKIYNwrRstAtwwnTx5uw+wrSNcrX
-	CmZev8/797eZB8I1RTD6CCgwmgkossL4Oc0DfHM0MBRpHeGb6bx6pdqSTozuQaxtmGOEwpAu8m7
-	JugWHsBVDp
-X-Google-Smtp-Source: AGHT+IHetxRpnG9cF/Gppc13q63FAvtOFyrYEQ3XG9Moiw5OSk5gaWti/6paiCCz38YCOkTOfMqnKg==
-X-Received: by 2002:a05:690c:4a04:b0:787:a126:562e with SMTP id 00721157ae682-787a126679dmr29411267b3.34.1762388774969;
-        Wed, 05 Nov 2025 16:26:14 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:c::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-787b159c58dsm3439457b3.38.2025.11.05.16.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 16:26:14 -0800 (PST)
-From: Daniel Zahka <daniel.zahka@gmail.com>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Shuah Khan <shuah@kernel.org>,
-	Boris Pismenny <borisp@nvidia.com>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Mark Bloch <mbloch@nvidia.com>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v3 5/5] netdevsim: implement psp device stats
-Date: Wed,  5 Nov 2025 16:26:06 -0800
-Message-ID: <20251106002608.1578518-6-daniel.zahka@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251106002608.1578518-1-daniel.zahka@gmail.com>
-References: <20251106002608.1578518-1-daniel.zahka@gmail.com>
+        bh=pglOosQTIvBfeYgOgvZ/bymKX6TWUK4RdH77mW1U80s=;
+        b=Vmgsq6LXAvrjjXSIBA4Ko80GegC7r50rdrZQVlGqyPNxNvonZnQj6Q8DCtHME+lxk/
+         D4Ul25yBjKdQ0VrWVKt5cKP/OSxi1vmxxMf4W2sr0ZGFHwD85ityvAhWh5UvPAHjRWfa
+         0dN7YXPTbSh09HBHsBmLvmBDhRgpZJ/hS7DaZ9WX/IwcAPNRZ+k0I1KOm9VVbClFVOYt
+         j/waOai7+YoBD0LpD7H+aOoBivCxAEgwu0kPGZz1HI+nRV4+BKabRhwRBYxROIFwjfRU
+         2GlEG5RAh2zMrQZkGK/fxW/73LsSmpJC71qNqiVw6JYJV7VBNgIRhd265g6qtAB6z2OV
+         df4g==
+X-Forwarded-Encrypted: i=1; AJvYcCWio4ofUbAYH1tSUe/dwe+eTYDvc690O71rWn3BNajQLTw84A0RfTEGwHTJp2yVR9Iwf7iRLUwvXEWYfERZcV8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjoDTEPqHIHwbMjStF3Mu9v3cVyKNGDHaRPGAizX/HKnGMYnfT
+	XKOduXmZGwpy89hH9GxMKA5zfWoNZ6EEbMdPR1hY9pRFZhgbgEkgFa3sVg3Xq9pu16sA793x2z1
+	4Z9urjlYzdUAvUHTtsjCslM6dAlBAgec=
+X-Gm-Gg: ASbGncvn9nOYtR7fFLNKDTwg52yNs6+vkfzeb10HalQN9ZtY9aue0m/UFSKHt4X5loO
+	MSWS7fZO1QfS/Ci7SVtFmukineER5SW2x4ro4DSrYZPTG/dpPqM90x7sAGNpAYmMUBdxZUJbeex
+	4aasv3NCSQzLEubBzXLGQEC7Y7wN6r3bSc/4ge64ihZ+A0OdYuL1MMN6ML019M0Y7xyx/QzUTcm
+	bN2YH0UfQuAdosV6abDeC6EvT3QiZrw4W6K06ASuU61kgxTQoMOBIcWipVi0i3eC5agZOs0d4hm
+	jelGTzsqJfo4oxo8Y0xPXvvfErpC
+X-Google-Smtp-Source: AGHT+IHvs+3XbvYIb+ePg+SGtg47YLsx/nuhBwaLkrgMO/eh+y9lNIxImoFpX1haQWbxriNO9cGrZ9z1XYaVKY0YoC4=
+X-Received: by 2002:a05:600c:5403:b0:46e:3f75:da49 with SMTP id
+ 5b1f17b1804b1-4775ce4fcc8mr40655025e9.37.1762392607821; Wed, 05 Nov 2025
+ 17:30:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251101193357.111186-1-harshit.m.mogalapalli@oracle.com>
+ <20251101193357.111186-2-harshit.m.mogalapalli@oracle.com>
+ <CAADnVQLe6a8Kae892sVaND-2p1DQDXGD5gqxHWHHUC85ntLCqw@mail.gmail.com> <e9d43dab-cfae-48a8-9039-e050ea392797@kernel.org>
+In-Reply-To: <e9d43dab-cfae-48a8-9039-e050ea392797@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 5 Nov 2025 17:29:56 -0800
+X-Gm-Features: AWmQ_bny7FcaG0pHAt7j2zZd3I9EBcjh494p7XVJPwhzbfrPnw_3LfP8rxR-6LM
+Message-ID: <CAADnVQKzSBZYaj0iMkNBk6FvaOket1mWPksX661zwC2rg2FBkQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] bpftool: Print map ID upon creation and support
+ JSON output
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>, bpf <bpf@vger.kernel.org>, 
+	Alan Maguire <alan.maguire@oracle.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-For now only tx/rx packets/bytes are reported. This is not compliant
-with the PSP Architecture Specification.
+On Wed, Nov 5, 2025 at 1:38=E2=80=AFAM Quentin Monnet <qmo@kernel.org> wrot=
+e:
+>
+> 2025-11-04 09:54 UTC-0800 ~ Alexei Starovoitov
+> <alexei.starovoitov@gmail.com>
+> > On Sat, Nov 1, 2025 at 12:34=E2=80=AFPM Harshit Mogalapalli
+> > <harshit.m.mogalapalli@oracle.com> wrote:
+> >>
+> >> It is useful to print map ID on successful creation.
+> >>
+> >> JSON case:
+> >> $ ./bpftool -j map create /sys/fs/bpf/test_map4 type hash key 4 value =
+8 entries 128 name map4
+> >> {"id":12}
+> >>
+> >> Generic case:
+> >> $ ./bpftool  map create /sys/fs/bpf/test_map5 type hash key 4 value 8 =
+entries 128 name map5
+> >> Map successfully created with ID: 15
+> >>
+> >> Bpftool Issue: https://github.com/libbpf/bpftool/issues/121
+> >> Acked-by: Yonghong Song <yonghong.song@linux.dev>
+> >> Reviewed-by: Quentin Monnet <qmo@kernel.org>
+> >> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> >> ---
+> >> v2->v3: remove a line break("\n" ) in p_err statement. [Thanks Quentin=
+]
+> >> ---
+> >>  tools/bpf/bpftool/map.c | 21 +++++++++++++++++----
+> >>  1 file changed, 17 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+> >> index c9de44a45778..f32ae5476d76 100644
+> >> --- a/tools/bpf/bpftool/map.c
+> >> +++ b/tools/bpf/bpftool/map.c
+> >> @@ -1251,6 +1251,8 @@ static int do_create(int argc, char **argv)
+> >>         LIBBPF_OPTS(bpf_map_create_opts, attr);
+> >>         enum bpf_map_type map_type =3D BPF_MAP_TYPE_UNSPEC;
+> >>         __u32 key_size =3D 0, value_size =3D 0, max_entries =3D 0;
+> >> +       struct bpf_map_info map_info =3D {};
+> >> +       __u32 map_info_len =3D sizeof(map_info);
+> >>         const char *map_name =3D NULL;
+> >>         const char *pinfile;
+> >>         int err =3D -1, fd;
+> >> @@ -1353,13 +1355,24 @@ static int do_create(int argc, char **argv)
+> >>         }
+> >>
+> >>         err =3D do_pin_fd(fd, pinfile);
+> >> -       close(fd);
+> >>         if (err)
+> >> -               goto exit;
+> >> +               goto close_fd;
+> >>
+> >> -       if (json_output)
+> >> -               jsonw_null(json_wtr);
+> >> +       err =3D bpf_obj_get_info_by_fd(fd, &map_info, &map_info_len);
+> >> +       if (err) {
+> >> +               p_err("Failed to fetch map info: %s", strerror(errno))=
+;
+> >> +               goto close_fd;
+> >> +       }
+> >>
+> >> +       if (json_output) {
+> >> +               jsonw_start_object(json_wtr);
+> >> +               jsonw_int_field(json_wtr, "id", map_info.id);
+> >> +               jsonw_end_object(json_wtr);
+> >> +       } else {
+> >> +               printf("Map successfully created with ID: %u\n", map_i=
+nfo.id);
+> >> +       }
+> >
+> > bpftool doesn't print it today and some scripts may depend on that.
+>
+>
+> Hi Alexei, are you sure we can't add any input at all? I'm concerned
+> that users won't ever find the IDs for created maps they might want to
+> use, if they never see it in the plain output.
+>
+>
+> > Let's drop this 'printf'. Json can do it unconditionally, since
+> > json parsing scripts should filter things they care about.
+>
+> I'd say the risk is the same. Scripts should filter things, but in
+> practise they might just as well be comparing to "null" today, given
+> that we didn't have any other output for the command so far. Conversely,
+> what scripts should not do is rely on plain output, we've always
+> recommended using bpftool's JSON for automation (or the exit code, in
+> the case of map creation). So I'm not convinced it's justified to
+> introduce a difference between plain and JSON in the current case.
 
-Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
----
- drivers/net/netdevsim/netdevsim.h |  5 +++++
- drivers/net/netdevsim/psp.c       | 27 +++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
-
-diff --git a/drivers/net/netdevsim/netdevsim.h b/drivers/net/netdevsim/netdevsim.h
-index 02c1c97b7008..af6fcfcda8ba 100644
---- a/drivers/net/netdevsim/netdevsim.h
-+++ b/drivers/net/netdevsim/netdevsim.h
-@@ -109,6 +109,11 @@ struct netdevsim {
- 	int rq_reset_mode;
- 
- 	struct {
-+		u64 rx_packets;
-+		u64 rx_bytes;
-+		u64 tx_packets;
-+		u64 tx_bytes;
-+		struct u64_stats_sync syncp;
- 		struct psp_dev *dev;
- 		u32 spi;
- 		u32 assoc_cnt;
-diff --git a/drivers/net/netdevsim/psp.c b/drivers/net/netdevsim/psp.c
-index 332b5b744f01..727da06101ca 100644
---- a/drivers/net/netdevsim/psp.c
-+++ b/drivers/net/netdevsim/psp.c
-@@ -70,6 +70,13 @@ nsim_do_psp(struct sk_buff *skb, struct netdevsim *ns,
- 		*psp_ext = skb->extensions;
- 		refcount_inc(&(*psp_ext)->refcnt);
- 		skb->decrypted = 1;
-+
-+		u64_stats_update_begin(&ns->psp.syncp);
-+		ns->psp.tx_packets++;
-+		ns->psp.rx_packets++;
-+		ns->psp.tx_bytes += skb->len - skb_inner_transport_offset(skb);
-+		ns->psp.rx_bytes += skb->len - skb_inner_transport_offset(skb);
-+		u64_stats_update_end(&ns->psp.syncp);
- 	} else {
- 		struct ipv6hdr *ip6h __maybe_unused;
- 		struct iphdr *iph;
-@@ -164,12 +171,32 @@ static void nsim_assoc_del(struct psp_dev *psd, struct psp_assoc *pas)
- 	ns->psp.assoc_cnt--;
- }
- 
-+static void nsim_get_stats(struct psp_dev *psd, struct psp_dev_stats *stats)
-+{
-+	struct netdevsim *ns = psd->drv_priv;
-+	unsigned int start;
-+
-+	/* WARNING: do *not* blindly zero stats in real drivers!
-+	 * All required stats must be reported by the device!
-+	 */
-+	memset(stats, 0, sizeof(struct psp_dev_stats));
-+
-+	do {
-+		start = u64_stats_fetch_begin(&ns->psp.syncp);
-+		stats->rx_bytes = ns->psp.rx_bytes;
-+		stats->rx_packets = ns->psp.rx_packets;
-+		stats->tx_bytes = ns->psp.tx_bytes;
-+		stats->tx_packets = ns->psp.tx_packets;
-+	} while (u64_stats_fetch_retry(&ns->psp.syncp, start));
-+}
-+
- static struct psp_dev_ops nsim_psp_ops = {
- 	.set_config	= nsim_psp_set_config,
- 	.rx_spi_alloc	= nsim_rx_spi_alloc,
- 	.tx_key_add	= nsim_assoc_add,
- 	.tx_key_del	= nsim_assoc_del,
- 	.key_rotate	= nsim_key_rotate,
-+	.get_stats	= nsim_get_stats,
- };
- 
- static struct psp_dev_caps nsim_psp_caps = {
--- 
-2.47.3
-
+tbh the "map create" feature suppose to create and pin and if both
+are successful then the map will be there and bpftool will
+exit with success.
+Now you're arguing that there could be a race with another
+bpftool/something that pins a different map in the same location
+and success of bpftool doesn't mean that exact that map is there.
+Other tool could have unpinned/deleted map, pinned another one, etc.
+Sure, such races are possible, but returning map id still
+looks pointless. It doesn't solve any race.
+So the whole 'lets print id' doesn't quite make sense to me.
 
