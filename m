@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-44926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C95C3C3A29A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 11:17:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC37C3A2B3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 11:18:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA93A1A42B13
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 10:09:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B85691A42F79
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 10:09:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB936325499;
-	Thu,  6 Nov 2025 10:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE3B8319608;
+	Thu,  6 Nov 2025 10:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zzn8GNtx";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Sc2KMZXG"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="W2avoLV5";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="z51/jrwc"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1ABB322774;
-	Thu,  6 Nov 2025 10:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD1F7324B1B;
+	Thu,  6 Nov 2025 10:02:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762423359; cv=none; b=rhmSrsp76ojzWiGfxKjaYqYduAoWhxUUiXIYwWOMqQO/2q4nKZSHfQHVc/wjUo+Gyn+fGES9qr2imEWcmO5jU/mLAWVQcZbDPFEHH0fhnCUK7pXPx39e8TleumHFF1//U9S06R78koYXnCU5TrhmDevL1aInqzlSai+MmXZc+3w=
+	t=1762423360; cv=none; b=LCn3Gy0UvSxU0MxWZTft3jhmbI0qKsdYgWCWvgFlFWHJovoA0TdsCq6EhTt7OTkIwk8WfuB/93JVY3EeJYBBWf/GKyeY0VD/jxn1fDicqzdwC9dmBTGJ2tdgkdjU86Ipdel1UvDj9DQvbpbbmHZUXmOWo5vswG+L5pyjgJgTkhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762423359; c=relaxed/simple;
-	bh=rscVeDO1P+cKaXX/Ha1fTrfGby5/x6sbnmbmn2plnQg=;
+	s=arc-20240116; t=1762423360; c=relaxed/simple;
+	bh=niJ5zV3fOozEUYGk5vpPy390WfaoIhw2fIWLZusJAMg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=O3yCPSvYDjyzRI2sLOm4lyG18hCvTDVtpDc4+3k3Y/voNbv7C65bGGH7uQ3RR7b1ZuhC3PpFeY37NQCvAuJ5uDsV5wDDckyr702dq0MaCY1gI3SqqYay5KWQnQQRfcCTfs0jV7ra5k22+Hq7e4gyEmdsAKqme7BgbxpBMKwF7YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zzn8GNtx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Sc2KMZXG; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=Xviuj8PjUUlEsBjPhVPWmWgTziyzvSFGyYqpfNcGzBlqtvoYmf6qKZ+oMv1RQRLDWWHSt9G903RI7x9Dl43xPXoiTe6YtXRkskxzAAqk2h6VD9PSHmMvPCfYm2yhxcBsJe5lXgYASxq4kgLCR8A3vwFAJhCmlvT2pFPeRrc6lRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=W2avoLV5; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=z51/jrwc; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,23 +39,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=W2Ul6+VkoAGtk+fbsWo8FnOHy/g1Ec+KdWjD8933yrE=;
-	b=zzn8GNtxXQFoEaa+oOM4Hn66k9j4jy8ZoB7IVuciMPbwMSeekysm7Pgrx31hA5SpJcD59F
-	IeUV1idTFmiLR1XBwgWgqsAMn8mLiGV4QseV2EJMxWQiRvjXpOnF2yRKubmxoVvn0x22AI
-	GrQ27+Ro5s1jxynIaILnk1bumKg9F5pEPwO8OaCFfJGk1gLfAHfVK1UGK/81cpBOdtjKtY
-	3un6M5hvZiLdnQ2jJyKAuvDWp+27AZ0SlqNhHBvYSV1jgFarCbQp1gh99Yl9mp3pZY4uSF
-	3z2ANPQ1XKHGfQsXqRK/nabqYEG0GqhzPQeq3xF4jaV7bzTveSBZInNQQM+tTw==
+	bh=v0BySyb43wBJ5y5cuP5lO0V/BYHsArDn7KOGMPsnnl4=;
+	b=W2avoLV5mLheM0n5+VZU/iRACei7ZPJhPyf2ExPvLCJLtOg8cTO5cd6e0BxTXS/WW7pnXc
+	v+578OvHwUliGIDwzoV2b58PoI3jwPTH0haNviB6ZMRYjk6sA81FviYVDJ7GgTgS1kCUD5
+	7MKUqYVYrY1Y7ROD4jHoQqdHRcpUBpW5IovjNC3/00GdWQkPFlykkD2TSpOeSs7yQk/JaE
+	5kwfCYaE4sj2Idc1y9EXljkfa/jAV73NEUH0LTti0CIgRi2Oo1YpvROL50esn4yaVONVsG
+	H17prNqscppvKmPuWRhLtk0D1jl8JC6cK8l1fLwZ5n/4lHZJjav01KyIU1bKqw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1762423350;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=W2Ul6+VkoAGtk+fbsWo8FnOHy/g1Ec+KdWjD8933yrE=;
-	b=Sc2KMZXGMiSsHbm8MYfddzr66E3sO7dpadeOTTva5Wo7ak7n3k94fbb29g9pelz6nJjyOs
-	hPIGLP7DiK7guoCQ==
-Date: Thu, 06 Nov 2025 11:02:25 +0100
-Subject: [PATCH v5 32/34] sparc64: vdso2c: Remove symbol handling
+	bh=v0BySyb43wBJ5y5cuP5lO0V/BYHsArDn7KOGMPsnnl4=;
+	b=z51/jrwcetl2rrEVfIpSaQ//9zH9OlqAQ+nk+QPbvOf633X9qXNJGn2VcFPCn1qgUSp3iQ
+	yGzsmODS6mDoFvDg==
+Date: Thu, 06 Nov 2025 11:02:26 +0100
+Subject: [PATCH v5 33/34] sparc64: vdso: Implement clock_gettime64()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251106-vdso-sparc64-generic-2-v5-32-97ff2b6542f7@linutronix.de>
+Message-Id: <20251106-vdso-sparc64-generic-2-v5-33-97ff2b6542f7@linutronix.de>
 References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
 In-Reply-To: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -91,120 +91,104 @@ Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
  linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1762423327; l=3583;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762423327; l=3381;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=rscVeDO1P+cKaXX/Ha1fTrfGby5/x6sbnmbmn2plnQg=;
- b=PULV7avTJJBnwuA28r3mPVOxYpRH9jY8icZE/ATVclSu1a37GckUbIeW+wl+hOeEDrcA6Rzf6
- XHLLxsdHHSgCyPlJsmGp+ChkGkWtlb5UZrqfEYqXuyxVx567j+h/oAR
+ bh=niJ5zV3fOozEUYGk5vpPy390WfaoIhw2fIWLZusJAMg=;
+ b=ok1VbX/B5odLmNfowHwPvvMIhYc5QqeLEYb3A+eNa2NoDF5JfkeWry4J2iGYC3MGA86BfM9to
+ z6uUO5Ty3z4AaZE/5z2FUlLx9vo2RsEX//6dyM6WrpmK1DEsSnwDS8E
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-There are no handled symbols left.
+To be y2038-safe, 32-bit userspace needs to explicitly call the 64-bit safe
+time APIs.
+
+Implement clock_gettime64() in the 32-bit vDSO.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 Tested-by: Andreas Larsson <andreas@gaisler.com>
 Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 Acked-by: Andreas Larsson <andreas@gaisler.com>
 ---
- arch/sparc/vdso/vdso2c.c | 10 ----------
- arch/sparc/vdso/vdso2c.h | 41 +----------------------------------------
- 2 files changed, 1 insertion(+), 50 deletions(-)
+ arch/sparc/include/asm/vdso/gettimeofday.h | 20 ++++++++++++++++++--
+ arch/sparc/vdso/vclock_gettime.c           |  8 ++++++++
+ arch/sparc/vdso/vdso32/vdso32.lds.S        |  2 ++
+ 3 files changed, 28 insertions(+), 2 deletions(-)
 
-diff --git a/arch/sparc/vdso/vdso2c.c b/arch/sparc/vdso/vdso2c.c
-index 70b14a436fe2297ab446f778ab0d43155c272421..e5c61214a0e285547ac57c9997542546464bde23 100644
---- a/arch/sparc/vdso/vdso2c.c
-+++ b/arch/sparc/vdso/vdso2c.c
-@@ -58,14 +58,6 @@
+diff --git a/arch/sparc/include/asm/vdso/gettimeofday.h b/arch/sparc/include/asm/vdso/gettimeofday.h
+index a35875fba45470ba961a7df3ae52bc17d2a4a4a0..b0c80c8a28bb71e16398ab38904ba826457ac71d 100644
+--- a/arch/sparc/include/asm/vdso/gettimeofday.h
++++ b/arch/sparc/include/asm/vdso/gettimeofday.h
+@@ -101,6 +101,8 @@ static __always_inline u64 __arch_get_hw_counter(s32 clock_mode, const struct vd
+ 	"f48", "f50", "f52", "f54", "f56", "f58", "f60", "f62",		\
+ 	"cc", "memory"
  
- const char *outfilename;
- 
--struct vdso_sym {
--	const char *name;
--	int export;
--};
--
--struct vdso_sym required_syms[] = {
--};
--
- __attribute__((format(printf, 1, 2))) __attribute__((noreturn))
- static void fail(const char *format, ...)
++#ifdef CONFIG_SPARC64
++
+ static __always_inline
+ long clock_gettime_fallback(clockid_t clock, struct __kernel_timespec *ts)
  {
-@@ -105,8 +97,6 @@ static void fail(const char *format, ...)
- #define PUT_BE(x, val)					\
- 	PBE(x, val, 64, PBE(x, val, 32, PBE(x, val, 16, LAST_PBE(x, val))))
- 
--#define NSYMS ARRAY_SIZE(required_syms)
--
- #define BITSFUNC3(name, bits, suffix) name##bits##suffix
- #define BITSFUNC2(name, bits, suffix) BITSFUNC3(name, bits, suffix)
- #define BITSFUNC(name) BITSFUNC2(name, ELF_BITS, )
-diff --git a/arch/sparc/vdso/vdso2c.h b/arch/sparc/vdso/vdso2c.h
-index ba0794659eb5af53b8c86b24f3221a5d0b3f74ab..bad6a0593f4ca293feca201a6343833268ad1cb8 100644
---- a/arch/sparc/vdso/vdso2c.h
-+++ b/arch/sparc/vdso/vdso2c.h
-@@ -17,11 +17,9 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
- 	unsigned long mapping_size;
- 	int i;
- 	unsigned long j;
--	ELF(Shdr) *symtab_hdr = NULL, *strtab_hdr;
-+	ELF(Shdr) *symtab_hdr = NULL;
- 	ELF(Ehdr) *hdr = (ELF(Ehdr) *)raw_addr;
- 	ELF(Dyn) *dyn = 0, *dyn_end = 0;
--	INT_BITS syms[NSYMS] = {};
--
- 	ELF(Phdr) *pt = (ELF(Phdr) *)(raw_addr + GET_BE(&hdr->e_phoff));
- 
- 	/* Walk the segment table. */
-@@ -72,38 +70,6 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
- 	if (!symtab_hdr)
- 		fail("no symbol table\n");
- 
--	strtab_hdr = raw_addr + GET_BE(&hdr->e_shoff) +
--		GET_BE(&hdr->e_shentsize) * GET_BE(&symtab_hdr->sh_link);
--
--	/* Walk the symbol table */
--	for (i = 0;
--	     i < GET_BE(&symtab_hdr->sh_size) / GET_BE(&symtab_hdr->sh_entsize);
--	     i++) {
--		int k;
--
--		ELF(Sym) *sym = raw_addr + GET_BE(&symtab_hdr->sh_offset) +
--			GET_BE(&symtab_hdr->sh_entsize) * i;
--		const char *name = raw_addr + GET_BE(&strtab_hdr->sh_offset) +
--			GET_BE(&sym->st_name);
--
--		for (k = 0; k < NSYMS; k++) {
--			if (!strcmp(name, required_syms[k].name)) {
--				if (syms[k]) {
--					fail("duplicate symbol %s\n",
--					     required_syms[k].name);
--				}
--
--				/*
--				 * Careful: we use negative addresses, but
--				 * st_value is unsigned, so we rely
--				 * on syms[k] being a signed type of the
--				 * correct width.
--				 */
--				syms[k] = GET_BE(&sym->st_value);
--			}
--		}
--	}
--
- 	if (!name) {
- 		fwrite(stripped_addr, stripped_len, 1, outfile);
- 		return;
-@@ -129,10 +95,5 @@ static void BITSFUNC(go)(void *raw_addr, size_t raw_len,
- 	fprintf(outfile, "const struct vdso_image %s_builtin = {\n", name);
- 	fprintf(outfile, "\t.data = raw_data,\n");
- 	fprintf(outfile, "\t.size = %lu,\n", mapping_size);
--	for (i = 0; i < NSYMS; i++) {
--		if (required_syms[i].export && syms[i])
--			fprintf(outfile, "\t.sym_%s = %" PRIi64 ",\n",
--				required_syms[i].name, (int64_t)syms[i]);
--	}
- 	fprintf(outfile, "};\n");
+@@ -113,7 +115,20 @@ long clock_gettime_fallback(clockid_t clock, struct __kernel_timespec *ts)
+ 	return o0;
  }
+ 
+-#ifndef CONFIG_SPARC64
++#else /* !CONFIG_SPARC64 */
++
++static __always_inline
++long clock_gettime_fallback(clockid_t clock, struct __kernel_timespec *ts)
++{
++	register long num __asm__("g1") = __NR_clock_gettime64;
++	register long o0 __asm__("o0") = clock;
++	register long o1 __asm__("o1") = (long) ts;
++
++	__asm__ __volatile__(SYSCALL_STRING : "=r" (o0) : "r" (num),
++			     "0" (o0), "r" (o1) : SYSCALL_CLOBBERS);
++	return o0;
++}
++
+ static __always_inline
+ long clock_gettime32_fallback(clockid_t clock, struct old_timespec32 *ts)
+ {
+@@ -125,7 +140,8 @@ long clock_gettime32_fallback(clockid_t clock, struct old_timespec32 *ts)
+ 			     "0" (o0), "r" (o1) : SYSCALL_CLOBBERS);
+ 	return o0;
+ }
+-#endif
++
++#endif /* CONFIG_SPARC64 */
+ 
+ static __always_inline
+ long gettimeofday_fallback(struct __kernel_old_timeval *tv, struct timezone *tz)
+diff --git a/arch/sparc/vdso/vclock_gettime.c b/arch/sparc/vdso/vclock_gettime.c
+index 093a7ff4dafce1cf0af5af4c303bef86e159858a..1d9859392e4cfd285349cf9155ca1fc25d3a7b41 100644
+--- a/arch/sparc/vdso/vclock_gettime.c
++++ b/arch/sparc/vdso/vclock_gettime.c
+@@ -48,4 +48,12 @@ int __vdso_clock_gettime(clockid_t clock, struct old_timespec32 *ts)
+ int clock_gettime(clockid_t, struct old_timespec32 *)
+ 	__weak __alias(__vdso_clock_gettime);
+ 
++int __vdso_clock_gettime64(clockid_t clock, struct __kernel_timespec *ts)
++{
++	return __cvdso_clock_gettime(clock, ts);
++}
++
++int clock_gettime64(clockid_t, struct __kernel_timespec *)
++	__weak __alias(__vdso_clock_gettime64);
++
+ #endif
+diff --git a/arch/sparc/vdso/vdso32/vdso32.lds.S b/arch/sparc/vdso/vdso32/vdso32.lds.S
+index 53575ee154c492f9503efdd8f995ac2a035203c7..a14e4f77e6f2222b855df27cc7a0d0a4f98bd4ac 100644
+--- a/arch/sparc/vdso/vdso32/vdso32.lds.S
++++ b/arch/sparc/vdso/vdso32/vdso32.lds.S
+@@ -17,6 +17,8 @@ VERSION {
+ 	global:
+ 		clock_gettime;
+ 		__vdso_clock_gettime;
++		clock_gettime64;
++		__vdso_clock_gettime64;
+ 		gettimeofday;
+ 		__vdso_gettimeofday;
+ 	local: *;
 
 -- 
 2.51.0
