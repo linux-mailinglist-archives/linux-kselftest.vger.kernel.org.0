@@ -1,324 +1,177 @@
-Return-Path: <linux-kselftest+bounces-44986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92348C3C021
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 16:21:24 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CBE5C3BFB4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 16:16:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B9033A5A71
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 15:14:19 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 18FF3350F68
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 15:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66885346785;
-	Thu,  6 Nov 2025 15:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 392A321CC7B;
+	Thu,  6 Nov 2025 15:15:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NGcOGbCW"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f66Fpu9i";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nalym2pI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C91345CB0
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 15:14:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C306221710;
+	Thu,  6 Nov 2025 15:15:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762442055; cv=none; b=E5ATGSPeT2uGXzKpqphOwQT0ea8ud1t/OFKi+ofygkneVMLCcMxzcIkX3/qtrcWzjIAj0DpsVs8TRFQveIrE3Pq1Vz4Ba0p5E+5eXGDqodfovabYT0R0ofOnZnEZ49miz2rAM2dpbCRJ26h1QuQbbqtM3hKZEdrlJUppiuoWr8k=
+	t=1762442150; cv=none; b=WWfmv4hYDoUAx4dW3y6mM4bG1aYMc76ruAIC+J/5OBpcn5GwuNZDf/FDPr5usgIVk9v7VMwJ9K5HyeMTp/pclxhQZ6zdPcKVq1mksUT1wQrOa7hl4RBvyPc/wFGnrgPPQDLlZvGVB1kXsQ8xUSeQwMqUPPJlRfC50wx7E+K/baQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762442055; c=relaxed/simple;
-	bh=o/UkQ5u97qWom/i/3OHl5FeeE6MKR73YOXiRcmWk9Qs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=ff59tyJ1/WignY/H2B1rE2lONVNyCccQg+LdreLUxKFFv+qORD7h0QYvl/h5e4iv0lkEDs/BTQ33Ee4s3UmRqgJM+VXT8irvpzq/bKG4MijmM3CB6LJbnWPaSFQJ8S/eVLT9Tg6qPznEe2MX9kmxFEGmFgJs2rwyjlMSVH9yppc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NGcOGbCW; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-afcb7ae6ed0so181496066b.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 07:14:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762442049; x=1763046849; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HagtsVyWDiv+KcI6/p888WZFkgTtFN1dnDWNBUt/rhk=;
-        b=NGcOGbCWAq4Ba2UiaThxpaNzT080TN3ddisyR5LITdBLrXD9XiMY43AZNSfWzxrelT
-         c7xbUFzdhM33RA/LeoR/HUCZf70DgxSInUi/aJFYjPZI2LLX52iHNFhXtuWOwA3xssrh
-         BfMlaR9MPcecmPalE/bnF9Lcnx4vK1Z0kY5knc7eiiG9LbkPoWTtLNSyc5s3BS0HJdFP
-         iFxTV21nLF/2NJCskOeOyAAknYFWWMgkGTY90HYh+eTQ1zyo5H3NH8FjjF65Bk/4cFNQ
-         /NzRtSSnBTrZo/sA67oODxvuInrqNHzp5jOwiVCxXlyplfAeYNgl2Dw3T6nRzoze/4i0
-         WJOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762442049; x=1763046849;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HagtsVyWDiv+KcI6/p888WZFkgTtFN1dnDWNBUt/rhk=;
-        b=Jla8GPrNiXY+CTlTJF1M0DnXCjm1NmDgs6VkNkNCzu1e2dHvKWAJPdMYQWwkQnzeZl
-         mzoyjy70f0g0AfSPuKBFnswJLDhaR85OzmeOr5jvipmUmxXqegYkjhiNkoDxXzemUwF2
-         lUTi7EOso1O9SimCRsqxQOcOHM3NW46wmSxNeZyW8VCQOZ9I0/k85rBwWCnjaFMpnc6X
-         2S5x3bOjq1oiBt7n0MHRCjhv0K+B0CUmI8tOipBSZlMVGNxVUNMgvrQMX/SHy3yvLIJI
-         hzDvqRKtlzvY+KnNXU4zbCyIOOERjaHzHs2B1uSuH00KqbJ72gBqcI96/bS8WeT9au73
-         smmw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2akLi7NNN6YLjt8iT1pY7a+Pr2Q8No9v2RYNzGPtTIm5840+oMWHEct6OX1N/guhKA6dVsRTPTiWPNuP5O0g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypiQH/JMmRX/VZNqUaCmiSXAZrp5Cp1hgMIfHIxOJ0poGFIXrN
-	fGPZZUk5F2S3d3W6ZOVOGf6d1/w3sIEeh3ufbkM9bGVcT8lkoWBBFU8e+Yu6bTWRNTw=
-X-Gm-Gg: ASbGncsFj4HCKL9+uSp3R0mqpjQxTKZtr/vyczQa8zE7t0BOknIfmh/eDN4csEBTsGR
-	Hnq6vjAe2y84SNjxCY7nxEivLPSsq34U8W3xbFsZCgeE8rqj+eBIm8gGjRERXxp0JOw448UyJ1x
-	ZqTbzqZWtctz8Hkg/xC011iPEn3wLaTvKCTcW/sEGJFv075XAffqaZ8+y5OanPBfsqaifJDc4w6
-	CzXazL/jt0J1/S+kf+I/izoOiPfeov/AQbYjujsMaaA6WQboi3f3JyOppWRyjIgDjmyXmlKqgYw
-	2ZdjMnfSi5kwxD184MqsLmjjp1VKnV0AX9cZdRRHRfd2mI1iQQpUB5BWun5Cu8ELZqQGI1hFhHS
-	CsO/YAQe1gPSoy6cyWQKFsyOS9k4rq2qTDZSRvUxSAEufBkpU2U7+NQ3o5KKR+LcZKHP8nASUeu
-	SFH825r6bu9pvp
-X-Google-Smtp-Source: AGHT+IEsuIUvNLnPlwFN3+VmgnXrhObFfu4Be6ixdY6AL/4JqrPb9LdcBRAwep5DRtttB+5TfdujaQ==
-X-Received: by 2002:a17:907:3fa6:b0:b04:67f3:890f with SMTP id a640c23a62f3a-b72654d3d36mr658748866b.33.1762442049245;
-        Thu, 06 Nov 2025 07:14:09 -0800 (PST)
-Received: from localhost ([87.213.113.147])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b728937fb6bsm243589266b.23.2025.11.06.07.14.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 07:14:08 -0800 (PST)
-Date: Thu, 6 Nov 2025 18:14:07 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev, Bobby Eshleman <bobbyeshleman@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Mina Almasry <almasrymina@google.com>
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v6 3/6] net: devmem: prepare for autorelease rx
- token management
-Message-ID: <4aa34dd6-f5ea-40cf-8004-bbde053dc143@suswa.mountain>
+	s=arc-20240116; t=1762442150; c=relaxed/simple;
+	bh=z8xPK1xx2fHBuulHSZ+SUNXDsHyaPEkSvnfMOIEyqLs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=fk1NUkwebkcXvUjYXvMlPsNmcDz1aT6IVcKCObRItZXp5UUFZo/Vi62pqtYtP2UUz31Xgx+SJ+MgpfgA+oPDSrQuGC5nG21Aon7qCRyTvhxR3SJQqNGU2ffigiogk4GGniCt2A4/PZI82oEcgi2fTXsm49ikVRfKahANhi6NBEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f66Fpu9i; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nalym2pI; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1762442144;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CLtSr+8LhzfirA2IeYphIZSTtuh+t2UY0R29gTgnx2c=;
+	b=f66Fpu9iI7qYCUAcxeLkPDJQka5ofnOR3fk8877ekacG3k8F0SFEamntJTIKQo3wjM+QAx
+	clG5BYAJ+S2jWLYm8Up3EWrciAhHxueUzSK0mWGIxfiImcnzhsvwvGIvAcE+d2ExOj6MzQ
+	2sGyX5LQ1tnSxk7pzBAjUvBG3KyhmQb14NOqvsgMc6TkCp/4qWFad4l+BPY6JLfDTAeyxj
+	CaVHwV1Tp2HMPaSM0kWjYstbJUoEmHD77ffqQYvlHF1cRGm8fNA1x81nJKf3fg8N1G0E5H
+	06oPr41izmyezU8VpRUwcpPScmFxnBP9+4GFhTVV+WCB1i7QwxTkzNPGTNiiiA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1762442144;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CLtSr+8LhzfirA2IeYphIZSTtuh+t2UY0R29gTgnx2c=;
+	b=nalym2pISJYniLhFOn8EOk8mFkZws4ifsvfRh2KW6S+dfy6AoC7Ex43+XS1lzyeTPxIRq7
+	XPL8Sn1/XVTpYZCw==
+Date: Thu, 06 Nov 2025 16:15:24 +0100
+Subject: [PATCH] selftests: timers: nanosleep: Add tests for return of
+ remaining time
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3@meta.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251106-nanosleep-rtmp-selftest-v1-1-f9212fb295fe@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAIu7DGkC/x3MQQqDQAxG4atI1g0YO1XoVUoXYv/YgI7DZJCCe
+ PcOLr/Fewc5ssHp2RyUsZvbFivk1tD0HeMMtk81dW33kFYCxzFuvgCJc1kTOxYt8ML9JEHlPgT
+ tlWqdMtR+1/n1Ps8/Fwv/zGkAAAA=
+X-Change-ID: 20251014-nanosleep-rtmp-selftest-6c14f1374f6f
+To: John Stultz <jstultz@google.com>, Thomas Gleixner <tglx@linutronix.de>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+ Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762442143; l=2406;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=z8xPK1xx2fHBuulHSZ+SUNXDsHyaPEkSvnfMOIEyqLs=;
+ b=pZ1o3IleRjU7WOnxQtlgxC0VjWmOuwFPYu3FT4jzWSXYGcbRYz4mXUnPjTWUnvf2HlrFtJ4iz
+ 2BL7QuCXP6NB8OU4hCRvJqxpSqYsWQc/GKWmxYo16tQt/h9VzLr/tLb
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Hi Bobby,
+If interrupted by a signal clock_nanosleep() returns the remaining time
+into the structure pointed to by the rmtp parameter. So far this
+functionality was not tested by the timer selftests.
 
-kernel test robot noticed the following build warnings:
+Extend the nanosleep selftest to cover this feature.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bobby-Eshleman/net-devmem-rename-tx_vec-to-vec-in-dmabuf-binding/20251105-092703
-base:   255d75ef029f33f75fcf5015052b7302486f7ad2
-patch link:    https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-3-ea98cf4d40b3%40meta.com
-patch subject: [PATCH net-next v6 3/6] net: devmem: prepare for autorelease rx token management
-config: nios2-randconfig-r071-20251105 (https://download.01.org/0day-ci/archive/20251106/202511060352.2kPPX3xE-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 8.5.0
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ tools/testing/selftests/timers/nanosleep.c | 55 ++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202511060352.2kPPX3xE-lkp@intel.com/
+diff --git a/tools/testing/selftests/timers/nanosleep.c b/tools/testing/selftests/timers/nanosleep.c
+index 252c6308c5698f9094b8bdc39c284077b5d55531..10badae13ebeb8d596839d5aab1a5161526eeaa9 100644
+--- a/tools/testing/selftests/timers/nanosleep.c
++++ b/tools/testing/selftests/timers/nanosleep.c
+@@ -116,6 +116,56 @@ int nanosleep_test(int clockid, long long ns)
+ 	return 0;
+ }
+ 
++static void dummy_event_handler(int val)
++{
++	/* No action needed */
++}
++
++static int nanosleep_test_remaining(int clockid)
++{
++	struct timespec rqtp = {}, rmtp = {};
++	struct itimerspec itimer = {};
++	struct sigaction sa = {};
++	timer_t timer;
++	int ret;
++
++	sa.sa_handler = dummy_event_handler;
++	ret = sigaction(SIGALRM, &sa, NULL);
++	if (ret)
++		return -1;
++
++	ret = timer_create(clockid, NULL, &timer);
++	if (ret)
++		return -1;
++
++	itimer.it_value.tv_nsec = NSEC_PER_SEC / 4;
++	ret = timer_settime(timer, 0, &itimer, NULL);
++	if (ret)
++		return -1;
++
++	rqtp.tv_nsec = NSEC_PER_SEC / 2;
++	ret = clock_nanosleep(clockid, 0, &rqtp, &rmtp);
++	if (ret != EINTR)
++		return -1;
++
++	ret = timer_delete(timer);
++	if (ret)
++		return -1;
++
++	sa.sa_handler = SIG_DFL;
++	ret = sigaction(SIGALRM, &sa, NULL);
++	if (ret)
++		return -1;
++
++	if (!in_order((struct timespec) {}, rmtp))
++		return -1;
++
++	if (!in_order(rmtp, rqtp))
++		return -1;
++
++	return 0;
++}
++
+ int main(int argc, char **argv)
+ {
+ 	long long length;
+@@ -150,6 +200,11 @@ int main(int argc, char **argv)
+ 			}
+ 			length *= 100;
+ 		}
++		ret = nanosleep_test_remaining(clockid);
++		if (ret < 0) {
++			ksft_test_result_fail("%-31s\n", clockstring(clockid));
++			ksft_exit_fail();
++		}
+ 		ksft_test_result_pass("%-31s\n", clockstring(clockid));
+ next:
+ 		ret = 0;
 
-New smatch warnings:
-net/ipv4/tcp.c:2626 tcp_recvmsg_dmabuf() error: uninitialized symbol 'refs'.
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20251014-nanosleep-rtmp-selftest-6c14f1374f6f
 
-vim +/refs +2626 net/ipv4/tcp.c
-
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2485  static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2486  			      unsigned int offset, struct msghdr *msg,
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2487  			      int remaining_len)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2488  {
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2489  	struct net_devmem_dmabuf_binding *binding = NULL;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2490  	struct dmabuf_cmsg dmabuf_cmsg = { 0 };
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2491  	struct tcp_xa_pool tcp_xa_pool;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2492  	unsigned int start;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2493  	int i, copy, n;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2494  	int sent = 0;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2495  	int err = 0;
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2496  	int refs;
-
-refs needs to be initialized to zero.  Best practice is to use
-CONFIG_INIT_STACK_ALL_PATTERN for testing.
-
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2497  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2498  	tcp_xa_pool.max = 0;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2499  	tcp_xa_pool.idx = 0;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2500  	do {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2501  		start = skb_headlen(skb);
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2502  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2503  		if (skb_frags_readable(skb)) {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2504  			err = -ENODEV;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2505  			goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2506  		}
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2507  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2508  		/* Copy header. */
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2509  		copy = start - offset;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2510  		if (copy > 0) {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2511  			copy = min(copy, remaining_len);
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2512  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2513  			n = copy_to_iter(skb->data + offset, copy,
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2514  					 &msg->msg_iter);
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2515  			if (n != copy) {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2516  				err = -EFAULT;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2517  				goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2518  			}
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2519  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2520  			offset += copy;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2521  			remaining_len -= copy;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2522  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2523  			/* First a dmabuf_cmsg for # bytes copied to user
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2524  			 * buffer.
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2525  			 */
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2526  			memset(&dmabuf_cmsg, 0, sizeof(dmabuf_cmsg));
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2527  			dmabuf_cmsg.frag_size = copy;
-18912c520674ec Stanislav Fomichev 2025-02-24  2528  			err = put_cmsg_notrunc(msg, SOL_SOCKET,
-18912c520674ec Stanislav Fomichev 2025-02-24  2529  					       SO_DEVMEM_LINEAR,
-18912c520674ec Stanislav Fomichev 2025-02-24  2530  					       sizeof(dmabuf_cmsg),
-18912c520674ec Stanislav Fomichev 2025-02-24  2531  					       &dmabuf_cmsg);
-18912c520674ec Stanislav Fomichev 2025-02-24  2532  			if (err)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2533  				goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2534  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2535  			sent += copy;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2536  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2537  			if (remaining_len == 0)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2538  				goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2539  		}
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2540  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2541  		/* after that, send information of dmabuf pages through a
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2542  		 * sequence of cmsg
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2543  		 */
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2544  		for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2545  			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2546  			struct net_iov *niov;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2547  			u64 frag_offset;
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2548  			u32 token;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2549  			int end;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2550  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2551  			/* !skb_frags_readable() should indicate that ALL the
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2552  			 * frags in this skb are dmabuf net_iovs. We're checking
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2553  			 * for that flag above, but also check individual frags
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2554  			 * here. If the tcp stack is not setting
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2555  			 * skb_frags_readable() correctly, we still don't want
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2556  			 * to crash here.
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2557  			 */
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2558  			if (!skb_frag_net_iov(frag)) {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2559  				net_err_ratelimited("Found non-dmabuf skb with net_iov");
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2560  				err = -ENODEV;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2561  				goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2562  			}
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2563  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2564  			niov = skb_frag_net_iov(frag);
-69e39537b66232 Pavel Begunkov     2025-02-04  2565  			if (!net_is_devmem_iov(niov)) {
-69e39537b66232 Pavel Begunkov     2025-02-04  2566  				err = -ENODEV;
-69e39537b66232 Pavel Begunkov     2025-02-04  2567  				goto out;
-69e39537b66232 Pavel Begunkov     2025-02-04  2568  			}
-69e39537b66232 Pavel Begunkov     2025-02-04  2569  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2570  			end = start + skb_frag_size(frag);
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2571  			copy = end - offset;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2572  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2573  			if (copy > 0) {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2574  				copy = min(copy, remaining_len);
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2575  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2576  				frag_offset = net_iov_virtual_addr(niov) +
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2577  					      skb_frag_off(frag) + offset -
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2578  					      start;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2579  				dmabuf_cmsg.frag_offset = frag_offset;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2580  				dmabuf_cmsg.frag_size = copy;
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2581  
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2582  				binding = net_devmem_iov_binding(niov);
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2583  
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2584  				if (!sk->sk_devmem_info.binding)
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2585  					sk->sk_devmem_info.binding = binding;
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2586  
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2587  				if (sk->sk_devmem_info.binding != binding) {
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2588  					err = -EFAULT;
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2589  					goto out;
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2590  				}
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2591  
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2592  				if (sk->sk_devmem_info.autorelease) {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2593  					err = tcp_xa_pool_refill(sk, &tcp_xa_pool,
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2594  								 skb_shinfo(skb)->nr_frags - i);
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2595  					if (err)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2596  						goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2597  
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2598  					dmabuf_cmsg.frag_token =
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2599  						tcp_xa_pool.tokens[tcp_xa_pool.idx];
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2600  				} else {
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2601  					token = net_iov_virtual_addr(niov) >> PAGE_SHIFT;
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2602  					dmabuf_cmsg.frag_token = token;
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2603  				}
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2604  
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2605  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2606  				/* Will perform the exchange later */
-297d389e9e5bd4 Pavel Begunkov     2025-02-04  2607  				dmabuf_cmsg.dmabuf_id = net_devmem_iov_binding_id(niov);
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2608  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2609  				offset += copy;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2610  				remaining_len -= copy;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2611  
-18912c520674ec Stanislav Fomichev 2025-02-24  2612  				err = put_cmsg_notrunc(msg, SOL_SOCKET,
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2613  						       SO_DEVMEM_DMABUF,
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2614  						       sizeof(dmabuf_cmsg),
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2615  						       &dmabuf_cmsg);
-18912c520674ec Stanislav Fomichev 2025-02-24  2616  				if (err)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2617  					goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2618  
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2619  				if (sk->sk_devmem_info.autorelease) {
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2620  					atomic_long_inc(&niov->pp_ref_count);
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2621  					tcp_xa_pool.netmems[tcp_xa_pool.idx++] =
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2622  						skb_frag_netmem(frag);
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2623  				} else {
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2624  					if (atomic_inc_return(&niov->uref) == 1)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2625  						atomic_long_inc(&niov->pp_ref_count);
-45aa39492cf4dd Bobby Eshleman     2025-11-04 @2626  					refs++;
-                                                                                        ^^^^^^
-
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2627  				}
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2628  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2629  				sent += copy;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2630  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2631  				if (remaining_len == 0)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2632  					goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2633  			}
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2634  			start = end;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2635  		}
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2636  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2637  		tcp_xa_pool_commit(sk, &tcp_xa_pool);
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2638  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2639  		if (!remaining_len)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2640  			goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2641  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2642  		/* if remaining_len is not satisfied yet, we need to go to the
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2643  		 * next frag in the frag_list to satisfy remaining_len.
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2644  		 */
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2645  		skb = skb_shinfo(skb)->frag_list ?: skb->next;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2646  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2647  		offset = offset - start;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2648  	} while (skb);
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2649  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2650  	if (remaining_len) {
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2651  		err = -EFAULT;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2652  		goto out;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2653  	}
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2654  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2655  out:
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2656  	tcp_xa_pool_commit(sk, &tcp_xa_pool);
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2657  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2658  	if (!sent)
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2659  		sent = err;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2660  
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2661  	if (refs > 0)
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2662  		atomic_add(refs, &sk->sk_devmem_info.outstanding_urefs);
-45aa39492cf4dd Bobby Eshleman     2025-11-04  2663  
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2664  	return sent;
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2665  }
-8f0b3cc9a4c102 Mina Almasry       2024-09-10  2666  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
