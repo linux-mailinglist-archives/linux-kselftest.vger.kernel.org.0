@@ -1,293 +1,295 @@
-Return-Path: <linux-kselftest+bounces-44975-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-44977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2023EC3BCCD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 15:38:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9C6C3BD78
+	for <lists+linux-kselftest@lfdr.de>; Thu, 06 Nov 2025 15:45:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 78CE9502A10
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 14:35:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2038188BB0B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Nov 2025 14:41:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D16340DA6;
-	Thu,  6 Nov 2025 14:33:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E7C33E358;
+	Thu,  6 Nov 2025 14:41:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="wU7eIE/a";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="g92+yCEe";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="wU7eIE/a";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="g92+yCEe"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="MAr/pBC2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ezo/8B9r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 686B3326D61
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Nov 2025 14:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762439620; cv=none; b=cabTxaN2vdPTIU425YaAORLFQ9hd3m8gfoYTHKtqC/v7dGqNC58jPbJ6IL/Su798WrvOy89/H4eytEeBkfKSEQuZbVJTokdkd0GZIue1FP6uFcl0HaTRIwMwUK/A0pG/w8buZRYEP1xOKBbaYvzVrkPPlI3n9WDGaXjaAL156TA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762439620; c=relaxed/simple;
-	bh=fQilJNipyxT/q8/9Js36Vv+5fgeLdeP3OrbGvCTyEBE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Is1XtF6TlbyOAZWbHbM4cSLNrxAzZahWHIraDswufvZdNESxI6Mb+HNEu9WOdf94hWgqKS2FCoVukPsmWDhkRwK0wG9UCnsj8meZjJbCQaLcXc0k1M3R9kQpeDlEKSA+SnNtmvw3IDxMfSlQau1S/CT8X5HgxddsbPG4vcYCnwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=wU7eIE/a; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=g92+yCEe; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=wU7eIE/a; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=g92+yCEe; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 95473211FA;
-	Thu,  6 Nov 2025 14:33:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762439616; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=pCIJX8/iWnVUuvfe1rGXnP2363EkjNZoIa3wD0HTysg=;
-	b=wU7eIE/awNdBW9X0M+guihUvpSfwGtZp7sB+FdVnnc6rp86D7PwrERWDsdMq2nV0SfheuJ
-	vS9mKCpsNreHzq7FzmTwbH14vUAGfSDnBvcPCAX7tDFa0UUGNH1/VLnRzCEJm0PS+fzlpK
-	6OrczvGIPmpeAZtqXCDUTI8lMGChIyo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762439616;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=pCIJX8/iWnVUuvfe1rGXnP2363EkjNZoIa3wD0HTysg=;
-	b=g92+yCEeQzeK7H/xtQ8RxX0mcYggPveuauVX45NrFsRXUHQWem3OBmr8NhE0PaChlFqnfi
-	DcxekCE+Z6GhaBDA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="wU7eIE/a";
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=g92+yCEe
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762439616; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=pCIJX8/iWnVUuvfe1rGXnP2363EkjNZoIa3wD0HTysg=;
-	b=wU7eIE/awNdBW9X0M+guihUvpSfwGtZp7sB+FdVnnc6rp86D7PwrERWDsdMq2nV0SfheuJ
-	vS9mKCpsNreHzq7FzmTwbH14vUAGfSDnBvcPCAX7tDFa0UUGNH1/VLnRzCEJm0PS+fzlpK
-	6OrczvGIPmpeAZtqXCDUTI8lMGChIyo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762439616;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=pCIJX8/iWnVUuvfe1rGXnP2363EkjNZoIa3wD0HTysg=;
-	b=g92+yCEeQzeK7H/xtQ8RxX0mcYggPveuauVX45NrFsRXUHQWem3OBmr8NhE0PaChlFqnfi
-	DcxekCE+Z6GhaBDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 65FC913A31;
-	Thu,  6 Nov 2025 14:33:36 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id EcLNF8CxDGlwSgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 06 Nov 2025 14:33:36 +0000
-Message-ID: <3ba49b47-91a5-4a73-9dbd-b27f3956ae16@suse.cz>
-Date: Thu, 6 Nov 2025 15:33:36 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3830F33468F;
+	Thu,  6 Nov 2025 14:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762440078; cv=fail; b=r7XLPa2bmlJGRpkobc4A/1Duq4xgpk8082bvXqdLsgeVRMNN0+nkYzpC+OG3crKo50Ut0/fnHAdCGdrw4AYwgkKNGO2w+7XRhM5r3ASSYQyFtH8NOj7WvDEtCsgjP5uFgroNiThTW/7WF+2ty+mz7Tdk7P6+20px+XsYDszVqyc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762440078; c=relaxed/simple;
+	bh=GHY47FJdSui/TEg8axGV3Px+iKFBHxz4Ve15dOQ9E/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=CFE42OTSJJEv4NQbTCYAamzypN1vYmRNuNsw8RMY7P9oFA5CglM9GgTF+sDOsu6BJcHgBOxRgQDmOnbpW2TyB6XKLRNBzAyboENqXgGKf9mypffsgF0n8Om90qM8WUKc1cfRNVstxEbS8fuJ1kdh+1LTrhpRf8zZeUqLyxyPuyc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=MAr/pBC2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ezo/8B9r; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A6CA4VQ000476;
+	Thu, 6 Nov 2025 14:41:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=O552z82k52JKdpsy2B
+	3eS3+2KNOrAkftOpyDB3eQO8o=; b=MAr/pBC2Gv0WgDaSf40AkkKuE69Z1Xp8Sn
+	j4DkNSmSWM9szJzthTNn6kp39EJM9MjeNLg5EJqO9akrSR9xchSN673BLI21UE+r
+	PVriUADf40FVUJ1N61+GPkVC2e1J4w6947K1nx7jg84jtCamQxIRF6NnqvvWIhrs
+	rqZXli+C/ugoTFUoCLHbvhkq+9PLhWaF6QLXPS09qfHxAiPl5MFGyudsY3m023rh
+	orcn7ZEcszqyUOgbl19oftheJ2qy3QcGFTchdE+l1c8jzMik74RFH9NGT+/naWax
+	eez/1Nh6bej9WKb92Qi2LVQd9qOF1BlA8L4cz2nTuGrFr/FXdTsw==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a8at925q9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 06 Nov 2025 14:41:04 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A6DK3Lw023093;
+	Thu, 6 Nov 2025 14:41:03 GMT
+Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11012019.outbound.protection.outlook.com [40.107.209.19])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a58ng1g1p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 06 Nov 2025 14:41:02 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LTioP8KaL/5XP6DPz62ayQZd3PvHZeEcNNxy4cqLByUpejpe5H/qnOY3CpbRYEfqobzb6Po/uaVE5/IHiFgOxApas7AApxlOaEcEEQwsAP4E3a04c2VPOMYertFpDPeFGH3n6DszDQmJNxJiYFV7Aync4Lbbrk88xg4EU0DVEeiJ5omhw+1sYCiyWbF+QEDuvphPbM8qEeyOaHFsY8Y3tmBbrqgAZl2jFnXlG/SDklvCwSUUBfUPD4f+XF29Cas6rp9EACU5smgA2hK9QiDF9XoNkK1FCsJBWjRyBu0Yj9G0+hvxxrucJ3XHLKkIIKB8uKzc4WjqhF/JonGaKv6z8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=O552z82k52JKdpsy2B3eS3+2KNOrAkftOpyDB3eQO8o=;
+ b=CCsghB+ENVZTlSSZjGDOsh2dLqRmpwWfx+9WBRyibus8DTOmn5FtSfPQUtEvtHoKxUqWMEegAMk8jfQSUJoGuSQkOuyo7pTcur7WimWbXmPxPXf5JU7bBTLExs8JC8+Tea+YGoiKLOSBdqewXViQwFeaYk4oDEGGwPPwSsfjfNRA1rkPU4Hi8YKgG6T6CX896mVD0BaYaKGPgQf81XLNQm8Ll9v4QMJrSdj4vWn3oY/iNbq8SpXetUTxZcEna7oIHgE+vMYzdp1wKNYFWZefiGTnDa6QKNFk1YYv3MiWzxvCZqUSsdQGfhOtbTw06619NkZK820Dm8SD4lT2OCjSuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O552z82k52JKdpsy2B3eS3+2KNOrAkftOpyDB3eQO8o=;
+ b=ezo/8B9rbcecZjb8vDwmb3ejYMiY83hXIdzkIDk+E7iPeY90nDw5I80Ifh/tkUnp6hSeeBi5W5qOUELgTSwqyP50V7pxYBtrC3gzLgU/TZRJeNUd3zhhYp/Esy8rqC8/9KQCOGvAtBnEDGntSWPa1O53IyCtuGeGKhDU7d9sXYg=
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
+ by CY5PR10MB6143.namprd10.prod.outlook.com (2603:10b6:930:35::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.7; Thu, 6 Nov
+ 2025 14:40:59 +0000
+Received: from DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
+ ([fe80::2650:55cf:2816:5f2%6]) with mapi id 15.20.9275.015; Thu, 6 Nov 2025
+ 14:40:59 +0000
+Date: Thu, 6 Nov 2025 14:40:56 +0000
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftest/mm: fix pointer comparison in mremap_test
+Message-ID: <98ae03ab-ec73-4649-8a7a-71839d6e6eb0@lucifer.local>
+References: <20251106104917.39890-1-ankitkhushwaha.linux@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251106104917.39890-1-ankitkhushwaha.linux@gmail.com>
+X-ClientProxiedBy: LO2P123CA0106.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:139::21) To DM4PR10MB8218.namprd10.prod.outlook.com
+ (2603:10b6:8:1cc::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/5] mm: implement sticky, copy on fork VMA flags
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Andrei Vagin <avagin@gmail.com>
-References: <cover.1762422915.git.lorenzo.stoakes@oracle.com>
- <9c9e9fb6b767556594b2cef023db01d45d8f8463.1762422915.git.lorenzo.stoakes@oracle.com>
- <3d423848-2b55-4797-bdab-a9b42a373a45@suse.cz>
- <402256c9-8cfe-4943-9b3f-40f21c17292e@lucifer.local>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
- KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
- 87tMFA+u+L4Z5xAzIimfLD5EKC56kJ1CsXlM8S/LHcmdD9Ctkn3trYDNnat0eoAcfPIP2OZ+
- 9oe9IF/R28zmh0ifLXyJQQz5ofdj4bPf8ecEW0rhcqHfTD8k4yK0xxt3xW+6Exqp9n9bydiy
- tcSAw/TahjW6yrA+6JhSBv1v2tIm+itQc073zjSX8OFL51qQVzRFr7H2UQG33lw2QrvHRXqD
- Ot7ViKam7v0Ho9wEWiQOOZlHItOOXFphWb2yq3nzrKe45oWoSgkxKb97MVsQ+q2SYjJRBBH4
- 8qKhphADYxkIP6yut/eaj9ImvRUZZRi0DTc8xfnvHGTjKbJzC2xpFcY0DQbZzuwsIZ8OPJCc
- LM4S7mT25NE5kUTG/TKQCk922vRdGVMoLA7dIQrgXnRXtyT61sg8PG4wcfOnuWf8577aXP1x
- 6mzw3/jh3F+oSBHb/GcLC7mvWreJifUL2gEdssGfXhGWBo6zLS3qhgtwjay0Jl+kza1lo+Cv
- BB2T79D4WGdDuVa4eOrQ02TxqGN7G0Biz5ZLRSFzQSQwLn8fbwARAQABzSBWbGFzdGltaWwg
- QmFia2EgPHZiYWJrYUBzdXNlLmN6PsLBlAQTAQoAPgIbAwULCQgHAwUVCgkICwUWAgMBAAIe
- AQIXgBYhBKlA1DSZLC6OmRA9UCJPp+fMgqZkBQJnyBr8BQka0IFQAAoJECJPp+fMgqZkqmMQ
- AIbGN95ptUMUvo6aAdhxaOCHXp1DfIBuIOK/zpx8ylY4pOwu3GRe4dQ8u4XS9gaZ96Gj4bC+
- jwWcSmn+TjtKW3rH1dRKopvC07tSJIGGVyw7ieV/5cbFffA8NL0ILowzVg8w1ipnz1VTkWDr
- 2zcfslxJsJ6vhXw5/npcY0ldeC1E8f6UUoa4eyoskd70vO0wOAoGd02ZkJoox3F5ODM0kjHu
- Y97VLOa3GG66lh+ZEelVZEujHfKceCw9G3PMvEzyLFbXvSOigZQMdKzQ8D/OChwqig8wFBmV
- QCPS4yDdmZP3oeDHRjJ9jvMUKoYODiNKsl2F+xXwyRM2qoKRqFlhCn4usVd1+wmv9iLV8nPs
- 2Db1ZIa49fJet3Sk3PN4bV1rAPuWvtbuTBN39Q/6MgkLTYHb84HyFKw14Rqe5YorrBLbF3rl
- M51Dpf6Egu1yTJDHCTEwePWug4XI11FT8lK0LNnHNpbhTCYRjX73iWOnFraJNcURld1jL1nV
- r/LRD+/e2gNtSTPK0Qkon6HcOBZnxRoqtazTU6YQRmGlT0v+rukj/cn5sToYibWLn+RoV1CE
- Qj6tApOiHBkpEsCzHGu+iDQ1WT0Idtdynst738f/uCeCMkdRu4WMZjteQaqvARFwCy3P/jpK
- uvzMtves5HvZw33ZwOtMCgbpce00DaET4y/UzsBNBFsZNTUBCACfQfpSsWJZyi+SHoRdVyX5
- J6rI7okc4+b571a7RXD5UhS9dlVRVVAtrU9ANSLqPTQKGVxHrqD39XSw8hxK61pw8p90pg4G
- /N3iuWEvyt+t0SxDDkClnGsDyRhlUyEWYFEoBrrCizbmahOUwqkJbNMfzj5Y7n7OIJOxNRkB
- IBOjPdF26dMP69BwePQao1M8Acrrex9sAHYjQGyVmReRjVEtv9iG4DoTsnIR3amKVk6si4Ea
- X/mrapJqSCcBUVYUFH8M7bsm4CSxier5ofy8jTEa/CfvkqpKThTMCQPNZKY7hke5qEq1CBk2
- wxhX48ZrJEFf1v3NuV3OimgsF2odzieNABEBAAHCwXwEGAEKACYCGwwWIQSpQNQ0mSwujpkQ
- PVAiT6fnzIKmZAUCZ8gcVAUJFhTonwAKCRAiT6fnzIKmZLY8D/9uo3Ut9yi2YCuASWxr7QQZ
- lJCViArjymbxYB5NdOeC50/0gnhK4pgdHlE2MdwF6o34x7TPFGpjNFvycZqccSQPJ/gibwNA
- zx3q9vJT4Vw+YbiyS53iSBLXMweeVV1Jd9IjAoL+EqB0cbxoFXvnjkvP1foiiF5r73jCd4PR
- rD+GoX5BZ7AZmFYmuJYBm28STM2NA6LhT0X+2su16f/HtummENKcMwom0hNu3MBNPUOrujtW
- khQrWcJNAAsy4yMoJ2Lw51T/5X5Hc7jQ9da9fyqu+phqlVtn70qpPvgWy4HRhr25fCAEXZDp
- xG4RNmTm+pqorHOqhBkI7wA7P/nyPo7ZEc3L+ZkQ37u0nlOyrjbNUniPGxPxv1imVq8IyycG
- AN5FaFxtiELK22gvudghLJaDiRBhn8/AhXc642/Z/yIpizE2xG4KU4AXzb6C+o7LX/WmmsWP
- Ly6jamSg6tvrdo4/e87lUedEqCtrp2o1xpn5zongf6cQkaLZKQcBQnPmgHO5OG8+50u88D9I
- rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
- dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
- m6M14QORSWTLRg==
-In-Reply-To: <402256c9-8cfe-4943-9b3f-40f21c17292e@lucifer.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 95473211FA
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,redhat.com,oracle.com,kernel.org,google.com,suse.com,goodmis.org,efficios.com,suse.de,vger.kernel.org,kvack.org,gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:mid,suse.cz:dkim]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
-X-Spam-Level: 
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|CY5PR10MB6143:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a08f94b-f3eb-4f98-1522-08de1d428088
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?6uF/lJdI5AuwVO0cod2ZNAvA1/mPjZ+CJh1F9GMzskiyDRWaPDaQILITaYDC?=
+ =?us-ascii?Q?pxU2igFkzfIHnejVmxWrIGLe1lM0f/wSg4IYUz5rFG2lGzGCf6rHMsjyTqIL?=
+ =?us-ascii?Q?cJvZspWp5KxlfowZX0tCWAbJ3guQc5yffCC+P46HW1FIuukKnpV3NXs1j+XA?=
+ =?us-ascii?Q?0WytkQGQlRZQBE94KWicCoMdHbIjl66SHZz5TKLc3nSlV5sR4UdRQ7LrqE3g?=
+ =?us-ascii?Q?IZGd/cb7Bw5hlbXnE2jzYm/urQcUwDrWvcpZ6RA2sCeM4dG1momSsTzPFMbS?=
+ =?us-ascii?Q?MHZp58UtmRbK9F0QhfMdG9thr3C32ry1Ws+Z6wtyiiLvhkmho6RG/AsgE589?=
+ =?us-ascii?Q?GGIwjQBRcS1ooNHG1i8bTUPqVsG5Dz1pjEPq3dSR4um2SLDJSaBr4J/Hvcnd?=
+ =?us-ascii?Q?kehmySfOwTg+7vnEz9kMD8v+u+REccepbt47vO3TMM8TiXz4d3pAfF4XflRi?=
+ =?us-ascii?Q?YhTAZp80+s5ny0S6T2fB05948NheD3YiAgfLDID/NsuqGYvf4gQ7wZn3CDv6?=
+ =?us-ascii?Q?Jc2on8N2IGynjTqEFfUkuyqCSZO0IDUhXQ4+7u9hTslyz9Na/l6KTd6mGSG4?=
+ =?us-ascii?Q?Gp4OBLCFPasExEKymHCBGZC5TYbY02YDVgtAF776kIu5uz8RB/boEomypiqA?=
+ =?us-ascii?Q?uErP/IG1PxmDkoePTvvdRt6a801LJOC+I0yNWINdSj7xVBjI41kMkKPB18aK?=
+ =?us-ascii?Q?65pv3MzewhWrSywEcEUJe3o6qH5iwMsV7mCxvn85XNHCH6d6CAbUFWJWFKP1?=
+ =?us-ascii?Q?a63wuBEzAT0Flmg6nHUq5dFH+2j9TPXWwqw+LviAu/KFtEogjyA0be0PFx4p?=
+ =?us-ascii?Q?fS8mlgKaTSf4+UenBPY0JdYRaxStPBpgFMZUnXVpzP6OehRtsznK7XGlm3+R?=
+ =?us-ascii?Q?5+1/XhUKvQmuajfTG2nQeSuRnYCmjoDvpeqxHzoHPMkD2SgFqcIn5V7wqr/V?=
+ =?us-ascii?Q?ufaoNWv79sWbR2NsNwNjxdOtEB0CbcIpXETXu4tRH4FE41kA1j11pNSS8TUC?=
+ =?us-ascii?Q?XfFpYPHemS/XAVvdsnTd5aYH3s0aW4FVZZvMtQFNPiik0FBYrBNLzoP6VfAm?=
+ =?us-ascii?Q?tovNOpYRCaFp3VTsSRQo77MuH5cAUG5YxiS4CZCbgFFtH54M9H7Xr6k54DiV?=
+ =?us-ascii?Q?6bI9ESdNSF9dCb6Jd3xiTHlOcUYeF4s7PQ5/6kKzqmt9EmRE+/b1qjS/SW9p?=
+ =?us-ascii?Q?4lpBHrYyaUHNNPr+ijSv1j6F77sE4uKSKI9krtPAKAXuGLRVev+24ZspCxt6?=
+ =?us-ascii?Q?kddeAAxFPwuGZ6ESmwX9KN6YVzUJmSe0U61xCILQpdKX2o0qS+H9c+hNlN6f?=
+ =?us-ascii?Q?tE72PkokwyW/FjH/OwRlEFGMHCilXqXXU7c29fRinuijUqQlEtnZTj5vs+tu?=
+ =?us-ascii?Q?fVm+Arm8+rhUfdhyUpEfW8bljuowELUEzn4HYaP3iCnjqTh8dGpQZ9glnnw9?=
+ =?us-ascii?Q?EF9AsGVgpVxKVb67UaNOjRbtOsCjUSz8?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?VLbHTlnNn0JjInxk5Gsj+TWcfs8mxESkdZqxaR1yXp93dSTVphi5vbR9y6QR?=
+ =?us-ascii?Q?9+O22agQrPTgLy4mrDHy3tT0q+iuxkLQKshBEwRtiGf4IZJ29uDxrRWkHdpY?=
+ =?us-ascii?Q?REkaKnJdaNXXVnQ6IfYdaqoMx95hrCaKm/GA8nHvghlCvD2xIZJhS+fn15/+?=
+ =?us-ascii?Q?jcsyGmkjc6xJVy0JOvY4o7/bMOsSL0uMQVO/4BnsuqBA2xY3pbQ8djL+Xs53?=
+ =?us-ascii?Q?fN0CL7JjyS6m3eaxR9UMeSDN7n/VcTcDgmYhRCoBeaaP3ipA74ZH6WvVBZq9?=
+ =?us-ascii?Q?j+pIQy4otX0eB9caqmNLLITfSjutqwnupeulIFYpvzAvdTaT+aqVjIrJNFsD?=
+ =?us-ascii?Q?V43UbfzH65dDQtC8uU2/LOUIEhStPl5zY2pc0Oz4Y+wxyKERD7TgUbAIsmet?=
+ =?us-ascii?Q?u1vFUJu8pBM1aetM9TiV3LiQO9xsHF8OEt+4XE5ViIwxyz4InlWFrwI5DFz2?=
+ =?us-ascii?Q?MV9utg2RzcyQc5ycdczMT64+3B757ANtAZ5sfvs9/ewY2ILs03LgEVqTaCaV?=
+ =?us-ascii?Q?zjlCjhQHI2qx6fzeYmCK+p/3J7XT3shAJwUq5EXQl3chBe/ZpfRQW6OfLJk1?=
+ =?us-ascii?Q?b3lj7t1oAcWzmx+jwwo+ssUNqcJRmEAfgG1IHQp+86uZTaONV8iTas9dCssn?=
+ =?us-ascii?Q?y4Y/i+G8pdumBdimOle0FJPsGjdAfcjKCxZ6Sdi73cV0gD34eVtOpbqlJA9+?=
+ =?us-ascii?Q?KkQNUXqN2E9giS5hTxZn7HiTH8+RPFwmg8A6EttxeENPVVpuvASU5dGFMGZb?=
+ =?us-ascii?Q?mMTtU+AVwp/X3HNwP4FrPZWqJiSEH+hd/ft7BuojAM7091q9LxzgFWnhYO3H?=
+ =?us-ascii?Q?jsBZ2HErWeDS1hXetGCIYjcjuWEZK7D8fCb+AQbIu2E189S6eVpk4A7FBk0m?=
+ =?us-ascii?Q?qG5CFw17sB9RSjJ92e8o5+euF3WpJ7mhibWTj86E/aFlmHZIgjh2ZkNAahpP?=
+ =?us-ascii?Q?Yt9JNXsPBSeqYv+sQwbF0Yx5psFduP7MtDn0Uc9455X1OSrrWfTS8t9a+xO9?=
+ =?us-ascii?Q?fOtEnowHpG3fhhcOdIBKqyQZBwkasL1vpwtjU+e/80xn3QXSRxSuJaLoTIAQ?=
+ =?us-ascii?Q?VgzJYTTeAcA9IaJXJSWmleg1hZmPwe5SFykjEnJq9W8ww4dG6RIErdcdkSan?=
+ =?us-ascii?Q?REpKnTqE9PmWTmg3H+Ey+gsyjY2VGZ759ndQ6t71OPrCcNATSxeJaYvX3kUC?=
+ =?us-ascii?Q?aoxfJHhqONyuwfgURaAXmNjX5/jWraNVU08XPymujeOwASavaVntdurp3VFx?=
+ =?us-ascii?Q?F6oMlvopEHwVPAAIH9rvjpCgtiAiEvO9CtTy39PJxs245Q/5iP5F0lb14yea?=
+ =?us-ascii?Q?6gEGPYehtXG35PxAqRp83ywkHMBHo5nGKnIQbzPEmL2XsnaprAOwT9StQrGS?=
+ =?us-ascii?Q?a/jAOzJ3ZtndF3cugQdyEX8+GA28jaZ6ANwqBzr0upc9XJsev786poxQZLEK?=
+ =?us-ascii?Q?E817Uo01Ol6kbmdOVYMgXq8jX+38nkP4HWH/1Jz/4ZTLFl/Lm5lbiJks6UbO?=
+ =?us-ascii?Q?q4dPqaEoBY4ndEh7Vgf+S8R/EbANo79s/a0mA6ViU02ZhPiFRX5CWp3YrjIP?=
+ =?us-ascii?Q?QRerQ2O8Dn9eWUicfIbOPdc4MBZ68n85RQDqcUBWQAV8i+Xifz/KhfsAcmoG?=
+ =?us-ascii?Q?vg=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	XsN3YmzLv6XqDSeJUD2CZEH5/Eib0weP242teNOmQ1EtvazvJRYz0WcDLZncgvYfpJPIHKNWxdnhywmRTg36cpBPMC0MbjpqYH1g8wiDVC2Yj+ft0FbgJIJMzx0S3Y3c8oIc/vishJUVgY1ZGoUNanSTktCSOkXSPBdNLJ3E4Bejxdb3QNY2wDr5QftO2JVGkM/t4cRwYctyUvPqgeD6ibzfnL0KAvSmuudHDG8sXJIbjd3so74dmS5il35TgwAoKLfeYhFjpfQwVnp/sRjhncqrgFkrH4XHJsKJgs2z/ftyPKkafXsWYNDNGDvDXF1IbAza6g6c/M6JJMUhywxwiK3P2D/+Fvin4cZLbntTOcIidJvVnMJnXRz19swGmgjjq0OHoLkrtAx3oH86l8zgASf8o+1yQgXLPAFMDbb+YBmCS0cLgO4+5O0yhk6kQfNdPKznaKYXthhQZMkh/XiPd3tG/wvRtVQGHLHoExLH+OIWD+vvNlrzDIDYjqO3gMqfhA5fkdXyVFWlDgx9KXae4cbaVyaD3B1K+W/6jEGr0uOm/fUIWg2zOjepPfHSflEqWmp1j0t5tx/EIzMdgkij3v5ZHM/1rZq9ZMVelUszcqg=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a08f94b-f3eb-4f98-1522-08de1d428088
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2025 14:40:59.5398
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 93VoWDPAAEFHtrdS7aVGBkwQnLWO/00zibgTQS/4OLhJkTxit7U8edQV5TEwFl2TAg+v+CV7lnU4CUZUSwtnlay0gEWHVXBMkavdNx/Xr4Q=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6143
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-06_03,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ mlxlogscore=999 mlxscore=0 adultscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2510240000 definitions=main-2511060116
+X-Authority-Analysis: v=2.4 cv=HPPO14tv c=1 sm=1 tr=0 ts=690cb380 b=1 cx=c_pps
+ a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=pGLkceISAAAA:8 a=yPCof4ZbAAAA:8 a=BkskC4soglnEnhqh4IIA:9 a=CjuIK1q_8ugA:10
+ cc=ntf awl=host:12123
+X-Proofpoint-GUID: yaMmj1XtyMlW5nmtpSgC7uToeSs4ft1E
+X-Proofpoint-ORIG-GUID: yaMmj1XtyMlW5nmtpSgC7uToeSs4ft1E
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA1MDEzNCBTYWx0ZWRfX8BpFmn3n7LZP
+ 2Lmk7nk5iCzfLAtk0HWzk3HgrS4fKhv8/mV+gO+QzjqiM1Trq38QsSsolQGKYOPaBEzpAWqzgYF
+ ppeOn2NgiXvHSVlNDW1ot3Hk0NuSFSH8TDjPV4d+WeSxBHM6sM+KETlXAqvukZvizUIYX3r/53f
+ Bpg4w/yWg1hcxdVrsmyqpdx9y5UfCs9Czvzrs2ykpsSFQu5mPF+AZPsyKXViZuYisrCsiR1krXs
+ NGllG3i5nkskVefkHJSLhexWA/GRakBJvSi30Wdyhfp7mNtucSvI8V27rO7vldSmn+Z/e/W6P/P
+ YFAtzPb0DalGfIPdhdePKCI17uVbf+Sls7rn5SFIthCEOdQsAurdb0whijKKKhsIfyru+BmzCHI
+ dnovzKPiMDlxsM1VsHgIzCKc+XtvTUHJnWn+uEB+D9ZscqPv1OU=
 
-On 11/6/25 15:18, Lorenzo Stoakes wrote:
-> On Thu, Nov 06, 2025 at 02:46:38PM +0100, Vlastimil Babka wrote:
->> On 11/6/25 11:46, Lorenzo Stoakes wrote:
->> > diff --git a/include/linux/mm.h b/include/linux/mm.h
->> > index 2ea65c646212..4d80eaf4ef3b 100644
->> > --- a/include/linux/mm.h
->> > +++ b/include/linux/mm.h
->> > @@ -527,6 +527,38 @@ extern unsigned int kobjsize(const void *objp);
->> >  #endif
->> >  #define VM_FLAGS_CLEAR	(ARCH_VM_PKEY_FLAGS | VM_ARCH_CLEAR)
->> >
->> > +/* Flags which should result in page tables being copied on fork. */
->> > +#define VM_COPY_ON_FORK VM_MAYBE_GUARD
->> > +
->> > +/*
->> > + * Flags which should be 'sticky' on merge - that is, flags which, when one VMA
->> > + * possesses it but the other does not, the merged VMA should nonetheless have
->> > + * applied to it:
->> > + *
->> > + * VM_COPY_ON_FORK - These flags indicates that a VMA maps a range that contains
->> > + *                   metadata which should be unconditionally propagated upon
->> > + *                   fork. When merging two VMAs, we encapsulate this range in
->> > + *                   the merged VMA, so the flag should be 'sticky' as a result.
->> > + */
->> > +#define VM_STICKY VM_COPY_ON_FORK
->>
->> TBH I don't see why there should be always an implication that copying on
->> fork implies stickiness in merging. Yeah, VM_MAYBE_GUARD is both, but in
->> general, is there any underlying property that makes this a rule?
-> 
-> Why do you copy on fork? It's because the page tables contain data that won't be
-> reconstructed on fault.
-> 
-> If that is the case, that applies to any VMA which is merged, and also - since
-> you can't be sure precisely which page tables contain the data we need to
-> propagate - on split too.
-> 
-> This is why copy on fork implies sticky IMO.
+On Thu, Nov 06, 2025 at 04:19:17PM +0530, Ankit Khushwaha wrote:
+> Pointer arthemitic with 'void * addr' and 'unsigned long long dest_alignment'
+> triggers following warning:
+>
+> mremap_test.c:1035:31: warning: pointer comparison always evaluates to
+> false [-Wtautological-compare]
+>  1035 |                 if (addr + c.dest_alignment < addr) {
+>       |                                             ^
+>
+> typecasting 'addr' to 'unsigned long long' to fix pointer comparison.
 
-Hmm I guess that makes some sense.
-> I can update the commit message to make this clear if this makes sense?
+Thanks for raising!
 
-It would help, thanks. Let's see if future will surprise us with some flag
-where this won't be true :)
+>
+> Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
 
->>
->> > +/*
->> > + * VMA flags we ignore for the purposes of merge, i.e. one VMA possessing one
->> > + * of these flags and the other not does not preclude a merge.
->> > + *
->> > + * VM_SOFTDIRTY - Should not prevent from VMA merging, if we match the flags but
->> > + *                dirty bit -- the caller should mark merged VMA as dirty. If
->> > + *                dirty bit won't be excluded from comparison, we increase
->> > + *                pressure on the memory system forcing the kernel to generate
->> > + *                new VMAs when old one could be extended instead.
-> 
-> Note that I'm literally just moving the comment from is_mergeable_vma():
-> 
-> -	 * VM_SOFTDIRTY should not prevent from VMA merging, if we
-> -	 * match the flags but dirty bit -- the caller should mark
-> -	 * merged VMA as dirty. If dirty bit won't be excluded from
-> -	 * comparison, we increase pressure on the memory system forcing
-> -	 * the kernel to generate new VMAs when old one could be
-> -	 * extended instead.
-> 
-> (OK I see you realised that below :P)
-> 
->>
->> So I wonder if VM_SOFTDIRTY should be actually also sticky and not just
->> VM_IGNORE_MERGE. The way I understand the flag suggests it should.
->> Right now AFAICS its rather undefined if the result of vma merge has the
->> flag - depending on which of the two VMA's stays and which is removed by the
->> merge. "the caller should mark merged VMA as dirty" in the comment you're
->> moving here seems not really happening or I'm missing it. __mmap_complete()
-> 
-> No it's not happening, but I can't be blamed for existing incorrect comments :)
-> 
->> and do_brk_flags() do it, so any new areas are marked, but on pure merge of
->> two vma's due to e.g. mprotect() this is really nondetermintic? AFAICT the
->> sticky flag behavior would work perfectly for VM_SOFTDIRTY.
-> 
-> Maybe we inavertantly changed this somehow or maybe it was just wrong, but we're
-> not doing this on merge in general afaict.
+See below, but the fix seems ok despite the existing code being really horrible
++ in need of rework:
 
-Yeah wouldn't surprised me if we subtly changed it during some refactoring
-and it's not causing such obvious issues to be noticed easily.
+Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-> I think you're right that we should make this sticky, but I'd rather deal with
-> that in a follow-up series/patch as this is out of scope here.
-> 
-> Equally so I'd rather fix the comment in a follow up too for the same reason.
+> ---
+>  tools/testing/selftests/mm/mremap_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
+> index a95c0663a011..5ae0400176af 100644
+> --- a/tools/testing/selftests/mm/mremap_test.c
+> +++ b/tools/testing/selftests/mm/mremap_test.c
+> @@ -1032,7 +1032,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+>  	/* Don't destroy existing mappings unless expected to overlap */
+>  	while (!is_remap_region_valid(addr, c.region_size) && !c.overlapping) {
+>  		/* Check for unsigned overflow */
+> -		if (addr + c.dest_alignment < addr) {
+> +		if ((unsigned long long) addr + c.dest_alignment < (unsigned long long) addr) {
 
-Sure it's just something I noticed and seems like a good fit for the new
-concept.
+Hmm this is odd though. gcc (and presumably for compatibility clang) treat void
+* arithmetic as if void * was of size 1, so on 64-bit systems this should be:
 
+64-bit value + 64-bit value < 64-bit value
+
+Which is a valid check for overflow right?
+
+On 32-bit it seems even more so:
+
+32-bit value + 64-bit value < 64-bit value
+
+So I'm not sure why this warning is happening.
+
+Maybe clang is doing some very clever checks to determine this is false.
+
+In practice I don't see how this could happen given userland pointers are
+already restricted on upper bits.
+
+BUT at the same time this is something that the rest of the test code does so it
+seems fine to take this.
+
+Also, (to be clear - it's not your fault Ankit):
+
+This (existing code) is horrible, I don't know why we're using unsigned long
+long _anyway_ here, the whole function is appalling.
+
+Your fix is in line with the existing code but is still quite horrible (again
+_not your fault_ :). So on the basis that it shuts this error up
+
+I guess we can take this patch as the fix is equally as gross as the existing
+code, but can we please:
+
+a. do away with the unsigned long long nonsense if possible (presumably to try
+   to detect overflow on 32-bit systems, but I do not understand why we are
+   bothering it seems totally overengineered and pointless for arbitrary mremap
+   tests)
+
+b. For the love of all spiders, cats and other beautiful things on planet earth,
+   let's please store a local unsigned long variable for the address and convert
+   from void * _once_ :)
+
+>  			ksft_print_msg("Couldn't find a valid region to remap to\n");
+>  			ret = -1;
+>  			goto clean_up_src;
+> --
+> 2.51.0
+>
+
+Thanks, Lorenzo
 
