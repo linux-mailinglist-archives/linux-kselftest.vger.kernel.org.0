@@ -1,133 +1,146 @@
-Return-Path: <linux-kselftest+bounces-45057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45058-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 911ECC3E7C4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 06:08:03 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B61BC3E825
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 06:29:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 874D94E2FF2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 05:08:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 02F1E4E25A2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 05:29:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B4624169F;
-	Fri,  7 Nov 2025 05:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12FE261B70;
+	Fri,  7 Nov 2025 05:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PxgTDjie"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2fe+DTWa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f73.google.com (mail-qv1-f73.google.com [209.85.219.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CFE1DA60D;
-	Fri,  7 Nov 2025 05:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03A8A1DC985
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 05:29:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762492079; cv=none; b=Cqjmvpkunl31X6pU6/5f/EZHqvHO18N4+ncB/iizwn/UuULVubxL8TdbP01XjdDMwMcx4pHWTraqi79u+5AYfQEmGDh2kRtIMF7Y6DNu3IJo+NbAc/uO9S/BoK7oCaeJa2DtA+z6oMP3xT4pOVCbKktEqDt2SsB1Mwa2xlsjFqw=
+	t=1762493391; cv=none; b=UfKIQWFNIpQVmJWOp/sv2smcud3Nkq0l6zS4M032T7kcP+n3UmQOW7R0zUy45PVO8m2Gv6tthshadZw90FLYlPl6YkNcTfW4dKTZvUAweozgprDuc517hnbpwpnN8O8wVxnz6IiLhqtZRmyhY1WGwKh5vdg/u/XlUurazLT21fM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762492079; c=relaxed/simple;
-	bh=Mw1hYzJPmBlRa1P9Q6n6jjczl4NnDGxr14+eAsBq9wc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EuGMh1q8cvcoc6iCzobsGxVoeogRbr4HczVZlHfNHgfeDVAHG/OVKBKaw95HOWlcV8K97B8P5wsi4K2dSN44YxHrTIAO+BobJhEUwzjZRTj2VwD/wOtkv0cPb1eLCGfA00U3aObkuf5NON7GMPiLdKnOpvHiubHlgTrkjdG66Ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PxgTDjie; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A76C116B1;
-	Fri,  7 Nov 2025 05:07:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762492078;
-	bh=Mw1hYzJPmBlRa1P9Q6n6jjczl4NnDGxr14+eAsBq9wc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PxgTDjie/RD0tJnwGg1tf/oiZCNgCBnM5h+8TF2R20VZ3hytBswUTVHddDufT761w
-	 hJGHowtzUpBK+CsH1s7gKs61gH3tsxUouBstyPv8e/j2C8ghVNpTccXaBy9vTNP1RF
-	 zfcek9YB//SZQYcb0vIZCHaikcQaaAym4Xfs1R5yS4nsMLZgvDnqWIvPeVXLedVM0C
-	 K2thDxvOWwxJrSpJf5FPJoKvp09V5jGFnvm9dNjqh//VdQNjzWY+JDii+D5StyS4Vx
-	 u3I2xtUOYnt/kVQU02PwkU2zMtbueP4+8KhPwawkqmqU1gDNv2JvsXiNhEfaQn3XJy
-	 RK/Eu5bGz0uPw==
-Date: Fri, 7 Nov 2025 05:07:54 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Benson Leung <bleung@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v6 1/3] revocable: Add fops replacement
-Message-ID: <aQ1-qj0ztQ29h-oc@google.com>
-References: <20251106152712.11850-1-tzungbi@kernel.org>
- <20251106152712.11850-2-tzungbi@kernel.org>
- <20251106154715.GB1732817@nvidia.com>
+	s=arc-20240116; t=1762493391; c=relaxed/simple;
+	bh=RV9zvylkghKN55Hz0b0NOWqbwRthFQ9z21H6uAqwdwo=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=G8K/Rv5CkLC47rOkf1Q37vQaHcyNieRqb4unmtrjf1xuuIjaLFtToz7uFfFVILZEr0JJAS2y5N2fEM7Y/ZaDI2UTmpJPqLmDTKf9dTG65Mt5A6hzZav4sejo2cDlY/4nYHrS/7z/d8KBFiHOmtLT8mctmZGdpDDs8WkaCfKlU4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=2fe+DTWa; arc=none smtp.client-ip=209.85.219.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rmoar.bounces.google.com
+Received: by mail-qv1-f73.google.com with SMTP id 6a1803df08f44-79a3c16b276so9426306d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 21:29:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762493389; x=1763098189; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=njV6Z7e8AHZ3jv7SEHiGiHSYJwXRJtYkycrQltatJm8=;
+        b=2fe+DTWa4ByZxAPi4XredV038SRctmSxKdmDPjYS3uJ+yrEncknUPk0tZw8HGFGdnd
+         OX080qcaIsim+s4xxUWhLN3HQFmxcT92SnSQcBhf9H+AY1tZ51h+Vcp3mrN5TVFuhpmD
+         Qme00bpEvBVBgR1QDy+k2pa9U74T5aQ54Akk7CqyTlTNCEDtHZDKNggk1EtrwgxE4Y0G
+         D/qSfiHwp2HcbuAECEyM2io00DBRQ+K9ZOtDB0ypNMjUCgJ4E26sU4+yq9gaic8Rx66q
+         KU7ID8YNQRxQ2PS2pBMqGoiRRli9HGCPMdLFuh4YtSzEoMsX5DFsbwj5o99EAWr6FV3w
+         M3Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762493389; x=1763098189;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=njV6Z7e8AHZ3jv7SEHiGiHSYJwXRJtYkycrQltatJm8=;
+        b=TKUG2hohT/GWpwfieRVcTNuX3YefJPcbtDw1neNX6Xs95KOMY8Taeafl3xNTdGVpFP
+         stpwhMUj2rKomu97eVoX56Wau+5iWLzU/B16jhJEDQ1MFJpTL+0FILUy8drG3qEQs2Hj
+         4pM98VgsU8fG564CJRZZHngUOWRpHgaPOTiNmpNKoPPoaKJdTbUxFU/1RyEXCxeDG6JH
+         8l8soGQERjCtZ81DIrosN9yqxS5WTTBdPBCUENd0j66F4jJwdDA4jJpm6DeN/y27qBAV
+         SPrss4QAMr/mxCmfES+oC9WWrNDpuTQ5vqvC8gLejFtjIJPNGPr0aS3esExuDnI91UKT
+         Y0VQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXQOVZ1EboO8s/XEd4mm1N3Gj5Q5DCehLw7G38I8702xo4hr5X7x2OOg6O/5Vrw4HOu2rtq1Me/eg/Ficb1pfM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXdIM8lpDrDTj9wihfUDcAVSa2hlQcBPYcpyZ0yuU6eUtarbqm
+	8juoitNJtWxR9miJEMiiVq6/awZIEE+V9NWYAyyin+QEEQjWEqan4F+cX1kJ2hoVrEHTLXeo4iE
+	ymA==
+X-Google-Smtp-Source: AGHT+IEcveD+OrmGuHXxDDibGvZt08sbWYuxuP0sLlsVz06qCZqoaz8Zfmbg2vG1rZ8pO+UwsxKrjpQ2Jg==
+X-Received: from qvag28.prod.google.com ([2002:a0c:f09c:0:b0:880:65e3:ffd7])
+ (user=rmoar job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6214:5009:b0:87c:2559:fa28
+ with SMTP id 6a1803df08f44-881767567f2mr25885676d6.43.1762493388956; Thu, 06
+ Nov 2025 21:29:48 -0800 (PST)
+Date: Fri,  7 Nov 2025 05:29:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251106154715.GB1732817@nvidia.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.2.1041.gc1ab5b90ca-goog
+Message-ID: <20251107052926.3403265-1-rmoar@google.com>
+Subject: [PATCH RESEND 0/5] release of KTAP version 2
+From: Rae Moar <rmoar@google.com>
+To: frowand.list@gmail.com, davidgow@google.com, keescook@chromium.org, 
+	raemoar63@gmail.com, Tim.Bird@sony.com, shuah@kernel.org
+Cc: tytso@google.com, gustavo.padovan@collabora.com, 
+	ricardo.canuelo@collabora.com, corbet@lwn.net, kernelci@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 06, 2025 at 11:47:15AM -0400, Jason Gunthorpe wrote:
-> On Thu, Nov 06, 2025 at 11:27:10PM +0800, Tzung-Bi Shih wrote:
-> > +/*
-> > + * Recover the private_data to its original one.
-> > + */
-> > +static struct fops_replacement *_recover_private_data(struct file *filp)
-> > +{
-> > +	struct fops_replacement *fr = filp->private_data;
-> > +
-> > +	filp->private_data = fr->orig_private_data;
-> > +	return fr;
-> > +}
-> > +
-> > +/*
-> > + * Replace the private_data to fops_replacement.
-> > + */
-> > +static void _replace_private_data(struct fops_replacement *fr)
-> > +{
-> > +	fr->filp->private_data = fr;
-> > +}
-> 
-> This switching of private_data isn't reasonable, it breaks too much
-> stuff. I think I showed a better idea in my sketch.
+Hi all! I wanted to resend out this series to respark the discussion
+on KTAP version 2. Many of the features proposed are already in use by
+KUnit. This would add these features to the KTAP documentation. Note
+that all the features of KTAP v2 are backwards compatible. Also, today
+is my last day at Google so I will be responding with my personal
+email afterwards.
 
-The approach assumes the filp->private_data should be set once by the
-filp->f_op->open() if any.  Is it common that the filp->private_data
-be updated in other file operations?
+--
 
-> I still think this is a bad use case of revocable, we don't need to
-> obfuscate very simple locks in *core* kernel code like this. I'd rather
-> see you propose this series without using it.
-> 
-> > +static int fs_revocable_release(struct inode *inode, struct file *filp)
-> > +{
-> > +	struct fops_replacement *fr = _recover_private_data(filp);
-> > +	int ret = 0;
-> > +	void *any;
-> > +
-> > +	filp->f_op = fr->orig_fops;
-> > +
-> > +	if (!fr->orig_fops->release)
-> > +		goto leave;
-> > +
-> > +	REVOCABLE_TRY_ACCESS_SCOPED(fr->rev, any) {
-> > +		if (!any) {
-> > +			ret = -ENODEV;
-> > +			goto leave;
-> > +		}
-> > +
-> > +		ret = fr->orig_fops->release(inode, filp);
-> > +	}
-> 
-> This probably doesn't work out, is likely to make a memory leak.
-> It will be hard for the owning driver to free its per-file memory
-> without access to release.
+This patch series represents the final release of KTAP version 2.
 
-Ah, I think this reveals a drawback of the approach.
-- Without calling ->release(), some memory may leak.
-- With calling ->release(), some UAF may happen. 
+There have been open discussions on version 2 for just over 2
+years. This patch series marks the end of KTAP version 2 development
+and beginning of the KTAP version 3 development.
+
+The largest component of KTAP version 2 release is the addition of test
+metadata to the specification. KTAP metadata could include any test
+information that is pertinent for user interaction before or after the
+running of the test. For example, the test file path or the test speed.
+
+Example of KTAP Metadata:
+
+ KTAP version 2
+ #:ktap_test: main
+ #:ktap_arch: uml
+ 1..1
+     KTAP version 2
+     #:ktap_test: suite_1
+     #:ktap_subsystem: example
+     #:ktap_test_file: lib/test.c
+     1..2
+     ok 1 test_1
+     #:ktap_test: test_2
+     #:ktap_speed: very_slow
+     # test_2 has begun
+     #:custom_is_flaky: true
+     ok 2 test_2
+ # suite_1 has passed
+ ok 1 suite_1
+
+The release also includes some formatting fixes and changes to update
+the specification to version 2.
+
+Frank Rowand (2):
+  ktap_v2: change version to 2-rc in KTAP specification
+  ktap_v2: change "version 1" to "version 2" in examples
+
+Rae Moar (3):
+  ktap_v2: add test metadata
+  ktap_v2: formatting fixes to ktap spec
+  ktap_v2: change version to 2 in KTAP specification
+
+ Documentation/dev-tools/ktap.rst | 273 +++++++++++++++++++++++++++++--
+ 1 file changed, 257 insertions(+), 16 deletions(-)
+
+
+base-commit: 9de5f847ef8fa205f4fd704a381d32ecb5b66da9
+-- 
+2.51.2.1041.gc1ab5b90ca-goog
+
 
