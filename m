@@ -1,105 +1,87 @@
-Return-Path: <linux-kselftest+bounces-45053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 893DBC3E4D6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 04:07:39 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8647CC3E61F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 04:41:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABC1E3AD60C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 03:07:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 36F954EBA91
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 03:40:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8060F2F5A32;
-	Fri,  7 Nov 2025 03:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754602FB0BE;
+	Fri,  7 Nov 2025 03:40:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a06yzr2B"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X2pH2a3F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7C52C21F3
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 03:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1E2227599;
+	Fri,  7 Nov 2025 03:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762484831; cv=none; b=OREwk6pmd3XFWWn11d0L+pebmkWzUtVJ0ALk1Sq99DyU9hTX3U7PPrjqKxLPNggBi8sza6MAYPoad+oQALVAHdX91hWFwK/VYPj0w+aRsbs7sKqXMUtPlohywewWflgelsHtojsW/WQ3o1lYyJfpxj/RFC5WXo/0g2cw4ow14wo=
+	t=1762486814; cv=none; b=DSReF6DxcNkljyzHaMXkIlQj+fnP5HPaTzB1LjPCtytLYYim1pqEBnZDMPxPZA9V2Fny+tmjbR4PMv+BrQdibn5oS0ueZUHQ5iqeGEyLxTCSVwFiOvav6hLwXpW7rOJun89+TEsukUj/D/roEdq+HNuyQU1mVHX2vpAPcVIcpZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762484831; c=relaxed/simple;
-	bh=808AlwEZ1o2mA4OcdatRSl+Gb85ZdMLrOwB3CyxK1Ks=;
+	s=arc-20240116; t=1762486814; c=relaxed/simple;
+	bh=5mryAzNSONsN2Qp9qiKezJx2wYrwlgHNENlTmAdtyPY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kir24zPsV0jgg34FvEtQoUcDVes3wGqGXsbkPtCn3kNCaKuB009+ZJngabKLNgvoZJDOFeyLDUzwlDDRtFAyd4ckmWikB+UFnA4fILY+i+0xenroimjxQYfmQZ886zVBh51hd3wiFv1XOFcP7C8ocDl2BXwSJxP9hFZGKd0ntHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a06yzr2B; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-78682bab930so4075097b3.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 19:07:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762484826; x=1763089626; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hR77XGy8gKTpCV+3sSlL3axBPG4R/F86P0C6FJqRU38=;
-        b=a06yzr2BZTwGYHArjHp9LGVTPlbRMRUAT0X+aLCvbKOYdB/uHjGpJNkdYmuLtITb8N
-         FN/4qcMRd8g3E0Cs814vxGEKkfOFXXVLZhvXoFyNeUxGPUbz2GZHTy2xkaT/9CD5D4e7
-         8/MWLBX+fZwSGrhWWSvT1J23CHiyEZYReXa+0mIjDVW4WYM5KDiIlGPJNoN02W36v3G9
-         dN853tmWvBjgeJG4CvSoIUs44A2era9m5KjEk6IP5J+6HXoXDcRMgJBEuuEjgB4M9W+H
-         RKmFPZBewnny9dfsbO+hGTOeCYZsUIzcCGgK1MdVuJOviDttthrRQ3IXzv2qg679brxf
-         rUHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762484826; x=1763089626;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hR77XGy8gKTpCV+3sSlL3axBPG4R/F86P0C6FJqRU38=;
-        b=NVIAUZpxipjKkW0JTWvHWxf9UYf/sIcohSbXSUNA23Bf8k/HjvY3k6rPmmivKL3NrQ
-         bbmnc6Aed2GnHlTqMdyqMCBVhgZGRbtwC3ba/BHt8chs4v65BieeFETljkiig1kcaREQ
-         SG6NqlPcCYse6uI9CXdiEX0qCqrv/C4wq4yPghm3x74zqGup1rH7KVYTKCOrXmqWpSkX
-         ldjvKiwYqQJ+GQRf+shyZ0x8zmsqCl5qzi9KSiXIsD9eQtTG4e0968vYbDcDuuHKNqJu
-         ZSjNC7EeOY84Kznc2WJoowcYVBYft9oGrKWdWo5SM0XY52HHptfwoCjQb24ocOVsgt39
-         k9RA==
-X-Forwarded-Encrypted: i=1; AJvYcCXrcfh8tNeP8Hs13wLXQEkkQC4hqAgCfIEIv6tViH5/bO82VEZHnSF/uIrnOD8fkoT0vXMMUvACWtFRq2VmFYw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6IO991z3RoYlS7xWc3zBsqo5j4A/sbK1ZVOmpCaZbdY2C8Fti
-	WI/ST3uR1+Qs8f8wzwuUtAmtwH8nlnIN+MgUwYzIPAnDQKc+4AXR+0N/
-X-Gm-Gg: ASbGncvGyscFXjRHMyNIRBfHkZD4QFpexyptvK+qslLw82arBEBKEHS2XQxyghAKRko
-	sJIAqHBlFd10+mu5eS9BIGMfj5r6QHyKk8GHGmz2oEpBvNlwjEi0UQbtDj0iqsfmwBd6Wiyw4hh
-	wfwEds6e+kGTac4h1/V6BUmqbuzsq4D7zIboUW7Pou3/DYKAdkgNJe5P3pfQSuQA0yBiNqGLp9j
-	HV238mPPOku7TWAHFR4Pp8JfAc0/AaNUiHAnPwdxccGwTEpBpP9Ynd52GNyySY4kBaHCz+jrOE0
-	u7gk/9DsmjlaPO1P+DBOmJyiYZM0WzUZ+5Qsw1WDwLnXBYZorTjHTLdfSpUBAzsrOziCcR7/C7K
-	MHYcQinOCHSowH+1N5JWA50Rmtm1BPiXDc1Gj1PYxNdT7D5ssE5mEfXoj4W8HDCMA2fnMa6QjKG
-	JopjL38z+JkzM3wl/cCpb9YDo9VNH3vuarYPB3
-X-Google-Smtp-Source: AGHT+IFB590VLlupKmRJu3Xg8gkOtJWd0diOwJuCAD9JFt31fECUBp8uUIrK8y6sj/IrmT+p0bOb1A==
-X-Received: by 2002:a05:690c:d84:b0:783:7768:55e6 with SMTP id 00721157ae682-787caaeead8mr1823477b3.13.1762484826556;
-        Thu, 06 Nov 2025 19:07:06 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:5b::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-787c68c4025sm2798627b3.26.2025.11.06.19.07.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 19:07:06 -0800 (PST)
-Date: Thu, 6 Nov 2025 19:07:04 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v8 07/14] vhost/vsock: add netns support
-Message-ID: <aQ1iWCvSdrat1Y5v@devvm11784.nha0.facebook.com>
-References: <20251023-vsock-vmtest-v8-0-dea984d02bb0@meta.com>
- <20251023-vsock-vmtest-v8-7-dea984d02bb0@meta.com>
- <juxkmz3vskdopukejobv745j6qqx45hhcdjtjw7gcpgz6fj5ws@ckz7dvyup6mq>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ux/vJlcfIKaNiQRjfan4ljIESUqDO6aZoQcE0NGnVFvK4RwWXBT5ASRSC+1fw/VOtPwX+A7DB0nLsK2mpE+JrwvfGGPe164JP2bKzREzW0WpR7lkfr9xRUK68CHOpaU5i+xoLMY57bLur83vvtcODEAhh+6eVRwZ+dVw/GH1q4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X2pH2a3F; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762486813; x=1794022813;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5mryAzNSONsN2Qp9qiKezJx2wYrwlgHNENlTmAdtyPY=;
+  b=X2pH2a3FMjlmvD6xQ6KRjnhT1knlJs/joneAIsTumJfoLPxlm2gQnaGF
+   JdWwy1xKG+Zf68fhqB0gQQBqCo88bnI+MZx33gLrw0+uILeGo/t7HOCL5
+   7okG/9FubtjP+koHck9eRz5HUdDpjb4G/LOswvluKdt7TU2wmPrEZm1Lo
+   0MlbJbOkvvZGn8zXuHh0evESvt3EqvB1L0FwFzo1ZOXTwKSof9bzHd4Xo
+   xwpx8XDMNlo5/Vw3nf1stjUujNk0D805RoAMrVEEI9UfAd8ihnYREvg+E
+   KmKURht66QlJ2skIJtY1ymvQ6RqUVRFVVsu5Q1vJ2jfHGt3jeRTb8WCsH
+   Q==;
+X-CSE-ConnectionGUID: c+jDB8vxQaqUnl6U4mNhzA==
+X-CSE-MsgGUID: J9vCuTEVRWuTKs94fDPOFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11605"; a="64519232"
+X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
+   d="scan'208";a="64519232"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2025 19:40:12 -0800
+X-CSE-ConnectionGUID: z63NhgyxQsu6z3LlMrKALg==
+X-CSE-MsgGUID: q8H5WDsQSfm+YNa+YbFMUw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,285,1754982000"; 
+   d="scan'208";a="225185237"
+Received: from lkp-server02.sh.intel.com (HELO 66d7546c76b2) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 06 Nov 2025 19:40:08 -0800
+Received: from kbuild by 66d7546c76b2 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vHDKX-000UfY-2q;
+	Fri, 07 Nov 2025 03:40:05 +0000
+Date: Fri, 7 Nov 2025 11:39:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tzung-Bi Shih <tzungbi@kernel.org>, Benson Leung <bleung@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, tzungbi@kernel.org,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Wolfram Sang <wsa-dev@sang-engineering.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v6 1/3] revocable: Add fops replacement
+Message-ID: <202511070909.JnNsfyvx-lkp@intel.com>
+References: <20251106152712.11850-2-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -108,96 +90,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <juxkmz3vskdopukejobv745j6qqx45hhcdjtjw7gcpgz6fj5ws@ckz7dvyup6mq>
+In-Reply-To: <20251106152712.11850-2-tzungbi@kernel.org>
 
-On Thu, Nov 06, 2025 at 05:21:35PM +0100, Stefano Garzarella wrote:
-> On Thu, Oct 23, 2025 at 11:27:46AM -0700, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > 
-> > Add the ability to isolate vhost-vsock flows using namespaces.
-> > 
-> > The VM, via the vhost_vsock struct, inherits its namespace from the
-> > process that opens the vhost-vsock device. vhost_vsock lookup functions
-> > are modified to take into account the mode (e.g., if CIDs are matching
-> > but modes don't align, then return NULL).
-> > 
-> > vhost_vsock now acquires a reference to the namespace.
-> > 
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > ---
-> > Changes in v7:
-> > - remove the check_global flag of vhost_vsock_get(), that logic was both
-> >  wrong and not necessary, reuse vsock_net_check_mode() instead
-> > - remove 'delete me' comment
-> > Changes in v5:
-> > - respect pid namespaces when assigning namespace to vhost_vsock
-> > ---
-> > drivers/vhost/vsock.c | 44 ++++++++++++++++++++++++++++++++++----------
-> > 1 file changed, 34 insertions(+), 10 deletions(-)
+Hi Tzung-Bi,
 
-[...]
+kernel test robot noticed the following build errors:
 
-> > static int vhost_vsock_dev_open(struct inode *inode, struct file *file)
-> > {
-> > +
-> > 	struct vhost_virtqueue **vqs;
-> > 	struct vhost_vsock *vsock;
-> > +	struct net *net;
-> > 	int ret;
-> > 
-> > 	/* This struct is large and allocation could fail, fall back to vmalloc
-> > @@ -669,6 +684,14 @@ static int vhost_vsock_dev_open(struct inode *inode, struct file *file)
-> > 		goto out;
-> > 	}
-> > 
-> > +	net = current->nsproxy->net_ns;
-> > +	vsock->net = get_net_track(net, &vsock->ns_tracker, GFP_KERNEL);
-> > +
-> > +	/* Cache the mode of the namespace so that if that netns mode changes,
-> > +	 * the vhost_vsock will continue to function as expected.
-> > +	 */
-> 
-> I think we should document this in the commit description and in both we
-> should add also the reason. (IIRC, it was to simplify everything and prevent
-> a VM from changing modes when running and then tracking all its packets)
-> 
+[auto build test ERROR on brauner-vfs/vfs.all]
+[also build test ERROR on v6.18-rc4 next-20251106]
+[cannot apply to char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus chrome-platform/for-next chrome-platform/for-firmware-next linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Sounds good!
+url:    https://github.com/intel-lab-lkp/linux/commits/Tzung-Bi-Shih/revocable-Add-fops-replacement/20251106-233108
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20251106152712.11850-2-tzungbi%40kernel.org
+patch subject: [PATCH v6 1/3] revocable: Add fops replacement
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20251107/202511070909.JnNsfyvx-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251107/202511070909.JnNsfyvx-lkp@intel.com/reproduce)
 
-> > +	vsock->net_mode = vsock_net_mode(net);
-> > +
-> > 	vsock->guest_cid = 0; /* no CID assigned yet */
-> > 	vsock->seqpacket_allow = false;
-> > 
-> > @@ -708,7 +731,7 @@ static void vhost_vsock_reset_orphans(struct sock *sk)
-> > 	 */
-> > 
-> > 	/* If the peer is still valid, no need to reset connection */
-> > -	if (vhost_vsock_get(vsk->remote_addr.svm_cid))
-> > +	if (vhost_vsock_get(vsk->remote_addr.svm_cid, sock_net(sk), vsk->net_mode))
-> > 		return;
-> > 
-> > 	/* If the close timeout is pending, let it expire.  This avoids races
-> > @@ -753,6 +776,7 @@ static int vhost_vsock_dev_release(struct inode *inode, struct file *file)
-> > 	virtio_vsock_skb_queue_purge(&vsock->send_pkt_queue);
-> > 
-> > 	vhost_dev_cleanup(&vsock->dev);
-> > +	put_net_track(vsock->net, &vsock->ns_tracker);
-> 
-> Doing this after virtio_vsock_skb_queue_purge() should ensure that all skbs
-> have been drained, so there should be no one flying with this netns. Perhaps
-> this clarifies my doubts about the skb net, but should we do something
-> similar for loopback as well?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511070909.JnNsfyvx-lkp@intel.com/
 
-100% - for loopback the skb purge is done in the net exit hook, which is
-called just before netns destruction. Maybe it is worth commenting that
-context there too.
+All errors (new ones prefixed by >>):
 
-> And maybe we should document that also in the virtio_vsock_skb_cb.
-> 
+   In file included from fs/fs_revocable.c:9:
+>> include/linux/fs_revocable.h:10:10: fatal error: 'linux/revocable.h' file not found
+      10 | #include <linux/revocable.h>
+         |          ^~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-sgtm!
 
-Best,
-Bobby
+vim +10 include/linux/fs_revocable.h
+
+     8	
+     9	#include <linux/fs.h>
+  > 10	#include <linux/revocable.h>
+    11	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
