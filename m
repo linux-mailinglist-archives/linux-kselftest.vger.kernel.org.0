@@ -1,69 +1,69 @@
-Return-Path: <linux-kselftest+bounces-45137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AE4BC41062
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 18:24:00 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4AEAC4106B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 18:24:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4EC074E3857
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 17:23:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2A6C54E68E2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 17:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29558334368;
-	Fri,  7 Nov 2025 17:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824F0334C13;
+	Fri,  7 Nov 2025 17:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="sq+nZT9U"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="VXNDD4+r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.176.194.123])
+Received: from fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.75.33.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACA8328B79;
-	Fri,  7 Nov 2025 17:23:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.176.194.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526B83346AE;
+	Fri,  7 Nov 2025 17:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.75.33.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762536226; cv=none; b=SXVv2dABoIJF4svqOtf9lYvtzflHbTpzc2IFPTuSqiS7vmlscHwlBMCKZffn2GgkuF03M25XmGPljMhKIN+4GG0v+sPvJyKFYdTWckaCS6KthqBrlQHq1+ulVRjZPPo2PQpUAb/jEKfkr8qiEKSPEMD59r4C5UXevOQdEWxUjBE=
+	t=1762536239; cv=none; b=oyhLN/lQQC5515BZgIT+FyyisASibC1NxC4C3CUkkoioFQKkSATacLyHLtRfTHpb0gj0+MBQ6767WgEafdBjmrwcUEjYWZavegQcZMI7rUomsQIiK8LHjT0Daa0n+2D8iI9HL5eRlbqdl+g2W/syHkwbdIcnkQoJfJQl5qV2uy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762536226; c=relaxed/simple;
-	bh=MByVuksCvqaX9S6WCLgVJiIGwm5vlcY5KiFcNTNmJ90=;
+	s=arc-20240116; t=1762536239; c=relaxed/simple;
+	bh=gLi7de/NPl4CutCbcHyElhUzdggKS3dZs6ObArdEYbs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=exL1idiVi2QuxWzEf3SPbU50NJgCQO/ZXg0fYEzP7d0B3saVwoUufmYD5cg3/ddHlC110T1g00EZ3w+TNr/8BWh3r0MGIbRnacVDOwsxjPd6T/8jcumIRR6wZ15QNxYjXCtyw2pfVCcxhLtDEW2NEAH2CgQbCoJ8IS92I0zJrq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=sq+nZT9U; arc=none smtp.client-ip=63.176.194.123
+	 In-Reply-To:Content-Type; b=pBY/YOLQsObzD2Xz0+wxPWuM+cQMHIqeFbawDOb4SBBZLEKjpIwHOXPsVQ1SXLws+jOu7h5PvVhNeHPlv9WYwyXIusa/9DmBA4Gi6R/BKiisjlcl16ugDnXdfcZAUjXb7dDIoWxa4Z2VHvHBs1tUknTmVavqP/6D6KYyHt8Gwok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=VXNDD4+r; arc=none smtp.client-ip=3.75.33.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1762536224; x=1794072224;
+  t=1762536237; x=1794072237;
   h=message-id:date:mime-version:reply-to:subject:to:cc:
    references:from:in-reply-to:content-transfer-encoding;
-  bh=ZYTs4MnUsvcTQkyzxj71ae7pzo5tQeHaCOSc3vIutPA=;
-  b=sq+nZT9UHtdR6Qm3RNbCKdq7WOBuDMJE2NRHVaceD+tKezj0vdN3fPTH
-   O3ekRjcKKai6MjWGETIkIkDkb+ZIslyDkPizSfGebXoRwt+sqWBc8dKkt
-   DYTXjk5K7tKbSoB3U6DJBw3aQ/4p2mK+PWw3Ju5ZQHv+y44t/bzQR+Lb7
-   iiUxasrbyR037LqQ2w3dlaow+7h1HPfwsbEm2osloAkO6CHX/APjf1RuH
-   QQ69Fadz2g6U+dgm41CHuxwUy4RazyFhdxxh+0jEjdm7Ko25IB0k/tBQ8
-   LVasU+W77PeWZfiP1UHlWgDIJ3e9+/ZZi1Y7EMvMPJfZlnwUVtuw9V4uq
+  bh=o6wcqFFajh7A/LsdWzRuMS1HeEL9V3ml4dPEALpSF3E=;
+  b=VXNDD4+r6GivoVgSDwoaQ2BG1mDCQu9Kz/XtxJwu3+JAxNl/4tIbQXt1
+   lK7I4q8XDmbi6yqthf6G7ycWBxErTbhHQnPOT2p3+tuzE0dCPS2V+pjmh
+   7twctb5v+aqlGZCPRL3d+kuvK/d0fSeORtxnG0gqPkjHWVhoMdn2x+N+i
+   Amw6Jv5CKq4k0VwdMgnOyaZvJj060oQMz5MkDVCnJxk6egIF6JhwJhMR2
+   YFiekU1ToZeKwjFBTtolF/JNGy1AQCU/0cWVcJ92GpxdS75ur84D944dC
+   x4UP/y1ldSO3/Kik/hmkeFBpR6DDUe/rs2tOJEVwtIGM2XWJJc4ekGhHv
    w==;
-X-CSE-ConnectionGUID: jLGytu/IS3Swgxc8btdIeQ==
-X-CSE-MsgGUID: eAphvwYsSrG1X7PZ3lMXog==
+X-CSE-ConnectionGUID: hWjyRCz+SZyv1J236BTcDQ==
+X-CSE-MsgGUID: J4rqY35IROKEYxpnVVSXaA==
 X-IronPort-AV: E=Sophos;i="6.19,287,1754956800"; 
-   d="scan'208";a="4852040"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 17:23:26 +0000
-Received: from EX19MTAEUA002.ant.amazon.com [54.240.197.232:9306]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.36.34:2525] with esmtp (Farcaster)
- id 65a7df21-9a1f-44f7-9ef4-1959268abc09; Fri, 7 Nov 2025 17:23:26 +0000 (UTC)
-X-Farcaster-Flow-ID: 65a7df21-9a1f-44f7-9ef4-1959268abc09
+   d="scan'208";a="4849373"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-007.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 17:23:54 +0000
+Received: from EX19MTAEUB001.ant.amazon.com [54.240.197.226:28723]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.11.74:2525] with esmtp (Farcaster)
+ id 5bb66a71-c62c-4d84-9175-7e585abc3994; Fri, 7 Nov 2025 17:23:54 +0000 (UTC)
+X-Farcaster-Flow-ID: 5bb66a71-c62c-4d84-9175-7e585abc3994
 Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
- EX19MTAEUA002.ant.amazon.com (10.252.50.126) with Microsoft SMTP Server
+ EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Fri, 7 Nov 2025 17:23:22 +0000
+ Fri, 7 Nov 2025 17:23:53 +0000
 Received: from [192.168.9.244] (10.106.83.15) by EX19D022EUC002.ant.amazon.com
  (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Fri, 7 Nov 2025
- 17:23:21 +0000
-Message-ID: <13d2268f-a556-4a04-a473-c595d26dfbd8@amazon.com>
-Date: Fri, 7 Nov 2025 17:23:20 +0000
+ 17:23:50 +0000
+Message-ID: <add94932-290c-4037-b4e6-c3c760240819@amazon.com>
+Date: Fri, 7 Nov 2025 17:23:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,24 +72,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v6 1/2] KVM: guest_memfd: add generic population via write
-To: Ackerley Tng <ackerleytng@google.com>
-CC: Nikita Kalyazin <kalyazin@amazon.co.uk>, "pbonzini@redhat.com"
-	<pbonzini@redhat.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"david@redhat.com" <david@redhat.com>, "jthoughton@google.com"
-	<jthoughton@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
-	Jack Thomson <jackabt@amazon.co.uk>, Derek Manwaring <derekmn@amazon.com>,
-	Marco Cali <xmarcalx@amazon.co.uk>, Vishal Annapurve <vannapurve@google.com>,
-	Sean Christopherson <seanjc@google.com>
-References: <20251020161352.69257-1-kalyazin@amazon.com>
- <20251020161352.69257-2-kalyazin@amazon.com> <aPpS2aqdobVTk_ed@google.com>
- <8a28ddea-35c0-490e-a7d2-7fb612fdd008@amazon.com>
- <aQPakDuteQkg0hTu@google.com>
- <2c61545f-befb-4681-95fd-ff281e1a947b@amazon.com>
- <diqzms4xdf2v.fsf@google.com>
+Subject: Re: [PATCH v7 00/12] Direct Map Removal Support for guest_memfd
+To: Brendan Jackman <jackmanb@google.com>
+CC: <pbonzini@redhat.com>, <corbet@lwn.net>, <maz@kernel.org>,
+	<oliver.upton@linux.dev>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>,
+	<yuzenghui@huawei.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
+	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+	<luto@kernel.org>, <peterz@infradead.org>, <willy@infradead.org>,
+	<akpm@linux-foundation.org>, <david@redhat.com>,
+	<lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
+	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>, <song@kernel.org>,
+	<jolsa@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+	<andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
+	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+	<sdf@fomichev.me>, <haoluo@google.com>, <jgg@ziepe.ca>,
+	<jhubbard@nvidia.com>, <peterx@redhat.com>, <jannh@google.com>,
+	<pfalcato@suse.de>, <shuah@kernel.org>, <seanjc@google.com>,
+	<kvm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
+	<linux-mm@kvack.org>, <bpf@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <xmarcalx@amazon.co.uk>,
+	<kalyazin@amazon.co.uk>, <jackabt@amazon.co.uk>, <derekmn@amazon.co.uk>,
+	<tabba@google.com>, <ackerleytng@google.com>, Patrick Roy
+	<patrick.roy@campus.lmu.de>
+References: <20250924151101.2225820-1-patrick.roy@campus.lmu.de>
+ <DE2L1SAOC55E.E4JY62WJQ2A8@google.com>
 Content-Language: en-US
 From: Nikita Kalyazin <kalyazin@amazon.com>
 Autocrypt: addr=kalyazin@amazon.com; keydata=
@@ -101,256 +110,144 @@ Autocrypt: addr=kalyazin@amazon.com; keydata=
  ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
  ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
  i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <diqzms4xdf2v.fsf@google.com>
+In-Reply-To: <DE2L1SAOC55E.E4JY62WJQ2A8@google.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D005EUA001.ant.amazon.com (10.252.50.159) To
+X-ClientProxiedBy: EX19D002EUA001.ant.amazon.com (10.252.50.66) To
  EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
 
 
-On 07/11/2025 15:42, Ackerley Tng wrote:
-> Nikita Kalyazin <kalyazin@amazon.com> writes:
+On 07/11/2025 15:54, Brendan Jackman wrote:
+> On Wed Sep 24, 2025 at 3:10 PM UTC, Patrick Roy wrote:
+>> From: Patrick Roy <roypat@amazon.co.uk>
+>>
+>> [ based on kvm/next ]
+>>
+>> Unmapping virtual machine guest memory from the host kernel's direct map is a
+>> successful mitigation against Spectre-style transient execution issues: If the
+>> kernel page tables do not contain entries pointing to guest memory, then any
+>> attempted speculative read through the direct map will necessarily be blocked
+>> by the MMU before any observable microarchitectural side-effects happen. This
+>> means that Spectre-gadgets and similar cannot be used to target virtual machine
+>> memory. Roughly 60% of speculative execution issues fall into this category [1,
+>> Table 1].
+>>
+>> This patch series extends guest_memfd with the ability to remove its memory
+>> from the host kernel's direct map, to be able to attain the above protection
+>> for KVM guests running inside guest_memfd.
+>>
+>> Additionally, a Firecracker branch with support for these VMs can be found on
+>> GitHub [2].
+>>
+>> For more details, please refer to the v5 cover letter [v5]. No
+>> substantial changes in design have taken place since.
+>>
+>> === Changes Since v6 ===
+>>
+>> - Drop patch for passing struct address_space to ->free_folio(), due to
+>>    possible races with freeing of the address_space. (Hugh)
+>> - Stop using PG_uptodate / gmem preparedness tracking to keep track of
+>>    direct map state.  Instead, use the lowest bit of folio->private. (Mike, David)
+>> - Do direct map removal when establishing mapping of gmem folio instead
+>>    of at allocation time, due to impossibility of handling direct map
+>>    removal errors in kvm_gmem_populate(). (Patrick)
+>> - Do TLB flushes after direct map removal, and provide a module
+>>    parameter to opt out from them, and a new patch to export
+>>    flush_tlb_kernel_range() to KVM. (Will)
+>>
+>> [1]: https://download.vusec.net/papers/quarantine_raid23.pdf
+>> [2]: https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding
 > 
->> On 30/10/2025 21:37, Sean Christopherson wrote:
->>> On Fri, Oct 24, 2025, Nikita Kalyazin wrote:
->>>>
->>>>
->>>> On 23/10/2025 17:07, Sean Christopherson wrote:
->>>>> On Mon, Oct 20, 2025, Nikita Kalyazin wrote:
->>>>>> From: Nikita Kalyazin <kalyazin@amazon.com>
->>>>
->>>> + Vishal and Ackerley
->>>>
->>>>>>
->>>>>> write syscall populates guest_memfd with user-supplied data in a generic
->>>>>> way, ie no vendor-specific preparation is performed.  If the request is
->>>>>> not page-aligned, the remaining bytes are initialised to 0.
->>>>>>
->>>>>> write is only supported for non-CoCo setups where guest memory is not
->>>>>> hardware-encrypted.
->>>>>
->>>>> Please include all of the "why".  The code mostly communicates the "what", but
->>>>> it doesn't capture why write() support is at all interesting, nor does it explain
->>>>> why read() isn't supported.
->>>>
->>>> Hi Sean,
->>>>
->>>> Thanks for the review.
->>>>
->>>> Do you think including the explanation from the cover letter would be
->>>> sufficient?
->>>
->>> It's pretty close.  A few more details would be helpful, e.g. to explain that VMMs
->>> may use write() to populate the initial image
->>
->> Ack.
->>
->>>
->>>> Shall I additionally say that read() isn't supported because there is no use
->>>> case for it as of now or would it be obvious?
->>>
->>> Hmm, I think if you want to exclude read() support, the changelog should explicitly
->>> state why.  E.g. "there's no use case" is quite different from "deliberately
->>> don't support read() for security reasons".
->>
->> Ack.
->>
->>>
->>>>>> Signed-off-by: Nikitia Kalyazin <kalyazin@amazon.com>
->>>>>> ---
->>>>>>     virt/kvm/guest_memfd.c | 48 ++++++++++++++++++++++++++++++++++++++++++
->>>>>
->>>>> There's a notable lack of uAPI and Documentation chanegs.  I.e. this needs a
->>>>> GUEST_MEMFD_FLAG_xxx along with proper documentation.
->>>>
->>>> Would the following be ok in the doc?
->>>>
->>>> When the capability KVM_CAP_GUEST_MEMFD_WRITE is supported, the 'flags'
->>>
->>> No capability is necessary, see d2042d8f96dd ("KVM: Rework KVM_CAP_GUEST_MEMFD_MMAP
->>> into KVM_CAP_GUEST_MEMFD_FLAGS").
->>
->> Thanks, I didn't realise that kvm/next was behind kvm/master.
->>
->>>
->>>> field
->>>> supports GUEST_MEMFD_FLAG_WRITE. Setting this flag on guest_memfd creation
->>>> enables write() syscall operations to populate guest_memfd memory from host
->>>> userspace.
->>>>
->>>> When a write() operation is performed on a guest_memfd file descriptor with
->>>> the
->>>> GUEST_MEMFD_FLAG_WRITE set, the syscall will populate the guest memory with
->>>> user-supplied data in a generic way, without any vendor-specific
->>>> preparation.
->>>> The write operation is only supported for non-CoCo (Confidential Computing)
->>>> setups where guest memory is not hardware-encrypted.
->>>
->>> The restriction should be that guest memory must be SHARED, i.e. not PRIVATE.
->>> Strictly speaking, guest memory can be encrypted, e.g. with SME and TME (I think
->>> TME is still a thing?), but with a shared key and thus accessible from the host.
->>>
->>> Even if that weren't the case, we want to support this for CoCo VMs.
->>
->> To clarify, should it depend on GUEST_MEMFD_FLAG_INIT_SHARED for now?
->>
->> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
->> index 5bd76cf394fa..5fbf65f49586 100644
->> --- a/include/linux/kvm_host.h
->> +++ b/include/linux/kvm_host.h
->> @@ -736,7 +736,7 @@ static inline u64
->> kvm_gmem_get_supported_flags(struct kvm *kvm)
->>           u64 flags = GUEST_MEMFD_FLAG_MMAP;
->>
->>           if (!kvm || kvm_arch_supports_gmem_init_shared(kvm))
->> -               flags |= GUEST_MEMFD_FLAG_INIT_SHARED;
->> +               flags |= GUEST_MEMFD_FLAG_INIT_SHARED |
->> GUEST_MEMFD_FLAG_WRITE;
->>
->>           return flags;
->>    }
->>
+> I just got around to trying this out, I checked out this patchset using
+> its base-commit and grabbed the Firecracker branch. Things seem OK until
+> I set the secrets_free flag in the Firecracker config which IIUC makes
+> it set GUEST_MEMFD_FLAG_NO_DIRECT_MAP.
 > 
-> Yup! It should depend on GUEST_MEMFD_FLAG_INIT_SHARED for now.
+> If I set it, I find the guest doesn't show anything on the console.
+> Running it in a VM and attaching GDB suggests that it's entering the
+> guest repeatedly, it doesn't seem like the vCPU thread is stuck or
+> anything. I'm a bit clueless about how to debug that (so far, whenever
+> I've broken KVM, things always exploded very dramatically).
 > 
-> When conversion is supported then GUEST_MEMFD_FLAG_WRITE can always be a
-> supported flag, and the shared/private check can then be shifted to
-> .write_begin().
+> Anyway, if I then kill the firecracker process, the host sometimes
+> crashes, I think this is the most suggestive splat I've seen:
+> 
+> [   99.673420][    T2] BUG: unable to handle page fault for address: ffff888012804000
+> [   99.676216][    T2] #PF: supervisor write access in kernel mode
+> [   99.678381][    T2] #PF: error_code(0x0002) - not-present page
+> [   99.680499][    T2] PGD 2e01067 P4D 2e01067 PUD 2e02067 PMD 12801063 PTE 800fffffed7fb020
+> [   99.683374][    T2] Oops: Oops: 0002 [#1] SMP
+> [   99.685004][    T2] CPU: 0 UID: 0 PID: 2 Comm: kthreadd Not tainted 6.17.0-rc7-00366-g473c46a3cb2a #106 NONE
+> [   99.688514][    T2] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.1 11/11/2019
+> [   99.691547][    T2] RIP: 0010:clear_page_erms+0x7/0x10
+> [   99.693440][    T2] Code: 48 89 47 18 48 89 47 20 48 89 47 28 48 89 47 30 48 89 47 38 48 8d 7f 40 75 d9 90 c3 0f 1f 80 00 00 00 00 b9 00 10 00 00 31 c0 <f3> aa c3 66 0f 1f 44 00 00 48 83 f9 40 73 2a 83 f9 08 73 0f 85 c9
+> [   99.700188][    T2] RSP: 0018:ffff88800318fc10 EFLAGS: 00010246
+> [   99.702321][    T2] RAX: 0000000000000000 RBX: 0000000000400dc0 RCX: 0000000000001000
+> [   99.705100][    T2] RDX: ffffea00004a0100 RSI: ffffea00004a0200 RDI: ffff888012804000
+> [   99.707861][    T2] RBP: 0000000000000801 R08: 0000000000000000 R09: 0000000000000000
+> [   99.710648][    T2] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
+> [   99.713412][    T2] R13: 0000000000000801 R14: ffffea00004a0100 R15: ffffffff81f4df80
+> [   99.716191][    T2] FS:  0000000000000000(0000) GS:ffff8880bbf28000(0000) knlGS:0000000000000000
+> [   99.719316][    T2] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   99.721648][    T2] CR2: ffff888012804000 CR3: 0000000007583001 CR4: 0000000000372eb0
+> [   99.724421][    T2] Call Trace:
+> [   99.725608][    T2]  <TASK>
+> [   99.726646][    T2]  get_page_from_freelist+0x6fe/0x14b0
+> [   99.728583][    T2]  ? fs_reclaim_acquire+0x43/0xe0
+> [   99.730325][    T2]  ? find_held_lock+0x2b/0x80
+> [   99.731965][    T2]  __alloc_frozen_pages_noprof+0x147/0x2d0
+> [   99.734003][    T2]  __alloc_pages_noprof+0x5/0x50
+> [   99.735766][    T2]  copy_process+0x1b1/0x1b30
+> [   99.737398][    T2]  ? lock_is_held_type+0x89/0x100
+> [   99.739157][    T2]  ? kthreadd+0x25/0x190
+> [   99.740664][    T2]  kernel_clone+0x59/0x390
+> [   99.742213][    T2]  ? kthreadd+0x25/0x190
+> [   99.743728][    T2]  kernel_thread+0x55/0x70
+> [   99.745310][    T2]  ? kthread_complete_and_exit+0x20/0x20
+> [   99.747265][    T2]  kthreadd+0x117/0x190
+> [   99.748748][    T2]  ? kthread_is_per_cpu+0x30/0x30
+> [   99.750509][    T2]  ret_from_fork+0x16b/0x1e0
+> [   99.752193][    T2]  ? kthread_is_per_cpu+0x30/0x30
+> [   99.753992][    T2]  ret_from_fork_asm+0x11/0x20
+> [   99.755717][    T2]  </TASK>
+> [   99.756861][    T2] CR2: ffff888012804000
+> [   99.758353][    T2] ---[ end trace 0000000000000000 ]---
+> [   99.760319][    T2] RIP: 0010:clear_page_erms+0x7/0x10
+> [   99.762209][    T2] Code: 48 89 47 18 48 89 47 20 48 89 47 28 48 89 47 30 48 89 47 38 48 8d 7f 40 75 d9 90 c3 0f 1f 80 00 00 00 00 b9 00 10 00 00 31 c0 <f3> aa c3 66 0f 1f 44 00 00 48 83 f9 40 73 2a 83 f9 08 73 0f 85 c9
+> [   99.769129][    T2] RSP: 0018:ffff88800318fc10 EFLAGS: 00010246
+> [   99.771297][    T2] RAX: 0000000000000000 RBX: 0000000000400dc0 RCX: 0000000000001000
+> [   99.774126][    T2] RDX: ffffea00004a0100 RSI: ffffea00004a0200 RDI: ffff888012804000
+> [   99.777013][    T2] RBP: 0000000000000801 R08: 0000000000000000 R09: 0000000000000000
+> [   99.779827][    T2] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
+> [   99.782641][    T2] R13: 0000000000000801 R14: ffffea00004a0100 R15: ffffffff81f4df80
+> [   99.785487][    T2] FS:  0000000000000000(0000) GS:ffff8880bbf28000(0000) knlGS:0000000000000000
+> [   99.788671][    T2] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   99.791012][    T2] CR2: ffff888012804000 CR3: 0000000007583001 CR4: 0000000000372eb0
+> [   99.793863][    T2] Kernel panic - not syncing: Fatal exception
+> [   99.796760][    T2] Kernel Offset: disabled
+> [   99.798296][    T2] ---[ end Kernel panic - not syncing: Fatal exception ]---
+> 
+> This makes me suspect the kvm_gmem_folio_restore_direct_map() path isn't
+> working or isn't getting called.
+> 
+> If anyone wants help trying to reproduce this let me know.
 
-Thanks for the confirmation.
+Hi Brendan,
 
-> 
->>>
->>>> If the write request is not page-aligned, any remaining bytes within the page
->>>> are initialized to zero.
->>>
->>> Why?  (Honest question, e.g. is that standard file semantics?)
->>
->> The clause was originally suggested by James in v5 [1].  The behaviour
->> shouldn't be deviating from the standard semantics though, so I will
->> omit it.  Moreover, when looking at the shmem implementation, I realised
->> that I hadn't handled the case of clearing bytes _before_ written bytes
->> properly.  I will fix it in the next version.
->>
-> 
-> Was thinking about this a bit more. One way to think about this is that
-> we could have more flexibility: Do we need to zero the parts of the page
-> that were not written to? Maybe the user wanted to write only to byte offsets
-> 10 to 20 within the page, and keep the rest intact? That should still be
-> okay I think, there's no data leak since we're not allowing read().
-> 
-> Looking ahead to conversions on huge pages, I think I prefer being more
-> restrictive though. For 4K pages we don't allow allocations or
-> truncations that are not PAGE_ALIGNED. For huge pages the current stance
-> is to return -EINVAL for allocations/truncations that are not huge page
-> size aligned.
-> 
-> If we allow non-page-aligned writes, handling huge pages could be
-> complicated. I don't see any way for guest_memfd to tell the caller
-> generic_perform_write() function that it can only write to certain parts
-> of a page. This means that if a huge page has mixed shared/private
-> status, guest_memfd would have to split the folio just for
-> generic_perform_write() to not write elsewhere.
-> 
-> Do you have any ideas here? Or maybe we will then use some
-> other .write_iter() function.
-> 
-> My proposal is to impose a restriction that write()s offset/len must be
-> PAGE_ALIGNED, we can check that in .write_begin(). Being more
-> restrictive could be a good starting point that allows us to relax the
-> constraint later. (Unless you already have a use case that requires
-> writing less than a page)
-> 
-> That should also solve the zeroing issue, if the user must always
-> provide full pages worth of data to write. :P
+Thanks for trying to run it!
 
-We do not have a use case for partial writes as we always write full 
-pages so I am totally open to applying the restriction, especially if it 
-helps huge page conversion.
+Just as a sanity check, the way it is known for us to work is we apply 
+all patches from [1].  For booted VMs (as opposed to restored from 
+snapshot), apart from the v6 of the direct map removal series, the only 
+additional patch is a fix for kvmclock on x86 [2].  Please let me know 
+if you see the same issue with that patch applied too.
 
-> 
-> 
->> [1]
->> https://lore.kernel.org/kvm/CADrL8HUObfEd80sr783dB3dPWGSX7H5=0HCp9OjiL6D_Sp+2Ww@mail.gmail.com/
->>
->>>
->>>>> And while it's definitely it's a-ok to land .write() in advance of the direct map
->>>>> changes, we do need to at least map out how we want the two to interact, e.g. so
->>>>> that we don't end up with constraints that are impossible to satisfy.
->>>>>
->>>>
->>>> write() shall not attempt to access a page that is not in the direct map,
->>>> which I believe can be achieved via kvm_kmem_gmem_write_begin() consulting
-> 
-> Btw why not just kvm_gmem_write_begin() instead of having the additional
-> kmem part in the name?
+Nikita
 
-You are right, no reason for an extra kmem in the name.  Thanks!
-
-> 
->>>> the KVM_GMEM_FOLIO_NO_DIRECT_MAP in folio->private (introduced in [1]).
->>>>
->>>> Do you think we should mention it in the commit message in some way? What
->>>> particular constraint are you cautious about?
->>>
->>> I want to be cautious with respect to the ABI/uAPI.  Patrick's series also adds
->>> a flag, and guest_memfd doesn't currently provide a way to toggle flags after the
->>> file is created.  That begs the question of how GUEST_MEMFD_FLAG_NO_DIRECT_MAP
->>> will co-exist with GUEST_MEMFD_FLAG_WRITE.  Presumably the goal is to use write()
->>> to initialize memory, and _then_ nuke the direct map.
->>>
->>> I want line of sight to understanding the exact semantics/flows.  E.g. will KVM
->>> require userspace to clear GUEST_MEMFD_FLAG_WRITE before allowing
->>> NO_DIRECT_MAP?  Or will the write() simply fail?  How will the sequencing be
->>> achieved?
->>
->> No, I don't think we can clear the GUEST_MEMFD_FLAG_WRITE as we expect
->> faults and writes to different pages to be arriving interspersed: some
->> pages will be populated by write() proactively, some will be allocated
->> by faults in the user mapping on demand.  Both write() and the fault
->> handler, if they need to allocate a page, will be writing content to it
->> and "sealing" by removing it from the direct map.  If write() faces an
->> already "sealed" page, it will fail (with EEXIST [1]).
->>
-> 
-> IIUC this means a write() after fallocate(), or any unintended access to
-> the memory before write, for a GUEST_MEMFD_FLAG_NO_DIRECT_MAP
-> guest_memfd will necessarily fail.
-> 
-> The required ordering is kind of awkward, but I don't really have any
-> good suggestions.
-
-I don't think fallocate() needs to "seal" the page, since it doesn't 
-initialise the page content.  So it should be allowed to write to a page 
-that has previously been fallocated, unless there is something I'm 
-missing that makes it impossible.
-
-> 
->>>
->>>>>> +     struct inode *inode = file_inode(file);
->>>>>> +     pgoff_t index = pos >> PAGE_SHIFT;
->>>>>> +     struct folio *folio;
->>>>>> +
->>>>>> +     if (!kvm_gmem_supports_mmap(inode))
->>>>>
->>>>> Checking for MMAP is neither sufficient nor strictly necessary.  MMAP doesn't
->>>>> imply SHARED, and it's not clear to me that mmap() support should be in any way
->>>>> tied to WRITE support.
->>>>
->>>> As in my reply to the comment about doc, I plan to introduce
->>>> KVM_CAP_GUEST_MEMFD_WRITE and GUEST_MEMFD_FLAG_WRITE.  The
->>>> kvm_arch_supports_gmem_write() will be a weak symbol and relying on
->>>> !kvm_arch_has_private_mem() on x86, similar to
->>>> kvm_arch_supports_gmem_mmap().  Does it look right?
->>>
->>> No.  As above, write() should be allowed iff memory is SHARED.  Relevant commits
->>> that are now in Linus' tree:
->>>
->>>     44c6cb9fe9888b371e31165b2854bd0f4e2787d4 KVM: guest_memfd: Allow mmap() on guest_memfd for x86 VMs with private memory
->>>     9aef71c892a55e004419923ba7129abe3e58d9f1 KVM: Explicitly mark KVM_GUEST_MEMFD as depending on KVM_GENERIC_MMU_NOTIFIER
->>>     5d3341d684be80892d8f6f9812f90f9274b81177 KVM: guest_memfd: Invalidate SHARED GPAs if gmem supports INIT_SHARED
->>
->> Ack.
+[1] 
+https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding/resources/hiding_ci/linux_patches
+[2] 
+https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding/resources/hiding_ci/linux_patches/11-kvm-clock
 
 
