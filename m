@@ -1,82 +1,83 @@
-Return-Path: <linux-kselftest+bounces-45037-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45038-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A416C3E05F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 01:50:30 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37463C3E068
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 01:50:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41118188BF54
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 00:50:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C2D44E788C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 00:50:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA672EF654;
-	Fri,  7 Nov 2025 00:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70DC52F362F;
+	Fri,  7 Nov 2025 00:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KbtqZVar"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C8Rbh7t+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBED2EB876
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 00:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9E02ECE8F
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 00:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762476596; cv=none; b=CEY3z2fugT9mL5pw+Qu7yv/ZF9VN2+XR+42VgVZ/getvmzCrHmAlYywf3Pvw+PCmVOSB3zsyvwu+pOXqx+EV8McNl3HkTfW8Tr0NZ1hjHVKn2mLAEATswXVPzEx0ON7rfy8bfE1a9RvqCJizzUeH2l0nk1uFOlfKjNnRbgO4S3I=
+	t=1762476598; cv=none; b=X8zZ5sRfGPzPp1L+swQk/FYPAk1XQ8pX8Ne+/D09Xz+AHGAfVWnkS7KXyJtZyyBK9sfmDPFE/suPYRXs4QlTAtRlEFar+h3PFuQb9oIGPNtUWZPPuya8GCt9AF3MQzvl0BVjUCWTn6EokdJko5YNbmvHbKBaVByFir8kJC3HBEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762476596; c=relaxed/simple;
-	bh=dwrVGPkUKFfHciYh/BOwW5ybz1vWWecMLURQ6DmfPcs=;
+	s=arc-20240116; t=1762476598; c=relaxed/simple;
+	bh=1wmMbDkeZvwS5QPp81g31sRYXEDgsB4E7BdLRFqgg48=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AH/zG6p5AR1x7/NPAllTE6CGA9hWFD4XA276kOOAMI8m1iziE17hWUpALZ1gmSal+cmQ7BeVIGJPfD/MIHVXYhlqeRZLuDKj6pD53/RAAjqV7txvK7ZcWwQjHDAGp+LKfN8+Mo8pBm0ndWETWs7alh3elWbq+0KuywIeVSjvxH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KbtqZVar; arc=none smtp.client-ip=209.85.210.171
+	 In-Reply-To:To:Cc; b=pW4mSH1ny6Y/ruKvfaoepI2m4+PwIrJnd7oVaogC/AS2ZGMhQfUWX7pkLpjU+cvS4JuBdifpTCSVDaVnSZx69bbfp98LJY9tSQly3cu2rGzV/DovsqPZrNNWnHZr6+5cKdqRQZuN4ugMYrz7U1AR1x8JRg+VDPyqHxU+8Opxb60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C8Rbh7t+; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-76e2ea933b7so200868b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 16:49:54 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-29524abfba3so2151315ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 16:49:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762476594; x=1763081394; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1762476595; x=1763081395; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YRbKKbPo7sghLlyHK7HWRfe/WOnldFy+fNHUccLNkyY=;
-        b=KbtqZVarxQBjv85tfHvy57gnoXxUnRrGS5ejboMg5fynrPykKESzZY6QKQ7I4PJ1UI
-         UcNONRJgigi0f0f7sz/ME65VinYgO4oDciXtQGVwN4l1WMxYmozFhDtTjX7iIDjDF1Tw
-         bAjOP+XhkrnKZNemVa/3WYcAePNO4sVnyRzNYzycaj7fsTczIpDuu+KlxkTia31EnzES
-         Baou8FEp4ndJsocuzoQs+7zLKGzCDf76MKiKl0SlBkTdAetTt+oiCNCrPWWHINCNmWXK
-         Pj3qZXpEmODrRGgwb4p4lRxv09WGDBerGWAAgaX7jSvMwl9DCuDvQNhBmDgnzn3uj3i9
-         AJ6g==
+        bh=dJjKQe5/mXMKF0WVnYjVoyy86oXCt6LuarvonIeoQdI=;
+        b=C8Rbh7t+3HwqmWe7JmdttYyym+02kmNvkkg4sbW/2S6PNFmKj4fRmzbMXeSTQ+jkKH
+         QSYcSTiLtv9aCbm7vCHvIWmWCMessEPc6+EjBONbI3Q290nMG5dZNSzMbKKQfDma4Lit
+         hvr8HGF84KfQci0PbadBr1yJdAiLq/M0lQ59vHBSqJ0uSuzCCDiN6pJTHfwmZPBoRByf
+         oZ68+zthZVEj1ecpPgf9p7qT3i0gBTJC1NwIKhqstvnOoUG+p+a++J8Qi2OHUWQDknJH
+         pNxErpVTZ/F2HM4ltNxuHfVg1QjcF636hVU/+CxCctlTVZTcatXljhj8/LbRwgTg6GaZ
+         q/TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762476594; x=1763081394;
+        d=1e100.net; s=20230601; t=1762476595; x=1763081395;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=YRbKKbPo7sghLlyHK7HWRfe/WOnldFy+fNHUccLNkyY=;
-        b=CLm3X6iGq8iehFEWkfoV9+3HBMekeSeSkRnBJGh7hUpJ1j+fmuDO61+vLemq/BTpg0
-         9mcDsvEK4tHy/kzOA7vQ5k+nQ0ltbkxLMg1TLgEosKJq3p3wlWPzmfna1A8FkXBo+Gmn
-         nVN/vk/2L8U9goRjX4rfIPeNPb+tDslUmDmWmCQz0RmxY8GsrOppdZqY3JeL9lVQkaDa
-         1ONQc+gsSw6pDhsdHkdh7X2/pZOjyjjykInhfAvp7PV6LBAN5FE87+ijR5xo9DobqQdb
-         jAsOiPjGljuMrOJ3RD19n6yiqNS9G7yiqR19kkuN0HiIZSZN1WAo4JMtT7A5bYYjJpUW
-         iy5w==
-X-Forwarded-Encrypted: i=1; AJvYcCU+mqyFwqNxOErDT19hqJSmQ0iSdFvM69RNBBMRR7htKjKX/ITT3xDwwFBLzW72cIBis/RRSARmvLEzIjORCaY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7jdJtGYqEURdmPCa7SnMo9hL4mrIsPazk/CVa66RF2hEBz21r
-	5ebuRb82/VSWwHoO1mDrQudBRoEeEk/jlaxNoRfkhp+ojQSwUixGEzJq
-X-Gm-Gg: ASbGncs8i53cOUcxU5hlwjsHGktBNae4gc58HllgH7iFSvoWw264nxe0gi5t/hL5eQQ
-	tz0wk45kl8dSCgDjC/tgLKKNbvzu7LThrkX+lr3z7MquXa9ItwMIcrUKvZfgM6XDNDwn/7wpB5b
-	jLnmkkw3yyCA5qVy2okokpzSe4Vs4dSmhc7KR8DFSC18NXVd4hKF1S9G3FTXHsS6l/5z3mt1wT1
-	ZYXrf+5TWZOovoKWAAGYZoj7YdeeYLlaXceRTo35mCnJMGGaWxRovNUc1riMbZZByU5DQbfWtRw
-	+OxpxO2UdDfl3n/vBq95AWN20sktAg3l3rhN4pZDOvSTNxvWE5u4Jy7cUPu+uA0lCRIW7sbDpcU
-	QOEah1YYdWsnJcmj6IJPbR+OaQZhSlqQlnQpwB4pNHPSOT37aYqeQffO585j1CSOAmXr9t0vo
-X-Google-Smtp-Source: AGHT+IEbuIc5GRka/5Y9I021s/vgHn1nIjge60jkwm47qZF7uc1qjEbVWXKKl/0cBwa3wQt/WmA2Cg==
-X-Received: by 2002:a05:6a00:8014:b0:7a9:acdf:e8f8 with SMTP id d2e1a72fcca58-7af6fbd5c22mr6105213b3a.4.1762476594202;
-        Thu, 06 Nov 2025 16:49:54 -0800 (PST)
-Received: from localhost ([2a03:2880:2ff:5::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0cc17a252sm869506b3a.41.2025.11.06.16.49.53
+        bh=dJjKQe5/mXMKF0WVnYjVoyy86oXCt6LuarvonIeoQdI=;
+        b=TMg5Efzgl1ZTLtj8inOiChyVhqdfpcwn1tXFgd296gVZnUrKxas7UxMDTSGgOE5ad3
+         FlKLI+ljsmyoaMlNSOAfIfKquiJjq5j6/tNsqojkmOTrGp7/D63zALTrIPDGMokKtvIS
+         inVHsGeDTApS8vKjOQZKY2RmfqKDJ8FolRNfXEzpLDYGB9hr8hJMKq/O6QZs3hud/Ti8
+         8Fzyw83+o9bf/CNPtvZ/kl2fkzXSmagfKeLS5N0GYNRbELAGiJvrPjjV7xrBRUvWhOPn
+         beL5c9/d4IkywQFk+Gt0MmAbvUNHe7T52PAJeRSP966RKxyg5qXlzLlA40oKPmgDy1M6
+         RHdA==
+X-Forwarded-Encrypted: i=1; AJvYcCVpqlCpTAOaxQbAL1B3ktI7JvJBbn2jyCtxzRBeRCxXnU367+MwJQUbYfv+7mdWaSunTvlvw63R6jndR4Y1Bbo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUDTPb8DmdXvkagHhLhQMjESlbukKSW7TL2FVwwTfHukIu3wE3
+	HkTA50apwL0xN4PmBiNYeRaMsx6NlIbD5/mTEOhCks6WdmFKC6+3eiRL
+X-Gm-Gg: ASbGnculH92sbNt2ejFRWvtawRkVFZz5z+zh2/aWpuLPGS847R8+xOY7MELVuRlh9M5
+	6Uvyb063N0w7gktEa2m1bURpqzBQfW9OepbdQu+xshDTy8SwudIJ+brUWIXQRVMeukv3IaMLGxJ
+	7ehzQlNdXCbgIDfrYS+GQdZ3qO+NOQ0FqycrpGQSsqbp8mHYJPUPCqXZV/sCZ2F5rh3bfFPmAiZ
+	DpwBZHjRQB2sHIaSM3DLn78S++gxIbKxrCf9vIHg/AaLf46FZdwBLuhNzASySps3Mue349+i/N6
+	sZ01K0ZttVrlK/y4b5iGIxodVzccMfp5q2kFXFcbraRwOAmiHP2CEn7ZAF811UzlLw+qN1JLokw
+	qQuOW8uIw33774gYjHjMxgY1xXz/tZj3qzMd7WeXkrAdp/cHJ589cLTTH2MfUIbvmLs59usFLXQ
+	==
+X-Google-Smtp-Source: AGHT+IGi1k8J+USNG0iHJpgilsw9wrNeAWnolCrzF3sxEbAdWnQ7KZAJ70UKioRAg5vmvuxlz3eybg==
+X-Received: by 2002:a17:902:dacf:b0:27e:ee83:fc80 with SMTP id d9443c01a7336-297c04aaa05mr16981245ad.57.1762476595330;
+        Thu, 06 Nov 2025 16:49:55 -0800 (PST)
+Received: from localhost ([2a03:2880:2ff:71::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29651c8f2b3sm41613955ad.76.2025.11.06.16.49.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 16:49:53 -0800 (PST)
+        Thu, 06 Nov 2025 16:49:54 -0800 (PST)
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Thu, 06 Nov 2025 16:49:47 -0800
-Subject: [PATCH net-next v3 03/11] selftests/vsock: reuse logic for
- vsock_test through wrapper functions
+Date: Thu, 06 Nov 2025 16:49:48 -0800
+Subject: [PATCH net-next v3 04/11] selftests/vsock: avoid multi-VM pidfile
+ collisions with QEMU
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,7 +86,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251106-vsock-selftests-fixes-and-improvements-v3-3-519372e8a07b@meta.com>
+Message-Id: <20251106-vsock-selftests-fixes-and-improvements-v3-4-519372e8a07b@meta.com>
 References: <20251106-vsock-selftests-fixes-and-improvements-v3-0-519372e8a07b@meta.com>
 In-Reply-To: <20251106-vsock-selftests-fixes-and-improvements-v3-0-519372e8a07b@meta.com>
 To: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>
@@ -96,189 +97,181 @@ X-Mailer: b4 0.14.3
 
 From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Add wrapper functions vm_vsock_test() and host_vsock_test() to invoke
-the vsock_test binary. This encapsulates several items of repeat logic,
-such as waiting for the server to reach listening state and
-enabling/disabling the bash option pipefail to avoid pipe-style logging
-from hiding failures.
+Change QEMU to use generated pidfile names instead of just a single
+globally-defined pidfile. This allows multiple QEMU instances to
+co-exist with different pidfiles. This is required for future tests that
+use multiple VMs to check for CID collissions.
+
+Additionally, this also places the burden of killing the QEMU process
+and cleaning up the pidfile on the caller of vm_start(). To help with
+this, a function terminate_pidfiles() is introduced that callers use to
+perform the cleanup. The terminate_pidfiles() function supports multiple
+pidfile removals because future patches will need to process two
+pidfiles at a time.
+
+Change QEMU_OPTS to be initialized inside the vm_start(). This allows
+the generated pidfile to be passed to the string assignment, and
+prepares for future vm-specific options as well (e.g., cid).
 
 Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 ---
 Changes in v3:
-- Add port input parameter to host_wait_for_listener() to accept port
-  from host_vsock_test() (Stefano)
-- Change host_wait_for_listener() call-site to pass in parameter
+- do not add unneeded -u to mktemp (Stefano)
+- quote $PIDFILE_TEMPLATE (Stefano)
+- do not remove cleanup(). Though it is expected that vm_start() does
+  not exit(2) and its caller is responsible for pidfile cleanup,
+  retaining cleanup() on EXIT is worth keeping as ill-timed kill signals
+  (i.e., during manual runs) may leak those files.
+- add create_pidfile() function to generate pidfile and automatically
+  add it to array for cleanup() to terminate and remove later.
+
+Changes in v2:
+- mention QEMU_OPTS changes in commit message (Simon)
 ---
- tools/testing/selftests/vsock/vmtest.sh | 134 ++++++++++++++++++++++----------
- 1 file changed, 94 insertions(+), 40 deletions(-)
+ tools/testing/selftests/vsock/vmtest.sh | 70 ++++++++++++++++++++++++---------
+ 1 file changed, 52 insertions(+), 18 deletions(-)
 
 diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-index d936209d3eaa..01ac2b7ee8db 100755
+index 01ac2b7ee8db..a461ef1fcc61 100755
 --- a/tools/testing/selftests/vsock/vmtest.sh
 +++ b/tools/testing/selftests/vsock/vmtest.sh
-@@ -272,8 +272,80 @@ EOF
+@@ -23,7 +23,8 @@ readonly VSOCK_CID=1234
+ readonly WAIT_PERIOD=3
+ readonly WAIT_PERIOD_MAX=60
+ readonly WAIT_TOTAL=$(( WAIT_PERIOD * WAIT_PERIOD_MAX ))
+-readonly QEMU_PIDFILE=$(mktemp /tmp/qemu_vsock_vmtest_XXXX.pid)
++readonly PIDFILE_TEMPLATE=/tmp/vsock_vmtest_XXXX.pid
++declare -a PIDFILES
+ 
+ # virtme-ng offers a netdev for ssh when using "--ssh", but we also need a
+ # control port forwarded for vsock_test.  Because virtme-ng doesn't support
+@@ -33,12 +34,6 @@ readonly QEMU_PIDFILE=$(mktemp /tmp/qemu_vsock_vmtest_XXXX.pid)
+ # add the kernel cmdline options that virtme-init uses to setup the interface.
+ readonly QEMU_TEST_PORT_FWD="hostfwd=tcp::${TEST_HOST_PORT}-:${TEST_GUEST_PORT}"
+ readonly QEMU_SSH_PORT_FWD="hostfwd=tcp::${SSH_HOST_PORT}-:${SSH_GUEST_PORT}"
+-readonly QEMU_OPTS="\
+-	 -netdev user,id=n0,${QEMU_TEST_PORT_FWD},${QEMU_SSH_PORT_FWD} \
+-	 -device virtio-net-pci,netdev=n0 \
+-	 -device vhost-vsock-pci,guest-cid=${VSOCK_CID} \
+-	 --pidfile ${QEMU_PIDFILE} \
+-"
+ readonly KERNEL_CMDLINE="\
+ 	virtme.dhcp net.ifnames=0 biosdevname=0 \
+ 	virtme.ssh virtme_ssh_channel=tcp virtme_ssh_user=$USER \
+@@ -90,15 +85,19 @@ vm_ssh() {
  }
  
- host_wait_for_listener() {
--	wait_for_listener "${TEST_HOST_PORT_LISTENER}" "${WAIT_PERIOD}" "${WAIT_PERIOD_MAX}"
-+	local port=$1
+ cleanup() {
+-	if [[ -s "${QEMU_PIDFILE}" ]]; then
+-		pkill -SIGTERM -F "${QEMU_PIDFILE}" > /dev/null 2>&1
+-	fi
++	local pidfile
  
-+	wait_for_listener "${port}" "${WAIT_PERIOD}" "${WAIT_PERIOD_MAX}"
-+}
-+
-+vm_vsock_test() {
-+	local host=$1
-+	local cid=$2
-+	local port=$3
-+	local rc
-+
-+	# log output and use pipefail to respect vsock_test errors
-+	set -o pipefail
-+	if [[ "${host}" != server ]]; then
-+		vm_ssh -- "${VSOCK_TEST}" \
-+			--mode=client \
-+			--control-host="${host}" \
-+			--peer-cid="${cid}" \
-+			--control-port="${port}" \
-+			2>&1 | log_guest
-+		rc=$?
-+	else
-+		vm_ssh -- "${VSOCK_TEST}" \
-+			--mode=server \
-+			--peer-cid="${cid}" \
-+			--control-port="${port}" \
-+			2>&1 | log_guest &
-+		rc=$?
-+
-+		if [[ $rc -ne 0 ]]; then
-+			set +o pipefail
-+			return $rc
+-	# If failure occurred during or before qemu start up, then we need
+-	# to clean this up ourselves.
+-	if [[ -e "${QEMU_PIDFILE}" ]]; then
+-		rm "${QEMU_PIDFILE}"
+-	fi
++	for pidfile in "${PIDFILES[@]}"; do
++		if [[ -s "${pidfile}" ]]; then
++			pkill -SIGTERM -F "${pidfile}" > /dev/null 2>&1
 +		fi
 +
-+		vm_wait_for_listener "${port}"
-+		rc=$?
-+	fi
-+	set +o pipefail
++		# If failure occurred during or before qemu start up, then we need
++		# to clean this up ourselves.
++		if [[ -e "${pidfile}" ]]; then
++			rm "${pidfile}"
++		fi
++	done
+ }
+ 
+ check_args() {
+@@ -188,10 +187,35 @@ handle_build() {
+ 	popd &>/dev/null
+ }
+ 
++create_pidfile() {
++	local pidfile
 +
-+	return $rc
++	pidfile=$(mktemp "${PIDFILE_TEMPLATE}")
++	PIDFILES+=("${pidfile}")
++
++	echo "${pidfile}"
 +}
 +
-+host_vsock_test() {
-+	local host=$1
-+	local cid=$2
-+	local port=$3
-+	local rc
++terminate_pidfiles() {
++	local pidfile
 +
-+	# log output and use pipefail to respect vsock_test errors
-+	set -o pipefail
-+	if [[ "${host}" != server ]]; then
-+		${VSOCK_TEST} \
-+			--mode=client \
-+			--peer-cid="${cid}" \
-+			--control-host="${host}" \
-+			--control-port="${port}" 2>&1 | log_host
-+		rc=$?
-+	else
-+		${VSOCK_TEST} \
-+			--mode=server \
-+			--peer-cid="${cid}" \
-+			--control-port="${port}" 2>&1 | log_host &
-+		rc=$?
-+
-+		if [[ $rc -ne 0 ]]; then
-+			return $rc
++	for pidfile in "$@"; do
++		if [[ -s "${pidfile}" ]]; then
++			pkill -SIGTERM -F "${pidfile}" > /dev/null 2>&1
 +		fi
 +
-+		host_wait_for_listener "${port}"
-+		rc=$?
-+	fi
-+	set +o pipefail
++		if [[ -e "${pidfile}" ]]; then
++			rm -f "${pidfile}"
++		fi
++	done
++}
 +
-+	return $rc
+ vm_start() {
++	local pidfile=$1
+ 	local logfile=/dev/null
+ 	local verbose_opt=""
+ 	local kernel_opt=""
++	local qemu_opts=""
+ 	local qemu
+ 
+ 	qemu=$(command -v "${QEMU}")
+@@ -201,6 +225,13 @@ vm_start() {
+ 		logfile=/dev/stdout
+ 	fi
+ 
++	qemu_opts="\
++		 -netdev user,id=n0,${QEMU_TEST_PORT_FWD},${QEMU_SSH_PORT_FWD} \
++		 -device virtio-net-pci,netdev=n0 \
++		 -device vhost-vsock-pci,guest-cid=${VSOCK_CID} \
++		--pidfile ${pidfile}
++	"
++
+ 	if [[ "${BUILD}" -eq 1 ]]; then
+ 		kernel_opt="${KERNEL_CHECKOUT}"
+ 	fi
+@@ -209,14 +240,14 @@ vm_start() {
+ 		--run \
+ 		${kernel_opt} \
+ 		${verbose_opt} \
+-		--qemu-opts="${QEMU_OPTS}" \
++		--qemu-opts="${qemu_opts}" \
+ 		--qemu="${qemu}" \
+ 		--user root \
+ 		--append "${KERNEL_CMDLINE}" \
+ 		--rw  &> ${logfile} &
+ 
+ 	if ! timeout ${WAIT_TOTAL} \
+-		bash -c 'while [[ ! -s '"${QEMU_PIDFILE}"' ]]; do sleep 1; done; exit 0'; then
++		bash -c 'while [[ ! -s '"${pidfile}"' ]]; do sleep 1; done; exit 0'; then
+ 		die "failed to boot VM"
+ 	fi
  }
+@@ -498,7 +529,8 @@ handle_build
+ echo "1..${#ARGS[@]}"
  
- log() {
-@@ -312,59 +384,41 @@ log_guest() {
- }
+ log_host "Booting up VM"
+-vm_start
++pidfile="$(create_pidfile)"
++vm_start "${pidfile}"
+ vm_wait_for_ssh
+ log_host "VM booted up"
  
- test_vm_server_host_client() {
-+	if ! vm_vsock_test "server" 2 "${TEST_GUEST_PORT}"; then
-+		return "${KSFT_FAIL}"
-+	fi
+@@ -522,6 +554,8 @@ for arg in "${ARGS[@]}"; do
+ 	cnt_total=$(( cnt_total + 1 ))
+ done
  
--	vm_ssh -- "${VSOCK_TEST}" \
--		--mode=server \
--		--control-port="${TEST_GUEST_PORT}" \
--		--peer-cid=2 \
--		2>&1 | log_guest &
--
--	vm_wait_for_listener "${TEST_GUEST_PORT}"
--
--	${VSOCK_TEST} \
--		--mode=client \
--		--control-host=127.0.0.1 \
--		--peer-cid="${VSOCK_CID}" \
--		--control-port="${TEST_HOST_PORT}" 2>&1 | log_host
-+	if ! host_vsock_test "127.0.0.1" "${VSOCK_CID}" "${TEST_HOST_PORT}"; then
-+		return "${KSFT_FAIL}"
-+	fi
++terminate_pidfiles "${pidfile}"
++
+ echo "SUMMARY: PASS=${cnt_pass} SKIP=${cnt_skip} FAIL=${cnt_fail}"
+ echo "Log: ${LOG}"
  
--	return $?
-+	return "${KSFT_PASS}"
- }
- 
- test_vm_client_host_server() {
-+	if ! host_vsock_test "server" "${VSOCK_CID}" "${TEST_HOST_PORT_LISTENER}"; then
-+		return "${KSFT_FAIL}"
-+	fi
- 
--	${VSOCK_TEST} \
--		--mode "server" \
--		--control-port "${TEST_HOST_PORT_LISTENER}" \
--		--peer-cid "${VSOCK_CID}" 2>&1 | log_host &
--
--	host_wait_for_listener
--
--	vm_ssh -- "${VSOCK_TEST}" \
--		--mode=client \
--		--control-host=10.0.2.2 \
--		--peer-cid=2 \
--		--control-port="${TEST_HOST_PORT_LISTENER}" 2>&1 | log_guest
-+	if ! vm_vsock_test "10.0.2.2" 2 "${TEST_HOST_PORT_LISTENER}"; then
-+		return "${KSFT_FAIL}"
-+	fi
- 
--	return $?
-+	return "${KSFT_PASS}"
- }
- 
- test_vm_loopback() {
- 	local port=60000 # non-forwarded local port
- 
--	vm_ssh -- "${VSOCK_TEST}" \
--		--mode=server \
--		--control-port="${port}" \
--		--peer-cid=1 2>&1 | log_guest &
--
--	vm_wait_for_listener "${port}"
-+	if ! vm_vsock_test "server" 1 "${port}"; then
-+		return "${KSFT_FAIL}"
-+	fi
- 
--	vm_ssh -- "${VSOCK_TEST}" \
--		--mode=client \
--		--control-host="127.0.0.1" \
--		--control-port="${port}" \
--		--peer-cid=1 2>&1 | log_guest
-+	if ! vm_vsock_test "127.0.0.1" 1 "${port}"; then
-+		return "${KSFT_FAIL}"
-+	fi
- 
--	return $?
-+	return "${KSFT_PASS}"
- }
- 
- run_test() {
 
 -- 
 2.47.3
