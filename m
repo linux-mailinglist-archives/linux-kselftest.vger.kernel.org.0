@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-45081-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45082-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF536C3FAD1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 12:15:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 945C3C3FAE6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 12:15:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2EF974EEA48
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 11:15:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2291F4E70DC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 11:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35931320CD3;
-	Fri,  7 Nov 2025 11:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4238322559;
+	Fri,  7 Nov 2025 11:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZiXTdogJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxDQCdEk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04EB92C2368;
-	Fri,  7 Nov 2025 11:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91DE307AC5;
+	Fri,  7 Nov 2025 11:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762514115; cv=none; b=StMW3ChDXEfjrQvsDULfFQFmAFtQZKn/FMO8foYsIhoFcA8VJIphYHpRfPTLZcC5mbJpyH4ldZo+8WiG6yRlne8rhwIs4DvA7W6RwSY2YJanpv4icKGvuWRuuwYGSyHVuV1RpNRF5MUqpf0TIxpUbhqSWVspoTQXRbmF3JPOPJc=
+	t=1762514117; cv=none; b=VAlvvMy7GxOwDj/wXd5neyUsYVvHZD1uOcVmFhCSwaYz+DeBgDWrcJkqbHNIBZYuT39/pmrYv65Y1IizBO6XWmGjgzyFVRsL4yi5RapPjpi1f+0hMH4oCYzfBY25fDBz+xopt0LjXQ1f36MmODksrnFXzkUsBmBu5wNRvWHPtRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762514115; c=relaxed/simple;
-	bh=Z/GVCnNyGD3t5M1f/cuGA9iiQXFKAUxC/iljAVC4J4c=;
+	s=arc-20240116; t=1762514117; c=relaxed/simple;
+	bh=y5Apbc3eRT4q7UHVdSIlpczJMEZmXfLz2nHx1ZejUTE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WY35L8XjV6KxOeXW2F5xYMSjI42KwJYAfvXGiEiG4Ry6zdC/aLDQJcETH+kxRMDDX446HXpcU3td07Lstmeiyl4VBSlIXe0P2G5R09lOgU9GJe5UCSl/aHJ7dpWWq14FIPjcY0clIGk8wiOg5+fyE9RVjr/eXf/TR4kGmnUw7CA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZiXTdogJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD3FC4CEF5;
-	Fri,  7 Nov 2025 11:15:13 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=FYjVd+QiaC+tCairaTArLMVgizFmRQzZl9SZiS/qj2UhAf/bpZQUAUOp+WYrsHsaXx6WbHdWzuplKaNUDQJjrCg1cuulFJrCbdy235CIlbkhaPLGM7YyLiVRI9qtJSzaqeTKkWbbAxmE2scpKAq0KAnYiaD2zMQ3/PBedAtiRpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxDQCdEk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73DEC116B1;
+	Fri,  7 Nov 2025 11:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762514114;
-	bh=Z/GVCnNyGD3t5M1f/cuGA9iiQXFKAUxC/iljAVC4J4c=;
+	s=k20201202; t=1762514117;
+	bh=y5Apbc3eRT4q7UHVdSIlpczJMEZmXfLz2nHx1ZejUTE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZiXTdogJKKMY0qjRUDlf3L2DqMgANNs9jbNpki9iyXzbaJ9dRiyUSVNy18T6fCHVN
-	 wiPJKD1kLe8rKDsOetz7RMRTSdQliBJOdngNMazoiIq4m98SiauX5sMyYd9AcSxIWw
-	 KBpZ+f/P2s/jrL5FMH5F15DPGpAa2ARy2/ZBDfiRW8RGtYAt+ruGS0xD9/UDqrBN8i
-	 72FAwzsl/c8bR/+EpaMnR9MQ1clX0ErYDCCZff+sCYzHrG8sLnric0U2HmrvpeO0ZP
-	 ddQCpyUCAHSZTdCHd8bVx1ORcIEFkFB4lYlQRaq1koCrq1KVvl2/B7m9GNu2vZpslh
-	 UcV/5bH9LAXeA==
+	b=qxDQCdEk8E6TeFu2sbHtCSCULbP2DrvxFsObLGZpTz0Ejqo+iKM/I0jZgQR6kyUnq
+	 y9u/W53apy1JHI2RuvutPeETS8Jj2fqTbFw6JSGdTW4509A8kLav/GN0Q2Fb71ur8f
+	 iTTRJ0SqikhC9oy6hnscb9cm9NjDDic7PxVafLgytqW4+ydn/mgNiBKMNph/I3n9P0
+	 wd8jSG/6L7wAVZRZK6jH3E3z9cp36a32yRhvlmBoGxd3uaPq0mf7tpjbV4Tfafnu1e
+	 wfVk4b11btt2pfFgbNjEedtIbdtS7fKaJrhAZnp2ef5LCi2HWZH2CJH41NlMzhI6rw
+	 6pF+nxZPgIdkw==
 From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Fri, 07 Nov 2025 12:14:46 +0100
-Subject: [PATCH nf-next v9 1/3] net: netfilter: Add IPIP flowtable rx sw
+Date: Fri, 07 Nov 2025 12:14:47 +0100
+Subject: [PATCH nf-next v9 2/3] net: netfilter: Add IPIP flowtable tx sw
  acceleration
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251107-nf-flowtable-ipip-v9-1-7cbc4090dfcb@kernel.org>
+Message-Id: <20251107-nf-flowtable-ipip-v9-2-7cbc4090dfcb@kernel.org>
 References: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
 In-Reply-To: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -67,12 +67,11 @@ Cc: Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
 X-Mailer: b4 0.14.2
 
-Introduce sw acceleration for rx path of IPIP tunnels relying on the
-netfilter flowtable infrastructure. Subsequent patches will add sw
-acceleration for IPIP tunnels tx path.
-This series introduces basic infrastructure to accelerate other tunnel
+Introduce sw acceleration for tx path of IPIP tunnels relying on the
+netfilter flowtable infrastructure.
+This patch introduces basic infrastructure to accelerate other tunnel
 types (e.g. IP6IP6).
-IPIP rx sw acceleration can be tested running the following scenario where
+IPIP sw tx acceleration can be tested running the following scenario where
 the traffic is forwarded between two NICs (eth0 and eth1) and an IPIP
 tunnel is used to access a remote site (using eth1 as the underlay device):
 
@@ -113,368 +112,208 @@ table inet filter {
 
 Reproducing the scenario described above using veths I got the following
 results:
-- TCP stream received from the IPIP tunnel:
-  - net-next: (baseline)		~ 71Gbps
-  - net-next + IPIP flowtbale support:	~101Gbps
+- TCP stream trasmitted into the IPIP tunnel:
+  - net-next: (baseline)                ~ 85Gbps
+  - net-next + IPIP flowtbale support:  ~102Gbps
 
+Co-developed-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- include/linux/netdevice.h             | 13 +++++++
- include/net/netfilter/nf_flow_table.h | 18 +++++++++
- net/ipv4/ipip.c                       | 25 +++++++++++++
- net/netfilter/nf_flow_table_core.c    |  3 ++
- net/netfilter/nf_flow_table_ip.c      | 69 ++++++++++++++++++++++++++++++++---
- net/netfilter/nf_flow_table_path.c    | 38 +++++++++++++++----
- 6 files changed, 153 insertions(+), 13 deletions(-)
+ net/netfilter/nf_flow_table_ip.c   | 66 ++++++++++++++++++++++++++++++++++++--
+ net/netfilter/nf_flow_table_path.c | 48 ++++++++++++++++++++++++---
+ 2 files changed, 107 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index 7f5aad5cc9a1994f95ba9037d3a4af27eef9d5e3..0355461960ce3c0db49e00a6f77f48b031a635dc 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -874,6 +874,7 @@ enum net_device_path_type {
- 	DEV_PATH_PPPOE,
- 	DEV_PATH_DSA,
- 	DEV_PATH_MTK_WDMA,
-+	DEV_PATH_TUN,
- };
+diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
+index b40080b0d71cc011e18b68201af33e9c84987d78..9e6e26f49826e749c168b4f96ab53d24ddb88fe3 100644
+--- a/net/netfilter/nf_flow_table_ip.c
++++ b/net/netfilter/nf_flow_table_ip.c
+@@ -437,6 +437,9 @@ static int nf_flow_offload_forward(struct nf_flowtable_ctx *ctx,
+ 	flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
  
- struct net_device_path {
-@@ -885,6 +886,18 @@ struct net_device_path {
- 			__be16		proto;
- 			u8		h_dest[ETH_ALEN];
- 		} encap;
-+		struct {
-+			union {
-+				struct in_addr	src_v4;
-+				struct in6_addr	src_v6;
-+			};
-+			union {
-+				struct in_addr	dst_v4;
-+				struct in6_addr	dst_v6;
-+			};
+ 	mtu = flow->tuplehash[dir].tuple.mtu + ctx->offset;
++	if (flow->tuplehash[!dir].tuple.tun_num)
++		mtu -= sizeof(*iph);
 +
-+			u8	l3_proto;
-+		} tun;
- 		struct {
- 			enum {
- 				DEV_PATH_BR_VLAN_KEEP,
-diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfilter/nf_flow_table.h
-index 89cfe72283983ad651a943919ab2141ef082977a..4047075c615e1b64722f98da3b36acf3a2733b64 100644
---- a/include/net/netfilter/nf_flow_table.h
-+++ b/include/net/netfilter/nf_flow_table.h
-@@ -107,6 +107,19 @@ enum flow_offload_xmit_type {
+ 	if (unlikely(nf_flow_exceeds_mtu(skb, mtu)))
+ 		return 0;
  
- #define NF_FLOW_TABLE_ENCAP_MAX		2
- 
-+struct flow_offload_tunnel {
-+	union {
-+		struct in_addr	src_v4;
-+		struct in6_addr	src_v6;
-+	};
-+	union {
-+		struct in_addr	dst_v4;
-+		struct in6_addr	dst_v6;
-+	};
-+
-+	u8	l3_proto;
-+};
-+
- struct flow_offload_tuple {
- 	union {
- 		struct in_addr		src_v4;
-@@ -130,12 +143,15 @@ struct flow_offload_tuple {
- 		__be16			proto;
- 	} encap[NF_FLOW_TABLE_ENCAP_MAX];
- 
-+	struct flow_offload_tunnel tun;
-+
- 	/* All members above are keys for lookups, see flow_offload_hash(). */
- 	struct { }			__hash;
- 
- 	u8				dir:2,
- 					xmit_type:3,
- 					encap_num:2,
-+					tun_num:2,
- 					in_vlan_ingress:2;
- 	u16				mtu;
- 	union {
-@@ -206,7 +222,9 @@ struct nf_flow_route {
- 				u16		id;
- 				__be16		proto;
- 			} encap[NF_FLOW_TABLE_ENCAP_MAX];
-+			struct flow_offload_tunnel tun;
- 			u8			num_encaps:2,
-+						num_tuns:2,
- 						ingress_vlans:2;
- 		} in;
- 		struct {
-diff --git a/net/ipv4/ipip.c b/net/ipv4/ipip.c
-index 3e03af073a1ccc3d7597a998a515b6cfdded40b5..ff95b1b9908e9f4ba4bff207a5bd2c5d5670215a 100644
---- a/net/ipv4/ipip.c
-+++ b/net/ipv4/ipip.c
-@@ -353,6 +353,30 @@ ipip_tunnel_ctl(struct net_device *dev, struct ip_tunnel_parm_kern *p, int cmd)
- 	return ip_tunnel_ctl(dev, p, cmd);
+@@ -508,10 +511,62 @@ static int nf_flow_pppoe_push(struct sk_buff *skb, u16 id)
+ 	return 0;
  }
  
-+static int ipip_fill_forward_path(struct net_device_path_ctx *ctx,
-+				  struct net_device_path *path)
+-static int nf_flow_encap_push(struct sk_buff *skb, struct flow_offload_tuple *tuple)
++static int nf_flow_tunnel_v4_push(struct net *net, struct sk_buff *skb,
++				  struct flow_offload_tuple *tuple)
 +{
-+	struct ip_tunnel *tunnel = netdev_priv(ctx->dev);
-+	const struct iphdr *tiph = &tunnel->parms.iph;
-+	struct rtable *rt;
++	struct iphdr *iph = (struct iphdr *)skb_network_header(skb);
++	struct rtable *rt = dst_rtable(tuple->dst_cache);
++	__be16	frag_off = iph->frag_off;
++	u32 headroom = sizeof(*iph);
++	u8 tos = iph->tos, ttl = iph->ttl;
++	int err;
 +
-+	rt = ip_route_output(dev_net(ctx->dev), tiph->daddr, 0, 0, 0,
-+			     RT_SCOPE_UNIVERSE);
-+	if (IS_ERR(rt))
-+		return PTR_ERR(rt);
++	err = iptunnel_handle_offloads(skb, SKB_GSO_IPXIP4);
++	if (err)
++		return err;
 +
-+	path->type = DEV_PATH_TUN;
-+	path->tun.src_v4.s_addr = tiph->saddr;
-+	path->tun.dst_v4.s_addr = tiph->daddr;
-+	path->tun.l3_proto = IPPROTO_IPIP;
-+	path->dev = ctx->dev;
++	skb_set_inner_ipproto(skb, IPPROTO_IPIP);
++	headroom += LL_RESERVED_SPACE(rt->dst.dev) + rt->dst.header_len;
++	err = skb_cow_head(skb, headroom);
++	if (err)
++		return err;
 +
-+	ctx->dev = rt->dst.dev;
-+	ip_rt_put(rt);
++	skb_scrub_packet(skb, true);
++	skb_clear_hash_if_not_l4(skb);
++	memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
++
++	/* Push down and install the IP header. */
++	skb_push(skb, sizeof(*iph));
++	skb_reset_network_header(skb);
++
++	iph = ip_hdr(skb);
++	iph->version	= 4;
++	iph->ihl	= sizeof(*iph) >> 2;
++	iph->frag_off	= ip_mtu_locked(&rt->dst) ? 0 : frag_off;
++	iph->protocol	= tuple->tun.l3_proto;
++	iph->tos	= tos;
++	iph->daddr	= tuple->tun.src_v4.s_addr;
++	iph->saddr	= tuple->tun.dst_v4.s_addr;
++	iph->ttl	= ttl;
++	iph->tot_len	= htons(skb->len);
++	__ip_select_ident(net, iph, skb_shinfo(skb)->gso_segs ?: 1);
++	ip_send_check(iph);
 +
 +	return 0;
 +}
 +
- static const struct net_device_ops ipip_netdev_ops = {
- 	.ndo_init       = ipip_tunnel_init,
- 	.ndo_uninit     = ip_tunnel_uninit,
-@@ -362,6 +386,7 @@ static const struct net_device_ops ipip_netdev_ops = {
- 	.ndo_get_stats64 = dev_get_tstats64,
- 	.ndo_get_iflink = ip_tunnel_get_iflink,
- 	.ndo_tunnel_ctl	= ipip_tunnel_ctl,
-+	.ndo_fill_forward_path = ipip_fill_forward_path,
- };
- 
- #define IPIP_FEATURES (NETIF_F_SG |		\
-diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
-index 6c6a5165f9933b130e772c096a01d3fcb1d61c94..06e8251a6644e2335117ae3720b9ebf159eb2264 100644
---- a/net/netfilter/nf_flow_table_core.c
-+++ b/net/netfilter/nf_flow_table_core.c
-@@ -118,7 +118,10 @@ static int flow_offload_fill_route(struct flow_offload *flow,
- 			flow_tuple->in_vlan_ingress |= BIT(j);
- 		j++;
- 	}
-+
-+	flow_tuple->tun = route->tuple[dir].in.tun;
- 	flow_tuple->encap_num = route->tuple[dir].in.num_encaps;
-+	flow_tuple->tun_num = route->tuple[dir].in.num_tuns;
- 
- 	switch (route->tuple[dir].xmit_type) {
- 	case FLOW_OFFLOAD_XMIT_DIRECT:
-diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
-index be21600cff5390202f5451cd76c4e2afc6f8bc00..b40080b0d71cc011e18b68201af33e9c84987d78 100644
---- a/net/netfilter/nf_flow_table_ip.c
-+++ b/net/netfilter/nf_flow_table_ip.c
-@@ -145,8 +145,11 @@ static bool ip_has_options(unsigned int thoff)
- static void nf_flow_tuple_encap(struct sk_buff *skb,
- 				struct flow_offload_tuple *tuple)
++static int nf_flow_encap_push(struct net *net, struct sk_buff *skb,
++			      struct flow_offload_tuple *tuple)
  {
-+	__be16 inner_proto = skb->protocol;
- 	struct vlan_ethhdr *veth;
- 	struct pppoe_hdr *phdr;
-+	struct iphdr *iph;
-+	u16 offset = 0;
- 	int i = 0;
+ 	int i;
  
- 	if (skb_vlan_tag_present(skb)) {
-@@ -159,13 +162,26 @@ static void nf_flow_tuple_encap(struct sk_buff *skb,
- 		veth = (struct vlan_ethhdr *)skb_mac_header(skb);
- 		tuple->encap[i].id = ntohs(veth->h_vlan_TCI);
- 		tuple->encap[i].proto = skb->protocol;
-+		inner_proto = veth->h_vlan_encapsulated_proto;
-+		offset += VLAN_HLEN;
- 		break;
- 	case htons(ETH_P_PPP_SES):
- 		phdr = (struct pppoe_hdr *)skb_network_header(skb);
- 		tuple->encap[i].id = ntohs(phdr->sid);
- 		tuple->encap[i].proto = skb->protocol;
-+		inner_proto = *((__be16 *)(phdr + 1));
-+		offset += PPPOE_SES_HLEN;
- 		break;
- 	}
++	if (tuple->tun_num) {
++		int err = nf_flow_tunnel_v4_push(net, skb, tuple);
 +
-+	if (inner_proto == htons(ETH_P_IP)) {
-+		iph = (struct iphdr *)(skb_network_header(skb) + offset);
-+		if (iph->protocol == IPPROTO_IPIP) {
-+			tuple->tun.dst_v4.s_addr = iph->daddr;
-+			tuple->tun.src_v4.s_addr = iph->saddr;
-+			tuple->tun.l3_proto = IPPROTO_IPIP;
-+		}
++		if (err)
++			return err;
 +	}
- }
- 
- struct nf_flowtable_ctx {
-@@ -277,11 +293,46 @@ static unsigned int nf_flow_xmit_xfrm(struct sk_buff *skb,
- 	return NF_STOLEN;
- }
- 
-+static bool nf_flow_ip4_encap_proto(struct sk_buff *skb, u32 *psize)
-+{
-+	struct iphdr *iph;
-+	u16 size;
 +
-+	if (!pskb_may_pull(skb, sizeof(*iph) + *psize))
-+		return false;
-+
-+	iph = (struct iphdr *)(skb_network_header(skb) + *psize);
-+	size = iph->ihl << 2;
-+
-+	if (ip_is_fragment(iph) || unlikely(ip_has_options(size)))
-+		return false;
-+
-+	if (iph->ttl <= 1)
-+		return false;
-+
-+	if (iph->protocol == IPPROTO_IPIP)
-+		*psize += size;
-+
-+	return true;
-+}
-+
-+static void nf_flow_ip4_encap_pop(struct sk_buff *skb)
-+{
-+	struct iphdr *iph = (struct iphdr *)skb_network_header(skb);
-+
-+	if (iph->protocol != IPPROTO_IPIP)
-+		return;
-+
-+	skb_pull(skb, iph->ihl << 2);
-+	skb_reset_network_header(skb);
-+}
-+
- static bool nf_flow_skb_encap_protocol(struct sk_buff *skb, __be16 proto,
- 				       u32 *offset)
+ 	for (i = 0; i < tuple->encap_num; i++) {
+ 		switch (tuple->encap[i].proto) {
+ 		case htons(ETH_P_8021Q):
+@@ -535,6 +590,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
  {
-+	__be16 inner_proto = skb->protocol;
- 	struct vlan_ethhdr *veth;
--	__be16 inner_proto;
-+	bool ret = false;
+ 	struct flow_offload_tuple_rhash *tuplehash;
+ 	struct nf_flowtable *flow_table = priv;
++	struct flow_offload_tuple *other_tuple;
+ 	enum flow_offload_tuple_dir dir;
+ 	struct nf_flowtable_ctx ctx = {
+ 		.in	= state->in,
+@@ -543,6 +599,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+ 	struct flow_offload *flow;
+ 	struct neighbour *neigh;
+ 	struct rtable *rt;
++	__be32 dest;
+ 	int ret;
  
- 	switch (skb->protocol) {
- 	case htons(ETH_P_8021Q):
-@@ -291,19 +342,23 @@ static bool nf_flow_skb_encap_protocol(struct sk_buff *skb, __be16 proto,
- 		veth = (struct vlan_ethhdr *)skb_mac_header(skb);
- 		if (veth->h_vlan_encapsulated_proto == proto) {
- 			*offset += VLAN_HLEN;
--			return true;
-+			inner_proto = proto;
-+			ret = true;
+ 	tuplehash = nf_flow_offload_lookup(&ctx, flow_table, skb);
+@@ -565,8 +622,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+ 
+ 	dir = tuplehash->tuple.dir;
+ 	flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
++	other_tuple = &flow->tuplehash[!dir].tuple;
+ 
+-	if (nf_flow_encap_push(skb, &flow->tuplehash[!dir].tuple) < 0)
++	if (nf_flow_encap_push(state->net, skb, other_tuple))
+ 		return NF_DROP;
+ 
+ 	switch (tuplehash->tuple.xmit_type) {
+@@ -577,7 +635,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
  		}
- 		break;
- 	case htons(ETH_P_PPP_SES):
- 		if (nf_flow_pppoe_proto(skb, &inner_proto) &&
- 		    inner_proto == proto) {
- 			*offset += PPPOE_SES_HLEN;
--			return true;
-+			ret = true;
- 		}
- 		break;
- 	}
- 
--	return false;
-+	if (inner_proto == htons(ETH_P_IP))
-+		ret = nf_flow_ip4_encap_proto(skb, offset);
-+
-+	return ret;
- }
- 
- static void nf_flow_encap_pop(struct sk_buff *skb,
-@@ -331,6 +386,9 @@ static void nf_flow_encap_pop(struct sk_buff *skb,
- 			break;
- 		}
- 	}
-+
-+	if (skb->protocol == htons(ETH_P_IP))
-+		nf_flow_ip4_encap_pop(skb);
- }
- 
- struct nf_flow_xmit {
-@@ -356,8 +414,7 @@ nf_flow_offload_lookup(struct nf_flowtable_ctx *ctx,
- {
- 	struct flow_offload_tuple tuple = {};
- 
--	if (skb->protocol != htons(ETH_P_IP) &&
--	    !nf_flow_skb_encap_protocol(skb, htons(ETH_P_IP), &ctx->offset))
-+	if (!nf_flow_skb_encap_protocol(skb, htons(ETH_P_IP), &ctx->offset))
- 		return NULL;
- 
- 	if (nf_flow_tuple_ip(ctx, skb, &tuple) < 0)
+-		neigh = ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, flow->tuplehash[!dir].tuple.src_v4.s_addr));
++		dest = other_tuple->tun_num ? other_tuple->tun.src_v4.s_addr
++					    : other_tuple->src_v4.s_addr;
++		neigh = ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, dest));
+ 		if (IS_ERR(neigh)) {
+ 			flow_offload_teardown(flow);
+ 			return NF_DROP;
 diff --git a/net/netfilter/nf_flow_table_path.c b/net/netfilter/nf_flow_table_path.c
-index 50b2b7d0c579ec0855f5870d1e1f7d6f74db0e8f..64e2672a3c3383bae896c4fb68ff9ab7489fe791 100644
+index 64e2672a3c3383bae896c4fb68ff9ab7489fe791..7d6668e4d42456404df4db9f512625ba985a2772 100644
 --- a/net/netfilter/nf_flow_table_path.c
 +++ b/net/netfilter/nf_flow_table_path.c
-@@ -80,6 +80,8 @@ struct nft_forward_info {
- 		__be16	proto;
- 	} encap[NF_FLOW_TABLE_ENCAP_MAX];
- 	u8 num_encaps;
-+	struct flow_offload_tunnel tun;
-+	u8 num_tuns;
- 	u8 ingress_vlans;
- 	u8 h_source[ETH_ALEN];
- 	u8 h_dest[ETH_ALEN];
-@@ -102,6 +104,7 @@ static void nft_dev_path_info(const struct net_device_path_stack *stack,
- 		case DEV_PATH_DSA:
- 		case DEV_PATH_VLAN:
- 		case DEV_PATH_PPPOE:
-+		case DEV_PATH_TUN:
- 			info->indev = path->dev;
- 			if (is_zero_ether_addr(info->h_source))
- 				memcpy(info->h_source, path->dev->dev_addr, ETH_ALEN);
-@@ -113,14 +116,27 @@ static void nft_dev_path_info(const struct net_device_path_stack *stack,
- 				break;
- 			}
+@@ -190,7 +190,46 @@ static bool nft_flowtable_find_dev(const struct net_device *dev,
+ 	return found;
+ }
  
--			/* DEV_PATH_VLAN and DEV_PATH_PPPOE */
--			if (info->num_encaps >= NF_FLOW_TABLE_ENCAP_MAX) {
--				info->indev = NULL;
--				break;
-+			/* DEV_PATH_VLAN, DEV_PATH_PPPOE and DEV_PATH_TUN */
-+			if (path->type == DEV_PATH_TUN) {
-+				if (info->num_tuns) {
-+					info->indev = NULL;
-+					break;
-+				}
-+				info->tun.src_v6 = path->tun.src_v6;
-+				info->tun.dst_v6 = path->tun.dst_v6;
-+				info->tun.l3_proto = path->tun.l3_proto;
-+				info->num_tuns++;
-+			} else {
-+				if (info->num_encaps >= NF_FLOW_TABLE_ENCAP_MAX) {
-+					info->indev = NULL;
-+					break;
-+				}
-+				info->encap[info->num_encaps].id =
-+					path->encap.id;
-+				info->encap[info->num_encaps].proto =
-+					path->encap.proto;
-+				info->num_encaps++;
- 			}
--			info->encap[info->num_encaps].id = path->encap.id;
--			info->encap[info->num_encaps].proto = path->encap.proto;
--			info->num_encaps++;
- 			if (path->type == DEV_PATH_PPPOE)
- 				memcpy(info->h_dest, path->encap.h_dest, ETH_ALEN);
- 			break;
-@@ -196,6 +212,14 @@ static void nft_dev_forward_path(struct nf_flow_route *route,
- 		route->tuple[!dir].in.encap[i].id = info.encap[i].id;
- 		route->tuple[!dir].in.encap[i].proto = info.encap[i].proto;
- 	}
+-static void nft_dev_forward_path(struct nf_flow_route *route,
++static int nft_flow_tunnel_update_route(const struct nft_pktinfo *pkt,
++					struct flow_offload_tunnel *tun,
++					struct nf_flow_route *route,
++					enum ip_conntrack_dir dir)
++{
++	struct dst_entry *cur_dst = route->tuple[dir].dst;
++	struct dst_entry *tun_dst = NULL;
++	struct flowi fl = {};
 +
-+	if (info.num_tuns) {
-+		route->tuple[!dir].in.tun.src_v6 = info.tun.dst_v6;
-+		route->tuple[!dir].in.tun.dst_v6 = info.tun.src_v6;
-+		route->tuple[!dir].in.tun.l3_proto = info.tun.l3_proto;
-+		route->tuple[!dir].in.num_tuns = info.num_tuns;
++	switch (nft_pf(pkt)) {
++	case NFPROTO_IPV4:
++		fl.u.ip4.daddr = tun->dst_v4.s_addr;
++		fl.u.ip4.saddr = tun->src_v4.s_addr;
++		fl.u.ip4.flowi4_iif = nft_in(pkt)->ifindex;
++		fl.u.ip4.flowi4_dscp = ip4h_dscp(ip_hdr(pkt->skb));
++		fl.u.ip4.flowi4_mark = pkt->skb->mark;
++		fl.u.ip4.flowi4_flags = FLOWI_FLAG_ANYSRC;
++		break;
++	case NFPROTO_IPV6:
++		fl.u.ip6.daddr = tun->dst_v6;
++		fl.u.ip6.saddr = tun->src_v6;
++		fl.u.ip6.flowi6_iif = nft_in(pkt)->ifindex;
++		fl.u.ip6.flowlabel = ip6_flowinfo(ipv6_hdr(pkt->skb));
++		fl.u.ip6.flowi6_mark = pkt->skb->mark;
++		fl.u.ip6.flowi6_flags = FLOWI_FLAG_ANYSRC;
++		break;
 +	}
 +
- 	route->tuple[!dir].in.num_encaps = info.num_encaps;
- 	route->tuple[!dir].in.ingress_vlans = info.ingress_vlans;
- 	route->tuple[dir].out.ifindex = info.outdev->ifindex;
++	nf_route(nft_net(pkt), &tun_dst, &fl, false, nft_pf(pkt));
++	if (!tun_dst)
++		return -ENOENT;
++
++	route->tuple[dir].dst = tun_dst;
++	dst_release(cur_dst);
++
++	return 0;
++}
++
++static void nft_dev_forward_path(const struct nft_pktinfo *pkt,
++				 struct nf_flow_route *route,
+ 				 const struct nf_conn *ct,
+ 				 enum ip_conntrack_dir dir,
+ 				 struct nft_flowtable *ft)
+@@ -213,7 +252,8 @@ static void nft_dev_forward_path(struct nf_flow_route *route,
+ 		route->tuple[!dir].in.encap[i].proto = info.encap[i].proto;
+ 	}
+ 
+-	if (info.num_tuns) {
++	if (info.num_tuns &&
++	    !nft_flow_tunnel_update_route(pkt, &info.tun, route, dir)) {
+ 		route->tuple[!dir].in.tun.src_v6 = info.tun.dst_v6;
+ 		route->tuple[!dir].in.tun.dst_v6 = info.tun.src_v6;
+ 		route->tuple[!dir].in.tun.l3_proto = info.tun.l3_proto;
+@@ -274,9 +314,9 @@ int nft_flow_route(const struct nft_pktinfo *pkt, const struct nf_conn *ct,
+ 	nft_default_forward_path(route, other_dst, !dir);
+ 
+ 	if (route->tuple[dir].xmit_type	== FLOW_OFFLOAD_XMIT_NEIGH)
+-		nft_dev_forward_path(route, ct, dir, ft);
++		nft_dev_forward_path(pkt, route, ct, dir, ft);
+ 	if (route->tuple[!dir].xmit_type == FLOW_OFFLOAD_XMIT_NEIGH)
+-		nft_dev_forward_path(route, ct, !dir, ft);
++		nft_dev_forward_path(pkt, route, ct, !dir, ft);
+ 
+ 	return 0;
+ }
 
 -- 
 2.51.1
