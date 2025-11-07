@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-45151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45152-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8F7BC41F90
-	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 00:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59F0DC42084
+	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 00:46:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4CE654E3823
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 23:37:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BE2804E21FE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 23:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED482314B93;
-	Fri,  7 Nov 2025 23:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8050C3081D7;
+	Fri,  7 Nov 2025 23:46:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dDXksjjD"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YTujExV9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD90D312820;
-	Fri,  7 Nov 2025 23:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45687279917;
+	Fri,  7 Nov 2025 23:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762558649; cv=none; b=Cr3rnVE7fPPpQFQaOrjapfWqAY712bNJdSMcBnz/LTuU/1R1ZmZwQpzP6HfOzElnN+snIKSw1dQlxe68gOtRc++aCHpmmj2eM/LmO8j3QlTsPZhk8mE0qjAp0h2xWGy8eVP1i4gixNAmMzOCDnCYSCfoaemZp4cQQhpmhM8i/ss=
+	t=1762559180; cv=none; b=Wxzwf1K+MHsR+dXP0lTENUcfCpclyYDMzw/THAYAhO6lqEtsiKIBZqES56srqrrhiusXxi9pG6cYMgeJaMiE89P5b+/idniVcdjSMeBD5swveq4v6E1fyrpGGp4egLadraRNRdp95/SA+TVztbBfZI4fCbimCX7as5uVVZwnRWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762558649; c=relaxed/simple;
-	bh=D0NNPWpR++qrShSzv1aC4sQ1DTsXVkK4wHvcpIxLu9E=;
+	s=arc-20240116; t=1762559180; c=relaxed/simple;
+	bh=K8HkLqrSqm3BPpuDnYJ0RdqRU6xjN20fn56q9ZX81cM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DOSEGr4m/VklWJj30ChyexnOYL/yDVZm1C+S2k0ZdP5uY0lNcjRLLjI3D2ISExrt+srQtH80IetUXo/Bw1snV4ijxEufAxVXoqnpWv/Lcl431/vlrnqM39LyeoKHdxEsncBEA8lgdmAS5aZEZLhfEPB0SuBspdxj5FxLZh8GiBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=dDXksjjD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCA4C16AAE;
-	Fri,  7 Nov 2025 23:37:26 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hHXDtOAtYgB7ESw4eGaA15zLzHyybwa7myTX8bVeo2Keuemn5v3S9dHFxr1q+8d2tPuArUv8CqiAreWO/R3p7RE7w61BPCgcnAhUPeV2aojdhHfbcA1IMSSVUpmKy3Ra5Ej6aPJyi0xMICwF2miwffwbRB51TUMKTH8WXiHuueg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=YTujExV9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29549C116C6;
+	Fri,  7 Nov 2025 23:46:16 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dDXksjjD"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YTujExV9"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1762558644;
+	t=1762559174;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dKdfc/nifvizPXu6zHyg6q4B2C0WsM/OrjAHPKMoa1E=;
-	b=dDXksjjDOnQQAvQYvE1Q2Si/elVheo7rfOJrlpPYzvIjolTh+DWB3ui0oD+WvKtYKtV2Ww
-	zVuEO6gqpBzF/6r8WDKVuMQ5M4RaIZEHQGhw8I82WVPVMX5+Ds9rkaDFEbCvWTMYH6NMS3
-	UtGxV+9w1jkJbyFOAxboRQuCCIQq60I=
+	bh=rOGbjEMvho9DWS0i3tlr01jp4bYqQwHxD0wdftLlPDk=;
+	b=YTujExV99iq+x3/5TiVgxM3SNv/SNCs01cmQ8GL0Jpi/3NRgFfDths0Wd+AhJn/Zi+xdjz
+	KJuL84DTYadQtc42UEd5WjaYhLFn9gbieg9iZN1PsrsuVKUou2TnnU4tSyt61zSLX6REJ4
+	VbFmzErGcGRRuGr4NEC9WQjYO1r7QcQ=
 Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b0f7e3ba (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Fri, 7 Nov 2025 23:37:24 +0000 (UTC)
-Date: Sat, 8 Nov 2025 00:37:15 +0100
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a1e888cd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 7 Nov 2025 23:46:13 +0000 (UTC)
+Date: Sat, 8 Nov 2025 00:46:05 +0100
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
@@ -78,10 +78,11 @@ Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
 	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
 	linux-s390@vger.kernel.org
-Subject: Re: [PATCH v5 17/34] random: vDSO: remove ifdeffery
-Message-ID: <aQ6Cq_5kiIXllEoS@zx2c4.com>
+Subject: Re: [PATCH v5 19/34] random: vDSO: only access vDSO datapage after
+ random_init()
+Message-ID: <aQ6EvdukQytvqK-u@zx2c4.com>
 References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
- <20251106-vdso-sparc64-generic-2-v5-17-97ff2b6542f7@linutronix.de>
+ <20251106-vdso-sparc64-generic-2-v5-19-97ff2b6542f7@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,20 +92,66 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251106-vdso-sparc64-generic-2-v5-17-97ff2b6542f7@linutronix.de>
+In-Reply-To: <20251106-vdso-sparc64-generic-2-v5-19-97ff2b6542f7@linutronix.de>
 
-On Thu, Nov 06, 2025 at 11:02:10AM +0100, Thomas Weißschuh wrote:
-> -#endif
-> +	if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
-> +		smp_store_release((unsigned long *)&vdso_k_rng_data->generation, next_gen + 1);
+Hi Thomas,
+
+I'm not a huge fan of this change:
+
+On Thu, Nov 06, 2025 at 11:02:12AM +0100, Thomas Weißschuh wrote:
+> +static DEFINE_STATIC_KEY_FALSE(random_vdso_is_ready);
+>  
+>  /* Control how we warn userspace. */
+>  static struct ratelimit_state urandom_warning =
+> @@ -252,6 +253,9 @@ static void random_vdso_update_generation(unsigned long next_gen)
+>  	if (!IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+>  		return;
+>  
+> +	if (!static_branch_likely(&random_vdso_is_ready))
+> +		return;
 > +
+>  	/* base_crng.generation's invalid value is ULONG_MAX, while
+>  	 * vdso_k_rng_data->generation's invalid value is 0, so add one to the
+>  	 * former to arrive at the latter. Use smp_store_release so that this
+> @@ -274,6 +278,9 @@ static void random_vdso_set_ready(void)
+>  	if (!IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+>  		return;
+>  
+> +	if (!static_branch_likely(&random_vdso_is_ready))
+> +		return;
+> +
+>  	WRITE_ONCE(vdso_k_rng_data->is_ready, true);
+>  }
+>  
+> @@ -925,6 +932,9 @@ void __init random_init(void)
+>  	_mix_pool_bytes(&entropy, sizeof(entropy));
+>  	add_latent_entropy();
+>  
+> +	if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+> +		static_branch_enable(&random_vdso_is_ready);
+> +
+>  	/*
+>  	 * If we were initialized by the cpu or bootloader before jump labels
+>  	 * or workqueues are initialized, then we should enable the static
+> @@ -934,8 +944,10 @@ void __init random_init(void)
+>  		crng_set_ready(NULL);
+>  
+>  	/* Reseed if already seeded by earlier phases. */
+> -	if (crng_ready())
+> +	if (crng_ready()) {
+>  		crng_reseed(NULL);
+> +		random_vdso_set_ready();
+> +	}
 
-This is possible because vdso_k_rng_data is now defined in the C source
-on all platforms and under all configurations, even if
-!CONFIG_VDSO_GETRANDOM means it's null? Whereas before, some config's
-headers didn't have this at all, so the #ifdef was necessary?
-
-If so, can you mention this in the commit message?
+The fact that the vdso datapage is set up by the time random_init() is
+called seems incredibly contingent on init details. Why not, instead,
+make this a necessary part of the structure of vdso setup code, which
+can actually know about what happens when? For example, one clean way of
+doing that would be to make vdso_k_rng_data always valid by having it
+initially point to __initdata memory, and then when it's time to
+initialize the real datapage, memcpy() the __initdata memory to the new
+specially allocated memory. Then we don't need the complex state
+tracking that this commit and the prior one introduce.
 
 Jason
 
