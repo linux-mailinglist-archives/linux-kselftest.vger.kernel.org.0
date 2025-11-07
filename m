@@ -1,69 +1,69 @@
-Return-Path: <linux-kselftest+bounces-45136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 957E1C41068
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 18:24:10 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AE4BC41062
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 18:24:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8EA942774A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 17:23:09 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4EC074E3857
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 17:23:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D54F3346AE;
-	Fri,  7 Nov 2025 17:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29558334368;
+	Fri,  7 Nov 2025 17:23:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="rn5vj+fj"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="sq+nZT9U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-014.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-014.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.199.210.3])
+Received: from fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.176.194.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B9A328B79;
-	Fri,  7 Nov 2025 17:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.199.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACA8328B79;
+	Fri,  7 Nov 2025 17:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.176.194.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762536184; cv=none; b=KEg7dbqFhg4dR3fDil4s8Tlb6h4pL4B0BiJskTLY3p3zofxPqQ45Iq+N6XawKacYQZrIgxGwsMUL8HfLLBqFDVxglImOBhm38IpmnOZmzxtHoZQT6voKJ2crmGEXfEYP9A+cVzJoelUxPgqCzmRI6lxwdgThSeuwEnKKTVjqGZA=
+	t=1762536226; cv=none; b=SXVv2dABoIJF4svqOtf9lYvtzflHbTpzc2IFPTuSqiS7vmlscHwlBMCKZffn2GgkuF03M25XmGPljMhKIN+4GG0v+sPvJyKFYdTWckaCS6KthqBrlQHq1+ulVRjZPPo2PQpUAb/jEKfkr8qiEKSPEMD59r4C5UXevOQdEWxUjBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762536184; c=relaxed/simple;
-	bh=OiGJqXeXn1LFs3RF2ZWfHltQfCG662vT0kTwgbxG71k=;
+	s=arc-20240116; t=1762536226; c=relaxed/simple;
+	bh=MByVuksCvqaX9S6WCLgVJiIGwm5vlcY5KiFcNTNmJ90=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ExgbshRsWMhrQAoAT970W6p1VrYVYhaepYShK4x2ylVNTIDVw30AxxA+457H/7AB8adIVVFzti3A5sBv1j2BD6BRZz+NrdVvrvJWXDZ/8zyn5j8St2HpW95Ifi25PYcsk7F6meWi/2no8jwAPlugQx/vu/MqmvSBIpBA7Fel9BY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=rn5vj+fj; arc=none smtp.client-ip=18.199.210.3
+	 In-Reply-To:Content-Type; b=exL1idiVi2QuxWzEf3SPbU50NJgCQO/ZXg0fYEzP7d0B3saVwoUufmYD5cg3/ddHlC110T1g00EZ3w+TNr/8BWh3r0MGIbRnacVDOwsxjPd6T/8jcumIRR6wZ15QNxYjXCtyw2pfVCcxhLtDEW2NEAH2CgQbCoJ8IS92I0zJrq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=sq+nZT9U; arc=none smtp.client-ip=63.176.194.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1762536182; x=1794072182;
+  t=1762536224; x=1794072224;
   h=message-id:date:mime-version:reply-to:subject:to:cc:
    references:from:in-reply-to:content-transfer-encoding;
-  bh=atCy8RpnuAqcRPzYjCIN1QpE+/di+36Scy1AE5iWgNk=;
-  b=rn5vj+fjBfJRdaUqsd5dbqJ8BebhDZ/5UkHPX8CfgHONuEhsE0/IAYv0
-   mhG7P9KhtlaPOhuCFLpurzETPLfsjRxVsPsJnbAZ/h6G6GPVb4An12d0h
-   bnQBN/z/FczD5BWpIJtir6WNey/rSM8DPXliUgLh/R5gRXfqzZDqAJsN8
-   zXGdZ/g6BUJc6/yl2VC7RgJ3+63mS62ZGQybSeqpaWBjz78QQS6cNS6T6
-   oXumwKLpH9o5bEF11uBMFr6wpS5pDW9XZxUZvtAp6kOW9RHwkFasJkT/4
-   aUMLqxD5GuGPqG1O/L38UNn3axUCh/1/FM6nMOGVwTK2XesoXcI2Q9xbW
-   g==;
-X-CSE-ConnectionGUID: fclArW/bR8qx9ljpWfI9Qg==
-X-CSE-MsgGUID: hWc3zM/WTWePNbtnbgcR6A==
+  bh=ZYTs4MnUsvcTQkyzxj71ae7pzo5tQeHaCOSc3vIutPA=;
+  b=sq+nZT9UHtdR6Qm3RNbCKdq7WOBuDMJE2NRHVaceD+tKezj0vdN3fPTH
+   O3ekRjcKKai6MjWGETIkIkDkb+ZIslyDkPizSfGebXoRwt+sqWBc8dKkt
+   DYTXjk5K7tKbSoB3U6DJBw3aQ/4p2mK+PWw3Ju5ZQHv+y44t/bzQR+Lb7
+   iiUxasrbyR037LqQ2w3dlaow+7h1HPfwsbEm2osloAkO6CHX/APjf1RuH
+   QQ69Fadz2g6U+dgm41CHuxwUy4RazyFhdxxh+0jEjdm7Ko25IB0k/tBQ8
+   LVasU+W77PeWZfiP1UHlWgDIJ3e9+/ZZi1Y7EMvMPJfZlnwUVtuw9V4uq
+   w==;
+X-CSE-ConnectionGUID: jLGytu/IS3Swgxc8btdIeQ==
+X-CSE-MsgGUID: eAphvwYsSrG1X7PZ3lMXog==
 X-IronPort-AV: E=Sophos;i="6.19,287,1754956800"; 
-   d="scan'208";a="4736768"
-Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
-  by internal-fra-out-014.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 17:22:38 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:7912]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.25.163:2525] with esmtp (Farcaster)
- id bd1226e1-fa2a-4cdf-b10a-b827fb60542a; Fri, 7 Nov 2025 17:22:38 +0000 (UTC)
-X-Farcaster-Flow-ID: bd1226e1-fa2a-4cdf-b10a-b827fb60542a
+   d="scan'208";a="4852040"
+Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
+  by internal-fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 17:23:26 +0000
+Received: from EX19MTAEUA002.ant.amazon.com [54.240.197.232:9306]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.36.34:2525] with esmtp (Farcaster)
+ id 65a7df21-9a1f-44f7-9ef4-1959268abc09; Fri, 7 Nov 2025 17:23:26 +0000 (UTC)
+X-Farcaster-Flow-ID: 65a7df21-9a1f-44f7-9ef4-1959268abc09
 Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.245) with Microsoft SMTP Server
+ EX19MTAEUA002.ant.amazon.com (10.252.50.126) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Fri, 7 Nov 2025 17:22:32 +0000
+ Fri, 7 Nov 2025 17:23:22 +0000
 Received: from [192.168.9.244] (10.106.83.15) by EX19D022EUC002.ant.amazon.com
  (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Fri, 7 Nov 2025
- 17:22:29 +0000
-Message-ID: <d1b58114-9b88-4535-b28c-09d9cc1ff3be@amazon.com>
-Date: Fri, 7 Nov 2025 17:22:27 +0000
+ 17:23:21 +0000
+Message-ID: <13d2268f-a556-4a04-a473-c595d26dfbd8@amazon.com>
+Date: Fri, 7 Nov 2025 17:23:20 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,64 +72,24 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v7 06/12] KVM: guest_memfd: add module param for disabling
- TLB flushing
-To: Ackerley Tng <ackerleytng@google.com>, Patrick Roy
-	<patrick.roy@linux.dev>, David Hildenbrand <david@redhat.com>, Will Deacon
-	<will@kernel.org>
-CC: Dave Hansen <dave.hansen@intel.com>, "Roy, Patrick" <roypat@amazon.co.uk>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
-	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oliver.upton@linux.dev"
-	<oliver.upton@linux.dev>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
-	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
-	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
-	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org"
-	<luto@kernel.org>, "peterz@infradead.org" <peterz@infradead.org>,
-	"willy@infradead.org" <willy@infradead.org>, "akpm@linux-foundation.org"
-	<akpm@linux-foundation.org>, "lorenzo.stoakes@oracle.com"
-	<lorenzo.stoakes@oracle.com>, "Liam.Howlett@oracle.com"
-	<Liam.Howlett@oracle.com>, "vbabka@suse.cz" <vbabka@suse.cz>,
-	"rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>, "song@kernel.org" <song@kernel.org>,
-	"jolsa@kernel.org" <jolsa@kernel.org>, "ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
-	<andrii@kernel.org>, "martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>, "yonghong.song@linux.dev"
-	<yonghong.song@linux.dev>, "john.fastabend@gmail.com"
-	<john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
-	"jgg@ziepe.ca" <jgg@ziepe.ca>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-	"peterx@redhat.com" <peterx@redhat.com>, "jannh@google.com"
-	<jannh@google.com>, "pfalcato@suse.de" <pfalcato@suse.de>, "shuah@kernel.org"
-	<shuah@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
-	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Cali,
- Marco" <xmarcalx@amazon.co.uk>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
-	"Thomson, Jack" <jackabt@amazon.co.uk>, "derekmn@amazon.co.uk"
-	<derekmn@amazon.co.uk>, "tabba@google.com" <tabba@google.com>
-References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
- <20250924152214.7292-1-roypat@amazon.co.uk>
- <20250924152214.7292-3-roypat@amazon.co.uk>
- <e25867b6-ffc0-4c7c-9635-9b3f47b186ca@intel.com>
- <c1875a54-0c87-450f-9370-29e7ec4fea3d@redhat.com>
- <82bff1c4-987f-46cb-833c-bd99eaa46e7a@intel.com>
- <c79173d8-6f18-40fa-9621-e691990501e4@redhat.com>
- <c88514c3-e15f-4853-8acf-15e7b4b979f4@linux.dev>
- <aNZwmPFAxm_HRYpC@willie-the-truck>
- <5d11b5f7-3208-4ea8-bbff-f535cf62d576@redhat.com>
- <be89abc6-97ca-47d8-b8e7-95f58ab9cc67@linux.dev>
- <f13e06f3-3c7b-4993-b33a-a6921c14231b@redhat.com>
- <d25340e3-2017-4614-a472-c5c7244c7ce4@linux.dev>
- <diqzqzu9dfog.fsf@google.com>
+Subject: Re: [PATCH v6 1/2] KVM: guest_memfd: add generic population via write
+To: Ackerley Tng <ackerleytng@google.com>
+CC: Nikita Kalyazin <kalyazin@amazon.co.uk>, "pbonzini@redhat.com"
+	<pbonzini@redhat.com>, "shuah@kernel.org" <shuah@kernel.org>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"david@redhat.com" <david@redhat.com>, "jthoughton@google.com"
+	<jthoughton@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>,
+	Jack Thomson <jackabt@amazon.co.uk>, Derek Manwaring <derekmn@amazon.com>,
+	Marco Cali <xmarcalx@amazon.co.uk>, Vishal Annapurve <vannapurve@google.com>,
+	Sean Christopherson <seanjc@google.com>
+References: <20251020161352.69257-1-kalyazin@amazon.com>
+ <20251020161352.69257-2-kalyazin@amazon.com> <aPpS2aqdobVTk_ed@google.com>
+ <8a28ddea-35c0-490e-a7d2-7fb612fdd008@amazon.com>
+ <aQPakDuteQkg0hTu@google.com>
+ <2c61545f-befb-4681-95fd-ff281e1a947b@amazon.com>
+ <diqzms4xdf2v.fsf@google.com>
 Content-Language: en-US
 From: Nikita Kalyazin <kalyazin@amazon.com>
 Autocrypt: addr=kalyazin@amazon.com; keydata=
@@ -141,183 +101,256 @@ Autocrypt: addr=kalyazin@amazon.com; keydata=
  ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
  ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
  i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <diqzqzu9dfog.fsf@google.com>
+In-Reply-To: <diqzms4xdf2v.fsf@google.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D003EUB004.ant.amazon.com (10.252.51.121) To
+X-ClientProxiedBy: EX19D005EUA001.ant.amazon.com (10.252.50.159) To
  EX19D022EUC002.ant.amazon.com (10.252.51.137)
 
 
 
-On 07/11/2025 15:29, Ackerley Tng wrote:
-> Patrick Roy <patrick.roy@linux.dev> writes:
+On 07/11/2025 15:42, Ackerley Tng wrote:
+> Nikita Kalyazin <kalyazin@amazon.com> writes:
 > 
->> Hey all,
->>
->> sorry it took me a while to get back to this, turns out moving
->> internationally is move time consuming than I expected.
->>
->> On Mon, 2025-09-29 at 12:20 +0200, David Hildenbrand wrote:
->>> On 27.09.25 09:38, Patrick Roy wrote:
->>>> On Fri, 2025-09-26 at 21:09 +0100, David Hildenbrand wrote:
->>>>> On 26.09.25 12:53, Will Deacon wrote:
->>>>>> On Fri, Sep 26, 2025 at 10:46:15AM +0100, Patrick Roy wrote:
->>>>>>> On Thu, 2025-09-25 at 21:13 +0100, David Hildenbrand wrote:
->>>>>>>> On 25.09.25 21:59, Dave Hansen wrote:
->>>>>>>>> On 9/25/25 12:20, David Hildenbrand wrote:
->>>>>>>>>> On 25.09.25 20:27, Dave Hansen wrote:
->>>>>>>>>>> On 9/24/25 08:22, Roy, Patrick wrote:
->>>>>>>>>>>> Add an option to not perform TLB flushes after direct map manipulations.
->>>>>>>>>>>
->>>>>>>>>>> I'd really prefer this be left out for now. It's a massive can of worms.
->>>>>>>>>>> Let's agree on something that works and has well-defined behavior before
->>>>>>>>>>> we go breaking it on purpose.
->>>>>>>>>>
->>>>>>>>>> May I ask what the big concern here is?
->>>>>>>>>
->>>>>>>>> It's not a _big_ concern.
->>>>>>>>
->>>>>>>> Oh, I read "can of worms" and thought there is something seriously problematic :)
->>>>>>>>
->>>>>>>>> I just think we want to start on something
->>>>>>>>> like this as simple, secure, and deterministic as possible.
->>>>>>>>
->>>>>>>> Yes, I agree. And it should be the default. Less secure would have to be opt-in and documented thoroughly.
->>>>>>>
->>>>>>> Yes, I am definitely happy to have the 100% secure behavior be the
->>>>>>> default, and the skipping of TLB flushes be an opt-in, with thorough
->>>>>>> documentation!
->>>>>>>
->>>>>>> But I would like to include the "skip tlb flushes" option as part of
->>>>>>> this patch series straight away, because as I was alluding to in the
->>>>>>> commit message, with TLB flushes this is not usable for Firecracker for
->>>>>>> performance reasons :(
+>> On 30/10/2025 21:37, Sean Christopherson wrote:
+>>> On Fri, Oct 24, 2025, Nikita Kalyazin wrote:
+>>>>
+>>>>
+>>>> On 23/10/2025 17:07, Sean Christopherson wrote:
+>>>>> On Mon, Oct 20, 2025, Nikita Kalyazin wrote:
+>>>>>> From: Nikita Kalyazin <kalyazin@amazon.com>
+>>>>
+>>>> + Vishal and Ackerley
+>>>>
 >>>>>>
->>>>>> I really don't want that option for arm64. If we're going to bother
->>>>>> unmapping from the linear map, we should invalidate the TLB.
+>>>>>> write syscall populates guest_memfd with user-supplied data in a generic
+>>>>>> way, ie no vendor-specific preparation is performed.  If the request is
+>>>>>> not page-aligned, the remaining bytes are initialised to 0.
+>>>>>>
+>>>>>> write is only supported for non-CoCo setups where guest memory is not
+>>>>>> hardware-encrypted.
 >>>>>
->>>>> Reading "TLB flushes result in a up to 40x elongation of page faults in
->>>>> guest_memfd (scaling with the number of CPU cores), or a 5x elongation
->>>>> of memory population,", I can understand why one would want that optimization :)
+>>>>> Please include all of the "why".  The code mostly communicates the "what", but
+>>>>> it doesn't capture why write() support is at all interesting, nor does it explain
+>>>>> why read() isn't supported.
+>>>>
+>>>> Hi Sean,
+>>>>
+>>>> Thanks for the review.
+>>>>
+>>>> Do you think including the explanation from the cover letter would be
+>>>> sufficient?
+>>>
+>>> It's pretty close.  A few more details would be helpful, e.g. to explain that VMMs
+>>> may use write() to populate the initial image
+>>
+>> Ack.
+>>
+>>>
+>>>> Shall I additionally say that read() isn't supported because there is no use
+>>>> case for it as of now or would it be obvious?
+>>>
+>>> Hmm, I think if you want to exclude read() support, the changelog should explicitly
+>>> state why.  E.g. "there's no use case" is quite different from "deliberately
+>>> don't support read() for security reasons".
+>>
+>> Ack.
+>>
+>>>
+>>>>>> Signed-off-by: Nikitia Kalyazin <kalyazin@amazon.com>
+>>>>>> ---
+>>>>>>     virt/kvm/guest_memfd.c | 48 ++++++++++++++++++++++++++++++++++++++++++
 >>>>>
->>>>> @Patrick, couldn't we use fallocate() to preallocate memory and batch the TLB flush within such an operation?
->>>>>
->>>>> That is, we wouldn't flush after each individual direct-map modification but after multiple ones part of a single operation like fallocate of a larger range.
->>>>>
->>>>> Likely wouldn't make all use cases happy.
+>>>>> There's a notable lack of uAPI and Documentation chanegs.  I.e. this needs a
+>>>>> GUEST_MEMFD_FLAG_xxx along with proper documentation.
+>>>>
+>>>> Would the following be ok in the doc?
+>>>>
+>>>> When the capability KVM_CAP_GUEST_MEMFD_WRITE is supported, the 'flags'
+>>>
+>>> No capability is necessary, see d2042d8f96dd ("KVM: Rework KVM_CAP_GUEST_MEMFD_MMAP
+>>> into KVM_CAP_GUEST_MEMFD_FLAGS").
+>>
+>> Thanks, I didn't realise that kvm/next was behind kvm/master.
+>>
+>>>
+>>>> field
+>>>> supports GUEST_MEMFD_FLAG_WRITE. Setting this flag on guest_memfd creation
+>>>> enables write() syscall operations to populate guest_memfd memory from host
+>>>> userspace.
+>>>>
+>>>> When a write() operation is performed on a guest_memfd file descriptor with
+>>>> the
+>>>> GUEST_MEMFD_FLAG_WRITE set, the syscall will populate the guest memory with
+>>>> user-supplied data in a generic way, without any vendor-specific
+>>>> preparation.
+>>>> The write operation is only supported for non-CoCo (Confidential Computing)
+>>>> setups where guest memory is not hardware-encrypted.
+>>>
+>>> The restriction should be that guest memory must be SHARED, i.e. not PRIVATE.
+>>> Strictly speaking, guest memory can be encrypted, e.g. with SME and TME (I think
+>>> TME is still a thing?), but with a shared key and thus accessible from the host.
+>>>
+>>> Even if that weren't the case, we want to support this for CoCo VMs.
+>>
+>> To clarify, should it depend on GUEST_MEMFD_FLAG_INIT_SHARED for now?
+>>
+>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+>> index 5bd76cf394fa..5fbf65f49586 100644
+>> --- a/include/linux/kvm_host.h
+>> +++ b/include/linux/kvm_host.h
+>> @@ -736,7 +736,7 @@ static inline u64
+>> kvm_gmem_get_supported_flags(struct kvm *kvm)
+>>           u64 flags = GUEST_MEMFD_FLAG_MMAP;
+>>
+>>           if (!kvm || kvm_arch_supports_gmem_init_shared(kvm))
+>> -               flags |= GUEST_MEMFD_FLAG_INIT_SHARED;
+>> +               flags |= GUEST_MEMFD_FLAG_INIT_SHARED |
+>> GUEST_MEMFD_FLAG_WRITE;
+>>
+>>           return flags;
+>>    }
+>>
+> 
+> Yup! It should depend on GUEST_MEMFD_FLAG_INIT_SHARED for now.
+> 
+> When conversion is supported then GUEST_MEMFD_FLAG_WRITE can always be a
+> supported flag, and the shared/private check can then be shifted to
+> .write_begin().
+
+Thanks for the confirmation.
+
+> 
+>>>
+>>>> If the write request is not page-aligned, any remaining bytes within the page
+>>>> are initialized to zero.
+>>>
+>>> Why?  (Honest question, e.g. is that standard file semantics?)
+>>
+>> The clause was originally suggested by James in v5 [1].  The behaviour
+>> shouldn't be deviating from the standard semantics though, so I will
+>> omit it.  Moreover, when looking at the shmem implementation, I realised
+>> that I hadn't handled the case of clearing bytes _before_ written bytes
+>> properly.  I will fix it in the next version.
+>>
+> 
+> Was thinking about this a bit more. One way to think about this is that
+> we could have more flexibility: Do we need to zero the parts of the page
+> that were not written to? Maybe the user wanted to write only to byte offsets
+> 10 to 20 within the page, and keep the rest intact? That should still be
+> okay I think, there's no data leak since we're not allowing read().
+> 
+> Looking ahead to conversions on huge pages, I think I prefer being more
+> restrictive though. For 4K pages we don't allow allocations or
+> truncations that are not PAGE_ALIGNED. For huge pages the current stance
+> is to return -EINVAL for allocations/truncations that are not huge page
+> size aligned.
+> 
+> If we allow non-page-aligned writes, handling huge pages could be
+> complicated. I don't see any way for guest_memfd to tell the caller
+> generic_perform_write() function that it can only write to certain parts
+> of a page. This means that if a huge page has mixed shared/private
+> status, guest_memfd would have to split the folio just for
+> generic_perform_write() to not write elsewhere.
+> 
+> Do you have any ideas here? Or maybe we will then use some
+> other .write_iter() function.
+> 
+> My proposal is to impose a restriction that write()s offset/len must be
+> PAGE_ALIGNED, we can check that in .write_begin(). Being more
+> restrictive could be a good starting point that allows us to relax the
+> constraint later. (Unless you already have a use case that requires
+> writing less than a page)
+> 
+> That should also solve the zeroing issue, if the user must always
+> provide full pages worth of data to write. :P
+
+We do not have a use case for partial writes as we always write full 
+pages so I am totally open to applying the restriction, especially if it 
+helps huge page conversion.
+
+> 
+> 
+>> [1]
+>> https://lore.kernel.org/kvm/CADrL8HUObfEd80sr783dB3dPWGSX7H5=0HCp9OjiL6D_Sp+2Ww@mail.gmail.com/
+>>
+>>>
+>>>>> And while it's definitely it's a-ok to land .write() in advance of the direct map
+>>>>> changes, we do need to at least map out how we want the two to interact, e.g. so
+>>>>> that we don't end up with constraints that are impossible to satisfy.
 >>>>>
 >>>>
->>>> For Firecracker, we rely a lot on not preallocating _all_ VM memory, and
->>>> trying to ensure only the actual "working set" of a VM is faulted in (we
->>>> pack a lot more VMs onto a physical host than there is actual physical
->>>> memory available). For VMs that are restored from a snapshot, we know
->>>> pretty well what memory needs to be faulted in (that's where @Nikita's
->>>> write syscall comes in), so there we could try such an optimization. But
->>>> for everything else we very much rely on the on-demand nature of guest
->>>> memory allocation (and hence direct map removal). And even right now,
->>>> the long pole performance-wise are these on-demand faults, so really, we
->>>> don't want them to become even slower :(
->>>
->>> Makes sense. I guess even without support for large folios one could implement a kind of "fault" around: for example, on access to one addr, allocate+prepare all pages in the same 2 M chunk, flushing the tlb only once after adjusting all the direct map entries.
->>>
+>>>> write() shall not attempt to access a page that is not in the direct map,
+>>>> which I believe can be achieved via kvm_kmem_gmem_write_begin() consulting
+> 
+> Btw why not just kvm_gmem_write_begin() instead of having the additional
+> kmem part in the name?
+
+You are right, no reason for an extra kmem in the name.  Thanks!
+
+> 
+>>>> the KVM_GMEM_FOLIO_NO_DIRECT_MAP in folio->private (introduced in [1]).
 >>>>
->>>> Also, can we really batch multiple TLB flushes as you suggest? Even if
->>>> pages are at consecutive indices in guest_memfd, they're not guaranteed
->>>> to be continguous physically, e.g. we couldn't just coalesce multiple
->>>> TLB flushes into a single TLB flush of a larger range.
+>>>> Do you think we should mention it in the commit message in some way? What
+>>>> particular constraint are you cautious about?
 >>>
->>> Well, you there is the option on just flushing the complete tlb of course :) When trying to flush a range you would indeed run into the problem of flushing an ever growing range.
->>
->> In the last guest_memfd upstream call (over a week ago now), we've
->> discussed the option of batching and deferring TLB flushes, while
->> providing a sort of "deadline" at which a TLB flush will
->> deterministically be done.  E.g. guest_memfd would keep a counter of how
->> many pages got direct map zapped, and do a flush of a range that
->> contains all zapped pages every 512 allocated pages (and to ensure the
->> flushes even happen in a timely manner if no allocations happen for a
->> long time, also every, say, 5 seconds or something like that). Would
->> that work for everyone? I briefly tested the performance of
->> batch-flushes with secretmem in QEMU, and its within of 30% of the "no
->> TLB flushes at all" solution in a simple benchmark that just memsets
->> 2GiB of memory.
->>
->> I think something like this, together with the batch-flushing at the end
->> of fallocate() / write() as David suggested above should work for
->> Firecracker.
->>
->>>> There's probably other things we can try. Backing guest_memfd with
->>>> hugepages would reduce the number TLB flushes by 512x (although not all
->>>> users of Firecracker at Amazon [can] use hugepages).
+>>> I want to be cautious with respect to the ABI/uAPI.  Patrick's series also adds
+>>> a flag, and guest_memfd doesn't currently provide a way to toggle flags after the
+>>> file is created.  That begs the question of how GUEST_MEMFD_FLAG_NO_DIRECT_MAP
+>>> will co-exist with GUEST_MEMFD_FLAG_WRITE.  Presumably the goal is to use write()
+>>> to initialize memory, and _then_ nuke the direct map.
 >>>
->>> Right.
+>>> I want line of sight to understanding the exact semantics/flows.  E.g. will KVM
+>>> require userspace to clear GUEST_MEMFD_FLAG_WRITE before allowing
+>>> NO_DIRECT_MAP?  Or will the write() simply fail?  How will the sequencing be
+>>> achieved?
+>>
+>> No, I don't think we can clear the GUEST_MEMFD_FLAG_WRITE as we expect
+>> faults and writes to different pages to be arriving interspersed: some
+>> pages will be populated by write() proactively, some will be allocated
+>> by faults in the user mapping on demand.  Both write() and the fault
+>> handler, if they need to allocate a page, will be writing content to it
+>> and "sealing" by removing it from the direct map.  If write() faces an
+>> already "sealed" page, it will fail (with EEXIST [1]).
+>>
+> 
+> IIUC this means a write() after fallocate(), or any unintended access to
+> the memory before write, for a GUEST_MEMFD_FLAG_NO_DIRECT_MAP
+> guest_memfd will necessarily fail.
+> 
+> The required ordering is kind of awkward, but I don't really have any
+> good suggestions.
+
+I don't think fallocate() needs to "seal" the page, since it doesn't 
+initialise the page content.  So it should be allowed to write to a page 
+that has previously been fallocated, unless there is something I'm 
+missing that makes it impossible.
+
+> 
 >>>
+>>>>>> +     struct inode *inode = file_inode(file);
+>>>>>> +     pgoff_t index = pos >> PAGE_SHIFT;
+>>>>>> +     struct folio *folio;
+>>>>>> +
+>>>>>> +     if (!kvm_gmem_supports_mmap(inode))
+>>>>>
+>>>>> Checking for MMAP is neither sufficient nor strictly necessary.  MMAP doesn't
+>>>>> imply SHARED, and it's not clear to me that mmap() support should be in any way
+>>>>> tied to WRITE support.
 >>>>
->>>> And I do still wonder if it's possible to have "async TLB flushes" where
->>>> we simply don't wait for the IPI (x86 terminology, not sure what the
->>>> mechanism on arm64 is). Looking at
->>>> smp_call_function_many_cond()/invlpgb_kernel_range_flush() on x86, it
->>>> seems so? Although seems like on ARM it's actually just handled by a
->>>> single instruction (TLBI) and not some interprocess communication
->>>> thingy. Maybe there's a variant that's faster / better for this usecase?
+>>>> As in my reply to the comment about doc, I plan to introduce
+>>>> KVM_CAP_GUEST_MEMFD_WRITE and GUEST_MEMFD_FLAG_WRITE.  The
+>>>> kvm_arch_supports_gmem_write() will be a weak symbol and relying on
+>>>> !kvm_arch_has_private_mem() on x86, similar to
+>>>> kvm_arch_supports_gmem_mmap().  Does it look right?
 >>>
->>> Right, some architectures (and IIRC also x86 with some extension) are able to flush remote TLBs without IPIs.
+>>> No.  As above, write() should be allowed iff memory is SHARED.  Relevant commits
+>>> that are now in Linus' tree:
 >>>
->>> Doing a quick search, there seems to be some research on async TLB flushing, e.g., [1].
->>>
->>> In the context here, I wonder whether an async TLB flush would be
->>> significantly better than not doing an explicit TLB flush: in both
->>> cases, it's not really deterministic when the relevant TLB entries
->>> will vanish: with the async variant it might happen faster on average
->>> I guess.
+>>>     44c6cb9fe9888b371e31165b2854bd0f4e2787d4 KVM: guest_memfd: Allow mmap() on guest_memfd for x86 VMs with private memory
+>>>     9aef71c892a55e004419923ba7129abe3e58d9f1 KVM: Explicitly mark KVM_GUEST_MEMFD as depending on KVM_GENERIC_MMU_NOTIFIER
+>>>     5d3341d684be80892d8f6f9812f90f9274b81177 KVM: guest_memfd: Invalidate SHARED GPAs if gmem supports INIT_SHARED
 >>
->> I actually did end up playing around with this a while ago, and it made
->> things slightly better performance wise, but it was still too bad to be
->> useful :(
->>
-> 
-> Does it help if we add a guest_memfd ioctl that allows userspace to zap
-> from the direct map to batch TLB flushes?
-> 
-> Could usage be something like:
-> 
-> 0. Create guest_memfd with GUEST_MEMFD_FLAG_NO_DIRECT_MAP.
-> 1. write() entire VM memory to guest_memfd.
-
-Hi Ackerley,
-
-This doesn't fully cover our use case.  We are not always able to 
-populate the entire guest memory proactively with a write(). 
-Specifically, 1) the memory content may not be available on the host by 
-the time the vCPU accesses the page and 2) as we don't want to populate 
-zero pages in advance to save memory on the host, faults on those pages 
-will occur unpredictably and we will have to pay TLB flush cost on every 
-such fault.
-
-> 2. ioctl(guest_memfd, KVM_GUEST_MEMFD_ZAP_DIRECT_MAP, { offset, len })
-> 3. vcpu_run()
-> 
-> This way, we could flush the tlb once for the entire range of { offset,
-> len } instead of zapping once per fault.
-> 
-> For not-yet-allocated folios, those will get zapped once per fault
-> though.
-> 
-> Maybe this won't help much if the intention is to allow on-demand
-> loading of memory, since the demands will come to guest_memfd on a
-> per-folio basis.
-
-Yes, in our setup we rely on both write() + on-demand faulting working 
-concurrently and we can't always predict which of them will handle a 
-specific page.
-
-Nikita
-
-> 
->>>
->>> [1] https://cs.yale.edu/homes/abhishek/kumar-taco20.pdf
->>>
->>
->> Best,
->> Patrick
+>> Ack.
 
 
