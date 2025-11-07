@@ -1,286 +1,537 @@
-Return-Path: <linux-kselftest+bounces-45089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45090-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B37CC3FF73
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 13:45:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BD04C40169
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 14:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5C0563B2CB5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 12:42:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3D3B54EDF95
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 13:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B610304994;
-	Fri,  7 Nov 2025 12:41:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="qtXb9ZyM";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="rtcg2ajT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC702D8788;
+	Fri,  7 Nov 2025 13:23:34 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27F6243954;
-	Fri,  7 Nov 2025 12:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762519269; cv=fail; b=disTPVzcLjbaVXy821U4sswu+rwHJG3vlljWXiTgI6bsA0PiOGw7K6ClTrCnTEIxAtMLsSjXNLsaonGQ3Tl7Ltu8b98TTijyOoWOtbuTC6EahUrrpXOg4OOtw/kSP0aTmmAjo58Z0/iDKmXQdZxWUPX/XTn8Gwma3rvLlzclUiY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762519269; c=relaxed/simple;
-	bh=q6ChFv4AyyOeKKZf4OC4n9bY+Jm6lUKbWZFT1244I5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=chKK4qnPwFoECvcPguf8vzq5rQzEY07zWVC3XqrId1sZFHyhoPay0Vrv7KKml9LpgaZYmr8DU2wYrHVGMhWk+nWy7K8FCS5ut0haO4YqF+TSZU/nLOkng88pKZC0+aQBm5XTrf/eadkZ3eO5Q8ipDg2k6mu91OaTiJa7QkWswqo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=qtXb9ZyM; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=rtcg2ajT; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5A78uN6F011618;
-	Fri, 7 Nov 2025 12:40:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=a8kJmo7nKPQ4Ry6rU/
-	gW+rofld+HXaB+NfHlNttRGVc=; b=qtXb9ZyMDLCdcWmRKZulcxrbgeDczIbqNW
-	Jm3S33CKnhY3B3s2imsZEEciuoEpL6gpms9YVxAVSlBwZwCqHtN+4yZ1PcdPH2xX
-	IgVTF0tWgT3z4iSgyozOGuKyOF7X+inzLOzonbVTgS0EgVt5q0IMg+nj++hv4GQD
-	dGIQImnQigXaqh8CpaGyYv0iFP0/gu6s5Au9Nk//fVJLt7zYjHPIRC/wSeX4p7Q2
-	HqBJGP3MxjJtWiDyvSJ6sRmi44mussMCXzfiLi+GPamimCzzxJeiHn4/F00hjIbI
-	hY57VcDqAurgNraYhy6VdhwTf9jFt/paIszTZeX1iBne1TT5OO8g==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4a8ytw9sc3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 07 Nov 2025 12:40:45 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5A7BlP0t023110;
-	Fri, 7 Nov 2025 12:40:45 GMT
-Received: from dm1pr04cu001.outbound.protection.outlook.com (mail-centralusazon11010003.outbound.protection.outlook.com [52.101.61.3])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4a58nh91nq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 07 Nov 2025 12:40:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CXA3IQQCXyAuiq0lzI4wV//jnr/Oqf/QY2yf4cleGuIOeKUUbynxxyEZ38Srk5FwndK+Q7G98nvW6SIuN46Ut30WelgA+K+kc4KL6W8+Tx0s8GTok8cG09qXArpySvrtEZWpLok4b7ClFy5oM99PcTFZx3GyG0qJGCbhRZ57EbeWm4NJhfkKtXeU29QFcGTjD07XIZUp6WEPppJNnHg4FpAo5vgucdDD/iNpaiV3M2tE8juDhpWQGb4vyy90czqfDU9zLgUUDMvDofLemHxsAqjQ5GsO5jz1XS1HwHi8gDCbZLXOSQkoPuMG3BASyGTPnuxDBFBys7N4tF/T+Aw/5g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a8kJmo7nKPQ4Ry6rU/gW+rofld+HXaB+NfHlNttRGVc=;
- b=reTDI8RIgYAPpGUGY+oBgQeJktDjKDpp+52RKT1gtVJgf9klw1YYdJ1jLoX77HhkCWRDftyANo948v6MyARFcpo9MW/u7+w0zDi5kapho6sA+eF+lb7T8OYrMeSX+43T/kVhg9Z1jObMXRh7YtF8dt5JLHM+fOgLUejaPou7GFq1enX5ONLuevaxkebIxOjouZhQYB5+qfYpP0j5LqdYyNCGbmaBBfsclNCze2igf+Lo/uItWM27p/hnz+jc72Dv75UN9v3Fl/3ZhFdMxWU1VfcMTfeXxQCyAHy4VP/0Tlt3/6KWo0EebreMvVjaSNTP3AJSpXpmvCi9qMrxXrK4pA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a8kJmo7nKPQ4Ry6rU/gW+rofld+HXaB+NfHlNttRGVc=;
- b=rtcg2ajTK2NKHe/l3ecI+VrMPSbKSQiv84H2cWSBdNSjE50W4AJnGmUhzkQjapP15twehVvBQKAWcrDG46CFqZ+yYMB4yj8fMh5tDXjdafvXQdv9DfRDAFvnil6T4lcQYG0p0aw2P3xPi55bltOgujELre3CK/TrBSLuV0SA2Q8=
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
- by BY5PR10MB4308.namprd10.prod.outlook.com (2603:10b6:a03:203::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.7; Fri, 7 Nov
- 2025 12:40:41 +0000
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2%7]) with mapi id 15.20.9298.010; Fri, 7 Nov 2025
- 12:40:41 +0000
-Date: Fri, 7 Nov 2025 12:40:38 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Pedro Falcato <pfalcato@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Jann Horn <jannh@google.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
-Subject: Re: [PATCH v2 1/5] mm: introduce VM_MAYBE_GUARD and make visible in
- /proc/$pid/smaps
-Message-ID: <8f291b26-536a-41ce-8cff-3b0871e6930e@lucifer.local>
-References: <cover.1762422915.git.lorenzo.stoakes@oracle.com>
- <fe38b1a43364f72d1ce7a6217e53a33c9c0bb0c5.1762422915.git.lorenzo.stoakes@oracle.com>
- <yja2mhwa4bzatbthjjq5rolqlkfgcbmppic3caaiwi6jc63rbc@cims6rqnotvj>
- <043dcbdb-e069-46e7-8f79-8fdaf354fb44@lucifer.local>
- <aQ24HAAxYLhIvV5U@google.com>
- <0f7186b3-16bd-44b7-a3fe-637af9d25dd3@lucifer.local>
- <aQ3iO40QYEM6Dxfs@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aQ3iO40QYEM6Dxfs@google.com>
-X-ClientProxiedBy: LO0P265CA0011.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:355::19) To DM4PR10MB8218.namprd10.prod.outlook.com
- (2603:10b6:8:1cc::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC9D2D7DDA
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 13:23:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762521814; cv=none; b=rxyZdaWdSC5eJjaelOfAwjq64kr5PaBMr5wAJaq7mXYTjQZ3ZyZ1DD45at2vM7LuCVd8SkyrH6QPZxfqcuF5i1vXt5fMaxkS12NlUd7+0VyHDMxxUjZgKoHCT/C2a9uHt6u5c2WFa/j1GWP1eJyf2gMKySnXIYu0LPB10KLn6gM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762521814; c=relaxed/simple;
+	bh=DGJ9+559FlV3UgQikrelkoCmYfFxJQL1ZC4qTlqeSWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VleBJGmD15yJmlZJ2OZrD6JjdwdSvJJJfq8aFTwA+KjLIbLcmaPv47BQeIkPcFsrLa82avnFtkcmUpyg76IlviAA/ZtYVX5TCfkmi6TkaL37/n+5IzrhAYuVLfyq5mQzW6Urvc+XFIP8Ed5jiP5mofN/6GKs3MCPZhIvhOzRP7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-640860f97b5so1288529a12.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Nov 2025 05:23:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762521809; x=1763126609;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hdV1jfrMy32tfsxFe1Wpkv2OHa2IiVAYkwnI7QBJXd0=;
+        b=rP/3HXz+8qi8VNg3/pGUr5cFBLdDn9MRuumGzlOFqHK85quDRkZbfkpi8+T62dyVMM
+         CnFKVJWbiIDQ1Gc62S8TIjTTxiYz0eRouE5RKFGkSt+5xRO5SyU6cqi/8r+EupHLTdVZ
+         5bXrde+2pEuEPXokqRzgCBIiJIAIY+yp3ctFul06iZVeUG1Vf3cGiSihTIO2W6DFsw7d
+         62miXs9/jEYTspcpZkLZt21sRwHEWweBoI13cTclvL3zXBT1rPSIRBr3MFZxR9qzbdU0
+         P03tzgVsD82pQJ4w95avWML27cH9cWb4hkBVu9autb57Wiow/ZOguBiyV/tK+3Vc14sj
+         2xiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX1dc4atABiteS23cnp6yKFNVQWuLABlKRJp9vwvM/mHap3K+6nuBNHpoJwu+04sAV+PPUR2mcc+I7UhK/HS2A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/eJp0FCKXpAgmFoFddEnoV3tKm+sW9T8U/ELBhReaSIAYFXPx
+	xKpRWQh4qSbyWrQJDl/yApkslcNGqFlPEw6g5YlvWtV0kCj4lVtfVfm54CWXgw==
+X-Gm-Gg: ASbGncv68v0NWv8wU/5GBnezRw4P6Isbzl7V5DexQHHTPRkPE5wMA+fhZcmNgT62fSA
+	J4Xrndnw3jSKfDbhOfLwyB41Fx4qXN3QBbcoJWCx/tvudYC+8buTNijJhuqHhWr3nMBcr1gCvrz
+	sg7fWbAj8gtDSMYgS3aI5Q7AwnIsIZpjNLoeGuuk78szvFdyBkhsV91jvMpVOK6FR4Jt8A1NYo4
+	Nzt8dr6SGtFJDl0xPaFbwJVKnQpHAdfRwXdb8Mz3rpdltbfry11J4j+ExJyTVzFa6R9hpVGoXVn
+	YpX/ssKTfuaQRyFb0ZpS/o8Boi1IZxPgAUF99qqxJqJDf/NtpUjWHQYmkolRs61Q5bgOD4UbrHt
+	U58XEekd2vibDDcCVCnOEJT76n2ZCMPhEHvo9sZU7HdCWXG6Elv7rZ8J5K5WRARXjBA==
+X-Google-Smtp-Source: AGHT+IEpoL7HaRFc7e20vexFAi3ULjF7HkITUJu5y1US5JRjD7tBhB6YkZ/emLsN0v1+Ob7GVBczyg==
+X-Received: by 2002:a17:907:1b0a:b0:b70:7cd8:9098 with SMTP id a640c23a62f3a-b72c0ed00dcmr322377266b.61.1762521809164;
+        Fri, 07 Nov 2025 05:23:29 -0800 (PST)
+Received: from gmail.com ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b72bf7231dcsm242895566b.31.2025.11.07.05.23.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 05:23:28 -0800 (PST)
+Date: Fri, 7 Nov 2025 05:23:26 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Gustavo Luiz Duarte <gustavold@gmail.com>
+Cc: Andre Carvalho <asantostc@gmail.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 2/4] netconsole: Split userdata and sysdata
+Message-ID: <jejsptfg7cqmbcm467tb72gg3mwsqge6iz4qy4wy5ifev2sgim@hukyfgsr74xj>
+References: <20251105-netconsole_dynamic_extradata-v1-0-142890bf4936@meta.com>
+ <20251105-netconsole_dynamic_extradata-v1-2-142890bf4936@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|BY5PR10MB4308:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35b3f3ca-877c-445d-056b-08de1dfadcb1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?lhAdlJle5yGEzeHSzGiwEGnjlkI/z59YT3vkS4/z/6g/p7hYBZL0MDC6rptw?=
- =?us-ascii?Q?lvcX7CvtFj5wCcW1KXadOasUFq3xggTzyXbsSAJCOOT2jdcVt8lbptUWXmqo?=
- =?us-ascii?Q?lCWmpnMEg788oMH7b6jEZHfETBcHZYb3UXO40/++cGDSsXTr7RTpoNX89qVY?=
- =?us-ascii?Q?bhKWAGgy9ByXLaNvg/n1lgdv4elnMN27QmipkH7GdAqNGD+6vvJvoQ4paaxO?=
- =?us-ascii?Q?lJ6Az5ea5Nf8oNPjiApPZFgOYYd5M86GQ35IAYRBLSaV8CkGNyxmK4jnKbWC?=
- =?us-ascii?Q?45F25cFCy1KFoMHHRIUEdG0hek35lsAPXuJrCMOc8GG+V5lRlf6qKBsdoNiO?=
- =?us-ascii?Q?ZwKigFwVI3wCK9cjdOYryG7eyFNik3H5IVuRE5fKi3Vmzfop4JO5oC0c2/eA?=
- =?us-ascii?Q?va70D2Dwt/Pg55QImD1sOuISP6+lNfvaVWL+gAzS1Wbfv3EjAug1qABdHqBQ?=
- =?us-ascii?Q?0XU+Db7C84T9ymsf5tXHv+bingroLOO09QEOpix3MIoH5vr+xrClkM74i5Ko?=
- =?us-ascii?Q?0nOLTlFdPsZquDubCylpwpF3drG/uJMQHgPD6LPForT/cKpq57qhAKIziwdR?=
- =?us-ascii?Q?c+JBDpEslGuDZXtgV4dlqp0I+5Jm6cisUIWFSLPpqbBxJ/hv4WlUDQNCycUz?=
- =?us-ascii?Q?7rJbTWu7NmWOxCdst9Kg0ZHMgtZC8RrJIxBJwwt78tSvJsbRdxGmktJAK5Bz?=
- =?us-ascii?Q?rZUtTyJsjMEDzz10zQnw3ig/bKcqYTkPRTYuK/+urvwwN+4suTL9sc+NQiHI?=
- =?us-ascii?Q?yFPjvXK2voUrOz5CqVII3ivNrZ4z9wzuIsJFX291C3mLuOwvF1a00dCZ/oWc?=
- =?us-ascii?Q?f33D06v/w5AHTq/Mpm/AYTr0CVhac4iWcLPH+OUgvrFtFgjsQEVBQNTp4hpC?=
- =?us-ascii?Q?fiBSMyqOVF0L/4SDZKKFQXMvN6T7rznRYOi2hYEposQcqv6vSfkaE8Bs/wwG?=
- =?us-ascii?Q?yDEa5pn8I2LJH5wF/qIZyPda/hexf+A8YwqPh7JEQDMOpovuWcmvyVcDHH01?=
- =?us-ascii?Q?faH6P3cRpaVg8Nfd2Nhvda4RT+H2e5n1ejHA5TCXVIdWqj6i+wGLoCBC12S1?=
- =?us-ascii?Q?sQIMWOe17pviNqvpASJJYr4SwEK8xU6c7N2PJ+0zxeQ2jUQ7O0UJ3GycOTVn?=
- =?us-ascii?Q?l4mUe9Gg+jiQrqFhrEW+dFyp8iLYnLZq75jDgQJvTDpEWioEZauo03vbBeLU?=
- =?us-ascii?Q?JpQgfz3gIJ8hwFy4DonquY3VWDGS14hfx0HVtIVS2kTIYyGVt31vFRPyPgBi?=
- =?us-ascii?Q?EmdzKqwInadA+Z1H9QTrtUxloJZu43AmM6jZXY5hx1gCs2QfV5xNzbVNeP6/?=
- =?us-ascii?Q?QQZY8ADf0Q2k5RgV1aCcD5ZO98rwJkVTiXC4ZiG0EwMcZXQKuhtnJ1jaw89b?=
- =?us-ascii?Q?vfpQZ8y2C/VELGwZxA0AxPYUiqsfjQjqaT7ghElDaBYfI+4JgK//0+tj6hNZ?=
- =?us-ascii?Q?92Vx1WPbiw4BAZIytN02F7OqTC5iI9Jr?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?iPEakMMLUfHOUczdRgvRM6ZxTqJNXNfq4Ujq8OpDy7Ij5QONZ3dkOZau5Sp2?=
- =?us-ascii?Q?BJFw9LxdQtfkxudH0bV8EQnUxhn06P37qLcAAz0xnswNCuEnJWAb0RPJu3Pj?=
- =?us-ascii?Q?3cEWvgSpCnvSjZfcXihL1g+1lpkvbh8finFKx/BdxcjlGOkR8gPNmTr4TcMG?=
- =?us-ascii?Q?ePNB7NXkHPrkiGrFRVtk2hqYrkrNZW8o8bkJSClyQbRHR7Re+krTITKjmG+R?=
- =?us-ascii?Q?O0wF3ND6S9EeueqimsAdeZE3Dte/t5AwBbfGdL3oU28o0EKY7Mhfvy96wdFW?=
- =?us-ascii?Q?jdq2WiA/medoD6PbAu7YNEoWhEZM+rgLuUyGbD+H8lKLhACu/CuTV9VOQMiB?=
- =?us-ascii?Q?tD50IjnHZuqSgnwhBf22CTTijL/IV3vOz8D1svUkH8SG+kfjXqcP2zhb5aNS?=
- =?us-ascii?Q?PoL75NCJ/zzl/yZ2w9LjhmHu4+n9n5NikIob8wf4UYWOkWt0ZS2dNbzQ2NTV?=
- =?us-ascii?Q?CpJfVorCDW2Zb6lRunWHzICvHRAXbCnAcCzH2ftoQwqtsFbKhqRtZprFIeaL?=
- =?us-ascii?Q?jee6X3bAX7RtanFs9FUEOUi15/5Sd/S9A54CtBQR9TcZhQzFZfKIaE8MHxfq?=
- =?us-ascii?Q?OkqYxNjAMVaCbBe4CPyemdsxs7+M78Fjvm0+cCXTkARQs/C161rKDPFlbMZc?=
- =?us-ascii?Q?8PkRF6LfN1/EoQMzKGy2ywkzwy7jl5QApwkmEwGbTmTbQbuvHSduarCqRsGS?=
- =?us-ascii?Q?Qdwyj66T3RYgzLHBKvKU+iiJjCag2YtUD8qEaZF0Lk51AcPHMmnMpfS9Ypj5?=
- =?us-ascii?Q?H/0ziPI2WODt+aW+tThtTKwLqtsnwWNvJ+8cP6Uq3LcwL6IlHzSq6HIBtWyT?=
- =?us-ascii?Q?wETJGC1NyioXiZimMnlEw4IV3MwzlRpYboHcIt/QD8ySN3GWZbr8IxIYwVyi?=
- =?us-ascii?Q?CWbeXtx/FAJhO/L5dLsuZ2k07129Nj1bGr3rk5Z90g+8qWClhW2HIeoxX0IU?=
- =?us-ascii?Q?GWwEUAMWIXlWVzXKD05l9G+WyzJEzT/QYVqaeIYisAYgGK2a8cv9UXqyWWx1?=
- =?us-ascii?Q?ThN0voFX71Ys6iYapZuRMkSFMWjAab9vf/swZNQpF3Gp7+6tLa6dGb+XCX4C?=
- =?us-ascii?Q?CSgVsnFGwPssSX+SGYDQt3FkQaavoWESY6TWZrdm8FEnUYx+wpn1XCYcZSl8?=
- =?us-ascii?Q?xqMeYVBNL+iVlAiiG4bbNJpR3tba8GOrm33hcHo8NtEc3ZI9tfQAXUvVVcK9?=
- =?us-ascii?Q?+lwppvmhduJm0cuEpnDufRVFC75KFn8Idzz6ArHIcnHs6jWO5KNBHHDdbs+w?=
- =?us-ascii?Q?ENDDtBBZWLFOH28Fe/Qgp7C2mN7Im0poakEHYDFVL/2JPcJ6KUsTdFguB1uE?=
- =?us-ascii?Q?nt6EfmfLQXIC7cPEIi0Rm+buZdwVQ0+RZSAPtOHedsa4o+eOnJFawWp0VYib?=
- =?us-ascii?Q?aGSBxC6bjjmEz2TeeXq9zlTPO2xYgdhowcniep/eAGR4YWvAudWfd5e2nFZN?=
- =?us-ascii?Q?CFCXWMw3JuszRk42Jw+kxlG/2pJ2u+/BioQ61nsA/BaLY/3Cm2UyP9WsexXi?=
- =?us-ascii?Q?xcVnjZqVX6WC/tjUh4Hz4OttkQXAodN7zC4KtMj5IIIMe35onxMy1TGNWiBD?=
- =?us-ascii?Q?yXxD3FA7U6rsw6uTXiS9K1BrN84fc8w50OG2wXoJEiUSWtnJ2+wqrnbnqjlM?=
- =?us-ascii?Q?rw=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	pOb3eJL06b8pibN14IFQLRTWVk4+vwM1WZ7a1XKtPLqFbwffN0DGLeMYARx5AsANrO5qe8g00qQm3VGSUIKem8rOjgPjCTZI17D/1Xarlo+9F6CPnKH5lhLgiiNJEOlk5LlW5+5rYp9UMe5LPA3PmKZDo+Gwb/wF50lVfOPGzhauYTysu9weP5OVr4WH8cOmMB135AIhkLwu5jdokPCwHnid8dKPw4y1gYvptUffCqd0JPnIhE8xtADo6TZDZQPbbCXQ6baGd09opUrdAJuqg581WIxk3AsrLxFJiu5gAjxY/Qj8Sv9Dweb5bEMaGLj+jTbCe+kHmbB60tjYPkTcDOTBVas6mS4mdBS3b5JFO90lmbirzN1Fok8cvWySMzzPeVahsklHSqXfp2VEmVUkc3NyeiTetmELmu+0r5SHQHPgLL9lHuItmCloBFOkOTw7/KKnFL3jhI8NwMns6ECWXt1AT8IvAdmjLU3Qs2tSE4gjZwTCGVyD6dVhXjVVeLN6HpAMAlKyxmFty02RYaIVL8v+suHdRnQA9EMZuyPmaCQYDA6flS4AaEaEITFh5Ncof2VmjBcolHPkvAp7ILUaT0MXKGyVH8VSWkOe3hVHZoA=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35b3f3ca-877c-445d-056b-08de1dfadcb1
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 12:40:41.5453
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: onT0PgeIzvXmAhSyufFvkQUyTBN+0J2/MWivL3XAoJyzK5KlX4a7TUq7XKej0D6yRD6M+eIFB8M8P3qc09ptrEMV8Xe+hMaoZmLsBmDPbTQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR10MB4308
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-07_03,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
- mlxlogscore=973 mlxscore=0 adultscore=0 spamscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2510240000 definitions=main-2511070103
-X-Authority-Analysis: v=2.4 cv=L/wQguT8 c=1 sm=1 tr=0 ts=690de8cd b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=ioD9YK-olDrjc_HnVRAA:9 a=CjuIK1q_8ugA:10
- cc=ntf awl=host:12100
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA2MDEzOCBTYWx0ZWRfXz1Q+HDVVuQcP
- kY43K/tM+NK12d+aBQr4qRhCeL6iCUIt5eq/3s+rHqusiGqurtAFKhOTYDrlAWPNAtK9KjnDHwK
- KnMF2V4RyCSd1O6hdzeTKceiVIRlJToREeuzyIrxoGWEvPDFGoqMiQGc+3cRj97LF65xEfTKo//
- Hw2V+aJJzbkyAhIqgOGrLlQf0Evdv1J8LPPi8KhX6maemoF6ghvM8DIGXfQYCWKhcqGCaq8kcZ+
- QoRMGPfU66X+jwhFYIClsPpoIlljPg3WwHn5tVcE5q59ZYnM+RBzcB5I7pdF6fjJnxPUWd1lcgC
- tVl3Ll+JmmN67/ve2kLbY/2aI2npSD+pdX6g3Engj72oFvUFX+DAv6k7nEpoCnSTeZsgsHIzurO
- SQnSSjnf6MKU/GtvidrTkGkwd5P6tfqSb8U3nnYXGqLFVqhcpSs=
-X-Proofpoint-ORIG-GUID: ncrqVOOd5T0EaOHli8tCkE_0lWeGKOFn
-X-Proofpoint-GUID: ncrqVOOd5T0EaOHli8tCkE_0lWeGKOFn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251105-netconsole_dynamic_extradata-v1-2-142890bf4936@meta.com>
 
-On Fri, Nov 07, 2025 at 12:12:43PM +0000, Alice Ryhl wrote:
-> On Fri, Nov 07, 2025 at 09:44:22AM +0000, Lorenzo Stoakes wrote:
-> > On Fri, Nov 07, 2025 at 09:13:00AM +0000, Alice Ryhl wrote:
-> > > On Thu, Nov 06, 2025 at 02:54:33PM +0000, Lorenzo Stoakes wrote:
-> > > > +cc Alice for rust stuff
-> > > >
-> > > > On Thu, Nov 06, 2025 at 02:27:56PM +0000, Pedro Falcato wrote:
-> > > > > On Thu, Nov 06, 2025 at 10:46:12AM +0000, Lorenzo Stoakes wrote:
-> > > > > >  /*
-> > > > > >   * vm_flags in vm_area_struct, see mm_types.h.
-> > > > > >   * When changing, update also include/trace/events/mmflags.h
-> > > > > > @@ -296,6 +298,7 @@ extern unsigned int kobjsize(const void *objp);
-> > > > > >  #define VM_UFFD_MISSING	0
-> > > > > >  #endif /* CONFIG_MMU */
-> > > > > >  #define VM_PFNMAP	0x00000400	/* Page-ranges managed without "struct page", just pure PFN */
-> > > > > > +#define VM_MAYBE_GUARD	BIT(VM_MAYBE_GUARD_BIT)	/* The VMA maybe contains guard regions. */
-> > > > >
-> > > > > Don't we also need an adjustment on the rust side for this BIT()? Like we
-> > > > > for f04aad36a07c ("mm/ksm: fix flag-dropping behavior in ksm_madvise").
-> > > >
-> > > > That's a bit unhelpful if rust can't cope with extremely basic assignments like
-> > > > that and we just have to know to add helpers :/
-> > > >
-> > > > We do BIT() stuff for e.g. VM_HIGH_ARCH_n, VM_UFFD_MINOR_BIT,
-> > > > VM_ALLOW_ANY_UNCACHED_BIT, VM_DROPPABLE_BIT and VM_SEALED_BIT too and no such
-> > > > helpers there, So not sure if this is required?
-> > > >
-> > > > Alice - why is it these 'non-trivial' defines were fine but VM_MERGEABLE was
-> > > > problematic? That seems strange.
-> > > >
-> > > > I see [0], so let me build rust here and see if it moans, if it moans I'll add
-> > > > it.
-> > > >
-> > > > [0]:https://lore.kernel.org/oe-kbuild-all/CANiq72kOhRdGtQe2UVYmDLdbw6VNkiMtdFzkQizsfQV0gLY1Hg@mail.gmail.com/
-> > >
-> > > When you use #define to declare a constant whose right-hand-side
-> > > contains a function-like macro such as BIT(), bindgen does not define a
-> > > Rust version of that constant. However, VM_MAYBE_GUARD is not referenced
-> > > in Rust anywhere, so that isn't a problem.
-> > >
-> > > It was a problem with VM_MERGEABLE because rust/kernel/mm/virt.rs
-> > > references it.
-> > >
-> > > Note that it's only the combination of #define and function-like macro
-> > > that triggers this condition. If the constant is defined using another
-> > > mechanism such as enum {}, then bindgen will generate the constant no
-> > > matter how complex the right-hand-side is. The problem is that bindgen
-> > > can't tell whether a #define is just a constant or not.
-> >
-> > Thanks, I guess we can update as we go as rust needs. Or I can do a big update
-> > as part of my VMA flag series respin?
->
-> Whenever you think is a good time works for me.
->
-> I think it would be nice to move those constants so they use enum {}
-> instead of #define at some point.
+On Wed, Nov 05, 2025 at 09:06:44AM -0800, Gustavo Luiz Duarte wrote:
+> Separate userdata and sysdata into distinct buffers to enable independent
+> management. Previously, both were stored in a single extradata_complete
+> buffer with a fixed size that accommodated both types of data.
+> 
+> This separation allows:
+> - userdata to grow dynamically (in subsequent patch)
+> - sysdata to remain in a small static buffer
+> - removal of complex entry counting logic that tracked both types together
+> 
+> The split also simplifies the code by eliminating the need to check total
+> entry count across both userdata and sysdata when enabling features,
+> which allows to drop holding su_mutex on sysdata_*_enabled_store().
+> 
+> No functional change in this patch, just structural preparation for
+> dynamic userdata allocation.
+> 
+> Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
+> ---
+>  drivers/net/netconsole.c | 204 +++++++++++++++++++----------------------------
+>  1 file changed, 84 insertions(+), 120 deletions(-)
+> 
+> diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+> index 0a8ba7c4bc9d..e780c884db83 100644
+> --- a/drivers/net/netconsole.c
+> +++ b/drivers/net/netconsole.c
+> @@ -50,7 +50,8 @@ MODULE_LICENSE("GPL");
+>  /* The number 3 comes from userdata entry format characters (' ', '=', '\n') */
+>  #define MAX_EXTRADATA_NAME_LEN		(MAX_EXTRADATA_ENTRY_LEN - \
+>  					MAX_EXTRADATA_VALUE_LEN - 3)
+> -#define MAX_EXTRADATA_ITEMS		16
+> +#define MAX_USERDATA_ITEMS		16
 
-Yeah I will do as part of my VMA series :) which actually is a neater solution
-to this in general (and can drop the existing binding helpers then actually).
+Do we still need to have MAX_USERDATA_ITEMS cap with your new approach?
 
->
-> Alice
+> +#define MAX_SYSDATA_ITEMS		4
 
-Thanks, Lorenzo
+Can we have this one inside enum sysdata_feature?
+
+Something as:
+
+  enum sysdata_feature {
+      SYSDATA_CPU_NR = BIT(0),
+      SYSDATA_TASKNAME = BIT(1),
+      SYSDATA_RELEASE = BIT(2),
+      SYSDATA_MSGID = BIT(3),
+      MAX_SYSDATA_ITEMS = 4  /* Sentinel: highest bit position */
+  };
+
+>  #define MAX_PRINT_CHUNK			1000
+>  
+>  static char config[MAX_PARAM_LENGTH];
+> @@ -122,8 +123,9 @@ enum sysdata_feature {
+>   * @list:	Links this target into the target_list.
+>   * @group:	Links us into the configfs subsystem hierarchy.
+>   * @userdata_group:	Links to the userdata configfs hierarchy
+> - * @extradata_complete:	Cached, formatted string of append
+> - * @userdata_length:	String length of usedata in extradata_complete.
+> + * @userdata:		Cached, formatted string of append
+> + * @userdata_length:	String length of userdata.
+> + * @sysdata:		Cached, formatted string of append
+>   * @sysdata_fields:	Sysdata features enabled.
+>   * @msgcounter:	Message sent counter.
+>   * @stats:	Packet send stats for the target. Used for debugging.
+> @@ -152,8 +154,10 @@ struct netconsole_target {
+>  #ifdef	CONFIG_NETCONSOLE_DYNAMIC
+>  	struct config_group	group;
+>  	struct config_group	userdata_group;
+> -	char extradata_complete[MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS];
+> +	char			userdata[MAX_EXTRADATA_ENTRY_LEN * MAX_USERDATA_ITEMS];
+>  	size_t			userdata_length;
+> +	char			sysdata[MAX_EXTRADATA_ENTRY_LEN * MAX_SYSDATA_ITEMS];
+> +
+>  	/* bit-wise with sysdata_feature bits */
+>  	u32			sysdata_fields;
+>  	/* protected by target_list_lock */
+> @@ -802,28 +806,14 @@ static ssize_t remote_ip_store(struct config_item *item, const char *buf,
+>  	return ret;
+>  }
+>  
+> -/* Count number of entries we have in extradata.
+> - * This is important because the extradata_complete only supports
+> - * MAX_EXTRADATA_ITEMS entries. Before enabling any new {user,sys}data
+> - * feature, number of entries needs to checked for available space.
+> +/* Count number of entries we have in userdata.
+> + * This is important because userdata only supports MAX_USERDATA_ITEMS
+> + * entries. Before enabling any new userdata feature, number of entries needs
+> + * to checked for available space.
+>   */
+> -static size_t count_extradata_entries(struct netconsole_target *nt)
+> +static size_t count_userdata_entries(struct netconsole_target *nt)
+>  {
+> -	size_t entries;
+> -
+> -	/* Userdata entries */
+> -	entries = list_count_nodes(&nt->userdata_group.cg_children);
+> -	/* Plus sysdata entries */
+> -	if (nt->sysdata_fields & SYSDATA_CPU_NR)
+> -		entries += 1;
+> -	if (nt->sysdata_fields & SYSDATA_TASKNAME)
+> -		entries += 1;
+> -	if (nt->sysdata_fields & SYSDATA_RELEASE)
+> -		entries += 1;
+> -	if (nt->sysdata_fields & SYSDATA_MSGID)
+> -		entries += 1;
+> -
+> -	return entries;
+> +	return list_count_nodes(&nt->userdata_group.cg_children);
+>  }
+>  
+>  static ssize_t remote_mac_store(struct config_item *item, const char *buf,
+> @@ -894,13 +884,13 @@ static void update_userdata(struct netconsole_target *nt)
+>  
+>  	/* Clear the current string in case the last userdatum was deleted */
+>  	nt->userdata_length = 0;
+> -	nt->extradata_complete[0] = 0;
+> +	nt->userdata[0] = 0;
+>  
+>  	list_for_each(entry, &nt->userdata_group.cg_children) {
+>  		struct userdatum *udm_item;
+>  		struct config_item *item;
+>  
+> -		if (child_count >= MAX_EXTRADATA_ITEMS) {
+> +		if (child_count >= MAX_USERDATA_ITEMS) {
+>  			spin_unlock_irqrestore(&target_list_lock, flags);
+>  			WARN_ON_ONCE(1);
+>  			return;
+> @@ -914,11 +904,11 @@ static void update_userdata(struct netconsole_target *nt)
+>  		if (strnlen(udm_item->value, MAX_EXTRADATA_VALUE_LEN) == 0)
+>  			continue;
+>  
+> -		/* This doesn't overflow extradata_complete since it will write
+> -		 * one entry length (1/MAX_EXTRADATA_ITEMS long), entry count is
+> +		/* This doesn't overflow userdata since it will write
+> +		 * one entry length (1/MAX_USERDATA_ITEMS long), entry count is
+>  		 * checked to not exceed MAX items with child_count above
+>  		 */
+> -		nt->userdata_length += scnprintf(&nt->extradata_complete[nt->userdata_length],
+> +		nt->userdata_length += scnprintf(&nt->userdata[nt->userdata_length],
+>  						 MAX_EXTRADATA_ENTRY_LEN, " %s=%s\n",
+>  						 item->ci_name, udm_item->value);
+>  	}
+> @@ -960,7 +950,7 @@ static void disable_sysdata_feature(struct netconsole_target *nt,
+>  				    enum sysdata_feature feature)
+>  {
+>  	nt->sysdata_fields &= ~feature;
+> -	nt->extradata_complete[nt->userdata_length] = 0;
+> +	nt->sysdata[0] = 0;
+>  }
+>  
+>  static ssize_t sysdata_msgid_enabled_store(struct config_item *item,
+> @@ -979,12 +969,6 @@ static ssize_t sysdata_msgid_enabled_store(struct config_item *item,
+>  	if (msgid_enabled == curr)
+>  		goto unlock_ok;
+>  
+> -	if (msgid_enabled &&
+> -	    count_extradata_entries(nt) >= MAX_EXTRADATA_ITEMS) {
+> -		ret = -ENOSPC;
+> -		goto unlock;
+> -	}
+> -
+>  	if (msgid_enabled)
+>  		nt->sysdata_fields |= SYSDATA_MSGID;
+>  	else
+> @@ -992,7 +976,6 @@ static ssize_t sysdata_msgid_enabled_store(struct config_item *item,
+>  
+>  unlock_ok:
+>  	ret = strnlen(buf, count);
+> -unlock:
+>  	mutex_unlock(&dynamic_netconsole_mutex);
+>  	return ret;
+>  }
+> @@ -1013,12 +996,6 @@ static ssize_t sysdata_release_enabled_store(struct config_item *item,
+>  	if (release_enabled == curr)
+>  		goto unlock_ok;
+>  
+> -	if (release_enabled &&
+> -	    count_extradata_entries(nt) >= MAX_EXTRADATA_ITEMS) {
+> -		ret = -ENOSPC;
+> -		goto unlock;
+> -	}
+> -
+>  	if (release_enabled)
+>  		nt->sysdata_fields |= SYSDATA_RELEASE;
+>  	else
+> @@ -1026,7 +1003,6 @@ static ssize_t sysdata_release_enabled_store(struct config_item *item,
+>  
+>  unlock_ok:
+>  	ret = strnlen(buf, count);
+> -unlock:
+>  	mutex_unlock(&dynamic_netconsole_mutex);
+>  	return ret;
+>  }
+> @@ -1047,12 +1023,6 @@ static ssize_t sysdata_taskname_enabled_store(struct config_item *item,
+>  	if (taskname_enabled == curr)
+>  		goto unlock_ok;
+>  
+> -	if (taskname_enabled &&
+> -	    count_extradata_entries(nt) >= MAX_EXTRADATA_ITEMS) {
+> -		ret = -ENOSPC;
+> -		goto unlock;
+> -	}
+> -
+>  	if (taskname_enabled)
+>  		nt->sysdata_fields |= SYSDATA_TASKNAME;
+>  	else
+> @@ -1060,7 +1030,6 @@ static ssize_t sysdata_taskname_enabled_store(struct config_item *item,
+>  
+>  unlock_ok:
+>  	ret = strnlen(buf, count);
+> -unlock:
+>  	mutex_unlock(&dynamic_netconsole_mutex);
+>  	return ret;
+>  }
+> @@ -1083,27 +1052,16 @@ static ssize_t sysdata_cpu_nr_enabled_store(struct config_item *item,
+>  		/* no change requested */
+>  		goto unlock_ok;
+>  
+> -	if (cpu_nr_enabled &&
+> -	    count_extradata_entries(nt) >= MAX_EXTRADATA_ITEMS) {
+> -		/* user wants the new feature, but there is no space in the
+> -		 * buffer.
+> -		 */
+> -		ret = -ENOSPC;
+> -		goto unlock;
+> -	}
+> -
+>  	if (cpu_nr_enabled)
+>  		nt->sysdata_fields |= SYSDATA_CPU_NR;
+>  	else
+> -		/* This is special because extradata_complete might have
+> -		 * remaining data from previous sysdata, and it needs to be
+> -		 * cleaned.
+> +		/* This is special because sysdata might have remaining data
+> +		 * from previous sysdata, and it needs to be cleaned.
+>  		 */
+>  		disable_sysdata_feature(nt, SYSDATA_CPU_NR);
+>  
+>  unlock_ok:
+>  	ret = strnlen(buf, count);
+> -unlock:
+>  	mutex_unlock(&dynamic_netconsole_mutex);
+>  	return ret;
+>  }
+> @@ -1146,7 +1104,7 @@ static struct config_item *userdatum_make_item(struct config_group *group,
+>  
+>  	ud = to_userdata(&group->cg_item);
+>  	nt = userdata_to_target(ud);
+> -	if (count_extradata_entries(nt) >= MAX_EXTRADATA_ITEMS)
+> +	if (count_userdata_entries(nt) >= MAX_USERDATA_ITEMS)
+>  		return ERR_PTR(-ENOSPC);
+>  
+>  	udm = kzalloc(sizeof(*udm), GFP_KERNEL);
+> @@ -1353,22 +1311,21 @@ static void populate_configfs_item(struct netconsole_target *nt,
+>  
+>  static int sysdata_append_cpu_nr(struct netconsole_target *nt, int offset)
+>  {
+> -	/* Append cpu=%d at extradata_complete after userdata str */
+> -	return scnprintf(&nt->extradata_complete[offset],
+> +	return scnprintf(&nt->sysdata[offset],
+>  			 MAX_EXTRADATA_ENTRY_LEN, " cpu=%u\n",
+
+This is confusing. It is writing to sysdata but checking extradata entry len.
+
+>  static int sysdata_append_taskname(struct netconsole_target *nt, int offset)
+>  {
+> -	return scnprintf(&nt->extradata_complete[offset],
+> +	return scnprintf(&nt->sysdata[offset],
+>  			 MAX_EXTRADATA_ENTRY_LEN, " taskname=%s\n",
+
+Same as above.
+
+>  }
+>  
+>  static int sysdata_append_release(struct netconsole_target *nt, int offset)
+>  {
+> -	return scnprintf(&nt->extradata_complete[offset],
+> +	return scnprintf(&nt->sysdata[offset],
+>  			 MAX_EXTRADATA_ENTRY_LEN, " release=%s\n",
+>  			 init_utsname()->release);
+>  }
+> @@ -1376,46 +1333,36 @@ static int sysdata_append_release(struct netconsole_target *nt, int offset)
+>  static int sysdata_append_msgid(struct netconsole_target *nt, int offset)
+>  {
+>  	wrapping_assign_add(nt->msgcounter, 1);
+> -	return scnprintf(&nt->extradata_complete[offset],
+> +	return scnprintf(&nt->sysdata[offset],
+>  			 MAX_EXTRADATA_ENTRY_LEN, " msgid=%u\n",
+>  			 nt->msgcounter);
+>  }
+>  
+>  /*
+> - * prepare_extradata - append sysdata at extradata_complete in runtime
+> + * prepare_sysdata - append sysdata in runtime
+>   * @nt: target to send message to
+>   */
+> -static int prepare_extradata(struct netconsole_target *nt)
+> +static int prepare_sysdata(struct netconsole_target *nt)
+>  {
+> -	int extradata_len;
+> -
+> -	/* userdata was appended when configfs write helper was called
+> -	 * by update_userdata().
+> -	 */
+> -	extradata_len = nt->userdata_length;
+> +	int sysdata_len = 0;
+>  
+>  	if (!nt->sysdata_fields)
+>  		goto out;
+>  
+>  	if (nt->sysdata_fields & SYSDATA_CPU_NR)
+> -		extradata_len += sysdata_append_cpu_nr(nt, extradata_len);
+> +		sysdata_len += sysdata_append_cpu_nr(nt, sysdata_len);
+>  	if (nt->sysdata_fields & SYSDATA_TASKNAME)
+> -		extradata_len += sysdata_append_taskname(nt, extradata_len);
+> +		sysdata_len += sysdata_append_taskname(nt, sysdata_len);
+>  	if (nt->sysdata_fields & SYSDATA_RELEASE)
+> -		extradata_len += sysdata_append_release(nt, extradata_len);
+> +		sysdata_len += sysdata_append_release(nt, sysdata_len);
+>  	if (nt->sysdata_fields & SYSDATA_MSGID)
+> -		extradata_len += sysdata_append_msgid(nt, extradata_len);
+> +		sysdata_len += sysdata_append_msgid(nt, sysdata_len);
+>  
+> -	WARN_ON_ONCE(extradata_len >
+> -		     MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS);
+> +	WARN_ON_ONCE(sysdata_len >
+> +		     MAX_EXTRADATA_ENTRY_LEN * MAX_SYSDATA_ITEMS);
+>  
+>  out:
+> -	return extradata_len;
+> -}
+> -#else /* CONFIG_NETCONSOLE_DYNAMIC not set */
+> -static int prepare_extradata(struct netconsole_target *nt)
+> -{
+> -	return 0;
+> +	return sysdata_len;
+>  }
+>  #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
+>  
+> @@ -1517,13 +1464,8 @@ static void send_msg_no_fragmentation(struct netconsole_target *nt,
+>  				      int msg_len,
+>  				      int release_len)
+>  {
+> -	const char *extradata = NULL;
+>  	const char *release;
+>  
+> -#ifdef CONFIG_NETCONSOLE_DYNAMIC
+> -	extradata = nt->extradata_complete;
+> -#endif
+> -
+>  	if (release_len) {
+>  		release = init_utsname()->release;
+>  
+> @@ -1533,11 +1475,11 @@ static void send_msg_no_fragmentation(struct netconsole_target *nt,
+>  		memcpy(nt->buf, msg, msg_len);
+>  	}
+>  
+> -	if (extradata)
+> -		msg_len += scnprintf(&nt->buf[msg_len],
+> -				     MAX_PRINT_CHUNK - msg_len,
+> -				     "%s", extradata);
+> -
+> +#ifdef CONFIG_NETCONSOLE_DYNAMIC
+> +	msg_len += scnprintf(&nt->buf[msg_len],
+> +			     MAX_PRINT_CHUNK - msg_len,
+> +			     "%s%s", nt->userdata, nt->sysdata);
+> +#endif
+
+I am not sure I like this ifdef in here. Can you if userdata or sysdata are
+valid, and then scnprintf() instead of using ifdef?
+
+>  				 const char *msgbody, int header_len,
+> -				 int msgbody_len, int extradata_len)
+> +				 int msgbody_len, int sysdata_len)
+>  {
+> -	const char *extradata = NULL;
+> +	const char *userdata = NULL;
+> +	const char *sysdata = NULL;
+>  	int body_len, offset = 0;
+> -	int extradata_offset = 0;
+> +	int userdata_offset = 0;
+>  	int msgbody_offset = 0;
+> +	int sysdata_offset = 0;
+> +	int userdata_len = 0;
+>  
+>  #ifdef CONFIG_NETCONSOLE_DYNAMIC
+> -	extradata = nt->extradata_complete;
+> +	userdata = nt->userdata;
+> +	sysdata = nt->sysdata;
+> +	userdata_len = nt->userdata_length;
+>  #endif
+> -	if (WARN_ON_ONCE(!extradata && extradata_len != 0))
+> +	if (WARN_ON_ONCE(!userdata && userdata_len != 0))
+> +		return;
+> +
+> +	if (WARN_ON_ONCE(!sysdata && sysdata_len != 0))
+>  		return;
+>  
+>  	/* body_len represents the number of bytes that will be sent. This is
+>  	 * bigger than MAX_PRINT_CHUNK, thus, it will be split in multiple
+>  	 * packets
+>  	 */
+> -	body_len = msgbody_len + extradata_len;
+> +	body_len = msgbody_len + userdata_len + sysdata_len;
+>  
+>  	/* In each iteration of the while loop below, we send a packet
+>  	 * containing the header and a portion of the body. The body is
+> -	 * composed of two parts: msgbody and extradata. We keep track of how
+> -	 * many bytes have been sent so far using the offset variable, which
+> -	 * ranges from 0 to the total length of the body.
+> +	 * composed of three parts: msgbody, userdata and sysdata.
+> +	 * We keep track of how many bytes have been sent from each part using
+> +	 * the *_offset variables.
+> +	 * We keep track of how many bytes have been sent overall using the
+> +	 * offset variable, which ranges from 0 to the total length of the
+> +	 * body.
+>  	 */
+>  	while (offset < body_len) {
+>  		int this_header = header_len;
+> @@ -1594,12 +1547,20 @@ static void send_fragmented_body(struct netconsole_target *nt,
+>  		msgbody_offset += this_chunk;
+>  		this_offset += this_chunk;
+>  
+> -		/* after msgbody, append extradata */
+> -		this_chunk = min(extradata_len - extradata_offset,
+> +		/* after msgbody, append userdata */
+> +		this_chunk = min(userdata_len - userdata_offset,
+
+Please assign this "userdata_len - userdata_offset" to a variable and give it a
+name, so, it help us to reason about the code. 
+
+>  				 MAX_PRINT_CHUNK - this_header - this_offset);
+>  		memcpy(nt->buf + this_header + this_offset,
+> -		       extradata + extradata_offset, this_chunk);
+> -		extradata_offset += this_chunk;
+> +		       userdata + userdata_offset, this_chunk);
+> +		userdata_offset += this_chunk;
+> +		this_offset += this_chunk;
+> +
+> +		/* after userdata, append sysdata */
+> +		this_chunk = min(sysdata_len - sysdata_offset,
+> +				 MAX_PRINT_CHUNK - this_header - this_offset);
+> +		memcpy(nt->buf + this_header + this_offset,
+> +		       sysdata + sysdata_offset, this_chunk);
+
+s/this_header/this_header_offset?
+
+Now that you are touching this code, please review these variable to keep them named correct.
+
+Maybe adding _ptr for pointer, and _offset for offsets and _len for lenghts?
+
+Thank you for your work reasong about all of this!
+--breno
 
