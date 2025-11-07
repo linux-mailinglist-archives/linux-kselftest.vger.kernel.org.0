@@ -1,215 +1,316 @@
-Return-Path: <linux-kselftest+bounces-45110-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45111-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2CEFC409C3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 16:35:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 064CAC40A35
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 16:42:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04E2C1A446B2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 15:35:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9E7254E538E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 15:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DDC532D0D6;
-	Fri,  7 Nov 2025 15:35:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76FDF32D0D9;
+	Fri,  7 Nov 2025 15:42:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CBjXHOYy"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i59Mu426"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE80328B56
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 15:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE802D373F
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 15:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762529715; cv=none; b=VBqzUADFHukH+82ldeSisWi769UVl1ngFIeuNqAyAEVMQbVMlJ61BLHUiSzdeVbvDasmxAJEEm9WushVP9EbK5VkaV+WvWVkD9hVgUU/POwZHKOMQn/7HmmvsQBHPrzGHd0TPSURrPy98fHy4wsR1zvuTMjc1XRTEJ+SWh2DORM=
+	t=1762530157; cv=none; b=sO1ao86tLTFNN/H+KH5Nw8ZbGoEVyaF+I/aNBTvj1hEbDUat+PHTCTJhC9pSHt05djsau25CaCcKve+QIkkcgrlP++c5V3q/n4Pf4EK3lLjaRExEteu0uxhqGWy5WHSX6ho0IfCIzx5VqKkaS0hI6F3JRAs/jWD/rZGVtF4e+DE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762529715; c=relaxed/simple;
-	bh=7m90U4fRlmTtbaduAz/n40bucosBtxg2Nlzb525AIWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BcP7hDnMhVNRT0yhYJ1Oro2FGtwxQ2SB+ghA9cu2UZSnge9ryuNS016WSupaZdiiB5y2gmf+iWKPRPk6tdL9wFL95No613FqQVWCtPBqeYtdCz5LDzF1aDdjCtkiJEYZK5trrtwkNK+4NClRxf5VmtrKwGeOZdxy8gT6Nk1ertM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CBjXHOYy; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-786a822e73aso10248337b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Nov 2025 07:35:12 -0800 (PST)
+	s=arc-20240116; t=1762530157; c=relaxed/simple;
+	bh=SjIbsBo1Xr0uiNwHI9BoIIlOGUI+CBWkxiEfAPLMX+g=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=V5Ze3j8ECpWimr9gGNLQma6N9QnuD4RDebQhSYH8LFSrcInTvNes6/EOuRYPojniYXpvyMiOERY/1y6nLJyozT8+4AeKZ0J8YgHjRLodM7e3eBR670y4MTnSZaPAyhblib+Uy6SOIPSNoWeuadoWKAl0LLOprJKeDqY+mV7SKyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i59Mu426; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-336b646768eso1019138a91.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Nov 2025 07:42:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762529711; x=1763134511; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Hg5UfzPKclS12jZ/MM0cVARNy4+o8xhJZIOiFJg4L64=;
-        b=CBjXHOYykeExWbAdUzaTfxbv+hYeDnJ4OE6LMEsIQ+j1HllMQbTwIrF1ZEDn7jXbaG
-         lDM2Uj71u4sDtbD+vGnxUFHY34GPfx3h1iW1JsUxF8CYD3oxAyQxZbZplmBquMOloTwP
-         oRPywO8QmaIR6yh3L4Hcuck/OkBnD05U+hfOWzV/GEhqkGUyL0NYgE2trQfhP5MA7DoZ
-         LQpahZrpYOlvRREH+zpYiz2WBgdGz4j+YhGxFHwBjcPyqqb7GU/IMiM7XEpmL1F9pPbk
-         H1bgVT9cQsFpWEguqlEo19mGxZbreY0161jBsEn/zIuo0yFqfn26o9DZH7p0Aat4utdn
-         RyuA==
+        d=google.com; s=20230601; t=1762530154; x=1763134954; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cb+vE+6EBY8j48J4+TR78EJ2NW0EkYHyMNtJyZtDGEc=;
+        b=i59Mu426qLGkrnrCwSMQ7fzpRhK+4kuXJ1O4BZPx4M6czylkLYpYafhy0F3JTJOfAn
+         pyavlo1A0MTMwI6DHSneCbsF8Z3DRfNTNtjIRCFvzFycH74xIKKjOz8h4l/Xnf8ZpIik
+         lYPnB3mTGUH8ULrRK9NHV2dzxsyZuvcAib/z2fUTml131T06avYxdKJ3AEeP7sKnSikJ
+         6rrHjEltfbMif31uN6vJ5MZk/LsMU+yWwJYBJKHM2PAuI20LlYlwD9/C0+NnIhVvkuoV
+         dm5ASomF9mXKs+WDSGxWuKPQlShcpviPbU71836nKYpSAqKzeOqKY1WvPRjuKgsriCBX
+         H35Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762529711; x=1763134511;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hg5UfzPKclS12jZ/MM0cVARNy4+o8xhJZIOiFJg4L64=;
-        b=lXov0tg15uIm8UKJFTDhRkheDzeS3+Pm9BSWY2QynOucckb7F0TAIT4a/FkPXsM6ps
-         H45A2K2pUzuOXrfFFQ7mnZVOzRpIcUZUZ9lO90qPnnUHtNlebaKkUnRQAGbmZ7xNFg9/
-         KKg//1t/83de++IQlDsaLZ1A5m4bQIKBXeXgp0Q8HNOhiTmzuDh1cxUgFKkwsl62IDr2
-         Lfeymdm1UsQX8OgKW37gClx0cFPDldwfzzgqS1/Ire2vsBsYQqsAH8PX3aGUrD64eA5C
-         4oVEIoD93YPOeb5TQA+o1lvgGlTeS+wq4yzvHjYUUf9G7AdIZDVzVRj8WK+qApE0z23p
-         UijQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUUJT8tCOKH8J4vk0xBnyVXD/0+Ip/9sjWxquunOQbDP/BclY7ol30IxaCtEzRZuSgs5nDUVFEZ8imSlXgWSFE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIC6ty0p2paMhJuHx12VcBE+iie2Gq6jGffEb//nubRwyJrjXs
-	0Eo1yAZpNpXI5vXd9s1H2PMXXHLEhR4Qa8l5DxoD/btOHjlUfT8Ur6qsgQuURdqj
-X-Gm-Gg: ASbGncuAD6dDfAViloEFTAFC0+f3EGUnXjbLQKjNFNl9f4aRGTEjY/OFFzGGmv66cke
-	YEz9bS+nq4Gon+JjftPYLIgoKME2msGooxpHNUxd6BGL+eQpP01fY0XaRCeoiDRHZot4AA5Db6+
-	OvOHDmWDvmT7jv25kIplPcOUhTdC6jmCm3SktIhg1+snd8b3igwmr6D5SwOhoDCql2iaOShp9Js
-	MHnjJADjeaiVde/yyNCipwO8xp+E1lK4dDakQ3jZjt1cCZaxJMFDFfEepbHdbuMGys0o9YT6EMG
-	mTfjy1bHrbeXwYPDYOOaEIyfBszqLFIdjwylPByj0ox0CyPojOfJwcmsW/TpE6ARK1zYkU8W//4
-	kVCn7jvXg6oGK4RDAg77QIEs6jIY4/54ikR1+T+lbsvyv+aSXVTDWU6CyMB2Hf96F7Vn+zRGgiH
-	oI8rW1+rVzZVOYTv7x9XTZ1QSNIcEK+OAL1uLQ
-X-Google-Smtp-Source: AGHT+IFwUXomSgFrXOP5T+Zd2zXzyVOrxyGJXDnXPE08lhO8nln1/YwLRBm5iwzEweMUqR/HaaHj6g==
-X-Received: by 2002:a05:690c:360e:b0:786:a984:c064 with SMTP id 00721157ae682-787c53f0603mr27190947b3.35.1762529711161;
-        Fri, 07 Nov 2025 07:35:11 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:70::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-787cb4db618sm4770327b3.32.2025.11.07.07.35.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 07:35:10 -0800 (PST)
-Date: Fri, 7 Nov 2025 07:35:09 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v3 04/11] selftests/vsock: avoid multi-VM
- pidfile collisions with QEMU
-Message-ID: <aQ4RrcB0tzMWch1S@devvm11784.nha0.facebook.com>
-References: <20251106-vsock-selftests-fixes-and-improvements-v3-0-519372e8a07b@meta.com>
- <20251106-vsock-selftests-fixes-and-improvements-v3-4-519372e8a07b@meta.com>
- <aQ4LaUi9wTnEN8KA@horms.kernel.org>
+        d=1e100.net; s=20230601; t=1762530154; x=1763134954;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cb+vE+6EBY8j48J4+TR78EJ2NW0EkYHyMNtJyZtDGEc=;
+        b=gtq4OOeLypwmVRyii8+8k9iLwSbBH89Mj9xQLiNQ9/uy+Y4ovgehErGhhtsDNFdXZJ
+         IQgwgO3tpkC5MrjgmlQWokFiz6YIE1V2W4wvrvz6xJ0Tss+XQA6A2d/a65Zcr2bwwiF7
+         +6DJOkUwCsn8MmLz4iLcg89QSWDkuMtns1PoBumKzY/jrh4swvPDRoFAMqndtATAes9p
+         e2ITSRzEE31DZCH64HShJuEZ9tJzq/MrQ9a6CxrNJw9vyh7ixX7LaHA5+Q8b5mWHkIOi
+         jke0TGcCJNue+Dd8P+awFa3sXFIVEYUEpw/Mfrhlx+MUB38pB1FJil/YBJnVO49n4+2B
+         8w1A==
+X-Forwarded-Encrypted: i=1; AJvYcCVQmQnFRQCDcB4sup24/rqBQFycgVUxY1JgkVrwgRPc1ewM4wdHZlOBtCK3s/SdNigRCCRUtCMkhCJ++TrQaHQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXHjE8Ev5VE/RgX2+O91MZs+nOlYnCwAk84tA/t9WxItxvyiOj
+	i7E3a1pZjBzxF/ark7uf6vXxpokyvRqbrpsADAvdBpo1UDG+KMIIejMxyh1uhq0n+MDs3CkxN+j
+	tOik0E0jFcWCLY8DcAhf6yqDLOg==
+X-Google-Smtp-Source: AGHT+IEQ8+72xRcX4Lh83dJZDXTpAeoswe0M+6wUHGCveWfgq3KElXvQVuPxIFypKx+1WBdgQWa+lMSW9vth2zYOgA==
+X-Received: from pjbci23.prod.google.com ([2002:a17:90a:fc97:b0:343:5259:2292])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:1801:b0:340:ff7d:c2e with SMTP id 98e67ed59e1d1-3434c576a1dmr3891939a91.29.1762530154132;
+ Fri, 07 Nov 2025 07:42:34 -0800 (PST)
+Date: Fri, 07 Nov 2025 07:42:32 -0800
+In-Reply-To: <2c61545f-befb-4681-95fd-ff281e1a947b@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aQ4LaUi9wTnEN8KA@horms.kernel.org>
+Mime-Version: 1.0
+References: <20251020161352.69257-1-kalyazin@amazon.com> <20251020161352.69257-2-kalyazin@amazon.com>
+ <aPpS2aqdobVTk_ed@google.com> <8a28ddea-35c0-490e-a7d2-7fb612fdd008@amazon.com>
+ <aQPakDuteQkg0hTu@google.com> <2c61545f-befb-4681-95fd-ff281e1a947b@amazon.com>
+Message-ID: <diqzms4xdf2v.fsf@google.com>
+Subject: Re: [PATCH v6 1/2] KVM: guest_memfd: add generic population via write
+From: Ackerley Tng <ackerleytng@google.com>
+To: kalyazin@amazon.com, Sean Christopherson <seanjc@google.com>
+Cc: Nikita Kalyazin <kalyazin@amazon.co.uk>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
+	"shuah@kernel.org" <shuah@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "david@redhat.com" <david@redhat.com>, 
+	"jthoughton@google.com" <jthoughton@google.com>, "patrick.roy@linux.dev" <patrick.roy@linux.dev>, 
+	Jack Thomson <jackabt@amazon.co.uk>, Derek Manwaring <derekmn@amazon.com>, 
+	Marco Cali <xmarcalx@amazon.co.uk>, Vishal Annapurve <vannapurve@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Nov 07, 2025 at 03:08:25PM +0000, Simon Horman wrote:
-> On Thu, Nov 06, 2025 at 04:49:48PM -0800, Bobby Eshleman wrote:
-> 
-> ...
-> 
-> > @@ -90,15 +85,19 @@ vm_ssh() {
-> >  }
-> >  
-> >  cleanup() {
-> > -	if [[ -s "${QEMU_PIDFILE}" ]]; then
-> > -		pkill -SIGTERM -F "${QEMU_PIDFILE}" > /dev/null 2>&1
-> > -	fi
-> > +	local pidfile
-> >  
-> > -	# If failure occurred during or before qemu start up, then we need
-> > -	# to clean this up ourselves.
-> > -	if [[ -e "${QEMU_PIDFILE}" ]]; then
-> > -		rm "${QEMU_PIDFILE}"
-> > -	fi
-> > +	for pidfile in "${PIDFILES[@]}"; do
-> > +		if [[ -s "${pidfile}" ]]; then
-> > +			pkill -SIGTERM -F "${pidfile}" > /dev/null 2>&1
-> > +		fi
-> > +
-> > +		# If failure occurred during or before qemu start up, then we need
-> > +		# to clean this up ourselves.
-> > +		if [[ -e "${pidfile}" ]]; then
-> > +			rm "${pidfile}"
-> > +		fi
-> > +	done
-> >  }
-> 
-> Hi Bobby,
-> 
-> This is completely untested, but it looks to me
-> like cleanup() could be implemented more succinctly like this.
-> 
-> cleanup() {
-> 	terminate_pidfiles "${PIDFILES[@]}"
-> }
-> 
+Nikita Kalyazin <kalyazin@amazon.com> writes:
 
-Oh right! I reverted the deletion and completely forgot about
-terminate_pidfiles().
+> On 30/10/2025 21:37, Sean Christopherson wrote:
+>> On Fri, Oct 24, 2025, Nikita Kalyazin wrote:
+>>>
+>>>
+>>> On 23/10/2025 17:07, Sean Christopherson wrote:
+>>>> On Mon, Oct 20, 2025, Nikita Kalyazin wrote:
+>>>>> From: Nikita Kalyazin <kalyazin@amazon.com>
+>>>
+>>> + Vishal and Ackerley
+>>>
+>>>>>
+>>>>> write syscall populates guest_memfd with user-supplied data in a generic
+>>>>> way, ie no vendor-specific preparation is performed.  If the request is
+>>>>> not page-aligned, the remaining bytes are initialised to 0.
+>>>>>
+>>>>> write is only supported for non-CoCo setups where guest memory is not
+>>>>> hardware-encrypted.
+>>>>
+>>>> Please include all of the "why".  The code mostly communicates the "what", but
+>>>> it doesn't capture why write() support is at all interesting, nor does it explain
+>>>> why read() isn't supported.
+>>>
+>>> Hi Sean,
+>>>
+>>> Thanks for the review.
+>>>
+>>> Do you think including the explanation from the cover letter would be
+>>> sufficient?
+>> 
+>> It's pretty close.  A few more details would be helpful, e.g. to explain that VMMs
+>> may use write() to populate the initial image
+>
+> Ack.
+>
+>> 
+>>> Shall I additionally say that read() isn't supported because there is no use
+>>> case for it as of now or would it be obvious?
+>> 
+>> Hmm, I think if you want to exclude read() support, the changelog should explicitly
+>> state why.  E.g. "there's no use case" is quite different from "deliberately
+>> don't support read() for security reasons".
+>
+> Ack.
+>
+>> 
+>>>>> Signed-off-by: Nikitia Kalyazin <kalyazin@amazon.com>
+>>>>> ---
+>>>>>    virt/kvm/guest_memfd.c | 48 ++++++++++++++++++++++++++++++++++++++++++
+>>>>
+>>>> There's a notable lack of uAPI and Documentation chanegs.  I.e. this needs a
+>>>> GUEST_MEMFD_FLAG_xxx along with proper documentation.
+>>>
+>>> Would the following be ok in the doc?
+>>>
+>>> When the capability KVM_CAP_GUEST_MEMFD_WRITE is supported, the 'flags'
+>> 
+>> No capability is necessary, see d2042d8f96dd ("KVM: Rework KVM_CAP_GUEST_MEMFD_MMAP
+>> into KVM_CAP_GUEST_MEMFD_FLAGS").
+>
+> Thanks, I didn't realise that kvm/next was behind kvm/master.
+>
+>> 
+>>> field
+>>> supports GUEST_MEMFD_FLAG_WRITE. Setting this flag on guest_memfd creation
+>>> enables write() syscall operations to populate guest_memfd memory from host
+>>> userspace.
+>>>
+>>> When a write() operation is performed on a guest_memfd file descriptor with
+>>> the
+>>> GUEST_MEMFD_FLAG_WRITE set, the syscall will populate the guest memory with
+>>> user-supplied data in a generic way, without any vendor-specific
+>>> preparation.
+>>> The write operation is only supported for non-CoCo (Confidential Computing)
+>>> setups where guest memory is not hardware-encrypted.
+>> 
+>> The restriction should be that guest memory must be SHARED, i.e. not PRIVATE.
+>> Strictly speaking, guest memory can be encrypted, e.g. with SME and TME (I think
+>> TME is still a thing?), but with a shared key and thus accessible from the host.
+>> 
+>> Even if that weren't the case, we want to support this for CoCo VMs.
+>
+> To clarify, should it depend on GUEST_MEMFD_FLAG_INIT_SHARED for now?
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 5bd76cf394fa..5fbf65f49586 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -736,7 +736,7 @@ static inline u64 
+> kvm_gmem_get_supported_flags(struct kvm *kvm)
+>          u64 flags = GUEST_MEMFD_FLAG_MMAP;
+>
+>          if (!kvm || kvm_arch_supports_gmem_init_shared(kvm))
+> -               flags |= GUEST_MEMFD_FLAG_INIT_SHARED;
+> +               flags |= GUEST_MEMFD_FLAG_INIT_SHARED | 
+> GUEST_MEMFD_FLAG_WRITE;
+>
+>          return flags;
+>   }
+>
 
-> >  
-> >  check_args() {
-> > @@ -188,10 +187,35 @@ handle_build() {
-> >  	popd &>/dev/null
-> >  }
-> >  
-> > +create_pidfile() {
-> > +	local pidfile
-> > +
-> > +	pidfile=$(mktemp "${PIDFILE_TEMPLATE}")
-> > +	PIDFILES+=("${pidfile}")
-> > +
-> > +	echo "${pidfile}"
-> > +}
-> > +
-> > +terminate_pidfiles() {
-> > +	local pidfile
-> > +
-> > +	for pidfile in "$@"; do
-> > +		if [[ -s "${pidfile}" ]]; then
-> > +			pkill -SIGTERM -F "${pidfile}" > /dev/null 2>&1
-> > +		fi
-> > +
-> > +		if [[ -e "${pidfile}" ]]; then
-> > +			rm -f "${pidfile}"
-> > +		fi
-> > +	done
-> 
-> I think it would be useful to remove $pidfile from $PIDFILES.
-> This might be easier to implement if PIDFILES was an associative array.
-> 
+Yup! It should depend on GUEST_MEMFD_FLAG_INIT_SHARED for now.
 
-Using an associative makes sense, this way we can trim the set.
+When conversion is supported then GUEST_MEMFD_FLAG_WRITE can always be a
+supported flag, and the shared/private check can then be shifted to
+.write_begin().
 
-> > +}
-> > +
-> 
-> ...
-> 
-> > @@ -498,7 +529,8 @@ handle_build
-> >  echo "1..${#ARGS[@]}"
-> >  
-> >  log_host "Booting up VM"
-> > -vm_start
-> > +pidfile="$(create_pidfile)"
-> > +vm_start "${pidfile}"
-> >  vm_wait_for_ssh
-> >  log_host "VM booted up"
-> >  
-> 
-> > @@ -522,6 +554,8 @@ for arg in "${ARGS[@]}"; do
-> >  	cnt_total=$(( cnt_total + 1 ))
-> >  done
-> >  
-> > +terminate_pidfiles "${pidfile}"
-> 
-> I am assuming that there will be more calls to terminate_pidfiles
-> in subsequent patch-sets.
-> 
-> Else I think terminate_pidfiles can be removed
-> and instead we can rely on cleanup().
-> 
+>> 
+>>> If the write request is not page-aligned, any remaining bytes within the page
+>>> are initialized to zero.
+>> 
+>> Why?  (Honest question, e.g. is that standard file semantics?)
+>
+> The clause was originally suggested by James in v5 [1].  The behaviour 
+> shouldn't be deviating from the standard semantics though, so I will 
+> omit it.  Moreover, when looking at the shmem implementation, I realised 
+> that I hadn't handled the case of clearing bytes _before_ written bytes 
+> properly.  I will fix it in the next version.
+>
 
-Indeed, later patches will use terminate_pidfiles() in between spin up /
-shut down of multiple VMs.
+Was thinking about this a bit more. One way to think about this is that
+we could have more flexibility: Do we need to zero the parts of the page
+that were not written to? Maybe the user wanted to write only to byte offsets
+10 to 20 within the page, and keep the rest intact? That should still be
+okay I think, there's no data leak since we're not allowing read().
+
+Looking ahead to conversions on huge pages, I think I prefer being more
+restrictive though. For 4K pages we don't allow allocations or
+truncations that are not PAGE_ALIGNED. For huge pages the current stance
+is to return -EINVAL for allocations/truncations that are not huge page
+size aligned.
+
+If we allow non-page-aligned writes, handling huge pages could be
+complicated. I don't see any way for guest_memfd to tell the caller
+generic_perform_write() function that it can only write to certain parts
+of a page. This means that if a huge page has mixed shared/private
+status, guest_memfd would have to split the folio just for
+generic_perform_write() to not write elsewhere.
+
+Do you have any ideas here? Or maybe we will then use some
+other .write_iter() function. 
+
+My proposal is to impose a restriction that write()s offset/len must be
+PAGE_ALIGNED, we can check that in .write_begin(). Being more
+restrictive could be a good starting point that allows us to relax the
+constraint later. (Unless you already have a use case that requires
+writing less than a page)
+
+That should also solve the zeroing issue, if the user must always
+provide full pages worth of data to write. :P
 
 
-Thanks again, will incorporate your feedback in the next!
+> [1] 
+> https://lore.kernel.org/kvm/CADrL8HUObfEd80sr783dB3dPWGSX7H5=0HCp9OjiL6D_Sp+2Ww@mail.gmail.com/
+>
+>> 
+>>>> And while it's definitely it's a-ok to land .write() in advance of the direct map
+>>>> changes, we do need to at least map out how we want the two to interact, e.g. so
+>>>> that we don't end up with constraints that are impossible to satisfy.
+>>>>
+>>>
+>>> write() shall not attempt to access a page that is not in the direct map,
+>>> which I believe can be achieved via kvm_kmem_gmem_write_begin() consulting
 
-Best,
-Bobby
+Btw why not just kvm_gmem_write_begin() instead of having the additional
+kmem part in the name?
+
+>>> the KVM_GMEM_FOLIO_NO_DIRECT_MAP in folio->private (introduced in [1]).
+>>>
+>>> Do you think we should mention it in the commit message in some way? What
+>>> particular constraint are you cautious about?
+>> 
+>> I want to be cautious with respect to the ABI/uAPI.  Patrick's series also adds
+>> a flag, and guest_memfd doesn't currently provide a way to toggle flags after the
+>> file is created.  That begs the question of how GUEST_MEMFD_FLAG_NO_DIRECT_MAP
+>> will co-exist with GUEST_MEMFD_FLAG_WRITE.  Presumably the goal is to use write()
+>> to initialize memory, and _then_ nuke the direct map.
+>> 
+>> I want line of sight to understanding the exact semantics/flows.  E.g. will KVM
+>> require userspace to clear GUEST_MEMFD_FLAG_WRITE before allowing
+>> NO_DIRECT_MAP?  Or will the write() simply fail?  How will the sequencing be
+>> achieved?
+>
+> No, I don't think we can clear the GUEST_MEMFD_FLAG_WRITE as we expect 
+> faults and writes to different pages to be arriving interspersed: some 
+> pages will be populated by write() proactively, some will be allocated 
+> by faults in the user mapping on demand.  Both write() and the fault 
+> handler, if they need to allocate a page, will be writing content to it 
+> and "sealing" by removing it from the direct map.  If write() faces an 
+> already "sealed" page, it will fail (with EEXIST [1]).
+>
+
+IIUC this means a write() after fallocate(), or any unintended access to
+the memory before write, for a GUEST_MEMFD_FLAG_NO_DIRECT_MAP
+guest_memfd will necessarily fail.
+
+The required ordering is kind of awkward, but I don't really have any
+good suggestions.
+
+>> 
+>>>>> +     struct inode *inode = file_inode(file);
+>>>>> +     pgoff_t index = pos >> PAGE_SHIFT;
+>>>>> +     struct folio *folio;
+>>>>> +
+>>>>> +     if (!kvm_gmem_supports_mmap(inode))
+>>>>
+>>>> Checking for MMAP is neither sufficient nor strictly necessary.  MMAP doesn't
+>>>> imply SHARED, and it's not clear to me that mmap() support should be in any way
+>>>> tied to WRITE support.
+>>>
+>>> As in my reply to the comment about doc, I plan to introduce
+>>> KVM_CAP_GUEST_MEMFD_WRITE and GUEST_MEMFD_FLAG_WRITE.  The
+>>> kvm_arch_supports_gmem_write() will be a weak symbol and relying on
+>>> !kvm_arch_has_private_mem() on x86, similar to
+>>> kvm_arch_supports_gmem_mmap().  Does it look right?
+>> 
+>> No.  As above, write() should be allowed iff memory is SHARED.  Relevant commits
+>> that are now in Linus' tree:
+>> 
+>>    44c6cb9fe9888b371e31165b2854bd0f4e2787d4 KVM: guest_memfd: Allow mmap() on guest_memfd for x86 VMs with private memory
+>>    9aef71c892a55e004419923ba7129abe3e58d9f1 KVM: Explicitly mark KVM_GUEST_MEMFD as depending on KVM_GENERIC_MMU_NOTIFIER
+>>    5d3341d684be80892d8f6f9812f90f9274b81177 KVM: guest_memfd: Invalidate SHARED GPAs if gmem supports INIT_SHARED
+>
+> Ack.
 
