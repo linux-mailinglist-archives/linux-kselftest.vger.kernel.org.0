@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-45126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8B7BC40ED1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 17:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 267D6C40F04
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 17:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB8041893CCB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 16:50:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19C0618983BC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 16:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04F7E333723;
-	Fri,  7 Nov 2025 16:49:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD376335BAC;
+	Fri,  7 Nov 2025 16:49:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LWpbzNQA"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aSeuqrr2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013040.outbound.protection.outlook.com [40.93.196.40])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011015.outbound.protection.outlook.com [40.107.208.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 532F432E735;
-	Fri,  7 Nov 2025 16:49:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3857335064;
+	Fri,  7 Nov 2025 16:49:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762534189; cv=fail; b=Muy87O6bepAeiHCNSJfvhN0luV5tV2lOn7aaSqI0XlN4d/OMHcaZIHChqVARmh1vzELvj3gFpp044m0F5M1S5urHLnLMVUFvh4+uZ+7/verjPHnbffdf09u/K68QitCYMGq6BtvD8B0bF8TimD4WO4/6E3qdIu7y6XNlNSLT8ww=
+	t=1762534195; cv=fail; b=gNk/2kSGcbD4lBqWvgQWig83jS+MBOABKhLtQPEZT6HA9m7Pwl5nmQCX2JLk5qa9sRzA/pCK/3WDiMS2bFIFuGJhkX4ix/XSnK8csBNlqCzd+6nbx8pPCvcIWejKlI+YLzm5rgrFvlJVS/re1a/5hsIOTf0HWeTLNYXVuOyAgM8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762534189; c=relaxed/simple;
-	bh=IVW1EWqJfA1MwSdjKDmMwyEI11B7fJpwXKkK/M0p3YU=;
+	s=arc-20240116; t=1762534195; c=relaxed/simple;
+	bh=uzgR8EC+M3+WE0w+OOpa0Lx8BxhJvC3IFeJrkqkYFyY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LYKiHpj/9KtgXjOZP7zaWWnpIqlotk6EDvq3nj2ADsBotH5G9xUYmeeQM0Wv2BIMh5rk+iBlrfWDer0UGndnlw3PNjxktMzkDj24hqa8EsTQMUhiz//tzrToxDVvoZmMkbmznFcwm4tEQ6shWAMj2+ZlMVik8jpriNtxkJvx0/s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LWpbzNQA; arc=fail smtp.client-ip=40.93.196.40
+	 Content-Type:MIME-Version; b=b2CtnIZb4wx8nn4tFklEVyP6thfXezbpfjR2GpAexs0LRp0paMjV+LJLIvT/WxSE63ivKkekHPfJrqsyr+kMI0HdxC6zulVfxkHXL3pN0o7r8612nwVjXJikUfwMECBKdUaTyi8qQWJC/mY0zQcv+tw+9eFHNPtiG2IQlBlWWB4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aSeuqrr2; arc=fail smtp.client-ip=40.107.208.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UcMY2bayOEcxSSoLikoOoY7uph0Mlz8l3zWg5NalBxHQe8bGZpz6UPSKeK+tb6wp6+LBmSWQ1L2090V2N6seF2E6BO/VvxtrBw2gl82E2H5J3/7Uc1RjwFsRzofjY+/IQIyiK7VHUhHF1vm9AVU7M1xckoifxbhfAdp99TJ5BAJiekjmkA+lPj0zCpIduRedHk80ylLIKXEahfFp/FuNWzQfwQ436irL+D6hdeEyNu1elvJoohT4c8rdUANnNQkFRev7kEc6G/do54EQ/acdCK0rkey6cuiqGHHJng2Q9gpXibnlmUSFmgaP1YdZENHsukm3XAgIDvrDeOmOOavmDg==
+ b=FAe3QsB51LMyn935DrXMH40Mrjg7ybPZNktB5fxGItAKBwrm6CIbJYXDM+TdB2rvQ7vS42rrRNvKJdx4is30J4SKC4vzZAfHCj7E6m1MduRM8Iv4KvggCFL7mBK6J3KuP9AwaATQj1gvT6l3Ue5hftZ8/fyRSOk3p164NNq1tjSKO2deobKekb5kQoYHDIPo+51QMie4xDglKVyb+xu31fkkFms0nOb/fHlcpTZShHGjP7E33pAbsuMHSfWbC9AkbkgIZtVBXYlqcDTsDiaYFvjm4woVsgzt/93DIeabe1RgzfT8pW6aQdR8wqZk/qgEdqSGfYn5cjJst5eH/XMxxQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ez1Q0rRBzXmZuWzdS8lBLBjgtXV/mlIa+P2SfcFb5Ic=;
- b=tcDjnlfWZ/5SCVV2t4wPfMlDZwshqD8Qd8liEKsrY8KTe6IAcq+Q6vVd3XZhG22vCijzWMZIHEh69SMq65v9XYKmk4ABbTtoW+yQ5pPdPUCnFLOIbP4X/DUVdmoo/K+ELZ2xDUnhsmMoldIsU5uttIqYuwyXVM2jZIdEbalTlciFCjKo5MI+GWLg7mtr1fLeS3Fsv/dCoGq9fVvAKIQf1A/Zd0W5gJSnxWlm7cC1hS8Jm4cXAGxYuAjnNFuyb8N0jMr9mWTBAVBs2cDzRem/t7szb29YlbndOzqfgimKqd/Nt/+G8d6tOBQuVv4vOQ1FOkGA6jOCQCPec1oPOHz+Tg==
+ bh=caFwRKL3s2okpUFXhRVV9pFDpA7yEaogjDMcwAPDmbM=;
+ b=lJ1fyCnHvh5tv1nnNCueiMIqD24eqwYFwo4XW5R6sXPFzmfNkpLooXjRM/BTSZe8vCJlhLzMsm14Iq/4M1C1lOWUMuD8EXLDWSBIr1CRokCO3zoteL8284RGAaeqQeHSC0dKtxz+AsJ7AHtXFhG5bMcs6CcpQnZNjOa5jtMcliXIxnsg4a12wxpHIJ0LKJchG1mV5yCaJi5rpfDEy9tArYKAA+quZYQPDigLXLN49vhDF5sjS2NvlD6n8soHCs/0XoBGHZpMDGEhjJ+gIk1mkLC4IHUb4VEDE1OhL7c/v1+MfWwmZdU463LYcm/B2ackXoOK0gT+1L1foqFlB92whA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ez1Q0rRBzXmZuWzdS8lBLBjgtXV/mlIa+P2SfcFb5Ic=;
- b=LWpbzNQAOjYdSLT5UChbkXeQEbIN1yo8ERi7phpyCZd1hFXsZwCqPvvAoYlr0VlCI00bdAxsEfLd8xhR7D3kOCpSqJJpm0rUIshFXmnV9B2h5WIe0CeBq5E894ny/2c3U8YzpbibI9uDxPK+LW/xx2NTWhWhWlJ0702mOwYBUPaluJ+FJhteQKK5AzavzVhW5r8eaRNrV7a1meUDmRMRv+uB1G047tFQFFPLsUnhajeqbOqlInr7ekrwAA/oqIHUsRHKtSecpI4y/9HaqoFwW4EJ5ENoZYy4G7dwlxQAZWhcfn1xjTLtuXDPp+Icf3kJphU3wd2wZhwatOqvdI8rMw==
+ bh=caFwRKL3s2okpUFXhRVV9pFDpA7yEaogjDMcwAPDmbM=;
+ b=aSeuqrr2Q5Pb9oS8orhG8K3Pfb6L0BFer6vgc5vUSfSbsvubvaJIG1B7QOKXu1tiIgibpGeQBSwU11sn3vmd3faZplDOE2ULjdsF/O8q1yeHN+1dVX32L357hq1TCvmX6D1nftZ+fMapABJMDoPAInCdndqS+oT0DW4ORmq/4ZKRT2xid9CqHV/DhJGofpb47FMKd1eFcb07CCAP4SjE5srbQ/Gf9/K7c3hPsvduAU0NyYz4HHI68eThj+16hiJEARwIyX57drVcGc49Lgu/5YOCr/ta8UGH+kT0D0pnRg0crNQ0onLPRTYlE8G8FESye5yzGYfhqddDvQSqANKlkg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
  by BY5PR12MB4196.namprd12.prod.outlook.com (2603:10b6:a03:205::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Fri, 7 Nov
- 2025 16:49:43 +0000
+ 2025 16:49:45 +0000
 Received: from MN2PR12MB3613.namprd12.prod.outlook.com
  ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
  ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9298.006; Fri, 7 Nov 2025
- 16:49:43 +0000
+ 16:49:45 +0000
 From: Jason Gunthorpe <jgg@nvidia.com>
 To: Alex Williamson <alex@shazbot.org>,
 	=?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
@@ -80,15 +80,15 @@ Cc: Krishnakant Jaju <kjaju@nvidia.com>,
 	Simona Vetter <simona.vetter@ffwll.ch>,
 	Vivek Kasireddy <vivek.kasireddy@intel.com>,
 	Xu Yilun <yilun.xu@linux.intel.com>
-Subject: [PATCH 1/9] vfio/pci: Add vfio_pci_dma_buf_iommufd_map()
-Date: Fri,  7 Nov 2025 12:49:33 -0400
-Message-ID: <1-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
+Subject: [PATCH 2/9] iommufd: Add DMABUF to iopt_pages
+Date: Fri,  7 Nov 2025 12:49:34 -0400
+Message-ID: <2-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
 In-Reply-To: <0-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
 References:
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BN9PR03CA0708.namprd03.prod.outlook.com
- (2603:10b6:408:ef::23) To MN2PR12MB3613.namprd12.prod.outlook.com
+X-ClientProxiedBy: BLAPR03CA0138.namprd03.prod.outlook.com
+ (2603:10b6:208:32e::23) To MN2PR12MB3613.namprd12.prod.outlook.com
  (2603:10b6:208:c1::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -98,180 +98,407 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|BY5PR12MB4196:EE_
-X-MS-Office365-Filtering-Correlation-Id: c44f5577-4bd9-45b4-0da3-08de1e1da5d5
+X-MS-Office365-Filtering-Correlation-Id: b8d963ad-7849-4539-b5d7-08de1e1da64d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?nuvw8xYt/iVzBhKnnv8w58P+QG1WNoqUaNhKUM40JQobSu8BMtQbmCpOsf8R?=
- =?us-ascii?Q?Q1MG+t9KxIzFQA642FXxTFCW/nhFnbCmO+z3JCZJihVEIbG+lSr/DXCcTazj?=
- =?us-ascii?Q?x/awuqxIfpXB+wys8QKzhPRr33zQgpm8uzGoWUaO4hVOPiKT2y48qUTtPWG0?=
- =?us-ascii?Q?AAbFRFxI6XB3YaN8IrZ6DMJHstWIiisTI/vpODq8GZrckJ512r0g9fmiyJ3o?=
- =?us-ascii?Q?x98O7rBoAZJHvJvMrEJKojK1xtJnhrRPVCGR/6i6I7e24Iismgw0u5tvXX0U?=
- =?us-ascii?Q?jlrl1ZVn5NoyqQI4sKLGD+plLmKgzdUb9c8csjismYCyL8QUgCA6Q6meqDbQ?=
- =?us-ascii?Q?ce1I97v61p6Jj9uC6ChCxFpckDbH1WI7YZqTaxsBDRmc9Dn0dfZKJ+HmIsCo?=
- =?us-ascii?Q?UwY9id4L3Qz64x0xloJkZQ8bnr9IW+Q2kW4NKRtNBXGMwLrU8EUMqHiZllHL?=
- =?us-ascii?Q?ES4rJHVZ6la2cWuaS7AarqnCTXysKVzPrFvVhw7oEexH5G6gNeofUv3ZCqvX?=
- =?us-ascii?Q?zJnDNBMJcsrJ4bpkUJ2XaEdcN66lfXbw8v89y/Pq4YSbb3y0avwP28phZxzJ?=
- =?us-ascii?Q?65lFfzpOQ82z5sXzRbLNEyJx5v11rcOX32LG/l4qN0+VLnH/bE/PrCadOFM4?=
- =?us-ascii?Q?/k8MMRbV/payTVuBe/tkLTthTi/4/gVZJWIe9+Uc/5zQf2E2UKQgHdNui1/6?=
- =?us-ascii?Q?OetUGpbLL1rZaZ1uLkDRRWaqatrFDiYtMZyhhdJ+RHlGkan+MNPGHvbA+4Tw?=
- =?us-ascii?Q?+BLFSlUzDRX5CVyi8M/Q7IX7T+BDM6RtG3L3XowUjU5Q8LIxQvFZ7TUxM4G3?=
- =?us-ascii?Q?uKOyMrxBb2ejQrFwCR+MVQc2tdwPiSjbFmojeKU/RXT2ieX2pSKhGTCsvRCv?=
- =?us-ascii?Q?JcqOQRbkiPhXulPTOSqGHXLM35wC6tIAOpUlrnHVaG0I5rmpmzD6KQB39Ab0?=
- =?us-ascii?Q?9DUYephJ0sYwq9c3HHaeMo2H7kxoZEOzyX+eds4kr32yiPGoFyQbaqTCpyMw?=
- =?us-ascii?Q?347d/B5kLGHkbSs7w/C6YImKITLW5cXYARr2Rq+u6o8EizQoVMbgATwlqGr+?=
- =?us-ascii?Q?waK10ytP7kJ/PD/bROXH7Xt19X2vR1HpRHUm9SP0nZF/5cGwKSoR58QN8QEN?=
- =?us-ascii?Q?NZOMA0/rvl8xQpu9VizuzUecUJAl6pUEKbP07CKiPvnaoH2lxlw0LuqIJbjc?=
- =?us-ascii?Q?VA3h14OSUPld+fqDH9PkLHQYabs6XUI7PPNeTz8lGmiCTzktzmyApcfjDIRN?=
- =?us-ascii?Q?a/CPhNFlJxM86PKlLudhfudMbqT+X8VMqX1gDGra/MlhKpP+Nn94uPawuOh4?=
- =?us-ascii?Q?Mkj/P1IQGvdbf6M0xykFFaxJ/9zBSe7VyTTP3kdosDioGR/NwJi/BEfEuSWD?=
- =?us-ascii?Q?Fuv9qP+9zRLxXC+FR9eN0GG/Af7KD5Etl0fljUgvMh6eLt/mjbd0h1h+VJOe?=
- =?us-ascii?Q?OPryGKuZht8d7U33ojW+qZfmB8SZf6p2j2V5hJsm4aUgb/vGSPlJNXFfEPh4?=
- =?us-ascii?Q?oWyHcVurPLq5F+M=3D?=
+	=?us-ascii?Q?unAFFFbuqbwPlD3BoXHDzp8PdmTn34pqUWh2G9TUcEq7fNd7nYDpKWlAEcQU?=
+ =?us-ascii?Q?YrT1aw1/0uCAWKi1taZS2g2TTC7fZuH/ifjmrXyFhfAZe8tqUeRYtnIqUEEA?=
+ =?us-ascii?Q?dHm2PnngLefxodR79roWIeHbKenwMWuk3OJX1uJwMbnkY/3VTMyJwhxsztFY?=
+ =?us-ascii?Q?iJkvyCATvd4eZdLRTtClh1PCOas+8UmSCt80+LcKSjhgM/ynvHWdMKs1ke32?=
+ =?us-ascii?Q?jHpP9mEh71a0W+dg9w9kjreuaR1zGbypRGxPX9LMnEzb2M3O1zf2r/i1hxYJ?=
+ =?us-ascii?Q?cn4dRtufStP8Cl4lI0ocm8M05cBQjfE6xatnKs90xx/D48kbQjgkbYYyBBxk?=
+ =?us-ascii?Q?XUf4gNoXCagFB4ZO3/2WUdR0/ryeikuJ6VvhV73J56bkMLzdmgLDAod7Bkbb?=
+ =?us-ascii?Q?6WC9gdgH8UAvpIEqzS42cLml3o4Hk4vvKaDpHMl11G4FT+3ZnHh/+E5JsL+m?=
+ =?us-ascii?Q?D55vd5o199vK6wZwI8uD2ahFTb+JQeqt4sfAYcrAFmZEoWE40RcPSV6a83Sp?=
+ =?us-ascii?Q?8EiGgGimZjIDDfOKTI6a+D6/jtj57N0l0xovhie4neGomnKiHzhX6Hy4NT1C?=
+ =?us-ascii?Q?Sg+s4D0tihaYRUmRQRSPiIkBmbwWozPW+GPcBQ9rGLQ9FFAArVrrt2523rln?=
+ =?us-ascii?Q?IHZ50uUHZupFUL/6mn1orHji7o5qdSagkq1Egh9fMW6eb91bctsw2lY2VmwZ?=
+ =?us-ascii?Q?BNgx4TPTQGn34XbO0ql9LVkYMmPu+1t9x5I2QUOUwzVy3omwMWesvJiYKSgg?=
+ =?us-ascii?Q?b+jzzS5IUcOXfPO4LlQvJjYnVg3JtRa+0f2fyDFbI+oi+cYNlVj2AsGMpauW?=
+ =?us-ascii?Q?yX4b4TAWHyBE5TzVfYQI+bRMOhV5WoSZCtt01IpQ7HwSGJqdiZh+YqQagfP2?=
+ =?us-ascii?Q?mi62FFL0Lc9H2luKHJra0o/s96hh+CONW51QP6a2uoS7Cot4LbU88KEWR0nF?=
+ =?us-ascii?Q?2CuItEid3pzQlE+SUFax8nrSosSJrA7dRmpZZMhd1ViHSXLBlJzmmlJ7nCnr?=
+ =?us-ascii?Q?XqGwT9ovJ6CQw/lECwNCy7ayYORP7Iz9AnfKJUK7lSv+QIgl7+/ORiQWyymX?=
+ =?us-ascii?Q?c4Jd9VzMxwOYS0BCWBHo6yGrFdbvLIaUwiyC4RQPwdPoEQoB1dDBp7gijFQk?=
+ =?us-ascii?Q?EonKXVhG5HlBk5HJ5UdYNkUiy994CLO7moIufNgDI+44fPgTy97sZtPRGao0?=
+ =?us-ascii?Q?h1PHKHO0L+pt4sJPAqKjaEw+S7DLrYaDAVJyY/oBsKFdVdh+UEolCQmAq5Ml?=
+ =?us-ascii?Q?tWVJskvtAmN6+U9lOcTKL5TN9VjBeK34YXtovi+pZAFV9OOOE9y5WyRz6od0?=
+ =?us-ascii?Q?SEnh6mXGRkKdoGokd/cEHzJ4byZbt9uw1v9y/kkRyZDRLZixrI7T2yaaf9lv?=
+ =?us-ascii?Q?+8aDiNn9UtGPF2w04kxMDqudSQMZe6EyYGDszNThluAEqQN8SNRBUDkYjl0H?=
+ =?us-ascii?Q?UpStGOc9TcWOhDg/X8fUFtYb8XbhVhS2UQ36F7eUjlAAGQSo7DU4tdXHGNAp?=
+ =?us-ascii?Q?4vZvYWm9rHDyVVc=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?3hxAcmLHqGGQ+4c9E91shlcJkyggbkf4QCKkSAeL4suRusM2NpPznjJZqjS5?=
- =?us-ascii?Q?06O3TgITGxqBxBf9aRjI8Nf/dLg0qzL4I45jNaORBqquhcYUT5Q6LcdtOkx2?=
- =?us-ascii?Q?Y1DEyYH9pfAYdL/T00hvLjiis1UZ98RngZ1G17E+oph6OtaJNfJNFGofT45h?=
- =?us-ascii?Q?Bgd/P6Bz/nGh1c2rbWwK2biPCcBu836sQOpvAL7iv2Ky7tVoH05qoSV4AVdD?=
- =?us-ascii?Q?HojJd999BjowTyT1e8MRL6h+BizgQLOE6j1Uou2tbkDach966KFxqJpvNAuI?=
- =?us-ascii?Q?rwxXTxI9tiGgY1Y5IoykYNZ7jMKulkGvOEBV/LSoitTL9Ig28j1V6eTZJUTn?=
- =?us-ascii?Q?JE2nXroD19mPcEzBmVhstUi6q52oYat/pXkkjMoiu8hnCZwPAaNrwx7x+FkY?=
- =?us-ascii?Q?2mxOUt9QzHZ0ixqinN/r5KJQFOaxvKT3LvBu2iHhPEPJH9e/E2JGeQo0c6ix?=
- =?us-ascii?Q?X5AEre/S2w4cB1Tz1iOzCLvgCjJBCiZ85q9r0WIPdZqvmU7sOTltQPO2mRoi?=
- =?us-ascii?Q?JcJU/uAwipsd3/+NS1ZRnCrAQxyIkbZ3UQw05aA0dAyLu2WUgHc1wDWVIB5o?=
- =?us-ascii?Q?lMGqCkFtC8jS6UpsdUj3dGr7oMY/l82U+A0PH6Dg/xBq1gpPW9oGWnKnV8ZI?=
- =?us-ascii?Q?lSQzxh8e46GlVSCIJcKPvf9Rol9cYct/fli7fYbTDuw+MQKldXZJKNp9GuxL?=
- =?us-ascii?Q?ch+TGXdwIQ3jdbMZfStwvxN1CjcdF0WcRggBWTHhqkAxC7nz3pIhw2rbSoN3?=
- =?us-ascii?Q?yfzarfMdvu2yUWP0z0VL+h3MyHJqC9ekoJNtCwT97kJ7+tKzS1zX+wkdccy0?=
- =?us-ascii?Q?PBxHV8Kklk4x9LRJVX/MSx6DcixMWjGHG0cQ7IVRxbC73dk5h7Nw7e1EcyVv?=
- =?us-ascii?Q?mPI+6k9YaLDJCOSK6dkrZKVl+0+DP1GHJE3+mUJcq4gEdQYzpwNoAYOUIgzh?=
- =?us-ascii?Q?Fp50KNISTAPtGCjIW+ERBpe1zX9jRkh7FEGWw2MAHmvv4VUEKNxumuxa7EUL?=
- =?us-ascii?Q?CPsx7r+KRqblWv8bX30jav5WD8qhF2Wo1IcPy+a5YDflbzDZcMHn4XnQtyFY?=
- =?us-ascii?Q?Di8AQOZTD/uqva0pPnH/G3wRbXS+Pbpvnnqij64wNPqUKmwBQvbQtWUdfW4z?=
- =?us-ascii?Q?TM6dFIFZ0zjJVS2PPRQVsKRy69RICo+5kkxqoP0OtL0fveGp5i/PBZW1oIUm?=
- =?us-ascii?Q?Yts+OIJOgFnyCSE+B1Xkjfiq06fW5J0cY/lk1jYDC6owIL6FC0G/BaqiKP5I?=
- =?us-ascii?Q?e1YxMtOpc9xSMOGziZelgcC+p2QgJOQDApwzg8GXPCxWGqMzlQ5KncFsV027?=
- =?us-ascii?Q?5wsOX/AdWKV+5hROZmm7p42MFGa1XDkuHpjN2zD3GCq7Jwt6XxCXSenaT30x?=
- =?us-ascii?Q?tmdoju/oExzs8Q+P8IcbXo9OPvAxspt7c8taOMauOtBYAOXzpsDl0HgGVVWo?=
- =?us-ascii?Q?FS4OiORTO5y6jb+THpkyeRF41m2TRQN2JcaZOGPN1NW1sM2626vRjh7INw7z?=
- =?us-ascii?Q?umiUN4eJeeKhTXB1EOPYAJQt/u/1G2CiKeKov5mCt4FNF1i4NbUxQP3cop1m?=
- =?us-ascii?Q?mlIbOKSfOnc64ZNByfI=3D?=
+	=?us-ascii?Q?uzCVsv9/p96B3XeCe2KSNKeNIWplFfi3Z4+HBCVljzKIqMIvFi3waztCRfnL?=
+ =?us-ascii?Q?hiYHg8b9LMiacRuW6BLzIySo7gIACtEUg+4S+mCiS4Q1A3miUMHplOIMy5xU?=
+ =?us-ascii?Q?aoLUnig10qqVPDNgZAXPicS8D4XO3kFX5Cw5whrzJ/r4I/uciAepAo87ucOd?=
+ =?us-ascii?Q?2d2+0uQfZtqo5eyrEgVmL8dp+zd1M+ISIvaGMONTCFqheLzHJWDsdRgJfSxi?=
+ =?us-ascii?Q?tOQKBb862OeuqR/7sCpwxPD52U9Rl0gA0w/I6tuy5AUn/ARfuvb+RWN2GZFz?=
+ =?us-ascii?Q?jWRQv5ZYYEQ+ZtXMfv7sFv6BocmylB6hNW8O0rl6Bi+16i1wlYIP3CZq31Xd?=
+ =?us-ascii?Q?d16Zlxq6nL0M9HHX+MKYhzFkez0sOMeM3ustKW3XTZU7vtCaB+Ku9thWNw9i?=
+ =?us-ascii?Q?5YVer25YJl81uc8HNAD+DZ0jI2g7uoZzhOSfjpnYY0oWwdBxdgesxKPJBL/C?=
+ =?us-ascii?Q?pWX/lMMhgeo2hpUq9YbwPYzbAz+wnss5L0iaRp3n5T8yOLZKCfF91pQYfqn4?=
+ =?us-ascii?Q?bPum/WwDCGpopX2pCmmVDb0buprWm/AbomMhbdcID0uhMSPa3dwfzAEP5X5k?=
+ =?us-ascii?Q?PK6OMQaLVVVpBk0LHhIUZ4TFWteEe0Ohmcr3MrzulmQwontzLm3z2V3Qg2A3?=
+ =?us-ascii?Q?Y9bg51Eb7QgDQBV7Hu4SVoxh+Fx6ZHU+O86yI5qMTtEbRg9KZmh4fC6Wli2x?=
+ =?us-ascii?Q?bvOE/qlzQo7KIOz+pPOFoLs8nMTAx8dOkcG2oKkHPNo7ATtcCvjaCN9JFq4V?=
+ =?us-ascii?Q?M84ubeTYHeP3CgfBssHf0ISQ5sNW++WJdxGH1FeAAJMV/gIqyl9qN1TykKoA?=
+ =?us-ascii?Q?8+wdo2tO2cIRtCyfhkY6wDppHLoBMCGtAU54yDWvgC3CdXytRVsN7OGkG1np?=
+ =?us-ascii?Q?9Ct+cSx87zW3QSfw/r+uGC4Lr7d1fKapKitc0C9D/a8aors7qSHBhgVBPirW?=
+ =?us-ascii?Q?SJ1cdr3X47Q3qo8jhEWPfMsBjtfjpLXs4SPR7dZwe/IzMdiVFd0RjI5IKRjB?=
+ =?us-ascii?Q?Cydmrq646eMUCi6Grm4xEbS82YzqCVVuz+TVx9P42/ve/pxCdXkLpd/NA3sh?=
+ =?us-ascii?Q?7G4qpXlQUyi/L7vTiMkAqP3YTck7+iSoEUS/L4A7SFsQj+UD8ZtI9ivVW1bG?=
+ =?us-ascii?Q?/is/ZfpB3FF1FwmwM+tTBbCkOQCxM24mVy3t792+uNZrnmNbOPyk97Zj0BrX?=
+ =?us-ascii?Q?HPoc1kbIO4/qZOu5QPplDR2Fx2OcZ9hBxZtkQ+Ortm9vsyRiLxbJtS+e8k7B?=
+ =?us-ascii?Q?AZ7WWPi+3FuSeB+INiu6sBs9e4Q3KM21EgM1Wo/NTtejaBzxJq4nPIq/ikYS?=
+ =?us-ascii?Q?9xkoWcnA8KjlHBioWBETL4zfNQ+/w9qYr4Uy9ghOtgWm7bOXj5vLk0KmM2XY?=
+ =?us-ascii?Q?ZIQUDu07R+aYtzCpj16zCA5xfOT3KBpAmC8tw22ZoR2Z7WFzRwTyq1Y4CeWF?=
+ =?us-ascii?Q?ZQLuqfxdZlMWfKIl2aWjlu2BJ4i0yzsLm+WuJ+HW+hk86j2XSSgss9b/Idee?=
+ =?us-ascii?Q?VGLQ7hcoU/Go5nmpJ0dCSX76FdRv2QAz9DvPjORzES2pZOUaP/5gkkEKgVNX?=
+ =?us-ascii?Q?TUH6sU7v8KkKCpm+Jvg=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c44f5577-4bd9-45b4-0da3-08de1e1da5d5
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8d963ad-7849-4539-b5d7-08de1e1da64d
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 16:49:42.0392
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 16:49:43.7884
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: omaVxFE8uaWgYw9jj7vK9M4qbPKleHhZotnYf9Ms0iGHy5E6m0UiOR9BOWXuAjtz
+X-MS-Exchange-CrossTenant-UserPrincipalName: wfDV4Gwi5xd+GdjmMsXHEodOsjHt4FPwaTMMchRu6hxRZg3zbPdNB0js0o57Hd7L
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4196
 
-This function is used to establish the "private interconnect" between the
-VFIO DMABUF exporter and the iommufd DMABUF importer. This is intended to
-be a temporary API until the core DMABUF interface is improved to natively
-support a private interconnect and revocable negotiation.
+Add IOPT_ADDRESS_DMABUF to the iopt_pages and the basic infrastructure to
+create an iopt_pages from a struct dma_buf *.
 
-This function should only be called by iommufd when trying to map a
-DMABUF. For now iommufd will only support VFIO DMABUFs.
+DMABUF pages are not supported for accesses, and for now can only be used
+with the VFIO DMABUF exporter.
 
-The following improvements are needed in the DMABUF API to generically
-support more exporters with iommufd/kvm type importers that cannot use the
-DMA API:
+The overall flow will be similar to memfd where the user can pass in a
+DMABUF file descriptor to IOMMU_IOAS_MAP_FILE and create an area and
+pages. Like other areas it can be copied and otherwise manipulated, though
+there is little point in doing so.
 
- 1) Revoke semantics. VFIO needs to be able to prevent access to the MMIO
-    during FLR, and so it will use dma_buf_move_notify() to prevent
-    access. iommmufd does not support fault handling so it cannot
-    implement the full move_notify. Instead if revoke is negotiated the
-    exporter promises not to use move_notify() unless the importer can
-    experiance failures. iommufd will unmap the dmabuf from the iommu page
-    tables while it is revoked.
+There is no pinned page accounting done for DMABUF maps.
 
- 2) Private interconnect negotiation. iommufd will only be able to map
-    a "private interconnect" that provides a phys_addr_t and a
-    struct p2pdma_provider * to describe the memory. It cannot use a DMA
-    mapped scatterlist since it is directly calling iommu_map().
-
- 3) NULL device during dma_buf_dynamic_attach(). Since iommufd doesn't use
-    the DMA API it doesn't have a DMAable struct device to pass here.
+The DMABUF attachment exists so long as the dmabuf is mapped into an IOAS,
+even if the IOAS is not mapped to any domains.
 
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/vfio/pci/vfio_pci_dmabuf.c | 34 ++++++++++++++++++++++++++++++
- include/linux/vfio_pci_core.h      |  4 ++++
- 2 files changed, 38 insertions(+)
+ drivers/iommu/iommufd/io_pagetable.c    |   3 +
+ drivers/iommu/iommufd/io_pagetable.h    |  24 ++++-
+ drivers/iommu/iommufd/iommufd_private.h |   2 +
+ drivers/iommu/iommufd/main.c            |  10 ++
+ drivers/iommu/iommufd/pages.c           | 133 +++++++++++++++++++++++-
+ 5 files changed, 168 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/vfio/pci/vfio_pci_dmabuf.c b/drivers/vfio/pci/vfio_pci_dmabuf.c
-index cbf502b14e3c02..7cafd944ce5d38 100644
---- a/drivers/vfio/pci/vfio_pci_dmabuf.c
-+++ b/drivers/vfio/pci/vfio_pci_dmabuf.c
-@@ -81,6 +81,40 @@ static const struct dma_buf_ops vfio_pci_dmabuf_ops = {
- 	.release = vfio_pci_dma_buf_release,
+diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
+index c0360c450880b8..b3cf3825a88c7f 100644
+--- a/drivers/iommu/iommufd/io_pagetable.c
++++ b/drivers/iommu/iommufd/io_pagetable.c
+@@ -284,6 +284,9 @@ static int iopt_alloc_area_pages(struct io_pagetable *iopt,
+ 		case IOPT_ADDRESS_FILE:
+ 			start = elm->start_byte + elm->pages->start;
+ 			break;
++		case IOPT_ADDRESS_DMABUF:
++			start = elm->start_byte + elm->pages->dmabuf.start;
++			break;
+ 		}
+ 		rc = iopt_alloc_iova(iopt, dst_iova, start, length);
+ 		if (rc)
+diff --git a/drivers/iommu/iommufd/io_pagetable.h b/drivers/iommu/iommufd/io_pagetable.h
+index b6064f4ce4af91..389e3c3c80f335 100644
+--- a/drivers/iommu/iommufd/io_pagetable.h
++++ b/drivers/iommu/iommufd/io_pagetable.h
+@@ -5,6 +5,7 @@
+ #ifndef __IO_PAGETABLE_H
+ #define __IO_PAGETABLE_H
+ 
++#include <linux/dma-buf.h>
+ #include <linux/interval_tree.h>
+ #include <linux/kref.h>
+ #include <linux/mutex.h>
+@@ -179,7 +180,14 @@ enum {
+ 
+ enum iopt_address_type {
+ 	IOPT_ADDRESS_USER = 0,
+-	IOPT_ADDRESS_FILE = 1,
++	IOPT_ADDRESS_FILE,
++	IOPT_ADDRESS_DMABUF,
++};
++
++struct iopt_pages_dmabuf {
++	struct dma_buf_attachment *attach;
++	struct dma_buf_phys_vec phys;
++	unsigned long start;
+ };
+ 
+ /*
+@@ -209,6 +217,8 @@ struct iopt_pages {
+ 			struct file *file;
+ 			unsigned long start;
+ 		};
++		/* IOPT_ADDRESS_DMABUF */
++		struct iopt_pages_dmabuf dmabuf;
+ 	};
+ 	bool writable:1;
+ 	u8 account_mode;
+@@ -220,10 +230,22 @@ struct iopt_pages {
+ 	struct rb_root_cached domains_itree;
+ };
+ 
++static inline bool iopt_is_dmabuf(struct iopt_pages *pages)
++{
++	if (!IS_ENABLED(CONFIG_DMA_SHARED_BUFFER))
++		return false;
++	return pages->type == IOPT_ADDRESS_DMABUF;
++}
++
+ struct iopt_pages *iopt_alloc_user_pages(void __user *uptr,
+ 					 unsigned long length, bool writable);
+ struct iopt_pages *iopt_alloc_file_pages(struct file *file, unsigned long start,
+ 					 unsigned long length, bool writable);
++struct iopt_pages *iopt_alloc_dmabuf_pages(struct iommufd_ctx *ictx,
++					   struct dma_buf *dmabuf,
++					   unsigned long start_byte,
++					   unsigned long start,
++					   unsigned long length, bool writable);
+ void iopt_release_pages(struct kref *kref);
+ static inline void iopt_put_pages(struct iopt_pages *pages)
+ {
+diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+index 627f9b78483a0e..10ee3510312132 100644
+--- a/drivers/iommu/iommufd/iommufd_private.h
++++ b/drivers/iommu/iommufd/iommufd_private.h
+@@ -504,6 +504,8 @@ void iommufd_device_pre_destroy(struct iommufd_object *obj);
+ void iommufd_device_destroy(struct iommufd_object *obj);
+ int iommufd_get_hw_info(struct iommufd_ucmd *ucmd);
+ 
++struct device *iommufd_global_device(void);
++
+ struct iommufd_access {
+ 	struct iommufd_object obj;
+ 	struct iommufd_ctx *ictx;
+diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+index ce775fbbae94e7..5cc4b08c25f585 100644
+--- a/drivers/iommu/iommufd/main.c
++++ b/drivers/iommu/iommufd/main.c
+@@ -751,6 +751,15 @@ static struct miscdevice vfio_misc_dev = {
+ 	.mode = 0666,
  };
  
 +/*
-+ * This is a temporary "private interconnect" between VFIO DMABUF and iommufd.
-+ * It allows the two co-operating drivers to exchange the physical address of
-+ * the BAR. This is to be replaced with a formal DMABUF system for negotiated
-+ * interconnect types.
-+ *
-+ * If this function succeeds the following are true:
-+ *  - There is one physical range and it is pointing to MMIO
-+ *  - When move_notify is called it means revoke, not move, vfio_dma_buf_map
-+ *    will fail if it is currently revoked
++ * Used only by DMABUF, returns a valid struct device to use as a dummy struct
++ * device for attachment.
 + */
-+int vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
++struct device *iommufd_global_device(void)
++{
++	return iommu_misc_dev.this_device;
++}
++
+ static int __init iommufd_init(void)
+ {
+ 	int ret;
+@@ -794,5 +803,6 @@ MODULE_ALIAS("devname:vfio/vfio");
+ #endif
+ MODULE_IMPORT_NS("IOMMUFD_INTERNAL");
+ MODULE_IMPORT_NS("IOMMUFD");
++MODULE_IMPORT_NS("DMA_BUF");
+ MODULE_DESCRIPTION("I/O Address Space Management for passthrough devices");
+ MODULE_LICENSE("GPL");
+diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
+index c3433b84556172..7bc4731501cc21 100644
+--- a/drivers/iommu/iommufd/pages.c
++++ b/drivers/iommu/iommufd/pages.c
+@@ -45,6 +45,8 @@
+  * last_iova + 1 can overflow. An iopt_pages index will always be much less than
+  * ULONG_MAX so last_index + 1 cannot overflow.
+  */
++#include <linux/dma-buf.h>
++#include <linux/dma-resv.h>
+ #include <linux/file.h>
+ #include <linux/highmem.h>
+ #include <linux/iommu.h>
+@@ -53,6 +55,7 @@
+ #include <linux/overflow.h>
+ #include <linux/slab.h>
+ #include <linux/sched/mm.h>
++#include <linux/vfio_pci_core.h>
+ 
+ #include "double_span.h"
+ #include "io_pagetable.h"
+@@ -272,6 +275,7 @@ struct pfn_batch {
+ 	unsigned int end;
+ 	unsigned int total_pfns;
+ };
++enum { MAX_NPFNS = type_max(typeof(((struct pfn_batch *)0)->npfns[0])) };
+ 
+ static void batch_clear(struct pfn_batch *batch)
+ {
+@@ -350,7 +354,6 @@ static void batch_destroy(struct pfn_batch *batch, void *backup)
+ static bool batch_add_pfn_num(struct pfn_batch *batch, unsigned long pfn,
+ 			      u32 nr)
+ {
+-	const unsigned int MAX_NPFNS = type_max(typeof(*batch->npfns));
+ 	unsigned int end = batch->end;
+ 
+ 	if (end && pfn == batch->pfns[end - 1] + batch->npfns[end - 1] &&
+@@ -1360,6 +1363,121 @@ struct iopt_pages *iopt_alloc_file_pages(struct file *file, unsigned long start,
+ 	return pages;
+ }
+ 
++static void iopt_revoke_notify(struct dma_buf_attachment *attach)
++{
++	struct iopt_pages *pages = attach->importer_priv;
++
++	guard(mutex)(&pages->mutex);
++	pages->dmabuf.phys.len = 0;
++}
++
++static struct dma_buf_attach_ops iopt_dmabuf_attach_revoke_ops = {
++	.allow_peer2peer = true,
++	.move_notify = iopt_revoke_notify,
++};
++
++/*
++ * iommufd and vfio have a circular dependency. Future work for a phys
++ * based private interconnect will remove this.
++ */
++static int
++sym_vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
 +				 struct dma_buf_phys_vec *phys)
 +{
-+	struct vfio_pci_dma_buf *priv;
++	typeof(&vfio_pci_dma_buf_iommufd_map) fn;
++	int rc;
 +
-+	dma_resv_assert_held(attachment->dmabuf->resv);
-+
-+	if (attachment->dmabuf->ops != &vfio_pci_dmabuf_ops)
++	if (!IS_ENABLED(CONFIG_VFIO_PCI_DMABUF))
 +		return -EOPNOTSUPP;
 +
-+	priv = attachment->dmabuf->priv;
-+	if (priv->revoked)
-+		return -ENODEV;
-+
-+	/* More than one range to iommufd will require proper DMABUF support */
-+	if (priv->nr_ranges != 1)
++	fn = symbol_get(vfio_pci_dma_buf_iommufd_map);
++	if (!fn)
 +		return -EOPNOTSUPP;
-+
-+	*phys = priv->phys_vec[0];
-+	return 0;
++	rc = fn(attachment, phys);
++	symbol_put(vfio_pci_dma_buf_iommufd_map);
++	return rc;
 +}
-+EXPORT_SYMBOL_FOR_MODULES(vfio_pci_dma_buf_iommufd_map, "iommufd");
 +
- int vfio_pci_core_fill_phys_vec(struct dma_buf_phys_vec *phys_vec,
- 				struct vfio_region_dma_range *dma_ranges,
- 				size_t nr_ranges, phys_addr_t start,
-diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-index c9466ba323fa9c..6a3074f2cf1cea 100644
---- a/include/linux/vfio_pci_core.h
-+++ b/include/linux/vfio_pci_core.h
-@@ -28,6 +28,7 @@ struct vfio_pci_core_device;
- struct vfio_pci_region;
- struct p2pdma_provider;
- struct dma_buf_phys_vec;
-+struct dma_buf_attachment;
- 
- struct vfio_pci_regops {
- 	ssize_t (*rw)(struct vfio_pci_core_device *vdev, char __user *buf,
-@@ -203,4 +204,7 @@ VFIO_IOREAD_DECLARATION(32)
- VFIO_IOREAD_DECLARATION(64)
- #endif
- 
-+int vfio_pci_dma_buf_iommufd_map(struct dma_buf_attachment *attachment,
-+				 struct dma_buf_phys_vec *phys);
++static int iopt_map_dmabuf(struct iommufd_ctx *ictx, struct iopt_pages *pages,
++			   struct dma_buf *dmabuf)
++{
++	struct dma_buf_attachment *attach;
++	int rc;
 +
- #endif /* VFIO_PCI_CORE_H */
++	attach = dma_buf_dynamic_attach(dmabuf, iommufd_global_device(),
++					&iopt_dmabuf_attach_revoke_ops, pages);
++	if (IS_ERR(attach))
++		return PTR_ERR(attach);
++
++	dma_resv_lock(dmabuf->resv, NULL);
++	/*
++	 * Lock ordering requires the mutex to be taken inside the reservation,
++	 * make sure lockdep sees this.
++	 */
++	if (IS_ENABLED(CONFIG_LOCKDEP)) {
++		mutex_lock(&pages->mutex);
++		mutex_unlock(&pages->mutex);
++	}
++
++	rc = sym_vfio_pci_dma_buf_iommufd_map(attach, &pages->dmabuf.phys);
++	if (rc)
++		goto err_detach;
++
++	dma_resv_unlock(dmabuf->resv);
++
++	/* On success iopt_release_pages() will detach and put the dmabuf. */
++	pages->dmabuf.attach = attach;
++	return 0;
++
++err_detach:
++	dma_resv_unlock(dmabuf->resv);
++	dma_buf_detach(dmabuf, attach);
++	return rc;
++}
++
++struct iopt_pages *iopt_alloc_dmabuf_pages(struct iommufd_ctx *ictx,
++					   struct dma_buf *dmabuf,
++					   unsigned long start_byte,
++					   unsigned long start,
++					   unsigned long length, bool writable)
++{
++	static struct lock_class_key pages_dmabuf_mutex_key;
++	struct iopt_pages *pages;
++	int rc;
++
++	if (!IS_ENABLED(CONFIG_DMA_SHARED_BUFFER))
++		return ERR_PTR(-EOPNOTSUPP);
++
++	if (dmabuf->size <= (start + length - 1) ||
++	    length / PAGE_SIZE >= MAX_NPFNS)
++		return ERR_PTR(-EINVAL);
++
++	pages = iopt_alloc_pages(start_byte, length, writable);
++	if (IS_ERR(pages))
++		return pages;
++
++	/*
++	 * The mmap_lock can be held when obtaining the dmabuf reservation lock
++	 * which creates a locking cycle with the pages mutex which is held
++	 * while obtaining the mmap_lock. This locking path is not present for
++	 * IOPT_ADDRESS_DMABUF so split the lock class.
++	 */
++	lockdep_set_class(&pages->mutex, &pages_dmabuf_mutex_key);
++
++	/* dmabuf does not use pinned page accounting. */
++	pages->account_mode = IOPT_PAGES_ACCOUNT_NONE;
++	pages->type = IOPT_ADDRESS_DMABUF;
++	pages->dmabuf.start = start - start_byte;
++
++	rc = iopt_map_dmabuf(ictx, pages, dmabuf);
++	if (rc) {
++		iopt_put_pages(pages);
++		return ERR_PTR(rc);
++	}
++
++	return pages;
++}
++
+ void iopt_release_pages(struct kref *kref)
+ {
+ 	struct iopt_pages *pages = container_of(kref, struct iopt_pages, kref);
+@@ -1372,8 +1490,14 @@ void iopt_release_pages(struct kref *kref)
+ 	mutex_destroy(&pages->mutex);
+ 	put_task_struct(pages->source_task);
+ 	free_uid(pages->source_user);
+-	if (pages->type == IOPT_ADDRESS_FILE)
++	if (iopt_is_dmabuf(pages) && pages->dmabuf.attach) {
++		struct dma_buf *dmabuf = pages->dmabuf.attach->dmabuf;
++
++		dma_buf_detach(dmabuf, pages->dmabuf.attach);
++		dma_buf_put(dmabuf);
++	} else if (pages->type == IOPT_ADDRESS_FILE) {
+ 		fput(pages->file);
++	}
+ 	kfree(pages);
+ }
+ 
+@@ -2031,7 +2155,10 @@ int iopt_pages_rw_access(struct iopt_pages *pages, unsigned long start_byte,
+ 	if ((flags & IOMMUFD_ACCESS_RW_WRITE) && !pages->writable)
+ 		return -EPERM;
+ 
+-	if (pages->type == IOPT_ADDRESS_FILE)
++	if (iopt_is_dmabuf(pages))
++		return -EINVAL;
++
++	if (pages->type != IOPT_ADDRESS_USER)
+ 		return iopt_pages_rw_slow(pages, start_index, last_index,
+ 					  start_byte % PAGE_SIZE, data, length,
+ 					  flags);
 -- 
 2.43.0
 
