@@ -1,125 +1,152 @@
-Return-Path: <linux-kselftest+bounces-45033-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45034-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4369EC3DF7E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 01:24:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AE2CC3E03E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 01:49:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0E6AA4E4A88
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 00:24:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B1D93A5742
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 00:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 557F5278156;
-	Fri,  7 Nov 2025 00:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76BC22EA156;
+	Fri,  7 Nov 2025 00:49:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="T17NiJgt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b3lbuwiX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2D62765C4
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 00:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFE261FCE
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 00:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762475090; cv=none; b=fd86w3+7+g0ncXOK1S/tdiaTHqyaGIvcMFAZ8nZZIARjsWUAllZVJ6OuvHznT8oC/rJiaf4xy7MKTi7aZ6gYDplzaeCv6AeND33vMDXVzen/RdD3xmnCxishM+TD+K1K6bvOmPOb2cfQ/2UGOKs+9cgiPnjN6Iio5avpGVZC1Po=
+	t=1762476593; cv=none; b=FX+5MeKS/QixZJcnjvCMKN6gsMTm+wFhrFNW5JEdFpreDxMuOSOr717TCCjaRvVTyafxKgOvKtGWDD19OXFZGL5jucNXLJV76PzbJBwqjGYfRH97XnD7qxPCi1DdubTowGdivIzFA08q3UEPxkW6N9lU7lyjiQBCpcNC/I7HpWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762475090; c=relaxed/simple;
-	bh=XLWrFmYgf6F7bc1tZSN8JYD8e8DrgBT0ubR8anh20os=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Fj5iMsrD2AgDVy226AVg73vGWbK+QSA9CVL/JhMfNZPtxvQS22T45ySPH7hP7+928ItAOQCqP7x/iFe+v01YTBwxPqFm8tEumeLJyx//U05TxP/tvPm5P3rXZ1UYnIz0IRjhVTaEo5h3P9y6vELGgw/MluDsmrUp9slxjC17zRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=T17NiJgt; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-4330e912c51so767675ab.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 16:24:47 -0800 (PST)
+	s=arc-20240116; t=1762476593; c=relaxed/simple;
+	bh=579y5r6qisDyc0vXZIHMWG8pM549D8gpzJUlycZNzkY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Ev8BolSux+mj7iNCjL06ZjkMeqxVPOSQgpcnfxZQigAenrVZp62md6trj3EqSqFggZJx1f/x3QiEoufK+OpQ8SbJvQ8XAFp0JddpwgmUIgqYCoMB6rGL3oMeh9Y2PQU8yGMnnWgc1e256O/sdeJNC0Lm9paqfk3Wmf+UvubyJdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b3lbuwiX; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2951a817541so2353005ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Nov 2025 16:49:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1762475087; x=1763079887; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I3Pf8rkEr6SoORFVa8JIykJJgQV3sWej0HFDn8C7mOI=;
-        b=T17NiJgtQaJWtsaUddS2jcfHHb+C/j7kecEYm3ceFgxFNSB5ydVtiYcp7bBxu+gCOw
-         uINVLIDwRAazsuvxJGyJOj6GAylrH8nw6tUTFYdEF6rx3gK+M/9R79nP5Pma5IocqdHU
-         88K4ruzbvHdmm5eu/LoCxnKZfoQ7ovZCQvyyY=
+        d=gmail.com; s=20230601; t=1762476591; x=1763081391; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xcUPU8X7KL1Zl3smrmhHQZ2OCBnQgt1CnJSI/1SUSoQ=;
+        b=b3lbuwiXV2SKO59OSxe4pgmw2CXcRfVDsYj0NUYp+xFaSEtiDSYYuMmnimTI62ubtg
+         ABaA3+/bqEJytzEMM3XpYnX8TSbMNZFqM6E+AKa1IHEYSn15Q0xjF8z5BrELURpZMF86
+         rY3N9J75x5OL5m1AplPK2gaj4e9vJGvpG2l/hLdHpycC0N1KoZKXq+Zo/5XcYFGuRui/
+         yuyAXrBkEZGDVUx4axURtQaNeY1g7lKJ5IIM0RGVkOgHIC7zG5d4Ff6kexR7Bj/S80G8
+         K7B/eWtgT6VmA/6wWoM7XRUqYaZOXKvLckGtKO61mruAfJQ2i1J7f+X+eIdl4TKAro+S
+         U8tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762475087; x=1763079887;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I3Pf8rkEr6SoORFVa8JIykJJgQV3sWej0HFDn8C7mOI=;
-        b=Xg5lg1Z64FPKigdFYLCHrSAAgFnwmkj5ZS7wfxhbzGBc37e5gBaXqvXD2fdpNK2V6F
-         0q3oFDCHpTwTPn2QikLEY0XcPidA1xuJCLWxroE9Q8bS6nD2fdMtG1PBV4Sp/Mi3G985
-         y+z8UOSFgT5euRyyMvGZvrwbQywQcKlnWfG5zg62rF8OzxtHGnxLObobMuWXSVt0hBtn
-         Nvg5Bg/6NYfU/lDonHb2UVrAk77b0D7/0QUOq1/naexMwgaWLNbUEVVPH+L5odq1lVQE
-         G9iJvkL2NheFzXKmPhWivQ0G2w0HHexhnJPQcigOkLMqSSY6vJDGv7froRhByJu5xj5D
-         b+XQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUHfJ++oOtXb9OhFDLUOQuR8I7K+4mIrMohRbuzlfEuZFPwZqa9MLkt3jv+UetTO7RELKDGzJaTa8Xvm8tPGF4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1nPZO8AK6V9IJEFjWUTOcf+1+gqMeBopL8vmDsKk4l1yMRR0R
-	xllCB6AbignvvwsZ0vhEWoPL/n4UYaZgrLxcYc4YohNh3uCEdVN8dy76QSXelqAlNMI=
-X-Gm-Gg: ASbGnct6cl8m56p5aiMS54oK5qodQtpYReHzRpkwiFaIkooNmrulB50XktB1fEN+F88
-	8GQOVPj8tpQJyf8uM+BO2UoCgYVt2LSoyN/TL+hB/6RR4+wbYUXIHLogou/oPSnzpGQU0HzLFKy
-	5WHBVQNXd2BmFlhy3xSFdbOb8/7SeZMPIgBeK8h3Ym/2/l+lUHieAeHz8Ca2eqc8O7yVS4gIVGM
-	6q8fzkxOeUYhj8lhA4BNYs8qOoMZL681NIGxUG9WfABFV3tK+KJGTW/DpQmv7quWYa9IY4FqIzg
-	2dBE48mC7rwf96jjOYNkb32EImsLpKBj7YlskoMAZ7Z1KYkagDrHsMOGUPXtW/ugMrLv7YwSfMY
-	OQDwPpZzWbdLSVkl5NalHCwyI937pIK+LmZS2z9bdwKwC9KJyeJw8nUZyfDamSkXLhEVRJe/r1S
-	3Y+sFG2L4F1wt06Ym6srUN9+M=
-X-Google-Smtp-Source: AGHT+IESdNVTthD8LhJvh07byEKJ/B5pSJJsTsGTK9uvLAxX+Fv/PmXAeTZAJeM3pQ4++Nl3hlozjQ==
-X-Received: by 2002:a05:6e02:310b:b0:433:3102:b0f5 with SMTP id e9e14a558f8ab-4335f4a7b53mr19451525ab.30.1762475086940;
-        Thu, 06 Nov 2025 16:24:46 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-5b74695ed6dsm1374158173.52.2025.11.06.16.24.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Nov 2025 16:24:46 -0800 (PST)
-Message-ID: <250fe2c8-eeef-4764-ad50-d5e5987fbd38@linuxfoundation.org>
-Date: Thu, 6 Nov 2025 17:24:45 -0700
+        d=1e100.net; s=20230601; t=1762476591; x=1763081391;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xcUPU8X7KL1Zl3smrmhHQZ2OCBnQgt1CnJSI/1SUSoQ=;
+        b=O0GvBs3O63wJR9Mgk4DWVqMhO1PPBNPJfhP/eakw4AS6K8ny1sNGy3mxRUZU5Bg6cr
+         ZLHvbYo+S/V57EBPykQ5UiM9VNK/s1mQQrI0fkv5vWL1Zt4iXV1QZWIcVwb3YUJoSw7V
+         oSVcM1GLVyUJ+xi5+imor+y4csV7BF2ckMnTf7Xj/j0g94FkE9yI+Ii54O/X8M6s437T
+         q8b63zAmBM6jB37WkDATIX7509/cTfxQCVj5EIFhJfzIwOUTAx/hfMBqa5EBzIkBP4ws
+         OYUE32Xuo9be6k9rXDHyctGfogFYnx2Tbg3JTFgXHd4LB5RRSKWc7ZEqlBNBTpaQh2fn
+         i8Rg==
+X-Forwarded-Encrypted: i=1; AJvYcCWUWf8aviFx804I7oi9aaWDobtDSJD81VGyHn/+NDOH9CLjI1cviDK8F62F/Amq/UYedY9/aFy/i7CTOfYdcfw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAsOre9f9ELE/DefAVGxVPs8DoIYJvN1aLyWfqE4xk0d8frWV1
+	S/q34oa0sz8F3wEvtfjUYJ6l0iEYCnN8YuzfIWrc0ezr5EqGmPaw5xTX
+X-Gm-Gg: ASbGncukKNpjXYIYglx73jEzDwntP4f+p5yPMv4SE5NKH/hWBDTkeJwbcBhhtSgzRVk
+	pmG52tKohqZ8Gmwac6fecQc4yLO6cwqDmLqpnrmN139uIiyAn2ka6giuvHknUk2fytQaqLG9Dff
+	9NElJ26ogHiaplt7JsY+cN9P9lwRLTj2kX7OpZkL52gyu8IPNYKai81SVmiagQvia6OJeph0MkP
+	2usOgFZ6Rztr3Pw9pJqGWD+NvJ5ynGB3q6oLPdaky4U/QzDlsATG74y77MQB5XMBxATvnesBix4
+	jw2PaRT7jx5pePI4r8W2XgmVUAJwcTPKNcCfyXboJFbCfwAYcQLwiUiIZVGDfCHJp4aseGJqOVM
+	zzwz62abQnzwoEBaUct7NTqqZZQ8/XW6TM+piJYLe7BduhQ0nvSNinHEMk30CXJZo6S1tvhIGAg
+	==
+X-Google-Smtp-Source: AGHT+IGVbNnnCv/JKP0L4AJIgAT7XYbbLVjx7tiV6GHUi/PF7nRC7D/K/BXQFE6YswbPc0qA9n+hkw==
+X-Received: by 2002:a17:902:d4c1:b0:290:2a14:2ed5 with SMTP id d9443c01a7336-297c03a5f63mr17937825ad.4.1762476591127;
+        Thu, 06 Nov 2025 16:49:51 -0800 (PST)
+Received: from localhost ([2a03:2880:2ff:42::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29651c8f07csm42074815ad.78.2025.11.06.16.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Nov 2025 16:49:50 -0800 (PST)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next v3 00/11] selftests/vsock: refactor and improve
+ vmtest infrastructure
+Date: Thu, 06 Nov 2025 16:49:44 -0800
+Message-Id: <20251106-vsock-selftests-fixes-and-improvements-v3-0-519372e8a07b@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/dma: fix invalid array access in printf
-To: Zhang Chujun <zhangchujun@cmss.chinamobile.com>, vkoul@kernel.org
-Cc: dmaengine@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20251106033056.1926-1-zhangchujun@cmss.chinamobile.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20251106033056.1926-1-zhangchujun@cmss.chinamobile.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAChCDWkC/52OwWrDMBQEf0W8s1+RZCcmPuU/Sg62tWpEYsnoC
+ ZES/O8hptBr6XmHmX2SIAcIDepJGTVISJEG1TaK5usYv8DB0aDIansw2hqukuYbC+6+QIqwDw8
+ Ij9FxWNacKhbEIqwPfddp7yfrR2oUrRk7SYP6pIjCEY9Cl0bRNUhJ+Xt/UM2+/8TsX2PVsOYOp
+ 771zs6YzHlBGT/mtLzT/7LBYTL9yR27Y/tru2zb9gLV0w7oMwEAAA==
+X-Change-ID: 20251021-vsock-selftests-fixes-and-improvements-057440ffb2fa
+To: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Bobby Eshleman <bobbyeshleman@meta.com>, Simon Horman <horms@kernel.org>
+X-Mailer: b4 0.14.3
 
-On 11/5/25 20:30, Zhang Chujun wrote:
-> The printf statement attempts to print the DMA direction string using
-> the syntax 'dir[directions]', which is an invalid array access. The
-> variable 'dir' is an integer, and 'directions' is a char pointer array.
-> This incorrect syntax should be 'directions[dir]', using 'dir' as the
-> index into the 'directions' array. Fix this by correcting the array
-> access from 'dir[directions]' to 'directions[dir]'.
-> 
-> Signed-off-by: Zhang Chujun <zhangchujun@cmss.chinamobile.com>
-> 
-> diff --git a/tools/testing/selftests/dma/dma_map_benchmark.c b/tools/testing/selftests/dma/dma_map_benchmark.c
-> index b12f1f9babf8..b925756373ce 100644
-> --- a/tools/testing/selftests/dma/dma_map_benchmark.c
-> +++ b/tools/testing/selftests/dma/dma_map_benchmark.c
-> @@ -118,7 +118,7 @@ int main(int argc, char **argv)
->   	}
->   
->   	printf("dma mapping benchmark: threads:%d seconds:%d node:%d dir:%s granule: %d\n",
-> -			threads, seconds, node, dir[directions], granule);
-> +			threads, seconds, node, directions[dir], granule);
->   	printf("average map latency(us):%.1f standard deviation:%.1f\n",
->   			map.avg_map_100ns/10.0, map.map_stddev/10.0);
->   	printf("average unmap latency(us):%.1f standard deviation:%.1f\n",
+Hey all,
 
-Looks like you sent the same patch again. I replied to your previous
-patch asking you how you found this problem. It looks like a needed
-change. Compiler doesn't complain about it which is strange.
+This patch series refactors the vsock selftest VM infrastructure to
+improve test run times, improve logging, and prepare for future tests
+which make heavy usage of these refactored functions and have new
+requirements such as simultaneous QEMU processes.
 
-thanks,
--- Shuah
+These patches were broken off from this prior series:
+https://lore.kernel.org/all/20251021-vsock-vmtest-v7-0-0661b7b6f081@meta.com/
+
+To: Stefano Garzarella <sgarzare@redhat.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: virtualization@lists.linux.dev
+Cc: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Changes in v3:
+- see per-patch changes
+
+Changes in v2:
+- remove "Fixes" for some patches because they do not fix bugs in
+  kselftest runs (some fix bugs only when using bash args that kselftest
+  does not use or otherwise prepare functions for new usage)
+- broke out one fixes patch for "net"
+- per-patch changes
+- add patch for shellcheck declaration to disable false positives
+- Link to v1: https://lore.kernel.org/r/20251022-vsock-selftests-fixes-and-improvements-v1-0-edeb179d6463@meta.com
+
+---
+Bobby Eshleman (11):
+      selftests/vsock: improve logging in vmtest.sh
+      selftests/vsock: make wait_for_listener() work even if pipefail is on
+      selftests/vsock: reuse logic for vsock_test through wrapper functions
+      selftests/vsock: avoid multi-VM pidfile collisions with QEMU
+      selftests/vsock: do not unconditionally die if qemu fails
+      selftests/vsock: speed up tests by reducing the QEMU pidfile timeout
+      selftests/vsock: add check_result() for pass/fail counting
+      selftests/vsock: add BUILD=0 definition
+      selftests/vsock: add 1.37 to tested virtme-ng versions
+      selftests/vsock: add vsock_loopback module loading
+      selftests/vsock: disable shellcheck SC2317 and SC2119
+
+ tools/testing/selftests/vsock/vmtest.sh | 355 ++++++++++++++++++++++----------
+ 1 file changed, 243 insertions(+), 112 deletions(-)
+---
+base-commit: 8a25a2e34157d882032112e4194ccdfb29c499e8
+change-id: 20251021-vsock-selftests-fixes-and-improvements-057440ffb2fa
+
+Best regards,
+-- 
+Bobby Eshleman <bobbyeshleman@meta.com>
+
 
