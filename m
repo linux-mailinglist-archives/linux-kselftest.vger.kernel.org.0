@@ -1,154 +1,114 @@
-Return-Path: <linux-kselftest+bounces-45084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45085-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04FC7C3FD1C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 12:53:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7716AC3FD4C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 13:01:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACCE73B694C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 11:53:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B67C3BBDC6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 12:01:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C755A2D879F;
-	Fri,  7 Nov 2025 11:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7E32798ED;
+	Fri,  7 Nov 2025 12:01:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="nZYPXGpB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="3EZfkgsH"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="jiP0aSTQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DF2521CFF6;
-	Fri,  7 Nov 2025 11:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47AC45C0B
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 12:01:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762516403; cv=none; b=byEIV1LV7G7tiQV4uoO0xDL81i3wt6SHBY2hzj726zNQ2zmkWoJibF1EeBMqZqGNq2X05UJt6/gioHuhPcuDESzqhj+SiopHSucKzG5SYgzL2hdv7kw62EfPlyucPlTDwtamBvRfsdBvqHBpwhemegRiOh8ThaRi+JA3Wuv+Ymg=
+	t=1762516868; cv=none; b=S0M5NYw0ZvKlhRzk+Tg0Tm7peh9rTrgN0qQWPKKSfS2LsBws8osNJ9HoGrMkk6n7K5qhu/1cMnoga1y0p1zEfT5vD2IY6CHvZlieZ2imF2zqe93uh+BhIJRg+vZLMi1sz0wJiQmhyUFZoOVla3uIeUDjm5fGvV5CDrxQ9jR3giE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762516403; c=relaxed/simple;
-	bh=yQd1wP4dtJY3qwd3ZbTPi9Q/RA+YpkYHvKkoR396j6Q=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=WfhZaJUQx2WQyXvJSfnNHoq1RxbaLZ6+ZjVnZX5YBwnwnYjmEOKE8FMMGvBoxAZkKwF5XZow5ubjg4nIcQoRMSSgQ33SyqoMNcpYxqYX+f+bqaun+8pIZ7rzLQkfDRWK79urj/ixtk5rhY3qosads+XgxSzGCGfhuladNHjyiac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=nZYPXGpB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=3EZfkgsH; arc=none smtp.client-ip=202.12.124.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id C72A91D0014F;
-	Fri,  7 Nov 2025 06:53:20 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 07 Nov 2025 06:53:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762516400;
-	 x=1762602800; bh=gsS27V0zYbo8yJ9T1sSydfxjZObboVuI8REAIsMuIYA=; b=
-	nZYPXGpBqzTG8KfhVvOQDNoZLtc3+Vkdh228V8+pj56i/Qm2peUDrvCMygNC5KbD
-	JQ/uZ81AmSWUFzCcblz0vmfZSw/7BBT2RPJzzmUfLyYJll5SWnFxnjCphPEHh96w
-	8kMu0BSc+o0f2bkkxuvO03zeXRZcanoFzt4q1+pljkveIh+Wk0fC1x28Z6ZRG+pa
-	sb1zfC7EMu2wnDrC0J09vliAAwMC2bsc5E+9zE+OhA+whjz+BPe53f7zXfm/KRTJ
-	caQ3I+k6uh9GCnHcOWYy+sVxUdu326xn8UzCgmueWeeQwq89GcQB/USiNYN58tFm
-	T3iRh2Eskdm1UlbZY1nWgA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762516400; x=
-	1762602800; bh=gsS27V0zYbo8yJ9T1sSydfxjZObboVuI8REAIsMuIYA=; b=3
-	EZfkgsHEaT84CaUc+anzrmrs9QeECQIR5p2OM9fGvHT0fDs7/KV0zn3cAj3UZrXA
-	WbPpAoH7zv4+M46Ay0zcSAonKvQggGaqOfQm2REyqgKHpox4MRaJduvZoj6hQpoO
-	BSPz4Ou3eVBPo/glrhOU13Ac17xegnClsxl18KWBntOZSsDL8Eus2FVuvLfR3nGV
-	U6YdzRvqcfKN+c81TkF5lxy27ya6zva+5tawKd+Gc+jBuyZ8OcJegYxKE6AwqiPk
-	wBBVJMPn1toPs9XcG7OlAvBViVy7wac9P5a/oAtaHgT6ZSCVBCYX8r3QOHYQe9xe
-	1ZmHuZLgfSmvme1oYx19g==
-X-ME-Sender: <xms:r90NaabeM2LyeI1AQ57PK2DWvphAmwIpxUQJ9Q-iesNws4vF3sr9ug>
-    <xme:r90NaYPEtXoRPMsXCPgGKOcmSq54PKVMVfwmG3MdxA1wpNp3LhY_CjjmcXLxzmJrs
-    nxvK7buXeLbyz40hjEwrpUogYbe7Y-JGyrkdfUURAUJ1u1NohlUK9M>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddukeelheelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdefpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtg
-    hpthhtohepjhhovgihrdhgohhulhihsegrrhhmrdgtohhmpdhrtghpthhtohepkhgvvhhi
-    nhdrsghrohgushhkhiesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrg
-    hnugesrghrmhdrtghomhdprhgtphhtthhopehmihhkohdrlhgvnhgtiigvfihskhhisegr
-    rhhmrdgtohhmpdhrtghpthhtohepshhuiihukhhirdhpohhulhhoshgvsegrrhhmrdgtoh
-    hmpdhrtghpthhtohephigvohhrvghumhdrhihunhesrghrmhdrtghomhdprhgtphhtthho
-    peihrghnghihihgtohhngheshhhishhilhhitghonhdrtghomhdprhgtphhtthhopeihuh
-    iivghnghhhuhhisehhuhgrfigvihdrtghomh
-X-ME-Proxy: <xmx:r90Naa08TY73QAwQ15r2x0tWjcVK6iZ1U2jLiQ7uTwmZg-I_ucnftQ>
-    <xmx:r90NaYFUvmKHKTbn2nih1V_hWSqX6ycF5ywAeCuxVGwNx4PaMDJP4w>
-    <xmx:r90NaZgzqp4uVDE1DBQqjb7wUkxkHU0lvUlcFwlUStCzeGKZG0IMTA>
-    <xmx:r90NaZeZO9h15HpmRuk8i_fm0tmCxIyyKoQJmtTN_XzDMsUkCPmSww>
-    <xmx:sN0NaXNoJ3py5k8GLIR5-D3o_QeFRMYc_o86Zo7ZZ5QpcIsnJ76i-TNA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A92BF700063; Fri,  7 Nov 2025 06:53:19 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1762516868; c=relaxed/simple;
+	bh=53FxiJ2qQpY1dafOedja4bq8nuIV5SHVfyMnsMguH1Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=La4HYWnVrjRwMdgHTpgbwqNuYBAKfrgwA6BFi150435dI7p4e1LQddGJi6ApWT6s/GpaHEnOKydzhHSsR4tyDYTdBEyw5AGf90zeGZ3m1fqReqv8hgH+QzRaZyPI4MA0scPaQ0OM32EurBRSxr31MZI1ycRdiUUXQjMVPSOlK6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=jiP0aSTQ; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-640a3317b89so1144429a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Nov 2025 04:01:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google; t=1762516864; x=1763121664; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lUsVfRHnhaTc6L0mfrJ+S8eMrRvLqjKV9gyOwEzhVzo=;
+        b=jiP0aSTQhjUnZZiq/Imd+J35NHxKl3C3rZ420Tufrz3qqJInPyaOMzu++ms2YSVRmT
+         Zw9W0Km8UR5lIJsZoGhB193gQ2Ugoi1LFonVe9eam6aVzHqTWsv9rpIzBqa9N+EVqen+
+         JkImJ7NEdlTk4TZJxhHsg0NfOi2l45JxVa2ihjBbH9kDWvCO5M8+4DUaIr+RXmDDwDbp
+         sAPu/eIzaQLfQcZZlTgr9gPoKn/LYIL9Z9fgHR+65O4Y3oyoO4hERctncBr42mikwJ+R
+         PtoytRv6/1IqLJDkk2X/m/nZ4sFFR5uXBubyeKXtvMkSgaXlNyBhA8IRhSQNJpLa2exx
+         uISQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762516864; x=1763121664;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lUsVfRHnhaTc6L0mfrJ+S8eMrRvLqjKV9gyOwEzhVzo=;
+        b=f+Kqh5xZqdCAgkk5wDiBj5C4OKwMrkwUxLl6Yk0DCyxzq8zWsA50hjxU5j+3Tlmwc6
+         CztkWKg3dC0vBorC+/7Jn5kgMak6UElDj6QpChoeWVttrP2owlqgiicvNXiMt+b+Ah77
+         +hTLuoJOn9Os2VWm8IrHt/eECdfnNX4MMjvQT499+dfxzjCsNG34ZEFlU/6JKgpm3KWN
+         HuYhCYHNycwvK1nRHjzch9hJgyNzbfR14XMcbSS2aDx81Y6UTfFWcCA4dgSh1f2PVf3k
+         +PWb9LpDXiLaK0AHEkq0JpR4bLgmLz+rAL/0JkRJDt56ggbmChY20uK7BN7UoT590q9J
+         4Z0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWOE8uY/YPai2Z6VJ3DJNk2CrB6Cj5SBmPz8IbANsZGzXuDbSl+mxtfGrSsl8FfHuoeabX3B0xkA+r+KmVCMHU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/8H2lHxDtcAfphGkY2EGRjzI45fvULnqca0KD5RkOS0M/ZP0J
+	dGBcXSi98BZqY+3HXLRzOJ54NlbCEC90HGce8XBJENQaP/nPby/W9zH6Znyc4re3BkEeq6iMINN
+	5tXn2fbm2ln9W2hKcjbmO4lDGcULrzXrHIP87936/8Q==
+X-Gm-Gg: ASbGnctlcgVUwIPfh8Njg1UjwPbyCN45e3SbPvpMBGkPZMvYEaoEl/W2loMOptjrqwS
+	O3KclgKJmbBTVKkRfUHypw/rcF0ATDIkuymFkTq29OY/6KU6BRWda35oTgTy/ZlSCzNGu2pqVNP
+	ym+CNEzizQEz04C7dp3pcdk76Oeb/l3kEcm4jnnd7RGaAAJJUsZvosZ1ppj3Ty4eR/4fDvvi3O3
+	UpwnQgTU1fRiBVZxyC5+BlNOIiOTtdX0KBnuDgJKZN97KeZXhz27QCgSrivJKFgApOR
+X-Google-Smtp-Source: AGHT+IF9pn2F0a39L7q6vQA1QNL5mEmZPkN59pguhs34CMH4Kd6QJlTFZpAj3QhY1fmeJmLCWP6NNkx5xTN4CeVBEd4=
+X-Received: by 2002:a05:6402:518b:b0:640:9b62:a8bb with SMTP id
+ 4fb4d7f45d1cf-6413f063ab1mr2470983a12.22.1762516863928; Fri, 07 Nov 2025
+ 04:01:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AGYZwPnl2csF
-Date: Fri, 07 Nov 2025 12:52:38 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Yeoreum Yun" <yeoreum.yun@arm.com>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Marc Zyngier" <maz@kernel.org>, "Mark Brown" <broonie@kernel.org>,
- "Oliver Upton" <oliver.upton@linux.dev>, miko.lenczewski@arm.com,
- "Kevin Brodsky" <kevin.brodsky@arm.com>, "Ard Biesheuvel" <ardb@kernel.org>,
- "Suzuki K Poulose" <suzuki.poulose@arm.com>,
- "Lorenzo Pieralisi" <lpieralisi@kernel.org>, yangyicong@hisilicon.com,
- scott@os.amperecomputing.com, "Joey Gouly" <joey.gouly@arm.com>,
- "Zenghui Yu" <yuzenghui@huawei.com>, "Paolo Bonzini" <pbonzini@redhat.com>,
- shuah <shuah@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <9fffb30d-fc9c-4e2e-94d2-c724e81ae3ac@app.fastmail.com>
-In-Reply-To: <20251106094023.1371246-10-yeoreum.yun@arm.com>
-References: <20251106094023.1371246-1-yeoreum.yun@arm.com>
- <20251106094023.1371246-10-yeoreum.yun@arm.com>
-Subject: Re: [PATCH v11 9/9] arm64: armv8_deprecated: apply FEAT_LSUI for swpX
- emulation.
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
+ <20251101142325.1326536-2-pasha.tatashin@soleen.com> <d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
+In-Reply-To: <d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Fri, 7 Nov 2025 07:00:27 -0500
+X-Gm-Features: AWmQ_bkI8wIkZ7GC8hYGylBjaXrBxtU3ZeBWwhoHk2_ITShMsozqrZ6SHuSvZSc
+Message-ID: <CA+CK2bDSvtuwrrXGOC07Rj42yGFHWR4Sse7Q5z1z8f1ZFHWQ2Q@mail.gmail.com>
+Subject: Re: [PATCH v9 1/9] kho: make debugfs interface optional
+To: Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net, 
+	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org, 
+	ojeda@kernel.org, pratyush@kernel.org, rdunlap@infradead.org, rppt@kernel.org, 
+	tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Nov 6, 2025, at 10:40, Yeoreum Yun wrote:
-> apply FEAT_LSUI instruction to emulate deprecated swpX instruction.
+> Hi, Pasha
+>
+> In our previous discussion, we talked about counting the number of times
+> the kernel is rebooted via kexec. At that time, you suggested adding a
+> variable in debugfs to keep track of this count.
+> However, since debugfs is now optional, where would be an appropriate
+> place to store this variable?
 
-Can you explain in the changrelog why you do this?
+It is an optional config and can still be enabled if the live update
+reboot number value needs to be accessed through debugfs. However,
+given that debugfs does not guarantee a stable interface, tooling
+should not be built to require these interfaces.
 
-In particular, is this a performance optimization or is this required
-for correctness in some scenario?
+In the WIP LUO [1] I have, I pr_info() the live update number during
+boot and also store it in the incoming LUO FDT tree, which can also be
+accessed through this optional debugfs interface.
 
-I would have expected that there is very little benefit in
-changing the swp/swpb emulation here if the existing code
-has to remain compiled into the kernel and the overhead of
-the trap is so much larger than the uaccess_enable_privileged()
-overhead.
+The pr_info message appears like this during boot:
+[    0.000000] luo: Retrieved live update data, liveupdate number: 17
 
-> +		curval.var = newval.var = oldval;
-> +		newval.raw[idx] = *data;
-> +
-> +		asm volatile("// __lsui_user_swpb_asm\n"
-> +		__LSUI_PREAMBLE
-> +		"1: cast	%x2, %x3, %1\n"
-> +		"2:\n"
-> +		_ASM_EXTABLE_UACCESS_ERR(1b, 2b, %w0)
-> +		: "+r" (err), "+Q" (*addr_al), "+r" (curval.var)
-> +		: "r" (newval.var)
-> +		: "memory");
-
-I see that you fixed the race now. I had written an email about
-it earlier when I saw the same mistake you found as well, but
-it got stuck in my drafts folder. The new version looks correct
-to me, I'm just not sure we need the added complexity.
-
-     Arnd
+Pasha
 
