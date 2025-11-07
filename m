@@ -1,112 +1,110 @@
-Return-Path: <linux-kselftest+bounces-45150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CF89C41F8C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 00:36:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F7BC41F90
+	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 00:37:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CE613BE9B9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 23:36:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4CE654E3823
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 23:37:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F44314B6B;
-	Fri,  7 Nov 2025 23:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED482314B93;
+	Fri,  7 Nov 2025 23:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mIiN5q75"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dDXksjjD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25AE314B95
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Nov 2025 23:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD90D312820;
+	Fri,  7 Nov 2025 23:37:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762558574; cv=none; b=Gset3NxHAgJmbYW+RyXCkuMS5eA27+6Udyb/ssIqizQ+3LIu2yZ2hI1XimFk/idk7sZ2cM7eonDYuUg0tY1ZH17IlBFJdimKzIuZUB9AWqfAwzcQp+285gnjsyTjCKvq4r7EvvxiYBljrYEA25GzVJEn7aBeumygJw5SPCDsTVo=
+	t=1762558649; cv=none; b=Cr3rnVE7fPPpQFQaOrjapfWqAY712bNJdSMcBnz/LTuU/1R1ZmZwQpzP6HfOzElnN+snIKSw1dQlxe68gOtRc++aCHpmmj2eM/LmO8j3QlTsPZhk8mE0qjAp0h2xWGy8eVP1i4gixNAmMzOCDnCYSCfoaemZp4cQQhpmhM8i/ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762558574; c=relaxed/simple;
-	bh=0lY64VJ/ffa3/Z9Qv1liUMSAYVI0NdChWyMUC9rTTxo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MH2vhlWAe3O5f25ltt/jwo3LpiYLGh05fEAaSD1q42MVU7CaE86ni2yoJvARWUifU+K8KOz7AUgL9kjvNKDJ2uaZPhANZh0KrQhhK1NScWRk+rlwUTHyJP/qY5DUtYCvmAxYLdRvUHGxkTNDvyblrXEqcpVbn+sS7Ih6qBMpgp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mIiN5q75; arc=none smtp.client-ip=91.218.175.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762558560;
+	s=arc-20240116; t=1762558649; c=relaxed/simple;
+	bh=D0NNPWpR++qrShSzv1aC4sQ1DTsXVkK4wHvcpIxLu9E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DOSEGr4m/VklWJj30ChyexnOYL/yDVZm1C+S2k0ZdP5uY0lNcjRLLjI3D2ISExrt+srQtH80IetUXo/Bw1snV4ijxEufAxVXoqnpWv/Lcl431/vlrnqM39LyeoKHdxEsncBEA8lgdmAS5aZEZLhfEPB0SuBspdxj5FxLZh8GiBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=dDXksjjD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DCA4C16AAE;
+	Fri,  7 Nov 2025 23:37:26 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="dDXksjjD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1762558644;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0qQGWs6LpN4unSynWVZhzKi98tWARU4nt/0dAsCAu7Q=;
-	b=mIiN5q75lCcf4two/6jp3fr1UONOvcNFCZELHORZjTZkHsbOJO9x9ckTDX0TcH1xMG5rhV
-	QkiPWcQQN3A01vmtyJlDXfZfzuXQEcmdyLTiQ4ZPqy2Hx8ncAy0QNM8yZvrVetu+BsV5zo
-	4n2Gew0vzxo30idUCWKmG8Dbk1su/Sg=
-Date: Fri, 7 Nov 2025 15:35:55 -0800
+	bh=dKdfc/nifvizPXu6zHyg6q4B2C0WsM/OrjAHPKMoa1E=;
+	b=dDXksjjDOnQQAvQYvE1Q2Si/elVheo7rfOJrlpPYzvIjolTh+DWB3ui0oD+WvKtYKtV2Ww
+	zVuEO6gqpBzF/6r8WDKVuMQ5M4RaIZEHQGhw8I82WVPVMX5+Ds9rkaDFEbCvWTMYH6NMS3
+	UtGxV+9w1jkJbyFOAxboRQuCCIQq60I=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b0f7e3ba (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 7 Nov 2025 23:37:24 +0000 (UTC)
+Date: Sat, 8 Nov 2025 00:37:15 +0100
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Nick Alcock <nick.alcock@oracle.com>,
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Shuah Khan <shuah@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+	Russell King <linux@armlinux.org.uk>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-s390@vger.kernel.org
+Subject: Re: [PATCH v5 17/34] random: vDSO: remove ifdeffery
+Message-ID: <aQ6Cq_5kiIXllEoS@zx2c4.com>
+References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
+ <20251106-vdso-sparc64-generic-2-v5-17-97ff2b6542f7@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v9 1/9] kho: make debugfs interface optional
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
- graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org,
- ojeda@kernel.org, pratyush@kernel.org, rdunlap@infradead.org,
- rppt@kernel.org, tj@kernel.org
-References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
- <20251101142325.1326536-2-pasha.tatashin@soleen.com>
- <d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
- <CA+CK2bDSvtuwrrXGOC07Rj42yGFHWR4Sse7Q5z1z8f1ZFHWQ2Q@mail.gmail.com>
- <CA+CK2bC_+repP-q183hjAuYYB2-Yx7fr_U3zr2cxysAWx5hzpg@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-In-Reply-To: <CA+CK2bC_+repP-q183hjAuYYB2-Yx7fr_U3zr2cxysAWx5hzpg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20251106-vdso-sparc64-generic-2-v5-17-97ff2b6542f7@linutronix.de>
 
+On Thu, Nov 06, 2025 at 11:02:10AM +0100, Thomas Weißschuh wrote:
+> -#endif
+> +	if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+> +		smp_store_release((unsigned long *)&vdso_k_rng_data->generation, next_gen + 1);
+> +
 
-On 11/7/25 4:02 AM, Pasha Tatashin wrote:
-> On Fri, Nov 7, 2025 at 7:00 AM Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
->>> Hi, Pasha
->>>
->>> In our previous discussion, we talked about counting the number of times
->>> the kernel is rebooted via kexec. At that time, you suggested adding a
->>> variable in debugfs to keep track of this count.
->>> However, since debugfs is now optional, where would be an appropriate
->>> place to store this variable?
->> It is an optional config and can still be enabled if the live update
->> reboot number value needs to be accessed through debugfs. However,
->> given that debugfs does not guarantee a stable interface, tooling
->> should not be built to require these interfaces.
->>
->> In the WIP LUO [1] I have, I pr_info() the live update number during
->> boot and also store it in the incoming LUO FDT tree, which can also be
->> accessed through this optional debugfs interface.
->>
->> The pr_info message appears like this during boot:
->> [    0.000000] luo: Retrieved live update data, liveupdate number: 17
->>
->> Pasha
-> Forgot to add link to WIP LUOv5:
-> [1] https://github.com/soleen/linux/tree/luo/v5rc04
+This is possible because vdso_k_rng_data is now defined in the C source
+on all platforms and under all configurations, even if
+!CONFIG_VDSO_GETRANDOM means it's null? Whereas before, some config's
+headers didn't have this at all, so the #ifdef was necessary?
 
+If so, can you mention this in the commit message?
 
-Thanks a lot. I’ve carefully read this commit: 
-https://github.com/soleen/linux/commit/60205b9a95c319dc9965f119303a1d83f0ff08fa.
-
-To be honest, I’d like to run some tests with who/luo, including the 
-selftest for kho/luo. Could you please share the steps with me?
-
-If the testing steps have already been documented somewhere, could you 
-please share the link?
-
-Best Regards,
-
-Yanjun.Zhu
-
+Jason
 
