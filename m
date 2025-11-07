@@ -1,281 +1,182 @@
-Return-Path: <linux-kselftest+bounces-45143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7B7AC413BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 19:11:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 104E0C41492
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 19:31:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 38AD04F133E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 18:11:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6B923AB495
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 18:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A8233970D;
-	Fri,  7 Nov 2025 18:11:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E3F33B6CF;
+	Fri,  7 Nov 2025 18:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="qPMh+sGS"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="RJJ1uBJB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.74.81.189])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010046.outbound.protection.outlook.com [40.93.198.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99933396E1;
-	Fri,  7 Nov 2025 18:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.74.81.189
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762539088; cv=none; b=ko1+YLk4LOl6NTIQ6rlrUzTEPALTUgdei5VDiL9jRWknUcsDNPAJkMdoH1JtgZymn+PpvTNEdcTpVMZQG3lAZTERODH1V4HsP+W7vziLsCS+iZorUgxBLwVqr3AuLWmZkispTYimZjIOugs1IpNqu3oR1cTjtl0wPFeTWu9dGdo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762539088; c=relaxed/simple;
-	bh=N4gOSBeRZWqaySZxSBCtzaOl7g3HsBW0KJqcGWerLgo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=JHnTvsHPIMDU0vozm+cQ1p+WpvOdO93xaCFm5sWPwwYOvWmM3zSmG1Ywv/djaTFgw4kIwwkZkSqyMnF0i82IZEm7BPlBlZsfjbapDTUm7xCjrMTG0Cvba8eX9oohVzAG6dzRvXSA8BBMawk5rGnhN73PwtiDivwdq2R22PKdGmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=qPMh+sGS; arc=none smtp.client-ip=3.74.81.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1762539085; x=1794075085;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=SCkgHKsCB067+A2QKdQEeR2F/1cDYKaCmk5fyfcip00=;
-  b=qPMh+sGSJZt+z4Nc+DhY/1qTycu+jXWtJcRVfVq9aThqVfhZ7CnGrjbs
-   68J8ryCMsklugfRIIRzKfjio4AWTnd8/O16cOk7o7OJRbctMvBpisAZLd
-   nqU2bdn4xB3Q8OCfXoPqg+mifE4tBiunRgSnSKXqId8l9IYNfWHW1Sh5q
-   B09bCz0jvRk0ABD58ut3l9+naRE6voeFpiY1OBcZG8uXYktiDw/TWojP3
-   piBXzdlKm8Kz6SehvX/bTm2FndIweeX9zrmAnMvV7RYI2XG3W9V/r/YIH
-   5exIyAFKqLp0i+4B+hwJpbb7jmooRqPOnOWLbbaFatsClwVHQR/3alGJ2
-   w==;
-X-CSE-ConnectionGUID: fFJTYbfoSuanuoJNyoUMiw==
-X-CSE-MsgGUID: ItF1NJ0MQ7GmOV9vTi4D2Q==
-X-IronPort-AV: E=Sophos;i="6.19,287,1754956800"; 
-   d="scan'208";a="4852407"
-Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
-  by internal-fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2025 18:11:07 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [54.240.197.228:6828]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.13.118:2525] with esmtp (Farcaster)
- id 217d753f-5175-4dc1-96ad-8ed664faf6cb; Fri, 7 Nov 2025 18:11:06 +0000 (UTC)
-X-Farcaster-Flow-ID: 217d753f-5175-4dc1-96ad-8ed664faf6cb
-Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Fri, 7 Nov 2025 18:11:06 +0000
-Received: from [192.168.9.244] (10.106.83.15) by EX19D022EUC002.ant.amazon.com
- (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Fri, 7 Nov 2025
- 18:11:03 +0000
-Message-ID: <a940044f-3ae4-451f-b9ba-946ec6df5082@amazon.com>
-Date: Fri, 7 Nov 2025 18:11:01 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DBB2339704;
+	Fri,  7 Nov 2025 18:30:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762540254; cv=fail; b=j3EK3FpJ82PdxDsvCRvh0Hf2ZLlVXq+IzgrrfXjp+2JTLShpmKM6WSk70TLM+5HcM+gnwa8tTB2IoC0aUUULVOlPWdOepYErZD2RHs1c1UEOXkHW31joCmA9TaMbKzxLDYKflrMApBsxaILst7asAURxaj/zDzo4JIIlF4Sl4mU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762540254; c=relaxed/simple;
+	bh=JNx+fuKCIZm2zU2eebyjzEwU8J252MLZ/EhtcZ8fOaw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fCaQ65O8tMXnns70MV6pb3hcm9/3cmBp4W81K2ZQdM0pGyVq3j1qu5WGdZFlI8xLfI6ZHNTatEOt+4kr/l3LC7PVrE5242HbxSNKIBlifvYBjI4IdmBc1qfE/pHejdT3Ghc0WK2ICEBfRVdoAsM8eWpR0Tu7XcEfuOnVH1K7GWM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=RJJ1uBJB; arc=fail smtp.client-ip=40.93.198.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dwMHxPIamM2hdHJWLZsJDh6ocRAngDliIgluG1VXmRwhj8mOMlM+8XGmDhKh48w86RPHYXeqqcgTvLiTLMZUDUagOVftnrzcoaWIlY6L5xeq4R5wSvT1XuJ+9bnCr9FTi/3PXKLzsR35c2QWZD/LvDFOIskVNO6kAEHUJMgVP69/0+y1WOYG2Q3xXQILATabJnNTZm7F6MhFI+2Cr9WMc7qCtG8mwqdtDi9n0dwCpeQoGJRZB4vlPB+5tR4HvGHpBqUuYZmo2Z9OxqT1nbF/z8S7BClyp49jDVAeneCWJ+wkZ/kwukjsCOBpFLT9rxNhT/1ei0P49p3m99vem4njXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EijLTAgbzGD1tZGlQC/q6aW2CBGYpMQ2FcplgY5THjg=;
+ b=UF+VHoa6bjYOJvPCYsvjXsUl0XXKRkuLw6OB2flmZFo4hbVK3QIn7QPsYAp90lYQ6jZx2sb2/gaY8IFtJKyy9yhPAWdRtORRO9kONRWq6veywozEb1hT31wD6VDEyZHjkzv/wtD61rI4FUnMOMZfscCacDLXRjk3PWYfMgBHhdhck05d1CCB6FqxprBnBUDnIwMtDnjy7KYtyQiBQLXr8yNnhH+2NOeiLZa3uZQ6BkaH4m0I558hbcroCl5B9k2OPprKpUyUO8eASpBTIQmWI4yb5tYSloLX2pBEb2rDn3AGaXCvR5Khs684o+tbv95+DhAjFtIVeHBbJi5SPSNM4g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=ffwll.ch smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EijLTAgbzGD1tZGlQC/q6aW2CBGYpMQ2FcplgY5THjg=;
+ b=RJJ1uBJBxbOAnFzbRhDku8aJbDi5EYiY4QK8N8g7/eOpoqGDVfZvvA1MOUa+ZoqmD6Sbp1L6hVF0Y7odlTFfixBj4NndXkO81df1sZYeWnHxhI93BuYD50bZg7+180+vp8JbCWQp0F8fqc9vd/50llnFKgvBA/asjbufwvgq0sUrk26ffoWMHhHD9x0GVpJvbKteIbB1jWDZ6IWvh0YrQwTazWJ5sVRS+3uIhBmWF8gDcQP1LFKr/cLwpdmGcvj01IH9LFPyZ1UEed+tGzuZI0t9SKGzQ1Bpff/4OCFT9SjB1ZbUpzpiyzs/sN/dILbhgaEcPxZChHBWu+Ft7mbL+g==
+Received: from SN7PR04CA0216.namprd04.prod.outlook.com (2603:10b6:806:127::11)
+ by SN7PR12MB8147.namprd12.prod.outlook.com (2603:10b6:806:32e::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Fri, 7 Nov
+ 2025 18:30:49 +0000
+Received: from SN1PEPF0002636B.namprd02.prod.outlook.com
+ (2603:10b6:806:127:cafe::4) by SN7PR04CA0216.outlook.office365.com
+ (2603:10b6:806:127::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9298.13 via Frontend Transport; Fri,
+ 7 Nov 2025 18:30:47 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SN1PEPF0002636B.mail.protection.outlook.com (10.167.241.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9298.6 via Frontend Transport; Fri, 7 Nov 2025 18:30:47 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 7 Nov
+ 2025 10:30:26 -0800
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 7 Nov
+ 2025 10:30:25 -0800
+Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com (10.129.68.9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Fri, 7 Nov 2025 10:30:24 -0800
+Date: Fri, 7 Nov 2025 10:30:23 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Alex Williamson <alex@shazbot.org>, Christian =?iso-8859-1?Q?K=F6nig?=
+	<christian.koenig@amd.com>, <dri-devel@lists.freedesktop.org>,
+	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>, Kevin Tian
+	<kevin.tian@intel.com>, <kvm@vger.kernel.org>,
+	<linaro-mm-sig@lists.linaro.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, Robin Murphy <robin.murphy@arm.com>, "Shuah
+ Khan" <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, Will Deacon
+	<will@kernel.org>, Krishnakant Jaju <kjaju@nvidia.com>, Leon Romanovsky
+	<leon@kernel.org>, Matt Ochs <mochs@nvidia.com>, <patches@lists.linux.dev>,
+	Simona Vetter <simona.vetter@ffwll.ch>, Vivek Kasireddy
+	<vivek.kasireddy@intel.com>, Xu Yilun <yilun.xu@linux.intel.com>
+Subject: Re: [PATCH 3/9] iommufd: Do not map/unmap revoked DMABUFs
+Message-ID: <aQ46v1p6BgzLOOQD@Asurada-Nvidia>
+References: <0-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
+ <3-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v7 00/12] Direct Map Removal Support for guest_memfd
-To: Brendan Jackman <jackmanb@google.com>
-CC: <pbonzini@redhat.com>, <corbet@lwn.net>, <maz@kernel.org>,
-	<oliver.upton@linux.dev>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>,
-	<yuzenghui@huawei.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
-	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-	<luto@kernel.org>, <peterz@infradead.org>, <willy@infradead.org>,
-	<akpm@linux-foundation.org>, <david@redhat.com>,
-	<lorenzo.stoakes@oracle.com>, <Liam.Howlett@oracle.com>, <vbabka@suse.cz>,
-	<rppt@kernel.org>, <surenb@google.com>, <mhocko@suse.com>, <song@kernel.org>,
-	<jolsa@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
-	<andrii@kernel.org>, <martin.lau@linux.dev>, <eddyz87@gmail.com>,
-	<yonghong.song@linux.dev>, <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
-	<sdf@fomichev.me>, <haoluo@google.com>, <jgg@ziepe.ca>,
-	<jhubbard@nvidia.com>, <peterx@redhat.com>, <jannh@google.com>,
-	<pfalcato@suse.de>, <shuah@kernel.org>, <seanjc@google.com>,
-	<kvm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-	<linux-mm@kvack.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <xmarcalx@amazon.co.uk>,
-	<kalyazin@amazon.co.uk>, <jackabt@amazon.co.uk>, <derekmn@amazon.co.uk>,
-	<tabba@google.com>, <ackerleytng@google.com>, Patrick Roy
-	<patrick.roy@campus.lmu.de>
-References: <20250924151101.2225820-1-patrick.roy@campus.lmu.de>
- <DE2L1SAOC55E.E4JY62WJQ2A8@google.com>
- <add94932-290c-4037-b4e6-c3c760240819@amazon.com>
- <DE2NTMZXQ1MT.2TH9VAKM6WP6I@google.com>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <DE2NTMZXQ1MT.2TH9VAKM6WP6I@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D013EUB001.ant.amazon.com (10.252.51.116) To
- EX19D022EUC002.ant.amazon.com (10.252.51.137)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <3-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002636B:EE_|SN7PR12MB8147:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a156704-2480-4dca-057d-08de1e2bc579
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|7416014|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?oRqXdV9Il7LHMRFd10i6UNhvYD5M0lcXJl9ZrZfQRhBkHp8yuMALNrMQQxD7?=
+ =?us-ascii?Q?e5SUweui9Ls0+QDJw862EJsQ6sv6lQkzc6HAATuK0imohy2qplEyvsrb7u41?=
+ =?us-ascii?Q?1uf8xaCv/JvwDRZXc4jen2MzZW2kYUx6U+I2K/vw6wcbm88QCaTMe4jfjEva?=
+ =?us-ascii?Q?erUxd7kq18mKFouZ9iOYZ77FwioSIHNx96RISIdL1jcANIzcnkYJFeuethI2?=
+ =?us-ascii?Q?fLscr+vvaJ8rTxyHFTXTbVohYZ4lFVsJxesv6lOvr0Dfv2NBl1iMj+AgEFIC?=
+ =?us-ascii?Q?Rz8e08Pwh00Nt8Smsr6BB8OaFTL4zGiIhIJyusem92AwHSDXFBFDYL+EvBkx?=
+ =?us-ascii?Q?eqHrzr3OPBb7W7wDGlr/rR2ha0xf5bZZmYAZm5qZBVojALVdB1pTsOzDQK3i?=
+ =?us-ascii?Q?gNzDoaSXkY/u/gsLJL7vIBs8u9v9fSgOHaq4Tnnme7pQrJGvfguXPieo4wy/?=
+ =?us-ascii?Q?1cBhZtUmAPcngysQhUZvsp2YTdRwGKkCoBou4OYEorGvRNkF0RgxY4+7iIQm?=
+ =?us-ascii?Q?nKlko3dUnP/h7TwOpSkQbNZm9EKXTYoKL4fo3xL+fDLpJV9WrJHSIi0aEUSO?=
+ =?us-ascii?Q?IOR8tEKuVUpUbnkXfPM2dTPU456uASSIA0KIrUJ1d98CU3UXe9gc7rGgL+c8?=
+ =?us-ascii?Q?qsbdh7IBiwWYniLj9A7L8ze39Y+YjSpqEMnchaBfc/pJyHCS53e8WSGZ8sZk?=
+ =?us-ascii?Q?8l6lkV9SzEoj8Ft7/47V+MeJEdHwlM3MdnlqYjBsQ47pY2iPNR+MP21pewvJ?=
+ =?us-ascii?Q?61/nKAk02nzaUyXK6MAfK0f1qeERQf7VlTVfLUCET/QUeF4+q6WpnnOlB1p4?=
+ =?us-ascii?Q?luQTtMRc3WYwKmiz6ag9Oo9gaCrnBLVXal/2yeUX1e9v0h4HRhOSGoa6oQEo?=
+ =?us-ascii?Q?dRDrxp9gW12MXgudpuwvDXIBvbBSPQeVeIBbhM7riOzfw4mqCwXgz7P8DCc9?=
+ =?us-ascii?Q?XR44ozJIlpUYh+Vzy9tZ8iVYjpF2uhgt9gQgRz+gQapPRGOPaBIhjL9RcKdD?=
+ =?us-ascii?Q?Oiy3tEah2F2WSyqxYsnueXVeSfl2U6lj/KOa7lOSGoxGRlKW/Ki0hgSHl0wM?=
+ =?us-ascii?Q?lnjArJGBonTXUvIJ288qASfcNIikuQWPaHibWSUR0tDG9kMwmMt303RRSHYV?=
+ =?us-ascii?Q?C6YjE/PxRy7UijMYieCkBUgevUQSJdJVdxObmwEZdMMhfUn+WHIVUONz0Z8j?=
+ =?us-ascii?Q?agyn/ybouoLhyvWDCM1kYhHNGjt4dSQl7n+nYa5XFgLYU6ULPzY++Aa+cO4/?=
+ =?us-ascii?Q?WGm11EGfoT8rdog+24/1EGfZRcaAlGVu6Pp9M/5Gd/z1FhfL/C/uhkbYS82o?=
+ =?us-ascii?Q?n90KMMJHy/yoA6TwaQamDPOOo2NJsLklS4z3sjzCGIDUF8rGIsQlBE4phI98?=
+ =?us-ascii?Q?5aswJBv2v01fXHrXzXLr5nXBjM3/RsE2XQqKeWCzcCa4xc17MHPdJHMZe/qQ?=
+ =?us-ascii?Q?QVCBL2BrHKpPCyoOAdR6+o/ef6Ti5UluS3YhpxNzgubUtjwboZPMiC941bAR?=
+ =?us-ascii?Q?V2HCWq4kjSD1NOzjTgsKHlsB/Rjsw5GicqBAfha2bYCEP8RCfhn2GPsDU01x?=
+ =?us-ascii?Q?QKj8+wtzMzCRSXfzrc0=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2025 18:30:47.7159
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a156704-2480-4dca-057d-08de1e2bc579
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002636B.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8147
 
-
-
-On 07/11/2025 18:04, Brendan Jackman wrote:
-> On Fri Nov 7, 2025 at 5:23 PM UTC, Nikita Kalyazin wrote:
->>
->>
->> On 07/11/2025 15:54, Brendan Jackman wrote:
->>> On Wed Sep 24, 2025 at 3:10 PM UTC, Patrick Roy wrote:
->>>> From: Patrick Roy <roypat@amazon.co.uk>
->>>>
->>>> [ based on kvm/next ]
->>>>
->>>> Unmapping virtual machine guest memory from the host kernel's direct map is a
->>>> successful mitigation against Spectre-style transient execution issues: If the
->>>> kernel page tables do not contain entries pointing to guest memory, then any
->>>> attempted speculative read through the direct map will necessarily be blocked
->>>> by the MMU before any observable microarchitectural side-effects happen. This
->>>> means that Spectre-gadgets and similar cannot be used to target virtual machine
->>>> memory. Roughly 60% of speculative execution issues fall into this category [1,
->>>> Table 1].
->>>>
->>>> This patch series extends guest_memfd with the ability to remove its memory
->>>> from the host kernel's direct map, to be able to attain the above protection
->>>> for KVM guests running inside guest_memfd.
->>>>
->>>> Additionally, a Firecracker branch with support for these VMs can be found on
->>>> GitHub [2].
->>>>
->>>> For more details, please refer to the v5 cover letter [v5]. No
->>>> substantial changes in design have taken place since.
->>>>
->>>> === Changes Since v6 ===
->>>>
->>>> - Drop patch for passing struct address_space to ->free_folio(), due to
->>>>     possible races with freeing of the address_space. (Hugh)
->>>> - Stop using PG_uptodate / gmem preparedness tracking to keep track of
->>>>     direct map state.  Instead, use the lowest bit of folio->private. (Mike, David)
->>>> - Do direct map removal when establishing mapping of gmem folio instead
->>>>     of at allocation time, due to impossibility of handling direct map
->>>>     removal errors in kvm_gmem_populate(). (Patrick)
->>>> - Do TLB flushes after direct map removal, and provide a module
->>>>     parameter to opt out from them, and a new patch to export
->>>>     flush_tlb_kernel_range() to KVM. (Will)
->>>>
->>>> [1]: https://download.vusec.net/papers/quarantine_raid23.pdf
->>>> [2]: https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding
->>>
->>> I just got around to trying this out, I checked out this patchset using
->>> its base-commit and grabbed the Firecracker branch. Things seem OK until
->>> I set the secrets_free flag in the Firecracker config which IIUC makes
->>> it set GUEST_MEMFD_FLAG_NO_DIRECT_MAP.
->>>
->>> If I set it, I find the guest doesn't show anything on the console.
->>> Running it in a VM and attaching GDB suggests that it's entering the
->>> guest repeatedly, it doesn't seem like the vCPU thread is stuck or
->>> anything. I'm a bit clueless about how to debug that (so far, whenever
->>> I've broken KVM, things always exploded very dramatically).
->>>
->>> Anyway, if I then kill the firecracker process, the host sometimes
->>> crashes, I think this is the most suggestive splat I've seen:
->>>
->>> [   99.673420][    T2] BUG: unable to handle page fault for address: ffff888012804000
->>> [   99.676216][    T2] #PF: supervisor write access in kernel mode
->>> [   99.678381][    T2] #PF: error_code(0x0002) - not-present page
->>> [   99.680499][    T2] PGD 2e01067 P4D 2e01067 PUD 2e02067 PMD 12801063 PTE 800fffffed7fb020
->>> [   99.683374][    T2] Oops: Oops: 0002 [#1] SMP
->>> [   99.685004][    T2] CPU: 0 UID: 0 PID: 2 Comm: kthreadd Not tainted 6.17.0-rc7-00366-g473c46a3cb2a #106 NONE
->>> [   99.688514][    T2] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.1 11/11/2019
->>> [   99.691547][    T2] RIP: 0010:clear_page_erms+0x7/0x10
->>> [   99.693440][    T2] Code: 48 89 47 18 48 89 47 20 48 89 47 28 48 89 47 30 48 89 47 38 48 8d 7f 40 75 d9 90 c3 0f 1f 80 00 00 00 00 b9 00 10 00 00 31 c0 <f3> aa c3 66 0f 1f 44 00 00 48 83 f9 40 73 2a 83 f9 08 73 0f 85 c9
->>> [   99.700188][    T2] RSP: 0018:ffff88800318fc10 EFLAGS: 00010246
->>> [   99.702321][    T2] RAX: 0000000000000000 RBX: 0000000000400dc0 RCX: 0000000000001000
->>> [   99.705100][    T2] RDX: ffffea00004a0100 RSI: ffffea00004a0200 RDI: ffff888012804000
->>> [   99.707861][    T2] RBP: 0000000000000801 R08: 0000000000000000 R09: 0000000000000000
->>> [   99.710648][    T2] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
->>> [   99.713412][    T2] R13: 0000000000000801 R14: ffffea00004a0100 R15: ffffffff81f4df80
->>> [   99.716191][    T2] FS:  0000000000000000(0000) GS:ffff8880bbf28000(0000) knlGS:0000000000000000
->>> [   99.719316][    T2] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> [   99.721648][    T2] CR2: ffff888012804000 CR3: 0000000007583001 CR4: 0000000000372eb0
->>> [   99.724421][    T2] Call Trace:
->>> [   99.725608][    T2]  <TASK>
->>> [   99.726646][    T2]  get_page_from_freelist+0x6fe/0x14b0
->>> [   99.728583][    T2]  ? fs_reclaim_acquire+0x43/0xe0
->>> [   99.730325][    T2]  ? find_held_lock+0x2b/0x80
->>> [   99.731965][    T2]  __alloc_frozen_pages_noprof+0x147/0x2d0
->>> [   99.734003][    T2]  __alloc_pages_noprof+0x5/0x50
->>> [   99.735766][    T2]  copy_process+0x1b1/0x1b30
->>> [   99.737398][    T2]  ? lock_is_held_type+0x89/0x100
->>> [   99.739157][    T2]  ? kthreadd+0x25/0x190
->>> [   99.740664][    T2]  kernel_clone+0x59/0x390
->>> [   99.742213][    T2]  ? kthreadd+0x25/0x190
->>> [   99.743728][    T2]  kernel_thread+0x55/0x70
->>> [   99.745310][    T2]  ? kthread_complete_and_exit+0x20/0x20
->>> [   99.747265][    T2]  kthreadd+0x117/0x190
->>> [   99.748748][    T2]  ? kthread_is_per_cpu+0x30/0x30
->>> [   99.750509][    T2]  ret_from_fork+0x16b/0x1e0
->>> [   99.752193][    T2]  ? kthread_is_per_cpu+0x30/0x30
->>> [   99.753992][    T2]  ret_from_fork_asm+0x11/0x20
->>> [   99.755717][    T2]  </TASK>
->>> [   99.756861][    T2] CR2: ffff888012804000
->>> [   99.758353][    T2] ---[ end trace 0000000000000000 ]---
->>> [   99.760319][    T2] RIP: 0010:clear_page_erms+0x7/0x10
->>> [   99.762209][    T2] Code: 48 89 47 18 48 89 47 20 48 89 47 28 48 89 47 30 48 89 47 38 48 8d 7f 40 75 d9 90 c3 0f 1f 80 00 00 00 00 b9 00 10 00 00 31 c0 <f3> aa c3 66 0f 1f 44 00 00 48 83 f9 40 73 2a 83 f9 08 73 0f 85 c9
->>> [   99.769129][    T2] RSP: 0018:ffff88800318fc10 EFLAGS: 00010246
->>> [   99.771297][    T2] RAX: 0000000000000000 RBX: 0000000000400dc0 RCX: 0000000000001000
->>> [   99.774126][    T2] RDX: ffffea00004a0100 RSI: ffffea00004a0200 RDI: ffff888012804000
->>> [   99.777013][    T2] RBP: 0000000000000801 R08: 0000000000000000 R09: 0000000000000000
->>> [   99.779827][    T2] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
->>> [   99.782641][    T2] R13: 0000000000000801 R14: ffffea00004a0100 R15: ffffffff81f4df80
->>> [   99.785487][    T2] FS:  0000000000000000(0000) GS:ffff8880bbf28000(0000) knlGS:0000000000000000
->>> [   99.788671][    T2] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> [   99.791012][    T2] CR2: ffff888012804000 CR3: 0000000007583001 CR4: 0000000000372eb0
->>> [   99.793863][    T2] Kernel panic - not syncing: Fatal exception
->>> [   99.796760][    T2] Kernel Offset: disabled
->>> [   99.798296][    T2] ---[ end Kernel panic - not syncing: Fatal exception ]---
->>>
->>> This makes me suspect the kvm_gmem_folio_restore_direct_map() path isn't
->>> working or isn't getting called.
->>>
->>> If anyone wants help trying to reproduce this let me know.
->>
->> Hi Brendan,
->>
->> Thanks for trying to run it!
->>
->> Just as a sanity check, the way it is known for us to work is we apply
->> all patches from [1].  For booted VMs (as opposed to restored from
->> snapshot), apart from the v6 of the direct map removal series, the only
->> additional patch is a fix for kvmclock on x86 [2].  Please let me know
->> if you see the same issue with that patch applied too.
->>
->> Nikita
->>
->> [1]
->> https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding/resources/hiding_ci/linux_patches
->> [2]
->> https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding/resources/hiding_ci/linux_patches/11-kvm-clock
+On Fri, Nov 07, 2025 at 12:49:35PM -0400, Jason Gunthorpe wrote:
+> Once a DMABUF is revoked the domain will be unmapped under the pages
+> mutex. Double unmapping will trigger a WARN, and mapping while revoked
+> will fail.
 > 
-> Ah, thanks! Seems I should have checked my inbox before sending my other
-> mail. With the kvmclock fix applied to my host kernel, I start setting
-> the other crash immediately when the VM boots. If I comment out the
-> actual unmapping of memory, it boots (before, it wouldn't boot even with
-> that commented out).
+> Check for revoked DMABUFs along all the map and unmap paths to resolve
+> this. Ensure that map/unmap is always done under the pages mutex so it is
+> synchronized with the revoke notifier.
 > 
-> For the other linux_patches, I couldn't apply them on top of this
-> series, do you have a branch I can use as a reference?
-
-Instead of having an explicit branch, we apply all the patches on top of 
-[1].  There is a script that performs fetch/build/install end-to-end: [2].
-
-[1] 
-https://github.com/firecracker-microvm/firecracker/blob/feature/secret-hiding/resources/hiding_ci/kernel_commit_hash
-[2] 
-https://github.com/firecracker-microvm/firecracker/blob/feature/secret-hiding/resources/hiding_ci/build_and_install_kernel.sh
-
+> If a revoke happens between allocating the iopt_pages and the population
+> to a domain then the population will succeed, and leave things unmapped as
+> though revoke had happened immediately after.
 > 
-> Anyway, the solution I'm hoping to present for your problem gets rid of
-> that explicit unmapping code (the allocator will do it for you), so in
-> the meantime I have something I can work with.
+> Currently there is no way to repopulate the domains. Userspace is expected
+> to know if it is going to do something that would trigger revoke (eg if it
+> is about to do a FLR) then it should go and remove the DMABUF mappings
+> before and put the back after. The revoke is only to protect the kernel
+> from mis-behaving userspace.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 
+Reviewed-by: Nicolin Chen <nicolinc@nvidia.com>
 
