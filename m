@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-45080-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45081-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50300C3FACC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 12:15:15 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF536C3FAD1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 07 Nov 2025 12:15:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3F5A04E1C06
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 11:15:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2EF974EEA48
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Nov 2025 11:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7233A320A14;
-	Fri,  7 Nov 2025 11:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35931320CD3;
+	Fri,  7 Nov 2025 11:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bSkaOG9w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZiXTdogJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44256320A00;
-	Fri,  7 Nov 2025 11:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04EB92C2368;
+	Fri,  7 Nov 2025 11:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762514112; cv=none; b=GimQT6+7glbOtnH7qZXZ1MqLtR3RNArRXlPtksrp/Ye9Y+pYPrOi+v+U6ObfHLL6El3ALEE8CZ7+Bd7zoXvyn4plfU2B1WefGExWuhZcbXBvnDMWclTcZYrq8guNk0wHxlMeP+7f1YSCu7u2/znK08POSrAZl4c+VEBYfUNaN8Q=
+	t=1762514115; cv=none; b=StMW3ChDXEfjrQvsDULfFQFmAFtQZKn/FMO8foYsIhoFcA8VJIphYHpRfPTLZcC5mbJpyH4ldZo+8WiG6yRlne8rhwIs4DvA7W6RwSY2YJanpv4icKGvuWRuuwYGSyHVuV1RpNRF5MUqpf0TIxpUbhqSWVspoTQXRbmF3JPOPJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762514112; c=relaxed/simple;
-	bh=R0+I1GodW0kaLsfONU7InUNmqif4N7CYW8CRHNfhb8U=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=mlvhWdmwNGT0YGFxex3Dv3Fe5dzXfveltwOO5DCfGdbKmHeQBuSUrgv0uDqu9LL9vR9GOfCbOr2NguEffrHjWP1o02vuvTd4Vqu85ioKaIMWrT0/oWm6/Fhv5xC/2OPcxuEiGIJrUmTU2HEGVd0WmfdAel1l8fJqaljus3+Yo6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bSkaOG9w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1BDC19424;
-	Fri,  7 Nov 2025 11:15:11 +0000 (UTC)
+	s=arc-20240116; t=1762514115; c=relaxed/simple;
+	bh=Z/GVCnNyGD3t5M1f/cuGA9iiQXFKAUxC/iljAVC4J4c=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WY35L8XjV6KxOeXW2F5xYMSjI42KwJYAfvXGiEiG4Ry6zdC/aLDQJcETH+kxRMDDX446HXpcU3td07Lstmeiyl4VBSlIXe0P2G5R09lOgU9GJe5UCSl/aHJ7dpWWq14FIPjcY0clIGk8wiOg5+fyE9RVjr/eXf/TR4kGmnUw7CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZiXTdogJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD3FC4CEF5;
+	Fri,  7 Nov 2025 11:15:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762514111;
-	bh=R0+I1GodW0kaLsfONU7InUNmqif4N7CYW8CRHNfhb8U=;
-	h=From:Subject:Date:To:Cc:From;
-	b=bSkaOG9wbHDpEphNm1vrIC/iyflW/bP6ozjv49bASRMW1yIch6h1drNW+PNlgPdzH
-	 59IiYVSanQ0ieaqlysoKKYHqVagxje5k4tn/8PRgM+B3Yxzz41rOhhvGY5QwxprDU7
-	 YL7h11OmRS26KFFbzQboMed9Uj53LOZ4xh3x/KZ2e9gZc3pPFWjrsQ3NIZcmXcFcn1
-	 e269aOiuRNlmDzPJ2BWvHq1jVJtbLG3yq6/Ag2ydvLsOYXy9+w3FuPPzC9yvI5LCN5
-	 fSVE+okshPqmIQUEWM5MABLVa0LqD+MhUKV6OpV3nxCGDCEyzzyuaFswJwKqmUGCj9
-	 6y2cgT8z3150g==
+	s=k20201202; t=1762514114;
+	bh=Z/GVCnNyGD3t5M1f/cuGA9iiQXFKAUxC/iljAVC4J4c=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=ZiXTdogJKKMY0qjRUDlf3L2DqMgANNs9jbNpki9iyXzbaJ9dRiyUSVNy18T6fCHVN
+	 wiPJKD1kLe8rKDsOetz7RMRTSdQliBJOdngNMazoiIq4m98SiauX5sMyYd9AcSxIWw
+	 KBpZ+f/P2s/jrL5FMH5F15DPGpAa2ARy2/ZBDfiRW8RGtYAt+ruGS0xD9/UDqrBN8i
+	 72FAwzsl/c8bR/+EpaMnR9MQ1clX0ErYDCCZff+sCYzHrG8sLnric0U2HmrvpeO0ZP
+	 ddQCpyUCAHSZTdCHd8bVx1ORcIEFkFB4lYlQRaq1koCrq1KVvl2/B7m9GNu2vZpslh
+	 UcV/5bH9LAXeA==
 From: Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [PATCH nf-next v9 0/3] Add IPIP flowtable SW acceleration
-Date: Fri, 07 Nov 2025 12:14:45 +0100
-Message-Id: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
+Date: Fri, 07 Nov 2025 12:14:46 +0100
+Subject: [PATCH nf-next v9 1/3] net: netfilter: Add IPIP flowtable rx sw
+ acceleration
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,13 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKXUDWkC/33Qy2rDMBAF0F8JWldlRs9RVv2P0oX1SkSDbezgp
- oT8e4UXjYtFl8MdnbnozuY0lTSz4+HOprSUuQx9HdzLgYVz158SL7HOTIDQYITkfeb5MnxdO3+
- p2VhGjl5G64EiGMvqu3FKudxW853V9T7druyjBucyX4fpe7214Br/wy7IkQvSUjuTpFP49pmmP
- l1eh+m0covYErZFCA48WJQAMiSr/Y6QT8JCs4WsBBF0OUp03uUdoTYEUotQlcjkPQYk78jsCL0
- hBLYIXQkgo7vskqawJ8yToHYLU4kUOwdKCStd2BH2l0Bot7CV6JQWqMgZhH0L2hLN76RK6Kgja
- aeDlfCHeDweP4v1SHuRAgAA
-X-Change-ID: 20250623-nf-flowtable-ipip-1b3d7b08d067
+Message-Id: <20251107-nf-flowtable-ipip-v9-1-7cbc4090dfcb@kernel.org>
+References: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
+In-Reply-To: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
 To: "David S. Miller" <davem@davemloft.net>, 
  David Ahern <dsahern@kernel.org>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -70,73 +67,416 @@ Cc: Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
 X-Mailer: b4 0.14.2
 
-Introduce SW acceleration for IPIP tunnels in the netfilter flowtable
-infrastructure. This series introduces basic infrastructure to
-accelerate other tunnel types (e.g. IP6IP6).
+Introduce sw acceleration for rx path of IPIP tunnels relying on the
+netfilter flowtable infrastructure. Subsequent patches will add sw
+acceleration for IPIP tunnels tx path.
+This series introduces basic infrastructure to accelerate other tunnel
+types (e.g. IP6IP6).
+IPIP rx sw acceleration can be tested running the following scenario where
+the traffic is forwarded between two NICs (eth0 and eth1) and an IPIP
+tunnel is used to access a remote site (using eth1 as the underlay device):
 
+ETH0 -- TUN0 <==> ETH1 -- [IP network] -- TUN1 (192.168.100.2)
+
+$ip addr show
+6: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 00:00:22:33:11:55 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.2/24 scope global eth0
+       valid_lft forever preferred_lft forever
+7: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 00:11:22:33:11:55 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.1/24 scope global eth1
+       valid_lft forever preferred_lft forever
+8: tun0@NONE: <POINTOPOINT,NOARP,UP,LOWER_UP> mtu 1480 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/ipip 192.168.1.1 peer 192.168.1.2
+    inet 192.168.100.1/24 scope global tun0
+       valid_lft forever preferred_lft forever
+
+$ip route show
+default via 192.168.100.2 dev tun0
+192.168.0.0/24 dev eth0 proto kernel scope link src 192.168.0.2
+192.168.1.0/24 dev eth1 proto kernel scope link src 192.168.1.1
+192.168.100.0/24 dev tun0 proto kernel scope link src 192.168.100.1
+
+$nft list ruleset
+table inet filter {
+        flowtable ft {
+                hook ingress priority filter
+                devices = { eth0, eth1 }
+        }
+
+        chain forward {
+                type filter hook forward priority filter; policy accept;
+                meta l4proto { tcp, udp } flow add @ft
+        }
+}
+
+Reproducing the scenario described above using veths I got the following
+results:
+- TCP stream received from the IPIP tunnel:
+  - net-next: (baseline)		~ 71Gbps
+  - net-next + IPIP flowtbale support:	~101Gbps
+
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
-Changes in v9:
-- Fixed IPIP tunnel offloading when VLAN encapsulation is enabled.
-- Add IPIP tunnel over vlan self-test
-- Remove wrong filed from flow_offload_tuple key
-- Cosmetics
-- Link to v8: https://lore.kernel.org/r/20251023-nf-flowtable-ipip-v8-0-5d5d8595c730@kernel.org
+ include/linux/netdevice.h             | 13 +++++++
+ include/net/netfilter/nf_flow_table.h | 18 +++++++++
+ net/ipv4/ipip.c                       | 25 +++++++++++++
+ net/netfilter/nf_flow_table_core.c    |  3 ++
+ net/netfilter/nf_flow_table_ip.c      | 69 ++++++++++++++++++++++++++++++++---
+ net/netfilter/nf_flow_table_path.c    | 38 +++++++++++++++----
+ 6 files changed, 153 insertions(+), 13 deletions(-)
 
-Changes in v8:
-- Rebase on top of the following series (not yet applied)
-  https://patchwork.ozlabs.org/project/netfilter-devel/list/?series=477081
-- Link to v7: https://lore.kernel.org/r/20251021-nf-flowtable-ipip-v7-0-a45214896106@kernel.org
+diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+index 7f5aad5cc9a1994f95ba9037d3a4af27eef9d5e3..0355461960ce3c0db49e00a6f77f48b031a635dc 100644
+--- a/include/linux/netdevice.h
++++ b/include/linux/netdevice.h
+@@ -874,6 +874,7 @@ enum net_device_path_type {
+ 	DEV_PATH_PPPOE,
+ 	DEV_PATH_DSA,
+ 	DEV_PATH_MTK_WDMA,
++	DEV_PATH_TUN,
+ };
+ 
+ struct net_device_path {
+@@ -885,6 +886,18 @@ struct net_device_path {
+ 			__be16		proto;
+ 			u8		h_dest[ETH_ALEN];
+ 		} encap;
++		struct {
++			union {
++				struct in_addr	src_v4;
++				struct in6_addr	src_v6;
++			};
++			union {
++				struct in_addr	dst_v4;
++				struct in6_addr	dst_v6;
++			};
++
++			u8	l3_proto;
++		} tun;
+ 		struct {
+ 			enum {
+ 				DEV_PATH_BR_VLAN_KEEP,
+diff --git a/include/net/netfilter/nf_flow_table.h b/include/net/netfilter/nf_flow_table.h
+index 89cfe72283983ad651a943919ab2141ef082977a..4047075c615e1b64722f98da3b36acf3a2733b64 100644
+--- a/include/net/netfilter/nf_flow_table.h
++++ b/include/net/netfilter/nf_flow_table.h
+@@ -107,6 +107,19 @@ enum flow_offload_xmit_type {
+ 
+ #define NF_FLOW_TABLE_ENCAP_MAX		2
+ 
++struct flow_offload_tunnel {
++	union {
++		struct in_addr	src_v4;
++		struct in6_addr	src_v6;
++	};
++	union {
++		struct in_addr	dst_v4;
++		struct in6_addr	dst_v6;
++	};
++
++	u8	l3_proto;
++};
++
+ struct flow_offload_tuple {
+ 	union {
+ 		struct in_addr		src_v4;
+@@ -130,12 +143,15 @@ struct flow_offload_tuple {
+ 		__be16			proto;
+ 	} encap[NF_FLOW_TABLE_ENCAP_MAX];
+ 
++	struct flow_offload_tunnel tun;
++
+ 	/* All members above are keys for lookups, see flow_offload_hash(). */
+ 	struct { }			__hash;
+ 
+ 	u8				dir:2,
+ 					xmit_type:3,
+ 					encap_num:2,
++					tun_num:2,
+ 					in_vlan_ingress:2;
+ 	u16				mtu;
+ 	union {
+@@ -206,7 +222,9 @@ struct nf_flow_route {
+ 				u16		id;
+ 				__be16		proto;
+ 			} encap[NF_FLOW_TABLE_ENCAP_MAX];
++			struct flow_offload_tunnel tun;
+ 			u8			num_encaps:2,
++						num_tuns:2,
+ 						ingress_vlans:2;
+ 		} in;
+ 		struct {
+diff --git a/net/ipv4/ipip.c b/net/ipv4/ipip.c
+index 3e03af073a1ccc3d7597a998a515b6cfdded40b5..ff95b1b9908e9f4ba4bff207a5bd2c5d5670215a 100644
+--- a/net/ipv4/ipip.c
++++ b/net/ipv4/ipip.c
+@@ -353,6 +353,30 @@ ipip_tunnel_ctl(struct net_device *dev, struct ip_tunnel_parm_kern *p, int cmd)
+ 	return ip_tunnel_ctl(dev, p, cmd);
+ }
+ 
++static int ipip_fill_forward_path(struct net_device_path_ctx *ctx,
++				  struct net_device_path *path)
++{
++	struct ip_tunnel *tunnel = netdev_priv(ctx->dev);
++	const struct iphdr *tiph = &tunnel->parms.iph;
++	struct rtable *rt;
++
++	rt = ip_route_output(dev_net(ctx->dev), tiph->daddr, 0, 0, 0,
++			     RT_SCOPE_UNIVERSE);
++	if (IS_ERR(rt))
++		return PTR_ERR(rt);
++
++	path->type = DEV_PATH_TUN;
++	path->tun.src_v4.s_addr = tiph->saddr;
++	path->tun.dst_v4.s_addr = tiph->daddr;
++	path->tun.l3_proto = IPPROTO_IPIP;
++	path->dev = ctx->dev;
++
++	ctx->dev = rt->dst.dev;
++	ip_rt_put(rt);
++
++	return 0;
++}
++
+ static const struct net_device_ops ipip_netdev_ops = {
+ 	.ndo_init       = ipip_tunnel_init,
+ 	.ndo_uninit     = ip_tunnel_uninit,
+@@ -362,6 +386,7 @@ static const struct net_device_ops ipip_netdev_ops = {
+ 	.ndo_get_stats64 = dev_get_tstats64,
+ 	.ndo_get_iflink = ip_tunnel_get_iflink,
+ 	.ndo_tunnel_ctl	= ipip_tunnel_ctl,
++	.ndo_fill_forward_path = ipip_fill_forward_path,
+ };
+ 
+ #define IPIP_FEATURES (NETIF_F_SG |		\
+diff --git a/net/netfilter/nf_flow_table_core.c b/net/netfilter/nf_flow_table_core.c
+index 6c6a5165f9933b130e772c096a01d3fcb1d61c94..06e8251a6644e2335117ae3720b9ebf159eb2264 100644
+--- a/net/netfilter/nf_flow_table_core.c
++++ b/net/netfilter/nf_flow_table_core.c
+@@ -118,7 +118,10 @@ static int flow_offload_fill_route(struct flow_offload *flow,
+ 			flow_tuple->in_vlan_ingress |= BIT(j);
+ 		j++;
+ 	}
++
++	flow_tuple->tun = route->tuple[dir].in.tun;
+ 	flow_tuple->encap_num = route->tuple[dir].in.num_encaps;
++	flow_tuple->tun_num = route->tuple[dir].in.num_tuns;
+ 
+ 	switch (route->tuple[dir].xmit_type) {
+ 	case FLOW_OFFLOAD_XMIT_DIRECT:
+diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
+index be21600cff5390202f5451cd76c4e2afc6f8bc00..b40080b0d71cc011e18b68201af33e9c84987d78 100644
+--- a/net/netfilter/nf_flow_table_ip.c
++++ b/net/netfilter/nf_flow_table_ip.c
+@@ -145,8 +145,11 @@ static bool ip_has_options(unsigned int thoff)
+ static void nf_flow_tuple_encap(struct sk_buff *skb,
+ 				struct flow_offload_tuple *tuple)
+ {
++	__be16 inner_proto = skb->protocol;
+ 	struct vlan_ethhdr *veth;
+ 	struct pppoe_hdr *phdr;
++	struct iphdr *iph;
++	u16 offset = 0;
+ 	int i = 0;
+ 
+ 	if (skb_vlan_tag_present(skb)) {
+@@ -159,13 +162,26 @@ static void nf_flow_tuple_encap(struct sk_buff *skb,
+ 		veth = (struct vlan_ethhdr *)skb_mac_header(skb);
+ 		tuple->encap[i].id = ntohs(veth->h_vlan_TCI);
+ 		tuple->encap[i].proto = skb->protocol;
++		inner_proto = veth->h_vlan_encapsulated_proto;
++		offset += VLAN_HLEN;
+ 		break;
+ 	case htons(ETH_P_PPP_SES):
+ 		phdr = (struct pppoe_hdr *)skb_network_header(skb);
+ 		tuple->encap[i].id = ntohs(phdr->sid);
+ 		tuple->encap[i].proto = skb->protocol;
++		inner_proto = *((__be16 *)(phdr + 1));
++		offset += PPPOE_SES_HLEN;
+ 		break;
+ 	}
++
++	if (inner_proto == htons(ETH_P_IP)) {
++		iph = (struct iphdr *)(skb_network_header(skb) + offset);
++		if (iph->protocol == IPPROTO_IPIP) {
++			tuple->tun.dst_v4.s_addr = iph->daddr;
++			tuple->tun.src_v4.s_addr = iph->saddr;
++			tuple->tun.l3_proto = IPPROTO_IPIP;
++		}
++	}
+ }
+ 
+ struct nf_flowtable_ctx {
+@@ -277,11 +293,46 @@ static unsigned int nf_flow_xmit_xfrm(struct sk_buff *skb,
+ 	return NF_STOLEN;
+ }
+ 
++static bool nf_flow_ip4_encap_proto(struct sk_buff *skb, u32 *psize)
++{
++	struct iphdr *iph;
++	u16 size;
++
++	if (!pskb_may_pull(skb, sizeof(*iph) + *psize))
++		return false;
++
++	iph = (struct iphdr *)(skb_network_header(skb) + *psize);
++	size = iph->ihl << 2;
++
++	if (ip_is_fragment(iph) || unlikely(ip_has_options(size)))
++		return false;
++
++	if (iph->ttl <= 1)
++		return false;
++
++	if (iph->protocol == IPPROTO_IPIP)
++		*psize += size;
++
++	return true;
++}
++
++static void nf_flow_ip4_encap_pop(struct sk_buff *skb)
++{
++	struct iphdr *iph = (struct iphdr *)skb_network_header(skb);
++
++	if (iph->protocol != IPPROTO_IPIP)
++		return;
++
++	skb_pull(skb, iph->ihl << 2);
++	skb_reset_network_header(skb);
++}
++
+ static bool nf_flow_skb_encap_protocol(struct sk_buff *skb, __be16 proto,
+ 				       u32 *offset)
+ {
++	__be16 inner_proto = skb->protocol;
+ 	struct vlan_ethhdr *veth;
+-	__be16 inner_proto;
++	bool ret = false;
+ 
+ 	switch (skb->protocol) {
+ 	case htons(ETH_P_8021Q):
+@@ -291,19 +342,23 @@ static bool nf_flow_skb_encap_protocol(struct sk_buff *skb, __be16 proto,
+ 		veth = (struct vlan_ethhdr *)skb_mac_header(skb);
+ 		if (veth->h_vlan_encapsulated_proto == proto) {
+ 			*offset += VLAN_HLEN;
+-			return true;
++			inner_proto = proto;
++			ret = true;
+ 		}
+ 		break;
+ 	case htons(ETH_P_PPP_SES):
+ 		if (nf_flow_pppoe_proto(skb, &inner_proto) &&
+ 		    inner_proto == proto) {
+ 			*offset += PPPOE_SES_HLEN;
+-			return true;
++			ret = true;
+ 		}
+ 		break;
+ 	}
+ 
+-	return false;
++	if (inner_proto == htons(ETH_P_IP))
++		ret = nf_flow_ip4_encap_proto(skb, offset);
++
++	return ret;
+ }
+ 
+ static void nf_flow_encap_pop(struct sk_buff *skb,
+@@ -331,6 +386,9 @@ static void nf_flow_encap_pop(struct sk_buff *skb,
+ 			break;
+ 		}
+ 	}
++
++	if (skb->protocol == htons(ETH_P_IP))
++		nf_flow_ip4_encap_pop(skb);
+ }
+ 
+ struct nf_flow_xmit {
+@@ -356,8 +414,7 @@ nf_flow_offload_lookup(struct nf_flowtable_ctx *ctx,
+ {
+ 	struct flow_offload_tuple tuple = {};
+ 
+-	if (skb->protocol != htons(ETH_P_IP) &&
+-	    !nf_flow_skb_encap_protocol(skb, htons(ETH_P_IP), &ctx->offset))
++	if (!nf_flow_skb_encap_protocol(skb, htons(ETH_P_IP), &ctx->offset))
+ 		return NULL;
+ 
+ 	if (nf_flow_tuple_ip(ctx, skb, &tuple) < 0)
+diff --git a/net/netfilter/nf_flow_table_path.c b/net/netfilter/nf_flow_table_path.c
+index 50b2b7d0c579ec0855f5870d1e1f7d6f74db0e8f..64e2672a3c3383bae896c4fb68ff9ab7489fe791 100644
+--- a/net/netfilter/nf_flow_table_path.c
++++ b/net/netfilter/nf_flow_table_path.c
+@@ -80,6 +80,8 @@ struct nft_forward_info {
+ 		__be16	proto;
+ 	} encap[NF_FLOW_TABLE_ENCAP_MAX];
+ 	u8 num_encaps;
++	struct flow_offload_tunnel tun;
++	u8 num_tuns;
+ 	u8 ingress_vlans;
+ 	u8 h_source[ETH_ALEN];
+ 	u8 h_dest[ETH_ALEN];
+@@ -102,6 +104,7 @@ static void nft_dev_path_info(const struct net_device_path_stack *stack,
+ 		case DEV_PATH_DSA:
+ 		case DEV_PATH_VLAN:
+ 		case DEV_PATH_PPPOE:
++		case DEV_PATH_TUN:
+ 			info->indev = path->dev;
+ 			if (is_zero_ether_addr(info->h_source))
+ 				memcpy(info->h_source, path->dev->dev_addr, ETH_ALEN);
+@@ -113,14 +116,27 @@ static void nft_dev_path_info(const struct net_device_path_stack *stack,
+ 				break;
+ 			}
+ 
+-			/* DEV_PATH_VLAN and DEV_PATH_PPPOE */
+-			if (info->num_encaps >= NF_FLOW_TABLE_ENCAP_MAX) {
+-				info->indev = NULL;
+-				break;
++			/* DEV_PATH_VLAN, DEV_PATH_PPPOE and DEV_PATH_TUN */
++			if (path->type == DEV_PATH_TUN) {
++				if (info->num_tuns) {
++					info->indev = NULL;
++					break;
++				}
++				info->tun.src_v6 = path->tun.src_v6;
++				info->tun.dst_v6 = path->tun.dst_v6;
++				info->tun.l3_proto = path->tun.l3_proto;
++				info->num_tuns++;
++			} else {
++				if (info->num_encaps >= NF_FLOW_TABLE_ENCAP_MAX) {
++					info->indev = NULL;
++					break;
++				}
++				info->encap[info->num_encaps].id =
++					path->encap.id;
++				info->encap[info->num_encaps].proto =
++					path->encap.proto;
++				info->num_encaps++;
+ 			}
+-			info->encap[info->num_encaps].id = path->encap.id;
+-			info->encap[info->num_encaps].proto = path->encap.proto;
+-			info->num_encaps++;
+ 			if (path->type == DEV_PATH_PPPOE)
+ 				memcpy(info->h_dest, path->encap.h_dest, ETH_ALEN);
+ 			break;
+@@ -196,6 +212,14 @@ static void nft_dev_forward_path(struct nf_flow_route *route,
+ 		route->tuple[!dir].in.encap[i].id = info.encap[i].id;
+ 		route->tuple[!dir].in.encap[i].proto = info.encap[i].proto;
+ 	}
++
++	if (info.num_tuns) {
++		route->tuple[!dir].in.tun.src_v6 = info.tun.dst_v6;
++		route->tuple[!dir].in.tun.dst_v6 = info.tun.src_v6;
++		route->tuple[!dir].in.tun.l3_proto = info.tun.l3_proto;
++		route->tuple[!dir].in.num_tuns = info.num_tuns;
++	}
++
+ 	route->tuple[!dir].in.num_encaps = info.num_encaps;
+ 	route->tuple[!dir].in.ingress_vlans = info.ingress_vlans;
+ 	route->tuple[dir].out.ifindex = info.outdev->ifindex;
 
-Changes in v7:
-- Introduce sw acceleration for tx path of IPIP tunnels
-- Rely on exact match during flowtable entry lookup
-- Fix typos
-- Link to v6: https://lore.kernel.org/r/20250818-nf-flowtable-ipip-v6-0-eda90442739c@kernel.org
-
-Changes in v6:
-- Rebase on top of nf-next main branch
-- Link to v5: https://lore.kernel.org/r/20250721-nf-flowtable-ipip-v5-0-0865af9e58c6@kernel.org
-
-Changes in v5:
-- Rely on __ipv4_addr_hash() to compute the hash used as encap ID
-- Remove unnecessary pskb_may_pull() in nf_flow_tuple_encap()
-- Add nf_flow_ip4_ecanp_pop utility routine
-- Link to v4: https://lore.kernel.org/r/20250718-nf-flowtable-ipip-v4-0-f8bb1c18b986@kernel.org
-
-Changes in v4:
-- Use the hash value of the saddr, daddr and protocol of outer IP header as
-  encapsulation id.
-- Link to v3: https://lore.kernel.org/r/20250703-nf-flowtable-ipip-v3-0-880afd319b9f@kernel.org
-
-Changes in v3:
-- Add outer IP header sanity checks
-- target nf-next tree instead of net-next
-- Link to v2: https://lore.kernel.org/r/20250627-nf-flowtable-ipip-v2-0-c713003ce75b@kernel.org
-
-Changes in v2:
-- Introduce IPIP flowtable selftest
-- Link to v1: https://lore.kernel.org/r/20250623-nf-flowtable-ipip-v1-1-2853596e3941@kernel.org
-
----
-Lorenzo Bianconi (3):
-      net: netfilter: Add IPIP flowtable rx sw acceleration
-      net: netfilter: Add IPIP flowtable tx sw acceleration
-      selftests: netfilter: nft_flowtable.sh: Add IPIP flowtable selftest
-
- include/linux/netdevice.h                          |  13 ++
- include/net/netfilter/nf_flow_table.h              |  18 +++
- net/ipv4/ipip.c                                    |  25 ++++
- net/netfilter/nf_flow_table_core.c                 |   3 +
- net/netfilter/nf_flow_table_ip.c                   | 135 +++++++++++++++++++--
- net/netfilter/nf_flow_table_path.c                 |  84 +++++++++++--
- .../selftests/net/netfilter/nft_flowtable.sh       |  69 +++++++++++
- 7 files changed, 328 insertions(+), 19 deletions(-)
----
-base-commit: 32e4b1bf1bbfe63e52e2fff7ade0aaeb805defe3
-change-id: 20250623-nf-flowtable-ipip-1b3d7b08d067
-
-Best regards,
 -- 
-Lorenzo Bianconi <lorenzo@kernel.org>
+2.51.1
 
 
