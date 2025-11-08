@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-45178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 043ACC432DA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 19:02:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F6A9C432FB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 19:13:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B82853AADE8
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Nov 2025 18:02:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03BBD188A721
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Nov 2025 18:14:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06CD23EAAB;
-	Sat,  8 Nov 2025 18:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3812E264F9C;
+	Sat,  8 Nov 2025 18:13:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="TR/TRNNS"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="S9hLBHQN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF56F212548
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Nov 2025 18:02:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD8F24C676
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Nov 2025 18:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762624930; cv=none; b=RbsfkH97vSGB06q8WcoGyb1hjX+iZ4E1P8RDfLsRgSYW4ntLRnrya2c4OqmJ5IYPoD5yh5d4AbbYlQ31s1W/Bz1nvTtgpTr1K54fKoUQgpjbTZEskv0z+CNPHGam82SFeHWqIDfBx/UbzQKQ1L2C5m/RDotKUfUjuLA9V6EOKJw=
+	t=1762625631; cv=none; b=Mz6Oqol4JlMNmNqhOgscIFloS7KEuOnZcx/4v5T9eYC2OWiT/+mv8di2IqiT3z3XzlwLtFDjnBwFzfclpNP8OB0u3uLgUDvqEYd/Wf53M1suMqScIBulqlJh8ALYJFo+K0rKo+T6Q60xB3LbE82DlFrgYnkrlvmG70K7ovjpwkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762624930; c=relaxed/simple;
-	bh=3IAPhhTO3r40ZZf6LZefAtf94Ln9t0PzMSjZoD5Izaw=;
+	s=arc-20240116; t=1762625631; c=relaxed/simple;
+	bh=5sZTDtiz5vzvED+ms8GWFDwBiYLlGH1PPrJhewd5pPY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s5AUD0kDMIoXOrDawQkSmBaoFnUQY8rsjBrLbPFqSyBUTqeTnOwrzCnQNr9Fq8oYAJFSOcnEgRRRPkC06C+p3W2GpUV88AwsT4CflrDMBRrSEiRgMq1IKIC1azTyQh6YRZiysTJXsAU7ZRm9WhMj0qqDvjv/nBRuFNUavxRs45Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=TR/TRNNS; arc=none smtp.client-ip=209.85.208.51
+	 To:Cc:Content-Type; b=m/NTKIouopulKKWz02+VmAuVeB60ku2qnMxuv3oNrP0ghQcCJ2XGe4RHBoAUPP6MUAt53gJmM/a4tWJkaApVWS2N5p2yqAD4LjGB1LnAOTr643/rlWKeInQ7MLJpLqcSKXK8plRJccd/5n9yvPO75OPeXGwSrojhEze6gaeB0Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=S9hLBHQN; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-640741cdda7so2829613a12.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 08 Nov 2025 10:02:08 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-640b0639dabso3150284a12.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 08 Nov 2025 10:13:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1762624927; x=1763229727; darn=vger.kernel.org;
+        d=soleen.com; s=google; t=1762625628; x=1763230428; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+GWnAPZ9fJcziaRXd9RH/lv4CcYCp+R5b37Pg12ambs=;
-        b=TR/TRNNSmCGSVrbV5A1z0ywve0vGWlgCPWFzOZYO/umw0mviLuQ1m8z93newQ9A7zz
-         BHRXICmNAE7GXU+XESGpD/FgxCU1vp95Ijc4a9sfGRouBRteq1DUAS0+x9wmWG7L8bAo
-         0pKSFc3QdVwjEPzhUVgbnCAnu70+zvXIiQpIE6fBPltq3sRyv+TVOSm6J/xwAeZM0iDO
-         xOYW15EhMZGPjzIT1RhgESY6HICAkaurs8yFAm2yfAERjW7T3aQIQUb8ncM8gDjaBX3y
-         R/XaaP67PLwZVbG7YrTbD0J44DVQLomKPITchLG/uizeeY2evf1ek+l6SUyUTm+xOT3L
-         XYqw==
+        bh=91HNoa+3K2lfUaegKxi2k7ABbReKqG9R1eEkUGhEO1o=;
+        b=S9hLBHQNudBCwJ8l0eixW7cvJMhCJXZhH8tHBmxC3aE4DMLxqIf3/3O3v45hXib+Nk
+         XF4ZsnsdhFEOuw/x+cZUN5/66OT1+sPX63xn6DN3MYZ7PZKZrAcMkrwWFybmyOVxb9gO
+         K4FCd9p9n3Qg0wAhUK95Ttm1UjHHac3V/4PrZ/ymX71xsfjlpvH+K3lMQIYX9IS4J91Z
+         L2Wz2yVL4eacIf5UUJLTci/B1O9muAqpHAJXSvbrg4dUbIZZTaVu7hP9FUwdKAqlRusq
+         rUXkadwN/4Nn48b7K2NOZcunv5EUERS1FJFMZB4Z8RF1THcxwJhbGPleGdd20ktkMOO6
+         DpXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762624927; x=1763229727;
+        d=1e100.net; s=20230601; t=1762625628; x=1763230428;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=+GWnAPZ9fJcziaRXd9RH/lv4CcYCp+R5b37Pg12ambs=;
-        b=IYvxKaOmAoDGEuCip+aFeaiHDv+cgRjRUPKcPTvuJhVm37LhH7vo+9dt6AnXHJyQlm
-         hNTRvrgUW3wOt4vzSEwsTXSF74KrWPg/nKA2+uJjklaZUoBDDs8CKycLizeoJwQ2SVDb
-         84swtUhWlmUQMKv/z4yOHSat4L9K6ztA6LzdKz9r1zEneEkYx4BdYztuFlA4AlTjZ74M
-         Au+ijthVst+EbU3kRIxy+JS8vuCr2m/uUKWhqvqnJIBaTfW1hi09VPgk1nbVUknd5t2w
-         /+TGBIRXz5n1zvCuuP0LnfnSZAcdNZG9192DQMOhGUS6EFVTPat/bhJ4P40a2r+pgGHc
-         p7Jg==
-X-Forwarded-Encrypted: i=1; AJvYcCWiXc1G1/QMxci6F+iuSBVCtD8lXHt1l4mPUsHVGd/YDhSoBLWsNszG2aI0LLtAUlsrgctEyZbpSxAeyWp4Joo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgtJSbqYPEDJlQ57gBUqGzAjYJV1YIueoyXeQCmjZ+Lk2ReljV
-	FXaC+6ITPTtC/6Q9QuuUdrXTm4bY0dl0QcVzDUtZ88qI9RhKCYJYGQQ6bIDbSE36RVWb6FK9RuG
-	oFutcu0pYlDQyNX9OiffJHXAk2WIzbgFUtI2izBROig==
-X-Gm-Gg: ASbGncuCC139xvCkWNK+ESpx7CT68NlHPQZUfxoW9X0u4VN1gz41P7H1W24RZzES3qV
-	SVGl0m3D1wnaTbcUiNyZIut5zSqyjLcOUW2H/QG+AchGu37voCvpIIKWMqwCPpgcRnN7uKrnhrb
-	vyzBPtqkTzM5jVjSeyWxjYmggSzAepZbryWmFI6l8WBohRDi/ya8R25DOAOuGKyyZaWIQrG8zo2
-	DXfsLHxn4Oj+gjJYcWRUUYVgAh6pzJyyqwpo3UTDhYXCnW/HKPnymquB/EKDlhHriSFNC5Irs75
-	bT3MrvO7N4WvGaX51OtGW7BYE/K3axYcxkapYgk=
-X-Google-Smtp-Source: AGHT+IFsBU5ndj9huagaCxIuqQWmECbsaAtYI+vyGpVvxucw0lq5Q3fxfGJV+B8R/tEvXu8DaclLEzTrS4Qfd5oPG4I=
-X-Received: by 2002:a05:6402:1e8e:b0:640:9aed:6ab6 with SMTP id
- 4fb4d7f45d1cf-6415e6e4832mr2571858a12.24.1762624926681; Sat, 08 Nov 2025
- 10:02:06 -0800 (PST)
+        bh=91HNoa+3K2lfUaegKxi2k7ABbReKqG9R1eEkUGhEO1o=;
+        b=FxwmwzVzRifz++d209STDCr2mFcMe02Q45jZf0b0b0eeRS0ad+5dnHJSaNKAP0HhPk
+         ROdQcr0/aQXQGDqPlUfOiHByhRfepXKHlRpEBnTZ0sUrkGj35iSpkOskY9K+zsZfe2Ff
+         CYgjIEOx2+73w/yqFjkB/3b5zB96b8Fr7SW/zGOsuJWzDu7sF/8ONuxJNjwaOoy7Gn7a
+         f1SDN+UxL8MtSV8drJazbukAr/t3SwUnPV2D/06ePqxbTg4Vh5HZoA4673B7Rtxg+Ehq
+         riT8J57CMTomvrbp2xhe140EclS2LmqICcGVVT8VYAbOeGQuJ7TF2lIHKuN0CrmgA22e
+         CqxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXyzsoDJ5RbnqsG484EDBd4LGde7fo+4fjATvLJVHIXbPM28T7uoItFOVmwpVfz+us2Y10odyro5jVvMJCneKQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLNCUBFroXSi3OvKjRKzlztzf1FW1ZwrD9tdlAAUJLiYQ1tFFm
+	gUyKBdtNoDXGXEyII1nTtZxFy9bvMa9tAAKQEabzCNZrjpFXmYkjYItDL8RV5oKUMHuJ7nvcuQ/
+	K/sZzJlc7k0ZsjbpdHaYPYaHqIeHDiyBOloo0f3Tg0w==
+X-Gm-Gg: ASbGncseA9ZDwVKnOC5Wmd9seMjXaqKNChvDfSjJD/GcoXZGAD7ycO2VwFhHTmFZk+f
+	a63uRBJBZ2qWe2Lx4tA4wpNBHYYlUT52QU7ujPB1LsYir+2xwVqCu1A2jKBGy2NlwIE4+MXhJOE
+	xBYYmSLI/Z4GiSvJ+V4PK0KcxDK24S8iJJx3VAG2Um84GL/6W/YbVCseeVSGnhDF8ngTwyTuDEw
+	SQok/3LWBlnM60HpmK3fgt0nYT5yvKMTZa71lm3Uofmm+8h95M88m5zgQsDoj/Ryik2OvD8iTYv
+	EqSyZvvey7fc9wkCNw==
+X-Google-Smtp-Source: AGHT+IHZVBu8RRU1a/y3GTlLoIpZY/OsExrxtTacQ9lQl4JW8XPO7BtLSQRu2xOrmaWsBZtcsYsebXOpI3F0m4hWrgg=
+X-Received: by 2002:a05:6402:1462:b0:640:eea7:c950 with SMTP id
+ 4fb4d7f45d1cf-6415dc0e21dmr2539062a12.13.1762625627658; Sat, 08 Nov 2025
+ 10:13:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,55 +77,117 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
- <20251101142325.1326536-8-pasha.tatashin@soleen.com> <20251107142304.6d22289c96023fbb7e99464c@linux-foundation.org>
-In-Reply-To: <20251107142304.6d22289c96023fbb7e99464c@linux-foundation.org>
+ <20251101142325.1326536-2-pasha.tatashin@soleen.com> <d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
+ <CA+CK2bDSvtuwrrXGOC07Rj42yGFHWR4Sse7Q5z1z8f1ZFHWQ2Q@mail.gmail.com>
+ <CA+CK2bC_+repP-q183hjAuYYB2-Yx7fr_U3zr2cxysAWx5hzpg@mail.gmail.com> <029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev>
+In-Reply-To: <029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev>
 From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Sat, 8 Nov 2025 13:01:30 -0500
-X-Gm-Features: AWmQ_bmRKs4A_xQMqsLqTmPYtgSzWfjOGsBbh71PdYDaXz1vtujo3t8KJ5u4TWo
-Message-ID: <CA+CK2bAvh9Oa2SLfsbJ8zztpEjrgr_hr-uGgF1coy8yoibT39A@mail.gmail.com>
-Subject: Re: [PATCH v9 7/9] liveupdate: kho: move to kernel/liveupdate
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: brauner@kernel.org, corbet@lwn.net, graf@amazon.com, jgg@ziepe.ca, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, masahiroy@kernel.org, ojeda@kernel.org, 
-	pratyush@kernel.org, rdunlap@infradead.org, rppt@kernel.org, tj@kernel.org, 
-	yanjun.zhu@linux.dev
+Date: Sat, 8 Nov 2025 13:13:11 -0500
+X-Gm-Features: AWmQ_bmVwf9f5yvXg9QPmQc_QNNOtI32RAdJxezzIrbImc5UQioX_PtDH5nvgb8
+Message-ID: <CA+CK2bByYPJXSNOh6R3swqFrGsS02m3Dfh=ZU7YhNjNX6siyqg@mail.gmail.com>
+Subject: Re: [PATCH v9 1/9] kho: make debugfs interface optional
+To: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net, 
+	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org, 
+	ojeda@kernel.org, pratyush@kernel.org, rdunlap@infradead.org, rppt@kernel.org, 
+	tj@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 7, 2025 at 5:23=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
+On Fri, Nov 7, 2025 at 6:36=E2=80=AFPM Yanjun.Zhu <yanjun.zhu@linux.dev> wr=
+ote:
 >
-> On Sat,  1 Nov 2025 10:23:23 -0400 Pasha Tatashin <pasha.tatashin@soleen.=
-com> wrote:
 >
-> > Move KHO to kernel/liveupdate/ in preparation of placing all Live Updat=
-e
-> > core kernel related files to the same place.
+> On 11/7/25 4:02 AM, Pasha Tatashin wrote:
+> > On Fri, Nov 7, 2025 at 7:00=E2=80=AFAM Pasha Tatashin <pasha.tatashin@s=
+oleen.com> wrote:
+> >>> Hi, Pasha
+> >>>
+> >>> In our previous discussion, we talked about counting the number of ti=
+mes
+> >>> the kernel is rebooted via kexec. At that time, you suggested adding =
+a
+> >>> variable in debugfs to keep track of this count.
+> >>> However, since debugfs is now optional, where would be an appropriate
+> >>> place to store this variable?
+> >> It is an optional config and can still be enabled if the live update
+> >> reboot number value needs to be accessed through debugfs. However,
+> >> given that debugfs does not guarantee a stable interface, tooling
+> >> should not be built to require these interfaces.
+> >>
+> >> In the WIP LUO [1] I have, I pr_info() the live update number during
+> >> boot and also store it in the incoming LUO FDT tree, which can also be
+> >> accessed through this optional debugfs interface.
+> >>
+> >> The pr_info message appears like this during boot:
+> >> [    0.000000] luo: Retrieved live update data, liveupdate number: 17
+> >>
+> >> Pasha
+> > Forgot to add link to WIP LUOv5:
+> > [1] https://github.com/soleen/linux/tree/luo/v5rc04
 >
-> I notice that menuconfig is a bit weird after this.
 >
-> The "General setup" menu offers the "Live Update and Kexec HandOver"
-> menu but there's nothing in there.  If one sets
-> DEFERRED_STRUCT_PAGE_INIT then things look normal.
+> Thanks a lot. I=E2=80=99ve carefully read this commit:
+> https://github.com/soleen/linux/commit/60205b9a95c319dc9965f119303a1d83f0=
+ff08fa.
 >
-> Perhaps we shouldn't be offering "Live Update and Kexec HandOver" at
-> all if !DEFERRED_STRUCT_PAGE_INIT.
+> To be honest, I=E2=80=99d like to run some tests with who/luo, including =
+the
+> selftest for kho/luo. Could you please share the steps with me?
+>
+> If the testing steps have already been documented somewhere, could you
+> please share the link?
 
-Hi Andrew, thank you for noticing this, yes, indeed it looks strange
-when empty. Let's disable the menu when DEFERRED_STRUCT_PAGE_INIT
-until we relax this KHO/deferred init dependency.
+Currently the test performs in-kernel tests for FLB data, it creates a
+number of FLB for every registered LUO file-handler, which at the
+moment is only memfd.
 
-diff --git a/kernel/liveupdate/Kconfig b/kernel/liveupdate/Kconfig
-index 054f6375a7af..d7344d347f69 100644
---- a/kernel/liveupdate/Kconfig
-+++ b/kernel/liveupdate/Kconfig
-@@ -7,6 +7,7 @@
- #
+It works together with any of the kexec based live update tests. In
+v5, I introduce two tests:
+luo_kexec_simple
+luo_multi_session
 
- menu "Live Update and Kexec HandOver"
-+       depends on !DEFERRED_STRUCT_PAGE_INIT
+For example, with luo_multi_session:
+# ./luo_multi_session
+# [STAGE 1] Starting pre-kexec setup for multi-session test...
+# [STAGE 1] Creating state file for next stage (2)...
+# [STAGE 1] Creating empty sessions 'multi-test-empty-1' and
+'multi-test-empty-2'...
+# [STAGE 1] Creating session 'multi-test-files-1' with one memfd...
+# [STAGE 1] Creating session 'multi-test-files-2' with two memfds...
+# [STAGE 1] Executing kexec...
 
- config LIVEUPDATE
-        bool "Live Update Orchestrator"
+... reboot ...
+After reboot:
+
+$ ./luo_multi_session
+# [STAGE 2] Starting post-kexec verification...
+# [STAGE 2] Retrieving all sessions...
+# [STAGE 2] Verifying contents of session 'multi-test-files-1'...
+# [STAGE 2] Verifying contents of session 'multi-test-files-2'...
+# [STAGE 2] Test data verified successfully.
+# [STAGE 2] Finalizing all test sessions...
+# [STAGE 2] Finalizing state session...
+#
+--- MULTI-SESSION KEXEC TEST PASSED ---
+
+Dmesg data, shows that in-kernel live update test was also successful:
+
+[    0.000000] luo: Retrieved live update data, liveupdate number: 1
+[    0.034513] liveupdate test: test-flb-v0: found flb data from the
+previous boot
+[    0.034517] liveupdate test: test-flb-v1: found flb data from the
+previous boot
+[    0.034518] liveupdate test: test-flb-v2: found flb data from the
+previous boot
+[    0.676891] liveupdate test: Registered 3 FLBs with file handler: [memfd=
+-v1]
+
+Pasha
+
+> Best Regards,
+>
+> Yanjun.Zhu
+>
 
