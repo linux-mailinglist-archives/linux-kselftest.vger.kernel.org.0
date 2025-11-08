@@ -1,193 +1,179 @@
-Return-Path: <linux-kselftest+bounces-45179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F6A9C432FB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 19:13:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F71FC433CC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 20:42:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03BBD188A721
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Nov 2025 18:14:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0069188CFB1
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Nov 2025 19:42:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3812E264F9C;
-	Sat,  8 Nov 2025 18:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755B926D4CD;
+	Sat,  8 Nov 2025 19:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="S9hLBHQN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m78ub/XP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD8F24C676
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Nov 2025 18:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98EF622A80D
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Nov 2025 19:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762625631; cv=none; b=Mz6Oqol4JlMNmNqhOgscIFloS7KEuOnZcx/4v5T9eYC2OWiT/+mv8di2IqiT3z3XzlwLtFDjnBwFzfclpNP8OB0u3uLgUDvqEYd/Wf53M1suMqScIBulqlJh8ALYJFo+K0rKo+T6Q60xB3LbE82DlFrgYnkrlvmG70K7ovjpwkg=
+	t=1762630938; cv=none; b=YYa8I9JRY0qiKF/cW/kR/reMhmzt7r5Xlc6AB+qANx8UdPCMEg+gXYsCffVt3Q5qzI4zB5wyw2URE25pzqdspoMA4cd768e0IyuH9/2W8tw3CTXSjT4kh44nhDWAVzQT8EYagEJYYf/fVfWO7ELUAAZLZUadJ8N6/HUlx9Mhw1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762625631; c=relaxed/simple;
-	bh=5sZTDtiz5vzvED+ms8GWFDwBiYLlGH1PPrJhewd5pPY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m/NTKIouopulKKWz02+VmAuVeB60ku2qnMxuv3oNrP0ghQcCJ2XGe4RHBoAUPP6MUAt53gJmM/a4tWJkaApVWS2N5p2yqAD4LjGB1LnAOTr643/rlWKeInQ7MLJpLqcSKXK8plRJccd/5n9yvPO75OPeXGwSrojhEze6gaeB0Gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=S9hLBHQN; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-640b0639dabso3150284a12.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 08 Nov 2025 10:13:49 -0800 (PST)
+	s=arc-20240116; t=1762630938; c=relaxed/simple;
+	bh=X8ZNMlar1Ow1eWShjc511gIpn78CLUhuBDckR+OLvWw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fa9b5nL6i1h1ZQpdnjuVvP+Y4GAH9yPgGf9FDMU7Bk/zV6lxfCkXbvTChhiKWMMmXkc6BXBb8Xwnb+dVR8Bg0Bc7WHmm6sNr1mJ3V/GJLRXX5koWl6v/Y5QY1LcfH2iZmH5C4b8FalnJXnnX6rAvV28pfm+RFWLrozaCf+TGpQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m78ub/XP; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-378d6fa5aebso15299051fa.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 08 Nov 2025 11:42:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1762625628; x=1763230428; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=91HNoa+3K2lfUaegKxi2k7ABbReKqG9R1eEkUGhEO1o=;
-        b=S9hLBHQNudBCwJ8l0eixW7cvJMhCJXZhH8tHBmxC3aE4DMLxqIf3/3O3v45hXib+Nk
-         XF4ZsnsdhFEOuw/x+cZUN5/66OT1+sPX63xn6DN3MYZ7PZKZrAcMkrwWFybmyOVxb9gO
-         K4FCd9p9n3Qg0wAhUK95Ttm1UjHHac3V/4PrZ/ymX71xsfjlpvH+K3lMQIYX9IS4J91Z
-         L2Wz2yVL4eacIf5UUJLTci/B1O9muAqpHAJXSvbrg4dUbIZZTaVu7hP9FUwdKAqlRusq
-         rUXkadwN/4Nn48b7K2NOZcunv5EUERS1FJFMZB4Z8RF1THcxwJhbGPleGdd20ktkMOO6
-         DpXQ==
+        d=gmail.com; s=20230601; t=1762630935; x=1763235735; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=13aFuuc1GQr46fPnxHYB7JQQ32jMQnvYNiL//B4303c=;
+        b=m78ub/XPYARFiCn1X41kMWCyirwXam48zSHEEhpkCYS2pEjXzk1KGrPIQfIZ6+Sy6+
+         OwUgLhw8b0puzPaZk1AOZJKMEmZ6hWDof9yREOiaqiQ/jAprOvBEDYtaIUIpPAQ2REgR
+         Bm2kZ55dyrg/w66BUvIrbqwyB/8L54nOzdW5yvYKFITgielw0JftKukmd7gY5CPhuhc4
+         HjWvIfjTtZUFInIJ1cxBzAJNqJT5n4Evl9oYAodOBRS8pBNaUBWVtFA0DXf1yIsHVB3r
+         DmCsR5QrsMLu4YOIzXT6Hof4biz25iWoPaNO0340paVEXG1kSu/CaPbFwsw/xwpKSUW6
+         TIeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762625628; x=1763230428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=91HNoa+3K2lfUaegKxi2k7ABbReKqG9R1eEkUGhEO1o=;
-        b=FxwmwzVzRifz++d209STDCr2mFcMe02Q45jZf0b0b0eeRS0ad+5dnHJSaNKAP0HhPk
-         ROdQcr0/aQXQGDqPlUfOiHByhRfepXKHlRpEBnTZ0sUrkGj35iSpkOskY9K+zsZfe2Ff
-         CYgjIEOx2+73w/yqFjkB/3b5zB96b8Fr7SW/zGOsuJWzDu7sF/8ONuxJNjwaOoy7Gn7a
-         f1SDN+UxL8MtSV8drJazbukAr/t3SwUnPV2D/06ePqxbTg4Vh5HZoA4673B7Rtxg+Ehq
-         riT8J57CMTomvrbp2xhe140EclS2LmqICcGVVT8VYAbOeGQuJ7TF2lIHKuN0CrmgA22e
-         CqxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXyzsoDJ5RbnqsG484EDBd4LGde7fo+4fjATvLJVHIXbPM28T7uoItFOVmwpVfz+us2Y10odyro5jVvMJCneKQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLNCUBFroXSi3OvKjRKzlztzf1FW1ZwrD9tdlAAUJLiYQ1tFFm
-	gUyKBdtNoDXGXEyII1nTtZxFy9bvMa9tAAKQEabzCNZrjpFXmYkjYItDL8RV5oKUMHuJ7nvcuQ/
-	K/sZzJlc7k0ZsjbpdHaYPYaHqIeHDiyBOloo0f3Tg0w==
-X-Gm-Gg: ASbGncseA9ZDwVKnOC5Wmd9seMjXaqKNChvDfSjJD/GcoXZGAD7ycO2VwFhHTmFZk+f
-	a63uRBJBZ2qWe2Lx4tA4wpNBHYYlUT52QU7ujPB1LsYir+2xwVqCu1A2jKBGy2NlwIE4+MXhJOE
-	xBYYmSLI/Z4GiSvJ+V4PK0KcxDK24S8iJJx3VAG2Um84GL/6W/YbVCseeVSGnhDF8ngTwyTuDEw
-	SQok/3LWBlnM60HpmK3fgt0nYT5yvKMTZa71lm3Uofmm+8h95M88m5zgQsDoj/Ryik2OvD8iTYv
-	EqSyZvvey7fc9wkCNw==
-X-Google-Smtp-Source: AGHT+IHZVBu8RRU1a/y3GTlLoIpZY/OsExrxtTacQ9lQl4JW8XPO7BtLSQRu2xOrmaWsBZtcsYsebXOpI3F0m4hWrgg=
-X-Received: by 2002:a05:6402:1462:b0:640:eea7:c950 with SMTP id
- 4fb4d7f45d1cf-6415dc0e21dmr2539062a12.13.1762625627658; Sat, 08 Nov 2025
- 10:13:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762630935; x=1763235735;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=13aFuuc1GQr46fPnxHYB7JQQ32jMQnvYNiL//B4303c=;
+        b=F6fpVGuG16oh5ZyusoDkhO3I3tH+I7Kz3xsscolv42hJqlaUwBXM5lzqBptIBXHFTe
+         JV6LkI75TeKc+B4/GERfYjhztDLDqmh2Xx2dDXK5tmc630PIeD5v9qRofBm6oknytZif
+         yWCNuiUrQAF72uMVy2/nGud3JJZRJz6DLO2RWSd+yryyv4NBI7ZRxtKKLll2DrNMCOrI
+         CS7IWL/xSxdAaNOoOSVXj6hPp3FfsaGr4KY21o3+KV93wz7WOLUam5Kii8USajs7aC0o
+         N5RUSg9K+xroU3pzFbrnpH1Om1bRGEwDyBNtDzxG4+kAQZARixbWuG/YkxyuZh7TcNaq
+         XraQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXYBEJhJin1yN8qurnvYhEyZzd2IzXgk/6yZohscO0xIG/qlH6ruyUrUd6SMWktzjak75H7qmCmGqf4mFhzlpI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzu2/6J53cogpwdI/yDfMaIXxJ1GlGxoOkdvJ7xC3I9q/SlJX2n
+	3LD9Y2V0rt8nwhZgB8XjTQAtEbyXvolXX5p1wkKzGeAxx7a4DP+vZNLO
+X-Gm-Gg: ASbGncvZ3U0HhVqyE4eVL4a1elCG5dzfklMz0OzqzjThSqOhvzQa5O+ShRq9zCuRpvk
+	V/WLC7stRGEILw/SvoYHa/GIDTSu96MKbONsbKP5ArC4bVZBgrhuGRfGKnv230K9xMEb4Z1kLAR
+	5DgBMffKbFZXIa2X10aSuj8/8vMg53084A8NRtzUvOuoJPQiC3uv3gv6ZT8nvJrXUCyAlIJzZv7
+	f4frf2hT/qH56ZrBJ2+3AjtfB+leHB2uu0UhMf9PNrmIUFY9IeLfXWz5LW4VlpxZ+VjBJxBe+/u
+	wEu5w3lo1Atyr1SU1ueyQGAz/fW7ym+Jn1ZxHD++9JEBJat9J0JoR4tQji6niG9QSfW3vkhIK5U
+	0xFk1bLAh/DNMrkgXiTYyIyv0/BtH0J8cn3mXJmdtoejKi8dvb6EDFE7R4FSnhO7sCDgxYSvmV5
+	H4ZA==
+X-Google-Smtp-Source: AGHT+IFnDCuSBk7jK+h8KqudoG4bWkSSmVwNgOJURKDwKCfuB23jHIyPUYE9uyHMOVa5uRsybmgG3Q==
+X-Received: by 2002:a2e:b535:0:b0:37a:2f61:5f30 with SMTP id 38308e7fff4ca-37a7b30bad5mr6315371fa.35.1762630934396;
+        Sat, 08 Nov 2025 11:42:14 -0800 (PST)
+Received: from curiosity ([5.188.167.4])
+        by smtp.googlemail.com with ESMTPSA id 38308e7fff4ca-37a5f0edac3sm22115421fa.38.2025.11.08.11.42.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Nov 2025 11:42:12 -0800 (PST)
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Thomas Huth <thuth@redhat.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Andy Chiu <andybnac@gmail.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Joel Granados <joel.granados@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Sergey Matyukevich <geomatsi@gmail.com>
+Subject: [PATCH v4 0/9] riscv: vector: misc ptrace fixes for debug use-cases
+Date: Sat,  8 Nov 2025 22:41:39 +0300
+Message-ID: <20251108194207.1257866-1-geomatsi@gmail.com>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
- <20251101142325.1326536-2-pasha.tatashin@soleen.com> <d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
- <CA+CK2bDSvtuwrrXGOC07Rj42yGFHWR4Sse7Q5z1z8f1ZFHWQ2Q@mail.gmail.com>
- <CA+CK2bC_+repP-q183hjAuYYB2-Yx7fr_U3zr2cxysAWx5hzpg@mail.gmail.com> <029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev>
-In-Reply-To: <029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Sat, 8 Nov 2025 13:13:11 -0500
-X-Gm-Features: AWmQ_bmVwf9f5yvXg9QPmQc_QNNOtI32RAdJxezzIrbImc5UQioX_PtDH5nvgb8
-Message-ID: <CA+CK2bByYPJXSNOh6R3swqFrGsS02m3Dfh=ZU7YhNjNX6siyqg@mail.gmail.com>
-Subject: Re: [PATCH v9 1/9] kho: make debugfs interface optional
-To: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net, 
-	graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org, 
-	ojeda@kernel.org, pratyush@kernel.org, rdunlap@infradead.org, rppt@kernel.org, 
-	tj@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 7, 2025 at 6:36=E2=80=AFPM Yanjun.Zhu <yanjun.zhu@linux.dev> wr=
-ote:
->
->
-> On 11/7/25 4:02 AM, Pasha Tatashin wrote:
-> > On Fri, Nov 7, 2025 at 7:00=E2=80=AFAM Pasha Tatashin <pasha.tatashin@s=
-oleen.com> wrote:
-> >>> Hi, Pasha
-> >>>
-> >>> In our previous discussion, we talked about counting the number of ti=
-mes
-> >>> the kernel is rebooted via kexec. At that time, you suggested adding =
-a
-> >>> variable in debugfs to keep track of this count.
-> >>> However, since debugfs is now optional, where would be an appropriate
-> >>> place to store this variable?
-> >> It is an optional config and can still be enabled if the live update
-> >> reboot number value needs to be accessed through debugfs. However,
-> >> given that debugfs does not guarantee a stable interface, tooling
-> >> should not be built to require these interfaces.
-> >>
-> >> In the WIP LUO [1] I have, I pr_info() the live update number during
-> >> boot and also store it in the incoming LUO FDT tree, which can also be
-> >> accessed through this optional debugfs interface.
-> >>
-> >> The pr_info message appears like this during boot:
-> >> [    0.000000] luo: Retrieved live update data, liveupdate number: 17
-> >>
-> >> Pasha
-> > Forgot to add link to WIP LUOv5:
-> > [1] https://github.com/soleen/linux/tree/luo/v5rc04
->
->
-> Thanks a lot. I=E2=80=99ve carefully read this commit:
-> https://github.com/soleen/linux/commit/60205b9a95c319dc9965f119303a1d83f0=
-ff08fa.
->
-> To be honest, I=E2=80=99d like to run some tests with who/luo, including =
-the
-> selftest for kho/luo. Could you please share the steps with me?
->
-> If the testing steps have already been documented somewhere, could you
-> please share the link?
+This patch series suggests fixes for several corner cases in the RISC-V
+vector ptrace implementation:
 
-Currently the test performs in-kernel tests for FLB data, it creates a
-number of FLB for every registered LUO file-handler, which at the
-moment is only memfd.
+- init vector context with proper vlenb, to avoid reading zero vlenb
+  by an early attached debugger
 
-It works together with any of the kexec based live update tests. In
-v5, I introduce two tests:
-luo_kexec_simple
-luo_multi_session
+- follow gdbserver expectations and return ENODATA instead of EINVAL
+  if vector extension is supported but not yet activated for the
+  traced process
 
-For example, with luo_multi_session:
-# ./luo_multi_session
-# [STAGE 1] Starting pre-kexec setup for multi-session test...
-# [STAGE 1] Creating state file for next stage (2)...
-# [STAGE 1] Creating empty sessions 'multi-test-empty-1' and
-'multi-test-empty-2'...
-# [STAGE 1] Creating session 'multi-test-files-1' with one memfd...
-# [STAGE 1] Creating session 'multi-test-files-2' with two memfds...
-# [STAGE 1] Executing kexec...
+- validate input vector csr registers in ptrace, to maintain an accurate
+  view of the tracee's vector context across multiple halt/resume
+  debug cycles
 
-... reboot ...
-After reboot:
+For detailed description see the appropriate commit messages. A new test
+suite v_ptrace is added into the tools/testing/selftests/riscv/vector
+to verify some of the vector ptrace functionality and corner cases.
 
-$ ./luo_multi_session
-# [STAGE 2] Starting post-kexec verification...
-# [STAGE 2] Retrieving all sessions...
-# [STAGE 2] Verifying contents of session 'multi-test-files-1'...
-# [STAGE 2] Verifying contents of session 'multi-test-files-2'...
-# [STAGE 2] Test data verified successfully.
-# [STAGE 2] Finalizing all test sessions...
-# [STAGE 2] Finalizing state session...
-#
---- MULTI-SESSION KEXEC TEST PASSED ---
+Previous versions:
+- v3: https://lore.kernel.org/linux-riscv/20251025210655.43099-1-geomatsi@gmail.com/T/#u
+- v2: https://lore.kernel.org/linux-riscv/20250821173957.563472-1-geomatsi@gmail.com/T/#u
+- v1: https://lore.kernel.org/linux-riscv/20251007115840.2320557-1-geomatsi@gmail.com/T/#u
 
-Dmesg data, shows that in-kernel live update test was also successful:
+Changes in v4:
+The form 'vsetvli x0, x0, ...' can only be used if VLMAX remains
+unchanged, see spec 6.2. This condition was not met by the initial
+values in the selftests w.r.t. the initial zeroed context. QEMU accepted
+such values, but actual hardware (c908, BananaPi CanMV Zero board) did
+not, setting vill. So fix the selftests after testing on hardware:
+- replace 'vsetvli x0, x0, ...' by 'vsetvli rd, x0, ...' 
+- fixed instruction returns VLMAX, so use it in checks as well
+- replace fixed vlenb == 16 in the syscall test
 
-[    0.000000] luo: Retrieved live update data, liveupdate number: 1
-[    0.034513] liveupdate test: test-flb-v0: found flb data from the
-previous boot
-[    0.034517] liveupdate test: test-flb-v1: found flb data from the
-previous boot
-[    0.034518] liveupdate test: test-flb-v2: found flb data from the
-previous boot
-[    0.676891] liveupdate test: Registered 3 FLBs with file handler: [memfd=
--v1]
+Changes in v3:
+Address the review comments by Andy Chiu and rework the approach:
+- drop forced vector context save entirely
+- perform strict validation of vector csr regs in ptrace
 
-Pasha
+Changes in v2:
+- add thread_info flag to allow to force vector context save
+- force vector context save after vector ptrace to ensure valid vector
+  context in the next ptrace operations
+- force vector context save on the first context switch after vector
+  context init to get proper vlenb
 
-> Best Regards,
->
-> Yanjun.Zhu
->
+---
+
+Ilya Mamay (1):
+  riscv: ptrace: return ENODATA for inactive vector extension
+
+Sergey Matyukevich (8):
+  selftests: riscv: test ptrace vector interface
+  selftests: riscv: verify initial vector state with ptrace
+  riscv: vector: init vector context with proper vlenb
+  riscv: csr: define vtype registers elements
+  riscv: ptrace: validate input vector csr registers
+  selftests: riscv: verify ptrace rejects invalid vector csr inputs
+  selftests: riscv: verify ptrace accepts valid vector csr values
+  selftests: riscv: verify syscalls discard vector context
+
+ arch/riscv/include/asm/csr.h                  |  11 +
+ arch/riscv/kernel/ptrace.c                    |  72 +-
+ arch/riscv/kernel/vector.c                    |  12 +-
+ .../testing/selftests/riscv/vector/.gitignore |   1 +
+ tools/testing/selftests/riscv/vector/Makefile |   5 +-
+ .../testing/selftests/riscv/vector/v_ptrace.c | 754 ++++++++++++++++++
+ 6 files changed, 847 insertions(+), 8 deletions(-)
+ create mode 100644 tools/testing/selftests/riscv/vector/v_ptrace.c
+
+
+base-commit: e811c33b1f137be26a20444b79db8cbc1fca1c89
+-- 
+2.51.0
+
 
