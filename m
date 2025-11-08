@@ -1,128 +1,109 @@
-Return-Path: <linux-kselftest+bounces-45155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97B01C4215F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 01:00:57 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B44A9C4219B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 08 Nov 2025 01:09:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489C91897EBC
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Nov 2025 00:01:22 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 895394E1C60
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Nov 2025 00:08:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBF0E204C36;
-	Sat,  8 Nov 2025 00:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF916C133;
+	Sat,  8 Nov 2025 00:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BHbRrzGJ"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="rDOela9v"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8608225D6;
-	Sat,  8 Nov 2025 00:00:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B72883F;
+	Sat,  8 Nov 2025 00:08:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762560050; cv=none; b=Y5juCGiJsjg0Kd/VKexZSOS/jjO/pH6Yi4715pHe5boyizxKuWfC7Mji1aR5cxKVe2+yTnxeVkwv1bRVbOXzSMAaGGWjgdiCRQZwJKPu7iWAm94eCX6E6wlmXoxEjuyuc/X4aGeRtyDPM7KGs+8p9aSrxApjhc9wkHFN5ngteEw=
+	t=1762560536; cv=none; b=IQft3uJIoori6nrkfBOWT+1KXNDhbSVYeRqX07BYNV0xi0//fNYnQTTKUUjjHPQfxruPjjIVaYwwm2G1DT2LxBeshIemqGtJZj2/dGF0+Zcu/gbrJLmS3dqy4SJ9S4U1ks6tactTSt3gN5iFGDnPNAVov01aBaXej37TSPYJ9S0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762560050; c=relaxed/simple;
-	bh=ElqxjwMWZGyiH+CRJO/vCPV13ZXbTcu15nvD5XAzWQk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DR0w+UHJFQKdBrAYdi2XtDxe8myCB3HEoVubkFZdCfSa8aUHT0bUhXKE/EI823KaajD3MAwXKo03yxZFtJuiCJ+wbPdkRMHQ0beTtFEBhONq1KNUAzV/UXg4QnaIAhbZfW3FLnxNqqGEc8WF11gaCs2KnrP6M94Wp6ynMZdCn+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=BHbRrzGJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E74C113D0;
-	Sat,  8 Nov 2025 00:00:46 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="BHbRrzGJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1762560044;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9aw3k91pDoBMTIya0ydY2C08rTpxsNiCITG8XwHmzjw=;
-	b=BHbRrzGJePBy8TS0S5VXpw/OFjO5vpbdNASLPsgISoMNLpHlakF/SIAX1rTfU1HEsKdDFf
-	eIdEf0TZUWWWGhFbwQZtaagtlMoxYYRnZSpFO/+kThrLew7t8YruZeFh0DwCwEUcu01hwS
-	PPP3PgJwBoPMnJKLgkcEexv7TqxvNIw=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 4e65cb42 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Sat, 8 Nov 2025 00:00:44 +0000 (UTC)
-Date: Sat, 8 Nov 2025 01:00:35 +0100
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Alcock <nick.alcock@oracle.com>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Shuah Khan <shuah@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-	Russell King <linux@armlinux.org.uk>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-s390@vger.kernel.org
-Subject: Re: [PATCH v5 16/34] random: vDSO: trim vDSO includes
-Message-ID: <aQ6II2SiLMzTkAWX@zx2c4.com>
-References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
- <20251106-vdso-sparc64-generic-2-v5-16-97ff2b6542f7@linutronix.de>
- <aQ6FcWxZFD80yWye@zx2c4.com>
+	s=arc-20240116; t=1762560536; c=relaxed/simple;
+	bh=OTeLr/gdmWTJmpiKPkfQJJfAv0QmvVtcPkNjwhc99NY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=QEa2Z0Jocb2ri5JY82vfumoUnkDeUMBVclUGz8WhTZ4xfzH3PWdwSnN1sujCGbuaqfSTBS8V0DT9xbTuq4PvmuBUEu7MO9uW+ynA+tB2ZkMwYEABuWn67Dn7aiyjMve2cf9mHmAT4yWftXbpcMP5rWQTPlA1wR5uok9AzCd22RM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=rDOela9v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7C2DC4CEF7;
+	Sat,  8 Nov 2025 00:08:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1762560536;
+	bh=OTeLr/gdmWTJmpiKPkfQJJfAv0QmvVtcPkNjwhc99NY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=rDOela9v4Nmo0EdfH0Cec9HO/dHEdeyP+DvdMtXYxA1H49algjk0eMiXxRk2DVLBT
+	 gziferQ9JXx+Etq25IJmPttTOmFRuKw+TkiQAiMggVUmkEoZEdFqe7ITxZV4GwSA9k
+	 WxbC4PN+8vIuDPtaclrn5UsM6Ub1oa61r0e3rcGs=
+Date: Fri, 7 Nov 2025 16:08:55 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>, Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren
+ Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah
+ Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftest/mm: fix pointer comparison in mremap_test
+Message-Id: <20251107160855.58891ac6df6854a3b608185f@linux-foundation.org>
+In-Reply-To: <6e07949b-d86f-46d8-a68c-9717cfb26084@kernel.org>
+References: <20251106104917.39890-1-ankitkhushwaha.linux@gmail.com>
+	<fc051006-5cb2-49e1-bb27-7839837439cd@kernel.org>
+	<aQyOZ6eYng-IjxS_@fedora>
+	<6e07949b-d86f-46d8-a68c-9717cfb26084@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aQ6FcWxZFD80yWye@zx2c4.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Nov 08, 2025 at 12:49:05AM +0100, Jason A. Donenfeld wrote:
-> On Thu, Nov 06, 2025 at 11:02:09AM +0100, Thomas Weißschuh wrote:
-> > These includes are not used, remove them.
+On Fri, 7 Nov 2025 10:27:27 +0100 "David Hildenbrand (Red Hat)" <david@kernel.org> wrote:
+
+> On 06.11.25 13:02, Ankit Khushwaha wrote:
+> > On Thu, Nov 06, 2025 at 12:18:57PM +0100, David Hildenbrand (Red Hat) wrote:
+> >> On 06.11.25 11:49, Ankit Khushwaha wrote:
+> >>> Pointer arthemitic with 'void * addr' and 'unsigned long long dest_alignment'
+> >>> triggers following warning:
+> >>>
+> >>> mremap_test.c:1035:31: warning: pointer comparison always evaluates to
+> >>> false [-Wtautological-compare]
+> >>>    1035 |                 if (addr + c.dest_alignment < addr) {
+> >>>         |                                             ^
+> >>>
+> >>> typecasting 'addr' to 'unsigned long long' to fix pointer comparison.
+> >>
+> >> With which compiler are you seeing this?
 > > 
-> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> > Tested-by: Andreas Larsson <andreas@gaisler.com>
-> > Reviewed-by: Andreas Larsson <andreas@gaisler.com>
-> > ---
-> >  drivers/char/random.c | 2 --
-> >  1 file changed, 2 deletions(-)
+> > Hi David,
 > > 
-> > diff --git a/drivers/char/random.c b/drivers/char/random.c
-> > index b8b24b6ed3fe436c8102968392278d5cb5544f06..3860ddd9527930780d5c13cd4742fbc3c27acc42 100644
-> > --- a/drivers/char/random.c
-> > +++ b/drivers/char/random.c
-> > @@ -57,9 +57,7 @@
-> >  #include <crypto/chacha.h>
-> >  #include <crypto/blake2s.h>
-> >  #ifdef CONFIG_VDSO_GETRANDOM
-> > -#include <vdso/getrandom.h>
-> >  #include <vdso/datapage.h>
-> > -#include <vdso/vsyscall.h>
-> >  #endif
-> >  #include <asm/archrandom.h>
-> >  #include <asm/processor.h>
+> > clang version 20.1.8 (Fedora 20.1.8-4.fc42) raised this warning.
+> > 
+> > To reproduce:
+> > 	make -C tools/testing/selftests/mm CC=clang
 > 
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> Thanks, and thanks to Lorenzo for the details.
+> 
+> Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
 
-Sorry, it's been a long day. I meant:
+I must say, applying this would be an unhappy life event.
 
-Reviewed-by: Jason A. Donenfeld <Jason@zx2c4.com>
+	if (void* + ulong < void*)
+
+makes perfect sense in a world which permits void* arithmetic (ie,
+ours).  So what the heck is clang doing??
+
+If we do
+
+	void *addr2 = addr + c.dest_alignment;
+	if (addr2 < addr)
+		...
+
+then which statement warns, and why?
 
