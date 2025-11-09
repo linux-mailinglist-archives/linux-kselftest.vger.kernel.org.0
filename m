@@ -1,200 +1,150 @@
-Return-Path: <linux-kselftest+bounces-45199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 867B3C441F2
-	for <lists+linux-kselftest@lfdr.de>; Sun, 09 Nov 2025 17:09:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8821AC4438B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 09 Nov 2025 18:14:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3FD054E221C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Nov 2025 16:09:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 466123B19FF
+	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Nov 2025 17:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D9E62FFF94;
-	Sun,  9 Nov 2025 16:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48E6830506D;
+	Sun,  9 Nov 2025 17:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="drlx4Ujx";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tZpxlF53"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f1cW/NQD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFADE19DFAB;
-	Sun,  9 Nov 2025 16:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFE1304BA4
+	for <linux-kselftest@vger.kernel.org>; Sun,  9 Nov 2025 17:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762704549; cv=none; b=L32/Y1gmy5UPMuXuny25BuN3pNgN5HfLeZlcdb4FkAUMeSERGZIU7EdZuy3yAXQBuVvWJNWkZ6B8Pqjb7/8ayLitc6kmWhrNjSu8z7wFYDSwP7Rd3PviVakqxMTmNHjKBH+Su4TUmUhC8i2AxzNgk1aNBknj8QKiQ4BVfIpcGT8=
+	t=1762708479; cv=none; b=IyaYfg8Fm3bqjYxpAJ+Hauwgc1o7iahJ4VZyYDEbmcnLILyFT1rYtEqZn0qwU84NpROI2VKgog6wa6rROrQ3TqHPYZVdQDztv6uccXnmf27tZLiDSBRpPKXuaAwW+JKizoWtRXSYFQi8uslBGIxJ57g1DpxAA3xlVInfsM24E/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762704549; c=relaxed/simple;
-	bh=4jod38HpsiIabqfa0pDiZe29m1VSif005vhrT0/DnUc=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=rqJz6Ag7ZTopezkYvVAHRrXus4HMbI9wzRhsMUyJLhkAuFpF8/ZJtDSHY3o9dNc6aCpbBPmKYDzVaMCPRlqCzQdGRxwIcghylNfWwvXod1dW+mArv+9oZL+3wCkpR387skJFjJrk+kHMfdYIwL7p46rXRf1MiM7dFQkHvFsHVww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=drlx4Ujx; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tZpxlF53; arc=none smtp.client-ip=202.12.124.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 0F2AE7A001C;
-	Sun,  9 Nov 2025 11:09:05 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Sun, 09 Nov 2025 11:09:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762704544;
-	 x=1762790944; bh=JEE330ySaodkvhl3xDjKL/tIDsvMEMAgBil3ykH1mCk=; b=
-	drlx4UjxHBc4BK+/NVJU89mFSbrfOcSM+lHamYWdL3egMM8mGQLm5jNme0hu1Rht
-	17ASKVfJ7qjrdeREn5wXdwvevseHMNdIxD0PLDg/GrY1oY17B5NGgz3QCVs9Pnsz
-	aahHFTPIvSg43oGQ2ldcMf2dKJQHda9YZyk4beeBQMqHa1wOoEsDdp8OH73q/niD
-	tTNdsiAq8d93OLEXExNoNy/umBFvSyfKYpAnKgph7sAtxtYFuv86g7XcY8RAZQgp
-	BmojD/4751TwCgFscyQZhmNeuhm+uTXFZqJY/dgVY/QfR0icOlnF2vwKeEC6o3TE
-	46IziJYcsvKnY8cp5l5B1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762704544; x=
-	1762790944; bh=JEE330ySaodkvhl3xDjKL/tIDsvMEMAgBil3ykH1mCk=; b=t
-	ZpxlF53AtCgpy5zaK9XzTSw0xrnZE1DatfrBFVrRSWYxl4bTI1mCGnn4BeoQ6Vkr
-	aSauWlGgVMFTjq2hv7v9iIaAQyMrEsAFY7HaXSKggaScjCukiDUkQWSf3tAAGtw2
-	AmtNmi21+TxMlkCYr+9Y564q0KWWdQn4rlJ5/iE14Hs24g0LqxSziFK37Wtoxgd5
-	NFycR8/vwa/SrwPiiOY2f6yL33vU9cT9pa5eaF0D3zAxC0gN2JGYElrjix4QM/Te
-	we1M6Ll2YjybsX3J6FAVqONqELdi7WGpVpm69bFae9MG4L6YJgHEyUngPIOi1VEv
-	ZUoV7zykJiqiClh9ZBgNg==
-X-ME-Sender: <xms:m7wQactHBjhGmjaME3x7l_Ip111ypE856jTimBmaUzpicZxXSdM4Gg>
-    <xme:m7wQaUTH35MNFb2EDVu2u28sHYMVINxJnL9VcKPxRLHkM-u6vBuuEhaURZtWqYabf
-    fb5Jj6sU20jG9W9VKa9yd0plFCkDu5W1TfCGBQ6md7a_7udFru3QcI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduleehkeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfeuvedugedugfeiffdvtdettdeifeevfffghfefvefhvdehlefhheehjedvfffg
-    necuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghr
-    tghpthhtohepfeelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvg
-    hnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtoheptggrthgrlhhinhdr
-    mhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehvihhntggvnhiiohdrfhhrrg
-    hstghinhhosegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugiesrghrmhhlihhnuhig
-    rdhorhhgrdhukhdprhgtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsgh
-    hrohhuphdrvghupdhrtghpthhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdp
-    rhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdprhgtphhtthhopegrnh
-    gurhgvrghssehgrghishhlvghrrdgtohhmpdhrtghpthhtohepnhhpihhgghhinhesghhm
-    rghilhdrtghomh
-X-ME-Proxy: <xmx:m7wQabmF_YIbNBgdxFoevoHFJQ1eWu4ZnJ4xjCJtw66W2L-ukr0JXw>
-    <xmx:m7wQaRuILS_f_EquuhHZJAzhvti4hsBgThcJkmS8fwUn49V9jbw22Q>
-    <xmx:m7wQaSfVAsPMMG454n8tzXbzRCt1S_kSbiI9XIhUfh8Gag9s5h-lcw>
-    <xmx:m7wQaVahZheDTpO_ctNR7LNi3EgQoe8W4r0T2kpj8H5LbqG5RtGjRw>
-    <xmx:oLwQaSCuGOvbyudIA1SYvS95j7wbQLvk3z0UJxxth9q7U_J_OZSGmf0i>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id AB7B8700026; Sun,  9 Nov 2025 11:08:59 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1762708479; c=relaxed/simple;
+	bh=X8iXuBDLNyavzveN+u0clYIy8dEtP8NarhPdel67RD4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C+NAN8bIK3OLaosU9IzJHvzJqUBqdezPvxsKmgdzJBWSxXWoRkgZCYnXqjyp8ENQMdvBKnS2SznoBTTNquOlpgQmUIWYRe46tdNR7q2TKIxIrNFMlRYbDxFO3sswSh8cYY1p/tsRDTvpDLdZQqyyEynT0qHk68+lDLjuTTyM3eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f1cW/NQD; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762708476;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=F5HpPOlX4A+IDC0iS/hUD8BvRwzAlkYdd4UARWjCrtI=;
+	b=f1cW/NQDBmRdN/qrgRggEyi7y18tcbIg6op28Ff6fGsRBRkdkVzAbvhLWfUH0AOD0z6wWC
+	YcR8tOVWWlQWDv50CrYaUH1bt4Bd5TURHxnax856S7wpIXh5cDSumKhBU++kBubDj5sr8K
+	TLp6NDnUogw+S/doYK+pZHzBDwGBDZM=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-346-P45cLDM0P8SsWBX1eHJ3Qw-1; Sun,
+ 09 Nov 2025 12:14:33 -0500
+X-MC-Unique: P45cLDM0P8SsWBX1eHJ3Qw-1
+X-Mimecast-MFC-AGG-ID: P45cLDM0P8SsWBX1eHJ3Qw_1762708468
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1EA1F195608D;
+	Sun,  9 Nov 2025 17:14:27 +0000 (UTC)
+Received: from fedora (unknown [10.44.32.53])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 6443730001B9;
+	Sun,  9 Nov 2025 17:14:06 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sun,  9 Nov 2025 18:14:26 +0100 (CET)
+Date: Sun, 9 Nov 2025 18:14:04 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Dmitry Levin <ldv@strace.io>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexey Dobriyan <adobriyan@gmail.com>, Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Adrian Reber <areber@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	tiozhang <tiozhang@didiglobal.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	YueHaibing <yuehaibing@huawei.com>,
+	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
+	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
+	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
+	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
+	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	David Windsor <dwindsor@gmail.com>,
+	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Hans Liljestrand <ishkamiel@gmail.com>,
+	Penglei Jiang <superman.xpt@gmail.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Adrian Ratiu <adrian.ratiu@collabora.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Cyrill Gorcunov <gorcunov@gmail.com>,
+	Eric Dumazet <edumazet@google.com>
+Subject: [RFC PATCH 0/3] mt-exec: fix deadlock with ptrace_attach()
+Message-ID: <aRDL3HOB21pMVMWC@redhat.com>
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AisJtzLZ_1Kg
-Date: Sun, 09 Nov 2025 17:08:27 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: "Andy Lutomirski" <luto@kernel.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Nick Alcock" <nick.alcock@oracle.com>,
- "John Stultz" <jstultz@google.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- shuah <shuah@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
- "Jason A . Donenfeld" <Jason@zx2c4.com>,
- "Russell King" <linux@armlinux.org.uk>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Shannon Nelson" <sln@onemain.com>,
- "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
- sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-s390@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>
-Message-Id: <7eb1a661-e5bf-45cb-a3cf-7337fb0c4173@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2511090221080.25436@angie.orcam.me.uk>
-References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
- <b870aa47-5ed4-4dcf-a407-eca83d1733d8@app.fastmail.com>
- <6452c785-872a-4fe7-90e1-8138d73c6218@app.fastmail.com>
- <alpine.DEB.2.21.2511090221080.25436@angie.orcam.me.uk>
-Subject: Re: [PATCH v5 00/34] sparc64: vdso: Switch to the generic vDSO library
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Sun, Nov 9, 2025, at 04:23, Maciej W. Rozycki wrote:
-> On Sat, 8 Nov 2025, Arnd Bergmann wrote:
->
->> On other architectures, I see that parisc (always aliasing) has stubbed
->> out the vdso functions, while mips/loongson has limited the page size
->> selection to never alias. A few other mips platforms can theoretically
->> enable both small pages and vdso, but my guess is that in practice
->> they don't use the vdso (mips32/ath79) or they use 16KB pages
->> (rm, dec, ip22) based on the defconfig settings.
->
->  Umm, I'd have to dive into the details (and I hardly have the resources 
-> at hand), but quite a bunch of MIPS microarchitectures suffer from cache 
-> aliases; some even have VIVT caches.
+Not for inclusion yet. 2/2 is untested, incomplete, possibly buggy.
 
-I was going with this list:
+But could you review at least the intent? Do you see any problem with
+this approach?
 
-$ git grep define.cpu_has_dc_aliases arch/mips/
-arch/mips/include/asm/cpu-features.h:#define cpu_has_dc_aliases (cpu_data[0].dcache.flags & MIPS_CACHE_ALIASES)
-arch/mips/include/asm/mach-ath79/cpu-feature-overrides.h:#define cpu_has_dc_aliases     1
-arch/mips/include/asm/mach-au1x00/cpu-feature-overrides.h:#define cpu_has_dc_aliases            0
-arch/mips/include/asm/mach-bcm63xx/cpu-feature-overrides.h:#define cpu_has_dc_aliases           0
-arch/mips/include/asm/mach-cavium-octeon/cpu-feature-overrides.h:#define cpu_has_dc_aliases     0
-arch/mips/include/asm/mach-dec/cpu-feature-overrides.h:#define cpu_has_dc_aliases               0
-arch/mips/include/asm/mach-dec/cpu-feature-overrides.h:#define cpu_has_dc_aliases               (PAGE_SIZE < 0x4000)
-arch/mips/include/asm/mach-ingenic/cpu-feature-overrides.h:#define cpu_has_dc_aliases   0
-arch/mips/include/asm/mach-ip22/cpu-feature-overrides.h:#define cpu_has_dc_aliases      (PAGE_SIZE < 0x4000)
-arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h:#define cpu_has_dc_aliases              0
-arch/mips/include/asm/mach-ip28/cpu-feature-overrides.h:#define cpu_has_dc_aliases      0 /* see probe_pcache() */
-arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h:#define cpu_has_dc_aliases              0
-arch/mips/include/asm/mach-loongson2ef/cpu-feature-overrides.h:#define cpu_has_dc_aliases       (PAGE_SIZE < 0x4000)
-arch/mips/include/asm/mach-loongson64/cpu-feature-overrides.h:#define cpu_has_dc_aliases        (PAGE_SIZE < 0x4000)
-arch/mips/include/asm/mach-malta/cpu-feature-overrides.h:/* #define cpu_has_dc_aliases  ? */
-arch/mips/include/asm/mach-malta/cpu-feature-overrides.h:/* #define cpu_has_dc_aliases  ? */
-arch/mips/include/asm/mach-ralink/mt7621/cpu-feature-overrides.h:#define cpu_has_dc_aliases     0
-arch/mips/include/asm/mach-rm/cpu-feature-overrides.h:#define cpu_has_dc_aliases        (PAGE_SIZE < 0x4000)
-arch/mips/include/asm/mach-sibyte/cpu-feature-overrides.h:#define cpu_has_dc_aliases    0
+This problem is very, very old. It seems that nobody can suggest a
+simple/clean fix...
 
-which for many platforms seems to come up with a compile-time
-constant value. I hadn't checked the exact conditions for
-the runtime MIPS_CACHE_ALIASES flag, but I see that the kernel
-has a fairly centralized detection function in probe_pcache()
-https://elixir.bootlin.com/linux/v6.17.7/source/arch/mips/mm/c-r4k.c#L1251
+Oleg.
+---
 
-which is used for the 'generic' platform and those that don't set
-a compile-time constant (ath25, bcm47xx, bmips, cobalt, ip32, malta,
-pic32, rc32434 and tx49xx).
+ fs/binfmt_elf.c         |   4 +-
+ fs/binfmt_elf_fdpic.c   |   4 +-
+ fs/binfmt_flat.c        |   4 +-
+ fs/exec.c               | 142 +++++++++++++++++++++++-------------------------
+ include/linux/binfmts.h |   2 +-
+ kernel/exit.c           |   9 +--
+ kernel/signal.c         |   6 +-
+ 7 files changed, 87 insertions(+), 84 deletions(-)
 
-> (see the figures at the bottom; uptime quoted for an idea of the rate, 
-> though the system hasn't been heavily loaded).  It is possible with the 
-> aid of S$, which is inclusive and PIPT.
-
-I now found commit 0f02cfbc3d9e ("MIPS: VDSO: Match data page
-cache colouring when D$ aliases"), which probably does everything
-necessary to just make it work reliably on mips, and should
-be portable to sparc as Andy suggested as well.
-
-     Arnd
 
