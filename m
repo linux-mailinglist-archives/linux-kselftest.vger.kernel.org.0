@@ -1,130 +1,117 @@
-Return-Path: <linux-kselftest+bounces-45208-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96576C45141
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 07:28:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6210FC45699
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 09:46:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5BA984E3173
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 06:28:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FF2D188FAC1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 08:46:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9289F2773E3;
-	Mon, 10 Nov 2025 06:28:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBED2FC891;
+	Mon, 10 Nov 2025 08:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPDbT+y7"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zc0jjKjA";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dKrT84Jk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6272B156F20;
-	Mon, 10 Nov 2025 06:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955DF2EBBB2;
+	Mon, 10 Nov 2025 08:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762756102; cv=none; b=PklsV1y74mhY5+ZI1V12zp2At0PQ5h6Wnf/ohNle78Y9P0XY2JpOw2j3S4hycptmV67yHNULX6Y2fEx+ZT6Xs7S64eJ9TZmrSjePCoVe2N97N7TuAoQgiPDVt+/YblPkqxEX/IjFwwK+LbQSMXpf99oH0hckYBUjSnIC6QCez/k=
+	t=1762764356; cv=none; b=NnQg8wen6ThHXqzAYSSDTwY/j0xdevej4KkMSpYsyEENk+wowthL2mSTURrb9q62OWJqSVR5wYcjtjR4+A6VXpjbFzGTx9rn6gofp3qWTvr7TIW9nsLxSZZd4C4LbTJCv8J4L6edWTqUmaSi9OD34wAoFsYKaKpg+k1PAYloO1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762756102; c=relaxed/simple;
-	bh=ddIMMg0/UoErbMTX78JXcS4JAj9BwMzwkiTUhO7Nqns=;
+	s=arc-20240116; t=1762764356; c=relaxed/simple;
+	bh=qFxHyINETSyVLE4+guZZc0myjQ3B+ECx4XBF2wKcF+o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kuWJIfytjmJMJuvRi8mcrTXYgHwX+AQz9cmb0TnJL1nL1SxT2AaCS7KG71agRPl6dKsS9i6SywmGJ2QW75e2BjpPKlA7WCt0nwp9V+75AZwlDtEE0D0FFOCTQPHNiqg2YBMg3Ni7r98kIFAAGcZ2LTxdqenxVZaCta4unifiEQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPDbT+y7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D8DC116B1;
-	Mon, 10 Nov 2025 06:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762756101;
-	bh=ddIMMg0/UoErbMTX78JXcS4JAj9BwMzwkiTUhO7Nqns=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hPDbT+y7SDARIULk5EY9QOatLDtZNrpJ0nyknHBBTjv5z+mwJKFnycRJ1vBNgBDtl
-	 ZzYYo6RNkpWQcNIlZr6LU+maAns6QpKykxbBXRJm9rA/XX7pLDkz7p7b0cbwKlNGvz
-	 1CH9nRFaIRQ93E0pzoMo2lFGTGZXSlHtRGSE0nY/g4InX86/4chH9kCNjiVF1k5vXC
-	 WQC/2+TyMIOmG/Qxl4C9N8rq3EU520uOgaftw0MHKQ0cB4ZwjVfmic0VkGp3IVhrXi
-	 BMTjemiDqgWffTd1p3587iB0ZXaKY0i8K+IBYhjYwUUxLd7a5Vuo6NQe+n1eDjg+/O
-	 iXWNfME8V8yOw==
-Date: Mon, 10 Nov 2025 06:28:17 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Benson Leung <bleung@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v6 1/3] revocable: Add fops replacement
-Message-ID: <aRGGARe6ExyGpaRh@google.com>
-References: <20251106152712.11850-1-tzungbi@kernel.org>
- <20251106152712.11850-2-tzungbi@kernel.org>
- <20251106154715.GB1732817@nvidia.com>
- <aQ1-qj0ztQ29h-oc@google.com>
- <20251107141509.GK1732817@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GbWN5oSE/H5o9/wXKrSeOuVsIFHjIeyYCmebmCQTihS4kCHUdx9WmzwsqRmYMhzNl7JSWN+yo8hz1gG0mjgXTVvjKDZoKvOq85MOWvZcmTYMjJeFdEFx03vihO1IokIpQhkEGRHCBTA5I3WKp1tyrNoPwjGeHQ4JTq3tj0V0AO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zc0jjKjA; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dKrT84Jk; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Mon, 10 Nov 2025 09:45:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1762764350;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bsLI0Nxueu9BHgoGhAQAGzoBni2o++loH1n4XsHhDVo=;
+	b=zc0jjKjAsp0YnhtHKw7eM1+liJCO5iSx7CCFd73BS2XJvvlXwflG1NFICzbDNPrMliB1Zz
+	z9oijqTWuNr9uWvpbtAZJfvjFOWQZE3AFkPNDdET/ElQz/Xv3oLQmA/M6PJ/hhmHAX6Cpy
+	Iay9FeMMRFmSX+WRkJbz/WiJ+lqtk6zlCxe5YYD/aR+0JWiaTbiZdKvflk/K+zTAKAHRyh
+	iNT7oqeaQjzbbX4GfH8HcmR7cfsveFd4GJFxHPGpcHUVJs+ns0T1guWntAt+nL8WuHcQAH
+	YY2YP6EklQ3einkrNDniOoe3mo7Bw4HTblfZNZoJk+qiWUqrtmRZ9kBC4KKy5Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1762764350;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bsLI0Nxueu9BHgoGhAQAGzoBni2o++loH1n4XsHhDVo=;
+	b=dKrT84JkcQPBJNqu6XZmJfzmvsjkLpa1AvSOPwrcdFwP4VawI33FMJzCLV+t2ZRC2Nv2Nq
+	0e6oPX/MtzX04lDw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+	Russell King <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v5 17/34] random: vDSO: remove ifdeffery
+Message-ID: <20251110094145-462671cc-1f51-466a-b448-3dc541e764ca@linutronix.de>
+References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
+ <20251106-vdso-sparc64-generic-2-v5-17-97ff2b6542f7@linutronix.de>
+ <aQ6Cq_5kiIXllEoS@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20251107141509.GK1732817@nvidia.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aQ6Cq_5kiIXllEoS@zx2c4.com>
 
-On Fri, Nov 07, 2025 at 10:15:09AM -0400, Jason Gunthorpe wrote:
-> On Fri, Nov 07, 2025 at 05:07:54AM +0000, Tzung-Bi Shih wrote:
-> > On Thu, Nov 06, 2025 at 11:47:15AM -0400, Jason Gunthorpe wrote:
-> > > On Thu, Nov 06, 2025 at 11:27:10PM +0800, Tzung-Bi Shih wrote:
-> > > > +/*
-> > > > + * Recover the private_data to its original one.
-> > > > + */
-> > > > +static struct fops_replacement *_recover_private_data(struct file *filp)
-> > > > +{
-> > > > +	struct fops_replacement *fr = filp->private_data;
-> > > > +
-> > > > +	filp->private_data = fr->orig_private_data;
-> > > > +	return fr;
-> > > > +}
-> > > > +
-> > > > +/*
-> > > > + * Replace the private_data to fops_replacement.
-> > > > + */
-> > > > +static void _replace_private_data(struct fops_replacement *fr)
-> > > > +{
-> > > > +	fr->filp->private_data = fr;
-> > > > +}
-> > > 
-> > > This switching of private_data isn't reasonable, it breaks too much
-> > > stuff. I think I showed a better idea in my sketch.
-> > 
-> > The approach assumes the filp->private_data should be set once by the
-> > filp->f_op->open() if any.  Is it common that the filp->private_data
-> > be updated in other file operations?
+On Sat, Nov 08, 2025 at 12:37:15AM +0100, Jason A. Donenfeld wrote:
+> On Thu, Nov 06, 2025 at 11:02:10AM +0100, Thomas Weißschuh wrote:
+> > -#endif
+> > +	if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+> > +		smp_store_release((unsigned long *)&vdso_k_rng_data->generation, next_gen + 1);
+> > +
 > 
-> You can set it once during open, but you can't change it around every
-> fops callback. This stuff is all concurrent.
+> This is possible because vdso_k_rng_data is now defined in the C source
+> on all platforms and under all configurations, even if
+> !CONFIG_VDSO_GETRANDOM means it's null? Whereas before, some config's
+> headers didn't have this at all, so the #ifdef was necessary?
 
-Ah, yes, I see.
+This is possible because vdso/datapage.h is now included unconditionally.
+(Which was made possible by the previous cleanup patches in this series)
+vdso_k_rng_data is only defined if CONFIG_VDSO_GETRANDOM=y but declared
+unconditionally. If CONFIG_VDSO_GETRANDOM=n all references to the symbol
+are optimized away by the compiler before the linker is invoked, so no
+unresolved references are created.
 
-> > > This probably doesn't work out, is likely to make a memory leak.
-> > > It will be hard for the owning driver to free its per-file memory
-> > > without access to release.
-> > 
-> > Ah, I think this reveals a drawback of the approach.
-> > - Without calling ->release(), some memory may leak.
-> > - With calling ->release(), some UAF may happen. 
-> 
-> It just means the user of this needs to understand there are
-> limitations on what release can do. Usually release just frees memory,
-> that is fine.
-> 
-> I think it would be strange for a release to touch revocable data,
-> that might suggest some larger problem.
+> If so, can you mention this in the commit message?
 
-I think it'd be inevitable for accessing some devm memory in ->release(),
-e.g. [1].
+Will do.
 
-[1] https://elixir.bootlin.com/linux/v6.17/source/drivers/platform/chrome/cros_ec_chardev.c#L260
+
+Thomas
 
