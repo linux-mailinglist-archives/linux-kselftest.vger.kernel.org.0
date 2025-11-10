@@ -1,165 +1,156 @@
-Return-Path: <linux-kselftest+bounces-45224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24700C469FD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 13:35:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AC3EC46D15
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 14:16:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60331188988C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 12:35:39 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D339B349235
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 13:16:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6589030CD89;
-	Mon, 10 Nov 2025 12:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88E1A1C8FBA;
+	Mon, 10 Nov 2025 13:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bjyLkioR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PS38d2F+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 252FF2F690D;
-	Mon, 10 Nov 2025 12:35:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609E31397;
+	Mon, 10 Nov 2025 13:16:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762778110; cv=none; b=KY/PD4iESgPlzDDJ5xHXQhkJ+Reby9TIPyWWp8fD1+1g8Ps6hx8VVUHdxNcxltR4z7Rq2gnxLcLXADcyjikHehykSUmkC3gf6tVjEVtXNDKtNMZy4iFR7G/RpL2fuVQWB2lSin/CnRy55jv0omrREZ6pf25n2POFrBvqWDMp3uM=
+	t=1762780601; cv=none; b=newxeKB1HlO9mwxLbWK196lAMMX3SBvIFn6qbUuHFh8coBZDzQlXctD8kFYH9XxaiUg/wth9c3MlKKD6Fs5zlXmMOlI4bpUwxmbjqvjNAT6oE5yM0GP7fEz+mdJ5Bxfirf5AACe4yHW28uFl+U2r4TtsndO5M6ASLMLeBibhFDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762778110; c=relaxed/simple;
-	bh=Aqloc7BOWQNjYEGGJL4VNHIwvX0puHEXVUArW0wY5yM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XMom9hifIeP2N1qEPtjd4xPU5RqUvszFMiCYEeTZMmK0nCWsRnMvh+GjykJlQ2Mkv/vJZk97/f+qK0HBaMlxLCM2We37EVTSVSwg3D8bzAonyNksWpdsEtttxQrYTephNUf9QPm10YiwP4c2ZRoAR1f2hOg3o7F9mYBCe71AoL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bjyLkioR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C89C19425;
-	Mon, 10 Nov 2025 12:34:48 +0000 (UTC)
+	s=arc-20240116; t=1762780601; c=relaxed/simple;
+	bh=f0dZjtcP0vxUJBo4nfnO1ah3073NhYiLonrdArYUsXw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=F5WBqcLl9JgVZvbQ3WANezJldCU2j9BOBHcxxCRQlRfveKS2B04S14EFqkMguqft4WBv9QQY6yQ5lPD2Oi+OzSJPlRIj/vwg2I3GIuDvEyTB7gjnkec55OYSO+Un+Btya9wtXtnPDEOanVvdpdnuLD35MdLX3ztqtj0q93lXSjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PS38d2F+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A7FC4CEF5;
+	Mon, 10 Nov 2025 13:16:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762778107;
-	bh=Aqloc7BOWQNjYEGGJL4VNHIwvX0puHEXVUArW0wY5yM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bjyLkioRQTNOQX7WV1Bvgk28/2Npo87/4O/DYvYxhvdIkzERkIF4YWgs3zpThh4Nb
-	 nk4DxXanbkMIWVH7rVuKqkYHYeYKOOPFEthmKGnYEIAObYRKAndU3l8nRk9CvViRux
-	 65l/SP8udZTmUVNRLT5uXlJoPFSAOuwJ8MFyqobPnPc/FGkeiRAg+O5ICkw1tnUxZ9
-	 nw59ACFdY/BU2F4GziHlZTo7UgjLJ3h/vdd4gyK6wH9qrNK6e1DhackPpUZT9njHNg
-	 FBi/N8QIzRNuYSKNnCDyU3rxchuLO1kRHhf4q/nx8ccSCm7L7vHbfETFkVt/ILm193
-	 OzCXZMlkxupeQ==
-Date: Mon, 10 Nov 2025 14:34:44 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: "Roy, Patrick" <roypat@amazon.co.uk>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"maz@kernel.org" <maz@kernel.org>,
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-	"joey.gouly@arm.com" <joey.gouly@arm.com>,
-	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-	"yuzenghui@huawei.com" <yuzenghui@huawei.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-	"luto@kernel.org" <luto@kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"willy@infradead.org" <willy@infradead.org>,
-	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-	"david@redhat.com" <david@redhat.com>,
-	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>,
-	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-	"vbabka@suse.cz" <vbabka@suse.cz>,
-	"surenb@google.com" <surenb@google.com>,
-	"mhocko@suse.com" <mhocko@suse.com>,
-	"song@kernel.org" <song@kernel.org>,
-	"jolsa@kernel.org" <jolsa@kernel.org>,
-	"ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>,
-	"andrii@kernel.org" <andrii@kernel.org>,
-	"martin.lau@linux.dev" <martin.lau@linux.dev>,
-	"eddyz87@gmail.com" <eddyz87@gmail.com>,
-	"yonghong.song@linux.dev" <yonghong.song@linux.dev>,
-	"john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"kpsingh@kernel.org" <kpsingh@kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>,
-	"haoluo@google.com" <haoluo@google.com>,
-	"jgg@ziepe.ca" <jgg@ziepe.ca>,
-	"jhubbard@nvidia.com" <jhubbard@nvidia.com>,
-	"peterx@redhat.com" <peterx@redhat.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"pfalcato@suse.de" <pfalcato@suse.de>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"seanjc@google.com" <seanjc@google.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Cali, Marco" <xmarcalx@amazon.co.uk>,
-	"Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
-	"Thomson, Jack" <jackabt@amazon.co.uk>,
-	"derekmn@amazon.co.uk" <derekmn@amazon.co.uk>,
-	"tabba@google.com" <tabba@google.com>,
-	"ackerleytng@google.com" <ackerleytng@google.com>
-Subject: Re: [PATCH v7 05/12] KVM: guest_memfd: Add flag to remove from
- direct map
-Message-ID: <aRHb5FJ2TUMtktVz@kernel.org>
-References: <20250924151101.2225820-4-patrick.roy@campus.lmu.de>
- <20250924152214.7292-1-roypat@amazon.co.uk>
- <20250924152214.7292-2-roypat@amazon.co.uk>
- <DDWOP8GKHESP.2EOY2HGM9RXHU@google.com>
- <aQXVNuBwEIRBtOc0@kernel.org>
- <DDYZRG8A99D1.2MYZVGBKJNHJW@google.com>
- <aQiJAfO8wiVPko_N@kernel.org>
- <DDZV32U60137.1HE9JGMU6P1KD@google.com>
+	s=k20201202; t=1762780601;
+	bh=f0dZjtcP0vxUJBo4nfnO1ah3073NhYiLonrdArYUsXw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=PS38d2F+HD6yJ+cCZ27VfTyu/Xb5ZNzr80MqBwuo05yeFYAXUJdvjE5nUUkXYcFFD
+	 +5183EI4m7vKpS3ZZwa7ynwmCHyhTwcz+iEuPcYXMSWAvc3cub34I6kp/Cnbduib2k
+	 O2om8Jm3FT/iufyjmHEZqTttkvC6e+bBJbYB2icy6vI5KYYdvLq6XlDk1bKyZZ9tZh
+	 roMVdrRyxyw38iwxO2aGZ2XNKX9DBFV8xK31IMNliK86ajR/C3rW3abM/BOELVQbfR
+	 C0M8uOI3syHk24+OYOUanJp+f96ijtCAJSGZ55L2Ur8Kc8x9HzduLTQ+LWWXzdhMpq
+	 ipF5HIEmgZ2pA==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Zhu Yanjun <yanjun.zhu@linux.dev>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,  akpm@linux-foundation.org,
+  brauner@kernel.org,  corbet@lwn.net,  graf@amazon.com,  jgg@ziepe.ca,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  linux-mm@kvack.org,  masahiroy@kernel.org,  ojeda@kernel.org,
+  pratyush@kernel.org,  rdunlap@infradead.org,  rppt@kernel.org,
+  tj@kernel.org
+Subject: Re: [PATCH v9 1/9] kho: make debugfs interface optional
+In-Reply-To: <442fa82e-16ef-4bde-84eb-743450222468@linux.dev> (Zhu Yanjun's
+	message of "Sun, 9 Nov 2025 16:20:56 -0800")
+References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
+	<20251101142325.1326536-2-pasha.tatashin@soleen.com>
+	<d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
+	<CA+CK2bDSvtuwrrXGOC07Rj42yGFHWR4Sse7Q5z1z8f1ZFHWQ2Q@mail.gmail.com>
+	<CA+CK2bC_+repP-q183hjAuYYB2-Yx7fr_U3zr2cxysAWx5hzpg@mail.gmail.com>
+	<029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev>
+	<CA+CK2bByYPJXSNOh6R3swqFrGsS02m3Dfh=ZU7YhNjNX6siyqg@mail.gmail.com>
+	<442fa82e-16ef-4bde-84eb-743450222468@linux.dev>
+Date: Mon, 10 Nov 2025 14:16:37 +0100
+Message-ID: <mafs0qzu69gei.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DDZV32U60137.1HE9JGMU6P1KD@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 04, 2025 at 11:08:23AM +0000, Brendan Jackman wrote:
-> On Mon Nov 3, 2025 at 10:50 AM UTC, Mike Rapoport wrote:
-> >
-> >> >> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> >> >> > index 1d0585616aa3..73a15cade54a 100644
-> >> >> > --- a/include/linux/kvm_host.h
-> >> >> > +++ b/include/linux/kvm_host.h
-> >> >> > @@ -731,6 +731,12 @@ static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
-> >> >> >  bool kvm_arch_supports_gmem_mmap(struct kvm *kvm);
-> >> >> >  #endif
-> >> >> >  
-> >> >> > +#ifdef CONFIG_KVM_GUEST_MEMFD
-> >> >> > +#ifndef kvm_arch_gmem_supports_no_direct_map
-> >> >> > +#define kvm_arch_gmem_supports_no_direct_map can_set_direct_map
-> >> >> > +#endif
-> >> >> > +#endif /* CONFIG_KVM_GUEST_MEMFD */
-> >> >> 
-> 
-> But this is for CONFIG_ARCH_HAS_DIRECT_MAP? I am reading this as a stub
-> to fill in for archs that have set_direct_map_*, but don't have runtime
-> disablement like arm64.
+On Sun, Nov 09 2025, Zhu Yanjun wrote:
 
-You are right.
- 
-> Whereas my concern is archs that don't have set_direct_map_* at all,
-> i.e. where we need to unconditionally fail
-> GUEST_MEMFG_FLAG_NO_DIRECT_MAP.
-> 
-> (Or would we prefer to just not define it at all on those archs? Not
-> sure what the norms are there, I guess that's a question for KVM/arch
-> maintainers).
+> =E5=9C=A8 2025/11/8 10:13, Pasha Tatashin =E5=86=99=E9=81=93:
+>> On Fri, Nov 7, 2025 at 6:36=E2=80=AFPM Yanjun.Zhu <yanjun.zhu@linux.dev>=
+ wrote:
+>>>
+>>> On 11/7/25 4:02 AM, Pasha Tatashin wrote:
+>>>> On Fri, Nov 7, 2025 at 7:00=E2=80=AFAM Pasha Tatashin <pasha.tatashin@=
+soleen.com> wrote:
+>>>>>> Hi, Pasha
+>>>>>>
+>>>>>> In our previous discussion, we talked about counting the number of t=
+imes
+>>>>>> the kernel is rebooted via kexec. At that time, you suggested adding=
+ a
+>>>>>> variable in debugfs to keep track of this count.
+>>>>>> However, since debugfs is now optional, where would be an appropriate
+>>>>>> place to store this variable?
+>>>>> It is an optional config and can still be enabled if the live update
+>>>>> reboot number value needs to be accessed through debugfs. However,
+>>>>> given that debugfs does not guarantee a stable interface, tooling
+>>>>> should not be built to require these interfaces.
+>>>>>
+>>>>> In the WIP LUO [1] I have, I pr_info() the live update number during
+>>>>> boot and also store it in the incoming LUO FDT tree, which can also be
+>>>>> accessed through this optional debugfs interface.
+>>>>>
+>>>>> The pr_info message appears like this during boot:
+>>>>> [    0.000000] luo: Retrieved live update data, liveupdate number: 17
+>>>>>
+>>>>> Pasha
+>>>> Forgot to add link to WIP LUOv5:
+>>>> [1] https://github.com/soleen/linux/tree/luo/v5rc04
+>>>
+>>> Thanks a lot. I=E2=80=99ve carefully read this commit:
+>>> https://github.com/soleen/linux/commit/60205b9a95c319dc9965f119303a1d83=
+f0ff08fa.
+>>>
+>>> To be honest, I=E2=80=99d like to run some tests with who/luo, includin=
+g the
+>>> selftest for kho/luo. Could you please share the steps with me?
+>>>
+>>> If the testing steps have already been documented somewhere, could you
+>>> please share the link?
+>> Currently the test performs in-kernel tests for FLB data, it creates a
+>> number of FLB for every registered LUO file-handler, which at the
+>> moment is only memfd.
+>>
+>> It works together with any of the kexec based live update tests. In
+>> v5, I introduce two tests:
+>> luo_kexec_simple
+>> luo_multi_session
+>>
+>> For example, with luo_multi_session:
+>
+> Hi, Pasha
+>
+> I enabled "CONFIG_LIVEUPDATE=3Dy"
+>
+> # ./luo_multi_session
+> 1..0 # SKIP Failed to open /dev/liveupdate. Is the luo module loaded?
+>
+> # ls /dev/liveupdate
+> ls: cannot access '/dev/liveupdate': No such file or directory
+>
+> # grep "LIVEUPDATE" -inrHI /boot/config-`uname -r`
+> /boot/config-next-20251107-luo+:349:CONFIG_LIVEUPDATE=3Dy
+> /boot/config-next-20251107-luo+:11985:CONFIG_LIVEUPDATE_TEST=3Dy
+>
+> I made tests on FC42. But /dev/liveupdate is missing.
 
-It makes sense to define can_set_direct_map to false for arches that don't
-support set_direct_map. 
+You need to add liveupdate=3D1 to your kernel cmdline to enable LUO and
+get /dev/liveupdate.
 
--- 
-Sincerely yours,
-Mike.
+Pasha, your LUO series doesn't add the liveupdate parameter to
+kernel-parameters.txt. I think it should be done in the next version to
+this parameter is discoverable.
+
+--=20
+Regards,
+Pratyush Yadav
 
