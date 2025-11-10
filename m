@@ -1,101 +1,88 @@
-Return-Path: <linux-kselftest+bounces-45263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9919CC49733
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 22:49:48 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D05F2C4978D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 23:04:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 410A71887180
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 21:50:13 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5654F34B967
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 22:04:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB82932AAD4;
-	Mon, 10 Nov 2025 21:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E698B2E92B0;
+	Mon, 10 Nov 2025 22:04:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELZ14Cfj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="stHaKd72"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD6A2FD1D3
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 21:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2342D6605
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 22:04:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762811382; cv=none; b=Ha0SBYABHbyBcF5OgeMrmwwfvIr37/kkPo47h6VO3jvpWe4jxhvaJYzXqmwBBn6JI2m9UI+0kRXKSgZPubOVRToOlGViQ9oDZSCqW+8RaDyQ+LZozNHYVLZXRSF45k7Rt5KDVVWz9gxKTUb4NTtRmAqXKeWSivulktcI1EcDyyI=
+	t=1762812241; cv=none; b=P0joTafJkveb6rPZSoZi7RfMKQ/MSqeNjTAQc9KnZUMV1y1bnWWOU4GiPslUbBhIcOtyezPFAGGFbQjB9n1VkVogTQGfOoywLylN3ujD7/yko2AcsuFiHjEEQd+4h8FOEMDJHplzFzec2RoiyI2QgxCv3+T7XvfX66Oy8/EWRwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762811382; c=relaxed/simple;
-	bh=yVjviV3zopbG1PAfCWMvFshBkzHtOiy9INXF/AyrOjo=;
+	s=arc-20240116; t=1762812241; c=relaxed/simple;
+	bh=W/+Qb13fLuIC+pUVsrfpojLJCEkS1lN/GKOP++Gtp9A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EuOC9sdbddQ4ElksEfm+84uUXBz5Z1UNc81us7Mgv6ak29VvCMB/01Iui0Hq5roJzf+1URvNeHdRJ656Gov6TOyLhP8pk1Xl9dVZw+4p3o5wLWObHCEKChiIZ07SfR80KC3fJ4f1rnSi2wczV8+9m9EutwPt8KZns5irzcTeEnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELZ14Cfj; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59445ee9738so2765305e87.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 13:49:40 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=qqIDCfBe1i1JggPzJySS8ltIh4LRMeBJ3GwyPIB5CeF/BfoYeVXJnSpCkMHbd0M07AuAbvW//mFeyr3lJi7b6ZwcO9J9Z3lYmatXUyIhwxIeuucKxTr/9GTMBmWNXz42Oo+eA9aQ8VykYupHBEQ/ivaShIPx3DWFi8e44ps8GWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=stHaKd72; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7810289cd4bso3548182b3a.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 14:04:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762811379; x=1763416179; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RFirqqcYt6xjzQLvnHeiyd54+NIBXchkEuHWoh2vuEE=;
-        b=ELZ14Cfj9MG5Ek0/l9eeH/fIFQMGqh8G3P0o3tQcIOR2AY++gN9NOsFux0xdVdkO0v
-         MU2OKQdYIen9yRt5rLjN6bvyQOaJQ8UYJaZWXxsmd6LkU3JEWUAbF9ulY+Zwn++dGE9t
-         ThLPbe0s+JrPqiiKcJrsag1c3Uw0jRG8pHydamyIP3g58KmXkCqczTED6EJUFDfOE78H
-         +RaawlpsDr25t6K4jglBizAPhm0jL9Z8kxp+O9aP6T+vVY4U6J5InZS8V4pqXniQPZBQ
-         2xEcJg8SRJPckCf4vj3My5MAmjC2Gk8IYc4bFJiYyWie7GmF22LJuqJAaezdigqj25vH
-         uW5Q==
+        d=google.com; s=20230601; t=1762812240; x=1763417040; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zhck2YVv24x1Tq6SL/L5kEfr8DPVNBJogPUSyg2Wx54=;
+        b=stHaKd72tuHrNNbXpurTuxGKhT+vEUHxd8JNi7RLepLNdj7GlLy2nfDnKWJ5i/DQY9
+         mFRAHKOPZbNLR90oaFKncPo/aneOA+vaHXE6rwEIjf923vAsa4SrgnkI0TrzSx6omc3N
+         x0cKiU5mgFVT5Sts4Vr0GE3KS79QQqJlUnmtCVucc5ewXRB9oJGQaG76O0JSJn3uiwoo
+         ZkFSioCdM4ry/hrSko+KvJf/xkc2qp9EcFsy/ewMaLWXlOuJbZ2sdz7xikNmGxZykGGQ
+         igvrRWfdoLZBDTEGsMfmU+eLicx/gd2CQjzjc7IIrHWlvMHTnJXs/v5tZqUjgaxcISHF
+         jFxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762811379; x=1763416179;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RFirqqcYt6xjzQLvnHeiyd54+NIBXchkEuHWoh2vuEE=;
-        b=o52rkYmOwsk9ZPgEOq4RNZQ7Q62YCppOw9/gPcvZXoW7xcVeCY4jZ5FYgAoAl/tCXx
-         JM1m2cwCyfVwqKm2T2nOeEnm9iq3z4I5EDDCSLCF1Y1L1malTwq2bTPuxqDVQdmHYUb6
-         fhE562JskAelmQyja39fVK6Fulm4AMR83Zx85qPx/FLhpWBfmApDvF+K/0a2TxV4mqW+
-         dJfAyCd3pXPelSo8QKqLWsKPHfchPjxaWHmjYI8P5wTQkb7bfD7eoQ18QCVlsLn+UOXh
-         hHuV9yENCnMNEwK8nMoFx3DPDMapOOIowj+n+3e5BVFTWGMOx1E509gB6IC9TTsryyvs
-         F3cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVfHI2S7KHtdIndEX3kYBQJ00esgPtaTL4KpqHV9WCsFnZSCEXvcZeUr9Lv6ZzbEiF7/Myx/pMPhM/7SYbR6sI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3IhvLO6p2ZIobiUv44rshgExwsMiN6669PjeUP5j4HqCQhXDU
-	M7zZLye9zj9NFiAhZdMoouIVQm93XSGtqQOIpnIFbKOIUEkYLPndQDAU
-X-Gm-Gg: ASbGncsTJGLyCCoL3S6VF7LmJIadNYALO/creZkEerQFNEnnF2nR/7DWmipnVwsnoS6
-	z9m+MqlaSYW56R1d2j8CJbbr+luJElhVb5zPNzHisZ1GK3n0E2WDakxqNvze4XzfkGZ0A+gkpDW
-	2Soaz9FLdQAeCjcjyjvCmreG+tMn94yb6aR2fvVJgjTQKqWDr9Lau0CEqZ4QfKrikGz4gxDjT83
-	KGTKe8AyGCzlSfD2BWqI/oc8TmRbaUGGxEOdpMHa6fQ8FumKrDqdrtYetHmYDxDyPmr15/5oKKZ
-	KjvmDCA7+Le6dW/BdjTOdz/9C03/W8QvIszGgiVMl1r2KsYQTp2Xk+DMgytmoU03BFp986CHnib
-	CWP1CfKdyzIDAQ0C14lESvkK4vdqwKmqFkdnuGcML8vr3d1CVzzcs3Gnll4pf/7vxjAgaYWILLH
-	8Zog==
-X-Google-Smtp-Source: AGHT+IGjkYEZuiIm45qpRwthPMBOYrneNAO2t8mNMUlpQZhecV1r6b86jhyyoGDLr3xqW66ODHKdcw==
-X-Received: by 2002:a05:6512:3a86:b0:57c:2474:371f with SMTP id 2adb3069b0e04-5945f1e5562mr3111337e87.45.1762811378727;
-        Mon, 10 Nov 2025 13:49:38 -0800 (PST)
-Received: from grain.localdomain ([5.18.255.97])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944ff427d0sm4115144e87.68.2025.11.10.13.49.38
+        d=1e100.net; s=20230601; t=1762812240; x=1763417040;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zhck2YVv24x1Tq6SL/L5kEfr8DPVNBJogPUSyg2Wx54=;
+        b=BGpgPqSb3uDx7t3uiI8gJ37Gu/WeAnVbfd5Ufa/5kYHb9B/CG0P1R/0ycwo432ID4M
+         cBR/hgJ5m1HIFP2Kc01Cv++Ba5D6gezuI8N1NITnbA4RG/2L4vfbj5w10mc5Ua0xKu8e
+         gCNUccqTKxsHWNI7A3fnzg/ecuZ5sDEYfrPSCzkd7S468Pk4h8bx6zrcmFNFU8wIi8vT
+         08Sf38pOBpWvMuseuEt07BflV6SXQ9UgtdLZ0x6ApqnKZf+OwzDIbMLUbDWh/DeMRu9L
+         wYK/qymBi03gug9XBYuGnto7pXBoHKLcjsqvWe5LKE+kztQoY4dt9qfPvtsFEnRoMESM
+         VYAg==
+X-Forwarded-Encrypted: i=1; AJvYcCV8NJVMGe6faoyGrsMX0Z1Aof+jPBSCJxUNIwrkuipXadITwvS6aqdUdE0xKW+9WckGws5uKLUkjZplapV/GsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxPsgugUsEZHQAyRbGw8sdWpfAZ/pj+8zqiWwgoDVS42+QOQ+Y
+	bnxl2ByFFddd+WIf4ljZwsWuYDW74tRVu5XsV7IQxFhOazAZT3HxcX5uGfpnap4i0A==
+X-Gm-Gg: ASbGncvcgAwzZUqcHbMck8pWoU2A6wUAYHeOZBkn648WZkw0pDm6F/gxiXR65CWaxKF
+	O9bPSRRq3zGAJxl+iS4pEe3cEfB6ntcxDiQ610cGwux5dbX00EVHfIZt5FxbjQlPVCxRp8B2760
+	IU9IjkImoRRWQnJCvJRZQl9pEvyWKHmLasogY31GklEpf5rUwUX2+I3PyOAxLjEZmvRMFF+aT+5
+	LVa8osyGlDhl6dDrGEcnQnXRo1TYh4KywwpK55IjB6r9VBkdpdNR+mMCD2zXHjYQwiJtDx/F2Dz
+	C5Ub62oi5SgM2mGxaI7NO/D1vhTqyPGuXKIzu4VifmhwuKs8ipBpF4a62RjsQNc32lwH1sSvZmT
+	CIFbo9GGf6MaUr8LMyJR8JOHY4jzVfrtb6TwPetTJ6OtoNoWq+CEMfh0XsKMMK/riEaWesmVo/j
+	f7SLRVpU+on6yIK7y/qDdyp0w1ScHwmPXruUJpY4UObsqQ2E79jGYUuI6XjmQArlw=
+X-Google-Smtp-Source: AGHT+IGLIV/g6MCRKuipubTB9GVYmkpYIEQQohBhRaIhOj/Ez+CYSKMkODJsxMq554gdnbdi8bX1Mw==
+X-Received: by 2002:a05:6a00:1892:b0:7ab:4fce:fa1b with SMTP id d2e1a72fcca58-7b225adc01fmr11346982b3a.4.1762812239386;
+        Mon, 10 Nov 2025 14:03:59 -0800 (PST)
+Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0cc179f77sm12733156b3a.34.2025.11.10.14.03.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 13:49:38 -0800 (PST)
-Received: by grain.localdomain (Postfix, from userid 1000)
-	id 93D625A0033; Tue, 11 Nov 2025 00:49:37 +0300 (MSK)
-Date: Tue, 11 Nov 2025 00:49:37 +0300
-From: Cyrill Gorcunov <gorcunov@gmail.com>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH 2/3] exec: don't wait for zombie threads with
- cred_guard_mutex held
-Message-ID: <aRJd8Z-DrYrjRt4r@grain>
-References: <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <aRDL3HOB21pMVMWC@redhat.com>
- <aRDMNWx-69fL_gf-@redhat.com>
- <aRHFSrTxYSOkFic7@grain>
- <aRIAEYH2iLLN-Fjg@redhat.com>
+        Mon, 10 Nov 2025 14:03:58 -0800 (PST)
+Date: Mon, 10 Nov 2025 22:03:54 +0000
+From: David Matlack <dmatlack@google.com>
+To: Alex Mastro <amastro@fb.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH 1/4] vfio: selftests: add iova range query helpers
+Message-ID: <aRJhSkj6S48G_pHI@google.com>
+References: <20251110-iova-ranges-v1-0-4d441cf5bf6d@fb.com>
+ <20251110-iova-ranges-v1-1-4d441cf5bf6d@fb.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -104,68 +91,95 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aRIAEYH2iLLN-Fjg@redhat.com>
-User-Agent: Mutt/2.2.14 (2025-02-20)
+In-Reply-To: <20251110-iova-ranges-v1-1-4d441cf5bf6d@fb.com>
 
-On Mon, Nov 10, 2025 at 04:09:05PM +0100, Oleg Nesterov wrote:
-...
-> > > 	if (!((sig->flags & SIGNAL_GROUP_EXIT) || sig->group_exec_task)) {
-> > > 		sig->group_exec_task = tsk;
-> > > 		sig->notify_count = -zap_other_threads(tsk);
-> >
-> > Hi Oleg! I somehow manage to miss a moment -- why negative result here?
-> 
-> You know, initially I wrote
-> 
-> 		sig->notify_count = 0 - zap_other_threads(tsk);
-> 
-> to make it clear that this is not a typo ;)
+On 2025-11-10 01:10 PM, Alex Mastro wrote:
+> +/*
+> + * Return iova ranges for the device's container. Normalize vfio_iommu_type1 to
+> + * report iommufd's iommu_iova_range. Free with free().
+> + */
+> +static struct iommu_iova_range *vfio_iommu_iova_ranges(struct vfio_pci_device *device,
+> +						       size_t *nranges)
+> +{
+> +	struct vfio_iommu_type1_info_cap_iova_range *cap_range;
+> +	struct vfio_iommu_type1_info *buf;
 
-Aha! Thanks a huge for explanation :)
+nit: Maybe name this variable `info` here and in vfio_iommu_info_buf()
+and vfio_iommu_info_cap_hdr()? It is not an opaque buffer.
 
-> 
-> This is for exit_notify() which does
-> 
-> 	/* mt-exec, de_thread() -> wait_for_notify_count() */
-> 	if (tsk->signal->notify_count < 0 && !++tsk->signal->notify_count)
-> 		wake_up_process(tsk->signal->group_exec_task);
-> 
-> Then setup_new_exec() sets notify_count > 0 for __exit_signal() which does
-> 
-> 	/* mt-exec, setup_new_exec() -> wait_for_notify_count() */
-> 	if (sig->notify_count > 0 && !--sig->notify_count)
-> 		wake_up_process(sig->group_exec_task);
-> 
-> Yes this needs more comments and (with or without this patch) cleanups.
-> Note that exit_notify() and __exit_signal() already (before this patch)
-> use ->notify_count almost the same way, just exit_notify() assumes that
-> notify_count < 0 means the !thread_group_leader() case in de_thread().
+> +	struct vfio_info_cap_header *hdr;
+> +	struct iommu_iova_range *ranges = NULL;
+> +
+> +	buf = vfio_iommu_info_buf(device);
 
-Yeah, just realized. It's been a long time since I looked into this signals
-and tasks related code so to be honest don't think I would be helpful here)
-Anyway while looking into patch I got wonder why
+nit: How about naming this vfio_iommu_get_info() since it actually
+fetches the info from VFIO? (It doesn't just allocate a buffer.)
 
-+static int wait_for_notify_count(struct task_struct *tsk)
-+{
-+	for (;;) {
-+			return -EINTR;
-+		set_current_state(TASK_KILLABLE);
-+		if (!tsk->signal->notify_count)
-+			break;
+> +	VFIO_ASSERT_NOT_NULL(buf);
 
-We have no any barrier here in fetching @notify_count? I mean updating
-this value is done under locks (spin or read/write) in turn condition
-test is a raw one. Not a big deal since set_current_state() and schedule()
-are buffer flushers by themselves and after all not immediate update of
-notify_count simply force us to yield one more schedule() call but I've
-been a bit confused that we don't use some read_once here or something.
-Another (more likely) that I've just said something stupid)
+This assert is unnecessary.
 
-+		schedule();
- 	}
-+	__set_current_state(TASK_RUNNING);
-+	return 0;
-+}
+> +
+> +	hdr = vfio_iommu_info_cap_hdr(buf, VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE);
+> +	if (!hdr)
+> +		goto free_buf;
 
-	Cyrill
+Is this to account for running on old versions of VFIO? Or are there
+some scenarios when VFIO can't report the list of IOVA ranges?
+
+> +
+> +	cap_range = container_of(hdr, struct vfio_iommu_type1_info_cap_iova_range, header);
+> +	if (!cap_range->nr_iovas)
+> +		goto free_buf;
+> +
+> +	ranges = malloc(cap_range->nr_iovas * sizeof(*ranges));
+> +	VFIO_ASSERT_NOT_NULL(ranges);
+> +
+> +	for (u32 i = 0; i < cap_range->nr_iovas; i++) {
+> +		ranges[i] = (struct iommu_iova_range){
+> +			.start = cap_range->iova_ranges[i].start,
+> +			.last = cap_range->iova_ranges[i].end,
+> +		};
+> +	}
+> +
+> +	*nranges = cap_range->nr_iovas;
+> +
+> +free_buf:
+> +	free(buf);
+> +	return ranges;
+> +}
+> +
+> +/* Return iova ranges of the device's IOAS. Free with free() */
+> +struct iommu_iova_range *iommufd_iova_ranges(struct vfio_pci_device *device,
+> +					     size_t *nranges)
+> +{
+> +	struct iommu_iova_range *ranges;
+> +	int ret;
+> +
+> +	struct iommu_ioas_iova_ranges query = {
+> +		.size = sizeof(query),
+> +		.ioas_id = device->ioas_id,
+> +	};
+> +
+> +	ret = ioctl(device->iommufd, IOMMU_IOAS_IOVA_RANGES, &query);
+> +	VFIO_ASSERT_EQ(ret, -1);
+> +	VFIO_ASSERT_EQ(errno, EMSGSIZE);
+> +	VFIO_ASSERT_GT(query.num_iovas, 0);
+> +
+> +	ranges = malloc(query.num_iovas * sizeof(*ranges));
+> +	VFIO_ASSERT_NOT_NULL(ranges);
+> +
+> +	query.allowed_iovas = (uintptr_t)ranges;
+> +
+> +	ioctl_assert(device->iommufd, IOMMU_IOAS_IOVA_RANGES, &query);
+> +	*nranges = query.num_iovas;
+> +
+> +	return ranges;
+> +}
+> +
+> +struct iommu_iova_range *vfio_pci_iova_ranges(struct vfio_pci_device *device,
+> +					      size_t *nranges)
+
+nit: Both iommufd and VFIO represent the number of IOVA ranges as a u32.
+Perhaps we should do the same in VFIO selftests?
 
