@@ -1,45 +1,46 @@
-Return-Path: <linux-kselftest+bounces-45218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F52FC46514
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 12:39:02 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA553C464CD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 12:36:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AEB5A4ECD11
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 11:35:54 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 460993480C5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 11:36:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 071E030BB94;
-	Mon, 10 Nov 2025 11:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 569863093D8;
+	Mon, 10 Nov 2025 11:35:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iPLAInXP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EayCZC8U"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22EA30AD1F;
-	Mon, 10 Nov 2025 11:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A8E3081C5;
+	Mon, 10 Nov 2025 11:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762774541; cv=none; b=iPMDB91UerKMTKHWkQi9h66bdxNhzEwgDd0Cb+CrRpSBOXHvSfOjxUM9Xkxc3OzdGr54lKF7jRF6QW7NbPjN0NNoeeMXh/KSUZHiakqyETTUG8eRdXUaV1mERnPFgeQf7p1TEaM0aPkcyk5cmeOhOV1CBp3dgMNVRdceSAu0blo=
+	t=1762774550; cv=none; b=nFk1CHUm1t1TWGceLgghGxzhwgZ/up42ABVH04Wy5si+MGuj4W7ICvhrwgtM0q5BibF34U5kKflwuR/eOxfn+lACI+uT1lko0ZmMzjxJCLVRYxtFlHAf13YNxe6m3nvSYFJa4gS+JHX+1ojyJZjNM/RiFls8nFoawKFpWs7fnB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762774541; c=relaxed/simple;
-	bh=Trw3VkOpFEcmS9Rt6F8pvQePozUV3ete57zjNzKHvuQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DLzEDK6qjSI8MqCOaMfvHtFEowg2yXCWmMfvCfVJkaL7bjb7YLQ1FwqGYRxrxHeY0TQ+hUjd8zNQfAD4wYGhWzFjGqR2+3rb+JCh56rejfVOH8SI0rEYegQUAf2C9mPHkVyHK1Rg0M23PugJw3ns7CewPmCigISslNEin0F/1Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iPLAInXP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49CFC4CEF5;
-	Mon, 10 Nov 2025 11:35:36 +0000 (UTC)
+	s=arc-20240116; t=1762774550; c=relaxed/simple;
+	bh=tfPkJpL+aB+8sFcfxxCCqoXe/9nLFGDcyl5TPFG8KC4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bjTPZGpIbgVx6+r92jN/aoFQUa1TfWlShlSJJnLxImJEn3NoBL+ZFJsELy/5aCHbcWLgOmPowQ703/Wud6Gpr0N1mOJZTaq/cLQiUzwsBhEowi3nis1yaErGLtxcp1/NY6sCGIyM/Cx3MonovToC98lEdrLEIPJFcoFy7TW5D4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EayCZC8U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07132C116B1;
+	Mon, 10 Nov 2025 11:35:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762774541;
-	bh=Trw3VkOpFEcmS9Rt6F8pvQePozUV3ete57zjNzKHvuQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=iPLAInXPZw/D61DVlxUjkvYqo6g/qe407waall6A6dN/96v9W29S3uVe3Jz4Z7lIx
-	 eNiqPpbdkO8i3GjuF4rxmtr3dXy9XvHcJ9kLiUW2LzLPuX0ba2jGfij4S01WHP0AwL
-	 OHLSqkjd2O4RfhkTYdCUKjGorF455/qKBA07U9YrZOuQcQnMPO92thPXMtyel3N7Aj
-	 SJr0pXgbJH5GKJ84936xK9fweogKzSIfzT5A97GLwLqHPmoOKh1ITn7tC9X3RgIdkJ
-	 zi6BrAcxJ9JA/RlGB7jj6YSrqRJoj4nt9m5SccUi5zi3To6k+NfEsjWzROPygk+oTf
-	 EGTCegenCyzQw==
+	s=k20201202; t=1762774546;
+	bh=tfPkJpL+aB+8sFcfxxCCqoXe/9nLFGDcyl5TPFG8KC4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=EayCZC8ULJyxXRl8iT6e8aCFzY7CSCrl34MEdw/Z7CDqCitIOdrJrgz80MQ5yM1GK
+	 MMkRUK2sQMNVTzlSuTV6u0hpU7cbPXEYLO/qr7gKL6gI+mgHj3Jmw7gTm6+LbQ7Yza
+	 Nht9YUwxSLNlkcqioXTHDSZStxEq4wQP4lLy9+c/547gag7RUpiRvVgzx2A95LnuSU
+	 KFdvDNg9W/wZoJ7sMKAh25aM05qt8cN7YfKFkQw7sdnVAuauErsQqYWUDqNSG6S/Kv
+	 iez6PAIsacQUgYDHZYSLjSVpJucwp8MfCo1W6xp1DNCPNupk3BVqjEUEYqmtWq1rV1
+	 WYKnH7WlDNZPQ==
 From: Miguel Ojeda <ojeda@kernel.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
@@ -61,9 +62,11 @@ Cc: Rae Moar <raemoar63@gmail.com>,
 	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	patches@lists.linux.dev
-Subject: [PATCH 1/2] rust: allow `unreachable_pub` for doctests
-Date: Mon, 10 Nov 2025 12:35:27 +0100
-Message-ID: <20251110113528.1658238-1-ojeda@kernel.org>
+Subject: [PATCH 2/2] rust: device: make example buildable
+Date: Mon, 10 Nov 2025 12:35:28 +0100
+Message-ID: <20251110113528.1658238-2-ojeda@kernel.org>
+In-Reply-To: <20251110113528.1658238-1-ojeda@kernel.org>
+References: <20251110113528.1658238-1-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,63 +75,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Examples (i.e. doctests) may want to show public items such as structs,
-thus the `unreachable_pub` warning is not very helpful.
+This example can easily be made buildable, thus do so.
 
-Thus allow it for all doctests.
+It would have triggered an `unreachable_pub` warning without the previous
+commit.
 
-In addition, remove it from the existing `expect`s we have in a couple
-doctests.
-
-Suggested-by: Alice Ryhl <aliceryhl@google.com>
-Link: https://lore.kernel.org/rust-for-linux/aRG9VjsaCjsvAwUn@google.com/
 Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 ---
- rust/kernel/init.rs         | 2 +-
- rust/kernel/types.rs        | 2 +-
- scripts/rustdoc_test_gen.rs | 1 +
- 3 files changed, 3 insertions(+), 2 deletions(-)
+ rust/kernel/device.rs | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-index 4949047af8d7..e476d81c1a27 100644
---- a/rust/kernel/init.rs
-+++ b/rust/kernel/init.rs
-@@ -67,7 +67,7 @@
- //! ```
- //!
- //! ```rust
--//! # #![expect(unreachable_pub, clippy::disallowed_names)]
-+//! # #![expect(clippy::disallowed_names)]
- //! use kernel::{prelude::*, types::Opaque};
- //! use core::{ptr::addr_of_mut, marker::PhantomPinned, pin::Pin};
- //! # mod bindings {
-diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-index dc0a02f5c3cf..835824788506 100644
---- a/rust/kernel/types.rs
-+++ b/rust/kernel/types.rs
-@@ -289,7 +289,7 @@ fn drop(&mut self) {
- /// # Examples
+diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+index a849b7dde2fd..d00f4af507db 100644
+--- a/rust/kernel/device.rs
++++ b/rust/kernel/device.rs
+@@ -67,7 +67,16 @@
  ///
- /// ```
--/// # #![expect(unreachable_pub, clippy::disallowed_names)]
-+/// # #![expect(clippy::disallowed_names)]
- /// use kernel::types::Opaque;
- /// # // Emulate a C struct binding which is from C, maybe uninitialized or not, only the C side
- /// # // knows.
-diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
-index c8f9dc2ab976..0e6a0542d1bd 100644
---- a/scripts/rustdoc_test_gen.rs
-+++ b/scripts/rustdoc_test_gen.rs
-@@ -208,6 +208,7 @@ macro_rules! assert_eq {{
-     #[allow(unused)]
-     static __DOCTEST_ANCHOR: i32 = ::core::line!() as i32 + {body_offset} + 1;
-     {{
-+        #![allow(unreachable_pub)]
-         {body}
-         main();
-     }}
-
-base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
+ /// A bus specific device should be defined as follows.
+ ///
+-/// ```ignore
++/// ```
++/// # use core::marker::PhantomData;
++/// # use kernel::{
++/// #     device,
++/// #     types::Opaque, //
++/// # };
++/// # mod bindings {
++/// #     #[expect(non_camel_case_types)]
++/// #     pub struct bus_device_type;
++/// # }
+ /// #[repr(transparent)]
+ /// pub struct Device<Ctx: device::DeviceContext = device::Normal>(
+ ///     Opaque<bindings::bus_device_type>,
 -- 
 2.51.2
 
