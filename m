@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-45221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D4BDC46648
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 12:53:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFFECC46660
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 12:55:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 29D404E75F2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 11:53:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 433133A322C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 11:55:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F204230B50B;
-	Mon, 10 Nov 2025 11:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95CD30B525;
+	Mon, 10 Nov 2025 11:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wO2hCQc1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yxe5My0q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f73.google.com (mail-wr1-f73.google.com [209.85.221.73])
+Received: from mail-ed1-f74.google.com (mail-ed1-f74.google.com [209.85.208.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40BC62EB87F
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 11:53:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8232EB87F
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 11:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762775600; cv=none; b=nu2OxBMCgJ2EX6YRvVmTs7wRUYwf6IMDPOoMgoj+3tEnWyl8T/0Lo4kcPwdkpRiGl5bFAk+L4PhQteJRn5TWo7rIIBTzVd6cHSA2qXd9xnnQPN+g90oR0ureTDrQGrLHLiW2AyS4rhFHaYTbJtklDYrNk2htzr3xycDpcDBOzfE=
+	t=1762775696; cv=none; b=bj4YkP8ChoqRp0JKqf1GnhCNYmhRkDDrRgSzvJThGcn43skScbKZGbq0iC0RyDhg6ifx+dXiGK+s1Zz0wj33bnLb6dnXhN6bZDJE6OG8+NX2te98Hd2uUIGWkUB1b3qJfaIeCHD+VnABqgO9QnW8wOJzbrTXBTIGvRVmsqCtcBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762775600; c=relaxed/simple;
-	bh=EDZJblRFOBVaS7V9swh66M5uzKZEQn6brygnQ0u2oxA=;
+	s=arc-20240116; t=1762775696; c=relaxed/simple;
+	bh=Wld7jp9tEQXuIh09SWUvMZLGcORmYH4LRprox5mayS4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=F0Ws+m+gCIYlIS3vrFJ2kRt6jpKpSCWqVQHXFnPmL0nfcoQeJzI5Gd/biBOUtLComX2ze643ixhvmEaZJAQWYRCjUFNhhK7rNPVfGEfghuj9NHfxo7L2yJXrSbvr2019q6q7Kx/Y3ti1f+piQ57cDs9OAVUOHk6A6mUaWoyAhkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wO2hCQc1; arc=none smtp.client-ip=209.85.221.73
+	 To:Cc:Content-Type; b=Aj/KvZxrMC4r1qO7r3HmIIT0aClk37HP3dnFlPo04+ZrFwlW0TbX+Ohs2qcYefLrG3nOET3jSY67FQEhRs+6MeQazTvA20hw3Nz95UmUiSqODGW02jZVavQV5LIFPZ7l875tjJ/gnaiR6/8dSRPQKgWfRBq8WcpzkN//TcIW5Jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yxe5My0q; arc=none smtp.client-ip=209.85.208.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wr1-f73.google.com with SMTP id ffacd0b85a97d-42b366a76ffso520343f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 03:53:19 -0800 (PST)
+Received: by mail-ed1-f74.google.com with SMTP id 4fb4d7f45d1cf-64097bef0e2so4156495a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 03:54:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762775598; x=1763380398; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1762775693; x=1763380493; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FEKi6XUPcJTxR8kCttvI9av/95c/Ll+7Tji2AuMb3UQ=;
-        b=wO2hCQc1pDp6U+DbazLKOl9cCy6NhQ3O12tRziaJ2PPRzd2hFYWEMMDIxq0DgUOeCx
-         4tYbbsJ5mGg2rY3lYM2hXOV1qPNJ4HFHogKZuBKa1nUrIELAtecSTd0eZOkDB9Ca+FNl
-         2/VUne8RYKuI14DLlUfjn9Y9DLcRR5UHPd/cRYixc1293zhyUtjSjiOdloUzCN8aSEEz
-         baxeU8hRzmw6333HEj9v4qmQTvjezBjL2us0WIaJa6GHjbpPLJf/or1WkMvU8P4NAc20
-         NX/2hw8UFSW08eVk2j0pvkb0kCYqnscbHDirqI/oXPP7rFppDb+yzq+F3w13iIZr07Bo
-         rB6w==
+        bh=RQQBm4PwQuyI6yZ9AdqTjALBwiLdrNslKJZVi9Mtf9A=;
+        b=Yxe5My0qzeQJg0PhWL6EKJGdRWXdvyWwA6GKEJBtTzxfccEC879ZHcA6PZIRHCwRG1
+         JQARHzpFvIWNeLAlK7WJR70EHZOhaBETWBmwU3lsGS+jYgrkp47cMSr71HVvxORvg6ry
+         LEfQobC1E+pH58SKkK8cpdb+xofnjIyD8dpRbHKREEWMZ2Nj9ytEr6mAd99Bt648rWWs
+         6uH1w4mmjPOI7Ip3hP3V1G7UVTOXcU0BDEY3G9e/mSIRSdHz57ccrczAsrz6j/2yaeYr
+         3hE/T0rTw0LfuPbbnQC7TR54RFvl8k/rAbXiaNnXVbdA2ofwAsC9HySBeg2nyYQboonh
+         LIpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762775598; x=1763380398;
+        d=1e100.net; s=20230601; t=1762775693; x=1763380493;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FEKi6XUPcJTxR8kCttvI9av/95c/Ll+7Tji2AuMb3UQ=;
-        b=V2JroxGunnXlD0X4z8vHFclhb24Qfc1UDVV7NuMHKGnslWp9/kk43z+u+UosGx1Icp
-         g+9bf6iQvorAj6n77UDMtbwrNm/cjA08G1jk78NvH6pRtRYNJvPNCoFjuKSRMAgIT/e/
-         cV8rh1v9y/W10hopS6OwdcYI/CFVd0DVs8cqLxvDvDw/bebQY4Md+jpZ3PULZIFzD/oA
-         xIaVsyMmmlmQeSQ03BRUC98uHDh/zX+mo/4SDBJq3VeMtPclzWscnvENQtitor8SeUZD
-         unzeS3KRV1zbCj8/EUBVmxDT3Etpa6fL4v+wOjfXRLeGPECD9ytQ024rwSZaxwbgUw9x
-         9W5w==
-X-Forwarded-Encrypted: i=1; AJvYcCX/U/Tad1dAwUyzpGskpKAk8W3faulJ4Ch8vzBTJoI/sXieY7oCiDgt/OcopXuJlx09X2n5pSkPuYWInlZ6kjM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLAHe788FOazk6MNAwvOOdbrZT73m4000qN7ggcRLI7oAq38dU
-	9NT8zSU4EQL0FeAOmWmAqBXMDZi/8bEE/cvlxTih12lxKu1fSazjgTy+eKnvOGBYxDulsiwC1yP
-	daLQadS5tuyEJ2xZplA==
-X-Google-Smtp-Source: AGHT+IGDXVa4jR2Hvr+m+drHIkFWVJ9kU5jgqj0CSyP25A++0dFEDi+XQZITKlDq83CPddiTCOmKe1l7tbj1AWM=
-X-Received: from wrnp5.prod.google.com ([2002:adf:ce05:0:b0:42b:33e5:eba1])
+        bh=RQQBm4PwQuyI6yZ9AdqTjALBwiLdrNslKJZVi9Mtf9A=;
+        b=kExsJDkJg4LGoLcq4nzDladeiOdQW7jPGyVPbbKoqTFEVocyrdfZwFFgwLwcpajWYA
+         PWKjwLqEXfcEKxbRR+uBys9+S8XW5dRvDftaP5HSeVvw4BVNMAAkAu1t06I7mN5LHnmf
+         gGbGbuPFqtxU+yNabNFN9fWXQNsHerki4JBBHI5cRpY94CpF8Ur7C8f18HdzHOuCrhT6
+         LGac9b6bH03UmToP55MoL6AUnVLsMZeIz4boNUCiLJalnwpoLTnxnBxzzPsCNx4Lujf8
+         IOtaWKrOaM2LiCHrTx8LrHHTVyJW8IAZyp9/mipSUYYFcAHT1cm1Ukq2kWf7qegtWdEJ
+         OA8g==
+X-Forwarded-Encrypted: i=1; AJvYcCXbKjE8rzcIreadHERn85FSgJBzSWXnX/TdzbuHqIveJfcYEEr4Pq2BCGpEBS0HaeRJ/CLcZCGUXi5S8osnpVE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPzq2eyjFf0nfwk7vJO4kx1MUuU0jhfYPrBNTqeA9h3KsWK6l3
+	T0aNzK1eh25E3INJSirYQ9kY7bfLpCLbgE8TsbwTOgJ+TMqoGatKIjs8RhPPBC5hV+PgA4fOQo6
+	Ak+lnIqZpUlOaX1czQg==
+X-Google-Smtp-Source: AGHT+IF3M40dNIzNZkxr/1+aJ+nfeEg2fTctw3V8OcAEVxMO8ut0+MdQ2WzFfOK9xMLQ2EWoslAnSoMKLCyCugk=
+X-Received: from edaa20.prod.google.com ([2002:a05:6402:24d4:b0:640:949d:9bf8])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:4710:b0:42b:2dfd:534f with SMTP id ffacd0b85a97d-42b2dfd557dmr4843170f8f.34.1762775597658;
- Mon, 10 Nov 2025 03:53:17 -0800 (PST)
-Date: Mon, 10 Nov 2025 11:53:16 +0000
-In-Reply-To: <20251110113528.1658238-1-ojeda@kernel.org>
+ 2002:a05:6402:27d4:b0:640:fb00:9b0b with SMTP id 4fb4d7f45d1cf-6415e8565d6mr6321846a12.32.1762775693084;
+ Mon, 10 Nov 2025 03:54:53 -0800 (PST)
+Date: Mon, 10 Nov 2025 11:54:52 +0000
+In-Reply-To: <20251110113528.1658238-2-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20251110113528.1658238-1-ojeda@kernel.org>
-Message-ID: <aRHSLChi5HYXW4-9@google.com>
-Subject: Re: [PATCH 1/2] rust: allow `unreachable_pub` for doctests
+References: <20251110113528.1658238-1-ojeda@kernel.org> <20251110113528.1658238-2-ojeda@kernel.org>
+Message-ID: <aRHSjKsZVz3NfUrW@google.com>
+Subject: Re: [PATCH 2/2] rust: device: make example buildable
 From: Alice Ryhl <aliceryhl@google.com>
 To: Miguel Ojeda <ojeda@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -89,38 +89,42 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael
 	patches@lists.linux.dev
 Content-Type: text/plain; charset="utf-8"
 
-On Mon, Nov 10, 2025 at 12:35:27PM +0100, Miguel Ojeda wrote:
-> Examples (i.e. doctests) may want to show public items such as structs,
-> thus the `unreachable_pub` warning is not very helpful.
+On Mon, Nov 10, 2025 at 12:35:28PM +0100, Miguel Ojeda wrote:
+> This example can easily be made buildable, thus do so.
 > 
-> Thus allow it for all doctests.
+> It would have triggered an `unreachable_pub` warning without the previous
+> commit.
 > 
-> In addition, remove it from the existing `expect`s we have in a couple
-> doctests.
-> 
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Link: https://lore.kernel.org/rust-for-linux/aRG9VjsaCjsvAwUn@google.com/
 > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
 Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 
->  rust/kernel/init.rs         | 2 +-
->  rust/kernel/types.rs        | 2 +-
->  scripts/rustdoc_test_gen.rs | 1 +
->  3 files changed, 3 insertions(+), 2 deletions(-)
+>  rust/kernel/device.rs | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
 > 
-> diff --git a/rust/kernel/init.rs b/rust/kernel/init.rs
-> index 4949047af8d7..e476d81c1a27 100644
-> --- a/rust/kernel/init.rs
-> +++ b/rust/kernel/init.rs
-> @@ -67,7 +67,7 @@
->  //! ```
->  //!
->  //! ```rust
-> -//! # #![expect(unreachable_pub, clippy::disallowed_names)]
-> +//! # #![expect(clippy::disallowed_names)]
-
-Maybe we should also allow disallowed_names in doc tests?
-
-Alice
+> diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+> index a849b7dde2fd..d00f4af507db 100644
+> --- a/rust/kernel/device.rs
+> +++ b/rust/kernel/device.rs
+> @@ -67,7 +67,16 @@
+>  ///
+>  /// A bus specific device should be defined as follows.
+>  ///
+> -/// ```ignore
+> +/// ```
+> +/// # use core::marker::PhantomData;
+> +/// # use kernel::{
+> +/// #     device,
+> +/// #     types::Opaque, //
+> +/// # };
+> +/// # mod bindings {
+> +/// #     #[expect(non_camel_case_types)]
+> +/// #     pub struct bus_device_type;
+> +/// # }
+>  /// #[repr(transparent)]
+>  /// pub struct Device<Ctx: device::DeviceContext = device::Normal>(
+>  ///     Opaque<bindings::bus_device_type>,
+> -- 
+> 2.51.2
+> 
 
