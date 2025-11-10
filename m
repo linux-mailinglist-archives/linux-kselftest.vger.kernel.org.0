@@ -1,95 +1,95 @@
-Return-Path: <linux-kselftest+bounces-45233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFCF7C47ECC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 17:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77E7CC48153
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 17:47:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDB843B63AA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 15:53:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CEE23B8304
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 16:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0AD274676;
-	Mon, 10 Nov 2025 15:51:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DF6D279DB1;
+	Mon, 10 Nov 2025 16:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KHGEHoKm";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="hFY/7tkY";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KHGEHoKm";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="hFY/7tkY"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="WRlZN1Dt";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HtQdFl7J";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="WRlZN1Dt";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="HtQdFl7J"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597F4272805
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 15:51:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D90279DC3
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 16:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762789891; cv=none; b=F490RHNu4PgKuJ+Oaq4AL0uZD8/Uu1PRj1N63fybE8HZKq24m5Im0p5yFRyweB6eNbMKs2g1SUDfJxDRVc9p15SeEOGtrsr6nUbhtmY8LD4i3Ae/M1tjo5Qir12KS80uQAPW6Xa8XaU8Ypt2a8pMyMlS0G/aMnchsZYyOKRWDFM=
+	t=1762791439; cv=none; b=FOV1aGYsfqN7ZNhKfFsQA8j+dzS4IO69/xSQiIW2uiP1RWtXvGUPzPZdT+EdOZzZLKKGzCn0vq7zxXe/on77itD4KOM3zEidcbklJonyUnvvZW8RuIoDBdyVKzahYB+AYZiwzoAs9hH4PQy5INRr9gzCmgOwj83Ojgq+xhEo5XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762789891; c=relaxed/simple;
-	bh=i1U+HFpDeu6SxqM3NK8Hs6P6h69LlTAH3/dwAXJoyGE=;
+	s=arc-20240116; t=1762791439; c=relaxed/simple;
+	bh=BOICJgjEM8TZaqRMVH1oCsKEHOrwjoYHghZGGNdXB40=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mYcFYcnu25SdEsre/dGiMsYq1i7D95+hTa0qdL/TPcgEjgKMt5d7XjsT42yirpp3ZxugquW9FzZw9gtmBqwbBW59RBQ4QKi2Yd5ITEuhHu+70gDApHYHaSaq8FngaaQBWvQ5kKbuveNCSCMzV33JbQ4Q2wemc38nqtb1+XM1WLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KHGEHoKm; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=hFY/7tkY; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KHGEHoKm; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=hFY/7tkY; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:Content-Type; b=o9yyfzpn3PR2yVYCMhuwlrC8e0SkSYUmaYnlp3hJyJlxTYG3m1WNVUazT4UBfpl1G6/D3ovmCSbkXFU/Y/M4jkSxKZZ9zKDvgZ9wiSDixgTsrwLjvsoLoh1/Y6E8SCEpI4Nv/ce2jCYczEtrxDoI5E0QTS20L6HWkInaZ4I/yhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=WRlZN1Dt; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HtQdFl7J; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=WRlZN1Dt; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=HtQdFl7J; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9A9521FF89;
-	Mon, 10 Nov 2025 15:51:27 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 56DAF1F81C;
+	Mon, 10 Nov 2025 16:17:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762789887; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1762791434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=E1xGuYFXeq4wBXS5RbbG9hVQUEgFzhzN4Y+tuhwK4Hk=;
-	b=KHGEHoKmSNIeawnv9BSS7Wuq12+rxdviaKc3/MkzLJwQs+lecF6UpPhcL2UUFdbMnxKB61
-	mcq3GjYPvL0z9HP5MSD8zZKpgVnjweLd76//wdi40sQhI9HpYNlAeLmK8cqmQduJ2IkhKm
-	cLe6LSr63bbDwnQBEhQ92FP/WueI1Qk=
+	bh=YrOBspxCbbKPnxtqzlAEE5iWqhCmDcU42GABocD1amU=;
+	b=WRlZN1DtAqT+PMxHhs21FZZKglAss9orVBCok9BiUdcNVF4BWPbgREkiQMWHjTRr9M0jhB
+	YfXTlaczmrbDJb2qkrIxWTTPohaYFMZDzP/Exu8cPjZTFfov/RQwflcvIWIlsbRXt+Y/b4
+	yBQqeggkkz8kar6oqBcLfhkKGVlMZPA=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762789887;
+	s=susede2_ed25519; t=1762791434;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=E1xGuYFXeq4wBXS5RbbG9hVQUEgFzhzN4Y+tuhwK4Hk=;
-	b=hFY/7tkYSJkZupijhLdaXwAia/ra/uW7fqiD3fqN51tETN1pJaufwHVLhJm3YZ+/TaY0vp
-	z0Ri44Q+XnGDeZDA==
+	bh=YrOBspxCbbKPnxtqzlAEE5iWqhCmDcU42GABocD1amU=;
+	b=HtQdFl7J5kPMtvohpN3txIm0DYVUFWOXvTD07pOuox8uLKCNTa0lKyC3EF5/ttsrd6zbNJ
+	3m9tkwg2kKysFpAw==
 Authentication-Results: smtp-out2.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762789887; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1762791434; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=E1xGuYFXeq4wBXS5RbbG9hVQUEgFzhzN4Y+tuhwK4Hk=;
-	b=KHGEHoKmSNIeawnv9BSS7Wuq12+rxdviaKc3/MkzLJwQs+lecF6UpPhcL2UUFdbMnxKB61
-	mcq3GjYPvL0z9HP5MSD8zZKpgVnjweLd76//wdi40sQhI9HpYNlAeLmK8cqmQduJ2IkhKm
-	cLe6LSr63bbDwnQBEhQ92FP/WueI1Qk=
+	bh=YrOBspxCbbKPnxtqzlAEE5iWqhCmDcU42GABocD1amU=;
+	b=WRlZN1DtAqT+PMxHhs21FZZKglAss9orVBCok9BiUdcNVF4BWPbgREkiQMWHjTRr9M0jhB
+	YfXTlaczmrbDJb2qkrIxWTTPohaYFMZDzP/Exu8cPjZTFfov/RQwflcvIWIlsbRXt+Y/b4
+	yBQqeggkkz8kar6oqBcLfhkKGVlMZPA=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762789887;
+	s=susede2_ed25519; t=1762791434;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=E1xGuYFXeq4wBXS5RbbG9hVQUEgFzhzN4Y+tuhwK4Hk=;
-	b=hFY/7tkYSJkZupijhLdaXwAia/ra/uW7fqiD3fqN51tETN1pJaufwHVLhJm3YZ+/TaY0vp
-	z0Ri44Q+XnGDeZDA==
+	bh=YrOBspxCbbKPnxtqzlAEE5iWqhCmDcU42GABocD1amU=;
+	b=HtQdFl7J5kPMtvohpN3txIm0DYVUFWOXvTD07pOuox8uLKCNTa0lKyC3EF5/ttsrd6zbNJ
+	3m9tkwg2kKysFpAw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5AB0914488;
-	Mon, 10 Nov 2025 15:51:27 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 1885C144A2;
+	Mon, 10 Nov 2025 16:17:14 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id MzPiFP8JEmnZYQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 10 Nov 2025 15:51:27 +0000
-Message-ID: <945fbe45-1ee7-4108-b01a-a8d2b0bb9cfe@suse.cz>
-Date: Mon, 10 Nov 2025 16:51:27 +0100
+	id wEKnBQoQEmmDewAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 10 Nov 2025 16:17:14 +0000
+Message-ID: <2bbccc79-d64e-4ace-a528-37295e3f8a4d@suse.cz>
+Date: Mon, 10 Nov 2025 17:17:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,8 +97,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/8] mm: add atomic VMA flags and set VM_MAYBE_GUARD as
- such
+Subject: Re: [PATCH v3 5/8] mm: set the VM_MAYBE_GUARD flag on guard region
+ install
 Content-Language: en-US
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>
@@ -117,7 +117,7 @@ Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
  linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
 References: <cover.1762531708.git.lorenzo.stoakes@oracle.com>
- <cda9d4c073d773ef6c2cf2939d66cf80544cff40.1762531708.git.lorenzo.stoakes@oracle.com>
+ <99ce6131e27592c92b43ac866da48b4c2a568298.1762531708.git.lorenzo.stoakes@oracle.com>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -158,7 +158,7 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <cda9d4c073d773ef6c2cf2939d66cf80544cff40.1762531708.git.lorenzo.stoakes@oracle.com>
+In-Reply-To: <99ce6131e27592c92b43ac866da48b4c2a568298.1762531708.git.lorenzo.stoakes@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Level: 
@@ -167,117 +167,171 @@ X-Spamd-Result: default: False [-4.30 / 50.00];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
 	FREEMAIL_ENVRCPT(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_DN_SOME(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[27];
-	FREEMAIL_CC(0.00)[lwn.net,redhat.com,oracle.com,kernel.org,google.com,suse.com,goodmis.org,efficios.com,suse.de,nvidia.com,linux.alibaba.com,arm.com,linux.dev,vger.kernel.org,kvack.org,gmail.com];
 	RCVD_TLS_ALL(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[lwn.net,redhat.com,oracle.com,kernel.org,google.com,suse.com,goodmis.org,efficios.com,suse.de,nvidia.com,linux.alibaba.com,arm.com,linux.dev,vger.kernel.org,kvack.org,gmail.com];
 	R_RATELIMIT(0.00)[to_ip_from(RL37wz1aou84on4nnr4peu14t5)];
 	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,imap1.dmz-prg2.suse.org:helo,suse.cz:email,suse.cz:mid,suse.de:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo]
 X-Spam-Flag: NO
 X-Spam-Score: -4.30
 
 On 11/7/25 17:11, Lorenzo Stoakes wrote:
-> This patch adds the ability to atomically set VMA flags with only the mmap
-> read/VMA read lock held.
+> Now we have established the VM_MAYBE_GUARD flag and added the capacity to
+> set it atomically, do so upon MADV_GUARD_INSTALL.
 > 
-> As this could be hugely problematic for VMA flags in general given that all
-> other accesses are non-atomic and serialised by the mmap/VMA locks, we
-> implement this with a strict allow-list - that is, only designated flags
-> are allowed to do this.
+> The places where this flag is used currently and matter are:
 > 
-> We make VM_MAYBE_GUARD one of these flags.
+> * VMA merge - performed under mmap/VMA write lock, therefore excluding
+>   racing writes.
 > 
-> Reviewed-by: Pedro Falcato <pfalcato@suse.de>
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> * /proc/$pid/smaps - can race the write, however this isn't meaningful as
+>   the flag write is performed at the point of the guard region being
+>   established, and thus an smaps reader can't reasonably expect to avoid
+>   races. Due to atomicity, a reader will observe either the flag being set
+>   or not. Therefore consistency will be maintained.
+> 
+> In all other cases the flag being set is irrelevant and atomicity
+> guarantees other flags will be read correctly.
+> 
+> Note that non-atomic updates of unrelated flags do not cause an issue with
+> this flag being set atomically, as writes of other flags are performed
+> under mmap/VMA write lock, and these atomic writes are performed under
+> mmap/VMA read lock, which excludes the write, avoiding RMW races.
+> 
+> Note that we do not encounter issues with KCSAN by adjusting this flag
+> atomically, as we are only updating a single bit in the flag bitmap and
+> therefore we do not need to annotate these changes.
+> 
+> We intentionally set this flag in advance of actually updating the page
+> tables, to ensure that any racing atomic read of this flag will only return
+> false prior to page tables being updated, to allow for serialisation via
+> page table locks.
+> 
+> Note that we set vma->anon_vma for anonymous mappings. This is because the
+> expectation for anonymous mappings is that an anon_vma is established
+> should they possess any page table mappings. This is also consistent with
+> what we were doing prior to this patch (unconditionally setting anon_vma on
+> guard region installation).
+> 
+> We also need to update retract_page_tables() to ensure that madvise(...,
+> MADV_COLLAPSE) doesn't incorrectly collapse file-backed ranges contain
+> guard regions.
+> 
+> This was previously guarded by anon_vma being set to catch MAP_PRIVATE
+> cases, but the introduction of VM_MAYBE_GUARD necessitates that we check
+> this flag instead.
+> 
+> We utilise vma_flag_test_atomic() to do so - we first perform an optimistic
+> check, then after the PTE page table lock is held, we can check again
+> safely, as upon guard marker install the flag is set atomically prior to
+> the page table lock being taken to actually apply it.
+> 
+> So if the initial check fails either:
+> 
+> * Page table retraction acquires page table lock prior to VM_MAYBE_GUARD
+>   being set - guard marker installation will be blocked until page table
+>   retraction is complete.
+> 
+> OR:
+> 
+> * Guard marker installation acquires page table lock after setting
+>   VM_MAYBE_GUARD, which raced and didn't pick this up in the initial
+>   optimistic check, blocking page table retraction until the guard regions
+>   are installed - the second VM_MAYBE_GUARD check will prevent page table
+>   retraction.
+> 
+> Either way we're safe.
+> 
+> We refactor the retraction checks into a single
+> file_backed_vma_is_retractable(), there doesn't seem to be any reason that
+> the checks were separated as before.
+> 
+> Note that VM_MAYBE_GUARD being set atomically remains correct as
+> vma_needs_copy() is invoked with the mmap and VMA write locks held,
+> excluding any race with madvise_guard_install().
+> 
 > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> ---
->  include/linux/mm.h | 42 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 2a5516bff75a..699566c21ff7 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -518,6 +518,9 @@ extern unsigned int kobjsize(const void *objp);
->  /* This mask represents all the VMA flag bits used by mlock */
->  #define VM_LOCKED_MASK	(VM_LOCKED | VM_LOCKONFAULT)
+
+Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+
+Small nit below:
+
+> @@ -1778,15 +1801,16 @@ static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
+>  			spin_lock_nested(ptl, SINGLE_DEPTH_NESTING);
 >  
-> +/* These flags can be updated atomically via VMA/mmap read lock. */
-> +#define VM_ATOMIC_SET_ALLOWED VM_MAYBE_GUARD
-> +
->  /* Arch-specific flags to clear when updating VM flags on protection change */
->  #ifndef VM_ARCH_CLEAR
->  # define VM_ARCH_CLEAR	VM_NONE
-> @@ -860,6 +863,45 @@ static inline void vm_flags_mod(struct vm_area_struct *vma,
->  	__vm_flags_mod(vma, set, clear);
->  }
+>  		/*
+> -		 * Huge page lock is still held, so normally the page table
+> -		 * must remain empty; and we have already skipped anon_vma
+> -		 * and userfaultfd_wp() vmas.  But since the mmap_lock is not
+> -		 * held, it is still possible for a racing userfaultfd_ioctl()
+> -		 * to have inserted ptes or markers.  Now that we hold ptlock,
+> -		 * repeating the anon_vma check protects from one category,
+> -		 * and repeating the userfaultfd_wp() check from another.
+> +		 * Huge page lock is still held, so normally the page table must
+> +		 * remain empty; and we have already skipped anon_vma and
+> +		 * userfaultfd_wp() vmas.  But since the mmap_lock is not held,
+> +		 * it is still possible for a racing userfaultfd_ioctl() or
+> +		 * madvise() to have inserted ptes or markers.  Now that we hold
+> +		 * ptlock, repeating the anon_vma check protects from one
+> +		 * category, and repeating the userfaultfd_wp() check from
+> +		 * another.
+
+The last part of the comment is unchanged and mentions anon_vma check and
+userfaultfd_wp() check which were there explicitly originally, but now it's
+a file_backed_vma_is_retractable() check that also includes the guard region
+check, so maybe could be updated?
+
+>  		 */
+> -		if (likely(!vma->anon_vma && !userfaultfd_wp(vma))) {
+> +		if (likely(file_backed_vma_is_retractable(vma))) {
+>  			pgt_pmd = pmdp_collapse_flush(vma, addr, pmd);
+>  			pmdp_get_lockless_sync();
+>  			success = true;
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 67bdfcb315b3..de918b107cfc 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -1139,15 +1139,21 @@ static long madvise_guard_install(struct madvise_behavior *madv_behavior)
+>  		return -EINVAL;
 >  
-> +static inline bool __vma_flag_atomic_valid(struct vm_area_struct *vma,
-> +				       int bit)
-> +{
-> +	const vm_flags_t mask = BIT(bit);
+>  	/*
+> -	 * If we install guard markers, then the range is no longer
+> -	 * empty from a page table perspective and therefore it's
+> -	 * appropriate to have an anon_vma.
+> -	 *
+> -	 * This ensures that on fork, we copy page tables correctly.
+> +	 * Set atomically under read lock. All pertinent readers will need to
+> +	 * acquire an mmap/VMA write lock to read it. All remaining readers may
+> +	 * or may not see the flag set, but we don't care.
+> +	 */
+> +	vma_flag_set_atomic(vma, VM_MAYBE_GUARD_BIT);
 > +
-> +	/* Only specific flags are permitted */
-> +	if (WARN_ON_ONCE(!(mask & VM_ATOMIC_SET_ALLOWED)))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
-> +/*
-> + * Set VMA flag atomically. Requires only VMA/mmap read lock. Only specific
-> + * valid flags are allowed to do this.
-> + */
-> +static inline void vma_flag_set_atomic(struct vm_area_struct *vma, int bit)
-> +{
-> +	/* mmap read lock/VMA read lock must be held. */
-> +	if (!rwsem_is_locked(&vma->vm_mm->mmap_lock))
-> +		vma_assert_locked(vma);
-> +
-> +	if (__vma_flag_atomic_valid(vma, bit))
-> +		set_bit(bit, &vma->__vm_flags);
-> +}
-> +
-> +/*
-> + * Test for VMA flag atomically. Requires no locks. Only specific valid flags
-> + * are allowed to do this.
-> + *
-> + * This is necessarily racey, so callers must ensure that serialisation is
-> + * achieved through some other means, or that races are permissible.
-> + */
-> +static inline bool vma_flag_test_atomic(struct vm_area_struct *vma, int bit)
-> +{
-> +	if (__vma_flag_atomic_valid(vma, bit))
-> +		return test_bit(bit, &vma->__vm_flags);
-> +}
-
-Hm clang is unhappy here.
-
-./include/linux/mm.h:932:1: error: non-void function does not return a value in all control paths [-Werror,-Wreturn-type]
-  932 | }
-      | ^
-1 error generated.
-
-I don't have CONFIG_WERROR enabled though, so not sure why it's not just a
-warning, as the function is unused until patch 5/8 which adds a "return
-false" here. So it's just a potential bisection annoyance with clang.
-
-Andrew could you move that hunk from to this patch? Thanks.
-
-> +
->  static inline void vma_set_anonymous(struct vm_area_struct *vma)
->  {
->  	vma->vm_ops = NULL;
+> +	/*
+> +	 * If anonymous and we are establishing page tables the VMA ought to
+> +	 * have an anon_vma associated with it.
+>  	 */
+> -	err = anon_vma_prepare(vma);
+> -	if (err)
+> -		return err;
+> +	if (vma_is_anonymous(vma)) {
+> +		err = anon_vma_prepare(vma);
+> +		if (err)
+> +			return err;
+> +	}
+>  
+>  	/*
+>  	 * Optimistically try to install the guard marker pages first. If any
 
 
