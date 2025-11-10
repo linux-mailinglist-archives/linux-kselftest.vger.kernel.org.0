@@ -1,101 +1,113 @@
-Return-Path: <linux-kselftest+bounces-45244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45245-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF400C487CE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 19:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 51AFAC48862
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 19:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A79C34EC6B2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 18:10:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1F5B34EA082
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 18:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8DD31328A;
-	Mon, 10 Nov 2025 18:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B56732A3FE;
+	Mon, 10 Nov 2025 18:24:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="LRugej1F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NfmALfXQ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA053128C8;
-	Mon, 10 Nov 2025 18:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542313218B2;
+	Mon, 10 Nov 2025 18:24:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762798156; cv=none; b=aM9KvKE9rXBOggovvK+lQuMsdGIM6zzzsAt+6GKf/cZKFM31ah+isJa9DdHurMa5+KKzFSwmrOJlZAuby4OwyNpAXWL7Zry1OXDJpt+7pLOGCkgeT9HeU1e2ZBed5P+jsWG47w35EzXfnRZ9+F3mzGE7cVadnTqcyeSbRT3Ir0Y=
+	t=1762799048; cv=none; b=g9CIn/RtX8SU63OSHyDaNQP6L7htf6eB0pNTLajLE/nphpMLEJGGjWt7MPfeJQ5b+XegW92dnXuvmSAQ5gJUI0BNqquFZjbICy5A5IRzV1NwIX23NXCzmtq8p2Mobivc//uluMborKPkF7x3qt6xsRWdMwavrMFPi23rwvmFwu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762798156; c=relaxed/simple;
-	bh=bWAoMwFPwmev6XGzVDuTW34XLemkAhOwCMOC56+kBrc=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=bqv/fYi+b8LQoYnHfHEFEpJjL7WZFm1+yFxOeVP5fSRg67W+7qf3IVN2bR8dUmfakOREpkAC3oSKZ2dqplx7UCyzjE0NSnAhpKiAxmANR7yctcXIcNd23qr43cx2gcVcoH6eoCNHFKYS3+Nr5UvyMd0ixUkHxBICJMkJdnwH5E4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=LRugej1F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F1AEC4CEFB;
-	Mon, 10 Nov 2025 18:09:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1762798155;
-	bh=bWAoMwFPwmev6XGzVDuTW34XLemkAhOwCMOC56+kBrc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LRugej1FLuwbwrM2ekd19HYlCC5kDDwkZc4hqKG5Zq/mAwJfACdaVjOR32Gso6WQx
-	 kSs5wCP/pPolWGp8z9XhkYNLuFuNkE0gqHq9lZvQ4218k7E5kyuOqOn6NCr7eY3jHd
-	 VcroqitUMuCYtCwfrrjMu2BhUa3jCfUAVczRcpno=
-Date: Mon, 10 Nov 2025 10:09:14 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Wake Liu <wakel@google.com>
-Cc: David Hildenbrand <david@redhat.com>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan
- <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Ankit Khushwaha
- <ankitkhushwaha.linux@gmail.com>
-Subject: Re: [PATCH] mm/selftests: Fix -Wtautological-compare warning in
- mremap_test.c
-Message-Id: <20251110100914.af77cb0a5b4211313dd9f32a@linux-foundation.org>
-In-Reply-To: <20251110175155.1314757-1-wakel@google.com>
-References: <20251110175155.1314757-1-wakel@google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1762799048; c=relaxed/simple;
+	bh=QcmGZgGER1WlXItZoFVk7+ynEwglcHKP6PhNd97EWUE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=j9nDYX358rQ3j88ajCJTb3TWUzm6SFQUGUqvjxdxIX3eydYkCdLc5GfTjM/Xh83uPiyZPZY8WtjTQg0bBoq7v5hLVEG4iEBkZ1NSwhraTvzv7tGV5Ay9aqsV9xkL7gUjSxwEID6PZMmmXjBEnsk30by8r4ucnM3GZHXhCsCjiPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NfmALfXQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74819C116B1;
+	Mon, 10 Nov 2025 18:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762799047;
+	bh=QcmGZgGER1WlXItZoFVk7+ynEwglcHKP6PhNd97EWUE=;
+	h=From:Subject:Date:To:Cc:From;
+	b=NfmALfXQnMY1e1gphmkgHCGJX2FyaE3AQpzFkPx8ZuKsEE0lYZFtTUWDsAFji4iLz
+	 nYIgxoId+qggpDtBM+7E3hFrNWhhKm3BLcpY0D9OKUnv6TS05xoI7i7ai6pXw0DvTV
+	 OQEO6h8kDcM8nIatGfkG2TwZYK9c5v56s3EDxmnORNEPn1KdYJ47YNDnbuxpJmht+G
+	 jfLSzwGefMlu471CSSUkMd6FpPLnXzL7BcFGIy1Vsr99QW6teTkd+jmVJYQdkqxYpp
+	 ywAplWyYBYbq2kM1mzuoFKgNzFAUv+3YNTsN4+Q/Bk4pAVjbQXLty9YsxD6GkVGGU+
+	 7LD+BaIiToeyQ==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/6] selftests: mptcp: join: fix some flaky tests
+Date: Mon, 10 Nov 2025 19:23:39 +0100
+Message-Id: <20251110-net-mptcp-sft-join-unstable-v1-0-a4332c714e10@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKstEmkC/x3MQQqDMBBA0avIrB0woSnSqxQXSRzrSDuGTJSCe
+ HeDy7f4/wClzKTwag7ItLPyKhWmbSDOXj6EPFaD7awzputRqOAvlZhQp4LLyoKbaPHhS+i87eM
+ YnuTdA+ohZZr4f9/fUEMYzvMCytfIqXIAAAA=
+X-Change-ID: 20251108-net-mptcp-sft-join-unstable-5a28cdb6ea54
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1496; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=QcmGZgGER1WlXItZoFVk7+ynEwglcHKP6PhNd97EWUE=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKFdPdmM1285CYsLx54W3PC6frJZ/t3ONzNehEye7v6v
+ ZyztjNXd5SyMIhxMciKKbJIt0Xmz3xexVvi5WcBM4eVCWQIAxenAEykx57hn3Wr7ve3lYlWiywK
+ rFzfFZ9TWzR57rzzh8OSn50LPHza+hbDP/WVd30Wqf21/C51Osx38/Z9K8otT24y4Zsnxzp7lgG
+ vBzMA
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Tue, 11 Nov 2025 01:51:55 +0800 Wake Liu <wakel@google.com> wrote:
+When looking at the recent CI results on NIPA and MPTCP CIs, a few MPTCP
+Join tests are marked as unstable. Here are some fixes for that.
 
-> The compiler warns about a tautological comparison in mremap_test.c:
-> "pointer comparison always evaluates to false [-Wtautological-compare]"
-> 
-> This occurs when checking for unsigned overflow:
->   if (addr + c.dest_alignment < addr)
-> 
-> Cast 'addr' to 'unsigned long long' to ensure the comparison is performed
-> with a wider type, correctly detecting potential overflow and resolving
-> the warning.
-> 
+- Patch 1: a small fix for mptcp_connect.sh, printing a note as
+  initially intended. For >=v5.13.
 
-Thanks.  I recently merged
+- Patch 2: avoid unexpected reset when closing subflows. For >= 5.13.
 
-https://lore.kernel.org/all/20251108161829.25105-1-ankitkhushwaha.linux@gmail.com/T/#u
+- Patches 3-4: longer transfer when not waiting for the end. For >=5.18.
 
-there has been some discussion...
+- Patch 5: read all received data when expecting a reset. For >= v6.1.
 
-> --- a/tools/testing/selftests/mm/mremap_test.c
-> +++ b/tools/testing/selftests/mm/mremap_test.c
-> @@ -1032,7 +1032,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
->  	/* Don't destroy existing mappings unless expected to overlap */
->  	while (!is_remap_region_valid(addr, c.region_size) && !c.overlapping) {
->  		/* Check for unsigned overflow */
-> -		if (addr + c.dest_alignment < addr) {
-> +		if ((unsigned long long)addr + c.dest_alignment < (unsigned long long)addr) {
->  			ksft_print_msg("Couldn't find a valid region to remap to\n");
->  			ret = -1;
->  			goto clean_up_src;
+- Patch 6: a fix to properly kill background tasks. For >= v6.5.
 
-I wonder if we'd be better off borrowing ideas from
-include/linux/overflow.h:check_add_overflow().  Did anyone try
-__builtin_add_overflow() here?
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Matthieu Baerts (NGI0) (6):
+      selftests: mptcp: connect: fix fallback note due to OoO
+      selftests: mptcp: join: rm: set backup flag
+      selftests: mptcp: join: endpoints: longer transfer
+      selftests: mptcp: join: userspace: longer transfer
+      selftests: mptcp: connect: trunc: read all recv data
+      selftests: mptcp: join: properly kill background tasks
+
+ tools/testing/selftests/net/mptcp/mptcp_connect.c  | 18 +++--
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh |  2 +-
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 90 +++++++++++-----------
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     | 21 +++++
+ 4 files changed, 80 insertions(+), 51 deletions(-)
+---
+base-commit: 96a9178a29a6b84bb632ebeb4e84cf61191c73d5
+change-id: 20251108-net-mptcp-sft-join-unstable-5a28cdb6ea54
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
 
