@@ -1,68 +1,101 @@
-Return-Path: <linux-kselftest+bounces-45262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BB03C49706
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 22:43:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9919CC49733
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 22:49:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 701361889A1D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 21:44:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 410A71887180
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 21:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4ADD32ED35;
-	Mon, 10 Nov 2025 21:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB82932AAD4;
+	Mon, 10 Nov 2025 21:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTB/W/EN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELZ14Cfj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF641FF61E;
-	Mon, 10 Nov 2025 21:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD6A2FD1D3
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 21:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762811034; cv=none; b=Ef2A0CwJsBOgkLiZ+eVZnLfr/34G6u3KohW/FGlkWkXhxB1dE9UURKCs+8L89ljwN25dGS9YzyLT8hPfiU9GN3lC1NzBWeVWNLOYnd2ZiHVBm9sfUqlY/pV6fuzue1Msb9BD9/w1pSVP3kVU7ByRu5NY0QenFMnF0zcDua2H84E=
+	t=1762811382; cv=none; b=Ha0SBYABHbyBcF5OgeMrmwwfvIr37/kkPo47h6VO3jvpWe4jxhvaJYzXqmwBBn6JI2m9UI+0kRXKSgZPubOVRToOlGViQ9oDZSCqW+8RaDyQ+LZozNHYVLZXRSF45k7Rt5KDVVWz9gxKTUb4NTtRmAqXKeWSivulktcI1EcDyyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762811034; c=relaxed/simple;
-	bh=qLsh4xwJFcm7ZBPTELrv5HlI3dadasyJWn9EEI6vM8Q=;
+	s=arc-20240116; t=1762811382; c=relaxed/simple;
+	bh=yVjviV3zopbG1PAfCWMvFshBkzHtOiy9INXF/AyrOjo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fLGQk0v9qRF0JTdCZbAHa9igEn7tE9qsJSCVKaQGXfTjf4BheyDWhZ3aqQGLAy0QbVIVgs0zQh/Yup5ACiEW17k5Nzk4JZ3sAgiGK1jK4zpkGEp0rHkuVa4oIohCdY5sG25Ask76OBmq+z+9oKPXOAhtMqSH3IO3u9PpLiOSVhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTB/W/EN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC532C116B1;
-	Mon, 10 Nov 2025 21:43:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762811034;
-	bh=qLsh4xwJFcm7ZBPTELrv5HlI3dadasyJWn9EEI6vM8Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VTB/W/ENaZyWqwN3+1JS39b2RHZU0mVzd+iX5zXnJ6OoHc80SN0wrgaz/WIvM6Y77
-	 0dYcTeQlruQ7+v0pSvqoEsOHFlc4fXmZIMPBFmrz8H3LqzxQen+v/v8WRHWMNqmQb8
-	 2LiRM0jBjhSRh584eNaIXPZRqftXWByMhTDaIH7Rk7LitC1Gy1RRsBSREWb3SQPP3c
-	 YljSbH+HHxNKJvBbpjkbRilCUSwqwsOME1fxIuh3C3gwyanU/PhpkLlsuNEma24Pww
-	 uMGlOkYblxl+rwD8gC0QEGBRFsfHSVzFaVMrfAoc4BgVm7yuqOKEcg6+TOoj1h9LoD
-	 f85WUmDtXeziA==
-Date: Mon, 10 Nov 2025 14:43:49 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David Hildenbrand (Red Hat)" <david@kernel.org>,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftest/mm: fix pointer comparison in mremap_test
-Message-ID: <20251110214349.GC302594@ax162>
-References: <20251106104917.39890-1-ankitkhushwaha.linux@gmail.com>
- <fc051006-5cb2-49e1-bb27-7839837439cd@kernel.org>
- <aQyOZ6eYng-IjxS_@fedora>
- <6e07949b-d86f-46d8-a68c-9717cfb26084@kernel.org>
- <20251107160855.58891ac6df6854a3b608185f@linux-foundation.org>
- <aRA6lEQmmrvmj2DX@kernel.org>
- <a7034e0c-a2ab-425a-8472-ef0a87a17681@suse.cz>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EuOC9sdbddQ4ElksEfm+84uUXBz5Z1UNc81us7Mgv6ak29VvCMB/01Iui0Hq5roJzf+1URvNeHdRJ656Gov6TOyLhP8pk1Xl9dVZw+4p3o5wLWObHCEKChiIZ07SfR80KC3fJ4f1rnSi2wczV8+9m9EutwPt8KZns5irzcTeEnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELZ14Cfj; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59445ee9738so2765305e87.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 13:49:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762811379; x=1763416179; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RFirqqcYt6xjzQLvnHeiyd54+NIBXchkEuHWoh2vuEE=;
+        b=ELZ14Cfj9MG5Ek0/l9eeH/fIFQMGqh8G3P0o3tQcIOR2AY++gN9NOsFux0xdVdkO0v
+         MU2OKQdYIen9yRt5rLjN6bvyQOaJQ8UYJaZWXxsmd6LkU3JEWUAbF9ulY+Zwn++dGE9t
+         ThLPbe0s+JrPqiiKcJrsag1c3Uw0jRG8pHydamyIP3g58KmXkCqczTED6EJUFDfOE78H
+         +RaawlpsDr25t6K4jglBizAPhm0jL9Z8kxp+O9aP6T+vVY4U6J5InZS8V4pqXniQPZBQ
+         2xEcJg8SRJPckCf4vj3My5MAmjC2Gk8IYc4bFJiYyWie7GmF22LJuqJAaezdigqj25vH
+         uW5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762811379; x=1763416179;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RFirqqcYt6xjzQLvnHeiyd54+NIBXchkEuHWoh2vuEE=;
+        b=o52rkYmOwsk9ZPgEOq4RNZQ7Q62YCppOw9/gPcvZXoW7xcVeCY4jZ5FYgAoAl/tCXx
+         JM1m2cwCyfVwqKm2T2nOeEnm9iq3z4I5EDDCSLCF1Y1L1malTwq2bTPuxqDVQdmHYUb6
+         fhE562JskAelmQyja39fVK6Fulm4AMR83Zx85qPx/FLhpWBfmApDvF+K/0a2TxV4mqW+
+         dJfAyCd3pXPelSo8QKqLWsKPHfchPjxaWHmjYI8P5wTQkb7bfD7eoQ18QCVlsLn+UOXh
+         hHuV9yENCnMNEwK8nMoFx3DPDMapOOIowj+n+3e5BVFTWGMOx1E509gB6IC9TTsryyvs
+         F3cQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfHI2S7KHtdIndEX3kYBQJ00esgPtaTL4KpqHV9WCsFnZSCEXvcZeUr9Lv6ZzbEiF7/Myx/pMPhM/7SYbR6sI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3IhvLO6p2ZIobiUv44rshgExwsMiN6669PjeUP5j4HqCQhXDU
+	M7zZLye9zj9NFiAhZdMoouIVQm93XSGtqQOIpnIFbKOIUEkYLPndQDAU
+X-Gm-Gg: ASbGncsTJGLyCCoL3S6VF7LmJIadNYALO/creZkEerQFNEnnF2nR/7DWmipnVwsnoS6
+	z9m+MqlaSYW56R1d2j8CJbbr+luJElhVb5zPNzHisZ1GK3n0E2WDakxqNvze4XzfkGZ0A+gkpDW
+	2Soaz9FLdQAeCjcjyjvCmreG+tMn94yb6aR2fvVJgjTQKqWDr9Lau0CEqZ4QfKrikGz4gxDjT83
+	KGTKe8AyGCzlSfD2BWqI/oc8TmRbaUGGxEOdpMHa6fQ8FumKrDqdrtYetHmYDxDyPmr15/5oKKZ
+	KjvmDCA7+Le6dW/BdjTOdz/9C03/W8QvIszGgiVMl1r2KsYQTp2Xk+DMgytmoU03BFp986CHnib
+	CWP1CfKdyzIDAQ0C14lESvkK4vdqwKmqFkdnuGcML8vr3d1CVzzcs3Gnll4pf/7vxjAgaYWILLH
+	8Zog==
+X-Google-Smtp-Source: AGHT+IGjkYEZuiIm45qpRwthPMBOYrneNAO2t8mNMUlpQZhecV1r6b86jhyyoGDLr3xqW66ODHKdcw==
+X-Received: by 2002:a05:6512:3a86:b0:57c:2474:371f with SMTP id 2adb3069b0e04-5945f1e5562mr3111337e87.45.1762811378727;
+        Mon, 10 Nov 2025 13:49:38 -0800 (PST)
+Received: from grain.localdomain ([5.18.255.97])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944ff427d0sm4115144e87.68.2025.11.10.13.49.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Nov 2025 13:49:38 -0800 (PST)
+Received: by grain.localdomain (Postfix, from userid 1000)
+	id 93D625A0033; Tue, 11 Nov 2025 00:49:37 +0300 (MSK)
+Date: Tue, 11 Nov 2025 00:49:37 +0300
+From: Cyrill Gorcunov <gorcunov@gmail.com>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [RFC PATCH 2/3] exec: don't wait for zombie threads with
+ cred_guard_mutex held
+Message-ID: <aRJd8Z-DrYrjRt4r@grain>
+References: <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <aRDL3HOB21pMVMWC@redhat.com>
+ <aRDMNWx-69fL_gf-@redhat.com>
+ <aRHFSrTxYSOkFic7@grain>
+ <aRIAEYH2iLLN-Fjg@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,75 +104,68 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a7034e0c-a2ab-425a-8472-ef0a87a17681@suse.cz>
+In-Reply-To: <aRIAEYH2iLLN-Fjg@redhat.com>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 
-On Sun, Nov 09, 2025 at 08:11:09PM +0100, Vlastimil Babka wrote:
-> >> > >>> Pointer arthemitic with 'void * addr' and 'unsigned long long dest_alignment'
-> >> > >>> triggers following warning:
-> >> > >>>
-> >> > >>> mremap_test.c:1035:31: warning: pointer comparison always evaluates to
-> >> > >>> false [-Wtautological-compare]
-> >> > >>>    1035 |                 if (addr + c.dest_alignment < addr) {
-> >> > >>>         |                                             ^
-> >> > >>>
-> >> > >>> typecasting 'addr' to 'unsigned long long' to fix pointer comparison.
+On Mon, Nov 10, 2025 at 04:09:05PM +0100, Oleg Nesterov wrote:
 ...
-> >> I must say, applying this would be an unhappy life event.
-> >> 
-> >> 	if (void* + ulong < void*)
-> >> 
-> >> makes perfect sense in a world which permits void* arithmetic (ie,
-> >> ours).  So what the heck is clang doing??
+> > > 	if (!((sig->flags & SIGNAL_GROUP_EXIT) || sig->group_exec_task)) {
+> > > 		sig->group_exec_task = tsk;
+> > > 		sig->notify_count = -zap_other_threads(tsk);
+> >
+> > Hi Oleg! I somehow manage to miss a moment -- why negative result here?
 > 
-> My (not very informed) guess would be something about undefined behavior
-> because pointer arithmetic is strictly speaking only valid within an array,
-> so void* + ulong is also still in the same array, and thus can't become
-> smaller by an overflow, because overflow can't happen if we're still within
-> the same valid array...
-
-It is indeed due to undefined behavior but more so that without
--fwrapv-pointer (set via -fno-strict-overflow for the kernel build), the
-addition of an unsigned index and a pointer cannot wrap. This warning is
-a result of the following change in clang-20:
-
-https://github.com/llvm/llvm-project/commit/6d34cfac53b993a6cdf3d6669e017eac3a2296c8
-https://godbolt.org/z/hvMoPYb17
-
-which I made sure respected the value of -fwrapv-pointer in
-
-https://github.com/llvm/llvm-project/commit/f0dcf3240dffe3767c7f3a2e2da5b92ae9fd1bef
-
-But it looks like the mm selftests do not build with
--fno-strict-overflow. Maybe it should?
-
-> But I don't know if this strictness is only applied to the warning itself or
-> to the actual compilation too (does it eliminate everything as dead code then?)
-
-Yes, it would turn that
-
-  if (addr + c.dest_alignment < addr) {
-
-into just
-
-  if (false) {
-
-based on the above Godbolt link.
-
-> >> If we do
-> >> 
-> >> 	void *addr2 = addr + c.dest_alignment;
-> >> 	if (addr2 < addr)
-> >> 		...
-> >> 
-> >> then which statement warns, and why?
+> You know, initially I wrote
 > 
-> As the answer was that nothing warns, I'd think it just isn't able to warn
-> if it's no longer part of the same statement. Whether it also means it's not
-> eliminated as dead code anymore, dunno.
+> 		sig->notify_count = 0 - zap_other_threads(tsk);
+> 
+> to make it clear that this is not a typo ;)
 
-Based on the above Godbolt link, it appears it will be optimized the
-same way, just without the warning letting you know something is up.
+Aha! Thanks a huge for explanation :)
 
-Cheers,
-Nathan
+> 
+> This is for exit_notify() which does
+> 
+> 	/* mt-exec, de_thread() -> wait_for_notify_count() */
+> 	if (tsk->signal->notify_count < 0 && !++tsk->signal->notify_count)
+> 		wake_up_process(tsk->signal->group_exec_task);
+> 
+> Then setup_new_exec() sets notify_count > 0 for __exit_signal() which does
+> 
+> 	/* mt-exec, setup_new_exec() -> wait_for_notify_count() */
+> 	if (sig->notify_count > 0 && !--sig->notify_count)
+> 		wake_up_process(sig->group_exec_task);
+> 
+> Yes this needs more comments and (with or without this patch) cleanups.
+> Note that exit_notify() and __exit_signal() already (before this patch)
+> use ->notify_count almost the same way, just exit_notify() assumes that
+> notify_count < 0 means the !thread_group_leader() case in de_thread().
+
+Yeah, just realized. It's been a long time since I looked into this signals
+and tasks related code so to be honest don't think I would be helpful here)
+Anyway while looking into patch I got wonder why
+
++static int wait_for_notify_count(struct task_struct *tsk)
++{
++	for (;;) {
++			return -EINTR;
++		set_current_state(TASK_KILLABLE);
++		if (!tsk->signal->notify_count)
++			break;
+
+We have no any barrier here in fetching @notify_count? I mean updating
+this value is done under locks (spin or read/write) in turn condition
+test is a raw one. Not a big deal since set_current_state() and schedule()
+are buffer flushers by themselves and after all not immediate update of
+notify_count simply force us to yield one more schedule() call but I've
+been a bit confused that we don't use some read_once here or something.
+Another (more likely) that I've just said something stupid)
+
++		schedule();
+ 	}
++	__set_current_state(TASK_RUNNING);
++	return 0;
++}
+
+	Cyrill
 
