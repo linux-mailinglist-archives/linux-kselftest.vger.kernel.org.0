@@ -1,193 +1,267 @@
-Return-Path: <linux-kselftest+bounces-45231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEC8EC478FF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 16:33:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DD1DC479C5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 16:44:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 187904F288C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 15:27:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30C923B9AB3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 15:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9564224677A;
-	Mon, 10 Nov 2025 15:27:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BA5226E706;
+	Mon, 10 Nov 2025 15:36:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="Nl4Gl5OE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0deuG2kE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ej1-f73.google.com (mail-ej1-f73.google.com [209.85.218.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDB0231827
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 15:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C94224AE8
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 15:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762788447; cv=none; b=B9LvPzsJFIubRcuPwfsGiggLueny9mZEnvyCuDk5N1tVZjB62R7J5+dotnudcaD/9+x/+MxjfCKppgVSBy728Z5qeXmjwEATOGqf8q2pT10LL+HLkQHrIugw52iaQ5txtTosm5u5KCqeE274fySbdf9CcqYW2mT3cTgCpBuXcFQ=
+	t=1762788983; cv=none; b=dObaWHcDJPx0YhLHyuOew+hrWCYgo2wGsQ6/2FUTW8HHrRZ+aQurLPBTmkE47q4AeYBL8smmarVSoeQ5wP0Yw38SJ0U+0huAEQUXGeFJKuC95khBHYmxS3a6s222GBb0gzD23uBp0XG9PQSP3o/vvVcFHzP6XpTLKlkckT8Ds/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762788447; c=relaxed/simple;
-	bh=tTrwyqMXKGOusM8XR8JCOt9JF5xyhgL7Lhk3o4N59YM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bsVcuWNPMu0vAhcjJsnE+Kr/OK7R/IYQCblQi8Fq0FNjmFW/VhzTirsHHHxFLERJ0xin9WsLsLpz3cU7SKNpsm9RctgQAUvlfRcmVc8QnDeykVTfnwI8U2htAeHnw4JeZMiE/1Xou1+eDJzZFtVwA8yO23bPY74FnijAXVp3624=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=Nl4Gl5OE; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6407e617ad4so5422166a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 07:27:24 -0800 (PST)
+	s=arc-20240116; t=1762788983; c=relaxed/simple;
+	bh=6dsX1nap/ClvsXK7KrTRSd4Tz0PaTzKIHfmrOcuYTvQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=kei6x6Ye0CG4XMIlqZdycN1FT7kvh/ee7rk55LBEk15AMymc+fEKEPtJ2GkzMv1Ga8/pwHhDVF1fC+meaAF0zTv67CQRiUN54JfdBmCIepb13nAP9PwjaqghKVR2M+qvJ8+fgmu+j6WLbXgfVWS5UoCk5zHun854T/LB3lDL9C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0deuG2kE; arc=none smtp.client-ip=209.85.218.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-ej1-f73.google.com with SMTP id a640c23a62f3a-b726760acb7so427146866b.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 07:36:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1762788443; x=1763393243; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xx5VH4vrYCNCYpVzx/bKqrzvT5nCviGfQ8I1/CSh6+0=;
-        b=Nl4Gl5OE9iAy2SFBh7TKwjJiL6RnNxRn+CjzmE0AvQNEeqIhWihGv3XIqfAQWjIMe2
-         r3jTOtc2g4bdkBSlpdN9oGTMO+TPtaHNZkNYhc+4wFD5BU6Y0pafCUK8WUJGx4UumWHp
-         zGxqvDrHei8EJlKNOfKJvxqnNQZV330pryuuz5lDaCe34rsaPpyd9rCZE07oAxJ9gd0t
-         fyJMY+dAy7YT52D6VQd+308G+Y4nI+rXiiaT8TlxknKzKJhLoRr1NKw8tVl/1xTHF+bG
-         IbJX3VZAh5h/MLdTz1B0WyWljiLeiE1I7OcATfWm0+L3L7NX1r3orf5EAt3/9AY1DcpV
-         L9Mg==
+        d=google.com; s=20230601; t=1762788978; x=1763393778; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GaWutXseEM49NYYHvmu1piLSnNhRd63IQT+QthHzxAo=;
+        b=0deuG2kEWMF/6g9rM6XhekMoGiPnBy4VakFsAiejf9rhz3V8KsN5hO3bnoMNszQDxF
+         hGugU0Xht6eooCGB4hqJxqwzQG0eU2bJRqxpEYT81pF3lTq74nFgYxZYDO9jG/V4wEhX
+         xAGFZxaBJuVCCs7uibJ0/zJWnbH+DKM8RNOJcGkOQLcPla47UrQRtHFuKqmUnoMvms5T
+         bf4+8vazv0d/JpAWQ9rBFcdBHnEoRsxCc7MwjJfdrARo6xrH75ImPXXy0dY3ZBFzFxP+
+         YmnB02/VWJGgwzl3zBW0dADB2kP3k1zlmHZa1cMS93j8BfTZGxjsbjJVNlIws/E6zjab
+         Ootw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762788443; x=1763393243;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xx5VH4vrYCNCYpVzx/bKqrzvT5nCviGfQ8I1/CSh6+0=;
-        b=lPe2y4BWjrWzpx1x2twLFKDUS9xpvUHuipUbKYGPRu2+kV5kYsAQq057YlCozKc5B5
-         v9mL/Bha0kYY8w3AFZib/0Sbr4hwnfK47peBAkdWnuVs9nxhm1wa8WahDOwhWjpBv4w1
-         rQ+bG058Gsi4ROr/E5NhsdFacUxM1ENyQuRfnEG8oR0LOKGfmJ0+DQfmTzM5ciH3d3cy
-         80eqBA9UjSI5LjQopDy4xXTutaVEPoxdHZU8oQ1gF8LBGMqk40K3jpXxQ8d1Yhh4OPf2
-         6P0RiIbCl9PVTmabemaYMZFq+M88t5/ix5MxoGmApyykqAEkLAav/IZ/YaKZe4G1GA5l
-         CXDg==
-X-Forwarded-Encrypted: i=1; AJvYcCXbxWagyDbU7Eqwnp9bX5LC5aBbXIBr02RTs0BJn5tUb3od5ic1uDajCDi7cSdC3W9dbKD/xEh2Bqfdk7sz7RU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTbO+gBo6lOVViP0t4BRCi13ocrKyHCvPQg3l7Ipgr8d3FkSko
-	1PPNxUOEthuP9anUaeJVxpEiYLetS/JtqRn/Vb5QHNdgvzNlzNUYwqCno8uKMPEUoLzB+VV7ps/
-	AQxjmgQDTpwzXqxo4zfLBvGNEWrmH6sUxZWSJdG4vig==
-X-Gm-Gg: ASbGncsr2tgKLcZhlqAg2c01czGVBkCVIOb+sL+FLLytw9XNBQInrYd6A62vlNJ9PcS
-	FcYgmD9MfdKdnvpVxK/w0BB5ode8cWF6f7n9q89+CYdR7iYDB4IfDXrBkwc5zAnEaEcp26Rh19N
-	gitOTmKgDWMPHEmKDR7pT/79+b3IU8+KNfocr5BmqQMU2E8sGdYUS51mjbSah1V0q366ltqcxvH
-	2RCnApnF75mEF4oJspFRHKs38kkvHX2zv4rTl7NWmg2d9q/TtmY0ycvEH7GRx+WUTPX
-X-Google-Smtp-Source: AGHT+IH3MMnfCX6a3z6KUPljUpeObG5OPDBsINyyjGmXqmi/rDT84EI39PSGtuUazEgx1PPu0eGaSKu77yp++hDXvLE=
-X-Received: by 2002:a05:6402:2813:b0:640:9bb0:a059 with SMTP id
- 4fb4d7f45d1cf-6415a078158mr7201302a12.10.1762788442919; Mon, 10 Nov 2025
- 07:27:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762788978; x=1763393778;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GaWutXseEM49NYYHvmu1piLSnNhRd63IQT+QthHzxAo=;
+        b=mexnloEs+DNmG0tcaztHJuT6ZcVgy3I9d9Z71UtlOkZ9Wll+WV23Mzly8ToOS/YG09
+         SOCmEXgK/Udbz2kpf5lR5eGpeBU24TpOFFbUCuKfdYnO5QGlROpviaaelr9LFHcjrxAy
+         rcahrUw8jIlwcq8on/avZrvmHzr+EqABk4L/oyL3aNN/WSd3FCDmoKrxfJC5cQcFHjdn
+         crBNVkmUvLtxTYemz03vOdrim+lN29JBa51t2HbcM7q0c/W08gbCbOAUieix40oq3Ezw
+         y+Zkkx70Pb3KiUUvEkM1ZAwHd84EqYO5mFPKqSUHOMv3nTbpbNNjpb1VTC5N8y0EDQN4
+         cgbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW79YoOHC+Jdi8NzHqQOFyGe9Yo3dGk5hso9999ahnS++Bj/5n5Pbq4ESR01hVne5XkUfLXk815RINHnbZr95I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDs50PcurXnR/Gs1GKkGp0e+iGh+k/HNOFsF3Zb1r8lm8We2Yb
+	UuFYaXX3tazOyj+2//a7xHCGg/M56AHd1H6RbKflkpzbc87z2g5djdU6aj5ipQVjZ/0qVeoICwd
+	Rx9CWAUVMJaCdFg==
+X-Google-Smtp-Source: AGHT+IHTU5FXzUFeb1nI9cPK796M7PgT3DwXYMV5kcA8PjpI6OADg2Z/FZfwu9WOGlr1GmkIIQ0Qzc++hauFnA==
+X-Received: from ejcsq16.prod.google.com ([2002:a17:907:3890:b0:b72:b433:246f])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:907:72c5:b0:b70:be84:5183 with SMTP id a640c23a62f3a-b72e0591830mr875999666b.60.1762788978060;
+ Mon, 10 Nov 2025 07:36:18 -0800 (PST)
+Date: Mon, 10 Nov 2025 15:36:17 +0000
+In-Reply-To: <a940044f-3ae4-451f-b9ba-946ec6df5082@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
- <20251101142325.1326536-2-pasha.tatashin@soleen.com> <d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
- <CA+CK2bDSvtuwrrXGOC07Rj42yGFHWR4Sse7Q5z1z8f1ZFHWQ2Q@mail.gmail.com>
- <CA+CK2bC_+repP-q183hjAuYYB2-Yx7fr_U3zr2cxysAWx5hzpg@mail.gmail.com>
- <029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev> <CA+CK2bByYPJXSNOh6R3swqFrGsS02m3Dfh=ZU7YhNjNX6siyqg@mail.gmail.com>
- <442fa82e-16ef-4bde-84eb-743450222468@linux.dev> <mafs0qzu69gei.fsf@kernel.org>
-In-Reply-To: <mafs0qzu69gei.fsf@kernel.org>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Mon, 10 Nov 2025 10:26:46 -0500
-X-Gm-Features: AWmQ_bmW_CU-wm8DFynzZQ_qvdh98IjjlGR3MaYCYIdL41bju3LuBNxGSfrd-pM
-Message-ID: <CA+CK2bBEe16x0em1gRxQD3jhfV9t3QA2vx5ifk2pKb_WEoMTeg@mail.gmail.com>
-Subject: Re: [PATCH v9 1/9] kho: make debugfs interface optional
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Zhu Yanjun <yanjun.zhu@linux.dev>, akpm@linux-foundation.org, brauner@kernel.org, 
-	corbet@lwn.net, graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org, 
-	ojeda@kernel.org, rdunlap@infradead.org, rppt@kernel.org, tj@kernel.org
+Mime-Version: 1.0
+References: <20250924151101.2225820-1-patrick.roy@campus.lmu.de>
+ <DE2L1SAOC55E.E4JY62WJQ2A8@google.com> <add94932-290c-4037-b4e6-c3c760240819@amazon.com>
+ <DE2NTMZXQ1MT.2TH9VAKM6WP6I@google.com> <a940044f-3ae4-451f-b9ba-946ec6df5082@amazon.com>
+X-Mailer: aerc 0.21.0
+Message-ID: <DE54JGHVJ4QH.KW6CD73R58AU@google.com>
+Subject: Re: [PATCH v7 00/12] Direct Map Removal Support for guest_memfd
+From: Brendan Jackman <jackmanb@google.com>
+To: <kalyazin@amazon.com>, Brendan Jackman <jackmanb@google.com>
+Cc: <pbonzini@redhat.com>, <corbet@lwn.net>, <maz@kernel.org>, 
+	<oliver.upton@linux.dev>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>, 
+	<yuzenghui@huawei.com>, <catalin.marinas@arm.com>, <will@kernel.org>, 
+	<tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>, 
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>, 
+	<luto@kernel.org>, <peterz@infradead.org>, <willy@infradead.org>, 
+	<akpm@linux-foundation.org>, <david@redhat.com>, <lorenzo.stoakes@oracle.com>, 
+	<Liam.Howlett@oracle.com>, <vbabka@suse.cz>, <rppt@kernel.org>, 
+	<surenb@google.com>, <mhocko@suse.com>, <song@kernel.org>, <jolsa@kernel.org>, 
+	<ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>, 
+	<martin.lau@linux.dev>, <eddyz87@gmail.com>, <yonghong.song@linux.dev>, 
+	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>, 
+	<haoluo@google.com>, <jgg@ziepe.ca>, <jhubbard@nvidia.com>, 
+	<peterx@redhat.com>, <jannh@google.com>, <pfalcato@suse.de>, 
+	<shuah@kernel.org>, <seanjc@google.com>, <kvm@vger.kernel.org>, 
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>, 
+	<linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>, <bpf@vger.kernel.org>, 
+	<linux-kselftest@vger.kernel.org>, <xmarcalx@amazon.co.uk>, 
+	<kalyazin@amazon.co.uk>, <jackabt@amazon.co.uk>, <derekmn@amazon.co.uk>, 
+	<tabba@google.com>, <ackerleytng@google.com>, 
+	Patrick Roy <patrick.roy@campus.lmu.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 10, 2025 at 8:16=E2=80=AFAM Pratyush Yadav <pratyush@kernel.org=
-> wrote:
+On Fri Nov 7, 2025 at 6:11 PM UTC, Nikita Kalyazin wrote:
 >
-> On Sun, Nov 09 2025, Zhu Yanjun wrote:
 >
-> > =E5=9C=A8 2025/11/8 10:13, Pasha Tatashin =E5=86=99=E9=81=93:
-> >> On Fri, Nov 7, 2025 at 6:36=E2=80=AFPM Yanjun.Zhu <yanjun.zhu@linux.de=
-v> wrote:
-> >>>
-> >>> On 11/7/25 4:02 AM, Pasha Tatashin wrote:
-> >>>> On Fri, Nov 7, 2025 at 7:00=E2=80=AFAM Pasha Tatashin <pasha.tatashi=
-n@soleen.com> wrote:
-> >>>>>> Hi, Pasha
-> >>>>>>
-> >>>>>> In our previous discussion, we talked about counting the number of=
- times
-> >>>>>> the kernel is rebooted via kexec. At that time, you suggested addi=
-ng a
-> >>>>>> variable in debugfs to keep track of this count.
-> >>>>>> However, since debugfs is now optional, where would be an appropri=
-ate
-> >>>>>> place to store this variable?
-> >>>>> It is an optional config and can still be enabled if the live updat=
-e
-> >>>>> reboot number value needs to be accessed through debugfs. However,
-> >>>>> given that debugfs does not guarantee a stable interface, tooling
-> >>>>> should not be built to require these interfaces.
-> >>>>>
-> >>>>> In the WIP LUO [1] I have, I pr_info() the live update number durin=
-g
-> >>>>> boot and also store it in the incoming LUO FDT tree, which can also=
- be
-> >>>>> accessed through this optional debugfs interface.
-> >>>>>
-> >>>>> The pr_info message appears like this during boot:
-> >>>>> [    0.000000] luo: Retrieved live update data, liveupdate number: =
-17
-> >>>>>
-> >>>>> Pasha
-> >>>> Forgot to add link to WIP LUOv5:
-> >>>> [1] https://github.com/soleen/linux/tree/luo/v5rc04
-> >>>
-> >>> Thanks a lot. I=E2=80=99ve carefully read this commit:
-> >>> https://github.com/soleen/linux/commit/60205b9a95c319dc9965f119303a1d=
-83f0ff08fa.
-> >>>
-> >>> To be honest, I=E2=80=99d like to run some tests with who/luo, includ=
-ing the
-> >>> selftest for kho/luo. Could you please share the steps with me?
-> >>>
-> >>> If the testing steps have already been documented somewhere, could yo=
-u
-> >>> please share the link?
-> >> Currently the test performs in-kernel tests for FLB data, it creates a
-> >> number of FLB for every registered LUO file-handler, which at the
-> >> moment is only memfd.
-> >>
-> >> It works together with any of the kexec based live update tests. In
-> >> v5, I introduce two tests:
-> >> luo_kexec_simple
-> >> luo_multi_session
-> >>
-> >> For example, with luo_multi_session:
-> >
-> > Hi, Pasha
-> >
-> > I enabled "CONFIG_LIVEUPDATE=3Dy"
-> >
-> > # ./luo_multi_session
-> > 1..0 # SKIP Failed to open /dev/liveupdate. Is the luo module loaded?
-> >
-> > # ls /dev/liveupdate
-> > ls: cannot access '/dev/liveupdate': No such file or directory
-> >
-> > # grep "LIVEUPDATE" -inrHI /boot/config-`uname -r`
-> > /boot/config-next-20251107-luo+:349:CONFIG_LIVEUPDATE=3Dy
-> > /boot/config-next-20251107-luo+:11985:CONFIG_LIVEUPDATE_TEST=3Dy
-> >
-> > I made tests on FC42. But /dev/liveupdate is missing.
+> On 07/11/2025 18:04, Brendan Jackman wrote:
+>> On Fri Nov 7, 2025 at 5:23 PM UTC, Nikita Kalyazin wrote:
+>>>
+>>>
+>>> On 07/11/2025 15:54, Brendan Jackman wrote:
+>>>> On Wed Sep 24, 2025 at 3:10 PM UTC, Patrick Roy wrote:
+>>>>> From: Patrick Roy <roypat@amazon.co.uk>
+>>>>>
+>>>>> [ based on kvm/next ]
+>>>>>
+>>>>> Unmapping virtual machine guest memory from the host kernel's direct map is a
+>>>>> successful mitigation against Spectre-style transient execution issues: If the
+>>>>> kernel page tables do not contain entries pointing to guest memory, then any
+>>>>> attempted speculative read through the direct map will necessarily be blocked
+>>>>> by the MMU before any observable microarchitectural side-effects happen. This
+>>>>> means that Spectre-gadgets and similar cannot be used to target virtual machine
+>>>>> memory. Roughly 60% of speculative execution issues fall into this category [1,
+>>>>> Table 1].
+>>>>>
+>>>>> This patch series extends guest_memfd with the ability to remove its memory
+>>>>> from the host kernel's direct map, to be able to attain the above protection
+>>>>> for KVM guests running inside guest_memfd.
+>>>>>
+>>>>> Additionally, a Firecracker branch with support for these VMs can be found on
+>>>>> GitHub [2].
+>>>>>
+>>>>> For more details, please refer to the v5 cover letter [v5]. No
+>>>>> substantial changes in design have taken place since.
+>>>>>
+>>>>> === Changes Since v6 ===
+>>>>>
+>>>>> - Drop patch for passing struct address_space to ->free_folio(), due to
+>>>>>     possible races with freeing of the address_space. (Hugh)
+>>>>> - Stop using PG_uptodate / gmem preparedness tracking to keep track of
+>>>>>     direct map state.  Instead, use the lowest bit of folio->private. (Mike, David)
+>>>>> - Do direct map removal when establishing mapping of gmem folio instead
+>>>>>     of at allocation time, due to impossibility of handling direct map
+>>>>>     removal errors in kvm_gmem_populate(). (Patrick)
+>>>>> - Do TLB flushes after direct map removal, and provide a module
+>>>>>     parameter to opt out from them, and a new patch to export
+>>>>>     flush_tlb_kernel_range() to KVM. (Will)
+>>>>>
+>>>>> [1]: https://download.vusec.net/papers/quarantine_raid23.pdf
+>>>>> [2]: https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding
+>>>>
+>>>> I just got around to trying this out, I checked out this patchset using
+>>>> its base-commit and grabbed the Firecracker branch. Things seem OK until
+>>>> I set the secrets_free flag in the Firecracker config which IIUC makes
+>>>> it set GUEST_MEMFD_FLAG_NO_DIRECT_MAP.
+>>>>
+>>>> If I set it, I find the guest doesn't show anything on the console.
+>>>> Running it in a VM and attaching GDB suggests that it's entering the
+>>>> guest repeatedly, it doesn't seem like the vCPU thread is stuck or
+>>>> anything. I'm a bit clueless about how to debug that (so far, whenever
+>>>> I've broken KVM, things always exploded very dramatically).
+>>>>
+>>>> Anyway, if I then kill the firecracker process, the host sometimes
+>>>> crashes, I think this is the most suggestive splat I've seen:
+>>>>
+>>>> [   99.673420][    T2] BUG: unable to handle page fault for address: ffff888012804000
+>>>> [   99.676216][    T2] #PF: supervisor write access in kernel mode
+>>>> [   99.678381][    T2] #PF: error_code(0x0002) - not-present page
+>>>> [   99.680499][    T2] PGD 2e01067 P4D 2e01067 PUD 2e02067 PMD 12801063 PTE 800fffffed7fb020
+>>>> [   99.683374][    T2] Oops: Oops: 0002 [#1] SMP
+>>>> [   99.685004][    T2] CPU: 0 UID: 0 PID: 2 Comm: kthreadd Not tainted 6.17.0-rc7-00366-g473c46a3cb2a #106 NONE
+>>>> [   99.688514][    T2] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.1 11/11/2019
+>>>> [   99.691547][    T2] RIP: 0010:clear_page_erms+0x7/0x10
+>>>> [   99.693440][    T2] Code: 48 89 47 18 48 89 47 20 48 89 47 28 48 89 47 30 48 89 47 38 48 8d 7f 40 75 d9 90 c3 0f 1f 80 00 00 00 00 b9 00 10 00 00 31 c0 <f3> aa c3 66 0f 1f 44 00 00 48 83 f9 40 73 2a 83 f9 08 73 0f 85 c9
+>>>> [   99.700188][    T2] RSP: 0018:ffff88800318fc10 EFLAGS: 00010246
+>>>> [   99.702321][    T2] RAX: 0000000000000000 RBX: 0000000000400dc0 RCX: 0000000000001000
+>>>> [   99.705100][    T2] RDX: ffffea00004a0100 RSI: ffffea00004a0200 RDI: ffff888012804000
+>>>> [   99.707861][    T2] RBP: 0000000000000801 R08: 0000000000000000 R09: 0000000000000000
+>>>> [   99.710648][    T2] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
+>>>> [   99.713412][    T2] R13: 0000000000000801 R14: ffffea00004a0100 R15: ffffffff81f4df80
+>>>> [   99.716191][    T2] FS:  0000000000000000(0000) GS:ffff8880bbf28000(0000) knlGS:0000000000000000
+>>>> [   99.719316][    T2] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> [   99.721648][    T2] CR2: ffff888012804000 CR3: 0000000007583001 CR4: 0000000000372eb0
+>>>> [   99.724421][    T2] Call Trace:
+>>>> [   99.725608][    T2]  <TASK>
+>>>> [   99.726646][    T2]  get_page_from_freelist+0x6fe/0x14b0
+>>>> [   99.728583][    T2]  ? fs_reclaim_acquire+0x43/0xe0
+>>>> [   99.730325][    T2]  ? find_held_lock+0x2b/0x80
+>>>> [   99.731965][    T2]  __alloc_frozen_pages_noprof+0x147/0x2d0
+>>>> [   99.734003][    T2]  __alloc_pages_noprof+0x5/0x50
+>>>> [   99.735766][    T2]  copy_process+0x1b1/0x1b30
+>>>> [   99.737398][    T2]  ? lock_is_held_type+0x89/0x100
+>>>> [   99.739157][    T2]  ? kthreadd+0x25/0x190
+>>>> [   99.740664][    T2]  kernel_clone+0x59/0x390
+>>>> [   99.742213][    T2]  ? kthreadd+0x25/0x190
+>>>> [   99.743728][    T2]  kernel_thread+0x55/0x70
+>>>> [   99.745310][    T2]  ? kthread_complete_and_exit+0x20/0x20
+>>>> [   99.747265][    T2]  kthreadd+0x117/0x190
+>>>> [   99.748748][    T2]  ? kthread_is_per_cpu+0x30/0x30
+>>>> [   99.750509][    T2]  ret_from_fork+0x16b/0x1e0
+>>>> [   99.752193][    T2]  ? kthread_is_per_cpu+0x30/0x30
+>>>> [   99.753992][    T2]  ret_from_fork_asm+0x11/0x20
+>>>> [   99.755717][    T2]  </TASK>
+>>>> [   99.756861][    T2] CR2: ffff888012804000
+>>>> [   99.758353][    T2] ---[ end trace 0000000000000000 ]---
+>>>> [   99.760319][    T2] RIP: 0010:clear_page_erms+0x7/0x10
+>>>> [   99.762209][    T2] Code: 48 89 47 18 48 89 47 20 48 89 47 28 48 89 47 30 48 89 47 38 48 8d 7f 40 75 d9 90 c3 0f 1f 80 00 00 00 00 b9 00 10 00 00 31 c0 <f3> aa c3 66 0f 1f 44 00 00 48 83 f9 40 73 2a 83 f9 08 73 0f 85 c9
+>>>> [   99.769129][    T2] RSP: 0018:ffff88800318fc10 EFLAGS: 00010246
+>>>> [   99.771297][    T2] RAX: 0000000000000000 RBX: 0000000000400dc0 RCX: 0000000000001000
+>>>> [   99.774126][    T2] RDX: ffffea00004a0100 RSI: ffffea00004a0200 RDI: ffff888012804000
+>>>> [   99.777013][    T2] RBP: 0000000000000801 R08: 0000000000000000 R09: 0000000000000000
+>>>> [   99.779827][    T2] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000002
+>>>> [   99.782641][    T2] R13: 0000000000000801 R14: ffffea00004a0100 R15: ffffffff81f4df80
+>>>> [   99.785487][    T2] FS:  0000000000000000(0000) GS:ffff8880bbf28000(0000) knlGS:0000000000000000
+>>>> [   99.788671][    T2] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>> [   99.791012][    T2] CR2: ffff888012804000 CR3: 0000000007583001 CR4: 0000000000372eb0
+>>>> [   99.793863][    T2] Kernel panic - not syncing: Fatal exception
+>>>> [   99.796760][    T2] Kernel Offset: disabled
+>>>> [   99.798296][    T2] ---[ end Kernel panic - not syncing: Fatal exception ]---
+>>>>
+>>>> This makes me suspect the kvm_gmem_folio_restore_direct_map() path isn't
+>>>> working or isn't getting called.
+>>>>
+>>>> If anyone wants help trying to reproduce this let me know.
+>>>
+>>> Hi Brendan,
+>>>
+>>> Thanks for trying to run it!
+>>>
+>>> Just as a sanity check, the way it is known for us to work is we apply
+>>> all patches from [1].  For booted VMs (as opposed to restored from
+>>> snapshot), apart from the v6 of the direct map removal series, the only
+>>> additional patch is a fix for kvmclock on x86 [2].  Please let me know
+>>> if you see the same issue with that patch applied too.
+>>>
+>>> Nikita
+>>>
+>>> [1]
+>>> https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding/resources/hiding_ci/linux_patches
+>>> [2]
+>>> https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding/resources/hiding_ci/linux_patches/11-kvm-clock
+>> 
+>> Ah, thanks! Seems I should have checked my inbox before sending my other
+>> mail. With the kvmclock fix applied to my host kernel, I start setting
+>> the other crash immediately when the VM boots. If I comment out the
+>> actual unmapping of memory, it boots (before, it wouldn't boot even with
+>> that commented out).
+>> 
+>> For the other linux_patches, I couldn't apply them on top of this
+>> series, do you have a branch I can use as a reference?
 >
-> You need to add liveupdate=3D1 to your kernel cmdline to enable LUO and
-> get /dev/liveupdate.
-
-+1, kernel parameters require: kho=3D1 liveupdate=3D1
-
+> Instead of having an explicit branch, we apply all the patches on top of 
+> [1].  There is a script that performs fetch/build/install end-to-end: [2].
 >
-> Pasha, your LUO series doesn't add the liveupdate parameter to
-> kernel-parameters.txt. I think it should be done in the next version to
-> this parameter is discoverable.
+> [1] 
+> https://github.com/firecracker-microvm/firecracker/blob/feature/secret-hiding/resources/hiding_ci/kernel_commit_hash
+> [2] 
+> https://github.com/firecracker-microvm/firecracker/blob/feature/secret-hiding/resources/hiding_ci/build_and_install_kernel.sh
 
-Yeah, that is missing, I will update that in a standalone patch, or in
-a next version.
-
-Thanks,
-Pasha
+Thanks, I was able to construct a branch and confirm the crashes go
+away. I guess this should block merging the feature though, right? Do
+you know which particular of the patches are the likely relevant ones
+here?
 
