@@ -1,245 +1,185 @@
-Return-Path: <linux-kselftest+bounces-45204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC1B0C445A4
-	for <lists+linux-kselftest@lfdr.de>; Sun, 09 Nov 2025 20:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C24CC44AB3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 01:21:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83F5E3A82AE
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Nov 2025 19:11:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E190E3AEF7F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Nov 2025 00:21:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB8023496F;
-	Sun,  9 Nov 2025 19:11:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 326951DDC37;
+	Mon, 10 Nov 2025 00:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Sjj8Tmj8";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AIf/Vc1e";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Sjj8Tmj8";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="AIf/Vc1e"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aFVEiWeL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30802367DF
-	for <linux-kselftest@vger.kernel.org>; Sun,  9 Nov 2025 19:11:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635D68821
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Nov 2025 00:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762715473; cv=none; b=ArvrpH5RSuoLxyoO+AuDZdXR6PZu/hfCOZyMXusa9p764tGk0WE16ngmI/uSeR5fnMOZOd3fqZ16eMCQabqcGanbLw2SMc0L8PBa1+8eExZxjazl4o7YOknzWRA1HKP5MBubCidJKXqHMlwCpXP7fOFWAMi85wocMpQIfojo1uk=
+	t=1762734071; cv=none; b=UXti1jqPubhIznYBsHlaKdEu7SZz5qp4DLe0YhYvYiWVc6h02WUhXWZJNjFqtpWV/tjgQKBq9YRLH5BI04HmM8sNhEa6BAWGK22nVSs+lwedwIMpO9/3C4QV3UTQdFKuS3C4vTwMNBpnBHNx/NQ2jTbmJ9Cm/5Aun3nwpNqeb68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762715473; c=relaxed/simple;
-	bh=zNGgOq6uu5sBukeaWlKEEco/Nz+foneBJ3sqjqWHrL8=;
+	s=arc-20240116; t=1762734071; c=relaxed/simple;
+	bh=MS7Cf/KMp3LIQkV/zy5GKazQnzumkX1n8Ct0PmoQalU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zs25ew51s80z2bt6sQEhSLGSLTie4MLzcq2t/pKJb1WZ4DE9WvcKUiqBZ618Eko5Am3XqDBsf7HX4EuHyXbO2cvVrPJJO6xeL2gp4h/W0dads6+hpWsFRTpYf+A64di0deafrrEcbpB8Jatkrxmk7++rRhenpu9RyxcVZXMpyd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Sjj8Tmj8; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AIf/Vc1e; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Sjj8Tmj8; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=AIf/Vc1e; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C304622B75;
-	Sun,  9 Nov 2025 19:11:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762715469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	 In-Reply-To:Content-Type; b=IeDqBAQJtkIw2k9fxRZsG7GCzcKn/siHvwLJov/KzDXxkvnGUM6NSaDN8+qYedye7fKYfPjxamrz+86OZJO8td1Rx0zdJuzctDTiZM6bL6OMr9n47DMlLBD3g6xoe283vAucjfUTbU+bBjVZivVJrMROf4mOUP+pIEFBdqH5osI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aFVEiWeL; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <442fa82e-16ef-4bde-84eb-743450222468@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1762734062;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=qX9lJAeqWuZ+tZhf9D+6OWeGPK1zBp473L1ubEGFTno=;
-	b=Sjj8Tmj8te78EcciPx4vbEFIaaUYrlCsTNtCM7lpeMmq/UkH9LUMD2IRGUDK5ViIZx/qrw
-	OhU6yjzIi49h2Mzz8VvDLXRxNDdz6PGRzytxL5Oek0QzdHqPtVJqcfNuRG1V4+ALGrJ4NU
-	tBjY+5hv1ruMaxKOiNSTkoSvfbIjZdY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762715469;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=qX9lJAeqWuZ+tZhf9D+6OWeGPK1zBp473L1ubEGFTno=;
-	b=AIf/Vc1eF+LE48PBOj4Ivn9c86r5GC6pqubLqgzOfWXwF20vYgoBaETOO08B/RcdT9CkXl
-	wI1aG0oFTDdHS0CQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1762715469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=qX9lJAeqWuZ+tZhf9D+6OWeGPK1zBp473L1ubEGFTno=;
-	b=Sjj8Tmj8te78EcciPx4vbEFIaaUYrlCsTNtCM7lpeMmq/UkH9LUMD2IRGUDK5ViIZx/qrw
-	OhU6yjzIi49h2Mzz8VvDLXRxNDdz6PGRzytxL5Oek0QzdHqPtVJqcfNuRG1V4+ALGrJ4NU
-	tBjY+5hv1ruMaxKOiNSTkoSvfbIjZdY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1762715469;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=qX9lJAeqWuZ+tZhf9D+6OWeGPK1zBp473L1ubEGFTno=;
-	b=AIf/Vc1eF+LE48PBOj4Ivn9c86r5GC6pqubLqgzOfWXwF20vYgoBaETOO08B/RcdT9CkXl
-	wI1aG0oFTDdHS0CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9F9D7140AC;
-	Sun,  9 Nov 2025 19:11:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id RoarJU3nEGlMWAAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Sun, 09 Nov 2025 19:11:09 +0000
-Message-ID: <a7034e0c-a2ab-425a-8472-ef0a87a17681@suse.cz>
-Date: Sun, 9 Nov 2025 20:11:09 +0100
+	 in-reply-to:in-reply-to:references:references;
+	bh=jLBZG12EpOweg5W//dmheHVzJBlI9SLwueSdt6kZhp0=;
+	b=aFVEiWeLxQUK2ISXdf52J2BDzGtfH3DLAlz7RqIMEVvL9ZhZRM6nGB2fRlFMFljDGu5yXu
+	JcC07geo4luDBuNKUq/6FdonyAlA8GeAPnuUN8ofevO0Hyxet8ILg/fDdsxUkBh4xp+5kB
+	9PLUGv7mP+wX6RNN85JBMCCoTtQXbfg=
+Date: Sun, 9 Nov 2025 16:20:56 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftest/mm: fix pointer comparison in mremap_test
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>
-Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>,
- Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251106104917.39890-1-ankitkhushwaha.linux@gmail.com>
- <fc051006-5cb2-49e1-bb27-7839837439cd@kernel.org> <aQyOZ6eYng-IjxS_@fedora>
- <6e07949b-d86f-46d8-a68c-9717cfb26084@kernel.org>
- <20251107160855.58891ac6df6854a3b608185f@linux-foundation.org>
- <aRA6lEQmmrvmj2DX@kernel.org>
-Content-Language: en-US
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <aRA6lEQmmrvmj2DX@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_TLS_ALL(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,oracle.com,google.com,suse.com,kvack.org,vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spam-Level: 
+Subject: Re: [PATCH v9 1/9] kho: make debugfs interface optional
+To: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: akpm@linux-foundation.org, brauner@kernel.org, corbet@lwn.net,
+ graf@amazon.com, jgg@ziepe.ca, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, masahiroy@kernel.org,
+ ojeda@kernel.org, pratyush@kernel.org, rdunlap@infradead.org,
+ rppt@kernel.org, tj@kernel.org
+References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
+ <20251101142325.1326536-2-pasha.tatashin@soleen.com>
+ <d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
+ <CA+CK2bDSvtuwrrXGOC07Rj42yGFHWR4Sse7Q5z1z8f1ZFHWQ2Q@mail.gmail.com>
+ <CA+CK2bC_+repP-q183hjAuYYB2-Yx7fr_U3zr2cxysAWx5hzpg@mail.gmail.com>
+ <029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev>
+ <CA+CK2bByYPJXSNOh6R3swqFrGsS02m3Dfh=ZU7YhNjNX6siyqg@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <CA+CK2bByYPJXSNOh6R3swqFrGsS02m3Dfh=ZU7YhNjNX6siyqg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 11/9/25 07:54, Mike Rapoport wrote:
-> (added Nathan for clang advice)
-> 
-> On Fri, Nov 07, 2025 at 04:08:55PM -0800, Andrew Morton wrote:
->> On Fri, 7 Nov 2025 10:27:27 +0100 "David Hildenbrand (Red Hat)" <david@kernel.org> wrote:
->> 
->> > On 06.11.25 13:02, Ankit Khushwaha wrote:
->> > > On Thu, Nov 06, 2025 at 12:18:57PM +0100, David Hildenbrand (Red Hat) wrote:
->> > >> On 06.11.25 11:49, Ankit Khushwaha wrote:
->> > >>> Pointer arthemitic with 'void * addr' and 'unsigned long long dest_alignment'
->> > >>> triggers following warning:
->> > >>>
->> > >>> mremap_test.c:1035:31: warning: pointer comparison always evaluates to
->> > >>> false [-Wtautological-compare]
->> > >>>    1035 |                 if (addr + c.dest_alignment < addr) {
->> > >>>         |                                             ^
->> > >>>
->> > >>> typecasting 'addr' to 'unsigned long long' to fix pointer comparison.
->> > >>
->> > >> With which compiler are you seeing this?
->> > > 
->> > > Hi David,
->> > > 
->> > > clang version 20.1.8 (Fedora 20.1.8-4.fc42) raised this warning.
->> > > 
->> > > To reproduce:
->> > > 	make -C tools/testing/selftests/mm CC=clang
->> > 
->> > Thanks, and thanks to Lorenzo for the details.
->> > 
->> > Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
->> 
->> I must say, applying this would be an unhappy life event.
->> 
->> 	if (void* + ulong < void*)
->> 
->> makes perfect sense in a world which permits void* arithmetic (ie,
->> ours).  So what the heck is clang doing??
 
-My (not very informed) guess would be something about undefined behavior
-because pointer arithmetic is strictly speaking only valid within an array,
-so void* + ulong is also still in the same array, and thus can't become
-smaller by an overflow, because overflow can't happen if we're still within
-the same valid array...
+在 2025/11/8 10:13, Pasha Tatashin 写道:
+> On Fri, Nov 7, 2025 at 6:36 PM Yanjun.Zhu <yanjun.zhu@linux.dev> wrote:
+>>
+>> On 11/7/25 4:02 AM, Pasha Tatashin wrote:
+>>> On Fri, Nov 7, 2025 at 7:00 AM Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
+>>>>> Hi, Pasha
+>>>>>
+>>>>> In our previous discussion, we talked about counting the number of times
+>>>>> the kernel is rebooted via kexec. At that time, you suggested adding a
+>>>>> variable in debugfs to keep track of this count.
+>>>>> However, since debugfs is now optional, where would be an appropriate
+>>>>> place to store this variable?
+>>>> It is an optional config and can still be enabled if the live update
+>>>> reboot number value needs to be accessed through debugfs. However,
+>>>> given that debugfs does not guarantee a stable interface, tooling
+>>>> should not be built to require these interfaces.
+>>>>
+>>>> In the WIP LUO [1] I have, I pr_info() the live update number during
+>>>> boot and also store it in the incoming LUO FDT tree, which can also be
+>>>> accessed through this optional debugfs interface.
+>>>>
+>>>> The pr_info message appears like this during boot:
+>>>> [    0.000000] luo: Retrieved live update data, liveupdate number: 17
+>>>>
+>>>> Pasha
+>>> Forgot to add link to WIP LUOv5:
+>>> [1] https://github.com/soleen/linux/tree/luo/v5rc04
+>>
+>> Thanks a lot. I’ve carefully read this commit:
+>> https://github.com/soleen/linux/commit/60205b9a95c319dc9965f119303a1d83f0ff08fa.
+>>
+>> To be honest, I’d like to run some tests with who/luo, including the
+>> selftest for kho/luo. Could you please share the steps with me?
+>>
+>> If the testing steps have already been documented somewhere, could you
+>> please share the link?
+> Currently the test performs in-kernel tests for FLB data, it creates a
+> number of FLB for every registered LUO file-handler, which at the
+> moment is only memfd.
+>
+> It works together with any of the kexec based live update tests. In
+> v5, I introduce two tests:
+> luo_kexec_simple
+> luo_multi_session
+>
+> For example, with luo_multi_session:
 
-But I don't know if this strictness is only applied to the warning itself or
-to the actual compilation too (does it eliminate everything as dead code then?)
+Hi, Pasha
 
->> If we do
->> 
->> 	void *addr2 = addr + c.dest_alignment;
->> 	if (addr2 < addr)
->> 		...
->> 
->> then which statement warns, and why?
+I enabled "CONFIG_LIVEUPDATE=y"
 
-As the answer was that nothing warns, I'd think it just isn't able to warn
-if it's no longer part of the same statement. Whether it also means it's not
-eliminated as dead code anymore, dunno.
+# ./luo_multi_session
+1..0 # SKIP Failed to open /dev/liveupdate. Is the luo module loaded?
+
+# ls /dev/liveupdate
+ls: cannot access '/dev/liveupdate': No such file or directory
+
+# grep "LIVEUPDATE" -inrHI /boot/config-`uname -r`
+/boot/config-next-20251107-luo+:349:CONFIG_LIVEUPDATE=y
+/boot/config-next-20251107-luo+:11985:CONFIG_LIVEUPDATE_TEST=y
+
+I made tests on FC42. But /dev/liveupdate is missing.
+
+Thanks
+
+Yanjun.Zhu
+
+> # ./luo_multi_session
+> # [STAGE 1] Starting pre-kexec setup for multi-session test...
+> # [STAGE 1] Creating state file for next stage (2)...
+> # [STAGE 1] Creating empty sessions 'multi-test-empty-1' and
+> 'multi-test-empty-2'...
+> # [STAGE 1] Creating session 'multi-test-files-1' with one memfd...
+> # [STAGE 1] Creating session 'multi-test-files-2' with two memfds...
+> # [STAGE 1] Executing kexec...
+>
+> ... reboot ...
+> After reboot:
+>
+> $ ./luo_multi_session
+> # [STAGE 2] Starting post-kexec verification...
+> # [STAGE 2] Retrieving all sessions...
+> # [STAGE 2] Verifying contents of session 'multi-test-files-1'...
+> # [STAGE 2] Verifying contents of session 'multi-test-files-2'...
+> # [STAGE 2] Test data verified successfully.
+> # [STAGE 2] Finalizing all test sessions...
+> # [STAGE 2] Finalizing state session...
+> #
+> --- MULTI-SESSION KEXEC TEST PASSED ---
+>
+> Dmesg data, shows that in-kernel live update test was also successful:
+>
+> [    0.000000] luo: Retrieved live update data, liveupdate number: 1
+> [    0.034513] liveupdate test: test-flb-v0: found flb data from the
+> previous boot
+> [    0.034517] liveupdate test: test-flb-v1: found flb data from the
+> previous boot
+> [    0.034518] liveupdate test: test-flb-v2: found flb data from the
+> previous boot
+> [    0.676891] liveupdate test: Registered 3 FLBs with file handler: [memfd-v1]
+>
+> Pasha
+>
+>> Best Regards,
+>>
+>> Yanjun.Zhu
+>>
+-- 
+Best Regards,
+Yanjun.Zhu
 
 
