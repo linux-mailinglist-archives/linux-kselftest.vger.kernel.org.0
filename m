@@ -1,218 +1,144 @@
-Return-Path: <linux-kselftest+bounces-45339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45340-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2576BC4F48B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 18:39:24 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2AD8C4F4A6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 18:41:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F6DB18C35B9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 17:37:59 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4F0C734D37C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 17:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6BE3A79A0;
-	Tue, 11 Nov 2025 17:36:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73FBB36A022;
+	Tue, 11 Nov 2025 17:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ohPOIF7K"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4eUnBY3T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129DC3A1D0D
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 17:36:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA83393DF4
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 17:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762882613; cv=none; b=Dsihg+LUIq76VoHp/4s82JuQV01Gh7EfcEG85ThvLMzILdv9oY2AdhFmR+/WeTQdA9ixnnbnEgqxJTMLamNvna6+ZijUl7ruccJFL3eaYkbNNjqZXsPm5Rt/mb33kuNbPeF+vRW+TfIVwffMpsRPIO2WAbNEtVCiV0j+/qujf1Y=
+	t=1762882872; cv=none; b=lbL1i+z90RQT7CkNfOLImZjqOxgd1UjqBhyuuGlT57+4/aUog5aI2WeOLaoEobtTqKp9G3NTW5wV8atCFr2rBfkZ0aOcBjoYdUCav3u5adxWomFT2O/+nrcZGMh4j+qCiMSPFvGG3UI37+HBKc0OpxF5JY18euZdi2QGvGbivNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762882613; c=relaxed/simple;
-	bh=8YGDWKZMZ4rg6g9jadHfjYJ49DLGb0GNWnRjrg7bjP8=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=CufeYTIQ9un2EBq0dK4EXV17X2pmx9FGIn6iixn8psdzdLj3BaVYspyRPE7FaB/DXTp2S2P/Bzv+tUUndsHGZTB/MCZLp9RxZLce1Xbs2XBThg/tvsu/qf/ITB2OBeBPAXgPz0eTzufbPiokCPrpRL6cFzFmfWWz5quewZstNLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ohPOIF7K; arc=none smtp.client-ip=209.85.128.74
+	s=arc-20240116; t=1762882872; c=relaxed/simple;
+	bh=A3dCqptOcTzRgXrYKY6arq6dn0GyZOmvKu8eNBYqvO8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JsvfrrczFmNR1VJwPWHmznoL2X2/koJ1bpaZdUTRC0LHOvCSr5heCg6W/6B5j2PqzIALCVyZJoNDnJSi2cHSfcDP5f8v+YYQEPqCV9KhMMnBqD61DGd+zVp8EDUYXPSFfWzXYLM3upViSGdZDwm9i0/1FHdeyDOcVM7ZUPmuudc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4eUnBY3T; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-475e032d81bso26958615e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 09:36:50 -0800 (PST)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-340bcc92c7dso1134642a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 09:41:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762882609; x=1763487409; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gHk+n1DTS8EFhi+cKHdXuVXK4mRrNAjTvT92loE1bGw=;
-        b=ohPOIF7K8E+ozFul3+YJ9aCbMe61QoiL85Garz+qhXpdRX3kot1txeoP4+BaofPbk9
-         EjWtlXLEUQfFsVx8P3U+dhEsEG1Tw3Sz8W6f57WHgJMm2iqQI+NAWsCHADYQhSYedDWF
-         sPbi2p3fpAxYdNFPyxk4KjMW1+HWgCVOXNHKjA6RoM7Od89w5xIUMOA5nE3VlYf87RpC
-         gzu2aQXEbB51yR50pjidfN0Tic33+uKrNN2ZyV83J89lWLn6kjzz9fINEWa5Gb1NmtYe
-         XqMby7UIsmYhmCTo64aVgJNxfB06sOnwNbMkwRtCoMbbU1VvLFkl6dOqt5CWUDRSZ/Es
-         JPtw==
+        d=google.com; s=20230601; t=1762882870; x=1763487670; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VLML9QIDCd2Nh7IkEnXTPWZwGZyyJRn46il9NEEMgiQ=;
+        b=4eUnBY3Tv48SXNCChjsA/6UurtICmK912BAqLI9N/gYaRZP4b2s2OTqJVCrwAILIwJ
+         lZ7sPs0vXV1HjFjnLt3S71ay0yLteC78S/GVb9h7ingpDjRqKcrSbq1/7pPDfmwp/oC5
+         R1pjRLcFDeAEKQef/KB+RxIav7XOZWt/v6W9y9r0wiWVlDuF3t40ffRxUhWpuakian+s
+         ndos/9ESG08mVK0Y4nwZxv/Se0U44Tunm7anjV3KK+mW6GwPmvFJjG5ABHlqYnAWMAtm
+         +lczxEvHo5J2O/pcInvwEjJac/eVQyG+inVIhJfheV8LWNUhbkkN6ODZLMxnjL16b2tx
+         a1Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762882609; x=1763487409;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gHk+n1DTS8EFhi+cKHdXuVXK4mRrNAjTvT92loE1bGw=;
-        b=cW+sAXG4lHCqpNqKYYy1NqDkfpyMwiXF1pZ9YyYpLNbcgq6vTr6tL5Er9BlXK6bBv0
-         AcP3VTQRglvuNngvi1XfOCfcgF1CBTJ1aYPUmGWgfjEcvR6bFqGk2l+Y+mf2wxhKJQUO
-         mcj+i5gNDgLSJLBNDGnccBbdZXkT4cakSnJDdc1GVUF2p74mDJEoBeAYNT1hFwANv02+
-         KdVsuWp9+/yhSvAoqxrh+yyyE+Da2UyXwUA4PvYQnjIuUAgZWjNHG/oCZukWnQYLXpRb
-         u3wDSuTIn3tAIFQsLqR8RbQRZD77db8JiklkaH4e/K07pNH0ng+3vJlB9hnVCl82UnAl
-         G4/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXi3I3XGaoUoiOMG+5qOye9hrj4PA64/73llpb39pr3c62kEl/GpJkFdhHnIxtuiEtja77bDs9gZVW/CZeS174=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFMLuxgK+pg7nG4soSZcW7yn4iJiHiGRMjc+tgd03nfoogd9Xr
-	9E6HtQVmxpyD0vIP8QjyLRFH6wepigBhUeulECLXGj93bIyzE0jz65VlP0sTHDoS2zjs56JivkP
-	kaXTr4a03hI0U4g==
-X-Google-Smtp-Source: AGHT+IFash/y2AqAf9V3BG0zVcfUyjagtoZoZBAYxC2RDwTCzOL54auCDPMewWsZlZffs19L721j6rDsLwitPA==
-X-Received: from wmcq1.prod.google.com ([2002:a05:600c:c101:b0:477:40c1:3e61])
- (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:4694:b0:475:e007:baf2 with SMTP id 5b1f17b1804b1-477870ba725mr2270855e9.41.1762882609366;
- Tue, 11 Nov 2025 09:36:49 -0800 (PST)
-Date: Tue, 11 Nov 2025 17:36:42 +0000
+        d=1e100.net; s=20230601; t=1762882870; x=1763487670;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VLML9QIDCd2Nh7IkEnXTPWZwGZyyJRn46il9NEEMgiQ=;
+        b=OtXbvTIIoYLLASX3+UA9r62m3wtVvaKUWJTIMjcbtOs9Gxd/duEK5LDHZubCXfurSD
+         3xUf6kattXITYhDs+m7XytbTTANq/o3NxRNWBuf74OkqeYXztprRxYweR4NgUWkq/D1t
+         vBEHMyR2/bUyxy5IjqUkKMl20JFmVlyi+e4Qp7qjQ8SEwiBch0L2pR1eh3Us8URrvfBA
+         lxt01q4V1FpCEFV0PvalBvGC05KI1lM0mFjxHKS6FTc4KZMAlQvZL9bG1DbhzpXXPjpq
+         FhIMCW/CdMwPaM80U7fHgWuJmhTRag1GMiuV2mURXKE+PuodwUfjGFEPxCfUYEisZAj7
+         kL6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXTl8yaC/NBDadhd/TqXYR+MV2k2sKSMMym3uC48RD/OshLibji0l5ezdPXfEawO9Bq2amsFL5l8Pas3PjuFOw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzm9FzEO8RqmZbiQW54GY0dEcCf0UgMB2D1/+NnIyE/fXe4E0WF
+	2uoGgJt+mNNeuvr3QspTt9vAOz8YkxLONK9NA/gq5De5G0qzZpocoq69hmx3HoozTw==
+X-Gm-Gg: ASbGncs1CTupo4Miv/keNk3FOgHolWrZai5OLnbHFAAzkU3sKRhgd5f2ayh+pzrOEaL
+	An73ieQsXN3ZnG0F+lBFwyqCAYq6KJ98lKC3Q+ed7oH8brHPtCGYWze82De0vyopKyO5rs7ouC3
+	LmpXY4E/l1lgCQVgLlLkfQcniHCANYZNinkmHfopESaL3iP0MQNkfXR+xoSh01Nb7hu7sIN3qpg
+	r2/qyTveNVkEBXVVkLedCvLBa2fI54wwCtIWhQPEdxiOJOCUWXmOtzGVpPVVHV/3ooVsopceUkp
+	xUgh8o9l7OP+I/31wM14zpX5+j85u1niiJHSgQ2qERVTqt2GtQl51VP/eIQuzQZE9vnzRpjf/BI
+	MhjHk0kf02saYZ61ELBnZY1GYYoSIOh3Tk3dFbtF7gnmO2QMI5X9WAtEeT1znt8jmiTjc+/JoLW
+	89HwR5XnYOw2yBWPxGZueEzVP30vmyVYMJVfk6Aq43TQNlxRuSoP7g
+X-Google-Smtp-Source: AGHT+IEvwmOPuxLIG6g8YJxuSY1Ag9QNyhIsSAktbkG66XXY1WuAd5qXvp+4W0YdAckfJVsZ/Qdviw==
+X-Received: by 2002:a17:90b:4a89:b0:32e:3592:581a with SMTP id 98e67ed59e1d1-343ddeec98cmr150863a91.17.1762882869455;
+        Tue, 11 Nov 2025 09:41:09 -0800 (PST)
+Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-343705c1354sm11607638a91.18.2025.11.11.09.41.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Nov 2025 09:41:08 -0800 (PST)
+Date: Tue, 11 Nov 2025 17:41:04 +0000
+From: David Matlack <dmatlack@google.com>
+To: Alex Mastro <amastro@fb.com>
+Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] vfio: selftests: update DMA mapping tests to use
+ queried IOVA ranges
+Message-ID: <aRN1MKrfm9GQZpzI@google.com>
+References: <20251111-iova-ranges-v2-0-0fa267ff9b78@fb.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: b4 0.14.2
-Message-ID: <20251111-b4-ksft-error-on-fail-v3-1-0951a51135f6@google.com>
-Subject: [PATCH RESEND v3] selftests/run_kselftest.sh: exit with error if
- tests fail
-From: Brendan Jackman <jackmanb@google.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: "=?utf-8?q?Thomas_Wei=C3=9Fschuh?=" <thomas.weissschuh@linutronix.de>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Brendan Jackman <jackmanb@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251111-iova-ranges-v2-0-0fa267ff9b78@fb.com>
 
-Parsing KTAP is quite an inconvenience, but most of the time the thing
-you really want to know is "did anything fail"?
+On 2025-11-11 06:52 AM, Alex Mastro wrote:
+> Not all IOMMUs support the same virtual address width as the processor,
+> for instance older Intel consumer platforms only support 39-bits of
+> IOMMU address space.  On such platforms, using the virtual address as
+> the IOVA and mappings at the top of the address space both fail.
+> 
+> VFIO and IOMMUFD have facilities for retrieving valid IOVA ranges,
+> VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE and IOMMU_IOAS_IOVA_RANGES,
+> respectively.  These provide compatible arrays of ranges from which
+> we can construct a simple allocator and record the maximum supported
+> IOVA address.
+> 
+> Use this new allocator in place of reusing the virtual address, and
+> incorporate the maximum supported IOVA into the limit testing.  This
+> latter change doesn't test quite the same absolute end-of-address space
+> behavior but still seems to have some value.  Testing for overflow is
+> skipped when a reduced address space is supported as the desired errno
+> is not generated.
+> 
+> This series is based on Alex Williamson's "Incorporate IOVA range info"
+> [1] along with feedback from the discussion in David Matlack's "Skip
+> vfio_dma_map_limit_test if mapping returns -EINVAL" [2].
+> 
+> Given David's plans to split IOMMU concerns from devices as described in
+> [3], this series' home for `struct iova_allocator` and IOVA
+> range helpers are likely to be short lived, since they reside in
+> vfio_pci_device.c. I assume that the rework can move this functionality
+> to a more appropriate location next to other IOMMU-focused code, once
+> such a place exists.
+> 
+> [1] https://lore.kernel.org/all/20251108212954.26477-1-alex@shazbot.org/#t
+> [2] https://lore.kernel.org/all/20251107222058.2009244-1-dmatlack@google.com/
+> [3] https://lore.kernel.org/all/aRIoKJk0uwLD-yGr@google.com/
+> 
+> To: Alex Williamson <alex@shazbot.org>
+> To: David Matlack <dmatlack@google.com>
+> To: Shuah Khan <shuah@kernel.org>
+> To: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: kvm@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Alex Mastro <amastro@fb.com>
 
-Let's give the user the his information without them needing
-to parse anything.
+LGTM. And I confirmed this fixes vfio_dma_mapping_test on HW that does
+not support IOVA 0xffffffffffffffff. Thanks!
 
-Because of the use of subshells and namespaces, this needs to be
-communicated via a file. Just write arbitrary data into the file and
-treat non-empty content as a signal that something failed.
-
-In case any user depends on the current behaviour, such as running this
-from a script with `set -e` and parsing the result for failures
-afterwards, add a flag they can set to get the old behaviour, namely
---no-error-on-fail.
-
-Signed-off-by: Brendan Jackman <jackmanb@google.com>
----
-Changes in v3:
-- Fixed quoting
-- Link to v2: https://lore.kernel.org/r/20251014-b4-ksft-error-on-fail-v2-1-b3e2657237b8@google.com
-
-Changes in v2:
-- Fixed bug in report_failure()
-- Made error-on-fail the default
-- Link to v1: https://lore.kernel.org/r/20251007-b4-ksft-error-on-fail-v1-1-71bf058f5662@google.com
----
- tools/testing/selftests/kselftest/runner.sh | 14 ++++++++++----
- tools/testing/selftests/run_kselftest.sh    | 14 ++++++++++++++
- 2 files changed, 24 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 2c3c58e65a419f5ee8d7dc51a37671237a07fa0b..3a62039fa6217f3453423ff011575d0a1eb8c275 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -44,6 +44,12 @@ tap_timeout()
- 	fi
- }
- 
-+report_failure()
-+{
-+	echo "not ok $*"
-+	echo "$*" >> "$kselftest_failures_file"
-+}
-+
- run_one()
- {
- 	DIR="$1"
-@@ -105,7 +111,7 @@ run_one()
- 	echo "# $TEST_HDR_MSG"
- 	if [ ! -e "$TEST" ]; then
- 		echo "# Warning: file $TEST is missing!"
--		echo "not ok $test_num $TEST_HDR_MSG"
-+		report_failure "$test_num $TEST_HDR_MSG"
- 	else
- 		if [ -x /usr/bin/stdbuf ]; then
- 			stdbuf="/usr/bin/stdbuf --output=L "
-@@ -123,7 +129,7 @@ run_one()
- 				interpreter=$(head -n 1 "$TEST" | cut -c 3-)
- 				cmd="$stdbuf $interpreter ./$BASENAME_TEST"
- 			else
--				echo "not ok $test_num $TEST_HDR_MSG"
-+				report_failure "$test_num $TEST_HDR_MSG"
- 				return
- 			fi
- 		fi
-@@ -137,9 +143,9 @@ run_one()
- 			echo "ok $test_num $TEST_HDR_MSG # SKIP"
- 		elif [ $rc -eq $timeout_rc ]; then \
- 			echo "#"
--			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
-+			report_failure "$test_num $TEST_HDR_MSG # TIMEOUT $kselftest_timeout seconds"
- 		else
--			echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
-+			report_failure "$test_num $TEST_HDR_MSG # exit=$rc"
- 		fi)
- 		cd - >/dev/null
- 	fi
-diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-index 0443beacf3621ae36cb12ffd57f696ddef3526b5..d4be97498b32e975c63a1167d3060bdeba674c8c 100755
---- a/tools/testing/selftests/run_kselftest.sh
-+++ b/tools/testing/selftests/run_kselftest.sh
-@@ -33,6 +33,7 @@ Usage: $0 [OPTIONS]
-   -c | --collection COLLECTION	Run all tests from COLLECTION
-   -l | --list			List the available collection:test entries
-   -d | --dry-run		Don't actually run any tests
-+  -f | --no-error-on-fail	Don't exit with an error just because tests failed
-   -n | --netns			Run each test in namespace
-   -h | --help			Show this usage info
-   -o | --override-timeout	Number of seconds after which we timeout
-@@ -44,6 +45,7 @@ COLLECTIONS=""
- TESTS=""
- dryrun=""
- kselftest_override_timeout=""
-+ERROR_ON_FAIL=true
- while true; do
- 	case "$1" in
- 		-s | --summary)
-@@ -65,6 +67,9 @@ while true; do
- 		-d | --dry-run)
- 			dryrun="echo"
- 			shift ;;
-+		-f | --no-error-on-fail)
-+			ERROR_ON_FAIL=false
-+			shift ;;
- 		-n | --netns)
- 			RUN_IN_NETNS=1
- 			shift ;;
-@@ -105,9 +110,18 @@ if [ -n "$TESTS" ]; then
- 	available="$(echo "$valid" | sed -e 's/ /\n/g')"
- fi
- 
-+kselftest_failures_file="$(mktemp --tmpdir kselftest-failures-XXXXXX)"
-+export kselftest_failures_file
-+
- collections=$(echo "$available" | cut -d: -f1 | sort | uniq)
- for collection in $collections ; do
- 	[ -w /dev/kmsg ] && echo "kselftest: Running tests in $collection" >> /dev/kmsg
- 	tests=$(echo "$available" | grep "^$collection:" | cut -d: -f2)
- 	($dryrun cd "$collection" && $dryrun run_many $tests)
- done
-+
-+failures="$(cat "$kselftest_failures_file")"
-+rm "$kselftest_failures_file"
-+if "$ERROR_ON_FAIL" && [ "$failures" ]; then
-+	exit 1
-+fi
-
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20251007-b4-ksft-error-on-fail-0c2cb3246041
-
-Best regards,
--- 
-Brendan Jackman <jackmanb@google.com>
-
+Reviewed-by: David Matlack <dmatlack@google.com>
+Tested-by: David Matlack <dmatlack@google.com>
 
