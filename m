@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-45348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45349-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B150C4F795
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:44:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F74DC4F79B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:44:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE8F83AA883
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 18:44:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 159823AADF7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 18:44:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502872BE03C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587B92BE7A1;
 	Tue, 11 Nov 2025 18:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LhvmRijH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOcGp6yY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238702BD5BB;
-	Tue, 11 Nov 2025 18:44:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5D92BD5BD;
+	Tue, 11 Nov 2025 18:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762886668; cv=none; b=pSNeUHkdgD3PvBC2i958dUiWSmoPZSDLXGkg+DgQgR87LFzuRJSobnEPDNmOu/H4Yqwsi+R/HrAK1vRQR26Cj/FJR0Wmu/Sdl+IPvzeJ1trwKWFuuI2mqvY9VMJAfHduYs1kxvLJiSMkzQOBHbiB509wJZzhzSUXODjn+h2avo4=
+	t=1762886668; cv=none; b=pPmwWZOOo+/EjL9JT5gT1HO6IWLLZ3YnuR2rUnZIWPidAJ8za4/3rcTb/i/qAUg9d+J0+LbFq8V+dufPT2XpUpWKX0u2NrXlkHTuc+lKvpToHx4OJgtvovpeVLO3secsWs1RtEhJupqx90mpk5sthZXtYUWGWCU6B4bC9BmHAys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762886668; c=relaxed/simple;
-	bh=RN1NkgEO23eqGRbIw3CgEAS8tb3Fp9u4BZ1voGEOa3Q=;
+	bh=bWfWODgDizfceoDSDsQvR25at7fdp8OVsfqGkOutAqM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mNDhXDSV/uGB21F4d/NBR1hpv5U0hDL1xkrX1f4BXWMsyOLLYE2gdDzpVMzcDnnd5FlxEb7OKNPqDsNjMtv6CFr22ZyIDB4L2TP4n3AnV4UAIv/12/TNemgx/V2FUf+6upXVswgOrKb0R0Y3Qh2kjz5+ppaTD9pTrTdNNPirRA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LhvmRijH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9117BC16AAE;
+	 MIME-Version; b=uDVdQL60RBBH7vYdXKGeXa0DAKuYQ3V0Pmc5vCA7gBh/QLlOwzi/hnkQRwHEiKZzT+0l6NiQFXQLQpWs/429n//23TH+xU8Tb5kcyuholtN81x/ipInHtG9rRFIPImy3+lfYwOF7raHEr9FuEPiNFFbJ1r0J2pgQJhjJ4QOkFgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOcGp6yY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D320FC4CEF5;
 	Tue, 11 Nov 2025 18:44:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762886667;
-	bh=RN1NkgEO23eqGRbIw3CgEAS8tb3Fp9u4BZ1voGEOa3Q=;
+	s=k20201202; t=1762886668;
+	bh=bWfWODgDizfceoDSDsQvR25at7fdp8OVsfqGkOutAqM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LhvmRijHVE7DhBMAgCDPQkJjPgAzyuoQn2gcyl020+DeeyaUT45dX9uTplTJh829R
-	 Eh2tWyLnhoJaPHGZW4jpzrnYMiSrW8Wb/3UYOKQqFx6XEvXjdjS9ezViSBJzv7gZe6
-	 5VJmHzP/sygGB7NSf7d87vgYAqJxWnDcev22qw7PuRrjQwRjlrItbtiPYDUJhPiIm6
-	 RhTIDJ0GhH3kzG4xLHbPUA9mfQ2yeTKpJzRfbovH1QQvXO+o0lFICsPslWI6Lihtil
-	 PO2QhrT9a44GqGjV2F6cf+s6oyzNuE/jKET5mHxOadx39+E1R1wsYV3yUWrlc1IlM1
-	 /tovELo2fUjzg==
+	b=EOcGp6yY2aQatoc9Pf+0VGj8G7nF6mD5WtOgX1LI7HrKoGF+J5uDarPUUvNpntots
+	 HO/A1rcMkU4gGomxfPV5O+QRdCwTBJhTOP2WAXYYCR1gBO0ujStAlusyiV3pHsEwHU
+	 3huE/rA5fZ1sEbwMv+FkhBth8xsfxDg541I+XVotUHN4AGXeFMGVi1o51QFXwnMxc0
+	 tIpelBNbkZwejQdLyv34q+zBFICZzjjmNOfrOPiCYb/2KUl++VDsvlkJbIKud3MgTe
+	 hO1e3gy5yqcQNJ3AXl8DxUHNfD9LQCPDRZkp+eRLtb4H0k13FyEUTz82KCc41PaA4o
+	 mKIRxMI6muc9w==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -51,9 +51,9 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 03/11] mm/damon/tests/core-kunit: extend damos_test_commit_filter_for() for union fields
-Date: Tue, 11 Nov 2025 10:44:02 -0800
-Message-ID: <20251111184415.141757-4-sj@kernel.org>
+Subject: [PATCH 04/11] mm/damon/tests/core-kunit: add test cases to damos_test_commit_filter()
+Date: Tue, 11 Nov 2025 10:44:03 -0800
+Message-ID: <20251111184415.141757-5-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251111184415.141757-1-sj@kernel.org>
 References: <20251111184415.141757-1-sj@kernel.org>
@@ -65,46 +65,83 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-damos_commit_filter() also updates union fields of 'struct
-damos_filter'.  Extend damos_test_commit_filter_for() to cover the
-expectations of the union fields.
+damos_test_commit_filter() is covering only a single test case.  Extend
+it to cover multiple combinations of inputs.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/tests/core-kunit.h | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ mm/damon/tests/core-kunit.h | 53 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 47 insertions(+), 6 deletions(-)
 
 diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 31f90cfcabf3..5052d8db9657 100644
+index 5052d8db9657..2770972b0a39 100644
 --- a/mm/damon/tests/core-kunit.h
 +++ b/mm/damon/tests/core-kunit.h
-@@ -504,6 +504,26 @@ static void damos_test_commit_filter_for(struct kunit *test,
- 	KUNIT_EXPECT_EQ(test, dst->type, src->type);
- 	KUNIT_EXPECT_EQ(test, dst->matching, src->matching);
- 	KUNIT_EXPECT_EQ(test, dst->allow, src->allow);
-+	switch (src->type) {
-+	case DAMOS_FILTER_TYPE_MEMCG:
-+		KUNIT_EXPECT_EQ(test, dst->memcg_id, src->memcg_id);
-+		break;
-+	case DAMOS_FILTER_TYPE_ADDR:
-+		KUNIT_EXPECT_EQ(test, dst->addr_range.start,
-+				src->addr_range.start);
-+		KUNIT_EXPECT_EQ(test, dst->addr_range.end,
-+				src->addr_range.end);
-+		break;
-+	case DAMOS_FILTER_TYPE_TARGET:
-+		KUNIT_EXPECT_EQ(test, dst->target_idx, src->target_idx);
-+		break;
-+	case DAMOS_FILTER_TYPE_HUGEPAGE_SIZE:
-+		KUNIT_EXPECT_EQ(test, dst->sz_range.min, src->sz_range.min);
-+		KUNIT_EXPECT_EQ(test, dst->sz_range.max, src->sz_range.max);
-+		break;
-+	default:
-+		break;
-+	}
- }
+@@ -528,17 +528,58 @@ static void damos_test_commit_filter_for(struct kunit *test,
  
  static void damos_test_commit_filter(struct kunit *test)
+ {
+-	struct damos_filter src_filter = {
+-		.type = DAMOS_FILTER_TYPE_ANON,
+-		.matching = true,
+-		.allow = true};
+-	struct damos_filter dst_filter = {
++	struct damos_filter dst = {
+ 		.type = DAMOS_FILTER_TYPE_ACTIVE,
+ 		.matching = false,
+ 		.allow = false,
+ 	};
+ 
+-	damos_test_commit_filter_for(test, &dst_filter, &src_filter);
++	damos_test_commit_filter_for(test, &dst,
++			&(struct damos_filter){
++			.type = DAMOS_FILTER_TYPE_ANON,
++			.matching = true,
++			.allow = true,
++			});
++	damos_test_commit_filter_for(test, &dst,
++			&(struct damos_filter){
++			.type = DAMOS_FILTER_TYPE_MEMCG,
++			.matching = false,
++			.allow = false,
++			.memcg_id = 123,
++			});
++	damos_test_commit_filter_for(test, &dst,
++			&(struct damos_filter){
++			.type = DAMOS_FILTER_TYPE_YOUNG,
++			.matching = true,
++			.allow = true,
++			});
++	damos_test_commit_filter_for(test, &dst,
++			&(struct damos_filter){
++			.type = DAMOS_FILTER_TYPE_HUGEPAGE_SIZE,
++			.matching = false,
++			.allow = false,
++			.sz_range = {.min = 234, .max = 345},
++			});
++	damos_test_commit_filter_for(test, &dst,
++			&(struct damos_filter){
++			.type = DAMOS_FILTER_TYPE_UNMAPPED,
++			.matching = true,
++			.allow = true,
++			});
++	damos_test_commit_filter_for(test, &dst,
++			&(struct damos_filter){
++			.type = DAMOS_FILTER_TYPE_ADDR,
++			.matching = false,
++			.allow = false,
++			.addr_range = {.start = 456, .end = 567},
++			});
++	damos_test_commit_filter_for(test, &dst,
++			&(struct damos_filter){
++			.type = DAMOS_FILTER_TYPE_TARGET,
++			.matching = true,
++			.allow = true,
++			.target_idx = 6,
++			});
+ }
+ 
+ static void damos_test_filter_out(struct kunit *test)
 -- 
 2.47.3
 
