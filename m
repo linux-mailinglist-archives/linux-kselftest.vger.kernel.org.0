@@ -1,194 +1,186 @@
-Return-Path: <linux-kselftest+bounces-45366-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6728BC4FA79
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 20:58:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD7B3C4FCA3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 22:05:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 150BE3B146A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:58:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA17018C0B35
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 21:04:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B283C3A5E8F;
-	Tue, 11 Nov 2025 19:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA8935CB92;
+	Tue, 11 Nov 2025 21:01:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKSJ+k8f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EMZ27BoX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39AA217F55
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 19:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16899352F9F
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 21:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762891086; cv=none; b=ZItMqxqvn2IJIiTkXjeMH3rXwnYNkJ5dCf2WT1yXMYy4LjyodiCVhojYNu3VLnTQ/O3Oz5sO1Kug1pAhjttoaW9ezYsc+WThYGijUaHRGyvckNzJ8jJ7Lje+9wcrchVjBd7RqRGddbEGidExnSaA8IFsfHl64yJdWrzsn+wJ64k=
+	t=1762894917; cv=none; b=TgwjRD0tAaxLW3uOQLlB1WoDz4oT/OtmH7oglqFVRhCYQGDtv/M6GYXiwyRs+CTB1mm28jqtFA4X0W/+YEaV3N/qEYsJYTpGCWwKlhB9zuOupOvuddWu/VDMmlzs/XReLzjS8JB44HN5P4TpU2qzub/c9waM/22IQpMgnLHn8Eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762891086; c=relaxed/simple;
-	bh=62sKlTrI0pxAC8MsCjHaTOLDapsx/YJT2jYwGk/YKdM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ofiN8OAUb63uBO3eTvSL1HfL9e8MClEvJBOf0oAppQZryMa8c/CN4dca/HUnIIsUMK7g7+lQ6M+J0pgT6aM2jBg5cfgIdL/qgxTjUbNVqBIrTNAoch3fp/qNZkXK8yqONyxEfyDlq83ieiVLvHDGj0CZakWORAtOLs6b72AK5mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hKSJ+k8f; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1762894917; c=relaxed/simple;
+	bh=m2/ll1uTQe3vdYyhgsBOhN/isiT4ncOezX9iuBFvWf0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NtGLQmwTGy9lcbBtk4lgKhGYjDY5Y8p4ysW+x84nGV0x18o0uoyqob5jWZZb2/wIQv50ouqznwGuJlL0egIbrBMAIRRrl9z1AZL4YhBvQ39qmnJ2L7Dv94qNcPYogWhT69YVN/cl7xHXXCVBR7+v41YSjBdKsYOWaIc5KI63mbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EMZ27BoX; arc=none smtp.client-ip=74.125.224.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-47116aaf345so16815e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 11:58:04 -0800 (PST)
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-63f9beb27b9so166555d50.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 13:01:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762891083; x=1763495883; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GgqlcdicdOlvJS4d4lOKT+0mM+91PtUwo1QhcetW41s=;
-        b=hKSJ+k8fZGT096+ddl8ISH5rFKI3ErCDbIvcpLCKdO7UPypquJE4vL0daq2cRzzvju
-         BLJaTwVRjWzKOA7yfw6aVilpBJfcUTwLL+M8cpvdpAFO9tl2mxn2VwLrDglGyO68OVNS
-         4S43WF9B95pGQxA/JVquRvH7QWKGAPwtmhVI9IS207Veeh776ptyiZHDIBWQgkamTccN
-         A8nTVex14gCRwgSXmmBZnfDwVGMbxnwVBCOXx+5JQjYK0fHXarx+ypghdZd4fl93OmMj
-         9WBoC9+eaykoMZPkPvnOfHeGkYL3ZyzZonhkScHk9UZNpbdq9jpetjiWLbVVxKEi8v4s
-         YfLg==
+        d=gmail.com; s=20230601; t=1762894911; x=1763499711; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bDPq8KvClJvWwDQMfmOhMgSMTNNkWL2W9UB4UAss5Bg=;
+        b=EMZ27BoXyrccnWk6j0fZzJXConxIlnb+YJyxYnU4pvHMuVIow6oNh0p44L4eeNPAlb
+         EuU22N0Cu3NLv75bupq/7aQaIC76fv8insPYQvRVpLLgtxNnYfaxq1leWkBbQwLqpal1
+         dN2H45GfOTIZMIalPt3j+RAvbeKU5LUk5X4jrrgVx77EbEaniLj25o8hJrBzM2OzXDLb
+         6EjMCrvHtPJKTl0XLha4W+sb/tyBJSEidqBbro/8EAwK29bMgtOQYDZxKcG0Ho3RXKmv
+         B9Z4B6oHilKtSi+F0GDPzi4IS6pGJKPuoMNThYrWpESSL160+clnPrk3ZeGhyMlHRBO2
+         OiMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762891083; x=1763495883;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GgqlcdicdOlvJS4d4lOKT+0mM+91PtUwo1QhcetW41s=;
-        b=f+TzaBnpDNdUF0zJJNz+1zSKJqjSsn6zgbPkYe0d8IVbVRkClQ7CDyhsQmndDOldTd
-         xivQhJTZVrKd/JYp9VeXlHS4h/H6H+KzyFpLV/XrJGM8JoIo7RbB+SbYOc3K4EJ1uJWy
-         O2iIIffcy5AkehCgmigEhKyHkF0ixVKTTOEkuumqKflsn6BD333YkxNCqlyLg6k5DmB+
-         /mHn1PS/wWxWq5DMeH/PJCSCNgOkeEzJB/CBCW+NhRUTpdqNB2KID4rLuVI8BrC6ht1E
-         DA02br89k+x2lY4JAQrG8GTb67BoxL3YZCx8A+p7BCPhuYzfP32iNWmSNs5o3g6kd2KA
-         +XcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVnV5WS9cLxYv41MqnSmrjMvFsTJoT2xDFBd8o+Qne2P1E6G9/hy6UnMOQFnhL0yQtgJviL++TDPZGrq9gWXp0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzJFDZDzDjjzsTbWIKFhiv/EQ1HsF0RPgLyrdObxoUgxNLTz50
-	FgcTWSkTFhHMs6JnJv0OVnjUUZUweyjCBr5mvjKzXKqxE70WIx8cuZXE
-X-Gm-Gg: ASbGnctd8BZAit6ozGSvKIfEtw5mnuwncyVMkqDRdYATK/Ojls9GxIBInJCETCvi+Ys
-	tD/ud2Ix6He1qjOoGmVN1QIjaIQxTwavmlZU83ZdrREUiYezWQ1oLNf7k+5H2pXMAD5Dm7sSk8K
-	n1bu3zDIMSO8aVLH9yUZ+infMHRzZPSY8mQW2bGSbpFLod5zzlHO6rKI/Awn0hfmD9lsT3byGOH
-	3FLfkfPrBvXQ1v7BSXUahkHdKE/V79mPa0wKbQ95fPQRRwjdvNTR3FWDDKftsEFtJHzUmEANv5H
-	klcXsjH2+3WICWppT5SVjoEUdGttzzQoMi7r5Y5aHZKsGCCVn6txiO6dlHCDGDsM9S5vMy7wf2w
-	AiwrnbDGEOm3Jy6TuGZmFqYw+9dyaQIIXrU0ggzreMkSt3UbHoa1htG414s+80+BXhdJZYNL8ht
-	7jt8C1kK472k6IjbD/1N66rY3/UsA=
-X-Google-Smtp-Source: AGHT+IE21rOv3E/xf61ATIbFY5zukw0tfOg7SCkZGn4ZrAkN7p8psKMVSUEEhKXeXEJZn8Yww8oxyA==
-X-Received: by 2002:a05:600c:4f54:b0:477:5b01:7d49 with SMTP id 5b1f17b1804b1-477870c9a70mr2783175e9.4.1762891083060;
-        Tue, 11 Nov 2025 11:58:03 -0800 (PST)
-Received: from bhk ([196.239.144.128])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4775ce211d8sm405969865e9.11.2025.11.11.11.58.01
+        d=1e100.net; s=20230601; t=1762894911; x=1763499711;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bDPq8KvClJvWwDQMfmOhMgSMTNNkWL2W9UB4UAss5Bg=;
+        b=QPWiCrWsuNF7am8qhNFQR+vXRLKkvSgBEd8sFiHQEhpCY+7KXfdFi1m1e20hPh3vY2
+         1y3HBlP8H3SDzLx9qip9aWfF00kVwdAH+Kv0UwEkg1m/lFzUcowFLmk+md7rJWwZbEPP
+         6iNQGDEtH3yZB2vnRZSTlGEJZpWLBx8LW5TPoVEWT+G1fzWJ/nxsGNecTOy6WMVKxaoh
+         aX9WmxjswLCaZtkK6aIN4BMvDajIFz3QXL5d8dSxNgHCDayIQHCpMzwTkRCDuxiR523F
+         P/Au/ypuHSOVDX4c/SGLeLNcUrZRjJNGDtQhnfsS9ansrQTmPhq0mIelaI3IaNMH/gfR
+         iVgg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcBe97OdpqfrULjC59zlez6oJnEcFryJgHoHSxZP00ltZeeATeNpV3AmyDhoC4Hc7tqo0p2VPln8DkLSQS/LM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY7zlsZtJQ5Hx2OknC1yQYOfzkiwMrhXE9hFOZHksIOhLDks6V
+	2n6aRvofazYGMqkozHHCooNR0xuZJ+xXqyXQYuFspnirvEDq1Cwpunj0quphrw==
+X-Gm-Gg: ASbGncvARSHXPpmGlaWy8YvOkn4hi05uyXC1wiOsS654sZyIKGoCCnUMH1Yer2fG3Mv
+	XIWGO6Vd5mQ7oobXeuD9QxalHxKaOzFkvMzsk0s2a80I1OiogBcDzZDCpBINL/eN7sXLgUqU5lM
+	qPXeu4XqUfzrJ0cAwk6o49DFFL3HLMw/tpoZuNOvIPgM0Q43Y3Y8dQgBjtlKyLWMUtGvytBKLyl
+	Bt4M/S5j/qL+x+aR9PblPOhyioO93CCSwZLQnNi5ZJU5SXZ7cfxRLbBlow3Ua0qEy2K1RV+DPch
+	rch5rLDiNwS0b6QvmXqRLhZnO2+DASiHSV1RNAiPRCTObgRoeqDkffD8odX2QDwp7L4eIReE14D
+	Dcz25zCw4ML9h+yIIt0HCfiacfSrgJUPkECAmHDzvdsbATP4mMgtPSXU0urFfkCGujLimOKqfmp
+	tI9xqL1Dl78IFr8wle3jK4g2kRmJfKb6Vf0fVXh8gMYX0RmA==
+X-Google-Smtp-Source: AGHT+IG5pLwkGsZ+eCK296l8q5rg85wfM1wAQ8NbbJwGyjxk6/mldP/Q7Z6BLYOivEyqJVyS1VY/EA==
+X-Received: by 2002:a53:c048:0:20b0:63f:a165:b9ed with SMTP id 956f58d0204a3-64101a0ab45mr674439d50.6.1762894911625;
+        Tue, 11 Nov 2025 13:01:51 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:d::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-787d684218dsm36167807b3.21.2025.11.11.13.01.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 11:58:02 -0800 (PST)
-From: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
-To: akpm@linux-foundation.org,
-	peterx@redhat.com,
-	david@redhat.com,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	vbabka@suse.cz,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	david.hunter.linux@gmail.com,
-	khalid@kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
-Subject: [PATCH] selftests/mm/uffd: remove static address usage in shmem_allocate_area()
-Date: Tue, 11 Nov 2025 21:54:27 +0100
-Message-ID: <20251111205739.420009-1-mehdi.benhadjkhelifa@gmail.com>
-X-Mailer: git-send-email 2.51.2
+        Tue, 11 Nov 2025 13:01:49 -0800 (PST)
+Date: Tue, 11 Nov 2025 13:01:48 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Simon Horman <horms@kernel.org>
+Cc: Stefano Garzarella <sgarzare@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v3 07/11] selftests/vsock: add check_result()
+ for pass/fail counting
+Message-ID: <aROkPIIeGq3Tb0I6@devvm11784.nha0.facebook.com>
+References: <20251106-vsock-selftests-fixes-and-improvements-v3-0-519372e8a07b@meta.com>
+ <20251106-vsock-selftests-fixes-and-improvements-v3-7-519372e8a07b@meta.com>
+ <aRMjeZVqsnc1BNr-@horms.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aRMjeZVqsnc1BNr-@horms.kernel.org>
 
-The current shmem_allocate_area() implementation uses a hardcoded virtual
-base address(BASE_PMD_ADDR) as a hint for mmap() when creating shmem-backed
-test areas. This approach is fragile and may fail on systems with ASLR or
-different virtual memory layouts, where the chosen address is unavailable.
+On Tue, Nov 11, 2025 at 11:52:25AM +0000, Simon Horman wrote:
+> On Thu, Nov 06, 2025 at 04:49:51PM -0800, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > Add check_result() function to reuse logic for incrementing the
+> > pass/fail counters. This function will get used by different callers as
+> > we add different types of tests in future patches (namely, namespace and
+> > non-namespace tests will be called at different places, and re-use this
+> > function).
+> > 
+> > Reviewed-by: Simon Horman <horms@kernel.org>
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> > Changes in v3:
+> > - increment cnt_total directly (no intermediary var) (Stefano)
+> > - pass arg to check_result() from caller, dont incidentally rely on
+> >   global (Stefano)
+> > - use new create_pidfile() introduce in v3 of earlier patch
+> > - continue with more disciplined variable quoting style
+> > ---
+> >  tools/testing/selftests/vsock/vmtest.sh | 95 +++++++++++++++++++++++++--------
+> >  1 file changed, 72 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
+> > index 557f9a99a306..05cf370a3db4 100755
+> > --- a/tools/testing/selftests/vsock/vmtest.sh
+> > +++ b/tools/testing/selftests/vsock/vmtest.sh
+> > @@ -46,6 +46,8 @@ readonly TEST_DESCS=(
+> >  	"Run vsock_test using the loopback transport in the VM."
+> >  )
+> >  
+> > +readonly USE_SHARED_VM=(vm_server_host_client vm_client_host_server vm_loopback)
+> > +
+> >  VERBOSE=0
+> >  
+> >  usage() {
+> > @@ -79,6 +81,28 @@ die() {
+> >  	exit "${KSFT_FAIL}"
+> >  }
+> >  
+> > +check_result() {
+> > +	local rc arg
+> > +
+> > +	rc=$1
+> > +	arg=$2
+> > +
+> > +	cnt_total=$(( cnt_total + 1 ))
+> > +
+> > +	if [[ ${rc} -eq $KSFT_PASS ]]; then
+> > +		cnt_pass=$(( cnt_pass + 1 ))
+> > +		echo "ok ${num} ${arg}"
+> > +	elif [[ ${rc} -eq $KSFT_SKIP ]]; then
+> > +		cnt_skip=$(( cnt_skip + 1 ))
+> > +		echo "ok ${num} ${arg} # SKIP"
+> > +	elif [[ ${rc} -eq $KSFT_FAIL ]]; then
+> > +		cnt_fail=$(( cnt_fail + 1 ))
+> > +		echo "not ok ${num} ${arg} # exit=$rc"
+> 
+> Hi Bobby,
+> 
+> Should num be cnt_total above?
+> 
+> > +	fi
+> > +
+> > +	cnt_total=$(( cnt_total + 1 ))
+> 
+> It seems that cnt_total is being incremented twice.
+> Once seems like it ought to be enough.
+> 
 
-Replace the static base address with a dynamically reserved address range
-obtained via mmap(NULL, ..., PROT_NONE). The memfd-backed areas and their
-alias are then mapped into that reserved region using MAP_FIXED, preserving
-the original layout and aliasing semantics while avoiding collisions with
-unrelated mappings.
+Indeed. FWIW, this was fixed in the newest (v4). I messed up a rebase,
+and my eye didn't catch it before sending out.
 
-This change improves robustness and portability of the test suite without
-altering its behavior or coverage.
+> > +}
+> > +
+> >  vm_ssh() {
+> >  	ssh -q -o UserKnownHostsFile=/dev/null -p ${SSH_HOST_PORT} localhost "$@"
+> >  	return $?
+> 
+> I'll confess that I didn't notice these myself, but
+> Claude Code with https://github.com/masoncl/review-prompts/ did.
 
-Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
----
-Testing:
-A diff between running the mm selftests on 6.18-rc5 from before and after
-the change show no regression on x86_64 architecture with 32GB DDR5 RAM.
- tools/testing/selftests/mm/uffd-common.c | 25 +++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+Thanks for the note, I'll give it a try. I'm trying to build out my
+pre-send workflow atm, and this looks pretty useful.
 
-diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-index 994fe8c03923..492b21c960bb 100644
---- a/tools/testing/selftests/mm/uffd-common.c
-+++ b/tools/testing/selftests/mm/uffd-common.c
-@@ -6,11 +6,11 @@
-  */
- 
- #include "uffd-common.h"
-+#include "asm-generic/mman-common.h"
- 
- uffd_test_ops_t *uffd_test_ops;
- uffd_test_case_ops_t *uffd_test_case_ops;
- 
--#define BASE_PMD_ADDR ((void *)(1UL << 30))
- 
- /* pthread_mutex_t starts at page offset 0 */
- pthread_mutex_t *area_mutex(char *area, unsigned long nr, uffd_global_test_opts_t *gopts)
-@@ -142,30 +142,37 @@ static int shmem_allocate_area(uffd_global_test_opts_t *gopts, void **alloc_area
- 	unsigned long offset = is_src ? 0 : bytes;
- 	char *p = NULL, *p_alias = NULL;
- 	int mem_fd = uffd_mem_fd_create(bytes * 2, false);
-+	size_t region_size = bytes * 2 + hpage_size;
- 
--	/* TODO: clean this up.  Use a static addr is ugly */
--	p = BASE_PMD_ADDR;
--	if (!is_src)
--		/* src map + alias + interleaved hpages */
--		p += 2 * (bytes + hpage_size);
-+	void *reserve = mmap(NULL, region_size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS,
-+			-1, 0);
-+	if (reserve == MAP_FAILED) {
-+		close(mem_fd);
-+		return -errno;
-+	}
-+
-+	p = (char *)reserve;
- 	p_alias = p;
- 	p_alias += bytes;
- 	p_alias += hpage_size;  /* Prevent src/dst VMA merge */
- 
--	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
-+	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_SHARED,
- 			   mem_fd, offset);
- 	if (*alloc_area == MAP_FAILED) {
-+		munmap(reserve, region_size);
- 		*alloc_area = NULL;
-+		close(mem_fd);
- 		return -errno;
- 	}
- 	if (*alloc_area != p)
- 		err("mmap of memfd failed at %p", p);
- 
--	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
-+	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_SHARED,
- 			  mem_fd, offset);
- 	if (area_alias == MAP_FAILED) {
--		munmap(*alloc_area, bytes);
-+		munmap(reserve, region_size);
- 		*alloc_area = NULL;
-+		close(mem_fd);
- 		return -errno;
- 	}
- 	if (area_alias != p_alias)
--- 
-2.51.2
-
+Best,
+Bobby
 
