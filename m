@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-45326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0EDDC4EA6D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 16:00:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B5A2C4EA00
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 15:57:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BA96A4FDDCD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 14:53:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0E1918C20EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 14:53:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE52332911;
-	Tue, 11 Nov 2025 14:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2516303CAE;
+	Tue, 11 Nov 2025 14:52:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="VvzRDd9D"
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="EbjVct4i"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A24E305E24;
-	Tue, 11 Nov 2025 14:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 121822F8BEE;
+	Tue, 11 Nov 2025 14:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762872759; cv=none; b=BGDLpfkZ01SN+LErib9ufhKtZeBkrdyZ43GfVrftKH/SiFB3cRuHLJbWvySdcTas6on3tCRGr96KAqhJkJo1C9il7glKcbqRFlB43GKpTJ8zx4EPrGqe2ILNGlh59H5NPR0WPrnU2El1P7BnXfsieD0U1C7ckD27Zd3JRVQ5SBE=
+	t=1762872757; cv=none; b=WjQYIw+zKt1STEE4jiHi0Rf9himPWNJ2uIwyZoeAuYAH7L5v5gmJAClM8HfGFD5lwOQHVw23WJEuVi0OzpzJVvu2Ug3zJCBscxc5AZGl4gKnHx5vk99MhZzNVE6qvxs0vRaTDTXrHJmMUG66Wi70B1n47pA/eAtIWZ0Igc9GvLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762872759; c=relaxed/simple;
-	bh=i+sH/g3Q/zxRDXJUWVAcLjIlE78QLJOOmzP1YnJWwKo=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=IBIy4OtLaMvtUlCcl0Fp+LBgQ+P3qn5CsaBtnufQ6L0kTLjyRnamgv/uT+5Ke+OBMHKY8KgfDTH4LXhDtb4dbULc0uoURbEaSl9ytdZxWed1EhZMhLfP9FS8V009lVzoUzxb9agH4Xqf6OBfAxKcfU30VjvcySiJ7cdeWt70eE4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=VvzRDd9D; arc=none smtp.client-ip=67.231.145.42
+	s=arc-20240116; t=1762872757; c=relaxed/simple;
+	bh=cveI6e+XRZtUA4ELFU9FZTPydsO9z748yMb6+miUQ2A=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=ZxoysltmYnBZifeXpvkMe8Dci5vHtO4x84d/CX2vX+DasuJC0TsFY7oRYbqELCx6IJPczjEpsMrmXHM1q/S7WvKLHgN/+WHrsJLO4U0lhO9YzwoSvtfbVkK/ICW05t2KqFxnx4nqg5DIsK55kM8upZ4/pVumFp9/zHddmkACBFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=EbjVct4i; arc=none smtp.client-ip=67.231.145.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
 Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AB7SXNG1282474;
-	Tue, 11 Nov 2025 06:52:29 -0800
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AB7SXNH1282474;
+	Tue, 11 Nov 2025 06:52:30 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=s2048-2025-q2; bh=+sYjHIgeGgtgEtM/ZY
-	/rnb14rK5E2/vuUb3zVUYyCSo=; b=VvzRDd9D2evyyQXrKiJnGaWNsRk3B17oQ1
-	lRx25HrBeyol7c5ekZuBB8j1I+se2wDXRs6eot+TuvuBiLYm3SGMLavkECcI05Uw
-	T9GqDBOT3Ugc6Z/FL2QhZnpdOtIRoSy5U30+18ft8Up8WRIVLr43Yx4AHKJwuPR/
-	jukMNLyW4GkLRlZlk/AL3q5lDZFPu576v4hK5HXyDTpQdMdhshB4y6r0LNEeA5ry
-	vhzVZVOf0iPjyoM2kfevRIgOKiLYEXn+aRDVrXr5oVobG+o8KdtaEmGhiSI9/gr4
-	bbLhytpDcpMBuqzk7SRwxT53kWaQCpcYpYLFbF4KpjEDp5X+H+dQ==
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
+	 bh=sEOiaSvVzfpd+hSpNRMwujtxgU5Idw1uQYgrA454INM=; b=EbjVct4iIdCX
+	k37YehMnhype00xF14c1i3oC9G5fkj+ITC39M0W8Qwt3wgaCqdrLMTCr5AwcdIE9
+	dQPm67HyLRMftrJszGffgMCN2U8hBs/hIriw/A8JrCHdV4H6Gwvo0zJ7q+HnZDQc
+	+viHzS2r8csn2BpHZokfaBspZppWROPCMzDve87hhQElq40+d0jfq/Oj2bZrfGD9
+	r5Pesxqos9DinavZZc87Wx+ghUiFsDaCz/lmvTr8s+H3s6rsrI2vW5MWTG/MdRD+
+	MaPsIECWOGAhCCCZDu4qwkIWRdGRtAcxFRnj8pvN+alTIGmyyRkT84o+ASpT0v0Q
+	lSpcHm8C2A==
 Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ac0shadt9-1
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ac0shadt9-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 11 Nov 2025 06:52:29 -0800 (PST)
+	Tue, 11 Nov 2025 06:52:30 -0800 (PST)
 Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::150d) by
  mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.20; Tue, 11 Nov 2025 14:52:28 +0000
+ 15.2.2562.20; Tue, 11 Nov 2025 14:52:29 +0000
 From: Alex Mastro <amastro@fb.com>
-Subject: [PATCH v2 0/4] vfio: selftests: update DMA mapping tests to use
- queried IOVA ranges
-Date: Tue, 11 Nov 2025 06:52:01 -0800
-Message-ID: <20251111-iova-ranges-v2-0-0fa267ff9b78@fb.com>
+Date: Tue, 11 Nov 2025 06:52:02 -0800
+Subject: [PATCH v2 1/4] vfio: selftests: add iova range query helpers
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,104 +63,265 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJFNE2kC/32MOw7CMBAFrxJtjZHXsRGh4h6IIvGHbEGMbGSBI
- t+ddQoqRDnvaWaF7BP5DKduheQLZYoLg9p1YOdxuXlBjhmUVAYRpaBYRpHakwVaORg9hCkcemD
- jkXyg11a7XJlnys+Y3lu8YFt/dwoKKbTTGm0wHHPnMO1tvEOLFPVHVE30bkDDcn/Er1hr/QDJ3
- 1IH3AAAAA==
+Message-ID: <20251111-iova-ranges-v2-1-0fa267ff9b78@fb.com>
+References: <20251111-iova-ranges-v2-0-0fa267ff9b78@fb.com>
+In-Reply-To: <20251111-iova-ranges-v2-0-0fa267ff9b78@fb.com>
 To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>,
         Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>
 CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, Alex Mastro <amastro@fb.com>
 X-Mailer: b4 0.13.0
-X-Authority-Analysis: v=2.4 cv=Pf/yRyhd c=1 sm=1 tr=0 ts=69134dad cx=c_pps
+X-Authority-Analysis: v=2.4 cv=Pf/yRyhd c=1 sm=1 tr=0 ts=69134dae cx=c_pps
  a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
  a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=r1p2_3pzAAAA:8 a=1XWaLZrsAAAA:8 a=FOH2dFAWAAAA:8
- a=9jRdOu3wAAAA:8 a=yzAeJPK-mxwKR1Fv_EMA:9 a=QEXdDO2ut3YA:10
- a=r_pkcD-q9-ctt7trBg_g:22 a=ZE6KLimJVUuLrTuGpvhn:22 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: mpVuFlv2TWYADdiwxTnQRgit2ebAZJba
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTExMDExOSBTYWx0ZWRfX1jOLyskkoLOt
- gnYTg7IFAL055BvfGzME6Eagiq6SDkCsJJqIquLgLzVDuShdKFYEiYsB3ILZs2VItWauseXadXg
- wyNirE/6mqcd7F9DCJqpLSuKObABlw/PfejkqS+q6LULLP1PGgFWz+QtsEdaEhLkb45ZGK+003N
- v8YzO09ivG7+Yk3z9azEqfxlZVSR21NvQ+MoAkdQ3qsM53LqY279BSlZto+NMXAcL4lu7S1Hwx4
- DZbV8aRn2i9zw/8NJ08r9LnsB0EVFb3QaYGMRRkeXfLBoii9wCWyOEUCFSllaAVkMfPsUlGjFpN
- 8mBy/SaFtQwP4roRHxReoaLAvKygsZ1d2ZvqzrWnKYAkbdu4d7LLgGkG73JlE7K+W1LyVIZjZ1r
- Oczz1FmXBknz2Ev1JZNcOt7xYqbonw==
-X-Proofpoint-ORIG-GUID: mpVuFlv2TWYADdiwxTnQRgit2ebAZJba
+ a=FOH2dFAWAAAA:8 a=GlSvj1RGuABl-Q5FckAA:9 a=QEXdDO2ut3YA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-GUID: rCxQo8KyXoD9PzuHyPS0ZRC5NC24Aww6
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTExMDExOSBTYWx0ZWRfX6q7+DxqGGUNn
+ h06a/uEPDL/maGKfhrs/xkKiebUkePj8zaTdxBR3g2V6ScNuFBlJcZz9rBondCddILcxiYBOkNB
+ 8eWgmPNNyn7ucFc6tf8O9RbenFR1LxWBWyCbf7hvlg2y75sbaUJdd1iwnp2DRIhdtgc/a2ccArD
+ Gfg6fIFQFQEaybuelWgKktmx5Q4OSMohQj3HvMkdf5U14njM9PdZsyIwQo1Wu6K7v6kGaG1IIcI
+ e0SFD0OmikXnRjNFLkgTrwxIIY6B3hqIW1gWim9IqKae0ME/tY8JsHXcyi+oFxWOWDnHjpKwXEv
+ kFw0wsoceTtM/1fb/6JUsnUybHVOa2WpTiQBjbw4Bre7twYnhEk2XT5idDprwLTZTG27IYazjEM
+ lnph3lwCLgMaW/kDypxK0nTwaJNz3Q==
+X-Proofpoint-ORIG-GUID: rCxQo8KyXoD9PzuHyPS0ZRC5NC24Aww6
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-11_02,2025-11-11_02,2025-10-01_01
 
-Not all IOMMUs support the same virtual address width as the processor,
-for instance older Intel consumer platforms only support 39-bits of
-IOMMU address space.  On such platforms, using the virtual address as
-the IOVA and mappings at the top of the address space both fail.
+VFIO selftests need to map IOVAs from legally accessible ranges, which
+could vary between hardware. Tests in vfio_dma_mapping_test.c are making
+excessively strong assumptions about which IOVAs can be mapped.
 
-VFIO and IOMMUFD have facilities for retrieving valid IOVA ranges,
-VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE and IOMMU_IOAS_IOVA_RANGES,
-respectively.  These provide compatible arrays of ranges from which
-we can construct a simple allocator and record the maximum supported
-IOVA address.
+Add vfio_iommu_iova_ranges(), which queries IOVA ranges from the
+IOMMUFD or VFIO container associated with the device. The queried ranges
+are normalized to IOMMUFD's iommu_iova_range representation so that
+handling of IOVA ranges up the stack can be implementation-agnostic.
+iommu_iova_range and vfio_iova_range are equivalent, so bias to using the
+new interface's struct.
 
-Use this new allocator in place of reusing the virtual address, and
-incorporate the maximum supported IOVA into the limit testing.  This
-latter change doesn't test quite the same absolute end-of-address space
-behavior but still seems to have some value.  Testing for overflow is
-skipped when a reduced address space is supported as the desired errno
-is not generated.
+Query IOMMUFD's ranges with IOMMU_IOAS_IOVA_RANGES.
+Query VFIO container's ranges with VFIO_IOMMU_GET_INFO and
+VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE.
 
-This series is based on Alex Williamson's "Incorporate IOVA range info"
-[1] along with feedback from the discussion in David Matlack's "Skip
-vfio_dma_map_limit_test if mapping returns -EINVAL" [2].
+The underlying vfio_iommu_type1_info buffer-related functionality has
+been kept generic so the same helpers can be used to query other
+capability chain information, if needed.
 
-Given David's plans to split IOMMU concerns from devices as described in
-[3], this series' home for `struct iova_allocator` and IOVA
-range helpers are likely to be short lived, since they reside in
-vfio_pci_device.c. I assume that the rework can move this functionality
-to a more appropriate location next to other IOMMU-focused code, once
-such a place exists.
-
-[1] https://lore.kernel.org/all/20251108212954.26477-1-alex@shazbot.org/#t
-[2] https://lore.kernel.org/all/20251107222058.2009244-1-dmatlack@google.com/
-[3] https://lore.kernel.org/all/aRIoKJk0uwLD-yGr@google.com/
-
-To: Alex Williamson <alex@shazbot.org>
-To: David Matlack <dmatlack@google.com>
-To: Shuah Khan <shuah@kernel.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: kvm@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Alex Mastro <amastro@fb.com>
-
-Changes in v2:
-- Fix various nits
-- calloc() where appropriate
-- Update overflow test to run regardless of iova range constraints
-- Change iova_allocator_init() to return an allocated struct
-- Unfold iova_allocator_alloc()
-- Fix iova allocator initial state bug
-- Update vfio_pci_driver_test to use iova allocator
-- Link to v1: https://lore.kernel.org/r/20251110-iova-ranges-v1-0-4d441cf5bf6d@fb.com
-
 ---
-Alex Mastro (4):
-      vfio: selftests: add iova range query helpers
-      vfio: selftests: fix map limit tests to use last available iova
-      vfio: selftests: add iova allocator
-      vfio: selftests: replace iova=vaddr with allocated iovas
+ .../testing/selftests/vfio/lib/include/vfio_util.h |   8 +-
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c | 167 +++++++++++++++++++++
+ 2 files changed, 174 insertions(+), 1 deletion(-)
 
- .../testing/selftests/vfio/lib/include/vfio_util.h |  19 +-
- tools/testing/selftests/vfio/lib/vfio_pci_device.c | 241 ++++++++++++++++++++-
- .../testing/selftests/vfio/vfio_dma_mapping_test.c |  20 +-
- .../testing/selftests/vfio/vfio_pci_driver_test.c  |  12 +-
- 4 files changed, 283 insertions(+), 9 deletions(-)
----
-base-commit: 0ed3a30fd996cb0cac872432cf25185fda7e5316
-change-id: 20251110-iova-ranges-1c09549fbf63
+diff --git a/tools/testing/selftests/vfio/lib/include/vfio_util.h b/tools/testing/selftests/vfio/lib/include/vfio_util.h
+index 240409bf5f8a..ef8f06ef0c13 100644
+--- a/tools/testing/selftests/vfio/lib/include/vfio_util.h
++++ b/tools/testing/selftests/vfio/lib/include/vfio_util.h
+@@ -4,9 +4,12 @@
+ 
+ #include <fcntl.h>
+ #include <string.h>
+-#include <linux/vfio.h>
++
++#include <uapi/linux/types.h>
++#include <linux/iommufd.h>
+ #include <linux/list.h>
+ #include <linux/pci_regs.h>
++#include <linux/vfio.h>
+ 
+ #include "../../../kselftest.h"
+ 
+@@ -206,6 +209,9 @@ struct vfio_pci_device *vfio_pci_device_init(const char *bdf, const char *iommu_
+ void vfio_pci_device_cleanup(struct vfio_pci_device *device);
+ void vfio_pci_device_reset(struct vfio_pci_device *device);
+ 
++struct iommu_iova_range *vfio_pci_iova_ranges(struct vfio_pci_device *device,
++					      u32 *nranges);
++
+ int __vfio_pci_dma_map(struct vfio_pci_device *device,
+ 		       struct vfio_dma_region *region);
+ int __vfio_pci_dma_unmap(struct vfio_pci_device *device,
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index a381fd253aa7..7a523e3f2dce 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -29,6 +29,173 @@
+ 	VFIO_ASSERT_EQ(__ret, 0, "ioctl(%s, %s, %s) returned %d\n", #_fd, #_op, #_arg, __ret); \
+ } while (0)
+ 
++static struct vfio_info_cap_header *next_cap_hdr(void *buf, size_t bufsz,
++						 size_t *cap_offset)
++{
++	struct vfio_info_cap_header *hdr;
++
++	if (!*cap_offset)
++		return NULL;
++
++	VFIO_ASSERT_LT(*cap_offset, bufsz);
++	VFIO_ASSERT_GE(bufsz - *cap_offset, sizeof(*hdr));
++
++	hdr = (struct vfio_info_cap_header *)((u8 *)buf + *cap_offset);
++
++	if (hdr->next)
++		VFIO_ASSERT_GT(hdr->next, *cap_offset);
++
++	*cap_offset = hdr->next;
++
++	return hdr;
++}
++
++static struct vfio_info_cap_header *vfio_iommu_info_cap_hdr(struct vfio_iommu_type1_info *info,
++							    u16 cap_id)
++{
++	struct vfio_info_cap_header *hdr;
++	size_t cap_offset = info->cap_offset;
++
++	if (!(info->flags & VFIO_IOMMU_INFO_CAPS))
++		return NULL;
++
++	if (cap_offset)
++		VFIO_ASSERT_GE(cap_offset, sizeof(struct vfio_iommu_type1_info));
++
++	while ((hdr = next_cap_hdr(info, info->argsz, &cap_offset))) {
++		if (hdr->id == cap_id)
++			return hdr;
++	}
++
++	return NULL;
++}
++
++/* Return buffer including capability chain, if present. Free with free() */
++static struct vfio_iommu_type1_info *vfio_iommu_get_info(struct vfio_pci_device *device)
++{
++	struct vfio_iommu_type1_info *info;
++
++	info = malloc(sizeof(*info));
++	VFIO_ASSERT_NOT_NULL(info);
++
++	*info = (struct vfio_iommu_type1_info) {
++		.argsz = sizeof(*info),
++	};
++
++	ioctl_assert(device->container_fd, VFIO_IOMMU_GET_INFO, info);
++
++	info = realloc(info, info->argsz);
++	VFIO_ASSERT_NOT_NULL(info);
++
++	ioctl_assert(device->container_fd, VFIO_IOMMU_GET_INFO, info);
++
++	return info;
++}
++
++/*
++ * Return iova ranges for the device's container. Normalize vfio_iommu_type1 to
++ * report iommufd's iommu_iova_range. Free with free().
++ */
++static struct iommu_iova_range *vfio_iommu_iova_ranges(struct vfio_pci_device *device,
++						       u32 *nranges)
++{
++	struct vfio_iommu_type1_info_cap_iova_range *cap_range;
++	struct vfio_iommu_type1_info *info;
++	struct vfio_info_cap_header *hdr;
++	struct iommu_iova_range *ranges = NULL;
++
++	info = vfio_iommu_get_info(device);
++	hdr = vfio_iommu_info_cap_hdr(info, VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE);
++	VFIO_ASSERT_NOT_NULL(hdr);
++
++	cap_range = container_of(hdr, struct vfio_iommu_type1_info_cap_iova_range, header);
++	VFIO_ASSERT_GT(cap_range->nr_iovas, 0);
++
++	ranges = calloc(cap_range->nr_iovas, sizeof(*ranges));
++	VFIO_ASSERT_NOT_NULL(ranges);
++
++	for (u32 i = 0; i < cap_range->nr_iovas; i++) {
++		ranges[i] = (struct iommu_iova_range){
++			.start = cap_range->iova_ranges[i].start,
++			.last = cap_range->iova_ranges[i].end,
++		};
++	}
++
++	*nranges = cap_range->nr_iovas;
++
++	free(info);
++	return ranges;
++}
++
++/* Return iova ranges of the device's IOAS. Free with free() */
++static struct iommu_iova_range *iommufd_iova_ranges(struct vfio_pci_device *device,
++						    u32 *nranges)
++{
++	struct iommu_iova_range *ranges;
++	int ret;
++
++	struct iommu_ioas_iova_ranges query = {
++		.size = sizeof(query),
++		.ioas_id = device->ioas_id,
++	};
++
++	ret = ioctl(device->iommufd, IOMMU_IOAS_IOVA_RANGES, &query);
++	VFIO_ASSERT_EQ(ret, -1);
++	VFIO_ASSERT_EQ(errno, EMSGSIZE);
++	VFIO_ASSERT_GT(query.num_iovas, 0);
++
++	ranges = calloc(query.num_iovas, sizeof(*ranges));
++	VFIO_ASSERT_NOT_NULL(ranges);
++
++	query.allowed_iovas = (uintptr_t)ranges;
++
++	ioctl_assert(device->iommufd, IOMMU_IOAS_IOVA_RANGES, &query);
++	*nranges = query.num_iovas;
++
++	return ranges;
++}
++
++static int iova_range_comp(const void *a, const void *b)
++{
++	const struct iommu_iova_range *ra = a, *rb = b;
++
++	if (ra->start < rb->start)
++		return -1;
++
++	if (ra->start > rb->start)
++		return 1;
++
++	return 0;
++}
++
++/* Return sorted IOVA ranges of the device. Free with free(). */
++struct iommu_iova_range *vfio_pci_iova_ranges(struct vfio_pci_device *device,
++					      u32 *nranges)
++{
++	struct iommu_iova_range *ranges;
++
++	if (device->iommufd)
++		ranges = iommufd_iova_ranges(device, nranges);
++	else
++		ranges = vfio_iommu_iova_ranges(device, nranges);
++
++	if (!ranges)
++		return NULL;
++
++	VFIO_ASSERT_GT(*nranges, 0);
++
++	/* Sort and check that ranges are sane and non-overlapping */
++	qsort(ranges, *nranges, sizeof(*ranges), iova_range_comp);
++	VFIO_ASSERT_LT(ranges[0].start, ranges[0].last);
++
++	for (u32 i = 1; i < *nranges; i++) {
++		VFIO_ASSERT_LT(ranges[i].start, ranges[i].last);
++		VFIO_ASSERT_LT(ranges[i - 1].last, ranges[i].start);
++	}
++
++	return ranges;
++}
++
+ iova_t __to_iova(struct vfio_pci_device *device, void *vaddr)
+ {
+ 	struct vfio_dma_region *region;
 
-Best regards,
 -- 
-Alex Mastro <amastro@fb.com>
+2.47.3
 
 
