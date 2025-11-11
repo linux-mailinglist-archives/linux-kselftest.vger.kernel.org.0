@@ -1,145 +1,193 @@
-Return-Path: <linux-kselftest+bounces-45362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2873DC4F80D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:50:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C0ECC4F956
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 20:21:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 192124E9288
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 18:50:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9874F18C2B67
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E84C2BEFF1;
-	Tue, 11 Nov 2025 18:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F271A325736;
+	Tue, 11 Nov 2025 19:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="i5VxH8M9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PATnYtYT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58D92BD5BB;
-	Tue, 11 Nov 2025 18:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26BF4325722
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 19:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762886978; cv=none; b=QCU5KBAnLc5r7PmatHOnz12yu3eguFmBMhQ7mOpsYbXPx15lqpIPnEE6wTFYiFN8nMykGJP/KwwlLT7vxfGpi1sxPrE0Yr3G18HWiDtIg1KYMuJIDvbkYg9FcooiuGrvJYz98V4rvUKti1O75h/LCaKQ02rmndDpSJkVEfl0Hdw=
+	t=1762888732; cv=none; b=NxjHBi2CuhPSOwi/ZWvWyxgtYkoEro92NdLLAWffMhXrJYvAlPeD3X5S2PDMk8cawkXy0bZjGq4o170Rvo1RAV2gSyCBF1lgTrm1fRcWsqrg6+yt5PpByiDP99eEHTzO+VZCNiKvRRthNEDOO+YckcntLYcctCtQuiqDMHTc2VM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762886978; c=relaxed/simple;
-	bh=IeKI7EN+aRDwHDG7nb75Mg43OEG8tZf6/aAnVkhwr9A=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RSfxk1D4kYNqurQEpjdfSctLuAYGT8YaY2nAEAdGb/qBIJd9Gmov0BTWGPbMRhZStFL9S81vgQrff04393MHSX4fb/KEKwLIOdExYJW+W8cRl5sFoPcJamHqO49QBcU2xOTXW1YT14BwTKMMEFpgONTu6+3UGhL831H2hZNoK/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=i5VxH8M9; arc=none smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5ABGVXgP3806237;
-	Tue, 11 Nov 2025 10:49:31 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=s2048-2025-q2; bh=+8Jo7kyiJm65ZLieY55G
-	q5HyHbRo5mmDuZD1xndd2og=; b=i5VxH8M9YPGhEq2cUeeTk/4KZaDfQmwwnYkE
-	PO16jWSqLRQU8yahxOWbo4o+IqMmxI2eZffd7ARtKqcnjWREB9hHElQ83+lx/QHo
-	B92FmdDJzf7DXkPW1x0XqRpa0DYan/wS4V90Mn2IYHDoCCE/V2WJpNNkJFwUat0h
-	qiWWCuHxBZdmPjTVuw1+K3H22iqTWlfNo6ChIQcle4hRz4mHACICPvn6Vqyt59Nl
-	0J3QWxuPewVRgLY7jtEdoZz8A10VJSgIIko0AXkT1p1Sze8jAgx+TpeIBOd91lAA
-	YDrww8aNZMpvUiLp43DPMzUGDJ4Ybbi/3VRcCEzhxmobOfjtqA==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ac0xhvhf2-4
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Tue, 11 Nov 2025 10:49:31 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c085:208::7cb7) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.20; Tue, 11 Nov 2025 18:49:25 +0000
-Date: Tue, 11 Nov 2025 10:49:21 -0800
-From: Alex Mastro <amastro@fb.com>
-To: David Matlack <dmatlack@google.com>
-CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
-        Jason
- Gunthorpe <jgg@ziepe.ca>, <kvm@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/4] vfio: selftests: update DMA mapping tests to use
- queried IOVA ranges
-Message-ID: <aROFMS+Di8geIqOy@devgpu015.cco6.facebook.com>
-References: <20251111-iova-ranges-v2-0-0fa267ff9b78@fb.com>
- <aRN1MKrfm9GQZpzI@google.com>
+	s=arc-20240116; t=1762888732; c=relaxed/simple;
+	bh=WrkIgi+zshvGxhLfLIup6m0PxGHGcR8zBqwWWiSJGUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a0O0NXpfnbmaOvhWKSbxNQcP6no+HpkiipYV9kap8aKetR4F5RCkhEW5kDBWsm4Fp33ETg10pTd59Ny+PMaPXOW40eH3ABFWz3+UJ4h44u6Hg51EM2DeyQ0HNAPcSDOfNBpJWwY8WwtOlhR+7MYT0CGU/vhWF6fk9jR56ZHxLLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PATnYtYT; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-42b3669ca3dso14828f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 11:18:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762888729; x=1763493529; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3g2GDGj5AAay/k4tJ+VCCSovbtJsKk41E0hucw1Xl2I=;
+        b=PATnYtYTHXDllw9nDBdkh11UnLM9SWJSGe82d1Qs1Nv2d7LDMNZNWlP+e9NhTWk83/
+         dB0f1wGo+2KoAFgTptXGAPOrFEHgJxZqXr6znIyisCpz878Ff/P5qDr0i15KjbMME0Wj
+         fByCFLGPvMqbk4HWqML8u7tjuxgp/Lgzg0iOzK2ZLyFCl8Vz11WXOxx8oPf+y/DrKhRD
+         Tlkbvj7JKmczlof4RmFiL3WS1qAxKLyS71g9+T9/ifo9FyDWcwPLNPOGXO4fGjn4l7ju
+         Fu72hdKkD1Wn1BoDEvQm/H9JaaKNWCNjFK0XtfSLpI30epVECPIPCEUCoM/IYu6Ok3oa
+         tn+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762888729; x=1763493529;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3g2GDGj5AAay/k4tJ+VCCSovbtJsKk41E0hucw1Xl2I=;
+        b=Bt6qxvl15DbqBOkUvTf9XAzMPLtfeTjsSUlN3y3SIc9PBJCrz6qC3/4jHh5UIwjC5r
+         c278MTLmVyXxgJBOhGsY3TdPWiBDxMJGFW6lhgnAAH5SLyaJQcOk128oVyU3oLhwNvBM
+         UzajxGBWInASSqkYkU9J9UeW5H0S6gH/X3Fv2SRHKWq2q3eorFohNsfyCUYjIH2JHUx9
+         iACFyPgdzRkZtVKDeQoRMmT8EWgkYxSQWIxwPkRZl6Q7slZ09gUnyqkvbdohcuOV2ny3
+         tA7JD8/Q9tpoOmxhagHyiTW9pA8HlN3B7BG3HC61hewK30e1wjz5/pqjgGgGa2QZBnm3
+         61KA==
+X-Forwarded-Encrypted: i=1; AJvYcCUkkGZPREVTEQx3uCGet0D4pCZqGeos45C4280btBr0Hh1wp9hL1YbdBCuA816xpeS2kJa610IqasfyUMhmrRM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlvEzPx3YKRMYuMWLccOiJFfPdX9HDrAIo8xKFWkZEUOAzGOxW
+	P7SaZyaabzcfL5MoJMlZ7ubK9hoUH2hMXsAGCJtOtqyoGSG/3cD561LY
+X-Gm-Gg: ASbGncsL0guf410exJT8NMivgnVzMegG72xl1qYeoV0NxRH5zz5VWcPR40KvWfUokFg
+	o72X/Ia/Ms+YKdACpBm08TslIbeF/y41Aple7jiqWp3/cvZiegGePkD68W9FmTCiS154ubyS/sh
+	iNJWpaRR29z72xTa93xb9yVMIcP3duYjT1arWpM1izEZzcdFrc+mHEWj10qrXX7iAP9N9bmlbXX
+	iy7Evhf/eRuHu4zUjHr+oYavUMC0mgCLV38S5wAFEnfPileZqz9wdq+AeimjYbicPbAl3TYrZEA
+	5X7qOs54WAeNh59l6aR3jhtSjoRXKAA54wfTxFNYEY8NQ+nRX5TpMbpSMJN9H+FS2FNL3eUl3g/
+	nV3FlDcqjIusHwRaaKjw5f26V3Pk8r5y2n2AIC+3gFMsn1WpHd/NTmc+Q2WJy/Z2KjB7F2/+h3I
+	jri5/PjWc=
+X-Google-Smtp-Source: AGHT+IEIg14BCh/MvTFM8zMUPDwzSAPlSz5/+0VBZJxt8k8qV9/8IPFlPxgvs5CsxqfGwfmV9u0z9w==
+X-Received: by 2002:a05:6000:401e:b0:42b:3dbe:3a54 with SMTP id ffacd0b85a97d-42b4bb98aa5mr278784f8f.17.1762888729119;
+        Tue, 11 Nov 2025 11:18:49 -0800 (PST)
+Received: from archlinux ([143.58.192.81])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42abe62bf40sm28745773f8f.9.2025.11.11.11.18.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Nov 2025 11:18:48 -0800 (PST)
+Date: Tue, 11 Nov 2025 19:18:46 +0000
+From: Andre Carvalho <asantostc@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3 5/6] netconsole: resume previously
+ deactivated target
+Message-ID: <h5tdoarzjg2b5v3bvkmrlwgquejlhr5xjbrb6hn2ro4s46dpfs@4clrqzup6szk>
+References: <20251109-netcons-retrigger-v3-0-1654c280bbe6@gmail.com>
+ <20251109-netcons-retrigger-v3-5-1654c280bbe6@gmail.com>
+ <e4loxbog76cspufl7hu37uhdc54dtqjqryikwsnktdncpqvonb@mu6rsa3qbtvk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aRN1MKrfm9GQZpzI@google.com>
-X-Authority-Analysis: v=2.4 cv=efcwvrEH c=1 sm=1 tr=0 ts=6913853b cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=r1p2_3pzAAAA:8 a=1XWaLZrsAAAA:8 a=9jRdOu3wAAAA:8
- a=FOH2dFAWAAAA:8 a=84ljBqc_iw8H7pXuDXEA:9 a=CjuIK1q_8ugA:10
- a=r_pkcD-q9-ctt7trBg_g:22 a=ZE6KLimJVUuLrTuGpvhn:22 a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-ORIG-GUID: Vx1f7q_TweyaX8596SyKAiC4mzTtOqEM
-X-Proofpoint-GUID: Vx1f7q_TweyaX8596SyKAiC4mzTtOqEM
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTExMDE1MiBTYWx0ZWRfX6eJDv1GAZ9zN
- yOrPKzdIHA9PEFYA6/bgZp4iybF6MwFUdRMZyYH9aYcM3u3DUMkrY5bgyImhAG6Yrh23/UIGe08
- JDJAKEHCQQzmZ17fq1krKx/RC5OYqH5z8147zdls2RgQmpIGrN0BX2aj3fsTaBNDsDVpp9kfNYu
- qyDqWJMnEfX2tjDMz+bJBEAfu2rEDdQc6SkrBwd5wwIRQoTDeDLHaT6iubMawFny+utMmo4ls84
- apdzpZ2Nmllwn4KVEV26PTXvBREyO5pGSLEtkv2TyL5aYS6Cpt9e1x/asCiAgv34Fj98Mi04VRI
- AOJtY+2w3dviZo6Tsx9dAwkyvlTMjcESOzBbJwHKCmi2PsjIU1DsRCbPpw2FybI/VkuxddSsVPM
- UOLbUAL8xwyuQrJXIOUTHbEfWLW5Tw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-11_03,2025-11-11_03,2025-10-01_01
+In-Reply-To: <e4loxbog76cspufl7hu37uhdc54dtqjqryikwsnktdncpqvonb@mu6rsa3qbtvk>
 
-On Tue, Nov 11, 2025 at 05:41:04PM +0000, David Matlack wrote:
-> On 2025-11-11 06:52 AM, Alex Mastro wrote:
-> > Not all IOMMUs support the same virtual address width as the processor,
-> > for instance older Intel consumer platforms only support 39-bits of
-> > IOMMU address space.  On such platforms, using the virtual address as
-> > the IOVA and mappings at the top of the address space both fail.
-> > 
-> > VFIO and IOMMUFD have facilities for retrieving valid IOVA ranges,
-> > VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE and IOMMU_IOAS_IOVA_RANGES,
-> > respectively.  These provide compatible arrays of ranges from which
-> > we can construct a simple allocator and record the maximum supported
-> > IOVA address.
-> > 
-> > Use this new allocator in place of reusing the virtual address, and
-> > incorporate the maximum supported IOVA into the limit testing.  This
-> > latter change doesn't test quite the same absolute end-of-address space
-> > behavior but still seems to have some value.  Testing for overflow is
-> > skipped when a reduced address space is supported as the desired errno
-> > is not generated.
-> > 
-> > This series is based on Alex Williamson's "Incorporate IOVA range info"
-> > [1] along with feedback from the discussion in David Matlack's "Skip
-> > vfio_dma_map_limit_test if mapping returns -EINVAL" [2].
-> > 
-> > Given David's plans to split IOMMU concerns from devices as described in
-> > [3], this series' home for `struct iova_allocator` and IOVA
-> > range helpers are likely to be short lived, since they reside in
-> > vfio_pci_device.c. I assume that the rework can move this functionality
-> > to a more appropriate location next to other IOMMU-focused code, once
-> > such a place exists.
-> > 
-> > [1] https://lore.kernel.org/all/20251108212954.26477-1-alex@shazbot.org/#t
-> > [2] https://lore.kernel.org/all/20251107222058.2009244-1-dmatlack@google.com/
-> > [3] https://lore.kernel.org/all/aRIoKJk0uwLD-yGr@google.com/
-> > 
-> > To: Alex Williamson <alex@shazbot.org>
-> > To: David Matlack <dmatlack@google.com>
-> > To: Shuah Khan <shuah@kernel.org>
-> > To: Jason Gunthorpe <jgg@ziepe.ca>
-> > Cc: kvm@vger.kernel.org
-> > Cc: linux-kselftest@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Alex Mastro <amastro@fb.com>
+On Tue, Nov 11, 2025 at 02:12:26AM -0800, Breno Leitao wrote:
+> > + *		disabled. Internally, although both STATE_DISABLED and
+> > + *		STATE_DEACTIVATED correspond to inactive netpoll the latter is>
+> > + *		due to interface state changes and may recover automatically.
 > 
-> LGTM. And I confirmed this fixes vfio_dma_mapping_test on HW that does
-> not support IOVA 0xffffffffffffffff. Thanks!
+>  *		disabled. Internally, although both STATE_DISABLED and
+>  *		STATE_DEACTIVATED correspond to inactive targets, the latter is
+>  *		due to automatic interface state changes and will try
+>  *		recover automatically, if the interface comes back
+>  *		online.
 > 
-> Reviewed-by: David Matlack <dmatlack@google.com>
-> Tested-by: David Matlack <dmatlack@google.com>
 
-Thanks David!
+This is much clearer, thanks for the suggestion. 
+
+> > +	ret = __netpoll_setup_hold(&nt->np, ndev);
+> > +	if (ret) {
+> > +		/* netpoll fails setup once, do not try again. */
+> > +		nt->state = STATE_DISABLED;
+> > +	} else {
+> > +		nt->state = STATE_ENABLED;
+> > +		pr_info("network logging resumed on interface %s\n",
+> > +			nt->np.dev_name);
+> > +	}
+> > +}
+> 
+> I am not sure that helper is useful, I would simplify the last patch
+> with this one and write something like:
+> 
+
+The main reason why I opted for a helper in netpoll was to keep reference
+tracking for these devices strictly inside netpoll and have simmetry between
+setup and cleanup. Having said that, this might be an overkill and I'm fine with 
+dropping the helper and taking your suggestion.
+
+> > +
+> > +/* Check if the target was bound by mac address. */
+> > +static bool bound_by_mac(struct netconsole_target *nt)
+> > +{
+> > +	return is_valid_ether_addr(nt->np.dev_mac);
+> > +}
+> 
+> Awesome. I liked this helper. It might be useful it some other places, and
+> eventually transformed into a specific type in the target (in case we need to
+> in the future)
+> 
+> Can we use it egress_dev also? If so, please separate this in a separate patch.
+
+In order to do that, we'd need to move bound_by_mac to netpolland make it available
+to be called by netconsole. Let me know if you'd like me to do this in this series,
+otherwise I'm also happy to refactor this separately from this series.
+
+> > +		if (nt->state == STATE_DEACTIVATED && event == NETDEV_UP &&
+> > +		    target_match(nt, dev))
+> > +			list_move(&nt->list, &resume_list);
+> 
+> I think it would be better to move the nt->state == STATE_DEACTIVATED to target_match and use
+> the case above. As the following:
+> 
+> 	if (nt->np.dev == dev) {
+> 		switch (event) {
+> 		case NETDEV_CHANGENAME:
+> 		....
+> 		case NETDEV_UP:
+> 			if (target_match(nt, dev))
+> 				list_move(&nt->list, &resume_list);
+> 
+
+We are not able to handle this inside this switch because when target got deactivated, 
+do_netpoll_cleanup sets nt->np.dev = NULL. Having said that, I can still move nt->state == STATE_DEACTIVATED
+to inside target_match (maybe calling it deactivated_target_match) to make this slightly more readable. 
+
+> >  		netconsole_target_put(nt);
+> >  	}
+> >  	spin_unlock_irqrestore(&target_list_lock, flags);
+> >  	mutex_unlock(&target_cleanup_list_lock);
+> >  
+> 
+> Write a comment saying that maybe_resume_target() might be called with IRQ
+> enabled.
+
+Ack.
+
+> Also, extract the code below in a static function. Similar to
+> netconsole_process_cleanups_core(), but passing resume_list argument.
+> 
+> Let's try to keep netconsole_netdev_event() simple to read and reason about.
+
+Ack.
+
+Thanks for the review!
+
+-- 
+Andre Carvalho
 
