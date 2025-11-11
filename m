@@ -1,104 +1,190 @@
-Return-Path: <linux-kselftest+bounces-45364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65E2BC4F9BC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 20:28:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C88D1C4FA25
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 20:45:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AF5818C376B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:28:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8A05189DA45
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D913271F5;
-	Tue, 11 Nov 2025 19:27:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D079B330B3A;
+	Tue, 11 Nov 2025 19:44:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nQu0sUR7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="keUp0W7R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38CB83271E0
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 19:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7A432A3F9
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 19:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762889235; cv=none; b=EeIwwrnGVJjcOmOOvpOmIrJnuQakxnojTHU8DykG5I3Nf685FwTD8sL5n23g9us+dHyWMTa0pTILW+k1XkQzKwNkMbSl9EeVwhx2HzJEKY18NXcxUlziZhLPspDf7piwwzoE7tUyTd9rpzmGBiOvV1BbF5M862+qgMUPzSmz2DQ=
+	t=1762890297; cv=none; b=nxrGH9MvdxtTCJFXJ5YsIyioU3RtFX9M5eOXTsgNrIGfU3ex/1kc5seCmb/nxfKsYaOD/qjUt79hnUjVkvNxjSipCu9EXzFamEVzaWLoENoMQrWug6c53yEgaewWktPbRmGmxtPgsHhkepUH2w3tS4sKD++tcetF4SKscma7xvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762889235; c=relaxed/simple;
-	bh=T4q4eI/PjUjqDPpGU0Tf2NYnENnLstWCYa50yyn4bPo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t2v1SdbeCRPnIAPqODcCtg3SqGsedLfQ5ykggviesk5r1K+D8fbgAK4H0K3Q+HcitPiHxLpgHpCnSl1Vg6P+IENv8V7y9Jy8JlgqMcMvcxZ1rp09wUiC1zLnVMyR3sZzm56uuVCDRRRBo3cYrwl84G6zyrlqQGIj1TZZrsemgZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nQu0sUR7; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-594476f218fso34849e87.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 11:27:12 -0800 (PST)
+	s=arc-20240116; t=1762890297; c=relaxed/simple;
+	bh=7oWpdWjh8bUsjMbqkolVny17Ncf5rKANuor1AjH+n/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FsYlIEOdBcTCTImo+UloMdThmJ4War9jmeeH/fMA4GGaVrVix2YcdFyTSGuPWxjXHlFIhzEKm4+h2Qp4/K5WSkHoLMyU/xBupRMDa3oz8yBerKK/myLpAuOnaF3n34peevIapOhzh3lgpF7IA29OrLVJvtBQ++Z8tZ77NUpkKCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=keUp0W7R; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42b3108f41fso16428f8f.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 11:44:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762889231; x=1763494031; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T4q4eI/PjUjqDPpGU0Tf2NYnENnLstWCYa50yyn4bPo=;
-        b=nQu0sUR7DB7tDzowR5qZobA4FUDiRlSpO6wWrJ6ejebQBijIGVgMizvWluGbRYGHrI
-         MmpeIczgC/b9cTkdMIGSud/jVbR5GCP8rm/tsVg5eGBvOPLYD5kCr4F17bkv4PsHxc4E
-         LIAotl/MOOd9P5dPuSxOpUGTIPl49BCyvxtwP4WnvB3wHKbxJrK2ObYjyNfkKn7pSGW7
-         7VzU781J9WU/MYo6jEzuR+W6p88/KcfcXEO/y09pPmbHuh7Yg53jk05HcVW6YZdNocE6
-         a2VKZkaCz/xB8LEI15xi9Kqmy1haib4TfKy4aYVXuhbN2VEWOuJI2mAEE8wVACSaSkWB
-         RCGw==
+        d=gmail.com; s=20230601; t=1762890294; x=1763495094; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1vL8T6v//WK5ms8HtdFj+QIL7sFTl22SJ6QXIGnOjBo=;
+        b=keUp0W7RWwNrWaLT9DesESq4xUlrgnG73P1bYhcACh+Ay3B0aLJ0FJGx1xRtwZvWtU
+         yeaOfE+OVLk/8quh1jcBWAqY0lBcoSgCSvdH46cY5+hBaLWtmf5RB9XzOBO6txhICV7y
+         iK3hZimEXtl2JCqNZ+sGKK0MpOjew8U1wE0yaXwS4aB7zNNyEtWd0IhXr3x3jYQdFbeG
+         9gQAfIfk5GuQH/tsG3P8VLhj6hw3/nGUqYS1KHEiIAnGTR2hWZLg8CjLF4VyCv1xGx73
+         X73WjRkb8vWVwoQcKnUr0+IG4rCujwDuZQk3bJ4iJ8FABS9pqvcE5kuYvqkB446rpW4M
+         OGYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762889231; x=1763494031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=T4q4eI/PjUjqDPpGU0Tf2NYnENnLstWCYa50yyn4bPo=;
-        b=fp5Pn+Zwq7F2b+7gNrwV/xEmY4jlVNljsjHQB+pXwE4BFkWuHZ2LqB8J8RAN1dzYSM
-         JSF7kaKubytEEj+2kVRUBJle4ECsgUEXPq8dxFyRrd5wTlYzlvPNgEyOzX7uzFkqvSJL
-         08gqTQcoC2Huz8+bl8IstBHlvWEVR9hd9+jKC3H7wWIm/GmoOYOiQpQ77DIAdiRDnur4
-         QL3iRJI1b0e8lZmm/wkNZ3GNNcsKgBPIQRVTmReThcMHvK0zuA9vibryyl4joKR/9BFp
-         aLmhZu3HigefqbS/js+3ECtPmO3v4HOFxshoq8rkgFJLxXV/9LA716Urc8AADgAf5MnL
-         g5bw==
-X-Forwarded-Encrypted: i=1; AJvYcCXvfX/4EeQ5soKZzvSdU6fQXq42YveN+UAA76avDExu4G3JP/yUTIRryR1+MefTMngR63v1Vv+1hn0ou+ac0rU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhNqpY3l/gP/Dv4sPISRLpakUzGlHkNmMpBmNjgTokozQs9Pfg
-	rgo1YI32tdb+ljx0KrfWQLLUj4CIHtxQBU42Yv6B5eOMWdMj4dFT5/ZzgwNqJp87sqV4zQb9+eK
-	Alo+WuJk4KW7tY2L+EBiyJPZxZGKKHif5J9g6q+yN
-X-Gm-Gg: ASbGncu0fP/GyKWbr8Svt3+DLQLAx7JdEDcPAHkK5yUbnrkvwT0Ys+EquVA22YEY83u
-	AE3HTZAPjK/Ug5FjEts5ae5RRepGtsaQ2lhfkG3I708B6QLqIuAOptirX20NNPE0GBBDlqF4wqs
-	PIpYp0gCb1v7ULVqvNBTV+ewuW3GTRwMbc1FEoHRKlzaw7PyaqRoDP4qQPDAQN2RMNL9UzmC2Hw
-	9g2FpXoRGDv/jqdAKm/MCJAHv0Cw9sedVenVMF6q1Tze13T7qKBfrFsa+YGLYJhmHWX5272j6qA
-	0VA1+w==
-X-Google-Smtp-Source: AGHT+IFsoUNsZKjerOV56G4XYKfZyWvAntKSJGGhk3vCYo0YWbEwNmd5TjSqbsr3l2nPJ1TiKUWXTC0bT2qotuyukbQ=
-X-Received: by 2002:a05:6512:230a:b0:594:750e:1f53 with SMTP id
- 2adb3069b0e04-59576e13618mr100574e87.25.1762889231088; Tue, 11 Nov 2025
- 11:27:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1762890294; x=1763495094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1vL8T6v//WK5ms8HtdFj+QIL7sFTl22SJ6QXIGnOjBo=;
+        b=naQG1HrQG+I+qGhE4xJeGhfaHgmQ6fyX0AP9JYJDEYikpAaJiyDIn9JMFapE/YFZia
+         FIeS5sJEz7+GOSTbeAhiH3Um16wt7lgTXev4sbN4XUVnsfDzd4PqVYSvtfAxw3hr7Q3z
+         Z+hYB+q3Sdpy5s9uiW5YCvtlZh6a5spSNG0Qrbhmim0VuQlN2wlMxsgjpFmtme5j3/ij
+         dmBcbDwgskk9wvZ4/Qx3HwUTXhPk5WiGzjwfKLYq/Yl7blpFhWPqt4rLBnBJTzXjMgCC
+         X4XTA75UvB3lyVvbqttTg9wpy3IQY7RTE7VqzVVzhXHHjFVGtfD8xGMZdO3SdL/h84z+
+         FThg==
+X-Forwarded-Encrypted: i=1; AJvYcCUVCUJpsuuNw+co9Szz0pQnZRPET0uGV+IGc1SefQnSUK6jhVNptzLeKiC2ugvBpLtdU6BdJhzY26MAvWb6hyA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy//TIFsukTw+ysj/oEMszzgUUtchR5kwMhG+G9vPjawxrKLlCt
+	yJ8teC44qagwwQLMcFvV+e2Wd6PnG2N2/iFUJlrJeYcdNwcquLFSdetv
+X-Gm-Gg: ASbGncsk11588GCuzwwV2gnDpTT+AclkKORBwZNYydS94msKkDhabhzcDyjuOc0Tctr
+	nHjFcUQDMMgnC3IvoLpO7w4Tw9KzDKuI3lyj6KTPPAIYg4b3w4g9p99owqcWQzuj1fV+7OOliMB
+	VJtC+paMEO3+j6hKNNYN5KEXUUlWC6zSGVs4HeigNrtHPKWkRFXyinlEPSDS2Qg6lgv+Gi/TXOG
+	nKK61Ry397tIDAvS/hE0X0eHbGODVYH9+pFRModswhFXKRt8VzdYBy/IIvPH94IAisL1bRC+NLJ
+	XTT0beBir0oxFP80nWQ/aOEdpGTtqKf5elF3pP7bSxiVDuMr4Cunr4M+CqYNZA8Q6EZO2++8sUP
+	56cWJRC7t6gnuZkc0G6iyVmaoCvOMSPzon1E6+m4l6rT0DAxUOsriesHHTHSbPLS5T8oO5JGi
+X-Google-Smtp-Source: AGHT+IFaIln3yiGIh9seHXdbbc3BGtrHgn26mO1mY0X8kAuJekH79JQX+ckG0i3gu/pYK/9GFm+SlA==
+X-Received: by 2002:a05:6000:2509:b0:3fb:aca3:d5d9 with SMTP id ffacd0b85a97d-42b4bb8ed31mr286811f8f.1.1762890294369;
+        Tue, 11 Nov 2025 11:44:54 -0800 (PST)
+Received: from archlinux ([143.58.192.81])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42abe62bf40sm28841586f8f.9.2025.11.11.11.44.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Nov 2025 11:44:53 -0800 (PST)
+Date: Tue, 11 Nov 2025 19:44:52 +0000
+From: Andre Carvalho <asantostc@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v3 6/6] selftests: netconsole: validate target
+ resume
+Message-ID: <nb7mfjnisgeenoazh5wi2e2twt5ooxfg225oqq3tuq5iqezi3r@mm6z3s4npsrd>
+References: <20251109-netcons-retrigger-v3-0-1654c280bbe6@gmail.com>
+ <20251109-netcons-retrigger-v3-6-1654c280bbe6@gmail.com>
+ <kv5q2fq3mypb4eenrk6z3j4yjfhrlmjdcgwrsgm7cefvso7n3x@j3mcnw3uaaq5>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251111-iova-ranges-v3-0-7960244642c5@fb.com>
-In-Reply-To: <20251111-iova-ranges-v3-0-7960244642c5@fb.com>
-From: David Matlack <dmatlack@google.com>
-Date: Tue, 11 Nov 2025 11:26:43 -0800
-X-Gm-Features: AWmQ_bn4dxVx1lBNbH8PWoRfGDh1pL7JrgTYZHIYTl7d2EJCVBbNB8Ju5ASDoi4
-Message-ID: <CALzav=cmkiFUjENpYk3TT7czAeoh8jzp4WX_+diERu7JhyGCpA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] vfio: selftests: update DMA mapping tests to use
- queried IOVA ranges
-To: Alex Mastro <amastro@fb.com>
-Cc: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <kv5q2fq3mypb4eenrk6z3j4yjfhrlmjdcgwrsgm7cefvso7n3x@j3mcnw3uaaq5>
 
-On Tue, Nov 11, 2025 at 10:48=E2=80=AFAM Alex Mastro <amastro@fb.com> wrote=
-:
->
-> Changes in v3:
-> - Update capability chain cycle detection
-> - Clarify the iova=3Dvaddr commit message
-> - Link to v2: https://lore.kernel.org/r/20251111-iova-ranges-v2-0-0fa267f=
-f9b78@fb.com
+On Tue, Nov 11, 2025 at 02:27:53AM -0800, Breno Leitao wrote:
+> > +
+> > +	if [ "${STATE}" == "enabled" ]
+> > +	then
+> > +		ENABLED=1
+> 
+> Shouldn't they be local variables in here ?
 
-All tests are still passing on v3 for me.
+Yes, good point.
+
+> > +	else
+> > +		ENABLED=0
+> > +	fi
+> > +
+> > +	if [ ! -f "$FILE" ]; then
+> 
+> 	if [ ! -f "${TARGET_PATH}" ]; then
+> 
+> > +		echo "FAIL: Target does not exist." >&2
+> > +		exit "${ksft_fail}"
+> > +	fi
+> > +
+> > +	slowwait 2 sh -c "test -n \"\$(grep \"${ENABLED}\" \"${FILE}\")\"" || {
+> 
+> 	slowwait 2 sh -c "test -n \"\$(grep \"${ENABLED}\" \"${TARGET_PATH}/enabled\")\"" || {
+> 
+
+Ack.
+
+> > +		echo "FAIL: ${TARGET} is not ${STATE}." >&2
+> > +	}
+> > +}
+> > +
+> >  # A wrapper to translate protocol version to udp version
+> >  function wait_for_port() {
+> >  	local NAMESPACE=${1}
+> > diff --git a/tools/testing/selftests/drivers/net/netcons_resume.sh b/tools/testing/selftests/drivers/net/netcons_resume.sh
+> > new file mode 100755
+> > index 000000000000..404df7abef1b
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/drivers/net/netcons_resume.sh
+> > @@ -0,0 +1,92 @@
+> > +#!/usr/bin/env bash
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +
+> > +# This test validates that netconsole is able to resume a target that was
+> > +# deactivated when its interface was removed when the interface is brought
+> > +# back up.
+> 
+> Comment above is a bit harder to understand.
+> 
+
+Agreed. What do you think of: 
+
+# This test validates that netconsole is able to resume a previously deactivated
+# target once its interface is brought back up. 
+
+> > +for BINDMODE in "ifname" "mac"
+> > +do
+> > +	echo "Running with bind mode: ${BINDMODE}" >&2
+> > +	# Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
+> > +	echo "6 5" > /proc/sys/kernel/printk
+> > +
+> > +	# Create one namespace and two interfaces
+> > +	set_network
+> > +	trap do_cleanup EXIT
+> 
+> can we keep these trap lines outside of the loop?
+> 
+
+Let me try to do that. I'm using different handlers depending on how far we are on
+the test but instead I think I should be able to use a similar approach as you did
+with cleanup_netcons() in https://lore.kernel.org/netdev/20251107-netconsole_torture-v10-4-749227b55f63@debian.org/.
+
+> > +	pkill_socat
+> > +	# Cleanup & unload the module
+> > +	cleanup "${NETCONS_CONFIGFS}/cmdline0"
+> > +	rmmod netconsole
+> 
+> Why do we need to remove netconsole module in here?
+
+We are removing the module here so we can load it on the second iteration of the
+test with new cmdline. This is following a similar pattern to netcons_cmdline.sh.
+
+> Thanks for this patch. This is solving a real issue we have right now.
+> --breno
+
+Thanks for the review!
+
+-- 
+Andre Carvalho
 
