@@ -1,162 +1,186 @@
-Return-Path: <linux-kselftest+bounces-45319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45320-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3935C4E6F1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 15:25:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0B76C4E87D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 15:40:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1AAC1895B69
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 14:21:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 186713A7C71
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 14:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05B230FC15;
-	Tue, 11 Nov 2025 14:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D07B02C2357;
+	Tue, 11 Nov 2025 14:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ZhYP9xnI";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="2WZpgtF1"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AkfY1a/R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99513009F8;
-	Tue, 11 Nov 2025 14:19:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4037F3AA194;
+	Tue, 11 Nov 2025 14:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762870764; cv=none; b=toMNFe1zVNiyMzI59kNMnOGBUcGQHlEcLWd3f0ShH/XBQrUDJQ7fEZwGbSiD53kut4dYieP2ak7VF9W7jOoiEJPM0bkTybiEqx0LErKOhisM8VzHD/r3d+M+V+MbH+dVMs5r3PetOp2fsG+zeIjTMngwdsF8Z4Q+MkM8Ll4ZeLU=
+	t=1762871661; cv=none; b=GMbMpdp46BX0fr8kK0AIRaG5Kaf7FPgAYo2CdOjz+oqD8bqSfsoWFVEd4RvNATYFk0MUnkT5OH+fQnZnYNxyvHgAtERV8EwUE/cYQEYzP5pJjUpvwDBf60ww8GiuEpYaNteSAYg+OqPI2utPbKnMFaBou1wuCX0BfS6uq3699NQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762870764; c=relaxed/simple;
-	bh=NpByBHiupA9mwAKBz1qThmMNm5PKagkHfsCY5dM5c18=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=YLXC6SdbB9+ThdPTdPA1P2/uc+APF6268sqvJTVKK/0mT+O3a3Vl3+3HMEX5f+fJnLdSc4HCFs0/zYZ4gszhhEw9DZPx5eBmt4vaQkg2BZ0g22778vWArxkrtNOX1ctE+8wONGNuI/PS+WX7rgynKFbJ5EuRocy2nmvfL2O4II0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ZhYP9xnI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=2WZpgtF1; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 87241EC01B5;
-	Tue, 11 Nov 2025 09:19:21 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Tue, 11 Nov 2025 09:19:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762870761;
-	 x=1762957161; bh=bVi+m0X0BXfoG2Nsfva8RYjAvFJDsmuCQjkkB+K0KuA=; b=
-	ZhYP9xnI9wliJLlntLzoUk1X4TQVE9oL6i0Hh9ddlf5shEUa7wojA5MS+keq0F+U
-	MCg8WXVDMGat+8kgjSlbDmAXsZ/EYGiYBxhOT/1wYITAFtwF9JEmenebDLUHadUq
-	xELkTz5BXifZlI9WnWmB2zs4Aj68I9mFp2NgkVrtec7sFVTnb7+uv5p9tJpq04DS
-	SyL3gCMJTly+qBOsbKhi8dt5UcQJDOT0UyWaJpAKJ/cGgPt8zwyL4FwIuEgLVrIU
-	NKwrRXG7EgLO6iGIxdOZNojr06FBJ5ZyCAM0wssbQvZooIbjB/YXj/e/PVuXzcvk
-	9gtDn3liKiFqMPM1svNc8g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762870761; x=
-	1762957161; bh=bVi+m0X0BXfoG2Nsfva8RYjAvFJDsmuCQjkkB+K0KuA=; b=2
-	WZpgtF15oW2ZZpYzJ4yyEuOlfgRGDZpWxWad2X3OMvlEZA5NEAdh+5HC0pacTBLM
-	FNnSutjoZIfyuZKbCLOP3z/k/KguXKHroUCFuJr3q1Q28D2hniFquTPeCTDSRnzY
-	aDF8Arlu8DORQYSLRg08FjxwEMk9NJj/7z5Luc+rblBQ/JHNvNRk21o9kKOf6Wvc
-	w5t8sl2NqqXalZthbTq4gGMH1vdC72P7daJTyNbuQ5iQmKYKY5IkY5Lv1EUgcSNB
-	BrKqJINcZin8wB9pE85B+LQK5cFVaF1zKd/BSaPU5rPatI1WOz1DBCmS3FQL/Bdj
-	RbkYr8y8Fpg3ZKQdDnx/A==
-X-ME-Sender: <xms:6UUTaWw66VOFgMf7OLXVMB781_YbgWqXGE7R1EEeunTwwoqjnybFaw>
-    <xme:6UUTadG76aNHLXNT-3DGUQDVC-bW_vm0fzKyDO6TgKlzfFFyiuykeV_tGS5F9sU9j
-    RiN2C0i7PjJtfjEANtOHlhYu838rBeSbnKRibnHZfX4zv5KLujGiTth>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtddugeduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepvhhinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprh
-    gtphhtthhopehluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhhes
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidrug
-    gvpdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhn
-    ihigrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdr
-    khgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:6UUTacaV_5flJD5-LccgC0AsOYvjOOrTZ7t_2FcugszkZU57Mwg66g>
-    <xmx:6UUTaRcJOHHzxKj802S8vRgtI-kpqlJh7TRiSLFPZWVIzHaFAK6LMw>
-    <xmx:6UUTaW3kFFScndluEqR1wAzGbZBOGH5k9sJBqrPCZf8xVQk-5b14nQ>
-    <xmx:6UUTaYIrBDu0GFJL5kbaPES6fOKs7-ChGuwblM-wDvgzEbdoE6sSmw>
-    <xmx:6UUTacfl4kXKy2oa8eV9Y0ckV5i6S0FGHI-lDM1C78_9h7BffmPL9DgB>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id F0F1C700054; Tue, 11 Nov 2025 09:19:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1762871661; c=relaxed/simple;
+	bh=QRHSFphyHuUYSylpfEI4dKY66tc/70I55lMHxyfnGpQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o/VaeQCQFHnUJM83ossXorHr4qX4qVLGaMAIbZnZSePeTwDHw24IzohZ2LFQsHROAhRrrpNTt/1JKyghJ4bP6h3HYVnIOirxd6y9KRUXuqKncP/zz+isAQbYZbPqPXcaoaYouj1r6INaAsj5l4PwXogp5A/XSlg8FWmf3AfADrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AkfY1a/R; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5ABAbSDj018118;
+	Tue, 11 Nov 2025 14:33:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=V89Tf6
+	g0YV9pjIIxZUesAqO5uEP7tgPDp5nrZjIpuqU=; b=AkfY1a/R3eqdRs/RcLLkOj
+	0nztdkEYPfFwDThJMVeWP8ZRFDBpYE1IUfEk9tAuoqZJiggv4KnsUosdmT3rGl9x
+	jubG6oYwG+cTxI3Ju4CFLlazXcyHgiN9sk4qYh6/WE8lNGQfxDkO5d7rYgjP56dN
+	ICo5Y5M77za4xFXv/H8NHo+zPG82wBtLL8JD9GrMxH88iT8xlkIyTTFRz3WLKLBW
+	AFYj7Lf3i1YZGV4Ye/Ab7T5WxGvTzk2iTXkoNkvjapSydTAMCUTF0lx0DpL+rGIF
+	X1/5NAacjbMUdcUTmWGVJ1D8EIhCjjC1IoEuaWRk3dOQg/gizDls/PQ1ovkIDadg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aa5cj4csc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Nov 2025 14:33:11 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5ABEDiB1023243;
+	Tue, 11 Nov 2025 14:33:10 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aa5cj4csa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Nov 2025 14:33:10 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5ABE0dX2004770;
+	Tue, 11 Nov 2025 14:33:09 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4aagjxu9fh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Nov 2025 14:33:09 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5ABEX5KS13435236
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 11 Nov 2025 14:33:05 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 43CD320040;
+	Tue, 11 Nov 2025 14:33:05 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0F80520043;
+	Tue, 11 Nov 2025 14:32:56 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.43.66.101])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue, 11 Nov 2025 14:32:55 +0000 (GMT)
+Date: Tue, 11 Nov 2025 20:02:51 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Hari Bathini <hbathini@linux.ibm.com>, sachinpb@linux.ibm.com,
+        Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+        Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Fix htab_update/reenter_update
+ selftest failure
+Message-ID: <aRNJE5GRUxdlJbZB@linux.ibm.com>
+References: <20251106052628.349117-1-skb99@linux.ibm.com>
+ <CAADnVQL3njbb3ANFkDWYRC-EHqAqWSwYs4OSUeKiw4XOYa+UNQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A5RixjiBPr7B
-Date: Tue, 11 Nov 2025 15:19:00 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <a78a17eb-1df2-471b-9c28-64619c71dc54@app.fastmail.com>
-In-Reply-To: 
- <20251111144805-ab2781fe-5424-492b-9cb3-55ebaaedc199@linutronix.de>
-References: <20251111-vdso-test-types-v1-0-03b31f88c659@linutronix.de>
- <20251111-vdso-test-types-v1-4-03b31f88c659@linutronix.de>
- <29dd9e11-9ae8-415a-acb3-b96af56550b0@app.fastmail.com>
- <20251111144805-ab2781fe-5424-492b-9cb3-55ebaaedc199@linutronix.de>
-Subject: Re: [PATCH 04/10] selftests: vDSO: vdso_test_abi: Provide compatibility with
- 32-bit musl
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQL3njbb3ANFkDWYRC-EHqAqWSwYs4OSUeKiw4XOYa+UNQ@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=Ss+dKfO0 c=1 sm=1 tr=0 ts=69134927 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VnNF1IyMAAAA:8 a=LqaeoIZmStsDFBDhuGQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA4MDA5NSBTYWx0ZWRfX9AGXi2qEsKjd
+ qDzXhxAmj9SVp3d2a0D5f39HoknUjaMaKWPUxdV9P4xxfaL2BMHLtDofjJk3bwQQBXsi9/Vx+au
+ Zp4FHjbqQzUvc+3Olgy6EbZ6BNdt0uZXD3kYy6WuC8/u4yCGSypLFUDEP5AA7QORm9GWtCFUWzr
+ Eo4GhO79zGpnIdfCffhi3o+WXY9j+qNoxncze/1moIkLsw7YTphvRxnWHVmlIZvJglwVQlO+7Xu
+ K5CO/iIk9iAJVmtkUmRapiWJebgy7mLxoJLWrFODXywu9j8PjlADAg3zLjDri9dUoWyXvsdauTZ
+ 4fBExTsy02ywd530taSEVM+Msa0bHI2JcjifEdXik4JhMzQBL0Mp53rFr8NcFDTUJGvXgaTGGSU
+ X9QnZw1kRtuz5fWIbxOU7ieDClWHtA==
+X-Proofpoint-GUID: F6R7a6B_HyNo9riAeLXlM8vMbN51mwde
+X-Proofpoint-ORIG-GUID: DwHQI-apnqWP3kBaZUiseLMPIV9cXMx0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-11_02,2025-11-11_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 suspectscore=0 impostorscore=0 bulkscore=0 phishscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 spamscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511080095
 
-On Tue, Nov 11, 2025, at 14:55, Thomas Wei=C3=9Fschuh wrote:
-> On Tue, Nov 11, 2025 at 01:59:02PM +0100, Arnd Bergmann wrote:
->> On Tue, Nov 11, 2025, at 11:49, Thomas Wei=C3=9Fschuh wrote:
->> >=20
->> > +#ifdef SYS_clock_getres
->> >  	ret =3D syscall(SYS_clock_getres, clk_id, &sys_ts);
->> > +#else
->> > +	ret =3D syscall(SYS_clock_getres_time32, clk_id, &sys_ts);
->> > +#endif
->> >=20
->>=20
->> I think this #ifdef check is not reliable enough and may hide
->> bugs. As with the other syscalls, the best way to call these
->> is to either use __NR_clock_getres_time64 on __kernel_timespec, or
->> to use __NR_clock_getres on __kernel_old_timespec.
->
-> Could you give an example for such a bug?
+On Thu, Nov 06, 2025 at 09:15:39AM -0800, Alexei Starovoitov wrote:
+> On Wed, Nov 5, 2025 at 9:26 PM Saket Kumar Bhaskar <skb99@linux.ibm.com> wrote:
+> >
+> > Since commit 31158ad02ddb ("rqspinlock: Add deadlock detection and recovery")
+> > the updated path on re-entrancy now reports deadlock via
+> > -EDEADLK instead of the previous -EBUSY.
+> >
+> > The selftest is updated to align with expected errno
+> > with the kernel’s current behavior.
+> >
+> > Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> > ---
+> >  tools/testing/selftests/bpf/prog_tests/htab_update.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+> > index 2bc85f4814f4..98d52bb1446f 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+> > @@ -40,7 +40,7 @@ static void test_reenter_update(void)
+> >         if (!ASSERT_OK(err, "add element"))
+> >                 goto out;
+> >
+> > -       ASSERT_EQ(skel->bss->update_err, -EBUSY, "no reentrancy");
+> > +       ASSERT_EQ(skel->bss->update_err, -EDEADLK, "no reentrancy");
+> 
+> Makes sense, but looks like the test was broken for quite some time.
+> It fails with
+>         /* lookup_elem_raw() may be inlined and find_kernel_btf_id()
+> will return -ESRCH */
+>         bpf_program__set_autoload(skel->progs.lookup_elem_raw, true);
+>         err = htab_update__load(skel);
+>         if (!ASSERT_TRUE(!err || err == -ESRCH, "htab_update__load") || err)
+> 
+> before reaching deadlk check.
+> Pls make it more robust.
+> __pcpu_freelist_pop() might be better alternative then lookup_elem_raw().
+> 
+> pw-bot: cr
 
-If CONFIG_COMPAT_32BIT_TIME is disabled, 32-bit targets
-only provide clock_getres_time64, so using SYS_clock_getres
-may -ENOSYS.
+Hi Alexei,
 
-Since SYS_clock_getres itself is provided by the libc implementation,
-I wouldn't trust that this actually means the same as __NR_clock_getres,
-and it might be set to __NR_clock_getres_time64.
+I tried for __pcpu_freelist_pop, looks like it is not good candidate to
+attach fentry for, as it is non traceable:
 
->> If we are trying to validate the interface here, we should probably
->> call both if available. If we just want to know the result and
->> trust that both work correctly, I'd always use __NR_clock_getres_time=
-64
->> on 32-bit systems and __NR_clock_getres on 64-bit systems.
->
-> As these are vDSO and not timer selftests I think we trust the syscall=
-s.
-> But how do we detect a native 64-bit time system? The preprocessor bui=
-ltins
-> won't work as a 32-bit pointer system may use 64-bit time syscalls. I =
-am not
-> aware of the UAPI #define, beyond the absence of __NR_clock_getres_tim=
-e64.
+trace_kprobe: Could not probe notrace function __pcpu_freelist_pop
 
-I would just check __BITS_PER_LONG=3D32 and require a linux-5.6+ kernel
-at runtime to ensure the 64-bit calls are available.
+I wasn't able to find any other function for this.
 
-    Arnd
+Thanks
+Saket
+
 
