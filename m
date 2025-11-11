@@ -1,204 +1,269 @@
-Return-Path: <linux-kselftest+bounces-45289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2221EC4CC67
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 10:53:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D63EC4CEE0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 11:13:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F41118850C6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 09:53:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CABC91885669
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 10:13:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6BF2FC017;
-	Tue, 11 Nov 2025 09:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cvyuqpQt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA034338911;
+	Tue, 11 Nov 2025 10:12:33 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA6A2F693E;
-	Tue, 11 Nov 2025 09:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1A532BF32
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 10:12:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762854785; cv=none; b=hzw2xmTIxa5fflCyzOJWy+jUpSPsCJv1fbZP4abdjVSZQ4Rb3HiAcqmmOnqbmsir8m9LiCW07oqngWxsKSeqrFaf1mKdu22IjWMhCZ131VgbpjlC5pw78TzaKhOU3fambxd6GVqn4BmpV/hy6FqnCOjR+ixcLRnbqlTsOp2Tgcw=
+	t=1762855953; cv=none; b=MDVO74gl04mjdddaHICSp4zXyuLEnPP+m3tpNK9SII78ERrBMDdrlmD1EwtJXLZRuKbGq7v5zVx7jx5mYOYKxu8b4CjnAR/cf6RxqEghnyPBqB3n3hZU3+AumIW5IUVU9BeW+z+yZFLr6GoVW4xAP67yi/O42hxHt5onIXWovvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762854785; c=relaxed/simple;
-	bh=iDhbZOal2wnEXBNqtnf0/uj4kQN5h/UJan7jrM1zSwo=;
+	s=arc-20240116; t=1762855953; c=relaxed/simple;
+	bh=WAj76DydZj4CIC9aQ/rvGOUH+A9Zbu1Qohl7CV2gKcc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oWqyCd1ukiwZ/Y9yVNcO5TMe0nCnL9DjwdeT5mB44I+fSWJhpPrKoM/++kjjmdlPS6sAHOaf1VXHZgoxXDeu9YFmu9FCP465tjQjw49evYl7NOXzBWiZkDl73MaMyan+OfAjZWbL2FT+z8c2E8sb0u/PAXbNQpb7JAkfXyeqVn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cvyuqpQt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6957AC4CEFB;
-	Tue, 11 Nov 2025 09:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762854784;
-	bh=iDhbZOal2wnEXBNqtnf0/uj4kQN5h/UJan7jrM1zSwo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cvyuqpQtk0Q6hYQ6gNSeFX8b9Es2msAbN8+gQ0SFGS0il5537frS9ZBNWiJHoWhMo
-	 /juDrre53fD9dTCmBTGtcYvSzvKRIm99a8p2VAPszdWXqvkl5TnKQwoPoKNpt3EWTh
-	 /LmT97aljg7pGdrpVEb9qkGCbbHMdJGTmadUknN3ZCxt1a/Zb5TP8aAh17YKpJ0mQI
-	 XEwcfP2+y/eXt+yWGeugUUAaSizGdaknSm4e+sXB18HNskbOMNygLmjK22XzaM/VVC
-	 ZvOhvZOmFvE8mkD2w5qTq+xrEBUw3xIXs3IWLU+4k3ycBvgnFZnhx3dqELNGQIt0Wx
-	 W95UyabgI+svg==
-Date: Tue, 11 Nov 2025 01:53:01 -0800
-From: Oliver Upton <oupton@kernel.org>
-To: Jiaqi Yan <jiaqiyan@google.com>
-Cc: Jose Marinho <jose.marinho@arm.com>, maz@kernel.org,
-	oliver.upton@linux.dev, duenwen@google.com, rananta@google.com,
-	jthoughton@google.com, vsethi@nvidia.com, jgg@nvidia.com,
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
-	catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com,
-	corbet@lwn.net, shuah@kernel.org, kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=K0PIDy2319DJC1v/yiQz6dIbsbMOqorLfOI/p5tLopIh6P0b8zz54f6okxDm4Nv1ZNYTbWRTKEC1n9lGAEmu70LfoCkGF7MRfmORKNRVRuKhu3+EfplEbSv105JqAawFxXkzP/xTFOvmhgjqGEGw5PRwRV5p/7gGBa0p+m/4dXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-44fa4808c15so577199b6e.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 02:12:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762855951; x=1763460751;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d93P9SBrZbsmx5OIoldWG9QXDZwaWCjQ8D5gNZLMBrU=;
+        b=tRnwaarsaQetASYIdDm0LwPeYsSdgoBQVfc+6Ujyxij+afYFxVgxsdSkEIyfmdTddf
+         aElGluzjMshnB7L/PFr5ieGoT6t88NhCpZOWBBRTdL3XjpcmrJzygj0Wse8Ro7Lxs9ma
+         O6aC4oZwdOVr/lMrzM+TF08Fhjuec4rxkUC6kTzaOV6PQ3MqQVU/f9Ob0uBaW9C7BQDA
+         QV6S3+LWdlwVuPbTYFYgVTuIJL0rR4D53mKp2Lp1qRgHYb42xPXa7kLvutVL212a7QjA
+         m6X7C25C+EwJ1FwFv1KWUGsASqyztZjbKt1PGBVVvaFsdMf7yRyavrYv7vkBtnPpK8uc
+         Kr+A==
+X-Forwarded-Encrypted: i=1; AJvYcCVfS19bGs0XI83ltAK7Qpb2olLzswSQ5gWlKVfjTwv2f2g2zEqhsv1vI+rEOX8EVu6Y2wO9c1c/f4VXjNO9I/o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaMbQi873DWUoPKVrllvxJkhG0SoUbZutVBQNq5a+tD1YpHPTA
+	plC7q+xZsdOTRdDQADEJR0rneNasPyVGXvF02y/vG30OJmBk9fuAUOjY
+X-Gm-Gg: ASbGnctF7KNsi5q6tW/lX2C8R27uSpBF9vHcwjH/ovSUsXtPE3Qiwh9BNTvp/4LD/5e
+	ePGVxEJf7sbE/0H5eSCTJOqOzjT1zylgUpD2OmObamXzQydsNVGZiBd5bwS0tglKhqN7N225py5
+	376gi+Q5Vg6a8OrLBn2DIhdxXA9bwJdzDYep1l9J7IRZ1AWdGE0OU0QoS9qJcLYK6n2TqA1aJhu
+	0TABFDDA98GYegZWWxYMAbEms5ud/rgGbOjBC41FIShfrURxmz8pKShW2aQZCXfH9obOnVvIelk
+	kz8CE86s/k1VjCIvYS9T8+/3n/B6vs7X0KwzJucnOLF+IjBlShoNC0U4AAo66M9JxMxT84I6PO3
+	G/a5D4Ek7rU4gorLEjwru/eRGosplXq1DeHddkxPH+TiM+cZdkuCagT4IwQh1kOgmpUDVtyoTxB
+	GmOLkFTsNcjcumzg==
+X-Google-Smtp-Source: AGHT+IH7+LY6boZXNhSOAKanHLT9JkTRtS0g/6VaSLyR6710lVl+xvo91GwsE75JjB1doJnEGSLx6A==
+X-Received: by 2002:a05:6808:1924:b0:43f:2140:c5b7 with SMTP id 5614622812f47-4502a1d129amr5768112b6e.19.1762855950943;
+        Tue, 11 Nov 2025 02:12:30 -0800 (PST)
+Received: from gmail.com ([2a03:2880:10ff:42::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-656c5713288sm6875102eaf.5.2025.11.11.02.12.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Nov 2025 02:12:30 -0800 (PST)
+Date: Tue, 11 Nov 2025 02:12:26 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Andre Carvalho <asantostc@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] KVM: arm64: VM exit to userspace to handle SEA
-Message-ID: <aRMHfS1-K4E4UCbc@kernel.org>
-References: <20251013185903.1372553-1-jiaqiyan@google.com>
- <20251013185903.1372553-2-jiaqiyan@google.com>
- <7a61bcf9-a57d-a8e9-a9b8-4eacef80acd3@arm.com>
- <CACw3F51_0A8CuCgzcvoA3Db=Wxo8mm5XZw5in+nTKrst+NCcqw@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 5/6] netconsole: resume previously
+ deactivated target
+Message-ID: <e4loxbog76cspufl7hu37uhdc54dtqjqryikwsnktdncpqvonb@mu6rsa3qbtvk>
+References: <20251109-netcons-retrigger-v3-0-1654c280bbe6@gmail.com>
+ <20251109-netcons-retrigger-v3-5-1654c280bbe6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACw3F51_0A8CuCgzcvoA3Db=Wxo8mm5XZw5in+nTKrst+NCcqw@mail.gmail.com>
+In-Reply-To: <20251109-netcons-retrigger-v3-5-1654c280bbe6@gmail.com>
 
-Hi Jiaqi,
-
-On Mon, Nov 03, 2025 at 12:45:50PM -0800, Jiaqi Yan wrote:
-> On Mon, Nov 3, 2025 at 10:17 AM Jose Marinho <jose.marinho@arm.com> wrote:
-> >
-> > Thank you for these patches.
+On Sun, Nov 09, 2025 at 11:05:55AM +0000, Andre Carvalho wrote:
+> Attempt to resume a previously deactivated target when the associated
+> interface comes back (NETDEV_UP event is received) by calling
+> __netpoll_setup_hold on the device.
 > 
-> Thanks for your comments, Jose!
+> Depending on how the target was setup (by mac or interface name), the
+> corresponding field is compared with the device being brought up.
 > 
-> >
-> > On 10/13/2025 7:59 PM, Jiaqi Yan wrote:
-> > > When APEI fails to handle a stage-2 synchronous external abort (SEA),
-> > > today KVM injects an asynchronous SError to the VCPU then resumes it,
-> > > which usually results in unpleasant guest kernel panic.
-> > >
-> > > One major situation of guest SEA is when vCPU consumes recoverable
-> > > uncorrected memory error (UER). Although SError and guest kernel panic
-> > > effectively stops the propagation of corrupted memory, guest may
-> > > re-use the corrupted memory if auto-rebooted; in worse case, guest
-> > > boot may run into poisoned memory. So there is room to recover from
-> > > an UER in a more graceful manner.
-> > >
-> > > Alternatively KVM can redirect the synchronous SEA event to VMM to
-> > > - Reduce blast radius if possible. VMM can inject a SEA to VCPU via
-> > >    KVM's existing KVM_SET_VCPU_EVENTS API. If the memory poison
-> > >    consumption or fault is not from guest kernel, blast radius can be
-> > >    limited to the triggering thread in guest userspace, so VM can
-> > >    keep running.
-> > > - Allow VMM to protect from future memory poison consumption by
-> > >    unmapping the page from stage-2, or to interrupt guest of the
-> > >    poisoned page so guest kernel can unmap it from stage-1 page table.
-> > > - Allow VMM to track SEA events that VM customers care about, to restart
-> > >    VM when certain number of distinct poison events have happened,
-> > >    to provide observability to customers in log management UI.
-> > >
-> > > Introduce an userspace-visible feature to enable VMM handle SEA:
-> > > - KVM_CAP_ARM_SEA_TO_USER. As the alternative fallback behavior
-> > >    when host APEI fails to claim a SEA, userspace can opt in this new
-> > >    capability to let KVM exit to userspace during SEA if it is not
-> > >    owned by host.
-> > > - KVM_EXIT_ARM_SEA. A new exit reason is introduced for this.
-> > >    KVM fills kvm_run.arm_sea with as much as possible information about
-> > >    the SEA, enabling VMM to emulate SEA to guest by itself.
-> > >    - Sanitized ESR_EL2. The general rule is to keep only the bits
-> > >      useful for userspace and relevant to guest memory.
-> > >    - Flags indicating if faulting guest physical address is valid.
-> > >    - Faulting guest physical and virtual addresses if valid.
-> > >
-> > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> > > Co-developed-by: Oliver Upton <oliver.upton@linux.dev>
-> > > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
-> > > ---
-> > >   arch/arm64/include/asm/kvm_host.h |  2 +
-> > >   arch/arm64/kvm/arm.c              |  5 +++
-> > >   arch/arm64/kvm/mmu.c              | 68 ++++++++++++++++++++++++++++++-
-> > >   include/uapi/linux/kvm.h          | 10 +++++
-> > >   4 files changed, 84 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> > > index b763293281c88..e2c65b14e60c4 100644
-> > > --- a/arch/arm64/include/asm/kvm_host.h
-> > > +++ b/arch/arm64/include/asm/kvm_host.h
-> > > @@ -350,6 +350,8 @@ struct kvm_arch {
-> > >   #define KVM_ARCH_FLAG_GUEST_HAS_SVE                 9
-> > >       /* MIDR_EL1, REVIDR_EL1, and AIDR_EL1 are writable from userspace */
-> > >   #define KVM_ARCH_FLAG_WRITABLE_IMP_ID_REGS          10
-> > > +     /* Unhandled SEAs are taken to userspace */
-> > > +#define KVM_ARCH_FLAG_EXIT_SEA                               11
-> > >       unsigned long flags;
-> > >
-> > >       /* VM-wide vCPU feature set */
-> > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-> > > index f21d1b7f20f8e..888600df79c40 100644
-> > > --- a/arch/arm64/kvm/arm.c
-> > > +++ b/arch/arm64/kvm/arm.c
-> > > @@ -132,6 +132,10 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-> > >               }
-> > >               mutex_unlock(&kvm->lock);
-> > >               break;
-> > > +     case KVM_CAP_ARM_SEA_TO_USER:
-> > > +             r = 0;
-> > > +             set_bit(KVM_ARCH_FLAG_EXIT_SEA, &kvm->arch.flags);
-> > > +             break;
-> > >       default:
-> > >               break;
-> > >       }
-> > > @@ -327,6 +331,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
-> > >       case KVM_CAP_IRQFD_RESAMPLE:
-> > >       case KVM_CAP_COUNTER_OFFSET:
-> > >       case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
-> > > +     case KVM_CAP_ARM_SEA_TO_USER:
-> > >               r = 1;
-> > >               break;
-> > >       case KVM_CAP_SET_GUEST_DEBUG2:
-> > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-> > > index 7cc964af8d305..09210b6ab3907 100644
-> > > --- a/arch/arm64/kvm/mmu.c
-> > > +++ b/arch/arm64/kvm/mmu.c
-> > > @@ -1899,8 +1899,48 @@ static void handle_access_fault(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa)
-> > >       read_unlock(&vcpu->kvm->mmu_lock);
-> > >   }
-> > >
-> > > +/*
-> > > + * Returns true if the SEA should be handled locally within KVM if the abort
-> > > + * is caused by a kernel memory allocation (e.g. stage-2 table memory).
-> > > + */
-> > > +static bool host_owns_sea(struct kvm_vcpu *vcpu, u64 esr)
-> > > +{
-> > > +     /*
-> > > +      * Without FEAT_RAS HCR_EL2.TEA is RES0, meaning any external abort
-> > > +      * taken from a guest EL to EL2 is due to a host-imposed access (e.g.
-> > > +      * stage-2 PTW).
-> > > +      */
-> > > +     if (!cpus_have_final_cap(ARM64_HAS_RAS_EXTN))
-> > > +             return true;
-> > > +
-> > > +     /* KVM owns the VNCR when the vCPU isn't in a nested context. */
-> > > +     if (is_hyp_ctxt(vcpu) && (esr & ESR_ELx_VNCR))
-> > Is this check valid only for a "Data Abort"?
+> Targets that are candidates for resuming are removed from the target list
+> and added to a temporarily list, as __netpoll_setup_hold might allocate.
+> __netpoll_setup_hold assumes RTNL is held (which is guaranteed to be the
+> case when handling the event) and holds a reference to the device in case
+> of success. This reference will be removed upon target (or netconsole)
+> removal by netpoll_cleanup.
 > 
-> Yes, the VNCR bit is specific to a Data Abort (provided we can only
-> reach host_owns_sea if kvm_vcpu_abt_issea).
-> I don't think we need to explicitly exclude the check here for
-> Instruction Abort.
+> Target transitions to STATE_DISABLED in case of failures resuming it to
+> avoid retrying the same target indefinitely.
+> 
+> Signed-off-by: Andre Carvalho <asantostc@gmail.com>
+> ---
+>  drivers/net/netconsole.c | 62 +++++++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 56 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
+> index 5a374e6d178d..50d6df101c20 100644
+> --- a/drivers/net/netconsole.c
+> +++ b/drivers/net/netconsole.c
+> @@ -135,10 +135,12 @@ enum target_state {
+>   * @stats:	Packet send stats for the target. Used for debugging.
+>   * @state:	State of the target.
+>   *		Visible from userspace (read-write).
+> - *		We maintain a strict 1:1 correspondence between this and
+> - *		whether the corresponding netpoll is active or inactive.
+> + *		From a userspace perspective, the target is either enabled or
+> + *		disabled. Internally, although both STATE_DISABLED and
+> + *		STATE_DEACTIVATED correspond to inactive netpoll the latter is>
+> + *		due to interface state changes and may recover automatically.
 
-You can take an external abort on an instruction fetch, in which case
-bit 13 of the ISS (VNCR bit for data abort) is RES0. So this does need
-to check for a data abort.
+ *		disabled. Internally, although both STATE_DISABLED and
+ *		STATE_DEACTIVATED correspond to inactive targets, the latter is
+ *		due to automatic interface state changes and will try
+ *		recover automatically, if the interface comes back
+ *		online.
 
-Thanks,
-Oliver
+>   *		Also, other parameters of a target may be modified at
+> - *		runtime only when it is disabled (state == STATE_DISABLED).
+> + *		runtime only when it is disabled (state != STATE_ENABLED).
+>   * @extended:	Denotes whether console is extended or not.
+>   * @release:	Denotes whether kernel release version should be prepended
+>   *		to the message. Depends on extended console.
+> @@ -1445,17 +1447,50 @@ static int prepare_extradata(struct netconsole_target *nt)
+>  }
+>  #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
+>  
+> +/* Attempts to resume logging to a deactivated target. */
+> +static void maybe_resume_target(struct netconsole_target *nt,
+> +				struct net_device *ndev)
+> +{
+> +	int ret;
+> +
+> +	ret = __netpoll_setup_hold(&nt->np, ndev);
+> +	if (ret) {
+> +		/* netpoll fails setup once, do not try again. */
+> +		nt->state = STATE_DISABLED;
+> +	} else {
+> +		nt->state = STATE_ENABLED;
+> +		pr_info("network logging resumed on interface %s\n",
+> +			nt->np.dev_name);
+> +	}
+> +}
+
+I am not sure that helper is useful, I would simplify the last patch
+with this one and write something like:
+
+
+	/* Attempts to resume logging to a deactivated target. */
+	static void maybe_resume_target(struct netconsole_target *nt,
+					struct net_device *ndev)
+	{
+		int ret;
+
+		ret = __netpoll_setup_hold(&nt->np, ndev);
+		if (ret) {
+			/* netpoll fails setup once, do not try again. */
+			nt->state = STATE_DISABLED;
+			return;
+		}
+
+		netdev_hold(ndev, &np->dev_tracker, GFP_KERNEL);
+		nt->state = STATE_ENABLED;
+		pr_info("network logging resumed on interface %s\n",
+			nt->np.dev_name);
+	}
+
+> +
+> +/* Check if the target was bound by mac address. */
+> +static bool bound_by_mac(struct netconsole_target *nt)
+> +{
+> +	return is_valid_ether_addr(nt->np.dev_mac);
+> +}
+
+Awesome. I liked this helper. It might be useful it some other places, and
+eventually transformed into a specific type in the target (in case we need to
+in the future)
+
+Can we use it egress_dev also? If so, please separate this in a separate patch.
+
+> +/* Checks if a target matches a device. */
+> +static bool target_match(struct netconsole_target *nt, struct net_device *ndev)
+> +{
+> +	if (bound_by_mac(nt))
+> +		return !memcmp(nt->np.dev_mac, ndev->dev_addr, ETH_ALEN);
+> +	return !strncmp(nt->np.dev_name, ndev->name, IFNAMSIZ);
+> +}
+> +
+>  /* Handle network interface device notifications */
+>  static int netconsole_netdev_event(struct notifier_block *this,
+>  				   unsigned long event, void *ptr)
+>  {
+> -	unsigned long flags;
+> -	struct netconsole_target *nt, *tmp;
+>  	struct net_device *dev = netdev_notifier_info_to_dev(ptr);
+> +	struct netconsole_target *nt, *tmp;
+> +	LIST_HEAD(resume_list);
+>  	bool stopped = false;
+> +	unsigned long flags;
+>  
+>  	if (!(event == NETDEV_CHANGENAME || event == NETDEV_UNREGISTER ||
+> -	      event == NETDEV_RELEASE || event == NETDEV_JOIN))
+> +	      event == NETDEV_RELEASE || event == NETDEV_JOIN ||
+> +	      event == NETDEV_UP))
+>  		goto done;
+>  
+>  	mutex_lock(&target_cleanup_list_lock);
+> @@ -1475,11 +1510,26 @@ static int netconsole_netdev_event(struct notifier_block *this,
+>  				stopped = true;
+>  			}
+>  		}
+> +		if (nt->state == STATE_DEACTIVATED && event == NETDEV_UP &&
+> +		    target_match(nt, dev))
+> +			list_move(&nt->list, &resume_list);
+
+I think it would be better to move the nt->state == STATE_DEACTIVATED to target_match and use
+the case above. As the following:
+
+	if (nt->np.dev == dev) {
+		switch (event) {
+		case NETDEV_CHANGENAME:
+		....
+		case NETDEV_UP:
+			if (target_match(nt, dev))
+				list_move(&nt->list, &resume_list);
+
+
+>  		netconsole_target_put(nt);
+>  	}
+>  	spin_unlock_irqrestore(&target_list_lock, flags);
+>  	mutex_unlock(&target_cleanup_list_lock);
+>  
+
+Write a comment saying that maybe_resume_target() might be called with IRQ
+enabled.
+
+
+> +	list_for_each_entry_safe(nt, tmp, &resume_list, list) {
+> +		maybe_resume_target(nt, dev);
+> +
+> +		/* At this point the target is either enabled or disabled and
+> +		 * was cleaned up before getting deactivated. Either way, add it
+> +		 * back to target list.
+> +		 */
+> +		spin_lock_irqsave(&target_list_lock, flags);
+> +		list_move(&nt->list, &target_list);
+> +		spin_unlock_irqrestore(&target_list_lock, flags);
+> +	}
+> +
+>  	if (stopped) {
+>  		const char *msg = "had an event";
+>  
+Also, extract the code below in a static function. Similar to
+netconsole_process_cleanups_core(), but passing resume_list argument.
+
+Let's try to keep netconsole_netdev_event() simple to read and reason about.
 
