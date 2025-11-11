@@ -1,165 +1,248 @@
-Return-Path: <linux-kselftest+bounces-45287-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45288-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 333A1C4C7D4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 09:56:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ECC0C4CA12
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 10:24:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AD70F34D751
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 08:56:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ABB73A6C09
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 09:22:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0A52F1FD0;
-	Tue, 11 Nov 2025 08:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85BF82EFD99;
+	Tue, 11 Nov 2025 09:22:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ymWd3Lnk";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PDy55JQ8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iq/i8hPW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59799257846;
-	Tue, 11 Nov 2025 08:55:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E72E2EDD72;
+	Tue, 11 Nov 2025 09:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762851353; cv=none; b=bcaF5GNUzlhLPFA84DxGS0Mn2tZQW+6DLbtB8SsKKvB1kfWsg5qghrf6qhVuhKZ4z4jzbmS4rU0rxWOWmv910Wd27HjgRdslgAJma8G47ODHBhzb9OZwlMisqGE4zeSBQ49rUAFxSSQrLvNNOzNAcoyxHWaiKpV4lMTk7bekmjo=
+	t=1762852933; cv=none; b=H+kZANSjTbztwhag3Jq/FnuVwkZ8f77Tk6SNHX6JxN2MpAYlXefW8gEgpmVX+AeU+5felhayazQo8PuORLF6TGPkdWX6T7t89oxCnBYjCgjlxtTheT+fZZKvMh/S4yaKW43tichbnUxFg2GWgMeepqhU6yt25ouABgD0qIOqk1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762851353; c=relaxed/simple;
-	bh=DCCdV1feBxJd8JPs8bCmq9jkjv7iq1tmUdts5DlDJ2A=;
+	s=arc-20240116; t=1762852933; c=relaxed/simple;
+	bh=YKxB1Tk0c8PA5NVe6KSLcg4q1RUhiINUvY7b/ZMmRUw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yy4xW1xbhni/Eb/hfF0KPVP2yyAm4xHvPysXNzqFMrVlutCDwT3Y0E+Ds/5C6Tz3w/waVHHIAhuDeJHj5R538fcxJzHKNNGtwt6iJ6l/ojXLmpsWsfl8xTeWiuesHznnGQvTdWje7TeVzSjmbNfN945txCFIXcDFLoKSRJuBcKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ymWd3Lnk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PDy55JQ8; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 11 Nov 2025 09:55:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1762851350;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RKTM993Ma21ZOkCemY+4BJTuWewmn2tKdsb5lj2abpk=;
-	b=ymWd3LnkEfwtX1k261UdYE5R5/7IpCIN6oMUmih0narZm6Bp8Tw+ikKxAJ98mC+Ki8kPMJ
-	dBJpjhxGTVeH7mhIVwraawl+x4rKUcLrgjqLQQNzsEMcCgMEHvECAIV2HVQCLFCkTVlVl8
-	O+nqZiC7VSJQgOJQPi13SRfHbDZLHZEY3z1VK0oryukZg4fmRz3ltZctohv5sJoBejwjBp
-	LiENYCvrtOf0BCLFlrBMSBeAaFEbp7NDLImGC6soMNidgoVLHUkoF1FvWUavi7dVQADk5V
-	c9bVZlXcLAPlv0tkMAeLyrfguAvzyipXRg9zcPQHmJYXL0Pd+CRKopm3fmhPVQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1762851350;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RKTM993Ma21ZOkCemY+4BJTuWewmn2tKdsb5lj2abpk=;
-	b=PDy55JQ8GnIS/Y2nfebPHMOFIXaZwBf3oeKj/acsXinCUUcGzezaxkS3vc3c9VSFc5YRUL
-	LWQUVLlkyb70aeBw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
-	Russell King <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v5 19/34] random: vDSO: only access vDSO datapage after
- random_init()
-Message-ID: <20251110124547-66c465dc-5214-46bf-937f-c8fa381b86f3@linutronix.de>
-References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
- <20251106-vdso-sparc64-generic-2-v5-19-97ff2b6542f7@linutronix.de>
- <aQ6EvdukQytvqK-u@zx2c4.com>
- <20251110094555-353883a9-1950-4cc6-a774-bb0ef5db11c5@linutronix.de>
- <aRHAU7bVAIyaOrpA@zx2c4.com>
- <20251110114550-a3f2afa8-4f86-4048-be5b-2dc4f4ef340d@linutronix.de>
- <aRHPIXATFJAEv-CF@zx2c4.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qg+iqOb2Hbu/X4vfTdGV4HbZTyn6Ut0aPCXzCYA/4IXG2FoAcipgv6G782KoAmvgdZS1MQc7zHeGfVRsU4gjv8RPXI/NFjX41cbFln4B+YFFc2+n2zmKVinCaRNLfw0msQ0Xz04OJjuT6RGk/QbSWlVwMK/2iXLGm6AMBf9YFsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iq/i8hPW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B43C19422;
+	Tue, 11 Nov 2025 09:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762852932;
+	bh=YKxB1Tk0c8PA5NVe6KSLcg4q1RUhiINUvY7b/ZMmRUw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Iq/i8hPWgHTwu435PI+UGZlLN/X3lyfBrrm+1OwNKieirVMDPmDCkCaFA5KX+Cpoo
+	 jCY0uq+bKxbfSS/6qRug9ACZVWvSIG2hb05Nfywkq6thFqPc80S2JztzaJqBCtX5TK
+	 6ankYgSWSaELPVPWooj+5cT1eMoRBXuIxw8R7wm0f3aC08zRAHgGqQPhTXlh+50TBr
+	 zxjneSB775FAK9WKt6FxPW2yAZcqlXQ0OEYW8MPlkyO1msbbTBkJLfLsWoPQX0KMwY
+	 2kPRjg5gUXXR3fF2VCX329Z0qynUJi5o5aKfiv7nNQoaN9iGP9xwUFoDOYr6HTaRw8
+	 daoW/qmbnCCrQ==
+Date: Tue, 11 Nov 2025 10:21:58 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Bernd Edlinger <bernd.edlinger@hotmail.de>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Alexey Dobriyan <adobriyan@gmail.com>, 
+	Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
+	Will Drewry <wad@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>, 
+	James Morris <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>, 
+	"Eric W. Biederman" <ebiederm@xmission.com>, Adrian Reber <areber@redhat.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>, 
+	Alexei Starovoitov <ast@kernel.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-security-module@vger.kernel.org, tiozhang <tiozhang@didiglobal.com>, 
+	Luis Chamberlain <mcgrof@kernel.org>, "Paulo Alcantara (SUSE)" <pc@manguebit.com>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, Frederic Weisbecker <frederic@kernel.org>, 
+	YueHaibing <yuehaibing@huawei.com>, Paul Moore <paul@paul-moore.com>, 
+	Aleksa Sarai <cyphar@cyphar.com>, Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>, 
+	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>, 
+	David Hildenbrand <david@redhat.com>, Dave Chinner <dchinner@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Elena Reshetova <elena.reshetova@intel.com>, 
+	David Windsor <dwindsor@gmail.com>, Mateusz Guzik <mjguzik@gmail.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, "Joel Fernandes (Google)" <joel@joelfernandes.org>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Hans Liljestrand <ishkamiel@gmail.com>, 
+	Penglei Jiang <superman.xpt@gmail.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Adrian Ratiu <adrian.ratiu@collabora.com>, Ingo Molnar <mingo@kernel.org>, 
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Cyrill Gorcunov <gorcunov@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v17] exec: Fix dead-lock in de_thread with ptrace_attach
+Message-ID: <20251111-ankreiden-augen-eadcf9bbdfaa@brauner>
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <20251105143210.GA25535@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aRHPIXATFJAEv-CF@zx2c4.com>
+In-Reply-To: <20251105143210.GA25535@redhat.com>
 
-On Mon, Nov 10, 2025 at 12:40:17PM +0100, Jason A. Donenfeld wrote:
-> On Mon, Nov 10, 2025 at 12:24:13PM +0100, Thomas Weißschuh wrote:
-> > > > > For example, one clean way of
-> > > > > doing that would be to make vdso_k_rng_data always valid by having it
-> > > > > initially point to __initdata memory, and then when it's time to
-> > > > > initialize the real datapage, memcpy() the __initdata memory to the new
-> > > > > specially allocated memory. Then we don't need the complex state
-> > > > > tracking that this commit and the prior one introduce.
-> > > > 
-> > > > Wouldn't that require synchronization between the update path and the memcpy()
-> > > > path? Also if the pointer is going to change at some point we'll probably need
-> > > > to use READ_ONCE()/WRITE_ONCE(). In general I would be happy about a cleaner
-> > > > solution for this but didn't find a great one.
-> > > 
-> > > This is still before userspace has started, and interrupts are disabled,
-> > > so I don't think so?
-> > 
-> > Interrupts being disabled is a good point. But we are still leaking
-> > implementation details from the random code into the vdso datastore.
+On Wed, Nov 05, 2025 at 03:32:10PM +0100, Oleg Nesterov wrote:
+> I am still thinking about another approach, will write another email.
+> But let me take a closer look at your patch.
 > 
-> It wouldn't. You do this generically with memcpy().
-
-With "implementation details" I meant the fact that it is fine to swap out the
-datapage behind its back. And the fact that the memcpy() can not introduce any
-races.
-
-> > > Also, you only care about being after
-> > > mm_core_init(), right? So move your thing before sched_init() and then
-> > > you'll really have nothing to worry about.
-> > 
-> > The callchains random_init_early() -> crng_reseed()/_credit_init_bits() could
-> > still touch the datapage before it is allocated.
-> > Adding conditionals to prevent those is essentially what my patch does.
+> First of all, can you split it? See below.
 > 
-> I think I wasn't very clear in my proposal, because this isn't an issue
-> in it.
-
-I interpreted your previous mail as two different proposals:
-1) do the memcpy() thing
-2) move the page allocation after mm_core_init()
-
-Now it makes more sense.
-
-> Global scope:
+> On 08/21, Bernd Edlinger wrote:
+> >
+> > -static int de_thread(struct task_struct *tsk)
+> > +static int de_thread(struct task_struct *tsk, struct linux_binprm *bprm)
+> >  {
+> >  	struct signal_struct *sig = tsk->signal;
+> >  	struct sighand_struct *oldsighand = tsk->sighand;
+> >  	spinlock_t *lock = &oldsighand->siglock;
+> > +	struct task_struct *t;
+> > +	bool unsafe_execve_in_progress = false;
+> >
+> >  	if (thread_group_empty(tsk))
+> >  		goto no_thread_group;
+> > @@ -932,6 +934,19 @@ static int de_thread(struct task_struct *tsk)
+> >  	if (!thread_group_leader(tsk))
+> >  		sig->notify_count--;
+> >
+> > +	for_other_threads(tsk, t) {
+> > +		if (unlikely(t->ptrace)
+> > +		    && (t != tsk->group_leader || !t->exit_state))
+> > +			unsafe_execve_in_progress = true;
 > 
-> static struct vdso_rng_data placeholder_vdso_k_rng_data __initdata;
-> struct vdso_rng_data *vdso_k_rng_data = &placeholder_vdso_k_rng_data;
+> you can add "break" into the "if ()" block...
 > 
-> Then,
+> But this is minor. Why do we need "bool unsafe_execve_in_progress" ?
+> If this patch is correct, de_thread() can drop/reacquire cred_guard_mutex
+> unconditionally.
 > 
-> void __init vdso_setup_data_pages(void)
-> {
->     ...
->     vdso_k_rng_data = blabla();
->     ...
->     memcpy(vdso_k_rng_data, &placeholder_vdso_k_rng_data, sizeof(*vdso_k_rng_data);
->     ...
-> }
+> If you really think it makes sense, please make another patch with the
+> changelog.
 > 
-> If vdso_setup_data_pages() is called early enough in init, this is safe
-> to do, and then you don't need to muck up the random code with awful
-> state machine ordering stuff.
+> I'd certainly prefer to avoid this boolean at least for the start. If nothing
+> else to catch the potential problems earlier.
+> 
+> > +	if (unlikely(unsafe_execve_in_progress)) {
+> > +		spin_unlock_irq(lock);
+> > +		sig->exec_bprm = bprm;
+> > +		mutex_unlock(&sig->cred_guard_mutex);
+> > +		spin_lock_irq(lock);
+> 
+> I don't think spin_unlock_irq() + spin_lock_irq() makes any sense...
+> 
+> > @@ -1114,13 +1139,31 @@ int begin_new_exec(struct linux_binprm * bprm)
+> >  	 */
+> >  	trace_sched_prepare_exec(current, bprm);
+> >
+> > +	/* If the binary is not readable then enforce mm->dumpable=0 */
+> > +	would_dump(bprm, bprm->file);
+> > +	if (bprm->have_execfd)
+> > +		would_dump(bprm, bprm->executable);
+> > +
+> > +	/*
+> > +	 * Figure out dumpability. Note that this checking only of current
+> > +	 * is wrong, but userspace depends on it. This should be testing
+> > +	 * bprm->secureexec instead.
+> > +	 */
+> > +	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
+> > +	    is_dumpability_changed(current_cred(), bprm->cred) ||
+> > +	    !(uid_eq(current_euid(), current_uid()) &&
+> > +	      gid_eq(current_egid(), current_gid())))
+> > +		set_dumpable(bprm->mm, suid_dumpable);
+> > +	else
+> > +		set_dumpable(bprm->mm, SUID_DUMP_USER);
+> > +
+> 
+> OK, we need to do this before de_thread() drops cred_guard_mutex.
+> But imo this too should be done in a separate patch, the changelog should
+> explain this change.
+> 
+> > @@ -1361,6 +1387,11 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
+> >  	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
+> >  		return -ERESTARTNOINTR;
+> >
+> > +	if (unlikely(current->signal->exec_bprm)) {
+> > +		mutex_unlock(&current->signal->cred_guard_mutex);
+> > +		return -ERESTARTNOINTR;
+> > +	}
+> 
+> OK, if signal->exec_bprm != NULL, then current is already killed. But
+> proc_pid_attr_write() and ptrace_traceme() do the same. So how about
+> something like
+> 
+> 	int lock_current_cgm(void)
+> 	{
+> 		if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
+> 			return -ERESTARTNOINTR;
+> 
+> 		if (!current->signal->group_exec_task)
+> 			return 0;
+> 
+> 		WARN_ON(!fatal_signal_pending(current));
+> 		mutex_unlock(&current->signal->cred_guard_mutex);
+> 		return -ERESTARTNOINTR;
+> 	}
+> 
+> ?
+> 
+> Note that it checks ->group_exec_task, not ->exec_bprm. So this change can
+> come in a separate patch too, but I won't insist.
+> 
+> > @@ -453,6 +454,28 @@ static int ptrace_attach(struct task_struct *task, long request,
+> >  				return retval;
+> >  		}
+> >
+> > +		if (unlikely(task == task->signal->group_exec_task)) {
+> > +			retval = down_write_killable(&task->signal->exec_update_lock);
+> > +			if (retval)
+> > +				return retval;
+> > +
+> > +			scoped_guard (task_lock, task) {
+> > +				struct linux_binprm *bprm = task->signal->exec_bprm;
+> > +				const struct cred __rcu *old_cred = task->real_cred;
+> > +				struct mm_struct *old_mm = task->mm;
+> > +
+> > +				rcu_assign_pointer(task->real_cred, bprm->cred);
+> > +				task->mm = bprm->mm;
+> > +				retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
+> > +				rcu_assign_pointer(task->real_cred, old_cred);
+> > +				task->mm = old_mm;
+> > +			}
+> 
+> This is the most problematic change which I can't review...
+> 
+> Firstly, it changes task->mm/real_cred for __ptrace_may_access() and this
+> looks dangerous to me.
 
-Yes it is safe, but this safety is not obvious in my opinion.
-However I'll use your proposal for the next revision.
+Yeah, that is not ok. This is effectively override_creds for real_cred
+and that is not a pattern I want to see us establish at all! Temporary
+credential overrides for the subjective credentials is already terrible
+but at least we have the explicit split between real_cred and cred
+expressely for that. So no, that's not an acceptable solution.
 
-
-Thomas
+> 
+> Say, current_is_single_threaded() called by another CLONE_VM process can
+> miss group_exec_task and falsely return true. Probably not that bad, in
+> this case old_mm should go away soon, but still...
+> 
+> And I don't know if this can fool the users of task_cred_xxx/__task_cred
+> somehow.
+> 
+> Or. check_unsafe_exec() sets LSM_UNSAFE_PTRACE if ptrace. Is it safe to
+> ptrace the execing task after that? I have no idea what the security hooks
+> can do...
+> 
+> Again, can't review this part.
+> 
+> Oleg.
+> 
 
