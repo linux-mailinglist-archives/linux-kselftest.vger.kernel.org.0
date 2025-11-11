@@ -1,160 +1,168 @@
-Return-Path: <linux-kselftest+bounces-45356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69C8AC4F7BC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 39064C4F7EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 19:49:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE801189FE2C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 18:45:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A3731884EE5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 18:49:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B75D02C327A;
-	Tue, 11 Nov 2025 18:44:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D784D29C33D;
+	Tue, 11 Nov 2025 18:48:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FNPTrLvs"
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="Pbg7jlJV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 833202C2369;
-	Tue, 11 Nov 2025 18:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8AC3AA19B;
+	Tue, 11 Nov 2025 18:48:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762886670; cv=none; b=gI1tnyqhbjFHOiPNC9nPDhwQJcOf2FZw959/IBNv3n1Tpy8AZPXQAzUOdXk5IVxpqWBOq+YnzZzgohu0w1my8KR34/EPXIGIqVWgrzYIa+AJUXwpeXI4zv1XK+sqRfgVa0uAL8+NW/eTX3AL5WwsbKf+cn6xAqFLwzY34hlDHFc=
+	t=1762886934; cv=none; b=TVwxRxF8gK/QaYcNN3aXiRORLnlZxRwhs9TX2qw+/uyqR9lD2em4lAVLUj09k/WDLusq9mO9usE+4nFq/yItf2cppG/U/mFTo7OsRtcH9FByTLeLYo44RrSjjpzajt6MY8BIzi2eeqRWH+MHsS1XDF9IvBJDs7K+1NU8aTRyT4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762886670; c=relaxed/simple;
-	bh=m/GX1of/o0JwmQB22uABGhbz8AVH+G+y5IyrNLPgTaI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E8eVoNo7GVNzLKYFGs7LqAfUNxa5NvAHx1f12vTWUB4USqdmMUZURcnHdz3QLXp8Ip7br3OTBlp+d9Is46cZwWscgp8RnbabG1S1HtdGND4MPnOpBM11uJumMnpNn9VYlUxrNbL1f0zAwQ5t8HjkFZadA00C08ny6csxsK9Hgkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FNPTrLvs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B0FC2BCB0;
-	Tue, 11 Nov 2025 18:44:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762886670;
-	bh=m/GX1of/o0JwmQB22uABGhbz8AVH+G+y5IyrNLPgTaI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FNPTrLvs9YPxmIT6K0ECp8GD35K01XGC/S34VT/9Wej8jKHlX0asTUZSAxO3VSoKg
-	 34behRhWEUos0wj4lYps20hRlOSRHQTvmS30ugkz5TkUL7qrEYyTsveSy31dBN5yAa
-	 Sm/wkBIY0eYDWjuDoyOPYGMKHWbErVsUEWTrAgDJVe0KdBDgMKRpfnZE1Cd8DnO9Ze
-	 n6VVw0LB9GW1+5i8gwGKg40k36uRDBmgEDvZtNLA1MzpZ8GJ4nOCE+//jsud4X/gVa
-	 Jqq9stjJXqb1n7xE5s+hpLu2mzMUkWMFBsQzO8XWJWdHNQZ9DZoZQa1UcDn+F3Tb++
-	 dXoG050dSrRCQ==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 11/11] mm/damon/tests/core-kunit: add damon_commit_target_regions() test
-Date: Tue, 11 Nov 2025 10:44:10 -0800
-Message-ID: <20251111184415.141757-12-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251111184415.141757-1-sj@kernel.org>
-References: <20251111184415.141757-1-sj@kernel.org>
+	s=arc-20240116; t=1762886934; c=relaxed/simple;
+	bh=vO+jAwCKnPlIeRSA6S7Mn16AZhbOoIOPxT1PtXPbY0k=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=sJE+VXOYUBg/0storeUFxcH7UC9vdqWii6ZTTrGIDOFSaM9K5VNcPZgAXp8BQhKGd2M95DWWeavTCZ81S79XDxfG6yLLDDnafWdoR6nXvhnxVxfNqtgCxhxhCtSWCsD8rhrzL9H0DzY0/UmJLH7k2ZHslT/XsDmDK2eswSz1/fQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=Pbg7jlJV; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5ABGKpnP2601076;
+	Tue, 11 Nov 2025 10:48:47 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=s2048-2025-q2; bh=IiLZtQogc85dx7sMXh
+	t1MShWinLM8VCRAb6GHhKw/Mc=; b=Pbg7jlJVbsGPHSopEhSS7/s86qzA+kP11K
+	Y1G7pWCPigdgpMvwKN9a2fh8kBh9HKtbFcX6gMI9B7Ij6kU/a8qhgFWR6wRechKK
+	A6ZSqatOgYfBzuz0tYqXNNNILpSafit7x6xu7KYmhq8tgq89UgdZcnE5VXfrY68t
+	9bpW0S1/FFZJq8NjNWkTWZg9QthUcBdCbOrSYSx1/Wo0SCJMYC03dJfTlDvWz6mj
+	d111ShcC/ak6z/M27Ttcvxfy7sbBvsMtF6B+bx/jABsxWkiRA+zI307RgIhxDWiL
+	+Eq8h5W1IRXdU1Gx4XiiET0FxwNEXA3jqFTer3AwYRPecFoeKH4A==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ac8k51cdm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Tue, 11 Nov 2025 10:48:47 -0800 (PST)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:fe::f072) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.20; Tue, 11 Nov 2025 18:48:33 +0000
+From: Alex Mastro <amastro@fb.com>
+Subject: [PATCH v3 0/4] vfio: selftests: update DMA mapping tests to use
+ queried IOVA ranges
+Date: Tue, 11 Nov 2025 10:48:23 -0800
+Message-ID: <20251111-iova-ranges-v3-0-7960244642c5@fb.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPeEE2kC/32OQQ7CIBAAv9JwLoal0BZP/sN4aIG1HCwGDNE0/
+ bvQxF40Hmc3M7sLiTY4G8mxWkiwyUXn5wxNXRE9DfPVUmcyE864BABGnU8DDWUTKWimpFA4Ytu
+ QbNyDRffcaudL5snFhw+vLZ6gTH93ElBGhRECNMocMyccD9rfSIkk/kfkRbRGgcxy08NHrPeP4
+ VtgOPC2Q1Rj1++X1nV9A8A65cUNAQAA
+To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>,
+        Shuah Khan <shuah@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>
+CC: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Alex Mastro <amastro@fb.com>
+X-Mailer: b4 0.13.0
+X-Proofpoint-ORIG-GUID: ETSYN2DTAjoXhf6jKUlaLekGOusJP6MM
+X-Authority-Analysis: v=2.4 cv=X95f6WTe c=1 sm=1 tr=0 ts=6913850f cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=r1p2_3pzAAAA:8 a=1XWaLZrsAAAA:8 a=FOH2dFAWAAAA:8
+ a=9jRdOu3wAAAA:8 a=yzAeJPK-mxwKR1Fv_EMA:9 a=QEXdDO2ut3YA:10
+ a=r_pkcD-q9-ctt7trBg_g:22 a=ZE6KLimJVUuLrTuGpvhn:22 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTExMDE1MiBTYWx0ZWRfXypb5PdYdn7y/
+ uTU1StWG+IhbYUcH1kwdEqctfgsUJgvfKeyxvLl0PzYvmQ1jbheYBDuJXMQ0FbsllDPrXhMsPBo
+ wG5tZmYTkt9Egmw52Q6hS3ZCiAUOh8T0I86zvXuCYwPl5ds+uGirFRjzE0Qq/KdZr/kD7/uyvea
+ h0NRmSZPnL8PEZsV0q8lsR1ya9IR3B5GmkPrvpxjgn3YAQ6cl3uv6gDqDTzReK8NfzJTqGqJB7r
+ N0AAW9ClzZlAt5YTspvJJW7Ico8KWg7KIIzpywEh5g0hfByxsy4ZWY9S0bP561YCx4oGloL5CJt
+ /QTklBATWXdSjTM51VmaHWhxGgHfBqGu4fmj2tl0mAgU6+x9J2WMxyMiz7jcb5e+fQpfZfRqSJD
+ yPgR+U3W/a7AH1CJMyjSkzJ+6iyWYg==
+X-Proofpoint-GUID: ETSYN2DTAjoXhf6jKUlaLekGOusJP6MM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-11_03,2025-11-11_03,2025-10-01_01
 
-Add a new test for damon_commit_target_regions().
+Not all IOMMUs support the same virtual address width as the processor,
+for instance older Intel consumer platforms only support 39-bits of
+IOMMU address space. On such platforms, using the virtual address as the
+IOVA and mappings at the top of the address space both fail.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
+VFIO and IOMMUFD have facilities for retrieving valid IOVA ranges,
+VFIO_IOMMU_TYPE1_INFO_CAP_IOVA_RANGE and IOMMU_IOAS_IOVA_RANGES,
+respectively. These provide compatible arrays of ranges from which we
+can construct a simple allocator.
+
+Use this new allocator in place of reusing the virtual address, and
+incorporate the maximum supported IOVA into the limit testing.  This
+latter change doesn't test quite the same absolute end-of-address space
+behavior but still seems to have some value.
+
+This series is based on Alex Williamson's "Incorporate IOVA range info"
+[1] along with feedback from the discussion in David Matlack's "Skip
+vfio_dma_map_limit_test if mapping returns -EINVAL" [2].
+
+Given David's plans to split IOMMU concerns from devices as described
+in [3], this series' home for `struct iova_allocator` and IOVA
+range helpers are likely to be short lived, since they reside in
+vfio_pci_device.c. I assume that the rework can move this functionality
+to a more appropriate location next to other IOMMU-focused code, once
+such a place exists.
+
+[1] https://lore.kernel.org/all/20251108212954.26477-1-alex@shazbot.org/#t
+[2] https://lore.kernel.org/all/20251107222058.2009244-1-dmatlack@google.com/
+[3] https://lore.kernel.org/all/aRIoKJk0uwLD-yGr@google.com/
+
+To: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>
+To: Shuah Khan <shuah@kernel.org>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: kvm@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Alex Mastro <amastro@fb.com>
+
+Changes in v3:
+- Update capability chain cycle detection
+- Clarify the iova=vaddr commit message
+- Link to v2: https://lore.kernel.org/r/20251111-iova-ranges-v2-0-0fa267ff9b78@fb.com
+
+Changes in v2:
+- Fix various nits
+- calloc() where appropriate
+- Update overflow test to run regardless of iova range constraints
+- Change iova_allocator_init() to return an allocated struct
+- Unfold iova_allocator_alloc()
+- Fix iova allocator initial state bug
+- Update vfio_pci_driver_test to use iova allocator
+- Link to v1: https://lore.kernel.org/r/20251110-iova-ranges-v1-0-4d441cf5bf6d@fb.com
+
 ---
- mm/damon/tests/core-kunit.h | 65 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+Alex Mastro (4):
+      vfio: selftests: add iova range query helpers
+      vfio: selftests: fix map limit tests to use last available iova
+      vfio: selftests: add iova allocator
+      vfio: selftests: replace iova=vaddr with allocated iovas
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index c71c10f9e059..0d2d8cda8631 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -964,6 +964,70 @@ static void damos_test_commit(struct kunit *test)
- 			});
- }
- 
-+static struct damon_target *damon_test_help_setup_target(
-+		unsigned long region_start_end[][2], int nr_regions)
-+{
-+	struct damon_target *t;
-+	struct damon_region *r;
-+	int i;
-+
-+	t = damon_new_target();
-+	if (!t)
-+		return NULL;
-+	for (i = 0; i < nr_regions; i++) {
-+		r = damon_new_region(region_start_end[i][0],
-+				region_start_end[i][1]);
-+		if (!r) {
-+			damon_free_target(t);
-+			return NULL;
-+		}
-+		damon_add_region(r, t);
-+	}
-+	return t;
-+}
-+
-+static void damon_test_commit_target_regions_for(struct kunit *test,
-+		unsigned long dst_start_end[][2], int nr_dst_regions,
-+		unsigned long src_start_end[][2], int nr_src_regions,
-+		unsigned long expect_start_end[][2], int nr_expect_regions)
-+{
-+	struct damon_target *dst_target, *src_target;
-+	struct damon_region *r;
-+	int i;
-+
-+	dst_target = damon_test_help_setup_target(dst_start_end, nr_dst_regions);
-+	if (!dst_target)
-+		kunit_skip(test, "dst target setup fail");
-+	src_target = damon_test_help_setup_target(src_start_end, nr_src_regions);
-+	if (!src_target) {
-+		damon_free_target(dst_target);
-+		kunit_skip(test, "src target setup fail");
-+	}
-+	damon_commit_target_regions(dst_target, src_target, 1);
-+	i = 0;
-+	damon_for_each_region(r, dst_target) {
-+		KUNIT_EXPECT_EQ(test, r->ar.start, expect_start_end[i][0]);
-+		KUNIT_EXPECT_EQ(test, r->ar.end, expect_start_end[i][1]);
-+		i++;
-+	}
-+	KUNIT_EXPECT_EQ(test, damon_nr_regions(dst_target), nr_expect_regions);
-+	KUNIT_EXPECT_EQ(test, i, nr_expect_regions);
-+	damon_free_target(dst_target);
-+	damon_free_target(src_target);
-+}
-+
-+static void damon_test_commit_target_regions(struct kunit *test)
-+{
-+	damon_test_commit_target_regions_for(test,
-+			(unsigned long[][2]) {{3, 8}, {8, 10}}, 2,
-+			(unsigned long[][2]) {{4, 6}}, 1,
-+			(unsigned long[][2]) {{4, 6}}, 1);
-+	damon_test_commit_target_regions_for(test,
-+			(unsigned long[][2]) {{3, 8}, {8, 10}}, 2,
-+			(unsigned long[][2]) {}, 0,
-+			(unsigned long[][2]) {{3, 8}, {8, 10}}, 2);
-+}
-+
- static void damos_test_filter_out(struct kunit *test)
- {
- 	struct damon_target *t;
-@@ -1170,6 +1234,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damos_test_commit_dests),
- 	KUNIT_CASE(damos_test_commit_filter),
- 	KUNIT_CASE(damos_test_commit),
-+	KUNIT_CASE(damon_test_commit_target_regions),
- 	KUNIT_CASE(damos_test_filter_out),
- 	KUNIT_CASE(damon_test_feed_loop_next_input),
- 	KUNIT_CASE(damon_test_set_filters_default_reject),
+ .../testing/selftests/vfio/lib/include/vfio_util.h |  19 +-
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c | 246 ++++++++++++++++++++-
+ .../testing/selftests/vfio/vfio_dma_mapping_test.c |  20 +-
+ .../testing/selftests/vfio/vfio_pci_driver_test.c  |  12 +-
+ 4 files changed, 288 insertions(+), 9 deletions(-)
+---
+base-commit: 0ed3a30fd996cb0cac872432cf25185fda7e5316
+change-id: 20251110-iova-ranges-1c09549fbf63
+
+Best regards,
 -- 
-2.47.3
+Alex Mastro <amastro@fb.com>
+
 
