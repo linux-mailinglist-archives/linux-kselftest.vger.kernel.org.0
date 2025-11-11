@@ -1,128 +1,162 @@
-Return-Path: <linux-kselftest+bounces-45318-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61D05C4E4F2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 15:11:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3935C4E6F1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 15:25:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E32C61881AFA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 14:10:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1AAC1895B69
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 14:21:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84257307ACF;
-	Tue, 11 Nov 2025 14:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05B230FC15;
+	Tue, 11 Nov 2025 14:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LLwXHnXW"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ZhYP9xnI";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="2WZpgtF1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CF42EBBA8
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 14:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99513009F8;
+	Tue, 11 Nov 2025 14:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762870201; cv=none; b=q049nkcYq94DOZcXgiiuFKfC9t6g0Q8KBqbBpU5Gc15FwMCrLsY7+fVjXmrjwRHfMN48TXz0QSkMX7slKztQ78OzdJYo3PfsecDhuNqNzLoF14CBdbqE6PRGEraWu+sixLbWZbH9pzcojsF+p7Xew0wlQWlVM3ETUeX1gyWynJA=
+	t=1762870764; cv=none; b=toMNFe1zVNiyMzI59kNMnOGBUcGQHlEcLWd3f0ShH/XBQrUDJQ7fEZwGbSiD53kut4dYieP2ak7VF9W7jOoiEJPM0bkTybiEqx0LErKOhisM8VzHD/r3d+M+V+MbH+dVMs5r3PetOp2fsG+zeIjTMngwdsF8Z4Q+MkM8Ll4ZeLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762870201; c=relaxed/simple;
-	bh=L8iD7ISPG2fGHbO2n2GzUqN8VPD4vbOEio6K+3ptYII=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gdTaNUD5Ly1WEDNp2YO4oQmlVhYLpyDefsG3OiBZ5lNfDa6F5l25zIG3wbxaPn07TIHSAaAX6/13J+KCnXX0C7/DW8cO88mxMJJVCKHqJE77woOMdGx/BQE+gl+bp7AEtOOZYIQe8ntUt23FFE+XXQj2NaJPDauHIJyPzwR+oYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LLwXHnXW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762870198;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z0jAePqN6TOEf6jTJjCEwq53g6vGvq/lRpJXMiEpVl8=;
-	b=LLwXHnXWSoeqvkf0XZIdfcvAn/EEp3TT/0eeUPIAPl0CoYScSEaO2DImR1gioo3Nn84woR
-	ZZFplSC1Y7/7DHxAkPvp4rw2ImYNGxE0ZYfMN+gsOoGoilG4S0p/h2awQjQfR02zBsNeAW
-	QDUUxSxCPIKW5qkS0FhoDTFjlI6AmqE=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-650-vw-lvJJNOaevRjFJJf1SIA-1; Tue,
- 11 Nov 2025 09:09:55 -0500
-X-MC-Unique: vw-lvJJNOaevRjFJJf1SIA-1
-X-Mimecast-MFC-AGG-ID: vw-lvJJNOaevRjFJJf1SIA_1762870193
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8E8DA195607F;
-	Tue, 11 Nov 2025 14:09:53 +0000 (UTC)
-Received: from fedora (unknown [10.44.33.247])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 19CF31800576;
-	Tue, 11 Nov 2025 14:09:50 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Tue, 11 Nov 2025 15:09:53 +0100 (CET)
-Date: Tue, 11 Nov 2025 15:09:49 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Cyrill Gorcunov <gorcunov@gmail.com>
-Cc: "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [RFC PATCH 2/3] exec: don't wait for zombie threads with
- cred_guard_mutex held
-Message-ID: <aRNDrfjKQJpPNIUo@redhat.com>
-References: <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <aRDL3HOB21pMVMWC@redhat.com>
- <aRDMNWx-69fL_gf-@redhat.com>
- <aRHFSrTxYSOkFic7@grain>
- <aRIAEYH2iLLN-Fjg@redhat.com>
- <aRJd8Z-DrYrjRt4r@grain>
+	s=arc-20240116; t=1762870764; c=relaxed/simple;
+	bh=NpByBHiupA9mwAKBz1qThmMNm5PKagkHfsCY5dM5c18=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=YLXC6SdbB9+ThdPTdPA1P2/uc+APF6268sqvJTVKK/0mT+O3a3Vl3+3HMEX5f+fJnLdSc4HCFs0/zYZ4gszhhEw9DZPx5eBmt4vaQkg2BZ0g22778vWArxkrtNOX1ctE+8wONGNuI/PS+WX7rgynKFbJ5EuRocy2nmvfL2O4II0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ZhYP9xnI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=2WZpgtF1; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 87241EC01B5;
+	Tue, 11 Nov 2025 09:19:21 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 11 Nov 2025 09:19:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1762870761;
+	 x=1762957161; bh=bVi+m0X0BXfoG2Nsfva8RYjAvFJDsmuCQjkkB+K0KuA=; b=
+	ZhYP9xnI9wliJLlntLzoUk1X4TQVE9oL6i0Hh9ddlf5shEUa7wojA5MS+keq0F+U
+	MCg8WXVDMGat+8kgjSlbDmAXsZ/EYGiYBxhOT/1wYITAFtwF9JEmenebDLUHadUq
+	xELkTz5BXifZlI9WnWmB2zs4Aj68I9mFp2NgkVrtec7sFVTnb7+uv5p9tJpq04DS
+	SyL3gCMJTly+qBOsbKhi8dt5UcQJDOT0UyWaJpAKJ/cGgPt8zwyL4FwIuEgLVrIU
+	NKwrRXG7EgLO6iGIxdOZNojr06FBJ5ZyCAM0wssbQvZooIbjB/YXj/e/PVuXzcvk
+	9gtDn3liKiFqMPM1svNc8g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762870761; x=
+	1762957161; bh=bVi+m0X0BXfoG2Nsfva8RYjAvFJDsmuCQjkkB+K0KuA=; b=2
+	WZpgtF15oW2ZZpYzJ4yyEuOlfgRGDZpWxWad2X3OMvlEZA5NEAdh+5HC0pacTBLM
+	FNnSutjoZIfyuZKbCLOP3z/k/KguXKHroUCFuJr3q1Q28D2hniFquTPeCTDSRnzY
+	aDF8Arlu8DORQYSLRg08FjxwEMk9NJj/7z5Luc+rblBQ/JHNvNRk21o9kKOf6Wvc
+	w5t8sl2NqqXalZthbTq4gGMH1vdC72P7daJTyNbuQ5iQmKYKY5IkY5Lv1EUgcSNB
+	BrKqJINcZin8wB9pE85B+LQK5cFVaF1zKd/BSaPU5rPatI1WOz1DBCmS3FQL/Bdj
+	RbkYr8y8Fpg3ZKQdDnx/A==
+X-ME-Sender: <xms:6UUTaWw66VOFgMf7OLXVMB781_YbgWqXGE7R1EEeunTwwoqjnybFaw>
+    <xme:6UUTadG76aNHLXNT-3DGUQDVC-bW_vm0fzKyDO6TgKlzfFFyiuykeV_tGS5F9sU9j
+    RiN2C0i7PjJtfjEANtOHlhYu838rBeSbnKRibnHZfX4zv5KLujGiTth>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtddugeduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepvhhinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprh
+    gtphhtthhopehluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhhes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidrug
+    gvpdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhn
+    ihigrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdr
+    khgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:6UUTacaV_5flJD5-LccgC0AsOYvjOOrTZ7t_2FcugszkZU57Mwg66g>
+    <xmx:6UUTaRcJOHHzxKj802S8vRgtI-kpqlJh7TRiSLFPZWVIzHaFAK6LMw>
+    <xmx:6UUTaW3kFFScndluEqR1wAzGbZBOGH5k9sJBqrPCZf8xVQk-5b14nQ>
+    <xmx:6UUTaYIrBDu0GFJL5kbaPES6fOKs7-ChGuwblM-wDvgzEbdoE6sSmw>
+    <xmx:6UUTacfl4kXKy2oa8eV9Y0ckV5i6S0FGHI-lDM1C78_9h7BffmPL9DgB>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id F0F1C700054; Tue, 11 Nov 2025 09:19:20 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aRJd8Z-DrYrjRt4r@grain>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-ThreadId: A5RixjiBPr7B
+Date: Tue, 11 Nov 2025 15:19:00 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: "Andy Lutomirski" <luto@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Message-Id: <a78a17eb-1df2-471b-9c28-64619c71dc54@app.fastmail.com>
+In-Reply-To: 
+ <20251111144805-ab2781fe-5424-492b-9cb3-55ebaaedc199@linutronix.de>
+References: <20251111-vdso-test-types-v1-0-03b31f88c659@linutronix.de>
+ <20251111-vdso-test-types-v1-4-03b31f88c659@linutronix.de>
+ <29dd9e11-9ae8-415a-acb3-b96af56550b0@app.fastmail.com>
+ <20251111144805-ab2781fe-5424-492b-9cb3-55ebaaedc199@linutronix.de>
+Subject: Re: [PATCH 04/10] selftests: vDSO: vdso_test_abi: Provide compatibility with
+ 32-bit musl
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 11/11, Cyrill Gorcunov wrote:
+On Tue, Nov 11, 2025, at 14:55, Thomas Wei=C3=9Fschuh wrote:
+> On Tue, Nov 11, 2025 at 01:59:02PM +0100, Arnd Bergmann wrote:
+>> On Tue, Nov 11, 2025, at 11:49, Thomas Wei=C3=9Fschuh wrote:
+>> >=20
+>> > +#ifdef SYS_clock_getres
+>> >  	ret =3D syscall(SYS_clock_getres, clk_id, &sys_ts);
+>> > +#else
+>> > +	ret =3D syscall(SYS_clock_getres_time32, clk_id, &sys_ts);
+>> > +#endif
+>> >=20
+>>=20
+>> I think this #ifdef check is not reliable enough and may hide
+>> bugs. As with the other syscalls, the best way to call these
+>> is to either use __NR_clock_getres_time64 on __kernel_timespec, or
+>> to use __NR_clock_getres on __kernel_old_timespec.
 >
-> Anyway while looking into patch I got wonder why
+> Could you give an example for such a bug?
+
+If CONFIG_COMPAT_32BIT_TIME is disabled, 32-bit targets
+only provide clock_getres_time64, so using SYS_clock_getres
+may -ENOSYS.
+
+Since SYS_clock_getres itself is provided by the libc implementation,
+I wouldn't trust that this actually means the same as __NR_clock_getres,
+and it might be set to __NR_clock_getres_time64.
+
+>> If we are trying to validate the interface here, we should probably
+>> call both if available. If we just want to know the result and
+>> trust that both work correctly, I'd always use __NR_clock_getres_time=
+64
+>> on 32-bit systems and __NR_clock_getres on 64-bit systems.
 >
-> +static int wait_for_notify_count(struct task_struct *tsk)
-> +{
-> +	for (;;) {
-> +			return -EINTR;
-> +		set_current_state(TASK_KILLABLE);
-> +		if (!tsk->signal->notify_count)
-> +			break;
->
-> We have no any barrier here in fetching @notify_count? I mean updating
-> this value is done under locks (spin or read/write) in turn condition
-> test is a raw one. Not a big deal since set_current_state() and schedule()
+> As these are vDSO and not timer selftests I think we trust the syscall=
+s.
+> But how do we detect a native 64-bit time system? The preprocessor bui=
+ltins
+> won't work as a 32-bit pointer system may use 64-bit time syscalls. I =
+am not
+> aware of the UAPI #define, beyond the absence of __NR_clock_getres_tim=
+e64.
 
-Yes, so I think that, correctness-wise, this doesn't need additional barriers.
+I would just check __BITS_PER_LONG=3D32 and require a linux-5.6+ kernel
+at runtime to ensure the 64-bit calls are available.
 
-> but I've
-> been a bit confused that we don't use some read_once here or something.
-
-Yes, this needs READ_ONCE() to avoid the warnings from KCSAN. And in fact
-this code was written with READ_ONCE() but I removed it before sending this
-RFC.
-
-I was going to do this later. I always forget how KCSAN works, IIUC I also
-need to add WRITE_ONCE() into exit_notify() and __exit_signal() to make
-KCSAN happy, even if ->notify_count is always updated under the lock.
-
-Same for the "if (me->signal->group_exec_task == me)" check in begin_new_exec().
-
-Right now I would like to know if this RFC (approach) makes any sense,
-especially because 3/3 adds a user-visible change.
-
-Oleg.
-
+    Arnd
 
