@@ -1,86 +1,64 @@
-Return-Path: <linux-kselftest+bounces-45288-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2ECC0C4CA12
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 10:24:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2221EC4CC67
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 10:53:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ABB73A6C09
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 09:22:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F41118850C6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 09:53:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85BF82EFD99;
-	Tue, 11 Nov 2025 09:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D6BF2FC017;
+	Tue, 11 Nov 2025 09:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Iq/i8hPW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cvyuqpQt"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E72E2EDD72;
-	Tue, 11 Nov 2025 09:22:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA6A2F693E;
+	Tue, 11 Nov 2025 09:53:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762852933; cv=none; b=H+kZANSjTbztwhag3Jq/FnuVwkZ8f77Tk6SNHX6JxN2MpAYlXefW8gEgpmVX+AeU+5felhayazQo8PuORLF6TGPkdWX6T7t89oxCnBYjCgjlxtTheT+fZZKvMh/S4yaKW43tichbnUxFg2GWgMeepqhU6yt25ouABgD0qIOqk1c=
+	t=1762854785; cv=none; b=hzw2xmTIxa5fflCyzOJWy+jUpSPsCJv1fbZP4abdjVSZQ4Rb3HiAcqmmOnqbmsir8m9LiCW07oqngWxsKSeqrFaf1mKdu22IjWMhCZ131VgbpjlC5pw78TzaKhOU3fambxd6GVqn4BmpV/hy6FqnCOjR+ixcLRnbqlTsOp2Tgcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762852933; c=relaxed/simple;
-	bh=YKxB1Tk0c8PA5NVe6KSLcg4q1RUhiINUvY7b/ZMmRUw=;
+	s=arc-20240116; t=1762854785; c=relaxed/simple;
+	bh=iDhbZOal2wnEXBNqtnf0/uj4kQN5h/UJan7jrM1zSwo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qg+iqOb2Hbu/X4vfTdGV4HbZTyn6Ut0aPCXzCYA/4IXG2FoAcipgv6G782KoAmvgdZS1MQc7zHeGfVRsU4gjv8RPXI/NFjX41cbFln4B+YFFc2+n2zmKVinCaRNLfw0msQ0Xz04OJjuT6RGk/QbSWlVwMK/2iXLGm6AMBf9YFsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Iq/i8hPW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45B43C19422;
-	Tue, 11 Nov 2025 09:22:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oWqyCd1ukiwZ/Y9yVNcO5TMe0nCnL9DjwdeT5mB44I+fSWJhpPrKoM/++kjjmdlPS6sAHOaf1VXHZgoxXDeu9YFmu9FCP465tjQjw49evYl7NOXzBWiZkDl73MaMyan+OfAjZWbL2FT+z8c2E8sb0u/PAXbNQpb7JAkfXyeqVn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cvyuqpQt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6957AC4CEFB;
+	Tue, 11 Nov 2025 09:53:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762852932;
-	bh=YKxB1Tk0c8PA5NVe6KSLcg4q1RUhiINUvY7b/ZMmRUw=;
+	s=k20201202; t=1762854784;
+	bh=iDhbZOal2wnEXBNqtnf0/uj4kQN5h/UJan7jrM1zSwo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Iq/i8hPWgHTwu435PI+UGZlLN/X3lyfBrrm+1OwNKieirVMDPmDCkCaFA5KX+Cpoo
-	 jCY0uq+bKxbfSS/6qRug9ACZVWvSIG2hb05Nfywkq6thFqPc80S2JztzaJqBCtX5TK
-	 6ankYgSWSaELPVPWooj+5cT1eMoRBXuIxw8R7wm0f3aC08zRAHgGqQPhTXlh+50TBr
-	 zxjneSB775FAK9WKt6FxPW2yAZcqlXQ0OEYW8MPlkyO1msbbTBkJLfLsWoPQX0KMwY
-	 2kPRjg5gUXXR3fF2VCX329Z0qynUJi5o5aKfiv7nNQoaN9iGP9xwUFoDOYr6HTaRw8
-	 daoW/qmbnCCrQ==
-Date: Tue, 11 Nov 2025 10:21:58 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Bernd Edlinger <bernd.edlinger@hotmail.de>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Alexey Dobriyan <adobriyan@gmail.com>, 
-	Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, 
-	Will Drewry <wad@chromium.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>, 
-	James Morris <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>, 
-	"Eric W. Biederman" <ebiederm@xmission.com>, Adrian Reber <areber@redhat.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>, 
-	Alexei Starovoitov <ast@kernel.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-security-module@vger.kernel.org, tiozhang <tiozhang@didiglobal.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, "Paulo Alcantara (SUSE)" <pc@manguebit.com>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>, Frederic Weisbecker <frederic@kernel.org>, 
-	YueHaibing <yuehaibing@huawei.com>, Paul Moore <paul@paul-moore.com>, 
-	Aleksa Sarai <cyphar@cyphar.com>, Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>, 
-	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>, 
-	David Hildenbrand <david@redhat.com>, Dave Chinner <dchinner@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Elena Reshetova <elena.reshetova@intel.com>, 
-	David Windsor <dwindsor@gmail.com>, Mateusz Guzik <mjguzik@gmail.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, "Joel Fernandes (Google)" <joel@joelfernandes.org>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Hans Liljestrand <ishkamiel@gmail.com>, 
-	Penglei Jiang <superman.xpt@gmail.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Adrian Ratiu <adrian.ratiu@collabora.com>, Ingo Molnar <mingo@kernel.org>, 
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>, Cyrill Gorcunov <gorcunov@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v17] exec: Fix dead-lock in de_thread with ptrace_attach
-Message-ID: <20251111-ankreiden-augen-eadcf9bbdfaa@brauner>
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <20251105143210.GA25535@redhat.com>
+	b=cvyuqpQtk0Q6hYQ6gNSeFX8b9Es2msAbN8+gQ0SFGS0il5537frS9ZBNWiJHoWhMo
+	 /juDrre53fD9dTCmBTGtcYvSzvKRIm99a8p2VAPszdWXqvkl5TnKQwoPoKNpt3EWTh
+	 /LmT97aljg7pGdrpVEb9qkGCbbHMdJGTmadUknN3ZCxt1a/Zb5TP8aAh17YKpJ0mQI
+	 XEwcfP2+y/eXt+yWGeugUUAaSizGdaknSm4e+sXB18HNskbOMNygLmjK22XzaM/VVC
+	 ZvOhvZOmFvE8mkD2w5qTq+xrEBUw3xIXs3IWLU+4k3ycBvgnFZnhx3dqELNGQIt0Wx
+	 W95UyabgI+svg==
+Date: Tue, 11 Nov 2025 01:53:01 -0800
+From: Oliver Upton <oupton@kernel.org>
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: Jose Marinho <jose.marinho@arm.com>, maz@kernel.org,
+	oliver.upton@linux.dev, duenwen@google.com, rananta@google.com,
+	jthoughton@google.com, vsethi@nvidia.com, jgg@nvidia.com,
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
+	catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com,
+	corbet@lwn.net, shuah@kernel.org, kvm@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] KVM: arm64: VM exit to userspace to handle SEA
+Message-ID: <aRMHfS1-K4E4UCbc@kernel.org>
+References: <20251013185903.1372553-1-jiaqiyan@google.com>
+ <20251013185903.1372553-2-jiaqiyan@google.com>
+ <7a61bcf9-a57d-a8e9-a9b8-4eacef80acd3@arm.com>
+ <CACw3F51_0A8CuCgzcvoA3Db=Wxo8mm5XZw5in+nTKrst+NCcqw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,160 +67,138 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251105143210.GA25535@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACw3F51_0A8CuCgzcvoA3Db=Wxo8mm5XZw5in+nTKrst+NCcqw@mail.gmail.com>
 
-On Wed, Nov 05, 2025 at 03:32:10PM +0100, Oleg Nesterov wrote:
-> I am still thinking about another approach, will write another email.
-> But let me take a closer look at your patch.
-> 
-> First of all, can you split it? See below.
-> 
-> On 08/21, Bernd Edlinger wrote:
-> >
-> > -static int de_thread(struct task_struct *tsk)
-> > +static int de_thread(struct task_struct *tsk, struct linux_binprm *bprm)
-> >  {
-> >  	struct signal_struct *sig = tsk->signal;
-> >  	struct sighand_struct *oldsighand = tsk->sighand;
-> >  	spinlock_t *lock = &oldsighand->siglock;
-> > +	struct task_struct *t;
-> > +	bool unsafe_execve_in_progress = false;
-> >
-> >  	if (thread_group_empty(tsk))
-> >  		goto no_thread_group;
-> > @@ -932,6 +934,19 @@ static int de_thread(struct task_struct *tsk)
-> >  	if (!thread_group_leader(tsk))
-> >  		sig->notify_count--;
-> >
-> > +	for_other_threads(tsk, t) {
-> > +		if (unlikely(t->ptrace)
-> > +		    && (t != tsk->group_leader || !t->exit_state))
-> > +			unsafe_execve_in_progress = true;
-> 
-> you can add "break" into the "if ()" block...
-> 
-> But this is minor. Why do we need "bool unsafe_execve_in_progress" ?
-> If this patch is correct, de_thread() can drop/reacquire cred_guard_mutex
-> unconditionally.
-> 
-> If you really think it makes sense, please make another patch with the
-> changelog.
-> 
-> I'd certainly prefer to avoid this boolean at least for the start. If nothing
-> else to catch the potential problems earlier.
-> 
-> > +	if (unlikely(unsafe_execve_in_progress)) {
-> > +		spin_unlock_irq(lock);
-> > +		sig->exec_bprm = bprm;
-> > +		mutex_unlock(&sig->cred_guard_mutex);
-> > +		spin_lock_irq(lock);
-> 
-> I don't think spin_unlock_irq() + spin_lock_irq() makes any sense...
-> 
-> > @@ -1114,13 +1139,31 @@ int begin_new_exec(struct linux_binprm * bprm)
-> >  	 */
-> >  	trace_sched_prepare_exec(current, bprm);
-> >
-> > +	/* If the binary is not readable then enforce mm->dumpable=0 */
-> > +	would_dump(bprm, bprm->file);
-> > +	if (bprm->have_execfd)
-> > +		would_dump(bprm, bprm->executable);
-> > +
-> > +	/*
-> > +	 * Figure out dumpability. Note that this checking only of current
-> > +	 * is wrong, but userspace depends on it. This should be testing
-> > +	 * bprm->secureexec instead.
-> > +	 */
-> > +	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
-> > +	    is_dumpability_changed(current_cred(), bprm->cred) ||
-> > +	    !(uid_eq(current_euid(), current_uid()) &&
-> > +	      gid_eq(current_egid(), current_gid())))
-> > +		set_dumpable(bprm->mm, suid_dumpable);
-> > +	else
-> > +		set_dumpable(bprm->mm, SUID_DUMP_USER);
-> > +
-> 
-> OK, we need to do this before de_thread() drops cred_guard_mutex.
-> But imo this too should be done in a separate patch, the changelog should
-> explain this change.
-> 
-> > @@ -1361,6 +1387,11 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
-> >  	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
-> >  		return -ERESTARTNOINTR;
-> >
-> > +	if (unlikely(current->signal->exec_bprm)) {
-> > +		mutex_unlock(&current->signal->cred_guard_mutex);
-> > +		return -ERESTARTNOINTR;
-> > +	}
-> 
-> OK, if signal->exec_bprm != NULL, then current is already killed. But
-> proc_pid_attr_write() and ptrace_traceme() do the same. So how about
-> something like
-> 
-> 	int lock_current_cgm(void)
-> 	{
-> 		if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
-> 			return -ERESTARTNOINTR;
-> 
-> 		if (!current->signal->group_exec_task)
-> 			return 0;
-> 
-> 		WARN_ON(!fatal_signal_pending(current));
-> 		mutex_unlock(&current->signal->cred_guard_mutex);
-> 		return -ERESTARTNOINTR;
-> 	}
-> 
-> ?
-> 
-> Note that it checks ->group_exec_task, not ->exec_bprm. So this change can
-> come in a separate patch too, but I won't insist.
-> 
-> > @@ -453,6 +454,28 @@ static int ptrace_attach(struct task_struct *task, long request,
-> >  				return retval;
-> >  		}
-> >
-> > +		if (unlikely(task == task->signal->group_exec_task)) {
-> > +			retval = down_write_killable(&task->signal->exec_update_lock);
-> > +			if (retval)
-> > +				return retval;
-> > +
-> > +			scoped_guard (task_lock, task) {
-> > +				struct linux_binprm *bprm = task->signal->exec_bprm;
-> > +				const struct cred __rcu *old_cred = task->real_cred;
-> > +				struct mm_struct *old_mm = task->mm;
-> > +
-> > +				rcu_assign_pointer(task->real_cred, bprm->cred);
-> > +				task->mm = bprm->mm;
-> > +				retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
-> > +				rcu_assign_pointer(task->real_cred, old_cred);
-> > +				task->mm = old_mm;
-> > +			}
-> 
-> This is the most problematic change which I can't review...
-> 
-> Firstly, it changes task->mm/real_cred for __ptrace_may_access() and this
-> looks dangerous to me.
+Hi Jiaqi,
 
-Yeah, that is not ok. This is effectively override_creds for real_cred
-and that is not a pattern I want to see us establish at all! Temporary
-credential overrides for the subjective credentials is already terrible
-but at least we have the explicit split between real_cred and cred
-expressely for that. So no, that's not an acceptable solution.
+On Mon, Nov 03, 2025 at 12:45:50PM -0800, Jiaqi Yan wrote:
+> On Mon, Nov 3, 2025 at 10:17 AM Jose Marinho <jose.marinho@arm.com> wrote:
+> >
+> > Thank you for these patches.
+> 
+> Thanks for your comments, Jose!
+> 
+> >
+> > On 10/13/2025 7:59 PM, Jiaqi Yan wrote:
+> > > When APEI fails to handle a stage-2 synchronous external abort (SEA),
+> > > today KVM injects an asynchronous SError to the VCPU then resumes it,
+> > > which usually results in unpleasant guest kernel panic.
+> > >
+> > > One major situation of guest SEA is when vCPU consumes recoverable
+> > > uncorrected memory error (UER). Although SError and guest kernel panic
+> > > effectively stops the propagation of corrupted memory, guest may
+> > > re-use the corrupted memory if auto-rebooted; in worse case, guest
+> > > boot may run into poisoned memory. So there is room to recover from
+> > > an UER in a more graceful manner.
+> > >
+> > > Alternatively KVM can redirect the synchronous SEA event to VMM to
+> > > - Reduce blast radius if possible. VMM can inject a SEA to VCPU via
+> > >    KVM's existing KVM_SET_VCPU_EVENTS API. If the memory poison
+> > >    consumption or fault is not from guest kernel, blast radius can be
+> > >    limited to the triggering thread in guest userspace, so VM can
+> > >    keep running.
+> > > - Allow VMM to protect from future memory poison consumption by
+> > >    unmapping the page from stage-2, or to interrupt guest of the
+> > >    poisoned page so guest kernel can unmap it from stage-1 page table.
+> > > - Allow VMM to track SEA events that VM customers care about, to restart
+> > >    VM when certain number of distinct poison events have happened,
+> > >    to provide observability to customers in log management UI.
+> > >
+> > > Introduce an userspace-visible feature to enable VMM handle SEA:
+> > > - KVM_CAP_ARM_SEA_TO_USER. As the alternative fallback behavior
+> > >    when host APEI fails to claim a SEA, userspace can opt in this new
+> > >    capability to let KVM exit to userspace during SEA if it is not
+> > >    owned by host.
+> > > - KVM_EXIT_ARM_SEA. A new exit reason is introduced for this.
+> > >    KVM fills kvm_run.arm_sea with as much as possible information about
+> > >    the SEA, enabling VMM to emulate SEA to guest by itself.
+> > >    - Sanitized ESR_EL2. The general rule is to keep only the bits
+> > >      useful for userspace and relevant to guest memory.
+> > >    - Flags indicating if faulting guest physical address is valid.
+> > >    - Faulting guest physical and virtual addresses if valid.
+> > >
+> > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> > > Co-developed-by: Oliver Upton <oliver.upton@linux.dev>
+> > > Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> > > ---
+> > >   arch/arm64/include/asm/kvm_host.h |  2 +
+> > >   arch/arm64/kvm/arm.c              |  5 +++
+> > >   arch/arm64/kvm/mmu.c              | 68 ++++++++++++++++++++++++++++++-
+> > >   include/uapi/linux/kvm.h          | 10 +++++
+> > >   4 files changed, 84 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > > index b763293281c88..e2c65b14e60c4 100644
+> > > --- a/arch/arm64/include/asm/kvm_host.h
+> > > +++ b/arch/arm64/include/asm/kvm_host.h
+> > > @@ -350,6 +350,8 @@ struct kvm_arch {
+> > >   #define KVM_ARCH_FLAG_GUEST_HAS_SVE                 9
+> > >       /* MIDR_EL1, REVIDR_EL1, and AIDR_EL1 are writable from userspace */
+> > >   #define KVM_ARCH_FLAG_WRITABLE_IMP_ID_REGS          10
+> > > +     /* Unhandled SEAs are taken to userspace */
+> > > +#define KVM_ARCH_FLAG_EXIT_SEA                               11
+> > >       unsigned long flags;
+> > >
+> > >       /* VM-wide vCPU feature set */
+> > > diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> > > index f21d1b7f20f8e..888600df79c40 100644
+> > > --- a/arch/arm64/kvm/arm.c
+> > > +++ b/arch/arm64/kvm/arm.c
+> > > @@ -132,6 +132,10 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+> > >               }
+> > >               mutex_unlock(&kvm->lock);
+> > >               break;
+> > > +     case KVM_CAP_ARM_SEA_TO_USER:
+> > > +             r = 0;
+> > > +             set_bit(KVM_ARCH_FLAG_EXIT_SEA, &kvm->arch.flags);
+> > > +             break;
+> > >       default:
+> > >               break;
+> > >       }
+> > > @@ -327,6 +331,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+> > >       case KVM_CAP_IRQFD_RESAMPLE:
+> > >       case KVM_CAP_COUNTER_OFFSET:
+> > >       case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
+> > > +     case KVM_CAP_ARM_SEA_TO_USER:
+> > >               r = 1;
+> > >               break;
+> > >       case KVM_CAP_SET_GUEST_DEBUG2:
+> > > diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> > > index 7cc964af8d305..09210b6ab3907 100644
+> > > --- a/arch/arm64/kvm/mmu.c
+> > > +++ b/arch/arm64/kvm/mmu.c
+> > > @@ -1899,8 +1899,48 @@ static void handle_access_fault(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa)
+> > >       read_unlock(&vcpu->kvm->mmu_lock);
+> > >   }
+> > >
+> > > +/*
+> > > + * Returns true if the SEA should be handled locally within KVM if the abort
+> > > + * is caused by a kernel memory allocation (e.g. stage-2 table memory).
+> > > + */
+> > > +static bool host_owns_sea(struct kvm_vcpu *vcpu, u64 esr)
+> > > +{
+> > > +     /*
+> > > +      * Without FEAT_RAS HCR_EL2.TEA is RES0, meaning any external abort
+> > > +      * taken from a guest EL to EL2 is due to a host-imposed access (e.g.
+> > > +      * stage-2 PTW).
+> > > +      */
+> > > +     if (!cpus_have_final_cap(ARM64_HAS_RAS_EXTN))
+> > > +             return true;
+> > > +
+> > > +     /* KVM owns the VNCR when the vCPU isn't in a nested context. */
+> > > +     if (is_hyp_ctxt(vcpu) && (esr & ESR_ELx_VNCR))
+> > Is this check valid only for a "Data Abort"?
+> 
+> Yes, the VNCR bit is specific to a Data Abort (provided we can only
+> reach host_owns_sea if kvm_vcpu_abt_issea).
+> I don't think we need to explicitly exclude the check here for
+> Instruction Abort.
 
-> 
-> Say, current_is_single_threaded() called by another CLONE_VM process can
-> miss group_exec_task and falsely return true. Probably not that bad, in
-> this case old_mm should go away soon, but still...
-> 
-> And I don't know if this can fool the users of task_cred_xxx/__task_cred
-> somehow.
-> 
-> Or. check_unsafe_exec() sets LSM_UNSAFE_PTRACE if ptrace. Is it safe to
-> ptrace the execing task after that? I have no idea what the security hooks
-> can do...
-> 
-> Again, can't review this part.
-> 
-> Oleg.
-> 
+You can take an external abort on an instruction fetch, in which case
+bit 13 of the ISS (VNCR bit for data abort) is RES0. So this does need
+to check for a data abort.
+
+Thanks,
+Oliver
 
