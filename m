@@ -1,139 +1,125 @@
-Return-Path: <linux-kselftest+bounces-45294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A25C4D14C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 11:36:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F589C4D314
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 11:52:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB5A5189D0B6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 10:36:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 095AE189EF2F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 10:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F1A734D4F5;
-	Tue, 11 Nov 2025 10:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DD95354701;
+	Tue, 11 Nov 2025 10:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XNzcP4Jx"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="m4m/a/NG";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="inbNfnrT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1932741AC;
-	Tue, 11 Nov 2025 10:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631983546EC;
+	Tue, 11 Nov 2025 10:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762857345; cv=none; b=ktcKOQGN8/yURDDKv2UzWoUZbfq4rA66EII02I7hA5jTz3QD+C0Py7Pxpug0jg0tyvgoRnfNBqjZYP2tMZ6SKSQ/VsMEgJMtuIFo6KcTGSfAWjeVRZPFGAsGHB31Aozim+gzbIFZbAhaplxfaxK3vPRvaYapq5zcbNejqBH1zxU=
+	t=1762858202; cv=none; b=eYpy+TBEkpJZGqYtDy22BrB1cS8eJ9Vep0yPqb9RMfFyn+O8UhcQ+iq7wcp1VF9BTdkeAQhJyAWoPlBj6JK1IHUyJpDuTBcwkl2KsZ5jr6XhU9hAQyp4KScD4/lTw3Pj8SV+Q62UqskSkuvnJBvyHlqgmQxb+txcrKpHvMIEZcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762857345; c=relaxed/simple;
-	bh=Xq140z8t2Lz9tMLDdMmjzX8uNuNbzNJxr107yZ7r5/o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bY59AMdHU7XuVyPTb3eEdUTeVQ4D3vcta4I8hIqA6He0atvTSfF8nLl3Y4rYE0+D+gZEV+lp4XAT3qhP1/xQEARtC008Y7DBFOtPPhQlExACUshsjWOnFmsgmJxblv/opXgBEW41wzKN43PmFgoyxVgQSkShj3pDRLuZRqrTqs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XNzcP4Jx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702C5C116D0;
-	Tue, 11 Nov 2025 10:35:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762857344;
-	bh=Xq140z8t2Lz9tMLDdMmjzX8uNuNbzNJxr107yZ7r5/o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XNzcP4JxLcsq+v9Gh+HF0DTywnT1mFmvi7yAfyY5RW8Kk6f1dn/zMn6bi49eFCzFf
-	 03qQqT/jWGf9Zlz+J8IuOaHuegSCrMykqwybKOTMVNZLcWUs8Tgl3498RVQCXqDB7h
-	 g8Q7KFBQ+pvtZIdR830u68faptBVurqTFmc28LTu5DoloSbAk+oTbGvllcysqWbjO+
-	 usqZ4XYfF2fKzbeYY+LnQELFECpM53q7d14bsL7hzphs5k7QqLP3W8mg4gwQgGodw9
-	 PgDUubK/O7YU0CQH8YzAJl8jhHija1+4mQE1VTOzVJfKwzRDMXtGtPNKxPhisBdkf1
-	 oMJ94yacWuAgQ==
-Message-ID: <d2cb9d64-ecda-4cda-83e0-fd5d5758972d@kernel.org>
-Date: Tue, 11 Nov 2025 11:35:34 +0100
+	s=arc-20240116; t=1762858202; c=relaxed/simple;
+	bh=pYb7vxhtfM5ubqs7Kk23tw+dzy6sb8BnNmtiWjJhBaU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HsQDJnRw9o8MxzRbTjICxOOwrnErVIT2/L7DYRmYDAxrK84jIZtXXaUbNn2TxDgdVF2zCxSvOcFRDqzscg17KwZKruLcfzO7oq80TSSO/AWeXI9yoa2DMgziKC7fM3WvyQvt4INx1ntjLRVeootubRwn6YRQPap2yMQuDIeWnWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=m4m/a/NG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=inbNfnrT; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1762858198;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YP7FhE4la1Gi/u9709bHCz0zBQznM30ilDaWjSYpWL0=;
+	b=m4m/a/NGrfd1WYD8oBqUwxW+brQzaiKgpaIakJoXwhE+Un1YlYWoPTgMq/E1io66zf1RuU
+	XciQVBVs0TPaQAENigMH6HLmdR/uhdhDUL9vmoIA5HmM/P7sSe35sRcBxNEBtjEceJKPgX
+	h4LqH2mqMoBZJaeDWneEJcJtMXUHDu4Wql9tv2a//7JRlVEYKjYoMjtpM+I30PQb48B4u7
+	miuGw4VdAp+E60+gE/6e9sfwdT+f+GCVHgwYWvtFn43t/mwtHq1/f8zPt1hf9H3ESPnaxf
+	DnAEV29/4MbNIE9GQxgcsHjk2y3FtWk/eW30Njca9Aba8Xb5p5CHrLvPNClYfg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1762858198;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=YP7FhE4la1Gi/u9709bHCz0zBQznM30ilDaWjSYpWL0=;
+	b=inbNfnrTEPB1eoYyXZf/4MNrClSCzv/MuEqJUGTpBHs2lwFzF3ggsWLx++xlI2hpvW1NMQ
+	1EkyWCdhlcGgFBAQ==
+Subject: [PATCH 00/10] selftests: vDSO: Stop using libc types for vDSO
+ calls
+Date: Tue, 11 Nov 2025 11:49:46 +0100
+Message-Id: <20251111-vdso-test-types-v1-0-03b31f88c659@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v5 3/3] selftests/bpf: Add mptcp test with sockmap
-Content-Language: en-GB, fr-BE
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev
-Cc: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Florian Westphal <fw@strlen.de>, Christoph Paasch <cpaasch@apple.com>,
- Peter Krystad <peter.krystad@linux.intel.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20251111060307.194196-1-jiayuan.chen@linux.dev>
- <20251111060307.194196-4-jiayuan.chen@linux.dev>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20251111060307.194196-4-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAMoUE2kC/x3MQQ5AMBBA0avIrE3SaUJxFbGgBrNBOo0Q6d01l
+ m/x/wvKQVihK14IfInKsWdQWYDfxn1llDkbrLEVERm8Zj0wskaMz8mKdePZeEd2ci3k6gy8yP0
+ f+yGlD0o2oEJhAAAA
+X-Change-ID: 20251110-vdso-test-types-68ce0c712b79
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1762858197; l=1970;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=pYb7vxhtfM5ubqs7Kk23tw+dzy6sb8BnNmtiWjJhBaU=;
+ b=BOaKHqLlljoh4h3uJLCrGUJHXYE3Fxyx6BycI5YgBLuanRhLVBZJHq0xCxUEamJOP5RsIYQY0
+ flhKgOurLQcBHF1NBFCJr5daN1wOHLvFQY1xtbVDgkPmoDAzwTyhuhD
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Hi Jiayuan,
+Currently the vDSO selftests use the time-related types from libc.
+This works on glibc by chance today but will break with other libc
+implementations or on distributions which switch to 64-bit times
+everywhere.
 
-On 11/11/2025 07:02, Jiayuan Chen wrote:
-> Add test cases to verify that when MPTCP falls back to plain TCP sockets,
-> they can properly work with sockmap.
-> 
-> Additionally, add test cases to ensure that sockmap correctly rejects
-> MPTCP sockets as expected.
+The kernel's UAPI headers provide the proper types to use with the vDSO
+(and raw syscalls) but are not necessarily compatible with libc types.
+Introduce a new header which makes the UAPI headers compatible with the
+libc.
 
-Thank you for the v5.
+Also contains some related cleanups.
 
-Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Weißschuh (10):
+      Revert "selftests: vDSO: parse_vdso: Use UAPI headers instead of libc headers"
+      selftests: vDSO: Introduce vdso_types.h
+      selftests: vDSO: vdso_test_abi: Use types from vdso_types.h
+      selftests: vDSO: vdso_test_abi: Provide compatibility with 32-bit musl
+      selftests: vDSO: vdso_test_gettimeofday: Remove nolibc checks
+      selftests: vDSO: vdso_test_gettimeofday: Use types from vdso_types.h
+      selftests: vDSO: vdso_test_correctness: Drop SYS_getcpu fallbacks
+      selftests: vDSO: vdso_test_correctness: Use types from vdso_types.h
+      selftests: vDSO: vdso_test_correctness: Provide compatibility with 32-bit musl
+      selftests: vDSO: vdso_test_correctness: Use facilities from parse_vdso.c
 
-Cheers,
-Matt
+ tools/testing/selftests/vDSO/Makefile              |  6 +-
+ tools/testing/selftests/vDSO/parse_vdso.c          |  3 +-
+ tools/testing/selftests/vDSO/vdso_test_abi.c       | 35 ++++-----
+ .../testing/selftests/vDSO/vdso_test_correctness.c | 85 +++++++++-------------
+ .../selftests/vDSO/vdso_test_gettimeofday.c        |  9 +--
+ tools/testing/selftests/vDSO/vdso_types.h          | 70 ++++++++++++++++++
+ 6 files changed, 121 insertions(+), 87 deletions(-)
+---
+base-commit: 8c6abf7bda867b82f8a6d60a0d5ce9cb1da6c433
+change-id: 20251110-vdso-test-types-68ce0c712b79
+
+Best regards,
 -- 
-Sponsored by the NGI0 Core fund.
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
