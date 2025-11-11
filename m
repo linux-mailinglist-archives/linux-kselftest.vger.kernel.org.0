@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-45312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 832C0C4DF35
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 13:59:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91E24C4E02D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 14:04:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74E4E188337C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 12:53:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50A723A32AA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Nov 2025 12:59:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25511261B8A;
-	Tue, 11 Nov 2025 12:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D26A626290;
+	Tue, 11 Nov 2025 12:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="cmpQpyT3";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VunrRh3C"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="UqtWHWSc";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xsSGmQ/7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B762550D4;
-	Tue, 11 Nov 2025 12:46:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095DC3AA1A4;
+	Tue, 11 Nov 2025 12:59:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762865188; cv=none; b=nkBZBNBXF7d0fCSn97sQaoxephUNq24JvFkGIbk5zs5Tc1Vlo0Jkac9MWgskMHa12b2WD3fLSXK3sdJ9If80bQPTHEj+3fpOMbeHukuSNsEFW/ZJuzmH4MDNuG/FDB1kgapD6P8wPU2H+1hSabDGoLgmzQjo6V4kZy5L249e7qw=
+	t=1762865967; cv=none; b=avnSxxCkPqFTekg/GBu39gEDEf+N5Z+hmYTgXWUFDOKpFsbnHvAcwvMtwuNIs45UhSGksUPRGtEyCOEBYZciyFJglk7/CHVf1B8cIer2GWxxfovppN7LmY+bgysl1aeMusF9VAoywNbUUn9k5guXzvbLc48eVls550cOLf31oWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762865188; c=relaxed/simple;
-	bh=+D8jGoDpBa6xNo69zWsaU6PunpWeTPRMygAk91kfZN0=;
+	s=arc-20240116; t=1762865967; c=relaxed/simple;
+	bh=byl3iwP0rDxRmVpU3HYfkY1xTveCtw/y/ASjLYrcWdA=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=uzDV8Wd4E7clK7qhtM195CVBqJTPqhW/glQZsFElwe0zGAwUXf0p9PurlZTYD1WngsTVx/ATLz7B8jKAM4kL9NYcZEwU9kWUDCT15mfJ1JTrzj3RPNt7Ffuos3Xw7eFMYZgQRJVnUSrmEv2qzWu3da51/x9cCJHzgeW3p2joSUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=cmpQpyT3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VunrRh3C; arc=none smtp.client-ip=103.168.172.155
+	 Subject:Content-Type; b=V2JvYgJy7MIK0hB9+PvoBar8bbCejvix9Bw9w2LBEftq7zLivnGFRA/uMymzJhdLBCZqYhqyaz/0S15LCHt6pblsGwTUXRsMdrNQIrJpORF22lA1UpcDzHtNmP2cUUhq8OreBlH8RqchNzgm1mLnshQ2Q3H7qTuyuLewx0r39nY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=UqtWHWSc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=xsSGmQ/7; arc=none smtp.client-ip=103.168.172.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 7073514000F5;
-	Tue, 11 Nov 2025 07:46:24 -0500 (EST)
+	by mailfout.phl.internal (Postfix) with ESMTP id 3F130EC0183;
+	Tue, 11 Nov 2025 07:59:25 -0500 (EST)
 Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Tue, 11 Nov 2025 07:46:24 -0500
+  by phl-compute-04.internal (MEProxy); Tue, 11 Nov 2025 07:59:25 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1762865184;
-	 x=1762951584; bh=qPSPi7QKsWbBdZTy5b2peWWJFo3JmlmoZ6aUudf3qcc=; b=
-	cmpQpyT32o12/yKmdmlYsHXboPxRIxWAizKxd0/9YzBhy0/UEKLknNjI+3fTIO0q
-	7FU9sDw+hXE1aVSucaL2vd42AHytkYHA79HSPbFYwMDjP8Yuv6jnT35Mf+bVJHlE
-	Fc/5cTI4IlnHNFGfly+Ip2zf23lN+9kXHMpnTYg4Lr/ycDdd8q3U0B6VVS3z5pXD
-	7bkOMrA6Ln1TKIOt2WPWXSgfsM3Mjud6BHgZrSBku3cUyXSGpcICIn0zOjM6q/NP
-	fUeOLpdHvpWntYiBQEtN7Lg8LDUBTfyZjTdh/syMSnZ3bGTs2uv1DChvqL3kMO6I
-	AKKpsTKgoU4XuQ3QTLg66w==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1762865965;
+	 x=1762952365; bh=lpZ/xuA4REV8ZqmvRWc8U7MR0aL6JOz5DLY/YkHrw9k=; b=
+	UqtWHWScYmiVul6s0RQOIos8pdzTB+NUEpkxiwWBBXXpvQBQZmceO0sJWmXhHaUO
+	Ue5SjkpYWIv+CrJF+358rv5Um65ldn162OBdqLEYGWvp1BMBaNItTFDSJ236ljH3
+	UyB+s3OdF/bOzbQfL3luE0pBj4qUICHxVNw0YYwgDILlfGe7YlePxCgz1EkNZ7Is
+	zxJxtkBdYh9G6Es07wf9z2r7osm7Rz1h2FY8VuG82u2RrJmSHtUOW6XLqHojU6Xl
+	38cxWmsVFWK1VKnXcmAds8Fq6U1ZN8l36qJ0PqaYPDQ9hs3nidEB6OlZNLvC7iQK
+	i6HQZ7lrcj/30goutiVCMw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762865184; x=
-	1762951584; bh=qPSPi7QKsWbBdZTy5b2peWWJFo3JmlmoZ6aUudf3qcc=; b=V
-	unrRh3C50B8nlC2ySniXwHhyhI3jX7KuMzD/qvAKGTr+FjPomCAWJrwjQp7UfSMT
-	COn7W9RYQTK7fztKnBilzo14mV1uulpouTCYAEHFZSXwYe0prCaVvL9iSjqOrhOn
-	uVnZp3eSjGyVImrA+32aTzsybajHHCU5TuZcn9Qt8e1z3tWdbhjuA1h/LcY0BbbL
-	jAb/suWuven/2HAbkb1Cjn8POg3hBaviaECtanR7YfloSuMcfQj5G1nLtwa5RQsK
-	7U28JyPW7VXu6X/MSnxC/zBAHCjjUt8/fHkQ3zCFBac36gs6aBtwlPhWrCPL3rLL
-	rCMR9eFotMxAkHi5ESROg==
-X-ME-Sender: <xms:IDATaW27QQWmFxXXCV1Fjxac0TlGJfwvGc0aDsNfs2cKeSnDtNjonw>
-    <xme:IDATaT6Pa3Wpuy-syJNCmiMv-OHamFR8GBcGPduJ0ozl52gAgM873Cc9NTonNZgwA
-    ypNCBSJ0rB_44njWIctjYv3BcsPzGn74FsdQjEBGoKF-16LssJAdLg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtdduvdefucetufdoteggodetrf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762865965; x=
+	1762952365; bh=lpZ/xuA4REV8ZqmvRWc8U7MR0aL6JOz5DLY/YkHrw9k=; b=x
+	sSGmQ/7E9E3pqz0aYax7BxnB7Ohe2Ai/IMwtxMvAFPxb3dnOU7DB915wf0b/NFqi
+	LpK9ScL0/JOyVb7Tgvw/KzoAMG+ZkyRye1CBAmiZF5ymH+DhMLLpAXw1q11um/t3
+	bpu8kjZThO7KeVX7UD7/W2m4PJazsQSu4YvxYyjDodXCli9wHc24plpndarD6Rti
+	mPovccDyvit/TTneO97YHbB/TzQMXpRqqP8ffqOhWHigG0ELwpgEPKWvtUGzVENW
+	Dez1F2Sy8K7/DqxrmAm34D7NZpvVJq8cbT0fXDDKkPAC/xNzQWjt3jGtK0Rbtfpe
+	KSv8M6p0u5794QAmbEsxw==
+X-ME-Sender: <xms:LDMTacJmPJUOMS65REH6oCKh4efqNTNNhKOUa5UpEXqW9ahNQ5IjTg>
+    <xme:LDMTaW_gcKF7Ai4FSctoQD5FhpiA7P3uX_ZbQ36qCGzr0yPIQv1ll8dbhXs7GjKQZ
+    8KJUDWBc1cmQwuHvzne_SxBDB_W2f1vpf2rzcGOpX0sxAMLHP3xf24>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtdduvdehucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
     gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
@@ -79,14 +79,14 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtdduvdefucetufdote
     ihigrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
     gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdr
     khgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:IDATaYcNvlAGEPqong-TCBN9LE_UiAUdbzKsopWPbwG_bRD4ozvaVQ>
-    <xmx:IDATaURs1P1vO3-jXrv_6sn6sqF3SwIqwfB1iJF8qp-5c0p6NIlQXQ>
-    <xmx:IDATaZaMQSfVYyFYSaD97M5SIbOfNXzDSc2ZhVeAni_S0Hop1xHaPw>
-    <xmx:IDATafea6NdIYt3gSdap1__-SvRXgkL43zjVVQO7J4tcYA3OIW47fA>
-    <xmx:IDATaWjTw9Mlxp8qK4ELluiWv9jMmKwvknWI7lOuIT5NEwg5qE7vckUE>
+X-ME-Proxy: <xmx:LDMTaZwmmJhmb7RfxaHmaaOndIe_wmmglbdB_wo4nvBtD-6ruRaWBQ>
+    <xmx:LDMTaTX4ld0Xsh4WQ7G7zXqfacLqK54TtOamYNDEmHDS6Rd7nyBIHA>
+    <xmx:LDMTaTOokFBQuNSsckkmwEMbglX48-zBIX20rTzJPpHuW2pj0yOVwg>
+    <xmx:LDMTadBqIhzOV20ccI31YAGRwX5QrNW5V_VMD2fT1xhcRcwEvv1YDw>
+    <xmx:LTMTad1PeIzSn5WBhkfWaPoUul2bzlnWrFPuW_vHicCEh0EqdEnWN5Ut>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 10E65700063; Tue, 11 Nov 2025 07:46:24 -0500 (EST)
+	id D0E25700054; Tue, 11 Nov 2025 07:59:24 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -94,40 +94,60 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AVKYIwYTPfqF
-Date: Tue, 11 Nov 2025 13:45:56 +0100
+X-ThreadId: A5RixjiBPr7B
+Date: Tue, 11 Nov 2025 13:59:02 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
  "Andy Lutomirski" <luto@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
  "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <3bdfd610-ec7a-4f3c-ba9f-ec48eecc0835@app.fastmail.com>
-In-Reply-To: <20251111-vdso-test-types-v1-2-03b31f88c659@linutronix.de>
+Message-Id: <29dd9e11-9ae8-415a-acb3-b96af56550b0@app.fastmail.com>
+In-Reply-To: <20251111-vdso-test-types-v1-4-03b31f88c659@linutronix.de>
 References: <20251111-vdso-test-types-v1-0-03b31f88c659@linutronix.de>
- <20251111-vdso-test-types-v1-2-03b31f88c659@linutronix.de>
-Subject: Re: [PATCH 02/10] selftests: vDSO: Introduce vdso_types.h
+ <20251111-vdso-test-types-v1-4-03b31f88c659@linutronix.de>
+Subject: Re: [PATCH 04/10] selftests: vDSO: vdso_test_abi: Provide compatibility with
+ 32-bit musl
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
 On Tue, Nov 11, 2025, at 11:49, Thomas Wei=C3=9Fschuh wrote:
-> +/*
-> + * UAPI headers from the libc may be older and not provide these.
-> + */
-> +#if KERNEL_VERSION(5, 5, 0) > LINUX_VERSION_CODE
-> +typedef __kernel_long_t		__kernel_old_time_t;
-> +
-> +struct __kernel_old_timespec {
-> +	__kernel_old_time_t	tv_sec;
-> +	long			tv_nsec;
-> +};
+> The 32-bit time variants on musl have different names, provide a fallb=
+ack.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> ---
+>  tools/testing/selftests/vDSO/vdso_test_abi.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/tools/testing/selftests/vDSO/vdso_test_abi.c=20
+> b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> index=20
+> bb5a5534ae7e8a46d7e68a561684c29a752b866d..0a6b16a21369642384d43b0efd1b=
+ca227a2a4298=20
+> 100644
+> --- a/tools/testing/selftests/vDSO/vdso_test_abi.c
+> +++ b/tools/testing/selftests/vDSO/vdso_test_abi.c
+> @@ -166,7 +166,11 @@ static void=20
+> vdso_test_clock_getres(__kernel_clockid_t clk_id)
+>  		clock_getres_fail++;
+>  	}
+>=20
+> +#ifdef SYS_clock_getres
+>  	ret =3D syscall(SYS_clock_getres, clk_id, &sys_ts);
+> +#else
+> +	ret =3D syscall(SYS_clock_getres_time32, clk_id, &sys_ts);
 > +#endif
+>=20
 
-Doesn't this also need to define __kernel_old_timeval, which you
-refer to below?
+I think this #ifdef check is not reliable enough and may hide
+bugs. As with the other syscalls, the best way to call these
+is to either use __NR_clock_getres_time64 on __kernel_timespec, or
+to use __NR_clock_getres on __kernel_old_timespec.
 
-> +typedef __kernel_time_t (*vdso_time_t)(__kernel_time_t *t);
+If we are trying to validate the interface here, we should probably
+call both if available. If we just want to know the result and
+trust that both work correctly, I'd always use __NR_clock_getres_time64
+on 32-bit systems and __NR_clock_getres on 64-bit systems.
 
-This I think needs to be __kernel_old_time_t instead of __kernel_time_t.
-
-       Arnd
+      Arnd
 
