@@ -1,147 +1,125 @@
-Return-Path: <linux-kselftest+bounces-45407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33666C525AD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 14:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BE3CC52747
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 14:24:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A53DC4E6B05
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 12:55:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E0FBD4F51DA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 13:13:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23EB5329E61;
-	Wed, 12 Nov 2025 12:55:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3F232C33C;
+	Wed, 12 Nov 2025 13:13:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b="D6Bcjm/9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W0IDz1zZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.netfilter.org (mail.netfilter.org [217.70.190.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4333002D4;
-	Wed, 12 Nov 2025 12:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.190.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05A9316918;
+	Wed, 12 Nov 2025 13:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762952110; cv=none; b=AWDJaTt/vI/eP13Ix3Q4vwSmStpCbuC/FVkfL6TKQeZaQ9hA0kS+zZEJw59ZN0sI62g3l0N1bHiDuUM1zjKHXOyUD9hdF/zMrjcuhYQuJqv1/93DwRoiAFU9XBNqv2EK2tbBBd7Hy/XkMdod1fGAOC/N3b2e1cNgA5wICw1IERM=
+	t=1762953186; cv=none; b=EjzyOhOgwrd8dpK0rhLjPZoNYD/lS8v7HqFYr2YOPxvhyovwSBNHfJrIaJi1JLWmBrjLnWyrnbZHMCpNgGmK9U6AoSyfFGjltxxJDokAml6wHLvfId2ykYWhqngBk6giL4D7taZFoA23C0ewiLn1tKCEE2jcnEdrv5NcjX+8MNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762952110; c=relaxed/simple;
-	bh=GK3S2B+V0tGij54CXCXdL03p1HBPSpt3WcU8s4IwIWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=boe1WaMaq/qcabACLPdWoOscxwiWwvEs8XdLRt3W9dkF9Pu4TF9Xy5lX8QfuLNHDAvYm1jtBHL7j/UI7T6g3+yEtE9E7QYT0Oj39srWx7/ENF+9V9tZFWZhKgxVa2QSUEGhK7anvlFpRDlCvU5z4iFc5YPQmTtUjc4vWFMAccDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org; spf=pass smtp.mailfrom=netfilter.org; dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b=D6Bcjm/9; arc=none smtp.client-ip=217.70.190.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netfilter.org
-Received: from netfilter.org (mail-agni [217.70.190.124])
-	by mail.netfilter.org (Postfix) with ESMTPSA id 35840602A5;
-	Wed, 12 Nov 2025 13:55:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netfilter.org;
-	s=2025; t=1762952103;
-	bh=OdNeVeyuucE30sPTpY9njuCBycZpQtt+JjceqnPV0Mw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D6Bcjm/9LmFjtZeCTxPN0DJvz6XRu9Sc37Yb468pSkOpuAsnIIoqNazJRAud1sHoO
-	 mSxY5PM1z7yDgjRQl9NUgocoRUnggPcUSTm+qIXRQkNacOF9yv0AaC9HmSLeQhg7O7
-	 K3Z0/LtLWLjU6+T0X2vO0qu2tfklmPLSEFASLrJhdgG8Z8/lCTEUnS4ApEJUloFdWv
-	 WYudt8DCKioP7oXrFtXWT/e9wbbuAFLc+853qhVQqjTYbZMvUIe9qK8g1wHpYcAmeO
-	 6Ek5GA/lrp4yoZ8pWYiAi7erBgWRy74MIwLvjmxyozW4mQAVOQbb0ri2aMk5XEKYtw
-	 389qt0rQVqprA==
-Date: Wed, 12 Nov 2025 13:55:00 +0100
-From: Pablo Neira Ayuso <pablo@netfilter.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jozsef Kadlecsik <kadlec@netfilter.org>,
-	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	Phil Sutter <phil@nwl.cc>, Florian Westphal <fw@strlen.de>,
-	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH nf-next v9 2/3] net: netfilter: Add IPIP flowtable tx sw
- acceleration
-Message-ID: <aRSDjkzMx4Ba7IW8@calendula>
-References: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
- <20251107-nf-flowtable-ipip-v9-2-7cbc4090dfcb@kernel.org>
+	s=arc-20240116; t=1762953186; c=relaxed/simple;
+	bh=5BhmBWD+wfd+rrYTRM3269jsfIet1SdsHS2RmPQvEiQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=h8BBAaOFDjZgzYWsDFxVZkEQHAd/JFQbKOAzBKpv/2fA5sHb50HlUNz0GWkoRku4L+3EBXrbxIgQWlb3dZ7YYyNgyh9ODmWORz/PQJEN8ZW+M22JJ3RySz76T5hmEClVcjdphFgccAGwYc3T2IQ3wi5lmW3R4r7cXctuFzeQHiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W0IDz1zZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9F2C4AF09;
+	Wed, 12 Nov 2025 13:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762953185;
+	bh=5BhmBWD+wfd+rrYTRM3269jsfIet1SdsHS2RmPQvEiQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=W0IDz1zZpv/yynyI6FVqH5D3A1X74SUZjfiabCXC8eQ349BnzxsnTTVxV2jTwoMAl
+	 vmZ9oSJE3MfGx/iS2mKvGxhtB6hITyvrJiN5C4spPgVlaGIS8SSQ1oitrM5LWDi+vq
+	 H7uRPGnsvw5cmv2gTihxIlfBTbcOMg38ae56E3pXSWv/mLeji8vbENQEfdpNo26o6l
+	 RuvqXFR+yofoBkpOj54dX48MThX4IuQtivzau738o8EYeYMzVxCYbp5TX0Z/vFmvJH
+	 9fwp5QPuklnxpaNedHnYe+kD2gCjw6bjAYJSL/6ZStVGRYVqrvhL1V/VwRCnUhS524
+	 l5MRqJInZTeoQ==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests: tracing: Update fprobe selftest for ftrace based fprobe
+Date: Wed, 12 Nov 2025 22:13:01 +0900
+Message-ID: <176295318112.431538.11780280333728368327.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="qIJPGgiRR2AxazJq"
-Content-Disposition: inline
-In-Reply-To: <20251107-nf-flowtable-ipip-v9-2-7cbc4090dfcb@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
---qIJPGgiRR2AxazJq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Since the ftrace fprobe is both fgraph and ftrace based implemented,
+the selftest needs to be updated. This does not count the actual
+number of lines, but just check the differences.
 
-Hi Lorenzo,
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   18 ++++--------------
+ 1 file changed, 4 insertions(+), 14 deletions(-)
 
-On Fri, Nov 07, 2025 at 12:14:47PM +0100, Lorenzo Bianconi wrote:
-[...]
-> @@ -565,8 +622,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
->  
->  	dir = tuplehash->tuple.dir;
->  	flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
-> +	other_tuple = &flow->tuplehash[!dir].tuple;
->  
-> -	if (nf_flow_encap_push(skb, &flow->tuplehash[!dir].tuple) < 0)
-> +	if (nf_flow_encap_push(state->net, skb, other_tuple))
->  		return NF_DROP;
->  
->  	switch (tuplehash->tuple.xmit_type) {
-> @@ -577,7 +635,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
->  			flow_offload_teardown(flow);
->  			return NF_DROP;
->  		}
-> -		neigh = ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, flow->tuplehash[!dir].tuple.src_v4.s_addr));
-> +		dest = other_tuple->tun_num ? other_tuple->tun.src_v4.s_addr
-> +					    : other_tuple->src_v4.s_addr;
-
-I think this can be simplified if my series use the ip_hdr(skb)->daddr
-for rt_nexthop(), see attached patch. This would be fetched _before_
-pushing the tunnel and layer 2 encapsulation headers. Then, there is
-no need to fetch other_tuple and check if tun_num is greater than
-zero.
-
-See my sketch patch, I am going to give this a try, if this is
-correct, I would need one more iteration from you.
-
---qIJPGgiRR2AxazJq
-Content-Type: text/x-diff; charset=utf-8
-Content-Disposition: attachment; filename="update.patch"
-
-diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
-index 8b74fb34998e..ff2b6c16c715 100644
---- a/net/netfilter/nf_flow_table_ip.c
-+++ b/net/netfilter/nf_flow_table_ip.c
-@@ -427,6 +427,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
- 	struct flow_offload *flow;
- 	struct neighbour *neigh;
- 	struct rtable *rt;
-+	__be32 ip_dst;
- 	int ret;
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
+index 2506f464811b..47067a5e3cb0 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_fprobe.tc
+@@ -28,25 +28,21 @@ test -d events/fprobes/myevent1
+ test -d events/fprobes/myevent2
  
- 	tuplehash = nf_flow_offload_lookup(&ctx, flow_table, skb);
-@@ -449,6 +450,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+ echo 1 > events/fprobes/myevent1/enable
+-# Make sure the event is attached and is the only one
++# Make sure the event is attached.
+ grep -q $PLACE enabled_functions
+ cnt=`cat enabled_functions | wc -l`
+-if [ $cnt -ne $((ocnt + 1)) ]; then
++if [ $cnt -eq $ocnt ]; then
+ 	exit_fail
+ fi
  
- 	dir = tuplehash->tuple.dir;
- 	flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
-+	ip_dst = ip_hdr(skb)->daddr;
+ echo 1 > events/fprobes/myevent2/enable
+-# It should till be the only attached function
+-cnt=`cat enabled_functions | wc -l`
+-if [ $cnt -ne $((ocnt + 1)) ]; then
+-	exit_fail
+-fi
++cnt2=`cat enabled_functions | wc -l`
  
- 	switch (tuplehash->tuple.xmit_type) {
- 	case FLOW_OFFLOAD_XMIT_NEIGH:
-@@ -458,7 +460,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
- 			flow_offload_teardown(flow);
- 			return NF_DROP;
- 		}
--		neigh = ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, flow->tuplehash[!dir].tuple.src_v4.s_addr));
-+		neigh = ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, ip_dst));
- 		if (IS_ERR(neigh)) {
- 			flow_offload_teardown(flow);
- 			return NF_DROP;
+ echo 1 > events/fprobes/myevent3/enable
+ # If the function is different, the attached function should be increased
+ grep -q $PLACE2 enabled_functions
+ cnt=`cat enabled_functions | wc -l`
+-if [ $cnt -ne $((ocnt + 2)) ]; then
++if [ $cnt -eq $cnt2 ]; then
+ 	exit_fail
+ fi
+ 
+@@ -56,12 +52,6 @@ echo "-:myevent2" >> dynamic_events
+ grep -q myevent1 dynamic_events
+ ! grep -q myevent2 dynamic_events
+ 
+-# should still have 2 left
+-cnt=`cat enabled_functions | wc -l`
+-if [ $cnt -ne $((ocnt + 2)) ]; then
+-	exit_fail
+-fi
+-
+ echo 0 > events/fprobes/enable
+ echo > dynamic_events
+ 
 
---qIJPGgiRR2AxazJq--
 
