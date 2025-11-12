@@ -1,98 +1,97 @@
-Return-Path: <linux-kselftest+bounces-45420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45416-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A1E8C52E0E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 16:05:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A9D6C52F5F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 16:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D33B4FF1AA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 14:48:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38965502B68
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 14:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A42833F368;
-	Wed, 12 Nov 2025 14:41:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA3FD2882CE;
+	Wed, 12 Nov 2025 14:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MM+bf0Ek";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="sPZsZKRn"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Im9NKuCD";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="O85DX5AX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2437D34B1A2
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 14:41:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0292C33D6C8
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 14:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762958498; cv=none; b=Z7y5hdboC8On70d4EQjkVcftoV/7iky8EmD/kZN66sJ4IUlxw8DwiPbbr7h5mI0/kfTL7svu9WQFND5E0o5pquQ85qv6ZwsuqqQD+tayCO4FkjQTWSH0++9f8xrGKotKTgDHmTrjHngPc9ulWPk/lqfZ5zHq4Gjj0zbwfavBLzU=
+	t=1762957315; cv=none; b=FLSVASBhpjy/HtsDsaUW7D8fp8DOXOMOd0+9OHxssivqjK090AY1BkVHan907u5WdMP3NB0YEOjmVA9UW7hMi80elg8j/wN+N6ubtN0Ft80By64wQ+898GVVapkC5hyWOtnxkc7tzhYMPHFZdZWFvR6+b/0ql62fCnuC4O1MWvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762958498; c=relaxed/simple;
-	bh=TDodib+DZd6+wcrvamz4Bkx/AnG7mEyHSEh0xxoCLHs=;
+	s=arc-20240116; t=1762957315; c=relaxed/simple;
+	bh=lN4RRdyXEFU2ATERJYxJeFTOwDwQPwcnJw8cv+BPlCA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fzwQzq6J8b8bDuuB1bINTd++YPnJiX9GTKG4+w0SqCum9jtzCPQfdDN8/LoeQw8zUmFT/4oB4nSikh4wdeWYs1T98ZPu+FHXjfS8GH5EPBzetatkftg1Vr+9onCCYxABwEtxq71gPzXBx10yOm0zimVhcTDwf2Tcnj02yzFFsj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MM+bf0Ek; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=sPZsZKRn; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=cYaz0DnGBd2NZlflmX8ChnfuFJL1bQ3deEFNm8Gf2sMcy930IQEf3NEnIQTdylGA1tt1lmi2rntKOmRfNJZ/QV1lQ3X924+vwS//ZXTVTqEjx9BLrMsDjd7/OSVBzjpvIDOUPR216aVAKEcPxqJohxerBwO3VpiHi/b6kJnci0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Im9NKuCD; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=O85DX5AX; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762958495;
+	s=mimecast20190719; t=1762957313;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YgF5XOJVCvSo4xbeFnNtn2B9T9OShz14cXD3k7p95fU=;
-	b=MM+bf0EkcjhUDIA9oTMGRoG6sbyyvk/vowLWUj8KalsFNVqblmOkpSvpXa+PPeMACW84FN
-	XbGmqlIYUPWJKWdBVTAxW3yBzA1uRMyAkPBnwW9vTbDoNaNC1pHylMjjfXzble0TwwV5BK
-	/IZMmIkS3BFlaIbuuacz5VDWT3xthbk=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=hcUR1jMc/lixBGzLd81I+JyVT1RQh3JZhqcvVnMuZIg=;
+	b=Im9NKuCDtBkTespTZvDtY2hCjN1JTcPHke8ksOXqB8t2iY77QtzUZMBGmPQtr5AXk/SINy
+	4Sa5raGAUV61hyB+cfWmEn9c5N8PPLdQ/W2n/MRYjtRrQiZ0qbvlRZou6X+sCBNgh8Zum7
+	4HglcHs4KtWmkmFSsRUkjfu4ThAVHEg=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-189-48Xueq6YPuCOZb1fIIMpBQ-1; Wed, 12 Nov 2025 09:41:33 -0500
-X-MC-Unique: 48Xueq6YPuCOZb1fIIMpBQ-1
-X-Mimecast-MFC-AGG-ID: 48Xueq6YPuCOZb1fIIMpBQ_1762958490
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8b26e9214deso244449585a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 06:41:30 -0800 (PST)
+ us-mta-141-dx5bE-PoNJKm8V14mNVTZA-1; Wed, 12 Nov 2025 09:21:51 -0500
+X-MC-Unique: dx5bE-PoNJKm8V14mNVTZA-1
+X-Mimecast-MFC-AGG-ID: dx5bE-PoNJKm8V14mNVTZA_1762957310
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8b26bc4984bso351177585a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 06:21:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762958489; x=1763563289; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1762957310; x=1763562110; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YgF5XOJVCvSo4xbeFnNtn2B9T9OShz14cXD3k7p95fU=;
-        b=sPZsZKRn4KE5/l6CA3jSk11z6zZP2ZHFPd3RWxpUYpQifVSL/1jDq7Gh/sFpnpUteF
-         3EwCsLloJ7hkdQd4kMhtSzr0C1jsyk3mi2+XAY72IjiDBNvF+v3Soyu8GPs8r6jk5KES
-         pDvAD8y7piANJVMv8zwXWtQXR81ze71pjK6iBuCUfQ93QBa8sbaWmPiMBeCYdfVyx8po
-         WSjDTRiiCd6YSi7S+x39Q1FuBcIRhowzRN9lUEJ0QDCGuNY+dbqCiwoHZ6p+8FZ/6Q25
-         Jw+OnIm0HHPxMrNsr05entCcr2ez2Pw8SkhbABZHImUaO3skPFp49O+JJiHEqsh8JmPe
-         qZfQ==
+        bh=hcUR1jMc/lixBGzLd81I+JyVT1RQh3JZhqcvVnMuZIg=;
+        b=O85DX5AXyOl2TXA2LVUpHkws2IFlP5mmi9ghxZEG6gHvzmajUeOqOIvb1aQbwZzmCI
+         Op1zHmSOYzMhR5JoSnA8GNAE2WW41OLrUWkkakh4Aeafp9JrYbcS5DgZUoQzcXISEkiW
+         ImKfBW+NQz0VWY95tjTnNkv+M8E0PH/viTea4GVBQz0wM4uyfNLCAdGAWCwun1jwqsKi
+         59EDoPEwneEwJC/O44tQWeAQV5azqNgmQmIUmIcwxHNsrg17BKmHRM67jj2Pk6rmcDoo
+         Ba2SOvKGJrTnL1KMtx6X52WvW9DvpCTEFSXi70KiEqgDoJII/ksUkyfXkJe3p4OfPTmS
+         p/1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762958489; x=1763563289;
+        d=1e100.net; s=20230601; t=1762957310; x=1763562110;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YgF5XOJVCvSo4xbeFnNtn2B9T9OShz14cXD3k7p95fU=;
-        b=XOUSEuq7oqVuhOAZsHYex9spJIZUtAhCIs6TnkICRsexrKcDef6Q4EItVbehZP78zV
-         cVjjVjL7JG6+cIphOAwoaWQObItJJI4EQjxNW8BU6Dx3sOfGb1DwIr0iSv85OfB3+084
-         BpOwHiPMfxzsuy4V0N84DRF1l3kPGVixF28kWqtemnhyOfFYzJsCNN+ULPi7StqOjHvW
-         mHbIkLS2Di+ghHTDvQKVN/xxuEzJ/b68U9fRGpd7E5UCZhpEXZz/lajfMQbm5rppzGNS
-         3WBtYl+wxhn/T6hGjvCJ2xphMyOMBUTfoA+YN830Hsl4OZ+1GBCPP3fhJufpGBOx7Zm8
-         cBUQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWRRb5O/v27f/7zMsDBs9dhpW9tdgv7jx8L0XKxs6WH2Cn2hB61A5QX1+DiIazC8waUeIiD1V2Q3qHtqcwyTwY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZZM/DHUJ/JcHe4xkujguV5OaHhKl9Jfn3m0wUE30dj7n6LK2o
-	+NNnD5gS08i+6IfdM16bk3ttTbNBMlaG2YhZCtjVeE8M4ZuBl0SkvAvgTXdRvodftActnlcP5vq
-	LwEbUROAWUpoCi7OZLvnltAjskbjqxsuFOZzKM8xiNCI3WYP4J+1Aoazy0hbvKhHTIkd14IymV8
-	pKJg==
-X-Gm-Gg: ASbGncvOmyiSfKTeCtxN3+705dkoyi+esi6g2t5P7A2CjpJ0ZjrjNMZS6jj/VoDonyg
-	1r8vCVL1L2HFv9gOVz7fECV21mdSmaLOzh20COo/5Zil9GvW469BNnKdN3l7t3HWnCKrczF7J2V
-	AifHtjg8F7CG7HMhKyOI4IOIeBQxwFSZKCwdAdVw6HydASDai9z2RlCbi/PbNWZCSN50XLeU1JJ
-	gxH4NlEScw3S1Dty4CBqm7avEyv6i9BGEy1YBO/boHe+3a6O6tkNUOkZwFOdsOlrIGgaLwtkawS
-	8cOzZfmRYLhFyDQkvRQCyMbcg9x/vKFIK2BK2zaxzKPGTtTueQTUHdQNPwikmVBdKLBQkP0Rknq
-	Fn9exnQ3Jr/CXq8nfcxATU06lrg7xoTkdTEpl1J8Nb7v2SHGFX5w=
-X-Received: by 2002:a05:620a:370e:b0:8b2:4a19:881f with SMTP id af79cd13be357-8b29b7649ccmr424657185a.29.1762958489398;
-        Wed, 12 Nov 2025 06:41:29 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFAxwJ06ScQZOrSAKaHN+tdx6s7DKjmYnbHPCAgBLzkrBYXoRsdJglGU1gKWLjPqmNEQ9AEmA==
-X-Received: by 2002:a05:620a:370e:b0:8b2:4a19:881f with SMTP id af79cd13be357-8b29b7649ccmr424651485a.29.1762958488718;
-        Wed, 12 Nov 2025 06:41:28 -0800 (PST)
+        bh=hcUR1jMc/lixBGzLd81I+JyVT1RQh3JZhqcvVnMuZIg=;
+        b=RJFe+fSWMZSOQsn6BayhULBDX46PKPIhZkX0qjebAkyMd+LzDDZFZL/ZKpC9MeVpfu
+         G+D0FNxOnzjMeBjj1yFp7qfbrjfauYJDIOCb6WQAhTjdO4fyWrfQ7OnDO0P8tvvL/Va8
+         u9VUZxyB3XWhPeBy7yNPOUbYBqMPnMcylk7zv4/jDq/lxB58VYvgkEJtGHAN4EjOOX92
+         3h6Sr34TZbUTUef3+qR8iH3rZ6bsXPynZCNBGxqeKI6O8i54sFkEe0OQRt9PcmXyGnbn
+         pyZ1xYyD9q5b55NkXMPjcr9o5/2V9IB2S9dFsH/ydtKt2ScSF0H2xf/gBVwTJdAgq4Dt
+         AVFw==
+X-Forwarded-Encrypted: i=1; AJvYcCVcIBxsDzZSzd+gWMIzJxW3GMeBX6PK/XlQ2jp6QLnzbIABg4Ok/AtOXX7h0red9NBUOudUnvjPXVpUiM5qp/A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1HxXmfwNZVSON8FrsXNZYF7a5SFIsynaMNCcHyMHw6FjmZke7
+	tEMV/tZfSORuyai14fmEpfuWQwEWU1h0+1zCddytYs757hbPipiNsBgXVzn6lZ79iuzjhgmlOwX
+	XjbmnvmgA6UhqrBTVCEACDjkGFAAxOIU9EhlrZ/LgEgp85dtEuTykdTZURKI5Ku1jUf74dw==
+X-Gm-Gg: ASbGncvhs8wnsc0hEwA4dDSZGYS7xyEY9WRlk9DayUlJzt8V+AdE6/ot+4G65mgi/x8
+	iwOzIr9LrEMV023NUMppKKPybfnQMk35s26leF6swAtZ/aHRRSD2OB/b5uZQSdbP/un3kGYAaPE
+	p+ae/Ffw/qpnWxAQNzZZUwMnCNUVB8ZoCn92m+GB2ZYoKQLPIe4yXVy+FSIgdsKdhh4Xj9f49xW
+	DgVCqzkd8HCM8TN+yHPrbDEWAusGekQT9dmKnpHC0wCOJftazs/a2YLAXz8iSOaEnBmkTHaMGht
+	g8g0P3Ldeg0+UFv7rBxrFC9P09qTJxGR4dqhyGmPTQ3a0lRIedGpf2HY0UO3NkQOKYlP4b+XZbS
+	/mlpP74ve9jtm1+UuHA6m8fvlrvqTZklsfFSGlSklGoDEmV0f0fM=
+X-Received: by 2002:ac8:5845:0:b0:4eb:a3e1:8426 with SMTP id d75a77b69052e-4eddbe14abemr40231121cf.84.1762957310231;
+        Wed, 12 Nov 2025 06:21:50 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHkOKYuFy3HjHtsK18IyyLMWJPS+qaeCfNjTdaJqA21tqIMrUz0QQaXD4DwryQa4PrhG/QPGA==
+X-Received: by 2002:ac8:5845:0:b0:4eb:a3e1:8426 with SMTP id d75a77b69052e-4eddbe14abemr40230261cf.84.1762957309611;
+        Wed, 12 Nov 2025 06:21:49 -0800 (PST)
 Received: from sgarzare-redhat (host-79-46-200-153.retail.telecomitalia.it. [79.46.200.153])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b29a9ff16fsm200475785a.41.2025.11.12.06.41.24
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4eda56133d5sm86249391cf.4.2025.11.12.06.21.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 06:41:28 -0800 (PST)
-Date: Wed, 12 Nov 2025 15:41:19 +0100
+        Wed, 12 Nov 2025 06:21:49 -0800 (PST)
+Date: Wed, 12 Nov 2025 15:21:39 +0100
 From: Stefano Garzarella <sgarzare@redhat.com>
 To: Bobby Eshleman <bobbyeshleman@gmail.com>
 Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
@@ -107,11 +106,11 @@ Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
 	linux-hyperv@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>, berrange@redhat.com, 
 	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v9 13/14] selftests/vsock: add tests for host
- <-> vm connectivity with namespaces
-Message-ID: <7yhu6bdhqyueh6l3svxfxpg33jgibdbjrhxksccsrjp5efdsyk@jzicgr2ywlrx>
+Subject: Re: [PATCH net-next v9 08/14] vsock: reject bad VSOCK_NET_MODE_LOCAL
+ configuration for G2H
+Message-ID: <ureyl5b2tneivmlce4fdtmuoxgayfxwgewoypb6oyxeh7ozt3i@chygpr2uvtcp>
 References: <20251111-vsock-vmtest-v9-0-852787a37bed@meta.com>
- <20251111-vsock-vmtest-v9-13-852787a37bed@meta.com>
+ <20251111-vsock-vmtest-v9-8-852787a37bed@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -120,576 +119,202 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20251111-vsock-vmtest-v9-13-852787a37bed@meta.com>
+In-Reply-To: <20251111-vsock-vmtest-v9-8-852787a37bed@meta.com>
 
-On Tue, Nov 11, 2025 at 10:54:55PM -0800, Bobby Eshleman wrote:
+On Tue, Nov 11, 2025 at 10:54:50PM -0800, Bobby Eshleman wrote:
 >From: Bobby Eshleman <bobbyeshleman@meta.com>
 >
->Add tests to validate namespace correctness using vsock_test and socat.
->The vsock_test tool is used to validate expected success tests, but
->socat is used for expected failure tests. socat is used to ensure that
->connections are rejected outright instead of failing due to some other
->socket behavior (as tested in vsock_test). Additionally, socat is
->already required for tunneling TCP traffic from vsock_test. Using only
->one of the vsock_test tests like 'test_stream_client_close_client' would
->have yielded a similar result, but doing so wouldn't remove the socat
->dependency.
+>Reject setting VSOCK_NET_MODE_LOCAL with -EOPNOTSUPP if a G2H transport
+>is operational. Additionally, reject G2H transport registration if there
+>already exists a namespace in local mode.
 >
->Additionally, check for the dependency socat. socat needs special
->handling beyond just checking if it is on the path because it must be
->compiled with support for both vsock and unix. The function
->check_socat() checks that this support exists.
+>G2H sockets break in local mode because the G2H transports don't support
+>namespacing yet. The current approach is to coerce packets coming out of
+>G2H transports into VSOCK_NET_MODE_GLOBAL mode, but it is not possible
+>to coerce sockets in the same way because it cannot be deduced which
+>transport will be used by the socket. Specifically, when bound to
+>VMADDR_CID_ANY in a nested VM (both G2H and H2G available), it is not
+>until a packet is received and matched to the bound socket that we
+>assign the transport. This presents a chicken-and-egg problem, because
+>we need the namespace to lookup the socket and resolve the transport,
+>but we need the transport to know how to use the namespace during
+>lookup.
 >
->Add more padding to test name printf strings because the tests added in
->this patch would otherwise overflow.
+>For that reason, this patch prevents VSOCK_NET_MODE_LOCAL from being
+>used on systems that support G2H, even nested systems that also have H2G
+>transports.
+>
+>Local mode is blocked based on detecting the presence of G2H devices
+>(when possible, as hyperv is special). This means that a host kernel
+>with G2H support compiled in (or has the module loaded), will still
+>support local mode because there is no G2H (e.g., virtio-vsock) device
+>detected. This enables using the same kernel in the host and in the
+>guest, as we do in kselftest.
+>
+>Systems with only namespace-aware transports (vhost-vsock, loopback) can
+>still use both VSOCK_NET_MODE_GLOBAL and VSOCK_NET_MODE_LOCAL modes as
+>intended.
+>
+>The hyperv transport must be treated specially. Other G2H transports can
+>can report presence of a device using get_local_cid(). When a device is
+>present it returns a valid CID; otherwise, it returns VMADDR_CID_ANY.
+>THe hyperv transport's get_local_cid() always returns VMADDR_CID_ANY,
+>however, even when a device is present.
+>
+>For that reason, this patch adds an always_block_local_mode flag to
+>struct vsock_transport. When set to true, VSOCK_NET_MODE_LOCAL is
+>blocked unconditionally whenever the transport is registered, regardless
+>of device presence. When false, LOCAL mode is only blocked when
+>get_local_cid() indicates a device is present (!= VMADDR_CID_ANY).
+>
+>The hyperv transport sets this flag to true to unconditionally block
+>local mode. Other G2H transports (virtio-vsock, vmci-vsock) leave it
+>false and continue using device detection via get_local_cid() to block
+>local mode.
+>
+>These restrictions can be lifted in a future patch series when G2H
+>transports gain namespace support.
+
+IMO this commit should be before supporting namespaces in any device,
+so we are sure we don't have commits where this can happen.
+
 >
 >Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 >---
->Changes in v9:
->- consistent variable quoting
->---
-> tools/testing/selftests/vsock/vmtest.sh | 463 +++++++++++++++++++++++++++++++-
-> 1 file changed, 461 insertions(+), 2 deletions(-)
+> include/net/af_vsock.h           |  8 +++++++
+> net/vmw_vsock/af_vsock.c         | 45 +++++++++++++++++++++++++++++++++++++---
+> net/vmw_vsock/hyperv_transport.c |  1 +
+> 3 files changed, 51 insertions(+), 3 deletions(-)
 >
->diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
->index cc8dc280afdf..111059924287 100755
->--- a/tools/testing/selftests/vsock/vmtest.sh
->+++ b/tools/testing/selftests/vsock/vmtest.sh
->@@ -7,6 +7,7 @@
-> #		* virtme-ng
-> #		* busybox-static (used by virtme-ng)
-> #		* qemu	(used by virtme-ng)
->+#		* socat
-> #
-> # shellcheck disable=SC2317,SC2119
+>diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+>index cfd121bb5ab7..089c61105dda 100644
+>--- a/include/net/af_vsock.h
+>+++ b/include/net/af_vsock.h
+>@@ -108,6 +108,14 @@ struct vsock_transport_send_notify_data {
 >
->@@ -52,6 +53,19 @@ readonly TEST_NAMES=(
-> 	ns_local_same_cid_ok
-> 	ns_global_local_same_cid_ok
-> 	ns_local_global_same_cid_ok
->+	ns_diff_global_host_connect_to_global_vm_ok
->+	ns_diff_global_host_connect_to_local_vm_fails
->+	ns_diff_global_vm_connect_to_global_host_ok
->+	ns_diff_global_vm_connect_to_local_host_fails
->+	ns_diff_local_host_connect_to_local_vm_fails
->+	ns_diff_local_vm_connect_to_local_host_fails
->+	ns_diff_global_to_local_loopback_local_fails
->+	ns_diff_local_to_global_loopback_fails
->+	ns_diff_local_to_local_loopback_fails
->+	ns_diff_global_to_global_loopback_ok
->+	ns_same_local_loopback_ok
->+	ns_same_local_host_connect_to_local_vm_ok
->+	ns_same_local_vm_connect_to_local_host_ok
-> )
-> readonly TEST_DESCS=(
-> 	# vm_server_host_client
->@@ -82,6 +96,45 @@ readonly TEST_DESCS=(
+> struct vsock_transport {
+> 	struct module *module;
+>+	/* If true, block VSOCK_NET_MODE_LOCAL unconditionally when this G2H
+>+	 * transport is registered. If false, only block LOCAL mode when
+>+	 * get_local_cid() indicates a device is present (!= VMADDR_CID_ANY).
+>+	 * Hyperv sets this true because it doesn't offer a callback that
+>+	 * detects device presence. This only applies to G2H transports; H2G
+>+	 * transports are unaffected.
+>+	 */
+>+	bool always_block_local_mode;
 >
-> 	# ns_local_global_same_cid_ok
-> 	"Check QEMU successfully starts one VM in a local ns and then another VM in a global ns with the same CID."
->+
->+	# ns_diff_global_host_connect_to_global_vm_ok
->+	"Run vsock_test client in global ns with server in VM in another global ns."
->+
->+	# ns_diff_global_host_connect_to_local_vm_fails
->+	"Run socat to test a process in a global ns fails to connect to a VM in a local ns."
->+
->+	# ns_diff_global_vm_connect_to_global_host_ok
->+	"Run vsock_test client in VM in a global ns with server in another global ns."
->+
->+	# ns_diff_global_vm_connect_to_local_host_fails
->+	"Run socat to test a VM in a global ns fails to connect to a host process in a local ns."
->+
->+	# ns_diff_local_host_connect_to_local_vm_fails
->+	"Run socat to test a host process in a local ns fails to connect to a VM in another local ns."
->+
->+	# ns_diff_local_vm_connect_to_local_host_fails
->+	"Run socat to test a VM in a local ns fails to connect to a host process in another local ns."
->+
->+	# ns_diff_global_to_local_loopback_local_fails
->+	"Run socat to test a loopback vsock in a global ns fails to connect to a vsock in a local ns."
->+
->+	# ns_diff_local_to_global_loopback_fails
->+	"Run socat to test a loopback vsock in a local ns fails to connect to a vsock in a global ns."
->+
->+	# ns_diff_local_to_local_loopback_fails
->+	"Run socat to test a loopback vsock in a local ns fails to connect to a vsock in another local ns."
->+
->+	# ns_diff_global_to_global_loopback_ok
->+	"Run socat to test a loopback vsock in a global ns successfully connects to a vsock in another global ns."
->+
->+	# ns_same_local_loopback_ok
->+	"Run socat to test a loopback vsock in a local ns successfully connects to a vsock in the same ns."
->+
->+	# ns_same_local_host_connect_to_local_vm_ok
->+	"Run vsock_test client in a local ns with server in VM in same ns."
->+
->+	# ns_same_local_vm_connect_to_local_host_ok
->+	"Run vsock_test client in VM in a local ns with server in same ns."
-> )
+> 	/* Initialize/tear-down socket. */
+> 	int (*init)(struct vsock_sock *, struct vsock_sock *);
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index c0b5946bdc95..a2da1810b802 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -91,6 +91,11 @@
+>  *   and locked down by a namespace manager. The default is "global". The mode
+>  *   is set per-namespace.
+>  *
+>+ *   Note: LOCAL mode is only supported when using namespace-aware transports
+>+ *   (vhost-vsock, loopback). If a guest-to-host transport (virtio-vsock,
+>+ *   hyperv-vsock, vmci-vsock) is loaded, attempts to set LOCAL mode will fail
+>+ *   with EOPNOTSUPP, as these transports do not support per-namespace 
+>isolation.
+>+ *
+>  *   The modes affect the allocation and accessibility of CIDs as follows:
+>  *
+>  *   - global - access and allocation are all system-wide
+>@@ -2757,12 +2762,30 @@ static int vsock_net_mode_string(const struct ctl_table *table, int write,
+> 		if (*lenp >= sizeof(data))
+> 			return -EINVAL;
 >
-> readonly USE_SHARED_VM=(
->@@ -113,7 +166,7 @@ usage() {
-> 	for ((i = 0; i < ${#TEST_NAMES[@]}; i++)); do
-> 		name=${TEST_NAMES[${i}]}
-> 		desc=${TEST_DESCS[${i}]}
->-		printf "\t%-35s%-35s\n" "${name}" "${desc}"
->+		printf "\t%-55s%-35s\n" "${name}" "${desc}"
-> 	done
-> 	echo
->
->@@ -232,7 +285,7 @@ check_args() {
-> }
->
-> check_deps() {
->-	for dep in vng ${QEMU} busybox pkill ssh; do
->+	for dep in vng ${QEMU} busybox pkill ssh socat; do
-> 		if [[ ! -x $(command -v "${dep}") ]]; then
-> 			echo -e "skip:    dependency ${dep} not found!\n"
-> 			exit "${KSFT_SKIP}"
->@@ -283,6 +336,20 @@ check_vng() {
-> 	fi
-> }
->
->+check_socat() {
->+	local support_string
->+
->+	support_string="$(socat -V)"
->+
->+	if [[ "${support_string}" != *"WITH_VSOCK 1"* ]]; then
->+		die "err: socat is missing vsock support"
->+	fi
->+
->+	if [[ "${support_string}" != *"WITH_UNIX 1"* ]]; then
->+		die "err: socat is missing unix support"
->+	fi
->+}
->+
-> handle_build() {
-> 	if [[ ! "${BUILD}" -eq 1 ]]; then
-> 		return
->@@ -331,6 +398,14 @@ terminate_pidfiles() {
-> 	done
-> }
->
->+terminate_pids() {
->+	local pid
->+
->+	for pid in "$@"; do
->+		kill -SIGTERM "${pid}" &>/dev/null || :
->+	done
->+}
->+
-> vm_start() {
-> 	local pidfile=$1
-> 	local ns=$2
->@@ -573,6 +648,389 @@ test_ns_host_vsock_ns_mode_ok() {
-> 	return "${KSFT_PASS}"
-> }
->
->+test_ns_diff_global_host_connect_to_global_vm_ok() {
->+	local pids pid pidfile
->+	local ns0 ns1 port
->+	declare -a pids
->+	local unixfile
->+	ns0="global0"
->+	ns1="global1"
->+	port=1234
->+	local rc
->+
->+	init_namespaces
->+
->+	pidfile="$(create_pidfile)"
->+
->+	if ! vm_start "${pidfile}" "${ns0}"; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	unixfile=$(mktemp -u /tmp/XXXX.sock)
->+	ip netns exec "${ns1}" \
->+		socat TCP-LISTEN:"${TEST_HOST_PORT}",fork \
->+			UNIX-CONNECT:"${unixfile}" &
->+	pids+=($!)
->+	host_wait_for_listener "${ns1}" "${TEST_HOST_PORT}"
->+
->+	ip netns exec "${ns0}" socat UNIX-LISTEN:"${unixfile}",fork \
->+		TCP-CONNECT:localhost:"${TEST_HOST_PORT}" &
->+	pids+=($!)
->+
->+	vm_vsock_test "${ns0}" "server" 2 "${TEST_GUEST_PORT}"
->+	vm_wait_for_listener "${ns0}" "${TEST_GUEST_PORT}"
->+	host_vsock_test "${ns1}" "127.0.0.1" "${VSOCK_CID}" "${TEST_HOST_PORT}"
->+	rc=$?
->+
->+	for pid in "${pids[@]}"; do
->+		if [[ "$(jobs -p)" = *"${pid}"* ]]; then
->+			kill -SIGTERM "${pid}" &>/dev/null
->+		fi
->+	done
->+
+>-		if (!strncmp(data, VSOCK_NET_MODE_STR_GLOBAL, sizeof(data)))
+>+		if (!strncmp(data, VSOCK_NET_MODE_STR_GLOBAL, sizeof(data))) {
+> 			mode = VSOCK_NET_MODE_GLOBAL;
+>-		else if (!strncmp(data, VSOCK_NET_MODE_STR_LOCAL, sizeof(data)))
+>+		} else if (!strncmp(data, VSOCK_NET_MODE_STR_LOCAL, sizeof(data))) {
+>+			/* LOCAL mode is not supported when G2H transports
+>+			 * (virtio-vsock, hyperv, vmci) are active, because
+>+			 * these transports don't support namespaces. We must
+>+			 * stay in GLOBAL mode to avoid bind/lookup mismatches.
+>+			 *
+>+			 * Check if G2H transport is present and either:
+>+			 * 1. Has always_block_local_mode set (hyperv), OR
+>+			 * 2. Has an actual device present (get_local_cid() != VMADDR_CID_ANY)
+>+			 */
+>+			mutex_lock(&vsock_register_mutex);
+>+			if (transport_g2h &&
+>+			    (transport_g2h->always_block_local_mode ||
+>+			     transport_g2h->get_local_cid() != VMADDR_CID_ANY)) {
 
-In run_shared_vm_test() we are also checking oops, warn in both host and 
-VM, should we do the same here in each no-shared test that boot a VM?
+This seems almost like a hack. What about adding a new function in the 
+transports that tells us whether a device is present or not and 
+implement it in all of them?
 
-I mean, should we generalize run_shared_vm_test() and use it for both 
-kind of tests?
+Or a more specific function to check if the transport can work with 
+local mode (e.g.  netns_local_aware() or something like that - I'm not 
+great with nameming xD)
 
-Stefano
+>+				mutex_unlock(&vsock_register_mutex);
+>+				return -EOPNOTSUPP;
+>+			}
+>+			mutex_unlock(&vsock_register_mutex);
 
->+	terminate_pidfiles "${pidfile}"
->+
->+	if [[ "${rc}" -ne 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+}
->+
->+test_ns_diff_global_host_connect_to_local_vm_fails() {
->+	local ns0="global0"
->+	local ns1="local0"
->+	local port=12345
->+	local pidfile
->+	local result
->+	local pid
->+
->+	init_namespaces
->+
->+	outfile=$(mktemp)
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns1}"; then
->+		log_host "failed to start vm (cid=${VSOCK_CID}, ns=${ns0})"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns1}"
->+	vm_ssh "${ns1}" -- socat VSOCK-LISTEN:"${port}" STDOUT > "${outfile}" &
->+	echo TEST | ip netns exec "${ns0}" \
->+		socat STDIN VSOCK-CONNECT:"${VSOCK_CID}":"${port}" 2>/dev/null
->+
->+	terminate_pidfiles "${pidfile}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" != TEST ]]; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_global_vm_connect_to_global_host_ok() {
->+	local ns0="global0"
->+	local ns1="global1"
->+	local port=12345
->+	local unixfile
->+	local pidfile
->+	local pids
->+
->+	init_namespaces
->+
->+	declare -a pids
->+
->+	log_host "Setup socat bridge from ns ${ns0} to ns ${ns1} over port ${port}"
->+
->+	unixfile=$(mktemp -u /tmp/XXXX.sock)
->+
->+	ip netns exec "${ns0}" \
->+		socat TCP-LISTEN:"${port}" UNIX-CONNECT:"${unixfile}" &
->+	pids+=($!)
->+
->+	ip netns exec "${ns1}" \
->+		socat UNIX-LISTEN:"${unixfile}" TCP-CONNECT:127.0.0.1:"${port}" &
->+	pids+=($!)
->+
->+	log_host "Launching ${VSOCK_TEST} in ns ${ns1}"
->+	host_vsock_test "${ns1}" "server" "${VSOCK_CID}" "${port}"
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns0}"; then
->+		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
->+		terminate_pids "${pids[@]}"
->+		rm -f "${unixfile}"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns0}"
->+	vm_vsock_test "${ns0}" "10.0.2.2" 2 "${port}"
->+	rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+	terminate_pids "${pids[@]}"
->+	rm -f "${unixfile}"
->+
->+	if [[ ! $rc -eq 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+
->+}
->+
->+test_ns_diff_global_vm_connect_to_local_host_fails() {
->+	local ns0="global0"
->+	local ns1="local0"
->+	local port=12345
->+	local pidfile
->+	local result
->+	local pid
->+
->+	init_namespaces
->+
->+	log_host "Launching socat in ns ${ns1}"
->+	outfile=$(mktemp)
->+	ip netns exec "${ns1}" socat VSOCK-LISTEN:"${port}" STDOUT &> "${outfile}" &
->+	pid=$!
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns0}"; then
->+		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
->+		terminate_pids "${pid}"
->+		rm -f "${outfile}"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns0}"
->+
->+	vm_ssh "${ns0}" -- \
->+		bash -c "echo TEST | socat STDIN VSOCK-CONNECT:2:${port}" 2>&1 | log_guest
->+
->+	terminate_pidfiles "${pidfile}"
->+	terminate_pids "${pid}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" != TEST ]]; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_local_host_connect_to_local_vm_fails() {
->+	local ns0="local0"
->+	local ns1="local1"
->+	local port=12345
->+	local pidfile
->+	local result
->+	local pid
->+
->+	init_namespaces
->+
->+	outfile=$(mktemp)
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns1}"; then
->+		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns1}"
->+	vm_ssh "${ns1}" -- socat VSOCK-LISTEN:"${port}" STDOUT > "${outfile}" &
->+	echo TEST | ip netns exec "${ns0}" \
->+		socat STDIN VSOCK-CONNECT:"${VSOCK_CID}":"${port}" 2>/dev/null
->+
->+	terminate_pidfiles "${pidfile}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" != TEST ]]; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_local_vm_connect_to_local_host_fails() {
->+	local ns0="local0"
->+	local ns1="local1"
->+	local port=12345
->+	local pidfile
->+	local result
->+	local pid
->+
->+	init_namespaces
->+
->+	log_host "Launching socat in ns ${ns1}"
->+	outfile=$(mktemp)
->+	ip netns exec "${ns1}" socat VSOCK-LISTEN:"${port}" STDOUT &> "${outfile}" &
->+	pid=$!
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns0}"; then
->+		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
->+		rm -f "${outfile}"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns0}"
->+
->+	vm_ssh "${ns0}" -- \
->+		bash -c "echo TEST | socat STDIN VSOCK-CONNECT:2:${port}" 2>&1 | log_guest
->+
->+	terminate_pidfiles "${pidfile}"
->+	terminate_pids "${pid}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" != TEST ]]; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+__test_loopback_two_netns() {
->+	local ns0=$1
->+	local ns1=$2
->+	local port=12345
->+	local result
->+	local pid
->+
->+	modprobe vsock_loopback &> /dev/null || :
->+
->+	log_host "Launching socat in ns ${ns1}"
->+	outfile=$(mktemp)
->+	ip netns exec "${ns1}" socat VSOCK-LISTEN:"${port}" STDOUT > "${outfile}" 2>/dev/null &
->+	pid=$!
->+
->+	log_host "Launching socat in ns ${ns0}"
->+	echo TEST | ip netns exec "${ns0}" socat STDIN VSOCK-CONNECT:1:"${port}" 2>/dev/null
->+	terminate_pids "${pid}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" == TEST ]]; then
->+		return 0
->+	fi
->+
->+	return 1
->+}
->+
->+test_ns_diff_global_to_local_loopback_local_fails() {
->+	init_namespaces
->+
->+	if ! __test_loopback_two_netns "global0" "local0"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_local_to_global_loopback_fails() {
->+	init_namespaces
->+
->+	if ! __test_loopback_two_netns "local0" "global0"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_local_to_local_loopback_fails() {
->+	init_namespaces
->+
->+	if ! __test_loopback_two_netns "local0" "local1"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_global_to_global_loopback_ok() {
->+	init_namespaces
->+
->+	if __test_loopback_two_netns "global0" "global1"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_same_local_loopback_ok() {
->+	init_namespaces
->+
->+	if __test_loopback_two_netns "local0" "local0"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_same_local_host_connect_to_local_vm_ok() {
->+	local ns="local0"
->+	local port=1234
->+	local pidfile
->+	local rc
->+
->+	init_namespaces
->+
->+	pidfile="$(create_pidfile)"
->+
->+	if ! vm_start "${pidfile}" "${ns}"; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_vsock_test "${ns}" "server" 2 "${TEST_GUEST_PORT}"
->+	host_vsock_test "${ns}" "127.0.0.1" "${VSOCK_CID}" "${TEST_HOST_PORT}"
->+	rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+
->+	if [[ $rc -ne 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+}
->+
->+test_ns_same_local_vm_connect_to_local_host_ok() {
->+	local ns="local0"
->+	local port=1234
->+	local pidfile
->+	local rc
->+
->+	init_namespaces
->+
->+	pidfile="$(create_pidfile)"
->+
->+	if ! vm_start "${pidfile}" "${ns}"; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_vsock_test "${ns}" "server" 2 "${TEST_GUEST_PORT}"
->+	host_vsock_test "${ns}" "127.0.0.1" "${VSOCK_CID}" "${TEST_HOST_PORT}"
->+	rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+
->+	if [[ $rc -ne 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+}
->+
-> namespaces_can_boot_same_cid() {
-> 	local ns0=$1
-> 	local ns1=$2
->@@ -851,6 +1309,7 @@ fi
-> check_args "${ARGS[@]}"
-> check_deps
-> check_vng
->+check_socat
-> handle_build
+What happen if the G2H is loaded here, just after we release the mutex?
+
+I suspect there could be a race that we may fix postponing the unlock 
+after the vsock_net_write_mode() call.
+
+WDYT?
+
+> 			mode = VSOCK_NET_MODE_LOCAL;
+>-		else
+>+		} else {
+> 			return -EINVAL;
+>+		}
 >
-> echo "1..${#ARGS[@]}"
+> 		if (!vsock_net_write_mode(net, mode))
+> 			return -EPERM;
+>@@ -2909,6 +2932,7 @@ int vsock_core_register(const struct vsock_transport *t, int features)
+> {
+> 	const struct vsock_transport *t_h2g, *t_g2h, *t_dgram, *t_local;
+> 	int err = mutex_lock_interruptible(&vsock_register_mutex);
+>+	struct net *net;
+>
+> 	if (err)
+> 		return err;
+>@@ -2931,6 +2955,21 @@ int vsock_core_register(const struct vsock_transport *t, int features)
+> 			err = -EBUSY;
+> 			goto err_busy;
+> 		}
+>+
+>+		/* G2H sockets break in LOCAL mode namespaces because G2H transports
+>+		 * don't support them yet. Block registering new G2H transports if we
+>+		 * already have local mode namespaces on the system.
+>+		 */
+>+		rcu_read_lock();
+>+		for_each_net_rcu(net) {
+>+			if (vsock_net_mode(net) == VSOCK_NET_MODE_LOCAL) {
+>+				rcu_read_unlock();
+>+				err = -EOPNOTSUPP;
+>+				goto err_busy;
+>+			}
+>+		}
+>+		rcu_read_unlock();
+>+
+> 		t_g2h = t;
+> 	}
+>
+>diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
+>index 432fcbbd14d4..ed48dd1ff19b 100644
+>--- a/net/vmw_vsock/hyperv_transport.c
+>+++ b/net/vmw_vsock/hyperv_transport.c
+>@@ -835,6 +835,7 @@ int hvs_notify_set_rcvlowat(struct vsock_sock *vsk, int val)
+>
+> static struct vsock_transport hvs_transport = {
+> 	.module                   = THIS_MODULE,
+>+	.always_block_local_mode  = true,
+>
+> 	.get_local_cid            = hvs_get_local_cid,
+>
 >
 >-- 
 >2.47.3
