@@ -1,166 +1,141 @@
-Return-Path: <linux-kselftest+bounces-45394-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45395-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4645DC517E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 10:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96A79C51D26
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 12:03:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C022188EF5A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 09:53:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A27E618959D8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 11:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 185992FFFB2;
-	Wed, 12 Nov 2025 09:52:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P/LAqUPl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CDAB30B53B;
+	Wed, 12 Nov 2025 11:03:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D352FF668
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 09:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720D4307AD2;
+	Wed, 12 Nov 2025 11:03:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762941170; cv=none; b=mg9dB7JwqimAdi2iynRFqWaj2J8asCAYxH4p0ArCylF90PailSh3C1IySh2Zu3jSqe5nP6HjbEUDju/NcknsKkoNkzQWWhDDTLkLNhqIMa7jkkgdfQgITOwbqwTPlTY8/RC+6mZ0Dut0mgtf8hzHv9TrQW2JJ5kfuHv7ujKnNkM=
+	t=1762945385; cv=none; b=gbRMYfRKsPWn9W4Ib0yVzStN7IY4tzh3kdOLT6lSAwPDfJgnMIK57CU/JaCBBah/1T9yNZ9PXHHoruB2YQafmO4eeJFc65iomaiw5jn3EeaZCGzdfhe2HfZ0YDu8oIqfIcPY9Gh3kckLllwlWb52mwc+vO1L3L7eQ6YHBQs1usA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762941170; c=relaxed/simple;
-	bh=qieoI6be/NucVGDXoIOFCAFq9yqK2SgJwSK5f9zar58=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z7/MX7Zyxw8siPBQ7bRgH1G+E0BJmzXFiNeDt5I7dTEHEQV7F/KUIcmMpPp4mwvJ5kPoUh2aTZ7EQxio22ZUZwCU85my2eQnwujrESTAg2n2OiaYA4XDYs1wqolAUc4+p1CBFHOg3jxa1EmGOyMzU11sgt6xxYV4kNg2tk1lZG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P/LAqUPl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762941167;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NhHDG/RYOkgjp1iTZiVveFurISFNmM/HJtxHwxRJDf8=;
-	b=P/LAqUPlYvYc0aAqTIyWPqWlZC5IibxSdtbQqDfSqYKod+by5WczZ0eLF++KodpS8m9cCo
-	JP07bEoDfr91Mc7H/zvmExTos8AEBy6gKhobIO9DiaLoC0/KVdgLG2NN+hg9Ls2YxGuq16
-	DbK5gVpprCF0cbMsL/JL1MRIkcXkPSk=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-151-thKX29d8MDyDCSuebjYMpA-1; Wed,
- 12 Nov 2025 04:52:43 -0500
-X-MC-Unique: thKX29d8MDyDCSuebjYMpA-1
-X-Mimecast-MFC-AGG-ID: thKX29d8MDyDCSuebjYMpA_1762941158
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9FED31800650;
-	Wed, 12 Nov 2025 09:52:35 +0000 (UTC)
-Received: from fedora (unknown [10.44.34.114])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 8BECE1800451;
-	Wed, 12 Nov 2025 09:52:14 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed, 12 Nov 2025 10:52:35 +0100 (CET)
-Date: Wed, 12 Nov 2025 10:52:13 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexey Dobriyan <adobriyan@gmail.com>, Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Adrian Reber <areber@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	tiozhang <tiozhang@didiglobal.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	YueHaibing <yuehaibing@huawei.com>,
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
-	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
-	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	David Windsor <dwindsor@gmail.com>,
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Hans Liljestrand <ishkamiel@gmail.com>,
-	Penglei Jiang <superman.xpt@gmail.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Adrian Ratiu <adrian.ratiu@collabora.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Cyrill Gorcunov <gorcunov@gmail.com>,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v17] exec: Fix dead-lock in de_thread with ptrace_attach
-Message-ID: <aRRYzb2FxHzpKhms@redhat.com>
-References: <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <20251105143210.GA25535@redhat.com>
- <20251111-ankreiden-augen-eadcf9bbdfaa@brauner>
- <GV2PPF74270EBEEDCF80CEE0F08891ED37BE4CFA@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <aRM2POTDTxEzeF2F@redhat.com>
- <GV2PPF74270EBEE16FE36CF873C5C2309A9E4CFA@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	s=arc-20240116; t=1762945385; c=relaxed/simple;
+	bh=mRdHHDT+l/aWNe5U39cCXkYuFI9jtrvAfepTP4K14T0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PzAhUTMwQS3lGz8oUqZv31I0w5mvxjlWK1E5C+E68SfbPQwZCB82k2jXSmocTkQ5KuQm/Mm6eWxIFxjGZu0APzrOHjtWD9rvWpObKmKsZpPnjXWXeS/HKQ09MLJQaexh7nmbZtgtBNjWNlaUqVk7GQ7lMk5eWlpkgwjKgIwYb4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4d60qB2kHfzYQtlJ;
+	Wed, 12 Nov 2025 19:02:30 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id A9CC81A07BB;
+	Wed, 12 Nov 2025 19:02:58 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgCnzlthaRRpHJ7tAQ--.24376S2;
+	Wed, 12 Nov 2025 19:02:58 +0800 (CST)
+Message-ID: <8e4de6bc-1398-48f5-aaed-b366ed1b771b@huaweicloud.com>
+Date: Wed, 12 Nov 2025 19:02:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <GV2PPF74270EBEE16FE36CF873C5C2309A9E4CFA@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] cpuset: Avoid unnecessary partition invalidation
+To: Sun Shaojie <sunshaojie@kylinos.cn>
+Cc: longman@redhat.com, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com,
+ shuah@kernel.org, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <b9dce00a-4728-4ac8-ae38-7f41114c7c81@redhat.com>
+ <20251112094610.386299-1-sunshaojie@kylinos.cn>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20251112094610.386299-1-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgCnzlthaRRpHJ7tAQ--.24376S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXr13uw4DCFW8uFW5Gry8Zrb_yoW5Gw43pF
+	WDKw4Yya95WrySkw42yw1xWFWFyan7ursrJr15Jr4xu3yUur1vyFn0ya98W3W3W3s8Xa4Y
+	vrWDK3s3ZFn8AFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
+	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU17KsUUUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-On 11/11, Bernd Edlinger wrote:
->
-> On 11/11/25 14:12, Oleg Nesterov wrote:
-> > On 11/11, Bernd Edlinger wrote:
-> >>
-> >> Well when this is absolutely not acceptable then I would have to change
-> >> all security engines to be aware of the current and the new credentials.
-> >
-> > Hmm... even if we find another way to avoid the deadlock? Say, the patches
-> > I sent...
-> >
->
-> Maybe, but it looks almost too simple ;-)
->
->    164          sleep(2);
->    165          /* deadlock may happen here */
->    166          k = ptrace(PTRACE_ATTACH, thread2_tid, 0L, 0L);
->
-> what happens if you change the test expectation here, that the
-> ptrace may fail instead of succeed?
->
-> What signals does the debugger receive after that point?
-> Is the debugger notified that the debugged process continues,
-> has the same PID, and is no longer ptraced?
 
-Ah, but this is another thing... OK, you dislike 3/3 and I have to agree.
 
-Yes, de_thread() silently untraces/reaps the old leader and after 3/3 debugger
-can't rely on PTRACE_EVENT_EXIT, so unless the debugger has already attached to
-all sub-threads (at least to execing thread) it looks as if the leader was just
-untraced somehow.
+On 2025/11/12 17:46, Sun Shaojie wrote:
+> Hi Ridong,
+> 
+> Thank you for your response.
+> 
+>>From your reply "in case 1, A1 can also be converted to a partition," I 
+> realize there might be a misunderstanding. The scenario I'm addressing 
+> involves two sibling cgroups where one is an effective partition root and 
+> the other is not, and both have empty cpuset.cpus.exclusive. Let me 
+> explain the intention behind case 1 in detail, which will also illustrate 
+> why this has negative impacts on our product.
+> 
 
-OK, this is probably too bad, we need another solution...
+I think I understand what you mean.
 
-Oleg.
+> In case 1, after #3 completes, A1 is already a valid partition root - this 
+> is correct.After #4, B1 was generated, and B1 is no-exclusive. After #5, 
+> A1 changes from "root" to "root invalid". But A1 becoming "root invalid" 
+> could be unnecessary because having A1 remain as "root" might be more 
+> acceptable. Here's the analysis:
+> 
+
+What I want to note is this: what if we run echo root > /sys/fs/cgroup/B1/cpuset.cpus.partition
+after step #5? There’s no conflict check when enabling the partition.
+
+> As documented in cgroup-v2.rst regarding cpuset.cpus: "The actual list of 
+> CPUs to be granted, however, is subjected to constraints imposed by its 
+> parent and can differ from the requested CPUs". This means that although 
+> we're requesting CPUs 0-3 for B1, we can accept that the actual available 
+> CPUs in B1 might not be 0-3.
+> 
+> Based on this characteristic, in our product's implementation for case 1, 
+> before writing to B1's cpuset.cpus in #5, we check B1's parent 
+> cpuset.cpus.effective and know that the CPUs available for B1 don't include 
+> 0-1 (since 0-1 are exclusively used by A1). However, we still want to set 
+> B1's cpuset.cpus to 0-3 because we hope that when 0-1 become available in 
+> the future, B1 can use them without affecting the normal operation of other 
+> cgroups.
+> 
+> The reality is that because B1's requested cpuset.cpus (0-3) conflicts with 
+> A1's exclusive CPUs (0-1) at that moment, it destroys the validity of A1's 
+> partition root. So why must the current rule sacrifice A1's validity to 
+> accommodate B1's CPU request? In this situation, B1 can clearly use 2-3 
+> while A1 exclusively uses 0-1 - they don't need to conflict.
+> 
+> This patch narrows the exclusivity conflict check scope to only between 
+> partitions. Moreover, user-specified CPUs (including cpuset.cpus and 
+> cpuset.cpus.exclusive) only have true exclusive meaning within effective 
+> partitions. So why should the current rule perform exclusivity conflict 
+> checks between an exclusive partition and a non-exclusive member? This is 
+> clearly unnecessary.
+> 
+> Thanks
+> Sun Shaojie
+
+-- 
+Best regards,
+Ridong
 
 
