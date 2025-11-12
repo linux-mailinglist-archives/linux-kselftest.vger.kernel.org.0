@@ -1,214 +1,125 @@
-Return-Path: <linux-kselftest+bounces-45392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0C83C513F3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 10:01:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E322C5172E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 10:49:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D658A4F44E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 08:58:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B259C188222E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 09:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E2E2FDC38;
-	Wed, 12 Nov 2025 08:58:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n05MXCnw"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B4E2EBBA8;
+	Wed, 12 Nov 2025 09:46:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC7023BD1B;
-	Wed, 12 Nov 2025 08:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30155280025;
+	Wed, 12 Nov 2025 09:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762937916; cv=none; b=O/T8I4qbNogrTZjCMvA+262k8tuJHd+jTu7Q7/rtUGTOSIwMlPlriB8nqq/C6NRpB84h/jA1ZYD8WDSZN7o4c7Dd1Xl69LtxOBEHPwH9UZcEj0mBezE+LiVGSQmtxD5PoWGp1zvTGJNmQQJfRSngkP1FEkW4kLxot8bERHRJ49U=
+	t=1762940792; cv=none; b=kFHyCU61G94c4g6Rixxaq4ZYK9vyZiv9W7wVTxcNNcV98aZAkyCudkEzQst0fm7r9TllohIgl6GB9C/jckdd47Ew/JNYMGk0a12n3vcrSqawW/fo2x6StN3QAXfeRJFeR2kN488opYrRdc2XzM8VAfir7DEDte9bauhC8ksYDc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762937916; c=relaxed/simple;
-	bh=zRDQF4ySYQusOHzc2T1tZsRtG0bPI5An+rv/0D9ldPA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bErVRvqILX+JcKL5a/B/8vy2cB+G9lDrtsLWCYlZwx+eADyCC/hRjQktjuUlXfmAg21LyYX0JJ/+BLlZySzzMUlWK7OtUjwIHCeSOfkQgEHbYaIYuzpjGdQnvLvn0WlJs8qTr/CBFwF5LIUJnyhlKokSLPr4A2990/D3q8aPzF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n05MXCnw; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762937915; x=1794473915;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zRDQF4ySYQusOHzc2T1tZsRtG0bPI5An+rv/0D9ldPA=;
-  b=n05MXCnwoF3FDYv3miQrqUY/syKVpHg561KFlQRaJfHD0mvgOQwmEDx3
-   uDTk+hD9pCTsCpfbGV/KX63xlUjQAQkeSHAWa54xUlUvthEU7YE4XlJqD
-   hmXwdPlRfKkTZ785dPturti7hAhdBC1MGU+aTQU29/7IzUWTh+6gK16TY
-   //rxvqTMs6KwNex5XFBMXG1aEhDowAZWdusbHmm3BRJRYCdT7sl2+K3wP
-   NZW6vrQPgmVEo9dQoXt7YgzYn48R3bz2c8IOfUD9INWHKh5tX+u09uygY
-   E4erDzqbw3BmDGtKSnfmnYxATluz3K9qTLgK3/NLZ73LKvBce5p+xhfZM
-   Q==;
-X-CSE-ConnectionGUID: IgU1RCQSRgSkJELES+VqJw==
-X-CSE-MsgGUID: 4QwU3wrkT5WjpL55VeY8Ng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="52556509"
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="52556509"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 00:58:33 -0800
-X-CSE-ConnectionGUID: pRO6tdWeROitpi6xfJxcsA==
-X-CSE-MsgGUID: jwxmFvxbSl+/qGbeC5NoOQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="189343307"
-Received: from yinghaoj-desk.ccr.corp.intel.com (HELO [10.238.1.225]) ([10.238.1.225])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 00:58:13 -0800
-Message-ID: <ab3f297e-44d5-4f42-aa17-f2e7c135580e@linux.intel.com>
-Date: Wed, 12 Nov 2025 16:58:10 +0800
+	s=arc-20240116; t=1762940792; c=relaxed/simple;
+	bh=PGXH5ZNoFVU82DUBUYg+wC+o3Hx+ymercUt+UTpMI1U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TISkpKhLdoPdnLs0EjMZRLAxRMloZ3qFBkEZ3OKeukZPvqw14kJL9ga5YiIEjiQSIEZisQ3OWhs6/JVdxsFGiAMNOi5IA+YpwMFln+csOd0HW1NLZFS4jrpd0+GcM6UnlV7/jRuQhxEPj5KedgjvEVqsR+gbtyuzj1YDESYKa7Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 72334534bfac11f0a38c85956e01ac42-20251112
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:b558790b-f5d3-4cf6-8624-8aab05f4ddb0,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:15
+X-CID-INFO: VERSION:1.3.6,REQID:b558790b-f5d3-4cf6-8624-8aab05f4ddb0,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:re
+	lease,TS:15
+X-CID-META: VersionHash:a9d874c,CLOUDID:7b4bb5ea26bfdafd5716007837c7b4a6,BulkI
+	D:251112113325GOOOY919,BulkQuantity:2,Recheck:0,SF:19|66|72|78|81|82|83|10
+	2|850,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS
+	:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,A
+	RC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 72334534bfac11f0a38c85956e01ac42-20251112
+X-User: sunshaojie@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1424881545; Wed, 12 Nov 2025 17:46:21 +0800
+From: Sun Shaojie <sunshaojie@kylinos.cn>
+To: chenridong@huaweicloud.com
+Cc: longman@redhat.com,
+	tj@kernel.org,
+	hannes@cmpxchg.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1] cpuset: Avoid unnecessary partition invalidation
+Date: Wed, 12 Nov 2025 17:46:10 +0800
+Message-Id: <20251112094610.386299-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <b9dce00a-4728-4ac8-ae38-7f41114c7c81@redhat.com>
+References: <b9dce00a-4728-4ac8-ae38-7f41114c7c81@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 01/37] KVM: guest_memfd: Introduce per-gmem
- attributes, use to guard user mappings
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: cgroups@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, x86@kernel.org,
- akpm@linux-foundation.org, bp@alien8.de, brauner@kernel.org,
- chao.p.peng@intel.com, chenhuacai@kernel.org, corbet@lwn.net,
- dave.hansen@intel.com, dave.hansen@linux.intel.com, david@redhat.com,
- dmatlack@google.com, erdemaktas@google.com, fan.du@intel.com,
- fvdl@google.com, haibo1.xu@intel.com, hannes@cmpxchg.org, hch@infradead.org,
- hpa@zytor.com, hughd@google.com, ira.weiny@intel.com,
- isaku.yamahata@intel.com, jack@suse.cz, james.morse@arm.com,
- jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, jhubbard@nvidia.com,
- jroedel@suse.de, jthoughton@google.com, jun.miao@intel.com,
- kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev,
- liam.merwick@oracle.com, maciej.wieczor-retman@intel.com,
- mail@maciej.szmigiero.name, maobibo@loongson.cn,
- mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org,
- mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, mingo@redhat.com,
- mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev,
- nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev,
- palmer@dabbelt.com, pankaj.gupta@amd.com, paul.walmsley@sifive.com,
- pbonzini@redhat.com, peterx@redhat.com, pgonda@google.com, prsampat@amd.com,
- pvorel@suse.cz, qperret@google.com, richard.weiyang@gmail.com,
- rick.p.edgecombe@intel.com, rientjes@google.com, rostedt@goodmis.org,
- roypat@amazon.co.uk, rppt@kernel.org, seanjc@google.com,
- shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com,
- steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com,
- tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com,
- vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com,
- wei.w.wang@intel.com, will@kernel.org, willy@infradead.org,
- wyihan@google.com, xiaoyao.li@intel.com, yan.y.zhao@intel.com,
- yilun.xu@intel.com, yuzenghui@huawei.com, zhiquan1.li@intel.com
-References: <cover.1760731772.git.ackerleytng@google.com>
- <638600e19c6e23959bad60cf61582f387dff6445.1760731772.git.ackerleytng@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <638600e19c6e23959bad60cf61582f387dff6445.1760731772.git.ackerleytng@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Hi Ridong,
 
+Thank you for your response.
 
-On 10/18/2025 4:11 AM, Ackerley Tng wrote:
-[...]
->
-> +static int kvm_gmem_init_inode(struct inode *inode, loff_t size, u64 flags)
-> +{
-> +	struct gmem_inode *gi = GMEM_I(inode);
-> +	MA_STATE(mas, &gi->attributes, 0, (size >> PAGE_SHIFT) - 1);
-> +	u64 attrs;
-> +	int r;
-> +
-> +	inode->i_op = &kvm_gmem_iops;
-> +	inode->i_mapping->a_ops = &kvm_gmem_aops;
-> +	inode->i_mode |= S_IFREG;
-> +	inode->i_size = size;
-> +	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
-> +	mapping_set_inaccessible(inode->i_mapping);
-> +	/* Unmovable mappings are supposed to be marked unevictable as well. */
-AS_UNMOVABLE has been removed and got merged into AS_INACCESSIBLE, not sure if
-it's better to use "Inaccessible" instead of "Unmovable"
+From your reply "in case 1, A1 can also be converted to a partition," I 
+realize there might be a misunderstanding. The scenario I'm addressing 
+involves two sibling cgroups where one is an effective partition root and 
+the other is not, and both have empty cpuset.cpus.exclusive. Let me 
+explain the intention behind case 1 in detail, which will also illustrate 
+why this has negative impacts on our product.
 
-> +	WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
-> +
-> +	gi->flags = flags;
-> +
-> +	mt_set_external_lock(&gi->attributes,
-> +			     &inode->i_mapping->invalidate_lock);
-> +
-> +	/*
-> +	 * Store default attributes for the entire gmem instance. Ensuring every
-> +	 * index is represented in the maple tree at all times simplifies the
-> +	 * conversion and merging logic.
-> +	 */
-> +	attrs = gi->flags & GUEST_MEMFD_FLAG_INIT_SHARED ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE;
-> +
-> +	/*
-> +	 * Acquire the invalidation lock purely to make lockdep happy. There
-> +	 * should be no races at this time since the inode hasn't yet been fully
-> +	 * created.
-> +	 */
-> +	filemap_invalidate_lock(inode->i_mapping);
-> +	r = mas_store_gfp(&mas, xa_mk_value(attrs), GFP_KERNEL);
-> +	filemap_invalidate_unlock(inode->i_mapping);
-> +
-> +	return r;
-> +}
-> +
-[...]
-> @@ -925,13 +986,39 @@ static struct inode *kvm_gmem_alloc_inode(struct super_block *sb)
->
->   	mpol_shared_policy_init(&gi->policy, NULL);
->
-> +	/*
-> +	 * Memory attributes are protected the filemap invalidation lock, but
-                                      ^
-                                 protected by
-> +	 * the lock structure isn't available at this time.  Immediately mark
-> +	 * maple tree as using external locking so that accessing the tree
-> +	 * before its fully initialized results in NULL pointer dereferences
-> +	 * and not more subtle bugs.
-> +	 */
-> +	mt_init_flags(&gi->attributes, MT_FLAGS_LOCK_EXTERN);
-> +
->   	gi->flags = 0;
->   	return &gi->vfs_inode;
->   }
->
->   static void kvm_gmem_destroy_inode(struct inode *inode)
->   {
-> -	mpol_free_shared_policy(&GMEM_I(inode)->policy);
-> +	struct gmem_inode *gi = GMEM_I(inode);
-> +
-> +	mpol_free_shared_policy(&gi->policy);
-> +
-> +	/*
-> +	 * Note!  Checking for an empty tree is functionally necessary to avoid
-> +	 * explosions if the tree hasn't been initialized, i.e. if the inode is
+In case 1, after #3 completes, A1 is already a valid partition root - this 
+is correct.After #4, B1 was generated, and B1 is no-exclusive. After #5, 
+A1 changes from "root" to "root invalid". But A1 becoming "root invalid" 
+could be unnecessary because having A1 remain as "root" might be more 
+acceptable. Here's the analysis:
 
-It makes sense to skip __mt_destroy() when mtree is empty.
-But what explosions it could trigger if mtree is empty?
-It seems __mt_destroy() can handle the case if the external lock is not set.
+As documented in cgroup-v2.rst regarding cpuset.cpus: "The actual list of 
+CPUs to be granted, however, is subjected to constraints imposed by its 
+parent and can differ from the requested CPUs". This means that although 
+we're requesting CPUs 0-3 for B1, we can accept that the actual available 
+CPUs in B1 might not be 0-3.
 
+Based on this characteristic, in our product's implementation for case 1, 
+before writing to B1's cpuset.cpus in #5, we check B1's parent 
+cpuset.cpus.effective and know that the CPUs available for B1 don't include 
+0-1 (since 0-1 are exclusively used by A1). However, we still want to set 
+B1's cpuset.cpus to 0-3 because we hope that when 0-1 become available in 
+the future, B1 can use them without affecting the normal operation of other 
+cgroups.
 
-> +	 * being destroyed before guest_memfd can set the external lock.
-> +	 */
-> +	if (!mtree_empty(&gi->attributes)) {
-> +		/*
-> +		 * Acquire the invalidation lock purely to make lockdep happy,
-> +		 * the inode is unreachable at this point.
-> +		 */
-> +		filemap_invalidate_lock(inode->i_mapping);
-> +		__mt_destroy(&gi->attributes);
-> +		filemap_invalidate_unlock(inode->i_mapping);
-> +	}
->   }
->
->   static void kvm_gmem_free_inode(struct inode *inode)
-> --
-> 2.51.0.858.gf9c4a03a3a-goog
+The reality is that because B1's requested cpuset.cpus (0-3) conflicts with 
+A1's exclusive CPUs (0-1) at that moment, it destroys the validity of A1's 
+partition root. So why must the current rule sacrifice A1's validity to 
+accommodate B1's CPU request? In this situation, B1 can clearly use 2-3 
+while A1 exclusively uses 0-1 - they don't need to conflict.
 
+This patch narrows the exclusivity conflict check scope to only between 
+partitions. Moreover, user-specified CPUs (including cpuset.cpus and 
+cpuset.cpus.exclusive) only have true exclusive meaning within effective 
+partitions. So why should the current rule perform exclusivity conflict 
+checks between an exclusive partition and a non-exclusive member? This is 
+clearly unnecessary.
+
+Thanks
+Sun Shaojie
 
