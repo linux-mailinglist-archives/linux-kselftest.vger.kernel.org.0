@@ -1,166 +1,174 @@
-Return-Path: <linux-kselftest+bounces-45428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45429-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C960C53905
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 18:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AFEF8C5351E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 17:14:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9C6AB547434
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 15:46:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 131F44F3960
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 16:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD54345CC5;
-	Wed, 12 Nov 2025 15:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97CC533B6C7;
+	Wed, 12 Nov 2025 16:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KPituJcF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O3fqrhjh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63C3345CBE;
-	Wed, 12 Nov 2025 15:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A05D23B628;
+	Wed, 12 Nov 2025 16:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762962163; cv=none; b=Lb13TI4IxOw5aiAsrd0fZsfJK460jzD6VqxmoQ1mmkwZVUI41t8CQJ9+Wc8NiAJGbfNOypVFGlQ8wygykySkgFrdQ87wz+F7NXH/OijTLu9V9nJJL5J8U+dtJN9mFynXUwO84PMHxAT4TV4yvkku1fsEL6EAYyj0GC5aSbkUF9k=
+	t=1762963360; cv=none; b=sxt3H8IYf0IfOf1C+egEINVJW/5Gaw4ZRwip2Aov9LRavnV12RSra5l68P/z1Yy5XaszVlH25npzqMmVoOZd48JMDkM5SIlK9CTqhX9dKW4lLqpOpb81DVot0t5/ZHCjcjHtE0j6hHzdjKjsj0Ms43nHtLNSH6oO6HUR1DdV48w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762962163; c=relaxed/simple;
-	bh=ipqbHpurnSVvOIPX2qXsTqde4IbogP7c/9c05Brr93w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JfhjIIO1BRj6L3m6y1lj6RYxauUTwYezrxVT9/e03M4nEN/BpU1mLBk04Ak+15aKHR9g0GBUDkyRKe4hFOq0Exsm+wo9AdybxhvgqL9Bah5JO4mWl1GkNKRV004sNJT0n5Qh1t9jYhN65cK7S5aDvKnts4vSaEh4Kh0pcghE8N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KPituJcF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7079AC4CEF5;
-	Wed, 12 Nov 2025 15:42:41 +0000 (UTC)
+	s=arc-20240116; t=1762963360; c=relaxed/simple;
+	bh=9cDqhpoh2TaNYp3Sh641A7yKKpNFEMcajDyDQWAWX4s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PUMUCE7VB554j3GS+cdT9kTuwPNrM4Jt1ikdfUKWvRZ7FkoFSBfq1j/wWJSmDc93UeMzJtKVee5egoxShgyRAhy4VZXEryLEzN0ZxJrdik3I0g8AxPoPuRll3hagr8XuXVz4AV09COxWiz0Ok8MtYhOcN9yEU+QWHm/oClBSzjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O3fqrhjh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F51CC19421;
+	Wed, 12 Nov 2025 16:02:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762962163;
-	bh=ipqbHpurnSVvOIPX2qXsTqde4IbogP7c/9c05Brr93w=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KPituJcFNSjD5P+6aPcagVN3PDZTIuLo6Chdee4DGXczD42xk/RYHpsFtOpSMPV2w
-	 igC1fhqrXpXvYjeAZ5uX6tawwU1Vpm82tNw4zXOBvLP2r+j/kgv6VWOMuBZ37HH3j6
-	 +HHSzHW56t9Af4AeL/NraNZ0QcK2yjWO6ORCouO+o8mlaW6wGjKnR2LEVF4E9Z/DK1
-	 fv1fk43sm+4Fr6bzIw0/eWUO3rLsKpB7m+awnK52NgUfEoN1HmY3d+uYx6ndW57SlW
-	 c/bHxyfZRAQvrKG5+Ya/V3B4kfOmCZ1jwG30ay6XjiegnhPYtlPmA8KbhaFKOm8xpv
-	 eqEYcsuEhq7wQ==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 7/9] selftests/damon/sysfs.py: merge DAMON status dumping into commitment assertion
-Date: Wed, 12 Nov 2025 07:41:10 -0800
-Message-ID: <20251112154114.66053-8-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251112154114.66053-1-sj@kernel.org>
-References: <20251112154114.66053-1-sj@kernel.org>
+	s=k20201202; t=1762963360;
+	bh=9cDqhpoh2TaNYp3Sh641A7yKKpNFEMcajDyDQWAWX4s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O3fqrhjhmLH4/axpfuqlpns5UI3RTk421oEou5qosF86eJPrbWqoTQ2ZH7a47DaMY
+	 eympqIhmMHvoX+JAfOykwiD51YzRz0wCpdyNj308zUMA7+rvWowBXn/z+XJptOjGeQ
+	 ql4y131ZzB7tT1cKnMgpaCsdHKf/rnM1kMg/DZa3p7JLTNkJ0ySYYDvItRYTd0ZSaY
+	 rETDdWOwGrSIC26ntYnZ9YbZYf+un4vZnOniFyktjfRbduVYfNtxC7+KdWmR1TXrRX
+	 t03fXR2IbaSl50WT7DCqRd6fwkZxmCHZ+hMsr/V3bwe2Fbuk55ByVRDEYFHubhaSgc
+	 3+XqU3hdosynQ==
+Date: Wed, 12 Nov 2025 17:02:37 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	Phil Sutter <phil@nwl.cc>, Florian Westphal <fw@strlen.de>,
+	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH nf-next v9 2/3] net: netfilter: Add IPIP flowtable tx sw
+ acceleration
+Message-ID: <aRSvnfdhO2G1DXJI@lore-desk>
+References: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
+ <20251107-nf-flowtable-ipip-v9-2-7cbc4090dfcb@kernel.org>
+ <aRSDjkzMx4Ba7IW8@calendula>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="p6H8euPBYFgemF2H"
+Content-Disposition: inline
+In-Reply-To: <aRSDjkzMx4Ba7IW8@calendula>
 
-For each test case, sysfs.py makes changes to DAMON, dumps DAMON
-internal status and asserts the expectation is met.  The dumping part
-should be the same for all cases, so it is duplicated for each test
-case.  Which means it is easy to make mistakes.  Actually a few of those
-duplicates are not turning DAMON off in case of the dumping failure.  It
-makes following selftests that need to turn DAMON on fails with -EBUSY.
-Merge the status dumping into commitment assertion with proper dumping
-failure handling, to deduplicate and avoid the unnecessary following
-tests failures.
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.py | 43 ++++++++------------------
- 1 file changed, 13 insertions(+), 30 deletions(-)
+--p6H8euPBYFgemF2H
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/damon/sysfs.py b/tools/testing/selftests/damon/sysfs.py
-index b4c5ef5c4d69..9cca71eb0325 100755
---- a/tools/testing/selftests/damon/sysfs.py
-+++ b/tools/testing/selftests/damon/sysfs.py
-@@ -185,7 +185,15 @@ def assert_ctx_committed(ctx, dump):
-     assert_monitoring_targets_committed(ctx.targets, dump['adaptive_targets'])
-     assert_schemes_committed(ctx.schemes, dump['schemes'])
- 
--def assert_ctxs_committed(ctxs, dump):
-+def assert_ctxs_committed(kdamonds):
-+    status, err = dump_damon_status_dict(kdamonds.kdamonds[0].pid)
-+    if err is not None:
-+        print(err)
-+        kdamonds.stop()
-+        exit(1)
-+
-+    ctxs = kdamonds.kdamonds[0].contexts
-+    dump = status['contexts']
-     assert_true(len(ctxs) == len(dump), 'ctxs length', dump)
-     for idx, ctx in enumerate(ctxs):
-         assert_ctx_committed(ctx, dump[idx])
-@@ -202,13 +210,7 @@ def main():
-         print('kdamond start failed: %s' % err)
-         exit(1)
- 
--    status, err = dump_damon_status_dict(kdamonds.kdamonds[0].pid)
--    if err is not None:
--        print(err)
--        kdamonds.stop()
--        exit(1)
--
--    assert_ctxs_committed(kdamonds.kdamonds[0].contexts, status['contexts'])
-+    assert_ctxs_committed(kdamonds)
- 
-     context = _damon_sysfs.DamonCtx(
-             monitoring_attrs=_damon_sysfs.DamonAttrs(
-@@ -256,12 +258,7 @@ def main():
-     kdamonds.kdamonds[0].contexts = [context]
-     kdamonds.kdamonds[0].commit()
- 
--    status, err = dump_damon_status_dict(kdamonds.kdamonds[0].pid)
--    if err is not None:
--        print(err)
--        exit(1)
--
--    assert_ctxs_committed(kdamonds.kdamonds[0].contexts, status['contexts'])
-+    assert_ctxs_committed(kdamonds)
- 
-     # test online commitment of minimum context.
-     context = _damon_sysfs.DamonCtx()
-@@ -270,12 +267,7 @@ def main():
-     kdamonds.kdamonds[0].contexts = [context]
-     kdamonds.kdamonds[0].commit()
- 
--    status, err = dump_damon_status_dict(kdamonds.kdamonds[0].pid)
--    if err is not None:
--        print(err)
--        exit(1)
--
--    assert_ctxs_committed(kdamonds.kdamonds[0].contexts, status['contexts'])
-+    assert_ctxs_committed(kdamonds)
- 
-     kdamonds.stop()
- 
-@@ -303,17 +295,8 @@ def main():
-         exit(1)
-     kdamonds.kdamonds[0].contexts[0].targets[1].obsolete = True
-     kdamonds.kdamonds[0].commit()
--
--    status, err = dump_damon_status_dict(kdamonds.kdamonds[0].pid)
--    if err is not None:
--        print(err)
--        kdamonds.stop()
--        exit(1)
--
-     del kdamonds.kdamonds[0].contexts[0].targets[1]
--
--    assert_ctxs_committed(kdamonds.kdamonds[0].contexts, status['contexts'])
--
-+    assert_ctxs_committed(kdamonds)
-     kdamonds.stop()
- 
- if __name__ == '__main__':
--- 
-2.47.3
+> Hi Lorenzo,
+
+Hi Pablo,
+
+>=20
+> On Fri, Nov 07, 2025 at 12:14:47PM +0100, Lorenzo Bianconi wrote:
+> [...]
+> > @@ -565,8 +622,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff =
+*skb,
+> > =20
+> >  	dir =3D tuplehash->tuple.dir;
+> >  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
+> > +	other_tuple =3D &flow->tuplehash[!dir].tuple;
+> > =20
+> > -	if (nf_flow_encap_push(skb, &flow->tuplehash[!dir].tuple) < 0)
+> > +	if (nf_flow_encap_push(state->net, skb, other_tuple))
+> >  		return NF_DROP;
+> > =20
+> >  	switch (tuplehash->tuple.xmit_type) {
+> > @@ -577,7 +635,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff =
+*skb,
+> >  			flow_offload_teardown(flow);
+> >  			return NF_DROP;
+> >  		}
+> > -		neigh =3D ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, flow->tuplehash[!=
+dir].tuple.src_v4.s_addr));
+> > +		dest =3D other_tuple->tun_num ? other_tuple->tun.src_v4.s_addr
+> > +					    : other_tuple->src_v4.s_addr;
+>=20
+> I think this can be simplified if my series use the ip_hdr(skb)->daddr
+> for rt_nexthop(), see attached patch. This would be fetched _before_
+> pushing the tunnel and layer 2 encapsulation headers. Then, there is
+> no need to fetch other_tuple and check if tun_num is greater than
+> zero.
+>=20
+> See my sketch patch, I am going to give this a try, if this is
+> correct, I would need one more iteration from you.
+> diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_tab=
+le_ip.c
+> index 8b74fb34998e..ff2b6c16c715 100644
+> --- a/net/netfilter/nf_flow_table_ip.c
+> +++ b/net/netfilter/nf_flow_table_ip.c
+> @@ -427,6 +427,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *s=
+kb,
+>  	struct flow_offload *flow;
+>  	struct neighbour *neigh;
+>  	struct rtable *rt;
+> +	__be32 ip_dst;
+>  	int ret;
+> =20
+>  	tuplehash =3D nf_flow_offload_lookup(&ctx, flow_table, skb);
+> @@ -449,6 +450,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *s=
+kb,
+> =20
+>  	dir =3D tuplehash->tuple.dir;
+>  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
+> +	ip_dst =3D ip_hdr(skb)->daddr;
+
+I agree this patch will simplify my series (thx :)) but I guess we should m=
+ove
+ip_dst initialization after nf_flow_encap_push() since we need to route the
+traffic according to the tunnel dst IP address, right?
+
+Regards,
+Lorenzo
+
+> =20
+>  	switch (tuplehash->tuple.xmit_type) {
+>  	case FLOW_OFFLOAD_XMIT_NEIGH:
+> @@ -458,7 +460,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *s=
+kb,
+>  			flow_offload_teardown(flow);
+>  			return NF_DROP;
+>  		}
+> -		neigh =3D ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, flow->tuplehash[!di=
+r].tuple.src_v4.s_addr));
+> +		neigh =3D ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, ip_dst));
+>  		if (IS_ERR(neigh)) {
+>  			flow_offload_teardown(flow);
+>  			return NF_DROP;
+
+
+--p6H8euPBYFgemF2H
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaRSvnQAKCRA6cBh0uS2t
+rHPxAQDzX1TgbfpgXD0BPeWv+KttxwukKd0c9trhj84geanZ9QEAxqr+u3nXUoTT
+qkLlHrdRODNNLSULmhZBVBoUEjP/zQU=
+=II//
+-----END PGP SIGNATURE-----
+
+--p6H8euPBYFgemF2H--
 
