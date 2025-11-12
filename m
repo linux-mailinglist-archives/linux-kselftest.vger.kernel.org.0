@@ -1,181 +1,156 @@
-Return-Path: <linux-kselftest+bounces-45436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8094EC53D60
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 19:03:41 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C235AC53DD5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 19:11:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 252843B121D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 17:52:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3EFCD4FC605
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 18:05:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E955634A77A;
-	Wed, 12 Nov 2025 17:52:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB905348862;
+	Wed, 12 Nov 2025 18:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="5rZUyUzr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D9234A788
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 17:52:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB8233468A;
+	Wed, 12 Nov 2025 18:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762969935; cv=none; b=MyWSBt2fADREuTmfwL6GHftAqm+LfZlABvd784k30AAyRf8duo2tZNHvGQ7NK2JdzyCZdJvIVlfPMxmaLyd9JHhq4D5Kgfim4Y8NFRa6uW0DwtjkAoI2ayxyNLp6BPu4em6tC4KBVdaD/vRxwJx47T+7cSFNaEeY7I8xx6UGAzE=
+	t=1762970698; cv=none; b=S3r5/ZhVVw8/LLqlUj9wkiZThhG+bYvDMRlpgMPARBim++a/qXqOU96VxVAhKP1KDjBh2f90tQUadbqoEUFA0ASW8zYP6tZ7zFY+znb6BXZ9wjFdHPQ2gflZRWk0INm3UKWpcdOdgQRaDRyl4EkDTOjLKrwtgN6OfUfnBoPDzSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762969935; c=relaxed/simple;
-	bh=SFwbsqB0O+tUTWktvVVZyqJuNVNdERcvJx7zcL57ES8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GP2sI3zFjMUfMgSqlBME5DMFm4nwGMVs3/tIwoq0RvY+bdKi4sfn14UaPPSVegqdRQggcSNjK4rndK/UzzWiBJjPb93fcgPx0MUGKqBQhAawOwUdwjn4Ku5Q5hjxY4gN6fHj5OqXawzV4lYTgj9/GmWWVVK4xyETNQvVtSy9sj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7c281c649ccso683845a34.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 09:52:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762969933; x=1763574733;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EzbvFRntyWDcqPtNXDS/uZhln+N71UAAKYfDgxB7UP4=;
-        b=hEWa3z9KIKp+RlboLvqmyZe06awuNb+6VK4O5zsEV5tvyoI+HpSbXJ9MfK9whYI0xh
-         SNBkRy08dp1ChslvPLPJAS50pL6/KAu9qC6E2N1YM4WgaB0z0qx0PZ0dHItlou66Msbl
-         eZBalJrQpYJZpS3u5SGDYa31T1x5Lh2UfbxVAAwYiKI7RfsZPl4ih1ONJ8xnadJuUI2E
-         oYgMtrkiJE+8q0JNVFKUujL0V7a/0eeaHveJpQEhxkYmfO6fy7Q6NNBhJv9FpNrrLYPP
-         2lv3LHDlY+pHe7zw4BVvtw4U9bObOscflXP0vEH/nJ36t297aME+OdAxGspPaB4qYO3w
-         Qcgg==
-X-Forwarded-Encrypted: i=1; AJvYcCXmcD66QhHw1hoS71S2eZhb24jAex/G3eLKnePoSeu9VRp55H5wA+0Dp6M/HHqSs8thflARmb+Ijqrychy+Ph0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3reYsnBxuW9F7A1U/Y27oGkvAfxO8uMdEy0USp2/uoU+ccwdS
-	WqJeDn4C/mwk+FAntZY0bAfB+A/Fl+wMqdY3m8d5iDOw0oNW/Cmb9B+p6s/a5A==
-X-Gm-Gg: ASbGncumCTE48y0JLxLcVDFdHwZ4LvRNAragMfLZooIqV0NdLh9hvaUpIZrZFjR44uE
-	FgaZ5hq5df/kwYmdhUK/dB8jhVrHPzP7MOHU6WN2aMbnCnBxgA5O67WNG2YekCzwB4KR6K51dfl
-	j75+AZCvlGZt2oNyvK+JxGldeTUv4uHmWYjDVmO6Y14mOchkHBxnMvLFLoRE06fcpCz3qmhTy0/
-	H/mI1P4haUOhaSwfuTLhia6t+orhKgOtb31BbcHjNM15cs5QcOiLv4R5H/chWeH+fd7/XCreD8a
-	CwV1rcSlNqrEUK1Afy2aHygY8w2pTNcDlULmAJH9eDKU0o+QpjVs2YVCfNkaWuZJSa+CydR8tiQ
-	BW2EpUg04Si0eCtiL2UKk84amHe+EarfLg5IpSmPA+bQRM4Hw1KTu3dNQwsrl5cg0m17aUn4Cdw
-	yd3ZA=
-X-Google-Smtp-Source: AGHT+IHOBDkAaitCpQS5gqhSNc5RIO3uY8mN4wl3nl8Q4q11uEhKYnOOPm8WmrkxLHAK+NlFSLvsOQ==
-X-Received: by 2002:a05:6808:1786:b0:450:18a:da48 with SMTP id 5614622812f47-450746a6fa9mr1811520b6e.62.1762969933082;
-        Wed, 12 Nov 2025 09:52:13 -0800 (PST)
-Received: from gmail.com ([2a03:2880:10ff:52::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6571f334f82sm699002eaf.0.2025.11.12.09.52.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 09:52:12 -0800 (PST)
-Date: Wed, 12 Nov 2025 09:52:10 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Andre Carvalho <asantostc@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v3 5/6] netconsole: resume previously
- deactivated target
-Message-ID: <j67rta6sn3c2tgor3gtcrr2hvcdnxk6iqvzkhqkjkr6cgaezbh@vri4vhhzv5rf>
-References: <20251109-netcons-retrigger-v3-0-1654c280bbe6@gmail.com>
- <20251109-netcons-retrigger-v3-5-1654c280bbe6@gmail.com>
- <e4loxbog76cspufl7hu37uhdc54dtqjqryikwsnktdncpqvonb@mu6rsa3qbtvk>
- <h5tdoarzjg2b5v3bvkmrlwgquejlhr5xjbrb6hn2ro4s46dpfs@4clrqzup6szk>
+	s=arc-20240116; t=1762970698; c=relaxed/simple;
+	bh=thaPD+WJ3wmrVp9/rylWOTphTDjNy0S2OUsOypRmUJ4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oj0H0QxL4eNCH6uQuApT6U65NY+PZYM29BG3Zk1NTJeQ+xFrEqLxNEGeJf2q92NnofkSrLgsnunbpMERzXntY222/gjpkTLMEyl3f75e0Bka9l2lPZWCjiIIivAkd5HIleffvoByaend2bNiDAZGTAO15AHX5KbYioQF6hJdr8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=5rZUyUzr; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5ACCrah91140123;
+	Wed, 12 Nov 2025 10:04:51 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
+	 bh=5f9Du9Vto8AzV6Fmh5aBZhgsQoxQEjzcPQeDRAHFNWg=; b=5rZUyUzrqiz8
+	1QiVHBAd/AWjgKNsb4bzEYDSIuwG2uMS6u4vtXXLNscWmORGIVTB94yJ7bFMgER9
+	bZ4Eh6ajR0QAuEhNp+ENjKcVs4YGgNO3JeCxrv5fCXGt0q8IA+dJ7JP2MjSKRPQ4
+	XNe7+VFHE2jmzAEDhc6jRue+sWG2tlh5qUWZd4E7nZBJx90m0mHSY6g/6sTOmVFK
+	yXcYp0BRhNY3yfu5USSmL6rV9+Ujq3/WDj7FUoXJQ7EtxDzSs085XeRjxdyc8Iee
+	LqVFwK//7mKbqz/H69J7RJSmgjm06XqDhKzNpwPtqtnjsquNwRs698K7xbbqk61s
+	H7iotA1lIQ==
+Received: from maileast.thefacebook.com ([163.114.135.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4actn3jh3y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 12 Nov 2025 10:04:51 -0800 (PST)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:1b::2d) by
+ mail.thefacebook.com (2620:10d:c0a9:6f::237c) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.20; Wed, 12 Nov 2025 18:04:49 +0000
+Date: Wed, 12 Nov 2025 10:04:43 -0800
+From: Alex Mastro <amastro@fb.com>
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex@shazbot.org>, Shuah Khan <shuah@kernel.org>,
+        Jason
+ Gunthorpe <jgg@ziepe.ca>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 0/4] vfio: selftests: update DMA mapping tests to use
+ queried IOVA ranges
+Message-ID: <aRTMO7GtBTcxaPj5@devgpu015.cco6.facebook.com>
+References: <20251111-iova-ranges-v3-0-7960244642c5@fb.com>
+ <CALzav=cmkiFUjENpYk3TT7czAeoh8jzp4WX_+diERu7JhyGCpA@mail.gmail.com>
+ <aRTGbXB6gtkKVnLo@devgpu015.cco6.facebook.com>
+ <CALzav=fwE2kPqJUiB2J20pK5bH_-1XvONQXz1DpsMSOCKa=X+g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <h5tdoarzjg2b5v3bvkmrlwgquejlhr5xjbrb6hn2ro4s46dpfs@4clrqzup6szk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALzav=fwE2kPqJUiB2J20pK5bH_-1XvONQXz1DpsMSOCKa=X+g@mail.gmail.com>
+X-Proofpoint-ORIG-GUID: gmGOXJurSDtruhadA44ZGG4uiqxlKzIW
+X-Authority-Analysis: v=2.4 cv=PeDyRyhd c=1 sm=1 tr=0 ts=6914cc43 cx=c_pps
+ a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=FOH2dFAWAAAA:8 a=jP91L4faPYvz1sexuHQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-GUID: gmGOXJurSDtruhadA44ZGG4uiqxlKzIW
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEyMDE0NSBTYWx0ZWRfX7rN/ubatQyMR
+ cAS+m6+9TjvTgRrg5unP29hU1K5axqvnlTEqZlFJNGXLUGhHeRBWSk0o9mk6MFTeM2nPAVgmBiy
+ zgYeNR/DJOkMefiZ0InE+0P3BlmpoDKk8RsYi2SheBVePZg3X0mK9ftc9nbwhjJ/36MBrH0LOks
+ ya3sPoWGACTK+1IOiFf0RqfdvuwYNmUI/vp4IQdZ6tk+JVcotMadppvue3MLCSef6Jxni2IMUxA
+ 1bNH0aP+3txcurtOUGg0BS4MaLHxwu339WbKE239MMDe74nwHtn7J0NZTa8KT1ypOtHyBXbm6mZ
+ pSpT/NwRQCxN6r35pAW2JEBNtlsuTEAAZniPotKfJxDW7pWFtvMAXwgE1ZllKHHJE277wxKEIsF
+ bOV3qL5nnEslcF37DIcpilTYOtVTCA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-12_06,2025-11-11_03,2025-10-01_01
 
-On Tue, Nov 11, 2025 at 07:18:46PM +0000, Andre Carvalho wrote:
-> On Tue, Nov 11, 2025 at 02:12:26AM -0800, Breno Leitao wrote:
-> > > + *		disabled. Internally, although both STATE_DISABLED and
-> > > + *		STATE_DEACTIVATED correspond to inactive netpoll the latter is>
-> > > + *		due to interface state changes and may recover automatically.
-> > 
-> >  *		disabled. Internally, although both STATE_DISABLED and
-> >  *		STATE_DEACTIVATED correspond to inactive targets, the latter is
-> >  *		due to automatic interface state changes and will try
-> >  *		recover automatically, if the interface comes back
-> >  *		online.
-> > 
+On Wed, Nov 12, 2025 at 09:51:35AM -0800, David Matlack wrote:
+> On Wed, Nov 12, 2025 at 9:40 AM Alex Mastro <amastro@fb.com> wrote:
+> >
+> > Hey David, is vfio_pci_driver_test known to be in good shape? Both on the base
+> > commit and after my series, I am seeing below, which results in a KSFT_SKIP.
+> > Invoking other tests in a similar way actually runs things with expected
+> > results (my devices are already bound to vfio-pci before running anything).
+> >
+> > base commit: 0ed3a30fd996cb0cac872432cf25185fda7e5316
+> >
+> > $ vfio_pci_driver_test -f 0000:05:00.0
+> > No driver found for device 0000:05:00.0
+> >
+> > Same thing using the run.sh wrapper
+> >
+> > $ sudo ./run.sh -d 0000:05:00.0 ./vfio_pci_driver_test
+> > + echo "0000:05:00.0" > /sys/bus/pci/drivers/vfio-pci/unbind
+> > + echo "vfio-pci" > /sys/bus/pci/devices/0000:05:00.0/driver_override
+> > + echo "0000:05:00.0" > /sys/bus/pci/drivers/vfio-pci/bind
+> >
+> > No driver found for device 0000:05:00.0
+> > + echo "0000:05:00.0" > /sys/bus/pci/drivers/vfio-pci/unbind
+> > + echo "" > /sys/bus/pci/devices/0000:05:00.0/driver_override
+> > + echo "0000:05:00.0" > /sys/bus/pci/drivers/vfio-pci/bind
+> >
+> > device = vfio_pci_device_init(device_bdf, default_iommu_mode);
+> > if (!device->driver.ops) {
+> >         fprintf(stderr, "No driver found for device %s\n", device_bdf);
+> >         return KSFT_SKIP;
+> > }
+> >
+> > Is this meant to be a placeholder for some future testing, or am I holding
+> > things wrong?
 > 
-> This is much clearer, thanks for the suggestion. 
+> What kind of device are you using?
 > 
-> > > +	ret = __netpoll_setup_hold(&nt->np, ndev);
-> > > +	if (ret) {
-> > > +		/* netpoll fails setup once, do not try again. */
-> > > +		nt->state = STATE_DISABLED;
-> > > +	} else {
-> > > +		nt->state = STATE_ENABLED;
-> > > +		pr_info("network logging resumed on interface %s\n",
-> > > +			nt->np.dev_name);
-> > > +	}
-> > > +}
-> > 
-> > I am not sure that helper is useful, I would simplify the last patch
-> > with this one and write something like:
-> > 
+> This test uses the selftests driver framework, so it requires a driver
+> in tools/testing/selftests/vfio/lib/drivers to function. The driver
+> framework allows tests to trigger real DMA and MSIs from the device in
+> a controlled, generic, way.
+
+Ah, TIL about that concept. This is with one of our internal compute
+accelerators, so not surprising that I'm seeing a skip then.
+
+> We currently only have drivers for Intel DSA and Intel CBDMA
+> devices.So if you're not using one of those devices,
+> vfio_pci_driver_test exiting with KSFT_SKIP is entirely expected.
 > 
-> The main reason why I opted for a helper in netpoll was to keep reference
-> tracking for these devices strictly inside netpoll and have simmetry between
-> setup and cleanup. Having said that, this might be an overkill and I'm fine with 
-> dropping the helper and taking your suggestion.
+> I would love to add support for more devices. Jason Gunthrope
+> suggested supporting a driver for mlx5 class hardware, since it's
+> broadly available. I've also had some discussions about adding a
+> simple emulated PCIe device to QEMU for running VFIO selftests within
+> VMs.
 
-Right, that makes sense. Would we have other owners for that function?
+I do have access to mlx5 hardware FWIW, so that would be cool.
 
-> 
-> > > +
-> > > +/* Check if the target was bound by mac address. */
-> > > +static bool bound_by_mac(struct netconsole_target *nt)
-> > > +{
-> > > +	return is_valid_ether_addr(nt->np.dev_mac);
-> > > +}
-> > 
-> > Awesome. I liked this helper. It might be useful it some other places, and
-> > eventually transformed into a specific type in the target (in case we need to
-> > in the future)
-> > 
-> > Can we use it egress_dev also? If so, please separate this in a separate patch.
-> 
-> In order to do that, we'd need to move bound_by_mac to netpolland make it available
-> to be called by netconsole. Let me know if you'd like me to do this in this series,
-> otherwise I'm also happy to refactor this separately from this series.
+Thanks for the explanation!
 
-Oh, I see the problem. That egress_dev() should belong to netconsole not
-netpoll.
-
-I've sent a patchset to start untangling netconsole and netpoll, and the
-patchset was conflicting with the fix in 'net' 
-
-https://lore.kernel.org/all/20250902-netpoll_untangle_v3-v1-0-51a03d6411be@debian.org/
-
-Let's keep egress_dev() as it is for now, until we got them untangled.
-
-> 
-> > > +		if (nt->state == STATE_DEACTIVATED && event == NETDEV_UP &&
-> > > +		    target_match(nt, dev))
-> > > +			list_move(&nt->list, &resume_list);
-> > 
-> > I think it would be better to move the nt->state == STATE_DEACTIVATED to target_match and use
-> > the case above. As the following:
-> > 
-> > 	if (nt->np.dev == dev) {
-> > 		switch (event) {
-> > 		case NETDEV_CHANGENAME:
-> > 		....
-> > 		case NETDEV_UP:
-> > 			if (target_match(nt, dev))
-> > 				list_move(&nt->list, &resume_list);
-> > 
-> 
-> We are not able to handle this inside this switch because when target got deactivated, 
-
-You are right, that is why we are doing the magic here. Please add
-a comment in saying that maybe_resume_target() is IRQ usafe, thus,
-cannot be called with IRQ disabled.
-
-> do_netpoll_cleanup sets nt->np.dev = NULL. Having said that, I can still move nt->state == STATE_DEACTIVATED
-> to inside target_match (maybe calling it deactivated_target_match) to make this slightly more readable. 
-
-Awesome. Thanks for the patch!
---breno
+Alex
 
