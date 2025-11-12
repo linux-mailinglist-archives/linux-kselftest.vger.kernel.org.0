@@ -1,107 +1,108 @@
-Return-Path: <linux-kselftest+bounces-45405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FB75C5200F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 12:34:44 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4FF4C51F8E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 12:29:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1CE918970E0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 11:29:22 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6AE2C34DA1D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 11:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FBE430F55F;
-	Wed, 12 Nov 2025 11:28:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1457030C364;
+	Wed, 12 Nov 2025 11:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jQVxioWc";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UcAd8N0D"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NviFA56M";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sw7uYIrj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3AE430FC07
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 11:28:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A32F30CDA5
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 11:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762946897; cv=none; b=GWnWBHOZ2ENIrdofGvbVhp/OzoVxzxDQxKGsEuBIKDXwO29BkTh9Y1du5kD0L0Ur73+cUNZbAnkH3+SOtALaYEQXAobMjw9cai8QKDTInKS2SKu4KVM/MpmNOihPA2i+tfbLBuqbZ1oiwxY0y1hiJc2id/QIZGBSdh7XECsapr8=
+	t=1762946965; cv=none; b=u+hJQXaUh4yQH1R0pJchDbeojppCiv3pTMLVJiAaLW3z8L7chWxxNLEP+pO3IaSaRSD8a7pwMz/eXdyTpdiwaKMVzLtTD+b/WM9teJnTOu3E2IEFymrEIO19ZAyqBrxEizK9ZqNYMxcGeHMMlDV6y0vFrghuU4iEjetSb5AhcKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762946897; c=relaxed/simple;
-	bh=w9b2RxEPIpBQFFaebpQtwOH3HfQgFg+EyEqHMhWr7p4=;
+	s=arc-20240116; t=1762946965; c=relaxed/simple;
+	bh=yRKl92YIodipSDJpj5FM6SuTiPvUzBXwPijlqgd2Fgo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fZrFzv7IInwJKh+qeMp3PKzTJxExi6pXqn4t+NPaMSHmGXIH7EPx3Dy0IhDANHQBs3uTMno+RuwWcKiswBU5LukhXTOQKW8zDt/4ENzuk4oaoVa1mOKqvqkKUpQy9r+BX7XlCzoNsUyYpePgzUqyIEImJzAxB7ijPL8y3fBdX0U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jQVxioWc; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UcAd8N0D; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=nVOaj32psDAY2glwp1F1gQSYNnV6uc4gnUDQoZn0V8zjrY56IE7gVvGg26J4TS1TbPGqIGA9V+Pt11EWMtTiVWh5tVM1MPEZpZ3VHiXY+Tf9ku5QtcJtKnCTsf/4M44biLp3AKxJBIBK7DZ2HmmLAgvO4pkof7mdHFhhSQMy9nU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NviFA56M; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sw7uYIrj; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762946895;
+	s=mimecast20190719; t=1762946962;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cXbr75syi7AqX8YAj0Uq0xwyVkaRbUdxvBGBY9PH2cY=;
-	b=jQVxioWcqTqSRT9YcOr+iMl0pjlcqzaEtV4Gtrs5FzVEnclIVWc0XjK8hfXP6tqpBQBV30
-	A5L9V0+4wxH1E2kEycn660zdD0UuT5n8M1Zp0RVcfMsxr0jdZlUceNkOR9kzbA/4ctke8g
-	dGfO41ZS35vIJvemyWD9gCEArD9dmS4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=g+0n/gIH659cLeiKRT95CYm5fjgEisAw12N4OwZEDpM=;
+	b=NviFA56MR+NxgJ+t3DyrYH9JWhLv1VHwW4lL2DTSgl50rqaY9qoxHqKVim4gl53XQ5ofhF
+	IC66nUOh8TNHQV4eFfG2ozk2geHHcFFrPbO11knGLNgFD5vh2h1ul3dG30IedZK3FYNPEK
+	HmUFDr29yhSMHnVUkWAKGMCG0lTQWII=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-376-KpxaGdeZMfCS6RLrl6YYJw-1; Wed, 12 Nov 2025 06:28:13 -0500
-X-MC-Unique: KpxaGdeZMfCS6RLrl6YYJw-1
-X-Mimecast-MFC-AGG-ID: KpxaGdeZMfCS6RLrl6YYJw_1762946893
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-88233d526baso22274246d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 03:28:13 -0800 (PST)
+ us-mta-433-h_A4rnOeOnOEOB6JbGSH6w-1; Wed, 12 Nov 2025 06:29:21 -0500
+X-MC-Unique: h_A4rnOeOnOEOB6JbGSH6w-1
+X-Mimecast-MFC-AGG-ID: h_A4rnOeOnOEOB6JbGSH6w_1762946961
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8b22ab98226so390231585a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 03:29:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762946893; x=1763551693; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1762946961; x=1763551761; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cXbr75syi7AqX8YAj0Uq0xwyVkaRbUdxvBGBY9PH2cY=;
-        b=UcAd8N0DErhar9fdaQ1F4OZvc0G/9LAs90XoqqiIbWoJH0uZtg13duTIZvta02E2Ek
-         DNkdX8YCAy/7sUjbliF4Q+YEv09aTx47g3wFEI2kbofCZZEvREnlrqXbwUybF70bcq/I
-         FwhfCScCXEK6gpUfdlQgrATTnkq/yoCpaOiJ4KkIqX86YAGfc4Ktb6hf0JeU5JyPY568
-         nKYiZUMrcHZY1k/b4NcrgTSEyE/NdXrDnOy5+yhTcTCXp0sXvxTWGdGRJyEtuL1i59cS
-         OzMGdDgR+DJ08RZsDDl4f1/5exMr5xYUtjo6Knj1Gki/qcYtt3DnYoX7gIfRYZTIU34d
-         iCnw==
+        bh=g+0n/gIH659cLeiKRT95CYm5fjgEisAw12N4OwZEDpM=;
+        b=Sw7uYIrjM0tzjrD9llhmKwn/SWdZeO+/kO9yRelMZ/jMfRPh3vo5YP6O3VfC2LLLQE
+         QyvVeAP7YtA5Pe5lngsix2DCa1u54jXCt8PCssV17QfVWhHPsazRC0ZVsxnnMA4yIzC9
+         C7GkHhtgjBAUQ9k29/8Sf01/cryBfKcvrl7AK7WBnJd9Rr2UaVwJi813hidaRfKeP7/D
+         AJHBU0qhijNha2tfM8tCTU6wCUq4JkczN/76MLRfUEM9PfcUOAbV/dniIGb21iwEshhR
+         tY56JYddiKao4OJspNZ2ZNTI8GGkBi8BBNrGy3a4A2Zaaxrsx+0WRtJFOoF5EABhCx2q
+         W8DQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762946893; x=1763551693;
+        d=1e100.net; s=20230601; t=1762946961; x=1763551761;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cXbr75syi7AqX8YAj0Uq0xwyVkaRbUdxvBGBY9PH2cY=;
-        b=Mecxb+RQr0FfHPq7/zBJPpFDMn1WUA9+dqks/Me43w77vxHlFUpnx4NZpz1GIL9iRA
-         SKC0+/lD0nyisWiTsc90v/dL76WU8l+mkjdekEsYEAFCooRtSfFdyhayBy5PMV2M2o4V
-         8ZTvgBBV/Jiuv7l43E1ILjVwgB7IAK8uM+dmnWeAm1+IlUQhpmbpta9MGIPZCKHrI1wG
-         GP9ogQ/iKDbxPRslbvrUysaBVQjNTv2k6bUWrFuEp85RTDX3RKmXIYnQsMqeA3Cnr/Bw
-         JQc1pjNIxshcDkUn6Wi2y+x07wIvN0F+aVma5aFfv0Zc4xa/6RK82ayMsF6L3iHNYJRq
-         L4Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCVA6P8XtRy8AB5si7PAIhkvgJ5CsJqJBJSFhMS59KqyIMDk5WXuBeliP0R+LtL/Lvn5eDd8tcf0tRPREElyodc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfjMN6DXHxL0AEP63D0JSYjLEMpXkpIXLmip76KIu8c4SN5DZD
-	hZdLZNfWaNKc94RBIAVq5VGr6oXdShb/zbzfE+YnhwMFVY36hTpgqqYmhOQAmOgQMi87RsDdQBy
-	pAbSK2Gb1wtvGPpnWo8GXp1S6zf15qg5OXFNJM5j1U+EhtwAEJdSrv756txye1prlaxHtGw==
-X-Gm-Gg: ASbGncs7ry8tpFDLFz3gJ4thCJeFcPRJr2aloyASBMKXQ0AxLI2Tmvg5Iijx/C3MeTR
-	BJ8jBtpWocTRBwRkkcCm38EJ1cpO3xeZ4a4YUuP1IQGKZTUVU46U9uCv2qlM1fS1DrPwo/4NbLG
-	iJAsqNzgTXGZjPXuoMta7xohqYOEb5FaDHzgIzg1rw0swDFomO3KYiPc+MNo37WLVkHVdhk59d0
-	dF1dq4kpAyyr5OWLy1+ov0zxRRd+8idlPrjUGIlslWYCao3uIt8I03ytvRRxThfKtx7crJdN9/o
-	gc6h/POs6Hvh/dsg7MNmsLgOywEXgTV+TwmqHLzcHC5ET2n8HGgkuW3ZOuF0FG/rcCyhajUaxps
-	amXalGufMafi/5S443rl/GkOEKbU/VqFfmMrknXTYc/3ZrozIv/k=
-X-Received: by 2002:a05:6214:2248:b0:880:298b:3a6d with SMTP id 6a1803df08f44-88271a2a00emr36353016d6.35.1762946893353;
-        Wed, 12 Nov 2025 03:28:13 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGnA7ozYlvXHQMnpycDhkhnMaFa5erx7IOPg689k7NBMlvaatOo3MEwHXk4xMfYTAwAfX3oqA==
-X-Received: by 2002:a05:6214:2248:b0:880:298b:3a6d with SMTP id 6a1803df08f44-88271a2a00emr36352786d6.35.1762946892999;
-        Wed, 12 Nov 2025 03:28:12 -0800 (PST)
+        bh=g+0n/gIH659cLeiKRT95CYm5fjgEisAw12N4OwZEDpM=;
+        b=Q0tckZg63BdOCgMU0XO6ShXs8o96zz/cEyO5Pg+xwpZWvrRJKuWkAQly1MLJ0iQpzD
+         epz+42XRjYS+0EIyI4JLRnD+w72CsSSL5gR2L8IkmaKfgAkLsL+MUnYKjogpX5kVfqT8
+         L6xA7ZSs6tJ7ghCYHbD8dOCkXbF4InePpabdO7NqpkyoMwHeyVUhSJTCK4fHUm43Bsjy
+         NB1asyCsQzd/Q7JoOn/BM1Ikb9YkQ/GxtX8+p4bGKn0VBXL7qOVhT9afhsiCWJx4pOPn
+         k5bYOJ7tBVCDywpxw1DxFC0eBTFnxJTVPfCEAROAf0wFivdEDjQyXcgQqYClCR2XhP2b
+         /X/w==
+X-Forwarded-Encrypted: i=1; AJvYcCUhrMFy7gMj5xeuWVTASLL6i9KmEOl6kiNVqVCQmrTPCHAoTpGsupdCdAITNav34E0q0SlhLfBzVhr/rfzTXrY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZP9Xy0N9EVJLh0qIQ7AMfD14X265kzWRQ7JuDfULK3x8aDJ77
+	PXa+aWog2U0RmrSwzfm6xGy5XsChnP7NzVBguDbZZHqpMXeuVTffDbWohZc7wPfatIVnDz0csRt
+	tZhsY9FXuFFiYX7+FwzhOGGec/lOpsN1VmUhX59wI52zdtn01MDzOToPERgpR/pH0QVkycg==
+X-Gm-Gg: ASbGncsbyUy5+MlrjrAGDxio4jeU0+FNVr8ua6ls4FQ2AYaQmE+1u8pTWTaWHAIQS6X
+	6SFvfqLMziXHWOAmZh4FglLV4VAJMQ54qX/OZCztERsb+mBaZmF6F15zTybAGIh0SJYaw7hIPto
+	ISww9V1WMHWUYk06NyduGyr4NEvjEtew9hZEX/JbiYfFiyYVcLMTBxn1mSqrJqtdNn44SybPVjR
+	Qu1+Y8FjJ1u9B+4cf+kY2wrOY/tC2QhxlazkUdYOthSlbkCLx3nQec/olv+r5yCkCq3gZZV+lBJ
+	PhcJl8lkzRn8lAP07p6pQARsPO6FTEObBOJSW0JGVPrm/rHZTX0awtA+2DlehBGsB/QZ9molUKe
+	bc4E6HUyNfcwS7epmFSsACzIJT/FIOpTQmx0drplvlz1jBdWDSbU=
+X-Received: by 2002:a05:620a:288d:b0:854:b9a1:b478 with SMTP id af79cd13be357-8b29b764a91mr352965485a.18.1762946960679;
+        Wed, 12 Nov 2025 03:29:20 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHUJFxOJbDQYyH5iAisGFENmrwrjD8S/tLmssJoauTGvGRsQ2OlHPKZyUfeC9cCLoY0kaU2QQ==
+X-Received: by 2002:a05:620a:288d:b0:854:b9a1:b478 with SMTP id af79cd13be357-8b29b764a91mr352963785a.18.1762946960297;
+        Wed, 12 Nov 2025 03:29:20 -0800 (PST)
 Received: from sgarzare-redhat (host-79-46-200-153.retail.telecomitalia.it. [79.46.200.153])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8823896a8d9sm92866156d6.17.2025.11.12.03.28.11
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b29a9e7059sm172313385a.38.2025.11.12.03.29.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 03:28:12 -0800 (PST)
-Date: Wed, 12 Nov 2025 12:28:08 +0100
+        Wed, 12 Nov 2025 03:29:19 -0800 (PST)
+Date: Wed, 12 Nov 2025 12:29:12 +0100
 From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Simon Horman <horms@kernel.org>, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v4 12/12] selftests/vsock: disable shellcheck
- SC2317 and SC2119
-Message-ID: <r5uyojkue5zgoiixgmrjoew6pe6p7jzhd4hsudoxdirwummht3@fclnufaabg6g>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Bobby Eshleman <bobbyeshleman@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Simon Horman <horms@kernel.org>, 
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v4 00/12] selftests/vsock: refactor and improve
+ vmtest infrastructure
+Message-ID: <3htkg6jotej6ev35jyc7edo6jtoo6tm7ciivnzvd7rd4my4nsp@47nbily4raoi>
 References: <20251108-vsock-selftests-fixes-and-improvements-v4-0-d5e8d6c87289@meta.com>
- <20251108-vsock-selftests-fixes-and-improvements-v4-12-d5e8d6c87289@meta.com>
+ <d19c7bea-9b4d-4f00-a6bc-35247011e788@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -110,42 +111,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20251108-vsock-selftests-fixes-and-improvements-v4-12-d5e8d6c87289@meta.com>
+In-Reply-To: <d19c7bea-9b4d-4f00-a6bc-35247011e788@redhat.com>
 
-On Sat, Nov 08, 2025 at 08:01:03AM -0800, Bobby Eshleman wrote:
->From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Tue, Nov 11, 2025 at 01:33:11PM +0100, Paolo Abeni wrote:
+>On 11/8/25 5:00 PM, Bobby Eshleman wrote:
+>> This patch series refactors the vsock selftest VM infrastructure to
+>> improve test run times, improve logging, and prepare for future tests
+>> which make heavy usage of these refactored functions and have new
+>> requirements such as simultaneous QEMU processes.
+>>
+>> These patches were broken off from this prior series:
+>> https://lore.kernel.org/all/20251021-vsock-vmtest-v7-0-0661b7b6f081@meta.com/
+>>
+>> To: Stefano Garzarella <sgarzare@redhat.com>
+>> To: Shuah Khan <shuah@kernel.org>
+>> Cc: virtualization@lists.linux.dev
+>> Cc: netdev@vger.kernel.org
+>> Cc: linux-kselftest@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Cc: Simon Horman <horms@kernel.org>
+>>
+>> Changes in v4:
+>> - fix messed up rebase (wrt check_result() and shared_vm_test() patches)
+>> - more consistent variable quotes style
+>> - use associative array for pidfiles, remove after terminate
+>> - Link to v3: https://lore.kernel.org/r/20251106-vsock-selftests-fixes-and-improvements-v3-0-519372e8a07b@meta.com
+>>
+>> Changes in v3:
+>> - see per-patch changes
+>> - Link to v2: https://lore.kernel.org/all/20251104-vsock-selftests-fixes-and-improvements-v2-0-ca2070fd1601@meta.com
+>>
+>> Changes in v2:
+>> - remove "Fixes" for some patches because they do not fix bugs in
+>>   kselftest runs (some fix bugs only when using bash args that kselftest
+>>   does not use or otherwise prepare functions for new usage)
+>> - broke out one fixes patch for "net"
+>> - per-patch changes
+>> - add patch for shellcheck declaration to disable false positives
+>> - Link to v1: https://lore.kernel.org/r/20251022-vsock-selftests-fixes-and-improvements-v1-0-edeb179d6463@meta.com
 >
->Disable shellcheck rules SC2317 and SC2119. These rules are being
->triggered due to false positives. For SC2317, many `return
->"${KSFT_PASS}"` lines are reported as unreachable, even though they are
->executed during normal runs. For SC2119, the fact that
->log_guest/log_host accept either stdin or arguments triggers SC2119,
->despite being valid.
->
->Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->---
-> tools/testing/selftests/vsock/vmtest.sh | 2 ++
-> 1 file changed, 2 insertions(+)
+>Series LGTM, but let's wait a little bit more for explicit ack from Stefano.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Sorry for the delay, yep it LGTM too and I should replied with my R-b to 
+all patches. In any case, it can go IMO.
 
->
->diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
->index 42e155b45602..c7b270dd77a9 100755
->--- a/tools/testing/selftests/vsock/vmtest.sh
->+++ b/tools/testing/selftests/vsock/vmtest.sh
->@@ -7,6 +7,8 @@
-> #		* virtme-ng
-> #		* busybox-static (used by virtme-ng)
-> #		* qemu	(used by virtme-ng)
->+#
->+# shellcheck disable=SC2317,SC2119
->
-> readonly SCRIPT_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
-> readonly KERNEL_CHECKOUT=$(realpath "${SCRIPT_DIR}"/../../../../)
->
->-- 
->2.47.3
->
+Thanks,
+Stefano
 
 
