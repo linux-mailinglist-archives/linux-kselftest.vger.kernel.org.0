@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-45454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45455-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDE1CC542B2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 20:37:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 924EFC5427A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 20:34:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E9AF3B84F0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 19:25:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A91E43BC0C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 19:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E96613538BB;
-	Wed, 12 Nov 2025 19:23:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63329354717;
+	Wed, 12 Nov 2025 19:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DjMejYYJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0C1eI0oX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7ABA3538A6
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 19:23:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89EC535292C
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 19:23:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762975387; cv=none; b=YZA2NoGpkoEao/+BvhNVxeBYEoxS2yCN9lX3uVGX2sSN/uS0ysKTSJQiVyg8JCBCowAmzY2TpJJzwGtxSdcQusjFO3SOJUk/vNXMmNgJ1Ju7dr6z+ke0W5rs6f6UYj7dlxrirgSRZcG5P5Mp+lk5bwWzZwKLohZatyDYVvIvUFY=
+	t=1762975389; cv=none; b=kMJ4vpu666ZuUkGZNoQzgyASOSQsSHUr5MszAPQSLhtLwaFsV75sphOjkPf2YFxw6tcGcK5MiXQ6yhd/1ByhlzZhPymB0Ql4VffYkpQZwpgp1sFw6nN+BUWqjrujHa1av/HR8IydYtYI00h7VMpfrWRCVmCkAHFhACBfIVAdNqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762975387; c=relaxed/simple;
-	bh=ziyqjUHtKMrKVd0zgnNDhJCsoHFy7brURyeLh0BmOG4=;
+	s=arc-20240116; t=1762975389; c=relaxed/simple;
+	bh=SlxKyy8oGH9AOgazMhe2QdY/23hnybCjV1OgXyTJ4gE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=JI8p0swybcE2qqgWFReh80xTqSxQ0yxK7B/wJtpZ58AnZ6znRSWr+3tNGwqVnkkSFDiSasOhyjvTgpPfd6ecTVrWxH0xl9CVvhOdQPxz/ez74whiplggx1NvhCQ1/DjGQ2HBNmMcKK5OLT3/O6v3VLoNlSWKEhGmIeDBREoF7BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DjMejYYJ; arc=none smtp.client-ip=209.85.210.202
+	 To:Cc:Content-Type; b=gQxLs+oTmiEntARzdQm7m2pRIB3xL4GKEddmvWWRWz0RZm/QVBTvKxq+Z9tdAOQCh32yT4pFjoNRTvuNtwXgV+4tEMna62ZZ62eJSRMPuxUG1zeer/DMq8PNk52jt+RW2UI5N1UZXP0OscwZYSu34xk9VqpiwCuDY38fnhFbMSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0C1eI0oX; arc=none smtp.client-ip=209.85.215.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
-Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7b0e73b0f52so2384087b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 11:23:04 -0800 (PST)
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b471737e673so11845a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 11:23:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762975384; x=1763580184; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1762975386; x=1763580186; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QDUM2NK15b4A5lvtiNxBQOB3nHinOOh+D9L4COyosKw=;
-        b=DjMejYYJ7ivyQLPWl+f8/P4SKUQ6KHoS7WtzrCJYB31srMxFI0Qgtj1YtlwT3JcyqY
-         jGIBCqjfx5s9QOYGlaTsI1GDhjWPtAC1+u56m5ghbuU/hHPHG0sF+LUX7pNTpZk2tMyl
-         5JgVBoZFRi5gyXk0XIclqoGr4PEwuejfTFzlitgztPIR5Jp8oHgzj7k6FB3M7p6EnOl9
-         WBorFGzCUsmeHrfAfpf79JeMxz2AHlJqagjW9Dt6RHZHLzNt6hKCeHqv/PNayqbqh43N
-         UusQsJO6YLY+1CESTev90v0SZ5hk2LvFD3ZA/jDapkAu6n4YgufF8rYQVFS5EfMgM9Cb
-         eTHw==
+        bh=Kl4dnG1uPmBI4Dj/q7R4tdouJJ9NgauEmgKL1z09vYo=;
+        b=0C1eI0oXtzqLpxewyWg/zvLQ5aCcXtxZgCAGJ/by2f4C23YfbcA95PHzaL5/NzJguy
+         9tmpR/jV//F3koY47MxY3oanlnjqKtYAVPSUkoCacNCTkuhjAT4JLc9/B6wo11r3nxm7
+         5V3mXsaZ9hp6LK17A2Pyp7+oL2KdvTTKAHfI7a7Ch8qOo7T2gvmcT9CYsDCtyErk88HY
+         EIZ8ECHytnWwl45n1t8IkeqSZtQdcJhzNUgwqJqFovB8n+Hd7tOca1obXl1n075PI/87
+         YyvDlKGdKvKn8leNOooOS/M0cv836bILlxrt0PsrM7PbqZkfz/UPZd3JZOkWooHpt48r
+         GChA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762975384; x=1763580184;
+        d=1e100.net; s=20230601; t=1762975386; x=1763580186;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QDUM2NK15b4A5lvtiNxBQOB3nHinOOh+D9L4COyosKw=;
-        b=FTdHIybJqoj3qTw4cQmAz2H+TxoLa5Oa9sMslx9rqFUSzYEpYP2rubRudAcaVZVPtU
-         I8U7wlMgpc5OEy62en5Yn2tx7bxhkykD/tyKOqhWbWl+k43KO0+3ZyOkd/xbYtJ5Rcky
-         7CMOa4vq1NusKqjuhqRg6/CPI8HfHvXSfP7Y7ZCQAZ0UHHnkrIX3zvWVGPYtc8dMmk0a
-         gU6GKqUGlqnMnsRS/4OWLrv4Bc5rRSrUjCB7yO56k9zZ/3l9+k16eXMw3Ppngiks8vB5
-         KuZRO0VVTWeWSDbCWJJTgcM+pM33y+4hwWhk+EdeR9uFCn+xGEvna2DKPIHURk476rtU
-         avMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWeXyJ60bdDaByWOjlkjVsQSYJvyyxDMRXilM38utorSKgYPm5+VZAEcVcKp6T8ILqMAGLSMCX8hl9WGJnhQYk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyzcKC8dUwbkm7xj5B98rBtKGI0ZIAwggqj3tgG5CQHpzAOW5w
-	67aTQYgbGou/0w6T0Af9j2BbGqItXGlhtqWmMryaOLv75cxnA4SupXmmokrS2PlSFORygBYDSqQ
-	CoXKvaF1HOJKIKQ==
-X-Google-Smtp-Source: AGHT+IEMXPRZlnocl6XkYY/pmIh7xcdwjbJWrd6xHc+Z+8UgXczaFCv9IRoJlhqyQP3H4kW5w1K5ojzUHkCJZw==
-X-Received: from pfuf34.prod.google.com ([2002:a05:6a00:b22:b0:77c:6e29:42af])
+        bh=Kl4dnG1uPmBI4Dj/q7R4tdouJJ9NgauEmgKL1z09vYo=;
+        b=gxYKUslp8Erb54AnYCcyI8ivUbyCLpE1LYEMBmeUib1CcMtnq2paj53suENJi+s/W9
+         lc6/hageRTVdjlDSQs7H8oJLKQwMVXmBDa07uL4KB2jvLANyyu77KSCSFiI88zCsIOsd
+         ZiW4BFcF9rPvXVN23clGvDV+zjfF0pwdrD4AqWwegWG4/jkX57D+YpX6/Rrg1FI+yckj
+         ic98MkU19ktto/UBuvKP6CA2ggNPF8xCrfoBNlNSpXHNGpedK0BBUwT0v5Y/J2XdVflx
+         c7i4BqQ9561GcDxUDHJUN5l40pK6f0cbjoSEnDAuBs7tc7EROo//gbvfbAFLTT6lKFc9
+         aB3g==
+X-Forwarded-Encrypted: i=1; AJvYcCXaonUNq2a1UvLM0MmdW6eWhbEfakrRs5BevQQil63a5cE7YVJJGcSNjpayQ1wPOzP7wKSAgdnQst5Hu88fen8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcN+TpwGSHj9yxYExhnt2Ocqh6e/ckoUQtdxXsqKwocxJYNEMD
+	+wYqVl7SDMxE52kQ3a/NFJyhxGUtlioVH+8sM2N0P8kJvFj1/0reI+w1f3gmIM4hz085R/iZOFX
+	GFyT5o2huVSZGcw==
+X-Google-Smtp-Source: AGHT+IEZIP9v/Os4raitXR3ccHA+MFQ26VDb0zn4z4lb+kU/9GjiM2FCWiiFc+zk9W9U21/lcYdl5KGclegMGA==
+X-Received: from pfhx36.prod.google.com ([2002:a05:6a00:18a4:b0:793:b157:af4f])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:7346:b0:343:3d3c:4685 with SMTP id adf61e73a8af0-3590988af94mr5335213637.18.1762975384015;
- Wed, 12 Nov 2025 11:23:04 -0800 (PST)
-Date: Wed, 12 Nov 2025 19:22:27 +0000
+ 2002:a05:6a20:6a05:b0:350:7238:7e2b with SMTP id adf61e73a8af0-35909696a00mr5195916637.16.1762975385707;
+ Wed, 12 Nov 2025 11:23:05 -0800 (PST)
+Date: Wed, 12 Nov 2025 19:22:28 +0000
 In-Reply-To: <20251112192232.442761-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251112192232.442761-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251112192232.442761-14-dmatlack@google.com>
-Subject: [PATCH v2 13/18] vfio: selftests: Stop passing device for IOMMU operations
+Message-ID: <20251112192232.442761-15-dmatlack@google.com>
+Subject: [PATCH v2 14/18] vfio: selftests: Rename vfio_util.h to libvfio.h
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex.williamson@redhat.com>
 Cc: Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>, 
@@ -85,237 +85,177 @@ Cc: Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>,
 	Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Drop the struct vfio_pci_device wrappers for IOMMU map/unmap functions
-and require tests to directly call iommu_map(), iommu_unmap(), etc. This
-results in more concise code, and also makes it clear the map operations
-are happening on a struct iommu, not necessarily on a specific device,
-especially when multi-device tests are introduced.
+Rename vfio_util.h to libvfio.h to match the name of libvfio.mk.
 
-Do the same for iova_allocator_init() as that function only needs the
-struct iommu, not struct vfio_pci_device.
+No functional change intended.
 
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- .../selftests/vfio/lib/include/vfio_util.h    | 44 +------------------
- .../selftests/vfio/lib/iova_allocator.c       |  4 +-
- .../selftests/vfio/vfio_dma_mapping_test.c    | 20 ++++-----
- .../selftests/vfio/vfio_pci_driver_test.c     | 19 ++++----
- 4 files changed, 22 insertions(+), 65 deletions(-)
+ tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c          | 2 +-
+ tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c        | 2 +-
+ .../selftests/vfio/lib/include/{vfio_util.h => libvfio.h}   | 6 +++---
+ tools/testing/selftests/vfio/lib/iommu.c                    | 2 +-
+ tools/testing/selftests/vfio/lib/iova_allocator.c           | 2 +-
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c          | 2 +-
+ tools/testing/selftests/vfio/lib/vfio_pci_driver.c          | 2 +-
+ tools/testing/selftests/vfio/vfio_dma_mapping_test.c        | 2 +-
+ tools/testing/selftests/vfio/vfio_iommufd_setup_test.c      | 2 +-
+ tools/testing/selftests/vfio/vfio_pci_device_test.c         | 2 +-
+ tools/testing/selftests/vfio/vfio_pci_driver_test.c         | 2 +-
+ 11 files changed, 13 insertions(+), 13 deletions(-)
+ rename tools/testing/selftests/vfio/lib/include/{vfio_util.h => libvfio.h} (98%)
 
-diff --git a/tools/testing/selftests/vfio/lib/include/vfio_util.h b/tools/testing/selftests/vfio/lib/include/vfio_util.h
-index f67915d9443e..5224808201fe 100644
+diff --git a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
+index 0afbab0d82de..c75045bcab79 100644
+--- a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
++++ b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
+@@ -9,7 +9,7 @@
+ #include <linux/pci_ids.h>
+ #include <linux/sizes.h>
+ 
+-#include <vfio_util.h>
++#include <libvfio.h>
+ 
+ #include "registers.h"
+ 
+diff --git a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
+index c6db311ce64d..a871b935542b 100644
+--- a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
++++ b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
+@@ -7,7 +7,7 @@
+ #include <linux/pci_ids.h>
+ #include <linux/sizes.h>
+ 
+-#include <vfio_util.h>
++#include <libvfio.h>
+ 
+ #include "hw.h"
+ #include "registers.h"
+diff --git a/tools/testing/selftests/vfio/lib/include/vfio_util.h b/tools/testing/selftests/vfio/lib/include/libvfio.h
+similarity index 98%
+rename from tools/testing/selftests/vfio/lib/include/vfio_util.h
+rename to tools/testing/selftests/vfio/lib/include/libvfio.h
+index 5224808201fe..3027af15e316 100644
 --- a/tools/testing/selftests/vfio/lib/include/vfio_util.h
-+++ b/tools/testing/selftests/vfio/lib/include/vfio_util.h
-@@ -260,52 +260,10 @@ void vfio_pci_device_cleanup(struct vfio_pci_device *device);
++++ b/tools/testing/selftests/vfio/lib/include/libvfio.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0-only */
+-#ifndef SELFTESTS_VFIO_LIB_INCLUDE_VFIO_UTIL_H
+-#define SELFTESTS_VFIO_LIB_INCLUDE_VFIO_UTIL_H
++#ifndef SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_H
++#define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_H
  
- void vfio_pci_device_reset(struct vfio_pci_device *device);
+ #include <fcntl.h>
+ #include <string.h>
+@@ -352,4 +352,4 @@ void vfio_pci_driver_memcpy_start(struct vfio_pci_device *device,
+ int vfio_pci_driver_memcpy_wait(struct vfio_pci_device *device);
+ void vfio_pci_driver_send_msi(struct vfio_pci_device *device);
  
--static inline struct iommu_iova_range *vfio_pci_iova_ranges(struct vfio_pci_device *device,
--							    u32 *nranges)
--{
--	return iommu_iova_ranges(device->iommu, nranges);
--}
--
--struct iova_allocator *iova_allocator_init(struct vfio_pci_device *device);
-+struct iova_allocator *iova_allocator_init(struct iommu *iommu);
- void iova_allocator_cleanup(struct iova_allocator *allocator);
- iova_t iova_allocator_alloc(struct iova_allocator *allocator, size_t size);
+-#endif /* SELFTESTS_VFIO_LIB_INCLUDE_VFIO_UTIL_H */
++#endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_H */
+diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
+index 3933079fc419..52f9cdf5f171 100644
+--- a/tools/testing/selftests/vfio/lib/iommu.c
++++ b/tools/testing/selftests/vfio/lib/iommu.c
+@@ -19,7 +19,7 @@
+ #include <linux/iommufd.h>
  
--static inline int __vfio_pci_dma_map(struct vfio_pci_device *device,
--				     struct dma_region *region)
--{
--	return __iommu_map(device->iommu, region);
--}
--
--static inline void vfio_pci_dma_map(struct vfio_pci_device *device,
--				    struct dma_region *region)
--{
--	VFIO_ASSERT_EQ(__vfio_pci_dma_map(device, region), 0);
--}
--
--static inline int __vfio_pci_dma_unmap(struct vfio_pci_device *device,
--				       struct dma_region *region,
--				       u64 *unmapped)
--{
--	return __iommu_unmap(device->iommu, region, unmapped);
--}
--
--static inline void vfio_pci_dma_unmap(struct vfio_pci_device *device,
--				      struct dma_region *region)
--{
--	VFIO_ASSERT_EQ(__vfio_pci_dma_unmap(device, region, NULL), 0);
--}
--
--static inline int __vfio_pci_dma_unmap_all(struct vfio_pci_device *device,
--					   u64 *unmapped)
--{
--	return __iommu_unmap_all(device->iommu, unmapped);
--}
--
--static inline void vfio_pci_dma_unmap_all(struct vfio_pci_device *device)
--{
--	VFIO_ASSERT_EQ(__vfio_pci_dma_unmap_all(device, NULL), 0);
--}
--
- void vfio_pci_config_access(struct vfio_pci_device *device, bool write,
- 			    size_t config, size_t size, void *data);
+ #include "../../../kselftest.h"
+-#include <vfio_util.h>
++#include <libvfio.h>
+ 
+ const char *default_iommu_mode = "iommufd";
  
 diff --git a/tools/testing/selftests/vfio/lib/iova_allocator.c b/tools/testing/selftests/vfio/lib/iova_allocator.c
-index f03648361ba2..b3b6b27f5d1e 100644
+index b3b6b27f5d1e..a12b0a51e9e6 100644
 --- a/tools/testing/selftests/vfio/lib/iova_allocator.c
 +++ b/tools/testing/selftests/vfio/lib/iova_allocator.c
-@@ -21,13 +21,13 @@
+@@ -19,7 +19,7 @@
+ #include <linux/types.h>
+ #include <linux/vfio.h>
  
- #include <vfio_util.h>
+-#include <vfio_util.h>
++#include <libvfio.h>
  
--struct iova_allocator *iova_allocator_init(struct vfio_pci_device *device)
-+struct iova_allocator *iova_allocator_init(struct iommu *iommu)
+ struct iova_allocator *iova_allocator_init(struct iommu *iommu)
  {
- 	struct iova_allocator *allocator;
- 	struct iommu_iova_range *ranges;
- 	u32 nranges;
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index a59c86797897..282c14bbdd00 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -20,7 +20,7 @@
+ #include <linux/vfio.h>
  
--	ranges = vfio_pci_iova_ranges(device, &nranges);
-+	ranges = iommu_iova_ranges(iommu, &nranges);
- 	VFIO_ASSERT_NOT_NULL(ranges);
+ #include "../../../kselftest.h"
+-#include <vfio_util.h>
++#include <libvfio.h>
  
- 	allocator = malloc(sizeof(*allocator));
+ #define PCI_SYSFS_PATH	"/sys/bus/pci/devices"
+ 
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+index abb7a62a03ea..ca0e25efbfa1 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include "../../../kselftest.h"
+-#include <vfio_util.h>
++#include <libvfio.h>
+ 
+ #ifdef __x86_64__
+ extern struct vfio_pci_driver_ops dsa_ops;
 diff --git a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-index 289af4665803..c4c2fc36c7b3 100644
+index c4c2fc36c7b3..213fcd8dcc79 100644
 --- a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
 +++ b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-@@ -122,7 +122,7 @@ FIXTURE_SETUP(vfio_dma_mapping_test)
- {
- 	self->iommu = iommu_init(variant->iommu_mode);
- 	self->device = vfio_pci_device_init(device_bdf, self->iommu);
--	self->iova_allocator = iova_allocator_init(self->device);
-+	self->iova_allocator = iova_allocator_init(self->iommu);
- }
+@@ -10,7 +10,7 @@
+ #include <linux/sizes.h>
+ #include <linux/vfio.h>
  
- FIXTURE_TEARDOWN(vfio_dma_mapping_test)
-@@ -153,7 +153,7 @@ TEST_F(vfio_dma_mapping_test, dma_map_unmap)
- 	region.iova = iova_allocator_alloc(self->iova_allocator, size);
- 	region.size = size;
+-#include <vfio_util.h>
++#include <libvfio.h>
  
--	vfio_pci_dma_map(self->device, &region);
-+	iommu_map(self->iommu, &region);
- 	printf("Mapped HVA %p (size 0x%lx) at IOVA 0x%lx\n", region.vaddr, size, region.iova);
+ #include "../kselftest_harness.h"
  
- 	ASSERT_EQ(region.iova, to_iova(self->device, region.vaddr));
-@@ -195,7 +195,7 @@ TEST_F(vfio_dma_mapping_test, dma_map_unmap)
- 	}
+diff --git a/tools/testing/selftests/vfio/vfio_iommufd_setup_test.c b/tools/testing/selftests/vfio/vfio_iommufd_setup_test.c
+index 3655106b912d..caf1c6291f3d 100644
+--- a/tools/testing/selftests/vfio/vfio_iommufd_setup_test.c
++++ b/tools/testing/selftests/vfio/vfio_iommufd_setup_test.c
+@@ -10,7 +10,7 @@
+ #include <sys/ioctl.h>
+ #include <unistd.h>
  
- unmap:
--	rc = __vfio_pci_dma_unmap(self->device, &region, &unmapped);
-+	rc = __iommu_unmap(self->iommu, &region, &unmapped);
- 	ASSERT_EQ(rc, 0);
- 	ASSERT_EQ(unmapped, region.size);
- 	printf("Unmapped IOVA 0x%lx\n", region.iova);
-@@ -245,7 +245,7 @@ FIXTURE_SETUP(vfio_dma_map_limit_test)
- 			     MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
- 	ASSERT_NE(region->vaddr, MAP_FAILED);
+-#include <vfio_util.h>
++#include <libvfio.h>
+ #include "../kselftest_harness.h"
  
--	ranges = vfio_pci_iova_ranges(self->device, &nranges);
-+	ranges = iommu_iova_ranges(self->iommu, &nranges);
- 	VFIO_ASSERT_NOT_NULL(ranges);
- 	last_iova = ranges[nranges - 1].last;
- 	free(ranges);
-@@ -268,10 +268,10 @@ TEST_F(vfio_dma_map_limit_test, unmap_range)
- 	u64 unmapped;
- 	int rc;
+ static const char iommu_dev_path[] = "/dev/iommu";
+diff --git a/tools/testing/selftests/vfio/vfio_pci_device_test.c b/tools/testing/selftests/vfio/vfio_pci_device_test.c
+index e95217933c6b..ecbb669b3765 100644
+--- a/tools/testing/selftests/vfio/vfio_pci_device_test.c
++++ b/tools/testing/selftests/vfio/vfio_pci_device_test.c
+@@ -10,7 +10,7 @@
+ #include <linux/sizes.h>
+ #include <linux/vfio.h>
  
--	vfio_pci_dma_map(self->device, region);
-+	iommu_map(self->iommu, region);
- 	ASSERT_EQ(region->iova, to_iova(self->device, region->vaddr));
+-#include <vfio_util.h>
++#include <libvfio.h>
  
--	rc = __vfio_pci_dma_unmap(self->device, region, &unmapped);
-+	rc = __iommu_unmap(self->iommu, region, &unmapped);
- 	ASSERT_EQ(rc, 0);
- 	ASSERT_EQ(unmapped, region->size);
- }
-@@ -282,10 +282,10 @@ TEST_F(vfio_dma_map_limit_test, unmap_all)
- 	u64 unmapped;
- 	int rc;
- 
--	vfio_pci_dma_map(self->device, region);
-+	iommu_map(self->iommu, region);
- 	ASSERT_EQ(region->iova, to_iova(self->device, region->vaddr));
- 
--	rc = __vfio_pci_dma_unmap_all(self->device, &unmapped);
-+	rc = __iommu_unmap_all(self->iommu, &unmapped);
- 	ASSERT_EQ(rc, 0);
- 	ASSERT_EQ(unmapped, region->size);
- }
-@@ -298,10 +298,10 @@ TEST_F(vfio_dma_map_limit_test, overflow)
- 	region->iova = ~(iova_t)0 & ~(region->size - 1);
- 	region->size = self->mmap_size;
- 
--	rc = __vfio_pci_dma_map(self->device, region);
-+	rc = __iommu_map(self->iommu, region);
- 	ASSERT_EQ(rc, -EOVERFLOW);
- 
--	rc = __vfio_pci_dma_unmap(self->device, region, NULL);
-+	rc = __iommu_unmap(self->iommu, region, NULL);
- 	ASSERT_EQ(rc, -EOVERFLOW);
- }
+ #include "../kselftest_harness.h"
  
 diff --git a/tools/testing/selftests/vfio/vfio_pci_driver_test.c b/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-index 057aa9bbe13e..229e932a06f8 100644
+index 229e932a06f8..f0ca8310d6a8 100644
 --- a/tools/testing/selftests/vfio/vfio_pci_driver_test.c
 +++ b/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-@@ -18,7 +18,7 @@ static const char *device_bdf;
- 	ASSERT_EQ(EAGAIN, errno);			\
- } while (0)
+@@ -5,7 +5,7 @@
+ #include <linux/sizes.h>
+ #include <linux/vfio.h>
  
--static void region_setup(struct vfio_pci_device *device,
-+static void region_setup(struct iommu *iommu,
- 			 struct iova_allocator *iova_allocator,
- 			 struct dma_region *region, u64 size)
- {
-@@ -33,13 +33,12 @@ static void region_setup(struct vfio_pci_device *device,
- 	region->iova = iova_allocator_alloc(iova_allocator, size);
- 	region->size = size;
+-#include <vfio_util.h>
++#include <libvfio.h>
  
--	vfio_pci_dma_map(device, region);
-+	iommu_map(iommu, region);
- }
+ #include "../kselftest_harness.h"
  
--static void region_teardown(struct vfio_pci_device *device,
--			    struct dma_region *region)
-+static void region_teardown(struct iommu *iommu, struct dma_region *region)
- {
--	vfio_pci_dma_unmap(device, region);
-+	iommu_unmap(iommu, region);
- 	VFIO_ASSERT_EQ(munmap(region->vaddr, region->size), 0);
- }
- 
-@@ -76,12 +75,12 @@ FIXTURE_SETUP(vfio_pci_driver_test)
- 
- 	self->iommu = iommu_init(variant->iommu_mode);
- 	self->device = vfio_pci_device_init(device_bdf, self->iommu);
--	self->iova_allocator = iova_allocator_init(self->device);
-+	self->iova_allocator = iova_allocator_init(self->iommu);
- 
- 	driver = &self->device->driver;
- 
--	region_setup(self->device, self->iova_allocator, &self->memcpy_region, SZ_1G);
--	region_setup(self->device, self->iova_allocator, &driver->region, SZ_2M);
-+	region_setup(self->iommu, self->iova_allocator, &self->memcpy_region, SZ_1G);
-+	region_setup(self->iommu, self->iova_allocator, &driver->region, SZ_2M);
- 
- 	/* Any IOVA that doesn't overlap memcpy_region and driver->region. */
- 	self->unmapped_iova = iova_allocator_alloc(self->iova_allocator, SZ_1G);
-@@ -110,8 +109,8 @@ FIXTURE_TEARDOWN(vfio_pci_driver_test)
- 
- 	vfio_pci_driver_remove(self->device);
- 
--	region_teardown(self->device, &self->memcpy_region);
--	region_teardown(self->device, &driver->region);
-+	region_teardown(self->iommu, &self->memcpy_region);
-+	region_teardown(self->iommu, &driver->region);
- 
- 	iova_allocator_cleanup(self->iova_allocator);
- 	vfio_pci_device_cleanup(self->device);
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
