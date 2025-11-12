@@ -1,45 +1,102 @@
-Return-Path: <linux-kselftest+bounces-45373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E8AFC506AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 04:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E874C507C1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 05:09:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B41F1890680
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 03:34:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1569B18993D6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 04:10:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8015023BD1B;
-	Wed, 12 Nov 2025 03:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2AC32C327C;
+	Wed, 12 Nov 2025 04:09:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RqGPCslN";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ekFg/j6a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE228B652;
-	Wed, 12 Nov 2025 03:33:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED915271451
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 04:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762918411; cv=none; b=M3/fh6dVWkWoCfMh78UedeaBOrG65UsXwz72bN+U8r1qg4DEsovogxh20VZcwXY35SV10ii/tBg+1y16R9WWkuwAEkR0tTfCO+olI+SIwI5sQtLz5+1z/PqAWlv6m7tt2DYkxyvuwBf6TcQDDXfWBpnzywd3yz02cX7JRQUuf4w=
+	t=1762920575; cv=none; b=pnIvyF/R/JYLTy9/U2y9KLidO/gP5Ia1ahGS85GHXiIJ+HhpFpU+zsC1begKAaW9YV4SQFS1qhGCEwrEq9GDhPGu3/umrnplgWtNhXOw0FRzDTQ5IapfE9h6skZdYlLx0uR8j8foYpxrHd0f9md/Zs25HdF24lCeyOEzwqYoUPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762918411; c=relaxed/simple;
-	bh=m6oI5hrMk+/WG4ZUT582FYnudlzi+ZnfDEEbwSfeIqo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hu6mm2YXOackDAeJAOsYFwhp+of5Rslea8koRj0Ze1k+fQ98oeva8Hp9cu9nIdmmkI5Iyp03if3QDg672y7o+dAupv8cJ+V8Z7Yx6X5ZU/rI8u5HBOCq6X+WtNanWqimhHHGeddVDYfFjJ5r6JCaJI4L2pLK1RtRdEERE2QYw4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4d5prd3lVxzKHMX9;
-	Wed, 12 Nov 2025 11:33:05 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 8140B1A08AC;
-	Wed, 12 Nov 2025 11:33:22 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP2 (Coremail) with SMTP id Syh0CgC3YXgBABRp6VHJAQ--.51983S2;
-	Wed, 12 Nov 2025 11:33:22 +0800 (CST)
-Message-ID: <380567da-9079-4a4d-afae-42bde42d2a58@huaweicloud.com>
-Date: Wed, 12 Nov 2025 11:33:21 +0800
+	s=arc-20240116; t=1762920575; c=relaxed/simple;
+	bh=9PW+A3JHWzURTlDXLHDmB0OKXZRnM2OGKf4qPL38i74=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=pzh/GO6zq5cE+TfTBe8Ze5jFLZmfj7bJ2nfXtRjRrmzZchXv3pdRWpjFxRS10vV3eoz0Ky3+kBr+2Ma3oa+kg9l+Jkjm+C+7rO+XtMUHx9XkmFoitjX6vkJNQq08ypGrjvNcbjVaG5/BAy75VIHkrTfs06ostGA+AppukZSQcd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RqGPCslN; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ekFg/j6a; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762920572;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jBULf+ZIkA9FqHKiIs1320k4feJF2I1rgP/b6d4F0Mk=;
+	b=RqGPCslNWScVnn2Ck8198zp8k3QFwJYzUEuVbqRCtQLYv2/sfM0iFmajjpAhRgAuSCvhp9
+	Cbg7FJRC6OJXEFBWv/PmqM9xc3NYFCRGjAEZ5gvR6fZbgty7GwRv4P15aqJNps20rNWsfT
+	bXN54Zvd4ak6z5h70UF33wK13wLegW4=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-672-TUm3fSwHMRSCD8i9XpqTWQ-1; Tue, 11 Nov 2025 23:09:31 -0500
+X-MC-Unique: TUm3fSwHMRSCD8i9XpqTWQ-1
+X-Mimecast-MFC-AGG-ID: TUm3fSwHMRSCD8i9XpqTWQ_1762920571
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4edb366a926so4959571cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 20:09:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1762920571; x=1763525371; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jBULf+ZIkA9FqHKiIs1320k4feJF2I1rgP/b6d4F0Mk=;
+        b=ekFg/j6aJfbuCI/fUdbBHYO8FmybPehHCL7m55Fnh0HjygoTnq+HTAe0eYnXO+75oz
+         Fc/b/tdXULJVMhXcohj3c9qQols4VKsA1uFCztCyQgeRvso/io1K3UYQOljc0E7lPLOC
+         a7MkjAXGg5R/2WA/oNYIs38rFTE2fgEU6SPP7l+txRfcjQccaIN3MMVprsaiGheYPSRw
+         2uSTJBPY6bHhz1IPfk0FC7zX37tPfX7h76Lkz4aggmGZbmos5zAqXRePPhu+9+HUHeRQ
+         8egx2jc37454HovImtru3UjyT1psiGVYihYQnxj2zGv7G+hS/9k9nQHJj9x/0KlEVR2A
+         g//g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762920571; x=1763525371;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jBULf+ZIkA9FqHKiIs1320k4feJF2I1rgP/b6d4F0Mk=;
+        b=saMJ2+91+wGKO288NnH+4oSFNNoqL19687jSRxH8TuHfkNY6TCDdnPzCpOUXWdllRD
+         N76qINplSse/cmxMSDGJ279Vr4QI7fcPjKtCTntldrWls7eVWbMOG97EtIjjaG7U0pe8
+         l8MSZFnY3FcKwRwQ0WL3LAupknWB/gSorYApQn/szLeJVS0vR9D8MF/HJRdtOrDfWItz
+         ekR3yxkpTPhCJI5fA+JFEsqkU2zY8EYscd/yAiUhaJIhQofxZzxD6HRfFSmTNFz41P0f
+         ktMuKLQfYNciFRd/dEZWuu3WA+S83sLP1KaHSENgQ1frm6NAf1vJKIbFT3Mj+hrSRzVQ
+         MJhw==
+X-Forwarded-Encrypted: i=1; AJvYcCWX9mR8ZhgRUmcChyDht1hY8Ulaa6E0TIpH4fCfbVRnPQvTVs/mE+sLRQIfsAw1YKiKtnMI1pgotIKA4kHg/L8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpW/Hq8NKWbMP8FPv0QkV3IRQWRhmY1qE2E+28sSHySDaX+84r
+	6mwWGBz5Lk1fczkdqgs0/KWzJVkxO4Rut2XYtjWmESDa5j/9J/tb/p493iBtTuzYzZT0r9Gdbst
+	vaveK0IjIwluUXG2AvF/gJ9kiO8B6UWPuQNIo9L7sbaUsH3QnfRi08kyY/mmNpuuOrEC+rA==
+X-Gm-Gg: ASbGncuJtWO87BEbY+TX7W3v/ASl1nfWnY9JwwHOb1ssME6LPHNhaNs2VtcX7n/llom
+	Cj0/TBDfHcMnOZMYGNmoRbWwYe+obGsaYPPYMr2BdMpaochhhae1+Gyx8fazwyNdkCox5iNS0ag
+	wdRltLrQArs4njbgcKO+zaOuRe3LRkDdx5QSWj2o+QhV74OttWTncYBuhrgFI7Jq0M2gSD7iBIy
+	lJE5WwwaB7J2yCHZu4AuwSjMTZm2jQow4ftuzOKA8aBrOW2VDJH+iG+rApw+d+hhSddy0WtOPI1
+	vJdymKFPoVsBLX/hRdh2UAbsCKZVEYNx5SibNujj34JGRo7CQlLJNTn5NRgOC1nRlXxTpFibSS7
+	dOWQmRdMmUbejGUMsFaeu4+Y3FwQKWACTvDzmzX0gasb+Mg==
+X-Received: by 2002:ac8:5a15:0:b0:4e8:ada0:450a with SMTP id d75a77b69052e-4eddbd774bamr18423781cf.45.1762920571010;
+        Tue, 11 Nov 2025 20:09:31 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGPWTMesD++oG9Eb6d/7De7HTmZLuSnw0p9oUBYq3+RbK0SLKI1SdBODf1yz+ndvuVag3fpAg==
+X-Received: by 2002:ac8:5a15:0:b0:4e8:ada0:450a with SMTP id d75a77b69052e-4eddbd774bamr18423691cf.45.1762920570668;
+        Tue, 11 Nov 2025 20:09:30 -0800 (PST)
+Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4eda563fbfcsm77229701cf.10.2025.11.11.20.09.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Nov 2025 20:09:30 -0800 (PST)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <b9dce00a-4728-4ac8-ae38-7f41114c7c81@redhat.com>
+Date: Tue, 11 Nov 2025 23:09:29 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,158 +105,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v1] cpuset: Avoid unnecessary partition invalidation
-To: Sun Shaojie <sunshaojie@kylinos.cn>, longman@redhat.com
+To: Chen Ridong <chenridong@huaweicloud.com>,
+ Sun Shaojie <sunshaojie@kylinos.cn>
 Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
  cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20251112021120.248778-1-sunshaojie@kylinos.cn>
+ <380567da-9079-4a4d-afae-42bde42d2a58@huaweicloud.com>
 Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20251112021120.248778-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <380567da-9079-4a4d-afae-42bde42d2a58@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgC3YXgBABRp6VHJAQ--.51983S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3XryUZw4kAw18urWfKw17Jrb_yoWxJry7pF
-	ykGr4jvw4YgF15C3srCF18WrsYqwsFqF17Jwn8Jr1xZF9xJFn29rnYk3sxJrWj9rWUGw15
-	u39av3yfXanIq37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU17KsUUUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
+On 11/11/25 10:33 PM, Chen Ridong wrote:
+>
+> On 2025/11/12 10:11, Sun Shaojie wrote:
+> Hello Shaojie,
+>
+>> Currently, when a non-exclusive cpuset's "cpuset.cpus" overlaps with a
+>> partitioned sibling, the sibling's partition state becomes invalid.
+>> However, this invalidation is often unnecessary.
+>>
+>> This can be observed in specific configuration sequences:
+>>
+>> Case 1: Partition created first, then non-exclusive cpuset overlaps
+>>   #1> mkdir -p /sys/fs/cgroup/A1
+>>   #2> echo "0-1" > /sys/fs/cgroup/A1/cpuset.cpus
+>>   #3> echo "root" > /sys/fs/cgroup/A1/cpuset.cpus.partition
+>>   #4> mkdir -p /sys/fs/cgroup/B1
+>>   #5> echo "0-3" > /sys/fs/cgroup/B1/cpuset.cpus
+>>   // A1's partition becomes "root invalid" - this is unnecessary
+>>
+>> Case 2: Non-exclusive cpuset exists first, then partition created
+>>   #1> mkdir -p /sys/fs/cgroup/B1
+>>   #2> echo "0-1" > /sys/fs/cgroup/B1/cpuset.cpus
+>>   #3> mkdir -p /sys/fs/cgroup/A1
+>>   #4> echo "0-1" > /sys/fs/cgroup/A1/cpuset.cpus
+>>   #5> echo "root" > /sys/fs/cgroup/A1/cpuset.cpus.partition
+>>   // A1's partition becomes "root invalid" - this is unnecessary
+>>
+>> In Case 1, the effective CPU mask of B1 can differ from its requested
+>> mask. B1 can use CPUs 2-3 which don't overlap with A1's exclusive
+>> CPUs (0-1), thus not violating A1's exclusivity requirement.
+>>
+>> In Case 2, B1 can inherit the effective CPUs from its parent, so there
+>> is no need to invalidate A1's partition state.
+>>
+>> This patch relaxes the overlap check to only consider conflicts between
+>> partitioned siblings, not between a partitioned cpuset and a regular
+>> non-exclusive one.
+>>
+> Does this rule have any negative impact on your products?
+>
+> The CPUs specified by the user (including cpuset.cpus and cpuset.cpus.exclusive) can be treated as
+> the dedicated exclusive CPUs for the partition. For the cases you provided, both siblings can be
+> partitions. For example, in case 1, A1 can also be converted to a partition. If this rule is
+> relaxed, I don’t see any check for exclusive conflicts when A1 becomes a partition.
+>
+> Additionally, I think we should preserve the CPU affinity as the user intends as much as possible.
 
+Where does the original patch sent to? I didn't see it.
 
-On 2025/11/12 10:11, Sun Shaojie wrote:
-Hello Shaojie,
+Anyway it is late for me. I will take a further look tomorrow.
 
-> Currently, when a non-exclusive cpuset's "cpuset.cpus" overlaps with a
-> partitioned sibling, the sibling's partition state becomes invalid.
-> However, this invalidation is often unnecessary.
-> 
-> This can be observed in specific configuration sequences:
-> 
-> Case 1: Partition created first, then non-exclusive cpuset overlaps
->  #1> mkdir -p /sys/fs/cgroup/A1
->  #2> echo "0-1" > /sys/fs/cgroup/A1/cpuset.cpus
->  #3> echo "root" > /sys/fs/cgroup/A1/cpuset.cpus.partition
->  #4> mkdir -p /sys/fs/cgroup/B1
->  #5> echo "0-3" > /sys/fs/cgroup/B1/cpuset.cpus
->  // A1's partition becomes "root invalid" - this is unnecessary
-> 
-> Case 2: Non-exclusive cpuset exists first, then partition created
->  #1> mkdir -p /sys/fs/cgroup/B1
->  #2> echo "0-1" > /sys/fs/cgroup/B1/cpuset.cpus
->  #3> mkdir -p /sys/fs/cgroup/A1
->  #4> echo "0-1" > /sys/fs/cgroup/A1/cpuset.cpus
->  #5> echo "root" > /sys/fs/cgroup/A1/cpuset.cpus.partition
->  // A1's partition becomes "root invalid" - this is unnecessary
-> 
-> In Case 1, the effective CPU mask of B1 can differ from its requested
-> mask. B1 can use CPUs 2-3 which don't overlap with A1's exclusive
-> CPUs (0-1), thus not violating A1's exclusivity requirement.
-> 
-> In Case 2, B1 can inherit the effective CPUs from its parent, so there
-> is no need to invalidate A1's partition state.
-> 
-> This patch relaxes the overlap check to only consider conflicts between
-> partitioned siblings, not between a partitioned cpuset and a regular
-> non-exclusive one.
-> 
-
-Does this rule have any negative impact on your products?
-
-The CPUs specified by the user (including cpuset.cpus and cpuset.cpus.exclusive) can be treated as
-the dedicated exclusive CPUs for the partition. For the cases you provided, both siblings can be
-partitions. For example, in case 1, A1 can also be converted to a partition. If this rule is
-relaxed, I don’t see any check for exclusive conflicts when A1 becomes a partition.
-
-Additionally, I think we should preserve the CPU affinity as the user intends as much as possible.
-
-> Signed-off-by: Sun Shaojie <sunshaojie@kylinos.cn>
-> ---
->  kernel/cgroup/cpuset.c                            |  8 ++++----
->  tools/testing/selftests/cgroup/test_cpuset_prs.sh | 10 +++++-----
->  2 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 52468d2c178a..e0d27c9a101a 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -586,14 +586,14 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
->   * Returns: true if CPU exclusivity conflict exists, false otherwise
->   *
->   * Conflict detection rules:
-> - * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
-> + * 1. If both cpusets are exclusive, they must be mutually exclusive
->   * 2. exclusive_cpus masks cannot intersect between cpusets
->   * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
->   */
->  static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
->  {
-> -	/* If either cpuset is exclusive, check if they are mutually exclusive */
-> -	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
-> +	/* If both cpusets are exclusive, check if they are mutually exclusive */
-> +	if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))
->  		return !cpusets_are_exclusive(cs1, cs2);
->  
->  	/* Exclusive_cpus cannot intersect */
-> @@ -695,7 +695,7 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
->  		goto out;
->  
->  	/*
-> -	 * If either I or some sibling (!= me) is exclusive, we can't
-> +	 * If both I and some sibling (!= me) are exclusive, we can't
->  	 * overlap. exclusive_cpus cannot overlap with each other if set.
->  	 */
->  	ret = -EINVAL;
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index a17256d9f88a..903dddfe88d7 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -269,7 +269,7 @@ TEST_MATRIX=(
->  	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X3:P2    .      .     0 A1:0-2|A2:3|A3:3 A1:P0|A2:P2 3"
->  	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3  X2-3:P2   .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
->  	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3 X2-3:P2:C3 .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
-> -	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-3|A2:1-3|A3:2-3|B1:2-3 A1:P0|A3:P0|B1:P-2"
-> +	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-1|A2:1|A3:1|B1:2-3 A1:P0|A3:P0|B1:P2 2-3"
->  	" C0-3:S+ C1-3:S+ C2-3   C4-5     .      .      .      P2    0 B1:4-5 B1:P2 4-5"
->  	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3  X2-3:P2   P2    0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
->  	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3 X2-3:P2:C1-3 P2  0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
-> @@ -318,7 +318,7 @@ TEST_MATRIX=(
->  	# Invalid to valid local partition direct transition tests
->  	" C1-3:S+:P2 X4:P2  .      .      .      .      .      .     0 A1:1-3|XA1:1-3|A2:1-3:XA2: A1:P2|A2:P-2 1-3"
->  	" C1-3:S+:P2 X4:P2  .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
-> -	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:4-6 A1:P-2|B1:P0"
-> +	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0 0-4"
->  	"  C0-3:P2   .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
->  
->  	# Local partition invalidation tests
-> @@ -388,10 +388,10 @@ TEST_MATRIX=(
->  	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
->  	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2 0-1|1"
->  
-> -	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
-> -	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P0"
-> +	# A non-exclusive cpuset.cpus change will not invalidate partition and its siblings
-> +	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:3 A1:P1|B1:P0"
->  	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P-1"
-> -	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P0|B1:P-1"
-> +	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-1|B1:2-3 A1:P0|B1:P1"
->  
->  	# cpuset.cpus can overlap with sibling cpuset.cpus.exclusive but not subsumed by it
->  	"   C0-3     .      .    C4-5     X5     .      .      .     0 A1:0-3|B1:4-5"
-
--- 
-Best regards,
-Ridong
+Cheers,
+Longman
 
 
