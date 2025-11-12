@@ -1,352 +1,174 @@
-Return-Path: <linux-kselftest+bounces-45466-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2B39C54B05
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 23:10:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16A49C54AE6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 23:08:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6A3E04E4DCC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 22:05:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93B253A8F40
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 22:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11E9F2E8E12;
-	Wed, 12 Nov 2025 22:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 454DA2D839E;
+	Wed, 12 Nov 2025 22:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z/Qbpf+T"
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="yn/7LuWP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4380B2BE7BA
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 22:05:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8574C28CF56;
+	Wed, 12 Nov 2025 22:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762985107; cv=none; b=pZL+DoE34354w63xVKRyPGwCza7WJSLqswLGCDVzxWZKCBLOQ28N94cjXCDanpTWeCF5X3tFGqZoO2zluctVTz4wAUmcY39ne4W1D7pm6Vieznu0zh53sDS0UCLdmMX00wnSzkST52qSAvn3aadM2woUy3FiD+0d6aQPJUI9kRU=
+	t=1762985255; cv=none; b=nDQyjN9ltmjIgRt9lQ3AmQj3qROCxBCMh0ZqAQzAgtH8hCzxImNCAxzgorGZ68fL5Mq+jYF2tfYlW11dTkOH/Ed5q8WAGmc4douT4h9u+ykqGgKmkCuIOrNFJqrk3a8z0uNoBEnLeaBGCEIIhtJcoWd3HYfGZumLdxCp1M0IP20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762985107; c=relaxed/simple;
-	bh=2qhpNkaMfGbH1CfnNdd4Up7M0srBKHHLqbCrBAstSk4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PWPtNqLWAUe2drzPsrQWKeYpf3OEGqW/EJDECJIqWmiamWEoZ8C9aGoa9DE36vih2shqTw95Y7i/bq8pXKvIaBQGs4+YhBpCevVj+2FYDkxC8q0kjqMPgqK01jphd2OngPxx4luWwNEev4OSJHrCEx/d6sQAU3aS7QR2Sw8PwD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z/Qbpf+T; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-29853ec5b8cso1216715ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 14:05:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762985104; x=1763589904; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oKPs42nPgCf3xa7WYhvLEc5azAO7u4S86iHOJTh8d2o=;
-        b=z/Qbpf+TBKxwz9MY9ugFswkrz10K0eeCGtxl7clQhuDrGQUnkZ6ufG1IWIzj04CMf4
-         NtOXEhdeu8R1d2qV0VcduVtpQEkqx2TCaPR//sP9r7r7Cmi7KMY/B7VYiXCNHXl9c3dJ
-         lqz9kZs3QdJlwPzBkHOtWk5PMtqIUFbxBONdw/98txPYIBzZ72Jj4Kq/ds82oT5vrQx0
-         iqeYcFy0KilcjqHZdv3i6mE51Lkz2Xp7RLIx/LIy7J9Z1miLi7mr9OcCUhWs/IL7TohX
-         2UyXw/Vcj38NJlVS7hMreGQBLovkOj4/t+qKJ6cWsdEB6iIKLBKOXilSBIPbJzYFaCRg
-         tj9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762985104; x=1763589904;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oKPs42nPgCf3xa7WYhvLEc5azAO7u4S86iHOJTh8d2o=;
-        b=hc9XcfBZi2XAGx6JIokMio2u/rP8ijJgxWxRxYsegxbgzSJpw2qhHXXONfV7JwuY2N
-         aALRWfbxrPzLXVoQf/IW7sPB6PNTn6UruRfxDqrv4u6m8dv5c+x8SIs2yrq5r++9OohS
-         SbUcC5cleB+jKoHzTC761hqkFmWLOJogH9CULOgDKKXpFkBq+99vAZ6qjzQPUY09XUoU
-         GdFjTEAUB/5SIA71H6j04hsSfx83PF96YP+C0Ov0MmcS7fXGh8BSRokTrQs7C0XLevLP
-         RvEEf/+ono1yI9KPxypOMHT11GViHL9h7QDV3YXrgPpPgRxlNRWGKwFOVSW1QHcClx9M
-         HQlw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+Ti3t1E6IXGFS3INQCp568fqEJApqbLU1SBUObIyxftOCiYAd23nL+mhniv/cTrs3PKkjE9513L4dJDDcCT8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKwYlTEO62z/guRFjNPoz7LVOpuy4EZoqjSzjX7DqRiHom5YGn
-	m4uCs+VBFT/b+zfPe5mVO4inxvL40p32YIts9fwNLLSxYDC3y0eROWIBz0Y84nD8cYl8/R0u7SP
-	sRxKxESgy4IV2JIp51SVW7C8hDaRGmDHcR1nsrhmx
-X-Gm-Gg: ASbGncv00dXTKtq3gIupk+GLvxBNzr9ekcZ5TAFmQXxbylFhZcnE1Gja+AU636Wqvla
-	ZyT7PK7lkIGh857HDR3WuAEIQiOI2CxrTJ44+QCq9GZKAaGBwS3NzWFwq7f7Y8t2Zdl1SCCrTod
-	SZAIPbFT+8SuW0Ce3ZH2ff9pPjJKgDlKCoA/ZBnLclmTo5yWn+yneYTl7wbTMflyv2A8iVPNuNy
-	KxyLVYv4OfS7ajo+mEJo+32kKrWUL2INU28sKrUQDxQwpa2FQDTuCwJyHFtbOMDQtBGDR+395WB
-	ojAiCYU2cQL78y+JbzxeoPhp2g==
-X-Google-Smtp-Source: AGHT+IEEm3bNv9rfezM7XwE7yjmnPOy5mZvfwXtXh1qfH7f2eoz0NkAYCYxRGrvQAR1YGl9JYIOmyR46J21A+jr8E+c=
-X-Received: by 2002:a17:902:ccd1:b0:258:9d26:1860 with SMTP id
- d9443c01a7336-2984eddd8e8mr59380125ad.40.1762985104264; Wed, 12 Nov 2025
- 14:05:04 -0800 (PST)
+	s=arc-20240116; t=1762985255; c=relaxed/simple;
+	bh=vFb162fQrfik4BXt5CZU9D4wyBDl0W+eQVuWkuKKRQE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GUAkkIAS7Pc0++SO/i6aUDhiRZha6bWdmcKqY5XBVq7iJZpthojq82OQBv2fwU9M1c+ZL2dL8MGMYFnJEWnqIx8mqrIb9pc7ZYf9+8xknxgUDYfei0sjFDJiA7qGAe0KOTXr93xnLIlyi3EwiRXh15dw+rs/YteURWOXIrinp7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=yn/7LuWP; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+	by m0089730.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 5ACJUfBW1517738;
+	Wed, 12 Nov 2025 14:07:26 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=dyPzt6jYWQBlgpZrAEGm
+	Ly5XUl+8bBVMINlubHmdpe8=; b=yn/7LuWPdJq/zbD+UyTGYFExLs8tgTr1y7wU
+	2Zv29CCZ4VQiHQtyLQXIyzjrO9fzfejC12xm3+TkiB/U/q2lw9rBFvF/3W4/DNJy
+	5P+1cU6wBM+vQ3deX5bZW4L1oDpPiy0r71E8PNqZ/KOHuUofBBxi/zjFx6YBL852
+	ZXyVOoe48thRkpwNBvwqwNdeObw4saxPu0rm9U+qz+pjNeqNwi3LaKXG0jmiSZU4
+	DqG74+vDWgoXlzyU4lz812TpM8nyg93ooHGOpyPKyRwn658CPqiZqQbEX4p1YfFy
+	3RrkonWK6VX80t+//cARdziEKEbs/rvAIDOnR+0DDvoaT0kRNw==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by m0089730.ppops.net (PPS) with ESMTPS id 4acuj7cdkn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 12 Nov 2025 14:07:26 -0800 (PST)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::150d) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.20; Wed, 12 Nov 2025 22:07:25 +0000
+Date: Wed, 12 Nov 2025 14:07:20 -0800
+From: Alex Mastro <amastro@fb.com>
+To: David Matlack <dmatlack@google.com>
+CC: Alex Williamson <alex.williamson@redhat.com>,
+        Alex Williamson
+	<alex@shazbot.org>, Jason Gunthorpe <jgg@nvidia.com>,
+        Josh Hilke
+	<jrhilke@google.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        Raghavendra Rao Ananta
+	<rananta@google.com>,
+        Vipin Sharma <vipinsh@google.com>
+Subject: Re: [PATCH v2 00/18] vfio: selftests: Support for multi-device tests
+Message-ID: <aRUFGHPe+EXao10B@devgpu015.cco6.facebook.com>
+References: <20251112192232.442761-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112212026.31441-1-adelodunolaoluwa.ref@yahoo.com> <20251112212026.31441-1-adelodunolaoluwa@yahoo.com>
-In-Reply-To: <20251112212026.31441-1-adelodunolaoluwa@yahoo.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Wed, 12 Nov 2025 14:04:52 -0800
-X-Gm-Features: AWmQ_bnIPeclCbtbxPZNlzdNhqCLUG7E5kJ4h6vY_ySub0JtYOJiM91OLaOaSz0
-Message-ID: <CAAVpQUB97EBnTbA9pKwdhPM0pHadiM3QhP4_1qLSKGg2LAwzkA@mail.gmail.com>
-Subject: Re: [PATCH v4] selftests: af_unix: Add tests for ECONNRESET and EOF semantics
-To: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, 
-	skhan@linuxfoundation.org, david.hunter.linux@gmail.com, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, 
-	linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20251112192232.442761-1-dmatlack@google.com>
+X-Proofpoint-GUID: a6rH3zQb7kVzxe_6ShyBkjTM7yvOQYUf
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEyMDE3OSBTYWx0ZWRfX0bCPA514uoLx
+ UFqKskTLffagL1adLoObxbJOYTr/g/DXCg270IplUb0WBp3nA+xzwAyrizRtc/4UFmZgfCL9+XP
+ Q834SzfrPCTPFoYGazp/90tKnyEail34Kb1gOrzMbQw7/46laste7h7Ydm7l/lqQJA9ZIGsNJtV
+ ilaS1miMxZYN6/3pY6MJ7H+rvzt9YnW/ng2V5Y+LMPe2lJFz6ewBxSSqv3xc3WwFGPqtkAz5JeX
+ eAB3baQ8FbjkgbqniFioNSBeaFDdkw7ThgcTwE5E2K2ykGgYwFKxZ4/Q2nJl1yUXpZ90QXnLY87
+ c0NmJdqefd+VDrHMkjSei5zVzh2fbJN21NbfiDpWWMlBLp4Fu665ALYeODcaLMT1bvduvBcRH/F
+ 4WTPBo+GKjK1qDHEtT8oDz5jMPbhVQ==
+X-Authority-Analysis: v=2.4 cv=H8LWAuYi c=1 sm=1 tr=0 ts=6915051e cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=FOH2dFAWAAAA:8 a=BPcALthgWs1Ll9ulZ4YA:9 a=CjuIK1q_8ugA:10
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-ORIG-GUID: a6rH3zQb7kVzxe_6ShyBkjTM7yvOQYUf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-12_06,2025-11-12_01,2025-10-01_01
 
-On Wed, Nov 12, 2025 at 1:20=E2=80=AFPM Sunday Adelodun
-<adelodunolaoluwa@yahoo.com> wrote:
->
-> Add selftests to verify and document Linux=E2=80=99s intended behaviour f=
-or
-> UNIX domain sockets (SOCK_STREAM and SOCK_DGRAM) when a peer closes.
-> The tests verify that:
->
->  1. SOCK_STREAM returns EOF when the peer closes normally.
->  2. SOCK_STREAM returns ECONNRESET if the peer closes with unread data.
->  3. SOCK_SEQPACKET returns EOF when the peer closes normally.
->  4. SOCK_SEQPACKET returns ECONNRESET if the peer closes with unread data=
-.
->  5. SOCK_DGRAM does not return ECONNRESET when the peer closes.
->
-> This follows up on review feedback suggesting a selftest to clarify
-> Linux=E2=80=99s semantics.
->
-> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-> Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-> ---
->  tools/testing/selftests/net/.gitignore        |   1 +
->  tools/testing/selftests/net/af_unix/Makefile  |   1 +
->  .../selftests/net/af_unix/unix_connreset.c    | 178 ++++++++++++++++++
->  3 files changed, 180 insertions(+)
->  create mode 100644 tools/testing/selftests/net/af_unix/unix_connreset.c
->
-> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selft=
-ests/net/.gitignore
-> index 439101b518ee..e89a60581a13 100644
-> --- a/tools/testing/selftests/net/.gitignore
-> +++ b/tools/testing/selftests/net/.gitignore
-> @@ -65,3 +65,4 @@ udpgso
->  udpgso_bench_rx
->  udpgso_bench_tx
->  unix_connect
-> +unix_connreset
-> diff --git a/tools/testing/selftests/net/af_unix/Makefile b/tools/testing=
-/selftests/net/af_unix/Makefile
-> index de805cbbdf69..5826a8372451 100644
-> --- a/tools/testing/selftests/net/af_unix/Makefile
-> +++ b/tools/testing/selftests/net/af_unix/Makefile
-> @@ -7,6 +7,7 @@ TEST_GEN_PROGS :=3D \
->         scm_pidfd \
->         scm_rights \
->         unix_connect \
-> +       unix_connreset \
->  # end of TEST_GEN_PROGS
->
->  include ../../lib.mk
-> diff --git a/tools/testing/selftests/net/af_unix/unix_connreset.c b/tools=
-/testing/selftests/net/af_unix/unix_connreset.c
-> new file mode 100644
-> index 000000000000..9413f8a0814f
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/af_unix/unix_connreset.c
-> @@ -0,0 +1,178 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Selftest for AF_UNIX socket close and ECONNRESET behaviour.
-> + *
-> + * This test verifies:
-> + *  1. SOCK_STREAM returns EOF when the peer closes normally.
-> + *  2. SOCK_STREAM returns ECONNRESET if peer closes with unread data.
-> + *  3. SOCK_SEQPACKET returns EOF when the peer closes normally.
-> + *  4. SOCK_SEQPACKET returns ECONNRESET if the peer closes with unread =
-data.
-> + *  5. SOCK_DGRAM does not return ECONNRESET when the peer closes.
-> + *
-> + * These tests document the intended Linux behaviour.
-> + *
-> + */
-> +
-> +#define _GNU_SOURCE
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <fcntl.h>
-> +#include <unistd.h>
-> +#include <errno.h>
-> +#include <sys/socket.h>
-> +#include <sys/un.h>
-> +#include "../../kselftest_harness.h"
-> +
-> +#define SOCK_PATH "/tmp/af_unix_connreset.sock"
-> +
-> +static void remove_socket_file(void)
-> +{
-> +       unlink(SOCK_PATH);
-> +}
-> +
-> +FIXTURE(unix_sock)
-> +{
-> +       int server;
-> +       int client;
-> +       int child;
-> +};
-> +
-> +FIXTURE_VARIANT(unix_sock)
-> +{
-> +       int socket_type;
-> +       const char *name;
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(unix_sock, stream) {
-> +       .socket_type =3D SOCK_STREAM,
-> +       .name =3D "SOCK_STREAM",
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(unix_sock, dgram) {
-> +       .socket_type =3D SOCK_DGRAM,
-> +       .name =3D "SOCK_DGRAM",
-> +};
-> +
-> +FIXTURE_VARIANT_ADD(unix_sock, seqpacket) {
-> +       .socket_type =3D SOCK_SEQPACKET,
-> +       .name =3D "SOCK_SEQPACKET",
-> +};
-> +
-> +FIXTURE_SETUP(unix_sock)
-> +{
-> +       struct sockaddr_un addr =3D {};
-> +       int err;
-> +
-> +       addr.sun_family =3D AF_UNIX;
-> +       strcpy(addr.sun_path, SOCK_PATH);
-> +       remove_socket_file();
-> +
-> +       self->server =3D socket(AF_UNIX, variant->socket_type, 0);
-> +       ASSERT_LT(-1, self->server);
-> +
-> +       err =3D bind(self->server, (struct sockaddr *)&addr, sizeof(addr)=
-);
-> +       ASSERT_EQ(0, err);
-> +
-> +       if (variant->socket_type =3D=3D SOCK_STREAM ||
-> +           variant->socket_type =3D=3D SOCK_SEQPACKET) {
-> +               err =3D listen(self->server, 1);
-> +               ASSERT_EQ(0, err);
-> +       }
-> +
-> +       self->client =3D socket(AF_UNIX, variant->socket_type | SOCK_NONB=
-LOCK, 0);
-> +       ASSERT_LT(-1, self->client);
-> +
-> +       err =3D connect(self->client, (struct sockaddr *)&addr, sizeof(ad=
-dr));
-> +       ASSERT_EQ(0, err);
-> +}
-> +
-> +FIXTURE_TEARDOWN(unix_sock)
-> +{
-> +       if ((variant->socket_type =3D=3D SOCK_STREAM ||
-> +            variant->socket_type =3D=3D SOCK_SEQPACKET) & self->child > =
-0)
-> +               close(self->child);
-> +
-> +       close(self->client);
-> +       close(self->server);
-> +       remove_socket_file();
-> +}
-> +
-> +/* Test 1: peer closes normally */
-> +TEST_F(unix_sock, eof)
-> +{
-> +       char buf[16] =3D {};
-> +       ssize_t n;
-> +
-> +       if (variant->socket_type =3D=3D SOCK_STREAM ||
-> +           variant->socket_type =3D=3D SOCK_SEQPACKET) {
-> +               self->child =3D accept(self->server, NULL, NULL);
-> +               ASSERT_LT(-1, self->child);
-> +
-> +               close(self->child);
-> +       } else {
-> +               close(self->server);
-> +       }
-> +
-> +       n =3D recv(self->client, buf, sizeof(buf), 0);
-> +
-> +       if (variant->socket_type =3D=3D SOCK_STREAM ||
-> +           variant->socket_type =3D=3D SOCK_SEQPACKET) {
-> +               ASSERT_EQ(0, n);
-> +       } else {
-> +               ASSERT_EQ(-1, n);
-> +               ASSERT_EQ(EAGAIN, errno);
-> +       }
-> +}
-> +
-> +/* Test 2: peer closes with unread data */
-> +TEST_F(unix_sock, reset_unread_behavior)
-> +{
-> +       char buf[16] =3D {};
-> +       ssize_t n;
-> +
-> +       if (variant->socket_type =3D=3D SOCK_DGRAM) {
-> +               /* No real connection, just close the server */
-> +               close(self->server);
-> +       } else {
-> +               /* Establish full connection first */
-> +               self->child =3D accept(self->server, NULL, NULL);
-> +               ASSERT_LT(-1, self->child);
-> +
-> +               /* Send data that will remain unread */
-> +               send(self->client, "hello", 5, 0);
+On Wed, Nov 12, 2025 at 07:22:14PM +0000, David Matlack wrote:
+> This series adds support for tests that use multiple devices, and adds
+> one new test, vfio_pci_device_init_perf_test, which measures parallel
+> device initialization time to demonstrate the improvement from commit
+> e908f58b6beb ("vfio/pci: Separate SR-IOV VF dev_set").
 
-Could you move this send() before "if (...)" because we want
-to test unread_data behaviour for SOCK_DGRAM too ?
+The new test runs and passes for me.
 
-Otherwise looks good, so with that fixed:
+Tested-by: Alex Mastro <amastro@fb.com>
 
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+$ vfio_pci_device_init_perf_test $(readlink -f /sys/class/vfio-dev/*/../.. | xargs -n1 basename)
+Testing parallel initialization of 24 devices:
+    0000:05:00.0
+    0000:06:00.0
+    0000:27:00.0
+    0000:28:00.0
+    0000:e5:00.0
+    0000:e6:00.0
+    0000:e7:00.0
+    0000:e8:00.0
+    0000:e9:00.0
+    0000:ea:00.0
+    0000:c5:00.0
+    0000:c6:00.0
+    0000:07:00.0
+    0000:c7:00.0
+    0000:c8:00.0
+    0000:c9:00.0
+    0000:ca:00.0
+    0000:08:00.0
+    0000:09:00.0
+    0000:0a:00.0
+    0000:23:00.0
+    0000:24:00.0
+    0000:25:00.0
+    0000:26:00.0
+TAP version 13
+1..5
+# Starting 5 tests from 5 test cases.
+#  RUN           vfio_pci_device_init_perf_test.vfio_type1_iommu.init ...
+Wall time: 1.440004083s
+Min init time (per device): 1.236283226s
+Max init time (per device): 1.440002010s
+Avg init time (per device): 1.258762246s
+#            OK  vfio_pci_device_init_perf_test.vfio_type1_iommu.init
+ok 1 vfio_pci_device_init_perf_test.vfio_type1_iommu.init
+#  RUN           vfio_pci_device_init_perf_test.vfio_type1v2_iommu.init ...
+Wall time: 1.448952696s
+Min init time (per device): 1.242623358s
+Max init time (per device): 1.448951915s
+Avg init time (per device): 1.264836317s
+#            OK  vfio_pci_device_init_perf_test.vfio_type1v2_iommu.init
+ok 2 vfio_pci_device_init_perf_test.vfio_type1v2_iommu.init
+#  RUN           vfio_pci_device_init_perf_test.iommufd_compat_type1.init ...
+Wall time: 1.446931666s
+Min init time (per device): 1.242316634s
+Max init time (per device): 1.446927360s
+Avg init time (per device): 1.264904097s
+#            OK  vfio_pci_device_init_perf_test.iommufd_compat_type1.init
+ok 3 vfio_pci_device_init_perf_test.iommufd_compat_type1.init
+#  RUN           vfio_pci_device_init_perf_test.iommufd_compat_type1v2.init ...
+Wall time: 1.449211729s
+Min init time (per device): 1.243377853s
+Max init time (per device): 1.449211729s
+Avg init time (per device): 1.264266785s
+#            OK  vfio_pci_device_init_perf_test.iommufd_compat_type1v2.init
+ok 4 vfio_pci_device_init_perf_test.iommufd_compat_type1v2.init
+#  RUN           vfio_pci_device_init_perf_test.iommufd.init ...
+Wall time: 1.447583702s
+Min init time (per device): 1.241216318s
+Max init time (per device): 1.447582350s
+Avg init time (per device): 1.264159293s
+#            OK  vfio_pci_device_init_perf_test.iommufd.init
+ok 5 vfio_pci_device_init_perf_test.iommufd.init
+# PASSED: 5 / 5 tests passed.
+# Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
 
-Thanks!
-
-
-> +
-> +               /* Peer closes before client reads */
-> +               close(self->child);
-> +       }
-> +
-> +       n =3D recv(self->client, buf, sizeof(buf), 0);
-> +       ASSERT_EQ(-1, n);
-> +
-> +       if (variant->socket_type =3D=3D SOCK_STREAM ||
-> +           variant->socket_type =3D=3D SOCK_SEQPACKET) {
-> +               ASSERT_EQ(ECONNRESET, errno);
-> +       } else {
-> +               ASSERT_EQ(EAGAIN, errno);
-> +       }
-> +}
-> +
-> +/* Test 3: closing unaccepted (embryo) server socket should reset client=
-. */
-> +TEST_F(unix_sock, reset_closed_embryo)
-> +{
-> +       char buf[16] =3D {};
-> +       ssize_t n;
-> +
-> +       if (variant->socket_type =3D=3D SOCK_DGRAM)
-> +               SKIP(return, "This test only applies to SOCK_STREAM and S=
-OCK_SEQPACKET");
-> +
-> +       /* Close server without accept()ing */
-> +       close(self->server);
-> +
-> +       n =3D recv(self->client, buf, sizeof(buf), 0);
-> +
-> +       ASSERT_EQ(-1, n);
-> +       ASSERT_EQ(ECONNRESET, errno);
-> +}
-> +
-> +TEST_HARNESS_MAIN
-> +
-> --
-> 2.43.0
->
+ 
 
