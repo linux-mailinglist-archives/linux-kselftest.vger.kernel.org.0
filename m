@@ -1,107 +1,107 @@
-Return-Path: <linux-kselftest+bounces-45400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24A43C51F58
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 12:27:55 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D920C520B1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 12:44:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5D5E1889216
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 11:24:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 34C004FE7E8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 11:24:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCFE3081DE;
-	Wed, 12 Nov 2025 11:23:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67FC32FE06F;
+	Wed, 12 Nov 2025 11:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KcD5XfAp";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dQqDbML6"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BRKSnGcq";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fdFDwoYi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE6126F467
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 11:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB563257AEC
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 11:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762946635; cv=none; b=MqXpTJvCLSZ05p2wkB81Tq0+Fj0MVq5kepbJXz3/UJaU8A79kDKgcCWrxi/BbNXfT8hAFz1nQPP9zcaoqtyEjbet6p99OLUql8ldNsobnDqPGvauTHLowl+feHtMIL5u797KxM3C7BBpoAWVV9BgobUjYc9nIoIs24ikEGYZRJM=
+	t=1762946652; cv=none; b=VfkBa9vxRqQ89iwbLw+QAr9SVFNRRVLlal3LneYgFVWjQAe+2BzW9VeYebyYdLiDQgfxYsXxV43DYCZEqmzKzdxLiTZpowpEWAdGBRnKG8yQ8QZbkPB2+LC8nisaK/eCBLy93SSAtjEiwVHwxs/ftqMLVrSoGkF+Pum4hcQrHXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762946635; c=relaxed/simple;
-	bh=SDyYLyP6tCKgZow9SIBWdRS3PYcrbQQi85B2bhjoTbI=;
+	s=arc-20240116; t=1762946652; c=relaxed/simple;
+	bh=7/0V7WKhYDg3U+bnov+MRIZUZa6EKfNx7qtPM/VQN+8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H4D7C9Zd+fl+/qSuge5iBuCPTdJ6sTbW6wwutdTWi7cYnsz6hEFQrDo2TGVG4bCV/Oo9rUGGcb1fHzb5/PqmeaFnrQjgu9IULRUJmwUbnGL122cR985t3ALkBVMOUcotukVDZrqs+MydLwFvkEGQr4gnlCBXX18q4otIE97BLxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KcD5XfAp; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dQqDbML6; arc=none smtp.client-ip=170.10.133.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fb3byIf0sfKiDfxUhxiBymZASj59EgLmLShapVNNukTjuBkg0YDVw2OCFurdWnDmr9eZopXXkB6tMg7R3UfkklE1nxNr3LNAs+LEC47lK//fz/STaxjI3o4h7YWK5kZdmEKV6/hqnLEHxzHcVg8C89X2mkJvhwGvysdTxweQ3Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BRKSnGcq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fdFDwoYi; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762946631;
+	s=mimecast20190719; t=1762946650;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=D3H0HyO28+OYSSXAxEHzY6dM2GaftH10W5eTlFdtLkc=;
-	b=KcD5XfApUn51sMHsImre0sW1jaCdRWI2JwCmgA9ouyT9RootRotaYINgHcDoAZWNt4DZWV
-	EGaEwNWOZiQ7ksvWowpA7eahqFcI7ArtjtQNY34KWRQEYbSd/e6orE6xpNK5WM13SmxzPq
-	LAWNklKBSXDocHJCOqsE0fyW/jV9Hsg=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=TRM3b2n1y1d90nSJ+/3SrEo8VmC6gmyRB7DQ+Gs04+A=;
+	b=BRKSnGcqbJqhlXL1laQoe8+VU8jtb5TnD1ELoenUkLd78pbcg530EFnVnLEdL7VwijALJt
+	cfDtM25Rs0ukVlLnMrC/NcDfDtORAraQo/FFWFj6mmq1xTRqkJhIY9h0D0sKiaPBWuJil/
+	eXB1om8hwjUzcHlvr/LKAoXbjeuiL8U=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-510-7MxQfF8hMhyGevdmDEizpw-1; Wed, 12 Nov 2025 06:23:50 -0500
-X-MC-Unique: 7MxQfF8hMhyGevdmDEizpw-1
-X-Mimecast-MFC-AGG-ID: 7MxQfF8hMhyGevdmDEizpw_1762946630
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-88051c72070so14272616d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 03:23:50 -0800 (PST)
+ us-mta-287-zt0RHBBVNrGPOdkzYV5vPA-1; Wed, 12 Nov 2025 06:24:08 -0500
+X-MC-Unique: zt0RHBBVNrGPOdkzYV5vPA-1
+X-Mimecast-MFC-AGG-ID: zt0RHBBVNrGPOdkzYV5vPA_1762946648
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4edad305681so13778371cf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 03:24:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762946630; x=1763551430; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1762946648; x=1763551448; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D3H0HyO28+OYSSXAxEHzY6dM2GaftH10W5eTlFdtLkc=;
-        b=dQqDbML6wumCG6VgYQJwTyS3ejhi5+rOkDts0wdsCVJy2LqLxP7utTnWN3WGmdecV3
-         7x/kT8bQDVlfEE5ZxV2bmbHuHqZhQhqrW/4fp5pRh+8tJ27+nQCr3h2HZy8OHj+XpYJv
-         KBQ7A77vq6bqIcfd8E7cO4vUkl3fdKPeMGNEpGVQkUGV6ni4hrLHFmkJy4OkQ9BDKCYx
-         FP0S89UUmVsNDR1zv2y7ZtOx0cYeB/e6o+wgKwwjCF8IQJdbN1p1RVe27ANdH682zZL0
-         XuVbhTqatYXEEKQVPvlAjZsXR54evkwkMmIXwpPIxLXZbIDGoC/LJZbP+K8sCbsQ+smT
-         cytg==
+        bh=TRM3b2n1y1d90nSJ+/3SrEo8VmC6gmyRB7DQ+Gs04+A=;
+        b=fdFDwoYiemwCy9WiGcBYbq9Q913Kvvfa0+2wntbchXUbzL/pnh4l2Yr5JAzVsC24p+
+         7skjiAdo3GzkK9TZTk+tGCRJXaP3kOCGf5hIbjVPI7YBKPyZIGaNGH0mUW948QMhRbkR
+         YZA/c9bKSUnpqzcMcHqDXHb6DcQ/Xl766UGmdu5Nx3RPzUuLZ0yUpBIO9Z3cBNh9twCw
+         9MeFs9xHaBxrTraxJIfZvndG8TWXcxc1sVlSD4yLHxu9kpuWie7vFmxqUgzXpEg2bSos
+         P5yWKj3/f4ZrPa5+iTv9PoEEkrBu7ucnNLC0PrMiuGjKm2EFUiIDDaj4OVeADlnjc2rY
+         TOBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762946630; x=1763551430;
+        d=1e100.net; s=20230601; t=1762946648; x=1763551448;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D3H0HyO28+OYSSXAxEHzY6dM2GaftH10W5eTlFdtLkc=;
-        b=gIL0zNIZVGnHN0jsJ6tuLMgRPrlOSRuHFepn2lYrLbmE1o/2LQFe5EkTmTznyGrxos
-         jvKLwhuS4t7rukk/lQwHUSMcbQzi9gQuM57LRb7dAWL7erRMFAVgFNZqvKjcG1xQTy9M
-         i+5134NWuPNTCEZuKSZ8xa6atYYTClc/nuF/VCzT11fsL4xEQJPyCV9Qgcg9OZY7vkNx
-         7f/WZEDC+e93cbjlOPCO+SaWY8UJvd8dVgZ2In4S1xh8Og4nwTELFuuM9O1v1MEXVJT2
-         Ny+gPPCnJCFUGCEbEXib0iv1Z+pRSV8Amsh4Sd3f04wwPhLQP2ic8C1OZa4rukE0YYOX
-         bhxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWTbp433H4vhQzeSu5KNYhlogct3EsEb57JvPqM4oAz06yrhA+F0UJw/aVzaRU0xpC1EmxYd2EFEeRTFWmc2FM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTV/KmSUhLUj8AQC9K5E6cZSPHDnXnllLGAIx2WQCSY3Znucu6
-	SNnQ2mKackPbV/lRCgKwmOtnedrp60NZLQuI6yqoiPgmoWINmpN+N4JVdDvU/kP+mOYnvT9wCtI
-	/vEJmAw0f5Ims9cAvskgZtO7tAFljXq/NgPt+7/sBF1oCG9xHp7bgBXguqljLsSZwy8FLeA==
-X-Gm-Gg: ASbGnctMZlYjbOybVOoanF5UBvqfoIsSsks14KscDz5CK/EDo3OCB388TiAVyffMild
-	Pd/gXoYIheC37aqDRnVhGLJZQc4hd1LIHOzFIlQ+MUJqucLaiJnsYSC46mt81UBIKWlo1a4f5/K
-	Hu52DtmpE0Jn6f3Wy4Z3cEiQ1w8ScR+aqOeRhJPVyEjDfWC1zZVVGziyqtlTa9xLjsvRPuAIZQT
-	1oLEWMDbyN1SahEJMsGXhTco6xJUgBXJI/w6N7v1TIgDNtvmWaQ3DI/KT3jZN5YTJgljP/9mCBB
-	UvfvfGtuxy6qPB1qF7m/IDXlsQVR6vnQSCAPMyvTyZcSmxlNxv9QhLqYjmWtyFeaG1ZMK3Xwsmj
-	7JSIwBSDGmlMt2sTd0EDW6K5A4SZrMuRdAiX7NsfaxTlIfcgO9Gs=
-X-Received: by 2002:ad4:4ea7:0:b0:882:4be6:9ad2 with SMTP id 6a1803df08f44-882719e68e7mr44666286d6.33.1762946630289;
-        Wed, 12 Nov 2025 03:23:50 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH75JP6UyDj3zoFvW86TbiZUWcqb8so45eTwS+F/Ht1XSgKOAe4vkrTmnLDJKvoh14SKJ1KRA==
-X-Received: by 2002:ad4:4ea7:0:b0:882:4be6:9ad2 with SMTP id 6a1803df08f44-882719e68e7mr44665946d6.33.1762946629843;
-        Wed, 12 Nov 2025 03:23:49 -0800 (PST)
+        bh=TRM3b2n1y1d90nSJ+/3SrEo8VmC6gmyRB7DQ+Gs04+A=;
+        b=vGzWZmSNnQ8lG+q+1fP3Ltlqx/WPx3C/WxFFTKiIRciprEkMAxfybQTaWodxfjMua6
+         qmQWLS2n5033CCkjoa/ixwqCCHJsdVhdzmMFAty0YdN4eBdVnK7/jiFDkza2Nqg7LaXr
+         U9Ovviwg0a9N0Mv3zH3aM8N0nvia/mnw+pGm2ub+7VEswbOnNdH7RuXdSElX+kohYFCL
+         72lN3z7UNjJb8RRai+xUDd1ZIs/MDyM330L7fcdxn7bJG1o5SoorYcL2Ncxga5G/BW/h
+         93uWe6j0V3hUbdcimnHilhfptlcv2za62m4ooXIrroIQJX2zu3OnxvRhboxE38eCbH3v
+         UtGA==
+X-Forwarded-Encrypted: i=1; AJvYcCWu8pPh1cWTEWgYDIIiORah0bf5amCNW3YF0ygBv3nO98PwvrJEjv96KsZEIzMG9+pYXXaOOLLruKCLsqJVtyk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa3aJlONw7Fsom0VKm7seIlLY4zS8vBQ4veEeAoc17kjVu0JXj
+	uz7t/GzFsoqQwKmmMQJ3aTk93O37u3YpIRtu+d+vVdtB6xxjapOWbM85vZjA0pmseJWJ6pCkTns
+	x4+wJ1ds3XDzsaJ5ErNz+0KiwLSPU7hFHiV99PFKHxHP8QmII/hjvFGUfQl1BCizmR889fA==
+X-Gm-Gg: ASbGncsJdIl4OKsvht0bPVmkOqfZYzncgq0RWiNfG2yHFsNaK9imXPHUx87KRJ5TH6V
+	nTAHfm6i/LzQUonqHg0duNfP+M+N95nOXthqxtm0LWIHNyt6jKg7MMu38hp9q8ROjYPJDNpM1ze
+	fQahC0Kh/A9IXtJh+tXwFE+2ZUpet/BbM4h3EBl7A3PM/OmN2itrGD24jZcOoxQtksx0dnau+zR
+	mPYCxUBjZ5GnCVrQW9Fhq4j0tyAvcxWnmyyOQ/IIzWts0cmMyQssRTZS1wDWlRYzJdKCuYSZRWi
+	WliK5zDxeB9nMcpVc75GIrQHi01zvOr+vJOlgzuKxyRq0syY0ID3dQ0zs753GegzX1Z+sQNMPJm
+	Bl5M48KIblEmhDxnFJD0Wx410I7G0Y16TRPrHgHhgafOB0vjMqwo=
+X-Received: by 2002:ac8:7f0c:0:b0:4ed:afb4:5e2a with SMTP id d75a77b69052e-4eddbdd580emr30525761cf.68.1762946648360;
+        Wed, 12 Nov 2025 03:24:08 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEi9lfYrqcHRO06/1BdvE4+TDOFgR+mc1Xy/qr6FjnRCvkl3aS8R3iVlzWEotM9WMLpQRj+pQ==
+X-Received: by 2002:ac8:7f0c:0:b0:4ed:afb4:5e2a with SMTP id d75a77b69052e-4eddbdd580emr30525511cf.68.1762946647933;
+        Wed, 12 Nov 2025 03:24:07 -0800 (PST)
 Received: from sgarzare-redhat (host-79-46-200-153.retail.telecomitalia.it. [79.46.200.153])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88238b4045csm90028026d6.30.2025.11.12.03.23.47
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b29a9e6f88sm172172785a.30.2025.11.12.03.24.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 03:23:48 -0800 (PST)
-Date: Wed, 12 Nov 2025 12:23:43 +0100
+        Wed, 12 Nov 2025 03:24:07 -0800 (PST)
+Date: Wed, 12 Nov 2025 12:24:03 +0100
 From: Stefano Garzarella <sgarzare@redhat.com>
 To: Bobby Eshleman <bobbyeshleman@gmail.com>
 Cc: Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev, 
 	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Simon Horman <horms@kernel.org>, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v4 05/12] selftests/vsock: do not
- unconditionally die if qemu fails
-Message-ID: <6t3kq42haafazobjbrnmcppg4bhyzfbmkuyld3h2y3rq5xaehr@olnyeve44x5l>
+Subject: Re: [PATCH net-next v4 06/12] selftests/vsock: speed up tests by
+ reducing the QEMU pidfile timeout
+Message-ID: <jnhqclrso3uy7ptqutykcsaocu2fh26wi6jm6s5ny4eldnv7zx@4wblegex46a7>
 References: <20251108-vsock-selftests-fixes-and-improvements-v4-0-d5e8d6c87289@meta.com>
- <20251108-vsock-selftests-fixes-and-improvements-v4-5-d5e8d6c87289@meta.com>
+ <20251108-vsock-selftests-fixes-and-improvements-v4-6-d5e8d6c87289@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -110,43 +110,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20251108-vsock-selftests-fixes-and-improvements-v4-5-d5e8d6c87289@meta.com>
+In-Reply-To: <20251108-vsock-selftests-fixes-and-improvements-v4-6-d5e8d6c87289@meta.com>
 
-On Sat, Nov 08, 2025 at 08:00:56AM -0800, Bobby Eshleman wrote:
+On Sat, Nov 08, 2025 at 08:00:57AM -0800, Bobby Eshleman wrote:
 >From: Bobby Eshleman <bobbyeshleman@meta.com>
 >
->If QEMU fails to boot, then set the returncode (via timeout) instead of
->unconditionally dying. This is in preparation for tests that expect QEMU
->to fail to boot. In that case, we just want to know if the boot failed
->or not so we can test the pass/fail criteria, and continue executing the
->next test.
+>Reduce the time waiting for the QEMU pidfile from three minutes to five
+>seconds. The three minute time window was chosen to make sure QEMU had
+>enough time to fully boot up. This, however, is an unreasonably long
+>delay for QEMU to write the pidfile, which happens earlier when the QEMU
+>process starts (not after VM boot). The three minute delay becomes
+>noticeably wasteful in future tests that expect QEMU to fail and wait a
+>full three minutes for a pidfile that will never exist.
 >
 >Reviewed-by: Simon Horman <horms@kernel.org>
 >Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 >---
-> tools/testing/selftests/vsock/vmtest.sh | 6 ++----
-> 1 file changed, 2 insertions(+), 4 deletions(-)
+> tools/testing/selftests/vsock/vmtest.sh | 4 ++--
+> 1 file changed, 2 insertions(+), 2 deletions(-)
 
 Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
 >
 >diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
->index 13b685280a67..6889bdb8a31c 100755
+>index 6889bdb8a31c..bd231467c66b 100755
 >--- a/tools/testing/selftests/vsock/vmtest.sh
 >+++ b/tools/testing/selftests/vsock/vmtest.sh
->@@ -236,10 +236,8 @@ vm_start() {
+>@@ -22,7 +22,7 @@ readonly SSH_HOST_PORT=2222
+> readonly VSOCK_CID=1234
+> readonly WAIT_PERIOD=3
+> readonly WAIT_PERIOD_MAX=60
+>-readonly WAIT_TOTAL=$(( WAIT_PERIOD * WAIT_PERIOD_MAX ))
+>+readonly WAIT_QEMU=5
+> readonly PIDFILE_TEMPLATE=/tmp/vsock_vmtest_XXXX.pid
+> declare -A PIDFILES
+>
+>@@ -236,7 +236,7 @@ vm_start() {
 > 		--append "${KERNEL_CMDLINE}" \
 > 		--rw  &> ${logfile} &
 >
->-	if ! timeout ${WAIT_TOTAL} \
->-		bash -c 'while [[ ! -s '"${pidfile}"' ]]; do sleep 1; done; exit 0'; then
->-		die "failed to boot VM"
->-	fi
->+	timeout "${WAIT_TOTAL}" \
->+		bash -c 'while [[ ! -s '"${pidfile}"' ]]; do sleep 1; done; exit 0'
+>-	timeout "${WAIT_TOTAL}" \
+>+	timeout "${WAIT_QEMU}" \
+> 		bash -c 'while [[ ! -s '"${pidfile}"' ]]; do sleep 1; done; exit 0'
 > }
 >
-> vm_wait_for_ssh() {
 >
 >-- 
 >2.47.3
