@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-45449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8B77C541EF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 20:26:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8369DC541FE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 20:27:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C3024E5FEA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 19:24:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 279114E7707
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 19:24:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22F5A351FA1;
-	Wed, 12 Nov 2025 19:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B99135293A;
+	Wed, 12 Nov 2025 19:23:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cip5GyAc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mto1Mz3S"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF38350A12
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 19:22:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A16C3350D51
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 19:22:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762975379; cv=none; b=n+Vi8Tc1/ECJ+U3It5EMEuHBKfshLnTe8QIh/mtxMM1x3lsFBWphEioTLYyKSWUW5bH2aXRliSi1POKoTCX7qtqInFWe4hEllLl+hgIjFXdCP+oYI3hzJJjjEV8nJvy8bT60e2HFFnnqRZSLQn7jlFwdZI7xx9HYekh733l4/Q4=
+	t=1762975380; cv=none; b=XcOpKqba31EE3nopYeahLJnR92BNk5onNnAbpIujGgryzUWW0GMU7m+jrc7Qdo1yo67BIsMQJ0ruZXcUcz+zlhyFrGNoKArViKfoDlJPeh4n2LY9eiyuKiupof9K9vyViwcYsqgbSV5pgYYKOwKL54u1MD6TimFTE3J6+IXrQR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762975379; c=relaxed/simple;
-	bh=X2z0zYXx4IfeK6I1u0CZBdTx7I9g6VYRrlA6xnWbdPU=;
+	s=arc-20240116; t=1762975380; c=relaxed/simple;
+	bh=4WEWqFLkAyILTnk5IRmplEfehB7Qfwkb9Xc1jBRIVh0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ITx3ZpEah9bof4H0zPa+ynFYIymSqZxKPd9BWNshJez6sxWHErPdzqXDByvDeElTy8kBE5mys927HzKEQ9bPHFEVShDrXmxAUTgicVa7DqAHAcHkzLwwU4l/jgWQ8LeIyoOrHzk1nZj7mXTtptDb9s+GWIoVz5Z7ol1HvGBdYQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cip5GyAc; arc=none smtp.client-ip=209.85.210.201
+	 To:Cc:Content-Type; b=jcwGgggfXs0YXhP7UCgq35OjezA4gKe6nMNMnF+XvoDj9R2cDk5dxoiBQ4ve++BuHbSGxDo1tA5r07UWdxxbhiS2Bl3cuGDuRGTdDOkkbA/op41+gK43DuOm2acbKPA3puZdkXOyXxfqyQ7IYSNocS59k5mQGufaWp6ucX9GgUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mto1Mz3S; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7a432101881so2125192b3a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 11:22:56 -0800 (PST)
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7b89c1ce9cfso472691b3a.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 11:22:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762975376; x=1763580176; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1762975378; x=1763580178; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ueKETxDM4kJbfqgE66fsmgAr6L0p0+l6thADmsbkETo=;
-        b=cip5GyAcOLDAohdpwhUwRAvruToQeL+heV6cy+o6ZzjZtSgxn7cVCK67sHdk9KVqWh
-         z9s+pfzFj7kwzc6xRXY+XK5z3/DvP5TFSh6hiAPLdF1kiPkU4QstKsJ1qcOYUQ7vEHNo
-         wFgDbhdTaJLkTJFofLbGQ2PSdS5VgYuWx8orGZiA0cIrRqNG96xmDnulW8kbzM8TlbnK
-         2hA8dbrmgkUphHHFNxKSKMHpLkIYp7BFsfWHq5ifSrgfsFHPYj/P+J8C/8IYwu//pVq2
-         WIJ/0YzVLjDDR6HvQV0NQqFcHdZHCH3u5FpWc9cni9qbFXq5/XVoQ4rXFwjlEoLDDGxB
-         KGhA==
+        bh=mq/oPHnS+nR1DAAGuM6ciZxbjUUIou+j7/UhE84TOCk=;
+        b=mto1Mz3S6cey2ugi/lZmLCcSeyr/JeDqcaYOguBgBeC9FxeA6K49VL8OJNxSBi9Ti7
+         f7bTdKXwb0ArUjYTmYpP1L6UXjCzdamosqtmhHiZIpiGEdVxtfcPyOtDYp9kHmBysrsY
+         RvIodXmScdoUUWvq6QAZLDjQIurSTqQsqRP7WEXY10VEEj8kdLvivAUJM94EpTMo/XGe
+         fBcB09B6INIkfdqccQZvRyjlQTqQvb43Bg2ZKT06NKFrUukjnaGPMhCaCuk+WAOpa6rX
+         z4HkR5HVpbVhF+ZYi1wZ0yEFunA/AeEAWDJdwP+X0BSz/9Upep9z6qDhFeL/r0Ptp0r4
+         /UsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762975376; x=1763580176;
+        d=1e100.net; s=20230601; t=1762975378; x=1763580178;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ueKETxDM4kJbfqgE66fsmgAr6L0p0+l6thADmsbkETo=;
-        b=Tym6qP0NdazjSzm6iTkxiN0DixtwVrzoC6kFuaVexhcga4WN71hF/xMaHldKpBzdcC
-         YuGVMHfcHYvqcR5wvDivlLaHw3+7LlsS/NR/V0iEZPek23fBpAvLg9eP0NKiLV38paeJ
-         +KMHIOajGv1fpWR4D1if88PHtBphSXk1qLmW1Igm+7WmN5Ko6kBkhG/ScqIrsNmHb3s1
-         YvH2lOKvlwrevr8QjB/BoaphIuTp8EPBvhRCyaBlRTVyLNy9pWIq3kT0U4s9GERieilR
-         b8o/zXc49m5bu39aE1rg76nPAQP3rxD0AzRDKwYBczkF5CYYLGlZW5Inwu6HIZa9niqC
-         5zmw==
-X-Forwarded-Encrypted: i=1; AJvYcCUT1YyTQK++ugUYBaiosjk8Lr/JWDkeD/WEKcCGRVseGTe3nPN0gWvxepS315CabUTaGQXUwdGalnGXHUO4aLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzy16sS6KET0nwBJQ7229y1+gsyC70xgghFmDfC6T+IFyGWVmHm
-	vsEYZ+zid4kQWCUk4jxzqui5fHulG5sjzYNctOobrvfGPhAMd7HGoR0dXgvxUwykQF327s+GKgT
-	CL20BFknQJ/3wXA==
-X-Google-Smtp-Source: AGHT+IEzsM/mNVu+WiWqJPEakH62CIW77qsxfOleVw+6jOlLtlnEJjcytVKVMxooFSZ/VRHPV9LWkhxYkLXOug==
-X-Received: from pfblb14.prod.google.com ([2002:a05:6a00:4f0e:b0:7b8:d5a9:9eff])
+        bh=mq/oPHnS+nR1DAAGuM6ciZxbjUUIou+j7/UhE84TOCk=;
+        b=ZmF10hDB0zHtImf1q5D30U22uThyO290MYoJ9b11ExXkhuDRXfCYEWgVmcIZ3Ibhoj
+         GPxvfrGQktVovOSp3UosqhTZAhlR1ybYP49jGygdjXxAnLol7eWNimm/NM6pHheRLA/d
+         8NTXJnk50sAxLlWHkdMaf+D01AjoI6YqOji0D1Y6F6Y8X8NI0zN/8s939EHxXu7l0Wg1
+         LK39dcXJ7BEgeY0xuKqQnMi8UtgErVAIqavjln5+tvBnolf61LaqDnPgFYN5as8IIma/
+         IuDuftWM9Mks3iB7bryjnEZbqJjjMykRJzeDYVwYx+c+by7h6FK7QGdJsc7fA3qT1y8r
+         +dvw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+xsGi3OlJpPZEkAhcAvbk4+FpLx9eNb/5S6uyJxCKUYmbF0Qn2C1qXWb/ZTEGB1Jd9156sNB14qQlwETWo3s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywbjbw3kRQKlXOQM1K/mnmVEhoVavPKChIrkz9YrfRlwZVjuujk
+	q2FNGqRMXlQ+UhswfR59tHZTVHptkFn/UUIPT3JCBzYcVEDsSp5TaQlpDrO+Q04R1hi0dVGW+Hu
+	FF+jsDKtBrq5pSg==
+X-Google-Smtp-Source: AGHT+IEd9++8is6wKtQHcfQ6Wkj1e3bbHC3t+bITp5e83+/U0RnUJT78Nw/CRkwOfCVl+NP4rN8DCvD7e+WkmQ==
+X-Received: from pfbml5.prod.google.com ([2002:a05:6a00:3d85:b0:792:f698:fda2])
  (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:22c3:b0:7ab:e844:1e52 with SMTP id d2e1a72fcca58-7b7a4fdc065mr4048347b3a.23.1762975376430;
- Wed, 12 Nov 2025 11:22:56 -0800 (PST)
-Date: Wed, 12 Nov 2025 19:22:22 +0000
+ 2002:a05:6a00:2ea7:b0:7b2:2d85:ae59 with SMTP id d2e1a72fcca58-7b7a2d8d131mr4883446b3a.11.1762975378013;
+ Wed, 12 Nov 2025 11:22:58 -0800 (PST)
+Date: Wed, 12 Nov 2025 19:22:23 +0000
 In-Reply-To: <20251112192232.442761-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251112192232.442761-1-dmatlack@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251112192232.442761-9-dmatlack@google.com>
-Subject: [PATCH v2 08/18] vfio: selftests: Prefix logs with device BDF where relevant
+Message-ID: <20251112192232.442761-10-dmatlack@google.com>
+Subject: [PATCH v2 09/18] vfio: selftests: Upgrade driver logging to dev_err()
 From: David Matlack <dmatlack@google.com>
 To: Alex Williamson <alex.williamson@redhat.com>
 Cc: Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>, 
@@ -85,147 +85,66 @@ Cc: Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>,
 	Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Prefix log messages with the device's BDF where relevant. This will help
-understanding VFIO selftests logs when tests are run with multiple
-devices.
+Upgrade various logging in the VFIO selftests drivers from dev_info() to
+dev_err(). All of these logs indicate scenarios that may be unexpected.
+For example, the logging during probing indicates matching devices but
+that aren't supported by the driver. And the memcpy errors can indicate
+a problem if the caller was not trying to do something like exercise I/O
+fault handling. Exercising I/O fault handling is certainly a valid thing
+to do, but the driver can't infer the caller's expectations, so better
+to just log with dev_err().
 
+Suggested-by: Raghavendra Rao Ananta <rananta@google.com>
 Signed-off-by: David Matlack <dmatlack@google.com>
 ---
- .../selftests/vfio/lib/drivers/dsa/dsa.c      | 34 +++++++++----------
- .../selftests/vfio/lib/drivers/ioat/ioat.c    | 16 ++++-----
- .../selftests/vfio/lib/include/vfio_util.h    |  4 +++
- .../selftests/vfio/lib/vfio_pci_device.c      |  1 +
- 4 files changed, 30 insertions(+), 25 deletions(-)
+ tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c   | 4 ++--
+ tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-index 0ca2cbc2a316..8d667be80229 100644
+index 8d667be80229..0afbab0d82de 100644
 --- a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
 +++ b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
 @@ -70,7 +70,7 @@ static int dsa_probe(struct vfio_pci_device *device)
  		return -EINVAL;
  
  	if (dsa_int_handle_request_required(device)) {
--		printf("Device requires requesting interrupt handles\n");
-+		dev_info(device, "Device requires requesting interrupt handles\n");
+-		dev_info(device, "Device requires requesting interrupt handles\n");
++		dev_err(device, "Device requires requesting interrupt handles\n");
  		return -EINVAL;
  	}
  
-@@ -91,23 +91,23 @@ static void dsa_check_sw_err(struct vfio_pci_device *device)
- 			return;
- 	}
- 
--	fprintf(stderr, "SWERR: 0x%016lx 0x%016lx 0x%016lx 0x%016lx\n",
-+	dev_err(device, "SWERR: 0x%016lx 0x%016lx 0x%016lx 0x%016lx\n",
- 		err.bits[0], err.bits[1], err.bits[2], err.bits[3]);
- 
--	fprintf(stderr, "  valid: 0x%x\n", err.valid);
--	fprintf(stderr, "  overflow: 0x%x\n", err.overflow);
--	fprintf(stderr, "  desc_valid: 0x%x\n", err.desc_valid);
--	fprintf(stderr, "  wq_idx_valid: 0x%x\n", err.wq_idx_valid);
--	fprintf(stderr, "  batch: 0x%x\n", err.batch);
--	fprintf(stderr, "  fault_rw: 0x%x\n", err.fault_rw);
--	fprintf(stderr, "  priv: 0x%x\n", err.priv);
--	fprintf(stderr, "  error: 0x%x\n", err.error);
--	fprintf(stderr, "  wq_idx: 0x%x\n", err.wq_idx);
--	fprintf(stderr, "  operation: 0x%x\n", err.operation);
--	fprintf(stderr, "  pasid: 0x%x\n", err.pasid);
--	fprintf(stderr, "  batch_idx: 0x%x\n", err.batch_idx);
--	fprintf(stderr, "  invalid_flags: 0x%x\n", err.invalid_flags);
--	fprintf(stderr, "  fault_addr: 0x%lx\n", err.fault_addr);
-+	dev_err(device, "  valid: 0x%x\n", err.valid);
-+	dev_err(device, "  overflow: 0x%x\n", err.overflow);
-+	dev_err(device, "  desc_valid: 0x%x\n", err.desc_valid);
-+	dev_err(device, "  wq_idx_valid: 0x%x\n", err.wq_idx_valid);
-+	dev_err(device, "  batch: 0x%x\n", err.batch);
-+	dev_err(device, "  fault_rw: 0x%x\n", err.fault_rw);
-+	dev_err(device, "  priv: 0x%x\n", err.priv);
-+	dev_err(device, "  error: 0x%x\n", err.error);
-+	dev_err(device, "  wq_idx: 0x%x\n", err.wq_idx);
-+	dev_err(device, "  operation: 0x%x\n", err.operation);
-+	dev_err(device, "  pasid: 0x%x\n", err.pasid);
-+	dev_err(device, "  batch_idx: 0x%x\n", err.batch_idx);
-+	dev_err(device, "  invalid_flags: 0x%x\n", err.invalid_flags);
-+	dev_err(device, "  fault_addr: 0x%lx\n", err.fault_addr);
- 
- 	VFIO_FAIL("Software Error Detected!\n");
- }
 @@ -256,7 +256,7 @@ static int dsa_completion_wait(struct vfio_pci_device *device,
  	if (status == DSA_COMP_SUCCESS)
  		return 0;
  
--	printf("Error detected during memcpy operation: 0x%x\n", status);
-+	dev_info(device, "Error detected during memcpy operation: 0x%x\n", status);
+-	dev_info(device, "Error detected during memcpy operation: 0x%x\n", status);
++	dev_err(device, "Error detected during memcpy operation: 0x%x\n", status);
  	return -1;
  }
  
 diff --git a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-index c3b91d9b1f59..e04dce1d544c 100644
+index e04dce1d544c..c6db311ce64d 100644
 --- a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
 +++ b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
 @@ -51,7 +51,7 @@ static int ioat_probe(struct vfio_pci_device *device)
  		r = 0;
  		break;
  	default:
--		printf("ioat: Unsupported version: 0x%x\n", version);
-+		dev_info(device, "ioat: Unsupported version: 0x%x\n", version);
+-		dev_info(device, "ioat: Unsupported version: 0x%x\n", version);
++		dev_err(device, "ioat: Unsupported version: 0x%x\n", version);
  		r = -EINVAL;
  	}
  	return r;
-@@ -135,13 +135,13 @@ static void ioat_handle_error(struct vfio_pci_device *device)
+@@ -135,7 +135,7 @@ static void ioat_handle_error(struct vfio_pci_device *device)
  {
  	void *registers = ioat_channel_registers(device);
  
--	printf("Error detected during memcpy operation!\n"
--	       "  CHANERR: 0x%x\n"
--	       "  CHANERR_INT: 0x%x\n"
--	       "  DMAUNCERRSTS: 0x%x\n",
--	       readl(registers + IOAT_CHANERR_OFFSET),
--	       vfio_pci_config_readl(device, IOAT_PCI_CHANERR_INT_OFFSET),
--	       vfio_pci_config_readl(device, IOAT_PCI_DMAUNCERRSTS_OFFSET));
-+	dev_info(device, "Error detected during memcpy operation!\n"
-+		 "  CHANERR: 0x%x\n"
-+		 "  CHANERR_INT: 0x%x\n"
-+		 "  DMAUNCERRSTS: 0x%x\n",
-+		 readl(registers + IOAT_CHANERR_OFFSET),
-+		 vfio_pci_config_readl(device, IOAT_PCI_CHANERR_INT_OFFSET),
-+		 vfio_pci_config_readl(device, IOAT_PCI_DMAUNCERRSTS_OFFSET));
- 
- 	ioat_reset(device);
- }
-diff --git a/tools/testing/selftests/vfio/lib/include/vfio_util.h b/tools/testing/selftests/vfio/lib/include/vfio_util.h
-index 379942dc5357..babbf90688e8 100644
---- a/tools/testing/selftests/vfio/lib/include/vfio_util.h
-+++ b/tools/testing/selftests/vfio/lib/include/vfio_util.h
-@@ -50,6 +50,9 @@
- 	VFIO_LOG_AND_EXIT(_fmt, ##__VA_ARGS__);			\
- } while (0)
- 
-+#define dev_info(_dev, _fmt, ...) printf("%s: " _fmt, (_dev)->bdf, ##__VA_ARGS__)
-+#define dev_err(_dev, _fmt, ...) fprintf(stderr, "%s: " _fmt, (_dev)->bdf, ##__VA_ARGS__)
-+
- struct iommu_mode {
- 	const char *name;
- 	const char *container_path;
-@@ -172,6 +175,7 @@ struct iommu {
- };
- 
- struct vfio_pci_device {
-+	const char *bdf;
- 	int fd;
- 	int group_fd;
- 
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 57bdd22573d4..f3aea724695d 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -841,6 +841,7 @@ struct vfio_pci_device *vfio_pci_device_init(const char *bdf, struct iommu *iomm
- 	device = calloc(1, sizeof(*device));
- 	VFIO_ASSERT_NOT_NULL(device);
- 
-+	device->bdf = bdf;
- 	device->iommu = iommu;
- 
- 	if (device->iommu->mode->container_path)
+-	dev_info(device, "Error detected during memcpy operation!\n"
++	dev_err(device, "Error detected during memcpy operation!\n"
+ 		 "  CHANERR: 0x%x\n"
+ 		 "  CHANERR_INT: 0x%x\n"
+ 		 "  DMAUNCERRSTS: 0x%x\n",
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
