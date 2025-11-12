@@ -1,176 +1,282 @@
-Return-Path: <linux-kselftest+bounces-45438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D245C53DDB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 19:12:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05A4AC53F62
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 19:44:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 17C7E4E5B98
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 18:05:25 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 04C1E34F6C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 18:37:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E56D343D6D;
-	Wed, 12 Nov 2025 18:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B390134B408;
+	Wed, 12 Nov 2025 18:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FCuHR/3q";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fvBBqqqy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nz4nFM7R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEED934846A
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 18:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A229834CFA8
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 18:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762970722; cv=none; b=YM6ihxqI9/zRm7YQUFVnf0Z3edqy2GG3EqlvhttZ9EKNMAQgbhPtmaMLga6y1l3aiQRMfVtqXwelg0pK+HAAjCFbajuqBDlTpeRPjaWQQ7nfHm0SSTShcf+AXMuob9ncs9l179FjEjIiUB8TSUI/B6CTT9CPqSZu+sy59wphyK8=
+	t=1762972043; cv=none; b=CapPUDjKgU/Y78xRO+pEwzJYOYvjSKvFRr6xHgFRRA9G6F6EmBVaAlLraC/97WuKww+xM2bwk6zqf5OaKj/g4ztoVRleeXLYu5anU2q5LNxIokslvbYK5FLPFmwv/MK6xOAsOuisxM6D5MRGolxXAEkEl/vz7O+ru2vlA7apu4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762970722; c=relaxed/simple;
-	bh=ko5BbGl6a9fQFlBxeoKvlk91k6qFsjA2qTndHaSt7YE=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=bD4i4GgrcOZ+DyMJ3As4e4/h6NSs0R7wU/Ov9p0u4T0e3hlWDl9L6pn+HlF3Hyf6dATczh0P4MoSyHzAxwayKIimlk7OEWCN5YtP7GAbhgMYookWxL43FUVAFnGz/0FT6Je/QSKYKy0ID3RYTCTT0qgy5PQElPpp/oUZwN7BPyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FCuHR/3q; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fvBBqqqy; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762970719;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0Zn2uqlOqkTGm+7Vhf+JluqFYrDljO4Zyy3TKQXkdTw=;
-	b=FCuHR/3qXGnLB9pvrp2X3NsKGrGybR8DhnSIuJTocE09BRm+1vZ3SuNUdBfnt1Xy9nsOSL
-	p2CMWLCAG24ZRIP0J1hBc6GOnf25gXN0+/ApUFL0Kv3vR/DJ78vO6RXQGT2ylefvox5uZD
-	EanRBSdSCxF+JFl6ujNNDocJiDsFniI=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-591-CSFNpUUXPsmn6hixd7xglw-1; Wed, 12 Nov 2025 13:05:18 -0500
-X-MC-Unique: CSFNpUUXPsmn6hixd7xglw-1
-X-Mimecast-MFC-AGG-ID: CSFNpUUXPsmn6hixd7xglw_1762970718
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8b259f0da04so310841385a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 10:05:18 -0800 (PST)
+	s=arc-20240116; t=1762972043; c=relaxed/simple;
+	bh=t9WH0uIA0Kd5iVPDGi3VBM9RJJsL30m93Ocqn2bvwTY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GFdB2NAaX5NIYmW7LdJgjpjKX/5a5KDsnYsvZHMsdsw8G0dL8jMdplLUGP4Vs1Ry5T9ToHtdnVFnqhvBD2d15x6N/9m2mEutUvCI6ZN0Mfz6yfQtAMJo9AyCcm6KDEBicQLxe76EKbkZ1ON9+RqMOOa474kGibnlOsnBAHQIQ7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nz4nFM7R; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-78665368a5cso12099857b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 10:27:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762970718; x=1763575518; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0Zn2uqlOqkTGm+7Vhf+JluqFYrDljO4Zyy3TKQXkdTw=;
-        b=fvBBqqqyTlsxOIpJ9UPap7LmW1Xe5fW9YUJV3oCBJ1KX1CFIaX5xqLNBDGrE7gge5Y
-         O23qi8y+k/5Okr59fUf/XJ/xTSlxUh2UsmSta2Yzr8xtp33E0JCsZ3Wqjk4402bP3pQa
-         N+dmz4M8zr/G0Y2E56IAN9pe3sJkpxUlNJ7hYJIpXEot8BZ6eqO+cfKWL+T3TWNneOwZ
-         MaMEXMvUkwX6xO4PPRDYphpIJB7/+2tZhjfJ/bt1IIGUpN2TE4da2+m8Q3WHXkrgoAyZ
-         OESEdmlcK0rpnVjrCSdbYp+Rax+vRgEbFheMfR/h1HpG9m3Z9n+jZR3RKTPKhBcxUQOW
-         PidA==
+        d=gmail.com; s=20230601; t=1762972040; x=1763576840; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kn4iJ576u/8r69eAmbE1/5rsoTHMVU1gXmFF80Gkt/s=;
+        b=Nz4nFM7RRsGZORcMyP1ZJXgR+glf+eHfJUMWYH7nhtTojAIbFV+StSznpgQRZ+LzDW
+         jedLyy66Zg6EJszrHY1H7xC9gns4OxbZ2OS5waC/QNs1hu+xLnuVpZE+rPq1SCfBmJg6
+         HYZ+db6bIBtckenS4UV0FRHxOlnrWGtCiQrHbzJ4pUquQNglGJE8ReSIwk7EWUvd84vP
+         Z1oRS1bKpl3C2El95gc/4Z4fGE5SM9iMUujCGf22D3VsBLMcqRrupynAuJpWv+iovRFA
+         xKpqhpoWk6fcSyBgnx1k14bwPEy0jGgdorls+Maps6I3lZ2t2vprvvVacKG4lENkOm6v
+         nPUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762970718; x=1763575518;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0Zn2uqlOqkTGm+7Vhf+JluqFYrDljO4Zyy3TKQXkdTw=;
-        b=DjKMTziew/p77WteIQtPLijDUd1aiM9ATc1hTT7KmGNwRsOmUG3STbKnMvFk/SB823
-         JFBUkE2jpjQ26SfLp2tZlFBuLC7Ya7FJWcRRVjsDK6XwwMhgbgvj3fGd4UPG0XT81ew8
-         g5hOdXEapW6EbKslbEBO20fmO3LGVpJNXMGvbn36Qz3Ao8jGOfjIfl7ocPaaorc3vEwf
-         EoUI3iOiHjU1sZd5eGhMctAIDDgZ4flEiZifp7bRL2ygc7ovqTPr5y0ODCTRT+BaJwH4
-         PThUuTMd8AzXFH5VCIiZPdJsZbDZf+AIkA3nikDwGJ9iDfsTg6jTA47y4VkQPgy+HYer
-         04HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWTTZvwdtpnTSbpLhvy9AkCtrU0+OiLhrnJG5NcukDOLxUF3YW/CBG5r1AuE5841gNyYiNrQEVrRfKX/oYKD48=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcXWIbC8sGwvnXxuQTUqHGkZam+dfH6ObHygxBz/zNo7RPfq3n
-	lHYF9MN+J7jVi9RljqY96CaoQc4SYBD6MCBfAqhfpXXVtWDK8q7Ng5DaRcMtMk52xEdsr2H+hGD
-	3rmP8X/xQ2uDjoMQlC9KS9iHROxnbS5WVL4I9h6j2DjRQqH/gW847dY7kkdY5dJk/0X23Sg==
-X-Gm-Gg: ASbGncsdrawUVNV/JR555De3dR8wy+P6B63QZ3bBRhLuuVphlcGU3NnSCu2wAVgATnl
-	Q8z4Fj81EAb58Q//eKv3sQY1x9ho1pblaa9XIF079J/LEBITysh9O9X1zbOcU8ZkhuHNoSdBuGC
-	Lh3e/Ev1kDtEoN0cy7LO+1tpRcBNn5yoBw3Vhi3+FajACb9B5zBesGYHnHtYOaTX463592Wq39G
-	tMEY2+MpP107VjmGEnOu7JWi7PTeTgWU8ywNyp5YysHPOmw6nQMLaWpcIBhUS55BMHdw/mWXlv5
-	Xz73Qy1ExiXYgR8AS+7gD7hkH0vHDAgHpCsuy3/xrIRsOcQcZQPKuPCoyQ3cRtrwaXaQP7U4nyA
-	I1lV7a2NbIeqfzr1+vqqmXzB4JnNaq+Z9ofCCJY2onUmDng==
-X-Received: by 2002:ad4:5f49:0:b0:882:4f53:ed41 with SMTP id 6a1803df08f44-882719e6978mr55688786d6.39.1762970717963;
-        Wed, 12 Nov 2025 10:05:17 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG4IiIw+N1Z2Q8t2UVNI42KNkJKyBdYBTSzcbCJ42RBQAZsdIZ+JdFm9V5TA71Qksd6vDNtIw==
-X-Received: by 2002:ad4:5f49:0:b0:882:4f53:ed41 with SMTP id 6a1803df08f44-882719e6978mr55688206d6.39.1762970717419;
-        Wed, 12 Nov 2025 10:05:17 -0800 (PST)
-Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88238b293a6sm95893676d6.37.2025.11.12.10.05.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Nov 2025 10:05:16 -0800 (PST)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <85f438b2-5131-4794-bb2d-09ca611fb246@redhat.com>
-Date: Wed, 12 Nov 2025 13:05:15 -0500
+        d=1e100.net; s=20230601; t=1762972040; x=1763576840;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kn4iJ576u/8r69eAmbE1/5rsoTHMVU1gXmFF80Gkt/s=;
+        b=YOR/A84t3le+cmthmk3DpvJBrgnWbqoOW1zkNkMbAR/E/kkVZ6QcGlDzrTSbq0v7qD
+         Q76KU2A9Vsw4opJXEvZcQC8B7xqaZE8XYxDlLfVQuG8RFDurnXNIi2WR3gSz2oyWIDty
+         UiL1EV9m1yfuICzRuiuE8SCXKqJgRIJs84nBd3ksXruCIHmpoFd1b6czASuzFuM1uGQd
+         +aZK11ECQOYmRSdkUM2fXQd7TJir4PIx8BHwEOouky0gNiABVaXNMXBTLLAwd3yw0eSS
+         FVNnMNHYLoNA49p7IrwRBPZ9TU4qEya4JXFriLxGtM21nB3r/YRIQEUvY5VyHQmHAOmE
+         rgdg==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ0Tz16UBzlV+hUtKVvQFFR3GfDEK+s076pakdd+4YRgONMUgXsWXHBrSXNI5F4e4HjO+2bees8CHGo3T8PTQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3LYiQVBggYU3piFlb8aC+GxOy7ylTBPzLIz9htS3dLlNLSYXT
+	ad50Fg0IK6q/GPAPBxw2/uVrAVjfBx05QsUfidOoySL+ySeM6UNAa+HR
+X-Gm-Gg: ASbGncsDkGwCxwfkcAqYRNsVriOX0+ZwVRUmSSt84LgQD4oVfZFqNKAgTnE8DwcJgWA
+	Jp60Km9jf/VsVmmEbXoYrYt+tZ/+OJvaue4CO2ypXzNclYRjLholHfczZXcvvPmz6aNOFLQQkHX
+	RNFXcoMDsQZ81VLnmBuqg8tYoi9mWKaxSFZVHwg1LpU+r/wyOF6lL+IMl1WHcdHw3Y0r+QxyxWZ
+	vV9Fs72MFB7I+6k/qMNZqoK4FuuOp7MF8TvLV3e5z20AJ8p1U/+Fvktns+RvZ+r8mA0hD5/sbjk
+	UcXJAlUavgZ/hVSCXlblF2xcYpsMuN7g2a0NxDMHFCmbuc66YfiEppcAOgIvmRVzmF02Ljyz2aw
+	3hVTIJcsjUQz6VZ950JxB+gAcoDILim6ES6LeUmefDO3Y7o8V4SEU0159nscbo9COPndpYlh4z5
+	BtQ8Srr0w94UOey4OOCV7qzm3o3BPHRlaVUxG6UCCo+pudJpE=
+X-Google-Smtp-Source: AGHT+IFtItqGMv7c9zs0jQHS1j4i/TwYkKYfFZ78q75Lc+7yrpynqEhiYQ57+QLFTujVr5ZJ9SSG/A==
+X-Received: by 2002:a05:690c:a9a:b0:786:82fc:ab57 with SMTP id 00721157ae682-788136f832emr34080737b3.67.1762972040554;
+        Wed, 12 Nov 2025 10:27:20 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:5e::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-787d69e9dbesm44067957b3.42.2025.11.12.10.27.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Nov 2025 10:27:19 -0800 (PST)
+Date: Wed, 12 Nov 2025 10:27:18 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	Sargun Dhillon <sargun@sargun.me>, berrange@redhat.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v9 06/14] vsock/loopback: add netns support
+Message-ID: <aRTRhk/ok06YKTEu@devvm11784.nha0.facebook.com>
+References: <20251111-vsock-vmtest-v9-0-852787a37bed@meta.com>
+ <20251111-vsock-vmtest-v9-6-852787a37bed@meta.com>
+ <g6bxp6hketbjrddzni2ln37gsezqvxbu2orheorzh7fs66roll@hhcrgsos3ui3>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] cpuset: Avoid unnecessary partition invalidation
-To: Sun Shaojie <sunshaojie@kylinos.cn>, chenridong@huaweicloud.com
-Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
- cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <b9dce00a-4728-4ac8-ae38-7f41114c7c81@redhat.com>
- <20251112094610.386299-1-sunshaojie@kylinos.cn>
-Content-Language: en-US
-In-Reply-To: <20251112094610.386299-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <g6bxp6hketbjrddzni2ln37gsezqvxbu2orheorzh7fs66roll@hhcrgsos3ui3>
 
-On 11/12/25 4:46 AM, Sun Shaojie wrote:
-> Hi Ridong,
->
-> Thank you for your response.
->
->  From your reply "in case 1, A1 can also be converted to a partition," I
-> realize there might be a misunderstanding. The scenario I'm addressing
-> involves two sibling cgroups where one is an effective partition root and
-> the other is not, and both have empty cpuset.cpus.exclusive. Let me
-> explain the intention behind case 1 in detail, which will also illustrate
-> why this has negative impacts on our product.
->
-> In case 1, after #3 completes, A1 is already a valid partition root - this
-> is correct.After #4, B1 was generated, and B1 is no-exclusive. After #5,
-> A1 changes from "root" to "root invalid". But A1 becoming "root invalid"
-> could be unnecessary because having A1 remain as "root" might be more
-> acceptable. Here's the analysis:
->
-> As documented in cgroup-v2.rst regarding cpuset.cpus: "The actual list of
-> CPUs to be granted, however, is subjected to constraints imposed by its
-> parent and can differ from the requested CPUs". This means that although
-> we're requesting CPUs 0-3 for B1, we can accept that the actual available
-> CPUs in B1 might not be 0-3.
->
-> Based on this characteristic, in our product's implementation for case 1,
-> before writing to B1's cpuset.cpus in #5, we check B1's parent
-> cpuset.cpus.effective and know that the CPUs available for B1 don't include
-> 0-1 (since 0-1 are exclusively used by A1). However, we still want to set
-> B1's cpuset.cpus to 0-3 because we hope that when 0-1 become available in
-> the future, B1 can use them without affecting the normal operation of other
-> cgroups.
->
-> The reality is that because B1's requested cpuset.cpus (0-3) conflicts with
-> A1's exclusive CPUs (0-1) at that moment, it destroys the validity of A1's
-> partition root. So why must the current rule sacrifice A1's validity to
-> accommodate B1's CPU request? In this situation, B1 can clearly use 2-3
-> while A1 exclusively uses 0-1 - they don't need to conflict.
->
-> This patch narrows the exclusivity conflict check scope to only between
-> partitions. Moreover, user-specified CPUs (including cpuset.cpus and
-> cpuset.cpus.exclusive) only have true exclusive meaning within effective
-> partitions. So why should the current rule perform exclusivity conflict
-> checks between an exclusive partition and a non-exclusive member? This is
-> clearly unnecessary.
+On Wed, Nov 12, 2025 at 03:19:47PM +0100, Stefano Garzarella wrote:
+> On Tue, Nov 11, 2025 at 10:54:48PM -0800, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > Add NS support to vsock loopback. Sockets in a global mode netns
+> > communicate with each other, regardless of namespace. Sockets in a local
+> > mode netns may only communicate with other sockets within the same
+> > namespace.
+> > 
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> > Changes in v9:
+> > - remove per-netns vsock_loopback and workqueues, just re-using
+> >  the net and net_mode in skb->cb achieved the same result in a simpler
+> >  way. Also removed need for pernet_subsys.
+> > - properly track net references
+> > 
+> > Changes in v7:
+> > - drop for_each_net() init/exit, drop net_rwsem, the pernet registration
+> >  handles this automatically and race-free
+> > - flush workqueue before destruction, purge pkt list
+> > - remember net_mode instead of current net mode
+> > - keep space after INIT_WORK()
+> > - change vsock_loopback in netns_vsock to ->priv void ptr
+> > - rename `orig_net_mode` to `net_mode`
+> > - remove useless comment
+> > - protect `register_pernet_subsys()` with `net_rwsem`
+> > - do cleanup before releasing `net_rwsem` when failure happens
+> > - call `unregister_pernet_subsys()` in `vsock_loopback_exit()`
+> > - call `vsock_loopback_deinit_vsock()` in `vsock_loopback_exit()`
+> > 
+> > Changes in v6:
+> > - init pernet ops for vsock_loopback module
+> > - vsock_loopback: add space in struct to clarify lock protection
+> > - do proper cleanup/unregister on vsock_loopback_exit()
+> > - vsock_loopback: use virtio_vsock_skb_net()
+> > 
+> > Changes in v5:
+> > - add callbacks code to avoid reverse dependency
+> > - add logic for handling vsock_loopback setup for already existing
+> >  namespaces
+> > ---
+> > net/vmw_vsock/vsock_loopback.c | 41 ++++++++++++++++++++++++++++++++++++++++-
+> > 1 file changed, 40 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
+> > index d3ac056663ea..e62f6c516992 100644
+> > --- a/net/vmw_vsock/vsock_loopback.c
+> > +++ b/net/vmw_vsock/vsock_loopback.c
+> > @@ -32,6 +32,9 @@ static int vsock_loopback_send_pkt(struct sk_buff *skb, struct net *net,
+> > 	struct vsock_loopback *vsock = &the_vsock_loopback;
+> > 	int len = skb->len;
+> > 
+> > +	virtio_vsock_skb_set_net(skb, net);
+> > +	virtio_vsock_skb_set_net_mode(skb, net_mode);
+> > +
+> > 	virtio_vsock_skb_queue_tail(&vsock->pkt_queue, skb);
+> > 	queue_work(vsock->workqueue, &vsock->pkt_work);
+> > 
+> > @@ -116,8 +119,10 @@ static void vsock_loopback_work(struct work_struct *work)
+> > {
+> > 	struct vsock_loopback *vsock =
+> > 		container_of(work, struct vsock_loopback, pkt_work);
+> > +	enum vsock_net_mode net_mode;
+> > 	struct sk_buff_head pkts;
+> > 	struct sk_buff *skb;
+> > +	struct net *net;
+> > 
+> > 	skb_queue_head_init(&pkts);
+> > 
+> > @@ -131,7 +136,41 @@ static void vsock_loopback_work(struct work_struct *work)
+> > 		 */
+> > 		virtio_transport_consume_skb_sent(skb, false);
+> > 		virtio_transport_deliver_tap_pkt(skb);
+> > -		virtio_transport_recv_pkt(&loopback_transport, skb, NULL, 0);
+> > +
+> > +		/* In the case of virtio_transport_reset_no_sock(), the skb
+> > +		 * does not hold a reference on the socket, and so does not
+> > +		 * transitively hold a reference on the net.
+> > +		 *
+> > +		 * There is an ABA race condition in this sequence:
+> > +		 * 1. the sender sends a packet
+> > +		 * 2. worker calls virtio_transport_recv_pkt(), using the
+> > +		 *    sender's net
+> > +		 * 3. virtio_transport_recv_pkt() uses t->send_pkt() passing the
+> > +		 *    sender's net
+> > +		 * 4. virtio_transport_recv_pkt() free's the skb, dropping the
+> > +		 *    reference to the socket
+> > +		 * 5. the socket closes, frees its reference to the net
+> > +		 * 6. Finally, the worker for the second t->send_pkt() call
+> > +		 *    processes the skb, and uses the now stale net pointer for
+> > +		 *    socket lookups.
+> > +		 *
+> > +		 * To prevent this, we acquire a net reference in vsock_loopback_send_pkt()
+> > +		 * and hold it until virtio_transport_recv_pkt() completes.
+> > +		 *
+> > +		 * Additionally, we must grab a reference on the skb before
+> > +		 * calling virtio_transport_recv_pkt() to prevent it from
+> > +		 * freeing the skb before we have a chance to release the net.
+> > +		 */
+> > +		net_mode = virtio_vsock_skb_net_mode(skb);
+> > +		net = virtio_vsock_skb_net(skb);
+> 
+> Wait, we are adding those just for loopback (in theory used only for
+> testing/debugging)? And only to support virtio_transport_reset_no_sock() use
+> case?
 
-As I have said in the other thread, v2 exclusive cpuset checking follows 
-the v1 rule. However, the behavior of setting cpuset.cpus differs 
-between v1 and v2. In v1, setting cpuset.cpus can fail if there is some 
-conflict. In v2, users are allow to set whatever value they want without 
-failure, but the effective CPUs granted will be subjected to constraints 
-and differ from cpuset.cpus. So in that sense, I think it makes sense to 
-relax the exclusive cpuset check for v2, but we still need to keep the 
-current v1 behavior. Please update your patch to do that.
+Yes, exactly, only loopback + reset_no_sock(). The issue doesn't exist
+for vhost-vsock because vhost_vsock holds a net reference, and it
+doesn't exist for non-reset_no_sock calls because after looking up the
+socket we transfer skb ownership to it, which holds down the skb -> sk ->
+net reference chain.
 
-Cheers,
-Longman
+> 
+> Honestly I don't like this, do we have any alternative?
+> 
+> I'll also try to think something else.
+> 
+> Stefano
 
+
+I've been thinking about this all morning... maybe
+we can do something like this:
+
+```
+
+virtio_transport_recv_pkt(...,  struct sock *reply_sk) {... }
+
+virtio_transport_reset_no_sock(..., reply_sk)
+{
+	if (reply_sk)
+		skb_set_owner_sk_safe(reply, reply_sk)
+
+	t->send_pkt(reply);
+}
+
+vsock_loopback_work(...)
+{
+	virtio_transport_recv_pkt(..., skb, skb->sk);
+}
+
+
+for other transports:
+
+	virtio_transport_recv_pkt(..., skb, NULL);
+
+```
+
+This way 'reply' keeps the sk and sk->net alive even after
+virtio_transport_recv_pkt() frees 'skb'. The net won't be released until
+after 'reply' is freed back on the other side, removing the race.
+
+It makes semantic sense too... for loopback, we already know which sk
+the reply is going back to. For other transports, we don't because
+they're across the virt boundary.
+
+WDYT?
+
+I hate to suggest this, but another option might be to just do nothing?
+In order for this race to have any real effect, a loopback socket must
+send a pkt to a non-existent socket, immediately close(), then the
+namespace deleted, a new namespace created with the same pointer
+address, and finally a new socket with the same port created in that
+namespace, all before the reply RST reaches recv_pkt()... at which point
+the newly created socket would wrongfully receive the RST.
+
+Best,
+Bobby
 
