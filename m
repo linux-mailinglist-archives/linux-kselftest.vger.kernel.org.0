@@ -1,193 +1,232 @@
-Return-Path: <linux-kselftest+bounces-45371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 797AFC50501
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 03:14:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDE53C50532
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 03:19:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 594144E1DE0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 02:14:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59B253B10C0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 02:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EDF29BD90;
-	Wed, 12 Nov 2025 02:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E67229B36;
+	Wed, 12 Nov 2025 02:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="gk2VSwhX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DEA299AAC;
-	Wed, 12 Nov 2025 02:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B6B1C28E
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 02:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762913654; cv=none; b=qwcjtcr9o0pHNEpVfXR1ZT8R+U1IMJV5Jh63r8McYpUZPYz4wkHjZ/ujnDE3Pf/inra7m4qu1MFFj22NLf31trSM//r62cKgmWToKzLWEWyrgcKpQ9xoZAEbn+G+6NRGeEjQG4hPs7w919Sr2tpLiGphwdRK1vkHvzngjDcyuUk=
+	t=1762913980; cv=none; b=aUDTAvdFmsAGG41cLFL3VVwqsmFGOhCRqzupoHoTfjQtjJ9CoBp3AXSTBazR0HCBBONIWgtmsqyql5BMO5uPVABzaR4v4bu4fQfU7fucUCjrPPGZjvj76qcku5YnTOrN5UeKGkIvo8cHtmtEUpRa7/2a6Kiw1AKyETRrgQyQyl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762913654; c=relaxed/simple;
-	bh=+EVal716qGzAn0CzKjGD5B5F08wc4sjxGE0eoLp4SE8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KV8U8Nq6f8WODjIy4cS/l3A1eiNzuBeQU5kjO7VOWwV7qn1G+2I9DCRNHdfN9tM2FequBTpkCN4whzpUSc/jLtIGuDToZOGeYFA8YPHrMi9eZggrx+MRbOLlECXYLvf3WBPv5QsgzWduCra4Awm/INesgioVt5fX+RGrgL5R8YA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3ce0d764bf6d11f0a38c85956e01ac42-20251112
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED
-	SA_UNFAMILIAR, SN_UNTRUSTED, SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:1d481d92-dc9e-4306-8a81-f16ef82f1896,IP:10,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:15
-X-CID-INFO: VERSION:1.3.6,REQID:1d481d92-dc9e-4306-8a81-f16ef82f1896,IP:10,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:re
-	lease,TS:15
-X-CID-META: VersionHash:a9d874c,CLOUDID:60b87a7d78fa585f0569a02cddf450d5,BulkI
-	D:251112100717OSVPKDLB,BulkQuantity:1,Recheck:0,SF:19|66|72|78|102|850,TC:
-	nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:40,QS:nil,BEC:
-	nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3ce0d764bf6d11f0a38c85956e01ac42-20251112
-X-User: sunshaojie@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 907620271; Wed, 12 Nov 2025 10:13:54 +0800
-From: Sun Shaojie <sunshaojie@kylinos.cn>
-To: longman@redhat.com
-Cc: tj@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Sun Shaojie <sunshaojie@kylinos.cn>
-Subject: [PATCH v1] cpuset: Avoid unnecessary partition invalidation
-Date: Wed, 12 Nov 2025 10:11:20 +0800
-Message-Id: <20251112021120.248778-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1762913980; c=relaxed/simple;
+	bh=x2aGuz+zJKZnZZkXzCTVvYZ2ScR1g8KD1+E5T+TcHbg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RVQDchFqy+jmVqEbCPpuB+eNQ7RjLOC8dSQSmX1esAEZ4IHHpuEydaRhD8wNZTRlgDUe8P06s8QoxOSiTG8YqCQKjir/6xjdeS5+Sh0W1fu9UjirIt2tYVjeCjdqpKVo3MNCVp8T/SNCFO2FbLJoPuZwyx1g8dADMYtqvEuvBKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=gk2VSwhX; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b72cbc24637so79610266b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Nov 2025 18:19:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1762913976; x=1763518776; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ugAQKBkBrsHecB9x8Cs9RwnH0DI2WGTlcIm1Ae1jyr0=;
+        b=gk2VSwhXpuPtX/Fqzr3AwXz1gHhLb2kLLml9g1FsMGgyXn031gl4T+NmBIirL00dD2
+         Kn5SVvCG4YbujGvs0sw0/Ek0BLiKDcxnbKnN3cZnvW2NcSnpT9L7MSbY1LwKTnhA3Pek
+         8uRkUEuzFAz4MUVdwJCKZFJTianz3jU7wwVhB3CmB5SddXuo+Rvyb/M8bkCia5+DCzDz
+         /jkYGUraJHhlC7RXmQ/BuF2Ef/CUfgTuYn6dMW9UlYw0kEw/KyOnpyd81swGrQPScQKM
+         GBysQAUuvVA1EpDUhYpI2mVYSlBC1BvGL3yZ5VDHxAu+T2VmAp/3aG3ixPQNjs/JSpAz
+         /thg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762913976; x=1763518776;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ugAQKBkBrsHecB9x8Cs9RwnH0DI2WGTlcIm1Ae1jyr0=;
+        b=A5ae46E3rEPRjsNl26sKvBkp7Lu0197aXssH/ChJe/vbNX1B2L2ONhiJ1lTxEWDZ9p
+         zMmfA3P8h8iKMlzdEry8cAfkOfHbsu2yxhK7Y8PMo3xoh49Cbugz3PvmWl1rFH7r0DEN
+         8kigXYGdk5JwwQ4Wcoo76undNd+4qAxoO4u34y9Fc951gyoeSBybNOW73gEGQAschgEg
+         ATZU6RsZwDxycR2iTFjfZZxNwXjSxIO4Ng6xINoyq9GRBCIMaDeNk6TgsGB+X35SGLGi
+         5FSxeLCFXijcp9uEZWSBlfXK0FUsqykSJ519cFY2ppwEYJIx1q8ygUgJuUG6fviRfQVt
+         H0xA==
+X-Forwarded-Encrypted: i=1; AJvYcCV2fsZ4HW4jKQ/SVGPewRH9Sh2R+q6qlWo25lmhAcyIELhE/Y5i4fK4uElqJGgwS72dNaHPyF/3t655/Am+5fA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfbWNHoLHm4M0cWdFOZhAfeBTJc+T0aCB7NJIpMK1oS6q/hN7C
+	/QImaWRJ3DnUOend0aAXotst2GTQGK/mjSbXWtHG+q7oBmySr8fhTgKiiNMqBCG6+a43qhhRlOk
+	xOthkBDaZsDLyq2Esj3g1B/QbulEku6KlFhJVJJR4Bg==
+X-Gm-Gg: ASbGnctDe6RridzyTePYVVEEKaDjGrp9BP0v03Tz5jaHJf/mx5dDnyGvKTtERqLonbx
+	7+HyR10Ft/yRtLLDjJUA4auqJxoywa49xOzmjFC4kj9NmEuc+O4snqhtxCbPOmZoJakJltHfRjN
+	0U2fwg1k2DXsvkYoqfktXkPbKDmxJXoTgiEeT0+j0Mok44w2bN3R5bn+9t0Bsr4PiJfedTwkMpD
+	lKhQzLV3vQICCVrbjNOBxApMZ48BZJDbTPpTscIdXT/gsSyjLrmkKaIDoQswHE=
+X-Google-Smtp-Source: AGHT+IE+yEBTlwHkenGiGwu5UyXnAf6gT3RkSyNE+10D+a3qX/UN5XaT1J5EAZetmYd9Vh7p3GgyT6IZWxgqCbtm2x0=
+X-Received: by 2002:a17:907:3daa:b0:b72:52c2:b8ca with SMTP id
+ a640c23a62f3a-b7331aec193mr102047266b.59.1762913975653; Tue, 11 Nov 2025
+ 18:19:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251023-v5_user_cfi_series-v22-0-1935270f7636@rivosinc.com>
+ <20251023-v5_user_cfi_series-v22-25-1935270f7636@rivosinc.com>
+ <CANXhq0oEpCow0G+KsJ6ZPuwsxmAFVqoKGEzygiwSmxFsmntiWg@mail.gmail.com> <aRN-0Z9MNeJ9IZf2@debug.ba.rivosinc.com>
+In-Reply-To: <aRN-0Z9MNeJ9IZf2@debug.ba.rivosinc.com>
+From: Zong Li <zong.li@sifive.com>
+Date: Wed, 12 Nov 2025 10:19:23 +0800
+X-Gm-Features: AWmQ_bmKovRTmE80-MSruF1BPvDQmZ8Z-ahD6_kAC3IOhiFoglBht7EGrzIY3bI
+Message-ID: <CANXhq0ryrNUoBvACX9hh-=FVOe+L6_6beXrZQn2e1P6eWgcUiA@mail.gmail.com>
+Subject: Re: [PATCH v22 25/28] riscv: create a config for shadow stack and
+ landing pad instr support
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently, when a non-exclusive cpuset's "cpuset.cpus" overlaps with a
-partitioned sibling, the sibling's partition state becomes invalid.
-However, this invalidation is often unnecessary.
+On Wed, Nov 12, 2025 at 2:22=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> w=
+rote:
+>
+> On Tue, Nov 11, 2025 at 01:58:37PM +0800, Zong Li wrote:
+> >On Fri, Oct 24, 2025 at 12:51=E2=80=AFAM Deepak Gupta via B4 Relay
+> ><devnull+debug.rivosinc.com@kernel.org> wrote:
+> >>
+> >> From: Deepak Gupta <debug@rivosinc.com>
+> >>
+> >> This patch creates a config for shadow stack support and landing pad i=
+nstr
+> >> support. Shadow stack support and landing instr support can be enabled=
+ by
+> >> selecting `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` w=
+ires
+> >> up path to enumerate CPU support and if cpu support exists, kernel wil=
+l
+> >> support cpu assisted user mode cfi.
+> >>
+> >> If CONFIG_RISCV_USER_CFI is selected, select `ARCH_USES_HIGH_VMA_FLAGS=
+`,
+> >> `ARCH_HAS_USER_SHADOW_STACK` and DYNAMIC_SIGFRAME for riscv.
+> >>
+> >> Reviewed-by: Zong Li <zong.li@sifive.com>
+> >> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> >> ---
+> >>  arch/riscv/Kconfig                  | 22 ++++++++++++++++++++++
+> >>  arch/riscv/configs/hardening.config |  4 ++++
+> >>  2 files changed, 26 insertions(+)
+> >>
+> >> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> >> index 0c6038dc5dfd..4f9f9358e6e3 100644
+> >> --- a/arch/riscv/Kconfig
+> >> +++ b/arch/riscv/Kconfig
+> >> @@ -1146,6 +1146,28 @@ config RANDOMIZE_BASE
+> >>
+> >>            If unsure, say N.
+> >>
+> >> +config RISCV_USER_CFI
+> >> +       def_bool y
+> >> +       bool "riscv userspace control flow integrity"
+> >> +       depends on 64BIT && $(cc-option,-mabi=3Dlp64 -march=3Drv64ima_=
+zicfiss) && \
+> >> +                           $(cc-option,-fcf-protection=3Dfull)
+> >
+> >Hi Deepak,
+> >I noticed that you added a $(cc-option,-fcf-protection=3Dfull) check in
+> >this version. I think this check will fail by a cc1 warning when using
+> >a newer toolchain, because -fcf-protection cannot be used alone, it
+> >must be specified together with the appropriate -march option.
+> >For example:
+> >  1. -fcf-protection=3Dbranch requires -march=3D..._zicfilp
+> >  2. -fcf-protection=3Dreturn requires -march=3D..._zicfiss
+> >  3. -fcf-protection=3Dfull requires -march=3D..._zicfilp_zicfiss
+>
+> toolchain that I have from June doesn't require -march=3D..._zicfilp_zicf=
+iss
+> for -fcf-protection=3Dfull. If that has changed, I think this will need a
+> revision.
 
-This can be observed in specific configuration sequences:
+Yes, that=E2=80=99s what I=E2=80=99ve learned from the toolchain guys so fa=
+r, perhaps
+we can double check with them. If it is right, I guess we might merge
+them into one check as follows:
+$(cc-option,-mabi=3Dlp64 -march=3Drv64ima_zicfilp_zicfiss -fcf-protection=
+=3Dfull)
+or
+$(cc-option,-mabi=3Dlp64 -march=3Drv64ima_zicfiss -fcf-protection=3Dreturn)
 
-Case 1: Partition created first, then non-exclusive cpuset overlaps
- #1> mkdir -p /sys/fs/cgroup/A1
- #2> echo "0-1" > /sys/fs/cgroup/A1/cpuset.cpus
- #3> echo "root" > /sys/fs/cgroup/A1/cpuset.cpus.partition
- #4> mkdir -p /sys/fs/cgroup/B1
- #5> echo "0-3" > /sys/fs/cgroup/B1/cpuset.cpus
- // A1's partition becomes "root invalid" - this is unnecessary
-
-Case 2: Non-exclusive cpuset exists first, then partition created
- #1> mkdir -p /sys/fs/cgroup/B1
- #2> echo "0-1" > /sys/fs/cgroup/B1/cpuset.cpus
- #3> mkdir -p /sys/fs/cgroup/A1
- #4> echo "0-1" > /sys/fs/cgroup/A1/cpuset.cpus
- #5> echo "root" > /sys/fs/cgroup/A1/cpuset.cpus.partition
- // A1's partition becomes "root invalid" - this is unnecessary
-
-In Case 1, the effective CPU mask of B1 can differ from its requested
-mask. B1 can use CPUs 2-3 which don't overlap with A1's exclusive
-CPUs (0-1), thus not violating A1's exclusivity requirement.
-
-In Case 2, B1 can inherit the effective CPUs from its parent, so there
-is no need to invalidate A1's partition state.
-
-This patch relaxes the overlap check to only consider conflicts between
-partitioned siblings, not between a partitioned cpuset and a regular
-non-exclusive one.
-
-Signed-off-by: Sun Shaojie <sunshaojie@kylinos.cn>
----
- kernel/cgroup/cpuset.c                            |  8 ++++----
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 10 +++++-----
- 2 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 52468d2c178a..e0d27c9a101a 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -586,14 +586,14 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
-  * Returns: true if CPU exclusivity conflict exists, false otherwise
-  *
-  * Conflict detection rules:
-- * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
-+ * 1. If both cpusets are exclusive, they must be mutually exclusive
-  * 2. exclusive_cpus masks cannot intersect between cpusets
-  * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
-  */
- static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
- {
--	/* If either cpuset is exclusive, check if they are mutually exclusive */
--	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
-+	/* If both cpusets are exclusive, check if they are mutually exclusive */
-+	if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))
- 		return !cpusets_are_exclusive(cs1, cs2);
- 
- 	/* Exclusive_cpus cannot intersect */
-@@ -695,7 +695,7 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
- 		goto out;
- 
- 	/*
--	 * If either I or some sibling (!= me) is exclusive, we can't
-+	 * If both I and some sibling (!= me) are exclusive, we can't
- 	 * overlap. exclusive_cpus cannot overlap with each other if set.
- 	 */
- 	ret = -EINVAL;
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index a17256d9f88a..903dddfe88d7 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -269,7 +269,7 @@ TEST_MATRIX=(
- 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X3:P2    .      .     0 A1:0-2|A2:3|A3:3 A1:P0|A2:P2 3"
- 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3  X2-3:P2   .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
- 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3 X2-3:P2:C3 .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
--	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-3|A2:1-3|A3:2-3|B1:2-3 A1:P0|A3:P0|B1:P-2"
-+	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-1|A2:1|A3:1|B1:2-3 A1:P0|A3:P0|B1:P2 2-3"
- 	" C0-3:S+ C1-3:S+ C2-3   C4-5     .      .      .      P2    0 B1:4-5 B1:P2 4-5"
- 	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3  X2-3:P2   P2    0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
- 	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3 X2-3:P2:C1-3 P2  0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
-@@ -318,7 +318,7 @@ TEST_MATRIX=(
- 	# Invalid to valid local partition direct transition tests
- 	" C1-3:S+:P2 X4:P2  .      .      .      .      .      .     0 A1:1-3|XA1:1-3|A2:1-3:XA2: A1:P2|A2:P-2 1-3"
- 	" C1-3:S+:P2 X4:P2  .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
--	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:4-6 A1:P-2|B1:P0"
-+	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0 0-4"
- 	"  C0-3:P2   .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
- 
- 	# Local partition invalidation tests
-@@ -388,10 +388,10 @@ TEST_MATRIX=(
- 	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
- 	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2 0-1|1"
- 
--	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
--	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P0"
-+	# A non-exclusive cpuset.cpus change will not invalidate partition and its siblings
-+	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:3 A1:P1|B1:P0"
- 	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P-1"
--	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P0|B1:P-1"
-+	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-1|B1:2-3 A1:P0|B1:P1"
- 
- 	# cpuset.cpus can overlap with sibling cpuset.cpus.exclusive but not subsumed by it
- 	"   C0-3     .      .    C4-5     X5     .      .      .     0 A1:0-3|B1:4-5"
--- 
-2.25.1
-
+>
+> >
+> >
+> >> +       depends on RISCV_ALTERNATIVE
+> >> +       select RISCV_SBI
+> >> +       select ARCH_HAS_USER_SHADOW_STACK
+> >> +       select ARCH_USES_HIGH_VMA_FLAGS
+> >> +       select DYNAMIC_SIGFRAME
+> >> +       help
+> >> +         Provides CPU assisted control flow integrity to userspace ta=
+sks.
+> >> +         Control flow integrity is provided by implementing shadow st=
+ack for
+> >> +         backward edge and indirect branch tracking for forward edge =
+in program.
+> >> +         Shadow stack protection is a hardware feature that detects f=
+unction
+> >> +         return address corruption. This helps mitigate ROP attacks.
+> >> +         Indirect branch tracking enforces that all indirect branches=
+ must land
+> >> +         on a landing pad instruction else CPU will fault. This mitig=
+ates against
+> >> +         JOP / COP attacks. Applications must be enabled to use it, a=
+nd old user-
+> >> +         space does not get protection "for free".
+> >> +         default y.
+> >> +
+> >>  endmenu # "Kernel features"
+> >>
+> >>  menu "Boot options"
+> >> diff --git a/arch/riscv/configs/hardening.config b/arch/riscv/configs/=
+hardening.config
+> >> new file mode 100644
+> >> index 000000000000..089f4cee82f4
+> >> --- /dev/null
+> >> +++ b/arch/riscv/configs/hardening.config
+> >> @@ -0,0 +1,4 @@
+> >> +# RISCV specific kernel hardening options
+> >> +
+> >> +# Enable control flow integrity support for usermode.
+> >> +CONFIG_RISCV_USER_CFI=3Dy
+> >>
+> >> --
+> >> 2.43.0
+> >>
+> >>
 
