@@ -1,117 +1,167 @@
-Return-Path: <linux-kselftest+bounces-45468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3AF0C54C1E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 23:55:07 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7189EC54C7A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 00:11:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B908A3B679C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 22:54:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 98BC64E02B8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Nov 2025 23:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D0C52DECD3;
-	Wed, 12 Nov 2025 22:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FB9C2E718B;
+	Wed, 12 Nov 2025 23:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="q6+wuVAM"
+	dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b="vR41GOMo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.190.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E800C2DC76C;
-	Wed, 12 Nov 2025 22:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CD32550AF;
+	Wed, 12 Nov 2025 23:10:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.190.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762988048; cv=none; b=mCyRbvTLTHrLTfCoSud8/0Nx0YFsgKD4w6kt1TnP3Joh33JqnyYl1LR+cZqTMFPQy48jle0w/6FiJ/ZRYk2VyJZ2nq5FbIgSwdkv4WcWWpEBhttPggM+LwaAl1D+cq56tkKQtSLO8B49eQjWgQAyy19PWsqkUthroDsNVAlTy/s=
+	t=1762989061; cv=none; b=KF8L4/TMl783qXidzsGdFOdB7EnjmDL8FZhYzX4aMGouIWjWr3j2SU4vnQp72LEyG8bIznDTnJDPC660PTbSoSBxXTWsrNxxEpyKq6P94M6tB1NU3/vWAB9vFeyc1fWQcPs5wpftKXQRX8J7Z3NtxSVLRJaKZ/sBa85DV3FfQkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762988048; c=relaxed/simple;
-	bh=WmpWtNRGBU0amauqTCw9LraUQrV1H992ZY5WY2RJ5Bk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TUzqOs9T9UYynbz8ml5IHlZFFdkuQKvPGm4tpc6x459lqfx+L7/bVD0g+Dd9DmA2uiLFQqWfVYBaXWR72tBRFDd7zrjAOXwjrHWhLbZHYTrXLcs2rRSEfmXYKY1JiVMWZ8azxGel9lIdcYQKzFIVvgfC0C2wyqbHwTEHzd0M4LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=q6+wuVAM; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5ACL10r4048805;
-	Wed, 12 Nov 2025 14:54:01 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=s2048-2025-q2; bh=D4W90eTzfDymVTb4Rf9z
-	J0YgQ8mGorBDV+kKWUQ6bcg=; b=q6+wuVAMSRtWFHzbjCr0AZ/4NRPGOHMs4c2B
-	DGA8Vyo9HMfGvtO1wTPpw02merAR44yOBzjUPHLAZVFEt6L3zWot3A9EGI+cIR6k
-	r80SBbsDUvflucoVyZwTQCbVTEhsqXPi3NaJVwNGggMPbSkeffA7fxFwM2SGiOlU
-	GL+oG2BNDywEs8h1XWqsTq1hUjqZRS5Sy3lXKsuJor9Dp4CNeaJ8SmXZpaAJPlIw
-	PpxBC7xneY1zMHv5+569NZhg1Raf5XMNMV3GbWh5wwHHscLruiOMibzA1zrmTm+J
-	N3/ParLyBlABhGjTKEDjypt9w4k99Bt57RnLeKmqgrUV2yfL+g==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ad1sj8u5m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 12 Nov 2025 14:54:00 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.20; Wed, 12 Nov 2025 22:53:59 +0000
-Date: Wed, 12 Nov 2025 14:53:54 -0800
-From: Alex Mastro <amastro@fb.com>
-To: David Matlack <dmatlack@google.com>
-CC: Alex Williamson <alex.williamson@redhat.com>,
-        Alex Williamson
-	<alex@shazbot.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Josh Hilke
-	<jrhilke@google.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Raghavendra Rao Ananta
-	<rananta@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Aaron Lewis
-	<aaronlewis@google.com>
-Subject: Re: [PATCH v2 18/18] vfio: selftests: Add
- vfio_pci_device_init_perf_test
-Message-ID: <aRUQAg1kNVzfKkuv@devgpu015.cco6.facebook.com>
-References: <20251112192232.442761-1-dmatlack@google.com>
- <20251112192232.442761-19-dmatlack@google.com>
+	s=arc-20240116; t=1762989061; c=relaxed/simple;
+	bh=g8HQwyvosRqrj/H5ZyB6qV1fxoG9t+H6fK+shkMMQMk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WSWV6/SFiDI9ZZn6n03EXV+4EDZAj05zWailyXPFY6m+PgUHaZEwmL7jomwbZzZqDpEQcMLe1aQnHAa9YfLBv/GtU0QxyEmPzIztvzJJiLnIke4Lips/8CYTsN3WSK8lEr4hLmB09dkkrW0A9FY3CJ9bBDvg4DDZuE6/EX9YlPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org; spf=pass smtp.mailfrom=netfilter.org; dkim=pass (2048-bit key) header.d=netfilter.org header.i=@netfilter.org header.b=vR41GOMo; arc=none smtp.client-ip=217.70.190.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=netfilter.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netfilter.org
+Received: from netfilter.org (mail-agni [217.70.190.124])
+	by mail.netfilter.org (Postfix) with ESMTPSA id D61D660279;
+	Thu, 13 Nov 2025 00:10:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netfilter.org;
+	s=2025; t=1762989054;
+	bh=lhBJqy6zMtIHmZv4N86dc6RbKyZHbbHAvF6rboVN0/g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vR41GOMoghr4+WpMVNC79Tgs9adVJXTC7MiVSbI1MsYwFPGkMA0/G7VyciUBy+TSc
+	 rV0XXcGZqg6yR3CeUXUGWPKay+TEKHmjuBfzkRDCi/xk4oSMyRQJBVeRjVmyveAwXa
+	 64uYjyOHV7p7Z6c4Ql5jQm+P9/WhH+m6JSTOrnjq3Pdraes7nLpCHe+y0JUe+pDNhb
+	 OiQCIQl9N0fSSzP3PzMg/bJhshi1SvQ5XoA/zYgA02pDS14SECX3IMPFGs7iu0CbRM
+	 94wLf++lBqa3uxR7VaUMX1hJl549O7a2NXGCsoBYrtTIGijfmhdsZWWLkh/GEGEfII
+	 2Unzs70yGSZhA==
+Date: Thu, 13 Nov 2025 00:10:50 +0100
+From: Pablo Neira Ayuso <pablo@netfilter.org>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	Phil Sutter <phil@nwl.cc>, Florian Westphal <fw@strlen.de>,
+	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH nf-next v9 2/3] net: netfilter: Add IPIP flowtable tx sw
+ acceleration
+Message-ID: <aRUT-tFXYbwfZYUk@calendula>
+References: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
+ <20251107-nf-flowtable-ipip-v9-2-7cbc4090dfcb@kernel.org>
+ <aRSDjkzMx4Ba7IW8@calendula>
+ <aRSvnfdhO2G1DXJI@lore-desk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251112192232.442761-19-dmatlack@google.com>
-X-Authority-Analysis: v=2.4 cv=V6dwEOni c=1 sm=1 tr=0 ts=69151008 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=FOH2dFAWAAAA:8 a=kPA7cs-zk86F02t9bKcA:9 a=CjuIK1q_8ugA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: tOZZeKFQ6He6MMBa4HPEsAxwK67fdZsA
-X-Proofpoint-ORIG-GUID: tOZZeKFQ6He6MMBa4HPEsAxwK67fdZsA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEyMDE4NiBTYWx0ZWRfX7DWFxnvzsOA8
- bL8oxcB2hYbvCt2+atpk9mtPadF7zEmBBh/8Jp4oBrGdZUtA0tc51zKUC2oKbpUKKOh1eH9QxLi
- Ih8IMuUmB2t94JPU8rCgpKLnJZSRyWWWk3Zo8wzj99DMrQhnSiHn2HHDrndrGDPaAZMCoYxBKmk
- uwlwXmNPhfnhebdeM786Jz0BbD5+QmDFrRxsGKUhKLLr5RJ6v8dmEGrUts/5mJh/XJuZOyr92aO
- du27fa8CBkvbil28qCIETQEFNtXfQGHPjszF9WdNT8cSviACVKWy0lUCJcAmZCRSF+CuEQa785a
- KrGLkwgxrtlhShnuCJeSMnV24DJmpcMe4lFoVIWL1L2oz73/fMK9cq0fu1khE5gzZWGIV4Mtrf1
- mQu+3Q6ZfaqG04eChqcG/Gvlhi6M5w==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-12_06,2025-11-12_01,2025-10-01_01
+In-Reply-To: <aRSvnfdhO2G1DXJI@lore-desk>
 
-On Wed, Nov 12, 2025 at 07:22:32PM +0000, David Matlack wrote:
-> +static s64 to_ns(struct timespec ts)
-> +{
-> +	return (s64)ts.tv_nsec + 1000000000LL * (s64)ts.tv_sec;
-> +}
-> +
-> +static struct timespec to_timespec(s64 ns)
-> +{
-> +	struct timespec ts = {
-> +		.tv_nsec = ns % 1000000000LL,
-> +		.tv_sec = ns / 1000000000LL,
+Hi Lorenzo,
 
-nit - I think you can get NSEC_PER_SEC from #include <linux/time64.h>
+On Wed, Nov 12, 2025 at 05:02:37PM +0100, Lorenzo Bianconi wrote:
+[...]
+> > On Fri, Nov 07, 2025 at 12:14:47PM +0100, Lorenzo Bianconi wrote:
+> > [...]
+> > > @@ -565,8 +622,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+> > >  
+> > >  	dir = tuplehash->tuple.dir;
+> > >  	flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
+> > > +	other_tuple = &flow->tuplehash[!dir].tuple;
+> > >  
+> > > -	if (nf_flow_encap_push(skb, &flow->tuplehash[!dir].tuple) < 0)
+> > > +	if (nf_flow_encap_push(state->net, skb, other_tuple))
+> > >  		return NF_DROP;
+> > >  
+> > >  	switch (tuplehash->tuple.xmit_type) {
+> > > @@ -577,7 +635,9 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+> > >  			flow_offload_teardown(flow);
+> > >  			return NF_DROP;
+> > >  		}
+> > > -		neigh = ip_neigh_gw4(rt->dst.dev, rt_nexthop(rt, flow->tuplehash[!dir].tuple.src_v4.s_addr));
+> > > +		dest = other_tuple->tun_num ? other_tuple->tun.src_v4.s_addr
+> > > +					    : other_tuple->src_v4.s_addr;
+> > 
+> > I think this can be simplified if my series use the ip_hdr(skb)->daddr
+> > for rt_nexthop(), see attached patch. This would be fetched _before_
+> > pushing the tunnel and layer 2 encapsulation headers. Then, there is
+> > no need to fetch other_tuple and check if tun_num is greater than
+> > zero.
+> > 
+> > See my sketch patch, I am going to give this a try, if this is
+> > correct, I would need one more iteration from you.
+> >
+> > diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_table_ip.c
+> > index 8b74fb34998e..ff2b6c16c715 100644
+> > --- a/net/netfilter/nf_flow_table_ip.c
+> > +++ b/net/netfilter/nf_flow_table_ip.c
+> > @@ -427,6 +427,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+> >  	struct flow_offload *flow;
+> >  	struct neighbour *neigh;
+> >  	struct rtable *rt;
+> > +	__be32 ip_dst;
+> >  	int ret;
+> >  
+> >  	tuplehash = nf_flow_offload_lookup(&ctx, flow_table, skb);
+> > @@ -449,6 +450,7 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
+> >  
+> >  	dir = tuplehash->tuple.dir;
+> >  	flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
+> > +	ip_dst = ip_hdr(skb)->daddr;
+> 
+> I agree this patch will simplify my series (thx :)) but I guess we should move
+> ip_dst initialization after nf_flow_encap_push() since we need to route the
+> traffic according to the tunnel dst IP address, right?
+
+Right, I made a quick edit, it looks like this:
+
+@@ -566,9 +624,14 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff *skb,
  
-Otherwise LGTM
+        dir = tuplehash->tuple.dir;
+        flow = container_of(tuplehash, struct flow_offload, tuplehash[dir]);
++       other_tuple = &flow->tuplehash[!dir].tuple;
++
++       if (nf_flow_tunnel_push(skb, other_tuple) < 0)
++               return NF_DROP;
++
+        ip_daddr = ip_hdr(skb)->daddr;
+ 
+-       if (nf_flow_encap_push(skb, &flow->tuplehash[!dir].tuple) < 0)
++       if (nf_flow_encap_push(skb, other_tuple) < 0)
+                return NF_DROP;
+ 
+        switch (tuplehash->tuple.xmit_type) {
 
-Reviewed-by: Alex Mastro <amastro@fb.com>
+That is, after tunnel header push but before pushing l2 encap (that
+could possibly modify skb_network_header pointer), fetch the
+destination address.
+
+I made a few more comestic edits on your series and I pushed them out
+to this branch:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git/log/?h=flowtable-consolidate-xmit%2bipip
+
+I just noticed, in nf_flow_tunnel_ipip_push(), that this can be removed:
+
+        memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
+
+because this packet never entered the IP layer, the flowtable takes it
+before it can get there.
 
