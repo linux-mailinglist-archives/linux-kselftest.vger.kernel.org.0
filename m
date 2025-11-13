@@ -1,145 +1,154 @@
-Return-Path: <linux-kselftest+bounces-45508-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45509-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D85A7C55962
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 04:50:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD8BEC55A19
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 05:12:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BCC8C4E5DF5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 03:46:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 85E49346AE1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 04:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 424492BCF45;
-	Thu, 13 Nov 2025 03:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE81E29DB61;
+	Thu, 13 Nov 2025 04:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zXXBwuHJ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fIG5KhQz";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="YiRJbblu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3399283FDD
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 03:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E922D94A6
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 04:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763005589; cv=none; b=GP/zSXFqOwY28Q+fJ1oLQ9qM7w4v3kRS2BnYTggrEugDgfK4qQwXNWXTz2FIZNGOxfoPmr7OMvz49DtvYJqw0otV2UHog3EXNrL8eSyh58cik2tL+pfEng/zq5p4Ifyq7GgjC6c/OoFBtNGuxQwLF+sKLN7qhfTDMHSmTTOnd3c=
+	t=1763007139; cv=none; b=a9bBg5d+WEdw2jvuK/W4xpQmg0t0fHcVQ1WE8iOi8dreldj0L/YZAjhghxI+Igc2HqpeLtCQpGgbXubLUkOb3EcGzoXB4V77wRS0DXg+c36xzKjiVRGVAyVg+JICqcIFaJv2/v7nqtNBrTirl7UYIYfOvJLQHAm4M9TVqFQPlGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763005589; c=relaxed/simple;
-	bh=xNrBJ9JKhl94hsQQloq6sf3vO4Sqwb09Lpz3KK53sXM=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=do/6rrqnX5xmZSaWudsvsqhIU5dM5Z2rqjT/je0Cn8CUaUniSfV/W3ByFAFeF/r3atX5IRPRGb0rNvAjEzo9UyxsWJIq/yPRtaiEw91I3RYydG/HkdNs401ApL4uamc+qZBwp69asuyzVFJQnIp8xb2OQdGu+Jb/EuCQN+HemiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zXXBwuHJ; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--cmllamas.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2954d676f9dso3242775ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 19:46:27 -0800 (PST)
+	s=arc-20240116; t=1763007139; c=relaxed/simple;
+	bh=5KVcUwFam+d3kfWZaKYqsgN5CXXYEyx0nSIK4JVGF1c=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=BKgEDxJgXWNSazhLUZIFfGUhArXsCYuw9AUln7Ri/AaMOGqm6y4YcuK/RbaGbawK1WvGuMXJmH6nsnKGOH+YQLbsyeDHELHYN0IX0G/BhHZY6nmjaghVncBM4hT6BNDU4zd8UNUZP8XWBlI2824VZi23yd0qm3xhl0GOr/dFtxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fIG5KhQz; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=YiRJbblu; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763007137;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PXF2BvFrpcJte5UaMjynGshHJ8MIVF48yxM6S+pDvV4=;
+	b=fIG5KhQzasVtoJSdBd9yG6ME2o2Tm8wmTbC6ZJA68bc40Nb707bajzHlJ8ikMyOim6fQcL
+	s+XmXiLPI33A91abaDsABNFhdZoMOKMOMw1fMN4cH1FLDJW0uEiM/ZOrTOQyA3EkYgMqwX
+	x27OuPZLbfeAGlGeYvgHFsP+cHBjZ9c=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-589-BoFked_uNgeu7NRKhO0y-A-1; Wed, 12 Nov 2025 23:12:15 -0500
+X-MC-Unique: BoFked_uNgeu7NRKhO0y-A-1
+X-Mimecast-MFC-AGG-ID: BoFked_uNgeu7NRKhO0y-A_1763007135
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8805054afa1so10662456d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 20:12:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763005587; x=1763610387; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=adduDIgHwGkFi5eI+DMenkw4/FG0bTrtUTxhLb5vmxg=;
-        b=zXXBwuHJQvupCyS6gAfCQ6Eu6c9yDAsqWzC4/R6QMYNCgBWRHBpk1rc4Mh90oQXtgW
-         2iOYPPbyQU/ZcvKxQ0giCb66rAmc3Q9/I5b5WR0i613WYfH+v5YdKuwjNS81crKwxd4V
-         2L/weWL6llZWReikJVHir7ng9ETSmRGm0nb8YnXp/Z3lppBIV2ofnVi9lBHH+nyqlOJr
-         Ju4xnB7lgqdN+hZZiuqMs+RKkTZ/C+LQJSkl9u7eDzgYu+ZBi+/zdsjMFY0UERg6alUI
-         0+0nu9wVRS382fzEC7h67pCZHeCbovtF+iyi7fZt5eEE14AXyBhfMlhmYbSBSAAbrbUe
-         v5hQ==
+        d=redhat.com; s=google; t=1763007135; x=1763611935; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PXF2BvFrpcJte5UaMjynGshHJ8MIVF48yxM6S+pDvV4=;
+        b=YiRJbblusMl0T6AQKNqzBM00P628i/eBpaDgGFXuoFGV1OyHPbO+9QhLPMWNdznaCO
+         hwjjsdyasfWYPzvABQDVcAG8XVRS4MG9wWEFGVCaw9NfaJxFf9ZCgrr/29qSuoG4pwKo
+         IOSmDWOPDDXFySES9PoFH88/LehNn/nlyo4BTIycZJV+oNBZe6slEcXXOb2nwnsw7mMW
+         OEp5ZNyvPFyf/LKklj7i+gXrJ8qjl5nwW+96HROfKgjISpVU8XMXg4wvwurR5lwuFy6S
+         /AXNaioXuGeIgnfN305mghZH/XBV0pPiph7AAuIYFBB8xWZG0IcGKzJ05W9rRpyaGUhy
+         ixFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763005587; x=1763610387;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=adduDIgHwGkFi5eI+DMenkw4/FG0bTrtUTxhLb5vmxg=;
-        b=L1z9STxHxU1YDec3XnPy93WwYrMd0fNXjsM7qOLpaGFp/C6KBZqxwhkllhsmFV2CqL
-         bdsEk0Mkqmfe8SSGsSawSutf43OavmJ3hC9RM2lsXFF9NI5po7mU3X4lH2hpHdkd+h3+
-         OuVNBmqrb34Q9oI1+ltVD7fLmmfvzHtRE0rIZL245sRRqxccxfq255zKwzjS+ZMIQuKU
-         eC0YZzKvjSNavY3LXCaUvTG+Zv/oFWhqYA3s6KrQsOZ9+hIrZttYTud8d/V0SpvmwTwE
-         +DBKcDkOs+SCC/LvTpb1LPO+MQqsTAFwKArLrZWDdX56IKYBpuypuDAD7tUJpnDL16ML
-         VIhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX3NDd8k26uEu+8umJdFOVmtZT8OeIr7bEM36eiRaQaKJryANbU3MBRZ8oyWNKca90XFeWLUmVkrDs400bD0ME=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYzgPddemPCCGw5IKwOuYkHShRGXH2drDNWqH5AzKr2g9qA2U7
-	SdnMX86A6L97y5X14OMqiWik5aKJGsMF9ZBn4Lcrm+q60qHFqfJd6Ga7wR2K6Mzr50KMy6K2EhW
-	097sZA4xmHZGBPA==
-X-Google-Smtp-Source: AGHT+IGEXQEv1ck2MMfwU6rgK0ZJutzaTXShQnbjZpIAo+t8a2V6IvSghLh5iFSwIMiZroqb5nh669NLVFj+pQ==
-X-Received: from dlbrp1.prod.google.com ([2002:a05:7022:1601:b0:119:49ca:6b84])
- (user=cmllamas job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:2406:b0:298:4f73:d872 with SMTP id d9443c01a7336-2984f73d8d1mr72305215ad.21.1763005587061;
- Wed, 12 Nov 2025 19:46:27 -0800 (PST)
-Date: Thu, 13 Nov 2025 03:46:22 +0000
+        d=1e100.net; s=20230601; t=1763007135; x=1763611935;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PXF2BvFrpcJte5UaMjynGshHJ8MIVF48yxM6S+pDvV4=;
+        b=Udq9ayk9qYBdM5IblqZnlYeFjVGNA5xmP4Bed3VWZ2UfHMmpRHjnNa78ErvWPQSDn5
+         u6P1NEQko66Mz2jkgg/ptED9BOODnwBUD46bY59GzJ258kr9fh9aBBAZ9X/eTpzVvgD2
+         cvmQ6awmWhBxIF3kucXbkchLKDIbaUjxXn6R1w4xlk+ngr9a33Jq4evu58m3OBHYrPhS
+         7r6ptDCIksDto5IXJxKsWRFJB21mfPwkYpOwwPen0/FijtxPD5XEXaTm4YoctuGFTKdV
+         fliWe+TTSn3o/V1fW1UZE7Q914F7Cg/J2cpL8Y7pemBemYqn+XPINHCc+Dt1FidwT9WY
+         8kNA==
+X-Forwarded-Encrypted: i=1; AJvYcCULBLUcctgLACT5BqebIGkVP0sfsuDIog3EkQ0OR2LNZhucLHER6Tbl7uc2KAHZz8gkzbpGaLO+Nx4AMUUfuyg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxp5sq6jfyLe8rwtL1bfN329l80hCyE5Z64KrP0hnbxsMW+Me7H
+	H15xOXvpK7CRIcfzs2iHiZl8od21U1Xix+2yRFb6lfGWr+YpxX4WF2aKAa4OMmNk8ND9Geb3qu+
+	LPFdbMiJNOEj21sItM6W+4nh3mpQzKvdDjTNBrgRYpOctHUYQ77JkA+rW2uTDB1BCk9hAPw==
+X-Gm-Gg: ASbGncsXSy/W7q+Q0VXfd7dR0E+NqsALeYV1Jc6bcSA8OVc2bS9RZ3IefERZvxgTl/Q
+	31UwgiP7fDoswU87Rnl8ND3OQgyN12wWoZnkyYYUF5Ej7bEcTcEn0DsrsXQuaSvD3adN8y8Sj9P
+	uyt8VHvWQM7Y5Vr2mGUdq8XoQiuWxQgVRMMkrXV0fy4GVEMghMAA7ZLKPHH+uhheMSdHxX7Juyz
+	80OM8LwIk8+5rsIB3KGLDZu8gjnOnZgFDnuVOd86dTpqcjDTHngEHtoUbYYW87BgPVxTsJCf09A
+	4HjlOqVRD0dYr5iEFdgFP+mY3IqgkqOi7U/X+35Gu08pgZrn9wZF9BYVEpEttNmhVbQOAONxzOV
+	2Dt0AYWvaDvqddsx7Fc23biR62S4ZAqTmHfxJ6QbDnBcuJQ==
+X-Received: by 2002:a05:6214:1c48:b0:880:4bdd:eb99 with SMTP id 6a1803df08f44-88271a39bf8mr81658486d6.50.1763007135030;
+        Wed, 12 Nov 2025 20:12:15 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGRDhCLizq1RLY3ln4mDWmpcPMOmzDiMDvejsHPgswmKFEfCLHM0V9nS2E9rZHYrxzUs/bBHw==
+X-Received: by 2002:a05:6214:1c48:b0:880:4bdd:eb99 with SMTP id 6a1803df08f44-88271a39bf8mr81658336d6.50.1763007134668;
+        Wed, 12 Nov 2025 20:12:14 -0800 (PST)
+Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88286318333sm4839906d6.24.2025.11.12.20.12.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Nov 2025 20:12:14 -0800 (PST)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <b97e1f53-3b6a-4d2a-82fc-3150565e266a@redhat.com>
+Date: Wed, 12 Nov 2025 23:12:13 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.51.2.1041.gc1ab5b90ca-goog
-Message-ID: <20251113034623.3127012-1-cmllamas@google.com>
-Subject: [PATCH] selftests/mm: fix division-by-zero in uffd-unit-tests
-From: Carlos Llamas <cmllamas@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Peter Xu <peterx@redhat.com>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Shuah Khan <shuah@kernel.org>, Ujwal Kundur <ujwal.kundur@gmail.com>, 
-	Brendan Jackman <jackmanb@google.com>
-Cc: kernel-team@android.com, linux-kernel@vger.kernel.org, 
-	Carlos Llamas <cmllamas@google.com>, stable@vger.kernel.org, 
-	"open list:MEMORY MANAGEMENT - USERFAULTFD" <linux-mm@kvack.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] cpuset: Avoid unnecessary partition invalidation
+To: Sun Shaojie <sunshaojie@kylinos.cn>, chenridong@huaweicloud.com
+Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <b9dce00a-4728-4ac8-ae38-7f41114c7c81@redhat.com>
+ <20251113033322.431859-1-sunshaojie@kylinos.cn>
+Content-Language: en-US
+In-Reply-To: <20251113033322.431859-1-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Commit 4dfd4bba8578 ("selftests/mm/uffd: refactor non-composite global
-vars into struct") moved some of the operations previously implemented
-in uffd_setup_environment() earlier in the main test loop.
+On 11/12/25 10:33 PM, Sun Shaojie wrote:
+> The reviewer mentioned they couldn't see my original patch, so I'm
+> re-quoting the key changes below for clarity:
+>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 52468d2c178a..e0d27c9a101a 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -586,14 +586,14 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
+>>   * Returns: true if CPU exclusivity conflict exists, false otherwise
+>>   *
+>>   * Conflict detection rules:
+>> - * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
+>> + * 1. If both cpusets are exclusive, they must be mutually exclusive
+>>   * 2. exclusive_cpus masks cannot intersect between cpusets
+>>   * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
+>>   */
+>> static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
+>> {
+>> -	/* If either cpuset is exclusive, check if they are mutually exclusive */
+>> -	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
+>> +	/* If both cpusets are exclusive, check if they are mutually exclusive */
+>> +	if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))
+>> 		return !cpusets_are_exclusive(cs1, cs2);
+>>
+>> 	/* Exclusive_cpus cannot intersect */
+> Here are the main changes, where the conflict check for step #6 in Table 2
+> is performed. And these changes have no effect on cgroup v1.
 
-The calculation of nr_pages, which involves a division by page_size, now
-occurs before checking that default_huge_page_size() returns a non-zero
-This leads to a division-by-zero error on systems with !CONFIG_HUGETLB.
+cpus_excl_conflict() is called by validate_change() which is used for 
+both v1 and v2.
 
-Fix this by relocating the non-zero page_size check before the nr_pages
-calculation, as it was originally implemented.
-
-Cc: stable@vger.kernel.org
-Fixes: 4dfd4bba8578 ("selftests/mm/uffd: refactor non-composite global vars into struct")
-Signed-off-by: Carlos Llamas <cmllamas@google.com>
----
- tools/testing/selftests/mm/uffd-unit-tests.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 9e3be2ee7f1b..f917b4c4c943 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -1758,10 +1758,15 @@ int main(int argc, char *argv[])
- 			uffd_test_ops = mem_type->mem_ops;
- 			uffd_test_case_ops = test->test_case_ops;
- 
--			if (mem_type->mem_flag & (MEM_HUGETLB_PRIVATE | MEM_HUGETLB))
-+			if (mem_type->mem_flag & (MEM_HUGETLB_PRIVATE | MEM_HUGETLB)) {
- 				gopts.page_size = default_huge_page_size();
--			else
-+				if (gopts.page_size == 0) {
-+					uffd_test_skip("huge page size is 0, feature missing?");
-+					continue;
-+				}
-+			} else {
- 				gopts.page_size = psize();
-+			}
- 
- 			/* Ensure we have at least 2 pages */
- 			gopts.nr_pages = MAX(UFFD_TEST_MEM_SIZE, gopts.page_size * 2)
-@@ -1776,12 +1781,6 @@ int main(int argc, char *argv[])
- 				continue;
- 
- 			uffd_test_start("%s on %s", test->name, mem_type->name);
--			if ((mem_type->mem_flag == MEM_HUGETLB ||
--			    mem_type->mem_flag == MEM_HUGETLB_PRIVATE) &&
--			    (default_huge_page_size() == 0)) {
--				uffd_test_skip("huge page size is 0, feature missing?");
--				continue;
--			}
- 			if (!uffd_feature_supported(test)) {
- 				uffd_test_skip("feature missing");
- 				continue;
--- 
-2.51.2.1041.gc1ab5b90ca-goog
+Cheers,
+Longman
 
 
