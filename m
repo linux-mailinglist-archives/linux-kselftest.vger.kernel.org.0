@@ -1,159 +1,141 @@
-Return-Path: <linux-kselftest+bounces-45577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45578-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CCD0C5992A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 19:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47A5EC59B7B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 20:21:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6E757344583
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 18:52:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EEB1734431B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 19:21:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C9B9315D51;
-	Thu, 13 Nov 2025 18:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99FD531A54A;
+	Thu, 13 Nov 2025 19:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GbuNqQTM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hRRo5/ko"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01DE830FF1D
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 18:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7464531A051
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 19:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763059961; cv=none; b=d/3p9bdopByUMyNL2UJAecOepVB+kGcFV2ryaEQq4s59lYCEa9p3vNVtqW+rpYt2glAxFbyh78q4cvCZMl0ylwUS8lNNpT0rLpZBNkuIKieCth3yYnW1b2ZivwFtxOwW9ArAgMglvtdLpBmcnJPdxwBKPaqhEFjMnbFHcrIegnk=
+	t=1763061676; cv=none; b=PVoqpsjca1j2Vfk5JGJStQy6QtH4TdoLEnewFIr8ZVwkVYoezGOF2H9qe6jshQIOKw24g4CyzsxHdrpHIMF1Ta1TTxi2T2btbCsQVrEz0NAVkYC75G7QUMIhe5ZoGN/G7XSdYuKar8DpZdWroHRJHj9JJG0DNZr6P0cVboBcLmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763059961; c=relaxed/simple;
-	bh=tY+LqcJi+t4vC6sC8QoxXUZexC4HaIVQqUDXfk6E/Gk=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=oVdIoGnWIy2FfetLg43zLGOZ9mG7UdxSQ8xV0UFw5wUxtqxTqC6XvMKXR5eJKPjk2jzpEB9hTtp87qPInPHUOZiXSJT0YihrWAICE/8M4nx2gXex9ljCYbGBEF0ruBOr/5whpmk78U+GA+SATgCvN3WRuVAt2g5Um2bEAtZsy3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GbuNqQTM; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-940d9772e28so49918539f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 10:52:39 -0800 (PST)
+	s=arc-20240116; t=1763061676; c=relaxed/simple;
+	bh=YV6sOxoXq6hGnFV0FtR8Pqna/c3no8BjtpDPc+tesEA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IcHD2V4WPgMQg8dB2A4zVbGNhnugSCIgtkXfY/SsUzXuORzANwtfq8hdO0QCaGzABo+RHuLmZmR7wIQ/no6k2NUyXcXS6jycgbFY/3aif0U8EJDHQP8+zF8L6vsioEBEelBNsTe8uNycRi2nbHzTlD89aSZPek3sgOJKyEKHRvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hRRo5/ko; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3436d6aa66dso1822993a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 11:21:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1763059959; x=1763664759; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1KVDNdeiUNjeLgJncmsFihjy0/HtaAIfwMHOw6agH2w=;
-        b=GbuNqQTMV+XQVndGd3Kh0vtc8WgKtJq3hL6KfmKdqZ0VIA6L6+dRZpZClklr99v74e
-         2TONNAyAqeNeg29RpBIsa57qShxTZthwFzradSqY90fwDmVdYuoAQJpZ78zDN6DSBT5r
-         9Jc4+pM4Y/biE5C3gJIqeOSWGoRut/QGJJ3C0=
+        d=gmail.com; s=20230601; t=1763061673; x=1763666473; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YV6sOxoXq6hGnFV0FtR8Pqna/c3no8BjtpDPc+tesEA=;
+        b=hRRo5/ko0m+0C3//rh0YIVeTifJukWDpcKaN7C9Wwcfkqi5QNW4blQOzYlHll5pvnB
+         xAbRvySqMLlA7lHg3zEHrzK3UPpmLUgrpl4F3SZ7z0JuYWsOE6+eQJcoldQwThagkroK
+         ZbOoWL98/j+CeeX/f6dN5fBRNgo9OMYw4KhHRzXZNV6Z901lf2kbR4mxB6QmDdGHoKS2
+         wLdh+Z0uHjL3DJTHn5zLMaspz65wDvYjT3bJ0/nR/XnUODcYtUrHxw1a15NvkSuHHUT2
+         XBQqfdgjrktY2+rpW/+t3ljqyCco+m8ggVZtoNYsMWyxLHcdvNchEaAmySjkBalxB7yf
+         SXIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763059959; x=1763664759;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1KVDNdeiUNjeLgJncmsFihjy0/HtaAIfwMHOw6agH2w=;
-        b=CdmVt4YILs+p/EZak8kCarkWnTMrzWsFn3dp0JMET5IK6s6tHNqCgRisr7sBsD7aKj
-         SHftUI5lbOaBkkAoYb+SgdDCh5/a9feeUHZyjVfGMk8Eej7HyTiIq45UELCwt0o0+0/6
-         DIR1d5q2HS5pqnZyoaPTjpz3B+OzdKl6AtpigIyVxFXRxSvHVK6N5Vu8HgEwgESb5h6y
-         wtSVrRNSil2ravJ6Ca1V7sM7EEP8C5IFPex83bRn88jRYkznYypvBb74KgFZTemDb8sD
-         +rZCwpxpdNRP3gYHfG3tIg8vLNVaz8UoT3lC3PAoV52q15fgxKhWzBbQSvBn5WCAwlh9
-         HRaA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ84uzWBOuVaB0o4j4Sm0CEVFsIIuJu8uu91+LxueAVRO6ynhriEdxiLwbEK7jeoksNEMpu+tlyjYpqB59Nz0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwF2dirKBQC5TTVIuGOA9dTsDw/yCZl7reD+gxwyG31oE5C5UXk
-	dVKxpcR2mvW/NoI7xdNcdvw2iPe7vSfEALu8iwIFryqMFIzwd95xLbtKKUGmEPzBpUvvtIy52HT
-	xogxY
-X-Gm-Gg: ASbGncsZBwFZsz2dFakl8TwXWpz5Up/kHhUb3Pec4kSHGZeqT/sPCyo5Bq9TDLb8CUi
-	HqzTiy9DL2GLFxJuqoXnM5PxOJFjCZPtkC6sjHJVYci+qb9n/7vGuFDcjIHwBKrgTdx2muUrV1F
-	Q5e1HVcmRpkSHSvvPFqsf7ltISvoUHPjxz5/FlitWR6t7wUr2zKF2IAhcBEKGfhkpyEB06Zk74S
-	22AVhOdCQJZbMJvzwxC+Yld5c0BnqExgDlDrkX0qCGIOJ+dZk0jY8rNdJpy8n0fyY9eoLiUnnLA
-	2UiK0KwcwHhUTJjXrtcfdGTUKfoWCYRsc8B/iPBaKhUOR+kCzX4dfXmGKYebZLA4yRQnE1OLDrp
-	MH1E0tF0Wi8RlLnMxjUJ4x2xmL1KZHW7aoThXi5RrKcwW/hPvgjQ4UfaiIAHj483xMi7LXddVLt
-	VINNC0N080gniwW4HAPF07yNk=
-X-Google-Smtp-Source: AGHT+IF2/bU+eSqXeVfXjfHWK1jKW4KR7t0Or1eO+izL08nGbvipHvjs8ExWqQyzio3nvcGrkZAjVw==
-X-Received: by 2002:a05:6602:b8e:b0:886:e168:e087 with SMTP id ca18e2360f4ac-948e0d9843cmr63168639f.13.1763059958939;
-        Thu, 13 Nov 2025 10:52:38 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-948d2b75865sm93549939f.5.2025.11.13.10.52.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Nov 2025 10:52:38 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------DzRij7SNZ0lc7eB07u15O7aG"
-Message-ID: <e7557516-343b-4dcf-920c-c0d46cde822b@linuxfoundation.org>
-Date: Thu, 13 Nov 2025 11:52:37 -0700
+        d=1e100.net; s=20230601; t=1763061673; x=1763666473;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YV6sOxoXq6hGnFV0FtR8Pqna/c3no8BjtpDPc+tesEA=;
+        b=K0YUKuUbIwSFTPUq0+7mfLkihZAs3EbXTeDvxE6buREWnAeDvelxmSDVHp2juceKuM
+         WkvBxH+hMlaQT78BueSAaOkDV3a1P5L+bPfzPUMEs0C9z2+M6VWPSPbWYpl7AHu9c00I
+         MhxGMQxttug0IsZRftN3uQ7w/FW1usftcTYgvWGIX9KAa4VsPbbDixP94BSZiuwzdcog
+         QGoTGCikHLgRk4yRQWzrGDpzCkQ2K4+xAgMk2eZ49hhMyp36AkmaJuvl5ayM+uAx6XER
+         WhCFmmdElN20RVfllgcc56MoZvpyV+kmHZnnoal/RnQxFrja0Mq0UTPakQyI6b98Anre
+         QKHw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWz2gpr/4WPXac8O+Xi7m1sFv0Jo94Y5ssAhNvNlHuFBVjMl4++Ews4ftPGHGCGjbohCIwxGXmzEgjFCwylGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFOeAaoLt3LYXvw0snxoFvOTQBDP3oky0o+fXOAkMCQ+Z5ii/t
+	h71FX1Fw4S/1ayEGrwqKZ/V9z4i3SnVURFEkyORS0Qf67FsVxPxWa7PNUOHMNKOcyfc=
+X-Gm-Gg: ASbGncvzZFTG+Gd7eQoU7P5eeNpFOfRQ8/7gSxFrw5Ue3D8NTRll0wzysbx9eO2qKbj
+	RUerU0Mh85klB7OwrUmmwEG3a2AcnPwI3dKG4keFAKQjXT2w2PpQ5VP/aSP+ovNQETG0pcerCAK
+	vgfZYctEJ76VKkX61qEyAvWC3yO15hWa1Diy8jaKTRVm41Rg9HegLwZ6s92kdLdvnkcjwg1V/bT
+	NHeEkGMU/AXGyk8sL60QvSNil08nV7NB58litb5nM89x9IYfmFRkmWcUgIo48oQ+VXAtbEsmq+D
+	lt7lJ/GxsttTlWzlp27GYEsyOMOfPDx4ZlsnejgZyjcC3x3hi+hx14L3Sxb0pUBFSFvUn3qgzOp
+	lZO4QofFA0iVQXFf1Cy4yLMIUbHwWKE9KNxuCVfMXIe1L9BewpXqIruVDMZbtVV5w8oh/JGf+9D
+	5EARiGO9BP
+X-Google-Smtp-Source: AGHT+IHz5MAfkUB8H2U+X4Opj6NB0ta/4SEepskdKyPG77Ty3LlkB8Uvny/o7z5fI2DcCEhkb3ZvSg==
+X-Received: by 2002:a17:90b:1802:b0:343:747e:2ca4 with SMTP id 98e67ed59e1d1-343f9177d72mr696406a91.9.1763061673216;
+        Thu, 13 Nov 2025 11:21:13 -0800 (PST)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-343e07b4b23sm6822395a91.13.2025.11.13.11.21.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Nov 2025 11:21:12 -0800 (PST)
+Message-ID: <351b27a15b9222a48f720de17093ab24d14ec391.camel@gmail.com>
+Subject: Re: [PATCH v4 1/2] libbpf: fix BTF dedup to support recursive
+ typedef definitions
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Houssel <paulhoussel2@gmail.com>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Martin Horth <martin.horth@telecom-sudparis.eu>, Ouail Derghal	
+ <ouail.derghal@imt-atlantique.fr>, Guilhem Jazeron
+ <guilhem.jazeron@inria.fr>,  Ludovic Paillat <ludovic.paillat@inria.fr>,
+ Robin Theveniaut <robin.theveniaut@irit.fr>, Tristan d'Audibert	
+ <tristan.daudibert@gmail.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau	 <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song	 <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh	 <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo	 <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,  Paul Houssel
+ <paul.houssel@orange.com>
+Date: Thu, 13 Nov 2025 11:21:09 -0800
+In-Reply-To: <bf00857b1e06f282aac12f6834de7396a7547ba6.1763037045.git.paul.houssel@orange.com>
+References: <cover.1763037045.git.paul.houssel@orange.com>
+	 <bf00857b1e06f282aac12f6834de7396a7547ba6.1763037045.git.paul.houssel@orange.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] kselftest fixes update for Linux 6.18-rc6
 
-This is a multi-part message in MIME format.
---------------DzRij7SNZ0lc7eB07u15O7aG
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Thu, 2025-11-13 at 13:39 +0100, Paul Houssel wrote:
+> Handle recursive typedefs in BTF deduplication
+>=20
+> Pahole fails to encode BTF for some Go projects (e.g. Kubernetes and
+> Podman) due to recursive type definitions that create reference loops
+> not representable in C. These recursive typedefs trigger a failure in
+> the BTF deduplication algorithm.
+>=20
+> This patch extends btf_dedup_ref_type() to properly handle potential
+> recursion for BTF_KIND_TYPEDEF, similar to how recursion is already
+> handled for BTF_KIND_STRUCT. This allows pahole to successfully
+> generate BTF for Go binaries using recursive types without impacting
+> existing C-based workflows.
+>=20
+> Co-developed-by: Martin Horth <martin.horth@telecom-sudparis.eu>
+> Signed-off-by: Martin Horth <martin.horth@telecom-sudparis.eu>
+> Co-developed-by: Ouail Derghal <ouail.derghal@imt-atlantique.fr>
+> Signed-off-by: Ouail Derghal <ouail.derghal@imt-atlantique.fr>
+> Co-developed-by: Guilhem Jazeron <guilhem.jazeron@inria.fr>
+> Signed-off-by: Guilhem Jazeron <guilhem.jazeron@inria.fr>
+> Co-developed-by: Ludovic Paillat <ludovic.paillat@inria.fr>
+> Signed-off-by: Ludovic Paillat <ludovic.paillat@inria.fr>
+> Co-developed-by: Robin Theveniaut <robin.theveniaut@irit.fr>
+> Signed-off-by: Robin Theveniaut <robin.theveniaut@irit.fr>
+> Suggested-by: Tristan d'Audibert <tristan.daudibert@gmail.com>
+> Signed-off-by: Paul Houssel <paul.houssel@orange.com>
+>=20
+> ---
 
-Hi Linus,
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Please pull this kselftest fixes update for Linux 6.18-rc6
-
-Fixes event-filter-function.tc tracing test failure caused when a first
-run to sample events triggers kmem_cache_free which interferes with the
-rest of the test. Fix this calling sample_events twice to eliminate the
-kmem_cache_free related noise from the sampling.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 920aa3a7705a061cb3004572d8b7932b54463dbf:
-
-   selftests: cachestat: Fix warning on declaration under label (2025-10-22 09:23:18 -0600)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-6.18-rc6
-
-for you to fetch changes up to dd4adb986a86727ed8f56c48b6d0695f1e211e65:
-
-   selftests/tracing: Run sample events to clear page cache events (2025-11-10 18:00:07 -0700)
-
-----------------------------------------------------------------
-linux_kselftest-fixes-6.18-rc6
-
-Fixes event-filter-function.tc tracing test failure caused when a first
-run to sample events triggers kmem_cache_free which interferes with the
-rest of the test. Fix this calling sample_events twice to eliminate the
-kmem_cache_free related noise from the sampling.
-
-----------------------------------------------------------------
-Steven Rostedt (1):
-       selftests/tracing: Run sample events to clear page cache events
-
-  tools/testing/selftests/ftrace/test.d/filter/event-filter-function.tc | 4 ++++
-  1 file changed, 4 insertions(+)
-----------------------------------------------------------------
---------------DzRij7SNZ0lc7eB07u15O7aG
-Content-Type: text/x-patch; charset=UTF-8;
- name="linux_kselftest-fixes-6.18-rc6.diff"
-Content-Disposition: attachment;
- filename="linux_kselftest-fixes-6.18-rc6.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvZmls
-dGVyL2V2ZW50LWZpbHRlci1mdW5jdGlvbi50YyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L2Z0cmFjZS90ZXN0LmQvZmlsdGVyL2V2ZW50LWZpbHRlci1mdW5jdGlvbi50YwppbmRleCBj
-NjIxNjVmYWJkMGMuLmNmYTE2YWExZjM5YSAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9z
-ZWxmdGVzdHMvZnRyYWNlL3Rlc3QuZC9maWx0ZXIvZXZlbnQtZmlsdGVyLWZ1bmN0aW9uLnRj
-CisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2Z0cmFjZS90ZXN0LmQvZmlsdGVyL2V2
-ZW50LWZpbHRlci1mdW5jdGlvbi50YwpAQCAtMjAsNiArMjAsMTAgQEAgc2FtcGxlX2V2ZW50
-cygpIHsKIGVjaG8gMCA+IHRyYWNpbmdfb24KIGVjaG8gMCA+IGV2ZW50cy9lbmFibGUKIAor
-IyBDbGVhciBmdW5jdGlvbnMgY2F1c2VkIGJ5IHBhZ2UgY2FjaGU7IHJ1biBzYW1wbGVfZXZl
-bnRzIHR3aWNlCitzYW1wbGVfZXZlbnRzCitzYW1wbGVfZXZlbnRzCisKIGVjaG8gIkdldCB0
-aGUgbW9zdCBmcmVxdWVudGx5IGNhbGxpbmcgZnVuY3Rpb24iCiBlY2hvID4gdHJhY2UKIHNh
-bXBsZV9ldmVudHMK
-
---------------DzRij7SNZ0lc7eB07u15O7aG--
+[...]
 
