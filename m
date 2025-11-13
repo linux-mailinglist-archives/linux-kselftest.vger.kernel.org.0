@@ -1,111 +1,80 @@
-Return-Path: <linux-kselftest+bounces-45540-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A813C57775
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 13:41:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05915C57AD0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 14:33:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 866CB4E6C44
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 12:40:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B7483A4AFA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 13:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BED5334FF55;
-	Thu, 13 Nov 2025 12:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PM28zDVD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5429350293;
+	Thu, 13 Nov 2025 13:15:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4EC34F24A
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 12:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8E73502B0;
+	Thu, 13 Nov 2025 13:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763037630; cv=none; b=nvijvJuzbyZ0mkJI9Xw0peloYzN6mhTe2rjrEJ/f3X6ZXMdpp8dP//A+gJOfDSTOkCbq4OcmLPOehhQMUt2VkvldqMiJrom2Fh/rF4xKqO4hfeGnnwGNSuMUPxooMIZnd8XIf4r+2qYYl5fETTAEGz579krhlFe6h8dyrr8N8OM=
+	t=1763039711; cv=none; b=pqybhtYrhGB99wm1Q/Cj2NWZi391uFIzi7sirf9tn9N/e+rCzEFyUr/ccET0vy+O7Hm7yiHpM9T/Q7up7lMKf9hoeqBO7LQFWFMasDwOJ1Qj+zAJePsPcY6ilXoUeAcMoJmrGeOZ70N+59anYFruT1L/2PHbVZxNyFU2Ltz/b8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763037630; c=relaxed/simple;
-	bh=ZDIjKrxNRsNKjDHyHEBYoPmLkLVi1miMphnKseqdm2M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LRemEy9qbq8xXTilWwCv99Ojm9G7x/Dzi5IDYSu5kFtS3RftLqsXjmMWFCwO8mBsMuzGED41eymd3lAHdhOn9or+TwSSSsIMu0ErKUSIFkOLUPwvgCWYFf80licmiwLcliQIvDGkqdNRcliWI/JCdj4Bt4UmrXP8mWwzKCPu89k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PM28zDVD; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-429c4c65485so680643f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 04:40:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763037627; x=1763642427; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MO9XnnVHj/rspITKiAGHVAzlJx09tqhwIOhjHMpSEAU=;
-        b=PM28zDVDce/GS0oF5Z085lkACZLsnDDdLwESuUTD4Pl3O2qB4z06jXIZd8aT0OVH5t
-         7pl06Je3UXw6k7hqGunUJvNBMKrLWjZThhX7Y/1wVDp2AbOKMr+SLFYd4y2jvfatkmVk
-         bOJgo2p+S+LEwhNkclVUmAAk5LrCeYeqvL1GpQTVcBKsBiW3+af/KjsUZpKYhc1U7ARE
-         DjQ8I/6lt8tXTJT0u9INEEEvl7wwbpQBefvfhD5i541ytYq6nLVPt7HW2ScbweCrLwBy
-         R4PTlDTYWgJ1y7RalE5S6UkwsJ4GvrTkIvCDwtE3J9PBELEf7DmSc95Kr65d3iqFn2XM
-         qlwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763037627; x=1763642427;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MO9XnnVHj/rspITKiAGHVAzlJx09tqhwIOhjHMpSEAU=;
-        b=Hgqs0XS4KxRcYXhaku3pgcYl0tGqRkSXkUwD6w2L6BgKIZ2dY+v00M53TIThkZgQU9
-         h0/oY2vnIRPh3mGktVfyeLCDeaSWKXGlQAIlQc593303U887AyTu+3EUpzlsb2UVEPyV
-         YFhF6j9uH6x89fwgSnz+rSCtdtLTJmT78vWG47le5EtL891JQUcEwib3BZScqsmg6b0q
-         m46jEVAaUOvtP8WuQNia2rdeTbRsfHQsTZCk9Vv0y3zEo4YD1IxVXRWfsx0tkQKGVHkr
-         +EZWaeB97qBkqbE8vOrffF549KI/55BkJzCFw9U3EuW1+ORJDT5QtaogjoebZMKqxhvk
-         QTKw==
-X-Forwarded-Encrypted: i=1; AJvYcCV19AQL1iav0BxQHwLoUxau2VdtHYrCivcSLo/3QVfKt4LVbLtnjmwbpVyPZM6hkYLHku0qO8+fQmRKZ302BUo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZY+DoY8jNB62lECWvar0Pl13v8N0MW60i/dNAdmln/wDvxedb
-	+JOZN3pQJKsXLB0a8VQGptxhpWYfXbA5Y7J4k5mi+wHy/WxxwMhmun2I
-X-Gm-Gg: ASbGncv2QgS03bZ4Fp3upx35LFFh6KLi+BQrvugGZIrUrYKvN3VTmhket6epzI0CAmV
-	J6cKHYP4BKITIyib/uIOYl9t5W5thraTyAwMkcBu1wdP4hi/DBPIP1WXfgRAw4Em6RBwhkj9Vx9
-	Wf0/oTDiUxJy9jHczJI9g5AgwnlW14Krq3GqOMbHZ2/qvOreLOdoS2WIS07oI7y2UCl7nP5VHyZ
-	2h7Mlntu8PpSUmTB6DI0aydhXn9dqkQCIq/Mu1HIZ2j0IaroBx8hO5XzFpunHC+RP1pxj3lgVfq
-	c/RS+911z7wBEV1aD+2K2Lv2XXRBZ26Dv4qZr8UJKnPru5wMH2B70Qf/LZVQUZJ/ywSJcluIprh
-	la93HDkRRYCG4VKLd8NibKQlWFIih93Ybf7/xC1uD3wZ39bBvzTW/OKUvH8/mzPrPLaLZaLB/FY
-	Y6wUcI9hJ4k9mdq0mb7XvWV3Y=
-X-Google-Smtp-Source: AGHT+IFMEpMMezmvxEMs766MRgjBKcLvtdSkSskQxUa3/4U12S0a20TELgCjrLTK7nBypapkTU9dgQ==
-X-Received: by 2002:a05:6000:2f86:b0:42b:43b4:2870 with SMTP id ffacd0b85a97d-42b4bb91d32mr6647570f8f.26.1763037627088;
-        Thu, 13 Nov 2025 04:40:27 -0800 (PST)
-Received: from paul-Precision-5770 ([80.12.41.69])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f0b62dsm3697140f8f.24.2025.11.13.04.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Nov 2025 04:40:26 -0800 (PST)
-From: Paul Houssel <paulhoussel2@gmail.com>
-X-Google-Original-From: Paul Houssel <paul.houssel@orange.com>
-To: Paul Houssel <paulhoussel2@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	bpf@vger.kernel.org,
+	s=arc-20240116; t=1763039711; c=relaxed/simple;
+	bh=6dMW8bMwTxb4FkBK6bLthIdV3ilHyTf/DTu0YvWev8U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=J+SWi/f4aY15Ye1rcH+EiNs2Hp/4mVRp40LZ524gVoaPxe2K1pZrGAmRyydyAcRPenq4K2+yVF4sRoHy5q/nqdUdUkXOoHw9u4tp7PMZbfb2w5pnT3L3nNk2FMVFm1Ba7Hu0xN4skCRnvpMOIBOZfVnIalc2NX/B7MW2NedDXS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c0b2be10c09211f0a38c85956e01ac42-20251113
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED, SA_LOWREP
+	SA_EXISTED, SN_UNTRUSTED, SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
+	GTI_C_CI, GTI_FG_IT, GTI_RG_INFO, GTI_C_BU, AMN_T1
+	AMN_GOOD, AMN_C_TI, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:84fc251b-f117-4269-a976-58cc5b6f035c,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:5
+X-CID-INFO: VERSION:1.3.6,REQID:84fc251b-f117-4269-a976-58cc5b6f035c,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:5
+X-CID-META: VersionHash:a9d874c,CLOUDID:900a97af88ae7b7aff42089cce452c64,BulkI
+	D:251113211501BVFKTKG3,BulkQuantity:0,Recheck:0,SF:17|19|66|78|102|850,TC:
+	nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,
+	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: c0b2be10c09211f0a38c85956e01ac42-20251113
+X-User: sunshaojie@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1220712474; Thu, 13 Nov 2025 21:14:57 +0800
+From: Sun Shaojie <sunshaojie@kylinos.cn>
+To: llong@redhat.com
+Cc: cgroups@vger.kernel.org,
+	chenridong@huaweicloud.com,
+	hannes@cmpxchg.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Martin Horth <martin.horth@telecom-sudparis.eu>,
-	Ouail Derghal <ouail.derghal@imt-atlantique.fr>,
-	Guilhem Jazeron <guilhem.jazeron@inria.fr>,
-	Ludovic Paillat <ludovic.paillat@inria.fr>,
-	Robin Theveniaut <robin.theveniaut@irit.fr>,
-	Tristan d'Audibert <tristan.daudibert@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Paul Houssel <paul.houssel@orange.com>
-Subject: [PATCH v4 2/2] selftests/bpf: add BTF dedup tests for recursive typedef definitions
-Date: Thu, 13 Nov 2025 13:39:51 +0100
-Message-ID: <9fac2f744089f6090257d4c881914b79f6cd6c6a.1763037045.git.paul.houssel@orange.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1763037045.git.paul.houssel@orange.com>
-References: <cover.1763037045.git.paul.houssel@orange.com>
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	sunshaojie@kylinos.cn,
+	tj@kernel.org
+Subject: [PATCH v2] cpuset: relax the overlap check for cgroup-v2
+Date: Thu, 13 Nov 2025 21:14:34 +0800
+Message-Id: <20251113131434.606961-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -114,94 +83,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add several ./test_progs tests:
-    1.  btf/dedup:recursive typedef ensures that deduplication no
-	longer fails on recursive typedefs.
-    2.  btf/dedup:typedef ensures that typedefs are deduplicated correctly
-	just as they were before this patch.
+In cgroup v2, a mutual overlap check is required when at least one of two
+cpusets is exclusive. However, this check should be relaxed and limited to
+cases where both cpusets are exclusive.
 
-Signed-off-by: Paul Houssel <paul.houssel@orange.com>
+The table 1 shows the partition states of A1 and B1 after each step before
+applying this patch.
+
+Table 1: Before applying the patch
+ Step                                       | A1's prstate | B1's prstate |
+ #1> mkdir -p A1                            | member       |              |
+ #2> echo "0-1" > A1/cpuset.cpus            | member       |              |
+ #3> echo "root" > A1/cpuset.cpus.partition | root         |              |
+ #4> mkdir -p B1                            | root         | member       |
+ #5> echo "0-3" > B1/cpuset.cpus            | root invalid | member       |
+ #6> echo "root" > B1/cpuset.cpus.partition | root invalid | root invalid |
+
+After step #5, A1 changes from "root" to "root invalid" because its CPUs
+(0-1) overlap with those requested by B1 (0-3). However, B1 can actually
+use CPUs 2-3, so it would be more reasonable for A1 to remain as "root."
+
+This patch relaxes the exclusive cpuset check for cgroup v2 while
+preserving the current cgroup v1 behavior.
+
+Signed-off-by: Sun Shaojie <sunshaojie@kylinos.cn>
+
 ---
- tools/testing/selftests/bpf/prog_tests/btf.c | 65 ++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+v1 -> v2:
+  - Keeps the current cgroup v1 behavior unchanged
+  - Link: https://lore.kernel.org/cgroups/c8e234f4-2c27-4753-8f39-8ae83197efd3@redhat.com
+---
+ kernel/cgroup/cpuset.c                            |  9 +++++++--
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 10 +++++-----
+ 2 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
-index 8a9ba4292109..054ecb6b1e9f 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf.c
-@@ -7495,6 +7495,71 @@ static struct btf_dedup_test dedup_tests[] = {
- 		BTF_STR_SEC("\0t\0m1\0m2\0tag1\0tag2\0tag3"),
- 	},
- },
-+{
-+	.descr = "dedup: recursive typedef",
-+	/*
-+	 * This test simulates a recursive typedef, which in GO is defined as such:
-+	 *
-+	 *   type Foo func() Foo
-+	 *
-+	 * In BTF terms, this is represented as a TYPEDEF referencing
-+	 * a FUNC_PROTO that returns the same TYPEDEF.
-+	 */
-+	.input = {
-+		.raw_types = {
-+			/*
-+			 * [1] typedef Foo -> func() Foo
-+			 * [2] func_proto() -> Foo
-+			 * [3] typedef Foo -> func() Foo
-+			 * [4] func_proto() -> Foo
-+			 */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 2),	/* [1] */
-+			BTF_FUNC_PROTO_ENC(1, 0),		/* [2] */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 4),	/* [3] */
-+			BTF_FUNC_PROTO_ENC(3, 0),		/* [4] */
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0Foo"),
-+	},
-+	.expect = {
-+		.raw_types = {
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 2),	/* [1] */
-+			BTF_FUNC_PROTO_ENC(1, 0),		/* [2] */
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0Foo"),
-+	},
-+},
-+{
-+	.descr = "dedup: typedef",
-+    /*
-+     * // CU 1:
-+     * typedef int foo;
-+     *
-+     * // CU 2:
-+     * typedef int foo;
-+     */
-+	.input = {
-+		.raw_types = {
-+			/* CU 1 */
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 1),		/* [2] */
-+			/* CU 2 */
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [3] */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 3),		/* [4] */
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0foo"),
-+	},
-+	.expect = {
-+		.raw_types = {
-+			BTF_TYPE_INT_ENC(0, BTF_INT_SIGNED, 0, 32, 4),	/* [1] */
-+			BTF_TYPEDEF_ENC(NAME_NTH(1), 1),		/* [2] */
-+			BTF_END_RAW,
-+		},
-+		BTF_STR_SEC("\0foo"),
-+	},
-+},
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 52468d2c178a..3240b3ab5998 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -592,8 +592,13 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
+  */
+ static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
  {
- 	.descr = "dedup: typedef tags",
- 	.input = {
+-	/* If either cpuset is exclusive, check if they are mutually exclusive */
+-	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
++	/* If both cpusets are exclusive, check if they are mutually exclusive */
++	if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))
++		return !cpusets_are_exclusive(cs1, cs2);
++
++	/* In cgroup-v1, if either cpuset is exclusive, check if they are mutually exclusive */
++	if (!is_in_v2_mode() &&
++	    (is_cpu_exclusive(cs1) != is_cpu_exclusive(cs2)))
+ 		return !cpusets_are_exclusive(cs1, cs2);
+ 
+ 	/* Exclusive_cpus cannot intersect */
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index a17256d9f88a..903dddfe88d7 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -269,7 +269,7 @@ TEST_MATRIX=(
+ 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X3:P2    .      .     0 A1:0-2|A2:3|A3:3 A1:P0|A2:P2 3"
+ 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3  X2-3:P2   .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
+ 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3 X2-3:P2:C3 .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
+-	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-3|A2:1-3|A3:2-3|B1:2-3 A1:P0|A3:P0|B1:P-2"
++	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-1|A2:1|A3:1|B1:2-3 A1:P0|A3:P0|B1:P2 2-3"
+ 	" C0-3:S+ C1-3:S+ C2-3   C4-5     .      .      .      P2    0 B1:4-5 B1:P2 4-5"
+ 	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3  X2-3:P2   P2    0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
+ 	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3 X2-3:P2:C1-3 P2  0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
+@@ -318,7 +318,7 @@ TEST_MATRIX=(
+ 	# Invalid to valid local partition direct transition tests
+ 	" C1-3:S+:P2 X4:P2  .      .      .      .      .      .     0 A1:1-3|XA1:1-3|A2:1-3:XA2: A1:P2|A2:P-2 1-3"
+ 	" C1-3:S+:P2 X4:P2  .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
+-	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:4-6 A1:P-2|B1:P0"
++	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0 0-4"
+ 	"  C0-3:P2   .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
+ 
+ 	# Local partition invalidation tests
+@@ -388,10 +388,10 @@ TEST_MATRIX=(
+ 	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
+ 	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2 0-1|1"
+ 
+-	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
+-	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P0"
++	# A non-exclusive cpuset.cpus change will not invalidate partition and its siblings
++	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:3 A1:P1|B1:P0"
+ 	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P-1"
+-	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P0|B1:P-1"
++	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-1|B1:2-3 A1:P0|B1:P1"
+ 
+ 	# cpuset.cpus can overlap with sibling cpuset.cpus.exclusive but not subsumed by it
+ 	"   C0-3     .      .    C4-5     X5     .      .      .     0 A1:0-3|B1:4-5"
 -- 
-2.51.0
+2.25.1
 
 
