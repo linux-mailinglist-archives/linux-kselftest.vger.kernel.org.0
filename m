@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-45552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC6BC588F8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 17:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EAADC588E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 17:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 905624F84B4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 15:38:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8B71D4F4E6F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 15:38:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A90A435502E;
-	Thu, 13 Nov 2025 15:31:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97E12355053;
+	Thu, 13 Nov 2025 15:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wimaF+9/";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+4ogWPra"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bKm2mfaE";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vbaSfjo5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8892F363B;
-	Thu, 13 Nov 2025 15:31:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B432F39D1;
+	Thu, 13 Nov 2025 15:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763047870; cv=none; b=iBQeYd5hkmTgHmqyrMl+wOoBrU2nr1TAMBHobkZrPFhOhMc+rIN8PR8JpDoO4ydd5fKFGnihYNutpg9oNsBrZwUFwh94zQZvGrGbxdVM8XuMSbXvE8YbgEYF06AfmrjvuVWFuugnU3kLHyVPqnod53d4nCi/707+FQEC3vfYmWE=
+	t=1763047871; cv=none; b=sfqndBS70+Y+F3wt4WXKA6wnMdlaXMA5/IN/OybhHOZH3+xcse7vEsml6FfaXU+a7FsnGZ/6bV2RtAOyb/tx47jUyuW3olNWR9ZL7KRNTgYffwUxcGB/rF/l/bZ4aEVmbHiNxt61FMIFNj+569pZTqpqYHGwezInjepXzLZgcB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763047870; c=relaxed/simple;
-	bh=vMHQb2pZU8YuJZrhWcCiLCwjhvrbfECZZuvDEJ5pZYc=;
+	s=arc-20240116; t=1763047871; c=relaxed/simple;
+	bh=XprfE5GVbG+1C0TRWP/OMuxspwruH8TFVSisi/13+5A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BY+fvyYv990VMXcOAFAovYyoKR8SgyB9M54ITx4Bu2PLjMBxxNaNNvzzojWgbpl119lXCtSeynsW7ACoScv3bmwXHlUGlmAmZMkAmUMf96fdAWja/Q2tYMSBhmkZ4a3F4UgyuKKh4OsYcc9Nv9+6LtjN5/Nq7dkuu8Cpsexqngc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wimaF+9/; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+4ogWPra; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=Sr8jFHrL+qf9gRKSeMG+lzd3ufYx9BFqacgkY8HY7xuhtP0F1vj0EWnSSu7cRA4G4gKLZChaXmN0IKvddwrFVPWRnKXKY3oGVWQDtpsKIanKpesF0DlYVt3dpUIqehlIRestdJNPhsQ0lH4sZcGg0QeG12J8txQKQYp8jWPiFyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bKm2mfaE; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vbaSfjo5; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,23 +39,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZgafkdasB43CZMgeqQ/jKhsmZopqp31FwuK/XeQH0zA=;
-	b=wimaF+9/1sELlqjQnOnNc3XCpnD0K6Xzpzmsf89i1/dzZpjLYruTGuRtoDEE7qYYM6oU6L
-	llZC7aGXmMddRNeqQuHyV7Fj6FivgpklIN6VlBxZZ5fv9GgHCmdM3rR+d3jiT3WjUU48+n
-	LJXMc9dMpx770BDY6MhgH5q78s18GJ717vZIWpwU8SY/b9HFzx3q7zaD1SGVHILjCmWF1J
-	/FLLAxjlQ/pYXJDXiwnUpxCuA7DNxbbtR0Zh3P/G3CYDE2oxrdPr6rvp39SPVPWwcTv7gn
-	eu+tXKLNEfAh0NLDGlW5yC/X/EHRH5PNKa4McCUaIjWFm3JCOOKWBruK6RSl4g==
+	bh=Rk4H2rJzsJKwW6HjwCB/Dmy11K36eNhIBQuW6DahpyQ=;
+	b=bKm2mfaEDX6yIFx4tJOrmBGPUEfuq1VgV/0fIUEr/xtjccrN32ta3iiYa90Ow4uIGlib68
+	icnSXwjG3fqueYKlcrVwwxPI0m1kUiceI86ti0t0fyhnTk63FdjvEAVYSTFOafh58FT7Ua
+	uqpG1zONLgPYULmCkGmHqWHL+KOyymuGXdsA4iTcsc/uM805HbmW4HMo/yU1Xi4y2TEzEO
+	6s2SX++0f7MwtA0RYLvuvK2t7Ntw8VqXg79OXmOuw/HZO/aAzmlzqrM87VyVgK8Za67yh4
+	McgekwyRu1Rm6rypdkXyKF72Yuu9W+wzHcYhA0Pof28IkdR8oPJSCYdTrsuhUg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1763047867;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZgafkdasB43CZMgeqQ/jKhsmZopqp31FwuK/XeQH0zA=;
-	b=+4ogWPraL9yWDZk3RBzk6PTOEK5CXILqI18hq1iBQT+p8i4xL/aZXPGbJBreImZV6X8gSl
-	Fe7J20S8S9Us97Bg==
-Date: Thu, 13 Nov 2025 16:30:18 +0100
-Subject: [PATCH v2 02/14] selftests: vDSO: Introduce vdso_types.h
+	bh=Rk4H2rJzsJKwW6HjwCB/Dmy11K36eNhIBQuW6DahpyQ=;
+	b=vbaSfjo5bb9btVBVIiWbGjb9I884nB9gRX6yK16OgmHY+9GgoS5TG/XCokRyRHnThFFZZx
+	endJnLMrDbRiJ8Aw==
+Date: Thu, 13 Nov 2025 16:30:19 +0100
+Subject: [PATCH v2 03/14] selftests: vDSO: Introduce vdso_syscalls.h
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251113-vdso-test-types-v2-2-0427eff70d08@linutronix.de>
+Message-Id: <20251113-vdso-test-types-v2-3-0427eff70d08@linutronix.de>
 References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
 In-Reply-To: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -73,107 +73,127 @@ To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763047863; l=3191;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763047863; l=4307;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=vMHQb2pZU8YuJZrhWcCiLCwjhvrbfECZZuvDEJ5pZYc=;
- b=kv+NJvr34fUn58aJcSqjyw9lRiORxlaU3HTkrNFePvcUKSqf9MMgw66sY1LBEXdz3kELrgWoG
- P45wL87CD2bAoOVe0FJED/uFawh44/+uEVRx6Fd9FJFzLWUeK3e3cvX
+ bh=XprfE5GVbG+1C0TRWP/OMuxspwruH8TFVSisi/13+5A=;
+ b=FCtQS+LIqCLv/nrQU5QH23RgGGUcob9f/SSyfGFJ7hEQiH6GwyWrf0ppsMk5wvmBadVrNV4b1
+ /qSMMDozJ+fAMi8XFOhcnncUaTRMTXxVk3mTr+ngccziiZZJbg+ri6K
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Currently the vDSO selftests use the time-related types from libc.
-This works on glibc by chance today but will break with other libc
-implementations or on distributions which switch to 64-bit times
-everywhere.
+The vDSO selftests use raw system call wrapper to validate the
+correctness of the vDSO implementation. The exactly available system
+calls differ between architectures and kernel configurations.
+Raw system calls should not use libc types as these are not necessarily
+compatible.
 
-The kernel's UAPI headers provide the proper types to use with the vDSO
-(and raw syscalls) but are not necessarily compatible with libc types.
-Introduce a new header which makes the UAPI headers compatible with the
-libc.
+Introduce a helper header which uses the correct types and fallbacks.
 
-Tested with glibc, musl and nolibc.
-
+Link: https://lore.kernel.org/lkml/29dd9e11-9ae8-415a-acb3-b96af56550b0@app.fastmail.com/
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- tools/testing/selftests/vDSO/vdso_types.h | 70 +++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ tools/testing/selftests/vDSO/vdso_syscalls.h | 93 ++++++++++++++++++++++++++++
+ 1 file changed, 93 insertions(+)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_types.h b/tools/testing/selftests/vDSO/vdso_types.h
+diff --git a/tools/testing/selftests/vDSO/vdso_syscalls.h b/tools/testing/selftests/vDSO/vdso_syscalls.h
 new file mode 100644
-index 0000000000000000000000000000000000000000..75f2b108ed0fb6956d05e2498879658608aa2f51
+index 0000000000000000000000000000000000000000..1419f8dd3ea831beaf582c47f6acf2ce5d5d12f8
 --- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_types.h
-@@ -0,0 +1,70 @@
++++ b/tools/testing/selftests/vDSO/vdso_syscalls.h
+@@ -0,0 +1,93 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
 + * Copyright (C) 2025 Thomas Weißschuh <thomas.weissschuh@linutronix.de>, Linutronix GmbH
 + *
-+ * Types to use with vDSO functions.
++ * System call wrappers to use for vDSO testing.
 + *
-+ * The types used by the vDSO functions do not necessarily match the ones used
-+ * by libc. The kernel's UAPI headers do provide definitions for those types
-+ * but are often not compatible with libc which applications need to use.
-+ * As the types differ between platforms listing them manually is a lot of work
-+ * and error prone. Instead hack around the incompatibilities of the libc and
-+ * UAPI headers and use the UAPI types.
++ * vDSO calls are expected to return the same data as the equivalent system call.
++ * To ensure this the tests need to trigger system calls. Calling into libc may
++ * silently use the vDSO, so explicit system calls are necessary.
++ * Not all system calls are available on all platforms, so some fallback logic
++ * is needed. Use __NR_ constants from the kernel's UAPI headers over SYS_ from
++ * ones from libc to avoid any potential interference from libc.
++ * Always prefer the 64-bit time variants of the system calls as 32-bit ones
++ * may not be present on the platform or disabled in the kernel configuration.
 + */
-+#ifndef __VDSO_TYPES_H__
-+#define __VDSO_TYPES_H__
++#ifndef __VDSO_SYSCALLS_H__
++#define __VDSO_SYSCALLS_H__
++
++#include "vdso_types.h"
++
++#include <stddef.h>
++#include <sys/syscall.h>
++#include <linux/unistd.h>
++
++#define typeof_member(T, m)	typeof(((T*)0)->m)
++#define sizeof_member(T, m)	sizeof(typeof_member(T, m))
 +
 +/*
-+ * Include the headers from libc first to not override any of its types later.
++ * To keep the fallback logic simple we assume that although the types between
++ * the wrapper and the system call are different they are compatible.
++ * Validate that assumption.
++ * On x32 tv_nsec of __kernel_old_timespec is smaller than the one from
++ * __kernel_timespec. This is fine, as only the lower 4 bytes are relevant and
++ * it is a little-endian architecture.
 + */
-+#include <time.h>
-+#include <sys/time.h>
++#define ASSERT_TIMESPEC_COMPATIBLE(T1, T2)							\
++	do {											\
++		_Static_assert(sizeof(T2) == sizeof(T2));					\
++		_Static_assert(offsetof(T1, tv_sec) == offsetof(T2, tv_sec));			\
++		_Static_assert(sizeof_member(T1, tv_sec) == sizeof_member(T2, tv_sec));		\
++		_Static_assert(offsetof(T1, tv_nsec) == offsetof(T2, tv_nsec));			\
++		_Static_assert(sizeof_member(T1, tv_nsec) == sizeof_member(T2, tv_nsec) ||	\
++			       (__BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__ && 			\
++			       sizeof_member(T1, tv_nsec) > sizeof_member(T2, tv_nsec)));	\
++	} while(0)
 +
-+/*
-+ * Avoid collisions.
-+ */
-+#define timeval kernel_timeval_moved
-+#define itimerspec kernel_itimerspec_moved
-+#define itimerval kernel_itimerval_moved
-+#define timezone kernel_timezone_moved
-+
-+/*
-+ * Get the UAPI types.
-+ */
-+#include <linux/time.h>
-+
-+#undef timeval
-+#undef itimerspec
-+#undef itimerval
-+#undef timezone
-+
-+/*
-+ * The UAPI headers do not provide their own 'struct __kernel_timezone'.
-+ * 'struct timezone' is the one from libc.
-+ */
-+struct kernel_timezone {
-+	int	tz_minuteswest;
-+	int	tz_dsttime;
-+};
-+
-+#include <linux/version.h>
-+
-+/*
-+ * UAPI headers from the libc may be older and not provide these.
-+ */
-+#if KERNEL_VERSION(5, 5, 0) > LINUX_VERSION_CODE
-+typedef __kernel_long_t		__kernel_old_time_t;
-+
-+struct __kernel_old_timespec {
-+	__kernel_old_time_t	tv_sec;
-+	long			tv_nsec;
-+};
++static inline
++int sys_clock_getres(__kernel_clockid_t clock, struct __kernel_timespec *ts)
++{
++#ifdef __NR_clock_getres_time64
++	return syscall(__NR_clock_getres_time64, clock, ts);
++#else
++	ASSERT_TIMESPEC_COMPATIBLE(typeof(*ts), struct __kernel_old_timespec);
++	return syscall(__NR_clock_getres, clock, ts);
 +#endif
++}
 +
-+typedef long (*vdso_gettimeofday_t)(struct __kernel_old_timeval *tv, struct kernel_timezone *tz);
-+typedef long (*vdso_clock_gettime_t)(__kernel_clockid_t clk_id, struct __kernel_old_timespec *ts);
-+typedef long (*vdso_clock_gettime64_t)(__kernel_clockid_t clk_id, struct __kernel_timespec *ts);
-+typedef long (*vdso_clock_getres_t)(__kernel_clockid_t clk_id, struct __kernel_old_timespec *ts);
-+typedef __kernel_old_time_t (*vdso_time_t)(__kernel_old_time_t *t);
++static inline
++int sys_clock_gettime(__kernel_clockid_t clock, struct __kernel_timespec *ts)
++{
++#ifdef __NR_clock_gettime64
++	return syscall(__NR_clock_gettime64, clock, ts);
++#else
++	ASSERT_TIMESPEC_COMPATIBLE(typeof(*ts), struct __kernel_old_timespec);
++	return syscall(__NR_clock_gettime, clock, ts);
++#endif
++}
 +
-+#endif /* __VDSO_TYPES_H__ */
++static inline
++int sys_gettimeofday(struct __kernel_old_timeval *tv, struct kernel_timezone *tz)
++{
++#ifdef __NR_gettimeofday
++	return syscall(__NR_gettimeofday, tv, tz);
++#else
++	/* Architectures with vdso_gettimeofday() also have __NR_gettimeofday */
++	errno = ENOSYS;
++	return -1;
++#endif
++}
++
++static inline
++__kernel_old_time_t sys_time(__kernel_old_time_t *tloc)
++{
++#ifdef __NR_time
++	return syscall(__NR_time, tloc);
++#else
++	/* Architectures with vdso_time() also have __NR_time */
++	errno = ENOSYS;
++	return -1;
++#endif
++}
++
++#endif /* __VDSO_SYSCALLS_H__ */
 
 -- 
 2.51.0
