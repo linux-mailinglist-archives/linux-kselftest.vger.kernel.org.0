@@ -1,252 +1,87 @@
-Return-Path: <linux-kselftest+bounces-45505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4001FC55644
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 03:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A344C556CF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 03:23:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1EE4F4E2F32
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 02:12:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 43B504E1972
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 02:23:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C088299947;
-	Thu, 13 Nov 2025 02:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EC632F7AAE;
+	Thu, 13 Nov 2025 02:23:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nV8FfQGN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+OhYIvL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7441C2D9492
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 02:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094042F6910;
+	Thu, 13 Nov 2025 02:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762999928; cv=none; b=ZUSGMSHwWJvzdLXvJYnA0vqStzOdkV/W1uK6URlpc7uIthx38Q2pvA82+R1k2/SmFN17+hnzITLdTnXAevdMyEKjBJaHwylEqXf469i8Dyi7in9yA+ZfR37HNNX42Caoa/btZLjiUHOPGwSIBJLWcukukpxBoTFqF6trCiTGa7Y=
+	t=1763000632; cv=none; b=e+X1BA7kPYaeAVIlfWuNoxfqM/lnDU5QYHpGUWUTQJvm1F1mPVDqASTG79EL5KGxbKRfdcW6zDUuqOovfwGSm59qbOLx5YEVncus0cxiSgvzfw1fBcy5HmZx5PrZO06xI/pYISeLsGjx3on3wY/XfvKMYCyd4jJ9zmLhCsuKKs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762999928; c=relaxed/simple;
-	bh=iefuxv+wcT0MtT+ue114GA0K5hPLCgei+iICUvCUOXo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=cjTSoxmJxrL2RaCZJYvYisjOqf0Y1s4pTbuPCpljwPeUXOLwWWHu/o/AWo+oy8PbxIDRVI//9YTlWhKGBo7KXI05oQrL5TLISpTbm/N/MpSaX+m0cmUAjydw8daA1KPfuoh4xT45yU6Woichk+qlBpssmeNPB645Jv0R9QSkN8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nV8FfQGN; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <a1aa7736-d014-477f-a516-2281a70fc8c1@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1762999910;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w/+1BR+z1PXeMCvVSg/Yv+cjc1+rmoxZ3614InYoJRw=;
-	b=nV8FfQGNv/0WHZb3+OThUFBKmCnETJ6CvUvKHHqtuE4TvC5BMA6YBhUrFW0GzBdv8xm1Dq
-	aCoTJqNbj7JMz5ef1xN4YwR6MO/M5nk9PYzIx3oGMIiC68ER2dsdEkXRgYpCGvPZOPab1m
-	s2iYakGeatJfxLbTpDO+bjD/g/hFZoQ=
-Date: Wed, 12 Nov 2025 18:11:45 -0800
+	s=arc-20240116; t=1763000632; c=relaxed/simple;
+	bh=uiIKjmlOaAuVzG/eOCcOMDdAt1BLiAZtilWHaUZlBp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f05lLaqMIz1HTfdPrfN9jkZY6yGwH1yJHcthBppw0yTXr0m/2X2h0eF8RXMTuxj7DU2oUjaLVTZsymIowLhC5RtDTrMY231bWHwMiXQaBXjeerYYkcQChxT6XQo5e6PbHB6vhj6da5mgwFh+znhdiBI6y3x4PB/FGgZQmYGNdU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+OhYIvL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E38C4CEF1;
+	Thu, 13 Nov 2025 02:23:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763000631;
+	bh=uiIKjmlOaAuVzG/eOCcOMDdAt1BLiAZtilWHaUZlBp0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=I+OhYIvLdMiP1mW5j/cV/kopMRJpCWVRFR3lRntku6GmbCToIZY329xsfRedUegmv
+	 ZxhYT+fg7PhIa080G0AgZYogyz5dCXaPfBHYD3BDCsCIGcyCCYu7lzX2NEYLDH7HDe
+	 7xjxE1e9A63IaO1sTt1dY45Hb+JiqaqzUk3WvqrRjdI8RyWVZVUTOsKZyOk+iLl2mx
+	 hs9T1Zfx1IqwdlhSubVEUHcDgkTeOd6f66Kz8vfWxkhbBM7ypxHVqYvJyFI2UZRVrd
+	 1k9T3H33cEwhKCVKrtFFws+GGDseWphrX51h0gO3rjrQn5rYUi/FsTJH8nyfzdbApQ
+	 n2CUHvBW4mKcw==
+Date: Wed, 12 Nov 2025 18:23:49 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev, Mat
+ Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Christoph Paasch
+ <cpaasch@apple.com>, Florian Westphal <fw@strlen.de>, Peter Krystad
+ <peter.krystad@linux.intel.com>, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v5 0/3] mptcp: Fix conflicts between MPTCP and
+ sockmap
+Message-ID: <20251112182349.281a6a11@kernel.org>
+In-Reply-To: <cf035c68-fe96-49e0-acdb-bf813ae71d57@kernel.org>
+References: <20251111060307.194196-1-jiayuan.chen@linux.dev>
+	<cf035c68-fe96-49e0-acdb-bf813ae71d57@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v9 1/9] kho: make debugfs interface optional
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Pratyush Yadav <pratyush@kernel.org>, akpm@linux-foundation.org,
- brauner@kernel.org, corbet@lwn.net, graf@amazon.com, jgg@ziepe.ca,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, masahiroy@kernel.org, ojeda@kernel.org,
- rdunlap@infradead.org, rppt@kernel.org, tj@kernel.org
-References: <20251101142325.1326536-1-pasha.tatashin@soleen.com>
- <20251101142325.1326536-2-pasha.tatashin@soleen.com>
- <d7651272-f979-4972-ae41-bab2faa8473a@linux.dev>
- <CA+CK2bDSvtuwrrXGOC07Rj42yGFHWR4Sse7Q5z1z8f1ZFHWQ2Q@mail.gmail.com>
- <CA+CK2bC_+repP-q183hjAuYYB2-Yx7fr_U3zr2cxysAWx5hzpg@mail.gmail.com>
- <029090cf-9a4d-4f79-b857-04c3ada83323@linux.dev>
- <CA+CK2bByYPJXSNOh6R3swqFrGsS02m3Dfh=ZU7YhNjNX6siyqg@mail.gmail.com>
- <442fa82e-16ef-4bde-84eb-743450222468@linux.dev>
- <mafs0qzu69gei.fsf@kernel.org>
- <CA+CK2bBEe16x0em1gRxQD3jhfV9t3QA2vx5ifk2pKb_WEoMTeg@mail.gmail.com>
- <0735e1ef-2b65-4a54-b4d5-964fb875cd09@linux.dev>
- <CA+CK2bBnnGyQ-N8-XS3W3tnSRwvFbstOdo0oDSdkF70KP1AVxw@mail.gmail.com>
- <475ed48d-1f62-4983-94a1-64e41c463c36@linux.dev>
-Content-Language: en-US
-In-Reply-To: <475ed48d-1f62-4983-94a1-64e41c463c36@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Tue, 11 Nov 2025 11:35:04 +0100 Matthieu Baerts wrote:
+> I think this series can be applied directly in 'net', if that's OK for
+> both of you.
 
-On 11/12/25 5:41 PM, Yanjun.Zhu wrote:
->
-> On 11/11/25 7:26 AM, Pasha Tatashin wrote:
->> On Mon, Nov 10, 2025 at 11:11 PM Zhu Yanjun <yanjun.zhu@linux.dev> 
->> wrote:
->>> In FC42, when I run "./luo_multi_session"
->>>
->>> # ./luo_multi_session
->>> # [STAGE 1] Starting pre-kexec setup for multi-session test...
->>> # [STAGE 1] Creating state file for next stage (2)...
->>> # [STAGE 1] Creating empty sessions 'multi-test-empty-1' and
->>> 'multi-test-empty-2'...
->>> # [STAGE 1] Creating session 'multi-test-files-1' with one memfd...
->>> # [STAGE 1] Creating session 'multi-test-files-2' with two memfds...
->>> # [STAGE 1] Executing kexec...
->>>
->>> Then the system hang. And via virt-viewer, a calltrace will appear.
->> Looks like mountroot fails, are you passing the same kernel parameters
->> as the during cold boot?
->> i.e. kexec -l -s --reuse-cmdline --initrd=[initramfs] [kernel]
->
->
-> Thanks a lot. It can work now.  The logs are as below:
->
-> "
->
-> # [STAGE 2] Starting post-kexec verification...
-> # [STAGE 2] Retrieving all sessions...
-> # [STAGE 2] Verifying contents of session 'multi-test-files-1'...
-> # [STAGE 2] Verifying contents of session 'multi-test-files-2'...
-> # [STAGE 2] Test data verified successfully.
-> # [STAGE 2] Finalizing all test sessions...
-> # [STAGE 2] Finalizing state session...
-> #
-> --- MULTI-SESSION KEXEC TEST PASSED ---
-> "
->
-> Yanjun.Zhu
+Also no preference here, Martin mentioned he will take it via bpf
+tomorrow. 
 
-
-Hi, Pasha
-
-In my tests, I found that luo_kexec_simple and luo_multi_session 
-currently depend on the glibc-static library.
-If this library is not installed, build errors occur.
-By making the following changes, luo_kexec_simple and luo_multi_session 
-would no longer depend on glibc-static, reducing external library 
-dependencies.
-I am not sure whether you agree with these proposed changes.
-
-diff --git a/tools/testing/selftests/liveupdate/Makefile 
-b/tools/testing/selftests/liveupdate/Makefile
-index 6ee6efeec62d..b226b9976150 100644
---- a/tools/testing/selftests/liveupdate/Makefile
-+++ b/tools/testing/selftests/liveupdate/Makefile
-@@ -3,7 +3,6 @@
-  KHDR_INCLUDES ?= -I../../../../usr/include
-  CFLAGS += -Wall -O2 -Wno-unused-function
-  CFLAGS += $(KHDR_INCLUDES)
--LDFLAGS += -static
-  OUTPUT ?= .
-
-  # --- Test Configuration (Edit this section when adding new tests) ---
-
-Yanjun.Zhu
-
->
->
->>
->> Pasha
->>
->>> The call trace is in the attachment.
->>>
->>> Yanjun.Zhu
->>>
->>> 在 2025/11/10 7:26, Pasha Tatashin 写道:
->>>> On Mon, Nov 10, 2025 at 8:16 AM Pratyush Yadav 
->>>> <pratyush@kernel.org> wrote:
->>>>> On Sun, Nov 09 2025, Zhu Yanjun wrote:
->>>>>
->>>>>> 在 2025/11/8 10:13, Pasha Tatashin 写道:
->>>>>>> On Fri, Nov 7, 2025 at 6:36 PM Yanjun.Zhu <yanjun.zhu@linux.dev> 
->>>>>>> wrote:
->>>>>>>> On 11/7/25 4:02 AM, Pasha Tatashin wrote:
->>>>>>>>> On Fri, Nov 7, 2025 at 7:00 AM Pasha Tatashin 
->>>>>>>>> <pasha.tatashin@soleen.com> wrote:
->>>>>>>>>>> Hi, Pasha
->>>>>>>>>>>
->>>>>>>>>>> In our previous discussion, we talked about counting the 
->>>>>>>>>>> number of times
->>>>>>>>>>> the kernel is rebooted via kexec. At that time, you 
->>>>>>>>>>> suggested adding a
->>>>>>>>>>> variable in debugfs to keep track of this count.
->>>>>>>>>>> However, since debugfs is now optional, where would be an 
->>>>>>>>>>> appropriate
->>>>>>>>>>> place to store this variable?
->>>>>>>>>> It is an optional config and can still be enabled if the live 
->>>>>>>>>> update
->>>>>>>>>> reboot number value needs to be accessed through debugfs. 
->>>>>>>>>> However,
->>>>>>>>>> given that debugfs does not guarantee a stable interface, 
->>>>>>>>>> tooling
->>>>>>>>>> should not be built to require these interfaces.
->>>>>>>>>>
->>>>>>>>>> In the WIP LUO [1] I have, I pr_info() the live update number 
->>>>>>>>>> during
->>>>>>>>>> boot and also store it in the incoming LUO FDT tree, which 
->>>>>>>>>> can also be
->>>>>>>>>> accessed through this optional debugfs interface.
->>>>>>>>>>
->>>>>>>>>> The pr_info message appears like this during boot:
->>>>>>>>>> [    0.000000] luo: Retrieved live update data, liveupdate 
->>>>>>>>>> number: 17
->>>>>>>>>>
->>>>>>>>>> Pasha
->>>>>>>>> Forgot to add link to WIP LUOv5:
->>>>>>>>> [1] https://github.com/soleen/linux/tree/luo/v5rc04
->>>>>>>> Thanks a lot. I’ve carefully read this commit:
->>>>>>>> https://github.com/soleen/linux/commit/60205b9a95c319dc9965f119303a1d83f0ff08fa. 
->>>>>>>>
->>>>>>>>
->>>>>>>> To be honest, I’d like to run some tests with who/luo, 
->>>>>>>> including the
->>>>>>>> selftest for kho/luo. Could you please share the steps with me?
->>>>>>>>
->>>>>>>> If the testing steps have already been documented somewhere, 
->>>>>>>> could you
->>>>>>>> please share the link?
->>>>>>> Currently the test performs in-kernel tests for FLB data, it 
->>>>>>> creates a
->>>>>>> number of FLB for every registered LUO file-handler, which at the
->>>>>>> moment is only memfd.
->>>>>>>
->>>>>>> It works together with any of the kexec based live update tests. In
->>>>>>> v5, I introduce two tests:
->>>>>>> luo_kexec_simple
->>>>>>> luo_multi_session
->>>>>>>
->>>>>>> For example, with luo_multi_session:
->>>>>> Hi, Pasha
->>>>>>
->>>>>> I enabled "CONFIG_LIVEUPDATE=y"
->>>>>>
->>>>>> # ./luo_multi_session
->>>>>> 1..0 # SKIP Failed to open /dev/liveupdate. Is the luo module 
->>>>>> loaded?
->>>>>>
->>>>>> # ls /dev/liveupdate
->>>>>> ls: cannot access '/dev/liveupdate': No such file or directory
->>>>>>
->>>>>> # grep "LIVEUPDATE" -inrHI /boot/config-`uname -r`
->>>>>> /boot/config-next-20251107-luo+:349:CONFIG_LIVEUPDATE=y
->>>>>> /boot/config-next-20251107-luo+:11985:CONFIG_LIVEUPDATE_TEST=y
->>>>>>
->>>>>> I made tests on FC42. But /dev/liveupdate is missing.
->>>>> You need to add liveupdate=1 to your kernel cmdline to enable LUO and
->>>>> get /dev/liveupdate.
->>>> +1, kernel parameters require: kho=1 liveupdate=1
->>>>
->>>>> Pasha, your LUO series doesn't add the liveupdate parameter to
->>>>> kernel-parameters.txt. I think it should be done in the next 
->>>>> version to
->>>>> this parameter is discoverable.
->>>> Yeah, that is missing, I will update that in a standalone patch, or in
->>>> a next version.
->>>>
->>>> Thanks,
->>>> Pasha
->>> -- 
->>> Best Regards,
->>> Yanjun.Zhu
+Please let us know on the off chance that you have anything that may
+conflict queued up. These will likely need a week of travel before 
+they reach net in this case.
 
