@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-45562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13FBDC587F1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 16:51:38 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E253C58A12
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 17:12:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 28EE8360636
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 15:40:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BFB714FE70B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 15:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50F7A357A53;
-	Thu, 13 Nov 2025 15:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 656832F49FC;
+	Thu, 13 Nov 2025 15:31:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="skwbFSod";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fU+7sjRf"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kIalnQ3H";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="K1mmvDRf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539CC3570B0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44453357718;
 	Thu, 13 Nov 2025 15:31:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763047878; cv=none; b=ggsdx0oACMrqe1hRRWhP5PW32HWUOEoNqDV4A4V1GDMNzZxl1wIAtALgXpN95+oUIIlPTkpOwOdOovrCWTsFM3su+TyuT40AGelO0II6+GmXU6f2GnpHDZDzE8qo3N4sDJnbjPiQjyEIL1aWJ1imU07d7yLK8i/EzdXIBRvWo28=
+	t=1763047879; cv=none; b=fQr3azNaAzLcjfaqBGRfZ/fI1GHAJC3ao+P0GN8qsGPxZlcfQM+kRCT1/qzosrgV5Vp8cxGYLHLsktZJrqWCWYf2sG7/VhFZrj2yTP85NKC5aAm71BfMsFKi/wwZIZ2JSnUwNknrnvDORMPmOfCLJhWYv5GiwHsL5tkIvGS0vJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763047878; c=relaxed/simple;
-	bh=tY9DN2SUv82NrViCPQmv/VBRBqsvVDFw04Mj21smQY8=;
+	s=arc-20240116; t=1763047879; c=relaxed/simple;
+	bh=LJAX46aHnRmsKlsk759IEhxLTOisIPDMEme8ejGdai4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Jm2KR41bfySLYo+jrNJdhIBD9e+TYf9jssDXM8u9wWjX77T7Bbe7hYGdYnUNGHia3lyPk/25lQi4yrkqvkDcxl98R1oUaw4e80jKJ+pdo+5g14Va/C2oXeOJGeZCx2R6cyoMxwcNzuzhaLdbIBE+gOPAeXK65rDFrXvc+SX1/tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=skwbFSod; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fU+7sjRf; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=peX09pXiLbhMLCfAYsKC9ZI5tDtgA3xPJHpBIjfMbS6A7FRuqHBO7SESu7SC2ZgFzGO8zG72lEr1xmgivy+QwIx0hQnkcVY4U32yk017gOXjNTfuXchpLN1q95kN6s03zAGLxnaMu1S5+ieKq8KhP3xs9CwDxv43CTR4TdciiLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kIalnQ3H; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=K1mmvDRf; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,24 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=gWkuvyexKAL9zkJaKecsm5/FPgL2CY5qnocQcUmqwFY=;
-	b=skwbFSod4+08MuuyFUU8zqJGu8iReJ9NUnNN7I2tgX1X9q0N5+SRu7uISlmOUxV1eJQLa/
-	ExvPxEcvqxLUP2TqJ0AZQ9SQDjdeSCHZYpUEWxs9jccpQTIzzkARj7GZ4THl4XGLEnDMua
-	qZ43+1Dx1xsSMZOLgPSTKqTyeAI+UwBgpkg0F2BeFUaxGGAQbtztd4oSaEtmyjH+HJ1vdv
-	BTnebr4fzrV8rRS+bECua3LnZWdJrLYjAkGWuqL64L7Ckeqil4L6HA8ztHj7nMSnuD5cfk
-	9kq2qyZruJ7uNrnT/iIGeWKQul1oDO1NqNR5P1T3LJmvon1StnIC015pYymYHg==
+	bh=pKjXgtAOgZVyQ2FoIi7WihbBl5GtnPPYa5CAXSqUp0o=;
+	b=kIalnQ3HVEZBUOnoGr99xjt4rHfMNQZ8bpRbJRkXDfEBfnBQUsXWONFUCT7w9/FX/7dA7t
+	PGdrXv4X13SVGl6ugzBgznSknS0QfzCnD/5jbOmi4gh2X/ofygpzuhAWBb3dJWvAnhtIbA
+	/pBt66mbUN2Bg7G33S/TbiazgvUhMgUPxepu0L4GC0qzdZm7ayhMS2dtARWTFCuCdCRJAM
+	Rgo8xsYhkSM3xoEQwmKNEqXBZTcy/qZpopvyj7jGN3bBcmh7KonLzltb3QdpJW1PAk0IEb
+	xbQo7pjR10TOpqS9IWWTNIpI3sMD/uGf9kKDzwOXJqOOtwU1Ba6aO+tp6BfVsQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1763047875;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=gWkuvyexKAL9zkJaKecsm5/FPgL2CY5qnocQcUmqwFY=;
-	b=fU+7sjRffHOxHjxw9YTkQ6EYRu5d7fxex/VTTdBVaRXwU0wvZ8fjT5kPNeMYdRshq9T3ws
-	hwBmtK1+ci8Me9Ag==
-Date: Thu, 13 Nov 2025 16:30:28 +0100
-Subject: [PATCH v2 12/14] selftests: vDSO: vdso_test_correctness: Use
- system call wrappers from vdso_syscalls.h
+	bh=pKjXgtAOgZVyQ2FoIi7WihbBl5GtnPPYa5CAXSqUp0o=;
+	b=K1mmvDRfjubh8P/ToZepC/t0hou1voPH81b1lbbEQuEAwhbfv1fqVzq/xX1mDXZuWqm7i3
+	4MuAjrAAPjsE4pBw==
+Date: Thu, 13 Nov 2025 16:30:29 +0100
+Subject: [PATCH v2 13/14] selftests: vDSO: vdso_test_correctness: Use
+ facilities from parse_vdso.c
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251113-vdso-test-types-v2-12-0427eff70d08@linutronix.de>
+Message-Id: <20251113-vdso-test-types-v2-13-0427eff70d08@linutronix.de>
 References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
 In-Reply-To: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
@@ -74,111 +74,130 @@ To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763047863; l=3603;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763047863; l=4422;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=tY9DN2SUv82NrViCPQmv/VBRBqsvVDFw04Mj21smQY8=;
- b=EZVSO9ciO4fY5Kaz2/z11hM1t1srBYjU5Lq/azx43ptEbWWSQHzcd/SOYdJtjgRcIF4gA7e+j
- Ps4E5LIg0ymCv6WPstfezMf8Gj/nokF4ZUK4SbFH+hNvMnWiu3P/hu8
+ bh=LJAX46aHnRmsKlsk759IEhxLTOisIPDMEme8ejGdai4=;
+ b=/7FiC3tqoDTQbY/cCOz83V/JQhT3c5SEBGUGvv8aP/R4y3VxmYvJMM1+hEiQPvzoIfvDnrxBc
+ jlFzhqdy5JbBNLdqFEy4XhBNjEJvxBKPLbfotj/kQ3g7Z/0aWbutfOu
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Using syscall() is problematic for the reasons outlined in vdso_syscalls.h.
+The soname from the vDSO is not a public API. Furthermore it requires
+libc to implement dlsym() and friends.
 
-Use the wrappers from the utility header instead.
+Use the facilities from parse_vdso.c instead which uses the official
+vDSO ABI to find it, aligned with the other vDSO selftests.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- .../testing/selftests/vDSO/vdso_test_correctness.c | 34 ++++++----------------
- 1 file changed, 9 insertions(+), 25 deletions(-)
+ tools/testing/selftests/vDSO/Makefile              |  4 +--
+ .../testing/selftests/vDSO/vdso_test_correctness.c | 30 ++++++++++------------
+ 2 files changed, 14 insertions(+), 20 deletions(-)
 
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index 74dfc60e636edce91cc1df9643ca8aa008ecfe65..504b30155ae7c6da3065c4472384f54e5547332a 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -26,13 +26,11 @@ CFLAGS_NOLIBC := -nostdlib -nostdinc -ffreestanding -fno-asynchronous-unwind-tab
+ $(OUTPUT)/vdso_test_gettimeofday: parse_vdso.c vdso_test_gettimeofday.c
+ $(OUTPUT)/vdso_test_getcpu: parse_vdso.c vdso_test_getcpu.c
+ $(OUTPUT)/vdso_test_abi: parse_vdso.c vdso_test_abi.c
++$(OUTPUT)/vdso_test_correctness: parse_vdso.c vdso_test_correctness.c
+ 
+ $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c | headers
+ $(OUTPUT)/vdso_standalone_test_x86: CFLAGS:=$(CFLAGS_NOLIBC) $(CFLAGS)
+ 
+-$(OUTPUT)/vdso_test_correctness: vdso_test_correctness.c
+-$(OUTPUT)/vdso_test_correctness: LDFLAGS += -ldl
+-
+ $(OUTPUT)/vdso_test_getrandom: parse_vdso.c
+ $(OUTPUT)/vdso_test_getrandom: CFLAGS += -isystem $(top_srcdir)/tools/include \
+                                          $(KHDR_INCLUDES) \
 diff --git a/tools/testing/selftests/vDSO/vdso_test_correctness.c b/tools/testing/selftests/vDSO/vdso_test_correctness.c
-index 276446d24f55d6b28910320e3d601bac501c2ca1..ac5fa3e906806c28d3238e6f4e767e370932c5d1 100644
+index ac5fa3e906806c28d3238e6f4e767e370932c5d1..310688e1379511e2c564b460c6379cc00b7a5f9a 100644
 --- a/tools/testing/selftests/vDSO/vdso_test_correctness.c
 +++ b/tools/testing/selftests/vDSO/vdso_test_correctness.c
-@@ -20,6 +20,7 @@
+@@ -10,20 +10,22 @@
+ #include <time.h>
+ #include <stdlib.h>
+ #include <unistd.h>
++#include <sys/auxv.h>
+ #include <sys/syscall.h>
+-#include <dlfcn.h>
+ #include <string.h>
+ #include <errno.h>
+ #include <sched.h>
+ #include <stdbool.h>
+ #include <limits.h>
  
++#include "parse_vdso.h"
  #include "vdso_config.h"
  #include "vdso_call.h"
-+#include "vdso_syscalls.h"
+ #include "vdso_syscalls.h"
  #include "vdso_types.h"
  #include "../kselftest.h"
  
-@@ -131,21 +132,6 @@ static long sys_getcpu(unsigned * cpu, unsigned * node,
- 	return syscall(__NR_getcpu, cpu, node, cache);
- }
++static const char *version;
+ static const char **name;
  
--static inline int sys_clock_gettime(clockid_t id, struct timespec *ts)
--{
--	return syscall(__NR_clock_gettime, id, ts);
--}
--
--static inline int sys_clock_gettime64(clockid_t id, struct __kernel_timespec *ts)
--{
--	return syscall(__NR_clock_gettime64, id, ts);
--}
--
--static inline int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
--{
--	return syscall(__NR_gettimeofday, tv, tz);
--}
--
- static void test_getcpu(void)
+ #ifndef __NR_clock_gettime64
+@@ -88,39 +90,32 @@ static void *vsyscall_getcpu(void)
+ 
+ static void fill_function_pointers(void)
  {
- 	printf("[RUN]\tTesting getcpu...\n");
-@@ -237,8 +223,8 @@ static char const * const clocknames[] = {
- 
- static void test_one_clock_gettime(int clock, const char *name)
- {
-+	struct __kernel_timespec start, end;
- 	struct __kernel_old_timespec vdso;
--	struct timespec start, end;
- 	int vdso_ret, end_ret;
- 
- 	printf("[RUN]\tTesting clock_gettime for clock %s (%d)...\n", name, clock);
-@@ -269,9 +255,9 @@ static void test_one_clock_gettime(int clock, const char *name)
+-	void *vdso = dlopen("linux-vdso.so.1",
+-			    RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+-	if (!vdso)
+-		vdso = dlopen("linux-gate.so.1",
+-			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+-	if (!vdso)
+-		vdso = dlopen("linux-vdso32.so.1",
+-			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+-	if (!vdso)
+-		vdso = dlopen("linux-vdso64.so.1",
+-			      RTLD_LAZY | RTLD_LOCAL | RTLD_NOLOAD);
+-	if (!vdso) {
++	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
++
++	if (!sysinfo_ehdr) {
+ 		printf("[WARN]\tfailed to find vDSO\n");
+ 		return;
  	}
  
- 	printf("\t%llu.%09ld %llu.%09ld %llu.%09ld\n",
--	       (unsigned long long)start.tv_sec, start.tv_nsec,
--	       (unsigned long long)vdso.tv_sec, vdso.tv_nsec,
--	       (unsigned long long)end.tv_sec, end.tv_nsec);
-+	       (unsigned long long)start.tv_sec, (unsigned long)start.tv_nsec,
-+	       (unsigned long long)vdso.tv_sec, (unsigned long)vdso.tv_nsec,
-+	       (unsigned long long)end.tv_sec, (unsigned long)end.tv_nsec);
+-	vdso_getcpu = (getcpu_t)dlsym(vdso, name[4]);
++	vdso_init_from_sysinfo_ehdr(sysinfo_ehdr);
++
++	vdso_getcpu = (getcpu_t)vdso_sym(version, name[4]);
+ 	if (!vdso_getcpu)
+ 		printf("Warning: failed to find getcpu in vDSO\n");
  
- 	if (!ts_leq(&start, &vdso) || !ts_leq(&vdso, &end)) {
- 		printf("[FAIL]\tTimes are out of sequence\n");
-@@ -305,7 +291,7 @@ static void test_one_clock_gettime64(int clock, const char *name)
+ 	vgetcpu = (getcpu_t) vsyscall_getcpu();
  
- 	printf("[RUN]\tTesting clock_gettime64 for clock %s (%d)...\n", name, clock);
+-	vdso_clock_gettime = (vdso_clock_gettime_t)dlsym(vdso, name[1]);
++	vdso_clock_gettime = (vdso_clock_gettime_t)vdso_sym(version, name[1]);
+ 	if (!vdso_clock_gettime)
+ 		printf("Warning: failed to find clock_gettime in vDSO\n");
  
--	if (sys_clock_gettime64(clock, &start) < 0) {
-+	if (sys_clock_gettime(clock, &start) < 0) {
- 		if (errno == EINVAL) {
- 			vdso_ret = VDSO_CALL(vdso_clock_gettime64, 2, clock, &vdso);
- 			if (vdso_ret == -EINVAL) {
-@@ -321,7 +307,7 @@ static void test_one_clock_gettime64(int clock, const char *name)
- 	}
+ #if defined(VDSO_32BIT)
+-	vdso_clock_gettime64 = (vdso_clock_gettime64_t)dlsym(vdso, name[5]);
++	vdso_clock_gettime64 = (vdso_clock_gettime64_t)vdso_sym(version, name[5]);
+ 	if (!vdso_clock_gettime64)
+ 		printf("Warning: failed to find clock_gettime64 in vDSO\n");
+ #endif
  
- 	vdso_ret = VDSO_CALL(vdso_clock_gettime64, 2, clock, &vdso);
--	end_ret = sys_clock_gettime64(clock, &end);
-+	end_ret = sys_clock_gettime(clock, &end);
- 
- 	if (vdso_ret != 0 || end_ret != 0) {
- 		printf("[FAIL]\tvDSO returned %d, syscall errno=%d\n",
-@@ -362,10 +348,8 @@ static void test_clock_gettime64(void)
- 
- static void test_gettimeofday(void)
- {
--	struct __kernel_old_timeval vdso;
--	struct kernel_timezone vdso_tz;
--	struct timeval start, end;
--	struct timezone sys_tz;
-+	struct __kernel_old_timeval start, vdso, end;
-+	struct kernel_timezone vdso_tz, sys_tz;
- 	int vdso_ret, end_ret;
- 
+-	vdso_gettimeofday = (vdso_gettimeofday_t)dlsym(vdso, name[0]);
++	vdso_gettimeofday = (vdso_gettimeofday_t)vdso_sym(version, name[0]);
  	if (!vdso_gettimeofday)
+ 		printf("Warning: failed to find gettimeofday in vDSO\n");
+ 
+@@ -398,6 +393,7 @@ static void test_gettimeofday(void)
+ 
+ int main(int argc, char **argv)
+ {
++	version = versions[VDSO_VERSION];
+ 	name = (const char **)&names[VDSO_NAMES];
+ 
+ 	fill_function_pointers();
 
 -- 
 2.51.0
