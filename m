@@ -1,60 +1,62 @@
-Return-Path: <linux-kselftest+bounces-45550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CECEBC58AD0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 17:22:37 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA935C587A3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 16:47:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECFD0500FBE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 15:38:14 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7C2FB34FABF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 15:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A7053546FA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6879B354AD0;
 	Thu, 13 Nov 2025 15:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XCuGLAHC";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1JYvKvU6"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yZLDdAIP";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dGNr/nNr"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4995D2F3621;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EF2C2F362D;
 	Thu, 13 Nov 2025 15:31:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763047870; cv=none; b=p+gL0Edks5E4lVRofH1VmwiJeObeawQ1z/jSUX3UnhPLxDERQjW0wUN/oXlAsl8HoVTRbcTGVKkTPpa3otlRbuvMbPPruCk2lZRVg7FJQ03BinETiEUn8uEhZl1E2jH6ZztA/gx/hI0mZ0s39CLzOmWhp+USjzCE4ZkoFoqbUUI=
+	t=1763047870; cv=none; b=D1MDOKIalBLCfAgdqV84gjywazALQgZMBPVQb7SsrfyOo5molgG2tLVeHbBPc0P31ggojPYR3+H4vPdNTDEsMyF4e5hHywUGAShv5H0ZDv+E48oiTx7wuH6ZpKtrZU7llIEkFhI9GKNxzk5qAOcaUHyEPCw+HzLEHnd8D5hhnNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763047870; c=relaxed/simple;
-	bh=TGcKeBkgz11eVd1/eROWlror7QWLtk1vSCzPNBRof8o=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ttCXTkb42K22AC0qFUOR8ZRekwOId+QxA0oINrZfZl33gggCylwvkz8q2doeqew93z7ZkDWVHLLZlNRHRAfGzPgOJrwxb3iQV8nu6eV1clV9YoHO0uFR8lHWUxtqBvVi9TBc3dkEQqicCRoDVny5CtrDshFE5V73TGRzNZFctOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XCuGLAHC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1JYvKvU6; arc=none smtp.client-ip=193.142.43.55
+	bh=5Op/T/eyCK+F5h2kEKIs2m7fYFFJJ7Y0BBAu8h5Itc8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=ZBt29mujNnmSwzlMp+r7yGFhTsZEg0EASp1FIgZPR7trAdlrrHRZ7Yx254+GEFmAr+Cz53GedaipLot/irr/ykTCGlSW1HjjnHE5MnxDOdImeKSo4tgQYAkX4LnVfEgjVNK+bFMadDJiJniMXoYPoG2cj2rqLOlEZfUjZhFnpUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yZLDdAIP; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dGNr/nNr; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763047865;
+	s=2020; t=1763047866;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=H2MmUcroBuAR7K4Pm+x4nWX7nRULthvq86zgxGuC7iA=;
-	b=XCuGLAHC41JYD9iHSfmlCYOzURg+oui1YOrr9V7j2ejDGbJfOUbkPiJqrmi81TwE4/NBFq
-	t0VwS0/uLzeOmXjEpaAZh+Ra9Xcm3l2wmcNTZffKCAt68cM0f+irOXL0NFPPYnh1Dbjj+I
-	SxMLfe05c80K8L3aeWBexjLqMPALX9soAbU8AGUZdY8qqA1yQTPkVcBItzHWu3vvMf/m4z
-	UWD4hQ8LT5U40lLw3QPWbOw2cbNDTc4AkEqcu/wHD4BupSkhUL0nxiqW4100kFDtZpeB5G
-	nSc3OBBYUODWIU6s+iV5/q9+8ChrVbCHlBfY5HBh9zIGs5AYW7Ih6gFKwAoDJA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lkJuPkbdEbvr1D9/q5FGwGe2aiPkXcMa/v88BuPKdsA=;
+	b=yZLDdAIPOYIcB52Qnz/xUJyrjUzFvrcX2jMeZSHkQlH5B/Q6Sh7ZM7YaNI+t4sCefMTOjF
+	l/Md0cklT/05zVFK4Wu+tSuJS/ee70DgNygkfONMJlmtbTrBuDjxy8ZXgri4eDDA4toovd
+	/X8Q1bWH41xX8s72paZn3nxvTVAM2TpUP2RzUIx9qLN+DeLOvX9WYQ9H5Oo8DIq0el3eD7
+	f9vkQb+nVFwy3GoENnSWhHuiYe68Vz5N3e82SCsKY1Q41rsQoODWydWZOAJzWrAUDN445t
+	pk6t3bnUDjAI1AQWA/hTeZMpNwfQ1SuEAHHha5JfSOjNVeg/zx1NXtC8htOUJw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763047865;
+	s=2020e; t=1763047866;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=H2MmUcroBuAR7K4Pm+x4nWX7nRULthvq86zgxGuC7iA=;
-	b=1JYvKvU6j4kxsK5ivXG5K4/8ip6xWcTlNQ7nfrnzYWrgcLm1eqK7dSvEwGT2/7xwq8LXL0
-	IsGfipI9AHEI9oDw==
-Subject: [PATCH v2 00/14] selftests: vDSO: Stop using libc types for vDSO
- calls
-Date: Thu, 13 Nov 2025 16:30:16 +0100
-Message-Id: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lkJuPkbdEbvr1D9/q5FGwGe2aiPkXcMa/v88BuPKdsA=;
+	b=dGNr/nNrz2bvdkTmrB9YxETJuRAQx1sQTUGQuJXFPrcwy+yMzSKHL1hHSdGs/5pZTabTEY
+	Zj8Q5q/QIJsaqbBg==
+Date: Thu, 13 Nov 2025 16:30:17 +0100
+Subject: [PATCH v2 01/14] Revert "selftests: vDSO: parse_vdso: Use UAPI
+ headers instead of libc headers"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,77 +65,70 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAIj5FWkC/2WNywrCMBBFf6XM2kgmpS9X/od0YdOpHZBEMjG0l
- P67seDK5Tlwz91AKDAJXIoNAiUW9i6DORVg57t7kOIxMxhtKkTUKo3iVSSJKq4vElW3lrRt0Ax
- NB3n1CjTxchRvfeaZJfqwHgcJv/bXwr9WQqWVLocSp7a1ddVdn+zeMXjHy3kk6Pd9/wCpuBlTs
- gAAAA==
-X-Change-ID: 20251110-vdso-test-types-68ce0c712b79
+Message-Id: <20251113-vdso-test-types-v2-1-0427eff70d08@linutronix.de>
+References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
+In-Reply-To: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
 To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
  Vincenzo Frascino <vincenzo.frascino@arm.com>, 
  Shuah Khan <shuah@kernel.org>
 Cc: Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763047863; l=2631;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763047863; l=1846;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=TGcKeBkgz11eVd1/eROWlror7QWLtk1vSCzPNBRof8o=;
- b=mT/nrNhuaqXUgo/zCm7isljsxPhrDKHPdsTkWYeRYfhNZRbWtp0cvc3SCUuUGAsq7V354XTGW
- 9ifcANAfVK+B7Y7lXioaiIBdnGZvB3pMBVIJaDmYCY8H5FpkxExSHv1
+ bh=5Op/T/eyCK+F5h2kEKIs2m7fYFFJJ7Y0BBAu8h5Itc8=;
+ b=3vyDLpbd397jWGe+N6QwdtnJCklB7Ey+qMGVwoRLiXFZz17v4y2DTqkKRmjXNttsggpq0rov3
+ BmZs8uc3V6jC+ojKrd5HnqJOhxwje5NKsAHlwXK6fohBB7vYwexFNCS
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Currently the vDSO selftests use the time-related types from libc.
-This works on glibc by chance today but will break with other libc
-implementations or on distributions which switch to 64-bit times
-everywhere.
+This reverts commit c9fbaa879508 ("selftests: vDSO: parse_vdso: Use UAPI
+headers instead of libc headers")
 
-The kernel's UAPI headers provide the proper types to use with the vDSO
-(and raw syscalls) but are not necessarily compatible with libc types.
-Introduce a new header which makes the UAPI headers compatible with the
-libc.
+The kernel headers were used to make parse_vdso.c compatible with
+nolibc.  Unfortunately linux/elf.h is incompatible with glibc's
+sys/auxv.h. When using glibc it is therefore not possible build
+parse_vdso.c as part of the same compilation unit as its caller
+as sys/auxv.h is needed for getauxval().
 
-Also contains some related cleanups.
+In the meantime nolibc gained its own elf.h, providing compatibility
+with the documented libc interfaces.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-Changes in v2:
-- Use __kernel_old_time_t in vdso_time_t.
-- Add vdso_syscalls.h.
-- Add a test for the time() function.
-- Validate return value of syscall(clock_getres) in vdso_test_abi
-- Link to v1: https://lore.kernel.org/r/20251111-vdso-test-types-v1-0-03b31f88c659@linutronix.de
+ tools/testing/selftests/vDSO/Makefile     | 2 --
+ tools/testing/selftests/vDSO/parse_vdso.c | 3 +--
+ 2 files changed, 1 insertion(+), 4 deletions(-)
 
----
-Thomas Weißschuh (14):
-      Revert "selftests: vDSO: parse_vdso: Use UAPI headers instead of libc headers"
-      selftests: vDSO: Introduce vdso_types.h
-      selftests: vDSO: Introduce vdso_syscalls.h
-      selftests: vDSO: vdso_test_gettimeofday: Remove nolibc checks
-      selftests: vDSO: vdso_test_gettimeofday: Use types from vdso_types.h
-      selftests: vDSO: vdso_test_abi: Use types from vdso_types.h
-      selftests: vDSO: vdso_test_abi: Validate return value of syscall(clock_getres)
-      selftests: vDSO: vdso_test_abi: Use system call wrappers from vdso_syscalls.h
-      selftests: vDSO: vdso_test_correctness: Drop SYS_getcpu fallbacks
-      selftests: vDSO: vdso_test_correctness: Make ts_leq() and tv_leq() more generic
-      selftests: vDSO: vdso_test_correctness: Use types from vdso_types.h
-      selftests: vDSO: vdso_test_correctness: Use system call wrappers from vdso_syscalls.h
-      selftests: vDSO: vdso_test_correctness: Use facilities from parse_vdso.c
-      selftests: vDSO: vdso_test_correctness: Add a test for time()
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index f94ea07cddc97ea8b13d8bed2b35a32bb99a2423..74dfc60e636edce91cc1df9643ca8aa008ecfe65 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -19,8 +19,6 @@ endif
+ 
+ include ../lib.mk
+ 
+-CFLAGS += $(TOOLS_INCLUDES)
+-
+ CFLAGS_NOLIBC := -nostdlib -nostdinc -ffreestanding -fno-asynchronous-unwind-tables \
+ 		 -fno-stack-protector -include $(top_srcdir)/tools/include/nolibc/nolibc.h \
+ 		 -I$(top_srcdir)/tools/include/nolibc/ $(KHDR_INCLUDES)
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 3ff00fb624a44b964cc54954f1f088cabe11a901..c6ff4413ea367ae57bc6a60073314b29f938c99d 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -19,8 +19,7 @@
+ #include <stdint.h>
+ #include <string.h>
+ #include <limits.h>
+-#include <linux/auxvec.h>
+-#include <linux/elf.h>
++#include <elf.h>
+ 
+ #include "parse_vdso.h"
+ 
 
- tools/testing/selftests/vDSO/Makefile              |   6 +-
- tools/testing/selftests/vDSO/parse_vdso.c          |   3 +-
- tools/testing/selftests/vDSO/vdso_syscalls.h       |  93 ++++++++++
- tools/testing/selftests/vDSO/vdso_test_abi.c       |  46 +++--
- .../testing/selftests/vDSO/vdso_test_correctness.c | 190 +++++++++++----------
- .../selftests/vDSO/vdso_test_gettimeofday.c        |   9 +-
- tools/testing/selftests/vDSO/vdso_types.h          |  70 ++++++++
- 7 files changed, 285 insertions(+), 132 deletions(-)
----
-base-commit: 1b2eb8c1324859864f4aa79dc3cfbb2f7ef5c524
-change-id: 20251110-vdso-test-types-68ce0c712b79
-
-Best regards,
 -- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+2.51.0
 
 
