@@ -1,179 +1,142 @@
-Return-Path: <linux-kselftest+bounces-45541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05915C57AD0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 14:33:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C4F3C57D9D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 15:09:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B7483A4AFA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 13:15:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B225F3AE192
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 13:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5429350293;
-	Thu, 13 Nov 2025 13:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC9023372C;
+	Thu, 13 Nov 2025 13:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="txJkF5FT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8E73502B0;
-	Thu, 13 Nov 2025 13:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF98821D3F3;
+	Thu, 13 Nov 2025 13:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763039711; cv=none; b=pqybhtYrhGB99wm1Q/Cj2NWZi391uFIzi7sirf9tn9N/e+rCzEFyUr/ccET0vy+O7Hm7yiHpM9T/Q7up7lMKf9hoeqBO7LQFWFMasDwOJ1Qj+zAJePsPcY6ilXoUeAcMoJmrGeOZ70N+59anYFruT1L/2PHbVZxNyFU2Ltz/b8g=
+	t=1763042076; cv=none; b=uP+zi14Gq+Z15wttsGfoNJCptv+GncSNyucBk4xQM9DgLM7ienpNua89ZR4sNEM1wXTHAVd2aX0H9rliQhGLPjfOKlS7cSEa11Mzz/JZKa5Q4uQTy4sTaYQam6YsydMAlzNPupnqJiJBoK+VSmalfPFoa/J75gHcoFuRJ122SRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763039711; c=relaxed/simple;
-	bh=6dMW8bMwTxb4FkBK6bLthIdV3ilHyTf/DTu0YvWev8U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=J+SWi/f4aY15Ye1rcH+EiNs2Hp/4mVRp40LZ524gVoaPxe2K1pZrGAmRyydyAcRPenq4K2+yVF4sRoHy5q/nqdUdUkXOoHw9u4tp7PMZbfb2w5pnT3L3nNk2FMVFm1Ba7Hu0xN4skCRnvpMOIBOZfVnIalc2NX/B7MW2NedDXS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: c0b2be10c09211f0a38c85956e01ac42-20251113
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED, SA_LOWREP
-	SA_EXISTED, SN_UNTRUSTED, SN_UNFAMILIAR, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_C_CI, GTI_FG_IT, GTI_RG_INFO, GTI_C_BU, AMN_T1
-	AMN_GOOD, AMN_C_TI, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:84fc251b-f117-4269-a976-58cc5b6f035c,IP:10,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:5
-X-CID-INFO: VERSION:1.3.6,REQID:84fc251b-f117-4269-a976-58cc5b6f035c,IP:10,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:5
-X-CID-META: VersionHash:a9d874c,CLOUDID:900a97af88ae7b7aff42089cce452c64,BulkI
-	D:251113211501BVFKTKG3,BulkQuantity:0,Recheck:0,SF:17|19|66|78|102|850,TC:
-	nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,
-	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: c0b2be10c09211f0a38c85956e01ac42-20251113
-X-User: sunshaojie@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1220712474; Thu, 13 Nov 2025 21:14:57 +0800
-From: Sun Shaojie <sunshaojie@kylinos.cn>
-To: llong@redhat.com
-Cc: cgroups@vger.kernel.org,
-	chenridong@huaweicloud.com,
-	hannes@cmpxchg.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	sunshaojie@kylinos.cn,
-	tj@kernel.org
-Subject: [PATCH v2] cpuset: relax the overlap check for cgroup-v2
-Date: Thu, 13 Nov 2025 21:14:34 +0800
-Message-Id: <20251113131434.606961-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1763042076; c=relaxed/simple;
+	bh=+eiYuQTlJMcgq/um/mZzzKGyhjmsIRw7x4ekIWvmY/I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uQN33V/A6HJhLytYsRW2fL9uflF0Se0MmjGqXcxv0JeE9PGMC9pjBC13v4ECRZiodExfPOG3Jqq0XnMxzJD/MNshK+vbWNZPQaPmRpMMdt68ykfKmqhQRXY9jPvCNFk20Yg7KAlZ8uwaS/0s/8QTD+Hlb0DTl32Qv2e+h/cMrQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=txJkF5FT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40204C19422;
+	Thu, 13 Nov 2025 13:54:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763042075;
+	bh=+eiYuQTlJMcgq/um/mZzzKGyhjmsIRw7x4ekIWvmY/I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=txJkF5FTgucRclDGl/+nRNJi8tlfSGLE4+IQ9ck78w9qoy9Th7UppRKQGB5QHsYgZ
+	 LRC2bLqh4G7rf/o33v+aCv3LApwXMQNb5Y3GsBDqRjuNeDWP2TGlyq/ShP6grhAckk
+	 XIJUeEpmvalPFJdjvq6CmUBD5njyBiMEEn7Q8Q3+iP8qdo6ZT5Ose/qcp/txA14otR
+	 Ne5b4FbsDVOPXQouMDOaMQUxub3Xl6U2ww8uXC+yIpC33UEMEOgdzvoq8mKulRdet0
+	 J8dhLzyKxMgfNgyVdmSTtjBc4fUgFr5k2gbFxjL9hh1W29sJriI6qCgMdUQ6Ll6FIo
+	 vLDyjHVViO50A==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98.2)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1vJXmT-0000000BIvM-18qS;
+	Thu, 13 Nov 2025 14:54:33 +0100
+Date: Thu, 13 Nov 2025 14:54:33 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Jiaqi Yan <jiaqiyan@google.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, maz@kernel.org, 
+	oliver.upton@linux.dev, duenwen@google.com, rananta@google.com, jthoughton@google.com, 
+	vsethi@nvidia.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
+	catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
+	shuah@kernel.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] VMM can handle guest SEA via KVM_EXIT_ARM_SEA
+Message-ID: <wuuvrqxezybzdnijarlom4wvxlfgzgjoakwt7ixittz2jb4mal@ngjvq2rrt2ps>
+References: <20251013185903.1372553-1-jiaqiyan@google.com>
+ <20251020144646.GT316284@nvidia.com>
+ <CACw3F528D6odL3MJWb28Y4HVOLo56tMQXBpvti5nhczdpMxOdQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACw3F528D6odL3MJWb28Y4HVOLo56tMQXBpvti5nhczdpMxOdQ@mail.gmail.com>
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-In cgroup v2, a mutual overlap check is required when at least one of two
-cpusets is exclusive. However, this check should be relaxed and limited to
-cases where both cpusets are exclusive.
+Hi,
 
-The table 1 shows the partition states of A1 and B1 after each step before
-applying this patch.
+On Mon, Nov 10, 2025 at 09:41:33AM -0800, Jiaqi Yan wrote:
+> On Mon, Oct 20, 2025 at 7:46 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> >
+> > On Mon, Oct 13, 2025 at 06:59:00PM +0000, Jiaqi Yan wrote:
+> > > Problem
+> > > =======
+> > >
+> > > When host APEI is unable to claim a synchronous external abort (SEA)
+> > > during guest abort, today KVM directly injects an asynchronous SError
+> > > into the VCPU then resumes it. The injected SError usually results in
+> > > unpleasant guest kernel panic.
+> > >
+> > > One of the major situation of guest SEA is when VCPU consumes recoverable
+> > > uncorrected memory error (UER), which is not uncommon at all in modern
+> > > datacenter servers with large amounts of physical memory. Although SError
+> > > and guest panic is sufficient to stop the propagation of corrupted memory,
+> > > there is room to recover from an UER in a more graceful manner.
+> > >
+> > > Proposed Solution
+> > > =================
+> > >
+> > > The idea is, we can replay the SEA to the faulting VCPU. If the memory
+> > > error consumption or the fault that cause SEA is not from guest kernel,
+> > > the blast radius can be limited to the poison-consuming guest process,
+> > > while the VM can keep running.
 
-Table 1: Before applying the patch
- Step                                       | A1's prstate | B1's prstate |
- #1> mkdir -p A1                            | member       |              |
- #2> echo "0-1" > A1/cpuset.cpus            | member       |              |
- #3> echo "root" > A1/cpuset.cpus.partition | root         |              |
- #4> mkdir -p B1                            | root         | member       |
- #5> echo "0-3" > B1/cpuset.cpus            | root invalid | member       |
- #6> echo "root" > B1/cpuset.cpus.partition | root invalid | root invalid |
+I like the idea of having a "guest-first"/"host-first" approach for APEI,
+letting userspace (likely rasdaemon) to decide to handle hardware errors
+either at the guest or at the host. Yet, it sounds wrong to have a flag
+called KVM_EXIT_ARM_SEA, as:
 
-After step #5, A1 changes from "root" to "root invalid" because its CPUs
-(0-1) overlap with those requested by B1 (0-3). However, B1 can actually
-use CPUs 2-3, so it would be more reasonable for A1 to remain as "root."
+    1. This is not exclusive to ARM;
+    2. There are other notification mechanisms that can rise an APEI
+       errors. For instance QEMU code defines:
 
-This patch relaxes the exclusive cpuset check for cgroup v2 while
-preserving the current cgroup v1 behavior.
+    ACPI_GHES_NOTIFY_POLLED = 0,
+    ACPI_GHES_NOTIFY_EXTERNAL = 1,
+    ACPI_GHES_NOTIFY_LOCAL = 2,
+    ACPI_GHES_NOTIFY_SCI = 3,
+    ACPI_GHES_NOTIFY_NMI = 4,
+    ACPI_GHES_NOTIFY_CMCI = 5,
+    ACPI_GHES_NOTIFY_MCE = 6,
+    ACPI_GHES_NOTIFY_GPIO = 7,
+    ACPI_GHES_NOTIFY_SEA = 8,
+    ACPI_GHES_NOTIFY_SEI = 9,
+    ACPI_GHES_NOTIFY_GSIV = 10,
+    ACPI_GHES_NOTIFY_SDEI = 11,
+    ACPI_GHES_NOTIFY_RESERVED = 12
 
-Signed-off-by: Sun Shaojie <sunshaojie@kylinos.cn>
+ - even on arm. QEMU currently implements two mechanisms (SEA and GPIO);
+ - once we implement the same feature on Intel, it will likely use
+   NMI, MCE and/or SCI.
 
----
-v1 -> v2:
-  - Keeps the current cgroup v1 behavior unchanged
-  - Link: https://lore.kernel.org/cgroups/c8e234f4-2c27-4753-8f39-8ae83197efd3@redhat.com
----
- kernel/cgroup/cpuset.c                            |  9 +++++++--
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 10 +++++-----
- 2 files changed, 12 insertions(+), 7 deletions(-)
+So, IMO, the best would be to use a more generic name like
+KVM_EXIT_APEI or KVM_EXIT_GHES - or maybe even name it the way it really
+is meant: KVM_EXIT_ACPI_GUEST_FIRST.
 
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 52468d2c178a..3240b3ab5998 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -592,8 +592,13 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
-  */
- static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
- {
--	/* If either cpuset is exclusive, check if they are mutually exclusive */
--	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
-+	/* If both cpusets are exclusive, check if they are mutually exclusive */
-+	if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))
-+		return !cpusets_are_exclusive(cs1, cs2);
-+
-+	/* In cgroup-v1, if either cpuset is exclusive, check if they are mutually exclusive */
-+	if (!is_in_v2_mode() &&
-+	    (is_cpu_exclusive(cs1) != is_cpu_exclusive(cs2)))
- 		return !cpusets_are_exclusive(cs1, cs2);
- 
- 	/* Exclusive_cpus cannot intersect */
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index a17256d9f88a..903dddfe88d7 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -269,7 +269,7 @@ TEST_MATRIX=(
- 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X3:P2    .      .     0 A1:0-2|A2:3|A3:3 A1:P0|A2:P2 3"
- 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3  X2-3:P2   .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
- 	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3 X2-3:P2:C3 .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
--	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-3|A2:1-3|A3:2-3|B1:2-3 A1:P0|A3:P0|B1:P-2"
-+	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-1|A2:1|A3:1|B1:2-3 A1:P0|A3:P0|B1:P2 2-3"
- 	" C0-3:S+ C1-3:S+ C2-3   C4-5     .      .      .      P2    0 B1:4-5 B1:P2 4-5"
- 	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3  X2-3:P2   P2    0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
- 	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3 X2-3:P2:C1-3 P2  0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
-@@ -318,7 +318,7 @@ TEST_MATRIX=(
- 	# Invalid to valid local partition direct transition tests
- 	" C1-3:S+:P2 X4:P2  .      .      .      .      .      .     0 A1:1-3|XA1:1-3|A2:1-3:XA2: A1:P2|A2:P-2 1-3"
- 	" C1-3:S+:P2 X4:P2  .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
--	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:4-6 A1:P-2|B1:P0"
-+	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0 0-4"
- 	"  C0-3:P2   .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
- 
- 	# Local partition invalidation tests
-@@ -388,10 +388,10 @@ TEST_MATRIX=(
- 	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
- 	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2 0-1|1"
- 
--	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
--	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P0"
-+	# A non-exclusive cpuset.cpus change will not invalidate partition and its siblings
-+	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:3 A1:P1|B1:P0"
- 	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P-1"
--	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P0|B1:P-1"
-+	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-1|B1:2-3 A1:P0|B1:P1"
- 
- 	# cpuset.cpus can overlap with sibling cpuset.cpus.exclusive but not subsumed by it
- 	"   C0-3     .      .    C4-5     X5     .      .      .     0 A1:0-3|B1:4-5"
--- 
-2.25.1
+That's said, I'd say that we need an implementation on a real userspace
+applicaton to be able to test it (rasdaemon being the obvious candidate).
 
+In order to test, the better is to use the new QEMU code (for 10.2) to
+allow injecting hardware errors via QMP.
+
+Regards,
+Mauro
 
