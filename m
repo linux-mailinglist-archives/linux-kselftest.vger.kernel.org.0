@@ -1,144 +1,334 @@
-Return-Path: <linux-kselftest+bounces-45525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48E3BC56849
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 10:13:02 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41C53C56B13
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 10:52:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5D633AE495
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 09:12:59 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 24747350D27
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 09:51:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91CB2D5A07;
-	Thu, 13 Nov 2025 09:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="js1Xtar+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 514D22DF3D1;
+	Thu, 13 Nov 2025 09:50:58 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D4729ACC6;
-	Thu, 13 Nov 2025 09:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DCF2DEA68;
+	Thu, 13 Nov 2025 09:50:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763025174; cv=none; b=N/koSe17EfYxs//atk8KEInN+I0sbsabdcpi4aqYlGt6JMyDv73X4OmI4WBYbcL0Y7LspobO1jKOND+MkKtiN6kcLdbDcxxntPhuTJ1UCzCTG8bjAWtIfk9FDdgRaDKWMMj16vdr77yAej4ZTtQz5pyQsqyhurwy743qyMf5lik=
+	t=1763027458; cv=none; b=FugmkR5nDCFGZBPpT2SlJtMUmT7FFWemNFq3ycjmMIlQZ+MC25dPZw4mAZbV/fs2DEWS6Dj6AeyXrwwLytAIGSQOYFpDkxLwGE+cP5ittWSGnhfmPkW9LufzMpESrxJiwbvZuuQtEuNElOpNKlmf7Mxv6Ly1+rmm5yvdVF+2xuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763025174; c=relaxed/simple;
-	bh=Z5sCgPCZvSjgs/rZdisIFqpHsRyOQUvFSlrjPGt7aks=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dT2q4+SjXr1RuwdQnZJTGQW7Cdo5Sz+VMc0O5JkrzA0tvlvi1GKmKYFNPIvZyhVn2r3gf8JsqgxHzc/6eD+/jMPF8zqpKSESuEjJPCSbnK2CDkqJIAysvm4xWYzJ6ErWhLyVWhZwnar8kljeZuqegsUbFMVYHGICWLEl8E0Z1lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=js1Xtar+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8961FC116D0;
-	Thu, 13 Nov 2025 09:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763025174;
-	bh=Z5sCgPCZvSjgs/rZdisIFqpHsRyOQUvFSlrjPGt7aks=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=js1Xtar+fTSewmsuYTUDV0A10GwT1XwZRx6McGr5fuhCLx+B/K0lhzeuyv2ODyQ8j
-	 dzVDfodH2T1lzzzR+sFgCLZDevpZObzcriZtoI2WR99HzwPJaIBpMEy0AQ1VAcaxnj
-	 XfTge17udmZjuUktYV9iuV0hSYSgEVXueTxrPeZqNNaQLR6cqlcvzCoOULt5ArEyDx
-	 JyFojC1d1oVWBv7fI8DH7ghzws40fd9jgrwPycRAhHLKNg+ve3zsz3TZjloj6gTN3a
-	 NgQgsLYZx8Lcy8GkXyUAdfQKWPPpbV6+ue2pFBnhjlF7/Fev2DyP/9AiVG4/t6rcRt
-	 1fgoxerYV/+WA==
-Message-ID: <4f302c55-b0a2-46c0-8cd3-0eb7bb9bac86@kernel.org>
-Date: Thu, 13 Nov 2025 10:12:44 +0100
+	s=arc-20240116; t=1763027458; c=relaxed/simple;
+	bh=q9mFL8RiAZj6RMExwmFVyoj5ShrrswYQK5SmpeJxjKY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TLUQNny/htwtZO1igA7iL/4hqrKYQZs8Dv1doXQzQC3JJJMOrfjC2jxmCPlAZzyYmZHSDXUDuyEvruYwyzEb/iaccbUFbHnl0ca6ArnHMWsXHn2StF7NICqh/gvoGDxYTHmw4YBhJRmW5CTS6QHQOxL4j74+JAXuMcHWdHjJyRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 389b3ddec07611f0a38c85956e01ac42-20251113
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED, SA_LOWREP
+	SA_EXISTED, SN_UNTRUSTED, SN_LOWREP, SN_EXISTED, SPF_NOPASS
+	DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF
+	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:bae591e1-cddb-4d2a-aadc-b87fd6a85652,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:15
+X-CID-INFO: VERSION:1.3.6,REQID:bae591e1-cddb-4d2a-aadc-b87fd6a85652,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:re
+	lease,TS:15
+X-CID-META: VersionHash:a9d874c,CLOUDID:d1fd8e5c04717b0a002828b5f9deddca,BulkI
+	D:2511131750462U230LTH,BulkQuantity:0,Recheck:0,SF:19|38|66|72|78|102|850,
+	TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,
+	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 389b3ddec07611f0a38c85956e01ac42-20251113
+X-User: zhangguopeng@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <zhangguopeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 358271896; Thu, 13 Nov 2025 17:50:43 +0800
+From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+To: tj@kernel.org,
+	hannes@cmpxchg.org,
+	shuah@kernel.org,
+	cgroups@vger.kernel.org
+Cc: mkoutny@suse.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>
+Subject: [PATCH] selftests/cgroup: conform test to TAP format output
+Date: Thu, 13 Nov 2025 17:50:25 +0800
+Message-Id: <20251113095025.2811205-1-zhangguopeng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v5 0/3] mptcp: Fix conflicts between MPTCP and sockmap
-Content-Language: en-GB, fr-BE
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, mptcp@lists.linux.dev,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Christoph Paasch <cpaasch@apple.com>, Florian Westphal <fw@strlen.de>,
- Peter Krystad <peter.krystad@linux.intel.com>, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20251111060307.194196-1-jiayuan.chen@linux.dev>
- <cf035c68-fe96-49e0-acdb-bf813ae71d57@kernel.org>
- <20251112182349.281a6a11@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20251112182349.281a6a11@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Jakub,
+Conform the layout, informational and status messages to TAP.  No
+functional change is intended other than the layout of output messages.
 
-On 13/11/2025 03:23, Jakub Kicinski wrote:
-> On Tue, 11 Nov 2025 11:35:04 +0100 Matthieu Baerts wrote:
->> I think this series can be applied directly in 'net', if that's OK for
->> both of you.
-> 
-> Also no preference here, Martin mentioned he will take it via bpf
-> tomorrow. 
-> 
-> Please let us know on the off chance that you have anything that may
-> conflict queued up. These will likely need a week of travel before 
-> they reach net in this case.
+Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+---
+ tools/testing/selftests/cgroup/test_core.c       | 7 ++++---
+ tools/testing/selftests/cgroup/test_cpu.c        | 7 ++++---
+ tools/testing/selftests/cgroup/test_cpuset.c     | 7 ++++---
+ tools/testing/selftests/cgroup/test_freezer.c    | 7 ++++---
+ tools/testing/selftests/cgroup/test_kill.c       | 7 ++++---
+ tools/testing/selftests/cgroup/test_kmem.c       | 7 ++++---
+ tools/testing/selftests/cgroup/test_memcontrol.c | 7 ++++---
+ tools/testing/selftests/cgroup/test_zswap.c      | 7 ++++---
+ 8 files changed, 32 insertions(+), 24 deletions(-)
 
-No problem for me, this can go to bpf-net first. We don't have pending
-patches modifying these parts.
-
-Cheers,
-Matt
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index 5e5b8c4b8c0e..102262555a59 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -923,8 +923,10 @@ struct corecg_test {
+ int main(int argc, char *argv[])
+ {
+ 	char root[PATH_MAX];
+-	int i, ret = EXIT_SUCCESS;
++	int i;
+ 
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), &nsdelegate)) {
+ 		if (setup_named_v1_root(root, sizeof(root), CG_NAMED_NAME))
+ 			ksft_exit_skip("cgroup v2 isn't mounted and could not setup named v1 hierarchy\n");
+@@ -946,12 +948,11 @@ int main(int argc, char *argv[])
+ 			ksft_test_result_skip("%s\n", tests[i].name);
+ 			break;
+ 		default:
+-			ret = EXIT_FAILURE;
+ 			ksft_test_result_fail("%s\n", tests[i].name);
+ 			break;
+ 		}
+ 	}
+ 
+ 	cleanup_named_v1_root(root);
+-	return ret;
++	ksft_finished();
+ }
+diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+index 7d77d3d43c8e..c83f05438d7c 100644
+--- a/tools/testing/selftests/cgroup/test_cpu.c
++++ b/tools/testing/selftests/cgroup/test_cpu.c
+@@ -796,8 +796,10 @@ struct cpucg_test {
+ int main(int argc, char *argv[])
+ {
+ 	char root[PATH_MAX];
+-	int i, ret = EXIT_SUCCESS;
++	int i;
+ 
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -814,11 +816,10 @@ int main(int argc, char *argv[])
+ 			ksft_test_result_skip("%s\n", tests[i].name);
+ 			break;
+ 		default:
+-			ret = EXIT_FAILURE;
+ 			ksft_test_result_fail("%s\n", tests[i].name);
+ 			break;
+ 		}
+ 	}
+ 
+-	return ret;
++	ksft_finished();
+ }
+diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
+index 8094091a5857..c5cf8b56ceb8 100644
+--- a/tools/testing/selftests/cgroup/test_cpuset.c
++++ b/tools/testing/selftests/cgroup/test_cpuset.c
+@@ -247,8 +247,10 @@ struct cpuset_test {
+ int main(int argc, char *argv[])
+ {
+ 	char root[PATH_MAX];
+-	int i, ret = EXIT_SUCCESS;
++	int i;
+ 
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -265,11 +267,10 @@ int main(int argc, char *argv[])
+ 			ksft_test_result_skip("%s\n", tests[i].name);
+ 			break;
+ 		default:
+-			ret = EXIT_FAILURE;
+ 			ksft_test_result_fail("%s\n", tests[i].name);
+ 			break;
+ 		}
+ 	}
+ 
+-	return ret;
++	ksft_finished();
+ }
+diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
+index 714c963aa3f5..97fae92c8387 100644
+--- a/tools/testing/selftests/cgroup/test_freezer.c
++++ b/tools/testing/selftests/cgroup/test_freezer.c
+@@ -1488,8 +1488,10 @@ struct cgfreezer_test {
+ int main(int argc, char *argv[])
+ {
+ 	char root[PATH_MAX];
+-	int i, ret = EXIT_SUCCESS;
++	int i;
+ 
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+@@ -1501,11 +1503,10 @@ int main(int argc, char *argv[])
+ 			ksft_test_result_skip("%s\n", tests[i].name);
+ 			break;
+ 		default:
+-			ret = EXIT_FAILURE;
+ 			ksft_test_result_fail("%s\n", tests[i].name);
+ 			break;
+ 		}
+ 	}
+ 
+-	return ret;
++	ksft_finished();
+ }
+diff --git a/tools/testing/selftests/cgroup/test_kill.c b/tools/testing/selftests/cgroup/test_kill.c
+index a4dd326ced79..c8c9d306925b 100644
+--- a/tools/testing/selftests/cgroup/test_kill.c
++++ b/tools/testing/selftests/cgroup/test_kill.c
+@@ -274,8 +274,10 @@ struct cgkill_test {
+ int main(int argc, char *argv[])
+ {
+ 	char root[PATH_MAX];
+-	int i, ret = EXIT_SUCCESS;
++	int i;
+ 
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+@@ -287,11 +289,10 @@ int main(int argc, char *argv[])
+ 			ksft_test_result_skip("%s\n", tests[i].name);
+ 			break;
+ 		default:
+-			ret = EXIT_FAILURE;
+ 			ksft_test_result_fail("%s\n", tests[i].name);
+ 			break;
+ 		}
+ 	}
+ 
+-	return ret;
++	ksft_finished();
+ }
+diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
+index 005a142f3492..ca38525484e3 100644
+--- a/tools/testing/selftests/cgroup/test_kmem.c
++++ b/tools/testing/selftests/cgroup/test_kmem.c
+@@ -421,8 +421,10 @@ struct kmem_test {
+ int main(int argc, char **argv)
+ {
+ 	char root[PATH_MAX];
+-	int i, ret = EXIT_SUCCESS;
++	int i;
+ 
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -446,11 +448,10 @@ int main(int argc, char **argv)
+ 			ksft_test_result_skip("%s\n", tests[i].name);
+ 			break;
+ 		default:
+-			ret = EXIT_FAILURE;
+ 			ksft_test_result_fail("%s\n", tests[i].name);
+ 			break;
+ 		}
+ 	}
+ 
+-	return ret;
++	ksft_finished();
+ }
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 2e9d78ab641c..4e1647568c5b 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -1650,8 +1650,10 @@ struct memcg_test {
+ int main(int argc, char **argv)
+ {
+ 	char root[PATH_MAX];
+-	int i, proc_status, ret = EXIT_SUCCESS;
++	int i, proc_status;
+ 
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -1685,11 +1687,10 @@ int main(int argc, char **argv)
+ 			ksft_test_result_skip("%s\n", tests[i].name);
+ 			break;
+ 		default:
+-			ret = EXIT_FAILURE;
+ 			ksft_test_result_fail("%s\n", tests[i].name);
+ 			break;
+ 		}
+ 	}
+ 
+-	return ret;
++	ksft_finished();
+ }
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+index ab865d900791..64ebc3f3f203 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -597,8 +597,10 @@ static bool zswap_configured(void)
+ int main(int argc, char **argv)
+ {
+ 	char root[PATH_MAX];
+-	int i, ret = EXIT_SUCCESS;
++	int i;
+ 
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -625,11 +627,10 @@ int main(int argc, char **argv)
+ 			ksft_test_result_skip("%s\n", tests[i].name);
+ 			break;
+ 		default:
+-			ret = EXIT_FAILURE;
+ 			ksft_test_result_fail("%s\n", tests[i].name);
+ 			break;
+ 		}
+ 	}
+ 
+-	return ret;
++	ksft_finished();
+ }
 -- 
-Sponsored by the NGI0 Core fund.
+2.25.1
 
 
