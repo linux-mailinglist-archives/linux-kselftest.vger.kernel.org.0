@@ -1,117 +1,106 @@
-Return-Path: <linux-kselftest+bounces-45471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7D16C54EB8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 01:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BE8C2C54EC7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 01:38:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E724F4E158E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 00:35:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 16BB44E0484
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 00:37:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B380383A14;
-	Thu, 13 Nov 2025 00:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8F51339A4;
+	Thu, 13 Nov 2025 00:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="viNgrp3B"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cVLW2eG/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF51F2F85B
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 00:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765A035959
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 00:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762994119; cv=none; b=K3Ul6zJB5ldcnE8VbNWIUYHilrT+9C5sr/p6oLODTVPnRL1Bj7OQVdN+YNfi2x9CAbl0BMjuFOP3r9smwQuSjuTcjjW8cfH3MFYt4DZORHnMZ2AA25fWdvZml8GEqVZlWsDmlSBK2WwY1jRhDaBpQ0WC0IescsbE/i98toXuxPA=
+	t=1762994243; cv=none; b=sXGLBq4Q2zpn9/7rQ5y44LD5VN6DuZBkDvk88gUOe87U76Wt1GObnshJXHczI5jwinMm3ib+iY/reVt0bx7/6OcaQFGgM7SLAa9mFVp4j+FP0rMugCZtPG8pX8c+jZJO3+ybspCgAGNZ439cC2mwiS6FJMu2KRx7YgAn/uN2rq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762994119; c=relaxed/simple;
-	bh=pqaWapcSx1fG/eg63jrW4womW8bqwrPCzR9rpSBWqUU=;
+	s=arc-20240116; t=1762994243; c=relaxed/simple;
+	bh=gQAFEkuis6MxG6DQ2tXr7tvJKT50Xpw9bu5kwP7LPfM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SulFgJFc0UnUcbbYY0XuKq4ipeWr+32u2KlF+MnOvp9l5nmKQMY9vOKCV5gtXrkcmPirpKCxKFVhyX14a9nwYTUVGmcparbVd/8Xm/qPyBujvkemzuscOlelZUVAseypHzbsIqTUyeiZYOagg3SVYlUaedFfKMTe72+kRN+1aFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=viNgrp3B; arc=none smtp.client-ip=209.85.167.52
+	 To:Cc:Content-Type; b=Ddv6MA8TT8aXtNcZVWmVypsUelqVyGwSBhSdFXl/nNkP9NP/PDw5d7vLTGTg7rstgKNSXEKZ4yAbbwMN+r9vb67OykWSe3C2oJUG5AyDchEQLhBH6GCNW5GwQxRh58o/9QpEWFrZYSHmHx3BzBj2ai9snqQx0eudUT3qk5CulPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cVLW2eG/; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59431f57bf6so219587e87.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 16:35:17 -0800 (PST)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-594285c6509so210982e87.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Nov 2025 16:37:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1762994116; x=1763598916; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1762994240; x=1763599040; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tkmP58eOOzM61HVymH4b01vkY2iRcbp7BM0yKv/+Lgg=;
-        b=viNgrp3BaPYr7S6e0enLdqUp6skcvv3zmFX8C2ErAvx9kB+AOwOgXfPam6Yy0i9wf/
-         n/Jde2Of5BoduLoucZUhHRoS4meM79cwQQmj/kHvgmimr853dri4T+2AzdHQpqxeEZbE
-         mXn2GTv9oMWw/nCp2AIOI6I6ktZz5F16NLxy9K4vUi2Bp4ZWfPd6IAPRzkVeDLWCug/B
-         zXWJgGR7IDtnfmcj0Np9B1DR/ZZnyfmCmRlMTNrisZFRUu8qJ1IAyTs47MOT/xlX4FKc
-         QqXxr9hrNahE2eHpSytr3qH3R5U8nANCsgs7YquxpCFiQWTkgP+1Lau2OassQS4K/jBZ
-         zdAw==
+        bh=gQAFEkuis6MxG6DQ2tXr7tvJKT50Xpw9bu5kwP7LPfM=;
+        b=cVLW2eG/gPr1sJMBKzZEY21OMPLNeE6ftCtoZGHFrgcHGQMGOmRzQwNKGGJstI1jGa
+         Gg6Hv5kPDIeXEeO8S4KLCDmgwMymhkrsr+tePT1TYm12oOLrpQUaMdy41Xv7IODsHaBw
+         jjAhtP4CWpRn7sqY7/yBtNDygBBUn/od2EdUKJ54dbbYnV6oJSWwo/r2ZxUTe4umFmp1
+         HuRpJvZNBLZKXi5egl/3aUzoLFntjduxNVHuLz5MAgQ7T4Zmiwz8Qe1syrNpqiYkWyJn
+         t0y2vp2sgvULVGYQ/k5JNQWy6YWdm1qWIQOeI+2bdT+QL7pGtDdMfADQPU/asLIz0jjX
+         72NA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762994116; x=1763598916;
+        d=1e100.net; s=20230601; t=1762994240; x=1763599040;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tkmP58eOOzM61HVymH4b01vkY2iRcbp7BM0yKv/+Lgg=;
-        b=QjMaKWgbsJKbyOGLD4pezdGPZVgRCBMgafDofCNeGNOFGrSVB98fz9l9zAQDDgsJxU
-         xeWm2v3byulwcc+/I+Nsk9mIi4sBS+ITGoKBZZD/UCqHbeZmQOdA0YKhZM2oP/fEu92/
-         sclEj74SFqd/qbGdq0Dbt1v+XZasg1JGApsYay5p7nBbL8fkXjvJSWapbpvcEN/Obw5x
-         wmxen6XFbDOydtxiowcmsMDKtzs/BuXtaTqG8Os0nz3bddlhTfsgGfevxtOXaa2BByiq
-         Ql1ol0B5b8X+fiWPmRpmYtZqGiIVitefbazuNSzKjfJki5fV/sfoDQumPzuW0GlBt5fW
-         NV/A==
-X-Forwarded-Encrypted: i=1; AJvYcCX6/xvDKC7S20ET4Qd7dRiqOhg1VL3C0a13W4GQTd3jIBD8a6rbHwliwUiUIxVgupw2AzvlQp02Faf6gmwvzfM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzD/KlmDI+MH5xqXU1GNUAU6GbT6BPP9fSovc9KWjyPp3X9+EnF
-	AXsExLl6+R1hr0SW+O2cX1JCrANlLmhcoHqslnPYhljoqOhLKxkHXt6cvX9TTuSy1HCC1VOXdpL
-	ip5HvPigWmU3gl6Eze1L7dhgfjD4Ow4uPORQgUtgpcBW1+yyDyZfTIhAP
-X-Gm-Gg: ASbGncs96PqODJjrENhgGzfu13+nzpM7fNeg7PtR6D7Sy7+KRaYdVDBeAitoQG7cbNw
-	oLeCxGJmqUJkGr97SB62eXNw4BUkpd1uCciVDMZnMgAgwdOtuhxcdgqAukVseqFvx8aZG+H2TRp
-	PBn7pJEkZfxPkL0IL0EtEi2CGVrYRlyT8bfrVCpbdwqaNd5o9FrZkysfKRZF7qVsSl4gj1n7ZcV
-	P53TvjsRHFXZ+J+X9R4Pn5XWVpoofZlUyVWBNAbv9l+8pM0HFYQnw5j6U7x9Ghy/qhPGaw=
-X-Google-Smtp-Source: AGHT+IHS/Kzh0J9JYNHr2D3ULKDt78ThxpCQIIKEBGFx1+HIJhZiigh8difVsCMYmuVEig16Ad6HrnNP542iimGxtQI=
-X-Received: by 2002:a05:6512:2c90:b0:595:78e2:fbe9 with SMTP id
- 2adb3069b0e04-59578e2fdc4mr1629903e87.4.1762994115701; Wed, 12 Nov 2025
- 16:35:15 -0800 (PST)
+        bh=gQAFEkuis6MxG6DQ2tXr7tvJKT50Xpw9bu5kwP7LPfM=;
+        b=QqBdoWUNhdGDtwbzYE4T1UHyg9ccRLjrUILrpyT8GwjZDY4RhI2z/rJ3inG3SG6ZWe
+         3wr4h4T15IceEZTQqbzfTMGCAX/27CIfkbH+RiVOoltX6L9zpiTiFB3WzNED6/9xRGQH
+         KpAFwhJRT0wOfqUeXDSxX3lmFLvXMMEFTeHqfhZIu+hGaWNCUSd+w7qdZ5ndyk5bS7At
+         AOT7458MFWa1P+fbaAN5sFeTmxj5ophZbE6kNf6kG+lECKSU3FHB7iHlT3TVZz4jyP+x
+         DaC+udaOy9GK1tcP+vtcG84ouOslMR1Ro2wMTjMlJPXsNnbZdJA62vTiIUrllN4Gw7C/
+         sDKw==
+X-Forwarded-Encrypted: i=1; AJvYcCWeF7/pmeEyI8xbBFB+o+4WGUGEPxZMdYlsEOHYXnKa7YPRbeoMSJKiWPhlRzUZuFrJXPlMGnv6pp6M8cAzPYM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuzPiVNglHz5jtrlhUsH6tVjUdcBBiNZXyQQ53Q+WNPD+9zL1M
+	qNxBswRBX8tXq4BOfTlW0LTgewKyRj0UqSaeycf3v+ZNPPkHgPJY7fYIMJmpdRxk01JqE0rg5bq
+	Iw4AzFrnCNV0HWDBnLr6LBISb58eVoem1q/W991nY
+X-Gm-Gg: ASbGncv4ig9ZcdI0wWql8U0coCxz9NyQGDSmTfpTLf++/0WX/YlKw/X8F49LWjdGOtC
+	G56RuaEqXT/TXOyQjje/fDvAkNsQgDRnx264IKREtpn+FzHOAoP7fuEpBi5MPy+JBnIAc16gfQW
+	3TX64r5hN+KiqO2QEEn/wnvDkLCMwiYSlfpq+26sCsKJub6V0ShB2UK5U7JhEIRlgasZgDag0iF
+	t9A9OCQrfyXvlkDVHpfFf0QT51lz4S2viNsYooR6DrlUxmd8g4UXLu4dsmN6TVUMdBZA78=
+X-Google-Smtp-Source: AGHT+IES/CJsPbrAgyWQnLon15KjjafWzvib+JwHwpBetgA1Zmgy6sN5eKJD/4qlHX/bLU4ksRV0aZSNvBB5EL/4rWs=
+X-Received: by 2002:a05:6512:3d17:b0:595:7daf:9425 with SMTP id
+ 2adb3069b0e04-5957daf9557mr931008e87.28.1762994239481; Wed, 12 Nov 2025
+ 16:37:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112192232.442761-1-dmatlack@google.com> <20251112192232.442761-19-dmatlack@google.com>
- <aRUQAg1kNVzfKkuv@devgpu015.cco6.facebook.com>
-In-Reply-To: <aRUQAg1kNVzfKkuv@devgpu015.cco6.facebook.com>
+References: <20251112192232.442761-1-dmatlack@google.com> <aRUFGHPe+EXao10B@devgpu015.cco6.facebook.com>
+In-Reply-To: <aRUFGHPe+EXao10B@devgpu015.cco6.facebook.com>
 From: David Matlack <dmatlack@google.com>
-Date: Wed, 12 Nov 2025 16:34:47 -0800
-X-Gm-Features: AWmQ_blBM6dOH1o_M6QHhvqvhltx_Al5yFrg6jKCV2WNKsSpZRUCPCb5OssgibQ
-Message-ID: <CALzav=e3ZQsVEGmRFAZ1dmMg+SVkBpEzgzpUMJw3LSA6NZJw1Q@mail.gmail.com>
-Subject: Re: [PATCH v2 18/18] vfio: selftests: Add vfio_pci_device_init_perf_test
+Date: Wed, 12 Nov 2025 16:36:51 -0800
+X-Gm-Features: AWmQ_bk8b8m7l1BLL99RYzxjgrX9eX0t8GUscVQicIffm6eZO-IaDbPjTlCoDjg
+Message-ID: <CALzav=fYCutTptee2+9ZDYChxDGFUaOytSwmf4qZhFTRSGRGNw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/18] vfio: selftests: Support for multi-device tests
 To: Alex Mastro <amastro@fb.com>
 Cc: Alex Williamson <alex.williamson@redhat.com>, Alex Williamson <alex@shazbot.org>, 
 	Jason Gunthorpe <jgg@nvidia.com>, Josh Hilke <jrhilke@google.com>, kvm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>, 
-	Aaron Lewis <aaronlewis@google.com>
+	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 12, 2025 at 2:54=E2=80=AFPM Alex Mastro <amastro@fb.com> wrote:
+On Wed, Nov 12, 2025 at 2:07=E2=80=AFPM Alex Mastro <amastro@fb.com> wrote:
 >
-> On Wed, Nov 12, 2025 at 07:22:32PM +0000, David Matlack wrote:
-> > +static s64 to_ns(struct timespec ts)
-> > +{
-> > +     return (s64)ts.tv_nsec + 1000000000LL * (s64)ts.tv_sec;
-> > +}
-> > +
-> > +static struct timespec to_timespec(s64 ns)
-> > +{
-> > +     struct timespec ts =3D {
-> > +             .tv_nsec =3D ns % 1000000000LL,
-> > +             .tv_sec =3D ns / 1000000000LL,
+> On Wed, Nov 12, 2025 at 07:22:14PM +0000, David Matlack wrote:
+> > This series adds support for tests that use multiple devices, and adds
+> > one new test, vfio_pci_device_init_perf_test, which measures parallel
+> > device initialization time to demonstrate the improvement from commit
+> > e908f58b6beb ("vfio/pci: Separate SR-IOV VF dev_set").
 >
-> nit - I think you can get NSEC_PER_SEC from #include <linux/time64.h>
+> The new test runs and passes for me.
+>
+> Tested-by: Alex Mastro <amastro@fb.com>
 
-Thanks for the tip. I'll include that in v3.
-
->
-> Otherwise LGTM
->
-> Reviewed-by: Alex Mastro <amastro@fb.com>
+Thanks for testing!
 
