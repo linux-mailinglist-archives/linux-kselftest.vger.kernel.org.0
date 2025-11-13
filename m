@@ -1,168 +1,175 @@
-Return-Path: <linux-kselftest+bounces-45533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45534-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD721C5737B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 12:36:44 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D26EBC573E1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 12:42:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 223F64E672D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 11:34:39 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A70E634BA5A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 11:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E03D9346FDB;
-	Thu, 13 Nov 2025 11:34:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A29422DAFB9;
+	Thu, 13 Nov 2025 11:39:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KXmZr9PC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VIr0rjst"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150532FFFA7
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 11:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E38299AA3;
+	Thu, 13 Nov 2025 11:39:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763033647; cv=none; b=GK98kN2ruO3MzjEzQKLGNM3iTobWLbrYwzRpeQeZWlLYrYZQjE9H48fijdGVnRvCsWAXryJla9+A2odRzntWyDZrHLSyn/LkSkVjgB9wscuoy8VioAzhe+Kv036hUz/niB/rTbJTiDT8xoK7ft8AkC4aeFeqYGY5hYFQSeRLQjs=
+	t=1763033976; cv=none; b=T2uwgj/DnZiwAMoBGvp7yFa33DuVqWA22ZbkQNf+5lvBR1rclMq+hyUPn02ZzJdNefkiX32wrVvk3XEOH5bpG63ETdLuNqbU5Ja1dC5nDtF0vBjRubemLgGzePpcFv8l3SCVpVhfhJrF5eNQtVZkG93iLMvAASJF1Lq6meYb/uY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763033647; c=relaxed/simple;
-	bh=szEfWU/bVV1zSB98g0M2rX9bxqlQLQNTUONjL2LW8Zc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O4UAtA5vm95gimY2zLi3Q3Jy8clb6GEk2BUYdc2IhycOkq5bd9I1cg8NXyQXM16RkMwyIRTjCv3/cu3ybQVPgsIz5qgzwCNUvu5aj7R8Ubzg12OSp0tkcrbtFCkzC/xOVCbNNrGQ8aJ60c7VjXxKK3WfKpEW74IxQ8tN/fXkgo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KXmZr9PC; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-42b3c965cc4so353244f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 03:34:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763033642; x=1763638442; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=itNJjGbKr9hOTSLlNwiZZOpbJXSs/2p7rVNvrCzyP+Y=;
-        b=KXmZr9PCoa5qVa/VigcWhfxfx/iX5li6bYSwjGXHmogvrt2cWOIpg478NOtVVxdxBj
-         /jXumxsJKNow4QDerDNsenR2F0LxGPCyqD5JmZBbarDqZRuMWxgMsqkD8ODXpFUIZk8A
-         EzRGweoKnCNAdpp7C38a0AQRGyu25vHEw/uRMwNS6Aaoln63QtFFfpnVhelLalAOrDZ/
-         wxqyDN+ggNMK98uGVsrecBi9WGZwB5XAKpI40mREtOLK8L1ntAH7Um2j7nOLfxSuDban
-         rTL8hPO2dl3WhMgnM3x7xT5Ma2eaFb6AxyldwMo3Q0+yNZKb4NapWQ4SzJpbK+Ua8NSC
-         LPzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763033642; x=1763638442;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=itNJjGbKr9hOTSLlNwiZZOpbJXSs/2p7rVNvrCzyP+Y=;
-        b=DCxuiogrprkQoc5BNZZMfhD3nqLisV59jtBq9KeP35IS2xRzdBuv3h+vK50JznMRoK
-         iL2wKZtEGvO8a3c4rf7KyF6SxWBmdgjKipFuyYaL8W52ikStoKVCtgngXE9D3bAwjFMq
-         Wznvv3al8SK6TUIZepObJbXvankZEzgd3C7SNmPLP/7MKSWZ74bq17mwZPP/bz3rlmO9
-         k+L7qoDQlmc7gs8t9AffFjf+cD10xtzyzoNcwJFchlOWxAlY4XPgmupePS2+FA6QPk+q
-         XTDEuGOMoWRm90qQXwgsNRClTbijc3Fae2u7dUTgm88DHqBFkEtqNhsNOKf1Flbs8Tr2
-         XpQg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTnqVsY2bwk6aPHu/pzazpGTlHPKfIlFxBkwgJH1WbTYYS0ryiQH7XA7L8P2F3TlLAEtBrJqlaNhz7U4QoNxs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAqH20Pio6G7OdiABc6E/DZmCtksUn/amJxjsKk4aJygiVluDo
-	CL+A1ukR0bn1r4ptKWSqU9yf8joCrnVZiqxo/iQLEJPVKuYV3g2PnJyQ
-X-Gm-Gg: ASbGncvlDZbLtKu4WARLuXhZcS8iTwhDCzyMvP5X7QDo7ql0BiSyHkK6FC9bcq82JcI
-	tViF3i4jn4E+ecQ+uUaWdHzitucA1UnLn8MZhMcSM/6D1MSdnmeUVh7aqX1K5FnvtsF5wzLGX7u
-	rqJIK4CrmXK+3BPpZd11A49Vkr7GCCUJueSnIeTwls/qKLlMri+S6fo2PQyRnbfsy5KQwhto4Zt
-	roiHCOiPOvZ6Tyo/k3tdKcFeqnpmzd08ga0O8jLuc+nBFdvcNrmlFJpUPnVgIFUWzFGBwxK46KI
-	vjYiU2Z5xYdeKilk0SLxMJRWw2xi6yo7c2ka8wVVxcHEsWvpmO0gKHd1oZ072C0B/JLwhtGfJLM
-	lMc+COXZDXmYA8DgepR52iwop6ZCimh+MW2lrOYO2Fs8yMOf7QRyDqFwUtp4lcaEiraABSBQnZk
-	o5U1RsYmYxfrNeUUou9DqiSlJkQkU=
-X-Google-Smtp-Source: AGHT+IGdopSjDKcZsfNDj50WFrJg2rJWrnZhwNBuCTBSaYL3A3I/G6d2OYwxOSpsfHYEqI44/nAYpQ==
-X-Received: by 2002:a05:6000:40dc:b0:429:d3c9:b8af with SMTP id ffacd0b85a97d-42b5282384cmr2499048f8f.25.1763033642106;
-        Thu, 13 Nov 2025 03:34:02 -0800 (PST)
-Received: from [10.24.67.124] ([15.248.2.24])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f17cbfsm3172575f8f.35.2025.11.13.03.34.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Nov 2025 03:34:01 -0800 (PST)
-Message-ID: <25469f8f-27ea-4d9f-af70-86e320224ec4@gmail.com>
-Date: Thu, 13 Nov 2025 11:34:00 +0000
+	s=arc-20240116; t=1763033976; c=relaxed/simple;
+	bh=ENVhoOS7G7gCzCBUGCoR+ITgrpqX7seulif8UfTBp0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=onv917+BY/9oO+ZW5f7F/i96sE4s/vF/aL1VyuI7S5ZR7N+4ROn2ZN8g1srckxWNCHhClKFmANbi38L2NpoHdRtDsNg8N/yN+WewcDycwnvOLS+lDwcBF/c7T7AUWUrhc0CReybSx/0xLQR4Fh9vqGC5rxoKuvh/sIpdxkFnKgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VIr0rjst; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A995C4CEF5;
+	Thu, 13 Nov 2025 11:39:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763033976;
+	bh=ENVhoOS7G7gCzCBUGCoR+ITgrpqX7seulif8UfTBp0Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VIr0rjstKJ3saWpOlCPEj9yrlsSRfWVdSQkR1q6I3ZgbEqEbjPhjAwZARfKCLBEHD
+	 NGXFco0t56DpoMlRyxC4Dv7YU5Dj77k5L5LEk+YeLgg6BmGF3YD/hglGfiBsfuYSL3
+	 WalSNO2wr0gm3B+obfSK4LBPcORjuDCqoqCbXgpv9hONWBGRCQH7Icr1ATqy0Pmb9r
+	 ZMVa4ISTLJXD4HD0aPUFJ3/8+8HfJoZY1kBU/TJZKi4MwFDa1g7A0PisLusFC0HKNg
+	 wdLEn1kFzdFK2Tk27NHIoXVG5ZbkwxsahhpJX0ykb16FldNGhAL4Y2Sxc+/7dRi/YV
+	 dht9+6EHugDgQ==
+Date: Thu, 13 Nov 2025 13:39:26 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+Cc: akpm@linux-foundation.org, peterx@redhat.com, david@redhat.com,
+	lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+	surenb@google.com, mhocko@suse.com, shuah@kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com, khalid@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/mm/uffd: remove static address usage in
+ shmem_allocate_area()
+Message-ID: <aRXDbk9ajOhH7ReX@kernel.org>
+References: <20251111205739.420009-1-mehdi.benhadjkhelifa@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] KVM: selftests: Fix unaligned mmap allocations
-To: Sean Christopherson <seanjc@google.com>
-Cc: maz@kernel.org, oliver.upton@linux.dev, pbonzini@redhat.com,
- joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
- catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- isaku.yamahata@intel.com, roypat@amazon.co.uk, kalyazin@amazon.co.uk,
- jackabt@amazon.com
-References: <20251013151502.6679-1-jackabt.amazon@gmail.com>
- <20251013151502.6679-3-jackabt.amazon@gmail.com>
- <aPpi1c-8EpWuo87B@google.com>
- <c52db7bf-494f-49a8-9829-3805db6dda7c@gmail.com>
- <aQkZtjLt6lIULffA@google.com>
- <0c3db907-7012-43c3-b7fc-36848789da52@gmail.com>
- <aQpfviS-oAmanqpq@google.com>
-Content-Language: en-US
-From: "Thomson, Jack" <jackabt.amazon@gmail.com>
-In-Reply-To: <aQpfviS-oAmanqpq@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251111205739.420009-1-mehdi.benhadjkhelifa@gmail.com>
 
-
-
-On 04/11/2025 8:19 pm, Sean Christopherson wrote:
-> On Tue, Nov 04, 2025, Jack Thomson wrote:
->> On 03/11/2025 9:08 pm, Sean Christopherson wrote:
->>> On Tue, Oct 28, 2025, Jack Thomson wrote:
->>>>
->>>>
->>>> On 23/10/2025 6:16 pm, Sean Christopherson wrote:
->>>>> On Mon, Oct 13, 2025, Jack Thomson wrote:
->>>>>> From: Jack Thomson <jackabt@amazon.com>
->>>>>>
->>>>>> When creating a VM using mmap with huge pages, and the memory amount does
->>>>>> not align with the underlying page size. The stored mmap_size value does
->>>>>> not account for the fact that mmap will automatically align the length
->>>>>> to a multiple of the underlying page size. During the teardown of the
->>>>>> test, munmap is used. However, munmap requires the length to be a
->>>>>> multiple of the underlying page size.
->>>>>
->>>>> What happens when selftests use the wrong map_size?  E.g. is munmap() silently
->>>>> failing?  If so, then I should probably take this particular patch through
->>>>> kvm-x86/gmem, otherwise it means we'll start getting asserts due to:
->>>>>
->>>>>      3223560c93eb ("KVM: selftests: Define wrappers for common syscalls to assert success")
->>>>>
->>>>> If munmap() isn't failing, then that begs the question of what this patch is
->>>>> actually doing :-)
->>>>>
->>>>
->>>> Hi Sean, sorry I completely missed your reply.
->>>>
->>>> Yeah currently with a misaligned map_size it causes munmap() to fail, I
->>>> noticed when tested with different backings.
->>>
->>> Exactly which tests fail?  I ask because I'm not sure we want to fix this by
->>> having vm_mem_add() paper over test issues (I vaguely recall looking at this in
->>> the past, but I can't find or recall the details).
->>
->> The test failures happened with pre_faulting tests after adding the
->> option to change the backing page size [1]. If you'd prefer to
->> have the test handle with this I'll update there instead.
+On Tue, Nov 11, 2025 at 09:54:27PM +0100, Mehdi Ben Hadj Khelifa wrote:
+> The current shmem_allocate_area() implementation uses a hardcoded virtual
+> base address(BASE_PMD_ADDR) as a hint for mmap() when creating shmem-backed
+> test areas. This approach is fragile and may fail on systems with ASLR or
+> different virtual memory layouts, where the chosen address is unavailable.
 > 
-> Ah, yeah, that's a test bug introduced by your patch.  I can't find the thread,
-> but the issue of hugepage aligntment in vm_mem_add() has come up in the past,
-> and IIRC the conclusion was that tests need to handle the size+alignment, because
-> having the library force the alignment risking papering over test bugs/flaws.
-> And I think there may have even been cases where it introduced failures, as some
-> tests deliberately wanted to do weird things?
+> Replace the static base address with a dynamically reserved address range
+> obtained via mmap(NULL, ..., PROT_NONE). The memfd-backed areas and their
+> alias are then mapped into that reserved region using MAP_FIXED, preserving
+> the original layout and aliasing semantics while avoiding collisions with
+> unrelated mappings.
 > 
-> E.g. not updating the pre-faulting test to use the "correct" size+alignment means
-> the test is missing easy coverage for hugepages, since KVM won't create huge
-> mappings in stage-2 due to the memslot not being sized+aligned.
+> This change improves robustness and portability of the test suite without
+> altering its behavior or coverage.
+> 
+> Signed-off-by: Mehdi Ben Hadj Khelifa <mehdi.benhadjkhelifa@gmail.com>
+> ---
+> Testing:
+> A diff between running the mm selftests on 6.18-rc5 from before and after
+> the change show no regression on x86_64 architecture with 32GB DDR5 RAM.
+>  tools/testing/selftests/mm/uffd-common.c | 25 +++++++++++++++---------
+>  1 file changed, 16 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+> index 994fe8c03923..492b21c960bb 100644
+> --- a/tools/testing/selftests/mm/uffd-common.c
+> +++ b/tools/testing/selftests/mm/uffd-common.c
+> @@ -6,11 +6,11 @@
+>   */
+>  
+>  #include "uffd-common.h"
+> +#include "asm-generic/mman-common.h"
 
-Got you, that makes sense I'll update this series to resolve this then.
-Thanks for taking a look.
+Please drop this.
+There's already include <sys/mman.h> via uffd-common.h/vm_util.h.
+
+>  
+>  uffd_test_ops_t *uffd_test_ops;
+>  uffd_test_case_ops_t *uffd_test_case_ops;
+>  
+> -#define BASE_PMD_ADDR ((void *)(1UL << 30))
+>  
+>  /* pthread_mutex_t starts at page offset 0 */
+>  pthread_mutex_t *area_mutex(char *area, unsigned long nr, uffd_global_test_opts_t *gopts)
+> @@ -142,30 +142,37 @@ static int shmem_allocate_area(uffd_global_test_opts_t *gopts, void **alloc_area
+>  	unsigned long offset = is_src ? 0 : bytes;
+>  	char *p = NULL, *p_alias = NULL;
+>  	int mem_fd = uffd_mem_fd_create(bytes * 2, false);
+> +	size_t region_size = bytes * 2 + hpage_size;
+>  
+> -	/* TODO: clean this up.  Use a static addr is ugly */
+> -	p = BASE_PMD_ADDR;
+> -	if (!is_src)
+> -		/* src map + alias + interleaved hpages */
+> -		p += 2 * (bytes + hpage_size);
+> +	void *reserve = mmap(NULL, region_size, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS,
+> +			-1, 0);
+> +	if (reserve == MAP_FAILED) {
+> +		close(mem_fd);
+> +		return -errno;
+> +	}
+> +
+> +	p = (char *)reserve;
+
+No need for casting here.
+
+>  	p_alias = p;
+>  	p_alias += bytes;
+>  	p_alias += hpage_size;  /* Prevent src/dst VMA merge */
+>  
+> -	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
+> +	*alloc_area = mmap(p, bytes, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_SHARED,
+>  			   mem_fd, offset);
+>  	if (*alloc_area == MAP_FAILED) {
+> +		munmap(reserve, region_size);
+
+I think it'll be more readable to put munmap() after setting *alloc_area to
+NULL.
+
+>  		*alloc_area = NULL;
+> +		close(mem_fd);
+>  		return -errno;
+>  	}
+>  	if (*alloc_area != p)
+>  		err("mmap of memfd failed at %p", p);
+>  
+> -	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_SHARED,
+> +	area_alias = mmap(p_alias, bytes, PROT_READ | PROT_WRITE, MAP_FIXED | MAP_SHARED,
+>  			  mem_fd, offset);
+>  	if (area_alias == MAP_FAILED) {
+> -		munmap(*alloc_area, bytes);
+> +		munmap(reserve, region_size);
+
+Here as well.
+
+>  		*alloc_area = NULL;
+> +		close(mem_fd);
+>  		return -errno;
+>  	}
+>  	if (area_alias != p_alias)
+> -- 
+> 2.51.2
+> 
 
 -- 
-Thanks,
-Jack
+Sincerely yours,
+Mike.
 
