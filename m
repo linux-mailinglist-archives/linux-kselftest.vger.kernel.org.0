@@ -1,148 +1,163 @@
-Return-Path: <linux-kselftest+bounces-45570-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5608EC59097
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 18:14:33 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8C88C591B5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 18:23:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B22C424196
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 16:51:15 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 805C735FF16
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Nov 2025 17:18:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FFB936654E;
-	Thu, 13 Nov 2025 16:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FD80351FC2;
+	Thu, 13 Nov 2025 17:07:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IuJ4IYJX"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bv8M1sdP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4433659F7
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 16:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0743C26A1C4
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 17:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763052157; cv=none; b=p6/neuCLBpw4YQ03JHLTjTlopRnV2uglEAYMwJrmqSEv18ErpqZFEtJiGIZE4Nog0R2ty+OjX21+j2HMg8wE/ZKMbm7daEmWSvnspYTL25ChoECDluWU671LECUgIDScSIbnXC4Rqid4OonKJjMFaUrooOcg3dttNiG8fQ61gr8=
+	t=1763053659; cv=none; b=Zg6HO4qRg6LsaZqInS/1sb6oyEQzHfQkhhJtgGNKRWNAUkVbDfg4mN8U115oOBUVAjr6q2SfgPuTYChXMZWjUbchJqQDZYWm3f+94lkpkz4x9f2D8vQhwD3paBLOhJXua0VN9FoJ3RwQ+57ekQLjw92Yxb8r3h6AA4W28FohMMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763052157; c=relaxed/simple;
-	bh=AZDhgFsJHk/7/ccWHmuKjRVzzDMIUsT8B2xszzmjcS4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=T+RjydmQmWyDie3qi83OeAP2BjnZtxdlsbhwJFjh9UAwxc1n90NJ/RHrSPgCbCvzLuXzMIGB9nkPzLnyIvR/Z/tgNUXAVQ0o+TjMl8r1w6A7XDzuKcvsl2JRo4R0r6tt6UZnPmtGbU1Y0FP/2SAetRSHaDJJ1xjC7fkVwamEEIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IuJ4IYJX; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42b305881a1so116628f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 08:42:35 -0800 (PST)
+	s=arc-20240116; t=1763053659; c=relaxed/simple;
+	bh=3wHzdTnzv/9koblQs4sk6PY2OUVV0EFT9zAT0iA+YQU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mz/Lg4b0E6O5wHkWYEpjwfG4JiGnQz0u7Q/psGXq3FGo2udEZLWAIJXaN+YJjerPrAKRziBMNM5dT/o9n4BiSKlZmqFcOXMR07xSlqxI4WatxklLBQOa5VgpXM777sIKt48HzeS3cnDUO/LHuKgKhlyhnAo2q+//MZqdv5xjY5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bv8M1sdP; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4711810948aso7673155e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 09:07:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763052154; x=1763656954; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tnv5GvLZO90fssK5mBO/V2ejb0VVnidgq+QHki0NiLw=;
-        b=IuJ4IYJXLJ2V5+7Y5+mRDTUTL2yzgqfIK7tEPsOTetMWojJb6Y1g9LSVir2GIvKVRf
-         Yv+a1pGGPiP6Gfxk16B/uaFurp0SkXbX+hphQNp07ksmvhtcOWOV7mjdOuI0BqjvYYKU
-         zDONzb9C2el/O/eHTD6PIjHk62BdfujD1UdFvbAhW0UuvYcywIzbmM9w7oUWYdX62qrk
-         DFBCpTUbKm+UhP7HXJ7dusVMcE2FsBbdwYrOUlcKBjsaVC2379pTisGc+099x7tO//2V
-         e/1QdPmECdMRPGnOfCRPRTJO4BLRv+D3Hbpl4s0fCD/vFymEydKWRfbkioWs0E5X+Hzt
-         glvQ==
+        d=suse.com; s=google; t=1763053655; x=1763658455; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SJwtOPWKmmTBRwvu3K3EIMtulS3eBFOLsMuoPcJT6P4=;
+        b=bv8M1sdPv9k28oZt7NxnZh8yQ8JaHVqhx1lnLNb2BqCHU2JFNpAsrWi98GuW0VRHlS
+         0vfV9gWXmN5ghLZrutVLjEZLAE3W2O4dnAFRII6fabQ45fHxrV/JqYa6trTeq2ZZh7Hb
+         oZDA+8a9590BfSHIDVpTTLX/gRFXSvyiYqh8devGZtpnMXDsLbeCsVTgYBiU4yP8OUKz
+         0pty2mr0yHspYF06nM3zwBiqiLWLhwR5x+NMquWtK3AIpNzMNA9LK9zgT2EGMZNLIHOS
+         /c5ep+jEJEPsz4Ep6Q1VLaHxW8ZS4El4r0mgF7u6VJbEAAFzSJ//VZ0KIKVo+UX2zt63
+         s7eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763052154; x=1763656954;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Tnv5GvLZO90fssK5mBO/V2ejb0VVnidgq+QHki0NiLw=;
-        b=dEMUdnW3YPujf5OS+qD7ueumJrzusNOrJYR/3hRqKXEwG3p/E2FDu8qYgbYO4KgfkM
-         2jwtK19kUi39rRBj9qb+srtSURBuz5h4aUBW4FbBZVMUmXtkfOgL4lG0iQWWW7Pr2hRl
-         9xBnUBBhMp5Rdb0xhWjF67yB+XKDdutyDXrAJrhyrnlyzptfZIcyQWO7rIala2Misp3f
-         4r9EHnCgTE3NVHwZZD9c5s8eNr6ih+ChOXR/UQ4l5/GimsJJrm/urfIn/omh2DgaF4bB
-         huffpOH3ix9xLiiU443ycWp358P6e/Gr3kGzUQNm8GPkEUvUxv/710orSrj93Z/aG+2f
-         FUsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZC9nMhjkC4SY3xQzrD8bwW+PDafP5OXLnsH1HeK/HWgJjLgeuLn3VTkgrzwKOu0i90iUOxtR3Hdb2Zympad0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ1pOB1dShhmire5Qau20UodFOkrzEBAUt3bE1wEju3Pq1mFHI
-	FMqTG/EQeRBBDwybEewyzFNchxiqFmYs2RfLxb8fotUSHbSMWv7L+J2q
-X-Gm-Gg: ASbGncswxTsLAX3d1j2brcG2ZZ8L6eREcjwguadGErRZhmhS7XLjj49+KGg38tzXE/I
-	2M72EsXV47PyXpbih3jbVQtxXouoLB778MJyBJwCb0fPov209KocY10PvQ0OwbFcLExIWuNB8W3
-	EbjjUvBDXlD2+XsjHjcms+QOjIpNYt/G+pV/7rxf66kywLWgP76NJw9g4PlZn60m1Pb2DLLxh5+
-	W0lXPO2H6YdkCCz9o+2tnkvtgVWmraUQVEVoUZkg6cQ8Oty9qVUDXxt1u8tYMD8TaLgBWdGm+ya
-	2BrOH+FLBOOKMnJye0Vx4Jt+2U96SvyYISWVRGkJQd6hkBmYfkDNfekVyBtRwcadWgmri46M31D
-	9lApMJBD+1YC69YswF8GXIVIxVA/O7H0Hq9kzKWeQfqvNczBdSn67GRYWCGJqoL9n6q7IVs8n/3
-	hAguEy3A/SdF07R6c=
-X-Google-Smtp-Source: AGHT+IFlJhZQHRbGLobb3YLbAsBiS2Koyw/Ec1i06oLS8N0XCLnx1tPyDdy1oAHB/rz71WT4cMX8YQ==
-X-Received: by 2002:a05:600c:c4b8:b0:477:5b01:7d42 with SMTP id 5b1f17b1804b1-4778fee8183mr614895e9.5.1763052153366;
-        Thu, 13 Nov 2025 08:42:33 -0800 (PST)
-Received: from localhost ([2a03:2880:31ff:50::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42b53f21948sm4877254f8f.43.2025.11.13.08.42.32
+        d=1e100.net; s=20230601; t=1763053655; x=1763658455;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SJwtOPWKmmTBRwvu3K3EIMtulS3eBFOLsMuoPcJT6P4=;
+        b=nClfxv+7y2hUhUWYE37BK5zWZHfhX8wZfj0Ng2uA+3+eSSVyVDqloegw6Thd4XTIFE
+         tR8nHK3txjjQ2gsEwxxruTVvdEbmEap6eGkhnougMAV5ke/0N0kjJScwZC+dxZXiUSc8
+         xikZxxpdMsbX3p/ddyCnaLbPaNrF4ShdPnvnptu/3YfXA4Z6CXxx+RIoCcP34du/xhCR
+         AbtDuSiabEwDF6u+H579LSRPxYpsrUvJG2tO+uc/2guCF3L2sUyASZNXjBzkNQN4HDyz
+         QstK6Nq5Eq8CzL07w7r+aPhaZP7D2VhEaqFO92lgdZDghY8cVTBj6OqeBtB3vm+0TCHW
+         KPLw==
+X-Forwarded-Encrypted: i=1; AJvYcCWhwYAyxrdPIlFpmxFC5emwbDOxj9gBLPMeCfutDQXmoTdLR+W3EMnzbJtiCyvTjb1RjWZCYk6E55XSxj0DPcA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHIbhys3GRf0fAMnGSiSKgWa0nj5g3jyQFGOXREOImNHjD2Cpu
+	CsxQ+hLjg+eRFmGpb8DBiN5RXfavaNDsanvmcpqXBeBPbGxB3RRa563Fd6cstV2jdsU=
+X-Gm-Gg: ASbGncsktN3Yi7hNpTVDg1ZJFTCsUT44NKxHxoIdJRjqn7+WGUc0LtyvSTafQKMNt89
+	npOuPabnnwYZeVRuvrwdHYrpp6ItHMQL8jI4ClUdCH+mvEQfdiQt+g4ITHa47CJhydj3nBQfWR5
+	rynpjEf4InqpDIH5GaV8DBghQ2l6bB9kxyCcvJo3nEiJtQBVwlliPM7g68WgOY6gEmhBhJMiGUD
+	lpjEddfvJucPbHfu0+bvQIii1lso+WGNTKtmTirnoMnR9AUTS4/G6fXlw41+32vlwCw+aubTlli
+	CGTje0KnIks10yU/TKkjcn/Rpf/UTn+OtUm1usSdiKMGIc0hbSGmrb3LYf3j3RyUKePyr+3D8Ge
+	Bu4L67ifippEFTly1OREswTycX6hECCUBVrVP6yTkZZ9mRRbJ3MdmyWVPYPP8HN553xLiljkw7e
+	6EXDjAXtzGS4jZzpdRVIYJ
+X-Google-Smtp-Source: AGHT+IGEwb65FvPJGLb66aSr9nqC7poeWs9ugZLSftaq0Hld+3M0XPCgYNsTqP6hCKw35URKMlz8sQ==
+X-Received: by 2002:a05:600c:4f07:b0:477:63b5:6f3a with SMTP id 5b1f17b1804b1-4778fead9a4mr1762145e9.27.1763053655325;
+        Thu, 13 Nov 2025 09:07:35 -0800 (PST)
+Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47787e442c2sm106055695e9.7.2025.11.13.09.07.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Nov 2025 08:42:32 -0800 (PST)
-From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Date: Thu, 13 Nov 2025 08:42:21 -0800
-Subject: [PATCH net-next v2 4/4] netconsole: Increase MAX_USERDATA_ITEMS
+        Thu, 13 Nov 2025 09:07:35 -0800 (PST)
+Date: Thu, 13 Nov 2025 18:07:33 +0100
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Sun Shaojie <sunshaojie@kylinos.cn>
+Cc: llong@redhat.com, cgroups@vger.kernel.org, chenridong@huaweicloud.com, 
+	hannes@cmpxchg.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	shuah@kernel.org, tj@kernel.org
+Subject: Re: [PATCH v2] cpuset: relax the overlap check for cgroup-v2
+Message-ID: <lhfcykirz5afdzdc6wnroubsdhasww4gsfri4dxpzagiejjbep@322rtmyvwiyd>
+References: <20251113131434.606961-1-sunshaojie@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251113-netconsole_dynamic_extradata-v2-4-18cf7fed1026@meta.com>
-References: <20251113-netconsole_dynamic_extradata-v2-0-18cf7fed1026@meta.com>
-In-Reply-To: <20251113-netconsole_dynamic_extradata-v2-0-18cf7fed1026@meta.com>
-To: Breno Leitao <leitao@debian.org>, Andre Carvalho <asantostc@gmail.com>, 
- Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Gustavo Luiz Duarte <gustavold@gmail.com>
-X-Mailer: b4 0.13.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7h7ewfrvbadf2ean"
+Content-Disposition: inline
+In-Reply-To: <20251113131434.606961-1-sunshaojie@kylinos.cn>
 
-Increase MAX_USERDATA_ITEMS from 16 to 256 entries now that the userdata
-buffer is allocated dynamically.
 
-The previous limit of 16 was necessary because the buffer was statically
-allocated for all targets. With dynamic allocation, we can support more
-entries without wasting memory on targets that don't use userdata.
+--7h7ewfrvbadf2ean
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] cpuset: relax the overlap check for cgroup-v2
+MIME-Version: 1.0
 
-This allows users to attach more metadata to their netconsole messages,
-which is useful for complex debugging and logging scenarios.
+Hello.
 
-Also update the testcase accordingly.
+On Thu, Nov 13, 2025 at 09:14:34PM +0800, Sun Shaojie <sunshaojie@kylinos.c=
+n> wrote:
+> In cgroup v2, a mutual overlap check is required when at least one of two
+> cpusets is exclusive. However, this check should be relaxed and limited to
+> cases where both cpusets are exclusive.
+>=20
+> The table 1 shows the partition states of A1 and B1 after each step before
+> applying this patch.
+>=20
+> Table 1: Before applying the patch
+>  Step                                       | A1's prstate | B1's prstate=
+ |
+>  #1> mkdir -p A1                            | member       |             =
+ |
+>  #2> echo "0-1" > A1/cpuset.cpus            | member       |             =
+ |
+>  #3> echo "root" > A1/cpuset.cpus.partition | root         |             =
+ |
+>  #4> mkdir -p B1                            | root         | member      =
+ |
+>  #5> echo "0-3" > B1/cpuset.cpus            | root invalid | member      =
+ |
+>  #6> echo "root" > B1/cpuset.cpus.partition | root invalid | root invalid=
+ |
+>=20
+> After step #5, A1 changes from "root" to "root invalid" because its CPUs
+> (0-1) overlap with those requested by B1 (0-3). However, B1 can actually
+> use CPUs 2-3, so it would be more reasonable for A1 to remain as "root."
 
-Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
----
- drivers/net/netconsole.c                                | 2 +-
- tools/testing/selftests/drivers/net/netcons_overflow.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I remember there was the addition of cgroup_file_notify() for the
+cpuset.cpus.partition so that such changes can be watched for.
 
-diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index 12fbc303a8240..36ce19936fa39 100644
---- a/drivers/net/netconsole.c
-+++ b/drivers/net/netconsole.c
-@@ -50,7 +50,7 @@ MODULE_LICENSE("GPL");
- /* The number 3 comes from userdata entry format characters (' ', '=', '\n') */
- #define MAX_EXTRADATA_NAME_LEN		(MAX_EXTRADATA_ENTRY_LEN - \
- 					MAX_EXTRADATA_VALUE_LEN - 3)
--#define MAX_USERDATA_ITEMS		16
-+#define MAX_USERDATA_ITEMS		256
- #define MAX_PRINT_CHUNK			1000
- 
- static char config[MAX_PARAM_LENGTH];
-diff --git a/tools/testing/selftests/drivers/net/netcons_overflow.sh b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-index 29bad56448a24..06089643b7716 100755
---- a/tools/testing/selftests/drivers/net/netcons_overflow.sh
-+++ b/tools/testing/selftests/drivers/net/netcons_overflow.sh
-@@ -15,7 +15,7 @@ SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
- 
- source "${SCRIPTDIR}"/lib/sh/lib_netcons.sh
- # This is coming from netconsole code. Check for it in drivers/net/netconsole.c
--MAX_USERDATA_ITEMS=16
-+MAX_USERDATA_ITEMS=256
- 
- # Function to create userdata entries
- function create_userdata_max_entries() {
+I may not be seeing whole picture, so I ask -- why would it be "more
+reasonable" for A1 to remain root. From this description it looks like
+you'd silently convert B1's effective cpus to 2-3 but IIUC the code
+change that won't happen but you'd reject the write of "0-3" instead.
 
--- 
-2.47.3
+Isn't here missing Table 2: After applying the patch? I'm asking because
+of the number 1 but also because it'd make the intention clearer
+;-), perhaps with a column for cpuset.cpus.effective.
 
+Thanks,
+Michal
+
+--7h7ewfrvbadf2ean
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaRYQTBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+AhD4AEA/GWWlwm3wrl5ni3OWMly
+l1jxes5Q5f9YIl+tVi4awEQBALGU4JhCDZ5CMZflO9yIUuFRu7zXymMjo3Zgx7Wf
+1OAH
+=gUoG
+-----END PGP SIGNATURE-----
+
+--7h7ewfrvbadf2ean--
 
