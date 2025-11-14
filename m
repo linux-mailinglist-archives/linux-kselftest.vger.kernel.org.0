@@ -1,207 +1,124 @@
-Return-Path: <linux-kselftest+bounces-45662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90221C5E857
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 18:21:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36EE8C5ED12
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 19:20:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3343420A2F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 17:21:32 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1E9AD3555DB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 18:12:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB31C2D5A01;
-	Fri, 14 Nov 2025 17:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7872D9EC2;
+	Fri, 14 Nov 2025 18:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Mvpa56aB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SKHRBPmr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44452D5432;
-	Fri, 14 Nov 2025 17:21:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 093042D7DF7;
+	Fri, 14 Nov 2025 18:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763140881; cv=none; b=nWSrwOyXpYL1bti21KaE+izZDuLShV3HCrMo6IwWSYwfseeLEGt+NVcjv3X7jwFjkySiM0y1FKrPfrkFN1TQ2C+X2n0TJafNikxw0FNk6uN/TcE3mrjL4IHLIwThqOIv/NU6NSGNuKLBInoMYmwc/oeosyILP5e3xTwTHVQ1jYc=
+	t=1763143944; cv=none; b=qerZsf3bN4AHgnPEGlQG6IW1jrIeVbM43LD4PMVDkf6Km0w+ndN26rSPBFp7C7Y8a94Mdjqy1TKP7NatjDHRjuNXAtldMLLa5fsnYuQoNgmEI9MWkE7WAe/3gFZxuFcTVbJIi5CHCOvi+erkqCfhKkBNdjvLht2pRjhVSg6C6kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763140881; c=relaxed/simple;
-	bh=JVMpqOWcLMFCAWU33olBZTr+K7wf1Is8jZBAtaqK55Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jt7bxzYjD4s+D6QgNTO+j5IZxwILbcOlmQVz9wM1EBh7QgoeegsUhctroqcuKxo59BYq3D6bawHWnF9iZ692ZrUId1EnMhYxYvA+Wgpm1eUOXyN7rvVvWA9rcNMsTYlPxJD/mkt4R6oU8CdNhv87U6hhEG7Rk1R0pBjnl0SHy2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Mvpa56aB; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AEDmiEj029027;
-	Fri, 14 Nov 2025 17:19:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=P2Nm6Onw0q8fHzAEfmXvyG5IXHnkvj
-	b10mJ/VAqkb3Q=; b=Mvpa56aBX/l9Glh810ag3gV6Fy7Bym1IJzWjuviNZ5SNdg
-	SM0j4sLV6IYc6d+aWnJQrgFzVFXx6Ne9B/cJfWhskV5Hu1bYCSid8n3x0Qw/MHLf
-	4irsnF1A+gSrGdUk33/iJJj14jEmtwjFf9QaSjp2tseluRqAp1NRW6CQyI9zhJJS
-	G2oj9QLfYQNDRbWBE0EQjfAaCCjxu7HDRuO5Mw6gpDEh7+tRemv25ZDdrfz3Mrw/
-	hzT2yMPJdo56zJAJ20/D9GrwbOQZisGCUMiwTwCfdlcJVeHiaZInk6GDYeIsxwdX
-	BweOTctQeJArioYMSP5FnX9kw7CfX/LfNkdDY9nQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4adree3t48-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 14 Nov 2025 17:19:54 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AEHFf0S026695;
-	Fri, 14 Nov 2025 17:19:53 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4adree3t43-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 14 Nov 2025 17:19:53 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AEG2iFw004748;
-	Fri, 14 Nov 2025 17:19:53 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4aagjycpp7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 14 Nov 2025 17:19:53 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AEHJnXQ38339028
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 14 Nov 2025 17:19:49 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 26BE520043;
-	Fri, 14 Nov 2025 17:19:49 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8D70820040;
-	Fri, 14 Nov 2025 17:19:39 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.43.106.27])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 14 Nov 2025 17:19:39 +0000 (GMT)
-Date: Fri, 14 Nov 2025 22:49:35 +0530
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hbathini@linux.ibm.com,
-        sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
-        eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
-        martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix
- htab_update/reenter_update selftest failure
-Message-ID: <aRdkp7ztSM1JNZME@linux.ibm.com>
-References: <20251114152653.356782-1-skb99@linux.ibm.com>
- <3b15cc4d71bfa87ffcd49f69c1453d88c6457ef0c9c312c11b8a550f862e8f2b@mail.kernel.org>
+	s=arc-20240116; t=1763143944; c=relaxed/simple;
+	bh=HWdx5m4w/63GW+c5noK6/roJoo1MeRKB7OF1YuTwqgw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PRfQMxlh9hghWr6ULJ6tyOVNS1SOqcjObW+/tw6o6Jrk4tliNUhK9IdiGlGMDHPJbHR1n1Ht/BnYR3idFJkSZR3UGWCVRMvQcHDDrOejG9Kplu15v4k4Wla8vR/Okcva8U2qlsPwvcvY/jHxZkYNR1PeWiPRVFvqtrouu/G/MfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SKHRBPmr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4400BC4CEF8;
+	Fri, 14 Nov 2025 18:12:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763143943;
+	bh=HWdx5m4w/63GW+c5noK6/roJoo1MeRKB7OF1YuTwqgw=;
+	h=From:Subject:Date:To:Cc:From;
+	b=SKHRBPmr3bytK3dZ/umdfjG7DJ4IVzFg5DVgjksI0FM4X/xt7u7TbskZhcYJY25E5
+	 Rxp4jnG0Pu6TBssuF8VyycSPJJ0HEVp6mVrs2VB39T8iqD/4OYyFrDH2I1LUJAfy5k
+	 Umju4N8vP508QR0apLOLJwUocxafGzHH3T8FUy68xe7/rGRFaCTmX5uZLFv9dW0M0Z
+	 Dx4LdN46cwulLJEgIEWaE8VWmQ9+4db9Go/i6+ncBQrSk8PxB/t6u7k93zIHU3fH3q
+	 HvukNi+XXDG9cEdvS+Vb9NGapWG2uV9c61aViagca+JZIuKzArwyNtumvSUzfXA8nf
+	 ne8JIt3hW4m/w==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 0/8] selftests: mptcp: counter cache & stats
+ before timeout
+Date: Fri, 14 Nov 2025 19:12:04 +0100
+Message-Id: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-0-863cb04e1b7b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3b15cc4d71bfa87ffcd49f69c1453d88c6457ef0c9c312c11b8a550f862e8f2b@mail.kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEzMDE3OSBTYWx0ZWRfX5dJT8FhEp3G7
- pRYU/5oPDzqqYE7N59JDoMbV3e5dbqgf+UPECycscxPZ94oeFT8oB3hrGjAAtG/kxAKBoDbFV6r
- 1Li92Juu3s3GFgnfwNQ9z7hdcm51f645wgcioxfTWokww0kxSzosoFVaiGhuZk8kbAzSx3VLDqf
- PdYR9oT1JdvYr8OhkPqEbG6eUZK5d02G3KnOvm0PNbj/RS+qQQRKFyUFX8ylcDNnqPuIPESbDQj
- XTCQtgaQRDxvEu81P0UsikcbGbItmn4Pv6dnMZOg/x0ItFMiPLekmQqokm+1Upr5myAdFdqP/lV
- EEbkgG2j2XIzu11YU1b6FCtX+xwuF5a6d8MZTbuFMGMeRDmlTIZCEcXqzipZZdxrGxGQKDxV6BX
- ztC9AUdMdtrRZ35Yp5cRAl6qYbOVYQ==
-X-Proofpoint-ORIG-GUID: pqaLkmWo8Etjl-kk7Y2e8IxlrwyVcFDJ
-X-Proofpoint-GUID: yK6CtMW2pTuKf1YjF4kzwejkSzk1fPmb
-X-Authority-Analysis: v=2.4 cv=J/GnLQnS c=1 sm=1 tr=0 ts=691764ba cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=iFABrAoMAAAA:20 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=NrwLQqnjwQ5ZMmIj2uUA:9
- a=CjuIK1q_8ugA:10 a=bA3UWDv6hWIuX7UZL3qL:22 a=yULaImgL6KKpOYXvFmjq:22
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-14_05,2025-11-13_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 bulkscore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
- phishscore=0 clxscore=1011 spamscore=0 adultscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511130179
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPRwF2kC/zWNQQrCMBBFr1Jm7YAJUdSriIsxndhZNAmZaSmU3
+ t0guPgP3ub9HZSbsMJj2KHxKiold3GnAeJE+cMoY3fwZ39xzgXMbH2b4VwtVtRkGMuSOylOjGp
+ kiiYzl8UwEV1DuPnxfffQk7Vxku1394R/CV7H8QWV0187iAAAAA==
+X-Change-ID: 20251114-net-next-mptcp-sft-count-cache-stats-timeout-faa64482db92
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1952; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=HWdx5m4w/63GW+c5noK6/roJoo1MeRKB7OF1YuTwqgw=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLFC34a/Q3PVPdoOK8V484Y8b5l9/tDf78s3Nh+UmmSz
+ 9Qrk0M6O0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACZy3YmRYY3Bkn6+XVMTpNJ5
+ V3z4H7pt6xovvs67b6V+JE5gqOVtj2dkWLjyr/OP+e3ddzw9H0ZkG2WtmDftssjFrdtnJ00pKH5
+ UyA4A
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Fri, Nov 14, 2025 at 03:50:44PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c b/tools/testing/selftests/bpf/prog_tests/htab_update.c
-> > index 2bc85f481..96b65c1a3 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
-> > @@ -15,17 +15,17 @@ struct htab_update_ctx {
-> >  static void test_reenter_update(void)
-> >  {
-> >  	struct htab_update *skel;
-> > -	unsigned int key, value;
-> > +	void *value = NULL;
-> > +	unsigned int key, value_size;
->                            ^^^
-> 
-> Is key supposed to be initialized? The old code had 'unsigned int key = 0,
-> value = 0;' but the new code drops the initialization. Later uses of key
-> at the bpf_map_update_elem() calls will pass uninitialized stack memory.
-> 
-> >  	int err;
-> >
-> >  	skel = htab_update__open();
-> >  	if (!ASSERT_OK_PTR(skel, "htab_update__open"))
-> >  		return;
-> 
-> [ ... ]
-> 
-> > @@ -33,14 +33,32 @@ static void test_reenter_update(void)
-> >  	if (!ASSERT_OK(err, "htab_update__attach"))
-> >  		goto out;
-> >
-> > -	/* Will trigger the reentrancy of bpf_map_update_elem() */
-> > -	key = 0;
-> > -	value = 0;
-> > -	err = bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, &value, 0);
-> > -	if (!ASSERT_OK(err, "add element"))
-> > +	value_size = bpf_map__value_size(skel->maps.htab);
-> > +
-> > +	value = calloc(1, value_size);
-> > +	if (!ASSERT_OK_PTR(value, "calloc value"))
-> > +		goto out;
-> > +	/*
-> > +	 * First update: plain insert. This should NOT trigger the re-entrancy
-> > +	 * path, because there is no old element to free yet.
-> > +	 */
-> > +	err = bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, &value, BPF_ANY);
-> > +	if (!ASSERT_OK(err, "first update (insert)"))
-> > +		goto out;
-> > +
-> > +	/*
-> > +	 * Second update: replace existing element with same key and trigger
-> > +	 * the reentrancy of bpf_map_update_elem().
-> > +	 * check_and_free_fields() calls bpf_obj_free_fields() on the old
-> > +	 * value, which is where fentry program runs and performs a nested
-> > +	 * bpf_map_update_elem(), triggering -EDEADLK.
-> > +	 */
-> > +	memset(&value, 0, sizeof(value));
->                ^^^^^^^
-> 
-> Does this memset zero the allocated memory? It looks like this zeros the
-> pointer variable itself (8 bytes) rather than the memory it points to.
-> Should this be 'memset(value, 0, value_size)' instead?
-> 
-> > +	err = bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, &value, BPF_ANY);
-> > +	if (!ASSERT_OK(err, "second update (replace)"))
-> >  		goto out;
-> >
-> > -	ASSERT_EQ(skel->bss->update_err, -EBUSY, "no reentrancy");
-> > +	ASSERT_EQ(skel->bss->update_err, -EDEADLK, "no reentrancy");
-> >  out:
-> >  	htab_update__destroy(skel);
-> >  }
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19369517166
-Will fix these.
+Here are a bunch of small improvements to the MPTCP selftests:
+
+- Patch 1: move code to mptcp_lib.sh to prepare the new features.
+
+- Patch 2: simplify mptcp_lib_pr_err_stats helper use.
+
+- Patch 3: remove unused last column from nstat output.
+
+- Patch 4: improve stats dump in mptcp_join.sh.
+
+- Patch 5: get counters from nstat history and simplify mptcp_connect.sh.
+
+- Patch 6: avoid taking the same packet trace twice.
+
+- Patch 7: wait for an event instead of a fix time.
+
+- Patch 8: instead of using 'timeout' and print the stats after, another
+  internal timeout is used: if it fires, it will print stats, then stop
+  everything. This avoids confusions around stats in case of timeout.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Matthieu Baerts (NGI0) (8):
+      selftests: mptcp: lib: introduce 'nstat_{init,get}'
+      selftests: mptcp: lib: remove stats files args
+      selftests: mptcp: lib: stats: remove nstat rate columns
+      selftests: mptcp: join: dump stats from history
+      selftests: mptcp: lib: get counters from nstat history
+      selftests: mptcp: connect: avoid double packet traces
+      selftests: mptcp: wait for port instead of sleep
+      selftests: mptcp: get stats just before timing out
+
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh | 140 ++++++++++-----------
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    |  65 +++++-----
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     |  58 +++++++--
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  43 ++++---
+ tools/testing/selftests/net/mptcp/simult_flows.sh  |  44 ++++---
+ tools/testing/selftests/net/mptcp/userspace_pm.sh  |   3 +-
+ 6 files changed, 203 insertions(+), 150 deletions(-)
+---
+base-commit: df58ee7d8faf353ebf5d4703c35fcf3e578e9b1b
+change-id: 20251114-net-next-mptcp-sft-count-cache-stats-timeout-faa64482db92
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
 
