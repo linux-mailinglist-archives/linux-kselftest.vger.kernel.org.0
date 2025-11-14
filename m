@@ -1,339 +1,208 @@
-Return-Path: <linux-kselftest+bounces-45636-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 496A2C5C9B4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 11:34:59 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02D31C5CAAA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 11:49:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 34F6C4F96F3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 10:25:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1834F4F4175
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 10:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCBB13101BC;
-	Fri, 14 Nov 2025 10:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466143128AB;
+	Fri, 14 Nov 2025 10:41:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="K2ppTtny";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WZmhUvRh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from fout-b4-smtp.messagingengine.com (fout-b4-smtp.messagingengine.com [202.12.124.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43965289811;
-	Fri, 14 Nov 2025 10:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2F5313279;
+	Fri, 14 Nov 2025 10:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763115941; cv=none; b=f+MIWdC5Owxa3G8d9JyfnyN7ZkI3c1uawx1x0XI6vHWb7UeoIiu0Lvlw3gWvgNVpjh3BU0DcwID1UXBqMkpm8M73O8h1GlES5yRaSpSbbo7qqtWR34eJFsKZ39ZgQWCTf3mRKGT+EvLSTITgnQtZHRcKvcZjfIdNpuO17mWaChA=
+	t=1763116883; cv=none; b=pLtHihGolV1mYYHshK3LIz5zO6tiyns4un0yEnyxmIndkHwph2Woyx+Mykdr57pxCqBTYNoKpKg4zalEeI8WNm+nzjFlsaZ1kRRnWbaehI8cEhojZ3OgKTLlT+MSDdHfin8v+6rS/xtE2JEMc5XbpGkq61XbpDRTgpvol75wf0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763115941; c=relaxed/simple;
-	bh=NTRQrkXrVOlZ817YcIMNizB6JNZt99wbtTjoaPbNuyU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ieQ21SsZhjgRaxWX/CvntyFwu5uZ8jj4KXFU67p1OiYgGy2XMAGOU2efakQD/2QaeWuehHmRqpmyQGIPxL39TEubn8d8ksQ9dp2zrMA7920PSegu9nblniGbFBXOjXpMd50fwyg/UlmgfRvh4ICilCdNK1i03RBBLH0FoW8sjLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3b8b74b8c14411f0a38c85956e01ac42-20251114
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_UNTRUSTED
-	SA_LOWREP, SA_EXISTED, SN_UNTRUSTED, SN_LOWREP, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:91711ad3-018f-4f8c-92c7-39b68ad9cecd,IP:10,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:15
-X-CID-INFO: VERSION:1.3.6,REQID:91711ad3-018f-4f8c-92c7-39b68ad9cecd,IP:10,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:re
-	lease,TS:15
-X-CID-META: VersionHash:a9d874c,CLOUDID:1983b938a7bc7da8f0fba472cf3cf538,BulkI
-	D:251114182531RMD01A3R,BulkQuantity:0,Recheck:0,SF:19|38|66|72|78|102|850,
-	TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,
-	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3b8b74b8c14411f0a38c85956e01ac42-20251114
-X-User: zhangguopeng@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <zhangguopeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 356757877; Fri, 14 Nov 2025 18:25:24 +0800
-From: Guopeng Zhang <zhangguopeng@kylinos.cn>
-To: mkoutny@suse.com,
-	tj@kernel.org,
-	hannes@cmpxchg.org,
-	shuah@kernel.org,
-	cgroups@vger.kernel.org
-Cc: sebastian.chlad@suse.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH v2] selftests/cgroup: conform test to KTAP format output
-Date: Fri, 14 Nov 2025 18:24:40 +0800
-Message-Id: <20251114102440.3448810-1-zhangguopeng@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1763116883; c=relaxed/simple;
+	bh=BlWX5TwKK9UsIfOdOqxRMWJ3PJGZ4rnasWgYxToHYzU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=JCDbSrFcsNVrGzIrzxxiW1baQzJTrLJAofrYB9GU+B0IBAFXUm9LnAbsGrP5gf74i7xOAa3+k1UmRIryUur+2rruwQBlmDex8XDjOPpB/TrQExHyklfBj8M5HiMbEjkfmfJ46g+RPbIgu77/ZCI2GdtdpB6jkAHrsXNnlLZ8GtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=K2ppTtny; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WZmhUvRh; arc=none smtp.client-ip=202.12.124.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 1F9A51D000B5;
+	Fri, 14 Nov 2025 05:41:19 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Fri, 14 Nov 2025 05:41:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1763116878;
+	 x=1763203278; bh=duabn7YrLYFVynrWmnVneK+z+LnJhk/xuK3tjoE6SCw=; b=
+	K2ppTtnyZ97G7M+sz4/QDzhOa4R1q5+PJpTwn4bYqO8yBLTqBvgyX1UgRerPhwVx
+	86pV2uxn5Mvx5CtjPUflvWDFDyFOnbD4cQoHh73Vyt7cKuhMzZ2douhLisAKXbg8
+	1rMsNGFTi1KlLuXhqdmtH0I8eBbsUzfo775bF+Dbhfwk3jfnbpWV8GxoTJ4IB73k
+	FRHfsVuFoEkYR2kZvfgjLsAbBviuhtPxdwkCnRUV+n5UYC52rU5Gub1uynPTYPS7
+	qKiEM35YFTFKS4gwRuyfNs2gwOhpNiB3d3ONpNtzSxv8gAl165Ni4VxxtCLqaicX
+	oWXvu/c5FJ3TioDByXDA4Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763116878; x=
+	1763203278; bh=duabn7YrLYFVynrWmnVneK+z+LnJhk/xuK3tjoE6SCw=; b=W
+	ZmhUvRhKAsZfgZaqfSb1yR+RD0nEvhYWd6wtGisbc5Bw/4u9N9p/KKtQKBPiCqO4
+	MfgDWiy4QGjyWvh02ayFZSPgn1S3wDpAeTAN9bnd9MXe31NQa/APOblEQ/wTQ3rI
+	FEQPhixUxy1sOWzpsf4bYOBq/jNOPkv7Eia2s/FmsGyb5ycoe20M1ssxh49yn2Ko
+	9AfHV5I33kGazcDBZLCDisFmfmFw7O8/F1ZyVA/DsnN738R8UqEDvZ4o//ilZqF+
+	x2rV7PAls0IuN4XjX1797Ig2MmQRckrqwHqnBM5Sv+ry8CK7bifyxrii+aYlRI6o
+	84++OWDT8YSwMeQw/FbFQ==
+X-ME-Sender: <xms:TgcXaShrPr8tLrxoZvHbNaVPhoJB9Gvk4HUI_RXZiTruBDWFEofzCg>
+    <xme:TgcXad1jSNZI-Y7vxTGdeu9vChS3tIzj0S4nUQYYzcR1JwPorcibkVvFaaNCnKvoH
+    pfFot4SKty8mgZpFFt8tatV-9rXgCbGQe3MhGcIzdPt7HJ7gwOFdA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtdelieduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepvhhinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprh
+    gtphhtthhopehluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhhes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidrug
+    gvpdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhn
+    ihigrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdr
+    khgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:TgcXaYL7hDu43JjPCPDmmm0yYIOHQ2I1T1Y-vuTtbWUqkBvRQicilA>
+    <xmx:TgcXaSNCu7uRx6i4slBe5hpbMSJxOI6PkSAgM87BLw21HvFuivEocA>
+    <xmx:TgcXaYn2RPIKRw4M_F7du0MHkK4sPU-mz5kUS7ml_VOpRFRLzjWqjA>
+    <xmx:TgcXaW4Jkb8jRItcEgj1HO75-ENrmtJVSzoBWM6l23oU7eaQ26aPmw>
+    <xmx:TgcXaQNc4PsMO0m4ZfaIji1DQlzc3PvTLHNmcC_n3F1dslBxs3h_9_Ai>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 6ADB2700054; Fri, 14 Nov 2025 05:41:18 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: Ap118jhpfmOV
+Date: Fri, 14 Nov 2025 11:40:31 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: "Andy Lutomirski" <luto@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Message-Id: <db53e96f-d0c4-4702-aee5-1c38c69074cd@app.fastmail.com>
+In-Reply-To: 
+ <20251114102555-293562eb-f1f9-47e1-bc2d-59f26a7283fa@linutronix.de>
+References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
+ <20251113-vdso-test-types-v2-3-0427eff70d08@linutronix.de>
+ <5826549e-88a8-429c-ad42-46aeada9d21b@app.fastmail.com>
+ <20251114093245-04b5eb56-d3ed-486b-90ff-7c7ad5cfc7e7@linutronix.de>
+ <22ec7315-49b2-4fde-bd2f-f24f2cfcec37@app.fastmail.com>
+ <20251114102555-293562eb-f1f9-47e1-bc2d-59f26a7283fa@linutronix.de>
+Subject: Re: [PATCH v2 03/14] selftests: vDSO: Introduce vdso_syscalls.h
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Conform the layout, informational and status messages to KTAP.  No
-functional change is intended other than the layout of output messages.
+On Fri, Nov 14, 2025, at 11:02, Thomas Wei=C3=9Fschuh wrote:
+> On Fri, Nov 14, 2025 at 10:16:01AM +0100, Arnd Bergmann wrote:
+>> On Fri, Nov 14, 2025, at 09:48, Thomas Wei=C3=9Fschuh wrote:
+>> If you think that clock_getres_time64() is important, I don't
+>> mind changing that, especially now that we have a shared vdso
+>> for all architectures. The arguments here is a bit different,
+>> since an efficient clock_getres() function in libc requires
+>> caching the values in userspace, while an efficient gettimeofday()
+>> is much simpler, by calling vdso_clock_gettime_time64()
+>
+> I don't think it is important. For my SPARC vDSO series I even
+> dropped the regular clock_getres() after your request. But because it
+> doesn't exist we need to handle the presence of vdso_clock_getres() and
+> the simultaneous absence of sys_clock_getres() in the test.
 
-Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Suggested-by: Sebastian Chlad <sebastian.chlad@suse.com>
----
-v2:
-Change subject and commit message to refer to KTAP instead of TAP.
-No code changes.
----
- tools/testing/selftests/cgroup/test_core.c       | 7 ++++---
- tools/testing/selftests/cgroup/test_cpu.c        | 7 ++++---
- tools/testing/selftests/cgroup/test_cpuset.c     | 7 ++++---
- tools/testing/selftests/cgroup/test_freezer.c    | 7 ++++---
- tools/testing/selftests/cgroup/test_kill.c       | 7 ++++---
- tools/testing/selftests/cgroup/test_kmem.c       | 7 ++++---
- tools/testing/selftests/cgroup/test_memcontrol.c | 7 ++++---
- tools/testing/selftests/cgroup/test_zswap.c      | 7 ++++---
- 8 files changed, 32 insertions(+), 24 deletions(-)
+But that is the other way round, right? On sparc32 we have
+(optionally) sys_clock_getres() but never vdso_clock_getres().
 
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index 5e5b8c4b8c0e..102262555a59 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -923,8 +923,10 @@ struct corecg_test {
- int main(int argc, char *argv[])
- {
- 	char root[PATH_MAX];
--	int i, ret = EXIT_SUCCESS;
-+	int i;
- 
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), &nsdelegate)) {
- 		if (setup_named_v1_root(root, sizeof(root), CG_NAMED_NAME))
- 			ksft_exit_skip("cgroup v2 isn't mounted and could not setup named v1 hierarchy\n");
-@@ -946,12 +948,11 @@ int main(int argc, char *argv[])
- 			ksft_test_result_skip("%s\n", tests[i].name);
- 			break;
- 		default:
--			ret = EXIT_FAILURE;
- 			ksft_test_result_fail("%s\n", tests[i].name);
- 			break;
- 		}
- 	}
- 
- 	cleanup_named_v1_root(root);
--	return ret;
-+	ksft_finished();
- }
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 7d77d3d43c8e..c83f05438d7c 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -796,8 +796,10 @@ struct cpucg_test {
- int main(int argc, char *argv[])
- {
- 	char root[PATH_MAX];
--	int i, ret = EXIT_SUCCESS;
-+	int i;
- 
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -814,11 +816,10 @@ int main(int argc, char *argv[])
- 			ksft_test_result_skip("%s\n", tests[i].name);
- 			break;
- 		default:
--			ret = EXIT_FAILURE;
- 			ksft_test_result_fail("%s\n", tests[i].name);
- 			break;
- 		}
- 	}
- 
--	return ret;
-+	ksft_finished();
- }
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-index 8094091a5857..c5cf8b56ceb8 100644
---- a/tools/testing/selftests/cgroup/test_cpuset.c
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -247,8 +247,10 @@ struct cpuset_test {
- int main(int argc, char *argv[])
- {
- 	char root[PATH_MAX];
--	int i, ret = EXIT_SUCCESS;
-+	int i;
- 
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -265,11 +267,10 @@ int main(int argc, char *argv[])
- 			ksft_test_result_skip("%s\n", tests[i].name);
- 			break;
- 		default:
--			ret = EXIT_FAILURE;
- 			ksft_test_result_fail("%s\n", tests[i].name);
- 			break;
- 		}
- 	}
- 
--	return ret;
-+	ksft_finished();
- }
-diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
-index 714c963aa3f5..97fae92c8387 100644
---- a/tools/testing/selftests/cgroup/test_freezer.c
-+++ b/tools/testing/selftests/cgroup/test_freezer.c
-@@ -1488,8 +1488,10 @@ struct cgfreezer_test {
- int main(int argc, char *argv[])
- {
- 	char root[PATH_MAX];
--	int i, ret = EXIT_SUCCESS;
-+	int i;
- 
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-@@ -1501,11 +1503,10 @@ int main(int argc, char *argv[])
- 			ksft_test_result_skip("%s\n", tests[i].name);
- 			break;
- 		default:
--			ret = EXIT_FAILURE;
- 			ksft_test_result_fail("%s\n", tests[i].name);
- 			break;
- 		}
- 	}
- 
--	return ret;
-+	ksft_finished();
- }
-diff --git a/tools/testing/selftests/cgroup/test_kill.c b/tools/testing/selftests/cgroup/test_kill.c
-index a4dd326ced79..c8c9d306925b 100644
---- a/tools/testing/selftests/cgroup/test_kill.c
-+++ b/tools/testing/selftests/cgroup/test_kill.c
-@@ -274,8 +274,10 @@ struct cgkill_test {
- int main(int argc, char *argv[])
- {
- 	char root[PATH_MAX];
--	int i, ret = EXIT_SUCCESS;
-+	int i;
- 
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-@@ -287,11 +289,10 @@ int main(int argc, char *argv[])
- 			ksft_test_result_skip("%s\n", tests[i].name);
- 			break;
- 		default:
--			ret = EXIT_FAILURE;
- 			ksft_test_result_fail("%s\n", tests[i].name);
- 			break;
- 		}
- 	}
- 
--	return ret;
-+	ksft_finished();
- }
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 005a142f3492..ca38525484e3 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -421,8 +421,10 @@ struct kmem_test {
- int main(int argc, char **argv)
- {
- 	char root[PATH_MAX];
--	int i, ret = EXIT_SUCCESS;
-+	int i;
- 
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -446,11 +448,10 @@ int main(int argc, char **argv)
- 			ksft_test_result_skip("%s\n", tests[i].name);
- 			break;
- 		default:
--			ret = EXIT_FAILURE;
- 			ksft_test_result_fail("%s\n", tests[i].name);
- 			break;
- 		}
- 	}
- 
--	return ret;
-+	ksft_finished();
- }
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 2e9d78ab641c..4e1647568c5b 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -1650,8 +1650,10 @@ struct memcg_test {
- int main(int argc, char **argv)
- {
- 	char root[PATH_MAX];
--	int i, proc_status, ret = EXIT_SUCCESS;
-+	int i, proc_status;
- 
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -1685,11 +1687,10 @@ int main(int argc, char **argv)
- 			ksft_test_result_skip("%s\n", tests[i].name);
- 			break;
- 		default:
--			ret = EXIT_FAILURE;
- 			ksft_test_result_fail("%s\n", tests[i].name);
- 			break;
- 		}
- 	}
- 
--	return ret;
-+	ksft_finished();
- }
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index ab865d900791..64ebc3f3f203 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -597,8 +597,10 @@ static bool zswap_configured(void)
- int main(int argc, char **argv)
- {
- 	char root[PATH_MAX];
--	int i, ret = EXIT_SUCCESS;
-+	int i;
- 
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -625,11 +627,10 @@ int main(int argc, char **argv)
- 			ksft_test_result_skip("%s\n", tests[i].name);
- 			break;
- 		default:
--			ret = EXIT_FAILURE;
- 			ksft_test_result_fail("%s\n", tests[i].name);
- 			break;
- 		}
- 	}
- 
--	return ret;
-+	ksft_finished();
- }
--- 
-2.25.1
+>> I don't think we can actually build a full userspace (other than noli=
+bc)
+>> that works with CONFIG_COMPAT_32BIT_TIME=3Dn, so I'm not particularly
+>> worried about testing the vdso for that case.
+>
+> musl 1.2 started to always use 64-bit times. Looking at both the musl =
+and glibc
+> code, they always try the 64-bit variant first.
+> I think they should work fine.
 
+No, musl only uses the time64 syscalls when it actually passes
+a 64-bit time value, but e.g. still uses __NR_futex instead of
+__NR_futex_time64 when waiting for a futex without a timeout, and it use=
+s=20
+__NR_clock_settime instead of __NR_clock_settime_time64 when setting a
+time within the 32-bit time_t range (1902..2037).
+
+> Personally I'd like to have tests for the functionality that exists.
+> Even if there are currently no users.
+>
+>> You already skip testing vdso_time() if sys_time() is unavailable, an=
+d I
+>> think we can do it the exact same way for all five vdso calls.
+>
+> That was an oversight.
+
+Ok. So you'd want to check all the time32 and time64 vdso calls
+against the __kernel_timespec values returned from
+sys_clock_get{res_time64,time64} and their 64-bit equivalents?
+
+I think in this case we have to actually address the inconsistency
+in the rounding between the interfaces, which I don't think is
+well documented and possibly differs across implementations.
+
+As far as I can tell, gettimeofday() always returns the
+CLOCK_REALTIME value rounded down to full microseconds and
+truncated to signed 'long' seconds, while time() returns the
+CLOCK_REALTIME_COARSE value rounded down to full seconds.
+This can be a second earlier than a previous CLOCK_REALTIME
+value.
+
+I see that glibc's time() function uses CLOCK_REALTIME_COARSE
+to be consistent with the Linux sys_time() and vdso_time(),
+while musl's time() uses CLOCK_REALTIME for consistency with
+gettimeofday() and sensible user expectations.
+
+>> > sys_clock_gettime() should probably be called sys_clock_gettime64(),
+>> > as that is what it actually is.
+>>=20
+>> That also seems wrong, as there is no clock_gettime64 on 64-bit
+>> architectures, only clock_gettime.
+>
+> I referred to the type that it returns, which is always 64-bit.
+> Another name, without the sys_ prefix, would be better.
+
+Right, but then I would make it return 'struct timespec', not
+'struct __kernel_timespec', because it's no longer the kernel
+interface.
+
+>> > FYI: gettimeoday() seems to be available even in kernels without
+>> > CONFIG_COMPAT_32BIT_TIME.
+>>=20
+>> I see, that does sound like a mistake. It's relatively harmless,
+>> but I think it would be safe to change this along with changing
+>> the vdso to only expose the time32 interfaces when COMPAT_32BIT_TIME
+>> is enabled.
+>
+> IMO that would need to be another series with its own discussion.
+
+Sure.
+
+      Arnd
 
