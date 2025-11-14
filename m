@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-45666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9C7AC5ED2D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 19:21:51 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA07FC5ED54
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 19:23:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 087564F2E2D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 18:13:35 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CDC363663E1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 18:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B003346FB5;
-	Fri, 14 Nov 2025 18:12:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900AF2DAFDE;
+	Fri, 14 Nov 2025 18:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MLo+abK7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zt9+8bYo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD57A346FB0;
-	Fri, 14 Nov 2025 18:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604C3347BBA;
+	Fri, 14 Nov 2025 18:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763143951; cv=none; b=EpVMnr7KHb426KiQN80xt7GYq+y6M6JgwpAZ5EeLNCVXfPn8rl7IOAVWNZGByYXbtqvIr7mONzbGKFo3RgWP0HdPrN3SwdFmZYgnqUz7m22gKGYaQuHQ6j1vIyw1BV46BYP0eujMM0hHcpEsTAg1fVpUbE6eio8svxTiNyehHJc=
+	t=1763143954; cv=none; b=PNtUtGEqPwS0RglTDr37yc4tiq+HPEXgKMf1iEifAN6cV7rRxOijJ+S6arQctgMW5ZhhG96BYXNs3e30dPLNK7LyLdXEBrwYTT8mfEEfvY68rTKUvNC/GE4N/jpCpebZyb6GQAWv7+K2tyyyPLrM/p9oCUFnOP0AgOK7vSvIfjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763143951; c=relaxed/simple;
-	bh=QIeCsov8dwW62lkBk2JAwnnC41VOoAFnNv9LbRKTX48=;
+	s=arc-20240116; t=1763143954; c=relaxed/simple;
+	bh=m+kDsxek/MV31g8PwZ4leaY6woK2369gM187AjK76Vg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gMWLJ8ugETuAsFAF4XdphkmeQfS8AfMeOG/XQ4xCKtuXrIViU1dhqSpmSfdnwLlxV+KZoTXWB0iQlSW0SoKacQ8aSC1p3vQN1x5xKOfPdhHoz8StslxW9OcTAazVfZaxklbqNVdes2N3RNujLcS19SViVJD5By3b/2eaFaqoXXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MLo+abK7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24AE8C113D0;
-	Fri, 14 Nov 2025 18:12:28 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=jT2nhtQHzHzZz4FolPycdyp0tL8kUA1BcMwC2AXAHVWMXPM4YC8OdSGfU+N4Nd7O5JsCURuJJVMqrOTBEcz+V5bjrgpt8hBADtBskR1QzkwRhrVt2e2TsEnH8dM1SB5Y4oTq64+RUmRVTGzUn6mHgcSn4r6QXN68ulNAUNCu9+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zt9+8bYo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8530C19421;
+	Fri, 14 Nov 2025 18:12:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763143951;
-	bh=QIeCsov8dwW62lkBk2JAwnnC41VOoAFnNv9LbRKTX48=;
+	s=k20201202; t=1763143953;
+	bh=m+kDsxek/MV31g8PwZ4leaY6woK2369gM187AjK76Vg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=MLo+abK7zGyHmt55J48u9HpiGXojztohRugY45NagXgTTF34XNWrFVztoaJmOhg2L
-	 BRkeLijwJozZa2WWNPVHDpGY5p/WVsNL/tvxxb6w1n+cnYhLTGKNDL1U7MfHvmklxb
-	 b07MYNy2mp6Wm+eTuzkrBaAy//TsRP61eFD6+pkwMetbS1PdkWyhFZyrDsXU+4VBdW
-	 0dttS+YzNZE1EnACqAlkDpLVnBBxS6xlV5XazDM/Zm48Lc2p2+u3K1D/YcNC8F0+of
-	 CJdtTZLiBB3xfRr3z0JgccDFMBuoRkiwbkSjvXWv/It5JcH2QWPJ03/JpmoW69GODC
-	 UY5CEvhotbiqg==
+	b=Zt9+8bYoYMhpZ/WOHHpYLPchJXO4hObiOgZbmZ52wwPSght1nglmTQqDlBDADVjpX
+	 KWVG8SwD4zP5h48tFPVmzMOMaktxIbWc+XpBRwbYnKaiJYwy1zSE73UUkvVYVLNhzm
+	 ViHxy4D+oU0X34k3zau8EVRitPU1WAiIqVdbPYNZJxE1g5hakC/ZT+ie+gX9nY+sHh
+	 vPB9QdHCK4m9kw/z+Tatg/dtKvxZPR8I/r98S1LVRpg5J80BCIb+ZKjnqPBZaqmrwK
+	 7ladNJ2hxeM5KcG1XbM/hS9v0SqjmgcT6G2o40a78ANcm8mB1HSAlRII+blQRDJjLx
+	 k2rOYjG6vpY6Q==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 14 Nov 2025 19:12:07 +0100
-Subject: [PATCH net-next 3/8] selftests: mptcp: lib: stats: remove nstat
- rate columns
+Date: Fri, 14 Nov 2025 19:12:08 +0100
+Subject: [PATCH net-next 4/8] selftests: mptcp: join: dump stats from
+ history
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-3-863cb04e1b7b@kernel.org>
+Message-Id: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-4-863cb04e1b7b@kernel.org>
 References: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-0-863cb04e1b7b@kernel.org>
 In-Reply-To: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-0-863cb04e1b7b@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -64,43 +64,84 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1076; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=QIeCsov8dwW62lkBk2JAwnnC41VOoAFnNv9LbRKTX48=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLFC/4+s0/muvJF+BuLU9mfA8sFnq7mtWX5u+KNmX2vE
- 0+f37xDHaUsDGJcDLJiiizSbZH5M59X8ZZ4+VnAzGFlAhnCwMUpABOxF2f4wxP1pF/wxzwNHV3O
- 9Fz3BJerziabF58wucJ13ufAlpSvygz/U47yJS8Qn3k3lPnih8w3DOeWe+zzvztt6/FSrS3OT9j
- y+AE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2233; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=m+kDsxek/MV31g8PwZ4leaY6woK2369gM187AjK76Vg=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLFC/43Jje6hu0t/rE+7qHUPymRxV++Odksuzz/8CfBO
+ B0dp2yejlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIkoT2dkeDKz9t/7OKugVA3R
+ qQ+rVn89Fr1bYO9k3RmdVe/nrCv+MI/hr/RjaY3DC70THhY0J/AmeZrdq5IX77kc6vZ0Lte5Vkc
+ LdgA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-With the MPTCP selftests, the nstat daemon is not used. It means that
-the last column (the rate) is always 0.0, and that's not something
-interesting to display.
+In case of errors, dump the stats from history instead of using nstat.
 
-Then, this last column can be filtered out.
+There are multiple advantages to that:
+
+- The same filters from pr_err_stats are used, e.g. the unused 'rate'
+  column is not displayed.
+
+- The counters are closer to the ones from when the test stopped.
+
+- While at it, the errors can be better presented: error colours, a
+  small indentation to distinguish the different parts, extra new lines.
+
+Even if it should only happen in rare cases -- internal errors, or netns
+issues -- if no history is available, 'nstat' is used like before, just
+in case.
 
 Acked-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_lib.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 16 ++++++++++++----
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh  |  6 +++++-
+ 2 files changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-index 4a26d4150603..c5571100f797 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
-@@ -390,9 +390,9 @@ mptcp_lib_nstat_init() {
- mptcp_lib_nstat_get() {
- 	local ns="${1}"
- 
--	# filter out non-*TCP stats
-+	# filter out non-*TCP stats, and the rate (last column)
- 	NSTAT_HISTORY="/tmp/${ns}.nstat" ip netns exec "${ns}" nstat |
--		grep Tcp > "/tmp/${ns}.out"
-+		grep -o ".*Tcp\S\+\s\+[0-9]\+" > "/tmp/${ns}.out"
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index aee215d73b7c..54bac074f184 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -1146,12 +1146,20 @@ run_tests()
+ 	do_transfer ${listener_ns} ${connector_ns} MPTCP MPTCP ${connect_addr}
  }
  
- # $1: ns, $2: MIB counter
++_dump_stats()
++{
++	local ns="${1}"
++	local side="${2}"
++
++	mptcp_lib_print_err "${side} ns stats (${ns2})"
++	mptcp_lib_pr_nstat "${ns}"
++	echo
++}
++
+ dump_stats()
+ {
+-	echo Server ns stats
+-	ip netns exec $ns1 nstat -as | grep Tcp
+-	echo Client ns stats
+-	ip netns exec $ns2 nstat -as | grep Tcp
++	_dump_stats "${ns1}" "Server"
++	_dump_stats "${ns2}" "Client"
+ }
+ 
+ chk_csum_nr()
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+index c5571100f797..fa91eebdbc47 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+@@ -110,7 +110,11 @@ mptcp_lib_pr_nstat() {
+ 	local ns="${1}"
+ 	local hist="/tmp/${ns}.out"
+ 
+-	cat "${hist}"
++	if [ -f "${hist}" ]; then
++		awk '{ print "  "$0 }' "${hist}"
++	else
++		ip netns exec "${ns}" nstat -as | grep Tcp
++	fi
+ }
+ 
+ # $1-2: listener/connector ns ; $3 port
 
 -- 
 2.51.0
