@@ -1,153 +1,120 @@
-Return-Path: <linux-kselftest+bounces-45627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28857C5BE27
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 09:04:38 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5FC4C5BE60
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 09:11:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 723183548BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 08:01:53 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 61DD9345092
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 08:11:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DCB727F01E;
-	Fri, 14 Nov 2025 08:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E41102F4A1B;
+	Fri, 14 Nov 2025 08:11:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="a+cGADRf";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Mzcu1uVa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MT9IHfhL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB6313AA2D;
-	Fri, 14 Nov 2025 08:01:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7206275AE4;
+	Fri, 14 Nov 2025 08:11:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763107310; cv=none; b=phvOLLpyDWmQmTfkK8Z/H+qGG7Zn54ApWUHtvmcpIYu1h01GwyHlowdcrdedQqO29Wo9o8Jo4gTjmEyRIdJhv2hCRw1b5SezFtq5iw2sbHJUirSujYkZHsKPrHMF5fxQfjWfGYyxQg8zb+ypFqlD5fnr1NFubWMOc5xAUA8de6Q=
+	t=1763107908; cv=none; b=KslehChCVHrbW9G2P44D3GXRuhpjodyd/DOVNF9CfaHrE7FdtRZjVYK6Zy05XiHRK/dcpz/+GBeTWnqiJmyHVgEgF4HW/+UyS/qCwvsIFU1euIv9GXqtOGOaKZWn8enjiaU1FIMwjDXIVW2Cqf8GspXS4e9r2RjEIk5p9k7IcKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763107310; c=relaxed/simple;
-	bh=AM99Za7F2UgjaayGXrnrD1m1mKDiPyqjuSZSYubQQs0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=PslZnys0Cfwex6z8x+YukchqPKqprCY1K8oiAN23+779Jg4OBn4YfuWHnzv6UvYmzEhRcCO+4zEA+bCC2kqwrwM/vpx8k6+9HA3VUm/a6KsK91ujEw01g52bH9/Yo3kXdiKKsOrdEJ6zX0G5gTc01SPvTkHfc3jfR+awOEm2NWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=a+cGADRf; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Mzcu1uVa; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 599691D000F8;
-	Fri, 14 Nov 2025 03:01:46 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Fri, 14 Nov 2025 03:01:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1763107306;
-	 x=1763193706; bh=GUfuQzs0UGJKCWgSC9jC5H1uycJ0SQm6HbNmJXyNyPw=; b=
-	a+cGADRfy8MR6TvXl7pkksv8e+vUDXB6yzu4CgaeWjmOpm1cIQcEYeqfKCs3E0r1
-	YJVUWAFbt1jZ73xhzIyoWwBeG0RhpH9yE/JHrLJKi9JQj67f09XlW7OZPfYTpeTf
-	WjDcfMVJISTSlfClIRtm9pgkVOPJovuR6YDIHzNTml3XqC7M3ZylMzUsArwk8RP5
-	p90FrsizJrPtGFH9YRMnagd1PIFIBL5NrOczVRAP62FKXfW6pkp5ey9bhsQD+mHr
-	GZ4XoFiVn5APlhVNGxcJPj7qsCrE+DIYXb/PIY7Su5MOl3p0kbBCJxThdN3e4x3I
-	Tr6zx3ISsBpj6JE9WIhoNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763107306; x=
-	1763193706; bh=GUfuQzs0UGJKCWgSC9jC5H1uycJ0SQm6HbNmJXyNyPw=; b=M
-	zcu1uVaRnGEHV3Rj7qsjsLiOL2E9Miv0nwggsvqYk86Mb8qytbTQCjdwW0ms5ES2
-	G4zeqUGfPGzNuRc0TE6GpvQXW90K5O/O/qRTJ3NTSYb81LFosgJ2H9ET7iD5C4Uo
-	P8tk3oJ20Rgfwop/RbPISZLFNBEJNSpYyNssN3T5Kdz+6DnlSWaJo29c/NCHM98T
-	/af22Tew8V9mjp731zKfTxqMjPk2Szsw/zDFtResSguI9QaK+huTypo8qCAidojx
-	urg08lowXQQ4DMmbqrrgjMIymqcLA41rFyclvrbuVv/OidPaL0fRNhOPyXyyJC+d
-	Qkb3nFp5Jg6PsHTffQh/Q==
-X-ME-Sender: <xms:6eEWaY1glke-1Rn4hsTK00kpntMel7AibwmwalQ0OXwDA454GmcTrg>
-    <xme:6eEWad6dULnMZdMEKq7RJhaG2s1XMR-HzSZ2D68TNYGwcc-5jL3zoIhPfM4fXL8dE
-    qFjBv17xlNRmVJ4sjH7F6t4eyP5lMU5HsEf_ctIO6ocdudW2adHmQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtdelvdelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepvhhinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprh
-    gtphhtthhopehluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhhes
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidrug
-    gvpdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhn
-    ihigrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdr
-    khgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:6eEWaadKQ_L0DJz8Yz5-k8CqQoS2lctol6tlffglAp_0ycy8oIJ2Fg>
-    <xmx:6eEWaeQy-pFOU7XP1w9riuOlI8eA6OCiEN_VRuxuAC_YqvWwg7I_vg>
-    <xmx:6eEWabbeSgfC8m8XWyLODQd8bMtKdRuD3jLuuVRI7-_Xg2YlIEyDgQ>
-    <xmx:6eEWaZdSKRGwjaN3tbj6jdW8G5IiVZpA7wNa25vQWL9pPQTfEZHNkA>
-    <xmx:6uEWaYgs9WKUZb3mijpclU_yn_4o_kjSAYsPe14-fPdN4MqSkI2LsSl->
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 9C540700054; Fri, 14 Nov 2025 03:01:45 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1763107908; c=relaxed/simple;
+	bh=OhGJvBDuLbsZuOLjHyEX6xIRl+rLMcdKrk/4+J4TeoY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=s8eyIBzMIPsFbvi6ZMlUEoTMRcvTCoDATCXTmwQUCdUextFb5Eq71/9i5UbgRLpn9xTHWdK/CKvZERA9C2fjnGhOR9ZtGf33PBns2p9nhRWiRZ64GUFlxb+uwwlvIFXSCIN3F7sDFh3hvQTM2yO6eHMGnSrFZjpz2DJWS3GuWJE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MT9IHfhL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39037C19421;
+	Fri, 14 Nov 2025 08:11:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763107906;
+	bh=OhGJvBDuLbsZuOLjHyEX6xIRl+rLMcdKrk/4+J4TeoY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=MT9IHfhLgZNygWpWG+dIRg6p7RUMUEJnK40W4JZjMG0Yi6v+emGp8fU39Dv5V938i
+	 RfBl//v9Ge3H/xItQ2DqNjBiq9ZOnM4UIPaxoDcfBXafM4kkEDITA9SSqc2sSdXGVq
+	 o7Hu4mvfGFxlFKsWc/nNdJvQQlg9sWoXCT9DHE3oYDYq6WZMkCe7PG6unlXomQBHHk
+	 UaXZwAnG6UHtepYc44yd4I52ghf1b8H64CrQCGiRPzXDn9UGEQmvBdJZMaPf1ClPot
+	 aPgBmOUnsHTiqmRoTeu8rOVEFVk+Rd+smmC0ATKdv/AoT0lOdj+uCLIh1F+0T5pdCu
+	 oCyn+0Y2SCsIw==
+Message-ID: <9d30836b-9ddb-4432-aa39-85e32c2ea645@kernel.org>
+Date: Fri, 14 Nov 2025 09:11:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AMhH2wAeH5kJ
-Date: Fri, 14 Nov 2025 09:01:13 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- "Andy Lutomirski" <luto@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <c3a23032-5e25-429b-b096-e9bc0a72d026@app.fastmail.com>
-In-Reply-To: <20251113-vdso-test-types-v2-12-0427eff70d08@linutronix.de>
-References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
- <20251113-vdso-test-types-v2-12-0427eff70d08@linutronix.de>
-Subject: Re: [PATCH v2 12/14] selftests: vDSO: vdso_test_correctness: Use system call
- wrappers from vdso_syscalls.h
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: fix division-by-zero in uffd-unit-tests
+To: Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Carlos Llamas <cmllamas@google.com>, Peter Xu <peterx@redhat.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Ujwal Kundur <ujwal.kundur@gmail.com>,
+ Brendan Jackman <jackmanb@google.com>, kernel-team@android.com,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+ "open list:MEMORY MANAGEMENT - USERFAULTFD" <linux-mm@kvack.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <20251113034623.3127012-1-cmllamas@google.com>
+ <e0be6864-4260-4843-a432-d47437b5d43f@kernel.org>
+ <4a60a703-d9c2-46a8-83b4-a7ecff7f6ba2@lucifer.local>
+ <aRXyxWeh81-aTHaC@google.com>
+ <b4291d0d-b913-4e61-9f9d-fbebd1eb4720@lucifer.local>
+ <20251113153205.6507ecb308e7d09362905da7@linux-foundation.org>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20251113153205.6507ecb308e7d09362905da7@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 13, 2025, at 16:30, Thomas Wei=C3=9Fschuh wrote:
+On 14.11.25 00:32, Andrew Morton wrote:
+> On Thu, 13 Nov 2025 15:03:06 +0000 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
+> 
+>> On Thu, Nov 13, 2025 at 03:01:25PM +0000, Carlos Llamas wrote:
+>>> On Thu, Nov 13, 2025 at 09:54:37AM +0000, Lorenzo Stoakes wrote:
+>>>> On Thu, Nov 13, 2025 at 10:06:42AM +0100, David Hildenbrand (Red Hat) wrote:
+>>>>> On 13.11.25 04:46, Carlos Llamas wrote:
+>>>>>> Commit 4dfd4bba8578 ("selftests/mm/uffd: refactor non-composite global
+>>>>>> vars into struct") moved some of the operations previously implemented
+>>>>>> in uffd_setup_environment() earlier in the main test loop.
+>>>>>>
+>>>>>> The calculation of nr_pages, which involves a division by page_size, now
+>>>>>> occurs before checking that default_huge_page_size() returns a non-zero
+>>>>>> This leads to a division-by-zero error on systems with !CONFIG_HUGETLB.
+>>>>>>
+>>>>>> Fix this by relocating the non-zero page_size check before the nr_pages
+>>>>>> calculation, as it was originally implemented.
+>>>>>>
+>>>>>> Cc: stable@vger.kernel.org
+>>>>>
+>>>>> Do we CC stable on unit tests? From my recollection, no.
+>>>>
+>>>> Yeah please let's not.
+>>>
+>>> Oops, I keep getting confused about this Cc stable thing. Please let me
+>>> know if a v2 dropping the tag is needed.
+>>
+>> No need, Andrew should spot the objection and drop the tag :)
+> 
+> I actually add cc:stable tags to selftests fixes!
+> 
+> Because why not.  Why leave people running known-to-be-buggy code when
+> our backporting processes are so well-functioning and lightweight?
+> 
+> I'm not getting the objection?
 
->=20
->  static void test_one_clock_gettime(int clock, const char *name)
->  {
-> +	struct __kernel_timespec start, end;
->  	struct __kernel_old_timespec vdso;
-> -	struct timespec start, end;
->  	int vdso_ret, end_ret;
->=20
->  	printf("[RUN]\tTesting clock_gettime for clock %s (%d)...\n", name,=20
+I thought we were so inconsistent on that that it ends up being a wasted 
+effort to even try taking care about stability of selfests in stable trees.
 
-This looks confusing to me: I can see that the existing code is
-wrong because it passes a (libc-defined) timespec into the
-sys_clock_gettime() that expects __kernel_old_timespec.
+-- 
+Cheers
 
-It looks like you are changing a sometimes-wrong type into
-a consistently wrong type, but then you also change the
-sys_clock_gettime() definition to return __kernel_timespec
-instead of __kernel_old_timespec, so it ends up working.
-
-Why not always use __kernel_old_timespec for the local variables
-and the sys_clock_gettime() calls here?
-
-> @@ -305,7 +291,7 @@ static void test_one_clock_gettime64(int clock, co=
-nst char *name)
->=20
-> 	printf("[RUN]\tTesting clock_gettime64 for clock %s (%d)...\n", name,=
- clock);
->=20
-> -	if (sys_clock_gettime64(clock, &start) < 0) {
-> +	if (sys_clock_gettime(clock, &start) < 0) {
-> 		if (errno =3D=3D EINVAL) {
->  			vdso_ret =3D VDSO_CALL(vdso_clock_gettime64, 2, clock, &vdso);
-> 			if (vdso_ret =3D=3D -EINVAL) {
-
-This looks like the correct fix to me. We were already uses the same
-types for syscall and vdso paths, and now the types match the interface.
-
-     Arnd
+David
 
