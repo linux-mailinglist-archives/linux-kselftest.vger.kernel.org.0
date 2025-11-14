@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-45669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C5A4C5ED31
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 19:22:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A3B0C5ECE2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 19:19:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 742E8361885
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 18:14:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79B113B3260
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 18:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7934334B1B6;
-	Fri, 14 Nov 2025 18:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 209B134CFA0;
+	Fri, 14 Nov 2025 18:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2dDt7mr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJBmJsGR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 494D934B18B;
-	Fri, 14 Nov 2025 18:12:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6533225A38;
+	Fri, 14 Nov 2025 18:12:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763143959; cv=none; b=F1f1S5myMHl03gy36x6LxGX/tBgM9SpK+E6yrJSQS6ccZT03ml7sXiwu0EgOD1t0ozpSrQqrAtN08czUdydNQEBbqQGk8KbzUzJ/YSNELubPf6aulpCSwrAf1du4fWo09xVGxR5P4vPd6lDMlWhBU6E2Gbz2gyld52CBIzgxIOo=
+	t=1763143962; cv=none; b=WTikGMbJ3Mr4h5E098n7rXKAcB0s1Kec3A26040rtpD4FYzEUMSCXOivbwFIcTrJyPgyUiW/2tAQNS/JCZ3+TwzoGZuYipNay7ERTFtAjRE9xUc8xp0+ulN79v5vKjFK9N13G4zATlNu/y9BeamtYUcPDOJx6+GDZtMZVLDhLQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763143959; c=relaxed/simple;
-	bh=nEl2T66irRmp4tRPy8x4wUYialN5rIBEJihyOUMUTDU=;
+	s=arc-20240116; t=1763143962; c=relaxed/simple;
+	bh=tvWbDLJvMCusXB4MivXMB5KMx6BdY5fajVKVbvHmzSg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BGfIZbdRkwwJ/61YwIzCc3+e0ej93NYnURBgbCpix8NeRxotKCoSEBDj3CXvfJMQAfguJya8WC5IGTNfI09FKfL7zfHaFa+f6feo0oNU3BJ4v54AXqlOg05l3VBg7zDfeVnCC3wgK720p9zvVzck747T4TRIjqWQucfTs60cXv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2dDt7mr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB09C4CEF5;
-	Fri, 14 Nov 2025 18:12:36 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=r4+zsB+dgp4+MKnPMaQGFz+AQ1SzuoRXZfebsegd3kL/5/vPKVMQEQHhUT9Yci5Ef/Wss2qcNB9q1spQtAbIscRXH8oGlkVF7OAAJRQjnxSIBgyFAqXplGhKnv3LTluHmq7RStBDOzWisyYbyL3EuDGmcRxXAX7qWkHPT4XErWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJBmJsGR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B524C116D0;
+	Fri, 14 Nov 2025 18:12:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763143959;
-	bh=nEl2T66irRmp4tRPy8x4wUYialN5rIBEJihyOUMUTDU=;
+	s=k20201202; t=1763143961;
+	bh=tvWbDLJvMCusXB4MivXMB5KMx6BdY5fajVKVbvHmzSg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=r2dDt7mrCia0ncEYdI+eZONIldJ83NCTuw5j08iMa2CO+w0Bq1pfmR8AgVBHBtnDS
-	 MZR3QfdIrKGKYj84UVp3NWvxyDon7JhYMX4cwJqd4ufTFRFiLTmvPVhHNHh9qybRrK
-	 21wATF5eqFeM4HCMmzyyD8sVRb6qdcq5NhcYDdpTYrGIoXDVmtbcxy/2hXEH1xXnk/
-	 QUQMhPWDuXG0OUX1hDpiudnm5L5TXJZcPriPmyVUGut4tQtn2Efhx9oLXyE9wyF8GZ
-	 DsTycb4jR0ZylFpV1Jvkmz12+cw9SnqwWm3gPTS/YM6hLs/N9ZOzz6FxA2TZvociTH
-	 mc33CFGzg+J9A==
+	b=mJBmJsGRGtzjXu3MoutQqFm2kguaytRSUepx2estzTJOq+LAUwU/VAeInyRXrW2b4
+	 UMbIFXzxKZTkuSEzTXSQCJOBQb+9vOqBjd5fz5yKa4ppQu5dQ1q/fbCXohYI/Hf+lI
+	 jiSbxMHIw9icaU5npKWBOCL5OyudmnV4VihK46PQ5HLPzxjZyXtD0QLkKSH/7ZSK8O
+	 sUCOL1M/3VpLDNGI/0ML7BPj0yMYq+99JPVRRagq79lZsKSZuwHRu8XuNxhN5lZI3T
+	 Ei3IgRkmBs3Iamt2VLfKeZwFTMSbhpWhO9NkYiuHwB4fXtaFP3WZh3WMch5c5z6Tw9
+	 C9vazwMLr3+VQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 14 Nov 2025 19:12:10 +0100
-Subject: [PATCH net-next 6/8] selftests: mptcp: connect: avoid double
- packet traces
+Date: Fri, 14 Nov 2025 19:12:11 +0100
+Subject: [PATCH net-next 7/8] selftests: mptcp: wait for port instead of
+ sleep
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-6-863cb04e1b7b@kernel.org>
+Message-Id: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-7-863cb04e1b7b@kernel.org>
 References: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-0-863cb04e1b7b@kernel.org>
 In-Reply-To: <20251114-net-next-mptcp-sft-count-cache-stats-timeout-v1-0-863cb04e1b7b@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -64,64 +64,57 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1962; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=nEl2T66irRmp4tRPy8x4wUYialN5rIBEJihyOUMUTDU=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLFCxmtv57jlc52acpbqX9eyS3AhONDwIH1b/6eqmKwv
- 1Ue3jy/o5SFQYyLQVZMkUW6LTJ/5vMq3hIvPwuYOaxMIEMYuDgFYCLm3IwMZ+4LTbc8GqPzNt/Q
- JuOGVer2Nwf63PcU8q3Zahng7SoewPBPidfSOG+ey9tLwgx/fIMv3w16lvw7d+Ea4zAdM50qvVJ
- mAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1768; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=tvWbDLJvMCusXB4MivXMB5KMx6BdY5fajVKVbvHmzSg=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDLFC5mPbefr3qdfMT2FUf6378STyyZzLdmf3PdkZx73D
+ D2Ou46zO0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACaSr83IMF1XZKXD5Vr/Q39T
+ 091LHvyb7TPZp7y6kO//lLbEmxx9uYwMe+Yt72h6bFnGbplRbpucoXJRJ4ThFrPvYcEtuSkzln3
+ jBgA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-When the same netns is used for the listener and the connector, no need
-to take exactly the same packet trace twice, one is enough.
+After having started mptcp_connect in listening mode,
+'mptcp_lib_wait_local_port_listen' can be used to wait for the listening
+socket to be ready.
 
-This avoids confusions when the traces are the same, and wasting
-resources which might not help reproducing an issue.
-
-While at it, avoid long lines and double spaces now that these lines are
-no longer aligned.
+This is better than using the 'sleep' command, not to pause for a fixed
+amount of time, but waiting for an event. This helper is used in all
+other MPTCP selftests, but not in these two.
 
 Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_connect.sh | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh | 2 +-
+ tools/testing/selftests/net/mptcp/userspace_pm.sh  | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.sh b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-index 3a804abebd2c..e0bfd9b4730c 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.sh
-@@ -375,11 +375,15 @@ do_transfer()
- 		local capfile="${rndh}-${connector_ns:0:3}-${listener_ns:0:3}-${cl_proto}-${srv_proto}-${connect_addr}-${port}"
- 		local capopt="-i any -s 65535 -B 32768 ${capuser}"
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+index 42d533b95ec7..6cde7429104b 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
+@@ -178,7 +178,7 @@ do_transfer()
+ 				${local_addr} < "$sin" > "$sout" &
+ 	local spid=$!
  
--		ip netns exec ${listener_ns}  tcpdump ${capopt} -w "${capfile}-listener.pcap"  >> "${capout}" 2>&1 &
-+		ip netns exec ${listener_ns} tcpdump ${capopt} \
-+			-w "${capfile}-listener.pcap" >> "${capout}" 2>&1 &
- 		local cappid_listener=$!
+-	sleep 1
++	mptcp_lib_wait_local_port_listen "${listener_ns}" "${port}"
  
--		ip netns exec ${connector_ns} tcpdump ${capopt} -w "${capfile}-connector.pcap" >> "${capout}" 2>&1 &
--		local cappid_connector=$!
-+		if [ ${listener_ns} != ${connector_ns} ]; then
-+			ip netns exec ${connector_ns} tcpdump ${capopt} \
-+				-w "${capfile}-connector.pcap" >> "${capout}" 2>&1 &
-+			local cappid_connector=$!
-+		fi
+ 	timeout ${timeout_test} \
+ 		ip netns exec ${connector_ns} \
+diff --git a/tools/testing/selftests/net/mptcp/userspace_pm.sh b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+index 87323942cb8a..e9ae1806ab07 100755
+--- a/tools/testing/selftests/net/mptcp/userspace_pm.sh
++++ b/tools/testing/selftests/net/mptcp/userspace_pm.sh
+@@ -211,7 +211,8 @@ make_connection()
+ 	ip netns exec "$ns1" \
+ 	   ./mptcp_connect -s MPTCP -w 300 -p $app_port -l $listen_addr > /dev/null 2>&1 &
+ 	local server_pid=$!
+-	sleep 0.5
++
++	mptcp_lib_wait_local_port_listen "${ns1}" "${port}"
  
- 		sleep 1
- 	fi
-@@ -416,7 +420,9 @@ do_transfer()
- 	if $capture; then
- 		sleep 1
- 		kill ${cappid_listener}
--		kill ${cappid_connector}
-+		if [ ${listener_ns} != ${connector_ns} ]; then
-+			kill ${cappid_connector}
-+		fi
- 	fi
- 
- 	mptcp_lib_nstat_get "${listener_ns}"
+ 	# Run the client, transfer $file and stay connected to the server
+ 	# to conduct tests
 
 -- 
 2.51.0
