@@ -1,198 +1,124 @@
-Return-Path: <linux-kselftest+bounces-45603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88EF8C5B0E4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 04:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62054C5B14F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 04:14:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61AFB3A3F68
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 03:02:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BDA33A5D23
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 03:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8690225A38;
-	Fri, 14 Nov 2025 03:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C98B2566D3;
+	Fri, 14 Nov 2025 03:14:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M3y1FdhG"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yklrk8LJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03E623D7C4
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 03:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCB6248F51
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 03:14:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763089340; cv=none; b=d4P7MOtKrrVh0ZYqAsRtOzlLdHhlEVpg27Z+StqEo9iTGPnNBBiqP562DwToZUpHBEUkUpE/w2VIEwWXHMa/Wcn6iY4x2ng/uv1IZqrSx/tJFMG6n0peS2X7j+cSkgRyngxuLpYxDZfgT1ZkO/YzGWWT4QzOWwlbCCnCMHaBoYU=
+	t=1763090070; cv=none; b=TWZLzkVFTzKZqihmGUrjZOHkd0eFsIXGgqFF7SUE5VWezE7WttFKLRqmZxXPT7cOrAy3DNzSzpAlPDdXw/s+o5mripY0ISTHv8AVs8JP+dSTKpgaXDXTxazJ68mOevGitOfitFGWpZxVwHXtA2Jlj0pMVi/j7yc05Wz33NYDuq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763089340; c=relaxed/simple;
-	bh=vJeehSBHuz6A8C1ZUxbAu9WXDe8+OD8Re77G68OIBbo=;
+	s=arc-20240116; t=1763090070; c=relaxed/simple;
+	bh=26ICLLmQLvLg9di8JGtO2ctXGqGEi3cL0H2jl3cUtPQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PapZyCl15CYvZU4+0dmXKiAJCruVJXbC+MOiR4HixWIXvOEs4TkeoVi1zhIoM24OLA4KPubbTC6zCcxJv06uCYxhrqmTbKls8WdRZQcrvJCVZMsZttkkmfee2Sj1B8ySsIRGIMrdNcDS0L0QNnUEx158/SBujpGqEgB+Dr7JysI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M3y1FdhG; arc=none smtp.client-ip=209.85.219.48
+	 To:Cc:Content-Type; b=M9UQtff3AA8zYRBQildquEwULE17G+Tl5fLKqlxuvGhKhBlCdEUI8PqZ26zQSQ4z3GtlcYfDsZDBhaMpZ1ja4OfGfqql6ZpkzVkpV7ndpIAHHDjyPhoJBhrpkx36GMCFlVJ7HizajxtbhsOhGZoRRVydGMVa8aDQxHyOaEm54mY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yklrk8LJ; arc=none smtp.client-ip=209.85.219.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8823e39c581so18803496d6.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 19:02:18 -0800 (PST)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8804f1bd6a7so16244266d6.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 19:14:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763089338; x=1763694138; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763090067; x=1763694867; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WIO2cS4o+tQCkNiY+vNeI0z+NxcLRk0oVZpiye9XTWU=;
-        b=M3y1FdhGfg8X4aQg6gMFEU41JzWzzBd1V3TkFZMPVyeWfUfUYhf7R+iUCuMOqaW8GY
-         e0FlzwDSH7RVNyXrVL/zT3mOj5q4K9MYDydMKzHvlsCkY4QAqCCZXlYbALNsz12vqSMi
-         8YAzcS9L6N7l15Gb56ko2pHlds603X/G6hJwPBlncWoxEXe7ZR/vylAc5erdml5qavUr
-         tkmBnldl9zrwoT09j9lPV1SpZSEbcw89OyKyqSQoVI5HrA5pR+r5pGThwtnd0oHGbRiz
-         CzRcH5YrWLU6NuneEmEqRJ+BGnFptQ45z2/Yg4nf6X9CEMiPNceXmTRfUlg08+3y8c0E
-         /dMQ==
+        bh=26ICLLmQLvLg9di8JGtO2ctXGqGEi3cL0H2jl3cUtPQ=;
+        b=yklrk8LJdPGiJ+ah9wIslnhoaD/d8Y7+JbcoZzuwqtqLWvGO+EpYg5IuP97Kmg0rZW
+         M0Y7YYUprVZUagSp15MuthFasNDm7arq9h6bYpJVBqMykuGopk61XxwmZYbHyZrSiwEO
+         p+CrFUtnZTA0iV1UKA6AsayZ4qwxxwGO4NudFmttPmx4Y/bnTSEPjEQ1DUIygTsPFaLx
+         8NNwOm+b9wXmPxpfv3TQUFmQ9J0DM27KJOYxHbE6xYY4gS5eoeA/mxvSqRLArtkp6BLN
+         jwbNI+O+v5056HcOOZBrnGECo8iAwPTqtkBT2HK1QzYqSJCW22NghY4FYmpYHNibsI5o
+         mErw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763089338; x=1763694138;
+        d=1e100.net; s=20230601; t=1763090067; x=1763694867;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WIO2cS4o+tQCkNiY+vNeI0z+NxcLRk0oVZpiye9XTWU=;
-        b=k0kw5ipzNwx3p0Za8IEunx+yKfwfeS7VDoh//xOo+8tlIUPyCJLoqXQUd8lcUcAbm+
-         /mtA/4fhdUaA69PT194ZZKASHh8GZu5hHRxvo7TM4xo2+hQI642jb4vvhw+fHIsS7SAo
-         04b4AB4cGLYOTfokLftYqvGSXW+NRpG5GjP6W76gI2sOsiCBPubR8vXe/zw5/ZHWkhB9
-         cNpqjfOGgufqIER6Tu7r2qCeBQ0QZQhpEO+Wd5RWqaCZSdWuOhWiG3u70wp7EHbAq0fd
-         7fWPLN1/3h1FM9uusXDrOo5XIoIG03WD8IQB+W1e6PEVDv/TvzNaFLAg2pqc39GaBex3
-         HAiw==
-X-Forwarded-Encrypted: i=1; AJvYcCUHcrade2l/G2deZZAW7upNHf/cshJN35gT3DoUjtGYalyv6SBquc3CWH1mimEgqS/czUCJgSm5iU2dx//Qwcc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw00GWnd7kZ8TKNuzgGPHqm0fvmU+A8ckS+qzVY9B1HqQuG4N4+
-	rW6Xf17WK0xXhLqJAxme4dm/vSP44oUtKFgLQEE2pAQWUBtsszCus+wOTKpCjTgSafe7LzOu+wP
-	KuC877P+jBD/jRHHgzaWUPE5OqObcVJWWcxY+STqb+p8/FBCzlCxzDxGO
-X-Gm-Gg: ASbGncvm75fhiXaro0HBJUPWpGtc1pPD1qxh9KreCnSfROATuiV0gQz9AJOLzjY8b5D
-	0ChvDXJsszM3t1r6LydvMeiA2ldyEbKed288M0Qw3fQadBJ8GhqCpi8QDoeWhQHTJiWitqIQKFa
-	AsjaMXXYTLdPBQkzYYmqGK+gnQGFdw1w3Zu38Jipg/4K+Tf7oNmLlZPaSrSP4Uob8xzlnHZeTU4
-	sU0INCHA5cZwl1mVC4SISpE/NptyahWCtWdfNklgBaKkU8bXNJE1wg5yuQJoqhTTBLSFg==
-X-Google-Smtp-Source: AGHT+IFvp1AKDv+CGISWS67MhHbkV7Pl2rdoGvfF5NJEasYAxV/vxP2gbJpYWb+f/rBFL2WdCQaKcvqVex6R292KstM=
-X-Received: by 2002:a05:6214:ccd:b0:87c:836:8f21 with SMTP id
- 6a1803df08f44-882926012c6mr22780256d6.21.1763089337440; Thu, 13 Nov 2025
- 19:02:17 -0800 (PST)
+        bh=26ICLLmQLvLg9di8JGtO2ctXGqGEi3cL0H2jl3cUtPQ=;
+        b=WY54jMR9hCX2Hyk/gi1M+09MTW74DI8fn+HBILeg0zziuQ/7BqFcpKu6MOInYf9cdv
+         p6jS2ixYDEePIxzHE6iIa3olTAVbhpgYiNnexVQmkkcBbD1+gl9Mg8xp3vtvL+qkvsar
+         abFxH8WOaw++foWIAAU5iDzbUAW4sN7/mP2CaGdjJJNovVzPoe/jU/MAFRWMijNUQqMy
+         NmJ+GBDorB9yxV5VOr6gib6tuTarBCNjpzZvwnz1upgWA0CCrzD9gbiecgaCsDBZwzQF
+         x3Z5HDe+ovGFXZk5vNb9iMObkhyUhUH9c3quIpfaEdUI19rKqS1in6Z+dYs4jmHALV2x
+         9yOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVCf+Tjzi8f8S7Y/1e4u7hqk/FnJ1uxVLPedhBhXkboyGb3jP4IZBjr/z6QKq9nqTKdsAiBhxuDSVnE54EJcS0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWLQR4tJh5FtIbhW6cRDjXOGK8tcbhwAeFdTdXNXd0ZSj4KghQ
+	In0zc2+jUcLmuVhtOYKQtJ4HoQ87r9Np40wdmaVzUX+MFSc3oa7/j7tl+hqMaRrl9Pa3VpxRRmu
+	bQG3Ysk9+1PbgUsUQ3Q5hhO7OUUX5+oTd5eI2l4Rb
+X-Gm-Gg: ASbGncu6k1M9hKkWhvRX1Lr4y6Ah7Wrmt3iFqbo2sqdKVztSB+I3B+ZZ0HCW4d81pEg
+	vl4nnkmfiOOCJfJ5rGZZH8XO34COa2bdo8vReEnlVKIOUkA2NvFSKXj2T38wYJwO3ed5i/uDQs/
+	y95JmW/5XLYWM3P9AvNXJf+SbLoWKB1xGvY+Z4qk7/jaCMWgme9ubjPSWqpgO1FDBmMrYqjMdsA
+	DYg8jYD61nf0BZk0kN4H/mjF3ikl1oVzGbDgOd1/izAFrGRn3NpAMjU5Q1FptPBgX3Mfp06X37w
+	kgp9
+X-Google-Smtp-Source: AGHT+IG0PcYJyZDTl4anXZT7Q+KhHsTl2CjgZujUQ2YdaT5womClkLSUPJWEPuiC31Behx9d2CUrl4AcL3u4e6YApe8=
+X-Received: by 2002:ad4:5ae4:0:b0:880:4ac3:fbdb with SMTP id
+ 6a1803df08f44-882925c2619mr19716476d6.23.1763090066430; Thu, 13 Nov 2025
+ 19:14:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251106-kunit-filter-kconfig-v1-1-d723fb7ac221@linutronix.de>
-In-Reply-To: <20251106-kunit-filter-kconfig-v1-1-d723fb7ac221@linutronix.de>
+References: <20251110113528.1658238-1-ojeda@kernel.org>
+In-Reply-To: <20251110113528.1658238-1-ojeda@kernel.org>
 From: David Gow <davidgow@google.com>
-Date: Fri, 14 Nov 2025 11:02:06 +0800
-X-Gm-Features: AWmQ_bksRYvCZCDPnDL7gXx9x2gwvGVw9iF29YxGSHLoUKgpQCGyn7ltSjKWPSc
-Message-ID: <CABVgOSnSGkkcWJVS3t8=Tp1UbtpqdVV1LDvZczWUrneVCtja-g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Make filter parameters configurable via Kconfig
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+Date: Fri, 14 Nov 2025 11:14:14 +0800
+X-Gm-Features: AWmQ_bkraSc5QAT3iB5vtDWiNqlmgCcymMGKQ12sUWJTLB9CXP4bdJ9vF-Gujig
+Message-ID: <CABVgOSmOAnf_zXJMRrGq_ZJ0Xg_7XU7TWDuT6P00ZWPCUd5VjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] rust: allow `unreachable_pub` for doctests
+To: Miguel Ojeda <ojeda@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Rae Moar <raemoar63@gmail.com>, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, patches@lists.linux.dev
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000b40aa706438539a2"
+	boundary="0000000000002707b70643856500"
 
---000000000000b40aa706438539a2
+--0000000000002707b70643856500
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, 6 Nov 2025 at 18:32, Thomas Wei=C3=9Fschuh
-<thomas.weissschuh@linutronix.de> wrote:
+On Mon, 10 Nov 2025 at 19:35, Miguel Ojeda <ojeda@kernel.org> wrote:
 >
-> Enable the preset of filter parameters from kconfig options, similar to
-> how other KUnit configuration parameters are handled already.
-> This is useful to run a subset of tests even if the cmdline is not
-> readily modifyable.
+> Examples (i.e. doctests) may want to show public items such as structs,
+> thus the `unreachable_pub` warning is not very helpful.
 >
-> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> Thus allow it for all doctests.
+>
+> In addition, remove it from the existing `expect`s we have in a couple
+> doctests.
+>
+> Suggested-by: Alice Ryhl <aliceryhl@google.com>
+> Link: https://lore.kernel.org/rust-for-linux/aRG9VjsaCjsvAwUn@google.com/
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > ---
-
-Thanks. Do you think it'd make sense to also add one of these for
-kunit.action (i.e., support for listing tests/test attributes)?
-
-Otherwise, other than maybe the possibility of adding some detail to
-the help texts (though that'd just duplicate what's in the
-documentation for those module parameters), this looks good. We can
-always add more in a follow-up if it's useful.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  lib/kunit/Kconfig    | 24 ++++++++++++++++++++++++
->  lib/kunit/executor.c |  8 +++++---
->  2 files changed, 29 insertions(+), 3 deletions(-)
->
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index 7a6af361d2fc6276b9667be8c694b0c80e33c1e8..50ecf55d2b9c8a82f2aff7a0b=
-4156bd6179b0a2f 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -93,6 +93,30 @@ config KUNIT_AUTORUN_ENABLED
->           In most cases this should be left as Y. Only if additional opt-=
-in
->           behavior is needed should this be set to N.
->
-> +config KUNIT_DEFAULT_FILTER_GLOB
-> +       string "Default value of the filter_glob module parameter"
-> +       help
-> +         Sets the default value of kunit.filter_glob. If set to a non-em=
-pty
-> +         string only matching tests are executed.
-> +
-> +         If unsure, leave empty so all tests are executed.
-> +
-> +config KUNIT_DEFAULT_FILTER
-> +       string "Default value of the filter module parameter"
-> +       help
-> +         Sets the default value of kunit.filter. If set to a non-empty
-> +         string only matching tests are executed.
-> +
-> +         If unsure, leave empty so all tests are executed.
-> +
-> +config KUNIT_DEFAULT_FILTER_ACTION
-> +       string "Default value of the filter_action module parameter"
-> +       help
-> +         Sets the default value of kunit.filter_action. If set to a non-=
-empty
-> +         string only matching tests are executed.
-> +
-> +         If unsure, leave empty so all tests are executed.
-> +
->  config KUNIT_DEFAULT_TIMEOUT
->         int "Default value of the timeout module parameter"
->         default 300
-> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 0061d4c7e35170634a3c1d1cff7179037fb8ba07..02ff380ab7938cfac2be3f8c0=
-e7630a78961cc3d 100644
-> --- a/lib/kunit/executor.c
-> +++ b/lib/kunit/executor.c
-> @@ -45,9 +45,11 @@ bool kunit_autorun(void)
->         return autorun_param;
->  }
->
-> -static char *filter_glob_param;
-> -static char *filter_param;
-> -static char *filter_action_param;
-> +#define PARAM_FROM_CONFIG(config) (config[0] ? config : NULL)
-> +
-> +static char *filter_glob_param =3D PARAM_FROM_CONFIG(CONFIG_KUNIT_DEFAUL=
-T_FILTER_GLOB);
-> +static char *filter_param =3D PARAM_FROM_CONFIG(CONFIG_KUNIT_DEFAULT_FIL=
-TER);
-> +static char *filter_action_param =3D PARAM_FROM_CONFIG(CONFIG_KUNIT_DEFA=
-ULT_FILTER_ACTION);
->
->  module_param_named(filter_glob, filter_glob_param, charp, 0600);
->  MODULE_PARM_DESC(filter_glob,
->
-> ---
-> base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-> change-id: 20251106-kunit-filter-kconfig-f08998936fc6
->
-> Best regards,
-> --
-> Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
->
-
---000000000000b40aa706438539a2
+--0000000000002707b70643856500
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -282,14 +208,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg6eh90FRDSDDmxpgS4D+ZaqZBaKl3
-ArVGKXCX1cP9v5wwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
-MTE0MDMwMjE4WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgEzl3KRh+ItapDHTGYY9mSlu83NB0
+1TYKH3IElZYdA0EwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
+MTE0MDMxNDI3WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAKIEVV1Dcw5l3F/OTmhhXzhDPaHwoSvF0Bvq5Rr47TSISy/XI/GQeRLye/cesl5Kf
-JKgtTwb9Czh2CXvApjTLZG/Yvn2LUHxcYwcbUrjI98WGPoDgW/K2Obq53ojpma9vrk45HTgv/a3T
-/++Zpo0r4TchSy+e02SugSGBdmDRv3x6sPuDiuTXRiEDVqMxCBNgnBUW532CAoi7/DHYZokR1vW8
-ZfUP4E/azhkIFA7fwCIZMYOgD3WUpQj+NqQqv4LFf/tSPwT3a812793y++Vr8imFfDFNTxSzwdYF
-g8J5GXBVHF2p5VQGfQfNNf7AwVFXyFl7WlbDTBDjb25qrhPj6A==
---000000000000b40aa706438539a2--
+AQEBBQAEggEAJuHIEWvuXoc/EvN/+HaTqRsgbaqTBSfK66XVtLrrVCjIOpaUbVbTTB9RqMxom5BX
+S8P09iNiQzEfUF8o5ZqsgApeMtRL3EclOmTFqBrBsrgZ8wh4qW4usZeEiP0I5omzpC9NUGgVFtpV
+vy8jpbBcvRCIESgyw0iYVnG+Iutoa4cEQJo52Yf+5Yj3/w1hx0pxMJwwivAQUokZBJqHJ0nakWvr
+peK5EzUAPDTqxjKFFBfjdOTLprdA+1tDFAnl6/CKZvVcekeBNVLybfelT+lnOomV6WXpyzPyRwkC
+cjKgNrbxBo5oSPSQYBXFNS0D1HaFIJq5Do4HwGCEWf9dTk0FPg==
+--0000000000002707b70643856500--
 
