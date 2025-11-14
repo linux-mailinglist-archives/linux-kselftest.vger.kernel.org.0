@@ -1,217 +1,153 @@
-Return-Path: <linux-kselftest+bounces-45625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9203FC5BBFB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 08:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 28857C5BE27
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 09:04:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 80A4435DB0C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 07:16:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 723183548BE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 08:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79AC02FD1AD;
-	Fri, 14 Nov 2025 07:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DCB727F01E;
+	Fri, 14 Nov 2025 08:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="CTmlnX1z"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="a+cGADRf";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Mzcu1uVa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010019.outbound.protection.outlook.com [52.101.69.19])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC88D2FB962;
-	Fri, 14 Nov 2025 07:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763104466; cv=fail; b=arkgHaDMztRVQ7brB6vffceEfRHYORR1ie4thncQNoV7Rkit+9iTEHa3+I91Krpjxcbsj2x7sIy1hRfByYl3vlDkJc9/YFIRfF1MV1iYy+HUodD09zN7uamiEhz7Kj6aiRCWIqyApQEOEnamFn1iT5vBp2IzS96hX7FhRMVaFrE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763104466; c=relaxed/simple;
-	bh=ysEtE8z1ernfQZLmXOZkBhW7KEVKGRW6x2sseqULYPQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rstQ7xIppbwT1K038EB019nojfFPxbGbvM1XnleuJa6OHPQBchsHypYoXJBHk8WvQ2yzd7Ch7KSeU87Iga2dDmOTxhiE36GD0acYKTdtRixKR6rFNKNhEP6nV8m6+v35Mj2z/eaGSFyemLkQAZCAGeW64Y2n9RCPbidhQhydUbg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=CTmlnX1z; arc=fail smtp.client-ip=52.101.69.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DDqvUJxlwyAcQ9zMDoBjhWVhHmBBnnx/bDXOj3NHDy1VhL0DAPI0vUV8L+UK7SQLqeBnv3/r4J/m4FhQoFpxN+Q/WYGZjPeq4NEHNB0SKLabxJfqAraZHTaSaMsZgMLOri9A5hEUI/wsuokN2pz/og9lbm5ydDWebdtK/ACALZ1ID80tzg70A/bB7kL+m+vWmV7FfhdAqHnTet/tQDoQKtC64NumGMg7xP/k8S8kjcdilSN2CpyKTdQ3IpZrjjK/Z6UNbw7ozmVPFod7Cx/3JagapD9TRl9YUimlzt18+yqQM8tb5bDR2h4tFNss4U3mEHKsTTWe7R5CzNJLSXlrCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d6UwF4goqZJTCWoqfCv+7kw2fsKDXobIlOF3NWs9qDU=;
- b=WmRTwXNoGNAm5UqyS/Rz+tTcUdJQxumxmgkCYjPjq7CMkj2zQYE+j+ym0+mEtcVFDl5OIX3Sjx67jRve0eK60r2SMEipGP0mbEn9W5gCh/Vjpseb+asegA90/sFjbhvri+ZQum3VTfGocz9MIWRJu676MYiffZHmhP/43a+sR99NKEXi+Z0Xnqna11tZkWSwWtFmPnQqe5ZH4kMS/cucdujQrUw5dXa2EJUd9qsLMfLk1oITeiZf1h8CfSSBIINerGGqYs3Sg90U7CI7f8WorLt8ummEl/6kF4y9fqgAASxIl0bxj4zF6O1zKw9i1m4L9nTs4I2tuSKdCNdSLJ0BaQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.6.101) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d6UwF4goqZJTCWoqfCv+7kw2fsKDXobIlOF3NWs9qDU=;
- b=CTmlnX1z7+nI7ImH8SjXFcTZDHO5wiuaZDdyNnGoStf9M6IZEoTP6B6popxGZQpl1pPJLHO6w4hCUGd8zFmpumaa16oKUZEzQPBQK5FE2VJsiUJR+AHQuworEASHbA1GS0NEDMz9PBNv3GIcc27GFWREBPbgQeeLFZVtnUCzuUtMIaQBBfHTf2P8zt5eDtZN+Pb/EHX6Zo4eD6Ct7wf4kbjou40zbi76VNPbKJ5jvU7JaUswVkrcNJIBnNSJdA0t2tRntNkb4kpmxdwTY8U5Mt3rukrqr7LwRlCLHLe3xwYsooM++4E58anKjgVx/EV4Qcj3RIW4drvh/V0a0VGPjw==
-Received: from AS4P250CA0024.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:5e3::17)
- by DBBPR07MB7641.eurprd07.prod.outlook.com (2603:10a6:10:1f3::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.17; Fri, 14 Nov
- 2025 07:14:20 +0000
-Received: from AM3PEPF0000A79C.eurprd04.prod.outlook.com
- (2603:10a6:20b:5e3:cafe::f) by AS4P250CA0024.outlook.office365.com
- (2603:10a6:20b:5e3::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.17 via Frontend Transport; Fri,
- 14 Nov 2025 07:14:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.101)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.6.101 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.6.101;
- helo=fr712usmtp1.zeu.alcatel-lucent.com; pr=C
-Received: from fr712usmtp1.zeu.alcatel-lucent.com (131.228.6.101) by
- AM3PEPF0000A79C.mail.protection.outlook.com (10.167.16.107) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.13
- via Frontend Transport; Fri, 14 Nov 2025 07:14:20 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr712usmtp1.zeu.alcatel-lucent.com (Postfix) with ESMTP id 0735F1C003F;
-	Fri, 14 Nov 2025 09:14:18 +0200 (EET)
-From: chia-yu.chang@nokia-bell-labs.com
-To: pabeni@redhat.com,
-	edumazet@google.com,
-	parav@nvidia.com,
-	linux-doc@vger.kernel.org,
-	corbet@lwn.net,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	kuniyu@google.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	dave.taht@gmail.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	andrew+netdev@lunn.ch,
-	donald.hunter@gmail.com,
-	ast@fiberby.net,
-	liuhangbin@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v6 net-next 14/14] tcp: accecn: enable AccECN
-Date: Fri, 14 Nov 2025 08:13:45 +0100
-Message-Id: <20251114071345.10769-15-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251114071345.10769-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20251114071345.10769-1-chia-yu.chang@nokia-bell-labs.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB6313AA2D;
+	Fri, 14 Nov 2025 08:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763107310; cv=none; b=phvOLLpyDWmQmTfkK8Z/H+qGG7Zn54ApWUHtvmcpIYu1h01GwyHlowdcrdedQqO29Wo9o8Jo4gTjmEyRIdJhv2hCRw1b5SezFtq5iw2sbHJUirSujYkZHsKPrHMF5fxQfjWfGYyxQg8zb+ypFqlD5fnr1NFubWMOc5xAUA8de6Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763107310; c=relaxed/simple;
+	bh=AM99Za7F2UgjaayGXrnrD1m1mKDiPyqjuSZSYubQQs0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=PslZnys0Cfwex6z8x+YukchqPKqprCY1K8oiAN23+779Jg4OBn4YfuWHnzv6UvYmzEhRcCO+4zEA+bCC2kqwrwM/vpx8k6+9HA3VUm/a6KsK91ujEw01g52bH9/Yo3kXdiKKsOrdEJ6zX0G5gTc01SPvTkHfc3jfR+awOEm2NWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=a+cGADRf; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Mzcu1uVa; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 599691D000F8;
+	Fri, 14 Nov 2025 03:01:46 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Fri, 14 Nov 2025 03:01:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1763107306;
+	 x=1763193706; bh=GUfuQzs0UGJKCWgSC9jC5H1uycJ0SQm6HbNmJXyNyPw=; b=
+	a+cGADRfy8MR6TvXl7pkksv8e+vUDXB6yzu4CgaeWjmOpm1cIQcEYeqfKCs3E0r1
+	YJVUWAFbt1jZ73xhzIyoWwBeG0RhpH9yE/JHrLJKi9JQj67f09XlW7OZPfYTpeTf
+	WjDcfMVJISTSlfClIRtm9pgkVOPJovuR6YDIHzNTml3XqC7M3ZylMzUsArwk8RP5
+	p90FrsizJrPtGFH9YRMnagd1PIFIBL5NrOczVRAP62FKXfW6pkp5ey9bhsQD+mHr
+	GZ4XoFiVn5APlhVNGxcJPj7qsCrE+DIYXb/PIY7Su5MOl3p0kbBCJxThdN3e4x3I
+	Tr6zx3ISsBpj6JE9WIhoNw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763107306; x=
+	1763193706; bh=GUfuQzs0UGJKCWgSC9jC5H1uycJ0SQm6HbNmJXyNyPw=; b=M
+	zcu1uVaRnGEHV3Rj7qsjsLiOL2E9Miv0nwggsvqYk86Mb8qytbTQCjdwW0ms5ES2
+	G4zeqUGfPGzNuRc0TE6GpvQXW90K5O/O/qRTJ3NTSYb81LFosgJ2H9ET7iD5C4Uo
+	P8tk3oJ20Rgfwop/RbPISZLFNBEJNSpYyNssN3T5Kdz+6DnlSWaJo29c/NCHM98T
+	/af22Tew8V9mjp731zKfTxqMjPk2Szsw/zDFtResSguI9QaK+huTypo8qCAidojx
+	urg08lowXQQ4DMmbqrrgjMIymqcLA41rFyclvrbuVv/OidPaL0fRNhOPyXyyJC+d
+	Qkb3nFp5Jg6PsHTffQh/Q==
+X-ME-Sender: <xms:6eEWaY1glke-1Rn4hsTK00kpntMel7AibwmwalQ0OXwDA454GmcTrg>
+    <xme:6eEWad6dULnMZdMEKq7RJhaG2s1XMR-HzSZ2D68TNYGwcc-5jL3zoIhPfM4fXL8dE
+    qFjBv17xlNRmVJ4sjH7F6t4eyP5lMU5HsEf_ctIO6ocdudW2adHmQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvtdelvdelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepvhhinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprh
+    gtphhtthhopehluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhhes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidrug
+    gvpdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhn
+    ihigrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdr
+    khgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:6eEWaadKQ_L0DJz8Yz5-k8CqQoS2lctol6tlffglAp_0ycy8oIJ2Fg>
+    <xmx:6eEWaeQy-pFOU7XP1w9riuOlI8eA6OCiEN_VRuxuAC_YqvWwg7I_vg>
+    <xmx:6eEWabbeSgfC8m8XWyLODQd8bMtKdRuD3jLuuVRI7-_Xg2YlIEyDgQ>
+    <xmx:6eEWaZdSKRGwjaN3tbj6jdW8G5IiVZpA7wNa25vQWL9pPQTfEZHNkA>
+    <xmx:6uEWaYgs9WKUZb3mijpclU_yn_4o_kjSAYsPe14-fPdN4MqSkI2LsSl->
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9C540700054; Fri, 14 Nov 2025 03:01:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM3PEPF0000A79C:EE_|DBBPR07MB7641:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 96b5698b-9082-41bd-9710-08de234d6e84
-X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|82310400026|36860700013|7416014|376014|1800799024|921020;
-X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?m4/RwoUvE3oRNSseEsdZogAXAeFCB1uCbZ27gz+h8f1j2jHEaAbCbvtz8xOf?=
- =?us-ascii?Q?TKq9N/yeAyhxDz28jjIjS0vyeRXMC8c+ToO/k5dAF20YbhTloOH2PqNtmeGm?=
- =?us-ascii?Q?Zz7D/8WMkZ6j0Q8n9/DLIW/FkuBJPVYL9reyh/gEnKar+SRUlE0KlBUelzWB?=
- =?us-ascii?Q?qaVF3ftD3vkybiqkGW0kiMucZHwzkZF0Hj+Lh/8CHynIBFoXXPiGBHddGCSc?=
- =?us-ascii?Q?Lzchft4wcBYO5Fo18d6tPnserQQMpYPt8RpOMrAGBhjdqFZpAu8IZb16X0f8?=
- =?us-ascii?Q?UuzxH+hYGWvWR8dk/24vON8BgHSswkpKzQl4nRm0nOdcDIvGZmTdDKJwdGEO?=
- =?us-ascii?Q?C4aaE7TvrjhTG0rtxuerwx0wSzKCaV0iA6FWVKZf6YimPIWdoOa8Rby42ReQ?=
- =?us-ascii?Q?wGMUTQwIbflg510gwDLAqFzEQ3FtGFNR5Ifc4zYdv39gKr4S6SZgWDenVX4B?=
- =?us-ascii?Q?VrFAuHd/wUptYYOfAxINwfydI2j/IrChB4e7MyUG0YVD+BT92fMzMU7s6lTy?=
- =?us-ascii?Q?yr05UaAPXwiqt0S+qyj2GlTlFwma1IydjyrvhzsO55D7ZJsBRIQx5WWA9aMC?=
- =?us-ascii?Q?qHOH1SSN1JQL9TCrWrz5Z7hPDPulbzstBMlqfo/ZMMLVi67Z0b7/RIrpPa+W?=
- =?us-ascii?Q?uzcXOtPAt+sBO2pNae8VGZ9hcYMK/Y0Q80ytXrrOd2BezdOgxqeKChdRH2Vv?=
- =?us-ascii?Q?9i3xbJYN4w6s9Ci9+QI88/1RIRJn6Z/u6qyXy5aKhcK2k0KM0BGn+5SPgfGn?=
- =?us-ascii?Q?xRYPc0GU92gs6Q84DevsMF6cgpnNjh+msuTzdrRxQGOtLbrpo/x7/vMuxNMP?=
- =?us-ascii?Q?LED/lRbnp6UdhUeamhnVcqdvzECh+Y655TenAjqJ/TSQ9pKuUZsRz3EA6wGV?=
- =?us-ascii?Q?S4usAzDMrAvIGekbhl+cIZBGeWJyUcrAeRXgVjGAMEr3FEWBnGSG95oI22WL?=
- =?us-ascii?Q?tIRJw/nXw+C7vlIN7lkyb9itQR72gdqHkfouy3TI46ReYA0w9U8HbN71eM29?=
- =?us-ascii?Q?HbvS9SZvqTyfOusQ4fZ6LuENxFt60H/I5+Ma0VqGVnD8IGAfYoUBJ0ydwUcW?=
- =?us-ascii?Q?fFCWlAICdP/AMr3wprQaNXqOxLscNuT513gVBQoX6e/uo85f7XOWAde3ciga?=
- =?us-ascii?Q?AW4IV9g6TwsGSi+7OKH1qlE3K/UHNs7HReu6g5r9JPWc8PYjiiGzFFhuWlDP?=
- =?us-ascii?Q?xrSicue2XNYuI12MeUKxHZkbPPKYZj948JDh1w9MorQS4IRoSbmJu4FN2kG6?=
- =?us-ascii?Q?f9XLBzhOvaSse2mmqZbKonZ02mEPX5aFUAWhlmCS8Of46JO+ZHmHtNoAlSRn?=
- =?us-ascii?Q?o1lAFwSZCGpYgzxDvlzlx7aOFoINGCuEAF7CwGvHXuh6V/7k6autC4Sf/+Jv?=
- =?us-ascii?Q?lgJiUjllNmye/3HaD4XpdwWKZ5sA+6/K0DO3kh2kL1s4oQ8h5AAAwsgHtmxW?=
- =?us-ascii?Q?aQB70bpwcgGN1VAYmozalAeG5bIuLSF3gI9gXu8vmmoTIqe7AiB5A1Q5/AUV?=
- =?us-ascii?Q?1kLpWZFsR9UVstWkB3cpPWzgXyY3ZZIkN9M8ReNGXIsb6hye2ekZT0LvkNlu?=
- =?us-ascii?Q?FCo4/AKxAzGXoGeatlJGrt5evV/NK0wv4Xp5M39V?=
-X-Forefront-Antispam-Report:
- CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(7416014)(376014)(1800799024)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2025 07:14:20.6096
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 96b5698b-9082-41bd-9710-08de234d6e84
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.101];Helo=[fr712usmtp1.zeu.alcatel-lucent.com]
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM3PEPF0000A79C.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR07MB7641
+X-ThreadId: AMhH2wAeH5kJ
+Date: Fri, 14 Nov 2025 09:01:13 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ "Andy Lutomirski" <luto@kernel.org>, "Thomas Gleixner" <tglx@linutronix.de>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Message-Id: <c3a23032-5e25-429b-b096-e9bc0a72d026@app.fastmail.com>
+In-Reply-To: <20251113-vdso-test-types-v2-12-0427eff70d08@linutronix.de>
+References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
+ <20251113-vdso-test-types-v2-12-0427eff70d08@linutronix.de>
+Subject: Re: [PATCH v2 12/14] selftests: vDSO: vdso_test_correctness: Use system call
+ wrappers from vdso_syscalls.h
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+On Thu, Nov 13, 2025, at 16:30, Thomas Wei=C3=9Fschuh wrote:
 
-Enable Accurate ECN negotiation and request for incoming and
-outgoing connection by setting sysctl_tcp_ecn:
+>=20
+>  static void test_one_clock_gettime(int clock, const char *name)
+>  {
+> +	struct __kernel_timespec start, end;
+>  	struct __kernel_old_timespec vdso;
+> -	struct timespec start, end;
+>  	int vdso_ret, end_ret;
+>=20
+>  	printf("[RUN]\tTesting clock_gettime for clock %s (%d)...\n", name,=20
 
-+==============+===========================================+
-|              |  Highest ECN variant (Accurate ECN, ECN,  |
-|   tcp_ecn    |  or no ECN) to be negotiated & requested  |
-|              +---------------------+---------------------+
-|              | Incoming connection | Outgoing connection |
-+==============+=====================+=====================+
-|      0       |        No ECN       |        No ECN       |
-|      1       |         ECN         |         ECN         |
-|      2       |         ECN         |        No ECN       |
-+--------------+---------------------+---------------------+
-|      3       |     Accurate ECN    |     Accurate ECN    |
-|      4       |     Accurate ECN    |         ECN         |
-|      5       |     Accurate ECN    |        No ECN       |
-+==============+=====================+=====================+
+This looks confusing to me: I can see that the existing code is
+wrong because it passes a (libc-defined) timespec into the
+sys_clock_gettime() that expects __kernel_old_timespec.
 
-Refer Documentation/networking/ip-sysctl.rst for more details.
+It looks like you are changing a sometimes-wrong type into
+a consistently wrong type, but then you also change the
+sys_clock_gettime() definition to return __kernel_timespec
+instead of __kernel_old_timespec, so it ends up working.
 
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
----
- net/ipv4/sysctl_net_ipv4.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Why not always use __kernel_old_timespec for the local variables
+and the sys_clock_gettime() calls here?
 
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index ef21a85e021c..bde49331dc07 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -47,7 +47,7 @@ static unsigned int udp_child_hash_entries_max = UDP_HTABLE_SIZE_MAX;
- static int tcp_plb_max_rounds = 31;
- static int tcp_plb_max_cong_thresh = 256;
- static unsigned int tcp_tw_reuse_delay_max = TCP_PAWS_MSL * MSEC_PER_SEC;
--static int tcp_ecn_mode_max = 2;
-+static int tcp_ecn_mode_max = 5;
- static u32 icmp_errors_extension_mask_all =
- 	GENMASK_U8(ICMP_ERR_EXT_COUNT - 1, 0);
- 
--- 
-2.34.1
+> @@ -305,7 +291,7 @@ static void test_one_clock_gettime64(int clock, co=
+nst char *name)
+>=20
+> 	printf("[RUN]\tTesting clock_gettime64 for clock %s (%d)...\n", name,=
+ clock);
+>=20
+> -	if (sys_clock_gettime64(clock, &start) < 0) {
+> +	if (sys_clock_gettime(clock, &start) < 0) {
+> 		if (errno =3D=3D EINVAL) {
+>  			vdso_ret =3D VDSO_CALL(vdso_clock_gettime64, 2, clock, &vdso);
+> 			if (vdso_ret =3D=3D -EINVAL) {
 
+This looks like the correct fix to me. We were already uses the same
+types for syscall and vdso paths, and now the types match the interface.
+
+     Arnd
 
