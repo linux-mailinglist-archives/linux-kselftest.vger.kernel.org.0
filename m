@@ -1,183 +1,140 @@
-Return-Path: <linux-kselftest+bounces-45599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF260C5AD8A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 01:51:46 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4F2CC5ADBA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 01:57:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B6EDE35266C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 00:50:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 488094E5606
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 00:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F3C721E097;
-	Fri, 14 Nov 2025 00:50:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BADC221264;
+	Fri, 14 Nov 2025 00:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="FYewPZaZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ACC9163;
-	Fri, 14 Nov 2025 00:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB34721C9E1
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 00:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763081417; cv=none; b=PXHOHi9TrKaXFcqwPUObTvG4x9uBYRYar4Y1ZZIa4gVS5ek70p2tzvaajhmKGauimUFu28YvAWJSRZ0E888GJvpv2DzSlxiWhFqfrbf6bReYzPLvae+wArTlnOrha+DI0jRFh1eCdg6eDTVmRywwj1YLoMfTbvZcqoDCr4ioMzk=
+	t=1763081610; cv=none; b=c/pweItNXJVoOAcUM3fRqDsaWn1txTYR5zcky8IaCVNLkc2vxZ7rthQuC3XOcz9LB7pxry6wOHMjTlaW+wiTwp2HSqF0rS4eTWyqsDWlm4IbFZVgKPto7wqClJdfP/eOg/zcdbvND2qBpjTEKfivOA8WVCh4k1DI2B1iFab/b40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763081417; c=relaxed/simple;
-	bh=xAxOvXP86nakyrMrBn+/Yx2U7yB+cawtLydJdkIsyR0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=emhjBOO/yfefuMRB69J5wXLnk32gpE3/hltjS/Iugew3Ntf680HCkK8cTwHQSDlWPXUf+D9a0SKsfDY7MK9oQXU6GCE4k5rrRJ7nB0xeFTcvRYm52HIOiJzy/HI6SEZbtxEkquNQnjh1pbbzQ9F8fOMUaUEow6+Mk/WcPh4Yxig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4d6z7M1HRJzKHM0B;
-	Fri, 14 Nov 2025 08:49:51 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 0A3451A13E5;
-	Fri, 14 Nov 2025 08:50:11 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP1 (Coremail) with SMTP id cCh0CgA3cku_fBZpDTKfAg--.32867S2;
-	Fri, 14 Nov 2025 08:50:08 +0800 (CST)
-Message-ID: <19fa5a93-4cc9-4f84-891c-b3b096a68799@huaweicloud.com>
-Date: Fri, 14 Nov 2025 08:50:07 +0800
+	s=arc-20240116; t=1763081610; c=relaxed/simple;
+	bh=sk2uMggCq1ckhCBdGx9muJo7+MWiHKvDO30mLbByhn8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CiHXGtjgG0UP5U4ruizbHmxY3OvjQzo3q842dEiOcRYQNng5Koc+Z65SaOuq+rI29rubKhnEU35B+gV3Oo7m2ahvI0j0rjXwAl9RN6Iq8eyMJHCKhC0Z1ID2mYMyMoH9deSyzoT9m/jvdOmW6a1WpeuvF/42F7YlxrRNSEcvk7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=FYewPZaZ; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-477741542bcso25645e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 16:53:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763081607; x=1763686407; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sk2uMggCq1ckhCBdGx9muJo7+MWiHKvDO30mLbByhn8=;
+        b=FYewPZaZnXJz+oeofuFC+cW8dJW2Cw9bTYXju3ALNuURgkGkEUjkc2r1JdJO/yY06D
+         XCpMXFM76mHmg9RSDohlps9BzQxwDZTcsuQ/91+zyg5v7IHjC6oWIsdH1CCRIsGrSExd
+         VqmqdAbdWLM/Duz3fydlAeJ2P2z52viqthm3Q/skGQw6YfA81di0o9aocCCJBaXyYI7m
+         rd3FBwMzDwENc82rXnhjncLLkmQCXX40bGXmQZZcSm9baNWZtnpeBg/ianCfHzVf20Ax
+         luYw7vfPL1tQlKp4ebXMt4nnLdfP4d7jwr9ShfSljaLcjWLMwEFsHxn43Ski7F/ukW6S
+         trGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763081607; x=1763686407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sk2uMggCq1ckhCBdGx9muJo7+MWiHKvDO30mLbByhn8=;
+        b=fpD0XWWxo4+td0+SZCos0BZ/e9fbdaJ8pvhL/b4353oqdsC13eWRofsMKGvKzt0eA8
+         Pdu5JM3zAb/g0a6KDOBWMHj6pACSPh13CzVrLwGirZyQqZhXdo/IF6h20i+3aE/0v9c1
+         pHOt3Vc0zLv4ncviKoUiUWSCq5V/W7QMtJd40g77Jq8OMo2laaTimiJoi5q1bodKdVlX
+         HN9VJWUN1u1aSQaHggrsBHY5hu6zZ4fjS6ugbgg6F6k64eusGzLKIdxknXPGTcG3Mi05
+         e+rbTAJvz0yhAbF+WIPMjg28sWfdbLU62lQqOB0lMTuluJMiH15k5DwHTHwH2fTeZhhJ
+         Szlw==
+X-Forwarded-Encrypted: i=1; AJvYcCXM0+C6rN9BTpQHQ7DvOhF/fQ6q//ylbH9jsz7T/SJQkwaBVqGO+NaBxEja1KHQEyz/Ur7kc4Huy8S2cxQPsMM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrEtEv1z8ox4Bkx7JwzXp3RvVyja4QyBoBCFacfHdtsHKSJHtq
+	odDYP2dIa0fpjapXDHjUrON8juB/4009RHuzkKOeLbip5vvcg/ajxXxpREOeFpz0R/YULYYCWjU
+	PBibDetxev+18ua7NI9X6it8HtnDTr5BrOwQgR1dz
+X-Gm-Gg: ASbGncudQ6uGes2D1wH5GtOoCs6x/MsAbMYzxg3qGxqC15tdlAexHZ+gsGSsqewnPCd
+	Qw8xz2EBVZGO8O9+BqYf7doyY5ULCrkjInfFeX1TvIk6zEL4wiwPlwIUT9vaTUtFyIYyrikAiR2
+	HrIpdn2OcZqPpzdnng1NnkeDM1b7DRlAA85NjChsgaTLgHaJ9/WZwVvkQOZYSfgBO+Z83c+Y9Wx
+	4HRXgmmwYNUnCdaDbD78hO6sETMyrnkYSEI0AFNk0/gnARkbgn1R0rMD9GIq6Idrs0+aSQJ62po
+	hVt9yL5lGe3AVhyKT/q5echMxQ==
+X-Google-Smtp-Source: AGHT+IE3vstJm3oWP95qkqRJjs5fszSUCVzNUiug16EQF/JXNPVFpZq7hEiC3L8y9CW/kpoGUurTym+p6tSTb8UVNrk=
+X-Received: by 2002:a05:600c:a20e:b0:477:86fd:fb19 with SMTP id
+ 5b1f17b1804b1-47790b10751mr266505e9.9.1763081607050; Thu, 13 Nov 2025
+ 16:53:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] cpuset: relax the overlap check for cgroup-v2
-To: Sun Shaojie <sunshaojie@kylinos.cn>, llong@redhat.com
-Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- mkoutny@suse.com, shuah@kernel.org, tj@kernel.org
-References: <20251113131434.606961-1-sunshaojie@kylinos.cn>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20251113131434.606961-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgA3cku_fBZpDTKfAg--.32867S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr43Gr1UWw1fGFWDJw1rtFb_yoW7JFykpF
-	ykKr1jvw4YgF1jkwnFgF18XwsYqw12qF1UJwn8Jw1xZF9rJFnrur1qk39xJFW5ur45Gw15
-	u39xZ393WFsIq37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUF1v3UUUUU
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+References: <20251013185903.1372553-1-jiaqiyan@google.com> <176305834766.2137300.8747261213603076982.b4-ty@kernel.org>
+ <CACw3F51cxSgd-=D46A6X6GptEZS8-JZ_MnB_yK_ZR1wktunYRA@mail.gmail.com> <aRZc1SqU01Cyxc5Y@kernel.org>
+In-Reply-To: <aRZc1SqU01Cyxc5Y@kernel.org>
+From: Jiaqi Yan <jiaqiyan@google.com>
+Date: Thu, 13 Nov 2025 16:53:15 -0800
+X-Gm-Features: AWmQ_bmZ-_H-myZL0CSQJa9c5c9xb22UWf4fE3TvV1ETbHc5zzWFdDRoRMYRrbg
+Message-ID: <CACw3F50ti1cXOLwhyEbM8OCmwEaDDXK-r3QT+qfz2=a0yCTBjA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] VMM can handle guest SEA via KVM_EXIT_ARM_SEA
+To: Oliver Upton <oupton@kernel.org>
+Cc: oliver.upton@linux.dev, maz@kernel.org, duenwen@google.com, 
+	rananta@google.com, jthoughton@google.com, vsethi@nvidia.com, 
+	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
+	catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
+	shuah@kernel.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Jason Gunthorpe <jgg@ziepe.ca>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Nov 13, 2025 at 2:34=E2=80=AFPM Oliver Upton <oupton@kernel.org> wr=
+ote:
+>
+> On Thu, Nov 13, 2025 at 02:14:08PM -0800, Jiaqi Yan wrote:
+> > On Thu, Nov 13, 2025 at 1:06=E2=80=AFPM Oliver Upton <oupton@kernel.org=
+> wrote:
+> > >
+> > > On Mon, 13 Oct 2025 18:59:00 +0000, Jiaqi Yan wrote:
+> > > > Problem
+> > > > =3D=3D=3D=3D=3D=3D=3D
+> > > >
+> > > > When host APEI is unable to claim a synchronous external abort (SEA=
+)
+> > > > during guest abort, today KVM directly injects an asynchronous SErr=
+or
+> > > > into the VCPU then resumes it. The injected SError usually results =
+in
+> > > > unpleasant guest kernel panic.
+> > > >
+> > > > [...]
+> > >
+> > > I've gone ahead and done some cleanups, especially around documentati=
+on.
+> > >
+> > > Applied to next, thanks!
+> >
+> > Many thanks, Oliver!
+> >
+> > I assume I still need to send out v5 with typo fixed, comments
+> > addressed, and your cleanups applied? If so, what specific tag/release
+> > you want me to rebase v5 onto?
+>
+> No need -- I took care of the issues I spotted when applying, LMK if
+> anything looks amiss on kvmarm/next.
 
+I took a look and everything looks fixed, and thanks for nearly
+rewriting the documentation!
 
-On 2025/11/13 21:14, Sun Shaojie wrote:
-> In cgroup v2, a mutual overlap check is required when at least one of two
-> cpusets is exclusive. However, this check should be relaxed and limited to
-> cases where both cpusets are exclusive.
-> 
-> The table 1 shows the partition states of A1 and B1 after each step before
-> applying this patch.
-> 
-> Table 1: Before applying the patch
->  Step                                       | A1's prstate | B1's prstate |
->  #1> mkdir -p A1                            | member       |              |
->  #2> echo "0-1" > A1/cpuset.cpus            | member       |              |
->  #3> echo "root" > A1/cpuset.cpus.partition | root         |              |
->  #4> mkdir -p B1                            | root         | member       |
->  #5> echo "0-3" > B1/cpuset.cpus            | root invalid | member       |
->  #6> echo "root" > B1/cpuset.cpus.partition | root invalid | root invalid |
-> 
-> After step #5, A1 changes from "root" to "root invalid" because its CPUs
-> (0-1) overlap with those requested by B1 (0-3). However, B1 can actually
-> use CPUs 2-3, so it would be more reasonable for A1 to remain as "root."
-> 
-> This patch relaxes the exclusive cpuset check for cgroup v2 while
-> preserving the current cgroup v1 behavior.
-> 
-> Signed-off-by: Sun Shaojie <sunshaojie@kylinos.cn>
-> 
-> ---
-> v1 -> v2:
->   - Keeps the current cgroup v1 behavior unchanged
->   - Link: https://lore.kernel.org/cgroups/c8e234f4-2c27-4753-8f39-8ae83197efd3@redhat.com
-> ---
->  kernel/cgroup/cpuset.c                            |  9 +++++++--
->  tools/testing/selftests/cgroup/test_cpuset_prs.sh | 10 +++++-----
->  2 files changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 52468d2c178a..3240b3ab5998 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -592,8 +592,13 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
->   */
->  static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
->  {
-> -	/* If either cpuset is exclusive, check if they are mutually exclusive */
-> -	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
-> +	/* If both cpusets are exclusive, check if they are mutually exclusive */
-> +	if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))
-> +		return !cpusets_are_exclusive(cs1, cs2);
-> +
-> +	/* In cgroup-v1, if either cpuset is exclusive, check if they are mutually exclusive */
-> +	if (!is_in_v2_mode() &&
-> +	    (is_cpu_exclusive(cs1) != is_cpu_exclusive(cs2)))
->  		return !cpusets_are_exclusive(cs1, cs2);
->  
-
-I prefer adding a helper function in the cpuset-v1.c file, similar to cpus_excl_conflict_legacy().
-
-For cpuset v1, it can simply return cpus_excl_conflict_legacy(). It seems that other rules are not
-relevant to v1.
-
->  	/* Exclusive_cpus cannot intersect */
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index a17256d9f88a..903dddfe88d7 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -269,7 +269,7 @@ TEST_MATRIX=(
->  	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X3:P2    .      .     0 A1:0-2|A2:3|A3:3 A1:P0|A2:P2 3"
->  	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3  X2-3:P2   .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
->  	" C0-3:S+ C1-3:S+ C2-3     .    X2-3   X2-3 X2-3:P2:C3 .     0 A1:0-1|A2:1|A3:2-3 A1:P0|A3:P2 2-3"
-> -	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-3|A2:1-3|A3:2-3|B1:2-3 A1:P0|A3:P0|B1:P-2"
-> +	" C0-3:S+ C1-3:S+ C2-3   C2-3     .      .      .      P2    0 A1:0-1|A2:1|A3:1|B1:2-3 A1:P0|A3:P0|B1:P2 2-3"
->  	" C0-3:S+ C1-3:S+ C2-3   C4-5     .      .      .      P2    0 B1:4-5 B1:P2 4-5"
->  	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3  X2-3:P2   P2    0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
->  	" C0-3:S+ C1-3:S+ C2-3    C4    X2-3   X2-3 X2-3:P2:C1-3 P2  0 A3:2-3|B1:4 A3:P2|B1:P2 2-4"
-> @@ -318,7 +318,7 @@ TEST_MATRIX=(
->  	# Invalid to valid local partition direct transition tests
->  	" C1-3:S+:P2 X4:P2  .      .      .      .      .      .     0 A1:1-3|XA1:1-3|A2:1-3:XA2: A1:P2|A2:P-2 1-3"
->  	" C1-3:S+:P2 X4:P2  .      .      .    X3:P2    .      .     0 A1:1-2|XA1:1-3|A2:3:XA2:3 A1:P2|A2:P2 1-3"
-> -	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:4-6 A1:P-2|B1:P0"
-> +	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4|B1:5-6 A1:P2|B1:P0 0-4"
->  	"  C0-3:P2   .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3|B1:4-6 A1:P2|B1:P0 0-3"
->  
->  	# Local partition invalidation tests
-> @@ -388,10 +388,10 @@ TEST_MATRIX=(
->  	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
->  	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2 0-1|1"
->  
-> -	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
-> -	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P0"
-> +	# A non-exclusive cpuset.cpus change will not invalidate partition and its siblings
-> +	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:3 A1:P1|B1:P0"
->  	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P-1"
-> -	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P0|B1:P-1"
-> +	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-1|B1:2-3 A1:P0|B1:P1"
->  
->  	# cpuset.cpus can overlap with sibling cpuset.cpus.exclusive but not subsumed by it
->  	"   C0-3     .      .    C4-5     X5     .      .      .     0 A1:0-3|B1:4-5"
-
--- 
-Best regards,
-Ridong
-
+>
+> Thanks,
+> Oliver
 
