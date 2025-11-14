@@ -1,87 +1,86 @@
-Return-Path: <linux-kselftest+bounces-45604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45605-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62054C5B14F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 04:14:50 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30FDCC5B155
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 04:15:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BDA33A5D23
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 03:14:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 145664E5793
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 03:15:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C98B2566D3;
-	Fri, 14 Nov 2025 03:14:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8382425C809;
+	Fri, 14 Nov 2025 03:15:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yklrk8LJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hCooNx+V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCB6248F51
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 03:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D5F259C80
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 03:15:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763090070; cv=none; b=TWZLzkVFTzKZqihmGUrjZOHkd0eFsIXGgqFF7SUE5VWezE7WttFKLRqmZxXPT7cOrAy3DNzSzpAlPDdXw/s+o5mripY0ISTHv8AVs8JP+dSTKpgaXDXTxazJ68mOevGitOfitFGWpZxVwHXtA2Jlj0pMVi/j7yc05Wz33NYDuq8=
+	t=1763090108; cv=none; b=EdaDvlpa3K9FA6LxQ/mdzK+FJDgRM4YAMUl2BtG4GfMkLUt1h5dvHMtGDRFn2uQ4D4v2l8C5MlgjC8MFtduNVJDqsarmPdl59DVX9GwnI8TXQ/6kH3yoYLWdZ3oGCmP4jYPGkHRBrZLPcairepUVjr6T2QmGIDSOgefT90ZlDK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763090070; c=relaxed/simple;
-	bh=26ICLLmQLvLg9di8JGtO2ctXGqGEi3cL0H2jl3cUtPQ=;
+	s=arc-20240116; t=1763090108; c=relaxed/simple;
+	bh=yorTgaeZR2/q85HP52W6Sm640FbOcT22K644HplQKuw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M9UQtff3AA8zYRBQildquEwULE17G+Tl5fLKqlxuvGhKhBlCdEUI8PqZ26zQSQ4z3GtlcYfDsZDBhaMpZ1ja4OfGfqql6ZpkzVkpV7ndpIAHHDjyPhoJBhrpkx36GMCFlVJ7HizajxtbhsOhGZoRRVydGMVa8aDQxHyOaEm54mY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yklrk8LJ; arc=none smtp.client-ip=209.85.219.53
+	 To:Cc:Content-Type; b=q47l+QrzxNSRx98ygy0WLzbU7sx9B9Kef3ymrLDs3R52cbFNLSZFTkrJo+iUcQ9kccP8KKFTZ5LcMyQyedFMg0Xri8DtW7NB2GSbahjtomNL5b0/VaLNrDTPVX4aMAQ6F7zrnQFqQHlPbvI/PLZv/6oipq1OaSliqVcdHShLT/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hCooNx+V; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8804f1bd6a7so16244266d6.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 19:14:27 -0800 (PST)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-882360ca0e2so11218076d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Nov 2025 19:15:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763090067; x=1763694867; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763090105; x=1763694905; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=26ICLLmQLvLg9di8JGtO2ctXGqGEi3cL0H2jl3cUtPQ=;
-        b=yklrk8LJdPGiJ+ah9wIslnhoaD/d8Y7+JbcoZzuwqtqLWvGO+EpYg5IuP97Kmg0rZW
-         M0Y7YYUprVZUagSp15MuthFasNDm7arq9h6bYpJVBqMykuGopk61XxwmZYbHyZrSiwEO
-         p+CrFUtnZTA0iV1UKA6AsayZ4qwxxwGO4NudFmttPmx4Y/bnTSEPjEQ1DUIygTsPFaLx
-         8NNwOm+b9wXmPxpfv3TQUFmQ9J0DM27KJOYxHbE6xYY4gS5eoeA/mxvSqRLArtkp6BLN
-         jwbNI+O+v5056HcOOZBrnGECo8iAwPTqtkBT2HK1QzYqSJCW22NghY4FYmpYHNibsI5o
-         mErw==
+        bh=yorTgaeZR2/q85HP52W6Sm640FbOcT22K644HplQKuw=;
+        b=hCooNx+VOYIlcAFRaGdIPFDnAwCCEbv9pBwMc6U//UilctgTyJcEI+fawYNrQM30vX
+         HMoQ/KZ7nF9CKL1L6z7ogIAbl1Y3tHCmo+pyvH6QBfZj/YjudKxobA9Yw4AbzPPz5Kcr
+         Lc0kqWLO3/1V9k9dg8mtv0XXDwjqgCptztSWAuowTVR8CWHdKfkB3mLimRzItL5D8Y28
+         CKX8ovVktb8kWto6nCCxJK/C3iyvgJN+TxQkAAZ8z4LQMk+LifrVRDWK0m6ZpvuMcwqc
+         Swyj9eKN+gD9VzQYQPofI+Ju8IdDMvta3hXQ1pwmc/kOrKMykRYFlLuG89gMAGcpbaL9
+         LJZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763090067; x=1763694867;
+        d=1e100.net; s=20230601; t=1763090105; x=1763694905;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=26ICLLmQLvLg9di8JGtO2ctXGqGEi3cL0H2jl3cUtPQ=;
-        b=WY54jMR9hCX2Hyk/gi1M+09MTW74DI8fn+HBILeg0zziuQ/7BqFcpKu6MOInYf9cdv
-         p6jS2ixYDEePIxzHE6iIa3olTAVbhpgYiNnexVQmkkcBbD1+gl9Mg8xp3vtvL+qkvsar
-         abFxH8WOaw++foWIAAU5iDzbUAW4sN7/mP2CaGdjJJNovVzPoe/jU/MAFRWMijNUQqMy
-         NmJ+GBDorB9yxV5VOr6gib6tuTarBCNjpzZvwnz1upgWA0CCrzD9gbiecgaCsDBZwzQF
-         x3Z5HDe+ovGFXZk5vNb9iMObkhyUhUH9c3quIpfaEdUI19rKqS1in6Z+dYs4jmHALV2x
-         9yOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCf+Tjzi8f8S7Y/1e4u7hqk/FnJ1uxVLPedhBhXkboyGb3jP4IZBjr/z6QKq9nqTKdsAiBhxuDSVnE54EJcS0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWLQR4tJh5FtIbhW6cRDjXOGK8tcbhwAeFdTdXNXd0ZSj4KghQ
-	In0zc2+jUcLmuVhtOYKQtJ4HoQ87r9Np40wdmaVzUX+MFSc3oa7/j7tl+hqMaRrl9Pa3VpxRRmu
-	bQG3Ysk9+1PbgUsUQ3Q5hhO7OUUX5+oTd5eI2l4Rb
-X-Gm-Gg: ASbGncu6k1M9hKkWhvRX1Lr4y6Ah7Wrmt3iFqbo2sqdKVztSB+I3B+ZZ0HCW4d81pEg
-	vl4nnkmfiOOCJfJ5rGZZH8XO34COa2bdo8vReEnlVKIOUkA2NvFSKXj2T38wYJwO3ed5i/uDQs/
-	y95JmW/5XLYWM3P9AvNXJf+SbLoWKB1xGvY+Z4qk7/jaCMWgme9ubjPSWqpgO1FDBmMrYqjMdsA
-	DYg8jYD61nf0BZk0kN4H/mjF3ikl1oVzGbDgOd1/izAFrGRn3NpAMjU5Q1FptPBgX3Mfp06X37w
-	kgp9
-X-Google-Smtp-Source: AGHT+IG0PcYJyZDTl4anXZT7Q+KhHsTl2CjgZujUQ2YdaT5womClkLSUPJWEPuiC31Behx9d2CUrl4AcL3u4e6YApe8=
-X-Received: by 2002:ad4:5ae4:0:b0:880:4ac3:fbdb with SMTP id
- 6a1803df08f44-882925c2619mr19716476d6.23.1763090066430; Thu, 13 Nov 2025
- 19:14:26 -0800 (PST)
+        bh=yorTgaeZR2/q85HP52W6Sm640FbOcT22K644HplQKuw=;
+        b=YSCJRR0EM8tVq23pC/qG4gGw5ydUKp/+UYVWBSoa3tAhLF1ao5/cIIQzsuQJ3vSsnm
+         MqHZy6J5+mXCbqo6vwwtl2TZTfEjD3Fp/octRAUmvB6LfWgm9gYOGakAt2b/9zpSmRB4
+         mrFG2aXs83q+MOYUxTDgcwfwDtesZPzkTLZs0GLdKvbXIEuuBpwFaI9APq3z7ljjjoMo
+         Obmz7/fjClZCrqscKMNBguLJacSuXB9UT7LcjJgVJJyfNsGE2kKL2UC8HUmGbpMeR0Vp
+         /7dTMU95rdVJYQysDaMsRsodqUhjywBQgf9C/kLLLiThtB89lCnv7EQyZquvu5c//OyY
+         SZTw==
+X-Forwarded-Encrypted: i=1; AJvYcCWgPRuakQtN8eI6D3IGnt6CHpIXIlxIP2s0iqzXIEdA2YU2O5iooNhfNvSglYDhZ7FEMt5R16P2R5r4CkDCZpI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcbmY2DVAB/nhbfyTiVT7hAimnOtoCl4Od2EhxpJOn5OyhnZTP
+	zzSHf63jPYMRAVhUg2RBh6u8VdGaetZzaGDq0rYqI7mUppDsFL5NPPMc7mNNqvKOjY9YVZDBLgh
+	xay/U231Xtu1S4YSXKxxcyEvFPYNc0V/YMSaE4kqX
+X-Gm-Gg: ASbGnctGouQDWk2IbupiE+xk2pMokZEO8695rgJ4gBFDHvHSO+rsoC6CQ8/cAVyTk7u
+	oRBTMeSSPT4ONjRkx//HRrXAG09dcCZ76aF/TOrZ+ZvUzGtSkW20vsjkBos/2g2S/HkeksRwMt6
+	vZgCGJHUcScaBQhK9/04MSmXlWXjFpDkAskBedy3HarqHFmuUfPDdUQCFf49hds609P21QTYpCK
+	5YcJ7HRtCq9Qqh2Xwzc0ihwRDmNzoVDUfEm8FkM8QEMZ2eqOuB1AB8Skeh4itFFmFbXmg==
+X-Google-Smtp-Source: AGHT+IGMpVB9w2WmV3dfZ4tdVatSvVfzLfAiH+XO8mkw82EVwP8pgplHxo0Y03nRUkH60WYEb36vMt0yQppxk5EeWHE=
+X-Received: by 2002:a05:6214:21e5:b0:882:6d84:ec11 with SMTP id
+ 6a1803df08f44-8829269e431mr23825486d6.33.1763090104480; Thu, 13 Nov 2025
+ 19:15:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251110113528.1658238-1-ojeda@kernel.org>
-In-Reply-To: <20251110113528.1658238-1-ojeda@kernel.org>
+References: <20251110113528.1658238-1-ojeda@kernel.org> <20251110113528.1658238-2-ojeda@kernel.org>
+In-Reply-To: <20251110113528.1658238-2-ojeda@kernel.org>
 From: David Gow <davidgow@google.com>
-Date: Fri, 14 Nov 2025 11:14:14 +0800
-X-Gm-Features: AWmQ_bkraSc5QAT3iB5vtDWiNqlmgCcymMGKQ12sUWJTLB9CXP4bdJ9vF-Gujig
-Message-ID: <CABVgOSmOAnf_zXJMRrGq_ZJ0Xg_7XU7TWDuT6P00ZWPCUd5VjQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] rust: allow `unreachable_pub` for doctests
+Date: Fri, 14 Nov 2025 11:14:52 +0800
+X-Gm-Features: AWmQ_blEZP0-T1RyhnpRFnFK4YhuhbMYTPikeTYw3lx2rtw_A7yy1iUS09njInY
+Message-ID: <CABVgOSmv75=k7wNs+YfpXfoPqTMVq+U+Q+TmAK65_yF0poFnGg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] rust: device: make example buildable
 To: Miguel Ojeda <ojeda@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
 	Danilo Krummrich <dakr@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
@@ -93,23 +92,18 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael
 	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, rust-for-linux@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, patches@lists.linux.dev
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000002707b70643856500"
+	boundary="0000000000006ae4d406438567a7"
 
---0000000000002707b70643856500
+--0000000000006ae4d406438567a7
 Content-Type: text/plain; charset="UTF-8"
 
 On Mon, 10 Nov 2025 at 19:35, Miguel Ojeda <ojeda@kernel.org> wrote:
 >
-> Examples (i.e. doctests) may want to show public items such as structs,
-> thus the `unreachable_pub` warning is not very helpful.
+> This example can easily be made buildable, thus do so.
 >
-> Thus allow it for all doctests.
+> It would have triggered an `unreachable_pub` warning without the previous
+> commit.
 >
-> In addition, remove it from the existing `expect`s we have in a couple
-> doctests.
->
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Link: https://lore.kernel.org/rust-for-linux/aRG9VjsaCjsvAwUn@google.com/
 > Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 > ---
 
@@ -118,7 +112,7 @@ Reviewed-by: David Gow <davidgow@google.com>
 Cheers,
 -- David
 
---0000000000002707b70643856500
+--0000000000006ae4d406438567a7
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -208,14 +202,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgEzl3KRh+ItapDHTGYY9mSlu83NB0
-1TYKH3IElZYdA0EwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
-MTE0MDMxNDI3WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgfmMhxa/mN0p5xIcpzhFMBEEIq/mf
+vZpgVRe7RMiVRNIwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
+MTE0MDMxNTA1WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAJuHIEWvuXoc/EvN/+HaTqRsgbaqTBSfK66XVtLrrVCjIOpaUbVbTTB9RqMxom5BX
-S8P09iNiQzEfUF8o5ZqsgApeMtRL3EclOmTFqBrBsrgZ8wh4qW4usZeEiP0I5omzpC9NUGgVFtpV
-vy8jpbBcvRCIESgyw0iYVnG+Iutoa4cEQJo52Yf+5Yj3/w1hx0pxMJwwivAQUokZBJqHJ0nakWvr
-peK5EzUAPDTqxjKFFBfjdOTLprdA+1tDFAnl6/CKZvVcekeBNVLybfelT+lnOomV6WXpyzPyRwkC
-cjKgNrbxBo5oSPSQYBXFNS0D1HaFIJq5Do4HwGCEWf9dTk0FPg==
---0000000000002707b70643856500--
+AQEBBQAEggEAVW8XdlD4PivR+uxUuJkJraGsQMQJmxmZb2zDdDHUhl0DYjA8Wvj2/gtOZ9+CvlCK
+cbouc/ItuGfJs/rzc0pnktbrIv9uqXIiiNDjqLKvjWu8qERWCpoziLpYMCcn428Vy6M/A5AGn/2R
+S6DEaaKiV3NCXtT2qOmbndU46cJVmJkTqFOacyA+phKq+YcTJDRfKBpqsGt12tUMq28iLzCK+VP6
+MYmtn0F6R6baWR9MTuBDpYRsjGpPXG2AjO9OrbE3da1/v2eKkXsH4amBVjfuF6Uvo+nonJaIAn4N
+JZvzoHgN3M8HSh480CYfKn+iMcqmbwOVULwy5bxkl78O7QChxA==
+--0000000000006ae4d406438567a7--
 
