@@ -1,146 +1,207 @@
-Return-Path: <linux-kselftest+bounces-45661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F3AC5E957
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 18:31:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90221C5E857
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 18:21:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E459F3A4517
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 16:23:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3343420A2F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 17:21:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DD72BD5A7;
-	Fri, 14 Nov 2025 16:23:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB31C2D5A01;
+	Fri, 14 Nov 2025 17:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f8Awmdgx"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Mvpa56aB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF97285C9D
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 16:23:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44452D5432;
+	Fri, 14 Nov 2025 17:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763137416; cv=none; b=dEKZUfjijpfPyRVE7VYYapeGfvltlfVuPsZZFGTXAGM9KYfGZJwU0derIGjWujy/7SrhkfUIKNG7dH33GbTK0oKx7lcUrYl+Jc3CsZMMmqeB6GdvGCHHsJlblTJ4slEi+WoD9qfPFvInmk8yHhmNlkA1mvE4oup2W4RlM8au7Gk=
+	t=1763140881; cv=none; b=nWSrwOyXpYL1bti21KaE+izZDuLShV3HCrMo6IwWSYwfseeLEGt+NVcjv3X7jwFjkySiM0y1FKrPfrkFN1TQ2C+X2n0TJafNikxw0FNk6uN/TcE3mrjL4IHLIwThqOIv/NU6NSGNuKLBInoMYmwc/oeosyILP5e3xTwTHVQ1jYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763137416; c=relaxed/simple;
-	bh=08UMhVekfnzODHg258j6v7alIEul93sizWVdqDK755I=;
+	s=arc-20240116; t=1763140881; c=relaxed/simple;
+	bh=JVMpqOWcLMFCAWU33olBZTr+K7wf1Is8jZBAtaqK55Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s3sgvFjviIzL2PKF+ZPYDi0dUe8jDGS0F7/6fYAkn2t+D8ihTLE2JE2/zGZbkJvFGRFGrqFbJ249iOJljMWQ5JwP9DCHH+5ZwjwtvkIj4W9qhu6pm4c0O2x3DCbsvGiFYPok66YLsrFVVITB3IiRo21uoM2hMJe003vy21j+SxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f8Awmdgx; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3434700be69so2747455a91.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 08:23:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763137414; x=1763742214; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/YlbrZzTl/MWfTO6W+9TMn8CctXsku7j8hxAqkLvD38=;
-        b=f8AwmdgxSj9eznwehU65Xpfe113Vl494Cehacz8/OilpO2fZMb2QgIDXwhZ9GuJsMf
-         NBtqlAHbhwf5XKXHxS+IEP5l9hEi4uhe8Hx6pjm3IkcITB4AY0c2AHaV26VO+CKyeMtU
-         3D826JKSqgye5b8aizBshN1NhDziQBDyucTefC57YgG6za3U1DoWhqTvve8jp8avessN
-         b7n1zVS2bX82OZzusK3r7Zdjp1TQsNbrOl6rIAyBWlIRofEieprgk3JouLKYjeMXJxe/
-         TxlZXNRE7KYPJtW5nQE6DwTipfdB7KPozN7Y3M4xKLCI5ic7VmYvaR7ME0AmmwGgEjs+
-         S5jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763137414; x=1763742214;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/YlbrZzTl/MWfTO6W+9TMn8CctXsku7j8hxAqkLvD38=;
-        b=JdUuW74PlfXkjx9FUev4QKmCs0qnCxh7tA4ZP9Jb4T9opZ96cYI0I0vakHeqZts3vO
-         m8j9MDjAGHFncq9irdVOQFtyN1Cbofb3vFa8Ur1d3jwpBecvTbopva1g5V3a8DzN7jRA
-         L9fO4UHGADu6jT8A92+AYBunX5DtyKz0OQAoTT3s7sjqXWYBhWNiOAzPGYWgrKttUEvc
-         Inn3Dxx2n4r+nLU6PgIjd7f5aupOpXue6ys4/QPk733xmvj67r85FSDm2Edj7N9pILNd
-         OA98GOl+wrJ6daaF8EjlULRJCuqKSIBMtgDjDnu0R3f4hfx2ZAkBQcOcKUwy5TicUeij
-         XvWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXp6LXdMW5fsuu8eu0upYplKgqTy2s3bCSY8/qE5KLNrFtl1wOj4L41TIyRuur2F5sZHrPbhCRCOGylkI1gy1Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyrx3yU680eP8Z+hvvs47QMh3nohIYfQwI9umboLn6xsSD1nX/F
-	frXG/pQfP2RPArud9kafNH3JPVV9SR1lV0NDSPFnZ+VRFpM/TgpxvMQ=
-X-Gm-Gg: ASbGncuzyud0G35GypKF1Cu3tdYx/P5boctbtKhYlfSHVIL9n+D21XpQPSofQ/w2cd9
-	ESEPHRWo/X81jDC3JCzzYIjWX8TfpnB14cKoZiATgNw5e7LmG4pNnARXh509jm8L1kFM6STnh7K
-	dgQ9KxQVx/BsmM9Gl/c+NLsna81xmULfM0MTOSBNxgT7BSw9zVLuM5EIq1dRYmIvQIUDMKoVyD5
-	EYjjDdeak+4Z0WHhOIhVGGFMYnkjPpYjA8Prv2b0ZSxkD0Ey5OxsjQuoCqKmVCY3sea7/4WXc9k
-	a+lTqeFrmy0GKSfqxaKcJkyKAbjHP0V4EN0RpnyifXYm26I+IK1Jx0l6+LwNPAVzW/yxGqdqnWD
-	5kXhQ2W6hdmAtOqtWghO9MDIqXxlZ/NzFHYdqjcfYq1eIdi3Ig94DAb9NWxG2dmP8MWrhM76ySH
-	bEIe3j8vucTAHXZzIU5G2wkhcAp0kBhS8hOKdQSnJwmubthN4KcydTQrIfOanTL7HFlvIiTTR5C
-	7OfNx7W4eddlih+zrNrU+7dsKmFeUCha6XiTnQHf5uYn6MNqU2wXPGHvdFAK5iWjvBeBC0SWGk7
-	OQ==
-X-Google-Smtp-Source: AGHT+IGmHmCEt7ubcY4pkEZLszbXZLk6Ci4T9fQqgSf5JbWXKIXcZ0Pqm/APxGewYx9HSHzcYBRGmQ==
-X-Received: by 2002:a17:90b:2dca:b0:340:c179:3657 with SMTP id 98e67ed59e1d1-343fa7569femr4452805a91.33.1763137413401;
-        Fri, 14 Nov 2025 08:23:33 -0800 (PST)
-Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3456511fa6fsm949975a91.1.2025.11.14.08.23.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 08:23:33 -0800 (PST)
-Date: Fri, 14 Nov 2025 08:23:32 -0800
-From: Stanislav Fomichev <stfomichev@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	shuah@kernel.org, ast@kernel.org, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: drv-net: xdp: make the XDP qstats
- tests less flaky
-Message-ID: <aRdXhE0a-P3Ep1YE@mini-arch>
-References: <20251113152703.3819756-1-kuba@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jt7bxzYjD4s+D6QgNTO+j5IZxwILbcOlmQVz9wM1EBh7QgoeegsUhctroqcuKxo59BYq3D6bawHWnF9iZ692ZrUId1EnMhYxYvA+Wgpm1eUOXyN7rvVvWA9rcNMsTYlPxJD/mkt4R6oU8CdNhv87U6hhEG7Rk1R0pBjnl0SHy2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Mvpa56aB; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AEDmiEj029027;
+	Fri, 14 Nov 2025 17:19:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=P2Nm6Onw0q8fHzAEfmXvyG5IXHnkvj
+	b10mJ/VAqkb3Q=; b=Mvpa56aBX/l9Glh810ag3gV6Fy7Bym1IJzWjuviNZ5SNdg
+	SM0j4sLV6IYc6d+aWnJQrgFzVFXx6Ne9B/cJfWhskV5Hu1bYCSid8n3x0Qw/MHLf
+	4irsnF1A+gSrGdUk33/iJJj14jEmtwjFf9QaSjp2tseluRqAp1NRW6CQyI9zhJJS
+	G2oj9QLfYQNDRbWBE0EQjfAaCCjxu7HDRuO5Mw6gpDEh7+tRemv25ZDdrfz3Mrw/
+	hzT2yMPJdo56zJAJ20/D9GrwbOQZisGCUMiwTwCfdlcJVeHiaZInk6GDYeIsxwdX
+	BweOTctQeJArioYMSP5FnX9kw7CfX/LfNkdDY9nQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4adree3t48-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Nov 2025 17:19:54 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AEHFf0S026695;
+	Fri, 14 Nov 2025 17:19:53 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4adree3t43-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Nov 2025 17:19:53 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AEG2iFw004748;
+	Fri, 14 Nov 2025 17:19:53 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4aagjycpp7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 14 Nov 2025 17:19:53 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AEHJnXQ38339028
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 14 Nov 2025 17:19:49 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 26BE520043;
+	Fri, 14 Nov 2025 17:19:49 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8D70820040;
+	Fri, 14 Nov 2025 17:19:39 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.43.106.27])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 14 Nov 2025 17:19:39 +0000 (GMT)
+Date: Fri, 14 Nov 2025 22:49:35 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hbathini@linux.ibm.com,
+        sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+        martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix
+ htab_update/reenter_update selftest failure
+Message-ID: <aRdkp7ztSM1JNZME@linux.ibm.com>
+References: <20251114152653.356782-1-skb99@linux.ibm.com>
+ <3b15cc4d71bfa87ffcd49f69c1453d88c6457ef0c9c312c11b8a550f862e8f2b@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251113152703.3819756-1-kuba@kernel.org>
+In-Reply-To: <3b15cc4d71bfa87ffcd49f69c1453d88c6457ef0c9c312c11b8a550f862e8f2b@mail.kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEzMDE3OSBTYWx0ZWRfX5dJT8FhEp3G7
+ pRYU/5oPDzqqYE7N59JDoMbV3e5dbqgf+UPECycscxPZ94oeFT8oB3hrGjAAtG/kxAKBoDbFV6r
+ 1Li92Juu3s3GFgnfwNQ9z7hdcm51f645wgcioxfTWokww0kxSzosoFVaiGhuZk8kbAzSx3VLDqf
+ PdYR9oT1JdvYr8OhkPqEbG6eUZK5d02G3KnOvm0PNbj/RS+qQQRKFyUFX8ylcDNnqPuIPESbDQj
+ XTCQtgaQRDxvEu81P0UsikcbGbItmn4Pv6dnMZOg/x0ItFMiPLekmQqokm+1Upr5myAdFdqP/lV
+ EEbkgG2j2XIzu11YU1b6FCtX+xwuF5a6d8MZTbuFMGMeRDmlTIZCEcXqzipZZdxrGxGQKDxV6BX
+ ztC9AUdMdtrRZ35Yp5cRAl6qYbOVYQ==
+X-Proofpoint-ORIG-GUID: pqaLkmWo8Etjl-kk7Y2e8IxlrwyVcFDJ
+X-Proofpoint-GUID: yK6CtMW2pTuKf1YjF4kzwejkSzk1fPmb
+X-Authority-Analysis: v=2.4 cv=J/GnLQnS c=1 sm=1 tr=0 ts=691764ba cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=iFABrAoMAAAA:20 a=NEAV23lmAAAA:8 a=VwQbUJbxAAAA:8 a=NrwLQqnjwQ5ZMmIj2uUA:9
+ a=CjuIK1q_8ugA:10 a=bA3UWDv6hWIuX7UZL3qL:22 a=yULaImgL6KKpOYXvFmjq:22
+ a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-14_05,2025-11-13_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ phishscore=0 clxscore=1011 spamscore=0 adultscore=0 priorityscore=1501
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511130179
 
-On 11/13, Jakub Kicinski wrote:
-> The XDP qstats tests send 2k packets over a single socket.
-> Looks like when netdev CI is busy running those tests in QEMU
-> occasionally flakes. The target doesn't get to run at all
-> before all 2000 packets are sent.
+On Fri, Nov 14, 2025 at 03:50:44PM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+> > index 2bc85f481..96b65c1a3 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+> > @@ -15,17 +15,17 @@ struct htab_update_ctx {
+> >  static void test_reenter_update(void)
+> >  {
+> >  	struct htab_update *skel;
+> > -	unsigned int key, value;
+> > +	void *value = NULL;
+> > +	unsigned int key, value_size;
+>                            ^^^
 > 
-> Lower the number of packets to 1000 and reopen the socket
-> every 50 packets, to give RSS a chance to spread the packets
-> to multiple queues.
+> Is key supposed to be initialized? The old code had 'unsigned int key = 0,
+> value = 0;' but the new code drops the initialization. Later uses of key
+> at the bpf_map_update_elem() calls will pass uninitialized stack memory.
 > 
-> For the netdev CI testing either lowering the count or using
-> multiple sockets is enough, but let's do both for extra resiliency.
+> >  	int err;
+> >
+> >  	skel = htab_update__open();
+> >  	if (!ASSERT_OK_PTR(skel, "htab_update__open"))
+> >  		return;
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> [ ... ]
+> 
+> > @@ -33,14 +33,32 @@ static void test_reenter_update(void)
+> >  	if (!ASSERT_OK(err, "htab_update__attach"))
+> >  		goto out;
+> >
+> > -	/* Will trigger the reentrancy of bpf_map_update_elem() */
+> > -	key = 0;
+> > -	value = 0;
+> > -	err = bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, &value, 0);
+> > -	if (!ASSERT_OK(err, "add element"))
+> > +	value_size = bpf_map__value_size(skel->maps.htab);
+> > +
+> > +	value = calloc(1, value_size);
+> > +	if (!ASSERT_OK_PTR(value, "calloc value"))
+> > +		goto out;
+> > +	/*
+> > +	 * First update: plain insert. This should NOT trigger the re-entrancy
+> > +	 * path, because there is no old element to free yet.
+> > +	 */
+> > +	err = bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, &value, BPF_ANY);
+> > +	if (!ASSERT_OK(err, "first update (insert)"))
+> > +		goto out;
+> > +
+> > +	/*
+> > +	 * Second update: replace existing element with same key and trigger
+> > +	 * the reentrancy of bpf_map_update_elem().
+> > +	 * check_and_free_fields() calls bpf_obj_free_fields() on the old
+> > +	 * value, which is where fentry program runs and performs a nested
+> > +	 * bpf_map_update_elem(), triggering -EDEADLK.
+> > +	 */
+> > +	memset(&value, 0, sizeof(value));
+>                ^^^^^^^
+> 
+> Does this memset zero the allocated memory? It looks like this zeros the
+> pointer variable itself (8 bytes) rather than the memory it points to.
+> Should this be 'memset(value, 0, value_size)' instead?
+> 
+> > +	err = bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, &value, BPF_ANY);
+> > +	if (!ASSERT_OK(err, "second update (replace)"))
+> >  		goto out;
+> >
+> > -	ASSERT_EQ(skel->bss->update_err, -EBUSY, "no reentrancy");
+> > +	ASSERT_EQ(skel->bss->update_err, -EDEADLK, "no reentrancy");
+> >  out:
+> >  	htab_update__destroy(skel);
+> >  }
+> 
+> 
 > ---
-> CC: shuah@kernel.org
-> CC: ast@kernel.org
-> CC: hawk@kernel.org
-> CC: john.fastabend@gmail.com
-> CC: sdf@fomichev.me
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/drivers/net/xdp.py | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 > 
-> diff --git a/tools/testing/selftests/drivers/net/xdp.py b/tools/testing/selftests/drivers/net/xdp.py
-> index a148004e1c36..834a37ae7d0d 100755
-> --- a/tools/testing/selftests/drivers/net/xdp.py
-> +++ b/tools/testing/selftests/drivers/net/xdp.py
-> @@ -687,9 +687,12 @@ from lib.py import ip, bpftool, defer
->          "/dev/null"
->      # Listener runs on "remote" in case of XDP_TX
->      rx_host = cfg.remote if act == XDPAction.TX else None
-> -    # We want to spew 2000 packets quickly, bash seems to do a good enough job
-> -    tx_udp =  f"exec 5<>/dev/udp/{cfg.addr}/{port}; " \
-> -        "for i in `seq 2000`; do echo a >&5; done; exec 5>&-"
-> +    # We want to spew 1000 packets quickly, bash seems to do a good enough job
-> +    # Each reopening of the socket gives us a differenot local port (for RSS)
-> +    tx_udp = "for _ in `seq 20`; do " \
-> +        f"exec 5<>/dev/udp/{cfg.addr}/{port}; " \
-> +        "for i in `seq 50`; do echo a >&5; done; " \
-> +        "exec 5>&-; done"
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19369517166
+Will fix these.
 
-TIL about bash's /dev/udp, interesting..
-
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
 
