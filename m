@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-45694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6907DC60C3F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 23:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 768ABC60C4B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 23:57:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 383F13585AE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 22:56:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D4376357CBC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 22:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E686254AF5;
-	Sat, 15 Nov 2025 22:56:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE21A25B30D;
+	Sat, 15 Nov 2025 22:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NwiLzH+3"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Y/qbIx5W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8493260583
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 22:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C560D259CB9
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 22:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763247392; cv=none; b=WgH9JDDR2vJzI4IamhZKSqIKY2UVGVKG80/byH99ja5OPHexFZuH2/vbCVPug7snLLZcu+BpZKrvnpadSRJ9wbFBb9Jmk5F1yl9NDd6xvhje73tIHLMv94ZlndfQjYSvnfjPeGvTVWw8iTk9znQtj9ywA9fKH+JeyLBlSDvMMdQ=
+	t=1763247403; cv=none; b=le3XpX+ZFwoOfQ96cz1bdBAaPaC4YB5v6bwQb2WwrTwE8i0MQzcM5zxBou6xWyvJ3UTbX/O2h5DD+dSqiyLn9pjTRF02MEyaJS4uaglB0JbN1bQBvQnMwpUJm9Ud1hsVhFGWJxLGsgvfKUzy/dpEzxG0driztd3xVwF6BwA++dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763247392; c=relaxed/simple;
-	bh=yRG8Nxy/l0LvjSvT/KrupkQ2EizRIh9OaEoODht8KYk=;
+	s=arc-20240116; t=1763247403; c=relaxed/simple;
+	bh=IRddIqUtwNi+AV55PXrVdRjSup1mSpc0MTZ8UM5J3EE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WxnXmEQb8UgmUF4iHv0wvA3+ewR2hFCZuxhGzXhbrq+xjeXjiHkYMBJ2KJStxWN04eXASKZZe7c8ROpcX64AA13aGJMNL7oevaZGALdxdD+y56ZwGN+L9aLNzZNVMw0QD/PmihFo4PGkl1mcIYF/ULX/TMy/6tEJ6iC5/tw6Q+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NwiLzH+3; arc=none smtp.client-ip=209.85.128.46
+	 MIME-Version; b=QhanPoTitqI1vfslv8R62k7YwXxj324d4nUT99b+k0iVdCnPmAZXs+Rq3H0ko7yZbfZjrN5DTjHfjA17taAF+/Wm+okMTsePt2zgL5nv4lEY/aI76AjPRSD2W8xQPWjT3oHudqL5uPmoRsfMS6Uwypji+vsh7M9Ysh2LQdzJvjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Y/qbIx5W; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-477770019e4so36352435e9.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 14:56:29 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4775ae5684fso15940025e9.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 14:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763247388; x=1763852188; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1763247400; x=1763852200; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ps8UGCpaZwTjonsD4/+wCNz8vb5xTFCKH5GRNUH/TvA=;
-        b=NwiLzH+33BRvHF8nr65OarDmt2W25zh891vR4glig5CmarRWsSf4kkjuugdEEpQaGT
-         9gOcaR/ViYnoVmViY0jmO61XBHwpSR5BJsVlpqWc6b2QN0DfvsRAz5OrG0yW9+FCw7J/
-         EdoTxzhI7XA7YGi1bFBqYUl1Gi8GY5NEFD8xO3EJdRklybhewsLaifsIegvdbxv8p3ht
-         WfKYq6BDf0vpeJZmk3LiMt/DX53dR080lcI6iMH2EOskfsBu75+U7+lW6D+oeREzmndc
-         7an0J6tNzJQ6WJ7ckyyzjpi0ACCBUybAo1u+X/2wYdJTyPsT2vqr0f14S54qbw/b4qq5
-         u6kw==
+        bh=4kLOmfcGszNcREdllxFMniLyDC8fKR9Rrc1ubu80Dpk=;
+        b=Y/qbIx5WrHBUYe2S75QwB9Dkp7/8cOzNfNURa8yCNNlm8EZ33VBXRWCzz5s9P0dH6F
+         u90PjMzq9GQboLVZycmIv8uTr/CUHYxixClQStaFL9wa/3Ul463yBU+4cT61vBPirSO5
+         OYDs2dQ9oZtjLdKIkg8xj9DveAjVnHlQ/TXAKdAfzs0G2hLGDFsxzzBGhvHT83L6CEwy
+         jUX3/eP9cIkZiZbEH+t1dexirmicYRyuQ13U26CkEl+gBwwidHVUctGUdhh+r2hzTU8O
+         Kzt4HbrlMilyW0tdEqOAB44/DQikTbkugcB6LhCFnHMQCr5Fz0zIis3tsJp/XW/j1ALl
+         yOdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763247388; x=1763852188;
+        d=1e100.net; s=20230601; t=1763247400; x=1763852200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Ps8UGCpaZwTjonsD4/+wCNz8vb5xTFCKH5GRNUH/TvA=;
-        b=IseIqiFp9u1D1daokiiI7kfnxziv/WgHgQSJaN8JsBnN4CCsuBS3DxbJ5jBmY8wjbz
-         J5ZpSV5I30lFZC8Ly6Ze6AdF0bWzDDH/f04q1mpukLK2nY4lOYHaB+HQZIkrxFzBlY6g
-         kYm8Gv0VFYSKpSi327XeFRoN6ENPYKPL2CzDzm4gvaWFE6bbL+4i+EYKRoZDrRUUu7ki
-         kbr+NrkqpPZANEf9RPDL6xzhHxxb5c+tsyOeyiI+glpg2MhLvkhXkXAfhvWbTMx4/5OH
-         1e3cY7MlexWZ9bTIeUxOR+Njr7fxxhcJRQQrxVvE264yoIBnsEVPdgdpo46kfAwzuWyv
-         k04Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW8xZSa7RN+mfcNgddDMt96862ArzV6hti/uMz5R052ZMZryDSnpQ6hb85LQUWEf1g85nOgEHwgKvJVZ9Y5RBE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqDrvFpSMqSfi7fae+QbAQ29o5QDTZB+3T3wNbfmtLVHtB93Xc
-	F7VAE4oNs8ikSxyH/sw4bwK6nYxK2HcwCi/L1aYj7TgNw+evURabJ0yKPTDOIVBw/fY=
-X-Gm-Gg: ASbGnctuKhH2MxGaZmA4dlIeoznUukEVQCE3R5d0dJqCyzyOO/VEektkRavL3/puFxE
-	4Ad9FUmZxSR1Kd5DViu6KBiybmBIODSfBh1louAJNBoeIEBv99vbRic50Cx7CgxxcxrQ+RLpqQX
-	VnGlfUufGUYUcPmotTRxvsQCj3Nv+zBFr0T5IlhY4z/0SarFpGsmm6KM1dSwPKsxdqsRPH/Sw7K
-	mwX/iYN8QX/O0HKwTN2vxDI6NmgB/IIvVU4cJiVSko6P4+Y72pvqWOIFu0WVxjtknt+G+APbUJp
-	eM+CkDd747mR5ovXq/x/JNVvEHvMedBLemTSvepVP5f5x+T4mh4TrmrDbb1tdaClrMAQs4yvEyc
-	V0cUVE6k4JW3ZvRU0m4OABDljEUFfAcj5pL42YrrxcqAqj4S8s6BcBFK/kecgJQeUI58iSrrHaz
-	H23VJmAgptw6jYI5N6klwWgOWeWlDgUD+thfHSHR0=
-X-Google-Smtp-Source: AGHT+IFDpCictYIrRIjY6i+tnY3JVoJqZbp4M1IzOl9jkFjchbrF4S6GZivYdIQ9y/Hn2jAMz8IEwg==
-X-Received: by 2002:a05:600c:3542:b0:471:115e:87bd with SMTP id 5b1f17b1804b1-4778fe7d0ecmr69055525e9.26.1763247388152;
-        Sat, 15 Nov 2025 14:56:28 -0800 (PST)
+        bh=4kLOmfcGszNcREdllxFMniLyDC8fKR9Rrc1ubu80Dpk=;
+        b=mN8Y4Wh9bk0mS0N+CPiRyK7MhA69BN+CPOWOHkRRYp3YDW64inmXl/ITuhkRx59JI2
+         HZmJMdYer+t6VWp1XixqaWRGiTbNvh9geRwqkNqlg++3Y8612VVFn+2w8qBWXlCNCU5y
+         NQGJ4COOZlBbotcmOuqhSGdZyHFaPp0CwvQKPlbLfQz6T8vPTbNPJUhZTi+uDZ7enn/6
+         ECl9ExC+aD4crBkaOeCF63+BhybpXcZM1tKSgpDCRheTp1TEMYbvY1Tk2HyPYt8q44Oy
+         8VurdZJVkD3CWVXlO0s6mH3a212Jkes9vWMS9tzzFSFafM/yjbBT269JlVD3c7V89rfl
+         hJHw==
+X-Forwarded-Encrypted: i=1; AJvYcCXMbmtdKnosx8kE5RozOHbmZ8gWI9tGUj8r+wxJerZEVoqwe5k1DkE1bAKLFot4ar+omIja1IzSeDYizl8JryE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXoI8GTlpd1qNlUhA5woR4PymCwndFO9RA0Gfw+8nMXlR4F0bU
+	aAKWIxc9EwcQb6utwri0pJ8HSYHXQyjy9nEXG7Pw4cTfEluwx3CsOZ4TQSjjgLYr3GU=
+X-Gm-Gg: ASbGncsvLtGXy+t86mMq1WTEjl0ykfZnfzLqZvLiodhUeBLTRnj/lamHkIvuw3gA4nz
+	MuUOxHjwsnLpxktsXrqFcOqC7FlbqZK8g+8rjQPUYffF8a3V4xhkxlicZAYHII74tKpGUuIxQmQ
+	HmRATYeYMWQgzC4lLpVagACJpOM5Mdk0FFXiirZASAOp3rxBtgYUF8utU8X+f+nJcb3VQCa5f29
+	6aT9yC7j36Boxs3zg3Lyk/j3v4IZHTZ/UhA1pIQjX5Iphs1sKuD+ybC7e+NZa9D0oZgx2zUt1x0
+	9Y4yaF0IuPmKR5jrkQ0MNUqUcEc1r2ofVC6scGbIX2VRrEfMUPvnD1HP8LYVdE+dY107PSciZJ6
+	fTyUItMsEJw2fW+AIN06bfnfdLSr3lVCA0cPHPVU+IpMsLTBaHWXbS/HLRLc+fdHd52LbHTBUvR
+	mHImvtRfR5RyazErmlAjzJy2IOAO3tMqpt77g65e1FNKbRVZI3iw==
+X-Google-Smtp-Source: AGHT+IFLVDoqoGskZ7MybkZYq547SpmYOBch5zZQEBS6OPlqP2gwNUILqNPcLqack3TT+ywYO2yYxg==
+X-Received: by 2002:a05:600c:4452:b0:477:832c:86ae with SMTP id 5b1f17b1804b1-4778fe5c755mr66428595e9.12.1763247400108;
+        Sat, 15 Nov 2025 14:56:40 -0800 (PST)
 Received: from F15.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba1462c605sm6641971b3a.21.2025.11.15.14.56.23
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba1462c605sm6641971b3a.21.2025.11.15.14.56.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 14:56:27 -0800 (PST)
+        Sat, 15 Nov 2025 14:56:38 -0800 (PST)
 From: Hoyeon Lee <hoyeon.lee@suse.com>
 To: bpf@vger.kernel.org
 Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
@@ -90,11 +90,15 @@ Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
+	Shubham Sharma <slopixelz@gmail.com>,
+	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Jordan Rife <jordan@jrife.io>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [bpf-next v1 2/5] selftests/bpf: use sockaddr_storage instead of sa46 in select_reuseport test
-Date: Sun, 16 Nov 2025 07:55:37 +0900
-Message-ID: <20251115225550.1086693-3-hoyeon.lee@suse.com>
+Subject: [bpf-next v1 3/5] selftests/bpf: move common TCP helpers into bpf_tracing_net.h
+Date: Sun, 16 Nov 2025 07:55:38 +0900
+Message-ID: <20251115225550.1086693-4-hoyeon.lee@suse.com>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251115225550.1086693-1-hoyeon.lee@suse.com>
 References: <20251115225550.1086693-1-hoyeon.lee@suse.com>
@@ -106,157 +110,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The select_reuseport selftest uses a custom sa46 union to represent
-IPv4 and IPv6 addresses. This custom wrapper requires extra manual
-handling for address family and field extraction.
+Some BPF selftests contain identical copies of the min(), max(),
+before(), and after() helpers. These repeated snippets are the same
+across the tests and do not need to be defined separately.
 
-Replace sa46 with sockaddr_storage and update the helper functions to
-operate on native socket structures. This simplifies the code and
-removes unnecessary custom address-handling logic. No functional
-changes intended.
+Move these helpers into bpf_tracing_net.h so they can be shared by
+TCP related BPF programs. This removes repeated code and keeps the
+helpers in a single place.
 
 Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
 ---
- .../bpf/prog_tests/select_reuseport.c         | 67 ++++++++++---------
- 1 file changed, 34 insertions(+), 33 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_cc_cubic.c      |  9 ---------
+ tools/testing/selftests/bpf/progs/bpf_cubic.c         |  7 -------
+ tools/testing/selftests/bpf/progs/bpf_dctcp.c         |  6 ------
+ tools/testing/selftests/bpf/progs/bpf_tracing_net.h   | 11 +++++++++++
+ .../selftests/bpf/progs/tcp_ca_write_sk_pacing.c      |  2 --
+ 5 files changed, 11 insertions(+), 24 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-index 036d4760d2c1..3dbcc091f16c 100644
---- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-+++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-@@ -41,11 +41,7 @@ static struct bpf_object *obj;
- static __u32 index_zero;
- static int epfd;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_cc_cubic.c b/tools/testing/selftests/bpf/progs/bpf_cc_cubic.c
+index 4e51785e7606..9af19dfe4e80 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_cc_cubic.c
++++ b/tools/testing/selftests/bpf/progs/bpf_cc_cubic.c
+@@ -22,10 +22,6 @@
+ #define TCP_PACING_CA_RATIO (120)
+ #define TCP_REORDERING (12)
  
--static union sa46 {
--	struct sockaddr_in6 v6;
--	struct sockaddr_in v4;
--	sa_family_t family;
--} srv_sa;
-+static struct sockaddr_storage srv_sa;
- 
- #define RET_IF(condition, tag, format...) ({				\
- 	if (CHECK_FAIL(condition)) {					\
-@@ -135,24 +131,24 @@ static int prepare_bpf_obj(void)
- 	return 0;
- }
- 
--static void sa46_init_loopback(union sa46 *sa, sa_family_t family)
-+static void ss_init_loopback(struct sockaddr_storage *sa, sa_family_t family)
- {
- 	memset(sa, 0, sizeof(*sa));
--	sa->family = family;
--	if (sa->family == AF_INET6)
--		sa->v6.sin6_addr = in6addr_loopback;
-+	sa->ss_family = family;
-+	if (sa->ss_family == AF_INET6)
-+		((struct sockaddr_in6 *)sa)->sin6_addr = in6addr_loopback;
- 	else
--		sa->v4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-+		((struct sockaddr_in *)sa)->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
- }
- 
--static void sa46_init_inany(union sa46 *sa, sa_family_t family)
-+static void ss_init_inany(struct sockaddr_storage *sa, sa_family_t family)
- {
- 	memset(sa, 0, sizeof(*sa));
--	sa->family = family;
--	if (sa->family == AF_INET6)
--		sa->v6.sin6_addr = in6addr_any;
-+	sa->ss_family = family;
-+	if (sa->ss_family == AF_INET6)
-+		((struct sockaddr_in6 *)sa)->sin6_addr = in6addr_any;
- 	else
--		sa->v4.sin_addr.s_addr = INADDR_ANY;
-+		((struct sockaddr_in *)sa)->sin_addr.s_addr = INADDR_ANY;
- }
- 
- static int read_int_sysctl(const char *sysctl)
-@@ -228,7 +224,7 @@ static void check_data(int type, sa_family_t family, const struct cmd *cmd,
- 		       int cli_fd)
- {
- 	struct data_check expected = {}, result;
--	union sa46 cli_sa;
-+	struct sockaddr_storage cli_sa;
- 	socklen_t addrlen;
- 	int err;
- 
-@@ -251,26 +247,32 @@ static void check_data(int type, sa_family_t family, const struct cmd *cmd,
- 	}
- 
- 	if (family == AF_INET6) {
-+		struct sockaddr_in6 *srv_v6 = (struct sockaddr_in6 *)&srv_sa;
-+		struct sockaddr_in6 *cli_v6 = (struct sockaddr_in6 *)&cli_sa;
-+
- 		expected.eth_protocol = htons(ETH_P_IPV6);
--		expected.bind_inany = !srv_sa.v6.sin6_addr.s6_addr32[3] &&
--			!srv_sa.v6.sin6_addr.s6_addr32[2] &&
--			!srv_sa.v6.sin6_addr.s6_addr32[1] &&
--			!srv_sa.v6.sin6_addr.s6_addr32[0];
-+		expected.bind_inany = !srv_v6->sin6_addr.s6_addr32[3] &&
-+			!srv_v6->sin6_addr.s6_addr32[2] &&
-+			!srv_v6->sin6_addr.s6_addr32[1] &&
-+			!srv_v6->sin6_addr.s6_addr32[0];
- 
--		memcpy(&expected.skb_addrs[0], cli_sa.v6.sin6_addr.s6_addr32,
--		       sizeof(cli_sa.v6.sin6_addr));
-+		memcpy(&expected.skb_addrs[0], cli_v6->sin6_addr.s6_addr32,
-+		       sizeof(cli_v6->sin6_addr));
- 		memcpy(&expected.skb_addrs[4], &in6addr_loopback,
- 		       sizeof(in6addr_loopback));
--		expected.skb_ports[0] = cli_sa.v6.sin6_port;
--		expected.skb_ports[1] = srv_sa.v6.sin6_port;
-+		expected.skb_ports[0] = cli_v6->sin6_port;
-+		expected.skb_ports[1] = srv_v6->sin6_port;
- 	} else {
-+		struct sockaddr_in *srv_v4 = (struct sockaddr_in *)&srv_sa;
-+		struct sockaddr_in *cli_v4 = (struct sockaddr_in *)&cli_sa;
-+
- 		expected.eth_protocol = htons(ETH_P_IP);
--		expected.bind_inany = !srv_sa.v4.sin_addr.s_addr;
-+		expected.bind_inany = !srv_v4->sin_addr.s_addr;
- 
--		expected.skb_addrs[0] = cli_sa.v4.sin_addr.s_addr;
-+		expected.skb_addrs[0] = cli_v4->sin_addr.s_addr;
- 		expected.skb_addrs[1] = htonl(INADDR_LOOPBACK);
--		expected.skb_ports[0] = cli_sa.v4.sin_port;
--		expected.skb_ports[1] = srv_sa.v4.sin_port;
-+		expected.skb_ports[0] = cli_v4->sin_port;
-+		expected.skb_ports[1] = srv_v4->sin_port;
- 	}
- 
- 	if (memcmp(&result, &expected, offsetof(struct data_check,
-@@ -364,16 +366,15 @@ static void check_results(void)
- static int send_data(int type, sa_family_t family, void *data, size_t len,
- 		     enum result expected)
- {
--	union sa46 cli_sa;
-+	struct sockaddr_storage cli_sa;
- 	int fd, err;
- 
- 	fd = socket(family, type, 0);
- 	RET_ERR(fd == -1, "socket()", "fd:%d errno:%d\n", fd, errno);
- 
--	sa46_init_loopback(&cli_sa, family);
-+	ss_init_loopback(&cli_sa, family);
- 	err = bind(fd, (struct sockaddr *)&cli_sa, sizeof(cli_sa));
- 	RET_ERR(fd == -1, "bind(cli_sa)", "err:%d errno:%d\n", err, errno);
+-#define min(a, b) ((a) < (b) ? (a) : (b))
+-#define max(a, b) ((a) > (b) ? (a) : (b))
+-#define after(seq2, seq1) before(seq1, seq2)
 -
- 	err = sendto(fd, data, len, MSG_FASTOPEN, (struct sockaddr *)&srv_sa,
- 		     sizeof(srv_sa));
- 	RET_ERR(err != len && expected >= PASS,
-@@ -589,9 +590,9 @@ static void prepare_sk_fds(int type, sa_family_t family, bool inany)
- 	socklen_t addrlen;
+ extern void cubictcp_init(struct sock *sk) __ksym;
+ extern void cubictcp_cwnd_event(struct sock *sk, enum tcp_ca_event event) __ksym;
+ extern __u32 cubictcp_recalc_ssthresh(struct sock *sk) __ksym;
+@@ -34,11 +30,6 @@ extern __u32 tcp_reno_undo_cwnd(struct sock *sk) __ksym;
+ extern void cubictcp_acked(struct sock *sk, const struct ack_sample *sample) __ksym;
+ extern void cubictcp_cong_avoid(struct sock *sk, __u32 ack, __u32 acked) __ksym;
  
- 	if (inany)
--		sa46_init_inany(&srv_sa, family);
-+		ss_init_inany(&srv_sa, family);
- 	else
--		sa46_init_loopback(&srv_sa, family);
-+		ss_init_loopback(&srv_sa, family);
- 	addrlen = sizeof(srv_sa);
+-static bool before(__u32 seq1, __u32 seq2)
+-{
+-	return (__s32)(seq1-seq2) < 0;
+-}
+-
+ static __u64 div64_u64(__u64 dividend, __u64 divisor)
+ {
+ 	return dividend / divisor;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_cubic.c b/tools/testing/selftests/bpf/progs/bpf_cubic.c
+index f089faa97ae6..46fb2b37d3a7 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_cubic.c
++++ b/tools/testing/selftests/bpf/progs/bpf_cubic.c
+@@ -20,13 +20,6 @@
+ char _license[] SEC("license") = "GPL";
  
- 	/*
+ #define clamp(val, lo, hi) min((typeof(val))max(val, lo), hi)
+-#define min(a, b) ((a) < (b) ? (a) : (b))
+-#define max(a, b) ((a) > (b) ? (a) : (b))
+-static bool before(__u32 seq1, __u32 seq2)
+-{
+-	return (__s32)(seq1-seq2) < 0;
+-}
+-#define after(seq2, seq1) 	before(seq1, seq2)
+ 
+ extern __u32 tcp_slow_start(struct tcp_sock *tp, __u32 acked) __ksym;
+ extern void tcp_cong_avoid_ai(struct tcp_sock *tp, __u32 w, __u32 acked) __ksym;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_dctcp.c b/tools/testing/selftests/bpf/progs/bpf_dctcp.c
+index 32c511bcd60b..1cc83140849f 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_dctcp.c
++++ b/tools/testing/selftests/bpf/progs/bpf_dctcp.c
+@@ -13,16 +13,10 @@
+ #ifndef EBUSY
+ #define EBUSY 16
+ #endif
+-#define min(a, b) ((a) < (b) ? (a) : (b))
+-#define max(a, b) ((a) > (b) ? (a) : (b))
+ #define min_not_zero(x, y) ({			\
+ 	typeof(x) __x = (x);			\
+ 	typeof(y) __y = (y);			\
+ 	__x == 0 ? __y : ((__y == 0) ? __x : min(__x, __y)); })
+-static bool before(__u32 seq1, __u32 seq2)
+-{
+-	return (__s32)(seq1-seq2) < 0;
+-}
+ 
+ char _license[] SEC("license") = "GPL";
+ 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+index 17db400f0e0d..39e98e16c113 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
++++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+@@ -5,6 +5,17 @@
+ #include <vmlinux.h>
+ #include <bpf/bpf_core_read.h>
+ 
++#define min(a, b) ((a) < (b) ? (a) : (b))
++#define max(a, b) ((a) > (b) ? (a) : (b))
++
++static inline bool before(__u32 seq1, __u32 seq2)
++{
++	return (__s32)(seq1 - seq2) < 0;
++}
++
++#define after(seq2, seq1) before(seq1, seq2)
++
++
+ #define AF_INET			2
+ #define AF_INET6		10
+ 
+diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_write_sk_pacing.c b/tools/testing/selftests/bpf/progs/tcp_ca_write_sk_pacing.c
+index a58b5194fc89..022291f21dfb 100644
+--- a/tools/testing/selftests/bpf/progs/tcp_ca_write_sk_pacing.c
++++ b/tools/testing/selftests/bpf/progs/tcp_ca_write_sk_pacing.c
+@@ -8,8 +8,6 @@ char _license[] SEC("license") = "GPL";
+ 
+ #define USEC_PER_SEC 1000000UL
+ 
+-#define min(a, b) ((a) < (b) ? (a) : (b))
+-
+ static unsigned int tcp_left_out(const struct tcp_sock *tp)
+ {
+ 	return tp->sacked_out + tp->lost_out;
 -- 
 2.51.1
 
