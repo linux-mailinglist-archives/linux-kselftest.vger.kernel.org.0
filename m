@@ -1,98 +1,227 @@
-Return-Path: <linux-kselftest+bounces-45676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0605C5F852
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 23:39:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74722C5FC1B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 01:47:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B2E04348FF9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Nov 2025 22:39:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 826A14E3ACC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 00:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D992FBDE4;
-	Fri, 14 Nov 2025 22:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09CBB145FE0;
+	Sat, 15 Nov 2025 00:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="i8uaM4bq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BQPKiKh1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C920429D27A;
-	Fri, 14 Nov 2025 22:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5D427707
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 00:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763159951; cv=none; b=YJHVuTDoupfNN8pjHZvMxydXOQCfKwLpzZWKr9NArCOsP74pEGZ3RszSDxV4QsL931XA8wPzNPZ8CiT7TuRbCGuMYyXj2/S9pFxMOZaG8KNQPKt2cunYQHCu8s6NC2Z0VmDAm+LXUop0fzqiiMibqTl04m4qufMSTnEkPG/c/24=
+	t=1763167619; cv=none; b=pmo6Iyot2qhjS6BJFWF8Kder7hhlvpPXIX+q/5UQq9XapRas4XDFF7DD3fKMCsnAFD5fiWfaq9YrVss8Y8/U7xMuzKrtyWpqOiJIsXrMlZTRv7ls9zdik76kuI3b6pU+A89EU0Xrm4/pnz5EeL5obdChcWT2xvSqL/24osoIxIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763159951; c=relaxed/simple;
-	bh=MYESjMwsofYhqqquOVfZchs52Vx8aKwvtmP2Lmh5LHE=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=eqKESJ9r0dTl36FPXVIC4UmfVJ0WgprJ7cM/8TIRDCdmbFeQRpIeR1wCQHW3Rbtw224ALufiwHUhvQeYaGJ4ETtUGuGRrnuBoDNLPbmCEljj5175ByQlcCwtwxnbySOp9/ZeTF7swC1Dlxmh70VeO+VWz66akfsDvgCujigaNKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=i8uaM4bq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFF69C4CEF5;
-	Fri, 14 Nov 2025 22:39:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1763159950;
-	bh=MYESjMwsofYhqqquOVfZchs52Vx8aKwvtmP2Lmh5LHE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=i8uaM4bqM/bAoszT1IjaRnvMQKaHJOAf2cjkjEQMgfdFGodOKmrvYIXQ72E7IljE2
-	 wMLOmULdxSobtPEPSgdfYKeEuuC2Hw7V/uPUKlTFV0IvsQICMERyNtvFwZHby9fF+p
-	 B/R2us7EVhMEVKTjjFgmroiAhM5yIjim9sXODTgc=
-Date: Fri, 14 Nov 2025 14:39:09 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Carlos Llamas
- <cmllamas@google.com>, Peter Xu <peterx@redhat.com>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
- <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, Ujwal Kundur
- <ujwal.kundur@gmail.com>, Brendan Jackman <jackmanb@google.com>,
- kernel-team@android.com, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, "open list:MEMORY MANAGEMENT - USERFAULTFD"
- <linux-mm@kvack.org>, "open list:KERNEL SELFTEST FRAMEWORK"
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] selftests/mm: fix division-by-zero in uffd-unit-tests
-Message-Id: <20251114143909.14ecee31b88f179bc2858e30@linux-foundation.org>
-In-Reply-To: <9d30836b-9ddb-4432-aa39-85e32c2ea645@kernel.org>
-References: <20251113034623.3127012-1-cmllamas@google.com>
-	<e0be6864-4260-4843-a432-d47437b5d43f@kernel.org>
-	<4a60a703-d9c2-46a8-83b4-a7ecff7f6ba2@lucifer.local>
-	<aRXyxWeh81-aTHaC@google.com>
-	<b4291d0d-b913-4e61-9f9d-fbebd1eb4720@lucifer.local>
-	<20251113153205.6507ecb308e7d09362905da7@linux-foundation.org>
-	<9d30836b-9ddb-4432-aa39-85e32c2ea645@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1763167619; c=relaxed/simple;
+	bh=1/rD70ZHFrBNjJjci45pfQlAUENF4SO4u3lc/h6C+Zc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=W7olQUEeowKLbqvuDr1jaOFhORAL5+s3WdgpaFPZVmIYxlO2dzti76yLwcFSWh7M+azdeRSWc3I26v6ZoQGi3/+DCkkwFyAg9SJGllOCbvMXbzeadOYRq3f5qi5TV//YxTNcVhguLebKd3C3lqkFLabMIfXPHUPFpAANST0X2H4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BQPKiKh1; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-341aec498fdso4016714a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 16:46:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763167617; x=1763772417; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mr/52DwIA8Vew8AuO0L8R6bm0vR8dQ+5A9WA+WG6t/s=;
+        b=BQPKiKh1yfHcIrDSW59IH51D2rhvPkgu8emslDNrXmC7gsCFmyIVKyaXPuUky4qISc
+         +19Up0qR7WWgxb5rLlc/vAvyxEK+7xSgmw20NRkuvhsi2uNabtm3xwQFagWK4bxGDqS/
+         7gYj1dgRY4Qz6cyLqfB+LbbJ8hPrpBmmNQPY/qOHjAjqEqdl2m5Gvwe2rcSO1iFrvHaC
+         9swHyDubrt6x4xbkszwVPYZjC8xoJlQCUauEvdXnHkEai5Ya/mUGIPDi/aaxO3ZaLOIy
+         FiDZnjit3RNrnR++7shFiwMTsNlkRDSDa1Av00GMtGH845Ycpd83v1N/4tK/TCeKiRf/
+         xCOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763167617; x=1763772417;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mr/52DwIA8Vew8AuO0L8R6bm0vR8dQ+5A9WA+WG6t/s=;
+        b=SJsLTxMS0WUUxRFNGGSkyfIfxnuNOKcomMLWrXMCdzr3I1VJ2PKos83s1lJWKwNhDS
+         WAMkchf/XYNQxcdSRYxUqqOaE5bk0Dvov2vV8fZ+3bEh7EmJz+IE2y6Dl7Db8uHxjogE
+         RlT0ej/F4PDiC1cEiJhHXbVRKFMcPvAgcbJFmnXYda7P+GQIkgHd56uB1LM/D/S8dafG
+         iXWO09Yhm0mT44C0YmnT8s1VaknHXMOJIHQoT0Bz4Roo9Ecx+5sWJuL1UiOvOtwVzOSW
+         rvxAWIKYAb2SpiJsxlcL01DQcq3maWtPItL+jduV2XcbC2uh3MGrTHFzzHLdBI9AOTb5
+         15hg==
+X-Forwarded-Encrypted: i=1; AJvYcCWWWfiD4lBaR1SNw+gL9hfzTbgwWAJgGaZ7F2zm6HwHfEF8FJVNMTh2B7HZ68VsEqRhmNmzsrXbgNX/CPftxWY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZST8jGTEICNp9/q9uj6nzRaiH0ruOdPCjc1YHP/VKnjs/EVdv
+	Wox3PZt4EEhJEft/z7Nv6frb0oNJzPPPFrJH9igG1IvNeoh3OhXMVVDtRDNpu4JMVsO4OjytPcz
+	0WlQzrDwjvRN8uKq750yC4SwUgQ==
+X-Google-Smtp-Source: AGHT+IHPDsoGUhVWbmh0UerKKIaGr6kr4KuHT3qBmIvhj2MnXtnNCORQphwRQGqEcjJQnhvfFDaRm0g88w6S7pk3mw==
+X-Received: from pjbdb8.prod.google.com ([2002:a17:90a:d648:b0:343:5c2:dd74])
+ (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:1dc9:b0:340:29a1:1b0c with SMTP id 98e67ed59e1d1-343f9e93781mr5917746a91.7.1763167617416;
+ Fri, 14 Nov 2025 16:46:57 -0800 (PST)
+Date: Fri, 14 Nov 2025 16:46:56 -0800
+In-Reply-To: <aQnGJ5agTohMijj8@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <cover.1760731772.git.ackerleytng@google.com> <5a4dfc265a46959953e6c24730d22584972b1179.1760731772.git.ackerleytng@google.com>
+ <aQnGJ5agTohMijj8@yzhao56-desk.sh.intel.com>
+Message-ID: <diqz346gcebj.fsf@google.com>
+Subject: Re: [RFC PATCH v1 11/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES
+From: Ackerley Tng <ackerleytng@google.com>
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: cgroups@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-trace-kernel@vger.kernel.org, x86@kernel.org, akpm@linux-foundation.org, 
+	binbin.wu@linux.intel.com, bp@alien8.de, brauner@kernel.org, 
+	chao.p.peng@intel.com, chenhuacai@kernel.org, corbet@lwn.net, 
+	dave.hansen@intel.com, dave.hansen@linux.intel.com, david@redhat.com, 
+	dmatlack@google.com, erdemaktas@google.com, fan.du@intel.com, fvdl@google.com, 
+	haibo1.xu@intel.com, hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com, 
+	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com, jack@suse.cz, 
+	james.morse@arm.com, jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, 
+	jhubbard@nvidia.com, jroedel@suse.de, jthoughton@google.com, 
+	jun.miao@intel.com, kai.huang@intel.com, keirf@google.com, 
+	kent.overstreet@linux.dev, liam.merwick@oracle.com, 
+	maciej.wieczor-retman@intel.com, mail@maciej.szmigiero.name, 
+	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
+	mhiramat@kernel.org, mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, 
+	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au, 
+	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es, 
+	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com, 
+	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com, 
+	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, qperret@google.com, 
+	richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org, seanjc@google.com, 
+	shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com, 
+	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com, 
+	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com, 
+	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com, 
+	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org, wyihan@google.com, 
+	xiaoyao.li@intel.com, yilun.xu@intel.com, yuzenghui@huawei.com, 
+	zhiquan1.li@intel.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 14 Nov 2025 09:11:40 +0100 "David Hildenbrand (Red Hat)" <david@kernel.org> wrote:
+Yan Zhao <yan.y.zhao@intel.com> writes:
 
-> >>> Oops, I keep getting confused about this Cc stable thing. Please let me
-> >>> know if a v2 dropping the tag is needed.
-> >>
-> >> No need, Andrew should spot the objection and drop the tag :)
-> > 
-> > I actually add cc:stable tags to selftests fixes!
-> > 
-> > Because why not.  Why leave people running known-to-be-buggy code when
-> > our backporting processes are so well-functioning and lightweight?
-> > 
-> > I'm not getting the objection?
-> 
-> I thought we were so inconsistent on that that it ends up being a wasted 
-> effort to even try taking care about stability of selfests in stable trees.
+> On Fri, Oct 17, 2025 at 01:11:52PM -0700, Ackerley Tng wrote:
+>> For shared to private conversions, if refcounts on any of the folios
+>> within the range are elevated, fail the conversion with -EAGAIN.
+>> 
+>> At the point of shared to private conversion, all folios in range are
+>> also unmapped. The filemap_invalidate_lock() is held, so no faulting
+>> can occur. Hence, from that point on, only transient refcounts can be
+>> taken on the folios associated with that guest_memfd.
+>> 
+>> Hence, it is safe to do the conversion from shared to private.
+>> 
+>> After conversion is complete, refcounts may become elevated, but that
+>> is fine since users of transient refcounts don't actually access
+>> memory.
+>> 
+>> For private to shared conversions, there are no refcount checks. any
+>> transient refcounts are expected to drop their refcounts soon. The
+>> conversion process will spin waiting for these transient refcounts to
+>> go away.
+> Where's the code to spin?
+>
 
-Oh,  I try to be vigilant about it.
+Thanks, I will fix the commit message for the next revision.
 
-hp2:/usr/src/mm> git log tools/testing/selftests/mm | grep stable@|wc
-     44      89    1462
+>> +/*
+>> + * Preallocate memory for attributes to be stored on a maple tree, pointed to
+>> + * by mas.  Adjacent ranges with attributes identical to the new attributes
+>> + * will be merged.  Also sets mas's bounds up for storing attributes.
+>> + *
+>> + * This maintains the invariant that ranges with the same attributes will
+>> + * always be merged.
+>> + */
+>> +static int kvm_gmem_mas_preallocate(struct ma_state *mas, u64 attributes,
+>> +				    pgoff_t start, size_t nr_pages)
+>> +{
+>> +	pgoff_t end = start + nr_pages;
+>> +	pgoff_t last = end - 1;
+>> +	void *entry;
+>> +
+>> +	/* Try extending range. entry is NULL on overflow/wrap-around. */
+>> +	mas_set_range(mas, end, end);
+>> +	entry = mas_find(mas, end);
+>> +	if (entry && xa_to_value(entry) == attributes)
+>> +		last = mas->last;
+>> +
+>> +	mas_set_range(mas, start - 1, start - 1);
+> Check start == 0 ?
+>
 
-I pass selftests patches through the same brain algorithm as
-I do everything else, shrug.
+Thanks!
+
+>> +	entry = mas_find(mas, start - 1);
+>> +	if (entry && xa_to_value(entry) == attributes)
+>> +		start = mas->index;
+>> +
+>> +	mas_set_range(mas, start, last);
+>> +	return mas_preallocate(mas, xa_mk_value(attributes), GFP_KERNEL);
+>> +}
+> ...
+>
+>> +static long kvm_gmem_set_attributes(struct file *file, void __user *argp)
+>> +{
+>> +	struct gmem_file *f = file->private_data;
+>> +	struct inode *inode = file_inode(file);
+>> +	struct kvm_memory_attributes2 attrs;
+>> +	pgoff_t err_index;
+>> +	size_t nr_pages;
+>> +	pgoff_t index;
+>> +	int r;
+>> +
+>> +	if (copy_from_user(&attrs, argp, sizeof(attrs)))
+>> +		return -EFAULT;
+>> +
+>> +	if (attrs.flags)
+>> +		return -EINVAL;
+>> +	if (attrs.attributes & ~kvm_supported_mem_attributes(f->kvm))
+>> +		return -EINVAL;
+>> +	if (attrs.size == 0 || attrs.offset + attrs.size < attrs.offset)
+>> +		return -EINVAL;
+>> +	if (!PAGE_ALIGNED(attrs.offset) || !PAGE_ALIGNED(attrs.offset))
+> Should be
+> if (!PAGE_ALIGNED(attrs.offset) || !PAGE_ALIGNED(attrs.size))
+> ?
+>
+
+Thanks!
+
+>> +		return -EINVAL;
+>> +
+>> +	if (attrs.offset > inode->i_size ||
+> Should be
+> if (attrs.offset >= inode->i_size ||
+> ?
+
+Thanks!
+>> +	    attrs.offset + attrs.size > inode->i_size)
+>> +		return -EINVAL;
+>> +
+>> +	nr_pages = attrs.size >> PAGE_SHIFT;
+>> +	index = attrs.offset >> PAGE_SHIFT;
+>> +	r = __kvm_gmem_set_attributes(inode, index, nr_pages, attrs.attributes,
+>> +				      &err_index);
+>> +	if (r) {
+>> +		attrs.error_offset = err_index << PAGE_SHIFT;
+>> +
+>> +		if (copy_to_user(argp, &attrs, sizeof(attrs)))
+>> +			return -EFAULT;
+>> +	}
+>> +
+>> +	return r;
+>> +}
 
