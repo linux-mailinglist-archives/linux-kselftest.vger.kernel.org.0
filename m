@@ -1,212 +1,111 @@
-Return-Path: <linux-kselftest+bounces-45684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B00B6C5FECA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 03:45:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88A2CC5FF77
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 04:44:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6315D3BBD3F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 02:45:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 87F0E4E4605
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 03:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2744821E0BB;
-	Sat, 15 Nov 2025 02:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="biX5T468"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A619D233134;
+	Sat, 15 Nov 2025 03:43:33 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f193.google.com (mail-yw1-f193.google.com [209.85.128.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7971F1F4615
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 02:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E851B21322F;
+	Sat, 15 Nov 2025 03:43:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763174723; cv=none; b=jTz87dsGTz1XIdUqKuRHNLW+rBh0+KOLG3TvIU2GcZx/ZyNLn2b+hXINMgu/7j8DBSMyfC02u5N4boZmLe++5+UhgZwaIDg0NGfmZwBKrH/qQ9l3p+YcNxGC8E5YEME2+2+lZ8DeTO4Bl4kG9ggRQWLGWxeNJv9qAqs5SgILKLc=
+	t=1763178213; cv=none; b=lT94Y+LFp+K+EuY+VSJnHiFA7GeyHF+jsXRiyrW9CLEw1/C+wfRmtA0kuIcUtJhiTCjqUY///SnzRLc4XYBn+kWwSWExcdR9fsO+koWm59xzSAmcprDZC0P1EJCjvrA6KjsNUh3V6pOh2xaQc9P2zussxs+1p/YpYCYzvTjtKkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763174723; c=relaxed/simple;
-	bh=QgQoA1oMCRhoLrz1xB6vwIvr2sOg0pFJdAiGIvKOPdk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nMPg3P0eh/hcPcsis3l062g3cY8nZ0w41zznBP8tsgeDsbGaqpuxWMoVnTDNA2pSTxDiGfuMvcEqsn5nJIc2AaUdgYewObNlnwradM0pPSjix7mBCLaIKBbI9FZXH5moiJcD72wuzAq2GboG4sQOencVrBBW2oMS6L3jmLNKOsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=biX5T468; arc=none smtp.client-ip=209.85.128.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f193.google.com with SMTP id 00721157ae682-787df0d729dso25743507b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 18:45:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763174720; x=1763779520; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DvCG/LkvighatCxQcwWFOP8i6iT+iOW0XMsHIFsyAJQ=;
-        b=biX5T468DtCnyuqLXOBvg/AifzVchKd2RyYf0sfJLDd61OZpcWI37qBFJOZhXFAJtL
-         u7+UkGIGiBMF9LE4sC/ppVCKVodk3ipWztDV6S2rotWGD5r2NejsmBC9MgdD/uhbhECy
-         WjLVoffZR9HHSFGJLV/5fLT+ln3w/Y2NT9XpLdjpf95rmPUem6hxu6fUVUWWqAlwO8Nh
-         mukJHv0jR0q1hguE6XlLXUvHQMHIUjLudmSD7bfQ45kUCo+z2JF1Y0WBxcLLdUHS5pgN
-         LxAHfp6BQhhbKphIU3Wjifg1LRedCL68HXBcf+oO3Bm8BgusV2fP/dCFQ+8n6hoWIlhY
-         janw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763174720; x=1763779520;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DvCG/LkvighatCxQcwWFOP8i6iT+iOW0XMsHIFsyAJQ=;
-        b=tYmJ0X5Y2G/Wni606UuFsz3fS7erue+EM20U9lWAuiFftNIpxwgxhy6afMBRDoT86h
-         G6CQJIazWpf2CtpdI1B2E+BSBsVsAfNz82iDY6vUzSt7XR9j9pXlaeH0N+EPfsroATfS
-         WqMXu7Utrw8M30BI38Thu6fERoV3tCpJR6bY0MWv39Gvq2sv/A3bpodlTY1QN1plt7lz
-         Fg3F77Hs0WtqtwG9LQx1YHKdR7aPmtA87DX8iDBKN2h6eoBhU64lEdJOwFw0URZDY6yi
-         X49h5p30rsCjK9RNN9ZkNr+ZPCltkqwr4GrcLvYotNzl0CfRK35dwHdRsdsLC9W04iSO
-         1yEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUcY13IVdA1pJc3J8LHQmRh5H1kv8hYZrLQeqkfJ+fVysHhbxBNVm7/qWSjQ9QdFK7kycr9rpqSvXHLGzA1BQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxtwsBiXnQRRLswPHzi64N8k5f1QNbIGXo09jfMwXd6rYL8JOx
-	2j4jgqbbioRN4pLYg38yO2xGlyJG0Jt6LpAkcAeOhHJ1i0KwtsZOG6kl7cbvMSBx1ncuQJiIKAZ
-	qhmTQC8HoT/K2W+hYAKuoKTrAkZQEoXo=
-X-Gm-Gg: ASbGncubBmKwsFLg5ezY4NhkVnigohB0/BaYsZiYe5SFqiqnbBYMZZL3fUd3cKmT1IG
-	3dbMXBMloIZ4BkWxI3U81aV0FD0NZ92GhAWCwrT17CatP63C0Jzs6zLN3r0NbS3al+4LkMrrj4q
-	OsgJUe/Gx2ac2TkFSSZIKxxU6n6/ijPZPc/K5JAISiFxoGqR3dlDkzHeZV2vj1aXL5B81H9jVSj
-	qSLAagXxnmYMd5eX7Hju1s2TyRQBEHfJ9Fj4Unen3rdNdK3ypOBllw0k5Bc
-X-Google-Smtp-Source: AGHT+IFYJ2/DFCYkBHvkGgyTOY/QDa8mebFzcO5f1baR7nsHhNcsvTScfI8nJm0kV8YKUSROcJCXAqFMKxgv51vQ55k=
-X-Received: by 2002:a05:690c:8311:10b0:788:1d35:1093 with SMTP id
- 00721157ae682-78929effd17mr42849487b3.63.1763174720339; Fri, 14 Nov 2025
- 18:45:20 -0800 (PST)
+	s=arc-20240116; t=1763178213; c=relaxed/simple;
+	bh=AiWXujPQ04Yxz29lTc7t34+mHLsOGO5fR5Xm9tgyWmY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a1AR1FMBTZnAfANdCpgqfk2ny/MUwwETQwnTXlSJA5Y7LGTvNHFuriXkB336F0lLDq9jmk+iW7P7HA5uw/vhacr+thPKl8M03lQ4FrKzxzM+YtaI0VrKIUWPqdCqIwq7dJuXl56vXPQRo0MamYPhB/tpieRrC0RtWIjqeik3FNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 3cab0520c1d511f0a38c85956e01ac42-20251115
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:32808797-364d-407e-ab3c-c7abec898b65,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:5
+X-CID-INFO: VERSION:1.3.6,REQID:32808797-364d-407e-ab3c-c7abec898b65,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:5
+X-CID-META: VersionHash:a9d874c,CLOUDID:1aa8b991e1503b29d3837da6fb433775,BulkI
+	D:251113184535IYNM5ZGZ,BulkQuantity:5,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|841,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk
+	:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,B
+	RE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 3cab0520c1d511f0a38c85956e01ac42-20251115
+X-User: zhangguopeng@kylinos.cn
+Received: from [192.168.24.105] [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <zhangguopeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1973445955; Sat, 15 Nov 2025 11:43:23 +0800
+Message-ID: <9eddc66c-4a95-4692-889b-de9f06726a7f@kylinos.cn>
+Date: Sat, 15 Nov 2025 11:43:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251110134858.1664471-1-dongml2@chinatelecom.cn> <CAEf4BzZ3oX-=zX0_HbeUHsPw7AOZVvi_LNkwugQnybpQvZS_Mw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ3oX-=zX0_HbeUHsPw7AOZVvi_LNkwugQnybpQvZS_Mw@mail.gmail.com>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Sat, 15 Nov 2025 10:45:09 +0800
-X-Gm-Features: AWmQ_blAFJ3hl5eVmRfpa2d2JMXS8aAVn_TR_4yg5YjO_-YeBjxqOcixOgmdshI
-Message-ID: <CADxym3ZBmr1USGY08HcbpV6=G0SjZ6khoOb0R+L2R11AEOKzFA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: simplify the kernel_count bench trigger
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	mingo@kernel.org, jiang.biao@linux.dev, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/cgroup: conform test to TAP format output
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: tj@kernel.org, hannes@cmpxchg.org, shuah@kernel.org,
+ cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, sebastian.chlad@suse.com, longman@redhat.com
+References: <6lwnagu63xzanum2xx6vkm2qe4oh74fteqeymmkqxyjbovcce6@3jekdivdr7yf>
+ <6916a8f5.050a0220.23bb4.ab7dSMTPIN_ADDED_BROKEN@mx.google.com>
+ <4h54pkcisk5fmevglu3qldk5fb2rgo5355vfds3wplhekfumtz@qtwtixmuw2hz>
+From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+In-Reply-To: <4h54pkcisk5fmevglu3qldk5fb2rgo5355vfds3wplhekfumtz@qtwtixmuw2hz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 15, 2025 at 4:46=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Nov 10, 2025 at 5:49=E2=80=AFAM Menglong Dong <menglong8.dong@gma=
-il.com> wrote:
-> >
-> > Remove the "trigger_count" in trigger_bench.c and reuse trigger_driver(=
-)
-> > instead for trigger_kernel_count_setup().
-> >
-> > With the calling to bpf_get_numa_node_id(), the result for "kernel_coun=
-t"
-> > will become a little more accurate.
->
-> "more accurate" is a bit misleading here. I think you meant that it
-> will do same amount of helper calls as fentry and other benchmarks,
-> and in that sense will be closer as a baseline comparison, is that
-> right? Can you clarify that in the next revision, please?
 
-Yeah, this is what I mean. The call to "bpf_get_numa_node_id" should
-be considered as the baseline comparison.
 
->
-> >
-> > It will also easier if we want to test the performance of livepatch, ju=
-st
-> > hook the bpf_get_numa_node_id() and run the "kernel_count" bench trigge=
-r.
-> >
-> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > ---
-> >  .../selftests/bpf/benchs/bench_trigger.c        |  5 +----
-> >  .../testing/selftests/bpf/progs/trigger_bench.c | 17 +++++------------
-> >  2 files changed, 6 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools=
-/testing/selftests/bpf/benchs/bench_trigger.c
-> > index 1e2aff007c2a..34fd8fa3b803 100644
-> > --- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> > +++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-> > @@ -179,11 +179,8 @@ static void trigger_syscall_count_setup(void)
-> >  static void trigger_kernel_count_setup(void)
-> >  {
-> >         setup_ctx();
-> > -       bpf_program__set_autoload(ctx.skel->progs.trigger_driver, false=
-);
-> > -       bpf_program__set_autoload(ctx.skel->progs.trigger_count, true);
-> > +       ctx.skel->rodata->kernel_count =3D 1;
-> >         load_ctx();
-> > -       /* override driver program */
-> > -       ctx.driver_prog_fd =3D bpf_program__fd(ctx.skel->progs.trigger_=
-count);
-> >  }
-> >
-> >  static void trigger_kprobe_setup(void)
-> > diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/=
-testing/selftests/bpf/progs/trigger_bench.c
-> > index 3d5f30c29ae3..6564d1909c7b 100644
-> > --- a/tools/testing/selftests/bpf/progs/trigger_bench.c
-> > +++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
-> > @@ -39,26 +39,19 @@ int bench_trigger_uprobe_multi(void *ctx)
-> >         return 0;
-> >  }
-> >
-> > +const volatile int kernel_count =3D 0;
->
-> nit: use bool? it's not a counter, no need to use int here
->
-> >  const volatile int batch_iters =3D 0;
-> >
-> > -SEC("?raw_tp")
-> > -int trigger_count(void *ctx)
-> > -{
-> > -       int i;
-> > -
-> > -       for (i =3D 0; i < batch_iters; i++)
-> > -               inc_counter();
-> > -
-> > -       return 0;
-> > -}
-> > -
-> >  SEC("?raw_tp")
-> >  int trigger_driver(void *ctx)
-> >  {
-> >         int i;
-> >
-> > -       for (i =3D 0; i < batch_iters; i++)
-> > +       for (i =3D 0; i < batch_iters; i++) {
-> >                 (void)bpf_get_numa_node_id(); /* attach point for bench=
-marking */
-> > +               if (kernel_count)
-> > +                       inc_counter();
-> > +       }
->
->
-> tbh, I wouldn't touch trigger_driver() adding unnecessary if
-> conditions to it. It's fine, IMO, to have bpf_get_numa_node_id() call
-> in trigger_count() for being closer in terms of actual work being
-> done, but I'd keep trigger_driver and trigger_count separate (maybe
-> renaming trigger_count to trigger_kernel_count would help, I don't
-> know)
+On 11/14/25 22:32, Michal Koutný wrote:
+> On Fri, Nov 14, 2025 at 11:55:48AM +0800, Guopeng Zhang <zhangguopeng@kylinos.cn> wrote:
+>> Actually, selftests are no longer just something for developers to view locally; they are now extensively 
+>> run in CI and stable branch regression testing. Using a standardized layout means that general test runners 
+>> and CI systems can parse the cgroup test results without any special handling.
+> 
+> Nice. I appreciate you took this up.
+> 
+>> This patch is not part of a formal, tree-wide conversion series I am running; it is an incremental step to align the 
+>> cgroup C tests with the existing TAP usage. I started here because these tests already use ksft_test_result_*() and 
+>> only require minor changes to generate proper TAP output.
+> 
+> The tests are in various state of usage, correctness and usefulness,
+> hence...
+> 
+>>
+>>> I'm asking to better asses whether also the scripts listed in
+>>> Makefile:TEST_PROGS should be converted too.
+>>
+>> I agree that having them produce TAP output would benefit tooling and CI. I did not want to mix 
+>> that into this change, but if you and other maintainers think this direction is reasonable, 
+>> I would be happy to follow up and convert the cgroup shell tests to TAP as well.
+> 
+> ...I'd suggest next focus on test_cpuset_prs.sh (as discussed, it may
+> need more changes to adapt its output too).
+> 
+> Michal
+Yes, I agree that test_cpuset_prs.sh should be the next focus.
+Thanks again for the guidance.
 
-Ah, OK! I'll add the call to bpf_get_numa_node_id() in trigger_count()
-instead. I think the "trigger_kernel_count" makes more sense to me.
+Guopeng
 
-Thanks!
-Menglong Dong
-
->
-> pw-bot: cr
->
-> >
-> >         return 0;
-> >  }
-> > --
-> > 2.51.2
-> >
 
