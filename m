@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-45696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AA9EC60C63
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 23:58:42 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B9C9C60C5D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 23:58:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F2DE3AE9DC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 22:57:23 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5AAF135A78F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 22:57:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FC1267386;
-	Sat, 15 Nov 2025 22:56:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8B026A1BB;
+	Sat, 15 Nov 2025 22:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RMdq3qO2"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Xamextw8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830AF191F84
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 22:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C535125C809
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 22:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763247413; cv=none; b=YMCbvlHyrovccm+S6IlTkDmVn3kBD3DoZjAzQa4fpSBL+xQPimPCqiu3fTlyWIrNu3x9uxu9oRrfjmnULWheRtDZQPKwSQolSAwb78jACEvjJTZHiX6DD/ObaEznTeyYqY+osg1kpAZfLRsGW0XbtBXJGacJYXZseDc0AfTe5JM=
+	t=1763247420; cv=none; b=ThDmZqOICDxJqaU7kZDkGYsQCybgITLGV4JGvLTY1kNBgjAm9HFVpOX1t9sgZN6m8OFI8AZOezvnYVptrkZ2T71/aYfpVTUNdsQnJmfiATdB7SgPoPrNsUhFqOzJhWl6ni4saBpwoL9OjBIb1MylR9TU5iuLTIEYcTtveSA90Yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763247413; c=relaxed/simple;
-	bh=Isqdw0RhAzylXu4IdiwZU689kLt/pJObP5hCd/DHxbo=;
+	s=arc-20240116; t=1763247420; c=relaxed/simple;
+	bh=r6WDjhpIq3Wd/J0Y+qOKRxylI1swOi5e1ZWkbyl+O9I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fsoN7uNdIdunpGXQzonC6E5CUmn/71KRXKPZl0137RHX40Tz6+eU9FLtXa5WRFGh2Mr9ff1IwuA7LM3R3vGKSswj6WVdxxFuPZ7AtqdXIBdBfbizpre14XHPUAaqgm51fCSb+O6OqegL5hBe0D9ykerpvmH7b7rQfTxyix/IO/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RMdq3qO2; arc=none smtp.client-ip=209.85.128.43
+	 MIME-Version; b=ge1HGNGghq1PKuMF399r1lwAaUaketrFNo16olIKjrqliD63DNJzPpPF0FcYWGJTg4FVo/l9zWXbjs54EQEyqRn/kIooFT8uiyXaT3o4r8KID5YuMKxlXnI0blS1V1l8sMXGV4HJR8jEE1jEJhIlbqXbURQWt/foInqPL4ymmsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Xamextw8; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4777771ed1aso20832105e9.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 14:56:49 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4710022571cso28963295e9.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 14:56:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763247408; x=1763852208; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1763247416; x=1763852216; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hax3l6ZHFp82yvZa1z7cG8hX78sJJl+3NtBXaKxMPD8=;
-        b=RMdq3qO2e67+fzvYUpA22MDxQcGojoSDGqGXVqIrBYpf9X5yrBfggvNKVWz6w01T2c
-         tph9ykq0TYcXe0QOwEFtByB6zrzuc/fQYJnEv+HKwBP9L5Ov4JatAT8ZXAie4D+k9Jja
-         18ob2KlL+aZn1w8N9uBRlaVIwPlwzF9RZHM48GmDczgZH9aMu+8wlpamy2MymTP5DfQ5
-         2M8Wg6Exj3e97TReaqitftzBT5RCx3aLfz9pwrUPAx/FVJVC2DIklHMduUASsWQVI9R3
-         +uQV2OipcVUS6dNWqv6WrKKc9sGV1SQCpvLh7U1nCepbudGt25VEvD1QQjy0KP+MzCkr
-         CSmw==
+        bh=VoQmqXz6sGsQU+5pMM6WGkJhNb0pQ0+RIfWOvYniKT8=;
+        b=Xamextw82DwYWSqntdG9MeMF44K+zJGdTXjxlixvbMixa1LhzCfuGxJEsWK8y2wffB
+         p8mjHPGSVyfllguJ3rxr8mWceC0E7Y1YohNhq/clTwaucKbqJHsvENTxExIKfvj4twiS
+         06a8yRjDgdL3jdN/NisfjIq5LJZPrpyo12Tl3olydU+1ONl17WnU+kkpsM0zZRtMFexl
+         WP6k7gwJOy5wo765vt48hGQxR2E5NEV6fXWzsMVnsemlDYk7uAsQa3GWXyvoDzv21L23
+         /QdVzggCCMbclhpTBCK+HNCv5CJLshKWHfeXwQE4ApvmetMo3rWkaEC+RI8++StGcoG/
+         m1GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763247408; x=1763852208;
+        d=1e100.net; s=20230601; t=1763247416; x=1763852216;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=hax3l6ZHFp82yvZa1z7cG8hX78sJJl+3NtBXaKxMPD8=;
-        b=QwqDK723xTogTS/5CneclXgcJp2kHn3yaarp2AGFXMaONCyAiip5DKtqjkZbFFqusx
-         HKzVNpMZFe6yax67S+jSSKCnSl3fteKwx6OiiF6JbPsjbEEiumKPO1RbZZiNZy4tUUhn
-         nyx7Kjz8MkJQgjYPxSxEPjN7/4Xru2ZLyS/OIDQvEtAYlbNrS6fc2V9gGH5fXRBHr/Rd
-         x/Sv8EBRe4K8zlVcItZ4EniE9bAWOMAVD7iWcpSVvJJBDyT+SuuOE0+gPF6/epehDN8Y
-         SfkkGctjeN8KmhQLZ5/BbtkgRvJZ0Fmf3quRNoARjl2duyoc1/ZoA7UfowlfoccvqpKZ
-         YbjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXSyBIpkA2toQyI8Ek9o6dYGTzVl0xK+YkldEhVPMKcoSddJTiybItiWgOptCBC0NurEqEWGxGMGxQoMHau2DQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaQucGYVPu/B3U8AN+MTaDVSoZRYBTYgIiye4HXvRccqio8ygJ
-	1ZZB26xJgCIm3ZWK1jfKb1REZPdECkPfqWgzHEibOscPaVhBd33hh/4CoMZelfGitso=
-X-Gm-Gg: ASbGncu2Rdq6EXTq5yUW6Go7QBq9OLMST9r8tEZnTh5+XnHwFs9EDOnLItU5oTT4V/j
-	ClpRu2Z2cSiq99SrWbgBzg4WcCFfFayM7PRQPDv1xKB/hO0DKuS1DWh0YoxuFKwA7V8+GDK5bkP
-	6kDUIAbFHmJoQa2F+4n54enqN0qRmevcTQbgXdSB2EZoccYsU7ez7bYUf5U+XAGTH4vo9DN3z42
-	6gswgW4tzhuBx0jZrrAV+hBNfr60Pj8Xhb8h1jeptGG4EjdXKFdE1KtGpQyW0awicXZYDhkj3xF
-	UvyEw93NVOAiIqWeO3wMOsaAHs6XS5+vwfbkr8iF7voEBS8eOX9g12QFGfTZvDx4w2AabGe7zob
-	Iuv/d/YSUC5gL4+xxmDCB0DOUelSoHhQPZPIdIHLY6p9ONeoRugLTI0IfQhYVq2CsdNAsc+zagV
-	Vkj/qzVXBJvK4juE2wEdE1Uwle1MnFDoAE7QyGvkrul7OemmuiVQ==
-X-Google-Smtp-Source: AGHT+IEvBVqyOu4uOb4WG4c5ywhNFvW1pjUp9ZjPOqqgZTKbrw3cQLaFupO8D/BR8AI9EmrelD5QmQ==
-X-Received: by 2002:a05:600c:6287:b0:477:7f4a:44b4 with SMTP id 5b1f17b1804b1-4778fe60641mr68379945e9.1.1763247408577;
-        Sat, 15 Nov 2025 14:56:48 -0800 (PST)
+        bh=VoQmqXz6sGsQU+5pMM6WGkJhNb0pQ0+RIfWOvYniKT8=;
+        b=nSxLi6KcQYa0o43VyKoZssk+1Yp8Y7bNMX7tJj5qd6eIuhmGDTs0Uh0X9FB96+faMa
+         lgRxihRHlr4ik800lFyjGbBCTA3x/DfsSFLDjdPvsw4s7N9IxN03JY57LGSxSfj7Xpnt
+         RGRRtQytKizntLvQdpodKPpgM/j13y7gDqvKuEtYV+eq0D/qer4YsL7B8wqmeMlGeXyl
+         qzcw7ZTbn2DkN27RI6cu+lDnT88lXxWM5ySSRqeNQHfxGGJDlRKFuM42d8lxdMzUCGWG
+         UNdl3gWoJOov7LyztehvL3KAIDu3WvzWcK7a9d00ezB/Wn62H4y7JNooUENK7dU5zt15
+         j90w==
+X-Forwarded-Encrypted: i=1; AJvYcCUVH+FJ+z6TYGYMCUiXUjg1v75W/jW4BGbHWfFtAiMumPKLjClDpZNBB3eE9iHnN7VuN7ZsjId1hZHEHFa1+7A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTDifeyGMZ5CnGcujR5RqUM8mOf6vSamp/y5wYrp2xAzvmbTDV
+	eGCk8c390nFlhGIF8e2EHaVHcifw4bdbCoe7QD3d0Jg9ZgBxl34TYiXooiS2qV8u6+I=
+X-Gm-Gg: ASbGncu5XOuw+9dP/b1Dax9s5Z+RVnP9CXHD3ooIuuO9RqWjL388hfepdv4O62Ieed8
+	1OOYWlDN5Y4BUCOjtW+eSyz828SEHK8U/tHf2jxSBFUhuDyqCM+IaxJ7Qo6dwzRVJ7W3igPcai3
+	rBjqHuMEHCAKU7VS2HpIdCQPgXN7Nci6Fc7N6oeWJv7lr/cFoP1V/PEX9CuClcDj4tgHgT2O2/U
+	GrzF4eTXmBrHRCZsB0JXb5SaQX2YE3NinI86tSiZY1UoYTXfMZgA+9nNYtH2HtKfA4mbSiIZLMD
+	TFAbRha6X9FtVcNWl9rFj5GDFkDJqMsi79uuhvxIv86vfn9fQkOdXcUMvXt/cyuCFj8UQ8u6nkG
+	VcxLWhKGYzeQgas6kBOuyYuq1Q+CZ5nO19WL4k9oIhr3FrTgNilKbHXPSgUjWkIEXsVVuUkmJKf
+	T+8HgcPgGC9rW6Zf5+tzEWpkayJQWAlv5qz7xD7tbf1cDkAhK56w==
+X-Google-Smtp-Source: AGHT+IHzTCVjlD7bxRYPCcVQyJMUetvvQL/GhvoPlqWuHIenUBMbxrAsm/jIQ3IT68GtJnvxF1gisQ==
+X-Received: by 2002:a05:600c:3b19:b0:471:989:9d7b with SMTP id 5b1f17b1804b1-4778fe95fe2mr74546895e9.21.1763247416137;
+        Sat, 15 Nov 2025 14:56:56 -0800 (PST)
 Received: from F15.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba1462c605sm6641971b3a.21.2025.11.15.14.56.43
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba1462c605sm6641971b3a.21.2025.11.15.14.56.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 14:56:46 -0800 (PST)
+        Sat, 15 Nov 2025 14:56:55 -0800 (PST)
 From: Hoyeon Lee <hoyeon.lee@suse.com>
 To: bpf@vger.kernel.org
 Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
@@ -90,11 +90,16 @@ Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [bpf-next v1 4/5] selftests/bpf: replace TCP CC string comparisons with bpf_strncmp
-Date: Sun, 16 Nov 2025 07:55:39 +0900
-Message-ID: <20251115225550.1086693-5-hoyeon.lee@suse.com>
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [bpf-next v1 5/5] selftests/bpf: propagate LLVM toolchain to runqslower build
+Date: Sun, 16 Nov 2025 07:55:40 +0900
+Message-ID: <20251115225550.1086693-6-hoyeon.lee@suse.com>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251115225550.1086693-1-hoyeon.lee@suse.com>
 References: <20251115225550.1086693-1-hoyeon.lee@suse.com>
@@ -106,114 +111,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The connect4_prog and bpf_iter_setsockopt tests duplicate the same
-open-coded TCP congestion control string comparison logic. Since
-bpf_strncmp() provides the same functionality, use it instead to
-avoid repeated open-coded loops.
+The selftests/bpf invokes a nested make when building runqslower, but
+LLVM toolchain version (clang/llvm-strip) is not propagated. As a
+result, runqslower is built with system default clang, not respecting
+specified LLVM version.
 
-This change applies only to functional BPF tests and does not affect
-the verifier performance benchmarks (veristat.cfg). No functional
-changes intended.
+    # LLVM=-21 make -C tools/testing/selftests/bpf
+    ...
+    make feature_display=0 -C /bpf/tools/bpf/runqslower                        \
+        OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/runqslower/        \
+        BPFOBJ_OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/libbpf/     \
+        BPFOBJ=/bpf/tools/testing/selftests/bpf/tools/build/libbpf/libbpf.a    \
+        BPF_INCLUDE=/bpf/tools/testing/selftests/bpf/tools/include             \
+        BPFTOOL_OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/bpftool/   \
+        VMLINUX_BTF=/sys/kernel/btf/vmlinux BPF_TARGET_ENDIAN=--target=bpfel   \
+        EXTRA_CFLAGS='-g -O0  ' EXTRA_LDFLAGS=' ' &&                           \
+        cp  /bpf/tools/testing/selftests/bpf/tools/build/runqslower/runqslower \
+            /bpf/tools/testing/selftests/bpf/runqslower
+    clang -g -O2 --target=bpfel -I/bpf/tools/testing/selftests/bpf/tools/build/runqslower/ \
+          -I/bpf/tools/testing/selftests/bpf/tools/include -I/bpf/tools/include/uapi       \
+          -c runqslower.bpf.c -o /bpf/tools/testing/selftests/bpf/tools/build/runqslower/runqslower.bpf.o && \
+          llvm-strip -g /bpf/tools/testing/selftests/bpf/tools/build/runqslower//runqslower.bpf.o
+    /bin/sh: 1: clang: not found
+
+Explicitly propagate CLANG and LLVM_STRIP to the runqslower sub-make so
+that the LLVM toolchain selection from lib.mk is preserved.
 
 Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
 ---
- .../selftests/bpf/progs/bpf_iter_setsockopt.c | 17 ++-------------
- .../selftests/bpf/progs/connect4_prog.c       | 21 +++++++------------
- 2 files changed, 10 insertions(+), 28 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 1 +
+ tools/testing/selftests/lib.mk       | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_setsockopt.c b/tools/testing/selftests/bpf/progs/bpf_iter_setsockopt.c
-index 774d4dbe8189..a8aa5a71d846 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_setsockopt.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_setsockopt.c
-@@ -18,23 +18,10 @@
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 34ea23c63bd5..79ab69920dca 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -306,6 +306,7 @@ endif
  
- unsigned short reuse_listen_hport = 0;
- unsigned short listen_hport = 0;
--char cubic_cc[TCP_CA_NAME_MAX] = "bpf_cubic";
-+const char cubic_cc[] = "bpf_cubic";
- char dctcp_cc[TCP_CA_NAME_MAX] = "bpf_dctcp";
- bool random_retry = false;
+ $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
+ 	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	       \
++		    CLANG=$(CLANG) LLVM_STRIP=$(LLVM_STRIP)		       \
+ 		    OUTPUT=$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=$(VMLINUX_BTF)     \
+ 		    BPFTOOL_OUTPUT=$(HOST_BUILD_DIR)/bpftool/		       \
+ 		    BPFOBJ_OUTPUT=$(BUILD_DIR)/libbpf/			       \
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index a448fae57831..f14255b2afbd 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -8,6 +8,7 @@ LLVM_SUFFIX := $(LLVM)
+ endif
  
--static bool tcp_cc_eq(const char *a, const char *b)
--{
--	int i;
--
--	for (i = 0; i < TCP_CA_NAME_MAX; i++) {
--		if (a[i] != b[i])
--			return false;
--		if (!a[i])
--			break;
--	}
--
--	return true;
--}
+ CLANG := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
++LLVM_STRIP := $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
  
- SEC("iter/tcp")
- int change_tcp_cc(struct bpf_iter__tcp *ctx)
-@@ -58,7 +45,7 @@ int change_tcp_cc(struct bpf_iter__tcp *ctx)
- 			   cur_cc, sizeof(cur_cc)))
- 		return 0;
- 
--	if (!tcp_cc_eq(cur_cc, cubic_cc))
-+	if (bpf_strncmp(cur_cc, TCP_CA_NAME_MAX, cubic_cc))
- 		return 0;
- 
- 	if (random_retry && bpf_get_prandom_u32() % 4 == 1)
-diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
-index 9e9ebf27b878..9d158cfad981 100644
---- a/tools/testing/selftests/bpf/progs/connect4_prog.c
-+++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
-@@ -34,6 +34,9 @@
- #define SOL_TCP 6
- #endif
- 
-+const char reno[] = "reno";
-+const char cubic[] = "cubic";
-+
- __attribute__ ((noinline)) __weak
- int do_bind(struct bpf_sock_addr *ctx)
- {
-@@ -50,35 +53,27 @@ int do_bind(struct bpf_sock_addr *ctx)
- }
- 
- static __inline int verify_cc(struct bpf_sock_addr *ctx,
--			      char expected[TCP_CA_NAME_MAX])
-+			      const char expected[])
- {
- 	char buf[TCP_CA_NAME_MAX];
--	int i;
- 
- 	if (bpf_getsockopt(ctx, SOL_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
- 		return 1;
- 
--	for (i = 0; i < TCP_CA_NAME_MAX; i++) {
--		if (buf[i] != expected[i])
--			return 1;
--		if (buf[i] == 0)
--			break;
--	}
-+	if (bpf_strncmp(buf, TCP_CA_NAME_MAX, expected))
-+		return 1;
- 
- 	return 0;
- }
- 
- static __inline int set_cc(struct bpf_sock_addr *ctx)
- {
--	char reno[TCP_CA_NAME_MAX] = "reno";
--	char cubic[TCP_CA_NAME_MAX] = "cubic";
--
--	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
-+	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, (void *)reno, sizeof(reno)))
- 		return 1;
- 	if (verify_cc(ctx, reno))
- 		return 1;
- 
--	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
-+	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, (void *)cubic, sizeof(cubic)))
- 		return 1;
- 	if (verify_cc(ctx, cubic))
- 		return 1;
+ CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
+ CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
 -- 
 2.51.1
 
