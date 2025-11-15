@@ -1,81 +1,82 @@
-Return-Path: <linux-kselftest+bounces-45677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74722C5FC1B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 01:47:04 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDCBDC5FC7F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 01:55:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 826A14E3ACC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 00:47:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 901B1360617
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 00:53:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09CBB145FE0;
-	Sat, 15 Nov 2025 00:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2791A256B;
+	Sat, 15 Nov 2025 00:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BQPKiKh1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KssO1vHO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5D427707
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 00:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 217F117C220
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 00:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763167619; cv=none; b=pmo6Iyot2qhjS6BJFWF8Kder7hhlvpPXIX+q/5UQq9XapRas4XDFF7DD3fKMCsnAFD5fiWfaq9YrVss8Y8/U7xMuzKrtyWpqOiJIsXrMlZTRv7ls9zdik76kuI3b6pU+A89EU0Xrm4/pnz5EeL5obdChcWT2xvSqL/24osoIxIw=
+	t=1763167979; cv=none; b=VdY98ZTSkvpKqPMIl3LNMd2qoOikWcqa/ZOKtRwnRrDxF5D14M5VboCyTj1Sc5kIbMFkemnp4SVdaxKDho34e5D7b++hjicrcc/JGbc4ri8eorbZhT6g7NdEnBpZqIY5RlgEwGr2/3QfzAp4OPMXSQj2ZvMRuU14fFOxGHlOm0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763167619; c=relaxed/simple;
-	bh=1/rD70ZHFrBNjJjci45pfQlAUENF4SO4u3lc/h6C+Zc=;
+	s=arc-20240116; t=1763167979; c=relaxed/simple;
+	bh=Zt6gL3AszafFvMRDqHPmrtZZuuPTg89Q67zHxC/2ZRw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=W7olQUEeowKLbqvuDr1jaOFhORAL5+s3WdgpaFPZVmIYxlO2dzti76yLwcFSWh7M+azdeRSWc3I26v6ZoQGi3/+DCkkwFyAg9SJGllOCbvMXbzeadOYRq3f5qi5TV//YxTNcVhguLebKd3C3lqkFLabMIfXPHUPFpAANST0X2H4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BQPKiKh1; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=UvRjH/kEkr17GeLazUgG5dkd/umrAkmxGMshPFVlg1VbfhDrAB1/CcNwGPP57RmG3sarHFS3XYPlInWx5Psdwxoiw+vOIXjFa4S3NtVHPQj3Qxb1A3BRWBwOVhnEaug3bloDTrxMYq/ZN6KHN8v8OB6KqjaA8ZRbguVCpighyRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KssO1vHO; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-341aec498fdso4016714a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 16:46:58 -0800 (PST)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3438744f11bso3706636a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 16:52:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763167617; x=1763772417; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763167977; x=1763772777; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mr/52DwIA8Vew8AuO0L8R6bm0vR8dQ+5A9WA+WG6t/s=;
-        b=BQPKiKh1yfHcIrDSW59IH51D2rhvPkgu8emslDNrXmC7gsCFmyIVKyaXPuUky4qISc
-         +19Up0qR7WWgxb5rLlc/vAvyxEK+7xSgmw20NRkuvhsi2uNabtm3xwQFagWK4bxGDqS/
-         7gYj1dgRY4Qz6cyLqfB+LbbJ8hPrpBmmNQPY/qOHjAjqEqdl2m5Gvwe2rcSO1iFrvHaC
-         9swHyDubrt6x4xbkszwVPYZjC8xoJlQCUauEvdXnHkEai5Ya/mUGIPDi/aaxO3ZaLOIy
-         FiDZnjit3RNrnR++7shFiwMTsNlkRDSDa1Av00GMtGH845Ycpd83v1N/4tK/TCeKiRf/
-         xCOw==
+        bh=U9SSTkCfK9gXlKFXxpFitF3UmgPFfqReOkQFg2JXAv8=;
+        b=KssO1vHOaxB0iZyyyzHkQoFSFHxdym+y7nD/4/2IFsnqBdOnGAozASkzlk5qsBgw7C
+         RmwOUA2hlrauPMZU7y6qzvx3oH0nQVwyOlRR4dtHb1DGJfxa74mWSDvQSd0nP99OM541
+         y/AObdqYNBmYLifTZK6m5T7SmHFHkoBjSjsXqhOo/rmxZ/IY5FU9xUOB5GYqa30liK8j
+         qWlYplMet9f7a+DBMVbcOUqGavFSUEGKdH/uzLku8KWKCBfIEITxraeKpX8bC8M+Gwpe
+         DmAWLVCjttbF2v0+6J5rGWFaQZyIjxhd0y3hI0YRIWLu87TVdDpUH835MdkjPQfQJzbA
+         E5PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763167617; x=1763772417;
+        d=1e100.net; s=20230601; t=1763167977; x=1763772777;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mr/52DwIA8Vew8AuO0L8R6bm0vR8dQ+5A9WA+WG6t/s=;
-        b=SJsLTxMS0WUUxRFNGGSkyfIfxnuNOKcomMLWrXMCdzr3I1VJ2PKos83s1lJWKwNhDS
-         WAMkchf/XYNQxcdSRYxUqqOaE5bk0Dvov2vV8fZ+3bEh7EmJz+IE2y6Dl7Db8uHxjogE
-         RlT0ej/F4PDiC1cEiJhHXbVRKFMcPvAgcbJFmnXYda7P+GQIkgHd56uB1LM/D/S8dafG
-         iXWO09Yhm0mT44C0YmnT8s1VaknHXMOJIHQoT0Bz4Roo9Ecx+5sWJuL1UiOvOtwVzOSW
-         rvxAWIKYAb2SpiJsxlcL01DQcq3maWtPItL+jduV2XcbC2uh3MGrTHFzzHLdBI9AOTb5
-         15hg==
-X-Forwarded-Encrypted: i=1; AJvYcCWWWfiD4lBaR1SNw+gL9hfzTbgwWAJgGaZ7F2zm6HwHfEF8FJVNMTh2B7HZ68VsEqRhmNmzsrXbgNX/CPftxWY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZST8jGTEICNp9/q9uj6nzRaiH0ruOdPCjc1YHP/VKnjs/EVdv
-	Wox3PZt4EEhJEft/z7Nv6frb0oNJzPPPFrJH9igG1IvNeoh3OhXMVVDtRDNpu4JMVsO4OjytPcz
-	0WlQzrDwjvRN8uKq750yC4SwUgQ==
-X-Google-Smtp-Source: AGHT+IHPDsoGUhVWbmh0UerKKIaGr6kr4KuHT3qBmIvhj2MnXtnNCORQphwRQGqEcjJQnhvfFDaRm0g88w6S7pk3mw==
-X-Received: from pjbdb8.prod.google.com ([2002:a17:90a:d648:b0:343:5c2:dd74])
+        bh=U9SSTkCfK9gXlKFXxpFitF3UmgPFfqReOkQFg2JXAv8=;
+        b=EaJh1t8rLf3OaCI4lHqXhZvtLlf+lhiXy5q1gLdmB5pcjfDPsShvC0I7gJo5eSx9y2
+         X9WM/HJgUnuG6FoQna2gjKsxF8t6M0X6WwKMCJSyhZZjy2rJ84gyUSFAdYhrxpERzRoh
+         +R6cpYR6CE5Sz3rTxGU47HzZjyzFpHjW7MVCKTtuTxdUAAzJGquay4hpJ1BQLS0mPV24
+         qeR0O/gv8pkVkuoDUD+sVFhY7Z5NsJJgkaKrIqnTbxUmDtG9H2uPTm3J//1QC8SWzR2A
+         zW1UYTlq9+v9qbpQYkD9SLvXmvSUmoHPECp3wx8QLd1OVu+vAeJywmJS3vhB9EiEqWBt
+         ERlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWuN5TXHnAcJmq/G6VGW7CtUvxZ08YBNJhhvpHcwj12yX8Sexcf3UyEQyAVytxrCGADy/PCxWVWF6vaLaYviUw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ4oKNG0OJunRBm2pjixl39K+PHYv3Jx45VbstTn4uwzPGVbLp
+	cKCjwnr9pvZKtH6srYkp7cU8B60Yb+Xt+On220mA7JfE2LL3TyK64/7rVk3qR8A005PJhbRUr0X
+	z9m6dgNDmCzkZON9sdUa/Css9hQ==
+X-Google-Smtp-Source: AGHT+IFQ6ztt0EQFHe4KI+3WuxtLaazXI8OcEuS0OZM8dxl+4bnHUaopiO2H4ku8y1VZu9JaoG1ZZurdE58bMYL0dA==
+X-Received: from pjbpm10.prod.google.com ([2002:a17:90b:3c4a:b0:340:a9b3:320c])
  (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:1dc9:b0:340:29a1:1b0c with SMTP id 98e67ed59e1d1-343f9e93781mr5917746a91.7.1763167617416;
- Fri, 14 Nov 2025 16:46:57 -0800 (PST)
-Date: Fri, 14 Nov 2025 16:46:56 -0800
-In-Reply-To: <aQnGJ5agTohMijj8@yzhao56-desk.sh.intel.com>
+ 2002:a17:90b:3c89:b0:339:cece:a99 with SMTP id 98e67ed59e1d1-343f9eb3128mr5188244a91.13.1763167977228;
+ Fri, 14 Nov 2025 16:52:57 -0800 (PST)
+Date: Fri, 14 Nov 2025 16:52:55 -0800
+In-Reply-To: <aRG35j3OhMvQo85n@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <cover.1760731772.git.ackerleytng@google.com> <5a4dfc265a46959953e6c24730d22584972b1179.1760731772.git.ackerleytng@google.com>
- <aQnGJ5agTohMijj8@yzhao56-desk.sh.intel.com>
-Message-ID: <diqz346gcebj.fsf@google.com>
-Subject: Re: [RFC PATCH v1 11/37] KVM: guest_memfd: Add support for KVM_SET_MEMORY_ATTRIBUTES
+References: <cover.1760731772.git.ackerleytng@google.com> <a3795f7fb4f785ced19abe18c2f33aa478c4d202.1760731772.git.ackerleytng@google.com>
+ <aRG35j3OhMvQo85n@yzhao56-desk.sh.intel.com>
+Message-ID: <diqzzf8oazh4.fsf@google.com>
+Subject: Re: [RFC PATCH v1 06/37] KVM: guest_memfd: Update kvm_gmem_populate()
+ to use gmem attributes
 From: Ackerley Tng <ackerleytng@google.com>
 To: Yan Zhao <yan.y.zhao@intel.com>
 Cc: cgroups@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
@@ -89,139 +90,74 @@ Cc: cgroups@vger.kernel.org, kvm@vger.kernel.org, linux-doc@vger.kernel.org,
 	haibo1.xu@intel.com, hannes@cmpxchg.org, hch@infradead.org, hpa@zytor.com, 
 	hughd@google.com, ira.weiny@intel.com, isaku.yamahata@intel.com, jack@suse.cz, 
 	james.morse@arm.com, jarkko@kernel.org, jgg@ziepe.ca, jgowans@amazon.com, 
-	jhubbard@nvidia.com, jroedel@suse.de, jthoughton@google.com, 
-	jun.miao@intel.com, kai.huang@intel.com, keirf@google.com, 
-	kent.overstreet@linux.dev, liam.merwick@oracle.com, 
-	maciej.wieczor-retman@intel.com, mail@maciej.szmigiero.name, 
-	maobibo@loongson.cn, mathieu.desnoyers@efficios.com, maz@kernel.org, 
-	mhiramat@kernel.org, mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, 
-	mingo@redhat.com, mlevitsk@redhat.com, mpe@ellerman.id.au, 
-	muchun.song@linux.dev, nikunj@amd.com, nsaenz@amazon.es, 
-	oliver.upton@linux.dev, palmer@dabbelt.com, pankaj.gupta@amd.com, 
-	paul.walmsley@sifive.com, pbonzini@redhat.com, peterx@redhat.com, 
-	pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, qperret@google.com, 
-	richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	rostedt@goodmis.org, roypat@amazon.co.uk, rppt@kernel.org, seanjc@google.com, 
-	shakeel.butt@linux.dev, shuah@kernel.org, steven.price@arm.com, 
-	steven.sistare@oracle.com, suzuki.poulose@arm.com, tabba@google.com, 
+	jhubbard@nvidia.com, jthoughton@google.com, jun.miao@intel.com, 
+	kai.huang@intel.com, keirf@google.com, kent.overstreet@linux.dev, 
+	liam.merwick@oracle.com, maciej.wieczor-retman@intel.com, 
+	mail@maciej.szmigiero.name, maobibo@loongson.cn, 
+	mathieu.desnoyers@efficios.com, maz@kernel.org, mhiramat@kernel.org, 
+	mhocko@kernel.org, mic@digikod.net, michael.roth@amd.com, mingo@redhat.com, 
+	mlevitsk@redhat.com, mpe@ellerman.id.au, muchun.song@linux.dev, 
+	nikunj@amd.com, nsaenz@amazon.es, oliver.upton@linux.dev, palmer@dabbelt.com, 
+	pankaj.gupta@amd.com, paul.walmsley@sifive.com, pbonzini@redhat.com, 
+	peterx@redhat.com, pgonda@google.com, prsampat@amd.com, pvorel@suse.cz, 
+	qperret@google.com, richard.weiyang@gmail.com, rick.p.edgecombe@intel.com, 
+	rientjes@google.com, rostedt@goodmis.org, roypat@amazon.co.uk, 
+	rppt@kernel.org, seanjc@google.com, shakeel.butt@linux.dev, shuah@kernel.org, 
+	steven.price@arm.com, suzuki.poulose@arm.com, tabba@google.com, 
 	tglx@linutronix.de, thomas.lendacky@amd.com, vannapurve@google.com, 
-	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com, 
-	wei.w.wang@intel.com, will@kernel.org, willy@infradead.org, wyihan@google.com, 
-	xiaoyao.li@intel.com, yilun.xu@intel.com, yuzenghui@huawei.com, 
-	zhiquan1.li@intel.com
+	vbabka@suse.cz, viro@zeniv.linux.org.uk, vkuznets@redhat.com, will@kernel.org, 
+	willy@infradead.org, wyihan@google.com, xiaoyao.li@intel.com, 
+	yilun.xu@intel.com, yuzenghui@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 
 Yan Zhao <yan.y.zhao@intel.com> writes:
 
-> On Fri, Oct 17, 2025 at 01:11:52PM -0700, Ackerley Tng wrote:
->> For shared to private conversions, if refcounts on any of the folios
->> within the range are elevated, fail the conversion with -EAGAIN.
->> 
->> At the point of shared to private conversion, all folios in range are
->> also unmapped. The filemap_invalidate_lock() is held, so no faulting
->> can occur. Hence, from that point on, only transient refcounts can be
->> taken on the folios associated with that guest_memfd.
->> 
->> Hence, it is safe to do the conversion from shared to private.
->> 
->> After conversion is complete, refcounts may become elevated, but that
->> is fine since users of transient refcounts don't actually access
->> memory.
->> 
->> For private to shared conversions, there are no refcount checks. any
->> transient refcounts are expected to drop their refcounts soon. The
->> conversion process will spin waiting for these transient refcounts to
->> go away.
-> Where's the code to spin?
->
-
-Thanks, I will fix the commit message for the next revision.
-
->> +/*
->> + * Preallocate memory for attributes to be stored on a maple tree, pointed to
->> + * by mas.  Adjacent ranges with attributes identical to the new attributes
->> + * will be merged.  Also sets mas's bounds up for storing attributes.
->> + *
->> + * This maintains the invariant that ranges with the same attributes will
->> + * always be merged.
->> + */
->> +static int kvm_gmem_mas_preallocate(struct ma_state *mas, u64 attributes,
->> +				    pgoff_t start, size_t nr_pages)
+>>  #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_POPULATE
+>> +static bool kvm_gmem_range_is_private(struct gmem_inode *gi, pgoff_t index,
+>> +				      size_t nr_pages, struct kvm *kvm, gfn_t gfn)
 >> +{
->> +	pgoff_t end = start + nr_pages;
->> +	pgoff_t last = end - 1;
+>> +	pgoff_t end = index + nr_pages - 1;
 >> +	void *entry;
 >> +
->> +	/* Try extending range. entry is NULL on overflow/wrap-around. */
->> +	mas_set_range(mas, end, end);
->> +	entry = mas_find(mas, end);
->> +	if (entry && xa_to_value(entry) == attributes)
->> +		last = mas->last;
->> +
->> +	mas_set_range(mas, start - 1, start - 1);
-> Check start == 0 ?
->
+>> +	if (vm_memory_attributes)
+>> +		return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
+>> +						       KVM_MEMORY_ATTRIBUTE_PRIVATE,
+>> +						       KVM_MEMORY_ATTRIBUTE_PRIVATE);
+> Can't compile kvm_range_has_vm_memory_attributes() if
+> CONFIG_KVM_VM_MEMORY_ATTRIBUTES is not set.
 
-Thanks!
+Thanks! I will fix this in the next revision.
 
->> +	entry = mas_find(mas, start - 1);
->> +	if (entry && xa_to_value(entry) == attributes)
->> +		start = mas->index;
->> +
->> +	mas_set_range(mas, start, last);
->> +	return mas_preallocate(mas, xa_mk_value(attributes), GFP_KERNEL);
->> +}
-> ...
->
->> +static long kvm_gmem_set_attributes(struct file *file, void __user *argp)
->> +{
->> +	struct gmem_file *f = file->private_data;
->> +	struct inode *inode = file_inode(file);
->> +	struct kvm_memory_attributes2 attrs;
->> +	pgoff_t err_index;
->> +	size_t nr_pages;
->> +	pgoff_t index;
->> +	int r;
->> +
->> +	if (copy_from_user(&attrs, argp, sizeof(attrs)))
->> +		return -EFAULT;
->> +
->> +	if (attrs.flags)
->> +		return -EINVAL;
->> +	if (attrs.attributes & ~kvm_supported_mem_attributes(f->kvm))
->> +		return -EINVAL;
->> +	if (attrs.size == 0 || attrs.offset + attrs.size < attrs.offset)
->> +		return -EINVAL;
->> +	if (!PAGE_ALIGNED(attrs.offset) || !PAGE_ALIGNED(attrs.offset))
-> Should be
-> if (!PAGE_ALIGNED(attrs.offset) || !PAGE_ALIGNED(attrs.size))
-> ?
->
 
-Thanks!
+We've been discussing HugeTLB support in the guest_memfd upstream calls
+and I'd like to add a quick follow up here, with code, for anyone who
+might be interested. Here's a WIP tree:
 
->> +		return -EINVAL;
->> +
->> +	if (attrs.offset > inode->i_size ||
-> Should be
-> if (attrs.offset >= inode->i_size ||
-> ?
+https://github.com/googleprodkernel/linux-cc/tree/wip-gmem-conversions-hugetlb-restructuring
 
-Thanks!
->> +	    attrs.offset + attrs.size > inode->i_size)
->> +		return -EINVAL;
->> +
->> +	nr_pages = attrs.size >> PAGE_SHIFT;
->> +	index = attrs.offset >> PAGE_SHIFT;
->> +	r = __kvm_gmem_set_attributes(inode, index, nr_pages, attrs.attributes,
->> +				      &err_index);
->> +	if (r) {
->> +		attrs.error_offset = err_index << PAGE_SHIFT;
->> +
->> +		if (copy_to_user(argp, &attrs, sizeof(attrs)))
->> +			return -EFAULT;
->> +	}
->> +
->> +	return r;
->> +}
+This tree was based off kvm-next (as of 2025-10-08), and includes
+
++ Mmap fixes from Sean
++ NUMA mempolicy support from Shivank Garg (AMD)
++ Some cleanup patches from Sean
++ Conversion series [1] with some cleanups (Thanks for the comments and
+  reviews on this series! Haven't had time to figure out all of it,
+  addressed some first)
++ st_blocks fix for guest_memfd, which was discussed at the guest_memfd
+  upstream call: slides [2]
++ HugeTLB support without conversion: this stage does not yet take into
+  account comments from the upstream call. This stage provides support
+  for HugeTLB to be used through guest_memfd for private memory. This
+  has to be used with the KVM parameter vm_memory_attributes set to
+  true. This stage can be used to test Yan's TDX huge page support by
+  setting up guest_memfd with HugeTLB just for private memory, with
+  shared memory being taken from elsewhere.
++ HugeTLB support with conversion and folio restructuring: this stage
+  also does not take into account comments from the upstream call, so it
+  still disables the INIT_SHARED flag, although HugeTLB can now be used
+  with in-place conversion for both shared and private memory. This can
+  be used to test Yan's TDX huge page support.
+
+[1] https://lore.kernel.org/all/cover.1760731772.git.ackerleytng@google.com/T/
+[2] https://lpc.events/event/18/contributions/1764/attachments/1409/3715/2025-10-30%20guest_memfd%20upstream%20call_%20guest_memfd%20HugeTLB%20support%20overview.pdf
 
