@@ -1,111 +1,186 @@
-Return-Path: <linux-kselftest+bounces-45685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45686-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88A2CC5FF77
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 04:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 139D0C5FFAB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 05:08:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 87F0E4E4605
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 03:44:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 79D964E48E8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 04:08:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A619D233134;
-	Sat, 15 Nov 2025 03:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AC5D1DE4CE;
+	Sat, 15 Nov 2025 04:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kdx/c78r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E851B21322F;
-	Sat, 15 Nov 2025 03:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756E0F50F
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 04:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763178213; cv=none; b=lT94Y+LFp+K+EuY+VSJnHiFA7GeyHF+jsXRiyrW9CLEw1/C+wfRmtA0kuIcUtJhiTCjqUY///SnzRLc4XYBn+kWwSWExcdR9fsO+koWm59xzSAmcprDZC0P1EJCjvrA6KjsNUh3V6pOh2xaQc9P2zussxs+1p/YpYCYzvTjtKkw=
+	t=1763179723; cv=none; b=e8OzIPRlCrthfCCM6nxzll8BWT/sRQtKJpbvqRRE4Le8SRA6G/YTfyER/Ry5yWaMZIlIzoO0q2PMXN85pQhHBJYTIcrCDlN5kl2aW/cPYj9oCm9CVEvj9yKJRb4PYL2S8TtTb8NMGiOTxnar3oyitolyev2nGjyzUWZLK7eIdwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763178213; c=relaxed/simple;
-	bh=AiWXujPQ04Yxz29lTc7t34+mHLsOGO5fR5Xm9tgyWmY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a1AR1FMBTZnAfANdCpgqfk2ny/MUwwETQwnTXlSJA5Y7LGTvNHFuriXkB336F0lLDq9jmk+iW7P7HA5uw/vhacr+thPKl8M03lQ4FrKzxzM+YtaI0VrKIUWPqdCqIwq7dJuXl56vXPQRo0MamYPhB/tpieRrC0RtWIjqeik3FNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3cab0520c1d511f0a38c85956e01ac42-20251115
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:32808797-364d-407e-ab3c-c7abec898b65,IP:10,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:5
-X-CID-INFO: VERSION:1.3.6,REQID:32808797-364d-407e-ab3c-c7abec898b65,IP:10,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:5
-X-CID-META: VersionHash:a9d874c,CLOUDID:1aa8b991e1503b29d3837da6fb433775,BulkI
-	D:251113184535IYNM5ZGZ,BulkQuantity:5,Recheck:0,SF:17|19|64|66|78|80|81|82
-	|83|102|841,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk
-	:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,B
-	RE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3cab0520c1d511f0a38c85956e01ac42-20251115
-X-User: zhangguopeng@kylinos.cn
-Received: from [192.168.24.105] [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <zhangguopeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 1973445955; Sat, 15 Nov 2025 11:43:23 +0800
-Message-ID: <9eddc66c-4a95-4692-889b-de9f06726a7f@kylinos.cn>
-Date: Sat, 15 Nov 2025 11:43:20 +0800
+	s=arc-20240116; t=1763179723; c=relaxed/simple;
+	bh=KZGqL2Ezl0HG8L3ZKNB+3v2T5VnKNS3msnMQ+mBqZBY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fG/OTAWZboxANoTPRszMlSLHPJCs/ubb1oyDsfLGNh/ln8eyqvlgWxReMm9pEDLeuvwuCUUS/japaLjFj0+F+cHQXEhh/KeYTrntTS6nUhN4gndtR/YnS8tFGZzz/m91g/Y6tRiMuAUnNzQvPvg4bA4Obq9E557wEllt/J8lkC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kdx/c78r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ADADC19425
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 04:08:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763179723;
+	bh=KZGqL2Ezl0HG8L3ZKNB+3v2T5VnKNS3msnMQ+mBqZBY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Kdx/c78r7wuHriNVNHW5bfwCSFqYvYcHnuJcdhAREmfpSvpc9Datzo1GQ784ItIV8
+	 vWXGy3xOp2fbx5NPYsojEJkxKC2KhQ/stcmi8EMrOW+6AfGJBUD0LWIxs/x6/lw5SZ
+	 qcuV3/gTi+btPR2H8v/w6iCrKGTK3tjNle1G9ez0/aZ5N4V7+e9WPmXWG5l40PmkWP
+	 ZznLGCkHHQX9RYYglhsDeeCqO8LPNFPgiz3c/3WjRdalRVlclYWACOAsCETiuyPR/2
+	 JIjleG0XLOY8L3GQsYbOx8P3/Y36vok/nxP4Hu2JK1fKUWvIISFxslBhyVlJbk123x
+	 cqpGGej89kFMQ==
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6408f9cb1dcso3941695a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Nov 2025 20:08:42 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUsFW2iYXoOdBoo15bbfEkTxG9cY1K7TlvqJ7FatFgEjjV6WS8KmhuW7gCc8MJ/zmB0pP7Xa7+kn6oyR8R/nlw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAyc9OLMQM6llnJ6gnROy2aZ/Txp2vn10zMt08/oyGmbv0AAmR
+	2tFP5Et6oF3COHt8+2lmTO1VBcrhQnsmo4yjrsLnFUzf/dgz7uLQvazVggNL3ZU4cpdU9zdcq9N
+	hYdZz8lQe6SnHq2YnrL/A/u2QVjfSdz4=
+X-Google-Smtp-Source: AGHT+IG9cQ3842nU2X96hW6f/gkC+5SQGjvtKdtQOMK6m2HstYAXMYIkvNvxji/TrvC80TdUeDVdiXrTNf1BUzk4eTg=
+X-Received: by 2002:a17:907:9603:b0:b72:5d9c:b47b with SMTP id
+ a640c23a62f3a-b73678ed0a1mr518109066b.36.1763179721512; Fri, 14 Nov 2025
+ 20:08:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/cgroup: conform test to TAP format output
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: tj@kernel.org, hannes@cmpxchg.org, shuah@kernel.org,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, sebastian.chlad@suse.com, longman@redhat.com
-References: <6lwnagu63xzanum2xx6vkm2qe4oh74fteqeymmkqxyjbovcce6@3jekdivdr7yf>
- <6916a8f5.050a0220.23bb4.ab7dSMTPIN_ADDED_BROKEN@mx.google.com>
- <4h54pkcisk5fmevglu3qldk5fb2rgo5355vfds3wplhekfumtz@qtwtixmuw2hz>
-From: Guopeng Zhang <zhangguopeng@kylinos.cn>
-In-Reply-To: <4h54pkcisk5fmevglu3qldk5fb2rgo5355vfds3wplhekfumtz@qtwtixmuw2hz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20251104113700.1561752-1-maobibo@loongson.cn> <20251104113700.1561752-4-maobibo@loongson.cn>
+In-Reply-To: <20251104113700.1561752-4-maobibo@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 15 Nov 2025 12:08:28 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5TNk-pxVthnau=GgfB=5K9fUQsFnKKKH=VqLaLmENFtA@mail.gmail.com>
+X-Gm-Features: AWmQ_bnuZb7NbZ1VUmGJms5OOq9ewjA1_-hRujqnV8OhCjjyH6ZWv0RIiUblj2g
+Message-ID: <CAAhV-H5TNk-pxVthnau=GgfB=5K9fUQsFnKKKH=VqLaLmENFtA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/7] KVM: LoongArch: selftests: Add basic interfaces
+To: Bibo Mao <maobibo@loongson.cn>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi, Bibo,
 
+On Tue, Nov 4, 2025 at 7:37=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrote=
+:
+>
+> Add some basic function interfaces such as CSR register access,
+> local irq enable or disable APIs.
+This is "basic interfaces", so better to be before Patch-2 (or keep
+the order but change the subject)?
 
-On 11/14/25 22:32, Michal Koutný wrote:
-> On Fri, Nov 14, 2025 at 11:55:48AM +0800, Guopeng Zhang <zhangguopeng@kylinos.cn> wrote:
->> Actually, selftests are no longer just something for developers to view locally; they are now extensively 
->> run in CI and stable branch regression testing. Using a standardized layout means that general test runners 
->> and CI systems can parse the cgroup test results without any special handling.
-> 
-> Nice. I appreciate you took this up.
-> 
->> This patch is not part of a formal, tree-wide conversion series I am running; it is an incremental step to align the 
->> cgroup C tests with the existing TAP usage. I started here because these tests already use ksft_test_result_*() and 
->> only require minor changes to generate proper TAP output.
-> 
-> The tests are in various state of usage, correctness and usefulness,
-> hence...
-> 
->>
->>> I'm asking to better asses whether also the scripts listed in
->>> Makefile:TEST_PROGS should be converted too.
->>
->> I agree that having them produce TAP output would benefit tooling and CI. I did not want to mix 
->> that into this change, but if you and other maintainers think this direction is reasonable, 
->> I would be happy to follow up and convert the cgroup shell tests to TAP as well.
-> 
-> ...I'd suggest next focus on test_cpuset_prs.sh (as discussed, it may
-> need more changes to adapt its output too).
-> 
-> Michal
-Yes, I agree that test_cpuset_prs.sh should be the next focus.
-Thanks again for the guidance.
+Huacai
 
-Guopeng
-
+>
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  .../kvm/include/loongarch/processor.h         | 52 +++++++++++++++++++
+>  .../selftests/kvm/lib/loongarch/processor.c   |  5 ++
+>  2 files changed, 57 insertions(+)
+>
+> diff --git a/tools/testing/selftests/kvm/include/loongarch/processor.h b/=
+tools/testing/selftests/kvm/include/loongarch/processor.h
+> index a18ac7bff303..b027f8f4dac7 100644
+> --- a/tools/testing/selftests/kvm/include/loongarch/processor.h
+> +++ b/tools/testing/selftests/kvm/include/loongarch/processor.h
+> @@ -118,6 +118,28 @@
+>  #define  CSR_TLBREHI_PS_SHIFT          0
+>  #define  CSR_TLBREHI_PS                        (0x3fUL << CSR_TLBREHI_PS=
+_SHIFT)
+>
+> +#define csr_read(csr)                          \
+> +({                                             \
+> +       register unsigned long __v;             \
+> +       __asm__ __volatile__(                   \
+> +               "csrrd %[val], %[reg]\n\t"      \
+> +               : [val] "=3Dr" (__v)              \
+> +               : [reg] "i" (csr)               \
+> +               : "memory");                    \
+> +       __v;                                    \
+> +})
+> +
+> +#define csr_write(v, csr)                      \
+> +({                                             \
+> +       register unsigned long __v =3D v;         \
+> +       __asm__ __volatile__ (                  \
+> +               "csrwr %[val], %[reg]\n\t"      \
+> +               : [val] "+r" (__v)              \
+> +               : [reg] "i" (csr)               \
+> +               : "memory");                    \
+> +       __v;                                    \
+> +})
+> +
+>  #define EXREGS_GPRS                    (32)
+>
+>  #ifndef __ASSEMBLER__
+> @@ -147,6 +169,36 @@ struct handlers {
+>  void vm_init_descriptor_tables(struct kvm_vm *vm);
+>  void vm_install_exception_handler(struct kvm_vm *vm, int vector, handler=
+_fn handler);
+>
+> +static inline void local_irq_enable(void)
+> +{
+> +       unsigned int flags =3D CSR_CRMD_IE;
+> +
+> +       register unsigned int mask asm("$t0") =3D CSR_CRMD_IE;
+> +
+> +       __asm__ __volatile__(
+> +               "csrxchg %[val], %[mask], %[reg]\n\t"
+> +               : [val] "+r" (flags)
+> +               : [mask] "r" (mask), [reg] "i" (LOONGARCH_CSR_CRMD)
+> +               : "memory");
+> +}
+> +
+> +static inline void local_irq_disable(void)
+> +{
+> +       unsigned int flags =3D 0;
+> +
+> +       register unsigned int mask asm("$t0") =3D CSR_CRMD_IE;
+> +
+> +       __asm__ __volatile__(
+> +               "csrxchg %[val], %[mask], %[reg]\n\t"
+> +               : [val] "+r" (flags)
+> +               : [mask] "r" (mask), [reg] "i" (LOONGARCH_CSR_CRMD)
+> +               : "memory");
+> +}
+> +
+> +static inline void cpu_relax(void)
+> +{
+> +       asm volatile("nop" ::: "memory");
+> +}
+>  #else
+>  #define PC_OFFSET_EXREGS               ((EXREGS_GPRS + 0) * 8)
+>  #define ESTAT_OFFSET_EXREGS            ((EXREGS_GPRS + 1) * 8)
+> diff --git a/tools/testing/selftests/kvm/lib/loongarch/processor.c b/tool=
+s/testing/selftests/kvm/lib/loongarch/processor.c
+> index be537c5ff74e..20ba476ccb72 100644
+> --- a/tools/testing/selftests/kvm/lib/loongarch/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/loongarch/processor.c
+> @@ -373,3 +373,8 @@ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu,=
+ void *guest_code)
+>         regs.pc =3D (uint64_t)guest_code;
+>         vcpu_regs_set(vcpu, &regs);
+>  }
+> +
+> +uint32_t guest_get_vcpuid(void)
+> +{
+> +       return csr_read(LOONGARCH_CSR_CPUID);
+> +}
+> --
+> 2.39.3
+>
 
