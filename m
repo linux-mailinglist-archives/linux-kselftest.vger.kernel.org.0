@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-45695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 768ABC60C4B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 23:57:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AA9EC60C63
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 23:58:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D4376357CBC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 22:57:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F2DE3AE9DC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Nov 2025 22:57:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE21A25B30D;
-	Sat, 15 Nov 2025 22:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FC1267386;
+	Sat, 15 Nov 2025 22:56:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Y/qbIx5W"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RMdq3qO2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C560D259CB9
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 22:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830AF191F84
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 22:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763247403; cv=none; b=le3XpX+ZFwoOfQ96cz1bdBAaPaC4YB5v6bwQb2WwrTwE8i0MQzcM5zxBou6xWyvJ3UTbX/O2h5DD+dSqiyLn9pjTRF02MEyaJS4uaglB0JbN1bQBvQnMwpUJm9Ud1hsVhFGWJxLGsgvfKUzy/dpEzxG0driztd3xVwF6BwA++dM=
+	t=1763247413; cv=none; b=YMCbvlHyrovccm+S6IlTkDmVn3kBD3DoZjAzQa4fpSBL+xQPimPCqiu3fTlyWIrNu3x9uxu9oRrfjmnULWheRtDZQPKwSQolSAwb78jACEvjJTZHiX6DD/ObaEznTeyYqY+osg1kpAZfLRsGW0XbtBXJGacJYXZseDc0AfTe5JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763247403; c=relaxed/simple;
-	bh=IRddIqUtwNi+AV55PXrVdRjSup1mSpc0MTZ8UM5J3EE=;
+	s=arc-20240116; t=1763247413; c=relaxed/simple;
+	bh=Isqdw0RhAzylXu4IdiwZU689kLt/pJObP5hCd/DHxbo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QhanPoTitqI1vfslv8R62k7YwXxj324d4nUT99b+k0iVdCnPmAZXs+Rq3H0ko7yZbfZjrN5DTjHfjA17taAF+/Wm+okMTsePt2zgL5nv4lEY/aI76AjPRSD2W8xQPWjT3oHudqL5uPmoRsfMS6Uwypji+vsh7M9Ysh2LQdzJvjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Y/qbIx5W; arc=none smtp.client-ip=209.85.128.51
+	 MIME-Version; b=fsoN7uNdIdunpGXQzonC6E5CUmn/71KRXKPZl0137RHX40Tz6+eU9FLtXa5WRFGh2Mr9ff1IwuA7LM3R3vGKSswj6WVdxxFuPZ7AtqdXIBdBfbizpre14XHPUAaqgm51fCSb+O6OqegL5hBe0D9ykerpvmH7b7rQfTxyix/IO/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RMdq3qO2; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4775ae5684fso15940025e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 14:56:41 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4777771ed1aso20832105e9.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 14:56:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763247400; x=1763852200; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1763247408; x=1763852208; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4kLOmfcGszNcREdllxFMniLyDC8fKR9Rrc1ubu80Dpk=;
-        b=Y/qbIx5WrHBUYe2S75QwB9Dkp7/8cOzNfNURa8yCNNlm8EZ33VBXRWCzz5s9P0dH6F
-         u90PjMzq9GQboLVZycmIv8uTr/CUHYxixClQStaFL9wa/3Ul463yBU+4cT61vBPirSO5
-         OYDs2dQ9oZtjLdKIkg8xj9DveAjVnHlQ/TXAKdAfzs0G2hLGDFsxzzBGhvHT83L6CEwy
-         jUX3/eP9cIkZiZbEH+t1dexirmicYRyuQ13U26CkEl+gBwwidHVUctGUdhh+r2hzTU8O
-         Kzt4HbrlMilyW0tdEqOAB44/DQikTbkugcB6LhCFnHMQCr5Fz0zIis3tsJp/XW/j1ALl
-         yOdA==
+        bh=hax3l6ZHFp82yvZa1z7cG8hX78sJJl+3NtBXaKxMPD8=;
+        b=RMdq3qO2e67+fzvYUpA22MDxQcGojoSDGqGXVqIrBYpf9X5yrBfggvNKVWz6w01T2c
+         tph9ykq0TYcXe0QOwEFtByB6zrzuc/fQYJnEv+HKwBP9L5Ov4JatAT8ZXAie4D+k9Jja
+         18ob2KlL+aZn1w8N9uBRlaVIwPlwzF9RZHM48GmDczgZH9aMu+8wlpamy2MymTP5DfQ5
+         2M8Wg6Exj3e97TReaqitftzBT5RCx3aLfz9pwrUPAx/FVJVC2DIklHMduUASsWQVI9R3
+         +uQV2OipcVUS6dNWqv6WrKKc9sGV1SQCpvLh7U1nCepbudGt25VEvD1QQjy0KP+MzCkr
+         CSmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763247400; x=1763852200;
+        d=1e100.net; s=20230601; t=1763247408; x=1763852208;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=4kLOmfcGszNcREdllxFMniLyDC8fKR9Rrc1ubu80Dpk=;
-        b=mN8Y4Wh9bk0mS0N+CPiRyK7MhA69BN+CPOWOHkRRYp3YDW64inmXl/ITuhkRx59JI2
-         HZmJMdYer+t6VWp1XixqaWRGiTbNvh9geRwqkNqlg++3Y8612VVFn+2w8qBWXlCNCU5y
-         NQGJ4COOZlBbotcmOuqhSGdZyHFaPp0CwvQKPlbLfQz6T8vPTbNPJUhZTi+uDZ7enn/6
-         ECl9ExC+aD4crBkaOeCF63+BhybpXcZM1tKSgpDCRheTp1TEMYbvY1Tk2HyPYt8q44Oy
-         8VurdZJVkD3CWVXlO0s6mH3a212Jkes9vWMS9tzzFSFafM/yjbBT269JlVD3c7V89rfl
-         hJHw==
-X-Forwarded-Encrypted: i=1; AJvYcCXMbmtdKnosx8kE5RozOHbmZ8gWI9tGUj8r+wxJerZEVoqwe5k1DkE1bAKLFot4ar+omIja1IzSeDYizl8JryE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXoI8GTlpd1qNlUhA5woR4PymCwndFO9RA0Gfw+8nMXlR4F0bU
-	aAKWIxc9EwcQb6utwri0pJ8HSYHXQyjy9nEXG7Pw4cTfEluwx3CsOZ4TQSjjgLYr3GU=
-X-Gm-Gg: ASbGncsvLtGXy+t86mMq1WTEjl0ykfZnfzLqZvLiodhUeBLTRnj/lamHkIvuw3gA4nz
-	MuUOxHjwsnLpxktsXrqFcOqC7FlbqZK8g+8rjQPUYffF8a3V4xhkxlicZAYHII74tKpGUuIxQmQ
-	HmRATYeYMWQgzC4lLpVagACJpOM5Mdk0FFXiirZASAOp3rxBtgYUF8utU8X+f+nJcb3VQCa5f29
-	6aT9yC7j36Boxs3zg3Lyk/j3v4IZHTZ/UhA1pIQjX5Iphs1sKuD+ybC7e+NZa9D0oZgx2zUt1x0
-	9Y4yaF0IuPmKR5jrkQ0MNUqUcEc1r2ofVC6scGbIX2VRrEfMUPvnD1HP8LYVdE+dY107PSciZJ6
-	fTyUItMsEJw2fW+AIN06bfnfdLSr3lVCA0cPHPVU+IpMsLTBaHWXbS/HLRLc+fdHd52LbHTBUvR
-	mHImvtRfR5RyazErmlAjzJy2IOAO3tMqpt77g65e1FNKbRVZI3iw==
-X-Google-Smtp-Source: AGHT+IFLVDoqoGskZ7MybkZYq547SpmYOBch5zZQEBS6OPlqP2gwNUILqNPcLqack3TT+ywYO2yYxg==
-X-Received: by 2002:a05:600c:4452:b0:477:832c:86ae with SMTP id 5b1f17b1804b1-4778fe5c755mr66428595e9.12.1763247400108;
-        Sat, 15 Nov 2025 14:56:40 -0800 (PST)
+        bh=hax3l6ZHFp82yvZa1z7cG8hX78sJJl+3NtBXaKxMPD8=;
+        b=QwqDK723xTogTS/5CneclXgcJp2kHn3yaarp2AGFXMaONCyAiip5DKtqjkZbFFqusx
+         HKzVNpMZFe6yax67S+jSSKCnSl3fteKwx6OiiF6JbPsjbEEiumKPO1RbZZiNZy4tUUhn
+         nyx7Kjz8MkJQgjYPxSxEPjN7/4Xru2ZLyS/OIDQvEtAYlbNrS6fc2V9gGH5fXRBHr/Rd
+         x/Sv8EBRe4K8zlVcItZ4EniE9bAWOMAVD7iWcpSVvJJBDyT+SuuOE0+gPF6/epehDN8Y
+         SfkkGctjeN8KmhQLZ5/BbtkgRvJZ0Fmf3quRNoARjl2duyoc1/ZoA7UfowlfoccvqpKZ
+         YbjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSyBIpkA2toQyI8Ek9o6dYGTzVl0xK+YkldEhVPMKcoSddJTiybItiWgOptCBC0NurEqEWGxGMGxQoMHau2DQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxaQucGYVPu/B3U8AN+MTaDVSoZRYBTYgIiye4HXvRccqio8ygJ
+	1ZZB26xJgCIm3ZWK1jfKb1REZPdECkPfqWgzHEibOscPaVhBd33hh/4CoMZelfGitso=
+X-Gm-Gg: ASbGncu2Rdq6EXTq5yUW6Go7QBq9OLMST9r8tEZnTh5+XnHwFs9EDOnLItU5oTT4V/j
+	ClpRu2Z2cSiq99SrWbgBzg4WcCFfFayM7PRQPDv1xKB/hO0DKuS1DWh0YoxuFKwA7V8+GDK5bkP
+	6kDUIAbFHmJoQa2F+4n54enqN0qRmevcTQbgXdSB2EZoccYsU7ez7bYUf5U+XAGTH4vo9DN3z42
+	6gswgW4tzhuBx0jZrrAV+hBNfr60Pj8Xhb8h1jeptGG4EjdXKFdE1KtGpQyW0awicXZYDhkj3xF
+	UvyEw93NVOAiIqWeO3wMOsaAHs6XS5+vwfbkr8iF7voEBS8eOX9g12QFGfTZvDx4w2AabGe7zob
+	Iuv/d/YSUC5gL4+xxmDCB0DOUelSoHhQPZPIdIHLY6p9ONeoRugLTI0IfQhYVq2CsdNAsc+zagV
+	Vkj/qzVXBJvK4juE2wEdE1Uwle1MnFDoAE7QyGvkrul7OemmuiVQ==
+X-Google-Smtp-Source: AGHT+IEvBVqyOu4uOb4WG4c5ywhNFvW1pjUp9ZjPOqqgZTKbrw3cQLaFupO8D/BR8AI9EmrelD5QmQ==
+X-Received: by 2002:a05:600c:6287:b0:477:7f4a:44b4 with SMTP id 5b1f17b1804b1-4778fe60641mr68379945e9.1.1763247408577;
+        Sat, 15 Nov 2025 14:56:48 -0800 (PST)
 Received: from F15.localdomain ([121.167.230.140])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba1462c605sm6641971b3a.21.2025.11.15.14.56.34
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ba1462c605sm6641971b3a.21.2025.11.15.14.56.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 14:56:38 -0800 (PST)
+        Sat, 15 Nov 2025 14:56:46 -0800 (PST)
 From: Hoyeon Lee <hoyeon.lee@suse.com>
 To: bpf@vger.kernel.org
 Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
@@ -90,15 +90,11 @@ Cc: Hoyeon Lee <hoyeon.lee@suse.com>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Shubham Sharma <slopixelz@gmail.com>,
-	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Jordan Rife <jordan@jrife.io>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [bpf-next v1 3/5] selftests/bpf: move common TCP helpers into bpf_tracing_net.h
-Date: Sun, 16 Nov 2025 07:55:38 +0900
-Message-ID: <20251115225550.1086693-4-hoyeon.lee@suse.com>
+Subject: [bpf-next v1 4/5] selftests/bpf: replace TCP CC string comparisons with bpf_strncmp
+Date: Sun, 16 Nov 2025 07:55:39 +0900
+Message-ID: <20251115225550.1086693-5-hoyeon.lee@suse.com>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251115225550.1086693-1-hoyeon.lee@suse.com>
 References: <20251115225550.1086693-1-hoyeon.lee@suse.com>
@@ -110,124 +106,114 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some BPF selftests contain identical copies of the min(), max(),
-before(), and after() helpers. These repeated snippets are the same
-across the tests and do not need to be defined separately.
+The connect4_prog and bpf_iter_setsockopt tests duplicate the same
+open-coded TCP congestion control string comparison logic. Since
+bpf_strncmp() provides the same functionality, use it instead to
+avoid repeated open-coded loops.
 
-Move these helpers into bpf_tracing_net.h so they can be shared by
-TCP related BPF programs. This removes repeated code and keeps the
-helpers in a single place.
+This change applies only to functional BPF tests and does not affect
+the verifier performance benchmarks (veristat.cfg). No functional
+changes intended.
 
 Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_cc_cubic.c      |  9 ---------
- tools/testing/selftests/bpf/progs/bpf_cubic.c         |  7 -------
- tools/testing/selftests/bpf/progs/bpf_dctcp.c         |  6 ------
- tools/testing/selftests/bpf/progs/bpf_tracing_net.h   | 11 +++++++++++
- .../selftests/bpf/progs/tcp_ca_write_sk_pacing.c      |  2 --
- 5 files changed, 11 insertions(+), 24 deletions(-)
+ .../selftests/bpf/progs/bpf_iter_setsockopt.c | 17 ++-------------
+ .../selftests/bpf/progs/connect4_prog.c       | 21 +++++++------------
+ 2 files changed, 10 insertions(+), 28 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_cc_cubic.c b/tools/testing/selftests/bpf/progs/bpf_cc_cubic.c
-index 4e51785e7606..9af19dfe4e80 100644
---- a/tools/testing/selftests/bpf/progs/bpf_cc_cubic.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_cc_cubic.c
-@@ -22,10 +22,6 @@
- #define TCP_PACING_CA_RATIO (120)
- #define TCP_REORDERING (12)
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_setsockopt.c b/tools/testing/selftests/bpf/progs/bpf_iter_setsockopt.c
+index 774d4dbe8189..a8aa5a71d846 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_setsockopt.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_setsockopt.c
+@@ -18,23 +18,10 @@
  
--#define min(a, b) ((a) < (b) ? (a) : (b))
--#define max(a, b) ((a) > (b) ? (a) : (b))
--#define after(seq2, seq1) before(seq1, seq2)
--
- extern void cubictcp_init(struct sock *sk) __ksym;
- extern void cubictcp_cwnd_event(struct sock *sk, enum tcp_ca_event event) __ksym;
- extern __u32 cubictcp_recalc_ssthresh(struct sock *sk) __ksym;
-@@ -34,11 +30,6 @@ extern __u32 tcp_reno_undo_cwnd(struct sock *sk) __ksym;
- extern void cubictcp_acked(struct sock *sk, const struct ack_sample *sample) __ksym;
- extern void cubictcp_cong_avoid(struct sock *sk, __u32 ack, __u32 acked) __ksym;
+ unsigned short reuse_listen_hport = 0;
+ unsigned short listen_hport = 0;
+-char cubic_cc[TCP_CA_NAME_MAX] = "bpf_cubic";
++const char cubic_cc[] = "bpf_cubic";
+ char dctcp_cc[TCP_CA_NAME_MAX] = "bpf_dctcp";
+ bool random_retry = false;
  
--static bool before(__u32 seq1, __u32 seq2)
+-static bool tcp_cc_eq(const char *a, const char *b)
 -{
--	return (__s32)(seq1-seq2) < 0;
--}
+-	int i;
 -
- static __u64 div64_u64(__u64 dividend, __u64 divisor)
- {
- 	return dividend / divisor;
-diff --git a/tools/testing/selftests/bpf/progs/bpf_cubic.c b/tools/testing/selftests/bpf/progs/bpf_cubic.c
-index f089faa97ae6..46fb2b37d3a7 100644
---- a/tools/testing/selftests/bpf/progs/bpf_cubic.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_cubic.c
-@@ -20,13 +20,6 @@
- char _license[] SEC("license") = "GPL";
- 
- #define clamp(val, lo, hi) min((typeof(val))max(val, lo), hi)
--#define min(a, b) ((a) < (b) ? (a) : (b))
--#define max(a, b) ((a) > (b) ? (a) : (b))
--static bool before(__u32 seq1, __u32 seq2)
--{
--	return (__s32)(seq1-seq2) < 0;
+-	for (i = 0; i < TCP_CA_NAME_MAX; i++) {
+-		if (a[i] != b[i])
+-			return false;
+-		if (!a[i])
+-			break;
+-	}
+-
+-	return true;
 -}
--#define after(seq2, seq1) 	before(seq1, seq2)
  
- extern __u32 tcp_slow_start(struct tcp_sock *tp, __u32 acked) __ksym;
- extern void tcp_cong_avoid_ai(struct tcp_sock *tp, __u32 w, __u32 acked) __ksym;
-diff --git a/tools/testing/selftests/bpf/progs/bpf_dctcp.c b/tools/testing/selftests/bpf/progs/bpf_dctcp.c
-index 32c511bcd60b..1cc83140849f 100644
---- a/tools/testing/selftests/bpf/progs/bpf_dctcp.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_dctcp.c
-@@ -13,16 +13,10 @@
- #ifndef EBUSY
- #define EBUSY 16
+ SEC("iter/tcp")
+ int change_tcp_cc(struct bpf_iter__tcp *ctx)
+@@ -58,7 +45,7 @@ int change_tcp_cc(struct bpf_iter__tcp *ctx)
+ 			   cur_cc, sizeof(cur_cc)))
+ 		return 0;
+ 
+-	if (!tcp_cc_eq(cur_cc, cubic_cc))
++	if (bpf_strncmp(cur_cc, TCP_CA_NAME_MAX, cubic_cc))
+ 		return 0;
+ 
+ 	if (random_retry && bpf_get_prandom_u32() % 4 == 1)
+diff --git a/tools/testing/selftests/bpf/progs/connect4_prog.c b/tools/testing/selftests/bpf/progs/connect4_prog.c
+index 9e9ebf27b878..9d158cfad981 100644
+--- a/tools/testing/selftests/bpf/progs/connect4_prog.c
++++ b/tools/testing/selftests/bpf/progs/connect4_prog.c
+@@ -34,6 +34,9 @@
+ #define SOL_TCP 6
  #endif
--#define min(a, b) ((a) < (b) ? (a) : (b))
--#define max(a, b) ((a) > (b) ? (a) : (b))
- #define min_not_zero(x, y) ({			\
- 	typeof(x) __x = (x);			\
- 	typeof(y) __y = (y);			\
- 	__x == 0 ? __y : ((__y == 0) ? __x : min(__x, __y)); })
--static bool before(__u32 seq1, __u32 seq2)
--{
--	return (__s32)(seq1-seq2) < 0;
--}
  
- char _license[] SEC("license") = "GPL";
- 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-index 17db400f0e0d..39e98e16c113 100644
---- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
-@@ -5,6 +5,17 @@
- #include <vmlinux.h>
- #include <bpf/bpf_core_read.h>
- 
-+#define min(a, b) ((a) < (b) ? (a) : (b))
-+#define max(a, b) ((a) > (b) ? (a) : (b))
++const char reno[] = "reno";
++const char cubic[] = "cubic";
 +
-+static inline bool before(__u32 seq1, __u32 seq2)
-+{
-+	return (__s32)(seq1 - seq2) < 0;
-+}
-+
-+#define after(seq2, seq1) before(seq1, seq2)
-+
-+
- #define AF_INET			2
- #define AF_INET6		10
- 
-diff --git a/tools/testing/selftests/bpf/progs/tcp_ca_write_sk_pacing.c b/tools/testing/selftests/bpf/progs/tcp_ca_write_sk_pacing.c
-index a58b5194fc89..022291f21dfb 100644
---- a/tools/testing/selftests/bpf/progs/tcp_ca_write_sk_pacing.c
-+++ b/tools/testing/selftests/bpf/progs/tcp_ca_write_sk_pacing.c
-@@ -8,8 +8,6 @@ char _license[] SEC("license") = "GPL";
- 
- #define USEC_PER_SEC 1000000UL
- 
--#define min(a, b) ((a) < (b) ? (a) : (b))
--
- static unsigned int tcp_left_out(const struct tcp_sock *tp)
+ __attribute__ ((noinline)) __weak
+ int do_bind(struct bpf_sock_addr *ctx)
  {
- 	return tp->sacked_out + tp->lost_out;
+@@ -50,35 +53,27 @@ int do_bind(struct bpf_sock_addr *ctx)
+ }
+ 
+ static __inline int verify_cc(struct bpf_sock_addr *ctx,
+-			      char expected[TCP_CA_NAME_MAX])
++			      const char expected[])
+ {
+ 	char buf[TCP_CA_NAME_MAX];
+-	int i;
+ 
+ 	if (bpf_getsockopt(ctx, SOL_TCP, TCP_CONGESTION, &buf, sizeof(buf)))
+ 		return 1;
+ 
+-	for (i = 0; i < TCP_CA_NAME_MAX; i++) {
+-		if (buf[i] != expected[i])
+-			return 1;
+-		if (buf[i] == 0)
+-			break;
+-	}
++	if (bpf_strncmp(buf, TCP_CA_NAME_MAX, expected))
++		return 1;
+ 
+ 	return 0;
+ }
+ 
+ static __inline int set_cc(struct bpf_sock_addr *ctx)
+ {
+-	char reno[TCP_CA_NAME_MAX] = "reno";
+-	char cubic[TCP_CA_NAME_MAX] = "cubic";
+-
+-	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &reno, sizeof(reno)))
++	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, (void *)reno, sizeof(reno)))
+ 		return 1;
+ 	if (verify_cc(ctx, reno))
+ 		return 1;
+ 
+-	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, &cubic, sizeof(cubic)))
++	if (bpf_setsockopt(ctx, SOL_TCP, TCP_CONGESTION, (void *)cubic, sizeof(cubic)))
+ 		return 1;
+ 	if (verify_cc(ctx, cubic))
+ 		return 1;
 -- 
 2.51.1
 
