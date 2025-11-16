@@ -1,101 +1,79 @@
-Return-Path: <linux-kselftest+bounces-45698-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00ED8C60EA3
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Nov 2025 02:43:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE383C616BC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Nov 2025 15:28:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A488B3AA9F6
-	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Nov 2025 01:42:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 21CB34E04BC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 16 Nov 2025 14:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 566A81F7575;
-	Sun, 16 Nov 2025 01:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g4U8zbLZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA91A2D6E67;
+	Sun, 16 Nov 2025 14:28:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD68C199FAC
-	for <linux-kselftest@vger.kernel.org>; Sun, 16 Nov 2025 01:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAB21DE4CE;
+	Sun, 16 Nov 2025 14:28:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763257373; cv=none; b=eN5rtTwGxYSknoXdwcXNNh4ZGG5k/H8D7I7oxLZGbT9oBccwc/qPuzmN6ZL+jYNuXjlcmIqJNc/Rlbzi0D1w9XAUl2XznqZ2/f8En1n5A0sJA9mEO1sTr0fTgLB+XML0+uWUIcUpYWRXQ1/WMUNY4MYFFtWjVuY6Il7Tw3AH0YE=
+	t=1763303315; cv=none; b=nEKEjhqwrPdQsfxPYww0gMnAJG5CKV6T54d4ElprtXFayGba7or3T83Nuz3d3uZ4gMFXKKsdFrOKiHCBr0FWyPGn0BzA9GoeUolCG5Swfh6IlKXIpgE+XG92QTA36xyjrrHgmQT/l6ZO8B1sM3dvfRSeLq2gDxJ6Q5AH8I5EzuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763257373; c=relaxed/simple;
-	bh=qYNdzOMrVfyqOsFIUuLtig4HQ4c3gJxVv6JUEuRa8uc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=meuW/CTQHTrj5kkRv5nDFqDd/rK0qd7addbaRDp6dfKZbrD9tGadIXbTshMamVIxRcmwizMRDs8R8AMUQp5VZPxuJtebdGhY8+PF9tWK+73oR6eT0STHpW/laD5SMbmpOxmuSO5QxCiFG2dfaRm8XIJ3ebm5QbW3LJ9I9jbMd6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g4U8zbLZ; arc=none smtp.client-ip=209.85.216.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-3438d4ae152so4088918a91.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Nov 2025 17:42:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763257371; x=1763862171; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FAy9YPVCu7bLfM4qk+fenh6vAk3C+JyPIshXGIHtStU=;
-        b=g4U8zbLZsOmhccacd4609clPw5cpQtgJRp1jR58mkCMPXJh5DCw6MNawZhv8s20fBl
-         ELbqErx/O8J1VC/hFOv0lvLN3xH8CHdcAya80HwP9Id5zqziXYUfWS4GDVD6/YoELprK
-         TQGiZowMk91CigMdXrhWqQ0H3rdCF6CDcBVrsC1JDN5RN2Nz98kRz/9j2wdT4HRTF9Wl
-         khrGnGJD7FkG8HfHzAYIUptsZBgfuvf7womsSjr03ucn0YSLtHKYgiDTEFvLFC0E8GME
-         mXWk4VV16lFgh6b10puD3Lq+Y6Z2wFienLvXNsc5DkL/8U6roIaksuHIRuVnZXf4VpCw
-         G6QQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763257371; x=1763862171;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FAy9YPVCu7bLfM4qk+fenh6vAk3C+JyPIshXGIHtStU=;
-        b=LfUjM5+or8+8xn3lLJ1Voh5tmw9JZy61DiznVr9i9t8KLTqTt6ZQ2EIQy/xa1mGt+t
-         7iWtpzRvOxdU3xQFddkxhY6IgxwumE8Gn5JPrJEyilHIyEWnXDrZl7gyW1ru8HgWwAQ1
-         cK0/e3naQXToP5ovIgPe5e/8nls78dG81Sc32NllQZDXdlRRo0qe+5pMdfnDyB7QGo1k
-         vBmD3xYAbHko+beracXIR/bGjZz1JK4314OpKA7LwPZ+wFlvySkmKraOUBaC+BiUg2gT
-         2yKakqmH5B15QtAvnmw+R0/oyJaZNxNibKerBTqgz//xNodgHLZbigqDnp1x9H1Mrjbz
-         44hQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVhoJbfmQV/CMMzNccBx4rNnWBaTKd7x0iL+Z8/ancFE16Bc2KfKso1zRr5kC2YdsmOMGdLjlqMv/INzjtFh0M=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3HTDX/SFZnVi8qA+wOPYdVdw6rXo7fC4T+iE0Re8dsOmODjiA
-	thPH5Eis7tXqsipAD4ZJT3tRhwnXH1aJwRLpBAV8Z0ec8pS9LdVDPnBk
-X-Gm-Gg: ASbGncu3xlzjjohSHvT8ylm4iEtNH97MFFflvAdEc3Z6mECVwllH7f9xE7m+ASAGGIU
-	wzX1q1ncPrTxGllyFyzI/BNl5eYCtnPqTXVb1TPMHkSycY67f2yjFAWNQqoWAV3w8MP/6BqHFP2
-	pt4SFNYOfHeQ1W4lg0FbtHBnk/kyzPliEQxM/xYhcT3jc3uYkzrS6o2cSLps8i+8BpSxzGLFY2Q
-	Z/JHnP98DwbtMUZDZlA5mESJ8NaTYMF1JKsJJEYJyfmFv16czS/nAlXeufOaDIrtvov91jeICfR
-	2CZgAdFLSfi7Cj5thudFkFdFbNpnJqEVIOZJz5lE2zIfftiW02pSnXcYAhiO0lLFCjOjZT3KWVv
-	bTCeO6eqgkTcgGyE3RX9YQFjTXGGNXawydiN0Vv6s6BqxdDr9+m0AI4rvJfI5ePcsOOJOscf2PO
-	Qp
-X-Google-Smtp-Source: AGHT+IHwMTm+3w4Hi6aGuV3EFYma9rpYV2hO6neS7/j59k0gNdUR5jovUBVjsn0Kg939TBxdL+1jaQ==
-X-Received: by 2002:a17:90b:2f08:b0:33b:dec9:d9aa with SMTP id 98e67ed59e1d1-343fa7493admr8502869a91.25.1763257371056;
-        Sat, 15 Nov 2025 17:42:51 -0800 (PST)
-Received: from 7950hx ([43.129.244.20])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc36f61bea9sm8243757a12.14.2025.11.15.17.42.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 17:42:50 -0800 (PST)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: andrii@kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	mingo@kernel.org,
-	jiang.biao@linux.dev,
-	bpf@vger.kernel.org,
+	s=arc-20240116; t=1763303315; c=relaxed/simple;
+	bh=kbfNZ6gK4F3AMX5MfezPONSToRU7w2owlAu5Wlmvbws=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uMCYpbPtmhHtIi+MHyYg1KPlSd8Ty4M4NT+CN4JXcTD9CzFOcWic8XIzKVb9B3DoMVDBYWneSmlXm3eQMMCbUp9nTXmnqekukC8buLj2ijcQAwveZPIO6Yp/cJd7gPHOI89RB7/caWEJpO8MFnIGhCQe5++GuDc1dqAdb/erpYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 80733236c2f811f0a38c85956e01ac42-20251116
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI, GTI_FG_IT, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:14824acd-c57c-4625-97a3-7c9aac3d23e1,IP:20,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:15
+X-CID-INFO: VERSION:1.3.6,REQID:14824acd-c57c-4625-97a3-7c9aac3d23e1,IP:20,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:15
+X-CID-META: VersionHash:a9d874c,CLOUDID:4024931863e062d73f091e3d9412cac2,BulkI
+	D:251116222824Q3YKBKNY,BulkQuantity:0,Recheck:0,SF:17|19|66|78|102|850,TC:
+	nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,
+	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 80733236c2f811f0a38c85956e01ac42-20251116
+X-User: sunshaojie@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 965992263; Sun, 16 Nov 2025 22:28:21 +0800
+From: Sun Shaojie <sunshaojie@kylinos.cn>
+To: llong@redhat.com
+Cc: chenridong@huaweicloud.com,
+	mkoutny@suse.com,
+	cgroups@vger.kernel.org,
+	hannes@cmpxchg.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] selftests/bpf: call bpf_get_numa_node_id() in trigger_count()
-Date: Sun, 16 Nov 2025 09:42:42 +0800
-Message-ID: <20251116014242.151110-1-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.51.2
+	shuah@kernel.org,
+	tj@kernel.org,
+	Sun Shaojie <sunshaojie@kylinos.cn>
+Subject: [PATCH v3 0/1] cpuset: relax the overlap check for cgroup-v2
+Date: Sun, 16 Nov 2025 22:27:20 +0800
+Message-Id: <20251116142721.959920-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -104,57 +82,74 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The bench test "trig-kernel-count" can be used as a baseline comparison
-for fentry and other benchmarks, and the calling to bpf_get_numa_node_id()
-should be considered as composition of the baseline. So, let's call it in
-trigger_count(). Meanwhile, rename trigger_count() to
-trigger_kernel_count() to make it easier understand.
+In cgroup v2, a mutual overlap check is required when at least one of
+two
+cpusets is exclusive. However, this check should be relaxed and limited
+to
+cases where both cpusets are exclusive.
 
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+This patch ensures that for sibling cpusets A1 (exclusive) and B1
+(non-exclusive), change B1 cannot affect A1's exclusivity.
+
+for example. Assume a machine has 4 CPUs (0-3).
+
+   root cgroup
+      /    \
+    A1      B1
+
+Case 1:
+ Table 1.1: Before applying the patch
+ Step                                       | A1's prstate | B1'sprstate |
+ #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+ #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
+ #3> echo "0" > B1/cpuset.cpus              | root invalid | member      |
+
+After step #3, A1 changes from "root" to "root invalid" because its CPUs
+(0-1) overlap with those requested by B1 (0-3). However, B1 can actually
+use CPUs 2-3(from B1's parent), so it would be more reasonable for A1 to
+remain as "root."
+
+ Table 1.2: After applying the patch
+ Step                                       | A1's prstate | B1'sprstate |
+ #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+ #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
+ #3> echo "0" > B1/cpuset.cpus              | root         | member      |
+
+Case 2: (This situation remains unchanged from before)
+ Table 2.1: Before applying the patch
+ Step                                       | A1's prstate | B1'sprstate |
+ #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+ #3> echo "1-2" > B1/cpuset.cpus            | member       | member      |
+ #2> echo "root" > A1/cpuset.cpus.partition | root invalid | member      |
+
+ Table 2.2: After applying the patch
+ Step                                       | A1's prstate | B1'sprstate |
+ #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+ #3> echo "1-2" > B1/cpuset.cpus            | member       | member      |
+ #2> echo "root" > A1/cpuset.cpus.partition | root invalid | member      |
+
+All other cases remain unaffected. For example, cgroup-v1, both A1 and
+B1 are exclusive or non-exlusive.
+
 ---
- tools/testing/selftests/bpf/benchs/bench_trigger.c | 4 ++--
- tools/testing/selftests/bpf/progs/trigger_bench.c  | 6 ++++--
- 2 files changed, 6 insertions(+), 4 deletions(-)
+v2 -> v3:
+  - Ensure compliance with constraints such as cpuset.cpus.exclusive.
+  - Link:
+    https://lore.kernel.org/cgroups/20251113131434.606961-1-sunshaojie@kylinos.cn/
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index 1e2aff007c2a..34018fc3927f 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -180,10 +180,10 @@ static void trigger_kernel_count_setup(void)
- {
- 	setup_ctx();
- 	bpf_program__set_autoload(ctx.skel->progs.trigger_driver, false);
--	bpf_program__set_autoload(ctx.skel->progs.trigger_count, true);
-+	bpf_program__set_autoload(ctx.skel->progs.trigger_kernel_count, true);
- 	load_ctx();
- 	/* override driver program */
--	ctx.driver_prog_fd = bpf_program__fd(ctx.skel->progs.trigger_count);
-+	ctx.driver_prog_fd = bpf_program__fd(ctx.skel->progs.trigger_kernel_count);
- }
- 
- static void trigger_kprobe_setup(void)
-diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
-index 3d5f30c29ae3..2898b3749d07 100644
---- a/tools/testing/selftests/bpf/progs/trigger_bench.c
-+++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
-@@ -42,12 +42,14 @@ int bench_trigger_uprobe_multi(void *ctx)
- const volatile int batch_iters = 0;
- 
- SEC("?raw_tp")
--int trigger_count(void *ctx)
-+int trigger_kernel_count(void *ctx)
- {
- 	int i;
- 
--	for (i = 0; i < batch_iters; i++)
-+	for (i = 0; i < batch_iters; i++) {
- 		inc_counter();
-+		bpf_get_numa_node_id();
-+	}
- 
- 	return 0;
- }
+v1 -> v2:
+  - Keeps the current cgroup v1 behavior unchanged
+  - Link:
+    https://lore.kernel.org/cgroups/c8e234f4-2c27-4753-8f39-8ae83197efd3@redhat.com
+
+
+ kernel/cgroup/cpuset-internal.h               |  3 ++
+ kernel/cgroup/cpuset-v1.c                     | 20 +++++++++
+ kernel/cgroup/cpuset.c                        | 44 ++++++++++++++-----
+ .../selftests/cgroup/test_cpuset_prs.sh       | 10 ++---
+ 4 files changed, 60 insertions(+), 17 deletions(-)
+
 -- 
-2.51.2
+2.25.1
 
 
