@@ -1,121 +1,118 @@
-Return-Path: <linux-kselftest+bounces-45796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD9B0C66316
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 22:03:24 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04AF8C66368
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 22:09:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 96AE04ECF5C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 21:03:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 04C0435B635
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 21:09:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD47A34CFB3;
-	Mon, 17 Nov 2025 21:03:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30A134CFCB;
+	Mon, 17 Nov 2025 21:09:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NaXVfcwo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qanSjEG0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507B034C9AE
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 21:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40433451B0
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 21:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763413382; cv=none; b=Ys0vhRrr1f0dUbzWHCc2orZ8VTJQyG0PPNic4cMQM2D2XdIdJDTl6Ut34r57KvZV7Y5pTYIcs0woCLHwZun5lp+tbR1q5ul7yNoBp0gyWQPYA9Q6hq/wMLbYfCejhx/ghRrEzCpfZUcBRptb3OQXgFB6cKVcVKIDBxXhh5Bnkcc=
+	t=1763413752; cv=none; b=GOKplhCSB4ctk4wNLG8tQ4LfkkuWvP3MruaBk2KYlrFSZNOjUVHsenw5Sb0xUMrXbZtKh3PjPNOz5JnkYRJOi0KXyGaTm5t/OE0MLPpZvv5G1oK6z+xGqLXanGv2itzS0/RC1aSkL7YmywumdjP1estW60ZkJMWXpkRxwsdrBTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763413382; c=relaxed/simple;
-	bh=iP6TspFv6C7dt+qkcsFWTPUOXmBMAp/00Ut2BHL86o4=;
+	s=arc-20240116; t=1763413752; c=relaxed/simple;
+	bh=dA/5NYPyaR3SpUDS42goPQsXtjt42GFHqrfiFziwDXg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LT6YWauqpeOFJDbWbj5RAkdwuhmhYEcnVh+vjvTSig9CnrgtyFroUycuLGYfIaD3wHA2oXOPkMv491vq8aBEeZtB9F0DHcmncVHfXDTVHzw4ldPuPOmn2ihaQFEtkicQdZrVXEJrC37L39fwsyiX2oQU/WDJZgwuKSJYWy0yMQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NaXVfcwo; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-343514c781fso729328a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 13:03:01 -0800 (PST)
+	 To:Cc:Content-Type; b=j9z9jI0MjIdZNlNZ/irnBhv8XeL9Mh5vxkgSd8/+VbD2B8xXq+7m7xqW36rK8QRRmopSGVqCqfFTNYSQufdGx5lCwqy6t44nL2zuK43oauAy7Fqiqzm3xNxoqo9rwgKNGsIyEx913N6/hvh/mhQRspBpi3MstjfJUTDwRcxunzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qanSjEG0; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-595825c8eb3so4699433e87.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 13:09:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763413380; x=1764018180; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763413746; x=1764018546; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iP6TspFv6C7dt+qkcsFWTPUOXmBMAp/00Ut2BHL86o4=;
-        b=NaXVfcwoZa7LhmxM8NlTRwkrZ0ZZkSPcDLeurc8j2BNgbm4N3rTFMhEyl7nhPo9Dr0
-         cyTCIFrOIrbGj2GVaWQkFy6Qsz0GpiUqbQ0+OLzLePXqm1UNnaOL97t/k5LP5cEn1gp/
-         4M367BlSX+u/3TV9NHNqACV9VpTIprstQNVbCEXvbT6MPzXMVlvhZuHldbeHRXePRIU0
-         Ajvkfu4L/inB1IIzDy/hiAaBnq6rxn5wmN5+n9ONdRZy/8q3JEZQ0zE/mVfrEVcGG8l5
-         bb2E/fSeZJD3F39FIGWcZyfvqU0abBW4gPw8n2fApof9N9T6/V/lbEmsesrt/9rdYeR/
-         4eMA==
+        bh=RjoWhLUfJbKg+2stbKiQ55r0rLOxAAjJs86wMbbOnY8=;
+        b=qanSjEG02A3Y2Oq23LtXhCxrONeIzu+2dN7Za4S1Aj4O8PHIU9ghmAeWBLxyE24UIC
+         +1mlKC8jHhruCYxQeoRoeQ2HC5iBqFdUDvLd34S5eDfgMqzVXEHhYVt51a8y0K9c9TW5
+         QDnn5lZmGE9sVgBkBhVvc0C65XKnlG8QWcNIFoNwL07FvmwVlOS928UhReX2UhyjBBlH
+         F5zm2x6Nioz8JMJOsO6yfs1xnMVzKVLMpicytqzO7PudiEcVkWJxmdz3kEv/owd2oXQR
+         2Jd5bUFcMqq1wBTp35OfjCTviMN5oosMjT/qbwGFvZHtRnv8hMHDtGjwToeVRWWIbt4o
+         qkIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763413381; x=1764018181;
+        d=1e100.net; s=20230601; t=1763413746; x=1764018546;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=iP6TspFv6C7dt+qkcsFWTPUOXmBMAp/00Ut2BHL86o4=;
-        b=pTzaxI1KN6J0ogPzj5FeKp4NEVIoKri1mW8Fdo393t6CVOlHoLhveXdAsEOxjTBRIF
-         l1DF1pH9Me+FKit0/pSLvZDQpfEhdg8pq2bCu3Qc2RnFczliGHFFO8loqaBeUOQW2Q9t
-         /3DYQ2GxdoNFIQ/X7qSe0BqgwsTd9s4P/XB8kLfufbO0K8X0sDKwVOpzAaq3rhNj0zNZ
-         1DZhv4UZXaCIlRYOgrdUjYafJGFfthFOIII8WxL6YPu9T6hatp3KxLotJhnfWYSGNvXM
-         GcIlCtjvX04QaWedh54CzRPGUIAGMk3FG1and0Hze8xqpDj5uOJJZc7Fa4vVADwBS/rP
-         YeBA==
-X-Forwarded-Encrypted: i=1; AJvYcCVBKpXghQQEyDhW7PP2O/fKw6DTm/HX9FThmU/kTBK9h1OL7pC1Pvn0+Snh5ZvTDrU8Nw5Bu7pBQ2OiS+tVtmM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzypQ+BPd/i2C05GiMjbyCxwpqzYgogfmo3lGf6ayS55/NzMyGz
-	H763Ci90MfLmtbSgNBcnGyRweXWahNGz6+1BIngfOYNrXTlKQ4EWj5AKUv2HImv8hv6KOOMpKDR
-	i3VmdIQeUM4CePnMU4YPlt54LZHqsIRM=
-X-Gm-Gg: ASbGncvlZbrMp1TKHIu/i3sLAUOLaZUXUgNZxeFdAqV1O0PHJoDBJ51p/MrJNMyavTe
-	it3Dea4v5Y3kw9V6PoGR4JYkBO2ShHyPrGb9As3Q8lvpCoReUqQKrfp5by+jdn41YlSwHEzd/lc
-	8JzcxR3+HnBcXNZouViK/yJkkoXpYfBUZqVgaFu5s9HNmQYDa6x2IYHnZAHox+D/c301OKxY338
-	FcBt9W5q+kGQ1A/qR8efZBXqZJx6oNEXNNPdOdX9fFj372b6Bnu1XLHCkT9a1GT+qMZRQ1g3JyE
-	vqlA/+EkZtYTRW75p36zBiht5yOyFo7vl1fpARNcS1IZxgEQML8niYaAA4lWQkZJY3s8yi5U8JO
-	O+Xo4OZmQYEwGnw==
-X-Google-Smtp-Source: AGHT+IGlfQGUdtSox02ATWkbxSbcf1jC5YZXySUNyLmlrEZvBMimdky+/XqX+bymvXPFrGG75BWC3U7j6V3cT8HAU7U=
-X-Received: by 2002:a05:7022:310:b0:11b:98e8:624e with SMTP id
- a92af1059eb24-11c796b9796mr80353c88.4.1763413380425; Mon, 17 Nov 2025
- 13:03:00 -0800 (PST)
+        bh=RjoWhLUfJbKg+2stbKiQ55r0rLOxAAjJs86wMbbOnY8=;
+        b=hk9lAflkb3etbUceEAzT2pRBqMZ+kdpN246i6HL/thWbxyrdGDnlrwkY9uQfjFERMd
+         lC+OeHcJi1QtCnMOp1A0thUDjB/15XHekHBjF4eQzN5xAbzE6I/+8JxIENYZsnyJN1bW
+         tXGAjaVTlH3ymA8TGZurDk7twWlV+RSnQ4EvqoysCgHQMuWIBixra2gaegnFADOeJnVS
+         as8HPAGXi3QOaK/lSPb9TpOSG/o7Ft0btCMEH13nPQuk8klPwVHHKWxJHhRDAbR6tFt2
+         GMa7hHEXTsA2LsQKSlAqBzDYJqIu/SB8hZr9dykJs+m08NTyjR3s8RLOQlGNtt2RLXQv
+         wucg==
+X-Forwarded-Encrypted: i=1; AJvYcCXADVnxQ6fPnAilOf6DQv1B4sc7vNAIezFWj6oE0IXZyz7dEhuH6zB7uvq9fQQXX2KI+tqh0euFdwQ+OGz9T2Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5GrmEGGWLgG/1B4BVy58ugmOk0qlWPjcgktiEkRbN0qX6UwSW
+	t51gMQk0+37SRsOTjjSszm5aBZvalhbnBcYjfCWogMvCnhLg6m4+KXHrqvdXWvgI76jaPJO/FSx
+	w/h+XO/jFaS6mAi17Te2t2/2UKcxC3R+CJQ+GvwRh
+X-Gm-Gg: ASbGncs7RznXHC76XxmJU8QkD5vLxWeVgaEtriW4ZZVHxUnARAePGzUJaXQ91CMZzZS
+	1G99d4XHlrLMoQ2KztWczZkO97IbXWh712YnQ1x/I36LilbmEGttRVv2aWlowK82WrQBfqtYNF3
+	Boy99zUve7LruYEDSmVzitfsbT0nYSFK5QIGmWerIyV6kMl6NVhEyLHXDatOjkMxRqGyWkMfF8z
+	UG42sPIhkLdVc390IW0XdPQKwTfGj+OmlWxUyOsOCBsmoKCbNT0WvHJ8PKl9Xs3Sm0+r8FuuyqW
+	83mMNQ==
+X-Google-Smtp-Source: AGHT+IFni1VNjv0z/eeugp/jXAsBHzPTprbSdMefmczevXx19k/vvMv478Xc/gXsOfk0JBX+x3U9Hk/lS2aJOagt9H8=
+X-Received: by 2002:a05:6512:b05:b0:592:f441:928a with SMTP id
+ 2adb3069b0e04-595841eec54mr5006421e87.3.1763413745951; Mon, 17 Nov 2025
+ 13:09:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251117080714.876978-1-ojeda@kernel.org>
-In-Reply-To: <20251117080714.876978-1-ojeda@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 17 Nov 2025 22:02:48 +0100
-X-Gm-Features: AWmQ_bkVH0zwZmTGtxY2a6yQt4iofNRpnQgdcxIiUj_oO7rEMvoYnw_JJyWw_ro
-Message-ID: <CANiq72=-w2p8sQgUKYgPG3Tx9GSUNgcVUp24k0ck2RqYgupCVg@mail.gmail.com>
-Subject: Re: [PATCH] rust: allow `clippy::disallowed_names` for doctests
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Benno Lossin <lossin@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	rust-for-linux@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20251112192232.442761-1-dmatlack@google.com> <20251112192232.442761-3-dmatlack@google.com>
+ <aRt+XHgbKFq5k3ns@devgpu015.cco6.facebook.com>
+In-Reply-To: <aRt+XHgbKFq5k3ns@devgpu015.cco6.facebook.com>
+From: David Matlack <dmatlack@google.com>
+Date: Mon, 17 Nov 2025 13:08:38 -0800
+X-Gm-Features: AWmQ_bnjy6Qk7n2t_yD_IVUwtIQduWDCtYPxvyttcjPXfMzUdeQiOxzgfIPrCtA
+Message-ID: <CALzav=fN5CAn8C0x0SnsB7Fpq6o-CHspPvvL3ctk1U5i5FE40A@mail.gmail.com>
+Subject: Re: [PATCH v2 02/18] vfio: selftests: Split run.sh into separate scripts
+To: Alex Mastro <amastro@fb.com>
+Cc: Alex Williamson <alex.williamson@redhat.com>, Alex Williamson <alex@shazbot.org>, 
+	Jason Gunthorpe <jgg@nvidia.com>, Josh Hilke <jrhilke@google.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 17, 2025 at 9:07=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wro=
-te:
+On Mon, Nov 17, 2025 at 11:58=E2=80=AFAM Alex Mastro <amastro@fb.com> wrote=
+:
 >
-> Examples (i.e. doctests) may want to use names such as `foo`, thus the
-> `clippy::disallowed_names` lint gets in the way.
+> On Wed, Nov 12, 2025 at 07:22:16PM +0000, David Matlack wrote:
+> > diff --git a/tools/testing/selftests/vfio/Makefile b/tools/testing/self=
+tests/vfio/Makefile
+> > index 155b5ecca6a9..e9e5c6dc63b6 100644
+> > --- a/tools/testing/selftests/vfio/Makefile
+> > +++ b/tools/testing/selftests/vfio/Makefile
+> > @@ -3,7 +3,11 @@ TEST_GEN_PROGS +=3D vfio_dma_mapping_test
+> >  TEST_GEN_PROGS +=3D vfio_iommufd_setup_test
+> >  TEST_GEN_PROGS +=3D vfio_pci_device_test
+> >  TEST_GEN_PROGS +=3D vfio_pci_driver_test
+> > +
+> > +TEST_PROGS_EXTENDED :=3D scripts/cleanup.sh
+> > +TEST_PROGS_EXTENDED :=3D scripts/lib.sh
+> >  TEST_PROGS_EXTENDED :=3D scripts/run.sh
+> > +TEST_PROGS_EXTENDED :=3D scripts/setup.sh
 >
-> Thus allow it for all doctests.
->
-> In addition, remove it from the existing `expect`s we have in a few
-> doctests.
->
-> This does not mean that we should stop trying to find good names for
-> our examples, though.
->
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Link: https://lore.kernel.org/rust-for-linux/aRHSLChi5HYXW4-9@google.com/
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> I think these assignments will discard prior assignments. Was +=3D intend=
+ed?
 
-Applied to `rust-next` -- thanks everyone!
-
-Cheers,
-Miguel
+Yes, thanks for catching that!
 
