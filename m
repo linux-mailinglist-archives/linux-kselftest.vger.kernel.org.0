@@ -1,103 +1,157 @@
-Return-Path: <linux-kselftest+bounces-45714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45715-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ECB5C62767
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 06:59:03 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95513C62779
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 07:04:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 880944E320F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 05:59:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4D2394E63A9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 06:04:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B4ED30DD2E;
-	Mon, 17 Nov 2025 05:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760BB2D6E59;
+	Mon, 17 Nov 2025 06:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y209mvOS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB6F305059;
-	Mon, 17 Nov 2025 05:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736684C9D
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 06:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763359139; cv=none; b=IgJgobjRkFP1SDdoFJOY1/VRCHH9/44UQaY/N7VORmFlyuH5Xmif2Wrgoy0N8ikobkhOGccQN6o7sPuX2ansggX/YfUDq0K7E2k/3s+ihLkc9aEKlZzhDqgypdXx2O8ITZ/iWfulHq0smKEecuTfBwVO64H4qvBHVF6C97qHbdE=
+	t=1763359478; cv=none; b=avIpijb5Fo1wnB04p19D1G0+qMRI8IvGWOvIUPxIpVUo49frFSIoWk1asB3tINYfXyXq5fgW8SSLY0jIZKjMqymz6+45vRTe2jNN5mqguALVYeihJPtjufqUEygzKOo4x7vs2i8vQM7U5ATnsJm2LMk8pFRe6SWfwJiEWQ3FTfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763359139; c=relaxed/simple;
-	bh=AoPHKdikv+8wCS/LWy4wgA57i48fv4YwoTIj123j8AE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uvUficq2lsQ8wtgjvD+xTpp703Oiz3Gg940IZoRSgErSVFZIyJmbcrrnKTE0rvJ7GEnB1v7uoccdH0/9OdVNTrusOXF2gPnJRKwJz3RvMq6l6+YJviBXALavPH/SzXX7YDpWZ6wAZamjg6OY1mcVoOt1emwRtw+THTIm8H09qjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 79ff11ccc37a11f0a38c85956e01ac42-20251117
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
-	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
-	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:758d1c63-dba1-40a8-b1e1-9de899667562,IP:10,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:5
-X-CID-INFO: VERSION:1.3.6,REQID:758d1c63-dba1-40a8-b1e1-9de899667562,IP:10,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:5
-X-CID-META: VersionHash:a9d874c,CLOUDID:8ff85ff5e9f52c158a363b1c65d189b1,BulkI
-	D:25111711234284X4JSNJ,BulkQuantity:1,Recheck:0,SF:17|19|64|66|78|80|81|82
-	|83|102|841|850,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,
-	Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR
-	:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 79ff11ccc37a11f0a38c85956e01ac42-20251117
-X-User: sunshaojie@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 894737174; Mon, 17 Nov 2025 13:58:44 +0800
-From: Sun Shaojie <sunshaojie@kylinos.cn>
-To: chenridong@huaweicloud.com
-Cc: cgroups@vger.kernel.org,
-	hannes@cmpxchg.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llong@redhat.com,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	sunshaojie@kylinos.cn,
-	tj@kernel.org
-Subject: Re: [PATCH v3 0/1] cpuset: relax the overlap check for cgroup-v2
-Date: Mon, 17 Nov 2025 13:58:31 +0800
-Message-Id: <20251117055831.1040057-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <4366cedd-b9c7-48de-bb48-f3c4ff81e73e@huaweicloud.com>
-References: <4366cedd-b9c7-48de-bb48-f3c4ff81e73e@huaweicloud.com>
+	s=arc-20240116; t=1763359478; c=relaxed/simple;
+	bh=hm8EksoT+/2DgQxjoNjEl6sU6Krkby9Edu+5zlSFhUQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=suzNFxiB99hXH48fN5cSPuuqFq1F2FfYOgiAzP58T6X/wqcSeKhJXjDDaimKaQY7QQMCWfz3ZqsZg1VRdELFqULd8wJ7N0U+bSdvN0QwKvAtoWD6dDhec7i7LLBxpUGqsN8wNB8A0mJH31xX+DEnTRLsz14dwDrF7Rxd7BICfbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Y209mvOS; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <fa987c2b-b806-4aa7-a318-812fc7d0f414@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1763359464;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nZ5qcZGVMGt/z/po/hYAoZDHUji+2tgr7hoNqPgP1tY=;
+	b=Y209mvOS+8SFicxLVtTN/H4nWqCGMOmkm6X2ejyNYHLyj6Lw6/L1tocqVNo0ioSsv5HDss
+	L6RqtEQzeUUFksMAdOTyCHffKPnKfv72Nx3jzIA/sa+DG58xavSohzFrx7b0XfySp17lD+
+	J9YCIG2yFe4crEL+74N3EFCzPHqPz+A=
+Date: Sun, 16 Nov 2025 22:04:15 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [bpf-next v1 5/5] selftests/bpf: propagate LLVM toolchain to
+ runqslower build
+Content-Language: en-GB
+To: Hoyeon Lee <hoyeon.lee@suse.com>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20251115225550.1086693-1-hoyeon.lee@suse.com>
+ <20251115225550.1086693-6-hoyeon.lee@suse.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20251115225550.1086693-6-hoyeon.lee@suse.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2025/11/17 11:23, Chen Ridong wrote:
->Is this a cover letter?
+
+
+On 11/15/25 2:55 PM, Hoyeon Lee wrote:
+> The selftests/bpf invokes a nested make when building runqslower, but
+> LLVM toolchain version (clang/llvm-strip) is not propagated. As a
+> result, runqslower is built with system default clang, not respecting
+> specified LLVM version.
 >
->The cover letter is labeled as v3, while the patch itself is v4.
+>      # LLVM=-21 make -C tools/testing/selftests/bpf
+>      ...
+>      make feature_display=0 -C /bpf/tools/bpf/runqslower                        \
+>          OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/runqslower/        \
+>          BPFOBJ_OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/libbpf/     \
+>          BPFOBJ=/bpf/tools/testing/selftests/bpf/tools/build/libbpf/libbpf.a    \
+>          BPF_INCLUDE=/bpf/tools/testing/selftests/bpf/tools/include             \
+>          BPFTOOL_OUTPUT=/bpf/tools/testing/selftests/bpf/tools/build/bpftool/   \
+>          VMLINUX_BTF=/sys/kernel/btf/vmlinux BPF_TARGET_ENDIAN=--target=bpfel   \
+>          EXTRA_CFLAGS='-g -O0  ' EXTRA_LDFLAGS=' ' &&                           \
+>          cp  /bpf/tools/testing/selftests/bpf/tools/build/runqslower/runqslower \
+>              /bpf/tools/testing/selftests/bpf/runqslower
+>      clang -g -O2 --target=bpfel -I/bpf/tools/testing/selftests/bpf/tools/build/runqslower/ \
+>            -I/bpf/tools/testing/selftests/bpf/tools/include -I/bpf/tools/include/uapi       \
+>            -c runqslower.bpf.c -o /bpf/tools/testing/selftests/bpf/tools/build/runqslower/runqslower.bpf.o && \
+>            llvm-strip -g /bpf/tools/testing/selftests/bpf/tools/build/runqslower//runqslower.bpf.o
+>      /bin/sh: 1: clang: not found
+
+I tried with LLVM=-20 make -C tools/testing/selftests/bpf in my system and
+there is no build error.
+
+Also could you try with command line
+    make -C tools/testing/selftests/bpf LLVM=1
+for clang build kernel or selftests, LLVM=1 is recommended as it
+encodes a bunch of clang command lines:
+   CC              = $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+   LD              = $(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX)
+   AR              = $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)
+   NM              = $(LLVM_PREFIX)llvm-nm$(LLVM_SUFFIX)
+   OBJCOPY         = $(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX)
+   OBJDUMP         = $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
+   READELF         = $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
+   STRIP           = $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+
+
+
+
 >
->For a single patch, I don’t think a cover letter is necessary.
+> Explicitly propagate CLANG and LLVM_STRIP to the runqslower sub-make so
+> that the LLVM toolchain selection from lib.mk is preserved.
+>
+> Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
+> ---
+>   tools/testing/selftests/bpf/Makefile | 1 +
+>   tools/testing/selftests/lib.mk       | 1 +
+>   2 files changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 34ea23c63bd5..79ab69920dca 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -306,6 +306,7 @@ endif
+>   
+>   $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUTPUT)
+>   	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower	       \
+> +		    CLANG=$(CLANG) LLVM_STRIP=$(LLVM_STRIP)		       \
+>   		    OUTPUT=$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=$(VMLINUX_BTF)     \
+>   		    BPFTOOL_OUTPUT=$(HOST_BUILD_DIR)/bpftool/		       \
+>   		    BPFOBJ_OUTPUT=$(BUILD_DIR)/libbpf/			       \
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index a448fae57831..f14255b2afbd 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -8,6 +8,7 @@ LLVM_SUFFIX := $(LLVM)
+>   endif
+>   
+>   CLANG := $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
+> +LLVM_STRIP := $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
+>   
+>   CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
+>   CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
 
-Hi, Ridong,
-
-Thank you so much. I've made a mental note of this point.
-
-Thanks,
-Sun Shaojie
 
