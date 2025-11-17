@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-45788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4A98C662C7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 21:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A52F3C662CA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 21:59:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 7E2B72977D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 20:59:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 79A2D293AE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 20:59:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54F7534D39A;
-	Mon, 17 Nov 2025 20:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A41C34D3B6;
+	Mon, 17 Nov 2025 20:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MUTose0Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k5maADOB"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB6C34CFDE;
-	Mon, 17 Nov 2025 20:58:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EEA34D3A7;
+	Mon, 17 Nov 2025 20:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763413117; cv=none; b=IM0D+ko4zabGnqphKZx/OZ5IggDsg7dKxPrv5MJeQvI8AOpYz/1ZCpqQgIFdi42eSxOtil7t/QK+1ocyj0btX87lUUjmpJnsXBsNkjfj7/IFlPiJ99hgd4FoG0eqGjvxHDNzcOB/YqVSpXzhio13jIR1AvsatM+xWB3AAj+lfyQ=
+	t=1763413118; cv=none; b=incXzCus2rlPsMjgSwQ4uqqzBfRvxBlM3YV5UwuQH31tQKgKXcEhyK6r3Sm4cy416Skhk7+00JiHf45ZhwzCiEEODPRXCsx13BXyBen7Bnr6EP+t+37e3AV2jbhqTwEu+vpgMmah3N1dSkiILd1woKdAFf270HdSUui5j8e3UqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763413117; c=relaxed/simple;
-	bh=zJuilAMBCqK8irESZmDZAvqwvT0FFeBdoMmHsxTCLKo=;
+	s=arc-20240116; t=1763413118; c=relaxed/simple;
+	bh=MCuliezInHREj7rDrkC/ZdUFHDoRmkGeUHSiJBHdMbs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ar/zBZWUuwWdnkW5TR9yDd1x9eKJbq0qMARWyi8nuGV6S2zUNZzao37A5oqiQqNWHUUY8LzBwYdqWik0Uqq8mYtKGuiuJjquYLnBGbTsxbl3g9IievDEhKCMGCDSv3ynf1CJ/UOenP7VGo0XSe7edjQU7ChHEFW/WqtE4YNjoVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MUTose0Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0C34C4AF1C;
-	Mon, 17 Nov 2025 20:58:35 +0000 (UTC)
+	 MIME-Version; b=BTRPalrW3h/NTetFrE6cjAZ5lQNZvOlNBq9fSaUwNfpXLdPh85ut2y/5rDiILq09757IuoOneem+NzB3QrinRjnjIRz3JG4chXqpX9/AYn2HW2bQ2IvKAJlqEmDJZts5n6z1dXBLdcf13IsYN0XAUxpKHCOkqx4qUIQnxl56zuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k5maADOB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26DB1C4AF13;
+	Mon, 17 Nov 2025 20:58:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763413116;
-	bh=zJuilAMBCqK8irESZmDZAvqwvT0FFeBdoMmHsxTCLKo=;
+	s=k20201202; t=1763413118;
+	bh=MCuliezInHREj7rDrkC/ZdUFHDoRmkGeUHSiJBHdMbs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MUTose0QKJPWuHZ0KUZFrrdhZqwwOQEYWQu9DUPe7onPOgmZ8QMvuqAWRNZgUCcnw
-	 uXFUZdG9D9mwhuyGM9jRORtb5+JLMxGRGK7aPj3KqbEFfElcOToQsGyNjx8qFF1lsi
-	 QtZ0z93PlhaCgMpXjwOxLjQcJbzvaYpIpOX6fXibqDUMr0aDq9V1LVDlJKTIUkSnz/
-	 4SMDwOlQ05v0t7AlDhu3JkH6op4iCp9gSih4OZh94+Utylif84n3TaeKrDkQn6WPar
-	 4rk9iJ+OQLp3YdoiqZ2jk+enrgTmm6KJEXg+ffHd7yhPJl16iTMDuQZtr8MXsw6IAG
-	 gIexSX3juunRw==
+	b=k5maADOB0DV9R2mczgqyU174E9cKYrpuhMHTqs68ncfkauR+IPpvyADivDcnpylgr
+	 PSACRS4r2lJaWS5V/ii6cY3hogZaYVR1yxIj7d36gvX2bID30XetwXqEz07UWyg7RF
+	 UMJrryFJ0BO6aOTtTvcrOvMgopNWwDic/HmCt/2Ku2FGkHQDansLuoY8R8NPGx9t2n
+	 2noarWDEKbwMLan1ifpsj3PbqAiPSPN/xw7GLEy4bB4Rs1GB1Jidnwu77XyyJ9Ya2R
+	 ZBo8d0ASCuFdIdI3xq9BkcwuDBk2g0GGheIN56pWAPHk4LDY/afwFgW+sansKyeBqw
+	 lthXOx/bKMC5Q==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: netdev@vger.kernel.org,
 	krakauer@google.com,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 07/12] selftests: net: py: read ip link info about remote dev
-Date: Mon, 17 Nov 2025 12:58:05 -0800
-Message-ID: <20251117205810.1617533-8-kuba@kernel.org>
+Subject: [PATCH net-next 08/12] netdevsim: pass packets thru GRO on Rx
+Date: Mon, 17 Nov 2025 12:58:06 -0800
+Message-ID: <20251117205810.1617533-9-kuba@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251117205810.1617533-1-kuba@kernel.org>
 References: <20251117205810.1617533-1-kuba@kernel.org>
@@ -68,45 +68,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We're already saving the info about the local dev in env.dev
-for the tests, save remote dev as well. This is more symmetric,
-env generally provides the same info for local and remote end.
-
-While at it make sure that we reliably get the detailed info
-about the local dev. nsim used to read the dev info without -d.
+To replace veth in software GRO testing with netdevsim we need
+GRO support in netdevsim. Luckily we already have NAPI support
+so this change is trivial (comapred to veth).
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/drivers/net/lib/py/env.py | 2 ++
- tools/testing/selftests/net/lib/py/nsim.py        | 2 +-
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/netdevsim/netdev.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index 01be3d9b9720..8b644fd84ff2 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -168,6 +168,8 @@ from .remote import Remote
+diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+index fa1d97885caa..2b713db16cd0 100644
+--- a/drivers/net/netdevsim/netdev.c
++++ b/drivers/net/netdevsim/netdev.c
+@@ -433,13 +433,8 @@ static int nsim_rcv(struct nsim_rq *rq, int budget)
+ 		}
  
-         # resolve remote interface name
-         self.remote_ifname = self.resolve_remote_ifc()
-+        self.remote_dev = ip("-d link show dev " + self.remote_ifname,
-+                             host=self.remote, json=True)[0]
+ 		/* skb might be discard at netif_receive_skb, save the len */
+-		skblen = skb->len;
+-		skb_mark_napi_id(skb, &rq->napi);
+-		ret = netif_receive_skb(skb);
+-		if (ret == NET_RX_SUCCESS)
+-			dev_dstats_rx_add(dev, skblen);
+-		else
+-			dev_dstats_rx_dropped(dev);
++		dev_dstats_rx_add(dev, skb->len);
++		napi_gro_receive(&rq->napi, skb);
+ 	}
  
-         self._required_cmd = {}
- 
-diff --git a/tools/testing/selftests/net/lib/py/nsim.py b/tools/testing/selftests/net/lib/py/nsim.py
-index 1a8cbe9acc48..7c640ed64c0b 100644
---- a/tools/testing/selftests/net/lib/py/nsim.py
-+++ b/tools/testing/selftests/net/lib/py/nsim.py
-@@ -27,7 +27,7 @@ from .utils import cmd, ip
-         self.port_index = port_index
-         self.ns = ns
-         self.dfs_dir = "%s/ports/%u/" % (nsimdev.dfs_dir, port_index)
--        ret = ip("-j link show dev %s" % ifname, ns=ns)
-+        ret = ip("-d -j link show dev %s" % ifname, ns=ns)
-         self.dev = json.loads(ret.stdout)[0]
-         self.ifindex = self.dev["ifindex"]
- 
+ 	nsim_start_peer_tx_queue(dev, rq);
 -- 
 2.51.1
 
