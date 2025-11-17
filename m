@@ -1,106 +1,151 @@
-Return-Path: <linux-kselftest+bounces-45780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB23C66124
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 21:13:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76DD4C662AC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 21:58:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C8D8835EB6A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 20:13:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A599535AE7E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 20:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6818D313276;
-	Mon, 17 Nov 2025 20:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B680336EEE;
+	Mon, 17 Nov 2025 20:58:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="HAwiyuIP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pGwkYGpr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B71EB3093AD;
-	Mon, 17 Nov 2025 20:13:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CF33093AE;
+	Mon, 17 Nov 2025 20:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763410417; cv=none; b=ODtiNy25qu9Dkp5CKPHM92OiYig73D3e87Uto9CaPjKzcywDU0U9PLfwuG8gsbwWLLD3Py47EqVioSo4H3QX6WiMVomCEbw+Ffn1q0N/wY+IlJKNvIGsGj9EGfIwXIgetJoEqDxsfT5dISXTsp8V/LdAuNozd4xgwSnxLkt0oZk=
+	t=1763413107; cv=none; b=nVxUw+SiCC69II7iCvx6JOGPcfMn6rvIfaqQDL+MhxLkduXpScAu1c0asHGCjf/lzbGciRGhVdpdei2Z8fQP8AxB/cATiszj5UVM6KzC8LiperkKi3cDoG1yzKFFa30t/dOo6bhMypBkjU85KciN1RQu3N1CYIFebeVbs+bLupA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763410417; c=relaxed/simple;
-	bh=u06n2iTj4e8/ax0tNv9tzaRKTfmQb9rRLqxBVlHkBXE=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iNgehxf3gfj0p6USIntWZA19BYzrZ9l6r5LWxS+VTVN+BBoWo1/EP5dAHZ0WHlZ69kVE6y9ywKhPmkyjPMqvsKliXlC4TdKuFf/QQp3YOfhm2fARdeMCzuJdGQ2l5MqLQiuHkhzEzghlCUJGQMEkXpQpn3qt1DA9BOYWYOx+oMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=HAwiyuIP; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AHJ0Yrb578000;
-	Mon, 17 Nov 2025 12:13:29 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=s2048-2025-q2; bh=iD1kcxyo9iGvISC3CrJP
-	d7zikK1YKwkZbNKgf+3H5DA=; b=HAwiyuIPel+7ZAqv9VtS3IrjxStMRctHyBto
-	oc4ylHyJtMmZFq9pd4eQOWco7p5U8M0s9cArTap/HW9g59x6IsixiPld7tEr7vZg
-	z95ywu3YgzrYGmFLFzudOCjqhp/cypt+7/muC2H7tvvcxs7S7NB4kFmibL97MjFG
-	GCoSX2seQaEglaOuVQ2cGheCMn5LyKMkrK2KzIZixnP5X5VctPCJypH/2zvoNQBt
-	bkBNTReB7Jk0GnalvqQNROol/uzEcafAJ9Fk64opdzGpEVeSr3GnpwTlQqpDjMDe
-	FSjVACef0DuF+6Jyxy27zVkqegZWnmaHqM16MWo1M9ZDKhNM3g==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4ag6v92fa4-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 17 Nov 2025 12:13:28 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c08b:78::2ac9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.20; Mon, 17 Nov 2025 20:13:27 +0000
-Date: Mon, 17 Nov 2025 12:13:23 -0800
-From: Alex Mastro <amastro@fb.com>
-To: David Matlack <dmatlack@google.com>
-CC: Alex Williamson <alex.williamson@redhat.com>,
-        Alex Williamson
-	<alex@shazbot.org>, Jason Gunthorpe <jgg@nvidia.com>,
-        Josh Hilke
-	<jrhilke@google.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Raghavendra Rao Ananta
-	<rananta@google.com>,
-        Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH v2 00/18] vfio: selftests: Support for multi-device tests
-Message-ID: <aRuB45aR1LVGO1If@devgpu015.cco6.facebook.com>
-References: <20251112192232.442761-1-dmatlack@google.com>
+	s=arc-20240116; t=1763413107; c=relaxed/simple;
+	bh=gMxOe7pw4YW4sPHaE8H8E0DNQlGAUR7FL6SCkfpnujc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VMDY2rVDzQogIYf54fLQfb0CGIp64wdZjO+6JyrkSzNIr0eoXwu2zAJxtVn9tS4pBEQ13pprz04j5H3dq/fJb1ILAAWlUEzMp9yeh36o07CDv5V5a3f0ynsiLFD+QzgalSF0FuAdhwZ/hmg4SToY3Nj8Nmbrh+PgXXw5KcVw3Os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pGwkYGpr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 262E3C116B1;
+	Mon, 17 Nov 2025 20:58:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763413106;
+	bh=gMxOe7pw4YW4sPHaE8H8E0DNQlGAUR7FL6SCkfpnujc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=pGwkYGprq8Sleb6CqiQYnUS6JUkIVkxeGW+zgCREHe8uNpPrvVIdHrAcs/VloL2dn
+	 v4ZUL+08okBIV8ncENeFzCTVs5WxFI61HCEUBdmtKcUwacQ2xOEy5NbfxYLq88eBEd
+	 O5hVp1wMOe8Uf7UvdSoz6S/rhp7J+RvRNeCuHcCChWTWif52w63lInAWYM1fC2qZbq
+	 zvDu3of2q4jD0YundekjL7HlKBz0ysetScKDx13e783k0mi0/XAoeWVT2BW0rMEIOq
+	 j5gup3fVY7IATeXOb/m79xPebXIHDVIQ0EMc4O/NZycAo9Nym4pU3trZt7HVMw6rXM
+	 v97s0C+JCREXw==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	willemdebruijn.kernel@gmail.com,
+	shuah@kernel.org,
+	sdf@fomichev.me,
+	krakauer@google.com,
+	linux-kselftest@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next 00/12] selftests: drv-net: convert GRO and Toeplitz tests to work for drivers in NIPA
+Date: Mon, 17 Nov 2025 12:57:58 -0800
+Message-ID: <20251117205810.1617533-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20251112192232.442761-1-dmatlack@google.com>
-X-Proofpoint-ORIG-GUID: myOdcBTS54_JPAj6nxOSwXMv9nflTe9Z
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE3MDE3MSBTYWx0ZWRfX3yTgVqnihWTL
- Jo/014aTVoBDTe/uvVgxwbM3SQUcse7Lt/v/VUU6JMbevjXGJkXsgYeUlXBxj2EHS7yRrmw4RnQ
- yblw6NoYTcggF3uspoPtnKzDY66WXmfrphan7iNe1fSQVebrrbC1kX3Qrk1ttQ3zKyauIeOjhhp
- L5VItrT+yyVwK2ED3xLKF5Y0/RnRneze4Q+YIWSENiAlsYp5MtNQSW7V2X4VT/23mW8eWmDQUTQ
- aLaHwk1HsoMJEEe4wi+BfcnAp7dyhdiR9aa8zwO8jvVNfuAW+K0wnMZc4b6dx2ZcP9BN7lhk7n8
- YdqTqSCbFXzOGf9xI1SVAEA915x8HIS9k0Z/AJX1vhrZ7dZvFELL8GeaJyVHbSsdDOQnORndd5P
- uUJWnqtv1QLIGgNBSGtit5bGMieZCg==
-X-Authority-Analysis: v=2.4 cv=F/Bat6hN c=1 sm=1 tr=0 ts=691b81e8 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=FOH2dFAWAAAA:8 a=wOU0V_YN5uQqQRcwivcA:9 a=CjuIK1q_8ugA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-GUID: myOdcBTS54_JPAj6nxOSwXMv9nflTe9Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 12, 2025 at 07:22:14PM +0000, David Matlack wrote:
-> This series adds support for tests that use multiple devices, and adds
-> one new test, vfio_pci_device_init_perf_test, which measures parallel
-> device initialization time to demonstrate the improvement from commit
-> e908f58b6beb ("vfio/pci: Separate SR-IOV VF dev_set").
- 
-Aside from the Makefile assignment issue in "Split run.sh into separate
-scripts", LGTM.
+Main objective of this series is to convert the gro.sh and toeplitz.sh
+tests to be "NIPA-compatible" - meaning make use of the Python env,
+which lets us run the tests against either netdevsim or a real device.
 
-Reviewed-by: Alex Mastro <amastro@fb.com>
+The tests seem to have been written with a different flow in mind.
+Namely they source different bash "setup" scripts depending on arguments
+passed to the test. While I have nothing against the use of bash and
+the overall architecture - the existing code needs quite a bit of work
+(don't assume MAC/IP addresses, support remote endpoint over SSH).
+If I'm the one fixing it, I'd rather convert them to our "simplistic"
+Python.
+
+This series rewrites the tests in Python while addressing their
+shortcomings. The functionality of running the test over loopback
+on a real device is retained but with a different method of invocation
+(see the last patch).
+
+Once again we are dealing with a script which run over a variety of
+protocols (combination of [ipv4, ipv6, ipip] x [tcp, udp]). The first
+4 patches add support for test variants to our scripts. We use the
+term "variant" in the same sense as the C kselftest_harness.h -
+variant is just a set of static input arguments.
+
+Note that neither GRO nor the Toeplitz test fully passes for me on
+any HW I have access to. But this is unrelated to the conversion.
+This series is not making any real functional changes to the tests,
+it is limited to improving the "test harness" scripts.
+
+Jakub Kicinski (12):
+  selftests: net: py: coding style improvements
+  selftests: net: py: extract the case generation logic
+  selftests: net: py: add test variants
+  selftests: drv-net: xdp: use variants for qstat tests
+  selftests: net: relocate gro and toeplitz tests to drivers/net
+  selftests: net: py: support ksft ready without wait
+  selftests: net: py: read ip link info about remote dev
+  netdevsim: pass packets thru GRO on Rx
+  selftests: drv-net: add a Python version of the GRO test
+  selftests: drv-net: hw: convert the Toeplitz test to Python
+  netdevsim: add loopback support
+  selftests: net: remove old setup_* scripts
+
+ tools/testing/selftests/drivers/net/Makefile  |   2 +
+ .../testing/selftests/drivers/net/hw/Makefile |   6 +-
+ tools/testing/selftests/net/Makefile          |   7 -
+ tools/testing/selftests/net/lib/Makefile      |   1 +
+ drivers/net/netdevsim/netdev.c                |  26 ++-
+ .../testing/selftests/{ => drivers}/net/gro.c |   5 +-
+ .../{net => drivers/net/hw}/toeplitz.c        |   7 +-
+ .../testing/selftests/drivers/net/.gitignore  |   1 +
+ tools/testing/selftests/drivers/net/gro.py    | 161 ++++++++++++++
+ .../selftests/drivers/net/hw/.gitignore       |   3 +-
+ .../drivers/net/hw/lib/py/__init__.py         |   4 +-
+ .../selftests/drivers/net/hw/toeplitz.py      | 208 ++++++++++++++++++
+ .../selftests/drivers/net/lib/py/__init__.py  |   4 +-
+ .../selftests/drivers/net/lib/py/env.py       |   2 +
+ tools/testing/selftests/drivers/net/xdp.py    |  42 ++--
+ tools/testing/selftests/net/.gitignore        |   2 -
+ tools/testing/selftests/net/gro.sh            | 105 ---------
+ .../selftests/net/lib/ksft_setup_loopback.sh  | 111 ++++++++++
+ .../testing/selftests/net/lib/py/__init__.py  |   5 +-
+ tools/testing/selftests/net/lib/py/ksft.py    |  93 ++++++--
+ tools/testing/selftests/net/lib/py/nsim.py    |   2 +-
+ tools/testing/selftests/net/lib/py/utils.py   |  20 +-
+ tools/testing/selftests/net/setup_loopback.sh | 120 ----------
+ tools/testing/selftests/net/setup_veth.sh     |  45 ----
+ tools/testing/selftests/net/toeplitz.sh       | 199 -----------------
+ .../testing/selftests/net/toeplitz_client.sh  |  28 ---
+ 26 files changed, 631 insertions(+), 578 deletions(-)
+ rename tools/testing/selftests/{ => drivers}/net/gro.c (99%)
+ rename tools/testing/selftests/{net => drivers/net/hw}/toeplitz.c (99%)
+ create mode 100755 tools/testing/selftests/drivers/net/gro.py
+ create mode 100755 tools/testing/selftests/drivers/net/hw/toeplitz.py
+ delete mode 100755 tools/testing/selftests/net/gro.sh
+ create mode 100755 tools/testing/selftests/net/lib/ksft_setup_loopback.sh
+ delete mode 100644 tools/testing/selftests/net/setup_loopback.sh
+ delete mode 100644 tools/testing/selftests/net/setup_veth.sh
+ delete mode 100755 tools/testing/selftests/net/toeplitz.sh
+ delete mode 100755 tools/testing/selftests/net/toeplitz_client.sh
+
+-- 
+2.51.1
+
 
