@@ -1,229 +1,230 @@
-Return-Path: <linux-kselftest+bounces-45738-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45739-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11409C63EDC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 12:52:14 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EF63C64696
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 14:40:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75F383B1CAB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 11:47:39 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E9FF034BAE6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 13:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D050E32D421;
-	Mon, 17 Nov 2025 11:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 364EF32ED5D;
+	Mon, 17 Nov 2025 13:31:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O8UX5FJS"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="1pDygRjj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A379B32B9B0;
-	Mon, 17 Nov 2025 11:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AFF31B130;
+	Mon, 17 Nov 2025 13:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763380022; cv=none; b=E41rAAZusTIYCAcRsx2mTgm5tWcUYvjfr2osufboO+d5s5/A7YWbfXSixEGB99+VSHYcszY5L3uqH3tyZr+IEq/2HmR1q1axkSkLW9S5qXkzakoS5NRn0T09sHSfFrI+1wHyQvE/VeObGfU/ie/XPmofVmjNVMG+s0T3GJ7qw/A=
+	t=1763386276; cv=none; b=Hdvk1zq5FAS2V9g2LFsmpoIz7VPvh0TRRed52yLXoCrEjh94v+stc7ZvjQohzHY/CD5sGZRWhFKblMlGCUts1yckC4bWsJl38zzjVo/uQqyVIPUwGUXQnOdw2XL1r2/MHR4s/A4ekpyTH6fLiLtr91BC8k1WXTXO/B+m4PnWgY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763380022; c=relaxed/simple;
-	bh=h8iM1V294GwM0YHrw7ozBTpi1JGWrn7/s48f8890vrE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yfx9p6GMQJJ8ECvAe3a/aQg1IPcfRGFxNcZdzZ27jO8sE4K7xEKONZYUK6MiDoHTUmOZAglsWbs6HG0vSiN0eaiN152OfhvgU1QoRJO4Jsaa0BJPrqnw8lkQ5+qtF8d4MDbxvPMmiwXoEUAW/pvUbm+bJs4h/baXFbFbaSv04fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O8UX5FJS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 577AAC19422;
-	Mon, 17 Nov 2025 11:46:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763380022;
-	bh=h8iM1V294GwM0YHrw7ozBTpi1JGWrn7/s48f8890vrE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=O8UX5FJSiJdTcEG3REy6V2AlgMJBt/IhL1oU13rvGS33McOro6n6HxI5fPuED4ish
-	 oKifpoVHZqjpslWPfFkDjy7lEhoGIaxJH+ISoMj5BXrmIholFoh90nkhJH3MM5KHQf
-	 U0sscO5fqNeipAtqlAo1LD8nR8HP9lZxPPHKzGq7bEOSJbYWed5/oX/nMx+2uaXxZ+
-	 tzZD/Mj+BCJI/TWAhGducVtENC2khabGoX0n8KwcJC4uPIMefzan9oOHbCZmco4NZe
-	 C30j6WwCnorBwFe/v0Xp3FDKxjgLLoRp75g5pQ14GEN4Yze1XA/A9POTLDwtPpSqyo
-	 e1ginZR0p/nbA==
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-mm@kvack.org
-Cc: Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>,
-	Hugh Dickins <hughd@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 4/4] KVM: selftests: test userfaultfd minor for guest_memfd
-Date: Mon, 17 Nov 2025 13:46:31 +0200
-Message-ID: <20251117114631.2029447-5-rppt@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251117114631.2029447-1-rppt@kernel.org>
-References: <20251117114631.2029447-1-rppt@kernel.org>
+	s=arc-20240116; t=1763386276; c=relaxed/simple;
+	bh=pt3PQ1vvMVP+VWOEiV5zyAhX+CMmP9BnNZ9khou0aLQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UMlzYhcpOlXOyj+KRze0eGMRXO3sdKGTe2faOlT4MAsUzgzIrMb7PyLuqLDk/8NxYrLkaXvITdGayOErK0gCYZtkjoRRcovnZ1/Zmwe2H1l/ljXB7Y2cPKI3bqnw17zQieQq25p7KsRQnlGEkMJe9EXGzfwDMomsDcia4eItYdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=1pDygRjj; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Yfb31dMONbaywXFaOoW6pTDnX2BiBdF8XhLIsRZ9Sas=;
+	b=1pDygRjjuX+Lyw2evxjsjZV9+mweSjoS419Q1YDrVjgO7uDvUrGP489oAIKAJrnTcvdlsGTcA
+	5yxdg2OltwvISIqLE/IY7JVUsUjWE2/5RbV66TlysXDNJFUJSy8BAqzjmzbaZzurSF2jM6raR0w
+	53Cy8N/skEj7z/g28YGrkE4=
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4d97r95d9czpSyw;
+	Mon, 17 Nov 2025 21:29:13 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id AF1CC180477;
+	Mon, 17 Nov 2025 21:31:05 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
+ (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 17 Nov
+ 2025 21:31:04 +0800
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
+	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
+	<shuah@kernel.org>, <kees@kernel.org>, <wad@chromium.org>,
+	<akpm@linux-foundation.org>, <ldv@strace.io>, <macro@orcam.me.uk>,
+	<deller@gmx.de>, <mark.rutland@arm.com>, <song@kernel.org>, <mbenes@suse.cz>,
+	<ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
+	<anshuman.khandual@arm.com>, <broonie@kernel.org>, <kevin.brodsky@arm.com>,
+	<pengcan@kylinos.cn>, <dvyukov@google.com>, <kmal@cock.li>,
+	<lihongbo22@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <ruanjinjie@huawei.com>
+Subject: [PATCH v7 00/11] arm64: entry: Convert to Generic Entry
+Date: Mon, 17 Nov 2025 21:30:37 +0800
+Message-ID: <20251117133048.53182-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-From: Nikita Kalyazin <kalyazin@amazon.com>
+Currently, x86, Riscv, Loongarch use the Generic Entry which makes
+maintainers' work easier and codes more elegant. arm64 has already
+successfully switched to the Generic IRQ Entry in commit
+b3cf07851b6c ("arm64: entry: Switch to generic IRQ entry"), it is
+time to completely convert arm64 to Generic Entry.
 
-The test demonstrates that a minor userfaultfd event in guest_memfd can
-be resolved via a memcpy followed by a UFFDIO_CONTINUE ioctl.
+The goal is to bring arm64 in line with other architectures that already
+use the generic entry infrastructure, reducing duplicated code and
+making it easier to share future changes in entry/exit paths, such as
+"Syscall User Dispatch".
 
-Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- .../testing/selftests/kvm/guest_memfd_test.c  | 103 ++++++++++++++++++
- 1 file changed, 103 insertions(+)
+This patch set is rebased on v6.18-rc6.
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index e7d9aeb418d3..a5d3ed21d7bb 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -10,13 +10,17 @@
- #include <errno.h>
- #include <stdio.h>
- #include <fcntl.h>
-+#include <pthread.h>
- 
- #include <linux/bitmap.h>
- #include <linux/falloc.h>
- #include <linux/sizes.h>
-+#include <linux/userfaultfd.h>
- #include <sys/mman.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/ioctl.h>
- 
- #include "kvm_util.h"
- #include "test_util.h"
-@@ -254,6 +258,104 @@ static void test_guest_memfd_flags(struct kvm_vm *vm)
- 	}
- }
- 
-+struct fault_args {
-+	char *addr;
-+	volatile char value;
-+};
-+
-+static void *fault_thread_fn(void *arg)
-+{
-+	struct fault_args *args = arg;
-+
-+	/* Trigger page fault */
-+	args->value = *args->addr;
-+	return NULL;
-+}
-+
-+static void test_uffd_minor(int fd, size_t total_size)
-+{
-+	struct uffdio_api uffdio_api = {
-+		.api = UFFD_API,
-+		.features = UFFD_FEATURE_MINOR_GENERIC,
-+	};
-+	struct uffdio_register uffd_reg;
-+	struct uffdio_continue uffd_cont;
-+	struct uffd_msg msg;
-+	struct fault_args args;
-+	pthread_t fault_thread;
-+	void *mem, *mem_nofault, *buf = NULL;
-+	int uffd, ret;
-+	off_t offset = page_size;
-+	void *fault_addr;
-+
-+	ret = posix_memalign(&buf, page_size, total_size);
-+	TEST_ASSERT_EQ(ret, 0);
-+
-+	memset(buf, 0xaa, total_size);
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC);
-+	TEST_ASSERT(uffd != -1, "userfaultfd creation should succeed");
-+
-+	ret = ioctl(uffd, UFFDIO_API, &uffdio_api);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_API) should succeed");
-+
-+	mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(mem != MAP_FAILED, "mmap should succeed");
-+
-+	mem_nofault = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(mem_nofault != MAP_FAILED, "mmap should succeed");
-+
-+	uffd_reg.range.start = (unsigned long)mem;
-+	uffd_reg.range.len = total_size;
-+	uffd_reg.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	ret = ioctl(uffd, UFFDIO_REGISTER, &uffd_reg);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_REGISTER) should succeed");
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
-+			offset, page_size);
-+	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-+
-+	fault_addr = mem + offset;
-+	args.addr = fault_addr;
-+
-+	ret = pthread_create(&fault_thread, NULL, fault_thread_fn, &args);
-+	TEST_ASSERT(ret == 0, "pthread_create should succeed");
-+
-+	ret = read(uffd, &msg, sizeof(msg));
-+	TEST_ASSERT(ret != -1, "read from userfaultfd should succeed");
-+	TEST_ASSERT(msg.event == UFFD_EVENT_PAGEFAULT, "event type should be pagefault");
-+	TEST_ASSERT((void *)(msg.arg.pagefault.address & ~(page_size - 1)) == fault_addr,
-+		    "pagefault should occur at expected address");
-+
-+	memcpy(mem_nofault + offset, buf + offset, page_size);
-+
-+	uffd_cont.range.start = (unsigned long)fault_addr;
-+	uffd_cont.range.len = page_size;
-+	uffd_cont.mode = 0;
-+	ret = ioctl(uffd, UFFDIO_CONTINUE, &uffd_cont);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_CONTINUE) should succeed");
-+
-+	/*
-+	 * wait for fault_thread to finish to make sure fault happened and was
-+	 * resolved before we verify the values
-+	 */
-+	ret = pthread_join(fault_thread, NULL);
-+	TEST_ASSERT(ret == 0, "pthread_join should succeed");
-+
-+	TEST_ASSERT(args.value == *(char *)(mem_nofault + offset),
-+		    "memory should contain the value that was copied");
-+	TEST_ASSERT(args.value == *(char *)(mem + offset),
-+		    "no further fault is expected");
-+
-+	ret = munmap(mem_nofault, total_size);
-+	TEST_ASSERT(!ret, "munmap should succeed");
-+
-+	ret = munmap(mem, total_size);
-+	TEST_ASSERT(!ret, "munmap should succeed");
-+	free(buf);
-+	close(uffd);
-+}
-+
- #define gmem_test(__test, __vm, __flags)				\
- do {									\
- 	int fd = vm_create_guest_memfd(__vm, page_size * 4, __flags);	\
-@@ -273,6 +375,7 @@ static void __test_guest_memfd(struct kvm_vm *vm, uint64_t flags)
- 		if (flags & GUEST_MEMFD_FLAG_INIT_SHARED) {
- 			gmem_test(mmap_supported, vm, flags);
- 			gmem_test(fault_overflow, vm, flags);
-+			gmem_test(uffd_minor, vm, flags);
- 		} else {
- 			gmem_test(fault_private, vm, flags);
- 		}
+The performance benchmarks from perf bench basic syscall on
+real hardware are below:
+
+| Metric     | W/O Generic Framework | With Generic Framework | Change |
+| ---------- | --------------------- | ---------------------- | ------ |
+| Total time | 2.813 [sec]           | 2.930 [sec]            |  ↑4%   |
+| usecs/op   | 0.281349              | 0.293006               |  ↑4%   |
+| ops/sec    | 3,554,299             | 3,412,894              |  ↓4%   |
+
+Compared to earlier with arch specific handling, the performance decreased
+by approximately 4%.
+
+It was tested ok with following test cases on QEMU virt platform:
+ - Perf tests.
+ - Different `dynamic preempt` mode switch.
+ - Pseudo NMI tests.
+ - Stress-ng CPU stress test.
+ - MTE test case in Documentation/arch/arm64/memory-tagging-extension.rst
+   and all test cases in tools/testing/selftests/arm64/mte/*.
+ - "sud" selftest testcase.
+ - get_syscall_info, peeksiginfo in tools/testing/selftests/ptrace.
+
+The test QEMU configuration is as follows:
+
+	qemu-system-aarch64 \
+		-M virt,gic-version=3,virtualization=on,mte=on \
+		-cpu max,pauth-impdef=on \
+		-kernel Image \
+		-smp 8,sockets=1,cores=4,threads=2 \
+		-m 512m \
+		-nographic \
+		-no-reboot \
+		-device virtio-rng-pci \
+		-append "root=/dev/vda rw console=ttyAMA0 kgdboc=ttyAMA0,115200 \
+			earlycon preempt=voluntary irqchip.gicv3_pseudo_nmi=1" \
+		-drive if=none,file=images/rootfs.ext4,format=raw,id=hd0 \
+		-device virtio-blk-device,drive=hd0 \
+
+Chanegs in v7:
+- Support "Syscall User Dispatch" by implementing
+  arch_syscall_is_vdso_sigreturn() as kemal suggested.
+- Add aarch64 support for "sud" selftest testcase, which tested ok with
+  the patch series.
+- Fix the kernel test robot warning for arch_ptrace_report_syscall_entry()
+  and arch_ptrace_report_syscall_exit() in asm/entry-common.h.
+- Add perf syscall performance test.
+- Link to v6: https://lore.kernel.org/all/20250916082611.2972008-1-ruanjinjie@huawei.com/
+
+Changes in v6:
+- Rebased on v6.17-rc5-next as arm64 generic irq entry has merged.
+- Update the commit message.
+- Link to v5: https://lore.kernel.org/all/20241206101744.4161990-1-ruanjinjie@huawei.com/
+
+Changes in v5:
+- Not change arm32 and keep inerrupts_enabled() macro for gicv3 driver.
+- Move irqentry_state definition into arch/arm64/kernel/entry-common.c.
+- Avoid removing the __enter_from_*() and __exit_to_*() wrappers.
+- Update "irqentry_state_t ret/irq_state" to "state"
+  to keep it consistently.
+- Use generic irq entry header for PREEMPT_DYNAMIC after split
+  the generic entry.
+- Also refactor the ARM64 syscall code.
+- Introduce arch_ptrace_report_syscall_entry/exit(), instead of
+  arch_pre/post_report_syscall_entry/exit() to simplify code.
+- Make the syscall patches clear separation.
+- Update the commit message.
+- Link to v4: https://lore.kernel.org/all/20241025100700.3714552-1-ruanjinjie@huawei.com/
+
+Changes in v4:
+- Rework/cleanup split into a few patches as Mark suggested.
+- Replace interrupts_enabled() macro with regs_irqs_disabled(), instead
+  of left it here.
+- Remove rcu and lockdep state in pt_regs by using temporary
+  irqentry_state_t as Mark suggested.
+- Remove some unnecessary intermediate functions to make it clear.
+- Rework preempt irq and PREEMPT_DYNAMIC code
+  to make the switch more clear.
+- arch_prepare_*_entry/exit() -> arch_pre_*_entry/exit().
+- Expand the arch functions comment.
+- Make arch functions closer to its caller.
+- Declare saved_reg in for block.
+- Remove arch_exit_to_kernel_mode_prepare(), arch_enter_from_kernel_mode().
+- Adjust "Add few arch functions to use generic entry" patch to be
+  the penultimate.
+- Update the commit message.
+- Add suggested-by.
+- Link to v3: https://lore.kernel.org/all/20240629085601.470241-1-ruanjinjie@huawei.com/
+
+Changes in v3:
+- Test the MTE test cases.
+- Handle forget_syscall() in arch_post_report_syscall_entry()
+- Make the arch funcs not use __weak as Thomas suggested, so move
+  the arch funcs to entry-common.h, and make arch_forget_syscall() folded
+  in arch_post_report_syscall_entry() as suggested.
+- Move report_single_step() to thread_info.h for arm64
+- Change __always_inline() to inline, add inline for the other arch funcs.
+- Remove unused signal.h for entry-common.h.
+- Add Suggested-by.
+- Update the commit message.
+
+Changes in v2:
+- Add tested-by.
+- Fix a bug that not call arch_post_report_syscall_entry() in
+  syscall_trace_enter() if ptrace_report_syscall_entry() return not zero.
+- Refactor report_syscall().
+- Add comment for arch_prepare_report_syscall_exit().
+- Adjust entry-common.h header file inclusion to alphabetical order.
+- Update the commit message.
+
+Jinjie Ruan (10):
+  arm64/ptrace: Split report_syscall()
+  arm64/ptrace: Refactor syscall_trace_enter/exit()
+  arm64/ptrace: Refator el0_svc_common()
+  entry: Add syscall_exit_to_user_mode_prepare() helper
+  arm64/ptrace: Handle ptrace_report_syscall_entry() error
+  arm64/ptrace: Expand secure_computing() in place
+  arm64/ptrace: Use syscall_get_arguments() heleper
+  entry: Add arch_ptrace_report_syscall_entry/exit()
+  entry: Add has_syscall_work() helper
+  arm64: entry: Convert to generic entry
+
+kemal (1):
+  selftests: sud_test: Support aarch64
+
+ arch/arm64/Kconfig                            |  2 +-
+ arch/arm64/include/asm/entry-common.h         | 69 ++++++++++++++
+ arch/arm64/include/asm/syscall.h              | 29 +++++-
+ arch/arm64/include/asm/thread_info.h          | 22 +----
+ arch/arm64/kernel/debug-monitors.c            |  7 ++
+ arch/arm64/kernel/ptrace.c                    | 90 -------------------
+ arch/arm64/kernel/signal.c                    |  2 +-
+ arch/arm64/kernel/syscall.c                   | 31 ++-----
+ include/linux/entry-common.h                  | 42 ++++++---
+ kernel/entry/syscall-common.c                 | 43 ++++++++-
+ .../syscall_user_dispatch/sud_test.c          |  4 +
+ 11 files changed, 188 insertions(+), 153 deletions(-)
+
 -- 
-2.50.1
+2.34.1
 
 
