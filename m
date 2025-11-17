@@ -1,222 +1,233 @@
-Return-Path: <linux-kselftest+bounces-45718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8F6AC628AD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 07:39:18 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9F39C629B4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 07:57:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C54C93B3CDB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 06:38:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5B9DE4E6C51
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 06:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8385F315D30;
-	Mon, 17 Nov 2025 06:38:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06EF3164A1;
+	Mon, 17 Nov 2025 06:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gf5NFbf1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZHakJaE6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401AC315D21
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 06:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763361506; cv=none; b=UGUw5o0/tX9dOuhE5f5eRpbHPAFyT8J3z/iqWvR1HlKL9wrQIeVI5+jwS11JHkvxUjLFlslBUvMWg/Yw9BMPjkzDAYjCA7w8RqjNqbWtHeezQRlKZHAhc7XBNv/RED4JMZQX/eo1M5+snkfq1sBqVDUbsDoeDY4l9OCqGXgGN4o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763361506; c=relaxed/simple;
-	bh=A3rPgwriz9b4YMnOHBRbVV8RhIKuGfNGKqAw/aSnWR0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V6SUovGIclQHd/FR7+X/mAB6DBHGiyYxsHH4fA7cggoS8vAQxuil3DMdl0Fd/GK9lYofgTEpuEW013798fFnZY9Hk2ULKE8H7xAtJDZaDXGCml+WaoZoy4W2YFAOMe85RTyFJDcDIAFm48/4QetiKJaR2X1HfbBsp1MKcD1tgjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gf5NFbf1; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5959187c5a9so523034e87.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Nov 2025 22:38:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763361502; x=1763966302; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mKPR8K5JHXfnzVilFNApKLVvNZlS9+8kqXfsjfMNXqI=;
-        b=gf5NFbf1JXmj3AGYkhkTLg/oETWuiJ81BRLbW9KHkG4aPxxhP09VYdkFChl5ISNsvW
-         B1cRpQaFmpw31ymrVP55jw00Dm0KgFGGPLBjKfxcwfQKdGw5aOdW1E9yK+1ZJfs42gfF
-         pbr3OaePXjI/o7NmANcZad9rrsNLIv50WjcGeOXFHvVnH9mLyunPsjcBuMfL31IfLX/8
-         9XF0tWe/m7n4hoPamVdKEbO5iDMK+0X2ADJc+oCrfBdvRMqs1LZ9+xGdlGwonBORFD12
-         +7VRMj5EQvFIoTWUo4+BuHAublOfKXlrxAt0xdmQLo7rLSQBLdEUBUJyNKIMiXQ6wbG3
-         fxpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763361502; x=1763966302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mKPR8K5JHXfnzVilFNApKLVvNZlS9+8kqXfsjfMNXqI=;
-        b=L+u6I4qxs3JR6XCunVww9T3bn7B6Kc0JxUN4dUdnEE/bg21bfr+GdCPOADuoSmfHmN
-         qakvnd9vnBYXP15bDyK6cSmUp2o0/1HorUAPXZ4dNRrfORPHELt5NSGWk0DiobRU8iLj
-         oeQccPL67QUfr8Ie4ZuihH7lCfNWEfazIumG3K5Xe537rTwlwSm+pGEHfWeY7Vky2OBa
-         yEdGp2UrLiP2C2I99APK0KdP4BlzmykmN4/dDFkQos3MBPKUtGrl61lil3NWQkqCo80A
-         Tsu+JENnaU6xhQTkUyICVHTX5IjC/PzcnzvH0m2zOxQgs3LkciGF3SsARlLhEsHCcYtL
-         9tTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGLvwaT/s08nzbJKzl9aqMyzxJc0JFV06gZWnCSXXKQSHLRq+3az2LSjMdtVeY5P1k4//XP6IBjZwOYF7IoBw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUXf3uft27m2dJbq3kR3RItlOEj4hC39N9NTPuKqykyGdPrlr8
-	XTt4UVGGX1HyR98Ga7tTGPO3jBZy6ZHIJJUm/z/SJImf9wuaeOjiOad3U4CgIC8/iSJKvUrziaZ
-	EEFsqLf9Ov+2pSjDPx3CAD4ebg42LH6VcB0gEJsDzaA==
-X-Gm-Gg: ASbGncuHBjKh6spckZ0M6qi7GH7w7aL0eyMmsC9XLMIQeTgjhEvUzx87XAUx59GRdYL
-	0wJoGi0H3y272xuFJDBE5WjmCJ3ZU5j/OjpMrYMFknUlOq3OIpkuVYBQnKpIp7pU9YJEORaN0gO
-	5EvIUJW7GN8wHrfGebXfEdcRIIdvWDNj5mvUxL+rSy6h8zcmF42dm2ZcwUyf+RWXmGB9v9LBuDu
-	V1JhR+qjcgfoeMY9mnh4AhuXAFi8WVge3GnU/cNDX+gDyBzPDOgJ7gmja6TmIF227v8mhwu77yM
-	lqhE/mmG6gJD/fuRgGY=
-X-Google-Smtp-Source: AGHT+IF2nuhg87qiUvcOswURQNG1UrXLxNTg9RKGJWjZh7RuDRmzJpvcQFqpdeQyNJOrQ9CjFviUwVaU1c282AQ/H5Y=
-X-Received: by 2002:a05:6512:3a8f:b0:595:83f5:c33e with SMTP id
- 2adb3069b0e04-59584198566mr3695392e87.11.1763361502263; Sun, 16 Nov 2025
- 22:38:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9AD314D04
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 06:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763362621; cv=fail; b=kIsNIKEwVuXD981uYoxvsz8UOXET973OgCsgx8H/6dKNeU12vBBIHSl8rL4YFNr3jbqpzCSzQuLaIWFnGt6e3WdoWwYdg2plmWX/oHgM2aiYjT+Av/xr+UqjbywimqnGMgfy8LqWTAx+CDscn8hdhWx4jRAf/4FTniNz3IJhNRc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763362621; c=relaxed/simple;
+	bh=G7z9+0bpTV5/ZtZLI59/igMe3hRNL1s/Kwj9B20uL+0=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=eyh9j2x59fXxj6d74+Kom4fwuOHzMJigBSrUfavZE6UrZn09b4x1fpHRzQIH57TvWc9BQ6WaSQ5GJbJJWy3DpGNUyzWONLexvBdTJHuDI/+mEAXi2SR+nXy81i2RELiZ2AhP4MCTx78YricqnYDZ5kowgCzQ3wGK/g6RNXfiu9c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZHakJaE6; arc=fail smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763362619; x=1794898619;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=G7z9+0bpTV5/ZtZLI59/igMe3hRNL1s/Kwj9B20uL+0=;
+  b=ZHakJaE6yp+V1lUOf/unJB7iRcjbAt5AYMJckllbf7UtYnvUgJ5F4ZDn
+   4yiYtIRd6MrBbLuNGZon5m5QbljR6o/WMVh0RRe62lip+rfRN/2jvxX5g
+   9HkmT5FZOQQnTVbcZJMlk2mOyzLocK3md3NLlwnwqyUUxoGlTfVJ5FcwQ
+   Y8RwQGSdcma/rr/RmdGhvJGnU6rLQpQm2iXfkmbqzzUzh64oV3q7G4pFd
+   zqQyojV0GkFWba1Y8NxIUZ8c7WkvqqikIKZmZi5MlJcQh7FtxC/6nOtQA
+   2KmJPAbBzHYna3oNTrmB/pnY5slpky9W87R8fqKC42V952Ke9u0LMisho
+   w==;
+X-CSE-ConnectionGUID: 4DUetEx/Rqik9Ss20kujYg==
+X-CSE-MsgGUID: F/xM7NMfS0q8Ki+wGgDw4Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="82742979"
+X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
+   d="scan'208";a="82742979"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2025 22:56:59 -0800
+X-CSE-ConnectionGUID: KptW3E2xSDOosjsZ4Iz+rQ==
+X-CSE-MsgGUID: AZmJgRe8SAKdJ+cP8wnDdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
+   d="scan'208";a="221015823"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2025 22:56:59 -0800
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Sun, 16 Nov 2025 22:56:58 -0800
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27 via Frontend Transport; Sun, 16 Nov 2025 22:56:58 -0800
+Received: from PH7PR06CU001.outbound.protection.outlook.com (52.101.201.62) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.27; Sun, 16 Nov 2025 22:56:58 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=M8VXHXIFyLhaJJyJu3f9PCEHk3Le4y/cjnWBUg2m848WB6xRNgy+Xd6sA2f7JT4PujFUOA/wCo8+2krPqDjYTKUbKBGJPFqPURLEHnIXH5ht20/5HBY3z4Qwf1iB+VCH9bC6AN5aZwc+/fLs/e0D2nWxFk6hm9fn7oDyIkD3No80BOt0b5ZVDzkY+qIwlxab7Sccepid5OmFZjMwlmw530+MlYX3DoGBXCZwg4a1AsGhxT190m26QgF5jSWW6WlIOy1mP9n7yAW5MLfhvA4hG9N+IO1AXMi/zwAcYmkhkQQxCp4tMUoB97z4s7JZ0xVuCE2G7BSPqtj45M22bPfWdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b8AahdwyT7DPfhXhv6JyyyUv36z+h4KD4g/TnlWxnjw=;
+ b=jlOEmnsjP+iUg+NiBMjNd8S2R/B91T4gSELTRV9BMMvnpR8QH25IsG+boFEBFVEMNFL2WLWMuQAOAvG+rW5vNdAMUi+aSzTRk4VNV5cx93GNb5HAbNX0dzr8Ty+85ukVHKueJ/ePY/KQ45+ytc4m8Nn7bc1x4gi6ppXgv6uypbZ6NaYeZTKgm/0geAQpfQsTLTRZBfss/djizlBU9o3vEredzGhY4vnD/IQZ8k8Wm367nl3hkqusnFBZ8oXxGcnM4TBagjE3nrJqjyCm3V23qm7qoVKSZKi00KIaVNBWMiKMMojqEB29XhfbiImrfF+/Mb3l7Y5h28gfIm80j5ty/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Mon, 17 Nov
+ 2025 06:56:56 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::b576:d3bd:c8e0:4bc1%5]) with mapi id 15.20.9320.013; Mon, 17 Nov 2025
+ 06:56:56 +0000
+From: "Tian, Kevin" <kevin.tian@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>, "iommu@lists.linux.dev"
+	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Robin
+ Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Will Deacon
+	<will@kernel.org>
+CC: Alex Mastro <amastro@fb.com>, Eric Auger <eric.auger@redhat.com>, "Lixiao
+ Yang" <lixiao.yang@intel.com>, Matthew Rosato <mjrosato@linux.ibm.com>,
+	Nicolin Chen <nicolinc@nvidia.com>, "patches@lists.linux.dev"
+	<patches@lists.linux.dev>, "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: RE: [PATCH iommufd] iommufd: Make vfio_compat's unmap succeed if the
+ range is already empty
+Thread-Topic: [PATCH iommufd] iommufd: Make vfio_compat's unmap succeed if the
+ range is already empty
+Thread-Index: AQHcTbaFCfF32K7inEe8+O7kS5xvbbT2gmkA
+Date: Mon, 17 Nov 2025 06:56:56 +0000
+Message-ID: <BN9PR11MB5276EE15198CEECC799B3B568CC9A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <0-v1-76be45eff0be+5d-iommufd_unmap_compat_jgg@nvidia.com>
+In-Reply-To: <0-v1-76be45eff0be+5d-iommufd_unmap_compat_jgg@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MN0PR11MB6059:EE_
+x-ms-office365-filtering-correlation-id: 874b7579-fb3e-4f25-270a-08de25a67f42
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024|38070700021;
+x-microsoft-antispam-message-info: =?us-ascii?Q?yPVNYX6UW7K0B0nS4idJwhyb/l/d839dvznxc3fhne3D97v/qKReJYYo8AYj?=
+ =?us-ascii?Q?IX/D8uBfazR2YmjRW8Ogk6UUFJRCXfPDys4LmS5qBJT7ajZdtTvX0gsHwsi3?=
+ =?us-ascii?Q?VL/QMflI+j63vMXsK1lcTpkQ/WJ/hE4jsQUXqsyQYdNxv51IBN92g53J95zN?=
+ =?us-ascii?Q?4siBVPj5CeGFdt7mnVxyLur70wg1lNLqeZdPjkDzFF9o6OynrqmnRiQhqyyr?=
+ =?us-ascii?Q?c59KkUakpLDuJx9NkngUL1nNqyHXbeHceyvpCNQESvbwfJq5mgiv19bCLT5G?=
+ =?us-ascii?Q?nn2m8TCuzHqGFyXMAi0A/Pni3wvaTk/D2MnsXj8xtuDuKpGDrz3gv1D7kg82?=
+ =?us-ascii?Q?xCbCjeFu6u2IwAAuhAbfMyTTQ+gNnwTLLJjA5dQcUhcuJ+wf4IodXvln/D0a?=
+ =?us-ascii?Q?f8uZRj+Xn9pQ4nEobvzwN/6eqflWFjL3SNvrCs/C2eCncqoZA1W+Osui+T76?=
+ =?us-ascii?Q?MDc72QKU65/LOPxn3GwSG9mcAququVydGAjuB2GjdddHA6CIaP89RG3YKEsA?=
+ =?us-ascii?Q?Twb6ht88UFHuicZ1XHgY7sNzeJORR8rtU7pt1DOGgsP8MkKqFzgZFdPNvAB/?=
+ =?us-ascii?Q?LqcKH/iEMqwTJEq39VC0TkLLnj6C4qFYYlq4OM7j1ju2A4VDSsssJo8gbQ7z?=
+ =?us-ascii?Q?m9KhywIps9lxI/yHoldaDiZAbcQU9D9Lq8+Ew+vKRT4g4GnWAggx9nofQpWx?=
+ =?us-ascii?Q?n3kGy3kD75J34zCdmXlxS/mfCKLT9qpDRX2T8aEOIGbCZyXu809h17bwBIcQ?=
+ =?us-ascii?Q?Xm1OK94rN/vqSI6FhHrOIKM28Yg2e1OS60OL8g16czhysR9neURPwVMvtu8e?=
+ =?us-ascii?Q?W8PSlee1JjkzSSCOlqIRKcSxJ+HOnyC+I3TIMheHUzz46rX2vpL2ZMh3lMDe?=
+ =?us-ascii?Q?aOqNtquAynDV8oGkcSGZxQNGH9mH1sv9Mv7IFRKrsKlRlDcAC7vJ67Mcs5B7?=
+ =?us-ascii?Q?6i7n0ICE1i/GawyENM96RY5lrFZHIqRmtDuyu06wgqXe6GpEfsXJ8ZqUehLQ?=
+ =?us-ascii?Q?0gBxDfADhbQJJit7fW4NS8oLF95TmAxJnaTTRag16qVkJYLwmZGrCaB3uGon?=
+ =?us-ascii?Q?MOTbZS0fizyTiV0YavRyD/W5xNyHRGHwEVnmpq2mNPxYyCu9f1egKVArNNlM?=
+ =?us-ascii?Q?AItSs1N12PrxijVkrvEpwXR9OHXrGKdFolOZcs/4X5fiBh/iDBAEwfGCl0ka?=
+ =?us-ascii?Q?213B8FyXB39CLSoJNmSTdK8dt0A58mFH2oE4liGuED6JrF/sgzZeubEOEYur?=
+ =?us-ascii?Q?TdscaUMy3Z6OU1i2fvrYeWa7wJGT1wSxOtPiLtRtRj9CmNjSBTgxobhWIrIa?=
+ =?us-ascii?Q?XHF1O/kRg8We8gFDN47GIZkvqpRPoxk8PxJQA8iuiaIkrSGRJi3ZkaZfqUFV?=
+ =?us-ascii?Q?qog7P6JUupEcEJo4KfADpIRz8L+gU/gwBK6apcaDxyzB84t3SXvqWqENwluo?=
+ =?us-ascii?Q?HX03hvXZ/pessa/78AxBIPwuDdxh13t0vg6tCmkETqVJuPI7wSmKHB2uyqRr?=
+ =?us-ascii?Q?uJmvx/MlvPfzE62eiXHE+lOTIbxIcvRgTRyL?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qKEp297bXoNVpj7amfqSQqtvbGuI7UtwYMmFR5ddtgYA4/oI9+sCsLcC2V4N?=
+ =?us-ascii?Q?9YBoS5Hw2yKcztIpqGtGs7BKbJhW+fccdImpDgUGT19WVRZWCp7PKO/VS2f5?=
+ =?us-ascii?Q?FpxKirBWUe9jQq9AvXdGvRLmpWM7stajpudTHkSkXkxpVUhGQLQLCvUjAEmh?=
+ =?us-ascii?Q?CkB6O9SghdBLDuZoBMOCSy4HoedLDBZcWTCfxqbJGBxjhiNDNhaN061Z+7He?=
+ =?us-ascii?Q?qrLsXgVmp/9CZ/qxegbbc7+HxbbaZyOiIrQNvvzhgPkn983+ujVyBTeGCu0h?=
+ =?us-ascii?Q?ALf5fofwvQm8DY06LQQet/XErFANYdpdBXQnow/xLlzC4RM4DRkkfmqjCfCg?=
+ =?us-ascii?Q?hJObsL7uwCNVCHRkcTuQCNoAXGx4xoGHqr4LKtEP0SnXT5bvefBY3Gz79Ss2?=
+ =?us-ascii?Q?8gOtV4JSYk7UNl0r7xj3U0XIHo4fewWJevZzdR4hRG9OlVhitHpFunmZbaYT?=
+ =?us-ascii?Q?L+VpnjkfVvNPYkDjr2F9QvidVSZoBTECiqgW2Mpyu6bEwvCL66NUidbSrzth?=
+ =?us-ascii?Q?w/1ojsikIfDXp+g49cyNqKP9N/NTAAete1MPUvfrhMT5YzfHRMTqCD+A7FUw?=
+ =?us-ascii?Q?LU+UGUCNJZ0WYJlprgAvzBkr9sdjIA+SNYUEP0xSbhV03MydYB3lj7qqxFNU?=
+ =?us-ascii?Q?o2kKCPx5NP9gujlGXJNhgt804PnOEU9/BLhYPiegphmzza+SUQvcV51zvXHL?=
+ =?us-ascii?Q?1jgiNDsJETzCv6tB85ZVWjGvhvfoz5etGz/T2wTNoDlbEfJBeXXwwclZtSso?=
+ =?us-ascii?Q?jeDP18AVsHa+qGbshOSScEefIRcG6nZP9GUdLfLM4OAU7Zi3tGJ5pFpDCmxj?=
+ =?us-ascii?Q?7FoTZmL3UpnUrYhQvX63e57+jvGTOXT3wEGySPa+I3CdEkuZqdaw2+9SOaf8?=
+ =?us-ascii?Q?GYV1SCarn3LUNmvcU0wCdFRJ6nbe4tnQ5Mu96IxW5xOrefbCJMytvpjCGgVA?=
+ =?us-ascii?Q?Te3IthJ58vSnqPCaBGLC7F9bIUsndmeo5A8cEsNgNOC4lpV14BGi1ZHXuDXA?=
+ =?us-ascii?Q?++TP/756gWpAQf3dD1sT/twWiZkwJTkTzQ3W+/v0T4tbE8PT0pGWWNT9PYSU?=
+ =?us-ascii?Q?o+dx0qY0ciMEeDgqXLErYdkn7k0eAfap2NF7B5kPjvqyuLyBE8P79XP4KnE+?=
+ =?us-ascii?Q?9Hm2pTdhSqQSf7GQJmVU81wbKnVEUknr6s1HIL1hAv/60y/gK93etsdFIF3t?=
+ =?us-ascii?Q?KesbjqrETbNt4YApnO97yYOO7S1cxX33nOE7s+agAToSbS8Quj3kX1yQy9AU?=
+ =?us-ascii?Q?i7EVZDOaJIqsbGtV7mD/QcnzN1HV8BAwC59QxcIshI7RKuj+J9qOEbe9mwMN?=
+ =?us-ascii?Q?WqVbweu42jlx4XQVsG0VkXaTzPONNBZN15ajlHJLULlGuQFx/bpz69TyMdhl?=
+ =?us-ascii?Q?KyAB5FyWJH0/ouZkek5TaBIg8AXXmyrFNnlVH/14Fq1LTJ3RMHI/MPGLnuw5?=
+ =?us-ascii?Q?lmEwbA2MMLNx/v7I/W06FbwKbyhWhtH5KrxzKMnw+vaoC6QQan5UVw9CqgJC?=
+ =?us-ascii?Q?f7QuIQ43cYgK+jOaRKAOWoZVDVCDmFTI4L3qFzo7Zb1Da+D5EFw2GZBbUx6/?=
+ =?us-ascii?Q?0A1lX0exK2G+Q3ywdYVLfWyIaT+qiJDzdcmIcKjv?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251115225550.1086693-1-hoyeon.lee@suse.com> <20251115225550.1086693-6-hoyeon.lee@suse.com>
- <fa987c2b-b806-4aa7-a318-812fc7d0f414@linux.dev>
-In-Reply-To: <fa987c2b-b806-4aa7-a318-812fc7d0f414@linux.dev>
-From: Hoyeon Lee <hoyeon.lee@suse.com>
-Date: Mon, 17 Nov 2025 15:37:50 +0900
-X-Gm-Features: AWmQ_bnRlBGsS_F9znam2aLrWmZfBD5qK6FdCrSiGBUG8wo4GZBjDq9kjSkoE4U
-Message-ID: <CAK7-dKYDqV97K+hbw651zbu3-UZ1WSOf2a07uqWWtiRSfJV_zQ@mail.gmail.com>
-Subject: Re: [bpf-next v1 5/5] selftests/bpf: propagate LLVM toolchain to
- runqslower build
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 874b7579-fb3e-4f25-270a-08de25a67f42
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2025 06:56:56.2909
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wO3GECiTDYWgGO3oYLi1Y5hi0YvrYxFT2j5JsOh/FzxVhGvxMUKYgxwTHLoLZ0O1+TqlV5nvkCwI6ST+X752Vg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6059
+X-OriginatorOrg: intel.com
 
-On Mon, Nov 17, 2025 at 3:04=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
->
->
->
-> On 11/15/25 2:55 PM, Hoyeon Lee wrote:
-> > The selftests/bpf invokes a nested make when building runqslower, but
-> > LLVM toolchain version (clang/llvm-strip) is not propagated. As a
-> > result, runqslower is built with system default clang, not respecting
-> > specified LLVM version.
-> >
-> >      # LLVM=3D-21 make -C tools/testing/selftests/bpf
-> >      ...
-> >      make feature_display=3D0 -C /bpf/tools/bpf/runqslower             =
-           \
-> >          OUTPUT=3D/bpf/tools/testing/selftests/bpf/tools/build/runqslow=
-er/        \
-> >          BPFOBJ_OUTPUT=3D/bpf/tools/testing/selftests/bpf/tools/build/l=
-ibbpf/     \
-> >          BPFOBJ=3D/bpf/tools/testing/selftests/bpf/tools/build/libbpf/l=
-ibbpf.a    \
-> >          BPF_INCLUDE=3D/bpf/tools/testing/selftests/bpf/tools/include  =
-           \
-> >          BPFTOOL_OUTPUT=3D/bpf/tools/testing/selftests/bpf/tools/build/=
-bpftool/   \
-> >          VMLINUX_BTF=3D/sys/kernel/btf/vmlinux BPF_TARGET_ENDIAN=3D--ta=
-rget=3Dbpfel   \
-> >          EXTRA_CFLAGS=3D'-g -O0  ' EXTRA_LDFLAGS=3D' ' &&              =
-             \
-> >          cp  /bpf/tools/testing/selftests/bpf/tools/build/runqslower/ru=
-nqslower \
-> >              /bpf/tools/testing/selftests/bpf/runqslower
-> >      clang -g -O2 --target=3Dbpfel -I/bpf/tools/testing/selftests/bpf/t=
-ools/build/runqslower/ \
-> >            -I/bpf/tools/testing/selftests/bpf/tools/include -I/bpf/tool=
-s/include/uapi       \
-> >            -c runqslower.bpf.c -o /bpf/tools/testing/selftests/bpf/tool=
-s/build/runqslower/runqslower.bpf.o && \
-> >            llvm-strip -g /bpf/tools/testing/selftests/bpf/tools/build/r=
-unqslower//runqslower.bpf.o
-> >      /bin/sh: 1: clang: not found
->
-> I tried with LLVM=3D-20 make -C tools/testing/selftests/bpf in my system =
-and
-> there is no build error.
->
-> Also could you try with command line
->     make -C tools/testing/selftests/bpf LLVM=3D1
-> for clang build kernel or selftests, LLVM=3D1 is recommended as it
-> encodes a bunch of clang command lines:
->    CC              =3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
->    LD              =3D $(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX)
->    AR              =3D $(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX)
->    NM              =3D $(LLVM_PREFIX)llvm-nm$(LLVM_SUFFIX)
->    OBJCOPY         =3D $(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX)
->    OBJDUMP         =3D $(LLVM_PREFIX)llvm-objdump$(LLVM_SUFFIX)
->    READELF         =3D $(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX)
->    STRIP           =3D $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
->
->
-Thanks for the review.
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Wednesday, November 5, 2025 2:12 AM
+>=20
 
-Just to clarify, the issue is not the build failure itself. The error
-"clang: not found" only appeared because I intentionally did not set
-update-alternatives to avoid falling back to the system default compiler.
+sorry coming to this late, but why do we leave inconsistent behavior
+between unmapping all vs. unmapping a range:
 
-The real issue is that the runqslower sub-make invokes "clang" instead
-of "clang-21" when LLVM=3D-21 is specified. This shows that the selected
-LLVM toolchain version is not being propagated into the nested build.
+>  int iopt_unmap_all(struct io_pagetable *iopt, unsigned long *unmapped)
+>  {
+> -	int rc;
+> -
+> -	rc =3D iopt_unmap_iova_range(iopt, 0, ULONG_MAX, unmapped);
+>  	/* If the IOVAs are empty then unmap all succeeds */
+> -	if (rc =3D=3D -ENOENT)
+> -		return 0;
+> -	return rc;
+> +	return iopt_unmap_iova_range(iopt, 0, ULONG_MAX, unmapped);
+>  }
 
-LLVM=3D1 works well for general builds, but in this case the intention is
-to verify that a specific LLVM version is consistently applied across
-all sub-makes. That propagation does not currently happen, and the patch
-addresses exactly that.
+here empty IOVAs succeeds, while...
 
-Thanks again for taking a look.
->
->
-> >
-> > Explicitly propagate CLANG and LLVM_STRIP to the runqslower sub-make so
-> > that the LLVM toolchain selection from lib.mk is preserved.
-> >
-> > Signed-off-by: Hoyeon Lee <hoyeon.lee@suse.com>
-> > ---
-> >   tools/testing/selftests/bpf/Makefile | 1 +
-> >   tools/testing/selftests/lib.mk       | 1 +
-> >   2 files changed, 2 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index 34ea23c63bd5..79ab69920dca 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -306,6 +306,7 @@ endif
-> >
-> >   $(OUTPUT)/runqslower: $(BPFOBJ) | $(DEFAULT_BPFTOOL) $(RUNQSLOWER_OUT=
-PUT)
-> >       $(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower      =
-      \
-> > +                 CLANG=3D$(CLANG) LLVM_STRIP=3D$(LLVM_STRIP)          =
-          \
-> >                   OUTPUT=3D$(RUNQSLOWER_OUTPUT) VMLINUX_BTF=3D$(VMLINUX=
-_BTF)     \
-> >                   BPFTOOL_OUTPUT=3D$(HOST_BUILD_DIR)/bpftool/          =
-        \
-> >                   BPFOBJ_OUTPUT=3D$(BUILD_DIR)/libbpf/                 =
-        \
-> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/l=
-ib.mk
-> > index a448fae57831..f14255b2afbd 100644
-> > --- a/tools/testing/selftests/lib.mk
-> > +++ b/tools/testing/selftests/lib.mk
-> > @@ -8,6 +8,7 @@ LLVM_SUFFIX :=3D $(LLVM)
-> >   endif
-> >
-> >   CLANG :=3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX)
-> > +LLVM_STRIP :=3D $(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX)
-> >
-> >   CLANG_TARGET_FLAGS_arm          :=3D arm-linux-gnueabi
-> >   CLANG_TARGET_FLAGS_arm64        :=3D aarch64-linux-gnu
->
+> @@ -367,6 +367,10 @@ int iommufd_ioas_unmap(struct iommufd_ucmd
+> *ucmd)
+>  				     &unmapped);
+>  		if (rc)
+>  			goto out_put;
+> +		if (!unmapped) {
+> +			rc =3D -ENOENT;
+> +			goto out_put;
+> +		}
+>  	}
+
+...here it's a failure.
+
+from uAPI p.o.v. better the two scenarios are consistent?
 
