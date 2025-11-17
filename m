@@ -1,69 +1,102 @@
-Return-Path: <linux-kselftest+bounces-45774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45775-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB9C7C65A67
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 19:03:52 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7638BC65C1C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 19:43:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 69AB634ABEE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 17:56:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 7361028E3C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 18:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5AB2D12EF;
-	Mon, 17 Nov 2025 17:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C62A031B805;
+	Mon, 17 Nov 2025 18:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="nPHFR4UM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iUSUa9RV";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="chk80gK5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.74.81.189])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7D32BDC09;
-	Mon, 17 Nov 2025 17:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.74.81.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9BA831A064
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 18:43:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763402170; cv=none; b=hQaauuuPCiMDLsw9O6xhl7kgMjZlcpisHKyz8bdBOrCtyqiefKSiy5Te4w0nfD78DEdZIm7i/Px3OZGSMV4XXXEbNhB2qkKZLQ/Eyc/Pzcq2vRrrOjjWyZzhXsiGMR81XncSYjKBjDZE+8IiN7QH3AqBobZRdJA9auk4rQ/ntUo=
+	t=1763404990; cv=none; b=fBBdtYIQKo4KvJqfOw90BiccIAcxDFELCBrRTiAw5LUNBhqyO0vMmfTEwHH+JuglQzoAip7v4MSr5lwPjc/EDdQzebbu20PJlt8D4ZyUdVSqMV8zfh0FGXzGNwZ6n+fflkRs2lFAQ+0bUvL31wQ8wrEyGhClP5EJ9/11xuGnn18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763402170; c=relaxed/simple;
-	bh=6aBRxvsB8FcK8Ggd9JrGhsno6+pnPVxSCu6we9Ym6Pc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=b5mKv1XXekVb6/CRbFcrgaOcOtvMtTbBdn0r4fVQm0qbBnjZgfAheywfKvR5ob4w2RgCSnphKa3QW1Hv9pmFpjCazg7DQYgBWaLYyudM4Pki2h54BmFpw8CZB+mFG6nIR+7vN/wbyWny/gzEcNT+QUUMNfhwm4ynrFAMEgyQXqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=nPHFR4UM; arc=none smtp.client-ip=3.74.81.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1763404990; c=relaxed/simple;
+	bh=GIG/iyDk/a3m0i27C/ULXzWZKuo5X7gaeRrIaW50xR8=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=V3A1NfLst3s9Q6GG+N/zAjc+phEHgusGtFD6s5utLWeRFpf1Y3RnF/5P7qpzN6LeYQesbE4nrHDEJaT5gn0ZGSftYQJR2NeHS1SiMC0h8w/ZkAyFaogNQhg8Nw1CBSXoGPkY7tteYSdiMk7i/aeyi78oM65ZeNq5g4rMU30vA8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iUSUa9RV; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=chk80gK5; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763404987;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XpfOGVqLv8brfQ8QJuGmJSNw8lcPJaQQkI4+G0V1iic=;
+	b=iUSUa9RVFOlvyMQJ0VC5z82bSuZL2dEINUfYmRFYjEBpa/rtN9q08tMxoBF9dSo1lEijzI
+	Vn317FG7u9osXruHm6IFDspvVl02PYp/RScqf+NuQ3h24yKZ4sQznCp0zk/sC5JxsJTQCs
+	Xp6Qq8tK3LQ0lhK91md8DxtM8grKg8A=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-532-rPK5NJpBOyeYww_XyuatVQ-1; Mon, 17 Nov 2025 13:43:05 -0500
+X-MC-Unique: rPK5NJpBOyeYww_XyuatVQ-1
+X-Mimecast-MFC-AGG-ID: rPK5NJpBOyeYww_XyuatVQ_1763404984
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-8826a2b2d9aso170371846d6.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 10:43:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1763402168; x=1794938168;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=1+C5a3uEh6uVhE5CwBjGHueg7GAsDN4q94fBn9c2N+U=;
-  b=nPHFR4UMC8nvNHo4Fnw9rOi4kaQ2UntLOJmp34d63Go0B086RuyGNxTI
-   9Ups/aIMG/+fpDnsKnRvx3i1LNe4lvbVtOI/faG9wpv+mMWqYief6gtxl
-   CD9nODGsAoxjZqkdwHOS2cNcfwN7/ieomLSEe4E+JOtKC6GLWaN77PCAj
-   ezA7A5fCgKAGSy5F7aQe5n4IzQkHKq+Ni6YMHyyAC2V1awrcxksmXcthT
-   m28xfCt/5BI2j2FDGNX8X6q1ZuXxXT4N/xt7CJed4L/HOkqSm7yl8pphs
-   5lO8oPJcxfPYC0PNaVpf5xditTgPEA1T30QvZRN6fEFTjnNAj/8CU6hAz
-   w==;
-X-CSE-ConnectionGUID: AE5RMGScSNWxUyM+wG0ARw==
-X-CSE-MsgGUID: caTuEcgcSBqoUTH9RXgYZg==
-X-IronPort-AV: E=Sophos;i="6.19,312,1754956800"; 
-   d="scan'208";a="5331311"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-004.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 17:55:50 +0000
-Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:23472]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.42.72:2525] with esmtp (Farcaster)
- id 7f414123-7287-41e0-add1-f6f5cca5cd00; Mon, 17 Nov 2025 17:55:50 +0000 (UTC)
-X-Farcaster-Flow-ID: 7f414123-7287-41e0-add1-f6f5cca5cd00
-Received: from EX19D022EUC002.ant.amazon.com (10.252.51.137) by
- EX19MTAEUA001.ant.amazon.com (10.252.50.50) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Mon, 17 Nov 2025 17:55:48 +0000
-Received: from [192.168.14.35] (10.106.82.32) by EX19D022EUC002.ant.amazon.com
- (10.252.51.137) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Mon, 17 Nov 2025
- 17:55:47 +0000
-Message-ID: <a5531d06-dd11-402b-a701-a7c6a62186a7@amazon.com>
-Date: Mon, 17 Nov 2025 17:55:46 +0000
+        d=redhat.com; s=google; t=1763404984; x=1764009784; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XpfOGVqLv8brfQ8QJuGmJSNw8lcPJaQQkI4+G0V1iic=;
+        b=chk80gK5hGYLznobaSphkDvyCHLuUBNezstAp/yN6Q+9iWibx+9wGqMMH32wXnBw7f
+         klRacwNqWWiUwix9ZMFxe6Tj1wHbLl3xJ7ZN8E2cwBavFLd61bDec7IoGPlrEZqD5nkN
+         oVr7jehFhlKJO5zNlLrxYNCrphk9Je9ST3pOCAY1GMxZjzY3Qln91cP9mq7NBBZXsrus
+         5r/DXTpjUuBfCICcePvs3Ao8mx+q2PFDkOZDv4qbyiadOVQUZ3mPl8uPshRhFy1knzjK
+         0jd7QqpjZq1/M/y99318yqnsyHJR981BQPUiNWu7lwSlt4ZiGy2jMcOQ6/pT4YzcP1ft
+         7JyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763404984; x=1764009784;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XpfOGVqLv8brfQ8QJuGmJSNw8lcPJaQQkI4+G0V1iic=;
+        b=w/aFWrf6tsydRKhty/B2rVFkIvVGLdmsbXNc1yLNFBLdhobyJgUw7XhXag6oBlj0JV
+         hgJHXCU+NSnx3JYpSunUwM87xTNQagxAUBuE9bDvG620Ip6Bv8Xy8a1asPIcQYKWZMzh
+         k+dNYOuXG/N2wYdre2pux/BLGp2F5DjPj/GSHhJjwJdl9T33M6Ytgzu1g0QmGb+RjC17
+         gt3hqMmyVR59j3a0csk3oItgIDHHg11wNZ0PXJLnBqcGDQSfPW6yLXOjeouXA0pCfw7o
+         V2scCBNnTFuuZKh7jY9ice9oj5tNqW+cnABVDAHymSPoolEUJxDXL7ALTwubE0lZXnen
+         blgw==
+X-Forwarded-Encrypted: i=1; AJvYcCVXjKRvSCZbOjnOVCD4zo84YpzW76CxA3I7jMhXk5OA4vlz09i6SgxwNyS0WiZGucRSp0SAngWoC6q5pxieREQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywjgcnhjc/QzB+7s/BWiod70Vcm2z8NQyZzCaE2xCResZcUo2v5
+	z9aYr2mrvxLK3OIhYieIacOyRySMBsO6bUead5fTImJolMMg+d2jte6GgqnzVoUY4NGBLsNUPxf
+	dcLPkIMXXIHJUxoGeEvn6nsvMCS4PVc7g3h1AygrrXz2rdIEgm01IDwewnD6kuPfPoxrV5A==
+X-Gm-Gg: ASbGncu3/xJi2pl9vQLv09bPNUsEaypUyH2GRNosRYdsQTnr8zJWQmhm4e0aVBD9cC/
+	t43P2TxaLu1t0itSj3o8fHXioUrvyYE7MeFG94YsRUvpeyAaFxQpC5Jy+d3syfUIf2Mmy4wTuVx
+	Nb4kaMDWKK9kCIm9cWdjNCg+T/+wCchaKEsz4T2+SXYv5VWD2eVNLwVCZhYcnSMCTAxGRMS1l+Q
+	+opt4HYz8xdvyuVZOTH7axa3UOr+ZfgNaHE/FsJ4IWvgFlP/4uOcExzo9LhkgYODS4Nu7+YWGRr
+	hHM7AAsunr7L+by8e0Wig1hEwouJbua/xtNgHZ+QEYMpz7tXyTnl3RnUEpU3DMYvKn5ZjymTjLk
+	piTVAH4o3B0q/RMs6Hklm2tOL0L3ZAg/kD3Yui6Pqt71ndQ==
+X-Received: by 2002:a05:6214:4107:b0:809:19ab:599f with SMTP id 6a1803df08f44-882926025bbmr171908696d6.27.1763404984402;
+        Mon, 17 Nov 2025 10:43:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHQrDJLX+yOoO3ZzmOViiV0w0QFUdIMlBhGy2JuQArUWTmQJ0fqku/2pfP07YjDe5rOa6U05A==
+X-Received: by 2002:a05:6214:4107:b0:809:19ab:599f with SMTP id 6a1803df08f44-882926025bbmr171908296d6.27.1763404983958;
+        Mon, 17 Nov 2025 10:43:03 -0800 (PST)
+Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8828655e55bsm96747376d6.43.2025.11.17.10.43.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Nov 2025 10:43:03 -0800 (PST)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <52026e81-9cf6-4711-9bd0-4b57b31021a4@redhat.com>
+Date: Mon, 17 Nov 2025 13:43:02 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,104 +104,197 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [RFC PATCH 0/4] mm, kvm: add guest_memfd support for uffd minor
- faults
-To: Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>
-CC: Andrea Arcangeli <aarcange@redhat.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>, Hugh Dickins <hughd@google.com>, "Liam
- R. Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes
-	<lorenzo.stoakes@oracle.com>, Michal Hocko <mhocko@suse.com>, Paolo Bonzini
-	<pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>, Sean Christopherson
-	<seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan
-	<surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20251117114631.2029447-1-rppt@kernel.org>
+Subject: Re: [PATCH v2] cpuset: relax the overlap check for cgroup-v2
+To: Sun Shaojie <sunshaojie@kylinos.cn>, chenridong@huaweicloud.com,
+ mkoutny@suse.com, llong@redhat.com
+Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org, tj@kernel.org
+References: <19fa5a93-4cc9-4f84-891c-b3b096a68799@huaweicloud.com>
+ <20251115060211.853449-1-sunshaojie@kylinos.cn>
 Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <20251117114631.2029447-1-rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D002EUA001.ant.amazon.com (10.252.50.66) To
- EX19D022EUC002.ant.amazon.com (10.252.51.137)
+In-Reply-To: <20251115060211.853449-1-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 11/15/25 1:02 AM, Sun Shaojie wrote:
+> On 2015/11/15 08:58, Chen Ridong wrote:
+>> On 2025/11/15 0:14, Michal Koutný wrote:
+>>> On Fri, Nov 14, 2025 at 09:29:20AM +0800, Chen Ridong <chenridong@huaweicloud.com> wrote:
+>>>> After further consideration, I still suggest retaining this rule.
+>>> Apologies, I'm slightly lost which rule. I hope the new iteration from
+>>> Shaojie with both before/after tables will explain it.
+>>>
+>> The rule has changed in this patch from "If either cpuset is exclusive, check if they are mutually
+>> exclusive" to
+>> "If both cpusets are exclusive, check if they are mutually exclusive"
+>>
+>>   -    /* If either cpuset is exclusive, check if they are mutually exclusive */
+>>   -    if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
+>>   +    /* If both cpusets are exclusive, check if they are mutually exclusive */
+>>   +    if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))
+>>   +        return !cpusets_are_exclusive(cs1, cs2);
+>>
+>> I suggest not modifying this rule and keeping the original logic intact:
+>>
+>>>> For am example:
+>>>>    Step                                       | A1's prstate | B1's prstate |
+>>>>    #1> mkdir -p A1                            | member       |              |
+>>>>    #2> echo "0-1" > A1/cpuset.cpus.exclusive  | member       |              |
+>>>>    #3> echo "root" > A1/cpuset.cpus.partition | root         |              |
+>>>>    #4> mkdir -p B1                            | root         | member       |
+>>>>    #5> echo "0" > B1/cpuset.cpus              | root invalid | member       |
+>>>>
+>>>> Currently, we mark A1 as invalid. But similar to the logic in this patch, why must A1 be
+>>>> invalidated?
+>>> A1 is invalidated becase it doesn't have exclusive ownership of CPU 0
+>>> anymore.
+>>>
+>>>> B1 could also use the parent's effective CPUs, right?
+>>> Here you assume some ordering between siblings treating A1 more
+>>> important than B1. But it's symmetrical in principle, no?
+>>>
+>> I’m using an example to illustrate that if Shaojie’s patch is accepted, other rules could be relaxed
+>> following the same logic—but I’m not in favor of doing so.
+> Hi, Ridong,
+>
+> Thank you for pointing out the issue with the current patch; this is indeed
+> not what our product intends. I must admit that I haven't thoroughly tested
+> on such recent kernel versions.
+>
+> Obviously, this patch is flawed. However, patch v3 is needed. Regarding the
+> "other rules" you mentioned, we do not intend to relax them. On the
+> contrary, we aim to maintain them firmly.
+>
+> Our product need ensure the following behavior: in cgroup-v2, user
+> modifications to one cpuset should not affect the partition state of its
+> sibling cpusets. This is justified and meaningful, as it aligns with the
+> isolation characteristics of cgroups.
+>
+> This can be divided into two scenarios:
+> Scenario 1: Only one of A1 and B1 is "root".
+> Scenario 2: Both A1 and B1 are "root".
+>
+> We plan to implement Scenario 1 first. This is the goal of patch v2.
+> However, patch v2 is flawed because it does not strictly adhere to the
+> following existing rule.
+>
+> However, it is worth noting that the current cgroup v2 implementation does
+> not strictly adhere to the following rule either (which is also an
+> objective for patch v3 to address).
+>
+> Rule 1: "cpuset.cpus" cannot be a subset of a sibling's "cpuset.cpus.exclusive".
+
+Inside the cpuset code, the rule should be "cpuset.cpus should not be a 
+subset of sibling's cpuset.cpus.exclusive".
+
+Note that one rule that should always be followed in v2 is that writing 
+any valid cpumask into cpuset.cpus is allowed, but writing to 
+cpuset.cpus.exclusive may fail if some rules are violated. If the new 
+cpuset.cpus violate the rules for a sibling partition root, the current 
+code will invalidate the sibling partition. I am not against changing 
+the cpuset.cpus.effective to a suitable value to avoid the conflict 
+instead invalidating a sibling partition. We do need to make sure that 
+the new behavior is consistent under different circumstances.
+
+>
+> Using your example to illustrate.
+>   Step (refer to the steps in the table below）
+>   #1> mkdir -p A1
+>   #2> echo "0-1" > A1/cpuset.cpus.exclusive
+>   #3> echo "root" > A1/cpuset.cpus.partition
+>   #4> mkdir -p B1
+>   #5> echo "0" > B1/cpuset.cpus
+>
+> Table 1: Current result
+>   Step | return | A1's excl_cpus | B1's cpus | A1's prstate | B1's prstate |
+>   #1   | 0      |                |           | member       |              |
+>   #2   | 0      | 0-1            |           | member       |              |
+>   #3   | 0      | 0-1            |           | root         |              |
+>   #4   | 0      | 0-1            |           | root         | member       |
+>   #5   | 0      | 0-1            | 0         | root invalid | member       |
+>
+> Table 2: Expected result
+>   Step | return | A1's excl_cpus | B1's cpus | A1's prstate | B1's prstate |
+>   #1   | 0      |                |           | member       |              |
+>   #2   | 0      | 0-1            |           | member       |              |
+>   #3   | 0      | 0-1            |           | root         |              |
+>   #4   | 0      | 0-1            |           | root         | member       |
+>   #5   | error  | 0-1            |           | root         | member       |
+>
+> Currently, after step #5, the operation returns success, which clearly
+> violates Rule 1, as B1's "cpuset.cpus" is a subset of A1's
+> "cpuset.cpus.exclusive".
+>
+> Therefore, after step #5, the operation should return error, with A1
+> remaining as "root". This better complies with the Rule 1.
+>
+> ------
+> The following content is provided for reference, and we hope it may be
+> adopted in the future.
+> !!These are not part of what patch v3 will implement.
+>
+> As for Scenario 2 (Both A1 and B1 are "root")， we will retain the current
+> cgroup v2 behavior. This patch series does not modify it, but we hope to
+> draw the maintainers' attention, as we indeed have plans for future
+> modifications. Our intent can be seen from the following examples.
+>
+> For example:
+>   Step (refer to the steps in the table below）
+>   #1> mkdir -p A1
+>   #2> echo "0-1"  > A1/cpuset.cpus
+>   #3> echo "root" > A1/cpuset.cpus.partition
+>   #4> mkdir -p B1
+>   #5> echo "2-3"  > B1/cpuset.cpus
+>   #6> echo "root" > B1/cpuset.cpus.partition
+>   #7> echo "1-2"  > B1/cpuset.cpus
+>
+> Table 1: Current result
+>   Step | A1's eft_cpus | B1's eft_cpus | A1's prstate | B1's prstate |
+>   #1   | from parent   |               | member       |              |
+>   #2   | 0-1           |               | member       |              |
+>   #3   | 0-1           |               | root         |              |
+>   #4   | 0-1           | from parent   | root         | member       |
+>   #5   | 0-1           | 2-3           | root         | member       |
+>   #6   | 0-1           | 2-3           | root         | root         |
+>   #7   | 0-1           | 1-2           | root invalid | root invalid |
+>
+> Table 2: Expected result
+>   Step | A1's eft_cpus | B1's eft_cpus | A1's prstate | B1's prstate |
+>   #1   | from parent   |               | member       |              |
+>   #2   | 0-1           |               | member       |              |
+>   #3   | 0-1           |               | root         |              |
+>   #4   | 0-1           | from parent   | root         | member       |
+>   #5   | 0-1           | 2-3           | root         | member       |
+>   #6   | 0-1           | 2-3           | root         | root         |
+>   #7   | 0-1           | 2             | root         | root invalid |
+>
+> After step #7, we expect A1 to remain "root" (unaffected), while only B1
+> becomes "root invalid".
+>
+>   
+> The following Rule 2 and Rule 3 are alsomplemented and adhered to by our
+> product. The current cgroup v2 implementation does not enforce them.
+> Likewise, we hope this will draw the maintainers' attention. Maybe, they can
+> be applied in the future.
+>
+> Rule 2: In one cpuset, when "cpuset.cpus" is not null, "cpuset.cpus.effective"
+>          must either be a subset of it, or "cpuset.cpus.effective" is null.
+
+cpuset.cpus.effective will never be null in v2 with the exception of a 
+partition root distributing out all its CPUs to child sub-partitions.
 
 
+>
+> Rule 3: In one cpuset, when "cpuset.cpus" is not null, "cpuset.cpus.exclusive"
+>          must either be a subset of it, or "cpuset.cpus.exclusive" is null.
 
-On 17/11/2025 11:46, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Hi,
-> 
-> These patches allow guest_memfd to notify userspace about minor page
-> faults using userfaultfd and let userspace to resolve these page faults
-> using UFFDIO_CONTINUE.
-> 
-> To allow UFFDIO_CONTINUE outside of the core mm I added a
-> get_pagecache_folio() callback to vm_ops that allows an address space
-> backing a VMA to return a folio that exists in it's page cache (patch 2)
-> 
-> In order for guest_memfd to notify userspace about page faults, it has to
-> call handle_userfault() and since guest_memfd may be a part of kvm module,
-> handle_userfault() is exported for kvm module (patch 3).
-> 
-> Note that patch 3 changelog does not provide motivation for enabling uffd
-> in guest_memfd, mainly because I can't say I understand why is that
-> required :)
-> Would be great to hear from KVM folks about it.
+We currently don't have this rule in the cpuset code as 
+cpuset.cpus.exclusive can be independent of "cpuset.cpus".  We could 
+implement this rule by failing the cpuset.cpus.exclusive write in this 
+case, but we can't fail the write to "cpuset.cpus" if the rule is violated.
 
-Hi Mike,
-
-Thanks for posting it!
-
-In our use case, Firecracker snapshot-restore using UFFD [1], we will 
-use UFFD minor/continue to respond to guest_memfd faults in user 
-mappings primarily due to VMM accesses that are required for PV (virtio) 
-device emulation and also KVM accesses when decoding MMIO operations on x86.
-
-Nikita
-
-[1] 
-https://github.com/firecracker-microvm/firecracker/blob/main/docs/snapshotting/handling-page-faults-on-snapshot-resume.md
-
-> 
-> This series is the minimal change I've been able to come up with to allow
-> integration of guest_memfd with uffd and while refactoring uffd and making
-> mfill_atomic() flow more linear would have been a nice improvement, it's
-> way out of the scope of enabling uffd with guest_memfd.
-> 
-> Mike Rapoport (Microsoft) (3):
->    userfaultfd: move vma_can_userfault out of line
->    userfaultfd, shmem: use a VMA callback to handle UFFDIO_CONTINUE
->    userfaultfd, guest_memfd: support userfault minor mode in guest_memfd
-> 
-> Nikita Kalyazin (1):
->    KVM: selftests: test userfaultfd minor for guest_memfd
-> 
->   fs/userfaultfd.c                              |   4 +-
->   include/linux/mm.h                            |   9 ++
->   include/linux/userfaultfd_k.h                 |  36 +-----
->   include/uapi/linux/userfaultfd.h              |   8 +-
->   mm/shmem.c                                    |  20 ++++
->   mm/userfaultfd.c                              |  88 ++++++++++++---
->   .../testing/selftests/kvm/guest_memfd_test.c  | 103 ++++++++++++++++++
->   virt/kvm/guest_memfd.c                        |  30 +++++
->   8 files changed, 245 insertions(+), 53 deletions(-)
-> 
-> 
-> base-commit: 6146a0f1dfae5d37442a9ddcba012add260bceb0
-> --
-> 2.50.1
-> 
+Cheers,
+Longman
 
 
