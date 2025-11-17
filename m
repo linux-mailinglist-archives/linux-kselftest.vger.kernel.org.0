@@ -1,108 +1,97 @@
-Return-Path: <linux-kselftest+bounces-45750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D18D5C64669
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 14:38:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4611FC64789
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 14:49:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B9F23ACB27
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 13:33:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7989D4EF5F8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 13:43:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE5913358D3;
-	Mon, 17 Nov 2025 13:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81921332EB0;
+	Mon, 17 Nov 2025 13:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="S7xkFUo5"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zewSX/fr";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GM28NwN1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810F93328EC;
-	Mon, 17 Nov 2025 13:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A67331A4B;
+	Mon, 17 Nov 2025 13:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763386285; cv=none; b=sDkae78wFZhLAWrqqPOxPZLB3RxhIr5blIlNNGfDxe+cZoXXgcQ0TNGcHpwE4BhYJivo97+E26TkJUtdATcZo/+Kc5mUValRaPJZYqg6jkti/mFjbVo1gDQsh9LraoWrv8K3jPHffEw6rtv81fsdfEtkBi4xbYgw34kMSuuxZb8=
+	t=1763387030; cv=none; b=nDAtDnw2xKose+1UzrGg3zik/Lg879IN8p58KNr6E8g5tVk0ZCFS4eT1ykhJNdTYXRz7J8GBnnAmP8GBYOWDIheIeowvIRvHTgfB2cRG6gMqZtQo7MiXHMIw8NlRf2VHe+wDPFf5nrAhnlMfRm62rDAfa99AXzJT2CcbvyAl8Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763386285; c=relaxed/simple;
-	bh=e2EqaLHY+hi8mOpTTTohUlXK6N1GgMucbwUdNtAo4mQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IFsz26mNkc1vTjh2j1hYgIJ5NLVCXGMnioQJQ9pHh1q/AiR+hmF5tNoBEJ0tOtVGrRsdM5+MyjvJZ1HUc72s3pz43M+fx0PdjyfRF69NkCh2l7LgNxVdc/PLNBKaAQt9s/eSKM72W2FJOB0HXKw5kx/2Rpzd7L2J0syp7rybzYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=S7xkFUo5; arc=none smtp.client-ip=113.46.200.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=g+Lx46iAeOgPpubr+gkS3rp+7tkakNKdnP1SW8F/O7E=;
-	b=S7xkFUo5md6dhTG0nsu8qRM2GgJ9v6v89JBKj8/wzVd31elaHwd1fP2zVW/A3+qqgBnQ+4A7z
-	wQSKuQnOtm3YmNhaO5bKVUSjbLwTiKvCKE8XvNbByBo36USluVhNnhXIY0Y4Mhox+LsCBXRGBki
-	kDx0a9NwJN4XiI12mMBbuSU=
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4d97rT0vnSzpSyw;
-	Mon, 17 Nov 2025 21:29:29 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0F9F7180477;
-	Mon, 17 Nov 2025 21:31:21 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 17 Nov
- 2025 21:31:19 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
-	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
-	<shuah@kernel.org>, <kees@kernel.org>, <wad@chromium.org>,
-	<akpm@linux-foundation.org>, <ldv@strace.io>, <macro@orcam.me.uk>,
-	<deller@gmx.de>, <mark.rutland@arm.com>, <song@kernel.org>, <mbenes@suse.cz>,
-	<ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
-	<anshuman.khandual@arm.com>, <broonie@kernel.org>, <kevin.brodsky@arm.com>,
-	<pengcan@kylinos.cn>, <dvyukov@google.com>, <kmal@cock.li>,
-	<lihongbo22@huawei.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-CC: <ruanjinjie@huawei.com>
-Subject: [PATCH v7 11/11] selftests: sud_test: Support aarch64
-Date: Mon, 17 Nov 2025 21:30:48 +0800
-Message-ID: <20251117133048.53182-12-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251117133048.53182-1-ruanjinjie@huawei.com>
+	s=arc-20240116; t=1763387030; c=relaxed/simple;
+	bh=duAx2VgQ0gYY9TJ/L2rcm8J/86SdKdBcCDHwD6qepxI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ooisiMdTTz2xVSWSvqGKGoIeC6ubayNEZmk2mMF807Iw9jCseOGNsi7a33G66KHys3ceRtQ86gzCE3cLw9zwjFVn99oEh55zmZDraTl6kfctYCjIlqAACEE18ZB6kvKS9+ZvJ7VNzXprxeHgRM0LUw28F3MW+jGU9tA/eDt+d1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zewSX/fr; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GM28NwN1; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1763387025;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=duAx2VgQ0gYY9TJ/L2rcm8J/86SdKdBcCDHwD6qepxI=;
+	b=zewSX/fr0sDpdjN4IQRj9Ut5gWvKRxTTXFxbJzqo5txZRWjHhx+MXfC7E3coy3iUbi+dLX
+	Pyq2kXnMrW2QNB9cBwLNhN32KVmwiD7qCgmDl/oG4d25/zY1ves9JK3aYvcgEQqBgnWAH4
+	WUxRVXVr7AFaIJJ8W3ittpBONf0W0EsDv+AGLOzzR/AfNjHUNOYSK8EX9uQFfyox284e+U
+	Z8EWDc8bg1XZLj6UASkbJ1UZ2HUSbUw9eSR2O+K/fWIfRLRDCKJ/u+foF2y5yrVIO3gTJJ
+	CKx1p7YHlBtCx+IAMfheJ5ECyS+SLF8zh+cpqI1H+LvsFR083USI+4H50Eb0jg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1763387025;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=duAx2VgQ0gYY9TJ/L2rcm8J/86SdKdBcCDHwD6qepxI=;
+	b=GM28NwN1RR4HRdFlS6YPhvkWiGVMLC8h8j/wO7UeoJVD+E0y/pJFq7jFjMBv6CAN0uv0L4
+	FPXAaS7hMqdXDHDQ==
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, oleg@redhat.com, peterz@infradead.org, luto@kernel.org,
+ shuah@kernel.org, kees@kernel.org, wad@chromium.org,
+ akpm@linux-foundation.org, ldv@strace.io, macro@orcam.me.uk,
+ deller@gmx.de, mark.rutland@arm.com, song@kernel.org, mbenes@suse.cz,
+ ryan.roberts@arm.com, ada.coupriediaz@arm.com, anshuman.khandual@arm.com,
+ broonie@kernel.org, kevin.brodsky@arm.com, pengcan@kylinos.cn,
+ dvyukov@google.com, kmal@cock.li, lihongbo22@huawei.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: ruanjinjie@huawei.com
+Subject: Re: [PATCH v7 04/11] entry: Add syscall_exit_to_user_mode_prepare()
+ helper
+In-Reply-To: <20251117133048.53182-5-ruanjinjie@huawei.com>
 References: <20251117133048.53182-1-ruanjinjie@huawei.com>
+ <20251117133048.53182-5-ruanjinjie@huawei.com>
+Date: Mon, 17 Nov 2025 14:43:44 +0100
+Message-ID: <87zf8k7p0v.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- dggpemf500011.china.huawei.com (7.185.36.131)
 
-From: kemal <kmal@cock.li>
+On Mon, Nov 17 2025 at 21:30, Jinjie Ruan wrote:
 
-Support aarch64 to test "Syscall User Dispatch" with sud_test
-selftest testcase.
+> In the generic entry code, the part before
+> syscall_exit_to_user_mode_work() calls syscall_exit_work(), which
+> serves the same purpose as syscall_exit_to_user_mode_prepare()
+> in arm64.
+>
+> In preparation for moving arm64 over to the generic entry
+> code, extract syscall_exit_to_user_mode_prepare() helper from
+> syscall_exit_to_user_mode_work().
+>
+> No functional changes.
+>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 
-Signed-off-by: kemal <kmal@cock.li>
----
- tools/testing/selftests/syscall_user_dispatch/sud_test.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-index 2eb2c06303f2..f53ebc89befc 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-@@ -192,6 +192,10 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
- 	((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A0] =
- 			((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A7];
- #endif
-+#ifdef __aarch64__
-+	((ucontext_t *)ucontext)->uc_mcontext.regs[0] = (unsigned int)
-+			((ucontext_t *)ucontext)->uc_mcontext.regs[8];
-+#endif
- }
- 
- int setup_sigsys_handler(void)
--- 
-2.34.1
-
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
