@@ -1,300 +1,117 @@
-Return-Path: <linux-kselftest+bounces-45753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8325DC64CFB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 16:11:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E017C64CBF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 16:07:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6C7F735FFFB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 15:03:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5704B4E3553
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 15:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59E233B6FD;
-	Mon, 17 Nov 2025 15:02:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C767932BF31;
+	Mon, 17 Nov 2025 15:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O8Uk5Qor"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wq0D2B6f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB38A270EBA
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 15:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FE8257459
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 15:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763391734; cv=none; b=txBC+0sBC4mlZDtNorn7Rh136Lp1xYPWl5pEPy7awUYEVb3APcNu8vnx62oytIHFBRP6xl95k8UAZWRtDvVdTa/oKkrm2zVIgYjidCHUmKL4uDzYh+ieRcLXOhdooxZYXvAwVtBymlvHbPuLrnp14iJdzjr5rKx6VLioo7f+Uy0=
+	t=1763392020; cv=none; b=kwpsMGvQGAu4cukbPKeWJ5yn5oGTmjE33YTKqyY1oFEa9XmaQAvZEcbPFz+62IfrckbJ+m6eZQmNgK7zagvxfjA/80zaE+3CyV3X32quyXGwD2Ibkx4nRkrlHumeViNt6lJZhqxM8yqGUO47P4tyw1yjal67IenH5k04nhhvD7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763391734; c=relaxed/simple;
-	bh=V6fHlz8HT9iaeRZe6Hts1U21hfu7/7IRpYz4JuQDFPk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BcY1po8mEvl76TYCCr6SSfaz6DupBy4SR4X4m6hIMs5TuSgxHw2gJcDH1yGvHMBW+II8bIgB5eEg88KSWvLQy0biXUgNMBlcDrhAnjk8OYx70nU9iaYd7BWmUipJFQu2BJPn3FL1Xp6nLehI4zQPV6lo261AT36OEyZCqjAoxW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O8Uk5Qor; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763391731;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=s+H138e7y6HCsaCtaTqIGyoW1ghuauULhTt5/nDa2Fg=;
-	b=O8Uk5QorvG5pV1XemtBCcQrYnwjTyYSDDiSYc4D+gB6JI77fZUeJRe+uuSSz9zW1lKlGAh
-	sHj04DEc8aet+ueqvWh2KGE+36CuPhQqHkZM+K6W5Lhuq4O1F+m+1AooKlt5y/sKJfX2oT
-	Re7HvAEoTprsrG0a6uFs6BOViIRx8WQ=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-499-EAqHuR5uO7aiC1gWSDGuug-1; Mon,
- 17 Nov 2025 10:02:09 -0500
-X-MC-Unique: EAqHuR5uO7aiC1gWSDGuug-1
-X-Mimecast-MFC-AGG-ID: EAqHuR5uO7aiC1gWSDGuug_1763391715
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 63997180123A;
-	Mon, 17 Nov 2025 15:01:53 +0000 (UTC)
-Received: from fedora (unknown [10.44.32.40])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id E78D13003776;
-	Mon, 17 Nov 2025 15:01:34 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 17 Nov 2025 16:01:52 +0100 (CET)
-Date: Mon, 17 Nov 2025 16:01:33 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexey Dobriyan <adobriyan@gmail.com>, Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Adrian Reber <areber@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	tiozhang <tiozhang@didiglobal.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	YueHaibing <yuehaibing@huawei.com>,
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
-	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
-	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	David Windsor <dwindsor@gmail.com>,
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Hans Liljestrand <ishkamiel@gmail.com>,
-	Penglei Jiang <superman.xpt@gmail.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Adrian Ratiu <adrian.ratiu@collabora.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Cyrill Gorcunov <gorcunov@gmail.com>,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v17] exec: Fix dead-lock in de_thread with ptrace_attach
-Message-ID: <aRs4zYDhddBQFiXZ@redhat.com>
-References: <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <20251105143210.GA25535@redhat.com>
- <20251111-ankreiden-augen-eadcf9bbdfaa@brauner>
- <GV2PPF74270EBEE4FE6E639B899D01D8870E4C9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	s=arc-20240116; t=1763392020; c=relaxed/simple;
+	bh=ZVCe+1ZisPI9dqGUCn3xqHobEuFAysrEV1InQvFbmIs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=WXD7qtzun2jVFbDmsnd4492er/NaXd0uXNGlZOk/FiiTORIjBPOOfTUAYy16lj7iznjG6GNf8B0i9s0oBn0zwnVYxdp+UdwCZpxGlrvKpt/iw9OTTdOUAlrib/XAikvanlr8tESWebikuqpZM8+vcrYpnkdr/WNuImq6RP4pZH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wq0D2B6f; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-340c0604e3dso5389541a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 07:06:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763392018; x=1763996818; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aKWMjY1G5dJf/3LgpKl/NETW+FjIuUMvWMw9eVSgzUo=;
+        b=wq0D2B6f1V51nU4oHfitWHu7jnwBFngossWWGk4P5zhV4Islx91MODW4B3oC04qsKm
+         RT+Ec800shpB/jh1FGa2c/agkG9+aRuBMnCQ4UscOMmZm132/Ih5bx5UyHo5HMoA/Qoz
+         KpG/ROZe5sgubBF/smsw+NJ9Uj7wOoDa6++VseXJNqWQ4z8OlSwyNA0PafjScRxF61uv
+         q2AKSbZke7Kn0ecU6WKFqhUg5+aEmVRYRjzQ2UD4OvhUQ0xKx4o55yyGf0VVWzAZy7gj
+         B6pOnzChBwgAv+wuNCGWdZ9RqlLr53Yns1CJcIF2Ym6otvoqf65WeROVxGNwGaGdbZzC
+         XuRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763392018; x=1763996818;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aKWMjY1G5dJf/3LgpKl/NETW+FjIuUMvWMw9eVSgzUo=;
+        b=eMzjeifK82ETGdoxb3OBd7xlVy/mrypaNiuAj6ZLrrmX/F+xtpPSAlAYiO8MoAyp6n
+         2NULPs+XGJE7troqg4weQLJouHsT/tAZ7saUWFnIggBGxP37MYArvTqu2YCT0SQP9hOo
+         B+06fBTTF0AQ5LVbnH/K2xf6jOOhMTwFRzIDnnR8EkgGSqWCsEJDSGk0ziXEG0yi2tWz
+         ScST5azSreksnYTfVg93ZIHY0BCOZYMaFjm/4p9Nj3BzzOT9ZAO5amlKuD0M5RX4Dhrn
+         FqLatnxy19YbPiltTQ3HCJ2Rw5tQ/BTDTIW/8rOdcv52Zm/qNcWDPuRrmTRzg8N7Kaef
+         1rGA==
+X-Forwarded-Encrypted: i=1; AJvYcCWNqVGQqH5nRJWM7w1dj6Q/EQqWbfZmZtCTy2us8rW/3TN2iZhWQwnnB5J6Aejh0vkhobNYhbH2+q4WTJl8qeQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyb8YBIFUNhVn0Ve8zm2dw7MGNpU90MeNlToi3i1RdRT8z9i8ln
+	XoJc8zespCrpK0fE4mThcZLJ8GiBp6/x7K+/WeJ0RO4vHyqcSWbRoVBK9YevdsD9TrtuQ/OGt+C
+	qGWgWAA==
+X-Google-Smtp-Source: AGHT+IFOxUuzIgKh1JwbIAjKu49ctjZJknsV5hB6eqARol3NYY+tbG9o+hSzpMZk0suFg7lO7U0MuSnvVVA=
+X-Received: from pjbbg15.prod.google.com ([2002:a17:90b:d8f:b0:340:9a17:4b10])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c06:b0:32e:64ca:e84e
+ with SMTP id 98e67ed59e1d1-343f9ea0b0dmr14224737a91.15.1763392018493; Mon, 17
+ Nov 2025 07:06:58 -0800 (PST)
+Date: Mon, 17 Nov 2025 07:06:57 -0800
+In-Reply-To: <20251115110830.26792-1-ankitkhushwaha.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <GV2PPF74270EBEE4FE6E639B899D01D8870E4C9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Mime-Version: 1.0
+References: <20251115110830.26792-1-ankitkhushwaha.linux@gmail.com>
+Message-ID: <aRs6EbV2gnkertzA@google.com>
+Subject: Re: [PATCH] KVM: selftests: Include missing uapi header for *_VECTOR definitions
+From: Sean Christopherson <seanjc@google.com>
+To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kernel-mentees@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 11/17, Bernd Edlinger wrote:
->
-> On 11/11/25 10:21, Christian Brauner wrote:
-> > On Wed, Nov 05, 2025 at 03:32:10PM +0100, Oleg Nesterov wrote:
->
-> >> But this is minor. Why do we need "bool unsafe_execve_in_progress" ?
-> >> If this patch is correct, de_thread() can drop/reacquire cred_guard_mutex
-> >> unconditionally.
-> >>
->
-> I would not like to drop the mutex when no absolutely necessary for performance reasons.
+On Sat, Nov 15, 2025, Ankit Khushwaha wrote:
+> The exception vector constants CP_VECTOR, HV_VECTOR, VC_VECTOR, and
+> SX_VECTOR are used in ex_str(), but the header that defines
+> them is not included. Other exception vectors are picked up through
+> indirect includes, but these four are not, which leads to unresolved
 
-OK, I won't insist... But I don't really understand how this can help to
-improve the performance. If nothing else, this adds another for_other_threads()
-loop.
+That means your build is picking up stale kernel headers (likely the ones installed
+system-wide).  The "#include <asm/kvm.h>" in kvm_util.h is what pulls in the kernel
+uAPI headers.
 
-And again, the unsafe_execve_in_progress == T case is unlikely. I'm afraid this
-case (de_thread() without cred_guard_mutex) won't have enough testing.
+Selftests uapi headers are a bit of a mess.  In the past, selftests would
+automatically do "make headers_install" as part of the build, but commit
+3bb267a36185 ("selftests: drop khdr make target") yanked that out because there
+are scenarios where it broke the build.
 
-In any case, why you dislike the suggestion to add this unsafe_execve_in_progress
-logic in a separate patch?
+So the "right" way to build selftest is to first do "make headers_install", and
+then build selftests.
 
-> >>> +	if (unlikely(unsafe_execve_in_progress)) {
-> >>> +		spin_unlock_irq(lock);
-> >>> +		sig->exec_bprm = bprm;
-> >>> +		mutex_unlock(&sig->cred_guard_mutex);
-> >>> +		spin_lock_irq(lock);
-> >>
-> >> I don't think spin_unlock_irq() + spin_lock_irq() makes any sense...
-> >>
->
-> Since the spin lock was acquired while holding the mutex, both should be
-> unlocked in reverse sequence and the spin lock re-acquired after releasing
-> the mutex.
+Note, if you build KVM selftests directly, tools/testing/selftests/lib.mk will
+define the includes to be relative to the source directory, i.e. expects the
+headers to be installed in the source.
 
-Why?
+  ifeq ($(KHDR_INCLUDES),)
+  KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
+  endif
 
-> I'd expect the scheduler to do a task switch after the cred_guard_mutex is
-> unlocked, at least in the RT-linux variant, while the spin lock is not yet
-> unlocked.
+You can explicitly set KHDR_INCLUDES when building if you install headers somewhere
+else.  E.g. my build invocation looks something like this, where "$output" is an
+out-of-tree directory.
 
-I must have missed something, but I still don't understand why this would
-be wrong...
-
-> >>> @@ -1114,13 +1139,31 @@ int begin_new_exec(struct linux_binprm * bprm)
-> >>>  	 */
-> >>>  	trace_sched_prepare_exec(current, bprm);
-> >>>
-> >>> +	/* If the binary is not readable then enforce mm->dumpable=0 */
-> >>> +	would_dump(bprm, bprm->file);
-> >>> +	if (bprm->have_execfd)
-> >>> +		would_dump(bprm, bprm->executable);
-> >>> +
-> >>> +	/*
-> >>> +	 * Figure out dumpability. Note that this checking only of current
-> >>> +	 * is wrong, but userspace depends on it. This should be testing
-> >>> +	 * bprm->secureexec instead.
-> >>> +	 */
-> >>> +	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
-> >>> +	    is_dumpability_changed(current_cred(), bprm->cred) ||
-> >>> +	    !(uid_eq(current_euid(), current_uid()) &&
-> >>> +	      gid_eq(current_egid(), current_gid())))
-> >>> +		set_dumpable(bprm->mm, suid_dumpable);
-> >>> +	else
-> >>> +		set_dumpable(bprm->mm, SUID_DUMP_USER);
-> >>> +
-> >>
-> >> OK, we need to do this before de_thread() drops cred_guard_mutex.
-> >> But imo this too should be done in a separate patch, the changelog should
-> >> explain this change.
-> >>
->
-> The dumpability need to be determined before de_thread, because ptrace_may_access
-> needs this information to determine if the tracer is allowed to ptrace. That is
-> part of the core of the patch, it would not work without that.
-
-Yes,
-
-> I will add more comments to make that more easy to understand.
-
-But again, why this change can't come in a separate patch? Before the patch which
-drops cred_guard_mutex in de_thread().
-
-> >> 	int lock_current_cgm(void)
-> >> 	{
-> >> 		if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
-> >> 			return -ERESTARTNOINTR;
-> >>
-> >> 		if (!current->signal->group_exec_task)
-> >> 			return 0;
-> >>
-> >> 		WARN_ON(!fatal_signal_pending(current));
-> >> 		mutex_unlock(&current->signal->cred_guard_mutex);
-> >> 		return -ERESTARTNOINTR;
-> >> 	}
-> >>
-> >> ?
-> >>
->
-> Some use mutex_lock_interruptible and some use mutex_lock_killable here,
-> so it wont work for all of them.  I would not consider this a new kind
-> of dead-lock free mutex, but just an open-coded state machine, handling
-> the state that the tasks have whild de_thread is running.
-
-OK. and we don't have mutex_lock_state(). I think that all users could
-use mutex_lock_killable(), but you are right anyway, and this is minor.
-
-> >> Note that it checks ->group_exec_task, not ->exec_bprm. So this change can
-> >> come in a separate patch too, but I won't insist.
-
-Yes. Although this is minor too ;)
-
-> >> This is the most problematic change which I can't review...
-> >>
-> >> Firstly, it changes task->mm/real_cred for __ptrace_may_access() and this
-> >> looks dangerous to me.
-> >
-> > Yeah, that is not ok. This is effectively override_creds for real_cred
-> > and that is not a pattern I want to see us establish at all! Temporary
-> > credential overrides for the subjective credentials is already terrible
-> > but at least we have the explicit split between real_cred and cred
-> > expressely for that. So no, that's not an acceptable solution.
-> >
->
-> Okay I understand your point.
-> I did this originally just to avoid to have to change the interface to all
-> the security engines, but instead I could add a flag PTRACE_MODE_BPRMCREDS to
-> the ptrace_may_access which must be handled in all security engines, to use
-> child->signal->exec_bprm->creds instead of __task_cred(child).
-
-Can't comment... I don't understand your idea, but this is my fault. I guess
-this needs more changes, in particular __ptrace_may_access_mm_cred(), but
-most probably I misunderstood your idea.
-
->
-> >> Or. check_unsafe_exec() sets LSM_UNSAFE_PTRACE if ptrace. Is it safe to
-> >> ptrace the execing task after that? I have no idea what the security hooks
-> >> can do...
->
-> That means the tracee is already ptraced before the execve, and SUID-bits
-> do not work as usual, and are more or less ignored.  But in this patch
-> the tracee is not yet ptraced.
-
-Well. I meant that if LSM_UNSAFE_PTRACE is not set, then currently (say)
-security_bprm_committing_creds() has all rights to assume that the execing
-task is not ptraced. Yes, I don't see any potential problem right now, but
-still.
-
-And just in case... Lets look at this code
-
-	+                               rcu_assign_pointer(task->real_cred, bprm->cred);
-	+                               task->mm = bprm->mm;
-	+                               retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
-	+                               rcu_assign_pointer(task->real_cred, old_cred);
-	+                               task->mm = old_mm;
-
-again.
-
-This is mostly theoretical, but what if begin_new_exec() fails after de_thread()
-and before exec_mmap() and/or commit_creds(bprm->cred) ? In this case the execing
-thread will report SIGSEGV to debugger which can (say) read old_mm.
-
-No?
-
-I am starting to think that ptrace_attach() should simply fail with -EWOULDBLOCK
-if it detects "unsafe_execve_in_progress" ... And perhaps this is what you already
-tried to do in the past, I can't recall :/
-
-Oleg.
-
+  KHDR_INCLUDES="-isystem $output/usr/include" EXTRA_CFLAGS="-static -Werror -gdwarf-4" make \
+  INSTALL_HDR_PATH="$output/usr" OUTPUT=$output
 
