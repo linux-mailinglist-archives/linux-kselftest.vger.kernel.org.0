@@ -1,379 +1,322 @@
-Return-Path: <linux-kselftest+bounces-45732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 225B3C63C15
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 12:18:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93215C63D95
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 12:37:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B20E94EBE9A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 11:15:39 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 9E3BC23F93
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 11:37:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D272330B2D;
-	Mon, 17 Nov 2025 11:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8DC732A3C0;
+	Mon, 17 Nov 2025 11:37:37 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (unknown [147.136.157.3])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAA1330323;
-	Mon, 17 Nov 2025 11:08:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1047320CB5;
+	Mon, 17 Nov 2025 11:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763377696; cv=none; b=uMKzzXA+EwV8Y+ON35+u9gi36n2hzK4ZhqBxRaRb8ioGK9bE8isx/9esc6twWcL4vxGuD1TiC7V6KqghBYChRdu+cZecRlFf/p3vGF2GzF9g5ihmIou6KXlg1nEnOdiZ3MT0oiCrsNZPnXE2jxVLRc67B3ss1UIR4XfjRBiT0Ug=
+	t=1763379457; cv=none; b=rFR4rN3mge0pqOQbWH6tHyP4dE82Obtg6p0q7BJTBxmcVFPtLWkVS4YriUD60Yz4ADrtM9ffe/SXT2NC0cjpv3FVmt8r5apW/w3/+xXzSqAu9wRl7a3cq2C/HNyKKXKfKKdm6tKC7lIIAOINz4H6CEXwnBauUgL9I/lM/rddF/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763377696; c=relaxed/simple;
-	bh=2xuQUNjye5SH0spf/BntnQEjEUG+Ko7KqGYOWawkBnM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SuiMHXfcxzvpX14xFixBvqf1LA/NEWscjU93p/sr/roDvY2/rIyC8hC9Fpw2Ybd0qZu3nkdbv1o5SctvTkQ3BzvGxhn4Et4iTm6EkYKHquyMlDgoOA04Ijw0Qptj+Vp26gWTY832I69A7dcOXPE2GhcjLQSx8z0zpzlnOxzJ/0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
-Received: by localhost.localdomain (Postfix, from userid 1007)
-	id 1CBBD8B2A0F; Mon, 17 Nov 2025 19:08:05 +0800 (+08)
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	David Ahern <dsahern@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Michal Luczaj <mhal@rbox.co>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Cong Wang <cong.wang@bytedance.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v1 3/3] bpf, selftest: Add tests for FIONREAD and copied_seq
-Date: Mon, 17 Nov 2025 19:07:07 +0800
-Message-ID: <20251117110736.293040-4-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251117110736.293040-1-jiayuan.chen@linux.dev>
-References: <20251117110736.293040-1-jiayuan.chen@linux.dev>
+	s=arc-20240116; t=1763379457; c=relaxed/simple;
+	bh=h7xExUgJ2PMfCCbOEdTmw1MHf+lPsPBwvkENqcV6bmU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VLvUEejzUv00CAtw32T0fixpu4KKfevn+EoIhRKI7h/dyX5STNzhqZhPiz06yquhrRkAEEZUTL9v/nKaFeSugSyP3oMFwbujA/pqgLYI/Q689iu2ufXqbZyUPSDM30SAqRvDJVH6AOaVjFL+yA+nO9n3uKDsmxvfs+eYm9vroDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.235])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4d95Lb6TDDzYQvKh;
+	Mon, 17 Nov 2025 19:36:55 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 9AF421A0C96;
+	Mon, 17 Nov 2025 19:37:32 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgB3n1z7CBtp73g7BA--.60798S2;
+	Mon, 17 Nov 2025 19:37:32 +0800 (CST)
+Message-ID: <f32d2f31-630f-450b-911f-b512bbeb380a@huaweicloud.com>
+Date: Mon, 17 Nov 2025 19:37:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/1] cpuset: relax the overlap check for cgroup-v2
+To: Sun Shaojie <sunshaojie@kylinos.cn>
+Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llong@redhat.com, mkoutny@suse.com, shuah@kernel.org, tj@kernel.org
+References: <fe8046d7-1f21-4b23-92f2-6be24ef9f58b@huaweicloud.com>
+ <20251117100047.1101975-1-sunshaojie@kylinos.cn>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20251117100047.1101975-1-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgB3n1z7CBtp73g7BA--.60798S2
+X-Coremail-Antispam: 1UD129KBjvJXoWfJw1UGw4DGry8Cry8Xr4rAFb_yoWDWr13pF
+	W8GF4jya1jgr15Cw13tw1kWrsaq3yIqFnrJrn8Jr1rAF9xtF1xArn5JwnxCFy5Ars8Gw15
+	ZFZFy3yfuFn8tFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
+	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
+	67AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAwIDUUUUU=
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-This commit adds two new test functions: one to reproduce the bug reported
-by syzkaller [1], and another to cover the calculation of copied_seq.
 
-The tests primarily involve installing  and uninstalling sockmap on
-sockets, then reading data to verify proper functionality.
 
-Additionally, extend the do_test_sockmap_skb_verdict_fionread() function
-to support UDP FIONREAD testing.
+On 2025/11/17 18:00, Sun Shaojie wrote:
+> On 2025/11/17 15:45, Chen Ridong  Wrote:
+>> On 2025/11/17 9:57, Sun Shaojie wrote:
+>>> In cgroup v2, a mutual overlap check is required when at least one of two
+>>> cpusets is exclusive. However, this check should be relaxed and limited to
+>>> cases where both cpusets are exclusive.
+>>>
+>>> This patch ensures that for sibling cpusets A1 (exclusive) and B1
+>>> (non-exclusive), change B1 cannot affect A1's exclusivity.
+>>>
+>>> for example. Assume a machine has 4 CPUs (0-3).
+>>>
+>>>    root cgroup
+>>>       /    \
+>>>     A1      B1
+>>>
+>>> Case 1:
+>>>  Table 1.1: Before applying the patch
+>>>  Step                                       | A1's prstate | B1'sprstate |
+>>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+>>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
+>>>  #3> echo "0" > B1/cpuset.cpus              | root invalid | member      |
+>>>
+>>> After step #3, A1 changes from "root" to "root invalid" because its CPUs
+>>> (0-1) overlap with those requested by B1 (0-3). However, B1 can actually
+>>
+>> B1 (0-3) --> B1(0) ?
+> 
+> Sorry, that was a typo. It should indeed be B1 (0).
+> 
+>>
+>>> use CPUs 2-3(from B1's parent), so it would be more reasonable for A1 to
+>>> remain as "root."
+>>>
+>>>  Table 1.2: After applying the patch
+>>>  Step                                       | A1's prstate | B1'sprstate |
+>>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+>>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
+>>>  #3> echo "0" > B1/cpuset.cpus              | root         | member      |
+>>>
+>>> All other cases remain unaffected. For example, cgroup-v1, both A1 and B1
+>>> are exclusive or non-exlusive.
+>>>
+>>> Signed-off-by: Sun Shaojie <sunshaojie@kylinos.cn>
+>>> ---
+>>>  kernel/cgroup/cpuset-internal.h               |  3 ++
+>>>  kernel/cgroup/cpuset-v1.c                     | 20 +++++++++
+>>>  kernel/cgroup/cpuset.c                        | 43 ++++++++++++++-----
+>>>  .../selftests/cgroup/test_cpuset_prs.sh       |  5 ++-
+>>>  4 files changed, 58 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+>>> index 337608f408ce..c53111998432 100644
+>>> --- a/kernel/cgroup/cpuset-internal.h
+>>> +++ b/kernel/cgroup/cpuset-internal.h
+>>> @@ -292,6 +292,7 @@ void cpuset1_hotplug_update_tasks(struct cpuset *cs,
+>>>  			    struct cpumask *new_cpus, nodemask_t *new_mems,
+>>>  			    bool cpus_updated, bool mems_updated);
+>>>  int cpuset1_validate_change(struct cpuset *cur, struct cpuset *trial);
+>>> +bool cpuset1_cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2);
+>>>  #else
+>>>  static inline void fmeter_init(struct fmeter *fmp) {}
+>>>  static inline void cpuset1_update_task_spread_flags(struct cpuset *cs,
+>>> @@ -302,6 +303,8 @@ static inline void cpuset1_hotplug_update_tasks(struct cpuset *cs,
+>>>  			    bool cpus_updated, bool mems_updated) {}
+>>>  static inline int cpuset1_validate_change(struct cpuset *cur,
+>>>  				struct cpuset *trial) { return 0; }
+>>> +static inline bool cpuset1_cpus_excl_conflict(struct cpuset *cs1,
+>>> +				struct cpuset *cs2) {return false; }
+>>>  #endif /* CONFIG_CPUSETS_V1 */
+>>>  
+>>>  #endif /* __CPUSET_INTERNAL_H */
+>>> diff --git a/kernel/cgroup/cpuset-v1.c b/kernel/cgroup/cpuset-v1.c
+>>> index 12e76774c75b..5c1296bf6a34 100644
+>>> --- a/kernel/cgroup/cpuset-v1.c
+>>> +++ b/kernel/cgroup/cpuset-v1.c
+>>> @@ -373,6 +373,26 @@ int cpuset1_validate_change(struct cpuset *cur, struct cpuset *trial)
+>>>  	return ret;
+>>>  }
+>>>  
+>>> +/*
+>>> + * cpuset1_cpus_excl_conflict() - Check if two cpusets have exclusive CPU conflicts
+>>> + *                                to legacy (v1)
+>>> + * @cs1: first cpuset to check
+>>> + * @cs2: second cpuset to check
+>>> + *
+>>> + * Returns: true if CPU exclusivity conflict exists, false otherwise
+>>> + *
+>>> + * If either cpuset is CPU exclusive, their allowed CPUs cannot intersect.
+>>> + */
+>>> +bool cpuset1_cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
+>>> +{
+>>> +	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
+>>> +		if (cpumask_intersects(cs1->cpus_allowed,
+>>> +				       cs2->cpus_allowed))
+>>> +			return true;
+>>> +
+>>> +	return false;
+>>> +}
+>>> +
+>>>  #ifdef CONFIG_PROC_PID_CPUSET
+>>>  /*
+>>>   * proc_cpuset_show()
+>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>> index 52468d2c178a..0fd803612513 100644
+>>> --- a/kernel/cgroup/cpuset.c
+>>> +++ b/kernel/cgroup/cpuset.c
+>>> @@ -580,35 +580,56 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
+>>>  
+>>>  /**
+>>>   * cpus_excl_conflict - Check if two cpusets have exclusive CPU conflicts
+>>> - * @cs1: first cpuset to check
+>>> - * @cs2: second cpuset to check
+>>> + * @cs1: current cpuset to check
+>>> + * @cs2: cpuset involved in the check
+>>>   *
+>>>   * Returns: true if CPU exclusivity conflict exists, false otherwise
+>>>   *
+>>>   * Conflict detection rules:
+>>> - * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
+>>> + * For cgroup-v1:
+>>> + *     see cpuset1_cpus_excl_conflict()
+>>> + * For cgroup-v2:
+>>> + * 1. If cs1 is exclusive, cs1 and cs2 must be mutually exclusive
+>>>   * 2. exclusive_cpus masks cannot intersect between cpusets
+>>> - * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
+>>> + * 3. If cs2 is exclusive, cs2's allowed CPUs cannot be a subset of cs1's exclusive CPUs
+>>> + * 4. if cs1 and cs2 are not exclusive, the allowed CPUs of one cpuset cannot be a subset
+>>> + *    of another's exclusive CPUs
+>>>   */
+>>
+>> The revised conflict detection rules are confusing to me. I thought cs1 and cs2 should be treated
+>> symmetrically, but that doesn’t seem to be the case here.
+>>
+>> Shouldn’t the following rule apply regardless of whether cs1 or cs2 is exclusive: "The allowed CPUs
+>> of one cpuset cannot be a subset of another's exclusive CPUs"?
+>>
+> 
+> 
+> Certainly, this rule applies regardless of whether cs1 or cs2 is exclusive,
+> and the current implementation already handles it this way.
+> The following two cases cover this rule. 
+> "1. If cs1 is exclusive, cs1 and cs2 must be mutually exclusive"
+> "3. If cs2 is exclusive, cs2's allowed CPUs cannot be a subset of cs1's exclusive CPUs"
+> 
 
-[1] https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
+I believe this function should return the same result regardless of whether it is called as
+cpus_excl_conflict(A1, B1) or cpus_excl_conflict(B1, A1), which means cs1 and cs2 should be treated
+symmetrically. However, since cs1 and cs2 are handled differently, it is difficult to convince me
+that this implementation is correct.
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 192 +++++++++++++++++-
- .../bpf/progs/test_sockmap_pass_prog.c        |   8 +
- 2 files changed, 194 insertions(+), 6 deletions(-)
+> 
+>>>  static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
+>>>  {
+>>> -	/* If either cpuset is exclusive, check if they are mutually exclusive */
+>>> -	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
+>>> +	/* For cgroup-v1 */
+>>> +	if (!cpuset_v2())
+>>> +		return cpuset1_cpus_excl_conflict(cs1, cs2);
+>>> +
+>>> +	/* If cs1 are exclusive, check if they are mutually exclusive */
+>>> +	if (is_cpu_exclusive(cs1))
+>>>  		return !cpusets_are_exclusive(cs1, cs2);
+>>>  
+>>> +	/* The following check applies when either
+>>> +	 * both cs1 and cs2 are non-exclusive，or
+>>> +	 * only cs2 is exclusive.
+>>> +	 */
+>>> +
+>>>  	/* Exclusive_cpus cannot intersect */
+>>>  	if (cpumask_intersects(cs1->exclusive_cpus, cs2->exclusive_cpus))
+>>>  		return true;
+>>>  
+>>> -	/* The cpus_allowed of one cpuset cannot be a subset of another cpuset's exclusive_cpus */
+>>> -	if (!cpumask_empty(cs1->cpus_allowed) &&
+>>> -	    cpumask_subset(cs1->cpus_allowed, cs2->exclusive_cpus))
+>>> -		return true;
+>>> -
+>>> +	/* cs2's allowed CPUs cannot be a subset of cs1's exclusive CPUs */
+>>>  	if (!cpumask_empty(cs2->cpus_allowed) &&
+>>>  	    cpumask_subset(cs2->cpus_allowed, cs1->exclusive_cpus))
+>>>  		return true;
+>>>  
+>>> +	/* If cs2 is exclusive, check finished here */
+>>> +	if (is_cpu_exclusive(cs2))
+>>> +		return false;
+>>> +
+>>> +	/* The following check applies only if both cs1 and cs2 are non-exclusive. */
+>>> +
+>>> +	/* cs1's allowed CPUs cannot be a subset of cs1's exclusive CPUs */
+>>> +	if (!cpumask_empty(cs1->cpus_allowed) &&
+>>> +	    cpumask_subset(cs1->cpus_allowed, cs2->exclusive_cpus))
+>>> +		return true;
+>>> +
+>>>  	return false;
+>>>  }
+>>>  
+>>
+>>From your commit message, it appears you intend to modify "if (is_cpu_exclusive(cs1) ||
+>> is_cpu_exclusive(cs2))" to "if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))".
+>>
+>> However, I’m having trouble following the change.
+>>
+> 
+> The current modification specifically addresses the scenario where one cpuset
+> A1 is exclusive and its sibling cpuset B1 is non-exclusive. 
+> The goal is to ensure that when the non-exclusive cpuset B1 modifies its own
+> "cpuset.cpus" or "cpuset.cpus.exclusive", it does not cause A1 to change from 
+> exclusive to non-exclusive.
+> 
+> The following three scenarios are not affected by this patch:
+> 1.both A1 and B1 are exclusive.
+> 2.both A1 and B1 are non-exclusive.
+> 3.A1 is exclusive, B1 is non-exclusive, change "cpuset.cpus" or "cpuset.cpus.exclusive" of A1.
+> 
+> 
+>>> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>>> index a17256d9f88a..b848bc0729cf 100755
+>>> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>>> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>>> @@ -388,10 +388,11 @@ TEST_MATRIX=(
+>>>  	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
+>>>  	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2 0-1|1"
+>>>  
+>>> -	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
+>>> +	# A non-exclusive cpuset.cpus change will not invalidate its siblings partition.
+>>> +	# But a exclusive cpuset.cpus change will invalidate itself.
+>>>  	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P0"
+>>>  	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P-1"
+>>> -	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P0|B1:P-1"
+>>> +	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-1|B1:2-3 A1:P0|B1:P1"
+>>>  
+>>>  	# cpuset.cpus can overlap with sibling cpuset.cpus.exclusive but not subsumed by it
+>>>  	"   C0-3     .      .    C4-5     X5     .      .      .     0 A1:0-3|B1:4-5"
+>>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 1e3e4392dcca..e6cff25f4b75 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -1,7 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2020 Cloudflare
- #include <error.h>
--#include <netinet/tcp.h>
-+#include <linux/tcp.h>
-+#include <linux/socket.h>
- #include <sys/epoll.h>
- 
- #include "test_progs.h"
-@@ -22,6 +23,16 @@
- #define TCP_REPAIR_ON		1
- #define TCP_REPAIR_OFF_NO_WP	-1	/* Turn off without window probes */
- 
-+/**
-+ * SOL_TCP is defined in <netinet/tcp.h> while field
-+ * copybuf_address of tcp_zerocopy_receive is not in it
-+ * Although glibc has merged my patch to sync headers,
-+ * the fix will take time to propagate, hence this workaround.
-+ */
-+#ifndef SOL_TCP
-+#define SOL_TCP 6
-+#endif
-+
- static int connected_socket_v4(void)
- {
- 	struct sockaddr_in addr = {
-@@ -536,13 +547,14 @@ static void test_sockmap_skb_verdict_shutdown(void)
- }
- 
- 
--static void test_sockmap_skb_verdict_fionread(bool pass_prog)
-+static void do_test_sockmap_skb_verdict_fionread(int sotype, bool pass_prog)
- {
- 	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
- 	int expected, zero = 0, sent, recvd, avail;
- 	struct test_sockmap_pass_prog *pass = NULL;
- 	struct test_sockmap_drop_prog *drop = NULL;
- 	char buf[256] = "0123456789";
-+	int split_len = sizeof(buf) / 2;
- 
- 	if (pass_prog) {
- 		pass = test_sockmap_pass_prog__open_and_load();
-@@ -550,7 +562,10 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 			return;
- 		verdict = bpf_program__fd(pass->progs.prog_skb_verdict);
- 		map = bpf_map__fd(pass->maps.sock_map_rx);
--		expected = sizeof(buf);
-+		if (sotype == SOCK_DGRAM)
-+			expected = split_len; /* FIONREAD for UDP is different from TCP */
-+		else
-+			expected = sizeof(buf);
- 	} else {
- 		drop = test_sockmap_drop_prog__open_and_load();
- 		if (!ASSERT_OK_PTR(drop, "open_and_load"))
-@@ -566,7 +581,7 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_prog_attach"))
- 		goto out;
- 
--	err = create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
-+	err = create_socket_pairs(AF_INET, sotype, &c0, &c1, &p0, &p1);
- 	if (!ASSERT_OK(err, "create_socket_pairs()"))
- 		goto out;
- 
-@@ -574,8 +589,9 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_map_update_elem(c1)"))
- 		goto out_close;
- 
--	sent = xsend(p1, &buf, sizeof(buf), 0);
--	ASSERT_EQ(sent, sizeof(buf), "xsend(p0)");
-+	sent = xsend(p1, &buf, split_len, 0);
-+	sent += xsend(p1, &buf, sizeof(buf) - split_len, 0);
-+	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
- 	err = ioctl(c1, FIONREAD, &avail);
- 	ASSERT_OK(err, "ioctl(FIONREAD) error");
- 	ASSERT_EQ(avail, expected, "ioctl(FIONREAD)");
-@@ -597,6 +613,12 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 		test_sockmap_drop_prog__destroy(drop);
- }
- 
-+static void test_sockmap_skb_verdict_fionread(bool pass_prog)
-+{
-+	do_test_sockmap_skb_verdict_fionread(SOCK_STREAM, pass_prog);
-+	do_test_sockmap_skb_verdict_fionread(SOCK_DGRAM, pass_prog);
-+}
-+
- static void test_sockmap_skb_verdict_change_tail(void)
- {
- 	struct test_sockmap_change_tail *skel;
-@@ -1042,6 +1064,160 @@ static void test_sockmap_vsock_unconnected(void)
- 	xclose(map);
- }
- 
-+/* it used to reproduce WARNING */
-+static void test_sockmap_zc(void)
-+{
-+	int map, err, sent, recvd, zero = 0, one = 1, on = 1;
-+	char buf[10] = "0123456789", rcv[11], addr[100];
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	struct tcp_zerocopy_receive zc;
-+	socklen_t zc_len = sizeof(zc);
-+	struct bpf_program *prog;
-+
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto end;
-+
-+	prog = skel->progs.prog_skb_verdict_ingress;
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto end;
-+
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend"))
-+		goto end;
-+
-+	/* trigger tcp_bpf_recvmsg_parser and inc copied_seq of p1 */
-+	recvd = recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1)"))
-+		goto end;
-+
-+	/* uninstall sockmap of p1 */
-+	bpf_map_delete_elem(map, &one);
-+
-+	/* trigger tcp stack and the rcv_nxt of p1 is less than copied_seq */
-+	sent = xsend(c1, buf, sizeof(buf) - 1, 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf) - 1, "xsend"))
-+		goto end;
-+
-+	err = setsockopt(p1, SOL_SOCKET, SO_ZEROCOPY, &on, sizeof(on));
-+	if (!ASSERT_OK(err, "setsockopt"))
-+		goto end;
-+
-+	memset(&zc, 0, sizeof(zc));
-+	zc.copybuf_address = (__u64)((unsigned long)addr);
-+	zc.copybuf_len = sizeof(addr);
-+
-+	err = getsockopt(p1, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE, &zc, &zc_len);
-+	if (!ASSERT_OK(err, "getsockopt"))
-+		goto end;
-+
-+end:
-+	if (c0 >= 0)
-+		close(c0);
-+	if (p0 >= 0)
-+		close(p0);
-+	if (c1 >= 0)
-+		close(c1);
-+	if (p1 >= 0)
-+		close(p1);
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
-+/* it used to check whether copied_seq of sk is correct */
-+static void test_sockmap_copied_seq(void)
-+{
-+	int map, err, sent, recvd, zero = 0, one = 1;
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	char buf[10] = "0123456789", rcv[11];
-+	struct bpf_program *prog;
-+
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto end;
-+
-+	prog = skel->progs.prog_skb_verdict_ingress;
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p1)"))
-+		goto end;
-+
-+	/* just trigger sockamp: data sent by c0 will be received by p1 */
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), bpf"))
-+		goto end;
-+
-+	recvd = recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), bpf"))
-+		goto end;
-+
-+	/* uninstall sockmap of p1 and p0 */
-+	err = bpf_map_delete_elem(map, &one);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem(1)"))
-+		goto end;
-+	err = bpf_map_delete_elem(map, &zero);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem(0)"))
-+		goto end;
-+
-+	/* now all sockets become plain socket, they should work */
-+
-+	/* test copied_seq of p1 by running tcp native stack */
-+	sent = xsend(c1, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1), native"))
-+		goto end;
-+
-+	recvd = recv(p1, rcv, sizeof(rcv), MSG_DONTWAIT);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), native"))
-+		goto end;
-+
-+	/* p0 previously redirected skb to p1, we also check copied_seq of p0 */
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), native"))
-+		goto end;
-+
-+	recvd = recv(p0, rcv, sizeof(rcv), MSG_DONTWAIT);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p0), native"))
-+		goto end;
-+
-+end:
-+	if (c0 >= 0)
-+		close(c0);
-+	if (p0 >= 0)
-+		close(p0);
-+	if (c1 >= 0)
-+		close(c1);
-+	if (p1 >= 0)
-+		close(p1);
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -1108,4 +1284,8 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_vsock_poll();
- 	if (test__start_subtest("sockmap vsock unconnected"))
- 		test_sockmap_vsock_unconnected();
-+	if (test__start_subtest("sockmap with zc"))
-+		test_sockmap_zc();
-+	if (test__start_subtest("sockmap recover"))
-+		test_sockmap_copied_seq();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-index 69aacc96db36..4bc97da15a69 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-@@ -44,4 +44,12 @@ int prog_skb_parser(struct __sk_buff *skb)
- 	return SK_PASS;
- }
- 
-+SEC("sk_skb/stream_parser")
-+int prog_skb_verdict_ingress(struct __sk_buff *skb)
-+{
-+	int one = 1;
-+
-+	return bpf_sk_redirect_map(skb, &sock_map_rx, one, BPF_F_INGRESS);
-+}
-+
- char _license[] SEC("license") = "GPL";
 -- 
-2.43.0
+Best regards,
+Ridong
 
 
