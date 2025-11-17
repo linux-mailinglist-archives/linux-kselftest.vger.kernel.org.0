@@ -1,233 +1,288 @@
-Return-Path: <linux-kselftest+bounces-45719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45720-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F39C629B4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 07:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 60C02C62C9B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 08:46:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5B9DE4E6C51
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 06:57:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2A8E74E2DD4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 07:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06EF3164A1;
-	Mon, 17 Nov 2025 06:57:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZHakJaE6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A25B831A810;
+	Mon, 17 Nov 2025 07:45:55 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9AD314D04
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 06:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763362621; cv=fail; b=kIsNIKEwVuXD981uYoxvsz8UOXET973OgCsgx8H/6dKNeU12vBBIHSl8rL4YFNr3jbqpzCSzQuLaIWFnGt6e3WdoWwYdg2plmWX/oHgM2aiYjT+Av/xr+UqjbywimqnGMgfy8LqWTAx+CDscn8hdhWx4jRAf/4FTniNz3IJhNRc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763362621; c=relaxed/simple;
-	bh=G7z9+0bpTV5/ZtZLI59/igMe3hRNL1s/Kwj9B20uL+0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=eyh9j2x59fXxj6d74+Kom4fwuOHzMJigBSrUfavZE6UrZn09b4x1fpHRzQIH57TvWc9BQ6WaSQ5GJbJJWy3DpGNUyzWONLexvBdTJHuDI/+mEAXi2SR+nXy81i2RELiZ2AhP4MCTx78YricqnYDZ5kowgCzQ3wGK/g6RNXfiu9c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZHakJaE6; arc=fail smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763362619; x=1794898619;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=G7z9+0bpTV5/ZtZLI59/igMe3hRNL1s/Kwj9B20uL+0=;
-  b=ZHakJaE6yp+V1lUOf/unJB7iRcjbAt5AYMJckllbf7UtYnvUgJ5F4ZDn
-   4yiYtIRd6MrBbLuNGZon5m5QbljR6o/WMVh0RRe62lip+rfRN/2jvxX5g
-   9HkmT5FZOQQnTVbcZJMlk2mOyzLocK3md3NLlwnwqyUUxoGlTfVJ5FcwQ
-   Y8RwQGSdcma/rr/RmdGhvJGnU6rLQpQm2iXfkmbqzzUzh64oV3q7G4pFd
-   zqQyojV0GkFWba1Y8NxIUZ8c7WkvqqikIKZmZi5MlJcQh7FtxC/6nOtQA
-   2KmJPAbBzHYna3oNTrmB/pnY5slpky9W87R8fqKC42V952Ke9u0LMisho
-   w==;
-X-CSE-ConnectionGUID: 4DUetEx/Rqik9Ss20kujYg==
-X-CSE-MsgGUID: F/xM7NMfS0q8Ki+wGgDw4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11615"; a="82742979"
-X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="82742979"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2025 22:56:59 -0800
-X-CSE-ConnectionGUID: KptW3E2xSDOosjsZ4Iz+rQ==
-X-CSE-MsgGUID: AZmJgRe8SAKdJ+cP8wnDdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,311,1754982000"; 
-   d="scan'208";a="221015823"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2025 22:56:59 -0800
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Sun, 16 Nov 2025 22:56:58 -0800
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27 via Frontend Transport; Sun, 16 Nov 2025 22:56:58 -0800
-Received: from PH7PR06CU001.outbound.protection.outlook.com (52.101.201.62) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.27; Sun, 16 Nov 2025 22:56:58 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=M8VXHXIFyLhaJJyJu3f9PCEHk3Le4y/cjnWBUg2m848WB6xRNgy+Xd6sA2f7JT4PujFUOA/wCo8+2krPqDjYTKUbKBGJPFqPURLEHnIXH5ht20/5HBY3z4Qwf1iB+VCH9bC6AN5aZwc+/fLs/e0D2nWxFk6hm9fn7oDyIkD3No80BOt0b5ZVDzkY+qIwlxab7Sccepid5OmFZjMwlmw530+MlYX3DoGBXCZwg4a1AsGhxT190m26QgF5jSWW6WlIOy1mP9n7yAW5MLfhvA4hG9N+IO1AXMi/zwAcYmkhkQQxCp4tMUoB97z4s7JZ0xVuCE2G7BSPqtj45M22bPfWdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b8AahdwyT7DPfhXhv6JyyyUv36z+h4KD4g/TnlWxnjw=;
- b=jlOEmnsjP+iUg+NiBMjNd8S2R/B91T4gSELTRV9BMMvnpR8QH25IsG+boFEBFVEMNFL2WLWMuQAOAvG+rW5vNdAMUi+aSzTRk4VNV5cx93GNb5HAbNX0dzr8Ty+85ukVHKueJ/ePY/KQ45+ytc4m8Nn7bc1x4gi6ppXgv6uypbZ6NaYeZTKgm/0geAQpfQsTLTRZBfss/djizlBU9o3vEredzGhY4vnD/IQZ8k8Wm367nl3hkqusnFBZ8oXxGcnM4TBagjE3nrJqjyCm3V23qm7qoVKSZKi00KIaVNBWMiKMMojqEB29XhfbiImrfF+/Mb3l7Y5h28gfIm80j5ty/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Mon, 17 Nov
- 2025 06:56:56 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::b576:d3bd:c8e0:4bc1%5]) with mapi id 15.20.9320.013; Mon, 17 Nov 2025
- 06:56:56 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, Joerg Roedel <joro@8bytes.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Robin
- Murphy" <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>, Will Deacon
-	<will@kernel.org>
-CC: Alex Mastro <amastro@fb.com>, Eric Auger <eric.auger@redhat.com>, "Lixiao
- Yang" <lixiao.yang@intel.com>, Matthew Rosato <mjrosato@linux.ibm.com>,
-	Nicolin Chen <nicolinc@nvidia.com>, "patches@lists.linux.dev"
-	<patches@lists.linux.dev>, "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: RE: [PATCH iommufd] iommufd: Make vfio_compat's unmap succeed if the
- range is already empty
-Thread-Topic: [PATCH iommufd] iommufd: Make vfio_compat's unmap succeed if the
- range is already empty
-Thread-Index: AQHcTbaFCfF32K7inEe8+O7kS5xvbbT2gmkA
-Date: Mon, 17 Nov 2025 06:56:56 +0000
-Message-ID: <BN9PR11MB5276EE15198CEECC799B3B568CC9A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <0-v1-76be45eff0be+5d-iommufd_unmap_compat_jgg@nvidia.com>
-In-Reply-To: <0-v1-76be45eff0be+5d-iommufd_unmap_compat_jgg@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MN0PR11MB6059:EE_
-x-ms-office365-filtering-correlation-id: 874b7579-fb3e-4f25-270a-08de25a67f42
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024|38070700021;
-x-microsoft-antispam-message-info: =?us-ascii?Q?yPVNYX6UW7K0B0nS4idJwhyb/l/d839dvznxc3fhne3D97v/qKReJYYo8AYj?=
- =?us-ascii?Q?IX/D8uBfazR2YmjRW8Ogk6UUFJRCXfPDys4LmS5qBJT7ajZdtTvX0gsHwsi3?=
- =?us-ascii?Q?VL/QMflI+j63vMXsK1lcTpkQ/WJ/hE4jsQUXqsyQYdNxv51IBN92g53J95zN?=
- =?us-ascii?Q?4siBVPj5CeGFdt7mnVxyLur70wg1lNLqeZdPjkDzFF9o6OynrqmnRiQhqyyr?=
- =?us-ascii?Q?c59KkUakpLDuJx9NkngUL1nNqyHXbeHceyvpCNQESvbwfJq5mgiv19bCLT5G?=
- =?us-ascii?Q?nn2m8TCuzHqGFyXMAi0A/Pni3wvaTk/D2MnsXj8xtuDuKpGDrz3gv1D7kg82?=
- =?us-ascii?Q?xCbCjeFu6u2IwAAuhAbfMyTTQ+gNnwTLLJjA5dQcUhcuJ+wf4IodXvln/D0a?=
- =?us-ascii?Q?f8uZRj+Xn9pQ4nEobvzwN/6eqflWFjL3SNvrCs/C2eCncqoZA1W+Osui+T76?=
- =?us-ascii?Q?MDc72QKU65/LOPxn3GwSG9mcAququVydGAjuB2GjdddHA6CIaP89RG3YKEsA?=
- =?us-ascii?Q?Twb6ht88UFHuicZ1XHgY7sNzeJORR8rtU7pt1DOGgsP8MkKqFzgZFdPNvAB/?=
- =?us-ascii?Q?LqcKH/iEMqwTJEq39VC0TkLLnj6C4qFYYlq4OM7j1ju2A4VDSsssJo8gbQ7z?=
- =?us-ascii?Q?m9KhywIps9lxI/yHoldaDiZAbcQU9D9Lq8+Ew+vKRT4g4GnWAggx9nofQpWx?=
- =?us-ascii?Q?n3kGy3kD75J34zCdmXlxS/mfCKLT9qpDRX2T8aEOIGbCZyXu809h17bwBIcQ?=
- =?us-ascii?Q?Xm1OK94rN/vqSI6FhHrOIKM28Yg2e1OS60OL8g16czhysR9neURPwVMvtu8e?=
- =?us-ascii?Q?W8PSlee1JjkzSSCOlqIRKcSxJ+HOnyC+I3TIMheHUzz46rX2vpL2ZMh3lMDe?=
- =?us-ascii?Q?aOqNtquAynDV8oGkcSGZxQNGH9mH1sv9Mv7IFRKrsKlRlDcAC7vJ67Mcs5B7?=
- =?us-ascii?Q?6i7n0ICE1i/GawyENM96RY5lrFZHIqRmtDuyu06wgqXe6GpEfsXJ8ZqUehLQ?=
- =?us-ascii?Q?0gBxDfADhbQJJit7fW4NS8oLF95TmAxJnaTTRag16qVkJYLwmZGrCaB3uGon?=
- =?us-ascii?Q?MOTbZS0fizyTiV0YavRyD/W5xNyHRGHwEVnmpq2mNPxYyCu9f1egKVArNNlM?=
- =?us-ascii?Q?AItSs1N12PrxijVkrvEpwXR9OHXrGKdFolOZcs/4X5fiBh/iDBAEwfGCl0ka?=
- =?us-ascii?Q?213B8FyXB39CLSoJNmSTdK8dt0A58mFH2oE4liGuED6JrF/sgzZeubEOEYur?=
- =?us-ascii?Q?TdscaUMy3Z6OU1i2fvrYeWa7wJGT1wSxOtPiLtRtRj9CmNjSBTgxobhWIrIa?=
- =?us-ascii?Q?XHF1O/kRg8We8gFDN47GIZkvqpRPoxk8PxJQA8iuiaIkrSGRJi3ZkaZfqUFV?=
- =?us-ascii?Q?qog7P6JUupEcEJo4KfADpIRz8L+gU/gwBK6apcaDxyzB84t3SXvqWqENwluo?=
- =?us-ascii?Q?HX03hvXZ/pessa/78AxBIPwuDdxh13t0vg6tCmkETqVJuPI7wSmKHB2uyqRr?=
- =?us-ascii?Q?uJmvx/MlvPfzE62eiXHE+lOTIbxIcvRgTRyL?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?qKEp297bXoNVpj7amfqSQqtvbGuI7UtwYMmFR5ddtgYA4/oI9+sCsLcC2V4N?=
- =?us-ascii?Q?9YBoS5Hw2yKcztIpqGtGs7BKbJhW+fccdImpDgUGT19WVRZWCp7PKO/VS2f5?=
- =?us-ascii?Q?FpxKirBWUe9jQq9AvXdGvRLmpWM7stajpudTHkSkXkxpVUhGQLQLCvUjAEmh?=
- =?us-ascii?Q?CkB6O9SghdBLDuZoBMOCSy4HoedLDBZcWTCfxqbJGBxjhiNDNhaN061Z+7He?=
- =?us-ascii?Q?qrLsXgVmp/9CZ/qxegbbc7+HxbbaZyOiIrQNvvzhgPkn983+ujVyBTeGCu0h?=
- =?us-ascii?Q?ALf5fofwvQm8DY06LQQet/XErFANYdpdBXQnow/xLlzC4RM4DRkkfmqjCfCg?=
- =?us-ascii?Q?hJObsL7uwCNVCHRkcTuQCNoAXGx4xoGHqr4LKtEP0SnXT5bvefBY3Gz79Ss2?=
- =?us-ascii?Q?8gOtV4JSYk7UNl0r7xj3U0XIHo4fewWJevZzdR4hRG9OlVhitHpFunmZbaYT?=
- =?us-ascii?Q?L+VpnjkfVvNPYkDjr2F9QvidVSZoBTECiqgW2Mpyu6bEwvCL66NUidbSrzth?=
- =?us-ascii?Q?w/1ojsikIfDXp+g49cyNqKP9N/NTAAete1MPUvfrhMT5YzfHRMTqCD+A7FUw?=
- =?us-ascii?Q?LU+UGUCNJZ0WYJlprgAvzBkr9sdjIA+SNYUEP0xSbhV03MydYB3lj7qqxFNU?=
- =?us-ascii?Q?o2kKCPx5NP9gujlGXJNhgt804PnOEU9/BLhYPiegphmzza+SUQvcV51zvXHL?=
- =?us-ascii?Q?1jgiNDsJETzCv6tB85ZVWjGvhvfoz5etGz/T2wTNoDlbEfJBeXXwwclZtSso?=
- =?us-ascii?Q?jeDP18AVsHa+qGbshOSScEefIRcG6nZP9GUdLfLM4OAU7Zi3tGJ5pFpDCmxj?=
- =?us-ascii?Q?7FoTZmL3UpnUrYhQvX63e57+jvGTOXT3wEGySPa+I3CdEkuZqdaw2+9SOaf8?=
- =?us-ascii?Q?GYV1SCarn3LUNmvcU0wCdFRJ6nbe4tnQ5Mu96IxW5xOrefbCJMytvpjCGgVA?=
- =?us-ascii?Q?Te3IthJ58vSnqPCaBGLC7F9bIUsndmeo5A8cEsNgNOC4lpV14BGi1ZHXuDXA?=
- =?us-ascii?Q?++TP/756gWpAQf3dD1sT/twWiZkwJTkTzQ3W+/v0T4tbE8PT0pGWWNT9PYSU?=
- =?us-ascii?Q?o+dx0qY0ciMEeDgqXLErYdkn7k0eAfap2NF7B5kPjvqyuLyBE8P79XP4KnE+?=
- =?us-ascii?Q?9Hm2pTdhSqQSf7GQJmVU81wbKnVEUknr6s1HIL1hAv/60y/gK93etsdFIF3t?=
- =?us-ascii?Q?KesbjqrETbNt4YApnO97yYOO7S1cxX33nOE7s+agAToSbS8Quj3kX1yQy9AU?=
- =?us-ascii?Q?i7EVZDOaJIqsbGtV7mD/QcnzN1HV8BAwC59QxcIshI7RKuj+J9qOEbe9mwMN?=
- =?us-ascii?Q?WqVbweu42jlx4XQVsG0VkXaTzPONNBZN15ajlHJLULlGuQFx/bpz69TyMdhl?=
- =?us-ascii?Q?KyAB5FyWJH0/ouZkek5TaBIg8AXXmyrFNnlVH/14Fq1LTJ3RMHI/MPGLnuw5?=
- =?us-ascii?Q?lmEwbA2MMLNx/v7I/W06FbwKbyhWhtH5KrxzKMnw+vaoC6QQan5UVw9CqgJC?=
- =?us-ascii?Q?f7QuIQ43cYgK+jOaRKAOWoZVDVCDmFTI4L3qFzo7Zb1Da+D5EFw2GZBbUx6/?=
- =?us-ascii?Q?0A1lX0exK2G+Q3ywdYVLfWyIaT+qiJDzdcmIcKjv?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBDD2D877B;
+	Mon, 17 Nov 2025 07:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763365555; cv=none; b=EJWzYmYzbYZs805qvsUrE+iqM6AKuEVfQOEKAv18esUPh1cCOoUcHyifMHwJFCOY/jfC8Er1YnOTZb5BmQzP/CjZJvTKZofHcC1TPFT+6C8qnZF6mQrkp7uK3MfAFoKoT7UXU4fBR74l6T6pVIeBUfjxUFhlyJxttm/h6+h3SmE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763365555; c=relaxed/simple;
+	bh=EbNxfSdIJxkkYRxf8iJ7gn0LKWwTw9Xv1/OhMGTP6rQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l5UfuHc6uTPsNzOEWdNAD8Wck+ezzOf567dRht0mB0SBiFb92SoagMknBOnDgySOjbgUykyw8JF/5S5FhsukOysVq4A+e7wq15O0RlGrYTiQnb64LHPFWmaU6xwsZWdKduv1MUoYNLvAEBeRK0+QPs6pvfxu/A6k4Bht9OB4z3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.216])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4d90CD43ZYzYQv57;
+	Mon, 17 Nov 2025 15:45:12 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 0A2431A1A48;
+	Mon, 17 Nov 2025 15:45:49 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgBnj1yr0hppanUoBA--.12700S2;
+	Mon, 17 Nov 2025 15:45:48 +0800 (CST)
+Message-ID: <fe8046d7-1f21-4b23-92f2-6be24ef9f58b@huaweicloud.com>
+Date: Mon, 17 Nov 2025 15:45:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 874b7579-fb3e-4f25-270a-08de25a67f42
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Nov 2025 06:56:56.2909
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wO3GECiTDYWgGO3oYLi1Y5hi0YvrYxFT2j5JsOh/FzxVhGvxMUKYgxwTHLoLZ0O1+TqlV5nvkCwI6ST+X752Vg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6059
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/1] cpuset: relax the overlap check for cgroup-v2
+To: Sun Shaojie <sunshaojie@kylinos.cn>, llong@redhat.com
+Cc: mkoutny@suse.com, cgroups@vger.kernel.org, hannes@cmpxchg.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org, tj@kernel.org
+References: <20251117015708.977585-1-sunshaojie@kylinos.cn>
+ <20251117015708.977585-2-sunshaojie@kylinos.cn>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20251117015708.977585-2-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgBnj1yr0hppanUoBA--.12700S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Ar15CFWUCw4rCF4rKFyUKFg_yoW3uF48pF
+	W8GF4jy3yjgF1UCw13Kr1kWrsYgw40qFnrtrn5Jr1rAF9rJF1xArn8JwnxtFy5XrZ8Ww13
+	ZFZIy3yfuFs8trUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUyCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
+	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
+	67AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAwIDUUUUU=
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Wednesday, November 5, 2025 2:12 AM
->=20
 
-sorry coming to this late, but why do we leave inconsistent behavior
-between unmapping all vs. unmapping a range:
 
->  int iopt_unmap_all(struct io_pagetable *iopt, unsigned long *unmapped)
->  {
-> -	int rc;
-> -
-> -	rc =3D iopt_unmap_iova_range(iopt, 0, ULONG_MAX, unmapped);
->  	/* If the IOVAs are empty then unmap all succeeds */
-> -	if (rc =3D=3D -ENOENT)
-> -		return 0;
-> -	return rc;
-> +	return iopt_unmap_iova_range(iopt, 0, ULONG_MAX, unmapped);
+On 2025/11/17 9:57, Sun Shaojie wrote:
+> In cgroup v2, a mutual overlap check is required when at least one of two
+> cpusets is exclusive. However, this check should be relaxed and limited to
+> cases where both cpusets are exclusive.
+> 
+> This patch ensures that for sibling cpusets A1 (exclusive) and B1
+> (non-exclusive), change B1 cannot affect A1's exclusivity.
+> 
+> for example. Assume a machine has 4 CPUs (0-3).
+> 
+>    root cgroup
+>       /    \
+>     A1      B1
+> 
+> Case 1:
+>  Table 1.1: Before applying the patch
+>  Step                                       | A1's prstate | B1'sprstate |
+>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
+>  #3> echo "0" > B1/cpuset.cpus              | root invalid | member      |
+> 
+> After step #3, A1 changes from "root" to "root invalid" because its CPUs
+> (0-1) overlap with those requested by B1 (0-3). However, B1 can actually
+
+B1 (0-3) --> B1(0) ?
+
+> use CPUs 2-3(from B1's parent), so it would be more reasonable for A1 to
+> remain as "root."
+> 
+>  Table 1.2: After applying the patch
+>  Step                                       | A1's prstate | B1'sprstate |
+>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
+>  #3> echo "0" > B1/cpuset.cpus              | root         | member      |
+> 
+> All other cases remain unaffected. For example, cgroup-v1, both A1 and B1
+> are exclusive or non-exlusive.
+> 
+> Signed-off-by: Sun Shaojie <sunshaojie@kylinos.cn>
+> ---
+>  kernel/cgroup/cpuset-internal.h               |  3 ++
+>  kernel/cgroup/cpuset-v1.c                     | 20 +++++++++
+>  kernel/cgroup/cpuset.c                        | 43 ++++++++++++++-----
+>  .../selftests/cgroup/test_cpuset_prs.sh       |  5 ++-
+>  4 files changed, 58 insertions(+), 13 deletions(-)
+> 
+> diff --git a/kernel/cgroup/cpuset-internal.h b/kernel/cgroup/cpuset-internal.h
+> index 337608f408ce..c53111998432 100644
+> --- a/kernel/cgroup/cpuset-internal.h
+> +++ b/kernel/cgroup/cpuset-internal.h
+> @@ -292,6 +292,7 @@ void cpuset1_hotplug_update_tasks(struct cpuset *cs,
+>  			    struct cpumask *new_cpus, nodemask_t *new_mems,
+>  			    bool cpus_updated, bool mems_updated);
+>  int cpuset1_validate_change(struct cpuset *cur, struct cpuset *trial);
+> +bool cpuset1_cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2);
+>  #else
+>  static inline void fmeter_init(struct fmeter *fmp) {}
+>  static inline void cpuset1_update_task_spread_flags(struct cpuset *cs,
+> @@ -302,6 +303,8 @@ static inline void cpuset1_hotplug_update_tasks(struct cpuset *cs,
+>  			    bool cpus_updated, bool mems_updated) {}
+>  static inline int cpuset1_validate_change(struct cpuset *cur,
+>  				struct cpuset *trial) { return 0; }
+> +static inline bool cpuset1_cpus_excl_conflict(struct cpuset *cs1,
+> +				struct cpuset *cs2) {return false; }
+>  #endif /* CONFIG_CPUSETS_V1 */
+>  
+>  #endif /* __CPUSET_INTERNAL_H */
+> diff --git a/kernel/cgroup/cpuset-v1.c b/kernel/cgroup/cpuset-v1.c
+> index 12e76774c75b..5c1296bf6a34 100644
+> --- a/kernel/cgroup/cpuset-v1.c
+> +++ b/kernel/cgroup/cpuset-v1.c
+> @@ -373,6 +373,26 @@ int cpuset1_validate_change(struct cpuset *cur, struct cpuset *trial)
+>  	return ret;
 >  }
+>  
+> +/*
+> + * cpuset1_cpus_excl_conflict() - Check if two cpusets have exclusive CPU conflicts
+> + *                                to legacy (v1)
+> + * @cs1: first cpuset to check
+> + * @cs2: second cpuset to check
+> + *
+> + * Returns: true if CPU exclusivity conflict exists, false otherwise
+> + *
+> + * If either cpuset is CPU exclusive, their allowed CPUs cannot intersect.
+> + */
+> +bool cpuset1_cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
+> +{
+> +	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
+> +		if (cpumask_intersects(cs1->cpus_allowed,
+> +				       cs2->cpus_allowed))
+> +			return true;
+> +
+> +	return false;
+> +}
+> +
+>  #ifdef CONFIG_PROC_PID_CPUSET
+>  /*
+>   * proc_cpuset_show()
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 52468d2c178a..0fd803612513 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -580,35 +580,56 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
+>  
+>  /**
+>   * cpus_excl_conflict - Check if two cpusets have exclusive CPU conflicts
+> - * @cs1: first cpuset to check
+> - * @cs2: second cpuset to check
+> + * @cs1: current cpuset to check
+> + * @cs2: cpuset involved in the check
+>   *
+>   * Returns: true if CPU exclusivity conflict exists, false otherwise
+>   *
+>   * Conflict detection rules:
+> - * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
+> + * For cgroup-v1:
+> + *     see cpuset1_cpus_excl_conflict()
+> + * For cgroup-v2:
+> + * 1. If cs1 is exclusive, cs1 and cs2 must be mutually exclusive
+>   * 2. exclusive_cpus masks cannot intersect between cpusets
+> - * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
+> + * 3. If cs2 is exclusive, cs2's allowed CPUs cannot be a subset of cs1's exclusive CPUs
+> + * 4. if cs1 and cs2 are not exclusive, the allowed CPUs of one cpuset cannot be a subset
+> + *    of another's exclusive CPUs
+>   */
 
-here empty IOVAs succeeds, while...
+The revised conflict detection rules are confusing to me. I thought cs1 and cs2 should be treated
+symmetrically, but that doesn’t seem to be the case here.
 
-> @@ -367,6 +367,10 @@ int iommufd_ioas_unmap(struct iommufd_ucmd
-> *ucmd)
->  				     &unmapped);
->  		if (rc)
->  			goto out_put;
-> +		if (!unmapped) {
-> +			rc =3D -ENOENT;
-> +			goto out_put;
-> +		}
->  	}
+Shouldn’t the following rule apply regardless of whether cs1 or cs2 is exclusive: "The allowed CPUs
+of one cpuset cannot be a subset of another's exclusive CPUs"?
 
-...here it's a failure.
+>  static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
+>  {
+> -	/* If either cpuset is exclusive, check if they are mutually exclusive */
+> -	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
+> +	/* For cgroup-v1 */
+> +	if (!cpuset_v2())
+> +		return cpuset1_cpus_excl_conflict(cs1, cs2);
+> +
+> +	/* If cs1 are exclusive, check if they are mutually exclusive */
+> +	if (is_cpu_exclusive(cs1))
+>  		return !cpusets_are_exclusive(cs1, cs2);
+>  
+> +	/* The following check applies when either
+> +	 * both cs1 and cs2 are non-exclusive，or
+> +	 * only cs2 is exclusive.
+> +	 */
+> +
+>  	/* Exclusive_cpus cannot intersect */
+>  	if (cpumask_intersects(cs1->exclusive_cpus, cs2->exclusive_cpus))
+>  		return true;
+>  
+> -	/* The cpus_allowed of one cpuset cannot be a subset of another cpuset's exclusive_cpus */
+> -	if (!cpumask_empty(cs1->cpus_allowed) &&
+> -	    cpumask_subset(cs1->cpus_allowed, cs2->exclusive_cpus))
+> -		return true;
+> -
+> +	/* cs2's allowed CPUs cannot be a subset of cs1's exclusive CPUs */
+>  	if (!cpumask_empty(cs2->cpus_allowed) &&
+>  	    cpumask_subset(cs2->cpus_allowed, cs1->exclusive_cpus))
+>  		return true;
+>  
+> +	/* If cs2 is exclusive, check finished here */
+> +	if (is_cpu_exclusive(cs2))
+> +		return false;
+> +
+> +	/* The following check applies only if both cs1 and cs2 are non-exclusive. */
+> +
+> +	/* cs1's allowed CPUs cannot be a subset of cs1's exclusive CPUs */
+> +	if (!cpumask_empty(cs1->cpus_allowed) &&
+> +	    cpumask_subset(cs1->cpus_allowed, cs2->exclusive_cpus))
+> +		return true;
+> +
+>  	return false;
+>  }
+>  
 
-from uAPI p.o.v. better the two scenarios are consistent?
+From your commit message, it appears you intend to modify "if (is_cpu_exclusive(cs1) ||
+is_cpu_exclusive(cs2))" to "if (is_cpu_exclusive(cs1) && is_cpu_exclusive(cs2))".
+
+However, I’m having trouble following the change.
+
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index a17256d9f88a..b848bc0729cf 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -388,10 +388,11 @@ TEST_MATRIX=(
+>  	"  C0-1:S+  C1      .    C2-3     .      P2     .      .     0 A1:0-1|A2:1 A1:P0|A2:P-2"
+>  	"  C0-1:S+ C1:P2    .    C2-3     P1     .      .      .     0 A1:0|A2:1 A1:P1|A2:P2 0-1|1"
+>  
+> -	# A non-exclusive cpuset.cpus change will invalidate partition and its siblings
+> +	# A non-exclusive cpuset.cpus change will not invalidate its siblings partition.
+> +	# But a exclusive cpuset.cpus change will invalidate itself.
+>  	"  C0-1:P1   .      .    C2-3   C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P0"
+>  	"  C0-1:P1   .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P-1|B1:P-1"
+> -	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-2|B1:2-3 A1:P0|B1:P-1"
+> +	"   C0-1     .      .  P1:C2-3  C0-2     .      .      .     0 A1:0-1|B1:2-3 A1:P0|B1:P1"
+>  
+>  	# cpuset.cpus can overlap with sibling cpuset.cpus.exclusive but not subsumed by it
+>  	"   C0-3     .      .    C4-5     X5     .      .      .     0 A1:0-3|B1:4-5"
+
+-- 
+Best regards,
+Ridong
+
 
