@@ -1,157 +1,142 @@
-Return-Path: <linux-kselftest+bounces-45728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5086AC63986
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 11:40:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77048C63BF6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 12:16:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C74C74EBFC7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 10:36:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC13C3B599F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 11:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44588318156;
-	Mon, 17 Nov 2025 10:36:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="qMpFKE1S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750FD32E73E;
+	Mon, 17 Nov 2025 11:07:55 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from localhost.localdomain (unknown [147.136.157.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB4330E0ED;
-	Mon, 17 Nov 2025 10:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3862328B50;
+	Mon, 17 Nov 2025 11:07:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.0
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763375771; cv=none; b=DkR8UuX7LBSBqcksQXsEwkfTG99m9SwBMS8sZJLKqK56PIt0buR0jBv4qE2V2j1ZjBIRoz4eXTtvyAItUbica4hpi/jNH11hrB5GZaaXIeIlnP4wlrlwv9lzZIbwCCmibYpJFvFu6A1ZWb/3ajnLPMqp/PZbO/hOQagayLTbAAY=
+	t=1763377675; cv=none; b=XDRkF73srWZ9TgOKM+/0TC1RJeWMFOQwHwAGQsyxe1aExXi+n135GcndL2sLhtBa3Dxmoys1XMtPjP2gx1E++Gwi9wFcH5Dn2JWKeXrzGB7nupewMrSjQD7qBdAwXLmIn9u8p2QhIodlrGXntU7roAe1dNabOx1Bq1ZTB1VexMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763375771; c=relaxed/simple;
-	bh=KSPgCJ97GRrXpoW8hmZWLmE3w95TFWqPKFOCt/clTYA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dnZ1dtppJaZB8hxrLZRCbgEpMNjiOoZw5+1GiQF0bwD1RbRUTFkAaLl7to6wvVE4ImgSODWauLT39k6K5BOxACvpJvMm0bdSQ2NafaefRuy5S+vbU6mGO3t3OGpOX+7hN6t/aZTB9fh/rJVcIkmoZ9QcE6wwEHFSRiaq6IFkSvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=qMpFKE1S; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=qpvjh85w8VDGNQb2IXNPCd6h49MYt/U9hPxq6g2rhVo=; b=qMpFKE1Sp3WYzrMNjZ9RjtZl2W
-	BoA9JBEs+QF5mBK02P4guR6OQZVu0kaROCnbqM+ePHT0iHCbx3AyFEX4DVM9WsEtZH5iN5nJLh8ME
-	je/uRn0lhp3JRnkXFIOsxWWMG7MnxPbJrOui0tA03DD5iyf61dL7mQtxE7+Zk80zqUqNItRV0QNIR
-	u9XzjySt2tM0hckulZXoIQBhlrfA5zHzdlSySrJ7doYLVKNMBn4g2D0SexIbGRk+/7MGJXHFjyScZ
-	3m+FVgqgvR/jAWFIb53qI/gbHzh1CBRkeEvB9MI7wbTp1MWMh+aesS3mNqLj86UV8BECPLLHlBr3/
-	aaa9vwQg==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vKwaW-00ENIH-37; Mon, 17 Nov 2025 10:36:00 +0000
-Date: Mon, 17 Nov 2025 02:35:55 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Andre Carvalho <asantostc@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	s=arc-20240116; t=1763377675; c=relaxed/simple;
+	bh=77dXaZcfE04ua8WiSdvAOylJQVXPQIEskS3PfLhEXPg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bbxmRs2gI+EuBKQo271eg8tOgSBuaapeEXXwOfxDVNehC4EISG4Z9S2ktWOjiCABbJu56orEkS8Ec9epoEUOYJRoj6vvOfSk9q6D/5F+3yPwjSWPQrrL2AaEKl23kP1N5qrho7rfh0KL+28E+YNuqt/pg3Y086kOtctSMGKD5Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
+Received: by localhost.localdomain (Postfix, from userid 1007)
+	id 114408B2A0C; Mon, 17 Nov 2025 19:07:45 +0800 (+08)
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Michal Luczaj <mhal@rbox.co>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Cong Wang <cong.wang@bytedance.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 5/5] selftests: netconsole: validate target
- resume
-Message-ID: <fd4jjkw6hpkyydg2uk6ys2paa3z3egsmfim3xidjtyyzxeg33n@jjww2sd4xcas>
-References: <20251116-netcons-retrigger-v4-0-5290b5f140c2@gmail.com>
- <20251116-netcons-retrigger-v4-5-5290b5f140c2@gmail.com>
+Subject: [PATCH bpf-next v1 0/3] bpf: Fix FIONREAD and copied_seq issues
+Date: Mon, 17 Nov 2025 19:07:04 +0800
+Message-ID: <20251117110736.293040-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251116-netcons-retrigger-v4-5-5290b5f140c2@gmail.com>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 16, 2025 at 05:14:05PM +0000, Andre Carvalho wrote:
-> Introduce a new netconsole selftest to validate that netconsole is able
-> to resume a deactivated target when the low level interface comes back.
-> 
-> The test setups the network using netdevsim, creates a netconsole target
-> and then remove/add netdevsim in order to bring the same interfaces
-> back. Afterwards, the test validates that the target works as expected.
-> 
-> Targets are created via cmdline parameters to the module to ensure that
-> we are able to resume targets that were bound by mac and interface name.
-> 
-> Signed-off-by: Andre Carvalho <asantostc@gmail.com>
-> ---
->  tools/testing/selftests/drivers/net/Makefile       |  1 +
->  .../selftests/drivers/net/lib/sh/lib_netcons.sh    | 35 ++++++--
->  .../selftests/drivers/net/netcons_resume.sh        | 97 ++++++++++++++++++++++
->  3 files changed, 128 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-> index 33f4816216ec..7dc9e5b23d5b 100644
-> --- a/tools/testing/selftests/drivers/net/Makefile
-> +++ b/tools/testing/selftests/drivers/net/Makefile
-> @@ -17,6 +17,7 @@ TEST_PROGS := \
->  	netcons_cmdline.sh \
->  	netcons_fragmented_msg.sh \
->  	netcons_overflow.sh \
-> +	netcons_resume.sh \
->  	netcons_sysdata.sh \
->  	netcons_torture.sh \
->  	netpoll_basic.py \
-> diff --git a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-> index 87f89fd92f8c..6157db660067 100644
-> --- a/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-> +++ b/tools/testing/selftests/drivers/net/lib/sh/lib_netcons.sh
-> @@ -203,19 +203,21 @@ function do_cleanup() {
->  function cleanup_netcons() {
->  	# delete netconsole dynamic reconfiguration
->  	# do not fail if the target is already disabled
-> -	if [[ ! -d "${NETCONS_PATH}" ]]
-> +	local TARGET_PATH=${1:-${NETCONS_PATH}}
-> +
-> +	if [[ ! -d "${TARGET_PATH}" ]]
->  	then
->  		# in some cases this is called before netcons path is created
->  		return
->  	fi
-> -	if [[ $(cat "${NETCONS_PATH}"/enabled) != 0 ]]
-> +	if [[ $(cat "${TARGET_PATH}"/enabled) != 0 ]]
->  	then
-> -		echo 0 > "${NETCONS_PATH}"/enabled || true
-> +		echo 0 > "${TARGET_PATH}"/enabled || true
->  	fi
->  	# Remove all the keys that got created during the selftest
-> -	find "${NETCONS_PATH}/userdata/" -mindepth 1 -type d -delete
-> +	find "${TARGET_PATH}/userdata/" -mindepth 1 -type d -delete
->  	# Remove the configfs entry
-> -	rmdir "${NETCONS_PATH}"
-> +	rmdir "${TARGET_PATH}"
->  }
->  
->  function cleanup() {
-> @@ -377,6 +379,29 @@ function check_netconsole_module() {
->  	fi
->  }
->  
-> +function wait_target_state() {
-> +	local TARGET=${1}
-> +	local STATE=${2}
-> +	local TARGET_PATH="${NETCONS_CONFIGFS}"/"${TARGET}"
-> +	local ENABLED=0
-> +
-> +	if [ "${STATE}" == "enabled" ]
-> +	then
-> +		local ENABLED=1
+syzkaller reported a bug [1] where a socket using sockmap, after being
+unloaded, exposed incorrect copied_seq calculation. The selftest I
+provided can be used to reproduce the issue reported by syzkaller.
 
-ENABLED is already marked as local above. "local" here is unnecessary.
+TCP recvmsg seq # bug 2: copied E92C873, seq E68D125, rcvnxt E7CEB7C, fl 40
+WARNING: CPU: 1 PID: 5997 at net/ipv4/tcp.c:2724 tcp_recvmsg_locked+0xb2f/0x2910 net/ipv4/tcp.c:2724
+Call Trace:
+ <TASK>
+ receive_fallback_to_copy net/ipv4/tcp.c:1968 [inline]
+ tcp_zerocopy_receive+0x131a/0x2120 net/ipv4/tcp.c:2200
+ do_tcp_getsockopt+0xe28/0x26c0 net/ipv4/tcp.c:4713
+ tcp_getsockopt+0xdf/0x100 net/ipv4/tcp.c:4812
+ do_sock_getsockopt+0x34d/0x440 net/socket.c:2421
+ __sys_getsockopt+0x12f/0x260 net/socket.c:2450
+ __do_sys_getsockopt net/socket.c:2457 [inline]
+ __se_sys_getsockopt net/socket.c:2454 [inline]
+ __x64_sys_getsockopt+0xbd/0x160 net/socket.c:2454
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0xfa0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-Other than that, and with the "trap" fix, it might be in good shape.
+A sockmap socket maintains its own receive queue (ingress_msg) which may
+contain data from either its own protocol stack or forwarded from other
+sockets.
 
-Thanks for this selftest.
---breno
+                                                     FD1:read()
+                                                     --  FD1->copied_seq++
+                                                         |  [read data]
+                                                         |
+                                [enqueue data]           v
+                  [sockmap]     -> ingress to self ->  ingress_msg queue
+FD1 native stack  ------>                                 ^
+-- FD1->rcv_nxt++               -> redirect to other      | [enqueue data]
+                                       |                  |
+                                       |             ingress to FD1
+                                       v                  ^
+                                      ...                 |  [sockmap]
+                                                     FD2 native stack
 
---
-pw-bot: cr
+The issue occurs when reading from ingress_msg: we update tp->copied_seq
+by default, but if the data comes from other sockets (not the socket's
+own protocol stack), tcp->rcv_nxt remains unchanged. Later, when
+converting back to a native socket, reads may fail as copied_seq could
+be significantly larger than rcv_nxt.
+
+Additionally, FIONREAD calculation based on copied_seq and rcv_nxt is
+insufficient for sockmap sockets, requiring separate field tracking.
+
+[1] https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
+
+Jiayuan Chen (3):
+  bpf, sockmap: Fix incorrect copied_seq calculation
+  bpf, sockmap: Fix FIONREAD for sockmap
+  bpf, selftest: Add tests for FIONREAD and copied_seq
+
+ include/linux/skmsg.h                         |  71 ++++++-
+ net/core/skmsg.c                              |  20 +-
+ net/ipv4/tcp_bpf.c                            |  26 ++-
+ net/ipv4/udp_bpf.c                            |  25 ++-
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 192 +++++++++++++++++-
+ .../bpf/progs/test_sockmap_pass_prog.c        |   8 +
+ 6 files changed, 325 insertions(+), 17 deletions(-)
+
+-- 
+2.43.0
+
 
