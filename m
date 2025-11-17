@@ -1,96 +1,215 @@
-Return-Path: <linux-kselftest+bounces-45759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5D51C64F9B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 16:52:33 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D773EC65203
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 17:27:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 72F414E1C2E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 15:52:31 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BFD9D3436AF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Nov 2025 16:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B1B2299ABF;
-	Mon, 17 Nov 2025 15:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C40172C21E4;
+	Mon, 17 Nov 2025 16:21:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LUxkpQRE"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LcIG99RN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB98B1FDA8E;
-	Mon, 17 Nov 2025 15:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 566AD27FB21
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Nov 2025 16:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763394746; cv=none; b=n+Y7JvXnhgRqIK8oQfB0suLag8ER5Mh8SuU3DZE9QWZKYo6aUzM/T8nekwYa30Ug2B2Tqu4DPvwbSXNtShTVMz4XhCdopcCA3u56wYOeUnmcbu6/N4vmvqX3815UKYSSgN0IEMHIaBMTGcxxIOkJ/4k4Q57V6LRz0XzAn02K4nA=
+	t=1763396470; cv=none; b=W6e8Oc6l66lrbRG6+h6NKol7OgMFQA311aylR17ub+5Ulb33/VrhkMlK4t8vYdvilMGBkVGN5aCPfg7sfSVLDP9INEJ9/gujOePcDd+G6v/4tTtilLymYmrIgGZvN6sreDvmSpx7/W2cmdUuOL33XSuuyKegCO+LcswLWUCHerc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763394746; c=relaxed/simple;
-	bh=h86l60bKnZ/x/7tUOQYfFlRch3iSkW8o7ez2iOx5cQs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=a46sxftrcTC0L/GuXzCDfm6kD8iazF4sOaR3RHIyXecAfsfj33pnM1qOtsFNM7uESgO0t8hI9C6qzokwoyicPyF/UQ5I8bWRjLBpkTQBKXXDZzwYBkeUACv7cnna1OPhuI6DlMzrEfoGZ1fXdlB2Gwh+rOfH+HLq5hW76M9nY50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LUxkpQRE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D86C9C113D0;
-	Mon, 17 Nov 2025 15:52:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763394745;
-	bh=h86l60bKnZ/x/7tUOQYfFlRch3iSkW8o7ez2iOx5cQs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LUxkpQREbP2QOS9x8Iyj114TlA2hs00nkAg2KnFwM9o1WuwxWkeaKKqrjZWpWp+3v
-	 x3FuRWhzsbc8X9+Hp5p4jsyhrFbTijF1pW5smYZxL5Vs4yN2gbjciGsUkH2cawsrA9
-	 G8WYAPbU8mZjLZYJg/vSWcR398br00BvDexxpeujdT09vmbC7iYuUFewumiEkjekB/
-	 OClrqHiS5kI680AF6FXj/XBT0fpe2HLkQDZG4v5/uspIjJ4ubzlDg9LQmyqfTiF902
-	 VNRQ5g2ih9/SZsB9alvSj3qw5zQNSAUMZDWsIsKiZfXH8OQKhGVkQY5jL2ZBgz6UMZ
-	 R9fMF9nF/N6IQ==
+	s=arc-20240116; t=1763396470; c=relaxed/simple;
+	bh=Ov9iuOmcLm2wLkl+Duufok1qoz+D6Jtj5fyC9fkrws4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W/NJM4AWvtGN96+GwOP/dyXE5lCYkyyO+ztURo6lHSHFt35UrrDyDJ7HcvmYZ1ue72LSKlEJws/EBLi1mHOETA+QFpw9rDEr6VSHnEMJPPzlf+wWA4d0VE6rpCWopGuWDNdiJjyqvP4ppWvyFyTMz9PaDDEInFD7braBWfJkStM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LcIG99RN; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1763396454;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=mIcWgka4CgRJZLXYvw90pre7ZdtAVL9XesUCcWBnk60=;
+	b=LcIG99RNqaNfSJYFQJjfTIpGa9m27kJco0MNB+yJLArxudGYruowFcYpAjLXR296RagnFj
+	Zs5M5rHVgriy+oW2GBXDHCnlHYvOxrGexmmOR+EiIfY7D1g92+d4PL/0cEqE2vk5J/ZTQd
+	04eCbA6pn52vRK66V1XRe6GGGTk7UVQ=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	jolsa@kernel.org,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	eddyz87@gmail.com,
+	dxu@dxuuu.xyz,
+	deso@posteo.net,
+	martin.lau@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	shuah@kernel.org,
+	kerneljasonxing@gmail.com,
+	chen.dylane@linux.dev,
+	willemb@google.com,
+	paul.chaignon@gmail.com,
+	a.s.protopopov@gmail.com,
+	memxor@gmail.com,
+	yatsenko@meta.com,
+	tklauser@distanz.ch,
+	leon.hwang@linux.dev,
+	kernel-patches-bot@fb.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v10 0/8] bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags for percpu maps
+Date: Tue, 18 Nov 2025 00:20:25 +0800
+Message-ID: <20251117162033.6296-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 17 Nov 2025 16:52:19 +0100
-Message-Id: <DEB39JY2VH7G.2D1WAPTNN94MQ@kernel.org>
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor"
- <alex.gaynor@gmail.com>, "Brendan Higgins" <brendan.higgins@linux.dev>,
- "David Gow" <davidgow@google.com>
-Cc: <rust-for-linux@vger.kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>,
- "Gary Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Danilo Krummrich" <dakr@kernel.org>, "Rae Moar" <raemoar63@gmail.com>,
- <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
- <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>
-Subject: Re: [PATCH] rust: allow `clippy::disallowed_names` for doctests
-X-Mailer: aerc 0.21.0
-References: <20251117080714.876978-1-ojeda@kernel.org>
-In-Reply-To: <20251117080714.876978-1-ojeda@kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon Nov 17, 2025 at 9:07 AM CET, Miguel Ojeda wrote:
-> Examples (i.e. doctests) may want to use names such as `foo`, thus the
-> `clippy::disallowed_names` lint gets in the way.
->
-> Thus allow it for all doctests.
->
-> In addition, remove it from the existing `expect`s we have in a few
-> doctests.
->
-> This does not mean that we should stop trying to find good names for
-> our examples, though.
->
-> Suggested-by: Alice Ryhl <aliceryhl@google.com>
-> Link: https://lore.kernel.org/rust-for-linux/aRHSLChi5HYXW4-9@google.com/
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+This patch set introduces the BPF_F_CPU and BPF_F_ALL_CPUS flags for
+percpu maps, as the requirement of BPF_F_ALL_CPUS flag for percpu_array
+maps was discussed in the thread of
+"[PATCH bpf-next v3 0/4] bpf: Introduce global percpu data"[1].
 
-Acked-by: Benno Lossin <lossin@kernel.org>
+The goal of BPF_F_ALL_CPUS flag is to reduce data caching overhead in light
+skeletons by allowing a single value to be reused to update values across all
+CPUs. This avoids the M:N problem where M cached values are used to update a
+map on N CPUs kernel.
 
-Cheers,
-Benno
+The BPF_F_CPU flag is accompanied by *flags*-embedded cpu info, which
+specifies the target CPU for the operation:
 
-> ---
->  rust/kernel/init.rs         | 3 +--
->  rust/kernel/types.rs        | 1 -
->  scripts/rustdoc_test_gen.rs | 2 +-
->  3 files changed, 2 insertions(+), 4 deletions(-)
+* For lookup operations: the flag field alongside cpu info enable querying
+  a value on the specified CPU.
+* For update operations: the flag field alongside cpu info enable
+  updating value for specified CPU.
+
+Links:
+[1] https://lore.kernel.org/bpf/20250526162146.24429-1-leon.hwang@linux.dev/
+
+Changes:
+v9 -> v10:
+* Add tests to verify array and hash maps do not support BPF_F_CPU and
+  BPF_F_ALL_CPUS flags.
+* Address comment from Andrii:
+  * Copy map value using copy_map_value_long for percpu_cgroup_storage
+    maps in a separate patch.
+
+v8 -> v9:
+* Change value type from u64 to u32 in selftests.
+* Address comments from Andrii:
+  * Keep value_size unaligned and update everywhere for consistency when
+    cpu flags are specified.
+  * Update value by getting pointer for percpu hash and percpu
+    cgroup_storage maps.
+
+v7 -> v8:
+* Address comments from Andrii:
+  * Check BPF_F_LOCK when update percpu_array, percpu_hash and
+    lru_percpu_hash maps.
+  * Refactor flags check in __htab_map_lookup_and_delete_batch().
+  * Keep value_size unaligned and copy value using copy_map_value() in
+    __htab_map_lookup_and_delete_batch() when BPF_F_CPU is specified.
+  * Update warn message in libbpf's validate_map_op().
+  * Update comment of libbpf's bpf_map__lookup_elem().
+
+v6 -> v7:
+* Get correct value size for percpu_hash and lru_percpu_hash in
+  update_batch API.
+* Set 'count' as 'max_entries' in test cases for lookup_batch API.
+* Address comment from Alexei:
+  * Move cpu flags check into bpf_map_check_op_flags().
+
+v5 -> v6:
+* Move bpf_map_check_op_flags() from 'bpf.h' to 'syscall.c'.
+* Address comments from Alexei:
+  * Drop the refactoring code of data copying logic for percpu maps.
+  * Drop bpf_map_check_op_flags() wrappers.
+
+v4 -> v5:
+* Address comments from Andrii:
+  * Refactor data copying logic for all percpu maps.
+  * Drop this_cpu_ptr() micro-optimization.
+  * Drop cpu check in libbpf's validate_map_op().
+  * Enhance bpf_map_check_op_flags() using *allowed flags* instead of
+    'extra_flags_mask'.
+
+v3 -> v4:
+* Address comments from Andrii:
+  * Remove unnecessary map_type check in bpf_map_value_size().
+  * Reduce code churn.
+  * Remove unnecessary do_delete check in
+    __htab_map_lookup_and_delete_batch().
+  * Introduce bpf_percpu_copy_to_user() and bpf_percpu_copy_from_user().
+  * Rename check_map_flags() to bpf_map_check_op_flags() with
+    extra_flags_mask.
+  * Add human-readable pr_warn() explanations in validate_map_op().
+  * Use flags in bpf_map__delete_elem() and
+    bpf_map__lookup_and_delete_elem().
+  * Drop "for alignment reasons".
+v3 link: https://lore.kernel.org/bpf/20250821160817.70285-1-leon.hwang@linux.dev/
+
+v2 -> v3:
+* Address comments from Alexei:
+  * Use BPF_F_ALL_CPUS instead of BPF_ALL_CPUS magic.
+  * Introduce these two cpu flags for all percpu maps.
+* Address comments from Jiri:
+  * Reduce some unnecessary u32 cast.
+  * Refactor more generic map flags check function.
+  * A code style issue.
+v2 link: https://lore.kernel.org/bpf/20250805163017.17015-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+* Address comments from Andrii:
+  * Embed cpu info as high 32 bits of *flags* totally.
+  * Use ERANGE instead of E2BIG.
+  * Few format issues.
+
+Leon Hwang (8):
+  bpf: Introduce internal bpf_map_check_op_flags helper function
+  bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array
+    maps
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash
+    and lru_percpu_hash maps
+  bpf: Copy map value using copy_map_value_long for
+    percpu_cgroup_storage maps
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for
+    percpu_cgroup_storage maps
+  libbpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu maps
+  selftests/bpf: Add cases to test BPF_F_CPU and BPF_F_ALL_CPUS flags
+
+ include/linux/bpf-cgroup.h                    |   4 +-
+ include/linux/bpf.h                           |  44 ++-
+ include/uapi/linux/bpf.h                      |   2 +
+ kernel/bpf/arraymap.c                         |  29 +-
+ kernel/bpf/hashtab.c                          |  94 ++++--
+ kernel/bpf/local_storage.c                    |  27 +-
+ kernel/bpf/syscall.c                          |  65 ++--
+ tools/include/uapi/linux/bpf.h                |   2 +
+ tools/lib/bpf/bpf.h                           |   8 +
+ tools/lib/bpf/libbpf.c                        |  26 +-
+ tools/lib/bpf/libbpf.h                        |  21 +-
+ .../selftests/bpf/prog_tests/percpu_alloc.c   | 312 ++++++++++++++++++
+ .../selftests/bpf/progs/percpu_alloc_array.c  |  32 ++
+ 13 files changed, 562 insertions(+), 104 deletions(-)
+
+--
+2.51.2
+
 
