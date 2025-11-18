@@ -1,205 +1,209 @@
-Return-Path: <linux-kselftest+bounces-45879-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44EB3C6ADD5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 18:14:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40EB2C6AD9F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 18:12:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id BCD682BEEC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:11:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id EFA942C215
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:12:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D54736B061;
-	Tue, 18 Nov 2025 17:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C1683A79B5;
+	Tue, 18 Nov 2025 17:11:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzMe8S1e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC05288514;
-	Tue, 18 Nov 2025 17:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224143A5E97
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 17:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763485855; cv=none; b=idBuZquFZnjpsI/kSM7rmMSxiXi7Y0lYZWXOhphHRg+tgyLcRpctm1Ix8r7f+3RGdCRLYhlkdMeudEk6nK4FpUN3Sc7xIOWmGTOaPmmFMGeLlqcO9fR0dw+TgfHkyaFjRtq/bXzOm4/99tcxHsyMFRKRokxbOx8iWv1cW+fJ0AY=
+	t=1763485882; cv=none; b=BKtRmGc23P+BJm48GgfIHWYiEZn0R1Ik0FZDANt9jN9nSarRL1JAfroJJWdYNitkybnd6Tha9eqD0GxcR/sy715bEthyFfvoZDZjBBkNpl+Wvlnkkc3IMIb3hZmVIwXb67Gf1VP9MSFApLdXuvlgtyqk3nSpoUTV3Z7FgCndmBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763485855; c=relaxed/simple;
-	bh=/Uc281nLugbVMb8A4fGMDJAfBH5XvXt1z4kRaZd5WH4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=hP5xJwyGNidMPKkz2zy7CMXL3Td4QbwFvCRZkxr8+VlhU1pB7ETXNcq6zYB4xB7Vh3vPdUf1RGieGkTDeYsq6RpuqcAP+tYNjAtJ1s56CIUuzTORMAADvY1wwYelwGppn4CucAtIJM503NGriwZlyieXKQc5WdrLzvoot6I+9P0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 649E91516;
-	Tue, 18 Nov 2025 09:10:45 -0800 (PST)
-Received: from [10.57.39.196] (unknown [10.57.39.196])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51BE83F66E;
-	Tue, 18 Nov 2025 09:10:47 -0800 (PST)
-Message-ID: <57c2c83c-9eea-40e0-9f95-47f21b1c75be@arm.com>
-Date: Tue, 18 Nov 2025 18:10:44 +0100
+	s=arc-20240116; t=1763485882; c=relaxed/simple;
+	bh=sGFjzNSUP3iKmiMpSYgzBv7rK8Cov3HbhYOyp14idfo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aLfToOJNP+cajG6eGZfEww0KFNFq21I7tM+1YcqJFAhXmYUosVZrgJr0pzyLeZ1b5nEQb9uqhtjyGAG1KwoWMR7Gc1h0haBpHHX9mfWdAiwcdPXzSOYRi0OzO7qkxrnoeu12uyRurVLY1OdzUblWOeA1iHxds4IxPmRIdcdnb1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzMe8S1e; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4775895d69cso31005305e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 09:11:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763485878; x=1764090678; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TBe9IiuweoW+3W7c6RGD7+9IjhQceFzz7qTeC4zbtq4=;
+        b=gzMe8S1e0EPP2+9p51FkD/e1HbUoZ5e3t1ZxHXKciNd3oHDUKNdebpQOIy3xR2Vlfm
+         7RFcWkDGBlQNQb04ZEj0uNBeYJ/9BqTCVIDWz8SGxJa7EiAMUXqtjM9ncOln7upk4Ngr
+         necciN2hZRVHQRUWr2rgsySs2mEuVIfoGZbxiygipbM4bCW1znVEQ2b4M2B/ApRdnPyk
+         KcT42+LPYRQNN96ycTFBbJdb9G6Wy8/KlsW0O46BmyICvgLZGhl4Zz9sHm9iODVLnCbi
+         h5TC7RMiSAbxlyhC48n7IIKN1IyLHQ56X+RDRmJg4dQovXbJBVyVtzvHKampc33thKCs
+         FIfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763485878; x=1764090678;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TBe9IiuweoW+3W7c6RGD7+9IjhQceFzz7qTeC4zbtq4=;
+        b=PZfPgTdaXKe6mJqV4pthhGNZHIjAyhuhyQ0bQ2x62OLqUw2LaaHOUXwQmQRIhupLXf
+         AZ6k1j8IaOCzDP3VdtRUUvHJKvdduWKC7n1bX2SxNuZaC2VO/PoUZqETw7MFtgQPFyB1
+         9clCE9Hcs3q5eqP8n+nnKImIiwtKQQ7EncwEP8dTKUB95KZmVc7FfV2P/eHO3gl4nypU
+         7kXysBnMtu54nc2DcgYKIq60DAM9+gpK9iTKQC6ptNz0o2paCo+LmiWYr6/RfHNN/NJ0
+         Aa1dWn5kvrhIT35G4EwBIg6ZqDVbshDW4mvSDhI/HiIBC1hfpLNhHqEJUQeh+Ft7h6Ml
+         ZfbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWfp4uTkql2TOyGQ1GaAm5l9xDqGql8ima4laPgVt23a/lKJMZ2R6deqoBh8UWwh1gSuNcsKSW+9deoDWeyQBI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrXWFWIsTEg4cZSUn8MGuFVTmRumC4iGkPeqpJmALyIBTfFjmE
+	ztaeCxY8ic77fzsXmGymqzBPSXY3zkPOHQsNmxEsPra0Or3pNfQSyuon4l39sOQQsRR+Ww==
+X-Gm-Gg: ASbGnct8LFh4/nOBwQMKKyopUHZ3A50/uBfi9TFTYwM6yjJN+66H0ypBVufIwZ9ZO6q
+	hLrWGZKpG8Iio9vWb3rt9iaybdjNr1tC5EEDHOYhp17AIXfH70Hh9RxkAgtuDguuumcn6YoNh2U
+	AqWlCijYAHVfGmv21PKtzTjts3yPH4xQ4w+n7e251Aegn5se1z/W6kbB16q+XAZNw8jhDFo8p0V
+	fP4cWocm0w9OelywHQUOeCK+G/w9j9X4x3mNcv4JjLw2RKStSXr1gfkZWta1imRRSwuYFahE6vC
+	TnXScNQxXFLDcydNiLFcmVQrEQRIYBWMIgNkyC+C9CNjE8WCJGJJDBxP5tdCWMEvKEBabE+Lu0K
+	zqMzKgwDlXLsrZz45iFq3aA47n8s4rIUZt6cb549TYj7MsooYV0XTefT4i+VCacWsOQ7JbgPdpR
+	YpWssXBXwORPuWX2qXe8BHupRAQFiGtisWnEckheZKFOu/tQqPIwIdsoGH5ER0SvurqP7ZW8mh1
+	xslfvtGMkBw1pIIk85B/oNrqj2h/34J
+X-Google-Smtp-Source: AGHT+IHAVcd0D2l8vGUA9g49D1aKsIZ/sD6QLBYmCPWxLP3aBw/DLAQPHYPULLtdRj037Az96qsRzg==
+X-Received: by 2002:a05:600c:1d19:b0:46e:5100:326e with SMTP id 5b1f17b1804b1-4778fea835dmr152713665e9.23.1763485878063;
+        Tue, 18 Nov 2025 09:11:18 -0800 (PST)
+Received: from ip-10-0-150-200.eu-west-1.compute.internal (ec2-52-49-196-232.eu-west-1.compute.amazonaws.com. [52.49.196.232])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b103d312sm706385e9.13.2025.11.18.09.11.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Nov 2025 09:11:17 -0800 (PST)
+From: griffoul@gmail.com
+X-Google-Original-From: griffoul@gmail.org
+To: kvm@vger.kernel.org
+Cc: seanjc@google.com,
+	pbonzini@redhat.com,
+	vkuznets@redhat.com,
+	shuah@kernel.org,
+	dwmw@amazon.co.uk,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fred Griffoul <fgriffo@amazon.co.uk>
+Subject: [PATCH v2 00/10] KVM: nVMX: Improve performance for unmanaged guest memory
+Date: Tue, 18 Nov 2025 17:11:03 +0000
+Message-ID: <20251118171113.363528-1-griffoul@gmail.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 03/11] arm64/ptrace: Refator el0_svc_common()
-To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
- will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
- luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
- akpm@linux-foundation.org, ldv@strace.io, macro@orcam.me.uk, deller@gmx.de,
- mark.rutland@arm.com, song@kernel.org, mbenes@suse.cz, ryan.roberts@arm.com,
- ada.coupriediaz@arm.com, anshuman.khandual@arm.com, broonie@kernel.org,
- pengcan@kylinos.cn, dvyukov@google.com, kmal@cock.li, lihongbo22@huawei.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20251117133048.53182-1-ruanjinjie@huawei.com>
- <20251117133048.53182-4-ruanjinjie@huawei.com>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20251117133048.53182-4-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-In subject: s/refator/refactor/
+From: Fred Griffoul <fgriffo@amazon.co.uk>
 
-Also nit: this is less about ptrace than about syscall entry, so maybe
-"arm64/syscall:"?
+This patch series addresses both performance and correctness issues in
+nested VMX when handling guest memory.
 
-On 17/11/2025 14:30, Jinjie Ruan wrote:
-> Compared to the generic entry code, arm64 terminate the process
+During nested VMX operations, L0 (KVM) accesses specific L1 guest pages
+to manage L2 execution. These pages fall into two categories: pages
+accessed only by L0 (such as the L1 MSR bitmap page or the eVMCS page),
+and pages passed to the L2 guest via vmcs02 (such as APIC access,
+virtual APIC, and posted interrupt descriptor pages).
 
-s/terminate/terminates/ (similar observation for other commit messages)
+The current implementation uses kvm_vcpu_map/unmap, which causes two
+issues.
 
-> after report_syscall_exit() if the syscall is issued within
-> a restartable sequence.
+First, the current approach is missing proper invalidation handling in
+critical scenarios. Enlightened VMCS (eVMCS) pages can become stale when
+memslots are modified, as there is no mechanism to invalidate the cached
+mappings. Similarly, APIC access and virtual APIC pages can be migrated
+by the host, but without proper notification through mmu_notifier
+callbacks, the mappings become invalid and can lead to incorrect
+behavior.
 
-Presumably this implies that forcing SIGSEGV before or after calling the
-tracing handlers makes no difference, if so it should be clarified.
+Second, for unmanaged guest memory (memory not directly mapped by the
+kernel, such as memory passed with the mem= parameter or guest_memfd for
+non-CoCo VMs), this workflow invokes expensive memremap/memunmap
+operations on every L2 VM entry/exit cycle. This creates significant
+overhead that impacts nested virtualization performance.
 
-> In preparation for moving arm64 over to the generic entry code,
-> refactor el0_svc_common() as below:
->
-> - Extract syscall_exit_to_user_mode_prepare() to replace the
->   the combination of read_thread_flags() and syscall_trace_exit(),
->   also move the syscall exit check logic into it.
->
-> - Move rseq_syscall() ahead, so the CONFIG_DEBUG_RSEQ check is
->   not needed.
->
-> - Move has_syscall_work() helper into asm/syscall.h, which will be
->   reused by ptrace.c.
->
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> ---
->  arch/arm64/include/asm/syscall.h |  7 ++++++-
->  arch/arm64/kernel/ptrace.c       | 10 +++++++++-
->  arch/arm64/kernel/syscall.c      | 26 +++++---------------------
->  3 files changed, 20 insertions(+), 23 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/syscall.h b/arch/arm64/include/asm/syscall.h
-> index d69f590a989b..6225981fbbdb 100644
-> --- a/arch/arm64/include/asm/syscall.h
-> +++ b/arch/arm64/include/asm/syscall.h
-> @@ -114,7 +114,12 @@ static inline int syscall_get_arch(struct task_struct *task)
->  	return AUDIT_ARCH_AARCH64;
->  }
->  
-> +static inline bool has_syscall_work(unsigned long flags)
-> +{
-> +	return unlikely(flags & _TIF_SYSCALL_WORK);
-> +}
-> +
->  int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags);
-> -void syscall_trace_exit(struct pt_regs *regs, unsigned long flags);
-> +void syscall_exit_to_user_mode_prepare(struct pt_regs *regs);
->  
->  #endif	/* __ASM_SYSCALL_H */
-> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-> index bbb868f6b292..95984bbf53db 100644
-> --- a/arch/arm64/kernel/ptrace.c
-> +++ b/arch/arm64/kernel/ptrace.c
-> @@ -2403,7 +2403,7 @@ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
->  	return regs->syscallno;
->  }
->  
-> -void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
-> +static void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
->  {
->  	audit_syscall_exit(regs);
->  
-> @@ -2412,8 +2412,16 @@ void syscall_trace_exit(struct pt_regs *regs, unsigned long flags)
->  
->  	if (flags & (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP))
->  		report_syscall_exit(regs);
-> +}
-> +
-> +void syscall_exit_to_user_mode_prepare(struct pt_regs *regs)
-> +{
-> +	unsigned long flags = read_thread_flags();
->  
->  	rseq_syscall(regs);
-> +
-> +	if (has_syscall_work(flags) || flags & _TIF_SINGLESTEP)
-> +		syscall_trace_exit(regs, flags);
+This series replaces kvm_host_map with gfn_to_pfn_cache in nested VMX.
+The pfncache infrastructure maintains persistent mappings as long as the
+page GPA does not change, eliminating the memremap/memunmap overhead on
+every VM entry/exit cycle. Additionally, pfncache provides proper
+invalidation handling via mmu_notifier callbacks and memslots generation
+check, ensuring that mappings are correctly updated during both memslot
+updates and page migration events.
 
-Since we're trying to align as much with the generic code as possible,
-we might as well rename this function to syscall_exit_work() as well.
+As an example, a microbenchmark using memslot_perf_test with 8192
+memslots demonstrates huge improvements in nested VMX operations with
+unmanaged guest memory:
 
->  }
->  
->  /*
-> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
-> index 6e3fe760e0bb..9713b038d750 100644
-> --- a/arch/arm64/kernel/syscall.c
-> +++ b/arch/arm64/kernel/syscall.c
-> @@ -65,11 +65,6 @@ static void invoke_syscall(struct pt_regs *regs, unsigned int scno,
->  	choose_random_kstack_offset(get_random_u16());
->  }
->  
-> -static inline bool has_syscall_work(unsigned long flags)
-> -{
-> -	return unlikely(flags & _TIF_SYSCALL_WORK);
-> -}
-> -
->  static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
->  			   const syscall_fn_t syscall_table[])
->  {
-> @@ -125,26 +120,15 @@ static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
->  		if (scno == NO_SYSCALL)
->  			syscall_set_return_value(current, regs, -ENOSYS, 0);
->  		scno = syscall_trace_enter(regs, regs->syscallno, flags);
-> -		if (scno == NO_SYSCALL)
-> -			goto trace_exit;
+                        Before          After           Improvement
+  map:                  26.12s          1.54s           ~17x faster
+  unmap:                40.00s          0.017s          ~2353x faster
+  unmap chunked:        10.07s          0.005s          ~2014x faster
 
-Why not keep the goto instead of duplicating the call? It could be
-renamed if necessary.
+The series is organized as follows:
 
-- Kevin
+Patches 1-5 handle the L1 MSR bitmap page and system pages (APIC access,
+virtual APIC, and posted interrupt descriptor). Patch 1 converts the MSR
+bitmap to use gfn_to_pfn_cache. Patches 2-3 restore and complete
+"guest-uses-pfn" support in pfncache. Patch 4 converts the system pages
+to use gfn_to_pfn_cache. Patch 5 adds a selftest for cache invalidation
+and memslot updates.
 
-> +		if (scno == NO_SYSCALL) {
-> +			syscall_exit_to_user_mode_prepare(regs);
-> +			return;
-> +		}
->  	}
->  
->  	invoke_syscall(regs, scno, sc_nr, syscall_table);
->  
-> -	/*
-> -	 * The tracing status may have changed under our feet, so we have to
-> -	 * check again. However, if we were tracing entry, then we always trace
-> -	 * exit regardless, as the old entry assembly did.
-> -	 */
-> -	if (!has_syscall_work(flags) && !IS_ENABLED(CONFIG_DEBUG_RSEQ)) {
-> -		flags = read_thread_flags();
-> -		if (!has_syscall_work(flags) && !(flags & _TIF_SINGLESTEP))
-> -			return;
-> -	}
-> -
-> -trace_exit:
-> -	flags = read_thread_flags();
-> -	syscall_trace_exit(regs, flags);
-> +	syscall_exit_to_user_mode_prepare(regs);
->  }
->  
->  void do_el0_svc(struct pt_regs *regs)
+Patches 6-7 add enlightened VMCS support. Patch 6 avoids accessing eVMCS
+fields after they are copied into the cached vmcs12 structure. Patch 7
+converts eVMCS page mapping to use gfn_to_pfn_cache.
+
+Patches 8-10 implement persistent nested context to handle L2 vCPU
+multiplexing and migration between L1 vCPUs. Patch 8 introduces the
+nested context management infrastructure. Patch 9 integrates pfncache
+with persistent nested context. Patch 10 adds a selftest for this L2
+vCPU context switching.
+
+v2:
+  - Extended series to support enlightened VMCS (eVMCS).
+  - Added persistent nested context for improved L2 vCPU handling.
+  - Added additional selftests.
+
+Suggested-by: dwmw@amazon.co.uk
+
+
+Fred Griffoul (10):
+  KVM: nVMX: Implement cache for L1 MSR bitmap
+  KVM: pfncache: Restore guest-uses-pfn support
+  KVM: x86: Add nested state validation for pfncache support
+  KVM: nVMX: Implement cache for L1 APIC pages
+  KVM: selftests: Add nested VMX APIC cache invalidation test
+  KVM: nVMX: Cache evmcs fields to ensure consistency during VM-entry
+  KVM: nVMX: Replace evmcs kvm_host_map with pfncache
+  KVM: x86: Add nested context management
+  KVM: nVMX: Use nested context for pfncache persistence
+  KVM: selftests: Add L2 vcpu context switch test
+
+ arch/x86/include/asm/kvm_host.h               |  32 ++
+ arch/x86/include/uapi/asm/kvm.h               |   2 +
+ arch/x86/kvm/Makefile                         |   2 +-
+ arch/x86/kvm/nested.c                         | 199 ++++++++
+ arch/x86/kvm/vmx/hyperv.c                     |   5 +-
+ arch/x86/kvm/vmx/hyperv.h                     |  33 +-
+ arch/x86/kvm/vmx/nested.c                     | 463 ++++++++++++++----
+ arch/x86/kvm/vmx/vmx.c                        |   8 +
+ arch/x86/kvm/vmx/vmx.h                        |  16 +-
+ arch/x86/kvm/x86.c                            |  19 +-
+ include/linux/kvm_host.h                      |  34 +-
+ include/linux/kvm_types.h                     |   1 +
+ tools/testing/selftests/kvm/Makefile.kvm      |   2 +
+ .../selftests/kvm/x86/vmx_apic_update_test.c  | 302 ++++++++++++
+ .../selftests/kvm/x86/vmx_l2_switch_test.c    | 416 ++++++++++++++++
+ virt/kvm/kvm_main.c                           |   3 +-
+ virt/kvm/kvm_mm.h                             |   6 +-
+ virt/kvm/pfncache.c                           |  43 +-
+ 18 files changed, 1467 insertions(+), 119 deletions(-)
+ create mode 100644 arch/x86/kvm/nested.c
+ create mode 100644 tools/testing/selftests/kvm/x86/vmx_apic_update_test.c
+ create mode 100644 tools/testing/selftests/kvm/x86/vmx_l2_switch_test.c
+
+--
+2.43.0
+
 
