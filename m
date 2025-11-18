@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-45838-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B351DC67F29
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 08:30:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 923EBC67EAB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 08:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F256535CC13
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 07:23:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 0FF292A24F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 07:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 328703081D9;
-	Tue, 18 Nov 2025 07:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26DAC3093C6;
+	Tue, 18 Nov 2025 07:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h9fnYbQi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ezP7JTMj"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00CA63081B9;
-	Tue, 18 Nov 2025 07:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E97653093A6;
+	Tue, 18 Nov 2025 07:21:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763450478; cv=none; b=F7Uyqwm9RW7jxTLH6e2MUMT2SXSgzQSPtcNgATHouwFO6sGxESqGaueevMLwNYPx4A4MjExZCRp+kNaQjfV37q3Xc3J6E5NtAKIPuwYmnGePZ4SwRVGAylOPxaQBx4oSaKalCKD8Bc5vA2gbp/t83/F4jX6L+IbqwiSYolPy8/E=
+	t=1763450481; cv=none; b=Un8Bqc+5rQgEfj8sbuGs8ST0teWwn57M5JJEYhD7PKdREFVqiNPyjoQEV0bekvilH8ZZdOLUcfJcwkm6lM+RmZsc/dP3pxvumFtCSLqUElVKghZg1RUcNGV5q56zLZVBVd214MOfoscZqm/TJAq1eAcW6FHxqJfWcbbOTgdNO9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763450478; c=relaxed/simple;
-	bh=PsNkfnJCyxo7NMXegdzKziVjOZ7caxE9x0t2PWtbAE8=;
+	s=arc-20240116; t=1763450481; c=relaxed/simple;
+	bh=bAcKyJTl5+BIraX49wqM5hclDHdO8ieXranCvHNp3SA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SYeIN6g1eTA3ztAtGBdRB/z2uuOy6wXnPdoykeqhRH5IAEHOW20MpszSJol4qJmHq3A3R1+dQ4P58V7j3ksDLeBMViv0WdWbUpXVF+gp49mPYya3DxEXjdR5R0E1gZAzCw7LGUpIPzRzrG6JVB0WuefNPPf/4REt8g8tayDL+y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h9fnYbQi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11552C4CEF5;
-	Tue, 18 Nov 2025 07:21:14 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=KN/MoBbbVMJBHY4mHXG9OObCru7wCIq4wx+qmeMzFAVAYnwjc9z79CPZ8FDTc5CB0sMG35vq2nNnne3gSSe4ObZSvgz6wp/YSKYVv2i1mr4N9r6YqRz2OoOrd5QX+HI5SUOwAlr3bx5ouQG+Trid+ahxO78rVwMZbcIEuBZzNkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ezP7JTMj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02023C4CEF1;
+	Tue, 18 Nov 2025 07:21:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763450477;
-	bh=PsNkfnJCyxo7NMXegdzKziVjOZ7caxE9x0t2PWtbAE8=;
+	s=k20201202; t=1763450480;
+	bh=bAcKyJTl5+BIraX49wqM5hclDHdO8ieXranCvHNp3SA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=h9fnYbQiTrqXQbz5e0DmwT2QMAH62kJNzrPgVvUHlrGMD9hbSoEj6z9MmemiG/NrL
-	 DNafV212bhFiPv4EUUVH+WE64Q8p7jYf9IBvCc9ZX2Fzj0K1USfse2lKkwsgWP423l
-	 vLsWrsy9JkCy27sl6ddMrYdyhwsLhd9JbPDMcKMLsRFKz4j0EC67QQyqNj34U0N3Dy
-	 HSSXUcec8aRVvtYwhQGvtgkWgNXjTxJSRTpLW2V1nrf497QgBff1eRCXLUFO+fQire
-	 DUNaKNI2zMG+N2fAGdi2McwFIY3p6ILB+B2ZdqPWiWXUblNKzZvIBEVjPWIiZ15Egw
-	 1mhui04l+7MzQ==
+	b=ezP7JTMjzQwMr/IH2IZpp987ciP45uMNnKZWGgviQoRRT/9KyqwqPKIndNfPdP2Nj
+	 9QBvLyuKgkA1OIy1lR3nW152XD8XzzobShtI3IIV4cwCNA088dtmlRLi5upqwzYeqT
+	 RXso7pr1kk+arYG97SafNdDAGncLW1JsY/DQQKcAkUH4MvZa/eM9C049IbIKphzkQx
+	 gSunnVji9veT3wyf670TKHOdj24xCqlpnEaOpMeCRnRvvavxYfrjTzFmb6d8838eGy
+	 P/HQ0ACJN6OlIpYJpFwaahDm3xIqvlcIzrsCQw9+zTVOAwPORwN7YDAt6HaPqUyinX
+	 J9sBoiNWEuImw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Tue, 18 Nov 2025 08:20:26 +0100
-Subject: [PATCH net 08/11] selftests: mptcp: join: endpoints: longer
+Date: Tue, 18 Nov 2025 08:20:27 +0100
+Subject: [PATCH net 09/11] selftests: mptcp: join: userspace: longer
  timeout
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251118-net-mptcp-misc-fixes-6-18-rc6-v1-8-806d3781c95f@kernel.org>
+Message-Id: <20251118-net-mptcp-misc-fixes-6-18-rc6-v1-9-806d3781c95f@kernel.org>
 References: <20251118-net-mptcp-misc-fixes-6-18-rc6-v1-0-806d3781c95f@kernel.org>
 In-Reply-To: <20251118-net-mptcp-misc-fixes-6-18-rc6-v1-0-806d3781c95f@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -65,16 +65,16 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2833; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=PsNkfnJCyxo7NMXegdzKziVjOZ7caxE9x0t2PWtbAE8=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDJl5Pzc1Zc7qFcsml75dsuOLS7LnfrCVwSvenL1QPc2p
- RSpUpu4jlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIk8fMPIsFX0drOw35wpkXsM
- Yw6F9bktWKHz1biGZ7d3gd9r63U6mgz//XP2nyhc5yba/P7/zzm6/kXX193J7419178lpcZ5X9p
- efgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3112; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=bAcKyJTl5+BIraX49wqM5hclDHdO8ieXranCvHNp3SA=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDJl5ALmB2+OnOunwWyr8NXVNXBtz7p1Sx6VlP2YfqmDw
+ +HykZKAjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgImczGP4wyt69IyysF+G1cWZ
+ Wca3Gr55VT5dXBmjvW5X3pzNzonSMxkZrtwObWEKFpO+t3b75aPJX/LrNC9mTTurL/a8WKxLSi+
+ XCwA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-In rare cases, when the test environment is very slow, some endpoints
+In rare cases, when the test environment is very slow, some userspace
 tests can fail because some expected events have not been seen.
 
 Because the tests are expecting a long on-going connection, and they are
@@ -84,60 +84,69 @@ killed at the end, after the verifications: increasing the timeout
 doesn't change anything, apart from avoiding it to end before the end of
 the verifications.
 
-To play it safe, all endpoints tests not waiting for the end of the
+To play it safe, all userspace tests not waiting for the end of the
 transfer are now having a longer timeout: 2 minutes.
 
 The Fixes commit was making the connection longer, but still, the
 default timeout would have stopped it after 1 minute, which might not be
 enough in very slow environments.
 
-Fixes: 6457595db987 ("selftests: mptcp: join: endpoints: longer transfer")
+Fixes: 290493078b96 ("selftests: mptcp: join: userspace: longer transfer")
 Cc: stable@vger.kernel.org
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 303abbca59fc..93d38ded5e4e 100755
+index 93d38ded5e4e..74632beae2c6 100755
 --- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
 +++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -3941,7 +3941,7 @@ endpoint_tests()
- 		pm_nl_set_limits $ns1 2 2
+@@ -3804,7 +3804,7 @@ userspace_tests()
+ 	   continue_if mptcp_lib_has_file '/proc/sys/net/mptcp/pm_type'; then
+ 		set_userspace_pm $ns1
  		pm_nl_set_limits $ns2 2 2
- 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
--		{ test_linkfail=128 speed=slow \
-+		{ timeout_test=120 test_linkfail=128 speed=slow \
- 			run_tests $ns1 $ns2 10.0.1.1 & } 2>/dev/null
- 		local tests_pid=$!
- 
-@@ -3968,7 +3968,7 @@ endpoint_tests()
- 		pm_nl_set_limits $ns2 0 3
- 		pm_nl_add_endpoint $ns2 10.0.1.2 id 1 dev ns2eth1 flags subflow
- 		pm_nl_add_endpoint $ns2 10.0.2.2 id 2 dev ns2eth2 flags subflow
 -		{ test_linkfail=128 speed=5 \
 +		{ timeout_test=120 test_linkfail=128 speed=5 \
  			run_tests $ns1 $ns2 10.0.1.1 & } 2>/dev/null
  		local tests_pid=$!
- 
-@@ -4046,7 +4046,7 @@ endpoint_tests()
- 		# broadcast IP: no packet for this address will be received on ns1
- 		pm_nl_add_endpoint $ns1 224.0.0.1 id 2 flags signal
- 		pm_nl_add_endpoint $ns1 10.0.1.1 id 42 flags signal
+ 		wait_mpj $ns1
+@@ -3837,7 +3837,7 @@ userspace_tests()
+ 	   continue_if mptcp_lib_has_file '/proc/sys/net/mptcp/pm_type'; then
+ 		set_userspace_pm $ns2
+ 		pm_nl_set_limits $ns1 0 1
 -		{ test_linkfail=128 speed=5 \
 +		{ timeout_test=120 test_linkfail=128 speed=5 \
  			run_tests $ns1 $ns2 10.0.1.1 & } 2>/dev/null
  		local tests_pid=$!
- 
-@@ -4119,7 +4119,7 @@ endpoint_tests()
- 		# broadcast IP: no packet for this address will be received on ns1
- 		pm_nl_add_endpoint $ns1 224.0.0.1 id 2 flags signal
- 		pm_nl_add_endpoint $ns2 10.0.3.2 id 3 flags subflow
--		{ test_linkfail=128 speed=20 \
-+		{ timeout_test=120 test_linkfail=128 speed=20 \
+ 		wait_mpj $ns2
+@@ -3865,7 +3865,7 @@ userspace_tests()
+ 	   continue_if mptcp_lib_has_file '/proc/sys/net/mptcp/pm_type'; then
+ 		set_userspace_pm $ns2
+ 		pm_nl_set_limits $ns1 0 1
+-		{ test_linkfail=128 speed=5 \
++		{ timeout_test=120 test_linkfail=128 speed=5 \
  			run_tests $ns1 $ns2 10.0.1.1 & } 2>/dev/null
  		local tests_pid=$!
- 
+ 		wait_mpj $ns2
+@@ -3886,7 +3886,7 @@ userspace_tests()
+ 	   continue_if mptcp_lib_has_file '/proc/sys/net/mptcp/pm_type'; then
+ 		set_userspace_pm $ns2
+ 		pm_nl_set_limits $ns1 0 1
+-		{ test_linkfail=128 speed=5 \
++		{ timeout_test=120 test_linkfail=128 speed=5 \
+ 			run_tests $ns1 $ns2 10.0.1.1 & } 2>/dev/null
+ 		local tests_pid=$!
+ 		wait_mpj $ns2
+@@ -3910,7 +3910,7 @@ userspace_tests()
+ 	   continue_if mptcp_lib_has_file '/proc/sys/net/mptcp/pm_type'; then
+ 		set_userspace_pm $ns1
+ 		pm_nl_set_limits $ns2 1 1
+-		{ test_linkfail=128 speed=5 \
++		{ timeout_test=120 test_linkfail=128 speed=5 \
+ 			run_tests $ns1 $ns2 10.0.1.1 & } 2>/dev/null
+ 		local tests_pid=$!
+ 		wait_mpj $ns1
 
 -- 
 2.51.0
