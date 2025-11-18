@@ -1,138 +1,109 @@
-Return-Path: <linux-kselftest+bounces-45871-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45872-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59645C6AA74
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:34:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 566ABC6AB73
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:47:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D3AAB3A564D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 16:26:51 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7F6B63A194E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 16:38:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC0835CB8B;
-	Tue, 18 Nov 2025 16:26:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 531F0377E9D;
+	Tue, 18 Nov 2025 16:35:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RhEbiA95"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="JG2vECVA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D5C328B48
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 16:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E81270EBA;
+	Tue, 18 Nov 2025 16:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763483199; cv=none; b=WWUX55IBvacesv8LNHEMMRIAhXc7Vg3YJW+1oUFxCx3SIjQaM3yGvAt4x49ZhuDtP1J59ZyUMMZyh8xXT0oJrCThl1dXbQ9GLFakTiJSB6P+oP67FWc44231ECymeLDtDATThVCdk+YchnOtpTxG46ykYNyUp2oLOj+Fr4Uu44Q=
+	t=1763483718; cv=none; b=I5oWl8oKCNTas7QGe3yMCVotTA4m37KDGggZqrD5kph0dTsdiKhfnHEnaeDh922CrVA7yNkAvED0w0mKDLKJXfatWM5yTJfBd9JS4RZzTJNODPRC5aA4ct8ZC2Q1QverX+/G8TGNnYPkq4j7i2WllDMJpRh8mRT6PJ1WuBv/rso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763483199; c=relaxed/simple;
-	bh=t0fyfdxYhNgBFmShehvP44pj6moSlFVVPb8XbdW4o6s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SMB1c/O3OKroC+KTT6e4FlCBMFuZdFptftPrLIV81mqjtjfZDmvnZK/IEaO+TKiQbib9Nz8JbSsm1xjVv3tz0qkqOMRpBmcGP/qSnI2KLi2VMtHtk2SKABrdJyJs0GZMLQ0O7kR8fBMRqfv1oYnsIYCnAs504V20dBmFqf+uu7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RhEbiA95; arc=none smtp.client-ip=209.85.210.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-7aab061e7cbso6474719b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 08:26:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763483198; x=1764087998; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FPQvf2fJRZLygWkfiBo5LquDd0bEFe+7G+i8V4JqB1A=;
-        b=RhEbiA95Gp3g16qkDij7Ilrr2gqGQABey8QDlRHiH4FU62OMzvBzx8ir+OulfD5tph
-         D52jBys8O1lOXmT0F42Y7NWaVBu/Xtq1CV/fq4IFjc8jUZcziQNFNjmqFb7rxNy6gLgn
-         wK6I/fHTgUgC/vyUwiEfyfbZDhA6yI2msdYPYousKlrP8wiGxIV/tlv4JLqBk1a8ZSta
-         QWq7uhuMtdUlwzeeilci19nODo6ovJxUnFDMaZqypygXl4wp00ooYqayRbXK2RBy1i6P
-         TDM9+0f9hSqdlZAFb6Z7CVAdondk8tcUZUwmLrfne9EL/4/nfwTSAcE75LEttnPtxtkK
-         FpLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763483198; x=1764087998;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FPQvf2fJRZLygWkfiBo5LquDd0bEFe+7G+i8V4JqB1A=;
-        b=ueQuVkk5fTZ5aKKtEEw5Rj3vEMT3JKNkYAVVI4fV+vDw+sUhp8enV0vNfL+fZDZIcm
-         nttinE3KZxiCZX0KQVDa729qfw6sv7U8Px/hDRlDg2mJEfoWjQFOcVPjxZe/fijJ+A/I
-         zlsTANCMGagVgt74Uvt0aOhaw9OiEL0zBPXBG1s2oBxbL83IblxdkvWQANWr52Xhs8mm
-         cphvclE6pnFvYKn7vdxm85lv3wKQ2RkUTC4aCuDEmzvqa8iqbtwrPLTsL34M9Hf4PoIn
-         sk9vEJOvoMLObREVY77FM9GvSh/5h790h+X0jySYweaiRKfM1q5c0Mw+1KnUOLa0V+J4
-         nKOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHP9FPrcXBZrMhbrpjHo2GBn3DjTBcWFrH/iKOcFxV7NqGxAvyI68BRhDjs5hoxAXTyc/a//gfT5dllvUUM8A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSv8SGwFLhGmWGwfHtmu1BESBb9q90uauf/E1gKyspSR8IKTpo
-	dmZzM1LogBygdXvKNeQq8Dqrl+A167pB4Wc6+ptQmLK8y38xY4RLjLF0e3XH4LcG
-X-Gm-Gg: ASbGncufy5ZZuy1LoLuB5E/ThE+h0h21bxjMgId9WB667vulUCmEYOVZYp7Iw/PGmC9
-	3DtonTq/7TvgiaYOh7B1okDLRXev9scFGVvjQW9ToOyhjhUX89hODRDc18ud4YGZrpB6Eku7+ZA
-	kmAwtRHvfoDO/iP+aucIvJ/5hLj0WgnnHpGmQwokrs8vPFhMA9wK2zIi4MMGC4jO0fa0XeZtu5B
-	kMtJRBPx+cd/F7ZEyY20+8Wi//OYzFGaPh4QGMePhCQjyMMaeq5N9txwIkk97xeBezOpoEmdz3U
-	pYEIksdzRh8uLPVeohv/AMOmZ2ZhvQmqD6m2QuSdH7ZxXzTTRuUFpNxkvgvSAvkv2Bc6aPY+fzZ
-	xPmQA2edvNVa9Q8ldlyUxB7q1YafZnLEYdsLgyufVxLuWKVpUJDWtM4RqIf6Pln75loAp3EoSCc
-	k5BHjtOBA772Gs5qVNuZs=
-X-Google-Smtp-Source: AGHT+IExnN5/CvNTXvJarfjTKsDl977Q2/s/AGjrE0qQoqK+RhFoIGWV/hP+DhY09MKJIFf9WsFWeg==
-X-Received: by 2002:a05:6a00:2443:b0:7aa:9ca5:da9c with SMTP id d2e1a72fcca58-7ba3c4755d7mr17508039b3a.22.1763483197640;
-        Tue, 18 Nov 2025 08:26:37 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9250cd969sm16992718b3a.23.2025.11.18.08.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 08:26:37 -0800 (PST)
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	andrealmeid@igalia.com,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Subject: [PATCH] selftests/futex: Fix storing address of local variable
-Date: Tue, 18 Nov 2025 21:56:14 +0530
-Message-ID: <20251118162619.50586-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: git-send-email 2.51.1
+	s=arc-20240116; t=1763483718; c=relaxed/simple;
+	bh=wRa9wV7lXAq4pWQQ4zTDvQPhFOJmW08DMcRpEwY20Oc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xi6QX9TX5IAl/T8onGHVEC4gOuwnJ2u25VnYgsjvKPhSTAIDk99QaUOG6gAnQn0M51OEY1Mbqr7XwbHjZPJwI2FmNelEPdZHySHLa4a0EsjOrrZ4rbYjNi9Q3vqxjo3qLccMczoLGWZXd0Xp3IZvd2Ndbglx+x75p1YQoA9Kqyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=JG2vECVA; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=ksh9U0KHuVHmxLCi5JNn753atu32AFabkMKbDwp9OmY=; b=JG2vECVAx0pyo6yhYbTg9UVmfc
+	Blj6C5wQZ22ejABvEFyNMzRJoabX6DJcCKpPBOYi0b7j7JitY8EsIUL0vH0YIZLAPqyyOsUqK3G2v
+	X2dHC30+WfqawtJJXj4Y18FiIdO8bedcaQoNTqkCJ/wVYAsT7qixqkAUnWApgVB3GByMEqTnC/jw8
+	ygwqsTs5lHfo7Dg9kiVZSUhn2IgKlO7c9cjWb0Hpth3QzI02n8eM4wLaWreDIy38mKj9ivqUneQpc
+	8Eap+HavW8RK2WpTYYqeU39ixxFQLhueWAwJyoNHdHCOH1Eyp0rcJDEWud8yqR8UHA7MeXgixAJQC
+	AVoeLMPg==;
+Received: from [187.101.0.152] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1vLOfX-002E87-Mv; Tue, 18 Nov 2025 17:35:03 +0100
+Message-ID: <078950cf-01d0-42b0-868f-15096afd97e8@igalia.com>
+Date: Tue, 18 Nov 2025 13:34:59 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/futex: Fix storing address of local variable
+To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+ Darren Hart <dvhart@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ linux-kselftest@vger.kernel.org, Davidlohr Bueso <dave@stgolabs.net>
+References: <20251118162619.50586-1-ankitkhushwaha.linux@gmail.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20251118162619.50586-1-ankitkhushwaha.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-In `child_circular_list()` address of local variable ‘struct lock_struct a’
-is assigned to `head.list.next` raising the following warning.
+Em 18/11/2025 13:26, Ankit Khushwaha escreveu:
+> In `child_circular_list()` address of local variable ‘struct lock_struct a’
+> is assigned to `head.list.next` raising the following warning.
+> 
+> robust_list.c: In function ‘child_circular_list’:
+> robust_list.c:522:24: warning: storing the address of local variable ‘a’
+> in ‘head.list.next’ [-Wdangling-pointer=]
+> 
+>    522 |         head.list.next = &a.list;
+>        |         ~~~~~~~~~~~~~~~^~~~~~~~~
+> robust_list.c:513:28: note: ‘a’ declared here
+>    513 |         struct lock_struct a, b, c;
+>        |                            ^
+> robust_list.c:512:40: note: ‘head’ declared here
+>    512 |         static struct robust_list_head head;
+>        |                                        ^~~~
+> 
+> Defining the value with static keyword to fix this.
+> 
+> Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+> ---
+>   tools/testing/selftests/futex/functional/robust_list.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
+> index e7d1254e18ca..d1aab1cc5a37 100644
+> --- a/tools/testing/selftests/futex/functional/robust_list.c
+> +++ b/tools/testing/selftests/futex/functional/robust_list.c
+> @@ -510,7 +510,7 @@ TEST(test_robust_list_multiple_elements)
+>   static int child_circular_list(void *arg)
+>   {
+>   	static struct robust_list_head head;
+> -	struct lock_struct a, b, c;
+> +	static struct lock_struct a, b, c;
 
-robust_list.c: In function ‘child_circular_list’:
-robust_list.c:522:24: warning: storing the address of local variable ‘a’
-in ‘head.list.next’ [-Wdangling-pointer=]
-
-  522 |         head.list.next = &a.list;
-      |         ~~~~~~~~~~~~~~~^~~~~~~~~
-robust_list.c:513:28: note: ‘a’ declared here
-  513 |         struct lock_struct a, b, c;
-      |                            ^
-robust_list.c:512:40: note: ‘head’ declared here
-  512 |         static struct robust_list_head head;
-      |                                        ^~~~
-
-Defining the value with static keyword to fix this.
-
-Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
----
- tools/testing/selftests/futex/functional/robust_list.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
-index e7d1254e18ca..d1aab1cc5a37 100644
---- a/tools/testing/selftests/futex/functional/robust_list.c
-+++ b/tools/testing/selftests/futex/functional/robust_list.c
-@@ -510,7 +510,7 @@ TEST(test_robust_list_multiple_elements)
- static int child_circular_list(void *arg)
- {
- 	static struct robust_list_head head;
--	struct lock_struct a, b, c;
-+	static struct lock_struct a, b, c;
- 	int ret;
-
- 	ret = set_list(&head);
---
-2.51.1
-
+I believe that the right fix here would be to drop the static from 
+`head` declaration, WDYT?
 
