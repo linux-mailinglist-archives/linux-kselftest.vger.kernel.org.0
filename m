@@ -1,372 +1,1075 @@
-Return-Path: <linux-kselftest+bounces-45907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8D4DC6B25E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 19:14:20 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9BE5C6B264
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 19:14:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 928A524212
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 18:14:19 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 0D8682B39D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 18:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43DCF3612F0;
-	Tue, 18 Nov 2025 18:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F44E35FF51;
+	Tue, 18 Nov 2025 18:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="f9ITP2W4";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="TRGoU0qO"
+	dkim=pass (2048-bit key) header.d=HOTMAIL.DE header.i=@HOTMAIL.DE header.b="td0OBK46"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazolkn19013076.outbound.protection.outlook.com [52.103.46.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E683612E1
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 18:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763489637; cv=none; b=j7bG5h/aYOaVv7RI9GIxFyE8LpHJAIg6x+eXG9fGugX1NXml1f/n80KMBdyycPDUMSrHTaLxgE9BJFkqRcKmlKpWg900yLJXrInFZ2IReoGLMxSBI2/5AIBn0nLAus+IoHI2gRZMSbHsdNiVPTouHz75FF1Jd4jVKkEcOUZHKx8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763489637; c=relaxed/simple;
-	bh=t3HokRBvzk92tWqhfXFr5XVYUp8FzOUrOhuoJpPP+58=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZGgdJNWz6lGaXvcFX0LTPkiUpoNN7/zuIFI/ZkPglzmgz6G/+Mv+wsJbttAehtdVmjaL1pPqYng0Qcn8XtJ/jgeLqSWUJ3eUqQxHBi9tg0NmfmQdgv+fA8lAgE0UDgQ3NJEmC+DPiY6w87yTxqQ+uCg7Thbje3BBb6NExgbEhqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=f9ITP2W4; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=TRGoU0qO; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763489634;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cA4eJ9pim7VdQNrmudwFzP70yzHXe562WV92nI6SXhs=;
-	b=f9ITP2W4itMRRUC1zNHUBPOywkCsLJg8uQ4gRF8chYn79Cb6qwpB380o8J7pmWFA6+fGTJ
-	8lM15NTBfVG5j33OAhd42os/IVoQ5TYVTBLyWNx/vCjbHHvV6SB8Zelav/RAEJLvw8irpG
-	+o6un2Yi58U+SIxjw/MgdqtSC7FTgdw=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-612-ft6v7zVHMpSii-hUMLX9KQ-1; Tue, 18 Nov 2025 13:13:48 -0500
-X-MC-Unique: ft6v7zVHMpSii-hUMLX9KQ-1
-X-Mimecast-MFC-AGG-ID: ft6v7zVHMpSii-hUMLX9KQ_1763489627
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-477a95586f1so9428635e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 10:13:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763489627; x=1764094427; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cA4eJ9pim7VdQNrmudwFzP70yzHXe562WV92nI6SXhs=;
-        b=TRGoU0qOXQU59sd9K2fP/n2OpgYgX6vk4aAVcnK6n0PQLCVHrkDp8e4ccJuGIucWSp
-         +wP4TRu3xEn7eVd2SxQRVijOMQaOUoklxK5v8PgBaXKFvPLuq4IeuQ2ZPtrSgZPgW908
-         lyWelKTRtA0uC5MDuCXVkhqr3Z2w3v658u5zEpUB9ktjzE4GUpnAFWeCWyJ2mod1RDUt
-         parzrgU6jAppwXYYgom3DVF4obWZoKkPGWjNknfxHFj2hHzxFVyobgdlbzdlfAfYs7co
-         FplfLxKwERyMpF0W56IqeFCFqdgxrlZB3IZ75uzahJF7CBDlD67iTtrpbUdBjV8wU2Tg
-         HO/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763489627; x=1764094427;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cA4eJ9pim7VdQNrmudwFzP70yzHXe562WV92nI6SXhs=;
-        b=JPl2kVGhDW96rYkM+xm8l3EYXtWxLG2i2iVQvEQNX+n7tBQuqPbkqGtQ/WM9Sw5LcK
-         dCyQBQdHd6rdZVMWb8FOOgdD9yOo7T1kJULHBfKoT542fRhTtFt14btcymDScLAC9XQ7
-         Lx8I+eKpGPrz1L9qElmds4kwPdW1lwlZR3sVa6J4vYZ7nfBioKcRJwG15xxsFCdFqdyM
-         VpTePfRZhqnpdSQz967M84Yw+Kq2B6ElMeJNKSjK7ENtH9CUMDc85CIGOUw+0DQwlZHA
-         Y8YD0yXwrXmDdLvlBqSNWDcvk8BflfSsm9VG9TYIzIsjEX0VLlX8gVnQz/aXlJAey8Zh
-         IElw==
-X-Forwarded-Encrypted: i=1; AJvYcCUkmWZujNZhET5rq7Mxwph8unKw1sS137jkwyt48SL+2lpX/9ZwyYL4avziM8RimuZdBME9ltBUC7ogXINM17U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjswdIemCrddlc3/99bykyZJt10YobLeuiM51tEKamCY75nvpl
-	B9FyQteIQqE6x6aVE9A+bC9jPOgvGI5mCEV2Zx2SDZj+sCn3qx+iYSW+bYyKyhJVUfnrUrYDmNa
-	27KjitGFHQGwaKhnaMfbl1mZVQcemLXUnybKToojcneuv/yurh+kaYJQbtbF8FZB21pnPLA==
-X-Gm-Gg: ASbGnctOPntCYt+8G9F6n4W+bQhyHZ/GyyqI+C36neJD5dlCOk/N6fxWfJCjsbKy76b
-	SUdlYQclAkylPtZ8wZloLr6gYyUH1egpT85F55dvOtyrAijPXlTT3qCe5bT5bSN/0dqRMQPng+s
-	ZleJq0nVoF4iyktL+jj5wEOKVSAIbW+YA28Bc1ITBvKMoTqYup4Sk810Oofzs0wxzxT0tYWgEsp
-	rHZR4VDXSuISUoIOk4wGyQ2Btik+rj+BQdz+/HYO3Ows+pJ6LdcYiFUAr8T8v9yxtHVTI9lyKBm
-	FSQ/qeUo/hPHnJq5ZS26+HN95AMvYdLUJJvtUzLHkqfi1Hq6gvNA3eRjFLDK11Q6vPiMVwmMhD9
-	s/E3XsNffRLk756snUywd0GlYjopsYerN5UAvWh/gfAjT2ULmhd6pAr2h+58=
-X-Received: by 2002:a05:600c:4fd2:b0:477:76c2:49c9 with SMTP id 5b1f17b1804b1-4778fe4fa18mr162302485e9.2.1763489626902;
-        Tue, 18 Nov 2025 10:13:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGJW+/iuChgFRraW70MIR1TDXfcEwMvm+w71wLHAdMua0RyeIpmzX027JJ8Fn6LsaDHZf5jnw==
-X-Received: by 2002:a05:600c:4fd2:b0:477:76c2:49c9 with SMTP id 5b1f17b1804b1-4778fe4fa18mr162301985e9.2.1763489626387;
-        Tue, 18 Nov 2025 10:13:46 -0800 (PST)
-Received: from sgarzare-redhat (host-82-57-51-250.retail.telecomitalia.it. [82.57.51.250])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b1022a32sm5350695e9.8.2025.11.18.10.13.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 10:13:45 -0800 (PST)
-Date: Tue, 18 Nov 2025 19:13:31 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
-	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
-	Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa <vishnu.dasa@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	virtualization@lists.linux.dev, netdev@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Sargun Dhillon <sargun@sargun.me>, berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v10 08/11] selftests/vsock: add tests for proc
- sys vsock ns_mode
-Message-ID: <4xfytzvgzk55cl4xbe7if56yodshsevfgvc34ubiwb5ozr6arn@nksp3rfq7jm6>
-References: <20251117-vsock-vmtest-v10-0-df08f165bf3e@meta.com>
- <20251117-vsock-vmtest-v10-8-df08f165bf3e@meta.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8112D8368;
+	Tue, 18 Nov 2025 18:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.46.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763489625; cv=fail; b=OVfFKINMTav8pkVWcnJVb3gtd3uXgRh8gNMOHOYDgOKxyV1GrzPw3/KTKrI87xHo1aYORPKPN2jjFEIqj+9iRchwTwuFzn/K5QZ8SMpvBFF9eiu6FQX9vRE/QKkn7y/HGkJxqUsL7WF5dlLyJm4RESsGOMP278xX0dHsPWpuYT8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763489625; c=relaxed/simple;
+	bh=GCXjqjXap0WA9wazTlq9zHk69gaFUiRciu1FA7jaVm0=;
+	h=Message-ID:Date:Subject:From:To:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=QKJ8e67lWsr57dB8kc+ptwLF64ibGYd0/VxSmQmoH9tzp0NpcikDLDe+0sFjehbaqqf26IErpsneP0OqlVwr0CUWrNY50fcuETWAIhPmCEYdOiiOjz/6h95zpAs4a2ZnNyT90QjrTYA4GAIJ3XdcEg8l/26sOxuRXEw22CkX6fc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.de; spf=pass smtp.mailfrom=hotmail.de; dkim=pass (2048-bit key) header.d=HOTMAIL.DE header.i=@HOTMAIL.DE header.b=td0OBK46; arc=fail smtp.client-ip=52.103.46.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.de
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iHpzhCCQu1HF7fWx2FuthC0ZusWUuOhCUIIm9cQU5BEvURrm4nBdO/+AQowP5KHvhF/Q42fububW7dWtUvzNDspgcrnPPi4FfVaTlYmeDKUInOAttaj59UphnMTPI2mQJbst/lgLGLFECSBAEiOFfBl7z4l0SJQ48wgi2xn7KVwZxpqz/OCY1uVWR4sJTpD++Q1qsbG3aocCxBx1s3f6tlHos5cn3pMwfepuAerewmPMrZSdOx2u650JJ2Pwv1KVfPOxNTATWzPSQfRudDoyb/TzUkgAcpKtqJcV6acuDu1meQaeGG6NI4oy4OVl1CwTq2xtC5LLFpgv0kY53kN4MA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+cMP49JB4LTB/5ccIsxKvZ25GPM208mtbFWw66OtZHg=;
+ b=hHybUC2wsR0TA3gbdCDGAqs/9t3AVBrEuWDq//QfbzrmPZMZzSj/6AdCD11Hl0oGXH0a9o2rWUlGOzTC3q3L+OewUy/ZHt6Fh/JimxA0chfAMPquOnuY0a375YABVPnlnekhIynVz/qRTc+ponO8ev2L9bMcOVHTXwFgXqNVDNNUirL9M4uWrWC00gupIb2Bkj2FQhD3nQKJUfX2SVv6J7DNSwLFezMQQTAgpHuThI+2sBjckw+joSUfjMnFs5OEap9EseLNz5VK90QNVs/lZ+W+/qotoNpHA3nryzUXPNsaPsrDF/gbEiV714wZW/nlpHkeuaC+VbS9P7iQtMU3dQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=HOTMAIL.DE;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+cMP49JB4LTB/5ccIsxKvZ25GPM208mtbFWw66OtZHg=;
+ b=td0OBK46xbpFlsFT8t1gEKKeFzCnKLI7ZBKfaOQNgtzbZ7RxRSAgPw0k5EZkSP0Dg3q7EKAzaCo1HdfGvrGOD0T3tlWbe7M1ehLvWVt61b0S6YXl8kEuQzj76E+tauveb+V2GRFSuDTRyRxDo4pi4khbWCVrDOiuiMZ9gbMlGrbNUZ4h1QHdBhW+iGzRrQoCZzRnQFf4LgSbwu1LCb7Pa3H7Y0XhKDnAx0+e54zZ/TZ6SBVirmBqkqecDAgDx7EUHpWXJFZ5lMxoFPAuxsdYPJnnSiW+BBlGcE+Lay6PEG1TwxaiZOy9cYZFOMLGKh+y5ixqSBSmmuxSNE3nfkHuDQ==
+Received: from GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:158:401::8d4) by DB9P195MB1292.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:10:293::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.22; Tue, 18 Nov
+ 2025 18:13:38 +0000
+Received: from GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+ ([fe80::dde:411d:b5f2:49]) by GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+ ([fe80::dde:411d:b5f2:49%8]) with mapi id 15.20.9320.018; Tue, 18 Nov 2025
+ 18:13:38 +0000
+Message-ID:
+ <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+Date: Tue, 18 Nov 2025 19:13:33 +0100
+User-Agent: Mozilla Thunderbird
+Subject: [PATCH v18] exec: Fix dead-lock in de_thread with ptrace_attach
+From: Bernd Edlinger <bernd.edlinger@hotmail.de>
+To: Alexander Viro <viro@zeniv.linux.org.uk>,
+ Alexey Dobriyan <adobriyan@gmail.com>, Oleg Nesterov <oleg@redhat.com>,
+ Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
+ Will Drewry <wad@chromium.org>, Christian Brauner <brauner@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Michal Hocko <mhocko@suse.com>,
+ Serge Hallyn <serge@hallyn.com>, James Morris
+ <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>,
+ Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>,
+ Helge Deller <deller@gmx.de>, "Eric W. Biederman" <ebiederm@xmission.com>,
+ Adrian Reber <areber@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Jens Axboe <axboe@kernel.dk>, Alexei Starovoitov <ast@kernel.org>,
+ "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-security-module@vger.kernel.org, tiozhang <tiozhang@didiglobal.com>,
+ Luis Chamberlain <mcgrof@kernel.org>,
+ "Paulo Alcantara (SUSE)" <pc@manguebit.com>,
+ Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Frederic Weisbecker <frederic@kernel.org>, YueHaibing
+ <yuehaibing@huawei.com>, Paul Moore <paul@paul-moore.com>,
+ Aleksa Sarai <cyphar@cyphar.com>, Stefan Roesch <shr@devkernel.io>,
+ Chao Yu <chao@kernel.org>, xu xin <xu.xin16@zte.com.cn>,
+ Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>,
+ David Hildenbrand <david@redhat.com>, Dave Chinner <dchinner@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Alexey Dobriyan <adobriyan@gmail.com>,
+ Jens Axboe <axboe@kernel.dk>, Paul Moore <paul@paul-moore.com>,
+ Elena Reshetova <elena.reshetova@intel.com>,
+ David Windsor <dwindsor@gmail.com>, Mateusz Guzik <mjguzik@gmail.com>,
+ YueHaibing <yuehaibing@huawei.com>, Ard Biesheuvel <ardb@kernel.org>,
+ "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Hans Liljestrand <ishkamiel@gmail.com>, tiozhang <tiozhang@didiglobal.com>,
+ Penglei Jiang <superman.xpt@gmail.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Adrian Ratiu <adrian.ratiu@collabora.com>, Ingo Molnar <mingo@kernel.org>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ Cyrill Gorcunov <gorcunov@gmail.com>, Eric Dumazet <edumazet@google.com>
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+Content-Language: en-US
+In-Reply-To: <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0112.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9d::14) To GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:158:401::8d4)
+X-Microsoft-Original-Message-ID:
+ <c569a48d-fece-441c-a588-d7d47a780da2@hotmail.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20251117-vsock-vmtest-v10-8-df08f165bf3e@meta.com>
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV2PPF74270EBEE:EE_|DB9P195MB1292:EE_
+X-MS-Office365-Filtering-Correlation-Id: 701f150e-5b8b-4e0f-311b-08de26ce31f9
+X-MS-Exchange-SLBlob-MailProps:
+	obhAqMD0nT/2z34ybd2aajjvmCSBGgf7d5pUJAmJuX8tzEqHeITZkmVpsG9hp05s2nCQWbL++NzOPgW8fOCGCbsrHFAgJIbgYWuLyWCibjscEBb5ak37rDE1iZusA8UcBeUDVu0gNyxDJeXAJsgjBo1/Mwlnk1MrfLgX76jOe+t0RXNXWqS4LG0edBPuz+eBB3iRrdebtD6sSt7bsxzM79ooz0stPh/nA/LyvJekpG8uy5X62cfrCY4AFdA0CU7Rb3Ufq/iT2hkbl42WpmefuUR6WXhgnd/Oc+fEywFPQMohD2u6MzxDn+xNxhKmauEHDs6ZioKYU7Ed7xKyCF6DH5RVz4esP5DFOcoGSb+OGoYxz9qujzWwjA9yoP9z2W8RdAK3Vnz0Hs+NW6A9B8GQp28/UNhpgEPWYJEQNXn66vwUB+2Ff1i2uISI4pUuPsZ1qvfYRJOS9Z5J2/sXyYW2a2z/o6P1ojMpd3OKgXlUB3hHVvAHaO4zeJma/GSjdUtfUzwsVkTomfS8PrQ+VkeKlOcNP45uoS7yVNL5RwfWgHU6emkknvnpGrXFTRRQbm7/b7QQLDBCSiakEe4ShdoBnB0XVGGcsqqTM0tQ887wJSOEHrOVBg9Ybd7rqSlDjCyKV5Q/qJarWIzZs7Ns9yKkJrZ1KL8Lwwp2QMyHGzToDCGvUJCeb6FPAItcvO0WbQdJI3ZBWfFGEhut7fBf61pxK1AjFn6wma1KRxqrx4KEEirUDXerYeMCv2dgLOWKGg6sHUc+zdFOnY2MXgTX4aC9e/npoL0/yDIDW/0DcvCgch8yWtHrGIGV0juuvW8S9J/J
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|461199028|23021999003|12121999013|15080799012|5072599009|6090799003|19110799012|41001999006|8060799015|51005399006|1602099012|40105399003|4302099013|3412199025|440099028|10035399007|12091999003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?VXc0R3NSeVhCL2NQeVY3ZG5tM1lZK0hRd3psR2xBenQ4T2FQVEFFM3VDcWJP?=
+ =?utf-8?B?eVpXUUhob3NLNDhKblJnRkM0b3dFUmluTi9FOTduc3VBdDhIWENRMWNoOUJQ?=
+ =?utf-8?B?a0ZxUGcxMDlwOEtEaUhmS3IyWlhkR0ExUWlEVEJaVHZxKzhGM2hLM1BaeUZm?=
+ =?utf-8?B?V2tZSXF0akZoUGV5VmFnUGVYZm9CQjkzVFQ0Y1lVRnlwL01GdjhKVklxZUcw?=
+ =?utf-8?B?OWsyT3ZIVU5WTVh4UGhSTFBvS3ZNWko4VXJIdVpDU2R0YU5PYnJWbmptUjcv?=
+ =?utf-8?B?OElFNVh6ZTBNdVNvcTBSSG5oWFA2bStEYUdWeXQxa2s0UTZTU09pTU41ZVFU?=
+ =?utf-8?B?K3cwZkNEOE9Sb1lSdHFLQXNiSjhhNjZhRm55MzljUFRPUTBOcVRMZXFWTGZ2?=
+ =?utf-8?B?ajNNUkY3OWd6cGpHd1Rsdjh6MHdLanBtR0dlMHJsbFUzRWs1em9hWnR5K0NK?=
+ =?utf-8?B?V05SL2hDTFZxdk5XYnJTM0FzTUtxUzR0c2JZSTNCTXk2ZmlJU2dWbFdEVG8r?=
+ =?utf-8?B?TW8wN3FFTzJGSHZ2c2VkWkFKK2xZNjZEZG5zVGdpSWhrMkY5NXZMVXoySGsz?=
+ =?utf-8?B?TU1DREJtektMMk9xai9BVEpYQmZYLzVYbFFKY3FHMGk3ZmtlZlArWFZmK2Zh?=
+ =?utf-8?B?d1VDcitTNW85S2tCM3BDMFN2cDY1THhaUHFDSnEveGVlRzI4cHJTWG5ZeVRV?=
+ =?utf-8?B?WTNGK211Z3BPbE9ZcGZOSHZuRmF2Z1lab1NybkRvUkNwRTk2TnRKeTBsMHp1?=
+ =?utf-8?B?MU5VSkJoM2k3ekE0YXI2YWFoQWJINmlYN2RPOGZ1NVBuSm8xT0VzdU55TjJM?=
+ =?utf-8?B?dlZFemVpUGhETW1XYU1kOWdRM3BEdWQxdHlxS2NZNzd1aE15dW9YOUNncFNC?=
+ =?utf-8?B?Y2pzT1lQN3RpUXRsVldIR1Bwd3Y4QmMvOFNZaDhhSDVHRXZOc0diOTltdWt3?=
+ =?utf-8?B?MFRZSEN2YW5ydFFBVGxwUDZsQXpPL2VBY3gvemJSeFBkS01BQ0RpdU5ycmR1?=
+ =?utf-8?B?eXhWckorcSs1cmpaWXJVWU5UZEdIQ2tnODB3U01LdU1ETUMwaXg2dkpXWVY1?=
+ =?utf-8?B?L0l3TXEwbjBpc2x0WFk1SThMaXZkcnQvVlFpbVRUQnNCdmdxVncxV2pJeW0r?=
+ =?utf-8?B?SjFpTkJ0Y1BzN0JSamZ5T0xBK3N1amQzaXp0WWhZM0VSOWlLejhPRlJpMC8v?=
+ =?utf-8?B?WFNveTlieGVzUEJTMFlvM3VGcFIwVXNZRU91dmUvNHU1UElBZ3Z3Sk9SYVMy?=
+ =?utf-8?B?ZVh2Q3BCQjZiQ2JZYklFWGNpVlpmOHFvajVpc0dpcGlPdzA4QldZd3FvVVZ4?=
+ =?utf-8?B?V1pQeXpWVW02bUlNUisvZjF0V2huNnF2aXJPbWE1ekhLOW5vTjFrZjNDeFcr?=
+ =?utf-8?B?SVNXeDhjb3VMUS9RdlE5ZFE4Z1BpTEgxbklSV0dYMWFUVXEvR1Y2TjF0ck43?=
+ =?utf-8?B?TWUzOUJMZjJxeVhiZjlidS96TTE2T2Z6czk1QnhLSSt5WWFma3F6YXZzNjVx?=
+ =?utf-8?B?dWxTVTEvRTlVUXN4ZzFxSklNZ2h4alFjRGpPRTZjd1ZMWENVV0ttRWs0T3Aw?=
+ =?utf-8?B?V2x1WHl5cUtRLzc3LzdlcHczVmFYRWZwODJDM2JxeWV1MzdEU3R3by9SdG8y?=
+ =?utf-8?B?OEdXWnRCOSs1QTk0SzROcHBldi93MzNrTFgzQmJuN0ZudDlRODUwNUpndVVv?=
+ =?utf-8?B?aGpzNlRCMnZXWFJ4dEkzejg4MVBsRm1xTXFLdEYzeFVDQ3BaS0dGSDlRQms4?=
+ =?utf-8?B?RS82eXRIYmJVYjU4UUdWWUtmdVZmSVpKRzJQcUY3aTd3TG9Za3htUlBRRnUw?=
+ =?utf-8?B?RUY4dTArb2NrTmNoazBzSHVRTFZGUUloZEJrNEcwVVdLdzVqMkRnKzlMMVhJ?=
+ =?utf-8?B?QlNrSzZpdDZKUUFnVzU5NVcxcThDd0hkcFRhVzlyaVdNaVNZNThYOU1rcnNT?=
+ =?utf-8?Q?eei2NHkAghjQrXN8c++Elb8knwIVXdti?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?bTYzZ1lwbVNCTTQ4U0h2OFNGQTNrTlI3cUpNM295UVRYcCt2enJoQ2VHYzk0?=
+ =?utf-8?B?UVhxdTh0TFhjVjJlTTE5em9qaHVES0pYSmcwY3YrSWVkZ0hhME1Xd2pxVGZt?=
+ =?utf-8?B?VmticEdQT2U3WnpPSDNSMFpZLzFHekJCUG5hcFVaZHJ0dnMxWlpiNFYzbUlm?=
+ =?utf-8?B?WEZxbXZkN1RjOXRZM2F5Yyt3d3VnZ01wclpwaVhXUWJJRitwOE94Rnd4TXVw?=
+ =?utf-8?B?K3gwOEFoOCtEUTV3ZmtoZmN3dytiejJOZjlZTUkyR09EVDU2cVkvOU0wdGVa?=
+ =?utf-8?B?aW5WOTdwZm5XbDdUWSs0Z2tyL3l5TmhUQ21wUzdIQ0ZNREdubWF6ZWc3NkZs?=
+ =?utf-8?B?eVNLMW5kbi9zYWFVMmErNEZHRmVxa0RGTmpKVjd2SG15UzhsS2gzZGwwdGps?=
+ =?utf-8?B?ZGlUbWVxREVHYlA0NUtFb3VRSTBjOFBqVEtlUVhRZlY4U1h6bW90VThLL1hE?=
+ =?utf-8?B?U0ZhRFI3bXdjcmZFNm95dk8xc0hhVjcrRzgrNm4vSlBjeUUyVWpMc291cEZx?=
+ =?utf-8?B?cFlvd3QyOTRzWW91N000a1VJd0oyQkZXVGNHb2NPaDdwNWcraEdCT21maElN?=
+ =?utf-8?B?U1FmK2lWMGpId3oxNTJmUW9jSXcrekgxMlBpWXpBK08xdEpFSDJxaEFYWTZx?=
+ =?utf-8?B?UnBJZXpxS1IrTStpd1AwWllWNTBJSm5YRDZuZEJERnUxcWRJS1luN1ZMWEV0?=
+ =?utf-8?B?N1AxTGEvMjdSRXBqSm11TEVpcXNuZ05pZ05vRlI4L3JWUHlxUEZqTDRWSnVS?=
+ =?utf-8?B?VHpFQ1MvRG5TbXEvZ0pQYmxEOVJ5NkcvRWF5YXRRc1d5cmJldDlYME53YzU3?=
+ =?utf-8?B?MitveTZST25lMWNPSDVzcnQvc3FhZ1N2SEhCY2ZUdGxocHRFdHA1WTZlL3cv?=
+ =?utf-8?B?eThEY21wcGxSQml5MHpqekN6aVFyKzBmeU1oTjVBWVVGNGFRcmlCOWhhNE02?=
+ =?utf-8?B?VUxHNU01SFpmeGlSb1RUQWtEbzhqOEZsREZLazBLbEhxZ20xUThubTBKeFVh?=
+ =?utf-8?B?NWVUVWl2eDVnZjg1QkhOa2U1RG5ONVBYWTB2bmxwUXVzeGRsL2xUTWZDNWhS?=
+ =?utf-8?B?VXBhTVlkTE5Bd3A4d215ZTBrMVNoblpNRXZYUUFGT1ZLY2R0SU1NT1dETnZX?=
+ =?utf-8?B?dElqd2xlOTRBRGxPSUtJT01HbDVpQVJnMENDeUplWHl2YlBSeWhaVHEwTlY1?=
+ =?utf-8?B?TURraGJ5VktJOUhwMk5GalBlMHorQ1RzbW5XbzI4WEVjSVhLd3pObHh2YXdY?=
+ =?utf-8?B?V3FCK3NqRC90RmNtVGROLyswejlpU1RGRGFyNWNWYVVhUEpRb3JZNENQdXVo?=
+ =?utf-8?B?bGRMTkRRU0xxbDZLMnFtMCtIZUNrQW5SQmdsQ3QxL3BXbnJTTXAzbnJ1d1V2?=
+ =?utf-8?B?SkxYelk3QUdId1hyeFE4cDNuVDB5TzFHT3pLWDR2K2E4REhrTTFHNjNiUmMy?=
+ =?utf-8?B?NkxvTm1hTmlEVlQ2eXdmMWJLdk5iOUVuMm96Vmk1bzdUM3RCTm56NndRMGY2?=
+ =?utf-8?B?R1NNSWU1K2tvcExKNCtPQTI2UTFJdk5aajJiNncxalRPc0hNbmd2VWg4eXVC?=
+ =?utf-8?B?b2FhYy9hSGJLRGgyZGYvRzBUb1NRR1F5eVhaZW5JazJVRU8xOHFnaUdJS0Y2?=
+ =?utf-8?B?RDhzaXlBVjY1T0tFaDFnNmFSOTR2bGYwYld3WFV6YnlMdzAxQ3Qyb2t6dkQ5?=
+ =?utf-8?B?S1lQaUFGVmxHQkxRZjVuUTlzQlcraWdUMW1IQjV5WnF1Ky9LakVzMlBBYk11?=
+ =?utf-8?Q?KdocWptILf5deuVJHC2CWTRd5zNov3NU9KOhX49?=
+X-OriginatorOrg: sct-15-20-8534-20-msonline-outlook-87dd8.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 701f150e-5b8b-4e0f-311b-08de26ce31f9
+X-MS-Exchange-CrossTenant-AuthSource: GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2025 18:13:38.0797
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P195MB1292
 
-On Mon, Nov 17, 2025 at 06:00:31PM -0800, Bobby Eshleman wrote:
->From: Bobby Eshleman <bobbyeshleman@meta.com>
->
->Add tests for the /proc/sys/net/vsock/ns_mode interface.  Namely,
->that it accepts "global" and "local" strings and enforces a write-once
->policy.
->
->Start a convention of commenting the test name over the test
->description. Add test name comments over test descriptions that existed
->before this convention.
->
->Add a check_netns() function that checks if the test requires namespaces
->and if the current kernel supports namespaces. Skip tests that require
->namespaces if the system does not have namespace support.
->
->Add a test to verify that guest VMs with an active G2H transport
->(virtio-vsock) cannot set namespace mode to 'local'. This validates
->the mutual exclusion between G2H transports and LOCAL mode.
->
->This patch is the first to add tests that do *not* re-use the same
->shared VM. For that reason, it adds a run_tests() function to run these
->tests and filter out the shared VM tests.
->
->Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->---
->Changes in v10:
->- Remove extraneous add_namespaces/del_namespaces calls.
->- Rename run_tests() to run_ns_tests() since it is designed to only
->  run ns tests.
->
->Changes in v9:
->- add test ns_vm_local_mode_rejected to check that guests cannot use
->  local mode
->---
-> tools/testing/selftests/vsock/vmtest.sh | 140 +++++++++++++++++++++++++++++++-
-> 1 file changed, 138 insertions(+), 2 deletions(-)
->
->diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
->index 1a7c810f282f..86483249f490 100755
->--- a/tools/testing/selftests/vsock/vmtest.sh
->+++ b/tools/testing/selftests/vsock/vmtest.sh
->@@ -41,14 +41,40 @@ readonly KERNEL_CMDLINE="\
-> 	virtme.ssh virtme_ssh_channel=tcp virtme_ssh_user=$USER \
-> "
-> readonly LOG=$(mktemp /tmp/vsock_vmtest_XXXX.log)
->-readonly TEST_NAMES=(vm_server_host_client vm_client_host_server vm_loopback)
->+readonly TEST_NAMES=(
->+	vm_server_host_client
->+	vm_client_host_server
->+	vm_loopback
->+	ns_host_vsock_ns_mode_ok
->+	ns_host_vsock_ns_mode_write_once_ok
->+	ns_vm_local_mode_rejected
->+)
-> readonly TEST_DESCS=(
->+	# vm_server_host_client
-> 	"Run vsock_test in server mode on the VM and in client mode on the host."
->+
->+	# vm_client_host_server
-> 	"Run vsock_test in client mode on the VM and in server mode on the host."
->+
->+	# vm_loopback
-> 	"Run vsock_test using the loopback transport in the VM."
->+
->+	# ns_host_vsock_ns_mode_ok
->+	"Check /proc/sys/net/vsock/ns_mode strings on the host."
->+
->+	# ns_host_vsock_ns_mode_write_once_ok
->+	"Check /proc/sys/net/vsock/ns_mode is write-once on the host."
->+
->+	# ns_vm_local_mode_rejected
->+	"Test that guest VM with G2H transport cannot set namespace mode to 'local'"
-> )
->
->-readonly USE_SHARED_VM=(vm_server_host_client vm_client_host_server vm_loopback)
->+readonly USE_SHARED_VM=(
->+	vm_server_host_client
->+	vm_client_host_server
->+	vm_loopback
->+	ns_vm_local_mode_rejected
->+)
-> readonly NS_MODES=("local" "global")
->
-> VERBOSE=0
->@@ -205,6 +231,20 @@ check_deps() {
-> 	fi
-> }
->
->+check_netns() {
->+	local tname=$1
->+
->+	# If the test requires NS support, check if NS support exists
->+	# using /proc/self/ns
->+	if [[ "${tname}" =~ ^ns_ ]] &&
+This introduces signal->exec_bprm, which is used to
+fix the case when at least one of the sibling threads
+is traced, and therefore the trace process may dead-lock
+in ptrace_attach, but de_thread will need to wait for the
+tracer to continue execution.
 
-If check_netns() is based on the test name, IMO we should document that 
-on top of TEST_NAMES.
+The problem happens when a tracer tries to ptrace_attach
+to a multi-threaded process, that does an execve in one of
+the threads at the same time, without doing that in a forked
+sub-process.  That means: There is a race condition, when one
+or more of the threads are already ptraced, but the thread
+that invoked the execve is not yet traced.  Now in this
+case the execve locks the cred_guard_mutex and waits for
+de_thread to complete.  But that waits for the traced
+sibling threads to exit, and those have to wait for the
+tracer to receive the exit signal, but the tracer cannot
+call wait right now, because it is waiting for the ptrace
+call to complete, and this never does not happen.
+The traced process and the tracer are now in a deadlock
+situation, and can only be killed by a fatal signal.
 
-Thanks,
-Stefano
+The solution is to detect this situation and allow
+ptrace_attach to continue by temporarily releasing the
+cred_guard_mutex, while de_thread() is still waiting for
+traced zombies to be eventually released by the tracer.
+In the case of the thread group leader we only have to wait
+for the thread to become a zombie, which may also need
+co-operation from the tracer due to PTRACE_O_TRACEEXIT.
 
->+	   [[ ! -e /proc/self/ns ]]; then
->+		log_host "No NS support detected for test ${tname}"
->+		return 1
->+	fi
->+
->+	return 0
->+}
->+
-> check_vng() {
-> 	local tested_versions
-> 	local version
->@@ -503,6 +543,32 @@ log_guest() {
-> 	LOG_PREFIX=guest log "$@"
-> }
->
->+test_ns_host_vsock_ns_mode_ok() {
->+	for mode in "${NS_MODES[@]}"; do
->+		if ! ns_set_mode "${mode}0" "${mode}"; then
->+			return "${KSFT_FAIL}"
->+		fi
->+	done
->+
->+	return "${KSFT_PASS}"
->+}
->+
->+test_ns_host_vsock_ns_mode_write_once_ok() {
->+	for mode in "${NS_MODES[@]}"; do
->+		local ns="${mode}0"
->+		if ! ns_set_mode "${ns}" "${mode}"; then
->+			return "${KSFT_FAIL}"
->+		fi
->+
->+		# try writing again and expect failure
->+		if ns_set_mode "${ns}" "${mode}"; then
->+			return "${KSFT_FAIL}"
->+		fi
->+	done
->+
->+	return "${KSFT_PASS}"
->+}
->+
-> test_vm_server_host_client() {
-> 	if ! vm_vsock_test "init_ns" "server" 2 "${TEST_GUEST_PORT}"; then
-> 		return "${KSFT_FAIL}"
->@@ -544,6 +610,26 @@ test_vm_loopback() {
-> 	return "${KSFT_PASS}"
-> }
->
->+test_ns_vm_local_mode_rejected() {
->+	# Guest VMs have a G2H transport (virtio-vsock) active, so they
->+	# should not be able to set namespace mode to 'local'.
->+	# This test verifies that the sysctl write fails as expected.
->+
->+	# Try to set local mode in the guest's init_ns
->+	if vm_ssh init_ns "echo local | tee /proc/sys/net/vsock/ns_mode &>/dev/null"; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	# Verify mode is still 'global'
->+	local mode
->+	mode=$(vm_ssh init_ns "cat /proc/sys/net/vsock/ns_mode")
->+	if [[ "${mode}" != "global" ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+}
->+
-> shared_vm_test() {
-> 	local tname
->
->@@ -576,6 +662,11 @@ run_shared_vm_tests() {
-> 			continue
-> 		fi
->
->+		if ! check_netns "${arg}"; then
->+			check_result "${KSFT_SKIP}" "${arg}"
->+			continue
->+		fi
->+
-> 		run_shared_vm_test "${arg}"
-> 		check_result "$?" "${arg}"
-> 	done
->@@ -629,6 +720,49 @@ run_shared_vm_test() {
-> 	return "${rc}"
-> }
->
->+run_ns_tests() {
->+	for arg in "${ARGS[@]}"; do
->+		if shared_vm_test "${arg}"; then
->+			continue
->+		fi
->+
->+		if ! check_netns "${arg}"; then
->+			check_result "${KSFT_SKIP}" "${arg}"
->+			continue
->+		fi
->+
->+		add_namespaces
->+
->+		name=$(echo "${arg}" | awk '{ print $1 }')
->+		log_host "Executing test_${name}"
->+
->+		host_oops_before=$(dmesg 2>/dev/null | grep -c -i 'Oops')
->+		host_warn_before=$(dmesg --level=warn 2>/dev/null | grep -c -i 'vsock')
->+		eval test_"${name}"
->+		rc=$?
->+
->+		host_oops_after=$(dmesg 2>/dev/null | grep -c -i 'Oops')
->+		if [[ "${host_oops_after}" -gt "${host_oops_before}" ]]; then
->+			echo "FAIL: kernel oops detected on host" | log_host
->+			check_result "${KSFT_FAIL}" "${name}"
->+			del_namespaces
->+			continue
->+		fi
->+
->+		host_warn_after=$(dmesg --level=warn 2>/dev/null | grep -c -i 'vsock')
->+		if [[ "${host_warn_after}" -gt "${host_warn_before}" ]]; then
->+			echo "FAIL: kernel warning detected on host" | log_host
->+			check_result "${KSFT_FAIL}" "${name}"
->+			del_namespaces
->+			continue
->+		fi
->+
->+		check_result "${rc}" "${name}"
->+
->+		del_namespaces
->+	done
->+}
->+
-> BUILD=0
-> QEMU="qemu-system-$(uname -m)"
->
->@@ -674,6 +808,8 @@ if shared_vm_tests_requested "${ARGS[@]}"; then
-> 	terminate_pidfiles "${pidfile}"
-> fi
->
->+run_ns_tests "${ARGS[@]}"
->+
-> echo "SUMMARY: PASS=${cnt_pass} SKIP=${cnt_skip} FAIL=${cnt_fail}"
-> echo "Log: ${LOG}"
->
->
->-- 
->2.47.3
->
+When a tracer wants to ptrace_attach a task that already
+is in execve, we simply retry the ptrace_may_access
+check with the new PTRACE_MODE_BPRMCREDS flag to check
+that the tracer has permission to trace the new credentials
+and dumpability which are about to be used after execve
+completes.  If the ptrace_attach happens on a thread that
+is a sibling-thread of the thread doing execve, it is
+sufficient to check against the old credentials, as this
+thread will be waited for, before the new credentials are
+installed.
+
+Other threads die quickly since the cred_guard_mutex is
+released, but a deadly signal is already pending.  In case
+the mutex_lock_killable misses the signal, the non-zero
+current->signal->exec_bprm makes sure they release the
+mutex immediately and return with -ERESTARTNOINTR.
+
+This means there is no API change, unlike the previous
+version of this patch which was discussed here:
+
+https://lore.kernel.org/lkml/b6537ae6-31b1-5c50-f32b-8b8332ace882@hotmail.de/
+
+See tools/testing/selftests/ptrace/vmaccess.c
+for a test case that gets fixed by this change.
+
+Note that since the test case was originally designed to
+test the ptrace_attach returning an error in this situation,
+the test expectation needed to be adjusted, to allow the
+API to succeed at the first attempt.
+
+Signed-off-by: Bernd Edlinger <bernd.edlinger@hotmail.de>
+---
+ fs/exec.c                                 |  86 +++++++++++---
+ fs/proc/base.c                            |  12 ++
+ include/linux/cred.h                      |   1 +
+ include/linux/ptrace.h                    |   1 +
+ include/linux/sched/signal.h              |  18 +++
+ kernel/cred.c                             |  30 ++++-
+ kernel/ptrace.c                           |  29 ++++-
+ kernel/seccomp.c                          |  18 ++-
+ security/apparmor/lsm.c                   |   5 +-
+ security/commoncap.c                      |   5 +-
+ security/landlock/task.c                  |   7 +-
+ security/selinux/hooks.c                  |   7 +-
+ security/smack/smack_lsm.c                |   5 +-
+ security/yama/yama_lsm.c                  |  11 +-
+ tools/testing/selftests/ptrace/vmaccess.c | 135 ++++++++++++++++++++--
+ 15 files changed, 324 insertions(+), 46 deletions(-)
+
+v10: Changes to previous version, make the PTRACE_ATTACH
+return -EAGAIN, instead of execve return -ERESTARTSYS.
+Added some lessions learned to the description.
+
+v11: Check old and new credentials in PTRACE_ATTACH again without
+changing the API.
+
+Note: I got actually one response from an automatic checker to the v11 patch,
+
+https://lore.kernel.org/lkml/202107121344.wu68hEPF-lkp@intel.com/
+
+which is complaining about:
+
+>> >> kernel/ptrace.c:425:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cred const *old_cred @@     got struct cred const [noderef] __rcu *real_cred @@
+
+   417			struct linux_binprm *bprm = task->signal->exec_bprm;
+   418			const struct cred *old_cred;
+   419			struct mm_struct *old_mm;
+   420	
+   421			retval = down_write_killable(&task->signal->exec_update_lock);
+   422			if (retval)
+   423				goto unlock_creds;
+   424			task_lock(task);
+ > 425			old_cred = task->real_cred;
+
+v12: Essentially identical to v11.
+
+- Fixed a minor merge conflict in linux v5.17, and fixed the
+above mentioned nit by adding __rcu to the declaration.
+
+- re-tested the patch with all linux versions from v5.11 to v6.6
+
+v10 was an alternative approach which did imply an API change.
+But I would prefer to avoid such an API change.
+
+The difficult part is getting the right dumpability flags assigned
+before de_thread starts, hope you like this version.
+If not, the v10 is of course also acceptable.
+
+v13: Fixed duplicated Return section in function header of
+is_dumpability_changed which was reported by the kernel test robot
+
+v14: rebased to v6.7, refreshed and retested.
+And added a more detailed description of the actual bug.
+
+v15: rebased to v6.8-rc1, addressed some review comments.
+Split the test case vmaccess into vmaccess1 and vmaccess2
+to improve overall test coverage.
+
+v16: rebased to 6.17-rc2, fixed some minor merge conflicts.
+
+v17: avoid use of task->in_execve in ptrace_attach.
+
+v18: Add some more comments, avoid the temporaty impersonation of the
+new credentials, and use instead a new option to ptrace_may_access.
+All security engines have to handle this option, but the advantage is
+that the engines could detect and maybe also deny the unsafe execve.
+
+
+Thanks
+Bernd.
+
+diff --git a/fs/exec.c b/fs/exec.c
+index 4298e7e08d5d..02f3e8469125 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -905,11 +905,13 @@ static int exec_mmap(struct mm_struct *mm)
+ 	return 0;
+ }
+ 
+-static int de_thread(struct task_struct *tsk)
++static int de_thread(struct task_struct *tsk, struct linux_binprm *bprm)
+ {
+ 	struct signal_struct *sig = tsk->signal;
+ 	struct sighand_struct *oldsighand = tsk->sighand;
+ 	spinlock_t *lock = &oldsighand->siglock;
++	struct task_struct *t;
++	bool unsafe_execve_in_progress = false;
+ 
+ 	if (thread_group_empty(tsk))
+ 		goto no_thread_group;
+@@ -932,6 +934,36 @@ static int de_thread(struct task_struct *tsk)
+ 	if (!thread_group_leader(tsk))
+ 		sig->notify_count--;
+ 
++	for_other_threads(tsk, t) {
++		if (unlikely(t->ptrace) &&
++		    (t != tsk->group_leader || !t->exit_state)) {
++			unsafe_execve_in_progress = true;
++			break;
++		}
++	}
++
++	if (unlikely(unsafe_execve_in_progress)) {
++		/*
++		 * Since the spin lock was acquired while holding the
++		 * mutex, both should be unlocked in reverse sequence and
++		 * the spin lock re-acquired after releasing the mutex.
++		 */
++		spin_unlock_irq(lock);
++		/*
++		 * Sibling threads are notified by the non-zero exec_bprm,
++		 * that they have just been zapped, and the cred_guard_mutex
++		 * is to be released by them immediately.
++		 * The caller of ptrace_attach on the other hand is allowed
++		 * to ptrace any additional sibling threads that may not yet
++		 * have ben ptraced, but if the group_exec_task is being
++		 * ptraced, an additional check has to be performed, that the
++		 * tracer is allowed to ptrace the new exec credentials.
++		 */
++		sig->exec_bprm = bprm;
++		mutex_unlock(&sig->cred_guard_mutex);
++		spin_lock_irq(lock);
++	}
++
+ 	while (sig->notify_count) {
+ 		__set_current_state(TASK_KILLABLE);
+ 		spin_unlock_irq(lock);
+@@ -1021,6 +1053,11 @@ static int de_thread(struct task_struct *tsk)
+ 		release_task(leader);
+ 	}
+ 
++	if (unlikely(unsafe_execve_in_progress)) {
++		mutex_lock(&sig->cred_guard_mutex);
++		sig->exec_bprm = NULL;
++	}
++
+ 	sig->group_exec_task = NULL;
+ 	sig->notify_count = 0;
+ 
+@@ -1032,6 +1069,11 @@ static int de_thread(struct task_struct *tsk)
+ 	return 0;
+ 
+ killed:
++	if (unlikely(unsafe_execve_in_progress)) {
++		mutex_lock(&sig->cred_guard_mutex);
++		sig->exec_bprm = NULL;
++	}
++
+ 	/* protects against exit_notify() and __exit_signal() */
+ 	read_lock(&tasklist_lock);
+ 	sig->group_exec_task = NULL;
+@@ -1114,13 +1156,31 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	 */
+ 	trace_sched_prepare_exec(current, bprm);
+ 
++	/* If the binary is not readable then enforce mm->dumpable=0 */
++	would_dump(bprm, bprm->file);
++	if (bprm->have_execfd)
++		would_dump(bprm, bprm->executable);
++
++	/*
++	 * Figure out dumpability. Note that this checking only of current
++	 * is wrong, but userspace depends on it. This should be testing
++	 * bprm->secureexec instead.
++	 */
++	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
++	    is_dumpability_changed(current_cred(), bprm->cred) ||
++	    !(uid_eq(current_euid(), current_uid()) &&
++	      gid_eq(current_egid(), current_gid())))
++		set_dumpable(bprm->mm, suid_dumpable);
++	else
++		set_dumpable(bprm->mm, SUID_DUMP_USER);
++
+ 	/*
+ 	 * Ensure all future errors are fatal.
+ 	 */
+ 	bprm->point_of_no_return = true;
+ 
+ 	/* Make this the only thread in the thread group */
+-	retval = de_thread(me);
++	retval = de_thread(me, bprm);
+ 	if (retval)
+ 		goto out;
+ 	/* see the comment in check_unsafe_exec() */
+@@ -1144,11 +1204,6 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	if (retval)
+ 		goto out;
+ 
+-	/* If the binary is not readable then enforce mm->dumpable=0 */
+-	would_dump(bprm, bprm->file);
+-	if (bprm->have_execfd)
+-		would_dump(bprm, bprm->executable);
+-
+ 	/*
+ 	 * Release all of the old mmap stuff
+ 	 */
+@@ -1210,18 +1265,6 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 
+ 	me->sas_ss_sp = me->sas_ss_size = 0;
+ 
+-	/*
+-	 * Figure out dumpability. Note that this checking only of current
+-	 * is wrong, but userspace depends on it. This should be testing
+-	 * bprm->secureexec instead.
+-	 */
+-	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
+-	    !(uid_eq(current_euid(), current_uid()) &&
+-	      gid_eq(current_egid(), current_gid())))
+-		set_dumpable(current->mm, suid_dumpable);
+-	else
+-		set_dumpable(current->mm, SUID_DUMP_USER);
+-
+ 	perf_event_exec();
+ 
+ 	/*
+@@ -1275,6 +1318,10 @@ int begin_new_exec(struct linux_binprm * bprm)
+ 	 * cred_guard_mutex must be held at least to this point to prevent
+ 	 * ptrace_attach() from altering our determination of the task's
+ 	 * credentials; any time after this it may be unlocked.
++	 * Note that de_thread may temporarily release the cred_guard_mutex,
++	 * but the credentials are pre-determined in that case and the ptrace
++	 * access check guarantees, that the access permissions of the tracer
++	 * are sufficient to trace the task also with the new credentials.
+ 	 */
+ 	security_bprm_committed_creds(bprm);
+ 
+@@ -1361,6 +1408,7 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
+ 	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
+ 		return -ERESTARTNOINTR;
+ 
++	/* It is not necessary to check current->signal->exec_bprm here. */
+ 	bprm->cred = prepare_exec_creds();
+ 	if (likely(bprm->cred))
+ 		return 0;
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 6299878e3d97..f554c2638ffb 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -2838,6 +2838,18 @@ static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
+ 	if (rv < 0)
+ 		goto out_free;
+ 
++	/*
++	 * A fatal signal is guaranteed to be already pending in the
++	 * unlikely event, that current->signal->exec_bprm happens
++	 * to be non-zero here, so just release the mutex again
++	 * and continue as if mutex_lock_interruptible did fail.
++	 */
++	if (unlikely(current->signal->exec_bprm)) {
++		mutex_unlock(&current->signal->cred_guard_mutex);
++		rv = -ERESTARTNOINTR;
++		goto out_free;
++	}
++
+ 	rv = security_setprocattr(PROC_I(inode)->op.lsmid,
+ 				  file->f_path.dentry->d_name.name, page,
+ 				  count);
+diff --git a/include/linux/cred.h b/include/linux/cred.h
+index 89ae50ad2ace..4204c19de714 100644
+--- a/include/linux/cred.h
++++ b/include/linux/cred.h
+@@ -153,6 +153,7 @@ extern const struct cred *get_task_cred(struct task_struct *);
+ extern struct cred *cred_alloc_blank(void);
+ extern struct cred *prepare_creds(void);
+ extern struct cred *prepare_exec_creds(void);
++extern bool is_dumpability_changed(const struct cred *, const struct cred *);
+ extern int commit_creds(struct cred *);
+ extern void abort_creds(struct cred *);
+ extern struct cred *prepare_kernel_cred(struct task_struct *);
+diff --git a/include/linux/ptrace.h b/include/linux/ptrace.h
+index 90507d4afcd6..dbd58a4807bc 100644
+--- a/include/linux/ptrace.h
++++ b/include/linux/ptrace.h
+@@ -64,6 +64,7 @@ extern void exit_ptrace(struct task_struct *tracer, struct list_head *dead);
+ #define PTRACE_MODE_NOAUDIT	0x04
+ #define PTRACE_MODE_FSCREDS	0x08
+ #define PTRACE_MODE_REALCREDS	0x10
++#define PTRACE_MODE_BPRMCREDS	0x20
+ 
+ /* shorthands for READ/ATTACH and FSCREDS/REALCREDS combinations */
+ #define PTRACE_MODE_READ_FSCREDS (PTRACE_MODE_READ | PTRACE_MODE_FSCREDS)
+diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
+index 7d6449982822..ade7d7173875 100644
+--- a/include/linux/sched/signal.h
++++ b/include/linux/sched/signal.h
+@@ -241,9 +241,27 @@ struct signal_struct {
+ 	struct mm_struct *oom_mm;	/* recorded mm when the thread group got
+ 					 * killed by the oom killer */
+ 
++	struct linux_binprm *exec_bprm;	/* Used to check ptrace_may_access
++					 * against new credentials while
++					 * de_thread is waiting for other
++					 * traced threads to terminate.
++					 * Set while de_thread is executing.
++					 * The cred_guard_mutex is released
++					 * after de_thread() has called
++					 * zap_other_threads(), therefore
++					 * a fatal signal is guaranteed to be
++					 * already pending in the unlikely
++					 * event, that
++					 * current->signal->exec_bprm happens
++					 * to be non-zero after the
++					 * cred_guard_mutex was acquired.
++					 */
++
+ 	struct mutex cred_guard_mutex;	/* guard against foreign influences on
+ 					 * credential calculations
+ 					 * (notably. ptrace)
++					 * Held while execve runs, except when
++					 * a sibling thread is being traced.
+ 					 * Deprecated do not use in new code.
+ 					 * Use exec_update_lock instead.
+ 					 */
+diff --git a/kernel/cred.c b/kernel/cred.c
+index dbf6b687dc5c..69fd0de813c0 100644
+--- a/kernel/cred.c
++++ b/kernel/cred.c
+@@ -375,6 +375,30 @@ static bool cred_cap_issubset(const struct cred *set, const struct cred *subset)
+ 	return false;
+ }
+ 
++/**
++ * is_dumpability_changed - Will changing creds affect dumpability?
++ * @old: The old credentials.
++ * @new: The new credentials.
++ *
++ * If the @new credentials have no elevated privileges compared to the
++ * @old credentials, the task may remain dumpable.  Otherwise we have
++ * to mark the task as undumpable to avoid information leaks from higher
++ * to lower privilege domains.
++ *
++ * Return: True if the task will become undumpable.
++ */
++bool is_dumpability_changed(const struct cred *old, const struct cred *new)
++{
++	if (!uid_eq(old->euid, new->euid) ||
++	    !gid_eq(old->egid, new->egid) ||
++	    !uid_eq(old->fsuid, new->fsuid) ||
++	    !gid_eq(old->fsgid, new->fsgid) ||
++	    !cred_cap_issubset(old, new))
++		return true;
++
++	return false;
++}
++
+ /**
+  * commit_creds - Install new credentials upon the current task
+  * @new: The credentials to be assigned
+@@ -403,11 +427,7 @@ int commit_creds(struct cred *new)
+ 	get_cred(new); /* we will require a ref for the subj creds too */
+ 
+ 	/* dumpability changes */
+-	if (!uid_eq(old->euid, new->euid) ||
+-	    !gid_eq(old->egid, new->egid) ||
+-	    !uid_eq(old->fsuid, new->fsuid) ||
+-	    !gid_eq(old->fsgid, new->fsgid) ||
+-	    !cred_cap_issubset(old, new)) {
++	if (is_dumpability_changed(old, new)) {
+ 		if (task->mm)
+ 			set_dumpable(task->mm, suid_dumpable);
+ 		task->pdeath_signal = 0;
+diff --git a/kernel/ptrace.c b/kernel/ptrace.c
+index 75a84efad40f..ac750d1ccd04 100644
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -20,6 +20,7 @@
+ #include <linux/pagemap.h>
+ #include <linux/ptrace.h>
+ #include <linux/security.h>
++#include <linux/binfmts.h>
+ #include <linux/signal.h>
+ #include <linux/uio.h>
+ #include <linux/audit.h>
+@@ -285,6 +286,11 @@ static int __ptrace_may_access(struct task_struct *task, unsigned int mode)
+ 		return -EPERM;
+ 	}
+ 
++	if ((mode & PTRACE_MODE_BPRMCREDS) && !task->signal->exec_bprm) {
++		WARN(1, "denying ptrace access check with PTRACE_MODE_BPRMCREDS\n");
++		return -EPERM;
++	}
++
+ 	/* May we inspect the given task?
+ 	 * This check is used both for attaching with ptrace
+ 	 * and for allowing access to sensitive information in /proc.
+@@ -313,7 +319,10 @@ static int __ptrace_may_access(struct task_struct *task, unsigned int mode)
+ 		caller_uid = cred->uid;
+ 		caller_gid = cred->gid;
+ 	}
+-	tcred = __task_cred(task);
++	if (mode & PTRACE_MODE_BPRMCREDS)
++		tcred = task->signal->exec_bprm->cred;
++	else
++		tcred = __task_cred(task);
+ 	if (uid_eq(caller_uid, tcred->euid) &&
+ 	    uid_eq(caller_uid, tcred->suid) &&
+ 	    uid_eq(caller_uid, tcred->uid)  &&
+@@ -337,7 +346,10 @@ static int __ptrace_may_access(struct task_struct *task, unsigned int mode)
+ 	 * Pairs with a write barrier in commit_creds().
+ 	 */
+ 	smp_rmb();
+-	mm = task->mm;
++	if (mode & PTRACE_MODE_BPRMCREDS)
++		mm = task->signal->exec_bprm->mm;
++	else
++		mm = task->mm;
+ 	if (mm &&
+ 	    ((get_dumpable(mm) != SUID_DUMP_USER) &&
+ 	     !ptrace_has_cap(mm->user_ns, mode)))
+@@ -451,6 +463,14 @@ static int ptrace_attach(struct task_struct *task, long request,
+ 			retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
+ 			if (retval)
+ 				return retval;
++
++			if (unlikely(task == task->signal->group_exec_task)) {
++				retval = __ptrace_may_access(task,
++							     PTRACE_MODE_ATTACH_REALCREDS |
++							     PTRACE_MODE_BPRMCREDS);
++				if (retval)
++					return retval;
++			}
+ 		}
+ 
+ 		scoped_guard (write_lock_irq, &tasklist_lock) {
+@@ -488,6 +508,10 @@ static int ptrace_traceme(void)
+ {
+ 	int ret = -EPERM;
+ 
++	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
++		return -ERESTARTNOINTR;
++
++	/* It is not necessary to check current->signal->exec_bprm here. */
+ 	write_lock_irq(&tasklist_lock);
+ 	/* Are we already being traced? */
+ 	if (!current->ptrace) {
+@@ -503,6 +527,7 @@ static int ptrace_traceme(void)
+ 		}
+ 	}
+ 	write_unlock_irq(&tasklist_lock);
++	mutex_unlock(&current->signal->cred_guard_mutex);
+ 
+ 	return ret;
+ }
+diff --git a/kernel/seccomp.c b/kernel/seccomp.c
+index 25f62867a16d..6e4ff108faa0 100644
+--- a/kernel/seccomp.c
++++ b/kernel/seccomp.c
+@@ -2010,9 +2010,21 @@ static long seccomp_set_mode_filter(unsigned int flags,
+ 	 * Make sure we cannot change seccomp or nnp state via TSYNC
+ 	 * while another thread is in the middle of calling exec.
+ 	 */
+-	if (flags & SECCOMP_FILTER_FLAG_TSYNC &&
+-	    mutex_lock_killable(&current->signal->cred_guard_mutex))
+-		goto out_put_fd;
++	if (flags & SECCOMP_FILTER_FLAG_TSYNC) {
++		if (mutex_lock_killable(&current->signal->cred_guard_mutex))
++			goto out_put_fd;
++
++		/*
++		 * A fatal signal is guaranteed to be already pending in the
++		 * unlikely event, that current->signal->exec_bprm happens
++		 * to be non-zero here, so just release the mutex again
++		 * and continue as if mutex_lock_killable did fail.
++		 */
++		if (unlikely(current->signal->exec_bprm)) {
++			mutex_unlock(&current->signal->cred_guard_mutex);
++			goto out_put_fd;
++		}
++	}
+ 
+ 	spin_lock_irq(&current->sighand->siglock);
+ 
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index b3f7a3258a2c..80c2cd968f05 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -129,7 +129,10 @@ static int apparmor_ptrace_access_check(struct task_struct *child,
+ 	int error;
+ 	bool needput;
+ 
+-	cred = get_task_cred(child);
++	if (mode & PTRACE_MODE_BPRMCREDS)
++		cred = get_cred(child->signal->exec_bprm->cred);
++	else
++		cred = get_task_cred(child);
+ 	tracee = cred_label(cred);	/* ref count on cred */
+ 	tracer = __begin_current_label_crit_section(&needput);
+ 	error = aa_may_ptrace(current_cred(), tracer, cred, tracee,
+diff --git a/security/commoncap.c b/security/commoncap.c
+index 6bd4adeb4795..e23a78a4514c 100644
+--- a/security/commoncap.c
++++ b/security/commoncap.c
+@@ -169,7 +169,10 @@ int cap_ptrace_access_check(struct task_struct *child, unsigned int mode)
+ 
+ 	rcu_read_lock();
+ 	cred = current_cred();
+-	child_cred = __task_cred(child);
++	if (mode & PTRACE_MODE_BPRMCREDS)
++		child_cred = child->signal->exec_bprm->cred;
++	else
++		child_cred = __task_cred(child);
+ 	if (mode & PTRACE_MODE_FSCREDS)
+ 		caller_caps = &cred->cap_effective;
+ 	else
+diff --git a/security/landlock/task.c b/security/landlock/task.c
+index 2385017418ca..46ce9b6e4728 100644
+--- a/security/landlock/task.c
++++ b/security/landlock/task.c
+@@ -17,6 +17,7 @@
+ #include <linux/rcupdate.h>
+ #include <linux/sched.h>
+ #include <linux/sched/signal.h>
++#include <linux/binfmts.h>
+ #include <net/af_unix.h>
+ #include <net/sock.h>
+ 
+@@ -96,7 +97,11 @@ static int hook_ptrace_access_check(struct task_struct *const child,
+ 
+ 	scoped_guard(rcu)
+ 	{
+-		child_dom = landlock_get_task_domain(child);
++		if (mode & PTRACE_MODE_BPRMCREDS)
++			child_dom = landlock_cred(child->signal->
++						  exec_bprm->cred)->domain;
++		else
++			child_dom = landlock_get_task_domain(child);
+ 		err = domain_ptrace(parent_subject->domain, child_dom);
+ 	}
+ 
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index dfc22da42f30..016e21180e96 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -2111,7 +2111,12 @@ static int selinux_ptrace_access_check(struct task_struct *child,
+ 				       unsigned int mode)
+ {
+ 	u32 sid = current_sid();
+-	u32 csid = task_sid_obj(child);
++	u32 csid;
++
++	if (mode & PTRACE_MODE_BPRMCREDS)
++		csid = cred_sid(child->signal->exec_bprm->cred);
++	else
++		csid = task_sid_obj(child);
+ 
+ 	if (mode & PTRACE_MODE_READ)
+ 		return avc_has_perm(sid, csid, SECCLASS_FILE, FILE__READ,
+diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+index af986587841d..5c2ca49baa05 100644
+--- a/security/smack/smack_lsm.c
++++ b/security/smack/smack_lsm.c
+@@ -476,7 +476,10 @@ static int smack_ptrace_access_check(struct task_struct *ctp, unsigned int mode)
+ {
+ 	struct smack_known *skp;
+ 
+-	skp = smk_of_task_struct_obj(ctp);
++	if (mode & PTRACE_MODE_BPRMCREDS)
++		skp = smk_of_task(smack_cred(ctp->signal->exec_bprm->cred));
++	else
++		skp = smk_of_task_struct_obj(ctp);
+ 
+ 	return smk_ptrace_rule_check(current, skp, mode, __func__);
+ }
+diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
+index 3d064dd4e03f..8ac9ce41d4f0 100644
+--- a/security/yama/yama_lsm.c
++++ b/security/yama/yama_lsm.c
+@@ -11,6 +11,7 @@
+ #include <linux/lsm_hooks.h>
+ #include <linux/sysctl.h>
+ #include <linux/ptrace.h>
++#include <linux/binfmts.h>
+ #include <linux/prctl.h>
+ #include <linux/ratelimit.h>
+ #include <linux/workqueue.h>
+@@ -363,13 +364,19 @@ static int yama_ptrace_access_check(struct task_struct *child,
+ 				rc = -EPERM;
+ 			if (!rc && !task_is_descendant(current, child) &&
+ 			    !ptracer_exception_found(current, child) &&
+-			    !ns_capable(__task_cred(child)->user_ns, CAP_SYS_PTRACE))
++			    !ns_capable(mode & PTRACE_MODE_BPRMCREDS ?
++					child->signal->exec_bprm->cred->user_ns :
++					__task_cred(child)->user_ns,
++					CAP_SYS_PTRACE))
+ 				rc = -EPERM;
+ 			rcu_read_unlock();
+ 			break;
+ 		case YAMA_SCOPE_CAPABILITY:
+ 			rcu_read_lock();
+-			if (!ns_capable(__task_cred(child)->user_ns, CAP_SYS_PTRACE))
++			if (!ns_capable(mode & PTRACE_MODE_BPRMCREDS ?
++					child->signal->exec_bprm->cred->user_ns :
++					__task_cred(child)->user_ns,
++					CAP_SYS_PTRACE))
+ 				rc = -EPERM;
+ 			rcu_read_unlock();
+ 			break;
+diff --git a/tools/testing/selftests/ptrace/vmaccess.c b/tools/testing/selftests/ptrace/vmaccess.c
+index 4db327b44586..5d4a65eb5a8d 100644
+--- a/tools/testing/selftests/ptrace/vmaccess.c
++++ b/tools/testing/selftests/ptrace/vmaccess.c
+@@ -14,6 +14,7 @@
+ #include <signal.h>
+ #include <unistd.h>
+ #include <sys/ptrace.h>
++#include <sys/syscall.h>
+ 
+ static void *thread(void *arg)
+ {
+@@ -23,7 +24,7 @@ static void *thread(void *arg)
+ 
+ TEST(vmaccess)
+ {
+-	int f, pid = fork();
++	int s, f, pid = fork();
+ 	char mm[64];
+ 
+ 	if (!pid) {
+@@ -31,19 +32,42 @@ TEST(vmaccess)
+ 
+ 		pthread_create(&pt, NULL, thread, NULL);
+ 		pthread_join(pt, NULL);
+-		execlp("true", "true", NULL);
++		execlp("false", "false", NULL);
++		return;
+ 	}
+ 
+ 	sleep(1);
+ 	sprintf(mm, "/proc/%d/mem", pid);
++	/* deadlock did happen here */
+ 	f = open(mm, O_RDONLY);
+ 	ASSERT_GE(f, 0);
+ 	close(f);
+-	f = kill(pid, SIGCONT);
+-	ASSERT_EQ(f, 0);
++	f = waitpid(-1, &s, WNOHANG);
++	ASSERT_NE(f, -1);
++	ASSERT_NE(f, 0);
++	ASSERT_NE(f, pid);
++	ASSERT_EQ(WIFEXITED(s), 1);
++	ASSERT_EQ(WEXITSTATUS(s), 0);
++	f = waitpid(-1, &s, 0);
++	ASSERT_EQ(f, pid);
++	ASSERT_EQ(WIFEXITED(s), 1);
++	ASSERT_EQ(WEXITSTATUS(s), 1);
++	f = waitpid(-1, NULL, 0);
++	ASSERT_EQ(f, -1);
++	ASSERT_EQ(errno, ECHILD);
+ }
+ 
+-TEST(attach)
++/*
++ * Same test as previous, except that
++ * we try to ptrace the group leader,
++ * which is about to call execve,
++ * when the other thread is already ptraced.
++ * This exercises the code in de_thread
++ * where it is waiting inside the
++ * while (sig->notify_count) {
++ * loop.
++ */
++TEST(attach1)
+ {
+ 	int s, k, pid = fork();
+ 
+@@ -52,19 +76,76 @@ TEST(attach)
+ 
+ 		pthread_create(&pt, NULL, thread, NULL);
+ 		pthread_join(pt, NULL);
+-		execlp("sleep", "sleep", "2", NULL);
++		execlp("false", "false", NULL);
++		return;
+ 	}
+ 
+ 	sleep(1);
++	/* deadlock may happen here */
+ 	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
+-	ASSERT_EQ(errno, EAGAIN);
+-	ASSERT_EQ(k, -1);
++	ASSERT_EQ(k, 0);
+ 	k = waitpid(-1, &s, WNOHANG);
+ 	ASSERT_NE(k, -1);
+ 	ASSERT_NE(k, 0);
+ 	ASSERT_NE(k, pid);
+ 	ASSERT_EQ(WIFEXITED(s), 1);
+ 	ASSERT_EQ(WEXITSTATUS(s), 0);
++	k = waitpid(-1, &s, 0);
++	ASSERT_EQ(k, pid);
++	ASSERT_EQ(WIFSTOPPED(s), 1);
++	ASSERT_EQ(WSTOPSIG(s), SIGTRAP);
++	k = waitpid(-1, &s, WNOHANG);
++	ASSERT_EQ(k, 0);
++	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
++	ASSERT_EQ(k, 0);
++	k = waitpid(-1, &s, 0);
++	ASSERT_EQ(k, pid);
++	ASSERT_EQ(WIFSTOPPED(s), 1);
++	ASSERT_EQ(WSTOPSIG(s), SIGSTOP);
++	k = waitpid(-1, &s, WNOHANG);
++	ASSERT_EQ(k, 0);
++	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
++	ASSERT_EQ(k, 0);
++	k = waitpid(-1, &s, 0);
++	ASSERT_EQ(k, pid);
++	ASSERT_EQ(WIFEXITED(s), 1);
++	ASSERT_EQ(WEXITSTATUS(s), 1);
++	k = waitpid(-1, NULL, 0);
++	ASSERT_EQ(k, -1);
++	ASSERT_EQ(errno, ECHILD);
++}
++
++/*
++ * Same test as previous, except that
++ * the group leader is ptraced first,
++ * but this time with PTRACE_O_TRACEEXIT,
++ * and the thread that does execve is
++ * not yet ptraced.  This exercises the
++ * code block in de_thread where the
++ * if (!thread_group_leader(tsk)) {
++ * is executed and enters a wait state.
++ */
++static long thread2_tid;
++static void *thread2(void *arg)
++{
++	thread2_tid = syscall(__NR_gettid);
++	sleep(2);
++	execlp("false", "false", NULL);
++	return NULL;
++}
++
++TEST(attach2)
++{
++	int s, k, pid = fork();
++
++	if (!pid) {
++		pthread_t pt;
++
++		pthread_create(&pt, NULL, thread2, NULL);
++		pthread_join(pt, NULL);
++		return;
++	}
++
+ 	sleep(1);
+ 	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
+ 	ASSERT_EQ(k, 0);
+@@ -72,12 +153,46 @@ TEST(attach)
+ 	ASSERT_EQ(k, pid);
+ 	ASSERT_EQ(WIFSTOPPED(s), 1);
+ 	ASSERT_EQ(WSTOPSIG(s), SIGSTOP);
+-	k = ptrace(PTRACE_DETACH, pid, 0L, 0L);
++	k = ptrace(PTRACE_SETOPTIONS, pid, 0L, PTRACE_O_TRACEEXIT);
++	ASSERT_EQ(k, 0);
++	thread2_tid = ptrace(PTRACE_PEEKDATA, pid, &thread2_tid, 0L);
++	ASSERT_NE(thread2_tid, -1);
++	ASSERT_NE(thread2_tid, 0);
++	ASSERT_NE(thread2_tid, pid);
++	k = waitpid(-1, &s, WNOHANG);
++	ASSERT_EQ(k, 0);
++	sleep(2);
++	/* deadlock may happen here */
++	k = ptrace(PTRACE_ATTACH, thread2_tid, 0L, 0L);
++	ASSERT_EQ(k, 0);
++	k = waitpid(-1, &s, WNOHANG);
++	ASSERT_EQ(k, pid);
++	ASSERT_EQ(WIFSTOPPED(s), 1);
++	ASSERT_EQ(WSTOPSIG(s), SIGTRAP);
++	k = waitpid(-1, &s, WNOHANG);
++	ASSERT_EQ(k, 0);
++	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
++	ASSERT_EQ(k, 0);
++	k = waitpid(-1, &s, 0);
++	ASSERT_EQ(k, pid);
++	ASSERT_EQ(WIFSTOPPED(s), 1);
++	ASSERT_EQ(WSTOPSIG(s), SIGTRAP);
++	k = waitpid(-1, &s, WNOHANG);
++	ASSERT_EQ(k, 0);
++	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
++	ASSERT_EQ(k, 0);
++	k = waitpid(-1, &s, 0);
++	ASSERT_EQ(k, pid);
++	ASSERT_EQ(WIFSTOPPED(s), 1);
++	ASSERT_EQ(WSTOPSIG(s), SIGSTOP);
++	k = waitpid(-1, &s, WNOHANG);
++	ASSERT_EQ(k, 0);
++	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
+ 	ASSERT_EQ(k, 0);
+ 	k = waitpid(-1, &s, 0);
+ 	ASSERT_EQ(k, pid);
+ 	ASSERT_EQ(WIFEXITED(s), 1);
+-	ASSERT_EQ(WEXITSTATUS(s), 0);
++	ASSERT_EQ(WEXITSTATUS(s), 1);
+ 	k = waitpid(-1, NULL, 0);
+ 	ASSERT_EQ(k, -1);
+ 	ASSERT_EQ(errno, ECHILD);
+-- 
+2.39.5
 
 
