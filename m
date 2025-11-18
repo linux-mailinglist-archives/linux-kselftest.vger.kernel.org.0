@@ -1,182 +1,160 @@
-Return-Path: <linux-kselftest+bounces-45917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45918-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 799D9C6BBC4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 22:40:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52013C6BC40
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 22:51:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5DAFB4E3896
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 21:40:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 135992BB09
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 21:51:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DAFC2FD1B2;
-	Tue, 18 Nov 2025 21:40:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A102E2F7AA3;
+	Tue, 18 Nov 2025 21:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GPRBc4ke";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FkX29SSL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bd+KZCft"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59022FDC41;
-	Tue, 18 Nov 2025 21:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776CC3702EE;
+	Tue, 18 Nov 2025 21:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763502037; cv=none; b=eN63qBbVnbSQDG9S4UgfS5Z9NTKegioeOtBpP4sEcRdaq+lIvcgT6hfy+r3vN7UxZTy5Pvrm1+08Fvwm0FW0O+HEj8Bs0N+rALzPRd7H7d1gZPrrBoF7FiLog7GdyFAHzOO8oVZWliHaLfMy3j7nhkDz3Qi9mE4CEnMZdAoHRkw=
+	t=1763502714; cv=none; b=jrixiJDRHJZfsgf1gkMwIwUx6ZOLQ24ZYy6IT1ADNr9ElM3+zle9ECkx1B6xiQO70ORde1WGRfGb6aBoBAnhNjacbnhizQvY69zXmagvLlmkmFB+3ngbC6rXc5dvpeK9102U7Sefl7GUjxSualQT0czPxbRk1dLvjqghDQCCmwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763502037; c=relaxed/simple;
-	bh=Vl3cdKjP26sMoMzS6fUYMm1UdiluXvV3MNOD7fYc2FU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=DPX5MmIW2GluTDTzQrehMaqUevGseS7kfZkxSdCfH76bjgS9U7plizgWnL4VG++1wf8IyFzG2EDwyidckHGCgamd54x7O6izsks6AJbqIbI1dWmHo1abI/0Py4U/1Kgu2ZGiZXltix/IBilM9FwWkHal1lLAd3M6Yn0O0w7xLvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GPRBc4ke; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FkX29SSL; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id C3D80EC01A8;
-	Tue, 18 Nov 2025 16:40:33 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Tue, 18 Nov 2025 16:40:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1763502033;
-	 x=1763588433; bh=kbWVlQZCtoMvrcuM7kpobytPmvOeBhZuuYLfB26eALI=; b=
-	GPRBc4ke2uHnPpS7APu7bEsmFUfnQMHeGovzRNI22Ehy+UaJT/6ImyzDctIqJZrR
-	9t/FdYeZlXiMav40JD3jHMEeFwzFLSnfe6ucxgMRrkInWSqL6G5WAfSp9XSyYloE
-	KAk0ifWlSbJ2LswKR6/NL/iOJfK2vU0upvfaEzdGuIb4YcO/bkp7AYJS/e5Eqxq8
-	CfxfiWcyeIlXoAqoLAyFlnj6QGgKcj6WCfwrXlyocHSopDx1k70LrxKZVQtbcKII
-	j4CJ1kQf/B62IPScQmksYZ0o+zhalNzI33qrDtPFhA154TpdpeOPBi8O5WM0TWdU
-	ruQ3ly5o7pUmGqVWk96LXw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1763502033; x=
-	1763588433; bh=kbWVlQZCtoMvrcuM7kpobytPmvOeBhZuuYLfB26eALI=; b=F
-	kX29SSLnPaRJ6uKGTDnMH8fwqAVLYo1679aM4pHRbv+fGuWtttf69fdcKHbeh9K/
-	9c4ppJOA+Yxz16NJdFnLiRIlhKVVJJ2puupHwu63sBWTi88axeeVrv/L36NJcu82
-	NDyNkEUvLp/Qm+Kffm0MQ+Q204YYj4gnXqPRlqNdkYPLnIP3BnUos8T6EDXTz+cl
-	Gq87tZZaktP3idW/utc9AfG4Fh4oxBu+f9mF72ffedvi397E7E+lYv+Mpl7DIRep
-	oQPNfJKn5N8lYMlRTKJoLRy/fzYjMZxey44g/ZynL+9YdbFGWGtFCyDUtZOIE1gO
-	o3sjW71zOKejQnP/Pe/AA==
-X-ME-Sender: <xms:0eccacFTvsMWk-wd3wnfOXJm90tDwOxklehUJrQT0Z0k-Yn_PF5ttQ>
-    <xme:0eccaQLjw8bXjKHzQ_83Dft3Q5duEI8fd_-ZHRQ_sDl6LyG3Vi9rFV0aUUTnhgBRV
-    Il6ZuL7NscvYLuZzOEFQrlsYLJEyqertMzKGFfZfEHsuBLSVc662Lg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvvddvgedvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepjedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtohepvhhinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprh
-    gtphhtthhopehluhhtoheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhhes
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidrug
-    gvpdhrtghpthhtohepthhhohhmrghsrdifvghishhsshgthhhuhheslhhinhhuthhrohhn
-    ihigrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdr
-    khgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:0eccaducuqgOvXfIcfhBZmF-3Qdps7gbuB5h0Ro8E57DpMcn1-g4Jw>
-    <xmx:0eccaQjrklZePeEASmnQS6VpRvRSbfEYkqgmQ51JIK7vc25tge-wvg>
-    <xmx:0eccaQqe8ereSj_ucW5Uj0ABJgfLVgZHXEojtzF4MVBz4Ro5S_PwXg>
-    <xmx:0eccaVtBfgjKL3vMe1K1n6GuBCuWQtwMLACws9wFYT3lHOhBQUmvKQ>
-    <xmx:0eccaTyQntBdR-dUiphIHB3FhTT7MuvbxMEaBCh2QlyLbZvGwqVzlAuA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 6E544700054; Tue, 18 Nov 2025 16:40:33 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1763502714; c=relaxed/simple;
+	bh=3saQsPNTZ1BLwOoaxmM5AQKiNhw4mO5JRJ3OV85XG2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=js3bsSsf2ouF4hIDEEcL21BrQTqOh1Rsmkr2zLBj/NkL8IAyKK8xSQZMJT06l7SeM6/ULoGWa3jHGG5Pyjnzmi03c+qPvA9pJHiv7w8gcGz6/1Xb6kfR0zFHEOvfqXEvX8+YO4dZchRLjj70/tXBm3leO2HpDNCR/o/eadH5pis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bd+KZCft; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A358C19424;
+	Tue, 18 Nov 2025 21:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763502713;
+	bh=3saQsPNTZ1BLwOoaxmM5AQKiNhw4mO5JRJ3OV85XG2M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=bd+KZCft4bdyMtznl0QNiXZern0SAdTdjRRG96pDzuX68XwUiu/QKKQxU1gM9ULeD
+	 Q1ORrXnma9N3iSyGAZHEJdROvKeojoseLAdHXuBWnxEuYE/s2jsCwYrwSw3B3d3L77
+	 KSzcWbT5mQUvAOLq6mJFsN+g2my5N5bMhXaFjUUl+dZQSqnsAoXt3+bT5gdakuW+Py
+	 mfw7MM8Vf6biuR66dF12BMR4AXTVgre2jSqZ4tTdOsEw98+kHjqCiK6ubq10DT2U0g
+	 bxleDPGWfFD1NC8+rBrtICxQUWyT2l4+p2bMf2QtTHxYsKtQrI6Bl8ed07tHCDm01r
+	 F81efobK/7WMw==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	willemdebruijn.kernel@gmail.com,
+	shuah@kernel.org,
+	sdf@fomichev.me,
+	krakauer@google.com,
+	linux-kselftest@vger.kernel.org,
+	petrm@nvidia.com,
+	matttbe@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH net-next v2 00/12] selftests: drv-net: convert GRO and Toeplitz tests to work for drivers in NIPA
+Date: Tue, 18 Nov 2025 13:51:14 -0800
+Message-ID: <20251118215126.2225826-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Ap118jhpfmOV
-Date: Tue, 18 Nov 2025 22:40:03 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <6fbb952c-0119-4be7-8f65-9198330013e7@app.fastmail.com>
-In-Reply-To: 
- <20251118145635-16c14d65-cc62-4c0f-bb2c-2cf7eb30b63c@linutronix.de>
-References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
- <20251113-vdso-test-types-v2-3-0427eff70d08@linutronix.de>
- <5826549e-88a8-429c-ad42-46aeada9d21b@app.fastmail.com>
- <20251114093245-04b5eb56-d3ed-486b-90ff-7c7ad5cfc7e7@linutronix.de>
- <22ec7315-49b2-4fde-bd2f-f24f2cfcec37@app.fastmail.com>
- <20251114102555-293562eb-f1f9-47e1-bc2d-59f26a7283fa@linutronix.de>
- <db53e96f-d0c4-4702-aee5-1c38c69074cd@app.fastmail.com>
- <20251118145635-16c14d65-cc62-4c0f-bb2c-2cf7eb30b63c@linutronix.de>
-Subject: Re: [PATCH v2 03/14] selftests: vDSO: Introduce vdso_syscalls.h
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 18, 2025, at 15:22, Thomas Wei=C3=9Fschuh wrote:
-> On Fri, Nov 14, 2025 at 11:40:31AM +0100, Arnd Bergmann wrote:
->> On Fri, Nov 14, 2025, at 11:02, Thomas Wei=C3=9Fschuh wrote:
->> > On Fri, Nov 14, 2025 at 10:16:01AM +0100, Arnd Bergmann wrote:
->> >
->> > I don't think it is important. For my SPARC vDSO series I even
->> > dropped the regular clock_getres() after your request. But because =
-it
->> > doesn't exist we need to handle the presence of vdso_clock_getres()=
- and
->> > the simultaneous absence of sys_clock_getres() in the test.
->>=20
->> But that is the other way round, right? On sparc32 we have
->> (optionally) sys_clock_getres() but never vdso_clock_getres().
->
-> Here SPARC was just an example to show that I don't really care about
-> clock_getres() in the vDSO in general.
-> But if it was present before for an architecture and we now drop it wi=
-thout a
-> replacement, userspace developers might complain. Manually caching the=
- value
-> in userspace sounds ugly and brittle, as it could even change at some =
-point.
-> Introducing a time64 replacement on the other hand wouldn't make much
-> difference as the values never would exceed the 32-bit range anyways.
->
-> So I would keep vdso_clock_getres() where it exists today even with
-> CONFIG_COMPAT_32BIT_TIME=3Dn.
+Main objective of this series is to convert the gro.sh and toeplitz.sh
+tests to be "NIPA-compatible" - meaning make use of the Python env,
+which lets us run the tests against either netdevsim or a real device.
 
-It is rather inconsistent with all the other interfaces though:
-when we originally did the time64 conversion, there were a number
-of interfaces that didn't really need a replacement, but we
-deliberately made new interfaces wherever possible. For architectures
-without time32 support, and for validating the time64 support,
-it should be possible to build both kernel and userspace without
-even defining the __kernel_old_time{_t,spec,val} types.
+The tests seem to have been written with a different flow in mind.
+Namely they source different bash "setup" scripts depending on arguments
+passed to the test. While I have nothing against the use of bash and
+the overall architecture - the existing code needs quite a bit of work
+(don't assume MAC/IP addresses, support remote endpoint over SSH).
+If I'm the one fixing it, I'd rather convert them to our "simplistic"
+Python.
 
->> Right, but then I would make it return 'struct timespec', not
->> 'struct __kernel_timespec', because it's no longer the kernel
->> interface.
->
-> 'struct timespec' might be only 32-bit, breaking the tests after y2038.
-> While that shouldn't happen in actual y2038 it would be nice if we can
-> validate the future behavior today without reconfiguring libc.
-> Given that this is also no longer a libc interface, can't we just use
-> the UAPI type?
+This series rewrites the tests in Python while addressing their
+shortcomings. The functionality of running the test over loopback
+on a real device is retained but with a different method of invocation
+(see the last patch).
 
-It clearly works, it just feels a bit wrong to me as mixing up
-the types and the interfaces is what caused the problem
-originally.
+Once again we are dealing with a script which run over a variety of
+protocols (combination of [ipv4, ipv6, ipip] x [tcp, udp]). The first
+4 patches add support for test variants to our scripts. We use the
+term "variant" in the same sense as the C kselftest_harness.h -
+variant is just a set of static input arguments.
 
-> What is the general expectation for userspace using 32-bit interfaces
-> after y2038 from the kernel's perspective?
+Note that neither GRO nor the Toeplitz test fully passes for me on
+any HW I have access to. But this is unrelated to the conversion.
+This series is not making any real functional changes to the tests,
+it is limited to improving the "test harness" scripts.
 
-I would hope that we'll end up turning off the fallback path
-and eventually remove that code entirely as we get closer to
-y2038, but not everyone agrees with that. An important
-open question is whether we'd want to still support running
-a 32-bit kernel from 2038+ with time32 userland but the RTC
-backdated to 1970.
+v2:
+ [patch  5] fix accidental modification of gitignore
+ [patch  8] fix typo in "compared"
+ [patch  9] fix typo I -> It
+ [patch 10] fix typoe configure -> configured
+v1: https://lore.kernel.org/20251117205810.1617533-1-kuba@kernel.org
 
-     Arnd
+Jakub Kicinski (12):
+  selftests: net: py: coding style improvements
+  selftests: net: py: extract the case generation logic
+  selftests: net: py: add test variants
+  selftests: drv-net: xdp: use variants for qstat tests
+  selftests: net: relocate gro and toeplitz tests to drivers/net
+  selftests: net: py: support ksft ready without wait
+  selftests: net: py: read ip link info about remote dev
+  netdevsim: pass packets thru GRO on Rx
+  selftests: drv-net: add a Python version of the GRO test
+  selftests: drv-net: hw: convert the Toeplitz test to Python
+  netdevsim: add loopback support
+  selftests: net: remove old setup_* scripts
+
+ tools/testing/selftests/drivers/net/Makefile  |   2 +
+ .../testing/selftests/drivers/net/hw/Makefile |   6 +-
+ tools/testing/selftests/net/Makefile          |   7 -
+ tools/testing/selftests/net/lib/Makefile      |   1 +
+ drivers/net/netdevsim/netdev.c                |  26 ++-
+ .../testing/selftests/{ => drivers}/net/gro.c |   5 +-
+ .../{net => drivers/net/hw}/toeplitz.c        |   7 +-
+ .../testing/selftests/drivers/net/.gitignore  |   1 +
+ tools/testing/selftests/drivers/net/gro.py    | 161 ++++++++++++++
+ .../selftests/drivers/net/hw/.gitignore       |   1 +
+ .../drivers/net/hw/lib/py/__init__.py         |   4 +-
+ .../selftests/drivers/net/hw/toeplitz.py      | 208 ++++++++++++++++++
+ .../selftests/drivers/net/lib/py/__init__.py  |   4 +-
+ .../selftests/drivers/net/lib/py/env.py       |   2 +
+ tools/testing/selftests/drivers/net/xdp.py    |  42 ++--
+ tools/testing/selftests/net/.gitignore        |   2 -
+ tools/testing/selftests/net/gro.sh            | 105 ---------
+ .../selftests/net/lib/ksft_setup_loopback.sh  | 111 ++++++++++
+ .../testing/selftests/net/lib/py/__init__.py  |   5 +-
+ tools/testing/selftests/net/lib/py/ksft.py    |  93 ++++++--
+ tools/testing/selftests/net/lib/py/nsim.py    |   2 +-
+ tools/testing/selftests/net/lib/py/utils.py   |  20 +-
+ tools/testing/selftests/net/setup_loopback.sh | 120 ----------
+ tools/testing/selftests/net/setup_veth.sh     |  45 ----
+ tools/testing/selftests/net/toeplitz.sh       | 199 -----------------
+ .../testing/selftests/net/toeplitz_client.sh  |  28 ---
+ 26 files changed, 630 insertions(+), 577 deletions(-)
+ rename tools/testing/selftests/{ => drivers}/net/gro.c (99%)
+ rename tools/testing/selftests/{net => drivers/net/hw}/toeplitz.c (99%)
+ create mode 100755 tools/testing/selftests/drivers/net/gro.py
+ create mode 100755 tools/testing/selftests/drivers/net/hw/toeplitz.py
+ delete mode 100755 tools/testing/selftests/net/gro.sh
+ create mode 100755 tools/testing/selftests/net/lib/ksft_setup_loopback.sh
+ delete mode 100644 tools/testing/selftests/net/setup_loopback.sh
+ delete mode 100644 tools/testing/selftests/net/setup_veth.sh
+ delete mode 100755 tools/testing/selftests/net/toeplitz.sh
+ delete mode 100755 tools/testing/selftests/net/toeplitz_client.sh
+
+-- 
+2.51.1
+
 
