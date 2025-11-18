@@ -1,189 +1,162 @@
-Return-Path: <linux-kselftest+bounces-45865-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8FF0C69C9C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 15:02:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 642D6C69ECA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 15:24:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 75A0B3843B9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 14:01:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 990AD4FA870
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 14:14:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0687F35E554;
-	Tue, 18 Nov 2025 13:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE7D135B132;
+	Tue, 18 Nov 2025 14:13:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XK4Td46z";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="aC6M3Cjc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nne+YwCX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC0D3570C9
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 13:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 317A22F99BC
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 14:13:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763474347; cv=none; b=lv3WQDb5WcgroDfWlArxVQDsvW6m8hMfMGcI9rTPXLl83CSRdpISU14GUIpqpeIIWvCDwflzXzgyaMmt+/zZWeZaSiEGOCIeVOiVBSO4B2/4BlMNZsXV5B7MNwu5TAcjlXblYyoNKmXHj5DHqKOJUV2abtbhsyaigF9IEcdYEkg=
+	t=1763475210; cv=none; b=SKJm4SF+lDy/o4qi2/xJXfgpgfrVtP1tC0JmmMfywdOmx8WVgA7+ia0JzfyBi8/QLLSU46WTpNDPsC82G2wzKCfi29zQXB3r9duxp3bBVJFYiVXkrQ2jR/EZVYrZ6RJn/PXBbICODePRK6of7kmniDzjU7TvsO9ThkE5PRxxfjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763474347; c=relaxed/simple;
-	bh=aDOXQIB2n+pg4b/q/S49BAM6icV8tjHMUu6SgbSHF3M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=a896giZRH7yK/NtN/y7+QnBsV9ZjeCScNzPGzysWMDGmDFm4c1bgw7+D5OfaQAe2XzjczOWssYo6vFBzLm/Wo97f0JTHchTU0RCcTsu39MS+teyG8tfEhVnY8tnAelGqYW9m4mULTTtIDgntbJR8SpKAZ4VkSbUXD7TExTdQWpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XK4Td46z; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=aC6M3Cjc; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763474343;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/sMrzWdyDZvwFZkmGhcBLLXh+fImVyjMBGC8vdg9gsc=;
-	b=XK4Td46zKk99R21Rlga4CfC+43zsFYx2JIzS4w5rbzAVeVCIF4dldZZXfArjVVNEERT5Q7
-	RH7TlgzI+6rfMEqWfHCWfsp8TAQhMDopaH284OT77WN0N6mG9krPdEo5PMz0QHsHuigOYb
-	9IBaxvKOLwIHUnyI/XhOqxEvvpobVsA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-30-wm7thRGVP9elYygn8i_R5w-1; Tue, 18 Nov 2025 08:59:02 -0500
-X-MC-Unique: wm7thRGVP9elYygn8i_R5w-1
-X-Mimecast-MFC-AGG-ID: wm7thRGVP9elYygn8i_R5w_1763474341
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4779da35d27so23128305e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 05:59:01 -0800 (PST)
+	s=arc-20240116; t=1763475210; c=relaxed/simple;
+	bh=HQUBK4MNv/SXU5ezJKyox6AQ7/NM49FiMg7jsCvMZ/w=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=Xf7pG06NwcdRG21vti6uYd7bbm1dCmlk7rzz+pAIhBEibqpazYXQByORDNAGK0H32PduPYZnwNXHKfnr6IU/wl8+nVuDD4TWIJTXB2NZOVvVySwECSUWao76CQBvlYuzXFEUulf3pN524fT/x6fOQpZTWHE50fjUgfU82ldFmhA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nne+YwCX; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-71d71bcab69so47482057b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 06:13:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763474341; x=1764079141; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=/sMrzWdyDZvwFZkmGhcBLLXh+fImVyjMBGC8vdg9gsc=;
-        b=aC6M3CjcSJ3JHIvhVPo6nuzb9LRIbQY7YGexjD9QcSAzfyiL8M/bJXaEy4f0VSi6Kf
-         JfHWaXFSQ/Qr7dOFkq+uXGHmg/Zg6VNf0xIn2WLWKDCVT0O+NKsi9JNGX+y8mPDWBw/3
-         prPFcyeaaGc2YvCoSFjH/jrOsn2RHVdzAEBseKOX5Grv0NZ4r4FLSb0daLHHG5eOi1oK
-         mAF+h2ext16wAdV1uLc/+A98iSBMiYUDKEl+1WQv0oqLpwppwhjnxKmYaIenNUVyy/lV
-         XLn5SmJedRevW+eL0O1d/Ek8h1NrKHjBaBPX/TmyByD7cAIZ1hckHhrJA06rcEE3y6OV
-         xnFQ==
+        d=gmail.com; s=20230601; t=1763475208; x=1764080008; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pLS+ljDA3ONh+IzG9dzAki9ZmyxqZdSzP94WFziG0+w=;
+        b=nne+YwCXQJbCRSPxb7g47EXQNrwVa/g6KwH53yc+Ji0W/sw7fvDDfCwrEsSzkesDAa
+         ekC9whtGVoYrx8fCDz0emKaz/r7RUr3aJzZcsvgVpPJcDgvVpwPGY2BQMuVMTR4hCsEN
+         GNhFEYojo+lAVp4KRinKyMdthR9kK2c4hLgFGsTsZ2d69w9CPbJyBGzr0Wi4U2web9hI
+         KjsGw/2XDs4Y4DyrAs7l1cQAgFawkGHqzhRs3F94mc2ms/I+mcsiY/Qek3vENIqIXFTh
+         HcedXW5MoXi4XCzzh1VtwS5Jpl5P2c7Ce5Jtez0+9jouX2zqm/pYutElFsFf0aqw8fFc
+         mriA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763474341; x=1764079141;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/sMrzWdyDZvwFZkmGhcBLLXh+fImVyjMBGC8vdg9gsc=;
-        b=Wkhb1o4ysJeHfbu6tJsDFm/zwHP220aptOC5kDJaV8NbmOe92Yy67ycvQTELtVkRU/
-         A6emZYKhRTJddWriBNEnaGJuxcPPt6Nc0mzGmuf16stDizJX3kqjQRKdsUw3t8UoWjx2
-         g7V3KFiDR7nT+YPDq3PRm15bi+JA31p6EYXEZS7mkDeUoisSMD/JQzoYm3AAKBF/DcxW
-         f/lDT6FpaJT0MZXC4QTqRUwkkyc27oGlmlpv/O4/d2fOlWbOu0NzCWG5vRlpgfhREb91
-         QYTIuwXk0khbZdSw6lBmujBUFg0KM+M9H+sezpfqr4QmMytlFeLUuFa0U7XnhVXsqK6y
-         8XDg==
-X-Forwarded-Encrypted: i=1; AJvYcCXvposGYiW/KAucb9Lt2KkrELMLWlxCt+RJ+Drz6iiHWyA9gfoKeSJYDVvaNC/c1Kg08OCJ9bsvg6GYAD8YLAc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZUAIi26BtTPlyCqiUhXn4AetVQwaIoJaQY3Qh9RWbBMLbKzaV
-	z2S9hZ9VinATQDTLZ0t8HlPpgj8gSe1XV0LQtyXb8g9mdB9j6c6rAZQK6JagGHjwd0hlLQ9j0bU
-	1TihX/NocGq9VPS6cUi1EQe12NMaNh5Mh41Y/CTKAf1doyqTZQjppRZTzPl4oHw9AfeJEFQ==
-X-Gm-Gg: ASbGncs5bgrZe4yk0hZrqbW4mahQbM7LjOhithMsaYOf4tR4H4u9Gh4KVh4TiFYRKGo
-	duu8rk1ka0FF7goIF+BEK7Qr6kj+2XWqYXAdW6+YXPi6nlEG1rO9CJwUSQNO1mA3PaIDNGw+PgY
-	e0Chh7IfxtNsPX02lJ31i0GfzBzfa7F4UJkLu67wkYtHAjDfeMz/S7BJ+jEx9HMJdkWojA5LgIx
-	MyoV66PybFL/IHVDewl+6mb2WphsAALJKlCBj2kHRDVKVei9TvXHrO2Uf3M02/AdOYfxcnsYJxT
-	gty+sIf8mrSqlZTUaZv7gIRddgT1HohpBmEMBN677NmwE3CHGpupLQUxvzw8pOJgGsKUBqpE7Dr
-	78T8h1LNmSsZR
-X-Received: by 2002:a05:600c:4595:b0:45d:d8d6:7fcc with SMTP id 5b1f17b1804b1-4778fe88265mr151063995e9.27.1763474340685;
-        Tue, 18 Nov 2025 05:59:00 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE9Am1Diu+ximSUOXMP3A5a0o3OiqTxBDb1D8Ajqh2TFqWWMm87brTKlLuvl3dgDrOlhHHa3A==
-X-Received: by 2002:a05:600c:4595:b0:45d:d8d6:7fcc with SMTP id 5b1f17b1804b1-4778fe88265mr151063795e9.27.1763474340210;
-        Tue, 18 Nov 2025 05:59:00 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.155.41])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477a9deb126sm16925725e9.9.2025.11.18.05.58.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Nov 2025 05:58:59 -0800 (PST)
-Message-ID: <769c1ba6-b622-402e-a615-dffa6f3d640c@redhat.com>
-Date: Tue, 18 Nov 2025 14:58:56 +0100
+        d=1e100.net; s=20230601; t=1763475208; x=1764080008;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pLS+ljDA3ONh+IzG9dzAki9ZmyxqZdSzP94WFziG0+w=;
+        b=NXrpyh61nzom7nRmkIyqiplteF6Z7obVFEFLiZ67AceJF5+bXsSJp04w8WFfPBy/lq
+         Pl/NYld/hTPCgtwFvThCWPxl2PJkZgRnfAdjC1Y0iqH12iKUUS0Q54rnI3DgIGYfnSB5
+         r4Ngj9Ud/ad2asp1DKN0mC+8gfPSzojUEo1vh2Zx6vGUsbl8bDsyTLaGglgP9h93ZUQA
+         +lTUbcIxl19OIReoh9Pqc0hD3BnTFVqqeeKX8sDsCqvlkYCcGMtDCviRP6/QEBMSL4Ud
+         IUsDWL2SxG8C46Ur4n+vKjLGET9f4KH1Tmwq+Rxx8LClAvJ63AhUTXEd/IapVbvemY2r
+         1Jhg==
+X-Forwarded-Encrypted: i=1; AJvYcCUh80AKByt6rDr87dHLB/UQ2TeTmsNlXX4HQqEzvHxOodcGvVG6DVSwW6F8JJbMJNE6yonRJVR+Ke57HeuLlCc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4/NF36cFYi6q9BlnWcQdqmc5SiQ1N8IFDbJKYF6BZIa2b7lAB
+	Gj1/yU7XcJ9SJvSRrOQfBUotuJpBVJmQs6d1I/Rx3OX4ptwT3PpLtqPm
+X-Gm-Gg: ASbGncsLup8SuNkTX/Qv925Xwv0Au/NHRItNyUGslFGpDF/DLOZVGqmuRPDN182i7rz
+	ymQXIXhzEXZagLJmQz85BpscqTf4GzbifEBxcBQaofxWSIf/gy1E4Unb0Xa647Wpe9jXxPf/SIl
+	+KpGWYhOYHCUK+4IRMe1271KEDOAY59Z4ASRDD9WtNjr+JfW5z69cfPUhK8kfh+pubd8uF3NL3/
+	zHwmDCqnw+u0t31NWKQC6SlnSRskXwiK5tTXoxeiPRJFxe+4FUuJ86sDvWpDbPCGd53LDx8XUDG
+	e+K645Oc/gmmRoRuoaG5uVal4INlbwwC52OZkhdfXHsITs/Cw0Io0WsXbHsrZAOtQHlG/ly8EBD
+	fqcVvGCiH0QJ/YpG9LL4PbFR/ct4oeIOoFV7jMvclT0GNKqbMzUgKtfBi+sYJ4+Od8D3+4GY854
+	06qynhlNs9pjDFjd+TWRtKcdjY6re3jbQtL3xdSbk/ueusGf9SukyGTcTx4GOFnXgKc8Y=
+X-Google-Smtp-Source: AGHT+IHgSy/PQp+8usU/2GA+MvxgTlVGrnZkbhS6n3nlE+QkTkTY7hmkNE9CD+jFUePzw0+lAB/nZw==
+X-Received: by 2002:a05:690c:25c8:b0:787:c849:6544 with SMTP id 00721157ae682-78929e2580amr155150137b3.5.1763475208112;
+        Tue, 18 Nov 2025 06:13:28 -0800 (PST)
+Received: from gmail.com (116.235.236.35.bc.googleusercontent.com. [35.236.235.116])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-7882216723csm53160337b3.50.2025.11.18.06.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Nov 2025 06:13:27 -0800 (PST)
+Date: Tue, 18 Nov 2025 09:13:26 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, 
+ netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ shuah@kernel.org, 
+ sdf@fomichev.me, 
+ krakauer@google.com, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.24bd73d3718ec@gmail.com>
+In-Reply-To: <20251117205609.4b0fa035@kernel.org>
+References: <20251117205810.1617533-1-kuba@kernel.org>
+ <willemdebruijn.kernel.31c286e47985d@gmail.com>
+ <20251117205609.4b0fa035@kernel.org>
+Subject: Re: [PATCH net-next 00/12] selftests: drv-net: convert GRO and
+ Toeplitz tests to work for drivers in NIPA
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 net-next 10/14] tcp: accecn: retransmit SYN/ACK without
- AccECN option or non-AccECN SYN/ACK
-To: chia-yu.chang@nokia-bell-labs.com, edumazet@google.com, parav@nvidia.com,
- linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
- dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
- kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
- donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
- ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
-References: <20251114071345.10769-1-chia-yu.chang@nokia-bell-labs.com>
- <20251114071345.10769-11-chia-yu.chang@nokia-bell-labs.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20251114071345.10769-11-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-On 11/14/25 8:13 AM, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Jakub Kicinski wrote:
+> On Mon, 17 Nov 2025 21:11:31 -0500 Willem de Bruijn wrote:
+> > > Note that neither GRO nor the Toeplitz test fully passes for me on
+> > > any HW I have access to. But this is unrelated to the conversion.  
+> > 
+> > You observed the same failures with the old and new tests? Are they
+> > deterministic failures or flakes.
 > 
-> For Accurate ECN, the first SYN/ACK sent by the TCP server shall set the
-> ACE flag (see Table 1 of RFC9768) and the AccECN option to complete the
-> capability negotiation. However, if the TCP server needs to retransmit such
-> a SYN/ACK (for example, because it did not receive an ACK acknowledging its
-> SYN/ACK, or received a second SYN requesting AccECN support), the TCP server
-> retransmits the SYN/ACK without the AccECN option. This is because the
-> SYN/ACK may be lost due to congestion, or a middlebox may block the AccECN
-> option. Furthermore, if this retransmission also times out, to expedite
-> connection establishment, the TCP server should retransmit the SYN/ACK with
-> (AE,CWR,ECE) = (0,0,0) and without the AccECN option, while maintaining
-> AccECN feedback mode.
+> Deterministic for Toeplitz - all NICs I have calculate the Rx 
+> hash the same as the test for at least one of traffic types. 
+> But none of them exactly as the test is expecting.
+> One IIRC also uses non-standard RSS indir table pattern by default.
+> The indirection table will be a trivial fix.
+
+Ugh yes we've had a bug open for ages internally to add indirection
+table parsing to the test:
+
+    The (upstream) RSS test is too simplistic: it calculates
+   
+        queue_id = hash % num_queues
+   
+    Real RSS uses an indirection table:
+   
+        queue_id = indir_table[hash % indir_table_len]
+
+> For HW-GRO I investigated less closely I mostly focused on making sure
+> netdevsim is solid as a replacement for veth. There was more flakiness
+> on HW (admittedly I was running inter-dc-building). But the failures
+> looked rather sus - the test was reporting that packets which were
+> not supposed to be coalesced got coalesced.
+
+The reverse is a known cause of flakiness, due to the context closure
+timer firing. But unexpected coalescing definitely seems suspicious.
+ 
+> BTW it's slightly inconvenient that we disable HW-GRO when normal GRO
+> is disabled :( Makes it quite hard to run the test to check device
+> behavior. My current plan is to rely on device counters to check
+> whether traffic is getting coalesced but better ideas most welcome :(
+
+We probably have to maintain this behavior, but could add an override
+to enable only HW-GRO.
+
+Alternatively, just for measurement, a bpf fentry program. But that is
+a lot more complex than reading the counters, which is sufficient
+signal.
+
+> > > This series is not making any real functional changes to the tests,
+> > > it is limited to improving the "test harness" scripts.
+> > 
+> > No significant actionable comments, just a few trivial typos.
 > 
-> This complies with Section 3.2.3.2.2 of the AccECN specification (RFC9768).
-> 
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> 
-> ---
-> v6:
-> - Use new synack_type TCP_SYNACK_RETRANS and num_retrans.
-> ---
->  include/net/tcp_ecn.h | 20 ++++++++++++++------
->  net/ipv4/tcp_output.c |  4 ++--
->  2 files changed, 16 insertions(+), 8 deletions(-)
-> 
-> diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
-> index a709fb1756eb..57841dfa6705 100644
-> --- a/include/net/tcp_ecn.h
-> +++ b/include/net/tcp_ecn.h
-> @@ -649,12 +649,20 @@ static inline void tcp_ecn_clear_syn(struct sock *sk, struct sk_buff *skb)
->  }
->  
->  static inline void
-> -tcp_ecn_make_synack(const struct request_sock *req, struct tcphdr *th)
-> -{
-> -	if (tcp_rsk(req)->accecn_ok)
-> -		tcp_accecn_echo_syn_ect(th, tcp_rsk(req)->syn_ect_rcv);
-> -	else if (inet_rsk(req)->ecn_ok)
-> -		th->ece = 1;
-> +tcp_ecn_make_synack(const struct request_sock *req, struct tcphdr *th,
-> +		    enum tcp_synack_type synack_type)
-> +{
-> +	// num_retrans will be incresaed after tcp_ecn_make_synack()
+> Thanks!
 
-Please use /* */ for comments
-
-> +	if (!req->num_retrans) {
-
-It's unclear you this function receives a `synack_type` argument and
-don't use it. Should the above be
-
-	if (synack_type != TCP_SYNACK_RETRANS) {
-
-?
-
-Or just remove such argument.
-
-/P
 
 
