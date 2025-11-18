@@ -1,206 +1,391 @@
-Return-Path: <linux-kselftest+bounces-45869-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4311AC6A365
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 16:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 044E3C6AA53
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:32:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E455C4F84D3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 15:00:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3EDAF4F4107
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 16:26:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 443EA363C50;
-	Tue, 18 Nov 2025 14:59:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="V9ZNRNQt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 079D430DECD;
+	Tue, 18 Nov 2025 16:26:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010051.outbound.protection.outlook.com [52.101.85.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF0735A953;
-	Tue, 18 Nov 2025 14:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763477990; cv=fail; b=N0WmJysd2kSGMDCuK9kqeugZDmMGIKyyO0dd0tYJNCY/4FVbFd1075LmfxUXl9pGnubqkUKO6xoFJ6upZHRYfo3NMI9CUTWypLk35nU9XQTP/RzZfkUx982msifISFT8tbUyAcMZtXipl4OMnPmu2mIEwjVKVk7vPmxRo3xB4Js=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763477990; c=relaxed/simple;
-	bh=nd8L7ikJFnYZvUzIbVySp31pn4RrBdkVjFB25Nv+68M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=jg341qEX6l7v/pbz7lwIgMS0BuktjyfTE2IOQl3kxOlsMFJSVbNvMkw9AIDoE09sYKfUgXqE4Ddetj4AE5vh2Zq9WYsGqsGNgPo2b5gEPJSpeu+k+xjmFNwdGFsVfHztDYNHxO+cFNbxV0y2mn3h2hfLw6I/he0e2TeD66fah54=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=V9ZNRNQt; arc=fail smtp.client-ip=52.101.85.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nmNqY/u+nshwOR+47CMMUJonRkwS6mwkAWelpRRYknRbLRSKfX80SYOF/1b6su6aeto9mVvV7jHoeOJbGGeSTVRtmyIjEr498ZzGRqh8zZAipr5v+/9h1Jp4G1CzF53D4o8nTQeQBUK4tITpgbSMYi2Dte8hf5mfk7lLu1onJcE8zDRFI4fQ11vUoarQbW/vepl8pQawRo4EPYgyXWjD3onMWxUh8jPkL8OXAjIVb86/vWXwdAv/Ve7gvIxG2djobTjLkV7BhJgp0m09hrVgVEffO7MNkicv4qRwOnBJPatsqRQd2W7XTzjaZ0D17a5ctD3x4px14pcmGueRcnUXnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eHD1vo+58VmqVJm9QaUdZRKerPUeq2VfZ8GTp8GOW90=;
- b=WLYTRL+pqB/BssCepnABBhk3KuBFkKy6TXNPLZOsDNJ9y+dLGcW+Z7oi1Yls9ozhEerv0JunP0mhskUHF3hf+8+yGfRahxvnCGKIR4vtZLGBBFinYOsDghlycM0tDlfitIVD7hpwwC5XBPu+NPRtL1uWfRsJXbo006aL8Ul9IAXl861K2yTYGHqx7q/XBK7nQBhumxqqRiot7eRMq4M0mU1oBY/k0lU13yH02+BsqWCDIGgusmIJs9uFrUG9q5d+ilcUr4cCV0r06TZ/Lvmpv3URO9McPZu/aXDVOClqTPk0NHFNo+Ox+hcdXmpaCIPoOoIy2QVkzBi9K/DLWEMY9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eHD1vo+58VmqVJm9QaUdZRKerPUeq2VfZ8GTp8GOW90=;
- b=V9ZNRNQtmq+EqBWt/GRN6hrlwtUqQ/PAZXVtoXvEhwrOYTNdIaqoEJFRn5Vl1oD/PYIVdWYYF4x8mD8OMXGVrIeY6/8Wsf/B7eTIWzEnesi7OyX2gktnzmX8TyB0ky0I/fIDjMDBJKJjHr+wlhDTQu443TM6vWSdzujylZqCSpWY25K44bSklYl3ITV+YXaLsCYkyTR75ImBz95ktUtsVmDO5jH35gP6RNIr/BXceu2CfZQLRdu+ZMR0wWY42FGwY+FtMd80m61b8iuen3kdOqi9YUi2BjnHpfXROKCJ9mgvprxYbXtdeybTYGC54jQK0P5f8tJvz+bq6ToFDKWpCQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
- by MN2PR12MB4255.namprd12.prod.outlook.com (2603:10b6:208:198::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.19; Tue, 18 Nov
- 2025 14:59:43 +0000
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9343.009; Tue, 18 Nov 2025
- 14:59:43 +0000
-Date: Tue, 18 Nov 2025 10:59:42 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: "Kasireddy, Vivek" <vivek.kasireddy@intel.com>
-Cc: Alex Williamson <alex@shazbot.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	Joerg Roedel <joro@8bytes.org>,
-	"Tian, Kevin" <kevin.tian@intel.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"linaro-mm-sig@lists.linaro.org" <linaro-mm-sig@lists.linaro.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Will Deacon <will@kernel.org>, Krishnakant Jaju <kjaju@nvidia.com>,
-	Leon Romanovsky <leon@kernel.org>, Matt Ochs <mochs@nvidia.com>,
-	Nicolin Chen <nicolinc@nvidia.com>,
-	"patches@lists.linux.dev" <patches@lists.linux.dev>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Xu Yilun <yilun.xu@linux.intel.com>
-Subject: Re: [PATCH 0/9] Initial DMABUF support for iommufd
-Message-ID: <20251118145942.GM10864@nvidia.com>
-References: <0-v1-af84a3ab44f5+f68-iommufd_buf_jgg@nvidia.com>
- <20251113113712.5691cbaf.alex@shazbot.org>
- <20251117155017.GF10864@nvidia.com>
- <IA0PR11MB71850B9B3A4D284BA7967445F8D6A@IA0PR11MB7185.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <IA0PR11MB71850B9B3A4D284BA7967445F8D6A@IA0PR11MB7185.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BN1PR12CA0025.namprd12.prod.outlook.com
- (2603:10b6:408:e1::30) To MN2PR12MB3613.namprd12.prod.outlook.com
- (2603:10b6:208:c1::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0335530F957;
+	Tue, 18 Nov 2025 16:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763483170; cv=none; b=h1uG25eSSml7rs3OvQCGfTGPV2nUBgn+hF4a0qBsHcCQprd9g4j8AzVlfJu5AdGd18GOUJ/UUQNDldg86Dxks7FzEB+0ANS5InEZILFexAUt1nOQ7hSlOr0apObkulYg6Uf6OzGBHp/y30nlanUvtb0djh6Ao3T2a8c9tUwUt7k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763483170; c=relaxed/simple;
+	bh=kszdK9f3rX0QfEk9jTjm2WfJ4J3/3rSkrUaLWu8E1gU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QKpIiOSdI/7/FIG6zgZUgCzSgLJ7KM64VNYDAylk0ugRf0mYnmIb7iC5r9XkXiNerzXZ5gz1iMN2ONkQO6ZnkuUbEusn2pnAW+/uvNUaXj/A/fgikJzxTdTT3UvThkfy6C7Q3vSDq78j+FiD0EtsHXkkY2OdAr/goVONbxSZbbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
+Received: from Mobilestation.localdomain (unknown [183.6.59.216])
+	by APP-03 (Coremail) with SMTP id rQCowAAXpdffnRxpmMQ0AQ--.31198S4;
+	Wed, 19 Nov 2025 00:25:47 +0800 (CST)
+From: Yao Zihong <zihong.plct@isrc.iscas.ac.cn>
+To: linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: ajones@ventanamicro.com,
+	alexghiti@rivosinc.com,
+	shuah@kernel.org,
+	samuel.holland@sifive.com,
+	evan@rivosinc.com,
+	cleger@rivosinc.com,
+	zihong.plct@isrc.iscas.ac.cn,
+	zihongyao@outlook.com,
+	zhangyin2018@iscas.ac.cn,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Yunhui Cui <cuiyunhui@bytedance.com>,
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH v5 2/2] selftests/riscv: Add Zicbop prefetch test
+Date: Wed, 19 Nov 2025 00:23:25 +0800
+Message-ID: <20251118162436.15485-3-zihong.plct@isrc.iscas.ac.cn>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20251118162436.15485-1-zihong.plct@isrc.iscas.ac.cn>
+References: <20251118162436.15485-1-zihong.plct@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|MN2PR12MB4255:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9af95e13-7066-478c-a7e8-08de26b31b1f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jWEGVMtxETuYnwm2KYgcW7+OwMlNO+lmekHwONH1WBIVjr3/mIPtBgB3T2BW?=
- =?us-ascii?Q?dxC77i9PTc5vzD+cdMOZ+r3EuHEXP6zfSfh7Sat6TjqZtdVOczUSpPEigBYT?=
- =?us-ascii?Q?B/yhWbBsCxulT4kjunnHvkmwV+TwODrbpHDuwoQOT9wsRYFW4E8nTkiTMDaC?=
- =?us-ascii?Q?zHb7z8uQAtawp6uugb/1gHw8LMSxN9EDUItkFlHyLj1Du+VplI0JP1QSVirO?=
- =?us-ascii?Q?hzVgG2KR049F9BKyfhOm+emsSWJobxAam6KxP1g8468LOasiQ7mgMzPaeFUB?=
- =?us-ascii?Q?ebVFRp7pQMnZI2C22AmPf95djXgkGZ9cagMfViUNv8daWTHNoEQ7FYWXtcHp?=
- =?us-ascii?Q?VYuIBSRNh/cdAIU1yiRm45hfLJpp5b1GHJpUr1CkKe4HFF3YOxeNRD2Kq+4w?=
- =?us-ascii?Q?J3sfgoDZtdC43zOoJC4rMURqKzdAlTlYT8bSwG8O9YMUKMeeGcFYRGrk+0gy?=
- =?us-ascii?Q?UedotOnj8bz9jqXC36fHT7Ic54xoo/nXzRIEpxnYyv9EW0M0orXMQhfkv9WH?=
- =?us-ascii?Q?XeSZI2zEPmbXjGSAJCG4Hin3iCRlqoyzA7h08iyOW54tGMXIp6IPbIGTFS0V?=
- =?us-ascii?Q?XJaeulMlDRJjPV4GsPuGKh6D9TLL2T3Hnd3GarW+MksnWuPPDjjfQKZztfyD?=
- =?us-ascii?Q?Fb/UQkylbe0WevnStVKBImjOL+oEitlqVg+3LsqFhsyF11JSIW4LypywfQGU?=
- =?us-ascii?Q?yXoX2sddFce32oDCcpqiXQCbxr0yFe70zjbnHwgcFs8dVQXbX9QLsc2cXNu0?=
- =?us-ascii?Q?rd2nZxMLZQLai+KkZSTXafe9824hXqKYjRS1guDJgGIOjFZUPw+tPP5PLoYk?=
- =?us-ascii?Q?R4lUAgj4guZI+q5KPrgVHQXYR5FW1r/Mwj4hbTaroPu1EKjqoedmc8xAA1RW?=
- =?us-ascii?Q?qWFs9IT8ME3512HlfED6SqINrqShWRYHVZen/GAoAsnjBmfdwSO1okqHeG9L?=
- =?us-ascii?Q?QApChw5FSMt5ZLdYhN+rsWResQA3kj4LI/anlsmblMXcWYxuvLRBFF0uZHPT?=
- =?us-ascii?Q?cXKRU29iVXY5V/3XydhrklrKn6Z8US9N41FNjGOUazyQ0Fg2d1ygsPyB4TjX?=
- =?us-ascii?Q?lX59uhQpSqwIkqfb2zyYw5d6cgd88U+i+TvE+YsJ75hVYo0tfe2cpXpLfbrh?=
- =?us-ascii?Q?T1Blus/Mw9AphWxY/8BgtVeid4Lj4tqJY1WNHq/EBDbQVMJ6RMUC0YsYd6J4?=
- =?us-ascii?Q?0DrZbghJEZClNz5+WAwg3kfNsnQ93R1VLSmsp6GLdzhcAyaL+VBkZOs/Wf1M?=
- =?us-ascii?Q?VG2wQhjeBxZWTnq7xCEsfFsGDLAkOW6BQiphhVoUzHwwzqHuLbGcib60OkU6?=
- =?us-ascii?Q?Zu6lN9BYoVpiE7GSqActie57eKP61oLcK3o4/jeumoTkpbNREuGAuHXwzjrh?=
- =?us-ascii?Q?tUiYDQQ41yOr/D2rdlZHzLekLAT49WzYZxP4mvz0c/v7zhs/l35lVcXJ7Rlt?=
- =?us-ascii?Q?TmmoaROF01TmtYQzkKMZRb3WRcmEotiS?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?sXkUhBta1Trk874aFW7fmAmKA9HvJtGZA41t0aQQ9Ga4os6klJzm+GcSAWID?=
- =?us-ascii?Q?vzpWvGQ1RXtysJdgv/FpzkMVYlBB5L9mfycnpq4geriwPpNqfItrthM4pfGY?=
- =?us-ascii?Q?NwvUiyYQB352ghs10g/BTDfSNcSxLKNSYQxaA2VDzUZ5EGSwCUAc19qnKhZ3?=
- =?us-ascii?Q?mXqHN6qfb2u8/uOV93s4QBYyRyXpGEoQEnl6tC4+30r0bvGx6L1gy6aXf7VS?=
- =?us-ascii?Q?3yknDCQllmQtTxbGIkmJ5s2yrbVoQtO6ViSJco5XkVAzvJDlwuxPcic2h3Ti?=
- =?us-ascii?Q?/I3ijPMFNULz0d2/Uo1mJTWVqI/2uy+zl/EWdMZtqRxow8jQzbZUVEu9Q+K/?=
- =?us-ascii?Q?UYLdx+FbZKiPmijSeYNe2hw/6KCpQAPO3nBKVC2pGUZ40VONa+r1bNPQDLFm?=
- =?us-ascii?Q?oNaJmPsCT4YD8Y6Nv0Kw2HFMmiF66X+3A48HtE+bxkfLL4KGiGRpBBrlT+YV?=
- =?us-ascii?Q?oRYeJnBiET8KNcLVhnHajANh55SlJl+99tz9k0LkCp3cYaQ9K87eZ2oCjT9D?=
- =?us-ascii?Q?RK1EPllNCsXU4gtCBz/8QFguvJ5ztkHHeYHqpXWy2iYqzILE279DVpaR5UVA?=
- =?us-ascii?Q?yHWS/eEUiGprEaHM1AsGe/SA5MnrnyNlmvyaIr3JuGPCSmCCLlsvuSfZdmS0?=
- =?us-ascii?Q?lpEVPWy1fvHWtG7SM9oJG/a5kzmtlXcQJ/dRyqqVnEoZ+gB2Q3cpYrGJtOJD?=
- =?us-ascii?Q?zJzg4Z1TlVGvujkDlhwcHdDv1ZbChl8f7HD3+SNTn1/xjFKHW98HGc0ACZQ0?=
- =?us-ascii?Q?JESg/NnZAF+cyh726ej5s+ptzwcPaIYoSy1nj/McHDg6boJe9O/oahXyrfzL?=
- =?us-ascii?Q?PEsS0h5Y+9JenqjFLKog/fbKoyH7KXJdVWkHvJeUIo6rxzKLtiqmvB0HID8H?=
- =?us-ascii?Q?yZVgMI6jZZAYdFaxfdepc8GxM/eee6SJdnwD3/vqg1ZZTPzIglRNik3KEzfN?=
- =?us-ascii?Q?92eu6JhN3Gizc+m3eeiFYYdS76Mn0i2k4cW2S8FmNmb2mg7P31rHvq8VcGgH?=
- =?us-ascii?Q?sgViNKvrE5Os+C+mPfxTZPYzJL9JA/0EvHPey2ShikWFSLuPKDMb/NjR8JUC?=
- =?us-ascii?Q?Bl4+pj17zufpcAii+CDdTQ2oQaHviyN6x23da6ZH1ctkuGpjTA6MwSnN+/d0?=
- =?us-ascii?Q?ZSwQMqGQdAY5++Av/UvSBVy6qrGhLGIsxGyFy/lcx/QXzC8/86yukFsEr68I?=
- =?us-ascii?Q?JP78i3AKb/6U1+YM41iLJG8z/BxCPtyArKgVdl63K/46abAVBZKjUD72pHVt?=
- =?us-ascii?Q?ds8ZipHZgbPAewhyNP/PcBioK4eqYJ97ZC/utqcYI8g7hYKq4iy8o+mUKQ+K?=
- =?us-ascii?Q?HI/j1Iiy7B5uUxdiszkaECmibaWla6uOXLkmQRmTRdHinJETOy0vCJjLQiEG?=
- =?us-ascii?Q?6EAWiFhAr+gOwIiZp8DSUymBxqBsbf1b/+vg/VCW8Jgg/KKHtKmEGC7GdptV?=
- =?us-ascii?Q?TL77hzanHnZ7QAb6feM/Ov1ZSOGAaVo158oz7ZSdbGqW/Xgio+vM4K43A4Gt?=
- =?us-ascii?Q?sBREyU99fhXX19++QqaaukrcoDmRywbK5dQJY9pehgBHFqagQ2xxfPYuRLQ1?=
- =?us-ascii?Q?bCEsvp9cwcbgqM9PEAM=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9af95e13-7066-478c-a7e8-08de26b31b1f
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2025 14:59:43.3778
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gNtnNwT91HUl3QuqasmP9zPaXSQg8JWZgN/ft9qnccJo2KSwAfIhg5i9hfeDAkVA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4255
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:rQCowAAXpdffnRxpmMQ0AQ--.31198S4
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFWkZr47tFyUKry5uw4UArb_yoWfAFW8pF
+	Zxur4IvF45ZF40qrWkJF1kCF1Fgrn2q3yUCrWrC345Zay7X3s8GFWkKay7AFyvkr97Zr1F
+	vFn8AFWUCa1xGaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHab7Iv0xC_tr1lb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI
+	8067AKxVWUXwA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF
+	64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcV
+	CY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE
+	c7CjxVAFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c
+	02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE
+	4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4
+	IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8I
+	j28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkG
+	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+	0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
+	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTR89NsUU
+	UUU
+X-CM-SenderInfo: p2lk00vjoszunw6l223fol2u1dvotugofq/
 
-On Tue, Nov 18, 2025 at 05:37:59AM +0000, Kasireddy, Vivek wrote:
-> Hi Jason,
-> 
-> > Subject: Re: [PATCH 0/9] Initial DMABUF support for iommufd
-> > 
-> > On Thu, Nov 13, 2025 at 11:37:12AM -0700, Alex Williamson wrote:
-> > > > The latest series for interconnect negotation to exchange a phys_addr is:
-> > > >  https://lore.kernel.org/r/20251027044712.1676175-1-
-> > vivek.kasireddy@intel.com
-> > >
-> > > If this is in development, why are we pursuing a vfio specific
-> > > temporary "private interconnect" here rather than building on that
-> > > work?  What are the gaps/barriers/timeline?
-> >
-> > I broadly don't expect to see an agreement on the above for probably
-> Are you planning to post your SGT mapping type patches soon, so that we
-> can start discussion on the design?
+Add selftests to cbo.c to verify Zicbop extension behavior, and split
+the previous `--sigill` mode into two options so they can be tested
+independently.
 
-It is on my list, but probably not soon enough :\
+The test checks:
+- That hwprobe correctly reports Zicbop presence and block size.
+- That prefetch instructions execute without exception on valid and NULL
+  addresses when Zicbop is present.
 
-I wanted to address the remarks given and I still have to conclude
-some urgent things for this merge window.
+Signed-off-by: Yao Zihong <zihong.plct@isrc.iscas.ac.cn>
+---
+ tools/testing/selftests/riscv/hwprobe/cbo.c | 165 ++++++++++++++++----
+ 1 file changed, 136 insertions(+), 29 deletions(-)
 
-> I went ahead and tested your patches and did not notice any regressions
-> with my test-cases (after adding some minor fixups). I have also added/tested
-> support for IOV mapping type based on your design:
-> https://gitlab.freedesktop.org/Vivek/drm-tip/-/commits/dmabuf_iov_v1
+diff --git a/tools/testing/selftests/riscv/hwprobe/cbo.c b/tools/testing/selftests/riscv/hwprobe/cbo.c
+index 5e96ef785d0d..6d99726aceac 100644
+--- a/tools/testing/selftests/riscv/hwprobe/cbo.c
++++ b/tools/testing/selftests/riscv/hwprobe/cbo.c
+@@ -15,24 +15,31 @@
+ #include <linux/compiler.h>
+ #include <linux/kernel.h>
+ #include <asm/ucontext.h>
++#include <getopt.h>
+ 
+ #include "hwprobe.h"
+ #include "../../kselftest.h"
+ 
+ #define MK_CBO(fn) le32_bswap((uint32_t)(fn) << 20 | 10 << 15 | 2 << 12 | 0 << 7 | 15)
++#define MK_PREFETCH(fn) \
++	le32_bswap(0 << 25 | (uint32_t)(fn) << 20 | 10 << 15 | 6 << 12 | 0 << 7 | 19)
+ 
+ static char mem[4096] __aligned(4096) = { [0 ... 4095] = 0xa5 };
+ 
+-static bool illegal_insn;
++static bool got_fault;
+ 
+-static void sigill_handler(int sig, siginfo_t *info, void *context)
++static void fault_handler(int sig, siginfo_t *info, void *context)
+ {
+ 	unsigned long *regs = (unsigned long *)&((ucontext_t *)context)->uc_mcontext;
+ 	uint32_t insn = *(uint32_t *)regs[0];
+ 
+-	assert(insn == MK_CBO(regs[11]));
++	if (sig == SIGILL)
++		assert(insn == MK_CBO(regs[11]));
+ 
+-	illegal_insn = true;
++	if (sig == SIGSEGV || sig == SIGBUS)
++		assert(insn == MK_PREFETCH(regs[11]));
++
++	got_fault = true;
+ 	regs[0] += 4;
+ }
+ 
+@@ -45,39 +52,51 @@ static void sigill_handler(int sig, siginfo_t *info, void *context)
+ 	: : "r" (base), "i" (fn), "i" (MK_CBO(fn)) : "a0", "a1", "memory");	\
+ })
+ 
++#define prefetch_insn(base, fn)							\
++({										\
++	asm volatile(								\
++	"mv	a0, %0\n"							\
++	"li	a1, %1\n"							\
++	".4byte	%2\n"								\
++	: : "r" (base), "i" (fn), "i" (MK_PREFETCH(fn)) : "a0", "a1");		\
++})
++
+ static void cbo_inval(char *base) { cbo_insn(base, 0); }
+ static void cbo_clean(char *base) { cbo_insn(base, 1); }
+ static void cbo_flush(char *base) { cbo_insn(base, 2); }
+ static void cbo_zero(char *base)  { cbo_insn(base, 4); }
++static void prefetch_i(char *base) { prefetch_insn(base, 0); }
++static void prefetch_r(char *base) { prefetch_insn(base, 1); }
++static void prefetch_w(char *base) { prefetch_insn(base, 3); }
+ 
+ static void test_no_cbo_inval(void *arg)
+ {
+ 	ksft_print_msg("Testing cbo.inval instruction remain privileged\n");
+-	illegal_insn = false;
++	got_fault = false;
+ 	cbo_inval(&mem[0]);
+-	ksft_test_result(illegal_insn, "No cbo.inval\n");
++	ksft_test_result(got_fault, "No cbo.inval\n");
+ }
+ 
+ static void test_no_zicbom(void *arg)
+ {
+ 	ksft_print_msg("Testing Zicbom instructions remain privileged\n");
+ 
+-	illegal_insn = false;
++	got_fault = false;
+ 	cbo_clean(&mem[0]);
+-	ksft_test_result(illegal_insn, "No cbo.clean\n");
++	ksft_test_result(got_fault, "No cbo.clean\n");
+ 
+-	illegal_insn = false;
++	got_fault = false;
+ 	cbo_flush(&mem[0]);
+-	ksft_test_result(illegal_insn, "No cbo.flush\n");
++	ksft_test_result(got_fault, "No cbo.flush\n");
+ }
+ 
+ static void test_no_zicboz(void *arg)
+ {
+ 	ksft_print_msg("No Zicboz, testing cbo.zero remains privileged\n");
+ 
+-	illegal_insn = false;
++	got_fault = false;
+ 	cbo_zero(&mem[0]);
+-	ksft_test_result(illegal_insn, "No cbo.zero\n");
++	ksft_test_result(got_fault, "No cbo.zero\n");
+ }
+ 
+ static bool is_power_of_2(__u64 n)
+@@ -85,6 +104,51 @@ static bool is_power_of_2(__u64 n)
+ 	return n != 0 && (n & (n - 1)) == 0;
+ }
+ 
++static void test_zicbop(void *arg)
++{
++	struct riscv_hwprobe pair = {
++		.key = RISCV_HWPROBE_KEY_ZICBOP_BLOCK_SIZE,
++	};
++	struct sigaction act = {
++		.sa_sigaction = &fault_handler,
++		.sa_flags = SA_SIGINFO
++	};
++	struct sigaction dfl = {
++		.sa_handler = SIG_DFL
++	};
++	cpu_set_t *cpus = (cpu_set_t *)arg;
++	__u64 block_size;
++	long rc;
++
++	rc = sigaction(SIGSEGV, &act, NULL);
++	assert(rc == 0);
++	rc = sigaction(SIGBUS, &act, NULL);
++	assert(rc == 0);
++
++	rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)cpus, 0);
++	block_size = pair.value;
++	ksft_test_result(rc == 0 && pair.key == RISCV_HWPROBE_KEY_ZICBOP_BLOCK_SIZE &&
++			 is_power_of_2(block_size), "Zicbop block size\n");
++	ksft_print_msg("Zicbop block size: %llu\n", block_size);
++
++	got_fault = false;
++	prefetch_i(&mem[0]);
++	prefetch_r(&mem[0]);
++	prefetch_w(&mem[0]);
++	ksft_test_result(!got_fault, "Zicbop prefetch.* on valid address\n");
++
++	got_fault = false;
++	prefetch_i(NULL);
++	prefetch_r(NULL);
++	prefetch_w(NULL);
++	ksft_test_result(!got_fault, "Zicbop prefetch.* on NULL\n");
++
++	rc = sigaction(SIGBUS, &dfl, NULL);
++	assert(rc == 0);
++	rc = sigaction(SIGSEGV, &dfl, NULL);
++	assert(rc == 0);
++}
++
+ static void test_zicbom(void *arg)
+ {
+ 	struct riscv_hwprobe pair = {
+@@ -100,13 +164,13 @@ static void test_zicbom(void *arg)
+ 			 is_power_of_2(block_size), "Zicbom block size\n");
+ 	ksft_print_msg("Zicbom block size: %llu\n", block_size);
+ 
+-	illegal_insn = false;
++	got_fault = false;
+ 	cbo_clean(&mem[block_size]);
+-	ksft_test_result(!illegal_insn, "cbo.clean\n");
++	ksft_test_result(!got_fault, "cbo.clean\n");
+ 
+-	illegal_insn = false;
++	got_fault = false;
+ 	cbo_flush(&mem[block_size]);
+-	ksft_test_result(!illegal_insn, "cbo.flush\n");
++	ksft_test_result(!got_fault, "cbo.flush\n");
+ }
+ 
+ static void test_zicboz(void *arg)
+@@ -125,11 +189,11 @@ static void test_zicboz(void *arg)
+ 			 is_power_of_2(block_size), "Zicboz block size\n");
+ 	ksft_print_msg("Zicboz block size: %llu\n", block_size);
+ 
+-	illegal_insn = false;
++	got_fault = false;
+ 	cbo_zero(&mem[block_size]);
+-	ksft_test_result(!illegal_insn, "cbo.zero\n");
++	ksft_test_result(!got_fault, "cbo.zero\n");
+ 
+-	if (illegal_insn || !is_power_of_2(block_size)) {
++	if (got_fault || !is_power_of_2(block_size)) {
+ 		ksft_test_result_skip("cbo.zero check\n");
+ 		return;
+ 	}
+@@ -177,7 +241,19 @@ static void check_no_zicbo_cpus(cpu_set_t *cpus, __u64 cbo)
+ 		rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)&one_cpu, 0);
+ 		assert(rc == 0 && pair.key == RISCV_HWPROBE_KEY_IMA_EXT_0);
+ 
+-		cbostr = cbo == RISCV_HWPROBE_EXT_ZICBOZ ? "Zicboz" : "Zicbom";
++		switch (cbo) {
++		case RISCV_HWPROBE_EXT_ZICBOZ:
++			cbostr = "Zicboz";
++			break;
++		case RISCV_HWPROBE_EXT_ZICBOM:
++			cbostr = "Zicbom";
++			break;
++		case RISCV_HWPROBE_EXT_ZICBOP:
++			cbostr = "Zicbop";
++			break;
++		default:
++			ksft_exit_fail_msg("Internal error: invalid cbo %llu\n", cbo);
++		}
+ 
+ 		if (pair.value & cbo)
+ 			ksft_exit_fail_msg("%s is only present on a subset of harts.\n"
+@@ -194,6 +270,7 @@ enum {
+ 	TEST_ZICBOM,
+ 	TEST_NO_ZICBOM,
+ 	TEST_NO_CBO_INVAL,
++	TEST_ZICBOP,
+ };
+ 
+ static struct test_info {
+@@ -206,26 +283,51 @@ static struct test_info {
+ 	[TEST_ZICBOM]		= { .nr_tests = 3, test_zicbom },
+ 	[TEST_NO_ZICBOM]	= { .nr_tests = 2, test_no_zicbom },
+ 	[TEST_NO_CBO_INVAL]	= { .nr_tests = 1, test_no_cbo_inval },
++	[TEST_ZICBOP]		= { .nr_tests = 3, test_zicbop },
++};
++
++static const struct option long_opts[] = {
++	{"zicbom-raises-sigill", no_argument, 0, 'm'},
++	{"zicboz-raises-sigill", no_argument, 0, 'z'},
++	{0, 0, 0, 0}
+ };
+ 
+ int main(int argc, char **argv)
+ {
+ 	struct sigaction act = {
+-		.sa_sigaction = &sigill_handler,
++		.sa_sigaction = &fault_handler,
+ 		.sa_flags = SA_SIGINFO,
+ 	};
+ 	struct riscv_hwprobe pair;
+ 	unsigned int plan = 0;
+ 	cpu_set_t cpus;
+ 	long rc;
+-	int i;
+-
+-	if (argc > 1 && !strcmp(argv[1], "--sigill")) {
+-		rc = sigaction(SIGILL, &act, NULL);
+-		assert(rc == 0);
+-		tests[TEST_NO_ZICBOZ].enabled = true;
+-		tests[TEST_NO_ZICBOM].enabled = true;
+-		tests[TEST_NO_CBO_INVAL].enabled = true;
++	int i, opt, long_index;
++
++	long_index = 0;
++
++	while ((opt = getopt_long(argc, argv, "mz", long_opts, &long_index)) != -1) {
++		switch (opt) {
++		case 'm':
++			tests[TEST_NO_ZICBOM].enabled = true;
++			tests[TEST_NO_CBO_INVAL].enabled = true;
++			rc = sigaction(SIGILL, &act, NULL);
++			assert(rc == 0);
++			break;
++		case 'z':
++			tests[TEST_NO_ZICBOZ].enabled = true;
++			tests[TEST_NO_CBO_INVAL].enabled = true;
++			rc = sigaction(SIGILL, &act, NULL);
++			assert(rc == 0);
++			break;
++		case '?':
++			fprintf(stderr,
++				"Usage: %s [--zicbom-raises-sigill|-m] [--zicboz-raises-sigill|-z]\n",
++				argv[0]);
++			exit(1);
++		default:
++			break;
++		}
+ 	}
+ 
+ 	rc = sched_getaffinity(0, sizeof(cpu_set_t), &cpus);
+@@ -253,6 +355,11 @@ int main(int argc, char **argv)
+ 		check_no_zicbo_cpus(&cpus, RISCV_HWPROBE_EXT_ZICBOM);
+ 	}
+ 
++	if (pair.value & RISCV_HWPROBE_EXT_ZICBOP)
++		tests[TEST_ZICBOP].enabled = true;
++	else
++		check_no_zicbo_cpus(&cpus, RISCV_HWPROBE_EXT_ZICBOP);
++
+ 	for (i = 0; i < ARRAY_SIZE(tests); ++i)
+ 		plan += tests[i].enabled ? tests[i].nr_tests : 0;
+ 
+-- 
+2.47.2
 
-Wow, that's great!
-
-Jason
 
