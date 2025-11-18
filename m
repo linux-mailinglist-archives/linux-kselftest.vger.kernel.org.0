@@ -1,312 +1,627 @@
-Return-Path: <linux-kselftest+bounces-45847-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45848-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CD92C68A46
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 10:50:12 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63F81C68B5E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 11:09:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CC9EF346608
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 09:48:13 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 7E4732A7F8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 10:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59AF73161B2;
-	Tue, 18 Nov 2025 09:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Dn5nPlgd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 431B532D443;
+	Tue, 18 Nov 2025 10:01:12 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E621A9F82;
-	Tue, 18 Nov 2025 09:48:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC1A314B74;
+	Tue, 18 Nov 2025 10:01:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763459289; cv=none; b=S09YEDyini1vtWLtrgddFnexcUS7loLy/IzEz19FVmX8SORLqwYO6IS89vsAuC6H5TmdQIZeA4Izah+7jMIq9YT7jKk/b4MoHucCY2o9+Cm9cSPrFY9r8mGzvUowlyX0rR6wLgZCY4S76PgXRF0GkDgLrtL700b9ppqf9fqeEJE=
+	t=1763460072; cv=none; b=BeyMQjaalEk8RdUyj7MOWiUDMhZ6FYb/KUiS3b+g4rJebqUiM5rnPUYpIqJS1i8IJrGK7wngAGYMpGnxHwLNZUtaS1tZAuYlvssXsa5YrlGmSWRFG+oA6Se/6IiNoXearHteKA7QwkqQhEsDxXBVy2yAprJeDqiKGMnoiNqmhYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763459289; c=relaxed/simple;
-	bh=Xf6zS75W+Xui/UTgREpxQFXtMLhIQdKtQosLwHmVb7o=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=AVsaIPWmZ6ykplIxhLWw6iY0ggblwlDWeY46fr4hl3FsGvbDEGwjy60sat0b3jjazFfEjLnDLlLZpCVWzgUtSXQN1Q0VWSQLPBxh9YLiEDAAbnLL6BBVRpNS1gZ7xIwNJqDjZAeuTxXnoitfCYh5pqdTquAGAcaijQ7tadggfqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Dn5nPlgd; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AI6U9eH006798;
-	Tue, 18 Nov 2025 09:47:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=97DCAF
-	CSQ1XM+EF/mPqIa768fNtqRdF1r0y2YGqmM1Y=; b=Dn5nPlgdOn3yLyjQHU/e2g
-	7N6iWk4PK8m37iQtqU5rTgyb44Rq1rRaqMWDG7mAurui5LmSwV3zkSGSxvkK9i/d
-	KHEoBZ94nCrsKD18n85EUP9jcnAmE3220SiLdcxSg5HCpBYvaJ99IZAiUe6lTkZI
-	Vb5RNLGynkpLd4GL2mPzIgGaM4YAekk3Who+Eu4/1JU3A7XnFH4RLi/qBhZ7JP0b
-	Y5EqRAc7L8u3LS3xqoggaJk95kSXjInAN3giLrcUvgALHvM/cAMKo8KRK0GlwfbA
-	HISQpvruxX2VlnJgeOMwDUhDrDPSIzI3ShrDYIaVyq2gNJYSLMueavA1bmlGymQQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk9t11b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 09:47:24 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5AI9bJ5N030415;
-	Tue, 18 Nov 2025 09:47:23 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk9t117-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 09:47:23 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AI7NnnW010448;
-	Tue, 18 Nov 2025 09:47:22 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af3us2jat-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 09:47:22 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AI9lKJN8585846
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Nov 2025 09:47:20 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3335058052;
-	Tue, 18 Nov 2025 09:47:20 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AFAB85805A;
-	Tue, 18 Nov 2025 09:47:14 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.98.109.80])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 18 Nov 2025 09:47:14 +0000 (GMT)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1763460072; c=relaxed/simple;
+	bh=1fgda7XqTVGrmCRU6ZsOIKirsmCPvb/orwZgSf9XXlM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ddsBzjqajAguQaFNAiYALVoEBaD58m2bdSKHizzx85XUqALJ2U26ReLQdvcFCFLN9SWkHhCNFlCeEB7a/f8834v1Hr2h03r0rwKpLFzo85wF4w8oqevY2MVZIY2DVAWlupCWBFBRCkYObkMUDdwhSiws2IUsVz+JN2zCMrY/Lvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4d9g8l2FlzzJ46jL;
+	Tue, 18 Nov 2025 18:00:23 +0800 (CST)
+Received: from mscpeml500004.china.huawei.com (unknown [7.188.26.250])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5C6601404FE;
+	Tue, 18 Nov 2025 18:01:05 +0800 (CST)
+Received: from huawei-ThinkCentre-M920t.huawei.com (10.123.122.223) by
+ mscpeml500004.china.huawei.com (7.188.26.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 18 Nov 2025 13:01:04 +0300
+From: Dmitry Skorodumov <skorodumov.dmitry@huawei.com>
+To: <netdev@vger.kernel.org>, Simon Horman <horms@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <andrey.bokhanko@huawei.com>, <edumazet@google.com>, Dmitry Skorodumov
+	<skorodumov.dmitry@huawei.com>, "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>
+Subject: [PATCH net-next 13/13] selftests: drv-net: selftest for ipvlan-macnat mode
+Date: Tue, 18 Nov 2025 13:00:45 +0300
+Message-ID: <20251118100046.2944392-14-skorodumov.dmitry@huawei.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20251118100046.2944392-1-skorodumov.dmitry@huawei.com>
+References: <20251118100046.2944392-1-skorodumov.dmitry@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.600.62\))
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Fix htab_update/reenter_update
- selftest failure
-From: Venkat <venkat88@linux.ibm.com>
-In-Reply-To: <20251117060752.129648-1-skb99@linux.ibm.com>
-Date: Tue, 18 Nov 2025 15:17:01 +0530
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Hari Bathini <hbathini@linux.ibm.com>, sachinpb@linux.ibm.com,
-        andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8A43B87B-A478-4AA1-8154-D459D25B3320@linux.ibm.com>
-References: <20251117060752.129648-1-skb99@linux.ibm.com>
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-X-Mailer: Apple Mail (2.3774.600.62)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: KMM4gIWZK2X-z6EtX4YMI80LvX1VKp7o
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfXzutXR4bg0xFI
- koA/V0INLXSqqEicJtw/JFEbKoIZ8e/7D2qWOyaYzlbLK7KIZyTf8gJjaAhE5G0aq+K0Pi17zjt
- Y2Sekf0iX9ABzNB9nB1Ka7OqLtlskiOmUQP1iwrgnDXH8uwv6g8ZMjy0/OZq5cXkNjo8USnp8bt
- NrmtMgbQXD4NUBomQbcr5INL9iab6tW09SEwUpOivh+mwrzoqakdfv6MsSJ+JfH+EMf93xPpDBW
- m60+0CSF42t5uS+3I3wpFo1moY6mPJts73eBu3cB0S9oxlnSwS6brc2i1OBULMQ42ucH9hqO1Z1
- CtMZUL6G7fB1/sC7TtlsUue4kRY9n+u1ayzSpmud7O0fr96vuRvgucxHju4IykDAbaY5Zke/4o9
- NHU0buBefripP2hoN1KZHLMGB3AEtg==
-X-Proofpoint-ORIG-GUID: JaQ19AOOl--rxcJTnj4pCPfWUknE21uZ
-X-Authority-Analysis: v=2.4 cv=XtL3+FF9 c=1 sm=1 tr=0 ts=691c40ac cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=LI0gvHg8sEG1FREOOLkA:9 a=QEXdDO2ut3YA:10
- a=cPQSjfK2_nFv0Q5t_7PE:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 spamscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
- adultscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: mscpeml500003.china.huawei.com (7.188.49.51) To
+ mscpeml500004.china.huawei.com (7.188.26.250)
 
+Implemented a self-test for ipvlan in l2macnat mode.
 
+The test verifies:
+1) It's not possible to configure an ip in l2macnat mode on ipvtap
 
-> On 17 Nov 2025, at 11:37=E2=80=AFAM, Saket Kumar Bhaskar =
-<skb99@linux.ibm.com> wrote:
->=20
-> Since commit 31158ad02ddb ("rqspinlock: Add deadlock detection
-> and recovery") the updated path on re-entrancy now reports deadlock
-> via -EDEADLK instead of the previous -EBUSY.
->=20
-> Also, the way reentrancy was exercised (via fentry/lookup_elem_raw)
-> has been fragile because lookup_elem_raw may be inlined
-> (find_kernel_btf_id() will return -ESRCH).
->=20
-> To fix this fentry is attached to bpf_obj_free_fields() instead of
-> lookup_elem_raw() and:
->=20
-> - The htab map is made to use a BTF-described struct val with a
->  struct bpf_timer so that check_and_free_fields() reliably calls
->  bpf_obj_free_fields() on element replacement.
->=20
-> - The selftest is updated to do two updates to the same key (insert +
->  replace) in prog_test.
->=20
-> - The selftest is updated to align with expected errno with the
->  kernel=E2=80=99s current behavior.
->=20
-> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+2) It creates several net namespaces
+- Default namespace emulates host,
+- ipvlan-tst-phy emulates some host in remote network
+- ipvlan-tst-0/1 emulate VMs on host.
 
-Tested this patch by applying on top of bpd-next and it works as =
-expected. Please add below tag.
+Test verifies, that MAC addresses are as expected in ARP/NEIGH tables:
+all MACs in 'tst-phy' points to "host" mac-address
+all MACs in Default and tst are real ones
 
-Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+3) The l2macnat mode has limited number of addresses remembered on port.
+Test verifies, that this limit really works.
 
-With this change:
+Signed-off-by: Dmitry Skorodumov <skorodumov.dmitry@huawei.com>
+---
+ tools/testing/selftests/net/Makefile          |   3 +
+ .../selftests/net/ipvtap_macnat_bridge.py     | 174 +++++++++
+ .../selftests/net/ipvtap_macnat_test.sh       | 332 ++++++++++++++++++
+ 3 files changed, 509 insertions(+)
+ create mode 100755 tools/testing/selftests/net/ipvtap_macnat_bridge.py
+ create mode 100755 tools/testing/selftests/net/ipvtap_macnat_test.sh
 
-./test_progs -t htab_update
-#144/1   htab_update/reenter_update:OK
-#144/2   htab_update/concurrent_update:OK
-#144     htab_update:OK
-Summary: 1/2 PASSED, 0 SKIPPED, 0 FAILED
-
-Regards,
-Venkat.
-
-> ---
-> Changes since v2:
-> Addressed CI failures:
-> * Initialize key to 0 before the first update.
-> * Used pointer value to pass for update and memset rather than
->  &value.
->=20
-> v2: =
-https://lore.kernel.org/all/20251114152653.356782-1-skb99@linux.ibm.com/
->=20
-> Changes since v1:
-> Addressed comments from Alexei:
-> * Fixed the scenario where test may fail when lookup_elem_raw()
->  is inlined.
->=20
-> v1: =
-https://lore.kernel.org/all/20251106052628.349117-1-skb99@linux.ibm.com/
->=20
-> .../selftests/bpf/prog_tests/htab_update.c    | 37 ++++++++++++++-----
-> .../testing/selftests/bpf/progs/htab_update.c | 19 +++++++---
-> 2 files changed, 41 insertions(+), 15 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c =
-b/tools/testing/selftests/bpf/prog_tests/htab_update.c
-> index 2bc85f4814f4..d0b405eb2966 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
-> @@ -15,17 +15,17 @@ struct htab_update_ctx {
-> static void test_reenter_update(void)
-> {
-> struct htab_update *skel;
-> - unsigned int key, value;
-> + void *value =3D NULL;
-> + unsigned int key, value_size;
-> int err;
->=20
-> skel =3D htab_update__open();
-> if (!ASSERT_OK_PTR(skel, "htab_update__open"))
-> return;
->=20
-> - /* lookup_elem_raw() may be inlined and find_kernel_btf_id() will =
-return -ESRCH */
-> - bpf_program__set_autoload(skel->progs.lookup_elem_raw, true);
-> + bpf_program__set_autoload(skel->progs.bpf_obj_free_fields, true);
-> err =3D htab_update__load(skel);
-> - if (!ASSERT_TRUE(!err || err =3D=3D -ESRCH, "htab_update__load") || =
-err)
-> + if (!ASSERT_TRUE(!err, "htab_update__load") || err)
-> goto out;
->=20
-> skel->bss->pid =3D getpid();
-> @@ -33,14 +33,33 @@ static void test_reenter_update(void)
-> if (!ASSERT_OK(err, "htab_update__attach"))
-> goto out;
->=20
-> - /* Will trigger the reentrancy of bpf_map_update_elem() */
-> + value_size =3D bpf_map__value_size(skel->maps.htab);
-> +
-> + value =3D calloc(1, value_size);
-> + if (!ASSERT_OK_PTR(value, "calloc value"))
-> + goto out;
-> + /*
-> + * First update: plain insert. This should NOT trigger the =
-re-entrancy
-> + * path, because there is no old element to free yet.
-> + */
-> key =3D 0;
-> - value =3D 0;
-> - err =3D bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, =
-&value, 0);
-> - if (!ASSERT_OK(err, "add element"))
-> + err =3D bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, =
-value, BPF_ANY);
-> + if (!ASSERT_OK(err, "first update (insert)"))
-> + goto out;
-> +
-> + /*
-> + * Second update: replace existing element with same key and trigger
-> + * the reentrancy of bpf_map_update_elem().
-> + * check_and_free_fields() calls bpf_obj_free_fields() on the old
-> + * value, which is where fentry program runs and performs a nested
-> + * bpf_map_update_elem(), triggering -EDEADLK.
-> + */
-> + memset(value, 0, value_size);
-> + err =3D bpf_map_update_elem(bpf_map__fd(skel->maps.htab), &key, =
-value, BPF_ANY);
-> + if (!ASSERT_OK(err, "second update (replace)"))
-> goto out;
->=20
-> - ASSERT_EQ(skel->bss->update_err, -EBUSY, "no reentrancy");
-> + ASSERT_EQ(skel->bss->update_err, -EDEADLK, "no reentrancy");
-> out:
-> htab_update__destroy(skel);
-> }
-> diff --git a/tools/testing/selftests/bpf/progs/htab_update.c =
-b/tools/testing/selftests/bpf/progs/htab_update.c
-> index 7481bb30b29b..195d3b2fba00 100644
-> --- a/tools/testing/selftests/bpf/progs/htab_update.c
-> +++ b/tools/testing/selftests/bpf/progs/htab_update.c
-> @@ -6,24 +6,31 @@
->=20
-> char _license[] SEC("license") =3D "GPL";
->=20
-> +/* Map value type: has BTF-managed field (bpf_timer) */
-> +struct val {
-> + struct bpf_timer t;
-> + __u64 payload;
-> +};
-> +
-> struct {
-> __uint(type, BPF_MAP_TYPE_HASH);
-> __uint(max_entries, 1);
-> - __uint(key_size, sizeof(__u32));
-> - __uint(value_size, sizeof(__u32));
-> + __type(key, __u32);
-> + __type(value, struct val);
-> } htab SEC(".maps");
->=20
-> int pid =3D 0;
-> int update_err =3D 0;
->=20
-> -SEC("?fentry/lookup_elem_raw")
-> -int lookup_elem_raw(void *ctx)
-> +SEC("?fentry/bpf_obj_free_fields")
-> +int bpf_obj_free_fields(void *ctx)
-> {
-> - __u32 key =3D 0, value =3D 1;
-> + __u32 key =3D 0;
-> + struct val value =3D { .payload =3D 1 };
->=20
-> if ((bpf_get_current_pid_tgid() >> 32) !=3D pid)
-> return 0;
->=20
-> - update_err =3D bpf_map_update_elem(&htab, &key, &value, 0);
-> + update_err =3D bpf_map_update_elem(&htab, &key, &value, BPF_ANY);
-> return 0;
-> }
-> --=20
-> 2.51.0
-
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index b5127e968108..ff28012d34db 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -203,6 +203,9 @@ YNL_GEN_PROGS := netlink-dumps
+ TEST_GEN_FILES += $(YNL_GEN_FILES)
+ TEST_GEN_PROGS += $(YNL_GEN_PROGS)
+ 
++TEST_PROGS += ipvtap_macnat_test.sh
++TEST_FILES += ipvtap_macnat_bridge.py
++
+ TEST_GEN_FILES += $(patsubst %.c,%.o,$(wildcard *.bpf.c))
+ 
+ TEST_INCLUDES := forwarding/lib.sh
+diff --git a/tools/testing/selftests/net/ipvtap_macnat_bridge.py b/tools/testing/selftests/net/ipvtap_macnat_bridge.py
+new file mode 100755
+index 000000000000..6fc4762b03cd
+--- /dev/null
++++ b/tools/testing/selftests/net/ipvtap_macnat_bridge.py
+@@ -0,0 +1,174 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""
++Script to bridge ipvtap and tap,
++needed to simulate behaviour of virtual machine using ipvtap.
++
++ipvtap in macnat mode cannot have IP address.
++Due to limitations of ipvtap, it also cannot be plugged
++into bridge.
++Use this script to connect ipvtap and tap and assing IP to tap.
++"""
++
++import socket
++import os
++import select
++import sys
++import signal
++import fcntl
++import struct
++import subprocess
++
++# Linux TUN/TAP constants
++TUNSETIFF = 0x400454ca
++IFF_TUN = 0x0001
++IFF_TAP = 0x0002
++IFF_NO_PI = 0x1000
++
++ns_name = "non-initialized"
++
++class TapBridge:
++    def __init__(self, tap, ipvtap, buffer_size=65536):
++        self.tap_name = tap
++        self.ipvtap_name = ipvtap
++        self.buffer_size = buffer_size
++        self.running = False
++
++    def open_tap_file(self, path):
++        """Open TAP interface as a file"""
++        try:
++            return os.open(path, os.O_RDWR)
++        except Exception as e:
++            print(f"Error opening {path}: {e}")
++            return None
++
++    def open_ipvtap_sock(self, tap_name):
++        """Open a TAP interface using raw socket"""
++        try:
++            sock = socket.socket(socket.AF_PACKET,
++                                 socket.SOCK_RAW,
++                                 socket.ntohs(0x0003))
++            sock.bind((tap_name, 0))
++            sock.setblocking(False)
++            print(f"Connected to IPVTAP interface: {tap_name}")
++            return sock
++
++        except Exception as e:
++            print(f"Error opening IPVTAP interface {tap_name}: {e}")
++            return None
++
++    def create_tap_interface(self, tap_name):
++        """Create and configure a TAP interface using /dev/net/tun"""
++        try:
++            # Open the tun device
++            tun_fd = os.open('/dev/net/tun', os.O_RDWR)
++            if tun_fd < 0:
++                raise Exception("Failed to open /dev/net/tun")
++
++            # Prepare the ifr structure
++            tap_name_bytes = tap_name.encode('utf-8')
++            ifr = struct.pack('16sH', tap_name_bytes, IFF_TAP | IFF_NO_PI)
++
++            # Set the interface name and flags
++            result = fcntl.ioctl(tun_fd, TUNSETIFF, ifr)
++
++            # Get the actual interface name that was set
++            unpacked = struct.unpack('16sH', result)
++            actual_name = unpacked[0].split(b'\x00')[0].decode()
++            print(f"Created TAP interface: {actual_name}")
++
++            return tun_fd
++
++        except Exception as e:
++            print(f"Error creating TAP interface {tap_name}: {e}")
++            return None
++
++    def forward_data(self, from_fd, to_fd, description):
++        """Forward data from one file descriptor to another"""
++        try:
++            data = os.read(from_fd, self.buffer_size)
++            if data:
++                os.write(to_fd, data)
++                return True
++            return False
++
++        except BlockingIOError:
++            return True
++        except Exception as e:
++            print(f"Error forwarding data {description}: {e}")
++            return False
++
++    def run(self):
++        """Main bridge loop"""
++        # Create TAP interfaces
++        tap1_fd = self.create_tap_interface(self.tap_name)
++
++        sock = self.open_ipvtap_sock(self.ipvtap_name)
++        tap2_fd = sock.fileno()
++
++        if tap1_fd is None or tap2_fd is None:
++            print("Failed to create TAP interfaces")
++            return
++
++        print("Press Ctrl+C to stop\n")
++
++        self.running = True
++        stats = {'tap1_to_tap2': 0, 'tap2_to_tap1': 0}
++        while self.running:
++            try:
++                # Use select to monitor both file descriptors
++                readable, _, _ = select.select([tap1_fd, tap2_fd], [], [], 1.0)
++
++                for fd in readable:
++                    if fd == tap1_fd:
++                        descr = f"from {self.tap_name} to {self.ipvtap_name}"
++                        if self.forward_data(tap1_fd, tap2_fd, descr):
++                            stats['tap1_to_tap2'] += 1
++                        else:
++                            self.running = False
++                    elif fd == tap2_fd:
++                        descr = f"from {self.ipvtap_name} to {self.tap_name}"
++                        if self.forward_data(tap2_fd, tap1_fd, descr):
++                            stats['tap2_to_tap1'] += 1
++                        else:
++                            self.running = False
++
++            except KeyboardInterrupt:
++                print("\nShutting down...")
++                self.running = False
++            except Exception as e:
++                print(f"Error in main loop: {e}")
++                self.running = False
++
++        # Cleanup
++        os.close(tap1_fd)
++        os.close(tap2_fd)
++        print(f"Bridge stopped in {ns_name}. Stats: {stats}")
++
++
++def signal_handler(_sig, _frame):
++    print(f'\nReceived interrupt signal, shutting down bridge in {ns_name}')
++    sys.exit(0)
++
++
++if __name__ == "__main__":
++    ns_name = subprocess.getoutput("ip netns identify") or "default"
++
++    signal.signal(signal.SIGINT, signal_handler)
++
++    # Check if running as root
++    if os.geteuid() != 0:
++        print("ERROR: This script must be run as root!")
++        sys.exit(1)
++
++    if len(sys.argv) != 3:
++        print("Usage: tap_bridge.py tap_name ipvtap_name")
++        sys.exit(1)
++
++    TAP = sys.argv[1]
++    IPVTAP = sys.argv[2]
++
++    print(f"Starting TAP bridge between {TAP} and {IPVTAP} in {ns_name}")
++    bridge = TapBridge(TAP, IPVTAP)
++    bridge.run()
+diff --git a/tools/testing/selftests/net/ipvtap_macnat_test.sh b/tools/testing/selftests/net/ipvtap_macnat_test.sh
+new file mode 100755
+index 000000000000..5f684a6d7603
+--- /dev/null
++++ b/tools/testing/selftests/net/ipvtap_macnat_test.sh
+@@ -0,0 +1,332 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Tests for ipvtap in macnat mode
++
++NS_TST0=ipvlan-tst-0
++NS_TST1=ipvlan-tst-1
++NS_PHY=ipvlan-tst-phy
++
++IP_HOST=172.25.0.1
++IP_PHY=172.25.0.2
++IP_TST0=172.25.0.10
++IP_TST1=172.25.0.30
++
++IP_OK0=("172.25.0.10" "172.25.0.11" "172.25.0.12" "172.25.0.13")
++IP6_OK0=("fc00::10" "fc00::11" "fc00::12" "fc00::13" )
++
++IP_OVFL0="172.25.0.14"
++IP6_OVFL0="fc00::14"
++
++IP6_HOST=fc00::1
++IP6_PHY=fc00::2
++IP6_TST0=fc00::10
++IP6_TST1=fc00::30
++
++MAC_HOST="92:3a:00:00:00:01"
++MAC_PHY="92:3a:00:00:00:02"
++MAC_TST0="92:3a:00:00:00:10"
++MAC_TST1="92:3a:00:00:00:30"
++
++VETH_HOST=vethtst
++VETH_PHY=vethtst.p
++
++#
++# The testing environment looks this way:
++#
++# |------HOST------|     |------PHY-------|
++# |      veth<----------------->veth      |
++# |------|--|------|     |----------------|
++#        |  |
++#        |  |            |-----TST0-------|
++#        |  |------------|----ipvtap      |
++#        |               |----------------|
++#        |
++#        |               |-----TST1-------|
++#        |---------------|----ivtap       |
++#                        |----------------|
++#
++# The macnat mode is for virtual machines, so ipvtap-interface is supposed
++# to be used only for traffic monitoring and doesn't have ip-address.
++#
++# To simulate a virtual machine on ipvtap, we create TAP-interfaces
++# in TST environments and assing IP-addresses to them.
++# TAP and IPVTAP are connected with simple python script.
++#
++
++ns_run() {
++	ns=$1
++	shift
++	if [[ "$ns" == "default" ]]; then
++		"$@" >/dev/null
++	else
++		ip netns exec "$ns" "$@" >/dev/null
++	fi
++}
++
++configure_ns() {
++	local ns=$1
++	local n=$2
++	local ip=$3
++	local ip6=$4
++	local mac=$5
++
++	ns_run $ns ip link set lo up
++
++	if ! ip link add netns $ns name ipvtap0.$n link $VETH_HOST \
++	    type ipvtap mode l2macnat bridge; then
++		exit_error "FAIL: Failed to configure ipvtap link."
++	fi
++	ns_run $ns ip link set ipvtap0.$n up
++
++	ns_run $ns ip tuntap add mode tap tap0.$n
++	ns_run $ns ip link set dev tap0.$n address $mac
++	# disable dad
++	ns_run $ns sysctl -w net/ipv6/conf/tap0.$n/accept_dad=0
++	ns_run $ns ip link set tap0.$n up
++	ns_run $ns ip a a $ip/24 dev tap0.$n
++	ns_run $ns ip a a $ip6/64 dev tap0.$n
++}
++
++start_macnat_bridge() {
++	local ns=$1
++	local n=$2
++	ip netns exec $ns python3 ipvtap_macnat_bridge.py tap0.$n ipvtap0.$n &
++}
++
++configure_veth() {
++	local ns=$1
++	local veth=$2
++	local ip=$3
++	local ip6=$4
++	local mac=$5
++
++	ns_run $ns ip link set lo up
++	ns_run $ns ethtool -K $veth tx off rx off
++	ns_run $ns ip link set dev $veth address $mac
++	ns_run $ns ip link set $veth up
++	ns_run $ns ip a a $ip/24 dev $veth
++	ns_run $ns ip a a $ip6/64 dev $veth
++}
++
++setup_env() {
++	ip netns add $NS_TST0
++	ip netns add $NS_TST1
++	ip netns add $NS_PHY
++
++	# setup simulated other-host (phy) and host itself
++	ip link add $VETH_HOST type veth peer name $VETH_PHY \
++	    netns $NS_PHY >/dev/null
++
++	# host config
++	configure_veth default $VETH_HOST $IP_HOST $IP6_HOST $MAC_HOST
++	configure_veth $NS_PHY $VETH_PHY $IP_PHY $IP6_PHY $MAC_PHY
++
++	# TST namespaces config
++	configure_ns $NS_TST0 0 $IP_TST0 $IP6_TST0 $MAC_TST0
++	configure_ns $NS_TST1 1 $IP_TST1 $IP6_TST1 $MAC_TST1
++}
++
++ping_all() {
++	# This will learn MAC/IP addresses on ipvtap
++	local ns=$1
++
++	ns_run $ns ping -c 1 $IP_TST0
++	ns_run $ns ping -c 1 $IP6_TST0
++
++	ns_run $ns ping -c 1 $IP_TST1
++	ns_run $ns ping -c 1 $IP6_TST1
++
++	ns_run $ns ping -c 1 $IP_HOST
++	ns_run $ns ping -c 1 $IP6_HOST
++
++	ns_run $ns ping -c 1 $IP_PHY
++	ns_run $ns ping -c 1 $IP6_PHY
++}
++
++check_mac_eq() {
++	# Ensure IP corresponds to MAC.
++	local ns=$1
++	local ip=$2
++	local mac=$3
++	local dev=$4
++
++	if [[ "$ns" == "default" ]]; then
++		out=$(
++			ip neigh show $ip dev $dev \
++			| grep "$ip" \
++			| grep "$mac"
++		)
++	else
++		out=$(
++			ip netns exec $ns \
++			ip neigh show $ip dev $dev \
++			| grep "$ip" \
++			| grep "$mac"
++		)
++	fi
++
++	if [[ 'X'$out'X' == "XX" ]]; then
++		exit_error "FAIL: '$ip' is not '$mac'"
++	fi
++}
++
++cleanup_env() {
++	ip link del $VETH_HOST
++	ip netns del $NS_TST0
++	ip netns del $NS_TST1
++	ip netns del $NS_PHY
++}
++
++exit_error() {
++	echo $1
++	exit 1
++}
++
++test_check_mac() {
++	# All IPs in NS_PHY should have MAC of the host
++	check_mac_eq $NS_PHY $IP_TST0 $MAC_HOST $VETH_PHY
++	check_mac_eq $NS_PHY $IP6_TST0 $MAC_HOST $VETH_PHY
++	check_mac_eq $NS_PHY $IP_TST1 $MAC_HOST $VETH_PHY
++	check_mac_eq $NS_PHY $IP6_TST1 $MAC_HOST $VETH_PHY
++	check_mac_eq $NS_PHY $IP_HOST $MAC_HOST $VETH_PHY
++	check_mac_eq $NS_PHY $IP6_HOST $MAC_HOST $VETH_PHY
++
++	# All IPs in TST0 should have corresponding MAC
++	check_mac_eq $NS_TST0 $IP_HOST $MAC_HOST tap0.0
++	check_mac_eq $NS_TST0 $IP6_HOST $MAC_HOST tap0.0
++	check_mac_eq $NS_TST0 $IP_TST1 $MAC_TST1 tap0.0
++	check_mac_eq $NS_TST0 $IP6_TST1 $MAC_TST1 tap0.0
++	check_mac_eq $NS_TST0 $IP_PHY $MAC_PHY tap0.0
++	check_mac_eq $NS_TST0 $IP6_PHY $MAC_PHY tap0.0
++
++	# All IPs in host should have corresponding MAC
++	check_mac_eq default $IP_TST0 $MAC_TST0 $VETH_HOST
++	check_mac_eq default $IP6_TST0 $MAC_TST0 $VETH_HOST
++	check_mac_eq default $IP_TST1 $MAC_TST1 $VETH_HOST
++	check_mac_eq default $IP6_TST1 $MAC_TST1 $VETH_HOST
++	check_mac_eq default $IP_PHY $MAC_PHY $VETH_HOST
++	check_mac_eq default $IP6_PHY $MAC_PHY $VETH_HOST
++}
++
++test_ip_add() {
++	# adding IPs to ipvtap should be forbidden and should fail
++	if ns_run $NS_TST0 ip a a 172.26.0.1/24 dev ipvtap0.0; then
++		exit_error "FAIL: Module allowed to add ip to ipvtap."
++	fi
++
++	if ns_run $NS_TST0 ip a a fc01::1/64 dev ipvtap0.0; then
++		exit_error "FAIL: Module allowed to add ip6 to ipvtap."
++	fi
++}
++
++test_ip_overflow() {
++	# The ipvtap remembers limited number of addresses on interface.
++	# Let's overflow it and check that oldest one doesn't work.
++
++	ns_run $NS_TST0 ip addr flush dev tap0.0
++
++	# Add exactly 4 ip addresses
++	for ip in "${IP_OK0[@]}"; do
++		ns_run $NS_TST0 ip a a $ip/24 dev tap0.0
++		ns_run $NS_TST0 ping -c 1 $IP_HOST -I $ip
++	done
++
++	# Initial check that ping works
++	if ! ping -c 2 $IP_TST0; then
++		exit_error "FAIL: Failed to ping tst0"
++	fi
++
++	# Add 1 more ip addresses
++	ns_run $NS_TST0 ip a a $IP_OVFL0/24 dev tap0.0
++	ns_run $NS_TST0 ping -c 1 $IP_HOST -I $IP_OVFL0
++	# check that ping to oldest one from host fails.
++	echo "the next ping should fail:"
++	if ping -c 2 $IP_TST0; then
++		exit_error "FAIL: IP-0 still exists on interface"
++	fi
++
++	# ping host using address-0 and force relearn of IP0.
++	# Host should be able ping after that
++	ns_run $NS_TST0 ping -c 1 $IP_HOST -I $IP_TST0
++
++	if ! ping -c 2 $IP_TST0; then
++		exit_error "FAIL: Failed to ping tst0 at stage 3"
++	fi
++}
++
++test_ip6_overflow() {
++	# The ipvtap stores limited number of addresses on interface.
++	# Let's overflow it and check that oldest one doesn't work.
++
++	ns_run $NS_TST0 ip addr flush dev tap0.0
++
++	# Add exactly 4 ip addresses
++	for ip6 in "${IP6_OK0[@]}"; do
++		ns_run $NS_TST0 ip a a $ip6/64 dev tap0.0
++		ns_run $NS_TST0 ping -c 1 $IP6_HOST -I $ip6
++	done
++
++	# Initial check that ping6 works
++	if ! ping -c 2 $IP6_TST0; then
++		exit_error "FAIL: Failed to ping6 tst0"
++	fi
++
++	# Add 1 more ip6 addresses
++	ns_run $NS_TST0 ip a a $IP6_OVFL0/64 dev tap0.0
++	ns_run $NS_TST0 ping -c 1 $IP6_HOST -I $IP6_OVFL0
++	# check that ping to oldest one from host fails.
++	echo "the next ping should fail:"
++	if ping -c 2 $IP6_TST0; then
++		exit_error "FAIL: IP6-0 still exists on interface"
++	fi
++
++	# ping host using address-0 and force relearn of IP0.
++	# Host should be able ping after that
++	ns_run $NS_TST0 ping -c 1 $IP6_HOST -I $IP6_TST0
++	if ! ping -c 2 $IP6_TST0; then
++		exit_error "FAIL: Failed to ping6 tst0 at stage 3"
++	fi
++}
++
++exec_test() {
++	echo "TEST: "$2
++	$1
++	echo "PASSED: "$2
++}
++
++trap cleanup_env EXIT
++
++echo "ipvlan macnat tests"
++echo "==================="
++
++modprobe -q tap
++modprobe -q ipvlan
++modprobe -q ipvtap
++
++setup_env
++
++exec_test test_ip_add "ip add not allowed"
++
++start_macnat_bridge $NS_TST0 0
++mb_pid1=$!
++start_macnat_bridge $NS_TST1 1
++mb_pid2=$!
++
++echo "<<< Preparation: pinging all...."
++ping_all default
++ping_all $NS_TST0
++ping_all $NS_TST1
++ping_all $NS_PHY
++echo "Finished preparational pinging all. >>>"
++
++exec_test test_check_mac "mac correctness"
++exec_test test_ip_overflow "ip learn capacity overflow"
++exec_test test_ip6_overflow "ip6 learn capacity overflow"
++
++kill -INT $mb_pid1
++kill -INT $mb_pid2
++wait $mb_pid1
++wait $mb_pid2
++
++echo "All tests passed"
+-- 
+2.25.1
 
 
