@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-45928-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45929-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40EE7C6BC85
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 22:55:12 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A68BC6BC5B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 22:53:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D595738011A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 21:52:55 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 16E552AD10
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 21:53:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C0AA31AF09;
-	Tue, 18 Nov 2025 21:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21CBF31D757;
+	Tue, 18 Nov 2025 21:52:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FXK9nD4y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fsUiw09d"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EEB5313530;
-	Tue, 18 Nov 2025 21:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC8530F53A;
+	Tue, 18 Nov 2025 21:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763502731; cv=none; b=mqDGv9YCOT5wuc+AKSqt5RUFQipmu20oTZ2OZbuPK5rEjNQBXtoqp3nD1TeTspF27CYrmjWYectGeKPiZadRd0YcRIwiKbL7Q/R1JUlg5UmrBALDf1bnSnfUZ2T3fmq/SopSp6RQrHK189BoagDVtZQP9wlfIh66SdmKKY8mT1U=
+	t=1763502733; cv=none; b=dP4EZzlArfYyIRu3ssXF1NujROE+KsKxpE8QHRSd+bWdcpqeghwqxXV8ifGTPDEns7JjeJjdq5ZkSb0HXQu3Y4Zd3ZX6lfuaBsQ+Fgk6la8FHuXWBFJ2LkixJVhEFsD9atxBrGCf0iXXh602xl6XbiapWgew703eDS//l05Y7HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763502731; c=relaxed/simple;
-	bh=eg/NrceRb/jGTWiY4hlGAq1hAagtDJouScKTylGGI9I=;
+	s=arc-20240116; t=1763502733; c=relaxed/simple;
+	bh=IudkGQ6Ftj+GR26bJr5wJC2xiIKCXDdipzViIKvPrpI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zmw4kYB9tLJtaGN+JKe8VpQqXu3K4Yt0MlxPqAjeA0q7vnlwn9WvkWPI2ubbXfvyJIclcun234qjyx0mvZpU+vEbGDNLuJNmowJjTllafIBVwUeLH9M307Qj/+GP5o0gYoQB7Ym8KjfNJlBjKUaJDToOQVzr472xaagzNKDkhPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FXK9nD4y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87F58C4AF12;
-	Tue, 18 Nov 2025 21:52:09 +0000 (UTC)
+	 MIME-Version; b=ptC1xD3bh71oQ8qd5mTCDes8piTl3JTKPgfkkJaeDc4qoWVQAMpebwCYe89YzUk4Fetg2gx0ocp8bNHTbqUVkakcAne/0rEc0R8syMvImve3Ry5miqjtVHk7OSLBIWaeztS1xPJLvivBFkMSuG6NZkmXlnUMDO94+ipe0q0hD/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fsUiw09d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CC91C19422;
+	Tue, 18 Nov 2025 21:52:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763502730;
-	bh=eg/NrceRb/jGTWiY4hlGAq1hAagtDJouScKTylGGI9I=;
+	s=k20201202; t=1763502732;
+	bh=IudkGQ6Ftj+GR26bJr5wJC2xiIKCXDdipzViIKvPrpI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=FXK9nD4y9/E0D7H/b9MYsoGTPJF8hG/LdbVYwY0pOg182sml04qAG0CLCrNYUwBL5
-	 cC/3XZOizuupryHjDlCvSiCTTwo7+xCfMRv/36cyZrj4MWIrMtve8RfUcZJiQVzhD2
-	 MzreZsMI1RIJLrLV0GMWY6jTkF82KNaFNAL7TcBVTITrYi3k0mrjRhqQhdCVqNGGw3
-	 e+Z7lnzqYg7q7VgY/WEwrMFYt+wxueK71l0DqJjx/cRHHBZWtuZIGF6V1caS1YAzVW
-	 QjDFdsljoIoOH1gxByAw/kPrydIvjbFjFDl6FIX8bjEfw10xVVT6uUdxsfrtyjTitA
-	 fygdHfz6attZQ==
+	b=fsUiw09dzZa5mNanIUxFLkm7OGNXEx900wyeiSRa9h/JZw1DOpij0Pgx6mhm57rpz
+	 AmwvYzg3LjYYLnajFCz/WnpC6NOMODRkTaqio3EnVkAzJJLYJhTSM95oanYSr2eFfF
+	 VUf8QSdtHUvbAEHOq6j2+FfYJ8G4cTUzb72hrDIn7y5mdycK+ZSh80wqYIVOTNC0Bv
+	 YHCGaJUpNIDw4VHO8WE6vL5+Gtn0XVCxBIb+j9CxchrBmQz9lJIRNd8SGxWT9wHYVJ
+	 s2LqSOjhvk7b0yJuJGTPCyJ/MGauITMZT6kiEIGFp7GJayFqLLlqt1K+TwJU3fi++K
+	 /q4Xryj1OfALw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -56,9 +56,9 @@ Cc: netdev@vger.kernel.org,
 	petrm@nvidia.com,
 	matttbe@kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 10/12] selftests: drv-net: hw: convert the Toeplitz test to Python
-Date: Tue, 18 Nov 2025 13:51:24 -0800
-Message-ID: <20251118215126.2225826-11-kuba@kernel.org>
+Subject: [PATCH net-next v2 11/12] netdevsim: add loopback support
+Date: Tue, 18 Nov 2025 13:51:25 -0800
+Message-ID: <20251118215126.2225826-12-kuba@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251118215126.2225826-1-kuba@kernel.org>
 References: <20251118215126.2225826-1-kuba@kernel.org>
@@ -70,524 +70,55 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rewrite the existing toeplitz.sh test in Python. The conversion
-is a lot less exact than the GRO one. We use Netlink APIs to
-get the device RSS and IRQ information. We expect that the device
-has neither RPS nor RFS configured, and set RPS up as part of
-the test.
+Support device loopback. Apparently this mode has been historically
+supported by the toeplitz test and I don't have any HW which lets
+me test the conversion..
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
-v2:
- - fix typo configure -> configured
-v1: https://lore.kernel.org/20251117205810.1617533-11-kuba@kernel.org
----
- .../testing/selftests/drivers/net/hw/Makefile |   3 +-
- .../selftests/drivers/net/hw/toeplitz.c       |   5 +
- .../selftests/drivers/net/hw/toeplitz.py      | 208 ++++++++++++++++++
- .../selftests/drivers/net/hw/toeplitz.sh      | 199 -----------------
- .../drivers/net/hw/toeplitz_client.sh         |  28 ---
- 5 files changed, 214 insertions(+), 229 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/hw/toeplitz.py
- delete mode 100755 tools/testing/selftests/drivers/net/hw/toeplitz.sh
- delete mode 100755 tools/testing/selftests/drivers/net/hw/toeplitz_client.sh
+ drivers/net/netdevsim/netdev.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index c9dced8c934a..1760238e9d4f 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -24,14 +24,13 @@ TEST_PROGS = \
- 	rss_ctx.py \
- 	rss_flow_label.py \
- 	rss_input_xfrm.py \
--	toeplitz.sh \
-+	toeplitz.py \
- 	tso.py \
- 	xsk_reconfig.py \
- 	#
+diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
+index 2b713db16cd0..6927c1962277 100644
+--- a/drivers/net/netdevsim/netdev.c
++++ b/drivers/net/netdevsim/netdev.c
+@@ -133,15 +133,21 @@ static netdev_tx_t nsim_start_xmit(struct sk_buff *skb, struct net_device *dev)
+ 	if (!nsim_ipsec_tx(ns, skb))
+ 		goto out_drop_any;
  
- TEST_FILES := \
- 	ethtool_lib.sh \
--	toeplitz_client.sh \
- 	#
+-	peer_ns = rcu_dereference(ns->peer);
+-	if (!peer_ns)
+-		goto out_drop_any;
++	/* Check if loopback mode is enabled */
++	if (dev->features & NETIF_F_LOOPBACK) {
++		peer_ns = ns;
++		peer_dev = dev;
++	} else {
++		peer_ns = rcu_dereference(ns->peer);
++		if (!peer_ns)
++			goto out_drop_any;
++		peer_dev = peer_ns->netdev;
++	}
  
- TEST_INCLUDES := \
-diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.c b/tools/testing/selftests/drivers/net/hw/toeplitz.c
-index bf74aa25345d..afc5f910b006 100644
---- a/tools/testing/selftests/drivers/net/hw/toeplitz.c
-+++ b/tools/testing/selftests/drivers/net/hw/toeplitz.c
-@@ -53,6 +53,7 @@
- #include <unistd.h>
+ 	dr = nsim_do_psp(skb, ns, peer_ns, &psp_ext);
+ 	if (dr)
+ 		goto out_drop_free;
  
- #include "../../../kselftest.h"
-+#include "../../../net/lib/ksft.h"
- 
- #define TOEPLITZ_KEY_MIN_LEN	40
- #define TOEPLITZ_KEY_MAX_LEN	60
-@@ -576,6 +577,10 @@ int main(int argc, char **argv)
- 		fd_sink = setup_sink();
- 
- 	setup_rings();
-+
-+	/* Signal to test framework that we're ready to receive */
-+	ksft_ready();
-+
- 	process_rings();
- 	cleanup_rings();
- 
-diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.py b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-new file mode 100755
-index 000000000000..34476c431e39
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-@@ -0,0 +1,208 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""
-+Toeplitz Rx hashing test:
-+ - rxhash (the hash value calculation itself);
-+ - RSS mapping from rxhash to rx queue;
-+ - RPS mapping from rxhash to cpu.
-+"""
-+
-+import glob
-+import os
-+import socket
-+from lib.py import ksft_run, ksft_exit, ksft_pr
-+from lib.py import NetDrvEpEnv, EthtoolFamily, NetdevFamily
-+from lib.py import cmd, bkg, rand_port, defer
-+from lib.py import ksft_in
-+from lib.py import ksft_variants, KsftNamedVariant, KsftSkipEx, KsftFailEx
-+
-+
-+def _check_rps_and_rfs_not_configured(cfg):
-+    """Verify that RPS is not already configured."""
-+
-+    for rps_file in glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*/rps_cpus"):
-+        with open(rps_file, "r", encoding="utf-8") as fp:
-+            val = fp.read().strip()
-+            if set(val) - {"0", ","}:
-+                raise KsftSkipEx(f"RPS already configured on {rps_file}: {val}")
-+
-+    rfs_file = "/proc/sys/net/core/rps_sock_flow_entries"
-+    with open(rfs_file, "r", encoding="utf-8") as fp:
-+        val = fp.read().strip()
-+        if val != "0":
-+            raise KsftSkipEx(f"RFS already configured {rfs_file}: {val}")
-+
-+
-+def _get_rss_key(cfg):
-+    """
-+    Read the RSS key from the device.
-+    Return a string in the traditional %02x:%02x:%02x:.. format.
-+    """
-+
-+    rss = cfg.ethnl.rss_get({"header": {"dev-index": cfg.ifindex}})
-+    return ':'.join(f'{b:02x}' for b in rss["hkey"])
-+
-+
-+def _get_cpu_for_irq(irq):
-+    with open(f"/proc/irq/{irq}/smp_affinity_list", "r",
-+              encoding="utf-8") as fp:
-+        data = fp.read().strip()
-+        if "," in data or "-" in data:
-+            raise KsftFailEx(f"IRQ{irq} is not mapped to a single core: {data}")
-+        return int(data)
-+
-+
-+def _get_irq_cpus(cfg):
-+    """
-+    Read the list of IRQs for the device Rx queues.
-+    """
-+    queues = cfg.netnl.queue_get({"ifindex": cfg.ifindex}, dump=True)
-+    napis = cfg.netnl.napi_get({"ifindex": cfg.ifindex}, dump=True)
-+
-+    # Remap into ID-based dicts
-+    napis = {n["id"]: n for n in napis}
-+    queues = {f"{q['type']}{q['id']}": q for q in queues}
-+
-+    cpus = []
-+    for rx in range(9999):
-+        name = f"rx{rx}"
-+        if name not in queues:
-+            break
-+        cpus.append(_get_cpu_for_irq(napis[queues[name]["napi-id"]]["irq"]))
-+
-+    return cpus
-+
-+
-+def _get_unused_cpus(cfg, count=2):
-+    """
-+    Get CPUs that are not used by Rx queues.
-+    Returns a list of at least 'count' CPU numbers.
-+    """
-+
-+    # Get CPUs used by Rx queues
-+    rx_cpus = set(_get_irq_cpus(cfg))
-+
-+    # Get total number of CPUs
-+    num_cpus = os.cpu_count()
-+
-+    # Find unused CPUs
-+    unused_cpus = [cpu for cpu in range(num_cpus) if cpu not in rx_cpus]
-+
-+    if len(unused_cpus) < count:
-+        raise KsftSkipEx(f"Need at {count} CPUs not used by Rx queues, found {len(unused_cpus)}")
-+
-+    return unused_cpus[:count]
-+
-+
-+def _configure_rps(cfg, rps_cpus):
-+    """Configure RPS for all Rx queues."""
-+
-+    mask = 0
-+    for cpu in rps_cpus:
-+        mask |= (1 << cpu)
-+    mask = hex(mask)[2:]
-+
-+    # Set RPS bitmap for all rx queues
-+    for rps_file in glob.glob(f"/sys/class/net/{cfg.ifname}/queues/rx-*/rps_cpus"):
-+        cmd(f"echo {mask} > {rps_file}", shell=True)
-+
-+    return mask
-+
-+
-+def _send_traffic(cfg, proto_flag, ipver, port):
-+    """Send 20 packets of requested type."""
-+
-+    # Determine protocol and IP version for socat
-+    if proto_flag == "-u":
-+        proto = "UDP"
-+    else:
-+        proto = "TCP"
-+
-+    baddr = f"[{cfg.addr_v['6']}]" if ipver == "6" else cfg.addr_v["4"]
-+
-+    # Run socat in a loop to send traffic periodically
-+    # Use sh -c with a loop similar to toeplitz_client.sh
-+    socat_cmd = f"""
-+    for i in `seq 20`; do
-+        echo "msg $i" | socat -{ipver} -t 0.1 - {proto}:{baddr}:{port};
-+        sleep 0.001;
-+    done
-+    """
-+
-+    cmd(socat_cmd, shell=True, host=cfg.remote)
-+
-+
-+def _test_variants():
-+    for grp in ["", "rss", "rps"]:
-+        for l4 in ["tcp", "udp"]:
-+            for l3 in ["4", "6"]:
-+                name = f"{l4}_ipv{l3}"
-+                if grp:
-+                    name = f"{grp}_{name}"
-+                yield KsftNamedVariant(name, "-" + l4[0], l3, grp)
-+
-+
-+@ksft_variants(_test_variants())
-+def test(cfg, proto_flag, ipver, grp):
-+    """Run a single toeplitz test."""
-+
-+    cfg.require_ipver(ipver)
-+
-+    # Check that rxhash is enabled
-+    ksft_in("receive-hashing: on", cmd(f"ethtool -k {cfg.ifname}").stdout)
-+
-+    port = rand_port(socket.SOCK_DGRAM)
-+    key = _get_rss_key(cfg)
-+
-+    toeplitz_path = cfg.test_dir / "toeplitz"
-+    rx_cmd = [
-+        str(toeplitz_path),
-+        "-" + ipver,
-+        proto_flag,
-+        "-d", str(port),
-+        "-i", cfg.ifname,
-+        "-k", key,
-+        "-T", "1000",
-+        "-s",
-+        "-v"
-+    ]
-+
-+    if grp:
-+        _check_rps_and_rfs_not_configured(cfg)
-+    if grp == "rss":
-+        irq_cpus = ",".join([str(x) for x in _get_irq_cpus(cfg)])
-+        rx_cmd += ["-C", irq_cpus]
-+        ksft_pr(f"RSS using CPUs: {irq_cpus}")
-+    elif grp == "rps":
-+        # Get CPUs not used by Rx queues and configure them for RPS
-+        rps_cpus = _get_unused_cpus(cfg, count=2)
-+        rps_mask = _configure_rps(cfg, rps_cpus)
-+        defer(_configure_rps, cfg, [])
-+        rx_cmd += ["-r", rps_mask]
-+        ksft_pr(f"RPS using CPUs: {rps_cpus}, mask: {rps_mask}")
-+
-+    # Run rx in background, it will exit once it has seen enough packets
-+    with bkg(" ".join(rx_cmd), ksft_ready=True, exit_wait=True) as rx_proc:
-+        while rx_proc.proc.poll() is None:
-+            _send_traffic(cfg, proto_flag, ipver, port)
-+
-+    # Check rx result
-+    ksft_pr("Receiver output:")
-+    ksft_pr(rx_proc.stdout.strip().replace('\n', '\n# '))
-+    if rx_proc.stderr:
-+        ksft_pr(rx_proc.stderr.strip().replace('\n', '\n# '))
-+
-+
-+def main() -> None:
-+    """Ksft boilerplate main."""
-+
-+    with NetDrvEpEnv(__file__) as cfg:
-+        cfg.ethnl = EthtoolFamily()
-+        cfg.netnl = NetdevFamily()
-+        ksft_run(cases=[test], args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.sh b/tools/testing/selftests/drivers/net/hw/toeplitz.sh
-deleted file mode 100755
-index d236b666dd3b..000000000000
---- a/tools/testing/selftests/drivers/net/hw/toeplitz.sh
-+++ /dev/null
-@@ -1,199 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--#
--# extended toeplitz test: test rxhash plus, optionally, either (1) rss mapping
--# from rxhash to rx queue ('-rss') or (2) rps mapping from rxhash to cpu
--# ('-rps <rps_map>')
--#
--# irq-pattern-prefix can be derived from /sys/kernel/irq/*/action,
--# which is a driver-specific encoding.
--#
--# invoke as ./toeplitz.sh (-i <iface>) -u|-t -4|-6 \
--# [(-rss -irq_prefix <irq-pattern-prefix>)|(-rps <rps_map>)]
--
--source $(dirname $0)/../../../net/lib/setup_loopback.sh
--readonly SERVER_IP4="192.168.1.200/24"
--readonly SERVER_IP6="fda8::1/64"
--readonly SERVER_MAC="aa:00:00:00:00:02"
--
--readonly CLIENT_IP4="192.168.1.100/24"
--readonly CLIENT_IP6="fda8::2/64"
--readonly CLIENT_MAC="aa:00:00:00:00:01"
--
--PORT=8000
--KEY="$(</proc/sys/net/core/netdev_rss_key)"
--TEST_RSS=false
--RPS_MAP=""
--PROTO_FLAG=""
--IP_FLAG=""
--DEV="eth0"
--
--# Return the number of rxqs among which RSS is configured to spread packets.
--# This is determined by reading the RSS indirection table using ethtool.
--get_rss_cfg_num_rxqs() {
--	echo $(ethtool -x "${DEV}" |
--		grep -E [[:space:]]+[0-9]+:[[:space:]]+ |
--		cut -d: -f2- |
--		awk '{$1=$1};1' |
--		tr ' ' '\n' |
--		sort -u |
--		wc -l)
--}
--
--# Return a list of the receive irq handler cpus.
--# The list is ordered by the irqs, so first rxq-0 cpu, then rxq-1 cpu, etc.
--# Reads /sys/kernel/irq/ in order, so algorithm depends on
--# irq_{rxq-0} < irq_{rxq-1}, etc.
--get_rx_irq_cpus() {
--	CPUS=""
--	# sort so that irq 2 is read before irq 10
--	SORTED_IRQS=$(for i in /sys/kernel/irq/*; do echo $i; done | sort -V)
--	# Consider only as many queues as RSS actually uses. We assume that
--	# if RSS_CFG_NUM_RXQS=N, then RSS uses rxqs 0-(N-1).
--	RSS_CFG_NUM_RXQS=$(get_rss_cfg_num_rxqs)
--	RXQ_COUNT=0
--
--	for i in ${SORTED_IRQS}
--	do
--		[[ "${RXQ_COUNT}" -lt "${RSS_CFG_NUM_RXQS}" ]] || break
--		# lookup relevant IRQs by action name
--		[[ -e "$i/actions" ]] || continue
--		cat "$i/actions" | grep -q "${IRQ_PATTERN}" || continue
--		irqname=$(<"$i/actions")
--
--		# does the IRQ get called
--		irqcount=$(cat "$i/per_cpu_count" | tr -d '0,')
--		[[ -n "${irqcount}" ]] || continue
--
--		# lookup CPU
--		irq=$(basename "$i")
--		cpu=$(cat "/proc/irq/$irq/smp_affinity_list")
--
--		if [[ -z "${CPUS}" ]]; then
--			CPUS="${cpu}"
--		else
--			CPUS="${CPUS},${cpu}"
--		fi
--		RXQ_COUNT=$((RXQ_COUNT+1))
--	done
--
--	echo "${CPUS}"
--}
--
--get_disable_rfs_cmd() {
--	echo "echo 0 > /proc/sys/net/core/rps_sock_flow_entries;"
--}
--
--get_set_rps_bitmaps_cmd() {
--	CMD=""
--	for i in /sys/class/net/${DEV}/queues/rx-*/rps_cpus
--	do
--		CMD="${CMD} echo $1 > ${i};"
--	done
--
--	echo "${CMD}"
--}
--
--get_disable_rps_cmd() {
--	echo "$(get_set_rps_bitmaps_cmd 0)"
--}
--
--die() {
--	echo "$1"
--	exit 1
--}
--
--check_nic_rxhash_enabled() {
--	local -r pattern="receive-hashing:\ on"
--
--	ethtool -k "${DEV}" | grep -q "${pattern}" || die "rxhash must be enabled"
--}
--
--parse_opts() {
--	local prog=$0
--	shift 1
--
--	while [[ "$1" =~ "-" ]]; do
--		if [[ "$1" = "-irq_prefix" ]]; then
--			shift
--			IRQ_PATTERN="^$1-[0-9]*$"
--		elif [[ "$1" = "-u" || "$1" = "-t" ]]; then
--			PROTO_FLAG="$1"
--		elif [[ "$1" = "-4" ]]; then
--			IP_FLAG="$1"
--			SERVER_IP="${SERVER_IP4}"
--			CLIENT_IP="${CLIENT_IP4}"
--		elif [[ "$1" = "-6" ]]; then
--			IP_FLAG="$1"
--			SERVER_IP="${SERVER_IP6}"
--			CLIENT_IP="${CLIENT_IP6}"
--		elif [[ "$1" = "-rss" ]]; then
--			TEST_RSS=true
--		elif [[ "$1" = "-rps" ]]; then
--			shift
--			RPS_MAP="$1"
--		elif [[ "$1" = "-i" ]]; then
--			shift
--			DEV="$1"
--		else
--			die "Usage: ${prog} (-i <iface>) -u|-t -4|-6 \
--			     [(-rss -irq_prefix <irq-pattern-prefix>)|(-rps <rps_map>)]"
--		fi
--		shift
--	done
--}
--
--setup() {
--	setup_loopback_environment "${DEV}"
--
--	# Set up server_ns namespace and client_ns namespace
--	setup_macvlan_ns "${DEV}" $server_ns server \
--	"${SERVER_MAC}" "${SERVER_IP}"
--	setup_macvlan_ns "${DEV}" $client_ns client \
--	"${CLIENT_MAC}" "${CLIENT_IP}"
--}
--
--cleanup() {
--	cleanup_macvlan_ns $server_ns server $client_ns client
--	cleanup_loopback "${DEV}"
--}
--
--parse_opts $0 $@
--
--setup
--trap cleanup EXIT
--
--check_nic_rxhash_enabled
--
--# Actual test starts here
--if [[ "${TEST_RSS}" = true ]]; then
--	# RPS/RFS must be disabled because they move packets between cpus,
--	# which breaks the PACKET_FANOUT_CPU identification of RSS decisions.
--	eval "$(get_disable_rfs_cmd) $(get_disable_rps_cmd)" \
--	  ip netns exec $server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
--	  -d "${PORT}" -i "${DEV}" -k "${KEY}" -T 1000 \
--	  -C "$(get_rx_irq_cpus)" -s -v &
--elif [[ ! -z "${RPS_MAP}" ]]; then
--	eval "$(get_disable_rfs_cmd) $(get_set_rps_bitmaps_cmd ${RPS_MAP})" \
--	  ip netns exec $server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
--	  -d "${PORT}" -i "${DEV}" -k "${KEY}" -T 1000 \
--	  -r "0x${RPS_MAP}" -s -v &
--else
--	ip netns exec $server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
--	  -d "${PORT}" -i "${DEV}" -k "${KEY}" -T 1000 -s -v &
--fi
--
--server_pid=$!
--
--ip netns exec $client_ns ./toeplitz_client.sh "${PROTO_FLAG}" \
--  "${IP_FLAG}" "${SERVER_IP%%/*}" "${PORT}" &
--
--client_pid=$!
--
--wait "${server_pid}"
--exit_code=$?
--kill -9 "${client_pid}"
--if [[ "${exit_code}" -eq 0 ]]; then
--	echo "Test Succeeded!"
--fi
--exit "${exit_code}"
-diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz_client.sh b/tools/testing/selftests/drivers/net/hw/toeplitz_client.sh
-deleted file mode 100755
-index 2fef34f4aba1..000000000000
---- a/tools/testing/selftests/drivers/net/hw/toeplitz_client.sh
-+++ /dev/null
-@@ -1,28 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--#
--# A simple program for generating traffic for the toeplitz test.
--#
--# This program sends packets periodically for, conservatively, 20 seconds. The
--# intent is for the calling program to kill this program once it is no longer
--# needed, rather than waiting for the 20 second expiration.
--
--send_traffic() {
--	expiration=$((SECONDS+20))
--	while [[ "${SECONDS}" -lt "${expiration}" ]]
--	do
--		if [[ "${PROTO}" == "-u" ]]; then
--			echo "msg $i" | nc "${IPVER}" -u -w 0 "${ADDR}" "${PORT}"
--		else
--			echo "msg $i" | nc "${IPVER}" -w 0 "${ADDR}" "${PORT}"
--		fi
--		sleep 0.001
--	done
--}
--
--PROTO=$1
--IPVER=$2
--ADDR=$3
--PORT=$4
--
--send_traffic
+-	peer_dev = peer_ns->netdev;
+ 	rxq = skb_get_queue_mapping(skb);
+ 	if (rxq >= peer_dev->num_rx_queues)
+ 		rxq = rxq % peer_dev->num_rx_queues;
+@@ -976,7 +982,8 @@ static void nsim_setup(struct net_device *dev)
+ 			    NETIF_F_FRAGLIST |
+ 			    NETIF_F_HW_CSUM |
+ 			    NETIF_F_LRO |
+-			    NETIF_F_TSO;
++			    NETIF_F_TSO |
++			    NETIF_F_LOOPBACK;
+ 	dev->pcpu_stat_type = NETDEV_PCPU_STAT_DSTATS;
+ 	dev->max_mtu = ETH_MAX_MTU;
+ 	dev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_HW_OFFLOAD;
 -- 
 2.51.1
 
