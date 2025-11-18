@@ -1,419 +1,123 @@
-Return-Path: <linux-kselftest+bounces-45874-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45875-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8077C6AC12
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:54:07 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2909CC6AD8A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 18:12:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DB7203A05F0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 16:46:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6408E4F5B28
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:04:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56DB435771D;
-	Tue, 18 Nov 2025 16:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B46ED3A1CED;
+	Tue, 18 Nov 2025 17:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="FBwfynV6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fStEeX8i"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+Received: from mail-pj1-f67.google.com (mail-pj1-f67.google.com [209.85.216.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511B2262FED
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 16:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2986D393DFE
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 17:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763484348; cv=none; b=JnqbwNEwbK+sbIHr6ZJF7ww9kzYeAHNqvpUxTFzdVjdr4/gfMhMOSuNZ5ynJPJEqGOMyrdhpQqqIjm/UZPW0vpsiL2ddOIPGGh4PR4aXbO92MhDLlowvp9F/7k/HFIqQTW/oXyMIArHwb16V3jPC4tdQICqC0oDDmNZj3TlSMps=
+	t=1763485430; cv=none; b=VMVZiZ9Zt9Yab5FNGmLn6ezEjtRRyrBXZVmIimy3YtfTpS4angk0u54t+u+ItOXE29OWd6bYZXDTLXTP3LoIwYknCKuJ2zi+1TVc7zdjEmFwYNCWWD+EGSiLby9TqD/eP5lXQsZZ0K8uFk2tS+4qSNK2fNrxx7AcRjet/sctrNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763484348; c=relaxed/simple;
-	bh=xkikO09N3w+mlB6/6zCo+thTqC+BZ/isHk1sO9g578A=;
+	s=arc-20240116; t=1763485430; c=relaxed/simple;
+	bh=51cj9zyo4AJIL2wDmFJ6SWh28X7zA4bhpBChfHPXGBI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AvdHEOeoNSRmfAVDq49SsYHMDVy9vFoCcGRCkjs9hCyvUHQZ0pZcFWR7KBzDZTkJSe3+9YY9zjHXAyvvxTdptTYbI9wUtwsum5FOdVBhFRnFE4XW+S9kNUppvnQs+gypdmWKz6gfCUdSkgS2yeMuz94ovFCNeXUJJHPuvTyKOEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=FBwfynV6; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-433692bbe4fso24925665ab.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 08:45:46 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=tFFD0DQk1HdhMBVFXEEcG5qDV04ndy7AFyshJpkQS8f9HOLk3PbOfnQK7GJi/V5ccF86RZoAqVo+DKxeG+tTXcbMsWf4cNwAJCqsWV8Xrc4KOYntV2h1YdxD/xjJWJfL6NxUZDZEp83akfVQVAAGPaXVUq4Lxu7gMyf6i0R96kU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fStEeX8i; arc=none smtp.client-ip=209.85.216.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f67.google.com with SMTP id 98e67ed59e1d1-343806688c5so6166993a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 09:03:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1763484345; x=1764089145; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ILDiozK7Z3N7Gifp/XPbCYzuZckjIPa28Dx6hmBsP8=;
-        b=FBwfynV65bRpasajiQlMl3P/z2trOh0nrqwIUGXaubfts4MdV7U3kwstoLT/tZ6vrK
-         NB8LvqYUct7+WSTUffcIYJF0gJoGaFPncX0+0C9HgcNCzmCPHgZDMgAZ0Y8KOJv5F9Nw
-         nASDEdl2h/GdpjBaqxYXJDcZELIujfy0UGkT/vi6y6YW/VBKO+5yPuHKVcM+vSAOhafE
-         hCxknnvL8ggJKeXHlWO8jbYVkZfurzoVLTiopNU+l2W08CD5/4i0XYwk7BlB3mvDKifw
-         fzG4UnNAxMNkQmDn6hWiBdbxwHYs2Jj6kI+zD5l2OxDbD2TnPCOSeV4X+tbBUIb+cjf1
-         rehQ==
+        d=gmail.com; s=20230601; t=1763485428; x=1764090228; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CvT3yUYq4hrxMRho5Iv8PoiK/Gg3Fovsi24MWBGpqWU=;
+        b=fStEeX8iERT9AkSH9NYRgLtGlRRyfw6+cFFiL2BcXxgsZv9JIxhve/jM/8u+DmsmSa
+         NOb84HEgfdF5lKRbdfWz+D6vZplThGBYAYndtOU8fXdxtrjHohVCJi4uW2sWyzO2rUWq
+         yLvT/4hDWZaYr0bNt7G65ElCFnAIczrqMHegMUUwGVpvLHjjxO3yjgqvSbQYbJJvwx1i
+         6liQrQZhBYpS0WJBlkJI2StM4psCSYkBVlReHcyGTaf/eldZclSHoqOznMWOaOVVZIYH
+         qBJ2VHHAdstVnGwEsXfGoOTaRJNfRucaRuIpKkO50ak4ujWB26hbycz3/HB22tagvG4C
+         2Ggw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763484345; x=1764089145;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ILDiozK7Z3N7Gifp/XPbCYzuZckjIPa28Dx6hmBsP8=;
-        b=X19VbaULTVdp7jPoGLLNpGv5sQP2F+ufsOvmBEC3dczs418UF5KCQFZTZ3HwBk1XMM
-         iWbINBP5ajczb6ocWjOiNK20LMMbnWGZ/ZAOO98edWDzzuDhcJxu9kA+815vmnoA8vry
-         bmu1kMZtVUKbsxyIZ9XwTGLGm0qg5Dna+nj6DjYNc7DlZ+QyH7yJQhqe+OyLpcx5aq8e
-         rki8Ix2AkxnLVRTTU0lpZhLS/vITekkMO+JmofCUSZDcDCayTGsyZ++tL/FPnwx/tk2A
-         va0qb3UTkFxqe0OxBoDyv/7rtIVk+VNuApsnMKOLpCuV4Fm3/t3c9TvwMxLiPbkwcfNz
-         Hlyg==
-X-Forwarded-Encrypted: i=1; AJvYcCXo5QlOrBFUqfiDKazFbFM9r+qwkSWGdV8z47p7C0BA66MZ5SZomVXblNFKXQQQ6MDFLfMWmKsO4AWMqcULZqU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3JWDStUpXdigdDUMFuaBL6i+LwBG0vODo7Vw63Dpr52QaTGyb
-	dOuaC5MlzH9cPu6lUPI31xgce/jyS506rBoE3UYQZq0/hMaChhrONETW44CevZ7DUXg=
-X-Gm-Gg: ASbGncsjDpj462ret6KBFJvXyKEoVBN+N1URFUUd10QM0LGr8FUU0RxCUDsGFADpizS
-	TW0192y2vaDEwJQUN5+2QwXUEZUXb+xXEXXl94FhNnHKPSgFGFiw3PuJeMWyLzzK/PhfpeL8faG
-	nrbXWY8jNXPnVQN8HQETlgcS8Qk2+qrdwkmfq4QLccZ1t9PCH1ClNuh8l8F0WDcnOf9Xy1e9O2s
-	AjhPfsTfVtG8oiOrAGoBZhsl0JNmu0fgGv09WWDDBRwwiVGoRrpSnJFjCbPL+wpJ6RHruQPDCIl
-	VLvCgkv8xba8sdJ7aijA8Bq5Y4PtGYG2aZYivthJFe+8JxNBy4VqDUYMpA2Ja0Gsho8sYwYCQzT
-	xkQbJSKjwjcIm6s1vtj81VqdknCRnMBYKghSLs3a7EGUDaZ5GnWNL5TI/IajhEn8RPlpSUU07tg
-	DPs0dkWOoCouos
-X-Google-Smtp-Source: AGHT+IEG/ZXTvWV/BZXQAuMFuIBlB9Lm6j2vkTCu+uGpPXAiS7L7tob5Vetea5EjX2PZBZrD5A2qvQ==
-X-Received: by 2002:a05:6e02:228f:b0:433:58b2:65f1 with SMTP id e9e14a558f8ab-4348c942c55mr206206745ab.15.1763484345137;
-        Tue, 18 Nov 2025 08:45:45 -0800 (PST)
-Received: from localhost ([140.82.166.162])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-434833c5ef5sm83086175ab.3.2025.11.18.08.45.44
+        d=1e100.net; s=20230601; t=1763485428; x=1764090228;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CvT3yUYq4hrxMRho5Iv8PoiK/Gg3Fovsi24MWBGpqWU=;
+        b=lj9iEjsldFhpexgHPSCxnG/8FNpQeSikHttjMBAeIaLy77yZP9HeLpLmTxLgIqTVBy
+         p8TS721yMKJhctTFRiUqWZ4UNBqov3gpCY4zV4Cck3vJJgz0Fpqwa3Jd50kmeCKRZZIw
+         8B1v/ET1I6HHlAyXCzTe2Hofgyh91i3xJfJgwNAH+x/E1Kayt4anjOTvUuFmKXLR5r+w
+         flICaPnD9i2u2U4HSs4d3BB1l2GJWO+NG/gHXr3KPedAEHXhsdWEYey0+7uFLMzuEh6u
+         SJmS5BWVnKuQE7qwlF7b340rVaKLolwYeNupJNANM6ARBecxPiTjQEv/wAjcmxporRC8
+         WmTw==
+X-Forwarded-Encrypted: i=1; AJvYcCXwwnAT7xaNXMRNYrEjIeq9hPz/TrdfVLrpxZ/oNSn+nB+oShFejPLmFqipfjked5qDEAaNQW3/jSR43daN/LM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeE0H82ArwsuWPqPQt9rZtHQ4HlpSA18X3WwSanJASZalVR3eQ
+	nmHxWaVCZHnJ/8FVlAWGVXODpUxjKIIDAhvQfQGVaKdQ5Bic2YSMZkzJ
+X-Gm-Gg: ASbGncue8fjUY1m+YHai1sD/XOzmpE06yBSAWXa7yszp27NYbMleRhrIRHBvVixtjXg
+	KjbWlNIz76kPG4PKu6qezK1DYnXi/qeT61z21PiRsBvOC/zOpBiY284KNq7l45uP6OnFxZktS9R
+	UXA9TK8HW1CoZblDUIxz3ylMaApXTYZYklePqDgmihPcwoWU2V3gX++nN0edO9Le6czpQ+Ewuao
+	KN2K4G+3dvFPmk+1k3fedOyTxi5JBsPgIfVvqoUtgEXH0empoMaWqbdYegNDdNJr3879GEbu84u
+	P/GRREOiovPLGYKW65xr2zusQnmetbysVi3taLX18zxFOoCRveDNWJU4HIn+kFrzMGYKWLg24D4
+	JYeSywbrBFBfDNZiVyT49XMjJzMePnePvS6jH/ah6ywRUkg3WUpiRZ1KDm/8h6G/u8HfiJm/buV
+	IJ3wxAR2Jzy2VgA8QX6izj78BWLU03E4SIoCIZ2gWSiJW5dufv9Ww=
+X-Google-Smtp-Source: AGHT+IHZYJX1pCWD/N46OSg88wwDwy7LwVqzDdC+rriSUKMZoZSIslmtB29azG5vTyIlze6Vb+SWUA==
+X-Received: by 2002:a17:90b:58ef:b0:343:7714:4ca6 with SMTP id 98e67ed59e1d1-343fa62be93mr16111610a91.22.1763485428213;
+        Tue, 18 Nov 2025 09:03:48 -0800 (PST)
+Received: from fedora ([103.120.31.122])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc36db21a0esm15420005a12.8.2025.11.18.09.03.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 08:45:44 -0800 (PST)
-Date: Tue, 18 Nov 2025 10:45:43 -0600
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Yao Zihong <zihong.plct@isrc.iscas.ac.cn>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	alexghiti@rivosinc.com, shuah@kernel.org, samuel.holland@sifive.com, evan@rivosinc.com, 
-	cleger@rivosinc.com, zihongyao@outlook.com, zhangyin2018@iscas.ac.cn, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Yunhui Cui <cuiyunhui@bytedance.com>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v5 2/2] selftests/riscv: Add Zicbop prefetch test
-Message-ID: <20251118-cbe35d090a464d246ed0b8eb@orel>
-References: <20251118162436.15485-1-zihong.plct@isrc.iscas.ac.cn>
- <20251118162436.15485-3-zihong.plct@isrc.iscas.ac.cn>
+        Tue, 18 Nov 2025 09:03:47 -0800 (PST)
+Date: Tue, 18 Nov 2025 22:33:41 +0530
+From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
+Cc: linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+	Darren Hart <dvhart@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>, Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	linux-kselftest@vger.kernel.org,
+	Davidlohr Bueso <dave@stgolabs.net>
+Subject: Re: [PATCH] selftests/futex: Fix storing address of local variable
+Message-ID: <aRym7c2crY6rmyKN@fedora>
+References: <20251118162619.50586-1-ankitkhushwaha.linux@gmail.com>
+ <078950cf-01d0-42b0-868f-15096afd97e8@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20251118162436.15485-3-zihong.plct@isrc.iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <078950cf-01d0-42b0-868f-15096afd97e8@igalia.com>
 
-On Wed, Nov 19, 2025 at 12:23:25AM +0800, Yao Zihong wrote:
-> Add selftests to cbo.c to verify Zicbop extension behavior, and split
-> the previous `--sigill` mode into two options so they can be tested
-> independently.
+On Tue, Nov 18, 2025 at 01:34:59PM -0300, André Almeida wrote:
+> > diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
+> > index e7d1254e18ca..d1aab1cc5a37 100644
+> > --- a/tools/testing/selftests/futex/functional/robust_list.c
+> > +++ b/tools/testing/selftests/futex/functional/robust_list.c
+> > @@ -510,7 +510,7 @@ TEST(test_robust_list_multiple_elements)
+> >   static int child_circular_list(void *arg)
+> >   {
+> >   	static struct robust_list_head head;
+> > -	struct lock_struct a, b, c;
+> > +	static struct lock_struct a, b, c;
 > 
-> The test checks:
-> - That hwprobe correctly reports Zicbop presence and block size.
-> - That prefetch instructions execute without exception on valid and NULL
->   addresses when Zicbop is present.
-> 
-> Signed-off-by: Yao Zihong <zihong.plct@isrc.iscas.ac.cn>
-> ---
->  tools/testing/selftests/riscv/hwprobe/cbo.c | 165 ++++++++++++++++----
->  1 file changed, 136 insertions(+), 29 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/riscv/hwprobe/cbo.c b/tools/testing/selftests/riscv/hwprobe/cbo.c
-> index 5e96ef785d0d..6d99726aceac 100644
-> --- a/tools/testing/selftests/riscv/hwprobe/cbo.c
-> +++ b/tools/testing/selftests/riscv/hwprobe/cbo.c
-> @@ -15,24 +15,31 @@
->  #include <linux/compiler.h>
->  #include <linux/kernel.h>
->  #include <asm/ucontext.h>
-> +#include <getopt.h>
->  
->  #include "hwprobe.h"
->  #include "../../kselftest.h"
->  
->  #define MK_CBO(fn) le32_bswap((uint32_t)(fn) << 20 | 10 << 15 | 2 << 12 | 0 << 7 | 15)
-> +#define MK_PREFETCH(fn) \
-> +	le32_bswap(0 << 25 | (uint32_t)(fn) << 20 | 10 << 15 | 6 << 12 | 0 << 7 | 19)
->  
->  static char mem[4096] __aligned(4096) = { [0 ... 4095] = 0xa5 };
->  
-> -static bool illegal_insn;
-> +static bool got_fault;
->  
-> -static void sigill_handler(int sig, siginfo_t *info, void *context)
-> +static void fault_handler(int sig, siginfo_t *info, void *context)
->  {
->  	unsigned long *regs = (unsigned long *)&((ucontext_t *)context)->uc_mcontext;
->  	uint32_t insn = *(uint32_t *)regs[0];
->  
-> -	assert(insn == MK_CBO(regs[11]));
-> +	if (sig == SIGILL)
-> +		assert(insn == MK_CBO(regs[11]));
->  
-> -	illegal_insn = true;
-> +	if (sig == SIGSEGV || sig == SIGBUS)
-> +		assert(insn == MK_PREFETCH(regs[11]));
-> +
-> +	got_fault = true;
->  	regs[0] += 4;
->  }
->  
-> @@ -45,39 +52,51 @@ static void sigill_handler(int sig, siginfo_t *info, void *context)
->  	: : "r" (base), "i" (fn), "i" (MK_CBO(fn)) : "a0", "a1", "memory");	\
->  })
->  
-> +#define prefetch_insn(base, fn)							\
-> +({										\
-> +	asm volatile(								\
-> +	"mv	a0, %0\n"							\
-> +	"li	a1, %1\n"							\
-> +	".4byte	%2\n"								\
-> +	: : "r" (base), "i" (fn), "i" (MK_PREFETCH(fn)) : "a0", "a1");		\
-> +})
-> +
->  static void cbo_inval(char *base) { cbo_insn(base, 0); }
->  static void cbo_clean(char *base) { cbo_insn(base, 1); }
->  static void cbo_flush(char *base) { cbo_insn(base, 2); }
->  static void cbo_zero(char *base)  { cbo_insn(base, 4); }
-> +static void prefetch_i(char *base) { prefetch_insn(base, 0); }
-> +static void prefetch_r(char *base) { prefetch_insn(base, 1); }
-> +static void prefetch_w(char *base) { prefetch_insn(base, 3); }
->  
->  static void test_no_cbo_inval(void *arg)
->  {
->  	ksft_print_msg("Testing cbo.inval instruction remain privileged\n");
-> -	illegal_insn = false;
-> +	got_fault = false;
->  	cbo_inval(&mem[0]);
-> -	ksft_test_result(illegal_insn, "No cbo.inval\n");
-> +	ksft_test_result(got_fault, "No cbo.inval\n");
->  }
->  
->  static void test_no_zicbom(void *arg)
->  {
->  	ksft_print_msg("Testing Zicbom instructions remain privileged\n");
->  
-> -	illegal_insn = false;
-> +	got_fault = false;
->  	cbo_clean(&mem[0]);
-> -	ksft_test_result(illegal_insn, "No cbo.clean\n");
-> +	ksft_test_result(got_fault, "No cbo.clean\n");
->  
-> -	illegal_insn = false;
-> +	got_fault = false;
->  	cbo_flush(&mem[0]);
-> -	ksft_test_result(illegal_insn, "No cbo.flush\n");
-> +	ksft_test_result(got_fault, "No cbo.flush\n");
->  }
->  
->  static void test_no_zicboz(void *arg)
->  {
->  	ksft_print_msg("No Zicboz, testing cbo.zero remains privileged\n");
->  
-> -	illegal_insn = false;
-> +	got_fault = false;
->  	cbo_zero(&mem[0]);
-> -	ksft_test_result(illegal_insn, "No cbo.zero\n");
-> +	ksft_test_result(got_fault, "No cbo.zero\n");
->  }
->  
->  static bool is_power_of_2(__u64 n)
-> @@ -85,6 +104,51 @@ static bool is_power_of_2(__u64 n)
->  	return n != 0 && (n & (n - 1)) == 0;
->  }
->  
-> +static void test_zicbop(void *arg)
-> +{
-> +	struct riscv_hwprobe pair = {
-> +		.key = RISCV_HWPROBE_KEY_ZICBOP_BLOCK_SIZE,
-> +	};
-> +	struct sigaction act = {
-> +		.sa_sigaction = &fault_handler,
-> +		.sa_flags = SA_SIGINFO
-> +	};
-> +	struct sigaction dfl = {
-> +		.sa_handler = SIG_DFL
-> +	};
-> +	cpu_set_t *cpus = (cpu_set_t *)arg;
-> +	__u64 block_size;
-> +	long rc;
-> +
-> +	rc = sigaction(SIGSEGV, &act, NULL);
-> +	assert(rc == 0);
-> +	rc = sigaction(SIGBUS, &act, NULL);
-> +	assert(rc == 0);
-> +
-> +	rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)cpus, 0);
-> +	block_size = pair.value;
-> +	ksft_test_result(rc == 0 && pair.key == RISCV_HWPROBE_KEY_ZICBOP_BLOCK_SIZE &&
-> +			 is_power_of_2(block_size), "Zicbop block size\n");
-> +	ksft_print_msg("Zicbop block size: %llu\n", block_size);
-> +
-> +	got_fault = false;
-> +	prefetch_i(&mem[0]);
-> +	prefetch_r(&mem[0]);
-> +	prefetch_w(&mem[0]);
-> +	ksft_test_result(!got_fault, "Zicbop prefetch.* on valid address\n");
-> +
-> +	got_fault = false;
-> +	prefetch_i(NULL);
-> +	prefetch_r(NULL);
-> +	prefetch_w(NULL);
-> +	ksft_test_result(!got_fault, "Zicbop prefetch.* on NULL\n");
-> +
-> +	rc = sigaction(SIGBUS, &dfl, NULL);
-> +	assert(rc == 0);
-> +	rc = sigaction(SIGSEGV, &dfl, NULL);
-> +	assert(rc == 0);
-> +}
-> +
->  static void test_zicbom(void *arg)
->  {
->  	struct riscv_hwprobe pair = {
-> @@ -100,13 +164,13 @@ static void test_zicbom(void *arg)
->  			 is_power_of_2(block_size), "Zicbom block size\n");
->  	ksft_print_msg("Zicbom block size: %llu\n", block_size);
->  
-> -	illegal_insn = false;
-> +	got_fault = false;
->  	cbo_clean(&mem[block_size]);
-> -	ksft_test_result(!illegal_insn, "cbo.clean\n");
-> +	ksft_test_result(!got_fault, "cbo.clean\n");
->  
-> -	illegal_insn = false;
-> +	got_fault = false;
->  	cbo_flush(&mem[block_size]);
-> -	ksft_test_result(!illegal_insn, "cbo.flush\n");
-> +	ksft_test_result(!got_fault, "cbo.flush\n");
->  }
->  
->  static void test_zicboz(void *arg)
-> @@ -125,11 +189,11 @@ static void test_zicboz(void *arg)
->  			 is_power_of_2(block_size), "Zicboz block size\n");
->  	ksft_print_msg("Zicboz block size: %llu\n", block_size);
->  
-> -	illegal_insn = false;
-> +	got_fault = false;
->  	cbo_zero(&mem[block_size]);
-> -	ksft_test_result(!illegal_insn, "cbo.zero\n");
-> +	ksft_test_result(!got_fault, "cbo.zero\n");
->  
-> -	if (illegal_insn || !is_power_of_2(block_size)) {
-> +	if (got_fault || !is_power_of_2(block_size)) {
->  		ksft_test_result_skip("cbo.zero check\n");
->  		return;
->  	}
-> @@ -177,7 +241,19 @@ static void check_no_zicbo_cpus(cpu_set_t *cpus, __u64 cbo)
->  		rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)&one_cpu, 0);
->  		assert(rc == 0 && pair.key == RISCV_HWPROBE_KEY_IMA_EXT_0);
->  
-> -		cbostr = cbo == RISCV_HWPROBE_EXT_ZICBOZ ? "Zicboz" : "Zicbom";
-> +		switch (cbo) {
-> +		case RISCV_HWPROBE_EXT_ZICBOZ:
-> +			cbostr = "Zicboz";
-> +			break;
-> +		case RISCV_HWPROBE_EXT_ZICBOM:
-> +			cbostr = "Zicbom";
-> +			break;
-> +		case RISCV_HWPROBE_EXT_ZICBOP:
-> +			cbostr = "Zicbop";
-> +			break;
-> +		default:
-> +			ksft_exit_fail_msg("Internal error: invalid cbo %llu\n", cbo);
-> +		}
->  
->  		if (pair.value & cbo)
->  			ksft_exit_fail_msg("%s is only present on a subset of harts.\n"
-> @@ -194,6 +270,7 @@ enum {
->  	TEST_ZICBOM,
->  	TEST_NO_ZICBOM,
->  	TEST_NO_CBO_INVAL,
-> +	TEST_ZICBOP,
->  };
->  
->  static struct test_info {
-> @@ -206,26 +283,51 @@ static struct test_info {
->  	[TEST_ZICBOM]		= { .nr_tests = 3, test_zicbom },
->  	[TEST_NO_ZICBOM]	= { .nr_tests = 2, test_no_zicbom },
->  	[TEST_NO_CBO_INVAL]	= { .nr_tests = 1, test_no_cbo_inval },
-> +	[TEST_ZICBOP]		= { .nr_tests = 3, test_zicbop },
-> +};
-> +
-> +static const struct option long_opts[] = {
-> +	{"zicbom-raises-sigill", no_argument, 0, 'm'},
-> +	{"zicboz-raises-sigill", no_argument, 0, 'z'},
-> +	{0, 0, 0, 0}
->  };
->  
->  int main(int argc, char **argv)
->  {
->  	struct sigaction act = {
-> -		.sa_sigaction = &sigill_handler,
-> +		.sa_sigaction = &fault_handler,
->  		.sa_flags = SA_SIGINFO,
->  	};
->  	struct riscv_hwprobe pair;
->  	unsigned int plan = 0;
->  	cpu_set_t cpus;
->  	long rc;
-> -	int i;
-> -
-> -	if (argc > 1 && !strcmp(argv[1], "--sigill")) {
-> -		rc = sigaction(SIGILL, &act, NULL);
-> -		assert(rc == 0);
-> -		tests[TEST_NO_ZICBOZ].enabled = true;
-> -		tests[TEST_NO_ZICBOM].enabled = true;
-> -		tests[TEST_NO_CBO_INVAL].enabled = true;
-> +	int i, opt, long_index;
-> +
-> +	long_index = 0;
-> +
-> +	while ((opt = getopt_long(argc, argv, "mz", long_opts, &long_index)) != -1) {
-> +		switch (opt) {
-> +		case 'm':
-> +			tests[TEST_NO_ZICBOM].enabled = true;
-> +			tests[TEST_NO_CBO_INVAL].enabled = true;
-> +			rc = sigaction(SIGILL, &act, NULL);
-> +			assert(rc == 0);
-> +			break;
-> +		case 'z':
-> +			tests[TEST_NO_ZICBOZ].enabled = true;
-> +			tests[TEST_NO_CBO_INVAL].enabled = true;
-> +			rc = sigaction(SIGILL, &act, NULL);
-> +			assert(rc == 0);
-> +			break;
+> I believe that the right fix here would be to drop the static from `head`
+> declaration, WDYT?
 
-I would have written it like below to avoid four redundant lines
+Hi André,
+I have tested your suggested changes.
+It works fine. will send v2 patch for this.
 
- case 'm': case 'z':
-   tests[opt == 'm' ? TEST_NO_ZICBOM : TEST_NO_ZICBOZ].enabled = true;
-   tests[TEST_NO_CBO_INVAL].enabled = true;
-   rc = sigaction(SIGILL, &act, NULL);
-   assert(rc == 0);
-   break;
+Thanks,
+-- Ankit
 
-> +		case '?':
-> +			fprintf(stderr,
-> +				"Usage: %s [--zicbom-raises-sigill|-m] [--zicboz-raises-sigill|-z]\n",
-> +				argv[0]);
-> +			exit(1);
-> +		default:
-> +			break;
-> +		}
->  	}
->  
->  	rc = sched_getaffinity(0, sizeof(cpu_set_t), &cpus);
-> @@ -253,6 +355,11 @@ int main(int argc, char **argv)
->  		check_no_zicbo_cpus(&cpus, RISCV_HWPROBE_EXT_ZICBOM);
->  	}
->  
-> +	if (pair.value & RISCV_HWPROBE_EXT_ZICBOP)
-> +		tests[TEST_ZICBOP].enabled = true;
-> +	else
-> +		check_no_zicbo_cpus(&cpus, RISCV_HWPROBE_EXT_ZICBOP);
-> +
->  	for (i = 0; i < ARRAY_SIZE(tests); ++i)
->  		plan += tests[i].enabled ? tests[i].nr_tests : 0;
->  
-> -- 
-> 2.47.2
->
-
-Anyway,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
