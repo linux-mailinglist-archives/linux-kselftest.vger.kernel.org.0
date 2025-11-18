@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-45920-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45921-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABA0DC6BC43
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 22:52:10 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E348C6BC5E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 22:53:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 10DD22BB0D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 21:52:09 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 89CE6349194
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 21:52:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0ECA30EF92;
-	Tue, 18 Nov 2025 21:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3788D30F535;
+	Tue, 18 Nov 2025 21:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A4PNtptL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vRJk0Ptz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 898D33702EE;
-	Tue, 18 Nov 2025 21:51:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE003702EE;
+	Tue, 18 Nov 2025 21:51:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763502718; cv=none; b=LHBD4KUvExcXAayrG61Bdne2Ned0gv5XRv7X+XAVc1Mb4baZP12erY8IFs4ZFdb//ch6ZUheYy8QcWB1CENipF5IcHPpig+KeU/A6BR6PV501iVdrUplJCVqjLde1h649+BXxKPYDhf9qGZ/W1ORO5MWjTidE9dcC9ATcp2Maho=
+	t=1763502721; cv=none; b=q9lRZWeCB6pWjzD2Oy5BwVEC1VaMn/3ugiaMnvj9oTX/H5x3gv+Am1XS6sYYRZdR91vSZkpReOPcq3c5W1w6TUnXmVLsREBnqGO2L7OsjQEskxcfzhB3hzsttynV/tZXdkoVgNIm3iPZWY4o/4YI1vlz48/CeAjaV3wvVt5hNAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763502718; c=relaxed/simple;
-	bh=3uKU+gcjE98LmB0fQ2hCAOBWsrEvwuLH9xh1mn2xG18=;
+	s=arc-20240116; t=1763502721; c=relaxed/simple;
+	bh=7VRlff2BxV4/bV8vpOfuj+lJBaj3v6P0BHu5peCjcxA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CyOpKAOyZzmSTMsmO6EHJfsliYEBYr8sHWlL42XgNuJ7Pa1ew6YRnK5ytjdpLjVaqWkJ69h/1pxxvqBCAOqmAyVaLPTogazhCPyP3OM3UekCJmRVuIRyvoefIGyUZN3q65ah1fBJtzEI9Cb4n7AmsNC85oAshcPEmj8s1bE52+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A4PNtptL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 925E5C2BCB1;
-	Tue, 18 Nov 2025 21:51:56 +0000 (UTC)
+	 MIME-Version; b=ZT9RT+PXU0SJiW41yGRN7V1KNbhhPMwbSZdhGu68gzUi5JZPMkBPCRa3A+Mq9KXA6NPdNqaRbNIMow/43yeR7chU3ZZb70r1mTWp52QikHzy68t1i1qzrLAfA5xzn8X20IMWwoPgn99WH2ee26+teF4FMJqdgy2NjxlRWjK+osI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vRJk0Ptz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58518C4AF12;
+	Tue, 18 Nov 2025 21:51:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763502718;
-	bh=3uKU+gcjE98LmB0fQ2hCAOBWsrEvwuLH9xh1mn2xG18=;
+	s=k20201202; t=1763502719;
+	bh=7VRlff2BxV4/bV8vpOfuj+lJBaj3v6P0BHu5peCjcxA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=A4PNtptLffdVSGRqQHQNVRlSMeapoNjSIXcHA9hNYWt4U5uAc2JjOv5iWzVDxu6g+
-	 YcuUBoYbBtXMDr8R+R3TItNoljMA8JaRYiFMQKAESghKmF/qEh/THB46JiBwqP2P/7
-	 r36jyn8GqVYCERcPZnbvMkpgxhqU1h+9wsZyaW1Pyv+QNgZJczIF6RLHBkACqQcToO
-	 TihRZXjfVltC8Zpt1WZC5yoTwBeeJvX709WKvuzBcqTtDW4VZNl2n5xyCaaNWD00N5
-	 BVIe/v3YxBCCAV7I1uOtMFyBMW6jXVOoJtZvtvWTgOTydTFvWrnCO9do8W3InDn+MU
-	 VXR8jQNO2cpuQ==
+	b=vRJk0PtzONX0sC0kubkQ+CVML5mabmPt8CcjyL+48yHyGdj7T8JTwp3f6ERytI75i
+	 xMmjVe5hRyqZ2xyAfD6J+s3k1p4ZtsMVaYw112HOFKOvDUyo0OA0ZZk7rBQMHz6iO7
+	 x9DasGdh6zju7GC5In6X8c94ub/8PiuhH4Ld8yj1OU2hgK0mJPvujp2cTEGs0YElzz
+	 xGNK9NCXUvxcq1T0As/JOll+GufTFOWRcRAYHuBymq6Ty1kZIi8s68/XQqgcCJD46L
+	 wLc47s2GW+GzSYhmElAHYU93/kCxnzhPZHEm2MhprVhKRAZjRfpiTTdMCRU2eESxkB
+	 nppsxSFsftmCg==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -56,9 +56,9 @@ Cc: netdev@vger.kernel.org,
 	petrm@nvidia.com,
 	matttbe@kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next v2 02/12] selftests: net: py: extract the case generation logic
-Date: Tue, 18 Nov 2025 13:51:16 -0800
-Message-ID: <20251118215126.2225826-3-kuba@kernel.org>
+Subject: [PATCH net-next v2 03/12] selftests: net: py: add test variants
+Date: Tue, 18 Nov 2025 13:51:17 -0800
+Message-ID: <20251118215126.2225826-4-kuba@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251118215126.2225826-1-kuba@kernel.org>
 References: <20251118215126.2225826-1-kuba@kernel.org>
@@ -70,107 +70,189 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for adding test variants move the test case
-collection logic to a dedicated function. New helper returns
+There's a lot of cases where we try to re-run the same code with
+different parameters. We currently need to either use a generator
+method or create a "main" case implementation which then gets called
+by trivial case functions:
 
- (function, args, name, )
+  def _test(x, y, z):
+     ...
 
-tuples. The main test loop can simply run them, not much
-logic or discernment needed.
+  def case_int():
+     _test(1, 2, 3)
+
+  def case_str():
+     _test('a', 'b', 'c')
+
+Add support for variants, similar to kselftests_harness.h and
+a lot of other frameworks. Variants can be added as decorator
+to test functions:
+
+  @ksft_variants([(1, 2, 3), ('a', 'b', 'c')])
+  def case(x, y, z):
+     ...
+
+ksft_run() will auto-generate case names:
+  case.1_2_3
+  case.a_b_c
+
+Because the names may not always be pretty (and to avoid forcing
+classes to implement case-friendly __str__()) add a wrapper class
+KsftNamedVariant which lets the user specify the name for the variant.
+
+Note that ksft_run's args are still supported. ksft_run splices args
+and variant params together.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- tools/testing/selftests/net/lib/py/ksft.py | 31 +++++++++++++++-------
- 1 file changed, 22 insertions(+), 9 deletions(-)
+ .../drivers/net/hw/lib/py/__init__.py         |  4 +-
+ .../selftests/drivers/net/lib/py/__init__.py  |  4 +-
+ .../testing/selftests/net/lib/py/__init__.py  |  5 +-
+ tools/testing/selftests/net/lib/py/ksft.py    | 57 ++++++++++++++++++-
+ 4 files changed, 63 insertions(+), 7 deletions(-)
 
+diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+index fb010a48a5a1..0c61debf86fb 100644
+--- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+@@ -25,7 +25,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../../..").resolve()
+         fd_read_timeout, ip, rand_port, wait_port_listen, wait_file
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
+-        ksft_setup
++        ksft_setup, ksft_variants, KsftNamedVariant
+     from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
+         ksft_ne, ksft_not_in, ksft_raises, ksft_true, ksft_gt, ksft_not_none
+     from drivers.net.lib.py import GenerateTraffic, Remote
+@@ -40,7 +40,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../../..").resolve()
+                "wait_port_listen", "wait_file",
+                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
+                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
+-               "ksft_setup",
++               "ksft_setup", "ksft_variants", "KsftNamedVariant",
+                "ksft_eq", "ksft_ge", "ksft_in", "ksft_is", "ksft_lt",
+                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
+                "ksft_not_none", "ksft_not_none",
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index b0c6300150fb..d9d035634a31 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -25,7 +25,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
+         fd_read_timeout, ip, rand_port, wait_port_listen, wait_file
+     from net.lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+     from net.lib.py import ksft_disruptive, ksft_exit, ksft_pr, ksft_run, \
+-        ksft_setup
++        ksft_setup, ksft_variants, KsftNamedVariant
+     from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
+         ksft_ne, ksft_not_in, ksft_raises, ksft_true, ksft_gt, ksft_not_none
+ 
+@@ -38,7 +38,7 @@ KSFT_DIR = (Path(__file__).parent / "../../../..").resolve()
+                "wait_port_listen", "wait_file",
+                "KsftSkipEx", "KsftFailEx", "KsftXfailEx",
+                "ksft_disruptive", "ksft_exit", "ksft_pr", "ksft_run",
+-               "ksft_setup",
++               "ksft_setup", "ksft_variants", "KsftNamedVariant",
+                "ksft_eq", "ksft_ge", "ksft_in", "ksft_is", "ksft_lt",
+                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
+                "ksft_not_none", "ksft_not_none"]
+diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
+index 97b7cf2b20eb..40f9ce307dd1 100644
+--- a/tools/testing/selftests/net/lib/py/__init__.py
++++ b/tools/testing/selftests/net/lib/py/__init__.py
+@@ -8,7 +8,8 @@ from .consts import KSRC
+ from .ksft import KsftFailEx, KsftSkipEx, KsftXfailEx, ksft_pr, ksft_eq, \
+     ksft_ne, ksft_true, ksft_not_none, ksft_in, ksft_not_in, ksft_is, \
+     ksft_ge, ksft_gt, ksft_lt, ksft_raises, ksft_busy_wait, \
+-    ktap_result, ksft_disruptive, ksft_setup, ksft_run, ksft_exit
++    ktap_result, ksft_disruptive, ksft_setup, ksft_run, ksft_exit, \
++    ksft_variants, KsftNamedVariant
+ from .netns import NetNS, NetNSEnter
+ from .nsim import NetdevSim, NetdevSimDev
+ from .utils import CmdExitFailure, fd_read_timeout, cmd, bkg, defer, \
+@@ -21,7 +22,7 @@ __all__ = ["KSRC",
+            "ksft_ne", "ksft_true", "ksft_not_none", "ksft_in", "ksft_not_in",
+            "ksft_is", "ksft_ge", "ksft_gt", "ksft_lt", "ksft_raises",
+            "ksft_busy_wait", "ktap_result", "ksft_disruptive", "ksft_setup",
+-           "ksft_run", "ksft_exit",
++           "ksft_run", "ksft_exit", "ksft_variants", "KsftNamedVariant",
+            "NetNS", "NetNSEnter",
+            "CmdExitFailure", "fd_read_timeout", "cmd", "bkg", "defer",
+            "bpftool", "ip", "ethtool", "bpftrace", "rand_port",
 diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-index 56dd9bd060cd..52c42c313cf2 100644
+index 52c42c313cf2..47e0af210bee 100644
 --- a/tools/testing/selftests/net/lib/py/ksft.py
 +++ b/tools/testing/selftests/net/lib/py/ksft.py
-@@ -135,7 +135,7 @@ KSFT_DISRUPTIVE = True
-         time.sleep(sleep)
+@@ -185,6 +185,49 @@ KSFT_DISRUPTIVE = True
+     return wrapper
  
  
--def ktap_result(ok, cnt=1, case="", comment=""):
-+def ktap_result(ok, cnt=1, case_name="", comment=""):
-     global KSFT_RESULT_ALL
-     KSFT_RESULT_ALL = KSFT_RESULT_ALL and ok
- 
-@@ -145,8 +145,8 @@ KSFT_DISRUPTIVE = True
-     res += "ok "
-     res += str(cnt) + " "
-     res += KSFT_MAIN_NAME
--    if case:
--        res += "." + str(case.__name__)
-+    if case_name:
-+        res += "." + case_name
-     if comment:
-         res += " # " + comment
-     print(res, flush=True)
-@@ -219,9 +219,13 @@ KSFT_DISRUPTIVE = True
-         ksft_pr(f"Ignoring SIGTERM (cnt: {term_cnt}), already exiting...")
- 
- 
--def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
--    cases = cases or []
-+def _ksft_generate_test_cases(cases, globs, case_pfx, args):
-+    """Generate a flat list of (func, args, name) tuples"""
- 
-+    cases = cases or []
-+    test_cases = []
++class KsftNamedVariant:
++    """ Named string name + argument list tuple for @ksft_variants """
 +
-+    # If using the globs method find all relevant functions
-     if globs and case_pfx:
-         for key, value in globs.items():
-             if not callable(value):
-@@ -231,6 +235,15 @@ KSFT_DISRUPTIVE = True
-                     cases.append(value)
++    def __init__(self, name, *params):
++        self.params = params
++        self.name = name or "_".join([str(x) for x in self.params])
++
++
++def ksft_variants(params):
++    """
++    Decorator defining the sets of inputs for a test.
++    The parameters will be included in the name of the resulting sub-case.
++    Parameters can be either single object, tuple or a KsftNamedVariant.
++    The argument can be a list or a generator.
++
++    Example:
++
++    @ksft_variants([
++        (1, "a"),
++        (2, "b"),
++        KsftNamedVariant("three", 3, "c"),
++    ])
++    def my_case(cfg, a, b):
++        pass # ...
++
++    ksft_run(cases=[my_case], args=(cfg, ))
++
++    Will generate cases:
++        my_case.1_a
++        my_case.2_b
++        my_case.three
++    """
++
++    def decorator(func):
++        @functools.wraps(func)
++        def wrapper():
++            return func
++        wrapper.ksft_variants = params
++        wrapper.original_func = func
++        return wrapper
++    return decorator
++
++
+ def ksft_setup(env):
+     """
+     Setup test framework global state from the environment.
+@@ -236,7 +279,19 @@ KSFT_DISRUPTIVE = True
                      break
  
-+    for func in cases:
-+        test_cases.append((func, args, func.__name__))
+     for func in cases:
+-        test_cases.append((func, args, func.__name__))
++        if hasattr(func, 'ksft_variants'):
++            # Parametrized test - create case for each param
++            for param in func.ksft_variants:
++                if not isinstance(param, KsftNamedVariant):
++                    if not isinstance(param, tuple):
++                        param = (param, )
++                    param = KsftNamedVariant(None, *param)
 +
-+    return test_cases
-+
-+
-+def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
-+    test_cases = _ksft_generate_test_cases(cases, globs, case_pfx, args)
-+
-     global term_cnt
-     term_cnt = 0
-     prev_sigterm = signal.signal(signal.SIGTERM, _ksft_intr)
-@@ -238,19 +251,19 @@ KSFT_DISRUPTIVE = True
-     totals = {"pass": 0, "fail": 0, "skip": 0, "xfail": 0}
++                test_cases.append((func.original_func,
++                                   (*args, *param.params),
++                                   func.__name__ + "." + param.name))
++        else:
++            test_cases.append((func, args, func.__name__))
  
-     print("TAP version 13", flush=True)
--    print("1.." + str(len(cases)), flush=True)
-+    print("1.." + str(len(test_cases)), flush=True)
+     return test_cases
  
-     global KSFT_RESULT
-     cnt = 0
-     stop = False
--    for case in cases:
-+    for func, args, name in test_cases:
-         KSFT_RESULT = True
-         cnt += 1
-         comment = ""
-         cnt_key = ""
- 
-         try:
--            case(*args)
-+            func(*args)
-         except KsftSkipEx as e:
-             comment = "SKIP " + str(e)
-             cnt_key = 'skip'
-@@ -272,7 +285,7 @@ KSFT_DISRUPTIVE = True
-         if not cnt_key:
-             cnt_key = 'pass' if KSFT_RESULT else 'fail'
- 
--        ktap_result(KSFT_RESULT, cnt, case, comment=comment)
-+        ktap_result(KSFT_RESULT, cnt, name, comment=comment)
-         totals[cnt_key] += 1
- 
-         if stop:
 -- 
 2.51.1
 
