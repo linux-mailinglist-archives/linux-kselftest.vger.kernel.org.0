@@ -1,54 +1,48 @@
-Return-Path: <linux-kselftest+bounces-45872-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566ABC6AB73
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:47:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E16F2C6AAF8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:41:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7F6B63A194E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 16:38:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 3DA5F2C02C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 16:41:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 531F0377E9D;
-	Tue, 18 Nov 2025 16:35:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6634234DB47;
+	Tue, 18 Nov 2025 16:41:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="JG2vECVA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CNJ72i/Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E81270EBA;
-	Tue, 18 Nov 2025 16:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358AA3233E5;
+	Tue, 18 Nov 2025 16:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763483718; cv=none; b=I5oWl8oKCNTas7QGe3yMCVotTA4m37KDGggZqrD5kph0dTsdiKhfnHEnaeDh922CrVA7yNkAvED0w0mKDLKJXfatWM5yTJfBd9JS4RZzTJNODPRC5aA4ct8ZC2Q1QverX+/G8TGNnYPkq4j7i2WllDMJpRh8mRT6PJ1WuBv/rso=
+	t=1763484082; cv=none; b=dkdew8G32D/Rd2y4bH0JEcuO7Bg55mJ4buHekzdYJ6VmJkUO/Zf/IkUiYYmNq/jKq+MfXLGpJ1ZeF1QSfJCREh0kw3M9pRdfLOMB9MyEVOdRpmkivQK6nqvs+4ok9pQCf4biwrUr90kO8I7UjHn0D+i7D9MzWG8PyEE8AvnaEzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763483718; c=relaxed/simple;
-	bh=wRa9wV7lXAq4pWQQ4zTDvQPhFOJmW08DMcRpEwY20Oc=;
+	s=arc-20240116; t=1763484082; c=relaxed/simple;
+	bh=76iwa07E2cia9ejh4c5uPXwKmb4vHJQCgXEZEhMo7lw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Xi6QX9TX5IAl/T8onGHVEC4gOuwnJ2u25VnYgsjvKPhSTAIDk99QaUOG6gAnQn0M51OEY1Mbqr7XwbHjZPJwI2FmNelEPdZHySHLa4a0EsjOrrZ4rbYjNi9Q3vqxjo3qLccMczoLGWZXd0Xp3IZvd2Ndbglx+x75p1YQoA9Kqyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=JG2vECVA; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=ksh9U0KHuVHmxLCi5JNn753atu32AFabkMKbDwp9OmY=; b=JG2vECVAx0pyo6yhYbTg9UVmfc
-	Blj6C5wQZ22ejABvEFyNMzRJoabX6DJcCKpPBOYi0b7j7JitY8EsIUL0vH0YIZLAPqyyOsUqK3G2v
-	X2dHC30+WfqawtJJXj4Y18FiIdO8bedcaQoNTqkCJ/wVYAsT7qixqkAUnWApgVB3GByMEqTnC/jw8
-	ygwqsTs5lHfo7Dg9kiVZSUhn2IgKlO7c9cjWb0Hpth3QzI02n8eM4wLaWreDIy38mKj9ivqUneQpc
-	8Eap+HavW8RK2WpTYYqeU39ixxFQLhueWAwJyoNHdHCOH1Eyp0rcJDEWud8yqR8UHA7MeXgixAJQC
-	AVoeLMPg==;
-Received: from [187.101.0.152] (helo=[192.168.15.100])
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1vLOfX-002E87-Mv; Tue, 18 Nov 2025 17:35:03 +0100
-Message-ID: <078950cf-01d0-42b0-868f-15096afd97e8@igalia.com>
-Date: Tue, 18 Nov 2025 13:34:59 -0300
+	 In-Reply-To:Content-Type; b=TszpHmfzkanunmTdVL3589ZulsgC3ba6jbfkRpy8PPCg+rGqd2k65Mk6rCY+WVz4bCyYJkg6G4RkGqYdHWV/7aVqMQ8NFfdaXPEQwdIkVARoPkarHxu8747Bljc8BIlcT7ZcP+BftVskR0kZsbOpdlnAr83PhuDp5oykAvzIQnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CNJ72i/Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9AA5C2BC86;
+	Tue, 18 Nov 2025 16:41:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763484082;
+	bh=76iwa07E2cia9ejh4c5uPXwKmb4vHJQCgXEZEhMo7lw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CNJ72i/QYImuXjY+Pg3BNrRhfOW78dFP48BxEYM13lc4eh3d/QCk+ootmeZ6HYp6V
+	 W7R6dP1va7EYMXMgF78zewkbrvEUkCMGbv3s2J500oOaooSHnnUR90xs5zs1GC5cz7
+	 jKthpLZGAoPHrKj135vstQa5Zxt/kuCMsKiCTGFzT56xrpn/caKAp6Ff6uUNf0UnJk
+	 8gQsBTnrG1eFiG3M/n+uAxMqtDPNa4jK0pz3codcrfDfnjZDBjsr+K6rvlnfYvjFuM
+	 4R2veWbx4NRNhwDPDpRSWJr+8B6PIbCMWj0t3veCRhz1ycxHFviUvefkCSBjEc4x2l
+	 22FMPgm86U8vg==
+Message-ID: <007c08e4-ce70-4c30-b3b1-e25e02dfe29d@kernel.org>
+Date: Tue, 18 Nov 2025 17:41:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,54 +50,173 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/futex: Fix storing address of local variable
-To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Cc: linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
- Darren Hart <dvhart@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- linux-kselftest@vger.kernel.org, Davidlohr Bueso <dave@stgolabs.net>
-References: <20251118162619.50586-1-ankitkhushwaha.linux@gmail.com>
+Subject: Re: [RFC PATCH 3/4] userfaultfd, guest_memfd: support userfault minor
+ mode in guest_memfd
+To: Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org
+Cc: Andrea Arcangeli <aarcange@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Hugh Dickins
+ <hughd@google.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko
+ <mhocko@suse.com>, Nikita Kalyazin <kalyazin@amazon.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251117114631.2029447-1-rppt@kernel.org>
+ <20251117114631.2029447-4-rppt@kernel.org>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
-From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20251118162619.50586-1-ankitkhushwaha.linux@gmail.com>
+In-Reply-To: <20251117114631.2029447-4-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Em 18/11/2025 13:26, Ankit Khushwaha escreveu:
-> In `child_circular_list()` address of local variable ‘struct lock_struct a’
-> is assigned to `head.list.next` raising the following warning.
+On 17.11.25 12:46, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> robust_list.c: In function ‘child_circular_list’:
-> robust_list.c:522:24: warning: storing the address of local variable ‘a’
-> in ‘head.list.next’ [-Wdangling-pointer=]
+> * Export handle_userfault() for KVM module so that fault() handler in
+>    guest_memfd would be able to notify userspace about page faults in its
+>    address space.
+> * Implement get_pagecache_folio() for guest_memfd.
+> * And finally, introduce UFFD_FEATURE_MINOR_GENERIC that will allow
+>    using userfaultfd minor mode with memory types other than shmem and
+>    hugetlb provided they are allowed to call handle_userfault() and
+>    implement get_pagecache_folio().
 > 
->    522 |         head.list.next = &a.list;
->        |         ~~~~~~~~~~~~~~~^~~~~~~~~
-> robust_list.c:513:28: note: ‘a’ declared here
->    513 |         struct lock_struct a, b, c;
->        |                            ^
-> robust_list.c:512:40: note: ‘head’ declared here
->    512 |         static struct robust_list_head head;
->        |                                        ^~~~
-> 
-> Defining the value with static keyword to fix this.
-> 
-> Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
->   tools/testing/selftests/futex/functional/robust_list.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   fs/userfaultfd.c                 |  4 +++-
+>   include/uapi/linux/userfaultfd.h |  8 +++++++-
+>   virt/kvm/guest_memfd.c           | 30 ++++++++++++++++++++++++++++++
+>   3 files changed, 40 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
-> index e7d1254e18ca..d1aab1cc5a37 100644
-> --- a/tools/testing/selftests/futex/functional/robust_list.c
-> +++ b/tools/testing/selftests/futex/functional/robust_list.c
-> @@ -510,7 +510,7 @@ TEST(test_robust_list_multiple_elements)
->   static int child_circular_list(void *arg)
->   {
->   	static struct robust_list_head head;
-> -	struct lock_struct a, b, c;
-> +	static struct lock_struct a, b, c;
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 54c6cc7fe9c6..964fa2662d5c 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -537,6 +537,7 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+>   out:
+>   	return ret;
+>   }
+> +EXPORT_SYMBOL_FOR_MODULES(handle_userfault, "kvm");
+>   
+>   static void userfaultfd_event_wait_completion(struct userfaultfd_ctx *ctx,
+>   					      struct userfaultfd_wait_queue *ewq)
+> @@ -1978,7 +1979,8 @@ static int userfaultfd_api(struct userfaultfd_ctx *ctx,
+>   	uffdio_api.features = UFFD_API_FEATURES;
+>   #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+>   	uffdio_api.features &=
+> -		~(UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM);
+> +		~(UFFD_FEATURE_MINOR_HUGETLBFS | UFFD_FEATURE_MINOR_SHMEM |
+> +		  UFFD_FEATURE_MINOR_GENERIC);
+>   #endif
+>   #ifndef CONFIG_HAVE_ARCH_USERFAULTFD_WP
+>   	uffdio_api.features &= ~UFFD_FEATURE_PAGEFAULT_FLAG_WP;
+> diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+> index 2841e4ea8f2c..c5cbd4a5a26e 100644
+> --- a/include/uapi/linux/userfaultfd.h
+> +++ b/include/uapi/linux/userfaultfd.h
+> @@ -42,7 +42,8 @@
+>   			   UFFD_FEATURE_WP_UNPOPULATED |	\
+>   			   UFFD_FEATURE_POISON |		\
+>   			   UFFD_FEATURE_WP_ASYNC |		\
+> -			   UFFD_FEATURE_MOVE)
+> +			   UFFD_FEATURE_MOVE |			\
+> +			   UFFD_FEATURE_MINOR_GENERIC)
+>   #define UFFD_API_IOCTLS				\
+>   	((__u64)1 << _UFFDIO_REGISTER |		\
+>   	 (__u64)1 << _UFFDIO_UNREGISTER |	\
+> @@ -210,6 +211,10 @@ struct uffdio_api {
+>   	 * UFFD_FEATURE_MINOR_SHMEM indicates the same support as
+>   	 * UFFD_FEATURE_MINOR_HUGETLBFS, but for shmem-backed pages instead.
+>   	 *
+> +	 * UFFD_FEATURE_MINOR_GENERIC indicates that minor faults can be
+> +	 * intercepted for file-backed memory in case subsystem backing this
+> +	 * memory supports it.
+> +	 *
+>   	 * UFFD_FEATURE_EXACT_ADDRESS indicates that the exact address of page
+>   	 * faults would be provided and the offset within the page would not be
+>   	 * masked.
+> @@ -248,6 +253,7 @@ struct uffdio_api {
+>   #define UFFD_FEATURE_POISON			(1<<14)
+>   #define UFFD_FEATURE_WP_ASYNC			(1<<15)
+>   #define UFFD_FEATURE_MOVE			(1<<16)
+> +#define UFFD_FEATURE_MINOR_GENERIC		(1<<17)
+>   	__u64 features;
+>   
+>   	__u64 ioctls;
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index fbca8c0972da..5e3c63307fdf 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -4,6 +4,7 @@
+>   #include <linux/kvm_host.h>
+>   #include <linux/pagemap.h>
+>   #include <linux/anon_inodes.h>
+> +#include <linux/userfaultfd_k.h>
+>   
+>   #include "kvm_mm.h"
+>   
+> @@ -369,6 +370,12 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
+>   		return vmf_error(err);
+>   	}
+>   
+> +	if (userfaultfd_minor(vmf->vma)) {
+> +		folio_unlock(folio);
+> +		folio_put(folio);
+> +		return handle_userfault(vmf, VM_UFFD_MINOR);
+> +	}
 
-I believe that the right fix here would be to drop the static from 
-`head` declaration, WDYT?
+Staring at things like VM_FAULT_NEEDDSYNC, I'm wondering whether we could have a
+new return value from ->fault that would indicate that
+handle_userfault(vmf, VM_UFFD_MINOR) should be called.
+
+Maybe some VM_FAULT_UFFD_MINOR or simply VM_FAULT_USERFAULTFD and we
+can just derive that it is VM_UFFD_MINOR.
+
+
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 4f66a3206a63c..2cf17da880f0e 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -1601,6 +1601,8 @@ typedef __bitwise unsigned int vm_fault_t;
+   *                             fsync() to complete (for synchronous page faults
+   *                             in DAX)
+   * @VM_FAULT_COMPLETED:                ->fault completed, meanwhile mmap lock released
++ * @VM_FAULT_USERFAULTFD:      ->fault did not modify page tables and needs
++ *                             handle_userfault() to complete
+   * @VM_FAULT_HINDEX_MASK:      mask HINDEX value
+   *
+   */
+@@ -1618,6 +1620,7 @@ enum vm_fault_reason {
+         VM_FAULT_DONE_COW       = (__force vm_fault_t)0x001000,
+         VM_FAULT_NEEDDSYNC      = (__force vm_fault_t)0x002000,
+         VM_FAULT_COMPLETED      = (__force vm_fault_t)0x004000,
++       VM_FAULT_USERFAULTFD    = (__force vm_fault_t)0x006000,
+         VM_FAULT_HINDEX_MASK    = (__force vm_fault_t)0x0f0000,
+  };
+  
+@@ -1642,6 +1645,7 @@ enum vm_fault_reason {
+         { VM_FAULT_FALLBACK,            "FALLBACK" },   \
+         { VM_FAULT_DONE_COW,            "DONE_COW" },   \
+         { VM_FAULT_NEEDDSYNC,           "NEEDDSYNC" },  \
++       { VM_FAULT_USERFAULTFD,         "USERFAULTFD" },\
+         { VM_FAULT_COMPLETED,           "COMPLETED" }
+  
+  struct vm_special_mapping {
+
+
+IIUC, we have exactly two invocations of ->fault(vmf) in memory.c where
+we would have to handle it IIUC. And the return value would never leave
+the core.
+
+That way, we wouldn't have to export handle_userfault().
+
+Just a thought ...
+
+-- 
+Cheers
+
+David
 
