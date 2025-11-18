@@ -1,170 +1,315 @@
-Return-Path: <linux-kselftest+bounces-45899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 148C4C6B0DE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 18:52:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 457B5C6B174
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 19:04:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id AA6202AD13
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 17:52:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0F2124E0348
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Nov 2025 18:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 056B03546E0;
-	Tue, 18 Nov 2025 17:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E48EA2DC348;
+	Tue, 18 Nov 2025 18:04:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PMeOj8Mz"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BoFZVyxW";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="evV/cxnh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8E4349B17
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 17:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4DA2D7DEA
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 18:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763488350; cv=none; b=oZPOT8zcVgwNyT/TYKMU7pm9SPvH4ix8hK0RPFRRgev9Dwwrbn7e5nqdcThiQUBptVV5jnJ935zo3o3nv08KFCbOC6CqB+ySXLhRGPgITSWexAif1btU3t7VjleVsIt/hUo8/HHponiT4Ts60M7Tz4q/3TBVvKchxybvLANKQaI=
+	t=1763489052; cv=none; b=BniS5GFVAdH1N135+plTbv/yBC9vooNutXpiTTNVjtMTvv61M47nqFdZ8FhbYEuAICOtKtULuNpznREye38ut3nXANEpMGtHMZkMAROgSkvOj1061oAQoDxJefMNo+GZem0lRm8DtovXm6brzdMsxHOf3OjTDZHHb7JSkQQkEq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763488350; c=relaxed/simple;
-	bh=9tDLmEl0AlG+JlkcUzxp8d7AUiUIQj7FJpPRHfm9nJ8=;
+	s=arc-20240116; t=1763489052; c=relaxed/simple;
+	bh=s+cwPXsVLSNo1ubmatgKVj1SDIBuFfEsEXm/mCHspCA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t8Z55+lD/vRVPggMdBnhFBkP8U+WNxz2F+0RHbsmR1v+SJ+ubSNRvgC2Nc8eKXd3hwKwroG53kMhUQtuc2VzNnQxXpH4tAk395QVvZfN1ajSjoJ5Mdu9P29kfI927waChFlL11kDDe0LqpO0qr2KZiRK3PMAp2+3OqNqMnGHfSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PMeOj8Mz; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47778b23f64so39609425e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 09:52:27 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dr9GsExNTx0NV/gD58QJkhhKT32kddriWw5MCTlM7g2eEisB4yb5Qly2+ZdZM6Bli+7DPavRVU5H/kJu8IKlTjdmRMD5y5WWpi96xBpEMScZQIoUYQED2Uuze8mVjSJ3ecR4vxRAqArXoTUtTh9zPnPLY73j+kDO0MMa6Op6J9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BoFZVyxW; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=evV/cxnh; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1763489048;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ySMhDYrMZ/Xx4AMvhjc7dxlay0zt2DHzPjG22vBPrHE=;
+	b=BoFZVyxWo7IEYZavxrC88qL3AdkZaVTDnYmw6ND/SGy678sz5QRtTcNq3RhzUSwU92oZiy
+	e2mEvH0QuPwoZEl9Ab+gs5xo8kfp6svewNFykADrexoso782JU/haIr4+KWzj42NMR0Apn
+	PYFJe2YwOhbAH2ZmFg+bDAvummpRCpc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-494-JjRnLhayPniFt4o9zCgqHg-1; Tue, 18 Nov 2025 13:04:06 -0500
+X-MC-Unique: JjRnLhayPniFt4o9zCgqHg-1
+X-Mimecast-MFC-AGG-ID: JjRnLhayPniFt4o9zCgqHg_1763489045
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4779b3749a8so13219975e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Nov 2025 10:04:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763488346; x=1764093146; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1763489045; x=1764093845; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZaANC36yaZF4chZG7yq+ENtiQcLbr4MDM5mx57OGjSU=;
-        b=PMeOj8MzQU9TjG+chSwzqc/g7OHOg4GaivoUcenfMSZc4JEgEBtb1cp7oDh5WUO9oy
-         cVxmnn5mud6VwYvHx1jGRBKKpIYFaCsnu05YmwcclYInW5MpkmChcyJmy/qam1YI6UFj
-         lVjjHJwiT3nOOe6ZuRhExPd+BYL3cnRdJ7JSiMnzblOGn40JKzwdok7/BKByQu2t010Y
-         kfBBb9imbGWqoy6PR70gl3ldcqR1y0yhTPh/3d2eSuxCmOtR/mXc7XQkGkF2rFahho9R
-         Jx+6LHWxsjY66cEhwSLQ4SZCtpeeZoFFXv+dg9JWwfwWZJHfx/xaF7srp/QFutfiVWK/
-         AhIg==
+        bh=ySMhDYrMZ/Xx4AMvhjc7dxlay0zt2DHzPjG22vBPrHE=;
+        b=evV/cxnheMWoOirQOpUw+X+GXIklPNKjJ/xchSPLDp/xDkAYSeU5X0Na9+CWP7v2HG
+         pOgARW7PeCV0nmNSUDYbNtGPK5bCfWcZEIdrp+dAW9wMxG1Xy6Sz42aQc2o3SqM7JpFF
+         FhmkUEgZxm5JI76mSYpHYJp9LMEzg/r2rTyhvgDBDg4x51ejnL/My/Wa6Qu0rz46DnvL
+         nBgi3ZNqpsN5EasuyNAtFiqhDx9j3ViMk7wU+ePAmRBJ3WgnbeuwvGT46rQ7MU1YRhSB
+         +WMxWWkN9yaPLf8PEphQ13lmKpRB5Eo+bkjMRDJRtqdOiL80no2t6fJnPDL1eo/usS1r
+         /e0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763488346; x=1764093146;
+        d=1e100.net; s=20230601; t=1763489045; x=1764093845;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZaANC36yaZF4chZG7yq+ENtiQcLbr4MDM5mx57OGjSU=;
-        b=AeetvgkVQg4ZpB0RvDDftQOV6D0NvN47h6NYbCbfLSbm2YJsjsl3ba6riHP95/GxoD
-         nZaYHQ9HbPJBPVOE9dC75/zgPvf9aLVHBkNx6Crf4WkP8ptgatEnsGJxX0PgM7BX/ygs
-         hyfknchdXzwjFG6cB4RrvUMCNxODx+Cru5xoh75lGxvgFYqG+EIKCVycnXSvH/LjtkvC
-         RDvp/bIdxaRcd6F/bVExVu5rEUdoYwGCLjCbeQpSHh5p1Pc1IknWVMS1qzSOcD6SEaYi
-         9ufQ/icJVZLZiDBFZKKSCPVG0VYjqmkfU46DWZGOqyqDT3iQKCx6XTkUlLxQMEJCHfWb
-         o1hA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2UO6aBzttL+rpYHUQFoHTC9d8JrsO7FdUqyJDGsRPYuMyghrtB60tMMkYHIz2py3CIQuizfUY6XwvtuGzXJU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxjo1J3fBPMTfhpPTM4SrBTHWzl1yJw6nqTFTuIzrep0tJpcjOq
-	KjgIQG4T9jFIc3twg3bJVMWh06coDnmgTxGx299973gkvqxC3bkskJ45SuEI9Cmhpdk=
-X-Gm-Gg: ASbGncv3EViLJ+r6Wifg7pjzOxqwJo/1/R4AH3i92YEAWmgWd0m1EQ/RQtuuWMCeZ7D
-	Y6vwQhW65M/E+/eiB/njRg8hT96uS8wcfsZPO8eaNOxucotV8cD6pQ3TcBepbbuLqOhE3VAu5YC
-	lL/lZs9Imrt0qXop8cZJZDi5Iy9IuyBfsGqr+8U5DqVOiYo6uucNFUdGEhN7fMTtveqaHCu6tRk
-	gPL53rRaogms9sBLkaVcgi9hLNGQHTBPycihO9RAYNm0MwUNCH77KLTc0Z3f+OA4LTVb6aPMFBk
-	qQHOpOlwSBMasBtWDl9KzQpfs25aYeVFbhkOZm+9FcTFOZptT/IuCVBCJ1Au9aUA922mQZLQPdL
-	kXhTwEx/54E9ks96oEIYH03XBfeWngw66iUadyJOsZfhtlCtTLpwoMXwvbwaWw8+lJYQ3PNlmW7
-	vLHgFjceZxnwJbpfHzMxsfPqoeha0Pd0o=
-X-Google-Smtp-Source: AGHT+IFUj6UETFT7esarzT9wjbjzFkPLV1Vezhy7cP2e4tBVdvrdSt2otb6qr2e+Rrdr7C4erQ5TWA==
-X-Received: by 2002:a05:600c:4712:b0:46e:4586:57e4 with SMTP id 5b1f17b1804b1-4778fe9b36emr155621345e9.24.1763488346164;
-        Tue, 18 Nov 2025 09:52:26 -0800 (PST)
-Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477a9d21591sm23572965e9.2.2025.11.18.09.52.25
+        bh=ySMhDYrMZ/Xx4AMvhjc7dxlay0zt2DHzPjG22vBPrHE=;
+        b=kToHqdPP61uOz+UmQ7EYfrd1mAq3DiSySq5eQa/G6XSWdZCZOUiQBw+U6k1GTZGYIy
+         OS2bYcocwF6OqHgYBR2m2vQD3p0KKrwX6j+irK8hV5c+x6B1KDV5HbU4N6z9t/2lwYEl
+         BETNxVwVnnwTXixQ7bEdclpug1XKs14g1AV+la4L9j91fpc19Z7raV/hyMpFI7WBhrvF
+         FH6Z0fZtfr6abEGDvyk0PTABpIYbhyUiSNkxrdKr5BM5b+mkw9Tb0qNXBeDt3IC+RB3A
+         ZX1qECiBtFKO+ujkamF9wZp2kl9RQunnR+9LSqbooNod7gOvjV7FJrEBqVQ6H37hGAGX
+         ODMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW4Dy2on4tamZkQPN7qHzdQwSyZ0SHFbbvVdfn3aa+SNfBiA/nOH3bvYx0Vr0OCg6lbr3UsffHB/LVw6zihda0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeATq50WtuJbtwHZ4Y7fxr+HBxZronG6GIULMQMDFLAJpGhinI
+	G3dHqLjOYjOyFCO44MqWhti9yX3PVHqyIlQBtVMs80/lsOaZkw1VeqOuH9zXE08sTln1wMXS2zA
+	hI0ZN+COmntxw3HiU21caY9zzQxMiQDpwV0W7uPCuQZXMLqothpZegdtrbaBj20+scIQjHQ==
+X-Gm-Gg: ASbGncu0jmmmDwyhsNGfiKMrj+L4E4euWN6YsmTu9LL/4yGdTDR6yS9IwbWtUQfNAGd
+	MeOWY+0B9s1HVuHvfH2gDPUmaKlA1LBohdvI7Q8qszC5P9EW96YIlzdbZblf8MmxV7yoeRCrdyV
+	Diw9o4a5xNtS+FvqupL4XJwcMLbdApQKf27kdfUFml8m40xJs5Sgk6X/2x4O2DxMOZ7tpJNbFPy
+	KI84+UtfImcW96Xr72v01nZIRuKO/k+uI4x6T9oSCLQ1CZAfsPtyjHG8Xpogue1ffbqA1yZOxU2
+	Tg4JSWd+hfUi+J5BDNvSTVxgcPy9DHHhUkxzv6BqUhu0ToylgAFzOJFvgRnzLH71mBs1/qLPxGQ
+	llGzW4O+/7SF4beV5oNxBIDI1Ki+cKYL3ZXc1wSxH/ciNrGgt
+X-Received: by 2002:a7b:c014:0:b0:477:994b:dbb8 with SMTP id 5b1f17b1804b1-477994bddeemr81418925e9.11.1763489045224;
+        Tue, 18 Nov 2025 10:04:05 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHpBG/2sJMbhkzpQOcxnTlmbcbHN4RuL+yQSZxX8aLutRGg8XkylL+hIZNfpXYQY2Dh7dA7sA==
+X-Received: by 2002:a7b:c014:0:b0:477:994b:dbb8 with SMTP id 5b1f17b1804b1-477994bddeemr81418715e9.11.1763489044753;
+        Tue, 18 Nov 2025 10:04:04 -0800 (PST)
+Received: from sgarzare-redhat (host-82-57-51-250.retail.telecomitalia.it. [82.57.51.250])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b10142d3sm3864205e9.5.2025.11.18.10.03.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Nov 2025 09:52:25 -0800 (PST)
-Date: Tue, 18 Nov 2025 18:52:24 +0100
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Sun Shaojie <sunshaojie@kylinos.cn>
-Cc: llong@redhat.com, chenridong@huaweicloud.com, cgroups@vger.kernel.org, 
-	hannes@cmpxchg.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	shuah@kernel.org, tj@kernel.org
-Subject: Re: [PATCH v4 1/1] cpuset: relax the overlap check for cgroup-v2
-Message-ID: <mcpsxwjouoxfgdoqbysxlvjrgx7m2475y75fhssz4uoryb3jqj@lnigmwq7nage>
-References: <20251117015708.977585-1-sunshaojie@kylinos.cn>
- <20251117015708.977585-2-sunshaojie@kylinos.cn>
+        Tue, 18 Nov 2025 10:04:03 -0800 (PST)
+Date: Tue, 18 Nov 2025 19:03:49 +0100
+From: Stefano Garzarella <sgarzare@redhat.com>
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
+	Jason Wang <jasowang@redhat.com>, Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
+	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
+	Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa <vishnu.dasa@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	virtualization@lists.linux.dev, netdev@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Sargun Dhillon <sargun@sargun.me>, berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 01/11] vsock: a per-net vsock NS mode state
+Message-ID: <7qu24adya4hyiu6enzgflua3nac7o3d4ymrhzksjig54p4vh6n@n4ehmhlbh5wn>
+References: <20251117-vsock-vmtest-v10-0-df08f165bf3e@meta.com>
+ <20251117-vsock-vmtest-v10-1-df08f165bf3e@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yqudl6qznctquhdl"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20251117015708.977585-2-sunshaojie@kylinos.cn>
+In-Reply-To: <20251117-vsock-vmtest-v10-1-df08f165bf3e@meta.com>
 
+On Mon, Nov 17, 2025 at 06:00:24PM -0800, Bobby Eshleman wrote:
+>From: Bobby Eshleman <bobbyeshleman@meta.com>
+>
+>Add the per-net vsock NS mode state. This only adds the structure for
+>holding the mode and some of the functions for setting/getting and
+>checking the mode, but does not integrate the functionality yet.
+>
+>A "net_mode" field is added to vsock_sock to store the mode of the
+>namespace when the vsock_sock was created. In order to evaluate
+>namespace mode rules we need to know both a) which namespace the
+>endpoints are in, and b) what mode that namespace had when the endpoints
+>were created. This allows us to handle the changing of modes from global
+>to local *after* a socket has been created by remembering that the mode
+>was global when the socket was created. If we were to use the current
+>net's mode instead, then the lookup would fail and the socket would
+>break.
+>
+>Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+>---
+>Changes in v10:
+>- change mode_locked to int (Stefano)
+>
+>Changes in v9:
+>- use xchg(), WRITE_ONCE(), READ_ONCE() for mode and mode_locked (Stefano)
+>- clarify mode0/mode1 meaning in vsock_net_check_mode() comment
+>- remove spin lock in net->vsock (not used anymore)
+>- change mode from u8 to enum vsock_net_mode in vsock_net_write_mode()
+>
+>Changes in v7:
+>- clarify vsock_net_check_mode() comments
+>- change to `orig_net_mode == VSOCK_NET_MODE_GLOBAL && orig_net_mode == vsk->orig_net_mode`
+>- remove extraneous explanation of `orig_net_mode`
+>- rename `written` to `mode_locked`
+>- rename `vsock_hdr` to `sysctl_hdr`
+>- change `orig_net_mode` to `net_mode`
+>- make vsock_net_check_mode() more generic by taking just net pointers
+>  and modes, instead of a vsock_sock ptr, for reuse by transports
+>  (e.g., vhost_vsock)
+>
+>Changes in v6:
+>- add orig_net_mode to store mode at creation time which will be used to
+>  avoid breakage when namespace changes mode during socket/VM lifespan
+>
+>Changes in v5:
+>- use /proc/sys/net/vsock/ns_mode instead of /proc/net/vsock_ns_mode
+>- change from net->vsock.ns_mode to net->vsock.mode
+>- change vsock_net_set_mode() to vsock_net_write_mode()
+>- vsock_net_write_mode() returns bool for write success to avoid
+>  need to use vsock_net_mode_can_set()
+>- remove vsock_net_mode_can_set()
+>---
+> MAINTAINERS                 |  1 +
+> include/net/af_vsock.h      | 44 ++++++++++++++++++++++++++++++++++++++++++++
+> include/net/net_namespace.h |  4 ++++
+> include/net/netns/vsock.h   | 17 +++++++++++++++++
+> 4 files changed, 66 insertions(+)
 
---yqudl6qznctquhdl
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 1/1] cpuset: relax the overlap check for cgroup-v2
-MIME-Version: 1.0
-
-On Mon, Nov 17, 2025 at 09:57:08AM +0800, Sun Shaojie <sunshaojie@kylinos.c=
-n> wrote:
-> This patch ensures that for sibling cpusets A1 (exclusive) and B1
-> (non-exclusive), change B1 cannot affect A1's exclusivity.
->=20
-> for example. Assume a machine has 4 CPUs (0-3).
->=20
->    root cgroup
->       /    \
->     A1      B1
->=20
-> Case 1:
->  Table 1.1: Before applying the patch
->  Step                                       | A1's prstate | B1'sprstate |
->  #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
->  #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
->  #3> echo "0" > B1/cpuset.cpus              | root invalid | member      |
->=20
-> After step #3, A1 changes from "root" to "root invalid" because its CPUs
-> (0-1) overlap with those requested by B1 (0-3). However, B1 can actually
-> use CPUs 2-3(from B1's parent), so it would be more reasonable for A1 to
-> remain as "root."
->=20
->  Table 1.2: After applying the patch
->  Step                                       | A1's prstate | B1'sprstate |
->  #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
->  #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
->  #3> echo "0" > B1/cpuset.cpus              | root         | member      |
-
-OK, this looks fine to me, based on this statement from the docs about
-cpuset.cpus.effective:
-
->  subset of "cpuset.cpus" unless none of the CPUs listed in "cpuset.cpus"
->  can be granted.  In this case, it will be treated just like an empty
->  "cpuset.cpus".
-
-I was likely confused by the eventual switch of B1 to root in your
-previous example.
-(Because if you continue, it should result in (after patch too):
-  #4> echo "root" > B1/cpuset.partition       | root invalid  | root invali=
-d |
-and end state should be invariant wrt A1,B1 or B1,A1 config order.)
-
-> All other cases remain unaffected. For example, cgroup-v1, both A1 and B1
-> are exclusive or non-exlusive.
-
-(Note, I'm only commenting the concept here, I haven't checked the code
-change actually achieves that and doesn't break anythine else ;-)
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
 Thanks,
-Michal
+Stefano
 
---yqudl6qznctquhdl
-Content-Type: application/pgp-signature; name="signature.asc"
+>
+>diff --git a/MAINTAINERS b/MAINTAINERS
+>index 37f4278db851..e1e0e2092d0c 100644
+>--- a/MAINTAINERS
+>+++ b/MAINTAINERS
+>@@ -27101,6 +27101,7 @@ L:	netdev@vger.kernel.org
+> S:	Maintained
+> F:	drivers/vhost/vsock.c
+> F:	include/linux/virtio_vsock.h
+>+F:	include/net/netns/vsock.h
+> F:	include/uapi/linux/virtio_vsock.h
+> F:	net/vmw_vsock/virtio_transport.c
+> F:	net/vmw_vsock/virtio_transport_common.c
+>diff --git a/include/net/af_vsock.h b/include/net/af_vsock.h
+>index d40e978126e3..9b5bdd083b6f 100644
+>--- a/include/net/af_vsock.h
+>+++ b/include/net/af_vsock.h
+>@@ -10,6 +10,7 @@
+>
+> #include <linux/kernel.h>
+> #include <linux/workqueue.h>
+>+#include <net/netns/vsock.h>
+> #include <net/sock.h>
+> #include <uapi/linux/vm_sockets.h>
+>
+>@@ -65,6 +66,7 @@ struct vsock_sock {
+> 	u32 peer_shutdown;
+> 	bool sent_request;
+> 	bool ignore_connecting_rst;
+>+	enum vsock_net_mode net_mode;
+>
+> 	/* Protected by lock_sock(sk) */
+> 	u64 buffer_size;
+>@@ -256,4 +258,46 @@ static inline bool vsock_msgzerocopy_allow(const struct vsock_transport *t)
+> {
+> 	return t->msgzerocopy_allow && t->msgzerocopy_allow();
+> }
+>+
+>+static inline enum vsock_net_mode vsock_net_mode(struct net *net)
+>+{
+>+	return READ_ONCE(net->vsock.mode);
+>+}
+>+
+>+static inline bool vsock_net_write_mode(struct net *net,
+>+					enum vsock_net_mode mode)
+>+{
+>+	if (xchg(&net->vsock.mode_locked, 1))
+>+		return false;
+>+
+>+	WRITE_ONCE(net->vsock.mode, mode);
+>+	return true;
+>+}
+>+
+>+/* Return true if two namespaces and modes pass the mode rules. Otherwise,
+>+ * return false.
+>+ *
+>+ * - ns0 and ns1 are the namespaces being checked.
+>+ * - mode0 and mode1 are the vsock namespace modes of ns0 and ns1 at the time
+>+ *   the vsock objects were created.
+>+ *
+>+ * Read more about modes in the comment header of net/vmw_vsock/af_vsock.c.
+>+ */
+>+static inline bool vsock_net_check_mode(struct net *ns0,
+>+					enum vsock_net_mode mode0,
+>+					struct net *ns1,
+>+					enum vsock_net_mode mode1)
+>+{
+>+	/* Any vsocks within the same network namespace are always reachable,
+>+	 * regardless of the mode.
+>+	 */
+>+	if (net_eq(ns0, ns1))
+>+		return true;
+>+
+>+	/*
+>+	 * If the network namespaces differ, vsocks are only reachable if both
+>+	 * were created in VSOCK_NET_MODE_GLOBAL mode.
+>+	 */
+>+	return mode0 == VSOCK_NET_MODE_GLOBAL && mode0 == mode1;
+>+}
+> #endif /* __AF_VSOCK_H__ */
+>diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
+>index cb664f6e3558..66d3de1d935f 100644
+>--- a/include/net/net_namespace.h
+>+++ b/include/net/net_namespace.h
+>@@ -37,6 +37,7 @@
+> #include <net/netns/smc.h>
+> #include <net/netns/bpf.h>
+> #include <net/netns/mctp.h>
+>+#include <net/netns/vsock.h>
+> #include <net/net_trackers.h>
+> #include <linux/ns_common.h>
+> #include <linux/idr.h>
+>@@ -196,6 +197,9 @@ struct net {
+> 	/* Move to a better place when the config guard is removed. */
+> 	struct mutex		rtnl_mutex;
+> #endif
+>+#if IS_ENABLED(CONFIG_VSOCKETS)
+>+	struct netns_vsock	vsock;
+>+#endif
+> } __randomize_layout;
+>
+> #include <linux/seq_file_net.h>
+>diff --git a/include/net/netns/vsock.h b/include/net/netns/vsock.h
+>new file mode 100644
+>index 000000000000..c1a5e805949d
+>--- /dev/null
+>+++ b/include/net/netns/vsock.h
+>@@ -0,0 +1,17 @@
+>+/* SPDX-License-Identifier: GPL-2.0 */
+>+#ifndef __NET_NET_NAMESPACE_VSOCK_H
+>+#define __NET_NET_NAMESPACE_VSOCK_H
+>+
+>+#include <linux/types.h>
+>+
+>+enum vsock_net_mode {
+>+	VSOCK_NET_MODE_GLOBAL,
+>+	VSOCK_NET_MODE_LOCAL,
+>+};
+>+
+>+struct netns_vsock {
+>+	struct ctl_table_header *sysctl_hdr;
+>+	enum vsock_net_mode mode;
+>+	int mode_locked;
+>+};
+>+#endif /* __NET_NET_NAMESPACE_VSOCK_H */
+>
+>-- 
+>2.47.3
+>
 
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaRyyVhsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+AjW9QD/c2y0ArZIX75uJ7oNlCG+
-+AR0L7BKrnxC/iw8IDwHzwUA/jZoh2yJaEM+blH9V1++aGv6PORbyXfY/6FSFL6u
-ZUEF
-=v8ne
------END PGP SIGNATURE-----
-
---yqudl6qznctquhdl--
 
