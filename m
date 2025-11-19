@@ -1,89 +1,98 @@
-Return-Path: <linux-kselftest+bounces-46024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B34DCC7148C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 23:34:28 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59DD9C714A1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 23:36:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id C4218208A0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 22:34:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1D72E4E335B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 22:35:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 894D52E0415;
-	Wed, 19 Nov 2025 22:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA53F304BB5;
+	Wed, 19 Nov 2025 22:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FAR4JFIl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E79BC25BEE7;
-	Wed, 19 Nov 2025 22:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD60B2DE6FF;
+	Wed, 19 Nov 2025 22:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763591663; cv=none; b=H2uRSIk+RFcKCtqh0r5N4EusoF+cwBSMtygycABSJ18na/w5HBSvVskAh+MVTLzxPjaE4k+smUTmRPgHBwMshJed9kx1NgD447nZbc3bUBComL82uq74ULKWSZpOLS4icisZyiLh2HFCgfVKT40Q/KB+qVvlpew/55UZM8pSxBU=
+	t=1763591731; cv=none; b=HqpTaUBAdBEqS2B1ceE0d404lL7sfOzkjda1G4MuwCMCdHbkHAIzt8e4S9B+UegNuiS57zThIGc3VlaT2d63oOBlcPStfa6BHU/iz5Myi1Ged15w2atYmm7gI3Uj8tZDeeH7goZ2hFouzEJThDP0zfvVImW5FMLLjeJVfZ8oR+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763591663; c=relaxed/simple;
-	bh=SnbvjvrX77gO8SzkYhCJY0xBXmPN4XI0ZbTQe/xfOXE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TIjcAqgmKSLxm8cNxsb2zoRSEqF1uWVq5pz6FIAztfW/E7EK25sTQHnjBpYk4YskHS062bKNg6wJfY/KJtlmfs4Cv5vxIY7oxwu/bBMJ9K+IGvSCFRWS+U9dDcNQxd4QTDCya+s3XloA/yLB4EUhRSvT0k7ovj95b/NuTlY0kSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf17.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay03.hostedemail.com (Postfix) with ESMTP id 58D0DBA94A;
-	Wed, 19 Nov 2025 22:34:13 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf17.hostedemail.com (Postfix) with ESMTPA id 4967818;
-	Wed, 19 Nov 2025 22:34:11 +0000 (UTC)
-Date: Wed, 19 Nov 2025 17:34:41 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Shuah Khan
- <shuah@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: tracing: Update fprobe selftest for ftrace
- based fprobe
-Message-ID: <20251119173441.3aa33415@gandalf.local.home>
-In-Reply-To: <f6831d9a-4ea6-4100-9b1b-716ac93e1cdd@linuxfoundation.org>
-References: <176295318112.431538.11780280333728368327.stgit@devnote2>
-	<f6831d9a-4ea6-4100-9b1b-716ac93e1cdd@linuxfoundation.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1763591731; c=relaxed/simple;
+	bh=gtkw5I6XWLCtMEVkd6b/QRRhgxON/maxlA2T6Gp457E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MqWGiSTInG2ZevjbD4bl227MxFbTah6LtBBCIKr7DzAo9j2WTrN3lLh35KjiHhnMOCzwcdOiF3cgiNbJg/6KyoQaf0cnKB7mnUHkTGjRpjUriAhW6dWZpK6X11dI8xAsGAXOXoCup+6Fmgo04pltv56jX3YJ4BeFJT4+f1mpjy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FAR4JFIl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B44C4CEF5;
+	Wed, 19 Nov 2025 22:35:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763591731;
+	bh=gtkw5I6XWLCtMEVkd6b/QRRhgxON/maxlA2T6Gp457E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=FAR4JFIl4a1/kGUdxiL57yHPZIlzEkEW8XgXreuOVre+Bs/lhVWxAHSBMjdK/yA6y
+	 gnOLQ7W+OQ+/gDOLooBlbD7Ms9P0L4GBSrPLeDt9MgAIIYnleNa/UcWbY8daNMXw4R
+	 dCwJLdjN7mpKmGRNQJTzI8rEM2sHtZ6mr2T4XciJCCJR9L0Jo01gVBnKqlMp+QW1YP
+	 uFZK6cYd5kkWjLc6gdKbZD86YAbXVwH3yE32bPpXZp2gnlyIMNUry/o6K3bKbRBgsK
+	 XyhoZDI/n1NU971WytVE1rbKaDuXkKIXinT0SlmO0g+eYS/1mUQxrJBc08e0EKoP03
+	 lsdNz8uIFNiIg==
+From: Oliver Upton <oupton@kernel.org>
+To: maz@kernel.org,
+	oliver.upton@linux.dev,
+	Maximilian Dittgen <mdittgen@amazon.de>
+Cc: Oliver Upton <oupton@kernel.org>,
+	pbonzini@redhat.com,
+	shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	kvm@vger.kernel.org,
+	lilitj@amazon.de,
+	nh-open-source@amazon.com
+Subject: Re: [PATCH v2 1/2] KVM: selftests: Assert GICR_TYPER.Processor_Number matches selftest CPU number
+Date: Wed, 19 Nov 2025 14:35:26 -0800
+Message-ID: <176359161122.183996.2358688818272311431.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251119135744.68552-1-mdittgen@amazon.de>
+References: <20251114143902.30435-1-mdittgen@amazon.de> <20251119135744.68552-1-mdittgen@amazon.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 4967818
-X-Stat-Signature: yru9doabtx9zix1yjx5k5t34q7zh58pf
-X-Rspamd-Server: rspamout06
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+c5yWUdYkSaQYYwlFp1IMTaS15bQw9QD8=
-X-HE-Tag: 1763591651-374537
-X-HE-Meta: U2FsdGVkX188VNyUNtqM4j95nY1svkSPoJk59wldZSd9DpjIeMZ/yN0pqbvxZRZASTKhCIpHkZDlmx/5V6pk4C5bdhixIUnOWjLGd0J7bVSrRnm6h9WJ1695VdmkActmpE6W9q8Q4mAYIU4R02cEUEk4r/U+xy3aJPKGl1FFe9yDRWMbGiCakHRL39ep4RIyrKLpadmzx/B5R5fJXJDzPwTK8W4ENExb+PACN2Sazpfo0z2eGijzTPBP8EOBzl9ioTxOp4L0uacVQ7p1Fm4koGXG7iIOI6XHvudf5FRvGnCxSWPeZlhPiPVutwkEK48MrKSFFeXBh618bYM0mu521YOXlhfTpK5BvBsDDDinQPzl8ck9DOnTnumoRiMxcBLE6q+Qex03RUHh6V1BsChGTA==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, 19 Nov 2025 15:16:04 -0700
-Shuah Khan <skhan@linuxfoundation.org> wrote:
-
-> On 11/12/25 06:13, Masami Hiramatsu (Google) wrote:
-> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Since the ftrace fprobe is both fgraph and ftrace based implemented,
-> > the selftest needs to be updated. This does not count the actual
-> > number of lines, but just check the differences.
-> > 
-> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > ---
-> >   .../ftrace/test.d/dynevent/add_remove_fprobe.tc    |   18 ++++--------------
-> >   1 file changed, 4 insertions(+), 14 deletions(-)
-> >  
+On Wed, 19 Nov 2025 14:57:43 +0100, Maximilian Dittgen wrote:
+> The selftests GIC library and tests assume that the
+> GICR_TYPER.Processor_number associated with a given CPU is the same as
+> the CPU's selftest index.
 > 
-> Steve, do you want me to take this through my tree?
+> Since this assumption is not guaranteed by specification, add an assert
+> in gicv3_cpu_init() that validates this is true.
+> 
+> [...]
 
-Yes please, unless Masami thinks otherwise.
+I did a small cleanup to patch #1 to get rid of open-coded shifts / masks.
 
--- Steve
+Please new versions of a series as a separate thread, using a cover letter
+for anything more than a single patch. This is helpful for tracking patches
+on my end.
 
+Applied to next, thanks!
+
+[1/2] KVM: selftests: Assert GICR_TYPER.Processor_Number matches selftest CPU number
+      https://git.kernel.org/kvmarm/kvmarm/c/31df012da496
+[2/2] KVM: selftests: SYNC after guest ITS setup in vgic_lpi_stress
+      https://git.kernel.org/kvmarm/kvmarm/c/85f329df2931
+
+--
+Best,
+Oliver
 
