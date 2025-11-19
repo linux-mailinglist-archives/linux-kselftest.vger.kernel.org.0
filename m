@@ -1,169 +1,158 @@
-Return-Path: <linux-kselftest+bounces-45965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B636DC6E0B5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 11:47:02 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B56BBC6E112
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 11:52:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E2CE5386D32
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 10:43:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id ACCE92E0B2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 10:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89AAF34DB6E;
-	Wed, 19 Nov 2025 10:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jJtshzyH";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="MDWdNlvm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE6B9347BBD;
+	Wed, 19 Nov 2025 10:52:52 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CCD345CB9
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 10:43:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02F7313E12;
+	Wed, 19 Nov 2025 10:52:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763549015; cv=none; b=XB1+P2gsnjVRG3nD0tgJ+4/2U3Ac/Mw088asEo2LZ+irdyijA8w+GzQsbxYWykgjJtfraSWVU9U/ixF+1Im7UnMItEPHHDOfP/84bkzmVlQ2k+N78/huZlqOBAcKYpk1PGq2+24GQj9n1J9ur2As9/OmcChsyiMb6c27uHJrb1g=
+	t=1763549572; cv=none; b=uaBh+rAxht+LiFn2oz9mEk+xTYBPE6bqk22mzCew/GQR0d/5BW1+4hHnoLUKrHtCInp6Qk9BB+cew2I6KlFiIRYU4VRAQRs+LNtDrlxbv/Oo6e4x6trzeiLwt8Vbf8VejXCbDd4is+LWuDMtlPskImgIxbFWMD8j1gflleFnJRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763549015; c=relaxed/simple;
-	bh=ls8bqSOh5paIrQgIWm7KUHizx2alUb9qbX99d7lJac0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:References:
-	 In-Reply-To:Content-Type; b=Ple2Odl8aRXyaqkTLMSlayUWRltdQRCw25l8+pPwdifo7z0nheVqOjZzfYibXCuW3PgHrdJ2UnBN17er1CcWusg1jFDYW9SyGf7VoGFITgkvtFDGRYMHLoe42uor8aRNdZ6E4yl5I8haBdaOk9coCNXe+Zf4MUdLm+gbjuPRE/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jJtshzyH; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=MDWdNlvm; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763549012;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZS3DJl+rfsKCgk3N3Is+kJs1Pfw50XKBZca3nELkm98=;
-	b=jJtshzyHlvYV2u7iuNHsFVIgkUSKspgrv4R7eAFKsd/ZJ19hJHYqoxoPNXD3PwSJO7bWGT
-	2wxA7rbHHx7uYCULBz05E8Zg/WgMdh2j8lybwSRElJzshPzgGcB5N/XSO3fMEVv58hS5ii
-	yOZkltNURFgUbcOhCmKnAMUep3WadW4=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-644-ZLFTJW0HPIyABBN7Yo84Yg-1; Wed, 19 Nov 2025 05:43:31 -0500
-X-MC-Unique: ZLFTJW0HPIyABBN7Yo84Yg-1
-X-Mimecast-MFC-AGG-ID: ZLFTJW0HPIyABBN7Yo84Yg_1763549010
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4779b3749a8so19200595e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 02:43:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763549010; x=1764153810; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:from:subject:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZS3DJl+rfsKCgk3N3Is+kJs1Pfw50XKBZca3nELkm98=;
-        b=MDWdNlvmNcMCm6tkIH8gZ1l9VyeGCELkkCc2LcZeimoUE+EnfG5psKehsmCdxTYX2W
-         u6ZIhESbsLBatUE8ZKRF1JI7Zz+HIYEr5+20ekO1pP+Sh+xCZEKrL/lOE4JjBY3ixBNO
-         Y4bZuwzB2jKaHdkecrD+U+w4OjmeIwPe6Z7pRJBjHJVJXRtFsbcRixwRnQDkQPlM0C7o
-         938zFN41HVChgML+i498njELwKPrgDsdQHPWIYBUFEJhkQ90LeHG2+xnQW5oqR4uuKlI
-         s0wwysd3DFboZMQ465CZcv5wlXmeIKCArYwHX8Pshoht5Hz3BHQGOxx5n2unajCGoejc
-         8y3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763549010; x=1764153810;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZS3DJl+rfsKCgk3N3Is+kJs1Pfw50XKBZca3nELkm98=;
-        b=dnhvZSGCCQDcvMDxmwd0l/2Te8oI9BjImkFI4GYl9RstXcCMHNZAHqj7w7ROyrAVvU
-         ORX9lfhLuH9+f1xKpxVKhoeI9HqCJYdKErc3VaxA7i9B1XNw0MgkuLDMXKZeYuW+OFaL
-         8jtiFTp+giwR5PEVJ3rL/nfCJ3HYfJYM125+UbKNhpxcKyp5fSlvIqFgOBbF66MeSwpB
-         QREOpdR1tJnIjWqRh+S8wpr+t/ysAC0gc0Obn835WAbFyNnelQvq0FpV3cvmCjLNYcj0
-         TWdR99pvGa1HlC04O+7I0Mh/LLs7/fuGuvNqWYbeR34iGLzC8nQiVW5MoTkw3s8kJ+z3
-         8MtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUZ3cxb+CF/RU9nqChr6WJHnR1j48zrcVOcajjLJZWllW3Vcd/OO8oxCdntFRf9Rk++V+4ODiM1CTZJ7qWfREg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzylmHNQaPlhz1QKg/qQY5CS95l1nbskf5fp9D3Hpenw6tWPoT4
-	uQ5QbkKkRDiyuWM9B6WD46Xyzos8fkilUcUBAdN5FkkcKXKFhVppBwquz4j1x2OaXNt5bxg6PUH
-	c9RH05VTCSvcY1KQoTa1loIM2B+D9BpICX+ngqwtMmrTyId8GOb7TeCfUIyofMWuTayXspA==
-X-Gm-Gg: ASbGncvI2wqdvze2oqICWtV2m65Dl6S0ODyDHdnRnWkxkfkJYa7Jhg7oECYmxML9ZiA
-	3ZCaLypntzw95M/Z8KeRf0uYnKgWu0E+UqkPBKQEJz064TBSiAzLmZfM1fNY3BQwuOgR7QR8cgz
-	SOocjxUnBk6DpTOBJT5uYm2JGifsBm5PqXL7QdjxkoujPlfI474+gDKEib4emmj5wJH8krg3hDB
-	mgbdYkRn0+tySkpwvj6LwMD4wJuS6pAKMad1pQeyf4UGVUo/bb1qa4+tVfdGETkkuYxINIa9dyk
-	7eKkngTNLE7ggs8t0hsI1Kmuz5LWSZ4hZrAVmzeGit6NhiCcaqqYpHK826yE5mUUcmYHhAoeMr3
-	nxOmgawZQFe6W
-X-Received: by 2002:a05:600c:c4b8:b0:477:5aaa:57a6 with SMTP id 5b1f17b1804b1-477b198b88bmr18033295e9.10.1763549009794;
-        Wed, 19 Nov 2025 02:43:29 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE9VgMfr9TLL8O8BdB9euFkQ+122gpF3n9fR5oFdXmPTT7jiqyq2kRGJT8397RGEwGwHWuazw==
-X-Received: by 2002:a05:600c:c4b8:b0:477:5aaa:57a6 with SMTP id 5b1f17b1804b1-477b198b88bmr18032805e9.10.1763549009317;
-        Wed, 19 Nov 2025 02:43:29 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.155.41])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b1041defsm39874685e9.15.2025.11.19.02.43.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Nov 2025 02:43:28 -0800 (PST)
-Message-ID: <da8a7137-dba2-46be-b528-6806b11204db@redhat.com>
-Date: Wed, 19 Nov 2025 11:43:26 +0100
+	s=arc-20240116; t=1763549572; c=relaxed/simple;
+	bh=ImjuopkknPURutRoQN0cYhcamdcieiu+MDCsuPC8BDg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pS5b6YHT8vLIGqw4R3itXmK093oaR1I1XebfurX64Tsg3dcL/CcChm3PgBQRFaVkK5fvHn/pLVJ0ClDLNpTyNvynC2jlHW8L4s2qfWigLiFY5Z/6PNPG+PNQk3D3htOxIFHbxeQlLSa6pAGWYg9r8QIQaocGoLaKPcIwTzxvkdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: daf01190c53511f0a38c85956e01ac42-20251119
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED, SN_EXISTED
+	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF
+	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:2fef2393-71be-482c-a7c0-c52d41eee6e1,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:5
+X-CID-INFO: VERSION:1.3.6,REQID:2fef2393-71be-482c-a7c0-c52d41eee6e1,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:5
+X-CID-META: VersionHash:a9d874c,CLOUDID:9b5fcba47a3de54798378eb4b8f014d0,BulkI
+	D:251119185236YEZMKME3,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|850,
+	TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,
+	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: daf01190c53511f0a38c85956e01ac42-20251119
+X-User: zhangguopeng@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <zhangguopeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 634930976; Wed, 19 Nov 2025 18:52:34 +0800
+From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+To: tj@kernel.org,
+	hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	mkoutny@suse.com,
+	muchun.song@linux.dev
+Cc: shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>
+Subject: [PATCH] selftests: cgroup: make test_memcg_sock robust against delayed sock stats
+Date: Wed, 19 Nov 2025 18:52:16 +0800
+Message-Id: <20251119105216.1675608-1-zhangguopeng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 net-next 03/14] net: update commnets for
- SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN
-From: Paolo Abeni <pabeni@redhat.com>
-To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>,
- "edumazet@google.com" <edumazet@google.com>,
- "parav@nvidia.com" <parav@nvidia.com>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "corbet@lwn.net" <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>,
- "dsahern@kernel.org" <dsahern@kernel.org>,
- "kuniyu@google.com" <kuniyu@google.com>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "dave.taht@gmail.com" <dave.taht@gmail.com>,
- "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
- "stephen@networkplumber.org" <stephen@networkplumber.org>,
- "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
- "jiri@resnulli.us" <jiri@resnulli.us>,
- "davem@davemloft.net" <davem@davemloft.net>,
- "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
- "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
- "ast@fiberby.net" <ast@fiberby.net>,
- "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
- "shuah@kernel.org" <shuah@kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
- <ncardwell@google.com>,
- "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>,
- "g.white@cablelabs.com" <g.white@cablelabs.com>,
- "ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
- "mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
- cheshire <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
- "Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>,
- Vidhi Goel <vidhi_goel@apple.com>
-References: <20251114071345.10769-1-chia-yu.chang@nokia-bell-labs.com>
- <20251114071345.10769-4-chia-yu.chang@nokia-bell-labs.com>
- <d87782d4-567d-4753-8435-fd52cd5b88da@redhat.com>
- <PAXPR07MB79842DF3D2028BB3366F0AF6A3D7A@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <6d4aad6e-ebe0-4c52-a8a4-9ed38ca50774@redhat.com>
-Content-Language: en-US
-In-Reply-To: <6d4aad6e-ebe0-4c52-a8a4-9ed38ca50774@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/19/25 11:40 AM, Paolo Abeni wrote:
-> On 11/19/25 11:24 AM, Chia-Yu Chang (Nokia) wrote:
->> I was thinking to totally remove ECN from Rx path, 
-> 
-> ??? do you mean you intend to remove the existing virtio_net ECN
-> support? I guess/hope I misread the above.
-> 
-> Note that removing features from virtio_net is an extreme pain at best,
-> and more probably simply impossible - see the UFO removal history.
-> 
-> Please clarify, thanks!
+test_memcg_sock() currently requires that memory.stat's "sock " counter
+is exactly zero immediately after the TCP server exits. On a busy system
+this assumption is too strict:
 
-Note that my comment on this patch is focusing only on clarity: you are
-updating a comment for such goal: the new comment need to be clear and
-consistent. The proposed text was not; a better/more consistent one will
-be ok for me.
+  - Socket memory may be freed with a small delay (e.g. RCU callbacks).
+  - memcg statistics are updated asynchronously via the rstat flushing
+    worker, so the "sock " value in memory.stat can stay non-zero for a
+    short period of time even after all socket memory has been uncharged.
 
-Thanks,
+As a result, test_memcg_sock() can intermittently fail even though socket
+memory accounting is working correctly.
 
-Paolo
+Make the test more robust by polling memory.stat for the "sock " counter
+and allowing it some time to drop to zero instead of checking it only
+once. If the counter does not become zero within the timeout, the test
+still fails as before.
+
+On my test system, running test_memcontrol 50 times produced:
+
+  - Before this patch:  6/50 runs passed.
+  - After this patch:  50/50 runs passed.
+
+Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+---
+ .../selftests/cgroup/test_memcontrol.c        | 24 ++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 4e1647568c5b..86d9981cddd8 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -1384,6 +1384,8 @@ static int test_memcg_sock(const char *root)
+ 	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
+ 	unsigned short port;
+ 	char *memcg;
++	long sock_post = -1;
++	int i, retries = 30;
+ 
+ 	memcg = cg_name(root, "memcg_test");
+ 	if (!memcg)
+@@ -1432,7 +1434,27 @@ static int test_memcg_sock(const char *root)
+ 	if (cg_read_long(memcg, "memory.current") < 0)
+ 		goto cleanup;
+ 
+-	if (cg_read_key_long(memcg, "memory.stat", "sock "))
++	/*
++	 * memory.stat is updated asynchronously via the memcg rstat
++	 * flushing worker, so the "sock " counter may stay non-zero
++	 * for a short period of time after the TCP connection is
++	 * closed and all socket memory has been uncharged.
++	 *
++	 * Poll memory.stat for up to 3 seconds and require that the
++	 * "sock " counter eventually drops to zero.
++	 */
++	for (i = 0; i < retries; i++) {
++		sock_post = cg_read_key_long(memcg, "memory.stat", "sock ");
++		if (sock_post < 0)
++			goto cleanup;
++
++		if (!sock_post)
++			break;
++
++		usleep(100 * 1000); /* 100ms */
++	}
++
++	if (sock_post)
+ 		goto cleanup;
+ 
+ 	ret = KSFT_PASS;
+-- 
+2.25.1
 
 
