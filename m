@@ -1,182 +1,224 @@
-Return-Path: <linux-kselftest+bounces-45971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id A77D0C6E2CE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 12:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 72A71C6E35D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 12:24:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 585D3355883
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 11:08:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 67ED4342D9B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 11:19:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DA943538AA;
-	Wed, 19 Nov 2025 11:06:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19141350D64;
+	Wed, 19 Nov 2025 11:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aF+9Tk3I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568E4350D46;
-	Wed, 19 Nov 2025 11:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21A8350A0B;
+	Wed, 19 Nov 2025 11:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763550388; cv=none; b=s4BAaZQJMDTE8LYAdDOG4p5xGue6LBf3DQnygsvYkdw0NCOVV6OcKB09xq23wiRXg+4UdNpq7PPZLciovbAf0RDchyq6Vl2hbia4udb7hqFn3FYUadK+3TomlE84RKQcvSjCCDWxbutefoBeaflaMS81+zKlIgfamFIzGM9XMUQ=
+	t=1763551152; cv=none; b=Xj3/4xdrLYuaslHvtiyvxIy/Bt5z7xpVF581+QBt0vdgd/mjLZmBMkreXR+Cc8TFPjKs4WYHCfuO/zFT/UK2WqTzJ0WbV9wrtSmg6lHgyC7Tjxg46gnPBG9KQUOe/mQdY2cm/HN18s4lcsUq2mzNkfhZ77xzn8Ewg1jCHo5y3L8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763550388; c=relaxed/simple;
-	bh=BbYn8CqyP0+Hg9dyQYWnTfj+aqDyVNNHHeIsXidYinQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=m3Uz93Rw8/shyKtq/ZHUcVyG0tjOYzb9YvlT0SfL2v/NZ07S7l3QJ2ROp3o8NmMUO3XpxFhUOM3ls2BJEeyjK82pCmkL2GCziWL4lnhVVXOYpG8bB3lkHF3JtZ5Ef8qVT0eGV0Dp5ZcmwjACxfG5M5paHIRFue45OuW4ioXqLKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: c09cf5e0c53711f0a38c85956e01ac42-20251119
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_FG_IT, GTI_RG_INFO
-	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:cc27802b-44c4-49f9-a9b0-58b2da6c2faf,IP:10,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:5
-X-CID-INFO: VERSION:1.3.6,REQID:cc27802b-44c4-49f9-a9b0-58b2da6c2faf,IP:10,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:5
-X-CID-META: VersionHash:a9d874c,CLOUDID:5802ba938666071d8c168d1e00a3a3b8,BulkI
-	D:251117180100BIUI482W,BulkQuantity:6,Recheck:0,SF:17|19|64|66|78|80|81|82
-	|83|102|841|850,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:n
-	il,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,
-	BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_ULS,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: c09cf5e0c53711f0a38c85956e01ac42-20251119
-X-User: sunshaojie@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 687768682; Wed, 19 Nov 2025 19:06:09 +0800
-From: Sun Shaojie <sunshaojie@kylinos.cn>
-To: llong@redhat.com
-Cc: cgroups@vger.kernel.org,
-	chenridong@huaweicloud.com,
-	hannes@cmpxchg.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	sunshaojie@kylinos.cn,
-	tj@kernel.org
-Subject: Re: [PATCH v4 1/1] cpuset: relax the overlap check for cgroup-v2
-Date: Wed, 19 Nov 2025 19:05:46 +0800
-Message-Id: <20251119110546.1387184-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <942d2b65-3c28-4f6d-aa6b-8365fa5cea2c@redhat.com>
-References: <942d2b65-3c28-4f6d-aa6b-8365fa5cea2c@redhat.com>
+	s=arc-20240116; t=1763551152; c=relaxed/simple;
+	bh=e5luU8H79ds78sItRWsonUxVPkWeHh+yAutPaKVJGLk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QIHnQF53NXsr1T6YeWU7IvqsCJTeedSE91HcYc9JeCx1z8/njWwdHyqs59Kt5gOpMWxHVwLK4eKDkCtr+pR/ZFnrRjxLbFKKgo6nu4WhCo+5Xs73p4S2/ehtMKbsa+YApVwCKtzN0max1jDxeW8aykrEDTucT+205AB787AIAlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aF+9Tk3I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BF2AC19422;
+	Wed, 19 Nov 2025 11:19:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763551151;
+	bh=e5luU8H79ds78sItRWsonUxVPkWeHh+yAutPaKVJGLk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aF+9Tk3IRXUKewbiFGFbnkhZdXblI7LOHDgr7982DO40NcRvuObB+En+tYDt1A1J7
+	 m5BpJm2XewurnYwAJlYKo5z5PEM6CnRhOurUWGtfjHyNEmzZPnYMtJpBsxSQSfVzvg
+	 G8XCzzs3sGbJV2WBoXGqM/e5RAv8YvCpCqhDcFGpXpZCu/0pMZsWOEOaMTnu4M/SLP
+	 epmOfKP2cbCEYHeJPcd1UKswbx89b4R1xWdZq0QLIECwONtvDLTZpShaUGwOJJuY3K
+	 gbg24oTHnEDm19e21UVyr6s2p08xnk/t4KPVaRPft9Y4AGGtrqFupwGb2xXno9jnjF
+	 gUIXiLDqoRCNQ==
+Date: Wed, 19 Nov 2025 12:19:07 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	Phil Sutter <phil@nwl.cc>, Florian Westphal <fw@strlen.de>,
+	netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH nf-next v9 2/3] net: netfilter: Add IPIP flowtable tx sw
+ acceleration
+Message-ID: <aR2nq_UIz9oF5Xt_@lore-desk>
+References: <20251107-nf-flowtable-ipip-v9-0-7cbc4090dfcb@kernel.org>
+ <20251107-nf-flowtable-ipip-v9-2-7cbc4090dfcb@kernel.org>
+ <aRSDjkzMx4Ba7IW8@calendula>
+ <aRSvnfdhO2G1DXJI@lore-desk>
+ <aRUT-tFXYbwfZYUk@calendula>
+ <aRWLhLobB4Rz0dA_@lore-desk>
+ <aRunjT-HYQ-UeR_-@calendula>
+ <aRu1aFVwT_FPDeZ1@lore-desk>
+ <aR0Lj3ph0RYtpleX@calendula>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kcIDJeLuCmIpT6qE"
+Content-Disposition: inline
+In-Reply-To: <aR0Lj3ph0RYtpleX@calendula>
 
-Hi, Longman,
 
-On Tue, 18 Nov 2025 14:53:27 -0500, Longman wrote:
->On 11/16/25 8:57 PM, Sun Shaojie wrote:
->> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->> index 52468d2c178a..0fd803612513 100644
->> --- a/kernel/cgroup/cpuset.c
->> +++ b/kernel/cgroup/cpuset.c
->> @@ -580,35 +580,56 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
->>   
->>   /**
->>    * cpus_excl_conflict - Check if two cpusets have exclusive CPU conflicts
->> - * @cs1: first cpuset to check
->> - * @cs2: second cpuset to check
->> + * @cs1: current cpuset to check
->> + * @cs2: cpuset involved in the check
->>    *
->>    * Returns: true if CPU exclusivity conflict exists, false otherwise
->>    *
->>    * Conflict detection rules:
->> - * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
->> + * For cgroup-v1:
->> + *     see cpuset1_cpus_excl_conflict()
->> + * For cgroup-v2:
->> + * 1. If cs1 is exclusive, cs1 and cs2 must be mutually exclusive
->>    * 2. exclusive_cpus masks cannot intersect between cpusets
->> - * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
->> + * 3. If cs2 is exclusive, cs2's allowed CPUs cannot be a subset of cs1's exclusive CPUs
->> + * 4. if cs1 and cs2 are not exclusive, the allowed CPUs of one cpuset cannot be a subset
->> + *    of another's exclusive CPUs
->>    */
->>   static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
->
->As cs1 and cs2 is going to be handled differently, their current naming 
->will make it hard to understand why they are treated differently. I will 
->recommended changing the parameter name to "trial, sibling" as the 
->caller call it with "cpus_excl_conflict(trial, c)" where trial is the 
->new cpuset data to be tested and sibling is one of its sibling cpusets. 
->It has to be clearly document what each parameter is for and the fact 
->that swapping the parameters will cause it to return incorrect result.
->
->
->>   {
->> -	/* If either cpuset is exclusive, check if they are mutually exclusive */
->> -	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
->> +	/* For cgroup-v1 */
->> +	if (!cpuset_v2())
->> +		return cpuset1_cpus_excl_conflict(cs1, cs2);
->> +
->> +	/* If cs1 are exclusive, check if they are mutually exclusive */
->> +	if (is_cpu_exclusive(cs1))
->>   		return !cpusets_are_exclusive(cs1, cs2);
->
->Code change like the following can eliminate the need to introduce a new 
->cpuset1_cpus_excl_conflict() helper.
->
->diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->index ec8bebc66469..201c70fb7401 100644
->--- a/kernel/cgroup/cpuset.c
->+++ b/kernel/cgroup/cpuset.c
->@@ -599,9 +599,15 @@ static inline bool cpusets_are_exclusive(struct 
->cpuset *cs1, struct cpuset *cs2)
->   */
->  static inline bool cpus_excl_conflict(struct cpuset *cs1, struct 
->cpuset *cs2)
+--kcIDJeLuCmIpT6qE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+> Hi Lorenzo,
+>=20
+> I found one more issue: caching the ip6 daddr does not work because
+> skb_cow_head() can reallocate the skb header, invalidating all
+> pointers.
+>=20
+> I went back to use the other_tuple, it is safer, new branch:
+>=20
+>         flowtable-consolidate-xmit+ipip3
+
+Hi Pablo,
+
+thx for fixing it. I tested the branch above and it works fine with IPIP tu=
+nnel
+flowtable offloading.
+
+>=20
+> Hopefully, this is the last iteration for this series.
+>=20
+> I am attaching a diff that compares flowtable-consolidate-xmit+ipip2
+> vs. flowtable-consolidate-xmit+ipip3 branches.
+>=20
+> I also made a few cosmetic edits.
+
+> diff --git a/net/netfilter/nf_flow_table_ip.c b/net/netfilter/nf_flow_tab=
+le_ip.c
+> index ee81ee3a5110..e128b0fe9a7b 100644
+> --- a/net/netfilter/nf_flow_table_ip.c
+> +++ b/net/netfilter/nf_flow_table_ip.c
+> @@ -512,13 +512,14 @@ static int nf_flow_pppoe_push(struct sk_buff *skb, =
+u16 id)
+>  }
+> =20
+>  static int nf_flow_tunnel_ipip_push(struct net *net, struct sk_buff *skb,
+> -				    struct flow_offload_tuple *tuple)
+> +				    struct flow_offload_tuple *tuple,
+> +				    __be32 *ip_daddr)
 >  {
->-       /* If either cpuset is exclusive, check if they are mutually 
->exclusive */
->-       if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
->-               return !cpusets_are_exclusive(cs1, cs2);
->+       /*
->+        * If trial is exclusive or sibling is exclusive & in v1,
->+        * check if they are mutually exclusive
->+        */
->+       if (is_cpu_exclusive(trial) || (!cpuset_v2() && 
->is_cpu_exclusive(sibling)))
->+               return !cpusets_are_exclusive(trial, sibling);
->+
->+       if (!cpuset_v2())
->+               return false;   /* The checking below is irrelevant to 
->cpuset v1 */
->
->         /* Exclusive_cpus cannot intersect */
->         if (cpumask_intersects(cs1->exclusive_cpus, cs2->exclusive_cpus))
+>  	struct iphdr *iph =3D (struct iphdr *)skb_network_header(skb);
+>  	struct rtable *rt =3D dst_rtable(tuple->dst_cache);
+> -	__be16	frag_off =3D iph->frag_off;
+> -	u32 headroom =3D sizeof(*iph);
+>  	u8 tos =3D iph->tos, ttl =3D iph->ttl;
+> +	__be16 frag_off =3D iph->frag_off;
+> +	u32 headroom =3D sizeof(*iph);
+>  	int err;
+> =20
+>  	err =3D iptunnel_handle_offloads(skb, SKB_GSO_IPXIP4);
+> @@ -551,14 +552,17 @@ static int nf_flow_tunnel_ipip_push(struct net *net=
+, struct sk_buff *skb,
+>  	__ip_select_ident(net, iph, skb_shinfo(skb)->gso_segs ?: 1);
+>  	ip_send_check(iph);
+> =20
+> +	*ip_daddr =3D tuple->tun.src_v4.s_addr;
+> +
+>  	return 0;
+>  }
+> =20
+>  static int nf_flow_tunnel_v4_push(struct net *net, struct sk_buff *skb,
+> -				  struct flow_offload_tuple *tuple)
+> +				  struct flow_offload_tuple *tuple,
+> +				  __be32 *ip_daddr)
+>  {
+>  	if (tuple->tun_num)
+> -		return nf_flow_tunnel_ipip_push(net, skb, tuple);
+> +		return nf_flow_tunnel_ipip_push(net, skb, tuple, ip_daddr);
+> =20
+>  	return 0;
+>  }
+> @@ -572,7 +576,8 @@ static int nf_flow_encap_push(struct sk_buff *skb,
+>  		switch (tuple->encap[i].proto) {
+>  		case htons(ETH_P_8021Q):
+>  		case htons(ETH_P_8021AD):
+> -			if (skb_vlan_push(skb, tuple->encap[i].proto, tuple->encap[i].id) < 0)
+> +			if (skb_vlan_push(skb, tuple->encap[i].proto,
+> +					  tuple->encap[i].id) < 0)
+>  				return -1;
+>  			break;
+>  		case htons(ETH_P_PPP_SES):
+> @@ -624,12 +629,11 @@ nf_flow_offload_ip_hook(void *priv, struct sk_buff =
+*skb,
+>  	dir =3D tuplehash->tuple.dir;
+>  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
+>  	other_tuple =3D &flow->tuplehash[!dir].tuple;
+> +	ip_daddr =3D other_tuple->src_v4.s_addr;
+> =20
+> -	if (nf_flow_tunnel_v4_push(state->net, skb, other_tuple) < 0)
+> +	if (nf_flow_tunnel_v4_push(state->net, skb, other_tuple, &ip_daddr) < 0)
+>  		return NF_DROP;
+> =20
+> -	ip_daddr =3D ip_hdr(skb)->daddr;
+> -
+>  	if (nf_flow_encap_push(skb, other_tuple) < 0)
+>  		return NF_DROP;
+> =20
+> @@ -906,6 +910,7 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_buff =
+*skb,
+>  {
+>  	struct flow_offload_tuple_rhash *tuplehash;
+>  	struct nf_flowtable *flow_table =3D priv;
+> +	struct flow_offload_tuple *other_tuple;
+>  	enum flow_offload_tuple_dir dir;
+>  	struct nf_flowtable_ctx ctx =3D {
+>  		.in	=3D state->in,
+> @@ -937,9 +942,10 @@ nf_flow_offload_ipv6_hook(void *priv, struct sk_buff=
+ *skb,
+> =20
+>  	dir =3D tuplehash->tuple.dir;
+>  	flow =3D container_of(tuplehash, struct flow_offload, tuplehash[dir]);
+> -	ip6_daddr =3D &ipv6_hdr(skb)->daddr;
+> +	other_tuple =3D &flow->tuplehash[!dir].tuple;
+> +	ip6_daddr =3D &other_tuple->src_v6;
+> =20
+> -	if (nf_flow_encap_push(skb, &flow->tuplehash[!dir].tuple) < 0)
+> +	if (nf_flow_encap_push(skb, other_tuple) < 0)
+>  		return NF_DROP;
+> =20
+>  	switch (tuplehash->tuple.xmit_type) {
 
-Thank you very much for your guidance and suggestions on the code.
+ack, the above changes are fine to me.
 
-I've updated patch v5 with some new ideas and look forward to your feedback.
+Regards,
+Lorenzo
 
-patch v5 : https://lore.kernel.org/cgroups/20251119105749.1385946-1-sunshaojie@kylinos.cn/
 
-Thanks,
-Sun Shaojie
+
+--kcIDJeLuCmIpT6qE
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaR2nqwAKCRA6cBh0uS2t
+rCguAP94Y7RHnUASHiziYeFrJJxBnS4STiAJgV9S0aQo5/aivwD/eSWO+ndi+yzN
+7+k7tS3aaTPJVKMehmyBmfl9xGWd+QE=
+=4wc/
+-----END PGP SIGNATURE-----
+
+--kcIDJeLuCmIpT6qE--
 
