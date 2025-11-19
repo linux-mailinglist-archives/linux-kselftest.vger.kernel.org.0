@@ -1,184 +1,147 @@
-Return-Path: <linux-kselftest+bounces-45969-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45970-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A985C6E286
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 12:11:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2CBFC6E265
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 12:09:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E038D3561A6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 11:05:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 165FD4F244F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 11:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4084353883;
-	Wed, 19 Nov 2025 11:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XAxaz9si";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="a34AVZsN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FDEB2E6CB6;
+	Wed, 19 Nov 2025 11:05:06 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3526C352928
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 11:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5531334E75A;
+	Wed, 19 Nov 2025 11:05:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763550283; cv=none; b=Dq6rKK4j7mel7ZlkQXzHYZ1Ml1emiNWBoUg9zmODNM49i3ZK3ys5Ic8mg/a6KcvFXcDzE3UksK2ROXjZxELUqn1fD6hGE03p5KW2gxpOFqz62buUCleWszc4Guga4khuxqH4t6gFqyK7wuW+x5WbMEKhXFVulg/68TduVZ1KxCI=
+	t=1763550305; cv=none; b=G2y9kRu5nodmdzSQ6UhSuyu26VQn7YKfO/yE1kL1tDk7v+uzMm8PadvmvcNwLm2+1UdiXfPBNyGSxceHIdTUq0mLXtGPS9m5yTATUO62kxRDcGi95oiam6OksdcBEeQayBntX4wXB5E28bIoUsG6tpLeJi7Fqchz7oYHC0KmrsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763550283; c=relaxed/simple;
-	bh=QJRpxNJ6nM55oUProzvGLMXrymnGB0HzC7vMJLxqOVg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uCYxBxJSIrs5YGNJYL4BMo4HOJA3eaRBkGX5vMH1rAVCbxUpBp0jK+DmAYHdS46kJixNpileuPH2IKbSHVkLaoPxfaLfaH1+j5SZ5sJJo12QzR/3LO2ttC4sjaYEAJ2o2gzxV5Qq5hr+N9ityltQNf1QRoo7HjmR4JTIItjgEC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XAxaz9si; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=a34AVZsN; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763550280;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=42XSTDD+Tw2WVGrVsFAsxHT5sZ/yd8/fKSBACD6leIQ=;
-	b=XAxaz9siEu3dufMJtmuP2Lkb8OtZenxaH9Ko5MrLjkpsJNqwEpli5c/qSu5vUW5ZFqRrKR
-	z7IcJvqDdtkpB/S0pmp8ejyHHLH9Nrte5J03RX7sgcx69Lrrb8Mm9NiJMby06Nj7gu1tXT
-	fQIIl68vG83Bjh5SNp1xy8IP2ATt9k8=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-660-0EjHCVs4NAyKm9H2gF2nUQ-1; Wed, 19 Nov 2025 06:04:38 -0500
-X-MC-Unique: 0EjHCVs4NAyKm9H2gF2nUQ-1
-X-Mimecast-MFC-AGG-ID: 0EjHCVs4NAyKm9H2gF2nUQ_1763550278
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-8804823b757so21597976d6.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 03:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763550278; x=1764155078; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=42XSTDD+Tw2WVGrVsFAsxHT5sZ/yd8/fKSBACD6leIQ=;
-        b=a34AVZsNXjM+XWUSGb+JUGfhIezMxetxPfQJ0LdxM7JD1Gl+NCL5TmaahNwA3W51ns
-         /EaCg9C+LnFwmXWUyuQ2u/ddDQZ3Y+1dHaj4amrNQcxJQ/ky7nJeUoGMTAsHdzvbLFpy
-         t5TW7is2qMykSe024ldj23RxSkrKEUx3Bjrz7O54avbzCBWBc5JsMGjG7C4XNsARb1S1
-         OeM7bIuYZlkofsxLfG2rrWrWyGuHCPSGYysxJtoijUYtYMupPQTXmtvRl9VwLAsga2CY
-         HZTki6YU50vGVV/0wYNFdWStCDWEzzWEnY/ZaJHzuontkR7MRF3EcBhKTaExzUV08q6C
-         wZoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763550278; x=1764155078;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=42XSTDD+Tw2WVGrVsFAsxHT5sZ/yd8/fKSBACD6leIQ=;
-        b=nR2p25QqXtVn9pUzfCRh7aWH/JJNzeb4EVKubOaqywKI6WxeoOmBlCNwgJDLixvxkL
-         z/tHH6Ks83zbZCHKGm6JVe+P9ngVHemrfZVqy4Lan0GLpSQfewxullilhDcJGfYM0XLo
-         J8+fOr4TgOBUaJVyZo3ASDPTyKhHJXCVJvjb6J/Az1FTr54sGM1fHGtggS66CmYydSKR
-         snP00XzQp+IJ7y/M5ZMXJAJRWJ7ZBo36k8nWVII6UF/nw/JM63mCQNrmQ2qN5fEFWxaV
-         XNergXyTmKdhUUlgGN7Hd4RSwiXGhRMHHj1rW6Lgji7XPRmS2y3UTTA78/2MvOOLJOuv
-         oq0g==
-X-Forwarded-Encrypted: i=1; AJvYcCUtZJmGPd6GJP4IT/JmXs/RcP0B/OrSt9fGU7XXCR6/lBS5AyqWDt5rTvBLXbQDQoaifsc7II37i2Qgd3m7Xqs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9beevZSlWJJ3iOBy9WP8lmdoaw4MXVxYaoRsgD9vY53KEM5r3
-	apB7/ngpwz5DgjZrewRUgNZRnRfWNo1pMXRbdeP7qqP6nt2mmmgP+vYXY5d/VWnhm2psmQXS4Lo
-	WtEszKnBRv/45fUXokxf/xFiHYFIEAFc0EK0GsbXbWrvvOCMp07yw8Ut2bVoBwNbWl8Ia1A==
-X-Gm-Gg: ASbGncuAZI4HQa/5U0QN9ZieRalSs+EcMOftvcL7GCRpZ1s1xbXMBUzXmGAW2JJsm/S
-	yCO7hiIwyw0BPKXx13BTsy/cnhssYFiDkmQs5lbgtRYtXIzbPRDVQ4YlZmoMbMbfKpVrIYSunoA
-	oi/EwiPXAQc1KEDp4inC8tCc01tuwm82ifhQIkfXUh5++A6inYQq1Q/E6ItQqJEGHb3837yRNPO
-	D3RzGxiEVQfhozq+8Or1/dTndyNtLug+5gW4eHVZIe3m9Q8kOWPHc32wlVBoOopZdzSI/C/HsF9
-	g6rPY49X0B45mY/gVevTbSB4TTMveG/WFT5qh72quDof5bBJ3YkV5sISbwpkmdWMJOzXRs96jG9
-	0ufD83sqadIHX6Bo5SsmVJcc6QhmgA2Y24eZ9ePY2LlwmwS/TJp5h6bKIooojTw==
-X-Received: by 2002:a05:6214:5e88:b0:882:760e:822e with SMTP id 6a1803df08f44-8845ffd1671mr19256006d6.2.1763550278385;
-        Wed, 19 Nov 2025 03:04:38 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGUx18S7QU3TAKJCuch0iU57e5cRCXq8XDSG2cx+/NGC5m+qevE8BVa0OMVsBGaSQSjDNVFOQ==
-X-Received: by 2002:a05:6214:5e88:b0:882:760e:822e with SMTP id 6a1803df08f44-8845ffd1671mr19255436d6.2.1763550277970;
-        Wed, 19 Nov 2025 03:04:37 -0800 (PST)
-Received: from sgarzare-redhat (host-87-12-139-91.business.telecomitalia.it. [87.12.139.91])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8828613962esm132823926d6.0.2025.11.19.03.04.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 03:04:36 -0800 (PST)
-Date: Wed, 19 Nov 2025 12:04:12 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
-	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
-	Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa <vishnu.dasa@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	virtualization@lists.linux.dev, netdev@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Sargun Dhillon <sargun@sargun.me>, berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v10 03/11] vsock: reject bad
- VSOCK_NET_MODE_LOCAL configuration for G2H
-Message-ID: <tfrb7l3cguctjl5jbd7ykon4aqav4ognxndtnohs7ukmvk7wkm@tpaaicknwwhq>
-References: <20251117-vsock-vmtest-v10-0-df08f165bf3e@meta.com>
- <20251117-vsock-vmtest-v10-3-df08f165bf3e@meta.com>
- <vsyzveqyufaquwx3xgahsh3stb6i5u3xa4kubpvesfzcuj6dry@sn4kx5ctgpbz>
- <aR0arw2F/DmbIrzY@devvm11784.nha0.facebook.com>
+	s=arc-20240116; t=1763550305; c=relaxed/simple;
+	bh=DowB7Bu+Be5hdLdLY9hNNyub8IZrw7Y4+2+cQBG4qjA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rmIS2kp3GIlQz4un6mbfcs6YzJhX9bjTLWyU8w7QeAT3/That4rs5KH0wvbAcD6MtnxIhYvB8aSUTEmMLl4a478LJRLmzqM0rfI2b8uBCH5oFOJlBojGs8llHmx5hNRAlbgEpcnpowJnqyKmvCG++E83I+Y6P5VXjdSWq/ZD/zM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 93cc65aac53711f0a38c85956e01ac42-20251119
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_FG_IT, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:12424509-c462-48e1-8ad0-95396a709c9e,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:5
+X-CID-INFO: VERSION:1.3.6,REQID:12424509-c462-48e1-8ad0-95396a709c9e,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:5
+X-CID-META: VersionHash:a9d874c,CLOUDID:5f25ec8ca44b0e112c6ea7e5d70e176a,BulkI
+	D:251117180100BIUI482W,BulkQuantity:5,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|841|850,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:n
+	il,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,
+	BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 93cc65aac53711f0a38c85956e01ac42-20251119
+X-User: sunshaojie@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1555944802; Wed, 19 Nov 2025 19:04:54 +0800
+From: Sun Shaojie <sunshaojie@kylinos.cn>
+To: mkoutny@suse.com
+Cc: cgroups@vger.kernel.org,
+	chenridong@huaweicloud.com,
+	hannes@cmpxchg.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llong@redhat.com,
+	shuah@kernel.org,
+	sunshaojie@kylinos.cn,
+	tj@kernel.org
+Subject: Re: [PATCH v4 1/1] cpuset: relax the overlap check for cgroup-v2
+Date: Wed, 19 Nov 2025 19:04:43 +0800
+Message-Id: <20251119110443.1386951-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <mcpsxwjouoxfgdoqbysxlvjrgx7m2475y75fhssz4uoryb3jqj@lnigmwq7nage>
+References: <mcpsxwjouoxfgdoqbysxlvjrgx7m2475y75fhssz4uoryb3jqj@lnigmwq7nage>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <aR0arw2F/DmbIrzY@devvm11784.nha0.facebook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 18, 2025 at 05:17:35PM -0800, Bobby Eshleman wrote:
->On Tue, Nov 18, 2025 at 07:10:28PM +0100, Stefano Garzarella wrote:
->> On Mon, Nov 17, 2025 at 06:00:26PM -0800, Bobby Eshleman wrote:
->> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+Hi, Michal,
 
-[...]
-
->> > diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
->> > index 7eccd6708d66..da7c52ad7b2a 100644
->> > --- a/net/vmw_vsock/vmci_transport.c
->> > +++ b/net/vmw_vsock/vmci_transport.c
->> > @@ -2033,6 +2033,12 @@ static u32 vmci_transport_get_local_cid(void)
->> > 	return vmci_get_context_id();
->> > }
->> >
->> > +static bool vmci_transport_supports_local_mode(void)
->> > +{
->> > +	/* Local mode is supported only when no device is present. */
->> > +	return vmci_transport_get_local_cid() == VMCI_INVALID_ID;
->>
->> IIRC vmci can be registered both as H2G and G2H, so should we filter out
->> the H2G case?
+On Tue, 18 Nov 2025 18:52:24 +0100, Michal Koutný wrote:
+>On Mon, Nov 17, 2025 at 09:57:08AM +0800, Sun Shaojie <sunshaojie@kylinos.cn> wrote:
+>> This patch ensures that for sibling cpusets A1 (exclusive) and B1
+>> (non-exclusive), change B1 cannot affect A1's exclusivity.
+>> 
+>> for example. Assume a machine has 4 CPUs (0-3).
+>> 
+>>    root cgroup
+>>       /    \
+>>     A1      B1
+>> 
+>> Case 1:
+>>  Table 1.1: Before applying the patch
+>>  Step                                       | A1's prstate | B1'sprstate |
+>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
+>>  #3> echo "0" > B1/cpuset.cpus              | root invalid | member      |
+>> 
+>> After step #3, A1 changes from "root" to "root invalid" because its CPUs
+>> (0-1) overlap with those requested by B1 (0-3). However, B1 can actually
+>> use CPUs 2-3(from B1's parent), so it would be more reasonable for A1 to
+>> remain as "root."
+>> 
+>>  Table 1.2: After applying the patch
+>>  Step                                       | A1's prstate | B1'sprstate |
+>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member      |
+>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member      |
+>>  #3> echo "0" > B1/cpuset.cpus              | root         | member      |
 >
->In fact, I'm realizing now that this should probably just be:
+>OK, this looks fine to me, based on this statement from the docs about
+>cpuset.cpus.effective:
 >
->static bool vmci_transport_supports_local_mode(void)
->{
->	return false;
->}
+>>  subset of "cpuset.cpus" unless none of the CPUs listed in "cpuset.cpus"
+>>  can be granted.  In this case, it will be treated just like an empty
+>>  "cpuset.cpus".
 >
->
->... because even for H2G there is no mechanism for attaching a namespace
->to a VM (unlike w/ vhost_vsock device open).
->
->Does that seem right?
+>I was likely confused by the eventual switch of B1 to root in your
+>previous example.
+>(Because if you continue, it should result in (after patch too):
+>  #4> echo "root" > B1/cpuset.partition       | root invalid  | root invalid |
+>and end state should be invariant wrt A1,B1 or B1,A1 config order.)
 
-tl;dr   yes
+This patch is based on a version after v6.18.0-rc5.
+Whether or not this patch is applied, modifications to cpuset.partition do not
+affect the state of sibling partitions.
 
+If continue, the result should be as follows:
+ #4> echo "root" > B1/cpuset.partition       | root         | root invalid |
 
-vmci_transport.c has MODULE_ALIAS_NETPROTO(PF_VSOCK) for historical 
-reasons. This means that the module is automatically loaded the first 
-time PF_VSOCK is requested by the user if af_vsock is not loaded.
+I've updated patch v5 with some new ideas and look forward to your feedback.
 
-This was the case before vsock was generalized to support multiple 
-transports and has remained so for historical reasons.
-
-So today, we can have that module loaded, registered only for F_DGRAM 
-but not registered for F_G2H and F_H2G, so maybe it could work for now 
-and if the H2G is also not supporting it, maybe is the right thing to 
-do. (with a better comment there on the reason why both G2H and H2G 
-doesn't support it).
-
-Sorry for the long reply, maybe just `yes` was fine, but I dumped what I 
-thought because I feel it might be useful to you.
+patch v5 : https://lore.kernel.org/cgroups/20251119105749.1385946-1-sunshaojie@kylinos.cn/
 
 Thanks,
-Stefano
-
+Sun Shaojie
 
