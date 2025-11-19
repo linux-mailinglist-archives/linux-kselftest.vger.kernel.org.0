@@ -1,161 +1,152 @@
-Return-Path: <linux-kselftest+bounces-46001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F0D8C6FFEE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 17:16:12 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1A67C6FE7D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 17:02:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 335AD4F8AB4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 16:03:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 34EBD3682D3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 15:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7277B2E8DE6;
-	Wed, 19 Nov 2025 16:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD34636C0A0;
+	Wed, 19 Nov 2025 15:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bQJ7X/pC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nlCX45z3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010001.outbound.protection.outlook.com [52.101.193.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2017288C08;
-	Wed, 19 Nov 2025 16:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.1
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763568094; cv=fail; b=JMepRPhjgCIcZ9OXl4ioSKYVQaMX0bKxI6Hgzz9YUDT3dI6bRR9T5rjyWOBlD7dNCuYLcivLFRGRZRdl7W+f14TljdQ9wGvRbCQ/SD+07TAKL2gs+d8e1j+8JOQ1Tm8LE+dd6KWIp52QVbZFRmUgf0OK2dZJEQAhzERC4dv2wqQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763568094; c=relaxed/simple;
-	bh=j107q189kTGNl/WPgtiVEXszO1j87aPKg38HrYcaThk=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=TKXgrj3rdTRkPi1gNIJQ9K/RTb2fh1yuV6/Mbcqe+occ0nnUuIYIZML9mGaM6y/GMTrZdfZikvuNORmAFgNZHiJmRnVP/SmzsI7odJQD6+EemKNa5DCh602XyFPWnSjlsc6tTDD4sLSN+EzD2i+SRUlG6dONeOKcOWrM5PFk78A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bQJ7X/pC; arc=fail smtp.client-ip=52.101.193.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UnA4E4RhmPuLa8zkXz75ja48g1akyaj+/ToyoMXd5NBUfou5zEDfo26i+PYkakPFR+hKvHyRILeREqU3RRE37SNfmi/CAcfeNmviqnxcCTA/ENScg6+t8WBNKz8P0qX8Or71cDiR0DVZqQJL+mT9DjxuiLbcH9ooFb8xs6EumfL2pMxtAGd7R3fZeRCBxzS5biMm+TTatd48q+HFL1qXT84d0RcbaI9S5GoHI2p/pJVQ8p4kLAhcdTGFKOrrQ6vBar2PmK9FTnQ/OBQs8JJGNe+8qzj1b9qXFNfMQ68Ny3JyGqQaVm3+vyOP351zUJvEAbSfAqwi7QmysGj6CJT+lQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j107q189kTGNl/WPgtiVEXszO1j87aPKg38HrYcaThk=;
- b=U6/7sUpDrIL39bA3NJ2r0CfAfAX2/t0uT7sr/wzLcjazMxwFjqNaPDOs7HxOiRPOg004LN5iz0krVP15LQgHHx5pKujpUDmMljHvvWEO6+2W62oj6xuX07r1sbXlaJSQLh2MTFwrdpGhAHBOTAYZpLk6n7RzGndQ23QFv6xdpF4EI+RV+PL0XbonzVOamD51k8XeSqL5+pG0Dmwdr9Lxwbt/1pHfrPWBhuRlqOHGptHH4v3HpqasBX6I5NPWwInOwXcMonEboOfZqUnP19+tgaAxCVF9Us5WqRle+i87GenfbEXqugxan2Zbkop9K+oIVl2Npzv9AQ86OUpIa464XA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j107q189kTGNl/WPgtiVEXszO1j87aPKg38HrYcaThk=;
- b=bQJ7X/pCnwywz67L4kTsLBxTLbgjE7UhUxlTv+vAOEXQBzaWRj6guIXBYw2nrT6J6W4xKIGF7VakD/pUDxxEBBRIirDziTrIqTieEYx72lrR+01O9/CM8GThl/yUz/A1+k6MW7qQCILSfOBiOB+ZUIC3ge7f32hVJsTMBQSd9vQYwvzlfX+KiJjwI6xhEFk52Q2KyNOIq31MZgmkN36gjtyU8h15FyfxCIUFkbwZfU+SYxA+gXuds+wnccTPEZXpW9/ggCfO6vIr30b+RVnDf/N+2koqPmLz04Mb0UOZ6sUwf2InClUnjENzuhtDuou6XC1imI4vX+Pj9wWUX5siMQ==
-Received: from BN9PR03CA0185.namprd03.prod.outlook.com (2603:10b6:408:f9::10)
- by MN0PR12MB5737.namprd12.prod.outlook.com (2603:10b6:208:370::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Wed, 19 Nov
- 2025 16:01:29 +0000
-Received: from BN1PEPF00004685.namprd03.prod.outlook.com
- (2603:10b6:408:f9:cafe::fd) by BN9PR03CA0185.outlook.office365.com
- (2603:10b6:408:f9::10) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.10 via Frontend Transport; Wed,
- 19 Nov 2025 16:01:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN1PEPF00004685.mail.protection.outlook.com (10.167.243.86) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9343.9 via Frontend Transport; Wed, 19 Nov 2025 16:01:27 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 19 Nov
- 2025 08:00:52 -0800
-Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 19 Nov
- 2025 08:00:47 -0800
-References: <20251118215126.2225826-1-kuba@kernel.org>
- <20251118215126.2225826-9-kuba@kernel.org>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
-	<willemdebruijn.kernel@gmail.com>, <shuah@kernel.org>, <sdf@fomichev.me>,
-	<krakauer@google.com>, <linux-kselftest@vger.kernel.org>, <petrm@nvidia.com>,
-	<matttbe@kernel.org>
-Subject: Re: [PATCH net-next v2 08/12] netdevsim: pass packets thru GRO on Rx
-Date: Wed, 19 Nov 2025 16:43:01 +0100
-In-Reply-To: <20251118215126.2225826-9-kuba@kernel.org>
-Message-ID: <87wm3mau6r.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2FB36C0C8
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 15:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763567367; cv=none; b=SH4WfB9qwhLvagVtdR5rCbByGFYafuR3SswudNM77JaoM3S5jKqHLVXvB+P2X2zFyTY3mC4xdHuEa5su6rshexQclCZUrZOPQUreVQf1w9Q/dxDwhzDxc5lbzeI6b28wMiiHAszfu9YP4eF9BfwnZ0IjFCZHVwCcoCFFxaGKr7I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763567367; c=relaxed/simple;
+	bh=e9o1/GNMLjcy+Zk5rqn6PgwLxkXMSjNL5BWwJUqnu/4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hs3+R4KBeB8y8NsUC1NhJGHodCKknLy1rcM45IkcmuwFd+6o9Go2NPf89q5INFfK5RVQKXFO/yeb5OtY+e6Dzee+ojQookF+VA3aBp9kwVWkELaPj0YgMXnbcTPuG0Vrb8X8psPj8AplfYV6DP6zrg3gpYcbMByQwAAS6kO42S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nlCX45z3; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42b427cda88so4952748f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 07:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763567364; x=1764172164; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zsMgANA5eM7ZKAX6n6+aWoRlKM8M0oaGArWvq51zEek=;
+        b=nlCX45z326861M0Ts/dYSqIsTqwIWlt6Rz5v0Gqss+9sGUMLX96Ogm7lu1ktG0c+sA
+         f1zeL0Of8o6tf+NHcLeTiY99fgnMsWyBRt90KvqYEVOjRUcF6jwlVv4OSVbORdWpJvMc
+         gKKG9J5eXy38J9IsjA0ShakNLUdQM9Xg7XAHLfmbZA8Yn8J0d5B7mL18YHOP3NQN1Wqy
+         SKnIsRz3XIHkmDDlbIO/lKxfNQdmsyhPztm+ZsuCEw+XdafSd3NXLHZRyRQ8D6s29BuQ
+         W0P5xVisnuElScH1mG3uzn5KS7JXpXwaYLRPMuUFo3+1bB3M0SefsrhkwpPQEbyHsbKG
+         BWgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763567364; x=1764172164;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zsMgANA5eM7ZKAX6n6+aWoRlKM8M0oaGArWvq51zEek=;
+        b=FiUyBYwYxwT9oLIV+kaUJGOhEbOM//FA/lICzqP166e1obv86qz140OeJnSPxdurTe
+         HZTUgp6hj02ZxxwkL5N2DxRDWiNAy0TvMbpBDWL0wzw0FmFmKrTDACLPIKyADbYzLJv6
+         iLliJUgbLR7/IhKX816HeA9ZgOGxhNbaGNLQNW3GzsW1SsKAIdPcpy2v44rTvNYLk5Vg
+         mQpKnCAXz3vi8TPPeFmgGZgoDkDYfXpdV1dyK+Ju4uELI0sHZjQ0k0G8DQXe686qLyiR
+         HKBqEz7vp05eOK+xJHwoV3Jq9oCy6niXZ772Axt2sg06/LSqe7PWvnSDknhCH1KBGhMf
+         /Isw==
+X-Forwarded-Encrypted: i=1; AJvYcCWIBhsdTyU4XNe0ktQTj4KaMvOJDkQiRBh9P8b20x/PTVqiQnTIGM/rwB89hQI3E/Gv/kBnO8zEHobFoft479c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk3kNIbxK3+3YKJB5a0vuVtquUJA8v7Yx5wnTLpi+t400+1qVY
+	e25lewmIquEwWb+HSNp5QA690gsRLLi644XOSM+zjXU1PJrqU6wGFvbZ
+X-Gm-Gg: ASbGncszd6qFB3Bv/zzCWXcgABc2im1qh16sGBrw6psirOlPq8BLjQesv2pX6Fw5CON
+	+d7WACoFaGqSiBRxS4JDbPkHaq2t/1oBDEyXDIHq2xv1vEMVgF5Vyoptl4T0ymLqivoGqGsnEDk
+	itleuv2FvMxk6Nenr8OR5bZ5xesA+tVshitzB35757v5/W7G9d8UTdUsYXP5p0bUk9JtW51268F
+	m8c4A4/03N1HA8oOn9FaUSe06Yx1uKernnORAbW4G7+HFsMc0++914GKQknZLNAieby7I79FRBI
+	X9m+HRmgVOj70vF37us781uQZ4kH9RlDd6JMgzEEzbuo+tpxs4BdRmktE6lMJVAshbzf2NGhTFL
+	ZzwRDuJEoj7lk+IP5dcwKse8bya7PaaYet4i4RqPn6YUSoSpNGR47bip96nFWD24geApTCwqIAt
+	AafewUQP0hf0lVcHmZMkHI87VkDNxcGzbOCzjfsAGdDpuiXCPUTf/+Wj2OPqa82nn6VQ==
+X-Google-Smtp-Source: AGHT+IHKBCKSyXwqmqDibyNSehgzgh3KJ1v3HqV1svmFXRruujCX1mFQdmNmlH2lr9fy9Bcfr5S55w==
+X-Received: by 2002:a05:6000:4024:b0:42b:2dd5:42be with SMTP id ffacd0b85a97d-42b593234e0mr18915716f8f.8.1763567364171;
+        Wed, 19 Nov 2025 07:49:24 -0800 (PST)
+Received: from f4d4888f22f2.ant.amazon.com.com ([15.248.3.91])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42c9628ebacsm25969755f8f.30.2025.11.19.07.49.23
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 19 Nov 2025 07:49:23 -0800 (PST)
+From: Jack Thomson <jackabt.amazon@gmail.com>
+To: maz@kernel.org,
+	oliver.upton@linux.dev,
+	pbonzini@redhat.com
+Cc: joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	isaku.yamahata@intel.com,
+	xmarcalx@amazon.co.uk,
+	kalyazin@amazon.co.uk,
+	jackabt@amazon.com
+Subject: [PATCH v3 0/3] KVM ARM64 pre_fault_memory
+Date: Wed, 19 Nov 2025 15:49:07 +0000
+Message-ID: <20251119154910.97716-1-jackabt.amazon@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00004685:EE_|MN0PR12MB5737:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63a60cc1-3578-4d8c-2be3-08de2784e599
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|7416014|82310400026|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?e4AnHUOhfO+W3qN20SRlReVUFDkPxhlsCSsqSpJCF0ytkZaZAqGyTmWGIu3E?=
- =?us-ascii?Q?iiCBcNoU0gldOULNP6uvnfBxM3hxswvI9Wlimp/UBqFjHj0CpaVrnO+pIjrt?=
- =?us-ascii?Q?/A92IAUXaE9FU4OzLCtXKoc7Ds97oliYin0rVGEchIGW6YRX7bFdPGy6OyYT?=
- =?us-ascii?Q?tECV8RIXBgnwqoIhxwOjm7RcT5/pXiiwbTWD7Cm8aSVd1IIYDcEOOtV+x8I+?=
- =?us-ascii?Q?XchPbmSU8N8yRvirAqSbeAK/4DeI244bJUT0Iy2UqWgboA2gheLSvVwNPYBu?=
- =?us-ascii?Q?p4vUkKDnzv04JEe0AG6UBFdoG5RNoH2Yypmaz5VmKOymH4Eu5fd1dLd/3Mra?=
- =?us-ascii?Q?zkBEafzMRAtYR0x+n6OP/GAOqPqfXnahh/17lJiqKHTYhkt4fGQu30Re+U8g?=
- =?us-ascii?Q?vlwzh3Jup5uMStgayuaGsmakFbjqa4AJ9mhz3QKh/20o2ZMjLvHcOGdBJBUI?=
- =?us-ascii?Q?NUEEOGy2G9iMt7bP9U5PNRzbTNFszI5t03AdAIQY3Zl9nQM/0C+MU3CU5ixD?=
- =?us-ascii?Q?xU+m3GQgR54Nhniktfyu09LjaDa52I89q2a3w7wqrVNbX/Fn4im8yzBH4zV/?=
- =?us-ascii?Q?INsLEZFMOQqpBNRCSm7wspEoplSpBWqur+ELtf5hgjoCQS8P0bSeKj3uwT7e?=
- =?us-ascii?Q?nEdfydqV+iz3Zmi8EiChFpfylhLKm+JCJ91QN6c8RzMI4+NvKYogrBM9MtVU?=
- =?us-ascii?Q?I3gzxCAKmn6au7k/RiQrWnkyMAPzM9H+E2pWq6pT8PRCoMQVBywfVWU9nXs4?=
- =?us-ascii?Q?RD/d3A41BzW73MtKpfeln3i+xIGuMMqqL6rMK9A6Tv7L5rxrA6Duv88ZIknA?=
- =?us-ascii?Q?D+YwEdfqPTFH5PYoehyNSiMj7ThBojgtmlqeX2PrceTf8ChtIP2azZphU+g0?=
- =?us-ascii?Q?pcIyD8sUvs0s/FmRxixLFwcFRqR9bTzIh55NwfSo3pp6JA1QWYlDKLcPktO1?=
- =?us-ascii?Q?DTGeDnNQlP0PhEhU79UnuSWYYKjB8P0b+tS7m/e5GZylIzm4zZzwe5YAW5iQ?=
- =?us-ascii?Q?RtJUgE2QPs9c29Vjyli5PZnk6Bfe0oIy8xnRN/jj/48rLpF2BXHEQOIS/5sw?=
- =?us-ascii?Q?L0Lru8KtbKRjXjhgdz/fGOj6+8YWYTjM9/oDCemdAEiDb+R16uqqBYMUUoZV?=
- =?us-ascii?Q?KKOry0BfJPfYblifTHIHG7Hg2BGNvRuhSB4E7KjNPYP/QXy1AHTr1wsS41d7?=
- =?us-ascii?Q?0a/U6XpMoq17jfuwaPv85cRSnfbF/cI8mGGe7losqDObd0LoRboheYzrdwBN?=
- =?us-ascii?Q?u5sZztvNqrN83YsAJ0f1ohA1q5Otr9g7q6rn1u3MSBY6ZOlAN122fiQsNEc6?=
- =?us-ascii?Q?ZSOzV1aBSjjxltgXA5IbyQTQf381sgTtNDF5Jh7xuK8xszvEoRGrBcgzqFIT?=
- =?us-ascii?Q?GFgoVf6q8AM3/icOS9QMIiH8ELS9cKx+a2QLV51t/Dad3VqWltXzQXBCTI07?=
- =?us-ascii?Q?gBq3/wFEVAHo/Y9TZpjveLjMZT9Mjf6y4k6ij2KhfVA9blnmJMu1WhCQci5w?=
- =?us-ascii?Q?X5zZJlM7UZS0+/fgSoKBGOEO3f/RXuI3T+A8RAMWFCJ//bkEyseRKLqgyMZM?=
- =?us-ascii?Q?8gwiITYmXPNV+n1/8cM=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 16:01:27.2499
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63a60cc1-3578-4d8c-2be3-08de2784e599
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF00004685.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5737
+Content-Transfer-Encoding: 8bit
+
+From: Jack Thomson <jackabt@amazon.com>
+
+This patch series adds ARM64 support for the KVM_PRE_FAULT_MEMORY
+feature, which was previously only available on x86 [1]. This allows us
+to reduce the number of stage-2 faults during execution. This is of
+benefit in post-copy migration scenarios, particularly in memory
+intensive applications, where we are experiencing high latencies due to
+the stage-2 faults.
+
+Patch Overview:
+
+ - The first patch adds support for the KVM_PRE_FAULT_MEMORY ioctl
+   on arm64.
+
+ - The second patch updates the pre_fault_memory_test to support
+   arm64.
+
+ - The last patch extends the pre_fault_memory_test to cover
+   different vm memory backings.
+
+=== Changes Since v2 [2] ===
+
+ - Update fault info synthesize value. Thanks Suzuki
+ - Remove change to selftests for unaligned mmap allocations. Thanks
+   Sean
+
+[1]: https://lore.kernel.org/kvm/20240710174031.312055-1-pbonzini@redhat.com
+[2]: https://lore.kernel.org/linux-arm-kernel/20251013151502.6679-1-jackabt.amazon@gmail.com
+
+Jack Thomson (3):
+  KVM: arm64: Add pre_fault_memory implementation
+  KVM: selftests: Enable pre_fault_memory_test for arm64
+  KVM: selftests: Add option for different backing in pre-fault tests
+
+ Documentation/virt/kvm/api.rst                |   3 +-
+ arch/arm64/kvm/Kconfig                        |   1 +
+ arch/arm64/kvm/arm.c                          |   1 +
+ arch/arm64/kvm/mmu.c                          |  73 +++++++++++-
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../selftests/kvm/pre_fault_memory_test.c     | 110 ++++++++++++++----
+ 6 files changed, 159 insertions(+), 30 deletions(-)
 
 
-Jakub Kicinski <kuba@kernel.org> writes:
+base-commit: 8a4821412cf2c1429fffa07c012dd150f2edf78c
+-- 
+2.43.0
 
-> To replace veth in software GRO testing with netdevsim we need
-> GRO support in netdevsim. Luckily we already have NAPI support
-> so this change is trivial (compared to veth).
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-Reviewed-by: Petr Machata <petrm@nvidia.com>
 
