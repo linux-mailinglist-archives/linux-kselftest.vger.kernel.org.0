@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-45992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71BFCC6FAEA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 16:36:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43718C6FB23
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 16:39:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 40BED3477D7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 15:29:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 10AC64E45E2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 15:32:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B737433EAE6;
-	Wed, 19 Nov 2025 15:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 566E329A9CD;
+	Wed, 19 Nov 2025 15:31:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ULo3ngKQ"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="DiOLNDF7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5CA34FF4A;
-	Wed, 19 Nov 2025 15:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4FF3285CB3;
+	Wed, 19 Nov 2025 15:31:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763566147; cv=none; b=fepA4MdGxCc3q7jIgdeMwQt/28PneS8qYNSYm8lmY3jdZk3d15xlZZTYmbtFOquxk9yRqG5UoPOUMp2SqcK9tL+4T84QbEQVL+Xk10xv72AsdEdY9E7xyKBbu/tdNNOOlbI43NoGqeCIuhl+JLwK2OAM0TW7a2YVj5hlB2WlfL0=
+	t=1763566319; cv=none; b=B/PXPxBGak8WlkxG+UguBSvNX4AfJD4oxBgaqQsOt3RxFPmTSzACcdX6q97FDGa7IgdMuMN9xniVJNI7y2/JGobmDmAV7TD1JUCIlolp4wEmVk/IrB3iiAbANAOxdQtD7AevMiNXJlo410DwlQRjCZLvYJhRPNziCaUoxpGtikM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763566147; c=relaxed/simple;
-	bh=fxRrC4eWDzwRTHar/gM5igIfuXRafCI9mBKcj9AGc0E=;
+	s=arc-20240116; t=1763566319; c=relaxed/simple;
+	bh=UA6BbECwsiGdz8YYnxOIoGO1ZKDze8WBFj4cUmpvk84=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eCHSYrcZn0CcGoTQkARS8n/9fsGBhbBb/NU+IdTiCBN99d3UmOQdXzsxb+GF9WBeUgu8s5p5U6ax6RitsgrIcaqqfgGHrcAeRAeXpfPEiVVyV6s3pNhmvjqhhbNU3r4YG3i5h5YCjEOv0cu1+Bv65UyWh2DhqgfVp70tPAAH+iQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ULo3ngKQ; arc=none smtp.client-ip=213.97.179.56
+	 In-Reply-To:Content-Type; b=RkafdT1Gh9DtUBXZGEI4gYr0jb8iHSGbqjIyvugkNno1spV4OSIcOEjuV3Dvdax3HuoP5dcjOJRxO6mbRvonyAx2X/JMrFPne38liyIk7purPXRezQ/HxMpORV8T3PG6mXlUmRHXDQizS+r4LqdwCsdtEECZUmXNd9625wQgW2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=DiOLNDF7; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,18 +37,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=gluVA1xMVK3xSRqyLRXhSYdly47aZriJBcNX3M9TlqQ=; b=ULo3ngKQeuE/xdWc+cNtJqQj3l
-	XyAlPCGr0/3y5TIAwrBbf7Rq57INSnN4+D0f3y99OgVy1NlZU7snxfgwRS6UeYaWCcVjMW3pKnVOA
-	BR+KU8dB2v4GdN1KpL6bnn1eTbIxvpxHF3rCCsDAdSOVxCf3nHCkQWLvSyWNmIbLvM6kFico/voj9
-	dpSjxO9EdUz+dMqvcjAsn/wm878dv2i/bK5pAtk3/K+eINcslVjZ0Yv5VMOM3j/Qk9xgXagHb/5lk
-	T43CmRuJRbXxmmV4eValbrHYy28HLrFHWGJ4HBTygmRw7YnYjwyqClHrNCeXZSaiXa+4BTJ29Bmtt
-	TENySD3w==;
+	bh=ZEydrG7L1tp3+i+7Fup4PEypaIBN4DKaXmuX18Pd51Q=; b=DiOLNDF74veKYhJgk4wDwEDoXF
+	yY6VNA0wHAm0EiJ0FcnqW8SHxNNJ6CTleyLTnbRiPPWZ5rCPBbwG1vrYepwtSSfvUqtHa2wyNCnEI
+	N2Djv8x9ggJwy5k/to2cyFTa5h96cgTU102th7uOlswxWwhpWb7w7dd1KiqVZBYBKYtxMkNrqEAJP
+	w6Wqtkx0OJBF123yRplNV/vKfyh8M+r8DSKkpIGGDCcBnsOL/wdVr/CSDb6zbkg78uSmsNyuhyeWU
+	RoUzr4f6sQf9Y8cqXQy3293np/81zxsyX9CObieyFuMZuONOTF8/ZqSJRY8cqrZemMkW4hqWuhB+/
+	2qT7O7Mw==;
 Received: from [187.101.0.152] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-	id 1vLk6s-002pEQ-MB; Wed, 19 Nov 2025 16:28:42 +0100
-Message-ID: <cfed2906-291f-41e9-a6ba-4884a7380d17@igalia.com>
-Date: Wed, 19 Nov 2025 12:28:37 -0300
+	id 1vLk9q-002pHQ-Ug; Wed, 19 Nov 2025 16:31:46 +0100
+Message-ID: <b133c105-861f-4c56-b3ef-ea2ec5054e65@igalia.com>
+Date: Wed, 19 Nov 2025 12:31:42 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,49 +56,29 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/futex: Fix storing address of local variable
-To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Cc: Darren Hart <dvhart@infradead.org>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Davidlohr Bueso <dave@stgolabs.net>
-References: <20251118170907.108832-1-ankitkhushwaha.linux@gmail.com>
+Subject: Re: [PATCH] kselftest: futex: Fix memset with zero size warning
+To: Wake Liu <wakel@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Darren Hart <dvhart@infradead.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+References: <20251119030052.315502-1-wakel@google.com>
 Content-Language: en-US
 From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <20251118170907.108832-1-ankitkhushwaha.linux@gmail.com>
+In-Reply-To: <20251119030052.315502-1-wakel@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Ankit,
+Hi Wake,
 
-Em 18/11/2025 14:08, Ankit Khushwaha escreveu:
-> In "child_circular_list()" address of local variable ‘lock_struct a’
-> is assigned to "" raising the following warning.
-> 
-> robust_list.c: In function ‘child_circular_list’:
-> robust_list.c:522:24: warning: storing the address of local variable ‘a’
-> in ‘head.list.next’ [-Wdangling-pointer=]
-> 
->    522 |         head.list.next = &a.list;
->        |         ~~~~~~~~~~~~~~~^~~~~~~~~
-> robust_list.c:513:28: note: ‘a’ declared here
->    513 |         struct lock_struct a, b, c;
->        |                            ^
-> robust_list.c:512:40: note: ‘head’ declared here
->    512 |         static struct robust_list_head head;
->        |                                        ^~~~
-> 
-> removing the static keyword of "head" to fix this.
+Em 19/11/2025 00:00, Wake Liu escreveu:
+> The `FIXTURE(args)` macro defines an empty `struct _test_data_args`,
+> leading to `sizeof(struct _test_data_args)` evaluating to 0. This
+> caused a build error due to a compiler warning on a `memset` call
+> with a zero size argument.
 > 
 
-This should be "Remove the static..." as noted in the kernel documentation:
-
-"Describe your changes in imperative mood, e.g. “make xyzzy do frotz” 
-instead of “[This patch] makes xyzzy do frotz” or “[I] changed xyzzy to 
-do frotz”, as if you are giving orders to the codebase to change its 
-behaviour."
-
-Please have a look on this page here: 
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+Do you mind sharing your compiler options? I can't reproduce this 
+warning here. I also noted that a few other selftests have this pattern 
+of defining an empty FIXTURE(), do they also produce warnings?
 
