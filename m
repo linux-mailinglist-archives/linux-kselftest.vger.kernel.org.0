@@ -1,173 +1,186 @@
-Return-Path: <linux-kselftest+bounces-46007-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D05CC7026B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 17:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BEFBBC703EB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 17:55:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AB9233C5B2A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 16:35:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E88C538472F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 16:38:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF5233C19E;
-	Wed, 19 Nov 2025 16:32:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7873C34106D;
+	Wed, 19 Nov 2025 16:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="t8xLRByW"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QoyUzQy0";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="qKhmmQci";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Vc917aBD";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="EhVk9XM6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013030.outbound.protection.outlook.com [40.93.196.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2AB3327C0C;
-	Wed, 19 Nov 2025 16:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763569975; cv=fail; b=sZQ5rCSxHiwPoaH02ZiVd5k7QkSOVSdHddYZpYWdRD64WMbVdNYsT3nGjtFTXVyjfalX53/GlDO/AsLoKmeNWtoaP9QFCO7EG0N3KS6owj1TuoIo+w2QogOy88Z6S1yBAsCBkGYQHoIYOzb6W85xylPqGFTQZ4kj+hNrQhSd21Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763569975; c=relaxed/simple;
-	bh=tPbW9Qm1JFJxkheYagrb1gm1JpphiLR0ExEh6p4BXps=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=J5SOhnbtQ3dO6ivqHH/FNGNxHgdPecgf/dQ1CfNMJlr35OHGWsKl2JKoS8CwpHRTChb7jwvJivD4VKpTqbtrp8mfV/DrVV61HcbX8nm3lujMOkznDiF57E3u+U9QqIlEA24aKSU/S//y9rmfvx5DTNowBcGtTMcbEpHnZYXKGhg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=t8xLRByW; arc=fail smtp.client-ip=40.93.196.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AylL4qymTbAv4SWoCGxTtcH/aKwt6I5gRmMsXf/RtUcnaNzzB3oK98WMKmpnMeijMe27RzjlHz1A696rxs5rsTbr5CrPybckVba6NUuWFlezZpGuqys5maTkSbeX+1hlhnx3JaHrt5TUMsD/W1LyEyrQ8jOxcw4wPKfYsP7Pq0ObhwfR/KgirZIbLAgvpyPWgn0jnmYX651LsU0oL+KG08/5SuVTowKRrXJRhQBe509eis0+k6oVNMwVhT5brEEPdBAxSO4f6g5zRUMeaGNzUxOpY39oqMlgB8cLJOHIHJjHkpnw8pIZ9tthFKBI6d2vWu9zLeF3Zzuts8J2JPZfBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tPbW9Qm1JFJxkheYagrb1gm1JpphiLR0ExEh6p4BXps=;
- b=EMcu+H5xi01+fLU/XOwBoI8v+bbwrBqtsgbOyyQNUTsg/qo9BdaGrBU765BASLT4KczPybF2cWktfqYt+RptgY+G63BYd2cY7hxFYNOPqB7x54aT6eWnEUcQDfzbG9W48n2PDJL/ThVZoiz1b5oacYqZLzhS2ZYvAz59TxjmsZGT0sLZkd9Kcu3dUacPttynA1Sfof419wr3JMbGut71aKf4IGfbvuPGcrcwu/EOG/U0wCL/oe8OJa9RO7w/1OZ39oHu4Mb6DRP+tEgxKmX+jjlD/1Q/uvs8svsesTW6PtEaWVxylU47eB/no8BA2gAPFHx88zFQ67N1zlt5z0paXw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tPbW9Qm1JFJxkheYagrb1gm1JpphiLR0ExEh6p4BXps=;
- b=t8xLRByW+XF7ZGDaNVOfbFlAN98U3myNm6u95LH3hZVQo1B/3QvlHA9Fk6NV+oi2qh/YEcdL1WXLS8HAaaiQLNjLb6VO6mLZ0xVAP8eVVGoe5HLqa7M60wiVScCWgSJFqWlNd3gg2EK+/F6P2XAsoVoW0M8ropGP1a5ESusYxDLfGVb5+79M1Fu0TFbavwn9GY2w5SRSqW5fFCXDPDRkscJiAp8gLdlrvnjHqvv4DADacoaPlmF/6n8fuAgo8FLsLWXy9QkcYueQwETGYhhNUl6kuSP4DWje8ADJG+0YUyi4Q6l6p0t4xtscKcyGzMbewgFkFS/1ILgvJBUTZHK/iQ==
-Received: from SJ0PR13CA0135.namprd13.prod.outlook.com (2603:10b6:a03:2c6::20)
- by DS0PR12MB9039.namprd12.prod.outlook.com (2603:10b6:8:de::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Wed, 19 Nov
- 2025 16:32:50 +0000
-Received: from SJ5PEPF00000207.namprd05.prod.outlook.com
- (2603:10b6:a03:2c6:cafe::c) by SJ0PR13CA0135.outlook.office365.com
- (2603:10b6:a03:2c6::20) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.10 via Frontend Transport; Wed,
- 19 Nov 2025 16:32:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- SJ5PEPF00000207.mail.protection.outlook.com (10.167.244.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9343.9 via Frontend Transport; Wed, 19 Nov 2025 16:32:50 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 19 Nov
- 2025 08:32:28 -0800
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 19 Nov
- 2025 08:32:22 -0800
-References: <20251118215126.2225826-1-kuba@kernel.org>
- <20251118215126.2225826-7-kuba@kernel.org>
-User-agent: mu4e 1.8.14; emacs 30.2
-From: Petr Machata <petrm@nvidia.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
-	<willemdebruijn.kernel@gmail.com>, <shuah@kernel.org>, <sdf@fomichev.me>,
-	<krakauer@google.com>, <linux-kselftest@vger.kernel.org>, <petrm@nvidia.com>,
-	<matttbe@kernel.org>
-Subject: Re: [PATCH net-next v2 06/12] selftests: net: py: support ksft
- ready without wait
-Date: Wed, 19 Nov 2025 17:31:58 +0100
-In-Reply-To: <20251118215126.2225826-7-kuba@kernel.org>
-Message-ID: <87jyzmasqa.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BCAD327BFD
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 16:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763570187; cv=none; b=FqSvE1XZzBQE44gbqyGmOuCA8UFNSwQBPKyrG0hGQjSnip+KsfdU0Ox9OShHvurf2C4J3ORfKM+Vf0lNVgofWbAp3O6R3eDbMdNDVzm5IDVeouAS/tN9iiVb3bYFXh41LuhaR0/D95EQwfnEoe2Lod/ov+qoIvg0RCsfa7ghCiQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763570187; c=relaxed/simple;
+	bh=MiYcdi2tQ+2r1RMplxVS9eAgA9bD8miiom4S+yzOduA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oteLIYAHnfeeiCWME5r1T/NsFTpisuZhAFkCEaDreDD9kYBDx4odpjwgQKEvBrdGbS6IUCJSQUsY8ztCHMSQb6bltE724DNz4mUwTPXIG6cNrnR6Ta/xpo74G+wsKdz35csqx6QPspjG9lZ5fc0wW2gW7yjHMa5D0jxBWvMIhp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QoyUzQy0; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=qKhmmQci; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Vc917aBD; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=EhVk9XM6; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id CDBEC20595;
+	Wed, 19 Nov 2025 16:36:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1763570178; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UaJrljRuHzsSahjPRFPX05pBvERQqP62JHa1SezYFP4=;
+	b=QoyUzQy0kfEnmwEH9C+WMNmv2fIw6SyxdCjQ48Vph6uLgnt2FyRgxRi+IrojladgxuGPqF
+	lgOx9Sp0Tpe3VQugorn8fo9va7mWPEshkF5wl7IVuODe649vFAspPCCre792HbRoNJzDIp
+	Zsj6cN0scu/Ujuuk/8iqe7SUORJ33/g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1763570178;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UaJrljRuHzsSahjPRFPX05pBvERQqP62JHa1SezYFP4=;
+	b=qKhmmQci2mtPc1l8hRYQoJB2MunsPpcPUwoTjghLy0f/8UeUoZhRpC1t2aDUlTvlNwmWKY
+	fYhvv+/I+Q/GNeDg==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Vc917aBD;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=EhVk9XM6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1763570173; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UaJrljRuHzsSahjPRFPX05pBvERQqP62JHa1SezYFP4=;
+	b=Vc917aBDIOVnaGybQq9G9o6Sw5JDPY9DXNjg0SB3wCL9/7z05/g3dtOdqldVWKeio8A1fU
+	wT1TjOnfdFdWRvoysS8piGh9prn0ffObfab8alRHuZuoxYbw9OSLk+320MTkYfLmaGZQRy
+	BHalF4F3Bja+m/sVwTPFNLNMHeB6gLY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1763570173;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UaJrljRuHzsSahjPRFPX05pBvERQqP62JHa1SezYFP4=;
+	b=EhVk9XM63H+CBv9exjU6w0Z1ugfyJBtkpRPI4mnv+0FmkorsOQ8RVVkrkiFOGJk/Vx4DlA
+	9BIe0uuvHC5zHVBw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2DD143EA62;
+	Wed, 19 Nov 2025 16:36:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Kx8ECPzxHWl4cgAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Wed, 19 Nov 2025 16:36:12 +0000
+Date: Wed, 19 Nov 2025 16:36:10 +0000
+From: Pedro Falcato <pfalcato@suse.de>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jann Horn <jannh@google.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Andrei Vagin <avagin@gmail.com>
+Subject: Re: [PATCH v4 3/9] mm: update vma_modify_flags() to handle residual
+ flags, document
+Message-ID: <vr45iyduvak3wpzmos5l4jfpzticerlnxuhnpvbzb7fpsvanqx@rsuogv5s6brh>
+References: <cover.1763460113.git.lorenzo.stoakes@oracle.com>
+ <23b5b549b0eaefb2922625626e58c2a352f3e93c.1763460113.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF00000207:EE_|DS0PR12MB9039:EE_
-X-MS-Office365-Filtering-Correlation-Id: d0d530fc-ea41-4378-bdca-08de27894835
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?qmAIwH3HrzQ6FN9D9cRcfuEv2gUZm9xA49cu5YYtRE4Puf8GU/PZNAhmcmmZ?=
- =?us-ascii?Q?/WPZFux7GV3JjunzBiCQrgBI+Q/PL9Vi5KMk3+YieNqOpxBr0MTFLmidGsye?=
- =?us-ascii?Q?c+VhEYuMWBfWVWk34s8XkltBmxq8pEV+EsG95ORsowaYEqKBR4bFh25tmFpM?=
- =?us-ascii?Q?EymE/wYX0MZVqrXYWYAXg5H69s4LnS/4Co6h4hlUgbQ7aZDcfXeWcMxE1xmb?=
- =?us-ascii?Q?+62tmsDCJo97szgH6snVsX1k08bOoSVeNSu6S4SIaHgK/43NgX23ZB2zKS/G?=
- =?us-ascii?Q?QB90Pwlb7PwUf0T7cu0gh9gq0y5EunabXye63GUBeMMBPb5/84tUjHe61fhs?=
- =?us-ascii?Q?sRAE5ZyLOphFporzw9WgnocyqQkZwXJyGZdPIcF90gnJCTUziasESY238F6i?=
- =?us-ascii?Q?/+W//4TGXhWcJuH3sJDiGm987VYA91as4FmGXAUH7L/VpDf7yROYpjBPln98?=
- =?us-ascii?Q?xVoOIm9Nqw6K7YwOwiOSaTqzqH0y1AQytGuU8kinbiBJiR5tlVWju/jsAmGD?=
- =?us-ascii?Q?st3VZDy93ZbrUzu0bz9lVmqvyi9+tG5+0TUbsncBWaNNnNB0ZLMdw523+0Mc?=
- =?us-ascii?Q?wb46Evowgvx3ysDe54AJS3aceegtUnMw59nqZUukifG7vlfJ3xdbiwTOTlkb?=
- =?us-ascii?Q?IZC302br+4WHQbICFx+irlRLcAi5Ku4OL1kz+0o91LmQ9lxNdJ8InpaT1blZ?=
- =?us-ascii?Q?hJ2Rs9Pby5yjXvK9hqWhy2xU9kUfoeBRDOmoDP6Z7ovWS74H2UxMCYhLSIWI?=
- =?us-ascii?Q?BI2mPwK9TB8F5f4FCs5sXlFZ+f/CFXh//of8+IIvfWTDcze4eW1rArUvLuXI?=
- =?us-ascii?Q?HjpX9S25Lef9VT7ECGbBLD+0MFZspmjcTAYofTxt1kLGpZp7OKfc6afsG5Xn?=
- =?us-ascii?Q?Y66LRWulSAElHpoNI/EfWOJnfRbgTIr8QLtPMy8kbKqPg2+19Ry1H2dISJhP?=
- =?us-ascii?Q?IC0cSI4M3pzK94TQu80PyCx4+EtYIjwG8K3/Wvyz8wXWFu6VNLpJGCmVFLhJ?=
- =?us-ascii?Q?wPT0AW1Q4u1HnX8qNSkNZ+g+Q3hUAuimo6W2g30foloFjKgu6lqy3otrr+f5?=
- =?us-ascii?Q?+9adN96dJJAdVbPksI80mtAz+1CdgBOrYZYDUp+RZuQTYsN9hCKijrvXaljL?=
- =?us-ascii?Q?5jcvfs2nBWJDhIlOmbgMqvTGf9aW2+2fe45kOpKmztuk3ojRQwyBynzXmSz5?=
- =?us-ascii?Q?jcNNdD8NT1XmLOyGsUCG5Hr1MjTvE5Cmn87iYl9t92yNICPQqX2VbiRyq2Jp?=
- =?us-ascii?Q?OaVmqiaB45U5JAMeuUZClPOSjyC9pgxL5dxhyOd3e8xpTRCwimy84gZi9BBG?=
- =?us-ascii?Q?S9vC847e+RVVgqWUDb8yigk6wlyS2mJLl5+dqFHGT6iTqaoxqCGlEKjUZiVR?=
- =?us-ascii?Q?5l8MvAEwDzqX6aXIw8wCKDKB5XcoorJ/17hsbTmRPprVlJ6BKpf97mDmsMrH?=
- =?us-ascii?Q?qd4DysFcIOSKYSldyXL0i0zQJOsnoR7lQue7l1Vv8mTH290odQKnujwwFFEO?=
- =?us-ascii?Q?IBfgXUkSfyyFg6W6lU8W4E4pquQh0Esi5te44n3NUAg0wQXjfMd+JLzyHylp?=
- =?us-ascii?Q?2vy58jAy3fiARy0D580=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 16:32:50.7376
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0d530fc-ea41-4378-bdca-08de27894835
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF00000207.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9039
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23b5b549b0eaefb2922625626e58c2a352f3e93c.1763460113.git.lorenzo.stoakes@oracle.com>
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Rspamd-Queue-Id: CDBEC20595
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,redhat.com,oracle.com,suse.cz,kernel.org,google.com,suse.com,goodmis.org,efficios.com,nvidia.com,linux.alibaba.com,arm.com,linux.dev,vger.kernel.org,kvack.org,gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	BLOCKLISTDE_FAIL(0.00)[2a07:de40:b281:106:10:150:64:167:query timed out,2a07:de40:b281:104:10:150:64:97:query timed out];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Score: -4.01
 
+On Tue, Nov 18, 2025 at 10:17:45AM +0000, Lorenzo Stoakes wrote:
+> The vma_modify_*() family of functions each either perform splits, a merge
+> or no changes at all in preparation for the requested modification to
+> occur.
+> 
+> When doing so for a VMA flags change, we currently don't account for any
+> flags which may remain (for instance, VM_SOFTDIRTY) despite the requested
+> change in the case that a merge succeeded.
+> 
+> This is made more important by subsequent patches which will introduce the
+> concept of sticky VMA flags which rely on this behaviour.
+> 
+> This patch fixes this by passing the VMA flags parameter as a pointer and
+> updating it accordingly on merge and updating callers to accommodate for
+> this.
+> 
+> Additionally, while we are here, we add kdocs for each of the
+> vma_modify_*() functions, as the fact that the requested modification is
+> not performed is confusing so it is useful to make this abundantly
+> clear.
+> 
+> We also update the VMA userland tests to account for this change.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-Jakub Kicinski <kuba@kernel.org> writes:
+Reviewed-by: Pedro Falcato <pfalcato@suse.de>
 
-> There's a common synchronization problem when a script (Python test)
-> uses a C program to set up some state (usually start a receiving
-> process for traffic). The script needs to know when the process
-> has fully initialized. The inverse of the problem exists for shutting
-> the process down - we need a reliable way to tell the process to exit.
->
-> We added helpers to do this safely in
-> commit 71477137994f ("selftests: drv-net: add a way to wait for a local process")
-> unfortunately the two operations (wait for init, and shutdown) are
-> controlled by a single parameter (ksft_wait). Add support for using
-> ksft_ready without using the second fd for exit.
->
-> This is useful for programs which wait for a specific number of packets
-> to rx so exit_wait is a good match, but we still need to wait for init.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Quite ugly change, but for the sake of brevity I think we can live it
+Temporarily(tm).
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
+-- 
+Pedro
 
