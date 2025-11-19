@@ -1,168 +1,166 @@
-Return-Path: <linux-kselftest+bounces-45986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-45987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 904EAC6F32B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 15:17:53 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 578D0C6F3CD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 15:22:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EF4134FC6DB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 13:58:09 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6BEB135EBBE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 14:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5533E3612C0;
-	Wed, 19 Nov 2025 13:58:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B19C4364E9F;
+	Wed, 19 Nov 2025 14:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="jQUJJv3N"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NlTJNig3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010005.outbound.protection.outlook.com [52.101.85.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBFE35B142;
-	Wed, 19 Nov 2025 13:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.42.203.116
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763560682; cv=none; b=P318XLg/4JaRgeS+Ip7GApf6oP+qQMJoFwFT+/lDojDlPWtmgCdavGtHkm6c/xkiQwq9yuyXxfYMUaixSBg49O8acCWvdIL/vG2he2nQ/FLbgEZMgGAdaxgpWgtVJoPzRTtHBVoyrgoSIxJ7HXZxx7kR4Eu+1Q/qzSebyvWGqXY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763560682; c=relaxed/simple;
-	bh=GHawNvWn/phGBxI62trqHe8t0fQ64barPr1ny8Ci9xs=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QU1qxb+BqIr7XQCivcETkX5fMp6tCxmaPDCGWZnErXQjqV+6KxmS2skKCKNpgn5e3RhDJ49G/j+uCZaTi5Tduojq6ggfVfVXJhWTOLtrkwLrSBzYl0NYQi4L0GhAuHWRK/yhQs+HmZ9PHmi1hC1oYyRikDXLUKaP0g1EzmVzl9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=jQUJJv3N; arc=none smtp.client-ip=52.42.203.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1763560680; x=1795096680;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Lzpnv0u1m2nCELjHbHbtPbxJSZ+ELcyCY03eyueq0jc=;
-  b=jQUJJv3NsvzTuZPpJRSFKPzIW+o4ai2BRg2LfZd3cpuL+57XrgvGTeQk
-   iD3/s3YkwHNdyozPaauY2xa+kvDNlSw06wTHCgpZPuUuLYBWDZ17Sb0j3
-   6uIZW3V/vi4PmSGOoj5I9F3XVmfOGH9w3tfA3TZK7vel3z2s5tla3ANda
-   aEd1NoAXybeC+il1B+zTHPqtrBrbZON6W/s25fgFTlAECr6SOhDs3GKk8
-   DTW+Zy1DHZzE6mjkwFTnS+jZvYLd3DvFetiWPZh4dkYcExAep2OGyYAmV
-   l4SUusPe3wA7Ptn7ifDjbeaEgPcwJ9Iq/QLmvngVBBCREiu67bKMr9C5n
-   g==;
-X-CSE-ConnectionGUID: H7eTEbVIRnaLQvIxNFiMiQ==
-X-CSE-MsgGUID: fvcmET55SiKDpntLhtopdQ==
-X-IronPort-AV: E=Sophos;i="6.19,315,1754956800"; 
-   d="scan'208";a="7361146"
-Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2025 13:57:57 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.51:21699]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.46.156:2525] with esmtp (Farcaster)
- id 70adb8ed-f7ea-4134-8909-59c27b0a6c34; Wed, 19 Nov 2025 13:57:57 +0000 (UTC)
-X-Farcaster-Flow-ID: 70adb8ed-f7ea-4134-8909-59c27b0a6c34
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Wed, 19 Nov 2025 13:57:57 +0000
-Received: from amazon.com (10.1.212.27) by EX19D001UWA001.ant.amazon.com
- (10.13.138.214) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Wed, 19 Nov 2025
- 13:57:54 +0000
-From: Maximilian Dittgen <mdittgen@amazon.de>
-To: <maz@kernel.org>, <oliver.upton@linux.dev>
-CC: <pbonzini@redhat.com>, <shuah@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<mdittgen@amazon.de>, <lilitj@amazon.de>, <nh-open-source@amazon.com>
-Subject: [PATCH v2 2/2] KVM: selftests: SYNC after guest ITS setup in vgic_lpi_stress
-Date: Wed, 19 Nov 2025 14:57:44 +0100
-Message-ID: <20251119135744.68552-2-mdittgen@amazon.de>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251119135744.68552-1-mdittgen@amazon.de>
-References: <20251114143902.30435-1-mdittgen@amazon.de>
- <20251119135744.68552-1-mdittgen@amazon.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2688234CFBD;
+	Wed, 19 Nov 2025 14:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.5
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763561572; cv=fail; b=Ybu9RbmoRfQ/NxJs+qux1cz1ClNdnYedwvutiHwhGDbgSDDOk4/BGoKKHMnTp4vsXnTmHjZEhDDmoe3SqisTvhttqU9tbVdZAPA3azqUMXv/sjDoDUsB5IiCGvUup/K4H+w3siBK3cPNxj38bgfTBQ0SBHFJCKrlB6hrE0U8Au8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763561572; c=relaxed/simple;
+	bh=LIUibiaNfRzfpk3JR/WrupEkUzCNPJMNAnCLJxvZP0Y=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=gAM3xDTglaEVdbgs3FQTj35VdRh5T3VDVKsq4vgr/UJWYh6Qm/IU8LcgaLoWp5dj6pY7yM1IcwRAetGkfXUy62IiLKEl8fqxnhXZ7Q9flV27Eiw6WASK0gd0DzKglwfedaRKAaXkog4A034cgCVLLGQznDVP53MkO/+DZyE5QGE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NlTJNig3; arc=fail smtp.client-ip=52.101.85.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LqZkI0nnkFHHwdFC2aK+oLa4spPFUh/xPT5s2OF5rSIonstq3vIS31p8y5pbRNzMof+LFaV7ZYpKyIr3gazMhI4EmJhf87GXfeODYDtEciaR5NzcWmz44+4bP33iYFQA2sSQkUiVcW1vi7kCnJD8Fcx1OWqvS9k7UDNl3+VAnDkNxk2kn5GAuQkIOo/8JynLF2ko2R73/Ohe21Ks0g+fdM9qEvHmeAUFFOyZYlldF3Lm5Yq+sVciEOMb87pFGKGITuuOZq1ZjJJX/L4jraIZYmA9dhXYAqwPmKbdMwJpp7E4LyDDDV57O/ZItf8o5fxWsG7UVm3217DNazz7khkXvg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q2mLK9TnMuv2/fVs0QYfbUzo6Z2eMlsQvpqMeA8gd7c=;
+ b=ATHz+HGrjpcRC/0/Aj5W9hsgIkXWUZ/5CufaASgF9A/9DijJZ0Ahtv/haGvI+CTby5OVeY68INI+2ZAXRlOtM0iitr/fRvwfFdYLrJARJVzl8mIj0deSX1p8Xl5jyeIn5yE34bFCMeqlKEBEcdVwBp7fGMopSIqRMkjXJ9TwPdsDHWSC7mO9Fo0dBeZ4lrWdWWb65LHDpun/VBdLj81haSeqLPZX+jb6rFVxB5wwlosPouwoJDbMncM0mwo6GqIsnTuoid0Eclpp7w7Eyonh1xoBkdxO8YkBqz3Uqwgj4lnXFCCD8jNRF4DeMJm41/UPDifSc0V5LGVZjnrFBICxYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q2mLK9TnMuv2/fVs0QYfbUzo6Z2eMlsQvpqMeA8gd7c=;
+ b=NlTJNig3/8wSLrR27MC1PZDzoox5QW8fYxT5mucLDvSRxuoUnDUbI1BChEG8FseeAFwoUx0J3M1vKSXljV+XEk7DDJNabSK+G7pi24qgzuZwgB8oQsIz7ozPs7c1Ynu22HtHFIfNMv+STm6S3l4XgE+hIfTKgueKg4KUdkcpI3OssFsVfjzU3/Kh9plltbg8UYV5spPRfYPHZcDy2NzcvQUguXmi/yvbJBbrtvkj8QH3CkB/aUBYWG0ztL5dADjY7w/XuItYPP+3M4ZeBywUUmXx0s4fA9YrwL7n76zG77NSS1hq///Z8+Kf2TYeQA2cP+8rJ3sn5iADdFg+y7wpog==
+Received: from MN0P220CA0007.NAMP220.PROD.OUTLOOK.COM (2603:10b6:208:52e::25)
+ by MW4PR12MB7335.namprd12.prod.outlook.com (2603:10b6:303:22b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Wed, 19 Nov
+ 2025 14:12:42 +0000
+Received: from BL02EPF0001A108.namprd05.prod.outlook.com
+ (2603:10b6:208:52e:cafe::34) by MN0P220CA0007.outlook.office365.com
+ (2603:10b6:208:52e::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.10 via Frontend Transport; Wed,
+ 19 Nov 2025 14:12:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BL02EPF0001A108.mail.protection.outlook.com (10.167.241.138) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9343.9 via Frontend Transport; Wed, 19 Nov 2025 14:12:41 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 19 Nov
+ 2025 06:12:21 -0800
+Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 19 Nov
+ 2025 06:12:15 -0800
+References: <20251118215126.2225826-1-kuba@kernel.org>
+ <20251118215126.2225826-3-kuba@kernel.org>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
+	<willemdebruijn.kernel@gmail.com>, <shuah@kernel.org>, <sdf@fomichev.me>,
+	<krakauer@google.com>, <linux-kselftest@vger.kernel.org>, <petrm@nvidia.com>,
+	<matttbe@kernel.org>
+Subject: Re: [PATCH net-next v2 02/12] selftests: net: py: extract the case
+ generation logic
+Date: Wed, 19 Nov 2025 15:11:55 +0100
+In-Reply-To: <20251118215126.2225826-3-kuba@kernel.org>
+Message-ID: <87ikf6cds4.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ClientProxiedBy: EX19D043UWA001.ant.amazon.com (10.13.139.45) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-
-vgic_lpi_stress sends MAPTI and MAPC commands during guest GIC setup to
-map interrupt events to ITT entries and collection IDs to
-redistributors, respectively.
-
-We have no guarantee that the ITS will finish handling these mapping
-commands before the selftest calls KVM_SIGNAL_MSI to inject LPIs to the
-guest. If LPIs are injected before ITS mapping completes, the ITS cannot
-properly pass the interrupt on to the redistributor.
-
-Fix by adding a SYNC command to the selftests ITS library, then calling
-SYNC after ITS mapping to ensure mapping completes before signal_lpi()
-writes to GITS_TRANSLATER.
-
-Signed-off-by: Maximilian Dittgen <mdittgen@amazon.de>
----
- tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c   |  4 ++++
- .../testing/selftests/kvm/include/arm64/gic_v3_its.h  |  1 +
- tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c    | 11 +++++++++++
- 3 files changed, 16 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c b/tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c
-index 687d04463983..e857a605f577 100644
---- a/tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c
-+++ b/tools/testing/selftests/kvm/arm64/vgic_lpi_stress.c
-@@ -118,6 +118,10 @@ static void guest_setup_gic(void)
- 
- 	guest_setup_its_mappings();
- 	guest_invalidate_all_rdists();
-+
-+	/* SYNC to ensure ITS setup is complete */
-+	for (cpuid = 0; cpuid < test_data.nr_cpus; cpuid++)
-+		its_send_sync_cmd(test_data.cmdq_base_va, cpuid);
- }
- 
- static void guest_code(size_t nr_lpis)
-diff --git a/tools/testing/selftests/kvm/include/arm64/gic_v3_its.h b/tools/testing/selftests/kvm/include/arm64/gic_v3_its.h
-index 3722ed9c8f96..58feef3eb386 100644
---- a/tools/testing/selftests/kvm/include/arm64/gic_v3_its.h
-+++ b/tools/testing/selftests/kvm/include/arm64/gic_v3_its.h
-@@ -15,5 +15,6 @@ void its_send_mapc_cmd(void *cmdq_base, u32 vcpu_id, u32 collection_id, bool val
- void its_send_mapti_cmd(void *cmdq_base, u32 device_id, u32 event_id,
- 			u32 collection_id, u32 intid);
- void its_send_invall_cmd(void *cmdq_base, u32 collection_id);
-+void its_send_sync_cmd(void *cmdq_base, u32 vcpu_id);
- 
- #endif // __SELFTESTS_GIC_V3_ITS_H__
-diff --git a/tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c b/tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c
-index 0e2f8ed90f30..d9ee331074ea 100644
---- a/tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c
-+++ b/tools/testing/selftests/kvm/lib/arm64/gic_v3_its.c
-@@ -253,3 +253,14 @@ void its_send_invall_cmd(void *cmdq_base, u32 collection_id)
- 
- 	its_send_cmd(cmdq_base, &cmd);
- }
-+
-+void its_send_sync_cmd(void *cmdq_base, u32 vcpu_id)
-+{
-+	struct its_cmd_block cmd = {};
-+
-+	its_encode_cmd(&cmd, GITS_CMD_SYNC);
-+	its_encode_target(&cmd, procnum_to_rdbase(vcpu_id));
-+
-+	its_send_cmd(cmdq_base, &cmd);
-+}
-+
--- 
-2.50.1 (Apple Git-155)
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A108:EE_|MW4PR12MB7335:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85f1e2b7-dfae-4cf6-5d3f-08de2775b3fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|7416014|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?8o+BHsH3sOXbl6rbVircLxTF+tugHrBlGNoIIZ7OBwuSfjn8jAhW8L189zwk?=
+ =?us-ascii?Q?KqYVC27li+7UFLLbArJbOFD36+oUA3xqONMYNpVCmKHufl5RJf4vnQLnzZEe?=
+ =?us-ascii?Q?+I3Z4LuZlWv0PDZs/geOv7CQfY/UqLV1TTgktGFRV+Rg1USppTnOCkZvI1T0?=
+ =?us-ascii?Q?rPc0R8rFbw03u9aBWc/vxFVpqPYa0JRnj5PS4t3uh8GKjdLYAURkDlQqggIJ?=
+ =?us-ascii?Q?EAzcKyO/hOWo91Q+l/Gv57oL1VNuMloFGW0geySlB57UPysz+c1Z7TTw8qOV?=
+ =?us-ascii?Q?+4T8XhQSl4yKaxKfMIuYPNZJtzu9Gy0EFS0TsoIsi/awsaLb4vlJNStIrEIa?=
+ =?us-ascii?Q?aSZzBdl8arBbCuI0PPwAAnKIUtcTtMl9xaSb6j37crSYNSNpmoLIioKR1KQ+?=
+ =?us-ascii?Q?GN/U8SUAFrAAxcrQEIt0Vru5bXm1mIXXCKEzXp82/rJk03m8ifOTzIXGRF64?=
+ =?us-ascii?Q?GAVYb4s2PLJRR1eVhgF6SiPvTsT3gQnYQm41BlEv7Mslpt3qmVqGV8TD/iQc?=
+ =?us-ascii?Q?ixJHmEDqk5rfQTg+LPTR9gfUfKkxyZeEAr0H+JOICloFTf4eeZyICtVfsy8e?=
+ =?us-ascii?Q?dCfAysIUJdwacEailEGoTNdLrCgl/0nnnH2zZGJPH1IBlLTpe1vjdJueViYu?=
+ =?us-ascii?Q?GUdrlguJ5iNvyTAKVJH9dcIIv70jiC74No+T+/6AV1yReDKrAgQ7WGhArgCP?=
+ =?us-ascii?Q?rt4Dkv8G6WaxiLkm8q8fLPUEvv2H+Vdo/cu5QqlKqxTlGNg9Brg0memKGfsj?=
+ =?us-ascii?Q?ie0rjmEyTgRtbXd7lFkvPdflIsCsjX79djB5lMCioiz7r/ISBFW/PWn56/4U?=
+ =?us-ascii?Q?/LmsRhsahcsEhj77cBwHn2yaXZt/B9QYNNg8kVkPCWCgZ7EVOXtaKZS6ILqT?=
+ =?us-ascii?Q?oYYup0aLYzl4vWh85vpBphPHjRNeu9kwdjI1RyW0L1JgeATcqrzUZO1ZS4PT?=
+ =?us-ascii?Q?OwGmXbSif89WmvGOFvwod4o/1pv/FDX3SelQ/9rEwQFXPSTTj6ZaFxdsHGf4?=
+ =?us-ascii?Q?i8+W+S5Gx4QgRzGwt4Jw7Q1oDuT877aMl/qotkLyOc7fb/f7iUwc0FLXKNdU?=
+ =?us-ascii?Q?0nHGv299IaP9JNe7y0OEFM5CiaU+6zmn3vQSueNw+u00byp+UssVS5NNDnAY?=
+ =?us-ascii?Q?MZrEcJHFD3pTMw/K3U2W6gUKGh09tGAW7l+P/52D9gnf9kIyMbkQetVCw5HS?=
+ =?us-ascii?Q?bRInKPeQsc58kY8oqJlgb12EMJOX3FQ+mPVR6xte/JskUjMj/K5DlIwlG+i8?=
+ =?us-ascii?Q?4qwSsMkkQ2mlydJPge3/G2PQgKkZSkU4CzPlIpHg2jgR8ijdyN6ofZf6ouVR?=
+ =?us-ascii?Q?RH+4U4f7HNq30mt7ijr0ZmM/5sJmSCVSjaeNBJ8xZUID23VLvf0wl/PhHBu0?=
+ =?us-ascii?Q?CIYqKezqyAjoKAxg+yN2thHO/NEAkVGMRnE2ctHqi+AKNh9btAYCq9Gpq8YU?=
+ =?us-ascii?Q?gt+wdTLBGHjmgjZTYBeOeiy+MeKn9VHcOu5gthnJPfo+CmOMbHCsi/BGKKKL?=
+ =?us-ascii?Q?dbVpRpGiOCjeRoT2/JWih0M2AsH5emaE6VzC67aTdNLmSF3Ylt8CJO5bEnFE?=
+ =?us-ascii?Q?ttv89Uop6uU6hcY0tjI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 14:12:41.5533
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85f1e2b7-dfae-4cf6-5d3f-08de2775b3fc
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A108.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7335
 
 
+Jakub Kicinski <kuba@kernel.org> writes:
 
+> In preparation for adding test variants move the test case
+> collection logic to a dedicated function. New helper returns
+>
+>  (function, args, name, )
+>
+> tuples. The main test loop can simply run them, not much
+> logic or discernment needed.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 
-Amazon Web Services Development Center Germany GmbH
-Tamara-Danz-Str. 13
-10243 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Christof Hellmis
-Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
-Sitz: Berlin
-Ust-ID: DE 365 538 597
-
+Reviewed-by: Petr Machata <petrm@nvidia.com>
 
