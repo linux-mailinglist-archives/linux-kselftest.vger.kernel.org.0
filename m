@@ -1,126 +1,124 @@
-Return-Path: <linux-kselftest+bounces-46027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32EFAC7164E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 23:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B487C71678
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 23:59:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 88496349193
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 22:57:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D8DE434ED4C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Nov 2025 22:59:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FF0307AD3;
-	Wed, 19 Nov 2025 22:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FCC3203B6;
+	Wed, 19 Nov 2025 22:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="S92gXX6p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="at85dKXL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D47E2512FF
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 22:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E28730504D
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 22:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763593021; cv=none; b=RicpF+nmcBKvyoW7Kw4ZxCsc8GrFx3E8o4EKfxhqTgwqGug93MyXe5AjugLWvuRaxy+Zu0i/+UdiM6DKdFAHQTb7Vmnbt61PzJLGHZ8A3ZS5kUCsIr20kAmHBjhncG+elQg6tleB9mtlL8WBk6HHotGhZqkIQnO+4L91UHVjv6k=
+	t=1763593129; cv=none; b=V4/y+gzYhYnrMWIeEAD7iB0uVzIH/QaJ8jDj3va1pCUn06U9F3xnCJ4eX7KGsz8Xk1IwklGWnm8OQ2bcFMzJyXoukWX3pCzVqklN+wAkoYGhpD+hty0PGhP3CJxv88teucsUu37ZGYp5yGx04M7U/lPzs7Wcv/I2BsdiPXe5Aeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763593021; c=relaxed/simple;
-	bh=yOCbSOXUcf42hI7Et0TY2otuu3AGTL7xxB5sc17Aou8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fMNbLMmE7dhfugW7eolbde9FVOdgbcLRsbmNx1z90MlODEJzIOgiso8V8ve6K2DTulkNXqB6gP9jrxvdPr9Co+wbJQcoPAO3XUwFb1OY7IsNHcNzjE58a/jhRXdEVCHwwbkRU8wS2Vw3vaPAg8gNIDjRbrn9XMdZGIU67CGb8Nk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=S92gXX6p; arc=none smtp.client-ip=209.85.166.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-43376624a8fso1847715ab.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 14:56:58 -0800 (PST)
+	s=arc-20240116; t=1763593129; c=relaxed/simple;
+	bh=f2l5MkKNSF6v8HTpthCW9c0REcYxtwaiNPwhFd/gKsY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TUEgsOyLY7uaNxqdBSBL+Og+jqg7tEIoTNxURVhfaOqdYT8FmT+3emgI+RN9Oo8vPCmdnn0T5g6/4mpqMQE6hZzI2Spn7HWTYn1oHRW74lI7c0n7KBIYDehd0hJN//64VAUoj+JgDPLc7KZhe0THn0vxRLfmlTDEpU8QE0+2ilw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=at85dKXL; arc=none smtp.client-ip=74.125.224.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-640d43265c3so39256d50.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 14:58:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1763593018; x=1764197818; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d9Cihjz4mIMaTQdMejOmpXxdqpfNp4ZNHdlB1PDzoK8=;
-        b=S92gXX6pxAQBeagLbG3zFH8hEM2F5YtHeVvGCQT13Ri+OdtVfNlS67Wo1mgTHsY8iQ
-         OPEjX6pVj1bTMjH4xZnx3XYXHCIrwYvbLXoDEzMWZVJe2U5ugqjBj9gn2N4hnLz0Gc+S
-         mtjAM0A1q4Zqi2RMw6I3/yI0LIgEunrYnljb0=
+        d=gmail.com; s=20230601; t=1763593125; x=1764197925; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f2l5MkKNSF6v8HTpthCW9c0REcYxtwaiNPwhFd/gKsY=;
+        b=at85dKXLFmwm0KYJmh7+JqEt1Y9DRGf2x2iFegbBk7ak4T3eQ6QWZeGkMurNjkGlpM
+         jLw7XfjyjClDMv74r9dTYztEeSBnDkKj9Qgd29Zl7hatVH0/yyjrReKBbW6JoS2rUZdQ
+         PIUAEMgxTdxEMT1lO0R2fBtFNnS1bDvx5iso6zZYpGjf+cs4uj5K5yrF4xWqOLWVOJLs
+         7WO1HEcsxQH3shGT3b7/WtiE65K9NNl8C6Rbsyq7h8UK0Jv+pRVnplBIJS0qwP8/b7ok
+         9fyeOlMfbCFvk0vADUqSzm+y8w3OvuN6cCTLfEn/5EVGlrFcOeH02yuv+HSJbsiV9bKD
+         Kpzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763593018; x=1764197818;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d9Cihjz4mIMaTQdMejOmpXxdqpfNp4ZNHdlB1PDzoK8=;
-        b=r2VcBEspoD0v3gSpu/K8tBTLkHWHmpV9IlZhuNhxDDFFCEjQpJUjZ1n5V+GlZNZ1aB
-         DI7BwOfdrg1zZuBDiBX5rKVbX+iyPpcUnXpj8ahICtsFugYq/SVyQ1EKtO+FfKALHg73
-         SyRS777hj6PueAg69wgT8iym/60v/MYXjNGrNwPNTxj0Fth957DRH/dA4pnZxFCA410m
-         ey6dKU70D9aLlGKleVJSW/ijVo9Dsy7cdhJBnItBOmqLa3uWRaoFf52x2jPVskzl+91g
-         Xtm+wK9OUstRGPYGnETsNYmY44c8FpszT4TVnJ+0TQMA4IvQnV0Lg8cfdP8Rj6uDnmMw
-         81MA==
-X-Forwarded-Encrypted: i=1; AJvYcCUadPUVUo+J2aqpd8jpAvXZgOdEwAky1Pkw/cNQ6YGr+LErZWDxTW/T8Ep9Pt6/KVAQLDpBwInI30Y5VWKQcXE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv3YMdAvulK4wQ8Nw+pUvIrZpVMhYLfwoMBq/XyY00Y7K3iLdG
-	DVEJeN7irce7TvJ9epy6vh026WQQfTHjWBK49W7PGuaJhmQzLpuv4k6235G/CgT4jnY=
-X-Gm-Gg: ASbGncuTURnwa7ELZ2wqMdH9T2e0bbQ1iOW1pwFAr85sRTgO9dbvsS5U7BGB1nfoaBw
-	WFHG9ysN8XdZDNwzp8uGW6qWcS6es/HTOOJ3c+36ipxG7pcF2zpYNK7TQPLCTZg6xuFcvfSK+d7
-	aoqF7uiY9PBQvidYs7eZWXWUhmoBDq/ufEg3YkmjcPG3R6yLPJSGuxYkuAjGFzyB3VRrp66a5ES
-	qZTqT1DtWa/LyEJ/lg++ETpBwJ9hv+Pj6MkVZMY6/C+GHw6GAQGpZOTw5/8vRN1T+mV35qcRiUA
-	vmL5oM+cx0U53XniuUnlQJXcdYsbN5jCfGJ4KC5ifge33SOpJB4r0qgMhY6PqH/zcIqIFRGt4Iz
-	dEvOYZ6K1QpkKsHNKUyuXGDjgdgAttJdwdvDUCVF8+Z5R+Rd6Y0//tC/o+u5kXoDCgsImqPbjuB
-	C9g5eBbEDdTHb5Sudr3MyIEaU=
-X-Google-Smtp-Source: AGHT+IF0n9luN6uLPUD0+qtd91vv8ozpZWFR5sEp2+lnlFuJPZGmT1NL1+Q7O5k6hfud7//ALyWKHw==
-X-Received: by 2002:a05:6e02:156d:b0:433:7310:f5bf with SMTP id e9e14a558f8ab-435a9077da8mr13911545ab.22.1763593018248;
-        Wed, 19 Nov 2025 14:56:58 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-435a90e707dsm3627275ab.30.2025.11.19.14.56.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Nov 2025 14:56:57 -0800 (PST)
-Message-ID: <b61a339e-f80f-4ecd-861e-e9bb834d5101@linuxfoundation.org>
-Date: Wed, 19 Nov 2025 15:56:57 -0700
+        d=1e100.net; s=20230601; t=1763593125; x=1764197925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=f2l5MkKNSF6v8HTpthCW9c0REcYxtwaiNPwhFd/gKsY=;
+        b=kz13eIXnDb416SvPkrKlJA2HD23hR6i/o5PzFOVJKNCMAwB07rzZCCA/UmNf/iBd7S
+         IQfY4oQ7E4TWapeHLXSXlGcWMnezD8oLwEi4ikj68qqAlScKgXpEqIQNdDJgN5ZW5pyu
+         yOp5ls2hhXkjVwSXi3Pdpr3GzhdDbcVp7VffX+BGg2MDeVhn3nh8f8uijideev4WXKt+
+         NeVf7cEjNJkY6egiDZfjWafPv1TBABZjwxr7tA5oJygXWTmEirC8PBYidiIwO9VJ5/TN
+         UQc3ODymqLp1z0XbT/RgtrDWCqhT6DmpXUv1/ST3k9bvSTV3BrkaOrcjA8H74kWsxCGF
+         A9tw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFnU76wZ3qv4hCZLpm3Ol/Y2dSqKmcB6DM8sD3SkgJJ2ZlC5hWEY3/02lBhRLscIK6DU2V7ikDv5bNpaSfxrs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdDuxA2LunJNkkWoHRqqBIjvIDf8UgneHqowfNd2t+kVr+UU/L
+	IW3sjbcvrBNMeb0eNaHe2VSLLz5K+DGHMLTNT4AtvjSEzS7ueK3noKNYwlEWFz6yUIDH7xMhZxR
+	gNdb+5UpcPUjoL4SPAooiM2p+G66++gU=
+X-Gm-Gg: ASbGncutiSfVok2DlUTjkiKsSinrmNJl2UdOQO3luUqK5iLu489OaSFUzOiZwZhekOp
+	LAaajxYVk5dpq9hdHjrkKkaW3L4BK2eY935LMh0NX7X9zLkeK8xbuahv/DUDI3vJ5KMHYgccKJ/
+	N1eBs3rOX83RmhdsWKJIvqpfnvz3v3EXDUZtLn088VWSn3OgM/mWkbOrcP06j6GGIPpUKaW9fTy
+	T8MpAwC8yT1pQ9dF/te0Yf/kQNdU//uGMOsdE/Hvn8SiVAoozhKpM6pq04vbXAI1zy2mRu/wrC3
+	AE+lxIWZYa8qN0kk+jsQymoGHPQ5NJA=
+X-Google-Smtp-Source: AGHT+IFIbdlD0slMDf0ec9/PDny5wf8Cs5EBojHNy7+PN47moxCbujYhgeKqvmUnVr7j4rMEgn4Rfe7CinYPHNqGi6g=
+X-Received: by 2002:a05:690c:d:b0:787:deea:1b85 with SMTP id
+ 00721157ae682-78a796139f6mr7902247b3.7.1763593125345; Wed, 19 Nov 2025
+ 14:58:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: tracing: Add tprobe enable/disable testcase
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <176252610176.214996.3978515319000806265.stgit@devnote2>
- <f5f272e1-e164-4bb1-bfd0-42edd5a125c5@linuxfoundation.org>
- <20251119170611.6eff8df7@gandalf.local.home>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20251119170611.6eff8df7@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20251113-netconsole_dynamic_extradata-v2-0-18cf7fed1026@meta.com>
+ <20251113-netconsole_dynamic_extradata-v2-4-18cf7fed1026@meta.com> <v4xuuka7oovpcmcw4ualj5mdhw6jlgtcdheybbwtuy7qhd6nyd@3kav6dwkkdac>
+In-Reply-To: <v4xuuka7oovpcmcw4ualj5mdhw6jlgtcdheybbwtuy7qhd6nyd@3kav6dwkkdac>
+From: Gustavo Luiz Duarte <gustavold@gmail.com>
+Date: Wed, 19 Nov 2025 22:58:34 +0000
+X-Gm-Features: AWmQ_bkblqT4UnsE6iXRexrupNu4V6Dl9BSuZjWsv7DfjnR_A5WtYtp478fk8Kc
+Message-ID: <CAGSyskU2awfHd4JCFysCJ=Gf8z2tj_oZRZ4TD3_=K2KRuM=U1g@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 4/4] netconsole: Increase MAX_USERDATA_ITEMS
+To: Breno Leitao <leitao@debian.org>
+Cc: Andre Carvalho <asantostc@gmail.com>, Simon Horman <horms@kernel.org>, 
+	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/19/25 15:06, Steven Rostedt wrote:
-> On Wed, 19 Nov 2025 14:44:22 -0700
-> Shuah Khan <skhan@linuxfoundation.org> wrote:
-> 
->> On 11/7/25 07:35, Masami Hiramatsu (Google) wrote:
->>> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->>>
->>> Commit 2867495dea86 ("tracing: tprobe-events: Register tracepoint when
->>> enable tprobe event") caused regression bug and tprobe did not work.
->>> To prevent similar problems, add a testcase which enables/disables a
->>> tprobe and check the results.
->>>
->>> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->>
->> Steve, do you want me to take this through my tree?
-> 
-> Yes please. Masami's an official maintainer and mostly handles all things
-> "probe" related. This is his domain ;-)
-> 
-> Thanks,
-> 
-> -- Steve
-Applied to linux-kselftest next for Linux 6.19-rc1.
+On Fri, Nov 14, 2025 at 1:07=E2=80=AFPM Breno Leitao <leitao@debian.org> wr=
+ote:
+>
+> On Thu, Nov 13, 2025 at 08:42:21AM -0800, Gustavo Luiz Duarte wrote:
+> > Increase MAX_USERDATA_ITEMS from 16 to 256 entries now that the userdat=
+a
+> > buffer is allocated dynamically.
+> >
+> > The previous limit of 16 was necessary because the buffer was staticall=
+y
+> > allocated for all targets. With dynamic allocation, we can support more
+> > entries without wasting memory on targets that don't use userdata.
+> >
+> > This allows users to attach more metadata to their netconsole messages,
+> > which is useful for complex debugging and logging scenarios.
+> >
+> > Also update the testcase accordingly.
+> >
+> > Signed-off-by: Gustavo Luiz Duarte <gustavold@gmail.com>
+>
+> Reviewed-by: Breno Leitao <leitao@debian.org>
+>
+> Please expand netcons_fragmented_msg.sh selftest to have ~100 userdata,
+> so, we can exercise this code in NIPA.
 
-thanks,
--- Shuah
+I had a quick look and netcons_fragmented_msg.sh needs some
+refactoring to be more reliable before I can do this. I will send this
+as a separate patch set.
 
