@@ -1,64 +1,55 @@
-Return-Path: <linux-kselftest+bounces-46092-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46093-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E51CC73627
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 11:08:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD0B1C738FE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 11:53:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E9DC834BF35
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 10:04:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 2B4E62BFAC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 10:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F86B30E843;
-	Thu, 20 Nov 2025 10:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492EE315767;
+	Thu, 20 Nov 2025 10:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="d67b7j1Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O5qMLTiS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B21926C39B;
-	Thu, 20 Nov 2025 10:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2051A23BF9C;
+	Thu, 20 Nov 2025 10:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763633050; cv=none; b=p1ESFvebiPjPGXWS48nbeoDQV3W7S7KEjA1DQuCNX4FCPJS1shGHoMR3cTfv8WDQuZE3Zp43qM5zgCGC6MJHhORMX1UqVfmuqZVNcPZcWSZ08Cja0sW3QDHKmn2Xr2R7mUfYLcrVrBtfcx3M0cwW8gqk+iuJ3S0lcWW6UmccSMs=
+	t=1763636006; cv=none; b=NqfelsHzDYecnmSrpS3ILW12b6wMER04wxLHd/29/5gcLhV5FgsGd7fcUKV/nYK40K8bL2FKVkmXcGHN5aSEXhfW0A//aBuABeYr77rYQbQdudnoxlIMos/IjC7Jhyo3cxEL/HLA/s7QIoHK4Mz4ijWJvnU3eChhY1+EdMXe11Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763633050; c=relaxed/simple;
-	bh=1dokCFfTg9IDBaB1SWan4W5GoJTFxFQOl4so3J73uII=;
+	s=arc-20240116; t=1763636006; c=relaxed/simple;
+	bh=3aWGyKh+4pSYIAH3l2yvH8Yb93l4QLZEop9JnOkqe3M=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NAYs8UtyWNgyWA+yFfZ1O/jqB1kEgDqaveEMy/yFK1k2nDxlDzKD2MLCAAaGp3iTxKQy4KQngJT/y9Bh9TyV0IuyKEKmuZIq2XKFKmzJtOBiysm8cp9fesnx/1KiCuI/b1+W8kprIen9GjER+sesyK4bFlchatWgpzDoFlixlIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=d67b7j1Z; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vdeArdTGf3LKHOnchP/pJVJkcG6D2j5qJk0Ex/IGsNY=; b=d67b7j1ZwpjHeeNpeOykuVkKu/
-	mVfSQ/ymQ4vpZ25jDXJmh6kYwKCvAQHXwV7DV1kJRIPNzUWkYsHKJb7Nn1DhxKpMtDhs7iexjY9nd
-	kgXMrwkEEvmLZtH/Zq3s7MgeX8PvEGeiHvnary3aFra5VCHxNNOYFvsSgPfHeKDmUOE2nPF/S/MP/
-	6VhJZmeLMTV3ijJfiWxVgJ1t3qH+BAMYMO7RlxmTgrMpT0oGAxW9jy6Wkhiavj8ljJ+ehVTAyxmmf
-	mbsM5g83SqabY7aUxFgOjx9HsqHmvVOn/vy2she7YwAuYX8qy2OIktJQxUZN/bMi9yfo24/Xh1oie
-	CieX5pzQ==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vM1W3-00GoXf-0z; Thu, 20 Nov 2025 10:03:51 +0000
-Date: Thu, 20 Nov 2025 02:03:44 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com, 
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, 
-	willemdebruijn.kernel@gmail.com, shuah@kernel.org, sdf@fomichev.me, krakauer@google.com, 
-	linux-kselftest@vger.kernel.org, petrm@nvidia.com, matttbe@kernel.org, 
-	Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH net-next v3 06/12] selftests: net: py: support ksft ready
- without wait
-Message-ID: <qshy7xf5pzgabrbvioe7v5tz45etzk22r3t3phklrnkq7tn6hs@3kv76yk73afl>
-References: <20251120021024.2944527-1-kuba@kernel.org>
- <20251120021024.2944527-7-kuba@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+e9UxAVi5zGpExXFxNZkDvFj8IWJxpiyZZ6HvvE9f4eQcuOPYqnk/dk4wOH4sWKRiN2jnI5DLegM76bQYyVBXTyv9h0/jJvMTPP84VVlrA1Pf0uxoxFjjc52hb/frGPUuussfQxQRy5b5bW8XfXiqAtKeC4szCVPLpM8hDx3Cw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O5qMLTiS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58263C4CEF1;
+	Thu, 20 Nov 2025 10:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763636005;
+	bh=3aWGyKh+4pSYIAH3l2yvH8Yb93l4QLZEop9JnOkqe3M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=O5qMLTiSILeSxOk74lvYZgbjmRN2wxGy73B9l48sNvB//Dz66c03RjNzFOyu/NXUK
+	 KvstWhbmtsi8eXJrZ+nCPU4IC8+P5iFRZRuXFQUD+kK1PKgRb7NfLs6uDZtQX7wWUT
+	 jD+A4koBxZ9zumW40xFThz9QIf7sz+HPtT8Cfe92R7X/O+cf/S+4xyKvasD6thS/9x
+	 WsOvI3WkNz1RNkcX3VbbJCWwjFfoxRuPwos/oEsGmIm0B9yKrhELVI1+tIizpunJic
+	 N3ELeAMj3sdwgyASCjJZ807c6YTuTOznURfpmzHpvm8yl1YImBk2vrBjRUs/NsBCpa
+	 qbE1VTvRrXQDA==
+Date: Thu, 20 Nov 2025 11:53:21 +0100
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Alex Tran <alex.t.tran@gmail.com>
+Cc: jikos@kernel.org, shuah@kernel.org, linux-input@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] selftests: hid: tests: test_wacom_generic: add base
+ test for display devices and opaque devices
+Message-ID: <awbmhna3hkra2eoc7lcl23d3mzfsk7qty5t4zl3m7s6hau3v4u@uzqkqudwttlp>
+References: <20251117014721.3142490-1-alex.t.tran@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,28 +58,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251120021024.2944527-7-kuba@kernel.org>
-X-Debian-User: leitao
+In-Reply-To: <20251117014721.3142490-1-alex.t.tran@gmail.com>
 
-On Wed, Nov 19, 2025 at 06:10:18PM -0800, Jakub Kicinski wrote:
-> There's a common synchronization problem when a script (Python test)
-> uses a C program to set up some state (usually start a receiving
-> process for traffic). The script needs to know when the process
-> has fully initialized. The inverse of the problem exists for shutting
-> the process down - we need a reliable way to tell the process to exit.
-> 
-> We added helpers to do this safely in
-> commit 71477137994f ("selftests: drv-net: add a way to wait for a local process")
-> unfortunately the two operations (wait for init, and shutdown) are
-> controlled by a single parameter (ksft_wait). Add support for using
-> ksft_ready without using the second fd for exit.
-> 
-> This is useful for programs which wait for a specific number of packets
-> to rx so exit_wait is a good match, but we still need to wait for init.
-> 
-> Reviewed-by: Petr Machata <petrm@nvidia.com>
-> Reviewed-by: Willem de Bruijn <willemb@google.com>
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Hi Alex,
 
-Reviewed-by: breno Leitao <leitao@debian.org>
+On Nov 16 2025, Alex Tran wrote:
+> Verify Wacom devices set INPUT_PROP_DIRECT appropriately on display devices
+> and INPUT_PROP_POINTER appropriately on opaque devices. Tests are defined
+> in the base class and disabled for inapplicable device types.
+> 
+> Signed-off-by: Alex Tran <alex.t.tran@gmail.com>
+> ---
+>  .../selftests/hid/tests/test_wacom_generic.py       | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/hid/tests/test_wacom_generic.py b/tools/testing/selftests/hid/tests/test_wacom_generic.py
+> index 2d6d04f0f..aa2a175f2 100644
+> --- a/tools/testing/selftests/hid/tests/test_wacom_generic.py
+> +++ b/tools/testing/selftests/hid/tests/test_wacom_generic.py
+> @@ -600,15 +600,17 @@ class BaseTest:
+>  
+>          def test_prop_direct(self):
+>              """
+> -            Todo: Verify that INPUT_PROP_DIRECT is set on display devices.
+> +            Verify that INPUT_PROP_DIRECT is set on display devices.
+>              """
+> -            pass
+> +            evdev = self.uhdev.get_evdev()
+> +            assert libevdev.INPUT_PROP_DIRECT in evdev.properties
+>  
+>          def test_prop_pointer(self):
+>              """
+> -            Todo: Verify that INPUT_PROP_POINTER is set on opaque devices.
+> +            Verify that INPUT_PROP_POINTER is set on opaque devices.
+>              """
+> -            pass
+> +            evdev = self.uhdev.get_evdev()
+> +            assert libevdev.INPUT_PROP_POINTER in evdev.properties
+>  
+>  
+>  class PenTabletTest(BaseTest.TestTablet):
+> @@ -622,6 +624,8 @@ class TouchTabletTest(BaseTest.TestTablet):
+>  
+>  
+>  class TestOpaqueTablet(PenTabletTest):
+> +    test_prop_direct = None
+
+That seems very awkward to do.
+
+Why not drop the 2 tests from the TestTablet class, move
+`test_prop_direct()` in that subclass (TestOpaqueTablet), and add a new
+TestDirectTablet class that TestDTH2452Tablet will be a subclass of?
+
+Basically try to make better use of subclassing instead of adding the
+tests at the top level class and selectively remove them in the
+subclasses.
+
+Cheers,
+Benjamin
+
+> +
+>      def create_device(self):
+>          return OpaqueTablet()
+>  
+> @@ -864,6 +868,7 @@ class TestPTHX60_Pen(TestOpaqueCTLTablet):
+>  
+>  class TestDTH2452Tablet(test_multitouch.BaseTest.TestMultitouch, TouchTabletTest):
+>      ContactIds = namedtuple("ContactIds", "contact_id, tracking_id, slot_num")
+> +    test_prop_pointer = None
+>  
+>      def create_device(self):
+>          return test_multitouch.Digitizer(
+> -- 
+> 2.51.0
+> 
 
