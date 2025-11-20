@@ -1,152 +1,179 @@
-Return-Path: <linux-kselftest+bounces-46111-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D13E1C746AF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:04:02 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D78CC74A2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:46:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id D42102B1BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:04:01 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6EA154E328F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A8E0346A12;
-	Thu, 20 Nov 2025 14:03:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 692F92882B2;
+	Thu, 20 Nov 2025 14:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o+xUpKA0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dKLnp1EO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E77602FE564
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 14:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EA6256C9E;
+	Thu, 20 Nov 2025 14:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763647435; cv=none; b=J1U28OQXU9VazYbmf0JcVLb4PHuLPtEWNGHIOnp63iz5wEoCat1MHNFHyWmwipInOhMnLEC86I064L45b4BGv5RA7Jhluv2lTlCTY71F77OwhGs7jQM0pRbumtlTWyOFzqjq+Ut2Js3tZILWDnegzf/175sxMXi35s4kqRG9Xgk=
+	t=1763649631; cv=none; b=UXpCz/rDgBGVLt4L1ylGQVIXnypoWuRCHPIkfJ9A9Vh+Wmrm7h6Is3ICwskqZAtFK8capPauE8lEsoqm2NOolSii4TWK8E9o+C01JHCARNgT+uKvMyCp6TLLdfN0RLSM9cNLx5pZqT/ma5PYCvnU6y5BNKkp3Y6AL2i8Lvg+tGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763647435; c=relaxed/simple;
-	bh=CI3aKvMENBD6Wx/BMX3Dm6s28G/RCoH+gf+fXWi+F9U=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=a0nGIH1MvnBLybFmgH3/D2GEWKhWfNhJIV2qji9vM4ZVychHwR4KBfoLd8SY3CcZYI5DKQPgyda2oiBiGButGrBrbk96yrDZozAhFZuEY4sFQBjVJJSmOdtVt7/8Oeh41gs3mMhH2Yq0B2j9nQWCW/XSlxkYicE+IiqeODQzizo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o+xUpKA0; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1763649631; c=relaxed/simple;
+	bh=hP2rrXLl45oNk0vB1/YtmaDxUpumojiwKa4dQyuZ/ZE=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dkA7qRMDqkIzQRSKVzfXXQzVNaD14fFcqLNukQDX4lXqgzh5tfLTN8kG2Ntb+nC+k2n96I5AriIsRjZEuF5theqlLd1ebrGzU29puN4VdpkYSki+lLNvLelfQGdhWSie7ZOHo9KPdI8Xjkb5IiC38BqFCwRb2+rEntvqLg8FPus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dKLnp1EO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10751C4CEF1;
+	Thu, 20 Nov 2025 14:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763649631;
+	bh=hP2rrXLl45oNk0vB1/YtmaDxUpumojiwKa4dQyuZ/ZE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dKLnp1EOQnEGrX9BJ7gtw/RVIIlOCygiWlne2eGq3Po3mip1OVTa+v4C37f+CeUpT
+	 KtRM1eFoqTAwdcBKpLlrXOI9KNzwT78epRV+541Xp0A/VQ8LAckKYCTVPvZE2hO/BI
+	 jb1iF9oiTwlOUK2hRO2mYpas5bMF+Wt4kCOrg0aNKNHYSAe4Rfq8lQu3G2aEocRGv2
+	 lckQEM6N0gMbk3btuvOHjqSAsFw7iYkHE2ApR1v4Y0UxZTJKuxcAA5vGzKXbEGAWZn
+	 M5SEdH8VfRdHTRfAONiYenMlqZssQrcuseA3rzIWjUJYeRQqJwyq+h38uQOFpKZaL7
+	 Z7SKYrzFdEv9A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vM5pk-00000006uwP-3bj9;
+	Thu, 20 Nov 2025 14:40:28 +0000
+Date: Thu, 20 Nov 2025 14:40:28 +0000
+Message-ID: <867bvksr6r.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Maximilian Dittgen <mdittgen@amazon.de>
+Cc: <oliver.upton@linux.dev>,
+	<pbonzini@redhat.com>,
+	<shuah@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>,
+	<kvm@vger.kernel.org>,
+	<lilitj@amazon.de>,
+	<sauravsc@amazon.de>,
+	<nh-open-source@amazon.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <zenghui.yu@linux.dev>,
+	Joey Gouly <joey.gouly@arm.com>
+Subject: Re: [RFC PATCH 00/13] Introduce per-vCPU vLPI injection control API
+In-Reply-To: <20251120140305.63515-1-mdittgen@amazon.de>
+References: <20251120140305.63515-1-mdittgen@amazon.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763647429;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=t2tROtgsicTEps6RWKZs8tKAeJGs/9o7AxPBq2elSzg=;
-	b=o+xUpKA0GTss5Hqr4AOnKIRD0++/yyfuuMREnltWDz/NJroRTWSqaxV9qW8YLNRbTjboLf
-	0ZjKKmP/IQWPRCKVZ7l3LweYSzsrygSlUyM1MRKmqcRIXhvZTNOwPHkkgEA/h+UWA+GtmA
-	Dg5jZq1PklmquRRuCwEQa3Ouw8++Kzg=
-Date: Thu, 20 Nov 2025 14:03:46 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <b6c033deb75243e285fa6b028ee666f874b75eb8@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf-next v1 1/3] bpf, sockmap: Fix incorrect copied_seq
- calculation
-To: "Jakub Sitnicki" <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, "John Fastabend" <john.fastabend@gmail.com>, "David
- S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Neal Cardwell"
- <ncardwell@google.com>, "Kuniyuki Iwashima" <kuniyu@google.com>, "David 
- Ahern" <dsahern@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard 
- Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong 
- Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Michal
- Luczaj" <mhal@rbox.co>, "Stefano Garzarella" <sgarzare@redhat.com>, "Cong
- Wang" <cong.wang@bytedance.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-In-Reply-To: <87tsyo6ets.fsf@cloudflare.com>
-References: <20251117110736.293040-1-jiayuan.chen@linux.dev>
- <20251117110736.293040-2-jiayuan.chen@linux.dev>
- <87zf8h6bpd.fsf@cloudflare.com>
- <5a66955891ef8db94b7288bbb296efcc0ac357cf@linux.dev>
- <87tsyo6ets.fsf@cloudflare.com>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: mdittgen@amazon.de, oliver.upton@linux.dev, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, lilitj@amazon.de, sauravsc@amazon.de, nh-open-source@amazon.com, suzuki.poulose@arm.com, zenghui.yu@linux.dev, joey.gouly@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-November 20, 2025 at 20:58, "Jakub Sitnicki" <jakub@cloudflare.com mailto=
-:jakub@cloudflare.com?to=3D%22Jakub%20Sitnicki%22%20%3Cjakub%40cloudflare=
-.com%3E > wrote:
+Maximilian: you keep ignoring the reviewers that are listed in
+MAINTAINERS. This isn't acceptable. Next time, I will simply ignore
+your patches.
 
+On Thu, 20 Nov 2025 14:02:49 +0000,
+Maximilian Dittgen <mdittgen@amazon.de> wrote:
+> 
+> At the moment, the ability to direct-inject vLPIs is only enableable
+> on an all-or-nothing per-VM basis, causing unnecessary I/O performance
+> loss in cases where a VM's vCPU count exceeds available vPEs. This RFC
+> introduces per-vCPU control over vLPI injection to realize potential
+> I/O performance gain in such situations.
+> 
+> Background
+> ----------
+> 
+> The value of dynamically enabling the direct injection of vLPIs on a
+> per-vCPU basis is the ability to run guest VMs with simultaneous
+> hardware-forwarded and software-forwarded message-signaled interrupts.
+> 
+> Currently, hardware-forwarded vLPI direct injection on a KVM guest
+> requires GICv4 and is enabled on a per-VM, all-or-nothing basis. vLPI
+> injection enablment happens in two stages:
+> 
+>     1) At vGIC initialization, allocate direct injection structures for
+>        each vCPU (doorbell IRQ, vPE table entry, virtual pending table,
+>        vPEID).
+>     2) When a PCI device is configured for passthrough, map its MSIs to
+>        vLPIs using the structures allocated in step 1.
+> 
+> Step 1 is all-or-nothing; if any vCPU cannot be configured with the
+> vPE structures necessary for direct injection, the vPEs of all vCPUs
+> are torn down and direct injection is disabled VM-wide.
+> 
+> This universality of direct vLPI injection enablement sparks several
+> issues, with the most pressing being performance degradation on
+> overcommitted hosts.
+> 
+> VM-wide vLPI enablement creates resource inefficiency when guest
+> VMs have more vCPUs than the host has available vPEIDs. The amount of
+> vPEIDs (and consequently, vPEs) a host can allocate is constrained by
+> hardware and defined by GICD_TYPER2.VID + 1 (ITS_MAX_VPEID). Since
+> direct injection requires a vCPU to be assigned a vPEID, at most
+> ITS_MAX_VPEID vCPUs can be configured for direct injection at a time.
+> Because vLPI direct injection is all-or-nothing on a VM, if a new guest
+> VM would exhaust remaining vPEIDs, all vCPUs on that VM would fall back
+> to hypervisor-forwarded LPIs, causing considerable I/O performance
+> degradation. 
+> 
+> Such performance degradation is exemplified on hosts with CPU
+> overcommitment. Overcommitting an arbitrarily high number of vCPUs
+> enables a VM's vCPU count to easily exceed the host's available vPEIDs.
 
->=20
->=20On Thu, Nov 20, 2025 at 02:49 AM GMT, Jiayuan Chen wrote:
->=20
->=20>=20
->=20> November 20, 2025 at 03:53, "Jakub Sitnicki" <jakub@cloudflare.com =
-mailto:jakub@cloudflare.com?to=3D%22Jakub%20Sitnicki%22%20%3Cjakub%40clou=
-dflare.com%3E > wrote:
-> >=20
->=20>  [...]
-> >=20
->=20> >=20
->=20> > > +/* The BPF program sets BPF_F_INGRESS on sk_msg to indicate da=
-ta needs to be
-> > >  > + * redirected to the ingress queue of a specified socket. Since=
- BPF_F_INGRESS is
-> > >  > + * defined in UAPI so that we can't extend this enum for our in=
-ternal flags. We
-> > >  > + * define some internal flags here while inheriting BPF_F_INGRE=
-SS.
-> > >  > + */
-> > >  > +enum {
-> > >  > + SK_MSG_F_INGRESS =3D BPF_F_INGRESS, /* (1ULL << 0) */
-> > >  > + /* internal flag */
-> > >  > + SK_MSG_F_INGRESS_SELF =3D (1ULL << 1)
-> > >  > +};
-> > >  > +
-> > >  >=20
->=20> >  I'm wondering if we need additional state to track this.
-> > >  Can we track sk_msg's construted from skb's that were not redirect=
-ed by
-> > >  setting `sk_msg.sk =3D sk` to indicate that the source socket is u=
-s in
-> > >  sk_psock_skb_ingress_self()?
-> > >=20
->=20>  Functionally, that would work. However, in that case, we would hav=
-e to hold
-> >  a reference to sk until the sk_msg is read, which would delay the re=
-lease of
-> >  sk. One concern is that if there is a bug in the read-side applicati=
-on, sk
-> >  might never be released.
-> >=20
->=20We don't need to grab a reference to sk if we're talking about settin=
-g
-> it only in sk_psock_skb_ingress_self(). psock already holds a ref for
-> psock->sk, and we purge psock->ingress_msg queue when destroying the
-> psock before releasing the sock ref in sk_psock_destroy().
+Let it be crystal clear: GICv4 and overcommitment is a non-story. It
+isn't designed for that. If that's what you are trying to achieve, you
+clearly didn't get the memo.
 
-I see. When it's an ingress to self redirection, the msg.sk would point t=
-o
-the same socket as psock->sk (the socket itself), not to another socket, =
-so
-indeed no additional reference grab is needed.
+> Even with marginally more vCPUs than vPEIDs, the current all-or-nothing
+> vLPI paradigm disables direct injection entirely. This creates two
+> problems: first, a single many-vCPU overcommitted VM loses all direct
+> injection despite having vPEIDs available;
 
-> While there's nothing wrong with an internal flaag, I'm trying to see i=
-f
-> we make things somewhat consistent so as a result sk_msg state is easie=
-r
-> to reason about.
->=20
->=20My thinking here is that we already set sk_msg.sk to source socket in
-> sk_psock_msg_verdict() on sendmsg() path, so we know that this is the
-> purpose of that field. We could mimic this on recvmsg() path.
->
+Are you saying that your HW is so undersized that you cannot create a
+*single VM* with direct injection? You really have fewer than 9 bit
+worth of VPEIDs? I'm sorry, but that's laughable. Even a $200 dev
+board does better.
+
+> second, on multi-tenant
+> hosts, VMs booted first consume all vPEIDs, leaving later VMs without
+> direct injection regardless of their I/O intensity. Per-vCPU control
+> would allow userspace to allocate available vPEIDs across VMs based on
+> I/O workload rather than boot order or per-VM vCPU count. This per-vCPU
+> granularity recovers most of the direct injection performance benefit
+> instead of losing it completely.
+> 
+> To allow this per-vCPU granularity, this RFC introduces three new ioctls
+> to the KVM API that enables userspace the ability to activate/deactivate
+> direct vLPI injection capability and resources to vCPUs ad-hoc during VM
+> runtime.
+
+How can that even work when changing the affinity of a vLPI (directly
+injected) to a vcpu that doesn't have direct injection enabled? You'd
+have to unmap the vLPI, and plug it back as a normal LPI. Not only
+this is absolutely ridiculous from a performance perspective, but you
+are also guaranteed to lose interrupts that would have fired in the
+meantime. Losing interrupts in a total no-go.
+
+Before I even look at the code, I you to explain how you are dealing
+with this.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
