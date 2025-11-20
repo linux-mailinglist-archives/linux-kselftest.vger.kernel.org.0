@@ -1,184 +1,140 @@
-Return-Path: <linux-kselftest+bounces-46131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70657C754AE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 17:18:44 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF4E3C75739
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 17:46:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 3F8E42B74A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:18:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E9AA64E050A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:40:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE431362150;
-	Thu, 20 Nov 2025 16:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717941805E;
+	Thu, 20 Nov 2025 16:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MCG19c7v"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qna/Gj5W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF462357A25;
-	Thu, 20 Nov 2025 16:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E53126F2AB
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 16:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763655520; cv=none; b=IDYYt/XveXVtJKcgNWAIzruUfdITSPlKYjj12ViuLKTZrcTMuSTk+xfK3dDOaOd3cWIY49Kmh4UuLvx2Br8ErRey56+1UcFXkwuD1P4Q2q/Qqqx42R3uCDdEpU14RCsAnvg2Yf7ftQ+j9CDDER9C+E+ElebQJ7lFdHyEiIpTER8=
+	t=1763656833; cv=none; b=qtViHno5INASpaQYZtazdXh9qLsnVe+dCkWr2H+61oyV2XVY5HjVQ1+rgC7CZpt6w/tzVAWtJKXsj+rSSTTVhNt8KzjqYTF4MnsssqpJv2TsuQ4kk3J2CmSY82aJ+o+DJR15fAYuIN1+m0nn0HkxkP++2hpal4oth/h6sNNQ+q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763655520; c=relaxed/simple;
-	bh=KwZ0JhnSDCNZyZyVN2OkoVg0lxuvRbqfuZ3B6h7NGRg=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=np0ChZucCjk5bW3x4mKajAwtKKFCmB2cMSAqCN5cyuAjn9aSUNtq/G+3/oNO2JomY6Qr/moA8XpODZZ3+bkl6nCJhamCSj5hBD8Yeotn8mETUrlo+3ZrHW3YpMPhqkg6rWDnPSCmGm5bXQM5/A/21WEV16XKNGMmCZnFpKtbIJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MCG19c7v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3344DC4CEF1;
-	Thu, 20 Nov 2025 16:18:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763655520;
-	bh=KwZ0JhnSDCNZyZyVN2OkoVg0lxuvRbqfuZ3B6h7NGRg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MCG19c7vrB14C6fJ+JhzzKXYDKpEsqcAEaaJONS7bVM706UHdAmzQmi6Cb3od5awI
-	 WRw4jQH663YReAPOCN1shTzYGWuEan0maY0zVHg6X/AOE2k2rsI+HfYDQPXjzSeRiF
-	 Fk/rAuUySTn8H38h+yJEmVTMzrTXBnsd87zsW6g9B3TH1wnn6ArRc/6IMorry3cgcE
-	 huPOZdYkq4T25oR8OUMHtrj2mYVkT4mkiajE72ylz7TjVCyaj0NIGpT8qytz4rbiVp
-	 yh/jzx84pAzuxwooUxaP6B8h3FuX8fzsJfj8SGgtCE8VkS5brlkFCuk/TjKVlsewCt
-	 X0FVYGbc88fzw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vM7Mj-00000006wt3-47F0;
-	Thu, 20 Nov 2025 16:18:38 +0000
-Date: Thu, 20 Nov 2025 16:18:37 +0000
-Message-ID: <864iqosmn6.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Maximilian Dittgen <mdittgen@amazon.de>
-Cc: <oliver.upton@linux.dev>,
-	<pbonzini@redhat.com>,
-	<shuah@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>,
-	<linux-kselftest@vger.kernel.org>,
-	<kvm@vger.kernel.org>,
-	<lilitj@amazon.de>,
-	<sauravsc@amazon.de>,
-	<nh-open-source@amazon.com>
-Subject: Re: [RFC PATCH 01/13] KVM: Introduce config option for per-vCPU vLPI enablement
-In-Reply-To: <20251120140305.63515-2-mdittgen@amazon.de>
-References: <20251120140305.63515-1-mdittgen@amazon.de>
-	<20251120140305.63515-2-mdittgen@amazon.de>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1763656833; c=relaxed/simple;
+	bh=0rLW36iyOf5x4MMAHLt7ZJRKB7UhffR6LbUm9J0KINk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qT0Vqn3b5HQLekyP89+maDkVAA+jNmajopCufoL9ZQQWFN45KZYVR2r5p89is1IuprwJFxNsIH0+Ka81fhg1TkzHwJM2KlnjxzDPJcLUbyNdYFZQHUqo3LTzxzg9G6+ccvW9/aEB1IUTEIr+4nA00AvxpK7D90fCKqqCGTttFUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qna/Gj5W; arc=none smtp.client-ip=209.85.166.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-9490b441c3bso46754839f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 08:40:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1763656831; x=1764261631; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aa1AkRLymUeMfi+gvxg2H2c9FzoNzzQchV4cefwGG74=;
+        b=Qna/Gj5WikmcXneAJgNzupCB7vXhKIHbcGbe4Bih3eqOVfOfgFryRU/AxsvGtM+Y6M
+         AZJB+QdIlY8/Hr5Ru+9kN+wWZjQiwIRrKy0P86l4zGtK4nF1cgI9U1453OyhrGuSm7UX
+         ystIrTkBybvrwjkPtQiYsHpV0uFpDNe5/VEO0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763656831; x=1764261631;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aa1AkRLymUeMfi+gvxg2H2c9FzoNzzQchV4cefwGG74=;
+        b=CsDKONWs7XZynAhRm9vPUlvUbE43usgAnBou6wFYdBC5H43nvLWD0oJ8GM+D0Uzbfl
+         XsaKK+adnrChsMcgiyXWip3SEjTDw0MXgTK1j5rIKShcqiXM5KLfsntvsqjegduxE77Y
+         QsktEps2D340VN4zOz5XEzDe8yFP9a/3fVqzQ8ca8db837NTj0DwnCfJF1qb9H6ufjWx
+         nqboNf6VUfBXGd87g1kD1pJ9rw6VnoJsgYZadTFhKXUT1TkaDrCLRM4/fjvcq4yoc6gn
+         5LFUHYxasd11bXFn4ccBJ/WrjrG0snuJMLZqr9PI0IKYYKrxX/E/dcXYDH7jP7rH+fiW
+         aZSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ/afd3T1O4jsGQZ9failWktEgwsJm2vKum7Xk7JpEbvZQv4UGVBS961ysB0WMWrOwZ9ML3JK5qSez7kSKLic=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9TrdZqHMiAvjp6cg3L1oH9k+hQkvkwF4ihtcEnEozT1qbC5vK
+	rWHtjJWkXekRn1lgPJACLocMUaRrnlETHecx/O4N6Xiu8zqv36Oh+QO8DLbR+qCUn3EXap2gDm8
+	HQ4Jc
+X-Gm-Gg: ASbGncvw24kyBGnk7gg5woSjn0anAyzhEA65iYEjQ//pIUZQyJQtHOihA//YF78nVb7
+	PPM4tMvx1t5uGE3kIumW7wwftMVOA1M2HgxVljH4YR5lUeRYcHei2zGWkOWrRZt/nDLcMQQ/+5r
+	o+kM8IBycQenrolx8cY+tTUyQ1Ab3RE/UGXylhPdTXZ1S9BFYgvGW/LdnMJ6eSD4zuplJkVCWbl
+	kNZBPugALBcAa/W7B8inRbLre+0A9KU2Q03MPc6iAsLPzaxK+W/wsnPm7KKyDERNeUnYFFBJiEG
+	ubEWROX4b3zc05puoqRYPU0w1G0FIQhOjahlUYRSBbAfqPS8qZdYncgOjQaPPELUf4tseadykrR
+	fgM8D1XBUFzWraEBcJDfHSnJr1LJdisw7Rn6YITGH6Tl8pb6Hy9bvDm1ro3VS/U7jNPGyxlN+lh
+	wlmriRWGSm55UjV+fKzy4XGWU=
+X-Google-Smtp-Source: AGHT+IFsgTAAQrcv0Z7q9/prVRarkjR54xZam1Bd2zaiU428gFS16ceXIp7y0FoUhB6GTW5mK9UwtQ==
+X-Received: by 2002:a05:6602:371a:b0:949:15f:6226 with SMTP id ca18e2360f4ac-94938ad740fmr250309839f.16.1763656830706;
+        Thu, 20 Nov 2025 08:40:30 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-949385d34a9sm108901139f.8.2025.11.20.08.40.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Nov 2025 08:40:30 -0800 (PST)
+Message-ID: <f0774852-fe3c-4236-91b1-f38045ea26f7@linuxfoundation.org>
+Date: Thu, 20 Nov 2025 09:40:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: mdittgen@amazon.de, oliver.upton@linux.dev, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, lilitj@amazon.de, sauravsc@amazon.de, nh-open-source@amazon.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: tracing: Add tprobe enable/disable testcase
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <176252610176.214996.3978515319000806265.stgit@devnote2>
+ <f5f272e1-e164-4bb1-bfd0-42edd5a125c5@linuxfoundation.org>
+ <20251119170611.6eff8df7@gandalf.local.home>
+ <b61a339e-f80f-4ecd-861e-e9bb834d5101@linuxfoundation.org>
+ <20251120102526.e5e9332fcab1db3ce18c6d15@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20251120102526.e5e9332fcab1db3ce18c6d15@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 20 Nov 2025 14:02:50 +0000,
-Maximilian Dittgen <mdittgen@amazon.de> wrote:
->=20
-> Add CONFIG_ARM_GIC_V3_PER_VCPU_VLPI to control whether vLPI direct
-> injection is to be enabled on a system-wide or a per-vCPU basis.
->=20
-> When enabled, vPEs can be allocated/deallocated to vCPUs on an ad-hoc,
-> per-vCPU basis in runtime. When disabled, keep current vgic_v4_init
-> behavior of automatic vCPU vPE allocation upon VM initialization.
->=20
-> We declare three ioctls numbers to manage per-vCPU vLPI enablement:
-> - KVM_ENABLE_VCPU_VLPI, which given a vCPU ID, allocates a vPE and
-> initializes the vCPU for receiving direct vLPI interrupts.
-> - KVM_DISABLE_VCPU_VLPI, which given a vCPU ID, disables the vCPU=E2=80=
-=99s
-> ability to receive direct vLPI interrupts and frees its underlying vPE
-> structure.
-> - KVM_QUERY_VCPU_VLPI, which given a vCPU ID, returns a boolean
-> describing whether the vCPU is configured to receive direct vLPI
-> interrupts.
->=20
-> This commit declares the kconfig, ioctl numbers, and documentation.
-> Implementation will come throughout this patch set.
->=20
-> Signed-off-by: Maximilian Dittgen <mdittgen@amazon.de>
-> ---
->  Documentation/virt/kvm/api.rst | 56 ++++++++++++++++++++++++++++++++++
->  arch/arm64/kvm/arm.c           | 15 +++++++++
->  arch/arm64/kvm/vgic/vgic-v4.c  |  9 ++++++
->  arch/arm64/kvm/vgic/vgic.h     |  2 ++
->  drivers/irqchip/Kconfig        | 13 ++++++++
->  include/uapi/linux/kvm.h       |  6 ++++
->  6 files changed, 101 insertions(+)
->=20
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.=
-rst
-> index 27f726ff8fe0..dcfb326dff10 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6517,6 +6517,62 @@ the capability to be present.
-> =20
->  `flags` must currently be zero.
-> =20
-> +4.XXX KVM_ENABLE_VCPU_VLPI
-> +--------------------------
-> +
-> +:Capability: KVM_CAP_ARM_PER_VCPU_VLPI
-> +:Architectures: arm64
-> +:Type: vm ioctl
-> +:Parameters: int vcpu_id (in)
-> +:Returns: 0 on success, negative value on error
-> +
-> +This ioctl enables GICv4 direct vLPI injection for the specified vCPU.
-> +Allocates vPE structures (doorbell IRQ, vPE table entry, virtual pending
-> +table, vPEID) and upgrades existing software-forwarded LPIs targeting
-> +this vCPU to hardware-forwarded vLPIs.
-> +
-> +If GICv4.1 is supported and vSGIs are disabled on the specified vCPU,
-> +this ioctl enables vCPU vSGI support.
-> +
-> +Requires CONFIG_ARM_GIC_V3_PER_VCPU_VLPI and GICv4 hardware support.
-> +
-> +Returns -EINVAL if vGICv4 is not initialized or if the passed vcpu_id
-> +does not map to a vCPU.
-> +
-> +4.XXX KVM_DISABLE_VCPU_VLPI
-> +---------------------------
-> +
-> +:Capability: KVM_CAP_ARM_PER_VCPU_VLPI
-> +:Architectures: arm64
-> +:Type: vm ioctl
-> +:Parameters: int vcpu_id (in)
-> +:Returns: 0 on success, negative value on error
-> +
-> +This ioctl disables GICv4 direct vLPI injection for the specified vCPU.
-> +Downgrades hardware-forwarded vLPIs to software-forwarded LPIs and frees
-> +vPE structures. Pending interrupts in the virtual pending table may be
-> +lost.
+On 11/19/25 18:25, Masami Hiramatsu (Google) wrote:
+> On Wed, 19 Nov 2025 15:56:57 -0700
+> Shuah Khan <skhan@linuxfoundation.org> wrote:
+> 
+>> On 11/19/25 15:06, Steven Rostedt wrote:
+>>> On Wed, 19 Nov 2025 14:44:22 -0700
+>>> Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>
+>>>> On 11/7/25 07:35, Masami Hiramatsu (Google) wrote:
+>>>>> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>>>>
+>>>>> Commit 2867495dea86 ("tracing: tprobe-events: Register tracepoint when
+>>>>> enable tprobe event") caused regression bug and tprobe did not work.
+>>>>> To prevent similar problems, add a testcase which enables/disables a
+>>>>> tprobe and check the results.
+>>>>>
+>>>>> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>>>
+>>>> Steve, do you want me to take this through my tree?
+>>>
+>>> Yes please. Masami's an official maintainer and mostly handles all things
+>>> "probe" related. This is his domain ;-)
+>>>
+>>> Thanks,
+>>>
+>>> -- Steve
+>> Applied to linux-kselftest next for Linux 6.19-rc1.
+> 
+> Thanks Shuah! This and other regression fixes is better to go
+> through selftests tree because those are checking existing
+> features. Maybe better to add [PATCH -selftests] or something
+> like that?
+> 
 
-I'm going to put my foot down on that immediately.
+Let me know which ones you would like to pick up and apply to my tree.
 
-There is no conceivable case where losing interrupts in acceptable.
-Ever. If that's what you want, please write your own hypervisor. I
-wish you luck!
-
-> +
-> +If vSGIs are enabled on the specified vCPU, this ioctl disables them.
-
-So what? Something that didn't have an active state now has one that
-the guest doesn't know about? There is exactly *one* bit that defines
-that, and it doesn't exist in some quantum superposition.
-
-This whole thing is completely insane, has not been thought out at
-all, is ignoring the basis of the architecture, and I'm really sorry
-that you wasted your time on that.
-
-	M.
-
---=20
-Without deviation from the norm, progress is not possible.
+thanks,
+-- Shuah
 
