@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-46112-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A8F7C747C0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:15:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29894C746F1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:06:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1AC994F3FDD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:04:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 4E65E2B93D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:04:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A35347BB6;
-	Thu, 20 Nov 2025 14:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07D53469FA;
+	Thu, 20 Nov 2025 14:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="JC/Haqu9"
+	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="f3y0uPaN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.42.203.116])
+Received: from pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.12.53.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3B2346A00;
-	Thu, 20 Nov 2025 14:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.42.203.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57563451D7;
+	Thu, 20 Nov 2025 14:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.12.53.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763647447; cv=none; b=C+42Km/8DEKIpC9gVMqIzy8iI4fBwUozQq2KxG5s0J1yz8HgIkRvnjoW77LmnPeLkvn0frUt2oJHz1VIzUc0LmJ2+xYOynB27p44MijmRRk9hawv+8kcpa3VJJX6Hscuz3nbCwrUHsBghjIw3a745dfrkNPw684weGE2bhW2xbk=
+	t=1763647462; cv=none; b=MfoJzWGeGu55QeIiAAfWFBem3Mik6pWsDrfVSdskcrU+MbIO/TL5VtjGs9h3iSQkJYsWJaxYXju2+kq+Y9ZQ9Of0+TsTa/tZZscDcW6IXsj6117J5PyfZhD0XBOl6AN9h/pSbjctJnrZBboMPe7eFPT7BuzpdDWkR6DgD3LXqdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763647447; c=relaxed/simple;
-	bh=QVTTigONz5BxsK1I4ZBTxtkFiOs/uY4AeYshB+YYJLg=;
+	s=arc-20240116; t=1763647462; c=relaxed/simple;
+	bh=FKENcEaJJgZTk6QVqMrbOCpdIkVJIjx0vpy+qXlzjeQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mjQTsF4ve7T4am6EJxo7nY6WLYGXaJgOrLZMpGPDKzgyIvtCuym09JvZbxAhETTOnlMBP4J3SxvBdOlXMRLgpqgEkOqeiuVzWoCVGSK/9mTo1HjIcMo9sOA/dRNy3JKJz2X0o6277a3SNrxmg08RU5ZywlBOO58Ngb3SFs7R5vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=JC/Haqu9; arc=none smtp.client-ip=52.42.203.116
+	 MIME-Version:Content-Type; b=CsHLMwtYgBUaARTEygmIbHyPvHdP0tjrrtjyffvBpHsstZKbTLo599Y28vfNIeC3J4CIML2NF4i5g7PpPNWYpzsZbwNlWiLTNwnJ55VGmbP9wpaF2VACrv6MxMaCbh4DVyBtgVQ0bNy722CE/FX+cXccy14JsgeKV8je24QeBv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=f3y0uPaN; arc=none smtp.client-ip=52.12.53.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1763647445; x=1795183445;
+  t=1763647460; x=1795183460;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=nHS+ShTd2CkJzC/awfjaT1l3eKow8+x9vpRZiRWUEyg=;
-  b=JC/Haqu97hiuBAu6YVvrdqHs7FA8ObT6bhdvF277mhI56qh4bNui7xZS
-   VrbXJg/OaAZblsDQeIiSi93qWsv4p9YeqsdN930Gl2b6PS8CaBfmDUgFK
-   aojXHKdw4xD+Aussk8k5qYvHaxDfkgpDUxGNBIspY7PluQAvnXGR6Xd9v
-   eabRx5ioK4wLjAAzb0tyTXBqUPJw54SFuFBbkm988EqONDP/n7adcuPFz
-   Ias3eAPeFIsgDDRX7phORfN4zieN66PifW7ThBcrYeJAe1CtNTSexnaU9
-   CdMw2KizYnNsQFE1vKZxfPdB6qJRLxhUnNHcr9UxuLyZuCu8rOj25tF4Q
+  bh=UfqKJfrocFCotJ0w2MXbh9V8T/H1xPhczpXuKuEYt1A=;
+  b=f3y0uPaNJ0Tm0wHW5+2c1ynVjoBs8XxRVCO7voocXif4ndqXFl8+Q+zd
+   NyqV7lrbFCR2sTajTBrCsxu3M4lOsKxpCH1wPxS8Tg9kDvM6fxsaLLffL
+   X+9hfQWY8JNNHiQTytZbiZNXR3KWg4TEAIYnL+uXKHeaPq1lxRfXtk9X4
+   qIHtghquNGtjszaNH+i4Jmy6bGDP0SU0cWB+d7wnMZPIPIXWLs7kFbFIW
+   F/oW6qlZDDhwmaEEFnmtQ5Pfzlk6bTh4B+dOUAF1H7U82cyeXut7OBhue
+   D7UWh6fuXTS8hHXCL/JJP21GE4grWO0kYFsciS9iOGC1IWIsoZa6xSeeV
    w==;
-X-CSE-ConnectionGUID: /3FDSui1Q3qezKZcB9vYmQ==
-X-CSE-MsgGUID: DIRt3zyiQAiq/VgE3zLiyA==
+X-CSE-ConnectionGUID: v75K3nozTkabLQBGwgEkgQ==
+X-CSE-MsgGUID: QEh0uMF7RxGlsKxF+l6ZPg==
 X-IronPort-AV: E=Sophos;i="6.20,213,1758585600"; 
-   d="scan'208";a="7424378"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-008.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 14:04:03 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:10463]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.61.192:2525] with esmtp (Farcaster)
- id 8b50bdef-f4c6-4df2-acb1-3b5a9a984323; Thu, 20 Nov 2025 14:04:02 +0000 (UTC)
-X-Farcaster-Flow-ID: 8b50bdef-f4c6-4df2-acb1-3b5a9a984323
+   d="scan'208";a="7310715"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-010.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 14:04:18 +0000
+Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:3019]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.20.19:2525] with esmtp (Farcaster)
+ id a18503df-0779-4b42-9ac7-24839b6decf4; Thu, 20 Nov 2025 14:04:18 +0000 (UTC)
+X-Farcaster-Flow-ID: a18503df-0779-4b42-9ac7-24839b6decf4
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+ EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Thu, 20 Nov 2025 14:04:02 +0000
+ Thu, 20 Nov 2025 14:04:17 +0000
 Received: from amazon.com (10.1.213.15) by EX19D001UWA001.ant.amazon.com
  (10.13.138.214) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Thu, 20 Nov 2025
- 14:03:59 +0000
+ 14:04:15 +0000
 From: Maximilian Dittgen <mdittgen@amazon.de>
 To: <maz@kernel.org>, <oliver.upton@linux.dev>
 CC: <pbonzini@redhat.com>, <shuah@kernel.org>,
@@ -69,9 +69,9 @@ CC: <pbonzini@redhat.com>, <shuah@kernel.org>,
 	<linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
 	<mdittgen@amazon.de>, <lilitj@amazon.de>, <sauravsc@amazon.de>,
 	<nh-open-source@amazon.com>, Maximilian Dittgen <mdittgen@amazon.com>
-Subject: [RFC PATCH 03/13] KVM: arm64: Refactor out locked section of kvm_vgic_v4_set_forwarding()
-Date: Thu, 20 Nov 2025 15:02:52 +0100
-Message-ID: <20251120140305.63515-4-mdittgen@amazon.de>
+Subject: [RFC PATCH 04/13] KVM: arm64: Implement vLPI QUERY ioctl for per-vCPU vLPI injection API
+Date: Thu, 20 Nov 2025 15:02:53 +0100
+Message-ID: <20251120140305.63515-5-mdittgen@amazon.de>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251120140305.63515-1-mdittgen@amazon.de>
 References: <20251120140305.63515-1-mdittgen@amazon.de>
@@ -81,104 +81,104 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ClientProxiedBy: EX19D038UWB004.ant.amazon.com (10.13.139.177) To
+X-ClientProxiedBy: EX19D046UWB004.ant.amazon.com (10.13.139.164) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-kvm_vgic_v4_set_forwarding() acquires its_lock to safely map guest LPIs
-to host IRQs for vLPI upgrades. Future per-vCPU direct vLPI injection
-requires atomically upgrading multiple LPIs while holding its_lock, which
-would cause recursive locking when calling kvm_vgic_v4_set_forwarding().
-
-Extract the locked portion to kvm_vgic_v4_set_forwarding_locked() to allow
-callers already holding its_lock to perform vLPI upgrades without
-recursive locking.
-
-No functional change.
+Implement kvm_vgic_query_vcpu_vlpi, which handles the KVM_QUERY_VCPU_VLPI
+ioctl to query whether a vCPU is currently initialized to handle LPIs via
+direct vLPI injection. This function checks whether the vCPU's entry in
+the VM's vPE array is populated.
 
 Signed-off-by: Maximilian Dittgen <mdittgen@amazon.com>
 ---
- arch/arm64/kvm/vgic/vgic-v4.c | 38 +++++++++++++++++++++--------------
- include/kvm/arm_vgic.h        |  3 +++
- 2 files changed, 26 insertions(+), 15 deletions(-)
+ arch/arm64/kvm/arm.c          | 13 +++++++++++--
+ arch/arm64/kvm/vgic/vgic-v4.c | 15 +++++++++++++++
+ arch/arm64/kvm/vgic/vgic.h    |  1 +
+ include/linux/kvm_host.h      | 11 +++++++++++
+ 4 files changed, 38 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 31db3ccb3296..afb04162e0cf 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -1959,8 +1959,17 @@ int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
+ 		return -ENOSYS;
+ 	}
+ 	case KVM_QUERY_VCPU_VLPI: {
+-		/* TODO: create ioctl handler function */
+-		return -ENOSYS;
++		int vcpu_id;
++		struct kvm_vcpu *vcpu;
++
++		if (copy_from_user(&vcpu_id, argp, sizeof(vcpu_id)))
++			return -EFAULT;
++
++		vcpu = kvm_get_vcpu_by_id(kvm, vcpu_id);
++		if (!vcpu)
++			return -EINVAL;
++
++		return kvm_vgic_query_vcpu_vlpi(vcpu);
+ 	}
+ 	default:
+ 		return -EINVAL;
 diff --git a/arch/arm64/kvm/vgic/vgic-v4.c b/arch/arm64/kvm/vgic/vgic-v4.c
-index fb2e6af96aa9..4a1825a1a5d7 100644
+index 4a1825a1a5d7..cebcb9175572 100644
 --- a/arch/arm64/kvm/vgic/vgic-v4.c
 +++ b/arch/arm64/kvm/vgic/vgic-v4.c
-@@ -483,27 +483,15 @@ int kvm_vgic_v4_map_irq_to_host(struct kvm *kvm, int virq,
- 	return 0;
+@@ -617,3 +617,18 @@ void kvm_vgic_v4_unset_forwarding(struct kvm *kvm, int host_irq)
+ 	raw_spin_unlock_irqrestore(&irq->irq_lock, flags);
+ 	vgic_put_irq(kvm, irq);
  }
- 
--int kvm_vgic_v4_set_forwarding(struct kvm *kvm, int virq,
--			       struct kvm_kernel_irq_routing_entry *irq_entry)
-+int kvm_vgic_v4_set_forwarding_locked(struct kvm *kvm, int virq,
-+			       struct kvm_kernel_irq_routing_entry *irq_entry, struct vgic_its *its)
- {
--	struct vgic_its *its;
- 	struct vgic_irq *irq;
- 	struct its_vlpi_map map;
- 	unsigned long flags;
- 	int ret = 0;
- 
--	if (!vgic_supports_direct_msis(kvm))
--		return 0;
--
--	/*
--	 * Get the ITS, and escape early on error (not a valid
--	 * doorbell for any of our vITSs).
--	 */
--	its = vgic_get_its(kvm, irq_entry);
--	if (IS_ERR(its))
--		return 0;
--
--	guard(mutex)(&its->its_lock);
-+	lockdep_assert_held(&its->its_lock);
- 
- 	/*
- 	 * Perform the actual DevID/EventID -> LPI translation.
-@@ -567,6 +555,26 @@ int kvm_vgic_v4_set_forwarding(struct kvm *kvm, int virq,
- 	return ret;
- }
- 
-+int kvm_vgic_v4_set_forwarding(struct kvm *kvm, int virq,
-+			       struct kvm_kernel_irq_routing_entry *irq_entry)
++
++/* query whether vLPI direct injection is enabled on a specific vCPU.
++ * return 0 if disabled, 1 if enabled, -EINVAL if vCPU non-existant or GIC
++ * uninitialized
++ */
++int kvm_vgic_query_vcpu_vlpi(struct kvm_vcpu *vcpu)
 +{
-+	struct vgic_its *its;
++	struct kvm *kvm = vcpu->kvm;
++	struct vgic_dist *dist = &kvm->arch.vgic;
++	int i = kvm_idx_from_vcpu(kvm, vcpu);
 +
-+	if (!vgic_supports_direct_msis(kvm))
-+		return 0;
++	if (i == UINT_MAX || !dist->its_vm.vpes)
++		return -EINVAL; /* vCPU non-existant or uninitialized */
++	return dist->its_vm.vpes[i] != NULL;
++}
+diff --git a/arch/arm64/kvm/vgic/vgic.h b/arch/arm64/kvm/vgic/vgic.h
+index 99894806a4e9..295088913c26 100644
+--- a/arch/arm64/kvm/vgic/vgic.h
++++ b/arch/arm64/kvm/vgic/vgic.h
+@@ -468,5 +468,6 @@ int vgic_its_debug_init(struct kvm_device *dev);
+ void vgic_its_debug_destroy(struct kvm_device *dev);
+ 
+ bool kvm_per_vcpu_vlpi_supported(void);
++int kvm_vgic_query_vcpu_vlpi(struct kvm_vcpu *vcpu);
+ 
+ #endif
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 5bd76cf394fa..bc7001f8c5dd 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1030,6 +1030,17 @@ static inline struct kvm_vcpu *kvm_get_vcpu_by_id(struct kvm *kvm, int id)
+ 	return NULL;
+ }
+ 
++static inline unsigned int kvm_idx_from_vcpu(struct kvm *kvm, struct kvm_vcpu *target_vcpu)
++{
++	struct kvm_vcpu *vcpu;
++	unsigned long i;
 +
-+	/*
-+	 * Get the ITS, and escape early on error (not a valid
-+	 * doorbell for any of our vITSs).
-+	 */
-+	its = vgic_get_its(kvm, irq_entry);
-+	if (IS_ERR(its))
-+		return 0;
-+
-+	guard(mutex)(&its->its_lock);
-+	return kvm_vgic_v4_set_forwarding_locked(kvm, virq, irq_entry, its);
++	kvm_for_each_vcpu(i, vcpu, kvm)
++		if (vcpu == target_vcpu)
++			return i;
++	return UINT_MAX;
 +}
 +
- static struct vgic_irq *__vgic_host_irq_get_vlpi(struct kvm *kvm, int host_irq)
- {
- 	struct vgic_irq *irq;
-diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
-index 02842754627f..18a49c4b83f8 100644
---- a/include/kvm/arm_vgic.h
-+++ b/include/kvm/arm_vgic.h
-@@ -454,6 +454,9 @@ int kvm_vgic_v4_map_irq_to_host(struct kvm *kvm, int virq,
- 					struct kvm_kernel_irq_routing_entry *irq_entry);
- int kvm_vgic_v4_set_forwarding(struct kvm *kvm, int irq,
- 			       struct kvm_kernel_irq_routing_entry *irq_entry);
-+int kvm_vgic_v4_set_forwarding_locked(struct kvm *kvm, int virq,
-+					struct kvm_kernel_irq_routing_entry *irq_entry,
-+					struct vgic_its *its);
+ void kvm_destroy_vcpus(struct kvm *kvm);
  
- void kvm_vgic_v4_unset_forwarding(struct kvm *kvm, int host_irq);
- 
+ int kvm_trylock_all_vcpus(struct kvm *kvm);
 -- 
 2.50.1 (Apple Git-155)
 
