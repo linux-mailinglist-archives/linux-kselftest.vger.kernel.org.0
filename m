@@ -1,175 +1,215 @@
-Return-Path: <linux-kselftest+bounces-46143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A97AC76919
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 00:03:15 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9169BC76A07
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 00:36:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E4DB24E2422
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 23:03:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7CBCF4E2ACF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 23:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DFFE2DD5EF;
-	Thu, 20 Nov 2025 23:03:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB128289378;
+	Thu, 20 Nov 2025 23:36:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QG6h9CE+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgXfHQM+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DE118A956;
-	Thu, 20 Nov 2025 23:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8027113B584
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 23:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763679790; cv=none; b=l4UiudASGuPsJxqtJz/zeu54cEVjw9t0bNCo9JvqpcKXH4WW0qdOGpv9fWt9d9ITljI0hJtTw/pxfHgIH13q+hzfoBMLCcjdtTEBo1FJSpZOf1zambZkGyQxX4WBssHCN1ttEKipdDDrSLuxirfgltB+RLyovKgw7oGIGTipOHo=
+	t=1763681809; cv=none; b=r8waLnBNsQ5Dtj6TTiRL3/+IoyQgZipNyYKMTdh/kbaLM+5AM0+FSO7lOn0VaalWReEpYMe3wm9GBdjtIUBpDxxI+9wPHdWOGd29Q53C+CI+E3k3aFVZzfBWMqp3g9SRrTQgBlIskrPL3CUb8fak2RuUt8c/47UHA6ks1kLEzLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763679790; c=relaxed/simple;
-	bh=O1Qi6nhG/zHyyZZ5m3S3q50NgcDPuwBjbUjZcPeZgGw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TE6zaHfnAHOJCZqeHJegMNRul4Cba4hKKLHf+g9NjQ8F0UGM1CdGUmT1iRPvcBBQ6GrYWH2PP5DtNsY54A3flsLp6ZEuF9+U40DtYaCw6opwlV0nhSZfsNFABllZTZpWYSAhyhiRdwNk3Ewc/sT9Gb66rhw+RZ1r4yaEALQb/Es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QG6h9CE+; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AKJgJvB026338;
-	Thu, 20 Nov 2025 23:03:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=corp-2025-04-25; bh=RsElIDttcWvAo74H8bTGmkSCUHxJ8
-	gnNR8dvyyJmZ8w=; b=QG6h9CE+/8jnys2cz1Q732FDXgWe34RpMFRra6oJp1M/v
-	EtkuvhWfVfb23C58VDczyHvDvRdEPL9qf2UPhxRYT6p9XcLDTungOXFWBEUI1oZE
-	lFPMGg5p/GM5awQCPd2EPSJm9BCfAzDAGhukKhEedOmfq8POcPe5Off0TZtEQTcL
-	8WqCOWzIjQ30E9mpU0XahYzCBwdQptDGJTrMn5axCJscVC9exOkIkEdeLy1tA7M2
-	OD9mewDgtQLHFguAv28OAKqv4iOrwatCCN4QSt4PguTiSE8F2Nqhak0d9qcuaBCi
-	RbxEO3QcO6UYBitqu97gs2H6kRrooqpqaCqTL6o5A==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4aej90a7vv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 23:03:05 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AKMWcxm039958;
-	Thu, 20 Nov 2025 23:03:05 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4aefyq5au1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 20 Nov 2025 23:03:04 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 5AKN34pW037023;
-	Thu, 20 Nov 2025 23:03:04 GMT
-Received: from ca-dev110.us.oracle.com (ca-dev110.us.oracle.com [10.129.136.45])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4aefyq5atm-1;
-	Thu, 20 Nov 2025 23:03:04 +0000
-From: Yifei Liu <yifei.l.liu@oracle.com>
-To: shuah@kernel.org
-Cc: yifei.l.liu@oracle.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v2 1/1] selftest/sched: skip the test if smt is not enabled
-Date: Thu, 20 Nov 2025 15:02:35 -0800
-Message-ID: <20251120230235.2857291-1-yifei.l.liu@oracle.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1763681809; c=relaxed/simple;
+	bh=xgZokAZNABaDEkJOi6XbkoiCbaV/hMr2HbQKs7w9K+Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UYbP9XF2fzj++BaifzCEPHLno8iKNIdejs8rXkx4j3GvmEUbhpgm3ewtCSSNFEUiF7qGTvk1bPdg4ro95y004i7cEg9kbJQ0eb4JogCqGGZMGf8MPkqAVR1cg/K/v7mI4PHAzo0CsjlcKBUBqjEWe0hVtEtiQAUqAOE49Pg44MU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgXfHQM+; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-789314f0920so14948267b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 15:36:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763681806; x=1764286606; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7F8K5d92SUopdRevdYJsWlM5dC1gAVlWHDuGfPJviq0=;
+        b=UgXfHQM+VzkoT9pZfTjeVQlBCkbkgN9lOhxDBGbx0kE7YcuvwPUZT0Avoe4dhS9Aqg
+         YCg7oivtWKHNQhRlcbmsCgF9uldDucelEvevo+NCYiL9xGjmR5XmDzkauyVdiZqnmT4V
+         GA2sJQJZhOrvDcF6H6JcxgUfhMj/Ajzp3zwc+ch2yY8P0icYsqJHp8fGajiyWE050y1s
+         UHghG0pqVnXzJZjZl5KCxy/LsGC8CAWsHpWdyDfI1Jd52NpsbkIgWF43Id8wxwmZrDnP
+         YfCB7qi8RKznsBlzAEQ2bUirfrcq/ZRvOpYjuHTr7LwJ/yEqXVUi1/gFM89PAfgM2cvv
+         7IAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763681806; x=1764286606;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7F8K5d92SUopdRevdYJsWlM5dC1gAVlWHDuGfPJviq0=;
+        b=Hlqi6Efxi5hTVuWSj60qwhFimnpXYlDqkgdBP7asVbjh8Mza5ci1jzE30JduspZ/5c
+         T8d/FrwM4reErEhdz2vI6I1yoJAbEuYTyIIW4QJ9vWSrkeshqgM2d7JWDccqKalp65fM
+         f5pJp29n5vxZNUBdToS/tprwIyzTcJ4Rp+AHBjnp+fYT78a1cqT6tKal1bs+cp7WjQlE
+         723AScYL7dJN3MhCoR1Q4Mn/RZD9DCUaentiFR/UVWYRcjKuUVmZQZnQfrtJDcLOFr6Y
+         eVSRrDqAS0LppLgup4XublLmhCMpVRKSwrkDUqNEAxkH5ULxr7MVfxBNd3G//oN+HGF1
+         prLg==
+X-Forwarded-Encrypted: i=1; AJvYcCUhUCv4l29epxtQ2HStD3rmuk7Ofn3MRmkpbPXsv31QPWqCVnD81eYjm5KFnycO0LPVpbgNv6je2jHNfrdz2qQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywp9Eywz49aDZnvF38qmZqXBtkikEAJeA8MGiMQSBkz+IZrSNNs
+	2DbIVzSUWhfHugcOV1iVpOFPVqjqErX+xyicaV5UqTQwLpM0bMq9gUPc
+X-Gm-Gg: ASbGncuhvHP31dbIRAiSENNHZDTAVVT7VkjMKnpIk1+dhIt/D+y90m3K4cAoXqC/HIT
+	BZeDKqFa7XwOATersmI2X34kIzftxbCGi2LPrue0SA+IwdnSaWsAUhfC8rADqiynUW8TK3YEp20
+	dMK41zxrKjB8AXWnn/WKr6xRHyrbQChkfWTEIT+WVSt6pHglnOuqct+yuuYt0wLTTc+V74iRP3J
+	b57HirH5lIY3tAy6BaXR9LgVpCPvFYwc+NyIFdOLuUDAuELJ0YyiekuZi/iRHNz+/JnJhxxw4u/
+	nVXfo5oiKptWtXcg4FvI0mOUafeFjUpWX9NBBYH6vH0FCB/cyVkkmIlNQv9Mu3swUigf9TcXXFa
+	s2xEaXIgfFpRTi/N1Le6x6AEHLyUqZ6Z750u8KQHb4b7Z2Pk7lJ+FO4SKrxAG+P0tGL8o5aYCa4
+	gZ97vuQOQWBPeqyyx5R3KMDMAxsifzYe1cJuO9XyONy3NzFmc=
+X-Google-Smtp-Source: AGHT+IG936bzBd2t2ZDaxj9CFy9XI4BtCUEGOQ719Q5cTSLOuBM3YS+5i5WksDX1Mm7w5hHfQZBozg==
+X-Received: by 2002:a05:690c:620e:b0:787:e384:4e7 with SMTP id 00721157ae682-78a8b55db14mr1407957b3.51.1763681806540;
+        Thu, 20 Nov 2025 15:36:46 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:11::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78a798a7f19sm11526177b3.20.2025.11.20.15.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 15:36:46 -0800 (PST)
+Date: Thu, 20 Nov 2025 15:36:44 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
+	berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v10 10/11] selftests/vsock: add tests for host
+ <-> vm connectivity with namespaces
+Message-ID: <aR+mDOF5/NOXa6/h@devvm11784.nha0.facebook.com>
+References: <20251117-vsock-vmtest-v10-0-df08f165bf3e@meta.com>
+ <20251117-vsock-vmtest-v10-10-df08f165bf3e@meta.com>
+ <s6zhozplsbiodcy77me7xhbhrbrozaanglbvcc474v6q77cc3w@ckaftl4qebwa>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-20_09,2025-11-20_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0 spamscore=0
- adultscore=0 mlxscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2511200163
-X-Authority-Analysis: v=2.4 cv=OMAqHCaB c=1 sm=1 tr=0 ts=691f9e29 b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=S9UabVrJeSShYSHE:21 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=NSVNPXkua3VteFUyN44A:9 cc=ntf
- awl=host:12099
-X-Proofpoint-ORIG-GUID: 8xTikaGVylB1xWtipBRNP_l9OkOfsobA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMSBTYWx0ZWRfX1r7NqTz2GOOb
- rmi82ENp99pfk14yrjmat3/Vyx1OVSOyqv4uwarF+zm/RDlVVCUoPM2GP46NRHhzQ7DrWiCUWWI
- +JqEgRCypg/OeqKSY4ESvhdMDnsN7/Ss0Qxu5ZHV75Ot1EbsIKlbHYPeJ9wRjRJgBkaCjvKZNsS
- vcIy8t9Yb5FBNHLKSPUBoKfo1TlSy/39nxny2z/QHTs+aIJ6EOa6UuF9a+77L4QyA3dOHzlQ1RF
- 6CbP8mINCTE59vPbBoFUJRcAN6FqByKxeNDn7Ma/Kd3gpThnbOlWcsAP89NJx24QR8z5GG2KYz2
- p8Jii7GB8S+yHYQarZE8wg1s3oldq2CGmG4r76sPxIRDkp7eQfbTC/Iyu8S0Q+h56XvK3aONOpV
- aOsBa3qFn81iy8M7U5xp0s04S6z7FpiacIbM2nX/PyDsZoukWKs=
-X-Proofpoint-GUID: 8xTikaGVylB1xWtipBRNP_l9OkOfsobA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <s6zhozplsbiodcy77me7xhbhrbrozaanglbvcc474v6q77cc3w@ckaftl4qebwa>
 
-The core scheduling is for smt enabled cpus. It is not returns
-failure and gives plenty of error messages and not clearly points
-to the smt issue if the smt is disabled. It just mention
-"not a core sched system" and many other messages. For example:
+On Tue, Nov 18, 2025 at 07:15:03PM +0100, Stefano Garzarella wrote:
+> On Mon, Nov 17, 2025 at 06:00:33PM -0800, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > Add tests to validate namespace correctness using vsock_test and socat.
+> > The vsock_test tool is used to validate expected success tests, but
+> > socat is used for expected failure tests. socat is used to ensure that
+> > connections are rejected outright instead of failing due to some other
+> > socket behavior (as tested in vsock_test). Additionally, socat is
+> > already required for tunneling TCP traffic from vsock_test. Using only
+> > one of the vsock_test tests like 'test_stream_client_close_client' would
+> > have yielded a similar result, but doing so wouldn't remove the socat
+> > dependency.
+> > 
+> > Additionally, check for the dependency socat. socat needs special
+> > handling beyond just checking if it is on the path because it must be
+> > compiled with support for both vsock and unix. The function
+> > check_socat() checks that this support exists.
+> > 
+> > Add more padding to test name printf strings because the tests added in
+> > this patch would otherwise overflow.
+> > 
+> > Add vm_dmesg_start() and vm_dmesg_check() to encapsulate checking dmesg
+> > for oops and warnings.
+> > 
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> > Changes in v10:
+> > - add vm_dmesg_start() and vm_dmesg_check()
+> > 
+> > Changes in v9:
+> > - consistent variable quoting
+> > ---
 
-Not a core sched system
-tid=210574, / tgid=210574 / pgid=210574: ffffffffffffffff
-Not a core sched system
-    tid=210575, / tgid=210575 / pgid=210574: ffffffffffffffff
-Not a core sched system
-        tid=210577, / tgid=210575 / pgid=210574: ffffffffffffffff
+...
 
-(similar things many other times)
+> > 
+> > +test_ns_diff_global_host_connect_to_global_vm_ok() {
+> > +	local oops_before warn_before
+> > +	local pids pid pidfile
+> > +	local ns0 ns1 port
+> > +	declare -a pids
+> > +	local unixfile
+> > +	ns0="global0"
+> > +	ns1="global1"
+> > +	port=1234
+> > +	local rc
+> > +
+> > +	init_namespaces
+> > +
+> > +	pidfile="$(create_pidfile)"
+> > +
+> > +	if ! vm_start "${pidfile}" "${ns0}"; then
+> > +		return "${KSFT_FAIL}"
+> > +	fi
+> > +
+> > +	vm_wait_for_ssh "${ns0}"
+> > +	oops_before=$(vm_dmesg_oops_count "${ns0}")
+> > +	warn_before=$(vm_dmesg_warn_count "${ns0}")
+> > +
+> > +	unixfile=$(mktemp -u /tmp/XXXX.sock)
+> 
+> Should we remove this file at the end of this test?
+> 
 
-In this patch, the test will first read /sys/devices/system/cpu/smt/active,
-if the file cannot be opened or its value is 0, the test is skipped with
-an explanatory message. This helps developers understand why it is skipped
-and avoids unnecessary attention when running the full selftest suite.
+Conveniently, socat does both the create and destroy for us.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Yifei Liu <yifei.l.liu@oracle.com>
----
- tools/testing/selftests/sched/cs_prctl_test.c | 23 ++++++++++++++++++-
- 1 file changed, 22 insertions(+), 1 deletion(-)
+> > +test_ns_diff_global_host_connect_to_local_vm_fails() {
+> > +	local oops_before warn_before
+> > +	local ns0="global0"
+> > +	local ns1="local0"
+> > +	local port=12345
+> > +	local dmesg_rc
+> > +	local pidfile
+> > +	local result
+> > +	local pid
+> > +
+> > +	init_namespaces
+> > +
+> > +	outfile=$(mktemp)
+> > +
+> > +	pidfile="$(create_pidfile)"
+> > +	if ! vm_start "${pidfile}" "${ns1}"; then
+> > +		log_host "failed to start vm (cid=${VSOCK_CID}, ns=${ns0})"
+> > +		return "${KSFT_FAIL}"
+> > +	fi
+> > +
+> > +	vm_wait_for_ssh "${ns1}"
+> > +	oops_before=$(vm_dmesg_oops_count "${ns1}")
+> > +	warn_before=$(vm_dmesg_warn_count "${ns1}")
+> > +
+> > +	vm_ssh "${ns1}" -- socat VSOCK-LISTEN:"${port}" STDOUT > "${outfile}" &
+> 
+> Should we wait for the listener here, like we do for TCP sockets?
+> (also in other place where we use VSOCK-LISTEN)
 
-diff --git a/tools/testing/selftests/sched/cs_prctl_test.c b/tools/testing/selftests/sched/cs_prctl_test.c
-index 52d97fae4dbd..7ce8088cde6a 100644
---- a/tools/testing/selftests/sched/cs_prctl_test.c
-+++ b/tools/testing/selftests/sched/cs_prctl_test.c
-@@ -32,6 +32,8 @@
- #include <stdlib.h>
- #include <string.h>
- 
-+#include "../kselftest.h"
-+
- #if __GLIBC_PREREQ(2, 30) == 0
- #include <sys/syscall.h>
- static pid_t gettid(void)
-@@ -109,6 +111,22 @@ static void handle_usage(int rc, char *msg)
- 	exit(rc);
- }
- 
-+int check_smt(void)
-+{
-+	int c = 0;
-+	FILE *file;
-+
-+	file = fopen("/sys/devices/system/cpu/smt/active", "r");
-+	if (!file)
-+		return 0;
-+	c = fgetc(file) - 0x30;
-+	fclose(file);
-+	if (c == 0 || c == 1)
-+		return c;
-+	//if fgetc returns EOF or -1 for correupted files, return 0.
-+	return 0;
-+}
-+
- static unsigned long get_cs_cookie(int pid)
- {
- 	unsigned long long cookie;
-@@ -271,7 +289,10 @@ int main(int argc, char *argv[])
- 		delay = -1;
- 
- 	srand(time(NULL));
--
-+	if (!check_smt()) {
-+		ksft_test_result_skip("smt not enabled\n");
-+		return 1;
-+	}
- 	/* put into separate process group */
- 	if (setpgid(0, 0) != 0)
- 		handle_error("process group");
--- 
-2.50.1
+Definitely, I didn't know ss could do this.
 
+Best,
+Bobby
 
