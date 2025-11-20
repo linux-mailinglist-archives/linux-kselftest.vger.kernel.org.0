@@ -1,67 +1,67 @@
-Return-Path: <linux-kselftest+bounces-46109-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46110-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A69FC746A9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:03:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25058C747E1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:16:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id DECB72B230
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:03:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 547344EC2AB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:03:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97E03446A4;
-	Thu, 20 Nov 2025 14:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4781D346A00;
+	Thu, 20 Nov 2025 14:03:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="Rm9upVw9"
+	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="IJdkv13b"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com [50.112.246.219])
+Received: from pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.245.243.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04EE930EF92;
-	Thu, 20 Nov 2025 14:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.112.246.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F9E3469F6;
+	Thu, 20 Nov 2025 14:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.245.243.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763647416; cv=none; b=LUybUHPZMwG4gVdgXOCfi9m68BT77+FOYjuMI5+0J+DLvD1GKgvunijHXRBu6sVIZtsPzCAycxxCP7UoFMOmFzlzIm8VT5Ggq+v9utuKMq140lLHFr4eSfwY6NGkbzbWGWA5fR1WqwwnbEobm1E3ymvDD6lTZpJIsCkHHTNS8Zg=
+	t=1763647432; cv=none; b=q0vLMHmZOrQMNl982tB1yoAYenEgCd0/oc61gkEbrHRL1fipqyaRFh89Ih/BJrYsRW8DdUqptsg0M3LqU4eTJd1H72G/a0xe8nCtqM1prkhnJEecBJAliOUSzfIJ/4Aeu4EiS1MCZYFFff/asPIFhIwj9kVtheMm86bVAUO293A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763647416; c=relaxed/simple;
-	bh=p546vTOZokgwSu4wB5sJ/X7RZDw5I5s1qQzwHGLUZBY=;
+	s=arc-20240116; t=1763647432; c=relaxed/simple;
+	bh=VRrDTNwlMDAPni1JKqLWNsh+TVOIBsDcGNwTufQ9FkY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ic/hdw3U7/Kmnv3aDbR6tA402q7DMvoD7W/D3XlSclzzany1I3lb3JaTo9REA+8y83n8timdhUyMtAfMoJQb7jkroPe+ACtiCHLg8ItE1WusZMBWKU/SiVMo2Rnp7zvoL2j0Sa6D+/0t5Ng5CvaoAcyvWDv5nT6yJP6s9Te01m8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=Rm9upVw9; arc=none smtp.client-ip=50.112.246.219
+	 MIME-Version:Content-Type; b=KaLKoAmL1YavyzLMmBU7Cp80HSSfSS/AsVFyUMYJdLzV7dGXNUy4JIH4nDw3owICEsZS2dfluUQefyPqoITmoK9qmuDtQbsZcAiFKrMuTBPpXqJX1NihWFFkrVViwxVpVUKu3hjc2LcQJNWR7Sa2P1cdQxVadPEbzte5fyiojWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=IJdkv13b; arc=none smtp.client-ip=44.245.243.92
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
-  t=1763647415; x=1795183415;
+  t=1763647430; x=1795183430;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=p546vTOZokgwSu4wB5sJ/X7RZDw5I5s1qQzwHGLUZBY=;
-  b=Rm9upVw9BagK8wWnDBEf6RH/Pv7V1d4M55hYobZkZrtSqAsD6T9B77b1
-   +bm62Rh9mp+6MHri+2NXKjYuXAFmg+BWYw17PZSrpKB90OamEdz4SgECS
-   TIhHDpLPJw4hYmoluectN9s7BDHQ5B+yAdfejAPVLtxMGbAvm9bql8peM
-   bX+ED3/Tg3Trpj8Ij1Xl4HwXAq9ScEeHMWIVdWhEfOpbD3r60eSoDNPQJ
-   bkI7AsGTbFwUncGvefo7FHS6IIFPp/t6cTd6sPcaYZjEIRLbaXSOes9ge
-   /CpGoU1KZT8pnt6Xijk49VzuSD1fVcNd7/2+C197k/X+YvlrqHlk/ybLa
+  bh=IgGVqWDaiFsLaVmBSmHNETcTk9tvvRTg96dWqNryNOM=;
+  b=IJdkv13by9V/3hmTEwLN01vJ81UvtM/oUSeYaFLnGmoP+e6ZlGJhcH+6
+   XXUluChGGpPCPAVTzHWaLSoVZb0XutcWV76sTrt/aiYytmGozZMSCrSpp
+   jRt34r7F+P380ttdw07HYxlFzKLI7q5+BIUKxzpxFBaFLERWbDLS68YJh
+   +yRXFwduHVVP/biAWcZ/sk2fqwfrcwsTJ1tmrFdzPvKtOoQrVmpO69X5R
+   pGXpdrCzqIw7x1SXG/PTXvcGhP7AMcCDdjjoVTfZNAUkQmtOxVBUU4tEI
+   y5ug2tuEwpxTs6Yh15psBzVl13oI+pmvOZowPLvPCz3IJcJIGctpEHu3w
    A==;
-X-CSE-ConnectionGUID: cGg9MRBSTrC692Ycfdvq6Q==
-X-CSE-MsgGUID: 4Vav65bbTeSz23whLv5weg==
+X-CSE-ConnectionGUID: bYjrAjY4Qb2r4ChUp8Uk4A==
+X-CSE-MsgGUID: 1JH6fH9BTXiXpfyPoh37Jw==
 X-IronPort-AV: E=Sophos;i="6.20,213,1758585600"; 
-   d="scan'208";a="7249752"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 14:03:32 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.236:25119]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.22.241:2525] with esmtp (Farcaster)
- id dd5f057c-43fc-4006-abbd-f33785e07a8b; Thu, 20 Nov 2025 14:03:31 +0000 (UTC)
-X-Farcaster-Flow-ID: dd5f057c-43fc-4006-abbd-f33785e07a8b
+   d="scan'208";a="7442486"
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-001.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 14:03:47 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:27411]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.59.1:2525] with esmtp (Farcaster)
+ id 44d76809-b453-483f-8bcd-3638f5ce46f4; Thu, 20 Nov 2025 14:03:47 +0000 (UTC)
+X-Farcaster-Flow-ID: 44d76809-b453-483f-8bcd-3638f5ce46f4
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Thu, 20 Nov 2025 14:03:31 +0000
+ Thu, 20 Nov 2025 14:03:47 +0000
 Received: from amazon.com (10.1.213.15) by EX19D001UWA001.ant.amazon.com
  (10.13.138.214) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Thu, 20 Nov 2025
- 14:03:28 +0000
+ 14:03:44 +0000
 From: Maximilian Dittgen <mdittgen@amazon.de>
 To: <maz@kernel.org>, <oliver.upton@linux.dev>
 CC: <pbonzini@redhat.com>, <shuah@kernel.org>,
@@ -69,9 +69,9 @@ CC: <pbonzini@redhat.com>, <shuah@kernel.org>,
 	<linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
 	<mdittgen@amazon.de>, <lilitj@amazon.de>, <sauravsc@amazon.de>,
 	<nh-open-source@amazon.com>
-Subject: [RFC PATCH 01/13] KVM: Introduce config option for per-vCPU vLPI enablement
-Date: Thu, 20 Nov 2025 15:02:50 +0100
-Message-ID: <20251120140305.63515-2-mdittgen@amazon.de>
+Subject: [RFC PATCH 02/13] KVM: arm64: Disable auto vCPU vPE assignment with per-vCPU vLPI config
+Date: Thu, 20 Nov 2025 15:02:51 +0100
+Message-ID: <20251120140305.63515-3-mdittgen@amazon.de>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20251120140305.63515-1-mdittgen@amazon.de>
 References: <20251120140305.63515-1-mdittgen@amazon.de>
@@ -81,141 +81,244 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ClientProxiedBy: EX19D043UWA001.ant.amazon.com (10.13.139.45) To
+X-ClientProxiedBy: EX19D032UWB001.ant.amazon.com (10.13.139.152) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 
-QWRkIENPTkZJR19BUk1fR0lDX1YzX1BFUl9WQ1BVX1ZMUEkgdG8gY29udHJvbCB3aGV0aGVyIHZM
-UEkgZGlyZWN0CmluamVjdGlvbiBpcyB0byBiZSBlbmFibGVkIG9uIGEgc3lzdGVtLXdpZGUgb3Ig
-YSBwZXItdkNQVSBiYXNpcy4KCldoZW4gZW5hYmxlZCwgdlBFcyBjYW4gYmUgYWxsb2NhdGVkL2Rl
-YWxsb2NhdGVkIHRvIHZDUFVzIG9uIGFuIGFkLWhvYywKcGVyLXZDUFUgYmFzaXMgaW4gcnVudGlt
-ZS4gV2hlbiBkaXNhYmxlZCwga2VlcCBjdXJyZW50IHZnaWNfdjRfaW5pdApiZWhhdmlvciBvZiBh
-dXRvbWF0aWMgdkNQVSB2UEUgYWxsb2NhdGlvbiB1cG9uIFZNIGluaXRpYWxpemF0aW9uLgoKV2Ug
-ZGVjbGFyZSB0aHJlZSBpb2N0bHMgbnVtYmVycyB0byBtYW5hZ2UgcGVyLXZDUFUgdkxQSSBlbmFi
-bGVtZW50OgotIEtWTV9FTkFCTEVfVkNQVV9WTFBJLCB3aGljaCBnaXZlbiBhIHZDUFUgSUQsIGFs
-bG9jYXRlcyBhIHZQRSBhbmQKaW5pdGlhbGl6ZXMgdGhlIHZDUFUgZm9yIHJlY2VpdmluZyBkaXJl
-Y3QgdkxQSSBpbnRlcnJ1cHRzLgotIEtWTV9ESVNBQkxFX1ZDUFVfVkxQSSwgd2hpY2ggZ2l2ZW4g
-YSB2Q1BVIElELCBkaXNhYmxlcyB0aGUgdkNQVeKAmXMKYWJpbGl0eSB0byByZWNlaXZlIGRpcmVj
-dCB2TFBJIGludGVycnVwdHMgYW5kIGZyZWVzIGl0cyB1bmRlcmx5aW5nIHZQRQpzdHJ1Y3R1cmUu
-Ci0gS1ZNX1FVRVJZX1ZDUFVfVkxQSSwgd2hpY2ggZ2l2ZW4gYSB2Q1BVIElELCByZXR1cm5zIGEg
-Ym9vbGVhbgpkZXNjcmliaW5nIHdoZXRoZXIgdGhlIHZDUFUgaXMgY29uZmlndXJlZCB0byByZWNl
-aXZlIGRpcmVjdCB2TFBJCmludGVycnVwdHMuCgpUaGlzIGNvbW1pdCBkZWNsYXJlcyB0aGUga2Nv
-bmZpZywgaW9jdGwgbnVtYmVycywgYW5kIGRvY3VtZW50YXRpb24uCkltcGxlbWVudGF0aW9uIHdp
-bGwgY29tZSB0aHJvdWdob3V0IHRoaXMgcGF0Y2ggc2V0LgoKU2lnbmVkLW9mZi1ieTogTWF4aW1p
-bGlhbiBEaXR0Z2VuIDxtZGl0dGdlbkBhbWF6b24uZGU+Ci0tLQogRG9jdW1lbnRhdGlvbi92aXJ0
-L2t2bS9hcGkucnN0IHwgNTYgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKwogYXJj
-aC9hcm02NC9rdm0vYXJtLmMgICAgICAgICAgIHwgMTUgKysrKysrKysrCiBhcmNoL2FybTY0L2t2
-bS92Z2ljL3ZnaWMtdjQuYyAgfCAgOSArKysrKysKIGFyY2gvYXJtNjQva3ZtL3ZnaWMvdmdpYy5o
-ICAgICB8ICAyICsrCiBkcml2ZXJzL2lycWNoaXAvS2NvbmZpZyAgICAgICAgfCAxMyArKysrKysr
-KwogaW5jbHVkZS91YXBpL2xpbnV4L2t2bS5oICAgICAgIHwgIDYgKysrKwogNiBmaWxlcyBjaGFu
-Z2VkLCAxMDEgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL0RvY3VtZW50YXRpb24vdmlydC9r
-dm0vYXBpLnJzdCBiL0RvY3VtZW50YXRpb24vdmlydC9rdm0vYXBpLnJzdAppbmRleCAyN2Y3MjZm
-ZjhmZTAuLmRjZmIzMjZkZmYxMCAxMDA2NDQKLS0tIGEvRG9jdW1lbnRhdGlvbi92aXJ0L2t2bS9h
-cGkucnN0CisrKyBiL0RvY3VtZW50YXRpb24vdmlydC9rdm0vYXBpLnJzdApAQCAtNjUxNyw2ICs2
-NTE3LDYyIEBAIHRoZSBjYXBhYmlsaXR5IHRvIGJlIHByZXNlbnQuCiAKIGBmbGFnc2AgbXVzdCBj
-dXJyZW50bHkgYmUgemVyby4KIAorNC5YWFggS1ZNX0VOQUJMRV9WQ1BVX1ZMUEkKKy0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tCisKKzpDYXBhYmlsaXR5OiBLVk1fQ0FQX0FSTV9QRVJfVkNQVV9W
-TFBJCis6QXJjaGl0ZWN0dXJlczogYXJtNjQKKzpUeXBlOiB2bSBpb2N0bAorOlBhcmFtZXRlcnM6
-IGludCB2Y3B1X2lkIChpbikKKzpSZXR1cm5zOiAwIG9uIHN1Y2Nlc3MsIG5lZ2F0aXZlIHZhbHVl
-IG9uIGVycm9yCisKK1RoaXMgaW9jdGwgZW5hYmxlcyBHSUN2NCBkaXJlY3QgdkxQSSBpbmplY3Rp
-b24gZm9yIHRoZSBzcGVjaWZpZWQgdkNQVS4KK0FsbG9jYXRlcyB2UEUgc3RydWN0dXJlcyAoZG9v
-cmJlbGwgSVJRLCB2UEUgdGFibGUgZW50cnksIHZpcnR1YWwgcGVuZGluZwordGFibGUsIHZQRUlE
-KSBhbmQgdXBncmFkZXMgZXhpc3Rpbmcgc29mdHdhcmUtZm9yd2FyZGVkIExQSXMgdGFyZ2V0aW5n
-Cit0aGlzIHZDUFUgdG8gaGFyZHdhcmUtZm9yd2FyZGVkIHZMUElzLgorCitJZiBHSUN2NC4xIGlz
-IHN1cHBvcnRlZCBhbmQgdlNHSXMgYXJlIGRpc2FibGVkIG9uIHRoZSBzcGVjaWZpZWQgdkNQVSwK
-K3RoaXMgaW9jdGwgZW5hYmxlcyB2Q1BVIHZTR0kgc3VwcG9ydC4KKworUmVxdWlyZXMgQ09ORklH
-X0FSTV9HSUNfVjNfUEVSX1ZDUFVfVkxQSSBhbmQgR0lDdjQgaGFyZHdhcmUgc3VwcG9ydC4KKwor
-UmV0dXJucyAtRUlOVkFMIGlmIHZHSUN2NCBpcyBub3QgaW5pdGlhbGl6ZWQgb3IgaWYgdGhlIHBh
-c3NlZCB2Y3B1X2lkCitkb2VzIG5vdCBtYXAgdG8gYSB2Q1BVLgorCis0LlhYWCBLVk1fRElTQUJM
-RV9WQ1BVX1ZMUEkKKy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQorCis6Q2FwYWJpbGl0eTog
-S1ZNX0NBUF9BUk1fUEVSX1ZDUFVfVkxQSQorOkFyY2hpdGVjdHVyZXM6IGFybTY0Cis6VHlwZTog
-dm0gaW9jdGwKKzpQYXJhbWV0ZXJzOiBpbnQgdmNwdV9pZCAoaW4pCis6UmV0dXJuczogMCBvbiBz
-dWNjZXNzLCBuZWdhdGl2ZSB2YWx1ZSBvbiBlcnJvcgorCitUaGlzIGlvY3RsIGRpc2FibGVzIEdJ
-Q3Y0IGRpcmVjdCB2TFBJIGluamVjdGlvbiBmb3IgdGhlIHNwZWNpZmllZCB2Q1BVLgorRG93bmdy
-YWRlcyBoYXJkd2FyZS1mb3J3YXJkZWQgdkxQSXMgdG8gc29mdHdhcmUtZm9yd2FyZGVkIExQSXMg
-YW5kIGZyZWVzCit2UEUgc3RydWN0dXJlcy4gUGVuZGluZyBpbnRlcnJ1cHRzIGluIHRoZSB2aXJ0
-dWFsIHBlbmRpbmcgdGFibGUgbWF5IGJlCitsb3N0LgorCitJZiB2U0dJcyBhcmUgZW5hYmxlZCBv
-biB0aGUgc3BlY2lmaWVkIHZDUFUsIHRoaXMgaW9jdGwgZGlzYWJsZXMgdGhlbS4KKworUmV0dXJu
-cyAtRUlOVkFMIGlmIHZHSUN2NCBpcyBub3QgaW5pdGlhbGl6ZWQgb3IgaWYgdGhlIHBhc3NlZCB2
-Y3B1X2lkCitkb2VzIG5vdCBtYXAgdG8gYSB2Q1BVLgorCis0LlhYWCBLVk1fUVVFUllfVkNQVV9W
-TFBJCistLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCisKKzpDYXBhYmlsaXR5OiBLVk1fQ0FQX0FS
-TV9QRVJfVkNQVV9WTFBJCis6QXJjaGl0ZWN0dXJlczogYXJtNjQKKzpUeXBlOiB2bSBpb2N0bAor
-OlBhcmFtZXRlcnM6IGludCB2Y3B1X2lkIChpbikKKzpSZXR1cm5zOiAxIGlmIGVuYWJsZWQsIDAg
-aWYgZGlzYWJsZWQsIG5lZ2F0aXZlIHZhbHVlIG9uIGVycm9yCisKK1RoaXMgaW9jdGwgcXVlcmll
-cyB3aGV0aGVyIEdJQ3Y0IGRpcmVjdCB2TFBJIGluamVjdGlvbiBpcyBlbmFibGVkIGZvcgordGhl
-IHNwZWNpZmllZCB2Q1BVLgorCitSZXR1cm5zIC1FSU5WQUwgaWYgdkdJQ3Y0IGlzIG5vdCBpbml0
-aWFsaXplZCBvciBpZiB0aGUgcGFzc2VkIHZjcHVfaWQKK2RvZXMgbm90IG1hcCB0byBhIHZDUFUu
-CisKIAogLi4gX2t2bV9ydW46CiAKZGlmZiAtLWdpdCBhL2FyY2gvYXJtNjQva3ZtL2FybS5jIGIv
-YXJjaC9hcm02NC9rdm0vYXJtLmMKaW5kZXggNDUyZDBjODUyODFlLi4yODM5ZTExYmEyYzEgMTAw
-NjQ0Ci0tLSBhL2FyY2gvYXJtNjQva3ZtL2FybS5jCisrKyBiL2FyY2gvYXJtNjQva3ZtL2FybS5j
-CkBAIC00MjQsNiArNDI0LDkgQEAgaW50IGt2bV92bV9pb2N0bF9jaGVja19leHRlbnNpb24oc3Ry
-dWN0IGt2bSAqa3ZtLCBsb25nIGV4dCkKIAkJZWxzZQogCQkJciA9IGt2bV9zdXBwb3J0c19jYWNo
-ZWFibGVfcGZubWFwKCk7CiAJCWJyZWFrOworCWNhc2UgS1ZNX0NBUF9BUk1fUEVSX1ZDUFVfVkxQ
-SToKKwkJciA9IGt2bV9wZXJfdmNwdV92bHBpX3N1cHBvcnRlZCgpOworCQlicmVhazsKIAogCWRl
-ZmF1bHQ6CiAJCXIgPSAwOwpAQCAtMTk0Nyw2ICsxOTUwLDE4IEBAIGludCBrdm1fYXJjaF92bV9p
-b2N0bChzdHJ1Y3QgZmlsZSAqZmlscCwgdW5zaWduZWQgaW50IGlvY3RsLCB1bnNpZ25lZCBsb25n
-IGFyZykKIAkJCXJldHVybiAtRUZBVUxUOwogCQlyZXR1cm4ga3ZtX3ZtX2lvY3RsX2dldF9yZWdf
-d3JpdGFibGVfbWFza3Moa3ZtLCAmcmFuZ2UpOwogCX0KKwljYXNlIEtWTV9FTkFCTEVfVkNQVV9W
-TFBJOiB7CisJCS8qIFRPRE86IGNyZWF0ZSBpb2N0bCBoYW5kbGVyIGZ1bmN0aW9uICovCisJCXJl
-dHVybiAtRU5PU1lTOworCX0KKwljYXNlIEtWTV9ESVNBQkxFX1ZDUFVfVkxQSTogeworCQkvKiBU
-T0RPOiBjcmVhdGUgaW9jdGwgaGFuZGxlciBmdW5jdGlvbiAqLworCQlyZXR1cm4gLUVOT1NZUzsK
-Kwl9CisJY2FzZSBLVk1fUVVFUllfVkNQVV9WTFBJOiB7CisJCS8qIFRPRE86IGNyZWF0ZSBpb2N0
-bCBoYW5kbGVyIGZ1bmN0aW9uICovCisJCXJldHVybiAtRU5PU1lTOworCX0KIAlkZWZhdWx0Ogog
-CQlyZXR1cm4gLUVJTlZBTDsKIAl9CmRpZmYgLS1naXQgYS9hcmNoL2FybTY0L2t2bS92Z2ljL3Zn
-aWMtdjQuYyBiL2FyY2gvYXJtNjQva3ZtL3ZnaWMvdmdpYy12NC5jCmluZGV4IDA5YzNlOWViMjNm
-OC4uOWVmMTJjMzNiM2Y3IDEwMDY0NAotLS0gYS9hcmNoL2FybTY0L2t2bS92Z2ljL3ZnaWMtdjQu
-YworKysgYi9hcmNoL2FybTY0L2t2bS92Z2ljL3ZnaWMtdjQuYwpAQCAtMjI2LDYgKzIyNiwxNSBA
-QCB2b2lkIHZnaWNfdjRfZ2V0X3ZscGlfc3RhdGUoc3RydWN0IHZnaWNfaXJxICppcnEsIGJvb2wg
-KnZhbCkKIAkqdmFsID0gISEoKnB0ciAmIG1hc2spOwogfQogCitib29sIGt2bV9wZXJfdmNwdV92
-bHBpX3N1cHBvcnRlZCh2b2lkKQoreworI2lmZGVmIENPTkZJR19BUk1fR0lDX1YzX1BFUl9WQ1BV
-X1ZMUEkKKwlyZXR1cm4ga3ZtX3ZnaWNfZ2xvYmFsX3N0YXRlLmhhc19naWN2NDsKKyNlbHNlCisJ
-cmV0dXJuIGZhbHNlOworI2VuZGlmCit9CisKIGludCB2Z2ljX3Y0X3JlcXVlc3RfdnBlX2lycShz
-dHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUsIGludCBpcnEpCiB7CiAJcmV0dXJuIHJlcXVlc3RfaXJxKGly
-cSwgdmdpY192NF9kb29yYmVsbF9oYW5kbGVyLCAwLCAidmNwdSIsIHZjcHUpOwpkaWZmIC0tZ2l0
-IGEvYXJjaC9hcm02NC9rdm0vdmdpYy92Z2ljLmggYi9hcmNoL2FybTY0L2t2bS92Z2ljL3ZnaWMu
-aAppbmRleCA1ZjBmYzk2YjRkYzIuLjk5ODk0ODA2YTRlOSAxMDA2NDQKLS0tIGEvYXJjaC9hcm02
-NC9rdm0vdmdpYy92Z2ljLmgKKysrIGIvYXJjaC9hcm02NC9rdm0vdmdpYy92Z2ljLmgKQEAgLTQ2
-Nyw0ICs0NjcsNiBAQCBzdGF0aWMgaW5saW5lIGJvb2wgdmdpY19pc192MyhzdHJ1Y3Qga3ZtICpr
-dm0pCiBpbnQgdmdpY19pdHNfZGVidWdfaW5pdChzdHJ1Y3Qga3ZtX2RldmljZSAqZGV2KTsKIHZv
-aWQgdmdpY19pdHNfZGVidWdfZGVzdHJveShzdHJ1Y3Qga3ZtX2RldmljZSAqZGV2KTsKIAorYm9v
-bCBrdm1fcGVyX3ZjcHVfdmxwaV9zdXBwb3J0ZWQodm9pZCk7CisKICNlbmRpZgpkaWZmIC0tZ2l0
-IGEvZHJpdmVycy9pcnFjaGlwL0tjb25maWcgYi9kcml2ZXJzL2lycWNoaXAvS2NvbmZpZwppbmRl
-eCBhNjFjNmRjNjNjMjkuLjFjM2UwYzZkMzE3NyAxMDA2NDQKLS0tIGEvZHJpdmVycy9pcnFjaGlw
-L0tjb25maWcKKysrIGIvZHJpdmVycy9pcnFjaGlwL0tjb25maWcKQEAgLTUyLDYgKzUyLDE5IEBA
-IGNvbmZpZyBBUk1fR0lDX1YzX0lUUwogCWRlZmF1bHQgQVJNX0dJQ19WMwogCXNlbGVjdCBJUlFf
-TVNJX0lPTU1VCiAKK2NvbmZpZyBBUk1fR0lDX1YzX1BFUl9WQ1BVX1ZMUEkKKwlib29sICJBUk0g
-R0lDdjQgcGVyLXZDUFUgdkxQSSBkaXJlY3QgaW5qZWN0aW9uIHN1cHBvcnQiCisJZGVwZW5kcyBv
-biBBUk1fR0lDX1YzX0lUUworCWRlZmF1bHQgbgorCWhlbHAKKwkgIEVuYWJsZSBHSUN2NCBkaXJl
-Y3QgaW5qZWN0aW9uIG9mIE1TSXMgYXMgdkxQSXMgb24gYSBwZXIgdkNQVQorCSAgYmFzaXMuIEVu
-YWJsZXMgcGFydGlhbCB2TFBJIGVuYWJsZW1lbnQgb24gc3lzdGVtcyB3aXRoIG1vcmUKKwkgIHZD
-UFUgY2FwYWNpdHkgdGhhbiB2UEUgY2FwYWNpdHkuIFdoZW4gZW5hYmxlZCwgYWxsIHZDUFVzCisJ
-ICB3aWxsIGJvb3Qgd2l0aG91dCBHSUN2NCB2UEUgc3RydWN0dXJlcyBhbmQgaGFuZGxlIGludGVy
-cnVwdHMKKwkgIGFzIHNvZnR3YXJlIExQSXMuIEtWTV9FTkFCTEVfVkNQVV9WTFBJIGlvY3RsIG11
-c3QgdGhlbiBiZSBjYWxsZWQgb24KKwkgIGluZGl2aWR1YWwgdkNQVXMgdG8gaW5pdGlhbGl6ZSB0
-aGVpciBHSUN2NCBzdHJ1Y3RzIGFuZCB1cGdyYWRlCisJICB0YXJnZXRpbmcgTFBJcyB0byB2TFBJ
-cy4KKwogY29uZmlnIEFSTV9HSUNfVjNfSVRTX0ZTTF9NQwogCWJvb2wKIAlkZXBlbmRzIG9uIEFS
-TV9HSUNfVjNfSVRTCmRpZmYgLS1naXQgYS9pbmNsdWRlL3VhcGkvbGludXgva3ZtLmggYi9pbmNs
-dWRlL3VhcGkvbGludXgva3ZtLmgKaW5kZXggMWU1NDExOTNlOThkLi4wMDJmZTBmNDg0MWQgMTAw
-NjQ0Ci0tLSBhL2luY2x1ZGUvdWFwaS9saW51eC9rdm0uaAorKysgYi9pbmNsdWRlL3VhcGkvbGlu
-dXgva3ZtLmgKQEAgLTk3Myw2ICs5NzMsNyBAQCBzdHJ1Y3Qga3ZtX2VuYWJsZV9jYXAgewogI2Rl
-ZmluZSBLVk1fQ0FQX0FSTV9DQUNIRUFCTEVfUEZOTUFQX1NVUFBPUlRFRCAyNDMKICNkZWZpbmUg
-S1ZNX0NBUF9HVUVTVF9NRU1GRF9GTEFHUyAyNDQKICNkZWZpbmUgS1ZNX0NBUF9BUk1fU0VBX1RP
-X1VTRVIgMjQ1CisjZGVmaW5lIEtWTV9DQVBfQVJNX1BFUl9WQ1BVX1ZMUEkgMjQ2CiAKIHN0cnVj
-dCBrdm1faXJxX3JvdXRpbmdfaXJxY2hpcCB7CiAJX191MzIgaXJxY2hpcDsKQEAgLTE0NTEsNiAr
-MTQ1MiwxMSBAQCBzdHJ1Y3Qga3ZtX2VuY19yZWdpb24gewogI2RlZmluZSBLVk1fR0VUX1NSRUdT
-MiAgICAgICAgICAgICBfSU9SKEtWTUlPLCAgMHhjYywgc3RydWN0IGt2bV9zcmVnczIpCiAjZGVm
-aW5lIEtWTV9TRVRfU1JFR1MyICAgICAgICAgICAgIF9JT1coS1ZNSU8sICAweGNkLCBzdHJ1Y3Qg
-a3ZtX3NyZWdzMikKIAorLyogUGVyLXZDUFUgdkxQSSBlbmFibGVtZW50L2Rpc2FibGVtZW50ICov
-CisjZGVmaW5lIEtWTV9FTkFCTEVfVkNQVV9WTFBJICAgIF9JT1coS1ZNSU8sIDB4ZjAsIGludCkK
-KyNkZWZpbmUgS1ZNX0RJU0FCTEVfVkNQVV9WTFBJICAgIF9JT1coS1ZNSU8sIDB4ZjEsIGludCkK
-KyNkZWZpbmUgS1ZNX1FVRVJZX1ZDUFVfVkxQSSAgICBfSU9SKEtWTUlPLCAweGYyLCBpbnQpCisK
-ICNkZWZpbmUgS1ZNX0RJUlRZX0xPR19NQU5VQUxfUFJPVEVDVF9FTkFCTEUgICAgKDEgPDwgMCkK
-ICNkZWZpbmUgS1ZNX0RJUlRZX0xPR19JTklUSUFMTFlfU0VUICAgICAgICAgICAgKDEgPDwgMSkK
-IAotLSAKMi41MC4xIChBcHBsZSBHaXQtMTU1KQoKCgoKQW1hem9uIFdlYiBTZXJ2aWNlcyBEZXZl
-bG9wbWVudCBDZW50ZXIgR2VybWFueSBHbWJIClRhbWFyYS1EYW56LVN0ci4gMTMKMTAyNDMgQmVy
-bGluCkdlc2NoYWVmdHNmdWVocnVuZzogQ2hyaXN0aWFuIFNjaGxhZWdlciwgQ2hyaXN0b2YgSGVs
-bG1pcwpFaW5nZXRyYWdlbiBhbSBBbXRzZ2VyaWNodCBDaGFybG90dGVuYnVyZyB1bnRlciBIUkIg
-MjU3NzY0IEIKU2l0ejogQmVybGluClVzdC1JRDogREUgMzY1IDUzOCA1OTcK
+The first step in implementing per-vCPU vLPI enablement ensuring
+vCPUs are not automatically assigned vPEs upon GICv4 VM boot.
+This is a) so that new VMs on a host do not selfishly grab all
+available vPEs when existing VMs are resource sharing, and b) to not
+crash hosts in which the number of launchable vCPUs can exceed the
+number of vPEIDs available in hardware.
+
+When CONFIG_ARM_GIC_V3_PER_VCPU_VLPI kconfig is enabled, skip vPE
+initialization portion of vgic_v4_init routine. Note we continue to
+allocate memory for an array of vPE pointers for future
+initialization. This will allow us to easily track which vCPUs are
+vLPI-enabled by simply null-checking the vpes[vcpu_id] entry.
+
+Disable automatic kvm_vgic_v4_set_forwarding() upon PCI endpoint
+configuration since vCPUs no longer have vPEs mapped by default.
+Instead, store the host_irq mapping so set_forwarding() can be
+called later upon per-vCPU vLPI enablement.
+
+We must work towards modifying vPE allocation/freeing functions to
+work on a vCPU rather than a VM level. This commit modifies vPE
+unmap/map to function on a per-vCPU basis, and disables IRQ
+allocation/freeing functionality for now since it is currently
+implemented on a per-VM level. Per-vCPU IRQ allocation/freeing will
+come in a later patch.
+
+Signed-off-by: Maximilian Dittgen <mdittgen@amazon.de>
+---
+ arch/arm64/kvm/arm.c          |  6 ++++
+ arch/arm64/kvm/vgic/vgic-v3.c | 12 ++++++--
+ arch/arm64/kvm/vgic/vgic-v4.c | 55 ++++++++++++++++++++++++++++++++---
+ include/kvm/arm_vgic.h        |  2 ++
+ 4 files changed, 69 insertions(+), 6 deletions(-)
+
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 2839e11ba2c1..31db3ccb3296 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -2798,8 +2798,14 @@ int kvm_arch_irq_bypass_add_producer(struct irq_bypass_consumer *cons,
+ 	if (irq_entry->type != KVM_IRQ_ROUTING_MSI)
+ 		return 0;
+ 
++#ifndef CONFIG_ARM_GIC_V3_PER_VCPU_VLPI
+ 	return kvm_vgic_v4_set_forwarding(irqfd->kvm, prod->irq,
+ 					  &irqfd->irq_entry);
++#else
++	/* Set forwarding later, ad-hoc upon per-vCPU vLPI enable request */
++	return kvm_vgic_v4_map_irq_to_host(irqfd->kvm, prod->irq,
++					  &irqfd->irq_entry);
++#endif
+ }
+ 
+ void kvm_arch_irq_bypass_del_producer(struct irq_bypass_consumer *cons,
+diff --git a/arch/arm64/kvm/vgic/vgic-v3.c b/arch/arm64/kvm/vgic/vgic-v3.c
+index 968aa9d89be6..842a3a50f3a2 100644
+--- a/arch/arm64/kvm/vgic/vgic-v3.c
++++ b/arch/arm64/kvm/vgic/vgic-v3.c
+@@ -566,8 +566,12 @@ static void unmap_all_vpes(struct kvm *kvm)
+ 	struct vgic_dist *dist = &kvm->arch.vgic;
+ 	int i;
+ 
+-	for (i = 0; i < dist->its_vm.nr_vpes; i++)
++	for (i = 0; i < dist->its_vm.nr_vpes; i++) {
++		if (!dist->its_vm.vpes[i])  /* Skip uninitialized vPEs */
++			continue;
++
+ 		free_irq(dist->its_vm.vpes[i]->irq, kvm_get_vcpu(kvm, i));
++	}
+ }
+ 
+ static void map_all_vpes(struct kvm *kvm)
+@@ -575,9 +579,13 @@ static void map_all_vpes(struct kvm *kvm)
+ 	struct vgic_dist *dist = &kvm->arch.vgic;
+ 	int i;
+ 
+-	for (i = 0; i < dist->its_vm.nr_vpes; i++)
++	for (i = 0; i < dist->its_vm.nr_vpes; i++) {
++		if (!dist->its_vm.vpes[i])
++			continue;
++
+ 		WARN_ON(vgic_v4_request_vpe_irq(kvm_get_vcpu(kvm, i),
+ 						dist->its_vm.vpes[i]->irq));
++	}
+ }
+ 
+ /*
+diff --git a/arch/arm64/kvm/vgic/vgic-v4.c b/arch/arm64/kvm/vgic/vgic-v4.c
+index 9ef12c33b3f7..fb2e6af96aa9 100644
+--- a/arch/arm64/kvm/vgic/vgic-v4.c
++++ b/arch/arm64/kvm/vgic/vgic-v4.c
+@@ -252,7 +252,7 @@ int vgic_v4_init(struct kvm *kvm)
+ {
+ 	struct vgic_dist *dist = &kvm->arch.vgic;
+ 	struct kvm_vcpu *vcpu;
+-	int nr_vcpus, ret;
++	int nr_vcpus, ret = 0;
+ 	unsigned long i;
+ 
+ 	lockdep_assert_held(&kvm->arch.config_lock);
+@@ -272,6 +272,7 @@ int vgic_v4_init(struct kvm *kvm)
+ 
+ 	dist->its_vm.nr_vpes = nr_vcpus;
+ 
++#ifndef CONFIG_ARM_GIC_V3_PER_VCPU_VLPI
+ 	kvm_for_each_vcpu(i, vcpu, kvm)
+ 		dist->its_vm.vpes[i] = &vcpu->arch.vgic_cpu.vgic_v3.its_vpe;
+ 
+@@ -313,7 +314,12 @@ int vgic_v4_init(struct kvm *kvm)
+ 			break;
+ 		}
+ 	}
+-
++#else
++	/*
++	 * TODO: Initialize the shared VM properties that remain necessary
++	 * in per-vCPU mode
++	 */
++#endif
+ 	if (ret)
+ 		vgic_v4_teardown(kvm);
+ 
+@@ -335,6 +341,9 @@ void vgic_v4_teardown(struct kvm *kvm)
+ 		return;
+ 
+ 	for (i = 0; i < its_vm->nr_vpes; i++) {
++		if (!its_vm->vpes[i])  /* Skip NULL vPEs */
++			continue;
++
+ 		struct kvm_vcpu *vcpu = kvm_get_vcpu(kvm, i);
+ 		int irq = its_vm->vpes[i]->irq;
+ 
+@@ -342,7 +351,15 @@ void vgic_v4_teardown(struct kvm *kvm)
+ 		free_irq(irq, vcpu);
+ 	}
+ 
++#ifdef CONFIG_ARM_GIC_V3_PER_VCPU_VLPI
++	/*
++	 * TODO: Free the shared VM properties that remain necessary
++	 * in per-vCPU mode. Create separate teardown function
++	 * that operates on a per-vCPU basis.
++	 */
++#else
+ 	its_free_vcpu_irqs(its_vm);
++#endif
+ 	kfree(its_vm->vpes);
+ 	its_vm->nr_vpes = 0;
+ 	its_vm->vpes = NULL;
+@@ -368,7 +385,9 @@ int vgic_v4_put(struct kvm_vcpu *vcpu)
+ {
+ 	struct its_vpe *vpe = &vcpu->arch.vgic_cpu.vgic_v3.its_vpe;
+ 
+-	if (!vgic_supports_direct_irqs(vcpu->kvm) || !vpe->resident)
++	if (!vgic_supports_direct_irqs(vcpu->kvm) ||
++				!vpe->its_vm || /* check if vPE is initialized for vCPU */
++				!vpe->resident)
+ 		return 0;
+ 
+ 	return its_make_vpe_non_resident(vpe, vgic_v4_want_doorbell(vcpu));
+@@ -379,7 +398,9 @@ int vgic_v4_load(struct kvm_vcpu *vcpu)
+ 	struct its_vpe *vpe = &vcpu->arch.vgic_cpu.vgic_v3.its_vpe;
+ 	int err;
+ 
+-	if (!vgic_supports_direct_irqs(vcpu->kvm) || vpe->resident)
++	if (!vgic_supports_direct_irqs(vcpu->kvm) ||
++				!vpe->its_vm ||
++				vpe->resident)
+ 		return 0;
+ 
+ 	if (vcpu_get_flag(vcpu, IN_WFI))
+@@ -414,6 +435,9 @@ void vgic_v4_commit(struct kvm_vcpu *vcpu)
+ {
+ 	struct its_vpe *vpe = &vcpu->arch.vgic_cpu.vgic_v3.its_vpe;
+ 
++	if (!vpe->its_vm)
++		return;
++
+ 	/*
+ 	 * No need to wait for the vPE to be ready across a shallow guest
+ 	 * exit, as only a vcpu_put will invalidate it.
+@@ -436,6 +460,29 @@ static struct vgic_its *vgic_get_its(struct kvm *kvm,
+ 	return vgic_msi_to_its(kvm, &msi);
+ }
+ 
++/**
++ * Map an interrupt to a host IRQ without setting up hardware forwarding.
++ * Useful for defered vLPI enablement.
++ */
++int kvm_vgic_v4_map_irq_to_host(struct kvm *kvm, int virq,
++					struct kvm_kernel_irq_routing_entry *irq_entry)
++{
++	struct vgic_its *its;
++	struct vgic_irq *irq;
++
++	its = vgic_get_its(kvm, irq_entry);
++	if (IS_ERR(its))
++		return 0;
++
++	if (vgic_its_resolve_lpi(kvm, its, irq_entry->msi.devid,
++				 irq_entry->msi.data, &irq))
++		return 0;
++
++	irq->host_irq = virq;
++
++	return 0;
++}
++
+ int kvm_vgic_v4_set_forwarding(struct kvm *kvm, int virq,
+ 			       struct kvm_kernel_irq_routing_entry *irq_entry)
+ {
+diff --git a/include/kvm/arm_vgic.h b/include/kvm/arm_vgic.h
+index b261fb3968d0..02842754627f 100644
+--- a/include/kvm/arm_vgic.h
++++ b/include/kvm/arm_vgic.h
+@@ -450,6 +450,8 @@ int kvm_vgic_set_owner(struct kvm_vcpu *vcpu, unsigned int intid, void *owner);
+ 
+ struct kvm_kernel_irq_routing_entry;
+ 
++int kvm_vgic_v4_map_irq_to_host(struct kvm *kvm, int virq,
++					struct kvm_kernel_irq_routing_entry *irq_entry);
+ int kvm_vgic_v4_set_forwarding(struct kvm *kvm, int irq,
+ 			       struct kvm_kernel_irq_routing_entry *irq_entry);
+ 
+-- 
+2.50.1 (Apple Git-155)
+
+
+
+
+Amazon Web Services Development Center Germany GmbH
+Tamara-Danz-Str. 13
+10243 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Christof Hellmis
+Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
+Sitz: Berlin
+Ust-ID: DE 365 538 597
 
 
