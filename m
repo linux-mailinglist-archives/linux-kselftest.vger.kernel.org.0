@@ -1,196 +1,127 @@
-Return-Path: <linux-kselftest+bounces-46105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9176AC74385
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:28:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D448C74478
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:37:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 9633D2CC7C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 13:28:15 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E25DC348182
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 13:29:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85FBC2882BE;
-	Thu, 20 Nov 2025 13:25:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B73D6342169;
+	Thu, 20 Nov 2025 13:28:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mQVhdPj2";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2AGYMZpb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29CA21257E;
-	Thu, 20 Nov 2025 13:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52331340A4C;
+	Thu, 20 Nov 2025 13:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763645120; cv=none; b=TqsMDBJunpc9O4qSKzKNdiQ1dcU8WH8wIMCm0qAOzr1/6wgwS3gc/dPOu0nxyw8KtZg8KP2xmKDAkLUoOMN5b1Tijr6w7EKKWl10GxPymyWxiDL+7vb0OTbT3l2YSZWY0w5FEzhqPmqgd/vOc2rfiyDG3iYemMr9xwNi7LNwilc=
+	t=1763645283; cv=none; b=U62F1cWgZ2BmS/AJnsdZNtNR1yd0GWIeRX948j0L3uojKGSnHLSRsmPi8B96Z5yZjrovT53o38SkGX3qH2q7Y4Up1G/6bvrZC7eOT5l4lTq/nB4UDm3X8Recky3IMuVsikR/kqQ1Tt0JtV1ChImLdezHxDHHvNGkIbcKZQW2v6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763645120; c=relaxed/simple;
-	bh=HWnTHI4ccYB9wpDY7/tCNmtUG5PSQOjy/t2vEeXGkvE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aOTiWjIIgthNr8JHbWfVlvel7+QMmP10DBNL9e7SZZ6kzCsYY9SB7izQxOXkID5+m3GCYCMLJ+/OfjwKCTnhx+fSz8sNZ7o0FrNY08CXEm/KRHFUWvfviuRzFCEbbbqRAa26zTyNiFZQhmowQc8X9gNWRGjUW6FtoduFExd3GtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dBzbN1P4JzYQv37;
-	Thu, 20 Nov 2025 21:24:32 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 1744B1A08FF;
-	Thu, 20 Nov 2025 21:25:14 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP1 (Coremail) with SMTP id cCh0CgD3e0W4Fh9pKq+TBQ--.7121S2;
-	Thu, 20 Nov 2025 21:25:13 +0800 (CST)
-Message-ID: <37f4b54d-609c-4754-bfa2-51b1ddf43df0@huaweicloud.com>
-Date: Thu, 20 Nov 2025 21:25:12 +0800
+	s=arc-20240116; t=1763645283; c=relaxed/simple;
+	bh=mzI9cTEZSZD8xt5H1pTN636SEe9Vnqf6ts26qsNTIaE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rnp/Df3uG7LBYWI9VdZt7/2+DPhTBPGqCjm+FPf1PtGzRrKTYapyInJNMCmg0YK7/5ekAQa/B+TQAomG74VunIY0SFuQoE4Sa0ql/riCE32SPVvINinbKHOqtIoGLBtWQuhp3s4zZ3RT7Q+95IvEfpzLzQZflWyn6RUmJ0xbdbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mQVhdPj2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2AGYMZpb; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Thu, 20 Nov 2025 14:27:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1763645274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V6lfM5WgDc8QM4spSulqDmKqkqyKsdr50H2QMibx3QE=;
+	b=mQVhdPj27TFJmkvmryUpmEjJa5IzP9z5O33Sn5TdCY8IbascWg5Zm/EBLTAl9L9v9ZrOM6
+	g9qvH6X2QUp5CFvwYlYdh/+6BmWxDmV+B413TQ1YeXncwrusT/oYoR09/+Xv7PvVEHV5+V
+	PTpPb2wYwb630udf5QJk0TAwkhLCdozyeU8CV6HTj4bhrLoIgFH2LaTrHzUkQCJkFSzErJ
+	l+5lPkuoLUmW8jdHFuS5OecSDn1yoHu4Hf5buesOmOvwGE7ED4OivdvDXuaAwpy3UUCf+E
+	BGrZ/YvfKYhhML+P+Y2s2Uz6UD7tfHsU52Yyj0DCvLaDqtUnZot/XxWkfqQITQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1763645274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V6lfM5WgDc8QM4spSulqDmKqkqyKsdr50H2QMibx3QE=;
+	b=2AGYMZpbi6QZcZ1jia+9ZisH+ai4lh8UV4LWs8rev4bPGDZgNhh2TnqpvkIfyPG6grZN/E
+	nTGz0AVCoxlQeFAw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 03/14] selftests: vDSO: Introduce vdso_syscalls.h
+Message-ID: <20251120142528-86237d98-17b3-480a-a2f4-3d88e5969e9e@linutronix.de>
+References: <20251113-vdso-test-types-v2-0-0427eff70d08@linutronix.de>
+ <20251113-vdso-test-types-v2-3-0427eff70d08@linutronix.de>
+ <5826549e-88a8-429c-ad42-46aeada9d21b@app.fastmail.com>
+ <20251114093245-04b5eb56-d3ed-486b-90ff-7c7ad5cfc7e7@linutronix.de>
+ <22ec7315-49b2-4fde-bd2f-f24f2cfcec37@app.fastmail.com>
+ <20251114102555-293562eb-f1f9-47e1-bc2d-59f26a7283fa@linutronix.de>
+ <db53e96f-d0c4-4702-aee5-1c38c69074cd@app.fastmail.com>
+ <20251118145635-16c14d65-cc62-4c0f-bb2c-2cf7eb30b63c@linutronix.de>
+ <6fbb952c-0119-4be7-8f65-9198330013e7@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on
- cpuset.cpus conflict.
-To: Sun Shaojie <sunshaojie@kylinos.cn>
-Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llong@redhat.com, mkoutny@suse.com, shuah@kernel.org, tj@kernel.org
-References: <06d74676-258e-43b7-ae61-d2102bab3926@huaweicloud.com>
- <20251120130750.1554604-1-sunshaojie@kylinos.cn>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20251120130750.1554604-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgD3e0W4Fh9pKq+TBQ--.7121S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw4xCFW7Aw47XFyDtr4fKrg_yoWrCrW5pF
-	W8KF1DJws5Xr1rCwsFqF17ZF42q3ZrZ3W7AFZ8Gr47JwnFv3Wqka1qkr9xW398J3s8GayU
-	Z3y7Zr4Svr1DWrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAwIDUUUUU=
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+In-Reply-To: <6fbb952c-0119-4be7-8f65-9198330013e7@app.fastmail.com>
 
-
-
-On 2025/11/20 21:07, Sun Shaojie wrote:
-> Hi, Ridong,
+On Tue, Nov 18, 2025 at 10:40:03PM +0100, Arnd Bergmann wrote:
+> On Tue, Nov 18, 2025, at 15:22, Thomas Weißschuh wrote:
+> > On Fri, Nov 14, 2025 at 11:40:31AM +0100, Arnd Bergmann wrote:
+> >> On Fri, Nov 14, 2025, at 11:02, Thomas Weißschuh wrote:
+> >> > On Fri, Nov 14, 2025 at 10:16:01AM +0100, Arnd Bergmann wrote:
+> >> >
+> >> > I don't think it is important. For my SPARC vDSO series I even
+> >> > dropped the regular clock_getres() after your request. But because it
+> >> > doesn't exist we need to handle the presence of vdso_clock_getres() and
+> >> > the simultaneous absence of sys_clock_getres() in the test.
+> >> 
+> >> But that is the other way round, right? On sparc32 we have
+> >> (optionally) sys_clock_getres() but never vdso_clock_getres().
+> >
+> > Here SPARC was just an example to show that I don't really care about
+> > clock_getres() in the vDSO in general.
+> > But if it was present before for an architecture and we now drop it without a
+> > replacement, userspace developers might complain. Manually caching the value
+> > in userspace sounds ugly and brittle, as it could even change at some point.
+> > Introducing a time64 replacement on the other hand wouldn't make much
+> > difference as the values never would exceed the 32-bit range anyways.
+> >
+> > So I would keep vdso_clock_getres() where it exists today even with
+> > CONFIG_COMPAT_32BIT_TIME=n.
 > 
-> On Thu, 20 Nov 2025 08:57:51, Chen Ridong wrote:
->> On 2025/11/19 21:20, Michal KoutnÃ½ wrote:
->>> On Wed, Nov 19, 2025 at 06:57:49PM +0800, Sun Shaojie <sunshaojie@kylinos.cn> wrote:
->>>>  Table 2.1: Before applying this patch
->>>>  Step                                       | A1's prstate | B1's prstate |
->>>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
->>>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
->>>>  #3> echo "2" > B1/cpuset.cpus              | root         | member       |
->>>>  #4> echo "root" > B1/cpuset.cpus.partition | root         | root         |
->>>>  #5> echo "1-2" > B1/cpuset.cpus            | root invalid | root invalid |
->>>>
->>>> After step #4, B1 can exclusively use CPU 2. Therefore, at step #5,
->>>> regardless of what conflicting value B1 writes to cpuset.cpus, it will
->>>> always have at least CPU 2 available. This makes it unnecessary to mark
->>>> A1 as "root invalid".
->>>>
->>>>  Table 2.2: After applying this patch
->>>>  Step                                       | A1's prstate | B1's prstate |
->>>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
->>>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
->>>>  #3> echo "2" > B1/cpuset.cpus              | root         | member       |
->>>>  #4> echo "root" > B1/cpuset.cpus.partition | root         | root         |
->>>>  #5> echo "1-2" > B1/cpuset.cpus            | root         | root invalid |
->>>>
->>>> In summary, regardless of how B1 configures its cpuset.cpus, there will
->>>> always be available CPUs in B1's cpuset.cpus.effective. Therefore, there
->>>> is no need to change A1 from "root" to "root invalid".
->>>
->>> Admittedly, I don't like this change because it relies on implicit
->>> preference ordering between siblings (here first comes, first served)
->>
->> Agree. If we only invalidate the latter one, I think regardless of the implementation approach, we
->> may end up with different results depending on the order of operations.
-> 
-> 
-> I don't understand the "order of operations" mentioned here. After reviewing
-> the previous email content, are you referring to this?
-> 
-> On Sat, 15 Nov 2025 15:41:03, Chen Ridong wrote:
->> With the result you expect, would we observe the following behaviors:
->>
->> #1> mkdir -p A1
->> #2> mkdir -p B1
->> #3> echo "0-1"  > A1/cpuset.cpus
->> #4> echo "1-2"  > B1/cpuset.cpus
->> #5> echo "root" > A1/cpuset.cpus.partition
->> #6> echo "root" > B1/cpuset.cpus.partition # A1:root;B1:root invalid
->>
->> #1> mkdir -p A1
->> #2> mkdir -p B1
->> #3> echo "0-1"  > A1/cpuset.cpus
->> #4> echo "1-2"  > B1/cpuset.cpus
->> #5> echo "root" > B1/cpuset.cpus.partition
->> #6> echo "root" > A1/cpuset.cpus.partition # A1:root invalid;B1:root
->>
->> Do different operation orders yield different results? If so, this is not what we expect.
-> 
-> However, after applying this patch, the outcomes of these two examples are 
-> as follows:
->  
->  #1> mkdir -p A1
->  #2> mkdir -p B1
->  #3> echo "0-1"  > A1/cpuset.cpus           | member       | member      |
->  #4> echo "1-2"  > B1/cpuset.cpus           | member       | member      |
->  #5> echo "root" > A1/cpuset.cpus.partition | root invalid | root        |
->  #6> echo "root" > B1/cpuset.cpus.partition | root invalid | root invalid|
-> 
->  #1> mkdir -p A1
->  #2> mkdir -p B1
->  #3> echo "0-1"  > A1/cpuset.cpus           | member       | member      |
->  #4> echo "1-2"  > B1/cpuset.cpus           | member       | member      |
->  #5> echo "root" > B1/cpuset.cpus.partition | root         | root invalid|
->  #6> echo "root" > A1/cpuset.cpus.partition | root invalid | root invalid|
-> 
+> It is rather inconsistent with all the other interfaces though:
+> when we originally did the time64 conversion, there were a number
+> of interfaces that didn't really need a replacement, but we
+> deliberately made new interfaces wherever possible. For architectures
+> without time32 support, and for validating the time64 support,
+> it should be possible to build both kernel and userspace without
+> even defining the __kernel_old_time{_t,spec,val} types.
 
-How about the following two sequences of operations:
+Fair enough. I'll add this to my TODO list.
 
-#1> mkdir -p A1
-#2> mkdir -p B1
-#3> echo "0-1"  > A1/cpuset.cpus
-#4> echo "root" > A1/cpuset.cpus.partition
-#5> echo "1-2"  > B1/cpuset.cpus
-#6> echo "root" > B1/cpuset.cpus.partition
+> >> Right, but then I would make it return 'struct timespec', not
+> >> 'struct __kernel_timespec', because it's no longer the kernel
+> >> interface.
+
+(...)
 
 
-#1> mkdir -p A1
-#2> mkdir -p B1
-#5> echo "1-2"  > B1/cpuset.cpus
-#6> echo "root" > B1/cpuset.cpus.partition
-#3> echo "0-1"  > A1/cpuset.cpus
-#4> echo "root" > A1/cpuset.cpus.partition
-
-Will these two sequences yield the same result?
-
-As a key requirement: Regardless of the order in which we apply the configurations, identical final
-settings should always result in identical system states. We need to confirm if this holds true here.
-
-> Moreover, even without applying this patch, the result remains the same,
-> because modifying cpuset.cpus.partition does not disable its siblings' partitions.
-> 
-> So, what are the specific issues that you believe would arise?
-> 
-> 
-> Thanks,
-> Sun Shaojie
-
--- 
-Best regards,
-Ridong
-
+Thomas
 
