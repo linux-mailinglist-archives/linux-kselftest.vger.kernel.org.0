@@ -1,186 +1,240 @@
-Return-Path: <linux-kselftest+bounces-46125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB2E7C751CB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C83DC752B8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:56:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 27ED64EF45A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:40:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BF98D4F3C73
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:41:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D3935B15B;
-	Thu, 20 Nov 2025 15:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827443612D7;
+	Thu, 20 Nov 2025 15:35:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lbzlHOj7"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CO70V/jR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B533A1D09
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 15:31:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927123612CC
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 15:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763652676; cv=none; b=j/93/EQkhr3ejuJVuYuNa0XfFIcwV4B1Axpds9v+lJ6NG32QqF4MUueP3kGizkX3PfsU6RbGHO5BNQEFxfW+qeZ6xZGN+DcmAmoUpfoU8H7poEb3kMtj52zUO1VPCJK1sEDlVBXaus5yD2YMJH3jqzFvzpGQFbRguZGUUHluKYI=
+	t=1763652909; cv=none; b=TPY4LW7n7wK34R2rlBRARGSulGgdi+BFIy4JX/cNJoKarqdkiFPJ+543qAa5O+YNtTfJsMzUkW9bkYPArH/wEe8WN96Xyl7uGlRObG1mkVQwVCl4HJTGNjnmiLcKcF310y3gnxZzkFOik+6ej+acWf5OJdcawWEpC/G2kcyP4no=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763652676; c=relaxed/simple;
-	bh=wMnT47phEFuGfAdPalYZmpWGC6ln9kV4Q339Ib+0xuE=;
+	s=arc-20240116; t=1763652909; c=relaxed/simple;
+	bh=HxGHVYEEBatxVNzTWUVGUN69/JYbXDtI3jufM2nxqoI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YgdN0bbmMHuML/B3HayGYnLLccy89Hn4SOJm4S7MCenIvRa4EUA8pT07iavWSUHy2+JO3XYypR1XbhMAehemu1WqpZckLnmvAVxY9SPMybRD883R6F3DTImswg2XA+/Pu1ZvwdL/WgptiDlCdzRJEkmU9dpp/gbHn+0d2m28AGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lbzlHOj7; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-787ff3f462bso23926577b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 07:31:13 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=uwhkoc2yX2bqSJHIFD+qeRY4MXp64I4DQRt8xbYmebYBRiiigMaGlPOUE4ueqWq0/q7OudbQIToAI7KpCounAeW/ARLAkRDGpD+UOej3Mp+BX50Oa4b+WFzE16ncoLs4tLeCpxIF53qfBaT8LnTIjVS6F+1a5S6oeYeZDLyS358=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CO70V/jR; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4779d47be12so8493955e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 07:35:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763652673; x=1764257473; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1763652905; x=1764257705; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PFiT8mQz2EeFfhAtckqnTM9BcNHX0xiz9tE4/FBhkTE=;
-        b=lbzlHOj7nNZO01ylI7WXU8F4o0tSysm4a2eWQsStUmqXbtFdoDctgJ9r196y/ZMHFF
-         CNCzckt38jO/1VY/nyuIvSSHn8iBArZd04LYVFofPSKZs1UrMIjgTSxZeU6nWwuqillY
-         wKbMquXENiQGkkXgKReO54LN5792IV1wxdaQZJV54+XqH8fEWqIcDw3XhyuPOK0KQ2WU
-         /nw3G188kAh61IeWc2FZ3Amig8SovI+FzqoQ56g8wSSD3owR+M9smjMLKHGkxG1d06ze
-         ftfV9xm1sZNsVIg/uUqmSJK9h6W2eSZ1gi7FBtIbjUhhMnvNkPSq6zX96irGDd2CE0jt
-         jRPw==
+        bh=11esoKSgE8g1amitmv74A8N+MN8ZcrR64u90u3R6V54=;
+        b=CO70V/jROHASWx0ueJGmOA7YnYZpUxvnNbjTU1/9UyJs+4nnIKqR89GXlNp793Lw49
+         TFEx4KRSO6AWumv0u+L7yZg2qSdjaOpOagxgHTcRRF5pmwVVfKLH3RV4IYlWXqolVHMR
+         noCeq8ooWLAMyrp3tV6bE5NIoSbfnxCoAw1a9GruffNXF56AC9I491LynObi45RVtB5A
+         1F3I1zrJGWwGXBRXI1nq+xsUNYyZ8+RGZ7plylbjcW+qZwemMN1LJyYTvdGAL46o/IBq
+         b3VP0U8D1voQSMLlw8ZUnXzWcPbX5xoazR/mvNCVTO8Z1SPVwAu4gQ4SUMNIH90L3mpx
+         pbwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763652673; x=1764257473;
+        d=1e100.net; s=20230601; t=1763652905; x=1764257705;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PFiT8mQz2EeFfhAtckqnTM9BcNHX0xiz9tE4/FBhkTE=;
-        b=h5VGq80csMsu/j92B7V+gQbznZibajwt89W0A7hKccO60/xpSp1EZpdl02TGT24EMG
-         Pr6Vqi4WOsOrKyEDPUagsuD+br5HJt7qMJw1bW5W3gyoDzkGcLOx2tkyU6JgGJ4hIIsW
-         zkXakqLdLsTo5B+XHD3fVvh2anXd+sDHfj/gMCuiBb9rV9kKClqicJG6K2S4vcEH+sIG
-         tLHMGeU18UtSAWW0reQnjt0vVZzdtESz7Xv90AeINp0VtONLOnO+s1DvOZJMKrep/Z6M
-         RW7rWEqi1vTHfHuU2mX2BrgiSkPRBGNqtXUMsGEXiK6QDSRHZPoQ/c7e3tML5I000eUv
-         eqiw==
-X-Forwarded-Encrypted: i=1; AJvYcCXY0T65hzjXWx5iuC+31EI5U6saZpvU8oInBltKzytC0cdeyv0g0Q6oFEjWAw+0PtTuR2nz0F/8jaqoCmJ4bE4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV4aAsdpYfEsH/8HsRnE4uSpkPXSKo46SE5+gljRdTIofMx8Tq
-	uaRgj1i5y1I+pzg9pNbvdsGAKudKWWRXfqeQ0AKgplwNPyr4lCnpKvlg
-X-Gm-Gg: ASbGncuxUFpamKaTghen3GiGr2xV3u2yByJynnzvRRB/i80F3wPJRYjGeIujBhYftdb
-	GV5/0XByikI8a7U2SI1RrdNPdjDvVQHjE+NDoLe8QbGgMdZSLX0soHFnyG04QbpfmxfKRu+K2CZ
-	wa3tN5q3zmtYZrR3pO7XLXMQQ+V9IWV3WQ4u0+fUR3UmIZdh7hlSnexUOuocqDfhDiodlSf3oIR
-	Fdf7PRF0kBPf1DEXkUHO/+0mj+akL+U+7nlSVo8wSaNlYHcRwTD0WBlqwtvJuDGmHgx7lz+1ojG
-	PHROYTvO5c28/9zSRpMm/uUP/SQK+ZeymwKz9G8POnpkfcXo62IeJrzJSu1irjMgLOqWbJy/fnL
-	ZsmkfMsryIwJui39QI1jPVDdJkp8cjRxGpJVMXw6mcRJw8v1JEOJgpC9B2vG9n2lWi8QmkTpFHZ
-	rF2R5onUjqCUlCkmWQFLSMMo6shJxEzwzom+p7kRFWY3BqQOU=
-X-Google-Smtp-Source: AGHT+IGnxsv7O9k5uQ7ryneqkrnqq+cPJZPkqCvcNCDp+BprL3ACVr9C8SpKEUSItTS/dKmykTVJvA==
-X-Received: by 2002:a05:690e:12cc:b0:63f:b4b4:7758 with SMTP id 956f58d0204a3-642f8df4854mr2073800d50.11.1763652672604;
-        Thu, 20 Nov 2025 07:31:12 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:45::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-642f71787f3sm871532d50.16.2025.11.20.07.31.12
+        bh=11esoKSgE8g1amitmv74A8N+MN8ZcrR64u90u3R6V54=;
+        b=CC9YVwfAqaWiR+24enaNGHCHb8D3HAnV8n9KGaPnkODgZmKCs+m4DNyArNqIJwFAX0
+         BUcs+DKdKTOPFR7SZWLCtV8o4n2PfDjRdAua/Jyd0FSPI4XKjUdK3Jr4o9xgjSb2iJi4
+         ZExBJ8hl7RWz2zox4jQ3lmokE9KxiS2Kj2dEP3e9Uqto7WG0qD1A0+N7pMkhQXYr4NpF
+         QUiQPVj8KLQiOqYi/7HcuO6fVRhCXupCGVe7lCUTe+cyaSbV/q9kgwr2Rcq7cMX9EO4F
+         n6WCpAWQJmVhrerOaGtcejh2ZMwv7T/bV9g+fBu9ZzHHdBt90EAIyQw3y2pFwQNs8Ggp
+         pkkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUuFuvVyCjhnRaXYFOjok1N2AWDoN0Zzw7FOe0PZXNMy+Pf+RdXOwkC/p6B8pkghbt09KgPJZEc9NlyfAs3Y1I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCRszxg5DVYk7VxgXfjwaas3m/ZQmBl+cthKYoLxwMdE4ditBa
+	h6djOKF7uC5ZNzJCO1+q1VYiOp9rgzZLH45hnrxXEAX65x+59+68jBH7QuY0Xiv6+t4=
+X-Gm-Gg: ASbGncuSCSX0J1q9NOQd+ifsgVS7fSpNyKnrsZZpoKWQDxH1nlv5/bmxya+bPyzC1hh
+	YUorn/wD6NH4O8Zjez3rwQ6ZK005it22ZxCQ6M2FjmkctaXLev4dtK7VvPrJ3Kdd0eMf/xQ+5/8
+	/3Pj5A/cvnpxB6H+vwUqCU5SfsVPyJUayK9p0MTRgECzE19lWPBwdZY+Wmgk1UOxEnpILEMJkDN
+	75AoAMCtt4vkwTi7LiiI37mCXcduJkOvsN7KijgcUBP38SKOJ+DPeoQ7DEEgNaNf8d+dNAepfJo
+	f6bnd9SSYUuATyWLX78iBayvQpoq7TJaihoMb6tccL7PLeoUNoVStVXG5b0oGjzNKRhfV3b0SVW
+	aii3OFeN4QaLBrKAJ0xIkHvFhR1l0cXyU3fI68PVQRY6q/1wGjwV14Xqyh5/w+PjFAeAS/d4MgS
+	ixHpeb0P5kBGB5SwR08wzZnALmPTApqGOV
+X-Google-Smtp-Source: AGHT+IEPAYYqmLfa62VPjHRp0h443J6MQXeseMV1CiVvWJMFtArLSISsoWd97XXXD7e7TlfONuWvEA==
+X-Received: by 2002:a05:600c:3b08:b0:477:93f7:bbc5 with SMTP id 5b1f17b1804b1-477b9dd6e39mr32508755e9.10.1763652904777;
+        Thu, 20 Nov 2025 07:35:04 -0800 (PST)
+Received: from blackbook2 (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b82d8251sm53046445e9.6.2025.11.20.07.35.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 07:31:12 -0800 (PST)
-Date: Thu, 20 Nov 2025 07:31:10 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v7 3/5] net: devmem: implement autorelease token
- management
-Message-ID: <aR80PvXaX1+S/avE@devvm11784.nha0.facebook.com>
-References: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
- <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-3-1abc8467354c@meta.com>
- <a0543467-df01-4486-9bac-d1a3446f44cc@redhat.com>
+        Thu, 20 Nov 2025 07:35:04 -0800 (PST)
+Date: Thu, 20 Nov 2025 16:35:02 +0100
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Cc: tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org, 
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev, 
+	lance.yang@linux.dev, shuah@kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] selftests: cgroup: make test_memcg_sock robust
+ against delayed sock stats
+Message-ID: <p655qedqjaakrnqpytc6dltejfluxo6jrffcltfz2ivonmk6lb@bxf5xlgo4iw2>
+References: <20251120060406.2846257-1-zhangguopeng@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ai47sd76qnrx3mju"
 Content-Disposition: inline
-In-Reply-To: <a0543467-df01-4486-9bac-d1a3446f44cc@redhat.com>
+In-Reply-To: <20251120060406.2846257-1-zhangguopeng@kylinos.cn>
 
-On Thu, Nov 20, 2025 at 01:19:54PM +0100, Paolo Abeni wrote:
-> On 11/20/25 4:37 AM, Bobby Eshleman wrote:
-> > @@ -2479,10 +2504,12 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
-> >  			      unsigned int offset, struct msghdr *msg,
-> >  			      int remaining_len)
-> >  {
-> > +	struct net_devmem_dmabuf_binding *binding = NULL;
-> >  	struct dmabuf_cmsg dmabuf_cmsg = { 0 };
-> >  	struct tcp_xa_pool tcp_xa_pool;
-> >  	unsigned int start;
-> >  	int i, copy, n;
-> > +	int refs = 0;
-> >  	int sent = 0;
-> >  	int err = 0;
-> >  
-> > @@ -2536,6 +2563,7 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
-> >  			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
-> >  			struct net_iov *niov;
-> >  			u64 frag_offset;
-> > +			u32 token;
-> >  			int end;
-> >  
-> >  			/* !skb_frags_readable() should indicate that ALL the
-> > @@ -2568,13 +2596,32 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
-> >  					      start;
-> >  				dmabuf_cmsg.frag_offset = frag_offset;
-> >  				dmabuf_cmsg.frag_size = copy;
-> > -				err = tcp_xa_pool_refill(sk, &tcp_xa_pool,
-> > -							 skb_shinfo(skb)->nr_frags - i);
-> > -				if (err)
-> > +
-> > +				binding = net_devmem_iov_binding(niov);
-> > +
-> > +				if (!sk->sk_devmem_info.binding)
-> > +					sk->sk_devmem_info.binding = binding;
-> > +
-> > +				if (sk->sk_devmem_info.binding != binding) {
-> > +					err = -EFAULT;
-> >  					goto out;
-> > +				}
-> > +
-> > +				if (static_branch_unlikely(&tcp_devmem_ar_key)) {
-> 
-> Not a real/full review but the above is apparently causing kunit build
-> failures:
-> 
-> ERROR:root:ld: vmlinux.o: in function `tcp_recvmsg_dmabuf':
-> tcp.c:(.text+0x669b21): undefined reference to `tcp_devmem_ar_key'
-> ld: tcp.c:(.text+0x669b68): undefined reference to `tcp_devmem_ar_key'
-> ld: tcp.c:(.text+0x669c54): undefined reference to `tcp_devmem_ar_key'
-> make[3]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
-> make[2]: *** [/home/kunit/testing/Makefile:1242: vmlinux] Error 2
-> make[1]: *** [/home/kunit/testing/Makefile:248: __sub-make] Error 2
-> make: *** [Makefile:248: __sub-make] Error 2
-> 
-> see:
-> 
-> https://netdev-3.bots.linux.dev/kunit/results/393664/
 
-Thanks Paolo, I'll fix that for the next rev. And I'll have to add
-building kunit into my flow (currently using some custom stuff and nipa
-ingest_mdir, but don't think either has kunit).
-> 
-> > @@ -2617,6 +2664,7 @@ static int tcp_recvmsg_dmabuf(struct sock *sk,
-> > const struct sk_buff *skb,
-> >  
-> >  out: tcp_xa_pool_commit(sk, &tcp_xa_pool); +
-> 
-> [just because I stumbled upon the above while looking for the build
-> issue]: please do not mix unrelated whitespace-change only with
-> functional change.
+--ai47sd76qnrx3mju
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3] selftests: cgroup: make test_memcg_sock robust
+ against delayed sock stats
+MIME-Version: 1.0
 
-Don't know how I missed that line, will definitely remove.
+Hello Guopeng.
 
-Thanks again,
-Bobby
++Cc Leon Huang Fu <leon.huangfu@shopee.com>  =20
+
+On Thu, Nov 20, 2025 at 02:04:06PM +0800, Guopeng Zhang <zhangguopeng@kylin=
+os.cn> wrote:
+> test_memcg_sock() currently requires that memory.stat's "sock " counter
+> is exactly zero immediately after the TCP server exits. On a busy system
+> this assumption is too strict:
+>=20
+>   - Socket memory may be freed with a small delay (e.g. RCU callbacks).
+
+(FTR, I remember there is `echo 1 > /sys/module/rcutree/parameters/do_rcu_b=
+arrier`,
+however, I'm not sure it works always as expected (a reader may actually
+wait for multi-stage RCU pipeline), so plain timeout is more reliable.)
+
+>   - memcg statistics are updated asynchronously via the rstat flushing
+>     worker, so the "sock " value in memory.stat can stay non-zero for a
+>     short period of time even after all socket memory has been uncharged.
+>=20
+> As a result, test_memcg_sock() can intermittently fail even though socket
+> memory accounting is working correctly.
+>=20
+> Make the test more robust by polling memory.stat for the "sock "
+> counter and allowing it some time to drop to zero instead of checking
+> it only once.
+
+I like the approach of adaptive waiting to settle in such tests.
+
+> The timeout is set to 3 seconds to cover the periodic rstat flush
+> interval (FLUSH_TIME =3D 2*HZ by default) plus some scheduling slack. If
+> the counter does not become zero within the timeout, the test still
+> fails as before.
+>
+> On my test system, running test_memcontrol 50 times produced:
+>=20
+>   - Before this patch:  6/50 runs passed.
+>   - After this patch:  50/50 runs passed.
+
+BTW Have you looked into the number of retries until success?
+Was it in accordance with the flushing interval?
+
+>=20
+> Suggested-by: Lance Yang <lance.yang@linux.dev>
+> Reviewed-by: Lance Yang <lance.yang@linux.dev>
+> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> ---
+> v3:
+>  - Move MEMCG_SOCKSTAT_WAIT_* defines after the #include block as
+>    suggested.
+> v2:
+>  - Mention the periodic rstat flush interval (FLUSH_TIME =3D 2*HZ) in
+>    the comment and clarify the rationale for the 3s timeout.
+>  - Replace the hard-coded retry count and wait interval with macros
+>    to avoid magic numbers and make the 3s timeout calculation explicit.
+> ---
+>  .../selftests/cgroup/test_memcontrol.c        | 30 ++++++++++++++++++-
+>  1 file changed, 29 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/tes=
+ting/selftests/cgroup/test_memcontrol.c
+> index 4e1647568c5b..8ff7286fc80b 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -21,6 +21,9 @@
+>  #include "kselftest.h"
+>  #include "cgroup_util.h"
+> =20
+> +#define MEMCG_SOCKSTAT_WAIT_RETRIES        30              /* 3s total */
+> +#define MEMCG_SOCKSTAT_WAIT_INTERVAL_US    (100 * 1000)    /* 100 ms */
+> +
+>  static bool has_localevents;
+>  static bool has_recursiveprot;
+> =20
+> @@ -1384,6 +1387,8 @@ static int test_memcg_sock(const char *root)
+>  	int bind_retries =3D 5, ret =3D KSFT_FAIL, pid, err;
+>  	unsigned short port;
+>  	char *memcg;
+> +	long sock_post =3D -1;
+> +	int i;
+> =20
+>  	memcg =3D cg_name(root, "memcg_test");
+>  	if (!memcg)
+> @@ -1432,7 +1437,30 @@ static int test_memcg_sock(const char *root)
+>  	if (cg_read_long(memcg, "memory.current") < 0)
+>  		goto cleanup;
+> =20
+> -	if (cg_read_key_long(memcg, "memory.stat", "sock "))
+> +	/*
+> +	 * memory.stat is updated asynchronously via the memcg rstat
+> +	 * flushing worker, which runs periodically (every 2 seconds,
+> +	 * see FLUSH_TIME). On a busy system, the "sock " counter may
+> +	 * stay non-zero for a short period of time after the TCP
+> +	 * connection is closed and all socket memory has been
+> +	 * uncharged.
+> +	 *
+> +	 * Poll memory.stat for up to 3 seconds (~FLUSH_TIME plus some
+> +	 * scheduling slack) and require that the "sock " counter
+> +	 * eventually drops to zero.
+> +	 */
+> +	for (i =3D 0; i < MEMCG_SOCKSTAT_WAIT_RETRIES; i++) {
+> +		sock_post =3D cg_read_key_long(memcg, "memory.stat", "sock ");
+> +		if (sock_post < 0)
+> +			goto cleanup;
+> +
+> +		if (!sock_post)
+> +			break;
+> +
+> +		usleep(MEMCG_SOCKSTAT_WAIT_INTERVAL_US);
+> +	}
+
+I think this may be useful also for othe tests (at least other
+memory.stat checks), so some encapsulated implementation like a macro
+with parameters
+	cg_read_assert_gt_with_retries(cg, file, field, exp, timeout, retries)
+WDYT?
+
+Michal
+
+--ai47sd76qnrx3mju
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaR81HRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+AikgQD+P75H+Zk6KLQv5jtwZR2/
+lc6k9NlLyZw80qeoVGUId3MA/3Xf79tB9qS682uIdC73LCKqrsTyqHG1PFRf/s6U
+uGgJ
+=oeRR
+-----END PGP SIGNATURE-----
+
+--ai47sd76qnrx3mju--
 
