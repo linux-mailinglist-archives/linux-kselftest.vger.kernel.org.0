@@ -1,163 +1,123 @@
-Return-Path: <linux-kselftest+bounces-46137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C450AC75EB8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 19:31:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 790F8C75FDF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 20:02:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 663124E02AF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 18:31:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 54F674E1657
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 19:02:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1593A3596E7;
-	Thu, 20 Nov 2025 18:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2573B3612F9;
+	Thu, 20 Nov 2025 19:02:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IWB+30XZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B51828A1F1
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 18:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4575B283FFB
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 19:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763663487; cv=none; b=dWuSvMbw/UIOOZaW1peSVzuzjoR2fjIXg4oKs6rLUyViAKhzsiVtx+OO0QE2IAiJD+0wJXqwg/gT11+v2Qq4jj9nxj/R+vIa0RSbJ1SzTNyAac5B7/4kKE/OmtEYjureEC5RDviga1tgEIo85h7/dpoNC1EDBF751Fuw3FKECjQ=
+	t=1763665351; cv=none; b=MifcURQGC3KUWSA5xfDt/lIzdvqy4iwcmFSgQQo0CnYYgstHClNxxQ1t+mYgpTE48nlZ/+aETrYY2SxyiY837z0CsUodNmiG8ldlyx0puKWWmd1tsuiCeATDNbDojCsa5lXsm0Bc2RynpOaLl13QYJMCe7UQwasUPqQVCDX+dO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763663487; c=relaxed/simple;
-	bh=RJWdSMJFkKKpmT8nR8qTiYD6gXE6h7WjUQL4kfxvCDw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b3KcyOmkUgbVi4/ELxQTWcko6Oa0GZSl7hnjSyhHR6OROZlXc99OhOouIu3uLUZVwsD/qwIbF7Jev65QXdqDxfxUXJCxLDx27qohAS5GtHIF7LhVQvGAYEHg5jRNr9KL8bAXbEH4rK19S36sMOk4qdfCWpcjy4/Puai8Dk11KCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1763665351; c=relaxed/simple;
+	bh=gZXuJmBaVg7aPMWMII9QEeNHi9TbulCijsQPLIvEFvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=im/HlWDHwkZxIktLqaDfiBhZfZPuJjD/XjneBH0d2nQyDyKC47xGhJibtlJ+eHrjdoL7TwMH4jE82B/26OJTojqodY7V6DiW2uOv+y1kHacr+VQ92jiJeTvFcNq8G/IGkBg8MMwbEBS4jShcQiWNrB6XUT8iTG2OemRNKGn4bCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IWB+30XZ; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-559a4d6b511so163585e0c.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 10:31:24 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-477bf34f5f5so756895e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 11:02:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763665347; x=1764270147; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pUk7F3OiQezqpI/i6F82zzEyxwA4n2FgbJ6n9Doemj0=;
+        b=IWB+30XZJWfymEtbhXoEzbLudbAhp2zzAn8X6PJnpJxs615v2kUqWDSsb11XUcOM8E
+         mBJ8p7w888mgni1J8f+Tcna4isc1U4pjMQqv5U88MY0ql/9Lkeu6nMk4DVN2ARHsOAmB
+         EePBARKQqUdFqNUqs0rMQSLeCiZRr8Wvo7ZlO8XNmHegQPCBoOA86kDU30Mn90LfBbt8
+         jNiVmylzqWNxqkayuhxDcWw07pVhyo6iZ1qHqK7l93oJgzJJZ2qi45fwrMX+itJCj/EY
+         7GrV4y2X5PhwZ/xMPiMMvyM0ysBT/ETAFx4rvFx8yYEp1heBOieZCqaTMpT6O8mnfFoS
+         Dhmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763663484; x=1764268284;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K6Pbbkcq4vJY4dhlOt9k4VzFX7B2ssH1NKcQYU3Egds=;
-        b=dec/DXzZUdNtE2yfi0mnbtlPfE4Ospy6fQCZpxAXEDOPAAnjH5I9Rx7kjzxW/9k0yM
-         WnC/WVjV58+IvVsBNFed9YLp8quQZvPKpFTpNSeBB89n1QbxCahjY0mTBHfNXch2eQc8
-         tDEHswttxrSfE8DU4gqlVUQQ/V+70O9+jnykyDfUV8+UcM5O7ZRZprGWSQPa7RKpb4E2
-         CYymGGJfS5rTOw8Q9MHpnuizZH4fsPZ3I234eQY9WIPxxCKiqOxOw18dHCWdX5bwvnnM
-         TiUvFbFoSAj7Pp0oFBuDVYPgk+nsrlGYqJtHL+qwK/4uMTZEkTAQYggv9xyE5G2l9RmQ
-         KbDw==
-X-Forwarded-Encrypted: i=1; AJvYcCVJZS/ClZApeQkcQS1pDtA64eGQPCbii8CFJwie0RzRBeq5CecHVhr5D1xN7SPaJqBWke+6DzCyTtsPBSVOhvY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOjcRGekvPwDgS1Ti+6SDLpI86aPoD6A8rPIJJVcIDjM9B3Y6S
-	AzCoNDPTKOPoLVoeR44rDRhFYg3ZSEyqGg+wIN8d5XL7VX5sg/7Oh2LFwr19GB6i
-X-Gm-Gg: ASbGncsGGLOkLZj5hBa0HeXm+W7rEHdZcTmuoKc9XCOirFB5/PFVrx6tBuirMABVjeT
-	yzaPuPPBgi+rds+aCiM/vrj8M8lm9h33MaiRFTluolSsfRC/QLcsb9IKL0FvmfWz+SNmn6igQU7
-	x2xvI8+VYjdzxB4lJvgkKXrFLpJXfx6HupDTb+a6HtXkjurjmePAWXezOOadbhnCdyfXZDm+VgR
-	VhPbzlYlxToUJkl9lD7U3PIosr3sOj/vRQBFLthghISwkDREslJiY7HcY53BZG2dZ5JInXFXam3
-	aOazoiWrX614SFOBiu3YcC0gNtt5Vg5Y60JFm0BILQxoiN56aMQ9Y5tLxmSC8ebzxVqVepr3+Jd
-	F4WIxYjb1jtQKMIQmC79g3kIMYb6GUzRKjrEoz+i4sp1Nn2GpXmiIMeqXhjVG3gmvhxpL0/bo9u
-	x4MpVU10i6CpCJ9OwYK6wase5JO9+1q6ZIcng7YuipWu+EA8BOwRI3
-X-Google-Smtp-Source: AGHT+IGbEzi2B/fdmEUDKCIROhYT2JP0fyCOnD7k3UKC0LeDmcUiyVBCvzRNp2FpMcYdye5eGVBcdw==
-X-Received: by 2002:a05:6122:2202:b0:55b:305b:4e46 with SMTP id 71dfb90a1353d-55b8b7e75fcmr252525e0c.18.1763663483439;
-        Thu, 20 Nov 2025 10:31:23 -0800 (PST)
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-55b7f7d2356sm1385495e0c.22.2025.11.20.10.31.22
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Nov 2025 10:31:22 -0800 (PST)
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5dfcfbcbcc0so440776137.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 10:31:22 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWFh4lSIQ+9Fy1thzLBaHhLqoH7Epq0GNblplO/kGsbNp9g0d7BzNHuQQukaCxqijjWIOoD7b5hUEL117ulJYw=@vger.kernel.org
-X-Received: by 2002:a05:6102:5705:b0:5db:da81:2541 with SMTP id
- ada2fe7eead31-5e1d851b50cmr75313137.12.1763663481782; Thu, 20 Nov 2025
- 10:31:21 -0800 (PST)
+        d=1e100.net; s=20230601; t=1763665347; x=1764270147;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pUk7F3OiQezqpI/i6F82zzEyxwA4n2FgbJ6n9Doemj0=;
+        b=DMUyA15kh9pfBHNJ3gCHW7O6PjNSB8GKAVkJHHviNexfbcF/+Cn9KKNTd+T9Xl0GsG
+         ZVGUCduX9MuW37UNYJ5TAZ97/z5i+vh3Y4qjkwl//ajktolGp1TKqRbZw7NGskx3YTAJ
+         ytd4DV7pJ26IifheAdcKckTBjFvAJHp6DZIZ8ORj5OGQSFfQKwFqlrd695A1IRlS8mvB
+         ngJTq+S+X9qYvx405U0G9u8VKbVEw0F15VsLrO8bBcZZ//AZi+XZ6pvf4WLjRc88vYnr
+         T6LEwML0pgLibM0KyX057P9ZqTMWEgoMFSWoV45c38SJGyrObuAsW1v8q3Y+9MxzHQm2
+         Q1IQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFTCh2Qv4+PvvdoQUKBkhq6gIlhVSdl1TjFAfzTQAX3mBB/WsFv0yFVlU7ZUot5+OJJyf6925WXKCqi7NM+Pc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyO3mwEtR2H7hrRmDOTMACWepviUW5SbGB70sBPvAb6lf5SMX9U
+	aF1dJDKZQjFZ3fNzz5uJssRE5i1/K/MPhiPihE/HiNraepT/lvPbF9l2
+X-Gm-Gg: ASbGncsc/ZDhpWQRLuHtH0sLdz3WARmDtHigrql1UALvjtvrnyuq0kAf20rvblB53ho
+	1Jew4FS5O+6HId2EvzjvRoKOgvPGfd74plNwoPsgWd1lAm0gLb/o5EbxgEkVDlCM/IJZn9m8vY3
+	tIn2DpDTaLedWGayViGIqdeFkqAMSIj5NM7mw5nm2S1uPOHJLWHTEHgjlotO/ojbNZEUuiBLBpF
+	bzY/3VS7AeEdJuHEBM+25QxpjvqUhMZq9QQDsFHwh7iZwgIXB+K8sGKgyDD3bQLScSCCmEbIKqY
+	0aLqBf7ZQS5MZ3z/u+Di0ipd42Fq+NrhyObA01h4FXFkUNgC38u2ulNjUVBARJNt3A984M4xK6L
+	JOr/sIYha0hfShjaxAGiPNIbI1EuU4L97+zxRXikq7FfMau3SO4ArvK1tG1As1zC+3L7oc8OrHu
+	DmdktW
+X-Google-Smtp-Source: AGHT+IEm7cyBl9sCriUUQUppCnGpTm7hcBwhjRia2+n5Yk+UR+NhXXnMSkR2YAPQMqM5M9apaOTEZw==
+X-Received: by 2002:a05:600c:1c86:b0:477:a36f:1a57 with SMTP id 5b1f17b1804b1-477b857907amr46992595e9.3.1763665347278;
+        Thu, 20 Nov 2025 11:02:27 -0800 (PST)
+Received: from curiosity ([80.211.22.60])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477bf3af0e1sm3254925e9.10.2025.11.20.11.02.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 11:02:26 -0800 (PST)
+Date: Thu, 20 Nov 2025 22:02:21 +0300
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: Andy Chiu <andybnac@gmail.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Thomas Huth <thuth@redhat.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Joel Granados <joel.granados@kernel.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+	Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v4 1/9] selftests: riscv: test ptrace vector interface
+Message-ID: <aR9lvboEcSzSjGNY@curiosity>
+References: <20251108194207.1257866-1-geomatsi@gmail.com>
+ <20251108194207.1257866-2-geomatsi@gmail.com>
+ <CAFTtA3PK8kU6dsHdOT8Gj=ov9UbguSWv8+aQjtnvkx6hFWZGkg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <48381c47930d98380871458ca471ea5a7a89aafc.1762956447.git.geert+renesas@glider.be>
- <20251120164933.GV17968@ziepe.ca> <20251120170744.GA236839@ziepe.ca>
-In-Reply-To: <20251120170744.GA236839@ziepe.ca>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 20 Nov 2025 19:31:10 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVsyu_vnYiV7EcChd3a6czUCh4Gis3hL8uDVmbDcGo06w@mail.gmail.com>
-X-Gm-Features: AWmQ_bnRxfo1Tg8SkmQbZPhLq64ESeWKE0re-uwHoKs8zI4GSfe8l_ubdewUL4Q
-Message-ID: <CAMuHMdVsyu_vnYiV7EcChd3a6czUCh4Gis3hL8uDVmbDcGo06w@mail.gmail.com>
-Subject: Re: [PATCH] genpt: Make GENERIC_PT invisible
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
-	Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	KUnit Development <kunit-dev@googlegroups.com>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFTtA3PK8kU6dsHdOT8Gj=ov9UbguSWv8+aQjtnvkx6hFWZGkg@mail.gmail.com>
 
-Hi Jason,
-
-CC kunit
-
-On Thu, 20 Nov 2025 at 18:07, Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> On Thu, Nov 20, 2025 at 12:49:33PM -0400, Jason Gunthorpe wrote:
-> > On Wed, Nov 12, 2025 at 03:08:05PM +0100, Geert Uytterhoeven wrote:
-> > > There is no point in asking the user about the Generic Radix Page
-> > > Table API:
-> > >   - All IOMMU drivers that use this API already select GENERIC_PT when
-> > >     needed,
-> > >   - Most users probably do not know what to answer anyway.
-> > >
-> > > Fixes: 7c5b184db7145fd4 ("genpt: Generic Page Table base API")
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > ---
-> > >  drivers/iommu/generic_pt/Kconfig | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Nov 19, 2025 at 11:13:36AM -0600, Andy Chiu wrote:
+> On Sat, Nov 8, 2025 at 1:42 PM Sergey Matyukevich <geomatsi@gmail.com> wrote:
 > >
-> > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
->
-> Actually, it doesn't work :\
->
-> $ tools/testing/kunit/kunit.py run --build_dir build_kunit_x86_64 --arch x86_64 --kunitconfig ./drivers/iommu/generic_pt/.kunitconfig
-> [13:01:26] Configuring KUnit Kernel ...
-> [13:01:26] Building KUnit Kernel ...
-> Populating config with:
-> $ make ARCH=x86_64 O=build_kunit_x86_64 olddefconfig
-> Building with:
-> $ make all compile_commands.json scripts_gdb ARCH=x86_64 O=build_kunit_x86_64 --jobs=20
-> ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
-> This is probably due to unsatisfied dependencies.
-> Missing: CONFIG_IOMMUFD_TEST=y, CONFIG_DEBUG_GENERIC_PT=y, CONFIG_IOMMU_PT_VTDSS=y, CONFIG_IOMMU_PT=y, CONFIG_IOMMU_PT_AMDV1=y, CONFIG_IOMMU_PT_X86_64=y, CONFIG_GENERIC_PT=y, CONFIG_IOMMU_PT_KUNIT_TEST=y
->
-> Can you add this hunk and send a v2?
->
-> --- a/drivers/iommu/generic_pt/.kunitconfig
-> +++ b/drivers/iommu/generic_pt/.kunitconfig
-> @@ -1,4 +1,5 @@
->  CONFIG_KUNIT=y
-> +CONFIG_COMPILE_TEST=y
->  CONFIG_GENERIC_PT=y
->  CONFIG_DEBUG_GENERIC_PT=y
->  CONFIG_IOMMU_PT=y
+> > Add a test case to check ptrace behavior in the case when vector
+> > extension is supported by the system, but vector context is not
+> > yet enabled for the traced process.
+> >
+> > Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+> 
+> Reviewed-by: Andy Chiu <andybnac@gmail.com>
 
-Do you really want to enable CONFIG_COMPILE_TEST in a .kunitconfig?
+Thanks for taking a look ! I will need at least one more respin
+to cover xtheadvector support to both ptrace check and the selftests.
 
-Hm, that .kunitconfig already enables IOMMUFD_TEST, which is
-documented to be dangerous (why?), and already enabled by allyesconfig
-(except on GENERIC_ATOMIC64 architectures).
-IOMMUFD_TEST cannot select GENERIC_PT, as that would lead to
-a recursive dependency (and I am not a huge fan of test code auto-enabling
-extra attack surfaces^W^W functionality).
-
-Or perhaps:
-
--       bool "Generic Radix Page Table"
-+       bool "Generic Radix Page Table" if COMPILE_TEST || KUNIT
-
-?
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Sergey
 
