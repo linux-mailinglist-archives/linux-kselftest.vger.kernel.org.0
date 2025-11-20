@@ -1,181 +1,185 @@
-Return-Path: <linux-kselftest+bounces-46139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0EE5C760D8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 20:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A4D8C76174
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 20:34:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9172D34250E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 19:20:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 32BF9356B83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 19:33:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0803C2E6CCB;
-	Thu, 20 Nov 2025 19:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75D95288514;
+	Thu, 20 Nov 2025 19:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="c6qGKiCC"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="IubsUJVs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6C52517AA
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 19:20:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7241D27A477
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 19:33:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763666423; cv=none; b=bPt0i8dEw2Pah/k6p7fe8ejv5eeU4dPf0fR7WKZDHGnqGRI+42Sa4QvepT6EPp0j+B1Dd5jOAVnW5vWNZiXHHf1LK5biD3VfFOpLHsKaJYPexpR0BJ587Jh79kLOqo8YD/XvdxULHiiv+capHRvfZPee/gi03mlYy2+Pfyw6DIQ=
+	t=1763667211; cv=none; b=QTLx3Rrp35mEg9a7tiRd2lQdrP0tAntKYp5fPzQuOXxVVV2Qyw0rsNo3e4jaEA3evsdGtwYIptRZqDHQeSh9psEzRJR/ACxhRep79+JoPAkuY59ErUpwp+tL7FG1r78uM/lsDE4Yn14nSvrWm9crd6fjXJubOiZNruEFXNNYIfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763666423; c=relaxed/simple;
-	bh=AaCcqFGlaMkBKinMgcJOTsQZe0To9vv4Dqsh7zVA0tk=;
+	s=arc-20240116; t=1763667211; c=relaxed/simple;
+	bh=hzYdS2RbjjdpNPkRll9+qBCneRKVB6myqbcq8DhMp4U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o5bIz4uezp3w0PiGBZ99UakmD2SuC59juDKDnrYmZ39zntiUZMqQDvlSkhAWuGXWgETQhJ3F0QzxDRBQ/Pe4WWPrGd649YkZxssNtoKEdeYo4VA0/yR3/S3aMYw0gBjhwT+cwHSnClYh9QWs65irlHaD7mcKj9ScdFtn/hwz5+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=c6qGKiCC; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-42b387483bbso847093f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 11:20:21 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZYy2CK4PSbXQ8My3SNzcVdDDcjfEkeIOx4NoDPmRgxkXJ48X+FOIoYOo+A/5NVLHr86WdADVh4ko3ClnF2gHpmP0YG2SYZKKloG/k4dkn51aHowsnTt2+ubvgfxM/k5UwzKaKkaATYhl8jpsQVUL0dBY1pJ61dMkl8GtbwWdlF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=IubsUJVs; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-8b2ed01ba15so105345785a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 11:33:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763666420; x=1764271220; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1GdkfT+k3vOqAIJe3mmQZm2FSZ3v5dOxrZlq1SxHp5k=;
-        b=c6qGKiCCqVGjbVCF3KPrM8v17KfcDRCjANlVnpv3vnsNhSl5fK8MLoVc+YvU9JLjyC
-         aHEGZyboEx2KYcfxE/3eQ+82zxQC9pSxwwnIv/j2mITLr+VDioC0kNk92RRHFneto+AO
-         KzJ04xEvX1xcsUiHBOZ80r8Cd0K+JwsaIn704XiLROJKjqvLwy/I41nIY6aKuhQeRTcr
-         EoWeD8aPvIIpkJYwobikIjMoW/byJ4lPJAtROwlVmhsSoY2naJv4MCAZSLro02igbfbb
-         rPPAjrHUpFAwuJhEFhkmC9TCo+7I8Mv4/vwcuyOZepdIVMa3eC0gpj5odgydgsgJB9OL
-         pFMw==
+        d=ziepe.ca; s=google; t=1763667208; x=1764272008; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJbOTvKtBkMETxUQbFFc6nVU6t/7S/ESP6xTtKSK0tM=;
+        b=IubsUJVsozjeY2Y4jN50q/fx1c4JbqqwWtVNLozAKP6oHvzL7bYZiqv2sOsvHXv92j
+         xtbvwVUHcJfYaC5ydUgAxU3ZBgBtCvMnHYWjgA4Bt+ez638hPh0auuIVTV5QnL3cq9Vi
+         gdq/h4LzTHAnaCcPPBZ7miB+PdphgmZKyq5aoZhv97qooz2FwNoRdcuqdqtZnAOckH9d
+         PF+UBh0W8hInqjFod7jv31MhqJsDM/HGF2OZ+bga9IX7bW3tN+ZEw3Vqk+lIeSw7hdRf
+         0j6il7WIzRiDXfnptOfoOAhN0g5V6mb5BRXbr9U4B5uga4awi7QuS1KR7+8ON1rnBkpv
+         QbrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763666420; x=1764271220;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1GdkfT+k3vOqAIJe3mmQZm2FSZ3v5dOxrZlq1SxHp5k=;
-        b=Q8UJnE30Yns97M2bsGNgaZ0KZ08wKpN28FfmHptdLVkZ4A3ZuyjZJdvHY/rSShohCD
-         90uC7oKv15cp6zmn2UQ1773P98USRN8vfkWnrDwjGuu7Saxk3a0dc9mBIR7w59h+dzn+
-         dkDgp8utwHrX00P0VG6loTWMmgcboe+5BFGCx7jQY6fklI+UxZ4DYF5HFNgRRRl+nSSz
-         5/P7hJx+dpii2ZvtraYt37ZE64CjhiZX+iulUwQmL7adE7DyX6nz3WdhJ6b86Vng3k54
-         KVCPDLqZTfsOnsrHEtMMZ1RhjUdrtQNdHyuvGNAY4s2xoyZE2zELqZRdvXKv/4v8Ubx7
-         EGOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBYm3Sv+c9ndKReVndcrTVvI0EL9uI3XYcCxbMus6qg7bvhFTYqW3cdcUvMVlL5cZN1UEEbK0wkvGlLb/gtIM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9mYlA1bGz5qjCs5NqSfT0TC3QEDLgpMrXRwDSE2Xj2HNc8tPF
-	M0jPejwyo+IaclhJKQGOEnngYIIHWO57JZwjXisuxjZ4J6pi2RqH09WpvpkpUAI4RVU=
-X-Gm-Gg: ASbGncv5DIAzqVZw+m4unYRVSNGdQGo0kvEjdSHFcb7S0Ywdb8HjFw5iF4G2Near3oc
-	XjqGemG/Tw8tDUjz4HX8hGpbhMGjTaWLqjBMUMGHfITpVRTDSe83xSN2cANoUI2WIItK1DL75zg
-	QsY3vtFzbyr5UzR3RSUXUSV32CHkD1SVBlmdsxTAtgrDXCqJ9IAIJeQL5SaOwI3RGQOikxdFCBs
-	UDSCpZru0qGL6aGLwqLUbO/pez9boiNOr+akJfSgbrDqxIJPeb4BIqVttsUr7bTqTfUNcADA80e
-	4ndPOMsaQrKYoFdeLLarJZyKevfqnvJUoiYSSkPq5jNwG9Z43hukgH86a96G8FD7TbFrHkwlfVL
-	WW8x9QbeG/9Gt/S2Mly05FYPR9rmp0Vb8sykGwFOhtUdeyeQTcjZO6got+vCjGuIAGJh8BUtOrV
-	HxHPF/8ry7E5+fWiaIX1kZZ1LQ
-X-Google-Smtp-Source: AGHT+IGAoi9mcb2Ki+Vf2x8GF9MIVNCxw9/ODHm+fzM81xCrrAi2YNRfJaEumj8/F5Vldpj31JhIrw==
-X-Received: by 2002:a5d:5f50:0:b0:42b:5628:f4a3 with SMTP id ffacd0b85a97d-42cb9a0d86bmr4652179f8f.1.1763666420131;
-        Thu, 20 Nov 2025 11:20:20 -0800 (PST)
-Received: from localhost (109-81-31-109.rct.o2.cz. [109.81.31.109])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fa41d2sm6785593f8f.22.2025.11.20.11.20.19
+        d=1e100.net; s=20230601; t=1763667208; x=1764272008;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OJbOTvKtBkMETxUQbFFc6nVU6t/7S/ESP6xTtKSK0tM=;
+        b=OPC57g6Ruv7bDfOxaFzd1+xrFv0SktFAn6n77/17eJId4YP1HiEgttPM/5MXDZYgd2
+         3s42/hgvwim4S1yaicrpX62ANeqaF/6GRjUhhqjkbkJCknQ7zMSkI40cHQ4aizKGiTS8
+         mElzqQv7hLmOIlpkfu2bXUj0yowqIUMLq92m3qFN729Ku3dluqftgmRY0OlP3pbllUgC
+         nz3TGtaV8gjDDZIH0GuAKi20dPVCxVFEyUE+A2baD3JQ1ycL7TnntScc+W9q1OZrNWRL
+         Jp686EbEwlbae4ItUGtzXzh85+OH7rpeoZM10Ii4Wlb33YDlGKnvbUYwzAkcAvaRaytR
+         J4kw==
+X-Forwarded-Encrypted: i=1; AJvYcCU9D1uLHs2sCEICW08ec9rTgbCCuiDiLiFYsdmJ9hsVMBwl6sSwhSzoXjUrlNaLaD6ed/QLwBv+ZIRlOjye73g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsJc5u0+sUEsQKoId2TOH+sV6K0bpnzu+XwyPXq7gbhsh85CPo
+	1Xhp1Z8GzZd6TL06pDYRg5MCTgKyyJ168hr6vchWkmabkvwvvNaiX0ZkqAGzGARfjsk=
+X-Gm-Gg: ASbGnctirW5PoyoZvNCipfft/sBHpUK+SHw5T3UldGRf7avNyyPU4K2JEOMk6+5bLT7
+	15L8Uylpmhoo5/tZlbvSVn7vMF6hq91PQ5mJ/pfs4mME+sng1pJINzJ4dY9sr6P1GToslu60bJb
+	v0pO0ZLBMl1e9tEqtaRE2+WDaFRq1hYpjalIzDsBqlszstY1PyfX4z8XIEeaYgP2sIXkKjbPMl1
+	lzwoLB7Ej4JyJiNnt/Sb7WmbhLv5cCPYbwzwA67tG5apCRfqPyI2xHBWJBA+7OH+U0VMdkt67T/
+	bVAADrKEknDPRRf7YE/EFMIWYcLj0Yumi8ougwdgH5YgKTu1EPEltNOYMOt0CtUUDZZNyvTebyY
+	2al5Ynjz/pdU9GRAOdfzsUfv0+o844U9+/SVCi2iUXd0Gzi0a/2+qA+MLmjEywEubhOsGUTamN3
+	P3TjG+ifjrjmyJk7DwO62ryDl9ylvTBpzdAG0VDJAnH2ZMVG+hDOlXkk6p
+X-Google-Smtp-Source: AGHT+IGpaR+w3wp4votZhuUNdazIQPQ2JUOa4gTel/dGSMeoCPvMZg4kNVugdag6pW8h3TthvdJcbg==
+X-Received: by 2002:a05:620a:7103:b0:8a2:45ba:1b5e with SMTP id af79cd13be357-8b33860b8eamr108942585a.28.1763667208042;
+        Thu, 20 Nov 2025 11:33:28 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-120-4.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.120.4])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b3294321dcsm208458485a.13.2025.11.20.11.33.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 11:20:19 -0800 (PST)
-Date: Thu, 20 Nov 2025 20:20:18 +0100
-From: Michal Hocko <mhocko@suse.com>
-To: hui.zhu@linux.dev
-Cc: Roman Gushchin <roman.gushchin@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
-	Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>,
-	mkoutny@suse.com, Jan Hendrik Farr <kernel@jfarr.cc>,
-	Christian Brauner <brauner@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	cgroups@vger.kernel.org, bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
-Subject: Re: [RFC PATCH 0/3] Memory Controller eBPF support
-Message-ID: <aR9p8n3VzpNHdPFw@tiehlicka>
-References: <cover.1763457705.git.zhuhui@kylinos.cn>
- <87ldk1mmk3.fsf@linux.dev>
- <895f996653b3385e72763d5b35ccd993b07c6125@linux.dev>
+        Thu, 20 Nov 2025 11:33:27 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1vMAPG-000000015S2-37Ge;
+	Thu, 20 Nov 2025 15:33:26 -0400
+Date: Thu, 20 Nov 2025 15:33:26 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	KUnit Development <kunit-dev@googlegroups.com>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] genpt: Make GENERIC_PT invisible
+Message-ID: <20251120193326.GB233636@ziepe.ca>
+References: <48381c47930d98380871458ca471ea5a7a89aafc.1762956447.git.geert+renesas@glider.be>
+ <20251120164933.GV17968@ziepe.ca>
+ <20251120170744.GA236839@ziepe.ca>
+ <CAMuHMdVsyu_vnYiV7EcChd3a6czUCh4Gis3hL8uDVmbDcGo06w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <895f996653b3385e72763d5b35ccd993b07c6125@linux.dev>
+In-Reply-To: <CAMuHMdVsyu_vnYiV7EcChd3a6czUCh4Gis3hL8uDVmbDcGo06w@mail.gmail.com>
 
-On Thu 20-11-25 09:29:52, hui.zhu@linux.dev wrote:
-[...]
-> > I generally agree with an idea to use BPF for various memcg-related
-> > policies, but I'm not sure how specific callbacks can be used in
-> > practice.
+On Thu, Nov 20, 2025 at 07:31:10PM +0100, Geert Uytterhoeven wrote:
+> Hi Jason,
 > 
-> Hi Roman,
+> CC kunit
 > 
-> Following are some ideas that can use ebpf memcg:
+> On Thu, 20 Nov 2025 at 18:07, Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > On Thu, Nov 20, 2025 at 12:49:33PM -0400, Jason Gunthorpe wrote:
+> > > On Wed, Nov 12, 2025 at 03:08:05PM +0100, Geert Uytterhoeven wrote:
+> > > > There is no point in asking the user about the Generic Radix Page
+> > > > Table API:
+> > > >   - All IOMMU drivers that use this API already select GENERIC_PT when
+> > > >     needed,
+> > > >   - Most users probably do not know what to answer anyway.
+> > > >
+> > > > Fixes: 7c5b184db7145fd4 ("genpt: Generic Page Table base API")
+> > > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > > > ---
+> > > >  drivers/iommu/generic_pt/Kconfig | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> >
+> > Actually, it doesn't work :\
+> >
+> > $ tools/testing/kunit/kunit.py run --build_dir build_kunit_x86_64 --arch x86_64 --kunitconfig ./drivers/iommu/generic_pt/.kunitconfig
+> > [13:01:26] Configuring KUnit Kernel ...
+> > [13:01:26] Building KUnit Kernel ...
+> > Populating config with:
+> > $ make ARCH=x86_64 O=build_kunit_x86_64 olddefconfig
+> > Building with:
+> > $ make all compile_commands.json scripts_gdb ARCH=x86_64 O=build_kunit_x86_64 --jobs=20
+> > ERROR:root:Not all Kconfig options selected in kunitconfig were in the generated .config.
+> > This is probably due to unsatisfied dependencies.
+> > Missing: CONFIG_IOMMUFD_TEST=y, CONFIG_DEBUG_GENERIC_PT=y, CONFIG_IOMMU_PT_VTDSS=y, CONFIG_IOMMU_PT=y, CONFIG_IOMMU_PT_AMDV1=y, CONFIG_IOMMU_PT_X86_64=y, CONFIG_GENERIC_PT=y, CONFIG_IOMMU_PT_KUNIT_TEST=y
+> >
+> > Can you add this hunk and send a v2?
+> >
+> > --- a/drivers/iommu/generic_pt/.kunitconfig
+> > +++ b/drivers/iommu/generic_pt/.kunitconfig
+> > @@ -1,4 +1,5 @@
+> >  CONFIG_KUNIT=y
+> > +CONFIG_COMPILE_TEST=y
+> >  CONFIG_GENERIC_PT=y
+> >  CONFIG_DEBUG_GENERIC_PT=y
+> >  CONFIG_IOMMU_PT=y
 > 
-> Priority‑Based Reclaim and Limits in Multi‑Tenant Environments:
-> On a single machine with multiple tenants / namespaces / containers,
-> under memory pressure it’s hard to decide “who should be squeezed first”
-> with static policies baked into the kernel.
-> Assign a BPF profile to each tenant’s memcg:
-> Under high global pressure, BPF can decide:
-> Which memcgs’ memory.high should be raised (delaying reclaim),
-> Which memcgs should be scanned and reclaimed more aggressively.
-> 
-> Online Profiling / Diagnosing Memory Hotspots:
-> A cgroup’s memory keeps growing, but without patching the kernel it’s
-> difficult to obtain fine‑grained information.
-> Attach BPF to the memcg charge/uncharge path:
-> Record large allocations (greater than N KB) with call stacks and
-> owning file/module, and send them to user space via a BPF ring buffer.
-> Based on sampled data, generate:
-> “Top N memory allocation stacks in this container over the last 10 minutes,”
-> Reports of which objects / call paths are growing fastest.
-> This makes it possible to pinpoint the root cause of host memory
-> anomalies without changing application code, which is very useful
-> in operations/ops scenarios.
-> 
-> SLO‑Driven Auto Throttling / Scale‑In/Out Signals:
-> Use eBPF to observe memory usage slope, frequent reclaim,
-> or near‑OOM behavior within a memcg.
-> When it decides “OOM is imminent,” instead of just killing/raising
-> limits, it can emit a signal to a control‑plane component.
-> For example, send an event to a user‑space agent to trigger
-> automatic scaling, QPS adjustment, or throttling.
-> 
-> Prevent a cgroup from launching a large‑scale fork+malloc attack:
-> BPF checks per‑uid or per‑cgroup allocation behavior over the
-> last few seconds during memcg charge.
+> Do you really want to enable CONFIG_COMPILE_TEST in a .kunitconfig?
 
-AFAIU, these are just very high level ideas rather than anything you are
-trying to target with this patch series, right?
+IDK, why not?
 
-All I can see is that you add a reclaim hook but it is not really clear
-to me how feasible it is to actually implement a real memory reclaim
-strategy this way.
+> Hm, that .kunitconfig already enables IOMMUFD_TEST, which is
+> documented to be dangerous (why?)
 
-In prinicipal I am not really opposed but the memory reclaim process is
-rather involved process and I would really like to see there is
-something real to be done without exporting all the MM code to BPF for
-any practical use. Is there any POC out there?
--- 
-Michal Hocko
-SUSE Labs
+It builds in a kernel module with a uapi that is kind of unsafe.
+
+Though, hmm, maybe that is some weird a leftover I don't recall that
+this kunit needed IOMMUFD_TEST stanza at all..
+
+>  and already enabled by allyesconfig (except on GENERIC_ATOMIC64
+> architectures).  
+
+I guess allyesconfig would do that.
+
+> IOMMUFD_TEST cannot select GENERIC_PT, as that would lead to a
+> recursive dependency (and I am not a huge fan of test code
+> auto-enabling extra attack surfaces^W^W functionality).
+
+Yes
+
+> Or perhaps:
+> 
+> -       bool "Generic Radix Page Table"
+> +       bool "Generic Radix Page Table" if COMPILE_TEST || KUNIT
+> 
+> ?
+
+It would work, that does seem like a better choice if someone wants to
+make the kunit run in a normal disto kernel.
+
+Thanks,
+Jason
 
