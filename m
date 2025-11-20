@@ -1,140 +1,190 @@
-Return-Path: <linux-kselftest+bounces-46132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF4E3C75739
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 17:46:17 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7530C75DF1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 19:13:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E9AA64E050A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:40:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id B579828DE1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 18:13:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717941805E;
-	Thu, 20 Nov 2025 16:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qna/Gj5W"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632292264D9;
+	Thu, 20 Nov 2025 18:13:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E53126F2AB
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 16:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E9F2FE59C;
+	Thu, 20 Nov 2025 18:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763656833; cv=none; b=qtViHno5INASpaQYZtazdXh9qLsnVe+dCkWr2H+61oyV2XVY5HjVQ1+rgC7CZpt6w/tzVAWtJKXsj+rSSTTVhNt8KzjqYTF4MnsssqpJv2TsuQ4kk3J2CmSY82aJ+o+DJR15fAYuIN1+m0nn0HkxkP++2hpal4oth/h6sNNQ+q8=
+	t=1763662421; cv=none; b=gJDHAytPdGJbfnxPSRcJHvZmqPj9FtyalBtrRRSS1b4EG3Y5DCr2RWEgbpgMPkAHS30GLfTHPEGf4gzARozBJxiUzOMp2xv8Uy9VuOsKywRhUqZ7Hdls71MCTKZl65PiFd6BeTBji7GbcVx2bxUnxpFnUIGVeNW+OwnAYbIm2ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763656833; c=relaxed/simple;
-	bh=0rLW36iyOf5x4MMAHLt7ZJRKB7UhffR6LbUm9J0KINk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qT0Vqn3b5HQLekyP89+maDkVAA+jNmajopCufoL9ZQQWFN45KZYVR2r5p89is1IuprwJFxNsIH0+Ka81fhg1TkzHwJM2KlnjxzDPJcLUbyNdYFZQHUqo3LTzxzg9G6+ccvW9/aEB1IUTEIr+4nA00AvxpK7D90fCKqqCGTttFUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qna/Gj5W; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-9490b441c3bso46754839f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 08:40:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1763656831; x=1764261631; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aa1AkRLymUeMfi+gvxg2H2c9FzoNzzQchV4cefwGG74=;
-        b=Qna/Gj5WikmcXneAJgNzupCB7vXhKIHbcGbe4Bih3eqOVfOfgFryRU/AxsvGtM+Y6M
-         AZJB+QdIlY8/Hr5Ru+9kN+wWZjQiwIRrKy0P86l4zGtK4nF1cgI9U1453OyhrGuSm7UX
-         ystIrTkBybvrwjkPtQiYsHpV0uFpDNe5/VEO0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763656831; x=1764261631;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aa1AkRLymUeMfi+gvxg2H2c9FzoNzzQchV4cefwGG74=;
-        b=CsDKONWs7XZynAhRm9vPUlvUbE43usgAnBou6wFYdBC5H43nvLWD0oJ8GM+D0Uzbfl
-         XsaKK+adnrChsMcgiyXWip3SEjTDw0MXgTK1j5rIKShcqiXM5KLfsntvsqjegduxE77Y
-         QsktEps2D340VN4zOz5XEzDe8yFP9a/3fVqzQ8ca8db837NTj0DwnCfJF1qb9H6ufjWx
-         nqboNf6VUfBXGd87g1kD1pJ9rw6VnoJsgYZadTFhKXUT1TkaDrCLRM4/fjvcq4yoc6gn
-         5LFUHYxasd11bXFn4ccBJ/WrjrG0snuJMLZqr9PI0IKYYKrxX/E/dcXYDH7jP7rH+fiW
-         aZSg==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ/afd3T1O4jsGQZ9failWktEgwsJm2vKum7Xk7JpEbvZQv4UGVBS961ysB0WMWrOwZ9ML3JK5qSez7kSKLic=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9TrdZqHMiAvjp6cg3L1oH9k+hQkvkwF4ihtcEnEozT1qbC5vK
-	rWHtjJWkXekRn1lgPJACLocMUaRrnlETHecx/O4N6Xiu8zqv36Oh+QO8DLbR+qCUn3EXap2gDm8
-	HQ4Jc
-X-Gm-Gg: ASbGncvw24kyBGnk7gg5woSjn0anAyzhEA65iYEjQ//pIUZQyJQtHOihA//YF78nVb7
-	PPM4tMvx1t5uGE3kIumW7wwftMVOA1M2HgxVljH4YR5lUeRYcHei2zGWkOWrRZt/nDLcMQQ/+5r
-	o+kM8IBycQenrolx8cY+tTUyQ1Ab3RE/UGXylhPdTXZ1S9BFYgvGW/LdnMJ6eSD4zuplJkVCWbl
-	kNZBPugALBcAa/W7B8inRbLre+0A9KU2Q03MPc6iAsLPzaxK+W/wsnPm7KKyDERNeUnYFFBJiEG
-	ubEWROX4b3zc05puoqRYPU0w1G0FIQhOjahlUYRSBbAfqPS8qZdYncgOjQaPPELUf4tseadykrR
-	fgM8D1XBUFzWraEBcJDfHSnJr1LJdisw7Rn6YITGH6Tl8pb6Hy9bvDm1ro3VS/U7jNPGyxlN+lh
-	wlmriRWGSm55UjV+fKzy4XGWU=
-X-Google-Smtp-Source: AGHT+IFsgTAAQrcv0Z7q9/prVRarkjR54xZam1Bd2zaiU428gFS16ceXIp7y0FoUhB6GTW5mK9UwtQ==
-X-Received: by 2002:a05:6602:371a:b0:949:15f:6226 with SMTP id ca18e2360f4ac-94938ad740fmr250309839f.16.1763656830706;
-        Thu, 20 Nov 2025 08:40:30 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-949385d34a9sm108901139f.8.2025.11.20.08.40.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Nov 2025 08:40:30 -0800 (PST)
-Message-ID: <f0774852-fe3c-4236-91b1-f38045ea26f7@linuxfoundation.org>
-Date: Thu, 20 Nov 2025 09:40:28 -0700
+	s=arc-20240116; t=1763662421; c=relaxed/simple;
+	bh=QIS6mpBdq2N3xQljBgRUlhU8C+c5gVyatzHM0SIxhyQ=;
+	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=cxt/aEyJotjk1o79gWNWXLKSN6hM3DxDYFkQHZUHaMHN3reTx9PaKLiFHx1JAz/bAiFNIis4F3DT/mPBuYuS+xrZ/3ROzwK2WTNcBpGkht8Ka/OP7LOlpTWu1OozuO/xvJssizzxYD/3dl6NGvgEOgbT5bsczrku6g4QEZIwYpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in01.mta.xmission.com ([166.70.13.51]:36142)
+	by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1vM8TC-0080O5-W2; Thu, 20 Nov 2025 10:29:23 -0700
+Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:33708 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1vM8TB-00Fz5d-R2; Thu, 20 Nov 2025 10:29:22 -0700
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,  Alexey Dobriyan
+ <adobriyan@gmail.com>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
+ <kees@kernel.org>,  Andy Lutomirski <luto@amacapital.net>,  Will Drewry
+ <wad@chromium.org>,  Christian Brauner <brauner@kernel.org>,  Andrew
+ Morton <akpm@linux-foundation.org>,  Michal Hocko <mhocko@suse.com>,
+  Serge Hallyn <serge@hallyn.com>,  James Morris
+ <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
+  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
+ <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
+ <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
+ <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
+  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
+  linux-security-module@vger.kernel.org,  tiozhang
+ <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
+ Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
+ <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
+  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
+  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
+  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
+ <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
+ <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
+ <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
+ Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
+ Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
+ <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
+ Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
+  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
+ <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
+ Dumazet <edumazet@google.com>
+In-Reply-To: <87tsyozqdu.fsf@email.froward.int.ebiederm.org> (Eric
+	W. Biederman's message of "Thu, 20 Nov 2025 09:15:57 -0600")
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<87tsyozqdu.fsf@email.froward.int.ebiederm.org>
+Date: Thu, 20 Nov 2025 11:29:14 -0600
+Message-ID: <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: tracing: Add tprobe enable/disable testcase
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <176252610176.214996.3978515319000806265.stgit@devnote2>
- <f5f272e1-e164-4bb1-bfd0-42edd5a125c5@linuxfoundation.org>
- <20251119170611.6eff8df7@gandalf.local.home>
- <b61a339e-f80f-4ecd-861e-e9bb834d5101@linuxfoundation.org>
- <20251120102526.e5e9332fcab1db3ce18c6d15@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20251120102526.e5e9332fcab1db3ce18c6d15@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-XM-SPF: eid=1vM8TB-00Fz5d-R2;;;mid=<87wm3ky5n9.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX18WRCiEc86RNupml3aU1I9F5t8x9s6oRjc=
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.5000]
+	*  0.7 XMSubLong Long Subject
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  1.0 XM_B_SpammyTLD Contains uncommon/spammy TLD
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Bernd Edlinger <bernd.edlinger@hotmail.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 514 ms - load_scoreonly_sql: 0.05 (0.0%),
+	signal_user_changed: 11 (2.1%), b_tie_ro: 9 (1.8%), parse: 1.07 (0.2%),
+	 extract_message_metadata: 17 (3.4%), get_uri_detail_list: 1.68 (0.3%),
+	 tests_pri_-2000: 14 (2.8%), tests_pri_-1000: 11 (2.1%),
+	tests_pri_-950: 1.22 (0.2%), tests_pri_-900: 1.10 (0.2%),
+	tests_pri_-90: 92 (17.9%), check_bayes: 81 (15.7%), b_tokenize: 18
+	(3.5%), b_tok_get_all: 8 (1.5%), b_comp_prob: 3.2 (0.6%),
+	b_tok_touch_all: 49 (9.4%), b_finish: 0.90 (0.2%), tests_pri_0: 352
+	(68.5%), check_dkim_signature: 0.56 (0.1%), check_dkim_adsp: 2.4
+	(0.5%), poll_dns_idle: 0.53 (0.1%), tests_pri_10: 2.2 (0.4%),
+	tests_pri_500: 8 (1.6%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v18] exec: Fix dead-lock in de_thread with ptrace_attach
+X-SA-Exim-Connect-IP: 166.70.13.51
+X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-SA-Exim-Scanned: No (on out02.mta.xmission.com); SAEximRunCond expanded to false
 
-On 11/19/25 18:25, Masami Hiramatsu (Google) wrote:
-> On Wed, 19 Nov 2025 15:56:57 -0700
-> Shuah Khan <skhan@linuxfoundation.org> wrote:
-> 
->> On 11/19/25 15:06, Steven Rostedt wrote:
->>> On Wed, 19 Nov 2025 14:44:22 -0700
->>> Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>
->>>> On 11/7/25 07:35, Masami Hiramatsu (Google) wrote:
->>>>> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->>>>>
->>>>> Commit 2867495dea86 ("tracing: tprobe-events: Register tracepoint when
->>>>> enable tprobe event") caused regression bug and tprobe did not work.
->>>>> To prevent similar problems, add a testcase which enables/disables a
->>>>> tprobe and check the results.
->>>>>
->>>>> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
->>>>
->>>> Steve, do you want me to take this through my tree?
->>>
->>> Yes please. Masami's an official maintainer and mostly handles all things
->>> "probe" related. This is his domain ;-)
->>>
->>> Thanks,
->>>
->>> -- Steve
->> Applied to linux-kselftest next for Linux 6.19-rc1.
-> 
-> Thanks Shuah! This and other regression fixes is better to go
-> through selftests tree because those are checking existing
-> features. Maybe better to add [PATCH -selftests] or something
-> like that?
-> 
+"Eric W. Biederman" <ebiederm@xmission.com> writes:
 
-Let me know which ones you would like to pick up and apply to my tree.
+> Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
+>
+>> This introduces signal->exec_bprm, which is used to
+>> fix the case when at least one of the sibling threads
+>> is traced, and therefore the trace process may dead-lock
+>> in ptrace_attach, but de_thread will need to wait for the
+>> tracer to continue execution.
+>
+> A small quibble it isn't a dead lock.  It isn't even really a live lock,
+> as it is possible to SIGKILL our way out.
+>
+> Thinking about this there is a really silly and simple way we can deal
+> with this situation for PTRACE_ATTACH.  We can send SIGSTOP and wait for
+> the thread to stop before doing anything with cred_guard_mutex.
+>
+> PTRACE_ATTACH already implies sending SIGSTOP so as long as we have
+> enough permissions to send SIGSTOP I don't see that being a problem.
+>
+> The worst case I can see is that we get a case where we stop the
+> process, the permission check fails under cred_guard_mutex and
+> and ptrace attach has fails and has to send SIGCONT to undo it's
+> premature SIGSTOP.  That might almost be visible, but it would still
+> be legitimate because we can still check that we have permission to
+> send SIGSTOP.
 
-thanks,
--- Shuah
+Bah no I am full of it.
+
+The challenging behavior is in the semantics of the kernel operations.
+We need to describe it as such please.
+
+It is the same class of problem as a single threaded process calls exec
+with a pipe attached to both stdin and stdout of the new process.
+
+For the stdin and stdout we can say just use pull and nonblocking I/O.
+
+The problem is that both PTRACE_ATTACH and PTRACE_SEIZE block over
+the duration of exec, and if exec is waiting for a thread to exit,
+and that thread is blocked in PTRACE_EVENT_EXIT waiting for that very
+same tracer those processes will hang. Not deadlock.
+
+
+I haven't seen anyone clearly describe the problem lately so I am
+repeating it.
+
+
+Just looking at the code I don't think there is any fundamental reason
+to call commit_creds after de_thread.  If we can change that we can sort
+this out without any change in userspace semantics.
+
+If we can't move commit_creds we have to either give
+PTRACE_ATTACH/PTRACE_SEIZE a non-block mode, or break out of
+PTRACE_EVENT_EXIT in de_thread.
+
+I will post a proof of concept of moving commit_creds in just a minute.
+
+Eric
 
