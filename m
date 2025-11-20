@@ -1,128 +1,124 @@
-Return-Path: <linux-kselftest+bounces-46062-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20B38C7243C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 06:41:06 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D5A7C7247B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 06:50:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6C91C4E2D27
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 05:40:58 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 99769353350
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 05:49:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A662FE567;
-	Thu, 20 Nov 2025 05:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32DCB27A927;
+	Thu, 20 Nov 2025 05:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sYdhT5dU"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GvOQbs2z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78232FFDE6
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 05:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A112727ED
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 05:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763617255; cv=none; b=t/vkGGyCzT0o/Z+mdcxoUztdAH/Ikzz9foIeCznzP6Zw2Of3ECAJWWpb3vthOs1p2/xP+NRgsy+Ht1tJ7pio7kc0RIHxc6zcd4KqOf/2BiAg8uNnIH0ywOtFeBLkNYLyXi+Pr9jUA0rmPIL3wSq9ggaaAPlwXJYX6C1T5ApB+qo=
+	t=1763617756; cv=none; b=JV1oRpvdEWf/+T4M1EbnzaXrOyxW+92tdxTL1O47643wcafzPb/y0oLIj51zFZiPOlk+SG6RgTCUSegnBEF3E1svaf1vqLFgQfwfybcLZRSs0p5fAgT/QaehxO0Sa8/0xTO0Tf69VrDJcDM82j3K2RcMuIZArsCE3AFoqGJKOns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763617255; c=relaxed/simple;
-	bh=OrHr5OBA3hTwt7niZUu05PDAmRnp8lU0IfHJTEIJMbM=;
+	s=arc-20240116; t=1763617756; c=relaxed/simple;
+	bh=RA75ANsCFli71Nin/P/uUZERLhitDgNZaMMrwAM1Wis=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N/ygvoC+VDiKkaYzaGwiaqq+6nOJSFU394vDWLLNT4vRCtyYKFshPcI5cwrHct9H2BP/it2VLoAGFaNjtTzpzROZeBT/RRoPljL4LG5HNZAos7sS3YOy3uE9b4e34JJ8qPxkKjX80ubtzI+LTzlTlI9sx4utxSnl6nEGjmRITRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sYdhT5dU; arc=none smtp.client-ip=95.215.58.189
+	 In-Reply-To:Content-Type; b=tVXTUHWHRVS4JDke8bPfh9Duhf844sma3siYz3JksK/zddfXEl50H5dbfiyruW2jqwZwnfNKs8PjMHZrrjgPs211IXSmKFmcCkA7XIUAJysGebQyZ/brsZ2aE10l9MiLQAT7nW8id5OIewi4HTDNLZ+kDPHlsngCrI6mvmJnPBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GvOQbs2z; arc=none smtp.client-ip=91.218.175.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <5ad2b75f-748a-4e93-8d11-63295bda0cbf@linux.dev>
+Message-ID: <594f5fdc-567c-443b-8bec-313986bce9be@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763617249;
+	t=1763617742;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ij3CZTiXFrpU/rmr2/hRZVBLGTLP5tsrztxvPsm3IUM=;
-	b=sYdhT5dU3FtwgTHC76n+k9PosD+C5XAY0ZmggWmW7CL9+DmYwksSch3iIvZ/go5zudOmyE
-	6b70vhIA2aOFm/CP3jMFG4xNhLKrwRvbcJfOCIxi1clOauRoJlMyM+UT6wm9hkc5nZhIuK
-	D1adzO2n/rYet5pAyLAcoq8mTPdkBvY=
-Date: Thu, 20 Nov 2025 13:40:34 +0800
+	bh=xHYXCj+PBmqDHq20QynsVeuFscEdivmHkOXz0KSXfp8=;
+	b=GvOQbs2zmSPWZv/p9mDvkSsQ6fkjxisB/IeYsK00ktF6cjhDx1wOZ2BcDcuJEyqdUUanzP
+	QeHfedJhQbV2UHkvzxh7TdAf2BD9vFqBzYQ3IMPMglOfvAlJ4zmk7w4rq1kz5ysOLkK9Ez
+	QGFRlpNAOkuAX+IK9Yw1wiWBOa7KtJ4=
+Date: Thu, 20 Nov 2025 13:48:49 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] selftests: cgroup: make test_memcg_sock robust against
- delayed sock stats
+Subject: Re: [PATCH v4 1/9] mm: introduce VM_MAYBE_GUARD and make visible in
+ /proc/$pid/smaps
 Content-Language: en-US
-To: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Cc: shuah@kernel.org, mkoutny@suse.com, linux-mm@kvack.org,
- muchun.song@linux.dev, linux-kselftest@vger.kernel.org,
- shakeel.butt@linux.dev, linux-kernel@vger.kernel.org, tj@kernel.org,
- hannes@cmpxchg.org, mhocko@kernel.org, roman.gushchin@linux.dev
-References: <20251120031619.1828911-1-zhangguopeng@kylinos.cn>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
+ "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Andrei Vagin <avagin@gmail.com>, Andrew Morton <akpm@linux-foundation.org>
+References: <cover.1763460113.git.lorenzo.stoakes@oracle.com>
+ <cf8ef821eba29b6c5b5e138fffe95d6dcabdedb9.1763460113.git.lorenzo.stoakes@oracle.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <20251120031619.1828911-1-zhangguopeng@kylinos.cn>
+In-Reply-To: <cf8ef821eba29b6c5b5e138fffe95d6dcabdedb9.1763460113.git.lorenzo.stoakes@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 
 
-On 2025/11/20 11:16, Guopeng Zhang wrote:
-> test_memcg_sock() currently requires that memory.stat's "sock " counter
-> is exactly zero immediately after the TCP server exits. On a busy system
-> this assumption is too strict:
+On 2025/11/18 18:17, Lorenzo Stoakes wrote:
+> Currently, if a user needs to determine if guard regions are present in a
+> range, they have to scan all VMAs (or have knowledge of which ones might
+> have guard regions).
 > 
->    - Socket memory may be freed with a small delay (e.g. RCU callbacks).
->    - memcg statistics are updated asynchronously via the rstat flushing
->      worker, so the "sock " value in memory.stat can stay non-zero for a
->      short period of time even after all socket memory has been uncharged.
+> Since commit 8e2f2aeb8b48 ("fs/proc/task_mmu: add guard region bit to
+> pagemap") and the related commit a516403787e0 ("fs/proc: extend the
+> PAGEMAP_SCAN ioctl to report guard regions"), users can use either
+> /proc/$pid/pagemap or the PAGEMAP_SCAN functionality to perform this
+> operation at a virtual address level.
 > 
-> As a result, test_memcg_sock() can intermittently fail even though socket
-> memory accounting is working correctly.
+> This is not ideal, and it gives no visibility at a /proc/$pid/smaps level
+> that guard regions exist in ranges.
 > 
-> Make the test more robust by polling memory.stat for the "sock "
-> counter and allowing it some time to drop to zero instead of checking
-> it only once. The timeout is set to 3 seconds to cover the periodic
-> rstat flush interval (FLUSH_TIME = 2*HZ by default) plus some
-> scheduling slack. If the counter does not become zero within the
-> timeout, the test still fails as before.
+> This patch remedies the situation by establishing a new VMA flag,
+> VM_MAYBE_GUARD, to indicate that a VMA may contain guard regions (it is
+> uncertain because we cannot reasonably determine whether a
+> MADV_GUARD_REMOVE call has removed all of the guard regions in a VMA, and
+> additionally VMAs may change across merge/split).
 > 
-> On my test system, running test_memcontrol 50 times produced:
+> We utilise 0x800 for this flag which makes it available to 32-bit
+> architectures also, a flag that was previously used by VM_DENYWRITE, which
+> was removed in commit 8d0920bde5eb ("mm: remove VM_DENYWRITE") and hasn't
+> bee reused yet.
 > 
->    - Before this patch:  6/50 runs passed.
->    - After this patch:  50/50 runs passed.
+> We also update the smaps logic and documentation to identify these VMAs.
 > 
-> Suggested-by: Lance Yang <lance.yang@linux.dev>
-> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> Another major use of this functionality is that we can use it to identify
+> that we ought to copy page tables on fork.
+> 
+> We do not actually implement usage of this flag in mm/madvise.c yet as we
+> need to allow some VMA flags to be applied atomically under mmap/VMA read
+> lock in order to avoid the need to acquire a write lock for this purpose.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Reviewed-by: Pedro Falcato <pfalcato@suse.de>
+> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
 > ---
-> v2:
->   - Mention the periodic rstat flush interval (FLUSH_TIME = 2*HZ) in
->     the comment and clarify the rationale for the 3s timeout.
->   - Replace the hard-coded retry count and wait interval with macros
->     to avoid magic numbers and make the 3s timeout calculation explicit.
-> ---
->   .../selftests/cgroup/test_memcontrol.c        | 30 ++++++++++++++++++-
->   1 file changed, 29 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index 4e1647568c5b..7bea656658a2 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -24,6 +24,9 @@
->   static bool has_localevents;
->   static bool has_recursiveprot;
->   
-> +#define MEMCG_SOCKSTAT_WAIT_RETRIES        30              /* 3s total */
-> +#define MEMCG_SOCKSTAT_WAIT_INTERVAL_US    (100 * 1000)    /* 100 ms */
 
-Nit: Defines are usually placed at the top of the file (e.g., after the
-#include block). Placing them between global variables and functions
-looks a bit out of place, IMHO ...
-Otherwise, feel free to add:
+LGTM! Feel free to add:
 
 Reviewed-by: Lance Yang <lance.yang@linux.dev>
-[...]
-
-Cheers,
-Lance
 
