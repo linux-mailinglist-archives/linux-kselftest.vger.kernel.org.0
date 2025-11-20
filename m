@@ -1,124 +1,186 @@
-Return-Path: <linux-kselftest+bounces-46063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D5A7C7247B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 06:50:26 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A689C724B1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 07:04:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 99769353350
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 05:49:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 00FC54E0561
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 06:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32DCB27A927;
-	Thu, 20 Nov 2025 05:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GvOQbs2z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB43205E02;
+	Thu, 20 Nov 2025 06:04:30 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A112727ED
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 05:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C70189BB0;
+	Thu, 20 Nov 2025 06:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763617756; cv=none; b=JV1oRpvdEWf/+T4M1EbnzaXrOyxW+92tdxTL1O47643wcafzPb/y0oLIj51zFZiPOlk+SG6RgTCUSegnBEF3E1svaf1vqLFgQfwfybcLZRSs0p5fAgT/QaehxO0Sa8/0xTO0Tf69VrDJcDM82j3K2RcMuIZArsCE3AFoqGJKOns=
+	t=1763618669; cv=none; b=g0ma7xUWq6Quhnatk2aDp+kd9uD+mvSz63uBXKwD0W5FyVJWMykKLLlI+VMjAUrpYtQr84j4o0xG7kUKHJAsj8Ja5fyDarDsm7wOcmzUY5OQR9v58fZd14WngjXEwJxdtyMMN+cHmT+gvQZXwHtpSSEfDXKBGYZ5SvJtO4s/vlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763617756; c=relaxed/simple;
-	bh=RA75ANsCFli71Nin/P/uUZERLhitDgNZaMMrwAM1Wis=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tVXTUHWHRVS4JDke8bPfh9Duhf844sma3siYz3JksK/zddfXEl50H5dbfiyruW2jqwZwnfNKs8PjMHZrrjgPs211IXSmKFmcCkA7XIUAJysGebQyZ/brsZ2aE10l9MiLQAT7nW8id5OIewi4HTDNLZ+kDPHlsngCrI6mvmJnPBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GvOQbs2z; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <594f5fdc-567c-443b-8bec-313986bce9be@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763617742;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xHYXCj+PBmqDHq20QynsVeuFscEdivmHkOXz0KSXfp8=;
-	b=GvOQbs2zmSPWZv/p9mDvkSsQ6fkjxisB/IeYsK00ktF6cjhDx1wOZ2BcDcuJEyqdUUanzP
-	QeHfedJhQbV2UHkvzxh7TdAf2BD9vFqBzYQ3IMPMglOfvAlJ4zmk7w4rq1kz5ysOLkK9Ez
-	QGFRlpNAOkuAX+IK9Yw1wiWBOa7KtJ4=
-Date: Thu, 20 Nov 2025 13:48:49 +0800
+	s=arc-20240116; t=1763618669; c=relaxed/simple;
+	bh=7VEyOGSjY1o9w6SMwe/n+8DEzf6I8ak5ypFJqYv95zk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rD+gSeqanssVLHHLc7CvwhzUk1RlSKdVdv5lm5CNAX9O8Q5e32PtUtr07hwCZiVv2djHo5i+zW0RIA8ddSlZfWmWrhKuFPDU0gJ/7Kk8hd21JVVPIwul2Ve6nsSmOkXIEHDhk/P949B6aKo9ZilzkGlPsapjuZtbsCAAx6X9Kp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c009bedec5d611f0a38c85956e01ac42-20251120
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:d3379ca8-9df7-4f91-8869-027173cb9c99,IP:10,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:0
+X-CID-INFO: VERSION:1.3.6,REQID:d3379ca8-9df7-4f91-8869-027173cb9c99,IP:10,URL
+	:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:05355a0d6bcb5969b9999be7041cecf5,BulkI
+	D:251120140421GDWNOKMT,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|850,
+	TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,
+	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: c009bedec5d611f0a38c85956e01ac42-20251120
+X-User: zhangguopeng@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <zhangguopeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 2026961757; Thu, 20 Nov 2025 14:04:18 +0800
+From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+To: tj@kernel.org,
+	hannes@cmpxchg.org,
+	mhocko@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeel.butt@linux.dev,
+	mkoutny@suse.com,
+	muchun.song@linux.dev
+Cc: lance.yang@linux.dev,
+	shuah@kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>
+Subject: [PATCH v3] selftests: cgroup: make test_memcg_sock robust against delayed sock stats
+Date: Thu, 20 Nov 2025 14:04:06 +0800
+Message-Id: <20251120060406.2846257-1-zhangguopeng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 1/9] mm: introduce VM_MAYBE_GUARD and make visible in
- /proc/$pid/smaps
-Content-Language: en-US
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, David Hildenbrand <david@redhat.com>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Andrei Vagin <avagin@gmail.com>, Andrew Morton <akpm@linux-foundation.org>
-References: <cover.1763460113.git.lorenzo.stoakes@oracle.com>
- <cf8ef821eba29b6c5b5e138fffe95d6dcabdedb9.1763460113.git.lorenzo.stoakes@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <cf8ef821eba29b6c5b5e138fffe95d6dcabdedb9.1763460113.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+test_memcg_sock() currently requires that memory.stat's "sock " counter
+is exactly zero immediately after the TCP server exits. On a busy system
+this assumption is too strict:
 
+  - Socket memory may be freed with a small delay (e.g. RCU callbacks).
+  - memcg statistics are updated asynchronously via the rstat flushing
+    worker, so the "sock " value in memory.stat can stay non-zero for a
+    short period of time even after all socket memory has been uncharged.
 
-On 2025/11/18 18:17, Lorenzo Stoakes wrote:
-> Currently, if a user needs to determine if guard regions are present in a
-> range, they have to scan all VMAs (or have knowledge of which ones might
-> have guard regions).
-> 
-> Since commit 8e2f2aeb8b48 ("fs/proc/task_mmu: add guard region bit to
-> pagemap") and the related commit a516403787e0 ("fs/proc: extend the
-> PAGEMAP_SCAN ioctl to report guard regions"), users can use either
-> /proc/$pid/pagemap or the PAGEMAP_SCAN functionality to perform this
-> operation at a virtual address level.
-> 
-> This is not ideal, and it gives no visibility at a /proc/$pid/smaps level
-> that guard regions exist in ranges.
-> 
-> This patch remedies the situation by establishing a new VMA flag,
-> VM_MAYBE_GUARD, to indicate that a VMA may contain guard regions (it is
-> uncertain because we cannot reasonably determine whether a
-> MADV_GUARD_REMOVE call has removed all of the guard regions in a VMA, and
-> additionally VMAs may change across merge/split).
-> 
-> We utilise 0x800 for this flag which makes it available to 32-bit
-> architectures also, a flag that was previously used by VM_DENYWRITE, which
-> was removed in commit 8d0920bde5eb ("mm: remove VM_DENYWRITE") and hasn't
-> bee reused yet.
-> 
-> We also update the smaps logic and documentation to identify these VMAs.
-> 
-> Another major use of this functionality is that we can use it to identify
-> that we ought to copy page tables on fork.
-> 
-> We do not actually implement usage of this flag in mm/madvise.c yet as we
-> need to allow some VMA flags to be applied atomically under mmap/VMA read
-> lock in order to avoid the need to acquire a write lock for this purpose.
-> 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> Reviewed-by: Pedro Falcato <pfalcato@suse.de>
-> Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
-> Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
-> ---
+As a result, test_memcg_sock() can intermittently fail even though socket
+memory accounting is working correctly.
 
-LGTM! Feel free to add:
+Make the test more robust by polling memory.stat for the "sock "
+counter and allowing it some time to drop to zero instead of checking
+it only once. The timeout is set to 3 seconds to cover the periodic
+rstat flush interval (FLUSH_TIME = 2*HZ by default) plus some
+scheduling slack. If the counter does not become zero within the
+timeout, the test still fails as before.
 
+On my test system, running test_memcontrol 50 times produced:
+
+  - Before this patch:  6/50 runs passed.
+  - After this patch:  50/50 runs passed.
+
+Suggested-by: Lance Yang <lance.yang@linux.dev>
 Reviewed-by: Lance Yang <lance.yang@linux.dev>
+Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+---
+v3:
+ - Move MEMCG_SOCKSTAT_WAIT_* defines after the #include block as
+   suggested.
+v2:
+ - Mention the periodic rstat flush interval (FLUSH_TIME = 2*HZ) in
+   the comment and clarify the rationale for the 3s timeout.
+ - Replace the hard-coded retry count and wait interval with macros
+   to avoid magic numbers and make the 3s timeout calculation explicit.
+---
+ .../selftests/cgroup/test_memcontrol.c        | 30 ++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 4e1647568c5b..8ff7286fc80b 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -21,6 +21,9 @@
+ #include "kselftest.h"
+ #include "cgroup_util.h"
+ 
++#define MEMCG_SOCKSTAT_WAIT_RETRIES        30              /* 3s total */
++#define MEMCG_SOCKSTAT_WAIT_INTERVAL_US    (100 * 1000)    /* 100 ms */
++
+ static bool has_localevents;
+ static bool has_recursiveprot;
+ 
+@@ -1384,6 +1387,8 @@ static int test_memcg_sock(const char *root)
+ 	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
+ 	unsigned short port;
+ 	char *memcg;
++	long sock_post = -1;
++	int i;
+ 
+ 	memcg = cg_name(root, "memcg_test");
+ 	if (!memcg)
+@@ -1432,7 +1437,30 @@ static int test_memcg_sock(const char *root)
+ 	if (cg_read_long(memcg, "memory.current") < 0)
+ 		goto cleanup;
+ 
+-	if (cg_read_key_long(memcg, "memory.stat", "sock "))
++	/*
++	 * memory.stat is updated asynchronously via the memcg rstat
++	 * flushing worker, which runs periodically (every 2 seconds,
++	 * see FLUSH_TIME). On a busy system, the "sock " counter may
++	 * stay non-zero for a short period of time after the TCP
++	 * connection is closed and all socket memory has been
++	 * uncharged.
++	 *
++	 * Poll memory.stat for up to 3 seconds (~FLUSH_TIME plus some
++	 * scheduling slack) and require that the "sock " counter
++	 * eventually drops to zero.
++	 */
++	for (i = 0; i < MEMCG_SOCKSTAT_WAIT_RETRIES; i++) {
++		sock_post = cg_read_key_long(memcg, "memory.stat", "sock ");
++		if (sock_post < 0)
++			goto cleanup;
++
++		if (!sock_post)
++			break;
++
++		usleep(MEMCG_SOCKSTAT_WAIT_INTERVAL_US);
++	}
++
++	if (sock_post)
+ 		goto cleanup;
+ 
+ 	ret = KSFT_PASS;
+-- 
+2.25.1
+
 
