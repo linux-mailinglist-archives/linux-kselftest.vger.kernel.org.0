@@ -1,182 +1,231 @@
-Return-Path: <linux-kselftest+bounces-46053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46055-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2B5EC71F11
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 04:16:54 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF7A8C72015
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 04:37:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id B10E029D35
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 03:16:53 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CDC714E1A22
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 03:37:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF5A31FA15E;
-	Thu, 20 Nov 2025 03:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 964DA2F745D;
+	Thu, 20 Nov 2025 03:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qsxa+VKd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD9F15B0EC;
-	Thu, 20 Nov 2025 03:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF82E1CEADB
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 03:37:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763608604; cv=none; b=ulnHrVkKr2mPwq6L82DFSnwbdjaZEIEQEbwZL1+WYABH4nqvofwwJ0WqcWnwdQHUfiZYzR6PGXRqMdUKhxSYr8ntNEJ3OGlcWIjSBg/P7DK7u9k5IH7OOILyzybPz9YdA20PF7dw3+FGtWBOrGsc7HiUcbTYzEOeZRhW2zunKNE=
+	t=1763609834; cv=none; b=jhbzWLbPl2xKavkaoeCBbn/H/paCNGS4gqeQf4aZAPfyX4OKnSeH0itLq1bnbcE1/QFHbL5N80NQps5jILPued1os4QRwt/NHD0IvOt1JCcMam8K2uWKGaMYzFe0oYBxWECjyGk4yUKDU+NHGRNWDDDScQGsRw+lCM4e7w4TsS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763608604; c=relaxed/simple;
-	bh=SoUDiVQlXXTB6rNISrL1lXhryvF3t43sSN75eU3dWi4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AzjI6qRxxqItS6V5LjVupllFh6ECeaTsHQAonHnyNjo0epLAj+6hBhbnKnfNDq5xCiu6dMorugQWG3tBbMZbxxCMBAy8scn61QJqzn9BUh8fGdvfcAlcaD6QhkpXAuO2RD2c7E5Hwa3DWqumdaU9NWFz+X9S8xwvmY7kpa8d+0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 4f6fe4eec5bf11f0a38c85956e01ac42-20251120
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_EXISTED
-	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
-	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:420976eb-eeff-4612-8a25-67b1f45aabaa,IP:10,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:0
-X-CID-INFO: VERSION:1.3.6,REQID:420976eb-eeff-4612-8a25-67b1f45aabaa,IP:10,URL
-	:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:6bb73d3f7a3683f7f756e61b52d1a4b8,BulkI
-	D:251120111633NPXGC7H2,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|850,
-	TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,
-	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 4f6fe4eec5bf11f0a38c85956e01ac42-20251120
-X-User: zhangguopeng@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <zhangguopeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 768923844; Thu, 20 Nov 2025 11:16:31 +0800
-From: Guopeng Zhang <zhangguopeng@kylinos.cn>
-To: tj@kernel.org,
-	hannes@cmpxchg.org,
-	mhocko@kernel.org,
-	roman.gushchin@linux.dev,
-	shakeel.butt@linux.dev,
-	mkoutny@suse.com,
-	muchun.song@linux.dev
-Cc: lance.yang@linux.dev,
-	shuah@kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH v2] selftests: cgroup: make test_memcg_sock robust against delayed sock stats
-Date: Thu, 20 Nov 2025 11:16:19 +0800
-Message-Id: <20251120031619.1828911-1-zhangguopeng@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1763609834; c=relaxed/simple;
+	bh=ECDBbREziOCBdmljpaOyZYKnPyj7Q88QKnhf5KEHVVM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cQKZJh9Nu7fvQAVYKNdLj/dRT1Y5SojUzRNuQkMWVC2cRuS0NrruuyuBgA8NL5GOvAej3FykCdqG+TtcmPsF4HLwA5dRSInilXuLTlUqAtBb+N7PLqMmd7HkPuPBvoY2QRQWE5XfOSi3VmFBzKHTEMj+0bPB/DHZO7wSODi7G7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qsxa+VKd; arc=none smtp.client-ip=74.125.224.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-640daf41b19so554395d50.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 19:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763609831; x=1764214631; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LIkiaMiVquFyiirALpYhy26Yx4mEN1PZCumzzoxIfHM=;
+        b=Qsxa+VKd1mpF7UMBzUypqSeI2fpL9oercFH36BLY0JFDDSV1v6mzYlAvlrroyjRbw7
+         I/gd8y4I1aOQuqt89THFWvvobEQt6MjyL2cSH67gw6shL07YZaHBehY8b1UAcxooTtah
+         kHGDLiRh3BGI1WbaiJaq8yrqgu3aQ4gSRH5B35xbheyVT6GvSdVZT/T2opISaSr04BhS
+         s2SXG+j9E6ksMjKkWQz+Xwo2WeKSbaQRDmO+Sn4ajetlbrnhuv5qaB7Lr7mnvwFqFw6O
+         UftCsGlJ8Uj45P34gk0OkTjJEaEIhbw0OvMnLxiu1/0j3qSSH3LTD03EhQf4PSCqICTW
+         fYtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763609831; x=1764214631;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LIkiaMiVquFyiirALpYhy26Yx4mEN1PZCumzzoxIfHM=;
+        b=L2yhJwqCU9WORNHo+tIBHPc0X46eP9YyWsDI8Ngw36Nns4sJfa23phyWnykgf1kHRw
+         ySsKegJlGMwS+clDl6kroz1UWhMIo/a4ZSHQ97lX7v3u646yx5WyMRVnRTo2jv0PPghU
+         +z7p9xDp6XDqSMDxws3ehrKNchsCu4aOJmbxSr+XCUfzlqfmkLCwPyjMNNhh3XhMxtFZ
+         Y0HAy8K0bdyejZ/XEGVZB8Myp1oN0LxebTShDxurcnxzsQbQrvJOEGkwv1P4xf9btIRo
+         e+C/G6DVx7oNxvYLdU8WvIwCvw1HZ8Hm1NohRUtPansfFRoCWy6bJ4PAJ7HxTFjcdBqa
+         OkNw==
+X-Forwarded-Encrypted: i=1; AJvYcCVPyZnrQ/DFqmNAdv2UBlJraRryodcu9ipdJPXD8JpDz48RnvqTOljz2Oe9xCDDIRrBxLCgpUExhtBtAls+QtY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJkwVJMwrkQd6TR8ghHsowi2/3oVlGLgGJdhN6hlphg8XyCyyk
+	Rz96OPN5cJzTn/DVvTA2pOqkwd8NeF9mndFEgbLNxmK+n6JErkulRFkg
+X-Gm-Gg: ASbGncucb9pqgRaZieC/F1i8CGgPcL2RZ5MRpOLxvReEl/mb03ixS5VUa1TovIIA0wS
+	0vgoFrXK+Dl4hbAp6zQJumwNxbPwkVUT5ZGHPQHVJCE9XG9AdxTxufhBejbnX8i3FA96RPyhDuD
+	O94QndgzSRocCtZf6N5jcNCJCNwVgMyk9e95N7wleHRmWmHJEmVxylkxiSzzWYCZRl/pSuoxflX
+	FUysHpr2FGFJwS05V+WpJ2KKWXpZBVLlnzMgUqrUJ0YULD+e7GiQiyVpU34x/BlDf8NaRQYuKm7
+	h9ORVM27obbF47hBymg9JocfiuGjCFaTXwfMt0kh+ImWCp7p0givDnXUnSV+bqJIUfhM3e3lH03
+	zffg4HmMv8fK90dV55WjUMN3nIUynxcXVYPeN0wGJUi++8JdonkZhChysZTXDXToAtlHhYaQPL3
+	7BHgxgfQuTo5sILgO99MK5cg==
+X-Google-Smtp-Source: AGHT+IFKpR/FkxuF8iJIp+zHB2TEb80Y93lcc8kYP3bFlmrPbGL1JL+3IZD61Ppr98fvNX1s6GOhrQ==
+X-Received: by 2002:a05:690e:4009:b0:63f:b1fd:3850 with SMTP id 956f58d0204a3-642f8e16330mr648848d50.33.1763609830900;
+        Wed, 19 Nov 2025 19:37:10 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:50::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78a798bd22fsm4151977b3.25.2025.11.19.19.37.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Nov 2025 19:37:10 -0800 (PST)
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+Subject: [PATCH net-next v7 0/5] net: devmem: improve cpu cost of RX token
+ management
+Date: Wed, 19 Nov 2025 19:37:07 -0800
+Message-Id: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOOMHmkC/5XQu26EMBCF4VexXO9EY2ODTbXvEaXwZQhWwkXYQ
+ bta8e6RKBJERz3S9x/Ni2daEmXeshdfaE05TSNvWXNjPPRu/CRIkbeMS5QajbSQw+JK6MFP3j8
+ p9980uBEirQMNUMIMZfqiEX7mXBZyA0grPYlGRY0VvzE+L9Slx1585yMVGOlR+MeN8T7lMi3Pf
+ coq9vtetSgvV1cBCNGqWtTWa63xPlBxb2Ea9tQqD7wQ13kJCMFgbCrto9LVia8OvKyv8xUgoFF
+ e1T46Y7oTr/94gbK6zmtAUE3wRndaaksnvv7nBarrfA0I5KwJnYoK/fE527b9Ahk4QLRzAgAA
+X-Change-ID: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ Willem de Bruijn <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, 
+ David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Shuah Khan <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
+ Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, 
+ Bobby Eshleman <bobbyeshleman@meta.com>
+X-Mailer: b4 0.14.3
 
-test_memcg_sock() currently requires that memory.stat's "sock " counter
-is exactly zero immediately after the TCP server exits. On a busy system
-this assumption is too strict:
+This series improves the CPU cost of RX token management by adding an
+attribute to NETDEV_CMD_BIND_RX that configures sockets using the
+binding to avoid the xarray allocator and instead use a per-binding niov
+array and a uref field in niov.
 
-  - Socket memory may be freed with a small delay (e.g. RCU callbacks).
-  - memcg statistics are updated asynchronously via the rstat flushing
-    worker, so the "sock " value in memory.stat can stay non-zero for a
-    short period of time even after all socket memory has been uncharged.
+Improvement is ~13% cpu util per RX user thread.
+    
+Using kperf, the following results were observed:
 
-As a result, test_memcg_sock() can intermittently fail even though socket
-memory accounting is working correctly.
+Before:
+	Average RX worker idle %: 13.13, flows 4, test runs 11
+After:
+	Average RX worker idle %: 26.32, flows 4, test runs 11
 
-Make the test more robust by polling memory.stat for the "sock "
-counter and allowing it some time to drop to zero instead of checking
-it only once. The timeout is set to 3 seconds to cover the periodic
-rstat flush interval (FLUSH_TIME = 2*HZ by default) plus some
-scheduling slack. If the counter does not become zero within the
-timeout, the test still fails as before.
+Two other approaches were tested, but with no improvement. Namely, 1)
+using a hashmap for tokens and 2) keeping an xarray of atomic counters
+but using RCU so that the hotpath could be mostly lockless. Neither of
+these approaches proved better than the simple array in terms of CPU.
 
-On my test system, running test_memcontrol 50 times produced:
+The attribute NETDEV_A_DMABUF_AUTORELEASE is added to toggle the
+optimization. It is an optional attribute and defaults to 0 (i.e.,
+optimization on).
 
-  - Before this patch:  6/50 runs passed.
-  - After this patch:  50/50 runs passed.
+To: David S. Miller <davem@davemloft.net>
+To: Eric Dumazet <edumazet@google.com>
+To: Jakub Kicinski <kuba@kernel.org>
+To: Paolo Abeni <pabeni@redhat.com>
+To: Simon Horman <horms@kernel.org>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+To: Willem de Bruijn <willemb@google.com>
+To: Neal Cardwell <ncardwell@google.com>
+To: David Ahern <dsahern@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+To: Arnd Bergmann <arnd@arndb.de>
+To: Jonathan Corbet <corbet@lwn.net>
+To: Andrew Lunn <andrew+netdev@lunn.ch>
+To: Shuah Khan <shuah@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Suggested-by: Lance Yang <lance.yang@linux.dev>
-Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Changes in v7:
+- use netlink instead of sockopt (Stan)
+- restrict system to only one mode, dmabuf bindings can not co-exist
+  with different modes (Stan)
+- use static branching to enforce single system-wide mode (Stan)
+- Link to v6: https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com
+
+Changes in v6:
+- renamed 'net: devmem: use niov array for token management' to refer to
+  optionality of new config
+- added documentation and tests
+- make autorelease flag per-socket sockopt instead of binding
+  field / sysctl
+- many per-patch changes (see Changes sections per-patch)
+- Link to v5: https://lore.kernel.org/r/20251023-scratch-bobbyeshleman-devmem-tcp-token-upstream-v5-0-47cb85f5259e@meta.com
+
+Changes in v5:
+- add sysctl to opt-out of performance benefit, back to old token release
+- Link to v4: https://lore.kernel.org/all/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v4-0-39156563c3ea@meta.com
+
+Changes in v4:
+- rebase to net-next
+- Link to v3: https://lore.kernel.org/r/20250926-scratch-bobbyeshleman-devmem-tcp-token-upstream-v3-0-084b46bda88f@meta.com
+
+Changes in v3:
+- make urefs per-binding instead of per-socket, reducing memory
+  footprint
+- fallback to cleaning up references in dmabuf unbind if socket
+  leaked tokens
+- drop ethtool patch
+- Link to v2: https://lore.kernel.org/r/20250911-scratch-bobbyeshleman-devmem-tcp-token-upstream-v2-0-c80d735bd453@meta.com
+
+Changes in v2:
+- net: ethtool: prevent user from breaking devmem single-binding rule
+  (Mina)
+- pre-assign niovs in binding->vec for RX case (Mina)
+- remove WARNs on invalid user input (Mina)
+- remove extraneous binding ref get (Mina)
+- remove WARN for changed binding (Mina)
+- always use GFP_ZERO for binding->vec (Mina)
+- fix length of alloc for urefs
+- use atomic_set(, 0) to initialize sk_user_frags.urefs
+- Link to v1: https://lore.kernel.org/r/20250902-scratch-bobbyeshleman-devmem-tcp-token-upstream-v1-0-d946169b5550@meta.com
+
 ---
-v2:
- - Mention the periodic rstat flush interval (FLUSH_TIME = 2*HZ) in
-   the comment and clarify the rationale for the 3s timeout.
- - Replace the hard-coded retry count and wait interval with macros
-   to avoid magic numbers and make the 3s timeout calculation explicit.
----
- .../selftests/cgroup/test_memcontrol.c        | 30 ++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+Bobby Eshleman (5):
+      net: devmem: rename tx_vec to vec in dmabuf binding
+      net: devmem: refactor sock_devmem_dontneed for autorelease split
+      net: devmem: implement autorelease token management
+      net: devmem: document NETDEV_A_DMABUF_AUTORELEASE netlink attribute
+      selftests: drv-net: devmem: add autorelease tests
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 4e1647568c5b..7bea656658a2 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -24,6 +24,9 @@
- static bool has_localevents;
- static bool has_recursiveprot;
- 
-+#define MEMCG_SOCKSTAT_WAIT_RETRIES        30              /* 3s total */
-+#define MEMCG_SOCKSTAT_WAIT_INTERVAL_US    (100 * 1000)    /* 100 ms */
-+
- int get_temp_fd(void)
- {
- 	return open(".", O_TMPFILE | O_RDWR | O_EXCL);
-@@ -1384,6 +1387,8 @@ static int test_memcg_sock(const char *root)
- 	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
- 	unsigned short port;
- 	char *memcg;
-+	long sock_post = -1;
-+	int i;
- 
- 	memcg = cg_name(root, "memcg_test");
- 	if (!memcg)
-@@ -1432,7 +1437,30 @@ static int test_memcg_sock(const char *root)
- 	if (cg_read_long(memcg, "memory.current") < 0)
- 		goto cleanup;
- 
--	if (cg_read_key_long(memcg, "memory.stat", "sock "))
-+	/*
-+	 * memory.stat is updated asynchronously via the memcg rstat
-+	 * flushing worker, which runs periodically (every 2 seconds,
-+	 * see FLUSH_TIME). On a busy system, the "sock " counter may
-+	 * stay non-zero for a short period of time after the TCP
-+	 * connection is closed and all socket memory has been
-+	 * uncharged.
-+	 *
-+	 * Poll memory.stat for up to 3 seconds (~FLUSH_TIME plus some
-+	 * scheduling slack) and require that the "sock " counter
-+	 * eventually drops to zero.
-+	 */
-+	for (i = 0; i < MEMCG_SOCKSTAT_WAIT_RETRIES; i++) {
-+		sock_post = cg_read_key_long(memcg, "memory.stat", "sock ");
-+		if (sock_post < 0)
-+			goto cleanup;
-+
-+		if (!sock_post)
-+			break;
-+
-+		usleep(MEMCG_SOCKSTAT_WAIT_INTERVAL_US);
-+	}
-+
-+	if (sock_post)
- 		goto cleanup;
- 
- 	ret = KSFT_PASS;
+ Documentation/netlink/specs/netdev.yaml           |  12 +++
+ Documentation/networking/devmem.rst               |  70 +++++++++++++
+ include/net/netmem.h                              |   1 +
+ include/net/sock.h                                |   7 +-
+ include/uapi/linux/netdev.h                       |   1 +
+ net/core/devmem.c                                 | 121 ++++++++++++++++++----
+ net/core/devmem.h                                 |  13 ++-
+ net/core/netdev-genl-gen.c                        |   5 +-
+ net/core/netdev-genl.c                            |  13 ++-
+ net/core/sock.c                                   | 103 ++++++++++++++----
+ net/ipv4/tcp.c                                    |  78 +++++++++++---
+ net/ipv4/tcp_ipv4.c                               |  13 ++-
+ net/ipv4/tcp_minisocks.c                          |   3 +-
+ tools/include/uapi/linux/netdev.h                 |   1 +
+ tools/testing/selftests/drivers/net/hw/devmem.py  |  22 +++-
+ tools/testing/selftests/drivers/net/hw/ncdevmem.c |  19 ++--
+ 16 files changed, 401 insertions(+), 81 deletions(-)
+---
+base-commit: 4c52142904b33b41c3ff7ee58670b4e3b3bf1120
+change-id: 20250829-scratch-bobbyeshleman-devmem-tcp-token-upstream-292be174d503
+
+Best regards,
 -- 
-2.25.1
+Bobby Eshleman <bobbyeshleman@meta.com>
 
 
