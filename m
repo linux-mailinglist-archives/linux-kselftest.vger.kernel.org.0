@@ -1,150 +1,194 @@
-Return-Path: <linux-kselftest+bounces-46101-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46102-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id F255AC74114
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 13:58:49 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0D3CC7415D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:06:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id D5B102ABA6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 12:58:32 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3C3EB350304
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 13:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D398533508B;
-	Thu, 20 Nov 2025 12:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="S7aqdZIp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B5F30E82E;
+	Thu, 20 Nov 2025 13:06:49 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E46731813F
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 12:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C71326921;
+	Thu, 20 Nov 2025 13:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763643507; cv=none; b=kTTB+XoY0NFblBB52/RshZ/MTGcyuByb3C7vaY0S891AVcBm0ragptsk4qQn0W3iMr2gerfgW+co3W9BE2lhQ96DCaU71nQHfnh7LD2PDaaFjVi15sTaUZjAMpVUf0gDAPTsVkDxUkpuQLY6www8t/Txup3Zaw0q22um3M15uB8=
+	t=1763644009; cv=none; b=dr19LPfjzAqGJHLAABLu+xYaAEBIZBNTJkfnxxlTX9zSIoHaN7i/Gi959yyAIx3yiT0xhrd9m7bE3ofrI2K2Rt03wJmC8776z9O4YnuKXi3wfIlafhDPr0FvSqX6fWA7VcEeQdwDYKqDgIKPIErEToYk8+Sk8J4MLKJPZz+ME00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763643507; c=relaxed/simple;
-	bh=yrrGT9RTCWN6v25Jy1PljEJyV2gwJA+0BkSczHJvwqU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Jy9uJz49Pud4WXsNoM4YkUdXwfdMEPL0QdqEe39Enxnxtp8FrfJrGMKAVE+ujMCVcW8XGCnQfRzlTB+Aa83hdYO0rvZq/maodJsMtl8+DOv5+eNGaBPmPEHs4lwR593LyU6mg7oyv5WlQqH7ElkBZUoxn/jsLmBopXFwh3rNuY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=S7aqdZIp; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b73b24f1784so156637166b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 04:58:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1763643505; x=1764248305; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rWt1WezTZ5DpLX3MB7doQs98ekhplq8AtMdx/O/O2yc=;
-        b=S7aqdZIpeni1IEmbAnYHWLn6J0Yx8fLyUQLq2Ef1J/WrTksSv4BxKoCb2jI/FILfsc
-         wyaUpjWBz/BvwJf4kYQD+NiacTMcuF09mbR03g0xKuuaaEcWUZY0ezk7DscGdzobZBO6
-         IejvOvDsDPo+JaQVnqpns0r6JcuL9O4F+ZfF+ihHVAdz8YI6A1CahTv31/CKHY/LU9yC
-         Ov/M4kmm+073daycX90GqfpCkJQ+/Rqz6Nk1cqbwvLkKyIQamctisqo/ubcf2I2VwrkS
-         B6PboTQVBrKutFNcyknsISoH0nwmw1SMBJHDkNKOFWc7T+QzZ4j5bkqBE+4pRTwWedRc
-         Odvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763643505; x=1764248305;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rWt1WezTZ5DpLX3MB7doQs98ekhplq8AtMdx/O/O2yc=;
-        b=tlgWt1TzxC1o1eB2HXyHHHzsTADTDINg6T838TeghEekBXnuZvgEt66D2TmEUwiz+S
-         sLqdrbpSIFIyVfU9b8Tz2HByEbPPA9UALsX36hyzpiowQvgktfHMGsIUxbpxI9dFnS7Z
-         I0q21cmwkwefFkBHOuqDiXc77H5WmGzHulWaGCtpRiJCr+LXKHmByzbXDrBfX8FX94xZ
-         9BRPNcuXHqah/PQdif2e/4vbXknbvMjdVoP9rLil8EjrqvW8n5RRoY/irQHAeu9NSVd9
-         VvhG/7LJYnM+MhQBOTc0JCYtpivfh5aHUer2LAtUp80zrmRpvwnaQGvsqkaWPTeAn/9O
-         VY8A==
-X-Forwarded-Encrypted: i=1; AJvYcCVwZBEqyYOJKNAz1EUOBBxqiF0PjxNEjURw6iw+CGCvhJApkzJHofwDn5BqdneLEctCBGmve/wol0ANAuJ6uL0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyndMj24W/7Ff0JCFDRr9HRNHnLkW3GsAvpsIiEFDlu2zymvVtt
-	XIg5CFKlvE96A4YrXV3Nd0/Stm530nzyQyigtO8dyQ5JcjDyxVGMi2UsPfvazorNfSA=
-X-Gm-Gg: ASbGnctMFtny6NoIAg7V4ANhP69qb627+RPKhMcPYzgFN+ZpgsD0nNa9dobHG/ozlj1
-	uHwvm7nTJz9shKXbx59xZFDC+3raQGBa35pDdP9YJODPV6kTKy9Rr99Ei75el7DqszkFKme7O1m
-	vUhUJpU/eGUuigZk9is9IhigPcvjjSe6Vedh2P8r9JTmXoztJlmgqhrrWAWuiUGgd3zjHJnJ1lV
-	hHt80RwwiAuuvsQ+dhsRQxJtA3DGlM3IqVDgjxN+1qXVedvXw+txudORugLVCV3lURWyT/XLnVF
-	8To4DDnWlh8PinVpl12Oy/2iEBBXWPCkqUsNe5QMUG89OeXeWz4lL6gcu3+NOva/IBTQ6pI1zg5
-	peeWCvb/HUcQRGBXwRHYAti14zdUBzWCyHYaA/ySbD1QmlHg3jGgimyeScEM4Ev5jaPPeyilgYI
-	tas8E=
-X-Google-Smtp-Source: AGHT+IGx1D4Lf3+ONX9DYRjufCOc1Fw/EfSu7B0mNDhtvWXtJYLURbexh3sFGvbZtkfpHNbDzHlRQg==
-X-Received: by 2002:a17:907:9487:b0:b04:48b5:6ea5 with SMTP id a640c23a62f3a-b765720a6e1mr306820066b.17.1763643504589;
-        Thu, 20 Nov 2025 04:58:24 -0800 (PST)
-Received: from cloudflare.com ([2a09:bac5:5063:2387::38a:71])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b7654fd4e51sm201000466b.42.2025.11.20.04.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 04:58:23 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org,  "John Fastabend" <john.fastabend@gmail.com>,
-  "David S. Miller" <davem@davemloft.net>,  "Eric Dumazet"
- <edumazet@google.com>,  "Jakub Kicinski" <kuba@kernel.org>,  "Paolo Abeni"
- <pabeni@redhat.com>,  "Simon Horman" <horms@kernel.org>,  "Neal Cardwell"
- <ncardwell@google.com>,  "Kuniyuki Iwashima" <kuniyu@google.com>,  "David
- Ahern" <dsahern@kernel.org>,  "Alexei Starovoitov" <ast@kernel.org>,
-  "Daniel Borkmann" <daniel@iogearbox.net>,  "Andrii Nakryiko"
- <andrii@kernel.org>,  "Martin KaFai Lau" <martin.lau@linux.dev>,  "Eduard
- Zingerman" <eddyz87@gmail.com>,  "Song Liu" <song@kernel.org>,  "Yonghong
- Song" <yonghong.song@linux.dev>,  "KP Singh" <kpsingh@kernel.org>,
-  "Stanislav Fomichev" <sdf@fomichev.me>,  "Hao Luo" <haoluo@google.com>,
-  "Jiri Olsa" <jolsa@kernel.org>,  "Shuah Khan" <shuah@kernel.org>,
-  "Michal Luczaj" <mhal@rbox.co>,  "Stefano Garzarella"
- <sgarzare@redhat.com>,  "Cong Wang" <cong.wang@bytedance.com>,
-  netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,
-  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v1 1/3] bpf, sockmap: Fix incorrect copied_seq
- calculation
-In-Reply-To: <5a66955891ef8db94b7288bbb296efcc0ac357cf@linux.dev> (Jiayuan
-	Chen's message of "Thu, 20 Nov 2025 02:49:43 +0000")
-References: <20251117110736.293040-1-jiayuan.chen@linux.dev>
-	<20251117110736.293040-2-jiayuan.chen@linux.dev>
-	<87zf8h6bpd.fsf@cloudflare.com>
-	<5a66955891ef8db94b7288bbb296efcc0ac357cf@linux.dev>
-Date: Thu, 20 Nov 2025 13:58:23 +0100
-Message-ID: <87tsyo6ets.fsf@cloudflare.com>
+	s=arc-20240116; t=1763644009; c=relaxed/simple;
+	bh=RGvJThNDKvEi3kAIVd2ILPgKgSEI63+ebSQhKwPrN4w=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h/bvZv9dhIVhZdEYy+p5HgVtNpwd3d/oh6vAwRtoVUAWQA1JAm9+PPKg3h2GHZzN7LeqaCflrNYE0GNkKhWUQJEMfqcKxJCz5IU4ikgQJyHAArRsTWTr7/4S5rCY3Cg96dpXLab0WYgA8R2q1+ecS74zhVcqYlo8mzSYViVyuIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: b2d92dd6c61111f0a38c85956e01ac42-20251120
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU
+	AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:3c1f7f0f-3eef-405a-bbbe-3cfc40ee9124,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:5
+X-CID-INFO: VERSION:1.3.6,REQID:3c1f7f0f-3eef-405a-bbbe-3cfc40ee9124,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:5
+X-CID-META: VersionHash:a9d874c,CLOUDID:42d86bd557a3a2a23587bc6bce955fd0,BulkI
+	D:251119212056S6LKT8LY,BulkQuantity:3,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|841|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil
+	,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,D
+	KP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: b2d92dd6c61111f0a38c85956e01ac42-20251120
+X-User: sunshaojie@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 2059068899; Thu, 20 Nov 2025 21:06:16 +0800
+From: Sun Shaojie <sunshaojie@kylinos.cn>
+To: mkoutny@suse.com
+Cc: cgroups@vger.kernel.org,
+	chenridong@huaweicloud.com,
+	hannes@cmpxchg.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llong@redhat.com,
+	shuah@kernel.org,
+	sunshaojie@kylinos.cn,
+	tj@kernel.org
+Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on cpuset.cpus conflict.
+Date: Thu, 20 Nov 2025 21:05:57 +0800
+Message-Id: <20251120130557.1554118-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <unk64xmcj5kt5c5gaauwaeld5qsshaldw7utgzk362w33y3zr7@s765trmj5ccs>
+References: <unk64xmcj5kt5c5gaauwaeld5qsshaldw7utgzk362w33y3zr7@s765trmj5ccs>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 20, 2025 at 02:49 AM GMT, Jiayuan Chen wrote:
-> November 20, 2025 at 03:53, "Jakub Sitnicki" <jakub@cloudflare.com mailto:jakub@cloudflare.com?to=%22Jakub%20Sitnicki%22%20%3Cjakub%40cloudflare.com%3E > wrote:
+Hi, Michal,
+
+On Wed, 19 Nov 2025 14:20:25, Michal Koutný wrote:
+>On Wed, Nov 19, 2025 at 06:57:49PM +0800, Sun Shaojie <sunshaojie@kylinos.cn> wrote:
+>> Currently, when setting a cpuset's cpuset.cpus to a value that conflicts
+>> with its sibling partition, the sibling's partition state becomes invalid.
+>> However, this invalidation is often unnecessary. If the cpuset being
+>> modified is exclusive, it should invalidate itself upon conflict.
+>> 
+>> This patch applies only to the following two cases：
+>> 
+>> Assume the machine has 4 CPUs (0-3).
+>> 
+>>    root cgroup
+>>       /    \
+>>     A1      B1
+>> 
+>> Case 1: A1 is exclusive, B1 is non-exclusive, set B1's cpuset.cpus
+>> 
+>>  Table 1.1: Before applying this patch
+>>  Step                                       | A1's prstate | B1's prstate |
+>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
+>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
+>>  #3> echo "0" > B1/cpuset.cpus              | root invalid | member       |
+>> 
+>> After step #3, A1 changes from "root" to "root invalid" because its CPUs
+>> (0-1) overlap with those requested by B1 (0). However, B1 can actually
+>> use CPUs 2-3(from B1's parent), so it would be more reasonable for A1 to
+>> remain as "root."
+>> 
+>>  Table 1.2: After applying this patch
+>>  Step                                       | A1's prstate | B1's prstate |
+>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
+>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
+>>  #3> echo "0" > B1/cpuset.cpus              | root         | member       |
+>> 
+>> Case 2: Both A1 and B1 are exclusive, set B1's cpuset.cpus
 >
-> [...]
->> >  +/* The BPF program sets BPF_F_INGRESS on sk_msg to indicate data needs to be
->> >  + * redirected to the ingress queue of a specified socket. Since BPF_F_INGRESS is
->> >  + * defined in UAPI so that we can't extend this enum for our internal flags. We
->> >  + * define some internal flags here while inheriting BPF_F_INGRESS.
->> >  + */
->> >  +enum {
->> >  + SK_MSG_F_INGRESS = BPF_F_INGRESS, /* (1ULL << 0) */
->> >  + /* internal flag */
->> >  + SK_MSG_F_INGRESS_SELF = (1ULL << 1)
->> >  +};
->> >  +
->> > 
->> I'm wondering if we need additional state to track this.
->> Can we track sk_msg's construted from skb's that were not redirected by
->> setting `sk_msg.sk = sk` to indicate that the source socket is us in
->> sk_psock_skb_ingress_self()?
+>(Thanks for working this out, Shaojie.)
 >
-> Functionally, that would work. However, in that case, we would have to hold
-> a reference to sk until the sk_msg is read, which would delay the release of
-> sk. One concern is that if there is a bug in the read-side application, sk
-> might never be released.
+>> 
+>>  Table 2.1: Before applying this patch
+>>  Step                                       | A1's prstate | B1's prstate |
+>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
+>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
+>>  #3> echo "2" > B1/cpuset.cpus              | root         | member       |
+>>  #4> echo "root" > B1/cpuset.cpus.partition | root         | root         |
+>>  #5> echo "1-2" > B1/cpuset.cpus            | root invalid | root invalid |
+>> 
+>> After step #4, B1 can exclusively use CPU 2. Therefore, at step #5,
+>> regardless of what conflicting value B1 writes to cpuset.cpus, it will
+>> always have at least CPU 2 available. This makes it unnecessary to mark
+>> A1 as "root invalid".
+>> 
+>>  Table 2.2: After applying this patch
+>>  Step                                       | A1's prstate | B1's prstate |
+>>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
+>>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
+>>  #3> echo "2" > B1/cpuset.cpus              | root         | member       |
+>>  #4> echo "root" > B1/cpuset.cpus.partition | root         | root         |
+>>  #5> echo "1-2" > B1/cpuset.cpus            | root         | root invalid |
+>> 
+>> In summary, regardless of how B1 configures its cpuset.cpus, there will
+>> always be available CPUs in B1's cpuset.cpus.effective. Therefore, there
+>> is no need to change A1 from "root" to "root invalid".
+>
+>Admittedly, I don't like this change because it relies on implicit
+>preference ordering between siblings (here first comes, first served)
+>and so the effective config cannot be derived just from the applied
+>values :-/
+>
+>Do you actually want to achieve this or is it an implementation
+>side-effect of the Case 1 scenario that you want to achieve?
 
-We don't need to grab a reference to sk if we're talking about setting
-it only in sk_psock_skb_ingress_self(). psock already holds a ref for
-psock->sk, and we purge psock->ingress_msg queue when destroying the
-psock before releasing the sock ref in sk_psock_destroy().
+Yes, this is indeed the functionality I intended to achieve, as I find it 
+follows the same logic as Case 1.
 
-While there's nothing wrong with an internal flaag, I'm trying to see if
-we make things somewhat consistent so as a result sk_msg state is easier
-to reason about.
+However, I didn't fully understand what you meant by "implicit preference 
+ordering between siblings (here first comes, first served)."
+Could you provide an example?
 
-My thinking here is that we already set sk_msg.sk to source socket in
-sk_psock_msg_verdict() on sendmsg() path, so we know that this is the
-purpose of that field. We could mimic this on recvmsg() path.
+As for your point that "the effective config cannot be derived just from 
+the applied values," even before this patch, we couldn't derive the final 
+effective configuration solely from the applied values.
+
+For example, consider the following scenario: (not apply this patch)
+Table 1:
+ Step                                       | A1's prstate | B1's prstate |
+ #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
+ #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
+ #3> echo "1-2" > B1/cpuset.cpus            | root invalid | member       |
+
+Table 2:
+ Step                                       | A1's prstate | B1's prstate |
+ #1> echo "1-2" > B1/cpuset.cpus            | member       | member       |
+ #2> echo "root" > A1/cpuset.cpus.partition | root invalid | member       |
+ #3> echo "0-1" > A1/cpuset.cpus            | root         | member       |
+
+After step #3, both Table 1 and Table 2 have identical value settings, 
+yet A1's partition state differs between them.
+
+
+Thanks,
+Sun Shaojie
 
