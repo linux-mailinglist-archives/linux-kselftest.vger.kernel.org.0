@@ -1,215 +1,154 @@
-Return-Path: <linux-kselftest+bounces-46144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46145-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9169BC76A07
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 00:36:58 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 546C1C76A85
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 00:50:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7CBCF4E2ACF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 23:36:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 4BB122BDDF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 23:50:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB128289378;
-	Thu, 20 Nov 2025 23:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UgXfHQM+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC87730C61B;
+	Thu, 20 Nov 2025 23:50:26 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8027113B584
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 23:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB2430AABF;
+	Thu, 20 Nov 2025 23:50:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763681809; cv=none; b=r8waLnBNsQ5Dtj6TTiRL3/+IoyQgZipNyYKMTdh/kbaLM+5AM0+FSO7lOn0VaalWReEpYMe3wm9GBdjtIUBpDxxI+9wPHdWOGd29Q53C+CI+E3k3aFVZzfBWMqp3g9SRrTQgBlIskrPL3CUb8fak2RuUt8c/47UHA6ks1kLEzLM=
+	t=1763682626; cv=none; b=D02xN/WYEam6mP975g2q2qujTP4eCXpnu25aqYbnjE7p9WYx1zMd5MQ7XL9FeB2VEQXEUTTzNNMyU07f4NPHy2rPzgmCUAhqSCVSIv+qiglemaTUaMSC3R4xvSj+ntjB32m7sn2+w9XJeXy35Pyq1GYXCGpU7xBkgT44+DmS4KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763681809; c=relaxed/simple;
-	bh=xgZokAZNABaDEkJOi6XbkoiCbaV/hMr2HbQKs7w9K+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UYbP9XF2fzj++BaifzCEPHLno8iKNIdejs8rXkx4j3GvmEUbhpgm3ewtCSSNFEUiF7qGTvk1bPdg4ro95y004i7cEg9kbJQ0eb4JogCqGGZMGf8MPkqAVR1cg/K/v7mI4PHAzo0CsjlcKBUBqjEWe0hVtEtiQAUqAOE49Pg44MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UgXfHQM+; arc=none smtp.client-ip=209.85.128.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-789314f0920so14948267b3.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 15:36:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763681806; x=1764286606; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7F8K5d92SUopdRevdYJsWlM5dC1gAVlWHDuGfPJviq0=;
-        b=UgXfHQM+VzkoT9pZfTjeVQlBCkbkgN9lOhxDBGbx0kE7YcuvwPUZT0Avoe4dhS9Aqg
-         YCg7oivtWKHNQhRlcbmsCgF9uldDucelEvevo+NCYiL9xGjmR5XmDzkauyVdiZqnmT4V
-         GA2sJQJZhOrvDcF6H6JcxgUfhMj/Ajzp3zwc+ch2yY8P0icYsqJHp8fGajiyWE050y1s
-         UHghG0pqVnXzJZjZl5KCxy/LsGC8CAWsHpWdyDfI1Jd52NpsbkIgWF43Id8wxwmZrDnP
-         YfCB7qi8RKznsBlzAEQ2bUirfrcq/ZRvOpYjuHTr7LwJ/yEqXVUi1/gFM89PAfgM2cvv
-         7IAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763681806; x=1764286606;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7F8K5d92SUopdRevdYJsWlM5dC1gAVlWHDuGfPJviq0=;
-        b=Hlqi6Efxi5hTVuWSj60qwhFimnpXYlDqkgdBP7asVbjh8Mza5ci1jzE30JduspZ/5c
-         T8d/FrwM4reErEhdz2vI6I1yoJAbEuYTyIIW4QJ9vWSrkeshqgM2d7JWDccqKalp65fM
-         f5pJp29n5vxZNUBdToS/tprwIyzTcJ4Rp+AHBjnp+fYT78a1cqT6tKal1bs+cp7WjQlE
-         723AScYL7dJN3MhCoR1Q4Mn/RZD9DCUaentiFR/UVWYRcjKuUVmZQZnQfrtJDcLOFr6Y
-         eVSRrDqAS0LppLgup4XublLmhCMpVRKSwrkDUqNEAxkH5ULxr7MVfxBNd3G//oN+HGF1
-         prLg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhUCv4l29epxtQ2HStD3rmuk7Ofn3MRmkpbPXsv31QPWqCVnD81eYjm5KFnycO0LPVpbgNv6je2jHNfrdz2qQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywp9Eywz49aDZnvF38qmZqXBtkikEAJeA8MGiMQSBkz+IZrSNNs
-	2DbIVzSUWhfHugcOV1iVpOFPVqjqErX+xyicaV5UqTQwLpM0bMq9gUPc
-X-Gm-Gg: ASbGncuhvHP31dbIRAiSENNHZDTAVVT7VkjMKnpIk1+dhIt/D+y90m3K4cAoXqC/HIT
-	BZeDKqFa7XwOATersmI2X34kIzftxbCGi2LPrue0SA+IwdnSaWsAUhfC8rADqiynUW8TK3YEp20
-	dMK41zxrKjB8AXWnn/WKr6xRHyrbQChkfWTEIT+WVSt6pHglnOuqct+yuuYt0wLTTc+V74iRP3J
-	b57HirH5lIY3tAy6BaXR9LgVpCPvFYwc+NyIFdOLuUDAuELJ0YyiekuZi/iRHNz+/JnJhxxw4u/
-	nVXfo5oiKptWtXcg4FvI0mOUafeFjUpWX9NBBYH6vH0FCB/cyVkkmIlNQv9Mu3swUigf9TcXXFa
-	s2xEaXIgfFpRTi/N1Le6x6AEHLyUqZ6Z750u8KQHb4b7Z2Pk7lJ+FO4SKrxAG+P0tGL8o5aYCa4
-	gZ97vuQOQWBPeqyyx5R3KMDMAxsifzYe1cJuO9XyONy3NzFmc=
-X-Google-Smtp-Source: AGHT+IG936bzBd2t2ZDaxj9CFy9XI4BtCUEGOQ719Q5cTSLOuBM3YS+5i5WksDX1Mm7w5hHfQZBozg==
-X-Received: by 2002:a05:690c:620e:b0:787:e384:4e7 with SMTP id 00721157ae682-78a8b55db14mr1407957b3.51.1763681806540;
-        Thu, 20 Nov 2025 15:36:46 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:11::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78a798a7f19sm11526177b3.20.2025.11.20.15.36.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 15:36:46 -0800 (PST)
-Date: Thu, 20 Nov 2025 15:36:44 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Sargun Dhillon <sargun@sargun.me>,
-	berrange@redhat.com, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v10 10/11] selftests/vsock: add tests for host
- <-> vm connectivity with namespaces
-Message-ID: <aR+mDOF5/NOXa6/h@devvm11784.nha0.facebook.com>
-References: <20251117-vsock-vmtest-v10-0-df08f165bf3e@meta.com>
- <20251117-vsock-vmtest-v10-10-df08f165bf3e@meta.com>
- <s6zhozplsbiodcy77me7xhbhrbrozaanglbvcc474v6q77cc3w@ckaftl4qebwa>
+	s=arc-20240116; t=1763682626; c=relaxed/simple;
+	bh=2k6nnKx4NCDkMoKdPHc9WTs3GWqy7H30K8kUmdQfeJk=;
+	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=B7w4yw9hHATpIxw8rRLrDK9ZPQsPQ0uCyhApo5YXfYjVO7gmNP3SbpGlKyHdYxm6aerdmidzRqjZXjtFPnT8HTF4s7l4x/KJHtIgjqii07SMicJ6tTO/Cakqh1v1vpj3qZnT/34wpHmaFm7KNUfTBnZyCGs2tlmXPHTqKYLIBpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in02.mta.xmission.com ([166.70.13.52]:37028)
+	by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1vMEPo-00CedT-A5; Thu, 20 Nov 2025 16:50:16 -0700
+Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:35208 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1vMEPn-00C1ie-EW; Thu, 20 Nov 2025 16:50:15 -0700
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,  Alexey Dobriyan
+ <adobriyan@gmail.com>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
+ <kees@kernel.org>,  Andy Lutomirski <luto@amacapital.net>,  Will Drewry
+ <wad@chromium.org>,  Christian Brauner <brauner@kernel.org>,  Andrew
+ Morton <akpm@linux-foundation.org>,  Michal Hocko <mhocko@suse.com>,
+  Serge Hallyn <serge@hallyn.com>,  James Morris
+ <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
+  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
+ <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
+ <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
+ <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
+  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
+  linux-security-module@vger.kernel.org,  tiozhang
+ <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
+ Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
+ <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
+  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
+  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
+  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
+ <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
+ <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
+ <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
+ Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
+ Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
+ <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
+ Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
+  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
+ <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
+ Dumazet <edumazet@google.com>
+In-Reply-To: <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org> (Eric
+	W. Biederman's message of "Thu, 20 Nov 2025 14:57:29 -0600")
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<87tsyozqdu.fsf@email.froward.int.ebiederm.org>
+	<87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
+	<87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
+Date: Thu, 20 Nov 2025 17:50:05 -0600
+Message-ID: <87a50gxo0i.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <s6zhozplsbiodcy77me7xhbhrbrozaanglbvcc474v6q77cc3w@ckaftl4qebwa>
+Content-Type: text/plain
+X-XM-SPF: eid=1vMEPn-00C1ie-EW;;;mid=<87a50gxo0i.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX195NfJOcpcY5dj59+cWhIBuzpRq6EZCwSg=
+X-Spam-Level: *
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.5000]
+	*  0.7 XMSubLong Long Subject
+	*  1.5 TR_Symld_Words too many words that have symbols inside
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Bernd Edlinger <bernd.edlinger@hotmail.de>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 339 ms - load_scoreonly_sql: 0.07 (0.0%),
+	signal_user_changed: 10 (3.0%), b_tie_ro: 9 (2.6%), parse: 0.93 (0.3%),
+	 extract_message_metadata: 9 (2.7%), get_uri_detail_list: 0.70 (0.2%),
+	tests_pri_-2000: 11 (3.2%), tests_pri_-1000: 9 (2.7%), tests_pri_-950:
+	1.06 (0.3%), tests_pri_-900: 0.97 (0.3%), tests_pri_-90: 79 (23.4%),
+	check_bayes: 78 (23.0%), b_tokenize: 13 (3.8%), b_tok_get_all: 8
+	(2.4%), b_comp_prob: 2.1 (0.6%), b_tok_touch_all: 52 (15.4%),
+	b_finish: 0.67 (0.2%), tests_pri_0: 207 (60.9%), check_dkim_signature:
+	0.53 (0.2%), check_dkim_adsp: 2.1 (0.6%), poll_dns_idle: 0.49 (0.1%),
+	tests_pri_10: 1.92 (0.6%), tests_pri_500: 7 (2.0%), rewrite_mail: 0.00
+	(0.0%)
+Subject: Re: [RFC][PATCH] exec: Move cred computation under exec_update_lock
+X-SA-Exim-Connect-IP: 166.70.13.52
+X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-SA-Exim-Scanned: No (on out01.mta.xmission.com); SAEximRunCond expanded to false
 
-On Tue, Nov 18, 2025 at 07:15:03PM +0100, Stefano Garzarella wrote:
-> On Mon, Nov 17, 2025 at 06:00:33PM -0800, Bobby Eshleman wrote:
-> > From: Bobby Eshleman <bobbyeshleman@meta.com>
-> > 
-> > Add tests to validate namespace correctness using vsock_test and socat.
-> > The vsock_test tool is used to validate expected success tests, but
-> > socat is used for expected failure tests. socat is used to ensure that
-> > connections are rejected outright instead of failing due to some other
-> > socket behavior (as tested in vsock_test). Additionally, socat is
-> > already required for tunneling TCP traffic from vsock_test. Using only
-> > one of the vsock_test tests like 'test_stream_client_close_client' would
-> > have yielded a similar result, but doing so wouldn't remove the socat
-> > dependency.
-> > 
-> > Additionally, check for the dependency socat. socat needs special
-> > handling beyond just checking if it is on the path because it must be
-> > compiled with support for both vsock and unix. The function
-> > check_socat() checks that this support exists.
-> > 
-> > Add more padding to test name printf strings because the tests added in
-> > this patch would otherwise overflow.
-> > 
-> > Add vm_dmesg_start() and vm_dmesg_check() to encapsulate checking dmesg
-> > for oops and warnings.
-> > 
-> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
-> > ---
-> > Changes in v10:
-> > - add vm_dmesg_start() and vm_dmesg_check()
-> > 
-> > Changes in v9:
-> > - consistent variable quoting
-> > ---
+"Eric W. Biederman" <ebiederm@xmission.com> writes:
 
-...
+> Instead of computing the new cred before we pass the point of no
+> return compute the new cred just before we use it.
+>
+> This allows the removal of fs_struct->in_exec and cred_guard_mutex.
+>
+> I am not certain why we wanted to compute the cred for the new
+> executable so early.  Perhaps I missed something but I did not see any
+> common errors being signaled.   So I don't think we loose anything by
+> computing the new cred later.
 
-> > 
-> > +test_ns_diff_global_host_connect_to_global_vm_ok() {
-> > +	local oops_before warn_before
-> > +	local pids pid pidfile
-> > +	local ns0 ns1 port
-> > +	declare -a pids
-> > +	local unixfile
-> > +	ns0="global0"
-> > +	ns1="global1"
-> > +	port=1234
-> > +	local rc
-> > +
-> > +	init_namespaces
-> > +
-> > +	pidfile="$(create_pidfile)"
-> > +
-> > +	if ! vm_start "${pidfile}" "${ns0}"; then
-> > +		return "${KSFT_FAIL}"
-> > +	fi
-> > +
-> > +	vm_wait_for_ssh "${ns0}"
-> > +	oops_before=$(vm_dmesg_oops_count "${ns0}")
-> > +	warn_before=$(vm_dmesg_warn_count "${ns0}")
-> > +
-> > +	unixfile=$(mktemp -u /tmp/XXXX.sock)
-> 
-> Should we remove this file at the end of this test?
-> 
+I should add that the permission checks happen in open_exec,
+everything that follows credential wise is just about representing in
+struct cred the credentials the new executable will have.
 
-Conveniently, socat does both the create and destroy for us.
+So I am really at a loss why we have had this complicated way of
+computing of computed the credentials all of these years full of
+time of check to time of use problems.
 
-> > +test_ns_diff_global_host_connect_to_local_vm_fails() {
-> > +	local oops_before warn_before
-> > +	local ns0="global0"
-> > +	local ns1="local0"
-> > +	local port=12345
-> > +	local dmesg_rc
-> > +	local pidfile
-> > +	local result
-> > +	local pid
-> > +
-> > +	init_namespaces
-> > +
-> > +	outfile=$(mktemp)
-> > +
-> > +	pidfile="$(create_pidfile)"
-> > +	if ! vm_start "${pidfile}" "${ns1}"; then
-> > +		log_host "failed to start vm (cid=${VSOCK_CID}, ns=${ns0})"
-> > +		return "${KSFT_FAIL}"
-> > +	fi
-> > +
-> > +	vm_wait_for_ssh "${ns1}"
-> > +	oops_before=$(vm_dmesg_oops_count "${ns1}")
-> > +	warn_before=$(vm_dmesg_warn_count "${ns1}")
-> > +
-> > +	vm_ssh "${ns1}" -- socat VSOCK-LISTEN:"${port}" STDOUT > "${outfile}" &
-> 
-> Should we wait for the listener here, like we do for TCP sockets?
-> (also in other place where we use VSOCK-LISTEN)
-
-Definitely, I didn't know ss could do this.
-
-Best,
-Bobby
+Eric
 
