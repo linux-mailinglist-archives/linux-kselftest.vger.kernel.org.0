@@ -1,240 +1,288 @@
-Return-Path: <linux-kselftest+bounces-46126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C83DC752B8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:56:59 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED9F3C75447
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 17:14:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BF98D4F3C73
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:41:52 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 762093439F8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:07:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827443612D7;
-	Thu, 20 Nov 2025 15:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD8CE35E526;
+	Thu, 20 Nov 2025 16:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="CO70V/jR"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="FygshPq5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-8fad.mail.infomaniak.ch (smtp-8fad.mail.infomaniak.ch [83.166.143.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927123612CC
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 15:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B6C35C186
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 16:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763652909; cv=none; b=TPY4LW7n7wK34R2rlBRARGSulGgdi+BFIy4JX/cNJoKarqdkiFPJ+543qAa5O+YNtTfJsMzUkW9bkYPArH/wEe8WN96Xyl7uGlRObG1mkVQwVCl4HJTGNjnmiLcKcF310y3gnxZzkFOik+6ej+acWf5OJdcawWEpC/G2kcyP4no=
+	t=1763654852; cv=none; b=CetZZ4Sy6rxjRxeWeiNoLUuVADs0DF0KidhIsantxiJyzdldpUY4b8BZv7LatelM4XjDikFcZTkjr2i0Wj1MPCuqhJOgn3j7pUOAy//6CYdccbYD9i3iWJAN5Amt80Nl0NeYUXi2uNhvapku2HghzYdy6MYQXvy7Kaaga0zfoiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763652909; c=relaxed/simple;
-	bh=HxGHVYEEBatxVNzTWUVGUN69/JYbXDtI3jufM2nxqoI=;
+	s=arc-20240116; t=1763654852; c=relaxed/simple;
+	bh=ikZZTlmcvvgaeRuhpKBwP55qPBNe+u4ZLfVXPYvtcZk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uwhkoc2yX2bqSJHIFD+qeRY4MXp64I4DQRt8xbYmebYBRiiigMaGlPOUE4ueqWq0/q7OudbQIToAI7KpCounAeW/ARLAkRDGpD+UOej3Mp+BX50Oa4b+WFzE16ncoLs4tLeCpxIF53qfBaT8LnTIjVS6F+1a5S6oeYeZDLyS358=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=CO70V/jR; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4779d47be12so8493955e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 07:35:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763652905; x=1764257705; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=11esoKSgE8g1amitmv74A8N+MN8ZcrR64u90u3R6V54=;
-        b=CO70V/jROHASWx0ueJGmOA7YnYZpUxvnNbjTU1/9UyJs+4nnIKqR89GXlNp793Lw49
-         TFEx4KRSO6AWumv0u+L7yZg2qSdjaOpOagxgHTcRRF5pmwVVfKLH3RV4IYlWXqolVHMR
-         noCeq8ooWLAMyrp3tV6bE5NIoSbfnxCoAw1a9GruffNXF56AC9I491LynObi45RVtB5A
-         1F3I1zrJGWwGXBRXI1nq+xsUNYyZ8+RGZ7plylbjcW+qZwemMN1LJyYTvdGAL46o/IBq
-         b3VP0U8D1voQSMLlw8ZUnXzWcPbX5xoazR/mvNCVTO8Z1SPVwAu4gQ4SUMNIH90L3mpx
-         pbwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763652905; x=1764257705;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=11esoKSgE8g1amitmv74A8N+MN8ZcrR64u90u3R6V54=;
-        b=CC9YVwfAqaWiR+24enaNGHCHb8D3HAnV8n9KGaPnkODgZmKCs+m4DNyArNqIJwFAX0
-         BUcs+DKdKTOPFR7SZWLCtV8o4n2PfDjRdAua/Jyd0FSPI4XKjUdK3Jr4o9xgjSb2iJi4
-         ZExBJ8hl7RWz2zox4jQ3lmokE9KxiS2Kj2dEP3e9Uqto7WG0qD1A0+N7pMkhQXYr4NpF
-         QUiQPVj8KLQiOqYi/7HcuO6fVRhCXupCGVe7lCUTe+cyaSbV/q9kgwr2Rcq7cMX9EO4F
-         n6WCpAWQJmVhrerOaGtcejh2ZMwv7T/bV9g+fBu9ZzHHdBt90EAIyQw3y2pFwQNs8Ggp
-         pkkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUuFuvVyCjhnRaXYFOjok1N2AWDoN0Zzw7FOe0PZXNMy+Pf+RdXOwkC/p6B8pkghbt09KgPJZEc9NlyfAs3Y1I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCRszxg5DVYk7VxgXfjwaas3m/ZQmBl+cthKYoLxwMdE4ditBa
-	h6djOKF7uC5ZNzJCO1+q1VYiOp9rgzZLH45hnrxXEAX65x+59+68jBH7QuY0Xiv6+t4=
-X-Gm-Gg: ASbGncuSCSX0J1q9NOQd+ifsgVS7fSpNyKnrsZZpoKWQDxH1nlv5/bmxya+bPyzC1hh
-	YUorn/wD6NH4O8Zjez3rwQ6ZK005it22ZxCQ6M2FjmkctaXLev4dtK7VvPrJ3Kdd0eMf/xQ+5/8
-	/3Pj5A/cvnpxB6H+vwUqCU5SfsVPyJUayK9p0MTRgECzE19lWPBwdZY+Wmgk1UOxEnpILEMJkDN
-	75AoAMCtt4vkwTi7LiiI37mCXcduJkOvsN7KijgcUBP38SKOJ+DPeoQ7DEEgNaNf8d+dNAepfJo
-	f6bnd9SSYUuATyWLX78iBayvQpoq7TJaihoMb6tccL7PLeoUNoVStVXG5b0oGjzNKRhfV3b0SVW
-	aii3OFeN4QaLBrKAJ0xIkHvFhR1l0cXyU3fI68PVQRY6q/1wGjwV14Xqyh5/w+PjFAeAS/d4MgS
-	ixHpeb0P5kBGB5SwR08wzZnALmPTApqGOV
-X-Google-Smtp-Source: AGHT+IEPAYYqmLfa62VPjHRp0h443J6MQXeseMV1CiVvWJMFtArLSISsoWd97XXXD7e7TlfONuWvEA==
-X-Received: by 2002:a05:600c:3b08:b0:477:93f7:bbc5 with SMTP id 5b1f17b1804b1-477b9dd6e39mr32508755e9.10.1763652904777;
-        Thu, 20 Nov 2025 07:35:04 -0800 (PST)
-Received: from blackbook2 (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477b82d8251sm53046445e9.6.2025.11.20.07.35.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 07:35:04 -0800 (PST)
-Date: Thu, 20 Nov 2025 16:35:02 +0100
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Cc: tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org, 
-	roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev, 
-	lance.yang@linux.dev, shuah@kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] selftests: cgroup: make test_memcg_sock robust
- against delayed sock stats
-Message-ID: <p655qedqjaakrnqpytc6dltejfluxo6jrffcltfz2ivonmk6lb@bxf5xlgo4iw2>
-References: <20251120060406.2846257-1-zhangguopeng@kylinos.cn>
+	 Content-Type:Content-Disposition:In-Reply-To; b=kfAMLhn4w7TLSH1kjwRDuVuS3ooTe6FnfauWFgl8mPgX6JQoebuz77MIBGNydB8m2J0T5O7qCZKdOP51pZhUuWYQBSgZKkKY1jsFF4bgcTxjIg0feepQI6jA9kUtWZWXawGmNQfxnRFIW7MY/a1IG5MMhnHb/ZxI50T5cdwYJgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=FygshPq5; arc=none smtp.client-ip=83.166.143.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-4-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:7:10::a6b])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4dC2fJ0JsMzlg6;
+	Thu, 20 Nov 2025 16:42:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1763653335;
+	bh=bK5R4FWeryYY7Dzvx1ZNaz58dfr5FQOYKvQc4SGZ4YM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FygshPq5IlSlaXB1OLnU88u1OtCo/xcWUxfMvs71UOoduLLFVoXOeHiyDK+tRMw0l
+	 hu+p5NjGJ+xoeATGrs1fPTBCGdZ4sUGKHCE0B7eOrmuKt04DyNFr6rYj+MuoAJEM++
+	 c0Ct4rf06JBSY1HTX38a+2Zi8SuATscH9CjsvXO4=
+Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4dC2fG24dwzXmx;
+	Thu, 20 Nov 2025 16:42:14 +0100 (CET)
+Date: Thu, 20 Nov 2025 16:42:13 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Abhinav Saxena <xandfury@gmail.com>
+Cc: =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev, Daniel Verkamp <dverkamp@chromium.org>, 
+	Jeff Xu <jeffxu@chromium.org>, =?utf-8?B?VGhpw6liYXVk?= Weksteen <tweek@google.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>
+Subject: Re: [PATCH RFC 0/4] landlock: add LANDLOCK_SCOPE_MEMFD_EXEC execution
+Message-ID: <20251120.KuoC9rol6aht@digikod.net>
+References: <20250719-memfd-exec-v1-0-0ef7feba5821@gmail.com>
+ <20250918.io7too8ain7A@digikod.net>
+ <878qhy2lch.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ai47sd76qnrx3mju"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251120060406.2846257-1-zhangguopeng@kylinos.cn>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <878qhy2lch.fsf@gmail.com>
+X-Infomaniak-Routing: alpha
 
+On Sun, Sep 28, 2025 at 05:37:02PM -0600, Abhinav Saxena wrote:
+> Thanks for the detailed reply Mickaël!
+> 
+> Mickaël Salaün <mic@digikod.net> writes:
+> 
+> > Thanks for this patch series Abhinav!  The code looks good overall, but
+> > we should clarify the design.  Sorry for the delayed response, it is on
+> > my radar now.
 
---ai47sd76qnrx3mju
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3] selftests: cgroup: make test_memcg_sock robust
- against delayed sock stats
-MIME-Version: 1.0
+Please feel free to ping me after two weeks without answer, I might miss
+some emails.
 
-Hello Guopeng.
+> >
+> > CCing Jeff and Daniel
+> >
+> > On Sat, Jul 19, 2025 at 05:13:10AM -0600, Abhinav Saxena wrote:
+> >> This patch series introduces LANDLOCK_SCOPE_MEMFD_EXEC, a new Landlock
+> >> scoping mechanism that restricts execution of anonymous memory file
+> >> descriptors (memfd) created via memfd_create(2). This addresses security
+> >> gaps where processes can bypass W^X policies and execute arbitrary code
+> >> through anonymous memory objects.
+> >> 
+> >> Fixes: <https://github.com/landlock-lsm/linux/issues/37>
+> >> 
+> >> SECURITY PROBLEM
+> >> `=============='
+> >> 
+> >> Current Landlock filesystem restrictions do not cover memfd objects,
+> >> allowing processes to:
+> >> 
+> >> 1. Read-to-execute bypass: Create writable memfd, inject code,
+> >>    then execute via mmap(PROT_EXEC) or direct execve()
+> >> 2. Anonymous execution: Execute code without touching the filesystem via
+> >>    execve(“/proc/self/fd/N”) where N is a memfd descriptor
+> >
+> >> 3. Cross-domain access violations: Pass memfd between processes to
+> >>    bypass domain restrictions
+> >
+> > Landlock only restricts access at open time, which is a useful property.
+> > This enables to create more restricted sandboxes but still get access to
+> > outside resources via trusted processes.  If the process passing the FDs
+> > is not trusted, the sandboxed process could just ask to execute
+> > arbitrary code outside the sandbox anyway.
+> >
+> > However, the Landlock scopes are designed to block IPC from within a
+> > sandbox to outside the sandbox.  We could have a new scope to forbid a
+> > sandbox process to receive or inherit file descriptors, but that would
+> > be a different and generic feature.  For compatibility reasons, this
+> > might not be easy to implement and I think there are more important
+> > features to implement before that.
+> >
+> > Thinking more about it, restricting memfd should not be a “scoped” flag
+> > because the semantic is not the same, but we should have a new ruleset
+> > property instead, something like “ruleset.denied” with a related
+> > LANDLOCK_DENY_EXECUTE_MEMFD flag.  This flag will only have an impact on
+> > newly created memfd from a sandboxed process with this restriction at
+> > creation time. This could be implemented with hook_file_alloc_security()
+> > by checking if the file is indeed a memfd and checking inode->i_mode for
+> > executability bits (which would imply MFD_NOEXEC_SEAL).
+> >
+> 
+> Thanks for the clarification! So if I understood correctly we are
+> proposing adding a `denied` field to the `landlock_ruleset_attr` struct
+> 
+> struct landlock_ruleset_attr {
+>     __u64 handled_access_fs;
+>     __u64 handled_access_net;
+>     __u64 scoped;
+>     __u64 denied;              /* New field */
+> };
+> 
+> which allows memfd_create() to be allowed by default unless
+> LANDLOCK_DENY_EXECUTE_MEMFD bit is set.
 
-+Cc Leon Huang Fu <leon.huangfu@shopee.com>  =20
+Yes
 
-On Thu, Nov 20, 2025 at 02:04:06PM +0800, Guopeng Zhang <zhangguopeng@kylin=
-os.cn> wrote:
-> test_memcg_sock() currently requires that memory.stat's "sock " counter
-> is exactly zero immediately after the TCP server exits. On a busy system
-> this assumption is too strict:
->=20
->   - Socket memory may be freed with a small delay (e.g. RCU callbacks).
+> Also it seems Thiébaud
+> Weksteen’s patch[1] will land, and maybe we can use
+> security_inode_init_security_anon instead? What do you think?
 
-(FTR, I remember there is `echo 1 > /sys/module/rcutree/parameters/do_rcu_b=
-arrier`,
-however, I'm not sure it works always as expected (a reader may actually
-wait for multi-stage RCU pipeline), so plain timeout is more reliable.)
+Definitely, and this patch is now merged in -next.
 
->   - memcg statistics are updated asynchronously via the rstat flushing
->     worker, so the "sock " value in memory.stat can stay non-zero for a
->     short period of time even after all socket memory has been uncharged.
->=20
-> As a result, test_memcg_sock() can intermittently fail even though socket
-> memory accounting is working correctly.
->=20
-> Make the test more robust by polling memory.stat for the "sock "
-> counter and allowing it some time to drop to zero instead of checking
-> it only once.
+> 
+> Apologies for my ignorance, do we have to wait till his patch has
+> landed into Linus’s tree?
 
-I like the approach of adaptive waiting to settle in such tests.
+As long as you explain this dependency in the commit message and point
+to the patch (as a comment, after a "---" line), we're good.
 
-> The timeout is set to 3 seconds to cover the periodic rstat flush
-> interval (FLUSH_TIME =3D 2*HZ by default) plus some scheduling slack. If
-> the counter does not become zero within the timeout, the test still
-> fails as before.
->
-> On my test system, running test_memcontrol 50 times produced:
->=20
->   - Before this patch:  6/50 runs passed.
->   - After this patch:  50/50 runs passed.
+> 
+> >> 
+> >> These scenarios can occur in sandboxed environments where filesystem
+> >> access is restricted but memfd creation remains possible.
+> >> 
+> >> IMPLEMENTATION
+> >> `============'
+> >> 
+> >> The implementation adds hierarchical execution control through domain
+> >> scoping:
+> >> 
+> >> Core Components:
+> >> - is_memfd_file(): Reliable memfd detection via “memfd:” dentry prefix
+> >> - domain_is_scoped(): Cross-domain hierarchy checking (moved to domain.c)
+> >> - LSM hooks: mmap_file, file_mprotect, bprm_creds_for_exec
+> >> - Creation-time restrictions: hook_file_alloc_security
+> >> 
+> >> Security Matrix:
+> >> Execution decisions follow domain hierarchy rules preventing both
+> >> same-domain bypass attempts and cross-domain access violations while
+> >> preserving legitimate hierarchical access patterns.
+> >> 
+> >> Domain Hierarchy with LANDLOCK_SCOPE_MEMFD_EXEC:
+> >> `============================================='
+> >> 
+> >> Root (no domain) - No restrictions
+> >>   |
+> >>   +– Domain A [SCOPE_MEMFD_EXEC] Layer 1
+> >>   |     +– memfd_A (tagged with Domain A as creator)
+> >>   |     |
+> >>   |     +– Domain A1 (child) [NO SCOPE] Layer 2
+> >>   |     |     +– Inherits Layer 1 restrictions from parent
+> >>   |     |     +– memfd_A1 (can create, inherits restrictions)
+> >>   |     |     +– Domain A1a [SCOPE_MEMFD_EXEC] Layer 3
+> >>   |     |           +– memfd_A1a (tagged with Domain A1a)
+> >>   |     |
+> >>   |     +– Domain A2 (child) [SCOPE_MEMFD_EXEC] Layer 2
+> >>   |           +– memfd_A2 (tagged with Domain A2 as creator)
+> >>   |           +– CANNOT access memfd_A1 (different subtree)
+> >>   |
+> >>   +– Domain B [SCOPE_MEMFD_EXEC] Layer 1
+> >>         +– memfd_B (tagged with Domain B as creator)
+> >>         +– CANNOT access ANY memfd from Domain A subtree
+> >> 
+> >> Execution Decision Matrix:
+> >> `======================'
+> >> Executor->  |  A  | A1 | A1a | A2 | B  | Root
+> >> Creator     |     |    |     |    |    |
+> >> ————|—–|—-|—–|—-|—-|—–
+> >> Domain A    |  X  | X  | X   | X  | X  |  Y
+> >> Domain A1   |  Y  | X  | X   | X  | X  |  Y
+> >> Domain A1a  |  Y  | Y  | X   | X  | X  |  Y
+> >> Domain A2   |  Y  | X  | X   | X  | X  |  Y
+> >> Domain B    |  X  | X  | X   | X  | X  |  Y
+> >> Root        |  Y  | Y  | Y   | Y  | Y  |  Y
+> >> 
+> >> Legend: Y = Execution allowed, X = Execution denied
+> >
+> > Because checks should not be related to scopes, this will be much
+> > simpler.
+> >
+> >> 
+> >> Scenarios Covered:
+> >> - Direct mmap(PROT_EXEC) on memfd files
+> >> - Two-stage mmap(PROT_READ) + mprotect(PROT_EXEC) bypass attempts
+> >> - execve("/proc/self/fd/N") anonymous execution
+> >> - execveat() and fexecve() file descriptor execution
+> >> - Cross-process memfd inheritance and IPC passing
+> >> 
+> >> TESTING
+> >> `====='
+> >> 
+> >> All patches have been validated with:
+> >> - scripts/checkpatch.pl –strict (clean)
+> >> - Selftests covering same-domain restrictions, cross-domain 
+> >>   hierarchy enforcement, and regular file isolation
+> >> - KUnit tests for memfd detection edge cases
+> >
+> > Thanks for all these tests!
+> >
+> >> 
+> >> DISCLAIMER
+> >> `========'
+> >> 
+> >> My understanding of Landlock scoping semantics may be limited, but this
+> >> implementation reflects my current understanding based on available
+> >> documentation and code analysis. I welcome feedback and corrections
+> >> regarding the scoping logic and domain hierarchy enforcement.
+> >> 
+> >> Signed-off-by: Abhinav Saxena <xandfury@gmail.com>
+> >> —
+> >> Abhinav Saxena (4):
+> >>       landlock: add LANDLOCK_SCOPE_MEMFD_EXEC scope
+> >>       landlock: implement memfd detection
+> >>       landlock: add memfd exec LSM hooks and scoping
+> >>       selftests/landlock: add memfd execution tests
+> >> 
+> >>  include/uapi/linux/landlock.h                      |   5 +
+> >>  security/landlock/.kunitconfig                     |   1 +
+> >>  security/landlock/audit.c                          |   4 +
+> >>  security/landlock/audit.h                          |   1 +
+> >>  security/landlock/cred.c                           |  14 -
+> >>  security/landlock/domain.c                         |  67 ++++
+> >>  security/landlock/domain.h                         |   4 +
+> >>  security/landlock/fs.c                             | 405 ++++++++++++++++++++-
+> >>  security/landlock/limits.h                         |   2 +-
+> >>  security/landlock/task.c                           |  67 —-
+> >>  …/selftests/landlock/scoped_memfd_exec_test.c    | 325 +++++++++++++++++
+> >>  11 files changed, 812 insertions(+), 83 deletions(-)
+> >> —
+> >> base-commit: 5b74b2eff1eeefe43584e5b7b348c8cd3b723d38
+> >> change-id: 20250716-memfd-exec-ac0d582018c3
+> >> 
+> >> Best regards,
+> >> – 
+> >> Abhinav Saxena <xandfury@gmail.com>
+> >> 
+> >> 
+> 
+> Best,
+> Abhinav
+> 
+> [1] - <https://lore.kernel.org/all/20250918020434.1612137-1-tweek@google.com/>
 
-BTW Have you looked into the number of retries until success?
-Was it in accordance with the flushing interval?
-
->=20
-> Suggested-by: Lance Yang <lance.yang@linux.dev>
-> Reviewed-by: Lance Yang <lance.yang@linux.dev>
-> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-> ---
-> v3:
->  - Move MEMCG_SOCKSTAT_WAIT_* defines after the #include block as
->    suggested.
-> v2:
->  - Mention the periodic rstat flush interval (FLUSH_TIME =3D 2*HZ) in
->    the comment and clarify the rationale for the 3s timeout.
->  - Replace the hard-coded retry count and wait interval with macros
->    to avoid magic numbers and make the 3s timeout calculation explicit.
-> ---
->  .../selftests/cgroup/test_memcontrol.c        | 30 ++++++++++++++++++-
->  1 file changed, 29 insertions(+), 1 deletion(-)
->=20
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/tes=
-ting/selftests/cgroup/test_memcontrol.c
-> index 4e1647568c5b..8ff7286fc80b 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-> @@ -21,6 +21,9 @@
->  #include "kselftest.h"
->  #include "cgroup_util.h"
-> =20
-> +#define MEMCG_SOCKSTAT_WAIT_RETRIES        30              /* 3s total */
-> +#define MEMCG_SOCKSTAT_WAIT_INTERVAL_US    (100 * 1000)    /* 100 ms */
-> +
->  static bool has_localevents;
->  static bool has_recursiveprot;
-> =20
-> @@ -1384,6 +1387,8 @@ static int test_memcg_sock(const char *root)
->  	int bind_retries =3D 5, ret =3D KSFT_FAIL, pid, err;
->  	unsigned short port;
->  	char *memcg;
-> +	long sock_post =3D -1;
-> +	int i;
-> =20
->  	memcg =3D cg_name(root, "memcg_test");
->  	if (!memcg)
-> @@ -1432,7 +1437,30 @@ static int test_memcg_sock(const char *root)
->  	if (cg_read_long(memcg, "memory.current") < 0)
->  		goto cleanup;
-> =20
-> -	if (cg_read_key_long(memcg, "memory.stat", "sock "))
-> +	/*
-> +	 * memory.stat is updated asynchronously via the memcg rstat
-> +	 * flushing worker, which runs periodically (every 2 seconds,
-> +	 * see FLUSH_TIME). On a busy system, the "sock " counter may
-> +	 * stay non-zero for a short period of time after the TCP
-> +	 * connection is closed and all socket memory has been
-> +	 * uncharged.
-> +	 *
-> +	 * Poll memory.stat for up to 3 seconds (~FLUSH_TIME plus some
-> +	 * scheduling slack) and require that the "sock " counter
-> +	 * eventually drops to zero.
-> +	 */
-> +	for (i =3D 0; i < MEMCG_SOCKSTAT_WAIT_RETRIES; i++) {
-> +		sock_post =3D cg_read_key_long(memcg, "memory.stat", "sock ");
-> +		if (sock_post < 0)
-> +			goto cleanup;
-> +
-> +		if (!sock_post)
-> +			break;
-> +
-> +		usleep(MEMCG_SOCKSTAT_WAIT_INTERVAL_US);
-> +	}
-
-I think this may be useful also for othe tests (at least other
-memory.stat checks), so some encapsulated implementation like a macro
-with parameters
-	cg_read_assert_gt_with_retries(cg, file, field, exp, timeout, retries)
-WDYT?
-
-Michal
-
---ai47sd76qnrx3mju
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaR81HRsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+AikgQD+P75H+Zk6KLQv5jtwZR2/
-lc6k9NlLyZw80qeoVGUId3MA/3Xf79tB9qS682uIdC73LCKqrsTyqHG1PFRf/s6U
-uGgJ
-=oeRR
------END PGP SIGNATURE-----
-
---ai47sd76qnrx3mju--
 
