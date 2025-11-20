@@ -1,157 +1,186 @@
-Return-Path: <linux-kselftest+bounces-46129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8760CC7557C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 17:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CB2E7C751CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:49:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F0AA14E2187
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 16:07:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 27ED64EF45A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:40:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91CD35B15A;
-	Thu, 20 Nov 2025 16:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D3935B15B;
+	Thu, 20 Nov 2025 15:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lbzlHOj7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E739C34F257;
-	Thu, 20 Nov 2025 16:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B533A1D09
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 15:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763654828; cv=none; b=U6S+KMikdb5gtxat9ocYg17NamHpF1EFQXMVbdR/nJBfpWX2ictFER80MGDusZxFbjWE+swI81pXHq5ZRcl2IHm9Cmn5NhI7a3CdtyYhkQXPsvNyAB7/ggSecY6GoBweBC7EywUh8rVooUVKOCCprEMoOSM7+gT3euQ52zEBzyQ=
+	t=1763652676; cv=none; b=j/93/EQkhr3ejuJVuYuNa0XfFIcwV4B1Axpds9v+lJ6NG32QqF4MUueP3kGizkX3PfsU6RbGHO5BNQEFxfW+qeZ6xZGN+DcmAmoUpfoU8H7poEb3kMtj52zUO1VPCJK1sEDlVBXaus5yD2YMJH3jqzFvzpGQFbRguZGUUHluKYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763654828; c=relaxed/simple;
-	bh=+RMqJQELsQfiJaUTMfH5DjOLFa4QNsEAB9sxfepEuog=;
-	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=g55EW3ouHcSzDc3ZVSxBvinsWCPHb7YbkjJUD/v3KnWhD4kJkafC4WW395/ioB3dm6DjghCoWJqW2LdfKNYWLcTKm9v4EUEnsGpKBJ2thru8WdDFNfeEP6ujWTwscfPM6KIHsKehkV1kKzDsnRNaCWRECdZf7PGkP9F8wgj0NCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in02.mta.xmission.com ([166.70.13.52]:44142)
-	by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vM6OE-00Be3t-5G; Thu, 20 Nov 2025 08:16:06 -0700
-Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:59778 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vM6OD-00B1Wa-2m; Thu, 20 Nov 2025 08:16:05 -0700
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,  Alexey Dobriyan
- <adobriyan@gmail.com>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
- <kees@kernel.org>,  Andy Lutomirski <luto@amacapital.net>,  Will Drewry
- <wad@chromium.org>,  Christian Brauner <brauner@kernel.org>,  Andrew
- Morton <akpm@linux-foundation.org>,  Michal Hocko <mhocko@suse.com>,
-  Serge Hallyn <serge@hallyn.com>,  James Morris
- <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
-  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
- <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
- <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
- <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
-  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
-  linux-security-module@vger.kernel.org,  tiozhang
- <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
- Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
- <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
-  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
-  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
-  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
- <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
- <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
- Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
- <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
- <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
- Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
-  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
- <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
- Dumazet <edumazet@google.com>
-In-Reply-To: <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	(Bernd Edlinger's message of "Tue, 18 Nov 2025 19:13:33 +0100")
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-Date: Thu, 20 Nov 2025 09:15:57 -0600
-Message-ID: <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1763652676; c=relaxed/simple;
+	bh=wMnT47phEFuGfAdPalYZmpWGC6ln9kV4Q339Ib+0xuE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YgdN0bbmMHuML/B3HayGYnLLccy89Hn4SOJm4S7MCenIvRa4EUA8pT07iavWSUHy2+JO3XYypR1XbhMAehemu1WqpZckLnmvAVxY9SPMybRD883R6F3DTImswg2XA+/Pu1ZvwdL/WgptiDlCdzRJEkmU9dpp/gbHn+0d2m28AGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lbzlHOj7; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-787ff3f462bso23926577b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 07:31:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763652673; x=1764257473; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PFiT8mQz2EeFfhAtckqnTM9BcNHX0xiz9tE4/FBhkTE=;
+        b=lbzlHOj7nNZO01ylI7WXU8F4o0tSysm4a2eWQsStUmqXbtFdoDctgJ9r196y/ZMHFF
+         CNCzckt38jO/1VY/nyuIvSSHn8iBArZd04LYVFofPSKZs1UrMIjgTSxZeU6nWwuqillY
+         wKbMquXENiQGkkXgKReO54LN5792IV1wxdaQZJV54+XqH8fEWqIcDw3XhyuPOK0KQ2WU
+         /nw3G188kAh61IeWc2FZ3Amig8SovI+FzqoQ56g8wSSD3owR+M9smjMLKHGkxG1d06ze
+         ftfV9xm1sZNsVIg/uUqmSJK9h6W2eSZ1gi7FBtIbjUhhMnvNkPSq6zX96irGDd2CE0jt
+         jRPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763652673; x=1764257473;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PFiT8mQz2EeFfhAtckqnTM9BcNHX0xiz9tE4/FBhkTE=;
+        b=h5VGq80csMsu/j92B7V+gQbznZibajwt89W0A7hKccO60/xpSp1EZpdl02TGT24EMG
+         Pr6Vqi4WOsOrKyEDPUagsuD+br5HJt7qMJw1bW5W3gyoDzkGcLOx2tkyU6JgGJ4hIIsW
+         zkXakqLdLsTo5B+XHD3fVvh2anXd+sDHfj/gMCuiBb9rV9kKClqicJG6K2S4vcEH+sIG
+         tLHMGeU18UtSAWW0reQnjt0vVZzdtESz7Xv90AeINp0VtONLOnO+s1DvOZJMKrep/Z6M
+         RW7rWEqi1vTHfHuU2mX2BrgiSkPRBGNqtXUMsGEXiK6QDSRHZPoQ/c7e3tML5I000eUv
+         eqiw==
+X-Forwarded-Encrypted: i=1; AJvYcCXY0T65hzjXWx5iuC+31EI5U6saZpvU8oInBltKzytC0cdeyv0g0Q6oFEjWAw+0PtTuR2nz0F/8jaqoCmJ4bE4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyV4aAsdpYfEsH/8HsRnE4uSpkPXSKo46SE5+gljRdTIofMx8Tq
+	uaRgj1i5y1I+pzg9pNbvdsGAKudKWWRXfqeQ0AKgplwNPyr4lCnpKvlg
+X-Gm-Gg: ASbGncuxUFpamKaTghen3GiGr2xV3u2yByJynnzvRRB/i80F3wPJRYjGeIujBhYftdb
+	GV5/0XByikI8a7U2SI1RrdNPdjDvVQHjE+NDoLe8QbGgMdZSLX0soHFnyG04QbpfmxfKRu+K2CZ
+	wa3tN5q3zmtYZrR3pO7XLXMQQ+V9IWV3WQ4u0+fUR3UmIZdh7hlSnexUOuocqDfhDiodlSf3oIR
+	Fdf7PRF0kBPf1DEXkUHO/+0mj+akL+U+7nlSVo8wSaNlYHcRwTD0WBlqwtvJuDGmHgx7lz+1ojG
+	PHROYTvO5c28/9zSRpMm/uUP/SQK+ZeymwKz9G8POnpkfcXo62IeJrzJSu1irjMgLOqWbJy/fnL
+	ZsmkfMsryIwJui39QI1jPVDdJkp8cjRxGpJVMXw6mcRJw8v1JEOJgpC9B2vG9n2lWi8QmkTpFHZ
+	rF2R5onUjqCUlCkmWQFLSMMo6shJxEzwzom+p7kRFWY3BqQOU=
+X-Google-Smtp-Source: AGHT+IGnxsv7O9k5uQ7ryneqkrnqq+cPJZPkqCvcNCDp+BprL3ACVr9C8SpKEUSItTS/dKmykTVJvA==
+X-Received: by 2002:a05:690e:12cc:b0:63f:b4b4:7758 with SMTP id 956f58d0204a3-642f8df4854mr2073800d50.11.1763652672604;
+        Thu, 20 Nov 2025 07:31:12 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:45::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-642f71787f3sm871532d50.16.2025.11.20.07.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 07:31:12 -0800 (PST)
+Date: Thu, 20 Nov 2025 07:31:10 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v7 3/5] net: devmem: implement autorelease token
+ management
+Message-ID: <aR80PvXaX1+S/avE@devvm11784.nha0.facebook.com>
+References: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
+ <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-3-1abc8467354c@meta.com>
+ <a0543467-df01-4486-9bac-d1a3446f44cc@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1vM6OD-00B1Wa-2m;;;mid=<87tsyozqdu.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19QcsFpf8D1sbddVLnmxux1sHku3bCtmFE=
-X-Spam-Level: 
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.5000]
-	*  0.7 XMSubLong Long Subject
-	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  1.0 XM_B_SpammyTLD Contains uncommon/spammy TLD
-	*  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Bernd Edlinger <bernd.edlinger@hotmail.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 459 ms - load_scoreonly_sql: 0.04 (0.0%),
-	signal_user_changed: 10 (2.2%), b_tie_ro: 9 (1.9%), parse: 0.95 (0.2%),
-	 extract_message_metadata: 12 (2.5%), get_uri_detail_list: 0.89 (0.2%),
-	 tests_pri_-2000: 4.4 (1.0%), tests_pri_-1000: 11 (2.3%),
-	tests_pri_-950: 1.30 (0.3%), tests_pri_-900: 1.09 (0.2%),
-	tests_pri_-90: 161 (35.0%), check_bayes: 150 (32.7%), b_tokenize: 16
-	(3.5%), b_tok_get_all: 9 (2.0%), b_comp_prob: 2.3 (0.5%),
-	b_tok_touch_all: 119 (25.9%), b_finish: 0.94 (0.2%), tests_pri_0: 246
-	(53.5%), check_dkim_signature: 0.59 (0.1%), check_dkim_adsp: 3.1
-	(0.7%), poll_dns_idle: 1.20 (0.3%), tests_pri_10: 2.0 (0.4%),
-	tests_pri_500: 7 (1.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v18] exec: Fix dead-lock in de_thread with ptrace_attach
-X-SA-Exim-Connect-IP: 166.70.13.52
-X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-SA-Exim-Scanned: No (on out01.mta.xmission.com); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a0543467-df01-4486-9bac-d1a3446f44cc@redhat.com>
 
-Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
+On Thu, Nov 20, 2025 at 01:19:54PM +0100, Paolo Abeni wrote:
+> On 11/20/25 4:37 AM, Bobby Eshleman wrote:
+> > @@ -2479,10 +2504,12 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
+> >  			      unsigned int offset, struct msghdr *msg,
+> >  			      int remaining_len)
+> >  {
+> > +	struct net_devmem_dmabuf_binding *binding = NULL;
+> >  	struct dmabuf_cmsg dmabuf_cmsg = { 0 };
+> >  	struct tcp_xa_pool tcp_xa_pool;
+> >  	unsigned int start;
+> >  	int i, copy, n;
+> > +	int refs = 0;
+> >  	int sent = 0;
+> >  	int err = 0;
+> >  
+> > @@ -2536,6 +2563,7 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
+> >  			skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
+> >  			struct net_iov *niov;
+> >  			u64 frag_offset;
+> > +			u32 token;
+> >  			int end;
+> >  
+> >  			/* !skb_frags_readable() should indicate that ALL the
+> > @@ -2568,13 +2596,32 @@ static int tcp_recvmsg_dmabuf(struct sock *sk, const struct sk_buff *skb,
+> >  					      start;
+> >  				dmabuf_cmsg.frag_offset = frag_offset;
+> >  				dmabuf_cmsg.frag_size = copy;
+> > -				err = tcp_xa_pool_refill(sk, &tcp_xa_pool,
+> > -							 skb_shinfo(skb)->nr_frags - i);
+> > -				if (err)
+> > +
+> > +				binding = net_devmem_iov_binding(niov);
+> > +
+> > +				if (!sk->sk_devmem_info.binding)
+> > +					sk->sk_devmem_info.binding = binding;
+> > +
+> > +				if (sk->sk_devmem_info.binding != binding) {
+> > +					err = -EFAULT;
+> >  					goto out;
+> > +				}
+> > +
+> > +				if (static_branch_unlikely(&tcp_devmem_ar_key)) {
+> 
+> Not a real/full review but the above is apparently causing kunit build
+> failures:
+> 
+> ERROR:root:ld: vmlinux.o: in function `tcp_recvmsg_dmabuf':
+> tcp.c:(.text+0x669b21): undefined reference to `tcp_devmem_ar_key'
+> ld: tcp.c:(.text+0x669b68): undefined reference to `tcp_devmem_ar_key'
+> ld: tcp.c:(.text+0x669c54): undefined reference to `tcp_devmem_ar_key'
+> make[3]: *** [../scripts/Makefile.vmlinux:72: vmlinux.unstripped] Error 1
+> make[2]: *** [/home/kunit/testing/Makefile:1242: vmlinux] Error 2
+> make[1]: *** [/home/kunit/testing/Makefile:248: __sub-make] Error 2
+> make: *** [Makefile:248: __sub-make] Error 2
+> 
+> see:
+> 
+> https://netdev-3.bots.linux.dev/kunit/results/393664/
 
-> This introduces signal->exec_bprm, which is used to
-> fix the case when at least one of the sibling threads
-> is traced, and therefore the trace process may dead-lock
-> in ptrace_attach, but de_thread will need to wait for the
-> tracer to continue execution.
+Thanks Paolo, I'll fix that for the next rev. And I'll have to add
+building kunit into my flow (currently using some custom stuff and nipa
+ingest_mdir, but don't think either has kunit).
+> 
+> > @@ -2617,6 +2664,7 @@ static int tcp_recvmsg_dmabuf(struct sock *sk,
+> > const struct sk_buff *skb,
+> >  
+> >  out: tcp_xa_pool_commit(sk, &tcp_xa_pool); +
+> 
+> [just because I stumbled upon the above while looking for the build
+> issue]: please do not mix unrelated whitespace-change only with
+> functional change.
 
-A small quibble it isn't a dead lock.  It isn't even really a live lock,
-as it is possible to SIGKILL our way out.
+Don't know how I missed that line, will definitely remove.
 
-Thinking about this there is a really silly and simple way we can deal
-with this situation for PTRACE_ATTACH.  We can send SIGSTOP and wait for
-the thread to stop before doing anything with cred_guard_mutex.
-
-PTRACE_ATTACH already implies sending SIGSTOP so as long as we have
-enough permissions to send SIGSTOP I don't see that being a problem.
-
-The worst case I can see is that we get a case where we stop the
-process, the permission check fails under cred_guard_mutex and
-and ptrace attach has fails and has to send SIGCONT to undo it's
-premature SIGSTOP.  That might almost be visible, but it would still
-be legitimate because we can still check that we have permission to
-send SIGSTOP.
-
-Eric
+Thanks again,
+Bobby
 
