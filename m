@@ -1,225 +1,258 @@
-Return-Path: <linux-kselftest+bounces-46107-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46108-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2977DC74694
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:02:36 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEB15C74721
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 15:08:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 058584F7561
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 13:46:34 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9A8313463A3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 14:03:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D17F346799;
-	Thu, 20 Nov 2025 13:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4FB341AB8;
+	Thu, 20 Nov 2025 14:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="BqVM76Nq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.83.148.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A05B342C99;
-	Thu, 20 Nov 2025 13:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCBEA30F7E8;
+	Thu, 20 Nov 2025 14:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.83.148.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763646323; cv=none; b=cVNSqejl8B61tMCZIQslWH0HKHZoO+PkOWo+o7QZGApP4IaO8Yq9CwvRAFSvfTBB9wmGYwiyHF6zjVNBf+pL8VivuqcUz2qcGBM84gV3EUGGesLiLrMOCu0+0oHTJXLPMhQXXpGQ8P0Yk9Xq5vlI3WhEUweXqlRONque/kSQdWw=
+	t=1763647402; cv=none; b=GhrE5FLP008UIeByvq/tvUd5/7moDaNIQlaXd54mGkDV1cToAlVTJsnW0VADDwengmNJILzh0Xo1q3U382FjkJAqDFMQ2VR4WkGp4EjXDGVSSi8oG0JvcRgwO/Qk+N9pHs9DC8QgS0qFu5kSuFpvrP6qVE4LfcGsqcLa5Nc1Poo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763646323; c=relaxed/simple;
-	bh=+jiC7CZHOFjw2Ag8OX/h9tCN/ZPLE0V2bCBBgmCAam0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RCHGHCU4DGCpfnwDm3ycIdQWdb8mklmYMWSQZSEBPQXc/OH1jk4rNM9RuD+QlMviy4GlCd34HCwYRAjqZevTzDPYtMJVCwpEBI2lrwJA+zXwt1vID9dUMCxXUGDVDZ7lWYgAyOvi0ri6L29pDCG0AYl6ZvA2LjZn/1CuVutAgtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dC02X0wTBzYQtkt;
-	Thu, 20 Nov 2025 21:44:36 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 09D861A1A0B;
-	Thu, 20 Nov 2025 21:45:18 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP2 (Coremail) with SMTP id Syh0CgDHbnVsGx9pmvekBQ--.9802S2;
-	Thu, 20 Nov 2025 21:45:17 +0800 (CST)
-Message-ID: <8d38b4ea-6b55-4319-b330-2dc33ac5cd77@huaweicloud.com>
-Date: Thu, 20 Nov 2025 21:45:16 +0800
+	s=arc-20240116; t=1763647402; c=relaxed/simple;
+	bh=wAI57A7CUMPEmBDEoWxqwdFnUFp/CXjd0JXJ/JoZF6E=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ATmpamwv7f+qpI6Xe8ctn9hz7+cTX98g9Lgji4X/P+boR1kCHJmCqLd8dbIpTg8JQamGpXUqURaQKhU8eCoGZ8LutQQ35PQDEl0qnnkdEwOZmU8eawXYxV1Gze0bnFQcXhQ387yS8Xi5sD/Icxf5ltzIBBxBDKZVOFh6Esrb22M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=BqVM76Nq; arc=none smtp.client-ip=35.83.148.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
+  t=1763647399; x=1795183399;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=wAI57A7CUMPEmBDEoWxqwdFnUFp/CXjd0JXJ/JoZF6E=;
+  b=BqVM76NqOLizz06Opl63mcRcFPbOYGKkJYtrRxGFufzGFkA5dpD4fGxU
+   tIkrXw1WpvBkGT4GsOGkxKY4sb422uaXMKwAjiZEKtjbZBjqHBjnG9CSU
+   5Ob60rqxKgQpYgurELFOwybaxZVmpDKUiFPCWE6iOyS44cq4O8aNuGcYw
+   vWIPPI49Szn0MKr6Q0G4Je6g/Ja8SD0d1hxlh4YXief3mOs6dDvzBVgRQ
+   tGTH73jj2QUdyx2Cxg9jxbaWNzj5ABQ5Pq7i4qcJhtXmnPhzlIfItJ4NL
+   5DOWkWAflt1gk0rKZJPm78IIRci6XfyzgmVCnrmNtBi1K13jscrJwbuSt
+   g==;
+X-CSE-ConnectionGUID: HKXweynVSo2flhWCKaSKyw==
+X-CSE-MsgGUID: 7DzM32z/RHeZQiB6jkU8lA==
+X-IronPort-AV: E=Sophos;i="6.20,213,1758585600"; 
+   d="scan'208";a="7231219"
+Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
+  by internal-pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 14:03:16 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [205.251.233.51:20477]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.53.70:2525] with esmtp (Farcaster)
+ id ddd1e577-27b0-4722-a551-f2b3c3672507; Thu, 20 Nov 2025 14:03:16 +0000 (UTC)
+X-Farcaster-Flow-ID: ddd1e577-27b0-4722-a551-f2b3c3672507
+Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
+ Thu, 20 Nov 2025 14:03:16 +0000
+Received: from amazon.com (10.1.213.15) by EX19D001UWA001.ant.amazon.com
+ (10.13.138.214) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Thu, 20 Nov 2025
+ 14:03:13 +0000
+From: Maximilian Dittgen <mdittgen@amazon.de>
+To: <maz@kernel.org>, <oliver.upton@linux.dev>
+CC: <pbonzini@redhat.com>, <shuah@kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<linux-kselftest@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<mdittgen@amazon.de>, <lilitj@amazon.de>, <sauravsc@amazon.de>,
+	<nh-open-source@amazon.com>
+Subject: [RFC PATCH 00/13] Introduce per-vCPU vLPI injection control API
+Date: Thu, 20 Nov 2025 15:02:49 +0100
+Message-ID: <20251120140305.63515-1-mdittgen@amazon.de>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on
- cpuset.cpus conflict.
-To: Sun Shaojie <sunshaojie@kylinos.cn>
-Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llong@redhat.com, mkoutny@suse.com, shuah@kernel.org, tj@kernel.org
-References: <5e690981-2921-4b9f-9771-8afaa15018c8@huaweicloud.com>
- <20251120130704.1554368-1-sunshaojie@kylinos.cn>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20251120130704.1554368-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgDHbnVsGx9pmvekBQ--.9802S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCw4ruFWUXFyxWryDZry7ZFb_yoWrCr15pF
-	yxKa17Xw4kXr15C3srX3Wvgryav3ZrZF47Arn8Jw1fAF9IyFnFv3WqkrZIvr15Ar9xGr4U
-	ZayjkrZxZF9rAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyCb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAwIDUUUUU=
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+X-ClientProxiedBy: EX19D038UWC002.ant.amazon.com (10.13.139.238) To
+ EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-
-
-On 2025/11/20 21:07, Sun Shaojie wrote:
-> Hi, Ridong,
-> 
-> On Thu, 20 Nov 2025 08:51:30, Chen Ridong wrote:
->> On 2025/11/19 18:57, Sun Shaojie wrote:
->>>  kernel/cgroup/cpuset.c                        | 19 +------------------
->>>  .../selftests/cgroup/test_cpuset_prs.sh       |  7 ++++---
->>>  2 files changed, 5 insertions(+), 21 deletions(-)
->>>
->>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>> index 52468d2c178a..f6a834335ebf 100644
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -2411,34 +2411,17 @@ static int cpus_allowed_validate_change(struct cpuset *cs, struct cpuset *trialc
->>>  					struct tmpmasks *tmp)
->>>  {
->>>  	int retval;
->>> -	struct cpuset *parent = parent_cs(cs);
->>>  
->>>  	retval = validate_change(cs, trialcs);
->>>  
->>>  	if ((retval == -EINVAL) && cpuset_v2()) {
->>> -		struct cgroup_subsys_state *css;
->>> -		struct cpuset *cp;
->>> -
->>>  		/*
->>>  		 * The -EINVAL error code indicates that partition sibling
->>>  		 * CPU exclusivity rule has been violated. We still allow
->>>  		 * the cpumask change to proceed while invalidating the
->>> -		 * partition. However, any conflicting sibling partitions
->>> -		 * have to be marked as invalid too.
->>> +		 * partition.
->>>  		 */
->>>  		trialcs->prs_err = PERR_NOTEXCL;
->>> -		rcu_read_lock();
->>> -		cpuset_for_each_child(cp, css, parent) {
->>> -			struct cpumask *xcpus = user_xcpus(trialcs);
->>> -
->>> -			if (is_partition_valid(cp) &&
->>> -			    cpumask_intersects(xcpus, cp->effective_xcpus)) {
->>> -				rcu_read_unlock();
->>> -				update_parent_effective_cpumask(cp, partcmd_invalidate, NULL, tmp);
->>> -				rcu_read_lock();
->>> -			}
->>> -		}
->>> -		rcu_read_unlock();
->>>  		retval = 0;
->>>  	}
->>>  	return retval;
->>
->> If we remove this logic, there is a scenario where the parent (a partition) could end up with empty
->> effective CPUs. This means the corresponding CS will also have empty effective CPUs and thus fail to
->> disable its siblings' partitions.
-> 
-> I have carefully considered the scenario where parent effective CPUs are 
-> empty, which corresponds to the following two cases. (After apply this patch).
-> 
->    root cgroup
->         |
->        A1
->       /  \
->     A2    A3
-> 
-> Case 1:
->  Step:
->  #1> echo "0-1" > A1/cpuset.cpus
->  #2> echo "root" > A1/cpuset.cpus.partition
->  #3> echo "0-1" > A2/cpuset.cpus
->  #4> echo "root" > A2/cpuset.cpus.partition
-> 
->  After step #4, 
-> 
->                 |      A1      |      A2      |      A3      |
->  cpus_allowed   | 0-1          | 0-1          |              |
->  effective_cpus |              | 0-1          |              |
->  prstate        | root         | root         | member       |
-> 
->  After step #4, A3's effective CPUs is empty.
-> 
-
-That may be a corner case is unexpected.
-
->  #5> echo "0-1" > A3/cpuset.cpus
-> 
-
-If we create subdirectories (e.g., A4, A5, ...) under the A1 cpuset and then configure cpuset.cpus
-for A1 (a common usage scenario), processes can no longer be migrated into these subdirectories (A4,
-A5, ...) afterward. However, prior to your patch, this migration was allowed.
-
->  After step #5,
-> 
->                 |      A1      |      A2      |      A3      |
->  cpus_allowed   | 0-1          | 0-1          | 0-1          |
->  effective_cpus |              | 0-1          |              |
->  prstate        | root         | root         | member       |
-> 
-> This patch affects step #5. After step #5, A3's effective CPUs is also empty.
-> Since A3's effective CPUs can be empty before step #5 (setting cpuset.cpus),
-> it is acceptable for them to remain empty after step #5. Moreover, if A3 is
-> aware that its parent's effective CPUs are empty, it should understand that
-> the CPUs it requests may not be granted.
-> 
-> Case 2:
->  Step:
->  #1> echo "0-1" > A1/cpuset.cpus
->  #2> echo "root" > A1/cpuset.cpus.partition
->  #3> echo "0" > A2/cpuset.cpus
->  #4> echo "root" > A2/cpuset.cpus.partition
->  #5> echo "1" > A3/cpuset.cpus
->  #6> echo "root" > A3/cpuset.cpus.partition
-> 
->  After step #6,
-> 
->                 |      A1      |      A2      |      A3      |
->  cpus_allowed   | 0-1          | 0            | 1            |
->  effective_cpus |              | 0            | 1            |
->  prstate        | root         | root         | root         |
-> 
->  #7> echo "0-1" > A3/cpuset.cpus
-> 
->  After step #7,
-> 
->                 |      A1      |      A2      |      A3      |
->  cpus_allowed   | 0-1          | 0            | 0-1          |
->  effective_cpus | 1            | 0            | 1            |
->  prstate        | root         | root         | root invalid |
-> 
-> This patch affects step #7. After step #7, A3 only affects itself, changing
-> from "root" to "root invalid". However, since its effective CPUs remain 1 
-> both before and after step #7, it doesn't matter even if A2 is not invalidated.
-> 
-> The purpose of this patch is to ensure that modifying cpuset.cpus does not 
-> disable its siblings' partitions.
-> 
-> 
-> Thanks,
-> Sun Shaojie
-
--- 
-Best regards,
-Ridong
+QXQgdGhlIG1vbWVudCwgdGhlIGFiaWxpdHkgdG8gZGlyZWN0LWluamVjdCB2TFBJcyBpcyBvbmx5
+IGVuYWJsZWFibGUKb24gYW4gYWxsLW9yLW5vdGhpbmcgcGVyLVZNIGJhc2lzLCBjYXVzaW5nIHVu
+bmVjZXNzYXJ5IEkvTyBwZXJmb3JtYW5jZQpsb3NzIGluIGNhc2VzIHdoZXJlIGEgVk0ncyB2Q1BV
+IGNvdW50IGV4Y2VlZHMgYXZhaWxhYmxlIHZQRXMuIFRoaXMgUkZDCmludHJvZHVjZXMgcGVyLXZD
+UFUgY29udHJvbCBvdmVyIHZMUEkgaW5qZWN0aW9uIHRvIHJlYWxpemUgcG90ZW50aWFsCkkvTyBw
+ZXJmb3JtYW5jZSBnYWluIGluIHN1Y2ggc2l0dWF0aW9ucy4KCkJhY2tncm91bmQKLS0tLS0tLS0t
+LQoKVGhlIHZhbHVlIG9mIGR5bmFtaWNhbGx5IGVuYWJsaW5nIHRoZSBkaXJlY3QgaW5qZWN0aW9u
+IG9mIHZMUElzIG9uIGEKcGVyLXZDUFUgYmFzaXMgaXMgdGhlIGFiaWxpdHkgdG8gcnVuIGd1ZXN0
+IFZNcyB3aXRoIHNpbXVsdGFuZW91cwpoYXJkd2FyZS1mb3J3YXJkZWQgYW5kIHNvZnR3YXJlLWZv
+cndhcmRlZCBtZXNzYWdlLXNpZ25hbGVkIGludGVycnVwdHMuCgpDdXJyZW50bHksIGhhcmR3YXJl
+LWZvcndhcmRlZCB2TFBJIGRpcmVjdCBpbmplY3Rpb24gb24gYSBLVk0gZ3Vlc3QKcmVxdWlyZXMg
+R0lDdjQgYW5kIGlzIGVuYWJsZWQgb24gYSBwZXItVk0sIGFsbC1vci1ub3RoaW5nIGJhc2lzLiB2
+TFBJCmluamVjdGlvbiBlbmFibG1lbnQgaGFwcGVucyBpbiB0d28gc3RhZ2VzOgoKICAgIDEpIEF0
+IHZHSUMgaW5pdGlhbGl6YXRpb24sIGFsbG9jYXRlIGRpcmVjdCBpbmplY3Rpb24gc3RydWN0dXJl
+cyBmb3IKICAgICAgIGVhY2ggdkNQVSAoZG9vcmJlbGwgSVJRLCB2UEUgdGFibGUgZW50cnksIHZp
+cnR1YWwgcGVuZGluZyB0YWJsZSwKICAgICAgIHZQRUlEKS4KICAgIDIpIFdoZW4gYSBQQ0kgZGV2
+aWNlIGlzIGNvbmZpZ3VyZWQgZm9yIHBhc3N0aHJvdWdoLCBtYXAgaXRzIE1TSXMgdG8KICAgICAg
+IHZMUElzIHVzaW5nIHRoZSBzdHJ1Y3R1cmVzIGFsbG9jYXRlZCBpbiBzdGVwIDEuCgpTdGVwIDEg
+aXMgYWxsLW9yLW5vdGhpbmc7IGlmIGFueSB2Q1BVIGNhbm5vdCBiZSBjb25maWd1cmVkIHdpdGgg
+dGhlCnZQRSBzdHJ1Y3R1cmVzIG5lY2Vzc2FyeSBmb3IgZGlyZWN0IGluamVjdGlvbiwgdGhlIHZQ
+RXMgb2YgYWxsIHZDUFVzCmFyZSB0b3JuIGRvd24gYW5kIGRpcmVjdCBpbmplY3Rpb24gaXMgZGlz
+YWJsZWQgVk0td2lkZS4KClRoaXMgdW5pdmVyc2FsaXR5IG9mIGRpcmVjdCB2TFBJIGluamVjdGlv
+biBlbmFibGVtZW50IHNwYXJrcyBzZXZlcmFsCmlzc3Vlcywgd2l0aCB0aGUgbW9zdCBwcmVzc2lu
+ZyBiZWluZyBwZXJmb3JtYW5jZSBkZWdyYWRhdGlvbiBvbgpvdmVyY29tbWl0dGVkIGhvc3RzLgoK
+Vk0td2lkZSB2TFBJIGVuYWJsZW1lbnQgY3JlYXRlcyByZXNvdXJjZSBpbmVmZmljaWVuY3kgd2hl
+biBndWVzdApWTXMgaGF2ZSBtb3JlIHZDUFVzIHRoYW4gdGhlIGhvc3QgaGFzIGF2YWlsYWJsZSB2
+UEVJRHMuIFRoZSBhbW91bnQgb2YKdlBFSURzIChhbmQgY29uc2VxdWVudGx5LCB2UEVzKSBhIGhv
+c3QgY2FuIGFsbG9jYXRlIGlzIGNvbnN0cmFpbmVkIGJ5CmhhcmR3YXJlIGFuZCBkZWZpbmVkIGJ5
+IEdJQ0RfVFlQRVIyLlZJRCArIDEgKElUU19NQVhfVlBFSUQpLiBTaW5jZQpkaXJlY3QgaW5qZWN0
+aW9uIHJlcXVpcmVzIGEgdkNQVSB0byBiZSBhc3NpZ25lZCBhIHZQRUlELCBhdCBtb3N0CklUU19N
+QVhfVlBFSUQgdkNQVXMgY2FuIGJlIGNvbmZpZ3VyZWQgZm9yIGRpcmVjdCBpbmplY3Rpb24gYXQg
+YSB0aW1lLgpCZWNhdXNlIHZMUEkgZGlyZWN0IGluamVjdGlvbiBpcyBhbGwtb3Itbm90aGluZyBv
+biBhIFZNLCBpZiBhIG5ldyBndWVzdApWTSB3b3VsZCBleGhhdXN0IHJlbWFpbmluZyB2UEVJRHMs
+IGFsbCB2Q1BVcyBvbiB0aGF0IFZNIHdvdWxkIGZhbGwgYmFjawp0byBoeXBlcnZpc29yLWZvcndh
+cmRlZCBMUElzLCBjYXVzaW5nIGNvbnNpZGVyYWJsZSBJL08gcGVyZm9ybWFuY2UKZGVncmFkYXRp
+b24uIAoKU3VjaCBwZXJmb3JtYW5jZSBkZWdyYWRhdGlvbiBpcyBleGVtcGxpZmllZCBvbiBob3N0
+cyB3aXRoIENQVQpvdmVyY29tbWl0bWVudC4gT3ZlcmNvbW1pdHRpbmcgYW4gYXJiaXRyYXJpbHkg
+aGlnaCBudW1iZXIgb2YgdkNQVXMKZW5hYmxlcyBhIFZNJ3MgdkNQVSBjb3VudCB0byBlYXNpbHkg
+ZXhjZWVkIHRoZSBob3N0J3MgYXZhaWxhYmxlIHZQRUlEcy4KRXZlbiB3aXRoIG1hcmdpbmFsbHkg
+bW9yZSB2Q1BVcyB0aGFuIHZQRUlEcywgdGhlIGN1cnJlbnQgYWxsLW9yLW5vdGhpbmcKdkxQSSBw
+YXJhZGlnbSBkaXNhYmxlcyBkaXJlY3QgaW5qZWN0aW9uIGVudGlyZWx5LiBUaGlzIGNyZWF0ZXMg
+dHdvCnByb2JsZW1zOiBmaXJzdCwgYSBzaW5nbGUgbWFueS12Q1BVIG92ZXJjb21taXR0ZWQgVk0g
+bG9zZXMgYWxsIGRpcmVjdAppbmplY3Rpb24gZGVzcGl0ZSBoYXZpbmcgdlBFSURzIGF2YWlsYWJs
+ZTsgc2Vjb25kLCBvbiBtdWx0aS10ZW5hbnQKaG9zdHMsIFZNcyBib290ZWQgZmlyc3QgY29uc3Vt
+ZSBhbGwgdlBFSURzLCBsZWF2aW5nIGxhdGVyIFZNcyB3aXRob3V0CmRpcmVjdCBpbmplY3Rpb24g
+cmVnYXJkbGVzcyBvZiB0aGVpciBJL08gaW50ZW5zaXR5LiBQZXItdkNQVSBjb250cm9sCndvdWxk
+IGFsbG93IHVzZXJzcGFjZSB0byBhbGxvY2F0ZSBhdmFpbGFibGUgdlBFSURzIGFjcm9zcyBWTXMg
+YmFzZWQgb24KSS9PIHdvcmtsb2FkIHJhdGhlciB0aGFuIGJvb3Qgb3JkZXIgb3IgcGVyLVZNIHZD
+UFUgY291bnQuIFRoaXMgcGVyLXZDUFUKZ3JhbnVsYXJpdHkgcmVjb3ZlcnMgbW9zdCBvZiB0aGUg
+ZGlyZWN0IGluamVjdGlvbiBwZXJmb3JtYW5jZSBiZW5lZml0Cmluc3RlYWQgb2YgbG9zaW5nIGl0
+IGNvbXBsZXRlbHkuCgpUbyBhbGxvdyB0aGlzIHBlci12Q1BVIGdyYW51bGFyaXR5LCB0aGlzIFJG
+QyBpbnRyb2R1Y2VzIHRocmVlIG5ldyBpb2N0bHMKdG8gdGhlIEtWTSBBUEkgdGhhdCBlbmFibGVz
+IHVzZXJzcGFjZSB0aGUgYWJpbGl0eSB0byBhY3RpdmF0ZS9kZWFjdGl2YXRlCmRpcmVjdCB2TFBJ
+IGluamVjdGlvbiBjYXBhYmlsaXR5IGFuZCByZXNvdXJjZXMgdG8gdkNQVXMgYWQtaG9jIGR1cmlu
+ZyBWTQpydW50aW1lLgoKVGhpcyBSRkMgcHJvcG9zZXMgdXNlcnNwYWNlIGNvbnRyb2wsIHJhdGhl
+ciB0aGFuIGtlcm5lbCBjb250cm9sLCBvdmVyCnZQRUlEIGFsbG9jYXRpb24gZm9yIHNpbXBsaWNp
+dHkgb2YgaW1wbGVtZW50YXRpb24sIGVhc2Ugb2YgdGVzdGFiaWxpdHksCmFuZCBhdXRvbm9teSBv
+dmVyIHJlc291cmNlIHVzYWdlLiBJbiB0aGUgZnV0dXJlLCB0aGUgdkxQSSBlbmFibGUvZGlzYWJs
+ZQpidWlsZGluZyBibG9ja3MgZnJvbSB0aGlzIFJGQyBtYXkgYmUgdXNlZCB0byBpbXBsZW1lbnQg
+YSBmdWxsIHZQRQphbGxvY2F0aW9uIHBvbGljeSBpbiB0aGUga2VybmVsLgoKClRoZSBzb2x1dGlv
+biBjb21lcyBpbiBzZXZlcmFsIHBhcnRzCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tCgoxKSBbUCAxXSBHZW5lcmFsIGRlY2xhcmF0aW9ucyAoaW9jdGwgZGVmaW5pdGlvbnMvc3R1
+YnMsIGtjb25maWcgb3B0aW9uKQoKMikgW1AgMl0gQ29uZGl0aW9uYWxseSBkaXNhYmxlIGF1dG8g
+dkxQSSBpbmplY3Rpb24gaW5pdCByb3V0aW5lcwoKICAgVG8gcHJldmVudCB2Q1BVcyBmcm9tIGV4
+Y2VlZGluZyB2UEVJRCBhbGxvY2F0aW9uIGxpbWl0cyB1cG9uIFZNIGJvb3QsCiAgIGRpc2FibGUg
+YXV0b21hdGljIHZQRUlEIGFsbG9jYXRpb24gaW4gdGhlIEdJQ3Y0IGluaXRpYWxpemF0aW9uCiAg
+IHJvdXRpbmUgd2hlbiB0aGUgcGVyLXZDUFUga2NvbmZpZyBpcyBhY3RpdmUuIExpa2V3aXNlLCBk
+aXNhYmxlCiAgIGF1dG9tYXRpYyBoYXJkd2FyZSBmb3J3YXJkaW5nIGZvciBQQ0kgZGV2aWNlLWJh
+Y2tlZCBNU0lzIHVwb24gZGV2aWNlCiAgIHJlZ2lzdHJhdGlvbi4KCjMpIFtQIDMtNl0gSW1wbGVt
+ZW50IHBlci12Q1BVIHZMUEkgZW5hYmxlbWVudCByb3V0aW5lLCB3aGljaDoKCiAgIGEpIENyZWF0
+ZXMgcGVyLXZDUFUgZG9vcmJlbGwgSVJRIG9uIG5ldyB2Q1BVLXNjb3BlZCwgcmF0aGVyIHRoYW4K
+ICAgICAgVk0tc2NvcGVkLCBpbnRlcnJ1cHQgZG9tYWluIGhpZXJhcmNoaWVzLgoKICAgYikgQWxs
+b2NhdGVzIHBlci12Q1BVIHZQRSB0YWJsZSBlbnRyaWVzIGFuZCB2aXJ0dWFsIHBlbmRpbmcgdGFi
+bGUsCiAgICAgIGxpbmtpbmcgdGhlbSB0byB0aGUgdkNQVSdzIGRvb3JiZWxsIElSUS4KCiAgIGMp
+IEl0ZXJhdGVzIHRocm91Z2ggaW50ZXJydXB0IHRyYW5zbGF0aW9uIHRhYmxlIHRvIHNldCBoYXJk
+d2FyZQogICAgICBmb3J3YXJkaW5nIGZvciBhbGwgUENJIGRldmljZeKAk2JhY2tlZCBpbnRlcnJ1
+cHRzIHRhcmdldGluZyB0aGUKICAgICAgc3BlY2lmaWMgdkNQVS4KCjMpIFtQIDctOF0gSW1wbGVt
+ZW50IHBlci12Q1BVIHZMUEkgZGlzYWJsZW1lbnQgcm91dGluZSwgd2hpY2gKCiAgIGEpIEl0ZXJh
+dGVzIHRocm91Z2ggaW50ZXJydXB0IHRyYW5zbGF0aW9uIHRhYmxlIHRvIHVuc2V0IGhhcmR3YXJl
+CiAgICAgIGZvcndhcmRpbmcgZm9yIGFsbCBpbnRlcnJ1cHRzIHRhcmdldGluZyB0aGUgc3BlY2lm
+aWMgdkNQVS4KCiAgIGIpIEZyZWVzIHBlci12Q1BVIHZQRSB0YWJsZSBlbnRyaWVzLCB2aXJ0dWFs
+IHBlbmRpbmcgdGFibGUsIGFuZAogICAgICBkb29yYmVsbCBJUlEsIHRoZW4gcmVtb3ZlcyB2Z2lj
+X2Rpc3QncyBwb2ludGVyIHRvIHRoZSB2Q1BVJ3MKICAgICAgZnJlZWQgdlBFLgoKNCkgW1AgOV0g
+Q291cGxlIHZTR0kgZW5hYmxlbWVudCB3aXRoIHBlci12Q1BVIHZQRSBhbGxvY2F0aW9uCgogICBT
+aW5jZSB2U0dJcyBjYW5ub3QgYmUgZGlyZWN0LWluamVjdGVkIHdpdGhvdXQgYW4gYWxsb2NhdGVk
+IHZQRSBvbgogICB0aGUgcmVjZWl2aW5nIHZDUFUsIGNvdXBsZSB2U0dJIGVuYWJsZW1lbnQgd2l0
+aCB2TFBJIGVuYWJsZW1lbnQKICAgb24gR0lDdjQuMS4KCjUpIFtQIDEwLTEzXSBXcml0ZSBzZWxm
+dGVzdHMgZm9yIHZMUEkgZGlyZWN0IGluamVjdGlvbgoKICAgUENJIGRldmljZXMgY2Fubm90IGJl
+IHBhc3NlZCB0aHJvdWdoIHRvIHNlbGZ0ZXN0IGd1ZXN0cywgc28KICAgZGVmaW5lIGFuIGlvY3Rs
+IHRoYXQgbW9ja3MgYSBoYXJkd2FyZSBzb3VyY2UgZm9yIHNvZnR3YXJlLWRlZmluZWQKICAgTVNJ
+IGludGVycnVwdHMgYW5kIHNldHMgdkxQSSAiaGFyZHdhcmUiIGZvcndhcmRpbmcgZm9yIHRoZSBN
+U0lzLiBVc2UKICAgdGhlc2UgdkxQSXMgdG8gc2VsZnRlc3QgcGVyLXZDUFUgdkxQSSBlbmFibGVt
+ZW50L2Rpc2FibGVtZW50IGlvY3Rscy4KClRlc3RpbmcKLS0tLS0tLQpUZXN0aW5nIGhhcyBiZWVu
+IGNhcnJpZWQgb3V0IHZpYSBzZWxmdGVzdHMgYW5kIFFFTVUtZW11bGF0ZWQgZ3Vlc3RzLgoKU2Vs
+ZnRlc3RzIGhhdmUgY292ZXJlZCBkaXZlcnNlIHZMUEkgY29uZmlndXJhdGlvbnMgYW5kIHJhY2Ug
+Y29uZGl0aW9ucy4KVGhlc2UgaW5jbHVkZToKMSkgU3RyZXNzIHRlc3RpbmcgTFBJIGluamVjdGlv
+biBhY3Jvc3MgbXVsdGlwbGUgdkNQVXMgd2hpbGUgCiAgIGNvbmN1cnJlbnRseSBhbmQgcmVwZWF0
+ZWRseSB0b2dnbGluZyB0aGUgdkNQVXMnIHZMUEkKICAgaW5qZWN0aW9uIGNhcGFiaWxpdHkuCjIp
+IEVuYWJsaW5nL2Rpc2FibGluZyB2TFBJIGRpcmVjdCBpbmplY3Rpb24gd2hpbGUgc2NoZWR1bGlu
+ZyBvcgogICB1bnNjaGVkdWxpbmcgYSB2Q1BVLgozKSBBbGxvY2F0aW5nIGFuZCBmcmVlaW5nIGEg
+c2luZ2xlIHZQRUlEIHRvIG11bHRpcGxlIHZDUFVzLCBlbnN1cmluZwogICByZXVzYWJpbGl0eS4K
+NCkgQXR0ZW1wdGluZyB0byBhbGxvY2F0ZSBhIHZQRUlEIHdoZW4gYWxsIGFyZSBhbHJlYWR5IGFs
+bG9jYXRlZCwKICAgdmFsaWRhdGluZyBhbiBlcnJvciBpcyB0aHJvd24uCjUpIENhbGxpbmcgZW5h
+YmxlL2Rpc2FibGUgdkxQSSBpb2N0bHMgd2hlbiBHSUMgaXMgbm90IGluaXRpYWxpemVkLgo2KSBJ
+ZGVtcG90ZW50IGlvY3RsIGNhbGxzLgoKUENJIGRldmljZSBwYXNzdGhyb3VnaCBhbmQgaW50ZXJy
+dXB0IGluamVjdGlvbiB0byBRRU1VIGd1ZXN0CmRlbW9uc3RyYXRlZDoKMSkgQ29tcGxldGUgaHlw
+ZXJ2aXNvciBjaXJjdW12ZW50aW9uIHdoZW4gdkxQSSBpbmplY3Rpb24gaXMgZW5hYmxlZCBvbgog
+ICBhIHZDUFUsIGh5cGVydmlzb3IgZm9yd2FyZGluZyB3aGVuIHZMUEkgaW5qZWN0aW9uIGlzIGRp
+c2FibGVkLgoyKSBJbnRlcnJ1cHRzIGFyZSBub3QgbG9zdCB3aGVuIHJlY2VpdmVkIGR1cmluZyBw
+ZXItdkNQVSB2TFBJIHN0YXRlCiAgIHRyYW5zaXRpb25zLgoKCkNhdmVhdHMKLS0tLS0tLQoKMSkg
+UGVuZGluZyBpbnRlcnJ1cHRzIGFyZSBmbHVzaGVkIHdoZW4gdkxQSSBpbmplY3Rpb24gaXMgZGlz
+YWJsZWQgZm9yIGEKICAgdkNQVTsgaGFyZHdhcmUgcGVuZGluZyBzdGF0ZSBpcyBub3QgdHJhbnNm
+ZXJlZCB0byBzb2Z0d2FyZS4gVGhpcyBtYXkKICAgY2F1c2UgcGVuZGluZyBpbnRlcnJ1cHRzIHRv
+IGJlIGxvc3QgdXBvbiB2UEUgZGlzYWJsZW1lbnQuCgogICBVbmxpa2UgdlNHSXMsIHZMUElzIGRv
+IG5vdCBleHBvc2UgdGhlaXIgcGVuZGluZyBzdGF0ZSB0aHJvdWdoIGEKICAgR0lDRF9JU1BFTkRS
+IHJlZ2lzdGVyLiBUaHVzLCB3ZSB3b3VsZCBuZWVkIHRvIHJlYWQgdGhlIHBlbmRpbmcgc3RhdGUK
+ICAgb2YgdGhlIHZMUEkgZnJvbSB0aGUgdlBULiBUbyByZWFkIHRoZSBwZW5kaW5nIHN0YXR1cyBv
+ZiB0aGUgdkxQSSBmcm9tCiAgIHZQVCwgd2Ugd291bGQgbmVlZCB0byBpbnZhbGlkYXRlIGFueSB2
+UFQgY2FjaGUgYXNzb2NpYXRlZCB3aXRoIHRoZQogICB2Q1BVJ3MgdlBFLiBUaGlzIHJlcXVpcmVz
+IHVubWFwcGluZyB0aGUgdlBFIGFuZCBoYWx0aW5nIHRoZSB2Q1BVLAogICB3aGljaCB3b3VsZCBi
+ZSBpbmNyZWRpYmx5IGV4cGVuc2l2ZSBhbmQgdW5lY2Vzc2FyeSBnaXZlbiB0aGF0IE1TSXMKICAg
+YXJlIHVzdWFsbHkgcmVjb3ZlcmFibGUgYnkgdGhlIGRyaXZlci4KCjIpIERpcmVjdC1pbmplY3Rl
+ZCB2U0dJcyAoR0lDdjQuMSkgcmVxdWlyZSB2Q1BVcyB0byBoYXZlIGFzc29jaWF0ZWQKICAgdlBF
+cy4gU2luY2UgZGlzYWJsaW5nIHZMUEkgaW5qZWN0aW9uIG9uIGEgdkNQVSBmcmVlcyBpdHMKICAg
+dlBFLCB2U0dJIGRpcmVjdCBpbmplY3Rpb24gbXVzdCBzaW11bHRhZW5vdXNseSBiZSBkaXNhYmxl
+ZCBhcyB3ZWxsLgogICBBdCB0aGUgbW9tZW50LCB3ZSB1c2UgdGhlIHBlci12Q1BVIHZTR0kgdG9n
+Z2xlIG1lY2hhbmlzbSBpbnRyb2R1Y2VkCiAgIGluIGNvbW1pdCBiYWNmMmM2IHRvIGVuYWJsZS9k
+aXNhYmxlIHZTR0kgaW5qZWN0aW9uIGFsb25nc2lkZSB2TFBJCiAgIGluamVjdGlvbi4KCk1heGlt
+aWxpYW4gRGl0dGdlbiAoMTMpOgogIEtWTTogSW50cm9kdWNlIGNvbmZpZyBvcHRpb24gZm9yIHBl
+ci12Q1BVIHZMUEkgZW5hYmxlbWVudAogIEtWTTogYXJtNjQ6IERpc2FibGUgYXV0byB2Q1BVIHZQ
+RSBhc3NpZ25tZW50IHdpdGggcGVyLXZDUFUgdkxQSSBjb25maWcKICBLVk06IGFybTY0OiBSZWZh
+Y3RvciBvdXQgbG9ja2VkIHNlY3Rpb24gb2YKICAgIGt2bV92Z2ljX3Y0X3NldF9mb3J3YXJkaW5n
+KCkKICBLVk06IGFybTY0OiBJbXBsZW1lbnQgdkxQSSBRVUVSWSBpb2N0bCBmb3IgcGVyLXZDUFUg
+dkxQSSBpbmplY3Rpb24gQVBJCiAgS1ZNOiBhcm02NDogSW1wbGVtZW50IHZMUEkgRU5BQkxFIGlv
+Y3RsIGZvciBwZXItdkNQVSB2TFBJIGluamVjdGlvbgogICAgQVBJCiAgS1ZNOiBhcm02NDogUmVz
+b2x2ZSByYWNlIGJldHdlZW4gdkNQVSBzY2hlZHVsaW5nIGFuZCB2TFBJIGVuYWJsZW1lbnQKICBL
+Vk06IGFybTY0OiBJbXBsZW1lbnQgdkxQSSBESVNBQkxFIGlvY3RsIGZvciBwZXItdkNQVSB2TFBJ
+IEluamVjdGlvbgogICAgQVBJCiAgS1ZNOiBhcm02NDogTWFrZSBwZXItdkNQVSB2TFBJIGNvbnRy
+b2wgaW9jdGxzIGF0b21pYwogIEtWTTogYXJtNjQ6IENvdXBsZSB2U0dJIGVuYWJsZW1lbnQgd2l0
+aCBwZXItdkNQVSB2UEUgYWxsb2NhdGlvbgogIEtWTTogc2VsZnRlc3RzOiBmaXggTUFQQyBSRGJh
+c2UgdGFyZ2V0IGZvcm1hdHRpbmcgaW4gdmdpY19scGlfc3RyZXNzCiAgS1ZNOiBJb2N0bCB0byBz
+ZXQgdXAgdXNlcnNwYWNlLWluamVjdGVkIE1TSXMgYXMgc29mdHdhcmUtYnlwYXNzaW5nCiAgICB2
+TFBJcwogIEtWTTogYXJtNjQ6IHNlbGZ0ZXN0czogQWRkIHN1cHBvcnQgZm9yIHN0cmVzcyB0ZXN0
+aW5nIGRpcmVjdC1pbmplY3RlZAogICAgdkxQSXMKICBLVk06IGFybTY0OiBzZWxmdGVzdHM6IEFk
+ZCB0ZXN0IGZvciBwZXItdkNQVSB2TFBJIGNvbnRyb2wgQVBJCgogRG9jdW1lbnRhdGlvbi92aXJ0
+L2t2bS9hcGkucnN0ICAgICAgICAgICAgICAgIHwgIDU2ICsrKwogYXJjaC9hcm02NC9rdm0vYXJt
+LmMgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDg5ICsrKysrCiBhcmNoL2FybTY0L2t2bS92
+Z2ljL3ZnaWMtaXRzLmMgICAgICAgICAgICAgICAgfCAxNDIgKysrKysrLQogYXJjaC9hcm02NC9r
+dm0vdmdpYy92Z2ljLXYzLmMgICAgICAgICAgICAgICAgIHwgIDE0ICstCiBhcmNoL2FybTY0L2t2
+bS92Z2ljL3ZnaWMtdjQuYyAgICAgICAgICAgICAgICAgfCAzNzAgKysrKysrKysrKysrKysrKyst
+CiBhcmNoL2FybTY0L2t2bS92Z2ljL3ZnaWMuaCAgICAgICAgICAgICAgICAgICAgfCAgMTAgKwog
+ZHJpdmVycy9pcnFjaGlwL0tjb25maWcgICAgICAgICAgICAgICAgICAgICAgIHwgIDEzICsKIGRy
+aXZlcnMvaXJxY2hpcC9pcnEtZ2ljLXYzLWl0cy5jICAgICAgICAgICAgICB8ICA1OCArKy0KIGRy
+aXZlcnMvaXJxY2hpcC9pcnEtZ2ljLXY0LmMgICAgICAgICAgICAgICAgICB8ICA3NSArKystCiBp
+bmNsdWRlL2t2bS9hcm1fdmdpYy5oICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDggKwogaW5j
+bHVkZS9saW51eC9pcnFjaGlwL2FybS1naWMtdjMuaCAgICAgICAgICAgIHwgICA1ICsKIGluY2x1
+ZGUvbGludXgvaXJxY2hpcC9hcm0tZ2ljLXY0LmggICAgICAgICAgICB8ICAxMCArLQogaW5jbHVk
+ZS9saW51eC9rdm1faG9zdC5oICAgICAgICAgICAgICAgICAgICAgIHwgIDExICsKIGluY2x1ZGUv
+dWFwaS9saW51eC9rdm0uaCAgICAgICAgICAgICAgICAgICAgICB8ICAyMiArKwogdG9vbHMvdGVz
+dGluZy9zZWxmdGVzdHMva3ZtL01ha2VmaWxlLmt2bSAgICAgIHwgICAxICsKIC4uLi9zZWxmdGVz
+dHMva3ZtL2FybTY0L3Blcl92Y3B1X3ZscGkuYyAgICAgICB8IDI3NCArKysrKysrKysrKysrCiAu
+Li4vc2VsZnRlc3RzL2t2bS9hcm02NC92Z2ljX2xwaV9zdHJlc3MuYyAgICAgfCAxODEgKysrKysr
+KystCiAuLi4vc2VsZnRlc3RzL2t2bS9saWIvYXJtNjQvZ2ljX3YzX2l0cy5jICAgICAgfCAgIDkg
+Ky0KIDE4IGZpbGVzIGNoYW5nZWQsIDEzMDcgaW5zZXJ0aW9ucygrKSwgNDEgZGVsZXRpb25zKC0p
+CiBjcmVhdGUgbW9kZSAxMDA2NDQgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3ZtL2FybTY0L3Bl
+cl92Y3B1X3ZscGkuYwoKLS0gCjIuNTAuMSAoQXBwbGUgR2l0LTE1NSkKCgoKCkFtYXpvbiBXZWIg
+U2VydmljZXMgRGV2ZWxvcG1lbnQgQ2VudGVyIEdlcm1hbnkgR21iSApUYW1hcmEtRGFuei1TdHIu
+IDEzCjEwMjQzIEJlcmxpbgpHZXNjaGFlZnRzZnVlaHJ1bmc6IENocmlzdGlhbiBTY2hsYWVnZXIs
+IENocmlzdG9mIEhlbGxtaXMKRWluZ2V0cmFnZW4gYW0gQW10c2dlcmljaHQgQ2hhcmxvdHRlbmJ1
+cmcgdW50ZXIgSFJCIDI1Nzc2NCBCClNpdHo6IEJlcmxpbgpVc3QtSUQ6IERFIDM2NSA1MzggNTk3
+Cg==
 
 
