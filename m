@@ -1,117 +1,158 @@
-Return-Path: <linux-kselftest+bounces-46060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882C2C72246
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 05:11:10 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 102C8C72436
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 06:40:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 026C034DB9B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 04:11:05 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C298434F8B3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Nov 2025 05:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A09A2DF146;
-	Thu, 20 Nov 2025 04:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD55F2FFDFB;
+	Thu, 20 Nov 2025 05:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2Imk8F6"
+	dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b="Eok4QOlZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388BE2264A9;
-	Thu, 20 Nov 2025 04:10:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F219F30102F
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 05:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763611855; cv=none; b=QdPvDor/KSN+y/qvucwHLLLbDh4vPy5+mw1kFhLUAlv0UM8kmYuNhxvpWgaWpcYbmAjHA/MyKPJQd+6zJZwxpTtqKKlIrgNRudeBxjj7hVrV4+yUDijiHVppVjz0C+xZd3hpr6K7XTKleCPA7rVpftkep9DS7SAGeGJXkArElB0=
+	t=1763617234; cv=none; b=OVAYLhEiY/enX3ldn8TPGkCPnqtXNf6JqMhFl86t1Yp3bGnKgmAxWmjmytZ9aJRHSN6jKT14YBqAWm65NFsG8k2enjplnwMJo2RZD/gHbWAz2wjyufozONJ1dZpi2ylQ2+YZeuQhbRwS/qIHdcCGaTgEDDzYKoA5npxznIt0U2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763611855; c=relaxed/simple;
-	bh=nNkw/HHMttissex3RT39Yy/FGFO9F7e8C5EUg9Ax/Uo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=UGYSkAux4H+6jWplV59kmC2YAH8cvvoHFbjvrgpqb+nZcAvlPHJRUVQWrQpYHYM6XRXidNcyzKox0HK1z/i8S9WIiu4Q1n7p4Qpf3dgKqEp9vqDDrIesZQ/LR8a97KF1WbkeVXgmHMMw8WklEjI6wGM4ApaZyPfJ1o9m3/unE+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2Imk8F6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C5AC4CEF1;
-	Thu, 20 Nov 2025 04:10:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763611854;
-	bh=nNkw/HHMttissex3RT39Yy/FGFO9F7e8C5EUg9Ax/Uo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=F2Imk8F6z3CsyoKSW+n4YscqlO9KPxGSFxWk/ATxEXCOzepoCp2P3nhDdJZLG7hRh
-	 kX8JFXweXwbmiweAJL6YC6HJBezQt5V6A+U6bS4JRLzSO38sUHnuDkZUyqPkm1Vbxc
-	 IxDZ6/gZSXdovY8mUITzvVEz7stNDZLuauXFPhRmfL6GYMEUyE2x2SvACYTFvA/lik
-	 BMl9IXqNtSuMcWZL6fjMwpntSTU0bfIArxoVhJefwlfMf2o4Fw98xR7Iz7cv5z7vB9
-	 uN9hg7mAlWPNcek1zzGhsbcNzOUMf8BiCRdEeZsPP4SbEsS9zAiblh7Lzur0OoKB72
-	 c0p/djP4gL/Ww==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7145439EF974;
-	Thu, 20 Nov 2025 04:10:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1763617234; c=relaxed/simple;
+	bh=AS2zQnqedhL3ve94IZZQDSA5cCEKJhL2aq0tdbw1za4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aj7ZAWV/FhsSmbPhPU/7k5fSWDHLW7sYGLsdkzQ/mZ7QnisqBru5vHDPFiJTNtaLpdj+GZumo7B8zBwc0bkbxZ6YSHzjYrUGgwzMXxOoMEXy/75iX8CnEnzi4OV3jspjIOWUlxGQtyq3zCVUritcLwo+WG/HzrZ4UsXU8+qTrW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com; spf=pass smtp.mailfrom=shopee.com; dkim=pass (2048-bit key) header.d=shopee.com header.i=@shopee.com header.b=Eok4QOlZ; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=shopee.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shopee.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-6419b7b4b80so596688a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Nov 2025 21:40:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com; t=1763617231; x=1764222031; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7dK/TZoBnuzuAgeT3RH6Vn9CDIGfrgo8wHcMBTPkWjc=;
+        b=Eok4QOlZM89ZvwKeYGw6H0fKOiUqDDyxqjYjicxGL+F99rkl24kZnCxn1H4FGhNTm7
+         hZ2F2gDHE/c2zcIBhOBrKK3vGgAUYSoSbhBfv/BIIE2okQIai90y1YUCjbz4heXC09CZ
+         Yi7SqxyaRDAmzkHU9e89HuXt54BsNPXXOiX6K2ZZvSYkwDIvHkni/9Wc3VK6I6zJC8hO
+         5xOsqkojHkaCd6wxXnBVy/GlIuhL+p95x9wTLh9H2Be0/F9eZXN3RQEorGXopY1Ia0k4
+         4dr1j6nb55JN8MgGaiZ9r/EeHm/oCFQFEX8OmYvMmg3aMbuc/fJQE8jO7m9i85iDxMxg
+         0eHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763617231; x=1764222031;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7dK/TZoBnuzuAgeT3RH6Vn9CDIGfrgo8wHcMBTPkWjc=;
+        b=wQWkuLKJxPl0fLGJjIGshUmJiuGQWd1y8IxJSXC8eB/IZ/2CBglBDrAQGNidG2mFHv
+         QW7ka4OWvRxFzzbjmkhgWBXchRplxLe8709BQ45wWsXM3xcoKaJ8Q8PsGwE35HBD9ifL
+         0Bu5Hk1fF/HDEm6chx9/4f45wxq3+ppfsAFU65CkfJu/mejXXjqWzzUMKmuNtcs0b6Oz
+         vJ1mf99H9PxEQeGm4Rrn845OF5i7vJsu6IofiZjF5iiYy67qPYd7Q5BB17hu6m4AnWUp
+         fpS9KHTq89pmZVBbe6F3Tl21KqevE9dQHdldBRPvCMjw4XbkkzyxSpKZGX1zDXSYPig6
+         X1qg==
+X-Forwarded-Encrypted: i=1; AJvYcCXKwYt5X22lNb3BcCsuVV4ZxciEnFPgNfPp2+YINTYVrOt/prKOqnE41FYENzxVA76+zij8HdjGYAZQzhAUgDo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlT3c7eacNx7GqF+FnIjgslRAtQrFHvu0ak/ze3OoXhcTjt295
+	Hs1XYbF5Vu5Fp0Gs4+RfyeTtIv3w6ujwk7oPHwGCzMj9I4UBcu7eik2UwknSeTdNf5HlHr1VLwi
+	d6ZVc8FEYwOGEoYWkF20oQviS5D/AhMZrae6hngsZTQ==
+X-Gm-Gg: ASbGncuO6Etvpy+lygI11VyRgahdRg063Bvap5/UOz2re/iiCOGivdDc3EQmiJAGZqt
+	uqYBlOsUP4kVjAhJPEuIfxNXB878uMjdge3YacvP12VeiNZaD65E7KXG5VRyOUgU3Q8U9CwF05B
+	RcFKc293KqFbbkRWXIEkc7GlMHmEvox5LIZZOiqiv7Tvlpa43mSOKidSOBbptD4WzyCnNXgYxpk
+	to+yCwLnk+FH4U7fA1/azz1ZOrqleBEM+6RLbA1KnPsx/4G+i0eXfXLm00aXpKmPd4Khg==
+X-Google-Smtp-Source: AGHT+IFd4ZD8LO3gWA0tYoGo49H3rk4bG8UV2Nu8f5cyi48eyODapZFusRvqrzWLi1Ytu9FzHhwORQyO09cagbntAK0=
+X-Received: by 2002:a17:907:7f01:b0:b73:70db:49ab with SMTP id
+ a640c23a62f3a-b76553fa23bmr176598566b.35.1763617231293; Wed, 19 Nov 2025
+ 21:40:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 00/11] mptcp: misc fixes for v6.18-rc7
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176361182026.1072863.12495916598448618920.git-patchwork-notify@kernel.org>
-Date: Thu, 20 Nov 2025 04:10:20 +0000
-References: 
- <20251118-net-mptcp-misc-fixes-6-18-rc6-v1-0-806d3781c95f@kernel.org>
-In-Reply-To: 
- <20251118-net-mptcp-misc-fixes-6-18-rc6-v1-0-806d3781c95f@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: martineau@kernel.org, geliang@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- shuah@kernel.org, fw@strlen.de, netdev@vger.kernel.org,
- mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org, yangang@kylinos.cn
+References: <20251119105216.1675608-1-zhangguopeng@kylinos.cn>
+ <20251119122758.85610-1-ioworker0@gmail.com> <2c276ed9-626f-4bae-9d42-727dd176ec74@kylinos.cn>
+In-Reply-To: <2c276ed9-626f-4bae-9d42-727dd176ec74@kylinos.cn>
+From: Leon Huang Fu <leon.huangfu@shopee.com>
+Date: Thu, 20 Nov 2025 13:39:53 +0800
+X-Gm-Features: AWmQ_bmEoAEKzhLFdmzN3VkYMFPpl9dZhwR3SWWzVK97oW1lQq-769I_C_Td8qw
+Message-ID: <CAPV86rqXrf027nLZocq2Acqf5T=YJY2Uj3MD1OrGG7DAUqkxzA@mail.gmail.com>
+Subject: Re: [PATCH] selftests: cgroup: make test_memcg_sock robust against
+ delayed sock stats
+To: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Cc: Lance Yang <ioworker0@gmail.com>, hannes@cmpxchg.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mhocko@kernel.org, 
+	mkoutny@suse.com, muchun.song@linux.dev, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, shuah@kernel.org, tj@kernel.org, 
+	Lance Yang <lance.yang@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Thu, Nov 20, 2025 at 10:12 AM Guopeng Zhang <zhangguopeng@kylinos.cn> wr=
+ote:
+>
+>
+>On 11/19/25 20:27, Lance Yang wrote:
+>> From: Lance Yang <lance.yang@linux.dev>
+>>
+>>
+>> On Wed, 19 Nov 2025 18:52:16 +0800, Guopeng Zhang wrote:
+>>> test_memcg_sock() currently requires that memory.stat's "sock " counter
+>>> is exactly zero immediately after the TCP server exits. On a busy syste=
+m
+>>> this assumption is too strict:
+>>>
+>>>   - Socket memory may be freed with a small delay (e.g. RCU callbacks).
+>>>   - memcg statistics are updated asynchronously via the rstat flushing
+>>>     worker, so the "sock " value in memory.stat can stay non-zero for a
+>>>     short period of time even after all socket memory has been uncharge=
+d.
+>>>
+>>> As a result, test_memcg_sock() can intermittently fail even though sock=
+et
+>>> memory accounting is working correctly.
+>>>
+>>> Make the test more robust by polling memory.stat for the "sock " counte=
+r
+>>> and allowing it some time to drop to zero instead of checking it only
+>>> once. If the counter does not become zero within the timeout, the test
+>>> still fails as before.
+>>>
+>>> On my test system, running test_memcontrol 50 times produced:
+>>>
+>>>   - Before this patch:  6/50 runs passed.
+>>>   - After this patch:  50/50 runs passed.
+>Hi Lance,
+>
+>Thanks a lot for your review and helpful comments!
+>>
+>>Good catch! Thanks!
+>>
+>> With more CPU cores, updates may be distributed across cores, making it
+>> slower to reach the per-CPU flush threshold, IIUC :)
+>>
+>Yes, that matches what I=E2=80=99ve seen as well =E2=80=94 on larger syste=
+ms it indeed
+>takes longer for the stats to converge due to per-CPU distribution and
+>the flush threshold.
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Me too.
 
-On Tue, 18 Nov 2025 08:20:18 +0100 you wrote:
-> Here are various unrelated fixes:
-> 
-> - Patch 1: Fix window space computation for fallback connections which
->   can affect ACK generation. A fix for v5.11.
-> 
-> - Patch 2: Avoid unneeded subflow-level drops due to unsynced received
->   window. A fix for v5.11.
-> 
-> [...]
+I previously proposed a potential solution to explicitly flush stats via
+a new interface, "memory.stat_refresh" [1]. However, improving the
+existing flush mechanism would likely be a better long-term direction.
 
-Here is the summary with links:
-  - [net,01/11] mptcp: fix ack generation for fallback msk
-    https://git.kernel.org/netdev/net/c/5e15395f6d9e
-  - [net,02/11] mptcp: avoid unneeded subflow-level drops
-    https://git.kernel.org/netdev/net/c/4f102d747cad
-  - [net,03/11] mptcp: fix premature close in case of fallback
-    https://git.kernel.org/netdev/net/c/17393fa7b708
-  - [net,04/11] mptcp: do not fallback when OoO is present
-    https://git.kernel.org/netdev/net/c/1bba3f219c5e
-  - [net,05/11] mptcp: decouple mptcp fastclose from tcp close
-    https://git.kernel.org/netdev/net/c/fff0c8799667
-  - [net,06/11] mptcp: fix duplicate reset on fastclose
-    https://git.kernel.org/netdev/net/c/ae155060247b
-  - [net,07/11] selftests: mptcp: join: fastclose: remove flaky marks
-    https://git.kernel.org/netdev/net/c/efff6cd53ac5
-  - [net,08/11] selftests: mptcp: join: endpoints: longer timeout
-    https://git.kernel.org/netdev/net/c/fb13c6bb810c
-  - [net,09/11] selftests: mptcp: join: userspace: longer timeout
-    https://git.kernel.org/netdev/net/c/0e4ec14dc1ee
-  - [net,10/11] mptcp: fix address removal logic in mptcp_pm_nl_rm_addr
-    https://git.kernel.org/netdev/net/c/92e239e36d60
-  - [net,11/11] selftests: mptcp: add a check for 'add_addr_accepted'
-    https://git.kernel.org/netdev/net/c/0eee0fdf9b7b
+Links:
+[1] https://lore.kernel.org/linux-mm/20251110101948.19277-1-leon.huangfu@sh=
+opee.com/
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
+Leon
 
-
+[...]
 
