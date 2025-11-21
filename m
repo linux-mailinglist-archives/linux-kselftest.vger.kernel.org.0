@@ -1,314 +1,138 @@
-Return-Path: <linux-kselftest+bounces-46290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46291-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3DEEC7BEAE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 00:07:25 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C5C6C7BEBA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 00:10:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 514DA3A60F6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 23:07:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2F9434E1E63
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 23:10:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F027C30BB95;
-	Fri, 21 Nov 2025 23:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20F6230FF34;
+	Fri, 21 Nov 2025 23:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="otxxdykF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gfy3Mwfe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B525238159
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 23:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DA627F16C
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 23:10:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763766438; cv=none; b=L7f6tV1izi7yRw6CVRbSFp45bopT8AO589J8skYixRw8BpYGpfewfDKZ9OZVaCQpuHHTIyKtOIWGHpvO7vfhwHRkwYs5M6MtjNjH5ttxc72xUV3eB/fRIqgj7/Q5+7puCjhx0edxeJFXELWin+x9wmeWS2MXbmSuLWBP3SxJNWw=
+	t=1763766613; cv=none; b=Cgih/CcSW7M5ErZs0IWjljJ+Qg2VJW0i02xni1cqKlO/2bBKio4ACaiEktsol6R4hqrt3bJzHeRf3XH+uFJ/vgncU4CLvXCLtBh/GC86xT2LF4cB/MYsREogv/9QXaFwwG4T1YgTzSFNK6hW1nE/fDRfPN2TISMA4FKmPuAJCYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763766438; c=relaxed/simple;
-	bh=VDL6/Wkzo+nHYBUJmIFWZKGy/WAbBJD7BKdCRJT3tcI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QoTr3vn/nt6pGUuT4UUgJdoKaKsMMaCxAC/mMNszymxjTWtJHWnp6DSnJ29JQ4HYFGoV/GGCPEeTCt1EVizaGjoOwVw71JCi8p76/dgeexUIJHF7HmBwuSrL8uybkojOS4oa5yXLa2JX1Bi0EXxJZ8kCZ1V18E723K+YOwyW8A8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=otxxdykF; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9E9943FE09
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 23:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1763766431;
-	bh=mURGdZgdGyl5h9hsbUzCtRvDVWH4yABOB0i1o0xgZtw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=otxxdykFtRBhDU2v2lxpyRd+7UvBDKlLcIUemkCgGLPEBfKVZljGPXbj+axYT6Fdz
-	 bpkK5AHMwRc3IAi5yrCmwSNEfaFKxR+/7sQN5EEEoxob+ynRVCh7f5GksvPBYOqBIc
-	 kzChTNC8YsMSeujRZB//qNcTRCwE6juyxkmcNnNg9IS2wG/fti3KgiZb5G6C2thcPX
-	 7MmoNd853sb/KLQivYVZPpC5qZLMd9At+amc799pZOl9JWfXW7slgnng9s3YlNBKRE
-	 xYvU/NFR41wfwW0YC3slPcihHI9TwgbuLE7Gn0JiL99rkzJJ973C9O76ltK/N+lP8Y
-	 xhP8U79KqU50iQnwOarqfm/ghR6RjsuANKLUjTERuujgp1ugvYNelH2tE36GyArcM8
-	 SWZLBP5SxKahm5G0pXGoly7zkA9+fBJi2MIkCvxMMf1APdCovqGmAT4z+cXSKYp5td
-	 dkyeHoQ3wJRMgpGSYDUs63P4VjQkS/36fe6zknwq5VKP4qPmmD2jTtoHIxMN/msmU8
-	 YYuBMTKSmTTao4QQIqT2oOfdUKaXrfJQz/u7a4voidfvnMcEFqnQBbteYFuhguVs0o
-	 +s/QXBJSnMwMXA9ElhDuO1Gy4qUQh1s+mTFJAF2QQKvHpgMieYnQwSZQwGR/KrwSyE
-	 K9oUOrk37I1YSRloiA/5OhW0=
-Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-78692e4e1faso69193437b3.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 15:07:11 -0800 (PST)
+	s=arc-20240116; t=1763766613; c=relaxed/simple;
+	bh=VdHSOcTtxGxUrX1sBmgMTtbKzqAZgA48oaPuJfmSDVo=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=WbVuzLAJMbl9kI2eeYhjtczraIbLL48d8JCNn0znbMiHilQqGHvlI5c1pYRf2n/1BcCmJ9Dxw0UfPR+SYXjuNg9288kT3uhWG73uOcX7BtDWEDp1SFueQplHIE39pz4skpDVXK09C9Htyz1acDzSyS6KQGgzNLilq/TJlJ8gg34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gfy3Mwfe; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-7866aca9ff4so25585997b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 15:10:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763766605; x=1764371405; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XIhyiakhBQz7pP1gby69E80SsuyQpol3QkLbw3g393Q=;
+        b=Gfy3MwfeBAYXXFSDqQBu+dxtBEWzVHhV0k67Me+B+IKfi+rm+AIm0fF2tWd0W9FSw5
+         E5V1rel0jQnt9SLmNNetqtkoJf0MBJt7biWmIwdC+4QJ8nDyI17AozBJiDvDtnjM8yzG
+         DslS4SMJkKhYDTT7oz3p6hLHoGrJZRZB0Tv8NBbLcz8YyPYQ3FuSIKvtFXjTaBVQ7ciW
+         9zrNdBDsFFdDGc7kZxNsakPMklVf6HMDWWNlSYgZZ5BBocjzQVtQSEV/7gEqQUuS1Lb3
+         Hod9sk6sRY3/SEvktzUI8Q8WCthkPBDH1gVJLAdXoxMVOzoCtBcTvIMNA6tF7Tj60g4I
+         ofsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763766429; x=1764371229;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mURGdZgdGyl5h9hsbUzCtRvDVWH4yABOB0i1o0xgZtw=;
-        b=fXoxpjAuF7g7sXNFH4dT1WOwyb0uDAC26lKVg9I/PmG8j5aBdQWIgs01kctk1ynUgA
-         Vu3YemZ/yLGQOFLvgZ7kwOwidi9/tD6uxH66efK0bxwLssdkosNnpejPyNJgKD1Juop6
-         k2UI9AvXcIXt/VpMTA7VH/DBSFfIwdpDp1P2ISqHyzDqbkK+AcukVKha7nTlwy43g2ux
-         R1xgm1XOwLlFb383JXvtE3ymLQAvEkQcaXfoFnw4rZu5isaIiEUqq2bbX0QjCiuOSy3z
-         dr8NS84YStJsBJA6bc1qBXnU78rAhnROi6hyW6Z7XSqdTltzhJWJbZ+xs2G3mdeyEsVM
-         iKvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXpHwCXAhoiiS28cP2PSsuqlX+k+sZEhIVi62+f0wBHh3ZJAoe7yLwujOexzWJXb1ehImBD/ZK73oGQkv0V9ds=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzvpj3ntULf3aLSmZ80lrrnRtfvvGF8N+SefUTT2/+Yrb2lSmDs
-	pp5ixOAvcIzl432P0JnoEFk7evDzfvY8LCMhPzVlteZXjqX5tQeLUs9BhqeMEzE/9uzAGyk9Cl8
-	McyNEK4LHZTxbCkYXcN02JyObdg42tvvxdZE+Z/T+OFGUYIzbrX9GctFAs1tpSFy4e7XSyIxfFV
-	SsKF9VWk9+hLmIV++Yb37YQVoFd97C1ktvvGisHJ6HGf2qyNbOf7PtiCzgZEjz
-X-Gm-Gg: ASbGnctnBJpha5onX+w3Jlo7R9E2IJcGsy3A+UH1xI680N2AO//8H/PxqcnoU/k4UcF
-	j68/ZH3e//LDUx9Zf/ExvA7mo1W862Mlwj0dKMgR7C8rTbv8nLZCZd+/7XL5dca5Rx8jYn4XHeg
-	CrhDM6Lmn+dROapjA5E7Rn6z2y/WNPPrVxtvtLclw3pSWATzIZ0UVXmG6ww5smbJDNyw==
-X-Received: by 2002:a53:b10a:0:b0:63f:c019:23bc with SMTP id 956f58d0204a3-642f8e30acamr6393242d50.27.1763766428790;
-        Fri, 21 Nov 2025 15:07:08 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGNbsczd5MfsDryDTrdB8miQHCP9n6FhmNbRk59/WbSb6lt9I6iTtdnnpp053CuQIcThR+YHVO/xZ+HKm10C6g=
-X-Received: by 2002:a53:b10a:0:b0:63f:c019:23bc with SMTP id
- 956f58d0204a3-642f8e30acamr6393202d50.27.1763766428362; Fri, 21 Nov 2025
- 15:07:08 -0800 (PST)
+        d=1e100.net; s=20230601; t=1763766605; x=1764371405;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XIhyiakhBQz7pP1gby69E80SsuyQpol3QkLbw3g393Q=;
+        b=WzJffE2u5QGHr3r0o7kHQS1pBUQSVzKJflq0dJKXkSdl11HcHxwPEZ/VXYRMjbjyo3
+         N2v446fcXePrdVwWGMPX42IVyWjAvb4bERWCIBJhMM8y2Lzp9HK/Ell+/jGxZOQa9006
+         x7Q0P4RtqMR6PCKpRsvyjstrnwkgVx3ZvX6GNFrhlzz+NzuqaexcgH1qnBqQsuPVt4HL
+         NNBSmO99frcE8w3CsJOune/+n2mCOvyJza0DJnjx8wVHS4Yk2maHeBHE0gW8DdbEYnbZ
+         OEKvfP1gJw0A3wZ0g0n+N2nHcGUH7ajXECoSx9+xQmWmPoHIj3NVPqgD5+87uvzurRFD
+         W7EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU0uMKSzY1nGLpANnu+QC5Cvd9aneMkHVLAtTtT3fFfPHgSv6ZJKCUnF/iFzn1ajiAbJGd3tLTQN0cpM+i5QlU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzA8eyBcLVHmi4ScCFsYgtV+TQlcCKdU4qHSdoRiLwP8qmVGo1
+	rgBBp7if1oI4MLXcP9Sn306hkQP+XEpnQK8R/MkHhoMjmjFB7yuBGt3f
+X-Gm-Gg: ASbGncvJ7AONNJdWkSsq17aeDkC1YUAAdXIeqMHhDYn4c0rqyM3G8EzH2rdmcRnv+g1
+	oytuzB6VyS6azLXgfTDpawaOF3wvK6QxOyzzjDY253M/vwnX+o7+Lwn8WgP5GkhIoxH/bdBLdPd
+	ZatAZHfPV36GW7+7pKmW1gG/jSxn1Bi9grZCA59+eNfhP+p6n/UVPn6dlotPWJ9CjUNS7yl7njT
+	OS13GvedBf8tt8qIGJ+Dq0/7FyKKWoZKugWiL6XMKIgxMkToB0aXi+5FdT91sBNoyntGNUgOzwY
+	oXsWVTTEdCMXZkiTxp2BLoGHxaXYgXT2OdzpTghcRaEuR08Nt3BUE3Ja6NO4gg6rYo9fJMuZx0d
+	oXjxmS9i5VKoh6mtUWQSWhp2JcwOSj98jb7t8upmv1RgrB4yVm9eMrqWRrNTuW7m2fdu1zzMTos
+	ta6z4OpBccuIvZYf6jy4CY2pajCF04u/MUvr214b8r6MojR+fEVzeEI7QBq11ddkd0kOM=
+X-Google-Smtp-Source: AGHT+IHfCNm/h1SWg6slN1yIU0nIrFVDdi5F9NffXFDZ8GMcG484usVNe9HQYWOgCoGXaTA5uDjGxg==
+X-Received: by 2002:a05:690c:b9e:b0:787:d2ee:e2d6 with SMTP id 00721157ae682-78a8b53930fmr29887407b3.34.1763766605302;
+        Fri, 21 Nov 2025 15:10:05 -0800 (PST)
+Received: from gmail.com (116.235.236.35.bc.googleusercontent.com. [35.236.235.116])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-78a798804c4sm19847067b3.3.2025.11.21.15.10.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Nov 2025 15:10:04 -0800 (PST)
+Date: Fri, 21 Nov 2025 18:10:02 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ willemb@google.com, 
+ petrm@nvidia.com, 
+ dw@davidwei.uk, 
+ shuah@kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Jakub Kicinski <kuba@kernel.org>
+Message-ID: <willemdebruijn.kernel.2fe8d4c058a2d@gmail.com>
+In-Reply-To: <20251121040259.3647749-1-kuba@kernel.org>
+References: <20251121040259.3647749-1-kuba@kernel.org>
+Subject: Re: [PATCH net-next 0/5] selftests: hw-net: toeplitz: read config
+ from the NIC directly
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <87tsyozqdu.fsf@email.froward.int.ebiederm.org> <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
- <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org> <87a50gxo0i.fsf@email.froward.int.ebiederm.org>
- <GV2PPF74270EBEEAD4CACA124C05BE1CE45E4D5A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <87o6ovx38h.fsf@email.froward.int.ebiederm.org> <GV2PPF74270EBEEFA106F4EF26B087ED898E4D5A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEED0840E45459881C0EDD4E4D5A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <87ikf3w5us.fsf@email.froward.int.ebiederm.org>
-In-Reply-To: <87ikf3w5us.fsf@email.froward.int.ebiederm.org>
-From: Ryan Lee <ryan.lee@canonical.com>
-Date: Fri, 21 Nov 2025 15:06:57 -0800
-X-Gm-Features: AWmQ_bl4fHuqSO33WuXiPW9zqHuMd1nfWUHzCuIgifbxs4kTz1ezfJlXQS9fZjo
-Message-ID: <CAKCV-6sH03G2xuZrhqEMExx-AAKPZgQ7Z1BnDgV5HimFVGCWwg@mail.gmail.com>
-Subject: Re: [RFC][PATCH] exec: Move cred computation under exec_update_lock
-To: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: Bernd Edlinger <bernd.edlinger@hotmail.de>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Alexey Dobriyan <adobriyan@gmail.com>, Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>, 
-	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
-	Christian Brauner <brauner@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>, 
-	James Morris <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>, 
-	Adrian Reber <areber@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>, 
-	Alexei Starovoitov <ast@kernel.org>, 
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-security-module@vger.kernel.org, 
-	tiozhang <tiozhang@didiglobal.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, YueHaibing <yuehaibing@huawei.com>, 
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>, 
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>, xu xin <xu.xin16@zte.com.cn>, 
-	Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>, 
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Elena Reshetova <elena.reshetova@intel.com>, David Windsor <dwindsor@gmail.com>, 
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Hans Liljestrand <ishkamiel@gmail.com>, Penglei Jiang <superman.xpt@gmail.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Adrian Ratiu <adrian.ratiu@collabora.com>, 
-	Ingo Molnar <mingo@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
-	Cyrill Gorcunov <gorcunov@gmail.com>, Eric Dumazet <edumazet@google.com>, 
-	apparmor <apparmor@lists.ubuntu.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 21, 2025 at 11:20=E2=80=AFAM Eric W. Biederman
-<ebiederm@xmission.com> wrote:
->
-> Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
->
-> > On 11/21/25 10:35, Bernd Edlinger wrote:
-> >> On 11/21/25 08:18, Eric W. Biederman wrote:
-> >>> Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
-> >>>
-> >>>> Hi Eric,
-> >>>>
-> >>>> thanks for you valuable input on the topic.
-> >>>>
-> >>>> On 11/21/25 00:50, Eric W. Biederman wrote:
-> >>>>> "Eric W. Biederman" <ebiederm@xmission.com> writes:
-> >>>>>
-> >>>>>> Instead of computing the new cred before we pass the point of no
-> >>>>>> return compute the new cred just before we use it.
-> >>>>>>
-> >>>>>> This allows the removal of fs_struct->in_exec and cred_guard_mutex=
-.
-> >>>>>>
-> >>>>>> I am not certain why we wanted to compute the cred for the new
-> >>>>>> executable so early.  Perhaps I missed something but I did not see=
- any
-> >>>>>> common errors being signaled.   So I don't think we loose anything=
- by
-> >>>>>> computing the new cred later.
-> >>>>>
-> >>>>> I should add that the permission checks happen in open_exec,
-> >>>>> everything that follows credential wise is just about representing =
-in
-> >>>>> struct cred the credentials the new executable will have.
-> >>>>>
-> >>>>> So I am really at a loss why we have had this complicated way of
-> >>>>> computing of computed the credentials all of these years full of
-> >>>>> time of check to time of use problems.
-> >>>>>
-> >>>>
-> >>>> Well, I think I see a problem with your patch:
-> >>>>
-> >>>> When the security engine gets the LSM_UNSAFE_PTRACE flag, it might
-> >>>> e.g. return -EPERM in bprm_creds_for_exec in the apparmor, selinux
-> >>>> or the smack security engines at least.  Previously that callback
-> >>>> was called before the point of no return, and the return code should
-> >>>> be returned as a return code the the caller of execve.  But if we mo=
-ve
-> >>>> that check after the point of no return, the caller will get killed
-> >>>> due to the failed security check.
-> >>>>
-> >>>> Or did I miss something?
-> >>>
-> >>> I think we definitely need to document this change in behavior.  I wo=
-uld
-> >>> call ending the exec with SIGSEGV vs -EPERM a quality of implementati=
-on
-> >>> issue.  The exec is failing one way or the other so I don't see it as=
- a
-> >>> correctness issue.
-> >>>
-> >>> In the case of ptrace in general I think it is a bug if the mere act =
-of
-> >>> debugging a program changes it's behavior.  So which buggy behavior
-> >>> should we prefer?  SIGSEGV where it is totally clear that the behavio=
-r
-> >>> has changed or -EPERM and ask the debugged program to handle it.
-> >>> I lean towards SIGSEGV because then it is clear the code should not
-> >>> handle it.
-> >>>
-> >>> In the case of LSM_UNSAFE_NO_NEW_PRIVS I believe the preferred way to
-> >>> handle unexpected things happening is to terminate the application.
-> >>>
-> >>> In the case of LSM_UNSAFE_SHARE -EPERM might be better.  I don't know
-> >>> of any good uses of any good uses of sys_clone(CLONE_FS ...) outside
-> >>> of CLONE_THREAD.
-> >>>
-> >>>
-> >>> Plus all of these things are only considerations if we are exec'ing a
-> >>> program that transitions to a different set of credentials.  Somethin=
-g
-> >>> that happens but is quite rare itself.
+Jakub Kicinski wrote:
+> First patch here tries to auto-disable building the iouring sample.
+> Our CI will still run the iouring test(s), of course, but it looks
+> like the liburing updates aren't very quick in distroes and having
+> to hack around it when developing unrelated tests is a bit annoying.
+> 
+> Remaining 4 patches iron out running the Toeplitz hash test against
+> real NICs. I tested mlx5, bnxt and fbnic, they all pass now.
+> I switched to using YNL directly in the C code, can't see a reason
+> to get the info in Python and pass it to C via argv. The old code
+> likely did this because it predates YNL.
+> 
+> Jakub Kicinski (5):
+>   selftests: hw-net: auto-disable building the iouring C code
+>   selftests: hw-net: toeplitz: make sure NICs have pure Toeplitz
+>     configured
+>   selftests: hw-net: toeplitz: read the RSS key directly from C
+>   selftests: hw-net: toeplitz: read indirection table from the device
+>   selftests: hw-net: toeplitz: give the test up to 4 seconds
+> 
+>  .../testing/selftests/drivers/net/hw/Makefile | 23 ++++++-
+>  .../selftests/drivers/net/hw/toeplitz.c       | 65 ++++++++++++++++++-
+>  .../selftests/drivers/net/hw/toeplitz.py      | 28 ++++----
+>  3 files changed, 98 insertions(+), 18 deletions(-)
 
-AppArmor's exec rules rely heavily on transitioning to different creds
-on exec. For example, an AppArmor policy like
+For the series:
 
-profile example_1 /usr/bin/example_1 {
-    /usr/bin/example_2 Px -> example_2_profile,
-    /usr/bin/example_3 Px,
-}
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-will allow binary example_1 to execute binaries example_2 and
-example_3, launching those processes under a different confinement
-(example_2_profile and a profile that attaches to /usr/bin/example_3,
-respectively). We will need to look into how much this patch (or a
-corresponding change in behavior) would affect our use case, but
-confinement transitions (where the confinement information is stored
-as an LSM blob on the cred struct) are extremely common in a system
-that uses AppArmor as an LSM.
-
-> >>>
-> >>> In practice I don't expect there is anything that depends on the exac=
-t
-> >>> behavior of what happens when exec'ing a suid executable to gain
-> >>> privileges when ptraced.   The closes I can imagine is upstart and
-> >>> I think upstart ran as root when ptracing other programs so there is =
-no
-> >>> gaining of privilege and thus no reason for a security module to
-> >>> complain.
-> >>>
-> >>> Who knows I could be wrong, and someone could actually care.  Which i=
-s
-> >>> hy I think we should document it.>>
-> >>
-> >>
-> >> Well, I dont know for sure, but the security engine could deny the exe=
-cution
-> >> for any reason, not only because of being ptraced.
-> >> Maybe there can be a policy which denies user X to execute e.g. any su=
-id programs.
-> >>
-> >>
-> >> Bernd.
-> >>
-> >
-> > Hmm, funny..
-> >
-> > I installed this patch on top of
-> >
-> > commit fd95357fd8c6778ac7dea6c57a19b8b182b6e91f (HEAD -> master, origin=
-/master, origin/HEAD)
-> > Merge: c966813ea120 7b6216baae75
-> > Author: Linus Torvalds <torvalds@linux-foundation.org>
-> > Date:   Thu Nov 20 11:04:37 2025 -0800
-> >
-> > but it does panic when I try to boot:
-> >
-> > [  0.870539]     TERM=3D1inux
-> > [  0.870573] Starting init: /bin/sh exists but couldn't execute it (err=
-or -14) 0.8705751 Kernel panic- not syncing: No working init found. Try pas=
-sing i mit=3D option to kernel. See Linux Documentation/admin-guide/init.rs=
-t for guidance
-> > [  0.870577] CPU: UID: 0 PID: 1 Comm: sh Not tainted 6.18.0-rc6+ #1 PRE=
-EMPT(voluntary)
-> > [  0.870579] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS Vi=
-rtualBo x 12/01/2006
-> > [  0.870580] Call Trace:
-> > [  0.870590]  <TASK>
-> > [  0.870592]  vpanic+0x36d/0x380
-> > [  0.870607]  ? __pfx_kernel_init+0x10/0x10
-> > [  0.870615]  panic+0x5b/0x60
-> > [  0.870617]  kernel_init+0x17d/0x1c0
-> > [  0.870623]  ret_from_fork+0x124/0x150
-> > [  0.870625}  ? __pfx_kernel_init+0x10/0x10
-> > [  0.870627]  ret_from_fork_asm+0x1a/0x30
-> > [  0.870632]  </TASK>
-> > [  0.8706631 Kernel Offset: 0x3a800000 from Oxffffffff81000000 (relocat=
-ion ran ge: 0xffffffff80000000-0xffffffffbfffffff)
-> > [  0.880034] ---[ end Kernel panic - not syncing: No working init found=
-. Try passing init option to kernel. See Linux Documentation/admin-guide/in=
-it.rst for guidance. 1---`
-> >
-> >
-> > Is that a known problem?
->
-> Nope.  It looks like the code needs a little bit bug fixing testing.
->
-> I will take see about taking a look.
->
-> Eric
->
-
-I've also CC'ed the AppArmor mailing list on this patch to facilitate
-discussion if, upon further investigation, this patch would require
-changes or cause other problems on the AppArmor side.
+Thanks for improving the test! Especially addressing the missing
+indirection table.
 
