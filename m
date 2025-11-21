@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-46178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BEC4C77395
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 05:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FF50C77398
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 05:05:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id B7784306E6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 04:03:32 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 501CC31EAE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 04:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 324622E6CA6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC8982E7BA0;
 	Fri, 21 Nov 2025 04:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAlN9qV2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e+Sueozl"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9862E54BD;
-	Fri, 21 Nov 2025 04:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47DA2E7167;
+	Fri, 21 Nov 2025 04:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763697792; cv=none; b=RIpF/CUelRp/YOQJZBYGesMy6NsF4jUFtJSxflL30kgvWNbd6mQ0Xhqzyt/M/Mkarg3HuNDm35M/nrYA7qm28sudPMVnsMjaKprNaG8SeypMZhhqryStj3Si6Pdd6TKPQ4xwB7lcv0paR++oMJ0HwchGlqqvoQYA8QORnrYCqbc=
+	t=1763697792; cv=none; b=hqSeyeHjmtau1ShI5a4ShuKrvifGPpXLuGBIbwEKU2vZy34uQt6Jyy2aSu+MIs1JAa3SicwscAVQZpiwpTmYQOwdZFs7r61mrY4X0kzFPqQ2Idv7gRelU1o0mRiLqwz2Hqgav/Jnx0vEipjBoTquDcQT89KKru/TD3tnde1La30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763697792; c=relaxed/simple;
-	bh=DgQu6fda/tRMrRW7O66hMyKgQhsZ86Exet7Y/AgYe+A=;
+	bh=La8fww2px4d3Lxfdubrxwta7HLe1uoWj6Y6RB67Z/zw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ert7LWKlnYrtBvoToH8wBk8rJUeXks9BW/GxddcV/ZAqFAQ8qTUfToVFrhcWdXz35uY+TmDz5qtMygKL/BTQ1lg7Fly3kdYUUvodX9nuvMaWLZqW0x1U+ZjMcfk91t9o9PVI5Ij+iBTCLHorwmIrzDdyfRBpX8AehxYYoEB9l7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAlN9qV2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E577BC19423;
-	Fri, 21 Nov 2025 04:03:10 +0000 (UTC)
+	 MIME-Version; b=f+1YmLl1zQewDSk885xBzY7HQblPnWxZmNMnWr8ICPt75lRLgvVA+oh/UzM+HwNiJvvOHTKOfUKLl27LPuGOLwiOSkXkaFMUbuTOPIbNBgtUeCxd6CSzNhaDei3XoB/aW0UdphTGoGLLH1I/J85Kfd5s9+egA5efndsmt5gXyic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e+Sueozl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E52C4CEF1;
+	Fri, 21 Nov 2025 04:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763697791;
-	bh=DgQu6fda/tRMrRW7O66hMyKgQhsZ86Exet7Y/AgYe+A=;
+	s=k20201202; t=1763697792;
+	bh=La8fww2px4d3Lxfdubrxwta7HLe1uoWj6Y6RB67Z/zw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mAlN9qV2DFbflu8Om4vkCYGyjlvTw7a05Y80NMvy2hGbh3tLYEyVhNHVpiOYjwpBH
-	 fOGAfaSHmLifPcSLFhwl2SAk8QRN7VIwbBXEt1F9bi68zBDoyuE/jOaCuFtpnUi6Dy
-	 /Mq9pF5ihUvFfnidvL3EfhnX0AW3YOlhH9lH2kvyTJ7s9gLEmKsK1ReYNZePIdE9Cq
-	 e8tmUGrIp5cC54Su0FiKa5Xbayq7E/Omo2swlZueEKgJdUQO0RVLlqi6GgHHj2vgWU
-	 eHSSXf+5jwbLvY6u5hv5WHEqvinyqXWdDGq+5eoCRBicACkOZkGQaacIR7PgTam/+5
-	 KjZ80pB1IG9QA==
+	b=e+SueozlBJNUC1lo8KdHbTUmB91ps+R//eed0vo59ECgh73zPPTe7IkIXoJIOoyHV
+	 lRL7/72Y7CMSjvm1gWve2ZZcle6q7WPBJ54eZpYjW6elXtzPbucrWjcVD+vJ6MX7hJ
+	 cGLw4+RHx8s+xGqZ5n3Qt4mtqaPwCSh9gyWZv6NVOP8LvjBaBDPE1HWpuBRLYnXuak
+	 3X6qXj62RA7iwRW+AFu1RjttAtOAmiHErnTnETyctQrUbAKs40K3xOYoRNfUv2PLnN
+	 slJ8px3WJfOlExGQ2M1Mvs/zO75cKLXANU6stdtbjdACKrt3cUBK1BJU8YYG1eHOVt
+	 +uhY8NKziTo5A==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: netdev@vger.kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 3/5] selftests: hw-net: toeplitz: read the RSS key directly from C
-Date: Thu, 20 Nov 2025 20:02:57 -0800
-Message-ID: <20251121040259.3647749-4-kuba@kernel.org>
+Subject: [PATCH net-next 4/5] selftests: hw-net: toeplitz: read indirection table from the device
+Date: Thu, 20 Nov 2025 20:02:58 -0800
+Message-ID: <20251121040259.3647749-5-kuba@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251121040259.3647749-1-kuba@kernel.org>
 References: <20251121040259.3647749-1-kuba@kernel.org>
@@ -68,130 +68,71 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now that we have YNL support for RSS accessing the RSS info from
-C is very easy. Instead of passing the RSS key from Python do it
-directly in the C code.
+Replace the simple modulo math with the real indirection table
+read from the device. This makes the tests pass for mlx5 and
+bnxt NICs.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 ---
- .../testing/selftests/drivers/net/hw/Makefile |  6 ++-
- .../selftests/drivers/net/hw/toeplitz.c       | 41 ++++++++++++++++++-
- .../selftests/drivers/net/hw/toeplitz.py      |  5 ---
- 3 files changed, 44 insertions(+), 8 deletions(-)
+ .../selftests/drivers/net/hw/toeplitz.c       | 24 ++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 949aeeeb357d..7c819fdfa107 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -15,7 +15,6 @@ endif
- 
- TEST_GEN_FILES := \
- 	$(COND_GEN_FILES) \
--	toeplitz \
- # end of TEST_GEN_FILES
- 
- TEST_PROGS = \
-@@ -55,7 +54,10 @@ TEST_INCLUDES := \
- 	#
- 
- # YNL files, must be before "include ..lib.mk"
--YNL_GEN_FILES := ncdevmem
-+YNL_GEN_FILES := \
-+	ncdevmem \
-+	toeplitz \
-+# end of YNL_GEN_FILES
- TEST_GEN_FILES += $(YNL_GEN_FILES)
- TEST_GEN_FILES += $(patsubst %.c,%.o,$(wildcard *.bpf.c))
- 
 diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.c b/tools/testing/selftests/drivers/net/hw/toeplitz.c
-index afc5f910b006..7420a4e201cc 100644
+index 7420a4e201cc..a4d04438c313 100644
 --- a/tools/testing/selftests/drivers/net/hw/toeplitz.c
 +++ b/tools/testing/selftests/drivers/net/hw/toeplitz.c
-@@ -52,6 +52,9 @@
- #include <sys/types.h>
- #include <unistd.h>
+@@ -68,6 +68,7 @@
+ #define FOUR_TUPLE_MAX_LEN	((sizeof(struct in6_addr) * 2) + (sizeof(uint16_t) * 2))
  
-+#include <ynl.h>
-+#include "ethtool-user.h"
-+
- #include "../../../kselftest.h"
- #include "../../../net/lib/ksft.h"
+ #define RSS_MAX_CPUS (1 << 16)	/* real constraint is PACKET_FANOUT_MAX */
++#define RSS_MAX_INDIR	(1 << 16)
  
-@@ -483,6 +486,42 @@ static void parse_rps_bitmap(const char *arg)
- 			rps_silo_to_cpu[cfg_num_rps_cpus++] = i;
- }
+ #define RPS_MAX_CPUS 16UL	/* must be a power of 2 */
  
-+static void read_rss_dev_info_ynl(void)
-+{
-+	struct ethtool_rss_get_req *req;
-+	struct ethtool_rss_get_rsp *rsp;
-+	struct ynl_sock *ys;
-+
-+	ys = ynl_sock_create(&ynl_ethtool_family, NULL);
-+	if (!ys)
-+		error(1, errno, "ynl_sock_create failed");
-+
-+	req = ethtool_rss_get_req_alloc();
-+	if (!req)
-+		error(1, errno, "ethtool_rss_get_req_alloc failed");
-+
-+	ethtool_rss_get_req_set_header_dev_name(req, cfg_ifname);
-+
-+	rsp = ethtool_rss_get(ys, req);
-+	if (!rsp)
-+		error(1, ys->err.code, "YNL: %s", ys->err.msg);
-+
-+	if (!rsp->_len.hkey)
-+		error(1, 0, "RSS key not available for %s", cfg_ifname);
-+
-+	if (rsp->_len.hkey < TOEPLITZ_KEY_MIN_LEN ||
-+	    rsp->_len.hkey > TOEPLITZ_KEY_MAX_LEN)
-+		error(1, 0, "RSS key length %u out of bounds [%u, %u]",
-+		      rsp->_len.hkey, TOEPLITZ_KEY_MIN_LEN,
-+		      TOEPLITZ_KEY_MAX_LEN);
-+
-+	memcpy(toeplitz_key, rsp->hkey, rsp->_len.hkey);
-+
-+	ethtool_rss_get_rsp_free(rsp);
-+	ethtool_rss_get_req_free(req);
-+	ynl_sock_destroy(ys);
-+}
-+
- static void parse_opts(int argc, char **argv)
+@@ -105,6 +106,8 @@ struct ring_state {
+ static unsigned int rx_irq_cpus[RSS_MAX_CPUS];	/* map from rxq to cpu */
+ static int rps_silo_to_cpu[RPS_MAX_CPUS];
+ static unsigned char toeplitz_key[TOEPLITZ_KEY_MAX_LEN];
++static unsigned int rss_indir_tbl[RSS_MAX_INDIR];
++static unsigned int rss_indir_tbl_size;
+ static struct ring_state rings[RSS_MAX_CPUS];
+ 
+ static inline uint32_t toeplitz(const unsigned char *four_tuple,
+@@ -133,7 +136,12 @@ static inline uint32_t toeplitz(const unsigned char *four_tuple,
+ /* Compare computed cpu with arrival cpu from packet_fanout_cpu */
+ static void verify_rss(uint32_t rx_hash, int cpu)
  {
- 	static struct option long_options[] = {
-@@ -551,7 +590,7 @@ static void parse_opts(int argc, char **argv)
- 	}
+-	int queue = rx_hash % cfg_num_queues;
++	int queue;
++
++	if (rss_indir_tbl_size)
++		queue = rss_indir_tbl[rx_hash % rss_indir_tbl_size];
++	else
++		queue = rx_hash % cfg_num_queues;
  
- 	if (!have_toeplitz)
--		error(1, 0, "Must supply rss key ('-k')");
-+		read_rss_dev_info_ynl();
+ 	log_verbose(" rxq %d (cpu %d)", queue, rx_irq_cpus[queue]);
+ 	if (rx_irq_cpus[queue] != cpu) {
+@@ -517,6 +525,20 @@ static void read_rss_dev_info_ynl(void)
  
- 	num_cpus = get_nprocs();
- 	if (num_cpus > RSS_MAX_CPUS)
-diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.py b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-index 642a5cc385b6..945c58d23310 100755
---- a/tools/testing/selftests/drivers/net/hw/toeplitz.py
-+++ b/tools/testing/selftests/drivers/net/hw/toeplitz.py
-@@ -156,10 +156,6 @@ ETH_RSS_HASH_TOP = 1
-                                   "hfunc": rss.get('hfunc'),
-                                   "input-xfrm": rss.get('input-xfrm', {})
-                                   })
--        # Refresh in case changing hfunc changes things.
--        rss = cfg.ethnl.rss_get({"header": {"dev-index": cfg.ifindex}})
--
--    key = ':'.join(f'{b:02x}' for b in rss["hkey"])
+ 	memcpy(toeplitz_key, rsp->hkey, rsp->_len.hkey);
  
-     port = rand_port(socket.SOCK_DGRAM)
- 
-@@ -170,7 +166,6 @@ ETH_RSS_HASH_TOP = 1
-         proto_flag,
-         "-d", str(port),
-         "-i", cfg.ifname,
--        "-k", key,
-         "-T", "1000",
-         "-s",
-         "-v"
++	if (rsp->_count.indir > RSS_MAX_INDIR)
++		error(1, 0, "RSS indirection table too large (%u > %u)",
++		      rsp->_count.indir, RSS_MAX_INDIR);
++
++	/* If indir table not available we'll fallback to simple modulo math */
++	if (rsp->_count.indir) {
++		memcpy(rss_indir_tbl, rsp->indir,
++		       rsp->_count.indir * sizeof(rss_indir_tbl[0]));
++		rss_indir_tbl_size = rsp->_count.indir;
++
++		log_verbose("RSS indirection table size: %u\n",
++			    rss_indir_tbl_size);
++	}
++
+ 	ethtool_rss_get_rsp_free(rsp);
+ 	ethtool_rss_get_req_free(req);
+ 	ynl_sock_destroy(ys);
 -- 
 2.51.1
 
