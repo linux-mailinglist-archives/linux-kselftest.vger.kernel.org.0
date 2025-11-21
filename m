@@ -1,188 +1,190 @@
-Return-Path: <linux-kselftest+bounces-46292-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8F93C7BEC3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 00:12:29 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6908EC7BF7A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 00:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 57BED36590E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 23:12:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 412814E158A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 23:52:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6892DAFD2;
-	Fri, 21 Nov 2025 23:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3383930C607;
+	Fri, 21 Nov 2025 23:51:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YU4VRKu3"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="fuAS7cxQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CF1298991
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 23:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4072F616C
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 23:51:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763766742; cv=none; b=oZzuPaPMr14cN9GyyMa/H2VqlMb8rFCop6RSyBcnuRhJbHnJMvHG5LnSUtdxFyn3Qv4dEX1OWIcls63mMU7cNLzgIdY1Vif2zO3j7etyBNFqCq0DV/W50Cwg/X3Clh23xjCwtl6jK/v0A/bH/bRraNDgs9WpAiMtilfTEfHwAmQ=
+	t=1763769119; cv=none; b=FwOJcKtt07irxcTAUhojWQ6kjVnaa0rAXtW6fd/hZjMBd/bi0zQPDK1CEYJOsF/VadJmJWhs9XHF7Ao/O8BiLsw4DEvMEeYzmB3ipGSFTFNJ3DxMhJ8k6bm3WCD+OYng05Gx0BeuYjLJydCgOWZu6UQLDwVAUvPU/glyXOqxv3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763766742; c=relaxed/simple;
-	bh=b0GsJjNOkd23Y8b/rhP04LJ129wq4rJm6upoQsP5r58=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=aKzw6zsaP0ynjfn4XHa5F6S0M8/vlh9o4VXMTIjbmI9jvQ7HoJnvEZFezuW8lMqIbuo60HB5ZnAPZZbFx3CJ2KyAPeo+H7JjfVjCRPB8ZTkYxDrHxgQiduBB4kX5/yUoM0qBSFGXQCMTJ7nkVfgtjT/bHHCVoAQrUtpPW0xtIaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YU4VRKu3; arc=none smtp.client-ip=74.125.224.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-640d8b78608so1932056d50.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 15:12:19 -0800 (PST)
+	s=arc-20240116; t=1763769119; c=relaxed/simple;
+	bh=qyIgkIWEPVtK3bvaf33iUXx+Lwkh8VwskyaNpGQA3FE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OKqTLi5sQdw/t9S/tH8xCY65w0Ub4einirbRcYmfdss4mQaNuO+bEBqolhjxWctopSOfWieHBuLIg2leZCXWebKXXAdBV3HCfHforUgc/H8VDuTaZh6vRwfZlGARhWPa25BXaYLj5fJVls+wl9m5YulFDUDVTX6XV/kMB2wTHFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=fuAS7cxQ; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8b22624bcdaso304287885a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 15:51:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763766737; x=1764371537; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ER0EqnipfQR28gz9kSpw01iLCYoIz+RpULRJggWqctc=;
-        b=YU4VRKu3K+fhPvpG5WaIudyNIZ9MR2lX/t4N6FlhwJHE4y99fp/WyEDf37YyMk0f2X
-         MnmZJ1OBbEb0lgvzD6ioYtO5DjaGob1xGbM1V5xyH6F02qYvdoHz72fGUb2ccuFMLAho
-         q3f6BPDfbRIyStg7hwT9cIQottnjVEYV9gvK+jJ2pEqCFRdPD3rK+PcvX9EWbhW6TkAI
-         oRXpNUGCjQW/FLxPZsVwt3hpRvjerp1NWUZ1O9+h03ye71GvKcU2lO1PGPjw5llybML1
-         W662/1N3I/1athQLStiSeYETXQfM3N2l0R8SYunrDN6Cxqd4WZyJ9ejjRKgQe5OvWDkC
-         SfkQ==
+        d=ziepe.ca; s=google; t=1763769115; x=1764373915; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SNFKsTnzS74A3YnRADAbN00lA3dVz8Z4Yjm0idBCQ+0=;
+        b=fuAS7cxQFt9ywr+iq4PvAM3qLYHFzLSUoxH0IHWqVb7gqAXeEDXeiS6dfs25X9D90K
+         aK976RMvnx2xdZAOkN8pUEAJnGRl+xRSne4FyJfk6GL+clZWBcgKyJiIFQjnB+DnLvlG
+         Pcee2tC7/U89Eu/5F11PEXBEPN/ehPcX6SxVklI5o3tOg17JOZCTu93OxdHLQF0zmrUs
+         4vAPeObxuh8SEPd6YHrKO7rS2AXr9LQ86KJCXOl8WFF9FpbsKPeAyEW7P+cEDp118VDq
+         7djnXPq/uoxLE2PUMiUeOK4gLSkCwE07PmtGEKuusa1T09waM/+4PVaNKjcygk22SjpK
+         cFOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763766737; x=1764371537;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ER0EqnipfQR28gz9kSpw01iLCYoIz+RpULRJggWqctc=;
-        b=XcAbBkPQr3O8EfK1WaXarRzbyyv6b4WaxIPHYgdhf2ZViDIVEdqvPFH9DBe7E2vgBE
-         YGl10IMijueb6otlkfdHdh72MQUL0MvTrsE+O3TzurSQkBB9fF+qoZ1qT5lbIKEWHIo4
-         T6/5jIpu5yHkvfWquo43B7Lk66v5HGRZ4DVGgohuYnCYU7vTxSbO/leYfgJK8kz1cfC3
-         Cov1UA1lV4VXG6AxBjiz0CQuHSw/5odJBwYEvTz3IsBNPjnKHh5OD5loTy1T/AsKgt61
-         OuF/2p70vfXwEyHduSDv4/Bvn5wXFn2XzPKO68YeoGpSTTVQ20GlsSf4nqlOx4vu9+7H
-         Gs0w==
-X-Forwarded-Encrypted: i=1; AJvYcCVwEGKSw4A4iB2FL9k3fLIH4MQcyhVtF1hYJ8BTTHC14uWaDc3c6deADv4jVQe1SJQlEq69fSs4TQZa7RH0cn4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/Xv6+lBA+dENBhFwIWd6Iocv8EnZqcDpk1M574ovG/OkBdyKy
-	wfRaojTURj7g+qPC3jfStomEc2mUWfsLPXPny3HF/Nsr/wO4Byrg7qqY
-X-Gm-Gg: ASbGncv1IMZE0BUdHolQGKz0oYbzCEsKLDXd0Xu91Nm60+08l67/rDBQU9cA+3aTXOd
-	abxrX3gUniCf5wM/lVhHlD2wkf0Pd9dY5CTUIpnyUT2fGTEt/bnwBORxB54Id2jd77Q0vVLsStj
-	WfmwwfauWplRTjqisB98fnn2OvkM62mpFHzVtqnzTRvbURMEb7C0ImQZcTrdZXyZao233Nx7WWm
-	OLg+cyNOXll/Zx7gt2AU9ah4CTm7rK66RdpIyuPVdj8cGtFhsDP2mfnqUouHvk+1iSRZFUPrET8
-	O20BX+cuP+7jbFTThrKDT5g4h39b1ivDCTa3FNg3NHuac+aqjE9FfSDLxgohf/gkEHd8+Fb5JBk
-	xuzG9w/lJACPYnhaN3IQqEhFKaFGhHSt3hfA7UlCH0vMoQ8ZGiQHs/wCsYflwmNaYmK8w8f29e6
-	jUHsBtfxYUEjSvZYZbGJ2PnLnEoIGTVm3+7be7b3lGY6qIoejYntEugD1n6vXpmVYIFF6OmvBaG
-	E4FYA==
-X-Google-Smtp-Source: AGHT+IFtWJ6o3fFiC7w0yCo09Sxi6MfOMUc8IK5cJlx6nfs3tpvkiRuecR5cvjP6jh7JG3gHDx0YfA==
-X-Received: by 2002:a05:690e:40e:b0:641:eb21:d6ac with SMTP id 956f58d0204a3-64302ab2666mr2074060d50.44.1763766737456;
-        Fri, 21 Nov 2025 15:12:17 -0800 (PST)
-Received: from gmail.com (116.235.236.35.bc.googleusercontent.com. [35.236.235.116])
-        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-642f70a6c44sm2131489d50.10.2025.11.21.15.12.16
+        d=1e100.net; s=20230601; t=1763769115; x=1764373915;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SNFKsTnzS74A3YnRADAbN00lA3dVz8Z4Yjm0idBCQ+0=;
+        b=oZwKuRhMwvWUnrO8mbMr9q+lmAhkit9gjYQB6dJ+zIUD/3xX323usLAY+EUONHmqB+
+         JxVKe8ycw4InC/ws+G4Zqq8seq21kjh0DTIMBY1JRkXe55tA/qzdXcxEDKA7ZqY4NJbK
+         YmFj7I4PZi/sI33a4D8JrWByDhD9LJYltC25pigtkMOLnQ4ZRT9koufGixpEhDVumFs/
+         hhlP5MptdoKFu4r8gpgTP5yLzEMplFzKsU+UWDu7QH6uMolHMzMOMHh3Xj5C30roIwHA
+         yEbY3IhbVS9EfsXm7z4sefxacqQRrqzEp8UZDBeoDgbpLr8G4TBGi1iuc59p27rTIWJW
+         QYIw==
+X-Forwarded-Encrypted: i=1; AJvYcCWE/isrfjz3T3cGK4cBfrBraFsdyMsnhhiAR8qOKOhUxGtdrZurxoQ1g+66lHuS+sFMSpunfiqAO69GZsTtNm4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzq8DiCrZNAP8v0VNnn+xCubO4KnpvXPy/w39hBtCFIcWSksbKk
+	LDYzfLni9cn6UfcMRmGiQ16+FqGiA5KgcR2e7qTChTX7QglYARhkveKKfr12o2hVxY0fcGHvA4s
+	r1K3l
+X-Gm-Gg: ASbGncsXPHvIyjlARIFlTOfaCwfLimdtkqxc0/sXCqEZGgeNCTeC/f5MP763ZBCt1dL
+	g3dTAmfaSX2GWYXK5DustAZsICL2TwpZIg3Al7s7629690xS7TNsPsKQ9TRjevaGLGnveFI3OA6
+	P94mLK8ZQ0rPZ1NIflpXto2uND1Gq06J+L6Ivgd6/Pn9N3nEFRXHhuAfWXA6a6QI4QsGtS42/BN
+	Ti53PxlPAGz9bLi8rkNe1T6qjaAvtYJv773sF7b4z/0NCC6sHhwZ7GK+VjqgrCbov+G5osLEoSJ
+	xoZXf26M4rIs/zOrGe5ue/pyBpq6MCIK/jrPMW2Gbscl0GJnU5XzI4kA/es0v3+K/uAqMtjhxlL
+	043fbjVZxW3+eYAksm8V98wEBXmPa3jsDxAmMb/b4hnZuyGllCTY9pU3qoCjpGOvC2zbU5nh1NN
+	EiYsS3KsmWR+uc0Sbw3XZ8zUpCRm4AoAa9+jQm5XicHLitgbfj7fjKSKke
+X-Google-Smtp-Source: AGHT+IFWPATCeCmWOiB88Xr2ysxytHvAaGgMnVOpuF76dOClmpd6DtTQfeYA8jncK9mJHMi6OC8ekA==
+X-Received: by 2002:a05:620a:470d:b0:8b2:e666:713 with SMTP id af79cd13be357-8b33d476f8cmr539235785a.42.1763769115207;
+        Fri, 21 Nov 2025 15:51:55 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-120-4.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.120.4])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b3295db543sm457101985a.38.2025.11.21.15.51.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Nov 2025 15:12:16 -0800 (PST)
-Date: Fri, 21 Nov 2025 18:12:16 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- davem@davemloft.net
-Cc: netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- willemb@google.com, 
- petrm@nvidia.com, 
- dw@davidwei.uk, 
- shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Jakub Kicinski <kuba@kernel.org>
-Message-ID: <willemdebruijn.kernel.224bdf2fac125@gmail.com>
-In-Reply-To: <20251121040259.3647749-5-kuba@kernel.org>
-References: <20251121040259.3647749-1-kuba@kernel.org>
- <20251121040259.3647749-5-kuba@kernel.org>
-Subject: Re: [PATCH net-next 4/5] selftests: hw-net: toeplitz: read
- indirection table from the device
+        Fri, 21 Nov 2025 15:51:54 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1vMauv-00000001bzu-1Ue0;
+	Fri, 21 Nov 2025 19:51:53 -0400
+Date: Fri, 21 Nov 2025 19:51:53 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Nirbhay Sharma <nirbhay.lkd@gmail.com>
+Cc: Kevin Tian <kevin.tian@intel.com>, Shuah Khan <shuah@kernel.org>,
+	iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, david.hunter.linux@gmail.com,
+	linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] selftests/iommu: Fix array-bounds warning in get_hw_info
+Message-ID: <20251121235153.GK233636@ziepe.ca>
+References: <20251113200854.429515-2-nirbhay.lkd@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251113200854.429515-2-nirbhay.lkd@gmail.com>
 
-Jakub Kicinski wrote:
-> Replace the simple modulo math with the real indirection table
-> read from the device. This makes the tests pass for mlx5 and
-> bnxt NICs.
+On Fri, Nov 14, 2025 at 01:38:55AM +0530, Nirbhay Sharma wrote:
+> GCC warns about potential out-of-bounds access when the test provides
+> a buffer smaller than struct iommu_test_hw_info:
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> iommufd_utils.h:817:37: warning: array subscript 'struct
+> iommu_test_hw_info[0]' is partly outside array bounds of 'struct
+> iommu_test_hw_info_buffer_smaller[1]'
+> [-Warray-bounds=]
+>   817 |                         assert(!info->flags);
+>       |                                 ~~~~^~~~~~~
+> 
+> The warning occurs because 'info' is cast to a pointer to the full
+> 8-byte struct at the top of the function, but the buffer_smaller test
+> case passes only a 4-byte buffer. While the code correctly checks
+> data_len before accessing each field, GCC's flow analysis with inlining
+> doesn't recognize that the size check protects the access.
+> 
+> Fix this by accessing fields through appropriately-typed pointers that
+> match the actual field sizes (__u32), declared only after the bounds
+> check. This makes the relationship between the size check and memory
+> access explicit to the compiler.
+> 
+> Signed-off-by: Nirbhay Sharma <nirbhay.lkd@gmail.com>
 > ---
->  .../selftests/drivers/net/hw/toeplitz.c       | 24 ++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
+>  tools/testing/selftests/iommu/iommufd_utils.h | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/drivers/net/hw/toeplitz.c b/tools/testing/selftests/drivers/net/hw/toeplitz.c
-> index 7420a4e201cc..a4d04438c313 100644
-> --- a/tools/testing/selftests/drivers/net/hw/toeplitz.c
-> +++ b/tools/testing/selftests/drivers/net/hw/toeplitz.c
-> @@ -68,6 +68,7 @@
->  #define FOUR_TUPLE_MAX_LEN	((sizeof(struct in6_addr) * 2) + (sizeof(uint16_t) * 2))
->  
->  #define RSS_MAX_CPUS (1 << 16)	/* real constraint is PACKET_FANOUT_MAX */
-> +#define RSS_MAX_INDIR	(1 << 16)
-
-Only if respinning, maybe also fix alignment of RSS_MAX_CPUS
-  
->  #define RPS_MAX_CPUS 16UL	/* must be a power of 2 */
->  
-> @@ -105,6 +106,8 @@ struct ring_state {
->  static unsigned int rx_irq_cpus[RSS_MAX_CPUS];	/* map from rxq to cpu */
->  static int rps_silo_to_cpu[RPS_MAX_CPUS];
->  static unsigned char toeplitz_key[TOEPLITZ_KEY_MAX_LEN];
-> +static unsigned int rss_indir_tbl[RSS_MAX_INDIR];
-> +static unsigned int rss_indir_tbl_size;
->  static struct ring_state rings[RSS_MAX_CPUS];
->  
->  static inline uint32_t toeplitz(const unsigned char *four_tuple,
-> @@ -133,7 +136,12 @@ static inline uint32_t toeplitz(const unsigned char *four_tuple,
->  /* Compare computed cpu with arrival cpu from packet_fanout_cpu */
->  static void verify_rss(uint32_t rx_hash, int cpu)
+> diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
+> index 9f472c20c190..37c1b994008c 100644
+> --- a/tools/testing/selftests/iommu/iommufd_utils.h
+> +++ b/tools/testing/selftests/iommu/iommufd_utils.h
+> @@ -770,7 +770,6 @@ static int _test_cmd_get_hw_info(int fd, __u32 device_id, __u32 data_type,
+>  				 void *data, size_t data_len,
+>  				 uint32_t *capabilities, uint8_t *max_pasid)
 >  {
-> -	int queue = rx_hash % cfg_num_queues;
-> +	int queue;
-> +
-> +	if (rss_indir_tbl_size)
-> +		queue = rss_indir_tbl[rx_hash % rss_indir_tbl_size];
-> +	else
-> +		queue = rx_hash % cfg_num_queues;
+> -	struct iommu_test_hw_info *info = (struct iommu_test_hw_info *)data;
+>  	struct iommu_hw_info cmd = {
+>  		.size = sizeof(cmd),
+>  		.dev_id = device_id,
+> @@ -810,11 +809,19 @@ static int _test_cmd_get_hw_info(int fd, __u32 device_id, __u32 data_type,
+>  		}
+>  	}
 >  
->  	log_verbose(" rxq %d (cpu %d)", queue, rx_irq_cpus[queue]);
->  	if (rx_irq_cpus[queue] != cpu) {
-> @@ -517,6 +525,20 @@ static void read_rss_dev_info_ynl(void)
->  
->  	memcpy(toeplitz_key, rsp->hkey, rsp->_len.hkey);
->  
-> +	if (rsp->_count.indir > RSS_MAX_INDIR)
-> +		error(1, 0, "RSS indirection table too large (%u > %u)",
-> +		      rsp->_count.indir, RSS_MAX_INDIR);
-> +
-> +	/* If indir table not available we'll fallback to simple modulo math */
-> +	if (rsp->_count.indir) {
-> +		memcpy(rss_indir_tbl, rsp->indir,
-> +		       rsp->_count.indir * sizeof(rss_indir_tbl[0]));
+> -	if (info) {
+> -		if (data_len >= offsetofend(struct iommu_test_hw_info, test_reg))
+> -			assert(info->test_reg == IOMMU_HW_INFO_SELFTEST_REGVAL);
+> -		if (data_len >= offsetofend(struct iommu_test_hw_info, flags))
+> -			assert(!info->flags);
+> +	if (data) {
+> +		if (data_len >= offsetofend(struct iommu_test_hw_info,
+> +					    test_reg)) {
+> +			__u32 *test_reg = (__u32 *)data + 1;
 
-It can be assumed that rsp->indir elements are sizeof(rss_indir_tbl[0])?
+This seems too obfuscated, can't we keep the struct somehow and still
+remove the warning?
 
-Is there a way to have the test verify element size. I'm not that
-familiar with YNL.
+I also feel like you have a compiler bug here, if gcc has inlined
+enough to know the size of data then it surely should know the
+constant value of data_len?
 
-> +		rss_indir_tbl_size = rsp->_count.indir;
-> +
-> +		log_verbose("RSS indirection table size: %u\n",
-> +			    rss_indir_tbl_size);
-> +	}
-> +
->  	ethtool_rss_get_rsp_free(rsp);
->  	ethtool_rss_get_req_free(req);
->  	ynl_sock_destroy(ys);
-> -- 
-> 2.51.1
-> 
+Failing that, how about just change the caller, maybe like this:
 
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -760,6 +760,7 @@ TEST_F(iommufd_ioas, get_hw_info)
+        } buffer_larger;
+        struct iommu_test_hw_info_buffer_smaller {
+                __u32 flags;
++               struct iommu_test_hw_info dummy;
+        } buffer_smaller;
+ 
+        if (self->device_id) {
+@@ -791,9 +792,11 @@ TEST_F(iommufd_ioas, get_hw_info)
+                 * Provide a user_buffer with size smaller than the exact size to check if
+                 * the fields within the size range still gets updated.
+                 */
+-               test_cmd_get_hw_info(self->device_id,
+-                                    IOMMU_HW_INFO_TYPE_DEFAULT,
+-                                    &buffer_smaller, sizeof(buffer_smaller));
++               test_cmd_get_hw_info(
++                       self->device_id, IOMMU_HW_INFO_TYPE_DEFAULT,
++                       &buffer_smaller,
++                       offsetofend(struct iommu_test_hw_info_buffer_smaller,
++                                   flags));
+                test_cmd_get_hw_info_pasid(self->device_id, &max_pasid);
+                ASSERT_EQ(0, max_pasid);
+                if (variant->pasid_capable) {
 
+Jason
 
