@@ -1,390 +1,252 @@
-Return-Path: <linux-kselftest+bounces-46172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D924C7719A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 04:01:50 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 139F5C77167
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 04:00:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sto.lore.kernel.org (Postfix) with ESMTPS id E0C4D28C1D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 03:01:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A17E64E259A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 03:00:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04C42E0407;
-	Fri, 21 Nov 2025 03:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D2F32D94B6;
+	Fri, 21 Nov 2025 03:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=HOTMAIL.DE header.i=@HOTMAIL.DE header.b="obgFIDab"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (unknown [147.136.157.0])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazolkn19013080.outbound.protection.outlook.com [52.103.33.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63D32BCF7F;
-	Fri, 21 Nov 2025 03:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.0
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763694051; cv=none; b=qeQDON8Lkfg4nRR9jT99eAuPwOAF17lMgJKFcvoptwTgZynDkfO6c8fA1RsupygRWLKcVk2a6d1TRLoZFn0F/W4xdhuoWn92na3VJYN8+Y9trupbHVM3bGJjPWcM2e+AqKoQQbI1hYiDEploi9BAYubs3GlJfj4IFM0sHt1HpxI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763694051; c=relaxed/simple;
-	bh=lMRjjg/wsjH5CwBUd3tT2F+wv+rZN70ipvgFgvqLm3o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PKg22Ly+sV8R6E8K8yk79bY5m/AGlvlrZZoUgVmueYThg3Wwg6rVuCTYg/9DVd59tGSIrFKxhNXJPfiGdwIJT56+S8LgkZC2QpXPSNviaiBz98mlwVLHlwqqVWQD5RrPqGmNxPpgDPyPqXbOR6dqVhBriNK5sHWrimQmeXxtoZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.0
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
-Received: by localhost.localdomain (Postfix, from userid 1007)
-	id 307938B2A14; Fri, 21 Nov 2025 11:00:42 +0800 (+08)
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Michal Luczaj <mhal@rbox.co>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Cong Wang <cong.wang@bytedance.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 3/3] bpf, selftest: Add tests for FIONREAD and copied_seq
-Date: Fri, 21 Nov 2025 10:59:44 +0800
-Message-ID: <20251121030013.60133-4-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251121030013.60133-1-jiayuan.chen@linux.dev>
-References: <20251121030013.60133-1-jiayuan.chen@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D5E2DCF58;
+	Fri, 21 Nov 2025 03:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.33.80
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763694005; cv=fail; b=Lw8DIt+3FgsoyPFWjxicw0cm0/bGlEyD14DS7Ck69s0LfQp7D3RNqCJn6TTC9m3pAhqh6586a8ZuefZUVv12tc+LqUTIYSYjVttDtnv3WH2tS9N41++JoRlIioU6qHJIKgYeHO65ZdCOS9Nz3jJ09rxIwmGFMagQlfIk90QZctU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763694005; c=relaxed/simple;
+	bh=oZ3KTloAyHRUcGnVF0wQncx4S7Hds5MwKtpnFBl/PY8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=sJP2nB4pdCYSxsJWi70/zGeY7ITWs58XCIwyIxwmGg9/8vxRkLl5BUQlyoE6MfJrC6rGwQoCH5ih3EMj0zBgOBNVpNkoAVUwOxmpKiQFJ5Mqbos/Ch8eA8NngEd2Evk8rPRySe4bjobc3A0CADzXzyFEDv5TAtgMtlqgHNZ3tCw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.de; spf=pass smtp.mailfrom=hotmail.de; dkim=pass (2048-bit key) header.d=HOTMAIL.DE header.i=@HOTMAIL.DE header.b=obgFIDab; arc=fail smtp.client-ip=52.103.33.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.de
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RA35waWuj2uucsFjjUS/repkX/5ClrcwMzOBaH7v+iega0AzLrextLldoqATcssmnpnjaxYk1oG8/6qU6MAI8ads6qp+AVqdF4FQA3/GIP9rycgKZcaFMbkfzf9NpszWC473efN1MW/ewCEJq4a5KJZ4JnSkvEabb9HBkad2TKykYWHIiPY8R1NkW2h/IFU9SRZ0Sk5AQoXtMxoxg5r3KixlKsrzm3rHSQ4XlaZhvUMatjxJcMStpTTDZWkmhvO3wyRtdMuVJbu2ehTtSkUblPXXkgyKAsWbaoRy4TaHlmI+9OnQjlfqGX306IvS4XX/TSG1B3Ju0/xwL1nMG/8GJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z20JZRB6FxIGQcGkjDNyffGckoJ+9Ld4B/+XRHhAt+g=;
+ b=pUFcnEkImh3lRgLu7+d38rHNx7P6SP4dI61UJ7C9OVyFa8ohNg23I+oH09+Lez88QS4tnSden/GJAXtWTiusgjlvpAtdLW1yJ+JxHeydegR3T5LtJ9YJcy3eMItVHs/i1CeewgZejdInDF1oHqhS49W2IRH0WewdwrS0eL0+aVHvi5ig12fOhMDuyHVexdPcakTyga8Pee0lJQRmqbhvOeHUrTLtL/J1mCitGPpbgkNwLfwLOlc1KUNiUCQmbiWbWOYitcdLK7TwJTAbXJM/ySmRnPeoEYYmtR0SUKiwwUQ230UfnYMnW71e0VaQ9nwslvNIP8J6YXCez1LhC9w0Jg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=HOTMAIL.DE;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z20JZRB6FxIGQcGkjDNyffGckoJ+9Ld4B/+XRHhAt+g=;
+ b=obgFIDabT4fVBvwJKvZNO19LN6u1GMR5xNHt39bymWvWmBF1T9NCAarYxlmIaLuUWLevb1vPCxmke9ykEuM3N8ydk0mkgKahDdOMUEj7NeLQCH8+v+pw5uJQbkvI0yzS979e9deiY3Lc0dSdFrfLOmwTMZhCJnZ2ttSRz/8JL6zlnW7/Faa7yuWxeBmL7vcW5b5H8PNVJmuasNabXw9yck55yVc9WSEtgNsgYZcum/5xzV7qbWBWECEBDObijX6UPH63S7q2L0/635klXT7Ft26NK2EZcndm3G0Olpy819MCvRy4fzQ6+XJsMv6olPuE1L00WcP0HPLuwe9JX6362g==
+Received: from GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:158:401::8d4) by FR8P195MB3355.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1b4::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.11; Fri, 21 Nov
+ 2025 02:59:59 +0000
+Received: from GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+ ([fe80::dde:411d:b5f2:49]) by GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+ ([fe80::dde:411d:b5f2:49%8]) with mapi id 15.20.9320.018; Fri, 21 Nov 2025
+ 02:59:59 +0000
+Message-ID:
+ <GV2PPF74270EBEEAD4CACA124C05BE1CE45E4D5A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+Date: Fri, 21 Nov 2025 03:59:56 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH] exec: Move cred computation under exec_update_lock
+To: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,
+ Alexey Dobriyan <adobriyan@gmail.com>, Oleg Nesterov <oleg@redhat.com>,
+ Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
+ Will Drewry <wad@chromium.org>, Christian Brauner <brauner@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Michal Hocko <mhocko@suse.com>,
+ Serge Hallyn <serge@hallyn.com>, James Morris
+ <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>,
+ Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>,
+ Helge Deller <deller@gmx.de>, Adrian Reber <areber@redhat.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
+ Alexei Starovoitov <ast@kernel.org>,
+ "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-security-module@vger.kernel.org, tiozhang <tiozhang@didiglobal.com>,
+ Luis Chamberlain <mcgrof@kernel.org>,
+ "Paulo Alcantara (SUSE)" <pc@manguebit.com>,
+ Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Frederic Weisbecker <frederic@kernel.org>, YueHaibing
+ <yuehaibing@huawei.com>, Paul Moore <paul@paul-moore.com>,
+ Aleksa Sarai <cyphar@cyphar.com>, Stefan Roesch <shr@devkernel.io>,
+ Chao Yu <chao@kernel.org>, xu xin <xu.xin16@zte.com.cn>,
+ Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>,
+ David Hildenbrand <david@redhat.com>, Dave Chinner <dchinner@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Elena Reshetova <elena.reshetova@intel.com>,
+ David Windsor <dwindsor@gmail.com>, Mateusz Guzik <mjguzik@gmail.com>,
+ Ard Biesheuvel <ardb@kernel.org>,
+ "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ Hans Liljestrand <ishkamiel@gmail.com>,
+ Penglei Jiang <superman.xpt@gmail.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Adrian Ratiu <adrian.ratiu@collabora.com>, Ingo Molnar <mingo@kernel.org>,
+ "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+ Cyrill Gorcunov <gorcunov@gmail.com>, Eric Dumazet <edumazet@google.com>
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+ <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
+ <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
+ <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
+ <87a50gxo0i.fsf@email.froward.int.ebiederm.org>
+Content-Language: en-US
+From: Bernd Edlinger <bernd.edlinger@hotmail.de>
+In-Reply-To: <87a50gxo0i.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0394.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:cf::12) To GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:158:401::8d4)
+X-Microsoft-Original-Message-ID:
+ <826efc8d-bce2-4fb4-bb01-09ab2a802223@hotmail.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV2PPF74270EBEE:EE_|FR8P195MB3355:EE_
+X-MS-Office365-Filtering-Correlation-Id: 844212ca-42b1-46ee-3b11-08de28aa0eba
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|51005399006|6090799003|5072599009|15080799012|461199028|23021999003|12121999013|41001999006|8060799015|19110799012|21061999006|440099028|3412199025|40105399003;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?UjBMd2lsOWJLV1RWa3NlMXJMQjhrMU90VUpRK0tSUFpUZHQwekVzdEpaWkZW?=
+ =?utf-8?B?ZU9sU09hZGVyeVFNUk53eXFnWEd6cGZ5L3A1TkZyWDZldHpvNnd5clNoVmdp?=
+ =?utf-8?B?TmxMMllvaU1raVNjekJmcW9vL3U1RXVDQWxJNkhUOUNZRG54NjEyU3ZSWm80?=
+ =?utf-8?B?M25xM3c3MDdtdWdXUHE4c1NFaXhycEVMZERCVXZhM0RaOGlHV3h3cGYyZW1p?=
+ =?utf-8?B?S3psbWZ4Qk9EZHFtUkFWZFNOQ0tnNFkraGYwczZ1WlZ0Und6RmgzWjVFWGg3?=
+ =?utf-8?B?V2VJdE5qZTZzRUxqbFh4RzNmd0JvRUliMU9uRkk3RnA1d0d0YXk5R2xlM093?=
+ =?utf-8?B?RnhOTWxvODcreXhLN3diMU1FRHJ2VzJJOXBVQmVmaTJoaDgrOVNkUzVHOVlV?=
+ =?utf-8?B?MEJvakl6UElVQlRDS1JBZStvbVdrbDMzN0tmMjFtYmhoNFJycFpyU2ZFdVNr?=
+ =?utf-8?B?OFdpR3BtOFIzbHZrdi83TGJLdGtCbWszODE1RXlvT3lsbzNFQ0ZTSkdQencw?=
+ =?utf-8?B?WldCY1p3Q3NydCtQem9PeUZxOXJFL1FZc3NsOCtBQUJiU3lqdXAreFk5eHJX?=
+ =?utf-8?B?ZFlkVVhHV0wzdFBrYnpwNUQ2c2E2QVVzazdFTzQ3NlJtZTNnVGxEelNNbEl2?=
+ =?utf-8?B?K2p1ckF3bk5XWXozSnljRUdBdjdRUWg5Skh2blZGK3pYVTVidmk4UGV1ekcx?=
+ =?utf-8?B?VFJZNTcvNHdGckNBMS84MnptbHA3d3dielp5UnNRUlpKcStsSDIxOXNWQXQ0?=
+ =?utf-8?B?d3V3RjN1KzcwUG5RQjNaZXdPOWFRZlJGTDBlYk4wMzR5a29kMG1jVGQzUUwx?=
+ =?utf-8?B?djEzOFNrenI2bWVpQzVaYlRPREd0WGZxbWhjMVFzT0RKQVFaQ3paUjNDZVp0?=
+ =?utf-8?B?cFhJU0VLLzc5ZmNtajR3RmNFSExRK0VNSFNIYjdNMnNDbTlFZ1h3TTZveFpu?=
+ =?utf-8?B?MDZuVDdCc1YvcUVBd0IwWFNZeGtXaGhKZkFqbHdOM1pESUZWTnNLRU5Lc1Rv?=
+ =?utf-8?B?U09kYmRraVdkWHdpL3N3bml0WVRrbEh1TXhVVVdlN0ZLQWhvYzQ2TWUybllL?=
+ =?utf-8?B?dFdXTVJWd2xiK2tjOWdxZE1LNC80YTQ1N3Y4aDRkSFhnL0NqS0xiZXA0N2NI?=
+ =?utf-8?B?WDZ2NmJSTm9wUVcraFdEMWNvbHdiYU5TU0FteUpmditnOGUvcHg5TWdSemJE?=
+ =?utf-8?B?Wk5Cb3JHbE45RjFrTThnYVJsd3NWaEZXNGY3UHQzbVRlZmdKY2J6ZnFjMTk4?=
+ =?utf-8?B?M21BN1AzaXVEWnhxUTd6bXZnNi9hQ2JsbW84S3NmRzdpUVM3Kyt4YWxaYm1Z?=
+ =?utf-8?B?anJReGNhSVlZS2dzNFNyYXpVYjRIK2dDeDE0RGFmNzBuTWZka1duM0cwYnAz?=
+ =?utf-8?B?N1RnVkJpNEJHU2llU2w0M3FFdlRHOGMvQU1ER3lOWHdjQk4zTUwycCtCTTRz?=
+ =?utf-8?B?YkJNT3p2NTU4MGRTRjg5d3RkTm10ekhqWXJuaE05djAzcE9zZlJMQnpSM0xi?=
+ =?utf-8?B?MFh1cG1jVHRvMlppUDloOEZTZzVUZTNGTERUNGxzeXY5VFJsZUVsZHZRVlJw?=
+ =?utf-8?B?NUhkTnhNdklWRUNic2hOZTJkbTJrcmtBaTdDNFZ6SkFjUHF2VGMzR3JnRTJY?=
+ =?utf-8?B?T1pqNnFGcm1HTzNXQ29QQ3BHZE94cWVDWC8rSTBxSThQNzF1NE9NNUtrcjdD?=
+ =?utf-8?B?a0VIQUd2R0xkV2ZFeWVjaGFlUWlDZmdaM09Hczl6YmUvTjJIdVFkaHErc1o1?=
+ =?utf-8?Q?vAQPSH2RjqD+GABDYiKAdTH1pf3PDtWNMb4t9RY?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?K3hqUVZFWnBPSkZQa0p2MGNpalZFLytIcnFBK0pyajE4Y3M2QUUwZ1lHQTh6?=
+ =?utf-8?B?VkRmWXF0dEg1dUJHNUVKMDc2a1k0SGx2dWo3Qzl6dUVTMjRTeWlMRklWQ2ht?=
+ =?utf-8?B?K3I1b0dseG5iQkZuVGl0ZUVhM0x3dFRqV0lKbW4rbFI3OTBkTzJvWTV5K1Z0?=
+ =?utf-8?B?U1lOWTErTFRpRjN0RU1mKzVnNW4xY05YSFVRT3JvTnB6S3FHL2Q5bm5BSkt3?=
+ =?utf-8?B?OWdxeVN3ZDU4QXFzMFdKSTdkTFRwaFpJNm5JaE5YQ1E2NmRaNHNRSDN4bnBl?=
+ =?utf-8?B?OFhUSCt4ZElobHJRU3djN3RBN2p3ek9DYU1ZblhVVEhISklHVGVVcWVRTXlG?=
+ =?utf-8?B?MDFkaklxMWF6R3A1dnl4Ymw4RzA4M0lhSHBYR201bTdRS21OL1o1NEN4SEo5?=
+ =?utf-8?B?aEhodkVnMDVTcVRKd2ZCemdtWm5xbjVGb2FzbGNqNERtUnBqTnlrdUJUQWdj?=
+ =?utf-8?B?VEhxeWx2ZTAxNTlKVW54elBUUGtJRVlXdE1xdm9xMUpYSWxXRFpQYU1jeU0r?=
+ =?utf-8?B?YnN6R0U5aHVvaHlGdzJ0V1JVczFNalhBYXhsMnFpcTBxdSt6WmNUME5pVXF1?=
+ =?utf-8?B?eDMwUk5kU0s5NUdwZ3AxUkdOamRZc05KS0txUFc0d2FqRUcxV2RRYjU0QUFB?=
+ =?utf-8?B?ajVPUHpjQURQYjlpcFlMbUdPRjhiRVE1SXg1Qm5sSEVjeU92aHhidWlORUxp?=
+ =?utf-8?B?djZMTTFUTTJWd2VEVHY1NGJtSFVpMlJZT1ZpNThDdXVyWWRXM25GM1NNQ1A0?=
+ =?utf-8?B?bkRDVGdQMlFWbjVaUVV3c2ExckhJL1h5WmtnNHhZT1JDa1djdkRwaHBGY0ZH?=
+ =?utf-8?B?NTBaR215UVg1Vm1UUGtnNDA2OVpId3lUUXV1amVld2FKUm8vN3pydmU5NkZr?=
+ =?utf-8?B?SFFEenlTeDQycTZ4RXdQMExkcEZOejA1dE9BMkRjamtSRTkrMExjQTlwN1RV?=
+ =?utf-8?B?UHQ0dGkxTWo4OGFSaW1mQjhLUUMvZHNyNUFmRzhEdm5NS0R0OVRLSjUrOUo1?=
+ =?utf-8?B?U21WTmJDeUZEeXJBOUl4Q2ZEZFpzT1M4Q1BQUmY0R3dyWEwzcXdKc002bm1M?=
+ =?utf-8?B?VkhHOVlVOG8vdTdhaGRpU0o3ak8vdytLM2N3Qy9raDhnTkhqTlF2a0lWUkVt?=
+ =?utf-8?B?Z1hiUjYrWGNjUGFBT1JNclJFMVM2aXJWKzNXc2UycUV4TjdjZmJXYzNYTmNG?=
+ =?utf-8?B?enBmZ1BCVmJJT2ozdWlKWVVLYjZSeVFaNXU3WUhra3hxNGhIRzFrOWJHandY?=
+ =?utf-8?B?ckFmaHplNHpnVnh6UHJQK21XZ1ArTHFwaGRvWVZpQ3RZamIwRTZmRWZYcy9I?=
+ =?utf-8?B?ZjJIQW1iRTd3RUtZNWdac1MvVUZNcTFJMzFCM3ZDMStTYVZsTllwbCswSjRx?=
+ =?utf-8?B?ajZsejloZlRTMlRrYjlkMTlWSXVEM3JFVVlXMDB5NmNGSk4wSmZ3Mkw4TUlZ?=
+ =?utf-8?B?OEdOcVV5aURPOS9zSk5xZ204K001SFoyU0Y1M3pyaENlOW85Um1PQWNsbFZ1?=
+ =?utf-8?B?MHNieERvYjRaUHdzWGpKYjNBdVo4dUdZOFJNNXRBTzRXalNVS1BYVFZqYXp1?=
+ =?utf-8?B?ZU1xNnFFZHNjSyt1QzJPNzRrd21hQ2tWQVJFMW9mRXljbXo0WkVlMWxvMTEv?=
+ =?utf-8?B?TWhkc2Z2RVRncXJVbWszL0tEb1h0WkJ2UjNWTDM0OHRtOVpia2xKc2l5Z1Rr?=
+ =?utf-8?B?VTBYeVg3RWRSdit2bnhqODY4c2dYS1pNL3UxM0xsQVJPaXRDTHV2UFVoNWty?=
+ =?utf-8?Q?bS52P2dFX7V02IsxpPv6S5L/FuJ4QMnWe2WpBmp?=
+X-OriginatorOrg: sct-15-20-8534-20-msonline-outlook-87dd8.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 844212ca-42b1-46ee-3b11-08de28aa0eba
+X-MS-Exchange-CrossTenant-AuthSource: GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2025 02:59:59.4348
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR8P195MB3355
 
-This commit adds two new test functions: one to reproduce the bug reported
-by syzkaller [1], and another to cover the calculation of copied_seq.
+Hi Eric,
 
-The tests primarily involve installing  and uninstalling sockmap on
-sockets, then reading data to verify proper functionality.
+thanks for you valuable input on the topic.
 
-Additionally, extend the do_test_sockmap_skb_verdict_fionread() function
-to support UDP FIONREAD testing.
+On 11/21/25 00:50, Eric W. Biederman wrote:
+> "Eric W. Biederman" <ebiederm@xmission.com> writes:
+> 
+>> Instead of computing the new cred before we pass the point of no
+>> return compute the new cred just before we use it.
+>>
+>> This allows the removal of fs_struct->in_exec and cred_guard_mutex.
+>>
+>> I am not certain why we wanted to compute the cred for the new
+>> executable so early.  Perhaps I missed something but I did not see any
+>> common errors being signaled.   So I don't think we loose anything by
+>> computing the new cred later.
+> 
+> I should add that the permission checks happen in open_exec,
+> everything that follows credential wise is just about representing in
+> struct cred the credentials the new executable will have.
+> 
+> So I am really at a loss why we have had this complicated way of
+> computing of computed the credentials all of these years full of
+> time of check to time of use problems.
+> 
 
-[1] https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
+Well, I think I see a problem with your patch:
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 203 +++++++++++++++++-
- .../bpf/progs/test_sockmap_pass_prog.c        |   8 +
- 2 files changed, 205 insertions(+), 6 deletions(-)
+When the security engine gets the LSM_UNSAFE_PTRACE flag, it might
+e.g. return -EPERM in bprm_creds_for_exec in the apparmor, selinux
+or the smack security engines at least.  Previously that callback
+was called before the point of no return, and the return code should
+be returned as a return code the the caller of execve.  But if we move
+that check after the point of no return, the caller will get killed
+due to the failed security check.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 1e3e4392dcca..8828f2b2f761 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -1,7 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2020 Cloudflare
- #include <error.h>
--#include <netinet/tcp.h>
-+#include <linux/tcp.h>
-+#include <linux/socket.h>
- #include <sys/epoll.h>
- 
- #include "test_progs.h"
-@@ -22,6 +23,16 @@
- #define TCP_REPAIR_ON		1
- #define TCP_REPAIR_OFF_NO_WP	-1	/* Turn off without window probes */
- 
-+/**
-+ * SOL_TCP is defined in <netinet/tcp.h> while field
-+ * copybuf_address of tcp_zerocopy_receive is not in it
-+ * Although glibc has merged my patch to sync headers,
-+ * the fix will take time to propagate, hence this workaround.
-+ */
-+#ifndef SOL_TCP
-+#define SOL_TCP 6
-+#endif
-+
- static int connected_socket_v4(void)
- {
- 	struct sockaddr_in addr = {
-@@ -536,13 +547,14 @@ static void test_sockmap_skb_verdict_shutdown(void)
- }
- 
- 
--static void test_sockmap_skb_verdict_fionread(bool pass_prog)
-+static void do_test_sockmap_skb_verdict_fionread(int sotype, bool pass_prog)
- {
- 	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
- 	int expected, zero = 0, sent, recvd, avail;
- 	struct test_sockmap_pass_prog *pass = NULL;
- 	struct test_sockmap_drop_prog *drop = NULL;
- 	char buf[256] = "0123456789";
-+	int split_len = sizeof(buf) / 2;
- 
- 	if (pass_prog) {
- 		pass = test_sockmap_pass_prog__open_and_load();
-@@ -550,7 +562,10 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 			return;
- 		verdict = bpf_program__fd(pass->progs.prog_skb_verdict);
- 		map = bpf_map__fd(pass->maps.sock_map_rx);
--		expected = sizeof(buf);
-+		if (sotype == SOCK_DGRAM)
-+			expected = split_len; /* FIONREAD for UDP is different from TCP */
-+		else
-+			expected = sizeof(buf);
- 	} else {
- 		drop = test_sockmap_drop_prog__open_and_load();
- 		if (!ASSERT_OK_PTR(drop, "open_and_load"))
-@@ -566,7 +581,7 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_prog_attach"))
- 		goto out;
- 
--	err = create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
-+	err = create_socket_pairs(AF_INET, sotype, &c0, &c1, &p0, &p1);
- 	if (!ASSERT_OK(err, "create_socket_pairs()"))
- 		goto out;
- 
-@@ -574,8 +589,9 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_map_update_elem(c1)"))
- 		goto out_close;
- 
--	sent = xsend(p1, &buf, sizeof(buf), 0);
--	ASSERT_EQ(sent, sizeof(buf), "xsend(p0)");
-+	sent = xsend(p1, &buf, split_len, 0);
-+	sent += xsend(p1, &buf, sizeof(buf) - split_len, 0);
-+	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
- 	err = ioctl(c1, FIONREAD, &avail);
- 	ASSERT_OK(err, "ioctl(FIONREAD) error");
- 	ASSERT_EQ(avail, expected, "ioctl(FIONREAD)");
-@@ -597,6 +613,12 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 		test_sockmap_drop_prog__destroy(drop);
- }
- 
-+static void test_sockmap_skb_verdict_fionread(bool pass_prog)
-+{
-+	do_test_sockmap_skb_verdict_fionread(SOCK_STREAM, pass_prog);
-+	do_test_sockmap_skb_verdict_fionread(SOCK_DGRAM, pass_prog);
-+}
-+
- static void test_sockmap_skb_verdict_change_tail(void)
- {
- 	struct test_sockmap_change_tail *skel;
-@@ -1042,6 +1064,169 @@ static void test_sockmap_vsock_unconnected(void)
- 	xclose(map);
- }
- 
-+/* it used to reproduce WARNING */
-+static void test_sockmap_zc(void)
-+{
-+	int map, err, sent, recvd, zero = 0, one = 1, on = 1;
-+	char buf[10] = "0123456789", rcv[11], addr[100];
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	struct tcp_zerocopy_receive zc;
-+	socklen_t zc_len = sizeof(zc);
-+	struct bpf_program *prog;
-+
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto end;
-+
-+	prog = skel->progs.prog_skb_verdict_ingress;
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto end;
-+
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend"))
-+		goto end;
-+
-+	/* trigger tcp_bpf_recvmsg_parser and inc copied_seq of p1 */
-+	recvd = recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1)"))
-+		goto end;
-+
-+	/* uninstall sockmap of p1 */
-+	bpf_map_delete_elem(map, &one);
-+
-+	/* trigger tcp stack and the rcv_nxt of p1 is less than copied_seq */
-+	sent = xsend(c1, buf, sizeof(buf) - 1, 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf) - 1, "xsend"))
-+		goto end;
-+
-+	err = setsockopt(p1, SOL_SOCKET, SO_ZEROCOPY, &on, sizeof(on));
-+	if (!ASSERT_OK(err, "setsockopt"))
-+		goto end;
-+
-+	memset(&zc, 0, sizeof(zc));
-+	zc.copybuf_address = (__u64)((unsigned long)addr);
-+	zc.copybuf_len = sizeof(addr);
-+
-+	err = getsockopt(p1, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE, &zc, &zc_len);
-+	if (!ASSERT_OK(err, "getsockopt"))
-+		goto end;
-+
-+end:
-+	if (c0 >= 0)
-+		close(c0);
-+	if (p0 >= 0)
-+		close(p0);
-+	if (c1 >= 0)
-+		close(c1);
-+	if (p1 >= 0)
-+		close(p1);
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
-+/* it used to check whether copied_seq of sk is correct */
-+static void test_sockmap_copied_seq(bool strp)
-+{
-+	int i, map, err, sent, recvd, zero = 0, one = 1;
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	char buf[10] = "0123456789", rcv[11];
-+	struct bpf_program *prog;
-+
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto end;
-+
-+	prog = skel->progs.prog_skb_verdict_ingress;
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
-+		goto end;
-+
-+	if (strp) {
-+		prog = skel->progs.prog_skb_parser;
-+		err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_PARSER, 0);
-+		if (!ASSERT_OK(err, "bpf_prog_attach parser"))
-+			goto end;
-+	}
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p1)"))
-+		goto end;
-+
-+	/* just trigger sockamp: data sent by c0 will be received by p1 */
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), bpf"))
-+		goto end;
-+
-+	recvd = recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), bpf"))
-+		goto end;
-+
-+	/* uninstall sockmap of p1 and p0 */
-+	err = bpf_map_delete_elem(map, &one);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem(1)"))
-+		goto end;
-+
-+	err = bpf_map_delete_elem(map, &zero);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem(0)"))
-+		goto end;
-+
-+	/* now all sockets become plain socket, they should still work */
-+	for (i = 0; i < 5; i++) {
-+		/* test copied_seq of p1 by running tcp native stack */
-+		sent = xsend(c1, buf, sizeof(buf), 0);
-+		if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1), native"))
-+			goto end;
-+
-+		recvd = recv(p1, rcv, sizeof(rcv), MSG_DONTWAIT);
-+		if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), native"))
-+			goto end;
-+
-+		/* p0 previously redirected skb to p1, we also check copied_seq of p0 */
-+		sent = xsend(c0, buf, sizeof(buf), 0);
-+		if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), native"))
-+			goto end;
-+
-+		recvd = recv(p0, rcv, sizeof(rcv), MSG_DONTWAIT);
-+		if (!ASSERT_EQ(recvd, sent, "recv_timeout(p0), native"))
-+			goto end;
-+	}
-+
-+end:
-+	if (c0 >= 0)
-+		close(c0);
-+	if (p0 >= 0)
-+		close(p0);
-+	if (c1 >= 0)
-+		close(c1);
-+	if (p1 >= 0)
-+		close(p1);
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -1108,4 +1293,10 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_vsock_poll();
- 	if (test__start_subtest("sockmap vsock unconnected"))
- 		test_sockmap_vsock_unconnected();
-+	if (test__start_subtest("sockmap with zc"))
-+		test_sockmap_zc();
-+	if (test__start_subtest("sockmap recover"))
-+		test_sockmap_copied_seq(false);
-+	if (test__start_subtest("sockmap recover with strp"))
-+		test_sockmap_copied_seq(true);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-index 69aacc96db36..085d7e61e78d 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-@@ -44,4 +44,12 @@ int prog_skb_parser(struct __sk_buff *skb)
- 	return SK_PASS;
- }
- 
-+SEC("sk_skb/stream_verdict")
-+int prog_skb_verdict_ingress(struct __sk_buff *skb)
-+{
-+	int one = 1;
-+
-+	return bpf_sk_redirect_map(skb, &sock_map_rx, one, BPF_F_INGRESS);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+Or did I miss something?
+
+
+Thanks
+Bernd.
+
+> Eric
 
 
