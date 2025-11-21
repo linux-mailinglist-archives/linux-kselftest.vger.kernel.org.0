@@ -1,84 +1,101 @@
-Return-Path: <linux-kselftest+bounces-46173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46174-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E49A3C771C9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 04:04:55 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A645C771FF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 04:11:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 64A312C17A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 03:04:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DE4AD355666
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 03:10:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C16244694;
-	Fri, 21 Nov 2025 03:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130FA2E5405;
+	Fri, 21 Nov 2025 03:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YBa4+W/M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AvCB4Lxg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3821B21578D;
-	Fri, 21 Nov 2025 03:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8EBA2E0418;
+	Fri, 21 Nov 2025 03:10:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763694234; cv=none; b=BgeT9Bgf77tyRLgNG4aWby+t7oioWKnGdzCxzNuX9EZecteOut9MN1NCYSRXa+ojsqwZMHy2556iL5reWlsSGsbWg6izEmzQWfXqSQo4PAQ7J2AFpZxMo4tZKx7wThMro4VfLsdahR0aadVTFs45gk3k4JPLhPn+y8lUPTL+F+E=
+	t=1763694647; cv=none; b=U/L3nefXTEfYIs3A77ErbkrVt/070nbYQ/ZneCDfl3YFKqgyGn6OPe6Kt8WUxazaK/t4fVteGIgUm60/AJgso/3h5WGZLvF/pgnFscOzjQXg7yAhV4ZoCyA2XfIh5QW+XpC0vhea/g72s/ecNp+q+UKz8zX7cdT70wLJbyZYx98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763694234; c=relaxed/simple;
-	bh=WEjTR9BmAKQiJ3tfB4Qnx2N/WVk4LVRDE0lbPpzpF6Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XbfCSgnFM0bdli+yNG63b5HA/Rtc2hKNXFQieLKTlGpRz7YshROd7uca9fT3ZIKkM0tOKdQc/C/fFSfVBvVztvfHYwKXK2u8+l+yxr9m8qG1kebD4xjgvWTT1TmAniOu6mG5WNw++kUn1Ug5Zwcuu1Fc3euAnU8hNUlihY70LN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YBa4+W/M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 320B1C4CEF1;
-	Fri, 21 Nov 2025 03:03:53 +0000 (UTC)
+	s=arc-20240116; t=1763694647; c=relaxed/simple;
+	bh=vUzuRKiaFsYAF5jLm0H0Pp3e+s5tGDkeNxZpVFn7MQc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=BwyntQyokhj73Rmn9Eiw7PvwQWb5wplWS78Tq+EcCQJ7MWjjbJ3SmtEwhGJtbL51Bh5+AqnTKKkNeZ6Noe6p07oHvu0IarBL4AbHBoiCf0clT2f0/GNSunoA4aVl3fo0b65rrFY8GsNgg5/ZroeourGtBjCroH4oYEDPecGy9MA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AvCB4Lxg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7808DC4CEF1;
+	Fri, 21 Nov 2025 03:10:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763694233;
-	bh=WEjTR9BmAKQiJ3tfB4Qnx2N/WVk4LVRDE0lbPpzpF6Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YBa4+W/Mo07GqzFi2W3CIbNkUyht/WlSuWszBXD3fZCX6oRvybC/GEhBSXdLJVyGn
-	 xLBai6gSc/sYZuY+azVfb6UOT71aABTPxv1s3MA5t10i5ruzol5BKkw1IgPP+V1Kvs
-	 pISC9TuDPFD8bJWD4NtVuDFA7mVQt+fvayNC1J9xQ0yd/fSKwbCZ+w4bcSD+niqi6S
-	 3DA6SOtbhgVufcnC6lqFFm79rcKiOuotA9xIaepR0jp71BMGsqR/FlPZPC2QXxmcFt
-	 hX4xY4yqRx3EIMQzKlh3E+ijpvymn9PfEKCz/qYEPzLYo5wKOHOhGtG8h6J2MN8cCH
-	 HbOIk8UNEKong==
-Date: Thu, 20 Nov 2025 19:03:52 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Carolina Jubran <cjubran@nvidia.com>
-Cc: Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Gal Pressman
- <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, "Cosmin Ratiu"
- <cratiu@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Mark Bloch
- <mbloch@nvidia.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next 1/6] selftests: drv-net: Add
- devlink_rate_tc_bw.py to TEST_PROGS
-Message-ID: <20251120190352.45f72431@kernel.org>
-In-Reply-To: <20251120095859.2951339-2-cjubran@nvidia.com>
-References: <20251120095859.2951339-1-cjubran@nvidia.com>
-	<20251120095859.2951339-2-cjubran@nvidia.com>
+	s=k20201202; t=1763694646;
+	bh=vUzuRKiaFsYAF5jLm0H0Pp3e+s5tGDkeNxZpVFn7MQc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=AvCB4LxgC02uDgHmydivnqOoY/cCbDwUhTtL8mK2HKoTf/XrnPZEPkwqN+Zz7lJUX
+	 V7+a/q6BdFvThPPOzvPAdLqlYuayF0h0DTpFrl4YboZNwsuFdfERrwwUpRK5lsUwuN
+	 EAOgkBhRIHR4avIF3ZhpfhyKrlpCvCFP7cFSMhKNG/BXMyCy1+SAYvW+JjeA2Sx4nT
+	 c3eac0Mtxe7GYxVlGNMQq6wA1oExiNayP49lLCCWvDD3dohFIowe0mkq5qwEGOTx+l
+	 Fbvm47qr5c+jcwUrza/yHfZBAwPwjaDc7WREh6wmmvYOV5Hj5Ht4vx8IBgot7chRpo
+	 qTtpcovGYgcfQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE3FD3A41003;
+	Fri, 21 Nov 2025 03:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/4] netconsole: Allow userdata buffer to grow
+ dynamically
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176369461151.1878899.12543595195471306601.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Nov 2025 03:10:11 +0000
+References: <20251119-netconsole_dynamic_extradata-v3-0-497ac3191707@meta.com>
+In-Reply-To: 
+ <20251119-netconsole_dynamic_extradata-v3-0-497ac3191707@meta.com>
+To: Gustavo Luiz Duarte <gustavold@gmail.com>
+Cc: leitao@debian.org, asantostc@gmail.com, horms@kernel.org,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-On Thu, 20 Nov 2025 11:58:54 +0200 Carolina Jubran wrote:
-> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-> index 8133d1a0051c..2f53eaa929b7 100644
-> --- a/tools/testing/selftests/drivers/net/hw/Makefile
-> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
-> @@ -23,6 +23,7 @@ TEST_PROGS = \
->  	rss_input_xfrm.py \
->  	tso.py \
->  	xsk_reconfig.py \
-> +	devlink_rate_tc_bw.py \
->  	#
+Hello:
 
-These need to be added in the right spot, we wanted them sorted.
-Otherwise everyone tries to add at the end and there's a lot of
-easily avoidable conflicts.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Wed, 19 Nov 2025 16:14:48 -0800 you wrote:
+> The current netconsole implementation allocates a static buffer for
+> extradata (userdata + sysdata) with a fixed size of
+> MAX_EXTRADATA_ENTRY_LEN * MAX_EXTRADATA_ITEMS bytes for every target,
+> regardless of whether userspace actually uses this feature. This forces
+> us to keep MAX_EXTRADATA_ITEMS small (16), which is restrictive for
+> users who need to attach more metadata to their log messages.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v3,1/4] netconsole: Simplify send_fragmented_body()
+    https://git.kernel.org/netdev/net-next/c/7279b718b431
+  - [net-next,v3,2/4] netconsole: Split userdata and sysdata
+    https://git.kernel.org/netdev/net-next/c/9dc10f50c430
+  - [net-next,v3,3/4] netconsole: Dynamic allocation of userdata buffer
+    https://git.kernel.org/netdev/net-next/c/eb83801af2dc
+  - [net-next,v3,4/4] netconsole: Increase MAX_USERDATA_ITEMS
+    https://git.kernel.org/netdev/net-next/c/5ad994534172
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
