@@ -1,182 +1,147 @@
-Return-Path: <linux-kselftest+bounces-46167-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46169-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAE48C770BA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 03:46:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99CC3C7717B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 04:00:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9507935486D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 02:46:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 62DFE31AAC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 03:00:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DAE32C3272;
-	Fri, 21 Nov 2025 02:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RXKuJU/R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E90C2DEA79;
+	Fri, 21 Nov 2025 03:00:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from localhost.localdomain (unknown [147.136.157.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9EB1D90DF;
-	Fri, 21 Nov 2025 02:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8953F2D77EA;
+	Fri, 21 Nov 2025 03:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.136.157.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763693211; cv=none; b=GPgwA2B99YWql8DSMV66j7aHI95FlR6W0RSTs+Kt3JlmHKTAEwz/R0dr3YqQWP0X7pDHeq/JbKOnQMivF18LpmjwlB+QCJqP5yhXujZAYD2fL1f6km6BgkBiX1B0SIWvEYdqBorYJJmdql0fsHClQy0ZQv584F4Pl2XfSAhw0t4=
+	t=1763694025; cv=none; b=NZI0kTdro8kci0wHKSmMsFj/RA86bqNHVFH3+J8NxkQkZxlc65xBJjAr3/UniVzF9K2Ofvx0K3CdI3aSUhX7ejU/BBmeCorzWnxZ0sGrTmbZthRqZkk8jp+ciFoc++mHe5ad1zzJoo5loXfuhROtO11WcT3tXL+HqcP/qp3zO8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763693211; c=relaxed/simple;
-	bh=9wRUpNCdJ+h3gNqDsWyecL8H/HjoIYfVBoT5t0mijps=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=dYP/ny/631VpJK8jN2vN0ZCEVz1EbGwHXVrPC7eFvRKoWFmoECkCL6iICMmNLC9cNb3KDIB9ckgn/4QARZdaucqPenMa14mY4FmWIBa8HVIUSnqeTRHAfO5nJ2mwyXUVEqvZFa4wEe03GIcTfkkovUoDqdQ2MxVBtS7CvGPlXqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RXKuJU/R; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1763694025; c=relaxed/simple;
+	bh=BpR73GKKSJHvTtGxGpzHqvLjY1kP0t8z1tlrwz2cO7g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iy0lhQQY63NMevqRMX/fLtId48DPHlD72GoYZJ+I0pHf6hG0NzNHBCkWMumR757ZjrA6EiICxKbuxuFpRT0Lnap2MSo5+yXEgZ8OIdZOJpNBgPmuWvSMoG0xtEpeGdH8uO4gxuyuMQS2IE2CljKVcfCbcnnlI82IPJsx2EX0c1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=none smtp.mailfrom=localhost.localdomain; arc=none smtp.client-ip=147.136.157.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=localhost.localdomain
+Received: by localhost.localdomain (Postfix, from userid 1007)
+	id AACEB8B2A11; Fri, 21 Nov 2025 11:00:15 +0800 (+08)
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	David Ahern <dsahern@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Michal Luczaj <mhal@rbox.co>,
+	Stefano Garzarella <sgarzare@redhat.com>,
+	Cong Wang <cong.wang@bytedance.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v2 0/3] bpf: Fix FIONREAD and copied_seq issues
+Date: Fri, 21 Nov 2025 10:59:41 +0800
+Message-ID: <20251121030013.60133-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763693196;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0yYZn6QK5gg9APsMYldZKsKSIWjXDUkqOUS9S8IfOMQ=;
-	b=RXKuJU/RA1cAjc1XUBHWdIB9doG2Wk814x1wLnldU/d0slv40i246MHbcPxCVv8Z7ah4GX
-	tU01cPDa5Zxf/9up0Y0JiDZQe0KB46S33I1BVcb7IkEpeZNkoRR1xAhu/BizuIrlwYWvtW
-	gpBi8k0becQydlkbV7NHMiRxNgU9NF0=
-Date: Fri, 21 Nov 2025 02:46:31 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: hui.zhu@linux.dev
-Message-ID: <f5c4c443f8ba855d329a180a6816fc259eb8dfca@linux.dev>
-TLS-Required: No
-Subject: Re: [RFC PATCH 0/3] Memory Controller eBPF support
-To: "Michal Hocko" <mhocko@suse.com>
-Cc: "Roman Gushchin" <roman.gushchin@linux.dev>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Johannes Weiner" <hannes@cmpxchg.org>,
- "Shakeel Butt" <shakeel.butt@linux.dev>, "Muchun Song"
- <muchun.song@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel 
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
- "KP Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
- "Hao Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah 
- Khan" <shuah@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>,
- "Miguel Ojeda" <ojeda@kernel.org>, "Nathan Chancellor"
- <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>, "Tejun Heo"
- <tj@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>, mkoutny@suse.com, "Jan 
- Hendrik Farr" <kernel@jfarr.cc>, "Christian Brauner"
- <brauner@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>, "Brian 
- Gerst" <brgerst@gmail.com>, "Masahiro Yamada" <masahiroy@kernel.org>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- cgroups@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
-In-Reply-To: <aR9p8n3VzpNHdPFw@tiehlicka>
-References: <cover.1763457705.git.zhuhui@kylinos.cn>
- <87ldk1mmk3.fsf@linux.dev>
- <895f996653b3385e72763d5b35ccd993b07c6125@linux.dev>
- <aR9p8n3VzpNHdPFw@tiehlicka>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-2025=E5=B9=B411=E6=9C=8821=E6=97=A5 03:20, "Michal Hocko" <mhocko@suse.co=
-m mailto:mhocko@suse.com?to=3D%22Michal%20Hocko%22%20%3Cmhocko%40suse.com=
-%3E > =E5=86=99=E5=88=B0:
+syzkaller reported a bug [1] where a socket using sockmap, after being
+unloaded, exposed incorrect copied_seq calculation. The selftest I
+provided can be used to reproduce the issue reported by syzkaller.
 
+TCP recvmsg seq # bug 2: copied E92C873, seq E68D125, rcvnxt E7CEB7C, fl 40
+WARNING: CPU: 1 PID: 5997 at net/ipv4/tcp.c:2724 tcp_recvmsg_locked+0xb2f/0x2910 net/ipv4/tcp.c:2724
+Call Trace:
+ <TASK>
+ receive_fallback_to_copy net/ipv4/tcp.c:1968 [inline]
+ tcp_zerocopy_receive+0x131a/0x2120 net/ipv4/tcp.c:2200
+ do_tcp_getsockopt+0xe28/0x26c0 net/ipv4/tcp.c:4713
+ tcp_getsockopt+0xdf/0x100 net/ipv4/tcp.c:4812
+ do_sock_getsockopt+0x34d/0x440 net/socket.c:2421
+ __sys_getsockopt+0x12f/0x260 net/socket.c:2450
+ __do_sys_getsockopt net/socket.c:2457 [inline]
+ __se_sys_getsockopt net/socket.c:2454 [inline]
+ __x64_sys_getsockopt+0xbd/0x160 net/socket.c:2454
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xcd/0xfa0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
->=20
->=20On Thu 20-11-25 09:29:52, hui.zhu@linux.dev wrote:
-> [...]
->=20
->=20>=20
->=20> I generally agree with an idea to use BPF for various memcg-related
-> >  policies, but I'm not sure how specific callbacks can be used in
-> >  practice.
-> >=20=20
->=20>  Hi Roman,
-> >=20=20
->=20>  Following are some ideas that can use ebpf memcg:
-> >=20=20
->=20>  Priority=E2=80=91Based Reclaim and Limits in Multi=E2=80=91Tenant =
-Environments:
-> >  On a single machine with multiple tenants / namespaces / containers,
-> >  under memory pressure it=E2=80=99s hard to decide =E2=80=9Cwho shoul=
-d be squeezed first=E2=80=9D
-> >  with static policies baked into the kernel.
-> >  Assign a BPF profile to each tenant=E2=80=99s memcg:
-> >  Under high global pressure, BPF can decide:
-> >  Which memcgs=E2=80=99 memory.high should be raised (delaying reclaim=
-),
-> >  Which memcgs should be scanned and reclaimed more aggressively.
-> >=20=20
->=20>  Online Profiling / Diagnosing Memory Hotspots:
-> >  A cgroup=E2=80=99s memory keeps growing, but without patching the ke=
-rnel it=E2=80=99s
-> >  difficult to obtain fine=E2=80=91grained information.
-> >  Attach BPF to the memcg charge/uncharge path:
-> >  Record large allocations (greater than N KB) with call stacks and
-> >  owning file/module, and send them to user space via a BPF ring buffe=
-r.
-> >  Based on sampled data, generate:
-> >  =E2=80=9CTop N memory allocation stacks in this container over the l=
-ast 10 minutes,=E2=80=9D
-> >  Reports of which objects / call paths are growing fastest.
-> >  This makes it possible to pinpoint the root cause of host memory
-> >  anomalies without changing application code, which is very useful
-> >  in operations/ops scenarios.
-> >=20=20
->=20>  SLO=E2=80=91Driven Auto Throttling / Scale=E2=80=91In/Out Signals:
-> >  Use eBPF to observe memory usage slope, frequent reclaim,
-> >  or near=E2=80=91OOM behavior within a memcg.
-> >  When it decides =E2=80=9COOM is imminent,=E2=80=9D instead of just k=
-illing/raising
-> >  limits, it can emit a signal to a control=E2=80=91plane component.
-> >  For example, send an event to a user=E2=80=91space agent to trigger
-> >  automatic scaling, QPS adjustment, or throttling.
-> >=20=20
->=20>  Prevent a cgroup from launching a large=E2=80=91scale fork+malloc =
-attack:
-> >  BPF checks per=E2=80=91uid or per=E2=80=91cgroup allocation behavior=
- over the
-> >  last few seconds during memcg charge.
-> >=20
->=20AFAIU, these are just very high level ideas rather than anything you =
-are
-> trying to target with this patch series, right?
->=20
->=20All I can see is that you add a reclaim hook but it is not really cle=
-ar
-> to me how feasible it is to actually implement a real memory reclaim
-> strategy this way.
->=20
->=20In prinicipal I am not really opposed but the memory reclaim process =
-is
-> rather involved process and I would really like to see there is
-> something real to be done without exporting all the MM code to BPF for
-> any practical use. Is there any POC out there?
+A sockmap socket maintains its own receive queue (ingress_msg) which may
+contain data from either its own protocol stack or forwarded from other
+sockets.
 
-Hi Michal,
+                                                     FD1:read()
+                                                     --  FD1->copied_seq++
+                                                         |  [read data]
+                                                         |
+                                [enqueue data]           v
+                  [sockmap]     -> ingress to self ->  ingress_msg queue
+FD1 native stack  ------>                                 ^
+-- FD1->rcv_nxt++               -> redirect to other      | [enqueue data]
+                                       |                  |
+                                       |             ingress to FD1
+                                       v                  ^
+                                      ...                 |  [sockmap]
+                                                     FD2 native stack
 
-I apologize for not delivering a more substantial POC.
+The issue occurs when reading from ingress_msg: we update tp->copied_seq
+by default, but if the data comes from other sockets (not the socket's
+own protocol stack), tcp->rcv_nxt remains unchanged. Later, when
+converting back to a native socket, reads may fail as copied_seq could
+be significantly larger than rcv_nxt.
 
-I was hesitant to add extensive eBPF support to memcg
-because I wasn't certain it aligned with the community's
-vision=E2=80=94and such support would require introducing many
-eBPF hooks into memcg.
+Additionally, FIONREAD calculation based on copied_seq and rcv_nxt is
+insufficient for sockmap sockets, requiring separate field tracking.
 
-I will add more eBPF hook to memcg and provide a more
-meaningful POC in the next version.
+[1] https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
 
-Best,
-Hui
+---
 
+v1 -> v2: Use skmsg.sk instead of extending BPF_F_XXX macro
+v1: https://lore.kernel.org/bpf/20251117110736.293040-1-jiayuan.chen@linux.dev/
 
-> --=20
->=20Michal Hocko
-> SUSE Labs
->
+Jiayuan Chen (3):
+  bpf, sockmap: Fix incorrect copied_seq calculation
+  bpf, sockmap: Fix FIONREAD for sockmap
+  bpf, selftest: Add tests for FIONREAD and copied_seq
+
+ include/linux/skmsg.h                         |  48 ++++-
+ net/core/skmsg.c                              |  29 ++-
+ net/ipv4/tcp_bpf.c                            |  26 ++-
+ net/ipv4/udp_bpf.c                            |  25 ++-
+ .../selftests/bpf/prog_tests/sockmap_basic.c  | 203 +++++++++++++++++-
+ .../bpf/progs/test_sockmap_pass_prog.c        |   8 +
+ 6 files changed, 323 insertions(+), 16 deletions(-)
+
+-- 
+2.43.0
+
 
