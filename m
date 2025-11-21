@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-46253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46251-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B267EC7AA44
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 16:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FE9CC7AA29
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 16:52:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3A8B3A1DD0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 15:51:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0F2D3A1872
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 15:51:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2631F34D4DF;
-	Fri, 21 Nov 2025 15:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F19F634A3D8;
+	Fri, 21 Nov 2025 15:51:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="r8q25+V7"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pzhokqfe"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011011.outbound.protection.outlook.com [52.101.52.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0299734A766;
-	Fri, 21 Nov 2025 15:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A5A34252C;
+	Fri, 21 Nov 2025 15:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.11
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763740285; cv=fail; b=OiHcDJVnyVGtZpXup/OA73C5mvRXfKbOMIAoqKs5driipt0tAgpZ6plqVIjgn2APh4NzM9kt+Q9hYkLaSsBCAYYOm+J0ykh4KxedXkiQrl2YXJ/rp+i7efTcXK0+r4Osxz5Yha4XSVv8pZET54gtmJYss7HzRG445jZV42vzph8=
+	t=1763740282; cv=fail; b=gvDvVwmPGSyZtIKQqpzUj42pSBQSmxDGsGJs3yC9zUlCJ+bl7k8UvKk38van3PFPhX21EXHrtEX5ncdIYrNKE8ooceo+REs6VN+W/G+qxSbjr+fjUaBYmWmHljGncdPtglxRI1DHRbbejruurh1MKn190jfUc+fK4Uc9FydAoh8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763740285; c=relaxed/simple;
-	bh=9Zel808vRXkJQq+WjGnbtKPp662Dnr6fninQZ5nFGzc=;
+	s=arc-20240116; t=1763740282; c=relaxed/simple;
+	bh=UqrxR0LO1bli339dy59280zcbLVtC88UTvz3mmeeKg4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aFc7ee8+u6/hrY/pqlZos15IE93VEROl2nyoALOOEe2xQJ9R12eyzC44LsSpLU/H5n4J7H5P1d02+CEcg/WkDHfTlWpb/RQ2MhedXUqjL0qSN8EtvMQTySt4/MoBsDWCrwmM2NCTJOpeufKlSQS3hl0EnAW49QzdaxRw4wu5mAE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=r8q25+V7; arc=fail smtp.client-ip=52.101.52.11
+	 Content-Type:MIME-Version; b=qvJeOM9DSl37Vaz1dGHmDJ3+SS9lqLnqaf2My1iteZjJeVg9KvFptXSc6zM0h0AN9123syM/wgXHvs7tOBNQcFrwqZKOet2bY/g7DwCMOBV+OeY72AXzjSkQOJwR+wpEVc5xhp83JUnRUNoV8vFbdLbGahtppa5D6ZnC60GBytM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pzhokqfe; arc=fail smtp.client-ip=52.101.52.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=KzvoAz1NiKEcXL9ELVzsrq5m8Tg2ncPNzOHXD0u8xlPvnMM4qj8q1o1TIwlFznfx8i5n6EFQ1T9+I5mjy8SnHxrpkbe0XmGUaUwRRz1H+iGmfbvq/lLA0D9DGxzOH9PVZsW9cu/5qjp/gWhJGJAEacbOGskL8RTgxw2OJAXIPIUix7P6nYO/S1VWtFCdIGqGZYg/yTHJzOwmqUhe2RO9hLUPkEerihRsSFn65AY+ZAMqQrS3Vq+MYpGP6YxlnshguKWEeZFTjbrkDxeInQngVbypOpR/XZR9FXGpctb+sXgXVOmVlKFgLyNiiICz62Wvychaj4OaTt7KJJzUg8P/bw==
+ b=SOqjMBLvLaJk7KZZ+D/LxMi4YTiBPCQM99Gp4uBD1KWCydkc0Po8rO6bP/53rTnM52HogFrAzFxZlX+gV6Bcnvm/g5KTUtrP/lqG9csw2MwcoDI62ZNqA3giYX8tjxazC1YZKDbvYf7YK5i6uksafdW05VAXd/2rdljaeZ8YG9X44UT7wT5Fyzfo47OAu91TBMTkldUxIbrlFD665fayk0i9QVcKj2Wx3oPMkYRfYtZG57HsFoBIjlpXMZ/BUGrvWd4w5rdRTQjoLSunZA/5fInSdssGu8kYniZvZsdQHy6XaNfcFxjXy8cCK9B8wsy1yrfo22HlcxVY0ixwSA+lcA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FfBUfyNJ7nSDpjBHUPr9BebiA67Y4PiPyDPubcgrMoo=;
- b=qZzChUVZronTxC2D3IzVRtvOmKG4sFijLvu8s3PCKqSwEbH1L/Hu22Zm+fKyrlEg6Stb/Xf78IdfcQ7DVZqlOohU5P6nslxFPcsnFuOfqgzcuRFg4cLuFbmxpPnIxGQUgudkVApyCd+GE/86sOEtq19mRgQVhEP375dtfWWA1Jc9LZvjIWgpNv2IFkdPAct7xDyrcoWlwsc1JUvhUaJCqFOzR7860op7+qggprHoyNg5+5cgShOshEBUerzx8v9HZEu4vl94dOyrq0+CUhcE1po8deb56dSo2NPfVgpv1DjjlAXVFAUDUfJCpq4TGqRfw80dladr6H2uwxY+i3vHYg==
+ bh=BwKkT1sEgtWjwoRJ2cfJAZdw7wPgNh+AEzscznfY3vM=;
+ b=geHNBgEQ9Lmovw3DGhltE7Ej6V+9Gldjkuz8j1/uor3p6Sl8vuhbB5RiAMpENBCJgXBprOWHfQV8Nlib7/cIz9+J5Z5Tk3x9RdGlm5OWlk8x+cjT6DrN92pBQmSb6k1M8OJmVAGO+603TVDutzT6h/C/SU5WJBMuJu/ur9NcYOzQVYvJbBveRCo9eHeQPEmt51BC9ru3ZHQxLrpfj97OVJqyYahDtHAyO1NoQWNBZSIqIjPiy9ZhpdENSgTeM4y9JKRN1j+BVf0ahee0tdqCXHbA17xCiqci6sRJUnCzZvOIIsXztvzf0podrMib2Q3ODSLir9/Lh1PrCb4ONbdg/w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FfBUfyNJ7nSDpjBHUPr9BebiA67Y4PiPyDPubcgrMoo=;
- b=r8q25+V7jp8pVlb+HjrmgM2ZWgWxMYFNl/ju4wj2Mn01bY84zRcadkh/NDBmOQs26NLqcg59aRDlk+eZ3XhBnAqYt9vJOUHKjYyfCqG08dLu+x966C/Kr5tq8rsVxUyKju6467RS5dQ4X/SR4tnCwo1URPDrdgeJKvrScPicMy8ClFbKhFXN9lAUOwu4/yxro0pXCJ7zEu6RSAN+8qOSv/dv29j7kMqIIpExUQhOGF+OnAbhUVBNS8C/3GRQCrq8idgquhgeWimG+8b3rqMqcyvizsheU+PDu1NELtYitk5i8BoXIFZKU1Sa5usPNgBwiVxS0p16kS6TOkMjOWPRUQ==
+ bh=BwKkT1sEgtWjwoRJ2cfJAZdw7wPgNh+AEzscznfY3vM=;
+ b=pzhokqfeu/P9Br8f5oNCT9taZfd3za0xKJgW562AAMYiL2sDSjg1JIYveS3W3akpJrr0DW6FI3xfi7fMNWIYFw+mOT+5O431Lq6HZAWPVOoWBB5ZeFqiL+p2lWYJ9IyG8P+AQ5/GacDX9piCicwJJLqMski6xQKbOYHdwn1cA+1S+Ekg+d1AJRHUNxK8YDW7I7PU51E39WAD6nHbHeSs3bvrt2Mt1y/tn7Qyr0ezddceTAJ4ZEQ9N3RKSrXyVf+uED+DbV9qeQCl0zcbltg7d1vpq7EP37JTuxq1JnWoprMXMfjHEQFZSYj8tt+Hsanz1FMJCQgWwoVEM4WYA7kSFw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
@@ -55,7 +55,7 @@ Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
 Received: from MN2PR12MB3613.namprd12.prod.outlook.com
  ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
  ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9343.009; Fri, 21 Nov 2025
- 15:51:11 +0000
+ 15:51:09 +0000
 From: Jason Gunthorpe <jgg@nvidia.com>
 To: Alex Williamson <alex@shazbot.org>,
 	=?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
@@ -80,15 +80,15 @@ Cc: Kevin Tian <kevin.tian@intel.com>,
 	Vivek Kasireddy <vivek.kasireddy@intel.com>,
 	Shuai Xue <xueshuai@linux.alibaba.com>,
 	Xu Yilun <yilun.xu@linux.intel.com>
-Subject: [PATCH v2 3/9] iommufd: Do not map/unmap revoked DMABUFs
-Date: Fri, 21 Nov 2025 11:51:00 -0400
-Message-ID: <3-v2-b2c110338e3f+5c2-iommufd_dmabuf_jgg@nvidia.com>
+Subject: [PATCH v2 4/9] iommufd: Allow a DMABUF to be revoked
+Date: Fri, 21 Nov 2025 11:51:01 -0400
+Message-ID: <4-v2-b2c110338e3f+5c2-iommufd_dmabuf_jgg@nvidia.com>
 In-Reply-To: <0-v2-b2c110338e3f+5c2-iommufd_dmabuf_jgg@nvidia.com>
 References:
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BLAPR03CA0002.namprd03.prod.outlook.com
- (2603:10b6:208:32b::7) To MN2PR12MB3613.namprd12.prod.outlook.com
+X-ClientProxiedBy: BL6PEPF00013DFF.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:22e:400:0:1001:0:1e) To MN2PR12MB3613.namprd12.prod.outlook.com
  (2603:10b6:208:c1::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -98,98 +98,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|DS0PR12MB6439:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5bd4b761-85a5-446a-37da-08de2915c967
+X-MS-Office365-Filtering-Correlation-Id: 6670dc8b-0098-40da-ad1e-08de2915c956
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?3w9FAfTmzx2y4oPnvpCyRnfBB7BKbdbp0SYxWPHMwlDu53j9ETET67aXb6Ap?=
- =?us-ascii?Q?WOiwHV1dXnxajr2wBQh5Gs3AXOsELU2duwseQF8A62SBRgaJt2opNFu0upoR?=
- =?us-ascii?Q?cii/RqbN1F2l0cmQZOwSFMEWJHh130QiIAs9ukLKP2SyHX2VJ4pHf/fcFbPJ?=
- =?us-ascii?Q?JOFpA+YXE6Hv60CYm0HYQ6dS9LSP4RndG/fy1dxHSUN7dIIaNSufABpGjPiy?=
- =?us-ascii?Q?gxqjJyzs2WvkfbAECiYeJLiNjGjU4rVgZyrn1+cOZGU4M88bQlyzRheS3U9R?=
- =?us-ascii?Q?sVPqTmZHJHe8AgjXrG8K2R5U6xLf2vW5LTpTWw4XVCcsEitwf5/X4LuiHY+C?=
- =?us-ascii?Q?B69saAyhErEEDJadsLp8IxNTTroqHavJb3zFRKrH4m1UOJItgzwokVcSFVI8?=
- =?us-ascii?Q?4kRqvVEEyC+xZ/v5dHGaf/Fr5CesSQC6ZkWcez/cnBQ+6Lo2DmI9QE+yvAWl?=
- =?us-ascii?Q?ky5TIovfF9jobDH5tn68RxFXQUsCvBvO+1Jw1SiWpkO2jpIjLTIsntYloK2q?=
- =?us-ascii?Q?4AJy6GkUowawGv1VSIYrDQHyiDuNOjYQN70bcW+aScjet2KCUe95CRsMSaXS?=
- =?us-ascii?Q?s/FYw4YoMtNoGxZknXrqpTrIEBt7eZcrKwpG0JI/XozUqpc7wTzuDdeVh4t3?=
- =?us-ascii?Q?+hPaJFBj0W1VwWFRNAjxGKuU2hlXbY1VP8KhpcZHJ+WtTb1xWfef9pQG0oUY?=
- =?us-ascii?Q?N6yz++c4zUwbdQFjjl8xKZ2rqwq4KDckti859B2n3Iz60hOchwbXYf86ggTm?=
- =?us-ascii?Q?6a+ip4MrjISymm/Svak0zrGO2nNarYO4rPC/b06eDg8efEE/OMWE/W4MmRRb?=
- =?us-ascii?Q?k/rJvj0OXETu/mHTwbycBQkm/BURGan50VcJeZBkkDzDZAgOIT1EwGsAMbed?=
- =?us-ascii?Q?BJxadRPpaHxMHAp6CKVpzi+9NZ0EcJhchSfploYUG0mIVojDKFK6w/Uamhxl?=
- =?us-ascii?Q?cHnk40J+UtrG1WPnHlIZUOI1MxDb89yocGastwPYoyKYA2lOpx2zGonjGYCn?=
- =?us-ascii?Q?6XVmUqXTmt9I9b2WTlDYBqdgnjr7CUcYotf3gcbYDwvzfpJ0QHUlYlV19+Q+?=
- =?us-ascii?Q?H7Lsqc/GTfXgxQnhbAnMO37+FjtoVd2Fc1pF5lFego+RmDjrO512lHkVoDi6?=
- =?us-ascii?Q?VBUDyA0eULtgg8pHoZRZ6Wx0i4YcRNSueoE/EtBiKroAdsV3s93/uZGUBYro?=
- =?us-ascii?Q?HSwllM9Tn+WIcKms+HmHmlUFnsGKjGxYTfBde5Fy48Kf8yVmTgpQ21R9m42U?=
- =?us-ascii?Q?gr7zjblt1qqOthA843E3SfOpbCnEFdGQlUDFfK/MSK+rLqjcB9/Nn7vr1oOa?=
- =?us-ascii?Q?pALx04jT46kyrKSDdSbGeTzNOIpx7qk9gm4+FamA0AyABZQnjhi7yLIce28e?=
- =?us-ascii?Q?xaRjB6jTL9JRII/x6A+Gsi1SGjsaWouGcPJZ8OJYrY9Au0vVeC9BdqfjARHg?=
- =?us-ascii?Q?0lXex5b+KM0SfXc2BJ4iBYRUkAWWL/NRuxH3C81rce5Cq80HsCh8RRuyk7Fn?=
- =?us-ascii?Q?aMwTP6rzKW006Zs=3D?=
+	=?us-ascii?Q?nIQwHA27gUTdaDt5p4h8j7tr4KL4e9eayCakb04BWQbWqFyEsXHSXtKoh68D?=
+ =?us-ascii?Q?W1KYV3fDubatbfXEbp/QnI/ywsoEKJSSo89YBYwL/B/8Xhv6mh52dDOKuwvn?=
+ =?us-ascii?Q?ZsH7KdhHGX8wqNJf97ehWP9YByMC4y7uTejjw0Vpc5reTly3d4jdQp0P7PeG?=
+ =?us-ascii?Q?RiflSFO01w4mi9y7SEKFGrsbcA/DNCawOtZFpckvMPtMlB7ljx/sReLxOaUz?=
+ =?us-ascii?Q?HVaZN6aezhbQ+MdagcsCF6weUFwPjzJEVdBvUqdi6W/8SiT6HkdVgMTTJYmx?=
+ =?us-ascii?Q?X2bwoFDZblZyw8KmVCtYo59vj6c8+5RHrby22fN9A7yh00xDN/5+SSfv/vIL?=
+ =?us-ascii?Q?as6HTZrGI/u4jDXZa/WEgiAa6Uduhq1eRL0Ig9a82WqaXtUWQQ/zoDD6h8cv?=
+ =?us-ascii?Q?8KDGL5dT+iJdj5mpNq0qiuQl1PylF9MTOmZ6OX5IbFjIWEI5ltCDVZT8MnF0?=
+ =?us-ascii?Q?A4M1Lpa0p1szlB3h4V7UrR5sacb3Gp+kAmy/wozdanxv/Kgf3WkG5IuSxI6P?=
+ =?us-ascii?Q?mfTWh+PF7J7ZCVmASwkj940gky0QqUM7H1mlMG/AeKdPVy26lvCzywfad4Rz?=
+ =?us-ascii?Q?y2AT3+dDysFHxZZLcwku4Eqj8B1QwIlz2XRAO26d72dnhaLBLxvN9ZCNWROm?=
+ =?us-ascii?Q?eXNH77qJntHRNUL9Gs/DfAtVOoUPG/i9Brst4D3kVV+mOqL/itINOyaAGh1M?=
+ =?us-ascii?Q?K4l9fLiCvBLdlQd71oG/9+xbWcy7dnn0mhdHfm6YnqUPabwIAtsQFUbsJrRT?=
+ =?us-ascii?Q?8/QhKzcRPmEztTr/t8fm+SAi0pkjbJ2pN6zpfE7hknbf/CAB8vNoivHikY6U?=
+ =?us-ascii?Q?KChb0HQg48C5eXqKXXrSj1rFAQeEWXFrEnAFMN/KGn5zBaKsLXZcF1Woo3ng?=
+ =?us-ascii?Q?tIIYSTUge50/5CrLzk3ChDvSQ2lTzQbc5MsC1xD+U6CYu/jL+PL4qLfj9SFB?=
+ =?us-ascii?Q?mw1B0u1bDpmbXXuBBLFtyFP4DdCeDyQ7Vdnpq0XGF3bVguvadClDJAGTiB2L?=
+ =?us-ascii?Q?jIDyB4WaeIgNVLgtf9N7ISQOqEwE4DoSPUwWAFNJgg85mOrdVhoru6R4rW2l?=
+ =?us-ascii?Q?26fxHf/62lPnDhNZQp/F0moZm95vhst8Qhr8ahZgT0ChqrC5R+ehFi914OjY?=
+ =?us-ascii?Q?PpCvbJ3fiX1doIO033y3+YhOvQjHIPNWr0dqlgYvCF4tY5D1yKFUaqom9TnM?=
+ =?us-ascii?Q?E0njStCb3QV527xgA9EAFV6IAw/xYqpjBzOhPLuuZu99qPWs19n3eAPP47G0?=
+ =?us-ascii?Q?lXgsKbY+ewCaiQSJeRWueMfcXEI0NbA/C5NUn9EcUbX8/fhn+vFaHo0k/Ba9?=
+ =?us-ascii?Q?/+zcGIq7iijeUhO7OHSRoCbfBfL3X8gm0LLfh7shk3IPw2caPHDJYPPiJrAk?=
+ =?us-ascii?Q?mYWYsjWE/XjypuXDQc+hh1fqvZhcAu1rOPaWqSWujyQJ9EuUVhTO90vxAwcS?=
+ =?us-ascii?Q?3cUP4kZTf3GC/IYWxpk980h9qIgRBUr9FuqdAZUMEpuj4YUDpPPpo3i+Z1Zo?=
+ =?us-ascii?Q?+eVoq1v4x5CP1Fc=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?306XJxtg03ZFaNhJdr/C590Cx/+B87nk/QDfulf9BY9fgeRAzaV46ZA+tWGx?=
- =?us-ascii?Q?eONzPajyY7h9h72AdFRtOfVaOZ62pFBljq1AtooYcj6PD/+DEtaUC9qqVMYL?=
- =?us-ascii?Q?uOpJNmIfde3n0V+uaq2CQjLyqVwbm+94Aku3luIw64CvKkQ98tW4jFKT1oiY?=
- =?us-ascii?Q?mcaY6w5m+U0Znn1svAcEfHG6iuXQJdsDBo2W/TNnPHJPhflWopBwaaX4j97T?=
- =?us-ascii?Q?6TNMdhag0pqRVVX10zZ7zNyQKxVRFLDlluWfaPjs2NyTkr0vptS3AH8f6y+K?=
- =?us-ascii?Q?aPl+BZrHT4qblpvcUYeRXFDUD8DcKSq+CK8r1q0MdltJL4C6DbPVg4PVaeNI?=
- =?us-ascii?Q?UMRdBimqjABcpyI4T+YHDAuxVQCKTJsHgrlx+/guPCioXmllDYgwMS1+oDOs?=
- =?us-ascii?Q?3QaG7+D6LAfwT1wksiwk9hHafqPZzrrjQUwqkcqVu0mYjXTc7nWlxdf65vE+?=
- =?us-ascii?Q?Im+lttIPIr38WORCD7L2AJZTeQgYim+DONfvyPnPPZI9RLdbagfLsInr2zT4?=
- =?us-ascii?Q?fhWI+GNvbMbnzThXLxWmch4xTqkM9zN/A1ZS0hTT3/dhXC3GUQdaq6i8P381?=
- =?us-ascii?Q?7OD5TchLunpOOnZJkTPwRke52js5CfdX9HqhUedLzRRqmfzDUbb63+uV9yhB?=
- =?us-ascii?Q?t2iKI1n0+bVhfxI86Yga/zJlD7it64Ff90yVDGeIxGEzjmoYEH8Qse7FF82U?=
- =?us-ascii?Q?LjZT4wgHMuzzDc3Ufwl5AIBZjhH+/0OMV/C3bkXuRyJO0GAhKt1J4HrepL8V?=
- =?us-ascii?Q?kX3F4+yRM7dPauLlY393FDq8/4pFw+EgJ1VpWXPMFoh8BSOXjlAPfvEjdDXz?=
- =?us-ascii?Q?12woDThg965S7bj2b8uz5UeqB0nHPnOCb6HeQCZK1/jwf6TkzdSa2T/ImDeT?=
- =?us-ascii?Q?zA1X03c5v82wAQ9ULu9p0LxAr7LAAD/NlPQqLYAOLdcGq/1xjtL1nzlpgOMX?=
- =?us-ascii?Q?D1TgRM9xzmCTWcVORA6zBQtELkKxt3JWO59MAmq/glHJQm6cPerXDENECSda?=
- =?us-ascii?Q?j6LBC5RDJrTkhZ5x1MAYN1fSPI4wLQ1pj+sJK6iux9x7706Dbi94RMV1lGQO?=
- =?us-ascii?Q?/1+khz7Joci0VeOQkdkIiduiKKe9S+0QC429EFDKEP/FZJ4awnZfAg6qSHJU?=
- =?us-ascii?Q?/78GeVLL6Kt4p9R38lkxB/uadHMW8A9hSP9o4u9d/q2jwVFCjN3doKdiNZPr?=
- =?us-ascii?Q?PNroINy3YVfZ2FBOuCK7UecCXa1tC6UsDe7jeEPiX+4RvMP+7BTgEDi7L7D5?=
- =?us-ascii?Q?8hpwIBWqVIfAcZr6PQ/vRxzwQaWcUYPB42b7rAs3GYlicFQbKuxEMIPxd1mE?=
- =?us-ascii?Q?m16zzqIihzJiFsYuTYX9EIYUHjOJsVZCERSrELfmPHPKGBruOi0GqOHZml8N?=
- =?us-ascii?Q?8K76WCjgIsQfx5WLlEOvfLxKwMrHv97UywM9+ThDA6t41w6KM8JIPCxcjuGi?=
- =?us-ascii?Q?QyeT5TYuNqGjn6NkakIAO8hnxjj1iskMhzv//H+guAQZINHx+E+P0UWcnYuf?=
- =?us-ascii?Q?mTHsQEWGxMjuMNj2OIw94WZaV6Wmpik5O3ja7FUNBSSQ85BSZPcIQLO2ojAH?=
- =?us-ascii?Q?/0uys+93cR7tj6AwpfY=3D?=
+	=?us-ascii?Q?7Ndv0uDeTLjr7r58YLmZI9mSw9LTDbXmY1a4qRcoOgYAByDDGMjIA/MUIRZp?=
+ =?us-ascii?Q?pdlt0Xoju23PYh5OHpxOAuwULhFW9wf7ej8h5XMhmCcCw/K8FvPyOfo8+0Cz?=
+ =?us-ascii?Q?bSS9q/hCQh2i12NTd/oubYE3aakhqcbMxNlIFiM0rcMV6e7SD+99iy7X5kWZ?=
+ =?us-ascii?Q?6dpJkFBwGcKG31W8rWxN1/cS474bdLOcDXppHAlSvjT5xYP1wn5XlyfI/6GC?=
+ =?us-ascii?Q?/zIhMGNsFF2hMKHgu1SW02+dXZYcGGDLFEB/HafARdUyA1IBIWaDgPyNswWa?=
+ =?us-ascii?Q?P8rmdkMGQwh1Yg6IVBEwTT4I22+pVSm1wAFBzDUkGppJ2cqKBEGxMq8hPmDH?=
+ =?us-ascii?Q?0oVP9SQfKm9o+EpLYtQsAWavDwD/Pq+Zgt8bVg2UxNxW7iVqT1et60zYusiw?=
+ =?us-ascii?Q?zquZlt28RPHoaTIEH9mwJYUyXwcJiSE3MDnaKM+j55Q6d3aqkn7esx2dmtv8?=
+ =?us-ascii?Q?HEAvGJfYFo1g28SvFkMAzSSCm3s21YW/p0o0mVRNiDHje716C/BnIJlMDD3M?=
+ =?us-ascii?Q?SS9RtnEhBcDToGbG6m90N8k+wR0DKB5/I48MH+jCUbVpeYEB4b2h6dVRmg1I?=
+ =?us-ascii?Q?iROPceHvrBkrFshYoePPZfBoalP/y1VwIHVXM6/BdfZnYlK3ULCM8uXLawyW?=
+ =?us-ascii?Q?Un6ygiDDmQD+z1ecHCQ/QieY2i25Fm1QAyPrp1lppebZlCPKt4p0BlpNhigG?=
+ =?us-ascii?Q?JOzurXpt2wa5fT0U/Wky1pwORiIh3YXoQVjF/w3e++pPfe78lnFUcqd9t/Bq?=
+ =?us-ascii?Q?LwNDvMaOsfm3wNU6Lzbcnn3h6SHsurFmNLE5ZdYdxaPDqA8zi6mnjbbget9s?=
+ =?us-ascii?Q?qkcXWj3sqVBDe2RFvsOl9xBp59y+CHNwIVRkVIGYKUoGcNvo65ZAxebH9m1s?=
+ =?us-ascii?Q?4IQYghnxdVsujc2sXn3mNXWQMXyynWCBRqAOTEXlDh9bb7uhJ73/45SfioSJ?=
+ =?us-ascii?Q?oA0YcRrRm0ucB9I6gE/jQoh0WWFJ7/bXfSdb/P8bm0+QXRbCMK4fHVytVCnb?=
+ =?us-ascii?Q?K/49Z8Rhe6c5B8GTuVyaqKtJYrpEsIIzNteuSJledhlsGpfP/uWLtQS+/rM0?=
+ =?us-ascii?Q?okBDxvCe5Mw/ldxME9ywRet2NNq67gA+tPkXR3+Psgts759E+ZZahyibg51T?=
+ =?us-ascii?Q?ZJw3vKeuHjBdDN/S89fWAI5dAoat/73/333mcdp8LXF2cX+uYAdnVkNWsBEX?=
+ =?us-ascii?Q?GMP7qswXYJKkLI5b8qy2aFZIzuMHDMjAj++fI5qF0sQa1+gr/RI61tKBpjes?=
+ =?us-ascii?Q?EjgSHkL69d5Q0c+1cZX+MEGIXhoTIZo0cchWQFOTm99hL2jpe2LqaVvILDqC?=
+ =?us-ascii?Q?RTrAj4zYLBXAy6yQW6LTUfZzKLeFGZ/bAe39EcKHGUiuOXbG+lGl++KrUu2K?=
+ =?us-ascii?Q?zAG6h4VJrNc/hxe1AEkazI5TBD/mNG1p2ctvRXYBvOP0hRTHvhuL5k9WDlkL?=
+ =?us-ascii?Q?spFSGHSTqexbMzcKS5JF66NHH8gm+AiuU/w7TT+xGlWJDPoAum4dK8v4GD+k?=
+ =?us-ascii?Q?88Cy+UNTvJyXzqyJvL9xPfjqsIuuOfoDCTFrR39PYv7xAsf8OQDEJ6USSEtM?=
+ =?us-ascii?Q?peYk3Gpqy9ceU/0WiGo=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bd4b761-85a5-446a-37da-08de2915c967
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6670dc8b-0098-40da-ad1e-08de2915c956
 X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2025 15:51:08.5239
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2025 15:51:08.3608
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AOO2uZqGOQhoOtCaOnd/oi4z374VOmODQWTPRf0vUP6wwTleh9rmLppRseMNRYDM
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1Fjaao8HyCHdGP60WnEP3xKgzsXHUKYH7e1Dm+zveLexATT36LknXeeKtceN1FXP
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6439
 
-Once a DMABUF is revoked the domain will be unmapped under the pages
-mutex. Double unmapping will trigger a WARN, and mapping while revoked
-will fail.
+When connected to VFIO, the only DMABUF exporter that is accepted, the
+move_notify callback will be made when VFIO wants to remove access to the
+MMIO. This is being called revoke.
 
-Check for revoked DMABUFs along all the map and unmap paths to resolve
-this. Ensure that map/unmap is always done under the pages mutex so it is
-synchronized with the revoke notifier.
+Wire up revoke to go through all the iommu_domain's that have mapped the
+DMABUF and unmap them.
 
-If a revoke happens between allocating the iopt_pages and the population
-to a domain then the population will succeed, and leave things unmapped as
-though revoke had happened immediately after.
+The locking here is unpleasant, since the existing locking scheme was
+designed to come from the iopt through the area to the pages we cannot use
+pages as starting point for the locking. There is no way to obtain the
+domains_rwsem before obtaining the pages mutex to reliably use the
+existing domains_itree.
 
-Currently there is no way to repopulate the domains. Userspace is expected
-to know if it is going to do something that would trigger revoke (eg if it
-is about to do a FLR) then it should go and remove the DMABUF mappings
-before and put the back after. The revoke is only to protect the kernel
-from mis-behaving userspace.
+Solve this problem by adding a new tracking structure just for DMABUF
+revoke. Record a linked list of areas and domains inside the pages
+mutex. Clean the entries on the list during revoke. The map/unmaps are now
+all done under a pages mutex while updating the tracking linked list so
+nothing can get out of sync. Only one lock is required for revoke
+processing.
 
 Reviewed-by: Nicolin Chen <nicolinc@nvidia.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
@@ -197,167 +199,273 @@ Tested-by: Nicolin Chen <nicolinc@nvidia.com>
 Tested-by: Shuai Xue <xueshuai@linux.alibaba.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- drivers/iommu/iommufd/io_pagetable.c | 11 +++++-
- drivers/iommu/iommufd/io_pagetable.h |  8 +++++
- drivers/iommu/iommufd/pages.c        | 54 +++++++++++++++++-----------
- 3 files changed, 52 insertions(+), 21 deletions(-)
+ drivers/iommu/iommufd/io_pagetable.c |  16 +++-
+ drivers/iommu/iommufd/io_pagetable.h |  17 +++++
+ drivers/iommu/iommufd/pages.c        | 106 ++++++++++++++++++++++++++-
+ 3 files changed, 135 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/iommu/iommufd/io_pagetable.c b/drivers/iommu/iommufd/io_pagetable.c
-index b3cf3825a88c7f..38c5fdc6c82128 100644
+index 38c5fdc6c82128..a120c2ae942a8b 100644
 --- a/drivers/iommu/iommufd/io_pagetable.c
 +++ b/drivers/iommu/iommufd/io_pagetable.c
-@@ -970,9 +970,14 @@ static void iopt_unfill_domain(struct io_pagetable *iopt,
- 				WARN_ON(!area->storage_domain);
- 			if (area->storage_domain == domain)
- 				area->storage_domain = storage_domain;
-+			if (iopt_is_dmabuf(pages)) {
-+				if (!iopt_dmabuf_revoked(pages))
-+					iopt_area_unmap_domain(area, domain);
-+			}
+@@ -973,6 +973,7 @@ static void iopt_unfill_domain(struct io_pagetable *iopt,
+ 			if (iopt_is_dmabuf(pages)) {
+ 				if (!iopt_dmabuf_revoked(pages))
+ 					iopt_area_unmap_domain(area, domain);
++				iopt_dmabuf_untrack_domain(pages, area, domain);
+ 			}
  			mutex_unlock(&pages->mutex);
  
--			iopt_area_unmap_domain(area, domain);
-+			if (!iopt_is_dmabuf(pages))
-+				iopt_area_unmap_domain(area, domain);
- 		}
- 		return;
+@@ -994,6 +995,8 @@ static void iopt_unfill_domain(struct io_pagetable *iopt,
+ 		WARN_ON(area->storage_domain != domain);
+ 		area->storage_domain = NULL;
+ 		iopt_area_unfill_domain(area, pages, domain);
++		if (iopt_is_dmabuf(pages))
++			iopt_dmabuf_untrack_domain(pages, area, domain);
+ 		mutex_unlock(&pages->mutex);
  	}
-@@ -1261,6 +1266,10 @@ static int iopt_area_split(struct iopt_area *area, unsigned long iova)
- 	if (!pages || area->prevent_access)
- 		return -EBUSY;
+ }
+@@ -1023,10 +1026,16 @@ static int iopt_fill_domain(struct io_pagetable *iopt,
+ 		if (!pages)
+ 			continue;
  
-+	/* Maintaining the domains_itree below is a bit complicated */
-+	if (iopt_is_dmabuf(pages))
-+		return -EOPNOTSUPP;
-+
- 	if (new_start & (alignment - 1) ||
- 	    iopt_area_start_byte(area, new_start) & (alignment - 1))
- 		return -EINVAL;
+-		mutex_lock(&pages->mutex);
++		guard(mutex)(&pages->mutex);
++		if (iopt_is_dmabuf(pages)) {
++			rc = iopt_dmabuf_track_domain(pages, area, domain);
++			if (rc)
++				goto out_unfill;
++		}
+ 		rc = iopt_area_fill_domain(area, domain);
+ 		if (rc) {
+-			mutex_unlock(&pages->mutex);
++			if (iopt_is_dmabuf(pages))
++				iopt_dmabuf_untrack_domain(pages, area, domain);
+ 			goto out_unfill;
+ 		}
+ 		if (!area->storage_domain) {
+@@ -1035,7 +1044,6 @@ static int iopt_fill_domain(struct io_pagetable *iopt,
+ 			interval_tree_insert(&area->pages_node,
+ 					     &pages->domains_itree);
+ 		}
+-		mutex_unlock(&pages->mutex);
+ 	}
+ 	return 0;
+ 
+@@ -1056,6 +1064,8 @@ static int iopt_fill_domain(struct io_pagetable *iopt,
+ 			area->storage_domain = NULL;
+ 		}
+ 		iopt_area_unfill_domain(area, pages, domain);
++		if (iopt_is_dmabuf(pages))
++			iopt_dmabuf_untrack_domain(pages, area, domain);
+ 		mutex_unlock(&pages->mutex);
+ 	}
+ 	return rc;
 diff --git a/drivers/iommu/iommufd/io_pagetable.h b/drivers/iommu/iommufd/io_pagetable.h
-index 08b6bfb6b14489..892daf4b1f1eea 100644
+index 892daf4b1f1eea..8f8d583e024376 100644
 --- a/drivers/iommu/iommufd/io_pagetable.h
 +++ b/drivers/iommu/iommufd/io_pagetable.h
-@@ -238,6 +238,14 @@ static inline bool iopt_is_dmabuf(struct iopt_pages *pages)
- 	return pages->type == IOPT_ADDRESS_DMABUF;
- }
+@@ -70,6 +70,16 @@ void iopt_area_unfill_domain(struct iopt_area *area, struct iopt_pages *pages,
+ void iopt_area_unmap_domain(struct iopt_area *area,
+ 			    struct iommu_domain *domain);
  
-+static inline bool iopt_dmabuf_revoked(struct iopt_pages *pages)
-+{
-+	lockdep_assert_held(&pages->mutex);
-+	if (iopt_is_dmabuf(pages))
-+		return pages->dmabuf.phys.len == 0;
-+	return false;
-+}
++int iopt_dmabuf_track_domain(struct iopt_pages *pages, struct iopt_area *area,
++			     struct iommu_domain *domain);
++void iopt_dmabuf_untrack_domain(struct iopt_pages *pages,
++				struct iopt_area *area,
++				struct iommu_domain *domain);
++int iopt_dmabuf_track_all_domains(struct iopt_area *area,
++				  struct iopt_pages *pages);
++void iopt_dmabuf_untrack_all_domains(struct iopt_area *area,
++				     struct iopt_pages *pages);
 +
- struct iopt_pages *iopt_alloc_user_pages(void __user *uptr,
- 					 unsigned long length, bool writable);
- struct iopt_pages *iopt_alloc_file_pages(struct file *file, unsigned long start,
+ static inline unsigned long iopt_area_index(struct iopt_area *area)
+ {
+ 	return area->pages_node.start;
+@@ -184,11 +194,18 @@ enum iopt_address_type {
+ 	IOPT_ADDRESS_DMABUF,
+ };
+ 
++struct iopt_pages_dmabuf_track {
++	struct iommu_domain *domain;
++	struct iopt_area *area;
++	struct list_head elm;
++};
++
+ struct iopt_pages_dmabuf {
+ 	struct dma_buf_attachment *attach;
+ 	struct dma_buf_phys_vec phys;
+ 	/* Always PAGE_SIZE aligned */
+ 	unsigned long start;
++	struct list_head tracker;
+ };
+ 
+ /*
 diff --git a/drivers/iommu/iommufd/pages.c b/drivers/iommu/iommufd/pages.c
-index 89a5c999e3a2d4..e8bfd734fb695b 100644
+index e8bfd734fb695b..a6c874d5eda8f4 100644
 --- a/drivers/iommu/iommufd/pages.c
 +++ b/drivers/iommu/iommufd/pages.c
-@@ -1650,6 +1650,9 @@ void iopt_area_unmap_domain(struct iopt_area *area, struct iommu_domain *domain)
- void iopt_area_unfill_domain(struct iopt_area *area, struct iopt_pages *pages,
- 			     struct iommu_domain *domain)
+@@ -1366,8 +1366,19 @@ struct iopt_pages *iopt_alloc_file_pages(struct file *file, unsigned long start,
+ static void iopt_revoke_notify(struct dma_buf_attachment *attach)
  {
+ 	struct iopt_pages *pages = attach->importer_priv;
++	struct iopt_pages_dmabuf_track *track;
+ 
+ 	guard(mutex)(&pages->mutex);
 +	if (iopt_dmabuf_revoked(pages))
 +		return;
 +
- 	__iopt_area_unfill_domain(area, pages, domain,
- 				  iopt_area_last_index(area));
- }
-@@ -1670,6 +1673,9 @@ int iopt_area_fill_domain(struct iopt_area *area, struct iommu_domain *domain)
- 
- 	lockdep_assert_held(&area->pages->mutex);
- 
-+	if (iopt_dmabuf_revoked(area->pages))
-+		return 0;
++	list_for_each_entry(track, &pages->dmabuf.tracker, elm) {
++		struct iopt_area *area = track->area;
 +
- 	rc = pfn_reader_first(&pfns, area->pages, iopt_area_index(area),
- 			      iopt_area_last_index(area));
- 	if (rc)
-@@ -1729,33 +1735,38 @@ int iopt_area_fill_domains(struct iopt_area *area, struct iopt_pages *pages)
++		iopt_area_unmap_domain_range(area, track->domain,
++					     iopt_area_index(area),
++					     iopt_area_last_index(area));
++	}
+ 	pages->dmabuf.phys.len = 0;
+ }
+ 
+@@ -1468,6 +1479,7 @@ struct iopt_pages *iopt_alloc_dmabuf_pages(struct iommufd_ctx *ictx,
+ 	pages->account_mode = IOPT_PAGES_ACCOUNT_NONE;
+ 	pages->type = IOPT_ADDRESS_DMABUF;
+ 	pages->dmabuf.start = start - start_byte;
++	INIT_LIST_HEAD(&pages->dmabuf.tracker);
+ 
+ 	rc = iopt_map_dmabuf(ictx, pages, dmabuf);
+ 	if (rc) {
+@@ -1478,6 +1490,86 @@ struct iopt_pages *iopt_alloc_dmabuf_pages(struct iommufd_ctx *ictx,
+ 	return pages;
+ }
+ 
++int iopt_dmabuf_track_domain(struct iopt_pages *pages, struct iopt_area *area,
++			     struct iommu_domain *domain)
++{
++	struct iopt_pages_dmabuf_track *track;
++
++	lockdep_assert_held(&pages->mutex);
++	if (WARN_ON(!iopt_is_dmabuf(pages)))
++		return -EINVAL;
++
++	list_for_each_entry(track, &pages->dmabuf.tracker, elm)
++		if (WARN_ON(track->domain == domain && track->area == area))
++			return -EINVAL;
++
++	track = kzalloc(sizeof(*track), GFP_KERNEL);
++	if (!track)
++		return -ENOMEM;
++	track->domain = domain;
++	track->area = area;
++	list_add_tail(&track->elm, &pages->dmabuf.tracker);
++
++	return 0;
++}
++
++void iopt_dmabuf_untrack_domain(struct iopt_pages *pages,
++				struct iopt_area *area,
++				struct iommu_domain *domain)
++{
++	struct iopt_pages_dmabuf_track *track;
++
++	lockdep_assert_held(&pages->mutex);
++	WARN_ON(!iopt_is_dmabuf(pages));
++
++	list_for_each_entry(track, &pages->dmabuf.tracker, elm) {
++		if (track->domain == domain && track->area == area) {
++			list_del(&track->elm);
++			kfree(track);
++			return;
++		}
++	}
++	WARN_ON(true);
++}
++
++int iopt_dmabuf_track_all_domains(struct iopt_area *area,
++				  struct iopt_pages *pages)
++{
++	struct iopt_pages_dmabuf_track *track;
++	struct iommu_domain *domain;
++	unsigned long index;
++	int rc;
++
++	list_for_each_entry(track, &pages->dmabuf.tracker, elm)
++		if (WARN_ON(track->area == area))
++			return -EINVAL;
++
++	xa_for_each(&area->iopt->domains, index, domain) {
++		rc = iopt_dmabuf_track_domain(pages, area, domain);
++		if (rc)
++			goto err_untrack;
++	}
++	return 0;
++err_untrack:
++	iopt_dmabuf_untrack_all_domains(area, pages);
++	return rc;
++}
++
++void iopt_dmabuf_untrack_all_domains(struct iopt_area *area,
++				     struct iopt_pages *pages)
++{
++	struct iopt_pages_dmabuf_track *track;
++	struct iopt_pages_dmabuf_track *tmp;
++
++	list_for_each_entry_safe(track, tmp, &pages->dmabuf.tracker,
++				 elm) {
++		if (track->area == area) {
++			list_del(&track->elm);
++			kfree(track);
++		}
++	}
++}
++
+ void iopt_release_pages(struct kref *kref)
+ {
+ 	struct iopt_pages *pages = container_of(kref, struct iopt_pages, kref);
+@@ -1495,6 +1587,7 @@ void iopt_release_pages(struct kref *kref)
+ 
+ 		dma_buf_detach(dmabuf, pages->dmabuf.attach);
+ 		dma_buf_put(dmabuf);
++		WARN_ON(!list_empty(&pages->dmabuf.tracker));
+ 	} else if (pages->type == IOPT_ADDRESS_FILE) {
+ 		fput(pages->file);
+ 	}
+@@ -1735,11 +1828,17 @@ int iopt_area_fill_domains(struct iopt_area *area, struct iopt_pages *pages)
  		return 0;
  
  	mutex_lock(&pages->mutex);
--	rc = pfn_reader_first(&pfns, pages, iopt_area_index(area),
--			      iopt_area_last_index(area));
--	if (rc)
--		goto out_unlock;
-+	if (!iopt_dmabuf_revoked(pages)) {
-+		rc = pfn_reader_first(&pfns, pages, iopt_area_index(area),
-+				      iopt_area_last_index(area));
++	if (iopt_is_dmabuf(pages)) {
++		rc = iopt_dmabuf_track_all_domains(area, pages);
 +		if (rc)
 +			goto out_unlock;
- 
--	while (!pfn_reader_done(&pfns)) {
--		done_first_end_index = pfns.batch_end_index;
--		done_all_end_index = pfns.batch_start_index;
--		xa_for_each(&area->iopt->domains, index, domain) {
--			rc = batch_to_domain(&pfns.batch, domain, area,
--					     pfns.batch_start_index);
-+		while (!pfn_reader_done(&pfns)) {
-+			done_first_end_index = pfns.batch_end_index;
-+			done_all_end_index = pfns.batch_start_index;
-+			xa_for_each(&area->iopt->domains, index, domain) {
-+				rc = batch_to_domain(&pfns.batch, domain, area,
-+						     pfns.batch_start_index);
-+				if (rc)
-+					goto out_unmap;
-+			}
-+			done_all_end_index = done_first_end_index;
++	}
 +
-+			rc = pfn_reader_next(&pfns);
- 			if (rc)
- 				goto out_unmap;
- 		}
--		done_all_end_index = done_first_end_index;
--
--		rc = pfn_reader_next(&pfns);
-+		rc = pfn_reader_update_pinned(&pfns);
+ 	if (!iopt_dmabuf_revoked(pages)) {
+ 		rc = pfn_reader_first(&pfns, pages, iopt_area_index(area),
+ 				      iopt_area_last_index(area));
  		if (rc)
- 			goto out_unmap;
-+
-+		pfn_reader_destroy(&pfns);
- 	}
--	rc = pfn_reader_update_pinned(&pfns);
--	if (rc)
--		goto out_unmap;
+-			goto out_unlock;
++			goto out_untrack;
  
- 	area->storage_domain = xa_load(&area->iopt->domains, 0);
- 	interval_tree_insert(&area->pages_node, &pages->domains_itree);
--	goto out_destroy;
-+	mutex_unlock(&pages->mutex);
-+	return 0;
- 
- out_unmap:
- 	pfn_reader_release_pins(&pfns);
-@@ -1782,7 +1793,6 @@ int iopt_area_fill_domains(struct iopt_area *area, struct iopt_pages *pages)
- 							end_index);
+ 		while (!pfn_reader_done(&pfns)) {
+ 			done_first_end_index = pfns.batch_end_index;
+@@ -1794,6 +1893,9 @@ int iopt_area_fill_domains(struct iopt_area *area, struct iopt_pages *pages)
  		}
  	}
--out_destroy:
  	pfn_reader_destroy(&pfns);
++out_untrack:
++	if (iopt_is_dmabuf(pages))
++		iopt_dmabuf_untrack_all_domains(area, pages);
  out_unlock:
  	mutex_unlock(&pages->mutex);
-@@ -1809,11 +1819,15 @@ void iopt_area_unfill_domains(struct iopt_area *area, struct iopt_pages *pages)
- 	if (!area->storage_domain)
- 		goto out_unlock;
- 
--	xa_for_each(&iopt->domains, index, domain)
--		if (domain != area->storage_domain)
-+	xa_for_each(&iopt->domains, index, domain) {
-+		if (domain == area->storage_domain)
-+			continue;
-+
-+		if (!iopt_dmabuf_revoked(pages))
- 			iopt_area_unmap_domain_range(
- 				area, domain, iopt_area_index(area),
- 				iopt_area_last_index(area));
-+	}
- 
- 	if (IS_ENABLED(CONFIG_IOMMUFD_TEST))
+ 	return rc;
+@@ -1833,6 +1935,8 @@ void iopt_area_unfill_domains(struct iopt_area *area, struct iopt_pages *pages)
  		WARN_ON(RB_EMPTY_NODE(&area->pages_node.rb));
+ 	interval_tree_remove(&area->pages_node, &pages->domains_itree);
+ 	iopt_area_unfill_domain(area, pages, area->storage_domain);
++	if (iopt_is_dmabuf(pages))
++		iopt_dmabuf_untrack_all_domains(area, pages);
+ 	area->storage_domain = NULL;
+ out_unlock:
+ 	mutex_unlock(&pages->mutex);
 -- 
 2.43.0
 
