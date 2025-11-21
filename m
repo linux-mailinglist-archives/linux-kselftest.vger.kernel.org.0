@@ -1,79 +1,80 @@
-Return-Path: <linux-kselftest+bounces-46147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD117C76BF0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 01:22:11 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id E11B1C76BDB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 01:21:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4725D4E62B4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 00:20:58 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6521D35E52B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 00:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61325221FBF;
-	Fri, 21 Nov 2025 00:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2286F22A4F1;
+	Fri, 21 Nov 2025 00:20:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="eDBh1/5j"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="BNh7+mUT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014A422068A
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 00:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D75AC221DAC
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 00:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763684454; cv=none; b=t4iQoHxPebuSrHqK/w6RFbiaxxdOAMDxkcVpl/yd3bS4Xuvyn2ink96JObKj4l3rWQ64rw59mWiqDjZgZR+esIjEHbNDK/bi2Xg+PHk6GY/bVs9T+a1IFa+VlT/sHiIj7J641dxdMSzmhm/duzH/S4e5PY59O6PBU0en9LVigtk=
+	t=1763684456; cv=none; b=T6yXsp9pGb5i2BWR9TfYWJYBVHI2YWVYEkdbjKlUB++Kvm50KnVo6TBbUVa8iur37Xvb8lQ/4RNzyKQ/dAN8DNv7fZl5tA9+i7s+YUxVfRQSAAkPBLt4trqG8/jdKcBylcpX9FvkwW+u/Xwq7zxhsT39aHfZYXtoxtWS/ZN25vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763684454; c=relaxed/simple;
-	bh=gkVr8IobuC68eHv3Z7VDv3KtRdI5x5m7j6A4Cq1f+Xk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YDxELL7OEKBGW7yLXQHCcbtNWJcr7LKhPHHHuZMXSKR3UhwESAQ9aTEO8vkbxHmw2VLm/CYJXgazWyd4xUolxxHwd9uaCsxxeg01Lnd0X4WWxp8oPotf6NyqRLDu0PPPokHpbF6u2RLMIaEVMHEof06LQu0jNoaxog+MSlJOYKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=eDBh1/5j; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1763684456; c=relaxed/simple;
+	bh=GrnXLMRsdgFNohgAyAbm8pIb18hIeb6R3DkmtYH93vs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KpsyfrqeSljRXKI4YDVNVdzNJCCqP+nG0evfwvNDb6qamA9Tq5WLZdfVRXyKcfrJK+fNsXptJ+NNLk0FRj6UtlypygoQQni/8m1Cc8u/X8w3rdKKtEIMascWum7Fiv67Im4RkW1LmzCCL2R3AWD51/WjjazKfM/YswM9XduI4dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=BNh7+mUT; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-477a219dbcaso14078195e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 16:20:51 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4775ae77516so15910645e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Nov 2025 16:20:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1763684450; x=1764289250; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PZEcjIjXTcoCtcoHMKS6yM6dPDyzVSynlkUTK2L1Eyc=;
-        b=eDBh1/5jVornOlC3bGDMlIKrSIzcThlN/n9FqHGMJ5nq9IQo7/b0VP2iqVWQuOiZzb
-         zQQK64BXXrQDbMTkuIGzzU9mCs/mHYr49+kmPJB6MgMPxs+kGVw1jUG+tzAleMnB+Xjj
-         YhMLkFwmdTV9WrVcv3TtIDpJAPweHU/vnMfVdLChr1f++jxjc3q8w8b5tURZl6kXTQRD
-         RMCRll8P4urM7vwZzw7q/z6tGlosAgV6NokDfXGZO2lZm9QI4nkNaIH87WyMoG0K/pV0
-         Y6Rg8qdsafQ8qHYfaRZ0BZl5/NzY+QPVwk5xSBuOOvs0551eLmApCoEnZlOfyiREJ6/T
-         PiiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763684450; x=1764289250;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=openvpn.net; s=google; t=1763684452; x=1764289252; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PZEcjIjXTcoCtcoHMKS6yM6dPDyzVSynlkUTK2L1Eyc=;
-        b=wtHVYGclB5Y0hMzLlKKk6zD/depEZMy1ElnkLYVTo9oqxxamezyvNrWcYvxl960L8L
-         P+Il8cUeZgjV79AvHElpk5RzF8eh2kSLto2QzZWX1VxtHtVhfk4N8Me50CmsenmN3qfo
-         wTEgd8uC4LWcFScA6ONgZmw6/WTpKYtn1pJRvkV4FYVGJs3OSOhJS149L0Jolpphor4R
-         bg3P+WSCLNdjsVK14eOlCFO3aIZer75ci5ylYUA7WMMG9N+83llVf1vBi0/fRLZDi9ew
-         NLKn8znIKPPPvPskyFAoA/OhppW9taLdeek/dJ9ChA7Qnz2vHa1+AkIWi7LZ1E9kMt1c
-         ZhfA==
-X-Forwarded-Encrypted: i=1; AJvYcCUasN35BZNAumbm8T7fZHRm7ffrof5gIfwT6GBOUODyglVR4lkxRxp2ttmGMYJj8gRe+g8laJ85jBA11IPW/sM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyL55ZamKGYdzZOj938jJ3eIRwuYHIug+nkcTgoDxM7eIe7nNbM
-	ZSk2Fpjm0xSuhvfBr8ldwOc7groVxbcfU6IAkuLgoRagDde/HcS35+21LfoWck2n1qOR40hlxhW
-	Eq54B316PV5XSE/2mHenkfQ2/yjmPDHd9iKkLyfwFegDggBeZ6rH1wbKJOT/+VzI0j6xgjbvsmp
-	0nAh8=
-X-Gm-Gg: ASbGnctYAC36A8uf+Ft4qBorEqd2ncLcfUQ2673xbJUU80fZ2Ovu3vLRWt+F5jIBWtN
-	13gTYKDgpfsj3TaoS6AMiiUFBPZfcv+YndJT5S0TL13P10ziLFjErsGB9zxAWUfQrSgHGYH/frU
-	U1sf3FB0CFAFgYH76ROGzcmvw65DhPDeHp686RilXBbWEcCJHEwIXMA/uPpGOlJDPe8ZRbzrc8M
-	ovJjhgccWc2gBXSTPa6TYgEr+31rW1t/Jyiu87B+m1ePdsw1vypPcbQsR4aJ1i9gvQLxtmeLSSB
-	PZY5JvqsDE5/LUQofwA/3WPLdkIYGTth419qa763KQHOYXsu2VMsVkoTcf3H3nb4ddgmj9Sc1Dm
-	VjSFu0HgF6wxwO+JiW6/Xw3VEkAfR9iOIj2ae6Bh3E4lzeYXYpas+6xAlEHB/R2tmhtl77MGeKL
-	Me2cl4p8uCr/mJo6z1ZgmqTs6d9mqXCtn4AdQ=
-X-Google-Smtp-Source: AGHT+IFUsYW7hYLEsGViwAV+3gSRUjYStxH02gAJMXNSlf/oVnRvsCZ+DsOFchdok41u9ZKOmJE2Wg==
-X-Received: by 2002:a05:600c:5494:b0:477:93f7:bbc5 with SMTP id 5b1f17b1804b1-477c0184c3amr4926295e9.10.1763684450102;
-        Thu, 20 Nov 2025 16:20:50 -0800 (PST)
+        bh=v6F1Wn5RNwY0zkpVgGTHfa5EnMBRoW8TlKg/+h7xsfo=;
+        b=BNh7+mUTTMroOFd3WLv6xxPz3DLss9hCAL+DJLFvpC/IxnXe07CBu1oMcdoW8RSyY9
+         RUdmqkUiNSE0F0xozyro5/bHefOsIxgesuvzf1+hhyy/NCfLXiGQ4It19dJMQA2Y8ztH
+         ZAji0qIG5nltMCVyCcGyWihHZHqni8D4/svAjAptpczumH2VJL9I+zeiB+iyiZJVT2Jy
+         aacpN4+turly7yuJLG3TKzCXT37O1kOiQjziQ9/GYFvKVH2ZXTIaGywC8c73UpL+pZ4M
+         P7D0tTf6rLateCJZeF6x7XffjX4BdtZRO2PEbrK0Y3rP6YgADFTZoXCZn14Eg3VRcARk
+         x07A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763684452; x=1764289252;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=v6F1Wn5RNwY0zkpVgGTHfa5EnMBRoW8TlKg/+h7xsfo=;
+        b=ue1z4BtU0FuxWadVnzb3r3pFSiuObbw78NMSOeYLgmcMc1MbB3cn63VyMtOsQcr6jB
+         E4U3pG+IUA218bojuK5LCqwTGG8SzQbeDKyUv5fE8lMlXY+RekfUhS1BR1IfHDdP1/8F
+         dIkuUamoxfsvJu+y8Oal8+SbBRzkVCHYzC7JqJYWIxwNCpOPtNhk8nKi08pDrTdfFcYw
+         dkyDB/zXp0A3AyOctt7D5LKFi6rhp/rgqD0JKUQv5L77PyyoNjw+IvqYMVk+ZocuOpmI
+         tnBGuLBOy3EJVoJW4hl82WzmBzI32762ihyoMSHbKvBSY7ph/N9Lhy6xTH4l7CDKZwd+
+         CQ1g==
+X-Forwarded-Encrypted: i=1; AJvYcCWCSmxwsbOTCurLoN2x6shxvnGySfkqCPKiKqoY4XjtwIMSqIsqyKh8m9WyeSkbM+s3gr1gcJwpK0i5aOqyRr4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXv9BpDf4qnYv9PNXmo0JOnDB1KNHtR1IhJMrf3fAQmrCFq87O
+	/1zBMxV52B+wzeLSHjdagZePdbmY7dz4C9/ORQ0ybpO+cNFOfrbtaAsr6VZYN6rIOZZv5m99xDn
+	crObIeAAXtfCyh61HcY4ef2c0MezdwLmJCgUGkMddqezMMAxz2qyppqbRy7RSDbU=
+X-Gm-Gg: ASbGncsb+2LHwx8+ubX9tjd+kCLVhCck708UH3TLyh8uuYa+afindTSn5atITUNDVIP
+	iMeLr9o+PWUhpd1LAY7eBJGNBzNhvZz7XoO66dKLsiRKunB7hSFRZenhY1bts/Qq/bsPjcvU31Y
+	fWu1bZbuRHlYEQhbbueD9taW7m8vd8YroFcStw6Q7WDdkE5vOAuAX/fBR2deZuzQu/xv4WM5H+M
+	05xixIkFfa3nnUjoc9dE6dWgk4JgwxcQXPQdbAOcAnukiraS1NhJrMnu1B0dvUpx9d0iMt6IV1y
+	kedwrq1uSizZKqazSZwQbHYWJJUV5u4eGTg+Q8y5+n+jOGlGTMYpVfYjslSwebBxibey9uJLfGj
+	jdSJfI5vYLPEvb1frxn0yNFdSmPaWsLLcGKvEW7uwy3NBUybvbx/fzSJSHi61VfHe7426ckZKmJ
+	84oPdTzB/sKste4sbNUCCqFEum
+X-Google-Smtp-Source: AGHT+IECtfzLd1PKZQnJFdOVD2F+AYvHvdZcJcj5SSbPVKZh6YhMSUT8HdJjYTSSezD8nOsVl29XAA==
+X-Received: by 2002:a05:600c:45d1:b0:475:dae5:d972 with SMTP id 5b1f17b1804b1-477c1123afcmr1611435e9.23.1763684452157;
+        Thu, 20 Nov 2025 16:20:52 -0800 (PST)
 Received: from inifinity.mandelbit.com ([2001:67c:2fbc:1:85ee:9871:b95c:24cf])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477bf226bf7sm15287345e9.11.2025.11.20.16.20.48
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477bf226bf7sm15287345e9.11.2025.11.20.16.20.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Nov 2025 16:20:49 -0800 (PST)
+        Thu, 20 Nov 2025 16:20:51 -0800 (PST)
 From: Antonio Quartulli <antonio@openvpn.net>
 To: netdev@vger.kernel.org
 Cc: Antonio Quartulli <antonio@openvpn.net>,
@@ -82,127 +83,82 @@ Cc: Antonio Quartulli <antonio@openvpn.net>,
 	Ralf Lici <ralf@mandelbit.com>,
 	linux-kselftest@vger.kernel.org,
 	Shuah Khan <shuah@kernel.org>
-Subject: [RFC net-next 00/13] ovpn: new features + kselftests
-Date: Fri, 21 Nov 2025 01:20:31 +0100
-Message-ID: <20251121002044.16071-1-antonio@openvpn.net>
+Subject: [RFC net-next 01/13] selftests: ovpn: allow compiling ovpn-cli.c with mbedtls3
+Date: Fri, 21 Nov 2025 01:20:32 +0100
+Message-ID: <20251121002044.16071-2-antonio@openvpn.net>
 X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20251121002044.16071-1-antonio@openvpn.net>
+References: <20251121002044.16071-1-antonio@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Dear all,
+mbedtls 3 installs headers and calls the shared object
+differently than version 2, therefore we must now rely
+on pkgconfig to fill the right C/LDFLAGS.
 
-This patchset is just a respin of my latest PR to net-next, including all
-modifications requested by Jakub and Sabrina.
+Moreover the mbedtls3 library expects any base64 file to
+have their content on one line.
+Since this change does no break older versions,
+let's change the sample key file format and make mbedtls3
+happy.
 
-However, this time I am also adding patches targeting selftest/net/ovpn, as
-they come in handy for testing the new features (originally I wanted
-them to be a separate PR, but it doesn't indeed make a lot of sense).
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+---
+ tools/testing/selftests/net/ovpn/Makefile   | 14 ++++++++++----
+ tools/testing/selftests/net/ovpn/data64.key |  6 +-----
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-This said, since these kselftest patches are quite invasive, I didn't
-feel confident with sending them in a PR right away, but I rather wanted
-some feedback from Sabrina and Shuah first, if possible.
-
-So here we go.
-
-Once I get some approval on this batch, I'll send then send them all
-to net-next again as PRv2.
-
-
-Thanks a lot!
-
-Regards,
-
-
-Antonio Quartulli (1):
-  selftests: ovpn: allow compiling ovpn-cli.c with mbedtls3
-
-Qingfang Deng (1):
-  ovpn: pktid: use bitops.h API
-
-Ralf Lici (10):
-  selftests: ovpn: add notification parsing and matching
-  ovpn: notify userspace on client float event
-  ovpn: add support for asymmetric peer IDs
-  selftests: ovpn: check asymmetric peer-id
-  selftests: ovpn: add test for the FW mark feature
-  ovpn: consolidate crypto allocations in one chunk
-  ovpn: use bound device in UDP when available
-  selftests: ovpn: add test for bound device
-  ovpn: use bound address in UDP when available
-  selftests: ovpn: add test for bound address
-
-Sabrina Dubroca (1):
-  ovpn: use correct array size to parse nested attributes in
-    ovpn_nl_key_swap_doit
-
- Documentation/netlink/specs/ovpn.yaml         |  23 +-
- drivers/net/ovpn/crypto_aead.c                | 162 +++++++---
- drivers/net/ovpn/io.c                         |   8 +-
- drivers/net/ovpn/netlink-gen.c                |  13 +-
- drivers/net/ovpn/netlink-gen.h                |   6 +-
- drivers/net/ovpn/netlink.c                    |  98 +++++-
- drivers/net/ovpn/netlink.h                    |   2 +
- drivers/net/ovpn/peer.c                       |   6 +
- drivers/net/ovpn/peer.h                       |   4 +-
- drivers/net/ovpn/pktid.c                      |  11 +-
- drivers/net/ovpn/pktid.h                      |   2 +-
- drivers/net/ovpn/skb.h                        |  13 +-
- drivers/net/ovpn/udp.c                        |  10 +-
- include/uapi/linux/ovpn.h                     |   2 +
- tools/testing/selftests/net/ovpn/Makefile     |  17 +-
- .../selftests/net/ovpn/check_requirements.py  |  37 +++
- tools/testing/selftests/net/ovpn/common.sh    |  60 +++-
- tools/testing/selftests/net/ovpn/data64.key   |   6 +-
- .../selftests/net/ovpn/json/peer0-float.json  |   9 +
- .../selftests/net/ovpn/json/peer0.json        |   6 +
- .../selftests/net/ovpn/json/peer1-float.json  |   1 +
- .../selftests/net/ovpn/json/peer1.json        |   1 +
- .../selftests/net/ovpn/json/peer2-float.json  |   1 +
- .../selftests/net/ovpn/json/peer2.json        |   1 +
- .../selftests/net/ovpn/json/peer3-float.json  |   1 +
- .../selftests/net/ovpn/json/peer3.json        |   1 +
- .../selftests/net/ovpn/json/peer4-float.json  |   1 +
- .../selftests/net/ovpn/json/peer4.json        |   1 +
- .../selftests/net/ovpn/json/peer5-float.json  |   1 +
- .../selftests/net/ovpn/json/peer5.json        |   1 +
- .../selftests/net/ovpn/json/peer6-float.json  |   1 +
- .../selftests/net/ovpn/json/peer6.json        |   1 +
- tools/testing/selftests/net/ovpn/ovpn-cli.c   | 281 +++++++++++-------
- .../selftests/net/ovpn/requirements.txt       |   1 +
- .../testing/selftests/net/ovpn/tcp_peers.txt  |  11 +-
- .../selftests/net/ovpn/test-bind-addr.sh      |  10 +
- tools/testing/selftests/net/ovpn/test-bind.sh | 117 ++++++++
- .../selftests/net/ovpn/test-close-socket.sh   |   2 +-
- tools/testing/selftests/net/ovpn/test-mark.sh |  81 +++++
- tools/testing/selftests/net/ovpn/test.sh      |  57 +++-
- .../testing/selftests/net/ovpn/udp_peers.txt  |  12 +-
- 41 files changed, 855 insertions(+), 224 deletions(-)
- create mode 100755 tools/testing/selftests/net/ovpn/check_requirements.py
- create mode 100644 tools/testing/selftests/net/ovpn/json/peer0-float.json
- create mode 100644 tools/testing/selftests/net/ovpn/json/peer0.json
- create mode 120000 tools/testing/selftests/net/ovpn/json/peer1-float.json
- create mode 100644 tools/testing/selftests/net/ovpn/json/peer1.json
- create mode 120000 tools/testing/selftests/net/ovpn/json/peer2-float.json
- create mode 100644 tools/testing/selftests/net/ovpn/json/peer2.json
- create mode 120000 tools/testing/selftests/net/ovpn/json/peer3-float.json
- create mode 100644 tools/testing/selftests/net/ovpn/json/peer3.json
- create mode 120000 tools/testing/selftests/net/ovpn/json/peer4-float.json
- create mode 100644 tools/testing/selftests/net/ovpn/json/peer4.json
- create mode 120000 tools/testing/selftests/net/ovpn/json/peer5-float.json
- create mode 100644 tools/testing/selftests/net/ovpn/json/peer5.json
- create mode 120000 tools/testing/selftests/net/ovpn/json/peer6-float.json
- create mode 100644 tools/testing/selftests/net/ovpn/json/peer6.json
- create mode 120000 tools/testing/selftests/net/ovpn/requirements.txt
- create mode 100755 tools/testing/selftests/net/ovpn/test-bind-addr.sh
- create mode 100755 tools/testing/selftests/net/ovpn/test-bind.sh
- create mode 100755 tools/testing/selftests/net/ovpn/test-mark.sh
-
+diff --git a/tools/testing/selftests/net/ovpn/Makefile b/tools/testing/selftests/net/ovpn/Makefile
+index dbe0388c8512..d3a070db0bb5 100644
+--- a/tools/testing/selftests/net/ovpn/Makefile
++++ b/tools/testing/selftests/net/ovpn/Makefile
+@@ -2,19 +2,25 @@
+ # Copyright (C) 2020-2025 OpenVPN, Inc.
+ #
+ CFLAGS = -pedantic -Wextra -Wall -Wl,--no-as-needed -g -O0 -ggdb $(KHDR_INCLUDES)
++CFLAGS += $(shell pkg-config --cflags mbedcrypto-3 mbedtls-3 2>/dev/null)
++
+ VAR_CFLAGS = $(shell pkg-config --cflags libnl-3.0 libnl-genl-3.0 2>/dev/null)
+ ifeq ($(VAR_CFLAGS),)
+ VAR_CFLAGS = -I/usr/include/libnl3
+ endif
+ CFLAGS += $(VAR_CFLAGS)
+ 
++MTLS_LDLIBS= $(shell pkg-config --libs mbedcrypto-3 mbedtls-3 2>/dev/null)
++ifeq ($(MTLS_LDLIBS),)
++MTLS_LDLIBS = -lmbedtls -lmbedcrypto
++endif
++LDLIBS += $(MTLS_LDLIBS)
+ 
+-LDLIBS = -lmbedtls -lmbedcrypto
+-VAR_LDLIBS = $(shell pkg-config --libs libnl-3.0 libnl-genl-3.0 2>/dev/null)
++NL_LDLIBS = $(shell pkg-config --libs libnl-3.0 libnl-genl-3.0 2>/dev/null)
+ ifeq ($(VAR_LDLIBS),)
+-VAR_LDLIBS = -lnl-genl-3 -lnl-3
++NL_LDLIBS = -lnl-genl-3 -lnl-3
+ endif
+-LDLIBS += $(VAR_LDLIBS)
++LDLIBS += $(NL_LDLIBS)
+ 
+ 
+ TEST_FILES = common.sh
+diff --git a/tools/testing/selftests/net/ovpn/data64.key b/tools/testing/selftests/net/ovpn/data64.key
+index a99e88c4e290..d04febcdf5a2 100644
+--- a/tools/testing/selftests/net/ovpn/data64.key
++++ b/tools/testing/selftests/net/ovpn/data64.key
+@@ -1,5 +1 @@
+-jRqMACN7d7/aFQNT8S7jkrBD8uwrgHbG5OQZP2eu4R1Y7tfpS2bf5RHv06Vi163CGoaIiTX99R3B
+-ia9ycAH8Wz1+9PWv51dnBLur9jbShlgZ2QHLtUc4a/gfT7zZwULXuuxdLnvR21DDeMBaTbkgbai9
+-uvAa7ne1liIgGFzbv+Bas4HDVrygxIxuAnP5Qgc3648IJkZ0QEXPF+O9f0n5+QIvGCxkAUVx+5K6
+-KIs+SoeWXnAopELmoGSjUpFtJbagXK82HfdqpuUxT2Tnuef0/14SzVE/vNleBNu2ZbyrSAaah8tE
+-BofkPJUBFY+YQcfZNM5Dgrw3i+Bpmpq/gpdg5w==
++jRqMACN7d7/aFQNT8S7jkrBD8uwrgHbG5OQZP2eu4R1Y7tfpS2bf5RHv06Vi163CGoaIiTX99R3Bia9ycAH8Wz1+9PWv51dnBLur9jbShlgZ2QHLtUc4a/gfT7zZwULXuuxdLnvR21DDeMBaTbkgbai9uvAa7ne1liIgGFzbv+Bas4HDVrygxIxuAnP5Qgc3648IJkZ0QEXPF+O9f0n5+QIvGCxkAUVx+5K6KIs+SoeWXnAopELmoGSjUpFtJbagXK82HfdqpuUxT2Tnuef0/14SzVE/vNleBNu2ZbyrSAaah8tEBofkPJUBFY+YQcfZNM5Dgrw3i+Bpmpq/gpdg5w==
 -- 
 2.51.2
 
