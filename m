@@ -1,263 +1,173 @@
-Return-Path: <linux-kselftest+bounces-46288-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC851C7B7AB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 20:20:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83915C7BC30
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 22:34:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BC20B4E58B3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 19:20:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E5D374E041D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 21:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 668A12DEA73;
-	Fri, 21 Nov 2025 19:20:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76A9C2F069E;
+	Fri, 21 Nov 2025 21:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N66wTsH4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9852D8367;
-	Fri, 21 Nov 2025 19:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B589126ED55;
+	Fri, 21 Nov 2025 21:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763752820; cv=none; b=QvpB7+hPiS630JGDi1vvwcrtT9CL5/mq2ZdYP6PyaXT7C1E4UOdXtydkHg4rBBBNF7YgBCAK/v2UN2GrhDsc3Zol7OWhtAs3ZTViTcX012BDXK7EtpaGzwrewwhVgzunS/XspurT8b8JtekPzMOMWnFKbTyO4e18PlLptIeoKi0=
+	t=1763760891; cv=none; b=uSNGqRcw5MSKcHp4yL6TdkfVWW2VW2MFN2zsxDthVN7YvHScM/u6myZ43kVX99XbY5srs94DPB21tDR+ersVhJGVfXP9krTM8MHoTo8gfXTPlE1/YC5c6BZS4WQ7uslWeV1uJLCKCTMKPbdqwDmaAGYJ8tYF19Ams50ELA9d8+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763752820; c=relaxed/simple;
-	bh=JTxhSWA6jxw9e4SLyOt7ueqSOQ+RMIIFCViCtct749k=;
-	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=CYwahzyNfyUz1iuvheaRsCQa0yk6gOEA7fpzyB3v5hPX3wZ0ddUEfiiaywoRPTBAOdC8lRIki1GvrMhLuiqUPjDFG56FF2dIJ7ln3cjG6hAaluBOU0TZ+LK471ihbWhssrhvsGp7RR3U5NK9mMxiUIJ3kdcjcP856xwiBubp4L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in01.mta.xmission.com ([166.70.13.51]:56436)
-	by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vMWfr-00EM7W-Dy; Fri, 21 Nov 2025 12:20:03 -0700
-Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:50660 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vMWfp-000k4P-Vv; Fri, 21 Nov 2025 12:20:03 -0700
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>,  Alexey Dobriyan
- <adobriyan@gmail.com>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
- <kees@kernel.org>,  Andy Lutomirski <luto@amacapital.net>,  Will Drewry
- <wad@chromium.org>,  Christian Brauner <brauner@kernel.org>,  Andrew
- Morton <akpm@linux-foundation.org>,  Michal Hocko <mhocko@suse.com>,
-  Serge Hallyn <serge@hallyn.com>,  James Morris
- <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
-  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
- <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
- <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
- <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
-  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
-  linux-security-module@vger.kernel.org,  tiozhang
- <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
- Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
- <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
-  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
-  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
-  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
- <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
- <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
- Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
- <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
- <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
- Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
-  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
- <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
- Dumazet <edumazet@google.com>
-In-Reply-To: <GV2PPF74270EBEED0840E45459881C0EDD4E4D5A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	(Bernd Edlinger's message of "Fri, 21 Nov 2025 12:26:48 +0100")
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<87tsyozqdu.fsf@email.froward.int.ebiederm.org>
-	<87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
-	<87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
-	<87a50gxo0i.fsf@email.froward.int.ebiederm.org>
-	<GV2PPF74270EBEEAD4CACA124C05BE1CE45E4D5A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<87o6ovx38h.fsf@email.froward.int.ebiederm.org>
-	<GV2PPF74270EBEEFA106F4EF26B087ED898E4D5A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEED0840E45459881C0EDD4E4D5A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-Date: Fri, 21 Nov 2025 13:19:55 -0600
-Message-ID: <87ikf3w5us.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1763760891; c=relaxed/simple;
+	bh=0Czov/vSnhpAiV6QxdjRhlrpGNFHHnSruDyXbNge7Zk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JZEi1l+GiiSFaaLNQMnVN6B56WuD0OrmZxNQbcEW6ZborrTQTPP4MA+tX3Tpv21BZOw2LXUfWmsIKHuYaudsfd4OyyBTk/MnOW5I3uk+iOML0C2TqLoYHC993S9Gzv46CYf6QVCSfBQcjIeAOOQM5FWv47IvIZxu2Ka5MZyrwLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N66wTsH4; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763760890; x=1795296890;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0Czov/vSnhpAiV6QxdjRhlrpGNFHHnSruDyXbNge7Zk=;
+  b=N66wTsH47MYQcfq+438OlnumTpmJDZc+bpqU/0i9ry0vjbepMy+2ejcL
+   5XhouXPSt8PgoZAn9GLOvRAtDGPZ4c8FuTgwUki1V1d+ElrSzEctWp+T6
+   pOo8e1N8sOd0kTXvFdUY7Wv4rQ1ymzAL7tFoPymRleZOl53vKPop8qvP7
+   H2vA8J0MhoXFEnciRMyYuW1kVaQlPZHDq+RlJFAnpDUHEGdEhblUghS3g
+   1itge39AcAKvdycEQ6bP65fx4lPGM3CkuPpap2CCfGXeCj1Z+BMq940Ie
+   QsJtztzGUdEl3/1MKSfVJTTjQFTL6VUPe8FqEin0ZoyRBRs/YhQV4KKrL
+   g==;
+X-CSE-ConnectionGUID: T9RDbhbCT3OWf0CCcAyACQ==
+X-CSE-MsgGUID: zYem0iVWQCarPNB7e3nYvw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="65745494"
+X-IronPort-AV: E=Sophos;i="6.20,216,1758610800"; 
+   d="scan'208";a="65745494"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 13:34:48 -0800
+X-CSE-ConnectionGUID: o8GEBnQYTy+S0wSkrKwIUA==
+X-CSE-MsgGUID: y0CCEHJzQ+qAuFX6PPHeeg==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 21 Nov 2025 13:34:45 -0800
+Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1vMYmB-0006tz-0J;
+	Fri, 21 Nov 2025 21:34:43 +0000
+Date: Sat, 22 Nov 2025 05:34:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: griffoul@gmail.com, kvm@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, seanjc@google.com, pbonzini@redhat.com,
+	vkuznets@redhat.com, shuah@kernel.org, dwmw@amazon.co.uk,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Fred Griffoul <fgriffo@amazon.co.uk>
+Subject: Re: [PATCH v2 08/10] KVM: x86: Add nested context management
+Message-ID: <202511220448.n0QXrANz-lkp@intel.com>
+References: <20251118171113.363528-9-griffoul@gmail.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1vMWfp-000k4P-Vv;;;mid=<87ikf3w5us.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX18mnrD+bsi9GaqPd61WTLqlIJTub8z3bTo=
-X-Spam-Level: ****
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.5000]
-	*  1.5 TR_Symld_Words too many words that have symbols inside
-	*  0.7 XMSubLong Long Subject
-	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  1.0 XM_B_Phish_Phrases Commonly used Phishing Phrases
-	*  1.0 XM_B_SpammyTLD Contains uncommon/spammy TLD
-	*  0.0 TR_XM_PhishingBody Phishing flag in body of message
-	*  1.5 XM_B_SpammyTLD3 Phishing rule with uncommon/spammy TLD Combo
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Bernd Edlinger <bernd.edlinger@hotmail.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 871 ms - load_scoreonly_sql: 0.05 (0.0%),
-	signal_user_changed: 11 (1.2%), b_tie_ro: 9 (1.1%), parse: 1.97 (0.2%),
-	 extract_message_metadata: 32 (3.7%), get_uri_detail_list: 6 (0.7%),
-	tests_pri_-2000: 48 (5.5%), tests_pri_-1000: 11 (1.3%),
-	tests_pri_-950: 1.33 (0.2%), tests_pri_-900: 1.19 (0.1%),
-	tests_pri_-90: 124 (14.3%), check_bayes: 123 (14.1%), b_tokenize: 23
-	(2.7%), b_tok_get_all: 17 (1.9%), b_comp_prob: 4.6 (0.5%),
-	b_tok_touch_all: 73 (8.4%), b_finish: 0.89 (0.1%), tests_pri_0: 619
-	(71.1%), check_dkim_signature: 0.63 (0.1%), check_dkim_adsp: 2.4
-	(0.3%), poll_dns_idle: 0.67 (0.1%), tests_pri_10: 3.1 (0.4%),
-	tests_pri_500: 13 (1.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC][PATCH] exec: Move cred computation under exec_update_lock
-X-SA-Exim-Connect-IP: 166.70.13.51
-X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-SA-Exim-Scanned: No (on out01.mta.xmission.com); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251118171113.363528-9-griffoul@gmail.org>
 
-Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
+Hi,
 
-> On 11/21/25 10:35, Bernd Edlinger wrote:
->> On 11/21/25 08:18, Eric W. Biederman wrote:
->>> Bernd Edlinger <bernd.edlinger@hotmail.de> writes:
->>>
->>>> Hi Eric,
->>>>
->>>> thanks for you valuable input on the topic.
->>>>
->>>> On 11/21/25 00:50, Eric W. Biederman wrote:
->>>>> "Eric W. Biederman" <ebiederm@xmission.com> writes:
->>>>>
->>>>>> Instead of computing the new cred before we pass the point of no
->>>>>> return compute the new cred just before we use it.
->>>>>>
->>>>>> This allows the removal of fs_struct->in_exec and cred_guard_mutex.
->>>>>>
->>>>>> I am not certain why we wanted to compute the cred for the new
->>>>>> executable so early.  Perhaps I missed something but I did not see any
->>>>>> common errors being signaled.   So I don't think we loose anything by
->>>>>> computing the new cred later.
->>>>>
->>>>> I should add that the permission checks happen in open_exec,
->>>>> everything that follows credential wise is just about representing in
->>>>> struct cred the credentials the new executable will have.
->>>>>
->>>>> So I am really at a loss why we have had this complicated way of
->>>>> computing of computed the credentials all of these years full of
->>>>> time of check to time of use problems.
->>>>>
->>>>
->>>> Well, I think I see a problem with your patch:
->>>>
->>>> When the security engine gets the LSM_UNSAFE_PTRACE flag, it might
->>>> e.g. return -EPERM in bprm_creds_for_exec in the apparmor, selinux
->>>> or the smack security engines at least.  Previously that callback
->>>> was called before the point of no return, and the return code should
->>>> be returned as a return code the the caller of execve.  But if we move
->>>> that check after the point of no return, the caller will get killed
->>>> due to the failed security check.
->>>>
->>>> Or did I miss something?
->>>
->>> I think we definitely need to document this change in behavior.  I would
->>> call ending the exec with SIGSEGV vs -EPERM a quality of implementation
->>> issue.  The exec is failing one way or the other so I don't see it as a
->>> correctness issue.
->>>
->>> In the case of ptrace in general I think it is a bug if the mere act of
->>> debugging a program changes it's behavior.  So which buggy behavior
->>> should we prefer?  SIGSEGV where it is totally clear that the behavior
->>> has changed or -EPERM and ask the debugged program to handle it.
->>> I lean towards SIGSEGV because then it is clear the code should not
->>> handle it.
->>>
->>> In the case of LSM_UNSAFE_NO_NEW_PRIVS I believe the preferred way to
->>> handle unexpected things happening is to terminate the application.
->>>
->>> In the case of LSM_UNSAFE_SHARE -EPERM might be better.  I don't know
->>> of any good uses of any good uses of sys_clone(CLONE_FS ...) outside
->>> of CLONE_THREAD.
->>>
->>>
->>> Plus all of these things are only considerations if we are exec'ing a
->>> program that transitions to a different set of credentials.  Something
->>> that happens but is quite rare itself.
->>>
->>> In practice I don't expect there is anything that depends on the exact
->>> behavior of what happens when exec'ing a suid executable to gain
->>> privileges when ptraced.   The closes I can imagine is upstart and
->>> I think upstart ran as root when ptracing other programs so there is no
->>> gaining of privilege and thus no reason for a security module to
->>> complain.
->>>
->>> Who knows I could be wrong, and someone could actually care.  Which is
->>> hy I think we should document it.>>
->> 
->> 
->> Well, I dont know for sure, but the security engine could deny the execution
->> for any reason, not only because of being ptraced.
->> Maybe there can be a policy which denies user X to execute e.g. any suid programs.
->> 
->> 
->> Bernd.
->> 
->
-> Hmm, funny..
->
-> I installed this patch on top of
->
-> commit fd95357fd8c6778ac7dea6c57a19b8b182b6e91f (HEAD -> master, origin/master, origin/HEAD)
-> Merge: c966813ea120 7b6216baae75
-> Author: Linus Torvalds <torvalds@linux-foundation.org>
-> Date:   Thu Nov 20 11:04:37 2025 -0800
->
-> but it does panic when I try to boot:
->
-> [  0.870539]     TERM=1inux
-> [  0.870573] Starting init: /bin/sh exists but couldn't execute it (error -14) 0.8705751 Kernel panic- not syncing: No working init found. Try passing i mit= option to kernel. See Linux Documentation/admin-guide/init.rst for guidance
-> [  0.870577] CPU: UID: 0 PID: 1 Comm: sh Not tainted 6.18.0-rc6+ #1 PREEMPT(voluntary)
-> [  0.870579] Hardware name: innotek GmbH VirtualBox/VirtualBox, BIOS VirtualBo x 12/01/2006
-> [  0.870580] Call Trace:
-> [  0.870590]  <TASK>
-> [  0.870592]  vpanic+0x36d/0x380
-> [  0.870607]  ? __pfx_kernel_init+0x10/0x10
-> [  0.870615]  panic+0x5b/0x60
-> [  0.870617]  kernel_init+0x17d/0x1c0
-> [  0.870623]  ret_from_fork+0x124/0x150
-> [  0.870625}  ? __pfx_kernel_init+0x10/0x10
-> [  0.870627]  ret_from_fork_asm+0x1a/0x30
-> [  0.870632]  </TASK>
-> [  0.8706631 Kernel Offset: 0x3a800000 from Oxffffffff81000000 (relocation ran ge: 0xffffffff80000000-0xffffffffbfffffff)
-> [  0.880034] ---[ end Kernel panic - not syncing: No working init found. Try passing init option to kernel. See Linux Documentation/admin-guide/init.rst for guidance. 1---`
->
->
-> Is that a known problem?
+kernel test robot noticed the following build warnings:
 
-Nope.  It looks like the code needs a little bit bug fixing testing.
+[auto build test WARNING on kvm/queue]
+[also build test WARNING on kvm/next mst-vhost/linux-next linus/master v6.18-rc6 next-20251121]
+[cannot apply to kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I will take see about taking a look.
+url:    https://github.com/intel-lab-lkp/linux/commits/griffoul-gmail-com/KVM-nVMX-Implement-cache-for-L1-MSR-bitmap/20251119-012332
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+patch link:    https://lore.kernel.org/r/20251118171113.363528-9-griffoul%40gmail.org
+patch subject: [PATCH v2 08/10] KVM: x86: Add nested context management
+config: i386-randconfig-062-20251121 (https://download.01.org/0day-ci/archive/20251122/202511220448.n0QXrANz-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511220448.n0QXrANz-lkp@intel.com/reproduce)
 
-Eric
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511220448.n0QXrANz-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/x86/kvm/nested.c:133:24: sparse: sparse: Using plain integer as NULL pointer
+
+vim +133 arch/x86/kvm/nested.c
+
+   122	
+   123	struct kvm_nested_context *kvm_nested_context_load(struct kvm_vcpu *vcpu,
+   124							   gpa_t gpa)
+   125	{
+   126		struct kvm_nested_context_table *table;
+   127		struct kvm_nested_context *ctx, *new_ctx = NULL;
+   128		struct kvm *vm = vcpu->kvm;
+   129		bool reset = false;
+   130	
+   131		table = vcpu->kvm->arch.nested_context_table;
+   132		if (WARN_ON_ONCE(!table))
+ > 133			return false;
+   134	retry:
+   135		spin_lock(&table->lock);
+   136		ctx = kvm_nested_context_find(table, vcpu, gpa);
+   137		if (!ctx) {
+   138			/* At capacity? Recycle the LRU context */
+   139			if (table->count >= kvm_nested_context_max(vcpu->kvm)) {
+   140				ctx = kvm_nested_context_recycle(table);
+   141				if (unlikely(!ctx))
+   142					goto finish;
+   143	
+   144				kvm_nested_context_insert(table, ctx, gpa);
+   145				++vm->stat.nested_context_recycle;
+   146				reset = true;
+   147	
+   148			} else if (new_ctx) {
+   149				++table->count;
+   150				ctx = new_ctx;
+   151				kvm_nested_context_insert(table, ctx, gpa);
+   152				new_ctx = NULL;
+   153	
+   154			} else {
+   155				/* Allocate a new context without holding the lock */
+   156				spin_unlock(&table->lock);
+   157				new_ctx = kvm_x86_ops.nested_ops->alloc_context(vcpu);
+   158				if (unlikely(!new_ctx))
+   159					return NULL;
+   160	
+   161				goto retry;
+   162			}
+   163		} else
+   164			++vm->stat.nested_context_reuse;
+   165	
+   166		ctx->vcpu = vcpu;
+   167	finish:
+   168		spin_unlock(&table->lock);
+   169	
+   170		if (new_ctx)
+   171			kvm_x86_ops.nested_ops->free_context(new_ctx);
+   172	
+   173		if (reset)
+   174			kvm_x86_ops.nested_ops->reset_context(ctx);
+   175	
+   176		return ctx;
+   177	}
+   178	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
