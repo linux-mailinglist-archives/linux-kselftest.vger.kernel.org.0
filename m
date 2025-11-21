@@ -1,134 +1,217 @@
-Return-Path: <linux-kselftest+bounces-46199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB4EDC77B3D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 08:30:57 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56969C77BEC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 08:47:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 16E542BE4C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 07:30:15 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CEED3351EDD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Nov 2025 07:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8288F338584;
-	Fri, 21 Nov 2025 07:30:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="BWDCPuIZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6057428D8D0;
+	Fri, 21 Nov 2025 07:47:56 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B66432FA26;
-	Fri, 21 Nov 2025 07:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EDAA23AB8A;
+	Fri, 21 Nov 2025 07:47:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763710201; cv=none; b=YHgo7QBHdMIPN5pXHZqyzCHam+Z8jylIkibmhCRS7sdqFx+Wh3z5YoeGhx8fGqkZPQMy52fPm6SjDAbFuQiojTRiiaYjTZmLgZakLAvhp634AMS/KGOIfHDNnZra+bFH37lyPxWPMMrMuHc0BPVEjF+lMy8c5UlAaezPPxiJKL4=
+	t=1763711276; cv=none; b=KdDrScQPrQ2a5JLebZL7eFA4OzkZMeHPllHBLo/22wXTPC62FVcmd9Kw56m78UiG2lP5h/jWTqkGKF06BFWNXa9MftLHFWdnCE47YjVS1BRpe/vDCcwChkIjcnB/+RgqDnudlEvU1ineq/CTjxayznEd+hD0G+ln6pAVUn1zjy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763710201; c=relaxed/simple;
-	bh=XCC70O6aygXS6msGgQDHEc9SNvVW1q9SjduvGsqHZGQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Hogd2PYyFC0mAO3QF9FMuVo3l6axnfDS0Fh7T3duETZ/GVtR7yUxMJ/lS4/MzTWRv6DX6cwDbDegaS7MW8PeWU0LXcC1djiy7//wLgvAG8YwgihiRF7N5BB05wzh/e2369sq0azyEVWaOWtUfq/v/CP6G/RHVre4goDuXo9FqGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=BWDCPuIZ; arc=none smtp.client-ip=113.46.200.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=yXg8+7/IaBeahjUcoxp7tnRw/aA/6ViGCJ49LoFeOZY=;
-	b=BWDCPuIZauSbS7kpISZx+lbXlOQi8ORkqYVjuyrDXbFs+yIsiwHAMLmUx67uxxMQYnbwxF5cO
-	+sRHBt+QaAhe81TOPUfdEfqV5/LIYtAUsrAWxcF437IxQk1g3joCkF0PFG6DIi/I7/a2XncjiY7
-	mY0/l7JUeQCu0RV2xJYRHWs=
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4dCRdk0kPQz1prL2;
-	Fri, 21 Nov 2025 15:28:10 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id D5DB6180BCF;
-	Fri, 21 Nov 2025 15:29:55 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 21 Nov 2025 15:29:53 +0800
-Message-ID: <a383b3c6-e036-294e-5c62-c7719349c75c@huawei.com>
-Date: Fri, 21 Nov 2025 15:29:53 +0800
+	s=arc-20240116; t=1763711276; c=relaxed/simple;
+	bh=1CXyyfR3TBKufsEIccWMysCnNvbUO/wchP7sL1WGubo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kVqjOp1zUXJ9aTkqUI/CfqNLzi4DUsLWLXaJNLsf+AqgbhEX3f4rqM2I5L77dfwMVpP+yUIOO+04V36FwXWPQqDOoWUkNsnqdB0EQva0aygzx/CKpPUtIyC5AmStk3QmKJoLsOQge95r0gHLatTZDOFYxLq4sICnguMbZa1s7oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 5c6868fcc6ae11f0a38c85956e01ac42-20251121
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:c47afd99-8d09-4ddf-aff3-c959e8862316,IP:20,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:15
+X-CID-INFO: VERSION:1.3.6,REQID:c47afd99-8d09-4ddf-aff3-c959e8862316,IP:20,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:15
+X-CID-META: VersionHash:a9d874c,CLOUDID:ed791c21fc197a444815489b1aed3c13,BulkI
+	D:251120233527X6NZUQMX,BulkQuantity:1,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|841|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:
+	nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
+	,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 5c6868fcc6ae11f0a38c85956e01ac42-20251121
+X-User: zhangguopeng@kylinos.cn
+Received: from [192.168.24.105] [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <zhangguopeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1849455201; Fri, 21 Nov 2025 15:47:42 +0800
+Message-ID: <f7553219-e19d-4172-90da-a2077cb574cc@kylinos.cn>
+Date: Fri, 21 Nov 2025 15:47:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v7 06/11] arm64/ptrace: Expand secure_computing() in place
-Content-Language: en-US
-To: Kevin Brodsky <kevin.brodsky@arm.com>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <oleg@redhat.com>, <tglx@linutronix.de>,
-	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
-	<kees@kernel.org>, <wad@chromium.org>, <akpm@linux-foundation.org>,
-	<ldv@strace.io>, <macro@orcam.me.uk>, <deller@gmx.de>,
-	<mark.rutland@arm.com>, <song@kernel.org>, <mbenes@suse.cz>,
-	<ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
-	<anshuman.khandual@arm.com>, <broonie@kernel.org>, <pengcan@kylinos.cn>,
-	<dvyukov@google.com>, <kmal@cock.li>, <lihongbo22@huawei.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20251117133048.53182-1-ruanjinjie@huawei.com>
- <20251117133048.53182-7-ruanjinjie@huawei.com>
- <e33d0fdb-e8a5-4abd-8e40-773349008b6b@arm.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <e33d0fdb-e8a5-4abd-8e40-773349008b6b@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] selftests: cgroup: make test_memcg_sock robust against
+ delayed sock stats
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org,
+ roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev,
+ lance.yang@linux.dev, shuah@kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251120060406.2846257-1-zhangguopeng@kylinos.cn>
+ <p655qedqjaakrnqpytc6dltejfluxo6jrffcltfz2ivonmk6lb@bxf5xlgo4iw2>
+From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+In-Reply-To: <p655qedqjaakrnqpytc6dltejfluxo6jrffcltfz2ivonmk6lb@bxf5xlgo4iw2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
 
-On 2025/11/19 1:12, Kevin Brodsky wrote:
-> On 17/11/2025 14:30, Jinjie Ruan wrote:
->> The generic entry expand secure_computing() in place and call
->> __secure_computing() directly.
+On 11/20/25 23:35, Michal Koutný wrote:
+> Hello Guopeng.
+> 
+> +Cc Leon Huang Fu <leon.huangfu@shopee.com>   
+> 
+> On Thu, Nov 20, 2025 at 02:04:06PM +0800, Guopeng Zhang <zhangguopeng@kylinos.cn> wrote:
+>> test_memcg_sock() currently requires that memory.stat's "sock " counter
+>> is exactly zero immediately after the TCP server exits. On a busy system
+>> this assumption is too strict:
 >>
->> In order to switch to the generic entry for arm64, refactor
->> secure_computing() for syscall_trace_enter().
+>>   - Socket memory may be freed with a small delay (e.g. RCU callbacks).
+> 
+> (FTR, I remember there is `echo 1 > /sys/module/rcutree/parameters/do_rcu_barrier`,
+> however, I'm not sure it works always as expected (a reader may actually
+> wait for multi-stage RCU pipeline), so plain timeout is more reliable.)
+> 
+Hi Michal,
+
+Thank you for the suggestion.
+
+I tested using `echo 1 > /sys/module/rcutree/parameters/do_rcu_barrier`, but
+unfortunately the effect was not very good on my setup. As you mentioned, a
+reader may actually wait for the multi-stage RCU pipeline, so a plain timeout
+seems more reliable here.
+>>   - memcg statistics are updated asynchronously via the rstat flushing
+>>     worker, so the "sock " value in memory.stat can stay non-zero for a
+>>     short period of time even after all socket memory has been uncharged.
 >>
->> No functional changes.
+>> As a result, test_memcg_sock() can intermittently fail even though socket
+>> memory accounting is working correctly.
 >>
->> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+>> Make the test more robust by polling memory.stat for the "sock "
+>> counter and allowing it some time to drop to zero instead of checking
+>> it only once.
+> 
+> I like the approach of adaptive waiting to settle in such tests.
+> 
+>> The timeout is set to 3 seconds to cover the periodic rstat flush
+>> interval (FLUSH_TIME = 2*HZ by default) plus some scheduling slack. If
+>> the counter does not become zero within the timeout, the test still
+>> fails as before.
+>>
+>> On my test system, running test_memcontrol 50 times produced:
+>>
+>>   - Before this patch:  6/50 runs passed.
+>>   - After this patch:  50/50 runs passed.
+> 
+> BTW Have you looked into the number of retries until success?
+> Was it in accordance with the flushing interval?
+> 
+Yes. From my observations, it usually succeeds after about 10–15 retries on
+average (roughly 1–1.5 seconds), and occasionally it takes more than 20 retries
+(>2 seconds). This looks broadly in line with the periodic rstat flushing
+interval (~2 seconds) plus some scheduling slack.
+>>
+>> Suggested-by: Lance Yang <lance.yang@linux.dev>
+>> Reviewed-by: Lance Yang <lance.yang@linux.dev>
+>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 >> ---
->>  arch/arm64/kernel/ptrace.c | 7 +++++--
->>  1 file changed, 5 insertions(+), 2 deletions(-)
+>> v3:
+>>  - Move MEMCG_SOCKSTAT_WAIT_* defines after the #include block as
+>>    suggested.
+>> v2:
+>>  - Mention the periodic rstat flush interval (FLUSH_TIME = 2*HZ) in
+>>    the comment and clarify the rationale for the 3s timeout.
+>>  - Replace the hard-coded retry count and wait interval with macros
+>>    to avoid magic numbers and make the 3s timeout calculation explicit.
+>> ---
+>>  .../selftests/cgroup/test_memcontrol.c        | 30 ++++++++++++++++++-
+>>  1 file changed, 29 insertions(+), 1 deletion(-)
 >>
->> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
->> index 707951ad5d24..9af3046a2ce9 100644
->> --- a/arch/arm64/kernel/ptrace.c
->> +++ b/arch/arm64/kernel/ptrace.c
->> @@ -2387,8 +2387,11 @@ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
->>  	}
+>> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+>> index 4e1647568c5b..8ff7286fc80b 100644
+>> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+>> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+>> @@ -21,6 +21,9 @@
+>>  #include "kselftest.h"
+>>  #include "cgroup_util.h"
 >>  
->>  	/* Do the secure computing after ptrace; failures should be fast. */
->> -	if (secure_computing() == -1)
->> -		return NO_SYSCALL;
->> +	if (flags & _TIF_SECCOMP) {
->> +		ret = __secure_computing(NULL);
-> 
-> No argument was passed to __secure_computing() in v6, as expected since
-> it was removed in v6.15. Not sure why this NULL reappeared.
-> 
-There is a typo here.
-
->> +		if (ret == -1L)
-> 
-> ret is an int, so should be -1, not -1L.
-
-Right, not -1L.
-
-> 
-> - Kevin
-> 
->> +			return NO_SYSCALL;
+>> +#define MEMCG_SOCKSTAT_WAIT_RETRIES        30              /* 3s total */
+>> +#define MEMCG_SOCKSTAT_WAIT_INTERVAL_US    (100 * 1000)    /* 100 ms */
+>> +
+>>  static bool has_localevents;
+>>  static bool has_recursiveprot;
+>>  
+>> @@ -1384,6 +1387,8 @@ static int test_memcg_sock(const char *root)
+>>  	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
+>>  	unsigned short port;
+>>  	char *memcg;
+>> +	long sock_post = -1;
+>> +	int i;
+>>  
+>>  	memcg = cg_name(root, "memcg_test");
+>>  	if (!memcg)
+>> @@ -1432,7 +1437,30 @@ static int test_memcg_sock(const char *root)
+>>  	if (cg_read_long(memcg, "memory.current") < 0)
+>>  		goto cleanup;
+>>  
+>> -	if (cg_read_key_long(memcg, "memory.stat", "sock "))
+>> +	/*
+>> +	 * memory.stat is updated asynchronously via the memcg rstat
+>> +	 * flushing worker, which runs periodically (every 2 seconds,
+>> +	 * see FLUSH_TIME). On a busy system, the "sock " counter may
+>> +	 * stay non-zero for a short period of time after the TCP
+>> +	 * connection is closed and all socket memory has been
+>> +	 * uncharged.
+>> +	 *
+>> +	 * Poll memory.stat for up to 3 seconds (~FLUSH_TIME plus some
+>> +	 * scheduling slack) and require that the "sock " counter
+>> +	 * eventually drops to zero.
+>> +	 */
+>> +	for (i = 0; i < MEMCG_SOCKSTAT_WAIT_RETRIES; i++) {
+>> +		sock_post = cg_read_key_long(memcg, "memory.stat", "sock ");
+>> +		if (sock_post < 0)
+>> +			goto cleanup;
+>> +
+>> +		if (!sock_post)
+>> +			break;
+>> +
+>> +		usleep(MEMCG_SOCKSTAT_WAIT_INTERVAL_US);
 >> +	}
->>  
->>  	/* Either of the above might have changed the syscall number */
->>  	syscall = syscall_get_nr(current, regs);
 > 
+> I think this may be useful also for othe tests (at least other
+> memory.stat checks), so some encapsulated implementation like a macro
+> with parameters
+> 	cg_read_assert_gt_with_retries(cg, file, field, exp, timeout, retries)
+> WDYT?
+> 
+> Michal
+
+That’s a great idea. I agree this pattern could be useful for other
+`memory.stat` checks as well, and I will implement an encapsulated helper/macro
+along those lines as per your suggestion.
+
+Thanks,
+Guopeng
+
 
