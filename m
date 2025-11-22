@@ -1,156 +1,139 @@
-Return-Path: <linux-kselftest+bounces-46297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF4F0C7C17D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 02:33:46 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92FF4C7C2B1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 03:17:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4709D35E783
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 01:33:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 248EA34B854
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 02:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80DE52580F3;
-	Sat, 22 Nov 2025 01:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A51262FD1;
+	Sat, 22 Nov 2025 02:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OmjpBe+Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3755F187346;
-	Sat, 22 Nov 2025 01:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36C2B212F98
+	for <linux-kselftest@vger.kernel.org>; Sat, 22 Nov 2025 02:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763775221; cv=none; b=K/KhhO5/K7i+c+2A4W4SK72giokdw+eFECTqkc34Sv0HlbXAatz4NA+J5Atq5gTCyajcKt9jd66m1ja+DD3e1vv5/bEGaqxMUKaLzXKFYBhHPQuoQirBSsJTOQk2bdZ/LyQ1FFWJEpMOxjhm0y+JuOI9BJJtCjw+1i0Qz93AQeI=
+	t=1763777820; cv=none; b=ZvUvlTAdMhcoZ3oQokC+vil6ethZqrtHQZUQN/MEvZjfllVCMYVDF4zHFD1n384Kc31d8QFCK++zaxsnIU9m0xAYPI/at4jAMFi+/L7wlZt0vM16X0X1kDhqB+4HdRqvgBYtio1Bo2IkDoNmUDhrX9R9l4dSJahZPsioKXYRp9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763775221; c=relaxed/simple;
-	bh=y4bM3oA5ie1HMqBdcaU0Q4ok15UmRjbDKni4nbNPAAk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OIUrMMOmABxJeTaXBEey3H/7HSNbSSGeJzu5wcPbCYlwPbc6qdRhERfPxX+tfZFeQrywJHZtgr4vHZDggqIMe3qRBD4du9zLrUDZCz1E+7uF0P4zv3DsV6oXwKbiRpuQmDZ/AhxT65JGd3QxDrawEY5JzzOGiwRZ2/+6iXI0RXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.216])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4dCvjW5KhqzKHMMX;
-	Sat, 22 Nov 2025 09:33:03 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id BACF31A142A;
-	Sat, 22 Nov 2025 09:33:35 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP1 (Coremail) with SMTP id cCh0CgDHSkTuEiFpL95ABg--.40877S2;
-	Sat, 22 Nov 2025 09:33:35 +0800 (CST)
-Message-ID: <0c409964-c4aa-4d41-aae5-cd0626015eeb@huaweicloud.com>
-Date: Sat, 22 Nov 2025 09:33:34 +0800
+	s=arc-20240116; t=1763777820; c=relaxed/simple;
+	bh=HcTrfLl0nwxO5b2LTWB2R002IRkel0ACVCeGY+W8t2Y=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=B+GgpcGWIrndCtc0EHgpPghLHK+ptaBlc8L+1mbDvUpu0J8MU3j8PL5e5wC5bFfRXfHWOukdMgVFABVYk5dqbsoXqcWgDtR+1nu5jPzHJvtywKib52ubXdkvgk4+QCHtoToGlRmTfcymDq3KfrGaRPRifE8qWbsxxpN6mvcdtxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OmjpBe+Y; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-78a6c7ac38fso29971577b3.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Nov 2025 18:16:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763777818; x=1764382618; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fZH1duZnEPXr5MV5XSfY2om1ciAirSpLv1SrLG39apQ=;
+        b=OmjpBe+YkaMd06KW4juBXlmrzO5506AxVnV/FI6Fu27wVtgb8Yj+S7NHg0ZSEB7p6s
+         gmlc/+8GhJj8Aki7a7D8Tp2gHkxrFORSFkcbH/RzG9j3w5AY3GyvMyWrifVwbleb+t5t
+         GbT865EVyXawPMEbpD0rICtHvCPI+UxhewrHzQ3ETGonSxuzvGa8Ld8lYqO51LOYmFY1
+         Unarl5Vq3ifIg6I4yxvFlFc/Gy5gEH1iAygdGNRe6yyoZNeHX/f5IaMJj4QZSVsHdBMQ
+         2FdCDYiwtWEgvwd3ammzbPJ23U5bftyZ+6zBqAK72xqIUqzRIETg1tQ59DibYvrz8nem
+         HbPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763777818; x=1764382618;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fZH1duZnEPXr5MV5XSfY2om1ciAirSpLv1SrLG39apQ=;
+        b=KKT656Q8nHsrVTyK9UxWapKK8BPl8W2kJqjEmJBwz4RqLaPjtatsGY4Uljjpy6VYJh
+         XOVQVZofAH/6rODvGcxRoVk4thL7E3ZP6jATReFZOLNW+xvomf/Hr0o27b245MWXi329
+         h4M1BJYAi1yog61BDt7ghgVuzoIFtLT9zd/EWuhF3OHWWPejKqa08Q4e5ZrqSYaI4aAQ
+         1qTJi0dLe5J24dFeXyE4k8VW7vyjR+fYyeeXC0kVH3JjtrMk8FHsB3PeyHcLmb6pvMes
+         zN08W7nrFd1AsfM2F8z3M8gOWRjVTGGgT/4Rj25/mr79XjBh3krYZqXgeJEVqKzWCROY
+         OeTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUGbAhYnq35aiydSuaswGQODec86JpOMy9ednIIXUBsnXTGWTE0mhKBQ5T6JCF3tSsNCm6Lc0p3o7vYQNLswnU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydoisgLKfayrbAKxiYaXMiRuWVPQXWJMd1K2uNtJJMg5wsv1al
+	3IQc7Kjj1tekjbIDKpax8MS72VacMYN9ePjaFAuZtjUZVKUeZqIUMzKz
+X-Gm-Gg: ASbGnct/p7Xmkbb7riw0XysVMlA6lID977RP8SDG5h7qb78pbdpgjH62Iy6pYxgZufE
+	WASYlTVRu1818VD1e+IznLL5WekgpmLxoTtJkB6hM9skbL5fuX87NZ+R4cXNs7wFv0Lcv+ESe98
+	rsmd8Bi2UKmQPdXHU04OwkSm726RT2mO5m7Co4MXy+Du3PtP+svBuy9hF9QWvoFB/TBOYxJrO09
+	eyfmTt/Ag49Mb8RUQoo/+6zd7QxJQI7PtNGuEGDPYolZEleOYEKwpXS8166QNxBZtYPr1NC/P2h
+	hf5ZlhZpmt+DLLI3CovNbbY9Eii7/o2QzGnNvGhBMbIoHEZukDMlmyqcaYhIQcWP1mv97OJ1Yjg
+	K/FQey8OU80NStdL/bVojv/qv74QGm58RdFDxuycD0Jhj8ZaxTL4/DNRDkhY5JK0y7rkd82u/iW
+	aCmMY/dZch21TVT5maA/AR1fDqYfIcU1teRjLWB5kGjofGjaiLGMEHCOhJYv3Dnrbm+Ow=
+X-Google-Smtp-Source: AGHT+IHoO6qNAUPw4+8PucvKAsU+85vfg1dtDVD5lxUKXjlhSCB8zRWLNk0AzYZnMtp7pZX7xPRC8A==
+X-Received: by 2002:a05:690e:1511:b0:63f:a324:bbf3 with SMTP id 956f58d0204a3-64302ab18damr3307134d50.42.1763777818152;
+        Fri, 21 Nov 2025 18:16:58 -0800 (PST)
+Received: from gmail.com (116.235.236.35.bc.googleusercontent.com. [35.236.235.116])
+        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-642f707a9b9sm2278959d50.6.2025.11.21.18.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Nov 2025 18:16:57 -0800 (PST)
+Date: Fri, 21 Nov 2025 21:16:57 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, 
+ netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ willemb@google.com, 
+ petrm@nvidia.com, 
+ dw@davidwei.uk, 
+ shuah@kernel.org, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.53e77e2eea78@gmail.com>
+In-Reply-To: <20251121173203.7bc1a3f4@kernel.org>
+References: <20251121040259.3647749-1-kuba@kernel.org>
+ <20251121040259.3647749-5-kuba@kernel.org>
+ <willemdebruijn.kernel.224bdf2fac125@gmail.com>
+ <20251121173203.7bc1a3f4@kernel.org>
+Subject: Re: [PATCH net-next 4/5] selftests: hw-net: toeplitz: read
+ indirection table from the device
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on
- cpuset.cpus conflict.
-To: Sun Shaojie <sunshaojie@kylinos.cn>
-Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llong@redhat.com, mkoutny@suse.com, shuah@kernel.org, tj@kernel.org
-References: <8d38b4ea-6b55-4319-b330-2dc33ac5cd77@huaweicloud.com>
- <20251121103217.1661443-1-sunshaojie@kylinos.cn>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20251121103217.1661443-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDHSkTuEiFpL95ABg--.40877S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7ur15Gr47Gw1xWF4xJw17trb_yoW8ur15pF
-	W8K3WUJws5Xr1rCwsFqFykZr15tanrAF17Xrn8Gr43JwsayF1vk3WvkF9Igrs8ZrnxGF1j
-	v3y3urZxZF1DAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbmii3UUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-
-
-On 2025/11/21 18:32, Sun Shaojie wrote:
-> Hi, Ridong,
+Jakub Kicinski wrote:
+> On Fri, 21 Nov 2025 18:12:16 -0500 Willem de Bruijn wrote:
+> > > +	if (rsp->_count.indir > RSS_MAX_INDIR)
+> > > +		error(1, 0, "RSS indirection table too large (%u > %u)",
+> > > +		      rsp->_count.indir, RSS_MAX_INDIR);
+> > > +
+> > > +	/* If indir table not available we'll fallback to simple modulo math */
+> > > +	if (rsp->_count.indir) {
+> > > +		memcpy(rss_indir_tbl, rsp->indir,
+> > > +		       rsp->_count.indir * sizeof(rss_indir_tbl[0]));  
+> > 
+> > It can be assumed that rsp->indir elements are sizeof(rss_indir_tbl[0])?
+> > 
+> > Is there a way to have the test verify element size. I'm not that
+> > familiar with YNL.
 > 
-> On Thu, 20 Nov 2025 21:45:16, Chen Ridong wrote:
->> On 2025/11/20 21:07, Sun Shaojie wrote:
->>> I have carefully considered the scenario where parent effective CPUs are 
->>> empty, which corresponds to the following two cases. (After apply this patch).
->>>
->>>    root cgroup
->>>         |
->>>        A1
->>>       /  \
->>>     A2    A3
->>>
->>> Case 1:
->>>  Step:
->>>  #1> echo "0-1" > A1/cpuset.cpus
->>>  #2> echo "root" > A1/cpuset.cpus.partition
->>>  #3> echo "0-1" > A2/cpuset.cpus
->>>  #4> echo "root" > A2/cpuset.cpus.partition
->>>
->>>  After step #4, 
->>>
->>>                 |      A1      |      A2      |      A3      |
->>>  cpus_allowed   | 0-1          | 0-1          |              |
->>>  effective_cpus |              | 0-1          |              |
->>>  prstate        | root         | root         | member       |
->>>
->>>  After step #4, A3's effective CPUs is empty.
->>>
->>
->> That may be a corner case is unexpected.
->>
->>>  #5> echo "0-1" > A3/cpuset.cpus
->>>
->>
->> If we create subdirectories (e.g., A4, A5, ...) under the A1 cpuset and then configure cpuset.cpus
->> for A1 (a common usage scenario), processes can no longer be migrated into these subdirectories (A4,
->> A5, ...) afterward. However, prior to your patch, this migration was allowed.
+> I suspect the reaction may be because drivers often use a smaller type.
+> But at the uAPI level the indirection table has always been represented
+> as an array of u32 (I mean the ioctl). And in the core we also always
+> deal with u32s. The Netlink type is not allowed to change either 
+> (it's a "C array" not individual attributes so members must be known
+> size).
 > 
-> Are you referring to creating subdirectories (A4, A5, ...) after step #4? 
-> And what parameters should be configured for A1's cpuset.cpus?
-> Could you provide a specific example?
+> LMK if you want me to add an assert or rework this. We could technically
+> keep the rsp struct around and use it directly?
 > 
+> Not fully convinced it's worth a respin, but LMK.. :)
 
- #1> echo "0-1" > A1/cpuset.cpus
- #2> echo "root" > A1/cpuset.cpus.partition
- #3> echo "0-1" > A2/cpuset.cpus
- #4> echo "root" > A2/cpuset.cpus.partition
- mkdir A4
- mkdir A5
- echo "0" > A4/cpuset.cpus
- echo $$ > A4/cgroup.procs
- echo "1" > A5/cpuset.cpus
- echo $$ > A5/cgroup.procs
-
-You might be going to argue that we haven't set the cpus for A4/A5..., yeah, maybe a corner case.
-
-However, it’s common practice to configure a cpuset’s cpus first and then migrate processes—this is
-a typical usage scenario.
-
-
-> Additionally, processes cannot be migrated into a cgroup whose 
-> cpuset.cpus.effective is empty. However, this patch does not modify this behavior.
-> 
-> So why does applying this patch enable such migration?
-> 
-
-
--- 
-Best regards,
-Ridong
-
+Not at all. Thanks for that uAPI context.
 
