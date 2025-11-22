@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-46308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1EA2C7C863
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 06:54:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F4EAC7C869
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 06:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FE4A3A9716
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 05:52:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A33D3A9D3C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 05:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6192D12F5;
-	Sat, 22 Nov 2025 05:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA29F2D4816;
+	Sat, 22 Nov 2025 05:51:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="iQsPBf/y"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="W7D3ePx8"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE212BF3CC;
-	Sat, 22 Nov 2025 05:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9390F2D3A70;
+	Sat, 22 Nov 2025 05:51:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763790698; cv=none; b=RI2swh1CAaeuRJzb2CHn03ldRgb6fblD/lz1Pg+k5Q+S60lXvAbM7Rc9trBrDr4IXVYHdwu/co1JYTlb8Ze77a/ypzkt7dkRaxcxGOgW40iO5HJK6oYBE3j56xDYjlJzZgr+zfDsnyO7KeQpa1lbPHhdcrArRP9gG3IWiiTQ63I=
+	t=1763790701; cv=none; b=rmEJvyH8nv+HGLKKydsoli8CvX01y9uxlGk8bOPVTeF0aNSWreyutKWOi29cF51WZhSaZLvjnwLpu4nQr/sAlAtH9lQD9FcJBZrLkWUg803aJoyNL8jSkgzPr57CdgMIugflYEpQIe6alrwd8ZHFLFaMg7GuAhy22Orj3uwjTtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763790698; c=relaxed/simple;
-	bh=wuR9Um2tq6ZLxAMhCeO1aI1vzR2V/4QxRww9FgFxO+k=;
+	s=arc-20240116; t=1763790701; c=relaxed/simple;
+	bh=LwIHhYXeFJeDdF1kDSEARDffQgz5dUmhKnAXQwo8Pn8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Tz9bZeQtS5sAQ9y6TNPp90lIMHBJzONIBRTDVjmvAh1AAXnaLpRhSj+dAnMvN4n6uFPjfVccT6YXBglUGLncqnBlzr0W7Gn4FdjdqjyIXg3NF2cMUTrrmEbcXjFXS/JWfqoCejLpD8FXt98+mSGhINg4KkUzSb5lFIDzKZdIkKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=iQsPBf/y; arc=none smtp.client-ip=213.97.179.56
+	 In-Reply-To:To:Cc; b=XjUFhwvHJkAdzFZJlDYGMIZwZtafAZBHWS3HSyezNwSDmFv/c/lbTV/RWwLWspJjYtPSgZdO52d9yNnHUrxvNnjTYMjGBecv84TuM1jU2p1xNm7OqRIO1UOkqzeOTTTIhAGy0yCf8DkjaIiNJwRpjzOidz1Hv5V4474qkRMpOt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=W7D3ePx8; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
@@ -37,19 +37,19 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender
 	:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=LKeIFtce+QsZcKJRLYOqSL7Yn9CvqGTf+rY/2k+4SUM=; b=iQsPBf/y1zugpmsmXvi3q3F7vS
-	fuxgWKGLLEHjAl84au4opyj/rlgtjvqPFyv/a4De1lpEp1lB6jxPEuTui78cofYIgHBq5gPrjUNq7
-	B1Cr5xOA+vy9Z4ZBWKKR8/yA49ShiMYfsbsDsqNzfLIQ3qgtVRNX2aX2qOWXUB5CK/rHIV8dzOOrz
-	x3jm4275/hL4Xlpbrz9AMRFUQTH1daXR5jlfs6OKCPImxn0azKI7VJmnpBvse5xsOhBsMpDfvAFOE
-	dmobrJan9iSLCwk1yIAzcyVLK8qwyoHcfcllkRK8uTy64e/VIOydNwUIhFdjHsrp1E4b81JnifMpj
-	Ooj0hBIQ==;
+	bh=zOjPGE9lsonyPtm0p0zdTTkMf2zbS0u2zhJUFebOEG0=; b=W7D3ePx87PMqrJQuCOV3NeJPG3
+	kBh6S/y74nERtLvLkl3MoJZ2WWgWlKUQm6Mt1c061jzVhiCqLHmCE0mq9QtzPpK05VLiZGFYnVC12
+	CXdaXCgjPfVC+gMogBHGG5ip9vMRSqKreNNvORDYHFPzzPsQIJIY5JMqNY4G7ucre7wWwN4P1m/VL
+	EdtH+V2/goa9iM6Z38OZLJpTJKlEA1toqO5RVP/iMXCzKir8JE/zRcEtDlALO0h4ts+NdPkHw8TKw
+	XzR3S7un+kAnASjAhmFQTc8hb8aCNviGuvDP0WmvuScNNzyH5SXAa8YsrInJsYGW8KlohoX5ALpKI
+	vzkQX3gg==;
 Received: from [187.101.0.152] (helo=[192.168.15.100])
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vMgWy-003xEt-Mh; Sat, 22 Nov 2025 06:51:32 +0100
+	id 1vMgX1-003xEt-SV; Sat, 22 Nov 2025 06:51:35 +0100
 From: =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
-Date: Sat, 22 Nov 2025 02:50:50 -0300
-Subject: [PATCH v6 8/9] selftests/futex: Expand for get_robust_list2()
+Date: Sat, 22 Nov 2025 02:50:51 -0300
+Subject: [PATCH v6 9/9] futex: Use new robust list API internally
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,7 +58,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251122-tonyk-robust_futex-v6-8-05fea005a0fd@igalia.com>
+Message-Id: <20251122-tonyk-robust_futex-v6-9-05fea005a0fd@igalia.com>
 References: <20251122-tonyk-robust_futex-v6-0-05fea005a0fd@igalia.com>
 In-Reply-To: <20251122-tonyk-robust_futex-v6-0-05fea005a0fd@igalia.com>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
@@ -71,189 +71,199 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  =?utf-8?q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
 X-Mailer: b4 0.14.3
 
-Reuse the same selftest for the original set_robust_list() syscall for
-the new set_robust_list2() syscall. Use kselftest variants feature to
-run the relevant tests for both interfaces. Create a new test case to
-get different lists from the same task.
+The new robust list API internals can handle any kind of robust list, so
+to simplify the code, reuse the same mechanisms for the original API and
+when calling the original set syscall, set the head in the array of
+lists. The first two indexes of the array of robust lists are reserved
+for the original API lists, the native robust list and the compat robust
+list.
 
 Signed-off-by: André Almeida <andrealmeid@igalia.com>
 ---
- .../selftests/futex/functional/robust_list.c       | 95 ++++++++++++++++++----
- 1 file changed, 81 insertions(+), 14 deletions(-)
+ include/linux/futex.h   |  4 ----
+ include/linux/sched.h   |  5 -----
+ kernel/futex/core.c     | 12 ------------
+ kernel/futex/syscalls.c | 52 ++++++++++++++++++++++++-------------------------
+ 4 files changed, 25 insertions(+), 48 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/robust_list.c b/tools/testing/selftests/futex/functional/robust_list.c
-index bf47e9ab2951..e6b26d7b9502 100644
---- a/tools/testing/selftests/futex/functional/robust_list.c
-+++ b/tools/testing/selftests/futex/functional/robust_list.c
-@@ -44,6 +44,7 @@
+diff --git a/include/linux/futex.h b/include/linux/futex.h
+index 3dba249bcd32..ce27f6307c60 100644
+--- a/include/linux/futex.h
++++ b/include/linux/futex.h
+@@ -87,10 +87,6 @@ static inline bool futex_in_32bit_syscall(void)
  
- #ifndef SYS_set_robust_list2
- # define SYS_set_robust_list2 470
-+# define SYS_get_robust_list2 471
+ static inline void futex_init_task(struct task_struct *tsk)
+ {
+-	tsk->robust_list = NULL;
+-#ifdef CONFIG_COMPAT
+-	tsk->robust_list32 = NULL;
+-#endif
+ 	tsk->futex_robust_lists = NULL;
+ 	INIT_LIST_HEAD(&tsk->pi_state_list);
+ 	tsk->pi_state_cache = NULL;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index de2f3cbe4953..e0f28e7f0a2d 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -75,7 +75,6 @@ struct pid_namespace;
+ struct pipe_inode_info;
+ struct rcu_node;
+ struct reclaim_state;
+-struct robust_list_head;
+ struct root_domain;
+ struct rq;
+ struct sched_attr;
+@@ -1330,11 +1329,7 @@ struct task_struct {
+ 	u32				rmid;
+ #endif
+ #ifdef CONFIG_FUTEX
+-	struct robust_list_head __user	*robust_list;
+ 	uintptr_t			*futex_robust_lists;
+-#ifdef CONFIG_COMPAT
+-	struct robust_list_head32 __user *robust_list32;
+-#endif
+ 	struct list_head		pi_state_list;
+ 	struct futex_pi_state		*pi_state_cache;
+ 	struct mutex			futex_exit_mutex;
+diff --git a/kernel/futex/core.c b/kernel/futex/core.c
+index 14d8a7176367..f91df175033d 100644
+--- a/kernel/futex/core.c
++++ b/kernel/futex/core.c
+@@ -1500,18 +1500,6 @@ static void exit_robust_lists(struct task_struct *tsk)
  
- enum robust_list_cmd {
- 	FUTEX_ROBUST_LIST_CMD_SET_64,
-@@ -81,6 +82,12 @@ static int set_robust_list2(struct robust_list_head *head, int index,
- 	return syscall(SYS_set_robust_list2, head, index, cmd, flags);
+ static void futex_cleanup(struct task_struct *tsk)
+ {
+-	if (unlikely(tsk->robust_list)) {
+-		exit_robust_list(tsk, tsk->robust_list);
+-		tsk->robust_list = NULL;
+-	}
+-
+-#ifdef CONFIG_64BIT
+-	if (unlikely(tsk->robust_list32)) {
+-		exit_robust_list32(tsk, tsk->robust_list32);
+-		tsk->robust_list32 = NULL;
+-	}
+-#endif
+-
+ 	if (unlikely(tsk->futex_robust_lists))
+ 		exit_robust_lists(tsk);
+ 
+diff --git a/kernel/futex/syscalls.c b/kernel/futex/syscalls.c
+index f730d16632fc..2a44791db37a 100644
+--- a/kernel/futex/syscalls.c
++++ b/kernel/futex/syscalls.c
+@@ -28,32 +28,29 @@
+ SYSCALL_DEFINE2(set_robust_list, struct robust_list_head __user *, head,
+ 		size_t, len)
+ {
++	enum robust_list2_cmd cmd;
+ 	/*
+ 	 * The kernel knows only one size for now:
+ 	 */
+ 	if (unlikely(len != sizeof(*head)))
+ 		return -EINVAL;
+ 
+-	current->robust_list = head;
++	cmd = IS_ENABLED(CONFIG_64BIT) ? FUTEX_ROBUST_LIST_CMD_SET_64 :
++	      FUTEX_ROBUST_LIST_CMD_SET_32;
+ 
+-	return 0;
++	return futex_robust_list_set((uintptr_t) head, cmd,
++				     FUTEX_ROBUST_LIST_NATIVE_IDX);
  }
  
-+static int get_robust_list2(int pid, struct robust_list_head **head,
-+			    unsigned int index, unsigned int flags)
-+{
-+	return syscall(SYS_get_robust_list2, pid, head, index, flags);
-+}
-+
- static bool robust_list2_support(void)
+-static inline void __user *futex_task_robust_list(struct task_struct *p, bool compat)
+-{
+-#ifdef CONFIG_COMPAT
+-	if (compat)
+-		return p->robust_list32;
+-#endif
+-	return p->robust_list;
+-}
+-
+-static void __user *futex_get_robust_list_common(int pid, bool compat, int index)
++static void __user *futex_get_robust_list_common(int pid, unsigned int index)
  {
- 	int ret = set_robust_list2(0, 0, FUTEX_ROBUST_LIST_CMD_LIST_LIMIT, 0);
-@@ -181,6 +188,23 @@ static int set_list(struct robust_list_head *head, bool robust2, int index)
- 	return set_robust_list2(head, index, get_cmd_set(), 0);
- }
- 
-+static int get_list(pid_t pid, struct robust_list_head **head, bool robust2, int index)
-+{
-+	int ret;
-+
-+	if (!robust2) {
-+		size_t len_ptr;
-+
-+		ret = get_robust_list(pid, head, &len_ptr);
-+		if (sizeof(**head) != len_ptr)
-+			return -EINVAL;
-+
-+		return ret;
-+	}
-+
-+	return get_robust_list2(pid, head, index, 0);
-+}
-+
- /*
-  * A basic (and incomplete) mutex lock function with robustness
-  */
-@@ -391,37 +415,44 @@ TEST(test_set_robust_list2_inval)
- /*
-  * Test get_robust_list with pid = 0, getting the list of the running thread
-  */
--TEST(test_get_robust_list_self)
-+TEST_F(robust_api, test_get_robust_list_self)
- {
- 	struct robust_list_head head, head2, *get_head;
--	size_t head_size = sizeof(head), len_ptr;
-+	bool robust2 = variant->robust2;
+ 	struct task_struct *p = current;
+ 	void __user *head;
  	int ret;
  
--	ret = set_robust_list(&head, head_size);
-+	ret = set_list(&head, robust2, 0);
- 	ASSERT_EQ(ret, 0);
++	if (index >= FUTEX_ROBUST_LIST2_MAX_IDX)
++		return (void __user *)ERR_PTR(-EINVAL);
++
+ 	scoped_guard(rcu) {
+ 		if (pid) {
+ 			p = find_task_by_vpid(pid);
+@@ -75,14 +72,10 @@ static void __user *futex_get_robust_list_common(int pid, bool compat, int index
+ 	if (!ptrace_may_access(p, PTRACE_MODE_READ_REALCREDS))
+ 		goto err_unlock;
  
--	ret = get_robust_list(0, &get_head, &len_ptr);
-+	ret = get_list(0, &get_head, robust2, 0);
- 	ASSERT_EQ(ret, 0);
- 	ASSERT_EQ(get_head, &head);
--	ASSERT_EQ(head_size, len_ptr);
+-	if (index >= 0) {
+-		scoped_guard(mutex, &p->futex_exit_mutex) {
+-			uintptr_t *rl = p->futex_robust_lists;
++	scoped_guard(mutex, &p->futex_exit_mutex) {
++		uintptr_t *rl = p->futex_robust_lists;
  
--	ret = set_robust_list(&head2, head_size);
-+	ret = set_list(&head2, robust2, 0);
- 	ASSERT_EQ(ret, 0);
+-			head = rl ? (void __user *) rl[index] : NULL;
+-		}
+-	} else {
+-		head = futex_task_robust_list(p, compat);
++		head = rl ? (void __user *) rl[index] : NULL;
+ 	}
  
--	ret = get_robust_list(0, &get_head, &len_ptr);
-+	ret = get_list(0, &get_head, robust2, 0);
- 	ASSERT_EQ(ret, 0);
- 	ASSERT_EQ(get_head, &head2);
--	ASSERT_EQ(head_size, len_ptr);
+ 	up_read(&p->signal->exec_update_lock);
+@@ -107,7 +100,11 @@ SYSCALL_DEFINE3(get_robust_list, int, pid,
+ 		struct robust_list_head __user * __user *, head_ptr,
+ 		size_t __user *, len_ptr)
+ {
+-	struct robust_list_head __user *head = futex_get_robust_list_common(pid, false, -1);
++	struct robust_list_head __user *head =
++		futex_get_robust_list_common(pid, FUTEX_ROBUST_LIST_NATIVE_IDX);
++
++	head = (struct robust_list_head __user *)
++		((uintptr_t) head & FUTEX_ROBUST_LIST_ENTRY_MASK);
  
- 	ksft_test_result_pass("%s\n", __func__);
+ 	if (IS_ERR(head))
+ 		return PTR_ERR(head);
+@@ -180,7 +177,7 @@ SYSCALL_DEFINE4(get_robust_list2, int, pid,
+ 	 */
+ 	index += FUTEX_ROBUST_LIST2_IDX;
+ 
+-	entry_ptr = futex_get_robust_list_common(pid, false, index);
++	entry_ptr = futex_get_robust_list_common(pid, index);
+ 	if (IS_ERR(entry_ptr))
+ 		return PTR_ERR(entry_ptr);
+ 
+@@ -568,22 +565,23 @@ COMPAT_SYSCALL_DEFINE2(set_robust_list,
+ 	if (unlikely(len != sizeof(*head)))
+ 		return -EINVAL;
+ 
+-	current->robust_list32 = head;
+-
+-	return 0;
++	return futex_robust_list_set((uintptr_t) head, FUTEX_ROBUST_LIST_CMD_SET_32,
++				     FUTEX_ROBUST_LIST_COMPAT_IDX);
  }
  
-+struct child_arg_struct {
-+	struct robust_list_head *head;
-+	bool robust2;
-+};
-+
- static int child_list(void *arg)
+ COMPAT_SYSCALL_DEFINE3(get_robust_list, int, pid,
+ 			compat_uptr_t __user *, head_ptr,
+ 			compat_size_t __user *, len_ptr)
  {
--	struct robust_list_head *head = arg;
-+	struct child_arg_struct *child = arg;
-+	struct robust_list_head *head;
-+	bool robust2 = child->robust2;
- 	int ret;
+-	struct robust_list_head32 __user *head = futex_get_robust_list_common(pid, true, -1);
++	struct robust_list_head32 __user *head =
++		futex_get_robust_list_common(pid, FUTEX_ROBUST_LIST_COMPAT_IDX);
  
--	ret = set_robust_list(head, sizeof(*head));
-+	head = child->head;
+-	if (IS_ERR(head))
+-		return PTR_ERR(head);
++	head = (struct robust_list_head32 __user *)
++		((uintptr_t) head & FUTEX_ROBUST_LIST_ENTRY_MASK);
+ 
+ 	if (put_user(sizeof(*head), len_ptr))
+ 		return -EFAULT;
 +
-+	ret = set_list(head, robust2, 0);
- 	if (ret) {
- 		ksft_test_result_fail("set_robust_list error\n");
- 		return -1;
-@@ -444,23 +475,26 @@ static int child_list(void *arg)
-  * parent
-  *   2) the child thread still alive when we try to get the list from it
-  */
--TEST(test_get_robust_list_child)
-+TEST_F(robust_api, test_get_robust_list_child)
- {
- 	struct robust_list_head head, *get_head;
-+	bool robust2 = variant->robust2;
-+	struct child_arg_struct child =
-+		{.robust2 = robust2, .head = &head};
- 	int ret, wstatus;
--	size_t len_ptr;
- 	pid_t tid;
- 
-+
- 	ret = pthread_barrier_init(&barrier, NULL, 2);
- 	ret = pthread_barrier_init(&barrier2, NULL, 2);
- 	ASSERT_EQ(ret, 0);
- 
--	tid = create_child(&child_list, &head);
-+	tid = create_child(&child_list, &child);
- 	ASSERT_NE(tid, -1);
- 
- 	pthread_barrier_wait(&barrier);
- 
--	ret = get_robust_list(tid, &get_head, &len_ptr);
-+	ret = get_list(tid, &get_head, robust2, 0);
- 	ASSERT_EQ(ret, 0);
- 	ASSERT_EQ(&head, get_head);
- 
-@@ -914,4 +948,37 @@ TEST(test_32bit_lists)
- 	munmap(locks, sizeof(*locks) * CHILD_NR);
+ 	return put_user(ptr_to_compat(head), head_ptr);
  }
- 
-+/*
-+ * Test setting and getting mutiples head lists
-+ */
-+TEST(set_and_get_robust2)
-+{
-+	struct robust_list_head *head = NULL, *heads;
-+	int i, list_limit, ret;
-+
-+	if (!robust_list2_support()) {
-+		ksft_test_result_skip("robust_list2 not supported\n");
-+		return;
-+	}
-+
-+	list_limit = set_robust_list2(NULL, 0, FUTEX_ROBUST_LIST_CMD_LIST_LIMIT, 0);
-+
-+	heads = malloc(list_limit * sizeof(*heads));
-+	ASSERT_NE(heads, NULL);
-+
-+	for (i = 0; i < list_limit; i++) {
-+		ret = set_list(&heads[i], true, i);
-+		ASSERT_EQ(ret, 0);
-+	}
-+
-+	for (i = 0; i < list_limit; i++) {
-+		ret = get_list(0, &head, true, i);
-+		ASSERT_EQ(ret, 0);
-+		ASSERT_EQ(head, &heads[i]);
-+	}
-+
-+	free(heads);
-+	ksft_test_result_pass("%s\n", __func__);
-+}
-+
- TEST_HARNESS_MAIN
+ #endif /* CONFIG_COMPAT */
 
 -- 
 2.52.0
