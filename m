@@ -1,66 +1,68 @@
-Return-Path: <linux-kselftest+bounces-46310-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46311-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id C965BC7C8DC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 07:50:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F5E3C7C989
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 08:32:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3880A35BF8A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 06:50:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82C4C3A7EDB
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 07:32:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F912F1FD1;
-	Sat, 22 Nov 2025 06:50:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D018F25A642;
+	Sat, 22 Nov 2025 07:32:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V7V1JzSA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Sjlk1t9Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D441F91F6;
-	Sat, 22 Nov 2025 06:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCDD14A91;
+	Sat, 22 Nov 2025 07:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763794243; cv=none; b=DkHJ9neG3wOHvMPJHDTqEADkVdNVT5C7Bg52eWIa2OOl6574scTym+qX6xByG/o0EZif0IYSE5CFQC3nw/Z2+mMLDkU/2Go0flj/4QD73k2zFKHHW4AB8ZLJCGMDt4gDyMA9AlhzYXVrTRsjDUetpdCORddq/efQTQLtfsmAFy8=
+	t=1763796767; cv=none; b=YrijXbxmTlshNa3sNUT75Q7yb9ubWBNXBiRAwcX8WQBPYdim1d/D2AAi55FBfh29eLeL7LBWAE+F2QLvo7HM2n3+DiirpoZ6jGQeF6CK5fKPWsPSwB0sC7C8JAixSmX8RCkEZh+QH5FwFEGuoEggyO0VYBlSXfS/WKZjnbzEvqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763794243; c=relaxed/simple;
-	bh=asyyhh74Yw5hvmAlX0pS/rD9jAOJr79T6FGqphnsugA=;
+	s=arc-20240116; t=1763796767; c=relaxed/simple;
+	bh=Nudo/f7ZBUHU5m8nUj5tqJU4nh7GKa/O9Gl8IzWCC8A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dTqdp5jUeebAEjtkOnmNO9ZU7RCOnqKGDyHkoGPiZMBqxgJP+HcOc8jmoBn5UB1sNhlJDw7PmSV2apVUC1rwDhmKu/n8EnjWJEMoemcAjXBiiqimD5g+Orwn1oP+yIjm1CRVhoUV3i8BrIRfmQnoyC4wv9fpRyYIkH2YYvidazc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V7V1JzSA; arc=none smtp.client-ip=198.175.65.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=o9Vu6zqxWN4ZXARDRSy/HCXUYD7I8u9Gdzdum/nydQvaPBf7roYpgI62cU5j/E2iirJ6nHCjmFadRE/rWwzpslLZ0bqNzDQP/+bKNQHj8Ye+dxndwbwEV9PcaFgX1w8vSW2gTcNbUnPCXbMX5kJPfhTC3vNZv4LV6pJeAl74+pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Sjlk1t9Q; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763794241; x=1795330241;
+  t=1763796766; x=1795332766;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=asyyhh74Yw5hvmAlX0pS/rD9jAOJr79T6FGqphnsugA=;
-  b=V7V1JzSA08+0Q6FzsrrSoA2sgBF0ELDidPY2rt2GraUrwHLTxkzTvUef
-   aK8KCgXAA1XVt4el6cKg4/nxprEtDDdArZG1ZBq59GufW4defdcBLEDF+
-   Rb+6Qat+2o0dXRf4RlI5AeYAOe5NI7Vx8YRHZXedBlmdPTSEqfiFkSzsw
-   wbI8CI7uSNpa5+XDWWnF859P3uRfoXF/mJLD5uU6dDH8d1gAwsTWZLZeK
-   FpHWfhvWli++jXvMMLPZ2mRmW0Jk185p37xIvoPEXtZTvdInDaXC8sS8t
-   V6gD8euqG3jQ2w6n4LO8t7EncYeoiIfo8DMY9nQtzo6l+dZqTvDZXciqE
-   A==;
-X-CSE-ConnectionGUID: sQgNw5OfRHmebZVwKfsoxg==
-X-CSE-MsgGUID: PDvZdKC1QhyFmMwx0HGTUA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="65912610"
+  bh=Nudo/f7ZBUHU5m8nUj5tqJU4nh7GKa/O9Gl8IzWCC8A=;
+  b=Sjlk1t9QhYmEzbuUli+pmutnDynCFSIaPZkFHPes7IaLt9EUaoYs+1KW
+   BccA28gJc2Pn7uOjNWrbR8O3OWQ4yvhqk0ApErXH2NYPiID2XO4x0CH/p
+   DVwYxYrOPHPkg26uchRft+1iNYSovro0vm82d4L8Y1TqhZbn0W0O8I5Oh
+   cj/9AY3hlMkT86+Mu0n4eaFfE2wp+mi+W195L/dKwJ3x7ewWmuvWSYUp6
+   9Q/PNWvMEtHwESxw5An7w/QcOMxXVKBEsHpw/ccRZ+RbYmmT1RG4lWO5I
+   3LfMQ7NaTSYzVYENdDqMZRpLnMM1I9is/pX/Nwvx2JjzhDF342NU0PH8k
+   Q==;
+X-CSE-ConnectionGUID: HweW9bXIRHStprFOaJILpA==
+X-CSE-MsgGUID: orFgIt9SSByDzuWKlFqFhQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11620"; a="68483068"
 X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
-   d="scan'208";a="65912610"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 22:50:40 -0800
-X-CSE-ConnectionGUID: udtJYmBdQPqEnBwt6kad3A==
-X-CSE-MsgGUID: ae9v6NQKTR+J/lR4/7q6ng==
+   d="scan'208";a="68483068"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2025 23:32:45 -0800
+X-CSE-ConnectionGUID: dPMFGBKlQgCOV4KbcqCW3A==
+X-CSE-MsgGUID: qZMDcbbCTH2n8xMnZ9luDQ==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,217,1758610800"; 
+   d="scan'208";a="222515263"
 Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 21 Nov 2025 22:50:37 -0800
+  by orviesa002.jf.intel.com with ESMTP; 21 Nov 2025 23:32:42 -0800
 Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1vMhS6-0007EN-1T;
-	Sat, 22 Nov 2025 06:50:34 +0000
-Date: Sat, 22 Nov 2025 14:49:53 +0800
+	id 1vMi6o-0007Fz-2c;
+	Sat, 22 Nov 2025 07:32:38 +0000
+Date: Sat, 22 Nov 2025 15:32:11 +0800
 From: kernel test robot <lkp@intel.com>
 To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
@@ -76,7 +78,7 @@ Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
 	kernel-dev@igalia.com,
 	=?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
 Subject: Re: [PATCH v6 6/9] futex: Wire up get_robust_list2 syscall
-Message-ID: <202511221454.rsysOoSt-lkp@intel.com>
+Message-ID: <202511221516.vYMzvSVO-lkp@intel.com>
 References: <20251122-tonyk-robust_futex-v6-6-05fea005a0fd@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -91,28 +93,41 @@ In-Reply-To: <20251122-tonyk-robust_futex-v6-6-05fea005a0fd@igalia.com>
 
 Hi André,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on c42ba5a87bdccbca11403b7ca8bad1a57b833732]
+[auto build test ERROR on c42ba5a87bdccbca11403b7ca8bad1a57b833732]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/futex-Use-explicit-sizes-for-compat_robust_list-structs/20251122-135406
 base:   c42ba5a87bdccbca11403b7ca8bad1a57b833732
 patch link:    https://lore.kernel.org/r/20251122-tonyk-robust_futex-v6-6-05fea005a0fd%40igalia.com
 patch subject: [PATCH v6 6/9] futex: Wire up get_robust_list2 syscall
-config: arc-allnoconfig (https://download.01.org/0day-ci/archive/20251122/202511221454.rsysOoSt-lkp@intel.com/config)
-compiler: arc-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221454.rsysOoSt-lkp@intel.com/reproduce)
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20251122/202511221516.vYMzvSVO-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221516.vYMzvSVO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511221454.rsysOoSt-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511221516.vYMzvSVO-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> <stdin>:1627:2: warning: #warning syscall get_robust_list2 not implemented [-Wcpp]
---
->> <stdin>:1627:2: warning: #warning syscall get_robust_list2 not implemented [-Wcpp]
+>> error: arch/powerpc/kernel/syscalls/syscall.tbl: syscall table is not sorted or duplicates the same syscall number
+   make[3]: *** [arch/powerpc/kernel/syscalls/Makefile:31: arch/powerpc/include/generated/asm/syscall_table_64.h] Error 1
+   make[3]: *** Deleting file 'arch/powerpc/include/generated/asm/syscall_table_64.h'
+>> error: arch/powerpc/kernel/syscalls/syscall.tbl: syscall table is not sorted or duplicates the same syscall number
+   make[3]: *** [arch/powerpc/kernel/syscalls/Makefile:35: arch/powerpc/include/generated/asm/syscall_table_spu.h] Error 1
+   make[3]: *** Deleting file 'arch/powerpc/include/generated/asm/syscall_table_spu.h'
+>> error: arch/powerpc/kernel/syscalls/syscall.tbl: syscall table is not sorted or duplicates the same syscall number
+   make[3]: *** [arch/powerpc/kernel/syscalls/Makefile:27: arch/powerpc/include/generated/asm/syscall_table_32.h] Error 1
+   make[3]: *** Deleting file 'arch/powerpc/include/generated/asm/syscall_table_32.h'
+   make[3]: Target 'all' not remade because of errors.
+   make[2]: *** [arch/powerpc/Makefile:397: archheaders] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 -- 
 0-DAY CI Kernel Test Service
