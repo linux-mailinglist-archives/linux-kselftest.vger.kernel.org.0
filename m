@@ -1,197 +1,93 @@
-Return-Path: <linux-kselftest+bounces-46295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E1ACC7C156
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 02:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B74FCC7C177
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 02:32:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9D28234E937
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 01:19:55 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 365A135E3EA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Nov 2025 01:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFD8E2749C1;
-	Sat, 22 Nov 2025 01:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C7301547E7;
+	Sat, 22 Nov 2025 01:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b6vJJnty"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADB229ACC6;
-	Sat, 22 Nov 2025 01:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78DF635;
+	Sat, 22 Nov 2025 01:32:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763774391; cv=none; b=UAj5Aany7C5rA3/yvP5j2irZbUHMr/unq4g+gjOZByFMIWaTDpHlXY5YHmJOU6j+7UJv9h+JlOOuPY4q+LiP/ACV+JN3qN7b2hgZYSEjoG5BGrMl+Z3d3IsaUn7e/rhfhd9xHJ5UeRw3AHu8Jhy3tZkWNtyYoqxH0OJGhtkZbTI=
+	t=1763775126; cv=none; b=c9JR5Ag4fbTlaZFWwy13kIDd6TzfNBn9Wo48bsIeVGZiEvrrlYxTwh0mgEXEfDmq60+bwrib55JPG7DH20f3Sa+GZLAfuPiLalqnTpq3aG+RWEBkqJSuAec4a7OvUKNXv0ffdprtu99kmMSaMd4ojjoFsGvgIFJQgV/12wNrxfo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763774391; c=relaxed/simple;
-	bh=y3BmQ6bnnYa+QWl98z6nxIBTOOjPPKArTyICqHBn/xw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DlxG9L1hugTaYmL2OOaPzvWDIWQi8uXDnELN1SWhRyk/e1fb5FU7rnop6Aj5yLZW6KBD9OjzO+as0ZOBVgsXGj6MK4IFlcxIufRVmDDuFNI4kTVJi7vPIKwhkkv7DXvk4WEAGSNelaKhnxTCMkb7kW0EsQCLCrtkkJypbbSTAEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4dCvPT1wcKzKHLyj;
-	Sat, 22 Nov 2025 09:19:09 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 3ACE61A07BD;
-	Sat, 22 Nov 2025 09:19:41 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP2 (Coremail) with SMTP id Syh0CgBH8XerDyFpV1pRBg--.38043S2;
-	Sat, 22 Nov 2025 09:19:41 +0800 (CST)
-Message-ID: <a2c5266a-60af-4a1a-8a99-a0b0c596aee6@huaweicloud.com>
-Date: Sat, 22 Nov 2025 09:19:39 +0800
+	s=arc-20240116; t=1763775126; c=relaxed/simple;
+	bh=9jja5RBFI/62fBBaW7kkTvtGSP8TFmPwFFbYq5vcbsg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=R8Vjo4bJrpyRC8tASzi7QAlRA3GtSCyCFn22y955EGzrrIWEeFAiy44cI3bLSORLpSx38y7/Kdfik0lElFVvSxeZGwp+dyRTgaGN/s0awSAuQI692iEAV/GtbErl4s/mRm9R1ysxu6xq3/F++ThsDex9mk7NdOGJMA5s93+Y1x8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b6vJJnty; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C73FAC4CEF1;
+	Sat, 22 Nov 2025 01:32:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763775125;
+	bh=9jja5RBFI/62fBBaW7kkTvtGSP8TFmPwFFbYq5vcbsg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=b6vJJntyLRWWONB2oFm83bMQNdBVXMOvYiNZc09d6fomP6wTE/WurGSj/5Dtk4f5+
+	 Hb6USRXoLX6bN9Ha9m/yJmzLiluA4uLiEkz3cQ42HS/zweatgHRkx1h0qoQajAuonL
+	 N1A6b9U46ZNCIRkWOpR9iWD9yazNDD0tvmUNZJS0qEEQJU3hS/6oG/FRX308LMpkN2
+	 NldpP5p/BdlVurzNNulTN9m2GDxQSh/a4vjZtykoveNls5F2Kg8dFfMvC9a6IM0oWD
+	 tCYH3Aj2y1UUBm+jPXNt1CHwIDdUtsxMg/yVUbkcsbPAg7cPqfQMkfVdfJqOc0/h4T
+	 zLXP6Rtt4qdFA==
+Date: Fri, 21 Nov 2025 17:32:03 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ willemb@google.com, petrm@nvidia.com, dw@davidwei.uk, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next 4/5] selftests: hw-net: toeplitz: read
+ indirection table from the device
+Message-ID: <20251121173203.7bc1a3f4@kernel.org>
+In-Reply-To: <willemdebruijn.kernel.224bdf2fac125@gmail.com>
+References: <20251121040259.3647749-1-kuba@kernel.org>
+	<20251121040259.3647749-5-kuba@kernel.org>
+	<willemdebruijn.kernel.224bdf2fac125@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on
- cpuset.cpus conflict.
-To: Sun Shaojie <sunshaojie@kylinos.cn>
-Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llong@redhat.com, mkoutny@suse.com, shuah@kernel.org, tj@kernel.org
-References: <37f4b54d-609c-4754-bfa2-51b1ddf43df0@huaweicloud.com>
- <20251121103308.1661628-1-sunshaojie@kylinos.cn>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20251121103308.1661628-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:Syh0CgBH8XerDyFpV1pRBg--.38043S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFyfXr4xJFy8tr13uFWruFg_yoWrCFW8pF
-	y8KF1UJ39Yqr1rCwsrtF17ZF43t3ZrZ3ZrZFZ8Gr18JrsFq3Wqk3WqkrZxW398Xr98Ga4U
-	Z3y7ur4fZr1DWFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUylb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUF1v3UUUUU
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-
-
-On 2025/11/21 18:33, Sun Shaojie wrote:
-> Hi, Ridong,
+On Fri, 21 Nov 2025 18:12:16 -0500 Willem de Bruijn wrote:
+> > +	if (rsp->_count.indir > RSS_MAX_INDIR)
+> > +		error(1, 0, "RSS indirection table too large (%u > %u)",
+> > +		      rsp->_count.indir, RSS_MAX_INDIR);
+> > +
+> > +	/* If indir table not available we'll fallback to simple modulo math */
+> > +	if (rsp->_count.indir) {
+> > +		memcpy(rss_indir_tbl, rsp->indir,
+> > +		       rsp->_count.indir * sizeof(rss_indir_tbl[0]));  
 > 
-> Thu, 20 Nov 2025 21:25:12, Chen Ridong wrote:
->> On 2025/11/20 21:07, Sun Shaojie wrote:
->>> I don't understand the "order of operations" mentioned here. After reviewing
->>> the previous email content, are you referring to this?
->>>
->>> On Sat, 15 Nov 2025 15:41:03, Chen Ridong wrote:
->>>> With the result you expect, would we observe the following behaviors:
->>>>
->>>> #1> mkdir -p A1
->>>> #2> mkdir -p B1
->>>> #3> echo "0-1"  > A1/cpuset.cpus
->>>> #4> echo "1-2"  > B1/cpuset.cpus
->>>> #5> echo "root" > A1/cpuset.cpus.partition
->>>> #6> echo "root" > B1/cpuset.cpus.partition # A1:root;B1:root invalid
->>>>
->>>> #1> mkdir -p A1
->>>> #2> mkdir -p B1
->>>> #3> echo "0-1"  > A1/cpuset.cpus
->>>> #4> echo "1-2"  > B1/cpuset.cpus
->>>> #5> echo "root" > B1/cpuset.cpus.partition
->>>> #6> echo "root" > A1/cpuset.cpus.partition # A1:root invalid;B1:root
->>>>
->>>> Do different operation orders yield different results? If so, this is not what we expect.
->>>
->>> However, after applying this patch, the outcomes of these two examples are 
->>> as follows:
->>>  
->>>  #1> mkdir -p A1
->>>  #2> mkdir -p B1
->>>  #3> echo "0-1"  > A1/cpuset.cpus           | member       | member      |
->>>  #4> echo "1-2"  > B1/cpuset.cpus           | member       | member      |
->>>  #5> echo "root" > A1/cpuset.cpus.partition | root invalid | root        |
->>>  #6> echo "root" > B1/cpuset.cpus.partition | root invalid | root invalid|
->>>
->>>  #1> mkdir -p A1
->>>  #2> mkdir -p B1
->>>  #3> echo "0-1"  > A1/cpuset.cpus           | member       | member      |
->>>  #4> echo "1-2"  > B1/cpuset.cpus           | member       | member      |
->>>  #5> echo "root" > B1/cpuset.cpus.partition | root         | root invalid|
->>>  #6> echo "root" > A1/cpuset.cpus.partition | root invalid | root invalid|
->>>
->>
->> How about the following two sequences of operations:
->>
->> #1> mkdir -p A1
->> #2> mkdir -p B1
->> #3> echo "0-1"  > A1/cpuset.cpus
->> #4> echo "root" > A1/cpuset.cpus.partition
->> #5> echo "1-2"  > B1/cpuset.cpus
->> #6> echo "root" > B1/cpuset.cpus.partition
->>
->>
->> #1> mkdir -p A1
->> #2> mkdir -p B1
->> #5> echo "1-2"  > B1/cpuset.cpus
->> #6> echo "root" > B1/cpuset.cpus.partition
->> #3> echo "0-1"  > A1/cpuset.cpus
->> #4> echo "root" > A1/cpuset.cpus.partition
->>
->> Will these two sequences yield the same result?
+> It can be assumed that rsp->indir elements are sizeof(rss_indir_tbl[0])?
 > 
->> As a key requirement: Regardless of the order in which we apply the configurations, identical final
->> settings should always result in identical system states. We need to confirm if this holds true here.
-> 
-> Is this truly a key requirement? It appears this requirement wasn't met even
-> before applying my patch.
-> 
+> Is there a way to have the test verify element size. I'm not that
+> familiar with YNL.
 
-I believe it requires, it may some corner cases we should fix.
+I suspect the reaction may be because drivers often use a smaller type.
+But at the uAPI level the indirection table has always been represented
+as an array of u32 (I mean the ioctl). And in the core we also always
+deal with u32s. The Netlink type is not allowed to change either 
+(it's a "C array" not individual attributes so members must be known
+size).
 
-> The example below, which does not use this patch, demonstrates how different
-> sequences with identical configurations can still lead to different system
-> states.
-> 
->  #1> mkdir -p A1
->  #2> mkdir -p B1                            | A1's prstate | B1's prstate |
->  #3> echo "0-1"  > A1/cpuset.cpus           | member       | member       |
->  #4> echo "0-1"  > A1/cpuset.cpus.exclusive | member       | member       |
->  #5> echo "root" > A1/cpuset.cpus.partition | root         | member       |
->  #6> echo "1-2"  > B1/cpuset.cpus           | root invalid | member       |
->  #7> echo "2-3"  > B1/cpuset.cpus.exclusive | root invalid | member       |
->  #8> echo "root" > B1/cpuset.cpus.partition | root invalid | root         |
-> 
+LMK if you want me to add an assert or rework this. We could technically
+keep the rsp struct around and use it directly?
 
-IIUC, you've created this example with the expectation that both A1 and B1 should serve as root
-partitions. However, we currently lack a mechanism where modifying a cpuset's state (e.g., cpus,
-cpus.exclusive, or cpus.partition) can transition its sibling from an invalid to a valid partition.
-
-The behavior observed before step #6 is acceptable. Proactively setting B1 as a partition in step #8
-is permitted, given that B1 does not conflict with A1. However, we do not have a mechanism to
-passively and automatically transition A1 to a valid partition state.
-
->  #1> mkdir -p A1
->  #2> mkdir -p B1                            | A1's prstate | B1's prstate |
->  #3> echo "0-1"  > A1/cpuset.cpus           | member       | member       |
->  #4> echo "0-1"  > A1/cpuset.cpus.exclusive | member       | member       |
->  #5> echo "2-3"  > B1/cpuset.cpus.exclusive | member       | member       |
->  #6> echo "root" > A1/cpuset.cpus.partition | root         | member       |
->  #7> echo "1-2"  > B1/cpuset.cpus           | root         | member       |
->  #8> echo "root" > B1/cpuset.cpus.partition | root         | root         |
-> 
-> Even without this patch, the result can still differ.
-> 
-> 
-> Thanks,
-> Sun Shaojie
-
--- 
-Best regards,
-Ridong
-
+Not fully convinced it's worth a respin, but LMK.. :)
 
