@@ -1,75 +1,74 @@
-Return-Path: <linux-kselftest+bounces-46347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F924C7DFA8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 11:30:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B196C7E001
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 12:18:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B06A34E588A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 10:28:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3E45D344849
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 11:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9C52D3217;
-	Sun, 23 Nov 2025 10:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924BC2D593D;
+	Sun, 23 Nov 2025 11:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlDoHH5Q"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="CkJBynGW";
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="mLDeGtcE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11702C15A5;
-	Sun, 23 Nov 2025 10:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384B828B4E2;
+	Sun, 23 Nov 2025 11:18:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763893665; cv=none; b=TMkwImS7E665dcL5OLCmN3gy1/lNE5zWuvOTB27fssqhcSyv8h0mgiD9i0PmSQygfK9cr939RfKfARjh0zvoYsC0svnpbmQVV93/SegDSZMzd2LEbEu6SkWPs1TDKPm2XnM1h6wkXN55PKL9x9u5U5wdyOmGR0EzNv7mMHwbmBI=
+	t=1763896709; cv=none; b=VaAH6UDmBC37JexwrxOoqYfBvWE2VkVURjJ0NoYV12yPkohVX2hEJcGwto0VwwBfLm+TBIMFo09pok7k26S6y5ouKWJ1dB/tuaRTUCHRlNQpBScMeqsrb8vC6+6srP2vU+3piko/m9zVtaVwUFxdlZTNyzfQZTNd7Ct9pUzxBSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763893665; c=relaxed/simple;
-	bh=h8iM1V294GwM0YHrw7ozBTpi1JGWrn7/s48f8890vrE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q1W99G9tDSihxRh1zFCAKm2laKq7HaCO2Swml21yQD3PM6nIQnT1iflmqHiHemU7Oeap+m1JABSAgyWe0utQBkux3glP/nnJ1+EFOa+VZ1aMZS7MpbTpcqzANZ3JR/WOXB/gZxH4G9aaSMJQSYCbeeFbhiCcdxsCSFckU88VcqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UlDoHH5Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14A77C113D0;
-	Sun, 23 Nov 2025 10:27:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763893665;
-	bh=h8iM1V294GwM0YHrw7ozBTpi1JGWrn7/s48f8890vrE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UlDoHH5Q8Iv5mSabwAMbk7PJJOWlKmQbXeamae2ZPKxq9eOP//D3ZPty956O6D6M+
-	 48trdFwBAydNWx+vtYd9RJPX+7eqK+QFQsbv3tl7dn9srde9x0DN0u/Ne7yu8CTWGW
-	 2p/p9d6oBMv5kZDX4dzi7RKCi34VyTzW5zDaOE9oELBy6If9Q1EI0V2gIZazVZwW/v
-	 9bee9AoJXJ/KL1UktjrqcwRHS+OYF59lpHoFkb8oB+JNJ38SSRE2u4FjHkCj+3vf9u
-	 o8I0sN3cnEl5beAuz63QypaDUtW9hGPi1rcELbYnK+X7wlNuCG4pU8uXnL+Yg2ryyR
-	 oJIbW/pZ+OyIw==
-From: Mike Rapoport <rppt@kernel.org>
-To: linux-mm@kvack.org
-Cc: Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Peter Xu <peterx@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
+	s=arc-20240116; t=1763896709; c=relaxed/simple;
+	bh=BtA8rCDyqdSX6xKFIIw2rFqZONqzippVVBtr+CBsuy8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oyH7i0XAoitCaTS7TagV9HsJUmO+oJVg23nqOXQBsA6WXolpvqdtG5B2MfAlFTPjScGQcjrb1Cl0zSEmgARDMXEnXWysoekueH0szAav/m5enhFI/u5GxxGyQDp2afexXR8jcqm1mjZJk7kYD10LslJ7JzuAbWWZsIraUghnzfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=CkJBynGW; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=mLDeGtcE; arc=none smtp.client-ip=80.241.56.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4dDmfK4fG3z9t74;
+	Sun, 23 Nov 2025 12:18:17 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1763896697;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+y0O9fq4Z5XBWU3EmYrjzVlObvd6zfqXVNW+py4U72c=;
+	b=CkJBynGW/D+dlDxwlXy/auxcXNrACqEwXITlH3WlCdYECmaoy4+WUWc/H1k+fwyO/rVQ/V
+	jrl6AAvbQD6PjGPmrRkkkRUOMoAw6Ss63c7OMgZHb2l/QpF/BJ/DcH7mjXE92/j5EsWfY1
+	+w5HW9RFuHUi8vqpw0UKfLNbKXGmp234wr6PxbC4A3SMOeA5bmI3o/G6KdtT+4VraEUIJQ
+	DaLBWDEp34LdldsVxHgn7k8yxff7MV7iZrZ5yhajqnLJaMC3h25F3lveqV2yXsADGmRCrQ
+	CZE+XwiOLeAopV1i/apxyiu2l8LRkxa2PlIYrJ7SI+EWIEHcnIUvsszjCFvOjQ==
+From: Maurice Hieronymus <mhi@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1763896695;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+y0O9fq4Z5XBWU3EmYrjzVlObvd6zfqXVNW+py4U72c=;
+	b=mLDeGtcEH/Ihx6U0Qinp5OVCBpa3V5itBuGl8HHgijFENcMR5fsioNz48eeCl8x5EJ/6z6
+	z56MIqKr/YSAklCGsEYGtt+H42B84f4SIUS9AGxVxszeR/Sw5jfqnFq9vrPnKaxx0CkD1L
+	hmeE1HY93KLTXlH29xKwFX90TFMLCY93yOpR+Innc5drfG2kaawFtgBwok9O7UC7uZ36ha
+	aSJDiWrhfJXrC/mCYnt0KfIo3yGGbkGDyjBubgp1YTGLX982V1ynvZyYAKyeNPEsRqC1p9
+	JmN+BlYNs/bDLiwa1nivQIDuDcL8cDu33jrbaSmkakyM5tHvNP9/TLVrUJ9qrw==
+To: peterhuewe@gmx.de,
+	jarkko@kernel.org
+Cc: linux-integrity@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 5/5] KVM: selftests: test userfaultfd minor for guest_memfd
-Date: Sun, 23 Nov 2025 12:27:07 +0200
-Message-ID: <20251123102707.559422-6-rppt@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20251123102707.559422-1-rppt@kernel.org>
-References: <20251123102707.559422-1-rppt@kernel.org>
+	Maurice Hieronymus <mhi@mailbox.org>
+Subject: [PATCH] selftests: tpm2: Fix ill defined assertions
+Date: Sun, 23 Nov 2025 12:18:09 +0100
+Message-ID: <20251123111809.24634-1-mhi@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,154 +76,41 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: ysc4ezr16c164mo1anqkucm4rupe3fma
+X-MBO-RS-ID: db62f58e38074497985
 
-From: Nikita Kalyazin <kalyazin@amazon.com>
+Remove parentheses around assert statements in Python. With parentheses,
+assert always evaluates to True, making the checks ineffective.
 
-The test demonstrates that a minor userfaultfd event in guest_memfd can
-be resolved via a memcpy followed by a UFFDIO_CONTINUE ioctl.
-
-Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Signed-off-by: Maurice Hieronymus <mhi@mailbox.org>
 ---
- .../testing/selftests/kvm/guest_memfd_test.c  | 103 ++++++++++++++++++
- 1 file changed, 103 insertions(+)
+ tools/testing/selftests/tpm2/tpm2.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index e7d9aeb418d3..a5d3ed21d7bb 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -10,13 +10,17 @@
- #include <errno.h>
- #include <stdio.h>
- #include <fcntl.h>
-+#include <pthread.h>
+diff --git a/tools/testing/selftests/tpm2/tpm2.py b/tools/testing/selftests/tpm2/tpm2.py
+index bba8cb54548e..3d130c30bc7c 100644
+--- a/tools/testing/selftests/tpm2/tpm2.py
++++ b/tools/testing/selftests/tpm2/tpm2.py
+@@ -437,7 +437,7 @@ class Client:
  
- #include <linux/bitmap.h>
- #include <linux/falloc.h>
- #include <linux/sizes.h>
-+#include <linux/userfaultfd.h>
- #include <sys/mman.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-+#include <sys/syscall.h>
-+#include <sys/ioctl.h>
+     def extend_pcr(self, i, dig, bank_alg = TPM2_ALG_SHA1):
+         ds = get_digest_size(bank_alg)
+-        assert(ds == len(dig))
++        assert ds == len(dig)
  
- #include "kvm_util.h"
- #include "test_util.h"
-@@ -254,6 +258,104 @@ static void test_guest_memfd_flags(struct kvm_vm *vm)
- 	}
- }
+         auth_cmd = AuthCommand()
  
-+struct fault_args {
-+	char *addr;
-+	volatile char value;
-+};
-+
-+static void *fault_thread_fn(void *arg)
-+{
-+	struct fault_args *args = arg;
-+
-+	/* Trigger page fault */
-+	args->value = *args->addr;
-+	return NULL;
-+}
-+
-+static void test_uffd_minor(int fd, size_t total_size)
-+{
-+	struct uffdio_api uffdio_api = {
-+		.api = UFFD_API,
-+		.features = UFFD_FEATURE_MINOR_GENERIC,
-+	};
-+	struct uffdio_register uffd_reg;
-+	struct uffdio_continue uffd_cont;
-+	struct uffd_msg msg;
-+	struct fault_args args;
-+	pthread_t fault_thread;
-+	void *mem, *mem_nofault, *buf = NULL;
-+	int uffd, ret;
-+	off_t offset = page_size;
-+	void *fault_addr;
-+
-+	ret = posix_memalign(&buf, page_size, total_size);
-+	TEST_ASSERT_EQ(ret, 0);
-+
-+	memset(buf, 0xaa, total_size);
-+
-+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC);
-+	TEST_ASSERT(uffd != -1, "userfaultfd creation should succeed");
-+
-+	ret = ioctl(uffd, UFFDIO_API, &uffdio_api);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_API) should succeed");
-+
-+	mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(mem != MAP_FAILED, "mmap should succeed");
-+
-+	mem_nofault = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-+	TEST_ASSERT(mem_nofault != MAP_FAILED, "mmap should succeed");
-+
-+	uffd_reg.range.start = (unsigned long)mem;
-+	uffd_reg.range.len = total_size;
-+	uffd_reg.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	ret = ioctl(uffd, UFFDIO_REGISTER, &uffd_reg);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_REGISTER) should succeed");
-+
-+	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
-+			offset, page_size);
-+	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-+
-+	fault_addr = mem + offset;
-+	args.addr = fault_addr;
-+
-+	ret = pthread_create(&fault_thread, NULL, fault_thread_fn, &args);
-+	TEST_ASSERT(ret == 0, "pthread_create should succeed");
-+
-+	ret = read(uffd, &msg, sizeof(msg));
-+	TEST_ASSERT(ret != -1, "read from userfaultfd should succeed");
-+	TEST_ASSERT(msg.event == UFFD_EVENT_PAGEFAULT, "event type should be pagefault");
-+	TEST_ASSERT((void *)(msg.arg.pagefault.address & ~(page_size - 1)) == fault_addr,
-+		    "pagefault should occur at expected address");
-+
-+	memcpy(mem_nofault + offset, buf + offset, page_size);
-+
-+	uffd_cont.range.start = (unsigned long)fault_addr;
-+	uffd_cont.range.len = page_size;
-+	uffd_cont.mode = 0;
-+	ret = ioctl(uffd, UFFDIO_CONTINUE, &uffd_cont);
-+	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_CONTINUE) should succeed");
-+
-+	/*
-+	 * wait for fault_thread to finish to make sure fault happened and was
-+	 * resolved before we verify the values
-+	 */
-+	ret = pthread_join(fault_thread, NULL);
-+	TEST_ASSERT(ret == 0, "pthread_join should succeed");
-+
-+	TEST_ASSERT(args.value == *(char *)(mem_nofault + offset),
-+		    "memory should contain the value that was copied");
-+	TEST_ASSERT(args.value == *(char *)(mem + offset),
-+		    "no further fault is expected");
-+
-+	ret = munmap(mem_nofault, total_size);
-+	TEST_ASSERT(!ret, "munmap should succeed");
-+
-+	ret = munmap(mem, total_size);
-+	TEST_ASSERT(!ret, "munmap should succeed");
-+	free(buf);
-+	close(uffd);
-+}
-+
- #define gmem_test(__test, __vm, __flags)				\
- do {									\
- 	int fd = vm_create_guest_memfd(__vm, page_size * 4, __flags);	\
-@@ -273,6 +375,7 @@ static void __test_guest_memfd(struct kvm_vm *vm, uint64_t flags)
- 		if (flags & GUEST_MEMFD_FLAG_INIT_SHARED) {
- 			gmem_test(mmap_supported, vm, flags);
- 			gmem_test(fault_overflow, vm, flags);
-+			gmem_test(uffd_minor, vm, flags);
- 		} else {
- 			gmem_test(fault_private, vm, flags);
- 		}
+@@ -589,7 +589,7 @@ class Client:
+     def seal(self, parent_key, data, auth_value, policy_dig,
+              name_alg = TPM2_ALG_SHA1):
+         ds = get_digest_size(name_alg)
+-        assert(not policy_dig or ds == len(policy_dig))
++        assert not policy_dig or ds == len(policy_dig)
+ 
+         attributes = 0
+         if not policy_dig:
+
+base-commit: 821e6e2a328bb907d40f8d1141d8b6c079aa7340
 -- 
 2.50.1
 
