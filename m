@@ -1,229 +1,104 @@
-Return-Path: <linux-kselftest+bounces-46356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C919C7E581
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 19:33:03 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBDC9C7E5DD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 19:48:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 530DD3A49CF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 18:33:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 30F4A34607C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 18:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 550712DC798;
-	Sun, 23 Nov 2025 18:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C121B86C7;
+	Sun, 23 Nov 2025 18:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MKWSbmkP"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jWE9Ke45";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cBMKMT8u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2CCF2DC76F
-	for <linux-kselftest@vger.kernel.org>; Sun, 23 Nov 2025 18:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3F615E8B;
+	Sun, 23 Nov 2025 18:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763922778; cv=none; b=FEneBulCw4XpGH4/a9jlSnpO2aullOyJfImOxkrxeVm+qX8Z1EOPiLMQKN/seumKL2EeuqxXUP98o0p6HUFu/bdP7wzXbD6ZnQ6rp81Pk7POwuldZYgGaZG8IV8vRapp58s7BjemnEOzWzoz4od24LVK65Hx1xUfMbwhw6LV26Q=
+	t=1763923676; cv=none; b=NmhNpS2q9JmCibr/es4K3VknzSEk2UbDkriftUoz0raAcuZKncY2Fh1NWwc6q1gONm2qIIgsIXZVAlPwwHV38c9iC08WKr6cwrwkHcPFY1VuK8VNtSKvPAHkmtgRNuRxLsQF+XwqdRrQmwwFhwhD9DJEv6rci6YwKW7Yyye+vAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763922778; c=relaxed/simple;
-	bh=q0o3WkXxgcPcxa+rbl7GKvJDyOx0UbOChtTaJCarZFI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m7OfjOA4kVhCvBtPXttAgtNKUe+CoVLWU98squrqILP5Pt3GKu5XD9/w8SQO96VWc9mLWwiFW6PekcXuNXQld8EMIVabxsjsl/6S9p5rAhjUFl33GKpTcuIuelcYheOVSKQayFYSZ0mkZ3wIuY/hmJUyf0E2cK2Vutl0V+MUkEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MKWSbmkP; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763922775;
+	s=arc-20240116; t=1763923676; c=relaxed/simple;
+	bh=TYbYOLcMERh+enukEUubRJ91bcLR5ALo678X7amkbhg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=f0ererBrWPO1i9jrkzN8PoEFgdE/2vaG3UHh5S9Ds+dhlmcBsq0ZDMEIteozj2TCWSKe6rS/83n5mRMlhz1O1TVOiCpd8+cKmCntvSxiORyR82VI33rBklLqv+Lea7dJYUbo+vVViFlwyZ7yUCTrwbzz3DW+k6Oa//fOMCJNBdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jWE9Ke45; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cBMKMT8u; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1763923673;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=36l7iu5Eghp8LjDFDIIU/eYWC2BgI9ey1UwqfIFE8Gg=;
-	b=MKWSbmkPKgJqgjPDCjbTTZpnfsLQsApcV2gnG7K2pAJcl6t36xaPwn2C0ZTxrsu1+fIVmr
-	ygo/xvKjU/VKXjVa7gzRqcfX/UfmX10he1dvcR6HJ6m6p8nFmohPwxWV8xRZ1Tp5ZtKQbN
-	iKGLdDv3pLRYxZt2m0Vf3IGsD8wQK38=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-478-ZAFeV0m9P-uQ-1se1ue-Gg-1; Sun,
- 23 Nov 2025 13:32:50 -0500
-X-MC-Unique: ZAFeV0m9P-uQ-1se1ue-Gg-1
-X-Mimecast-MFC-AGG-ID: ZAFeV0m9P-uQ-1se1ue-Gg_1763922765
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CA33419560B5;
-	Sun, 23 Nov 2025 18:32:42 +0000 (UTC)
-Received: from fedora (unknown [10.44.32.8])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id CB9B4180057F;
-	Sun, 23 Nov 2025 18:32:22 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Sun, 23 Nov 2025 19:32:42 +0100 (CET)
-Date: Sun, 23 Nov 2025 19:32:21 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Bernd Edlinger <bernd.edlinger@hotmail.de>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Alexey Dobriyan <adobriyan@gmail.com>, Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
-	James Morris <jamorris@linux.microsoft.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
-	"Eric W. Biederman" <ebiederm@xmission.com>,
-	Adrian Reber <areber@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
-	Alexei Starovoitov <ast@kernel.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-security-module@vger.kernel.org,
-	tiozhang <tiozhang@didiglobal.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	YueHaibing <yuehaibing@huawei.com>,
-	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
-	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
-	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
-	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
-	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Elena Reshetova <elena.reshetova@intel.com>,
-	David Windsor <dwindsor@gmail.com>,
-	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
-	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Hans Liljestrand <ishkamiel@gmail.com>,
-	Penglei Jiang <superman.xpt@gmail.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Adrian Ratiu <adrian.ratiu@collabora.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Cyrill Gorcunov <gorcunov@gmail.com>,
-	Eric Dumazet <edumazet@google.com>
-Subject: Re: [PATCH v17] exec: Fix dead-lock in de_thread with ptrace_attach
-Message-ID: <aSNTNZxiQ0txISJx@redhat.com>
-References: <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <20251105143210.GA25535@redhat.com>
- <20251111-ankreiden-augen-eadcf9bbdfaa@brauner>
- <GV2PPF74270EBEE4FE6E639B899D01D8870E4C9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <aRs4zYDhddBQFiXZ@redhat.com>
- <GV2PPF74270EBEE6F59267B0E9F28F536D0E4C9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	bh=tI+G/3To6o6zgkIyctIgDOevE5B4OCcqbZ8GMSytGSA=;
+	b=jWE9Ke453EtzrnIXgeNaMFY9yg6nwogpvGRKGNaeYl5mD+CiF61seZFzBysZOxBUdflUSy
+	AcneD0E4ifJS+fOmaKK/Fuezx5Bic21W/yjDtX2XUEnkcq28NTSd+MUvvosCsFy/huCPsx
+	e4ukRUlm1JDR3J+ccRNelpTH+Ai3VLRMzYS/t5H4y1aVCoef7g8HdQWh8fpV7hb4/ddPpF
+	hMaCMo8HzwfZ0ny4JT/+QGmqf5EH7u1kk6evT+fvPDZhDvjGZ59NiLoulVHEIdbqhf9VZq
+	qO+E+S6XExdGzyI23szAFgXFio0TfxpSg5FfNAcW98ereDiCLe3KFzLrIv2Hhg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1763923673;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tI+G/3To6o6zgkIyctIgDOevE5B4OCcqbZ8GMSytGSA=;
+	b=cBMKMT8uMxejLjJRcmxnxXb7zvKdYVD44xh8ZdDuqw3zeR/pUk+nW/WxD+gnBDQTAJBhyz
+	iJGQBgvADSz0j3Ag==
+To: kernel test robot <lkp@intel.com>, =?utf-8?Q?Andr=C3=A9?= Almeida
+ <andrealmeid@igalia.com>, Ingo Molnar <mingo@redhat.com>, Peter Zijlstra
+ <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, Davidlohr
+ Bueso <dave@stgolabs.net>, Arnd Bergmann <arnd@arndb.de>, Sebastian
+ Andrzej Siewior <bigeasy@linutronix.de>, Waiman Long <longman@redhat.com>,
+ Ryan Houdek <Sonicadvance1@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
+ kernel-dev@igalia.com, =?utf-8?Q?Andr=C3=A9?= Almeida
+ <andrealmeid@igalia.com>
+Subject: Re: [PATCH v6 6/9] futex: Wire up get_robust_list2 syscall
+In-Reply-To: <202511221454.rsysOoSt-lkp@intel.com>
+References: <20251122-tonyk-robust_futex-v6-6-05fea005a0fd@igalia.com>
+ <202511221454.rsysOoSt-lkp@intel.com>
+Date: Sun, 23 Nov 2025 19:47:51 +0100
+Message-ID: <87ms4cio14.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <GV2PPF74270EBEE6F59267B0E9F28F536D0E4C9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain
 
-Hi Bernd,
-
-sorry for delay, I am on PTO, didn't read emails this week...
-
-On 11/17, Bernd Edlinger wrote:
+On Sat, Nov 22 2025 at 14:49, kernel test robot wrote:
+> kernel test robot noticed the following build warnings:
 >
-> On 11/17/25 16:01, Oleg Nesterov wrote:
-> > On 11/17, Bernd Edlinger wrote:
-> >>
-> >> On 11/11/25 10:21, Christian Brauner wrote:
-> >>> On Wed, Nov 05, 2025 at 03:32:10PM +0100, Oleg Nesterov wrote:
-> >>
-> >>>> But this is minor. Why do we need "bool unsafe_execve_in_progress" ?
-> >>>> If this patch is correct, de_thread() can drop/reacquire cred_guard_mutex
-> >>>> unconditionally.
-> >>>>
-> >>
-> >> I would not like to drop the mutex when no absolutely necessary for performance reasons.
-> >
-> > OK, I won't insist... But I don't really understand how this can help to
-> > improve the performance. If nothing else, this adds another for_other_threads()
-> > loop.
-> >
+> [auto build test WARNING on c42ba5a87bdccbca11403b7ca8bad1a57b833732]
 >
-> If no dead-lock is possible it is better to complete the de_thread without
-> releasing the mutex.  For the debugger it is also the better experience,
-> no matter when the ptrace_attack happens it will succeed rather quickly either
-> before the execve or after the execve.
-
-I still disagree, I still don't understand the "performance reasons", but since I can't
-convince you I won't really argue.
-
-> >>>>> +	if (unlikely(unsafe_execve_in_progress)) {
-> >>>>> +		spin_unlock_irq(lock);
-> >>>>> +		sig->exec_bprm = bprm;
-> >>>>> +		mutex_unlock(&sig->cred_guard_mutex);
-> >>>>> +		spin_lock_irq(lock);
-> >>>>
-> >>>> I don't think spin_unlock_irq() + spin_lock_irq() makes any sense...
-> >>>>
-> >>
-> >> Since the spin lock was acquired while holding the mutex, both should be
-> >> unlocked in reverse sequence and the spin lock re-acquired after releasing
-> >> the mutex.
-> >
-> > Why?
-> >
+> url:    https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/futex-Use-explicit-sizes-for-compat_robust_list-structs/20251122-135406
+> base:   c42ba5a87bdccbca11403b7ca8bad1a57b833732
+> patch link:    https://lore.kernel.org/r/20251122-tonyk-robust_futex-v6-6-05fea005a0fd%40igalia.com
+> patch subject: [PATCH v6 6/9] futex: Wire up get_robust_list2 syscall
+> config: arc-allnoconfig (https://download.01.org/0day-ci/archive/20251122/202511221454.rsysOoSt-lkp@intel.com/config)
+> compiler: arc-linux-gcc (GCC) 15.1.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251122/202511221454.rsysOoSt-lkp@intel.com/reproduce)
 >
-> It is generally more safe when each thread acquires its mutexes in order and
-> releases them in reverse order.
-> Consider this:
-> Thread A:
-> holds spin_lock_irq(siglock);
-> does mutes_unlock(cred_guard_mutex); with irq disabled.
-> task switch happens to Thread B which has irq enabled.
-> and is waiting for cred_guard_mutex.
-> Thrad B:
-> does mutex_lock(cred_guard_mutex);
-> but is interrupted this point and the interrupt handler I executes
-> now iterrupt handler I wants to take siglock and is blocked,
-> because the system one single CPU core.
-
-I don't follow. Do you mean PREEMPT_RT ?
-
-If yes. In this case spin_lock_irq() is rt_spin_lock() which doesn't disable irqs,
-it does rt_lock_lock() (takes rt_mutex) + migrate_disable().
-
-I do think that spin/mutex/whatever_unlock() is always safe. In any order, and
-regardless of RT.
-
-> > And just in case... Lets look at this code
-> >
-> > 	+                               rcu_assign_pointer(task->real_cred, bprm->cred);
-> > 	+                               task->mm = bprm->mm;
-> > 	+                               retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
-> > 	+                               rcu_assign_pointer(task->real_cred, old_cred);
-> > 	+                               task->mm = old_mm;
-> >
-> > again.
-> >
-> > This is mostly theoretical, but what if begin_new_exec() fails after de_thread()
-> > and before exec_mmap() and/or commit_creds(bprm->cred) ? In this case the execing
-> > thread will report SIGSEGV to debugger which can (say) read old_mm.
-> >
-> > No?
-> >
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202511221454.rsysOoSt-lkp@intel.com/
 >
-> Yes, and that is the reason why the debugger has to prove the possession of access rights
-> to the process before the execve which are necessary in case exeve fails, yes the debugger
-> may inspect the result, and as well the debugger's access rights must be also sufficient
-> to ptrace the process after execve succeeds, moreover the debugged process shall stop
-> right at the first instruction where the new process starts.
+> All warnings (new ones prefixed by >>):
+>
+>>> <stdin>:1627:2: warning: #warning syscall get_robust_list2 not implemented [-Wcpp]
+> --
+>>> <stdin>:1627:2: warning: #warning syscall get_robust_list2 not implemented [-Wcpp]
 
-Not sure I understand... OK, I see that you sent V18, and in this version ptrace_attach()
-calls __ptrace_may_access() twice, so IIUC ptrace_attach() can only succeed if the debugger
-has rights to trace the execing thread both before and after exec...
-
-Oleg.
-
+Lacks a COND_SYSCALL()
 
