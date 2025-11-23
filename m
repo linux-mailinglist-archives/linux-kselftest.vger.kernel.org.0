@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-46351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 510DCC7E4D8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 18:12:59 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 706C9C7E4CF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 18:12:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A22593A4155
-	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 17:12:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 61CF04E244D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Nov 2025 17:12:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E55F72D9792;
-	Sun, 23 Nov 2025 17:12:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 088202D9EF4;
+	Sun, 23 Nov 2025 17:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qXKxkC2g"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="QGM44Q7v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010065.outbound.protection.outlook.com [52.101.201.65])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010008.outbound.protection.outlook.com [52.101.46.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 155552D23BC;
-	Sun, 23 Nov 2025 17:12:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2D02D9ECF;
+	Sun, 23 Nov 2025 17:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.8
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763917922; cv=fail; b=N/U8SzUotyOSJCfctStKFncEKHb06uzLtLmNCkucDQgqnsiW/w0cMQB5qsFRLS16UQ1qGckxJEXemQ65uyCoDRdH006nA/RW4XEKyED5erjZ3g4Q8jtyoHFg+BsYD+Oeq5JURGLEAwDisU2+e/Pw7wzHqGpbWuEx6qq+N+59R/s=
+	t=1763917925; cv=fail; b=tHyDaZ49pV0QkSswZNzp9NUp+KlwIKyV9x8kelVhlngG77bA11Ox8ntdCoewoje7gBB0Igun3jdw7kgF6ZndUwzGrfmQJqroFq7tfAog+jwLO4CaNj2IM9B+Tt9gQadvLL3L5/K4bpTSwZ09gHQ/wOiy6N1uXLvk2DUlVkphaKs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763917922; c=relaxed/simple;
-	bh=NKY2T0ld2DLpsOGzCvoquMtcH8QjzB09tc9xIQgohBw=;
+	s=arc-20240116; t=1763917925; c=relaxed/simple;
+	bh=drT1rIru+T7/fNd1M/aw6ApSKOdseqZFQf53VY+hx5A=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XX3mzCi0NzZp3eRStftK+kY2k+MAQdD59sFNEf+F01zqDSgzdA16QtYdW0VPnJNOLZdwyfY9i2D6qhGdZ+0xxhxXT/e1ax8tsc801pNBe6wboAAgnTmNz2S4wLSl1yybN5qpOOu1LovpeXPJLld96wXqiGgcXDqJ+alT2YYxTvI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qXKxkC2g; arc=fail smtp.client-ip=52.101.201.65
+	 MIME-Version:Content-Type; b=L+VGlyqgIYlKRF7xlCySomvGv4CVhUe4/SZqISck7fIFLVJwsz8tq5kPmURLmj4VHLy61viR6nl5Pbsb3XNh8+ghuxi5NKo+BgfnZXi3g1N/w0Q4zm42vvCiw2blbCBZE561yZU53pgvFLDB0KUgtXeB3LamvcUoDzb0Ji1++r8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=QGM44Q7v; arc=fail smtp.client-ip=52.101.46.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UpeddPW7x+qmydKaqwD9xpZ62u7N4I3Ezgx6mQ2svgo2Yt7gSICCqwzBQ2BFWB73O8nCcpfxuerW56LSRR7qspJtlMNxbBv3bTfGJheJ9Qp4bIkLqq2JrQuAxHEyW4rjDoEHBYkvk/7xBut8To4ojXHtr/MlQVE1AZXP+ydafQwtSYcCCMFRaIKfyFDAAxWaFzzcR/ZyZe/bp8UG2RBW9zwAImNht30YmEUkeseIy3w4/dYtHNzmKIOVte9IPUCbWpi++qFZqGZRTH4QSvOqkij0swPqcS3V1pJwEdhuDHeU1XpF7dMMX+ifuRGY7DAiK1xRqPm5egYS00JcM9yObg==
+ b=eWViBA8td6oQ4A09qGo2zthmGJxrtobkOMfzM3x69RX9YeQhMcTAn6iAmjGKbVQHOrls5dnDaEbDbW+sEoPfiFyCaXnbSmA+dFFbedJrNpQGuG9O0+PVACIg3hKleOFHvb+AOugFgrBCKeSoIgb7u1mHTISLMDbElq/7JNMI12ByxvqGCOTV0r9jtv1iQG2QIt81yJM15dgGihquTffEe435seI8BZvDDuizUA5muQGnYH1gQVAyQPN4TTg5fyIwb+P0+EOuWWLTWZ95TUWD/x7f+83cTjHUikXQMpOEfE3PziepnqnQGISMorzho8yZIVIs20GwOb/+++DHmalh9Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R4rj5cT6P3KGZ511aluDVpByX8lyv3BrbNOeTQFXQ2E=;
- b=D6I67aHNkP28Dhl5Uwviet0XXvlDWGqFX+gix0yoTylrpfQLZOVhpdR4Pk6NTZZPkI18lOiG82QFqMHl82GMZEnszOSAMALKcEoQmMiBIycqN61HgEAHsRhiini8W77+zei0gU3I065AGOI49jJ9eyxcFXZf/ZBuOuHcSDtac+ip8oyMsrI88hYtcyeL++FImNdTg3DQ1ruA5G2aNwNpbFMayjwaPiVQkvZ0zCG2KsoOM6v4fg4aWMZ9nQdVbDJNO9y/Nliwc5XbN8VHwgqnkbE83zf0HNq3wCeJWHjnhn5QjGjAEu2bh78KaZK/C8A7/bN8QFVNjYPlwarLcnUedg==
+ bh=JyiH2ugyRvz3ppOeMd6a8x/Ve8BkCuHcABvqxjVvZXs=;
+ b=bw9wltwN5LJcCBmybccW24MYUKn+PGcyBYAk6iOlJqTxYbS2a1vbMRZN6eXRXIX+JS0g0nY6qKNlse1kBNPiZn5NJpVbaDuMxexn0nbgIgBzcl6ODf3Wte9sxTJH7p/XbYNXWLTioz55GpHVfTtEf6xTkk4+0YGGWsO6xoJ8uRp41JFQVYXO7ZI1WPvjiIiosnlHqWPubLvWkUBjIssVuhr2Qp1fQf1E/W8FCeOgbM+sr7YJ2bHM+rMa3aQz4Che77zi/KLv/p2tcU8ruRoO2Ey5Ob8P61Zr9AjRyCpC7xTuoIcD6dMl6VfgAYojF/7MC56s27Ibzj52Xmep0BZwcg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,18 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R4rj5cT6P3KGZ511aluDVpByX8lyv3BrbNOeTQFXQ2E=;
- b=qXKxkC2gWcRytHEAY/2HiHa5c4lpdlXgjDyoISEJMsxVKWYKvV4bbOwLi1WgSsWrJFkP7lsD3Oe33t1l/8/oiyL8po6+HQC9p2uuTwYKdzSHXfpW0f9Mpx2PygY/o262pTHXTOO4NISsinOUBB1wWDqjikgG1MjTRVFO9QS52PCbMUhmpQCbTmb7U5LzR0NtKfFx70nu5xC1XoSCXl/fgbizBn7pXZLKkeLvK+VmR1zdilYngiTzFpecLeh/n7zpz+YvM5IVWcuBIg/RgrGcaSz+qHRUA6RkxLXg3uzYbZHjUBFFrlepgQz4J69kwcIB/vnMERFmqXWCYf5QBqDlLQ==
-Received: from SJ0PR13CA0018.namprd13.prod.outlook.com (2603:10b6:a03:2c0::23)
- by SA1PR12MB7293.namprd12.prod.outlook.com (2603:10b6:806:2b9::7) with
+ bh=JyiH2ugyRvz3ppOeMd6a8x/Ve8BkCuHcABvqxjVvZXs=;
+ b=QGM44Q7vg/Hcru3CjqUGQ4UVYS0vXLA/nIBuNKe6phHj0AwOSXZ5soEzijcJxGjICxEstBr96Rk2HRGDUMZzUq165z+AsWyhNRNTBFUS2L0eYN29SgZ4/wI3wtGCdhX0ExffbrD90kOMlt5QtP4Zw5DH4/6l3ICTYF7PMCx4g7SQmrfpPDzFk3kHs0zl0DsNIHZrXzYKQjiCVNOjMqKtMWrdgdc3lfe3GFto3GVHTCOO20ZHwXCYifXa8Nm1++U1OydSWWba+ibjc0rq4IZ32Qgkugn7Nv1TN+ncOTImygnOdtPV+hVQOPmRFRT4PZ8cD/hFHXVuJxOP+bH/U7DY1w==
+Received: from BYAPR08CA0069.namprd08.prod.outlook.com (2603:10b6:a03:117::46)
+ by PH8PR12MB7182.namprd12.prod.outlook.com (2603:10b6:510:229::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.16; Sun, 23 Nov
- 2025 17:11:55 +0000
-Received: from SJ5PEPF000001CD.namprd05.prod.outlook.com
- (2603:10b6:a03:2c0:cafe::b3) by SJ0PR13CA0018.outlook.office365.com
- (2603:10b6:a03:2c0::23) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.7 via Frontend Transport; Sun,
- 23 Nov 2025 17:11:55 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9275.12; Sun, 23 Nov
+ 2025 17:11:59 +0000
+Received: from SJ5PEPF000001CF.namprd05.prod.outlook.com
+ (2603:10b6:a03:117:cafe::d6) by BYAPR08CA0069.outlook.office365.com
+ (2603:10b6:a03:117::46) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.17 via Frontend Transport; Sun,
+ 23 Nov 2025 17:11:56 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -64,20 +64,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- SJ5PEPF000001CD.mail.protection.outlook.com (10.167.242.42) with Microsoft
+ SJ5PEPF000001CF.mail.protection.outlook.com (10.167.242.43) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9366.7 via Frontend Transport; Sun, 23 Nov 2025 17:11:55 +0000
+ 15.20.9366.7 via Frontend Transport; Sun, 23 Nov 2025 17:11:59 +0000
 Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 23 Nov
- 2025 09:11:44 -0800
+ 2025 09:11:48 -0800
 Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail204.nvidia.com
  (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 23 Nov
- 2025 09:11:44 -0800
+ 2025 09:11:48 -0800
 Received: from fedora.mtl.labs.mlnx (10.127.8.11) by mail.nvidia.com
  (10.129.68.10) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Sun, 23 Nov 2025 09:11:40 -0800
+ Transport; Sun, 23 Nov 2025 09:11:44 -0800
 From: Carolina Jubran <cjubran@nvidia.com>
 To: Shuah Khan <shuah@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
  S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
@@ -86,9 +86,9 @@ CC: Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>, "Cosmin
  Ratiu" <cratiu@nvidia.com>, Nimrod Oren <noren@nvidia.com>, Mark Bloch
 	<mbloch@nvidia.com>, <linux-kernel@vger.kernel.org>,
 	<linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: [PATCH net-next V2 2/6] selftests: drv-net: introduce Iperf3Runner for measurement use cases
-Date: Sun, 23 Nov 2025 19:10:11 +0200
-Message-ID: <20251123171015.3188514-3-cjubran@nvidia.com>
+Subject: [PATCH net-next V2 3/6] selftests: drv-net: Use Iperf3Runner in devlink_rate_tc_bw.py
+Date: Sun, 23 Nov 2025 19:10:12 +0200
+Message-ID: <20251123171015.3188514-4-cjubran@nvidia.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20251123171015.3188514-1-cjubran@nvidia.com>
 References: <20251123171015.3188514-1-cjubran@nvidia.com>
@@ -98,232 +98,247 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CD:EE_|SA1PR12MB7293:EE_
-X-MS-Office365-Filtering-Correlation-Id: c66f44c1-fe3d-493f-ec56-08de2ab36736
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001CF:EE_|PH8PR12MB7182:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4f6c69e6-a07e-4d04-e65a-08de2ab369b6
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024;
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sdPtQf1o0/5RSD+isdH+DoNy5YlSzglm3mhiYMWS+PyXFEF9gYmt8mjui392?=
- =?us-ascii?Q?Zt8cqAi4j2JhOxy5mFQY8R0NQql/LCD0wE/IkmcLys/5w1rESOh8IewhLwvQ?=
- =?us-ascii?Q?xi0kscfpvLETpEJdaeOeTv6g6VPHj61Elx+zjwJMraN/pvdsjFPSm6toAVwr?=
- =?us-ascii?Q?OWN11JewORfTSmkmgIdPodbHVxqM/+jzNv7q/jHsGYb2SRl90xvPXpwYCcHd?=
- =?us-ascii?Q?gzFTLjsOxGam9BqDpZ8EEQC6xMQAMNg8x93mzhKixOkqrMYe8cGs6Z6hUIdf?=
- =?us-ascii?Q?i7iQU/uphAAO+fnDrAUpQjnqAIQbWFGtyy9DPu2hdFNms+MCcHd83M4s3B1O?=
- =?us-ascii?Q?F6WsbHKSMPuc+o0Ft5AlE3KeOaBYScngIKoSzV4nHtwfBolIexmTCCZzV3un?=
- =?us-ascii?Q?rgQZ24I33cjb1ZEGvn4+NMkdVIDzrwuOfp083Z4AAs112/0CqHfpddWGiYTl?=
- =?us-ascii?Q?hDUNnTVCz921G1/2BMRAzFY8y4ONoO2xeTS00c1KEiyVlbaBP1kNgwawgrdC?=
- =?us-ascii?Q?nHFCnKU0KcPL63JZqbpUmd36pjyNh1XGOg6JedXXI/V5EXrSab71R7sUwbn0?=
- =?us-ascii?Q?EDi3o3fdy6iPI05ltCQ3EwZobrkClGJeKDkMnWjrRYamBHlqIWLU9a2GjnGD?=
- =?us-ascii?Q?EoAIWY5ev5zwT14JIEMSQgvkP7vHJW1TXY7U9+4eUAg0DcHQ5npQSOqGi38B?=
- =?us-ascii?Q?B3nYSpgoX/YktTu1ACcXnSUIlewRq7SzafZkZ9qjgmKpUTa+WbjRhKGAhNGZ?=
- =?us-ascii?Q?/89v2ASFg9nAMe3ykdHZ+x8AUMYtpgjT0Pfkydjuo4NlV9bpcRyPs0lOJRSM?=
- =?us-ascii?Q?2qcVtVqxiX/gij3eMcP5SNdaVF75ukXCSlQEiR5rP2wrfQMHYj41vlQkSQHo?=
- =?us-ascii?Q?Uolc71oYqYikK0JartkFTwVaMjqOpf0cZez9GMud/G5V1J/iWRIKnCGyYelf?=
- =?us-ascii?Q?7Ep8R1ZqyXB4hslNa3NJNlk/t1CF1V4ul/eNUDIbnTSgdAJ71TSHWEp9ZxMo?=
- =?us-ascii?Q?nfYNmI5Bvt3wgcDkXK7/zQuum3AFG9vGsF2EuVUGyqXyQAdMYyaxkUgVrcq9?=
- =?us-ascii?Q?67yKe78lpukt9w9gwfhHeCeXVZuvEPgemFnPhmEUXQ1hRxvqvwX7cYvOx633?=
- =?us-ascii?Q?b+Jiz1jjc7mzzJhGjDDWfRvqZ5r7uSZdCshhQFhtoIljsKdE9w/tyO/uPva6?=
- =?us-ascii?Q?nN/ZC9rSVcFBs+g/gBQbi0laBpSC9smDzdPaLr04R+zK4n6xsuXc/IH8qTlh?=
- =?us-ascii?Q?3Dhid9YnsDbO9bBXSOJQ7qK+ZdInR/+bBDSccTomhWH2eIV9Z0q/eTztQejB?=
- =?us-ascii?Q?YHRYN7L718I50cLQHmYaN79GKma2w8bf93ztJOMfBQKyk1Ol8u4MdqBr8ub4?=
- =?us-ascii?Q?bO8hLyq6URXoc6cF4FDEk1v3AfbFTFc9z5CwjDOtSO6gbaEmTK7aOz3X9LzL?=
- =?us-ascii?Q?g/j8GxePWvbtODsMzKFUbtZ6gxOSl3/7H1kPm1Hhf+cEU7pcJw3nFzVxiA81?=
- =?us-ascii?Q?bbaRYQaseL733SsitCkx+TivnuG0h4ps/CePIcRTodyQywA8DFWssFH8F8vn?=
- =?us-ascii?Q?/dKpMRyTLEWHafSbKfk=3D?=
+	=?utf-8?B?dVV1UWF6NGNWVFEyZkFpR3BwMmxncW1PaGZFY0ZzMkttZHUwb1htc3JGenI3?=
+ =?utf-8?B?RFptUDBYdVdGa0hhTndiMkNzQmNienNONGE5WWNrQW96Yk0wQ3VTaVFFSjBy?=
+ =?utf-8?B?SW1CWmZTRjNUd2ZCWGxHaUZoQWFDS3d3RHFENWN1WEdCNnJqdEdwdkRMdmJT?=
+ =?utf-8?B?VXhUY05SNTdzQUxHcE1WTGZyM0t2bE1rY2xCbllsOFFNMGxESkNIekJYWDVi?=
+ =?utf-8?B?MkNuVENqYm1SNFRIV1Y4UExYQmhQZDEyWFdNZHhMdVU0NzBUUlF6L2hrU1FQ?=
+ =?utf-8?B?Y0gxNVJGOU00Zjh0ZENtRVQ4QnpqQVJZVHV6aDdNeWRVZEtWVGJTcTVLZHYv?=
+ =?utf-8?B?UlhSMWl1S2NMVkFPaUcyQU5VMEhzQkFCRUpsQjBiMUlML09RWVdyaU1VYy9X?=
+ =?utf-8?B?K1V2enRjQ0xGbXBHREoySExCNGx3UmU3TFlRQ3ZqRk1iWGg1d0dVUkVDWGRL?=
+ =?utf-8?B?dXgyb1oxdVdVcnVKbVF3OEhyYU5TTGg2QnYzRnBZR0tRWVdNUjlTYlFpUjA0?=
+ =?utf-8?B?eXVsRkdKdWhTLzRESGtoU1BVU3dIbHZ1amdNZTd6MEgzYlB2TEovU2RqYnhj?=
+ =?utf-8?B?ZWV1enIzcDl3YzZkc1E5UVp4VEFuMDlaZ0d1OS90bFdiNXQyS0lvQlQvcUwy?=
+ =?utf-8?B?ZkZybDEyUW83ZGxsYk85N0lna2NOYmNyVTRZZFBQNUdsTEozOUdkUS80R3ND?=
+ =?utf-8?B?UzM4VkRQQWQ0bitsQ0F3YU9hZFJJSjhGU1lmQzJEbnRCZHdiUytaeDdwalZn?=
+ =?utf-8?B?S1F0RHpvWnNFMTlQbHRHNnhWOHg1VCtka2x6R1lEZGRoYWhEejRaSHU4dXpD?=
+ =?utf-8?B?OFJCai9ONWVqOUVGV0QwSDRNWnRDVFNycFdlNFFZWUsyTko3MUlIUGJ6eEFi?=
+ =?utf-8?B?WG5sUVlVUC9JVFZIaHg5Mk9HMTV2Z1ZabU9WMGFYWXNLQ2ZHL0o4a21tVlJV?=
+ =?utf-8?B?L085TkF5MitzWnNEYjk4MlFlcVRUM215bEs3dEhlMVl6N1lpMU4yMFRBZmJM?=
+ =?utf-8?B?SHo0SjVXaGh3eU96WXhuaHdrZXhKU3FMaWFQQ1BYVFN4d25kaW12TmN6aUdP?=
+ =?utf-8?B?RjZPVjJxdm1mN1FYVzZ5Uko1QXF6ZHQ2aVBJakIyek0wYWpxOEIzQlhhcXI0?=
+ =?utf-8?B?RUtzdkFyRk9Bdlg4UmoreEt6OFp2cVlqVWR1UDUyNTFYVllUTC93UlZHSlFQ?=
+ =?utf-8?B?SVhVc1RSaTIydjdsZ3Yza0ZlTEdBdUFiUGxUWTY3RzVoWThOUUpiS3JXQUtI?=
+ =?utf-8?B?VEsyWktGZ2JKZm1UcklkRXV6UldTdDFPYm03UkNmbUx1MlExMlc0bVdVRUdI?=
+ =?utf-8?B?ditMa3BJUWRpR043WkNvUjd4TVBJbGQ5SmYralgvQXBzbWd2Yk1jVUIrZ3Ev?=
+ =?utf-8?B?YVBobDJMMExzRnBRT3dJY2hROFNkNndqMDhKWis5ZFFVaXhldFBUY1lpQXpN?=
+ =?utf-8?B?M2RsNnVpNVFJcUxPT2xmbnJpcFlQUWd2YnVqZ28wSk1kWGtpTG1YeUVocmRR?=
+ =?utf-8?B?OVNFN2VmK2x4aU1TRURSSi9wbmo0SUZZNUE0UDdzRUsvaTFWdjRub3pNQm5I?=
+ =?utf-8?B?ZmRzTm04cVpkNzE5bHZ2ZE9JMkROZ0Y3aDVjMCtQd3I1dG02OVp0dGcreTc3?=
+ =?utf-8?B?RjFuL1FGdFV3SXJqS2tGa2xVVlJPSU5zakdLYWI4S2ord2RWUmk0RXN5S2VS?=
+ =?utf-8?B?ejlneFJVOHFTdHBQWGFZOEZMNW01dG56ck85UTA4ZTZrNDNNU3VWMzY0bXQ3?=
+ =?utf-8?B?c0dFWXFhcjliZ1J4UUl1MjJDbk05a20wK3pZZm5Ia2ZKaXpST3JiNzBsRUlO?=
+ =?utf-8?B?ZDN2Z3pWdVdZRGpjRTdtdHhjTFIvbmVIaTIvem5zU085U05wd1d4a2Y5d1FT?=
+ =?utf-8?B?dVhueThJRC8rNXdUblhHSWtrZUdZb1lLWjNRM0diaitpaDdTV2JHRU51V29F?=
+ =?utf-8?B?NFBjZ3lnS3B5Q1JDb0grT3JCUlFMcEJ2UDZ6Z1hJZ0hKRGVuaGJTWXQxejRV?=
+ =?utf-8?B?Zkc0c0VkN3J6OUFWRzhNaE4vODlBM2tVL0JVVU9SbzA2OUJVZS9pRzJtaURq?=
+ =?utf-8?B?Ri9zVElHd2ZTQk82djNtdzh5UVVTODliNXZWZXY1cTBnOXRWdUtyeVcwSHpI?=
+ =?utf-8?Q?ujs0=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2025 17:11:55.1687
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Nov 2025 17:11:59.4009
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c66f44c1-fe3d-493f-ec56-08de2ab36736
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f6c69e6-a07e-4d04-e65a-08de2ab369b6
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ5PEPF000001CD.namprd05.prod.outlook.com
+	SJ5PEPF000001CF.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7293
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7182
 
-GenerateTraffic was added to spin up long-running iperf3 load, mainly
-to drive high PPS background traffic. It was never meant to provide
-stable throughput numbers, and trying to repurpose it for measurement
-does not make sense.
-
-Introduce Iperf3Runner to allow tests to split out server/client
-configuration, control start/stop, and collect JSON output for
-analysis. This makes it possible to measure bandwidth directly when
-validating egress shaping.
-
-GenerateTraffic stays as the background load generator, reusing the
-common iperf3 helpers under the hood.
+Replace the inline iperf3 subprocess and JSON parsing with
+Iperf3Runner.
 
 Signed-off-by: Carolina Jubran <cjubran@nvidia.com>
 Reviewed-by: Cosmin Ratiu <cratiu@nvidia.com>
 Reviewed-by: Nimrod Oren <noren@nvidia.com>
 ---
- .../drivers/net/hw/lib/py/__init__.py         |  5 +-
- .../selftests/drivers/net/lib/py/__init__.py  |  5 +-
- .../selftests/drivers/net/lib/py/load.py      | 84 +++++++++++++++++--
- 3 files changed, 82 insertions(+), 12 deletions(-)
+ .../drivers/net/hw/devlink_rate_tc_bw.py      | 70 ++++++++-----------
+ 1 file changed, 29 insertions(+), 41 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-index fb010a48a5a1..7563a49fca65 100644
---- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-@@ -28,7 +28,7 @@ try:
-         ksft_setup
-     from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
-         ksft_ne, ksft_not_in, ksft_raises, ksft_true, ksft_gt, ksft_not_none
--    from drivers.net.lib.py import GenerateTraffic, Remote
-+    from drivers.net.lib.py import GenerateTraffic, Remote, Iperf3Runner
-     from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv
+diff --git a/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py b/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
+index ead6784d1910..16e5dda5bee1 100755
+--- a/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
++++ b/tools/testing/selftests/drivers/net/hw/devlink_rate_tc_bw.py
+@@ -64,6 +64,7 @@ from lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+ from lib.py import NetDrvEpEnv, DevlinkFamily
+ from lib.py import NlError
+ from lib.py import cmd, defer, ethtool, ip
++from lib.py import Iperf3Runner
  
-     __all__ = ["NetNS", "NetNSEnter", "NetdevSimDev",
-@@ -44,7 +44,8 @@ try:
-                "ksft_eq", "ksft_ge", "ksft_in", "ksft_is", "ksft_lt",
-                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
-                "ksft_not_none", "ksft_not_none",
--               "NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote"]
-+               "NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote",
-+               "Iperf3Runner"]
- except ModuleNotFoundError as e:
-     print("Failed importing `net` library from kernel sources")
-     print(str(e))
-diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-index b0c6300150fb..65de853e8ac6 100644
---- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-@@ -44,10 +44,11 @@ try:
-                "ksft_not_none", "ksft_not_none"]
  
-     from .env import NetDrvEnv, NetDrvEpEnv
--    from .load import GenerateTraffic
-+    from .load import GenerateTraffic, Iperf3Runner
-     from .remote import Remote
+ class BandwidthValidator:
+@@ -139,8 +140,8 @@ def setup_vlans_on_vf(vf_ifc):
+     Sets up two VLAN interfaces on the given VF, each mapped to a different TC.
+     """
+     vlan_configs = [
+-        {"vlan_id": 101, "tc": 3, "ip": "198.51.100.2"},
+-        {"vlan_id": 102, "tc": 4, "ip": "198.51.100.10"},
++        {"vlan_id": 101, "tc": 3, "ip": "198.51.100.1"},
++        {"vlan_id": 102, "tc": 4, "ip": "198.51.100.9"},
+     ]
  
--    __all__ += ["NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote"]
-+    __all__ += ["NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote",
-+                "Iperf3Runner"]
- except ModuleNotFoundError as e:
-     print("Failed importing `net` library from kernel sources")
-     print(str(e))
-diff --git a/tools/testing/selftests/drivers/net/lib/py/load.py b/tools/testing/selftests/drivers/net/lib/py/load.py
-index c4e808407cc4..cef661ded8ab 100644
---- a/tools/testing/selftests/drivers/net/lib/py/load.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/load.py
-@@ -2,21 +2,89 @@
+     for config in vlan_configs:
+@@ -224,13 +225,13 @@ def setup_devlink_rate(cfg):
+         raise KsftFailEx(f"rate_set failed on VF port {port_index}") from exc
  
- import re
- import time
-+import json
  
- from lib.py import ksft_pr, cmd, ip, rand_port, wait_port_listen
+-def setup_remote_server(cfg):
++def setup_remote_vlans(cfg):
+     """
+-    Sets up VLAN interfaces and starts iperf3 servers on the remote side.
++    Sets up VLAN interfaces on the remote side.
+     """
+     remote_dev = cfg.remote_ifname
+     vlan_ids = [101, 102]
+-    remote_ips = ["198.51.100.1", "198.51.100.9"]
++    remote_ips = ["198.51.100.2", "198.51.100.10"]
  
--class GenerateTraffic:
--    def __init__(self, env, port=None):
--        env.require_cmd("iperf3", local=True, remote=True)
+     for vlan_id, ip_addr in zip(vlan_ids, remote_ips):
+         vlan_dev = f"{remote_dev}.{vlan_id}"
+@@ -238,14 +239,13 @@ def setup_remote_server(cfg):
+             f"type vlan id {vlan_id}", host=cfg.remote)
+         cmd(f"ip addr add {ip_addr}/29 dev {vlan_dev}", host=cfg.remote)
+         cmd(f"ip link set dev {vlan_dev} up", host=cfg.remote)
+-        cmd(f"iperf3 -s -1 -B {ip_addr}",background=True, host=cfg.remote)
+         defer(cmd, f"ip link del {vlan_dev}", host=cfg.remote)
  
-+class Iperf3Runner:
-+    """
-+    Sets up and runs iperf3 traffic.
-+    """
-+    def __init__(self, env, port=None, server_ip=None, client_ip=None):
-+        env.require_cmd("iperf3", local=True, remote=True)
-         self.env = env
+ 
+ def setup_test_environment(cfg, set_tc_mapping=True):
+     """
+     Sets up the complete test environment including VF creation, VLANs,
+-    bridge configuration, devlink rate setup, and the remote server.
++    bridge configuration and devlink rate setup.
+     """
+     vf_ifc = setup_vf(cfg, set_tc_mapping)
+     ksft_pr(f"Created VF interface: {vf_ifc}")
+@@ -256,51 +256,39 @@ def setup_test_environment(cfg, set_tc_mapping=True):
+     setup_bridge(cfg)
+ 
+     setup_devlink_rate(cfg)
+-    setup_remote_server(cfg)
+-    time.sleep(2)
++    setup_remote_vlans(cfg)
+ 
+ 
+-def run_iperf_client(server_ip, local_ip, barrier, min_expected_gbps=0.1):
++def measure_bandwidth(cfg, server_ip, client_ip, barrier):
+     """
+-    Runs a single iperf3 client instance, binding to the given local IP.
+-    Waits on a barrier to synchronize with other threads.
++    Synchronizes with peers and runs an iperf3-based bandwidth measurement
++    between the given endpoints. Returns average Gbps.
+     """
++    runner = Iperf3Runner(cfg, server_ip=server_ip, client_ip=client_ip)
+     try:
+         barrier.wait(timeout=10)
+     except Exception as exc:
+         raise KsftFailEx("iperf3 barrier wait timed") from exc
+ 
+-    iperf_cmd = ["iperf3", "-c", server_ip, "-B", local_ip, "-J"]
+-    result = subprocess.run(iperf_cmd, capture_output=True, text=True,
+-                            check=True)
 -
-         self.port = rand_port() if port is None else port
--        self._iperf_server = cmd(f"iperf3 -s -1 -p {self.port}", background=True)
-+        self.server_ip = server_ip
-+        self.client_ip = client_ip
-+
-+    def _build_server(self):
-+        cmdline = f"iperf3 -s -1 -p {self.port}"
-+        if self.server_ip:
-+            cmdline += f" -B {self.server_ip}"
-+        return cmdline
-+
-+    def _build_client(self, streams, duration, reverse):
-+        host = self.env.addr if self.server_ip is None else self.server_ip
-+        cmdline = f"iperf3 -c {host} -p {self.port} -P {streams} -t {duration} -J"
-+        if self.client_ip:
-+            cmdline += f" -B {self.client_ip}"
-+        if reverse:
-+            cmdline += " --reverse"
-+        return cmdline
-+
-+    def start_server(self):
-+        """
-+        Starts an iperf3 server with optional bind IP.
-+        """
-+        cmdline = self._build_server()
-+        proc = cmd(cmdline, background=True)
-         wait_port_listen(self.port)
-         time.sleep(0.1)
--        self._iperf_client = cmd(f"iperf3 -c {env.addr} -P 16 -p {self.port} -t 86400",
--                                 background=True, host=env.remote)
-+        return proc
-+
-+    def start_client(self, background=False, streams=1, duration=10, reverse=False):
-+        """
-+        Starts the iperf3 client with the configured options.
-+        """
-+        cmdline = self._build_client(streams, duration, reverse)
-+        return cmd(cmdline, background=background, host=self.env.remote)
-+
-+    def measure_bandwidth(self, reverse=False):
-+        """
-+        Runs an iperf3 measurement and returns the average bandwidth (Gbps).
-+        Discards the first and last few reporting intervals and uses only the
-+        middle part of the run where throughput is typically stable.
-+        """
-+        self.start_server()
-+        result = self.start_client(duration=10, reverse=reverse)
-+
-+        if result.ret != 0:
-+            raise Exception("iperf3 failed to run successfully")
-+        try:
-+            out = json.loads(result.stdout)
-+        except json.JSONDecodeError as exc:
-+            raise Exception("Failed to parse iperf3 JSON output") from exc
-+
-+        intervals = out.get("intervals", [])
-+        samples = [i["sum"]["bits_per_second"] / 1e9 for i in intervals]
-+        if len(samples) < 10:
-+            raise Exception(f"iperf3 returned too few intervals: {len(samples)}")
-+        # Discard potentially unstable first and last 3 seconds.
-+        stable = samples[3:-3]
-+
-+        avg = sum(stable) / len(stable)
-+
-+        return avg
-+
-+
-+class GenerateTraffic:
-+    def __init__(self, env, port=None):
-+        self.env = env
-+        self.runner = Iperf3Runner(env, port)
-+
-+        self._iperf_server = self.runner.start_server()
-+        self._iperf_client = self.runner.start_client(background=True, streams=16, duration=86400)
+     try:
+-        output = json.loads(result.stdout)
+-        bits_per_second = output["end"]["sum_received"]["bits_per_second"]
+-        gbps = bits_per_second / 1e9
+-        if gbps < min_expected_gbps:
+-            ksft_pr(
+-                f"iperf3 bandwidth too low: {gbps:.2f} Gbps "
+-                f"(expected ≥ {min_expected_gbps} Gbps)"
+-            )
+-            return None
+-        return gbps
+-    except json.JSONDecodeError as exc:
+-        ksft_pr(f"Failed to parse iperf3 JSON output: {exc}")
+-        return None
++        bw_gbps = runner.measure_bandwidth(reverse=True)
++    except Exception as exc:
++        raise KsftFailEx("iperf3 bandwidth measurement failed") from exc
  
-         # Wait for traffic to ramp up
-         if not self._wait_pkts(pps=1000):
-@@ -61,7 +129,7 @@ class GenerateTraffic:
-     def _wait_client_stopped(self, sleep=0.005, timeout=5):
-         end = time.monotonic() + timeout
++    return bw_gbps
  
--        live_port_pattern = re.compile(fr":{self.port:04X} 0[^6] ")
-+        live_port_pattern = re.compile(fr":{self.runner.port:04X} 0[^6] ")
+-def run_bandwidth_test():
++
++def run_bandwidth_test(cfg):
+     """
+-    Launches iperf3 client threads for each VLAN/TC pair and collects results.
++    Runs parallel bandwidth measurements for each VLAN/TC pair and collects results.
+     """
+-    def _run_iperf_client_thread(server_ip, local_ip, results, barrier, tc_ix):
+-        results[tc_ix] = run_iperf_client(server_ip, local_ip, barrier)
++    def _run_measure_bandwidth_thread(local_ip, remote_ip, results, barrier, tc_ix):
++        results[tc_ix] = measure_bandwidth(cfg, local_ip, remote_ip, barrier)
  
-         while time.monotonic() < end:
-             data = cmd("cat /proc/net/tcp*", host=self.env.remote).stdout
+     vf_vlan_data = [
+         # (local_ip, remote_ip, TC)
+-        ("198.51.100.2",  "198.51.100.1", 3),
+-        ("198.51.100.10", "198.51.100.9", 4),
++        ("198.51.100.1",  "198.51.100.2", 3),
++        ("198.51.100.9", "198.51.100.10", 4),
+     ]
+ 
+     results = {}
+@@ -309,8 +297,8 @@ def run_bandwidth_test():
+ 
+     for local_ip, remote_ip, tc_ix in vf_vlan_data:
+         thread = threading.Thread(
+-            target=_run_iperf_client_thread,
+-            args=(remote_ip, local_ip, results, start_barrier, tc_ix)
++            target=_run_measure_bandwidth_thread,
++            args=(local_ip, remote_ip, results, start_barrier, tc_ix)
+         )
+         thread.start()
+         threads.append(thread)
+@@ -320,10 +308,11 @@ def run_bandwidth_test():
+ 
+     for tc_ix, tc_bw in results.items():
+         if tc_bw is None:
+-            raise KsftFailEx("iperf3 client failed; cannot evaluate bandwidth")
++            raise KsftFailEx("iperf3 failed; cannot evaluate bandwidth")
+ 
+     return results
+ 
++
+ def calculate_bandwidth_percentages(results):
+     """
+     Calculates the percentage of total bandwidth received by TC3 and TC4.
+@@ -398,10 +387,10 @@ def check_bandwidth_distribution(bw_data, validator):
+ 
+ def run_bandwidth_distribution_test(cfg, set_tc_mapping):
+     """
+-    Runs parallel iperf3 tests for both TCs and collects results.
++    Runs parallel bandwidth measurements for both TCs and collects results.
+     """
+     setup_test_environment(cfg, set_tc_mapping)
+-    bandwidths = run_bandwidth_test()
++    bandwidths = run_bandwidth_test(cfg)
+     bw_data = calculate_bandwidth_percentages(bandwidths)
+     test_name = "with TC mapping" if set_tc_mapping else "without TC mapping"
+     print_bandwidth_results(bw_data, test_name)
+@@ -451,7 +440,6 @@ def main() -> None:
+         )
+         if not cfg.pci:
+             raise KsftSkipEx("Could not get PCI address of the interface")
+-        cfg.require_cmd("iperf3", local=True, remote=True)
+ 
+         cfg.bw_validator = BandwidthValidator()
+ 
 -- 
 2.38.1
 
