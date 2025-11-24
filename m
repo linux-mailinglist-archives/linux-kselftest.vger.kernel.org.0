@@ -1,209 +1,289 @@
-Return-Path: <linux-kselftest+bounces-46381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72EACC8038B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 12:34:18 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C9A5C80391
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 12:34:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 45944344702
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 11:34:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 148F04E149D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 11:34:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D12FD2F1FF4;
-	Mon, 24 Nov 2025 11:34:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A748D2F60B6;
+	Mon, 24 Nov 2025 11:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i0dFp+6E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E567935959;
-	Mon, 24 Nov 2025 11:34:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7704626C3A2;
+	Mon, 24 Nov 2025 11:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763984046; cv=none; b=iKUqbPsKReyCX/Fp/6cCo/AnbIEtRgFrYMKjxRDV78Qz9NV4A/138gCsxbZEWWVHDGCs1jau9v9LPfKuAWaBRAo9R5kQTX/9/zWKJHwuvNd6Xd6uZ3M4x5D83wwpQqURp1R/3ikDOuKsPCADlT74aOpPsA8JQ/aZ/43Z1taOTtE=
+	t=1763984082; cv=none; b=MC+bPcOkC1WFINGY5jmTwb90wMKRS+f8a4syZuSgkG3yRFgqZOaTZdE7dZHBi2stczgDrzASCrLXALmW6fSw1deAn6HM58Y24leWfR87WOa6zqSnGFiIlZX1iAoqmljHI/bOumnIHsB4I07KZKCh0wZdlSIUnHmpRSIdmy/Fwc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763984046; c=relaxed/simple;
-	bh=e8x4+7Pv2Jhk1EcyNugPzKY+gxDNCJ9trL4AVFQUv7o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OJS6v7aYD6bOZO39OCnewq0+mlin1Prcbr75A/ETTAlRAdvSSR1Y8XGYpfIl2SWw1A83pBcbAKKrTZr4bQ8hLTrv+Y4Dkeqt5itaspoP3O00nOYs5RwZaujFazYxcECvycZZDH0n+xYxqL1odpFSsplrYm6j8G1tE4qoEssWcAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dFNwz1j0GzYQv40;
-	Mon, 24 Nov 2025 19:33:07 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id AA87A1A058E;
-	Mon, 24 Nov 2025 19:33:55 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP2 (Coremail) with SMTP id Syh0CgAHZHqiQiRp0AdsBw--.35066S2;
-	Mon, 24 Nov 2025 19:33:55 +0800 (CST)
-Message-ID: <921ab4b4-0713-4c33-9c11-eac234ab9d39@huaweicloud.com>
-Date: Mon, 24 Nov 2025 19:33:54 +0800
+	s=arc-20240116; t=1763984082; c=relaxed/simple;
+	bh=d2Pha4UQ+iv223CySHm3Sd8FeEwJji6XUeaUkkW/NLw=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kSXP13rHSWme3LBNTM4L4wMqz9q2Uc3b98H4nzjcxB/A2QodE3NGnf7y36z8/dMkFx+YUrGV/wP/oLoWgb0BHuE03b1lRyTIBtXR1crMys29wOw7Rwu/PGJiJcLKO2JiEkEDsZzE01ZKmo8ghWk5t1Jc8mbRQsWjbMeUSXKpVvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i0dFp+6E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D409BC116D0;
+	Mon, 24 Nov 2025 11:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763984082;
+	bh=d2Pha4UQ+iv223CySHm3Sd8FeEwJji6XUeaUkkW/NLw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=i0dFp+6E4Is+fWWge0UEvkYpQayOdSHJUgb7SEGt0uTr4JoW5nZSpbKPalYsSC1MU
+	 l8ORVowokyEHWSd7P/LWgix/3kyyBwWNEWtOPmVZOaaSJJvpDMzqE3mwHbsz9MJ+rx
+	 utAyn+nZTbA+jlfhuWZkhHlp+ar4zDTKIw1S9TNOX12m+dzY/Pzbq9Icju2i//xSnc
+	 rThftJF63B5VsJX8sLYD2UfW6b6XTZSr0hXnyyZlkXVO+xMsdCbX+nbHi7XuMA2ZxK
+	 zSQpKo/ZGtPX8Piy4kXKIax50h/KeafTjfvkcCDwQkBpfuxFiPcsSNPQZE0fSoSRQn
+	 css3xZ78TXGng==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vNUq7-00000007pHS-1gK1;
+	Mon, 24 Nov 2025 11:34:39 +0000
+Date: Mon, 24 Nov 2025 11:34:38 +0000
+Message-ID: <86see3r7e9.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Jack Thomson <jackabt.amazon@gmail.com>
+Cc: oliver.upton@linux.dev,
+	pbonzini@redhat.com,
+	joey.gouly@arm.com,
+	suzuki.poulose@arm.com,
+	yuzenghui@huawei.com,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	shuah@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	isaku.yamahata@intel.com,
+	xmarcalx@amazon.co.uk,
+	kalyazin@amazon.co.uk,
+	jackabt@amazon.com
+Subject: Re: [PATCH v3 1/3] KVM: arm64: Add pre_fault_memory implementation
+In-Reply-To: <20251119154910.97716-2-jackabt.amazon@gmail.com>
+References: <20251119154910.97716-1-jackabt.amazon@gmail.com>
+	<20251119154910.97716-2-jackabt.amazon@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on
- cpuset.cpus conflict.
-To: Sun Shaojie <sunshaojie@kylinos.cn>
-Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llong@redhat.com, mkoutny@suse.com, shuah@kernel.org, tj@kernel.org
-References: <0c409964-c4aa-4d41-aae5-cd0626015eeb@huaweicloud.com>
- <20251124102024.1768386-1-sunshaojie@kylinos.cn>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20251124102024.1768386-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgAHZHqiQiRp0AdsBw--.35066S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF4UZF4kZrWrGr47JFyrWFg_yoW5tr4fpF
-	WxK3WDJwsYqr1rCwsFq3Z7Zr15tanrAF17XFn8Gr17Jwn2qF1vk3W0krZIgrs8Xr9xGr1U
-	ZrW3urW3ZF1DAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU17KsUUUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jackabt.amazon@gmail.com, oliver.upton@linux.dev, pbonzini@redhat.com, joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, isaku.yamahata@intel.com, xmarcalx@amazon.co.uk, kalyazin@amazon.co.uk, jackabt@amazon.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
+On Wed, 19 Nov 2025 15:49:08 +0000,
+Jack Thomson <jackabt.amazon@gmail.com> wrote:
+> 
+> From: Jack Thomson <jackabt@amazon.com>
+> 
+> Add kvm_arch_vcpu_pre_fault_memory() for arm64. The implementation hands
+> off the stage-2 faulting logic to either gmem_abort() or
+> user_mem_abort().
+> 
+> Add an optional page_size output parameter to user_mem_abort() to
+> return the VMA page size, which is needed when pre-faulting.
+> 
+> Update the documentation to clarify x86 specific behaviour.
+> 
+> Signed-off-by: Jack Thomson <jackabt@amazon.com>
+> ---
+>  Documentation/virt/kvm/api.rst |  3 +-
+>  arch/arm64/kvm/Kconfig         |  1 +
+>  arch/arm64/kvm/arm.c           |  1 +
+>  arch/arm64/kvm/mmu.c           | 73 ++++++++++++++++++++++++++++++++--
+>  4 files changed, 73 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 57061fa29e6a..30872d080511 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6493,7 +6493,8 @@ Errors:
+>  KVM_PRE_FAULT_MEMORY populates KVM's stage-2 page tables used to map memory
+>  for the current vCPU state.  KVM maps memory as if the vCPU generated a
+>  stage-2 read page fault, e.g. faults in memory as needed, but doesn't break
+> -CoW.  However, KVM does not mark any newly created stage-2 PTE as Accessed.
+> +CoW.  However, on x86, KVM does not mark any newly created stage-2 PTE as
+> +Accessed.
+>  
+>  In the case of confidential VM types where there is an initial set up of
+>  private guest memory before the guest is 'finalized'/measured, this ioctl
+> diff --git a/arch/arm64/kvm/Kconfig b/arch/arm64/kvm/Kconfig
+> index 4f803fd1c99a..6872aaabe16c 100644
+> --- a/arch/arm64/kvm/Kconfig
+> +++ b/arch/arm64/kvm/Kconfig
+> @@ -25,6 +25,7 @@ menuconfig KVM
+>  	select HAVE_KVM_CPU_RELAX_INTERCEPT
+>  	select KVM_MMIO
+>  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+> +	select KVM_GENERIC_PRE_FAULT_MEMORY
+>  	select VIRT_XFER_TO_GUEST_WORK
+>  	select KVM_VFIO
+>  	select HAVE_KVM_DIRTY_RING_ACQ_REL
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index 870953b4a8a7..88c5dc2b4ee8 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -327,6 +327,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+>  	case KVM_CAP_IRQFD_RESAMPLE:
+>  	case KVM_CAP_COUNTER_OFFSET:
+>  	case KVM_CAP_ARM_WRITABLE_IMP_ID_REGS:
+> +	case KVM_CAP_PRE_FAULT_MEMORY:
+>  		r = 1;
 
+How does with pKVM, where the host is not in charge of dealing with
+stage-2?
 
-On 2025/11/24 18:20, Sun Shaojie wrote:
-> Hi, Ridong,
-> 
-> On Sat, 22 Nov 2025 09:33:34, Chen Ridong wrote:
->> On 2025/11/21 18:32, Sun Shaojie wrote:
->>> Hi, Ridong,
->>>
->>> On Thu, 20 Nov 2025 21:45:16, Chen Ridong wrote:
->>>> On 2025/11/20 21:07, Sun Shaojie wrote:
->>>>> I have carefully considered the scenario where parent effective CPUs are 
->>>>> empty, which corresponds to the following two cases. (After apply this patch).
->>>>>
->>>>>    root cgroup
->>>>>         |
->>>>>        A1
->>>>>       /  \
->>>>>     A2    A3
->>>>>
->>>>> Case 1:
->>>>>  Step:
->>>>>  #1> echo "0-1" > A1/cpuset.cpus
->>>>>  #2> echo "root" > A1/cpuset.cpus.partition
->>>>>  #3> echo "0-1" > A2/cpuset.cpus
->>>>>  #4> echo "root" > A2/cpuset.cpus.partition
->>>>>
->>>>>  After step #4, 
->>>>>
->>>>>                 |      A1      |      A2      |      A3      |
->>>>>  cpus_allowed   | 0-1          | 0-1          |              |
->>>>>  effective_cpus |              | 0-1          |              |
->>>>>  prstate        | root         | root         | member       |
->>>>>
->>>>>  After step #4, A3's effective CPUs is empty.
->>>>>
->>>>
->>>> That may be a corner case is unexpected.
->>>>
->>>>>  #5> echo "0-1" > A3/cpuset.cpus
->>>>>
->>>>
->>>> If we create subdirectories (e.g., A4, A5, ...) under the A1 cpuset and then configure cpuset.cpus
->>>> for A1 (a common usage scenario), processes can no longer be migrated into these subdirectories (A4,
->>>> A5, ...) afterward. However, prior to your patch, this migration was allowed.
->>>
->>> Are you referring to creating subdirectories (A4, A5, ...) after step #4? 
->>> And what parameters should be configured for A1's cpuset.cpus?
->>> Could you provide a specific example?
->>>
->>
->> #1> echo "0-1" > A1/cpuset.cpus
->> #2> echo "root" > A1/cpuset.cpus.partition
->> #3> echo "0-1" > A2/cpuset.cpus
->> #4> echo "root" > A2/cpuset.cpus.partition
->> mkdir A4
->> mkdir A5
->> echo "0" > A4/cpuset.cpus
->> echo $$ > A4/cgroup.procs
->> echo "1" > A5/cpuset.cpus
->> echo $$ > A5/cgroup.procs
->>
->> You might be going to argue that we haven't set the cpus for A4/A5..., yeah, maybe a corner case.
->>
->> However, it’s common practice to configure a cpuset’s cpus first and then migrate processes—this is
->> a typical usage scenario.
->>
-> 
-> I'm sorry, I didn't quite understand the point you were trying to make with this example.
-> 
-> If that's the case
-> 
->      root cgroup
->           |
->           A1
->        / /  \ \
->      A2 A3  A4 A5
-> 
->  #1> echo "0-1" > A1/cpuset.cpus
->  #2> echo "root" > A1/cpuset.cpus.partition
->  #3> echo "0-1" > A2/cpuset.cpus
->  #4> echo "root" > A2/cpuset.cpus.partition
->  mkdir A4
->  mkdir A5
->  echo "0" > A4/cpuset.cpus
+>  		break;
+>  	case KVM_CAP_SET_GUEST_DEBUG2:
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 7cc964af8d30..cba09168fc6d 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -1599,8 +1599,8 @@ static int gmem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+>  
+>  static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+>  			  struct kvm_s2_trans *nested,
+> -			  struct kvm_memory_slot *memslot, unsigned long hva,
+> -			  bool fault_is_perm)
+> +			  struct kvm_memory_slot *memslot, long *page_size,
 
-If we don't apply your patch, A2 will be invalidated.
+Why is page_size a signed type? A page size is never negative.
 
->  echo $$ > A4/cgroup.procs  ->This will return an error because A4's effective CPUs are empty.
->  echo "1" > A5/cpuset.cpus
->  echo $$ > A5/cgroup.procs  ->This will return an error because A5's effective CPUs are empty.
-> 
-> Even with this patch applied, this result will not change.
-> 
+> +			  unsigned long hva, bool fault_is_perm)
 
-You can have a try, the result I got:
+I really wish we'd stop adding parameters to this function, as it has
+long stopped being readable. It would make a lot more sense if we
+passed a descriptor for the fault, containing the ipa, hva, memslot
+and fault type.
 
-# mkdir A1
-# echo "0-1" > A1/cpuset.cpus
-# echo "root" > A1/cpuset.cpus.partition
-# cd A1/
-# mkdir A2
-# mkdir A4
-# mkdir A5
-# echo "0-1" > A2/cpuset.cpus
-# echo "root" > A2/cpuset.cpus.partition
-#
-# echo "0" > A4/cpuset.cpus
-# cat A2/cpuset.cpus
-0-1
-# cat A2/cpuset.cpus.partition
-root invalid
-# cat A4/cpuset.cpus.effective
-0
+>  {
+>  	int ret = 0;
+>  	bool topup_memcache;
+> @@ -1878,6 +1878,9 @@ static int user_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa,
+>  	kvm_release_faultin_page(kvm, page, !!ret, writable);
+>  	kvm_fault_unlock(kvm);
+>  
+> +	if (page_size)
+> +		*page_size = vma_pagesize;
+> +
+>  	/* Mark the page dirty only if the fault is handled successfully */
+>  	if (writable && !ret)
+>  		mark_page_dirty_in_slot(kvm, memslot, gfn);
+> @@ -2080,8 +2083,8 @@ int kvm_handle_guest_abort(struct kvm_vcpu *vcpu)
+>  		ret = gmem_abort(vcpu, fault_ipa, nested, memslot,
+>  				 esr_fsc_is_permission_fault(esr));
+>  	else
+> -		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, hva,
+> -				     esr_fsc_is_permission_fault(esr));
+> +		ret = user_mem_abort(vcpu, fault_ipa, nested, memslot, NULL,
+> +				     hva, esr_fsc_is_permission_fault(esr));
+>  	if (ret == 0)
+>  		ret = 1;
+>  out:
+> @@ -2457,3 +2460,65 @@ void kvm_toggle_cache(struct kvm_vcpu *vcpu, bool was_enabled)
+>  
+>  	trace_kvm_toggle_cache(*vcpu_pc(vcpu), was_enabled, now_enabled);
+>  }
+> +
+> +long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
+> +				    struct kvm_pre_fault_memory *range)
+> +{
+> +	int ret, idx;
+> +	hva_t hva;
+> +	phys_addr_t end;
+> +	struct kvm_memory_slot *memslot;
+> +	struct kvm_vcpu_fault_info stored_fault, *fault_info;
+> +
+> +	long page_size = PAGE_SIZE;
+> +	phys_addr_t ipa = range->gpa;
+> +	gfn_t gfn = gpa_to_gfn(range->gpa);
 
->>
->>> Additionally, processes cannot be migrated into a cgroup whose 
->>> cpuset.cpus.effective is empty. However, this patch does not modify this behavior.
->>>
->>> So why does applying this patch enable such migration?
-> 
-> Thanks,
-> Sun Shaojie
+nit: Please order this in a more readable way, preferably with long
+line first.
+
+> +
+> +	idx = srcu_read_lock(&vcpu->kvm->srcu);
+
+??? Aren't we already guaranteed to be under the SRCU read lock?
+
+> +
+> +	if (ipa >= kvm_phys_size(vcpu->arch.hw_mmu)) {
+> +		ret = -ENOENT;
+> +		goto out_unlock;
+> +	}
+> +
+> +	memslot = gfn_to_memslot(vcpu->kvm, gfn);
+> +	if (!memslot) {
+> +		ret = -ENOENT;
+> +		goto out_unlock;
+> +	}
+> +
+> +	fault_info = &vcpu->arch.fault;
+> +	stored_fault = *fault_info;
+
+If this is a vcpu ioctl, can the fault information be actually valid
+while userspace is issuing an ioctl? Wouldn't that mean that we are
+exiting to userspace in the middle of handling an exception?
+
+> +
+> +	/* Generate a synthetic abort for the pre-fault address */
+> +	fault_info->esr_el2 = ESR_ELx_EC_DABT_LOW;
+> +	fault_info->esr_el2 &= ~ESR_ELx_ISV;
+
+You are constructing this from scratch. How can ISV be set?
+
+> +	fault_info->esr_el2 |= ESR_ELx_FSC_FAULT_L(KVM_PGTABLE_LAST_LEVEL);
+> +
+> +	fault_info->hpfar_el2 = HPFAR_EL2_NS |
+> +		FIELD_PREP(HPFAR_EL2_FIPA, ipa >> 12);
+> +
+> +	if (kvm_slot_has_gmem(memslot)) {
+> +		ret = gmem_abort(vcpu, ipa, NULL, memslot, false);
+> +	} else {
+> +		hva = gfn_to_hva_memslot_prot(memslot, gfn, NULL);
+> +		if (kvm_is_error_hva(hva)) {
+> +			ret = -EFAULT;
+> +			goto out;
+> +		}
+> +		ret = user_mem_abort(vcpu, ipa, NULL, memslot, &page_size, hva,
+> +				     false);
+> +	}
+> +
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	end = (range->gpa & ~(page_size - 1)) + page_size;
+
+This suspiciously looks like one of the __ALIGN_KERNEL* macros.
+
+> +	ret = min(range->size, end - range->gpa);
+> +
+> +out:
+> +	*fault_info = stored_fault;
+> +out_unlock:
+> +	srcu_read_unlock(&vcpu->kvm->srcu, idx);
+> +	return ret;
+> +}
+
+Thanks,
+
+	M.
 
 -- 
-Best regards,
-Ridong
-
+Without deviation from the norm, progress is not possible.
 
