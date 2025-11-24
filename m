@@ -1,40 +1,48 @@
-Return-Path: <linux-kselftest+bounces-46375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46376-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 454A8C7FF0D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 11:39:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DCDCC800BF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 11:59:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0A50F4E3A0F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 10:39:25 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 48CB93420ED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 10:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67140274B26;
-	Mon, 24 Nov 2025 10:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D1D2FB62E;
+	Mon, 24 Nov 2025 10:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bC85DyZS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E1E21A449;
-	Mon, 24 Nov 2025 10:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECC2D13AA2F;
+	Mon, 24 Nov 2025 10:59:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763980762; cv=none; b=kAU+EeVwoYDeAV3kMyb/hHBv19UGMteBP96qcJTT9QRfKFbkl5sp2QxhTvY/k/PZsmFbTZ4snDfAQGV4ySk272jy+WsJqkM9a1tcH4LlBzM57m7zx+bJPUZU5hyHs4MIczOAQ+1pndOCGdlAEQAA6s6x+rfco9fiBicXGHLx9uc=
+	t=1763981974; cv=none; b=VFh7rxn9u91VZfrbzD34+uKk1jxdXYmVqG1TW0NezSMQEPlkVCPEuaoivCnkr9xvZoarkGk2KH3GiaS8E1aHpmsKH/TG2XsT02xZQ2bzz3yF2SRHlHtXDLAgRzd0vk72k4AFzyofb1n0JgU6naasXQZo1d8qbJ9I4w+FmpxVq/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763980762; c=relaxed/simple;
-	bh=sKzSYKgfcLzAIYddODcCTT28lZBov8xUXigByO0kSKk=;
+	s=arc-20240116; t=1763981974; c=relaxed/simple;
+	bh=qLtkeaNDsB2tmDLOENGtmBtmZgPrR5Q1pBKk7Jh7MKs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tfwXqNugZFhRtOT4fkHMLAT7FIMpUQMbTwg/Jxi2ROK2uDaTzksr5PpywsSQICSOqH0sV92OGLOWgrKBIgJr4nPDpVRcE9l434r3uZRjEgJ5utq7PI5e4epavlz5Y+ZnKJMqKzz7wADkmdEcaikVw/5XpAp6YdQ9+apLWWMqObk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 923C0497;
-	Mon, 24 Nov 2025 02:39:11 -0800 (PST)
-Received: from [10.1.39.148] (e121487-lin.cambridge.arm.com [10.1.39.148])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C6B8C3F6A8;
-	Mon, 24 Nov 2025 02:39:15 -0800 (PST)
-Message-ID: <ff581325-199a-4bcb-bf5b-43a6f5ec64be@arm.com>
-Date: Mon, 24 Nov 2025 10:38:49 +0000
+	 In-Reply-To:Content-Type; b=cXSTg7OOgMr5PnBC/j78WFs6S7BhkRnLYVMh/DvO6Vom9FbdcIpNA4/7cgQ9dxKuTrb8ILlM3Pzvm3PXjp7qZbyJwRMBZMqGwEe2nWXVgLju32pcFO1nMsBdmt4qL77wipe7LzhVmkH2b9rEzl5Ap5DpFINk9IV/B60ZAiqk1f0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bC85DyZS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D929C116D0;
+	Mon, 24 Nov 2025 10:59:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763981973;
+	bh=qLtkeaNDsB2tmDLOENGtmBtmZgPrR5Q1pBKk7Jh7MKs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bC85DyZShd95NPEK1pyA4HmcKPMgnE1eCpXYyMlFo/LrZmCPIMkjzXbCdHdVPNdYh
+	 40H+oOIzaTi26eBYT1hEmJlWXVgjFgoElkXRbOm0zxZIG9UqC+fJp7831F82iQ066G
+	 oexWubXGLmQJgIrTh16XpTfaeLl3w6jghcRQsNJ/gqhRjKCxYB2AuFkYzK33YqUkRi
+	 KL3z1vi6DiEIyGofW7iQbZbl6BaD+QJw9CdpqlpRgBcUN+1lkfaAgX2H3Bj0p786hi
+	 AYvifNMxW6DHHqK2IVvwvqz2w09NQBaP3jLc49a5VasABGT8CKU3TWhp4DbEpLbwi3
+	 cpuLjbyR12lLA==
+Message-ID: <6d2d4b0a-a1dc-48a4-83c1-1fe02f294181@kernel.org>
+Date: Mon, 24 Nov 2025 11:59:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,43 +50,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/3] KVM: arm64: Add pre_fault_memory implementation
-To: Jack Thomson <jackabt.amazon@gmail.com>, maz@kernel.org,
- oliver.upton@linux.dev, pbonzini@redhat.com
-Cc: joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
- catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
- linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- isaku.yamahata@intel.com, xmarcalx@amazon.co.uk, kalyazin@amazon.co.uk,
- jackabt@amazon.com
-References: <20251119154910.97716-1-jackabt.amazon@gmail.com>
- <20251119154910.97716-2-jackabt.amazon@gmail.com>
-Content-Language: en-GB
-From: Vladimir Murzin <vladimir.murzin@arm.com>
-In-Reply-To: <20251119154910.97716-2-jackabt.amazon@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH 0/5] mm, kvm: add guest_memfd support for uffd minor
+ faults
+To: Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org
+Cc: Andrea Arcangeli <aarcange@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Axel Rasmussen <axelrasmussen@google.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Hugh Dickins
+ <hughd@google.com>, James Houghton <jthoughton@google.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko
+ <mhocko@suse.com>, Nikita Kalyazin <kalyazin@amazon.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251123102707.559422-1-rppt@kernel.org>
+From: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20251123102707.559422-1-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Jack,
-
-On 11/19/25 15:49, Jack Thomson wrote:
-> From: Jack Thomson <jackabt@amazon.com>
+On 11/23/25 11:27, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> Add kvm_arch_vcpu_pre_fault_memory() for arm64. The implementation hands
-> off the stage-2 faulting logic to either gmem_abort() or
-> user_mem_abort().
+> Hi,
 > 
-> Add an optional page_size output parameter to user_mem_abort() to
-> return the VMA page size, which is needed when pre-faulting.
+> These patches allow guest_memfd to notify userspace about minor page
+> faults using userfaultfd and let userspace to resolve these page faults
+> using UFFDIO_CONTINUE.
 > 
-> Update the documentation to clarify x86 specific behaviour.
-> 
-> Signed-off-by: Jack Thomson <jackabt@amazon.com>
+> To allow UFFDIO_CONTINUE outside of the core mm I added a get_shmem_folio()
 
-It works quite well for a few cases I have, so FWIW
+get_shared_folio() I assume :)
 
-Tested-by: Vladimir Murzin <vladimir.murzin@arm.com>
-
+-- 
 Cheers
-Vladimir
+
+David
 
