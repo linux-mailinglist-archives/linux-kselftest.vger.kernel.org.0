@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-46377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DFA3C800FC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 12:03:30 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96F09C80138
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 12:06:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8B02D4E3449
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 11:03:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5C4D64E4749
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 11:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C8962F4A00;
-	Mon, 24 Nov 2025 11:03:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E51D426ED5E;
+	Mon, 24 Nov 2025 11:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tAXJgd8K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdHaKGWS"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A660296BC4;
-	Mon, 24 Nov 2025 11:03:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52F2238C1B;
+	Mon, 24 Nov 2025 11:05:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763982205; cv=none; b=VuDsEc1hb1A3Jb5OLcRt+EaSJkCxbMQa7k6EyZ8Qn6FRqfyEJ3jtaVcCaYQVwqrPtKrGM3+0N0BqL+KndLBh7o6tXkLjjDodAAjwIqtsib6UYdnYLX4YmXgyjZMoEmd++alQSZX97VgUWQhg7H+wJErWaLmhyCg63r0tc6rLiVU=
+	t=1763982326; cv=none; b=NoCH5/7mbILmqS2wDRuhtd9ojTDGzK0bgDx67I8D9Xzy2W1BVxC/g+7wQNSAzCcNKt/sVd2Rxee0S4H920jIAPPnZjZ2Ql2eKhmfapPq3o56Fs+UBQo6L1TzIedo/I0NMKDWkgDgYNwDMD9vmpgZv3zuzwfYbFZvjxLmIIx9VK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763982205; c=relaxed/simple;
-	bh=dPX6RM/71Vh3Rg6mMUUHNMjki5uHeW9Di7AFUe06SIM=;
+	s=arc-20240116; t=1763982326; c=relaxed/simple;
+	bh=xAo9jDsdZnz6/lhNhkcTyH2Vv9bCshFd2rXVbo51big=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qf9C2l23hzzHLAcjDy9IN/mjveI4oGCSk3IV9hU+00twV2cQprrAKZcOR03WZu+ZopkWszJ1j5jzSk12odsoW8yNZ36quQ0PgPLMmM9pjnAWVsHbgTpOCHIOYWomc5mDosxSMCqbUcnkNnAmWtMw7oEwfjGJy1h9O6dpHOJgoxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tAXJgd8K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E8FC4CEFB;
-	Mon, 24 Nov 2025 11:03:19 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=GFu9xy9KTkVVSm9Mp6d5HuibRPuy2hK62CzB3/F+lnlPGfgreSkmTggGzUIs/Y5Ff3zFDSzdl2Utja29Ymn4UUzX9uLlxxGKowViPbAsEk67ctWpkgyq61ffwm4QTzigVj/M6a0MHd3wAh1qnp6bT0OdQoSUvG1W2nAKLMsBaG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdHaKGWS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38170C4CEF1;
+	Mon, 24 Nov 2025 11:05:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763982204;
-	bh=dPX6RM/71Vh3Rg6mMUUHNMjki5uHeW9Di7AFUe06SIM=;
+	s=k20201202; t=1763982326;
+	bh=xAo9jDsdZnz6/lhNhkcTyH2Vv9bCshFd2rXVbo51big=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tAXJgd8KRu8Q5V9aLwauZ1k+fElq8tVU+jgRk9V8z9tI8Wt82uOnUMl4A41BAxhlH
-	 a97WXS50IpqSn9hKKdunuS4HBW2ES2f0Vv6k68wx8XxHSXmvVPAbatbuM8ocpG2k3s
-	 W78fXij3OS3qK5KaDT+OO9o+l8Csdaj/Xz161iBtcKql4r5F2AgBR/M2a25HYp1yHD
-	 b81IFqXfFkgCxXe0QBvBzGoAjRknxrnmYYbwqgP6tqBPcxW/GAuT4vGKtCGbRpmb86
-	 8p6A0ytk0HtSUfUyuLrEC3z7MWaPMnyKG8LvVPtKjJw3gd3LZCWvJj/PwioCnqL9fY
-	 mJK76Wr1oG7pQ==
-Message-ID: <a06e57ff-b77b-44fd-9b69-929d7647644b@kernel.org>
-Date: Mon, 24 Nov 2025 12:03:17 +0100
+	b=NdHaKGWS1O+C+KbtPyPToMXSoUWgmsYqnLDc2FhNyH96nyxbQtDe7ZubKu/lLjdyC
+	 X8ObCLyrQMQeU6tEylmtcRhWaISmSavumTsxfODA1Ru0XfV5JKiZ/cWHOJVJCtQ2Qn
+	 yxnSveJJgYC/h67AQ94ObFQ2vSxyQvGr9n/+Xhjy8txtI5PsMxzLEZnNAsSAWl53hB
+	 ojehVEENSrvjdmIw3jzSxpHDTX7Q+YzWt9pp8X+mZ4Pz//V3guYCyY8h1bxIEjayso
+	 LNYh72Ti4ciAh1xh2f1z4kcJCDXd8y6VKCB4scGUKFphVaz8NWAhND6uGKkjYepnzw
+	 ozLNRwume7YGA==
+Message-ID: <ef739802-1b53-4baa-81e4-dcc674d7c1c6@kernel.org>
+Date: Mon, 24 Nov 2025 12:05:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] userfaultfd, shmem: use a VMA callback to handle
- UFFDIO_CONTINUE
+Subject: Re: [PATCH 3/5] mm: introduce VM_FAULT_UFFD_MINOR fault reason
 To: Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org
 Cc: Andrea Arcangeli <aarcange@redhat.com>,
  Andrew Morton <akpm@linux-foundation.org>,
@@ -67,39 +66,71 @@ Cc: Andrea Arcangeli <aarcange@redhat.com>,
  linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20251123102707.559422-1-rppt@kernel.org>
- <20251123102707.559422-3-rppt@kernel.org>
+ <20251123102707.559422-4-rppt@kernel.org>
 From: "David Hildenbrand (Red Hat)" <david@kernel.org>
 Content-Language: en-US
-In-Reply-To: <20251123102707.559422-3-rppt@kernel.org>
+In-Reply-To: <20251123102707.559422-4-rppt@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 11/23/25 11:27, Mike Rapoport wrote:
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> When userspace resolves a page fault in a shmem VMA with UFFDIO_CONTINUE
-> it needs to get a folio that already exists in the pagecache backing
-> that VMA.
+> When a VMA is registered with userfaulfd in minor mode, its ->fault()
+> method should check if a folio exists in the page cache and if yes
+> ->fault() should call handle_userfault(VM_UFFD_MISSING).
 > 
-> Instead of using shmem_get_folio() for that, add a get_pagecache_folio()
-
-get_shared_folio()
-
-Given that the helper now no longer receives a VMA, I assume we can just 
-really call it get_folio() and the "shared" part would be implicit. 
-(from the inode)
-
-> method to 'struct vm_operations_struct' that will return a folio if it
-> exists in the VMA's pagecache at given pgoff.
+> Instead of calling handle_userfault() directly from a specific ->fault()
+> implementation introduce new fault reason VM_FAULT_UFFD_MINOR that will
+> notify the core page fault handler that it should call
+> handle_userfaultfd(VM_UFFD_MISSING) to complete a page fault.
 > 
-> Implement get_pagecache_folio() method for shmem and slightly refactor
-> userfaultfd's mfill_atomic() and mfill_atomic_pte_continue() to support
-> this new API.
+> Replace a call to handle_userfault(VM_UFFD_MISSING) in shmem and use the
+> new VM_FAULT_UFFD_MINOR there instead.
 > 
+> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
+>   include/linux/mm_types.h | 3 +++
+>   mm/memory.c              | 2 ++
+>   mm/shmem.c               | 2 +-
+>   3 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 90e5790c318f..eb135369940f 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -1523,6 +1523,8 @@ typedef __bitwise unsigned int vm_fault_t;
+>    *				fsync() to complete (for synchronous page faults
+>    *				in DAX)
+>    * @VM_FAULT_COMPLETED:		->fault completed, meanwhile mmap lock released
+> + * @VM_FAULT_UFFD_MINOR:	->fault did not modify page tables and needs
+> + *				handle_userfault(VM_UFFD_MINOR) to complete
+>    * @VM_FAULT_HINDEX_MASK:	mask HINDEX value
+>    *
+>    */
+> @@ -1540,6 +1542,7 @@ enum vm_fault_reason {
+>   	VM_FAULT_DONE_COW       = (__force vm_fault_t)0x001000,
+>   	VM_FAULT_NEEDDSYNC      = (__force vm_fault_t)0x002000,
+>   	VM_FAULT_COMPLETED      = (__force vm_fault_t)0x004000,
+> +	VM_FAULT_UFFD_MINOR	= (__force vm_fault_t)0x008000,
+>   	VM_FAULT_HINDEX_MASK    = (__force vm_fault_t)0x0f0000,
+>   };
+>   
+> diff --git a/mm/memory.c b/mm/memory.c
+> index b59ae7ce42eb..94acbac8cefb 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -5279,6 +5279,8 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
+>   	}
+>   
+>   	ret = vma->vm_ops->fault(vmf);
+> +	if (unlikely(ret & VM_FAULT_UFFD_MINOR))
+> +		return handle_userfault(vmf, VM_UFFD_MINOR);
 
-Nothing else jumped at me :)
+If we could define VM_FAULT_UFFD_MINOR to be 0 without USERFAULTFD, we 
+could optimize that check out completely on such configs.
+
 
 -- 
 Cheers
