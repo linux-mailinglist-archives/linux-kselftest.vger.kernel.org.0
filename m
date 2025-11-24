@@ -1,126 +1,145 @@
-Return-Path: <linux-kselftest+bounces-46389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C157FC80FC0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 15:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 49FF0C81400
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 16:10:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 886A93A80FA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 14:24:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F24903A7E43
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Nov 2025 15:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81BF23043BD;
-	Mon, 24 Nov 2025 14:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6806230DEDC;
+	Mon, 24 Nov 2025 15:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BWoOOJLX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lek3isPN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8B92A1C7
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Nov 2025 14:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C213296159;
+	Mon, 24 Nov 2025 15:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763994263; cv=none; b=OMg8HSGnsNwfXJZ/olLVLiAq+hcOJ63nByKRkycg700hN6sbFE8AvoZ4gCMD9f2xMF+TiBtPh9bma88ThwynxIUwsz9AWp2UGe56N3MXkAFkDnKrbRr7NFB/0kKbVrEptVsPEktLmtBh1lYbnqipxrimftsDC681CdJclwRMSNc=
+	t=1763996993; cv=none; b=cwhobHFqvBtVczHNchFOc58g5+wWJKq/pMOp3qeR1gwA3azzrCQCIlNl/tntvxNoWgSFbv+VXN9uga03zZ2KYpbIZ+oFMvqf+vGGZGtKLCKLz/QkVw/e+NP7sgqmtHElCA5jnzHjuYoiN4Drp/6KaCcv/UxFa+UOqSrcQzq0kew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763994263; c=relaxed/simple;
-	bh=HopjOyG0yLSJ8H+vj0g0gPLWne0fYbdJ7c/qNICipdY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OBhw8dcSvEIq+GI7SoAkcrvMcjB024XZ1SHlAKXZmPWEi0vy7ORrRQlN7DSTzytiPIqWA2Ac/Ku7VRU0jNFNpwSJ9hbkGaTJ/fQz4I98nM31CVuqB40ZXn30Ww4qqpiLwF3gqwH2KCvMtpEGnb8esntlof4+qKQAmVKNFk92zqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BWoOOJLX; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <5a633862-ae0e-43ba-8da6-0f03efd01bde@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763994258;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qeiYgrXnmUsYEngedEc4LRUzDKY1yGdvKClr67ha3/A=;
-	b=BWoOOJLXEfTp9oNy8Vs/hkx+lOu7wJ/edsodeHAB4HPCtx+Tlp/6gzTEPZr3RgvhB2bPff
-	Yw2mfFUh6/wlqgoLbeBLMePKs+UiRWKlj2mWWBB1k7X7QcvfjMQHtsfDFZU1kCrcVRLoL5
-	MYsccu9PgW7SX5X7I36qJYwDi/TXQVg=
-Date: Mon, 24 Nov 2025 22:23:53 +0800
+	s=arc-20240116; t=1763996993; c=relaxed/simple;
+	bh=UuNKUt3TuSlZUnNzguJ+jbkaDA7UcbKM9pSfdm62QCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G81q/LyKX8cNVlCrxIrshRhn8NqF5u4lSxPIpmXEuOZinMIAMXRddISw4QNsFUYTmTEQfNdIo26pNf+Iq7rXJLn46xTaGvr6zUBl0oViwvtz5MFR1ntooWo/07ZKXv4ObUUtjMBIj8MR19TfqUih6WMsja+1d2OLEuGazMF1Xms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lek3isPN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A37C116D0;
+	Mon, 24 Nov 2025 15:09:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763996992;
+	bh=UuNKUt3TuSlZUnNzguJ+jbkaDA7UcbKM9pSfdm62QCU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Lek3isPNtIB6N3n0GIvhZdhWijDxLAVSgOvnASeFW517VlnW9/1RzyxNSlSvsN0gg
+	 ZPP98kUpTQ4ugwLMNzFpUYVjFK5ZtgMyp1/H+4ixzsncuDlGl8fH146PDyVxT7VXBg
+	 hLTS02x4Owpo3jPegb4cH2GGSY9kjcxtbPOABSA5sWD1tF98KDw2ksyh83nxGkk7Ka
+	 LcgJ1V8OTBA8puGb3EHOzl9QdnDnkSUK/W0onoWvHiQwdOO/wo1BOwC/lZAfWIlMF8
+	 QvONdvjIjRI+/UPI3JfDGImnK6JmEAW0pVAxLsu10Q343giqj6gwAqHpT8Q6kWJoLH
+	 JbgmuUCJIYtWA==
+Date: Mon, 24 Nov 2025 17:09:43 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 3/5] mm: introduce VM_FAULT_UFFD_MINOR fault reason
+Message-ID: <aSR1NxBi9ZYoKhwT@kernel.org>
+References: <20251123102707.559422-1-rppt@kernel.org>
+ <20251123102707.559422-4-rppt@kernel.org>
+ <ef739802-1b53-4baa-81e4-dcc674d7c1c6@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v10 8/8] selftests/bpf: Add cases to test
- BPF_F_CPU and BPF_F_ALL_CPUS flags
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jiri Olsa <jolsa@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Song Liu <song@kernel.org>, Eduard <eddyz87@gmail.com>,
- Daniel Xu <dxu@dxuuu.xyz>, =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Shuah Khan <shuah@kernel.org>, Jason Xing <kerneljasonxing@gmail.com>,
- Tao Chen <chen.dylane@linux.dev>, Willem de Bruijn <willemb@google.com>,
- Paul Chaignon <paul.chaignon@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Mykyta Yatsenko <yatsenko@meta.com>, Tobias Klauser <tklauser@distanz.ch>,
- kernel-patches-bot@fb.com, LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20251117162033.6296-1-leon.hwang@linux.dev>
- <20251117162033.6296-9-leon.hwang@linux.dev>
- <CAADnVQLARr69Qv9EfwWkpudXLZNb21zYd86aPux_Fv3UAsrLGw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAADnVQLARr69Qv9EfwWkpudXLZNb21zYd86aPux_Fv3UAsrLGw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ef739802-1b53-4baa-81e4-dcc674d7c1c6@kernel.org>
 
-
-
-On 2025/11/22 10:34, Alexei Starovoitov wrote:
-> On Mon, Nov 17, 2025 at 8:22 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
-
-[...]
-
->> +
->> +                       /* lookup then check value on CPUs */
->> +                       for (j = 0; j < nr_cpus; j++) {
->> +                               flags = (u64)j << 32 | BPF_F_CPU;
->> +                               err = bpf_map__lookup_elem(map, keys + i * key_sz, key_sz, values,
->> +                                                          value_sz, flags);
->> +                               if (!ASSERT_OK(err, "bpf_map__lookup_elem specified cpu"))
->> +                                       goto out;
->> +                               if (!ASSERT_EQ(values[0], j != cpu ? 0 : value,
->> +                                              "bpf_map__lookup_elem value on specified cpu"))
->> +                                       goto out;
+On Mon, Nov 24, 2025 at 12:05:18PM +0100, David Hildenbrand (Red Hat) wrote:
+> On 11/23/25 11:27, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > When a VMA is registered with userfaulfd in minor mode, its ->fault()
+> > method should check if a folio exists in the page cache and if yes
+> > ->fault() should call handle_userfault(VM_UFFD_MISSING).
+> > 
+> > Instead of calling handle_userfault() directly from a specific ->fault()
+> > implementation introduce new fault reason VM_FAULT_UFFD_MINOR that will
+> > notify the core page fault handler that it should call
+> > handle_userfaultfd(VM_UFFD_MISSING) to complete a page fault.
+> > 
+> > Replace a call to handle_userfault(VM_UFFD_MISSING) in shmem and use the
+> > new VM_FAULT_UFFD_MINOR there instead.
+> > 
+> > Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > ---
+> >   include/linux/mm_types.h | 3 +++
+> >   mm/memory.c              | 2 ++
+> >   mm/shmem.c               | 2 +-
+> >   3 files changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> > index 90e5790c318f..eb135369940f 100644
+> > --- a/include/linux/mm_types.h
+> > +++ b/include/linux/mm_types.h
+> > @@ -1523,6 +1523,8 @@ typedef __bitwise unsigned int vm_fault_t;
+> >    *				fsync() to complete (for synchronous page faults
+> >    *				in DAX)
+> >    * @VM_FAULT_COMPLETED:		->fault completed, meanwhile mmap lock released
+> > + * @VM_FAULT_UFFD_MINOR:	->fault did not modify page tables and needs
+> > + *				handle_userfault(VM_UFFD_MINOR) to complete
+> >    * @VM_FAULT_HINDEX_MASK:	mask HINDEX value
+> >    *
+> >    */
+> > @@ -1540,6 +1542,7 @@ enum vm_fault_reason {
+> >   	VM_FAULT_DONE_COW       = (__force vm_fault_t)0x001000,
+> >   	VM_FAULT_NEEDDSYNC      = (__force vm_fault_t)0x002000,
+> >   	VM_FAULT_COMPLETED      = (__force vm_fault_t)0x004000,
+> > +	VM_FAULT_UFFD_MINOR	= (__force vm_fault_t)0x008000,
+> >   	VM_FAULT_HINDEX_MASK    = (__force vm_fault_t)0x0f0000,
+> >   };
+> > diff --git a/mm/memory.c b/mm/memory.c
+> > index b59ae7ce42eb..94acbac8cefb 100644
+> > --- a/mm/memory.c
+> > +++ b/mm/memory.c
+> > @@ -5279,6 +5279,8 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
+> >   	}
+> >   	ret = vma->vm_ops->fault(vmf);
+> > +	if (unlikely(ret & VM_FAULT_UFFD_MINOR))
+> > +		return handle_userfault(vmf, VM_UFFD_MINOR);
 > 
-> I was about to apply it, but noticed that the test is unstable.
-> It fails 1 out of 10 for me in the above line.
-> test_percpu_map_op_cpu_flag:PASS:bpf_map_lookup_batch value on
-> specified cpu 0 nsec
-> test_percpu_map_op_cpu_flag:FAIL:bpf_map_lookup_batch value on
-> specified cpu unexpected bpf_map_lookup_batch value on specified cpu:
-> actual 0 != expected 3735929054
-> #261/15  percpu_alloc/cpu_flag_lru_percpu_hash:FAIL
-> #261     percpu_alloc:FAIL
+> If we could define VM_FAULT_UFFD_MINOR to be 0 without USERFAULTFD, we could
+> optimize that check out completely on such configs.
+ 
+It will be a bit ugly, but we can :)
+ 
+> -- 
+> Cheers
 > 
-> Please investigate what is going on.
-> 
+> David
 
-I was able to reproduce the failure on a 16-core VM.
-
-It appears to be caused by LRU eviction. When I increased max_entries of
-the lru_percpu_hash map to libbpf_num_possible_cpus(), the issue no
-longer reproduced.
-
-I'll need to spend more time investigating the exact eviction behavior
-and why it shows up intermittently in this test.
-
-Thanks,
-Leon
+-- 
+Sincerely yours,
+Mike.
 
