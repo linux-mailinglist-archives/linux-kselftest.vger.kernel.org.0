@@ -1,179 +1,114 @@
-Return-Path: <linux-kselftest+bounces-46415-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46416-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7684FC834F6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 05:04:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21920C83567
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 05:33:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2656E3A693B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 04:04:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1B4D3AD8EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 04:33:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BCD274B42;
-	Tue, 25 Nov 2025 04:04:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DD2275861;
+	Tue, 25 Nov 2025 04:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Czygq7zJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mnohj4AH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF01B1A8F84
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 04:04:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3B01D9663
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 04:33:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764043470; cv=none; b=MTUWJxZq4Du2FPYoZiZplSmsBh62EbhOqT4w6THyhY5dr5aYBS5leuYoPsQ1abJ8J4nYhmjNrEZYR2+W8R+aMH9rnVABT+ruiNvw74wHITjIB5xopxK4JZ2JmcKsKVv40a6OIUPSgAlG/BNhP7ZN9hxFoRARdbyidYc6YUqdAOE=
+	t=1764045200; cv=none; b=jQVIR01oeHvlSWBj29a/RmzaQ+g0cNOK+xtPNv3Ce5rijZALf0sk8C6IdS5ZM70rS70SP0sIEG+WGWuEtZeVMsiqMSYw5Wd8ll+QJTwfSYSgZIkYJSnwk8mI6Y1kUgqMRcJRbIIiB8Kb/jYObEKwVSEHFn8+2nNZ8ASAP/BFF2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764043470; c=relaxed/simple;
-	bh=/FbogxLt3QT/nU4TGzukKhlWMxnJmkC8sZFIkQEjjAc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G6UNETex4VwKVfl/F4f5L5NV/uw9OgJuDq+x5cqIA+Btaxw5ytU6Y9yGSLdq59n+MJUsmKbEOxKrCVyGUt9BbAS4V1VQIqDJTAvYgmwv9wApCpIkaynCUkgXA8M91KaOqnaPRapw7WItqORtWJfVyULUSsmgYOLDCE+CGgm3ZR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Czygq7zJ; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1764045200; c=relaxed/simple;
+	bh=0tfEFF31HO0p5AVtPB2m9wDnsam1+lKDH7iW1ZAWsmQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VoWutSbKsqyVWIsElOFnAJX3KT5DfHAFTKKcDv3zrK/cBWQS8nBrFNdI5lVY7nAHcYmh+ABU/78H11POwKO6g1b/k9Y2NAjC7Qq35RjjeTSBQlmoh8J4gcEQvQpzzDgKU4r8jC6mP7ny7gCuR7NVfGaqyVWrqIGvBWnMUT85vwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mnohj4AH; arc=none smtp.client-ip=209.85.214.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-343d73d08faso2592962a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Nov 2025 20:04:28 -0800 (PST)
+Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2953e415b27so60387505ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Nov 2025 20:33:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764043468; x=1764648268; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ChSFyJUpzIVcmS5IaAZ2eEZOCaW40eEyMxqhYyX42Ig=;
-        b=Czygq7zJvyy4AKmciFy82f4zjBtAxEWGAuAZuCV8hlhRaJiT8q+3HZ7p0RZ/gD70BG
-         aTPsRLZK7vJwsqx2v9n42eQQsJDY06NM4pMVE7Nm3FewI7CS+Vgnk82tOhh/n0BKcVqr
-         QT9Qirh8YUJBS1HKqF/veVACIQiJdzzJohQUBYkSSN6iD7gZB+0rqsUm7Tiu0T97e8Cn
-         GFpSO8EX1d+5O6tQ/Qvsc5zvQmcdpWFu1EqzfPBjUvqqvnkDTTQfsx2X2eUh0Yf5nfB6
-         OTJ8YxjVC/f+YEzwAjsCWqV1vBCw8OXrQCLeXkOIg9PR4NEfmfjY+VRnDkfajM+XG6um
-         eZcg==
+        d=gmail.com; s=20230601; t=1764045198; x=1764649998; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R+zjcbL0tDzyXVFIG46xwFstTpucFPpn3y7+gA5A08g=;
+        b=Mnohj4AHeZlOByBRoTEWRze1h3kZj5lPfowL/d2fWSZuigOeAnYZOEZdv6tOQNBNAh
+         2h8YUva70VTdfsDTrRbV9hRJJXTsGxVZxUZ2MspcO4IF3CcSYP720sJAYrDgSrECDUFH
+         v/Ojh3uxCU6vrVx4Y3XhlV7y95hSBtILYUQeBIhbT8u3KE1ol+7iq1XdrjFS+2tyZBcL
+         k92m2DQnaYlYKN1sad1uRWi0N8rOTZtU/G5Po4EaFC3s3zLIUkOzs6/lB0+a2grzX5CH
+         rWPJLGg1bb30eI8MqsQI5J5FTUOIUE/S+qy3oFBD22v4yuf9sW631XR3vz2z2qoToX91
+         dadA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764043468; x=1764648268;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ChSFyJUpzIVcmS5IaAZ2eEZOCaW40eEyMxqhYyX42Ig=;
-        b=Pz7+EpLSm0+Rec8x0XSjxgDE/EkP/3wbSR+FjWaqtzFEc6/LOgWAgWET7T+GXFvZca
-         hEvtmomGjXdTLzRkXSuUWU/K7TRauLg+ZxCLSMkZgpG8hW69FXiRec1HRisByAk6dxji
-         7b0s/gJVOLU0vPx+sBQ5DFp4IhaDlm9NNblkbt0tO6KDpwjvI2aF2+Mu9gCGi9Y8SZEk
-         5RzzveuKuNZISO/W9be4HmTJ0G3SxDOjsmdmhnekkkhuS8Wq6PqNrxHdMr/4op+WlvQ7
-         vVHZnh1utOw4vwZPlOK4NDpoAY+9Rwp2PsWWWBLEb2UvO9Kkn/XdeqrfMi04/spuf69p
-         9Jww==
-X-Forwarded-Encrypted: i=1; AJvYcCWzg3043urqnJUx7XXsdhpD6kIFhEU7/NsaOt0A60z3LBvFjxv1udKAevv8WAN2mEpzLGsxeCYb6am6RS6fS98=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhrBgrnOjmqS30wsAU28NGkA1gnWVyRDY+wJEDJZQ9yNKzJjXo
-	Fa0OXjHiWjWoYr4O90gstPbO1hM8KRjgXN2J/1jXADIQzJRfpB3XmKFEiX3zmkudwzeZxLgysuI
-	W1vOiEWqEDBckIEXWfcoq48mJT3U14CG1fk9YNXQ0
-X-Gm-Gg: ASbGncvSbkDvKeMU907TSsAzrjRfKr3vsLikzqMqJeSfqp2s9tuiEfsjyv2cCsRkDNr
-	m0DeF3QRjLDcp1bRr5c1RBScDjXAEMnOAN12JkKFX6tx6D+nCfg6Awjf3KITFcjJ7twMxBE7EnZ
-	buoPflMyRQwGNU1S94zEQP8SFgBiM7Cs7o/LP6dcH8tycf9Asy5DNxdo9jtrpPu4981lchsh6cq
-	EArW8cfUQnL7RPaR2s1MFviJPFGEOKZXTYmFiWF/sH2+meA22g8tA2FoUoWr/mxI6/mxiQW//2p
-	ILHqcd6uneqJryh7m3rCZ2+okA==
-X-Google-Smtp-Source: AGHT+IFe326vtD9xIbEJxnlPgbrhSCWdZGMdC8KNPPHbVB+yjM8Yma+NpH35C0vH0GmGrxe+D8Javv1mcabOykmplq0=
-X-Received: by 2002:a17:90a:e7c7:b0:340:6b6f:4bbf with SMTP id
- 98e67ed59e1d1-347298dacdcmr18444397a91.18.1764043468011; Mon, 24 Nov 2025
- 20:04:28 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764045198; x=1764649998;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R+zjcbL0tDzyXVFIG46xwFstTpucFPpn3y7+gA5A08g=;
+        b=oMVY5dlxN6wFaZIPZyNDnMhSxMGh2xxpIGgYhw4dO16cWoP0VczLXDlvTlFNmp7OK2
+         o9xaw6FJPgGAs0+ff7OMdQhyx7xZC+m+QCphkDgPNMURaIi3E1rvdIchwKdVsSF32pCO
+         PRhNy0YH0M5y3XE0nTy1reSgmTp1S2FYCa5e1wqnnNyNgdCNCSn56xRnZsxtjjQVguQK
+         4HWRi/pJNpopmg8/TBn6gkZ5O1pHLYke0zDhBTG/C3CxfTLziiYgW8m1ZtpG/TWrz+qL
+         lpMxX7okdg97ER0HTAsm0Hi6BMN6p3OtGKieDCQ2ezYz9uN7L5CwfBgYe/j6UmANMSTb
+         tmBw==
+X-Forwarded-Encrypted: i=1; AJvYcCW8jLpXFQUrDskAw1ShiNfIFWFhAByhT3P/TcLu3EtMSZwsysrB7DRS+3o0xX43Jy++cbPOrlHrYvuWMOX8OYQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLul1zSgDfS3WsU7aOwqxGNwZPJD1CDD9ygtLAp2H99mT5Ayq6
+	vgSATXcJgdp6sQFoVsH3q3ETqp5riLgPMwJqiZCbLOhDntJZDM+gJMsB
+X-Gm-Gg: ASbGncuEspm+nve8VcMfdXJMyYBhfj8oJSc+0d85qoUky9B5Qtx09oTTBwozJjQkrBi
+	BXxe+HaPbSeKLgFpoclZzDozcI8AODLTTK+CzFMwckeW21+lue3Bv3iePM365Eb/K7O4ofsx2sr
+	OnECo8fZc3GD47ISeFBvl4zph4fuYKugTvIEpZiPNtZ3SHbmbhwI4r2QgJ6l1Waw4VlKXCZbPsc
+	zwT7LEzYAjFamyuBAeRjY1uJrhIKlQOnuq4+HAoobrfPA/hNpm+2VwRUhDm3dri4fztN8Ez+aEl
+	HaLmZjPkSZAbFzyI3IhFexLsEtNiFZ+t19pjGTk7x5cQlPNLKwUH2gHqWVx9rPefYPrkw+M22wA
+	M/L2ZvSvBkn5N3RjXS+LsEFjoN33S8CZ0FbOnXbsGS3njLBpNm0DuS9RxAVVlK9r6FyuYxp9SXR
+	iPI3sCBoBet6GSA8F6JVmZ+xqHIsWaBw==
+X-Google-Smtp-Source: AGHT+IG5wQiSA6DoLuqSdaHSi1FyIN7DulB2JAUjgDcIX0e3566wQM/LBnN9t0ZmEp/7FjsrZS6E7Q==
+X-Received: by 2002:a17:902:ebca:b0:295:9e4e:4092 with SMTP id d9443c01a7336-29bab1daa12mr16030285ad.56.1764045197941;
+        Mon, 24 Nov 2025 20:33:17 -0800 (PST)
+Received: from fedora ([103.120.31.122])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b2a6b22sm149678695ad.86.2025.11.24.20.33.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Nov 2025 20:33:17 -0800 (PST)
+Date: Tue, 25 Nov 2025 10:03:10 +0530
+From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Jason Xing <kernelxing@tencent.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/net: initialize char variable to null
+Message-ID: <aSUxhmqXmIPSdbHm@fedora>
+References: <20251124161324.16901-1-ankitkhushwaha.linux@gmail.com>
+ <willemdebruijn.kernel.6edcbeb29a45@gmail.com>
+ <aSSdH58ozNT-zWLM@fedora>
+ <willemdebruijn.kernel.1e69bae6de428@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <202505280933.33EEDC4DC8@keescook> <20250529225525.12494-1-sameekshasankpal@gmail.com>
- <CAGZaOhe0++vMANe1cAXXz=Pt1pf3ZX1vk3U7c0nGRnGGkt8e3A@mail.gmail.com> <66a49c4b-2008-4059-97aa-59d53fb91c31@linuxfoundation.org>
-In-Reply-To: <66a49c4b-2008-4059-97aa-59d53fb91c31@linuxfoundation.org>
-From: Sameeksha Sankpal <sameekshasankpal@gmail.com>
-Date: Tue, 25 Nov 2025 09:34:18 +0530
-X-Gm-Features: AWmQ_bkrWf_EuqRi3rZK4l2jxjroq3j8ICTen-MWXo1Nur7-mIBJm3ay5gF46c0
-Message-ID: <CAGZaOhcmHt76q=ABQ-NJvj9tuedCeonEFGP8SvnhUp9=+T5tPQ@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/seccomp: Fix indentation and rebase error
- logging patch
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: kees@kernel.org, luto@amacapital.net, wad@chromium.org, shuah@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <willemdebruijn.kernel.1e69bae6de428@gmail.com>
 
-Hi Shuah,
+On Mon, Nov 24, 2025 at 01:15:33PM -0500, Willem de Bruijn wrote:
+> This does not reproduce for me.
+> 
+> Can you share the full clang command that V=1 outputs, as well as the
+> output oof clang --version.
 
-Thanks for pointing that out. Apologies for missing the mailing lists earli=
-er.
-Resending this follow-up with the correct CC list and in plain text format.
-
-Please let me know if there=E2=80=99s anything else I should improve in thi=
-s patch.
-I=E2=80=99m happy to resend it as v4 if needed.
+Hi Willem,
+I have added clang output in 
+https://gist.github.com/ankitkhushwaha/8e93e3d37917b3571a7ce0e9c9806f18
 
 Thanks,
-Sameeksha
-
-
-On Mon, 24 Nov 2025 at 23:59, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 11/21/25 23:21, Sameeksha Sankpal wrote:
-> > Hi,
-> > Just following up on this patch.
-> > It=E2=80=99s been a few months, so I wanted to check if there is anythi=
-ng else I
-> > should address or improve to move it forward.
->
-> I see that you didn't cc any mailing list on this email? Please keep
-> everybody in the loop when you send responses.
->
-> >
-> > Thanks,
-> > Sameeksha Sankpal
-> >
-> > On Fri, 30 May 2025 at 04:25, Sameeksha Sankpal <sameekshasankpal@gmail=
-.com>
-> > wrote:
-> >
-> >> Rebase the error logging enhancement for get_proc_stat() against the
-> >> upstream seccomp tree with proper indentation formatting.
-> >>
-> >> Suggested-by: Kees Cook <kees@kernel.org>
-> >> Signed-off-by: Sameeksha Sankpal <sameekshasankpal@gmail.com>
-> >> ---
-> >> v1 -> v2:
-> >> - Used TH_LOG instead of printf for error logging
-> >> - Moved variable declaration to the top of the function
-> >> - Applied review suggestion by Kees Cook
-> >>
-> >> v2 -> v3:
-> >> - Rebased against upstream seccomp tree (was previously against v1)
-> >> - Fixed indentation to use tabs instead of spaces
-> >> - Used scripts/checkpatch.pl to check the patch for common errors
-> >> - Removed the blank line beforeS S-o-b added in v2
-> >>
-> >>   tools/testing/selftests/seccomp/seccomp_bpf.c | 5 +++++
-> >>   1 file changed, 5 insertions(+)
-> >>
-> >> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> >> b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> >> index 61acbd45ffaa..dbd7e705a2af 100644
-> >> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> >> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> >> @@ -4508,9 +4508,14 @@ static char get_proc_stat(struct __test_metadat=
-a
-> >> *_metadata, pid_t pid)
-> >>          char proc_path[100] =3D {0};
-> >>          char status;
-> >>          char *line;
-> >> +       int rc;
-> >>
-> >>          snprintf(proc_path, sizeof(proc_path), "/proc/%d/stat", pid);
-> >>          ASSERT_EQ(get_nth(_metadata, proc_path, 3, &line), 1);
-> >> +       rc =3D get_nth(_metadata, proc_path, 3, &line);
-> >> +       ASSERT_EQ(rc, 1) {
-> >> +               TH_LOG("user_notification_fifo: failed to read stat fo=
-r
-> >> PID %d (rc=3D%d)", pid, rc);
-> >> +       }
-> >>
-> >>          status =3D *line;
-> >>          free(line);
-> >> --
-> >> 2.43.0
-> >>
-> >>
-> >
-> thanks,
-> -- Shuah
+Ankit
 
