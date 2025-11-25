@@ -1,136 +1,98 @@
-Return-Path: <linux-kselftest+bounces-46412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46413-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D31D3C8336C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 04:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96119C833C6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 04:30:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9130C3AB28C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 03:23:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F7813AC293
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 03:30:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2758521FF2A;
-	Tue, 25 Nov 2025 03:23:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE07123ED5E;
+	Tue, 25 Nov 2025 03:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="hHLGhiMB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o3pcItko"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5984819F464;
-	Tue, 25 Nov 2025 03:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B911F1313;
+	Tue, 25 Nov 2025 03:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764041005; cv=none; b=EOaZ3RdSwpzia2qPTQLyiw/Beygv7OqoeW3Xh1rR34OSJiqJ2QbX5lccKPyvBhWPnVBb7p3Y1lvtEEUnUTlR4H4BsFoPyc9gNhU7I2pYdtr+dr7Qw0g5Tgp6n1pL4RTYmT8SVzxjcov1Nx3inS9uj6qRx2gn0pWWKYbEPxfNCVQ=
+	t=1764041447; cv=none; b=ozTKU96fyrOn3fMXT7VyihJNDOZfcMSUfGAeH9XYDb3bXvhm9xPns5XBzUIaRisMBIhGcxVNyhXXo6/jTCEqCtg+l5NwtiMNFNXx9aHonA62Fs87W7PXbBsMTLeHYXBP2fMlfFejtV3+XP2AurjW2NUQFnDzO/AVRZjJmq7vQl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764041005; c=relaxed/simple;
-	bh=Um8gES0aP3WWM8fWMNme342IcwCLp+u3sGeBFUsR1Ts=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=IubDCCNeeETHFqjAsrnYhhJ+40OSnNs/6ksZb3u5g/CMx12AkmVWMK9eOg/a0m+zl42n1KVwObivDmMokrxfjfry8eBMymQSQLtVZW9otqtKxJUSWH124mVwsLTCc/10+mbqHl6OQK/PY90oipUgHZ1832nyR3TvFxF/E5or79c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=hHLGhiMB; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=N/GlMzXtKU+hfuRyLCDNMAPdT07yfV6LWnrvh0FWnOg=;
-	b=hHLGhiMBs/ccMUnV96htEYVgIMJ6y8ixfclW8OTPQ0tM0A9c9FCtaFC5Z1U/98ohZBqAuaXah
-	4xcWm99WxZNvCeQUWsMUXJ9HAbFuraNI+CK49Tu81ySp1VV0MGh7lPf7KMOJlZpN752dnFMMihI
-	49PXO15qSzKaWsN4Zv7Pgow=
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4dFnyg6CjyzcZxk;
-	Tue, 25 Nov 2025 11:20:59 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id A077D1402C1;
-	Tue, 25 Nov 2025 11:23:12 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 25 Nov 2025 11:23:10 +0800
-Message-ID: <21071aac-8eaf-cfd7-6211-d119b257ef4c@huawei.com>
-Date: Tue, 25 Nov 2025 11:23:04 +0800
+	s=arc-20240116; t=1764041447; c=relaxed/simple;
+	bh=+MMACuO/EEO4urTCKiwdOmj7uPrXVNGTmbL2+n0lnzM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=X9A06JoKhY4CUserCfjpzjPthQHkbt7YR5Uwsdrgq7f3AB/KP01pLYb6xM2foYhY0XFTqcnUhyWJ8JAJsZ7abTE7XeSpQGNp1FU8H08wKLeawTVc4WmJCjxdZrChzcDujtELD8GsqnJRuqXy7MD8X5ka0e3gemjVz5EZkoI1eoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o3pcItko; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47499C116B1;
+	Tue, 25 Nov 2025 03:30:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764041446;
+	bh=+MMACuO/EEO4urTCKiwdOmj7uPrXVNGTmbL2+n0lnzM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=o3pcItko9zKxmfabH+qtiw0UrdOaw6RCi87/MoY5Iob7TyDDZz7F4bwfLMOc6aSk1
+	 DCe7RzCpCYXD9PigIgTepkVXghnEu8CfMHe9RLiMMZBmUtgd5UL4iKMWHileOUWq9o
+	 QzbJBQ6ueb4Qb20wwGM1lWnPKphLIIfnBPz5EqbzzQwANe+xBBc9olXMO6jwHiZBeg
+	 xc/kN7DEsf6keT/DH32F+t86VwfwLl4OBAOCLlQqWrW3Q0Cs07sdy8t17kMZbQmZpc
+	 sfF/B+fOX482paWu+lzr58sSkw7UVhM7V3WwzSfW9wGKW6PjNIYw44JPJVlQj9Q3X1
+	 8Ilksd4J+Cssg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3F7D63A8A3CA;
+	Tue, 25 Nov 2025 03:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v7 09/11] entry: Add has_syscall_work() helper
-Content-Language: en-US
-To: Kevin Brodsky <kevin.brodsky@arm.com>, <catalin.marinas@arm.com>,
-	<will@kernel.org>, <oleg@redhat.com>, <tglx@linutronix.de>,
-	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
-	<kees@kernel.org>, <wad@chromium.org>, <akpm@linux-foundation.org>,
-	<ldv@strace.io>, <macro@orcam.me.uk>, <deller@gmx.de>,
-	<mark.rutland@arm.com>, <song@kernel.org>, <mbenes@suse.cz>,
-	<ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
-	<anshuman.khandual@arm.com>, <broonie@kernel.org>, <pengcan@kylinos.cn>,
-	<dvyukov@google.com>, <kmal@cock.li>, <lihongbo22@huawei.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20251117133048.53182-1-ruanjinjie@huawei.com>
- <20251117133048.53182-10-ruanjinjie@huawei.com>
- <e37844e3-8810-42c1-bae1-30b2e7868b80@arm.com>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <e37844e3-8810-42c1-bae1-30b2e7868b80@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: af_unix: don't use SKIP for expected
+ failures
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176404140900.172437.13828660486764737049.git-patchwork-notify@kernel.org>
+Date: Tue, 25 Nov 2025 03:30:09 +0000
+References: <20251123021601.158709-1-kuba@kernel.org>
+In-Reply-To: <20251123021601.158709-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ kuniyu@google.com, adelodunolaoluwa@yahoo.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
 
+Hello:
 
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-On 2025/11/19 1:13, Kevin Brodsky wrote:
-> On 17/11/2025 14:30, Jinjie Ruan wrote:
->> Add has_syscall_work() helper to facilitate reuse of this
->> function in other places.
->>
->> No functional changes.
->>
->> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
->> ---
->>  include/linux/entry-common.h | 7 ++++++-
->>  1 file changed, 6 insertions(+), 1 deletion(-)
->>
->> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
->> index cd6dacb2d8bf..e0f94e937e84 100644
->> --- a/include/linux/entry-common.h
->> +++ b/include/linux/entry-common.h
->> @@ -44,6 +44,11 @@
->>  				 SYSCALL_WORK_SYSCALL_EXIT_TRAP	|	\
->>  				 ARCH_SYSCALL_WORK_EXIT)
->>  
->> +static inline bool has_syscall_work(unsigned long work)
->> +{
->> +	return unlikely(work & SYSCALL_WORK_ENTER);
+On Sat, 22 Nov 2025 18:16:01 -0800 you wrote:
+> netdev CI reserves SKIP in selftests for cases which can't be executed
+> due to setup issues, like missing or old commands. Tests which are
+> expected to fail must use XFAIL.
 > 
-> I'm not sure this is a good idea, since the generic syscall machinery
-> has two separate sets of flags (SYSCALL_WORK_ENTER and
-> SYSCALL_WORK_EXIT). Of course we could reflect that in the helper's
-> name, but since it's only used twice after patch 10, maybe we don't need
-> a helper at all.
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: kuniyu@google.com
+> CC: adelodunolaoluwa@yahoo.com
+> CC: shuah@kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> 
+> [...]
 
-Will remove it.
+Here is the summary with links:
+  - [net-next] selftests: af_unix: don't use SKIP for expected failures
+    https://git.kernel.org/netdev/net-next/c/e254c212cd9c
 
-> 
-> - Kevin
-> 
->> +}
->> +
->>  /**
->>   * syscall_enter_from_user_mode_prepare - Establish state and enable interrupts
->>   * @regs:	Pointer to currents pt_regs
->> @@ -91,7 +96,7 @@ static __always_inline long syscall_enter_from_user_mode_work(struct pt_regs *re
->>  {
->>  	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
->>  
->> -	if (work & SYSCALL_WORK_ENTER)
->> +	if (has_syscall_work(work))
->>  		syscall = syscall_trace_enter(regs, syscall, work);
->>  
->>  	return syscall;
-> 
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
