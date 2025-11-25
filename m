@@ -1,109 +1,140 @@
-Return-Path: <linux-kselftest+bounces-46420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 331F6C844C7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 10:50:58 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF524C84747
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 11:24:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C88913454E6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 09:50:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7859C4EADA6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 10:23:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5E7B2EC081;
-	Tue, 25 Nov 2025 09:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 945E72F39B1;
+	Tue, 25 Nov 2025 10:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQ3TY/wN"
+	dkim=pass (2048-bit key) header.d=mandelbit.com header.i=@mandelbit.com header.b="jdkvyeoz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D4562E9ECA;
-	Tue, 25 Nov 2025 09:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B97F231836
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 10:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764064251; cv=none; b=dJS4311iMw/EAmdPC6O6VrgFCfJroxKObFDldx/AC2SYQ8K2e7kxuHGrW+Np1t0b2Net3HjXYuvVfs7gWikp5gqU5om7/oae9E5p9MbMci93BtxQas7Jp+dw0/6xiK8HY54rgUmPDUc30hV2l4kk27e4/l//7PnkU6Lkt9tVtNE=
+	t=1764066106; cv=none; b=oi+/9r7Rr2XGAJqLj4VZKAp9inmuFApRlCdmjysdWMRwoNCdCLr7kLg9wAwncRbk+7Jx1L5LLoIT3cnHZxjtXUBh3alEhHt0lKEkwUwEaD4+6vSNaa+Who2R5QrGyr+E8xkipqKONtJasU/4L6MX4aRBF70jNapRWtqLgQ+ofUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764064251; c=relaxed/simple;
-	bh=ZpZ7Gn9GLkQYXGHbd52ia/vfx8XpDdhT9cEzlscmjek=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Cv764hFvM78TUQQng1W0/m7tsZggBJVlkhF/6i0l5dtm8n6UvlRjHMCrFffIgX3fR8UiNG1yICK/NTVG+kZD/74Er+wfUbN8c8D+zas55lFNUAtaUaxR2XeV0G45QlAn4Bo+zQSCltzKesrUuCN/H9its8/X2DihMVF/roeJZ48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQ3TY/wN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F13BC4CEF1;
-	Tue, 25 Nov 2025 09:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764064251;
-	bh=ZpZ7Gn9GLkQYXGHbd52ia/vfx8XpDdhT9cEzlscmjek=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=YQ3TY/wNjqodeZHs7cE5lAYdvVZ23Fk0Y3iJU+nqRkQWEwN1q2k5fFzjwd8uM381Z
-	 t/Kit8WUH7idwZdNOPhAI1oZUmyQBAVSrWq2dwIiZDn6okk2bd+6GbU+zmlPhlhva0
-	 21EikZ0Rgdiz8jg8xj2uWPn0SqzW8Uy4TXOVHuEMf3QNiXxThyJ9Evwr6e5nUik/eV
-	 sG5HT5RmS98jBKN8HeKtVb6SL0sq6jCkUNEOpMhiv8jufsbqDQpqWlf9dDfxlZ+vjM
-	 Pwicdetk7YIZ3BF4huugAu/dM1N1xA/Qz44hIwEXzwQ2gRKja2j7C5deCLw0L59icH
-	 hFVqBmVLRX5jg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB0513A8D142;
-	Tue, 25 Nov 2025 09:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1764066106; c=relaxed/simple;
+	bh=+rOwk2RA33dF4WiOqSAVuKiVTIehuiVNfhftsKo0a7Y=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Jb0w1BcJB2wf06AqCEC9FVoydq5jqbl1w39Wb0U3s1FnDEZcnd5ZXejnx/vfNCA911DTJRjeNoYpX970JFBts3Wa9wI62d/DVnrLccpn1qLgGFxPp3D0kM2Atgpu2Ne/WeISPqRz2XUOp3acq5/mWCTPJtu0TTiy+PRrpEyuZWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com; spf=pass smtp.mailfrom=mandelbit.com; dkim=pass (2048-bit key) header.d=mandelbit.com header.i=@mandelbit.com header.b=jdkvyeoz; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mandelbit.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mandelbit.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-429c4c65485so4277370f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 02:21:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mandelbit.com; s=google; t=1764066103; x=1764670903; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=usqUI61O5uSfjYi62jMQ9TXpUJFFLlygNvx27CjAFUM=;
+        b=jdkvyeozp6FBewcmin2f+Ojw7B+yJhFxvgWS5HHQXq1juPMHYF4hLczdsOYn5hGQEb
+         dRKDsvKOaC1royyzmAHsONXC3Jl9t2JLdKaSzGrWsIssbzPZD9b6WtN/RKy05AQCr8Y/
+         sxjBFY6RZUKHkT1a04HrQVp8DgHfDE6WZ/OC3TZ3VWwxxHWtyXKn3NSBrVWg4mv6+aOY
+         trgcjCUglASxEQSRiBsIhrMepSHFfo+n72s82o5w1xrxK64gDNN5V34iVJ1mkjqkG+UN
+         1FW+K1M6oeEpLYceCRgtCJ5toQVCPrwaa3dZgCZ1ozzc3R74jwkklXn5nRqiSXHiJCfV
+         xjHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764066103; x=1764670903;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=usqUI61O5uSfjYi62jMQ9TXpUJFFLlygNvx27CjAFUM=;
+        b=E395KoErVjD/seOKI1SXvnEZPxespxyv2sC3+E0irw4IZZV1JeOUUk1rOyir2jUypY
+         W8ld4/l9wPTOOddThrm2G3encR7+lmoMM7a9wGNBLf77hJBQTr+1DD5gZa9qNoaXQ+/C
+         L49z4Spj7Xl1bc46c82cphFRnv3UCbMVQLshC2pmHQoYJx+6xFk9O2z5Vr4PmSFPqD7j
+         O//hP4/NIL1G/Lm6Hp0ojVn7FA5mER7qXrcvLO+/v6octPM4wG+fj5ryTXu0g3BaFYLo
+         aDYtb7d6YiDk4Hfk9tUr7cSpr2SCDOxy2rebCCWhE2XCmt04IJ7TICpUAEuccmasdV6m
+         zeuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXI0K1JddZr4ljxS/x2S1q3dSfP5uNaY1qksIclwUkREQa2Co9rB9yjMgq9dOGfWNWUa+ryTXFOx8Y2tgKu6p0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyjh3UCUn6FGxFY0Hb6OTsueQdkpdmoi6NytwkHV7tryznJKYEa
+	ewCiqJzXxK5cBssLVDbWrfM9k8PhK1IASWcxoT2IcRga29SdmHSBM5xQQtg775tdHOk=
+X-Gm-Gg: ASbGnct3fmeo6EmXLDVntpHUZG4StmDkSRPxyLvZ7W/Bs3uPVNVAn18xwSvdx7EH6b0
+	fzeu89bC1ioOuCuYVWyQB9dtA8CGWLP257gf9ytglPPVcT2zDmfQlHjJ5V9CXrjgmwXD93nHD+F
+	TknBQTxeVM6TeFlulsBD8KCKUdR+4/5Ptm3FxeIqHie8yPnd1AIWaocz1TxB8sC7w8AwdGC4pIW
+	oNoI5oI2anTVqVdRI7sLGKB+DZ4J4+VnaU4PETUTJ0eNqT1pH+NUOf6YsqzwsjrjcQKtsVnrpHd
+	45o/YH2EkBq7hvC7CEpXStMGSIm4UbcNzR+QxUU0GITgk9WWnD2Zccl1A1NkJsoELCx/KrR2J0v
+	boJLUuf/PVB444kUt2HStotZQq2uMwGU9YVX2isZRcH6P6pGliSwoxP7gVKgAVrwrsihVLVGQqD
+	tsqMe1LdDGkGzQ/Dnc8N+Yp1Icak8ZbaCCl8z9iYB5iBJptpJPnFRVuMLGZOAkdSzOR2Wy
+X-Google-Smtp-Source: AGHT+IEKq67HVyAxXm2ukowHdBKE7/qTnckkb26kV1Fs3NCGHtrM7e7hMBSQbvVfFDTOevRhJMgmpA==
+X-Received: by 2002:a5d:5f44:0:b0:429:d350:802d with SMTP id ffacd0b85a97d-42cc1d34848mr14714622f8f.45.1764066102726;
+        Tue, 25 Nov 2025 02:21:42 -0800 (PST)
+Received: from ?IPv6:2a01:e11:600c:d1a0:3dc8:57d2:efb7:51a8? ([2a01:e11:600c:d1a0:3dc8:57d2:efb7:51a8])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fd8c47sm34796036f8f.38.2025.11.25.02.21.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Nov 2025 02:21:42 -0800 (PST)
+Message-ID: <e6a3845a7522e692fa3de69ec7f1f9c9a683223e.camel@mandelbit.com>
+Subject: Re: [RFC net-next 02/13] selftests: ovpn: add notification parsing
+ and matching
+From: Ralf Lici <ralf@mandelbit.com>
+To: Sabrina Dubroca <sd@queasysnail.net>, Antonio Quartulli
+	 <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Date: Tue, 25 Nov 2025 11:21:41 +0100
+In-Reply-To: <aSR--l90hvP6Fkld@krikkit>
+References: <20251121002044.16071-1-antonio@openvpn.net>
+	 <20251121002044.16071-3-antonio@openvpn.net> <aSR--l90hvP6Fkld@krikkit>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/5] Add Zilsd/Zclsd support in hwprobe and KVM
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <176406421375.657800.9856634072172881689.git-patchwork-notify@kernel.org>
-Date: Tue, 25 Nov 2025 09:50:13 +0000
-References: <20250826162939.1494021-1-pincheng.plct@isrc.iscas.ac.cn>
-In-Reply-To: <20250826162939.1494021-1-pincheng.plct@isrc.iscas.ac.cn>
-To: Pincheng Wang <pincheng.plct@isrc.iscas.ac.cn>
-Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
- palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, anup@brainfault.org,
- pbonzini@redhat.com, shuah@kernel.org, cyan.yang@sifive.com,
- cleger@rivosinc.com, charlie@rivosinc.com, cuiyunhui@bytedance.com,
- samuel.holland@sifive.com, namcao@linutronix.de, jesse@rivosinc.com,
- inochiama@gmail.com, yongxuan.wang@sifive.com, ajones@ventanamicro.com,
- parri.andrea@gmail.com, mikisabate@gmail.com, yikming2222@gmail.com,
- thomas.weissschuh@linutronix.de, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
 
-Hello:
-
-This series was applied to riscv/linux.git (for-next)
-by Paul Walmsley <pjw@kernel.org>:
-
-On Wed, 27 Aug 2025 00:29:34 +0800 you wrote:
-> Hi all,
-> 
-> This is v2 of a short series that adds kernel support for the ratified
-> Zilsd (Load/Store pair) and Zclsd (Compressed Load/Store pair) RISC-V
-> ISA extensions. The series enables kernel-side exposure so user-space
-> (for example glibc) can detect and use these extensions via hwprobe and
-> runtime checks.
-> 
+On Mon, 2025-11-24 at 16:51 +0100, Sabrina Dubroca wrote:
+> 2025-11-21, 01:20:33 +0100, Antonio Quartulli wrote:
+> > diff --git a/tools/testing/selftests/net/ovpn/common.sh
+> > b/tools/testing/selftests/net/ovpn/common.sh
+> > index 88869c675d03..b91cf17ab01f 100644
+> > --- a/tools/testing/selftests/net/ovpn/common.sh
+> > +++ b/tools/testing/selftests/net/ovpn/common.sh
 > [...]
+> > @@ -82,6 +99,23 @@ add_peer() {
+> > =C2=A0	fi
+> > =C2=A0}
+> > =C2=A0
+> > +compare_ntfs() {
+> > +	if [ ${#tmp_jsons[@]} -gt 0 ]; then
+> > +		[ "$FLOAT" =3D=3D 1 ] && suffix=3D"-float"
+> > +		expexted=3D"json/peer${1}${suffix}.json"
+>=20
+> nit: expected?
 
-Here is the summary with links:
-  - [v2,1/5] dt-bindings: riscv: add Zilsd and Zclsd extension descriptions
-    https://git.kernel.org/riscv/c/aeec6a5ddd8a
-  - [v2,2/5] riscv: add ISA extension parsing for Zilsd and Zclsd
-    https://git.kernel.org/riscv/c/ac3b03f8a4eb
-  - [v2,3/5] riscv: hwprobe: export Zilsd and Zclsd ISA extensions
-    https://git.kernel.org/riscv/c/668a3bd57466
-  - [v2,4/5] riscv: KVM: allow Zilsd and Zclsd extensions for Guest/VM
-    (no matching commit)
-  - [v2,5/5] KVM: riscv: selftests: add Zilsd and Zclsd extension to get-reg-list test
-    (no matching commit)
+Will fix, thanks.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> > +		received=3D"${tmp_jsons[$1]}"
+> > +
+> > +		kill -TERM ${listener_pids[$1]} || true
+> > +		wait ${listener_pids[$1]} || true
+> > +		printf "Checking notifications for peer ${1}... "
+> > +		diff <(jq -s "${JQ_FILTER}" ${expexted}) \
+> > +			<(jq -s "${JQ_FILTER}" ${received})
+> > +		echo "OK"
+>=20
+> Should that OK be conditional on what diff returns?
 
+We run selftests with set -e, so if the jsons don=E2=80=99t match, the scri=
+pt
+will print the diff and exit. That said, I agree the current code isn=E2=80=
+=99t
+very clear, so I=E2=80=99ll make the "OK" conditional.
 
+--=20
+Ralf Lici
+Mandelbit Srl
 
