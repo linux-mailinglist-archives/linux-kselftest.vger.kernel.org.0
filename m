@@ -1,339 +1,222 @@
-Return-Path: <linux-kselftest+bounces-46438-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB9E9C8575D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 15:40:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EFADC859D7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 16:02:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 512F44E15BD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 14:40:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4CA9B4EBFE8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 14:59:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDEDB32692C;
-	Tue, 25 Nov 2025 14:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6319D3271ED;
+	Tue, 25 Nov 2025 14:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GLGezGAr";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IXXRfgZc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mPdZmg5H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152DE32572F
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 14:40:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5438B3246F3
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 14:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764081610; cv=none; b=sL9l95Ynlc8ssLK5Lh6OojUB2/hZQ16SZHDxGn6Bdkc/CD3hmmVoB5M30jSSMtASvh4iE4CSD0wi6C1+dZPSP32ZR/ajFc/5qlvKQlPsQx18ASSBlFjindoekK70LjQZzP+lN+/K77yAX1emKLvwvmG6gcqpSqbE/tmdZaUeJTQ=
+	t=1764082776; cv=none; b=I9dK7Vh/HZe1/4OgWk4Fej6tfsoVv+wLzMpphEVwWND9OVTVGK9+Evr1GgF6Vf0gEP0ClpAZ8yeVie6TOJZst4B+oyz20sHk/V1cL4Ig7tS/zW1oqorBp5EALx7uvT/lzcOkbX8/bjs2zRtkKKJhQt4vjscOW6EwOnUQ2Nd+nsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764081610; c=relaxed/simple;
-	bh=q1IiVjIt9YL3X0z8+fKySuASLmhHi9xnE3naPm0SRvA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g3BExd9rXtKovYvl1E5mO3BeBws9BlbxUvH52igOzzIi/A3//7tXUupcTmleZx0I4YYuRbKR/sL/CQ+rTfcH4ZkPxVcmK56+ZNrPcq8EI4Z1Ej0+88zosRieOtGO+Gm1VY88mIfp3KX9Kyu/W6Yatf5JGXpOBOeGzEYA46MPCY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GLGezGAr; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IXXRfgZc; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764081607;
+	s=arc-20240116; t=1764082776; c=relaxed/simple;
+	bh=lFnjI40SNI55qE0qQdQxmGCFlRYJgftF543a4Fnj8wg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mxMDjCKZjDRg2RarnEtCns7bMKzjo31oxjkYv+IvQMfr2eEGPlmerC7EzGSsqYLkudwixzAEOVnASdGUJO4rBw4T+d8ayoTJ5rq4QeOYuNU6ZJ5H8BFuBtBuJfZWCS0hgJs0suxcUxccoCh3fFK9i+DRqx2mAaxIyg+NSejjfhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mPdZmg5H; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764082768;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=I5ogNRULO41Q+K2Bde0Qs6KvHkLMydku4fyWWl5Godc=;
-	b=GLGezGArDoab4oisS2Uz3NfHjIzBOQbwHxnYxLecMlHtZhYtlA/0X+vSyOyIilJpf5S01L
-	xWHEAJQ6YdUqz+HH/I1BF0Ru6Zj83ITWFxv7yRtfb5VAJruyRRUK3eydIg7MTwITrjyVdR
-	9rHn3a/uAs3IOuzpSUR5CaIXCxSCsI0=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-629-cxAsyJBvPWyLwvUgz-Fxpg-1; Tue, 25 Nov 2025 09:40:05 -0500
-X-MC-Unique: cxAsyJBvPWyLwvUgz-Fxpg-1
-X-Mimecast-MFC-AGG-ID: cxAsyJBvPWyLwvUgz-Fxpg_1764081605
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-42b2fb13b79so3464507f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 06:40:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1764081605; x=1764686405; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I5ogNRULO41Q+K2Bde0Qs6KvHkLMydku4fyWWl5Godc=;
-        b=IXXRfgZcsU1+Uz4qtQrADSydmZ287JYOI9olOqRU18srx9fhg0KbwdjBM23rJbSOBK
-         aKyi9z/J/P6nZuXzWZi1PDf7xGNnaOM5LhKt3YggR3/VJr+w3C4sw5No6rXR+PU+iOba
-         hG15RnBi5BRxZJuUqlpsPb0KqqDifTIg2aXKYmuyrxelx0HP0aS4k6Jjx9Dc41O/dab9
-         mp1C6jRq/5yAFHwpjU0jZbQ1VYREg0bO8tmCBeXFJLY63bjoJ28+Q/KKA0aQSqf2YSco
-         6LXvS1ELwBoCnbpllRWRNMzJMkAjlmRyxug3z4TX3FcSSneLGPYfisC/midhuaChRiC3
-         nnYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764081605; x=1764686405;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I5ogNRULO41Q+K2Bde0Qs6KvHkLMydku4fyWWl5Godc=;
-        b=vTcvYukKWGPIlCXlyokf8O2EvEOsmhVaR72Q++VYHx3ybXwbTAHewOWFwAgZl8nAyo
-         YmG6qS2tPCTHcopPaCmUM548uljmgEHvWp9lP/wA6JxvYsAwqx1AfyM34mzw0Vk2JtPd
-         bYRrm2DSa67Kj766Lc4jY51tnryO3XWCJ1JDCZNNQ+B4jULMf5824q4t/XXEkxVmzVX4
-         qbmLxObOREIgClv/mg2MfSM6faeK9sq9X9Y2M0EeUeLUWx7IRtREgUqYaeK1SedZ25Cr
-         fxJwtEAdLji+ePqC2Ei+KHzu94ZWT/WkyL9Wr+TV8Cw4K+8OY1GbwnaErUZql+dpuQ9E
-         6/9g==
-X-Forwarded-Encrypted: i=1; AJvYcCUvtgI11iNp7ZiXeayx4EylPOwTIk3Kd/GH6q8NC8e2uvGP0+wfIz2m8+KMaCyomNpGS5SfqOjlpKP1AsOTJ7E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7frpcaGex8BeRQKppnsmxrT/ha+5iGSBjWY8AUNs/r/Ajkchv
-	ILH37g5OaPs2192iivlVCIldde3guuJ5HRKBsazuOywLoAIdwHdMvganCl+KX8jJymi4junMg+3
-	xQ8xV0JKpTMs9Q6Zo2s2h1vfUr5/+6DYGT2Vk2VHJJEf9BmyY0R8ZPD8vcpf1xBcl6NEsDA==
-X-Gm-Gg: ASbGncvh6hTTKHSW7B12W3IsvLSAMk45e7uJxPsv1YxgqmP3PZAYNeIDJAonGU2s5AM
-	TWn8iebW6efRurHdSvyhzBHa0QbfQdXL0cG2dIYW2Drz02fKPVbv3Jdfl0jajjgu6LQc92/+fVK
-	XysuiP1Z0yryRCkbhDGrhbKejY4Y4lF5gwVs4UeycH3+Y9P1Xfb13Glea5DDL2e9ni9wQiNlF25
-	+eeUfYqE9iSBDV/SoQ54ol7R1ccQRvM4qbVysZrFzAn1Vs0zBNCpcHtXMqiGOyT+jw7j05VpLH7
-	JdFev4duiiKG9ly1jwedVjEbZe+MKCb9pLxyGtFzGZKm3p8jyb8uqlDsIrxdiZWHBhe2ncktPhO
-	nsyQqjqHWDSbLPw==
-X-Received: by 2002:a05:600c:840f:b0:477:952d:fc00 with SMTP id 5b1f17b1804b1-477c0176752mr182829105e9.12.1764081604586;
-        Tue, 25 Nov 2025 06:40:04 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE61ZQMvheL9QSNtpZPlW4HtLiNOD7Dc5SwbcJjYNes5UJ3YLVDfBHcBGJWoI19GxB3WPyx7Q==
-X-Received: by 2002:a05:600c:840f:b0:477:952d:fc00 with SMTP id 5b1f17b1804b1-477c0176752mr182828715e9.12.1764081604183;
-        Tue, 25 Nov 2025 06:40:04 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.153.231])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47906cb9715sm15413665e9.2.2025.11.25.06.40.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Nov 2025 06:40:03 -0800 (PST)
-Message-ID: <0550ee33-ce43-4703-966d-c112e774e6ce@redhat.com>
-Date: Tue, 25 Nov 2025 15:40:01 +0100
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jyPUc/82sLQA8c5Y3n9RcWAO/YA2hgVkOQotj5Xj93I=;
+	b=mPdZmg5HmdrkJMjCEywJsA5wTbQAtd4QQPMGCgzp0rTKQuiRzpd8t8uUYTBg4oJH9+6K/R
+	9RJOE+9Bf5kG7uDcZcm6R2mDPufbKNnSzROyfR+PP93yqg1pjwqvjBkfDBWUwkAmGTpl/G
+	TNTzkxquLqgK1xDsDBHrLpvrtxhJl60=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	jolsa@kernel.org,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	eddyz87@gmail.com,
+	dxu@dxuuu.xyz,
+	deso@posteo.net,
+	martin.lau@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	shuah@kernel.org,
+	kerneljasonxing@gmail.com,
+	chen.dylane@linux.dev,
+	willemb@google.com,
+	paul.chaignon@gmail.com,
+	a.s.protopopov@gmail.com,
+	memxor@gmail.com,
+	yatsenko@meta.com,
+	tklauser@distanz.ch,
+	leon.hwang@linux.dev,
+	kernel-patches-bot@fb.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v11 0/8] bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags for percpu maps
+Date: Tue, 25 Nov 2025 22:58:49 +0800
+Message-ID: <20251125145857.98134-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 12/12] selftests: net: selftest for ipvlan-macnat
- mode
-To: Dmitry Skorodumov <skorodumov.dmitry@huawei.com>, netdev@vger.kernel.org,
- Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: andrey.bokhanko@huawei.com, edumazet@google.com,
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-References: <20251120174949.3827500-1-skorodumov.dmitry@huawei.com>
- <20251120174949.3827500-13-skorodumov.dmitry@huawei.com>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20251120174949.3827500-13-skorodumov.dmitry@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 11/20/25 6:49 PM, Dmitry Skorodumov wrote:
-> diff --git a/tools/testing/selftests/net/ipvtap_macnat_bridge.py b/tools/testing/selftests/net/ipvtap_macnat_bridge.py
-> new file mode 100755
-> index 000000000000..7dc4a626e5bb
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ipvtap_macnat_bridge.py
-[...]
-> +    TAP = sys.argv[1]
-> +    IPVTAP = sys.argv[2]
-> +
-> +    print(f"Starting TAP bridge between {TAP} and {IPVTAP} in {ns_name}")
-> +    bridge = TapBridge(TAP, IPVTAP)
-> +    bridge.run()
+This patch set introduces the BPF_F_CPU and BPF_F_ALL_CPUS flags for
+percpu maps, as the requirement of BPF_F_ALL_CPUS flag for percpu_array
+maps was discussed in the thread of
+"[PATCH bpf-next v3 0/4] bpf: Introduce global percpu data"[1].
 
-This is not a complete review, but you need to add CONFIG_IPVTAP and
-CONFIG_TAP to tools/testing/selftests/net/config.
+The goal of BPF_F_ALL_CPUS flag is to reduce data caching overhead in light
+skeletons by allowing a single value to be reused to update values across all
+CPUs. This avoids the M:N problem where M cached values are used to update a
+map on N CPUs kernel.
 
-> diff --git a/tools/testing/selftests/net/ipvtap_macnat_test.sh b/tools/testing/selftests/net/ipvtap_macnat_test.sh
-> new file mode 100755
-> index 000000000000..927d75af776b
-> --- /dev/null
-> +++ b/tools/testing/selftests/net/ipvtap_macnat_test.sh
-> @@ -0,0 +1,333 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Tests for ipvtap in macnat mode
-> +
-> +NS_TST0=ipvlan-tst-0
-> +NS_TST1=ipvlan-tst-1
-> +NS_PHY=ipvlan-tst-phy
+The BPF_F_CPU flag is accompanied by *flags*-embedded cpu info, which
+specifies the target CPU for the operation:
 
-Please use lib.sh / setup_ns instead, to avoid netns name conflicts and
-leverage automatic cleanup
+* For lookup operations: the flag field alongside cpu info enable querying
+  a value on the specified CPU.
+* For update operations: the flag field alongside cpu info enable
+  updating value for specified CPU.
 
-> +
-> +IP_HOST=172.25.0.1
-> +IP_PHY=172.25.0.2
-> +IP_TST0=172.25.0.10
-> +IP_TST1=172.25.0.30
-> +
-> +IP_OK0=("172.25.0.10" "172.25.0.11" "172.25.0.12" "172.25.0.13")
-> +IP6_OK0=("fc00::10" "fc00::11" "fc00::12" "fc00::13" )
-> +
-> +IP_OVFL0="172.25.0.14"
-> +IP6_OVFL0="fc00::14"
-> +
-> +IP6_HOST=fc00::1
-> +IP6_PHY=fc00::2
-> +IP6_TST0=fc00::10
-> +IP6_TST1=fc00::30
-> +
-> +MAC_HOST="92:3a:00:00:00:01"
-> +MAC_PHY="92:3a:00:00:00:02"
-> +MAC_TST0="92:3a:00:00:00:10"
-> +MAC_TST1="92:3a:00:00:00:30"
-> +
-> +VETH_HOST=vethtst
-> +VETH_PHY=vethtst.p
-> +
-> +#
-> +# The testing environment looks this way:
-> +#
-> +# |------HOST------|     |------PHY-------|
-> +# |      veth<----------------->veth      |
-> +# |------|--|------|     |----------------|
-> +#        |  |
-> +#        |  |            |-----TST0-------|
-> +#        |  |------------|----ipvtap      |
-> +#        |               |----------------|
-> +#        |
-> +#        |               |-----TST1-------|
-> +#        |---------------|----ivtap       |
-> +#                        |----------------|
-> +#
-> +# The macnat mode is for virtual machines, so ipvtap-interface is supposed
-> +# to be used only for traffic monitoring and doesn't have ip-address.
-> +#
-> +# To simulate a virtual machine on ipvtap, we create TAP-interfaces
-> +# in TST environments and assing IP-addresses to them.
-> +# TAP and IPVTAP are connected with simple python script.
-> +#
-> +
-> +ns_run() {
-> +	ns=$1
-> +	shift
-> +	if [[ "$ns" == "default" ]]; then
-> +		"$@" >/dev/null
-> +	else
-> +		ip netns exec "$ns" "$@" >/dev/null
-> +	fi
-> +}
-> +
-> +configure_ns() {
-> +	local ns=$1
-> +	local n=$2
-> +	local ip=$3
-> +	local ip6=$4
-> +	local mac=$5
-> +
-> +	ns_run "$ns" ip link set lo up
-> +
-> +	if ! ip link add netns "$ns" name "ipvtap0.$n" link $VETH_HOST \
-> +	    type ipvtap mode l2macnat bridge; then
-> +		exit_error "FAIL: Failed to configure ipvtap link."
-> +	fi
-> +	ns_run "$ns" ip link set "ipvtap0.$n" up
-> +
-> +	ns_run "$ns" ip tuntap add mode tap "tap0.$n"
-> +	ns_run "$ns" ip link set dev "tap0.$n" address "$mac"
-> +	# disable dad
-> +	ns_run "$ns" sysctl -w "net/ipv6/conf/tap0.$n/accept_dad"=0
-> +	ns_run "$ns" ip link set "tap0.$n" up
-> +	ns_run "$ns" ip a a "$ip/24" dev "tap0.$n"
-> +	ns_run "$ns" ip a a "$ip6/64" dev "tap0.$n"
-> +}
-> +
-> +start_macnat_bridge() {
-> +	local ns=$1
-> +	local n=$2
-> +	ip netns exec "$ns" python3 ipvtap_macnat_bridge.py \
-> +		"tap0.$n" "ipvtap0.$n" &
-> +}
-> +
-> +configure_veth() {
-> +	local ns=$1
-> +	local veth=$2
-> +	local ip=$3
-> +	local ip6=$4
-> +	local mac=$5
-> +
-> +	ns_run "$ns" ip link set lo up
-> +	ns_run "$ns" ethtool -K "$veth" tx off rx off
-> +	ns_run "$ns" ip link set dev "$veth" address "$mac"
-> +	ns_run "$ns" ip link set "$veth" up
-> +	ns_run "$ns" ip a a "$ip/24" dev "$veth"
-> +	ns_run "$ns" ip a a "$ip6/64" dev "$veth"
-> +}
-> +
-> +setup_env() {
-> +	ip netns add $NS_TST0
-> +	ip netns add $NS_TST1
-> +	ip netns add $NS_PHY
-> +
-> +	# setup simulated other-host (phy) and host itself
-> +	ip link add $VETH_HOST type veth peer name $VETH_PHY \
-> +	    netns $NS_PHY >/dev/null
-> +
-> +	# host config
-> +	configure_veth default $VETH_HOST $IP_HOST $IP6_HOST $MAC_HOST
-> +	configure_veth $NS_PHY $VETH_PHY $IP_PHY $IP6_PHY $MAC_PHY
-> +
-> +	# TST namespaces config
-> +	configure_ns $NS_TST0 0 $IP_TST0 $IP6_TST0 $MAC_TST0
-> +	configure_ns $NS_TST1 1 $IP_TST1 $IP6_TST1 $MAC_TST1
-> +}
-> +
-> +ping_all() {
-> +	# This will learn MAC/IP addresses on ipvtap
-> +	local ns=$1
-> +
-> +	ns_run "$ns" ping -c 1 $IP_TST0
-> +	ns_run "$ns" ping -c 1 $IP6_TST0
-> +
-> +	ns_run "$ns" ping -c 1 $IP_TST1
-> +	ns_run "$ns" ping -c 1 $IP6_TST1
-> +
-> +	ns_run "$ns" ping -c 1 $IP_HOST
-> +	ns_run "$ns" ping -c 1 $IP6_HOST
-> +
-> +	ns_run "$ns" ping -c 1 $IP_PHY
-> +	ns_run "$ns" ping -c 1 $IP6_PHY
-> +}
-> +
-> +check_mac_eq() {
-> +	# Ensure IP corresponds to MAC.
-> +	local ns=$1
-> +	local ip=$2
-> +	local mac=$3
-> +	local dev=$4
-> +
-> +	if [[ "$ns" == "default" ]]; then
-> +		out=$(
-> +			ip neigh show "$ip" dev "$dev" \
-> +			| grep "$ip" \
-> +			| grep "$mac"
-> +		)
-> +	else
-> +		out=$(
-> +			ip netns exec "$ns" \
-> +			ip neigh show "$ip" dev "$dev" \
-> +			| grep "$ip" \
-> +			| grep "$mac"
-> +		)
-> +	fi
-> +
-> +	if [[ $out'X' == "X" ]]; then
-> +		exit_error "FAIL: '$ip' is not '$mac'"
-> +	fi
-> +}
-> +
-> +cleanup_env() {
-> +	ip link del $VETH_HOST
-> +	ip netns del $NS_TST0
-> +	ip netns del $NS_TST1
-> +	ip netns del $NS_PHY
-> +}
-> +
-> +exit_error() {
-> +	echo "$1"
-> +	exit 1
+Links:
+[1] https://lore.kernel.org/bpf/20250526162146.24429-1-leon.hwang@linux.dev/
 
-It would be better to try to run all the test-cases and return a single
-fail/success code. lib.sh can help with that. too.
+Changes:
+v10 -> v11:
+* Support the combination of BPF_EXIST and BPF_F_CPU/BPF_F_ALL_CPUS for
+  update operations.
+* Fix unstable lru_percpu_hash map test using the combination of
+  BPF_EXIST and BPF_F_CPU/BPF_F_ALL_CPUS to avoid LRU eviction
+  (reported by Alexei).
 
-/P
+v9 -> v10:
+* Add tests to verify array and hash maps do not support BPF_F_CPU and
+  BPF_F_ALL_CPUS flags.
+* Address comment from Andrii:
+  * Copy map value using copy_map_value_long for percpu_cgroup_storage
+    maps in a separate patch.
+
+v8 -> v9:
+* Change value type from u64 to u32 in selftests.
+* Address comments from Andrii:
+  * Keep value_size unaligned and update everywhere for consistency when
+    cpu flags are specified.
+  * Update value by getting pointer for percpu hash and percpu
+    cgroup_storage maps.
+
+v7 -> v8:
+* Address comments from Andrii:
+  * Check BPF_F_LOCK when update percpu_array, percpu_hash and
+    lru_percpu_hash maps.
+  * Refactor flags check in __htab_map_lookup_and_delete_batch().
+  * Keep value_size unaligned and copy value using copy_map_value() in
+    __htab_map_lookup_and_delete_batch() when BPF_F_CPU is specified.
+  * Update warn message in libbpf's validate_map_op().
+  * Update comment of libbpf's bpf_map__lookup_elem().
+
+v6 -> v7:
+* Get correct value size for percpu_hash and lru_percpu_hash in
+  update_batch API.
+* Set 'count' as 'max_entries' in test cases for lookup_batch API.
+* Address comment from Alexei:
+  * Move cpu flags check into bpf_map_check_op_flags().
+
+v5 -> v6:
+* Move bpf_map_check_op_flags() from 'bpf.h' to 'syscall.c'.
+* Address comments from Alexei:
+  * Drop the refactoring code of data copying logic for percpu maps.
+  * Drop bpf_map_check_op_flags() wrappers.
+
+v4 -> v5:
+* Address comments from Andrii:
+  * Refactor data copying logic for all percpu maps.
+  * Drop this_cpu_ptr() micro-optimization.
+  * Drop cpu check in libbpf's validate_map_op().
+  * Enhance bpf_map_check_op_flags() using *allowed flags* instead of
+    'extra_flags_mask'.
+
+v3 -> v4:
+* Address comments from Andrii:
+  * Remove unnecessary map_type check in bpf_map_value_size().
+  * Reduce code churn.
+  * Remove unnecessary do_delete check in
+    __htab_map_lookup_and_delete_batch().
+  * Introduce bpf_percpu_copy_to_user() and bpf_percpu_copy_from_user().
+  * Rename check_map_flags() to bpf_map_check_op_flags() with
+    extra_flags_mask.
+  * Add human-readable pr_warn() explanations in validate_map_op().
+  * Use flags in bpf_map__delete_elem() and
+    bpf_map__lookup_and_delete_elem().
+  * Drop "for alignment reasons".
+v3 link: https://lore.kernel.org/bpf/20250821160817.70285-1-leon.hwang@linux.dev/
+
+v2 -> v3:
+* Address comments from Alexei:
+  * Use BPF_F_ALL_CPUS instead of BPF_ALL_CPUS magic.
+  * Introduce these two cpu flags for all percpu maps.
+* Address comments from Jiri:
+  * Reduce some unnecessary u32 cast.
+  * Refactor more generic map flags check function.
+  * A code style issue.
+v2 link: https://lore.kernel.org/bpf/20250805163017.17015-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+* Address comments from Andrii:
+  * Embed cpu info as high 32 bits of *flags* totally.
+  * Use ERANGE instead of E2BIG.
+  * Few format issues.
+
+Leon Hwang (8):
+  bpf: Introduce internal bpf_map_check_op_flags helper function
+  bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array
+    maps
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash
+    and lru_percpu_hash maps
+  bpf: Copy map value using copy_map_value_long for
+    percpu_cgroup_storage maps
+  bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for
+    percpu_cgroup_storage maps
+  libbpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu maps
+  selftests/bpf: Add cases to test BPF_F_CPU and BPF_F_ALL_CPUS flags
+
+ include/linux/bpf-cgroup.h                    |   4 +-
+ include/linux/bpf.h                           |  44 ++-
+ include/uapi/linux/bpf.h                      |   2 +
+ kernel/bpf/arraymap.c                         |  32 +-
+ kernel/bpf/hashtab.c                          |  96 +++--
+ kernel/bpf/local_storage.c                    |  27 +-
+ kernel/bpf/syscall.c                          |  68 ++--
+ tools/include/uapi/linux/bpf.h                |   2 +
+ tools/lib/bpf/bpf.h                           |   8 +
+ tools/lib/bpf/libbpf.c                        |  26 +-
+ tools/lib/bpf/libbpf.h                        |  21 +-
+ .../selftests/bpf/prog_tests/percpu_alloc.c   | 335 ++++++++++++++++++
+ .../selftests/bpf/progs/percpu_alloc_array.c  |  32 ++
+ 13 files changed, 590 insertions(+), 107 deletions(-)
+
+--
+2.51.2
 
 
