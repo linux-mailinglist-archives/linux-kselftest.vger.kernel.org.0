@@ -1,139 +1,193 @@
-Return-Path: <linux-kselftest+bounces-46435-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E057FC851FE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 14:11:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE63CC8534F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 14:38:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4458E4E98AE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 13:11:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CCA73A9543
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 13:38:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CE123233FA;
-	Tue, 25 Nov 2025 13:11:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 844F4221DAE;
+	Tue, 25 Nov 2025 13:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FY+355QL";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PWtGKK0Q";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="up2UOeij";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="yFVqEwZI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A59A321F5E;
-	Tue, 25 Nov 2025 13:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C041FDE01
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 13:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764076262; cv=none; b=GLIHGF6tIKh4P7HB06hMZwBEy6d+Y8+n+X3pAjdBKriQZrCkju06zfyduKycD2JIAOPCJjD6/9+RCD21oih5Benbw0HZyDbOlKZRTrgaRum2uNOTgKB5Io6TDmmGJo1bUCuBCyziDwOEDdKUSm/yhnrhtAomroEDksEu5dhL33o=
+	t=1764077928; cv=none; b=WYeAwxaEKL8lq0giXEieKpfikOQhD+Su+dVZlfm2Jo6j/ZsyJZZbkAn37TvhN+X3CZCuRthAeWIUXgs7NPd8YPaqPYRwGc7MFQXVj76q8jCSsfsyDsfxhpoYQw9abc23/v/qWzfKICelIYCPrxy3MUBErBd+xwhdUhFgtu85tsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764076262; c=relaxed/simple;
-	bh=gj9b3dyyPTNy+zHidkmr8z0TSdRDpJfKlpfMvKdIs0Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=A9zsKPysm5V8nOiTsB9N2qOG0ALgEhIG0IpoR0+NVzMxnsMU317rQjBi2Ls4qI/hTJ+UxJE50SxIaM13Og89TtKik5e++nCOk1zBy4xA55xmc+52rhGLJTyQrsrp50Kts/iExJ3re77OMsHAOuHjtHUaBHw+4UP/rM4yLVkXl58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 327A51684;
-	Tue, 25 Nov 2025 05:10:51 -0800 (PST)
-Received: from [10.44.160.56] (e126510-lin.lund.arm.com [10.44.160.56])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82DA93F73B;
-	Tue, 25 Nov 2025 05:10:52 -0800 (PST)
-Message-ID: <1a8034b2-bb8f-4e73-b205-11453df6d02b@arm.com>
-Date: Tue, 25 Nov 2025 14:10:49 +0100
+	s=arc-20240116; t=1764077928; c=relaxed/simple;
+	bh=jutAJAAqG9b1pvGErmLBFzYKTc0qTKmeBDQIKhOhP+U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HjdAV8qQOZ4cxPNJK6WHz8b1jq1FXuPl/iVgKyoOXFBBRiUq+nC+L6g12jahaUELrqL6XNIocvsYlNrtFOxR2GPzqOXrCX6OApKu9FVgXyZHKcsXzAnDmYIa5X0NSHCm4dmFbxzOqT5tmkO3p1JAcdlnTHa7aWca5BOW1RvCKT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FY+355QL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=PWtGKK0Q; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=up2UOeij; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=yFVqEwZI; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E2C7522844;
+	Tue, 25 Nov 2025 13:38:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1764077925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WjtFN8WWBRYbYkmEaem1ql+t3SQYXM2w2lHsBbsZSpc=;
+	b=FY+355QL19H9gzGMWljgDxQ+uiBc87dy+BNwoMJAg1lc6iNlCkfOszPA0FhKXiVj8c1lUT
+	8IRxTFcU+SROix4VjUjm8Z6dljp5IGnP6G52Jk9Zl8+pWn2EwfpLKFhSOzFZ9dSwQgLJyg
+	GHktexMzZHTSIui4wMd0R6QNTURs0fw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1764077925;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WjtFN8WWBRYbYkmEaem1ql+t3SQYXM2w2lHsBbsZSpc=;
+	b=PWtGKK0Q5RX4D40885nJS65RXcUZerfkTSajEK9SE6aLsIqcKMGNtYPQwigi3Xe/VG/72+
+	imkrLxkbci9l/yCw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1764077924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WjtFN8WWBRYbYkmEaem1ql+t3SQYXM2w2lHsBbsZSpc=;
+	b=up2UOeijkbGoQ0gJEEm6sdLfMfNEQrQpCAbYC4MiIBoGCTncqLYkyHAk2pMHfOPKQinS+t
+	R0UeIfpPiDMgLvFqrkOKzt/DVHlR3wMS/kB3tRmN3AEIxa2xAZWn28A2xck1HEZimI7YoP
+	5YlSe6QZ5iB/llAhaztIwAl1NqZthkc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1764077924;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WjtFN8WWBRYbYkmEaem1ql+t3SQYXM2w2lHsBbsZSpc=;
+	b=yFVqEwZIy8fOrotXJC0ZhG9UBn1SYcscBxlfqdXY5+nO4OWVgZyVD45coRymecPc4DNu/p
+	OrEDupclvOoIxeBA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B74443EA63;
+	Tue, 25 Nov 2025 13:38:44 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 7li1K2SxJWlgMwAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Tue, 25 Nov 2025 13:38:44 +0000
+From: Petr Vorel <pvorel@suse.cz>
+To: rbm@suse.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	Petr Vorel <pvorel@suse.cz>
+Subject: Re: [PATCH] selftests/run_kselftest.sh: Add `--skip` argument option
+Date: Tue, 25 Nov 2025 14:38:39 +0100
+Message-ID: <20251125133840.172697-1-pvorel@suse.cz>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <20251125-selftests-add_skip_opt-v1-1-85ef2ae2e035@suse.com>
+References: <20251125-selftests-add_skip_opt-v1-1-85ef2ae2e035@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 08/11] entry: Add
- arch_ptrace_report_syscall_entry/exit()
-To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
- will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
- luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
- akpm@linux-foundation.org, ldv@strace.io, macro@orcam.me.uk, deller@gmx.de,
- mark.rutland@arm.com, song@kernel.org, mbenes@suse.cz, ryan.roberts@arm.com,
- ada.coupriediaz@arm.com, anshuman.khandual@arm.com, broonie@kernel.org,
- pengcan@kylinos.cn, dvyukov@google.com, kmal@cock.li, lihongbo22@huawei.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20251117133048.53182-1-ruanjinjie@huawei.com>
- <20251117133048.53182-9-ruanjinjie@huawei.com>
- <55e1345f-94d7-41a9-8f0a-694fd56f63ed@arm.com>
- <8489ee0d-8b9c-080a-04a0-b299549e86cf@huawei.com>
- <247aa84f-0550-42d9-8d65-615297e78a74@arm.com>
- <48b7443a-2dd9-9764-fbe5-12dc9eef1363@huawei.com>
-Content-Language: en-GB
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-In-Reply-To: <48b7443a-2dd9-9764-fbe5-12dc9eef1363@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -3.30
+X-Spam-Level: 
 
-On 25/11/2025 03:43, Jinjie Ruan wrote:
->
-> On 2025/11/24 23:23, Kevin Brodsky wrote:
->> On 24/11/2025 10:34, Jinjie Ruan wrote:
->>> On 2025/11/19 1:13, Kevin Brodsky wrote:
->>>> On 17/11/2025 14:30, Jinjie Ruan wrote:
->>>>> [...]
->>>>>
->>>>> diff --git a/kernel/entry/syscall-common.c b/kernel/entry/syscall-common.c
->>>>> index 66e6ba7fa80c..27310e611567 100644
->>>>> --- a/kernel/entry/syscall-common.c
->>>>> +++ b/kernel/entry/syscall-common.c
->>>>> @@ -17,6 +17,25 @@ static inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
->>>>>  	}
->>>>>  }
->>>>>  
->>>>> +/**
->>>>> + * arch_ptrace_report_syscall_entry - Architecture specific
->>>>> + *				      ptrace_report_syscall_entry().
->>>>> + *
->>>>> + * Invoked from syscall_trace_enter() to wrap ptrace_report_syscall_entry().
->>>>> + * Defaults to ptrace_report_syscall_entry.
->>>>> + *
->>>>> + * The main purpose is to support arch-specific ptrace_report_syscall_entry()
->>>>> + * implementation.
->>>>> + */
->>>>> +static __always_inline int arch_ptrace_report_syscall_entry(struct pt_regs *regs);
->>>>> +
->>>>> +#ifndef arch_ptrace_report_syscall_entry
->>>>> +static __always_inline int arch_ptrace_report_syscall_entry(struct pt_regs *regs)
->>>>> +{
->>>>> +	return ptrace_report_syscall_entry(regs);
->>>> I saw that Thomas suggested this approach on v4, and it makes sense to
->>>> me, but I find the naming surprising. If an architecture does need extra
->>>> handling, then the generic function should never be called from generic
->>>> code. So it seems to me that the more logical change would be:
->>>>
->>>> * Rename: ptrace_report_syscall_entry -> __ptrace_report_syscall_entry
->>>> * Introduce ptrace_report_syscall_entry(), defaults to
->>>> __ptrace_report_syscall_entry()
->>> If ptrace_report_syscall_entry() is defined in linux/ptrace.h, and an
->>> architecture also needs to redefine this function, but the
->>> architecture's own <asm/entry-common.h> must include <linux/ptrace.h>,
->>> the function will end up being defined twice and cause a "duplicate
->>> definition" compile error.
->> There's plenty of arch-defined functions in <linux/ptrace.h> already.
->> __ptrace_report_syscall_entry() should be defined inside an #ifndef and
->> architectures can define their own implementation in <asm/ptrace.h>,
->> like force_successful_syscall_return() for instance.
-> Shared functions like ptrace_report_syscall() are all defined in
-> <linux/ptrace.h>.
-> When we want to override __ptrace_report_syscall_entry() in
-> <asm/ptrace.h> we still have to include <linux/ptrace.h> again,then the
-> redefine problem occurs again.
->
-> What we actually need to reuse is ptrace_report_syscall_entry() (or
-> __ptrace_report_syscall_entry()).
+Hi Ricardo, all,
 
-You're right, this is yet another of those circular definition problems...
+> Currently the only way of excluding certain tests from a collection is by
+> passing all the other tests explicitly via `--test`. Therefore, if the user
+> wants to skip a single test the resulting command line might be too big,
+> depending on the collection. Add an option `--skip` that takes care of
+> that.
+> 
+> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
+> ---
+>  tools/testing/selftests/run_kselftest.sh | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+> index d4be97498b32..84d45254675c 100755
+> --- a/tools/testing/selftests/run_kselftest.sh
+> +++ b/tools/testing/selftests/run_kselftest.sh
+> @@ -30,6 +30,7 @@ Usage: $0 [OPTIONS]
+>    -s | --summary		Print summary with detailed log in output.log (conflict with -p)
+>    -p | --per-test-log		Print test log in /tmp with each test name (conflict with -s)
+>    -t | --test COLLECTION:TEST	Run TEST from COLLECTION
+> +  -S | --skip COLLECTION:TEST	Skip TEST from COLLECTION
+>    -c | --collection COLLECTION	Run all tests from COLLECTION
+>    -l | --list			List the available collection:test entries
+>    -d | --dry-run		Don't actually run any tests
+> @@ -43,6 +44,7 @@ EOF
+>  
+>  COLLECTIONS=""
+>  TESTS=""
+> +SKIP=""
+>  dryrun=""
+>  kselftest_override_timeout=""
+>  ERROR_ON_FAIL=true
+> @@ -58,6 +60,9 @@ while true; do
+>  		-t | --test)
+>  			TESTS="$TESTS $2"
+>  			shift 2 ;;
+> +		-S | --skip)
+> +			SKIP="$SKIP $2"
+> +			shift 2 ;;
+>  		-c | --collection)
+>  			COLLECTIONS="$COLLECTIONS $2"
+>  			shift 2 ;;
+> @@ -109,6 +114,12 @@ if [ -n "$TESTS" ]; then
+>  	done
+>  	available="$(echo "$valid" | sed -e 's/ /\n/g')"
+>  fi
+> +# Remove tests to be skipped from available list
+> +if [ -n "$SKIP" ]; then
+> +	for skipped in $SKIP ; do
+> +		available="$(echo "$available" | grep -v "^${skipped}$")"
+> +	done
+> +fi
 
-> The arch version need to reuse and wrap ptrace_report_syscall_entry(),
-> because for instance arm64 needs to perform additional operations before
-> and after this step. Therefore, I believe the current implementation is
-> appropriate.
+LGTM.
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
 
-I'm still not fond of arch_X() wrapping X() as this is unusual, but I
-don't have a better idea so let's stick to that. It also makes sense to
-have this done in syscall-common.c rather than a header considering the
-risk of circular dependency.
-
-- Kevin
+Kind regards,
+Petr
 
