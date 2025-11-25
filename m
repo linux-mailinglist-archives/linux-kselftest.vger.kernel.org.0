@@ -1,193 +1,106 @@
-Return-Path: <linux-kselftest+bounces-46436-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46437-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE63CC8534F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 14:38:52 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E5F7C856BA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 15:29:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CCA73A9543
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 13:38:51 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4A45E3502F4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Nov 2025 14:29:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 844F4221DAE;
-	Tue, 25 Nov 2025 13:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901E331D366;
+	Tue, 25 Nov 2025 14:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FY+355QL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PWtGKK0Q";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="up2UOeij";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="yFVqEwZI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QBKPnuqg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C041FDE01
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Nov 2025 13:38:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D4A222578;
+	Tue, 25 Nov 2025 14:29:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764077928; cv=none; b=WYeAwxaEKL8lq0giXEieKpfikOQhD+Su+dVZlfm2Jo6j/ZsyJZZbkAn37TvhN+X3CZCuRthAeWIUXgs7NPd8YPaqPYRwGc7MFQXVj76q8jCSsfsyDsfxhpoYQw9abc23/v/qWzfKICelIYCPrxy3MUBErBd+xwhdUhFgtu85tsw=
+	t=1764080953; cv=none; b=nhEk0wKRfe0JFVOsHrkMCNc1OWgHyadAUolstPpZJ71/xV/3nvcH+7vnIGKGEwD5PDDJUkljsvsEV3Lw/204jXHL+HHsPQLJG27wbBEMCmZpXNvW/ZAF5fjzfbD+/z0Kxjy8y76PZhmSTG4p930koP1srCrY9W7nMhG6aA/U3v0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764077928; c=relaxed/simple;
-	bh=jutAJAAqG9b1pvGErmLBFzYKTc0qTKmeBDQIKhOhP+U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HjdAV8qQOZ4cxPNJK6WHz8b1jq1FXuPl/iVgKyoOXFBBRiUq+nC+L6g12jahaUELrqL6XNIocvsYlNrtFOxR2GPzqOXrCX6OApKu9FVgXyZHKcsXzAnDmYIa5X0NSHCm4dmFbxzOqT5tmkO3p1JAcdlnTHa7aWca5BOW1RvCKT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FY+355QL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=PWtGKK0Q; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=up2UOeij; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=yFVqEwZI; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id E2C7522844;
-	Tue, 25 Nov 2025 13:38:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1764077925; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WjtFN8WWBRYbYkmEaem1ql+t3SQYXM2w2lHsBbsZSpc=;
-	b=FY+355QL19H9gzGMWljgDxQ+uiBc87dy+BNwoMJAg1lc6iNlCkfOszPA0FhKXiVj8c1lUT
-	8IRxTFcU+SROix4VjUjm8Z6dljp5IGnP6G52Jk9Zl8+pWn2EwfpLKFhSOzFZ9dSwQgLJyg
-	GHktexMzZHTSIui4wMd0R6QNTURs0fw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1764077925;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WjtFN8WWBRYbYkmEaem1ql+t3SQYXM2w2lHsBbsZSpc=;
-	b=PWtGKK0Q5RX4D40885nJS65RXcUZerfkTSajEK9SE6aLsIqcKMGNtYPQwigi3Xe/VG/72+
-	imkrLxkbci9l/yCw==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1764077924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WjtFN8WWBRYbYkmEaem1ql+t3SQYXM2w2lHsBbsZSpc=;
-	b=up2UOeijkbGoQ0gJEEm6sdLfMfNEQrQpCAbYC4MiIBoGCTncqLYkyHAk2pMHfOPKQinS+t
-	R0UeIfpPiDMgLvFqrkOKzt/DVHlR3wMS/kB3tRmN3AEIxa2xAZWn28A2xck1HEZimI7YoP
-	5YlSe6QZ5iB/llAhaztIwAl1NqZthkc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1764077924;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WjtFN8WWBRYbYkmEaem1ql+t3SQYXM2w2lHsBbsZSpc=;
-	b=yFVqEwZIy8fOrotXJC0ZhG9UBn1SYcscBxlfqdXY5+nO4OWVgZyVD45coRymecPc4DNu/p
-	OrEDupclvOoIxeBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B74443EA63;
-	Tue, 25 Nov 2025 13:38:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 7li1K2SxJWlgMwAAD6G6ig
-	(envelope-from <pvorel@suse.cz>); Tue, 25 Nov 2025 13:38:44 +0000
-From: Petr Vorel <pvorel@suse.cz>
-To: rbm@suse.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	Petr Vorel <pvorel@suse.cz>
-Subject: Re: [PATCH] selftests/run_kselftest.sh: Add `--skip` argument option
-Date: Tue, 25 Nov 2025 14:38:39 +0100
-Message-ID: <20251125133840.172697-1-pvorel@suse.cz>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251125-selftests-add_skip_opt-v1-1-85ef2ae2e035@suse.com>
-References: <20251125-selftests-add_skip_opt-v1-1-85ef2ae2e035@suse.com>
+	s=arc-20240116; t=1764080953; c=relaxed/simple;
+	bh=QtIX7m37UB3jSsMIWRrcRctC3VHFDnbfN3XBMYjY5iU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jIVCXOAMeOuXvVJVUW3wB12xVnxcOs7FF2rf0wF20VlFyky3RpAFbtx8KVKTgZ11IDeAOYC3/Y4wfNRwWDIzsOoUOoKFs+4o9TKYbA90QJv5Bo0CLOwd8ENNXm3TiHGAdReRKMtp7huSOaO24oc5pE40uwO8S5yOP/UjiScNIRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QBKPnuqg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09DC5C4CEF1;
+	Tue, 25 Nov 2025 14:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764080953;
+	bh=QtIX7m37UB3jSsMIWRrcRctC3VHFDnbfN3XBMYjY5iU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QBKPnuqgEw3szxGkQOnxr0TMpZ/I3SfNa3fREd5sHp8tNCegHRljayZIIKjHWeZRx
+	 LNFSWCHEtnVAzQ44+gTiYwuHP45oAoqYfcOcO1Jmf+ESzW4HMVxtPO2WqxraAGjxcK
+	 NU190+XBXxcDq4qG70hy+0R8LyBy1sc0+HIXaOZihCDRvwK4VkvZBktyTpdch+MFW1
+	 WJALRPtOUP6N7aTvT7sxAb9UId41zDLJ8llvhlk5UhGAaOcPlvFAaT4hhJ6qAcp6Zw
+	 26pmyKLrpNOouIEegNgpIiIt1vncfTwTgqEFdr0049Fkv/BR3j/2aaosGBPrb5nEyL
+	 qfD/kciwyAYJQ==
+Date: Tue, 25 Nov 2025 16:29:04 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Hugh Dickins <hughd@google.com>,
+	James Houghton <jthoughton@google.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Nikita Kalyazin <kalyazin@amazon.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/5] userfaultfd, shmem: use a VMA callback to handle
+ UFFDIO_CONTINUE
+Message-ID: <aSW9MJJ1CF65m5w9@kernel.org>
+References: <20251123102707.559422-1-rppt@kernel.org>
+ <20251123102707.559422-3-rppt@kernel.org>
+ <a06e57ff-b77b-44fd-9b69-929d7647644b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a06e57ff-b77b-44fd-9b69-929d7647644b@kernel.org>
 
-Hi Ricardo, all,
-
-> Currently the only way of excluding certain tests from a collection is by
-> passing all the other tests explicitly via `--test`. Therefore, if the user
-> wants to skip a single test the resulting command line might be too big,
-> depending on the collection. Add an option `--skip` that takes care of
-> that.
+On Mon, Nov 24, 2025 at 12:03:17PM +0100, David Hildenbrand (Red Hat) wrote:
+> On 11/23/25 11:27, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > 
+> > When userspace resolves a page fault in a shmem VMA with UFFDIO_CONTINUE
+> > it needs to get a folio that already exists in the pagecache backing
+> > that VMA.
+> > 
+> > Instead of using shmem_get_folio() for that, add a get_pagecache_folio()
 > 
-> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
-> ---
->  tools/testing/selftests/run_kselftest.sh | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+> get_shared_folio()
 > 
-> diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-> index d4be97498b32..84d45254675c 100755
-> --- a/tools/testing/selftests/run_kselftest.sh
-> +++ b/tools/testing/selftests/run_kselftest.sh
-> @@ -30,6 +30,7 @@ Usage: $0 [OPTIONS]
->    -s | --summary		Print summary with detailed log in output.log (conflict with -p)
->    -p | --per-test-log		Print test log in /tmp with each test name (conflict with -s)
->    -t | --test COLLECTION:TEST	Run TEST from COLLECTION
-> +  -S | --skip COLLECTION:TEST	Skip TEST from COLLECTION
->    -c | --collection COLLECTION	Run all tests from COLLECTION
->    -l | --list			List the available collection:test entries
->    -d | --dry-run		Don't actually run any tests
-> @@ -43,6 +44,7 @@ EOF
->  
->  COLLECTIONS=""
->  TESTS=""
-> +SKIP=""
->  dryrun=""
->  kselftest_override_timeout=""
->  ERROR_ON_FAIL=true
-> @@ -58,6 +60,9 @@ while true; do
->  		-t | --test)
->  			TESTS="$TESTS $2"
->  			shift 2 ;;
-> +		-S | --skip)
-> +			SKIP="$SKIP $2"
-> +			shift 2 ;;
->  		-c | --collection)
->  			COLLECTIONS="$COLLECTIONS $2"
->  			shift 2 ;;
-> @@ -109,6 +114,12 @@ if [ -n "$TESTS" ]; then
->  	done
->  	available="$(echo "$valid" | sed -e 's/ /\n/g')"
->  fi
-> +# Remove tests to be skipped from available list
-> +if [ -n "$SKIP" ]; then
-> +	for skipped in $SKIP ; do
-> +		available="$(echo "$available" | grep -v "^${skipped}$")"
-> +	done
-> +fi
+> Given that the helper now no longer receives a VMA, I assume we can just
+> really call it get_folio() and the "shared" part would be implicit. (from
+> the inode)
 
-LGTM.
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
+It makes naming shmem_vm_ops.get_folio harder, because we already have
+shmem_get_folio :)
+I'll think of something.
 
-Kind regards,
-Petr
+> -- 
+> Cheers
+> David
+
+-- 
+Sincerely yours,
+Mike.
 
