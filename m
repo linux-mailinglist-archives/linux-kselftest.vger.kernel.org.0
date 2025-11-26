@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-46539-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46540-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF073C8B768
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 19:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FA2DC8B76B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 19:41:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A1C864E166C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 18:41:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2C5804E518F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 18:41:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF19833C519;
-	Wed, 26 Nov 2025 18:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BE9533CEBD;
+	Wed, 26 Nov 2025 18:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bH/uuZpj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZXk5HKy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425BC31B818
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 18:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2146733C18B
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 18:41:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764182497; cv=none; b=M8eg6XOe2I4snFsFCmczMqVIqxB8vYM7Q8qNgK1kiOcYRQv6CXtQbHJSgNNodRrwA8KGD2XySF5o4QbUP8A9O312JlmutfCD5Rd4I5pZj70YJLOqslZQ6sg04FdIl0Tjd/YthPwELhKj4uwbHPSyKH0O3+xmCmGGZwAvxc2N+FE=
+	t=1764182499; cv=none; b=th1DHIiLfxhl62U1/hQhPKFUx6QLSnfP/OQgh0QqH/7HpQEFJ0IsmOeV/trtpqMqZxwxhOnP7dYlRvUGWvstmXA+iK2R6sLZGFHo68MJK2WUdSNkOVTmUVAsjFTQTDWgCR30yrQxQc5nj+QDD3nUtMF9uW3xeJjABDSkw0RXvhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764182497; c=relaxed/simple;
-	bh=jRr1vA2VhcAB7e6x+d+1Ejo2gBsTf4wkgPnm+WVpHKc=;
+	s=arc-20240116; t=1764182499; c=relaxed/simple;
+	bh=14sROXxsePSCyFjX+t2CW+D5fioa/3YjrCzjpOBgBnE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QWHp+5q5dkrq3nVNTuHK6n9mU74yxULIhaSHvAMR5TQwNBZadoymlXqmmTCuc2ZNdG0+uTYDKABNFukQcz2l7pg52y1NKYzcognx59eH9Yosnp5+8+7csQwRas4R4e0Tcu+HcNhrawdVXqX1o3ov5pn/lxnY8oqKRDA/IjLTraQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bH/uuZpj; arc=none smtp.client-ip=209.85.219.53
+	 MIME-Version; b=AX8KHC2z5rOKA3KtILAdmRKwwZKTRaL91wBwHj1+WJXMdhAXUxWtYjEJ9U6NbkojhuS2Vw8tVtVYBrrT9pvdwH2RAbG65rHqugwSm80mmFxsMQv0q+FQUNgMhTW1xmWsW3AoltitgDR4E9ywP5WIzMfjbCZcJKQo4CT6WE5i6wE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZXk5HKy; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-882475d8851so490646d6.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 10:41:35 -0800 (PST)
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-8824888ce97so604616d6.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 10:41:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764182494; x=1764787294; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764182496; x=1764787296; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v5AIJTSliCzft/R4MKMCKOoevolVdyRiQwHIZI0IpKk=;
-        b=bH/uuZpjAyxYxNrlyozGu/vpiGn9Kb8mHvFW61dGx5LBxkd+ouBU28Ft9qWgHaHayp
-         ZexdVzp3O9pY+FQGj9spKxtJZftEvGzwsJRSnkFP4BQmnlyYNyQtop6wnNNRd9bv+Pq3
-         anarp6dkCdjp9EteP1wK/48Ytu7agJY3oSpgiXm5VylKZ7OMZj/TSQohQb+7CdW4szm7
-         5xNyeto1aDh7z8T+rcTibMsJq4jvTSRkkbzkZfOPN3Rd4WCeBMxCDADjba2AHAwCdukk
-         4y4SgSNrIcN1xRvMntOtj7PPLCTBmaQhlVVF98qNmkh/2x7lo0R6VmZWKhNAGcZvboDC
-         IP6w==
+        bh=Ah32JKLj65Tb10mc2SlvS0l93Wr7sJeVTGZD/RA6bqM=;
+        b=OZXk5HKyKgHowc4hetOJTA5sM5PSZmoRdnTdv16sXymvQDPG5orRvvAOgGLkEReDp0
+         FL2fGiqSCMM8WYVrwSdIVlVCK+Ala2vYIIpOMHdNdRZycOVmFVp2YFjO+i6LBMdFx0W8
+         DrzGiZHhCCCMD3OnKGJHW+mupc4YmrzkSanivcXFJEnR728j7sJfe9ohAmwSS/m1ejcZ
+         McUMKlGNij3iOlYRLIkErn2vn/0/msiO3h98C/LTxxbC1bdix2O9v+8tSpyYgZnWBHUH
+         4/wbLhYIWtjEOG8jlYWWqTuDssCyx1LUQyiE7MjvvRyW9sZbgKefQH+18uTy3viweVN3
+         uRlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764182494; x=1764787294;
+        d=1e100.net; s=20230601; t=1764182496; x=1764787296;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=v5AIJTSliCzft/R4MKMCKOoevolVdyRiQwHIZI0IpKk=;
-        b=gFz6dHiJ+Gdf6UgOYbDkJGV4+vc0HjYZwu+ikj1bZ7RjF9h4ZtCb2jCxRANWL1NDOW
-         OEDUDtRQJalnndiDsq3WQFtbnicroqGyYjExy6itvH2xZNr5daMTos7lDo/793nNgJlE
-         vnQCYufNCMngSRGc83wJY0Zi/qjF6daNrq1GWa99s9vOyarq+BJhWcHKSWo/R2ae1dfL
-         W4UsRZ3s+deCYDlBd/Q2DqATx6IFtR6FG14VO/XvvMBtOVtLYekGsjuuLXkb8pjgTBPL
-         tHIJSVkSkxjosnmiJBjW12LkdTbDPZTLNUPxLBWCop9DrTH66NHzlm7xtOya9npk1ZeF
-         FFVA==
-X-Forwarded-Encrypted: i=1; AJvYcCVtTENaB0ErRGc9rjN+tIz4DMMYCXkrq0UXg44xB4s5e+T5P2SuKQIlWyxEMAON5xTItIARpSavaxaI+1rds/8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkW8PeaatPHdUw70kiEnEKlyWtyknIj4zGUAQkFpCgcDxJCQZI
-	TqQwt93jRZ26Lc2eQ2bZQHkYcLCn7a6214g6fiTXr6P28yVcU12gu6sQQEZcXgj4tbg=
-X-Gm-Gg: ASbGncvOo8BMPdTFVuSyzGifwgMBa19FQZTUoqQgiYqDhVf1ZITeHfU0aeKYfk2lND4
-	mq/jsC9Thg8XDLdWHPnFTvlBnN8EJwPJiNz2AEhudQsv8IhakqV+ICTa8q2UduJ95tnUFbDgN3R
-	4YOkvM2zbYvBszFFfMr7jv9gAZUnDMMkO+uHjmMt0h+b77OEXIVKcPbv6p4Ev9f7SiGu1O4ajTv
-	m+BI60I4Kd0+UcTnjqIP4m+y8OZoVMXLU091mLa1iF1snK+5HEpoKTuF9aen3+UKICEa89Dl9VW
-	+H8/IFVdYabJc4lqJvL3Whu+q5jJ49ddHtL6FfFBD6sqGxJRhdHg6kWbU+yJVu3Rm2o9i7LNoSZ
-	Jd0TFW4Ldw7POL9K1m2I4b38nSjRTWX9fJAq2nQJj74kok47LA5YUba5H7xhRNBTJ6tZLkwyprL
-	UZIX+vi19IYFdQHw+6a2ggyjzd2Bt5QKAM0+x+c28iGqGETFVQQgTFrKIQPyuhkHT32E9ED3me
-X-Google-Smtp-Source: AGHT+IHKOZzQGfkvDelDc1zjct1s7HRIYV1rQIM2VrRA7sLEUXmzMgwCEl/SerYIvu5apAHiLVU4xg==
-X-Received: by 2002:a05:6214:768:b0:880:5279:98eb with SMTP id 6a1803df08f44-8847c5120ecmr280275526d6.44.1764182494055;
-        Wed, 26 Nov 2025 10:41:34 -0800 (PST)
+        bh=Ah32JKLj65Tb10mc2SlvS0l93Wr7sJeVTGZD/RA6bqM=;
+        b=OcMYm3Jxh1SAAOClRs43Snwk+as7bq7Ebm+L4BFubU3BPHmrAuRS+Y4AxTFfdRp69Z
+         sGd3ZCEAjgyDGrwVu0B72XVnj1wG7bfYT4guZTxvO+deAvQ5ZOW6bQRZpBRTyQN5sPn8
+         x/i1H48sECocVauwMM3y1zrL7n5AD+dctp4jcbYSJjaxTmrzYzM18cSO38NvFoKXDl9V
+         FmkWrsyzqaLS38OMuPJHTwzQvHSTaRvMqUzK6H0NVkYBYzarLWqoYvobMBw8jaNPre6O
+         a2bEBznLMwPJjGg0doeTz5I7xYg1l2gZaQcwj0cIfyFG6pEeTqaXU7iTTRqfjCiF0OGh
+         9KbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV4Rn6UiWO732oETpAUHDRn27s+YSuTS9EaR1HL6y2FOinTVd22ZGuI1gyJUWYEdbEQDMJ8ijdeUgaXLICfVqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yym0DB/R2zn9JR585I0Y7PFxUUo5/+S8zUf3+SD6TRro3jX9xSX
+	P5ZUwzTDO5zVWj91bbrWHUnhfLmetOSiyqV462AwfKvZXuLw3O7xm+iK
+X-Gm-Gg: ASbGncsLc1TWEqE/+KCE7Q8m3CPuUXZQjjKezToMD+CfBklCTySowx/DSiTdFbkBKeK
+	g477M+tg4n1ORRIsNdUGZo/DWk6YJ7aKCCAyXZyjfh2qLNG/mOL4s6npYH1s3oWMUjri5RXej+c
+	0+gx/1P0nN7SQr0jM9YtzaxF7/OIgVkJKlvuWz1QJC2+oZRL8xLTNpTbX8qoXQiGWg7QR7BW7Ck
+	4mwFg0tTcEGIWMiHE2o/PVA9AHYafp1LrGk5A4E32VZL/yWfNk+KTR5610cMEU1oad0UCgjwRL7
+	SI0m3urahv4wNclkEbwh74tEhr7RDF0APanWZCjQl6tm4mwBl379h+nX3InGAfz4x4HL6rnRGtP
+	EZOMAiQ4YbuwgASBvEOma21NoN389TNZU4YWu5vMrr27kY+YO5i9lDo45RyAjxufzSmka5aqk3D
+	5TSIHF+8fP+rh5LFtHptE7y98y5YTZjtOkt0eGNx1xubRTVLlO6J1H9pm0OuuBjgmhC2a8+zH6
+X-Google-Smtp-Source: AGHT+IFEsCg1mSN32D+C3r/VHUzlAz2wwpRVuDST+GsfS6aHpdaamrLaRE/OphYPfzmTkQtgG/qgSQ==
+X-Received: by 2002:a05:6214:3d05:b0:880:5bff:74d6 with SMTP id 6a1803df08f44-8847c536166mr305963936d6.51.1764182495821;
+        Wed, 26 Nov 2025 10:41:35 -0800 (PST)
 Received: from pc.mynetworksettings.com ([2600:4041:4491:2000:9820:e89a:8e2a:90ba])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8846e445b1csm149919506d6.9.2025.11.26.10.41.33
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8846e445b1csm149919506d6.9.2025.11.26.10.41.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 10:41:33 -0800 (PST)
+        Wed, 26 Nov 2025 10:41:35 -0800 (PST)
 From: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
 To: rostedt@goodmis.org,
 	mhiramat@kernel.org,
@@ -85,9 +85,9 @@ Cc: mathieu.desnoyers@efficios.com,
 	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
-Subject: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols and :entry/:exit
-Date: Wed, 26 Nov 2025 13:41:09 -0500
-Message-ID: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
+Subject: [PATCH v4 3/3] selftests/ftrace: Add accept cases for fprobe list syntax
+Date: Wed, 26 Nov 2025 13:41:10 -0500
+Message-ID: <20251126184110.72241-4-seokwoo.chung130@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251126184110.72241-1-seokwoo.chung130@gmail.com>
 References: <20251126184110.72241-1-seokwoo.chung130@gmail.com>
@@ -99,341 +99,110 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-- Update DEFINE_FREE to use standard __free()
-- Extend fprobe to support multiple symbols per event. Add parsing logic for
-  lists, ! exclusions, and explicit suffixes. Update tracefs/README to reflect
-  the new syntax
-
 Signed-off-by: Seokwoo Chung (Ryan) <seokwoo.chung130@gmail.com>
 ---
- kernel/trace/trace.c        |   3 +-
- kernel/trace/trace_fprobe.c | 209 +++++++++++++++++++++++++++---------
- 2 files changed, 163 insertions(+), 49 deletions(-)
+ .../ftrace/test.d/dynevent/fprobe_list.tc     | 92 +++++++++++++++++++
+ 1 file changed, 92 insertions(+)
+ create mode 100644 tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index d1e527cf2aae..e0b77268a702 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5518,7 +5518,8 @@ static const char readme_msg[] =
- 	"\t           r[maxactive][:[<group>/][<event>]] <place> [<args>]\n"
- #endif
- #ifdef CONFIG_FPROBE_EVENTS
--	"\t           f[:[<group>/][<event>]] <func-name>[%return] [<args>]\n"
-+	"\t           f[:[<group>/][<event>]] <func-name>[:entry|:exit] [<args>]\n"
-+	"\t		(single symbols still accept %return)\n"
- 	"\t           t[:[<group>/][<event>]] <tracepoint> [<args>]\n"
- #endif
- #ifdef CONFIG_HIST_TRIGGERS
-diff --git a/kernel/trace/trace_fprobe.c b/kernel/trace/trace_fprobe.c
-index 8001dbf16891..6307d7d7dd9c 100644
---- a/kernel/trace/trace_fprobe.c
-+++ b/kernel/trace/trace_fprobe.c
-@@ -187,11 +187,14 @@ DEFINE_FREE(tuser_put, struct tracepoint_user *,
-  */
- struct trace_fprobe {
- 	struct dyn_event	devent;
-+	char			*filter;
- 	struct fprobe		fp;
-+	bool			list_mode;
-+	char			*nofilter;
- 	const char		*symbol;
-+	struct trace_probe	tp;
- 	bool			tprobe;
- 	struct tracepoint_user	*tuser;
--	struct trace_probe	tp;
- };
- 
- static bool is_trace_fprobe(struct dyn_event *ev)
-@@ -559,6 +562,8 @@ static void free_trace_fprobe(struct trace_fprobe *tf)
- 		trace_probe_cleanup(&tf->tp);
- 		if (tf->tuser)
- 			tracepoint_user_put(tf->tuser);
-+		kfree(tf->filter);
-+		kfree(tf->nofilter);
- 		kfree(tf->symbol);
- 		kfree(tf);
- 	}
-@@ -838,7 +843,12 @@ static int __register_trace_fprobe(struct trace_fprobe *tf)
- 	if (trace_fprobe_is_tracepoint(tf))
- 		return __regsiter_tracepoint_fprobe(tf);
- 
--	/* TODO: handle filter, nofilter or symbol list */
-+	/* Registration path:
-+	 * - list_mode: pass filter/nofilter
-+	 * - single: pass symbol only (legacy)
-+	 */
-+	if (tf->list_mode)
-+		return register_fprobe(&tf->fp, tf->filter, tf->nofilter);
- 	return register_fprobe(&tf->fp, tf->symbol, NULL);
- }
- 
-@@ -1154,60 +1164,119 @@ static struct notifier_block tprobe_event_module_nb = {
- };
- #endif /* CONFIG_MODULES */
- 
--static int parse_symbol_and_return(int argc, const char *argv[],
--				   char **symbol, bool *is_return,
--				   bool is_tracepoint)
-+static bool has_wildcard(const char *s)
- {
--	char *tmp = strchr(argv[1], '%');
--	int i;
-+	return s && (strchr(s, '*') || strchr(s, '?'));
-+}
- 
--	if (tmp) {
--		int len = tmp - argv[1];
-+static int parse_fprobe_spec(const char *in, bool is_tracepoint,
-+		char **base, bool *is_return, bool *list_mode,
-+		char **filter, char **nofilter)
-+{
-+	char *work __free(kfree) = NULL;
-+	char *b __free(kfree) = NULL;
-+	char *f __free(kfree) = NULL;
-+	char *nf __free(kfree) = NULL;
-+	bool legacy_ret = false;
-+	bool list = false;
-+	const char *p;
-+	int ret = 0;
- 
--		if (!is_tracepoint && !strcmp(tmp, "%return")) {
--			*is_return = true;
--		} else {
--			trace_probe_log_err(len, BAD_ADDR_SUFFIX);
--			return -EINVAL;
--		}
--		*symbol = kmemdup_nul(argv[1], len, GFP_KERNEL);
--	} else
--		*symbol = kstrdup(argv[1], GFP_KERNEL);
--	if (!*symbol)
--		return -ENOMEM;
-+	if (!in || !base || !is_return || !list_mode || !filter || !nofilter)
-+		return -EINVAL;
- 
--	if (*is_return)
--		return 0;
-+	*base = NULL; *filter = NULL; *nofilter = NULL;
-+	*is_return = false; *list_mode = false;
- 
- 	if (is_tracepoint) {
--		tmp = *symbol;
--		while (*tmp && (isalnum(*tmp) || *tmp == '_'))
--			tmp++;
--		if (*tmp) {
--			/* find a wrong character. */
--			trace_probe_log_err(tmp - *symbol, BAD_TP_NAME);
--			kfree(*symbol);
--			*symbol = NULL;
-+		if (strchr(in, ',') || strchr(in, ':'))
- 			return -EINVAL;
--		}
-+		if (strstr(in, "%return"))
-+			return -EINVAL;
-+		for (p = in; *p; p++)
-+			if (!isalnum(*p) && *p != '_')
-+				return -EINVAL;
-+		b = kstrdup(in, GFP_KERNEL);
-+		if (!b)
-+			return -ENOMEM;
-+		*base = no_free_ptr(b);
-+		return 0;
- 	}
- 
--	/* If there is $retval, this should be a return fprobe. */
--	for (i = 2; i < argc; i++) {
--		tmp = strstr(argv[i], "$retval");
--		if (tmp && !isalnum(tmp[7]) && tmp[7] != '_') {
--			if (is_tracepoint) {
--				trace_probe_log_set_index(i);
--				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
--				kfree(*symbol);
--				*symbol = NULL;
-+	work = kstrdup(in, GFP_KERNEL);
-+	if (!work)
-+		return -ENOMEM;
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc
+new file mode 100644
+index 000000000000..45e57c6f487d
+--- /dev/null
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/fprobe_list.tc
+@@ -0,0 +1,92 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++# description: Fprobe event list syntax and :entry/:exit suffixes
++# requires: dynamic_events "f[:[<group>/][<event>]] <func-name>[:entry|:exit] [<args>]":README
 +
-+	p = strstr(work, "%return");
-+	if (p && p[7] == '\0') {
-+		*is_return = true;
-+		legacy_ret = true;
-+		*(char *)p = '\0';
-+	} else {
-+		/*
-+		 * If "symbol:entry" or "symbol:exit" is given, it is new
-+		 * style probe.
-+		 */
-+		p = strrchr(work, ':');
-+		if (p) {
-+			if (!strcmp(p, ":exit")) {
-+				*is_return = true;
-+				*(char *)p = '\0';
-+			} else if (!strcmp(p, ":entry")) {
-+				*(char *)p = '\0';
-+			} else {
- 				return -EINVAL;
- 			}
--			*is_return = true;
--			break;
- 		}
- 	}
--	return 0;
++# Setup symbols to test. These are common kernel functions.
++PLACE=vfs_read
++PLACE2=vfs_write
++PLACE3=vfs_open
 +
-+	list = !!strchr(work, ',');
-+	
-+	if (list && legacy_ret) {
-+		return -EINVAL;
-+	}
++echo 0 > events/enable
++echo > dynamic_events
 +
-+	if (legacy_ret)
-+		*is_return = true;
++# Get baseline count of enabled functions (should be 0 if clean, but be safe)
++if [ -f enabled_functions ]; then
++	ocnt=`cat enabled_functions | wc -l`
++else
++	ocnt=0
++fi
 +
-+	b = kstrdup(work, GFP_KERNEL);
-+	if (!b)
-+		return -ENOMEM;
++# Test 1: List default (entry) with exclusion
++# Target: Trace vfs_read and vfs_open, but EXCLUDE vfs_write
++echo "f:test/list_entry $PLACE,!$PLACE2,$PLACE3" >> dynamic_events
++grep -q "test/list_entry" dynamic_events
++test -d events/test/list_entry
 +
-+	if (list) {
-+		char *tmp = b, *tok;
-+		size_t fsz, nfsz;
++echo 1 > events/test/list_entry/enable
 +
-+		fsz = nfsz = strlen(b) + 1;
++grep -q "$PLACE" enabled_functions
++grep -q "$PLACE3" enabled_functions
++! grep -q "$PLACE2" enabled_functions
 +
-+		f = kzalloc(fsz, GFP_KERNEL);
-+		nf = kzalloc(nfsz, GFP_KERNEL);
-+		if (!f || !nf)
-+			return -ENOMEM;
++# Check count (Baseline + 2 new functions)
++cnt=`cat enabled_functions | wc -l`
++if [ $cnt -ne $((ocnt + 2)) ]; then
++	exit_fail
++fi
 +
-+		while ((tok = strsep(&tmp, ",")) != NULL) {
-+			char *dst;
-+			bool neg = (*tok == '!');
++# Cleanup Test 1
++echo 0 > events/test/list_entry/enable
++echo "-:test/list_entry" >> dynamic_events
++! grep -q "test/list_entry" dynamic_events
 +
-+			if (*tok == '\0') {
-+				trace_probe_log_err(tmp - b - 1, BAD_TP_NAME);
-+				return -EINVAL;
++# Count should return to baseline
++cnt=`cat enabled_functions | wc -l`
++if [ $cnt -ne $ocnt ]; then
++	exit_fail
++fi
 +
-+			if (neg)
-+				tok++;
-+			dst = neg ? nf : f;
-+			if (dst[0] != '\0')
-+				strcat(dst, ",");
-+			strcat(dst, tok);
-+		}
-+		*list_mode = true;
-+	}
++# Test 2: List with explicit :entry suffix
++# (Should behave exactly like Test 1)
++echo "f:test/list_entry_exp $PLACE,!$PLACE2,$PLACE3:entry" >> dynamic_events
++grep -q "test/list_entry_exp" dynamic_events
++test -d events/test/list_entry_exp
 +
-+	*base = no_free_ptr(b);
-+	*filter = no_free_ptr(f);
-+	*nofilter = no_free_ptr(nf);
++echo 1 > events/test/list_entry_exp/enable
 +
-+	return ret;
- }
- 
- static int trace_fprobe_create_internal(int argc, const char *argv[],
-@@ -1241,6 +1310,8 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
- 	const char *event = NULL, *group = FPROBE_EVENT_SYSTEM;
- 	struct module *mod __free(module_put) = NULL;
- 	const char **new_argv __free(kfree) = NULL;
-+	char *parsed_nofilter __free(kfree) = NULL;
-+	char *parsed_filter __free(kfree) = NULL;
- 	char *symbol __free(kfree) = NULL;
- 	char *ebuf __free(kfree) = NULL;
- 	char *gbuf __free(kfree) = NULL;
-@@ -1249,6 +1320,7 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
- 	char *dbuf __free(kfree) = NULL;
- 	int i, new_argc = 0, ret = 0;
- 	bool is_tracepoint = false;
-+	bool list_mode = false;
- 	bool is_return = false;
- 
- 	if ((argv[0][0] != 'f' && argv[0][0] != 't') || argc < 2)
-@@ -1270,11 +1342,26 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
- 
- 	trace_probe_log_set_index(1);
- 
--	/* a symbol(or tracepoint) must be specified */
--	ret = parse_symbol_and_return(argc, argv, &symbol, &is_return, is_tracepoint);
-+	/* Parse spec early (single vs list, suffix, base symbol) */
-+	ret = parse_fprobe_spec(argv[1], is_tracepoint, &symbol, &is_return,
-+			&list_mode, &parsed_filter, &parsed_nofilter);
- 	if (ret < 0)
- 		return -EINVAL;
- 
-+	for (i = 2; i < argc; i++) {
-+		char *tmp = strstr(argv[i], "$retval");
++grep -q "$PLACE" enabled_functions
++grep -q "$PLACE3" enabled_functions
++! grep -q "$PLACE2" enabled_functions
 +
-+		if (tmp && !isalnum(tmp[7]) && tmp[7] != '_') {
-+			if (is_tracepoint) {
-+				trace_probe_log_set_index(i);
-+				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
-+				return -EINVAL;
-+			}
-+			is_return = true;
-+			break;
-+		}
-+	}
++cnt=`cat enabled_functions | wc -l`
++if [ $cnt -ne $((ocnt + 2)) ]; then
++	exit_fail
++fi
 +
- 	trace_probe_log_set_index(0);
- 	if (event) {
- 		gbuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
-@@ -1287,6 +1374,15 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
- 	}
- 
- 	if (!event) {
-+		/*
-+		 * Event name rules:
-+		 * - For list/wildcard: require explicit [GROUP/]EVENT
-+		 * - For single literal: autogenerate symbol__entry/symbol__exit
-+		 */
-+		if (list_mode || has_wildcard(symbol)) {
-+			trace_probe_log_err(0, NO_GROUP_NAME);
-+			return -EINVAL;
-+		}
- 		ebuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
- 		if (!ebuf)
- 			return -ENOMEM;
-@@ -1322,7 +1418,8 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
- 							NULL, NULL, NULL, sbuf);
- 		}
- 	}
--	if (!ctx->funcname)
++# Cleanup Test 2
++echo 0 > events/test/list_entry_exp/enable
++echo "-:test/list_entry_exp" >> dynamic_events
 +
-+	if (!list_mode && !has_wildcard(symbol) && !is_tracepoint)
- 		ctx->funcname = symbol;
- 
- 	abuf = kmalloc(MAX_BTF_ARGS_LEN, GFP_KERNEL);
-@@ -1356,6 +1453,21 @@ static int trace_fprobe_create_internal(int argc, const char *argv[],
- 		return ret;
- 	}
- 
-+	/* carry list parsing result into tf */
-+	if (!is_tracepoint) {
-+		tf->list_mode = list_mode;
-+		if (parsed_filter) {
-+			tf->filter = kstrdup(parsed_filter, GFP_KERNEL);
-+			if (!tf->filter)
-+				return -ENOMEM;
-+		}
-+		if (parsed_nofilter) {
-+			tf->nofilter = kstrdup(parsed_nofilter, GFP_KERNEL);
-+			if (!tf->nofilter)
-+				return -ENOMEM;
-+		}
-+	}
++# Test 3: List with :exit suffix
++echo "f:test/list_exit $PLACE,!$PLACE2,$PLACE3:exit" >> dynamic_events
++grep -q "test/list_exit" dynamic_events
++test -d events/test/list_exit
 +
- 	/* parse arguments */
- 	for (i = 0; i < argc; i++) {
- 		trace_probe_log_set_index(i + 2);
-@@ -1442,8 +1554,9 @@ static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
- 	seq_printf(m, ":%s/%s", trace_probe_group_name(&tf->tp),
- 				trace_probe_name(&tf->tp));
- 
--	seq_printf(m, " %s%s", trace_fprobe_symbol(tf),
--			       trace_fprobe_is_return(tf) ? "%return" : "");
-+	seq_printf(m, " %s", trace_fprobe_symbol(tf));
-+	if (!trace_fprobe_is_tracepoint(tf) && trace_fprobe_is_return(tf))
-+		seq_puts(m, ":exit");
- 
- 	for (i = 0; i < tf->tp.nr_args; i++)
- 		seq_printf(m, " %s=%s", tf->tp.args[i].name, tf->tp.args[i].comm);
++echo 1 > events/test/list_exit/enable
++
++# Even for return probes, enabled_functions lists the attached symbols
++grep -q "$PLACE" enabled_functions
++grep -q "$PLACE3" enabled_functions
++! grep -q "$PLACE2" enabled_functions
++
++cnt=`cat enabled_functions | wc -l`
++if [ $cnt -ne $((ocnt + 2)) ]; then
++	exit_fail
++fi
++
++# Cleanup Test 3
++echo 0 > events/test/list_exit/enable
++echo "-:test/list_exit" >> dynamic_events
++
++clear_trace
 -- 
 2.43.0
 
