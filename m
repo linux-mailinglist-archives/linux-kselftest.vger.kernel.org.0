@@ -1,223 +1,321 @@
-Return-Path: <linux-kselftest+bounces-46541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A32F9C8B783
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 19:42:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14B42C8B97D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 20:36:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 88D0F4E4E92
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 18:42:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C37183B03DB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 19:36:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8780B33F363;
-	Wed, 26 Nov 2025 18:41:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA58433E354;
+	Wed, 26 Nov 2025 19:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u1zPS+LK"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="S8ur7mVI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D11D331237;
-	Wed, 26 Nov 2025 18:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B562D27A907
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 19:36:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764182506; cv=none; b=L1MZzFhzSdDlClvec+pCoqWxHu+N/O0l/ChhMGzL7V4dYNE37PN228mHnhEAzWxTfY8l3k15pQ/Pb2nGC7fE26so/N9BDYmKqhxGh+TgQQ6X3dIxdJ79x8dMP8l8Cof/KYLoSA/UcGZS7pIFyZ7OgX9P8Mbna9fy/xfy+mj0oLU=
+	t=1764185773; cv=none; b=ZoMDzLeG6nhiTgPjYph7dwhEjiwGhu8tO+4TzCdI+7QIn/88dFWPI2DApUqgNFScvr+Ck1bgIAAfF4WutGDbHSBYaT0VTSUK7yMKdmAhrHvDIsQ0vRdCjluIUHHseQLXGLBxN3WKKoeQxOFmmZAOFqfIPgFfHjPMRGt6zvo0WS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764182506; c=relaxed/simple;
-	bh=OrhxCJrCTAVZNlhdhhsJnvnRtmy8sEmyPzUtcg6Xrw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GssvyNDWuK24o/KCEf5YniPvHcrGTr3nrffMss3CDur0wuic/pFh32+wbfCnDbxDxKTd6PEPeVAocniez1mA68DmMtnaGttGjFgnZVeU6pvktv5WFXdGMMivjTvjcplAEVfOHDGuJcuF2PcoL1U8rMffA/26SpYX6t1qwNBMyeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u1zPS+LK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C166C4CEF8;
-	Wed, 26 Nov 2025 18:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764182505;
-	bh=OrhxCJrCTAVZNlhdhhsJnvnRtmy8sEmyPzUtcg6Xrw4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u1zPS+LKUaXXpTefzHkDWvnRO47r2FZ8n+VfyP6uAEXavpdrJ98W4D0ey5rqVQL2b
-	 2kszPt8wjH6Ol4z2gl2D2DiQqTajn79gCa1MzviSWJxj5+/jQSZ60fxptQztxSz4ET
-	 0HLdIhBY0PA+USuTNyivVs32an/VfAP7QFm7y7VP8+dChFC+NeQeoG1P85OAM5DzTj
-	 In1e6YUqNJMlhUEt7m8V9Eoju6QjA8OsR/ejIs9jV/Ln7jBXGWFasGxxH3EO0NwkTG
-	 0ApqTvKMaPdShngMRvVSRoUfN7cZ1eJ/DaeAITctDy82/41WBm3INKD5BK9nHKMHjg
-	 PUS+LdeMvdfuQ==
-Date: Wed, 26 Nov 2025 18:41:39 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Dave Martin <Dave.Martin@arm.com>
-Cc: Peter Maydell <peter.maydell@linaro.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Fuad Tabba <tabba@google.com>, Mark Rutland <mark.rutland@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Eric Auger <eric.auger@redhat.com>
-Subject: Re: [PATCH v8 11/29] KVM: arm64: Document the KVM ABI for SME
-Message-ID: <8d27e309-15d7-47de-b51a-9f0e0bfa4766@sirena.org.uk>
-References: <20250902-kvm-arm64-sme-v8-0-2cb2199c656c@kernel.org>
- <20250902-kvm-arm64-sme-v8-11-2cb2199c656c@kernel.org>
- <CAFEAcA_GJ7gzn7aMCZYxHnJWvx4tHSHBKsOxtQ7NTb4gPjkMJQ@mail.gmail.com>
- <df712591-397e-422b-b9c9-fbf080cad9aa@sirena.org.uk>
- <aScfSMZEKCeUq7Zn@e133380.arm.com>
+	s=arc-20240116; t=1764185773; c=relaxed/simple;
+	bh=wdiTzfoiWi8flXhWTee2uq/9lBs376X8MQrM5Xh2PIE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ZHJ2ayS+7fGKsi9g235BD87PIQJApGNzqj35ilwF7aEKIl9rYRuuXpVQrTEshG7ePLt555GmTmGgUSnlF6cvjQDN8ed9oKBqVkRZOHv65YjXTTBW+3Ymt3EGg+amCe5gMlM9KNOJP7zPO/8hm/xfup6cwvhj3VxQE+L7zZg2REc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=S8ur7mVI; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7a4c4eeeef2so175061b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 11:36:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764185771; x=1764790571; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e4TlWrAe/4n7yxCRwObEG+IsI5t1kC6kq4+FowfY9Ic=;
+        b=S8ur7mVITy2gcoG+j4MgxqZlyIle9uj/LKpZCBMskhN1QOyWcT4E17uoqATwvtK46g
+         ZIGPkN7q7c4HCxmSvzPjEn37Iy8Gz4MwCwZzaZgWzHIPlll66nuSHu6vAkdGVvy337lt
+         s0V9YXWAmeKdpHIGbIx2K+nDkevGo7LNaAnCZIBfk1B02LVMJulFObJ4Z4qA5Y802YFt
+         9h8l6miobIB78DtD8id+zFHcQrQ4wtx7fjwCzy3cJbrEkmVnED16Tr7tW+F4mMZQw7UV
+         /lt+xSwp2TleDbQt5UAO2YMDI8vtjW1TwUCUZzT7Yt9hEiVgD1VB9U+B42j7F2Fjs3TY
+         zf9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764185771; x=1764790571;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e4TlWrAe/4n7yxCRwObEG+IsI5t1kC6kq4+FowfY9Ic=;
+        b=Ve+Ma8GIlu/JauGKxpLLn8oibJ1MuEBVIKbtByDi9quJKtEKVZXN0CuQs0NJVDpA57
+         qloNVbWsAg6t+oe0Y+GmI3tsqmYw1AQLGX5YaHgGqj37w9soUzNNtgoyG4i7LE3onHt6
+         tJG6QxAFGnh/XvOcIZvxMWvk4imiP1pEFRLfjOMjgpCIGXK6Xp2ninEJ3OmkRtAfRxAP
+         ybehstzWTRDXHO6AyIFZK1mYiIqjLYDtCUNNVl1GLzdv9kvObJrEi3VDA0E2CMKtWPDe
+         YC7iv5L1AKI0hZVXqMksqVU7F5arz93bhvzb+Yn5/XZ3YTWp4uln9/AKJY21MAHLzSQM
+         EsMA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfQeUmihZGmUQ0eu6hNcAnpDgTAgN+tW8Ar0tdFyJfGSvxgG+SKULFWW8wXhuJuGiMuzkXfxfSdoxJVNGzp1E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZZ1h6EkjnrFT8wQvvP/TfjFKtTZe+/3QTx4mUPDIBxY4dPtLQ
+	Dt2N0HWs+Ke6IRwZbnjT7vNrd3LcO4MWBd/Pr6LSjElzN63ebiC1FisrZS/fkxaxR9jm2JznaAd
+	v0wJS6trM7nv9jw==
+X-Google-Smtp-Source: AGHT+IEHbsigKIplHHxqv3Y5oFPoEosqidqUdTdsObyZw4vOpd3yAV5ZgTmjD2o7uDOT9sLmmm0JWWf8SQqwug==
+X-Received: from pfbly20.prod.google.com ([2002:a05:6a00:7594:b0:7b9:55bc:4970])
+ (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:2d9a:b0:7b6:363b:c678 with SMTP id d2e1a72fcca58-7ca8760d166mr9728241b3a.6.1764185770882;
+ Wed, 26 Nov 2025 11:36:10 -0800 (PST)
+Date: Wed, 26 Nov 2025 19:35:47 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="qeptf6kasDv7BEH7"
-Content-Disposition: inline
-In-Reply-To: <aScfSMZEKCeUq7Zn@e133380.arm.com>
-X-Cookie: Murphy was an optimist.
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.487.g5c8c507ade-goog
+Message-ID: <20251126193608.2678510-1-dmatlack@google.com>
+Subject: [PATCH 00/21] vfio/pci: Base support to preserve a VFIO device file
+ across Live Update
+From: David Matlack <dmatlack@google.com>
+To: Alex Williamson <alex@shazbot.org>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>, Alex Mastro <amastro@fb.com>, 
+	Alistair Popple <apopple@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>, 
+	David Matlack <dmatlack@google.com>, David Rientjes <rientjes@google.com>, 
+	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, 
+	kvm@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org, 
+	Lukas Wunner <lukas@wunner.de>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Philipp Stanner <pstanner@redhat.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>, 
+	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, William Tu <witu@nvidia.com>, 
+	Yi Liu <yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>, 
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
+This series adds the base support to preserve a VFIO device file across
+a Live Update. "Base support" means that this allows userspace to
+safetly preserve a VFIO device file with LIVEUPDATE_SESSION_PRESERVE_FD
+and retrieve a preserved VFIO device file with
+LIVEUPDATE_SESSION_RETRIEVE_FD, but the device itself is not preserved
+in a fully running state across Live Update.
 
---qeptf6kasDv7BEH7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This series unblocks 2 parallel but related streams of work:
 
-On Wed, Nov 26, 2025 at 05:23:47PM +0000, Dave Martin wrote:
-> On Mon, Nov 24, 2025 at 08:12:56PM +0000, Mark Brown wrote:
-> > On Mon, Nov 24, 2025 at 03:48:06PM +0000, Peter Maydell wrote:
+ - iommufd preservation across Live Update. This work spans iommufd,
+   the IOMMU subsystem, and IOMMU drivers [1]
 
-> > > >  .. [1] These encodings are not accepted for SVE-enabled vcpus.  See
-> > > > -       :ref:`KVM_ARM_VCPU_INIT`.
-> > > > +       :ref:`KVM_ARM_VCPU_INIT`.  They are also not accepted when =
-SME is
-> > > > +       enabled without SVE and the vcpu is in streaming mode.
+ - Preservation of VFIO device state across Live Update (config space,
+   BAR addresses, power state, SR-IOV state, etc.). This work spans both
+   VFIO and the core PCI subsystem.
 
-> > > Does this mean that on an SME-no-SVE VM the VMM needs to know
-> > > if the vcpu is currently in streaming mode or not to determine
-> > > whether to read the FP registers as fp_regs or sve regs? That
-> > > seems unpleasant -- I was expecting this to be strictly a
-> > > matter of how the VM was configured (as it is with SVE).
+While we need all of the above to fully preserve a VFIO device across a
+Live Update without disrupting the workload on the device, this series
+aims to be functional and safe enough to merge as the first incremental
+step toward that goal.
 
-> > Yes, it does.
+Areas for Discussion
+--------------------
 
-> Is the above condition right re streaming mode?  The original reason
-> for this restriction was that the SVE Z-regs and FPSIMD V-regs are
-> aliases when SVE is present.  To avoid having to worry about how to
-> order register accesses and/or paste parts of them together, we went
-> down the road of banishing encodings that alias a subset of the
-> register state accessed by some other encoding.
+BDF Stability across Live Update
 
-I queried the issue with requiring that writes to the registers be done
-in a specific order - we apparently have some other examples of this
-already (I would need to go and check which specifically) so that was
-seen as OK.
+  The PCI support for tracking preserved devices across a Live Update to
+  prevent auto-probing relies on PCI segment numbers and BDFs remaining
+  stable. For now I have disallowed VFs, as the BDFs assigned to VFs can
+  vary depending on how the kernel chooses to allocate bus numbers. For
+  non-VFs I am wondering if there is any more needed to ensure BDF
+  stability across Live Update.
 
-> In line with this principle, with SME Vn and Zn are aliases when
-> *not* in streaming mode, so allowing access through the Vn view feels
-> problematic too?  (And when in streaming mode, the Vn regs don't exist
-> at all.)
+  While we would like to support many different systems and
+  configurations in due time (including preserving VFs), I'd like to
+  keep this first serses constrained to simple use-cases.
 
-The ABI proposed here is that the V registers will only be available
-with a VM that lacks SVE, you'll never have them both simultaneously but
-rather which is available at any given moment will vary on a SME without
-SVE VM.  This obviously has complications, but aliasing is not one of
-them.
+FLB Locking
 
-Another option would be to represent the V registers as 128 bit Z
-registers, giving you something similar to how they'd appear on a VM
-with both SVE and SME for a SME only VM.
+  I don't see a way to properly synchronize pci_flb_finish() with
+  pci_liveupdate_incoming_is_preserved() since the incoming FLB mutex is
+  dropped by liveupdate_flb_get_incoming() when it returns the pointer
+  to the object, and taking pci_flb_incoming_lock in pci_flb_finish()
+  could result in a deadlock due to reversing the lock ordering.
 
-> Whether the proposed ABI is considered awkward for VMMs or not is a
-> separate matter...)
+FLB Retrieving
 
-Indeed.
+  The first patch of this series includes a fix to prevent an FLB from
+  being retrieved again it is finished. I am wondering if this is the
+  right approach or if subsystems are expected to stop calling
+  liveupdate_flb_get_incoming() after an FLB is finished.
 
-> > > > +       max_vq.  This is the maximum vector length currently availa=
-ble to
-> > > > +       the guest on this vcpu, and determines which register slice=
-s are
-> > > > +       visible through this ioctl interface.
-> >=20
-> > > > +       If SME is supported then the max_vq used for the Z and P re=
-gisters
-> > > > +       while SVCR.SM is 1 this vector length will be the maximum S=
-ME
-> > > > +       vector length available for the guest, otherwise it will be=
- the
-> > > > +       maximum SVE vector length available.
+Testing
+-------
 
-> The max_vq name here is not ABI; it's just linking concepts together in
-> the documentation text.
+The patches at the end of this series provide comprehensive selftests
+for the new code added by this series. The selftests have been validated
+in both a VM environment using a virtio-net PCIe device, and in a
+baremetal environment on an Intel EMR server with an Intel DSA device.
 
-> So, can we give explicitly different names to these two max_vq values?
+Here is an example of how to run the new selftests:
 
-We could call them sve_max_vq and sme_max_vq?
+vfio_pci_liveupdate_uapi_test:
 
-> Splitting the affected register descriptions into "SVCR.SM =3D=3D 0" and
-> "SVCR.SM =3D=3D 1" cases also be helpful to make this special-casing clea=
-r.
+  $ tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+  $ tools/testing/selftests/vfio/vfio_pci_liveupdate_uapi_test 0000:00:04.0
+  $ tools/testing/selftests/vfio/scripts/cleanup.sh
 
-Possibly I'm looking at the wrong thing here but the overall text for
-describing the vector registers is relatively long so I worry that it'd
-be harder for readers to play spot the difference if there was
-duplication.  I figured explicitly calling out the differences would be
-clearer and less error prone in terms of any future updates.
+vfio_pci_liveupdate_kexec_test:
 
-> > This is attempting to say that the VL for the Z and P registers (and
-> > FFR) will vary depending on if the vCPU is in streaming mode or not if
-> > the maximum VL for SVE and SME differs, similarly to how the Z, P and
-> > FFR registers disappear when we are not in streaming mode in a SME only
-> > system.
+  $ tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+  $ tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test --stage 1 0000:00:04.0
+  $ kexec [...]  # NOTE: distro-dependent
 
-> May flipping SVCR.SM through KVM_SET_ONE_REG have the architectural
-> effect of zeroing the vector regs?  That feels like something that
-> should be stated explicitly.
+  $ tools/testing/selftests/vfio/scripts/setup.sh 0000:00:04.0
+  $ tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test --stage 2 0000:00:04.0
+  $ tools/testing/selftests/vfio/scripts/cleanup.sh
 
-Yes, it should zero them - I'll find some place/way to add that.
+Dependencies
+------------
 
-> I'd agree that this mutating interface feels odd, and does not follow
-> the original spirit of the design here.
+This series was constructed on top of several in-flight series and on
+top of mm-nonmm-unstable [2].
 
-> But the SME architecture doesn't fit well with the spirit of the
-> original KVM ABI here either, so I guess there won't be a perfect
-> solution.
+  +-- This series
+  |
+  +-- [PATCH v2 00/18] vfio: selftests: Support for multi-device tests
+  |    https://lore.kernel.org/kvm/20251112192232.442761-1-dmatlack@google.com/
+  |
+  +-- [PATCH v3 0/4] vfio: selftests: update DMA mapping tests to use queried IOVA ranges
+  |   https://lore.kernel.org/kvm/20251111-iova-ranges-v3-0-7960244642c5@fb.com/
+  |
+  +-- [PATCH v8 0/2] Live Update: File-Lifecycle-Bound (FLB) State
+  |   https://lore.kernel.org/linux-mm/20251125225006.3722394-1-pasha.tatashin@soleen.com/
+  |
+  +-- [PATCH v8 00/18] Live Update Orchestrator
+  |   https://lore.kernel.org/linux-mm/20251125165850.3389713-1-pasha.tatashin@soleen.com/
+  |
 
-Something's going to be awkward somewhere.
+To simplify checking out the code, this series can be found on GitHub:
 
-> It seems that when SME is enabled in the vCPU features and the VMM is
-> planning to dump or set affected registers, there is a requirement to
-> dump / set SVCR.SM first, and then go down one of two code paths.  Can
-> this be called out explicitly?  This is a departure from the the
-> previous interaction model, so it probably deserves its own section,
-> which can then be cross-referenced from individual reg
-> descriptions.
+  https://github.com/dmatlack/linux/tree/liveupdate/vfio/cdev/v1
 
-> SVCR.SM exhibits this modality w.r.t a specific set of affected
-> register encodings; it would be good to have that captured clearly in
-> one place.
+Changelog
+---------
 
-As I said above my understanding is that this is not actually a
-departure from the current stituation, this not being noticed probably
-highlights why it'd be good to improve the documentation here!  I think
-grouping all behaviours like this together would be good from a
-usability point of view.  I don't know how much of that that fits
-directly in the ABI document or in a separate "here's some gotchas" type
-document, things are already getting a bit difficult to manage.
-Possibly both.
+v1:
+ - Rebase series on top of LUOv8 and VFIO selftests improvements
+ - Drop commits to preserve config space fields across Live Update.
+   These changes require changes to the PCI layer. For exmaple,
+   preserving rbars could lead to an inconsistent device state until
+   device BARs addresses are preserved across Live Update.
+ - Drop commits to preserve Bus Master Enable on the device. There's no
+   reason to preserve this until iommufd preservation is fully working.
+   Furthermore, preserving Bus Master Enable could lead to memory
+   corruption when the device if the device is bound to the default
+   identity-map domain after Live Update.
+ - Drop commits to preserve saved PCI state. This work is not needed
+   until we are ready to preserve the device's config space, and
+   requires more thought to make the PCI state data layout ABI-friendly.
+ - Add support to skip auto-probing devices that are preserved by VFIO
+   to avoid them getting bound to a different driver by the next kernel.
+ - Restrict device preservation further (no VFs, no intel-graphics).
+ - Various refactoring and small edits to improve readability and
+   eliminate code duplication.
 
---qeptf6kasDv7BEH7
-Content-Type: application/pgp-signature; name="signature.asc"
+rfc: https://lore.kernel.org/kvm/20251018000713.677779-1-vipinsh@google.com/
 
------BEGIN PGP SIGNATURE-----
+Cc: Saeed Mahameed <saeedm@nvidia.com>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Parav Pandit <parav@nvidia.com>
+Cc: Leon Romanovsky <leonro@nvidia.com>
+Cc: William Tu <witu@nvidia.com>
+Cc: Jacob Pan <jacob.pan@linux.microsoft.com>
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Pratyush Yadav <pratyush@kernel.org>
+Cc: Samiullah Khawaja <skhawaja@google.com>
+Cc: Chris Li <chrisl@kernel.org>
+Cc: Josh Hilke <jrhilke@google.com>
+Cc: David Rientjes <rientjes@google.com>
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmknSeIACgkQJNaLcl1U
-h9Docgf/cPhrqw0FDee6DcZOryTwO1VKQ+JqiWC1SI9SblwgQ/XgIeIYAQSjWrPM
-0pvT2htq6pm7QwQc0l0eX4Np6yo/OSjiCrjuCkJF1QHevk3sdguC+hCjaabkfDBm
-LbPLGdx3q7k6E4zza+kXg6inA0+D3T/fvLnFvvrDgnu7V3FmHlRCoIvinIpOeWZR
-7qZ+rZdUBKnljxQXBbbx3NPx5//xeYHlzxXLXwJU2CzCCSOSqKGIpuM0nLVaaoZS
-4sCzTBvU112uGizcjZGRruKfZ59Mp+xQKUrxnFb2HaO8udriyait0aMv7s08Xw/V
-z3/GvVCRxxcUSHXSYIwmWQPJeVqv4w==
-=dEOw
------END PGP SIGNATURE-----
+[1] https://lore.kernel.org/linux-iommu/20250928190624.3735830-1-skhawaja@google.com/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/log/?h=mm-nonmm-unstable
 
---qeptf6kasDv7BEH7--
+David Matlack (12):
+  liveupdate: luo_flb: Prevent retrieve() after finish()
+  PCI: Add API to track PCI devices preserved across Live Update
+  PCI: Require driver_override for incoming Live Update preserved
+    devices
+  vfio/pci: Notify PCI subsystem about devices preserved across Live
+    Update
+  vfio: Enforce preserved devices are retrieved via
+    LIVEUPDATE_SESSION_RETRIEVE_FD
+  vfio/pci: Store Live Update state in struct vfio_pci_core_device
+  vfio: selftests: Add Makefile support for TEST_GEN_PROGS_EXTENDED
+  vfio: selftests: Add vfio_pci_liveupdate_uapi_test
+  vfio: selftests: Expose iommu_modes to tests
+  vfio: selftests: Expose low-level helper routines for setting up
+    struct vfio_pci_device
+  vfio: selftests: Verify that opening VFIO device fails during Live
+    Update
+  vfio: selftests: Add continuous DMA to vfio_pci_liveupdate_kexec_test
+
+Vipin Sharma (9):
+  vfio/pci: Register a file handler with Live Update Orchestrator
+  vfio/pci: Preserve vfio-pci device files across Live Update
+  vfio/pci: Retrieve preserved device files after Live Update
+  vfio/pci: Skip reset of preserved device after Live Update
+  selftests/liveupdate: Move luo_test_utils.* into a reusable library
+  selftests/liveupdate: Add helpers to preserve/retrieve FDs
+  vfio: selftests: Build liveupdate library in VFIO selftests
+  vfio: selftests: Initialize vfio_pci_device using a VFIO cdev FD
+  vfio: selftests: Add vfio_pci_liveupdate_kexec_test
+
+ MAINTAINERS                                   |   1 +
+ drivers/pci/Makefile                          |   1 +
+ drivers/pci/liveupdate.c                      | 248 ++++++++++++++++
+ drivers/pci/pci-driver.c                      |  12 +-
+ drivers/vfio/device_cdev.c                    |  25 +-
+ drivers/vfio/group.c                          |   9 +
+ drivers/vfio/pci/Makefile                     |   1 +
+ drivers/vfio/pci/vfio_pci.c                   |  11 +-
+ drivers/vfio/pci/vfio_pci_core.c              |  23 +-
+ drivers/vfio/pci/vfio_pci_liveupdate.c        | 278 ++++++++++++++++++
+ drivers/vfio/pci/vfio_pci_priv.h              |  16 +
+ drivers/vfio/vfio.h                           |  13 -
+ drivers/vfio/vfio_main.c                      |  22 +-
+ include/linux/kho/abi/pci.h                   |  53 ++++
+ include/linux/kho/abi/vfio_pci.h              |  45 +++
+ include/linux/liveupdate.h                    |   3 +
+ include/linux/pci.h                           |  38 +++
+ include/linux/vfio.h                          |  51 ++++
+ include/linux/vfio_pci_core.h                 |   7 +
+ kernel/liveupdate/luo_flb.c                   |   4 +
+ tools/testing/selftests/liveupdate/.gitignore |   1 +
+ tools/testing/selftests/liveupdate/Makefile   |  14 +-
+ .../include/libliveupdate.h}                  |  11 +-
+ .../selftests/liveupdate/lib/libliveupdate.mk |  20 ++
+ .../{luo_test_utils.c => lib/liveupdate.c}    |  43 ++-
+ .../selftests/liveupdate/luo_kexec_simple.c   |   2 +-
+ .../selftests/liveupdate/luo_multi_session.c  |   2 +-
+ tools/testing/selftests/vfio/Makefile         |  23 +-
+ .../vfio/lib/include/libvfio/iommu.h          |   2 +
+ .../lib/include/libvfio/vfio_pci_device.h     |   8 +
+ tools/testing/selftests/vfio/lib/iommu.c      |   4 +-
+ .../selftests/vfio/lib/vfio_pci_device.c      |  60 +++-
+ .../vfio/vfio_pci_liveupdate_kexec_test.c     | 255 ++++++++++++++++
+ .../vfio/vfio_pci_liveupdate_uapi_test.c      |  93 ++++++
+ 34 files changed, 1313 insertions(+), 86 deletions(-)
+ create mode 100644 drivers/pci/liveupdate.c
+ create mode 100644 drivers/vfio/pci/vfio_pci_liveupdate.c
+ create mode 100644 include/linux/kho/abi/pci.h
+ create mode 100644 include/linux/kho/abi/vfio_pci.h
+ rename tools/testing/selftests/liveupdate/{luo_test_utils.h => lib/include/libliveupdate.h} (80%)
+ create mode 100644 tools/testing/selftests/liveupdate/lib/libliveupdate.mk
+ rename tools/testing/selftests/liveupdate/{luo_test_utils.c => lib/liveupdate.c} (89%)
+ create mode 100644 tools/testing/selftests/vfio/vfio_pci_liveupdate_kexec_test.c
+ create mode 100644 tools/testing/selftests/vfio/vfio_pci_liveupdate_uapi_test.c
+
+-- 
+2.52.0.487.g5c8c507ade-goog
+
 
