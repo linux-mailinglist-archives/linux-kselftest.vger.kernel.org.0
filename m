@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-46506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46507-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 879B3C8A77B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 15:54:56 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 827C4C8A74B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 15:53:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F263F4ED7B0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 14:52:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 13D10356912
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 14:52:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910F9302CD7;
-	Wed, 26 Nov 2025 14:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 374CE3090FB;
+	Wed, 26 Nov 2025 14:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GZ/kgA1u"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U70W6NrU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67362304994;
-	Wed, 26 Nov 2025 14:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85B8308F16
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 14:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764168701; cv=none; b=sKl49zBDQ31GPqcuWtiZFZVf6YbPJ5WvHXBZsvxGbcVfDv7zD0YS70q7q+63UWlzP/s5aHUWc07uGUFJemXb9bJeRH9WsrqmyOPt7yOKtIYUjLSuDW//9Z1DIzMfadWsVev6CvFmW54jPmaFZm0SxtRW5AOwygLzRXXYxkp97o8=
+	t=1764168711; cv=none; b=q2ANhIqWcjBuswfLOShoFs2PNajnlOE0Fo8WqB5GBaXvvZJp/ze2Hifw4khn2ssRmn6N0TLt+2gHRWdQdWp8ZxodmKKW9/JH3O4pbEde01tEXnQPXhym2HqIIrHq53uDjU1uX3iv+MWjJ+uXXFWZH4yCVFTqBf+mR/akQnTA1A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764168701; c=relaxed/simple;
-	bh=z+aVWh1DG3zW7uBJWklHailp5mnhLIZWDprqOY0jiFk=;
+	s=arc-20240116; t=1764168711; c=relaxed/simple;
+	bh=vE/JPMmNA+Dn2lRE547H5bvN6VnYzpVVr1Dc/xgSluc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fJ2VJVP1+hVXiUDXNRYkvXk80jJdcpKySjtzcQ/id3HTyJUXKh1TP7Afg3bPuSP2bKZbYkemfIqKVrjIUjSTgkDN9nP7Ra6EK68RP1+1KdZoqurKuZGZgvXkHc/qbhVbq3Wyfg8+YI/ZkllK+quid8Ki/wXMng+OngFWWi671j0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GZ/kgA1u; arc=none smtp.client-ip=91.218.175.183
+	 MIME-Version; b=ZBQIw4AlHLex8ufGY/jKBT2SVJc4pfVwyMNZEw64O9APhrZRYzriDa5+gNwt4WNI36cooE4MLs5BbSXLOtJMURpv+FiqZrPHTJaZYtONBDlwyL6vi8d0MtHku8CmnmNTus3OONTZlvD9qtXc8wTGM5tmL/O7rTcroVFI+r0yjZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U70W6NrU; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764168696;
+	t=1764168706;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=j8/i3V0qKATfpWYij/aZrmcs/5FGPNFp1K/yt6QF2yc=;
-	b=GZ/kgA1uDl/h/hqgaFqkf8h7noPRVBo0QscOPmTCq8Iw4jiGW5KR+yEwxxWguwsFWC1fXI
-	5b8Uy3WDnmsG4JZRaGMGM9Nyq6fy7GuHrXcShv4Ul2gnEZDeNR3ojwCR4uK8K4MmLbcOvN
-	waRc6VK/9w02xqtv5WMY6VRVxsYvXhA=
+	bh=BizZbmxMylmDygcgp8y5D9NypN6p1cqZpSSMPgibyaE=;
+	b=U70W6NrULrKFMH/7K2KoBcnZFFWgfNzxdobhqHPd1Dg1QKnj/ws38pJ9iS0/hN1ujE2kDT
+	mOevFF3ZCDQE7828jw9NWECp7LYYM9pBi7kdACZSKVk4TKewnf9d4OtaaHyECgm4jteJEO
+	Of3X7yUpZmHNRwJxhzHheIxvq2ceX4Y=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -71,9 +71,9 @@ Cc: ast@kernel.org,
 	kernel-patches-bot@fb.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v12 1/7] bpf: Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags
-Date: Wed, 26 Nov 2025 22:50:33 +0800
-Message-ID: <20251126145039.15715-2-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v12 2/7] bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array maps
+Date: Wed, 26 Nov 2025 22:50:34 +0800
+Message-ID: <20251126145039.15715-3-leon.hwang@linux.dev>
 In-Reply-To: <20251126145039.15715-1-leon.hwang@linux.dev>
 References: <20251126145039.15715-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -85,182 +85,141 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Introduce BPF_F_CPU and BPF_F_ALL_CPUS flags and check them for
-following APIs:
+Introduce support for the BPF_F_ALL_CPUS flag in percpu_array maps to
+allow updating values for all CPUs with a single value for both
+update_elem and update_batch APIs.
 
-* 'map_lookup_elem()'
-* 'map_update_elem()'
-* 'generic_map_lookup_batch()'
-* 'generic_map_update_batch()'
+Introduce support for the BPF_F_CPU flag in percpu_array maps to allow:
 
-And, get the correct value size for these APIs.
+* update value for specified CPU for both update_elem and update_batch
+APIs.
+* lookup value for specified CPU for both lookup_elem and lookup_batch
+APIs.
 
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
+The BPF_F_CPU flag is passed via:
+
+* map_flags of lookup_elem and update_elem APIs along with embedded cpu
+info.
+* elem_flags of lookup_batch and update_batch APIs along with embedded
+cpu info.
+
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- include/linux/bpf.h            | 23 ++++++++++++++++++++++-
- include/uapi/linux/bpf.h       |  2 ++
- kernel/bpf/syscall.c           | 31 +++++++++++++++++--------------
- tools/include/uapi/linux/bpf.h |  2 ++
- 4 files changed, 43 insertions(+), 15 deletions(-)
+ include/linux/bpf.h   |  9 +++++++--
+ kernel/bpf/arraymap.c | 29 +++++++++++++++++++++++------
+ kernel/bpf/syscall.c  |  2 +-
+ 3 files changed, 31 insertions(+), 9 deletions(-)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 6498be4c44f8..d84af3719b59 100644
+index d84af3719b59..01a99e3a3e51 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -3829,14 +3829,35 @@ bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image)
- }
- #endif
+@@ -2762,7 +2762,7 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
+ 				   struct bpf_func_state *callee);
  
-+static inline bool bpf_map_supports_cpu_flags(enum bpf_map_type map_type)
-+{
-+	return false;
-+}
-+
- static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 allowed_flags)
+ int bpf_percpu_hash_copy(struct bpf_map *map, void *key, void *value);
+-int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value);
++int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value, u64 flags);
+ int bpf_percpu_hash_update(struct bpf_map *map, void *key, void *value,
+ 			   u64 flags);
+ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+@@ -3831,7 +3831,12 @@ bpf_prog_update_insn_ptrs(struct bpf_prog *prog, u32 *offsets, void *image)
+ 
+ static inline bool bpf_map_supports_cpu_flags(enum bpf_map_type map_type)
  {
--	if (flags & ~allowed_flags)
-+	u32 cpu;
-+
-+	if ((u32)flags & ~allowed_flags)
- 		return -EINVAL;
- 
- 	if ((flags & BPF_F_LOCK) && !btf_record_has_field(map->record, BPF_SPIN_LOCK))
- 		return -EINVAL;
- 
-+	if (!(flags & BPF_F_CPU) && flags >> 32)
-+		return -EINVAL;
-+
-+	if (flags & (BPF_F_CPU | BPF_F_ALL_CPUS)) {
-+		if (!bpf_map_supports_cpu_flags(map->map_type))
-+			return -EINVAL;
-+		if ((flags & BPF_F_CPU) && (flags & BPF_F_ALL_CPUS))
-+			return -EINVAL;
-+
-+		cpu = flags >> 32;
-+		if ((flags & BPF_F_CPU) && cpu >= num_possible_cpus())
-+			return -ERANGE;
+-	return false;
++	switch (map_type) {
++	case BPF_MAP_TYPE_PERCPU_ARRAY:
++		return true;
++	default:
++		return false;
 +	}
-+
+ }
+ 
+ static inline int bpf_map_check_op_flags(struct bpf_map *map, u64 flags, u64 allowed_flags)
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 1eeb31c5b317..67e9e811de3a 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -307,7 +307,7 @@ static void *percpu_array_map_lookup_percpu_elem(struct bpf_map *map, void *key,
+ 	return per_cpu_ptr(array->pptrs[index & array->index_mask], cpu);
+ }
+ 
+-int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value)
++int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value, u64 map_flags)
+ {
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	u32 index = *(u32 *)key;
+@@ -325,11 +325,18 @@ int bpf_percpu_array_copy(struct bpf_map *map, void *key, void *value)
+ 	size = array->elem_size;
+ 	rcu_read_lock();
+ 	pptr = array->pptrs[index & array->index_mask];
++	if (map_flags & BPF_F_CPU) {
++		cpu = map_flags >> 32;
++		copy_map_value(map, value, per_cpu_ptr(pptr, cpu));
++		check_and_init_map_value(map, value);
++		goto unlock;
++	}
+ 	for_each_possible_cpu(cpu) {
+ 		copy_map_value_long(map, value + off, per_cpu_ptr(pptr, cpu));
+ 		check_and_init_map_value(map, value + off);
+ 		off += size;
+ 	}
++unlock:
+ 	rcu_read_unlock();
  	return 0;
  }
+@@ -398,10 +405,11 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 	struct bpf_array *array = container_of(map, struct bpf_array, map);
+ 	u32 index = *(u32 *)key;
+ 	void __percpu *pptr;
+-	int cpu, off = 0;
++	void *ptr, *val;
+ 	u32 size;
++	int cpu;
  
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index f5713f59ac10..8b6279ca6e66 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1373,6 +1373,8 @@ enum {
- 	BPF_NOEXIST	= 1, /* create new element if it didn't exist */
- 	BPF_EXIST	= 2, /* update existing element */
- 	BPF_F_LOCK	= 4, /* spin_lock-ed map_lookup/map_update */
-+	BPF_F_CPU	= 8, /* cpu flag for percpu maps, upper 32-bit of flags is a cpu number */
-+	BPF_F_ALL_CPUS	= 16, /* update value across all CPUs for percpu maps */
- };
+-	if (unlikely(map_flags > BPF_EXIST))
++	if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
+ 		/* unknown flags */
+ 		return -EINVAL;
  
- /* flags for BPF_MAP_CREATE command */
+@@ -422,11 +430,20 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 	size = array->elem_size;
+ 	rcu_read_lock();
+ 	pptr = array->pptrs[index & array->index_mask];
++	if (map_flags & BPF_F_CPU) {
++		cpu = map_flags >> 32;
++		ptr = per_cpu_ptr(pptr, cpu);
++		copy_map_value(map, ptr, value);
++		bpf_obj_free_fields(array->map.record, ptr);
++		goto unlock;
++	}
+ 	for_each_possible_cpu(cpu) {
+-		copy_map_value_long(map, per_cpu_ptr(pptr, cpu), value + off);
+-		bpf_obj_free_fields(array->map.record, per_cpu_ptr(pptr, cpu));
+-		off += size;
++		ptr = per_cpu_ptr(pptr, cpu);
++		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
++		copy_map_value(map, ptr, val);
++		bpf_obj_free_fields(array->map.record, ptr);
+ 	}
++unlock:
+ 	rcu_read_unlock();
+ 	return 0;
+ }
 diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index cef8963d69f9..7a1d0ce8fa57 100644
+index 7a1d0ce8fa57..6aa98257fa3f 100644
 --- a/kernel/bpf/syscall.c
 +++ b/kernel/bpf/syscall.c
-@@ -133,12 +133,14 @@ bool bpf_map_write_active(const struct bpf_map *map)
- 	return atomic64_read(&map->writecnt) != 0;
- }
- 
--static u32 bpf_map_value_size(const struct bpf_map *map)
--{
--	if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
--	    map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
-+static u32 bpf_map_value_size(const struct bpf_map *map, u64 flags)
-+{
-+	if (flags & (BPF_F_CPU | BPF_F_ALL_CPUS))
-+		return map->value_size;
-+	else if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
-+		 map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH ||
-+		 map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY ||
-+		 map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE)
- 		return round_up(map->value_size, 8) * num_possible_cpus();
- 	else if (IS_FD_MAP(map))
- 		return sizeof(u32);
-@@ -1732,7 +1734,7 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	if (!(map_get_sys_perms(map, f) & FMODE_CAN_READ))
- 		return -EPERM;
- 
--	err = bpf_map_check_op_flags(map, attr->flags, BPF_F_LOCK);
-+	err = bpf_map_check_op_flags(map, attr->flags, BPF_F_LOCK | BPF_F_CPU);
- 	if (err)
- 		return err;
- 
-@@ -1740,7 +1742,7 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	if (IS_ERR(key))
- 		return PTR_ERR(key);
- 
--	value_size = bpf_map_value_size(map);
-+	value_size = bpf_map_value_size(map, attr->flags);
- 
- 	err = -ENOMEM;
- 	value = kvmalloc(value_size, GFP_USER | __GFP_NOWARN);
-@@ -1807,7 +1809,7 @@ static int map_update_elem(union bpf_attr *attr, bpfptr_t uattr)
- 		goto err_put;
- 	}
- 
--	value_size = bpf_map_value_size(map);
-+	value_size = bpf_map_value_size(map, attr->flags);
- 	value = kvmemdup_bpfptr(uvalue, value_size);
- 	if (IS_ERR(value)) {
- 		err = PTR_ERR(value);
-@@ -2003,11 +2005,12 @@ int generic_map_update_batch(struct bpf_map *map, struct file *map_file,
- 	void *key, *value;
- 	int err = 0;
- 
--	err = bpf_map_check_op_flags(map, attr->batch.elem_flags, BPF_F_LOCK);
-+	err = bpf_map_check_op_flags(map, attr->batch.elem_flags,
-+				     BPF_F_LOCK | BPF_F_CPU | BPF_F_ALL_CPUS);
- 	if (err)
- 		return err;
- 
--	value_size = bpf_map_value_size(map);
-+	value_size = bpf_map_value_size(map, attr->batch.elem_flags);
- 
- 	max_count = attr->batch.count;
- 	if (!max_count)
-@@ -2062,11 +2065,11 @@ int generic_map_lookup_batch(struct bpf_map *map,
- 	u32 value_size, cp, max_count;
- 	int err;
- 
--	err = bpf_map_check_op_flags(map, attr->batch.elem_flags, BPF_F_LOCK);
-+	err = bpf_map_check_op_flags(map, attr->batch.elem_flags, BPF_F_LOCK | BPF_F_CPU);
- 	if (err)
- 		return err;
- 
--	value_size = bpf_map_value_size(map);
-+	value_size = bpf_map_value_size(map, attr->batch.elem_flags);
- 
- 	max_count = attr->batch.count;
- 	if (!max_count)
-@@ -2188,7 +2191,7 @@ static int map_lookup_and_delete_elem(union bpf_attr *attr)
- 		goto err_put;
- 	}
- 
--	value_size = bpf_map_value_size(map);
-+	value_size = bpf_map_value_size(map, 0);
- 
- 	err = -ENOMEM;
- 	value = kvmalloc(value_size, GFP_USER | __GFP_NOWARN);
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index f5713f59ac10..8b6279ca6e66 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1373,6 +1373,8 @@ enum {
- 	BPF_NOEXIST	= 1, /* create new element if it didn't exist */
- 	BPF_EXIST	= 2, /* update existing element */
- 	BPF_F_LOCK	= 4, /* spin_lock-ed map_lookup/map_update */
-+	BPF_F_CPU	= 8, /* cpu flag for percpu maps, upper 32-bit of flags is a cpu number */
-+	BPF_F_ALL_CPUS	= 16, /* update value across all CPUs for percpu maps */
- };
- 
- /* flags for BPF_MAP_CREATE command */
+@@ -318,7 +318,7 @@ static int bpf_map_copy_value(struct bpf_map *map, void *key, void *value,
+ 	    map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
+ 		err = bpf_percpu_hash_copy(map, key, value);
+ 	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_ARRAY) {
+-		err = bpf_percpu_array_copy(map, key, value);
++		err = bpf_percpu_array_copy(map, key, value, flags);
+ 	} else if (map->map_type == BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE) {
+ 		err = bpf_percpu_cgroup_storage_copy(map, key, value);
+ 	} else if (map->map_type == BPF_MAP_TYPE_STACK_TRACE) {
 -- 
 2.51.2
 
