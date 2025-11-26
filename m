@@ -1,176 +1,146 @@
-Return-Path: <linux-kselftest+bounces-46527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 250B0C8AF2F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 17:24:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 470CFC8AF95
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 17:31:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D83343A52D7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:24:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC6693AA5E7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57AD83321A4;
-	Wed, 26 Nov 2025 16:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC0133C509;
+	Wed, 26 Nov 2025 16:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o6EBdzbB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YYRVTlmj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA4030BBAB
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 16:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2152630E0D2
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 16:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764174282; cv=none; b=ZvRZRa61PpWMnlME2EaufYe48D4+o2c+L7BfAO1rh8v31ojFEFgb8Y8PwjV0J7KghunY9X05PRa9KPbKuMdbD0s//6f3C9gGzp0lA31H4q2zYXnQfwOX19xtIs53OSoLKr9QAa31sPak8Qx9npkr9FFYqug+rFEu8eGq7AXBWNk=
+	t=1764174669; cv=none; b=VjQyRmZADU2Wf8WyMqppndMkZy7YF4jmkfRZpYyYzMEaNyMkoHU5sCtZ1oVS1Fu9+F1d5IhWlIGmAwy4zu4tYPw4JSwtW1SyGFBKTfxSJGUSChlzaQ9y3/aEb/jeIoultzr+QhRh3IhUKTXxVguPL0U31ds7qkykPdwLUXr2xaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764174282; c=relaxed/simple;
-	bh=jVuT3OlGm7eNi3eYEGZFHHFSDumDXBBchOQE3Jg8Y/k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DPqi69OOdWSeEbTS6GVaRjYjl1q6HT0DStgclHRQhb13dBzFW6VeiZf93ZDBGHbimRcpLOiQb9JhG+VxlaBn9NVmt0gsWk2dzS6azpzO2I/3clTPgqkNBSDgoJNpLxXqHHh4cvFVCV6Eb3Ge7lSdXUP0sYdN/ACsBz4/BdYFxhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o6EBdzbB; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <13a871d1-5bd8-44a1-8737-eb26342d30b4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764174268;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ekRT332AhugTObU/O7d0SgsnySfkt/B3bfRW4qi1c38=;
-	b=o6EBdzbBfRSNbqrzyNQy0/jwq3rhnUJY9BWQHLJn0k5zdTTvjgAf2+V1BfVRd9qHfpD1eu
-	HUOSsk4Vk3QsZwRXXY7iimxiFnLtr5jxD6NVJCQMPtUO1qh42ZZMvELk9N7h889j5R0uCu
-	YenxpVKMF7xP80JV942cal4X7de7Jk0=
-Date: Thu, 27 Nov 2025 00:24:10 +0800
+	s=arc-20240116; t=1764174669; c=relaxed/simple;
+	bh=JUk+V7+BC+lkMoAifGFTRedw6UOHlW97lAtjujuGo3Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AZm/Qg+UkFOnmtDi4xPwHhV767aUD2uTfGJQSbYShpc8sPdrpxuO4LHTG0HdDJmjQppq6hSQDX9mQd3lA6msjvj6RHB33Lat28BJ67S8N/L5m5wMuKVpV9Lw0rdbi64K8lOl4ATxkr1Gclbzpop0RFKEytUFudupkI7FZjeUMWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YYRVTlmj; arc=none smtp.client-ip=209.85.214.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-297dd95ffe4so62492675ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 08:31:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764174667; x=1764779467; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YOzfVQwGYNqC1lxFkH12YuFq4cbbjh7siJwig+OWKTg=;
+        b=YYRVTlmj0WXe0OGg28gHJOU4bizezja97OUEzQhNLpXNw7cgAgE4vYJMQWIjf7aQbW
+         VdpL8H5gzGbdl6EgBjeOUIYBOREIyPGIU8ZAsLF/hbX9imTNo56Bd0Janql+aNU0zhKT
+         1QcanX8GYxbQAunEcRNncralrW9EZdNYfuQmrcZX95jQP4EamSGlN7Ux3HddDa2wC4AL
+         xn1950uATu/77O4fbjFHGrQ50RrWiTuGpD8yM+BLuf5Wi64/IOFQiIdwRYb4xQ0pEwvt
+         QFH7aQaTGkp+OOv3J75B2AOMvZMiMDIODQ3ZNLbsQtoY9obpQxnV/ypd8d9EnmsarEk0
+         LIWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764174667; x=1764779467;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YOzfVQwGYNqC1lxFkH12YuFq4cbbjh7siJwig+OWKTg=;
+        b=BEgkR8nzXr7bVsnjzF4d5dAytD7fxxvzmcWmji7bJ3X05gpqbVQWy1L47H6GFCQfPu
+         g0o6VqkyX83X6Ik7+dJcsiaMzyWd7/QnUY7CFaQBRp0GhL7LN6/i5BopW4iP2hZGSwLM
+         vIfUpmm8d8f45EfBTA/vregmJmQw4vewdJYUgWniSXDS8EO5pkSNc9G90W+IVzFr9Zay
+         sQtBVAbm26+f3WbRl5QyMk5jPot3Sn8Z2iV/dajYnWblfb+sdUMyaEbCQDP96WhW+gP2
+         me6ahYNxfzBYuBGDWIVgXyvu48RjRlBB/O6uM6tVP4Jk5qseWllQdrCddr6HGcqiKObc
+         l0EA==
+X-Forwarded-Encrypted: i=1; AJvYcCWYRYtGZqlgVtUqRHWOGKmNNAOyYe29+3ysxVvVLV/SzxLXKcN4y1PyT+81sgLZiAEbFd5qc3E8XdGxEmQghrg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyw9n6cU8t/M4O/oiHGgZ84rT3OIMzMz6hGLC3oIsxw+rLeGzSc
+	HZznkPsOAF77yQZOdR7BSbwAssN90qUPgaePBaldqcIVBUe7bD2Uqe9R
+X-Gm-Gg: ASbGncvQqk1eZVEUmqY50qTxi8nlWXmxAFQkgvrRfqeNYgzpPn1DIJnGbzJR7cZIg9A
+	XU7pPwwuXUwQ8Z7//UoYBJzbQWLDks/mQ5HS6LJkDK1vZsX0G//P5FNW9hbmUjzkFyOXq2j4Fb9
+	EIp7KC/lfiPhoqPk7owadypep6FvStD+838BGaH5AfRavqjg6UDoRZ9+x3fDC/PhbJUkrPvErKC
+	rAsYxptPY+3e9BeRGsWbQONlKo13qaTQRUMjMtuTBSDTcQfe8DgoXV62yztD5cKxTbdoz91u7ec
+	1N25ordEBnrHqnOvVGO4UgBDwzjPzEsIFepT5QrS/6iTgmUTEqmAkBYIeqzz8B/qxNARdmcEPq0
+	INZd0kaKpUNfoSXYks7C6iysW6gw/oOJTcByIMaRqZfEcPKXKW5KRGQUNnfAoDXNUz44j5Wc7jX
+	qpSFvLtzPqWBIrHGyENMLGXY/NRd/PzA==
+X-Google-Smtp-Source: AGHT+IHYlOs7ib3WRoxz+IosxSmgFDE9P7H1+e8rCoPRGJ8hqrHc7dD/TBxgldig3bre3IVxR56yzg==
+X-Received: by 2002:a17:90b:2247:b0:340:f05a:3ed3 with SMTP id 98e67ed59e1d1-3475ed5141bmr7678530a91.17.1764174666979;
+        Wed, 26 Nov 2025 08:31:06 -0800 (PST)
+Received: from fedora ([103.120.31.122])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd760fae9e2sm19829401a12.31.2025.11.26.08.31.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Nov 2025 08:31:06 -0800 (PST)
+From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+To: Matthieu Baerts <matttbe@kernel.org>,
+	Mat Martineau <martineau@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: netdev@vger.kernel.org,
+	mptcp@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Shuah Khan <shuah@kernel.org>,
+	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Subject: [PATCH] selftests: mptcp: initialize raw_addr to Null
+Date: Wed, 26 Nov 2025 22:00:46 +0530
+Message-ID: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v12 3/7] bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS
- flags support for percpu_hash and lru_percpu_hash maps
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- jolsa@kernel.org, yonghong.song@linux.dev, song@kernel.org,
- eddyz87@gmail.com, dxu@dxuuu.xyz, deso@posteo.net, martin.lau@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, shuah@kernel.org, kerneljasonxing@gmail.com,
- chen.dylane@linux.dev, willemb@google.com, paul.chaignon@gmail.com,
- a.s.protopopov@gmail.com, memxor@gmail.com, yatsenko@meta.com,
- tklauser@distanz.ch, kernel-patches-bot@fb.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-References: <20251126145039.15715-4-leon.hwang@linux.dev>
- <f33b87ffc7d3884dab5f73d90ba3f29afd4ee5975be512532702228363cde72e@mail.kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <f33b87ffc7d3884dab5f73d90ba3f29afd4ee5975be512532702228363cde72e@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+The "void *raw_addr" is left uninitialized when else path is
+followed raising below warning.
 
+mptcp_connect.c:1262:11: warning: variable 'raw_addr' is used
+      uninitialized whenever 'if' condition is false
+      [-Wsometimes-uninitialized]
 
-On 2025/11/26 23:11, bot+bpf-ci@kernel.org wrote:
->> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
->> index 01a99e3a3..f79d2ae27 100644
->> --- a/include/linux/bpf.h
->> +++ b/include/linux/bpf.h
-> 
-> [ ... ]
-> 
->> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
->> index c8a9b27f8..441ff5bc5 100644
->> --- a/kernel/bpf/hashtab.c
->> +++ b/kernel/bpf/hashtab.c
-> 
-> [ ... ]
-> 
->> @@ -1249,6 +1258,15 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
->>  	return ret;
->>  }
->>
->> +static int htab_map_check_update_flags(bool onallcpus, u64 map_flags)
->> +{
->> +	if (unlikely(!onallcpus && map_flags > BPF_EXIST))
->> +		return -EINVAL;
->> +	if (unlikely(onallcpus && ((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS)))
->> +		return -EINVAL;
->> +	return 0;
->> +}
->> +
-> 
-> Can htab_map_check_update_flags() correctly validate the new flags?
-> 
-> When onallcpus=false (the common case for normal map_update_elem
-> operations via htab_percpu_map_update_elem()->
-> htab_map_update_elem_in_place()), the check at the first if statement
-> compares the full 64-bit map_flags value against BPF_EXIST (2).
-> 
-> When BPF_F_CPU (8) is set, or when the CPU number is embedded in the
-> upper 32 bits (e.g., 0x0000000100000008 for CPU 1), map_flags will be
-> greater than BPF_EXIST, causing this function to return -EINVAL.
-> 
-> This appears inconsistent with the equivalent check in
-> bpf_percpu_array_update() (commit 51f40f83b), which uses:
-> 
->   if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
-> 
-> The percpu_array check casts to u32 to examine only the lower 32 bits,
-> allowing the CPU number in the upper 32 bits. The hash table check for
-> onallcpus=false doesn't perform this cast, so it will reject valid flag
-> combinations that include BPF_F_CPU.
-> 
-> Would this prevent the BPF_F_CPU functionality from working for normal
-> percpu_hash update operations?
-> 
+so the fix is to assign *raw_addr to NULL to suppress the warning.
 
-For UAPI percpu_hash updates, this is fine because onallcpus is always true.
+Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+---
+compiler used: clang version 21.1.5 (Fedora 21.1.5-1.fc43).
+compilation cmd used:
+	make -C tools/testing/selftests/net/mptcp CC=clang V=1 -j8
 
-For BPF program–initiated percpu_hash updates, the behavior also remains
-unchanged since onallcpus is false, and the 'map_flags > BPF_EXIST'
-check behaves exactly as it did before.
+this maybe also be false positive. But somehow clang - 21.1.5
+triggering this.
 
-Thanks,
-Leon
+---
+ tools/testing/selftests/net/mptcp/mptcp_connect.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> @@ -1262,9 +1280,9 @@ static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
->>  	u32 key_size, hash;
->>  	int ret;
->>
->> -	if (unlikely(map_flags > BPF_EXIST))
->> -		/* unknown flags */
->> -		return -EINVAL;
->> +	ret = htab_map_check_update_flags(onallcpus, map_flags);
->> +	if (unlikely(ret))
->> +		return ret;
->>
->>  	WARN_ON_ONCE(!bpf_rcu_lock_held());
->>
-> 
-> [ ... ]
-> 
->> @@ -1324,9 +1342,9 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
->>  	u32 key_size, hash;
->>  	int ret;
->>
->> -	if (unlikely(map_flags > BPF_EXIST))
->> -		/* unknown flags */
->> -		return -EINVAL;
->> +	ret = htab_map_check_update_flags(onallcpus, map_flags);
->> +	if (unlikely(ret))
->> +		return ret;
-> 
-> [ ... ]
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19708012130
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+index 404a77bf366a..cdb81e0d08ad 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+@@ -1248,8 +1248,8 @@ void xdisconnect(int fd)
+ {
+ 	socklen_t addrlen = sizeof(struct sockaddr_storage);
+ 	struct sockaddr_storage addr, empty;
++	void *raw_addr = NULL;
+ 	int msec_sleep = 10;
+-	void *raw_addr;
+ 	int i, cmdlen;
+ 	char cmd[128];
+
+--
+2.52.0
 
 
