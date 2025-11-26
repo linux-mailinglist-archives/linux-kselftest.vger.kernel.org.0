@@ -1,146 +1,205 @@
-Return-Path: <linux-kselftest+bounces-46528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 470CFC8AF95
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 17:31:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2712C8B0F7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 17:50:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC6693AA5E7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:31:10 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8184A4ED06B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:49:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFC0133C509;
-	Wed, 26 Nov 2025 16:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDAF33F36E;
+	Wed, 26 Nov 2025 16:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YYRVTlmj"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="Gc4ge9sS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.72.182.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2152630E0D2
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 16:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C734933EB1D;
+	Wed, 26 Nov 2025 16:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.72.182.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764174669; cv=none; b=VjQyRmZADU2Wf8WyMqppndMkZy7YF4jmkfRZpYyYzMEaNyMkoHU5sCtZ1oVS1Fu9+F1d5IhWlIGmAwy4zu4tYPw4JSwtW1SyGFBKTfxSJGUSChlzaQ9y3/aEb/jeIoultzr+QhRh3IhUKTXxVguPL0U31ds7qkykPdwLUXr2xaY=
+	t=1764175774; cv=none; b=kzLrLnfF86JyhCC1bGqNES4QtSh7Wm4Kpr+Tn0ogOm8GJlTAUncJJVRQomA/1WVQzVjW8T9MJtpbViKDoTWq6nnmHhH+Zq7buNevkz+CmqITqn/xSxCN/Z01Hnin527q0HtcyVKM/ybMu5qQOlj/2XqvqCrnYqZ7oUBJTgyqEEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764174669; c=relaxed/simple;
-	bh=JUk+V7+BC+lkMoAifGFTRedw6UOHlW97lAtjujuGo3Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AZm/Qg+UkFOnmtDi4xPwHhV767aUD2uTfGJQSbYShpc8sPdrpxuO4LHTG0HdDJmjQppq6hSQDX9mQd3lA6msjvj6RHB33Lat28BJ67S8N/L5m5wMuKVpV9Lw0rdbi64K8lOl4ATxkr1Gclbzpop0RFKEytUFudupkI7FZjeUMWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YYRVTlmj; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-297dd95ffe4so62492675ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 08:31:07 -0800 (PST)
+	s=arc-20240116; t=1764175774; c=relaxed/simple;
+	bh=5SsNInqEQBT6lxL7/CN96dYskG77UCJ09kLHMrzaEf4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=CSgZAgnrlQNmT1Ec+wsYrVi1ow4NEjKXdslQ6a4c3UGBLjlYN8BznFOYcki7m7ka1Vtc1IrVWjAKzZTIn64Mr2QzjtVDtmATKVL20jxWzsN8csv8Qc+C6Gqwf+SSjoZ7j1f0cbu7lYW6Nj9P/odvvMVI0YruKYrzaiRCWbtWLgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=Gc4ge9sS; arc=none smtp.client-ip=3.72.182.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764174667; x=1764779467; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YOzfVQwGYNqC1lxFkH12YuFq4cbbjh7siJwig+OWKTg=;
-        b=YYRVTlmj0WXe0OGg28gHJOU4bizezja97OUEzQhNLpXNw7cgAgE4vYJMQWIjf7aQbW
-         VdpL8H5gzGbdl6EgBjeOUIYBOREIyPGIU8ZAsLF/hbX9imTNo56Bd0Janql+aNU0zhKT
-         1QcanX8GYxbQAunEcRNncralrW9EZdNYfuQmrcZX95jQP4EamSGlN7Ux3HddDa2wC4AL
-         xn1950uATu/77O4fbjFHGrQ50RrWiTuGpD8yM+BLuf5Wi64/IOFQiIdwRYb4xQ0pEwvt
-         QFH7aQaTGkp+OOv3J75B2AOMvZMiMDIODQ3ZNLbsQtoY9obpQxnV/ypd8d9EnmsarEk0
-         LIWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764174667; x=1764779467;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YOzfVQwGYNqC1lxFkH12YuFq4cbbjh7siJwig+OWKTg=;
-        b=BEgkR8nzXr7bVsnjzF4d5dAytD7fxxvzmcWmji7bJ3X05gpqbVQWy1L47H6GFCQfPu
-         g0o6VqkyX83X6Ik7+dJcsiaMzyWd7/QnUY7CFaQBRp0GhL7LN6/i5BopW4iP2hZGSwLM
-         vIfUpmm8d8f45EfBTA/vregmJmQw4vewdJYUgWniSXDS8EO5pkSNc9G90W+IVzFr9Zay
-         sQtBVAbm26+f3WbRl5QyMk5jPot3Sn8Z2iV/dajYnWblfb+sdUMyaEbCQDP96WhW+gP2
-         me6ahYNxfzBYuBGDWIVgXyvu48RjRlBB/O6uM6tVP4Jk5qseWllQdrCddr6HGcqiKObc
-         l0EA==
-X-Forwarded-Encrypted: i=1; AJvYcCWYRYtGZqlgVtUqRHWOGKmNNAOyYe29+3ysxVvVLV/SzxLXKcN4y1PyT+81sgLZiAEbFd5qc3E8XdGxEmQghrg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyw9n6cU8t/M4O/oiHGgZ84rT3OIMzMz6hGLC3oIsxw+rLeGzSc
-	HZznkPsOAF77yQZOdR7BSbwAssN90qUPgaePBaldqcIVBUe7bD2Uqe9R
-X-Gm-Gg: ASbGncvQqk1eZVEUmqY50qTxi8nlWXmxAFQkgvrRfqeNYgzpPn1DIJnGbzJR7cZIg9A
-	XU7pPwwuXUwQ8Z7//UoYBJzbQWLDks/mQ5HS6LJkDK1vZsX0G//P5FNW9hbmUjzkFyOXq2j4Fb9
-	EIp7KC/lfiPhoqPk7owadypep6FvStD+838BGaH5AfRavqjg6UDoRZ9+x3fDC/PhbJUkrPvErKC
-	rAsYxptPY+3e9BeRGsWbQONlKo13qaTQRUMjMtuTBSDTcQfe8DgoXV62yztD5cKxTbdoz91u7ec
-	1N25ordEBnrHqnOvVGO4UgBDwzjPzEsIFepT5QrS/6iTgmUTEqmAkBYIeqzz8B/qxNARdmcEPq0
-	INZd0kaKpUNfoSXYks7C6iysW6gw/oOJTcByIMaRqZfEcPKXKW5KRGQUNnfAoDXNUz44j5Wc7jX
-	qpSFvLtzPqWBIrHGyENMLGXY/NRd/PzA==
-X-Google-Smtp-Source: AGHT+IHYlOs7ib3WRoxz+IosxSmgFDE9P7H1+e8rCoPRGJ8hqrHc7dD/TBxgldig3bre3IVxR56yzg==
-X-Received: by 2002:a17:90b:2247:b0:340:f05a:3ed3 with SMTP id 98e67ed59e1d1-3475ed5141bmr7678530a91.17.1764174666979;
-        Wed, 26 Nov 2025 08:31:06 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd760fae9e2sm19829401a12.31.2025.11.26.08.31.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 08:31:06 -0800 (PST)
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: netdev@vger.kernel.org,
-	mptcp@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Shuah Khan <shuah@kernel.org>,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Subject: [PATCH] selftests: mptcp: initialize raw_addr to Null
-Date: Wed, 26 Nov 2025 22:00:46 +0530
-Message-ID: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: git-send-email 2.52.0
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
+  t=1764175772; x=1795711772;
+  h=message-id:date:mime-version:reply-to:subject:to:cc:
+   references:from:in-reply-to:content-transfer-encoding;
+  bh=x7VXVCGx/0PdLhk+nsghb8qTMaImKePvh7JEix7jeY4=;
+  b=Gc4ge9sSvir+7RM1RfcGTSS8rK588yqfel5CCL1QcTQ9lmuPZJmQadvh
+   skAoGfim0+Rxq+oATzPEqPu1bLzqSFDLTtUUM/ixQJSAMLbYJYoWh08Ot
+   57xbsJ84Dq3MJF7YKqyizPc5Sl3eo3PqHRN3NFm3zLuKj6wSa0dbPrSus
+   PpbcWncQjPxtazR0SjJ7mGX3C+oFQ601+RQsmfeRDI6AmS/xEiFLHOQ2A
+   gWJWZChQ+7vh5eJXVKRX+3xmxVfb9f41GFuH3OmeKtCzfw9MwXkg8wHoZ
+   uiIPaat2myLifKcun0EhLBogOs3DHZZk130D2P4cfnaWSxrZmbbWiCl5N
+   g==;
+X-CSE-ConnectionGUID: PSbtWkjGQpyyl29xoV29RQ==
+X-CSE-MsgGUID: m+DW7VpVTBeEayJbqQJGbg==
+X-IronPort-AV: E=Sophos;i="6.20,228,1758585600"; 
+   d="scan'208";a="5850247"
+Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
+  by internal-fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 16:49:13 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:14001]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.44.247:2525] with esmtp (Farcaster)
+ id 7187bdac-8cef-490c-8568-2d44c5bc3585; Wed, 26 Nov 2025 16:49:13 +0000 (UTC)
+X-Farcaster-Flow-ID: 7187bdac-8cef-490c-8568-2d44c5bc3585
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
+ Wed, 26 Nov 2025 16:49:12 +0000
+Received: from [192.168.8.204] (10.106.83.30) by EX19D005EUB003.ant.amazon.com
+ (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Wed, 26 Nov 2025
+ 16:49:11 +0000
+Message-ID: <6e93a9b7-f731-4609-a034-2b78423e22e5@amazon.com>
+Date: Wed, 26 Nov 2025 16:49:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Reply-To: <kalyazin@amazon.com>
+Subject: Re: [PATCH v2 3/5] mm: introduce VM_FAULT_UFFD_MINOR fault reason
+To: Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>
+CC: Andrea Arcangeli <aarcange@redhat.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Axel Rasmussen <axelrasmussen@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand
+	<david@redhat.com>, Hugh Dickins <hughd@google.com>, James Houghton
+	<jthoughton@google.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	"Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, Michal Hocko
+	<mhocko@suse.com>, "Paolo Bonzini" <pbonzini@redhat.com>, Peter Xu
+	<peterx@redhat.com>, "Sean Christopherson" <seanjc@google.com>, Shuah Khan
+	<shuah@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>, Vlastimil Babka
+	<vbabka@suse.cz>, <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, "David Hildenbrand (Red Hat)"
+	<david@kernel.org>
+References: <20251125183840.2368510-1-rppt@kernel.org>
+ <20251125183840.2368510-4-rppt@kernel.org>
+Content-Language: en-US
+From: Nikita Kalyazin <kalyazin@amazon.com>
+Autocrypt: addr=kalyazin@amazon.com; keydata=
+ xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
+ JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
+ BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
+ IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
+ CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
+ ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
+ ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
+ i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
+In-Reply-To: <20251125183840.2368510-4-rppt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: EX19D003EUA004.ant.amazon.com (10.252.50.128) To
+ EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
-The "void *raw_addr" is left uninitialized when else path is
-followed raising below warning.
 
-mptcp_connect.c:1262:11: warning: variable 'raw_addr' is used
-      uninitialized whenever 'if' condition is false
-      [-Wsometimes-uninitialized]
 
-so the fix is to assign *raw_addr to NULL to suppress the warning.
+On 25/11/2025 18:38, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> When a VMA is registered with userfaulfd in minor mode, its ->fault()
+> method should check if a folio exists in the page cache and if yes
+> ->fault() should call handle_userfault(VM_UFFD_MISSING).
+> 
+> Instead of calling handle_userfault() directly from a specific ->fault()
+> implementation introduce new fault reason VM_FAULT_UFFD_MINOR that will
+> notify the core page fault handler that it should call
+> handle_userfaultfd(VM_UFFD_MISSING) to complete a page fault.
+> 
+> Replace a call to handle_userfault(VM_UFFD_MISSING) in shmem and use the
+> new VM_FAULT_UFFD_MINOR there instead.
+> 
+> For configurations that don't enable CONFIG_USERFAULTFD,
+> VM_FAULT_UFFD_MINOR is set to 0.
+> 
+> Suggested-by: David Hildenbrand (Red Hat) <david@kernel.org>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>   include/linux/mm_types.h | 10 +++++++++-
+>   mm/memory.c              |  2 ++
+>   mm/shmem.c               |  2 +-
+>   3 files changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 90e5790c318f..df71b057111b 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -1523,6 +1523,8 @@ typedef __bitwise unsigned int vm_fault_t;
+>    *                             fsync() to complete (for synchronous page faults
+>    *                             in DAX)
+>    * @VM_FAULT_COMPLETED:                ->fault completed, meanwhile mmap lock released
+> + * @VM_FAULT_UFFD_MINOR:       ->fault did not modify page tables and needs
+> + *                             handle_userfault(VM_UFFD_MINOR) to complete
+>    * @VM_FAULT_HINDEX_MASK:      mask HINDEX value
+>    *
+>    */
+> @@ -1540,6 +1542,11 @@ enum vm_fault_reason {
+>          VM_FAULT_DONE_COW       = (__force vm_fault_t)0x001000,
+>          VM_FAULT_NEEDDSYNC      = (__force vm_fault_t)0x002000,
+>          VM_FAULT_COMPLETED      = (__force vm_fault_t)0x004000,
+> +#ifdef CONFIG_USERFAULTFD
+> +       VM_FAULT_UFFD_MINOR     = (__force vm_fault_t)0x008000,
+> +#else
+> +       VM_FAULT_UFFD_MINOR     = (__force vm_fault_t)0x000000,
+> +#endif
+>          VM_FAULT_HINDEX_MASK    = (__force vm_fault_t)0x0f0000,
+>   };
+> 
+> @@ -1564,7 +1571,8 @@ enum vm_fault_reason {
+>          { VM_FAULT_FALLBACK,            "FALLBACK" },   \
+>          { VM_FAULT_DONE_COW,            "DONE_COW" },   \
+>          { VM_FAULT_NEEDDSYNC,           "NEEDDSYNC" },  \
+> -       { VM_FAULT_COMPLETED,           "COMPLETED" }
+> +       { VM_FAULT_COMPLETED,           "COMPLETED" },  \
+> +       { VM_FAULT_UFFD_MINOR,          "UFFD_MINOR" }, \
 
-Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
----
-compiler used: clang version 21.1.5 (Fedora 21.1.5-1.fc43).
-compilation cmd used:
-	make -C tools/testing/selftests/net/mptcp CC=clang V=1 -j8
+It looks like we have to keep the last element comma-less, otherwise I'm 
+seeing compile errors somewhere in fs/dax.c.
 
-this maybe also be false positive. But somehow clang - 21.1.5
-triggering this.
-
----
- tools/testing/selftests/net/mptcp/mptcp_connect.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-index 404a77bf366a..cdb81e0d08ad 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-@@ -1248,8 +1248,8 @@ void xdisconnect(int fd)
- {
- 	socklen_t addrlen = sizeof(struct sockaddr_storage);
- 	struct sockaddr_storage addr, empty;
-+	void *raw_addr = NULL;
- 	int msec_sleep = 10;
--	void *raw_addr;
- 	int i, cmdlen;
- 	char cmd[128];
-
---
-2.52.0
+> 
+>   struct vm_special_mapping {
+>          const char *name;       /* The name, e.g. "[vdso]". */
+> diff --git a/mm/memory.c b/mm/memory.c
+> index b59ae7ce42eb..94acbac8cefb 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -5279,6 +5279,8 @@ static vm_fault_t __do_fault(struct vm_fault *vmf)
+>          }
+> 
+>          ret = vma->vm_ops->fault(vmf);
+> +       if (unlikely(ret & VM_FAULT_UFFD_MINOR))
+> +               return handle_userfault(vmf, VM_UFFD_MINOR);
+>          if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY |
+>                              VM_FAULT_DONE_COW)))
+>                  return ret;
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index e16c7c8c3e1e..a9a31c0b5979 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2461,7 +2461,7 @@ static int shmem_get_folio_gfp(struct inode *inode, pgoff_t index,
+>          if (folio && vma && userfaultfd_minor(vma)) {
+>                  if (!xa_is_value(folio))
+>                          folio_put(folio);
+> -               *fault_type = handle_userfault(vmf, VM_UFFD_MINOR);
+> +               *fault_type = VM_FAULT_UFFD_MINOR;
+>                  return 0;
+>          }
+> 
+> --
+> 2.50.1
+> 
 
 
