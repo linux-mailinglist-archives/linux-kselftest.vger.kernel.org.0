@@ -1,266 +1,173 @@
-Return-Path: <linux-kselftest+bounces-46531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAB45C8B103
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 17:51:13 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60460C8B148
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 17:55:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C0934ECE3E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:50:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C4AC5358B8A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:55:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA2D33F397;
-	Wed, 26 Nov 2025 16:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7492A33EAEC;
+	Wed, 26 Nov 2025 16:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="XYdMB9I6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S090ngv+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.64.237.68])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB6833F382;
-	Wed, 26 Nov 2025 16:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.64.237.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C36430EF75;
+	Wed, 26 Nov 2025 16:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764175812; cv=none; b=srMN3h3TW1WyYFoDX0qjvP9NFVmUsx03mD902onBTvo/rhcQhE2BF5poNKN1cDoGPy0cDULfrsu08ukOhddhsLNRyv6xXtqXz1mK5dlWkRQ3ya6ocMHlZHF10T5aycJbUvpD7XodeTBIe3rwebfLwACo+Ez5Oc16r1sWpQq2GXw=
+	t=1764176122; cv=none; b=naJmi694Mu+c6nmyFej+AMtHOGAjN8oFFnNa6OCPlED2TUJ/TQC58cY8DcI9X32i+XKxrz0fiOcNaKvzj9l/TSM3fJwggLtJr2APpNvjwG24Jqa0lf2F5JC8/35LO7JLA595O0JMiX+qXW51r9Qz5abhb8qxvq2S4euw+Q9NSoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764175812; c=relaxed/simple;
-	bh=LEZvO3SRrTgPGOIAt0BnLB1gssjBkcBbXqQpASF4fwY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=gbieDJjudPF93l5M3ZaD1QUc1rumPJ8Ykjz1iUaWxyT0zaWDty+/DgE4lghaztiBvDwad/pEEZnvCgoBOrHQPzGRnpbtdLQX3ym5j3AQdBCcVS5XqDViMDikKUuLO+uF6aGAz9lMq1eBkeacpIG1Ea6lRNDV5VzA3v3eAOsZ3j8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=XYdMB9I6; arc=none smtp.client-ip=3.64.237.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1764175810; x=1795711810;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=hOWpCuTZQXXu+UFDi92tkah8da8iWaYrZywVBBw9cnQ=;
-  b=XYdMB9I61uQeaKROvWZTaPxhyl5Vm531YyJxtWsmOH+lVWqijbGJhh05
-   6G//jl2CWpJz5i/+PI5ZVazaRH2awjh8RiE4AnwXQ5F5pPzH1OxCL22R0
-   mc1NiqgIS+ZhElSxEbKSAsL3GRAYiJMuMwJjIRR3GLVcP+qW+/W8BA1B7
-   Ykew3MlxMeuT6FdcMa4A94kgQcmjFsCRpLdL1ibHeZ+51GAoqi2W7aC8Z
-   7W58/PhfflNU3YSeWMW2Msckhby9/UR44jfqy0p/lEffJTQM58dOnlrtp
-   qIpHOqMWNg0OtZg1c9tVER2c7qo/DLHKBKIP6WIUHSnFNmAmFavvWT97T
-   Q==;
-X-CSE-ConnectionGUID: KZIjcG2CQ6ucnaRhPFfPyw==
-X-CSE-MsgGUID: eHrl8mI8Tee2eBv0E8nJCw==
-X-IronPort-AV: E=Sophos;i="6.20,228,1758585600"; 
-   d="scan'208";a="5751043"
-Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
-  by internal-fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 16:49:50 +0000
-Received: from EX19MTAEUB002.ant.amazon.com [54.240.197.232:17770]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.27.255:2525] with esmtp (Farcaster)
- id 2808e225-d96e-4595-94bf-b76a6f3bfa50; Wed, 26 Nov 2025 16:49:50 +0000 (UTC)
-X-Farcaster-Flow-ID: 2808e225-d96e-4595-94bf-b76a6f3bfa50
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19MTAEUB002.ant.amazon.com (10.252.51.79) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Wed, 26 Nov 2025 16:49:49 +0000
-Received: from [192.168.8.204] (10.106.83.30) by EX19D005EUB003.ant.amazon.com
- (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Wed, 26 Nov 2025
- 16:49:47 +0000
-Message-ID: <18b4cddb-3e04-4272-9f04-6857cea70ff5@amazon.com>
-Date: Wed, 26 Nov 2025 16:49:46 +0000
+	s=arc-20240116; t=1764176122; c=relaxed/simple;
+	bh=t6dQaMcFstDQXYR4H7vfqmgdXjeJ9mqjp2aG+oOBJVA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YkvN1ni9NfOSBkq+Ss6Ya2Q1gsjdEyxjR1P0+V9RIH4AKtmLMiCld6XOhi1jS5dTVsTLJVuu61texlmiN4Ijd7N+6jfvhC1+kuST9UrDByAK+trllKXfxh39HGhWJeeGSaAc8AJeQig8q0RXO4s2f7dsvA+np0ms3EjNBlt/TvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S090ngv+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB98C4CEF7;
+	Wed, 26 Nov 2025 16:55:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764176121;
+	bh=t6dQaMcFstDQXYR4H7vfqmgdXjeJ9mqjp2aG+oOBJVA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=S090ngv+Xbhos+RtW6FAhhF2zD8GG1Mg9v5UzfySDdEoipkzc+1XqAcSh2YoYJfAW
+	 iS0srhh3ZlxBSHoV8+ybImfU6P/zpjOAes/KkpyMPCjlxRvSjYpNHtdCrIsoNxSDNI
+	 216nzH29D9Q6fOPPOM8x1pE6w5V1+ogJnMEjBHz4o5hcFRk5nyLzV1JtHWRqbaW7GE
+	 Q1PHawcGquKBStZ9XfMfSKLmlXjOfclrwofD5mubdgm5CmBsCQQsJZ9sZbli4jJyg4
+	 LkAUiOSYjYqT00U5z0Y65WO9lZTbtGo4IHllfsTLwzHstwHZzOV/ayqc3gWxzNSyDC
+	 Gy3JUAT3XAhOQ==
+Message-ID: <795a8f3c-eff7-46d9-9175-a4ebe3f9ffd8@kernel.org>
+Date: Wed, 26 Nov 2025 17:55:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v2 5/5] KVM: selftests: test userfaultfd minor for
- guest_memfd
-To: Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>
-CC: Andrea Arcangeli <aarcange@redhat.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand
-	<david@redhat.com>, Hugh Dickins <hughd@google.com>, James Houghton
-	<jthoughton@google.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	"Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>, Michal Hocko
-	<mhocko@suse.com>, "Paolo Bonzini" <pbonzini@redhat.com>, Peter Xu
-	<peterx@redhat.com>, "Sean Christopherson" <seanjc@google.com>, Shuah Khan
-	<shuah@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>, Vlastimil Babka
-	<vbabka@suse.cz>, <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20251125183840.2368510-1-rppt@kernel.org>
- <20251125183840.2368510-6-rppt@kernel.org>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <20251125183840.2368510-6-rppt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH] selftests: mptcp: initialize raw_addr to Null
+Content-Language: en-GB, fr-BE
+To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+References: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20251126163046.58615-1-ankitkhushwaha.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: EX19D002EUC001.ant.amazon.com (10.252.51.219) To
- EX19D005EUB003.ant.amazon.com (10.252.51.31)
 
+Hi Ankit,
 
-
-On 25/11/2025 18:38, Mike Rapoport wrote:
-> From: Nikita Kalyazin <kalyazin@amazon.com>
+On 26/11/2025 17:30, Ankit Khushwaha wrote:
+> The "void *raw_addr" is left uninitialized when else path is
+> followed raising below warning.
 > 
-> The test demonstrates that a minor userfaultfd event in guest_memfd can
-> be resolved via a memcpy followed by a UFFDIO_CONTINUE ioctl.
+> mptcp_connect.c:1262:11: warning: variable 'raw_addr' is used
+>       uninitialized whenever 'if' condition is false
+>       [-Wsometimes-uninitialized]
 > 
-> Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
-> Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> so the fix is to assign *raw_addr to NULL to suppress the warning.
+
+Thank you for having shared this patch!
+> Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
 > ---
->   .../testing/selftests/kvm/guest_memfd_test.c  | 103 ++++++++++++++++++
->   1 file changed, 103 insertions(+)
+> compiler used: clang version 21.1.5 (Fedora 21.1.5-1.fc43).
+> compilation cmd used:
+> 	make -C tools/testing/selftests/net/mptcp CC=clang V=1 -j8
 > 
-> diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-> index e7d9aeb418d3..a5d3ed21d7bb 100644
-> --- a/tools/testing/selftests/kvm/guest_memfd_test.c
-> +++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-> @@ -10,13 +10,17 @@
->   #include <errno.h>
->   #include <stdio.h>
->   #include <fcntl.h>
-> +#include <pthread.h>
-> 
->   #include <linux/bitmap.h>
->   #include <linux/falloc.h>
->   #include <linux/sizes.h>
-> +#include <linux/userfaultfd.h>
->   #include <sys/mman.h>
->   #include <sys/types.h>
->   #include <sys/stat.h>
-> +#include <sys/syscall.h>
-> +#include <sys/ioctl.h>
-> 
->   #include "kvm_util.h"
->   #include "test_util.h"
-> @@ -254,6 +258,104 @@ static void test_guest_memfd_flags(struct kvm_vm *vm)
->          }
->   }
-> 
-> +struct fault_args {
-> +       char *addr;
-> +       volatile char value;
-> +};
-> +
-> +static void *fault_thread_fn(void *arg)
-> +{
-> +       struct fault_args *args = arg;
-> +
-> +       /* Trigger page fault */
-> +       args->value = *args->addr;
-> +       return NULL;
-> +}
-> +
-> +static void test_uffd_minor(int fd, size_t total_size)
-> +{
-> +       struct uffdio_api uffdio_api = {
-> +               .api = UFFD_API,
-> +               .features = UFFD_FEATURE_MINOR_GENERIC,
+> this maybe also be false positive. But somehow clang - 21.1.5
+> triggering this.
 
-Should it be UFFD_FEATURE_MINOR_SHMEM instead? 
-UFFD_FEATURE_MINOR_GENERIC was removed in the v1.
+I confirm this, I can reproduce the warning with Clang 21.
 
-> +       };
-> +       struct uffdio_register uffd_reg;
-> +       struct uffdio_continue uffd_cont;
-> +       struct uffd_msg msg;
-> +       struct fault_args args;
-> +       pthread_t fault_thread;
-> +       void *mem, *mem_nofault, *buf = NULL;
-> +       int uffd, ret;
-> +       off_t offset = page_size;
-> +       void *fault_addr;
-> +
-> +       ret = posix_memalign(&buf, page_size, total_size);
-> +       TEST_ASSERT_EQ(ret, 0);
-> +
-> +       memset(buf, 0xaa, total_size);
-> +
-> +       uffd = syscall(__NR_userfaultfd, O_CLOEXEC);
-> +       TEST_ASSERT(uffd != -1, "userfaultfd creation should succeed");
-> +
-> +       ret = ioctl(uffd, UFFDIO_API, &uffdio_api);
-> +       TEST_ASSERT(ret != -1, "ioctl(UFFDIO_API) should succeed");
-> +
-> +       mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +       TEST_ASSERT(mem != MAP_FAILED, "mmap should succeed");
-> +
-> +       mem_nofault = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-> +       TEST_ASSERT(mem_nofault != MAP_FAILED, "mmap should succeed");
-> +
-> +       uffd_reg.range.start = (unsigned long)mem;
-> +       uffd_reg.range.len = total_size;
-> +       uffd_reg.mode = UFFDIO_REGISTER_MODE_MINOR;
-> +       ret = ioctl(uffd, UFFDIO_REGISTER, &uffd_reg);
-> +       TEST_ASSERT(ret != -1, "ioctl(UFFDIO_REGISTER) should succeed");
-> +
-> +       ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
-> +                       offset, page_size);
-> +       TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
-> +
-> +       fault_addr = mem + offset;
-> +       args.addr = fault_addr;
-> +
-> +       ret = pthread_create(&fault_thread, NULL, fault_thread_fn, &args);
-> +       TEST_ASSERT(ret == 0, "pthread_create should succeed");
-> +
-> +       ret = read(uffd, &msg, sizeof(msg));
-> +       TEST_ASSERT(ret != -1, "read from userfaultfd should succeed");
-> +       TEST_ASSERT(msg.event == UFFD_EVENT_PAGEFAULT, "event type should be pagefault");
-> +       TEST_ASSERT((void *)(msg.arg.pagefault.address & ~(page_size - 1)) == fault_addr,
-> +                   "pagefault should occur at expected address");
-> +
-> +       memcpy(mem_nofault + offset, buf + offset, page_size);
-> +
-> +       uffd_cont.range.start = (unsigned long)fault_addr;
-> +       uffd_cont.range.len = page_size;
-> +       uffd_cont.mode = 0;
-> +       ret = ioctl(uffd, UFFDIO_CONTINUE, &uffd_cont);
-> +       TEST_ASSERT(ret != -1, "ioctl(UFFDIO_CONTINUE) should succeed");
-> +
-> +       /*
-> +        * wait for fault_thread to finish to make sure fault happened and was
-> +        * resolved before we verify the values
-> +        */
-> +       ret = pthread_join(fault_thread, NULL);
-> +       TEST_ASSERT(ret == 0, "pthread_join should succeed");
-> +
-> +       TEST_ASSERT(args.value == *(char *)(mem_nofault + offset),
-> +                   "memory should contain the value that was copied");
-> +       TEST_ASSERT(args.value == *(char *)(mem + offset),
-> +                   "no further fault is expected");
-> +
-> +       ret = munmap(mem_nofault, total_size);
-> +       TEST_ASSERT(!ret, "munmap should succeed");
-> +
-> +       ret = munmap(mem, total_size);
-> +       TEST_ASSERT(!ret, "munmap should succeed");
-> +       free(buf);
-> +       close(uffd);
-> +}
-> +
->   #define gmem_test(__test, __vm, __flags)                               \
->   do {                                                                   \
->          int fd = vm_create_guest_memfd(__vm, page_size * 4, __flags);   \
-> @@ -273,6 +375,7 @@ static void __test_guest_memfd(struct kvm_vm *vm, uint64_t flags)
->                  if (flags & GUEST_MEMFD_FLAG_INIT_SHARED) {
->                          gmem_test(mmap_supported, vm, flags);
->                          gmem_test(fault_overflow, vm, flags);
-> +                       gmem_test(uffd_minor, vm, flags);
->                  } else {
->                          gmem_test(fault_private, vm, flags);
->                  }
-> --
-> 2.50.1
-> 
+It is indeed a false positive, because the code does that:
+
+
+  if (addr.ss_family == AF_INET)
+          raw_addr = &(((struct sockaddr_in *)&addr)->sin_addr);
+  else if (addr.ss_family == AF_INET6)
+          raw_addr = &(((struct sockaddr_in6 *)&addr)->sin6_addr);
+  else
+          xerror("bad family");
+
+
+"xerror()" calls "exit(1)", so "raw_addr" is never used uninitialized.
+
+I'm not sure why Clang 21 reports that now, and not before, but well,
+the modification you did in the selftests doesn't hurt:
+
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
+
+@Net maintainers: this patch can be applied in 'net' directly.
+
+
+@Antik: next time, please specify the target (net/net-next) in the
+subject, see [1]. No need to send a new version (except if the Net
+maintainers prefer), this patch can be applied on top of "net" without
+conflicts.
+
+[1] https://docs.kernel.org/process/maintainer-netdev.html
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
 
