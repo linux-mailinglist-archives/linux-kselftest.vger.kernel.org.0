@@ -1,391 +1,197 @@
-Return-Path: <linux-kselftest+bounces-46567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46568-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11697C8BCEB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 21:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A3E72C8BCF6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 21:23:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0FC544E504C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 20:20:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E95404E183A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 20:23:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3FFB33F39F;
-	Wed, 26 Nov 2025 20:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7EC341ADF;
+	Wed, 26 Nov 2025 20:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="l0+uYE+k";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pA7qptr4";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="n2iYVi6u";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ITcgysbd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SqI4bCla"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C609632E14A
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 20:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4E733F8B7
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 20:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764188410; cv=none; b=f4duI4+qostRmynxaP1YSVs589/YYr4RZagK4qJZu/MwfZT0Xdfj4zAkrddfZ5S6XDch0ewSA9Qi/9SvuwS7EC+nmGsZntjuDzQ+e8DvME/Fw2fLm3sjRREevI1Mhza+y+o7BILmVE48PtOf/ME3ge4zOF1kuDN/KDILP0Ye7kw=
+	t=1764188585; cv=none; b=Y5oST/FGFGnfqLuyFW8nCC/N+EwFOz4uPWRPJPE2lFdOhDtk1C+50tx4kFgf4qSxQevU4GMHbPJOUgMGYdPFC9xQ+SBw1oz1KzcxVWmKNCplErqlo3X0JdcbxPaWumsRqr4L81kkKOnbC9KlQnS4ypfokojC4NoPygPBcvakMYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764188410; c=relaxed/simple;
-	bh=3xf/d4zi+3N7+h/wteuZciKcrT6tEwTTuvcqiCP7G1A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hskt7cFha8EWalQhK9Hrc1z93UFdaTY5wtdXp1Y8QvTEZp5u+gI/OsGVz2Q1ezHo3Nq4uNoj8mNFT2OyLWr3e2mtgWhdSVB4++Ejj/swi1Nefq655KJUhGA/owVGb+09w/UMxg0wosXLc1KnHU6BCC+NqnRl+Bf8uS4URQbeNv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=l0+uYE+k; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pA7qptr4; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=n2iYVi6u; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ITcgysbd; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id E863F336C0;
-	Wed, 26 Nov 2025 20:20:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1764188404; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fW6x2f8ex+aAbpzCN3iK/uH0KKwVGB+ilGfHO9wn0l0=;
-	b=l0+uYE+kzwYOqInHDqx1cUl7p9XBrq7Yf2UgQv7cS719mm/FUqIFPRRbpmJs67H/+ybEjq
-	91ZEPOQUopYlU1r3Hes3kOdiGIVBdEOntbiA/FriRt899RE+ZJKBf5CHRroo86AjMTr3VF
-	IjKC5q+X6POH6wA1ImmsQmhlRstFBjs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1764188404;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fW6x2f8ex+aAbpzCN3iK/uH0KKwVGB+ilGfHO9wn0l0=;
-	b=pA7qptr4mXpDz3Bne2sS08XSDJMtYzaDypIiWREHfDAH8P3aprlEBRmdVfqMmuH2DN6oke
-	38SXAfNwZCkDwrDA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=n2iYVi6u;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=ITcgysbd
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1764188403; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fW6x2f8ex+aAbpzCN3iK/uH0KKwVGB+ilGfHO9wn0l0=;
-	b=n2iYVi6uCDE4prnL9u2nprriR112FhQY9ZOaPJ8pxiV69SZahh8MqMTaBQ9Yxtd8j+Qy5L
-	+tLuNQQL0LrwbpPFyHwD3sK9t7hWu347hwwHJfvU/XkCRHCNxKHmgl3KPaN006w6O59LNu
-	u9QFbVqOHIL94czpPk7bxdfWThUo6qI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1764188403;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fW6x2f8ex+aAbpzCN3iK/uH0KKwVGB+ilGfHO9wn0l0=;
-	b=ITcgysbd9xZG8i53uOY5HMYqCCLMrfmsFNi9qtO+cdOV+5LIKmPehpF5yfgyjs4W18drrZ
-	7zqvNcu3UQc4CNAA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 47EDB3EA63;
-	Wed, 26 Nov 2025 20:20:03 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id yE1jDvNgJ2mDEQAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Wed, 26 Nov 2025 20:20:03 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	shuah@kernel.org,
-	horms@kernel.org,
-	pabeni@redhat.com,
-	kuba@kernel.org,
-	edumazet@google.com,
-	dsahern@kernel.org,
-	davem@davemloft.net,
-	Fernando Fernandez Mancera <fmancera@suse.de>
-Subject: [PATCH 2/2 net-next] selftests: ipv6_icmp: add tests for ICMPv6 handling
-Date: Wed, 26 Nov 2025 21:19:43 +0100
-Message-ID: <20251126201943.4480-2-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251126201943.4480-1-fmancera@suse.de>
-References: <20251126201943.4480-1-fmancera@suse.de>
+	s=arc-20240116; t=1764188585; c=relaxed/simple;
+	bh=CkoAOT5dfaR5LU3r1d65dSm1AmgA1mv63WWdM5dMwLo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=MWFj4Ozy+T+1ulUjzZ2ExuXcE9eCPNmLvQ/kMRN24Sk4iK9BvUTHQyjHK7TwhX05m5jBWu/5FRvc0ePQLAnHSc8pWssBoG/fg59b02iZbhH2pC3NFOofKi5ReIh7/+m3vquwU6ikbQet3cDDYDLlsHgL7kYXCLOQxSXVm+6gBxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SqI4bCla; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-297dd95ffe4so1427525ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 12:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764188583; x=1764793383; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7e8dxkWxLgXy/8RA2rSCcjfvZCVyQEqhBlms36Lhfw=;
+        b=SqI4bClaKX0FpwiXHpgYHPWu2Zaj5vUtQWkLsWE9xwmarHPnlUSaxS8fjj7nBAiKbY
+         NCpBA716Ee9LQrBJrER8zwuCPT69DqZlv4TnvKAuOBKS2cn0uDUOp4zM5D06A4WvrsOE
+         ZJVo7f7OGNoUYrAwM4f4Bon00BUnR1PolW6UL3pxaqsFtKXcXCDUxh59aBxyRh2DKg8R
+         89CnN39ZVcoY4QFYHk8XlRkm/1i80vJVAXSWl7W+azQvZlOG6+8yZbQlgfJRV6f86dip
+         uUmTUE+mNTbS/5LdPuA5gC/Ho6wsvePoKQqC/aejmgo/GS29LguMTvod6lYk4yLUJWHG
+         ueZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764188583; x=1764793383;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s7e8dxkWxLgXy/8RA2rSCcjfvZCVyQEqhBlms36Lhfw=;
+        b=Xvam/Qhz2jXmNOeRSJNO/rmY8UdKtDI099buBonuUeoXPUr8iWREUkiEVkECByb54G
+         /WIdWZj780/pybQjUNyQeLwy871+RDwaSE454FPHUTbEGeIUxt41ak5MeCmScEIbI4sA
+         IecBId2gBMluZ4/HCou/gDX48R8EO4Zhfk9G09iBLAhZ+K/4kD67p9Q+6iXVe9smpFkZ
+         Gy95qt/kIPXRymf44vwtSJx7r07aGzUFNfR5XK1/F6TpRf3axuH075gUngXvT891FI0A
+         /ayOn5mLl6Ms0YNs1QeGfGBa2AenA+qorstdkBjUJGxvSF198fb2mB19pWZwsZFfA6qb
+         D+pQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV8ZETa0Y1mGeQtoDMJ/On4ciG6G8hnyXJuYy9Bzl3T1aW6UELH0jGoO9OLdTSHPAm+QOLM0XLPmjNrj8BZsd0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwP6Pqnm4Elyzo1oSZamcANgA5a3gfRzn+aHXyas6LmfffdFDk
+	3yLztx+mHnwRUivw/hsHVnCJvsK6A0UoQjOrLx0ZqDW/TdPo04iZGI1x
+X-Gm-Gg: ASbGncvR5gxqDH7X3jCdDufp43vGvaEiJc2IeMw3awEQdtgZubXl3hGF/KdB+fJA9CN
+	xW46JIH2ySrngwkq3ATxXICzx6CgwNuAlvkPDu6E48ecO5Jom66QHgNZAyGgtv61JupAKhewY7N
+	mJ7W/cipOgV+ivRQo4NIHAZVYlfntanz+s997Diik794V8+xbknmPyyYCgVwusO/k1Mq6EuEMpK
+	aH97Up95HlwSXgjwBdZp7S0hrKNSeE3teqwqMujRXkby0bWEaR5hN6fSrOosM8g5OLVEuD7DV7Y
+	8L36/XHezjtDLgZW639BBMriUnG009IeClUpsyD7C9WrPILLi/s6r84a5vINlaf5GgciKvCJiB0
+	SQGgxSIn9IOHhc5yxH89moKm4CrU1/aZQMlNDRPdOABCFZNIWr7SQGEWcy5R3Dyx+3YI7ttbL27
+	odbkcl//BiaetM/4sOuA==
+X-Google-Smtp-Source: AGHT+IFRTSFO/MKoB98sTD1DZ+tV8X8B7XD531tYopVzZrSobUd5V2ps7M3RGKr1Jlxbj1VQnB/yCA==
+X-Received: by 2002:a17:903:4b47:b0:295:4d24:31bd with SMTP id d9443c01a7336-29baaf85c44mr101322815ad.17.1764188583202;
+        Wed, 26 Nov 2025 12:23:03 -0800 (PST)
+Received: from [192.168.15.94] ([2804:7f1:ebc3:752f:12e1:8eff:fe46:88b8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b13a80csm207100475ad.35.2025.11.26.12.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Nov 2025 12:23:02 -0800 (PST)
+From: Andre Carvalho <asantostc@gmail.com>
+Subject: [PATCH net-next v7 0/5] netconsole: support automatic target
+ recovery
+Date: Wed, 26 Nov 2025 20:22:52 +0000
+Message-Id: <20251126-netcons-retrigger-v7-0-1d86dba83b1c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:dkim,suse.de:email];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Level: 
-X-Spam-Score: -3.01
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: E863F336C0
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJxhJ2kC/23QwW7DIAwG4FepOI/JOEDCTnuPqQcCJkVak4lEU
+ asq7z4rhylrOVrGH7/+h5ipZJrFx+khCq15ztPIQ/t2EuHix4FkjjwLBDTQKStHWsI0zrLQUvI
+ wUJFeJ6PbPoXOtoLvfgqlfNvNL8HP+eS2iDNvLnlepnLfP1vVvt9dB67irkqCbDx5B9qhDelzu
+ Pr8/R6m666teBBQ1QRkwQN1GsBi074IzZ+gVD1Dw4KyRgfsoO/JPgv6IFTbWTULBh30JikNAZ8
+ FcxSqGQwLGNoYvQVj4ksGexDqPVgWXIAmGY99tP962LbtF4UEQMoGAgAA
+X-Change-ID: 20250816-netcons-retrigger-a4f547bfc867
+To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Andre Carvalho <asantostc@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1764188576; l=3770;
+ i=asantostc@gmail.com; s=20250807; h=from:subject:message-id;
+ bh=CkoAOT5dfaR5LU3r1d65dSm1AmgA1mv63WWdM5dMwLo=;
+ b=HmmRNzhldp3z64+jNQ+Cd8o8m+ugMHzZVKd6I8L00xpCsIdzeNvsHt0pGbAH4cbuk/rAaEF0/
+ yqDTZZa7Op8Di9v4pBax3Wzq517Td167xktzqy+SLUhDf2WSBYfIQB8
+X-Developer-Key: i=asantostc@gmail.com; a=ed25519;
+ pk=eWre+RwFHCxkiaQrZLsjC67mZ/pZnzSM/f7/+yFXY4Q=
 
-Test ICMPv6 to link local address and local address. In addition, this
-test set could be extended to cover more situations in the future.
+This patchset introduces target resume capability to netconsole allowing
+it to recover targets when underlying low-level interface comes back
+online.
 
-ICMPv6 to local addresses
-    TEST: Ping to link local address                                   [OK]
-    TEST: Ping to link local address from ::1                          [OK]
-    TEST: Ping to local address                                        [OK]
-    TEST: Ping to local address from ::1                               [OK]
+The patchset starts by refactoring netconsole state representation in
+order to allow representing deactivated targets (targets that are
+disabled due to interfaces going down).
 
-Tests passed:   4
-Tests failed:   0
+It then modifies netconsole to handle NETDEV_UP events for such targets
+and setups netpoll. Targets are matched with incoming interfaces
+depending on how they were initially bound in netconsole (by mac or
+interface name).
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+The patchset includes a selftest that validates netconsole target state
+transitions and that target is functional after resumed.
+
+Signed-off-by: Andre Carvalho <asantostc@gmail.com>
 ---
- tools/testing/selftests/net/Makefile     |   1 +
- tools/testing/selftests/net/ipv6_icmp.sh | 204 +++++++++++++++++++++++
- 2 files changed, 205 insertions(+)
- create mode 100755 tools/testing/selftests/net/ipv6_icmp.sh
+Changes in v7:
+- selftest: use ${EXIT_STATUS} instead of ${ksft_pass} to avoid
+  shellcheck warning
+- Link to v6: https://lore.kernel.org/r/20251121-netcons-retrigger-v6-0-9c03f5a2bd6f@gmail.com
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index b66ba04f19d9..4d29b47bb084 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -47,6 +47,7 @@ TEST_PROGS := \
- 	ip_local_port_range.sh \
- 	ipv6_flowlabel.sh \
- 	ipv6_force_forwarding.sh \
-+	ipv6_icmp.sh \
- 	ipv6_route_update_soft_lockup.sh \
- 	l2_tos_ttl_inherit.sh \
- 	l2tp.sh \
-diff --git a/tools/testing/selftests/net/ipv6_icmp.sh b/tools/testing/selftests/net/ipv6_icmp.sh
-new file mode 100755
-index 000000000000..d4764219007c
---- /dev/null
-+++ b/tools/testing/selftests/net/ipv6_icmp.sh
-@@ -0,0 +1,204 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# This test is for checking IPv6 ICMP behavior in different situations.
-+source lib.sh
-+ret=0
-+
-+# all tests in this script, can be overridden with -t option
-+TESTS="icmpv6_to_local_address"
-+
-+VERBOSE=0
-+PAUSE_ON_FAIL=no
-+PAUSE=no
-+
-+which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
-+
-+log_test()
-+{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
-+
-+	if [ ${rc} -eq ${expected} ]; then
-+		printf "    TEST: %-60s  [OK]\n" "${msg}"
-+		nsuccess=$((nsuccess+1))
-+	else
-+		ret=1
-+		nfail=$((nfail+1))
-+		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+		echo
-+			echo "hit enter to continue, 'q' to quit"
-+			read a
-+			[ "$a" = "q" ] && exit 1
-+		fi
-+	fi
-+
-+	if [ "${PAUSE}" = "yes" ]; then
-+		echo
-+		echo "hit enter to continue, 'q' to quit"
-+		read a
-+		[ "$a" = "q" ] && exit 1
-+	fi
-+}
-+
-+setup()
-+{
-+	set -e
-+	setup_ns ns1
-+	IP="$(which ip) -netns $ns1"
-+	NS_EXEC="$(which ip) netns exec $ns1"
-+
-+	$IP link add dummy0 type dummy
-+	$IP link set dev dummy0 up
-+	$IP -6 address add 2001:db8:1::1/64 dev dummy0 nodad
-+	set +e
-+}
-+
-+cleanup()
-+{
-+	$IP link del dev dummy0 &> /dev/null
-+	cleanup_ns $ns1
-+}
-+
-+get_linklocal()
-+{
-+	local dev=$1
-+	local addr
-+
-+	addr=$($IP -6 -br addr show dev ${dev} | \
-+	awk '{
-+		for (i = 3; i <= NF; ++i) {
-+			if ($i ~ /^fe80/)
-+				print $i
-+		}
-+	}'
-+	)
-+	addr=${addr/\/*}
-+
-+	[ -z "$addr" ] && return 1
-+
-+	echo $addr
-+
-+	return 0
-+}
-+
-+run_cmd()
-+{
-+	local cmd="$1"
-+	local out
-+	local stderr="2>/dev/null"
-+
-+	if [ "$VERBOSE" = "1" ]; then
-+		printf "    COMMAND: $cmd\n"
-+		stderr=
-+	fi
-+
-+	out=$(eval $cmd $stderr)
-+	rc=$?
-+	if [ "$VERBOSE" = "1" -a -n "$out" ]; then
-+		echo "    $out"
-+	fi
-+
-+	[ "$VERBOSE" = "1" ] && echo
-+
-+	return $rc
-+}
-+
-+icmpv6_to_local_address()
-+{
-+	local rc
-+
-+	echo
-+	echo "ICMPv6 to local addresses"
-+
-+	setup
-+
-+	local lldummy=$(get_linklocal dummy0)
-+
-+	if [ -z "$lldummy" ]; then
-+		echo "Failed to get link local address for dummy0"
-+		return 1
-+	fi
-+
-+	# ping6 to link local address
-+	run_cmd "$NS_EXEC ${ping6} -c 3 $lldummy%dummy0"
-+	log_test $? 0 "Ping to link local address"
-+
-+	# ping6 to link local address from localhost (::1)
-+	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 $lldummy%dummy0"
-+	log_test $? 0 "Ping to link local address from ::1"
-+
-+	# ping6 to local address
-+	run_cmd "$NS_EXEC ${ping6} -c 3 2001:db8:1::1"
-+	log_test $? 0 "Ping to local address"
-+
-+	# ping6 to local address from localhost (::1)
-+	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 2001:db8:1::1"
-+	log_test $? 0 "Ping to local address from ::1"
-+}
-+
-+################################################################################
-+# usage
-+
-+usage()
-+{
-+	cat <<EOF
-+usage: ${0##*/} OPTS
-+
-+    -t <test>   Test(s) to run (default: all)
-+                (options: $TESTS)
-+    -p          Pause on fail
-+    -P          Pause after each test before cleanup
-+    -v          Verbose mode (show commands and output)
-+EOF
-+}
-+
-+################################################################################
-+# main
-+
-+trap cleanup EXIT
-+
-+while getopts :t:pPhv o
-+do
-+	case $o in
-+		t) TESTS=$OPTARG;;
-+		p) PAUSE_ON_FAIL=yes;;
-+		P) PAUSE=yes;;
-+		v) VERBOSE=$(($VERBOSE + 1));;
-+		h) usage; exit 0;;
-+		*) usage; exit 1;;
-+	esac
-+done
-+
-+[ "${PAUSE}" = "yes" ] && PAUSE_ON_FAIL=no
-+
-+if [ "$(id -u)" -ne 0 ];then
-+	echo "SKIP: Need root privileges"
-+	exit $ksft_skip;
-+fi
-+
-+if [ ! -x "$(command -v ip)" ]; then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit $ksft_skip
-+fi
-+
-+# start clean
-+cleanup &> /dev/null
-+
-+for t in $TESTS
-+do
-+	case $t in
-+	icmpv6_to_local_address)	icmpv6_to_local_address;;
-+
-+	help) echo "Test names: $TESTS"; exit 0;;
-+	esac
-+done
-+
-+if [ "$TESTS" != "none" ]; then
-+	printf "\nTests passed: %3d\n" ${nsuccess}
-+	printf "Tests failed: %3d\n" ${nfail}
-+fi
-+
-+exit $ret
+Changes in v6:
+- Rebase on top of net-next to resolve conflicts, no functional changes.
+- Link to v5: https://lore.kernel.org/r/20251119-netcons-retrigger-v5-0-2c7dda6055d6@gmail.com
+
+Changes in v5:
+- patch 3: Set (de)enslaved target as DISABLED instead of DEACTIVATED to prevent
+  resuming it.
+- selftest: Fix test cleanup by moving trap line to outside of loop and remove
+  unneeded 'local' keyword
+- Rename maybe_resume_target to resume_target, add netconsole_ prefix to
+  process_resumable_targets.
+- Hold device reference before calling __netpoll_setup.
+- Link to v4: https://lore.kernel.org/r/20251116-netcons-retrigger-v4-0-5290b5f140c2@gmail.com
+
+Changes in v4:
+- Simplify selftest cleanup, removing trap setup in loop.
+- Drop netpoll helper (__setup_netpoll_hold) and manage reference inside
+  netconsole.
+- Move resume_list processing logic to separate function.
+- Link to v3: https://lore.kernel.org/r/20251109-netcons-retrigger-v3-0-1654c280bbe6@gmail.com
+
+Changes in v3:
+- Resume by mac or interface name depending on how target was created.
+- Attempt to resume target without holding target list lock, by moving
+  the target to a temporary list. This is required as netpoll may
+  attempt to allocate memory.
+- Link to v2: https://lore.kernel.org/r/20250921-netcons-retrigger-v2-0-a0e84006237f@gmail.com
+
+Changes in v2:
+- Attempt to resume target in the same thread, instead of using
+workqueue .
+- Add wrapper around __netpoll_setup (patch 4).
+- Renamed resume_target to maybe_resume_target and moved conditionals to
+inside its implementation, keeping code more clear.
+- Verify that device addr matches target mac address when target was
+setup using mac.
+- Update selftest to cover targets bound by mac and interface name.
+- Fix typo in selftest comment and sort tests alphabetically in
+  Makefile.
+- Link to v1:
+https://lore.kernel.org/r/20250909-netcons-retrigger-v1-0-3aea904926cf@gmail.com
+
+---
+Andre Carvalho (3):
+      netconsole: convert 'enabled' flag to enum for clearer state management
+      netconsole: resume previously deactivated target
+      selftests: netconsole: validate target resume
+
+Breno Leitao (2):
+      netconsole: add target_state enum
+      netconsole: add STATE_DEACTIVATED to track targets disabled by low level
+
+ drivers/net/netconsole.c                           | 155 +++++++++++++++++----
+ tools/testing/selftests/drivers/net/Makefile       |   1 +
+ .../selftests/drivers/net/lib/sh/lib_netcons.sh    |  35 ++++-
+ .../selftests/drivers/net/netcons_resume.sh        |  97 +++++++++++++
+ 4 files changed, 254 insertions(+), 34 deletions(-)
+---
+base-commit: ab084f0b8d6d2ee4b1c6a28f39a2a7430bdfa7f0
+change-id: 20250816-netcons-retrigger-a4f547bfc867
+
+Best regards,
 -- 
-2.51.1
+Andre Carvalho <asantostc@gmail.com>
 
 
