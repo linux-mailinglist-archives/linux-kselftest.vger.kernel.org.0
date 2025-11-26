@@ -1,186 +1,176 @@
-Return-Path: <linux-kselftest+bounces-46526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 078D6C8AD77
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 17:10:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 250B0C8AF2F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 17:24:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C1643AC045
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:09:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D83343A52D7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C97C33C538;
-	Wed, 26 Nov 2025 16:08:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57AD83321A4;
+	Wed, 26 Nov 2025 16:24:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XnG2lGal"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o6EBdzbB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C287533D6D1
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 16:08:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA4030BBAB
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 16:24:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764173339; cv=none; b=aiUOnN6ersYNniEvoMAFaNK+FAz2PgRRhRehIMLZQCk4VXrYiLDnbsdy1QSBOxLKCOVwhzP6/wkhsUGOjox0HMi1GA2W9VxQbveRL/+uQ3spZieHunlJbiuYHrPdKt3aaEZGC80XIKfVvNEEekj2E25YuF2BKMqWYrOMJx55Rsg=
+	t=1764174282; cv=none; b=ZvRZRa61PpWMnlME2EaufYe48D4+o2c+L7BfAO1rh8v31ojFEFgb8Y8PwjV0J7KghunY9X05PRa9KPbKuMdbD0s//6f3C9gGzp0lA31H4q2zYXnQfwOX19xtIs53OSoLKr9QAa31sPak8Qx9npkr9FFYqug+rFEu8eGq7AXBWNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764173339; c=relaxed/simple;
-	bh=7I2EQS/O47z6XkwcLP1Gg8ZRDwtXdZe/P9q5/pdULpQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YDFE0Os2z6dGciWZOXkg0dpa4dKBDEK8bsviZGws3Ds2iZg1daMve8IkSxddxg+ef5iAex58K77OFoz5iU+w5kvYdDQP880gSajLOeGXRSplnt/wZyAOUka3tDuJrn3CSJhI7yO2donTg+81DYTOyhBIb2X4fH/cnnRJsFOkisM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XnG2lGal; arc=none smtp.client-ip=209.85.210.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-7b89c1ce9easo8195921b3a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 08:08:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764173330; x=1764778130; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0w85V/n6/PltUzl9FbkvTGvY3LknN/8DxQ32r6IxQUM=;
-        b=XnG2lGalo2r7m0ceuuS65+FVFrGEoCyIU6X45bSGmuk1dEFFiPErtkNv5+j0LBIeaJ
-         XJqjcmGPVpokdxPmtam8sj1jqaXxy38XXgTlUYyR15nA8FObMVYFZ1HxTPofhnlT+FG3
-         rAxSNTv9CunasAh4rn0rClsSevupK7PFBI7x135rY1boZjkSSxUxPiXow6PtdLfJyIe1
-         qSA3ZaqB3nQS5LwLIceEyaE24weKRxgqF1FOzvemZYQftiA6Yzl7UT3lROzLRSjmpFIV
-         cHgdjkrc0qdaV0MEaovZO+PMotJIM9noUPuzXDm9IDdSpSKYRHW+ihVhE14W4jYi2Xg9
-         Hy1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764173330; x=1764778130;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0w85V/n6/PltUzl9FbkvTGvY3LknN/8DxQ32r6IxQUM=;
-        b=h3mW0xA6YzI3W+Vg9q/Dac664hUu1PvkayWTB7PjQMltpvbabVag0l7i8pkikv4wj8
-         raReIADGrRcEWihik8Vns+YgTzNVV2z1Qt5FifU2rzhEtQDMZm6L5Xmp9t1ux/flxLQV
-         V41B268Z/0lLOl0sbvs5oeDEPP2HVt/QCjMj/JHw1y/jc0aENpM4JNusr4MmrQLuevge
-         nmbi/CES1t34WazEdb9ltmUf6amc85lA+B1eoqUjF2L4N/+AmCSm5k9XXJcRF9xprk86
-         G+AohMlgVIxGQ1eMkmrJWnfcHViNqvNrhNQbY5feJ2HthWVNVSovVGU7tx6TD7s76P9f
-         553Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUyiRYjhyUKA3W/nD3DiXptpoRPzc5A3Muhw2sued7T4FNbB9UWY3QZzXIRauZy4YG6RcGFv7IXdwliRkTqbxQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAJ15YAPlGjyQ/0oApqbqrjCJFR4KoHRIUeuCTYv4SZSShgq1U
-	7fYTi3ud4GxKaBwTqRDgIv45Qr87ygn+c9XvKcadS54ZDmy5W2GAmLQ0
-X-Gm-Gg: ASbGncsuZzdzUKWaCR8ayfpQIvuc52aKFzFKfsZs17NEzo4gy67UmGbq0GakCqVb52n
-	4CwATZ3TdIMqKZwQwQH27mpvV0scFQb5mVkkpzdQZ2TIWU4rfZAh3kYf0rwdke1PQWWTvTLVbtF
-	S63yLtFNehBzzSWt+eRqTHxaeaCs8nTLyLgu3A/vw30yB8psyfqsU0qfibi9DbrOA8mOnnup4zb
-	tZ4ygZVVHqBDcAp4iiE9aJMGiGjWPjHjydA51RZ3THEcbAOXS4Hz2Cbgf1cjnOkngygETV5r4rY
-	dxjlftpDpO6i+8Ca7GqCZtslB1v+2OxDMLbzW1c50XAyMA8/Ajw+Ds7RFQYkLZjz2LRlGwPg0Ye
-	HvZb5z128aBS0/HgNi9oqHgp9brGgGNsiqPa5l4k00Bbi7aagSgaInCxSLMqFFEgSaKlCH8lX6s
-	EEKzTkxm2HMBNe83mjy6rOY6WwBMA+cw==
-X-Google-Smtp-Source: AGHT+IEebVkUKBP+U1i9Oqi7Ort6BI2gg0wHmeA+Y9t88Utsg2k3h8rxgk1fLNRybEyKRORRW5br6g==
-X-Received: by 2002:a05:6a00:2d88:b0:7b9:ef46:ec70 with SMTP id d2e1a72fcca58-7c58e50c16emr18224646b3a.23.1764173330206;
-        Wed, 26 Nov 2025 08:08:50 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3f0243b3csm21831681b3a.36.2025.11.26.08.08.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 08:08:49 -0800 (PST)
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Peter Xu <peterx@redhat.com>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Subject: [PATCH] selftests/mm/uffd: initialize char variable to Null
-Date: Wed, 26 Nov 2025 21:38:30 +0530
-Message-ID: <20251126160830.52124-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1764174282; c=relaxed/simple;
+	bh=jVuT3OlGm7eNi3eYEGZFHHFSDumDXBBchOQE3Jg8Y/k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DPqi69OOdWSeEbTS6GVaRjYjl1q6HT0DStgclHRQhb13dBzFW6VeiZf93ZDBGHbimRcpLOiQb9JhG+VxlaBn9NVmt0gsWk2dzS6azpzO2I/3clTPgqkNBSDgoJNpLxXqHHh4cvFVCV6Eb3Ge7lSdXUP0sYdN/ACsBz4/BdYFxhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o6EBdzbB; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <13a871d1-5bd8-44a1-8737-eb26342d30b4@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764174268;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ekRT332AhugTObU/O7d0SgsnySfkt/B3bfRW4qi1c38=;
+	b=o6EBdzbBfRSNbqrzyNQy0/jwq3rhnUJY9BWQHLJn0k5zdTTvjgAf2+V1BfVRd9qHfpD1eu
+	HUOSsk4Vk3QsZwRXXY7iimxiFnLtr5jxD6NVJCQMPtUO1qh42ZZMvELk9N7h889j5R0uCu
+	YenxpVKMF7xP80JV942cal4X7de7Jk0=
+Date: Thu, 27 Nov 2025 00:24:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v12 3/7] bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS
+ flags support for percpu_hash and lru_percpu_hash maps
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ jolsa@kernel.org, yonghong.song@linux.dev, song@kernel.org,
+ eddyz87@gmail.com, dxu@dxuuu.xyz, deso@posteo.net, martin.lau@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, shuah@kernel.org, kerneljasonxing@gmail.com,
+ chen.dylane@linux.dev, willemb@google.com, paul.chaignon@gmail.com,
+ a.s.protopopov@gmail.com, memxor@gmail.com, yatsenko@meta.com,
+ tklauser@distanz.ch, kernel-patches-bot@fb.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+References: <20251126145039.15715-4-leon.hwang@linux.dev>
+ <f33b87ffc7d3884dab5f73d90ba3f29afd4ee5975be512532702228363cde72e@mail.kernel.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <f33b87ffc7d3884dab5f73d90ba3f29afd4ee5975be512532702228363cde72e@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-In "uffd-stress.c" & "uffd-unit-tests.c". address of char variable having
-garbage value (uninitialized) is passed to 'write' syscall triggers
-warning.
 
-	uffd-stress.c:246:39: warning: variable 'c' is uninitialized when
-	passed  as a const pointer argument here
-	[-Wuninitialized-const-pointer]
 
-	uffd-unit-tests.c:581:31: warning: variable 'c' is uninitialized
-	when passed as a const pointer argument here
-	[-Wuninitialized-const-pointer]
+On 2025/11/26 23:11, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index 01a99e3a3..f79d2ae27 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+> 
+> [ ... ]
+> 
+>> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+>> index c8a9b27f8..441ff5bc5 100644
+>> --- a/kernel/bpf/hashtab.c
+>> +++ b/kernel/bpf/hashtab.c
+> 
+> [ ... ]
+> 
+>> @@ -1249,6 +1258,15 @@ static long htab_lru_map_update_elem(struct bpf_map *map, void *key, void *value
+>>  	return ret;
+>>  }
+>>
+>> +static int htab_map_check_update_flags(bool onallcpus, u64 map_flags)
+>> +{
+>> +	if (unlikely(!onallcpus && map_flags > BPF_EXIST))
+>> +		return -EINVAL;
+>> +	if (unlikely(onallcpus && ((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS)))
+>> +		return -EINVAL;
+>> +	return 0;
+>> +}
+>> +
+> 
+> Can htab_map_check_update_flags() correctly validate the new flags?
+> 
+> When onallcpus=false (the common case for normal map_update_elem
+> operations via htab_percpu_map_update_elem()->
+> htab_map_update_elem_in_place()), the check at the first if statement
+> compares the full 64-bit map_flags value against BPF_EXIST (2).
+> 
+> When BPF_F_CPU (8) is set, or when the CPU number is embedded in the
+> upper 32 bits (e.g., 0x0000000100000008 for CPU 1), map_flags will be
+> greater than BPF_EXIST, causing this function to return -EINVAL.
+> 
+> This appears inconsistent with the equivalent check in
+> bpf_percpu_array_update() (commit 51f40f83b), which uses:
+> 
+>   if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
+> 
+> The percpu_array check casts to u32 to examine only the lower 32 bits,
+> allowing the CPU number in the upper 32 bits. The hash table check for
+> onallcpus=false doesn't perform this cast, so it will reject valid flag
+> combinations that include BPF_F_CPU.
+> 
+> Would this prevent the BPF_F_CPU functionality from working for normal
+> percpu_hash update operations?
+> 
 
-so the fix is to assign char variable to '\0' to prevent writing of
-garbage value.
+For UAPI percpu_hash updates, this is fine because onallcpus is always true.
 
-Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
----
-this warning is raised with clang version 21.1.5 (Fedora 21.1.5-1.fc43).
----
- tools/testing/selftests/mm/uffd-stress.c     | 2 +-
- tools/testing/selftests/mm/uffd-unit-tests.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
+For BPF program–initiated percpu_hash updates, the behavior also remains
+unchanged since onallcpus is false, and the 'map_flags > BPF_EXIST'
+check behaves exactly as it did before.
 
-diff --git a/tools/testing/selftests/mm/uffd-stress.c b/tools/testing/selftests/mm/uffd-stress.c
-index b51c89e1cd1a..700fbaa18d44 100644
---- a/tools/testing/selftests/mm/uffd-stress.c
-+++ b/tools/testing/selftests/mm/uffd-stress.c
-@@ -241,7 +241,7 @@ static int stress(struct uffd_args *args)
- 			return 1;
+Thanks,
+Leon
 
- 	for (cpu = 0; cpu < gopts->nr_parallel; cpu++) {
--		char c;
-+		char c = '\0';
- 		if (bounces & BOUNCE_POLL) {
- 			if (write(gopts->pipefd[cpu*2+1], &c, 1) != 1)
- 				err("pipefd write error");
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index f917b4c4c943..f4807242c5b2 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -543,7 +543,7 @@ static void uffd_minor_test_common(uffd_global_test_opts_t *gopts, bool test_col
- {
- 	unsigned long p;
- 	pthread_t uffd_mon;
--	char c;
-+	char c = '\0';
- 	struct uffd_args args = { 0 };
- 	args.gopts = gopts;
-
-@@ -759,7 +759,7 @@ static void uffd_sigbus_test_common(uffd_global_test_opts_t *gopts, bool wp)
- 	pthread_t uffd_mon;
- 	pid_t pid;
- 	int err;
--	char c;
-+	char c = '\0';
- 	struct uffd_args args = { 0 };
- 	args.gopts = gopts;
-
-@@ -819,7 +819,7 @@ static void uffd_events_test_common(uffd_global_test_opts_t *gopts, bool wp)
- 	pthread_t uffd_mon;
- 	pid_t pid;
- 	int err;
--	char c;
-+	char c = '\0';
- 	struct uffd_args args = { 0 };
- 	args.gopts = gopts;
-
-@@ -1125,7 +1125,7 @@ uffd_move_test_common(uffd_global_test_opts_t *gopts,
- {
- 	unsigned long nr;
- 	pthread_t uffd_mon;
--	char c;
-+	char c = '\0';
- 	unsigned long long count;
- 	struct uffd_args args = { 0 };
- 	char *orig_area_src = NULL, *orig_area_dst = NULL;
---
-2.52.0
+>> @@ -1262,9 +1280,9 @@ static long htab_map_update_elem_in_place(struct bpf_map *map, void *key,
+>>  	u32 key_size, hash;
+>>  	int ret;
+>>
+>> -	if (unlikely(map_flags > BPF_EXIST))
+>> -		/* unknown flags */
+>> -		return -EINVAL;
+>> +	ret = htab_map_check_update_flags(onallcpus, map_flags);
+>> +	if (unlikely(ret))
+>> +		return ret;
+>>
+>>  	WARN_ON_ONCE(!bpf_rcu_lock_held());
+>>
+> 
+> [ ... ]
+> 
+>> @@ -1324,9 +1342,9 @@ static long __htab_lru_percpu_map_update_elem(struct bpf_map *map, void *key,
+>>  	u32 key_size, hash;
+>>  	int ret;
+>>
+>> -	if (unlikely(map_flags > BPF_EXIST))
+>> -		/* unknown flags */
+>> -		return -EINVAL;
+>> +	ret = htab_map_check_update_flags(onallcpus, map_flags);
+>> +	if (unlikely(ret))
+>> +		return ret;
+> 
+> [ ... ]
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19708012130
 
 
