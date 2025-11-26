@@ -1,513 +1,344 @@
-Return-Path: <linux-kselftest+bounces-46512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46513-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E358C8A7AB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 15:56:11 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C016CC8A8A5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 16:09:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 907C33A5D56
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 14:55:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 41E814ECB74
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Nov 2025 15:06:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2C37308F1B;
-	Wed, 26 Nov 2025 14:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBFDB308F30;
+	Wed, 26 Nov 2025 15:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FFZnVk4t"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Ka+Uncqx";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="zcEQH0Js"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D829B308F11;
-	Wed, 26 Nov 2025 14:52:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764168764; cv=none; b=aYbZFl48exz9TSVIPqKdWarRkjrtttNatSsqoyPD6xnr5Jxtywd0zNkKz/MfzEUuvRxc7NFqDq8trmGC/fRseGY2UM6d88rs3M4/nsPTp/kGeyqj99ILi61ir38sovUx7AWZmd+F9Ybn5t9SykaT9kV+q1cHlAfOcUE0WqURsZQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764168764; c=relaxed/simple;
-	bh=ObBVKeOuW/rZyhKKNHsmLaLzvEHYqS7q/OKIbcl6Ixs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u8BeEH9tXOz78eKF4r43GEzJ+SPPw03SKqGrG2kJuQXxYCsMvHRVw3Yyw9n+X7ecMbzFNbyookTbXuhRnPVTfETi1X7gT4fCCegdaTASRVe1MuoSfT/DOoxEevZuwOO3VXjkK1W84WK7i1tKEJA0ZlBpHCBm6ZMWbRuvGnluauM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FFZnVk4t; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764168760;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zQW7AL/CsZzRnWa2E56YrYrrhZjrdykemufrqeiU4zk=;
-	b=FFZnVk4tmc5rw/FCp1XYuYOeZpmGBgX+B10LW9Knn8u1cyeg8Kqfjq173LGa1r7LTyII+5
-	TC5hoMkG1602tgSs0W/wDvXDybq0PjhX6OWEXlLx3Tn0NtlW8TocO5BoiXNTdCOyZ/m+qo
-	ayPnsUmieNXQkHJkWHtHJjefHCYnKbo=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	jolsa@kernel.org,
-	yonghong.song@linux.dev,
-	song@kernel.org,
-	eddyz87@gmail.com,
-	dxu@dxuuu.xyz,
-	deso@posteo.net,
-	martin.lau@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	shuah@kernel.org,
-	kerneljasonxing@gmail.com,
-	chen.dylane@linux.dev,
-	willemb@google.com,
-	paul.chaignon@gmail.com,
-	a.s.protopopov@gmail.com,
-	memxor@gmail.com,
-	yatsenko@meta.com,
-	tklauser@distanz.ch,
-	leon.hwang@linux.dev,
-	kernel-patches-bot@fb.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v12 7/7] selftests/bpf: Add cases to test BPF_F_CPU and BPF_F_ALL_CPUS flags
-Date: Wed, 26 Nov 2025 22:50:39 +0800
-Message-ID: <20251126145039.15715-8-leon.hwang@linux.dev>
-In-Reply-To: <20251126145039.15715-1-leon.hwang@linux.dev>
-References: <20251126145039.15715-1-leon.hwang@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A106308F33;
+	Wed, 26 Nov 2025 15:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764169593; cv=fail; b=CRzzu7GJT4ihRHPioQt5wEweWsa1U3Y6tQtSeOj3IUDtsAgu2/MnB48IQuXZTaXOJxQhIfCeC9+/5EyIysEscNylvQelv5TU2mt0gkl840pKiCnOdgncWbjGj4EBi84gHG6NHO9DBZoaNbu1sx2/GNJZLAyJlEndLLItlQtxtvQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764169593; c=relaxed/simple;
+	bh=uzwmVuXAGaa5exJhINNVZ8Y6EycSE7nHHh2p0jwRdd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=BH1EeSORWEfUG1aKwHH13Q/i+DNlaHmrTDiktAFHZ8fDCgCOHHD4I45v6BIF+aR8JeJ8Cdq227Tu6BWUwmTrMZmWrVBahWyOcXN/2UxI9tJGshf2nddWwt8na/CFpJ87nygeFUwkd1VNXZn/ylYHmcf5AUWWQiAJC7V77kXOtkU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Ka+Uncqx; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=zcEQH0Js; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AQEuD5a2463599;
+	Wed, 26 Nov 2025 15:06:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=qV6ngxkjE7gLkivzx9
+	HvmPUp8ebol1BiwQ+h7NI7XQE=; b=Ka+UncqxM32+DNm1jtZpfI+cck5nBoMKkN
+	AZqGjZ24Fg7ckApfkpmcJYQv8bKqyiH5tCUeX4EzZE5UqGCQ79BCFXZfDIsms514
+	aBNhB9KsiNVnpbX2AO1VPl6tWRAILbByWbAHGtaIfQZ7/h6ywUPEbl2sHSSDhvnN
+	JEGyvfT3XqIaXZT33n1LUXnJ2GNVigGoA9ZnCjKfgUqUSLQDEMZrgKzLXZ9Z91mH
+	TLvFRZBEGwpjzk6NdZUcBS1kvoUxjdUnnZmU3dogggh8dQP/59VOf2WGocXWbp/l
+	YmLkoTLdip8Y7bT54F96vZ7x/TevP7oj9EUGMIpaRwI3SJZekbQg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4ak8fkmfs8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 26 Nov 2025 15:06:01 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5AQEPPAj030106;
+	Wed, 26 Nov 2025 15:06:00 GMT
+Received: from sj2pr03cu001.outbound.protection.outlook.com (mail-westusazon11012024.outbound.protection.outlook.com [52.101.43.24])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4ak3memug2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 26 Nov 2025 15:06:00 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dHpO7Z2AvzRUFl4OPDeU2i/lP10J3/M5GvYqqN4qV2k04cDNaIUF4Z1aJ6AIFJztEGdBnKKpPrvc3clu2tQBCPTJ43aLzhxyRJ27Axfujtt5ofiVWqAFAIheFAPN1aw+781c6RZg/wqOps2sIJwGvzlJY4FzQ/Z3HvysLb/9MOXKXufXYAfHswqUsGBFUZDlUWdcLFJ1NdX2z1CCN0uRRXvUgaiS25grDT1caUKj1Ivo4XUrd/VSAwpZ32IuT+bQBqcX2vQBGyMevmITu68TT7y/6PwTQuOzDBi1o7qRPycDA9owGNXT6ITVOx/hxOnsJwsIvs+EBoKEF2iQJDBoZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qV6ngxkjE7gLkivzx9HvmPUp8ebol1BiwQ+h7NI7XQE=;
+ b=p+LcjSk0E86aS59iMnxeFjIx0sJ5Ht6hAiJWnXMxLbO/1mqUEcy//ZM8QkUnS+uIMYUOi4g0DB+0s03ma923iVxTla5lux8dZjuENZsc+9y9lTJVPXDGsepHPqyeyLvOWhwbC4eHfbwvpOXQaQAysb5KGBAlAY7SNa+WJ6tHdHko5p2QrxIyLjCvwz2agisvemaSBP1Wc1G/EbGvV3vuDgJo/U51eMZxt1SBJNNW4WcdAkW2vxmbHkDncZ6MDs/E1ihjGgBGFQ6gmbUB+5mmq8F3slQkV9veQnynyYdObQBH2ihlDaUKWFGU5Q46WgewpAZhd7HXZ7Vq/VXr8hYbFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qV6ngxkjE7gLkivzx9HvmPUp8ebol1BiwQ+h7NI7XQE=;
+ b=zcEQH0JsUj03HSaaO6v8kdWl0o7nFoNa38zNlEWS/+GWLmzE1RGu7flqLhmC0o9vrv5oA76kts8fzwM8P5jY+r+xVnk6bqSBfl4DFLOcu7yH94UmKwQvJ0py+TioUJi8zSvgjbXYPOVzNpw21/Zh8PcXnn5G3jI3m/fhzlAomY4=
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com (2603:10b6:510:128::16)
+ by PH3PPF18C4487EB.namprd10.prod.outlook.com (2603:10b6:518:1::78b) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.12; Wed, 26 Nov
+ 2025 15:05:55 +0000
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c]) by PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c%5]) with mapi id 15.20.9366.009; Wed, 26 Nov 2025
+ 15:05:55 +0000
+Date: Wed, 26 Nov 2025 10:05:49 -0500
+From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Hildenbrand <david@redhat.com>, Hugh Dickins <hughd@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Michal Hocko <mhocko@suse.com>, Nikita Kalyazin <kalyazin@amazon.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "David Hildenbrand (Red Hat)" <david@kernel.org>
+Subject: Re: [PATCH v2 1/5] userfaultfd: move vma_can_userfault out of line
+Message-ID: <i3qrqbj6nhqpjrnolg2zf6nmbdwsw6ejgmugzkeg6iqsi22jjv@ycv5iw7iaeol>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, David Hildenbrand <david@redhat.com>, 
+	Hugh Dickins <hughd@google.com>, James Houghton <jthoughton@google.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Michal Hocko <mhocko@suse.com>, 
+	Nikita Kalyazin <kalyazin@amazon.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Peter Xu <peterx@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, "David Hildenbrand (Red Hat)" <david@kernel.org>
+References: <20251125183840.2368510-1-rppt@kernel.org>
+ <20251125183840.2368510-2-rppt@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251125183840.2368510-2-rppt@kernel.org>
+User-Agent: NeoMutt/20250905
+X-ClientProxiedBy: MW4PR04CA0288.namprd04.prod.outlook.com
+ (2603:10b6:303:89::23) To PH0PR10MB5777.namprd10.prod.outlook.com
+ (2603:10b6:510:128::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5777:EE_|PH3PPF18C4487EB:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37aba908-9f8d-46d1-f82e-08de2cfd4c1a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?f4VWeY83vzZ0sfGEp5iSg/N3h5bG4LDPOffTxK2MpFJsY3gNJiEJaQfZvYyC?=
+ =?us-ascii?Q?WDGXZtYV8gqvvuFBIjLfB6ykTItFNem+elAR4/wYSf6Ry5Lj9+fyhawI3O6q?=
+ =?us-ascii?Q?2YBJGJBqpC+cyQrJNQx1OAV1j+q2VWXY6kKSYIYiJYJa+JPmnUBIDl6YLvyA?=
+ =?us-ascii?Q?zTeNwGQ1gms82Gnb/bV5N498qpZ+4sBWOE4efKyxwM9I0ZfxVXeHyKTskqhu?=
+ =?us-ascii?Q?eC34ZIoDHbSZC6mlKp3Ul6XgEr4xfYsZBva6pa26KV1M1k0RBKM90S9C4sgL?=
+ =?us-ascii?Q?OlwnzyYaQRstkZ0U0jyWxcFW8nlLcIpt6/N4b9F+Lq3gyoFKNtA/dIBOzEbS?=
+ =?us-ascii?Q?7srNKB0Tvo3RE/v8xzeJFcD+rda/GuqmEWdNkGZ1akyaf0GahWeWAX1k1Dy1?=
+ =?us-ascii?Q?tWLt19qwS1W1gHtD0nrhnCPymzn6UwVxtvG/HFc9YxJxSAiKMmAsM70fl7Dw?=
+ =?us-ascii?Q?aQn5ZtkiLm/u8zSt5QSHRwM6V4M7KRMMvIZs/kgDJN4JI0Scitk2BAEnUY0s?=
+ =?us-ascii?Q?UXQ17KCtRZOjRzdx3oB1/e/Tyuk2PgWrJ+KvdhsGYFCi8gm6agGfVtLZ3Xn1?=
+ =?us-ascii?Q?AXrmOovqmIFpphiDDMwIkAAznAqwDLOJBQGq3kbEP8euJV6wXpvtFvvKXAkd?=
+ =?us-ascii?Q?mSVJJ+plinwWjYC4ig/LMziptrD2XV+J0mBuj3l5F0ikQnu1Zuu5ahrF3h6A?=
+ =?us-ascii?Q?leD/HWBNlCMTH2ILIM/cW7R325UMqhHUOvlrSSVMkdO3oPUc7CNmhAcfk0Qm?=
+ =?us-ascii?Q?HHuUhllPvIytrMKAOUWX9r+F4ditAHEbfp0zIntPyTx7mzgFSyABTOUjVX7c?=
+ =?us-ascii?Q?Rebt7tIo513oHPNgo+Lf6fGrIagiZJgHpmd+0UEZ0LYeenXeQYTrS2K+XHUu?=
+ =?us-ascii?Q?ocvOT/5yH3NgS7gzxxGwv4z3T8cVnjnWHBDoRErKw6OHYpDA5GpAlUat1X5m?=
+ =?us-ascii?Q?TNwMO0w6d3EsuD/Glr3qcUmYf0cT3OfRRwEOTsg3xwTj17uaPnZ10UdrkFyL?=
+ =?us-ascii?Q?3d2O+doyCVPgnvXApQ1VO4w3DvPQ/rf/Jog9eyqDILnCazbYpNgh23sUjeeq?=
+ =?us-ascii?Q?sIK6PM+hpLY9sQpOLs8G2s/p+Q6moBvSmImy0UBCo/WWpc9392cc8TD6rX+B?=
+ =?us-ascii?Q?2N8wU7AfF6/F1VFSBqgtCbJuY/tIE9Rbb5X+ObEZeSyom/jOEkjfsYnWaKih?=
+ =?us-ascii?Q?XUc+p4UFiqmTH83PAvSLf31SQhtlIFCKRlKa77BD6e0R3zQJ9anjKPCjJki5?=
+ =?us-ascii?Q?17vnYnfgVHvHiXnGQPl1dJbo9eEtY0YsV5QjMQc9LRc69K4wrtqYnrMlLEZK?=
+ =?us-ascii?Q?0eRQ3ONBIf4tRZvSRnBjRwazu3ZgfY5ce4FHI7w0rZfaID5wuy/kO+5Xyp//?=
+ =?us-ascii?Q?5GP2HYEi4RN4pv0UqzqNFewgOa2f27kSc2eW+BKTKKRjhLRAavFbxyrg7jlI?=
+ =?us-ascii?Q?bzp8Oqdtk+/1jwepS5gZG/3l1gn8IlKZ?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5777.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?x4+bJdtEwF13KE+l8s7KdwLcWelueGZ9ajaoYzmYFnO/EUcggEPCBaDsC0pO?=
+ =?us-ascii?Q?Lnq/ZkNVJ6m1feBHgwlhUQWZO+uyB8r5f4lBmoCmLPbmMPDMJMF3Iqmhu4+Y?=
+ =?us-ascii?Q?J/ecwskpA1hLymS9hXPRiwIlwfEHkq25NtY03KXDKq8ifwZcbwmZOjmf+ckd?=
+ =?us-ascii?Q?D3tCNVP2X9zpn3025sRzxqRRERpXtBPw2tb2VjA4MSxC4mIhBix46aI3iuQe?=
+ =?us-ascii?Q?R6rSCiuDevuXisuwiYMRnqOpP/6gYrzG3W6SJa66Twou2wdVDYUNQsYzSaQ/?=
+ =?us-ascii?Q?yuS4S3l6JPTyS4PZzg8ZOPW2ed0AG7t262Gnc/bkbgCDnvF6ijh5ZLccGudX?=
+ =?us-ascii?Q?SeglpHIileVPGRHMamQcLgjQdgK3za0vAO1aaJTy88kievMLTfc6rrVfm9s2?=
+ =?us-ascii?Q?Ne3auDU3bBVFJZ+ORfDIHyD2+yIDdMtd7ii7Cgf/W/DmKWIuVAp3cUNYkZhA?=
+ =?us-ascii?Q?99UqiJ/OqUguGp7UmDWCRTXqgkHGYW5XLVBB2aq6XXXcYUtAdwpbm7RgFMdJ?=
+ =?us-ascii?Q?HWz2gKSzqo1mGlVBWQbdKHkpE63EcLRziu6WWKYWuqU0jWa7uKeandHQOGTt?=
+ =?us-ascii?Q?TT0YOL71+aevEWDR70KI9AuelfCgoVGAa82kuzrQlGUDCKX+q+oIrUFfsxUS?=
+ =?us-ascii?Q?383QmHszRgmoc4lrLB0ns0j56xNQj7HMmwmszWkqrpnAQ4U+o4QsgcfTXko5?=
+ =?us-ascii?Q?q396yJM9uezZ6fNSudOXNGEkFe0a//Rx/4suE8vWErSc3Xgi9R9kuxnaI9qs?=
+ =?us-ascii?Q?srxORGH7n6IDZUhCQx/NHsdT7cVkqK1YulT/bHz/tHEY16I3sCEgDzW6JUMD?=
+ =?us-ascii?Q?eDi3mE1v4yg9p3z+yqxjpIH+M8R2vzBVx3Uz8PdkwWY4vaIffaPbZ5j5QAx7?=
+ =?us-ascii?Q?sPO5jj6P1O+TaJ46Is0lM6G1ZUcI9XgYMn2aAHxMdhDxzQHleEfmeAPO82br?=
+ =?us-ascii?Q?4zuu5X3ucNv3ECVU5ORKUMiqlDQto1wXPzXfXz0aE9Lchc8h3cBNl47jIKS1?=
+ =?us-ascii?Q?iSuneBO0qyIwIZbFKOpRoZ479sJxNK02lxF6JZmpNzjFi6i1FnnS8oijatQe?=
+ =?us-ascii?Q?tWBskiFmMlhnPSYqmhoV1/4w8NcucQfXYwQiNirA4WaFUnt5E6uPB+suPwLQ?=
+ =?us-ascii?Q?phJVLsgJ8cIUre0Co4OsFd/ecy8YYTSQchKrXzcKYbTRdLYyGb73u5p7iDNa?=
+ =?us-ascii?Q?lnsXs9IJcVbVrO0wNaDc0dvwCCMXG37yFmr4rbFTsC96JvmiRmNfR5NBC6O1?=
+ =?us-ascii?Q?RneaSvnD+sXroaK/Xu9hctnF3q9eSAEpDER0MdIoYpPWIvwcAumrhUDLw9Mp?=
+ =?us-ascii?Q?YYjig/uJ47/S6jA4/LzvL1PCwVfkfu0Au66fZSUvj5A3KP10DXVyC6rJP/4R?=
+ =?us-ascii?Q?1BPfo+Ajq+1xLhBLsJlwHPpauSSa4EfiPBzkICVCg3PaAiyZFyuYatFWf8Lh?=
+ =?us-ascii?Q?zX1Qks8tY2Duk5IPPA2b9h0CcxFJH8DIKggeqpR1xL8eBz6dxkehpuXK83wC?=
+ =?us-ascii?Q?xjqKook6vwim9ugPNE4/EUch8rEBzr0msiwJQoxp8TrokMTNCw7vjMZch4TY?=
+ =?us-ascii?Q?F+Ng/dRWA7fLpBPBHsPq8QVW7c8P+IwyUyzlU6s8?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	vCmqX/V4oLoF2Ee9yuMGVCSJyq4Lrp89pmgVWZCPSdlzXFbiAYunTmfcP+jkiMtVSK28QTUhzzTFEFbpBikZq736MH4fq5QQ18yW5eT0k20aLk3lOYavWknOGwVIII9GqikB6vf9WkcJNRvEF7yFFeTmusgjPgXFdZVKT4N3mEn92QFjymhIky/FUfBFTcTeNgoxzcWaTXxoARwYsp2jxeUDJyOhSIOMF2K1QsiD6do5wtgW8HhT71LCR25heGyNhX0CTvm9iCaVksV7rGMrpSGI0JhbWAYOehtqreLHl6dmTxzmJz4wjhDjjKx5EtMRPQ4aTbZhSDjB084wU5CA2KRQ3/iIMV6iPuFyqGbo22ShevEvJ1PBLi7zTwzPtmBh7hJg1hUDlBo18tl5ODEbbdbCD0hnvjkZeKyJgOPXPWMwmB/Fb98XtkC6g26npvBe0JS4QjPfSFLu4PPZ1t9jKt/pCK8jfrd4ITBL5EtFzs75SLOauMFheaTiqgvsI7wcuGlQb19x9Why6XuC+1Q7AgrB5+EZMSeupYLd/RXj1nUSGyC+1/WtFIH/hdZcS0n3cUJ7VtQCSjeFhc8oSo1IIDfXDiBfe7b3yfinwFDsQj0=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37aba908-9f8d-46d1-f82e-08de2cfd4c1a
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5777.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Nov 2025 15:05:54.9952
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cX6BBajU0/v8rXdwdF22nfp4CW2hXU4q1YLfOm91QcpXdT3ZRIFg4+msk76Uw5DF4d1yyFoLrXqe3ZSiJHUHOg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPF18C4487EB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-25_02,2025-11-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 mlxscore=0 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2510240000 definitions=main-2511260124
+X-Authority-Analysis: v=2.4 cv=f4RFxeyM c=1 sm=1 tr=0 ts=69271759 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=6UeiqGixMTsA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=yPCof4ZbAAAA:8 a=LGixd4EU0KPlbEVDNxoA:9 a=CjuIK1q_8ugA:10
+ cc=ntf awl=host:12099
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI2MDEyNCBTYWx0ZWRfX1l0t98/6QbkS
+ icPftf4PJjO31lvGrJC1YcV/QHKFMRvBcGk7mYt9qvPncI8jkV9OAS6CG1wQFpQFBzsIK+sUSvl
+ pb3ZyFVz43rgqq50Wx9tzsx9bXama1CwreNpYFTQaUifH1srqP+JH38VZtDtbL+SvYfoC8M3WV9
+ 0XqjGfhNVV958DXsiRlcmOZo1zE1cf7c09zARrfKB6Utwm6jNju6s3UNejpg+D1pfOcA8dNICaG
+ UMi/6yvZazh4mKk/vlGIc8oE4/9IP/qHe7NHiRfH475LERwW7Y1lSPagjoa57Q4HO6TF525XzHu
+ nhwpE2GqBx6Dw3JMOTYB7UubbaD0WQslADnZcrk+IjLI+ZPyu+tOtM27v2nDAqZbnDY9Xs2KXy+
+ 7m3NPkexqr3aW0eTtqU5dSnkUhBkyYaMlng2qBPRQGzzlEiUl6g=
+X-Proofpoint-ORIG-GUID: sT-nZesz0ybPlyB-qjS5ckQBAi8Nwz0i
+X-Proofpoint-GUID: sT-nZesz0ybPlyB-qjS5ckQBAi8Nwz0i
 
-Add test coverage for the new BPF_F_CPU and BPF_F_ALL_CPUS flags support
-in percpu maps. The following APIs are exercised:
+* Mike Rapoport <rppt@kernel.org> [251125 13:39]:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> 
+> vma_can_userfault() has grown pretty big and it's not called on
+> performance critical path.
+> 
+> Move it out of line.
+> 
+> No functional changes.
+> 
+> Reviewed-by: David Hildenbrand (Red Hat) <david@kernel.org>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-* bpf_map_update_batch()
-* bpf_map_lookup_batch()
-* bpf_map_update_elem()
-* bpf_map__update_elem()
-* bpf_map_lookup_elem_flags()
-* bpf_map__lookup_elem()
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-For lru_percpu_hash map, set max_entries to
-'libbpf_num_possible_cpus() + 1' and only use the first
-'libbpf_num_possible_cpus()' entries. This ensures a spare entry is always
-available in the LRU free list, avoiding eviction.
-
-When updating an existing key in lru_percpu_hash map:
-
-1. l_new = prealloc_lru_pop();  /* Borrow from free list */
-2. l_old = lookup_elem_raw();   /* Found, key exists */
-3. pcpu_copy_value();           /* In-place update */
-4. bpf_lru_push_free();         /* Return l_new to free list */
-
-Also add negative tests to verify that non-percpu array and hash maps
-reject the BPF_F_CPU and BPF_F_ALL_CPUS flags.
-
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/percpu_alloc.c   | 328 ++++++++++++++++++
- .../selftests/bpf/progs/percpu_alloc_array.c  |  32 ++
- 2 files changed, 360 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-index 343da65864d6..c1d0949f093f 100644
---- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include "cgroup_helpers.h"
- #include "percpu_alloc_array.skel.h"
- #include "percpu_alloc_cgrp_local_storage.skel.h"
- #include "percpu_alloc_fail.skel.h"
-@@ -115,6 +116,321 @@ static void test_failure(void) {
- 	RUN_TESTS(percpu_alloc_fail);
- }
- 
-+static void test_percpu_map_op_cpu_flag(struct bpf_map *map, void *keys, size_t key_sz, u32 entries,
-+					int nr_cpus, bool test_batch)
-+{
-+	size_t value_sz = sizeof(u32), value_sz_cpus, value_sz_total;
-+	u32 *values = NULL, *values_percpu = NULL;
-+	const u32 value = 0xDEADC0DE;
-+	int i, j, cpu, map_fd, err;
-+	u64 batch = 0, flags;
-+	void *values_row;
-+	u32 count, v;
-+	LIBBPF_OPTS(bpf_map_batch_opts, batch_opts);
-+
-+	value_sz_cpus = value_sz * nr_cpus;
-+	values = calloc(entries, value_sz_cpus);
-+	if (!ASSERT_OK_PTR(values, "calloc values"))
-+		return;
-+
-+	values_percpu = calloc(entries, roundup(value_sz, 8) * nr_cpus);
-+	if (!ASSERT_OK_PTR(values_percpu, "calloc values_percpu")) {
-+		free(values);
-+		return;
-+	}
-+
-+	value_sz_total = value_sz_cpus * entries;
-+	memset(values, 0, value_sz_total);
-+
-+	map_fd = bpf_map__fd(map);
-+	flags = BPF_F_CPU | BPF_F_ALL_CPUS;
-+	err = bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-+	if (!ASSERT_ERR(err, "bpf_map_lookup_elem_flags cpu|all_cpus"))
-+		goto out;
-+
-+	err = bpf_map_update_elem(map_fd, keys, values, flags);
-+	if (!ASSERT_ERR(err, "bpf_map_update_elem cpu|all_cpus"))
-+		goto out;
-+
-+	flags = BPF_F_ALL_CPUS;
-+	err = bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-+	if (!ASSERT_ERR(err, "bpf_map_lookup_elem_flags all_cpus"))
-+		goto out;
-+
-+	flags = BPF_F_LOCK | BPF_F_CPU;
-+	err = bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-+	if (!ASSERT_ERR(err, "bpf_map_lookup_elem_flags BPF_F_LOCK"))
-+		goto out;
-+
-+	flags = BPF_F_LOCK | BPF_F_ALL_CPUS;
-+	err = bpf_map_update_elem(map_fd, keys, values, flags);
-+	if (!ASSERT_ERR(err, "bpf_map_update_elem BPF_F_LOCK"))
-+		goto out;
-+
-+	flags = (u64)nr_cpus << 32 | BPF_F_CPU;
-+	err = bpf_map_update_elem(map_fd, keys, values, flags);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map_update_elem -ERANGE"))
-+		goto out;
-+
-+	err = bpf_map__update_elem(map, keys, key_sz, values, value_sz, flags);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map__update_elem -ERANGE"))
-+		goto out;
-+
-+	err = bpf_map_lookup_elem_flags(map_fd, keys, values, flags);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map_lookup_elem_flags -ERANGE"))
-+		goto out;
-+
-+	err = bpf_map__lookup_elem(map, keys, key_sz, values, value_sz, flags);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map__lookup_elem -ERANGE"))
-+		goto out;
-+
-+	for (cpu = 0; cpu < nr_cpus; cpu++) {
-+		/* clear value on all cpus */
-+		values[0] = 0;
-+		flags = BPF_F_ALL_CPUS;
-+		for (i = 0; i < entries; i++) {
-+			err = bpf_map__update_elem(map, keys + i * key_sz, key_sz, values,
-+						   value_sz, flags);
-+			if (!ASSERT_OK(err, "bpf_map__update_elem all_cpus"))
-+				goto out;
-+		}
-+
-+		/* update value on specified cpu */
-+		for (i = 0; i < entries; i++) {
-+			values[0] = value;
-+			flags = (u64)cpu << 32 | BPF_F_CPU;
-+			err = bpf_map__update_elem(map, keys + i * key_sz, key_sz, values,
-+						   value_sz, flags);
-+			if (!ASSERT_OK(err, "bpf_map__update_elem specified cpu"))
-+				goto out;
-+
-+			/* lookup then check value on CPUs */
-+			for (j = 0; j < nr_cpus; j++) {
-+				flags = (u64)j << 32 | BPF_F_CPU;
-+				err = bpf_map__lookup_elem(map, keys + i * key_sz, key_sz, values,
-+							   value_sz, flags);
-+				if (!ASSERT_OK(err, "bpf_map__lookup_elem specified cpu"))
-+					goto out;
-+				if (!ASSERT_EQ(values[0], j != cpu ? 0 : value,
-+					       "bpf_map__lookup_elem value on specified cpu"))
-+					goto out;
-+			}
-+		}
-+	}
-+
-+	if (!test_batch)
-+		goto out;
-+
-+	count = entries;
-+	batch_opts.elem_flags = (u64)nr_cpus << 32 | BPF_F_CPU;
-+	err = bpf_map_update_batch(map_fd, keys, values, &count, &batch_opts);
-+	if (!ASSERT_EQ(err, -ERANGE, "bpf_map_update_batch -ERANGE"))
-+		goto out;
-+
-+	for (cpu = 0; cpu < nr_cpus; cpu++) {
-+		memset(values, 0, value_sz_total);
-+
-+		/* clear values across all CPUs */
-+		count = entries;
-+		batch_opts.elem_flags = BPF_F_ALL_CPUS;
-+		err = bpf_map_update_batch(map_fd, keys, values, &count, &batch_opts);
-+		if (!ASSERT_OK(err, "bpf_map_update_batch all_cpus"))
-+			goto out;
-+
-+		/* update values on specified CPU */
-+		for (i = 0; i < entries; i++)
-+			values[i] = value;
-+
-+		count = entries;
-+		batch_opts.elem_flags = (u64)cpu << 32 | BPF_F_CPU;
-+		err = bpf_map_update_batch(map_fd, keys, values, &count, &batch_opts);
-+		if (!ASSERT_OK(err, "bpf_map_update_batch specified cpu"))
-+			goto out;
-+
-+		/* lookup values on specified CPU */
-+		batch = 0;
-+		count = entries;
-+		memset(values, 0, entries * value_sz);
-+		err = bpf_map_lookup_batch(map_fd, NULL, &batch, keys, values, &count, &batch_opts);
-+		if (!ASSERT_TRUE(!err || err == -ENOENT, "bpf_map_lookup_batch specified cpu"))
-+			goto out;
-+
-+		for (i = 0; i < entries; i++)
-+			if (!ASSERT_EQ(values[i], value,
-+				       "bpf_map_lookup_batch value on specified cpu"))
-+				goto out;
-+
-+		/* lookup values from all CPUs */
-+		batch = 0;
-+		count = entries;
-+		batch_opts.elem_flags = 0;
-+		memset(values_percpu, 0, roundup(value_sz, 8) * nr_cpus * entries);
-+		err = bpf_map_lookup_batch(map_fd, NULL, &batch, keys, values_percpu, &count,
-+					   &batch_opts);
-+		if (!ASSERT_TRUE(!err || err == -ENOENT, "bpf_map_lookup_batch all_cpus"))
-+			goto out;
-+
-+		for (i = 0; i < entries; i++) {
-+			values_row = (void *) values_percpu +
-+				     roundup(value_sz, 8) * i * nr_cpus;
-+			for (j = 0; j < nr_cpus; j++) {
-+				v = *(u32 *) (values_row + roundup(value_sz, 8) * j);
-+				if (!ASSERT_EQ(v, j != cpu ? 0 : value,
-+					       "bpf_map_lookup_batch value all_cpus"))
-+					goto out;
-+			}
-+		}
-+	}
-+
-+out:
-+	free(values_percpu);
-+	free(values);
-+}
-+
-+
-+static void test_percpu_map_cpu_flag(enum bpf_map_type map_type)
-+{
-+	struct percpu_alloc_array *skel;
-+	size_t key_sz = sizeof(int);
-+	int *keys, nr_cpus, i, err;
-+	struct bpf_map *map;
-+	u32 max_entries;
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	max_entries = nr_cpus + 1;
-+	keys = calloc(max_entries, key_sz);
-+	if (!ASSERT_OK_PTR(keys, "calloc keys"))
-+		return;
-+
-+	for (i = 0; i < max_entries; i++)
-+		keys[i] = i;
-+
-+	skel = percpu_alloc_array__open();
-+	if (!ASSERT_OK_PTR(skel, "percpu_alloc_array__open")) {
-+		free(keys);
-+		return;
-+	}
-+
-+	map = skel->maps.percpu;
-+	bpf_map__set_type(map, map_type);
-+	bpf_map__set_max_entries(map, max_entries);
-+
-+	err = percpu_alloc_array__load(skel);
-+	if (!ASSERT_OK(err, "test_percpu_alloc__load"))
-+		goto out;
-+
-+	test_percpu_map_op_cpu_flag(map, keys, key_sz, max_entries - 1, nr_cpus, true);
-+out:
-+	percpu_alloc_array__destroy(skel);
-+	free(keys);
-+}
-+
-+static void test_percpu_array_cpu_flag(void)
-+{
-+	test_percpu_map_cpu_flag(BPF_MAP_TYPE_PERCPU_ARRAY);
-+}
-+
-+static void test_percpu_hash_cpu_flag(void)
-+{
-+	test_percpu_map_cpu_flag(BPF_MAP_TYPE_PERCPU_HASH);
-+}
-+
-+static void test_lru_percpu_hash_cpu_flag(void)
-+{
-+	test_percpu_map_cpu_flag(BPF_MAP_TYPE_LRU_PERCPU_HASH);
-+}
-+
-+static void test_percpu_cgroup_storage_cpu_flag(void)
-+{
-+	struct percpu_alloc_array *skel = NULL;
-+	struct bpf_cgroup_storage_key key;
-+	int cgroup, prog_fd, nr_cpus, err;
-+	struct bpf_map *map;
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	err = setup_cgroup_environment();
-+	if (!ASSERT_OK(err, "setup_cgroup_environment"))
-+		return;
-+
-+	cgroup = create_and_get_cgroup("/cg_percpu");
-+	if (!ASSERT_GE(cgroup, 0, "create_and_get_cgroup")) {
-+		cleanup_cgroup_environment();
-+		return;
-+	}
-+
-+	err = join_cgroup("/cg_percpu");
-+	if (!ASSERT_OK(err, "join_cgroup"))
-+		goto out;
-+
-+	skel = percpu_alloc_array__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "percpu_alloc_array__open_and_load"))
-+		goto out;
-+
-+	prog_fd = bpf_program__fd(skel->progs.cgroup_egress);
-+	err = bpf_prog_attach(prog_fd, cgroup, BPF_CGROUP_INET_EGRESS, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto out;
-+
-+	map = skel->maps.percpu_cgroup_storage;
-+	err = bpf_map_get_next_key(bpf_map__fd(map), NULL, &key);
-+	if (!ASSERT_OK(err, "bpf_map_get_next_key"))
-+		goto out;
-+
-+	test_percpu_map_op_cpu_flag(map, &key, sizeof(key), 1, nr_cpus, false);
-+out:
-+	bpf_prog_detach2(-1, cgroup, BPF_CGROUP_INET_EGRESS);
-+	close(cgroup);
-+	cleanup_cgroup_environment();
-+	percpu_alloc_array__destroy(skel);
-+}
-+
-+static void test_map_op_cpu_flag(enum bpf_map_type map_type)
-+{
-+	u32 max_entries = 1, count = max_entries;
-+	u64 flags, batch = 0, val = 0;
-+	int err, map_fd, key = 0;
-+	LIBBPF_OPTS(bpf_map_batch_opts, batch_opts);
-+
-+	map_fd = bpf_map_create(map_type, "test_cpu_flag", sizeof(int), sizeof(u64), max_entries,
-+				NULL);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-+		return;
-+
-+	flags = BPF_F_ALL_CPUS;
-+	err = bpf_map_update_elem(map_fd, &key, &val, flags);
-+	ASSERT_ERR(err, "bpf_map_update_elem all_cpus");
-+
-+	batch_opts.elem_flags = BPF_F_ALL_CPUS;
-+	err = bpf_map_update_batch(map_fd, &key, &val, &count, &batch_opts);
-+	ASSERT_ERR(err, "bpf_map_update_batch all_cpus");
-+
-+	flags = BPF_F_CPU;
-+	err = bpf_map_lookup_elem_flags(map_fd, &key, &val, flags);
-+	ASSERT_ERR(err, "bpf_map_lookup_elem_flags cpu");
-+
-+	batch_opts.elem_flags = BPF_F_CPU;
-+	err = bpf_map_lookup_batch(map_fd, NULL, &batch, &key, &val, &count, &batch_opts);
-+	ASSERT_ERR(err, "bpf_map_lookup_batch cpu");
-+
-+	close(map_fd);
-+}
-+
-+static void test_array_cpu_flag(void)
-+{
-+	test_map_op_cpu_flag(BPF_MAP_TYPE_ARRAY);
-+}
-+
-+static void test_hash_cpu_flag(void)
-+{
-+	test_map_op_cpu_flag(BPF_MAP_TYPE_HASH);
-+}
-+
- void test_percpu_alloc(void)
- {
- 	if (test__start_subtest("array"))
-@@ -125,4 +441,16 @@ void test_percpu_alloc(void)
- 		test_cgrp_local_storage();
- 	if (test__start_subtest("failure_tests"))
- 		test_failure();
-+	if (test__start_subtest("cpu_flag_percpu_array"))
-+		test_percpu_array_cpu_flag();
-+	if (test__start_subtest("cpu_flag_percpu_hash"))
-+		test_percpu_hash_cpu_flag();
-+	if (test__start_subtest("cpu_flag_lru_percpu_hash"))
-+		test_lru_percpu_hash_cpu_flag();
-+	if (test__start_subtest("cpu_flag_percpu_cgroup_storage"))
-+		test_percpu_cgroup_storage_cpu_flag();
-+	if (test__start_subtest("cpu_flag_array"))
-+		test_array_cpu_flag();
-+	if (test__start_subtest("cpu_flag_hash"))
-+		test_hash_cpu_flag();
- }
-diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_array.c b/tools/testing/selftests/bpf/progs/percpu_alloc_array.c
-index 37c2d2608ec0..ed6a2a93d5a5 100644
---- a/tools/testing/selftests/bpf/progs/percpu_alloc_array.c
-+++ b/tools/testing/selftests/bpf/progs/percpu_alloc_array.c
-@@ -187,4 +187,36 @@ int BPF_PROG(test_array_map_10)
- 	return 0;
- }
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, u32);
-+} percpu SEC(".maps");
-+
-+SEC("?fentry/bpf_fentry_test1")
-+int BPF_PROG(test_percpu_array, int x)
-+{
-+	u64 value = 0xDEADC0DE;
-+	int key = 0;
-+
-+	bpf_map_update_elem(&percpu, &key, &value, BPF_ANY);
-+	return 0;
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE);
-+	__type(key, struct bpf_cgroup_storage_key);
-+	__type(value, u32);
-+} percpu_cgroup_storage SEC(".maps");
-+
-+SEC("cgroup_skb/egress")
-+int cgroup_egress(struct __sk_buff *skb)
-+{
-+	u32 *val = bpf_get_local_storage(&percpu_cgroup_storage, 0);
-+
-+	*val = 1;
-+	return 1;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.51.2
-
+> ---
+>  include/linux/userfaultfd_k.h | 36 ++---------------------------------
+>  mm/userfaultfd.c              | 34 +++++++++++++++++++++++++++++++++
+>  2 files changed, 36 insertions(+), 34 deletions(-)
+> 
+> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+> index c0e716aec26a..e4f43e7b063f 100644
+> --- a/include/linux/userfaultfd_k.h
+> +++ b/include/linux/userfaultfd_k.h
+> @@ -208,40 +208,8 @@ static inline bool userfaultfd_armed(struct vm_area_struct *vma)
+>  	return vma->vm_flags & __VM_UFFD_FLAGS;
+>  }
+>  
+> -static inline bool vma_can_userfault(struct vm_area_struct *vma,
+> -				     vm_flags_t vm_flags,
+> -				     bool wp_async)
+> -{
+> -	vm_flags &= __VM_UFFD_FLAGS;
+> -
+> -	if (vma->vm_flags & VM_DROPPABLE)
+> -		return false;
+> -
+> -	if ((vm_flags & VM_UFFD_MINOR) &&
+> -	    (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma)))
+> -		return false;
+> -
+> -	/*
+> -	 * If wp async enabled, and WP is the only mode enabled, allow any
+> -	 * memory type.
+> -	 */
+> -	if (wp_async && (vm_flags == VM_UFFD_WP))
+> -		return true;
+> -
+> -#ifndef CONFIG_PTE_MARKER_UFFD_WP
+> -	/*
+> -	 * If user requested uffd-wp but not enabled pte markers for
+> -	 * uffd-wp, then shmem & hugetlbfs are not supported but only
+> -	 * anonymous.
+> -	 */
+> -	if ((vm_flags & VM_UFFD_WP) && !vma_is_anonymous(vma))
+> -		return false;
+> -#endif
+> -
+> -	/* By default, allow any of anon|shmem|hugetlb */
+> -	return vma_is_anonymous(vma) || is_vm_hugetlb_page(vma) ||
+> -	    vma_is_shmem(vma);
+> -}
+> +bool vma_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags,
+> +		       bool wp_async);
+>  
+>  static inline bool vma_has_uffd_without_event_remap(struct vm_area_struct *vma)
+>  {
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index af61b95c89e4..8dc964389b0d 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -1977,6 +1977,40 @@ ssize_t move_pages(struct userfaultfd_ctx *ctx, unsigned long dst_start,
+>  	return moved ? moved : err;
+>  }
+>  
+> +bool vma_can_userfault(struct vm_area_struct *vma, vm_flags_t vm_flags,
+> +		       bool wp_async)
+> +{
+> +	vm_flags &= __VM_UFFD_FLAGS;
+> +
+> +	if (vma->vm_flags & VM_DROPPABLE)
+> +		return false;
+> +
+> +	if ((vm_flags & VM_UFFD_MINOR) &&
+> +	    (!is_vm_hugetlb_page(vma) && !vma_is_shmem(vma)))
+> +		return false;
+> +
+> +	/*
+> +	 * If wp async enabled, and WP is the only mode enabled, allow any
+> +	 * memory type.
+> +	 */
+> +	if (wp_async && (vm_flags == VM_UFFD_WP))
+> +		return true;
+> +
+> +#ifndef CONFIG_PTE_MARKER_UFFD_WP
+> +	/*
+> +	 * If user requested uffd-wp but not enabled pte markers for
+> +	 * uffd-wp, then shmem & hugetlbfs are not supported but only
+> +	 * anonymous.
+> +	 */
+> +	if ((vm_flags & VM_UFFD_WP) && !vma_is_anonymous(vma))
+> +		return false;
+> +#endif
+> +
+> +	/* By default, allow any of anon|shmem|hugetlb */
+> +	return vma_is_anonymous(vma) || is_vm_hugetlb_page(vma) ||
+> +	    vma_is_shmem(vma);
+> +}
+> +
+>  static void userfaultfd_set_vm_flags(struct vm_area_struct *vma,
+>  				     vm_flags_t vm_flags)
+>  {
+> -- 
+> 2.50.1
+> 
 
