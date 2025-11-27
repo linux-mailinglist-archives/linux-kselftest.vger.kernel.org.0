@@ -1,144 +1,143 @@
-Return-Path: <linux-kselftest+bounces-46600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46601-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2573AC8C9E7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 02:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 69EC0C8CC0C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 04:32:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A2D0D3509F7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 01:57:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C102534B90D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 03:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7862723D2B4;
-	Thu, 27 Nov 2025 01:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B6627EFF1;
+	Thu, 27 Nov 2025 03:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LlIo8GQ9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C36239594;
-	Thu, 27 Nov 2025 01:57:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09731225416
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 03:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764208636; cv=none; b=eV4bRI+6g7Yqtxm14uWvB83+iodVKqsPOQT+x/NJagHl51ootWAgo8lJdbEWg1/znWXm+ycEDwFAG2HdinVGY0HBg+97+c/wgqT0yifJsB+/QhWmTzO94XffLTw6kSjAroyeYMkW5gAGFdMoiUJzNJihfRlAycGe9ZoXnWlAo/Q=
+	t=1764214358; cv=none; b=Ujo//cQV8O3hoEdEq2VPoKl5yx6flr2PSFoT13g6qD8Fw+cz5oyablo5u4bGJjnggyDrp8Ccpi/cbKvlgjUt+e20mqrm1KP0SexTnwh3qGHNh3Y7jn1yzIJSVvH+q0vnyQ0h5PJnGrD2VHD2oYC+ZW0W9tjr+L83/qXD3x2fZJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764208636; c=relaxed/simple;
-	bh=J+R2CqnwfsgWsmllI+loPgRfxWnnYZ22nUTCkSbhEGU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aAa2uckHtxy0aKski2O6kpLkuqhsTkzuDUWRPyURNwkOtHm4I3kBIvTLngb8eyA8RYkn0z/D5MR+c+fVMG0uto7Thw3ROVgsOqZh4eKYa9w+xffWNl3GTZq5XRRmAWKPI7m8vhXkKzfAR83w8bN7l6jgS170KT5guKYdWV/kDE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.235])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4dH00G4zj2zKHMS6;
-	Thu, 27 Nov 2025 09:56:30 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 1AB121A0EBA;
-	Thu, 27 Nov 2025 09:57:10 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP2 (Coremail) with SMTP id Syh0CgDHcHfzrydpMRCYCA--.64064S2;
-	Thu, 27 Nov 2025 09:57:08 +0800 (CST)
-Message-ID: <60aae228-9f3e-4511-8a92-7a7c4dea5e22@huaweicloud.com>
-Date: Thu, 27 Nov 2025 09:57:07 +0800
+	s=arc-20240116; t=1764214358; c=relaxed/simple;
+	bh=RQCpusYkNqhCf/oYYjKg0UCyKstePjWLCBpBHzMw+HE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iRdfWmNifPpFkzEOBg5H3C1/weIqE8VL1U3zHDul55v/rb2ZrTrWoMCInJJ1+ca2fEQU5EEhioY/zhVnNFaZJnTs+Rl7bCQDW6Peta+O+KmrH/V0biYjmf+FGAmmN6zqH5M1cn2v2x6/+0XAg2PqF7B8PJIYgOqKrpnU5gegwyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LlIo8GQ9; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-297e239baecso11339095ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 19:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764214356; x=1764819156; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJ1M2Xvyt40lCnxw+Gw/ePOJPKhvduaiNO9FIO7qjnU=;
+        b=LlIo8GQ9uSpY9NADk+QQzCwoZaYP4NSDSKnPuWLT64jl6DEmdM4YF8+Th05fLk25M8
+         YpUchykrGAUNuaUoIIV6qKZJT3YBI93UQ3jXoDNcFTWsLjU3TT6vVNXZfEpm4tKqmmwH
+         TAPUtdJ9oPeZEmnPZxtCaUvnu5lf0vDD61bW4umE0iT7KbAmMbZb805lzNla1Zq4jATE
+         wxYO4WC4H4WnxjVwXfqtjMWmpUXvf3oh6IBeWBB2VjoEtG++YtVVAyGTw92d19gzLAct
+         Dg1rGZpoDTfjZq8CiS18sksGAeDDHnWZHP0K39iN9NH0YeJ8BoAVW7Yq+NPrlO6xDxiv
+         6myQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764214356; x=1764819156;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VJ1M2Xvyt40lCnxw+Gw/ePOJPKhvduaiNO9FIO7qjnU=;
+        b=Ms+LEBRdfOOTV0DKky/0RD3aGSdEd0Ah4EVZHw214LBCNFj5XYRq+lR9Vuu48kpr+F
+         X4tQpRyZ0CqcO6U+JPmJxZvJuvzeVvRBmdpyIVv7WGyuPbHkBk9/OM67johdO663+enZ
+         TqJalbplQ6zE7VCeYuLlTuM55o/ibYrl0FcRnn0sJdKeSZ+H/zsLRTuXeRGBCAt/xNsJ
+         dmuFCJgtJkCJ3jg9bsdimSjgcfO/c7mpLNgf4jCTsHiCzULRoDWTiO9tlaJ4kvy3F5Sp
+         aWvSzT6bKA/op2sW8pAQAtaFxlX0QrWP3ZFkSGCNr5pI6NzyVYHBvgYfsqF9n/vigPiU
+         wBRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUR3NmZBrwa5BaAWhoktVkjiOHoMdo9GgqpKxFdok0WRe4aFmqlilr38sUxc9F8ghQUCkBSpZkXMOTALgXOA3A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRSBhQ1TRZlFmrdAkA7B2pEL4zdnJuqB6jEGSsTF6KiKgaoU41
+	0/Xk2k1JBKelsFhnrAtZDdJwuCn2IA5X5brfuwcDQRq0B0YfBVMZUu0=
+X-Gm-Gg: ASbGncsTreXa3pb1oL+kjYBzDBSQ4gxtifVuTdsgv7d/8W0uV+ofmBALef26dsmYaNj
+	NoG3wmnOZYZUS5N5aaYr2Ebp5raLLI4HqMQB1cTDUQw37n5q1QUSHF+G3pwJcUprzmLYWDdfz3N
+	UpTSAhQ8gVPYA1m1n0GelDyKVItE4/Clz9DE976eOHArePSgoZBt3MDcNdKQ9x/YxBs3kP/fnDB
+	/h9yyuTj8OTlh7JsrfRdPPqCN3jYX7e39sQwB7MVfGnln24W6UtQkJwzSt5muTyZhZq82u5mfkY
+	eBv2r2ZJt1SbaA+4vIYjaRsPoRnr8b9XgijST3+TuoZJqe/eJuuaN2rCaYzpJDteFN5kzWlgLiY
+	vHs8NBunsGf37YYxSHrlqnseACSP87c8dSSmkivFow09QvB88q16ncar2G3enXUQLBNl4qBiBPZ
+	554+d/YzO7TS8ZyWQot8Mh5XSzISE2q97F8xMZBj0j/pmcnGE=
+X-Google-Smtp-Source: AGHT+IG3jNbvnvpK7iPmyHhKwaYo2yFYrQWYJT24DmT6DQObpycLY0SOpYePrSAPkXpirXgXx1ENyg==
+X-Received: by 2002:a17:903:2f45:b0:296:5ebe:8fa with SMTP id d9443c01a7336-29b5e3b8731mr255928125ad.23.1764214356167;
+        Wed, 26 Nov 2025 19:32:36 -0800 (PST)
+Received: from samee-VMware-Virtual-Platform.. ([2402:e280:3d9e:537:5870:9b57:1a0b:b0e5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bceb276a7sm644295ad.48.2025.11.26.19.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Nov 2025 19:32:35 -0800 (PST)
+From: Sameeksha Sankpal <sameekshasankpal@gmail.com>
+To: kees@kernel.org
+Cc: luto@amacapital.net,
+	wad@chromium.org,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Sameeksha Sankpal <sameekshasankpal@gmail.com>
+Subject: [PATCH] [PATCH v4] selftests/seccomp: Fix indentation and rebase error logging patch
+Date: Thu, 27 Nov 2025 09:01:54 +0530
+Message-ID: <20251127033154.12290-1-sameekshasankpal@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on
- cpuset.cpus conflict.
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Sun Shaojie <sunshaojie@kylinos.cn>
-Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llong@redhat.com, shuah@kernel.org, tj@kernel.org
-References: <unk64xmcj5kt5c5gaauwaeld5qsshaldw7utgzk362w33y3zr7@s765trmj5ccs>
- <20251120130557.1554118-1-sunshaojie@kylinos.cn>
- <nfg4xqeoa4qqz7xypddzj756jhlsieeqfnpgvzwsltb7lnqz57@qgatuaufa7hq>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <nfg4xqeoa4qqz7xypddzj756jhlsieeqfnpgvzwsltb7lnqz57@qgatuaufa7hq>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgDHcHfzrydpMRCYCA--.64064S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFyrtrykJr1kZr4rAw4Dtwb_yoW8KrW3pF
-	W8KFn7Kw4Fqr1rJws2qw4xuF47tws7uF17JF98Gr18ZwsrCFyIkF4vyrZI9FWfX3s8Gw1j
-	v3y29r4YvFWDuF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbmii3UUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
+v4:
+ - Resending v3 after reviewer feedback (Shuah Khan).
+ - No code changes.
+ - Fixes email formatting and broken threading in earlier versions.
 
+v3:
+ - Rebased against upstream seccomp tree.
+ - Fixed indentation to use tabs instead of spaces.
+ - Used scripts/checkpatch.pl to fix warnings.
+ - Removed blank line before Signed-off-by.
 
-On 2025/11/26 22:13, Michal Koutný wrote:
-> On Thu, Nov 20, 2025 at 09:05:57PM +0800, Sun Shaojie <sunshaojie@kylinos.cn> wrote:
->>> Do you actually want to achieve this or is it an implementation
->>> side-effect of the Case 1 scenario that you want to achieve?
->>
->> Yes, this is indeed the functionality I intended to achieve, as I find it 
->> follows the same logic as Case 1.
-> 
-> So you want to achieve a stable [1] set of CPUs for a cgroup that cannot
-> be taken away from you by any sibling, correct?
-> My reasoning is that the siblings should be under one management entity
-> and therefore such overcommitment should be avoided already in the
-> configuration. Invalidating all conflicting siblings is then the most
-> fair result achievable.
-> B1 is a second-class partition _only_ because it starts later or why is
-> it OK to not fulfill its requirement?
-> 
-> [1] Note that A1 should still watch its cpuset.cpus.partition if it
-> takes exclusivity seriously because its cpus may be taken away by
-> hot(un)plug or ancestry reconfiguration.
-> 	
-> 
->> As for your point that "the effective config cannot be derived just from 
->> the applied values," even before this patch, we couldn't derive the final 
->> effective configuration solely from the applied values.
->>
->> For example, consider the following scenario: (not apply this patch)
->> Table 1:
->>  Step                                       | A1's prstate | B1's prstate |
->>  #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
->>  #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
->>  #3> echo "1-2" > B1/cpuset.cpus            | root invalid | member       |
->>
->> Table 2:
->>  Step                                       | A1's prstate | B1's prstate |
->>  #1> echo "1-2" > B1/cpuset.cpus            | member       | member       |
->>  #2> echo "root" > A1/cpuset.cpus.partition | root invalid | member       |
->>  #3> echo "0-1" > A1/cpuset.cpus            | root         | member       |
->>
->> After step #3, both Table 1 and Table 2 have identical value settings, 
->> yet A1's partition state differs between them.
-> 
+v2:
+ - Used TH_LOG instead of printf for error logging.
+ - Moved variable declaration to the top of the function.
+ - Applied review suggestions from Kees Cook.
 
-A corner case should be fixed, and I have sent the patch.
+v1:
+ - Initial patch to improve error logging in get_proc_stat().
 
-https://lore.kernel.org/cgroups/20251115093140.1121329-1-chenridong@huaweicloud.com/
+Suggested-by: Kees Cook <kees@kernel.org>
+Signed-off-by: Sameeksha Sankpal <sameekshasankpal@gmail.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-> Aha, I must admit I didn't expect that. IMO, nothing (documented)
-> prevents the latter (Table 2) behavior (here I'm referring to
-> cpuset.cpus, not sure about cpuset.cpus.exclusive).
-> Which of Table 1 or Table do you prefer?
-> 
-> Thanks,
-> Michal
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 61acbd45ffaa..dbd7e705a2af 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -4508,9 +4508,14 @@ static char get_proc_stat(struct __test_metadata *_metadata, pid_t pid)
+ 	char proc_path[100] = {0};
+ 	char status;
+ 	char *line;
++	int rc;
+ 
+ 	snprintf(proc_path, sizeof(proc_path), "/proc/%d/stat", pid);
+ 	ASSERT_EQ(get_nth(_metadata, proc_path, 3, &line), 1);
++	rc = get_nth(_metadata, proc_path, 3, &line);
++	ASSERT_EQ(rc, 1) {
++		TH_LOG("user_notification_fifo: failed to read stat for PID %d (rc=%d)", pid, rc);
++	}
+ 
+ 	status = *line;
+ 	free(line);
 -- 
-Best regards,
-Ridong
+2.43.0
 
 
