@@ -1,284 +1,168 @@
-Return-Path: <linux-kselftest+bounces-46616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46618-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6023C8D391
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 08:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AE263C8D596
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 09:31:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A148C4E523E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 07:50:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DCD644E4D9A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 08:31:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70C70329C78;
-	Thu, 27 Nov 2025 07:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB6DF31DDA4;
+	Thu, 27 Nov 2025 08:31:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eYchrPpl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hy3wn4pI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5B6327217
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 07:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A81527F727;
+	Thu, 27 Nov 2025 08:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764229682; cv=none; b=ds4I9khlpmM0ojObEkMCJ21zbhuUSJahSNOOZdl6pow3pdVqXNceywu41RJl7ChLTtZjnQ/ES+aDDIpUv087BxMhHOXkLWx67mvFmjNgrHGlob+UPL8TgaJEaVn5d/FnQEK+qEb91Wh4jeA1YLjJnllwlu9aJ6ovCvyBBImil7w=
+	t=1764232261; cv=none; b=DJe2MOpeiN1gcjuAL9VzIFqTkTNk9z1DzxuIksdSoChpmBhui7BqhuL8Ie4FPMDophBuF4wFNVndH+4obnx06wFQc98t8bS3Xuv7pPwEdETBUXNs2mpt8iJeYglWQqn/yCz9Vkl7Be5DjPJw4A4PmljkUMXFSl4RqnhC336ooaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764229682; c=relaxed/simple;
-	bh=/Awk+ZNAUSYj37xQmP8u5lLIpYhs6f3jnk3Fa/B/6hw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GenWWuU0V1XiSu5TEjnAxyv3TC0Y37WWR7p4y/BNFP3NSNzAiL6mfJVA1cZyd7CTMRUnlaSRFsLuwB+uO55wNWTJgFOakOl2iYBHmsxmrEID4+mvlAbacHxgXlqAT9uFUxQEjwH0Xn9Tf0i73Z+OAjHIouaDxCwnWN+skCieWEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eYchrPpl; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-29ba9249e9dso6852105ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Nov 2025 23:47:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764229674; x=1764834474; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mwxY3RrBqHReoCCTc0CExP42GtobWyxbXrcCgf7a+Ec=;
-        b=eYchrPplPehlVONV2tShm8syxQbikMDbK31X02qr1WFUKIamsItRPtI1KoJAMlc+WK
-         7hhzsked/rE8gwmwya2BNTeLRguSm5P4ImkNaSpJVXSuVVTzC4K83TlhFwtGtAnkcUSu
-         KR6GbGGdsG4BTCLNMEXJv6bm3TxC/ll1u7RtDkI0FL3LzOJtJoDs/na1zCutCzGiM7o7
-         W4mzH2UoC+esSVmi5JGiCIPtS+krXRcdby0KC/3iG3wdQ8kvcyuFDqdjSFAVJQuPnV/v
-         NVk11bWY2PFyMOivvcFx4xKmGJaVMcFDDVQMqd7IYNwgePqkKdngzobjcTWUgH7/OQGw
-         Uv5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764229674; x=1764834474;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mwxY3RrBqHReoCCTc0CExP42GtobWyxbXrcCgf7a+Ec=;
-        b=cfiucypxXq0BTVTOL3Aazp7PV6bjBED4CDyaC8FsXOOXnc53LeCT2qK9uwKabo1jEY
-         jOl6J61mgfY5o0hiEA56FX60t707V6uxfFBzb/T0TjdU16GIRziBXMgcBHGAFTDLPp/e
-         IJltXDd43q/85jHyQ+/4Kx7+PTrIGmjP8jRN49IuNyIxyMu4YNkgTz4ZERFF6w/o7i6l
-         efzd3PgA2CoWXuij4n0/tLsXTeB0o0zKB0DB0hx21aSumpnQt4XyHDOGzN1+qPa3K5zD
-         Y1NR1GgvzMHPTxnv5ePj9CmLg4AZmKVLwrLmLnUG/6G5pgkNKacKqiVXPy/ok51T0e68
-         RIFw==
-X-Forwarded-Encrypted: i=1; AJvYcCXlGb6tjNYcsG5TUARH8DHwL+QCNyeHc61Din23N6NyFLqzEKlqA07Ij2LF91Pfv594bROPEAtBgxCyqclxxus=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEisYjmOdXAOJBzmC2Zrx6O0Nkaf4NDhQRnWvYHmqDUBAtT162
-	LI/AQyGG+DCg5oZe6sVHyIB+Q8MtbPRN38cQkNxjMvJ/zotTOQjXmnC0
-X-Gm-Gg: ASbGncsAWpaxLb8kdMUFFqwjWZzjhJ6599HhMoeQ6q6HGlMfEE+Dj4H7vTjXxm0kIOv
-	n77AyqUHKREUTRoiTmAskSpQB/Ab/zHUSOyHyZQhdljgKRF7zqAV0aeLYqPViIt+cpET0lr6i7y
-	v4OTMBjlNhaEB8KPhfGlsB9d1/HoqOTvfnoi8+WGxaELiHrfkuRq3q2eOmNpKKyL1Jz+DonZZ9B
-	wVqcRK+BWoZPkdu9axYtVjmiU0Myc9yHEI0nFZ0YP0qRCAJDE71I0cqgq3ANq55ZT+ayz4unhmr
-	rFksXN+8UTr2qrly1BRZCkTq6pjNtks2W4FgchcGuAqSVMFIhrWYvsEUqswzPyH3JYUQ7Hrb7t+
-	JFvqwPp9fYjnHpkTKUWxwvIohkno5zAQLhvLTP2NerAl7wab4iltdjfV1fn4+3wriw2UUyN5IfJ
-	mq1yaQJc12iG+rFnddlhBv
-X-Google-Smtp-Source: AGHT+IHIlqze70ddD15adUvv30WNku5JRlVK0eu6g7d4TW5+OfNZ6dSJWF3hfK+35WHjCJXw8EQ6FQ==
-X-Received: by 2002:a17:903:b86:b0:295:4d97:8503 with SMTP id d9443c01a7336-29b6c575180mr257859795ad.30.1764229674412;
-        Wed, 26 Nov 2025 23:47:54 -0800 (PST)
-Received: from localhost ([2a03:2880:2ff:73::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bce477e94sm8648415ad.43.2025.11.26.23.47.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 23:47:54 -0800 (PST)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Wed, 26 Nov 2025 23:47:41 -0800
-Subject: [PATCH net-next v12 12/12] selftests/vsock: add tests for
- namespace deletion and mode changes
+	s=arc-20240116; t=1764232261; c=relaxed/simple;
+	bh=Hw3rpyjIs5q2m80mOXGPqWY/yNyazFCdz/ULb4y5eE8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=MiLNRry6sAKj1bIxSZMgZ4eeUJKGzakNaDvioPEJurihRmohOz7obeeG2MCpsNV7odKkDv+J9dPhdCJA97gTMaJ0EerF2BRlNifCO5par3/uz77guq4+Lj1IBiQ+Mje/BJ7auuWI8wtKDhkEyY25esD7RyjGyuDl0962FA/BVr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hy3wn4pI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04754C113D0;
+	Thu, 27 Nov 2025 08:31:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764232261;
+	bh=Hw3rpyjIs5q2m80mOXGPqWY/yNyazFCdz/ULb4y5eE8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=hy3wn4pIoJRjHnOpzYoslQqGho8xq0Z9RYYtBYN7+2U4rmY+LWmfVf7QjhnFLU0Mv
+	 QEDP6WThf6o5Q53L7jnlkEhpeYY48FZgFAt4ZuoKkLd8wdchRSGHF/bEWGOnGHYBBT
+	 FZ8xnt7DwDjwc8HuYv/UEioqMANa99L8z5klJ7kXO7QR9T1fKlc6GLVl08SqYFo5Lg
+	 RaTsa2Z8ARaoDxgBAXOvRTYOfrpd22vE5+10ciSjeYr16NsDt0ap+IHbaB2YhBdfA5
+	 1+WTRwoaMqCQwXUJPSdoVgujZPRxtohgp1aIb2iJZsXu+3yC16Y7s79nq8I1k8N+Fe
+	 fXBu/eflyUvhQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE9D380CFC2;
+	Thu, 27 Nov 2025 08:30:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251126-vsock-vmtest-v12-12-257ee21cd5de@meta.com>
-References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
-In-Reply-To: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
-To: Stefano Garzarella <sgarzare@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
- =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- "K. Y. Srinivasan" <kys@microsoft.com>, 
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
- Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryan-bt.tan@broadcom.com>, 
- Vishnu Dasa <vishnu.dasa@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, 
- netdev@vger.kernel.org, kvm@vger.kernel.org, linux-hyperv@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, berrange@redhat.com, 
- Sargun Dhillon <sargun@sargun.me>, Bobby Eshleman <bobbyeshleman@gmail.com>, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v23 00/28] riscv control-flow integrity for usermode
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <176423222224.2476283.17736612090314280039.git-patchwork-notify@kernel.org>
+Date: Thu, 27 Nov 2025 08:30:22 +0000
+References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
+In-Reply-To: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: linux-riscv@lists.infradead.org, tglx@linutronix.de, mingo@redhat.com,
+ bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+ akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, conor@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ arnd@arndb.de, brauner@kernel.org, peterz@infradead.org, oleg@redhat.com,
+ ebiederm@xmission.com, kees@kernel.org, corbet@lwn.net, shuah@kernel.org,
+ jannh@google.com, conor+dt@kernel.org, ojeda@kernel.org,
+ alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, a.hindborg@kernel.org, aliceryhl@google.com,
+ tmgross@umich.edu, lossin@kernel.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
+ rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+ zong.li@sifive.com, david@redhat.com, cmirabil@redhat.com
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+Hello:
 
-Add tests that validate vsock sockets are resilient to deleting
-namespaces or changing namespace modes from global to local. The vsock
-sockets should still function normally.
+This series was applied to riscv/linux.git (for-next)
+by Paul Walmsley <pjw@kernel.org>:
 
-The function check_ns_changes_dont_break_connection() is added to re-use
-the step-by-step logic of 1) setup connections, 2) do something that
-would maybe break the connections, 3) check that the connections are
-still ok.
+On Wed, 12 Nov 2025 16:42:58 -0800 you wrote:
+> v23:
+> fixed some of the "CHECK:" reported on checkpatch --strict.
+> Accepted Joel's suggestion for kselftest's Makefile.
+> CONFIG_RISCV_USER_CFI is enabled when zicfiss, zicfilp and fcf-protection
+> are all present in toolchain
+> 
+> v22: fixing build error due to -march=zicfiss being picked in gcc-13 and above
+> but not actually doing any codegen or recognizing instruction for zicfiss.
+> Change in v22 makes dependence on `-fcf-protection=full` compiler flag to
+> ensure that toolchain has support and then only CONFIG_RISCV_USER_CFI will be
+> visible in menuconfig.
+> 
+> [...]
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
-Changes in v11:
-- remove pipefile (Stefano)
+Here is the summary with links:
+  - [v23,01/28] mm: VM_SHADOW_STACK definition for riscv
+    https://git.kernel.org/riscv/c/ae8460ac9db2
+  - [v23,02/28] dt-bindings: riscv: zicfilp and zicfiss in dt-bindings (extensions.yaml)
+    https://git.kernel.org/riscv/c/b32ccfc268db
+  - [v23,03/28] riscv: zicfiss / zicfilp enumeration
+    https://git.kernel.org/riscv/c/55a811a7f304
+  - [v23,04/28] riscv: zicfiss / zicfilp extension csr and bit definitions
+    https://git.kernel.org/riscv/c/92c96b16548e
+  - [v23,05/28] riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
+    https://git.kernel.org/riscv/c/7720cdd21962
+  - [v23,06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+    https://git.kernel.org/riscv/c/e60eb198b13d
+  - [v23,07/28] riscv/mm: manufacture shadow stack pte
+    https://git.kernel.org/riscv/c/f8fcb7b5bf30
+  - [v23,08/28] riscv/mm: teach pte_mkwrite to manufacture shadow stack PTEs
+    https://git.kernel.org/riscv/c/0276a5ea1105
+  - [v23,09/28] riscv/mm: write protect and shadow stack
+    https://git.kernel.org/riscv/c/ae615676bc37
+  - [v23,10/28] riscv/mm: Implement map_shadow_stack() syscall
+    https://git.kernel.org/riscv/c/d291fd38f841
+  - [v23,11/28] riscv/shstk: If needed allocate a new shadow stack on clone
+    https://git.kernel.org/riscv/c/d209ea2fa4bb
+  - [v23,12/28] riscv: Implements arch agnostic shadow stack prctls
+    https://git.kernel.org/riscv/c/8b49f512abc2
+  - [v23,13/28] prctl: arch-agnostic prctl for indirect branch tracking
+    https://git.kernel.org/riscv/c/3363a8d1044e
+  - [v23,14/28] riscv: Implements arch agnostic indirect branch tracking prctls
+    https://git.kernel.org/riscv/c/0177891ccdb7
+  - [v23,15/28] riscv/traps: Introduce software check exception and uprobe handling
+    https://git.kernel.org/riscv/c/6f71171a7448
+  - [v23,16/28] riscv: signal: abstract header saving for setup_sigcontext
+    (no matching commit)
+  - [v23,17/28] riscv/signal: save and restore of shadow stack for signal
+    https://git.kernel.org/riscv/c/4f9da7ad3478
+  - [v23,18/28] riscv/kernel: update __show_regs to print shadow stack register
+    https://git.kernel.org/riscv/c/320c96a55d73
+  - [v23,19/28] riscv/ptrace: riscv cfi status and state via ptrace and in core files
+    https://git.kernel.org/riscv/c/7a39f89a817e
+  - [v23,20/28] riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
+    https://git.kernel.org/riscv/c/c09b490a9267
+  - [v23,21/28] riscv: kernel command line option to opt out of user cfi
+    https://git.kernel.org/riscv/c/6e0dc40ceb45
+  - [v23,22/28] riscv: enable kernel access to shadow stack memory via FWFT sbi call
+    https://git.kernel.org/riscv/c/dfd087078357
+  - [v23,23/28] arch/riscv: compile vdso with landing pad and shadow stack note
+    https://git.kernel.org/riscv/c/2cfe57e3bd9b
+  - [v23,24/28] arch/riscv: dual vdso creation logic and select vdso based on hw
+    https://git.kernel.org/riscv/c/418316aa61e8
+  - [v23,25/28] riscv: create a config for shadow stack and landing pad instr support
+    https://git.kernel.org/riscv/c/c5f5ce714457
+  - [v23,26/28] riscv: Documentation for landing pad / indirect branch tracking
+    https://git.kernel.org/riscv/c/73d0ccec35b8
+  - [v23,27/28] riscv: Documentation for shadow stack on riscv
+    https://git.kernel.org/riscv/c/6b8214c8cbd6
+  - [v23,28/28] kselftest/riscv: kselftest for user mode cfi
+    https://git.kernel.org/riscv/c/0f226cf6026f
 
-Changes in v9:
-- more consistent shell style
-- clarify -u usage comment for pipefile
----
- tools/testing/selftests/vsock/vmtest.sh | 119 ++++++++++++++++++++++++++++++++
- 1 file changed, 119 insertions(+)
-
-diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-index da9198dc8ab5..a903a0bf66c4 100755
---- a/tools/testing/selftests/vsock/vmtest.sh
-+++ b/tools/testing/selftests/vsock/vmtest.sh
-@@ -68,6 +68,12 @@ readonly TEST_NAMES=(
- 	ns_same_local_loopback_ok
- 	ns_same_local_host_connect_to_local_vm_ok
- 	ns_same_local_vm_connect_to_local_host_ok
-+	ns_mode_change_connection_continue_vm_ok
-+	ns_mode_change_connection_continue_host_ok
-+	ns_mode_change_connection_continue_both_ok
-+	ns_delete_vm_ok
-+	ns_delete_host_ok
-+	ns_delete_both_ok
- )
- readonly TEST_DESCS=(
- 	# vm_server_host_client
-@@ -135,6 +141,24 @@ readonly TEST_DESCS=(
- 
- 	# ns_same_local_vm_connect_to_local_host_ok
- 	"Run vsock_test client in VM in a local ns with server in same ns."
-+
-+	# ns_mode_change_connection_continue_vm_ok
-+	"Check that changing NS mode of VM namespace from global to local after a connection is established doesn't break the connection"
-+
-+	# ns_mode_change_connection_continue_host_ok
-+	"Check that changing NS mode of host namespace from global to local after a connection is established doesn't break the connection"
-+
-+	# ns_mode_change_connection_continue_both_ok
-+	"Check that changing NS mode of host and VM namespaces from global to local after a connection is established doesn't break the connection"
-+
-+	# ns_delete_vm_ok
-+	"Check that deleting the VM's namespace does not break the socket connection"
-+
-+	# ns_delete_host_ok
-+	"Check that deleting the host's namespace does not break the socket connection"
-+
-+	# ns_delete_both_ok
-+	"Check that deleting the VM and host's namespaces does not break the socket connection"
- )
- 
- readonly USE_SHARED_VM=(
-@@ -1274,6 +1298,101 @@ test_vm_loopback() {
- 	return "${KSFT_PASS}"
- }
- 
-+check_ns_changes_dont_break_connection() {
-+	local pipefile pidfile outfile
-+	local ns0="global0"
-+	local ns1="global1"
-+	local port=12345
-+	local pids=()
-+	local rc=0
-+
-+	init_namespaces
-+
-+	pidfile="$(create_pidfile)"
-+	if ! vm_start "${pidfile}" "${ns0}"; then
-+		return "${KSFT_FAIL}"
-+	fi
-+	vm_wait_for_ssh "${ns0}"
-+
-+	outfile=$(mktemp)
-+	vm_ssh "${ns0}" -- \
-+		socat VSOCK-LISTEN:"${port}",fork STDOUT > "${outfile}" 2>/dev/null &
-+	pids+=($!)
-+	vm_wait_for_listener "${ns0}" "${port}" "vsock"
-+
-+	# We use a pipe here so that we can echo into the pipe instead of using
-+	# socat and a unix socket file. We just need a name for the pipe (not a
-+	# regular file) so use -u.
-+	pipefile=$(mktemp -u /tmp/vmtest_pipe_XXXX)
-+	ip netns exec "${ns1}" \
-+		socat PIPE:"${pipefile}" VSOCK-CONNECT:"${VSOCK_CID}":"${port}" &
-+	pids+=($!)
-+
-+	timeout "${WAIT_PERIOD}" \
-+		bash -c 'while [[ ! -e '"${pipefile}"' ]]; do sleep 1; done; exit 0'
-+
-+	if [[ $2 == "delete" ]]; then
-+		if [[ "$1" == "vm" ]]; then
-+			ip netns del "${ns0}"
-+		elif [[ "$1" == "host" ]]; then
-+			ip netns del "${ns1}"
-+		elif [[ "$1" == "both" ]]; then
-+			ip netns del "${ns0}"
-+			ip netns del "${ns1}"
-+		fi
-+	elif [[ $2 == "change_mode" ]]; then
-+		if [[ "$1" == "vm" ]]; then
-+			ns_set_mode "${ns0}" "local"
-+		elif [[ "$1" == "host" ]]; then
-+			ns_set_mode "${ns1}" "local"
-+		elif [[ "$1" == "both" ]]; then
-+			ns_set_mode "${ns0}" "local"
-+			ns_set_mode "${ns1}" "local"
-+		fi
-+	fi
-+
-+	echo "TEST" > "${pipefile}"
-+
-+	timeout "${WAIT_PERIOD}" \
-+		bash -c 'while [[ ! -s '"${outfile}"' ]]; do sleep 1; done; exit 0'
-+
-+	if grep -q "TEST" "${outfile}"; then
-+		rc="${KSFT_PASS}"
-+	else
-+		rc="${KSFT_FAIL}"
-+	fi
-+
-+	terminate_pidfiles "${pidfile}"
-+	terminate_pids "${pids[@]}"
-+	rm -f "${outfile}" "${pipefile}"
-+
-+	return "${rc}"
-+}
-+
-+test_ns_mode_change_connection_continue_vm_ok() {
-+	check_ns_changes_dont_break_connection "vm" "change_mode"
-+}
-+
-+test_ns_mode_change_connection_continue_host_ok() {
-+	check_ns_changes_dont_break_connection "host" "change_mode"
-+}
-+
-+test_ns_mode_change_connection_continue_both_ok() {
-+	check_ns_changes_dont_break_connection "both" "change_mode"
-+}
-+
-+test_ns_delete_vm_ok() {
-+	check_ns_changes_dont_break_connection "vm" "delete"
-+}
-+
-+test_ns_delete_host_ok() {
-+	check_ns_changes_dont_break_connection "host" "delete"
-+}
-+
-+test_ns_delete_both_ok() {
-+	check_ns_changes_dont_break_connection "both" "delete"
-+}
-+
- shared_vm_test() {
- 	local tname
- 
-
+You are awesome, thank you!
 -- 
-2.47.3
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
