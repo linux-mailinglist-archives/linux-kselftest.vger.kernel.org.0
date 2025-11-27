@@ -1,97 +1,100 @@
-Return-Path: <linux-kselftest+bounces-46665-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D410C900DF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 20:48:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E596C9015A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 21:07:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2770C3ACE00
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 19:48:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9747B353428
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 20:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B5763054D7;
-	Thu, 27 Nov 2025 19:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C77730DD2A;
+	Thu, 27 Nov 2025 20:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ifN0VKW5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c89VzHD8"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52EB12DC79D;
-	Thu, 27 Nov 2025 19:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D945530DD06;
+	Thu, 27 Nov 2025 20:06:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764272758; cv=none; b=IZwPLm6cVU0mUtqF1D+JSTPMjS48mma0ABqejV4S/7NDgfNBwbKrt36yWqjN0KNJZvlqmvkVqtrSliZF4e6zOn+Y0oHjaeur4xl235+KYr9sFJp3FCAK9fwbkwsl7o1xyDerQ2LbImzDapPCEjdLjHuUFuhNVpl2RSh/RRqpI5U=
+	t=1764273997; cv=none; b=JcnnIvXi5i6m+6tOlxucqh1YqyZG8pKQx6fAJ0Tc5Y7Ns+aUUhRN3Yd9MP+18eckxYItogiJeKa0M7op42nzHtFCIJbFyjKN68dM0WgMeWNprPU2hWOA1EbWM7GHSWYJkVtJnGmnuqRFFsXZS3xwYsmHO4DDYNvlnTjPGyKTEP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764272758; c=relaxed/simple;
-	bh=YMYsojn8iBqtGgh2B2V/yKnhSFqYIeJykYpEuf3UJDU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gMKtjOz+3B/KY8widppqIaugG8CbjLSt01kIGuCieAwtz+UJ7btdK3zX6f/7DE2nBKcoItWoDLH4QZRzn2xh0GZy/vDUlUgTnKlTvlzOefOMqgGAvk0ghR1hh3I0aVDWAisqfoczfz417qE8fCN5MTXmUY6yFkvgB52sO9L3ZUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ifN0VKW5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9342AC4CEF8;
-	Thu, 27 Nov 2025 19:45:57 +0000 (UTC)
+	s=arc-20240116; t=1764273997; c=relaxed/simple;
+	bh=jnL5tP7VUoG8mpJi+s2F6SszKuVjvvL+PAqOALc0RuI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VyQY8kkJ+XWYft/gpBet+oJyKEJqI82bNFNSUhgEAhecn+BLMooZJW6UsyPd52ML32IPHllMzIYPyXtfi7s9GEryoWyH3jfkTeYKwP0M2zqlOmb/4Gopt5/eAHkBi6OmyAaPWf37lYIEgiWvUj8jXLd7DTb6WaHSxR8BFF9hdHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c89VzHD8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B790FC4CEF8;
+	Thu, 27 Nov 2025 20:06:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764272758;
-	bh=YMYsojn8iBqtGgh2B2V/yKnhSFqYIeJykYpEuf3UJDU=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ifN0VKW5G0FLFiN3JjZPNF8aNt7E/KkMVkiQVKyDLmaG//RElJD17Nkmu6ADvbo0m
-	 akDvxkBq/HM3F/nKmW4VNM36PGao7MDt/8ODK4JijAJ6nEC0nJdLrLRyG/85qZipXG
-	 gkSkogb8OojzU2GGnKrlbyH6spPA5xrb0xvbqPN9EUf0qXiXfwKA6wLIuLZKGm8nNB
-	 dyBpM6fbLovKkVdZIKYo3hTuW/mLpra6wrW3fB+ltDJ7EnhpAgOWjvOq1meruH5UyD
-	 AlULWaeecoq0dmtfgBKtuDex276QRWo2GUc06I/4PgPl8T6GM7b5LLLXHc8oR1GKrs
-	 tZ3buXvxXaNSQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: net: add a hint about MACAddressPolicy=persistent
-Date: Thu, 27 Nov 2025 11:45:56 -0800
-Message-ID: <20251127194556.2409574-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.51.1
+	s=k20201202; t=1764273996;
+	bh=jnL5tP7VUoG8mpJi+s2F6SszKuVjvvL+PAqOALc0RuI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=c89VzHD8qAagoVgodoLZz8iGYgI+22YwtwdE3mxI85w28yDbvvbyZrGbwmGTOSJNJ
+	 VbNNwfB3ZaJLIpoMELX8ZjfV4OnSp/Q6ixtVlf4owtgAf6vqE/JsGL5WUB4CdEK4Xy
+	 lDwofnXnChGJu/w5y/Wa5WtC9NzrLmt6UA4T5gtmzHqv2j/60Eqhx5as84J1x6YRvP
+	 euVulmTpuhaT8v4uM1WNqqOlXhzdT7O5QwNC/kwqd5XN/4ao/3iAGzStQE1JAeDbwc
+	 q24TJygQ6VxwRu6of6b7Y4sFD/VrDggTyoSNC1Ar7ZENT7TWOHRIkN+K363Rug3v/h
+	 aDq+aLo3XcFjg==
+Date: Thu, 27 Nov 2025 20:06:31 +0000
+From: Simon Horman <horms@kernel.org>
+To: Carolina Jubran <cjubran@nvidia.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Gal Pressman <gal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
+	Cosmin Ratiu <cratiu@nvidia.com>, Nimrod Oren <noren@nvidia.com>,
+	Mark Bloch <mbloch@nvidia.com>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next V2 0/6] selftests: drv-net: Fix issues in
+ devlink_rate_tc_bw.py
+Message-ID: <20251127200631.GA737230@horms.kernel.org>
+References: <20251123171015.3188514-1-cjubran@nvidia.com>
+ <20251124191026.1438551c@kernel.org>
+ <d81820e1-21e0-4c59-8532-ba55ac47c6fd@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <d81820e1-21e0-4c59-8532-ba55ac47c6fd@nvidia.com>
 
-New NIPA installation had been reporting a few flaky tests.
-arp_ndisc_evict_nocarrier is most flaky of them all.
-I suspect that the flakiness is due to udev swapping the MAC
-addresses on the interfaces. Extend the message in
-arp_ndisc_evict_nocarrier to hint at this potential issue.
-Having the neigh get fail right after ping is rather unusual,
-unless udev changes the MAC addr causing a flush in the meantime.
+On Wed, Nov 26, 2025 at 10:06:18AM +0200, Carolina Jubran wrote:
+> 
+> On 25/11/2025 5:10, Jakub Kicinski wrote:
+> > On Sun, 23 Nov 2025 19:10:09 +0200 Carolina Jubran wrote:
+> > > This series fixes issues in the devlink_rate_tc_bw.py selftest and
+> > > introduces a new Iperf3Runner that helps with measurement handling.
+> > Sorry to report but patch 2 doesn't apply cleanly.
+> 
+> 
+> I am based on top of net-next, and I do not see any issues applying the
+> series. I rebased on top of commit ab084f0b8d6d2ee4b1c6a28f39a2a7430bdfa7f0
+> and patch 2 still applies cleanly for me.
+> 
+> I’ll prepare a v3 to fix the new pylint warnings in load.py while I’m at
+> it.
+> 
+> If you are applying it on a different base, please let me know which
+> one.
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Carolina,
 
-diff --git a/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh b/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
-index 92eb880c52f2..00758f00efbf 100755
---- a/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
-+++ b/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
-@@ -75,7 +75,7 @@ setup_v4() {
-     ip neigh get $V4_ADDR1 dev veth0 >/dev/null 2>&1
-     if [ $? -ne 0 ]; then
-         cleanup_v4
--        echo "failed"
-+        echo "failed; is the system using MACAddressPolicy=persistent ?"
-         exit 1
-     fi
- 
--- 
-2.51.1
+FWIIW, I do see that b4 shazam (which I assume runs git am) is unable to
+apply this series cleanly to ab084f0b8d6d2ee4b1c6a28f39a2a7430bdfa7f0 due
+to some fuzz when applying the first patch: Hunk #1 of
+tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
 
+And I expect that a rebase figures this out, which is why you
+aren't seeing it.
 
