@@ -1,64 +1,80 @@
-Return-Path: <linux-kselftest+bounces-46636-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A2EEC8E2B1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 13:00:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3DB5C8E369
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 13:13:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C5316344137
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 11:59:39 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EE7BC34AF49
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 12:13:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17FD032E121;
-	Thu, 27 Nov 2025 11:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6657432E6A8;
+	Thu, 27 Nov 2025 12:13:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s6p6D/R8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i7uayMwp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC61932D0F3;
-	Thu, 27 Nov 2025 11:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FAA269CE1;
+	Thu, 27 Nov 2025 12:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764244755; cv=none; b=u8xkC0s+dCgr+ocM9aAsgB8GrvWFXwXyu6k1DrLmtMjasYG6FUa4rFs678tSm4pDYISOfGTBHIoKfmCXS/kT9rhn+UNULSas4GfMyT+mOoBATUI2+7MZAUqBcI7ozpXHePX2PMTTRC81xyNBAT/kNqhUHSAXes/nc+aZ9vM91bE=
+	t=1764245622; cv=none; b=jFZy7y+tLIxtdqJGsmBR5MLd5g/1FvOg9IRdoZCvZwjxHNH49qAiPU6PjgWjIi06fnSGReu7XpliqGzNV5JBIDgSVO3TSWgxEQ/2SdneV0ObdgubjDYgquEIVnDUBP00GgmpAWWq6FWUgpaEvInD91AJIG1lBbd33yNdWmZ8QOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764244755; c=relaxed/simple;
-	bh=2qB2eCl0eofbsnFLkh+Ilr9d7zdr+w4aA12A5by3Bdg=;
+	s=arc-20240116; t=1764245622; c=relaxed/simple;
+	bh=4wfdcjLqa32wYY20jUpXr6SpqVXYg6QlXgbmRyPKHNs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XtXZ/40Ok3pAccTm5+0dbN0i09Vv7+DSDSZNuwwuB1mAF2LRXi6fbIp00/Du5ZBcgHbBlKXsrcLtN/X2ZwHM+A9EA+y7r2EwPLZIK+7tdOHHyJRNCk/X+CpQJL9u7GU43A48mmabTSuvSc8Sfrqg0JSoA6tllKq0fRdn99b/0LA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s6p6D/R8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB51FC4AF09;
-	Thu, 27 Nov 2025 11:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764244754;
-	bh=2qB2eCl0eofbsnFLkh+Ilr9d7zdr+w4aA12A5by3Bdg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s6p6D/R8ZqqzaDSp4+inzrveJKOqEy+1LY5Uq7GgsrcK/Gk8p3gp66kBshTJkyx5w
-	 92uEwSYZ1wd02R9B6ni+7MBbSLlm7RcaXd795ou70ajPjNRqR7BCHZYJE7vu5Ux2H+
-	 RMUzdpS9pHvwpvbKBHahLTyw0sBgp+gMVFfi12Zqt19SinolKvB+gwR563iEXlTUOZ
-	 wVItBOQPqZVtESc8sYYpc+SIiS426V7pCGO8pFkbSE2bGDpHrcuMbu/I89kLMlZU5m
-	 yfDoXaSt/vBn2VIdsr29W8JkZ4tAXgrPxTdkfmNktHoMgd36c3riuy/Y8xPM3mPOxP
-	 Gp24sf9Vn+SGA==
-Date: Thu, 27 Nov 2025 11:59:09 +0000
-From: Simon Horman <horms@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>,
-	Jozsef Kadlecsik <kadlec@netfilter.org>,
-	Florian Westphal <fw@strlen.de>, Phil Sutter <phil@nwl.cc>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH nf-next] selftests: netfilter: nft_flowtable.sh: Add the
- capability to send IPv6 TCP traffic
-Message-ID: <aSg9DbG4_NlLxEcy@horms.kernel.org>
-References: <20251122-nft_flowtable-sh-ipv6-tcp-v1-1-4480d3c863a2@kernel.org>
- <aSgllQoIqNHIXqrs@horms.kernel.org>
- <aSg1MWLUx0GyCWij@lore-desk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=slP0MDbCCJiYLU86vpm3ybID/rQodAINwtqYuNg+nznXlybr5pKlHsBZqdHbP0cDsNR/GrtLQIumbi5QcCHxwftROIS9H8WQZmKqrh4Vgbvja4OVdh5fjfna6KUloBYIbIR9k1TT6SQkOP4Y3+aboGqsm4kmyp6snTtIZrHAE64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i7uayMwp; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764245620; x=1795781620;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4wfdcjLqa32wYY20jUpXr6SpqVXYg6QlXgbmRyPKHNs=;
+  b=i7uayMwpCJe1jtD3mMvAL2yUaBFmWQoAv75X/CnhYBbZtjxiQ1wBptP9
+   6M1EFxdUz5WVJo94o0WO9Mmzxtx/UumsFX8oJJ5JnPoqAotoAc0x9ea4L
+   MavO/7BCuuwsgWEelasdLxEp94mOYdUXTkFMpQRYRVqW7wP9i9sYTD8sR
+   6iKnQVnC8G4XmPKpq85R/3quXpsJWzpw1UMTI1XQ2d/jPDa6j9YIfb1c7
+   g+VVlv3TNFE6osGmUfqbsJSzpkZjzY7HkT1zm8TVQovkymZFJBzsuPeM2
+   mVWs0wOJ6UWmSrMs5kLyfuaOib+mbJC7K5ACXfVjBSNQSax8XWlKpgE0X
+   w==;
+X-CSE-ConnectionGUID: CXfjPvepRFa9kXILAYbc3g==
+X-CSE-MsgGUID: lo7pzuZUQFW31EwlOFth0w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="83684938"
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="83684938"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 04:13:39 -0800
+X-CSE-ConnectionGUID: +5F6CXJjSyyszMrvVcgAUg==
+X-CSE-MsgGUID: LdZuhfhfQNSSajPSbYmYmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="192472033"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 27 Nov 2025 04:13:36 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vOasP-000000004jp-1rzh;
+	Thu, 27 Nov 2025 12:13:33 +0000
+Date: Thu, 27 Nov 2025 20:12:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>,
+	rostedt@goodmis.org, mhiramat@kernel.org, corbet@lwn.net,
+	shuah@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, mathieu.desnoyers@efficios.com,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Subject: Re: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols
+ and :entry/:exit
+Message-ID: <202511271925.xuaUx8bB-lkp@intel.com>
+References: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,101 +83,130 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aSg1MWLUx0GyCWij@lore-desk>
+In-Reply-To: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
 
-On Thu, Nov 27, 2025 at 12:25:37PM +0100, Lorenzo Bianconi wrote:
-> > On Sat, Nov 22, 2025 at 07:41:38PM +0100, Lorenzo Bianconi wrote:
-> > > Introduce the capability to send TCP traffic over IPv6 to
-> > > nft_flowtable netfilter selftest.
-> > > 
-> > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > ---
-> > >  .../selftests/net/netfilter/nft_flowtable.sh       | 47 +++++++++++++++-------
-> > >  1 file changed, 33 insertions(+), 14 deletions(-)
-> > > 
-> > > diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-> > > index 1fbfc8ad8dcdc5db2ab1a1ea9310f655d09eee83..24b4e60b91451e7ea7f6a041b0335233047c6242 100755
-> > > --- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-> > > +++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
-> > > @@ -127,6 +127,8 @@ ip -net "$nsr1" addr add fee1:2::1/64 dev veth1 nodad
-> > >  ip -net "$nsr2" addr add 192.168.10.2/24 dev veth0
-> > >  ip -net "$nsr2" addr add fee1:2::2/64 dev veth0 nodad
-> > >  
-> > > +ip netns exec "$nsr1" sysctl net.ipv6.conf.all.forwarding=1 > /dev/null
-> > > +ip netns exec "$nsr2" sysctl net.ipv6.conf.all.forwarding=1 > /dev/null
-> > >  for i in 0 1; do
-> > >    ip netns exec "$nsr1" sysctl net.ipv4.conf.veth$i.forwarding=1 > /dev/null
-> > >    ip netns exec "$nsr2" sysctl net.ipv4.conf.veth$i.forwarding=1 > /dev/null
-> > > @@ -153,7 +155,9 @@ ip -net "$ns1" route add default via dead:1::1
-> > >  ip -net "$ns2" route add default via dead:2::1
-> > >  
-> > >  ip -net "$nsr1" route add default via 192.168.10.2
-> > > +ip -6 -net "$nsr1" route add default via fee1:2::2
-> > >  ip -net "$nsr2" route add default via 192.168.10.1
-> > > +ip -6 -net "$nsr2" route add default via fee1:2::1
-> > >  
-> > >  ip netns exec "$nsr1" nft -f - <<EOF
-> > >  table inet filter {
-> > > @@ -352,8 +356,9 @@ test_tcp_forwarding_ip()
-> > >  	local nsa=$1
-> > >  	local nsb=$2
-> > >  	local pmtu=$3
-> > > -	local dstip=$4
-> > > -	local dstport=$5
-> > > +	local proto=$4
-> > > +	local dstip=$5
-> > > +	local dstport=$6
-> > >  	local lret=0
-> > >  	local socatc
-> > >  	local socatl
-> > > @@ -363,12 +368,12 @@ test_tcp_forwarding_ip()
-> > >  		infile="$nsin_small"
-> > >  	fi
-> > >  
-> > > -	timeout "$SOCAT_TIMEOUT" ip netns exec "$nsb" socat -4 TCP-LISTEN:12345,reuseaddr STDIO < "$infile" > "$ns2out" &
-> > > +	timeout "$SOCAT_TIMEOUT" ip netns exec "$nsb" socat -${proto} TCP${proto}-LISTEN:12345,reuseaddr STDIO < "$infile" > "$ns2out" &
-> > 
-> > Hi Lorenzo,
-> > 
-> > Some minor nits:
-> > 
-> > 1. This line is (and was) excessively long.
-> >    Maybe it can be addressed as the line is being modified anyway.
-> > 
-> >    Flagged by checkpatch
-> > 
-> > 2. Prior to this patch, variables on this line were enclosed in "" to
-> >    guard against word splitting when expansion occurs.
-> >    This is no longer the case.
-> > 
-> >    Flagged by shellcheck
-> > 
-> > >  	lpid=$!
-> > >  
-> > >  	busywait 1000 listener_ready
-> > >  
-> > > -	timeout "$SOCAT_TIMEOUT" ip netns exec "$nsa" socat -4 TCP:"$dstip":"$dstport" STDIO < "$infile" > "$ns1out"
-> > > +	timeout "$SOCAT_TIMEOUT" ip netns exec "$nsa" socat -${proto} TCP${proto}:"$dstip":"$dstport" STDIO < "$infile" > "$ns1out"
-> > >  	socatc=$?
-> > 
-> > Likewise here.
-> > 
-> > >  
-> > >  	wait $lpid
-> > 
-> > Otherwise this LGTM.
-> 
-> Hi Simon,
-> 
-> ack, fine. Is it ok to address them in subsequent patch or do you prefer to
-> address them here?
+Hi Seokwoo,
 
-Hi Lorenzo,
+kernel test robot noticed the following build warnings:
 
-No preference on my side.
-And feel free to include the following either way.
+[auto build test WARNING on trace/for-next]
+[also build test WARNING on linus/master v6.18-rc7 next-20251127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Seokwoo-Chung-Ryan/docs-tracing-fprobe-Document-list-filters-and-entry-exit/20251127-024245
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20251126184110.72241-3-seokwoo.chung130%40gmail.com
+patch subject: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols and :entry/:exit
+config: x86_64-randconfig-003-20251127 (https://download.01.org/0day-ci/archive/20251127/202511271925.xuaUx8bB-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511271925.xuaUx8bB-lkp@intel.com/reproduce)
 
-> @Pablo: what do you prefer?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511271925.xuaUx8bB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   kernel/trace/trace_fprobe.c: In function 'parse_fprobe_spec':
+   kernel/trace/trace_fprobe.c:1282:12: error: invalid storage class for function 'trace_fprobe_create_internal'
+    1282 | static int trace_fprobe_create_internal(int argc, const char *argv[],
+         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1513:12: error: invalid storage class for function 'trace_fprobe_create_cb'
+    1513 | static int trace_fprobe_create_cb(int argc, const char *argv[])
+         |            ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1530:12: error: invalid storage class for function 'trace_fprobe_create'
+    1530 | static int trace_fprobe_create(const char *raw_command)
+         |            ^~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1535:12: error: invalid storage class for function 'trace_fprobe_release'
+    1535 | static int trace_fprobe_release(struct dyn_event *ev)
+         |            ^~~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1545:12: error: invalid storage class for function 'trace_fprobe_show'
+    1545 | static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
+         |            ^~~~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1572:12: error: invalid storage class for function 'enable_trace_fprobe'
+    1572 | static int enable_trace_fprobe(struct trace_event_call *call,
+         |            ^~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1608:12: error: invalid storage class for function 'disable_trace_fprobe'
+    1608 | static int disable_trace_fprobe(struct trace_event_call *call,
+         |            ^~~~~~~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1653:12: error: invalid storage class for function 'fprobe_register'
+    1653 | static int fprobe_register(struct trace_event_call *event,
+         |            ^~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1683:19: error: invalid storage class for function 'init_fprobe_trace_early'
+    1683 | static __init int init_fprobe_trace_early(void)
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/fprobe.h:6,
+                    from kernel/trace/trace_fprobe.c:8:
+   include/linux/compiler.h:286:52: error: initializer element is not constant
+     286 |         __UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)(uintptr_t)&sym;
+         |                                                    ^
+   include/linux/compiler.h:289:9: note: in expansion of macro '___ADDRESSABLE'
+     289 |         ___ADDRESSABLE(sym, __section(".discard.addressable"))
+         |         ^~~~~~~~~~~~~~
+   include/linux/init.h:250:9: note: in expansion of macro '__ADDRESSABLE'
+     250 |         __ADDRESSABLE(fn)
+         |         ^~~~~~~~~~~~~
+   include/linux/init.h:255:9: note: in expansion of macro '__define_initcall_stub'
+     255 |         __define_initcall_stub(__stub, fn)                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/init.h:268:9: note: in expansion of macro '____define_initcall'
+     268 |         ____define_initcall(fn,                                 \
+         |         ^~~~~~~~~~~~~~~~~~~
+   include/linux/init.h:274:9: note: in expansion of macro '__unique_initcall'
+     274 |         __unique_initcall(fn, id, __sec, __initcall_id(fn))
+         |         ^~~~~~~~~~~~~~~~~
+   include/linux/init.h:276:35: note: in expansion of macro '___define_initcall'
+     276 | #define __define_initcall(fn, id) ___define_initcall(fn, id, .initcall##id)
+         |                                   ^~~~~~~~~~~~~~~~~~
+   include/linux/init.h:294:41: note: in expansion of macro '__define_initcall'
+     294 | #define core_initcall(fn)               __define_initcall(fn, 1)
+         |                                         ^~~~~~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1702:1: note: in expansion of macro 'core_initcall'
+    1702 | core_initcall(init_fprobe_trace_early);
+         | ^~~~~~~~~~~~~
+   kernel/trace/trace_fprobe.c:1702:1: error: expected declaration or statement at end of input
+   kernel/trace/trace_fprobe.c: At top level:
+>> kernel/trace/trace_fprobe.c:28:12: warning: 'trace_fprobe_create' used but never defined
+      28 | static int trace_fprobe_create(const char *raw_command);
+         |            ^~~~~~~~~~~~~~~~~~~
+>> kernel/trace/trace_fprobe.c:29:12: warning: 'trace_fprobe_show' used but never defined
+      29 | static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev);
+         |            ^~~~~~~~~~~~~~~~~
+>> kernel/trace/trace_fprobe.c:30:12: warning: 'trace_fprobe_release' used but never defined
+      30 | static int trace_fprobe_release(struct dyn_event *ev);
+         |            ^~~~~~~~~~~~~~~~~~~~
+>> kernel/trace/trace_fprobe.c:741:12: warning: 'fprobe_register' used but never defined
+     741 | static int fprobe_register(struct trace_event_call *event,
+         |            ^~~~~~~~~~~~~~~
+>> kernel/trace/trace_fprobe.c:1653:12: warning: 'fprobe_register' defined but not used [-Wunused-function]
+    1653 | static int fprobe_register(struct trace_event_call *event,
+         |            ^~~~~~~~~~~~~~~
+>> kernel/trace/trace_fprobe.c:1545:12: warning: 'trace_fprobe_show' defined but not used [-Wunused-function]
+    1545 | static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
+         |            ^~~~~~~~~~~~~~~~~
+>> kernel/trace/trace_fprobe.c:1535:12: warning: 'trace_fprobe_release' defined but not used [-Wunused-function]
+    1535 | static int trace_fprobe_release(struct dyn_event *ev)
+         |            ^~~~~~~~~~~~~~~~~~~~
+>> kernel/trace/trace_fprobe.c:1530:12: warning: 'trace_fprobe_create' defined but not used [-Wunused-function]
+    1530 | static int trace_fprobe_create(const char *raw_command)
+         |            ^~~~~~~~~~~~~~~~~~~
+
+
+vim +/trace_fprobe_create +28 kernel/trace/trace_fprobe.c
+
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  27) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06 @28) static int trace_fprobe_create(const char *raw_command);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06 @29) static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06 @30) static int trace_fprobe_release(struct dyn_event *ev);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  31) static bool trace_fprobe_is_busy(struct dyn_event *ev);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  32) static bool trace_fprobe_match(const char *system, const char *event,
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  33) 			int argc, const char **argv, struct dyn_event *ev);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  34) 
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
