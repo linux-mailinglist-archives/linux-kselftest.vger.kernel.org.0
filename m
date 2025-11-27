@@ -1,133 +1,163 @@
-Return-Path: <linux-kselftest+bounces-46652-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46653-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D821C8EC5D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 15:33:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C869C8EC66
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 15:34:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 28FC23472D7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 14:33:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8E053ABA9F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 14:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C200322DA8;
-	Thu, 27 Nov 2025 14:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A03328B73;
+	Thu, 27 Nov 2025 14:34:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FQHeAbT3"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="bLzEP1Xp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OeWgNI6O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11EE287507
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 14:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D95411CBA;
+	Thu, 27 Nov 2025 14:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764254013; cv=none; b=ELXGDR6c459QhpSFcNlGPHNxNK4A25o0HbM9WGM6ZEPun8Z5V9prmcoF6m8yyipXLuWfyMxFIFfG+M4G/0rGLeqj3CmOPKagzM3yo9n6x8AnSMT3HJrHPoh3Jaod8V8I1+GKvj3FMmg8iFPAq3iblHmKnGSj+i7yIOGUwSCZT/E=
+	t=1764254076; cv=none; b=pirjLS5bQVnlFAHjC65e0GE9VLuqQXW513FnzVizF+vPCtc5sIJuB7AJjMSXIUAsd7pZwlBT3Tygj0kiGmrfpbhu1k/tzxlfHVErhWiLZiiAPq82i8sXYe5K+hYyNN2ooOMgSy6neyPpVI2Ilr1vPfDMDZDCcWDuLkQynlPPwug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764254013; c=relaxed/simple;
-	bh=tvZva6AUWDs6H9DZPxZEMtv2jwVTqWRwj57A2k4OIuA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SVG26QyNcGihaupMAFJ7wEVhjKktiS5DOWGYoDF+A9zHvoNHF5yMcIQbWEPvlAElOxdYLcY9lpS9TSGt0SIRld2MKEE3pGIxE0FBIkrzeMZtGxlcFwjgo8eC2bfkZAyusFY96HKBt0Knjph2RweZoQoLXCc+b4vY+2X8aghzZDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FQHeAbT3; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7aae5f2633dso980718b3a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 06:33:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764254011; x=1764858811; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=78FV6UYSi7/8C8kaIgUgHtZvrrRC53ZClmIsNXE7ZJo=;
-        b=FQHeAbT3mQlmETrt5SGPEvZhnIvl1jsjx+iqFMMjgkP2IvemlI0qMyVnaVC2FhxppL
-         gLg7LRJZ7HbIr+iTlIIEbe8I5NV08uSnBIcbok/53ucyXoYaPw5nMz3xBkpKu4U6B4qd
-         cLNMLpL/z8kOFenOGh9ecAXh4FP39yBnk7EcySPbUZ7TPJ+5vLj90dnppBGCEos27YD+
-         HCWg6mGios7kr1PfIa5j1YHCbl36cpp94cVp/w+OkKGgTg3VF+otTafp50mWWIEgTmnD
-         lqnZxuuQjrH5Ntv4gkHC2RBw+IbaJ86LiVWAzCiyjJ2bj+zFVk23SbbgCQQjGhrlKnae
-         ijtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764254011; x=1764858811;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=78FV6UYSi7/8C8kaIgUgHtZvrrRC53ZClmIsNXE7ZJo=;
-        b=PdNONymGb/+XPsk4f2BYOQV5UhwbAWakVzP9oyqTfFz27QD8q0lxYYFBZd66kdfnlX
-         XrRdo/X1gKxmFw7Vwyl2w/V5++lKK9/NA6x5mRS0eQKieP2L7iHk04rZNpqHWuOpPqL3
-         E5XKg+wmCWGDd1oaygxyTGNj7kXXr11mJFReP8JcYfoanDmkzQxhFrvHtdjZeYoOJBjz
-         IjLwJ5pIBql32s+zS0kJLb8hKQcz+hM6ND0InDG6mbnczThKq6T2q+1dDR/jshsSLlE7
-         sUydvVC8X2qqT6b5p98iveBZonsT9VNiycD2HaY7lDTlr1LtL65BKQIMhRlJJHwAp3Xx
-         Wfzw==
-X-Forwarded-Encrypted: i=1; AJvYcCWbehPd66Fu5D8U6U8Lj+H/xaf+DQpC3biKX9JuV3prr8ex5qbA/HlE/SmxUNnE65invsAJClaJ+6fFoYlvc3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNIRzgKTLlQg+TIvnXU+uAIk4QRStPoiKOAqf+hJA0YwI37J3w
-	mUbImhlA5xSMJy3ukFmvNIoWp7DQC9TXT5TeH4EShhDNScp4qZe/Re5e
-X-Gm-Gg: ASbGncuewYCeeaW/9jh6DOM94uq2y2aHZM4sFxwN/a1Y5+dFDqogQwVbETkz3ExtDKc
-	2UeVJN96PcPNHawRlm/5ue5bJUselVTDl80/sUiQwKmJHkV+vLkn6u2OZHJtkLBYGNyNvNE3hh2
-	hmu5+8XnWM3f1FsaCMDStDX45DMN4jmJfA9xsA1zcnawYlckcd8kCfy5JSgt9fmMUKWk7qohbH8
-	/6XwYyOmaUkiqDBohq+qVNJTV9DMPHdGJS5f6pwbl8zFaPeViWlQXtYgSONf9clsmZmSxGc9IIv
-	5hh3nCuZ9WWNuXkExFFs+HR1uRT/ufWst3rlcauhyB0ydeRktOdIbtf2CpOOFP7YFhqqhUpDczc
-	dobe8op4e/YNlTpklC03EkVYWopZ9ogbFwGWeGSM6IAdJh0FOYKXLbXjGBWKXoK2sic2Omqw3FE
-	wiXiPZOangOYQErppDnYkNbPh0xA==
-X-Google-Smtp-Source: AGHT+IHOjobWASJ73Zrh6Qa8pXI3uqzF83ifoElBRiObxI4QCVxxJ5b3Dg0i0XAfIuHwjIf0lHQCdA==
-X-Received: by 2002:a05:6a20:3d1c:b0:341:5935:e212 with SMTP id adf61e73a8af0-3614eb77688mr22536575637.18.1764254010884;
-        Thu, 27 Nov 2025 06:33:30 -0800 (PST)
-Received: from fedora ([209.132.188.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15f9260a4sm2157958b3a.58.2025.11.27.06.33.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 06:33:30 -0800 (PST)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jay Vosburgh <jv@jvosburgh.net>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net] selftests: bonding: add delay before each xvlan_over_bond connectivity check
-Date: Thu, 27 Nov 2025 14:33:10 +0000
-Message-ID: <20251127143310.47740-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	s=arc-20240116; t=1764254076; c=relaxed/simple;
+	bh=/ADRS2Syjol7k1tms1MXqhOe7X8+moGHAlbEFE5n85o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KnfeMxO60viymTT4aKbIW2PZYyZIfMoJaoM1y6qKQEo4jGPisacSEGurfQ3G1Kmto5JgHJDIvqKpZ498sG/z3RUO88ZVdUhUKJh6+CXeCoDRHbyGtzgt3mPxxrSqlvNkVQer2cUuNdEA0RVWw9n2rIdyNoU8M/ZQEMrUCPv6v+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=bLzEP1Xp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OeWgNI6O; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 48C8414001DA;
+	Thu, 27 Nov 2025 09:34:32 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-02.internal (MEProxy); Thu, 27 Nov 2025 09:34:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1764254072; x=
+	1764340472; bh=XVCU+8u6WBdn6tCaDdY+B4uGVoYEEaJVi7u1cDaBD7w=; b=b
+	LzEP1XpFNQGBxcjcvWfb4u5CBzusR6Okcfy84e4OsXmUTqfWDQ5T3z6bcayVQYgD
+	uDyFIAQUh2P8Q+Q8iFdZB0QLcajYFOw12z3f8I1/Ytd3pUGFP5WaUInc9rUalrE5
+	WYQ92ju2tjh5SJAqxugm1Z48NwTifcbFV0NHsBIO6Ec2l9HCn+pifngcvxpwkQvW
+	wcQHX9jCo9Jn9z1OcmdQtnBAFKq23PfUIsx23rFG+H3ZMp1iR87bdoDY8bEMZwUx
+	2hzVJcoNtzK5pEnofahSJanw0fw/ud/HK6hwSNJ0tmRwk0cdUW5CcC3JWpnt+/Lx
+	QQzEhFMhDxhwXOjZJ6NvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1764254072; x=1764340472; bh=XVCU+8u6WBdn6tCaDdY+B4uGVoYEEaJVi7u
+	1cDaBD7w=; b=OeWgNI6OTYGehnLJjrf6pFS0xmCP7ZcxPXToOWdt/irsh8fxoOV
+	f20akD0+zDOd/ViMBhSOCfcTkBllo3O2eQW1dMYO618WRxJDheC78mV0vVh8AGx2
+	bu6jxoZACVkRRYL58xbEe/Tarf7J6U4JT5qgOgWgDJMXtNoaKvgl6ndNBa4bpYNr
+	F3Lu4DQGu0q2sryEebEfVZ9sOklS4HoT5j7VjhEnRWl7Y0rQ1b6VzSODz+X8hTBY
+	g8iOXVUeK1nXp7Pw15fWoMsmeDhfAfPg9Tf2+QjnnJbuiIsoWiyMrQDe5yLXTW0g
+	eV5Qh0m1q0VI4rPuCwTylg3OGeX4ipCv04A==
+X-ME-Sender: <xms:d2EoaQ6tHJ-E-fGaI24KJxMHN8CLrsmdblv1BnE-ZhEOn3YggAlfUA>
+    <xme:d2EoabOyhRORhGwefl_xFRBSFute_ico9hCZ75KI9QVX82UWMiXBCj_pHzxPa9lrt
+    S1H-ceCxc5Pgv0-Pv0S5TxRuOEtBLwoxM_NUYRJnt3gRYWSIrWLUmM>
+X-ME-Received: <xmr:d2EoaWu388tGh5b4Pb14VWDjHifl_VLKf2u7kgP9jxTsZHxqkoIySdijYzgA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvgeejgeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepuefhhfffgfffhfefueeiudegtdefhfekgeetheegheeifffguedvueff
+    fefgudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgusehquhgvrghshihsnhgrihhlrdhnvghtpdhnsggprhgtphhtthhopeeipdhmohgu
+    vgepshhmthhpohhuthdprhgtphhtthhopegrnhhtohhnihhosehophgvnhhvphhnrdhnvg
+    htpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
+    thhtoheprhgrlhhfsehmrghnuggvlhgsihhtrdgtohhmpdhrtghpthhtohepkhhusggrse
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehv
+    ghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrd
+    horhhg
+X-ME-Proxy: <xmx:d2EoaWZZYz12e28m_a7hCERZsE0Kp8VI-aRVVjsLNIJRu0Ed_AiQQA>
+    <xmx:d2EoaQwrr1H6jlmCklfYSurevS5zn9GDdRGc1kMJJQRyUObXQUnOng>
+    <xmx:d2EoaWggID6wW1OJynHwPWHXO2fW-5hXKbmRHWw6RFDdIXBw128A8A>
+    <xmx:d2EoaUkY70uvFPQpmxtMfDP8B5W-UBh2h6JfkUefldzDDaeufAsw4w>
+    <xmx:eGEoafxG5Y08_oUhFXky9SPmoJDdntczFrI-xh0xPxIomwg_KUau1KN9>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 27 Nov 2025 09:34:31 -0500 (EST)
+Date: Thu, 27 Nov 2025 15:34:29 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: netdev@vger.kernel.org, Ralf Lici <ralf@mandelbit.com>,
+	Jakub Kicinski <kuba@kernel.org>, linux-kselftest@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: [RFC net-next 13/13] selftests: ovpn: add test for bound address
+Message-ID: <aShhdULYMt58e2_B@krikkit>
+References: <20251121002044.16071-1-antonio@openvpn.net>
+ <20251121002044.16071-14-antonio@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251121002044.16071-14-antonio@openvpn.net>
 
-Jakub reported increased flakiness in bond_macvlan_ipvlan.sh on regular
-kernel, while the tests consistently pass on a debug kernel. This suggests
-a timing-sensitive issue.
+2025-11-21, 01:20:44 +0100, Antonio Quartulli wrote:
+> From: Ralf Lici <ralf@mandelbit.com>
+> 
+> Add a selftest to verify that when a socket is bound to a local address,
+> UDP traffic from ovpn is correctly routed through that address.
+> 
+> This test extends test-bind.sh by binding to the addresses on each veth
+> pair and uses tcpdump to confirm that traffic flows as expected.
 
-To mitigate this, introduce a short sleep before each xvlan_over_bond
-connectivity check. The delay helps ensure neighbor and route cache
-have fully converged before verifying connectivity.
+Same as the other bind scenario, the test works even if we don't bind
+to that address.
 
-The sleep interval is kept minimal since check_connection() is invoked
-nearly 100 times during the test.
 
-Fixes: 246af950b940 ("selftests: bonding: add macvlan over bond testing")
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Closes: https://lore.kernel.org/netdev/20251114082014.750edfad@kernel.org
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- .../testing/selftests/drivers/net/bonding/bond_macvlan_ipvlan.sh | 1 +
- 1 file changed, 1 insertion(+)
+A few small comments on the implementation:
 
-diff --git a/tools/testing/selftests/drivers/net/bonding/bond_macvlan_ipvlan.sh b/tools/testing/selftests/drivers/net/bonding/bond_macvlan_ipvlan.sh
-index c4711272fe45..559f300f965a 100755
---- a/tools/testing/selftests/drivers/net/bonding/bond_macvlan_ipvlan.sh
-+++ b/tools/testing/selftests/drivers/net/bonding/bond_macvlan_ipvlan.sh
-@@ -30,6 +30,7 @@ check_connection()
- 	local message=${3}
- 	RET=0
- 
-+	sleep 0.25
- 	ip netns exec ${ns} ping ${target} -c 4 -i 0.1 &>/dev/null
- 	check_err $? "ping failed"
- 	log_test "${bond_mode}/${xvlan_type}_${xvlan_mode}: ${message}"
+> @@ -547,45 +518,83 @@ static int ovpn_socket(struct ovpn_ctx *ctx, sa_family_t family, int proto)
+>  		if (setsockopt(s, SOL_SOCKET, SO_BINDTODEVICE, ctx->bind_dev,
+>  			       strlen(ctx->bind_dev) + 1) != 0) {
+>  			perror("setsockopt for SO_BINDTODEVICE");
+> -			return -1;
+> +			goto close;
+
+ret isn't reset here, ovpn_socket will return a stale value.
+
+>  		}
+>  	}
+>  
+> -	ret = bind(s, (struct sockaddr *)&local_sock, sock_len);
+> -	if (ret < 0) {
+> -		perror("cannot bind socket");
+> -		goto err_socket;
+> +	return s;
+> +close:
+> +	close(s);
+> +	return ret;
+> +}
+> +
+[...]
+> @@ -2221,6 +2228,9 @@ static int ovpn_parse_cmd_args(struct ovpn_ctx *ovpn, int argc, char *argv[])
+>  
+>  		ovpn->sa_family = AF_INET;
+>  
+> +		ovpn->laddr = NULL;
+> +		ovpn->lport = "1";
+
+Why do we want lport=1 on the CONNECT side now?
+
+> +
+>  		ret = ovpn_parse_new_peer(ovpn, argv[3], argv[4], argv[5], argv[6],
+>  					  NULL);
+>  		if (ret < 0) {
+
 -- 
-2.50.1
-
+Sabrina
 
