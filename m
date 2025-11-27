@@ -1,142 +1,99 @@
-Return-Path: <linux-kselftest+bounces-46634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46635-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 754BBC8E0E0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 12:30:37 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04E90C8E269
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 12:57:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34D363AA48E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 11:30:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ECEAD4E6CF2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 11:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8955A32863F;
-	Thu, 27 Nov 2025 11:30:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D4D03314AE;
+	Thu, 27 Nov 2025 11:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SI3P/f4k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iAUgLSfU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6249632D0CA
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 11:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34DE732F76C;
+	Thu, 27 Nov 2025 11:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764243021; cv=none; b=J16EuBbLo7qMMtnQnWpsO/+hBUNSQ2UPkHO2N/aDUUgdVto/1Q4RSxgVvyAf8fQMa6Wspx2Ico4jMpSkdGzerfiNm83/2c3EirsfZQClcUfFiW/GDuZblz+Eod3oPbFUSCaFKhQMf+Se0XpkqAsoH2p8xgduM0XrmFk7kE3YQnk=
+	t=1764244325; cv=none; b=RykMhQCOG0Xi3rqfoLuUOnPoaDxHNsWnKrIqi+E68lwnGyIFgcCkOwNEVO1wzGoWWST04fsq5qQGVlXzPcaqZ8Z1ZJcwlpqx1lPwDHyZtywSiuuPQrkZAmOvz8K3UGDD5cg43dYuI4FvpvjmK2zdm7B+DExwzUKThMe1RRcjzYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764243021; c=relaxed/simple;
-	bh=e/8qyL9WnzF0uxj7if7UxvR04+zBw419mrHQinra2sI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WwBKsnMN7BNhbX0hfu7xUz8YA/WTHWwsa3DA1t4coVnB050IYrVYLJIV9TYBjFYiTeWEwdSGqqRbasCM78gEacWa/hYQrhVRWpvQ2zUWEllnZlUZtn+7+G4cug57AjePX8xD7qgFLZrTVzju69H7yztBudMX67b/gWYv61YhwvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SI3P/f4k; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <4056b77f-ea23-4c49-975c-006a4a8b4733@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764243007;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RZ2vKUZnYoEZ15SSkH2UVnB4dLdcLSe3Y7SscFwSwJk=;
-	b=SI3P/f4kCIFCa2CK/7Ve19704PX3asqZfw1eur6iqTnQ2DcyEYnafSAgjfNkaVEAWIdf6F
-	4y/29YH5E+YbKOhori+Tcfdn1zDKxrKXDUdJ4VsrgTDSsir+6RS4CenyUPjQViU15MV41/
-	cRdA6/m2N/dRT/uH76Sh1mT8V24Y+9M=
-Date: Thu, 27 Nov 2025 19:29:58 +0800
+	s=arc-20240116; t=1764244325; c=relaxed/simple;
+	bh=vXMAPEVvuqkmNZC1/QV8tfrfTIWyuSpb49vHXINrQ90=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=j1ShVzoNIedPn5kFGWC8TpPT3pzCFQPOGJembH1TRHIQ47/w2pzEe0MFswPof443dTHNAmxH5faFjLRaiH4HDK7Gv9bJKiMQUgCdQ6i9qpw+kd5KE7zpf4MudGNn3ObqMReMUrnF8sa1d9aTJDmPrHgJ3969lZRzHX5zwBA2p/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iAUgLSfU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22C1C4CEF8;
+	Thu, 27 Nov 2025 11:52:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764244324;
+	bh=vXMAPEVvuqkmNZC1/QV8tfrfTIWyuSpb49vHXINrQ90=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=iAUgLSfUY3cNdJ/lT8f6NFrNMIESS5uRK+gHgrsOa8ABQMJM2Pq4+JhUD3tUxtR8B
+	 a9ck5u/IGTN4PbljvRT1s59ncfU+mNuNdoDU4lZ08eSLzAvzGKcT6g8xuA3JWmdDIF
+	 q3m32k3tdSERBBGLGKUW+9jSxGccWSXYK2eigKxA+PgXc7B4EF41RKFMY2kjyzesbf
+	 zV6mf0j3oDs0F7vgyK/KUvV1jZw/Y4liLLqkk69UpZZq9YEW71efF4BwESsj+boqrd
+	 7/7cGY5n94WTp8kGxp2xmmwHfIzkl6+QQzSlrLJhqZWuASjYuRoFjoC0LppMXQPyaY
+	 LDXBBCVIFI3Eg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70D93380CFE0;
+	Thu, 27 Nov 2025 11:51:27 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 2/3] selftests: cgroup: make test_memcg_sock robust
- against delayed sock stats
-Content-Language: en-US
-To: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Cc: shuah@kernel.org, muchun.song@linux.dev, mkoutny@suse.com,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, shakeel.butt@linux.dev,
- linux-kernel@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org,
- mhocko@kernel.org, roman.gushchin@linux.dev,
- Andrew Morton <akpm@linux-foundation.org>
-References: <20251124123816.486164-1-zhangguopeng@kylinos.cn>
- <20251124123816.486164-3-zhangguopeng@kylinos.cn>
- <8ce13061-b4a7-4474-9e57-bab9b1a62b63@linux.dev>
- <07b9bdd1-3499-41a7-bef2-9428935fd3f1@kylinos.cn>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Lance Yang <lance.yang@linux.dev>
-In-Reply-To: <07b9bdd1-3499-41a7-bef2-9428935fd3f1@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Subject: Re: [PATCH net-next] selftests: af_unix: remove unused stdlib.h
+ include
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176424428626.2543014.2747107697046734578.git-patchwork-notify@kernel.org>
+Date: Thu, 27 Nov 2025 11:51:26 +0000
+References: <20251125113648.25903-1-adelodunolaoluwa@yahoo.com>
+In-Reply-To: <20251125113648.25903-1-adelodunolaoluwa@yahoo.com>
+To: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+Cc: kuniyu@google.com, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+ david.hunter.linux@gmail.com, linux-kernel-mentees@lists.linuxfoundation.org,
+ oe-kbuild-all@lists.linux.dev, lkp@intel.com
+
+Hello:
+
+This patch was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Tue, 25 Nov 2025 12:36:48 +0100 you wrote:
+> The unix_connreset.c test included <stdlib.h>, but no symbol from that
+> header is used. This causes a fatal build error under certain
+> linux-next configurations where stdlib.h is not available.
+> 
+> Remove the unused include to fix the build.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/r/202511221800.hcgCKvVa-lkp@intel.com/
+> Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next] selftests: af_unix: remove unused stdlib.h include
+    https://git.kernel.org/netdev/net-next/c/5c9c1e78de1e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-
-On 2025/11/27 19:18, Guopeng Zhang wrote:
-> 
-> 
-> On 11/27/25 18:55, Lance Yang wrote:
->>
->>
->> On 2025/11/24 20:38, Guopeng Zhang wrote:
->>> test_memcg_sock() currently requires that memory.stat's "sock " counter
->>> is exactly zero immediately after the TCP server exits. On a busy system
->>> this assumption is too strict:
->>>
->>>     - Socket memory may be freed with a small delay (e.g. RCU callbacks).
->>>     - memcg statistics are updated asynchronously via the rstat flushing
->>>       worker, so the "sock " value in memory.stat can stay non-zero for a
->>>       short period of time even after all socket memory has been uncharged.
->>>
->>> As a result, test_memcg_sock() can intermittently fail even though socket
->>> memory accounting is working correctly.
->>>
->>> Make the test more robust by polling memory.stat for the "sock "
->>> counter and allowing it some time to drop to zero instead of checking
->>> it only once. The timeout is set to 3 seconds to cover the periodic
->>> rstat flush interval (FLUSH_TIME = 2*HZ by default) plus some
->>> scheduling slack. If the counter does not become zero within the
->>> timeout, the test still fails as before.
->>>
->>> On my test system, running test_memcontrol 50 times produced:
->>>
->>>     - Before this patch:  6/50 runs passed.
->>>     - After this patch:  50/50 runs passed.
->>>
->>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
->>> Suggested-by: Lance Yang <lance.yang@linux.dev>
->>> ---
->>>    .../selftests/cgroup/test_memcontrol.c        | 20 ++++++++++++++++++-
->>>    1 file changed, 19 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
->>> index 4e1647568c5b..dda12e5c6457 100644
->>> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
->>> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
->>> @@ -21,6 +21,8 @@
->>>    #include "kselftest.h"
->>
->> This patch fails to apply to mm-new ...
->>
->> Hmm, it expects #include "kselftest.h" here, but the tree uses
->> #include "../kselftest.h".
->>
->> Which is odd, as that line hasn't been touched in years ...
-> Hi,lance
-> 
-> Thanks for your review.
-> 
-> When I prepared this patch I was working on linux-next, where
-> tools/testing/selftests/cgroup/test_memcontrol.c already uses:
-> 
->      #include "kselftest.h"
-> 
-> I just checked, and this change comes from the following commit:
-> 
->      1aaedc385b9b278dcf91f4e9d0c3e1a078804ff1
->      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=next-20251127&id=1aaedc385b9b278dcf91f4e9d0c3e1a078804ff1
-> 
-> So the patch applies cleanly on top of the latest linux-next, but not on
-> mm-new which still has `#include "../kselftest.h"`.
-
-Ahh, I see, thanks!
 
