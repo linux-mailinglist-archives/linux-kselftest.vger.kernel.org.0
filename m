@@ -1,316 +1,159 @@
-Return-Path: <linux-kselftest+bounces-46675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA726C90297
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 21:46:36 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D0BAC902EC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 22:14:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0E5BB35293E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 20:46:00 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9EB7A34E10E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 21:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3840320A01;
-	Thu, 27 Nov 2025 20:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4333195F4;
+	Thu, 27 Nov 2025 21:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dt9Zt17j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khkgOJ3j"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06F6320CCB
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 20:44:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5515C770FE;
+	Thu, 27 Nov 2025 21:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764276283; cv=none; b=uD/oXfhQGdYD1i550IoB3pe147T88whzZF0azUnN2+vrYoJfzglx0vRNCWhKkFEw4rcviH1ijaw/LouHWvHc+JoieWNPcSS1zFzL9gv5oxwW0otkkzJp1i3kbDDcTuxkNu82vwDxEmLpfNi71lpKrVQwJQK4qB5qF5MYgoawu4A=
+	t=1764278050; cv=none; b=M4jzvk+AOKyB8+xVmO+bQTqF9PgW1FOwrgFKo1OA9f83lnNaWAmwHGuK026evj72mtDjEXIOrVIiJAFmgLl+7Fpt7hlDyPxUgNbAawN0VdCQ5Ln38+oP/9uC0NySvHzKe7cMJSUHMOQj1XNF3fNHavOUF7NVFGYsUvRMNBSqq7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764276283; c=relaxed/simple;
-	bh=2LyuBsPor15Og8w8FehldYD9uvgj0U/Qd8569PQOz/I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ltNI2606LOtdGZI6HS7rnkazkcYDuWAzjIhRm34ViTSPFwlwXAZBf+dLwu1Qlxmcm5B3GhuzV9p9tOFFd+P6N2BqIeas76mBhOF3eCJPOq4T9lhEhQSwSQHp4eQuZhYDs6h5LkZ1zxMsOA3thqqrjtuSXBaz488x1o4wtME5osM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dt9Zt17j; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-42b32900c8bso826165f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 12:44:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764276280; x=1764881080; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M8Gbmeh89/N4kjz62es84Em0iR2fT9OzX01rnhn2RRU=;
-        b=Dt9Zt17jvBDfWOm7l30BS/Oc9Qe4F/BCWiKv+NhmEU+EbZvJPCxVKJjkVJ7p05Qsk7
-         f+8HMtAEyrJ/LQu9mxbnstQIKAqZWcOo7jj53Um9pLTE1/W5SgENl/f71t6civSLcKS6
-         TaFFcDsqJ8YuQSea11TSOhuoTfDcqc3QveUkZsU0qlpRkGXJAJuyUJi2LeFrufincLTE
-         mMa9vRq30CO//JeW4SAmfpybZg/NdMb02WZLscsQcs6SoNP9RKnwlzc4iHx/ow4os4XJ
-         +rir21G5YO0AvWbqVK4MN9F94EakNOkiLfbxe7G9f8ik8N7dk+z8OCgg+COok/ENF4ZF
-         7jiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764276280; x=1764881080;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=M8Gbmeh89/N4kjz62es84Em0iR2fT9OzX01rnhn2RRU=;
-        b=MoqkGPOgrULgM3n6vQddVX/TLOfHiq47RY6ieVBlDi5IMW4I2rZ8YrIQ18+/EpqPGZ
-         fc0VwdhocdozlMn/+uuPv5KLhklCWUlUe83ZswB1mH11kuHaISTTP2JxsQXRQMqxuCSY
-         eJGMeqaSEp3rUOdxrndbJApSTTyky6TmKUhzIafh8ZpjfeH1lDnVHtjCq9Aw+mDZOTAw
-         OuAsL2rGWcEdZO0AqtDSEOOWtJQCwJsd9O8Pf9GU8QmhzBZFbUD0CHRPNGaBmwSFCdKK
-         kGAWREhKz+GHhqvtmiXbTnuRxwli0u7RAJ5MuN/11RyZ8r4uvh8PCm2z+N69IEn6WsHG
-         hGXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVT+1iOEtBcQImFWIwtkvSu7wC2hY3gdGh6TaMg2xoCjx51SRsr/XApRQehB3/znHmj8HZ4M0U0STq5ZmL2PPg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5270P0EwfKYCyxDH0FInk9ozdaQV7HGb6K5SSPfXimo4PuxtQ
-	wdpGltdMhbRBsLuOYAQawrvTcHuz36ZI+tFtJ3HHRPLYPcVIm4B4uCtj
-X-Gm-Gg: ASbGncsweHz0n+tQzgTDt45VXSMPQY5geKW7mrnRjrM6xpG+t4Zaj45T4ZirXhK9c9R
-	Qh8vA8zoOaZs3yex5jGg7ePKDAgZHmmJIhsywMDrtdqG9Gqcem9OrF1M5cWH7lChhxDInDDsEJi
-	NUnEwMzhb1AVzEGmqsgSdnxCmuwsbkU9B4yBameAA+x5TD61f1YYb7QC45KlFKQ8gPd+o35ADqU
-	/f/suVb7jQa4yt4nWMkyW8MLu6rsf4RhXA8c9zsBTPG2o50RzUmhwdBIQ9IZI6H6/WHjJgCCvUk
-	iDoZZmN8VysGGhQpvmIgYeKEJYPwVT91zF0bYjNaudYnyV6Oec30Y2RRLaGrxAwqTcPu5KOqSo1
-	syDYXHGmRmsfATsAt/SGVnRtnsNWWDLKnMd/LTFxfOd5pPTXTMtAzpcNffZj+CBDVmOS/6corxa
-	kGV85o1xdlC1zGQw==
-X-Google-Smtp-Source: AGHT+IGuV2DWxNxvizrrGr6FH3gzPVUslsgMTwKhOGOXoIvvKJIWs4/U+A5R9xyG+U9svjhm0G8y7A==
-X-Received: by 2002:a05:6000:26c9:b0:42b:30f9:79b6 with SMTP id ffacd0b85a97d-42cc1d62843mr26242387f8f.58.1764276279891;
-        Thu, 27 Nov 2025 12:44:39 -0800 (PST)
-Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42e1c5d614asm5346105f8f.12.2025.11.27.12.44.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 12:44:39 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Pavel Begunkov <asml.silence@gmail.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Simon Horman <horms@kernel.org>,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	io-uring@vger.kernel.org,
-	dtatulea@nvidia.com
-Subject: [PATCH net-next v6 8/8] selftests: iou-zcrx: test large chunk sizes
-Date: Thu, 27 Nov 2025 20:44:21 +0000
-Message-ID: <ef9cc9f58d60656a8afef1fc84f066aeb7b27378.1764264798.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1764264798.git.asml.silence@gmail.com>
-References: <cover.1764264798.git.asml.silence@gmail.com>
+	s=arc-20240116; t=1764278050; c=relaxed/simple;
+	bh=Fi9uBpjCD9vm8iluPdYQEZRrTQxH47uO4POYpNrObW4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=IWU72LE3VW5wKl0TjsBgjSmJITKR9+8tAg+WddshZs4oZUlxNqyq7eaUUZvcsaUCzopisIbolI6rEmfqbiP39Soyi+Wi7zzxKc96lRJhuzNGyXWMErO33zyGbUvjwlZlPNuemZ8cRCbxpfI6Mbhr1myZOZDldyERvdc+1rmXFt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khkgOJ3j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDA79C4CEF8;
+	Thu, 27 Nov 2025 21:14:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764278049;
+	bh=Fi9uBpjCD9vm8iluPdYQEZRrTQxH47uO4POYpNrObW4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=khkgOJ3jyY5Z1bRFubXx8+PfzwwpzTLhKmfop/KpcKgOZsNorgafnpms8HWthBlZm
+	 Qjd+fBibf2KNWHwA60kRIHSzeqjIvG22F7oj5vdloc93fv9hv4l8KaBkJrRVc+ix3A
+	 qNW9H3ZKe0qRJMBV3nBa8qM1pz0GxGYSnGlezZ1NnfqTcyE8nX44WgR2tKPkYUEgbJ
+	 3hnD1zdApuKj+qKpcUvRaPdSb99IEx4ut3J/Re5H872dPTVyRnff2sxsVeH6S+e7Jz
+	 l8F4gH+/wnKZ+XCg81W1LX+OH0VsQa/DCQaWbyYoHg+PnmOL68kDGpGTByinNHagPP
+	 od+aoTIJWdbgg==
+Date: Thu, 27 Nov 2025 14:14:03 -0700 (MST)
+From: Paul Walmsley <pjw@kernel.org>
+To: linux-riscv@lists.infradead.org
+cc: Deepak Gupta <debug@rivosinc.com>, tglx@linutronix.de, mingo@redhat.com, 
+    bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+    akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz, 
+    lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+    aou@eecs.berkeley.edu, conor@kernel.org, robh@kernel.org, 
+    krzk+dt@kernel.org, arnd@arndb.de, brauner@kernel.org, 
+    peterz@infradead.org, oleg@redhat.com, ebiederm@xmission.com, 
+    kees@kernel.org, corbet@lwn.net, shuah@kernel.org, jannh@google.com, 
+    conor+dt@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com, 
+    boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
+    a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
+    lossin@kernel.org, linux-kernel@vger.kernel.org, 
+    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+    devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
+    linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
+    andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
+    atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
+    alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
+    rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
+    zong.li@sifive.com, david@redhat.com, cmirabil@redhat.com
+Subject: Re: [PATCH v23 00/28] riscv control-flow integrity for usermode
+In-Reply-To: <176423222224.2476283.17736612090314280039.git-patchwork-notify@kernel.org>
+Message-ID: <b82ffcca-3173-8c07-4a8a-c42d8d092a72@kernel.org>
+References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com> <176423222224.2476283.17736612090314280039.git-patchwork-notify@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-Add a test using large chunks for zcrx memory area.
+On Thu, 27 Nov 2025, patchwork-bot+linux-riscv@kernel.org wrote:
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- .../selftests/drivers/net/hw/iou-zcrx.c       | 72 +++++++++++++++----
- .../selftests/drivers/net/hw/iou-zcrx.py      | 37 ++++++++++
- 2 files changed, 97 insertions(+), 12 deletions(-)
+> This series was applied to riscv/linux.git (for-next)
+> by Paul Walmsley <pjw@kernel.org>:
+> 
 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-index 62456df947bc..fed5452e2ca3 100644
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-@@ -12,6 +12,7 @@
- #include <unistd.h>
- 
- #include <arpa/inet.h>
-+#include <linux/mman.h>
- #include <linux/errqueue.h>
- #include <linux/if_packet.h>
- #include <linux/ipv6.h>
-@@ -37,6 +38,23 @@
- 
- #include <liburing.h>
- 
-+#define SKIP_CODE	42
-+
-+struct t_io_uring_zcrx_ifq_reg {
-+	__u32	if_idx;
-+	__u32	if_rxq;
-+	__u32	rq_entries;
-+	__u32	flags;
-+
-+	__u64	area_ptr; /* pointer to struct io_uring_zcrx_area_reg */
-+	__u64	region_ptr; /* struct io_uring_region_desc * */
-+
-+	struct io_uring_zcrx_offsets offsets;
-+	__u32	zcrx_id;
-+	__u32	rx_buf_len;
-+	__u64	__resv[3];
-+};
-+
- static long page_size;
- #define AREA_SIZE (8192 * page_size)
- #define SEND_SIZE (512 * 4096)
-@@ -65,6 +83,8 @@ static bool cfg_oneshot;
- static int cfg_oneshot_recvs;
- static int cfg_send_size = SEND_SIZE;
- static struct sockaddr_in6 cfg_addr;
-+static unsigned cfg_rx_buf_len = 0;
-+static bool cfg_dry_run;
- 
- static char *payload;
- static void *area_ptr;
-@@ -128,14 +148,28 @@ static void setup_zcrx(struct io_uring *ring)
- 	if (!ifindex)
- 		error(1, 0, "bad interface name: %s", cfg_ifname);
- 
--	area_ptr = mmap(NULL,
--			AREA_SIZE,
--			PROT_READ | PROT_WRITE,
--			MAP_ANONYMOUS | MAP_PRIVATE,
--			0,
--			0);
--	if (area_ptr == MAP_FAILED)
--		error(1, 0, "mmap(): zero copy area");
-+	if (cfg_rx_buf_len && cfg_rx_buf_len != page_size) {
-+		area_ptr = mmap(NULL,
-+				AREA_SIZE,
-+				PROT_READ | PROT_WRITE,
-+				MAP_ANONYMOUS | MAP_PRIVATE |
-+				MAP_HUGETLB | MAP_HUGE_2MB,
-+				-1,
-+				0);
-+		if (area_ptr == MAP_FAILED) {
-+			printf("Can't allocate huge pages\n");
-+			exit(SKIP_CODE);
-+		}
-+	} else {
-+		area_ptr = mmap(NULL,
-+				AREA_SIZE,
-+				PROT_READ | PROT_WRITE,
-+				MAP_ANONYMOUS | MAP_PRIVATE,
-+				0,
-+				0);
-+		if (area_ptr == MAP_FAILED)
-+			error(1, 0, "mmap(): zero copy area");
-+	}
- 
- 	ring_size = get_refill_ring_size(rq_entries);
- 	ring_ptr = mmap(NULL,
-@@ -157,17 +191,23 @@ static void setup_zcrx(struct io_uring *ring)
- 		.flags = 0,
- 	};
- 
--	struct io_uring_zcrx_ifq_reg reg = {
-+	struct t_io_uring_zcrx_ifq_reg reg = {
- 		.if_idx = ifindex,
- 		.if_rxq = cfg_queue_id,
- 		.rq_entries = rq_entries,
- 		.area_ptr = (__u64)(unsigned long)&area_reg,
- 		.region_ptr = (__u64)(unsigned long)&region_reg,
-+		.rx_buf_len = cfg_rx_buf_len,
- 	};
- 
--	ret = io_uring_register_ifq(ring, &reg);
--	if (ret)
-+	ret = io_uring_register_ifq(ring, (void *)&reg);
-+	if (cfg_rx_buf_len && (ret == -EINVAL || ret == -EOPNOTSUPP ||
-+			       ret == -ERANGE)) {
-+		printf("Large chunks are not supported %i\n", ret);
-+		exit(SKIP_CODE);
-+	} else if (ret) {
- 		error(1, 0, "io_uring_register_ifq(): %d", ret);
-+	}
- 
- 	rq_ring.khead = (unsigned int *)((char *)ring_ptr + reg.offsets.head);
- 	rq_ring.ktail = (unsigned int *)((char *)ring_ptr + reg.offsets.tail);
-@@ -323,6 +363,8 @@ static void run_server(void)
- 	io_uring_queue_init(512, &ring, flags);
- 
- 	setup_zcrx(&ring);
-+	if (cfg_dry_run)
-+		return;
- 
- 	add_accept(&ring, fd);
- 
-@@ -383,7 +425,7 @@ static void parse_opts(int argc, char **argv)
- 		usage(argv[0]);
- 	cfg_payload_len = max_payload_len;
- 
--	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:")) != -1) {
-+	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:d")) != -1) {
- 		switch (c) {
- 		case 's':
- 			if (cfg_client)
-@@ -418,6 +460,12 @@ static void parse_opts(int argc, char **argv)
- 		case 'z':
- 			cfg_send_size = strtoul(optarg, NULL, 0);
- 			break;
-+		case 'x':
-+			cfg_rx_buf_len = page_size * strtoul(optarg, NULL, 0);
-+			break;
-+		case 'd':
-+			cfg_dry_run = true;
-+			break;
- 		}
- 	}
- 
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-index 712c806508b5..83061b27f2f2 100755
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
-@@ -7,6 +7,7 @@ from lib.py import ksft_run, ksft_exit, KsftSkipEx
- from lib.py import NetDrvEpEnv
- from lib.py import bkg, cmd, defer, ethtool, rand_port, wait_port_listen
- 
-+SKIP_CODE = 42
- 
- def _get_current_settings(cfg):
-     output = ethtool(f"-g {cfg.ifname}", json=True)[0]
-@@ -132,6 +133,42 @@ def test_zcrx_rss(cfg) -> None:
-         cmd(tx_cmd, host=cfg.remote)
- 
- 
-+def test_zcrx_large_chunks(cfg) -> None:
-+    cfg.require_ipver('6')
-+
-+    combined_chans = _get_combined_channels(cfg)
-+    if combined_chans < 2:
-+        raise KsftSkipEx('at least 2 combined channels required')
-+    (rx_ring, hds_thresh) = _get_current_settings(cfg)
-+    port = rand_port()
-+
-+    ethtool(f"-G {cfg.ifname} tcp-data-split on")
-+    defer(ethtool, f"-G {cfg.ifname} tcp-data-split auto")
-+
-+    ethtool(f"-G {cfg.ifname} hds-thresh 0")
-+    defer(ethtool, f"-G {cfg.ifname} hds-thresh {hds_thresh}")
-+
-+    ethtool(f"-G {cfg.ifname} rx 64")
-+    defer(ethtool, f"-G {cfg.ifname} rx {rx_ring}")
-+
-+    ethtool(f"-X {cfg.ifname} equal {combined_chans - 1}")
-+    defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    flow_rule_id = _set_flow_rule(cfg, port, combined_chans - 1)
-+    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
-+
-+    rx_cmd = f"{cfg.bin_local} -s -p {port} -i {cfg.ifname} -q {combined_chans - 1} -x 2"
-+    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {port} -l 12840"
-+
-+    probe = cmd(rx_cmd + " -d", fail=False)
-+    if probe.ret == SKIP_CODE:
-+        raise KsftSkipEx(probe.stdout)
-+
-+    with bkg(rx_cmd, exit_wait=True):
-+        wait_port_listen(port, proto="tcp")
-+        cmd(tx_cmd, host=cfg.remote)
-+
-+
- def main() -> None:
-     with NetDrvEpEnv(__file__) as cfg:
-         cfg.bin_local = path.abspath(path.dirname(__file__) + "/../../../drivers/net/hw/iou-zcrx")
--- 
-2.52.0
+[ the RISC-V CFI patch series ]
 
+> 
+> Here is the summary with links:
+>   - [v23,01/28] mm: VM_SHADOW_STACK definition for riscv
+>     https://git.kernel.org/riscv/c/ae8460ac9db2
+>   - [v23,02/28] dt-bindings: riscv: zicfilp and zicfiss in dt-bindings (extensions.yaml)
+>     https://git.kernel.org/riscv/c/b32ccfc268db
+>   - [v23,03/28] riscv: zicfiss / zicfilp enumeration
+>     https://git.kernel.org/riscv/c/55a811a7f304
+>   - [v23,04/28] riscv: zicfiss / zicfilp extension csr and bit definitions
+>     https://git.kernel.org/riscv/c/92c96b16548e
+>   - [v23,05/28] riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
+>     https://git.kernel.org/riscv/c/7720cdd21962
+>   - [v23,06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+>     https://git.kernel.org/riscv/c/e60eb198b13d
+>   - [v23,07/28] riscv/mm: manufacture shadow stack pte
+>     https://git.kernel.org/riscv/c/f8fcb7b5bf30
+>   - [v23,08/28] riscv/mm: teach pte_mkwrite to manufacture shadow stack PTEs
+>     https://git.kernel.org/riscv/c/0276a5ea1105
+>   - [v23,09/28] riscv/mm: write protect and shadow stack
+>     https://git.kernel.org/riscv/c/ae615676bc37
+>   - [v23,10/28] riscv/mm: Implement map_shadow_stack() syscall
+>     https://git.kernel.org/riscv/c/d291fd38f841
+>   - [v23,11/28] riscv/shstk: If needed allocate a new shadow stack on clone
+>     https://git.kernel.org/riscv/c/d209ea2fa4bb
+>   - [v23,12/28] riscv: Implements arch agnostic shadow stack prctls
+>     https://git.kernel.org/riscv/c/8b49f512abc2
+>   - [v23,13/28] prctl: arch-agnostic prctl for indirect branch tracking
+>     https://git.kernel.org/riscv/c/3363a8d1044e
+>   - [v23,14/28] riscv: Implements arch agnostic indirect branch tracking prctls
+>     https://git.kernel.org/riscv/c/0177891ccdb7
+>   - [v23,15/28] riscv/traps: Introduce software check exception and uprobe handling
+>     https://git.kernel.org/riscv/c/6f71171a7448
+>   - [v23,16/28] riscv: signal: abstract header saving for setup_sigcontext
+>     (no matching commit)
+>   - [v23,17/28] riscv/signal: save and restore of shadow stack for signal
+>     https://git.kernel.org/riscv/c/4f9da7ad3478
+>   - [v23,18/28] riscv/kernel: update __show_regs to print shadow stack register
+>     https://git.kernel.org/riscv/c/320c96a55d73
+>   - [v23,19/28] riscv/ptrace: riscv cfi status and state via ptrace and in core files
+>     https://git.kernel.org/riscv/c/7a39f89a817e
+>   - [v23,20/28] riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
+>     https://git.kernel.org/riscv/c/c09b490a9267
+>   - [v23,21/28] riscv: kernel command line option to opt out of user cfi
+>     https://git.kernel.org/riscv/c/6e0dc40ceb45
+>   - [v23,22/28] riscv: enable kernel access to shadow stack memory via FWFT sbi call
+>     https://git.kernel.org/riscv/c/dfd087078357
+>   - [v23,23/28] arch/riscv: compile vdso with landing pad and shadow stack note
+>     https://git.kernel.org/riscv/c/2cfe57e3bd9b
+>   - [v23,24/28] arch/riscv: dual vdso creation logic and select vdso based on hw
+>     https://git.kernel.org/riscv/c/418316aa61e8
+>   - [v23,25/28] riscv: create a config for shadow stack and landing pad instr support
+>     https://git.kernel.org/riscv/c/c5f5ce714457
+>   - [v23,26/28] riscv: Documentation for landing pad / indirect branch tracking
+>     https://git.kernel.org/riscv/c/73d0ccec35b8
+>   - [v23,27/28] riscv: Documentation for shadow stack on riscv
+>     https://git.kernel.org/riscv/c/6b8214c8cbd6
+>   - [v23,28/28] kselftest/riscv: kselftest for user mode cfi
+>     https://git.kernel.org/riscv/c/0f226cf6026f
+
+As I noted with the SSE series (before we removed it from for-next), I may 
+not ultimately send this in a PR this merge window, for several reasons.  
+The series has been around for a while, and although I know some vendors 
+have tested it privately, I'd really like to have more public testing of 
+this code, particularly on hardware emulation platforms or unreleased 
+silicon.  It would be good to see some Tested-by:s. 
+
+Thanks to everyone who has helped test this so far over the past few weeks 
+- particularly Joel Stanley of TensTorrent.
+
+
+- Paul
 
