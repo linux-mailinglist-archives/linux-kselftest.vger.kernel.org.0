@@ -1,159 +1,281 @@
-Return-Path: <linux-kselftest+bounces-46676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D0BAC902EC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 22:14:17 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 533E0C90495
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 23:22:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9EB7A34E10E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 21:14:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 476A84E275A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 22:22:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4333195F4;
-	Thu, 27 Nov 2025 21:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9322F311954;
+	Thu, 27 Nov 2025 22:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="khkgOJ3j"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kp5JguR/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5515C770FE;
-	Thu, 27 Nov 2025 21:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625C5311C3C;
+	Thu, 27 Nov 2025 22:21:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764278050; cv=none; b=M4jzvk+AOKyB8+xVmO+bQTqF9PgW1FOwrgFKo1OA9f83lnNaWAmwHGuK026evj72mtDjEXIOrVIiJAFmgLl+7Fpt7hlDyPxUgNbAawN0VdCQ5Ln38+oP/9uC0NySvHzKe7cMJSUHMOQj1XNF3fNHavOUF7NVFGYsUvRMNBSqq7I=
+	t=1764282121; cv=none; b=fdF7THdAAd/MnrpGaeYazdgbokZyaj0cgYL0AaR+pIdrXrLv+lNmrZIKAnApcmByvguiD9X9WYzBjkWeMPBj84ii0Ms7qYBGcMTLIv48dD8rjoUtrl3AtLUlwyucaYbsfH6zoWjQTBTNTreyY2eehwkUs6ztW7o0NVl4K7qmtWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764278050; c=relaxed/simple;
-	bh=Fi9uBpjCD9vm8iluPdYQEZRrTQxH47uO4POYpNrObW4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=IWU72LE3VW5wKl0TjsBgjSmJITKR9+8tAg+WddshZs4oZUlxNqyq7eaUUZvcsaUCzopisIbolI6rEmfqbiP39Soyi+Wi7zzxKc96lRJhuzNGyXWMErO33zyGbUvjwlZlPNuemZ8cRCbxpfI6Mbhr1myZOZDldyERvdc+1rmXFt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=khkgOJ3j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDA79C4CEF8;
-	Thu, 27 Nov 2025 21:14:06 +0000 (UTC)
+	s=arc-20240116; t=1764282121; c=relaxed/simple;
+	bh=BzEMECmzgVJDJoiQhj621xYOXsdnWnXY9xcYY4dEQQM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=o/ELXpIbL8izB2080KfhTlPfzNs2okFxROwUoiX2iM2Tl5knl0tRwkgvPcWLyqKPl0Qg1WY/Mc7S71tuJllyMu6ug3TZeaSdWjb23pxDxRydyaAxiSbQVCyayEwJpFbO07w5M5jc465szDRejufvjR/zwAFBzC/Lf1da7XGnrss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kp5JguR/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C250C4CEF8;
+	Thu, 27 Nov 2025 22:21:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764278049;
-	bh=Fi9uBpjCD9vm8iluPdYQEZRrTQxH47uO4POYpNrObW4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=khkgOJ3jyY5Z1bRFubXx8+PfzwwpzTLhKmfop/KpcKgOZsNorgafnpms8HWthBlZm
-	 Qjd+fBibf2KNWHwA60kRIHSzeqjIvG22F7oj5vdloc93fv9hv4l8KaBkJrRVc+ix3A
-	 qNW9H3ZKe0qRJMBV3nBa8qM1pz0GxGYSnGlezZ1NnfqTcyE8nX44WgR2tKPkYUEgbJ
-	 3hnD1zdApuKj+qKpcUvRaPdSb99IEx4ut3J/Re5H872dPTVyRnff2sxsVeH6S+e7Jz
-	 l8F4gH+/wnKZ+XCg81W1LX+OH0VsQa/DCQaWbyYoHg+PnmOL68kDGpGTByinNHagPP
-	 od+aoTIJWdbgg==
-Date: Thu, 27 Nov 2025 14:14:03 -0700 (MST)
-From: Paul Walmsley <pjw@kernel.org>
-To: linux-riscv@lists.infradead.org
-cc: Deepak Gupta <debug@rivosinc.com>, tglx@linutronix.de, mingo@redhat.com, 
-    bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-    akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz, 
-    lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com, palmer@dabbelt.com, 
-    aou@eecs.berkeley.edu, conor@kernel.org, robh@kernel.org, 
-    krzk+dt@kernel.org, arnd@arndb.de, brauner@kernel.org, 
-    peterz@infradead.org, oleg@redhat.com, ebiederm@xmission.com, 
-    kees@kernel.org, corbet@lwn.net, shuah@kernel.org, jannh@google.com, 
-    conor+dt@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com, 
-    boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
-    a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
-    lossin@kernel.org, linux-kernel@vger.kernel.org, 
-    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-    devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
-    linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
-    andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
-    atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
-    alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
-    rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
-    zong.li@sifive.com, david@redhat.com, cmirabil@redhat.com
-Subject: Re: [PATCH v23 00/28] riscv control-flow integrity for usermode
-In-Reply-To: <176423222224.2476283.17736612090314280039.git-patchwork-notify@kernel.org>
-Message-ID: <b82ffcca-3173-8c07-4a8a-c42d8d092a72@kernel.org>
-References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com> <176423222224.2476283.17736612090314280039.git-patchwork-notify@kernel.org>
+	s=k20201202; t=1764282119;
+	bh=BzEMECmzgVJDJoiQhj621xYOXsdnWnXY9xcYY4dEQQM=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Kp5JguR/NR/pJGcDLRqAzxS9wKFUSB7l8OLBFu8Co09P/ME/NF87lsdJO2M930tBq
+	 vAxiM2j54D2egRUnqzDPR0bNtYSpqcYd6v1hbhRZF7ywzL9WkDbT2TV19tQ2MFqR/5
+	 65Aoxn5bV3ehDVq9hdaw27JFNSgbtqwnk9okqVdH0GOW2AKHck1L7XqnRIm9yj7o15
+	 RpmtGXLulPyfYHkNHbNlOcoGw+Kg6woOX1raDxCTmz9EMunv5M9gtvTm6rlMv+22xi
+	 xUWEFWuMw1DtAq0WSbI27QBrvFGTU8sbO4sA8TeaMfWrT7bgBqMqffzUXqhFoyXDea
+	 7QPLQukhgIFnw==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+Date: Thu, 27 Nov 2025 23:21:43 +0100
+Subject: [PATCH nf-next v2] selftests: netfilter: nft_flowtable.sh: Add the
+ capability to send IPv6 TCP traffic
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251127-nft_flowtable-sh-ipv6-tcp-v2-1-c4162e5ee014@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42NQQ6CMBBFr0Jm7RhasCIr72GIQTqFiaQlbVM1h
+ LtbOYHL95L//gqBPFOAtljBU+LAzmaQhwKGqbcjIevMIEt5EkJKtCbezexesX/MhGFCXpLCOCx
+ 4VqbSshHqogXk/eLJ8Htv37rME4fo/Ge/SuJn/6kmgQLruil1NTSq6uX1Sd7SfHR+hG7bti8eR
+ ugOwwAAAA==
+X-Change-ID: 20251122-nft_flowtable-sh-ipv6-tcp-76f3d28169d1
+To: Pablo Neira Ayuso <pablo@netfilter.org>, 
+ Jozsef Kadlecsik <kadlec@netfilter.org>, Florian Westphal <fw@strlen.de>, 
+ Phil Sutter <phil@nwl.cc>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
+X-Mailer: b4 0.14.2
 
-On Thu, 27 Nov 2025, patchwork-bot+linux-riscv@kernel.org wrote:
+Introduce the capability to send TCP traffic over IPv6 to
+nft_flowtable netfilter selftest.
 
-> This series was applied to riscv/linux.git (for-next)
-> by Paul Walmsley <pjw@kernel.org>:
-> 
+Reviewed-by: Simon Horman <horms@kernel.org>
+Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+---
+Changes in v2:
+- Fix checkpatch warnings
+- Add TCP test for IPv6 IPsec traffic
+- Link to v1: https://lore.kernel.org/r/20251122-nft_flowtable-sh-ipv6-tcp-v1-1-4480d3c863a2@kernel.org
+---
+ .../selftests/net/netfilter/nft_flowtable.sh       | 57 ++++++++++++++++------
+ 1 file changed, 43 insertions(+), 14 deletions(-)
 
-[ the RISC-V CFI patch series ]
+diff --git a/tools/testing/selftests/net/netfilter/nft_flowtable.sh b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
+index 1fbfc8ad8dcdc5db2ab1a1ea9310f655d09eee83..a68bc882fa4ec0175d8db3df8337bb5fe6c42e26 100755
+--- a/tools/testing/selftests/net/netfilter/nft_flowtable.sh
++++ b/tools/testing/selftests/net/netfilter/nft_flowtable.sh
+@@ -127,6 +127,8 @@ ip -net "$nsr1" addr add fee1:2::1/64 dev veth1 nodad
+ ip -net "$nsr2" addr add 192.168.10.2/24 dev veth0
+ ip -net "$nsr2" addr add fee1:2::2/64 dev veth0 nodad
+ 
++ip netns exec "$nsr1" sysctl net.ipv6.conf.all.forwarding=1 > /dev/null
++ip netns exec "$nsr2" sysctl net.ipv6.conf.all.forwarding=1 > /dev/null
+ for i in 0 1; do
+   ip netns exec "$nsr1" sysctl net.ipv4.conf.veth$i.forwarding=1 > /dev/null
+   ip netns exec "$nsr2" sysctl net.ipv4.conf.veth$i.forwarding=1 > /dev/null
+@@ -153,7 +155,9 @@ ip -net "$ns1" route add default via dead:1::1
+ ip -net "$ns2" route add default via dead:2::1
+ 
+ ip -net "$nsr1" route add default via 192.168.10.2
++ip -6 -net "$nsr1" route add default via fee1:2::2
+ ip -net "$nsr2" route add default via 192.168.10.1
++ip -6 -net "$nsr2" route add default via fee1:2::1
+ 
+ ip netns exec "$nsr1" nft -f - <<EOF
+ table inet filter {
+@@ -352,8 +356,9 @@ test_tcp_forwarding_ip()
+ 	local nsa=$1
+ 	local nsb=$2
+ 	local pmtu=$3
+-	local dstip=$4
+-	local dstport=$5
++	local proto=$4
++	local dstip=$5
++	local dstport=$6
+ 	local lret=0
+ 	local socatc
+ 	local socatl
+@@ -363,12 +368,14 @@ test_tcp_forwarding_ip()
+ 		infile="$nsin_small"
+ 	fi
+ 
+-	timeout "$SOCAT_TIMEOUT" ip netns exec "$nsb" socat -4 TCP-LISTEN:12345,reuseaddr STDIO < "$infile" > "$ns2out" &
++	timeout "$SOCAT_TIMEOUT" ip netns exec "$nsb" socat -${proto} \
++            TCP"${proto}"-LISTEN:12345,reuseaddr STDIO < "$infile" > "$ns2out" &
+ 	lpid=$!
+ 
+ 	busywait 1000 listener_ready
+ 
+-	timeout "$SOCAT_TIMEOUT" ip netns exec "$nsa" socat -4 TCP:"$dstip":"$dstport" STDIO < "$infile" > "$ns1out"
++	timeout "$SOCAT_TIMEOUT" ip netns exec "$nsa" socat -${proto} \
++            TCP"${proto}":"$dstip":"$dstport" STDIO < "$infile" > "$ns1out"
+ 	socatc=$?
+ 
+ 	wait $lpid
+@@ -394,8 +401,11 @@ test_tcp_forwarding_ip()
+ test_tcp_forwarding()
+ {
+ 	local pmtu="$3"
++	local proto="$4"
++	local dstip="$5"
++	local dstport="$6"
+ 
+-	test_tcp_forwarding_ip "$1" "$2" "$pmtu" 10.0.2.99 12345
++	test_tcp_forwarding_ip "$1" "$2" "$pmtu" "$proto" "$dstip" "$dstport"
+ 
+ 	return $?
+ }
+@@ -403,6 +413,9 @@ test_tcp_forwarding()
+ test_tcp_forwarding_set_dscp()
+ {
+ 	local pmtu="$3"
++	local proto="$4"
++	local dstip="$5"
++	local dstport="$6"
+ 
+ ip netns exec "$nsr1" nft -f - <<EOF
+ table netdev dscpmangle {
+@@ -413,7 +426,7 @@ table netdev dscpmangle {
+ }
+ EOF
+ if [ $? -eq 0 ]; then
+-	test_tcp_forwarding_ip "$1" "$2" "$3" 10.0.2.99 12345
++	test_tcp_forwarding_ip "$1" "$2" "$pmtu" "$proto" "$dstip" "$dstport"
+ 	check_dscp "dscp_ingress" "$pmtu"
+ 
+ 	ip netns exec "$nsr1" nft delete table netdev dscpmangle
+@@ -430,7 +443,7 @@ table netdev dscpmangle {
+ }
+ EOF
+ if [ $? -eq 0 ]; then
+-	test_tcp_forwarding_ip "$1" "$2" "$pmtu"  10.0.2.99 12345
++	test_tcp_forwarding_ip "$1" "$2" "$pmtu" "$proto" "$dstip" "$dstport"
+ 	check_dscp "dscp_egress" "$pmtu"
+ 
+ 	ip netns exec "$nsr1" nft delete table netdev dscpmangle
+@@ -441,7 +454,7 @@ fi
+ 	# partial.  If flowtable really works, then both dscp-is-0 and dscp-is-cs3
+ 	# counters should have seen packets (before and after ft offload kicks in).
+ 	ip netns exec "$nsr1" nft -a insert rule inet filter forward ip dscp set cs3
+-	test_tcp_forwarding_ip "$1" "$2" "$pmtu"  10.0.2.99 12345
++	test_tcp_forwarding_ip "$1" "$2" "$pmtu" "$proto" "$dstip" "$dstport"
+ 	check_dscp "dscp_fwd" "$pmtu"
+ }
+ 
+@@ -455,7 +468,7 @@ test_tcp_forwarding_nat()
+ 
+ 	[ "$pmtu" -eq 0 ] && what="$what (pmtu disabled)"
+ 
+-	test_tcp_forwarding_ip "$nsa" "$nsb" "$pmtu" 10.0.2.99 12345
++	test_tcp_forwarding_ip "$nsa" "$nsb" "$pmtu" 4 10.0.2.99 12345
+ 	lret=$?
+ 
+ 	if [ "$lret" -eq 0 ] ; then
+@@ -465,7 +478,7 @@ test_tcp_forwarding_nat()
+ 			echo "PASS: flow offload for ns1/ns2 with masquerade $what"
+ 		fi
+ 
+-		test_tcp_forwarding_ip "$1" "$2" "$pmtu" 10.6.6.6 1666
++		test_tcp_forwarding_ip "$1" "$2" "$pmtu" 4 10.6.6.6 1666
+ 		lret=$?
+ 		if [ "$pmtu" -eq 1 ] ;then
+ 			check_counters "flow offload for ns1/ns2 with dnat $what"
+@@ -487,7 +500,7 @@ make_file "$nsin_small" "$filesize_small"
+ # Due to MTU mismatch in both directions, all packets (except small packets like pure
+ # acks) have to be handled by normal forwarding path.  Therefore, packet counters
+ # are not checked.
+-if test_tcp_forwarding "$ns1" "$ns2" 0; then
++if test_tcp_forwarding "$ns1" "$ns2" 0 4 10.0.2.99 12345; then
+ 	echo "PASS: flow offloaded for ns1/ns2"
+ else
+ 	echo "FAIL: flow offload for ns1/ns2:" 1>&2
+@@ -495,6 +508,14 @@ else
+ 	ret=1
+ fi
+ 
++if test_tcp_forwarding "$ns1" "$ns2" 0 6 "[dead:2::99]" 12345; then
++	echo "PASS: IPv6 flow offloaded for ns1/ns2"
++else
++	echo "FAIL: IPv6 flow offload for ns1/ns2:" 1>&2
++	ip netns exec "$nsr1" nft list ruleset
++	ret=1
++fi
++
+ # delete default route, i.e. ns2 won't be able to reach ns1 and
+ # will depend on ns1 being masqueraded in nsr1.
+ # expect ns1 has nsr1 address.
+@@ -520,7 +541,7 @@ table ip nat {
+ EOF
+ 
+ check_dscp "dscp_none" "0"
+-if ! test_tcp_forwarding_set_dscp "$ns1" "$ns2" 0 ""; then
++if ! test_tcp_forwarding_set_dscp "$ns1" "$ns2" 0 4 10.0.2.99 12345; then
+ 	echo "FAIL: flow offload for ns1/ns2 with dscp update and no pmtu discovery" 1>&2
+ 	exit 0
+ fi
+@@ -546,7 +567,7 @@ ip netns exec "$ns2" sysctl net.ipv4.ip_no_pmtu_disc=0 > /dev/null
+ ip netns exec "$nsr1" nft reset counters table inet filter >/dev/null
+ ip netns exec "$ns2"  nft reset counters table inet filter >/dev/null
+ 
+-if ! test_tcp_forwarding_set_dscp "$ns1" "$ns2" 1 ""; then
++if ! test_tcp_forwarding_set_dscp "$ns1" "$ns2" 1 4 10.0.2.99 12345; then
+ 	echo "FAIL: flow offload for ns1/ns2 with dscp update and pmtu discovery" 1>&2
+ 	exit 0
+ fi
+@@ -752,7 +773,7 @@ ip -net "$ns2" route del 192.168.10.1 via 10.0.2.1
+ ip -net "$ns2" route add default via 10.0.2.1
+ ip -net "$ns2" route add default via dead:2::1
+ 
+-if test_tcp_forwarding "$ns1" "$ns2" 1; then
++if test_tcp_forwarding "$ns1" "$ns2" 1 4 10.0.2.99 12345; then
+ 	check_counters "ipsec tunnel mode for ns1/ns2"
+ else
+ 	echo "FAIL: ipsec tunnel mode for ns1/ns2"
+@@ -760,6 +781,14 @@ else
+ 	ip netns exec "$nsr1" cat /proc/net/xfrm_stat 1>&2
+ fi
+ 
++if test_tcp_forwarding "$ns1" "$ns2" 1 6 "[dead:2::99]" 12345; then
++	check_counters "IPv6 ipsec tunnel mode for ns1/ns2"
++else
++	echo "FAIL: IPv6 ipsec tunnel mode for ns1/ns2"
++	ip netns exec "$nsr1" nft list ruleset 1>&2
++	ip netns exec "$nsr1" cat /proc/net/xfrm_stat 1>&2
++fi
++
+ if [ "$1" = "" ]; then
+ 	low=1280
+ 	mtu=$((65536 - low))
 
-> 
-> Here is the summary with links:
->   - [v23,01/28] mm: VM_SHADOW_STACK definition for riscv
->     https://git.kernel.org/riscv/c/ae8460ac9db2
->   - [v23,02/28] dt-bindings: riscv: zicfilp and zicfiss in dt-bindings (extensions.yaml)
->     https://git.kernel.org/riscv/c/b32ccfc268db
->   - [v23,03/28] riscv: zicfiss / zicfilp enumeration
->     https://git.kernel.org/riscv/c/55a811a7f304
->   - [v23,04/28] riscv: zicfiss / zicfilp extension csr and bit definitions
->     https://git.kernel.org/riscv/c/92c96b16548e
->   - [v23,05/28] riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
->     https://git.kernel.org/riscv/c/7720cdd21962
->   - [v23,06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
->     https://git.kernel.org/riscv/c/e60eb198b13d
->   - [v23,07/28] riscv/mm: manufacture shadow stack pte
->     https://git.kernel.org/riscv/c/f8fcb7b5bf30
->   - [v23,08/28] riscv/mm: teach pte_mkwrite to manufacture shadow stack PTEs
->     https://git.kernel.org/riscv/c/0276a5ea1105
->   - [v23,09/28] riscv/mm: write protect and shadow stack
->     https://git.kernel.org/riscv/c/ae615676bc37
->   - [v23,10/28] riscv/mm: Implement map_shadow_stack() syscall
->     https://git.kernel.org/riscv/c/d291fd38f841
->   - [v23,11/28] riscv/shstk: If needed allocate a new shadow stack on clone
->     https://git.kernel.org/riscv/c/d209ea2fa4bb
->   - [v23,12/28] riscv: Implements arch agnostic shadow stack prctls
->     https://git.kernel.org/riscv/c/8b49f512abc2
->   - [v23,13/28] prctl: arch-agnostic prctl for indirect branch tracking
->     https://git.kernel.org/riscv/c/3363a8d1044e
->   - [v23,14/28] riscv: Implements arch agnostic indirect branch tracking prctls
->     https://git.kernel.org/riscv/c/0177891ccdb7
->   - [v23,15/28] riscv/traps: Introduce software check exception and uprobe handling
->     https://git.kernel.org/riscv/c/6f71171a7448
->   - [v23,16/28] riscv: signal: abstract header saving for setup_sigcontext
->     (no matching commit)
->   - [v23,17/28] riscv/signal: save and restore of shadow stack for signal
->     https://git.kernel.org/riscv/c/4f9da7ad3478
->   - [v23,18/28] riscv/kernel: update __show_regs to print shadow stack register
->     https://git.kernel.org/riscv/c/320c96a55d73
->   - [v23,19/28] riscv/ptrace: riscv cfi status and state via ptrace and in core files
->     https://git.kernel.org/riscv/c/7a39f89a817e
->   - [v23,20/28] riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
->     https://git.kernel.org/riscv/c/c09b490a9267
->   - [v23,21/28] riscv: kernel command line option to opt out of user cfi
->     https://git.kernel.org/riscv/c/6e0dc40ceb45
->   - [v23,22/28] riscv: enable kernel access to shadow stack memory via FWFT sbi call
->     https://git.kernel.org/riscv/c/dfd087078357
->   - [v23,23/28] arch/riscv: compile vdso with landing pad and shadow stack note
->     https://git.kernel.org/riscv/c/2cfe57e3bd9b
->   - [v23,24/28] arch/riscv: dual vdso creation logic and select vdso based on hw
->     https://git.kernel.org/riscv/c/418316aa61e8
->   - [v23,25/28] riscv: create a config for shadow stack and landing pad instr support
->     https://git.kernel.org/riscv/c/c5f5ce714457
->   - [v23,26/28] riscv: Documentation for landing pad / indirect branch tracking
->     https://git.kernel.org/riscv/c/73d0ccec35b8
->   - [v23,27/28] riscv: Documentation for shadow stack on riscv
->     https://git.kernel.org/riscv/c/6b8214c8cbd6
->   - [v23,28/28] kselftest/riscv: kselftest for user mode cfi
->     https://git.kernel.org/riscv/c/0f226cf6026f
+---
+base-commit: b044de87bae07a50b2d99d9acfea5a4323da95ed
+change-id: 20251122-nft_flowtable-sh-ipv6-tcp-76f3d28169d1
 
-As I noted with the SSE series (before we removed it from for-next), I may 
-not ultimately send this in a PR this merge window, for several reasons.  
-The series has been around for a while, and although I know some vendors 
-have tested it privately, I'd really like to have more public testing of 
-this code, particularly on hardware emulation platforms or unreleased 
-silicon.  It would be good to see some Tested-by:s. 
+Best regards,
+-- 
+Lorenzo Bianconi <lorenzo@kernel.org>
 
-Thanks to everyone who has helped test this so far over the past few weeks 
-- particularly Joel Stanley of TensTorrent.
-
-
-- Paul
 
