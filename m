@@ -1,212 +1,142 @@
-Return-Path: <linux-kselftest+bounces-46657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 292F6C8F223
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 16:10:37 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DDE6C8F215
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 16:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61D3B3B6541
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 15:01:05 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5653034F83E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 15:07:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5571B33468E;
-	Thu, 27 Nov 2025 15:01:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B63333456;
+	Thu, 27 Nov 2025 15:07:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UMIkdj54"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sldNJaW/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B557333456;
-	Thu, 27 Nov 2025 15:01:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E88334373
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 15:07:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764255664; cv=none; b=XEMZ2NysUCdLDBLEJ0XpNGz661pjD01QEt0xOAALqGA186WAaivwoq0Hz/ZoY+3yacc553Deti55rTwVQdx6QLYJT30y/7AGoE7p0XJxaOxc34vfLbfhBprQwxtl4KDM/HrgpCcY8Kmb7aHYyMRIOeGafquVFSPB/MuXNgpODBs=
+	t=1764256025; cv=none; b=hmz1ch4CIZNIj1/O+4MGrIuQdkgF/1fxzP5pDEtT8XU0Nlz0Cu/Wh124Xw7XCHoVYE4M0Fs+rOt/IC1RPQaZWqffVJuO2CM34Jsp3zhNgMsO8k1+07rs1+zTtEn+wZQAXcwkcFXjt2CEvB14ko3kt18FMTMG6s86E3oqUEBTqUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764255664; c=relaxed/simple;
-	bh=UeR2BgcHfyY8nNyZQwhClJSqKeDIuwmepY4yPjZ0Vcg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KZ9i3GBCPDNVPYtvM148X8fmDkkJTsiM+91htSRgMs8CXFmIkIlaX6gP5av4c6FDj6g/CAZeoFTaG7pF/L+njZXKz9nQrYknaxCTHCC8c5qo9Qgpg7FddGQ6uh6n1tErGzyjlOFrP/mR0owiaN8bfgpXX3t3jdekT/6croqo2WQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UMIkdj54; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764255662; x=1795791662;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UeR2BgcHfyY8nNyZQwhClJSqKeDIuwmepY4yPjZ0Vcg=;
-  b=UMIkdj54tAbmOJ3ocouNc3A0QqoF8O9cuI9Xxr6KoJQ+M6CYg7J0M/+h
-   R6EdwpVTNwVdPbMeq7+smxxPGjqAXEI2YfFD6tliiFzGMwV3V2mm73QmK
-   7AmQR0UDlmsE1DffCOdflbPBUQEWoAiuN9inYZSlaOI8lryljrTlzlrCw
-   0522n8es4igpeAbvb18ALASzRLpRE01P0c0INbI5r151qpuSInOEubM3/
-   WsE88GLolOyEYK0eT3QTjPItt8QELX7US6k+SVJPmqBDue66KZxH5OhCu
-   b73MfhXOq3MNzmbHFfPFNvyVsbaoyyKI/bIC0fDw2xmVSYChRiLqum6qW
-   A==;
-X-CSE-ConnectionGUID: UqLmUKRlT7SSjOpn5UDHxQ==
-X-CSE-MsgGUID: 0lqC07vqSMCH77WO9tt+Ig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="83697031"
-X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="83697031"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 07:01:01 -0800
-X-CSE-ConnectionGUID: U0SK0fYHSaGH15RRdzsLpQ==
-X-CSE-MsgGUID: lhj7LxZ9T2iFjd7w05O2Gg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
-   d="scan'208";a="198358532"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 27 Nov 2025 07:00:59 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vOdUO-0000000052H-2rLt;
-	Thu, 27 Nov 2025 15:00:56 +0000
-Date: Thu, 27 Nov 2025 23:00:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>,
-	rostedt@goodmis.org, mhiramat@kernel.org, corbet@lwn.net,
-	shuah@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, mathieu.desnoyers@efficios.com,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
-Subject: Re: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols
- and :entry/:exit
-Message-ID: <202511272241.s6tUpIgv-lkp@intel.com>
-References: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
+	s=arc-20240116; t=1764256025; c=relaxed/simple;
+	bh=O3Jl0TedBRVRfVhZgOJdrLKqQHfxK+5HmiN/P10lDXE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aFkJpw3HGDo1UJAygotll0ELG1syRrWC4endvA5l4l33W+sQc6idwaU0L91avvdv1hHi1vHPBkuF94UKLeOH0KnRNLdHEO4pXh3IRlHrxTcVzq0yO1VWBTRvqVM3Mjcs+oBSfscDI6ATsv/R2hP3A0c/d2OoMntDwsKIZAjYhyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sldNJaW/; arc=none smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-640c9c85255so1320507d50.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 07:07:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764256023; x=1764860823; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o9j9JckZewB0T/evvAwAYflbY/oMjYUWYlwvg8R/JAM=;
+        b=sldNJaW/mtHUk78eRyP2lAEuPxOVWCzUy34HKQc/0B5GXWG56q2ha5vgocIRVwl74n
+         /3dcW/6l7FjFIbfofeKt/0akG5TOwa0eP31I6hQ53kXoBexKm1WAwg4J103a+j2X3I2S
+         2c+NuSx8sP3POpaNzZrv0c/kYzfrL8VJEcc4fT8V6Mm8DcChWlximDOZZoeymr8diehT
+         V/kxDRBF1Y0mLoBCJf88TYLMNK7+kQj8Y7bqnfL+/DiZ/1xxmJ0J2A47JpWlb/PPvchH
+         kmGVgaj5CMHQkL4CsUhepeDuuoaUd+ZhttYIDhHyoh7kcJYUshRM2EP1K5hzyb8e2op6
+         yt6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764256023; x=1764860823;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=o9j9JckZewB0T/evvAwAYflbY/oMjYUWYlwvg8R/JAM=;
+        b=vdKHL7M+2c4rz4lSWHVwR8HkvjZnWKuHv8XcgkaSyXnH7+D2MFGqW+kvkHtRG/B8ZI
+         8vfoIVWn0Ha7oejDbhWKQliylIVlr7zxW7KiPxMiKsgum1XH+8z007OyfqAZmZJJd5rm
+         rh+qfEJy4M4U3nBUf0W72GwjYOBXH9AikMpIHLCBAWlxrHyDwZELdwTBtcpnAwYzZdBC
+         gavNF81hSdx7NA34p7Iur/ZF0kCW2Gv+miBpY3ur4rky2xIJc/+YxossfRncyejpM01v
+         cWSewvFb7rLFyVED0uSIi9QokmeO+EV2YmzsW4AymdA6jf41NWKwq2Ojm5Cj4A18ft0e
+         gHRw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9sA2n45v5HYFQW3iN2Dp+1dAuVgXrFmK+6+Sr3LnyFVmrvEZpzLBm1AzflTX3PyysqsyH91UYB2OC/hEJEx8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw01vl5bnNaZfRICOJ4N/R78cO5PMidbar7Dddm3Mzx7bBBGyIG
+	RiOa9K/G8Kpypa4ivXFtlFvzaVxgYo6Vh4jSKqVRa7TZEft0GTQTLpd9wVI7IQOU6e+T1QU76sf
+	8whLiOXfL6rZS/hd2kjnUfXId4bvgTUBYLqbMMMbMJA==
+X-Gm-Gg: ASbGncvJbYhMevW10ceVgQtexj7qpbEUIXbhPEdrKRAk/s4XXmQqWxSByshLycoL7FE
+	v1DjizMGdcvdoEPz/Eiha2dg6Z5VloR/Dt0AJRC2yWUTVGP6tFI9yWz4Wg4eXT5JPvlanxQmKm5
+	y7kWYSPzjMXQCm2WFZqQ/oPdYQZfHMcojGucc/gqRTCoTBus0R3CVWYpxF8Zfp+cf77IPF/gr3f
+	TcH+aYG04nV+SkEHevzKvOJ6x1HFEhInKVvMuPX+L0WEDZ7oZf5zIDdYQRXeAYaa+MK3Adn
+X-Google-Smtp-Source: AGHT+IHOZv1XVUaCpJ1GafgJ+Q4ufaODDINZzVe7OUjEEvUjTH0ObsXn/Gn7AJqtRSZdFMpWXb50BEdfVotDE3qezIw=
+X-Received: by 2002:a05:690e:1581:10b0:641:f5bc:68d3 with SMTP id
+ 956f58d0204a3-6432940d24amr6552660d50.80.1764256022644; Thu, 27 Nov 2025
+ 07:07:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
+References: <20250902-kvm-arm64-sme-v8-0-2cb2199c656c@kernel.org>
+ <20250902-kvm-arm64-sme-v8-11-2cb2199c656c@kernel.org> <CAFEAcA_GJ7gzn7aMCZYxHnJWvx4tHSHBKsOxtQ7NTb4gPjkMJQ@mail.gmail.com>
+ <df712591-397e-422b-b9c9-fbf080cad9aa@sirena.org.uk>
+In-Reply-To: <df712591-397e-422b-b9c9-fbf080cad9aa@sirena.org.uk>
+From: Peter Maydell <peter.maydell@linaro.org>
+Date: Thu, 27 Nov 2025 15:06:50 +0000
+X-Gm-Features: AWmQ_blQNCtlqrFl6oR-29ayIeVzxjSMrcpdxqL32ABrh38kpa7m6Xz9ardxRBI
+Message-ID: <CAFEAcA8LGwm-6JEhtKTq1E_da-T=H-aBX9-8LMJOAQpK5J+NfQ@mail.gmail.com>
+Subject: Re: [PATCH v8 11/29] KVM: arm64: Document the KVM ABI for SME
+To: Mark Brown <broonie@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Joey Gouly <joey.gouly@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Will Deacon <will@kernel.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Eric Auger <eric.auger@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Seokwoo,
+On Mon, 24 Nov 2025 at 20:13, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Mon, Nov 24, 2025 at 03:48:06PM +0000, Peter Maydell wrote:
+> > On Tue, 2 Sept 2025 at 12:45, Mark Brown <broonie@kernel.org> wrote:
+>
+> > > SME, the Scalable Matrix Extension, is an arm64 extension which adds
+> > > support for matrix operations, with core concepts patterned after SVE.
+>
+> > I haven't actually tried writing any code that uses this proposed
+> > ABI, but mostly it looks OK to me. I have a few nits below, but
+> > my main concern is the bits of text that say (or seem to say --
+> > maybe I'm misinterpreting them) that various parts of how userspace
+> > accesses the guest state (e.g. the fp regs) depend on the current
+> > state of the vcpu, rather than being only a function of how the
+> > vcpu was configured. That seems to me like it's unnecessarily awkward.
+> > (More detail below.)
+>
+> That was deliberate and I agree it is awkward, it was introduced as a
+> result of earlier review comments.  I had originally implemented an ABI
+> where the VL for the vector registers was the maximum of the SVE and SME
+> VLs but the feedback was that the ABI should instead follow what the
+> architecture does with the vector length and potentially presence of the
+> vector registers depending on the current streaming mode configuration.
+> It sounds like you would prefer something more like what was there
+> originally?
 
-kernel test robot noticed the following build warnings:
+Yes, that's what I would prefer. The "varies by current CPU state"
+approach seems to me to be not the way we do things right now,
+and to be awkward for the VMM side, so it ought to have a really
+strong justification for why we need it.
 
-[auto build test WARNING on trace/for-next]
-[also build test WARNING on linus/master v6.18-rc7 next-20251127]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Generally the VMM doesn't care about the actual current state of the
+CPU, it just wants all the data (e.g. to send for migration). We don't
+make the current SVE accessors change based on what the current SVE
+vq length is or whether the guest has set the SVE enable bits -- we
+have "if the vcpu supports SVE at all, data is always accessed via
+the SVE accessors, and it's always the max_vq length, regardless of
+how the vcpu has set its current vq length".
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Seokwoo-Chung-Ryan/docs-tracing-fprobe-Document-list-filters-and-entry-exit/20251127-024245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
-patch link:    https://lore.kernel.org/r/20251126184110.72241-3-seokwoo.chung130%40gmail.com
-patch subject: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols and :entry/:exit
-config: x86_64-randconfig-003-20251127 (https://download.01.org/0day-ci/archive/20251127/202511272241.s6tUpIgv-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511272241.s6tUpIgv-lkp@intel.com/reproduce)
+What's the benefit of making the way KVM exposes the data
+bounce around based on the current CPU state? Does that
+make things easier for the kernel internally?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511272241.s6tUpIgv-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   kernel/trace/trace_fprobe.c: In function 'parse_fprobe_spec':
-   kernel/trace/trace_fprobe.c:1282:12: error: invalid storage class for function 'trace_fprobe_create_internal'
-    1282 | static int trace_fprobe_create_internal(int argc, const char *argv[],
-         |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1513:12: error: invalid storage class for function 'trace_fprobe_create_cb'
-    1513 | static int trace_fprobe_create_cb(int argc, const char *argv[])
-         |            ^~~~~~~~~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1530:12: error: invalid storage class for function 'trace_fprobe_create'
-    1530 | static int trace_fprobe_create(const char *raw_command)
-         |            ^~~~~~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1535:12: error: invalid storage class for function 'trace_fprobe_release'
-    1535 | static int trace_fprobe_release(struct dyn_event *ev)
-         |            ^~~~~~~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1545:12: error: invalid storage class for function 'trace_fprobe_show'
-    1545 | static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
-         |            ^~~~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1572:12: error: invalid storage class for function 'enable_trace_fprobe'
-    1572 | static int enable_trace_fprobe(struct trace_event_call *call,
-         |            ^~~~~~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1608:12: error: invalid storage class for function 'disable_trace_fprobe'
-    1608 | static int disable_trace_fprobe(struct trace_event_call *call,
-         |            ^~~~~~~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1653:12: error: invalid storage class for function 'fprobe_register'
-    1653 | static int fprobe_register(struct trace_event_call *event,
-         |            ^~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1683:19: error: invalid storage class for function 'init_fprobe_trace_early'
-    1683 | static __init int init_fprobe_trace_early(void)
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/fprobe.h:6,
-                    from kernel/trace/trace_fprobe.c:8:
-   include/linux/compiler.h:286:52: error: initializer element is not constant
-     286 |         __UNIQUE_ID(__PASTE(__addressable_,sym)) = (void *)(uintptr_t)&sym;
-         |                                                    ^
-   include/linux/compiler.h:289:9: note: in expansion of macro '___ADDRESSABLE'
-     289 |         ___ADDRESSABLE(sym, __section(".discard.addressable"))
-         |         ^~~~~~~~~~~~~~
-   include/linux/init.h:250:9: note: in expansion of macro '__ADDRESSABLE'
-     250 |         __ADDRESSABLE(fn)
-         |         ^~~~~~~~~~~~~
-   include/linux/init.h:255:9: note: in expansion of macro '__define_initcall_stub'
-     255 |         __define_initcall_stub(__stub, fn)                      \
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   include/linux/init.h:268:9: note: in expansion of macro '____define_initcall'
-     268 |         ____define_initcall(fn,                                 \
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/init.h:274:9: note: in expansion of macro '__unique_initcall'
-     274 |         __unique_initcall(fn, id, __sec, __initcall_id(fn))
-         |         ^~~~~~~~~~~~~~~~~
-   include/linux/init.h:276:35: note: in expansion of macro '___define_initcall'
-     276 | #define __define_initcall(fn, id) ___define_initcall(fn, id, .initcall##id)
-         |                                   ^~~~~~~~~~~~~~~~~~
-   include/linux/init.h:294:41: note: in expansion of macro '__define_initcall'
-     294 | #define core_initcall(fn)               __define_initcall(fn, 1)
-         |                                         ^~~~~~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1702:1: note: in expansion of macro 'core_initcall'
-    1702 | core_initcall(init_fprobe_trace_early);
-         | ^~~~~~~~~~~~~
-   kernel/trace/trace_fprobe.c:1702:1: error: expected declaration or statement at end of input
-   kernel/trace/trace_fprobe.c: At top level:
->> kernel/trace/trace_fprobe.c:28:12: warning: 'trace_fprobe_create' used but never defined
-      28 | static int trace_fprobe_create(const char *raw_command);
-         |            ^~~~~~~~~~~~~~~~~~~
->> kernel/trace/trace_fprobe.c:29:12: warning: 'trace_fprobe_show' used but never defined
-      29 | static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev);
-         |            ^~~~~~~~~~~~~~~~~
->> kernel/trace/trace_fprobe.c:30:12: warning: 'trace_fprobe_release' used but never defined
-      30 | static int trace_fprobe_release(struct dyn_event *ev);
-         |            ^~~~~~~~~~~~~~~~~~~~
->> kernel/trace/trace_fprobe.c:741:12: warning: 'fprobe_register' used but never defined
-     741 | static int fprobe_register(struct trace_event_call *event,
-         |            ^~~~~~~~~~~~~~~
->> kernel/trace/trace_fprobe.c:1653:12: warning: 'fprobe_register' defined but not used [-Wunused-function]
-    1653 | static int fprobe_register(struct trace_event_call *event,
-         |            ^~~~~~~~~~~~~~~
->> kernel/trace/trace_fprobe.c:1545:12: warning: 'trace_fprobe_show' defined but not used [-Wunused-function]
-    1545 | static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev)
-         |            ^~~~~~~~~~~~~~~~~
->> kernel/trace/trace_fprobe.c:1535:12: warning: 'trace_fprobe_release' defined but not used [-Wunused-function]
-    1535 | static int trace_fprobe_release(struct dyn_event *ev)
-         |            ^~~~~~~~~~~~~~~~~~~~
->> kernel/trace/trace_fprobe.c:1530:12: warning: 'trace_fprobe_create' defined but not used [-Wunused-function]
-    1530 | static int trace_fprobe_create(const char *raw_command)
-         |            ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/trace_fprobe_create +28 kernel/trace/trace_fprobe.c
-
-334e5519c375701 Masami Hiramatsu (Google  2023-06-06  27) 
-334e5519c375701 Masami Hiramatsu (Google  2023-06-06 @28) static int trace_fprobe_create(const char *raw_command);
-334e5519c375701 Masami Hiramatsu (Google  2023-06-06 @29) static int trace_fprobe_show(struct seq_file *m, struct dyn_event *ev);
-334e5519c375701 Masami Hiramatsu (Google  2023-06-06 @30) static int trace_fprobe_release(struct dyn_event *ev);
-334e5519c375701 Masami Hiramatsu (Google  2023-06-06  31) static bool trace_fprobe_is_busy(struct dyn_event *ev);
-334e5519c375701 Masami Hiramatsu (Google  2023-06-06  32) static bool trace_fprobe_match(const char *system, const char *event,
-334e5519c375701 Masami Hiramatsu (Google  2023-06-06  33) 			int argc, const char **argv, struct dyn_event *ev);
-334e5519c375701 Masami Hiramatsu (Google  2023-06-06  34) 
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- PMM
 
