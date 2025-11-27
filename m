@@ -1,849 +1,392 @@
-Return-Path: <linux-kselftest+bounces-46655-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B18FC8EDF6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 15:51:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7FC3C8ED95
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 15:50:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1FD13B6D40
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 14:49:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2393334A339
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Nov 2025 14:50:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7AE7296BD1;
-	Thu, 27 Nov 2025 14:49:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D2D29993F;
+	Thu, 27 Nov 2025 14:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MPcu6uKt";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="LrZmAw0u"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qo3UvmQG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C71287253
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 14:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97F027703C;
+	Thu, 27 Nov 2025 14:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764254960; cv=none; b=RSXEPcWqQfo2cTiYeR7PcUKwrmG7/5l1nQsKmoN9kMdKx/G8eYIMFo+MQxa4M8NG7dkuR7j7BQ6ILXCYSFZ3GsC5x+9q0wzNyPSx3p9Jzg0+HDTOqvsmbMFTZhFSSCokBTlue3C0cnP7Wvsv9KzbZLr233Utk0G7FtZ+1tb8HtU=
+	t=1764254994; cv=none; b=qDpUuEunN4jIYowqAjenMJXgv31671O+BA0s+7V6mi0sGYYanLtKYjB05YO2W5EkKa4lrHxw0cSXGQwbaFgDfGdiq1aZWfJAZbl56wz0cpUHFyOZvHmWeW0PmEfjSSZrXJNYtEKAjv80K63t2JYB+gzl31toc4SRr39nF8976Cc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764254960; c=relaxed/simple;
-	bh=V+2O4+U9XYiRjqX56rz5HXnNpgerXl93oyFAv7FFemo=;
+	s=arc-20240116; t=1764254994; c=relaxed/simple;
+	bh=8rbYXMJ/hJ7cEW5zgrnHPgV0bxewRwQbEFcf01xOEvQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uMpPWxAdU9rJAeVMbk0rEMyDTijX7/X3zBvbtfdHYrAYgnzOD0auHrI6H/jkDENauY3t9TtxET5XSokrqKgPFGrveqQqH9LYEF7bm27lapLG8ciwkbY2ZYLkEo0SLoGNHnm8sONaENEqDalH5Rf6ihugV8Rq0Xiri/IGtOgm07c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MPcu6uKt; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=LrZmAw0u; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764254957;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gkeusIdRsgymP/rGb7Efa8f39SNOxjOhJFPwPyuvaf4=;
-	b=MPcu6uKtCMP4R93P8A56WnQrkzmpBQs2MB1yjrfzXcNrdVbiL0clIbLWCG+PxMIgVeHrZt
-	vpe+fAjajD6g0c4Pjd48qOzKRkXCTRAJgfDs7BDlFYzwimp3v+MVPYhvUqT4C5iuaPR0Mn
-	mBPnnTwsdAe0QdSyTUvOZvgxiboPR7U=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-2-ZcF36iJmPBqeIfxdV2SHZg-1; Thu, 27 Nov 2025 09:49:15 -0500
-X-MC-Unique: ZcF36iJmPBqeIfxdV2SHZg-1
-X-Mimecast-MFC-AGG-ID: ZcF36iJmPBqeIfxdV2SHZg_1764254954
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4779da35d27so9955455e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Nov 2025 06:49:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1764254954; x=1764859754; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gkeusIdRsgymP/rGb7Efa8f39SNOxjOhJFPwPyuvaf4=;
-        b=LrZmAw0ustAWYnJUUryTF5vwLQbUofFC/XKmA0jyilZe+Azkvr0FeDxffCse2PJQdN
-         yWZfmFWFIFYgQUAXOeLwC4PvrQ4nd1YWJgNAUc/UQ7ImjupctpZovHLPQRWWfAE0bR5z
-         oTKsZakZSy+gOXBWrrGyiuB9j44bxJjkh0cB/82xWuJy37YllYayJJ7CbKc23meB3EhF
-         XYI9gYlRt/H1shRSol8bb0ftJUCCUOYuSq50GTLRcMMQhRbq8AiwZ+qyANZcbBvnnJ9D
-         uVFYFuFaShqv9v1/u3/2rx6XIS4ZrgPtdrSAe0eUVWeLt2j2pFudmCiiXupMcGD7bxLf
-         GuuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764254954; x=1764859754;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gkeusIdRsgymP/rGb7Efa8f39SNOxjOhJFPwPyuvaf4=;
-        b=vUlvVLlsdMd/86+Jl9lxigJJRJwrU80HM+wXQ9M1nWYkf3abPpDittyadZmqRpy6eH
-         wV5LppOT0ac+OvXvi0gPuoLU29X45SWkLApHX59dCPfZ33OWcAfAzqyKUBnW7I5NEMio
-         HvaPmTQb5BM4fEVJFYU6RzQgi0TwpGkcMhKPuvsV3yHT+OPYyzdN1CBUM8lc9vI0eiTh
-         VudvsWv0YeCLMjh1qRzC+NK8a1XVy2gHfY+2pmmPL7LY4AbzVy48Gn5dnEscB752zCxk
-         2WTfu/Ge9pTjFn0hIe71+QGzR5VIOVkAxjIOIqCHZB32urIG2hOQusf1cPH32qzczkf0
-         drCg==
-X-Forwarded-Encrypted: i=1; AJvYcCUULoxMN6sEQfRASf/Y2m6jIe2Iab8wbxg2CEkOQM6mBXTKcExULB7KAzr8HpM/Z4xRuuHGPOGLAekb59Xinfk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJCIjiK5S/ICa5Rg7WLrDM5HKwD7aB8jUei1ZLwr8IzWBOwfEc
-	wDPGrHCur270OVLJ+6kxYQZEiVCkUVTWVrLjAeaOH8W/WCvWaJbNKMHTX2V+9MTS3LxuTIuK3CV
-	ON/d1gnzs1orTcwbGxSTD9bmj8Cjp/Cdi49hG4v25VaC8W20PHipWzEfxrNjXBRremyl6ng==
-X-Gm-Gg: ASbGncv2xB8aj8e/lJR2DT0jU8TU+JhkQrR8qvO4fN1kbNvnvLdPD90/asovod7ApCs
-	APViJw/waF/jKZNelqmzszdITiSFqPi+HjcfMYhapB8Q9TtVJEjw+VJ1QBhSbt13OHgRhc+7ykJ
-	52pbZaihibSQrIoLKwh4X6uvd9td3/dCV57lwsVaE42MuL1bPiNn6eEGV5c3vd+G/h08y3e9cUl
-	vs7XRvlBh0AyM3RbXpNJIfg6yM+iuEbHM7ZC/ioAX1S5Bucq+SRt+F2QrUQjZqgbDbgCDd0ADgq
-	Ec9AvHJTF85P0taFi5Btw3jPc4vWqexB1fQGXpvPf/Zclc2GGdP00tl6UFp6bq8AFUau96mk1+i
-	GSYd2TnhCAjPoDCbs6f+vn/LfWvghveLwYBzjJuMVcOUFiLhdM0i5BSuJOm+eLw==
-X-Received: by 2002:a05:600c:3541:b0:477:7991:5d1e with SMTP id 5b1f17b1804b1-47904b24871mr113306095e9.25.1764254954047;
-        Thu, 27 Nov 2025 06:49:14 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE5ic335Ch3Kfx+CSKA0+Lyb+qZ0T71jtixHIqiNZEaMPH4CU9EYXxcYOoHFw96edNJz0/0uQ==
-X-Received: by 2002:a05:600c:3541:b0:477:7991:5d1e with SMTP id 5b1f17b1804b1-47904b24871mr113305535e9.25.1764254953495;
-        Thu, 27 Nov 2025 06:49:13 -0800 (PST)
-Received: from sgarzare-redhat (host-87-12-139-91.business.telecomitalia.it. [87.12.139.91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479040d81e4sm74068435e9.3.2025.11.27.06.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 06:49:12 -0800 (PST)
-Date: Thu, 27 Nov 2025 15:49:03 +0100
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
-	Jason Wang <jasowang@redhat.com>, Eugenio =?utf-8?B?UMOpcmV6?= <eperezma@redhat.com>, 
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan" <kys@microsoft.com>, 
-	Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>, 
-	Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa <vishnu.dasa@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	virtualization@lists.linux.dev, netdev@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org, berrange@redhat.com, 
-	Sargun Dhillon <sargun@sargun.me>, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v12 11/12] selftests/vsock: add tests for host
- <-> vm connectivity with namespaces
-Message-ID: <ygvjuud4cbzhpz573ygle7y45zfzwpyaorexfb46f5orzp44o4@2slgqe3xduwd>
-References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
- <20251126-vsock-vmtest-v12-11-257ee21cd5de@meta.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uNuNRKdKwL4Z6xX5h3HiAjXaK2P7BzNpuJ8xQxWjxwIXWf6rbiKH9bcugI6U3j6zmsLWIE3LJoHrwCeWTN0gGIF7B6hn4PuRZwhfHoGh1pECTVmjD7SMbJDGEOtJoNKhDV9YfTVPmV4pw4DQV3i43HAicQVELqIlR47F+b5zbg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qo3UvmQG; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764254992; x=1795790992;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8rbYXMJ/hJ7cEW5zgrnHPgV0bxewRwQbEFcf01xOEvQ=;
+  b=Qo3UvmQGu6JBr8pEd3PDZSD8/2Hcli2pb8iI2p0Cv7Ake/ZVXSr0oU/C
+   RvwIT1jVFxz6IlBXyY8puQ/gSB+X5MQ8IF+3QlHGvvORNnsbMhOSHgkmd
+   hb8hE6YeugyjXdCInRcHt25dS50kaWxPiprVrhcfyFy6izu8znczexDaH
+   gVUatHLIFoi0oReXO/plfY1pt/hW68mZauLlxFTG1ATjFsrKZ1I74ZamO
+   jlZaiC2bm9D+Ke1TP2bpkxWY8DGEZ4EL4CKwZhOLvjD+GY+Ti7JgmoG7r
+   tWcoghsPJP+u5tWGcPLsHsjDxzIW/CTjwjgzHvxqtl/7Ydeeu0yZYgBFd
+   A==;
+X-CSE-ConnectionGUID: gCnqKw8DTui/lGlIAXp+0g==
+X-CSE-MsgGUID: PlJyol6wRHCaN7zJ3epxcQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="88945692"
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="88945692"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 06:49:51 -0800
+X-CSE-ConnectionGUID: ZvGpGi2YR/OIWJQTJ7W/XQ==
+X-CSE-MsgGUID: 7iQSOpnqRZqHe8GrZYRqiQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,231,1758610800"; 
+   d="scan'208";a="192508889"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 27 Nov 2025 06:49:48 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vOdJZ-000000004sT-2ArO;
+	Thu, 27 Nov 2025 14:49:45 +0000
+Date: Thu, 27 Nov 2025 22:49:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>,
+	rostedt@goodmis.org, mhiramat@kernel.org, corbet@lwn.net,
+	shuah@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mathieu.desnoyers@efficios.com, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	"Seokwoo Chung (Ryan)" <seokwoo.chung130@gmail.com>
+Subject: Re: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols
+ and :entry/:exit
+Message-ID: <202511272254.BX8oUzwu-lkp@intel.com>
+References: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251126-vsock-vmtest-v12-11-257ee21cd5de@meta.com>
+In-Reply-To: <20251126184110.72241-3-seokwoo.chung130@gmail.com>
 
-On Wed, Nov 26, 2025 at 11:47:40PM -0800, Bobby Eshleman wrote:
->From: Bobby Eshleman <bobbyeshleman@meta.com>
->
->Add tests to validate namespace correctness using vsock_test and socat.
->The vsock_test tool is used to validate expected success tests, but
->socat is used for expected failure tests. socat is used to ensure that
->connections are rejected outright instead of failing due to some other
->socket behavior (as tested in vsock_test). Additionally, socat is
->already required for tunneling TCP traffic from vsock_test. Using only
->one of the vsock_test tests like 'test_stream_client_close_client' would
->have yielded a similar result, but doing so wouldn't remove the socat
->dependency.
->
->Additionally, check for the dependency socat. socat needs special
->handling beyond just checking if it is on the path because it must be
->compiled with support for both vsock and unix. The function
->check_socat() checks that this support exists.
->
->Add more padding to test name printf strings because the tests added in
->this patch would otherwise overflow.
->
->Add vm_dmesg_* helpers to encapsulate checking dmesg
->for oops and warnings.
->
->Add ability to pass extra args to host-side vsock_test so that tests
->that cause false positives may be skipped with arg --skip.
->
->Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
->---
->Changes in v12:
->- add test skip (vsock_test test 29) when host_vsock_test() uses client
->  mode in a local namespace. Test 29 causes a false positive to trigger.
+Hi Seokwoo,
 
-I see, LGTM and thanks for adding a comment with the reason!
+kernel test robot noticed the following build errors:
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+[auto build test ERROR on trace/for-next]
+[also build test ERROR on linus/master v6.18-rc7 next-20251127]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
->Changes in v11:
->- add 'sleep "${WAIT_PERIOD}"' after any non-TCP socat LISTEN cmd
->  (Stefano)
->- add host_wait_for_listener() after any socat TCP-LISTEN (Stefano)
->- reuse vm_dmesg_{oops,warn}_count() inside vm_dmesg_check()
->- fix copy-paste in test_ns_same_local_vm_connect_to_local_host_ok()
->  (Stefano)
->
->Changes in v10:
->- add vm_dmesg_start() and vm_dmesg_check()
->
->Changes in v9:
->- consistent variable quoting
->---
-> tools/testing/selftests/vsock/vmtest.sh | 572 +++++++++++++++++++++++++++++++-
-> 1 file changed, 568 insertions(+), 4 deletions(-)
->
->diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
->index ec18eb5b4ccd..da9198dc8ab5 100755
->--- a/tools/testing/selftests/vsock/vmtest.sh
->+++ b/tools/testing/selftests/vsock/vmtest.sh
->@@ -7,6 +7,7 @@
-> #		* virtme-ng
-> #		* busybox-static (used by virtme-ng)
-> #		* qemu	(used by virtme-ng)
->+#		* socat
-> #
-> # shellcheck disable=SC2317,SC2119
->
->@@ -54,6 +55,19 @@ readonly TEST_NAMES=(
-> 	ns_local_same_cid_ok
-> 	ns_global_local_same_cid_ok
-> 	ns_local_global_same_cid_ok
->+	ns_diff_global_host_connect_to_global_vm_ok
->+	ns_diff_global_host_connect_to_local_vm_fails
->+	ns_diff_global_vm_connect_to_global_host_ok
->+	ns_diff_global_vm_connect_to_local_host_fails
->+	ns_diff_local_host_connect_to_local_vm_fails
->+	ns_diff_local_vm_connect_to_local_host_fails
->+	ns_diff_global_to_local_loopback_local_fails
->+	ns_diff_local_to_global_loopback_fails
->+	ns_diff_local_to_local_loopback_fails
->+	ns_diff_global_to_global_loopback_ok
->+	ns_same_local_loopback_ok
->+	ns_same_local_host_connect_to_local_vm_ok
->+	ns_same_local_vm_connect_to_local_host_ok
-> )
-> readonly TEST_DESCS=(
-> 	# vm_server_host_client
->@@ -82,6 +96,45 @@ readonly TEST_DESCS=(
->
-> 	# ns_local_global_same_cid_ok
-> 	"Check QEMU successfully starts one VM in a local ns and then another VM in a global ns with the same CID."
->+
->+	# ns_diff_global_host_connect_to_global_vm_ok
->+	"Run vsock_test client in global ns with server in VM in another global ns."
->+
->+	# ns_diff_global_host_connect_to_local_vm_fails
->+	"Run socat to test a process in a global ns fails to connect to a VM in a local ns."
->+
->+	# ns_diff_global_vm_connect_to_global_host_ok
->+	"Run vsock_test client in VM in a global ns with server in another global ns."
->+
->+	# ns_diff_global_vm_connect_to_local_host_fails
->+	"Run socat to test a VM in a global ns fails to connect to a host process in a local ns."
->+
->+	# ns_diff_local_host_connect_to_local_vm_fails
->+	"Run socat to test a host process in a local ns fails to connect to a VM in another local ns."
->+
->+	# ns_diff_local_vm_connect_to_local_host_fails
->+	"Run socat to test a VM in a local ns fails to connect to a host process in another local ns."
->+
->+	# ns_diff_global_to_local_loopback_local_fails
->+	"Run socat to test a loopback vsock in a global ns fails to connect to a vsock in a local ns."
->+
->+	# ns_diff_local_to_global_loopback_fails
->+	"Run socat to test a loopback vsock in a local ns fails to connect to a vsock in a global ns."
->+
->+	# ns_diff_local_to_local_loopback_fails
->+	"Run socat to test a loopback vsock in a local ns fails to connect to a vsock in another local ns."
->+
->+	# ns_diff_global_to_global_loopback_ok
->+	"Run socat to test a loopback vsock in a global ns successfully connects to a vsock in another global ns."
->+
->+	# ns_same_local_loopback_ok
->+	"Run socat to test a loopback vsock in a local ns successfully connects to a vsock in the same ns."
->+
->+	# ns_same_local_host_connect_to_local_vm_ok
->+	"Run vsock_test client in a local ns with server in VM in same ns."
->+
->+	# ns_same_local_vm_connect_to_local_host_ok
->+	"Run vsock_test client in VM in a local ns with server in same ns."
-> )
->
-> readonly USE_SHARED_VM=(
->@@ -112,7 +165,7 @@ usage() {
-> 	for ((i = 0; i < ${#TEST_NAMES[@]}; i++)); do
-> 		name=${TEST_NAMES[${i}]}
-> 		desc=${TEST_DESCS[${i}]}
->-		printf "\t%-35s%-35s\n" "${name}" "${desc}"
->+		printf "\t%-55s%-35s\n" "${name}" "${desc}"
-> 	done
-> 	echo
->
->@@ -231,7 +284,7 @@ check_args() {
-> }
->
-> check_deps() {
->-	for dep in vng ${QEMU} busybox pkill ssh ss; do
->+	for dep in vng ${QEMU} busybox pkill ssh ss socat; do
-> 		if [[ ! -x $(command -v "${dep}") ]]; then
-> 			echo -e "skip:    dependency ${dep} not found!\n"
-> 			exit "${KSFT_SKIP}"
->@@ -282,6 +335,20 @@ check_vng() {
-> 	fi
-> }
->
->+check_socat() {
->+	local support_string
->+
->+	support_string="$(socat -V)"
->+
->+	if [[ "${support_string}" != *"WITH_VSOCK 1"* ]]; then
->+		die "err: socat is missing vsock support"
->+	fi
->+
->+	if [[ "${support_string}" != *"WITH_UNIX 1"* ]]; then
->+		die "err: socat is missing unix support"
->+	fi
->+}
->+
-> handle_build() {
-> 	if [[ ! "${BUILD}" -eq 1 ]]; then
-> 		return
->@@ -330,6 +397,14 @@ terminate_pidfiles() {
-> 	done
-> }
->
->+terminate_pids() {
->+	local pid
->+
->+	for pid in "$@"; do
->+		kill -SIGTERM "${pid}" &>/dev/null || :
->+	done
->+}
->+
-> vm_start() {
-> 	local pidfile=$1
-> 	local ns=$2
->@@ -468,6 +543,28 @@ vm_dmesg_warn_count() {
-> 	vm_ssh "${ns}" -- dmesg --level=warn 2>/dev/null | grep -c -i 'vsock'
-> }
->
->+vm_dmesg_check() {
->+	local pidfile=$1
->+	local ns=$2
->+	local oops_before=$3
->+	local warn_before=$4
->+	local oops_after warn_after
->+
->+	oops_after=$(vm_dmesg_oops_count "${ns}")
->+	if [[ "${oops_after}" -gt "${oops_before}" ]]; then
->+		echo "FAIL: kernel oops detected on vm in ns ${ns}" | log_host
->+		return 1
->+	fi
->+
->+	warn_after=$(vm_dmesg_warn_count "${ns}")
->+	if [[ "${warn_after}" -gt "${warn_before}" ]]; then
->+		echo "FAIL: kernel warning detected on vm in ns ${ns}" | log_host
->+		return 1
->+	fi
->+
->+	return 0
->+}
->+
-> vm_vsock_test() {
-> 	local ns=$1
-> 	local host=$2
->@@ -511,6 +608,8 @@ host_vsock_test() {
-> 	local host=$2
-> 	local cid=$3
-> 	local port=$4
->+	shift 4
->+	local extra_args=("$@")
-> 	local rc
->
-> 	local cmd="${VSOCK_TEST}"
->@@ -525,13 +624,15 @@ host_vsock_test() {
-> 			--mode=client \
-> 			--peer-cid="${cid}" \
-> 			--control-host="${host}" \
->-			--control-port="${port}" 2>&1 | log_host
->+			--control-port="${port}" \
->+			"${extra_args[@]}" 2>&1 | log_host
-> 		rc=$?
-> 	else
-> 		${cmd} \
-> 			--mode=server \
-> 			--peer-cid="${cid}" \
->-			--control-port="${port}" 2>&1 | log_host &
->+			--control-port="${port}" \
->+			"${extra_args[@]}" 2>&1 | log_host &
-> 		rc=$?
->
-> 		if [[ $rc -ne 0 ]]; then
->@@ -592,6 +693,468 @@ test_ns_host_vsock_ns_mode_ok() {
-> 	return "${KSFT_PASS}"
-> }
->
->+test_ns_diff_global_host_connect_to_global_vm_ok() {
->+	local oops_before warn_before
->+	local pids pid pidfile
->+	local ns0 ns1 port
->+	declare -a pids
->+	local unixfile
->+	ns0="global0"
->+	ns1="global1"
->+	port=1234
->+	local rc
->+
->+	init_namespaces
->+
->+	pidfile="$(create_pidfile)"
->+
->+	if ! vm_start "${pidfile}" "${ns0}"; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns0}"
->+	oops_before=$(vm_dmesg_oops_count "${ns0}")
->+	warn_before=$(vm_dmesg_warn_count "${ns0}")
->+
->+	unixfile=$(mktemp -u /tmp/XXXX.sock)
->+	ip netns exec "${ns1}" \
->+		socat TCP-LISTEN:"${TEST_HOST_PORT}",fork \
->+			UNIX-CONNECT:"${unixfile}" &
->+	pids+=($!)
->+	host_wait_for_listener "${ns1}" "${TEST_HOST_PORT}" "tcp"
->+
->+	ip netns exec "${ns0}" socat UNIX-LISTEN:"${unixfile}",fork \
->+		TCP-CONNECT:localhost:"${TEST_HOST_PORT}" &
->+	pids+=($!)
->+	host_wait_for_listener "${ns0}" "${unixfile}" "unix"
->+
->+	vm_vsock_test "${ns0}" "server" 2 "${TEST_GUEST_PORT}"
->+	vm_wait_for_listener "${ns0}" "${TEST_GUEST_PORT}" "tcp"
->+	host_vsock_test "${ns1}" "127.0.0.1" "${VSOCK_CID}" "${TEST_HOST_PORT}"
->+	rc=$?
->+
->+	vm_dmesg_check "${pidfile}" "${ns0}" "${oops_before}" "${warn_before}"
->+	dmesg_rc=$?
->+
->+	terminate_pids "${pids[@]}"
->+	terminate_pidfiles "${pidfile}"
->+
->+	if [[ "${rc}" -ne 0 ]] || [[ "${dmesg_rc}" -ne 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+}
->+
->+test_ns_diff_global_host_connect_to_local_vm_fails() {
->+	local oops_before warn_before
->+	local ns0="global0"
->+	local ns1="local0"
->+	local port=12345
->+	local dmesg_rc
->+	local pidfile
->+	local result
->+	local pid
->+
->+	init_namespaces
->+
->+	outfile=$(mktemp)
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns1}"; then
->+		log_host "failed to start vm (cid=${VSOCK_CID}, ns=${ns0})"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns1}"
->+	oops_before=$(vm_dmesg_oops_count "${ns1}")
->+	warn_before=$(vm_dmesg_warn_count "${ns1}")
->+
->+	vm_ssh "${ns1}" -- socat VSOCK-LISTEN:"${port}" STDOUT > "${outfile}" &
->+	vm_wait_for_listener "${ns1}" "${port}" "vsock"
->+	echo TEST | ip netns exec "${ns0}" \
->+		socat STDIN VSOCK-CONNECT:"${VSOCK_CID}":"${port}" 2>/dev/null
->+
->+	vm_dmesg_check "${pidfile}" "${ns1}" "${oops_before}" "${warn_before}"
->+	dmesg_rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" == "TEST" ]] || [[ "${dmesg_rc}" -ne 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+}
->+
->+test_ns_diff_global_vm_connect_to_global_host_ok() {
->+	local oops_before warn_before
->+	local ns0="global0"
->+	local ns1="global1"
->+	local port=12345
->+	local unixfile
->+	local dmesg_rc
->+	local pidfile
->+	local pids
->+	local rc
->+
->+	init_namespaces
->+
->+	declare -a pids
->+
->+	log_host "Setup socat bridge from ns ${ns0} to ns ${ns1} over port ${port}"
->+
->+	unixfile=$(mktemp -u /tmp/XXXX.sock)
->+
->+	ip netns exec "${ns0}" \
->+		socat TCP-LISTEN:"${port}" UNIX-CONNECT:"${unixfile}" &
->+	pids+=($!)
->+	host_wait_for_listener "${ns0}" "${port}" "tcp"
->+
->+	ip netns exec "${ns1}" \
->+		socat UNIX-LISTEN:"${unixfile}" TCP-CONNECT:127.0.0.1:"${port}" &
->+	pids+=($!)
->+	host_wait_for_listener "${ns1}" "${unixfile}" "unix"
->+
->+	log_host "Launching ${VSOCK_TEST} in ns ${ns1}"
->+	host_vsock_test "${ns1}" "server" "${VSOCK_CID}" "${port}"
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns0}"; then
->+		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
->+		terminate_pids "${pids[@]}"
->+		rm -f "${unixfile}"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns0}"
->+
->+	oops_before=$(vm_dmesg_oops_count "${ns0}")
->+	warn_before=$(vm_dmesg_warn_count "${ns0}")
->+
->+	vm_vsock_test "${ns0}" "10.0.2.2" 2 "${port}"
->+	rc=$?
->+
->+	vm_dmesg_check "${pidfile}" "${ns0}" "${oops_before}" "${warn_before}"
->+	dmesg_rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+	terminate_pids "${pids[@]}"
->+	rm -f "${unixfile}"
->+
->+	if [[ "${rc}" -ne 0 ]] || [[ "${dmesg_rc}" -ne 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+
->+}
->+
->+test_ns_diff_global_vm_connect_to_local_host_fails() {
->+	local ns0="global0"
->+	local ns1="local0"
->+	local port=12345
->+	local oops_before warn_before
->+	local dmesg_rc
->+	local pidfile
->+	local result
->+	local pid
->+
->+	init_namespaces
->+
->+	log_host "Launching socat in ns ${ns1}"
->+	outfile=$(mktemp)
->+
->+	ip netns exec "${ns1}" socat VSOCK-LISTEN:"${port}" STDOUT &> "${outfile}" &
->+	pid=$!
->+	host_wait_for_listener "${ns1}" "${port}" "vsock"
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns0}"; then
->+		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
->+		terminate_pids "${pid}"
->+		rm -f "${outfile}"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns0}"
->+
->+	oops_before=$(vm_dmesg_oops_count "${ns0}")
->+	warn_before=$(vm_dmesg_warn_count "${ns0}")
->+
->+	vm_ssh "${ns0}" -- \
->+		bash -c "echo TEST | socat STDIN VSOCK-CONNECT:2:${port}" 2>&1 | log_guest
->+
->+	vm_dmesg_check "${pidfile}" "${ns0}" "${oops_before}" "${warn_before}"
->+	dmesg_rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+	terminate_pids "${pid}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" != TEST ]] && [[ "${dmesg_rc}" -eq 0 ]]; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_local_host_connect_to_local_vm_fails() {
->+	local ns0="local0"
->+	local ns1="local1"
->+	local port=12345
->+	local oops_before warn_before
->+	local dmesg_rc
->+	local pidfile
->+	local result
->+	local pid
->+
->+	init_namespaces
->+
->+	outfile=$(mktemp)
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns1}"; then
->+		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns1}"
->+	oops_before=$(vm_dmesg_oops_count "${ns1}")
->+	warn_before=$(vm_dmesg_warn_count "${ns1}")
->+
->+	vm_ssh "${ns1}" -- socat VSOCK-LISTEN:"${port}" STDOUT > "${outfile}" &
->+	vm_wait_for_listener "${ns1}" "${port}" "vsock"
->+
->+	echo TEST | ip netns exec "${ns0}" \
->+		socat STDIN VSOCK-CONNECT:"${VSOCK_CID}":"${port}" 2>/dev/null
->+
->+	vm_dmesg_check "${pidfile}" "${ns1}" "${oops_before}" "${warn_before}"
->+	dmesg_rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" != TEST ]] && [[ "${dmesg_rc}" -eq 0 ]]; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_local_vm_connect_to_local_host_fails() {
->+	local oops_before warn_before
->+	local ns0="local0"
->+	local ns1="local1"
->+	local port=12345
->+	local dmesg_rc
->+	local pidfile
->+	local result
->+	local pid
->+
->+	init_namespaces
->+
->+	log_host "Launching socat in ns ${ns1}"
->+	outfile=$(mktemp)
->+	ip netns exec "${ns1}" socat VSOCK-LISTEN:"${port}" STDOUT &> "${outfile}" &
->+	pid=$!
->+	host_wait_for_listener "${ns1}" "${port}" "vsock"
->+
->+	pidfile="$(create_pidfile)"
->+	if ! vm_start "${pidfile}" "${ns0}"; then
->+		log_host "failed to start vm (cid=${cid}, ns=${ns0})"
->+		rm -f "${outfile}"
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns0}"
->+	oops_before=$(vm_dmesg_oops_count "${ns0}")
->+	warn_before=$(vm_dmesg_warn_count "${ns0}")
->+
->+	vm_ssh "${ns0}" -- \
->+		bash -c "echo TEST | socat STDIN VSOCK-CONNECT:2:${port}" 2>&1 | log_guest
->+
->+	vm_dmesg_check "${pidfile}" "${ns0}" "${oops_before}" "${warn_before}"
->+	dmesg_rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+	terminate_pids "${pid}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" != TEST ]] && [[ "${dmesg_rc}" -eq 0 ]]; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+__test_loopback_two_netns() {
->+	local ns0=$1
->+	local ns1=$2
->+	local port=12345
->+	local result
->+	local pid
->+
->+	modprobe vsock_loopback &> /dev/null || :
->+
->+	log_host "Launching socat in ns ${ns1}"
->+	outfile=$(mktemp)
->+
->+	ip netns exec "${ns1}" socat VSOCK-LISTEN:"${port}" STDOUT > "${outfile}" 2>/dev/null &
->+	pid=$!
->+	host_wait_for_listener "${ns1}" "${port}" "vsock"
->+
->+	log_host "Launching socat in ns ${ns0}"
->+	echo TEST | ip netns exec "${ns0}" socat STDIN VSOCK-CONNECT:1:"${port}" 2>/dev/null
->+	terminate_pids "${pid}"
->+
->+	result=$(cat "${outfile}")
->+	rm -f "${outfile}"
->+
->+	if [[ "${result}" == TEST ]]; then
->+		return 0
->+	fi
->+
->+	return 1
->+}
->+
->+test_ns_diff_global_to_local_loopback_local_fails() {
->+	init_namespaces
->+
->+	if ! __test_loopback_two_netns "global0" "local0"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_local_to_global_loopback_fails() {
->+	init_namespaces
->+
->+	if ! __test_loopback_two_netns "local0" "global0"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_local_to_local_loopback_fails() {
->+	init_namespaces
->+
->+	if ! __test_loopback_two_netns "local0" "local1"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_diff_global_to_global_loopback_ok() {
->+	init_namespaces
->+
->+	if __test_loopback_two_netns "global0" "global1"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_same_local_loopback_ok() {
->+	init_namespaces
->+
->+	if __test_loopback_two_netns "local0" "local0"; then
->+		return "${KSFT_PASS}"
->+	fi
->+
->+	return "${KSFT_FAIL}"
->+}
->+
->+test_ns_same_local_host_connect_to_local_vm_ok() {
->+	local oops_before warn_before
->+	local ns="local0"
->+	local port=1234
->+	local dmesg_rc
->+	local pidfile
->+	local rc
->+
->+	init_namespaces
->+
->+	pidfile="$(create_pidfile)"
->+
->+	if ! vm_start "${pidfile}" "${ns}"; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns}"
->+	oops_before=$(vm_dmesg_oops_count "${ns}")
->+	warn_before=$(vm_dmesg_warn_count "${ns}")
->+
->+	vm_vsock_test "${ns}" "server" 2 "${TEST_GUEST_PORT}"
->+
->+	# Skip test 29 (transport release use-after-free): This test attempts
->+	# binding both G2H and H2G CIDs. Because virtio-vsock (G2H) doesn't
->+	# support local namespaces the test will fail when
->+	# transport_g2h->stream_allow() returns false. This edge case only
->+	# happens for vsock_test in client mode on the host in a local
->+	# namespace. This is a false positive.
->+	host_vsock_test "${ns}" "127.0.0.1" "${VSOCK_CID}" "${TEST_HOST_PORT}" --skip=29
->+	rc=$?
->+
->+	vm_dmesg_check "${pidfile}" "${ns}" "${oops_before}" "${warn_before}"
->+	dmesg_rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+
->+	if [[ "${rc}" -ne 0 ]] || [[ "${dmesg_rc}" -ne 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+}
->+
->+test_ns_same_local_vm_connect_to_local_host_ok() {
->+	local oops_before warn_before
->+	local ns="local0"
->+	local port=1234
->+	local dmesg_rc
->+	local pidfile
->+	local rc
->+
->+	init_namespaces
->+
->+	pidfile="$(create_pidfile)"
->+
->+	if ! vm_start "${pidfile}" "${ns}"; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	vm_wait_for_ssh "${ns}"
->+	oops_before=$(vm_dmesg_oops_count "${ns}")
->+	warn_before=$(vm_dmesg_warn_count "${ns}")
->+
->+	host_vsock_test "${ns}" "server" "${VSOCK_CID}" "${port}"
->+	vm_vsock_test "${ns}" "10.0.2.2" 2 "${port}"
->+	rc=$?
->+
->+	vm_dmesg_check "${pidfile}" "${ns}" "${oops_before}" "${warn_before}"
->+	dmesg_rc=$?
->+
->+	terminate_pidfiles "${pidfile}"
->+
->+	if [[ "${rc}" -ne 0 ]] || [[ "${dmesg_rc}" -ne 0 ]]; then
->+		return "${KSFT_FAIL}"
->+	fi
->+
->+	return "${KSFT_PASS}"
->+}
->+
-> namespaces_can_boot_same_cid() {
-> 	local ns0=$1
-> 	local ns1=$2
->@@ -869,6 +1432,7 @@ fi
-> check_args "${ARGS[@]}"
-> check_deps
-> check_vng
->+check_socat
-> handle_build
->
-> echo "1..${#ARGS[@]}"
->
->-- 
->2.47.3
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Seokwoo-Chung-Ryan/docs-tracing-fprobe-Document-list-filters-and-entry-exit/20251127-024245
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/trace/linux-trace for-next
+patch link:    https://lore.kernel.org/r/20251126184110.72241-3-seokwoo.chung130%40gmail.com
+patch subject: [PATCH v4 2/3] tracing/fprobe: Support comma-separated symbols and :entry/:exit
+config: x86_64-randconfig-001-20251127 (https://download.01.org/0day-ci/archive/20251127/202511272254.BX8oUzwu-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251127/202511272254.BX8oUzwu-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202511272254.BX8oUzwu-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> kernel/trace/trace_fprobe.c:1284:1: error: function definition is not allowed here
+    1284 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1514:1: error: function definition is not allowed here
+    1514 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1531:1: error: function definition is not allowed here
+    1531 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1536:1: error: function definition is not allowed here
+    1536 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1546:1: error: function definition is not allowed here
+    1546 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1574:1: error: function definition is not allowed here
+    1574 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1610:1: error: function definition is not allowed here
+    1610 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1655:1: error: function definition is not allowed here
+    1655 | {
+         | ^
+   kernel/trace/trace_fprobe.c:1684:1: error: function definition is not allowed here
+    1684 | {
+         | ^
+>> kernel/trace/trace_fprobe.c:1702:15: error: use of undeclared identifier 'init_fprobe_trace_early'
+    1702 | core_initcall(init_fprobe_trace_early);
+         |               ^
+>> kernel/trace/trace_fprobe.c:1702:15: error: use of undeclared identifier 'init_fprobe_trace_early'
+>> kernel/trace/trace_fprobe.c:1702:40: error: expected '}'
+    1702 | core_initcall(init_fprobe_trace_early);
+         |                                        ^
+   kernel/trace/trace_fprobe.c:1175:1: note: to match this '{'
+    1175 | {
+         | ^
+   12 errors generated.
+
+
+vim +1284 kernel/trace/trace_fprobe.c
+
+08c9306fc2e32b Masami Hiramatsu (Google  2023-08-23  1281) 
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1282) static int trace_fprobe_create_internal(int argc, const char *argv[],
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1283) 					struct traceprobe_parse_context *ctx)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06 @1284) {
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1285) 	/*
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1286) 	 * Argument syntax:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1287) 	 *  - Add fentry probe:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1288) 	 *      f[:[GRP/][EVENT]] [MOD:]KSYM [FETCHARGS]
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1289) 	 *  - Add fexit probe:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1290) 	 *      f[N][:[GRP/][EVENT]] [MOD:]KSYM%return [FETCHARGS]
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1291) 	 *  - Add tracepoint probe:
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1292) 	 *      t[:[GRP/][EVENT]] TRACEPOINT [FETCHARGS]
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1293) 	 *
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1294) 	 * Fetch args:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1295) 	 *  $retval	: fetch return value
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1296) 	 *  $stack	: fetch stack address
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1297) 	 *  $stackN	: fetch Nth entry of stack (N:0-)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1298) 	 *  $argN	: fetch Nth argument (N:1-)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1299) 	 *  $comm       : fetch current task comm
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1300) 	 *  @ADDR	: fetch memory at ADDR (ADDR should be in kernel)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1301) 	 *  @SYM[+|-offs] : fetch memory at SYM +|- offs (SYM is a data symbol)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1302) 	 * Dereferencing memory fetch:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1303) 	 *  +|-offs(ARG) : fetch memory at ARG +|- offs address.
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1304) 	 * Alias name of args:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1305) 	 *  NAME=FETCHARG : set NAME as alias of FETCHARG.
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1306) 	 * Type of args:
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1307) 	 *  FETCHARG:TYPE : use TYPE instead of unsigned long.
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1308) 	 */
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1309) 	struct trace_fprobe *tf __free(free_trace_fprobe) = NULL;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1310) 	const char *event = NULL, *group = FPROBE_EVENT_SYSTEM;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1311) 	struct module *mod __free(module_put) = NULL;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1312) 	const char **new_argv __free(kfree) = NULL;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1313) 	char *parsed_nofilter __free(kfree) = NULL;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1314) 	char *parsed_filter __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1315) 	char *symbol __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1316) 	char *ebuf __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1317) 	char *gbuf __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1318) 	char *sbuf __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1319) 	char *abuf __free(kfree) = NULL;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1320) 	char *dbuf __free(kfree) = NULL;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1321) 	int i, new_argc = 0, ret = 0;
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1322) 	bool is_tracepoint = false;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1323) 	bool list_mode = false;
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1324) 	bool is_return = false;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1325) 
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1326) 	if ((argv[0][0] != 'f' && argv[0][0] != 't') || argc < 2)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1327) 		return -ECANCELED;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1328) 
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1329) 	if (argv[0][0] == 't') {
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1330) 		is_tracepoint = true;
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1331) 		group = TRACEPOINT_EVENT_SYSTEM;
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1332) 	}
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1333) 
+a2224559cbba1d Masami Hiramatsu (Google  2024-12-26  1334) 	if (argv[0][1] != '\0') {
+a2224559cbba1d Masami Hiramatsu (Google  2024-12-26  1335) 		if (argv[0][1] != ':') {
+a2224559cbba1d Masami Hiramatsu (Google  2024-12-26  1336) 			trace_probe_log_set_index(0);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1337) 			trace_probe_log_err(1, BAD_MAXACT);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1338) 			return -EINVAL;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1339) 		}
+a2224559cbba1d Masami Hiramatsu (Google  2024-12-26  1340) 		event = &argv[0][2];
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1341) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1342) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1343) 	trace_probe_log_set_index(1);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1344) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1345) 	/* Parse spec early (single vs list, suffix, base symbol) */
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1346) 	ret = parse_fprobe_spec(argv[1], is_tracepoint, &symbol, &is_return,
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1347) 			&list_mode, &parsed_filter, &parsed_nofilter);
+08c9306fc2e32b Masami Hiramatsu (Google  2023-08-23  1348) 	if (ret < 0)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1349) 		return -EINVAL;
+08c9306fc2e32b Masami Hiramatsu (Google  2023-08-23  1350) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1351) 	for (i = 2; i < argc; i++) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1352) 		char *tmp = strstr(argv[i], "$retval");
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1353) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1354) 		if (tmp && !isalnum(tmp[7]) && tmp[7] != '_') {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1355) 			if (is_tracepoint) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1356) 				trace_probe_log_set_index(i);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1357) 				trace_probe_log_err(tmp - argv[i], RETVAL_ON_PROBE);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1358) 				return -EINVAL;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1359) 			}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1360) 			is_return = true;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1361) 			break;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1362) 		}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1363) 	}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1364) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1365) 	trace_probe_log_set_index(0);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1366) 	if (event) {
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1367) 		gbuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1368) 		if (!gbuf)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1369) 			return -ENOMEM;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1370) 		ret = traceprobe_parse_event_name(&event, &group, gbuf,
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1371) 						  event - argv[0]);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1372) 		if (ret)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1373) 			return -EINVAL;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1374) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1375) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1376) 	if (!event) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1377) 		/*
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1378) 		 * Event name rules:
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1379) 		 * - For list/wildcard: require explicit [GROUP/]EVENT
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1380) 		 * - For single literal: autogenerate symbol__entry/symbol__exit
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1381) 		 */
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1382) 		if (list_mode || has_wildcard(symbol)) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1383) 			trace_probe_log_err(0, NO_GROUP_NAME);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1384) 			return -EINVAL;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1385) 		}
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1386) 		ebuf = kmalloc(MAX_EVENT_NAME_LEN, GFP_KERNEL);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1387) 		if (!ebuf)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1388) 			return -ENOMEM;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1389) 		/* Make a new event name */
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1390) 		if (is_tracepoint)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1391) 			snprintf(ebuf, MAX_EVENT_NAME_LEN, "%s%s",
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1392) 				 isdigit(*symbol) ? "_" : "", symbol);
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1393) 		else
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1394) 			snprintf(ebuf, MAX_EVENT_NAME_LEN, "%s__%s", symbol,
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1395) 				 is_return ? "exit" : "entry");
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1396) 		sanitize_event_name(ebuf);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1397) 		event = ebuf;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1398) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1399) 
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1400) 	if (is_return)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1401) 		ctx->flags |= TPARG_FL_RETURN;
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1402) 	else
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1403) 		ctx->flags |= TPARG_FL_FENTRY;
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1404) 
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1405) 	ctx->funcname = NULL;
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1406) 	if (is_tracepoint) {
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1407) 		/* Get tracepoint and lock its module until the end of the registration. */
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1408) 		struct tracepoint *tpoint;
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1409) 
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1410) 		ctx->flags |= TPARG_FL_TPOINT;
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1411) 		mod = NULL;
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1412) 		tpoint = find_tracepoint(symbol, &mod);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1413) 		if (tpoint) {
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1414) 			sbuf = kmalloc(KSYM_NAME_LEN, GFP_KERNEL);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1415) 			if (!sbuf)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1416) 				return -ENOMEM;
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1417) 			ctx->funcname = kallsyms_lookup((unsigned long)tpoint->probestub,
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1418) 							NULL, NULL, NULL, sbuf);
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1419) 		}
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1420) 	}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1421) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1422) 	if (!list_mode && !has_wildcard(symbol) && !is_tracepoint)
+e3d6e1b9a34c74 Masami Hiramatsu (Google  2025-04-01  1423) 		ctx->funcname = symbol;
+b576e09701c7d0 Masami Hiramatsu (Google  2023-06-06  1424) 
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1425) 	abuf = kmalloc(MAX_BTF_ARGS_LEN, GFP_KERNEL);
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1426) 	if (!abuf)
+d643eaa7082dc3 Masami Hiramatsu (Google  2025-07-23  1427) 		return -ENOMEM;
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1428) 	argc -= 2; argv += 2;
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1429) 	new_argv = traceprobe_expand_meta_args(argc, argv, &new_argc,
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1430) 					       abuf, MAX_BTF_ARGS_LEN, ctx);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1431) 	if (IS_ERR(new_argv))
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1432) 		return PTR_ERR(new_argv);
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1433) 	if (new_argv) {
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1434) 		argc = new_argc;
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1435) 		argv = new_argv;
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1436) 	}
+57faaa04804ccb Masami Hiramatsu (Google  2025-03-27  1437) 	if (argc > MAX_TRACE_ARGS) {
+57faaa04804ccb Masami Hiramatsu (Google  2025-03-27  1438) 		trace_probe_log_set_index(2);
+57faaa04804ccb Masami Hiramatsu (Google  2025-03-27  1439) 		trace_probe_log_err(0, TOO_MANY_ARGS);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1440) 		return -E2BIG;
+57faaa04804ccb Masami Hiramatsu (Google  2025-03-27  1441) 	}
+18b1e870a49671 Masami Hiramatsu (Google  2023-06-06  1442) 
+d9b15224dd8ff8 Ye Bin                    2024-03-22  1443  	ret = traceprobe_expand_dentry_args(argc, argv, &dbuf);
+d9b15224dd8ff8 Ye Bin                    2024-03-22  1444  	if (ret)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1445) 		return ret;
+d9b15224dd8ff8 Ye Bin                    2024-03-22  1446  
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1447) 	/* setup a probe */
+2867495dea8632 Masami Hiramatsu (Google  2025-04-01  1448) 	tf = alloc_trace_fprobe(group, event, symbol, argc, is_return, is_tracepoint);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1449) 	if (IS_ERR(tf)) {
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1450) 		ret = PTR_ERR(tf);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1451) 		/* This must return -ENOMEM, else there is a bug */
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1452) 		WARN_ON_ONCE(ret != -ENOMEM);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1453) 		return ret;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1454) 	}
+e2d0d7b2f42dca Masami Hiramatsu (Google  2023-06-06  1455) 
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1456) 	/* carry list parsing result into tf */
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1457) 	if (!is_tracepoint) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1458) 		tf->list_mode = list_mode;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1459) 		if (parsed_filter) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1460) 			tf->filter = kstrdup(parsed_filter, GFP_KERNEL);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1461) 			if (!tf->filter)
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1462) 				return -ENOMEM;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1463) 		}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1464) 		if (parsed_nofilter) {
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1465) 			tf->nofilter = kstrdup(parsed_nofilter, GFP_KERNEL);
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1466) 			if (!tf->nofilter)
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1467) 				return -ENOMEM;
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1468) 		}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1469) 	}
+a90d508c939bee Seokwoo Chung (Ryan       2025-11-26  1470) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1471) 	/* parse arguments */
+73f35080477e89 Mikel Rychliski           2024-09-30  1472  	for (i = 0; i < argc; i++) {
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1473) 		trace_probe_log_set_index(i + 2);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1474) 		ctx->offset = 0;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1475) 		ret = traceprobe_parse_probe_arg(&tf->tp, i, argv[i], ctx);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1476) 		if (ret)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1477) 			return ret;	/* This can be -ENOMEM */
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1478) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1479) 
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1480) 	if (is_return && tf->tp.entry_arg) {
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1481) 		tf->fp.entry_handler = trace_fprobe_entry_handler;
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1482) 		tf->fp.entry_data_size = traceprobe_get_entry_data_size(&tf->tp);
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1483) 		if (ALIGN(tf->fp.entry_data_size, sizeof(long)) > MAX_FPROBE_DATA_SIZE) {
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1484) 			trace_probe_log_set_index(2);
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1485) 			trace_probe_log_err(0, TOO_MANY_EARGS);
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1486) 			return -E2BIG;
+db5e228611b118 Masami Hiramatsu (Google  2025-02-26  1487) 		}
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1488) 	}
+25f00e40ce7953 Masami Hiramatsu (Google  2024-03-04  1489) 
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1490) 	ret = traceprobe_set_print_fmt(&tf->tp,
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1491) 			is_return ? PROBE_PRINT_RETURN : PROBE_PRINT_NORMAL);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1492) 	if (ret < 0)
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1493) 		return ret;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1494) 
+2db832ec9090d3 Masami Hiramatsu (Google  2025-04-01  1495) 	ret = register_trace_fprobe_event(tf);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1496) 	if (ret) {
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1497) 		trace_probe_log_set_index(1);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1498) 		if (ret == -EILSEQ)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1499) 			trace_probe_log_err(0, BAD_INSN_BNDRY);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1500) 		else if (ret == -ENOENT)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1501) 			trace_probe_log_err(0, BAD_PROBE_ADDR);
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1502) 		else if (ret != -ENOMEM && ret != -EEXIST)
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1503) 			trace_probe_log_err(0, FAIL_REG_PROBE);
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1504) 		return -EINVAL;
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1505) 	}
+334e5519c37570 Masami Hiramatsu (Google  2023-06-06  1506) 
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1507) 	/* 'tf' is successfully registered. To avoid freeing, assign NULL. */
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1508) 	tf = NULL;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1509) 
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1510) 	return 0;
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1511) }
+8275637215bd3d Masami Hiramatsu (Google  2025-01-17  1512) 
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
