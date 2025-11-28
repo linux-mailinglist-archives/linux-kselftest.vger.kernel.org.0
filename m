@@ -1,88 +1,121 @@
-Return-Path: <linux-kselftest+bounces-46680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46681-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CCACC90741
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Nov 2025 01:47:56 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 278F1C90747
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Nov 2025 01:48:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 567CF34E44D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Nov 2025 00:47:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1CD364E033E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Nov 2025 00:48:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF8E1C5D44;
-	Fri, 28 Nov 2025 00:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6757F217F33;
+	Fri, 28 Nov 2025 00:48:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ln/e5OD7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUIoasXo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB8720B22;
-	Fri, 28 Nov 2025 00:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3321D20B22;
+	Fri, 28 Nov 2025 00:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764290870; cv=none; b=Cms50GJ4HAabTKAO2NPinpC3WZWPb+GVb71heilJf9qIt3bCGLeHnW27xZL9AJaRC8U0dBKgjv6suETZOz/TDuh/ou/rVH9DVpzNSOK8IHgnHVNxMINrVsevQ/JUD3HbmKv1DcZQWbgwyt5QDSphsRRqQPTGmfn4kOmSQfJH0Nc=
+	t=1764290931; cv=none; b=IDaAgwpzynh71yZ7y0V42NUEcw5Ag//pi4pu6JWszphTLmpKbehuoZuFrSOGumTaa4BNvosWnSX6wgPt0BwHxZGcArLB/qQHdKSEOxQDGWZIIaQcuHBh5+XH0ztCxXEeSYLLoXfNPgeih4i3KVz7aYm0auXwGVWK19M7E7ggY7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764290870; c=relaxed/simple;
-	bh=KSFigX3mQH03MUV5DsDXRhIb5B6qAvBrmCG/YPhRIPU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VKJUcayL+Yz42gXnLDku6kZQY7UsrgMpSuB7sgg9mz1mj4D40XjiJXq3RM+cwcR/UVhXo/ILNW0xcxCme15vYkkxTgZ98FbrrP/G+PQVdxDkeyVy71bL6jh7F729qSP511z29HkidxAR2+bFgn88G3Clq7D5HtNKM6PicnJALFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ln/e5OD7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA151C4CEF8;
-	Fri, 28 Nov 2025 00:47:49 +0000 (UTC)
+	s=arc-20240116; t=1764290931; c=relaxed/simple;
+	bh=Td66z1VEFMXwMvZf7Zzix0wOIQxl7V8ZtvG0w0bo+E8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=POgGBswyS2+II6/50jAVbW3r/tADHq1D32249tiGquhtahQkPIyu9nUopbJBe3Bmql/ZpMUWoKifZikznpPM7iMqLib++Ylf9hzChJ6geTrQgzsHMW+VdiqQSnA2S0wLcTcjfj74azYt5nfHsILhjO1D3Tzb+CbiJb9GWzkk+m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUIoasXo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F29CDC4CEF8;
+	Fri, 28 Nov 2025 00:48:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764290870;
-	bh=KSFigX3mQH03MUV5DsDXRhIb5B6qAvBrmCG/YPhRIPU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ln/e5OD7p3wbr8HfEBYAvMPMarHKj023XvTLBKGOH2yAn79pKQ4Y92Nb7RDq6X3/V
-	 KPyH7hkIY8NjJK3Dj9cSOFuaXyk5d4AzxGKPqxknfHQNJ++l+1gHLN5Cfujd0SVVqX
-	 E2LY5yQK0xbben7QpG/o2Diq7jLA5q28+mPmIyEbAuDYYmnWpK07juujtjDFMolZC+
-	 Y9oDPT9P0zbcOywQZSf2/2SlyMl48DSQ5b8kGZnRUI/kEPQPMkUPVUDQNXn7NR6BIQ
-	 7HLwsGlUJ2Atrk44c6bvat7LAlIoO/HQW1K5YlzCy/1v5fo2UEw7YeE5muP4K0VGpQ
-	 5uAiqCZEr+b5w==
-Date: Thu, 27 Nov 2025 16:47:48 -0800
+	s=k20201202; t=1764290929;
+	bh=Td66z1VEFMXwMvZf7Zzix0wOIQxl7V8ZtvG0w0bo+E8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AUIoasXopAs2vdmrFS0AiMn5on46jJlC0Xr/Bv2GqvpBILcbwJomOXZbW2WySoF8A
+	 MBEU1NXXE7Zjtya2p3qKISBZkQ0wy2GZKVdns9WUCfi2spT+aBTLRJUxEBAfzfhswU
+	 +PoYTeW/JAwA1nLyW6aPtR8O3O7htNWu3O/cDrPGtSRt42VOPdKYt2xhMjFQwM366z
+	 RNzhkifqH0sI779sZbBH5rip2E2iTg0iBtyD8ZRzk8guAT8r0A7ZUbMrIWiMiNH+Bj
+	 j9NuX9IO/eYXiehHN1kHcVF8NusOshfXGZlyiDfvqzZ+2fo8LLGWJTVDUAGgPtGbfi
+	 vhYRPJa7oUDwg==
 From: Jakub Kicinski <kuba@kernel.org>
-To: Andre Carvalho <asantostc@gmail.com>
-Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v7 0/5] netconsole: support automatic target
- recovery
-Message-ID: <20251127164748.4db1e1fe@kernel.org>
-In-Reply-To: <v44skio47zulg6jok5wq7w2ylw4abk7dxtjarlgnuz7hukvbts@7clzpd7cqc5u>
-References: <20251126-netcons-retrigger-v7-0-1d86dba83b1c@gmail.com>
-	<20251126173646.696537af@kernel.org>
-	<v44skio47zulg6jok5wq7w2ylw4abk7dxtjarlgnuz7hukvbts@7clzpd7cqc5u>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	shuah@kernel.org,
+	willemb@google.com,
+	petrm@nvidia.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: net: py: handle interrupt during cleanup
+Date: Thu, 27 Nov 2025 16:48:46 -0800
+Message-ID: <20251128004846.2602687-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, 27 Nov 2025 23:07:02 +0000 Andre Carvalho wrote:
-> > Should we not be listening for the REGISTER event then? On boot
-> > we force UP the device if we find it, theoretically there may
-> > be a case where user space is not configured to UP the device,
-> > and then we'd never resume the target?  
-> 
-> This is indeed a limitation on the current implementation. Based on
-> your feedback, I'm working on a new version of this series handling REGISTER
-> instead of UP and ensuring we force UP the device.
-> This will make it consistent with the boot behavior you described.
-> 
-> Based on my tests, I can't force the device UP while handling the REGISTER event.
-> I believe this is due to dev_open attempting to lock the device which is already held.
-> For this reason, I'm resorting to defering this to a workqueue, similar to my approach 
-> on v1 [1] (but correctly handling target_list lock).
-> 
-> Let me know if this approach makes sense or if I'm missing something.
+Following up on the old discussion [1]. Let the BaseExceptions out of
+defer()'ed cleanup. And handle it in the main loop. This allows us to
+exit the tests if user hit Ctrl-C during defer().
 
-SG, that's probably the most resilient solution.
+Link: https://lore.kernel.org/20251119063228.3adfd743@kernel.org # [1]
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: shuah@kernel.org
+CC: willemb@google.com
+CC: petrm@nvidia.com
+CC: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/net/lib/py/ksft.py | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+index ebd82940ee50..531e7fa1b3ea 100644
+--- a/tools/testing/selftests/net/lib/py/ksft.py
++++ b/tools/testing/selftests/net/lib/py/ksft.py
+@@ -163,7 +163,7 @@ KSFT_DISRUPTIVE = True
+         entry = global_defer_queue.pop()
+         try:
+             entry.exec_only()
+-        except BaseException:
++        except Exception:
+             ksft_pr(f"Exception while handling defer / cleanup (callback {i} of {qlen_start})!")
+             tb = traceback.format_exc()
+             for line in tb.strip().split('\n'):
+@@ -333,7 +333,21 @@ KsftCaseFunction = namedtuple("KsftCaseFunction",
+             KSFT_RESULT = False
+             cnt_key = 'fail'
+ 
+-        ksft_flush_defer()
++        try:
++            ksft_flush_defer()
++        except BaseException as e:
++            tb = traceback.format_exc()
++            for line in tb.strip().split('\n'):
++                ksft_pr("Exception|", line)
++            if isinstance(e, KeyboardInterrupt):
++                ksft_pr()
++                ksft_pr("WARN: defer() interrupted, cleanup may be incomplete.")
++                ksft_pr("      Attempting to finish cleanup before exiting.")
++                ksft_pr("      Interrupt again to exit immediately.")
++                ksft_pr()
++                stop = True
++            # Flush was interrupted, try to finish the job best we can
++            ksft_flush_defer()
+ 
+         if not cnt_key:
+             cnt_key = 'pass' if KSFT_RESULT else 'fail'
+-- 
+2.51.1
+
 
