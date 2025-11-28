@@ -1,186 +1,131 @@
-Return-Path: <linux-kselftest+bounces-46694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 045BCC924F2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Nov 2025 15:24:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91926C9279D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Nov 2025 16:51:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3B7794EA17B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Nov 2025 14:21:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5021B3A85ED
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Nov 2025 15:51:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089742367D3;
-	Fri, 28 Nov 2025 14:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC3292459D9;
+	Fri, 28 Nov 2025 15:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="REIDaUaU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1C432E73F
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Nov 2025 14:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184EF79CD
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Nov 2025 15:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764339663; cv=none; b=DTQ2Qsyklp+QYx6N7sJhnle8nTOF2wM460MUWcfadO5lKzzC10oWXi7uMzY6w+TJkzF3lLW/DV6+ysCbC3eHSeXGlZsY9kUp2Y3RL2AkTIrxoy1IHBrdlCNSvH+ByIS41RLEYnve5tLv/vW+jQVaEAYyq9YHrHLUbHpz99n1LRs=
+	t=1764345062; cv=none; b=ahkOmTpqGkhgquYbfaowHKtYisNDA/GpV5gvEcBT/dnIkl0R7TcYTzjNVKaj6YSfyHarE45AuqAxAbFAbHVWBy/7f1uoemTKkrPksAApyZ285ETnZE0xJ6WWLXcJy5ngbw04htk7wFF97grjukJNhPvcD+uzx1TcnMO5fkSFpQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764339663; c=relaxed/simple;
-	bh=iAhkuxtvlLCx3FI2+LZ2MUKk3NrR4LQpjDFB2p7NYFA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rY5DsCtZ3QRSOMwxqPm07+LALIEza/cCTdswjnl8lG2ttx8Wq/WbLp3XiAqgZAs+w9XvUn9ppalCrQLB8KSmwJZIkbe0X0vYK1TG1aQemoeUhH63UI9l8JwhMcnIYVZgf46Y5X0Y67l+eNkLupAz5NKRUvttlaLxGStT1l26x5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+	s=arc-20240116; t=1764345062; c=relaxed/simple;
+	bh=MGtL6DfpEfB/mkAXzLzzie/i+p22c/hsHzJYktd8RzM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o7Zs1Ba7R0EGcqqsusGu3+tYUskQpEw7lu3JL7T/BF9bdRl3e5kQr3pq9Pbjqe2VN8owjIJI/8Iut1kKo+e6E+SccDRXKqtD6ShGsHitBRnlQ6/nWC5HIX+5mHKctXp9NE1yrWz7GNMkP0EuuI31xgkZL0OeIGKsGTX85377kIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=REIDaUaU; arc=none smtp.client-ip=209.85.216.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-3ec3cdcda4eso1280856fac.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Nov 2025 06:21:02 -0800 (PST)
+Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-343774bd9b4so1671473a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Nov 2025 07:51:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764345060; x=1764949860; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P61WKJnqyh8/Q+jWB9OZ6DHYmVs1u+jLgIH+gZ1ifWY=;
+        b=REIDaUaUqcK9gN6uRpXDMYDFlBZZbLmjufKjW66gKJ+MMbzZXG5CLtLhxHdNRa2skM
+         GSXkVjt0N0jjNw/1KXhSdQrr5IzFF1/Hkn2Vjg8xYLCKGGg/48uixSAQM5Lq+1o/o8Ez
+         c/DWKqFYACOVxHrI6Hq89HKclWHmLMAzvzFpMBGWACG67LchHc28TGf92tN/2PxhMVu3
+         KUWKrE03pd9n2MgH7yOmOoOjr2VPMRvQTSj5NBj3tOcrbezAj4BuX7/P4mgpSthsg+ii
+         xNNKnMu5r3kzFGjqKfGGWA3utyAeQtSUrxVKJ22hG2drr9Ky0AC2HaN101sydM/PQ/Dw
+         6m2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764339661; x=1764944461;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bcATxuNlgaeDAYpQM6zHeyqMLPCvdphcTT8Pi4GZRCI=;
-        b=Uhin9bc10RBNMSdaJmm3ZRhccbsKKikqGp9DZMtK8SKl1o+uwJBVbz4UCS0gUVBDHy
-         sODiI3zzV9o/9irpE3HRJyri+WD9vCjItbBADpISWbLX/fjIVsLxTtIXr+njpKt0zkwV
-         somaRuj4Gcb/chnOjQlmnJNIwHv3yXiHYXOB4TQumFpgt8fHUh25E5HHlv/PrkSvDoMp
-         VMr5BZ7TeiRTyPZ7nsaYODN8OnsCWBtZQYTXetMg/0Lqs5Ao0a3pd9WEd2IO/XojwJi5
-         4atgJGpa7Eu68QlhM7MsUmWEGP53n+NDBtOkgaVhgFjjgeA6y6T2zzIUeu85cRfm7AnB
-         7tWg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpg9pdUjI1MJrLHXd0qXNDqXRxh1zd1zKYeiNhCh8/Ak/90SZYo48phdgRjNkIsI3bHoqPnWcWLvlZAAi5HKM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGvWNVISPqzb9RtvIU2mboN8B1thsMTnH9f12o4H0INlO5lNTz
-	kCDaLfKvyuJ7i0Vilkdg3IYpLFIfrUei434zLQKB3FGkkLm8Owqw8mUl
-X-Gm-Gg: ASbGnct90vs2tl2fMloGp9OxVurPQKArFzrtmEDIR3r4eQch0EbVyTaqwZ/buF++jMg
-	yxPJFKTrPAqVAEa4lZ7QdBKR6FC9pFXWvOFm1dWqk0jnQEFqVf/q/4uWJ/E2KyEmy3Mm/Pc5EvO
-	FeKFXQW/i/8iIZdOCiss6BcnmcOSNgEtmB3Yi3J8GOwCcaDakJqOsh+RtKXzZqTn5TG3FwnqFVC
-	XyOrkCDpjVjLEALnL1axpHecG0XpIBEDAQflloU6TKtIl5YwMPJRa2/LVhCMRLXHLbp+KILogeu
-	kiMVUyQ6k+FeCkaI4jeawhafsp/3kYumY3gssPpJu/FHUmu5aYoD504ZPz9/07ODnOD+zoZCKqe
-	0e4cC6lhc3hPS0ZpoS2oB24yY0Pf5++E0D+sjbwWm2ai2s9mKp4vNP7mVkLEDmyKkc2zGm5WQIR
-	jSAdtZB/bjpiTo2A==
-X-Google-Smtp-Source: AGHT+IFdXHddbS3YahClgjukUuSYo5q86nrHHLv0wekajQYQYjxd/clThSoKb648YqTTU/IIr/EKUA==
-X-Received: by 2002:a05:6870:a2d1:b0:3e7:e20a:39fb with SMTP id 586e51a60fabf-3ed1fd4ff6cmr7103109fac.11.1764339661150;
-        Fri, 28 Nov 2025 06:21:01 -0800 (PST)
-Received: from localhost ([2a03:2880:10ff:73::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3f0dcfdb503sm1801960fac.14.2025.11.28.06.21.00
+        d=1e100.net; s=20230601; t=1764345060; x=1764949860;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=P61WKJnqyh8/Q+jWB9OZ6DHYmVs1u+jLgIH+gZ1ifWY=;
+        b=Slo4f6CCWKW1OLLFuJp9iQ+Q/h9V0XXeVtf/TlZQtCbxMKhm6X66fW7+6VDPnd3vYY
+         dDbnTlHSmW3quncH9g9n0LiU1F+fMoO/u8TkYi3cb1HyJy9s0ZanNmwXbvOW5zIbPWiv
+         2X21Dmo7h9k6SGoOBfMiemzDC04U/oFkVgab4VhDmjqToSsfe/RkSdt3tnFSCgO6V84x
+         TXH9W5B+t0vtTq4CUSbWbAmS50AEUcVf58susDiyaFyPWnqP2XNXsHUzTds9jLsF0C4p
+         AP2ZQvviO8XbQxjaH8rMNZPf5MqbUPXrSUndXfQXkhikH7DdNt5ASSJcfoPRM5VfJsjH
+         RxEA==
+X-Forwarded-Encrypted: i=1; AJvYcCUf0qqjE1L/Q9vUnk5RYYhoSwP9J/EF5LCrdLiUTCC8BkZuOVMHe7qIQipvr5AzSgnPjdkO1LYyiwZ+xJD6iDI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrTNi1bSI4w+ViBOh7IuFT61ki3DtY1WGoixDNZKl+h37nT2qL
+	soQwFeiERBw4Bp6FBO8dXktKKWuDU09uZUVwb8CuSJpf+f63oV+kGxkU
+X-Gm-Gg: ASbGnctR+pIHZm1uLgxmpUNOJ4ADDlluiGQhIIoIt9u2obMUgFqBxmiM/fQnpoT1Lkx
+	AC+Yw3bIwk6QK6iz8I+OoJQ8h8IdDPXoCtadgoUxKSvrsCdac1AJ6od3hSuie0trZzxMsELsgFV
+	rCQfr3HWn3RVZ5Rn3XcOPWsx/odmKeKqbFA/X3JK+d1pnnyi8ejjJQ0iknLSBXnmIQ9aW73MRQy
+	MQEFhU3CdNmsqH6ixf6GAJhgzlUhxuPTCVQHoUgyN2PYJTutKDPb7Xjxg3kB1TL4MIq7pVPYM4X
+	cMpc6+62X0PVxVtkCsuHTcZlHS9AXzAcnK2UdRMHh8U0OCLHtxQCdGHrjoVjoMKL1Jp80/apNyZ
+	g33JtPpnNwL0sEzhIrhPlRQ2e/xLCs8UAVTmHRSSDUHoKSB1qRHfGf8yVSQXa0VoSEKNnhw6LsS
+	tJCw5GkE7YMTzWflB3HTT5rEKxltMxwQ==
+X-Google-Smtp-Source: AGHT+IHDXjnEWiD4Ij3Aoqmu0wuirePC/DePO6Ksg/pXsaBSBRnUOru5vuneh2uWo3PUFH/miirhXQ==
+X-Received: by 2002:a17:90b:4b8c:b0:340:d578:f2a2 with SMTP id 98e67ed59e1d1-34733e4cb74mr28454632a91.6.1764345060177;
+        Fri, 28 Nov 2025 07:51:00 -0800 (PST)
+Received: from fedora ([103.120.31.122])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-be6ec21e044sm2533746a12.12.2025.11.28.07.50.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Nov 2025 06:21:00 -0800 (PST)
-From: Breno Leitao <leitao@debian.org>
-Date: Fri, 28 Nov 2025 06:20:49 -0800
-Subject: [PATCH net-next 4/4] Documentation: netconsole: Document send_msg
- configfs attribute
+        Fri, 28 Nov 2025 07:50:59 -0800 (PST)
+Date: Fri, 28 Nov 2025 21:20:53 +0530
+From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kernel-mentees@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Include missing uapi header for *_VECTOR
+ definitions
+Message-ID: <aSnE3Q4kDAjIrC9Y@fedora>
+References: <20251115110830.26792-1-ankitkhushwaha.linux@gmail.com>
+ <aRs6EbV2gnkertzA@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251128-netconsole_send_msg-v1-4-8cca4bbce9bc@debian.org>
-References: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
-In-Reply-To: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
-To: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- gustavold@gmail.com, asantostc@gmail.com, calvin@wbinvd.org, 
- kernel-team@meta.com
-X-Mailer: b4 0.15-dev-a6db3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3352; i=leitao@debian.org;
- h=from:subject:message-id; bh=iAhkuxtvlLCx3FI2+LZ2MUKk3NrR4LQpjDFB2p7NYFA=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBpKa/F+n91KlfHmNbR3+aEeTppVS0z8VZzSPsvL
- P1xw6ToDciJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaSmvxQAKCRA1o5Of/Hh3
- bcv3D/9yfpizPhvw/0kpd6DLJkeflw/6EdTVIyepbmpLrnAtRfmN/B9x/C0ISfefQNwYnyMZpD1
- lVYSNjv1aZd4tOGqcUvqbY8OkLgsVVLXyuctR27pw8jNu0ObZhF0JddNKQJnHKbMKI2Pi5+pfs0
- iltAjWUMzmjMt5mULUZ40HQvla414ukJnTtD/E1RX3wVsiBU8m+lS7Dsg6ofTJxmkBC1vJGuW1a
- FwrluZ3UY798WrlEfNfL/nxdcy642+rC2jNF4miKMvKhfCCyFfCL2f3+k/lPSxkbIy/oz3w78mb
- SwJSZ9fDlplQdVC4Ylv6SrbCs5R5v0bNfbSsmOxw8OwjEx491JsX16KZqjLyRawLPARNjp4gCYg
- FZlvQYB6CV55OrPyAdO92VaS4DKKKkVzBTcvCdkpSvnKU/PyqHV0/iMnS/GuMtpKrWofbu+rlKo
- ZtBR1at+N7TAr6tqMPRBbV3MIwIZUmRfTmT9Uc2MuedAt1HYt/FpjEXJmX9rOd9ZLuJOSrkriXp
- b7APvJbpdLWfKX+W7JJIrkMvXVXZEdEefP06LX5SUv0toe78VqmzA7tiEMdEhdrodlP4l7Olh+p
- 1wMYXVNHzfCtnU1P/naWOE1c22THeLc8VZgXimISheVMC9wFSgOc2EHkP93b4NmaJ5UdlRfgMdC
- IWK5SY9NbyV8cLw==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aRs6EbV2gnkertzA@google.com>
 
-Add documentation for the new send_msg configfs attribute that allows
-sending custom messages directly through netconsole targets.
+On Mon, Nov 17, 2025 at 07:06:57AM -0800, Sean Christopherson wrote:
+> That means your build is picking up stale kernel headers (likely the ones installed
+> system-wide).  The "#include <asm/kvm.h>" in kvm_util.h is what pulls in the kernel
+> uAPI headers.
+> 
+> Selftests uapi headers are a bit of a mess.  In the past, selftests would
+> automatically do "make headers_install" as part of the build, but commit
+> 3bb267a36185 ("selftests: drop khdr make target") yanked that out because there
+> are scenarios where it broke the build.
+> 
+> So the "right" way to build selftest is to first do "make headers_install", and
+> then build selftests.
+> 
+> Note, if you build KVM selftests directly, tools/testing/selftests/lib.mk will
+> define the includes to be relative to the source directory, i.e. expects the
+> headers to be installed in the source.
+> 
+>   ifeq ($(KHDR_INCLUDES),)
+>   KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
+>   endif
+> 
+> You can explicitly set KHDR_INCLUDES when building if you install headers somewhere
+> else.  E.g. my build invocation looks something like this, where "$output" is an
+> out-of-tree directory.
+> 
+>   KHDR_INCLUDES="-isystem $output/usr/include" EXTRA_CFLAGS="-static -Werror -gdwarf-4" make \
+>   INSTALL_HDR_PATH="$output/usr" OUTPUT=$output
 
-The documentation covers:
-- How to use the send_msg attribute
-- Key features and requirements
-- Use cases for direct message sending
-- Example of periodic health check implementation
+Hi Sean,
+Thanks for pointing it out, i am not aware of these details.
+Will take care of this now onwards
 
-This feature enables userspace applications to inject custom messages
-into the netconsole stream without going through the kernel's printk
-infrastructure, which is useful for application monitoring, testing,
-and debugging purposes.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- Documentation/networking/netconsole.rst | 40 +++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
-index 4ab5d7b05cf1..229d5fe9a3b3 100644
---- a/Documentation/networking/netconsole.rst
-+++ b/Documentation/networking/netconsole.rst
-@@ -139,6 +139,7 @@ The interface exposes these parameters of a netconsole target to userspace:
- 	local_mac	Local interface's MAC address		(read-only)
- 	remote_mac	Remote agent's MAC address		(read-write)
- 	transmit_errors	Number of packet send errors		(read-only)
-+	send_msg	Send custom messages directly		(write-only)
- 	=============== =================================       ============
- 
- The "enabled" attribute is also used to control whether the parameters of
-@@ -158,6 +159,45 @@ You can also update the local interface dynamically. This is especially
- useful if you want to use interfaces that have newly come up (and may not
- have existed when netconsole was loaded / initialized).
- 
-+Direct Message Sending
-+----------------------
-+
-+The `send_msg` attribute allows sending custom messages directly through a
-+netconsole target without going through the kernel's printk infrastructure.
-+This is a write-only attribute that can be used to send arbitrary text to
-+the configured remote logging agent.
-+
-+To send a message directly::
-+
-+ echo "Custom status message" > /sys/kernel/config/netconsole/target1/send_msg
-+
-+Key features:
-+
-+* Messages can be sent only when the target is enabled
-+* The network interface must be up and running
-+* For extended targets, messages are sent with the extended header format
-+* For non-extended targets, messages are fragmented if they exceed the
-+  maximum chunk size
-+* Messages bypass the kernel log buffer entirely
-+
-+This is useful for:
-+
-+* Sending application-level alerts or status updates
-+* Injecting custom markers or delimiters into the log stream
-+* Sending diagnostic information from userspace scripts
-+* Testing netconsole connectivity without generating kernel messages
-+
-+Example use case - sending periodic health checks::
-+
-+ while true; do
-+   echo "[$(date)] System health: OK" > /sys/kernel/config/netconsole/target1/send_msg
-+   sleep 60
-+ done
-+
-+.. note::
-+   The `send_msg` attribute requires the target to be enabled. Unlike other
-+   parameters, you do not need to disable the target to use this attribute.
-+
- Netconsole targets defined at boot time (or module load time) with the
- `netconsole=` param are assigned the name `cmdline<index>`.  For example, the
- first target in the parameter is named `cmdline0`.  You can control and modify
-
--- 
-2.47.3
-
+Thank you
+-- Ankit
 
