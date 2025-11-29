@@ -1,675 +1,139 @@
-Return-Path: <linux-kselftest+bounces-46723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46724-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B4CFC93AFD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 10:16:01 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FF9FC93BEF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 11:22:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 618403A95AC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 09:15:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0C7333468A2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 10:22:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5FC1274FD3;
-	Sat, 29 Nov 2025 09:15:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BE626D4CA;
+	Sat, 29 Nov 2025 10:22:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GtCGuny0"
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="dkbF/YgT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ToluMmLW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A5415278E
-	for <linux-kselftest@vger.kernel.org>; Sat, 29 Nov 2025 09:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F73122B5A3;
+	Sat, 29 Nov 2025 10:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764407736; cv=none; b=tf2L6u+n5lyQFdfC5JMHeGzOuUDMm7U3aWoNeeF7QC6Ke8mtMwI3kOuhOnvdVd+ZDjd8rbqATKjnwbE46a8CFnGfHKxzOtwn1aKl4S2rPwJj0TwRIlJEV6Sg8Xr1p0k6IQnoo+mgcR7rcwLAVbFZqlvAp82P7+Unew3x71XMqYw=
+	t=1764411733; cv=none; b=moySxT8IqPuvXIo1qs5NGHYXxT211o1SNGbozRBgOjFG78UmffPRN05ar4J1UsVE89NCmT+TE8QOtdYzisODwaJpvBG6sdrYw7wRd1T0VE4bjHUtMqYwU3Me1UsyXxvWCnbLbtQpVRBSgi8XrHGTbZZeH2R6TB08OrVeQuFbhHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764407736; c=relaxed/simple;
-	bh=g44NCATS1TCM4N3MVgj2aM+W4i89Z9A+wULVk7cS86E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oy0rj9rKW/2Et2a3zSs57ozc0p9MfZ7Xb5NGlEUG5s2sGE14HvnbZJLrAEAikOEQmqm3tkiy+JDPQa1kSM8NYNiwQEQZIilShjBKXs6kzHhMr1Tbjt6/iqqt0b9eUR4g++uqKF7pC8hvRvwFGEtOaX0z508Jwi6y86wcLoQk210=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GtCGuny0; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7bc0cd6a13aso1601032b3a.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 29 Nov 2025 01:15:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764407734; x=1765012534; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8dR6VknWnQZF4bSIzafZo2V382x8cKwTyyx/xFmReEY=;
-        b=GtCGuny0JKPxy1lgupIwYdq780gZdI1gIqBA7ZYsW5vGohRQ2yxZlxtwfPvKUPRVUe
-         aG5RfvHUe/kXgLzRTHTT6Z5OqoxrjmZEfjQZODiqj1Ll4da6XglLyXg+A69kl+QcMk1p
-         nE52RahsgFr1vKAPZkAVjeEZpF0gN1zgDiZNd4blvcA2WG+Qy6Ap/pk/Mu5h1HB8JG3o
-         4doO5lZl23X3wo9DxleVnYu0F92ee4UHKd5CQwAOTHqpW1iFOg2nlWbxV5w1r4hyFlVU
-         fqG/bCdqHNSqnE557D8QNiaWRi3+B2gxlpXazwKHHlH7OQNf/z9N8DNYcxHFJo2OzAjx
-         BYvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764407734; x=1765012534;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8dR6VknWnQZF4bSIzafZo2V382x8cKwTyyx/xFmReEY=;
-        b=Gj2dzo9Z4Xz7CHxC9E6S8KSkeAas392qZtF4gGUaK87naYAHaljYof7D/mSwop92Nl
-         cDIqCJL9ZZopdIxKURIHitdwZol//4EQxrJezc62e7gGOt69JA7/lCIvHuT34cdQNTo2
-         fk2wHufSOuyWfqI1MM0/cuSSGo8fU30CjO4nJTBmpBOoMJHIGhzzLzYtGQ6AAQysMIMI
-         4QURMoE2107HtUroNUkV/5JUmaXAPtejUQ31p2YrFGLjSdYe8wyB9ZBFJeqjti6Jzzgi
-         Lb8RNQlBGRm7zDjbjGutqs/bKeyVKf5mwiol7aNOO0HP50R36bCvn6CwBmmln2DXSeLa
-         H7Qg==
-X-Forwarded-Encrypted: i=1; AJvYcCWcwYPXxfhtPV6fslVMFargNKh9RiWUBJQK3K450aml2GBrRMF311xFYeB1RERJ7yGCD4bQM6Xa8bMM4mzgkYE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzWCCu1u4xuuM+voWW3fawr5RwRQgr+sHHlBwfRF74w0Bsw17B
-	fsAX7Gf2ov1Q2/Ab6fgd2JSWk/PKjIn4XUyZg1Xfq+ViTW2Huea2Ofq+
-X-Gm-Gg: ASbGncsWpmtAmtMw/ISGHadiaG8hhOyK5hXmYMfjAbwKsn4G00pcEW8tXJ7xEL9BPzv
-	7+P1WZ9Wq6J01WIlBDxiiaop/pFpzZjXCLfp08+mD3+vzuqHc4UssCB4YAdyIHjBLOtvPEU7H5I
-	hWINl7ZQewxsvbmFEX2v1zqZ6oo7wJPJiGku6bvtSOdiiM4P5/uI2Y6rsX0vS6UyxjTIZJ/IQIl
-	bB7d3UY2SqTHntebmc9IJx3v7ZNNvmAWHAfEMZjKimdvkC3pg4uDyasc2NWIBYmVC+v8eA5BUkU
-	1NAXxNA0yJhh4sq18qlrgBeu8toj/3fE9YdI8GxXHS4pDwyOaQEBkr75nJB3BPnQFjy0IXEOInY
-	vjGAanRP81MeXvmDlGeUe6YFnBgNPxD2Q/t//MOkVMH0HyNEMGVxow9o3HMXA8EjxMzz34qX+Ty
-	tzu/O4NTUQa8A=
-X-Google-Smtp-Source: AGHT+IHruZIAOHm6EMOKF1APwodVcDGXlfmCY/BJnPMVAX/ATWPHaJ22ObFNln7/rm4RyHPip0Lemg==
-X-Received: by 2002:a05:6a00:cc8:b0:77d:98ee:e1c5 with SMTP id d2e1a72fcca58-7c42066e5f7mr37864729b3a.15.1764407733645;
-        Sat, 29 Nov 2025 01:15:33 -0800 (PST)
-Received: from fedora ([2405:201:3017:184:2d1c:8c4c:2945:3f7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15e7db416sm7300563b3a.41.2025.11.29.01.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Nov 2025 01:15:33 -0800 (PST)
-From: Bhavik Sachdev <b.sachdev1904@gmail.com>
-To: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	criu@lists.linux.dev,
-	Jan Kara <jack@suse.cz>,
-	Jeff Layton <jlayton@kernel.org>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Bhavik Sachdev <b.sachdev1904@gmail.com>,
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-	Andrei Vagin <avagin@gmail.com>,
-	Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Amir Goldstein <amir73il@gmail.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>
-Subject: [PATCH v7 3/3] selftests: statmount: tests for STATMOUNT_BY_FD
-Date: Sat, 29 Nov 2025 14:41:22 +0530
-Message-ID: <20251129091455.757724-4-b.sachdev1904@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251129091455.757724-1-b.sachdev1904@gmail.com>
-References: <20251129091455.757724-1-b.sachdev1904@gmail.com>
+	s=arc-20240116; t=1764411733; c=relaxed/simple;
+	bh=oVz44O4lt9xJul45styEiQsd5Qo4kmSSz0E2+IoHbdk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BPSIqhymYb5RKIYD6yIg+9WVXMuldxP6PIKxZN/f/AZ3qLUE74eJTmt8y8FGFqfnUPXw40XePN9vkcbGnNeXncZohl7cxQZSkDCZrUDeanvHrVKzDMNYZbeUDEe28ywkL2Mx4OT074SdK3shIIV4N7DtozdajhFX3aHjbmMC7aM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=dkbF/YgT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ToluMmLW; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailfout.phl.internal (Postfix) with ESMTP id 0477DEC0101;
+	Sat, 29 Nov 2025 05:22:09 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Sat, 29 Nov 2025 05:22:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1764411729; x=
+	1764498129; bh=jlPq/Wh5BfJbRcxs5REUD2RG4sozKHuQgt5SRlpBaA4=; b=d
+	kbF/YgTEk/mvpv+u80Ys0Atl7ZniPzPKaqAdnNN8CMyemobQxJuI+EFKqjq2r5jh
+	wuoBTWuedGHQbKW5C26sAss6TGX9CqijY59prIJypAERum9VatV08pI5YVVnus2L
+	gpR4hLOaUyhNtfiGffgjjHJyCT4uAVGylgS2G6oE6CUCKyyfPllS4BSVx9F3OffZ
+	zUEAJE9zBajvT+zBlrNQwtnPDqkRf7J9+sHSVXGK2uN+uLqUYCeuDams1BTcFtFU
+	tUhWwNEsb8/OutHdti5LGOTd/xWfwRf/MlwGp/2y6sZcstL+LzOQ374/f9m3LEBZ
+	tccJUMerLLDtaEq70f8cA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1764411729; x=1764498129; bh=jlPq/Wh5BfJbRcxs5REUD2RG4sozKHuQgt5
+	SRlpBaA4=; b=ToluMmLWPwrKiANLLaL+5rLfsokdw7XsNN2srTOy7V221n5FQKU
+	SnTT/dmEE1+qq5IGN0CClgQUY8j73ubJ+g9B/RlBBoohhM+XxlrkD6k7RL0Z+Sp6
+	6K9I7YUoST58GZ/YgSX5b8yPLZJG80SxMBllLXgn3UzQNOhFfb2W8qwL0DZpeIW0
+	+6oVYh6hCPz7TZUxxl/QOVs6G83ac3EB5fi52z+EEVWhYuhSs2RGvZAXWW+cm7wI
+	OT40WKrgsTkmT4lV5lPo8090V2gg81rW1xxBaydwaGOZSDfNswCD57bIxC4wMOX/
+	v5Wq+q+qdleNaLmyyXFMDiPYrtiWAxkGsRw==
+X-ME-Sender: <xms:UMkqafYGWYcuJdUoFVZJVpMipl_uXfYzDzJJVz4k8lDX0d1wUqOdaA>
+    <xme:UMkqaUZy8zRDQCbld7l8127RwtUltnDROl2pxxOGIUmHL7kuqPoSwNHCtc-AB5GJN
+    TYNIt1wfM9gBVQb0kxwncfI8Rm_rkfjQApknimyd4eOfk_3yy-Faw>
+X-ME-Received: <xmr:UMkqacz0muQlQet9M6uwSORlonUxAiRLfmXR11ZrFxA9zjYuI3pcukcKTsxkP0vHTHnYGcAMBFr0ccPvnAQPIkP1_g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvhedvvdduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
+    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
+    grthhtvghrnhepgefhffdtvedugfekffejvdeiieelhfetffeffefghedvvefhjeejvdek
+    feelgefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdr
+    nhgvthdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtphhtth
+    hopegrnhhkihhtkhhhuhhshhifrghhrgdrlhhinhhugiesghhmrghilhdrtghomhdprhgt
+    phhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepvgguuh
+    hmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghl
+    rdhorhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtth
+    hopehhohhrmhhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghr
+    nhgvlhdrohhrghdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdroh
+    hrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhn
+    vghlrdhorhhg
+X-ME-Proxy: <xmx:UMkqaYeTa-QXFWrPb87OZNYvDNMw8RZjKZTYQIaL_T33qCeNgA0keA>
+    <xmx:UMkqaZ7cR4TV17GOzc0JFVOEovtrer_h3Glyw-Jjc2M1ksI680syEg>
+    <xmx:UMkqaVJp76qGzRDrqGiIHCHS7BtYrcTqD6AsFaY-BNsl3N08fMYthg>
+    <xmx:UMkqaZzHdQugoLHZlNdL_PhSS9SP0KyTzcHv6BNkLx61OZP_keCMPQ>
+    <xmx:UMkqaTb8vGRoPm3lmQGgdfwSEOJxZsRTWylUzLnUZg5G-wA7PrdHFHLe>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 29 Nov 2025 05:22:08 -0500 (EST)
+Date: Sat, 29 Nov 2025 11:22:06 +0100
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: tls: fix read/write of garbage value
+Message-ID: <aSrJTmtJqOX0rNDh@krikkit>
+References: <20251129063726.31210-1-ankitkhushwaha.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251129063726.31210-1-ankitkhushwaha.linux@gmail.com>
 
-Add tests for STATMOUNT_BY_FD flag, which adds support for passing a
-file descriptors to statmount(). The fd can also be on a "unmounted"
-mount (mount unmounted with MNT_DETACH), we also include tests for that.
+2025-11-29, 12:07:26 +0530, Ankit Khushwaha wrote:
+> In 'poll_partial_rec_async' a uninitialized char variable 'token' with
+> *garbage* value is used for write/read instruction to synchronize
+> between threads via a pipe.
+> 
+> tls.c:2833:26: warning: variable 'token' is uninitialized
+>       when passed as a const pointer argument here
+>       [-Wuninitialized-const-pointer]
+>  2833 |            EXPECT_EQ(write(p[1], &token, 1), 1); /* Barrier #1 */
+> 
+> Initialize 'token' to '\0' to prevent write/read of garbage value.
 
-Co-developed-by: Andrei Vagin <avagin@gmail.com>
-Signed-off-by: Andrei Vagin <avagin@gmail.com>
-Signed-off-by: Bhavik Sachdev <b.sachdev1904@gmail.com>
----
- .../filesystems/statmount/statmount.h         |  15 +-
- .../filesystems/statmount/statmount_test.c    | 261 +++++++++++++++++-
- .../filesystems/statmount/statmount_test_ns.c | 101 ++++++-
- 3 files changed, 354 insertions(+), 23 deletions(-)
+I'm not opposed to making the compiler happy, but in this case
+"garbage" is completely fine, we don't care about the value.
 
-diff --git a/tools/testing/selftests/filesystems/statmount/statmount.h b/tools/testing/selftests/filesystems/statmount/statmount.h
-index 99e5ad082fb1..e1cba4bfd8d9 100644
---- a/tools/testing/selftests/filesystems/statmount/statmount.h
-+++ b/tools/testing/selftests/filesystems/statmount/statmount.h
-@@ -43,19 +43,24 @@
- 	#endif
- #endif
- 
--static inline int statmount(uint64_t mnt_id, uint64_t mnt_ns_id, uint64_t mask,
--			    struct statmount *buf, size_t bufsize,
-+static inline int statmount(uint64_t mnt_id, uint64_t mnt_ns_id, uint32_t fd,
-+			    uint64_t mask, struct statmount *buf, size_t bufsize,
- 			    unsigned int flags)
- {
- 	struct mnt_id_req req = {
- 		.size = MNT_ID_REQ_SIZE_VER0,
--		.mnt_id = mnt_id,
- 		.param = mask,
- 	};
- 
--	if (mnt_ns_id) {
-+	if (flags & STATMOUNT_BY_FD) {
- 		req.size = MNT_ID_REQ_SIZE_VER1;
--		req.mnt_ns_id = mnt_ns_id;
-+		req.mnt_fd = fd;
-+	} else {
-+		req.mnt_id = mnt_id;
-+		if (mnt_ns_id) {
-+			req.size = MNT_ID_REQ_SIZE_VER1;
-+			req.mnt_ns_id = mnt_ns_id;
-+		}
- 	}
- 
- 	return syscall(__NR_statmount, &req, buf, bufsize, flags);
-diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test.c b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-index f048042e53e9..4790a349806e 100644
---- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
-+++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-@@ -33,15 +33,24 @@ static const char *const known_fs[] = {
- 	"sysv", "tmpfs", "tracefs", "ubifs", "udf", "ufs", "v7", "vboxsf",
- 	"vfat", "virtiofs", "vxfs", "xenfs", "xfs", "zonefs", NULL };
- 
--static struct statmount *statmount_alloc(uint64_t mnt_id, uint64_t mask, unsigned int flags)
-+static struct statmount *statmount_alloc(uint64_t mnt_id, int fd, uint64_t mask, unsigned int flags)
- {
- 	size_t bufsize = 1 << 15;
--	struct statmount *buf = NULL, *tmp = alloca(bufsize);
-+	struct statmount *buf = NULL, *tmp = NULL;
- 	int tofree = 0;
- 	int ret;
- 
-+	if (flags & STATMOUNT_BY_FD && fd < 0)
-+		return NULL;
-+
-+	tmp = alloca(bufsize);
-+
- 	for (;;) {
--		ret = statmount(mnt_id, 0, mask, tmp, bufsize, flags);
-+		if (flags & STATMOUNT_BY_FD)
-+			ret = statmount(0, 0, (uint32_t) fd, mask, tmp, bufsize, flags);
-+		else
-+			ret = statmount(mnt_id, 0, 0, mask, tmp, bufsize, flags);
-+
- 		if (ret != -1)
- 			break;
- 		if (tofree)
-@@ -237,7 +246,7 @@ static void test_statmount_zero_mask(void)
- 	struct statmount sm;
- 	int ret;
- 
--	ret = statmount(root_id, 0, 0, &sm, sizeof(sm), 0);
-+	ret = statmount(root_id, 0, 0, 0, &sm, sizeof(sm), 0);
- 	if (ret == -1) {
- 		ksft_test_result_fail("statmount zero mask: %s\n",
- 				      strerror(errno));
-@@ -263,7 +272,7 @@ static void test_statmount_mnt_basic(void)
- 	int ret;
- 	uint64_t mask = STATMOUNT_MNT_BASIC;
- 
--	ret = statmount(root_id, 0, mask, &sm, sizeof(sm), 0);
-+	ret = statmount(root_id, 0, 0, mask, &sm, sizeof(sm), 0);
- 	if (ret == -1) {
- 		ksft_test_result_fail("statmount mnt basic: %s\n",
- 				      strerror(errno));
-@@ -323,7 +332,7 @@ static void test_statmount_sb_basic(void)
- 	struct statx sx;
- 	struct statfs sf;
- 
--	ret = statmount(root_id, 0, mask, &sm, sizeof(sm), 0);
-+	ret = statmount(root_id, 0, 0, mask, &sm, sizeof(sm), 0);
- 	if (ret == -1) {
- 		ksft_test_result_fail("statmount sb basic: %s\n",
- 				      strerror(errno));
-@@ -375,7 +384,7 @@ static void test_statmount_mnt_point(void)
- {
- 	struct statmount *sm;
- 
--	sm = statmount_alloc(root_id, STATMOUNT_MNT_POINT, 0);
-+	sm = statmount_alloc(root_id, 0, STATMOUNT_MNT_POINT, 0);
- 	if (!sm) {
- 		ksft_test_result_fail("statmount mount point: %s\n",
- 				      strerror(errno));
-@@ -405,7 +414,7 @@ static void test_statmount_mnt_root(void)
- 	assert(last_dir);
- 	last_dir++;
- 
--	sm = statmount_alloc(root_id, STATMOUNT_MNT_ROOT, 0);
-+	sm = statmount_alloc(root_id, 0, STATMOUNT_MNT_ROOT, 0);
- 	if (!sm) {
- 		ksft_test_result_fail("statmount mount root: %s\n",
- 				      strerror(errno));
-@@ -438,7 +447,7 @@ static void test_statmount_fs_type(void)
- 	const char *fs_type;
- 	const char *const *s;
- 
--	sm = statmount_alloc(root_id, STATMOUNT_FS_TYPE, 0);
-+	sm = statmount_alloc(root_id, 0, STATMOUNT_FS_TYPE, 0);
- 	if (!sm) {
- 		ksft_test_result_fail("statmount fs type: %s\n",
- 				      strerror(errno));
-@@ -467,7 +476,7 @@ static void test_statmount_mnt_opts(void)
- 	char *line = NULL;
- 	size_t len = 0;
- 
--	sm = statmount_alloc(root_id, STATMOUNT_MNT_BASIC | STATMOUNT_MNT_OPTS,
-+	sm = statmount_alloc(root_id, 0, STATMOUNT_MNT_BASIC | STATMOUNT_MNT_OPTS,
- 			     0);
- 	if (!sm) {
- 		ksft_test_result_fail("statmount mnt opts: %s\n",
-@@ -557,7 +566,7 @@ static void test_statmount_string(uint64_t mask, size_t off, const char *name)
- 	uint32_t start, i;
- 	int ret;
- 
--	sm = statmount_alloc(root_id, mask, 0);
-+	sm = statmount_alloc(root_id, 0, mask, 0);
- 	if (!sm) {
- 		ksft_test_result_fail("statmount %s: %s\n", name,
- 				      strerror(errno));
-@@ -586,14 +595,14 @@ static void test_statmount_string(uint64_t mask, size_t off, const char *name)
- 	exactsize = sm->size;
- 	shortsize = sizeof(*sm) + i;
- 
--	ret = statmount(root_id, 0, mask, sm, exactsize, 0);
-+	ret = statmount(root_id, 0, 0, mask, sm, exactsize, 0);
- 	if (ret == -1) {
- 		ksft_test_result_fail("statmount exact size: %s\n",
- 				      strerror(errno));
- 		goto out;
- 	}
- 	errno = 0;
--	ret = statmount(root_id, 0, mask, sm, shortsize, 0);
-+	ret = statmount(root_id, 0, 0, mask, sm, shortsize, 0);
- 	if (ret != -1 || errno != EOVERFLOW) {
- 		ksft_test_result_fail("should have failed with EOVERFLOW: %s\n",
- 				      strerror(errno));
-@@ -658,6 +667,226 @@ static void test_listmount_tree(void)
- 	ksft_test_result_pass("listmount tree\n");
- }
- 
-+static void test_statmount_by_fd(void)
-+{
-+	struct statmount *sm = NULL;
-+	char tmpdir[] = "/statmount.fd.XXXXXX";
-+	const char root[] = "/test";
-+	char subdir[PATH_MAX], tmproot[PATH_MAX];
-+	int fd;
-+
-+	if (!mkdtemp(tmpdir)) {
-+		ksft_perror("mkdtemp");
-+		return;
-+	}
-+
-+	if (mount("statmount.test", tmpdir, "tmpfs", 0, NULL)) {
-+		ksft_perror("mount");
-+		rmdir(tmpdir);
-+		return;
-+	}
-+
-+	snprintf(subdir, PATH_MAX, "%s%s", tmpdir, root);
-+	snprintf(tmproot, PATH_MAX, "%s/%s", tmpdir, "chroot");
-+
-+	if (mkdir(subdir, 0755)) {
-+		ksft_perror("mkdir");
-+		goto err_tmpdir;
-+	}
-+
-+	if (mount(subdir, subdir, NULL, MS_BIND, 0)) {
-+		ksft_perror("mount");
-+		goto err_subdir;
-+	}
-+
-+	if (mkdir(tmproot, 0755)) {
-+		ksft_perror("mkdir");
-+		goto err_subdir;
-+	}
-+
-+	fd = open(subdir, O_PATH);
-+	if (fd < 0) {
-+		ksft_perror("open");
-+		goto err_tmproot;
-+	}
-+
-+	if (chroot(tmproot)) {
-+		ksft_perror("chroot");
-+		goto err_fd;
-+	}
-+
-+	sm = statmount_alloc(0, fd, STATMOUNT_MNT_ROOT | STATMOUNT_MNT_POINT, STATMOUNT_BY_FD);
-+	if (!sm) {
-+		ksft_test_result_fail("statmount by fd failed: %s\n", strerror(errno));
-+		goto err_chroot;
-+	}
-+
-+	if (sm->size < sizeof(*sm)) {
-+		ksft_test_result_fail("unexpected size: %u < %u\n",
-+				      sm->size, (uint32_t) sizeof(*sm));
-+		goto err_chroot;
-+	}
-+
-+	if (sm->mask & STATMOUNT_MNT_POINT) {
-+		ksft_test_result_fail("STATMOUNT_MNT_POINT unexpectedly set in statmount\n");
-+		goto err_chroot;
-+	}
-+
-+	if (!(sm->mask & STATMOUNT_MNT_ROOT)) {
-+		ksft_test_result_fail("STATMOUNT_MNT_ROOT not set in statmount\n");
-+		goto err_chroot;
-+	}
-+
-+	if (strcmp(root, sm->str + sm->mnt_root) != 0) {
-+		ksft_test_result_fail("statmount returned incorrect mnt_root,"
-+			"statmount mnt_root: %s != %s\n",
-+			sm->str + sm->mnt_root, root);
-+		goto err_chroot;
-+	}
-+
-+	if (chroot(".")) {
-+		ksft_perror("chroot");
-+		goto out;
-+	}
-+
-+	free(sm);
-+	sm = statmount_alloc(0, fd, STATMOUNT_MNT_ROOT | STATMOUNT_MNT_POINT, STATMOUNT_BY_FD);
-+	if (!sm) {
-+		ksft_test_result_fail("statmount by fd failed: %s\n", strerror(errno));
-+		goto err_fd;
-+	}
-+
-+	if (sm->size < sizeof(*sm)) {
-+		ksft_test_result_fail("unexpected size: %u < %u\n",
-+				      sm->size, (uint32_t) sizeof(*sm));
-+		goto out;
-+	}
-+
-+	if (!(sm->mask & STATMOUNT_MNT_POINT)) {
-+		ksft_test_result_fail("STATMOUNT_MNT_POINT not set in statmount\n");
-+		goto out;
-+	}
-+
-+	if (!(sm->mask & STATMOUNT_MNT_ROOT)) {
-+		ksft_test_result_fail("STATMOUNT_MNT_ROOT not set in statmount\n");
-+		goto out;
-+	}
-+
-+	if (strcmp(subdir, sm->str + sm->mnt_point) != 0) {
-+		ksft_test_result_fail("statmount returned incorrect mnt_point,"
-+			"statmount mnt_point: %s != %s\n", sm->str + sm->mnt_point, subdir);
-+		goto out;
-+	}
-+
-+	if (strcmp(root, sm->str + sm->mnt_root) != 0) {
-+		ksft_test_result_fail("statmount returned incorrect mnt_root,"
-+			"statmount mnt_root: %s != %s\n", sm->str + sm->mnt_root, root);
-+		goto out;
-+	}
-+
-+	ksft_test_result_pass("statmount by fd\n");
-+	goto out;
-+err_chroot:
-+	chroot(".");
-+out:
-+	free(sm);
-+err_fd:
-+	close(fd);
-+err_tmproot:
-+	rmdir(tmproot);
-+err_subdir:
-+	umount2(subdir, MNT_DETACH);
-+	rmdir(subdir);
-+err_tmpdir:
-+	umount2(tmpdir, MNT_DETACH);
-+	rmdir(tmpdir);
-+}
-+
-+static void test_statmount_by_fd_unmounted(void)
-+{
-+	const char root[] = "/test.unmounted";
-+	char tmpdir[] = "/statmount.fd.XXXXXX";
-+	char subdir[PATH_MAX];
-+	int fd;
-+	struct statmount *sm = NULL;
-+
-+	if (!mkdtemp(tmpdir)) {
-+		ksft_perror("mkdtemp");
-+		return;
-+	}
-+
-+	if (mount("statmount.test", tmpdir, "tmpfs", 0, NULL)) {
-+		ksft_perror("mount");
-+		rmdir(tmpdir);
-+		return;
-+	}
-+
-+	snprintf(subdir, PATH_MAX, "%s%s", tmpdir, root);
-+
-+	if (mkdir(subdir, 0755)) {
-+		ksft_perror("mkdir");
-+		goto err_tmpdir;
-+	}
-+
-+	if (mount(subdir, subdir, 0, MS_BIND, NULL)) {
-+		ksft_perror("mount");
-+		goto err_subdir;
-+	}
-+
-+	fd = open(subdir, O_PATH);
-+	if (fd < 0) {
-+		ksft_perror("open");
-+		goto err_subdir;
-+	}
-+
-+	if (umount2(tmpdir, MNT_DETACH)) {
-+		ksft_perror("umount2");
-+		goto err_fd;
-+	}
-+
-+	sm = statmount_alloc(0, fd, STATMOUNT_MNT_POINT | STATMOUNT_MNT_ROOT, STATMOUNT_BY_FD);
-+	if (!sm) {
-+		ksft_test_result_fail("statmount by fd unmounted: %s\n",
-+				      strerror(errno));
-+		goto err_sm;
-+	}
-+
-+	if (sm->size < sizeof(*sm)) {
-+		ksft_test_result_fail("unexpected size: %u < %u\n",
-+				      sm->size, (uint32_t) sizeof(*sm));
-+		goto err_sm;
-+	}
-+
-+	if (sm->mask & STATMOUNT_MNT_POINT) {
-+		ksft_test_result_fail("STATMOUNT_MNT_POINT unexpectedly set in mask\n");
-+		goto err_sm;
-+	}
-+
-+	if (!(sm->mask & STATMOUNT_MNT_ROOT)) {
-+		ksft_test_result_fail("STATMOUNT_MNT_ROOT not set in mask\n");
-+		goto err_sm;
-+	}
-+
-+	if (strcmp(sm->str + sm->mnt_root, root) != 0) {
-+		ksft_test_result_fail("statmount returned incorrect mnt_root,"
-+			"statmount mnt_root: %s != %s\n",
-+			sm->str + sm->mnt_root, root);
-+		goto err_sm;
-+	}
-+
-+	ksft_test_result_pass("statmount by fd on unmounted mount\n");
-+err_sm:
-+	free(sm);
-+err_fd:
-+	close(fd);
-+err_subdir:
-+	umount2(subdir, MNT_DETACH);
-+	rmdir(subdir);
-+err_tmpdir:
-+	umount2(tmpdir, MNT_DETACH);
-+	rmdir(tmpdir);
-+}
-+
- #define str_off(memb) (offsetof(struct statmount, memb) / sizeof(uint32_t))
- 
- int main(void)
-@@ -669,14 +898,14 @@ int main(void)
- 
- 	ksft_print_header();
- 
--	ret = statmount(0, 0, 0, NULL, 0, 0);
-+	ret = statmount(0, 0, 0, 0, NULL, 0, 0);
- 	assert(ret == -1);
- 	if (errno == ENOSYS)
- 		ksft_exit_skip("statmount() syscall not supported\n");
- 
- 	setup_namespace();
- 
--	ksft_set_plan(15);
-+	ksft_set_plan(17);
- 	test_listmount_empty_root();
- 	test_statmount_zero_mask();
- 	test_statmount_mnt_basic();
-@@ -693,6 +922,8 @@ int main(void)
- 	test_statmount_string(all_mask, str_off(fs_type), "fs type & all");
- 
- 	test_listmount_tree();
-+	test_statmount_by_fd_unmounted();
-+	test_statmount_by_fd();
- 
- 
- 	if (ksft_get_fail_cnt() + ksft_get_error_cnt() > 0)
-diff --git a/tools/testing/selftests/filesystems/statmount/statmount_test_ns.c b/tools/testing/selftests/filesystems/statmount/statmount_test_ns.c
-index 605a3fa16bf7..6449b50dde0c 100644
---- a/tools/testing/selftests/filesystems/statmount/statmount_test_ns.c
-+++ b/tools/testing/selftests/filesystems/statmount/statmount_test_ns.c
-@@ -102,7 +102,7 @@ static int _test_statmount_mnt_ns_id(void)
- 	if (!root_id)
- 		return NSID_ERROR;
- 
--	ret = statmount(root_id, 0, STATMOUNT_MNT_NS_ID, &sm, sizeof(sm), 0);
-+	ret = statmount(root_id, 0, 0, STATMOUNT_MNT_NS_ID, &sm, sizeof(sm), 0);
- 	if (ret == -1) {
- 		ksft_print_msg("statmount mnt ns id: %s\n", strerror(errno));
- 		return NSID_ERROR;
-@@ -128,6 +128,98 @@ static int _test_statmount_mnt_ns_id(void)
- 	return NSID_PASS;
- }
- 
-+static int _test_statmount_mnt_ns_id_by_fd(void)
-+{
-+	struct statmount sm;
-+	uint64_t mnt_ns_id;
-+	int ret, fd, mounted = 1, status = NSID_ERROR;
-+	char mnt[] = "/statmount.fd.XXXXXX";
-+
-+	ret = get_mnt_ns_id("/proc/self/ns/mnt", &mnt_ns_id);
-+	if (ret != NSID_PASS)
-+		return ret;
-+
-+	if (!mkdtemp(mnt)) {
-+		ksft_print_msg("statmount by fd mnt ns id mkdtemp: %s\n", strerror(errno));
-+		return NSID_ERROR;
-+	}
-+
-+	if (mount(mnt, mnt, NULL, MS_BIND, 0)) {
-+		ksft_print_msg("statmount by fd mnt ns id mount: %s\n", strerror(errno));
-+		status = NSID_ERROR;
-+		goto err;
-+	}
-+
-+	fd = open(mnt, O_PATH);
-+	if (fd < 0) {
-+		ksft_print_msg("statmount by fd mnt ns id open: %s\n", strerror(errno));
-+		goto err;
-+	}
-+
-+	ret = statmount(0, 0, fd, STATMOUNT_MNT_NS_ID, &sm, sizeof(sm), STATMOUNT_BY_FD);
-+	if (ret == -1) {
-+		ksft_print_msg("statmount mnt ns id statmount: %s\n", strerror(errno));
-+		status = NSID_ERROR;
-+		goto out;
-+	}
-+
-+	if (sm.size != sizeof(sm)) {
-+		ksft_print_msg("unexpected size: %u != %u\n", sm.size,
-+			       (uint32_t)sizeof(sm));
-+		status = NSID_FAIL;
-+		goto out;
-+	}
-+	if (sm.mask != STATMOUNT_MNT_NS_ID) {
-+		ksft_print_msg("statmount mnt ns id unavailable\n");
-+		status = NSID_SKIP;
-+		goto out;
-+	}
-+
-+	if (sm.mnt_ns_id != mnt_ns_id) {
-+		ksft_print_msg("unexpected mnt ns ID: 0x%llx != 0x%llx\n",
-+			       (unsigned long long)sm.mnt_ns_id,
-+			       (unsigned long long)mnt_ns_id);
-+		status = NSID_FAIL;
-+		goto out;
-+	}
-+
-+	mounted = 0;
-+	if (umount2(mnt, MNT_DETACH)) {
-+		ksft_print_msg("statmount by fd mnt ns id umount2: %s\n", strerror(errno));
-+		goto out;
-+	}
-+
-+	ret = statmount(0, 0, fd, STATMOUNT_MNT_NS_ID, &sm, sizeof(sm), STATMOUNT_BY_FD);
-+	if (ret == -1) {
-+		ksft_print_msg("statmount mnt ns id statmount: %s\n", strerror(errno));
-+		status = NSID_ERROR;
-+		goto out;
-+	}
-+
-+	if (sm.size != sizeof(sm)) {
-+		ksft_print_msg("unexpected size: %u != %u\n", sm.size,
-+			       (uint32_t)sizeof(sm));
-+		status = NSID_FAIL;
-+		goto out;
-+	}
-+
-+	if (sm.mask == STATMOUNT_MNT_NS_ID) {
-+		ksft_print_msg("unexpected STATMOUNT_MNT_NS_ID in mask\n");
-+		status = NSID_FAIL;
-+		goto out;
-+	}
-+
-+	status = NSID_PASS;
-+out:
-+	close(fd);
-+	if (mounted)
-+		umount2(mnt, MNT_DETACH);
-+err:
-+	rmdir(mnt);
-+	return status;
-+}
-+
-+
- static void test_statmount_mnt_ns_id(void)
- {
- 	pid_t pid;
-@@ -148,6 +240,9 @@ static void test_statmount_mnt_ns_id(void)
- 	if (ret != NSID_PASS)
- 		exit(ret);
- 	ret = _test_statmount_mnt_ns_id();
-+	if (ret != NSID_PASS)
-+		exit(ret);
-+	ret = _test_statmount_mnt_ns_id_by_fd();
- 	exit(ret);
- }
- 
-@@ -179,7 +274,7 @@ static int validate_external_listmount(pid_t pid, uint64_t child_nr_mounts)
- 	for (int i = 0; i < nr_mounts; i++) {
- 		struct statmount sm;
- 
--		ret = statmount(list[i], mnt_ns_id, STATMOUNT_MNT_NS_ID, &sm,
-+		ret = statmount(list[i], mnt_ns_id, 0, STATMOUNT_MNT_NS_ID, &sm,
- 				sizeof(sm), 0);
- 		if (ret < 0) {
- 			ksft_print_msg("statmount mnt ns id: %s\n", strerror(errno));
-@@ -275,7 +370,7 @@ int main(void)
- 	int ret;
- 
- 	ksft_print_header();
--	ret = statmount(0, 0, 0, NULL, 0, 0);
-+	ret = statmount(0, 0, 0, 0, NULL, 0, 0);
- 	assert(ret == -1);
- 	if (errno == ENOSYS)
- 		ksft_exit_skip("statmount() syscall not supported\n");
+So I think the subject and the commit message should talk about
+"silencing a compiler warning" rather than "fixing use of garbage
+value".
+
+And your patch should indicate the target tree in the subject (here,
+with [PATCH net-next]), see
+https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
+
 -- 
-2.52.0
-
+Sabrina
 
