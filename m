@@ -1,139 +1,115 @@
-Return-Path: <linux-kselftest+bounces-46724-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46725-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FF9FC93BEF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 11:22:17 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6BE7C93C0F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 11:34:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0C7333468A2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 10:22:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6B2904E0440
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 10:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BE626D4CA;
-	Sat, 29 Nov 2025 10:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="dkbF/YgT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ToluMmLW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B00D267B92;
+	Sat, 29 Nov 2025 10:34:56 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F73122B5A3;
-	Sat, 29 Nov 2025 10:22:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C409823DD;
+	Sat, 29 Nov 2025 10:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764411733; cv=none; b=moySxT8IqPuvXIo1qs5NGHYXxT211o1SNGbozRBgOjFG78UmffPRN05ar4J1UsVE89NCmT+TE8QOtdYzisODwaJpvBG6sdrYw7wRd1T0VE4bjHUtMqYwU3Me1UsyXxvWCnbLbtQpVRBSgi8XrHGTbZZeH2R6TB08OrVeQuFbhHQ=
+	t=1764412496; cv=none; b=N1TLyk8ID2dJ9Mr5wPFgLNOLJQVd/FGE4oCu/i242j3jAQSTs/JW1tsFthv4erW9SUM4Q3nt72gj3lHJY5cYyhCPd8qGf3g/kuzAXALHSfGCclXhjgSisw3L3Jc18hn2c1rpjpP1ihnNs1M2UKUGpQjIJYD2h0cL7Ty6aytIa5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764411733; c=relaxed/simple;
-	bh=oVz44O4lt9xJul45styEiQsd5Qo4kmSSz0E2+IoHbdk=;
+	s=arc-20240116; t=1764412496; c=relaxed/simple;
+	bh=4VBKIZuWXDx1MDvdRM8G7YkqDLM6/dRzHL3lX6iqbzI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BPSIqhymYb5RKIYD6yIg+9WVXMuldxP6PIKxZN/f/AZ3qLUE74eJTmt8y8FGFqfnUPXw40XePN9vkcbGnNeXncZohl7cxQZSkDCZrUDeanvHrVKzDMNYZbeUDEe28ywkL2Mx4OT074SdK3shIIV4N7DtozdajhFX3aHjbmMC7aM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=dkbF/YgT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ToluMmLW; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id 0477DEC0101;
-	Sat, 29 Nov 2025 05:22:09 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Sat, 29 Nov 2025 05:22:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1764411729; x=
-	1764498129; bh=jlPq/Wh5BfJbRcxs5REUD2RG4sozKHuQgt5SRlpBaA4=; b=d
-	kbF/YgTEk/mvpv+u80Ys0Atl7ZniPzPKaqAdnNN8CMyemobQxJuI+EFKqjq2r5jh
-	wuoBTWuedGHQbKW5C26sAss6TGX9CqijY59prIJypAERum9VatV08pI5YVVnus2L
-	gpR4hLOaUyhNtfiGffgjjHJyCT4uAVGylgS2G6oE6CUCKyyfPllS4BSVx9F3OffZ
-	zUEAJE9zBajvT+zBlrNQwtnPDqkRf7J9+sHSVXGK2uN+uLqUYCeuDams1BTcFtFU
-	tUhWwNEsb8/OutHdti5LGOTd/xWfwRf/MlwGp/2y6sZcstL+LzOQ374/f9m3LEBZ
-	tccJUMerLLDtaEq70f8cA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1764411729; x=1764498129; bh=jlPq/Wh5BfJbRcxs5REUD2RG4sozKHuQgt5
-	SRlpBaA4=; b=ToluMmLWPwrKiANLLaL+5rLfsokdw7XsNN2srTOy7V221n5FQKU
-	SnTT/dmEE1+qq5IGN0CClgQUY8j73ubJ+g9B/RlBBoohhM+XxlrkD6k7RL0Z+Sp6
-	6K9I7YUoST58GZ/YgSX5b8yPLZJG80SxMBllLXgn3UzQNOhFfb2W8qwL0DZpeIW0
-	+6oVYh6hCPz7TZUxxl/QOVs6G83ac3EB5fi52z+EEVWhYuhSs2RGvZAXWW+cm7wI
-	OT40WKrgsTkmT4lV5lPo8090V2gg81rW1xxBaydwaGOZSDfNswCD57bIxC4wMOX/
-	v5Wq+q+qdleNaLmyyXFMDiPYrtiWAxkGsRw==
-X-ME-Sender: <xms:UMkqafYGWYcuJdUoFVZJVpMipl_uXfYzDzJJVz4k8lDX0d1wUqOdaA>
-    <xme:UMkqaUZy8zRDQCbld7l8127RwtUltnDROl2pxxOGIUmHL7kuqPoSwNHCtc-AB5GJN
-    TYNIt1wfM9gBVQb0kxwncfI8Rm_rkfjQApknimyd4eOfk_3yy-Faw>
-X-ME-Received: <xmr:UMkqacz0muQlQet9M6uwSORlonUxAiRLfmXR11ZrFxA9zjYuI3pcukcKTsxkP0vHTHnYGcAMBFr0ccPvnAQPIkP1_g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvhedvvdduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtjeenucfhrhhomhepufgrsghrihhn
-    rgcuffhusghrohgtrgcuoehsugesqhhuvggrshihshhnrghilhdrnhgvtheqnecuggftrf
-    grthhtvghrnhepgefhffdtvedugfekffejvdeiieelhfetffeffefghedvvefhjeejvdek
-    feelgefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsugesqhhuvggrshihshhnrghilhdr
-    nhgvthdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprhgtphhtth
-    hopegrnhhkihhtkhhhuhhshhifrghhrgdrlhhinhhugiesghhmrghilhdrtghomhdprhgt
-    phhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepvgguuh
-    hmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtth
-    hopehhohhrmhhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhn
-    vghlrdhorhhg
-X-ME-Proxy: <xmx:UMkqaYeTa-QXFWrPb87OZNYvDNMw8RZjKZTYQIaL_T33qCeNgA0keA>
-    <xmx:UMkqaZ7cR4TV17GOzc0JFVOEovtrer_h3Glyw-Jjc2M1ksI680syEg>
-    <xmx:UMkqaVJp76qGzRDrqGiIHCHS7BtYrcTqD6AsFaY-BNsl3N08fMYthg>
-    <xmx:UMkqaZzHdQugoLHZlNdL_PhSS9SP0KyTzcHv6BNkLx61OZP_keCMPQ>
-    <xmx:UMkqaTb8vGRoPm3lmQGgdfwSEOJxZsRTWylUzLnUZg5G-wA7PrdHFHLe>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 29 Nov 2025 05:22:08 -0500 (EST)
-Date: Sat, 29 Nov 2025 11:22:06 +0100
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: tls: fix read/write of garbage value
-Message-ID: <aSrJTmtJqOX0rNDh@krikkit>
-References: <20251129063726.31210-1-ankitkhushwaha.linux@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tJOzY4ei5kST/MtG0fnPFbdvbMdx1jCLd85ov/qlQq613ZTmGCOBE4YkxUDesQO67jrLlmiZIE0ihXJ7VqFn95lXi84L0ife4npdzRH3U+SsSM7mSg+wFB6M5aW3uEW719Wf7W606uRkWMWJmwBD5VpYZWprmn5EFTMhBLA3Bf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384
+	 client-signature ECDSA (secp384r1) client-digest SHA384)
+	(Client CN "*.hostsharing.net", Issuer "GlobalSign GCC R6 AlphaSSL CA 2025" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 9320E2C0759F;
+	Sat, 29 Nov 2025 11:34:49 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 778E01E09F; Sat, 29 Nov 2025 11:34:49 +0100 (CET)
+Date: Sat, 29 Nov 2025 11:34:49 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Williamson <alex@shazbot.org>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+	kvm@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-pci@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+	Parav Pandit <parav@nvidia.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Philipp Stanner <pstanner@redhat.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <shuah@kernel.org>, Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>, William Tu <witu@nvidia.com>,
+	Yi Liu <yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>
+Subject: Re: [PATCH 02/21] PCI: Add API to track PCI devices preserved across
+ Live Update
+Message-ID: <aSrMSRd8RJn2IKF4@wunner.de>
+References: <20251126193608.2678510-1-dmatlack@google.com>
+ <20251126193608.2678510-3-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251129063726.31210-1-ankitkhushwaha.linux@gmail.com>
+In-Reply-To: <20251126193608.2678510-3-dmatlack@google.com>
 
-2025-11-29, 12:07:26 +0530, Ankit Khushwaha wrote:
-> In 'poll_partial_rec_async' a uninitialized char variable 'token' with
-> *garbage* value is used for write/read instruction to synchronize
-> between threads via a pipe.
+On Wed, Nov 26, 2025 at 07:35:49PM +0000, David Matlack wrote:
+> Add an API to enable the PCI subsystem to track all devices that are
+> preserved across a Live Update, including both incoming devices (passed
+> from the previous kernel) and outgoing devices (passed to the next
+> kernel).
 > 
-> tls.c:2833:26: warning: variable 'token' is uninitialized
->       when passed as a const pointer argument here
->       [-Wuninitialized-const-pointer]
->  2833 |            EXPECT_EQ(write(p[1], &token, 1), 1); /* Barrier #1 */
-> 
-> Initialize 'token' to '\0' to prevent write/read of garbage value.
+> Use PCI segment number and BDF to keep track of devices across Live
+> Update. This means the kernel must keep both identifiers constant across
+> a Live Update for any preserved device.
 
-I'm not opposed to making the compiler happy, but in this case
-"garbage" is completely fine, we don't care about the value.
+While bus numbers will *usually* stay the same across next and previous
+kernel, there are exceptions.  E.g. if "pci=assign-busses" is specified
+on the command line, the kernel will re-assign bus numbers on every boot.
 
-So I think the subject and the commit message should talk about
-"silencing a compiler warning" rather than "fixing use of garbage
-value".
+The most portable way to identify PCI devices across kernels is to
+store their path from the root down the hierarchy.  Because the bus
+number might change but the device/function number on each bus stays
+the same.
 
-And your patch should indicate the target tree in the subject (here,
-with [PATCH net-next]), see
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
+This is what EFI does with device paths:
+https://uefi.org/specs/UEFI/2.10/10_Protocols_Device_Path_Protocol.html
 
--- 
-Sabrina
+Example:
+Acpi(PNP0A03,0)/Pci(1E|0)/Pci(0|0)
+
+Source:
+https://raw.githubusercontent.com/tianocore-docs/edk2-UefiDriverWritersGuide/main/3_foundation/39_uefi_device_paths/README.9.md
+
+We've got a device path *parser* in drivers/firmware/efi/dev-path-parser.c,
+but we don't have a *generator* for device paths in the kernel yet.
+
+Thanks,
+
+Lukas
 
