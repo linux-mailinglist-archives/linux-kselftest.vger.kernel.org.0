@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-46721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AD6EC93AEB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 10:15:27 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1012BC93AF7
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 10:15:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3A363346C9D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 09:15:27 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AB2074E253A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Nov 2025 09:15:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C1C3199252;
-	Sat, 29 Nov 2025 09:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F87A1DD889;
+	Sat, 29 Nov 2025 09:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gTZRvdLq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E0FhOj94"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40712741B5
-	for <linux-kselftest@vger.kernel.org>; Sat, 29 Nov 2025 09:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1DC26AA91
+	for <linux-kselftest@vger.kernel.org>; Sat, 29 Nov 2025 09:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764407721; cv=none; b=Y4fVNhdI4Fv6vkxnYS9I6/rPcrd2fFNb0a5PwDJQdmtab8gw0X5lkPIwTdfKI30MX8g/Sle96o+YgEYPrB8KehS6CHj5G29JjVlQhaYkBNxvhw6RZGLtVDQXXdWGOdqnMxqnp5owkuwDqcdS4mzV65V1AFhszmQqrhVj5hZk790=
+	t=1764407729; cv=none; b=kcaiCDious85LNjFCAZtqupUlXLsqapPIHgEGtmRClSF2hUhQnu80/5jk58sreAYGRXrPPCUK7vaxGgQB27OCTR9TqBXq4QeVrVbtX1Z05+9+WONkTAEjm0RqG+vs0j1MX/aXZ4zPsbIGgRfrAcQn5Xfe1iQQ3IS92inmELcSHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764407721; c=relaxed/simple;
-	bh=1H3tSySb8RYZ9Xz952vACbtvWTupkLqx1w90JROwSJk=;
+	s=arc-20240116; t=1764407729; c=relaxed/simple;
+	bh=IhlLSpZF72FSrdV1+YHnN2WHoXOri79HtwWzTG5DQ+A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GCHc8zzoYa7SRlhzIFCt63OAeQt4Owi7ptI4Kyk3KwA4N6E7YWYGChAOG5u6MlJCsCFB49A+lJonNUqOwIIUdVt+rfeAbe4u0VB6g8EQhm8TZEidFSaDBa1TrNTq02Uo5NjnGDIBmHyI1TuNyU7KpJn/1zb9/7jIYPpJZkl724Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gTZRvdLq; arc=none smtp.client-ip=209.85.210.170
+	 MIME-Version; b=jYavYDHtFP6NNtdHQnEIKUZz6WknII7eNbOaQmmbk+nimYFJirfsV3oZKnZ03x3GQxWbaqKpRj2ezCWGD1hdLr7rLy+qOhl3qzLnl2EHJxlWXeYM5kPi248nj8/Ww6eM3/8dA/LQU8lIBOcg8F0YtlQZR/dza7tMM5T9gBtNqLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E0FhOj94; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7aad4823079so2265691b3a.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 29 Nov 2025 01:15:19 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7d26a7e5639so2357404b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 29 Nov 2025 01:15:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764407719; x=1765012519; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764407727; x=1765012527; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RTLbYX7bNTCm4TW5N/uHN1/H0O/wwjH+DS42MIfV7UI=;
-        b=gTZRvdLqFAb/4YHMcqeFdjmsrcmNzl0o75pRwHqejAnlAtjEBSfJ3rdcmE0KCoAMxz
-         8aDfS28qehGIKRHuYCr+Q7HBiW6uRw4SaB4o+IGn7jh0DTlvLKWaE2UfjMhnaKzy8Mun
-         5z3I4e4j9lk1e7lpLgHEKzGTP6NOXg+6Y6D4GIS1CFY5bzTXvbnITAxX6q3Grs/VMpWI
-         kDJaW5B1yWNj9PTLfthJUcvgWKyhSqlSiaguH4zcsOZZCknt4wJo0p1boB5w12ainCgF
-         riPiv0yOm+1gxtUeHLxYnocVqVtzWJV/Iv5vkicp94K6cP0Fs3gJQVKHsFLk8KwBDuPU
-         3mCA==
+        bh=pVcxx22uwcyWv5Zel36iqnOvGPO1H7KVbIWMJe+WJP8=;
+        b=E0FhOj949Hsiqm6nPJpxDW4QqJsYQciautH01EnFNmh4bLUUEjz0vLN8Mq7FO28byM
+         LiJrtVIZ3Sf5f6a8Mle6A0qb5nVlM6FIOpCbSZwN8CTi172u5IVmIePtSuEBgDUwUAip
+         TehmMH48IDnoa4hVMeoASfCmjw7WkL85zfUagiZm2MmjwQdzQStYPJGXrIiBPewhlZfH
+         Z0IwGTk/rN8HA85cfornPZcLN7ZevZju202fLGCLZJE0GIGN2TjkbLVVB5wCTdewgKOl
+         Q4H6FtTCEhl6Fz/s9WdAYskutIDehriMLkbwfEm7b0m2DOk2PNX1rLAXjlbvpVCVEFl6
+         /cqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764407719; x=1765012519;
+        d=1e100.net; s=20230601; t=1764407727; x=1765012527;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RTLbYX7bNTCm4TW5N/uHN1/H0O/wwjH+DS42MIfV7UI=;
-        b=b2fRxZd9Twot+gYo34QUD/ZwdYz7Nij6DBWan3cjl8vjemEQFuq6dEtXEN718XaVPN
-         bQuVYzNT8u4xUl6ns1Dhraa7FXNqcYdT+fbto8SaVbEPVRYY2yHArXWoayafVSUtpTP4
-         xf994aGC4MKJrS65hPXacMz4x8wA19iVk2ELsVfj3Gy3gOirMtBEpNs2cFAUYFrHWIbR
-         pTeGSC71E7Hh9rewTiRLYeW2ixiYGM/wDGbIUX3AQmQlavLv4W94gCkv8KcehJxqnKFp
-         GMpKEoM0QCR5aC07L2amtmErJCXOX0cOz5ondpgPa5IR5Nei69KUOsLtAnX/Wu6Vy0fc
-         k83g==
-X-Forwarded-Encrypted: i=1; AJvYcCVHyQEeY9VPqqAM68UQ8emd6WFo0gtKAcbEzz3ZFIIEY5L1Ka+ONUV9ehzoa9YSSPRoUsrOWNDbw3zQ/XpgBJk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCGzJ2NHf5FkO5sKifWt4wH7rgLZhJl+K+0yZT+PbFM97wzaz7
-	X4ldr9tZ+x1o4GxTJZl0MC+1yZfPVpruRCbq7Gtfq4kNSsuON4EEpuS2
-X-Gm-Gg: ASbGnctxDxQXW9VNlSNWzTRsuDi4W+/K1JSlWftuohYDLJE+5zMes1f4NYiDDDp1HYf
-	gNbm2DICJXPtazqxBeLWLA3er6k1DjZSTmqtH+VbbULUHRvnesEbdJA0gWKvO3q6gS3T/U2WC1S
-	JKwakJWor59PJLjYxx7MoQgRj6NMkzHITUA7f4V5KEKbTXbQ8LJyYtgAob7vaRcKgGWWDH6RIxD
-	aaVAI/U/VT2y0CEGIQ+a6A6oR+uj25XUKky2t1MrBiVZcIfskMB/ftK04mM7vgUOgBp3H6d5Rwl
-	2D9PsVw0VfYLaWKMHDFO0SvCq3Z2/+pgAyCqt4GJT6dQ1h0VHQwdZ7drS0zT7S2q8Wf4hf6/lyv
-	hdXJ1hRkBPtpL59kUTIX/Zie5k/MmJCZVhE+jCZxglgO5TD7Ev4XJNoRtC2VKg0V/ScomT+Ooas
-	xGQ7LFLbRxFQc=
-X-Google-Smtp-Source: AGHT+IFKJjzpV9EYUo0mUxqBF81hGWIOAODYyB9YBLMIQiF1odGWwtu4fNZsuEorPfh62DeARpYtCA==
-X-Received: by 2002:a05:6a00:2293:b0:7ab:995a:46b0 with SMTP id d2e1a72fcca58-7c58e110869mr34201519b3a.15.1764407719096;
-        Sat, 29 Nov 2025 01:15:19 -0800 (PST)
+        bh=pVcxx22uwcyWv5Zel36iqnOvGPO1H7KVbIWMJe+WJP8=;
+        b=sJliaLeyO65M8QzVViVpzH8dlZp62u2MvdjSNR8DUkZ47vY9N1tuSvBOH0/E4gu3Ht
+         FalVSVsD5kkvxrJ6zszHC8I01MfKMPp1RiuLgjEF3ly+Ff/MYEl5mTBQRO7EUiKFf+ZR
+         7EfzLThM19pgmC/G85RIsaFbE1+rHXKXnrsdTeF4rvhME/o4ju3bqNf+vHUwAJv6Ca/+
+         xqSiD4c/tmLqNX/KaqoBFrbrqZiuAakgnyl5bME5Dapa3FHQdPDBhNjQqDDEiLuOqwzv
+         4VHdnoe0szB//pR8emeOsord257YyOj0XM7xOsbhu7Vv//VncftqhNFbYySRkAR4W0/N
+         mqdA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7mKYMWB+61+CKzCVhB8jkHGouMkVbdd9ZrxRQBmoErvv8g9doVvtwIGImxYymIuKvX+q0Xq3CQZxtli+yCSE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/Q3zXTQpJfXMXbD/jEyntETxSnJjiTpILFjxvZxzT04w2uz1j
+	YhA9pvmcbPNyO6bZDQG7erChHLuCqucB2KU/UN5fn8NqOq/nd3BXM4TW
+X-Gm-Gg: ASbGncumyb6Lh0WbSIU6k6qx5qN51qbCvnnaZSSaw/WhRkavHvge4PEaNBIUlxDAtpJ
+	NMHwQpmm1C/5EVX/dyVv/1BO8pXWPcgNXdkoUJGxpD7Pj7DRQ6WBMsbHxAvtxD9ZN91J32CyhaX
+	3MKPU8jKrB8tRfkAbKjGNmamyut6PAjnBjbMpR227HgiZ/r1w7VgyOgICbi3hGyuIeafKhE/cFi
+	3qVEWMXVTLXG+ODGeHQ8XuZ+CmlwJXG/VSsExCAn1KtW/QlFlXuDbuoRoUeYnKBB2BwSv6F1MyJ
+	TJUwvkez0e0O8061nzeNyXZKCwP3eANjxGXGBHSDh5e0JyLm0VJg30u7utvs11qANeScFET4ftK
+	uFazt9SKQOvgbDgLHb3+lwgv5hz6DGSRMzEz0pN3Zvq5rWUal+WYMBII7a61PJdujLCZo1G9mDH
+	7yKcTdu1R91hk=
+X-Google-Smtp-Source: AGHT+IFy53cLbESiXML1MJ4hrBJswXxa/BoGl5z6KQzHvzuNLRuKNd9j4dRr8DLhGkrFztEpABmyuA==
+X-Received: by 2002:a05:6a21:999a:b0:361:2fff:7b19 with SMTP id adf61e73a8af0-3614ee0a140mr34179763637.52.1764407726448;
+        Sat, 29 Nov 2025 01:15:26 -0800 (PST)
 Received: from fedora ([2405:201:3017:184:2d1c:8c4c:2945:3f7c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15e7db416sm7300563b3a.41.2025.11.29.01.15.11
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15e7db416sm7300563b3a.41.2025.11.29.01.15.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Nov 2025 01:15:18 -0800 (PST)
+        Sat, 29 Nov 2025 01:15:25 -0800 (PST)
 From: Bhavik Sachdev <b.sachdev1904@gmail.com>
 To: Alexander Viro <viro@zeniv.linux.org.uk>,
 	Christian Brauner <brauner@kernel.org>,
@@ -94,9 +94,9 @@ Cc: linux-fsdevel@vger.kernel.org,
 	Amir Goldstein <amir73il@gmail.com>,
 	"Martin K . Petersen" <martin.petersen@oracle.com>,
 	Andrew Donnellan <ajd@linux.ibm.com>
-Subject: [PATCH v7 1/3] statmount: permission check should return EPERM
-Date: Sat, 29 Nov 2025 14:41:20 +0530
-Message-ID: <20251129091455.757724-2-b.sachdev1904@gmail.com>
+Subject: [PATCH v7 2/3] statmount: accept fd as a parameter
+Date: Sat, 29 Nov 2025 14:41:21 +0530
+Message-ID: <20251129091455.757724-3-b.sachdev1904@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251129091455.757724-1-b.sachdev1904@gmail.com>
 References: <20251129091455.757724-1-b.sachdev1904@gmail.com>
@@ -108,29 +108,227 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, statmount() returns ENOENT when caller is not CAP_SYS_ADMIN
-in the user namespace owner of target mount namespace. This should be
-EPERM instead.
+Extend `struct mnt_id_req` to take in a fd and introduce STATMOUNT_BY_FD
+flag. When a valid fd is provided and STATMOUNT_BY_FD is set, statmount
+will return mountinfo about the mount the fd is on.
 
-Suggested-by: Miklos Szeredi <miklos@szeredi.hu>
+This even works for "unmounted" mounts (mounts that have been umounted
+using umount2(mnt, MNT_DETACH)), if you have access to a file descriptor
+on that mount. These "umounted" mounts will have no mountpoint and no
+valid mount namespace. Hence, we unset the STATMOUNT_MNT_POINT and
+STATMOUNT_MNT_NS_ID in statmount.mask for "unmounted" mounts.
+
+In case of STATMOUNT_BY_FD, given that we already have access to an fd
+on the mount, accessing mount information without a capability check
+seems fine because of the following reasons:
+
+- All fs related information is available via fstatfs() without any
+  capability check.
+- Mount information is also available via /proc/pid/mountinfo (without
+  any capability check).
+- Given that we have access to a fd on the mount which tells us that we
+  had access to the mount at some point (or someone that had access gave
+  us the fd). So, we should be able to access mount info.
+
+Co-developed-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
 Signed-off-by: Bhavik Sachdev <b.sachdev1904@gmail.com>
 ---
- fs/namespace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/namespace.c             | 102 ++++++++++++++++++++++++-------------
+ include/uapi/linux/mount.h |  10 +++-
+ 2 files changed, 76 insertions(+), 36 deletions(-)
 
 diff --git a/fs/namespace.c b/fs/namespace.c
-index 2bad25709b2c..ee36d67f1ac2 100644
+index ee36d67f1ac2..73ffa1fbdad7 100644
 --- a/fs/namespace.c
 +++ b/fs/namespace.c
-@@ -5795,7 +5795,7 @@ SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
+@@ -5563,31 +5563,49 @@ static int grab_requested_root(struct mnt_namespace *ns, struct path *root)
  
- 	if (kreq.mnt_ns_id && (ns != current->nsproxy->mnt_ns) &&
- 	    !ns_capable_noaudit(ns->user_ns, CAP_SYS_ADMIN))
+ /* locks: namespace_shared */
+ static int do_statmount(struct kstatmount *s, u64 mnt_id, u64 mnt_ns_id,
+-			struct mnt_namespace *ns)
++                        struct file *mnt_file, struct mnt_namespace *ns)
+ {
+-	struct mount *m;
+ 	int err;
+ 
+-	/* Has the namespace already been emptied? */
+-	if (mnt_ns_id && mnt_ns_empty(ns))
 -		return -ENOENT;
-+		return -EPERM;
++	if (mnt_file) {
++		WARN_ON_ONCE(ns != NULL);
+ 
+-	s->mnt = lookup_mnt_in_ns(mnt_id, ns);
+-	if (!s->mnt)
+-		return -ENOENT;
++		s->mnt = mnt_file->f_path.mnt;
++		ns = real_mount(s->mnt)->mnt_ns;
++		if (!ns)
++			/*
++			 * We can't set mount point and mnt_ns_id since we don't have a
++			 * ns for the mount. This can happen if the mount is unmounted
++			 * with MNT_DETACH.
++			 */
++			s->mask &= ~(STATMOUNT_MNT_POINT | STATMOUNT_MNT_NS_ID);
++	} else {
++		/* Has the namespace already been emptied? */
++		if (mnt_ns_id && mnt_ns_empty(ns))
++			return -ENOENT;
+ 
+-	err = grab_requested_root(ns, &s->root);
+-	if (err)
+-		return err;
++		s->mnt = lookup_mnt_in_ns(mnt_id, ns);
++		if (!s->mnt)
++			return -ENOENT;
++	}
+ 
+-	/*
+-	 * Don't trigger audit denials. We just want to determine what
+-	 * mounts to show users.
+-	 */
+-	m = real_mount(s->mnt);
+-	if (!is_path_reachable(m, m->mnt.mnt_root, &s->root) &&
+-	    !ns_capable_noaudit(ns->user_ns, CAP_SYS_ADMIN))
+-		return -EPERM;
++	if (ns) {
++		err = grab_requested_root(ns, &s->root);
++		if (err)
++			return err;
++
++		if (!mnt_file) {
++			struct mount *m;
++			/*
++			 * Don't trigger audit denials. We just want to determine what
++			 * mounts to show users.
++			 */
++			m = real_mount(s->mnt);
++			if (!is_path_reachable(m, m->mnt.mnt_root, &s->root) &&
++			    !ns_capable_noaudit(ns->user_ns, CAP_SYS_ADMIN))
++				return -EPERM;
++		}
++	}
+ 
+ 	err = security_sb_statfs(s->mnt->mnt_root);
+ 	if (err)
+@@ -5709,7 +5727,7 @@ static int prepare_kstatmount(struct kstatmount *ks, struct mnt_id_req *kreq,
+ }
+ 
+ static int copy_mnt_id_req(const struct mnt_id_req __user *req,
+-			   struct mnt_id_req *kreq)
++			   struct mnt_id_req *kreq, unsigned int flags)
+ {
+ 	int ret;
+ 	size_t usize;
+@@ -5727,11 +5745,17 @@ static int copy_mnt_id_req(const struct mnt_id_req __user *req,
+ 	ret = copy_struct_from_user(kreq, sizeof(*kreq), req, usize);
+ 	if (ret)
+ 		return ret;
+-	if (kreq->mnt_ns_fd != 0 && kreq->mnt_ns_id)
+-		return -EINVAL;
+-	/* The first valid unique mount id is MNT_UNIQUE_ID_OFFSET + 1. */
+-	if (kreq->mnt_id <= MNT_UNIQUE_ID_OFFSET)
+-		return -EINVAL;
++
++	if (flags & STATMOUNT_BY_FD) {
++		if (kreq->mnt_id || kreq->mnt_ns_id)
++			return -EINVAL;
++	} else {
++		if (kreq->mnt_ns_fd != 0 && kreq->mnt_ns_id)
++			return -EINVAL;
++		/* The first valid unique mount id is MNT_UNIQUE_ID_OFFSET + 1. */
++		if (kreq->mnt_id <= MNT_UNIQUE_ID_OFFSET)
++			return -EINVAL;
++	}
+ 	return 0;
+ }
+ 
+@@ -5777,25 +5801,33 @@ SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
+ {
+ 	struct mnt_namespace *ns __free(mnt_ns_release) = NULL;
+ 	struct kstatmount *ks __free(kfree) = NULL;
++	struct file *mnt_file __free(fput) = NULL;
+ 	struct mnt_id_req kreq;
+ 	/* We currently support retrieval of 3 strings. */
+ 	size_t seq_size = 3 * PATH_MAX;
+ 	int ret;
+ 
+-	if (flags)
++	if (flags & ~STATMOUNT_BY_FD)
+ 		return -EINVAL;
+ 
+-	ret = copy_mnt_id_req(req, &kreq);
++	ret = copy_mnt_id_req(req, &kreq, flags);
+ 	if (ret)
+ 		return ret;
+ 
+-	ns = grab_requested_mnt_ns(&kreq);
+-	if (IS_ERR(ns))
+-		return PTR_ERR(ns);
++	if (flags & STATMOUNT_BY_FD) {
++		mnt_file = fget_raw(kreq.mnt_fd);
++		if (!mnt_file)
++			return -EBADF;
++		/* do_statmount sets ns in case of STATMOUNT_BY_FD */
++	} else {
++		ns = grab_requested_mnt_ns(&kreq);
++		if (IS_ERR(ns))
++			return PTR_ERR(ns);
+ 
+-	if (kreq.mnt_ns_id && (ns != current->nsproxy->mnt_ns) &&
+-	    !ns_capable_noaudit(ns->user_ns, CAP_SYS_ADMIN))
+-		return -EPERM;
++		if (kreq.mnt_ns_id && (ns != current->nsproxy->mnt_ns) &&
++		    !ns_capable_noaudit(ns->user_ns, CAP_SYS_ADMIN))
++			return -EPERM;
++	}
  
  	ks = kmalloc(sizeof(*ks), GFP_KERNEL_ACCOUNT);
  	if (!ks)
+@@ -5807,7 +5839,7 @@ SYSCALL_DEFINE4(statmount, const struct mnt_id_req __user *, req,
+ 		return ret;
+ 
+ 	scoped_guard(namespace_shared)
+-		ret = do_statmount(ks, kreq.mnt_id, kreq.mnt_ns_id, ns);
++		ret = do_statmount(ks, kreq.mnt_id, kreq.mnt_ns_id, mnt_file, ns);
+ 
+ 	if (!ret)
+ 		ret = copy_statmount_to_user(ks);
+@@ -5947,7 +5979,7 @@ SYSCALL_DEFINE4(listmount, const struct mnt_id_req __user *, req,
+ 	if (!access_ok(mnt_ids, nr_mnt_ids * sizeof(*mnt_ids)))
+ 		return -EFAULT;
+ 
+-	ret = copy_mnt_id_req(req, &kreq);
++	ret = copy_mnt_id_req(req, &kreq, 0);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/include/uapi/linux/mount.h b/include/uapi/linux/mount.h
+index 5d3f8c9e3a62..18c624405268 100644
+--- a/include/uapi/linux/mount.h
++++ b/include/uapi/linux/mount.h
+@@ -197,7 +197,10 @@ struct statmount {
+  */
+ struct mnt_id_req {
+ 	__u32 size;
+-	__u32 mnt_ns_fd;
++	union {
++		__u32 mnt_ns_fd;
++		__u32 mnt_fd;
++	};
+ 	__u64 mnt_id;
+ 	__u64 param;
+ 	__u64 mnt_ns_id;
+@@ -232,4 +235,9 @@ struct mnt_id_req {
+ #define LSMT_ROOT		0xffffffffffffffff	/* root mount */
+ #define LISTMOUNT_REVERSE	(1 << 0) /* List later mounts first */
+ 
++/*
++ * @flag bits for statmount(2)
++ */
++#define STATMOUNT_BY_FD		0x00000001U	/* want mountinfo for given fd */
++
+ #endif /* _UAPI_LINUX_MOUNT_H */
 -- 
 2.52.0
 
