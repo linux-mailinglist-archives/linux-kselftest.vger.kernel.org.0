@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-46771-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46772-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 364A3C95681
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 00:36:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D886C9569C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 00:37:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 415F63A2AD3
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 23:36:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87B253A27B4
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 23:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FD72FFFA9;
-	Sun, 30 Nov 2025 23:35:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 174193009F7;
+	Sun, 30 Nov 2025 23:35:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D7UypCOO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QOK7YvSz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67EF2FF65E
-	for <linux-kselftest@vger.kernel.org>; Sun, 30 Nov 2025 23:35:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9569F2FFDFE
+	for <linux-kselftest@vger.kernel.org>; Sun, 30 Nov 2025 23:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764545739; cv=none; b=JfVzADEnV6DNgEvQvPfjExK3UpBcgwFnhe73D8YjyhxBDDLI2AJzrk40dSUO4LtA7AFBTiKGsGHuWtX55PTjHe1TJoU48TWssCZfkk6oXMSb0Z4L2zdxnmdUJc0ZoZU3qw/TB5dmSthBKj4ME7YH3tHQrUpt2wesm2XI2e6JCrc=
+	t=1764545742; cv=none; b=pZDeJFCdJCJVNn1FsA9N0ArCQ7cgckHlhEtS7c8n12vxf7N2fFbmlxqVNkae8ABBSARnlr8292F+4psHVJ9JqB8NNsq0SWkBLbkcBV9iHK9sW4Yb0iscNzFUBo9WWoeT/zFBMFCmtYsbXOQzWScVFby+lEseaqchYGLRI4GcbfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764545739; c=relaxed/simple;
-	bh=LSh5hLuiJCxDRwJ+BQ+Xc7tCZE16QA/b770rYhc+vp8=;
+	s=arc-20240116; t=1764545742; c=relaxed/simple;
+	bh=OGKzBuKu9HnGjv3V2KIOUMpBLQDNN5wbAGzT3ICtN0w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LkIQhqJh43x4G4a5lhDQvxXW7vn6miXRCIFdgs8K4zQ3Ikhn033epdw7tB9ycPIsFjdk/lj05d2Fi+WRPy74Mc33atMCDAnIKjB+kOaS7xXnTBLNnxenKvFQuiEXxUUeg4LPydeS03K5kRXjg/ZWOCcnbedAkVLtSboD/YM+EEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D7UypCOO; arc=none smtp.client-ip=209.85.128.48
+	 MIME-Version; b=Vbk/pjTaG7WUWS6O0I4g7B0PT2bSL0WZYMXyewvuwMQ4b7zBzxM5ffOJgtMfVQkFOW31v8gpiszizvwx76vHLjZSsIuci/FNdYk4e/nQ6PjO964Dvq3lJkXs7uKXEru9hA85GIeQM0l3UfP8Cp0Rp0zoHyq/jFafr3bXGHQi20A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QOK7YvSz; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47789cd2083so18976705e9.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 30 Nov 2025 15:35:37 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so31107165e9.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 30 Nov 2025 15:35:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764545736; x=1765150536; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764545738; x=1765150538; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BopLoWIhKj7xpDJExutQghL/d96/x+rVfP3p1ohtywE=;
-        b=D7UypCOOix839eTbKC/dmhlH6EbPRl2Q9K5FTyuaos0ra5SfgnRH67yxhdXonRzNE1
-         JLm/05xwKtxykCoPmzkttHKzOmVki1Jk1KIITlrwiebCDzkATqj3aa0lBfnszDQIwT8i
-         ct5CkJNOqMBUydrm89AS2BFiomYcBjCX2G3YsZ3MSuE3aq/ps+ZtYJQxcjULM/Z81xPm
-         hqjkAzibMOr0aVfM9a0KkPmay+GuLD7jQddO38eBauV6wOpy2qkK/5B9RIqXSr/PB6RZ
-         W0IjlPfXngCtYQbDJzdtD1CA18rqtwJrrgmy1LKiYd9iwF0gqqaZhlRZv5MoKAlOlV0a
-         F4SQ==
+        bh=Etzl3qXtEXxRUk5ZEMYr8GzSvCBjbQ/vWysP4cG19PU=;
+        b=QOK7YvSzRpIM3bmocDTZSTJZ+AT8aIuEJ68zb/9IfM3EH8n+V3khm6fZ54vC6Yeg/d
+         k27s32TTV9aqixkwBGJzPzJAgPR5m+Ln06/MJXEfNWwAP2xsMAPJaPngIyRIbYmUhSoF
+         yhqSGo5Yw/mUTf1bO0IsrT1NapU8git1uef7ourInA0Zjb56atcsEq7D2tRD1syPvo7V
+         ZQIZ84sAONRc5byf3x4m5Vfkgjx76wb/k3cuP5/N/nhBS7thhug/gLRKyVycUBxiSjOm
+         67tCPQtPsZinagA6YJzGB5kInMI1PRxiTCe886LOiKyTD5xeniNRwhInzQnPKeVL6ei/
+         ZwnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764545736; x=1765150536;
+        d=1e100.net; s=20230601; t=1764545738; x=1765150538;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=BopLoWIhKj7xpDJExutQghL/d96/x+rVfP3p1ohtywE=;
-        b=RtLOEGo8UWaHVISS2AaVXQZtqV4sVjIbFZOSK9fwztqJLqBeA6/wbHpOiAirzjVDVP
-         jomHwXsA8j0E2FTCDyt3kw7UftIWqgH/z0hrKv2LEkEPnorwZWcmRClbWAnjV5sl6RoC
-         Tr2WcH7bBTBYMbW2ERTAUggnZT82ilivCJjH2bOFqOIjunotP2xZIil3MjEDDK/tSx/Q
-         q/K8FYcUaBqr0Dh0HgOASalVpTCbS+mduT2ZNAUbJEkKuJNRM42UW+9hAesoNa+zs/SL
-         R3XNNz62AwVs3BjrHPv1wdpK6F75AruJm5bGqoY16P5d6Xcww/m7Yc1KikvhUYjk6B4A
-         3v4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWGOMZLrXv0vcrXfxuPe6WNP9sghiwxNSIwlNftJrtVymhIZHPShNoCCP2AUA/UBrgaSkWHZcbxlBD1DTyA38A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywrn1ItbUcIswpfo5to8NHZK2fILyngTlNI80WzLT9GuqclAGYJ
-	iFBIFJMOfwIMgEmw6QIYROjYQF2yHxNzEXfcLUCqz43RaN7Rcb/A9xwG
-X-Gm-Gg: ASbGncvx0dlEKvild9WLgfjQt7hcqYx3bYy3NRKJ5wSfXsb1nNzsl3SiVupP8V2UB0T
-	3vCoieFPBAff2NMgD913i9qEeOEs6wSCuX5nf6zWXs2QxGtsa2LWl8JyXb31rXWNPZJmJFJepib
-	ynh77ZHG0zv8Rs+D5kBkzIgp4p7NPGW0/f7nP6RALJCMrm+yF6crKcwioefVdjdIDhQgHZ26kfV
-	lOy5FbXQodBn0O+qr+GVz/PueEPlyOfTQ5jDxP2094Cz+WFnGuodwzMonTbPw5DIUF2hEkPawV1
-	eDMBZQB7spV4xG3sRijivmmD2FTBKetzlRy3sPWW+aBJLck1OklVBKsMl+Q/U0KuMA+4K+HU0We
-	VBGQXwuyXOgmCNKPNQmNvs2E8qaeB/TfD2PyjhBrnykrkqh2DiR4TNHPKnpJw+5qundEKNSNe3s
-	l8Oiw+3HlrOEygAOXh7e7PiMDalaG7P+upJqMLTvq7hZhDHHj177uICjJ3PJWm/W4RfuC+Yiqp4
-	Egb/h2G5Y+5agZZtFEELaq8N/4=
-X-Google-Smtp-Source: AGHT+IHISYLGMcAbCVZNiKeY1dtZPkbvCAz/q8vqp6c82/yUdHZQKIhPMrYnHbV51FKqG4IwK4u77g==
-X-Received: by 2002:a05:600c:5252:b0:477:582e:7a81 with SMTP id 5b1f17b1804b1-477c110328amr358728235e9.4.1764545736071;
-        Sun, 30 Nov 2025 15:35:36 -0800 (PST)
+        bh=Etzl3qXtEXxRUk5ZEMYr8GzSvCBjbQ/vWysP4cG19PU=;
+        b=aNKmb+HNw46dbO4Q57eVm3cxVFqiZboZ4M6cGTBmW8bW6ExU8F49tyi9/fC4ZmcM1r
+         4CvaXbf+Auf695yYJCvqBGg2wvgKTAqmRT3PXf4vHhMwX9GbDlpv0EaynXx00mBlSKON
+         i8KGMtV14/DtF/3BQFg3p6XIhCuBjxV45BUOFCPBYNt48+qBpJ1uXnOzZt5DTKTBFB4c
+         PRz9XT+SitI/6kVFbDjfqjGimCmNtr2M1w3W5T/tj0H4DFdANNgNKHtnqgo93/5x3TMz
+         TpcD35hwvPw+cu5Hk0rooxmBa1rHODQrn3g2qyiMyAaQSstLPItl31+aVr+LCDSz8YTo
+         qTVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFpAHTuwCIYpMU8AO9c/4yeR5hycoGaxcqH19Qgki4hRyhZuSpkl/4ndAGeOxEFR+bUDTuF3/2b6tXrakQOx4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSCET5khocsmBDnnBQ1Y1JFgqInxuH16SCdol7yWbT5ZN4hHTB
+	5K7PeFArIsCcvh2TDvABVyjXolxJOAqxfXb8Y878gQYMsnQQ0W6Bd0qC
+X-Gm-Gg: ASbGncslN4ATQDrCyfcXDng2xEJNQmXsyOpK0mSR10hRz0vlHKsBitjb1ex1HBdsePU
+	lsBxRW0cgq999u8VB2YVzn9ZIzAP3mmU+NxK4J5RmCeLZym2F96Lr/bAKUE8aLrZOi7R5LsMQGA
+	C0jJ577kqmtuxdv3ZlvyI9mjFGGuKEA/2OUx4Cbmj10wZ/l3+Yt/EG9ErjGr1TpGnTECSQKj0MK
+	h6SHknIviysbLN4SzyTNdFckKmVJta/bEh4YFnR4PjTG/psPBERB4WBoD76zJMbKF+gMMlm/I+x
+	Lx7Oj3Doy3phKJn6qQ1Z6JOGfcddvVjvs6WxG6Wfft/1uTZPl/o7AjV0g8/DwMtPDcMgchLl8YU
+	oIBFAUWCPa88LxLYn21RSdLqfCBTgcdqPEnRGFQmXoqL5FCPDSy4k+RvuioVc/XwW5Y/razvxOk
+	odLt+g+qSHrgTLdNlQAywGqgtADl8Z1KpNjmPQ9HBKQnSXDhdEnnf1ol2CyDkXOTCIz8BHUJESF
+	LwNKZTrqUrU4LBC
+X-Google-Smtp-Source: AGHT+IGIUBkKFTjVVCw8JO88WO04GjOPBXSs8x48lo+BhVoIg3ql1cUd33a7wo+Dz7e5cUTvz/0ZMw==
+X-Received: by 2002:a05:600c:1c1b:b0:471:14b1:da13 with SMTP id 5b1f17b1804b1-47904aebebdmr257224895e9.14.1764545737736;
+        Sun, 30 Nov 2025 15:35:37 -0800 (PST)
 Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479040b3092sm142722075e9.1.2025.11.30.15.35.34
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479040b3092sm142722075e9.1.2025.11.30.15.35.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Nov 2025 15:35:35 -0800 (PST)
+        Sun, 30 Nov 2025 15:35:36 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S . Miller" <davem@davemloft.net>,
@@ -107,9 +107,9 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	linux-kselftest@vger.kernel.org,
 	io-uring@vger.kernel.org,
 	dtatulea@nvidia.com
-Subject: [PATCH net-next v7 3/9] net: memzero mp params when closing a queue
-Date: Sun, 30 Nov 2025 23:35:18 +0000
-Message-ID: <374b055a2119076d43336008817248854774668e.1764542851.git.asml.silence@gmail.com>
+Subject: [PATCH net-next v7 4/9] net: let pp memory provider to specify rx buf len
+Date: Sun, 30 Nov 2025 23:35:19 +0000
+Message-ID: <0364ec97cc65b7b7b7376b98438c2630fa2e003c.1764542851.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1764542851.git.asml.silence@gmail.com>
 References: <cover.1764542851.git.asml.silence@gmail.com>
@@ -121,43 +121,80 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Instead of resetting memory provider parameters one by one in
-__net_mp_{open,close}_rxq, memzero the entire structure. It'll be used
-to extend the structure.
+Allow memory providers to configure rx queues with a specific receive
+buffer length. Pass it in struct pp_memory_provider_params, which is
+copied into the queue, so it's preserved across queue restarts. It's an
+opt-in feature for drivers, which they can enable by setting
+NDO_QUEUE_RX_BUF_SIZE to their struct netdev_queue_mgmt_ops.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- net/core/netdev_rx_queue.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ include/net/netdev_queues.h   | 9 +++++++++
+ include/net/page_pool/types.h | 1 +
+ net/core/netdev_rx_queue.c    | 4 ++++
+ 3 files changed, 14 insertions(+)
 
+diff --git a/include/net/netdev_queues.h b/include/net/netdev_queues.h
+index cd00e0406cf4..45c1d198f5bf 100644
+--- a/include/net/netdev_queues.h
++++ b/include/net/netdev_queues.h
+@@ -111,6 +111,11 @@ void netdev_stat_queue_sum(struct net_device *netdev,
+ 			   int tx_start, int tx_end,
+ 			   struct netdev_queue_stats_tx *tx_sum);
+ 
++enum {
++	/* queue restart support custom rx buffer sizes */
++	NDO_QUEUE_RX_BUF_SIZE		= 0x1,
++};
++
+ /**
+  * struct netdev_queue_mgmt_ops - netdev ops for queue management
+  *
+@@ -130,6 +135,8 @@ void netdev_stat_queue_sum(struct net_device *netdev,
+  * @ndo_queue_get_dma_dev: Get dma device for zero-copy operations to be used
+  *			   for this queue. Return NULL on error.
+  *
++ * @supported_params: bitmask of supported features, see NDO_QUEUE_*
++ *
+  * Note that @ndo_queue_mem_alloc and @ndo_queue_mem_free may be called while
+  * the interface is closed. @ndo_queue_start and @ndo_queue_stop will only
+  * be called for an interface which is open.
+@@ -149,6 +156,8 @@ struct netdev_queue_mgmt_ops {
+ 						  int idx);
+ 	struct device *		(*ndo_queue_get_dma_dev)(struct net_device *dev,
+ 							 int idx);
++
++	unsigned int supported_params;
+ };
+ 
+ bool netif_rxq_has_unreadable_mp(struct net_device *dev, int idx);
+diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+index 1509a536cb85..be74e4aec7b5 100644
+--- a/include/net/page_pool/types.h
++++ b/include/net/page_pool/types.h
+@@ -161,6 +161,7 @@ struct memory_provider_ops;
+ struct pp_memory_provider_params {
+ 	void *mp_priv;
+ 	const struct memory_provider_ops *mp_ops;
++	u32 rx_buf_len;
+ };
+ 
+ struct page_pool {
 diff --git a/net/core/netdev_rx_queue.c b/net/core/netdev_rx_queue.c
-index c7d9341b7630..a0083f176a9c 100644
+index a0083f176a9c..09d6f97e910e 100644
 --- a/net/core/netdev_rx_queue.c
 +++ b/net/core/netdev_rx_queue.c
-@@ -139,10 +139,9 @@ int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
+@@ -29,6 +29,10 @@ int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
+ 	    !qops->ndo_queue_mem_alloc || !qops->ndo_queue_start)
+ 		return -EOPNOTSUPP;
  
- 	rxq->mp_params = *p;
- 	ret = netdev_rx_queue_restart(dev, rxq_idx);
--	if (ret) {
--		rxq->mp_params.mp_ops = NULL;
--		rxq->mp_params.mp_priv = NULL;
--	}
-+	if (ret)
-+		memset(&rxq->mp_params, 0, sizeof(rxq->mp_params));
++	if (!(qops->supported_params & NDO_QUEUE_RX_BUF_SIZE) &&
++	    rxq->mp_params.rx_buf_len)
++		return -EOPNOTSUPP;
 +
- 	return ret;
- }
+ 	netdev_assert_locked(dev);
  
-@@ -179,8 +178,7 @@ void __net_mp_close_rxq(struct net_device *dev, unsigned int ifq_idx,
- 			 rxq->mp_params.mp_priv != old_p->mp_priv))
- 		return;
- 
--	rxq->mp_params.mp_ops = NULL;
--	rxq->mp_params.mp_priv = NULL;
-+	memset(&rxq->mp_params, 0, sizeof(rxq->mp_params));
- 	err = netdev_rx_queue_restart(dev, ifq_idx);
- 	WARN_ON(err && err != -ENETDOWN);
- }
+ 	new_mem = kvzalloc(qops->ndo_queue_mem_size, GFP_KERNEL);
 -- 
 2.52.0
 
