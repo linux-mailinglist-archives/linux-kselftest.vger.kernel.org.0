@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-46758-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46759-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA810C94EFA
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 12:19:34 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02132C94F04
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 12:19:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AC9C54E231D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 11:19:33 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C4B95344E6C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 11:19:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 116AB285058;
-	Sun, 30 Nov 2025 11:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F074284670;
+	Sun, 30 Nov 2025 11:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ha1VpMPt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgJ9uLCf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA76284883;
-	Sun, 30 Nov 2025 11:18:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5310027934B;
+	Sun, 30 Nov 2025 11:18:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764501524; cv=none; b=fkPNRrUMHwQ0c1JwjTeLTaELt44x8z+tDXozUOmg8A2m83awWVEPbCoJ4aPw2EfpcOmrn1Iwfm8bwrukudBloU7CqEdKF7n+rcXdMCQPCig/P8sp0ZQV9uEk67vVJ3lrQqewH6tAyPhXkA5NxMJmMr1scRkQUEjbUC2QCJeBMHM=
+	t=1764501530; cv=none; b=ph9eDuC9uVJ4HsjG0zO5RhWFBmNDkhqazf0ij6QwKEHA1l1syW3L/xZ4tuNTmSierSYPq54ewlOCXwi5l4xvtvJqf2b15t4Iw+0zWZghiYOb7H0MAXSm8rof8kBRBU4u3Es8UR8V9C/oAABn8IgFkVb1mmQJCOeO25vrxF5IJFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764501524; c=relaxed/simple;
-	bh=02TV+J21aRh8Y7GHD/quPCqz9iq/kEt5UBYeya9wXbk=;
+	s=arc-20240116; t=1764501530; c=relaxed/simple;
+	bh=Mv2TNIorv+Vl9StJ3rAHbansoPrEBArJPuXjfAYQx5k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JpwMmBfdoYLpIfkbjlpFF/sS8Up7fXVrveGXmyqGFVp/5x2raiY5/3swy88YUUypYpqntb3+jg13AJK+5CLHx2HDpF34/gun3CmBVPJtN17vf2f7vyeEUGqEJstX/Bpd7ASl6PmtdrKqCXz6KfFDjb1U1B+CJqToxBDXxsGcKRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ha1VpMPt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8BCC116B1;
-	Sun, 30 Nov 2025 11:18:38 +0000 (UTC)
+	 MIME-Version; b=oVBum5Xw1NXmf9177cJapKTu4ucuf8sotCu/NSZJ2WZ7VLm2K/GZLRSh4JiSpGa16qY+GGLQmMHTNLYsBuvJj4q3b8xJCrWa1o+x/e1bkptz+iGWPW1c2mquSwGvIBwkwYAf8nb4duNhZTR/AHDSd1SgbeDVAWUIk7b+SvtsiLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZgJ9uLCf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C503C4CEF8;
+	Sun, 30 Nov 2025 11:18:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764501523;
-	bh=02TV+J21aRh8Y7GHD/quPCqz9iq/kEt5UBYeya9wXbk=;
+	s=k20201202; t=1764501529;
+	bh=Mv2TNIorv+Vl9StJ3rAHbansoPrEBArJPuXjfAYQx5k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ha1VpMPtHwMP3wcPEvYjsA/TXMScV1CPNuo/cC5Lu3DHFteFKJfHohkZUPQKy0KVH
-	 Jz15kY7NsoNnb2ifdGn0TVWvzfZyhLUyxG/9gwIiLivBDv2L+6NlrOm5HO7uAQ94VQ
-	 W43OZVat768mPtgYQldsGVGP+DmrQ8p0eWovjw7NXQrngRyeR+P0y9W6NokDg6dW8c
-	 WIecaNNGhqHcEWomX9JH4q2tcK5gXHSoUMT8n5MUCD6/p4ACgXX3jGubo4z7Y/nL96
-	 nIZjMnQQSlLbYLMkRCy4SeLc/cuF1vSR8fRe2LRWKD8ko4jltWC0qCn1GUXPbYN46g
-	 CtYKcNVHiSLtg==
+	b=ZgJ9uLCflbDe4V56Zn+EhA12EOoiQEDWrl58/vwTrn/T4zlaUp6u7U3yzJWKNkAxr
+	 IiLbuZjOEiOHf8cf1oxIXvL+mkpo7nuKWwJtUhv6kZ5cCPBvMYAZuwSUksyQEhMRrN
+	 ESz3zJM8btnS19tBA/iOaUxlfzXqxaagg/uoN0X+ievjN5jI7dA9P7iL2kAF7WCwT9
+	 FaGvriFrMqPQvu/eRl34K8I7AQjTDZ560xypBAsdG7aDOo+PzBJMAPOEbH06BfhH7W
+	 F1dhejn+vvbHZdH6tzG3bDJJLAt3vB03eLs3ueip6Ddi1Joqaj0QUxw0NIrBm29sLT
+	 7Jk8HEn/9CCPg==
 From: Mike Rapoport <rppt@kernel.org>
 To: linux-mm@kvack.org
 Cc: Andrea Arcangeli <aarcange@redhat.com>,
@@ -64,9 +64,9 @@ Cc: Andrea Arcangeli <aarcange@redhat.com>,
 	linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 4/5] guest_memfd: add support for userfaultfd minor mode
-Date: Sun, 30 Nov 2025 13:18:11 +0200
-Message-ID: <20251130111812.699259-5-rppt@kernel.org>
+Subject: [PATCH v3 5/5] KVM: selftests: test userfaultfd minor for guest_memfd
+Date: Sun, 30 Nov 2025 13:18:12 +0200
+Message-ID: <20251130111812.699259-6-rppt@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251130111812.699259-1-rppt@kernel.org>
 References: <20251130111812.699259-1-rppt@kernel.org>
@@ -78,87 +78,148 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+From: Nikita Kalyazin <kalyazin@amazon.com>
 
-userfaultfd notifications about minor page faults used for live migration
-and snapshotting of VMs with memory backed by shared hugetlbfs or tmpfs
-mappings as described in detail in commit 7677f7fd8be7 ("userfaultfd: add
-minor fault registration mode").
+The test demonstrates that a minor userfaultfd event in guest_memfd can
+be resolved via a memcpy followed by a UFFDIO_CONTINUE ioctl.
 
-To use the same mechanism for VMs that use guest_memfd to map their memory,
-guest_memfd should support userfaultfd minor mode.
-
-Extend ->fault() method of guest_memfd with ability to notify core page
-fault handler that a page fault requires handle_userfault(VM_UFFD_MINOR) to
-complete and add implementation of ->get_folio_noalloc() to guest_memfd
-vm_ops.
-
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Acked-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>
+Co-developed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- virt/kvm/guest_memfd.c | 33 ++++++++++++++++++++++++++++++++-
- 1 file changed, 32 insertions(+), 1 deletion(-)
+ .../testing/selftests/kvm/guest_memfd_test.c  | 97 +++++++++++++++++++
+ 1 file changed, 97 insertions(+)
 
-diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-index ffadc5ee8e04..dca6e373937b 100644
---- a/virt/kvm/guest_memfd.c
-+++ b/virt/kvm/guest_memfd.c
-@@ -4,6 +4,7 @@
- #include <linux/kvm_host.h>
- #include <linux/pagemap.h>
- #include <linux/anon_inodes.h>
-+#include <linux/userfaultfd_k.h>
+diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+index e7d9aeb418d3..d0cf57d41cc9 100644
+--- a/tools/testing/selftests/kvm/guest_memfd_test.c
++++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+@@ -10,13 +10,17 @@
+ #include <errno.h>
+ #include <stdio.h>
+ #include <fcntl.h>
++#include <pthread.h>
  
- #include "kvm_mm.h"
+ #include <linux/bitmap.h>
+ #include <linux/falloc.h>
+ #include <linux/sizes.h>
++#include <linux/userfaultfd.h>
+ #include <sys/mman.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#include <sys/syscall.h>
++#include <sys/ioctl.h>
  
-@@ -359,7 +360,15 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
- 	if (!((u64)inode->i_private & GUEST_MEMFD_FLAG_INIT_SHARED))
- 		return VM_FAULT_SIGBUS;
- 
--	folio = kvm_gmem_get_folio(inode, vmf->pgoff);
-+	folio = filemap_lock_folio(inode->i_mapping, vmf->pgoff);
-+	if (!IS_ERR_OR_NULL(folio) && userfaultfd_minor(vmf->vma)) {
-+		ret = VM_FAULT_UFFD_MINOR;
-+		goto out_folio;
-+	}
-+
-+	if (PTR_ERR(folio) == -ENOENT)
-+		folio = kvm_gmem_get_folio(inode, vmf->pgoff);
-+
- 	if (IS_ERR(folio)) {
- 		int err = PTR_ERR(folio);
- 
-@@ -390,8 +399,30 @@ static vm_fault_t kvm_gmem_fault_user_mapping(struct vm_fault *vmf)
- 	return ret;
+ #include "kvm_util.h"
+ #include "test_util.h"
+@@ -254,6 +258,98 @@ static void test_guest_memfd_flags(struct kvm_vm *vm)
+ 	}
  }
  
-+#ifdef CONFIG_USERFAULTFD
-+static struct folio *kvm_gmem_get_folio_noalloc(struct inode *inode,
-+						pgoff_t pgoff)
++struct fault_args {
++	char *addr;
++	volatile char value;
++};
++
++static void *fault_thread_fn(void *arg)
 +{
-+	struct folio *folio;
++	struct fault_args *args = arg;
 +
-+	folio = filemap_lock_folio(inode->i_mapping, pgoff);
-+	if (IS_ERR_OR_NULL(folio))
-+		return folio;
-+
-+	if (!folio_test_uptodate(folio)) {
-+		clear_highpage(folio_page(folio, 0));
-+		kvm_gmem_mark_prepared(folio);
-+	}
-+
-+	return folio;
++	/* Trigger page fault */
++	args->value = *args->addr;
++	return NULL;
 +}
-+#endif
 +
- static const struct vm_operations_struct kvm_gmem_vm_ops = {
- 	.fault = kvm_gmem_fault_user_mapping,
-+#ifdef CONFIG_USERFAULTFD
-+	.get_folio_noalloc	= kvm_gmem_get_folio_noalloc,
-+#endif
- };
- 
- static int kvm_gmem_mmap(struct file *file, struct vm_area_struct *vma)
++static void test_uffd_minor(int fd, size_t total_size)
++{
++	struct uffdio_api uffdio_api = {
++		.api = UFFD_API,
++	};
++	struct uffdio_register uffd_reg;
++	struct uffdio_continue uffd_cont;
++	struct uffd_msg msg;
++	struct fault_args args;
++	pthread_t fault_thread;
++	void *mem, *mem_nofault;
++	int uffd, ret;
++	off_t offset = page_size;
++	void *fault_addr;
++
++	uffd = syscall(__NR_userfaultfd, O_CLOEXEC);
++	TEST_ASSERT(uffd != -1, "userfaultfd creation should succeed");
++
++	ret = ioctl(uffd, UFFDIO_API, &uffdio_api);
++	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_API) should succeed");
++
++	mem = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	TEST_ASSERT(mem != MAP_FAILED, "mmap should succeed");
++
++	mem_nofault = mmap(NULL, total_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
++	TEST_ASSERT(mem_nofault != MAP_FAILED, "mmap should succeed");
++
++	uffd_reg.range.start = (unsigned long)mem;
++	uffd_reg.range.len = total_size;
++	uffd_reg.mode = UFFDIO_REGISTER_MODE_MINOR;
++	ret = ioctl(uffd, UFFDIO_REGISTER, &uffd_reg);
++	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_REGISTER) should succeed");
++
++	ret = fallocate(fd, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE,
++			offset, page_size);
++	TEST_ASSERT(!ret, "fallocate(PUNCH_HOLE) should succeed");
++
++	memset(mem_nofault + offset, 0xaa, page_size);
++
++	fault_addr = mem + offset;
++	args.addr = fault_addr;
++
++	ret = pthread_create(&fault_thread, NULL, fault_thread_fn, &args);
++	TEST_ASSERT(ret == 0, "pthread_create should succeed");
++
++	ret = read(uffd, &msg, sizeof(msg));
++	TEST_ASSERT(ret != -1, "read from userfaultfd should succeed");
++	TEST_ASSERT(msg.event == UFFD_EVENT_PAGEFAULT, "event type should be pagefault");
++	TEST_ASSERT((void *)(msg.arg.pagefault.address & ~(page_size - 1)) == fault_addr,
++		    "pagefault should occur at expected address");
++
++
++	uffd_cont.range.start = (unsigned long)fault_addr;
++	uffd_cont.range.len = page_size;
++	uffd_cont.mode = 0;
++	ret = ioctl(uffd, UFFDIO_CONTINUE, &uffd_cont);
++	TEST_ASSERT(ret != -1, "ioctl(UFFDIO_CONTINUE) should succeed");
++
++	/*
++	 * wait for fault_thread to finish to make sure fault happened and was
++	 * resolved before we verify the values
++	 */
++	ret = pthread_join(fault_thread, NULL);
++	TEST_ASSERT(ret == 0, "pthread_join should succeed");
++
++	TEST_ASSERT(args.value == *(char *)(mem_nofault + offset),
++		    "memory should contain the value that was copied");
++	TEST_ASSERT(args.value == *(char *)(mem + offset),
++		    "no further fault is expected");
++
++	ret = munmap(mem_nofault, total_size);
++	TEST_ASSERT(!ret, "munmap should succeed");
++
++	ret = munmap(mem, total_size);
++	TEST_ASSERT(!ret, "munmap should succeed");
++	close(uffd);
++}
++
+ #define gmem_test(__test, __vm, __flags)				\
+ do {									\
+ 	int fd = vm_create_guest_memfd(__vm, page_size * 4, __flags);	\
+@@ -273,6 +369,7 @@ static void __test_guest_memfd(struct kvm_vm *vm, uint64_t flags)
+ 		if (flags & GUEST_MEMFD_FLAG_INIT_SHARED) {
+ 			gmem_test(mmap_supported, vm, flags);
+ 			gmem_test(fault_overflow, vm, flags);
++			gmem_test(uffd_minor, vm, flags);
+ 		} else {
+ 			gmem_test(fault_private, vm, flags);
+ 		}
 -- 
 2.51.0
 
