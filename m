@@ -1,167 +1,109 @@
-Return-Path: <linux-kselftest+bounces-46751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46752-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB364C94EB8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 12:05:22 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06514C94EC9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 12:09:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 62C894E144E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 11:05:21 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 954F23438BD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Nov 2025 11:09:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 790E322B5AD;
-	Sun, 30 Nov 2025 11:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 776DB263F5E;
+	Sun, 30 Nov 2025 11:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTGISrlJ"
+	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="XAJ1DXzV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCDA4A23;
-	Sun, 30 Nov 2025 11:05:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A624A23;
+	Sun, 30 Nov 2025 11:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764500716; cv=none; b=ONr9fMMI3M6KBYpaDhRRQVkUANQZIZAkMoHS1Vsv9CZBy3DbPfiS2nI3hHt5JjGIU4a9yfg57UtYrNZLAgovBUD80i1heuRhxQsD1XwNr5mULFUe2Qb8M7+sL48/0mhFFMnI/XAZEA+koMKIUOwOBiPfg34op/tsXISdJ2HfylU=
+	t=1764500941; cv=none; b=uYe2TNhESUle//k9c0UR4P7aj9nNDnyQDJB+fgPzFIipvIP6myF0//T65hHx5I20AmBBJYubK20dnc/FLf0Av1UQKj3fiZqMuEBFEMpjP2X83HVREYUyN6nQ8ewjJGu9lLHAYXunZh3Sau6ENnp1uPDYQm/QGAl7QG2zRDemo8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764500716; c=relaxed/simple;
-	bh=WgF209hVGnuhzCWEOErtx6btmHGTsEcP7tri0M2RCX4=;
+	s=arc-20240116; t=1764500941; c=relaxed/simple;
+	bh=RsugsK+X2juf2r7tAHLC5/ChLxAzlcL+ptlX+dtux6A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IMKJVcmngJtyaZ6Oa/yhpD/lsCorDdm4Sqfzyeeet0yyfMPWH3csv5TwtsvKWMWcJp6RSr1ZnVwY7x4XK8XWiPHyCDkBR8E3DQPtDsOWz/VubrQgywaQbYHbbIcrElvifJnv5E3FFIbQ675jX9MKYNxFkaUQ/Kau8Vqx5Akkmwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTGISrlJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2718C4CEF8;
-	Sun, 30 Nov 2025 11:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764500714;
-	bh=WgF209hVGnuhzCWEOErtx6btmHGTsEcP7tri0M2RCX4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BTGISrlJ0lGzN7zs3GC7hlj8AU+zkROh5RBFD2dy9dKebTpAxzlGMxMFOPBSIaPc4
-	 m1iH9EYA5JkkCr+RLJKhgtF0R8Ku+BHjMP8sEulJDHVGYL1IWaZLxmBl4zHvYOE+Rv
-	 1l50sLIlMgdXYqaVooXB3EhlUMY8VgKqKzlXy/kgHjnMhBjSfy1QatN6CaF4c5FlVf
-	 viwMzE7w1Wvyo38nJ3Djrc+BfCyX8sJvB1wmqREVXwUigN0CpHRsby7Am+hiAbJS+A
-	 8SqzUXKncccjYNK7DYX/ZjnZAs+cd/6Q4Nr5P7HSa50WSyTg0RIxQMgX4q01fmIFos
-	 l4Hz5zEDcRLGA==
-Date: Sun, 30 Nov 2025 13:05:04 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Peter Xu <peterx@redhat.com>
-Cc: linux-mm@kvack.org, Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	David Hildenbrand <david@redhat.com>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Nikita Kalyazin <kalyazin@amazon.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	"David Hildenbrand (Red Hat)" <david@kernel.org>
-Subject: Re: [PATCH v2 3/5] mm: introduce VM_FAULT_UFFD_MINOR fault reason
-Message-ID: <aSwk4IGY7zdb0cwd@kernel.org>
-References: <20251125183840.2368510-1-rppt@kernel.org>
- <20251125183840.2368510-4-rppt@kernel.org>
- <aSYBrH_xfMfs6yDW@x1.local>
- <aSgzcpFP1qBda5ef@kernel.org>
- <aShb8J18BaRrsA-u@x1.local>
+	 Content-Type:Content-Disposition:In-Reply-To; b=RmmBLS+Y9ccHZk3Mz/3p0iQcPmPvXYZGiv5DBpE/estcnMiEHopr+jcGvmoC2pG2i8nNWlSYyaUqlxFSFJNYUSOzo6yHGV9cFHeJV7Pwmc1Dpu/D6uEy8PyNK79tIkSIT/UfZ7eNYGibQ+w6GEqVI6KiE9JBwSf6ILySYr7DcY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=XAJ1DXzV; arc=none smtp.client-ip=51.159.59.229
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
+	t=1764500936; bh=IABG6YPVmEPR8RXOTOZQXCH/9ARVOI/ZzvN12k6e1pg=;
+	h=From:Message-ID:From;
+	b=XAJ1DXzVtQS/mgSw7GhZ4gJMYK/y1Jt/5zPf0pq0bSc584zty4elJi2FFB/POpWtU
+	 O4Rb5S8yuG/Mn+AyLZjdWGXl9e4Zq0EQdJwUZz5D3pwypyymf9heoFvc1vhE5BJyoF
+	 y3t987qxZ5nEPHcQf5CUi9weluVIrTulkMnXVL4E=
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by mta1.formilux.org (Postfix) with ESMTP id 7576FC04AB;
+	Sun, 30 Nov 2025 12:08:56 +0100 (CET)
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 5AUB8uCT000674;
+	Sun, 30 Nov 2025 12:08:56 +0100
+Date: Sun, 30 Nov 2025 12:08:56 +0100
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 12/13] tools/nolibc: add __nolibc_static_assert()
+Message-ID: <20251130110856.GE31522@1wt.eu>
+References: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
+ <20251122-nolibc-uapi-types-v2-12-b814a43654f5@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <aShb8J18BaRrsA-u@x1.local>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251122-nolibc-uapi-types-v2-12-b814a43654f5@weissschuh.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Thu, Nov 27, 2025 at 09:10:56AM -0500, Peter Xu wrote:
-> On Thu, Nov 27, 2025 at 01:18:10PM +0200, Mike Rapoport wrote:
-> > On Tue, Nov 25, 2025 at 02:21:16PM -0500, Peter Xu wrote:
-> > > Hi, Mike,
-> > > 
-> > > On Tue, Nov 25, 2025 at 08:38:38PM +0200, Mike Rapoport wrote:
-> > > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> > > > 
-> > > > When a VMA is registered with userfaulfd in minor mode, its ->fault()
-> > > > method should check if a folio exists in the page cache and if yes
-> > > > ->fault() should call handle_userfault(VM_UFFD_MISSING).
-> > > 
-> > > s/MISSING/MINOR/
-> > 
-> > Thanks, fixed. 
-> > 
-> > > > new VM_FAULT_UFFD_MINOR there instead.
-> > > 
-> > > Personally I'd keep the fault path as simple as possible, because that's
-> > > the more frequently used path (rather than when userfaultfd is armed). I
-> > > also see it slightly a pity that even with flags introduced, it only solves
-> > > the MINOR problem, not MISSING.
-> > 
-> > With David's suggestion the likely path remains unchanged.
+On Sat, Nov 22, 2025 at 05:59:18PM +0100, Thomas Weiﬂschuh wrote:
+> Add a wrapper for _Static_assert() to use within nolibc.
+> While _Static_assert() itself was only standardized in C11,
+> in GCC and clang dialects it is also available in older standards.
 > 
-> It is not about the likely, it's about introducing flags into core path
-> that makes the core path harder to follow, when it's not strictly required.
+> If it turns out that _Static_assert can't be used in some contexts,
+> this wrapper can be adapted.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+>  tools/include/nolibc/compiler.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/include/nolibc/compiler.h b/tools/include/nolibc/compiler.h
+> index 87090bbc53e0..ef247e916552 100644
+> --- a/tools/include/nolibc/compiler.h
+> +++ b/tools/include/nolibc/compiler.h
+> @@ -47,4 +47,6 @@
+>  #  define __nolibc_fallthrough do { } while (0)
+>  #endif /* __nolibc_has_attribute(fallthrough) */
+>  
+> +#define __nolibc_static_assert(_t) _Static_assert(_t, "")
+
+I'm not super fan of raising the bar to adoption by introducing forced
+C11-isms, especially when they're only used to perform extra safety
+checks that likely remain fine after you've checked them once. What
+about instead:
+
++#if __STDC_VERSION__ >= 201112L
++# define __nolibc_static_assert(_t) _Static_assert(_t, "")
++#endif
++# define __nolibc_static_assert(_t) do { } while (0)
++#else
+
+Note that this won't work out of code blocks but we very likely don't
+care. And if we'd care, we could always switch to __asm__("") which
+works everywhere.
  
-	ret = vma->vm_ops->fault(vmf);
-	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE | VM_FAULT_RETRY |
-			    VM_FAULT_DONE_COW | VM_FAULT_UFFD_MINOR))) {
-		if (ret & VM_FAULT_UFFD_MINOR)
-			return handle_userfault(vmf, VM_UFFD_MINOR);
-		return ret;
-	}
+What do you think ?
 
-isn't hard to follow and it's cleaner than adding EXPORT_SYMBOL that is not
-strictly required.
-
-> Meanwhile, personally I'm also not sure if we should have "unlikely" here..
-> My gut feeling is in reality we will only have two major use cases:
-> 
->   (a) when userfaultfd minor isn't in the picture
-> 
->   (b) when userfaultfd minor registered and actively being used (e.g. in a
->       postcopy process)
-> 
-> Then without likely, IIUC the hardware should optimize path selected hence
-> both a+b performs almost equally well.
-
-unlikely() adds a branch that hardware will predict correctly if
-UFFD_MINOR is actively used.
-
-But even misspredicted branch is nothing compared to putting a task on a
-wait queue and waiting for userspace to react to the fault notification
-before handle_userfault() returns the control to the fault handler.
- 
-> Just to mention, if we want, I think we have at least one more option to do
-> the same thing, but without even introducing a new flag to ->fault()
-> retval.
-> 
-> That is, when we have get_folio() around, we can essentially do two faults
-> in sequence, one lighter then the real one, only for minor vmas, something
-> like (I didn't think deeper, so only a rough idea shown):
-> 
-> __do_fault():
->   if (uffd_minor(vma)) {
->     ...
->     folio = vma->get_folio(...);
->     if (folio)
->        return handle_userfault(vmf, VM_UFFD_MINOR);
->     // fallthrough, which imply a cache miss
->   }
->   ret = vma->vm_ops->fault(vmf);
-
-That's something to consider for the future, especially if we'd be able to
-pull out MISSING handling as well from ->fault() handlers.
-
-> Thanks,
-> -- 
-> Peter Xu
-
--- 
-Sincerely yours,
-Mike.
+Thanks,
+Willy
 
