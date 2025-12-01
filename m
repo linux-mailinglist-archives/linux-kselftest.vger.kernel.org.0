@@ -1,275 +1,157 @@
-Return-Path: <linux-kselftest+bounces-46840-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46841-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E237C98C6A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 19:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CB843C98E7C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 20:47:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 93D3834320A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 18:54:24 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 46A2B344DF7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 19:47:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE0E522B5AC;
-	Mon,  1 Dec 2025 18:54:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8E521A457;
+	Mon,  1 Dec 2025 19:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rJrdc4my"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LLnN8BBu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3675321C17D
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 18:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEDA219E8C
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 19:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764615259; cv=none; b=NrDN0YXouIssga0XqDYZhVGP5jz4BJx4Js9AAvT2L5KnW5xFJIbvIJN4cBZ+F4IIEs0vkQ+T6k2wNEPpCRE61wz2JqFoYXUmHb8uA9MPuqquDpNCevftYv0WQJimvl0dRS7nrwZl7XMuLQU6P7P9aXZqwhOnxhTv2Q99SCx3MkE=
+	t=1764618433; cv=none; b=mcxsd+v3SyZCRfRx+VFtUXKFRimBuoBUxKwb0lREVrUHNUsHyYMplK6MKclWAAUN2QWz0oxC4aZb/DHnnkD2lPZ0N2jLCDPDDa2XLGN8KMMnfGwc7eLnoyjw9PpBMIehxwaEf8gI8SiZmbxN/0LPN2NrBvropk2Xxni/JzOk/lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764615259; c=relaxed/simple;
-	bh=xdQFSPwBDitJJbj4YFqv8oX69ifcmN2sMzq3HiUxFog=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eXazZe1GK3pt+3OKxr5EeWTF09gr0EDp/J3aMk6gsJfDlakEatYUBUjGC/QowZfSauHV9ZRcBTOzSLkgVj6RD+3CuPIq/FCEbnVPGa3p5NR8NEr7wp2WGL5kKazp74p9ciIp7DD72QRy85nz97K9uvVIp4rbvfVi9aDjV6uXs3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rJrdc4my; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3436a97f092so5739552a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Dec 2025 10:54:17 -0800 (PST)
+	s=arc-20240116; t=1764618433; c=relaxed/simple;
+	bh=LJRlCtDhlxqTwP8EM/U7e3Hdu1O1z2s+L3WXm2KX0sw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rFp2aI+mSKJB8UvXTaNj3lqmgWJSm9+JaOzKTTADi9MD1/5EUwePPzWlgJ9JGJp74C3IvKnC/cqz0eCQ8B69bD3N+a3ftcGNSvtsba8ngHm30LZdAqxKUGokJXNykshIXkpqPzNr8Hx5K70rPyUH5nz6Ncx1c4FF0wEphOxRZ3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LLnN8BBu; arc=none smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-63e19642764so3315610d50.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Dec 2025 11:47:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764615257; x=1765220057; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NZR7hK5x4THTBId2vxyDYOqgCYL0BSheMqFuUmlt+Jw=;
-        b=rJrdc4myLwh5sTna1PuJYPc/KOILdlLOmqy97IzQq1WNI+gRSTu77M/5mUVqJe26pv
-         Vxb029p44Gag8/bWe00oXbZS+Ftp8ymQhnMHBs0Mgc0eWQR8LrXlvW2YHAB6ppq9lKwb
-         IOPkaCW2XSW5iDBk2JJ9IZ6iPoGc5oHjY2G3qx45Nd5gl+h0yGZtsXoiFIZ7LnF00WyA
-         gH6sz/VIsim6SU9HLb3wzF66lBxUhWTAcLkW+wVKIzwkTCJPKgaHFQ/FDahBRzZqhE8k
-         2YzM19tyU6JMfTgzRM6MM41Q8wMrQbaQ+z52Glxjqs4v2dLDivW/WfQ3JViz9u7AuU3u
-         wLJg==
+        d=gmail.com; s=20230601; t=1764618430; x=1765223230; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gdF+wFbCafRAav8E0rs7m4ujJw3Abo7ahiUQFexsiII=;
+        b=LLnN8BBu0YKEtr2/ZyO4u1WZducwwH+JoykPRtt4EzxpA/0M2H6QLj7wVznvYm6V5k
+         +no51ha3ICkeKjaU8Qe6Z8zZSBtMb0PceGzX4nWbTe0m9we0IlROI240j/2BX8q7bPZN
+         URm2Hgu8BY39ZurKGl/f0rGUF9SaT3SSI+BsvG2SZc/Hg+BDOka6oDcKABqBKown/bsa
+         kUfwU/B7bazrk7T1vY/+aGLXIROTVYkE+HvEyuSt2CuTb9Pby27r0QkEL3HlVif9E0i4
+         rPMeOL560jXPouoePWxGaJYb6EFK91Rez9zftcy1gM3x172KSSOGNVrYDK0D2B/wULxz
+         pJvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764615257; x=1765220057;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZR7hK5x4THTBId2vxyDYOqgCYL0BSheMqFuUmlt+Jw=;
-        b=Vq4wEyOFGNd9bZCvaZFFhgmU3JFnkX4OA//LsfQa1jmZAlQhLEq/+U80zyks/qqjSo
-         F93U8z70RSFtKDlULdq4GNtM60uA0gO1xG70FdCWtRu0g7/Fr11b6jA9eFiw6OqLrnah
-         eQtle8hZOZnAR369rhvfT+dLBjLzH4FfT7KF/6vmed6IMJnE7Q0kN/MU/wp+AkYUFxTB
-         4ZoKJhAYvTNdmrdk79Ik0U9lxYRSOS/seoxv7l1AAwKheQpsiMv3Fy/UT5yziLdbpuuE
-         aw/zCC0SmGzrF6IDHJpuXiNRPRNZ+yKIyxdpVmm2yK9F5O4jx5lp/n5aCSbRJ6gLXX3r
-         kB/g==
-X-Forwarded-Encrypted: i=1; AJvYcCX5iQ0LGgpOi+fhNiqkOoJxAgPXNOhwkUrjVMzlWMGOZzEtaWOdPbmAXCktnWTXVCzXmUSz/FjWb8bsp38x6gI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8nLUcXxwaz1g3zaYViyn0c3sX2fOCvSX1ioCzEx91ZuulI5CG
-	EZn0hVEPfbb3rVJDmKnDQ+hjhhxG07qYSnR1AthlhmkBVr4LHvSjpABDirOQdG8TTQ==
-X-Gm-Gg: ASbGncvu4p2dHB+59h30L79Q0C/zuhbPUqotY/QbFDERMDdkPMnmhR8+THsCTQR2Xej
-	pch3TU4OFHy3Iigvw/xvG9pYGPU1o1YAZz3NYTOW/4/5+pqbQx53TdAfLbne6HzjlyKCw56a50m
-	ApJt+W/r+KvI8kpR3+4Pa5QgnqjT5f4+jr54nydKTva9QnuPz0WfAFfCRcOPa8gxMBA6VsgDL7l
-	WfWRKb8WdGMg0vBLFhN2MAU24B+uTNf2ma/BoSgELC0E+xnFHBIpwTyEakf3UKZT8qiCPw58h/h
-	VYJjZetjAdO/i4oFbYsWl7BXpc8p+3WriUx0mvcPXiMLXGU4YWG/sphZwF/e02XLsYWXqvZsAwc
-	Ck2nVgX3I+idljZEWuu9ntchCdvo90xrduKuK6ZTv+fvww/aHNMhDkyGsePhJfn/QI89/u+fZn9
-	XoAOA2H9qKtMqfDmF+qCEJUqSog6c5+ynS8S5rSU95UsSzJMM=
-X-Google-Smtp-Source: AGHT+IEiFxvWkfPP9po3hvukZ9ksCP0VDwl+C6gb0NjWaMPZyH9tph+K1Sdl9eUHW9tCV4/voZXr4g==
-X-Received: by 2002:a17:90b:53c3:b0:33f:ebc2:634 with SMTP id 98e67ed59e1d1-3475ebe8173mr23598831a91.9.1764615256953;
-        Mon, 01 Dec 2025 10:54:16 -0800 (PST)
-Received: from google.com (28.29.230.35.bc.googleusercontent.com. [35.230.29.28])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3475e952efbsm8216852a91.1.2025.12.01.10.54.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Dec 2025 10:54:16 -0800 (PST)
-Date: Mon, 1 Dec 2025 18:54:11 +0000
-From: David Matlack <dmatlack@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Lukas Wunner <lukas@wunner.de>, Alex Williamson <alex@shazbot.org>,
-	Adithya Jayachandran <ajayachandra@nvidia.com>,
-	Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Jacob Pan <jacob.pan@linux.microsoft.com>,
-	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
-	kvm@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-pci@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
-	Parav Pandit <parav@nvidia.com>,
-	Philipp Stanner <pstanner@redhat.com>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Saeed Mahameed <saeedm@nvidia.com>,
-	Samiullah Khawaja <skhawaja@google.com>,
-	Shuah Khan <shuah@kernel.org>, Tomita Moeko <tomitamoeko@gmail.com>,
-	Vipin Sharma <vipinsh@google.com>, William Tu <witu@nvidia.com>,
-	Yi Liu <yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>,
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Subject: Re: [PATCH 02/21] PCI: Add API to track PCI devices preserved across
- Live Update
-Message-ID: <aS3kUwlVV_WGT66w@google.com>
-References: <20251126193608.2678510-1-dmatlack@google.com>
- <20251126193608.2678510-3-dmatlack@google.com>
- <aSrMSRd8RJn2IKF4@wunner.de>
- <20251130005113.GB760268@nvidia.com>
- <CA+CK2bB0V9jdmrcNjgsmWHmSFQpSpxdVahf1pb3Bz2WA3rKcng@mail.gmail.com>
- <20251201132934.GA1075897@nvidia.com>
+        d=1e100.net; s=20230601; t=1764618430; x=1765223230;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gdF+wFbCafRAav8E0rs7m4ujJw3Abo7ahiUQFexsiII=;
+        b=xF+dfXpo50cDTq/L61ydn1LgpGIndct5AP3InnjUUfLhhpTxmY9XHELaTQEDoCioLx
+         ddDBKYfRsTRAOLBIHVNRejliIJkQWLLv87FLQp3gTjqCuCsBVggaYxFmhSc0iUkd63sQ
+         mBStiTidkjOnn0fOd9oGZoJ5NAxeO5QQalyGTzXF0U2zmlmRrxxsUg97hn+pHtO4FTPJ
+         a/JGFBrJTj1TQGFJU7wQlOL3C6segqSSdZy6axoVMchZ1irdhEfKNMFWxYZHP41RpsJc
+         usmOZhR2A1ZFK8pUYcil+hJNwMFps4bsc+jwQwhr6mgS2/A/zUL20rOeOuuxSKSahXwv
+         4+jg==
+X-Forwarded-Encrypted: i=1; AJvYcCVTP8bJeuI9BlhmnEJoLi+ocHg+K4k+gluF2VSJ5CmFSCZ9J2rIprXvLjfkuj5i+CaKwhPMCuH9eSWWkYeHFuY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEaT2dss21+hQDP9y7CPtIne13Q0WnGes9aOpWfEeut0cELtxO
+	S2anAcnsEF0S5yjTxGx07HEjfrdQokZIgo0KQRjz17oC8jbsPgXi7Nb5vCuuf08bNcrXpFNRfBx
+	0/7G0vv5mnw7ZN+i8XWhjCJe1u6ImPNE=
+X-Gm-Gg: ASbGnctXHMpHQPmNrQ4R2sbLrYYjlj32AsXDKKzNptwJP2y7nab3TbdARmzPLwKGh8R
+	CEjMHMHNfg9uvQ5+VTEIQP4RaFDD2JsH9iRdnrfvdiivVrh8dmKYeE/vbaHx/ntgNaHwhyfE8VA
+	kYduYn+21/KUj00QUOgpaNzP9LUhz4UXCJxFnxYnQz0fupGAsRi3pe8XkvMjI4c7RRr/sla8/fW
+	6PzxrWCzg4ksoK6RHMrXNPKoD6GAVJ8y8lHFvBBWdyZs0Vh+Xdrx7pCnJF6dAlDaJLRUQ==
+X-Google-Smtp-Source: AGHT+IEbgJrieBu9v966cDiQcL7TS6d+UQMGUfGhVLrpWM3ttYa7ssWW1Wzu7PmnjZr63p2JscrE5eIs4MP/V4pxTu8=
+X-Received: by 2002:a05:690e:1347:b0:643:2169:d6cf with SMTP id
+ 956f58d0204a3-6432169d875mr20321328d50.66.1764618430320; Mon, 01 Dec 2025
+ 11:47:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251201132934.GA1075897@nvidia.com>
+References: <20251201102817.301552-1-jonas.gorski@gmail.com>
+ <20251201102817.301552-4-jonas.gorski@gmail.com> <aS2j_BsYHJ3MT41o@horms.kernel.org>
+In-Reply-To: <aS2j_BsYHJ3MT41o@horms.kernel.org>
+From: Jonas Gorski <jonas.gorski@gmail.com>
+Date: Mon, 1 Dec 2025 20:46:59 +0100
+X-Gm-Features: AWmQ_bnfISX0h5mgLmPVNe3UZpFo3rQtqHEc0AW9QXkE-jpTVrrwCpNFWKYfZWU
+Message-ID: <CAOiHx=kOL9h_PE0UyzcV5wT-b+6pGvZh-joyRR4hzRLCyHOvAg@mail.gmail.com>
+Subject: Re: [PATCH RFC/RFT net-next v2 3/5] selftests: no_forwarding: test
+ VLAN uppers on VLAN aware bridged ports
+To: Simon Horman <horms@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Florian Fainelli <f.fainelli@gmail.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-12-01 09:29 AM, Jason Gunthorpe wrote:
-> On Sat, Nov 29, 2025 at 08:20:34PM -0500, Pasha Tatashin wrote:
-> > On Sat, Nov 29, 2025 at 7:51 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
-> > >
-> > > On Sat, Nov 29, 2025 at 11:34:49AM +0100, Lukas Wunner wrote:
-> > > > On Wed, Nov 26, 2025 at 07:35:49PM +0000, David Matlack wrote:
-> > > > > Add an API to enable the PCI subsystem to track all devices that are
-> > > > > preserved across a Live Update, including both incoming devices (passed
-> > > > > from the previous kernel) and outgoing devices (passed to the next
-> > > > > kernel).
-> > > > >
-> > > > > Use PCI segment number and BDF to keep track of devices across Live
-> > > > > Update. This means the kernel must keep both identifiers constant across
-> > > > > a Live Update for any preserved device.
-> > > >
-> > > > While bus numbers will *usually* stay the same across next and previous
-> > > > kernel, there are exceptions.  E.g. if "pci=assign-busses" is specified
-> > > > on the command line, the kernel will re-assign bus numbers on every boot.
-> > >
-> > > Stuff like this has to be disabled for this live update stuff, if the
-> > > bus numbers are changed it will break the active use of the iommu
-> > > across the kexec.
-> > >
-> > > So while what you say is all technically true, I'm not sure this is
-> > > necessary.
-> > 
-> > I agree. However, Lukas's comment made me wonder about the future: if
-> > we eventually need to preserve non-PCI devices (like a TPM), should we
-> > be designing a common identification mechanism for all buses now? Or
-> > should we settle on BDF for PCI and invent stable identifiers for
-> > other bus types as they become necessary?
-> 
-> Well, at least PCI subsystem should use BDF..
-> 
-> You are probably right that the matching of preserved data to a struct
-> device should be more general though.
+Hi,
 
-Lukas' suggestion would also make it more reliable to detect bus numbers
-changing during a Live Update. We can play whack-a-mole with things like
-assign-busses, but there will be a risk that we miss something or
-something changes in the future.
+On Mon, Dec 1, 2025 at 3:19=E2=80=AFPM Simon Horman <horms@kernel.org> wrot=
+e:
+>
+> On Mon, Dec 01, 2025 at 11:28:15AM +0100, Jonas Gorski wrote:
+> > Add a test (mainly for switchdev implementors) to test that multiple
+> > VLAN uppers on a VLAN aware bridge for the same VLAN do not enable
+> > forwarding of that VLAN between those ports.
+> >
+> > Since we are testing VLAN uppers, skip checking untagged traffic in
+> > those cases.
+> >
+> > Disallowing VLAN uppers on bridge ports is a valid choice for switchdev
+> > drivers, so test if we can create them first and skip the tests if not.
+> >
+> > Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
+> > ---
+> > v1 -> v2:
+> > * new patch
+> >
+> >  .../selftests/net/forwarding/no_forwarding.sh | 89 ++++++++++++++-----
+> >  1 file changed, 67 insertions(+), 22 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/net/forwarding/no_forwarding.sh b/=
+tools/testing/selftests/net/forwarding/no_forwarding.sh
+> > index 694ece9ba3a7..c8adf04e1328 100755
+> > --- a/tools/testing/selftests/net/forwarding/no_forwarding.sh
+> > +++ b/tools/testing/selftests/net/forwarding/no_forwarding.sh
+> > @@ -1,7 +1,7 @@
+> >  #!/bin/bash
+> >  # SPDX-License-Identifier: GPL-2.0
+> >
+> > -ALL_TESTS=3D"standalone two_bridges one_bridge_two_pvids"
+> > +ALL_TESTS=3D"standalone two_bridges one_bridge_two_pvids bridge_aware_=
+vlan_uppers"
+> >  NUM_NETIFS=3D4
+> >
+> >  source lib.sh
+> > @@ -90,6 +90,7 @@ check_rcv()
+> >  run_test()
+> >  {
+> >       local test_name=3D"$1"
+> > +     local swp_uppers=3D${2:0}
+>
+> Hi Jonas,
+>
+> Should this be as follows?
+>
+>         local swp_uppers=3D${2:-0}
+>
+>
+> I.e. default to 0 if $2 is not set,
+>      rather than take a substring of $2 at index 0 (which is all of $2)
 
-Perhaps it would make sense to rely on BDF in the PCI subsystem in the
-short term and enforce bus number stability manually (e.g. see patch at
-the bottom), and then explore stable device paths as a future
-improvement to make PCI device preservation more reliable and also to
-enable other bus types?
+Yes it is, I fat fingered that (or cold fingered?). But since bash has
+no abort on error enabled, it just chucks along and works by accident
+anyway (there may be some complaints on stderr).
 
-To handle pci=assign-busses, perhaps something like this? Are there any
-other places where the kernel could change busses?
-
-diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-index 0ce98e18b5a8..2e1e1aa385a8 100644
---- a/drivers/pci/probe.c
-+++ b/drivers/pci/probe.c
-@@ -1331,6 +1331,20 @@ static bool pci_ea_fixed_busnrs(struct pci_dev *dev, u8 *sec, u8 *sub)
- 	return true;
- }
- 
-+static bool pci_assign_all_busses(void)
-+{
-+	/*
-+	 * During a Live Update, do not assign new bus numbers. Use bus numbers
-+	 * assigned by the firmware and the previous kernel. Bus numbers must
-+	 * remain constant so that devices preserved across the Live Update can
-+	 * use the IOMMU uninterrupted.
-+	 */
-+	if (liveupdate_count())
-+		return false;
-+
-+	return pcibios_assign_all_busses();
-+}
-+
- /*
-  * pci_scan_bridge_extend() - Scan buses behind a bridge
-  * @bus: Parent bus the bridge is on
-@@ -1404,7 +1418,7 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
- 	pci_write_config_word(dev, PCI_BRIDGE_CONTROL,
- 			      bctl & ~PCI_BRIDGE_CTL_MASTER_ABORT);
- 
--	if ((secondary || subordinate) && !pcibios_assign_all_busses() &&
-+	if ((secondary || subordinate) && !pci_assign_all_busses() &&
- 	    !is_cardbus && !broken) {
- 		unsigned int cmax, buses;
- 
-@@ -1441,13 +1455,16 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
- 		if (subordinate > max)
- 			max = subordinate;
- 	} else {
-+		pci_WARN_ONCE(dev, liveupdate_count(),
-+			      "Assigning new bus numbers during a Live Update! [%u %u %u %u]\n",
-+			      secondary, subordinate, is_cardbus, broken);
- 
- 		/*
- 		 * We need to assign a number to this bus which we always
- 		 * do in the second pass.
- 		 */
- 		if (!pass) {
--			if (pcibios_assign_all_busses() || broken || is_cardbus)
-+			if (pci_assign_all_busses() || broken || is_cardbus)
- 
- 				/*
- 				 * Temporarily disable forwarding of the
-@@ -1522,7 +1539,7 @@ static int pci_scan_bridge_extend(struct pci_bus *bus, struct pci_dev *dev,
- 							max+i+1))
- 					break;
- 				while (parent->parent) {
--					if ((!pcibios_assign_all_busses()) &&
-+					if ((!pci_assign_all_busses()) &&
- 					    (parent->busn_res.end > max) &&
- 					    (parent->busn_res.end <= max+i)) {
- 						j = 1;
-diff --git a/include/linux/liveupdate.h b/include/linux/liveupdate.h
-index b913d63eab5f..87a4982d0eb1 100644
---- a/include/linux/liveupdate.h
-+++ b/include/linux/liveupdate.h
-@@ -219,6 +219,7 @@ struct liveupdate_flb {
- 
- /* Return true if live update orchestrator is enabled */
- bool liveupdate_enabled(void);
-+int liveupdate_count(void);
- 
- /* Called during kexec to tell LUO that entered into reboot */
- int liveupdate_reboot(void);
-@@ -241,6 +242,11 @@ static inline bool liveupdate_enabled(void)
- 	return false;
- }
- 
-+static inline int liveupdate_count(void)
-+{
-+	return 0;
-+}
-+
- static inline int liveupdate_reboot(void)
- {
- 	return 0;
-diff --git a/kernel/liveupdate/luo_core.c b/kernel/liveupdate/luo_core.c
-index 69298d82f404..2f273397bd41 100644
---- a/kernel/liveupdate/luo_core.c
-+++ b/kernel/liveupdate/luo_core.c
-@@ -256,6 +256,13 @@ bool liveupdate_enabled(void)
- {
- 	return luo_global.enabled;
- }
-+EXPORT_SYMBOL_GPL(liveupdate_enabled);
-+
-+int liveupdate_count(void)
-+{
-+	return luo_global.liveupdate_num;
-+}
-+EXPORT_SYMBOL_GPL(liveupdate_count);
- 
- /**
-  * DOC: LUO ioctl Interface
+Best regards,
+Jonas
 
