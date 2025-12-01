@@ -1,127 +1,172 @@
-Return-Path: <linux-kselftest+bounces-46778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 107BEC95AF8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 05:08:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D18FEC960B1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 08:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4E070341779
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 04:08:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AB21E4E14BF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 07:45:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27C2818A6B0;
-	Mon,  1 Dec 2025 04:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001EF2D1907;
+	Mon,  1 Dec 2025 07:45:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PKX24BN1"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Imtjlb65";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rtCOe3YQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f68.google.com (mail-pj1-f68.google.com [209.85.216.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C07D3AC39
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 04:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD5A23EA88;
+	Mon,  1 Dec 2025 07:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764562082; cv=none; b=qdgcxMnbLL5Dx7/JimuJAQRHveP9GsxJfN0blq4sivOB1M8+okf4P8oA9/JXavdbjy4NPmVujqmGDTpy5eJSZUH3UZwTKgCoHySMOp5F8FmJwe9lk6bY4OIgAUdJ3mMsFewZJHfvwnaOu5nxZBWmuAVjI1XC6cJgDJFMyD7cVnI=
+	t=1764575124; cv=none; b=pKIfmSdUbVu6lGcoO33AsN1SejofitkxoNfHnPO1kqfrNvW6BFEQN80iGy8zXd0ddCuAg9Ydiy8PLpWMUKfqOZABGKfXg0qegLT49B+WzZODfruymgROABsqM0INQNZer2FnwWchrFnm3oqysOINa9VRIVIoeOzoB/rtonSqCXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764562082; c=relaxed/simple;
-	bh=I5WnbEMYMvxMMyC0dGDFfkJkD1UwMDR1rRygcGxyK70=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E86Il+mFKzqAzgL20HdKvfAl8tjLPk4OkUGO49GyV1B12ip+BXXbWHMQIaI6tlXrazidy4hmZu0YOR8bi9GO9iOYO7MqIwyANAsGTCQxcWOzpwTgPnBbeRhnvBe9TErzOWY/XeQsPKxSVszupaFQS19H1vgMhRMyTigGUtx4kos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PKX24BN1; arc=none smtp.client-ip=209.85.216.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f68.google.com with SMTP id 98e67ed59e1d1-340bb1cb9ddso3123905a91.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 30 Nov 2025 20:08:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764562080; x=1765166880; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xHYB6uxWCS1cMIYtl4torJ0Vkz15tXZo+qs17i5jW2c=;
-        b=PKX24BN1VHfnGnfG0wJANp/3qY8+b9GPJ+0AcBC1Fe1R3x4daGkWoKtcDjEe7UN376
-         l0pxh9HFeafIYzxMot56Iorg+NhxGv6svrxCFpmHahOdE/2uw7ugRDbYpL3pwVtn989o
-         aTNOB3RlhDCmfTq5D4oNMFN46oN/adtnu963Mk+WDAIkI2XboVyWHkZsAPVmM1unqzrL
-         sdVZHsmgRrhd0K6MtCRf3l08cgDC+mvkSMhGCATkgChLFKCq1+AIudQiq5AC5naKwAcx
-         CxRVutgH6i1TX9oZMWO6dEG1bXCCwqpk4GbjPScr3hAANWvyU+w1hGhQeeLsNOaY+fXu
-         W5ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764562080; x=1765166880;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xHYB6uxWCS1cMIYtl4torJ0Vkz15tXZo+qs17i5jW2c=;
-        b=E0SP7MLybIaQrbfh8pWOMMpU2WFFADwhBKY8sJfKo4qADsc5JbfNb5wfa5f90HfOg+
-         OkjyElyRLFjDGzmqlErOoSnIXAeaN7+oc5KULP7yQmhjnUwA/3djzkpK/M0dLakQYVpd
-         jQ0KPchmahMID+X0ZwGxWj8yC/O6fux6R8fNy/xMxCtH0MtDYQ1QY7TsDqBpIEZ6qkHY
-         o5du25uwy0tnexoD3iVXTBJkDMJ5ihrjcJnLno34GImzPrSCJKl3ncKSLvYDzdgJtdBc
-         4JmCMml0dKHnTD2S7mb6YtGY2RxVV7QzmwsOxmCDrvsD35v6Xs/x+Pkbb32ygOBbABfi
-         2eOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvaaPnPp302Jq3t5jSYGNWoHOcg5D8FI+ZdtuOcfSsbaQCoN///JsZRF/SxnWZCbQSeM/ZdEOdAbSM6pELS2A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqqCpBIPRRhmgYbqj62MMCnahJiRyiNYy42F1Khw7zOfS+zyoB
-	FAL9Dusoqd/U7BkQYGTUcPWkq90GCSaNsF4f1dXyIBheo60kc3PIUoNX
-X-Gm-Gg: ASbGnctcrO7k1GsTHFGdBu4yZlV2h+JkoKPyQZpaxHtLfxDlQPxrtnd38gBzKs2O34I
-	Ozb/Ee3FykniYyz9CGgwaPrmghIyAAxsL/5eXvLBpeUNIK6gx++kOxUwxbH7cHKOYfdVD0LFIvK
-	YfNwdPL+YUTcTANk9G6G053aqS9Eh7zChKcOkLq4mGUMjUYOEUU5ilnqBzeTCvl7shoUw133Ed9
-	UP/RVehtdmZcYqraBKb0jjGk5Do/WOEV9XXEA9hc6qZvLOJ5U09+UM8kxW+/40nzzGULOWAtFlM
-	3SR8ynolyrG0uU8nECEnbbcwF9sDJh8nfgdJvRCairS3IrME2hc6zD6CQI70UAeuRNOdJcODgQJ
-	8vtQfHaFPTdF3t1lOgtPsrNBSBVR1ffIlcpoc6Tkm+crR6kG9HUk0rJ+kQdIarwiUJopFEByZXG
-	7s0JCHXIPcDXWVosYAFswD2SYMlFNuHv9XdjcCLI/D
-X-Google-Smtp-Source: AGHT+IGPl5jq66QKAxKuT1zbMmX7cVCg83U7Ow4OS33Os0vlctAPTudYRAxHElLQlJEOckDjjbES5A==
-X-Received: by 2002:a17:90b:48c5:b0:345:badf:f1b7 with SMTP id 98e67ed59e1d1-34733f3eb64mr33856675a91.28.1764562079912;
-        Sun, 30 Nov 2025 20:07:59 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3477aeb88a1sm11486769a91.0.2025.11.30.20.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Nov 2025 20:07:59 -0800 (PST)
-Date: Mon, 1 Dec 2025 09:37:50 +0530
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, mptcp@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2] selftests: mptcp: Mark xerror __noreturn
-Message-ID: <aS0UlhHP5aEzDZlv@fedora>
-References: <20251129043808.16714-1-ankitkhushwaha.linux@gmail.com>
- <632d57cf-becd-4d09-bb21-0e3db6776c49@kernel.org>
- <20251129174133.0e369f80@kernel.org>
- <d4656eca-3c65-407b-a487-0a1816c38036@kernel.org>
+	s=arc-20240116; t=1764575124; c=relaxed/simple;
+	bh=GBUGtKYwRwExyTl1p4q/ucqgy2VljRXPMtIc8z5zNyw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Rpy8yzlUkOqhHypfF7BT87k7nATwVha+TdPwGT4xT162oLXlHQNMf7lHjfx05aJJBg71XtXgjMXv59gWHOFZu5tUTkbBPF//xgFszFJVJhtBDi10hE38tmIjWYDkehB70FHQ3CChWs8fAEI6gyWkCQ8hjOZG+ZlrmUk5Kps5HVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Imtjlb65; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rtCOe3YQ; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id E620714001EF;
+	Mon,  1 Dec 2025 02:45:20 -0500 (EST)
+Received: from phl-imap-17 ([10.202.2.105])
+  by phl-compute-04.internal (MEProxy); Mon, 01 Dec 2025 02:45:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1764575120;
+	 x=1764661520; bh=V+VtHjpFIggTY5a4W6+5PNPiBiYU67RSG0Fw16B8tB4=; b=
+	Imtjlb65F6aNGxQSqiacHGLD3G+WGURe08XiupPmYvEs0TDEJQJEsYicEpouU7r4
+	m2YzbD+g08+QhnFoseMnDBd6rs4G2nAdRhdKBSMpRxFZke4giypD1Typ/O4FkASd
+	WSV7IskUQnqATxg1kdqf0MvuWQV15M9K3MeV+6jA04LNzHxKlAyVxdTQFk2KkWYj
+	18qGVjzLH5mZzdd2EYraVI38gOXD9iCvsSA3+Ab7iD6jyDEt0YbH4H7qdFbXsMK6
+	B4j/N8YJCJZCJ/vskiv5ys+gIRiZYRgLfZ/EMSVKR7BY8P1NIvaW8jv3MJyqyGQ2
+	xHapjTgQ5UeGCYAO+29sJg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1764575120; x=
+	1764661520; bh=V+VtHjpFIggTY5a4W6+5PNPiBiYU67RSG0Fw16B8tB4=; b=r
+	tCOe3YQWzoGavFq6z1jiSXe0Z381fhL+e6nZ980l+ms/8zcaB2d6E60vchQLiuQr
+	hBV1NjiO5DMLHWsFwJsXDXjrx8lecnRH4s97kQBc1hNpKugv/eTgT94Wy40MZVbj
+	SGXFzew5+SM8yIbnc2vFpmP8juH7ro97MCGwttffi6+lAz9q9V5XwtJDZI+ZnrI/
+	5SR6mjSDVhlX4EPgck6iP6tLNBVUPGmugt0UdPtaRlrEFp5Q+qOqcSsiwzRujkW4
+	jBKa2gpgxVf0GUjvOyqaivm2GWDdl47VcKlH4OiD2rCroS8tzcV+03JMLA1KVcoB
+	6NqP+wNWfu7nuWQUhA+qw==
+X-ME-Sender: <xms:kEctaeuSCbn4ZTg0wkyNXZpF5i7wBsDpnb88v78JA38ajsxIeOs6Nw>
+    <xme:kEctaeSDRXm-G34tfFmT20RhdVTHhhtLb9tsc1rBZVC-0ZS0gq42-rnE4KkauUV6C
+    onj7G_T6UXXop6gSx2xJQs5wMN4juniydEXLvqEaY877SYejJSMxfqb>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvheejudegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpefoggffhffvvefkjghfufgtgfesthhqre
+    dtredtjeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghr
+    nhgusgdruggvqeenucggtffrrghtthgvrhhnpedutddvudfftdffkeeuudehhfejkeekie
+    eiudejfefgffehveeiudeuudffleffveenucffohhmrghinhepohhpvghnghhrohhuphdr
+    ohhrghdptghpphhrvghfvghrvghntggvrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghr
+    tghpthhtohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepfiesudifthdrvg
+    hupdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhi
+    nhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
+    hinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehlihhnuhigseifvghishhsshgthhhuhhdrnhgvth
+X-ME-Proxy: <xmx:kEctaY7Bwlsk9Yt2mk0s6AnWxVgoznTmOLZbePY_rqOuPU_hi28xXw>
+    <xmx:kEctaS1XtqLrjGFAC-xOZ12fzO_5VQjgzu0hWpaJ4e7fPQnrKMwkFg>
+    <xmx:kEctaTDUqtPswDvBQJ4PvKd8Mc95Gnie41vnuQ6ZXwRqTqA9sYORlg>
+    <xmx:kEctadO5EM6dRiTUADz94KEQYQquzzLcHvZfbvFYpdB5QQ6cNya3NQ>
+    <xmx:kEctaR_may3E3k-UlEUvoGME39REZxBrOcI7oZT5AyeXcDhPmUDYtUbM>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4C5EDC40054; Mon,  1 Dec 2025 02:45:20 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d4656eca-3c65-407b-a487-0a1816c38036@kernel.org>
+X-ThreadId: AuglI0iV1DGV
+Date: Mon, 01 Dec 2025 08:45:00 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Willy Tarreau" <w@1wt.eu>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Message-Id: <75e632e3-3353-414d-9b8a-8bf9ca46b5a4@app.fastmail.com>
+In-Reply-To: <20251130105842.GD31522@1wt.eu>
+References: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
+ <20251122-nolibc-uapi-types-v2-9-b814a43654f5@weissschuh.net>
+ <20251130105842.GD31522@1wt.eu>
+Subject: Re: [PATCH v2 09/13] tools/nolibc: always use 64-bit time types
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Matthieu, Jakub,
+On Sun, Nov 30, 2025, at 11:58, Willy Tarreau wrote:
+> On Sat, Nov 22, 2025 at 05:59:15PM +0100, Thomas Wei=C3=9Fschuh wrote:
 
-On Sun, Nov 30, 2025 at 06:09:18PM +0100, Matthieu Baerts wrote:
-> Hi Jakub, Ankit,
-> 
-> On 30/11/2025 02:41, Jakub Kicinski wrote:
-> > On Sat, 29 Nov 2025 19:13:08 +0100 Matthieu Baerts wrote:
-> >>> +$(OUTPUT)/mptcp_connect: CFLAGS += -I$(top_srcdir)/tools/include
-> >>> +$(OUTPUT)/mptcp_sockopt: CFLAGS += -I$(top_srcdir)/tools/include
-> >>> +$(OUTPUT)/mptcp_inq: CFLAGS += -I$(top_srcdir)/tools/include  
-> > 
-> > I believe this is being added via MM or kselftest tree at level of the
-> > main ksft makefile. Since this is a false positive, maybe let's defer
-> > fixing the issue until after the merge window? When the -I.. flag
-> > will be implicitly in place?
-> 
-> @Ankit: do you mind sending a v3 without the modifications of the
-> Makefile, and supporting die_perror() in a bit more than 2 weeks or
-> later, please?
+>>  struct timespec {
+>> -	__kernel_old_time_t	tv_sec;
+>> -	long			tv_nsec;
+>> +	time_t	tv_sec;
+>> +	int64_t	tv_nsec;
+>>  };
+>>  #define _STRUCT_TIMESPEC
+>> =20
+>> +/* Never use with system calls */
+>>  struct timeval {
+>> -	__kernel_old_time_t	tv_sec;
+>> -	__kernel_suseconds_t	tv_usec;
+>> +	time_t	tv_sec;
+>> +	int64_t	tv_usec;
+>>  };
+>
+> It seems to me that glibc continues to make the effort of using a long
+> for tv_usec and tv_nsec. At least I'm seeing how that can make a
+> difference for application code given that these fields are constantly
+> multiplied or divided, forcing them to 64-bit when we know they'll nev=
+er
+> be larger than 1 billion is extra burden for the application. Another
+> reason might be that the definition really changed from long to suseco=
+nds_t
+> in timeval a while ago, it's possible that it's used as a long in vari=
+ous
+> APIs (or even just printf formats).
+>
+> IMHO it would be cleaner to keep it as a long here, or do you have a
+> particular reason for wanting int64_t (which BTW already forced a cast
+> in sys_gettimeofday()) ?
 
-I will surely send v3 patch after merge window with the requested
-changes.
+As far as I can tell, it's the other way round for suseconds_t,
+which in glibc is defined as
 
-Thanks,
--- Ankit
+#if __TIMESIZE =3D=3D 64 && __WORDSIZE =3D=3D 32
+# define __TIME_T_TYPE          __SQUAD_TYPE
+# define __SUSECONDS_T_TYPE     __SQUAD_TYPE
+#else
+# define __TIME_T_TYPE          __SLONGWORD_TYPE
+# define __SUSECONDS_T_TYPE     __SLONGWORD_TYPE
+#endif
+
+so this one is explicitly the same width as tv_sec, which has all
+the issues you listed, but avoids the need for padding.
+
+As far as I remember, the one reason for having a 'long tv_nsec'
+with complex padding in glibc and musl is that this is actually
+required by both Unix[1] and C11/C11 [2] standards.
+
+C23 has updated the definition and does allow int64_t tv_nsec.
+I think it makes sense for nolibc to just follow the kernel's
+definition here.
+
+       Arnd
+
+[1] https://pubs.opengroup.org/onlinepubs/009695399/basedefs/time.h.html
+[2] https://en.cppreference.com/w/c/chrono/timespec.html
 
