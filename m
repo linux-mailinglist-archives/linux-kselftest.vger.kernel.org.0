@@ -1,166 +1,87 @@
-Return-Path: <linux-kselftest+bounces-46860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3668C996F0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 23:49:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 265E0C99830
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 00:05:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5CB6B345986
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 22:49:32 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 199814E1B6D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 23:05:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01901245005;
-	Mon,  1 Dec 2025 22:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4616E286410;
+	Mon,  1 Dec 2025 23:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="Um0G9v2a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EySsHka1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585211FDA;
-	Mon,  1 Dec 2025 22:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152F3200110;
+	Mon,  1 Dec 2025 23:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764629367; cv=none; b=OK7V9hxOoRTKfaslARAP9EQ5VMWQN+oq8g+1yTm7D/Kh8clF7zMLf3dfAi0B3cbsptGjz5m/sFsxJINSW7G8XDS0s5d6XvNl6numW2/Y7SthCbdURn46SK6Os9PkPld6hr+F5/vtF5iae9JHDYSpSVz8rVVB1OOol5zJkxLUhdQ=
+	t=1764630312; cv=none; b=MeWmMEUUD72FoFa+Nvw1O60FWiQjrvpzyB5GukE7lGsyTnRw7J+1JZj/MCA6x1gyH4p6Wxrso1GziAtcc5vACF+i/imOZyHppIt4f0okGluuhLEJLjiE9uG1D3jA8qw49K7c3HADHwdVSGeW0PfvElgqq8T0Ji2nI8omN2uxTE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764629367; c=relaxed/simple;
-	bh=o08e3lndV4MmlSuouTwyGZ31ekryd2dZD37SZxIHuME=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dmOKDFYZ5JgiFEgwY20KMLoCtgbsC2Va9Ee63MoVJz+elJLVeBahsIS11qQHpRGg6+bjQD+uVZwiYc5N6P6P5q/uOMG94D/XhZ0Re5qMLRadbg6JX7gkkvqrvp+7ywmKg75WvbfV7egXHDCJHnhyTc3ZJduFt73A/vZmHBxa2lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=Um0G9v2a; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B1LJS7s4118138;
-	Mon, 1 Dec 2025 14:49:12 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=VG6uM2PSbf+3AJaJoRbbI3+C9CIZH9n9KAeQNJ7qCFE=; b=Um0G9v2ae4OF
-	gBkogoxMf45y8xPMXeASwfICnGRnq5V9NBz/ntUjiRPE5SrFlj8YDYXRg2NR/p1B
-	SrlUtrNhRGbqEa2aOrzMHYKhjMODgRFS5Ozv1EXNPgKWd2ThEDXzKLzqyCyZQTtu
-	ZFRf29+3OmXbE/YiHUjDQg3BOjkD1mz10z6wUbrIYLxPdvLWc+nMTwM9zVJHtOWE
-	5KlVH0b0jfCMwHj2x+hhZwg437nFrYU8bACRsHccQN+kq/pE6S54WtdwZGGHz5t9
-	Eu9p4yefsepdj0N5JUBclJfscHO5/ZJke4AdLwfuxOwzCr1oDN6aAb7YMbhvzi4k
-	/r7MqXRFNQ==
-Received: from mail.thefacebook.com ([163.114.134.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4asju5rnfw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 01 Dec 2025 14:49:12 -0800 (PST)
-Received: from devbig003.atn7.facebook.com (2620:10d:c085:108::4) by
- mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Mon, 1 Dec 2025 22:49:10 +0000
-From: Chris Mason <clm@meta.com>
-To: Jonas Gorski <jonas.gorski@gmail.com>
-CC: Chris Mason <clm@meta.com>, Simon Horman <horms@kernel.org>,
-        Andrew Lunn
-	<andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller"
-	<davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan
-	<shuah@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean
-	<vladimir.oltean@nxp.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH RFC/RFT net-next v2 1/5] net: dsa: deny bridge VLAN with existing 8021q upper on any port
-Date: Mon, 1 Dec 2025 14:48:48 -0800
-Message-ID: <20251201224855.4102774-1-clm@meta.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <CAOiHx=mog+8Grm1QTnqU_F3=BnWmJqTj+ko-nZiRMAb4-hvSqw@mail.gmail.com>
-References:
+	s=arc-20240116; t=1764630312; c=relaxed/simple;
+	bh=+RwdZzAxVA6x5/ldXNRxGJfwfndyYVCm7OwfFpRdce0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tBNQUxDtAYZJj8jQ9A89l/WXsq7kDaGBqkqHKPywXrLHE8C/qsu53QtQ6Lh1+gAYlBjpOCoILWb3tUEvJIOD+G6jTl/FKETBDDJm4VGnoNzvZyn9Q0hUI69QB5m66u5FT5l5jDy19/ElWsLPxek1cvjJKeWzc6ACTRDRcxJemZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EySsHka1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E86C4CEF1;
+	Mon,  1 Dec 2025 23:05:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764630311;
+	bh=+RwdZzAxVA6x5/ldXNRxGJfwfndyYVCm7OwfFpRdce0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EySsHka1wYUk7NkXPmW4y/vX+DwSxu3o7dZOI3+z7Ghe8EmbpwLuO7HHRsN7lwKN+
+	 rfdTf4XtggqLYDrCV0JtT0qvsrMtRa1wY+wXqFrnIql/DLpwJ4KXKg3n3vo/+SqbKp
+	 LZsxt1Rphkxg48fMhGk+I+Rg4ucsFRVfXy2JLUUXL5ncWFnYaHfaZMU9Z9U5pTx9gS
+	 GxlInJ0+hjJuenWwRhipkERPPRUGLGxMWQ+5sFbjRF7a4MxJ7y/Dl7R6SvFELA66Jw
+	 bg1X1WQuhjGipOoz5SztV8pYY/e4EiqWfKMmdQqIprJAnSkXjCDWcrbvk+JFtpMBz+
+	 AOPYDAl2avm1A==
+Date: Mon, 1 Dec 2025 15:05:09 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
+ linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+ dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+ stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us,
+ davem@davemloft.net, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
+ ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, ij@kernel.org, ncardwell@google.com,
+ koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
+ ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
+ cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
+ vidhi_goel@apple.com
+Subject: Re: [PATCH v7 net-next 00/13] AccECN protocol case handling series
+Message-ID: <20251201150509.6cd9fefc@kernel.org>
+In-Reply-To: <20251201163800.3965-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20251201163800.3965-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: Y0O8RzpyZELpb6ptQ4FoQgQymNIEJbUa
-X-Authority-Analysis: v=2.4 cv=EvnfbCcA c=1 sm=1 tr=0 ts=692e1b68 cx=c_pps
- a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=9R54UkLUAAAA:8 a=pGLkceISAAAA:8 a=VwQbUJbxAAAA:8 a=crjk6GUWDzGwglwjZYIA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=5hNPEnYuNAgA:10
- a=YTcpBFlVQWkNscrzJ_Dz:22
-X-Proofpoint-GUID: Y0O8RzpyZELpb6ptQ4FoQgQymNIEJbUa
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAxMDE4MyBTYWx0ZWRfXzm1T2yuII93v
- mXBuPNVJWfpBO6Dq9B8IQytaYfizIEqi/B8r4xyezbkPeqYRvbRaLcbKx17BCZt5y5bshqMv60O
- 8pYpx9PdtmeRPByYtNJyx8D8NXGeBRMFHZvEMHsi0gYA32G3y5TSNNIIFB7s0NX60vi6enI0TU9
- S5ThvBnJ9Ya2AX16Js6AjTgBAYHMbsbZfrqK1TsSZL9cnn5Mnap6JuE6BrvqY73fYUMs24IKHLK
- u+rUEL8SNgt89R4Uvu63n8XQGAdEURt8qtRVbTMBsUboQ3Vr9MyIGkHfiyvZblviDwjkvrJMhPj
- jAIp9jmtlMsk/u0VXX0bC/sZrTVDAqok2YgBnMLg9KMwRmX8fEm31do7oYX5EMoAFyj9CxvwnYt
- GIvIk8BKytuYmB4W/3dO67vXpDFIUw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, 1 Dec 2025 20:52:34 +0100 Jonas Gorski <jonas.gorski@gmail.com> wrote:
-
-> Hi,
+On Mon,  1 Dec 2025 17:37:47 +0100 chia-yu.chang@nokia-bell-labs.com
+wrote:
+> Plesae find the v7 AccECN case handling patch series, which covers
+> several excpetional case handling of Accurate ECN spec (RFC9768),
+> adds new identifiers to be used by CC modules, adds ecn_delta into
+> rate_sample, and keeps the ACE counter for computation, etc.
 > 
-> On Mon, Dec 1, 2025 at 3:48 PM Simon Horman <horms@kernel.org> wrote:
-> >
-> > On Mon, Dec 01, 2025 at 11:28:13AM +0100, Jonas Gorski wrote:
-> >
-> > ...
-> >
-> > > diff --git a/net/dsa/user.c b/net/dsa/user.c
-> > > index f59d66f0975d..fa1fe0f1493a 100644
-> > > --- a/net/dsa/user.c
-> > > +++ b/net/dsa/user.c
-> > > @@ -653,21 +653,30 @@ static int dsa_user_port_attr_set(struct net_device *dev, const void *ctx,
-> > >
-> > >  /* Must be called under rcu_read_lock() */
-> > >  static int
-> > > -dsa_user_vlan_check_for_8021q_uppers(struct net_device *user,
-> > > +dsa_user_vlan_check_for_8021q_uppers(struct dsa_port *dp,
-> > >                                    const struct switchdev_obj_port_vlan *vlan)
-> > >  {
-> > > -     struct net_device *upper_dev;
-> > > -     struct list_head *iter;
-> > > +     struct dsa_switch *ds = dp->ds;
-> > > +     struct dsa_port *other_dp;
-> > >
-> > > -     netdev_for_each_upper_dev_rcu(user, upper_dev, iter) {
-> > > -             u16 vid;
-> > > +     dsa_switch_for_each_user_port(other_dp, ds) {
-> > > +             struct net_device *user = other_dp->user;
-> >
-> > Hi Jonas,
-> >
-> > The AI robot is concerned that user may be NULL here.
-> > And I can't convince myself that cannot be the case.
-> >
-> > Could you take a look?
-> >
-> > https://netdev-ai.bots.linux.dev/ai-review.html?id=47057e-e740-4b66-9d60-9ec2a7ee92a1#patch-0
-> 
-> At this point it can be NULL. But it being NULL is not an issue, as ...
-> >
-> > > +             struct net_device *upper_dev;
-> > > +             struct list_head *iter;
-> > >
-> > > -             if (!is_vlan_dev(upper_dev))
-> > > +             if (!dsa_port_bridge_same(dp, other_dp))
-> > >                       continue;
-> 
-> ... this condition will filter all cases where it is NULL. For
-> dsa_port_bridge_same() to return true both ports need to be attached
-> to a bridge (and to the same bridge), and to be attached to a bridge a
-> net_device is required, so other_dp->user cannot be NULL. And we only
-> access user after here.
+> This patch series is part of the full AccECN patch series, which is available at
+> https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
 
-I reproduced this false positive here, thanks for the explanation.  This is an
-example of a class of review mistakes I've wanted to fix, so I used it to
-improve the prompts around NULL pointers that are protected via other checks.
-
-I'll test this on some more commits and push it out.
-
--chris
+Linux tagged 6.18 final, so net-next is closed for new code submissions
+per the announcement at
+https://lore.kernel.org/20251130174502.3908e3ee@kernel.org
+-- 
+pw-bot: defer
 
