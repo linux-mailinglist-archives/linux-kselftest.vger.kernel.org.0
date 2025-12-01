@@ -1,100 +1,179 @@
-Return-Path: <linux-kselftest+bounces-46796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD589C96B5F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 11:47:58 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 027E1C96C2B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 11:55:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C10A5343740
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 10:47:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E8E50344C99
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 10:53:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F534303CB7;
-	Mon,  1 Dec 2025 10:46:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3991C3054E1;
+	Mon,  1 Dec 2025 10:53:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="walNuAjj"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gVxrvCg0";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Tv+NmpJS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF48303A2D;
-	Mon,  1 Dec 2025 10:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62082FE591;
+	Mon,  1 Dec 2025 10:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764586002; cv=none; b=FZi6w9UV3se5fmMEQ7VDVuwQBRhATNRKKpRJFGvtFFI1x+CLg/wUjKOE8Nweb5oNgftVxc4JvwQux3fd29imo+R3Pdx7h6X40pg7YVXDeyRk2cSpuzGozfBOy2Wv1BwGEaYGoMh9AXRljFwncvSsSOK6+RGgF7aKmBwM9+nSVI8=
+	t=1764586420; cv=none; b=qVpzuYrgkbffRqMTsfNYwfRbYfEOXIG75VwLYynC7j/C/QjPgE77MGQqKA5prIpu8cKdqnWIH63Dy2CtJVu5jsX0mszRlXra+U8T5+L4XKlC9ptgc1eW947DpKHKTJxtm+XNK1F9yPvOBI+l7+FntobfQErwOiqlZC0VNeXA32I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764586002; c=relaxed/simple;
-	bh=SPtVYLN6pr0/GK26TSby27WfxPjzX7yoGAZOETTxBuk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A0zEr12b1KH2lUam2LG5C/Ne1jHGdNhUGlHKd8rdfy4+Ko1nodInvXl/JKIa6jrhNyCLrGcm69FQ7sxfKLcGea4YH98aadlXXrfPGqgLwLBkvl7kBBg4iALChC4/4E5tNmhdCNkutEwDLFSeW0klOXoNrS2k2SSP1Pu22f5935k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=walNuAjj; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=prSP2R4LrGQbPcGBJUcBFxh7pV4LinvyasSth50C79w=; b=walNuAjjcZPZpAajNR0M5w8zmO
-	IGRiHofwwxVdJHSp9QWhCYNnvdCjYgWRAZJQIQ9c7kk5CZfstSdqSDQboPvmsncxwxLEwTF4IakMP
-	GGkO8fWTv3BDfdI7rHz0CeV0yvcS1wH5huBSwWs6/6MCzMSdarzyX/a39jUquEiEYa5YurC2hSnik
-	mWZlMCNelBuXq5fYpAqCr+dwWUSkyU8jnf6yXE+Qg98dlnv8qet1Wj4EzwAQayujUvMEAVLpvuIl1
-	1tjfjkrePH4ZLF0Vvk0Y7sDqqY0t66B9L5syY4muNvTxyKw6UF8EJ5glmfR5KVS7EAQBdvIXyKAJ1
-	h0oL2wCg==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vQ1QN-000aAP-DP; Mon, 01 Dec 2025 10:46:31 +0000
-Date: Mon, 1 Dec 2025 02:46:25 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Andre Carvalho <asantostc@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v8 0/5] netconsole: support automatic target
- recovery
-Message-ID: <q4l6chqvikl4zgypqysdd5ri2vt6p4qdq2f4l66nxfbm7q5wo2@qwvwkilyzzoh>
-References: <20251128-netcons-retrigger-v8-0-0bccbf4c6385@gmail.com>
- <20251128161133.3397b20c@kernel.org>
- <htqwtsgxsffbjbccd62kzcdaa2uxezdtywudcrfghydym7axad@4j46eyxzvhte>
+	s=arc-20240116; t=1764586420; c=relaxed/simple;
+	bh=J35d9u8rweiVjB8ttPcL7PtgJyDA4HIFZjVOTezIpG0=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=fFPAY6xIBYO9n0ImmVlj/XvD6n/DQX1JIt0ErqvNG0gsMvI0T6Ub1vKBOXZn/JiNeN0YY5yWVWQ7lNDmF6XTtXa7eOtJHv6fxNeD7LsLkxhOKmgM0PEOqqThgbxr6wNifZ4jReL4GhuwkTub5b/dEsUU6ZSbNp175hBjvLBpl2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gVxrvCg0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Tv+NmpJS; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id C6DFFEC0817;
+	Mon,  1 Dec 2025 05:53:36 -0500 (EST)
+Received: from phl-imap-17 ([10.202.2.105])
+  by phl-compute-04.internal (MEProxy); Mon, 01 Dec 2025 05:53:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1764586416;
+	 x=1764672816; bh=xnZJWBs/RiH5PbQkgIZcruUaLXb2cwe/Wy6Areuom48=; b=
+	gVxrvCg0pp3498SzCSNpRlsoYr45sFRZy0b/8MS67ITtX5VF7itgzv6GdXEbficG
+	pMEePAc1Wa1D8zcbJ9VdCEKNPnBaQ4Ix+Iq347Sy3fDpRQRxysTFkOiMIC6uhdTi
+	0MEcHa/7pP9DKFkyZU42bDWhsIjDG7/z0LrcB7Y1r9RK83seRRGcMtcJyBVYq0Qv
+	NZOYytmngoxYmPuWO2Om1lclG/BiW71Zy4LhAE8s2RXIfBJ3oAh9YO2qOqKGHxue
+	JfXjWfGNVeVW+aM3AYqq665319QTv+mN6RuYCIuPbvGh12+bko1XmQ0ZXgfak4o0
+	1kELeASVtPk6Xr/u/WwuyQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1764586416; x=
+	1764672816; bh=xnZJWBs/RiH5PbQkgIZcruUaLXb2cwe/Wy6Areuom48=; b=T
+	v+NmpJSHlmdVSO83p4zPTFDcNYKybDM4FUAZao4yM4kE8NXnCuWqXLieyMiTFBMd
+	2N7I40D82JxPJvUqer5OD84iZ5KeCOrdOWnahJPgjkRnVBE185+Gfxy82UH4ThGr
+	EHPwkowfkgeFtUPJbbKUiASDt8Prv/4Mqe36CQVBceiVI2RHlffVsylInHy8AbSg
+	+CSmuWKLZ7OuYBR/zzjXd7J/ZlfXNgsxb4zuEbtemR2uLYmvTvXwBW851OcJOb+i
+	lKQUT2QnlOh0oPe6jbD6UQfS7fg0fPQGJ1pWLiK91iSXSIuWD3Zh1Df+2NAi0APV
+	kdqaD/XrjWsbFZKVT5LWg==
+X-ME-Sender: <xms:sHMtaWNtAxfHIdJ8XNe3uNxNvUP0MaVrtsCj5MSTDvf706JtzRsOpA>
+    <xme:sHMtafxYj22bcGEPRzVji-wGk7u8u5vpjKie6tL1zn61wMZtADm4EhmyDI2RO0G4X
+    s5vvRmDZt51DxSc_FKHhm_tctRbZjpYVLfKX1tA-v0ZW3-bBxP9TA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvheejheduucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucenucfjughrpefoggffhffvvefkjghfufgtgfesthhqre
+    dtredtjeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghr
+    nhgusgdruggvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvle
+    ehvddvgeejvdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtth
+    hopeehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeifsedufihtrdgvuhdprhgt
+    phhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqd
+    hkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhig
+    qdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
+    hinhhugiesfigvihhsshhstghhuhhhrdhnvght
+X-ME-Proxy: <xmx:sHMtaYYncX44nkNpwqni31gi1ww9wwoFdr7SB_GJds1rlyUEHkCZCw>
+    <xmx:sHMtacWRNCfSgd6EVeJcHkLpK9IS2fJzMuHCTpypuLiAfTRSpOYHSA>
+    <xmx:sHMtaehWLno-Z3D9eBpESy22DI-xCadGhD3DSzqbf5S6FQglATfRGQ>
+    <xmx:sHMtaSuyIO2wzakgbypXaMJvpAwWtbtRIjgLAeOVYAf9ykLbDThoTg>
+    <xmx:sHMtaddC7FZD4O1KC759-UalU2vfu4V6S0xtXXdcBQF5UW7yQT5w7vjp>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 54963C40054; Mon,  1 Dec 2025 05:53:36 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-ThreadId: AuglI0iV1DGV
+Date: Mon, 01 Dec 2025 11:53:16 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Willy Tarreau" <w@1wt.eu>
+Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Message-Id: <2158db79-4b59-4cd2-a4af-a2b4429fd1bd@app.fastmail.com>
+In-Reply-To: <20251201103505.GA23859@1wt.eu>
+References: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
+ <20251122-nolibc-uapi-types-v2-9-b814a43654f5@weissschuh.net>
+ <20251130105842.GD31522@1wt.eu>
+ <75e632e3-3353-414d-9b8a-8bf9ca46b5a4@app.fastmail.com>
+ <20251201103505.GA23859@1wt.eu>
+Subject: Re: [PATCH v2 09/13] tools/nolibc: always use 64-bit time types
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <htqwtsgxsffbjbccd62kzcdaa2uxezdtywudcrfghydym7axad@4j46eyxzvhte>
-X-Debian-User: leitao
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 29, 2025 at 12:29:22AM +0000, Andre Carvalho wrote:
-> On Fri, Nov 28, 2025 at 04:11:33PM -0800, Jakub Kicinski wrote:
-> > On Fri, 28 Nov 2025 22:07:59 +0000 Andre Carvalho wrote:
-> > > This patchset introduces target resume capability to netconsole allowing
-> > > it to recover targets when underlying low-level interface comes back
-> > > online.
-> > 
-> > config hiding a build failure somewhere:
-> > 
-> > drivers/net/netconsole.c: In function ‘send_msg_store’:
-> > drivers/net/netconsole.c:1304:16: error: ‘struct netconsole_target’ has no member named ‘enabled’
-> >  1304 |         if (!nt->enabled)
-> >       |                ^~
-> > -- 
-> > pw-bot: cr
-> 
-> Hi Jakub,
-> 
-> Looks like it comes from Breno's patch [1] which was also part of the same testing branch.
-> Not sure how to proceed here, I suppose we would need to pick one of the series to apply
-> first and then respind the other one.
+On Mon, Dec 1, 2025, at 11:35, Willy Tarreau wrote:
+> On Mon, Dec 01, 2025 at 08:45:00AM +0100, Arnd Bergmann wrote:
+>> On Sun, Nov 30, 2025, at 11:58, Willy Tarreau wrote:
+>>
+>> #if __TIMESIZE =3D=3D 64 && __WORDSIZE =3D=3D 32
+>> # define __TIME_T_TYPE          __SQUAD_TYPE
+>> # define __SUSECONDS_T_TYPE     __SQUAD_TYPE
+>> #else
+>> # define __TIME_T_TYPE          __SLONGWORD_TYPE
+>> # define __SUSECONDS_T_TYPE     __SLONGWORD_TYPE
+>> #endif
+>>=20
+>> so this one is explicitly the same width as tv_sec, which has all
+>> the issues you listed, but avoids the need for padding.
+>
+> Ah we seem to just have checked different versions then,
+> as in mine there was still some extra padding left depending
+> on the endianness :-)
 
-I would like to have this patchset intergrated first, and I will rebase
-mine on top of yours.
+The padding is definitely there in timespec around tv_nsec,
+just not in timeval.
 
---breno
+Oddly, the version I quoted is from my arm64 /usr/include/
+installation and looks different from what I see in the glibc
+history, though that also uses a 64-bit tv_usec:
+
+bits/typesizes.h:#define __SUSECONDS64_T_TYPE   __SQUAD_TYPE
+posix/bits/types.h:__STD_TYPE __SUSECONDS64_T_TYPE __suseconds64_t;
+struct timeval
+{
+#ifdef __USE_TIME64_REDIRECTS
+  __time64_t tv_sec;            /* Seconds.  */
+  __suseconds64_t tv_usec;      /* Microseconds.  */
+#else
+  __time_t tv_sec;              /* Seconds.  */
+  __suseconds_t tv_usec;        /* Microseconds.  */
+#endif
+};
+
+>> C23 has updated the definition and does allow int64_t tv_nsec.
+>
+> So it purposely breaks existing apps or does it apply only to those
+> compiled with -mstd=3Dc23 ?
+
+Neither, it's just that nolibc with a 64-bit tv_nsec would
+be compliant with c23, just not earlier versions.
+
+I expect glibc to stick with 32-bit timespec and padding, which
+is still compliant with the new definition of
+
+|   The type of tv_nsec is an implementation-defined signed integer type
+|   that can represent integers in [=E2=80=8B0=E2=80=8B, 999999999].=20
+
+>> I think it makes sense for nolibc to just follow the kernel's
+>> definition here.
+>
+> Given the very narrow range of existing code that can be impacted,
+> I'm fine, but in general I try to remain extremely cautious about
+> portability: as a general rule, ifdefs needed to address possible
+> incompatibilities, if any, should rather be in the libc code itself
+> and not in the user application. I just ran a quick check and don't
+> have code using &tv_usec nor &tv_nsec so here the risk remains quite
+> low.
+
+Ok
+
+     ARnd
 
