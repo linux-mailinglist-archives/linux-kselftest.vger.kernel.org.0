@@ -1,147 +1,123 @@
-Return-Path: <linux-kselftest+bounces-46787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71AF6C966E5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 10:45:08 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05A22C969B8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 11:18:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2411E3A2558
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 09:45:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B069F4E04F7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 10:18:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84F7301716;
-	Mon,  1 Dec 2025 09:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F55B301716;
+	Mon,  1 Dec 2025 10:18:03 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26CCB3016E3;
-	Mon,  1 Dec 2025 09:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2593002D0;
+	Mon,  1 Dec 2025 10:18:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764582305; cv=none; b=E6IIlcyY2EvMu7/awncxREAw3hI5eHSKkwgypNtYyIQRm8vy7rBj0cFqwvw0+8F0tWnywTCUnpoD447WF/UawncqJ2f+JT5gVVOKGoHvSEI23FDUtMMq/7t1/ul3pAr3b04aQtemWvDX7yQWLQfHNfoIQr/PmmPp+foiD6bm070=
+	t=1764584283; cv=none; b=BXXuJwsTYZ9Cl3/stNmyTOQws4txSMh1/rRdnSAQ0kTdzILGtFbD8Lakp8LhhLkkZNa+ExcdEX2o/4RGk2m83ryZFV2QcOFhu/tTRRpSgsfsLQjp2Gg7GGf28HOGw9CuPcOeLYOfSthuL9PJ3ZSFq86fuGvKIB4JjQl8Zg1cXZo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764582305; c=relaxed/simple;
-	bh=4XVEzB5zcXbD3mQxMCq3CKilOGlWuxPaM1ZHUOnCvUE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VtXp7PCsGyIHuvezPPdr2NOUKzIHBs18kvSHRRppg/jlmakwyqKP7znoE9ujGfyP2E1+06l5B2YYIJyv/3VD5Rx+QyDcM5pNZk3KUeVsPni0EC4O5iF6y55DQUB+zaZsE9F/AQezxSSEdHMp/vdqOZkZ0XzEK8kBQSwO62otl44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 6443bfbace9a11f0a38c85956e01ac42-20251201
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:ca7bf2b2-3734-47b3-bf85-dcf155affa40,IP:10,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:5
-X-CID-INFO: VERSION:1.3.6,REQID:ca7bf2b2-3734-47b3-bf85-dcf155affa40,IP:10,URL
-	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:5
-X-CID-META: VersionHash:a9d874c,CLOUDID:e7f97df87a10049f3beda36d7db7b00c,BulkI
-	D:251119212056S6LKT8LY,BulkQuantity:24,Recheck:0,SF:17|19|64|66|78|80|81|8
-	2|83|102|127|841|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:ni
-	l,RT:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,
-	DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_OBB
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 6443bfbace9a11f0a38c85956e01ac42-20251201
-X-User: sunshaojie@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 974515596; Mon, 01 Dec 2025 17:44:55 +0800
-From: Sun Shaojie <sunshaojie@kylinos.cn>
-To: chenridong@huaweicloud.com
-Cc: cgroups@vger.kernel.org,
-	hannes@cmpxchg.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llong@redhat.com,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	sunshaojie@kylinos.cn,
-	tj@kernel.org
-Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on cpuset.cpus conflict.
-Date: Mon,  1 Dec 2025 17:44:47 +0800
-Message-Id: <20251201094447.108278-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <45f5e2c6-42ec-4d77-9c2d-0e00472a05de@huaweicloud.com>
-References: <45f5e2c6-42ec-4d77-9c2d-0e00472a05de@huaweicloud.com>
+	s=arc-20240116; t=1764584283; c=relaxed/simple;
+	bh=0ohCcHE9Ps+Wxv0p+B+GebAPjC2U8EY2WYXm4N9ptDA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=R/+0TooA+UwfUP/a4XpfhP9/yD/wGgl/NAvwTAYQX9+JTmXmTW6kSoX5Ui0aWDPszqC0znwrermQl7wVl27QdQLN+VXhD2tZjRNvVotee4/CKfTgHtuhtdq6118vLD/8m4xkIncN85egNQ6VStIRSZa7QCyT1lP3wGQ+9gzVSJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 49C01FEC;
+	Mon,  1 Dec 2025 02:17:52 -0800 (PST)
+Received: from [10.57.43.170] (unknown [10.57.43.170])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D606E3F73B;
+	Mon,  1 Dec 2025 02:17:54 -0800 (PST)
+Message-ID: <65c7307b-1f4e-4ae7-8bcf-8bfd9a9186fb@arm.com>
+Date: Mon, 1 Dec 2025 11:17:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 11/12] arm64: entry: Convert to generic entry
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
+ luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
+ charlie@rivosinc.com, akpm@linux-foundation.org, ldv@strace.io,
+ macro@orcam.me.uk, deller@gmx.de, mark.rutland@arm.com, efault@gmx.de,
+ song@kernel.org, mbenes@suse.cz, ryan.roberts@arm.com,
+ ada.coupriediaz@arm.com, anshuman.khandual@arm.com, broonie@kernel.org,
+ pengcan@kylinos.cn, dvyukov@google.com, kmal@cock.li,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251126071446.3234218-1-ruanjinjie@huawei.com>
+ <20251126071446.3234218-12-ruanjinjie@huawei.com>
+ <c6cf8755-34d0-468d-99c4-ac6d266f9efb@arm.com>
+ <bfdd914c-4c3a-9af7-d530-f57f3532c3d5@huawei.com>
+ <8c55c2a1-995e-44a1-8d48-b7d794f5176f@arm.com>
+ <0e65df65-c454-df7f-0685-42e9c0f0f9e3@huawei.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <0e65df65-c454-df7f-0685-42e9c0f0f9e3@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi, Ridong,
+On 29/11/2025 02:23, Jinjie Ruan wrote:
+>>>>>  #define TIF_UPROBE		5	/* uprobe breakpoint or singlestep */
+>>>>>  #define TIF_MTE_ASYNC_FAULT	6	/* MTE Asynchronous Tag Check Fault */
+>>>>>  #define TIF_NOTIFY_SIGNAL	7	/* signal notifications exist */
+>>>>> -#define TIF_SYSCALL_TRACE	8	/* syscall trace active */
+>>>>> -#define TIF_SYSCALL_AUDIT	9	/* syscall auditing */
+>>>>> -#define TIF_SYSCALL_TRACEPOINT	10	/* syscall tracepoint for ftrace */
+>>>>> -#define TIF_SECCOMP		11	/* syscall secure computing */
+>>>>> -#define TIF_SYSCALL_EMU		12	/* syscall emulation active */
+>>>>> +#define TIF_SECCOMP		11      /* syscall secure computing */
+>>>>> +#define TIF_SYSCALL_EMU		12      /* syscall emulation active */
+>>>> These seem to have reappeared in v8 for some reason?
+>>> v8 add "ARCH_SYSCALL_WORK_EXIT" to be defined as "SECCOMP | SYSCALL_EMU"
+>>>   to keep the arm64 behaviour unchanged as mentioned in v7.
+>> Ah then that is where the issue is, I missed that: surely switching to
+>> generic entry means that we are using SYSCALL_WORK_BIT_* rather than
+>> TIF_* for all these flags?
+> I think they may be the same thing as you mentioned in v7，neither
+> SYSCALL_WORK_EXIT nor report_single_step() excluded SYSCALL_EMU, maybe
+> we should clarify them for arm64 together in a separate patch.
 
-On Thu, 27 Nov 2025 09:55:21, Chen Ridong wrote:
->I have to admit that I prefer the current implementation.
+These two might indeed be related. On second thoughts, while waiting for
+more knowledgeable arm64 reviewers, I would suggest aligning arm64 with
+the generic entry. Which means...
+
+> 1、"The generic report_single_step() always returns false if SYSCALL_EMU
+> is set."
+
+... replicating this behaviour on arm64 (in a separate patch), and...
+
+> 2、"
+>      > -void syscall_exit_to_user_mode_prepare(struct pt_regs *regs)
+>      > -{
+>      > -	unsigned long flags = read_thread_flags();
+>      > -
+>      > -	rseq_syscall(regs);
+>      > -
+>      > -	if (has_syscall_work(flags) || flags & _TIF_SINGLESTEP)
 >
->At the very least, it ensures that all partitions are treated fairly[1]. Relaxing this rule would
->make it more difficult for users to understand why the cpuset.cpus they configured do not match the
->effective CPUs in use, and why different operation orders yield different results.
-
-As for "different operation orders yield different results", Below is an
-example that is not a corner case.
-
-    root cgroup
-      /    \
-     A1    B1
-
- #1> echo "0" > A1/cpuset.cpus
- #2> echo "0-1" > B1/cpuset.cpus.exclusive --> return error
-
- #1> echo "0-1" > B1/cpuset.cpus.exclusive
- #2> echo "0" > A1/cpuset.cpus
-
+>      I believe switching to the generic function introduces a change
+>      here: syscall_exit_work() is only called if a flag in
+> SYSCALL_WORK_EXIT is set, and this set does not include SYSCALL_EMU and
+>     SECCOMP. Practically this means that audit_syscall_exit() will no
+>     longer be called if only SECCOMP and/or SYSCALL_EMU is set.
 >
->In another scenario, if we do not invalidate the siblings, new leaf cpusets (marked as member)
->created under A1 will end up with empty effective CPUs—and this is not a desired behavior.
->
->   root cgroup
->        |
->       A1
->      /  \
->    A2    A3...
->
-> #1> echo "0-1" > A1/cpuset.cpus
-> #2> echo "root" > A1/cpuset.cpus.partition
-> #3> echo "0-1" > A2/cpuset.cpus
-> #4> echo "root" > A2/cpuset.cpus.partition
-> mkdir A4
-> mkdir A5
-> echo "0" > A4/cpuset.cpus
-> echo $$ > A4/cgroup.procs
-> echo "1" > A5/cpuset.cpus
-> echo $$ > A5/cgroup.procs
->
+>    It doesn't feel like a major behaviour change, but it should be
+>    pointed out."
 
-If A2...A5 all belong to the same user, and that user wants both A4 and A5 
-to have effective CPUs, then the user should also understand that A2 needs
-to be adjusted to "member" instead of "root".
+... replicating this on arm64 as well, i.e. introducing a separate set
+of flags for syscall exit. This should be a patch of its own, as it
+isn't directly related to the report_single_step() behaviour (especially
+since it concerns SECCOMP as well). It would also be an occasion to get
+rid of has_syscall_work(), in preparation to the move to generic entry.
 
-if A2...A5 belong to different users, must satisfying user A4’s requirement
-come at the expense of user A2’s requirement? That is not fair.
-
->
->[1]: "B1 is a second-class partition only because it starts later or why is it OK to not fulfill its
->requirement?" --Michal.
-
-Thanks,
-Sun Shaojie
+- Kevin
 
