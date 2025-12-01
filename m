@@ -1,55 +1,95 @@
-Return-Path: <linux-kselftest+bounces-46781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2D09C962B2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 09:31:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A7A0C964A3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 09:58:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9656D4E1088
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 08:31:41 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5D8F64E1387
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 08:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD21296BCF;
-	Mon,  1 Dec 2025 08:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCAFD2FD7DA;
+	Mon,  1 Dec 2025 08:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="VHRIP3Va"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="YOM5Lr5d";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="v0HBoub+";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="YOM5Lr5d";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="v0HBoub+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6296433985;
-	Mon,  1 Dec 2025 08:31:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E412D2FD68D
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 08:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764577897; cv=none; b=ebj2D6czZxOy0oXoMdrmwD0YvCRzSKNfhIBNp8iGzEaFgUnktR4SwNaSTvKlu2VGBwJ1/HJ0zEE8cJYhBy4hwTFOPMK+mvHFYAYjaU+ydZCCA6CzRslmm3hQk1HZjhf7AWhcpp5XSWt1GnuHGoGlXZMMkFHz+bxioH6IYlyPrVA=
+	t=1764579491; cv=none; b=JfC2Qnfebxi4vMlEwXw5Gp/y96IJ0uYp3hPGm0bvimbWWk7AlK6b02RvwOjLps8/FHbCPTcaMzVFe8SSl4ksYMIoPEONAV8PcOBM0XNe3fXzLoDKVW64SQL6p/MP4I+3dXAief/da52VGXb8K1n9N1ifZAFmwT0AnRrs/R7MpLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764577897; c=relaxed/simple;
-	bh=vMqGvNboBBXSS8uY1TjtE7V3YvfgNXOsABIPU5fXf1U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Fxjh9PwLflYhm6ab+lr8k+Ye9ZPg+UfU7BmNoe8zo5c5XCyvTooyrp6WvKCGl7zvh1yWAlzHKZgQPOzNdfzFq22uvsAj3NLAIwEnWPrZflOhb7dXeuIdXRG2Aan5Jza0gxtHBt2AvI7oOVJxIvUI+9eQlQVo5YD+sgReG2SvrcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=VHRIP3Va; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=e+5glRbyh0Qf7t2E3ghkZkSak91rQ0ocUQNnzE3DWTs=;
-	b=VHRIP3VaNwCh2tYlW6dFMzGABtIqp/6KX/82pWbOnT6eNeURerH/ETjZ7JLKGDqItqhQfZ2bD
-	lMO6olMXPjw+LZfLkQIHxcBrE5583Gs7+p/tJu2zCzbChFSYtkMIPspZ9JfrNNljUGb6KgJO5+x
-	StZZLr8Gk4OyYAfLEzdOkU8=
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4dKcWz4l7Cz1T4GL;
-	Mon,  1 Dec 2025 16:29:35 +0800 (CST)
-Received: from dggpemr200006.china.huawei.com (unknown [7.185.36.167])
-	by mail.maildlp.com (Postfix) with ESMTPS id 598B2180478;
-	Mon,  1 Dec 2025 16:31:25 +0800 (CST)
-Received: from [10.67.110.145] (10.67.110.145) by
- dggpemr200006.china.huawei.com (7.185.36.167) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 1 Dec 2025 16:31:24 +0800
-Message-ID: <cd97e421-849b-4fc1-aeb0-c0865508a5f7@huawei.com>
-Date: Mon, 1 Dec 2025 16:31:24 +0800
+	s=arc-20240116; t=1764579491; c=relaxed/simple;
+	bh=X5wRJC7lZfI2JxXrlOHVkK8Dhcp5VBRZVeLW6lB6M00=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KL7qisNq1Ur1u3xV6NczkJBESUMOuQPwChTZda9ucmC3gA86AP4U1yQ8CdTnPmi2uv1HtP5mnxlavUuGjX5YCNqBTxbWfNHA42UE+/7T1ocIk8lZgevelrw5IeIyFbRvz9rRRZ1c/R4wpdeFFf8vucXDTo6W9NEwHLu0BF3ynM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YOM5Lr5d; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=v0HBoub+; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=YOM5Lr5d; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=v0HBoub+; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 1CADA5BD51;
+	Mon,  1 Dec 2025 08:58:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1764579488; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8SiUpfX9M8LLIqmWf8iz9EvnoQHx9wwh9z4++DhczXg=;
+	b=YOM5Lr5dxO2NFsFswzCU51zzS1qdtnJeDKu5HqEeXhHcokcFpHOT/YkSFTteG2ofDyp5ju
+	b7wb7ewP1jiRifhUcozu2vUV7AJO3E9RqSPrkLSAsO0pG6VUooI+LX6olSeTMPYIKu2PN4
+	pahFrNPO88p4q7bKyjIEVzztho88ALE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1764579488;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8SiUpfX9M8LLIqmWf8iz9EvnoQHx9wwh9z4++DhczXg=;
+	b=v0HBoub+/l86Qc2eTq9Z2v25Szy1lPy4LVcsWTsNjpQlUCREwgmPIsKqxx1t0gtlaPBbfG
+	gBVEqacIEikG/TDg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1764579488; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8SiUpfX9M8LLIqmWf8iz9EvnoQHx9wwh9z4++DhczXg=;
+	b=YOM5Lr5dxO2NFsFswzCU51zzS1qdtnJeDKu5HqEeXhHcokcFpHOT/YkSFTteG2ofDyp5ju
+	b7wb7ewP1jiRifhUcozu2vUV7AJO3E9RqSPrkLSAsO0pG6VUooI+LX6olSeTMPYIKu2PN4
+	pahFrNPO88p4q7bKyjIEVzztho88ALE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1764579488;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8SiUpfX9M8LLIqmWf8iz9EvnoQHx9wwh9z4++DhczXg=;
+	b=v0HBoub+/l86Qc2eTq9Z2v25Szy1lPy4LVcsWTsNjpQlUCREwgmPIsKqxx1t0gtlaPBbfG
+	gBVEqacIEikG/TDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 960073EA63;
+	Mon,  1 Dec 2025 08:58:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id OVbFIZ9YLWmCPAAAD6G6ig
+	(envelope-from <fmancera@suse.de>); Mon, 01 Dec 2025 08:58:07 +0000
+Message-ID: <30ee83e6-bed4-43c8-bbe2-ea19fbf17ce3@suse.de>
+Date: Mon, 1 Dec 2025 09:58:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,116 +97,59 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: breakpoints: check RTC wakeup alarm support
- before test
-To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
-CC: Moon Hee Lee <moonhee.lee.ca@gmail.com>, <yifei.l.liu@oracle.com>,
-	<zhujun2@cmss.chinamobile.com>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <zouyipeng@huawei.com>
-References: <20251112061532.2867859-1-zhengxinyu6@huawei.com>
- <b0ceed9c-3ff6-4eee-80e3-f50631bb1230@linuxfoundation.org>
+Subject: Re: [PATCH 2/2 net-next] selftests: ipv6_icmp: add tests for ICMPv6
+ handling
+To: David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, shuah@kernel.org, horms@kernel.org,
+ pabeni@redhat.com, kuba@kernel.org, edumazet@google.com, davem@davemloft.net
+References: <20251126201943.4480-1-fmancera@suse.de>
+ <20251126201943.4480-2-fmancera@suse.de>
+ <341a110e-7ba0-4846-abf4-5143042c8e80@kernel.org>
 Content-Language: en-US
-From: Xinyu Zheng <zhengxinyu6@huawei.com>
-In-Reply-To: <b0ceed9c-3ff6-4eee-80e3-f50631bb1230@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- dggpemr200006.china.huawei.com (7.185.36.167)
+From: Fernando Fernandez Mancera <fmancera@suse.de>
+In-Reply-To: <341a110e-7ba0-4846-abf4-5143042c8e80@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	URIBL_BLOCKED(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Level: 
+X-Spam-Score: -4.30
+X-Spam-Flag: NO
 
-
-
-On 11/20/2025 6:15 AM, Shuah Khan wrote:
-> On 11/11/25 23:15, Xinyu Zheng wrote:
->> If RTC wakeup alarm feature is unsupported, this testcase may cause
-> 
-> It may cause infinite suspend? Doesn't sound definitive.> infinite 
-> suspend if there is no other wakeup source. To solve this
->> problem, set wakeup alarm up before we trigger suspend. In this case,
->> we can test if RTC support RTC_FEATURE_ALARM and efi_set_alarm function.
+On 11/29/25 4:56 PM, David Ahern wrote:
+> On 11/26/25 12:19 PM, Fernando Fernandez Mancera wrote:
+>> Test ICMPv6 to link local address and local address. In addition, this
+>> test set could be extended to cover more situations in the future.
+>>
+>> ICMPv6 to local addresses
+>>      TEST: Ping to link local address                                   [OK]
+>>      TEST: Ping to link local address from ::1                          [OK]
+>>      TEST: Ping to local address                                        [OK]
+>>      TEST: Ping to local address from ::1                               [OK]
 >>
 > 
-> For a "may cause" problem, this change> Signed-off-by: Xinyu Zheng 
-> <zhengxinyu6@huawei.com>
->> --->   .../breakpoints/step_after_suspend_test.c     | 23 ++++++++++++ 
->> +++++++
->>   1 file changed, 23 insertions(+)
->>
->> diff --git a/tools/testing/selftests/breakpoints/ 
->> step_after_suspend_test.c b/tools/testing/selftests/breakpoints/ 
->> step_after_suspend_test.c
->> index 8d233ac95696..e738af896ce1 100644
->> --- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
->> +++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
->> @@ -13,6 +13,8 @@
->>   #include <stdio.h>
->>   #include <string.h>
->>   #include <unistd.h>
->> +#include <linux/rtc.h>
->> +#include <sys/ioctl.h>
->>   #include <sys/ptrace.h>
->>   #include <sys/stat.h>
->>   #include <sys/timerfd.h>
->> @@ -159,10 +161,30 @@ void suspend(void)
->>       int count_before;
->>       int count_after;
->>       struct itimerspec spec = {};
->> +    char *rtc_file = "/dev/rtc0";
->> +    int rtc_fd;
->> +    struct rtc_wkalrm alarm = { 0 };
->> +    time_t secs;
->>       if (getuid() != 0)
->>           ksft_exit_skip("Please run the test as root - Exiting.\n");
->> +    rtc_fd = open(rtc_file, O_RDONLY);
->> +    if (rtc_fd < 0)
->> +        ksft_exit_fail_msg("open rtc0 failed\n");
->> +
->> +    err = ioctl(rtc_fd, RTC_RD_TIME, &alarm.time);
->> +    if (err < 0)
->> +        ksft_exit_fail_msg("get rtc time failed\n");
->> +
->> +    secs = timegm((struct tm *)&alarm.time) + 3;
->> +    gmtime_r(&secs, (struct tm *)&alarm.time);
->> +    alarm.enabled = 1;
->> +
->> +    err = ioctl(rtc_fd, RTC_WKALM_SET, &alarm);
->> +    if (err < 0)
->> +        ksft_exit_fail_msg("set wake alarm test failed, errno %d\n", 
->> errno);
+> VRF based tests are needed as well to ensure this change works properly
+> with VRFs.
 > 
-> Essentially with this change the test doesn't run unless
-> RTC wake is supported. That sounds restrictive - is there
-> another way do do this?
 
-Hi, Shuah.
-
-If RTC wake is a must in this testcase?
-
-In my test, when EFI report supporting EFI_RT_SUPPORTED_SET_WAKEUP_TIME.
-There will be a alarmtimer.0.auto under /sys/class/rtc/rtc0/，while 
-suspending, I found alarmtimer will also been suspended and pass the 
-wakeup job to RTC. When RTC calls efi_set_alarm(), this function returns 
-EFI_UNSUPPORTED then suspend fails.
-
-When EFI doesn't report supporting EFI_RT_SUPPORTED_SET_WAKEUP_TIME, 
-there is no /sys/class/rtc/rtc0/alarmtimer.0.auto and alarmtimer is not 
-a suspend target. Then suspend success, but never wakeup.
-
-> 
->> +
->>       timerfd = timerfd_create(CLOCK_BOOTTIME_ALARM, 0);
->>       if (timerfd < 0)
->>           ksft_exit_fail_msg("timerfd_create() failed\n");
->> @@ -180,6 +202,7 @@ void suspend(void)
->>       if (count_after <= count_before)
->>           ksft_exit_fail_msg("Failed to enter Suspend state\n");
->> +    close(rtc_fd);
->>       close(timerfd);
->>   }
->>
-> thanks,
-> -- Shuah
-
--- 
-Xinyu Zheng
-
+Thank you David. I am reposting it with VRF based tests once net-next 
+tree is open again.
 
