@@ -1,179 +1,234 @@
-Return-Path: <linux-kselftest+bounces-46797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46798-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 027E1C96C2B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 11:55:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C63A7C97129
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 12:38:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E8E50344C99
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 10:53:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 983044E232C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 11:35:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3991C3054E1;
-	Mon,  1 Dec 2025 10:53:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A4DF26ED51;
+	Mon,  1 Dec 2025 11:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gVxrvCg0";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Tv+NmpJS"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ZFaVxMI0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D62082FE591;
-	Mon,  1 Dec 2025 10:53:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D9A26C3B6;
+	Mon,  1 Dec 2025 11:35:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764586420; cv=none; b=qVpzuYrgkbffRqMTsfNYwfRbYfEOXIG75VwLYynC7j/C/QjPgE77MGQqKA5prIpu8cKdqnWIH63Dy2CtJVu5jsX0mszRlXra+U8T5+L4XKlC9ptgc1eW947DpKHKTJxtm+XNK1F9yPvOBI+l7+FntobfQErwOiqlZC0VNeXA32I=
+	t=1764588920; cv=none; b=OMwJelWmcXy4h6zqxuhIgBpeN0RP04qeyW2MvGJAjRneIMDcIAeVZrrWQyOS7MzIoD/msAfpPO6U0GA6nOpAE/jWT2i0f/GDiB3Vs3/P2u/gtjByT7llroiObBd3jC1/y/JD0GsinHCU52DIQ3P6CjW0WxEWkYYInhV7OpjGkvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764586420; c=relaxed/simple;
-	bh=J35d9u8rweiVjB8ttPcL7PtgJyDA4HIFZjVOTezIpG0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=fFPAY6xIBYO9n0ImmVlj/XvD6n/DQX1JIt0ErqvNG0gsMvI0T6Ub1vKBOXZn/JiNeN0YY5yWVWQ7lNDmF6XTtXa7eOtJHv6fxNeD7LsLkxhOKmgM0PEOqqThgbxr6wNifZ4jReL4GhuwkTub5b/dEsUU6ZSbNp175hBjvLBpl2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gVxrvCg0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Tv+NmpJS; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id C6DFFEC0817;
-	Mon,  1 Dec 2025 05:53:36 -0500 (EST)
-Received: from phl-imap-17 ([10.202.2.105])
-  by phl-compute-04.internal (MEProxy); Mon, 01 Dec 2025 05:53:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1764586416;
-	 x=1764672816; bh=xnZJWBs/RiH5PbQkgIZcruUaLXb2cwe/Wy6Areuom48=; b=
-	gVxrvCg0pp3498SzCSNpRlsoYr45sFRZy0b/8MS67ITtX5VF7itgzv6GdXEbficG
-	pMEePAc1Wa1D8zcbJ9VdCEKNPnBaQ4Ix+Iq347Sy3fDpRQRxysTFkOiMIC6uhdTi
-	0MEcHa/7pP9DKFkyZU42bDWhsIjDG7/z0LrcB7Y1r9RK83seRRGcMtcJyBVYq0Qv
-	NZOYytmngoxYmPuWO2Om1lclG/BiW71Zy4LhAE8s2RXIfBJ3oAh9YO2qOqKGHxue
-	JfXjWfGNVeVW+aM3AYqq665319QTv+mN6RuYCIuPbvGh12+bko1XmQ0ZXgfak4o0
-	1kELeASVtPk6Xr/u/WwuyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1764586416; x=
-	1764672816; bh=xnZJWBs/RiH5PbQkgIZcruUaLXb2cwe/Wy6Areuom48=; b=T
-	v+NmpJSHlmdVSO83p4zPTFDcNYKybDM4FUAZao4yM4kE8NXnCuWqXLieyMiTFBMd
-	2N7I40D82JxPJvUqer5OD84iZ5KeCOrdOWnahJPgjkRnVBE185+Gfxy82UH4ThGr
-	EHPwkowfkgeFtUPJbbKUiASDt8Prv/4Mqe36CQVBceiVI2RHlffVsylInHy8AbSg
-	+CSmuWKLZ7OuYBR/zzjXd7J/ZlfXNgsxb4zuEbtemR2uLYmvTvXwBW851OcJOb+i
-	lKQUT2QnlOh0oPe6jbD6UQfS7fg0fPQGJ1pWLiK91iSXSIuWD3Zh1Df+2NAi0APV
-	kdqaD/XrjWsbFZKVT5LWg==
-X-ME-Sender: <xms:sHMtaWNtAxfHIdJ8XNe3uNxNvUP0MaVrtsCj5MSTDvf706JtzRsOpA>
-    <xme:sHMtafxYj22bcGEPRzVji-wGk7u8u5vpjKie6tL1zn61wMZtADm4EhmyDI2RO0G4X
-    s5vvRmDZt51DxSc_FKHhm_tctRbZjpYVLfKX1tA-v0ZW3-bBxP9TA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvheejheduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefoggffhffvvefkjghfufgtgfesthhqre
-    dtredtjeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghr
-    nhgusgdruggvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvle
-    ehvddvgeejvdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtth
-    hopeehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeifsedufihtrdgvuhdprhgt
-    phhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqd
-    hkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhig
-    qdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
-    hinhhugiesfigvihhsshhstghhuhhhrdhnvght
-X-ME-Proxy: <xmx:sHMtaYYncX44nkNpwqni31gi1ww9wwoFdr7SB_GJds1rlyUEHkCZCw>
-    <xmx:sHMtacWRNCfSgd6EVeJcHkLpK9IS2fJzMuHCTpypuLiAfTRSpOYHSA>
-    <xmx:sHMtaehWLno-Z3D9eBpESy22DI-xCadGhD3DSzqbf5S6FQglATfRGQ>
-    <xmx:sHMtaSuyIO2wzakgbypXaMJvpAwWtbtRIjgLAeOVYAf9ykLbDThoTg>
-    <xmx:sHMtaddC7FZD4O1KC759-UalU2vfu4V6S0xtXXdcBQF5UW7yQT5w7vjp>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 54963C40054; Mon,  1 Dec 2025 05:53:36 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1764588920; c=relaxed/simple;
+	bh=KI1Ijegz9/wIzZEx/nIZUvhNGkt/+DNgbyJIFeKjfcI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SahFpqhlL0aUZ9ROEyApJaAqWLzhJ9egW2JTfgvD2RZSB7Ju9mk41U7VmMtq6dCN2xSeYqYr/ouOfgMZEGSfOOrbqZLLEsK9FqLIJSwmPD3G/JY5343oSaJ1faQPfYdxsbizk76zGd5/VXpglOrEgUQDdVhSX+AZe3rueJIWNDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ZFaVxMI0; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=B1n2wwbLh7ZtXzvdamUIb2IVlWJUblxFZrBlZl2SoDM=; b=ZFaVxMI0pFRf8mv+d5G43bUYwe
+	ha1OY8mAx17gsIWLOLnQMBpnmqjkfdRjdc97Tzd7OcGxiOAW8kIt0uQ/NQwqpiLgfGEcjoWY8U6ma
+	fCa/zja8ficck7mP9n2VR69kK8k+xm2Yy4YQgteMNCM5znodSX1hNrX7735iNoGj0p3Ce+grFLFho
+	HRDFq3/rJ9bYXqS7KMnGSnEQ1cr7fOn4ewvLcq2GElZVVgKjBXu6qYRQhtCE3aKX/4xHwMObkjagY
+	76IiwJvIV/QMtgXNDb4hozSzV5D9jq9kPTqDI8o0EJav0Z1RzC1pE/8JdHel1kxvFDSPS9IMnxwaZ
+	E8xctk+Q==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.94.2)
+	(envelope-from <leitao@debian.org>)
+	id 1vQ2BS-000bos-M9; Mon, 01 Dec 2025 11:35:10 +0000
+Date: Mon, 1 Dec 2025 03:35:04 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Andre Carvalho <asantostc@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v8 4/5] netconsole: resume previously
+ deactivated target
+Message-ID: <65vs7a63onl37a7q7vjxo7wgmgkdcixkittcrirdje2e6qmkkj@syujqrygyvcd>
+References: <20251128-netcons-retrigger-v8-0-0bccbf4c6385@gmail.com>
+ <20251128-netcons-retrigger-v8-4-0bccbf4c6385@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AuglI0iV1DGV
-Date: Mon, 01 Dec 2025 11:53:16 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Willy Tarreau" <w@1wt.eu>
-Cc: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Message-Id: <2158db79-4b59-4cd2-a4af-a2b4429fd1bd@app.fastmail.com>
-In-Reply-To: <20251201103505.GA23859@1wt.eu>
-References: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
- <20251122-nolibc-uapi-types-v2-9-b814a43654f5@weissschuh.net>
- <20251130105842.GD31522@1wt.eu>
- <75e632e3-3353-414d-9b8a-8bf9ca46b5a4@app.fastmail.com>
- <20251201103505.GA23859@1wt.eu>
-Subject: Re: [PATCH v2 09/13] tools/nolibc: always use 64-bit time types
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251128-netcons-retrigger-v8-4-0bccbf4c6385@gmail.com>
+X-Debian-User: leitao
 
-On Mon, Dec 1, 2025, at 11:35, Willy Tarreau wrote:
-> On Mon, Dec 01, 2025 at 08:45:00AM +0100, Arnd Bergmann wrote:
->> On Sun, Nov 30, 2025, at 11:58, Willy Tarreau wrote:
->>
->> #if __TIMESIZE =3D=3D 64 && __WORDSIZE =3D=3D 32
->> # define __TIME_T_TYPE          __SQUAD_TYPE
->> # define __SUSECONDS_T_TYPE     __SQUAD_TYPE
->> #else
->> # define __TIME_T_TYPE          __SLONGWORD_TYPE
->> # define __SUSECONDS_T_TYPE     __SLONGWORD_TYPE
->> #endif
->>=20
->> so this one is explicitly the same width as tv_sec, which has all
->> the issues you listed, but avoids the need for padding.
->
-> Ah we seem to just have checked different versions then,
-> as in mine there was still some extra padding left depending
-> on the endianness :-)
+Hello Andre,
 
-The padding is definitely there in timespec around tv_nsec,
-just not in timeval.
+On Fri, Nov 28, 2025 at 10:08:03PM +0000, Andre Carvalho wrote:
+> @@ -242,6 +249,75 @@ static void populate_configfs_item(struct netconsole_target *nt,
+>  }
+>  #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
+>  
+> +/* Check if the target was bound by mac address. */
+> +static bool bound_by_mac(struct netconsole_target *nt)
+> +{
+> +	return is_valid_ether_addr(nt->np.dev_mac);
+> +}
+> +
+> +/* Attempts to resume logging to a deactivated target. */
+> +static void resume_target(struct netconsole_target *nt)
+> +{
+> +	int ret;
+> +
+> +	/* check if target is still deactivated as it may have been disabled
+> +	 * while resume was being scheduled.
+> +	 */
+This only happens if this is a dynamic target and someone is toggling
+the device (or even removing it, which would cause a crash I _think_).
 
-Oddly, the version I quoted is from my arm64 /usr/include/
-installation and looks different from what I see in the glibc
-history, though that also uses a 64-bit tv_usec:
+Given you are completely lockless here, so, there is a chance you hit
+a TOCTOU, also.
 
-bits/typesizes.h:#define __SUSECONDS64_T_TYPE   __SQUAD_TYPE
-posix/bits/types.h:__STD_TYPE __SUSECONDS64_T_TYPE __suseconds64_t;
-struct timeval
-{
-#ifdef __USE_TIME64_REDIRECTS
-  __time64_t tv_sec;            /* Seconds.  */
-  __suseconds64_t tv_usec;      /* Microseconds.  */
-#else
-  __time_t tv_sec;              /* Seconds.  */
-  __suseconds_t tv_usec;        /* Microseconds.  */
-#endif
-};
+I think you want to have dynamic_netconsole_mutex held during the
+operation of process_resume_target().
 
->> C23 has updated the definition and does allow int64_t tv_nsec.
->
-> So it purposely breaks existing apps or does it apply only to those
-> compiled with -mstd=3Dc23 ?
+  * mutex_lock(&dynamic_netconsole_mutex);
+  * remove from the list
+  * resume
+  * re-add to the list
+  * mutex_unlock(&dynamic_netconsole_mutex);
+  
 
-Neither, it's just that nolibc with a 64-bit tv_nsec would
-be compliant with c23, just not earlier versions.
+netconsole design has two locks:
+  * target lock list, which protects devices getting disabled by netdev
+    notifications
+  * dynamic_netconsole_mutex, which protects anyone disabling and
+    removing the target from configfs
 
-I expect glibc to stick with 32-bit timespec and padding, which
-is still compliant with the new definition of
+> +	if (nt->state != STATE_DEACTIVATED)
+> +		return;
+> +
+> +	if (bound_by_mac(nt))
+> +		/* ensure netpoll_setup will retrieve device by mac */
+> +		memset(&nt->np.dev_name, 0, IFNAMSIZ);
 
-|   The type of tv_nsec is an implementation-defined signed integer type
-|   that can represent integers in [=E2=80=8B0=E2=80=8B, 999999999].=20
+This is a clean-up step that was missing whent the target is getting
+down, and htis is just a work around that doesn't belong in here.
 
->> I think it makes sense for nolibc to just follow the kernel's
->> definition here.
->
-> Given the very narrow range of existing code that can be impacted,
-> I'm fine, but in general I try to remain extremely cautious about
-> portability: as a general rule, ifdefs needed to address possible
-> incompatibilities, if any, should rather be in the libc code itself
-> and not in the user application. I just ran a quick check and don't
-> have code using &tv_usec nor &tv_nsec so here the risk remains quite
-> low.
+Please move it to netconsole_process_cleanups_core(), in a separate
+patch.
 
-Ok
+Something as: 
 
-     ARnd
+	list_for_each_entry_safe(nt, tmp, &target_cleanup_list, list)
+		do_netpoll_cleanup(&nt->np);
+		if (bound_by_mac(nt))
+			memset(&nt->np.dev_name, 0, IFNAMSIZ);
+			
+
+Ideally this should belong to do_netpoll_cleanup(), but let's keep it in
+netconsole_process_cleanups_core() for three reasons:
+
+
+1) Bounding by mac is a netconsole concept
+2) do_netpoll_cleanup() is only used by netconsole, and I plan to move
+   it back to netconsole. Some PoC in [1]
+3) bound_by_mac() should be in netconsole and we do not want to export
+   it.
+
+[1]:
+https://lore.kernel.org/all/20250902-netpoll_untangle_v3-v1-3-51a03d6411be@debian.org/
+
+> +
+> +	ret = netpoll_setup(&nt->np);
+> +	if (ret) {
+> +		/* netpoll fails setup once, do not try again. */
+> +		nt->state = STATE_DISABLED;
+> +		return;
+> +	}
+> +
+> +	nt->state = STATE_ENABLED;
+> +	pr_info("network logging resumed on interface %s\n", nt->np.dev_name);
+> +}
+> +
+> +/* Checks if a deactivated target matches a device. */
+> +static bool deactivated_target_match(struct netconsole_target *nt,
+> +				     struct net_device *ndev)
+> +{
+> +	if (nt->state != STATE_DEACTIVATED)
+> +		return false;
+> +
+> +	if (bound_by_mac(nt))
+> +		return !memcmp(nt->np.dev_mac, ndev->dev_addr, ETH_ALEN);
+> +	return !strncmp(nt->np.dev_name, ndev->name, IFNAMSIZ);
+> +}
+> +
+> +/* Process work scheduled for target resume. */
+> +static void process_resume_target(struct work_struct *work)
+> +{
+> +	struct netconsole_target *nt =
+> +		container_of(work, struct netconsole_target, resume_wq);
+> +	unsigned long flags;
+> +
+
+mutex_lock(&dynamic_netconsole_mutex);
+As discussed above
+
+> +	/* resume_target is IRQ unsafe, remove target from
+> +	 * target_list in order to resume it with IRQ enabled.
+> +	 */
+> +	spin_lock_irqsave(&target_list_lock, flags);
+> +	list_del_init(&nt->list);
+> +	spin_unlock_irqrestore(&target_list_lock, flags);
+> +
+> +	resume_target(nt);
+> +
+> +	/* At this point the target is either enabled or disabled and
+> +	 * was cleaned up before getting deactivated. Either way, add it
+> +	 * back to target list.
+> +	 */
+> +	spin_lock_irqsave(&target_list_lock, flags);
+> +	list_add(&nt->list, &target_list);
+> +	spin_unlock_irqrestore(&target_list_lock, flags);
+
+mutex_unlock(&dynamic_netconsole_mutex);
+
+> +}
+> +
+>  /* Allocate and initialize with defaults.
+>   * Note that these targets get their config_item fields zeroed-out.
+>   */
+> @@ -264,6 +340,7 @@ static struct netconsole_target *alloc_and_init(void)
+>  	nt->np.remote_port = 6666;
+>  	eth_broadcast_addr(nt->np.remote_mac);
+>  	nt->state = STATE_DISABLED;
+> +	INIT_WORK(&nt->resume_wq, process_resume_target);
+
+It needs to be initialized earlier before the kzalloc, otherwise we
+might hit a similar problem to the one fixed by e5235eb6cfe0  ("net:
+netpoll: initialize work queue before error checks")
+
+The code path would be:
+  * alloc_param_target()
+	  * alloc_and_init()
+		  * kzalloc() fails and return NULL.
+		  * resume_wq() is still not initialized
+  fail:
+	* free_param_target()
+		* cancel_work_sync(&nt->resume_wq); and resume_wq is not
+		  initialized
+
+Thanks for the patch,
+--breno
+
+--
+pw-bot: cr
 
