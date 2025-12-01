@@ -1,234 +1,171 @@
-Return-Path: <linux-kselftest+bounces-46798-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C63A7C97129
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 12:38:38 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E01F5C973B1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 13:24:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 983044E232C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 11:35:23 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 82468342ECD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 12:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A4DF26ED51;
-	Mon,  1 Dec 2025 11:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08AB430BF60;
+	Mon,  1 Dec 2025 12:24:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ZFaVxMI0"
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="eHwHSctb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D9A26C3B6;
-	Mon,  1 Dec 2025 11:35:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBFD52FFDED
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 12:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764588920; cv=none; b=OMwJelWmcXy4h6zqxuhIgBpeN0RP04qeyW2MvGJAjRneIMDcIAeVZrrWQyOS7MzIoD/msAfpPO6U0GA6nOpAE/jWT2i0f/GDiB3Vs3/P2u/gtjByT7llroiObBd3jC1/y/JD0GsinHCU52DIQ3P6CjW0WxEWkYYInhV7OpjGkvU=
+	t=1764591861; cv=none; b=rHn+nfHfmcZWkjM3Oc+V7VloHIbYLtw5+1/Qo6IQUxIRQZRYHsMCx8Grk5IFmSF+iKcTfHVAn/wCjM4bb5AB+IYVwTg0mAoskMvG8sohGxBgAdtxAPoeqArGxQh9CrrHoqGh9g2TpETQj5LiiZOT3YRNE3jEJGnUA39sqq5Qt9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764588920; c=relaxed/simple;
-	bh=KI1Ijegz9/wIzZEx/nIZUvhNGkt/+DNgbyJIFeKjfcI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SahFpqhlL0aUZ9ROEyApJaAqWLzhJ9egW2JTfgvD2RZSB7Ju9mk41U7VmMtq6dCN2xSeYqYr/ouOfgMZEGSfOOrbqZLLEsK9FqLIJSwmPD3G/JY5343oSaJ1faQPfYdxsbizk76zGd5/VXpglOrEgUQDdVhSX+AZe3rueJIWNDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ZFaVxMI0; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=B1n2wwbLh7ZtXzvdamUIb2IVlWJUblxFZrBlZl2SoDM=; b=ZFaVxMI0pFRf8mv+d5G43bUYwe
-	ha1OY8mAx17gsIWLOLnQMBpnmqjkfdRjdc97Tzd7OcGxiOAW8kIt0uQ/NQwqpiLgfGEcjoWY8U6ma
-	fCa/zja8ficck7mP9n2VR69kK8k+xm2Yy4YQgteMNCM5znodSX1hNrX7735iNoGj0p3Ce+grFLFho
-	HRDFq3/rJ9bYXqS7KMnGSnEQ1cr7fOn4ewvLcq2GElZVVgKjBXu6qYRQhtCE3aKX/4xHwMObkjagY
-	76IiwJvIV/QMtgXNDb4hozSzV5D9jq9kPTqDI8o0EJav0Z1RzC1pE/8JdHel1kxvFDSPS9IMnxwaZ
-	E8xctk+Q==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vQ2BS-000bos-M9; Mon, 01 Dec 2025 11:35:10 +0000
-Date: Mon, 1 Dec 2025 03:35:04 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Andre Carvalho <asantostc@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v8 4/5] netconsole: resume previously
- deactivated target
-Message-ID: <65vs7a63onl37a7q7vjxo7wgmgkdcixkittcrirdje2e6qmkkj@syujqrygyvcd>
-References: <20251128-netcons-retrigger-v8-0-0bccbf4c6385@gmail.com>
- <20251128-netcons-retrigger-v8-4-0bccbf4c6385@gmail.com>
+	s=arc-20240116; t=1764591861; c=relaxed/simple;
+	bh=/+W6BnRm41PwQfr1i6QnKDnTOxqcyEQ40SOEI/y9Gs0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Nz32bYBJ95jGvmAEFh8HraDkO2hfEWKCWTDijNU3wRYBEqrbuGLeBXOlwPdXpHtB8rSeyGwt5ksm96qnkenGXQTPLpkbuk7r8njjP92gIqVhXd2e1BASF261d5Rt5d5poE+H3RQlHGjvh6xUquJOQ/EwBCY5QYt59Elpq75NHqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=eHwHSctb; arc=none smtp.client-ip=185.125.188.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 285AE3F278
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 12:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1764591851;
+	bh=7Mkjq1bUgfEqWcPG7pP9ef/rURS8Z4bqcdLjGL4dulQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	b=eHwHSctbbIMepkkfs29EA3B+NgflW2gq8QpymtjdKe+1s10sXuHxt3FlG332z3mke
+	 XcH08RWRG9ysv6OcqCQ/aPNX6WbF31Yklp0SFj2TCtDD1JI3xNHgy8w8Juhs3wXd8T
+	 0Ao+pgzFed85cwom+7XOOtCyOBGmIPASA0ArNoTvAaF4++7FiPsdmip0XgDxjX0fKn
+	 Pwzt74hktABhgpZYs4LmkgfX0yazAuW7OLAt/UE9VbV3RKUWQddcEUzXXPiAsTteFC
+	 dJIGbwJe2ZidD3QpLPrT2vcCA1GEvBzw8yxFzB0DmHat3Lc8XifJq/2gE4QE3MpvTe
+	 0HnbzvSmtLXZ/ZMkxG/FbvLUwYLlPk2UE94TAaia+TUnj8VcPyMYJsBRNSzF/eHW8K
+	 uSOG0JBvtzRqzWiTwaz2uK/0MEeWgoZRma0V0y7TtsUZaPJECFjE3BcM4TsaOzXFQY
+	 V3Ur/kTFknt/ph1HsDUp8TtKWYMvOyhwtpcZihdpv+Etu6j45PmPS6BctgWbeqGg3L
+	 DZMEEoztXGCkIYeymXfcZZ74uMXWItMmaCR0Cb53TVhD7COaRpbMFYrajhzvoI29yC
+	 ku0MNCxnV0xMbhG65UHd8XDJih1EFI/+Olz/Ll9Q7t5Vkq2qbeWCk9IE8cue42Bs6F
+	 B8U98huBs1dwkxWd8fx3i8b4=
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-b735eea0bddso352281266b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Dec 2025 04:24:11 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764591850; x=1765196650;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7Mkjq1bUgfEqWcPG7pP9ef/rURS8Z4bqcdLjGL4dulQ=;
+        b=lN1lWIAM/6tUI5lb93iKPYEhxHrsYFS+oaIFdER1WneKrCJ69GEonZhKNvIMVeSgkq
+         3Ju37ZQpV6KnXXnfsXS7PvMEF1K3hmgSFxUUuOcSMs/DeC5llfeOHb9q9GAMwaPSQDSg
+         frqpfvWs7ijddcqRqRz/DrkbU75id85OOth7WNjIqSOzYsyCs2G33WzJVZHa0SK5gcZt
+         QKCYomGFsCpIPB49zkCux5HT7GU5NnC1EGuBiWCHQnA8ndXsKghLJ1ETpAlNYu3XQQh9
+         hZVhFc1aSL8JFmCtINYDYAF/3H8QY/hk546K9B9isyV9fuuiDH9xO0SNE2t5+FSMR1f4
+         JuOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUpJqNG+MxWXqqXkx4r8/itbksIvKgTr2v1TNDUeuUTAp8PZOZsJCxuuvbztKFLm8hSTRIThdvu/t3IczO/RqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyX2je46JADG/jPYYTVTdfAd0flqdvmoVcU1iGGdtOsnO1Hlm3/
+	Jn0bx4S4Rm07xuOKRjNBWcyn8vM66AQYMOFizX0gNBcp2F2W61cvOF09zNA9qYlPI2Wq2BnZnk0
+	FLwJRSRGXQjZEQr5pVhmySynHivm6nu56KAShDICnK3lo826j5fdxa6mFEZ0XNJZisaFROowd1S
+	XMCZeBK7dV0g==
+X-Gm-Gg: ASbGncvlWfXIPPB0TaeHEMzYuGo3Q/A1at2hXLmZg39dymAtkP0SIt9CE+RYEKyJBxj
+	qTUffFq+p32zVNuqQJnDr07rK7DPt/llsiNRMbYu8baGEbV2cu8inhtxFPL1Vv6dGqE/03gYytS
+	5YQEPaPmZw0+wFiZY7p+W7LNNrxVnZ/+3hQIj1WbY93FUCy/DWzOnjmnQMuNnp5utZ27z6nmEX5
+	e4k9FsQiP5XwdNQrJKjb1gbtNoZ0ApLNvY/qcJujhAtq5n86bciJxm6SeClkkO7fwlmwDkDUeSm
+	pGWp6rftmh+Z6r5NJtd3jC+vrIBoK08c7CIf/MO5XqNNYVSUkd3GKT3KJkbpJPT+Hmvvp+L6a3i
+	lZojnp3nbZqk2HsO8xUpNFdFZo1FWHRnMjBoTSrtT5FqRRu7sQ46Mv0k8IdMNeuF/Pu/uWU1J95
+	DN4Urc5rwVYwzhj1qkdW8+gGpx
+X-Received: by 2002:a17:907:9812:b0:b73:398c:c5a7 with SMTP id a640c23a62f3a-b7671847649mr3675878566b.41.1764591850325;
+        Mon, 01 Dec 2025 04:24:10 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEB6mTSXIUXj7rWz03oA7m7S8ohwwSd/s14P0xUJXb50kip7lK8odKTbRY9H9EdRDRcT1PoSA==
+X-Received: by 2002:a17:907:9812:b0:b73:398c:c5a7 with SMTP id a640c23a62f3a-b7671847649mr3675874266b.41.1764591849812;
+        Mon, 01 Dec 2025 04:24:09 -0800 (PST)
+Received: from amikhalitsyn.lan (p200300cf5749de007c66abd95f8bdeba.dip0.t-ipconnect.de. [2003:cf:5749:de00:7c66:abd9:5f8b:deba])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64750a6ea36sm12307884a12.2.2025.12.01.04.24.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Dec 2025 04:24:09 -0800 (PST)
+From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+To: kees@kernel.org
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	Tycho Andersen <tycho@tycho.pizza>,
+	Andrei Vagin <avagin@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	=?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@stgraber.org>
+Subject: [PATCH v1 0/6] seccomp: support nested listeners
+Date: Mon,  1 Dec 2025 13:23:57 +0100
+Message-ID: <20251201122406.105045-1-aleksandr.mikhalitsyn@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251128-netcons-retrigger-v8-4-0bccbf4c6385@gmail.com>
-X-Debian-User: leitao
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello Andre,
+Dear friends,
 
-On Fri, Nov 28, 2025 at 10:08:03PM +0000, Andre Carvalho wrote:
-> @@ -242,6 +249,75 @@ static void populate_configfs_item(struct netconsole_target *nt,
->  }
->  #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
->  
-> +/* Check if the target was bound by mac address. */
-> +static bool bound_by_mac(struct netconsole_target *nt)
-> +{
-> +	return is_valid_ether_addr(nt->np.dev_mac);
-> +}
-> +
-> +/* Attempts to resume logging to a deactivated target. */
-> +static void resume_target(struct netconsole_target *nt)
-> +{
-> +	int ret;
-> +
-> +	/* check if target is still deactivated as it may have been disabled
-> +	 * while resume was being scheduled.
-> +	 */
-This only happens if this is a dynamic target and someone is toggling
-the device (or even removing it, which would cause a crash I _think_).
+this patch series adds support for nested seccomp listeners. It allows container
+runtimes and other sandboxing software to install seccomp listeners on top of
+existing ones, which is useful for nested LXC containers and other similar use-cases.
 
-Given you are completely lockless here, so, there is a chance you hit
-a TOCTOU, also.
+I decided to go with conservative approach and limit the maximum number of nested listeners
+to 8 per seccomp filter chain (MAX_LISTENERS_PER_PATH). This is done to avoid dynamic memory
+allocations in the very hot __seccomp_filter() function, where we use a preallocated static
+array on the stack to track matched listeners. 8 nested listeners should be enough for
+almost any practical scenarios.
 
-I think you want to have dynamic_netconsole_mutex held during the
-operation of process_resume_target().
+Expecting potential discussions around this patch series, I'm going to present a talk
+at LPC 2025 about the design and implementation details of this feature [1].
 
-  * mutex_lock(&dynamic_netconsole_mutex);
-  * remove from the list
-  * resume
-  * re-add to the list
-  * mutex_unlock(&dynamic_netconsole_mutex);
-  
+Git tree (based on for-next/seccomp):
+v1: https://github.com/mihalicyn/linux/commits/seccomp.mult.listeners.v1
+current: https://github.com/mihalicyn/linux/commits/seccomp.mult.listeners
 
-netconsole design has two locks:
-  * target lock list, which protects devices getting disabled by netdev
-    notifications
-  * dynamic_netconsole_mutex, which protects anyone disabling and
-    removing the target from configfs
+Link: https://lpc.events/event/19/contributions/2241/ [1]
 
-> +	if (nt->state != STATE_DEACTIVATED)
-> +		return;
-> +
-> +	if (bound_by_mac(nt))
-> +		/* ensure netpoll_setup will retrieve device by mac */
-> +		memset(&nt->np.dev_name, 0, IFNAMSIZ);
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: Kees Cook <kees@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Tycho Andersen <tycho@tycho.pizza>
+Cc: Andrei Vagin <avagin@gmail.com>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Stéphane Graber <stgraber@stgraber.org>
 
-This is a clean-up step that was missing whent the target is getting
-down, and htis is just a work around that doesn't belong in here.
+Alexander Mikhalitsyn (6):
+  seccomp: remove unused argument from seccomp_do_user_notification
+  seccomp: prepare seccomp_run_filters() to support more than one
+    listener
+  seccomp: limit number of listeners in seccomp tree
+  seccomp: handle multiple listeners case
+  seccomp: relax has_duplicate_listeners check
+  tools/testing/selftests/seccomp: test nested listeners
 
-Please move it to netconsole_process_cleanups_core(), in a separate
-patch.
+ .../userspace-api/seccomp_filter.rst          |   6 +
+ include/linux/seccomp.h                       |   3 +-
+ include/uapi/linux/seccomp.h                  |  13 +-
+ kernel/seccomp.c                              |  99 +++++++++--
+ tools/include/uapi/linux/seccomp.h            |  13 +-
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 162 ++++++++++++++++++
+ 6 files changed, 269 insertions(+), 27 deletions(-)
 
-Something as: 
+-- 
+2.43.0
 
-	list_for_each_entry_safe(nt, tmp, &target_cleanup_list, list)
-		do_netpoll_cleanup(&nt->np);
-		if (bound_by_mac(nt))
-			memset(&nt->np.dev_name, 0, IFNAMSIZ);
-			
-
-Ideally this should belong to do_netpoll_cleanup(), but let's keep it in
-netconsole_process_cleanups_core() for three reasons:
-
-
-1) Bounding by mac is a netconsole concept
-2) do_netpoll_cleanup() is only used by netconsole, and I plan to move
-   it back to netconsole. Some PoC in [1]
-3) bound_by_mac() should be in netconsole and we do not want to export
-   it.
-
-[1]:
-https://lore.kernel.org/all/20250902-netpoll_untangle_v3-v1-3-51a03d6411be@debian.org/
-
-> +
-> +	ret = netpoll_setup(&nt->np);
-> +	if (ret) {
-> +		/* netpoll fails setup once, do not try again. */
-> +		nt->state = STATE_DISABLED;
-> +		return;
-> +	}
-> +
-> +	nt->state = STATE_ENABLED;
-> +	pr_info("network logging resumed on interface %s\n", nt->np.dev_name);
-> +}
-> +
-> +/* Checks if a deactivated target matches a device. */
-> +static bool deactivated_target_match(struct netconsole_target *nt,
-> +				     struct net_device *ndev)
-> +{
-> +	if (nt->state != STATE_DEACTIVATED)
-> +		return false;
-> +
-> +	if (bound_by_mac(nt))
-> +		return !memcmp(nt->np.dev_mac, ndev->dev_addr, ETH_ALEN);
-> +	return !strncmp(nt->np.dev_name, ndev->name, IFNAMSIZ);
-> +}
-> +
-> +/* Process work scheduled for target resume. */
-> +static void process_resume_target(struct work_struct *work)
-> +{
-> +	struct netconsole_target *nt =
-> +		container_of(work, struct netconsole_target, resume_wq);
-> +	unsigned long flags;
-> +
-
-mutex_lock(&dynamic_netconsole_mutex);
-As discussed above
-
-> +	/* resume_target is IRQ unsafe, remove target from
-> +	 * target_list in order to resume it with IRQ enabled.
-> +	 */
-> +	spin_lock_irqsave(&target_list_lock, flags);
-> +	list_del_init(&nt->list);
-> +	spin_unlock_irqrestore(&target_list_lock, flags);
-> +
-> +	resume_target(nt);
-> +
-> +	/* At this point the target is either enabled or disabled and
-> +	 * was cleaned up before getting deactivated. Either way, add it
-> +	 * back to target list.
-> +	 */
-> +	spin_lock_irqsave(&target_list_lock, flags);
-> +	list_add(&nt->list, &target_list);
-> +	spin_unlock_irqrestore(&target_list_lock, flags);
-
-mutex_unlock(&dynamic_netconsole_mutex);
-
-> +}
-> +
->  /* Allocate and initialize with defaults.
->   * Note that these targets get their config_item fields zeroed-out.
->   */
-> @@ -264,6 +340,7 @@ static struct netconsole_target *alloc_and_init(void)
->  	nt->np.remote_port = 6666;
->  	eth_broadcast_addr(nt->np.remote_mac);
->  	nt->state = STATE_DISABLED;
-> +	INIT_WORK(&nt->resume_wq, process_resume_target);
-
-It needs to be initialized earlier before the kzalloc, otherwise we
-might hit a similar problem to the one fixed by e5235eb6cfe0  ("net:
-netpoll: initialize work queue before error checks")
-
-The code path would be:
-  * alloc_param_target()
-	  * alloc_and_init()
-		  * kzalloc() fails and return NULL.
-		  * resume_wq() is still not initialized
-  fail:
-	* free_param_target()
-		* cancel_work_sync(&nt->resume_wq); and resume_wq is not
-		  initialized
-
-Thanks for the patch,
---breno
-
---
-pw-bot: cr
 
