@@ -1,172 +1,208 @@
-Return-Path: <linux-kselftest+bounces-46779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D18FEC960B1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 08:45:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3D19C96103
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 08:59:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AB21E4E14BF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 07:45:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8550D3A2692
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 07:59:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001EF2D1907;
-	Mon,  1 Dec 2025 07:45:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ADF22D73B0;
+	Mon,  1 Dec 2025 07:59:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Imtjlb65";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rtCOe3YQ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mEhg779g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012026.outbound.protection.outlook.com [52.101.43.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DD5A23EA88;
-	Mon,  1 Dec 2025 07:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764575124; cv=none; b=pKIfmSdUbVu6lGcoO33AsN1SejofitkxoNfHnPO1kqfrNvW6BFEQN80iGy8zXd0ddCuAg9Ydiy8PLpWMUKfqOZABGKfXg0qegLT49B+WzZODfruymgROABsqM0INQNZer2FnwWchrFnm3oqysOINa9VRIVIoeOzoB/rtonSqCXU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764575124; c=relaxed/simple;
-	bh=GBUGtKYwRwExyTl1p4q/ucqgy2VljRXPMtIc8z5zNyw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Rpy8yzlUkOqhHypfF7BT87k7nATwVha+TdPwGT4xT162oLXlHQNMf7lHjfx05aJJBg71XtXgjMXv59gWHOFZu5tUTkbBPF//xgFszFJVJhtBDi10hE38tmIjWYDkehB70FHQ3CChWs8fAEI6gyWkCQ8hjOZG+ZlrmUk5Kps5HVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Imtjlb65; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=rtCOe3YQ; arc=none smtp.client-ip=103.168.172.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id E620714001EF;
-	Mon,  1 Dec 2025 02:45:20 -0500 (EST)
-Received: from phl-imap-17 ([10.202.2.105])
-  by phl-compute-04.internal (MEProxy); Mon, 01 Dec 2025 02:45:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1764575120;
-	 x=1764661520; bh=V+VtHjpFIggTY5a4W6+5PNPiBiYU67RSG0Fw16B8tB4=; b=
-	Imtjlb65F6aNGxQSqiacHGLD3G+WGURe08XiupPmYvEs0TDEJQJEsYicEpouU7r4
-	m2YzbD+g08+QhnFoseMnDBd6rs4G2nAdRhdKBSMpRxFZke4giypD1Typ/O4FkASd
-	WSV7IskUQnqATxg1kdqf0MvuWQV15M9K3MeV+6jA04LNzHxKlAyVxdTQFk2KkWYj
-	18qGVjzLH5mZzdd2EYraVI38gOXD9iCvsSA3+Ab7iD6jyDEt0YbH4H7qdFbXsMK6
-	B4j/N8YJCJZCJ/vskiv5ys+gIRiZYRgLfZ/EMSVKR7BY8P1NIvaW8jv3MJyqyGQ2
-	xHapjTgQ5UeGCYAO+29sJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1764575120; x=
-	1764661520; bh=V+VtHjpFIggTY5a4W6+5PNPiBiYU67RSG0Fw16B8tB4=; b=r
-	tCOe3YQWzoGavFq6z1jiSXe0Z381fhL+e6nZ980l+ms/8zcaB2d6E60vchQLiuQr
-	hBV1NjiO5DMLHWsFwJsXDXjrx8lecnRH4s97kQBc1hNpKugv/eTgT94Wy40MZVbj
-	SGXFzew5+SM8yIbnc2vFpmP8juH7ro97MCGwttffi6+lAz9q9V5XwtJDZI+ZnrI/
-	5SR6mjSDVhlX4EPgck6iP6tLNBVUPGmugt0UdPtaRlrEFp5Q+qOqcSsiwzRujkW4
-	jBKa2gpgxVf0GUjvOyqaivm2GWDdl47VcKlH4OiD2rCroS8tzcV+03JMLA1KVcoB
-	6NqP+wNWfu7nuWQUhA+qw==
-X-ME-Sender: <xms:kEctaeuSCbn4ZTg0wkyNXZpF5i7wBsDpnb88v78JA38ajsxIeOs6Nw>
-    <xme:kEctaeSDRXm-G34tfFmT20RhdVTHhhtLb9tsc1rBZVC-0ZS0gq42-rnE4KkauUV6C
-    onj7G_T6UXXop6gSx2xJQs5wMN4juniydEXLvqEaY877SYejJSMxfqb>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvheejudegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefoggffhffvvefkjghfufgtgfesthhqre
-    dtredtjeenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghr
-    nhgusgdruggvqeenucggtffrrghtthgvrhhnpedutddvudfftdffkeeuudehhfejkeekie
-    eiudejfefgffehveeiudeuudffleffveenucffohhmrghinhepohhpvghnghhrohhuphdr
-    ohhrghdptghpphhrvghfvghrvghntggvrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghr
-    tghpthhtohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepfiesudifthdrvg
-    hupdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhi
-    nhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
-    hinhhugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehlihhnuhigseifvghishhsshgthhhuhhdrnhgvth
-X-ME-Proxy: <xmx:kEctaY7Bwlsk9Yt2mk0s6AnWxVgoznTmOLZbePY_rqOuPU_hi28xXw>
-    <xmx:kEctaS1XtqLrjGFAC-xOZ12fzO_5VQjgzu0hWpaJ4e7fPQnrKMwkFg>
-    <xmx:kEctaTDUqtPswDvBQJ4PvKd8Mc95Gnie41vnuQ6ZXwRqTqA9sYORlg>
-    <xmx:kEctadO5EM6dRiTUADz94KEQYQquzzLcHvZfbvFYpdB5QQ6cNya3NQ>
-    <xmx:kEctaR_may3E3k-UlEUvoGME39REZxBrOcI7oZT5AyeXcDhPmUDYtUbM>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 4C5EDC40054; Mon,  1 Dec 2025 02:45:20 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881822D3EF2;
+	Mon,  1 Dec 2025 07:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.26
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764575954; cv=fail; b=R53VwIE6+jU4DZ+HhdUPKZybgrCjAj6n5efvGuUV0yD1qDFO2HBQr8xE8hpoi1eFLT8SBM8zftvBXiXVTo0kYeEl36ZNGzlCh5UvKzYEYxUv1amtcVfhKKFyKOy6nj+erhjDed7EA7FK0HPLvQTL9BdSRhU8/p6cI+2AJGzauPk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764575954; c=relaxed/simple;
+	bh=iksaNFs69nCJn0LOQSKlXMB0oVDFNkqt0kk6P2X7Jh8=;
+	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=I9eyTIk8aqW6Rp+MptkuRLX7t9Eq2wlAmdF0frBX1JEOAqhslsztTFtmT4k0ghiFny5m0JpWddpP0VWLjSYGu1Vpv5V/y+kz/rm+dhurdg8fu2XAu52AH2mo3u648D74wdwuYd8qXj0ovVTowmgDlubwvgSuFUMrVnpi2O4dYfk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mEhg779g; arc=fail smtp.client-ip=52.101.43.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jg21LB3jpAqflzuvWPHVZhco2duE4oZ/2Jxt0qUYoDrMZfxV+Xc3XKiS/xyV8HuWOzbOc5L3W9d7uFmV1hzoEG7FUbv96kBFGRRRRkYN3dRW31J4lvFnV1b+y+eWQbnZPwAm9j+iYpuNvKr72kbMeRBBq/38aYAa6dl+ssNLsDl+bu0UovEzl6Jd+fD4N2T/ZIOvscs9QL8zw6t1z2BOLeoVn6ylrAblQdEw9fkOX0Bt78zgkB0owq6sKi3qjpMJlXn5Lj3RfUk9Df+QjKocK04YptKkkgFXh5iLEBQNG1J2gmp1E/bgIxB37NEzaLW2MGHyBYcOdWZIbp2Df241dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GMDbAPQZZMA0ZMxD1HR3r31jI5hut6Zh8Z4IRiWumAk=;
+ b=hI+vQEKOWzXM1uhHYyjZzR2rkg5yW+WGhPkniLBB/VOs9NVfAJsYIR5q8eUdF92kSy8D5owuYYfIz+bIiM0UEsDy8tiySebBt8gqaIQs9MXj/sFWXR0C51yfbDo2UySgFIoS9rUppXPhqyCSNHu1WKQ2IykS0sRgpIr1OxlJn5FRVG73yKuheXaaci4buRq5yi5rGzTiqVnes9HQrdTdFVWzhmULNj+kpF/ItSw5S8SLLLvcO/Zg2m1v93ea6VZ4TTQ8tsNJN1DQsAaOscXm7jZ0mXyD08Gmn8eYL8LwwL9z1BsIW9+iaZRWMN1kpgQ8HZc37shsG1cNNkgGnztDKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GMDbAPQZZMA0ZMxD1HR3r31jI5hut6Zh8Z4IRiWumAk=;
+ b=mEhg779gMVbMhXpXU8xfc6/XeOq6fEBQ91V8gre6td3DQSZjmc7b6ylo2xEae1nHvrMIhRAT3TuVX1IAjdS8YpqxJ4NvxiAG/Uxzdz5W91K2xY6Yih6LOCDeSYDwDLVBX4cEaiTgBOr1zZ5JJ5Ae98/ogw/JuB4Teg9ITF4o6t+9LIrVp71qtJCGXPMaZMqw+BwvAWjiyLEcNAHg93x0IP1G3BnZcebYUKiUe2PBJscxHOV3LMKHpH/K6sN7YpGPK5kPDRXhp/fzVCh5uj3goVxJl4XDsBwg4Ins8nYOkIOXPbBymqZ7KQpQps2zuQChRec8/vHVdSv6vFiCXyY5tA==
+Received: from MN0PR02CA0022.namprd02.prod.outlook.com (2603:10b6:208:530::25)
+ by IA1PR12MB6411.namprd12.prod.outlook.com (2603:10b6:208:388::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Mon, 1 Dec
+ 2025 07:59:08 +0000
+Received: from BN3PEPF0000B36E.namprd21.prod.outlook.com
+ (2603:10b6:208:530:cafe::7e) by MN0PR02CA0022.outlook.office365.com
+ (2603:10b6:208:530::25) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.17 via Frontend Transport; Mon,
+ 1 Dec 2025 07:59:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN3PEPF0000B36E.mail.protection.outlook.com (10.167.243.165) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9412.0 via Frontend Transport; Mon, 1 Dec 2025 07:59:08 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 30 Nov
+ 2025 23:58:52 -0800
+Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Sun, 30 Nov
+ 2025 23:58:42 -0800
+References: <20251128004846.2602687-1-kuba@kernel.org>
+User-agent: mu4e 1.8.14; emacs 30.2
+From: Petr Machata <petrm@nvidia.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
+	<pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
+	<shuah@kernel.org>, <willemb@google.com>, <petrm@nvidia.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next] selftests: net: py: handle interrupt during
+ cleanup
+Date: Mon, 1 Dec 2025 08:57:24 +0100
+In-Reply-To: <20251128004846.2602687-1-kuba@kernel.org>
+Message-ID: <87fr9uy6oq.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AuglI0iV1DGV
-Date: Mon, 01 Dec 2025 08:45:00 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Willy Tarreau" <w@1wt.eu>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: shuah <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Message-Id: <75e632e3-3353-414d-9b8a-8bf9ca46b5a4@app.fastmail.com>
-In-Reply-To: <20251130105842.GD31522@1wt.eu>
-References: <20251122-nolibc-uapi-types-v2-0-b814a43654f5@weissschuh.net>
- <20251122-nolibc-uapi-types-v2-9-b814a43654f5@weissschuh.net>
- <20251130105842.GD31522@1wt.eu>
-Subject: Re: [PATCH v2 09/13] tools/nolibc: always use 64-bit time types
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B36E:EE_|IA1PR12MB6411:EE_
+X-MS-Office365-Filtering-Correlation-Id: f87b1d47-8288-4c84-57e0-08de30af8199
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|376014|7416014|82310400026|7053199007|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?X0XHidCv4Fw/8fDKBdgPYpt1qHYJbkQzmORdsCNSveXP7KW+ZjZLNVKW4nWL?=
+ =?us-ascii?Q?/aUcASiz1Y0er8IktmcUx3Jrk5+8MccDmBUgmgIl1Ri90zsjFAtjaB40oxeH?=
+ =?us-ascii?Q?yrg8PGYARvkOCYNCFJiBCyMsxjAU9EXRNrzIrx/7392vvIwd87sYmCJqs7gC?=
+ =?us-ascii?Q?xTSkCESI81BUhBMguOXL3M1hxCAgYNtDMDEVZW9ULhhzwaqED0C+8pEekCTG?=
+ =?us-ascii?Q?uEkKE1brjz4I0uHvJtjYXGXYqUy6bMucHulX2GeJud7PIqml5J4ZuMw+yjPC?=
+ =?us-ascii?Q?HRo14L6cknd7Fxoawo67gkeMDAOnZoWkrKDj1reYav6lpNv/T+n6WEQYZHI4?=
+ =?us-ascii?Q?V+GnUji3vk78WEPAdUv0X/VatS1GVWGECEhgKJSvWnRpon0bwvnVqBDZUiaj?=
+ =?us-ascii?Q?ZJsCJaRZTcJnYzaSy2vAOzTn4UCl9vrsv02KwbfmOeS007ummdGE7npqE3EX?=
+ =?us-ascii?Q?oT3oYtgUwAcEKYhcD/Vmcu42S6a5WmUqVLcyXrDi3oS+xeR6L4XfnsAEgoPU?=
+ =?us-ascii?Q?Xb62oM4/QXxliYdpFV2xgN1uqSBa+xW210FIosNblvufD3OE6TWheZlrj2Va?=
+ =?us-ascii?Q?m205jFylloGeeVTp2yLzPCJ98d8Hc8ALFP4GGK1g2Hb7Vn7z3VQRsadTdI3L?=
+ =?us-ascii?Q?SQJLg6xO6BnGCiZyUq6DE0n71AP9slrnFEI1GsR99L5G1I58W0IdAEveTkIT?=
+ =?us-ascii?Q?l2ZbgYPFxSVephCu77/xDowYISKTzMQeBK8BzkGbFxPelNA05F0ur40DURp+?=
+ =?us-ascii?Q?sXXThmw5bMWJiItyGQ82PN8ve8Fy1689zXhXGFUfIkcOqBQby2OyzJ3oGsB8?=
+ =?us-ascii?Q?nwY9G/bh71SKUh3VEdqftOx2E2KLbuF2vC9MuBP7o1/MTy6twpvWHTYmQEjI?=
+ =?us-ascii?Q?H7tZNNYijTGqfeRto2OmBrulCAY5Gm/wabB0O7PKFabReIx+W5KQlWnzlVAv?=
+ =?us-ascii?Q?KuLJ0MDsFnK12YMSJQfoVpP1MfPub0eDwn7N6mqByK1RC/iOs60hLuc8li7H?=
+ =?us-ascii?Q?Pm8CZiVftTSVCvOCUQWGk/brdThJQ3ceTRyYvtlvpIuah88KwYiaiq9DC2w7?=
+ =?us-ascii?Q?l476Jr65Tjpic+TY206O+T5qpmrW99trwf8T+muVW1OvWan5G9yQuiAyVNA+?=
+ =?us-ascii?Q?SXla/ISTd44Z2MEdQYlRdwuUr2KnRJipkJlUctELf6EOIXASIwYlcxo27RbL?=
+ =?us-ascii?Q?/TeBQ9/kmgVxCW9R8yVFka4ZAmV+ZtDDpi/0LPZVgJzJorDZZgy5th/vEnmS?=
+ =?us-ascii?Q?k0yLO5MWzrpOdDxpqzb9wAz6LcXnNV8Y4vES6cwe4ZmysaOd+ExPE3jSqSgo?=
+ =?us-ascii?Q?srvqo+q8D4k9mF2+zFO5mWTg0bMVUkqa/9w68+PfeQfzKx7TFjbVY+arehNF?=
+ =?us-ascii?Q?oRi28ccYPGakHpozxjLa6s0MY8xP6pSl0seDmSiMa8zrsSgHWwcO/ADPgnG8?=
+ =?us-ascii?Q?rk87byTzl5LUvpViplipcua+Ps9D78Pa+6rjxL3y0uXEUduFqsNVoeseRBF6?=
+ =?us-ascii?Q?HKLxo7BT2W2paBSynZksTNfHsRBuyzkdvb+IoV2N7ZAs/4+F6WRUGZYZHOON?=
+ =?us-ascii?Q?d2LtNxZ2/fWfDX0xRbI=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(7416014)(82310400026)(7053199007)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2025 07:59:08.3006
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f87b1d47-8288-4c84-57e0-08de30af8199
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B36E.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6411
 
-On Sun, Nov 30, 2025, at 11:58, Willy Tarreau wrote:
-> On Sat, Nov 22, 2025 at 05:59:15PM +0100, Thomas Wei=C3=9Fschuh wrote:
 
->>  struct timespec {
->> -	__kernel_old_time_t	tv_sec;
->> -	long			tv_nsec;
->> +	time_t	tv_sec;
->> +	int64_t	tv_nsec;
->>  };
->>  #define _STRUCT_TIMESPEC
->> =20
->> +/* Never use with system calls */
->>  struct timeval {
->> -	__kernel_old_time_t	tv_sec;
->> -	__kernel_suseconds_t	tv_usec;
->> +	time_t	tv_sec;
->> +	int64_t	tv_usec;
->>  };
+Jakub Kicinski <kuba@kernel.org> writes:
+
+> Following up on the old discussion [1]. Let the BaseExceptions out of
+> defer()'ed cleanup. And handle it in the main loop. This allows us to
+> exit the tests if user hit Ctrl-C during defer().
 >
-> It seems to me that glibc continues to make the effort of using a long
-> for tv_usec and tv_nsec. At least I'm seeing how that can make a
-> difference for application code given that these fields are constantly
-> multiplied or divided, forcing them to 64-bit when we know they'll nev=
-er
-> be larger than 1 billion is extra burden for the application. Another
-> reason might be that the definition really changed from long to suseco=
-nds_t
-> in timeval a while ago, it's possible that it's used as a long in vari=
-ous
-> APIs (or even just printf formats).
+> Link: https://lore.kernel.org/20251119063228.3adfd743@kernel.org # [1]
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: shuah@kernel.org
+> CC: willemb@google.com
+> CC: petrm@nvidia.com
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/net/lib/py/ksft.py | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
 >
-> IMHO it would be cleaner to keep it as a long here, or do you have a
-> particular reason for wanting int64_t (which BTW already forced a cast
-> in sys_gettimeofday()) ?
+> diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
+> index ebd82940ee50..531e7fa1b3ea 100644
+> --- a/tools/testing/selftests/net/lib/py/ksft.py
+> +++ b/tools/testing/selftests/net/lib/py/ksft.py
+> @@ -163,7 +163,7 @@ KSFT_DISRUPTIVE = True
+>          entry = global_defer_queue.pop()
+>          try:
+>              entry.exec_only()
+> -        except BaseException:
+> +        except Exception:
+>              ksft_pr(f"Exception while handling defer / cleanup (callback {i} of {qlen_start})!")
+>              tb = traceback.format_exc()
+>              for line in tb.strip().split('\n'):
+> @@ -333,7 +333,21 @@ KsftCaseFunction = namedtuple("KsftCaseFunction",
+>              KSFT_RESULT = False
+>              cnt_key = 'fail'
+>  
+> -        ksft_flush_defer()
+> +        try:
+> +            ksft_flush_defer()
+> +        except BaseException as e:
+> +            tb = traceback.format_exc()
+> +            for line in tb.strip().split('\n'):
+> +                ksft_pr("Exception|", line)
+> +            if isinstance(e, KeyboardInterrupt):
+> +                ksft_pr()
+> +                ksft_pr("WARN: defer() interrupted, cleanup may be incomplete.")
+> +                ksft_pr("      Attempting to finish cleanup before exiting.")
+> +                ksft_pr("      Interrupt again to exit immediately.")
+> +                ksft_pr()
+> +                stop = True
+> +            # Flush was interrupted, try to finish the job best we can
+> +            ksft_flush_defer()
+>  
+>          if not cnt_key:
+>              cnt_key = 'pass' if KSFT_RESULT else 'fail'
 
-As far as I can tell, it's the other way round for suseconds_t,
-which in glibc is defined as
+Nice.
 
-#if __TIMESIZE =3D=3D 64 && __WORDSIZE =3D=3D 32
-# define __TIME_T_TYPE          __SQUAD_TYPE
-# define __SUSECONDS_T_TYPE     __SQUAD_TYPE
-#else
-# define __TIME_T_TYPE          __SLONGWORD_TYPE
-# define __SUSECONDS_T_TYPE     __SLONGWORD_TYPE
-#endif
-
-so this one is explicitly the same width as tv_sec, which has all
-the issues you listed, but avoids the need for padding.
-
-As far as I remember, the one reason for having a 'long tv_nsec'
-with complex padding in glibc and musl is that this is actually
-required by both Unix[1] and C11/C11 [2] standards.
-
-C23 has updated the definition and does allow int64_t tv_nsec.
-I think it makes sense for nolibc to just follow the kernel's
-definition here.
-
-       Arnd
-
-[1] https://pubs.opengroup.org/onlinepubs/009695399/basedefs/time.h.html
-[2] https://en.cppreference.com/w/c/chrono/timespec.html
+Reviewed-by: Petr Machata <petrm@nvidia.com>
 
