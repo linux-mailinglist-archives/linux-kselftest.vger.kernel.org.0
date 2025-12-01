@@ -1,125 +1,166 @@
-Return-Path: <linux-kselftest+bounces-46859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A7E9C994C4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 23:06:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3668C996F0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 23:49:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D4E93A4926
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 22:06:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5CB6B345986
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 22:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36380286409;
-	Mon,  1 Dec 2025 22:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01901245005;
+	Mon,  1 Dec 2025 22:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="awW4FuAi"
+	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="Um0G9v2a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68AF283FE3
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 22:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585211FDA;
+	Mon,  1 Dec 2025 22:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764626796; cv=none; b=jPs8dU0jhK2Kr1KSABDqcaArFTQaxLcGkiXPOshmgFEr7IFSa9w7CFEJ5/+ySRFEobTLJNzmQYZGK+UMIFCI2b0PkMHL5ANzGBEh2ey0hg/fKVVu9Q4JPhlW1RS7KwVlltd21csEjESEoLln4de5L8b4+ppYSAyzWmJlIA7gXVE=
+	t=1764629367; cv=none; b=OK7V9hxOoRTKfaslARAP9EQ5VMWQN+oq8g+1yTm7D/Kh8clF7zMLf3dfAi0B3cbsptGjz5m/sFsxJINSW7G8XDS0s5d6XvNl6numW2/Y7SthCbdURn46SK6Os9PkPld6hr+F5/vtF5iae9JHDYSpSVz8rVVB1OOol5zJkxLUhdQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764626796; c=relaxed/simple;
-	bh=a+/3Ja2D/pQZL1X0Dhkaimbdc5lxjQT2Xnvsi0l8mf8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ssTwjmW7djtxv+2fAPTPAubbxPEriFzXpE+1s3pupR3nTY6y4kuGH4J86FjHNX2KSXe5HfkZE4ELWSzEvdHAdmiHtAcSfs6JObLJNclwmfQs0F0WIFcvXYKZOWVJ4xfeF0FD8fwPrkndezV2+ShiF6E8UdQfOPnlVyucW2EMSr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=awW4FuAi; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b98983bae8eso3742536a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Dec 2025 14:06:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764626793; x=1765231593; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bzBsG4oWJXV6B7jpmlKeQ9wP6eF71jAwh85HbHOqniI=;
-        b=awW4FuAi/RtjVS0xcsfdV4j+6Molx9MNsVRFq9YrhbctvqJJii0nQNzzovsyGD97pH
-         XniicBI9J/ibOWuaJ9HczsVnYMvV4vvrt9U8GyvndxTypPgMwdKuvMgC+9BPh9POmB3z
-         1oNVS1Vcji40EcYnuLbxNJALzIxL2DM7cHJdJ5YMuBZGdbIt0sHQwe9p5VHJzIOV2vmq
-         xS2nZLBE0RaATbcOLUw8fxPnqzxUk/lQcEkNmpHjM3mbEINxz2916DPEq6kPyHAmXYMg
-         XUm6ev9YzNFrI7aN0yyA42nAJYXgKwsNysUBZZF5PQkxcFnt99BEZk3Y72c9V/6wD2G6
-         UfFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764626793; x=1765231593;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bzBsG4oWJXV6B7jpmlKeQ9wP6eF71jAwh85HbHOqniI=;
-        b=iEYvGIZsLqGOyjBwDr5rN0OlI5TlZ3OTdhNlfooEjIgyFAPfW9rvIgQllwy2Mmdfwu
-         TULMMBUd6Km8767E/1MdLK+O7PH4swMAZGxH0rm+yPWDa6NV1FYJFO62L/KdgkFAokPs
-         pN+95+yXFjKg0yZaftvVoAW+CGiUyceJYVDF4Xk8mPM7OJppXrMzh2MEzF3LGTR84zN3
-         eI9g54yUfcb5QWavl1rRaqD6lZcec5kTZHp5IqPrnRTGAvzrKQl8aoGpj365GpKdPtlP
-         OM/0OIQef2l+PMsCwE4IjWNZqBTpEKS+/6Ec0ou1eoUZyuuRrUYm5mitvhiuFcZ55yn0
-         iTmg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOYRmNgTpT2x1u6M8BF+mUAn4acPBX8JLx+M2IH2a5fKPkG26f80xzw/dlvtsgO3eEoUfH92gSWZ6B62Azz/0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLNkf/HIvbRa1JaJzU0pd/lyb1s+bQo7VMXMkXfY+G/slycrxn
-	6G9YuTNoNkZFaVA7G0pv75fIk6/2rDHduKQttbvrD0TNwUuTuEXrP7r1
-X-Gm-Gg: ASbGnctyiXpdXJwttFMpqeU9uoq1ZpWJxe3ymLRyaDSe+yH3ZagEGAWWcZUZ2GYHeMp
-	ivGM+bD1YkJ4yPMh3Nic1gBZHvCPTobCopzCY6/fZXnijch18Y6tuxleXkWXI34MaPGI6PKQnCh
-	0P15z6N4pIfLSnNG6wzfJ7VHFz/D1K16djPvs9ThRGiW3A79QyNDS+uxHv71im0/IAIoCnp9JPx
-	9hvpaVrszCoEujtNOYjrIWZTyL9DZGLv3CpoUqjKLG3s2p6G43wyY5CIrXHo3D9OJbAI4PPU0l/
-	DaiQ0dJ9cud9D0E+wx9YeMj36F3JEXT+1QABbOsTnA4ISXIOT71KtnJj6TM0KQc3HLOv5icdkGJ
-	LgtHuZW9NpZ/GuyDDpCjZd3UA9fUUZKhG4w+gaK/mDRXhpdv+nLKG4krqewA18tW0g3YSmficCQ
-	0syO9ohfjqbw==
-X-Google-Smtp-Source: AGHT+IGhmMxPsgaoPXnzgSVj6wNtw4Ah5MXEyylsvvZXtki7UPfq2bXLwFkO2O3wbGKc+QoBFG6+CQ==
-X-Received: by 2002:a05:7301:b16:b0:2a4:3592:cf6d with SMTP id 5a478bee46e88-2a9415cd90emr11088569eec.17.1764626792802;
-        Mon, 01 Dec 2025 14:06:32 -0800 (PST)
-Received: from archlinux ([2804:7f1:ebc3:d24b:12e1:8eff:fe46:88b8])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a965b47caasm50506902eec.6.2025.12.01.14.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Dec 2025 14:06:32 -0800 (PST)
-Date: Mon, 1 Dec 2025 22:06:24 +0000
-From: Andre Carvalho <asantostc@gmail.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Simon Horman <horms@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v8 4/5] netconsole: resume previously
- deactivated target
-Message-ID: <2sqyjsod2s6kdukgipgcpjqdoysaw6trpgymxci36lmi3gykvx@tvg4qh3veuiq>
-References: <20251128-netcons-retrigger-v8-0-0bccbf4c6385@gmail.com>
- <20251128-netcons-retrigger-v8-4-0bccbf4c6385@gmail.com>
- <65vs7a63onl37a7q7vjxo7wgmgkdcixkittcrirdje2e6qmkkj@syujqrygyvcd>
+	s=arc-20240116; t=1764629367; c=relaxed/simple;
+	bh=o08e3lndV4MmlSuouTwyGZ31ekryd2dZD37SZxIHuME=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dmOKDFYZ5JgiFEgwY20KMLoCtgbsC2Va9Ee63MoVJz+elJLVeBahsIS11qQHpRGg6+bjQD+uVZwiYc5N6P6P5q/uOMG94D/XhZ0Re5qMLRadbg6JX7gkkvqrvp+7ywmKg75WvbfV7egXHDCJHnhyTc3ZJduFt73A/vZmHBxa2lU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=Um0G9v2a; arc=none smtp.client-ip=67.231.153.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B1LJS7s4118138;
+	Mon, 1 Dec 2025 14:49:12 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
+	 bh=VG6uM2PSbf+3AJaJoRbbI3+C9CIZH9n9KAeQNJ7qCFE=; b=Um0G9v2ae4OF
+	gBkogoxMf45y8xPMXeASwfICnGRnq5V9NBz/ntUjiRPE5SrFlj8YDYXRg2NR/p1B
+	SrlUtrNhRGbqEa2aOrzMHYKhjMODgRFS5Ozv1EXNPgKWd2ThEDXzKLzqyCyZQTtu
+	ZFRf29+3OmXbE/YiHUjDQg3BOjkD1mz10z6wUbrIYLxPdvLWc+nMTwM9zVJHtOWE
+	5KlVH0b0jfCMwHj2x+hhZwg437nFrYU8bACRsHccQN+kq/pE6S54WtdwZGGHz5t9
+	Eu9p4yefsepdj0N5JUBclJfscHO5/ZJke4AdLwfuxOwzCr1oDN6aAb7YMbhvzi4k
+	/r7MqXRFNQ==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4asju5rnfw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Mon, 01 Dec 2025 14:49:12 -0800 (PST)
+Received: from devbig003.atn7.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.29; Mon, 1 Dec 2025 22:49:10 +0000
+From: Chris Mason <clm@meta.com>
+To: Jonas Gorski <jonas.gorski@gmail.com>
+CC: Chris Mason <clm@meta.com>, Simon Horman <horms@kernel.org>,
+        Andrew Lunn
+	<andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller"
+	<davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean
+	<vladimir.oltean@nxp.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH RFC/RFT net-next v2 1/5] net: dsa: deny bridge VLAN with existing 8021q upper on any port
+Date: Mon, 1 Dec 2025 14:48:48 -0800
+Message-ID: <20251201224855.4102774-1-clm@meta.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <CAOiHx=mog+8Grm1QTnqU_F3=BnWmJqTj+ko-nZiRMAb4-hvSqw@mail.gmail.com>
+References:
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65vs7a63onl37a7q7vjxo7wgmgkdcixkittcrirdje2e6qmkkj@syujqrygyvcd>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: Y0O8RzpyZELpb6ptQ4FoQgQymNIEJbUa
+X-Authority-Analysis: v=2.4 cv=EvnfbCcA c=1 sm=1 tr=0 ts=692e1b68 cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=9R54UkLUAAAA:8 a=pGLkceISAAAA:8 a=VwQbUJbxAAAA:8 a=crjk6GUWDzGwglwjZYIA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=5hNPEnYuNAgA:10
+ a=YTcpBFlVQWkNscrzJ_Dz:22
+X-Proofpoint-GUID: Y0O8RzpyZELpb6ptQ4FoQgQymNIEJbUa
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAxMDE4MyBTYWx0ZWRfXzm1T2yuII93v
+ mXBuPNVJWfpBO6Dq9B8IQytaYfizIEqi/B8r4xyezbkPeqYRvbRaLcbKx17BCZt5y5bshqMv60O
+ 8pYpx9PdtmeRPByYtNJyx8D8NXGeBRMFHZvEMHsi0gYA32G3y5TSNNIIFB7s0NX60vi6enI0TU9
+ S5ThvBnJ9Ya2AX16Js6AjTgBAYHMbsbZfrqK1TsSZL9cnn5Mnap6JuE6BrvqY73fYUMs24IKHLK
+ u+rUEL8SNgt89R4Uvu63n8XQGAdEURt8qtRVbTMBsUboQ3Vr9MyIGkHfiyvZblviDwjkvrJMhPj
+ jAIp9jmtlMsk/u0VXX0bC/sZrTVDAqok2YgBnMLg9KMwRmX8fEm31do7oYX5EMoAFyj9CxvwnYt
+ GIvIk8BKytuYmB4W/3dO67vXpDFIUw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
 
-On Mon, Dec 01, 2025 at 03:35:04AM -0800, Breno Leitao wrote:
-> might hit a similar problem to the one fixed by e5235eb6cfe0  ("net:
-> netpoll: initialize work queue before error checks")
+On Mon, 1 Dec 2025 20:52:34 +0100 Jonas Gorski <jonas.gorski@gmail.com> wrote:
+
+> Hi,
 > 
-> The code path would be:
->   * alloc_param_target()
-> 	  * alloc_and_init()
-> 		  * kzalloc() fails and return NULL.
-> 		  * resume_wq() is still not initialized
->   fail:
-> 	* free_param_target()
-> 		* cancel_work_sync(&nt->resume_wq); and resume_wq is not
-> 		  initialized
+> On Mon, Dec 1, 2025 at 3:48 PM Simon Horman <horms@kernel.org> wrote:
+> >
+> > On Mon, Dec 01, 2025 at 11:28:13AM +0100, Jonas Gorski wrote:
+> >
+> > ...
+> >
+> > > diff --git a/net/dsa/user.c b/net/dsa/user.c
+> > > index f59d66f0975d..fa1fe0f1493a 100644
+> > > --- a/net/dsa/user.c
+> > > +++ b/net/dsa/user.c
+> > > @@ -653,21 +653,30 @@ static int dsa_user_port_attr_set(struct net_device *dev, const void *ctx,
+> > >
+> > >  /* Must be called under rcu_read_lock() */
+> > >  static int
+> > > -dsa_user_vlan_check_for_8021q_uppers(struct net_device *user,
+> > > +dsa_user_vlan_check_for_8021q_uppers(struct dsa_port *dp,
+> > >                                    const struct switchdev_obj_port_vlan *vlan)
+> > >  {
+> > > -     struct net_device *upper_dev;
+> > > -     struct list_head *iter;
+> > > +     struct dsa_switch *ds = dp->ds;
+> > > +     struct dsa_port *other_dp;
+> > >
+> > > -     netdev_for_each_upper_dev_rcu(user, upper_dev, iter) {
+> > > -             u16 vid;
+> > > +     dsa_switch_for_each_user_port(other_dp, ds) {
+> > > +             struct net_device *user = other_dp->user;
+> >
+> > Hi Jonas,
+> >
+> > The AI robot is concerned that user may be NULL here.
+> > And I can't convince myself that cannot be the case.
+> >
+> > Could you take a look?
+> >
+> > https://netdev-ai.bots.linux.dev/ai-review.html?id=47057e-e740-4b66-9d60-9ec2a7ee92a1#patch-0
+> 
+> At this point it can be NULL. But it being NULL is not an issue, as ...
+> >
+> > > +             struct net_device *upper_dev;
+> > > +             struct list_head *iter;
+> > >
+> > > -             if (!is_vlan_dev(upper_dev))
+> > > +             if (!dsa_port_bridge_same(dp, other_dp))
+> > >                       continue;
+> 
+> ... this condition will filter all cases where it is NULL. For
+> dsa_port_bridge_same() to return true both ports need to be attached
+> to a bridge (and to the same bridge), and to be attached to a bridge a
+> net_device is required, so other_dp->user cannot be NULL. And we only
+> access user after here.
 
-Checking this a bit now and I'm not sure if we have the same problem. On 
-alloc_param_target() the cleanup is simply kfree(nt).
+I reproduced this false positive here, thanks for the explanation.  This is an
+example of a class of review mistakes I've wanted to fix, so I used it to
+improve the prompts around NULL pointers that are protected via other checks.
 
-free_param_target() is only called as part of netconsole module setup/cleanup but
-only for targets that were succesfully added to the target list (so are guaranteed
-to have resume_wq initialised) before we hit the error.
+I'll test this on some more commits and push it out.
 
-Let me know if I'm missing something!
-
--- 
-Andre Carvalho
+-chris
 
