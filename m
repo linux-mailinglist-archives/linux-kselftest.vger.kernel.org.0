@@ -1,163 +1,338 @@
-Return-Path: <linux-kselftest+bounces-46838-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8775AC98BAA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 19:35:53 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75270C98C5B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 19:53:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 05D59341F79
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 18:35:53 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5E53B4E1DCF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 18:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C7C221FD0;
-	Mon,  1 Dec 2025 18:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eqVRxi1j";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="AJaPzgqx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E399C21C17D;
+	Mon,  1 Dec 2025 18:53:29 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548A8220F37
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 18:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC7A1C8FBA;
+	Mon,  1 Dec 2025 18:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764614149; cv=none; b=pjYAcpyNVDdAF25A/PC99DmEFNrZC7jgIEYyy4Ia/Mq7SxvEzqaDZ5PRcFRLHJMitE9tgBfDAmC84E5LImk43d1Iw9uborhqkCqBts6aCfsykgu9WJRt5VOe0A/ri017kTtgJuW6N3FXF6rEWhJ7W0ObhNGWGkDW4ZphC7POgDA=
+	t=1764615209; cv=none; b=MU08u+mJBIi49BmaXETX+z4EkJWWBgkW17yJ+Uzep504h3qG1dYZy4lZ473x8Y9a4KIsBxWTw+dEBLks1Iy7IdJiyKeGOBb501wpn/DM2MqCoSWSpKqCHLMWa7DLVRzqKCAKAIKKX4IQJzsLsoNfNSbqvjZR6Sd55GdhzTieD8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764614149; c=relaxed/simple;
-	bh=7GnbR9QZqw7J2SMIEk6efP4FG5Tr7Ngm60EmLw+aaV0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=une6ENwg49BR5+5FnK+qlTCKIE/LEqV2a5neyScdLuHyLqNE4I1KkVKp1CRC/vULvRY65DukG+f/a2lI7uwxWbAhepNtThmouOnFMMnt3kSSsXYQif13T0leHBIXonot2ZMmn9HlgcC7PNbTYlsHlYW/UmOD7JPpV5wb/jzqFIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eqVRxi1j; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=AJaPzgqx; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764614146;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+SbwtOZH9ducWOEZb4+vngRgdkRzNyQHiBzNVLWt3d8=;
-	b=eqVRxi1j8UrG84k5Yc5jkSU+KBhRANs4xYuxCjpw6j4ZQz9+3ZEzKr91D1AaQ0ZSusqBUG
-	pf37V1YgsvgI8Ao5plgpBk0jqfXLRnrfk7TgVQCAcrMl2xZZentUYqYl4HsQLYC2HJO6ul
-	H5mwxKihVBPi07O7BiJTBrMUXExTeQQ=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-631-ImtClmfAN5Ovb5TtkRDnRw-1; Mon, 01 Dec 2025 13:35:44 -0500
-X-MC-Unique: ImtClmfAN5Ovb5TtkRDnRw-1
-X-Mimecast-MFC-AGG-ID: ImtClmfAN5Ovb5TtkRDnRw_1764614144
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8b225760181so504409085a.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Dec 2025 10:35:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1764614144; x=1765218944; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+SbwtOZH9ducWOEZb4+vngRgdkRzNyQHiBzNVLWt3d8=;
-        b=AJaPzgqxtxamZP/Jc/2sOHUS9o2QlayuF4AuWdPdk+G7F70VcO7MK9QM87bS9YmVsk
-         ULTQ3GeueQjel0frYtpXNNw8BDH7ioE3+DXxXuJwHr0Skm+ulQQ4DT7e1fPgAAAWcOvl
-         dfuPVXmf6JqVcV+oOMQAEb/Skx9E2SWxfJZ5y/wNu4JbrrJYY08PJ0F5BXKLDU2wOdnI
-         8z/jJS0wOfhkvDL2Otl0j9eR4TirhgUpvieiNWpx/W5tgNPbXRVyt03WTcxUpJ7NG+2Y
-         yQ93wiWtSw4mCkSBBxr+WXSJfuC8fOVKMev0FuHuPyt9Wn67l7/RPs0epaOKJXM9gjEI
-         8zfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764614144; x=1765218944;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+SbwtOZH9ducWOEZb4+vngRgdkRzNyQHiBzNVLWt3d8=;
-        b=PJbL0Fo7NYExuYr31UqtF9kgJNiKJQFoLxugvSJZ80EjapSpy54P9D9FopxVVLKFPA
-         eJIgb5Z7XVX6xM0jz5n9VDi6etrHFQJhWXj4e8iApgAKwFu0+g3DIJjXnaJ4zUa5fji+
-         O74BNdo9xy7DEdz5PfB7WECsRB1Uht5o6gOxBdwynA+X6ldFLApT1DS6WECLLuK6D5vv
-         keqHD8lTmSLopZ2RxQl4X8WOnizTbFO3jHfFG/6hhsafAcIXpUjdARXhqFHy3Wfa1Spb
-         e9RAl+5CaBOfQXTAjxqR1nMjOCRJCHZE6pMCeP1TH9Wi5z4zs7JpnSWlxAy5dXCw+6/M
-         BXZA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHenO9Uav0j2c+VYxNCYR7fyAKYrwVkGwMe9OV/jV4Cb+vksSNfhumiUQiZ7jCQ0eug1AZhKBul21a25W7gXk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzkwg5pyHL1XaMfXX+I3gevxo7PauyEQHGSSYj5RK1OTAk6ouyf
-	BnU8w5gDTGugvM6zVzTO7fVL6S1KWBvdPEy5QozyOmZXtwXdxXTG7X75e2S+PPs5i9mE9D6h3g+
-	4KOoJRwDweuiGqND39vQD9mmgqRIjIe9E9Y81Y6t4QGXpfdPohIts2B5jNZkPVGdXXucADQ==
-X-Gm-Gg: ASbGncvdr/ywsFoFiJMiImFxEn3cUubd7HcJVlOGHrYKTLm47Sbgz0Lhf7mH+U4zN6G
-	IPLAdb16PjsDZ08zyAx0qowKnSBHDfQWMdgMbi48n84fCdzTQl481nkx2rtCP+fltp/n5bFBwcs
-	c+Qh5Jtyt2bfJ8FxpRzLqBJ56mNRodLRH2QdoWo9pNuaMVi317lsKPaYMqX+7U8ovecfQOKfT4p
-	YgiRcUtqCSPobfcBXSTzNEJuRuDFS/Zuz7zweRFcZu1LdZTs33BuO0+EhwD1uB8p9MqnnqrO9Sz
-	eCDR5/omIS5hjX4FnmuLQt+pM5+vFrusr+6aaB6VdFbWax/mlCp7JV001ZycRRKow/l+q4l3N+L
-	UZJU=
-X-Received: by 2002:a05:620a:4047:b0:850:b7ad:c978 with SMTP id af79cd13be357-8b4ebd9eb33mr3684778185a.49.1764614144204;
-        Mon, 01 Dec 2025 10:35:44 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHc/IAOaSDf8i1YjJ+6md5JjMRZyr0e09X4B+I8m0ASlSLeFoGocESiXm6l1ZZbPYuAyWGexg==
-X-Received: by 2002:a05:620a:4047:b0:850:b7ad:c978 with SMTP id af79cd13be357-8b4ebd9eb33mr3684771285a.49.1764614143671;
-        Mon, 01 Dec 2025 10:35:43 -0800 (PST)
-Received: from x1.local ([142.188.210.156])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b5299a69d1sm898568985a.16.2025.12.01.10.35.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Dec 2025 10:35:42 -0800 (PST)
-Date: Mon, 1 Dec 2025 13:35:40 -0500
-From: Peter Xu <peterx@redhat.com>
-To: Nikita Kalyazin <kalyazin@amazon.com>
-Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>, Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] guest_memfd: add support for userfaultfd minor
- mode
-Message-ID: <aS3f_PlxWLb-6NmR@x1.local>
-References: <20251130111812.699259-1-rppt@kernel.org>
- <20251130111812.699259-5-rppt@kernel.org>
- <652578cc-eeff-4996-8c80-e26682a57e6d@amazon.com>
- <2d98c597-0789-4251-843d-bfe36de25bd2@kernel.org>
- <553c64e8-d224-4764-9057-84289257cac9@amazon.com>
+	s=arc-20240116; t=1764615209; c=relaxed/simple;
+	bh=ed5kwppRyFw/Cxb3zSTl85BHGjjxI9iJbysfCG0f6VQ=;
+	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=cUC69u5Mk3ofyaO9fAyiLvgC5Kbuyh/LXHu7MCGKQsMXyVXQlnrKwNGlz+b4DiD39pyy85ZV2CXDYO7azNtL7Vvg0Dq4zxqUWljmE+K42QbOxrI6Dd5iiZ2vCyslehIAFEE7TIU3DUbstIdNpZthLjtdzTRFeo8FGjhaeB28kJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in02.mta.xmission.com ([166.70.13.52]:36888)
+	by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1vQ91S-00A8D5-Ro; Mon, 01 Dec 2025 11:53:18 -0700
+Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:60576 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1vQ91R-007wwj-3u; Mon, 01 Dec 2025 11:53:18 -0700
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc: Bernd Edlinger <bernd.edlinger@hotmail.de>,  Alexander Viro
+ <viro@zeniv.linux.org.uk>,  Alexey Dobriyan <adobriyan@gmail.com>,  Oleg
+ Nesterov <oleg@redhat.com>,  Kees Cook <kees@kernel.org>,  Andy Lutomirski
+ <luto@amacapital.net>,  Will Drewry <wad@chromium.org>,  Christian Brauner
+ <brauner@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>,  Michal
+ Hocko <mhocko@suse.com>,  Serge Hallyn <serge@hallyn.com>,  James Morris
+ <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
+  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
+ <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
+ <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
+ <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
+  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
+  linux-security-module@vger.kernel.org,  tiozhang
+ <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
+ Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
+ <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
+  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
+  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
+  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
+ <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
+ <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
+ <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
+ Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
+ Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
+ <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
+ Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
+  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
+ <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
+ Dumazet <edumazet@google.com>,  zohar@linux.ibm.com,
+  linux-integrity@vger.kernel.org,  Ryan Lee <ryan.lee@canonical.com>,
+  apparmor <apparmor@lists.ubuntu.com>
+In-Reply-To: <dca0f01500f9d6705dccf3b3ef616468b1f53f57.camel@huaweicloud.com>
+	(Roberto Sassu's message of "Mon, 01 Dec 2025 17:49:31 +0100")
+References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
+	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+	<87tsyozqdu.fsf@email.froward.int.ebiederm.org>
+	<87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
+	<87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
+	<6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
+	<87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
+	<dca0f01500f9d6705dccf3b3ef616468b1f53f57.camel@huaweicloud.com>
+Date: Mon, 01 Dec 2025 12:53:10 -0600
+Message-ID: <87ms42rq3t.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <553c64e8-d224-4764-9057-84289257cac9@amazon.com>
+Content-Type: text/plain
+X-XM-SPF: eid=1vQ91R-007wwj-3u;;;mid=<87ms42rq3t.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX1+XM2P5RQHG0tsP4a1fJTNsMKeh8jmHpMk=
+X-Spam-Level: ****
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.4998]
+	*  0.7 XMSubLong Long Subject
+	*  0.5 XMGappySubj_01 Very gappy subject
+	*  1.0 XMGappySubj_02 Gappier still
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	*  1.2 XM_Multi_Part_URI URI: Long-Multi-Part URIs
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa04 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  1.0 XM_B_Phish_Phrases Commonly used Phishing Phrases
+	*  0.0 XM_B_AI_SPAM_COMBINATION Email matches multiple AI-related
+	*      patterns
+	*  0.2 XM_B_SpammyWords One or more commonly used spammy words
+	*  0.5 TR_AI_Phishing Email matches multiple AI-related patterns
+	*  0.0 TR_XM_PhishingBody Phishing flag in body of message
+X-Spam-DCC: XMission; sa04 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ****;Roberto Sassu <roberto.sassu@huaweicloud.com>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 1141 ms - load_scoreonly_sql: 0.05 (0.0%),
+	signal_user_changed: 13 (1.1%), b_tie_ro: 11 (1.0%), parse: 2.2 (0.2%),
+	 extract_message_metadata: 32 (2.8%), get_uri_detail_list: 8 (0.7%),
+	tests_pri_-2000: 56 (4.9%), tests_pri_-1000: 13 (1.1%),
+	tests_pri_-950: 1.23 (0.1%), tests_pri_-900: 1.13 (0.1%),
+	tests_pri_-90: 300 (26.3%), check_bayes: 295 (25.8%), b_tokenize: 27
+	(2.4%), b_tok_get_all: 17 (1.5%), b_comp_prob: 5 (0.5%),
+	b_tok_touch_all: 240 (21.1%), b_finish: 1.05 (0.1%), tests_pri_0: 700
+	(61.4%), check_dkim_signature: 0.78 (0.1%), check_dkim_adsp: 3.1
+	(0.3%), poll_dns_idle: 1.11 (0.1%), tests_pri_10: 3.3 (0.3%),
+	tests_pri_500: 14 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: Are setuid shell scripts safe? (Implied by
+ security_bprm_creds_for_exec)
+X-SA-Exim-Connect-IP: 166.70.13.52
+X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-SA-Exim-Scanned: No (on out02.mta.xmission.com); SAEximRunCond expanded to false
 
-On Mon, Dec 01, 2025 at 04:48:22PM +0000, Nikita Kalyazin wrote:
-> I believe I found the precise point where we convinced ourselves that minor
-> support was sufficient: [1].  If at this moment we don't find that reasoning
-> valid anymore, then indeed implementing missing is the only option.
-> 
-> [1] https://lore.kernel.org/kvm/Z9GsIDVYWoV8d8-C@x1.local
+Roberto Sassu <roberto.sassu@huaweicloud.com> writes:
 
-Now after I re-read the discussion, I may have made a wrong statement
-there, sorry.  I could have got slightly confused on when the write()
-syscall can be involved.
+> On Mon, 2025-12-01 at 10:06 -0600, Eric W. Biederman wrote:
+>> Roberto Sassu <roberto.sassu@huaweicloud.com> writes:
+>> 
+>> > + Mimi, linux-integrity (would be nice if we are in CC when linux-
+>> > security-module is in CC).
+>> > 
+>> > Apologies for not answering earlier, it seems I don't receive the
+>> > emails from the linux-security-module mailing list (thanks Serge for
+>> > letting me know!).
+>> > 
+>> > I see two main effects of this patch. First, the bprm_check_security
+>> > hook implementations will not see bprm->cred populated. That was a
+>> > problem before we made this patch:
+>> > 
+>> > https://patchew.org/linux/20251008113503.2433343-1-roberto.sassu@huaweicloud.com/
+>> 
+>> Thanks, that is definitely needed.
+>> 
+>> Does calling process_measurement(CREDS_CHECK) on only the final file
+>> pass review?  Do you know of any cases where that will break things?
+>
+> We intentionally changed the behavior of CREDS_CHECK to be invoked only
+> for the final file. We are monitoring for bug reports, if we receive
+> complains from people that the patch breaks their expectation we will
+> revisit the issue.
+>
+> Any LSM implementing bprm_check_security looking for brpm->cred would
+> be affected by recalculating the DAC credentials for the final binary.
+>
+>> As it stands I don't think it should be assumed that any LSM has
+>> computed it's final creds until bprm_creds_from_file.  Not just the
+>> uid and gid.
+>
+> Uhm, I can be wrong, but most LSMs calculate their state change in
+> bprm_creds_for_exec (git grep bprm_creds_for_exec|grep LSM_HOOK_INIT).
+>
+>> If the patch you posted for review works that helps sort that mess out.
+>
+> Well, it works because we changed the expectation :)
 
-I agree if you want to get an event when cache missed with the current uffd
-definitions and when pre-population is forbidden, then MISSING trap is
-required.  That is, with/without the need of UFFDIO_COPY being available.
+I just haven't seen that code land in Linus's tree yet so I am a bit
+cautious in adopting that.  It is definitely needed as the behavior
+of IMA as v6.18 simply does not work in general.
 
-Do I understand it right that UFFDIO_COPY is not allowed in your case, but
-only write()?
+>> > to work around the problem of not calculating the final DAC credentials
+>> > early enough (well, we actually had to change our CREDS_CHECK hook
+>> > behavior).
+>> > 
+>> > The second, I could not check. If I remember well, unlike the
+>> > capability LSM, SELinux/Apparmor/SMACK calculate the final credentials
+>> > based on the first file being executed (thus the script, not the
+>> > interpreter). Is this patch keeping the same behavior despite preparing
+>> > the credentials when the final binary is found?
+>> 
+>> The patch I posted was.
+>> 
+>> My brain is still reeling from the realization that our security modules
+>> have the implicit assumption that it is safe to calculate their security
+>> information from shell scripts.
+>
+> If I'm interpreting this behavior correctly (please any LSM maintainer
+> could comment on it), the intent is just to transition to a different
+> security context where a different set of rules could apply (since we
+> are executing a script).
+>
+> Imagine if for every script, the security transition is based on the
+> interpreter, it would be hard to differentiate between scripts and
+> associate to the respective processes different security labels.
+>
+>> In the first half of the 90's I remember there was lots of effort to try
+>> and make setuid shell scripts and setuid perl scripts work, and the
+>> final conclusion was it was a lost cause.
+>
+> Definitely I lack a lot of context...
 
-One way that might work this around, is introducing a new UFFD_FEATURE bit
-allowing the MINOR registration to trap all pgtable faults, which will
-change the MINOR fault semantics.
+From the usenet comp.unix.faq that was probably updated in 1994:
+    http://www.faqs.org/faqs/unix-faq/faq/part4/section-7.html
 
-That'll need some further thoughts, meanwhile we may also want to make sure
-the old shmem/hugetlbfs semantics are kept (e.g. they should fail MINOR
-registers if the new feature bit is enabled in the ctx somehow; or support
-them properly in the codebase).
+I have been trying to remember enough details by looking it up, but the
+short version is that one of the big problems is there is a race between
+the kernel doing it's thing and the shell opening the shell script.
 
-Thanks,
+Clever people have been able to take advantage of that race and insert
+arbitrary code in that window for the shell to execute.  All you have to
+do is google for how to find a reproducer if the one in the link above
+is not enough.
 
--- 
-Peter Xu
+>> Now I look at security_bprm_creds_for_exec and security_bprm_check which
+>> both have the implicit assumption that it is indeed safe to compute the
+>> credentials from a shell script.
+>> 
+>> When passing a file descriptor to execat we have
+>> BINPRM_FLAGS_PATH_INACCESSIBLE and use /dev/fd/NNN as the filename
+>> which reduces some of the races.
+>> 
+>> However when just plain executing a shell script we pass the filename of
+>> the shell script as a command line argument, and expect the shell to
+>> open the filename again.  This has been a time of check to time of use
+>> race for decades, and one of the reasons we don't have setuid shell
+>> scripts.
+>
+> Yes, it would be really nice to fix it!
 
+After 30 years I really don't expect that is even a reasonable request.
+
+I think we are solidly into "Don't do that then", and the LSM security
+hooks are definitely doing that.
+
+There is the partial solution of passing /dev/fd instead of passing the
+name of the script.  I suspect that would break things.  I don't
+remember why that was never adopted.
+
+I think even with the TOCTOU race fixed there were other serious issues.
+
+I really think it behooves any security module people who want to use
+the shell script as the basis of their security decisions to research
+all of the old well known issues and describe how they don't apply.
+
+All I have energy for is to point out it is broken as is and to start
+moving code down into bprm_creds_from_file to avoid the race.
+
+Right now as far as I can tell anything based upon the script itself
+is worthless junk so changing that would not be breaking anything that
+wasn't already broken.
+
+>> Yet the IMA implementation (without the above mentioned patch) assumes
+>> the final creds will be calculated before security_bprm_check is called,
+>> and security_bprm_creds_for_exec busily calculate the final creds.
+>> 
+>> For some of the security modules I believe anyone can set any label they
+>> want on a file and they remain secure (At which point I don't understand
+>> the point of having labels on files).  I don't believe that is the case
+>> for selinux, or in general.
+>
+> A simple example for SELinux. Suppose that the parent process has type
+> initrc_t, then the SELinux policy configures the following transitions
+> based on the label of the first file executed (sesearch -T -s initrc_t
+> -c process):
+>
+> type_transition initrc_t NetworkManager_dispatcher_exec_t:process NetworkManager_dispatcher_t;
+> type_transition initrc_t NetworkManager_exec_t:process NetworkManager_t;
+> type_transition initrc_t NetworkManager_initrc_exec_t:process initrc_t;
+> type_transition initrc_t NetworkManager_priv_helper_exec_t:process NetworkManager_priv_helper_t;
+> type_transition initrc_t abrt_dump_oops_exec_t:process abrt_dump_oops_t;
+> type_transition initrc_t abrt_exec_t:process abrt_t;
+> [...]
+>
+> (there are 747 rules in my system).
+>
+> If the transition would be based on the interpreter label, it would be
+> hard to express with rules.
+
+Which is a problem for the people making the rules engine.  Because
+30 years of experience with this problem says basing anything on the
+script is already broken.
+
+I understand the frustration, but it requires a new way of launching
+shell scripts to even begin to make it secure.
+
+> If the transition does not occur for any reason the parent process
+> policy would still apply, but maybe it would not have the necessary
+> permissions for the execution of the script.
+
+Yep.
+
+>> So just to remove the TOCTOU race the security_bprm_creds_for_exec
+>> and security_bprm_check hooks need to be removed, after moving their
+>> code into something like security_bprm_creds_from_file.
+>> 
+>> Or am I missing something and even with the TOCTOU race are setuid shell
+>> scripts somehow safe now?
+>
+> Take this with a looot of salt, if there is a TOCTOU race, the script
+> will be executed with a security context that does not belong to it.
+> But the transition already happened. Not sure if it is safe.
+
+Historically it hasn't been safe.
+
+> I also don't know how the TOCTOU race could be solved, but I also would
+> like it to be fixed. I'm available to comment on any proposal!
+
+I am hoping someone who helped put these security hooks where they are
+will speak up, and tell me what I am missing.
+
+All I have the energy for right now is to point out security policies
+based upon shell scripts appear to be security policies that only
+protect you from well behaved programs.
+
+Eric
 
