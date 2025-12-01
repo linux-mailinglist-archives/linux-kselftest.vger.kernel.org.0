@@ -1,62 +1,121 @@
-Return-Path: <linux-kselftest+bounces-46809-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46810-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41773C97E56
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 15:48:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C06AC97FD1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 16:14:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 022D03A350F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 14:48:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C1BED343EE5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 15:14:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A9643195E6;
-	Mon,  1 Dec 2025 14:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E1831ED66;
+	Mon,  1 Dec 2025 15:13:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qRtegR7+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XEQdqXc6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E64728BA95;
-	Mon,  1 Dec 2025 14:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE3D31A547
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 15:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764600484; cv=none; b=NLu+jCl1SrysAR8SG/CYlr7JKNKn49dGvcAY4LZ9w9sN0Ihe5jlLjZEsVqmhJfxCDcdgXrIkKsAzWySdxgYZr76oluf4YLTxUz5I89wHUZBZ775xscqtIV3jEUgu9oVeK7DtGu5q0hXdUy/5hkw6pMHG4+0NkxswaQL1/IVq3wc=
+	t=1764602035; cv=none; b=pJwMCWvyrlzuiSZiDNKSWLILr6fhLZ7/erfskwHwJXYl3Atnj4FslLUvd7buX5uhti07M42XYudN5HaEkVzPCrvao0H9gsReBAAwuqupvpcc1vsexFJcll+RS3uj9qUU+bK1CPiN/wdi/+V2LVmK4JtzQJtWKXTj+vichUu4V7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764600484; c=relaxed/simple;
-	bh=sHeFdN53jSp7ITbkpxqG8nQwDInFfPwljVAM7N25H+c=;
+	s=arc-20240116; t=1764602035; c=relaxed/simple;
+	bh=VJPmfJ+OuSFtUO2JO+y5K63j1ImkklCStE4dlXCI8Ig=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SrW0dlZeimH+KtSSQaNipFlOpt/E6wkvFv/ynBuil+6z+/+T4e7374A9uqjRWDduVddowJLcJpg3ChJaPiGoOEKLBD/1+/Oqhy/di+Aeb5aEl3qZCG57O37/niPixU/X0oXBw17thfU2BCOjOBnaInb4wwKJ73Xx/ro3CXFuF3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qRtegR7+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BD9AC4CEF1;
-	Mon,  1 Dec 2025 14:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764600483;
-	bh=sHeFdN53jSp7ITbkpxqG8nQwDInFfPwljVAM7N25H+c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qRtegR7+mYHDNv63syP0L8Yus4GOVSjVEY/PbUsmYaqoM+RwrsngtVGeytmR3vYWu
-	 pFe0GhoQNBJRCqXJbqNnIKoQDqinhHMn7YDvUlhZDCzXgUlKSl4pxy3VBq6gCkiMnp
-	 WCnlQNAjGuZBBKcnvLIckAkrV1qd4JMGEnySoIN+bhH6zZ9gDf4M9WQkmKCUl9/ZwE
-	 /PVBLU8xuFjmHTEMLvqXAVdJtguPux0mg0sOkxmy8Wxla5QOTlR4TCePRPvpWRlqRz
-	 0F4SPqONaE2z+1XCoLXICjP9kr2xqu51kvWvH9mXz4K0HQqClp5FknH+ie593/DwlU
-	 P3aisBRfsX6GA==
-Date: Mon, 1 Dec 2025 14:47:59 +0000
-From: Simon Horman <horms@kernel.org>
-To: Jonas Gorski <jonas.gorski@gmail.com>
-Cc: Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC/RFT net-next v2 1/5] net: dsa: deny bridge VLAN with
- existing 8021q upper on any port
-Message-ID: <aS2qnzL2WC-sFlnJ@horms.kernel.org>
-References: <20251201102817.301552-1-jonas.gorski@gmail.com>
- <20251201102817.301552-2-jonas.gorski@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Inp9Iet1tFEd3rXBQqCnvI1pMO4JYrWWaks3mbTLJSHGGKDB07KU1xBAd2BhpzPqWzruQ0P9wPCvJs2kDq9i7IJn2O+baGVaJ5s11ZI4KfrjRIbWWGdLLY2veksP8G84IeWLoVGUUjiP6ymOPjx0ubHgkwjGqtcePhPi6HCdcJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XEQdqXc6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1764602033;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=f/tlyVzi6SvS7uRQ6J4iLF5XFx5rEXURTZnzpIQU4oM=;
+	b=XEQdqXc6sj+FA4zL63w+/AaSmCAC0+2HPRdhdFhQRE7NMH/c34lqf6/MzFhVlEmE6ReCrv
+	471yrHkaL1NxqbYyb7fYsbAOvMJecrySG86anSQqiwHeJz3otCaBXQyKB/2qq6O283JpTv
+	QH2l1atXvi77Wq71mcBJrn7mxQokJUs=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-385-MtAWk9dRM6CenYT9ryiugA-1; Mon,
+ 01 Dec 2025 10:13:46 -0500
+X-MC-Unique: MtAWk9dRM6CenYT9ryiugA-1
+X-Mimecast-MFC-AGG-ID: MtAWk9dRM6CenYT9ryiugA_1764602020
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A590F1956050;
+	Mon,  1 Dec 2025 15:13:39 +0000 (UTC)
+Received: from fedora (unknown [10.45.224.36])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id CE22B195608E;
+	Mon,  1 Dec 2025 15:13:20 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Mon,  1 Dec 2025 16:13:39 +0100 (CET)
+Date: Mon, 1 Dec 2025 16:13:19 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Alexey Dobriyan <adobriyan@gmail.com>, Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
+	"Eric W. Biederman" <ebiederm@xmission.com>,
+	Adrian Reber <areber@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	tiozhang <tiozhang@didiglobal.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	YueHaibing <yuehaibing@huawei.com>,
+	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
+	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
+	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
+	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
+	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	David Windsor <dwindsor@gmail.com>,
+	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Hans Liljestrand <ishkamiel@gmail.com>,
+	Penglei Jiang <superman.xpt@gmail.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Adrian Ratiu <adrian.ratiu@collabora.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Cyrill Gorcunov <gorcunov@gmail.com>,
+	Eric Dumazet <edumazet@google.com>
+Subject: Re: [PATCH v17] exec: Fix dead-lock in de_thread with ptrace_attach
+Message-ID: <aS2wj3j5qfoWDt2p@redhat.com>
+References: <AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <20251105143210.GA25535@redhat.com>
+ <20251111-ankreiden-augen-eadcf9bbdfaa@brauner>
+ <GV2PPF74270EBEE4FE6E639B899D01D8870E4C9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <aRs4zYDhddBQFiXZ@redhat.com>
+ <GV2PPF74270EBEE6F59267B0E9F28F536D0E4C9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <aSNTNZxiQ0txISJx@redhat.com>
+ <GV2PPF74270EBEEDD43083BE45C6E26F674E4DDA@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,66 +124,87 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251201102817.301552-2-jonas.gorski@gmail.com>
+In-Reply-To: <GV2PPF74270EBEEDD43083BE45C6E26F674E4DDA@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Mon, Dec 01, 2025 at 11:28:13AM +0100, Jonas Gorski wrote:
+On 11/29, Bernd Edlinger wrote:
+>
+> On 11/23/25 19:32, Oleg Nesterov wrote:
+> > I don't follow. Do you mean PREEMPT_RT ?
+> >
+> > If yes. In this case spin_lock_irq() is rt_spin_lock() which doesn't disable irqs,
+> > it does rt_lock_lock() (takes rt_mutex) + migrate_disable().
+> >
+> > I do think that spin/mutex/whatever_unlock() is always safe. In any order, and
+> > regardless of RT.
+> >
+>
+> It is hard to follow how linux implements that spin_lock_irq exactly,
 
-...
+Yes ;)
 
-> diff --git a/net/dsa/user.c b/net/dsa/user.c
-> index f59d66f0975d..fa1fe0f1493a 100644
-> --- a/net/dsa/user.c
-> +++ b/net/dsa/user.c
-> @@ -653,21 +653,30 @@ static int dsa_user_port_attr_set(struct net_device *dev, const void *ctx,
->  
->  /* Must be called under rcu_read_lock() */
->  static int
-> -dsa_user_vlan_check_for_8021q_uppers(struct net_device *user,
-> +dsa_user_vlan_check_for_8021q_uppers(struct dsa_port *dp,
->  				     const struct switchdev_obj_port_vlan *vlan)
->  {
-> -	struct net_device *upper_dev;
-> -	struct list_head *iter;
-> +	struct dsa_switch *ds = dp->ds;
-> +	struct dsa_port *other_dp;
->  
-> -	netdev_for_each_upper_dev_rcu(user, upper_dev, iter) {
-> -		u16 vid;
-> +	dsa_switch_for_each_user_port(other_dp, ds) {
-> +		struct net_device *user = other_dp->user;
+> but
+> to me it looks like it is done this way:
+>
+> include/linux/spinlock_api_smp.h:static inline void __raw_spin_lock_irq(raw_spinlock_t *lock)
+> include/linux/spinlock_api_smp.h-{
+> include/linux/spinlock_api_smp.h-       local_irq_disable();
+> include/linux/spinlock_api_smp.h-       preempt_disable();
+> include/linux/spinlock_api_smp.h-       spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
+> include/linux/spinlock_api_smp.h-       LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
+> include/linux/spinlock_api_smp.h-}
 
-Hi Jonas,
+Again, I will assume you mean RT.
 
-The AI robot is concerned that user may be NULL here.
-And I can't convince myself that cannot be the case.
+In this case spinlock_t and raw_spinlock_t are not the same thing.
 
-Could you take a look?
+include/linux/spinlock_types.h:
 
-https://netdev-ai.bots.linux.dev/ai-review.html?id=3d47057e-e740-4b66-9d60-9ec2a7ee92a1#patch-0
+	typedef struct spinlock {
+		struct rt_mutex_base	lock;
+	#ifdef CONFIG_DEBUG_LOCK_ALLOC
+		struct lockdep_map	dep_map;
+	#endif
+	} spinlock_t;
 
-> +		struct net_device *upper_dev;
-> +		struct list_head *iter;
->  
-> -		if (!is_vlan_dev(upper_dev))
-> +		if (!dsa_port_bridge_same(dp, other_dp))
->  			continue;
->  
-> -		vid = vlan_dev_vlan_id(upper_dev);
-> -		if (vid == vlan->vid)
-> -			return -EBUSY;
-> +		netdev_for_each_upper_dev_rcu(user, upper_dev, iter) {
-> +			u16 vid;
-> +
-> +			if (!is_vlan_dev(upper_dev))
-> +				continue;
-> +
-> +			vid = vlan_dev_vlan_id(upper_dev);
-> +			if (vid == vlan->vid)
-> +				return -EBUSY;
-> +		}
->  	}
->  
->  	return 0;
+include/linux/spinlock_rt.h:
 
-...
+	static __always_inline void spin_lock_irq(spinlock_t *lock)
+	{
+		rt_spin_lock(lock);
+	}
+
+rt_spin_lock() doesn't disable irqs, it takes "rt_mutex_base lock" and
+disables migration.
+
+
+> so an explicit task switch while locka_irq_disable looks
+> very dangerous to me.
+
+raw_spin_lock_irq() disables irqs/preemption regardless of RT, task switch
+is not possible.
+
+> Do you know other places where such
+> a code pattern is used?
+
+For example, double_lock_irq(). See task_numa_group(),
+
+	double_lock_irq(&my_grp->lock, &grp->lock);
+
+	....
+
+	spin_unlock(&my_grp->lock);
+	spin_unlock_irq(&grp->lock);
+
+this can unlock the locks in reverse order.
+
+I am sure there are more examples.
+
+> I do just ask, because a close look at those might reveal
+> some serious bugs, WDYT?
+
+See above, I don't understand your concerns...
+
+Oleg.
+
 
