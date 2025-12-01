@@ -1,152 +1,225 @@
-Return-Path: <linux-kselftest+bounces-46856-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B20AC99428
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 22:51:07 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C7EDC9946A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 22:57:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29E383A19E3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 21:51:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ED45A4E2FD3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 21:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A15A27AC57;
-	Mon,  1 Dec 2025 21:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7D527FD5A;
+	Mon,  1 Dec 2025 21:57:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="epKXQEpb"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PWZDy8qZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614372749C9
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 21:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5F4285CBA
+	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 21:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764625863; cv=none; b=t8wDv0LjtgxhpJMPvgEdZvabMDURwhSXeuENevlWQtONS9a2u1R/CWkHWk8YqGZnZxStvpOK5OuqiGqzYKgTQwdHaFYXmRfNThfsTsk1QCcuebWY1cA/8Ud4lN8ShPabv+JlB+pv6vew4eEPXypMXuaHVPrERTzccwGNBEqgRGg=
+	t=1764626241; cv=none; b=lLXHoN14shPE4WmA6lv43veHm4XisJBlBogBi2yt4iwHhzWWG3j21Sl2ld3FJTDd1Nz3YO/Q8qjCafY8on8inCmsHKtpY94j9yp8kFhjm+rk5xiqqb3znt7CT+iuF7PnHJCOk8Xo5+bu+pktW1xZDS8XM82aNp0YZ7s+mN0VF7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764625863; c=relaxed/simple;
-	bh=lBhsm34b8HRtF0qiK5+BYRFUpoqzlRFpLa0qPZI45N4=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=aL7hrCzj0QrC7EHlMae/ExAivw37FeLgDMMjkv4eiyPb2/sAtFCw7It//yuwn+4N7d8LvmjF+8Tz6RZL0Gs4vrb7LAEbKNA8UBnmSyx0OHc1WXq5Dx4TDgXQvB72j7vY+cKfoq8rbJTb5WNDZfTvnHlYG9VeMFD5YzHbpeF3Ov8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=epKXQEpb; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-786a822e73aso47648307b3.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Dec 2025 13:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764625860; x=1765230660; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B/Ft14pK70CD4rBElRNDZPQO4FwJE1Kwzd6HfV1lFTo=;
-        b=epKXQEpbQKe5Pr8+6xHHxOOUl5Df/RkGjelbvsAKw4TxRWcpjyZukJtNKgljHifIrS
-         +akmnUa9m4qq/pQTslTRaxp+nT2HIatfU8ExTAFJydhch2HvwIvANk5WyxxFGcqXs/Ay
-         PQpZC23QuOs/Uk3el/+POPoMqYZa1voGIVqL0NC1ejEAh/Ziw7Np3VZFkTuLGSShBjwj
-         gPXgG8dIEhKy47OCh+BCafNH0ipPz1LjeTDVitwLsLtEggjlqfosz5TOwiCStXSw0OC2
-         721Tncf5KruokxKDUZolTyM/Z/r4boNO6aJWwLg6z/t1IonSpskaAL7WOzl4vx4V26Zk
-         LLCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764625860; x=1765230660;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B/Ft14pK70CD4rBElRNDZPQO4FwJE1Kwzd6HfV1lFTo=;
-        b=pyzM41B4Dl9hnLztfLcRzjLoYBl4wS0wqOsh7MmYT52LBTqjYkRcj01a7p8urWdP7p
-         KyT0jeYtLYJMnx8agOGuKYtovjrOWwHvGOawfLIvBTjslS5Kk1geAXNzUsGj8Q4MZguf
-         6imbq+qXNa+AAbPNCjdyWC1O8FDfzaxYQlMQWla06Lb9duT9xQ9ZHT/O//FpNge8jZX5
-         1focCGSACWtoxCp0qaXgFpJ1Obmqm2g1yKQ3sIiV1gFrbpioFQGV82Mh3JxtGvcEB5YS
-         J0C4z9gGXHoxhYh3U9vEgq49rJtugg5yUfKN7YFXiDb87/yVtHSaQqeGzaxuqS224Rop
-         sUtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWDWr9T1+GbZyViDdowRA8Fnhh4b7Z7KHeLyge4NqCr8l1pAdWtsB6lmj4jnOz8thAL9jGZ+txYrUzAvazmnOI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTUHscfiNBWymZ7nisoDL4zOLj1PaK6TX2DizepYbSYLM9WOW/
-	tFQL8y67q5rqkiuxnxYaUGWPw7tKQ8i/1lbNI4mpTGXaPxFyYyRhvhPpWFKO8g==
-X-Gm-Gg: ASbGncsUcFOMCQARAueJvIxs77RhySACUdyh7CeVmKTQrDLMMyGKPEGfvKy9zSnsLwM
-	ob4lbMhQiyFGVL9EuNrDN/huw6J0TbTIex6z/Gp+RVpgcl+6MFaaNWR5e7IfOBHwqlkBd0nD8qZ
-	vogU5YdG9RfI3UuL4KRvDy66cYOa1+RPElyojsDsT8lGmKp6dfMMOwgg2aNgNOWOstncbNPD+w3
-	xluoUUutX4Q4L7qUufaocShnWOm2ALB4QmIcdfdRK5SFy05YfixhoK3ud/o+Hrc7wHa1hQWQSO2
-	JM8Z9/jgYOIXzFfw8K6vPgwYHzGmnG6waI0SAfL9ypJAkG+SfBMAoTgs4DkGNtc/P6/gBlkXqO8
-	N7GPgqJjXDqWYkUINd5K8/yePSzt4e5y+E4rnERYxG2Wn0DiNogR+DrX9AtrUarZ1xBbMehRIty
-	OtVHDiGEzHtK5/2dCMvFCEiWmPAT6hMJMdF3+JvVTF1dm2LdMAHxXZLMlWOwDIcrhbYgk=
-X-Google-Smtp-Source: AGHT+IFEirLemOCPBYW5SY+npyALCUTmcHk0zsceyQ+TZxHYOB6eir6q3oSUr2MGTHxgxQ7INoy8Fg==
-X-Received: by 2002:a05:690c:74c7:b0:786:5499:634f with SMTP id 00721157ae682-78a8b525dcemr320353247b3.41.1764625860331;
-        Mon, 01 Dec 2025 13:51:00 -0800 (PST)
-Received: from gmail.com (116.235.236.35.bc.googleusercontent.com. [35.236.235.116])
-        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-78ad100e94fsm55276807b3.32.2025.12.01.13.50.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Dec 2025 13:50:59 -0800 (PST)
-Date: Mon, 01 Dec 2025 16:50:59 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- netdev@vger.kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- andrew+netdev@lunn.ch, 
- horms@kernel.org, 
- shuah@kernel.org, 
- sdf@fomichev.me, 
- linux-kselftest@vger.kernel.org
-Message-ID: <willemdebruijn.kernel.18907bed3c8c6@gmail.com>
-In-Reply-To: <20251201115041.5aa4c986@kernel.org>
-References: <20251128005242.2604732-1-kuba@kernel.org>
- <20251128005242.2604732-2-kuba@kernel.org>
- <willemdebruijn.kernel.468ae2cb7a74@gmail.com>
- <20251129173851.56cf3b18@kernel.org>
- <willemdebruijn.kernel.3877052beef72@gmail.com>
- <20251201115041.5aa4c986@kernel.org>
-Subject: Re: [PATCH net-next 2/2] selftests: drv-net: gro: run the test
- against HW GRO and LRO
+	s=arc-20240116; t=1764626241; c=relaxed/simple;
+	bh=qZWIlvtYphfZcCD2iB+89oKRSWC8v4am+O1Yam6YnyY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d5ORvmYYdtU3/62xHo9d3mLC6WPV9C1dWoHXNHohAKohC+4h4qC0qM2tCJzs5h+zb5q55qb1Pr9teXrgzwdqsO3aWJB7hlGm4Suwi/Bk7FJnFKT4VPBpKBUfR/uEV7ULL9uOVZM1dzV9bDSBc8JhKrDkEYZDpbVNlSgEMNlejhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PWZDy8qZ; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <7ad2c03d-47bf-4eb2-98f9-44919bb19b8d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764626225;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HIgEooAuZfYBGtSMdgL7MEx82djnBNlIKpwfR1F7SPM=;
+	b=PWZDy8qZon+1l3Nw4SGR5/7DDnYUlb5R7CZVgA8WLZe8DB3ggmiU4/3I5XtstYgHr7y0xl
+	3xtmagQ3rjtWQtJ/MWJDe02OMfYIjo/G5Dx6+ODzd6k9tbc5zYxhlQpdKHd5FOnVb3hBTc
+	oDEnPvBC92TYpKx4pxV50O+axsgHpWs=
+Date: Mon, 1 Dec 2025 13:56:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Subject: Re: [PATCH 00/21] vfio/pci: Base support to preserve a VFIO device
+ file across Live Update
+To: David Matlack <dmatlack@google.com>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Alex Williamson <alex@shazbot.org>,
+ Adithya Jayachandran <ajayachandra@nvidia.com>, Alex Mastro
+ <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+ David Rientjes <rientjes@google.com>,
+ Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Josh Hilke <jrhilke@google.com>,
+ Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org,
+ Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
+ Lukas Wunner <lukas@wunner.de>, Mike Rapoport <rppt@kernel.org>,
+ Parav Pandit <parav@nvidia.com>, Philipp Stanner <pstanner@redhat.com>,
+ Pratyush Yadav <pratyush@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>,
+ Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>,
+ Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>,
+ William Tu <witu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+ Yunxiang Li <Yunxiang.Li@amd.com>
+References: <20251126193608.2678510-1-dmatlack@google.com>
+ <dadaeeb9-4008-4450-8b61-e147a2af38b2@linux.dev>
+ <46bbdad1-486d-4cb1-915f-577b00de827f@linux.dev>
+ <CALzav=eigAYdw5-hzk1MAHWBU29yJK4_WWTd0dyoBN91bnRoZQ@mail.gmail.com>
+ <4998497c-87e8-4849-8442-b7281c627884@linux.dev>
+ <aS3RF6ROa7uZsviv@google.com> <aS3SJxAjVT-ZH1YT@google.com>
+ <CA+CK2bDQh6jG53mbksYW7WjukSKy6egCfKs8+mmAcNKSQ9m4mQ@mail.gmail.com>
+ <3aa3a726-147d-4573-ae50-eef94a910640@linux.dev>
+ <CALzav=fCjZnU5jqHTwFziAcssUys+XqWX1GkM7_PGufBnVyPmQ@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Yanjun.Zhu" <yanjun.zhu@linux.dev>
+In-Reply-To: <CALzav=fCjZnU5jqHTwFziAcssUys+XqWX1GkM7_PGufBnVyPmQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Jakub Kicinski wrote:
-> On Sun, 30 Nov 2025 09:56:24 -0500 Willem de Bruijn wrote:
-> > Jakub Kicinski wrote:
-> > > On Fri, 28 Nov 2025 15:42:40 -0500 Willem de Bruijn wrote:  
-> > > > So GRO off disables HW_GRO, but not LRO? That difference is behavior
-> > > > is confusing. Could we still see this as a regression and make the
-> > > > ethtool HW_GRO feature equally independent from SW_GRO?  
-> > > 
-> > > I couldn't convince myself that it's justified. Of course it would have
-> > > made testing a lot easier. But apart from that - what's your reading of
-> > > the status quo? Working backwards from were we ended up (and I
-> > > haven't dug into the git history) I'm guessing that LRO disable is used
-> > > to prevent changing geometry of the packets. GRO would presumably be
-> > > disabled when user knows that it will be ineffective, to save the cost.
-> > > Or when some portion of the stack (XDP?) can't deal with super frames.
-> > > 
-> > > If those are the reasons, practically, I don't see why user would want
-> > > HW GRO without SW. Ever since we allowed SW GRO to re-GRO HW GRO'ed
-> > > frames it's always better to leave SW enabled. HW leaves a lot of
-> > > aggregation opportunities on the table.
-> > > 
-> > > I concluded that changing the current behavior would not help any real
-> > > life scenario, just testing. LMK if you see one or the inconsistency
-> > > is a big enough reason.  
-> > 
-> > I think that's fair.
-> > 
-> > But from reading the code I don't see how disabling NETIF_F_GRO also
-> > disables NETIF_F_GRO_HW. And indeed I just tested on one (admittedly
-> > not latest upstream) IDPF driver and it does not.
-> 
-> Looks like you're right. Broadcom drivers where GRO_HW originates do it
-> locally, so does qede. I guess somewhere along the way drives started
-> treating GRO_HW as a separate feature rather than a GRO offload. 
-> 
-> I don't think it changes the reasoning in any major way? 
 
-Agreed. If respinning, maybe change the wording a bit:
+On 12/1/25 1:48 PM, David Matlack wrote:
+> On Mon, Dec 1, 2025 at 1:46 PM Yanjun.Zhu <yanjun.zhu@linux.dev> wrote:
+>>
+>> On 12/1/25 9:44 AM, Pasha Tatashin wrote:
+>>> On Mon, Dec 1, 2025 at 12:36 PM David Matlack <dmatlack@google.com> wrote:
+>>>> On 2025-12-01 05:32 PM, David Matlack wrote:
+>>>>> On 2025-12-01 09:16 AM, Zhu Yanjun wrote:
+>>>>>> 在 2025/12/1 9:10, David Matlack 写道:
+>>>>>>> On Mon, Dec 1, 2025 at 7:49 AM Zhu Yanjun <yanjun.zhu@linux.dev> wrote:
+>>>>>>>> 在 2025/11/27 20:56, Zhu Yanjun 写道:
+>>>>>>>>> Hi, David
+>>>>>>>>>
+>>>>>>>>> ERROR: modpost: "liveupdate_register_file_handler" [drivers/vfio/pci/
+>>>>>>>>> vfio-pci-core.ko] undefined!
+>>>>>>>>>
+>>>>>>>>> ERROR: modpost: "vfio_pci_ops" [drivers/vfio/pci/vfio-pci-core.ko]
+>>>>>>>>> undefined!
+>>>>>>>>> ERROR: modpost: "liveupdate_enabled" [drivers/vfio/pci/vfio-pci-core.ko]
+>>>>>>>>> undefined!
+>>>>>>>>> ERROR: modpost: "liveupdate_unregister_file_handler" [drivers/vfio/pci/
+>>>>>>>>> vfio-pci-core.ko] undefined!
+>>>>>>>>> ERROR: modpost: "vfio_device_fops" [drivers/vfio/pci/vfio-pci-core.ko]
+>>>>>>>>> undefined!
+>>>>>>>>> ERROR: modpost: "vfio_pci_is_intel_display" [drivers/vfio/pci/vfio-pci-
+>>>>>>>>> core.ko] undefined!
+>>>>>>>>> ERROR: modpost: "vfio_pci_liveupdate_init" [drivers/vfio/pci/vfio-
+>>>>>>>>> pci.ko] undefined!
+>>>>>>>>> ERROR: modpost: "vfio_pci_liveupdate_cleanup" [drivers/vfio/pci/vfio-
+>>>>>>>>> pci.ko] undefined!
+>>>>>>>>> make[4]: *** [scripts/Makefile.modpost:147: Module.symvers] Error 1
+>>>>>>>>> make[3]: *** [Makefile:1960: modpost] Error 2
+>>>>>>>>>
+>>>>>>>>> After I git clone the source code from the link https://github.com/
+>>>>>>>>> dmatlack/linux/tree/liveupdate/vfio/cdev/v1,
+>>>>>>>>>
+>>>>>>>>> I found the above errors when I built the source code.
+>>>>>>>>>
+>>>>>>>>> Perhaps the above errors can be solved by EXPORT_SYMBOL.
+>>>>>>>>>
+>>>>>>>>> But I am not sure if a better solution can solve the above problems or not.
+>>>>>>>> I reviewed this patch series in detail. If I’m understanding it
+>>>>>>>> correctly, there appears to be a cyclic dependency issue. Specifically,
+>>>>>>>> some functions in kernel module A depend on kernel module B, while at
+>>>>>>>> the same time certain functions in module B depend on module A.
+>>>>>>>>
+>>>>>>>> I’m not entirely sure whether this constitutes a real problem or if it’s
+>>>>>>>> intentional design.
+>>>>>>> Thanks for your report. Can you share the .config file you used to
+>>>>>>> generate these errors?
+>>>>>> IIRC, I used FC 42 default config. Perhaps you can make tests with it. If
+>>>>>> this problem can not be reproduced, I will share my config with you.
+>>>>>>
+>>>>> What does "FC 42 default config" mean?
+>>>>>
+>>>>> Either way I was able to reproduce the errors you posted above by
+>>>>> changing CONFIG_VFIO_PCI{_CORE} from "y" to "m".
+>>>>>
+>>>>> To unblock building and testing this series you can change these configs
+>>>>> from "m" to "y", or the following patch (which fixed things for me):
+>>>> Oops, sorry, something went wrong when I posted that diff. Here's the
+>>>> correct diff:
+>>>>
+>>>> diff --git a/drivers/vfio/pci/Makefile b/drivers/vfio/pci/Makefile
+>>>> index 929df22c079b..c2cca16e99a8 100644
+>>>> --- a/drivers/vfio/pci/Makefile
+>>>> +++ b/drivers/vfio/pci/Makefile
+>>>> @@ -2,11 +2,11 @@
+>>>>
+>>>>    vfio-pci-core-y := vfio_pci_core.o vfio_pci_intrs.o vfio_pci_rdwr.o vfio_pci_config.o
+>>>>    vfio-pci-core-$(CONFIG_VFIO_PCI_ZDEV_KVM) += vfio_pci_zdev.o
+>>>> -vfio-pci-core-$(CONFIG_LIVEUPDATE) += vfio_pci_liveupdate.o
+>>>>    obj-$(CONFIG_VFIO_PCI_CORE) += vfio-pci-core.o
+>>>>
+>>>>    vfio-pci-y := vfio_pci.o
+>>>>    vfio-pci-$(CONFIG_VFIO_PCI_IGD) += vfio_pci_igd.o
+>>>> +vfio-pci-$(CONFIG_LIVEUPDATE) += vfio_pci_liveupdate.o
+>>>>    obj-$(CONFIG_VFIO_PCI) += vfio-pci.o
+>>>>
+>>>>    obj-$(CONFIG_MLX5_VFIO_PCI)           += mlx5/
+>>>> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+>>>> index c5b5eb509474..b9805861763a 100644
+>>>> --- a/drivers/vfio/vfio_main.c
+>>>> +++ b/drivers/vfio/vfio_main.c
+>>>> @@ -1386,6 +1386,7 @@ const struct file_operations vfio_device_fops = {
+>>>>           .show_fdinfo    = vfio_device_show_fdinfo,
+>>>>    #endif
+>>>>    };
+>>>> +EXPORT_SYMBOL_GPL(vfio_device_fops);
+>>>>
+>>>>    /**
+>>>>     * vfio_file_is_valid - True if the file is valid vfio file
+>>>> diff --git a/kernel/liveupdate/luo_core.c b/kernel/liveupdate/luo_core.c
+>>>> index 69298d82f404..c7a0c9c3b6a8 100644
+>>>> --- a/kernel/liveupdate/luo_core.c
+>>>> +++ b/kernel/liveupdate/luo_core.c
+>>>> @@ -256,6 +256,7 @@ bool liveupdate_enabled(void)
+>>>>    {
+>>>>           return luo_global.enabled;
+>>>>    }
+>>>> +EXPORT_SYMBOL_GPL(liveupdate_enabled);
+>>>>
+>>>>    /**
+>>>>     * DOC: LUO ioctl Interface
+>>>> diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+>>>> index fca3806dae28..9baa88966f04 100644
+>>>> --- a/kernel/liveupdate/luo_file.c
+>>>> +++ b/kernel/liveupdate/luo_file.c
+>>>> @@ -868,6 +868,7 @@ int liveupdate_register_file_handler(struct liveupdate_file_handler *fh)
+>>>>           luo_session_resume();
+>>>>           return err;
+>>>>    }
+>>>> +EXPORT_SYMBOL_GPL(liveupdate_register_file_handler);
+>>>>
+>>>>    /**
+>>>>     * liveupdate_unregister_file_handler - Unregister a liveupdate file handler
+>>>> @@ -913,3 +914,4 @@ int liveupdate_unregister_file_handler(struct liveupdate_file_handler *fh)
+>>>>           liveupdate_test_register(fh);
+>>>>           return err;
+>>>>    }
+>>>> +EXPORT_SYMBOL_GPL(liveupdate_unregister_file_handler);
+>>
+>> Sure. Exactly. The above is the same with my solution. But after that
+>> EXPORT_SYMBOL_GPL, a cyclic dependency issue will occur.
+> Did see the change to drivers/vfio/pci/Makefile? That fixes the
 
-+        # a dummy XDP generic program. Disabling SW GRO as a feature
--+        # would also disable HW GRO.
-++	  # may also disable HW GRO on some devices.
+Ah, I overlooked this change. I'll conduct a test.
+
+Thanks,
+
+Yanjun.Zhu
+
+> circular dependency between vfio-pci and vfio-pci-core that I created
+> in this series.
 
