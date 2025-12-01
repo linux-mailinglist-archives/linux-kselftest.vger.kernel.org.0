@@ -1,221 +1,268 @@
-Return-Path: <linux-kselftest+bounces-46813-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76BCCC9843C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 17:34:09 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77C4EC98493
+	for <lists+linux-kselftest@lfdr.de>; Mon, 01 Dec 2025 17:38:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BA683343EC9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 16:34:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9A7834E201B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 16:38:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 482113346B9;
-	Mon,  1 Dec 2025 16:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8DF533506C;
+	Mon,  1 Dec 2025 16:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="eNA8Bl/m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010019.outbound.protection.outlook.com [52.101.69.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705CC3346AC;
-	Mon,  1 Dec 2025 16:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764606840; cv=none; b=JpxkdQGUWdFp88D3NW4VuHDfERd63Gnw5X+UYu9I0dZPvK3XO4vx+9hOkKbyT8EYnHesQtCyQTIjWJcIXLkTCZ+NFwPH2VE0+1A1/G+XrEr+gZOmaMTR1BHaD3DRODbTrNmOZFGSoEOu3Wka7O1h3H/VFXHniDDKektMam87vUQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764606840; c=relaxed/simple;
-	bh=KKXMY60fzcmlXfqjSzlbbHZRwQdsCfygDV9sIcYYUxc=;
-	h=From:To:Cc:In-Reply-To:References:Date:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=KBVUkvWQcqVf/8swYjk1Kt9Zij1FqPlb9pNgdE3JMv3wfHLPe6ZT6Srs1goA12UuNsALKoVEZzPk/cRwEA0RvVe/azol5Ooxvfx/4pg97WivOyypC6TOdpboDgKr43JPg09shwsJxQ86BgUJIzzC6Kp7tXpCrmqiSt3jhdOqWpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in01.mta.xmission.com ([166.70.13.51]:50512)
-	by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vQ6Pi-009mGN-1t; Mon, 01 Dec 2025 09:06:10 -0700
-Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:40282 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1vQ6Pg-00Cg1V-BQ; Mon, 01 Dec 2025 09:06:09 -0700
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc: Bernd Edlinger <bernd.edlinger@hotmail.de>,  Alexander Viro
- <viro@zeniv.linux.org.uk>,  Alexey Dobriyan <adobriyan@gmail.com>,  Oleg
- Nesterov <oleg@redhat.com>,  Kees Cook <kees@kernel.org>,  Andy Lutomirski
- <luto@amacapital.net>,  Will Drewry <wad@chromium.org>,  Christian Brauner
- <brauner@kernel.org>,  Andrew Morton <akpm@linux-foundation.org>,  Michal
- Hocko <mhocko@suse.com>,  Serge Hallyn <serge@hallyn.com>,  James Morris
- <jamorris@linux.microsoft.com>,  Randy Dunlap <rdunlap@infradead.org>,
-  Suren Baghdasaryan <surenb@google.com>,  Yafang Shao
- <laoar.shao@gmail.com>,  Helge Deller <deller@gmx.de>,  Adrian Reber
- <areber@redhat.com>,  Thomas Gleixner <tglx@linutronix.de>,  Jens Axboe
- <axboe@kernel.dk>,  Alexei Starovoitov <ast@kernel.org>,
-  "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-  linux-kselftest@vger.kernel.org,  linux-mm@kvack.org,
-  linux-security-module@vger.kernel.org,  tiozhang
- <tiozhang@didiglobal.com>,  Luis Chamberlain <mcgrof@kernel.org>,  "Paulo
- Alcantara (SUSE)" <pc@manguebit.com>,  Sergey Senozhatsky
- <senozhatsky@chromium.org>,  Frederic Weisbecker <frederic@kernel.org>,
-  YueHaibing <yuehaibing@huawei.com>,  Paul Moore <paul@paul-moore.com>,
-  Aleksa Sarai <cyphar@cyphar.com>,  Stefan Roesch <shr@devkernel.io>,
-  Chao Yu <chao@kernel.org>,  xu xin <xu.xin16@zte.com.cn>,  Jeff Layton
- <jlayton@kernel.org>,  Jan Kara <jack@suse.cz>,  David Hildenbrand
- <david@redhat.com>,  Dave Chinner <dchinner@redhat.com>,  Shuah Khan
- <shuah@kernel.org>,  Elena Reshetova <elena.reshetova@intel.com>,  David
- Windsor <dwindsor@gmail.com>,  Mateusz Guzik <mjguzik@gmail.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  "Joel Fernandes (Google)"
- <joel@joelfernandes.org>,  "Matthew Wilcox (Oracle)"
- <willy@infradead.org>,  Hans Liljestrand <ishkamiel@gmail.com>,  Penglei
- Jiang <superman.xpt@gmail.com>,  Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>,  Adrian Ratiu <adrian.ratiu@collabora.com>,
-  Ingo Molnar <mingo@kernel.org>,  "Peter Zijlstra (Intel)"
- <peterz@infradead.org>,  Cyrill Gorcunov <gorcunov@gmail.com>,  Eric
- Dumazet <edumazet@google.com>,  zohar@linux.ibm.com,
-  linux-integrity@vger.kernel.org,  Ryan Lee <ryan.lee@canonical.com>,
- apparmor <apparmor@lists.ubuntu.com> 
-In-Reply-To: <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
-	(Roberto Sassu's message of "Tue, 25 Nov 2025 12:55:00 +0100")
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-	<AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285FF445694F149B70B21D0E46C2@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<AS8P193MB1285937F9831CECAF2A9EEE2E4752@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEEDE0B9742310DE91E9A7E431A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-	<87tsyozqdu.fsf@email.froward.int.ebiederm.org>
-	<87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
-	<87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
-	<6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
-Date: Mon, 01 Dec 2025 10:06:00 -0600
-Message-ID: <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A476731B824;
+	Mon,  1 Dec 2025 16:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764607109; cv=fail; b=If2APOlyX4shc428G8D4E/OcEjlUdknmMtVpD7ZDRIIQyXFI5zYt8SFgk/Dt/vJkvgHi6k7OjxweWyk4TzA3GbEnIrhBl/JgPnddhudo49P1x+kMjNofK3FysThKM1P647+FT7PWNKYavkzNcWA0u5U1tjgw5tCGwFPkvczZXC4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764607109; c=relaxed/simple;
+	bh=aeBPg9ltrFu1FJWEjMpRiI+j7hiD271PNF8jRqCE2YI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=oKvv02yMxw9tfcPHWd+Y+G6c4IJTnvHux37RryROOmNokrxdUKYhVYcGfE781GejWp0PD26/O0KrIz0jQAwy4FNv5XnF+prbOoKT3i2f2wbZQp5bGJHg6Yuh/vezH3dPm5Lh/+GSJcS0/EAtL9Oi5QJsbihzncp2ewMkD6dbefY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=eNA8Bl/m; arc=fail smtp.client-ip=52.101.69.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b/m8uJGhWcpCPUFzRfQryyotVQWouG0Ig6GqhaIymu7iRfiyteNwvpaU8eOCCiKRshpLc1BGY5q2ow5F0R/bki53ZDXDL/xAtf00MI2YR8iAhegdmlp+P0aGwnF95163/+gxWnd2GpjQa1JVrknW76zLn8Kh/8fI2KIzRqFI214X+81hO+ehY7yfv4GPXOEAw+zhC/MnW1a9KYKfq85B3Q5yAGvpLNOEawn00SZ7jLUqRiQS8IWWVtR/4iE4Iybv5A1uuWe6/DJhTAgPtpbLWMxb5r+Qd4vHRFREWFMtr8zoZfLho53tDBr7Hz5g4DhKunfCmXfOnfXIt7i8zxzW5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ohPmBs4RpLd/fHQDcFbtZ5Wn2JgePBoiPfZiiLKEZug=;
+ b=pclDFeWCgiUUaE1JvtDc214Y/qe4PTnWj8Ji9w71N64swtouRBC1Jyaq/Tf+5O8u3IDUUXjb9BC8voE5EAerkeBM9Z8OnH2a9WtnsQ/fg9FJhBcoq5kcPmsDiaaIuK5uryJvJjoIxhhQHR3o46/QwvKQwM91sFVicJTxhoaS9P/7Ma2ySWymXIAhP9TFivAOta9CNwwmgtLG65IWf5Ea01t66AOi1y/vmkrg+jZCkwiFcKhUgrAUn/dK7oBATvYsrEhyzFPgngacIWD7uKJSj0U8KrEdeWbogM4PmM4moMwvKmqSpA/I6t0Cule7N6hQpx5s1Ojdek/7TxC/FaO5Bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.100) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ohPmBs4RpLd/fHQDcFbtZ5Wn2JgePBoiPfZiiLKEZug=;
+ b=eNA8Bl/mZjBQEbkCnf3yupW29GvRLksMiwXpS0+KkN4XxXx0QZordIgATWJMO9NxF5wLXmAYR5PPTQ74n2l7b3aA6DbC6lr+dnHAfKpYIxFFHoBcSbOwHoaxTT4TCYl6oi5FBAHl30Ghb0IiRb24BhOGiloLok4qbj8xvKKl7m2eWBwKx3925Kuokub/emRYgy7Vo1B/4A0U3r+J0+KvsS/BIEX36TmT+B229e0KoBXRaM9rDkynqOoCPx0EBxToSF9gsbIeYV1wj7AVxNlO4DakaxmcJJZIdcaMsJrIL417WoLFPmQ/GRDBNqaQ7zqnem3UZENzuzT6prhB0z0kXA==
+Received: from AS4P192CA0005.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:5da::11)
+ by VI1PR07MB6510.eurprd07.prod.outlook.com (2603:10a6:800:18a::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.13; Mon, 1 Dec
+ 2025 16:38:18 +0000
+Received: from AM3PEPF00009B9C.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5da:cafe::ff) by AS4P192CA0005.outlook.office365.com
+ (2603:10a6:20b:5da::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.17 via Frontend Transport; Mon,
+ 1 Dec 2025 16:38:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.100)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.100 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.100;
+ helo=fr711usmtp2.zeu.alcatel-lucent.com; pr=C
+Received: from fr711usmtp2.zeu.alcatel-lucent.com (131.228.6.100) by
+ AM3PEPF00009B9C.mail.protection.outlook.com (10.167.16.21) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.8
+ via Frontend Transport; Mon, 1 Dec 2025 16:38:17 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr711usmtp2.zeu.alcatel-lucent.com (Postfix) with ESMTP id 10EF368002E;
+	Mon,  1 Dec 2025 18:38:16 +0200 (EET)
+From: chia-yu.chang@nokia-bell-labs.com
+To: pabeni@redhat.com,
+	edumazet@google.com,
+	parav@nvidia.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v7 net-next 00/13] AccECN protocol case handling series
+Date: Mon,  1 Dec 2025 17:37:47 +0100
+Message-Id: <20251201163800.3965-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1vQ6Pg-00Cg1V-BQ;;;mid=<87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX1/O4IKUzWWwapDxt1axB69s37nkia9NNac=
-X-Spam-Level: ****
-X-Spam-Virus: No
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.1 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.5000]
-	*  0.7 XMSubLong Long Subject
-	*  1.0 XMGappySubj_02 Gappier still
-	*  0.5 XMGappySubj_01 Very gappy subject
-	*  1.2 XM_Multi_Part_URI URI: Long-Multi-Part URIs
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa01 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  1.0 XM_B_Phish_Phrases Commonly used Phishing Phrases
-	*  0.0 XM_B_AI_SPAM_COMBINATION Email matches multiple AI-related
-	*      patterns
-	*  0.5 TR_AI_Phishing Email matches multiple AI-related patterns
-	*  0.0 TR_XM_PhishingBody Phishing flag in body of message
-X-Spam-DCC: XMission; sa01 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ****;Roberto Sassu <roberto.sassu@huaweicloud.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 576 ms - load_scoreonly_sql: 0.03 (0.0%),
-	signal_user_changed: 2.8 (0.5%), b_tie_ro: 1.85 (0.3%), parse: 1.32
-	(0.2%), extract_message_metadata: 17 (2.9%), get_uri_detail_list: 2.5
-	(0.4%), tests_pri_-2000: 24 (4.1%), tests_pri_-1000: 14 (2.5%),
-	tests_pri_-950: 1.46 (0.3%), tests_pri_-900: 1.33 (0.2%),
-	tests_pri_-90: 118 (20.4%), check_bayes: 116 (20.1%), b_tokenize: 24
-	(4.1%), b_tok_get_all: 11 (1.9%), b_comp_prob: 3.5 (0.6%),
-	b_tok_touch_all: 74 (12.9%), b_finish: 0.62 (0.1%), tests_pri_0: 385
-	(66.9%), check_dkim_signature: 0.44 (0.1%), check_dkim_adsp: 2.7
-	(0.5%), poll_dns_idle: 0.61 (0.1%), tests_pri_10: 1.64 (0.3%),
-	tests_pri_500: 7 (1.1%), rewrite_mail: 0.00 (0.0%)
-Subject: Are setuid shell scripts safe? (Implied by
- security_bprm_creds_for_exec)
-X-SA-Exim-Connect-IP: 166.70.13.51
-X-SA-Exim-Rcpt-To: too long (recipient list exceeded maximum allowed size of 512 bytes)
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-SA-Exim-Scanned: No (on out02.mta.xmission.com); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM3PEPF00009B9C:EE_|VI1PR07MB6510:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7262eea5-2abc-4793-2fb8-08de30f807fe
+X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|36860700013|1800799024|7416014|376014|82310400026|921020;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?U0M3dldvZStmN3hwYlhoSFhxNjlrWlRqajNtUkpnQUM0clBHWFhtVDY5cElS?=
+ =?utf-8?B?Rk1xeDdDdkk3Ry9QR1pjbTR3NTd0NXFISEREMlZUdWhGZEhWSFB4WjBJenVZ?=
+ =?utf-8?B?VWV6QUFmVjl2L29nWHR5bHlnaFhRL3ZtZ2hLbUdMYWx2K0ZIVHJvTzQyRGM3?=
+ =?utf-8?B?Q0Z0UUJ1TjJsVk5yekJPR3pOQ1FoK0NZU1ZZK3g4Q3ZjZXR5ZXFtQUJrMlZC?=
+ =?utf-8?B?U01SNzhZalJTMTFGVERvWXFyY2U5OEZhSnVoemxRMlM3cGNiZXppMmpvY083?=
+ =?utf-8?B?SFpwcFZ0a2YxRktZbEN1ZVNielE0R0dqQ3JkN1p3d01td09zNDBjRzJPU2sr?=
+ =?utf-8?B?V3RZS09ISFV5cElGbStVc3diMnYySk1FbUVCNmhyVld2VmNudzY1Uk1xSnBj?=
+ =?utf-8?B?ZURaTXkvSXJoZ2M0YTdCNkg2QTZoOFlreDFPNGF4WHFHaW51RnBtSmVYTWlQ?=
+ =?utf-8?B?Z2FvVFdlS0YzZnVKU1dNcUtiTWVpWS8wWTdnUlpiNjZOZEp0aDllNTBDdCta?=
+ =?utf-8?B?ZWNxVFFXNUg0b2k3TkFEN3NDTXFMWGhhVWoxa2ZqYWNwZy9wa1dPR2pTVFlB?=
+ =?utf-8?B?QVhhUmdqaWo0YW5wWHNMWDRCb3FORGN6cEJwZEVoTjd2Umh2eU9wU01Xc2lm?=
+ =?utf-8?B?Z20yaDdjYmtscUxiQituM1ZOd21YVW9SNm5HUjJGNExzVnFUdkNRdTkvcEZi?=
+ =?utf-8?B?ZWtWU1ZNRzhJWkVab3hrdE01eHJRUFJYYkpUc3h1WEw2RGJFeTdTTUk4YTBV?=
+ =?utf-8?B?V1d6K1M0Nm4wMzFMUWpvOTl2NEtGbVRvMnpjSWhheVZHWmIyNUplQkt3YThn?=
+ =?utf-8?B?MVVuSXI2OEJwMHVOQ3NhSGl2SlpVck0xeVE2dC9HS2t5QmVIQkQ4YWpCWFVX?=
+ =?utf-8?B?ZEJtZ3duWFhuOWIzblB0V2t0SDRZYlEvdkFWTUNrdEhvRW9VWGJUM3hpc3E1?=
+ =?utf-8?B?SzVCRG4rOHRNaisybmtEcjdlaWJFaFUya0ZZK1M1di8zM0hlbXlabHg0MEVx?=
+ =?utf-8?B?YXNxVFhIQ3ZNa202UitWYTFkWmNMOEVJUEt6WWRqWnA1MXNnNDZ4UTZ0Y1p3?=
+ =?utf-8?B?SG1PRS85cUlYWGNGcVBOdXJkNmJLbEp5c3RFUlJ5dFk2M3MrQ1ZwYlpQU2h4?=
+ =?utf-8?B?eDl3cm9TbW1DZzFPdjFubWZoU0hZcERFWnNpRkJldnVMTGlITldhSHVKcldD?=
+ =?utf-8?B?UTlndkl0RVFoK2VMa05XMnVTRWlaNENsQm0rL3dzS2pZQUtTR05HbkZIM2NU?=
+ =?utf-8?B?ZnloR0p0TzI2OWc2S1VHYk5TUFhheWs1SWU2Vm1NdEw0eXlQS054V2pZbFlj?=
+ =?utf-8?B?NVhXUHlnYkJtc2VWMDVBRXlEYVRSbWtJamdvMUJYU0RGMHllY1NqRjRickNq?=
+ =?utf-8?B?WDdTMEFDM2hxTm1WYUpOcFpuYUJKOTcrWnpQRktKVEdFVzBIZ0o2ZzdaTkox?=
+ =?utf-8?B?dHRSVkNnSmx0VVU1dXEzVUxkckc0Y3d5ZGV1YTM2bGF1OWVuRVl6cjFYcnN1?=
+ =?utf-8?B?aFlhYVlpODVuZUh3czRYZllYWENoemFmRjBDbjlNU052bitLZk9YWDdPY1gy?=
+ =?utf-8?B?VkNVdTFaR25MbnRoTFZqcklxVmNQTHJHQXMrL3cvUm4rR1cxcTdqcy9iSEsr?=
+ =?utf-8?B?UWV2REdLUFMyYStqWjRUVWl2bUl1RG5iQW96MmR5R1hDZStzamR5NE51NFZL?=
+ =?utf-8?B?WFAxcWJYaGpDYnlMRDRKRGxsQjBKYjVyMlUxU0F2NEwwMHg5azFHamNKRTJy?=
+ =?utf-8?B?NGZTTVk2aVo1RUpuakVDTm5xNkhSUVBPMWs1alFqUmpQcnYwcmNLN1N1RUJ2?=
+ =?utf-8?B?T1ZJNGNkSkFsNXRXc0ZYS1JDRU51NE55MkhxaUxzRXpKTHNwZDdNaU1mcjdM?=
+ =?utf-8?B?QkdFNlVJQy9EdG9JTTFKb0ZmRko2T1laMjFxWDJ1UmQ1eGNWSmVEVTB4YTVE?=
+ =?utf-8?B?TVdnMEdTTE5EZWNJZWlxa1pLeDllY1QvWFpkaGtySmh3ZzhIMmFnWVZFMnAz?=
+ =?utf-8?B?c090L3VpSlhYSlJ6WkNIa2hjTE1pT0diK3h5VFhiVFpobko3amU0VTFnQXJ6?=
+ =?utf-8?B?U2w3RC9OUEU2eGxHQlBneUtrcG5WS2dGd0tQVFlyY2RGZTN4YWNQa1VwSWpi?=
+ =?utf-8?Q?Wwnr84p+NumzIOTfWUcPt0H8y?=
+X-Forefront-Antispam-Report:
+ CIP:131.228.6.100;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr711usmtp2.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(7416014)(376014)(82310400026)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2025 16:38:17.6427
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7262eea5-2abc-4793-2fb8-08de30f807fe
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.100];Helo=[fr711usmtp2.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM3PEPF00009B9C.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR07MB6510
 
-Roberto Sassu <roberto.sassu@huaweicloud.com> writes:
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-> + Mimi, linux-integrity (would be nice if we are in CC when linux-
-> security-module is in CC).
->
-> Apologies for not answering earlier, it seems I don't receive the
-> emails from the linux-security-module mailing list (thanks Serge for
-> letting me know!).
->
-> I see two main effects of this patch. First, the bprm_check_security
-> hook implementations will not see bprm->cred populated. That was a
-> problem before we made this patch:
->
-> https://patchew.org/linux/20251008113503.2433343-1-roberto.sassu@huaweicloud.com/
+Hello,
 
-Thanks, that is definitely needed.
+Plesae find the v7 AccECN case handling patch series, which covers
+several excpetional case handling of Accurate ECN spec (RFC9768),
+adds new identifiers to be used by CC modules, adds ecn_delta into
+rate_sample, and keeps the ACE counter for computation, etc.
 
-Does calling process_measurement(CREDS_CHECK) on only the final file
-pass review?  Do you know of any cases where that will break things?
+This patch series is part of the full AccECN patch series, which is available at
+https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
 
-As it stands I don't think it should be assumed that any LSM has
-computed it's final creds until bprm_creds_from_file.  Not just the
-uid and gid.
+Best regards,
+Chia-Yu
 
-If the patch you posted for review works that helps sort that mess out.
+---
+v7:
+- Update comments in #3 (Paolo Abeni <pabeni@redhat.com>)
+- Update comments and use synack_type TCP_SYNACK_RETRANS and num_timeout in #9. (Paolo Abeni <pabeni@redhat.com>)
 
-> to work around the problem of not calculating the final DAC credentials
-> early enough (well, we actually had to change our CREDS_CHECK hook
-> behavior).
->
-> The second, I could not check. If I remember well, unlike the
-> capability LSM, SELinux/Apparmor/SMACK calculate the final credentials
-> based on the first file being executed (thus the script, not the
-> interpreter). Is this patch keeping the same behavior despite preparing
-> the credentials when the final binary is found?
+v6:
+- Update comment in #3 to highlight RX path is only used for virtio-net (Paolo Abeni <pabeni@redhat.com>)
+- Rename TCP_CONG_WANTS_ECT_1 to TCP_CONG_ECT_1_NEGOTIATION to distiguish from TCP_CONG_ECT_1_ESTABLISH (Paolo Abeni <pabeni@redhat.com>)
+- Move TCP_CONG_ECT_1_ESTABLISH in #6 to latter patch series (Paolo Abeni <pabeni@redhat.com>)
+- Add new synack_type instead of moving the increment of num_retran in #9 (Paolo Abeni <pabeni@redhat.com>)
+- Use new synack_type TCP_SYNACK_RETRANS and num_retrans for SYN/ACK retx fallbackk for AccECN in #10 (Paolo Abeni <pabeni@redhat.com>)
+- Do not cast const struct into non-const in #11, and set AccECN fail mode after tcp_rtx_synack() (Paolo Abeni <pabeni@redhat.com>)
 
-The patch I posted was.
+v5:
+- Move previous #11 in v4 in latter patch after discussion with RFC author.
+- Add #3 to update the comments for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN. (Parav Pandit <parav@nvidia.com>)
+- Add gro self-test for TCP CWR flag in #4. (Eric Dumazet <edumazet@google.com>)
+- Add fixes: tag into #7 (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message of #8 and if condition check (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #13 (Paolo Abeni <pabeni@redhat.com>)
 
-My brain is still reeling from the realization that our security modules
-have the implicit assumption that it is safe to calculate their security
-information from shell scripts.
+v4:
+- Add previous #13 in v2 back after dicussion with the RFC author.
+- Add TCP_ACCECN_OPTION_PERSIST to tcp_ecn_option sysctl to ignore AccECN fallback policy on sending AccECN option.
 
-In the first half of the 90's I remember there was lots of effort to try
-and make setuid shell scripts and setuid perl scripts work, and the
-final conclusion was it was a lost cause.
+v3:
+- Add additional min() check if pkts_acked_ewma is not initialized in #1. (Paolo Abeni <pabeni@redhat.com>)
+- Change TCP_CONG_WANTS_ECT_1 into individual flag add helper function INET_ECN_xmit_wants_ect_1() in #3. (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #4. (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message to fix old AccECN commits in #5. (Paolo Abeni <pabeni@redhat.com>)
+- Remove unnecessary brackets in #10. (Paolo Abeni <pabeni@redhat.com>)
+- Move patch #3 in v2 to a later Prague patch serise and remove patch #13 in v2. (Paolo Abeni <pabeni@redhat.com>)
 
-Now I look at security_bprm_creds_for_exec and security_bprm_check which
-both have the implicit assumption that it is indeed safe to compute the
-credentials from a shell script.
+---
+Chia-Yu Chang (11):
+  selftests/net: gro: add self-test for TCP CWR flag
+  tcp: ECT_1_NEGOTIATION and NEEDS_ACCECN identifiers
+  tcp: disable RFC3168 fallback identifier for CC modules
+  tcp: accecn: handle unexpected AccECN negotiation feedback
+  tcp: accecn: retransmit downgraded SYN in AccECN negotiation
+  tcp: add TCP_SYNACK_RETRANS synack_type
+  tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN
+    SYN/ACK
+  tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
+  tcp: accecn: fallback outgoing half link to non-AccECN
+  tcp: accecn: detect loss ACK w/ AccECN option and add
+    TCP_ACCECN_OPTION_PERSIST
+  tcp: accecn: enable AccECN
 
-When passing a file descriptor to execat we have
-BINPRM_FLAGS_PATH_INACCESSIBLE and use /dev/fd/NNN as the filename
-which reduces some of the races.
+Ilpo Järvinen (2):
+  tcp: try to avoid safer when ACKs are thinned
+  gro: flushing when CWR is set negatively affects AccECN
 
-However when just plain executing a shell script we pass the filename of
-the shell script as a command line argument, and expect the shell to
-open the filename again.  This has been a time of check to time of use
-race for decades, and one of the reasons we don't have setuid shell
-scripts.
+ Documentation/networking/ip-sysctl.rst        |  4 +-
+ .../networking/net_cachelines/tcp_sock.rst    |  1 +
+ include/linux/tcp.h                           |  4 +-
+ include/net/inet_ecn.h                        | 20 +++-
+ include/net/tcp.h                             | 32 ++++++-
+ include/net/tcp_ecn.h                         | 92 ++++++++++++++-----
+ net/ipv4/inet_connection_sock.c               |  4 +
+ net/ipv4/sysctl_net_ipv4.c                    |  4 +-
+ net/ipv4/tcp.c                                |  2 +
+ net/ipv4/tcp_cong.c                           |  5 +-
+ net/ipv4/tcp_input.c                          | 37 +++++++-
+ net/ipv4/tcp_minisocks.c                      | 46 +++++++---
+ net/ipv4/tcp_offload.c                        |  3 +-
+ net/ipv4/tcp_output.c                         | 32 ++++---
+ net/ipv4/tcp_timer.c                          |  3 +
+ tools/testing/selftests/drivers/net/gro.c     | 81 +++++++++++-----
+ 16 files changed, 284 insertions(+), 86 deletions(-)
 
-Yet the IMA implementation (without the above mentioned patch) assumes
-the final creds will be calculated before security_bprm_check is called,
-and security_bprm_creds_for_exec busily calculate the final creds.
+-- 
+2.34.1
 
-For some of the security modules I believe anyone can set any label they
-want on a file and they remain secure (At which point I don't understand
-the point of having labels on files).  I don't believe that is the case
-for selinux, or in general.
-
-So just to remove the TOCTOU race the security_bprm_creds_for_exec
-and security_bprm_check hooks need to be removed, after moving their
-code into something like security_bprm_creds_from_file.
-
-Or am I missing something and even with the TOCTOU race are setuid shell
-scripts somehow safe now?
-
-Eric
 
