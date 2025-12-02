@@ -1,151 +1,146 @@
-Return-Path: <linux-kselftest+bounces-46889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E1EC9C07C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 16:52:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04382C9C0AF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 16:56:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CD21B4E06E0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 15:52:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E4B824E268C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 15:56:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0D230F7F3;
-	Tue,  2 Dec 2025 15:52:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470733242B8;
+	Tue,  2 Dec 2025 15:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DhmpyZ2n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R9eTeKRs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22154320CD1
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 15:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB0F1EB193;
+	Tue,  2 Dec 2025 15:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764690749; cv=none; b=FA7bIGf9sDF7fRygNjkxOKSFmHRaWQij5FoybGiZboww8vWSZICeVDMonqQysm4YlcnJTCdl1DP8+xrCmBIc9x6HqhYIo6rpKjdB3XUm9wDTvgG9RwuHVklOSyHJYHJnGLCpnGcOYUu04Fbr8Dai6uzWOtFlZDgOruXPxdAQEzw=
+	t=1764690984; cv=none; b=UqmBOhkcPw9ezx8wObWMNqpHn4YJTOeIAIAkFVQSURmVPqdk8olPpGjDMuNBqpw2kgCtHv6y7TRPeOrfgryGnBXMIYbk4Fcw4p3FulYAiHa7wPNYvWiJwcnSwxDborJOg9CeSVmV/GZR9VVvezsQ51K08/AkxqhOldCu20oBqfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764690749; c=relaxed/simple;
-	bh=GkBYoUW2qrN93TUysIlXM/ON6wKoM5tpeQF1AMakzqM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fuoPr9NVYZiAEA27yE7X3fel8+k8pt6udey3YyjX0masCoYgU8G7EgnJLS3c3MkblCHSNu53p8kcuxOavMaiCMWlJA8CTy24sEKs8QT4nL4zWaifDHItxQxKE2t83Tyebgi1B7J12k0yWzfUyYjbHUnFvbyaAkezPpiIi00dW2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DhmpyZ2n; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7c75a5cb752so3390775a34.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 07:52:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764690747; x=1765295547; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=feKc1u+4lQENkn8pYvf0cy6PA0Ii+7sQgsN0RQiueGQ=;
-        b=DhmpyZ2n4u9nrLod70Z7T8ToHW8AXnv6nL4e2KQmxNrwtH64PeZOBQykjFZIUk3ABR
-         BifUNxw0f1wI8ZCoBCnhwPF7pzPXnvMgN57G5/LLEj/Duhe2le78AwMYMNef+6qRe7+Q
-         MXY04h6QBpiB+slSwiXcaPziRoFh0aumwqNLHbBuRLVmIQfYXUiCWpZm4zK7cN+y9E3Y
-         4dZWyCgM6q/E6xjRawgl1RxIMvq15rr54zoe/hm5+a/2Ryg6sBGUTgLgSKX3OzD4M70i
-         ZVKEr71RM13/Xb5f5PKPsvao3fYnagotlyP9bkUezgLhysdlM0HYQCrHk4XHRqcs/wsg
-         P3vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764690747; x=1765295547;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=feKc1u+4lQENkn8pYvf0cy6PA0Ii+7sQgsN0RQiueGQ=;
-        b=ghhd0CWvqW6GhV00n6/qmtIHadGsBxjwW70tRPfPUIXr2bVgqmdE2/ALUBfflK0AOu
-         5iwS0gQwkhnzDjnZeQFiQdQm5J2TRnK+pMo7aarrbd5vReGpsqd7H+EQ0qa00pbuNeYQ
-         x+nueuyArF3Jvb+6kLHZsgDnIGeOcOmhw4HZNdtlJGXhW94DhQ7XDGVLsPrM8AKTf09R
-         5aqFnpjmM3stA7gMUmGG60HNPmbR7Zcj0HKru9Sq1w4y2dcLINI8hgc6kjdGltbgdwqa
-         guJ28ZHj/V3JhE90r0oZftqlb8qRioIlbGyfVNAW2SwuVCpHUQ2h3GN63rMW7+o3+raF
-         RX2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXRU9I3wpqsAawguRwI/UYLq4dfQg+eACom3jjdLvrNRJdvZY8r/9gv9n98zFIhIXJMU2anbANvnkr2qBiYek4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDlf9TduyIMT5R0Em03V1GcYB+I90actvKGSV9QH5PXB3lIQw5
-	OU2oU7FmQcIuopoNB8iyeb2B0S3maqpMgl4kpMcWP7ZmarBE/xrYXNBPnNeNE+XwhIoQSBwPOe2
-	z1PbXuVF2E86CtX2tH2w+amqQUZr8x1U=
-X-Gm-Gg: ASbGncu+so5T5f9Qn2zWxQohNPU35lg4GeryK7LO+3YMy64NeBJ0WLux9QsCj2mHKa1
-	ap8xbSP5pIneWuXcP0HjUO38mTXvHya87jSghSjCsFG/3HLYalZUCcxVZijKBGslLxB99pbUBMN
-	ANAe2Q/Pi0wjeMS92Yh+ALlMa8925RIJZ8WVr236jweUDyLulroFGkcEObeTmCga6YcIB5XbsEI
-	TZjmbz+2pNOEXzHiprp0r6tF8ZbdpK1kN/GqJaHcFUgY4DpnV4ikD3zULxOjx+HrA+uku8u
-X-Google-Smtp-Source: AGHT+IHp6tZtEWeFByJZk/vtVUTBda0yahAChbF25/FmOCHgyPwNW8b96ReF11OQ0plce80g1whgm2I9wT8MTG/sn5o=
-X-Received: by 2002:a05:6830:440d:b0:7b2:aba7:f4e with SMTP id
- 46e09a7af769-7c798be2dbfmr26198349a34.10.1764690746975; Tue, 02 Dec 2025
- 07:52:26 -0800 (PST)
+	s=arc-20240116; t=1764690984; c=relaxed/simple;
+	bh=++2IOkQlw/nO4LizW1PkL4S0/6+JLMTRLO0OjXOGjA4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=oSwIE+etqxZ8gwWVeGbFM1HzbMbUx5CiADsAHeEKHmj/6nHA9yk7VPb2KoCV0TOiOm5guVWKPzQdV+uttXi3yhznGr61PaADIqzJNfERlT/d7q0Lv43a5ULxR5PBsSGBS4xhq+EumAzaxkjGQcfhYkTKJwa6cgGK2LmOQbxs6Gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R9eTeKRs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D7AC4CEF1;
+	Tue,  2 Dec 2025 15:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764690983;
+	bh=++2IOkQlw/nO4LizW1PkL4S0/6+JLMTRLO0OjXOGjA4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=R9eTeKRsBh3T2ew9zzxp4zqnddPACfRfy2uOE/HiQhW4s56FTZOd4V0L0qYObawXF
+	 ny1ELzArNmcguJoJo1RQ6vSD2jIkcCXlh8PmydskdAyl3MRm8NNgH6PLOEuNCRU6ds
+	 CujuPyTbKAmckpB3MlYhd5SaquW9wG8yqqhnTNjFqbQyNlEYQ6SNRGXBZHeIYXbo7l
+	 LxoRjQHmTZHJZvGtIFgum5B1KhmAwNXd4HyVOo+5J5OKbAQ3aGVW9vnGa3T9aSNWp0
+	 fAqqowwwflBfM+uCS+kS/AcYnjyoOtdaE0UNQa3NckVuTjpunwe3o+RHi7EGRSClNx
+	 6avJUgWKBHqLA==
+Content-Type: multipart/mixed; boundary="===============3063947242897467359=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251129091455.757724-1-b.sachdev1904@gmail.com> <20251129091455.757724-3-b.sachdev1904@gmail.com>
-In-Reply-To: <20251129091455.757724-3-b.sachdev1904@gmail.com>
-From: Andrei Vagin <avagin@gmail.com>
-Date: Tue, 2 Dec 2025 07:52:15 -0800
-X-Gm-Features: AWmQ_blWeFxHHcTZhTAqG8S6zqfjoT09D7pKTYe9CdzPUdirY1xoFo3obwNHy2I
-Message-ID: <CANaxB-zRh1=Azkx3fO4tmUAwzjQVE=-0=PeTN9aM1MxK1UzM+Q@mail.gmail.com>
-Subject: Re: [PATCH v7 2/3] statmount: accept fd as a parameter
-To: Bhavik Sachdev <b.sachdev1904@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	criu@lists.linux.dev, Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>, 
-	Aleksa Sarai <cyphar@cyphar.com>, Miklos Szeredi <miklos@szeredi.hu>, 
-	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>, Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
-	John Hubbard <jhubbard@nvidia.com>, Amir Goldstein <amir73il@gmail.com>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, Andrew Donnellan <ajd@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <09491a8e930081007a29db98e86fae762e662ff371db8267bdd94f8ba45aae39@mail.kernel.org>
+In-Reply-To: <20251202153032.10118-4-leon.hwang@linux.dev>
+References: <20251202153032.10118-4-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add tests to verify no unintended eviction when updating lru hash maps
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,skb99@linux.ibm.com,davem@davemloft.net,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  2 Dec 2025 15:56:21 +0000 (UTC)
 
-On Sat, Nov 29, 2025 at 1:15=E2=80=AFAM Bhavik Sachdev <b.sachdev1904@gmail=
-.com> wrote:
->
-> Extend `struct mnt_id_req` to take in a fd and introduce STATMOUNT_BY_FD
-> flag. When a valid fd is provided and STATMOUNT_BY_FD is set, statmount
-> will return mountinfo about the mount the fd is on.
->
-> This even works for "unmounted" mounts (mounts that have been umounted
-> using umount2(mnt, MNT_DETACH)), if you have access to a file descriptor
-> on that mount. These "umounted" mounts will have no mountpoint and no
-> valid mount namespace. Hence, we unset the STATMOUNT_MNT_POINT and
-> STATMOUNT_MNT_NS_ID in statmount.mask for "unmounted" mounts.
->
-> In case of STATMOUNT_BY_FD, given that we already have access to an fd
-> on the mount, accessing mount information without a capability check
-> seems fine because of the following reasons:
->
-> - All fs related information is available via fstatfs() without any
->   capability check.
-> - Mount information is also available via /proc/pid/mountinfo (without
->   any capability check).
-> - Given that we have access to a fd on the mount which tells us that we
->   had access to the mount at some point (or someone that had access gave
->   us the fd). So, we should be able to access mount info.
->
+--===============3063947242897467359==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Andrei Vagin <avagin@gmail.com>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+> index d0b405eb2..bd29a915b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
 
-> Co-developed-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-> Signed-off-by: Bhavik Sachdev <b.sachdev1904@gmail.com>
-> ---
->  fs/namespace.c             | 102 ++++++++++++++++++++++++-------------
->  include/uapi/linux/mount.h |  10 +++-
->  2 files changed, 76 insertions(+), 36 deletions(-)
->
-> diff --git a/fs/namespace.c b/fs/namespace.c
-> index ee36d67f1ac2..73ffa1fbdad7 100644
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-> @@ -5563,31 +5563,49 @@ static int grab_requested_root(struct mnt_namespa=
-ce *ns, struct path *root)
->
->  /* locks: namespace_shared */
->  static int do_statmount(struct kstatmount *s, u64 mnt_id, u64 mnt_ns_id,
-> -                       struct mnt_namespace *ns)
-> +                        struct file *mnt_file, struct mnt_namespace *ns)
+[ ... ]
 
-no spaces at the start of a line, code indent should use tabs.
+> +static void test_lru_hash_map_update_elem(enum bpf_map_type map_type)
+> +{
+> +	int err, map_fd, i, key, nr_cpus, max_entries = 128;
+> +	u64 *values, value = 0xDEADC0DE;
+> +
+> +	nr_cpus = libbpf_num_possible_cpus();
+> +	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
+> +		return;
+> +
+> +	values = calloc(nr_cpus, sizeof(u64));
 
-./scripts/checkpatch.pl can help to avoid this sort of typos.
+[ ... ]
 
-Thanks,
-Andrei
+> +	err = bpf_map_lookup_elem(map_fd, &key, values);
+> +	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
+> +		goto out;
+> +	if (!ASSERT_EQ(*values, 0, "bpf_map_lookup_elem value"))
+> +		goto out;
+> +
+> +	for (key = 1; key < max_entries; key++) {
+> +		err = bpf_map_lookup_elem(map_fd, &key, values);
+> +		if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
+> +			goto out;
+> +		if (!ASSERT_EQ(*values, value, "bpf_map_lookup_elem value"))
+> +			goto out;
+> +	}
+
+When test_lru_hash_map_update_elem() is called with
+BPF_MAP_TYPE_LRU_PERCPU_HASH via test_update_lru_percpu_hash_map(),
+should all CPU values be checked rather than just *values?
+
+For percpu maps, bpf_map_lookup_elem() returns an array with one value
+per CPU. The test allocates space for nr_cpus values but only verifies
+the first element. This means values for CPUs 1 through nr_cpus-1 are
+not validated.
+
+Looking at tools/testing/selftests/bpf/prog_tests/lookup_and_delete.c,
+the pattern for percpu maps is to loop through all CPUs:
+
+    for (i = 0; i < nr_cpus; i++) {
+        val = value[i];
+        /* check val */
+    }
+
+For BPF_MAP_TYPE_LRU_HASH this is correct, but for
+BPF_MAP_TYPE_LRU_PERCPU_HASH the test may pass even if non-primary
+CPUs have incorrect values.
+
+> +
+> +out:
+> +	close(map_fd);
+> +	free(values);
+> +}
+> +
+> +static void test_update_lru_hash_map(void)
+> +{
+> +	test_lru_hash_map_update_elem(BPF_MAP_TYPE_LRU_HASH);
+> +}
+> +
+> +static void test_update_lru_percpu_hash_map(void)
+> +{
+> +	test_lru_hash_map_update_elem(BPF_MAP_TYPE_LRU_PERCPU_HASH);
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/19864460617
+
+--===============3063947242897467359==--
 
