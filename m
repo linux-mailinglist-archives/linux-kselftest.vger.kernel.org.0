@@ -1,170 +1,175 @@
-Return-Path: <linux-kselftest+bounces-46887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33207C9BF97
-	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 16:36:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA4B4C9BFAF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 16:37:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C88124E2B8D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 15:36:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC8C73A7339
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 15:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 526DC258EF6;
-	Tue,  2 Dec 2025 15:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B22C26A08C;
+	Tue,  2 Dec 2025 15:36:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cmXLQLqR";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="bXNttpwi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EUjJGrVq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93E5B224AE0
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 15:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51183261B77
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 15:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764689776; cv=none; b=EpyioMJ3wPqzk74PXdvH0YOzl+1cZ64TKN5HczkpL7zMlnxto0iaiJ5lHnoq4qm8x9Hl1cxWxpsOxXrwzfYbljYyZ6/OHuGyhOPE21DU8X2+ggkPtI5/BnT7uRJ0Az2i1K+yOnKWmMuZ+Zv8KfLG+s4GneK4IrcuKW1BDW05cmk=
+	t=1764689808; cv=none; b=EQDcwQakhMqBhVp/feJ2xFyS8J/v+uyFTvpgemkBl0Z4Mba8GSL0HKGwiT24l2VtMU7IbG8ZyK7JThoSJI1yPsZzJ68BU8CtScTW553wjF9PE24stm8ZTbrD3J+GQKjVzrlIIQvG2/PBSpLhsI8ft4LwrVgAGhx/QLublRvFnWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764689776; c=relaxed/simple;
-	bh=i3C3bUlfDJDSJz+UEgqncbzEDCMJ04lynUCqoI5h7Ac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aakAkqTmNvl1KeiGFZINH6qhucoUdyXFCyq0cM58TYzKHT1THa7Ak52SpZwRKbcD9tREs1OjJh2uzu9mc63NyTQU88N/WChddgLMgxv2lMFUbSwilHm82zUWlSIwea/eM60fBq5LAGJ1K0fFmHujVIpO3ja22RuEin5M+Ilzwd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cmXLQLqR; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=bXNttpwi; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764689773;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YeUhnIQnNrHzJpcHAzDpdS8MH/0dybZ954xw+b5apLM=;
-	b=cmXLQLqRunxvZ9AwHsDVH20Hxu178oczWcKHt6kSJyZQ/DSNgd3oCCNaTDpujmFnT/6DQs
-	bv3d0Mv1VADXHDx8F6BxfAhjnUuVBhHocNeIDdAiC6FlTxdQY/4LNyykGrxRHG8WoxvWXV
-	QIsn5YYc03RdCnU/QBCIUcmK7yopmIE=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-692-QgYy_5-XOpeFYvT-KEMEaQ-1; Tue, 02 Dec 2025 10:36:12 -0500
-X-MC-Unique: QgYy_5-XOpeFYvT-KEMEaQ-1
-X-Mimecast-MFC-AGG-ID: QgYy_5-XOpeFYvT-KEMEaQ_1764689772
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8b26bc4984bso723297685a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 07:36:12 -0800 (PST)
+	s=arc-20240116; t=1764689808; c=relaxed/simple;
+	bh=Db+OBahDEdS2FWtuRKdcfD0E3xT8MskdpMGxiZaWAN4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PJ9mrRUA4wXzEiRpM3dAZuDDYopc8Pxqlzji/TIekoy/dh1dmanP6NRGg3Cr2WEmRfJ/JWksF0caXesUgjIP5NZdLJzs88En7jTVuS5sUygU32sASwx+oR6FockNnFVKDxos1JliFdKrVmuPEeXI1BtHrsf4W9q0jr/bWa8aXuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EUjJGrVq; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7ba55660769so4779160b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 07:36:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1764689772; x=1765294572; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YeUhnIQnNrHzJpcHAzDpdS8MH/0dybZ954xw+b5apLM=;
-        b=bXNttpwic51dPVpgUGsg7JohE924HeWKXleYn93pdrvXRmKPqZdN4GD9mAqOaCnKpX
-         8O149A6cFJgWkIjk/uPvps0ThD5WUMIFN3C8EiZFaZhI4NXODZQVhZoKD+bmJ/PEWYIS
-         v9JIW+BVBcUZJSlpu34opG+lrww3TJEqIuOm48Us9Eb0jMWXJ201jT3LduSIVQZbtVYT
-         B4flYcAvSqaRq+MZNQqh9apOl8MhiV9dpGoedSqJwDUf/zJ2oN+8hR2MVXVf8f+zfQOV
-         aMpNTx1GZeJShYby59mb99irnAkxXpfHXzsyeCQORx4RGkBBWNCGoKSeA4AWZcTYjnRa
-         zv6A==
+        d=gmail.com; s=20230601; t=1764689805; x=1765294605; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=y5I8W9mCKKh4ntYi6nw19VUMXjIpYmpQtM91U31imtE=;
+        b=EUjJGrVqqUAA8XrB78BW77prLUhGARskIj14+xP8ONvYeAu5udfSqREZlvsOhzxJXr
+         hE1zkIC1UjsHIKDyrckOvczoZH0OZD7MiGkmZtXbjZ5b+1fxfAZKdey1+pXJPkTTuC8z
+         JxTEEoD90zZ7c/HPUpWZ8E86bgib3NMnLmce+4WsK+Fbn2UgTFi8Kg2CSNK0T7acShlJ
+         V8KF9jBUPp8V1IO4GcUL6BGD5tAPghCHn8OBUTyeUvHiOxzY90pT+xv3ocTRf4pVlpU0
+         RPqFQlYo2sv+om0+OMQYussUdBlqcCor0mQYS6ZA+v/GRumVWJUwr5NpTeKf2DE3cUGx
+         qLdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764689772; x=1765294572;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YeUhnIQnNrHzJpcHAzDpdS8MH/0dybZ954xw+b5apLM=;
-        b=wVSf89RJ0dwJ0SC+VF6ANj6XNq7zv7Cmx6gOqoXmTDjU+uOqaUR6UljUTGr/C+AcLW
-         tisyJv8D2mtvCd7c5Wbbjdy5oweVt8us4CcpJZtYl3dLhkwAX0aqN9y4mMa0NGwvv+k4
-         P0+u0JUmgS49oLf2L03gzmIIapdJKqgWVDcm9H7NB/OKtCBD53NyBvOXJB1h14XeBtGD
-         4L6CqABgiUd8EjQzOIxOjjSZOG6eVXm6gTCX1gLk4xVftv1B0RhOkEySV1gPlotSBvgN
-         WBqN1YVq8AFnJ30CDlojZuMYQzDxbXrBGwdQfzEZQEqpizTKLQztPWxjFkM0uU++P8nI
-         v4rw==
-X-Forwarded-Encrypted: i=1; AJvYcCVQP4olijRWcnk1qvd1t8EgHXqJ9uqKaRMZw9WS/WbfqrYDQUMexP86g9J+mrd0U074Jz3yKg/IbK4VLJ1Ycjs=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywglq22b9FG5BsGPyvkGQFMggpnhyiD1kjByFU8Xjghih0E0H42
-	DW8+ul3bHXeWhBwcFqY5WzLODNwbkjkJizDeqntVFxgsF52bOc1wEnBPhl9dkyEPpEX3R9S4riA
-	Zdj1y4fmrpDYPTKR1T8bfYVMmobHd3cFYnPzPfysKaaTYEzaPWAaMyTI/k/tyKtNrV/VIGg==
-X-Gm-Gg: ASbGnctcA386M+3AqiunmdeHDjglVLj8wi7U9XXCZpJh/6NoqqGPMWBft7LYWCZWULq
-	WjAA4IeoBu+PzA2YJB7yq9md+q//3qRc9pn2+glzGWygd2qHdmKFvY/UXxcwiQeML0nXiZ/OfEL
-	72rSvtcGU2r22LJit3mO9EQ0HDUUSYNW4Vj5lm+fzLT2PWnXP5ak795aoxvLvZvEOpeS0S+3/up
-	svLaKYBEOqfG9jYOe7S3R2U1puBbc332YhV+XBEVqHiIBcIbzEFsATzMn65XtcnS6NK8OmX+q42
-	3/4x0+Ph+uPtfXmeHm9j3wmZ42sNiSBLRqNy1as7dIfrf0a12gqNAK3VAUJivhslF5WWPdrjl3S
-	jkvA=
-X-Received: by 2002:ac8:5a49:0:b0:4ee:41b2:91a6 with SMTP id d75a77b69052e-4ee58b066b0mr583360501cf.82.1764689771711;
-        Tue, 02 Dec 2025 07:36:11 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGLXfWGfXaBCM5txXHiaHxg/MnHqIkbYXvhInhcx15cakUIHeqTAWdqvhhC3SSFQ3wIt4nqmQ==
-X-Received: by 2002:ac8:5a49:0:b0:4ee:41b2:91a6 with SMTP id d75a77b69052e-4ee58b066b0mr583359971cf.82.1764689771231;
-        Tue, 02 Dec 2025 07:36:11 -0800 (PST)
-Received: from x1.local ([142.188.210.156])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4efd2edcebcsm95292531cf.0.2025.12.02.07.36.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Dec 2025 07:36:10 -0800 (PST)
-Date: Tue, 2 Dec 2025 10:36:08 -0500
-From: Peter Xu <peterx@redhat.com>
-To: Nikita Kalyazin <kalyazin@amazon.com>
-Cc: "David Hildenbrand (Red Hat)" <david@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-	Andrea Arcangeli <aarcange@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Hugh Dickins <hughd@google.com>,
-	James Houghton <jthoughton@google.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>, Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] guest_memfd: add support for userfaultfd minor
- mode
-Message-ID: <aS8HaDX5Pg9h_nkl@x1.local>
-References: <20251130111812.699259-1-rppt@kernel.org>
- <20251130111812.699259-5-rppt@kernel.org>
- <652578cc-eeff-4996-8c80-e26682a57e6d@amazon.com>
- <2d98c597-0789-4251-843d-bfe36de25bd2@kernel.org>
- <553c64e8-d224-4764-9057-84289257cac9@amazon.com>
- <aS3f_PlxWLb-6NmR@x1.local>
- <76e3d5bf-df73-4293-84f6-0d6ddabd0fd7@amazon.com>
- <aS4BVC42JiUT51rS@x1.local>
- <415a5956-1dec-4f10-be36-85f6d4d8f4b4@amazon.com>
+        d=1e100.net; s=20230601; t=1764689805; x=1765294605;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y5I8W9mCKKh4ntYi6nw19VUMXjIpYmpQtM91U31imtE=;
+        b=pReK9M9izlutnxHKxuOf2hueNN4rFQ9KetRtVRCIUsvi3ED9HtiW5Ogl60eYA2flUU
+         i59fiPAZ6orqYfR5fmYWC6ilbXB8bnoT2Yfgj9wfNyqXJKCzyA2hUUEQPWMO6b4/bYZs
+         kBQ4bvI3lnAV9jZc+g2w9ljC7lQStzihG2lPD6P0TG608Xk29eyrzeCnSHZyParg24cI
+         EtD3wtL4BGYB45LtwnuXELZEMBKIR9iNorTP55Xv+fzZRoKr7Bl1BIj+av7vnPh9PrGf
+         F+8nQp9WBc8ZiUcs0OdpAQJV0xEDDsSgoBqxP5X3mlZOIMJPIGnFC75zqiAItw+lOX4g
+         F/AA==
+X-Forwarded-Encrypted: i=1; AJvYcCWvbXiXKb/bUwOrF3Dh85bmJyJWUNaaYAA/6+MH+GB2cEW7BkBN6NnJsz4RvY4R8b5UOc8WYApsgRk/rCIntLU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxD2L6UPJrbPUihvmF5YeLxBh3Re7ZzXGfL8QTJbNzYWxJUWSZr
+	t0oqXicJk11xEsdCDoQ81meMODW3HXKIHzwF2XOzKmkOAqZYbsIV1ePP
+X-Gm-Gg: ASbGncuDiAVkBoF9oAhgrUnVeYQ0CUgPQTI0EWm1cT6HwcQHFEjK76ir1BQZxeTSxAD
+	aEuEhkulWF/Ji98CN5qsbZluMygbvqeh7rUp5Q461Tv1YTd7eSrKxQc3bnwmryQ7CasdkLFyKHw
+	gsT6ucCmap51sf+xmnHZKjSYK3v6UKWIvSuBmO4y9xyCWvjKCNDWbM2PGFfqYcMGYGBfyKOMW1E
+	QOzsfg8tlleiqZdoBROo8NPbc/Tu1rfr9GDjroi1ZKcB/cEnx80RpDO5FvBzOcxl0WVN0rJk4yv
+	+jJoocmbOVmsxh3YT8R1lvM4yCqja8L7UPHgn5Fq1bpGYPncRx2RQTUy2It8TioDzfrJjOW2IjR
+	Mc5CDER2scEEA+I0uEL94CQzIsL12SJCGe8yYyA7WOFZIvr9C/Z9LJzGl94B7voTccZfgPgH6YZ
+	o3RsdOJwdS8UOCJONpRDJ1gHJ9rco3Ki5zUzxFTzhIM+qB7O3jacxol25uW0fzYoQ/zCoVAngA5
+	Zhw7zopoubjkrdnT+M60BIIVkm3MJ1sep5TPY9BYupk4j3vA3PTfAHNJA==
+X-Google-Smtp-Source: AGHT+IGO0QrCd54Wl9B5liFX1HiSQC6tv9OYtUHS1BvuOAQRQdtSamONXdsxZaJpelkWSRGSbiFnog==
+X-Received: by 2002:a05:6a20:939d:b0:342:9cb7:64a3 with SMTP id adf61e73a8af0-36150ef868fmr43973180637.34.1764689805255;
+        Tue, 02 Dec 2025 07:36:45 -0800 (PST)
+Received: from [192.168.1.133] (50.2.111.219.st.bbexcite.jp. [219.111.2.50])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15fb1486asm17290721b3a.61.2025.12.02.07.36.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Dec 2025 07:36:44 -0800 (PST)
+Message-ID: <939d12e3-550d-44b7-8968-b09755b61bab@gmail.com>
+Date: Tue, 2 Dec 2025 15:36:39 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <415a5956-1dec-4f10-be36-85f6d4d8f4b4@amazon.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 0/9] Add support for providers with large rx
+ buffer
+To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Shuah Khan
+ <shuah@kernel.org>, Mina Almasry <almasrymina@google.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Yue Haibing <yuehaibing@huawei.com>,
+ David Wei <dw@davidwei.uk>, Haiyue Wang <haiyuewa@163.com>,
+ Jens Axboe <axboe@kernel.dk>, Joe Damato <jdamato@fastly.com>,
+ Simon Horman <horms@kernel.org>, Vishwanath Seshagiri <vishs@fb.com>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ io-uring@vger.kernel.org, dtatulea@nvidia.com
+References: <cover.1764542851.git.asml.silence@gmail.com>
+ <743e8c49-8683-46b7-8a8f-38b5ec36906a@redhat.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <743e8c49-8683-46b7-8a8f-38b5ec36906a@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 02, 2025 at 11:50:31AM +0000, Nikita Kalyazin wrote:
-> > It looks fine indeed, but it looks slightly weird then, as you'll have two
-> > ways to populate the page cache.  Logically here atomicity is indeed not
-> > needed when you trap both MISSING + MINOR.
+On 12/2/25 14:44, Paolo Abeni wrote:
+> On 12/1/25 12:35 AM, Pavel Begunkov wrote:
+>> Note: it's net/ only bits and doesn't include changes, which shoulf be
+>> merged separately and are posted separately. The full branch for
+>> convenience is at [1], and the patch is here:
+>>
+>> https://lore.kernel.org/io-uring/7486ab32e99be1f614b3ef8d0e9bc77015b173f7.1764265323.git.asml.silence@gmail.com
+>>
+>> Many modern NICs support configurable receive buffer lengths, and zcrx and
+>> memory providers can use buffers larger than 4K/PAGE_SIZE on x86 to improve
+>> performance. When paired with hw-gro larger rx buffer sizes can drastically
+>> reduce the number of buffers traversing the stack and save a lot of processing
+>> time. It also allows to give to users larger contiguous chunks of data. The
+>> idea was first floated around by Saeed during netdev conf 2024 and was
+>> asked about by a few folks.
+>>
+>> Single stream benchmarks showed up to ~30% CPU util improvement.
+>> E.g. comparison for 4K vs 32K buffers using a 200Gbit NIC:
+>>
+>> packets=23987040 (MB=2745098), rps=199559 (MB/s=22837)
+>> CPU    %usr   %nice    %sys %iowait    %irq   %soft   %idle
+>>    0    1.53    0.00   27.78    2.72    1.31   66.45    0.22
+>> packets=24078368 (MB=2755550), rps=200319 (MB/s=22924)
+>> CPU    %usr   %nice    %sys %iowait    %irq   %soft   %idle
+>>    0    0.69    0.00    8.26   31.65    1.83   57.00    0.57
+>>
+>> This series adds net infrastructure for memory providers configuring
+>> the size and implements it for bnxt. It's an opt-in feature for drivers,
+>> they should advertise support for the parameter in the qops and must check
+>> if the hardware supports the given size. It's limited to memory providers
+>> as it drastically simplifies implementation. It doesn't affect the fast
+>> path zcrx uAPI, and the sizes is defined in zcrx terms, which allows it
+>> to be flexible and adjusted in the future, see Patch 8 for details.
+>>
+>> A liburing example can be found at [2]
+>>
+>> full branch:
+>> [1] https://github.com/isilence/linux.git zcrx/large-buffers-v7
+>> Liburing example:
+>> [2] https://github.com/isilence/liburing.git zcrx/rx-buf-len
 > 
-> I reran the test based on the UFFDIO_COPY prototype I had using your series
-> [2], and UFFDIO_COPY is slower than write() to populate 512 MiB: 237 vs 202
-> ms (+17%).  Even though UFFDIO_COPY alone is functionally sufficient, I
-> would prefer to have an option to use write() where possible and only
-> falling back to UFFDIO_COPY for userspace faults to have better performance.
-
-Yes, write() should be fine.
-
-Especially to gmem, I guess write() support is needed when VMAs cannot be
-mapped at all in strict CoCo context, so it needs to be available one way
-or another.
-
-IIUC it's because UFFDIO_COPY (or memcpy(), I recall you used to test that
-instead) will involve pgtable operations.  So I wonder if the VMA mapping
-the gmem will still be accessed at some point later (either private->share
-convertable ones for device DMAs for CoCo, or fully shared non-CoCo use
-case), then the pgtable overhead will happen later for a write()-styled
-fault resolution.
-
-From that POV, above number makes sense.
-
-Thanks for the extra testing results.
-
+> Dump question, hoping someone could answer in a very short time...
 > 
-> [2]
-> https://lore.kernel.org/all/7666ee96-6f09-4dc1-8cb2-002a2d2a29cf@amazon.com
+> Differently from previous revisions, this is not a PR, just a plain
+> patch series - that in turn may cause duplicate commits when applied on
+> different trees.
+> 
+> Is the above intentional? why?
+
+It was based on linus-rc* before and getting merged nice and clean,
+now there is a small conflict. In my view, it should either be a
+separate pull to Linus that depends on the net+io_uring trees if
+Jens would be willing to orchestrate that, or I'll just merge the
+leftover io_uring patch for-6.20. In either case, this set shouldn't
+get applied to any other tree directly.
 
 -- 
-Peter Xu
+Pavel Begunkov
 
 
