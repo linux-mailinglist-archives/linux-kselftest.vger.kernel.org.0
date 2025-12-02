@@ -1,124 +1,82 @@
-Return-Path: <linux-kselftest+bounces-46907-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FFAAC9CC10
-	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 20:23:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41894C9CC1F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 20:24:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0A15F34AC4E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 19:23:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01B003A8BCF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 19:24:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 082692DC349;
-	Tue,  2 Dec 2025 19:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4847A2D9782;
+	Tue,  2 Dec 2025 19:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gHejWwrM"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KrOiT/Cl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F07270557;
-	Tue,  2 Dec 2025 19:23:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8EE2C327C
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 19:24:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764703388; cv=none; b=GeU6u5bsdkNCrnWqTqD+qt/3lIeyd+rN5Ux8NVbxd1KC3BhgqMWvv6gpN+r+Wd9rcCkbRNDY1a2nT+6umJ1S2HpkpK0PmNcrwvdK52weA9a9Fq+te/iab+jARbQHWGB+6J2oiXdYpkKfVQURMvnVnYAEFWf4m/gnBKK+Xk/Fnsc=
+	t=1764703472; cv=none; b=qIQswM1Fh7f8TMDKHmtqWw/k7vONcPM/x1g2E0ZvHOFKkviDabX3w/nmQMAvfUVjQFuLKokQWem+ye95VpUcjLtZ23nBAQQRX5iau4QKDAKAVq5z5vtNSiLIYCaC7GWxz8DcBJYhaG84nUMAABW0H80xosuwGXFvS3s1Eqa8Ob0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764703388; c=relaxed/simple;
-	bh=EGyOpohOwzTtiUd+9I5sQQAC0CR9xpQG9+BZRONdd2U=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=W6FKrS+zMV5J29msIkxsdKpcmSYR5M8dhCVKpxX7NZwz0p7xAsn0SXHCm2KzK5LFTPYgAr2cLHqTD7B3uiNnGg8a/5OfCDmvrWoeSci+ECbU9khIxIoqSMDXJ2i8p7bXDeL3Ztb63+HC5fUWua6+IX4CAm29rf9Gdqn03rUClVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gHejWwrM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 626F2C4CEF1;
-	Tue,  2 Dec 2025 19:23:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764703388;
-	bh=EGyOpohOwzTtiUd+9I5sQQAC0CR9xpQG9+BZRONdd2U=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=gHejWwrMmIeQ0nCCnyCC9FuC2DvU1D4lE7+z89YDlMbEfLFvdtDJlycerGtrLDwt0
-	 pGV3v5+mtWw30cdk9ILkHc39QdEhdV1zyDFv0P6dX6TYDetEv8G1v/WoZQbTaaqzdh
-	 qbjkcRPIhFURD5oLguINbj0iTIM5nxpH+mVlkZg9NZhLLJTW3iwhfCZvw2eXr88IQt
-	 8dSll7bCXbYvwyM+RsPfKHqDZ3VUYnOHIixQfeAG0KoZEaiufDGYlr9qJhl8DzqW8f
-	 zua63E6DjXYdxszi2Uuoeq98s0wK1nc1hq5z3hAfh63KXKOThPLXeH8S8WOnf/rv8I
-	 UwTdj1rJEVMyg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F29CF3A54A3B;
-	Tue,  2 Dec 2025 19:20:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1764703472; c=relaxed/simple;
+	bh=ZAVNffKBxs3Sh4FiMDJw2UR7G3mhGmzTiM45fYl42Nw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aKtZkj9kiG2PqkeOZJ8+WLCGAZoNdRmPF+aCNCJD5NuKcKuq58KKXGWw1zfwtR3EelWbwtBkI6XcN4Ntj9WIskgw6eAW39MhUILCsfEJwy3gS6rJmvhNWrZwKiDl/VXqYf+Ayew5RW2kFvpbM8XPmPVABegsDzCrYi6JE+ugZzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KrOiT/Cl; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 2 Dec 2025 11:24:22 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764703468;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ItDOClnB9rHsRl2j3htJV8Dizb51nQfpKAcRcZrVh4I=;
+	b=KrOiT/ClG7fAeDuTNt17HlI27GXbwiHrL41ptmFG1CNbpiCwKHmfjWuD4rUJVs0EsWK/04
+	7rYZMhE20goaUzkb95rBUjJNuzUyT6QF3x9E2kjUnjQJ79XgLNmqRobMLNVzEoWI4bb/Qg
+	reK/8rrRfsl9dz+aSGsHS9e9nrL+fss=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Guopeng Zhang <zhangguopeng@kylinos.cn>
+Cc: tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org, 
+	roman.gushchin@linux.dev, mkoutny@suse.com, muchun.song@linux.dev, lance.yang@linux.dev, 
+	shuah@kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] selftests: cgroup: Add cg_read_key_long_poll() to
+ poll a cgroup key with retries
+Message-ID: <bqbyraqz6ztwxd5hysw4ufttbb3ev463su4wyhipsuvau5bw7n@gzxrmua2aldf>
+References: <20251124123816.486164-1-zhangguopeng@kylinos.cn>
+ <20251124123816.486164-2-zhangguopeng@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v7 0/9] Add support for providers with large rx
- buffer
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176470320779.3356190.12546474842155040451.git-patchwork-notify@kernel.org>
-Date: Tue, 02 Dec 2025 19:20:07 +0000
-References: <cover.1764542851.git.asml.silence@gmail.com>
-In-Reply-To: <cover.1764542851.git.asml.silence@gmail.com>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
- michael.chan@broadcom.com, pavan.chebbi@broadcom.com, andrew+netdev@lunn.ch,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, ilias.apalodimas@linaro.org, shuah@kernel.org,
- almasrymina@google.com, sdf@fomichev.me, yuehaibing@huawei.com,
- dw@davidwei.uk, haiyuewa@163.com, axboe@kernel.dk, jdamato@fastly.com,
- horms@kernel.org, vishs@fb.com, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, io-uring@vger.kernel.org,
- dtatulea@nvidia.com
+In-Reply-To: <20251124123816.486164-2-zhangguopeng@kylinos.cn>
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Sun, 30 Nov 2025 23:35:15 +0000 you wrote:
-> Note: it's net/ only bits and doesn't include changes, which shoulf be
-> merged separately and are posted separately. The full branch for
-> convenience is at [1], and the patch is here:
+On Mon, Nov 24, 2025 at 08:38:14PM +0800, Guopeng Zhang wrote:
+> Introduce a new helper function `cg_read_key_long_poll()` in cgroup_util.h.
+> This function polls the specified key in a cgroup file until it matches the expected
+> value or the retry limit is reached, with configurable wait intervals between retries.
 > 
-> https://lore.kernel.org/io-uring/7486ab32e99be1f614b3ef8d0e9bc77015b173f7.1764265323.git.asml.silence@gmail.com
+> This helper is particularly useful for handling asynchronously updated cgroup statistics
+> (e.g., memory.stat), where immediate reads may observe stale values, especially on busy systems.
+> It allows tests and other utilities to handle such cases more flexibly.
 > 
-> Many modern NICs support configurable receive buffer lengths, and zcrx and
-> memory providers can use buffers larger than 4K/PAGE_SIZE on x86 to improve
-> performance. When paired with hw-gro larger rx buffer sizes can drastically
-> reduce the number of buffers traversing the stack and save a lot of processing
-> time. It also allows to give to users larger contiguous chunks of data. The
-> idea was first floated around by Saeed during netdev conf 2024 and was
-> asked about by a few folks.
-> 
-> [...]
+> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> Suggested-by: Michal Koutný <mkoutny@suse.com>
 
-Here is the summary with links:
-  - [net-next,v7,1/9] net: page pool: xa init with destroy on pp init
-    https://git.kernel.org/netdev/net-next/c/854858848bc7
-  - [net-next,v7,2/9] net: page_pool: sanitise allocation order
-    https://git.kernel.org/netdev/net-next/c/9954464d737d
-  - [net-next,v7,3/9] net: memzero mp params when closing a queue
-    (no matching commit)
-  - [net-next,v7,4/9] net: let pp memory provider to specify rx buf len
-    (no matching commit)
-  - [net-next,v7,5/9] eth: bnxt: store rx buffer size per queue
-    (no matching commit)
-  - [net-next,v7,6/9] eth: bnxt: adjust the fill level of agg queues with larger buffers
-    (no matching commit)
-  - [net-next,v7,7/9] eth: bnxt: allow providers to set rx buf size
-    (no matching commit)
-  - [net-next,v7,8/9] io_uring/zcrx: document area chunking parameter
-    (no matching commit)
-  - [net-next,v7,9/9] selftests: iou-zcrx: test large chunk sizes
-    (no matching commit)
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Reviewed-by: Shakeel Butt <shakeel.butt@linux.dev>
 
