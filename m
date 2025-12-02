@@ -1,187 +1,207 @@
-Return-Path: <linux-kselftest+bounces-46912-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46913-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D7C2C9CF1B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 21:44:29 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C26F5C9CF33
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 21:47:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2720F4E27FE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 20:44:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 510354E3DE5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 20:47:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924072F25F4;
-	Tue,  2 Dec 2025 20:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B2A2F746C;
+	Tue,  2 Dec 2025 20:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QuoYd4Yj";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="aVhKjiNp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74962853F1
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 20:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177882DC79E
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 20:47:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764708264; cv=none; b=DjPdQR4y7Mh9mdRueU7nJy/zjprIS2EF/DM9Bpb+GUdgDKL+rAYgAqE7uKDmJBAnSB2Zr8hFMke7ipmO41O815z/Ij+2/azKQP8QeXchBndlFpavRtlXUA7sfIOFe3BsNcz0wweP/Lgi1WAMM/VO6AOMjF+/umd+S4iLMw96a4U=
+	t=1764708449; cv=none; b=LE7/U8f4mSqJ7cMCZ3vR88C6rq5OFxtzoL42bwmjaum7zyLSVNdv3rFyypd/jDL3hhk+4/QxOjU6d+KSrn3updSq/DszFh1LrQv4NI0Vmj8A0TgNFVBmkWXFNw1J3e6hLVvfr4piyVM+lEVYTsZbzcMB1u+NE5jZjhHtcL0KzXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764708264; c=relaxed/simple;
-	bh=IyTQ0+LDYlrueKRoH0+ipJduxi4wUeUYIoh3DtrqyFM=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=Nspn0A/VmDtC4ue9iqWvdL1ccKOYwCkRdE73yueLa+JfbPW1jKLcogDZ2AS/ruU/PZ6qIHKnnvlfu0TYoSQ8gxwDIlNHOWTfMZ/2QmpHInwbTxZAaV2Mh6Dz4a8MDIukwcPdWevgQ/0EoK/3YZ/wL5xQZvpu5HGPUtdnf3alDOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-4512e9f2f82so5118218b6e.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 12:44:22 -0800 (PST)
+	s=arc-20240116; t=1764708449; c=relaxed/simple;
+	bh=UM18VZ97rudmnPHbViAf5T/QAoYaIPRYtTn8w10RmJc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UAIX6gut3lCeFo93v9gMm25dsnPokIXkKE3AyMZtOEvtS4S/Orj4vUbrVizqHH8eDvRKl49wIyw4YhGmDQbFkf3ulA1Lshv8/pA6kWeoStE9wFnjSvqjOPpbSmDhb2BUDaVBUfBdl1ycuvphePpTH9UBxd1n07q2SmEk0MVbHC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QuoYd4Yj; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=aVhKjiNp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1764708447;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=93E6zWcOFHYDryuio97v2YbtHjZdnUdD9zTGmSSfbUU=;
+	b=QuoYd4Yj6Lw4ODkFVPGAstJzq6XOlRf75aNJD84lK8Kd+KEGHq0XMU027Tvi+KFts2IShU
+	Zu1u7J0JrRtFtUPzDrR9Sq1T1Jp0dKg6m8SlbLNyaDUX8YdIYNzIEYkVx2zxAQlmfWOFZx
+	dO2m9AzS5gjF/eA/8BTsnhfwRFFP22k=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-335-lJ0AIqlCMG6aPki2dlrZ5Q-1; Tue, 02 Dec 2025 15:47:23 -0500
+X-MC-Unique: lJ0AIqlCMG6aPki2dlrZ5Q-1
+X-Mimecast-MFC-AGG-ID: lJ0AIqlCMG6aPki2dlrZ5Q_1764708442
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-477964c22e0so1348595e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 12:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1764708442; x=1765313242; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=93E6zWcOFHYDryuio97v2YbtHjZdnUdD9zTGmSSfbUU=;
+        b=aVhKjiNpcNVENSUPVrQNNZ1Ue/iQhIGTiBek9sS6yJYEqJCCkUrRrIqKcKIh+fm+ag
+         2/jK+rl+4e/psvGyEVkQ4V3VbEkwASukpZLraRcaRabgpvVFmPL4DlUAVrjroQncpHFO
+         wdk1p40p/JkVjrST4xp74VLVKSIDJOPvEb+H/f90A4H4gYJhXOw2xnLhIZWXGkiAQQha
+         uBziC3LsRd7Bdtl4xtBuH0fhDl1Iac0/Hv9+u4jJc3P2csK8wdw9QNypHRIEYKPx/U3r
+         6sLY7DApznGIgrY9sSg0xwUScDocIc7///oPEzB/fqTuBrERTFf5Fb1NknFcMlk4xEPR
+         +DSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764708262; x=1765313062;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9RjyyTo2j0TjdG2AARxhfmOot6uTSHz1gbkawPQrTgc=;
-        b=cngeP/ovXBC+aRrK94jWyLUkgcaafz0/hmfmRQygpoCKHEiwIriESnYRcVBRHS6XQT
-         hcf08YIJbHfW7wnig8khldunbF4mGntcUBL+TbcXFMu68uJJwJp87BLH7yotVPay0Srg
-         Jn8fhiYML6n/g1iNBgPxbdNluDn4kHCAhY/Cd93ED0HyTz88C6vIq3Kf3eWgON9hl9ce
-         AbpJluTbxIRSk023VjOtpyl/XJdKUvq8fw8zJrf8gPmfrQ4qs7Qhm8g3S2ZkNvLTs8j9
-         6b3kqs1OwaXwGfHORswcKRzh6W+QGOKJEiv7Ay4O8n2cQCTDnnL58U2LDmTFYjfleiya
-         dt5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXPcw7dpfb+wcfwX/gbyHPJHlMf3BMAq/8u9spkO0ZOBpySmmLjHw9+PvFp4R8rEAdmklnd+ch3mRhJYvMxOwg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUFJqfY6C4eOXm61wGNEDF2ar9IMW3Y01NmLqYdLlriwi6MoQG
-	U1Gi9Z3Xe6w1n4phjQwKdfR/Qvr/cuZ9w+la/TyTDTpF3LmUO75kCOacjHh/QfXmnhST2SjLXbX
-	vmxFzpd3/iFNHbuhEwrkK9wexJwUFz8VZsdDkCKOyLBDxNsha1ijxXmjTmX4=
-X-Google-Smtp-Source: AGHT+IGcno7lTm3KlUfyyg6HxcRNEihdvBlo41dTmfnSxwTQvFOBjfvGHG5YVFGLwpOggsBIX7u+TikcWdt8XtDaLJYmMGOgexaJ
+        d=1e100.net; s=20230601; t=1764708442; x=1765313242;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=93E6zWcOFHYDryuio97v2YbtHjZdnUdD9zTGmSSfbUU=;
+        b=PYAn0HTCD+OVI8B7wZxPopNRimZRLlKQEWuoCFddwnwDCmbHFA2bpyJCPJKWLmn2zY
+         c8+Fr+gjaFTMLMJKyPpRBbXLAdcxCSIgzW+lCYsbP1we9T6q99zSgSn2sdhu4hwvWPip
+         W+5o+0Y3CHjH+8Iz84cOs3fkdZWQtMqLBKP+rNCk7zhwMD6GD4/AwD3GMMZnU6m9zYNf
+         GSWPgkwy1pwmimlLraw4xF+9INgU2ICYb+yh4pDx7MQghusQQ9adUJ3qG1YWaDkJFFq7
+         Tq9i4mm62e68Ul0BwAW5j1uhZU6H/M/XYp3LU9UvvR9W88yrvk8HWnzXqiSdzu9/Iopl
+         ChQw==
+X-Forwarded-Encrypted: i=1; AJvYcCUUknuSmhX7tdY2jLzJNq2jt06GnS2xKQe6yMWJz6p0mQxs44m4sjxjlAy66RthejTdaerVJ7jOcMaSrn29LmE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjP9617WfjFivUwrSLWfnWcV4QrliO1zYEd7YeQGNn8bg7jeRr
+	k8N4Td7936OI5jZEwRkmIi1D35CwaP0xM100tDqY+o6Ba2LxpkWjqooRXxQcYywDFdVnUQfjX5G
+	qjjDvzwDyNXTYn7NK8bjUpQ043ZkHjD/yWCMeQwOEaioOk3x5e8yAoEzAogyL/9cKD5CgzA==
+X-Gm-Gg: ASbGncvKe2EeTLhTr3pZ42XlXWGlbeW//+SUYjpoUg+uDdqWjld7q8EP14i9236z2u7
+	FLI11O2iE8aHDDgki8ECkSpSOG6h/NT+sHVKxeG0dSHEAUzeLQyuQBr2kkvqv7BwBEO5TzoKiPW
+	iO8Bp1brG6OqroM9yMnDmmoJ6YKQPGDmQmEj8uZgG0ZL8difqQMgNCfckyxGHeFTSGQARqgjCUp
+	fuhefq3U5J4K9QUjir3m5ak2yv/ku0WijpNIHfQ+q6DHO1mCRX6v9RY8AyQioDGJnSEwuBI9VHw
+	DvIFo05SIhhv7okef8jQ1EHI6IaZAEmYiYMerZaV3EZxwpEjIF73yFxMfaxYiqmp8nHK7259Kq7
+	HTPssD0ejq3Cqew==
+X-Received: by 2002:a05:600c:4507:b0:479:2a78:4a2e with SMTP id 5b1f17b1804b1-4792aeefe08mr67265e9.7.1764708442363;
+        Tue, 02 Dec 2025 12:47:22 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHtz/lzVuD567rALCwx3x7VkFHPvswA+h4sGnpysQXizUNAK/zCsPREdKaY3F5ZICBkIIzs/w==
+X-Received: by 2002:a05:600c:4507:b0:479:2a78:4a2e with SMTP id 5b1f17b1804b1-4792aeefe08mr66825e9.7.1764708441897;
+        Tue, 02 Dec 2025 12:47:21 -0800 (PST)
+Received: from [192.168.88.32] ([212.105.155.136])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4792a7971c7sm8502095e9.2.2025.12.02.12.47.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Dec 2025 12:47:21 -0800 (PST)
+Message-ID: <06b7cfea-d366-44f7-943e-087ead2f25c2@redhat.com>
+Date: Tue, 2 Dec 2025 21:47:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:448e:b0:450:bf48:835f with SMTP id
- 5614622812f47-45112bb85c5mr18603481b6e.43.1764708261842; Tue, 02 Dec 2025
- 12:44:21 -0800 (PST)
-Date: Tue, 02 Dec 2025 12:44:21 -0800
-In-Reply-To: <20251202153032.10118-1-leon.hwang@linux.dev>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <692f4fa5.a70a0220.d98e3.01a5.GAE@google.com>
-Subject: [syzbot ci] Re: bpf: Fix unintended eviction when updating lru hash maps
-From: syzbot ci <syzbot+cibae4cdb2562c866c@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kernel-patches-bot@fb.com, kpsingh@kernel.org, leon.hwang@linux.dev, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	martin.lau@linux.dev, sdf@fomichev.me, shuah@kernel.org, skb99@linux.ibm.com, 
-	song@kernel.org, yonghong.song@linux.dev
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v12 04/12] vsock: add netns support to virtio
+ transports
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+ Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin"
+ <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
+ =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan"
+ <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
+ Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+ Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa
+ <vishnu.dasa@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
+ netdev@vger.kernel.org, kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, berrange@redhat.com,
+ Sargun Dhillon <sargun@sargun.me>, Bobby Eshleman <bobbyeshleman@meta.com>
+References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
+ <20251126-vsock-vmtest-v12-4-257ee21cd5de@meta.com>
+ <6cef5a68-375a-4bb6-84f8-fccc00cf7162@redhat.com>
+ <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-syzbot ci has tested the following series
+On 12/2/25 6:56 PM, Bobby Eshleman wrote:
+> On Tue, Dec 02, 2025 at 11:18:14AM +0100, Paolo Abeni wrote:
+>> On 11/27/25 8:47 AM, Bobby Eshleman wrote:
+>>> @@ -674,6 +689,17 @@ static int vhost_vsock_dev_open(struct inode *inode, struct file *file)
+>>>  		goto out;
+>>>  	}
+>>>  
+>>> +	net = current->nsproxy->net_ns;
+>>> +	vsock->net = get_net_track(net, &vsock->ns_tracker, GFP_KERNEL);
+>>> +
+>>> +	/* Store the mode of the namespace at the time of creation. If this
+>>> +	 * namespace later changes from "global" to "local", we want this vsock
+>>> +	 * to continue operating normally and not suddenly break. For that
+>>> +	 * reason, we save the mode here and later use it when performing
+>>> +	 * socket lookups with vsock_net_check_mode() (see vhost_vsock_get()).
+>>> +	 */
+>>> +	vsock->net_mode = vsock_net_mode(net);
+>>
+>> I'm sorry for the very late feedback. I think that at very least the
+>> user-space needs a way to query if the given transport is in local or
+>> global mode, as AFAICS there is no way to tell that when socket creation
+>> races with mode change.
+> 
+> Are you thinking something along the lines of sockopt?
 
-[v1] bpf: Fix unintended eviction when updating lru hash maps
-https://lore.kernel.org/all/20251202153032.10118-1-leon.hwang@linux.dev
-* [PATCH bpf-next 1/3] bpf: Avoid unintended eviction when updating lru_hash maps
-* [PATCH bpf-next 2/3] bpf: Avoid unintended eviction when updating lru_percpu_hash maps
-* [PATCH bpf-next 3/3] selftests/bpf: Add tests to verify no unintended eviction when updating lru hash maps
+I'd like to see a way for the user-space to query the socket 'namespace
+mode'.
 
-and found the following issue:
-general protection fault in bpf_lru_push_free
+sockopt could be an option; a possibly better one could be sock_diag. Or
+you could do both using dumping the info with a shared helper invoked by
+both code paths, alike what TCP is doing.
+>> Also I'm a bit uneasy with the model implemented here, as 'local' socket
+>> may cross netns boundaris and connect to 'local' socket in other netns
+>> (if I read correctly patch 2/12). That in turns AFAICS break the netns
+>> isolation.
+> 
+> Local mode sockets are unable to communicate with local mode (and global
+> mode too) sockets that are in other namespaces. The key piece of code
+> for that is vsock_net_check_mode(), where if either modes is local the
+> namespaces must be the same.
 
-Full report is available here:
-https://ci.syzbot.org/series/64db9547-852d-4c56-a3a1-3d18f254330c
+Sorry, I likely misread the large comment in patch 2:
 
-***
+https://lore.kernel.org/netdev/20251126-vsock-vmtest-v12-2-257ee21cd5de@meta.com/
 
-general protection fault in bpf_lru_push_free
+>> Have you considered instead a slightly different model, where the
+>> local/global model is set in stone at netns creation time - alike what
+>> /proc/sys/net/ipv4/tcp_child_ehash_entries is doing[1] - and
+>> inter-netns connectivity is explicitly granted by the admin (I guess
+>> you will need new transport operations for that)?
+>>
+>> /P
+>>
+>> [1] tcp allows using per-netns established socket lookup tables - as
+>> opposed to the default global lookup table (even if match always takes
+>> in account the netns obviously). The mentioned sysctl specify such
+>> configuration for the children namespaces, if any.
+> 
+> I'll save this discussion if the above doesn't resolve your concerns.
+I still have some concern WRT the dynamic mode change after netns
+creation. I fear some 'unsolvable' (or very hard to solve) race I can't
+see now. A tcp_child_ehash_entries-like model will avoid completely the
+issue, but I understand it would be a significant change over the
+current status.
 
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      5262cb23393f7e86a64d1a45eeaa8a6f99f03d10
-arch:      amd64
-compiler:  Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-config:    https://ci.syzbot.org/builds/702a7a8c-4385-4089-a777-8b47155f8794/config
-C repro:   https://ci.syzbot.org/findings/0cffd810-925f-42f4-88d2-8d21195f341e/c_repro
-syz repro: https://ci.syzbot.org/findings/0cffd810-925f-42f4-88d2-8d21195f341e/syz_repro
+"Luckily" the merge window is on us and we have some time to discuss. Do
+you have a specific use-case for the ability to change the netns mode
+after creation?
 
-Oops: general protection fault, probably for non-canonical address 0xdffffc0000000004: 0000 [#1] SMP KASAN PTI
-KASAN: null-ptr-deref in range [0x0000000000000020-0x0000000000000027]
-CPU: 0 UID: 0 PID: 5953 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:bpf_percpu_lru_push_free kernel/bpf/bpf_lru_list.c:539 [inline]
-RIP: 0010:bpf_lru_push_free+0x6e/0xbb0 kernel/bpf/bpf_lru_list.c:551
-Code: 01 0f 85 e4 00 00 00 4c 89 f0 48 c1 e8 03 80 3c 28 00 74 08 4c 89 f7 e8 c0 82 42 00 4d 8b 3e 4c 8d 73 10 4c 89 f0 48 c1 e8 03 <0f> b6 04 28 84 c0 0f 85 5b 09 00 00 45 0f b7 36 bf 08 00 00 00 44
-RSP: 0018:ffffc900046d7b48 EFLAGS: 00010202
-RAX: 0000000000000004 RBX: 0000000000000010 RCX: ffff888112941d00
-RDX: 0000000000000000 RSI: 0000000000000010 RDI: ffff888117c02300
-RBP: dffffc0000000000 R08: ffffffff8f7cee77 R09: 1ffffffff1ef9dce
-R10: dffffc0000000000 R11: fffffbfff1ef9dcf R12: 0000000000000002
-R13: 00000000fffffffe R14: 0000000000000020 R15: 0000607d55cf6a80
-FS:  000055555edc7500(0000) GS:ffff88818eb38000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2ed63fff CR3: 000000010bca0000 CR4: 00000000000006f0
-Call Trace:
- <TASK>
- htab_lru_push_free kernel/bpf/hashtab.c:1183 [inline]
- htab_lru_map_update_elem+0x33e/0xa90 kernel/bpf/hashtab.c:1266
- bpf_map_update_value+0x751/0x920 kernel/bpf/syscall.c:294
- map_update_elem+0x355/0x4b0 kernel/bpf/syscall.c:1817
- __sys_bpf+0x619/0x860 kernel/bpf/syscall.c:6150
- __do_sys_bpf kernel/bpf/syscall.c:6272 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6270 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6270
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xfa0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fe41118f7c9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcd4179988 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007fe4113e5fa0 RCX: 00007fe41118f7c9
-RDX: 0000000000000020 RSI: 0000200000000800 RDI: 0000000000000002
-RBP: 00007fe4111f297f R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fe4113e5fa0 R14: 00007fe4113e5fa0 R15: 0000000000000003
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:bpf_percpu_lru_push_free kernel/bpf/bpf_lru_list.c:539 [inline]
-RIP: 0010:bpf_lru_push_free+0x6e/0xbb0 kernel/bpf/bpf_lru_list.c:551
-Code: 01 0f 85 e4 00 00 00 4c 89 f0 48 c1 e8 03 80 3c 28 00 74 08 4c 89 f7 e8 c0 82 42 00 4d 8b 3e 4c 8d 73 10 4c 89 f0 48 c1 e8 03 <0f> b6 04 28 84 c0 0f 85 5b 09 00 00 45 0f b7 36 bf 08 00 00 00 44
-RSP: 0018:ffffc900046d7b48 EFLAGS: 00010202
-RAX: 0000000000000004 RBX: 0000000000000010 RCX: ffff888112941d00
-RDX: 0000000000000000 RSI: 0000000000000010 RDI: ffff888117c02300
-RBP: dffffc0000000000 R08: ffffffff8f7cee77 R09: 1ffffffff1ef9dce
-R10: dffffc0000000000 R11: fffffbfff1ef9dcf R12: 0000000000000002
-R13: 00000000fffffffe R14: 0000000000000020 R15: 0000607d55cf6a80
-FS:  000055555edc7500(0000) GS:ffff88818eb38000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2ed63fff CR3: 000000010bca0000 CR4: 00000000000006f0
-----------------
-Code disassembly (best guess):
-   0:	01 0f                	add    %ecx,(%rdi)
-   2:	85 e4                	test   %esp,%esp
-   4:	00 00                	add    %al,(%rax)
-   6:	00 4c 89 f0          	add    %cl,-0x10(%rcx,%rcx,4)
-   a:	48 c1 e8 03          	shr    $0x3,%rax
-   e:	80 3c 28 00          	cmpb   $0x0,(%rax,%rbp,1)
-  12:	74 08                	je     0x1c
-  14:	4c 89 f7             	mov    %r14,%rdi
-  17:	e8 c0 82 42 00       	call   0x4282dc
-  1c:	4d 8b 3e             	mov    (%r14),%r15
-  1f:	4c 8d 73 10          	lea    0x10(%rbx),%r14
-  23:	4c 89 f0             	mov    %r14,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	0f b6 04 28          	movzbl (%rax,%rbp,1),%eax <-- trapping instruction
-  2e:	84 c0                	test   %al,%al
-  30:	0f 85 5b 09 00 00    	jne    0x991
-  36:	45 0f b7 36          	movzwl (%r14),%r14d
-  3a:	bf 08 00 00 00       	mov    $0x8,%edi
-  3f:	44                   	rex.R
+/P
 
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
