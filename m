@@ -1,175 +1,151 @@
-Return-Path: <linux-kselftest+bounces-46888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA4B4C9BFAF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 16:37:04 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5E1EC9C07C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 16:52:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC8C73A7339
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 15:36:50 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CD21B4E06E0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 15:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B22C26A08C;
-	Tue,  2 Dec 2025 15:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE0D230F7F3;
+	Tue,  2 Dec 2025 15:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EUjJGrVq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DhmpyZ2n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51183261B77
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 15:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22154320CD1
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 15:52:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764689808; cv=none; b=EQDcwQakhMqBhVp/feJ2xFyS8J/v+uyFTvpgemkBl0Z4Mba8GSL0HKGwiT24l2VtMU7IbG8ZyK7JThoSJI1yPsZzJ68BU8CtScTW553wjF9PE24stm8ZTbrD3J+GQKjVzrlIIQvG2/PBSpLhsI8ft4LwrVgAGhx/QLublRvFnWM=
+	t=1764690749; cv=none; b=FA7bIGf9sDF7fRygNjkxOKSFmHRaWQij5FoybGiZboww8vWSZICeVDMonqQysm4YlcnJTCdl1DP8+xrCmBIc9x6HqhYIo6rpKjdB3XUm9wDTvgG9RwuHVklOSyHJYHJnGLCpnGcOYUu04Fbr8Dai6uzWOtFlZDgOruXPxdAQEzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764689808; c=relaxed/simple;
-	bh=Db+OBahDEdS2FWtuRKdcfD0E3xT8MskdpMGxiZaWAN4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PJ9mrRUA4wXzEiRpM3dAZuDDYopc8Pxqlzji/TIekoy/dh1dmanP6NRGg3Cr2WEmRfJ/JWksF0caXesUgjIP5NZdLJzs88En7jTVuS5sUygU32sASwx+oR6FockNnFVKDxos1JliFdKrVmuPEeXI1BtHrsf4W9q0jr/bWa8aXuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EUjJGrVq; arc=none smtp.client-ip=209.85.210.171
+	s=arc-20240116; t=1764690749; c=relaxed/simple;
+	bh=GkBYoUW2qrN93TUysIlXM/ON6wKoM5tpeQF1AMakzqM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fuoPr9NVYZiAEA27yE7X3fel8+k8pt6udey3YyjX0masCoYgU8G7EgnJLS3c3MkblCHSNu53p8kcuxOavMaiCMWlJA8CTy24sEKs8QT4nL4zWaifDHItxQxKE2t83Tyebgi1B7J12k0yWzfUyYjbHUnFvbyaAkezPpiIi00dW2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DhmpyZ2n; arc=none smtp.client-ip=209.85.210.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7ba55660769so4779160b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 07:36:46 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7c75a5cb752so3390775a34.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 07:52:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764689805; x=1765294605; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y5I8W9mCKKh4ntYi6nw19VUMXjIpYmpQtM91U31imtE=;
-        b=EUjJGrVqqUAA8XrB78BW77prLUhGARskIj14+xP8ONvYeAu5udfSqREZlvsOhzxJXr
-         hE1zkIC1UjsHIKDyrckOvczoZH0OZD7MiGkmZtXbjZ5b+1fxfAZKdey1+pXJPkTTuC8z
-         JxTEEoD90zZ7c/HPUpWZ8E86bgib3NMnLmce+4WsK+Fbn2UgTFi8Kg2CSNK0T7acShlJ
-         V8KF9jBUPp8V1IO4GcUL6BGD5tAPghCHn8OBUTyeUvHiOxzY90pT+xv3ocTRf4pVlpU0
-         RPqFQlYo2sv+om0+OMQYussUdBlqcCor0mQYS6ZA+v/GRumVWJUwr5NpTeKf2DE3cUGx
-         qLdw==
+        d=gmail.com; s=20230601; t=1764690747; x=1765295547; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=feKc1u+4lQENkn8pYvf0cy6PA0Ii+7sQgsN0RQiueGQ=;
+        b=DhmpyZ2n4u9nrLod70Z7T8ToHW8AXnv6nL4e2KQmxNrwtH64PeZOBQykjFZIUk3ABR
+         BifUNxw0f1wI8ZCoBCnhwPF7pzPXnvMgN57G5/LLEj/Duhe2le78AwMYMNef+6qRe7+Q
+         MXY04h6QBpiB+slSwiXcaPziRoFh0aumwqNLHbBuRLVmIQfYXUiCWpZm4zK7cN+y9E3Y
+         4dZWyCgM6q/E6xjRawgl1RxIMvq15rr54zoe/hm5+a/2Ryg6sBGUTgLgSKX3OzD4M70i
+         ZVKEr71RM13/Xb5f5PKPsvao3fYnagotlyP9bkUezgLhysdlM0HYQCrHk4XHRqcs/wsg
+         P3vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764689805; x=1765294605;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y5I8W9mCKKh4ntYi6nw19VUMXjIpYmpQtM91U31imtE=;
-        b=pReK9M9izlutnxHKxuOf2hueNN4rFQ9KetRtVRCIUsvi3ED9HtiW5Ogl60eYA2flUU
-         i59fiPAZ6orqYfR5fmYWC6ilbXB8bnoT2Yfgj9wfNyqXJKCzyA2hUUEQPWMO6b4/bYZs
-         kBQ4bvI3lnAV9jZc+g2w9ljC7lQStzihG2lPD6P0TG608Xk29eyrzeCnSHZyParg24cI
-         EtD3wtL4BGYB45LtwnuXELZEMBKIR9iNorTP55Xv+fzZRoKr7Bl1BIj+av7vnPh9PrGf
-         F+8nQp9WBc8ZiUcs0OdpAQJV0xEDDsSgoBqxP5X3mlZOIMJPIGnFC75zqiAItw+lOX4g
-         F/AA==
-X-Forwarded-Encrypted: i=1; AJvYcCWvbXiXKb/bUwOrF3Dh85bmJyJWUNaaYAA/6+MH+GB2cEW7BkBN6NnJsz4RvY4R8b5UOc8WYApsgRk/rCIntLU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxD2L6UPJrbPUihvmF5YeLxBh3Re7ZzXGfL8QTJbNzYWxJUWSZr
-	t0oqXicJk11xEsdCDoQ81meMODW3HXKIHzwF2XOzKmkOAqZYbsIV1ePP
-X-Gm-Gg: ASbGncuDiAVkBoF9oAhgrUnVeYQ0CUgPQTI0EWm1cT6HwcQHFEjK76ir1BQZxeTSxAD
-	aEuEhkulWF/Ji98CN5qsbZluMygbvqeh7rUp5Q461Tv1YTd7eSrKxQc3bnwmryQ7CasdkLFyKHw
-	gsT6ucCmap51sf+xmnHZKjSYK3v6UKWIvSuBmO4y9xyCWvjKCNDWbM2PGFfqYcMGYGBfyKOMW1E
-	QOzsfg8tlleiqZdoBROo8NPbc/Tu1rfr9GDjroi1ZKcB/cEnx80RpDO5FvBzOcxl0WVN0rJk4yv
-	+jJoocmbOVmsxh3YT8R1lvM4yCqja8L7UPHgn5Fq1bpGYPncRx2RQTUy2It8TioDzfrJjOW2IjR
-	Mc5CDER2scEEA+I0uEL94CQzIsL12SJCGe8yYyA7WOFZIvr9C/Z9LJzGl94B7voTccZfgPgH6YZ
-	o3RsdOJwdS8UOCJONpRDJ1gHJ9rco3Ki5zUzxFTzhIM+qB7O3jacxol25uW0fzYoQ/zCoVAngA5
-	Zhw7zopoubjkrdnT+M60BIIVkm3MJ1sep5TPY9BYupk4j3vA3PTfAHNJA==
-X-Google-Smtp-Source: AGHT+IGO0QrCd54Wl9B5liFX1HiSQC6tv9OYtUHS1BvuOAQRQdtSamONXdsxZaJpelkWSRGSbiFnog==
-X-Received: by 2002:a05:6a20:939d:b0:342:9cb7:64a3 with SMTP id adf61e73a8af0-36150ef868fmr43973180637.34.1764689805255;
-        Tue, 02 Dec 2025 07:36:45 -0800 (PST)
-Received: from [192.168.1.133] (50.2.111.219.st.bbexcite.jp. [219.111.2.50])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15fb1486asm17290721b3a.61.2025.12.02.07.36.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Dec 2025 07:36:44 -0800 (PST)
-Message-ID: <939d12e3-550d-44b7-8968-b09755b61bab@gmail.com>
-Date: Tue, 2 Dec 2025 15:36:39 +0000
+        d=1e100.net; s=20230601; t=1764690747; x=1765295547;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=feKc1u+4lQENkn8pYvf0cy6PA0Ii+7sQgsN0RQiueGQ=;
+        b=ghhd0CWvqW6GhV00n6/qmtIHadGsBxjwW70tRPfPUIXr2bVgqmdE2/ALUBfflK0AOu
+         5iwS0gQwkhnzDjnZeQFiQdQm5J2TRnK+pMo7aarrbd5vReGpsqd7H+EQ0qa00pbuNeYQ
+         x+nueuyArF3Jvb+6kLHZsgDnIGeOcOmhw4HZNdtlJGXhW94DhQ7XDGVLsPrM8AKTf09R
+         5aqFnpjmM3stA7gMUmGG60HNPmbR7Zcj0HKru9Sq1w4y2dcLINI8hgc6kjdGltbgdwqa
+         guJ28ZHj/V3JhE90r0oZftqlb8qRioIlbGyfVNAW2SwuVCpHUQ2h3GN63rMW7+o3+raF
+         RX2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXRU9I3wpqsAawguRwI/UYLq4dfQg+eACom3jjdLvrNRJdvZY8r/9gv9n98zFIhIXJMU2anbANvnkr2qBiYek4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDlf9TduyIMT5R0Em03V1GcYB+I90actvKGSV9QH5PXB3lIQw5
+	OU2oU7FmQcIuopoNB8iyeb2B0S3maqpMgl4kpMcWP7ZmarBE/xrYXNBPnNeNE+XwhIoQSBwPOe2
+	z1PbXuVF2E86CtX2tH2w+amqQUZr8x1U=
+X-Gm-Gg: ASbGncu+so5T5f9Qn2zWxQohNPU35lg4GeryK7LO+3YMy64NeBJ0WLux9QsCj2mHKa1
+	ap8xbSP5pIneWuXcP0HjUO38mTXvHya87jSghSjCsFG/3HLYalZUCcxVZijKBGslLxB99pbUBMN
+	ANAe2Q/Pi0wjeMS92Yh+ALlMa8925RIJZ8WVr236jweUDyLulroFGkcEObeTmCga6YcIB5XbsEI
+	TZjmbz+2pNOEXzHiprp0r6tF8ZbdpK1kN/GqJaHcFUgY4DpnV4ikD3zULxOjx+HrA+uku8u
+X-Google-Smtp-Source: AGHT+IHp6tZtEWeFByJZk/vtVUTBda0yahAChbF25/FmOCHgyPwNW8b96ReF11OQ0plce80g1whgm2I9wT8MTG/sn5o=
+X-Received: by 2002:a05:6830:440d:b0:7b2:aba7:f4e with SMTP id
+ 46e09a7af769-7c798be2dbfmr26198349a34.10.1764690746975; Tue, 02 Dec 2025
+ 07:52:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 0/9] Add support for providers with large rx
- buffer
-To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, Shuah Khan
- <shuah@kernel.org>, Mina Almasry <almasrymina@google.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Yue Haibing <yuehaibing@huawei.com>,
- David Wei <dw@davidwei.uk>, Haiyue Wang <haiyuewa@163.com>,
- Jens Axboe <axboe@kernel.dk>, Joe Damato <jdamato@fastly.com>,
- Simon Horman <horms@kernel.org>, Vishwanath Seshagiri <vishs@fb.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- io-uring@vger.kernel.org, dtatulea@nvidia.com
-References: <cover.1764542851.git.asml.silence@gmail.com>
- <743e8c49-8683-46b7-8a8f-38b5ec36906a@redhat.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <743e8c49-8683-46b7-8a8f-38b5ec36906a@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20251129091455.757724-1-b.sachdev1904@gmail.com> <20251129091455.757724-3-b.sachdev1904@gmail.com>
+In-Reply-To: <20251129091455.757724-3-b.sachdev1904@gmail.com>
+From: Andrei Vagin <avagin@gmail.com>
+Date: Tue, 2 Dec 2025 07:52:15 -0800
+X-Gm-Features: AWmQ_blWeFxHHcTZhTAqG8S6zqfjoT09D7pKTYe9CdzPUdirY1xoFo3obwNHy2I
+Message-ID: <CANaxB-zRh1=Azkx3fO4tmUAwzjQVE=-0=PeTN9aM1MxK1UzM+Q@mail.gmail.com>
+Subject: Re: [PATCH v7 2/3] statmount: accept fd as a parameter
+To: Bhavik Sachdev <b.sachdev1904@gmail.com>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	criu@lists.linux.dev, Jan Kara <jack@suse.cz>, Jeff Layton <jlayton@kernel.org>, 
+	Aleksa Sarai <cyphar@cyphar.com>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Pavel Tikhomirov <ptikhomirov@virtuozzo.com>, Alexander Mikhalitsyn <alexander@mihalicyn.com>, 
+	John Hubbard <jhubbard@nvidia.com>, Amir Goldstein <amir73il@gmail.com>, 
+	"Martin K . Petersen" <martin.petersen@oracle.com>, Andrew Donnellan <ajd@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 12/2/25 14:44, Paolo Abeni wrote:
-> On 12/1/25 12:35 AM, Pavel Begunkov wrote:
->> Note: it's net/ only bits and doesn't include changes, which shoulf be
->> merged separately and are posted separately. The full branch for
->> convenience is at [1], and the patch is here:
->>
->> https://lore.kernel.org/io-uring/7486ab32e99be1f614b3ef8d0e9bc77015b173f7.1764265323.git.asml.silence@gmail.com
->>
->> Many modern NICs support configurable receive buffer lengths, and zcrx and
->> memory providers can use buffers larger than 4K/PAGE_SIZE on x86 to improve
->> performance. When paired with hw-gro larger rx buffer sizes can drastically
->> reduce the number of buffers traversing the stack and save a lot of processing
->> time. It also allows to give to users larger contiguous chunks of data. The
->> idea was first floated around by Saeed during netdev conf 2024 and was
->> asked about by a few folks.
->>
->> Single stream benchmarks showed up to ~30% CPU util improvement.
->> E.g. comparison for 4K vs 32K buffers using a 200Gbit NIC:
->>
->> packets=23987040 (MB=2745098), rps=199559 (MB/s=22837)
->> CPU    %usr   %nice    %sys %iowait    %irq   %soft   %idle
->>    0    1.53    0.00   27.78    2.72    1.31   66.45    0.22
->> packets=24078368 (MB=2755550), rps=200319 (MB/s=22924)
->> CPU    %usr   %nice    %sys %iowait    %irq   %soft   %idle
->>    0    0.69    0.00    8.26   31.65    1.83   57.00    0.57
->>
->> This series adds net infrastructure for memory providers configuring
->> the size and implements it for bnxt. It's an opt-in feature for drivers,
->> they should advertise support for the parameter in the qops and must check
->> if the hardware supports the given size. It's limited to memory providers
->> as it drastically simplifies implementation. It doesn't affect the fast
->> path zcrx uAPI, and the sizes is defined in zcrx terms, which allows it
->> to be flexible and adjusted in the future, see Patch 8 for details.
->>
->> A liburing example can be found at [2]
->>
->> full branch:
->> [1] https://github.com/isilence/linux.git zcrx/large-buffers-v7
->> Liburing example:
->> [2] https://github.com/isilence/liburing.git zcrx/rx-buf-len
-> 
-> Dump question, hoping someone could answer in a very short time...
-> 
-> Differently from previous revisions, this is not a PR, just a plain
-> patch series - that in turn may cause duplicate commits when applied on
-> different trees.
-> 
-> Is the above intentional? why?
+On Sat, Nov 29, 2025 at 1:15=E2=80=AFAM Bhavik Sachdev <b.sachdev1904@gmail=
+.com> wrote:
+>
+> Extend `struct mnt_id_req` to take in a fd and introduce STATMOUNT_BY_FD
+> flag. When a valid fd is provided and STATMOUNT_BY_FD is set, statmount
+> will return mountinfo about the mount the fd is on.
+>
+> This even works for "unmounted" mounts (mounts that have been umounted
+> using umount2(mnt, MNT_DETACH)), if you have access to a file descriptor
+> on that mount. These "umounted" mounts will have no mountpoint and no
+> valid mount namespace. Hence, we unset the STATMOUNT_MNT_POINT and
+> STATMOUNT_MNT_NS_ID in statmount.mask for "unmounted" mounts.
+>
+> In case of STATMOUNT_BY_FD, given that we already have access to an fd
+> on the mount, accessing mount information without a capability check
+> seems fine because of the following reasons:
+>
+> - All fs related information is available via fstatfs() without any
+>   capability check.
+> - Mount information is also available via /proc/pid/mountinfo (without
+>   any capability check).
+> - Given that we have access to a fd on the mount which tells us that we
+>   had access to the mount at some point (or someone that had access gave
+>   us the fd). So, we should be able to access mount info.
+>
 
-It was based on linus-rc* before and getting merged nice and clean,
-now there is a small conflict. In my view, it should either be a
-separate pull to Linus that depends on the net+io_uring trees if
-Jens would be willing to orchestrate that, or I'll just merge the
-leftover io_uring patch for-6.20. In either case, this set shouldn't
-get applied to any other tree directly.
+Acked-by: Andrei Vagin <avagin@gmail.com>
 
--- 
-Pavel Begunkov
+> Co-developed-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> Signed-off-by: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+> Signed-off-by: Bhavik Sachdev <b.sachdev1904@gmail.com>
+> ---
+>  fs/namespace.c             | 102 ++++++++++++++++++++++++-------------
+>  include/uapi/linux/mount.h |  10 +++-
+>  2 files changed, 76 insertions(+), 36 deletions(-)
+>
+> diff --git a/fs/namespace.c b/fs/namespace.c
+> index ee36d67f1ac2..73ffa1fbdad7 100644
+> --- a/fs/namespace.c
+> +++ b/fs/namespace.c
+> @@ -5563,31 +5563,49 @@ static int grab_requested_root(struct mnt_namespa=
+ce *ns, struct path *root)
+>
+>  /* locks: namespace_shared */
+>  static int do_statmount(struct kstatmount *s, u64 mnt_id, u64 mnt_ns_id,
+> -                       struct mnt_namespace *ns)
+> +                        struct file *mnt_file, struct mnt_namespace *ns)
 
+no spaces at the start of a line, code indent should use tabs.
+
+./scripts/checkpatch.pl can help to avoid this sort of typos.
+
+Thanks,
+Andrei
 
