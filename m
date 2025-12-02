@@ -1,159 +1,106 @@
-Return-Path: <linux-kselftest+bounces-46862-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46863-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 797D8C9990F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 00:17:04 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39676C99A81
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 01:36:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F02A4341C29
-	for <lists+linux-kselftest@lfdr.de>; Mon,  1 Dec 2025 23:17:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D73473457C4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 00:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED002522B6;
-	Mon,  1 Dec 2025 23:17:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D076E13C3F2;
+	Tue,  2 Dec 2025 00:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BS2SK2Zm";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VZwcL92z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q25IqU2k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDCFA23D2B1
-	for <linux-kselftest@vger.kernel.org>; Mon,  1 Dec 2025 23:16:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03DD22097;
+	Tue,  2 Dec 2025 00:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764631020; cv=none; b=pSaXVrXhIeoKLukEOh1c4bHoEXUFyeeDEwG9fJ5M6RcJc39MePFq5Y+4qWSi11IpaD7vP3NDL5DrDuyJ+q5Ifu4ttieRIA4J2RjnzRHcJWy7z1U6cqVkU6Fq2lG/98pOgWyzCQSTUEGs2pHtXhlsPBjjYzyWi7SN9hmP5BIyGnE=
+	t=1764635784; cv=none; b=pvwxzjlVnRlDMd0XBI9luypJnFbfkW5lRLb5iH85b1x9eT+XRGhRvy9WwK3faed/N4d+cAXx7k/I/ATilQSwkwpSGziexUOZbtBUgCF0qhpBMDn2tWMTBDvojYB9bg3KrUYQ8eOs0fHu9tCEZcgqzCJIMXI4HBa87Sy54EfFFZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764631020; c=relaxed/simple;
-	bh=+lp93F6g8ek3RZ5nct/4V2jvnmStEmVEqjnyd/VFMow=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=mvwUzZh0wYLkJDuLw7fSqiFlJT+SwHxj7XuQRH7jjl378qUheEZFSvtYvKCQe4B4V8xNDdBjqLa302xKFZWMPaB0hjQgsl6X8cZKG5aBcI/ULmeHFDXrsSP/mg0RMfsly1G2HIzr0gC8uaF87orA3GZaV2TFOVy+0VxPZ+51+B4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BS2SK2Zm; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VZwcL92z; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764631017;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=w2JiQvYh5sm4dF/Ad/H8RwiLEUsI3vXlerU2PyyWqTY=;
-	b=BS2SK2Zmb+G3uujdvGWMWHbnAZS0v8sxVIoChIYxDlKO/zdoSxOsaLwj26QvaYJCJalQst
-	8+ZmDzqDyTtd2sGu69ejJrH4xBKLlY5REkF2FEkl2HV9DHgBE9Rcid/9nwjXaMi4XxnKTo
-	UmzMXTV8/DE3LpcaoSHlgQqxBPFvtqU=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-315-1uZbk_64OTWLqOvAO87-DA-1; Mon, 01 Dec 2025 18:16:56 -0500
-X-MC-Unique: 1uZbk_64OTWLqOvAO87-DA-1
-X-Mimecast-MFC-AGG-ID: 1uZbk_64OTWLqOvAO87-DA_1764631016
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-297fbfb4e53so71728875ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Dec 2025 15:16:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1764631015; x=1765235815; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=w2JiQvYh5sm4dF/Ad/H8RwiLEUsI3vXlerU2PyyWqTY=;
-        b=VZwcL92z3sOcue09UMYWLcX4Z3qNkN5LE+Grl9bzeKH8QFQaKIvv9YHOO4xweLl1qr
-         z5UWaB97oRgeROK8S8WDgwxQk0g2sc1DaueiFSeLG7s2ie47YuenJeVcc7ygNY3pgjk0
-         PV1P/NQLcMhGRi36ePkICvYf+I4rSSIKdzm+H7CTZ7DLM/YYCfH1rQvUZ/7HWmDNujb+
-         o7OIXcrmXtlO9VmCTiPG8ABSzz5x4TLqg2Dp+AQE400WWHDvoQ9VDcb4R2K91vQe7P2/
-         rahnoT/SoIl0Yc/3D3udum2pQxhexoB94p2mvrYKBek5GsPjLLW6k0G/teRuo01nx1eI
-         nf8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764631015; x=1765235815;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w2JiQvYh5sm4dF/Ad/H8RwiLEUsI3vXlerU2PyyWqTY=;
-        b=bKAyKVAmdc9Mz8xcjDquiwEqEMh13vXLLU2K+tvE0X05HQW3B5tagX1wb6CEFw/vXQ
-         SVpedunFWfotz0DF7jy+pasZOkv6+UqwP9OLwB0yGJ6RsJqCUx0OzZcbPovCEAno7MYd
-         /AlRzxmLrVwnVHWx5sO8VnNbBwLPccPja6m/IJn3yii0D1WSzB2Ki+EsnOLS4oS0tw2/
-         KQuIVVjiZF2NVnLgahQIVPexzoEUOU/u26lCOAPqTcyKDvSDReSAed+kR4nTylG88EGs
-         M9Xow2PzP9zX6jZqwl89M95VcASgs8llMEBkAaL27/fVZWb9QG0BUxvjJisfbtclVqqX
-         VGtw==
-X-Forwarded-Encrypted: i=1; AJvYcCWxXFhKliiIv6KtSlPewZRGsXID+OxgQbFQ7e3mEwSWVEaSSdmLX7V0wCnJagNtUyDvf2z29nTRofbfJ0xIPw4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ54K0NbGyI04B6TiEB5iDWqOYcc7NmsfyW9I0QKvJxTuzFIdj
-	jM4p2fA4AjrZkxE3XJL+3US3nUZ5/n3VTpc9yhPyHaLd5JeSAGjeJU3/ptw79NSagldWHQRFOHW
-	1xx0EYe9l04YrQ40nDO2vEcBPKvQ0zbIliT9jpTE5rSMimDav9OYwhNXWBD+I3F/Bo+Unug==
-X-Gm-Gg: ASbGnctyo1XUlPsEKGo4brRrq5LOEZ6Fo821l/eV5heKtJKTQbpPMwi02Rj/smdYFoq
-	rMNs5Sb6QBG2S7Yn+lt9d8+or4m7Z8haVFGTp0yhhhU3DsvouhxW3wbfk42nnL7+q7UPIMbTy2O
-	DBDZy/69OaR5RfYgbP+SUxccoT+QUCitqU0RUF0NugHTplMHAyy3EyGY19X5PODvrhcCpcUuxCN
-	BC+EIasomoHTqBdnv2xnIyM2mZ/ATR6r7JiXBk4a452p0sFwD+RqnEnRcurNU5GRAhW90Y1GPc7
-	HvwSsRX0sb4lsRm97ynxZIuWQop+dFKFUl9mnAfR1iPlg9m04/22gg1EBVRcyvyFhWLgzdOAI4R
-	014X0uYUfy5NB5pupVclcPHrm2KKZ0HZrVOcOi8HKb3Guae5rGw==
-X-Received: by 2002:a17:902:fc4f:b0:29b:ab3c:83a3 with SMTP id d9443c01a7336-29bab3c8498mr289489415ad.5.1764631015610;
-        Mon, 01 Dec 2025 15:16:55 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHFyevsaXlVkZQPgAl9fthr313SLT72+cWZt8TDFYWvlLYtQ2urgXFCv6ronYdUQmllLwTzXA==
-X-Received: by 2002:a17:902:fc4f:b0:29b:ab3c:83a3 with SMTP id d9443c01a7336-29bab3c8498mr289489255ad.5.1764631015302;
-        Mon, 01 Dec 2025 15:16:55 -0800 (PST)
-Received: from [192.168.68.51] (n175-34-62-5.mrk21.qld.optusnet.com.au. [175.34.62.5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bceb27504sm134068245ad.61.2025.12.01.15.16.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Dec 2025 15:16:54 -0800 (PST)
-Message-ID: <1c1860a0-91b0-40fc-acd0-97f04e6b3851@redhat.com>
-Date: Tue, 2 Dec 2025 09:16:49 +1000
+	s=arc-20240116; t=1764635784; c=relaxed/simple;
+	bh=rNqSKIEZABAD5RykiDYsun+nHDAK0efshJ2S5T5lf1s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=A7q6KWF5K0vDSRh+yIxHCd4gkzVRm18aRuCNSVHCCXxOiqQpQAqQ+H9J7tdSRn6worK1w2+wC4Re7uHN5XFmL6kqeVo8jeJxirflREs1mLNOfHq5XkHrjAqDp8O/XP/KtZVoan7m6lSiV8xzxVMyuZwBBC7kdhwfKpYy1mwlFXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q25IqU2k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 725A4C116C6;
+	Tue,  2 Dec 2025 00:36:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764635784;
+	bh=rNqSKIEZABAD5RykiDYsun+nHDAK0efshJ2S5T5lf1s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Q25IqU2kwF1u+ntUzsmQ79EXXO6KQvcCgtyqX2BiNMFbpMORcMvwBRUN45jSmM5T0
+	 7UIjWINuTpUond5Mfe58Fo714YxvBrcPcsSVN6RyMrzYl4gbYg7gZgXA+oh3fM36JG
+	 GGojawkFetKeSnb1c3M3p10S6WTiElkRco582NTRvnyP8DuQ4gKaX022XIsYwT1vCg
+	 zzf4nffOERMuZnuhiayvn3dfDGpZcr+kPF2DJjQWFBJQm2X2KsFwHaEFDLkbTqY75R
+	 u5krqRsacwmnpbGjlNIBY4ysMszUohssA3x7whUYsTRZjMY0AnJ1EQ3j1i0lmoL2Fe
+	 jPpslayzGfQwQ==
+Date: Mon, 1 Dec 2025 16:36:22 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman
+ <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ gustavold@gmail.com, asantostc@gmail.com, calvin@wbinvd.org,
+ kernel-team@meta.com, Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH net-next 0/4] (no cover subject)
+Message-ID: <20251201163622.4e50bf53@kernel.org>
+In-Reply-To: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
+References: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] KVM: selftests: Fix core dump in rseq_test
-From: Gavin Shan <gshan@redhat.com>
-To: kvmarm@lists.linux.dev, Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
- seanjc@google.com, shan.gavin@gmail.com
-References: <20251124050427.1924591-1-gshan@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20251124050427.1924591-1-gshan@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Hi Sean,
-
-On 11/24/25 3:04 PM, Gavin Shan wrote:
-> In commit 0297cdc12a87 ("KVM: selftests: Add option to rseq test to
-> override /dev/cpu_dma_latency"), a 'break' is missed before the option
-> 'l' in the argument parsing loop, which leads to an unexpected core
-> dump in atoi_paranoid(). It tries to get the latency from non-existent
-> argument.
+On Fri, 28 Nov 2025 06:20:45 -0800 Breno Leitao wrote:
+> This patch series introduces a new configfs attribute that enables sending
+> messages directly through netconsole without going through the kernel's logging
+> infrastructure.
 > 
->    host$ ./rseq_test -u
->    Random seed: 0x6b8b4567
->    Segmentation fault (core dumped)
+> This feature allows users to send custom messages, alerts, or status updates
+> directly to netconsole receivers by writing to
+> /sys/kernel/config/netconsole/<target>/send_msg, without poluting kernel
+> buffers, and sending msgs to the serial, which could be slow.
 > 
-> Add a 'break' before the option 'l' in the argument parsing loop to avoid
-> the unexpected core dump.
+> At Meta this is currently used in two cases right now (through printk by
+> now):
 > 
-> Fixes: 0297cdc12a87 ("KVM: selftests: Add option to rseq test to override /dev/cpu_dma_latency")
-> Cc: stable@vger.kernel.org # v6.15+
-> Signed-off-by: Gavin Shan <gshan@redhat.com>
-> ---
->   tools/testing/selftests/kvm/rseq_test.c | 1 +
->   1 file changed, 1 insertion(+)
+>   a) When a new workload enters or leave the machine.
+>   b) From time to time, as a "ping" to make sure the netconsole/machine
+>   is alive.
 > 
+> The implementation reuses the existing message transmission functions
+> (send_msg_udp() and send_ext_msg_udp()) to handle both basic and extended
+> message formats.
+> 
+> Regarding code organization, this version uses forward declarations for
+> send_msg_udp() and send_ext_msg_udp() functions rather than relocating them
+> within the file. While forward declarations do add a small amount of
+> redundancy, they avoid the larger churn that would result from moving entire
+> function definitions.
 
-Could you help to take a look when getting a chance? :)
-
-Thanks,
-Gavin
-
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index 1375fca80bcdb..f80ad6b47d16b 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -215,6 +215,7 @@ int main(int argc, char *argv[])
->   		switch (opt) {
->   		case 'u':
->   			skip_sanity_check = true;
-> +			break;
->   		case 'l':
->   			latency = atoi_paranoid(optarg);
->   			break;
-
+The two questions we need to address here are :
+ - why is the message important in the off-host message stream but not
+   important in local dmesg stream. You mention "serial, which could be
+   slow" - we need more details here.
+ - why do we need the kernel API, netcons is just a UDP message, which
+   is easy enough to send from user space. A little bit more detail
+   about the advantages would be good to have.
+The 2nd point is trivial, the first one is what really gives me pause.
+Why do we not care about the logs on host? If the serial is very slow
+presumably it impacts a lot of things, certainly boot speed, so...
+perhaps it should be configured to only log messages at a high level?
 
