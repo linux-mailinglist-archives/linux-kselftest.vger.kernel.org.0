@@ -1,170 +1,159 @@
-Return-Path: <linux-kselftest+bounces-46899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFF86C9C832
-	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 19:01:34 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E033C9C8BF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 19:10:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F0D403497B6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 18:01:32 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B93CD345528
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 18:10:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 054632D238D;
-	Tue,  2 Dec 2025 17:56:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77CAC2C11E3;
+	Tue,  2 Dec 2025 18:10:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XRwRv8Kl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qed2Yl5h"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFB312C3749
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 17:56:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A18A12C0323
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 18:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764698167; cv=none; b=WBrt0YPpgienaxZF2hfMuydWmd+wkxhuuHAWN1pTJLuhzHjyDjolH1DsaiVBpUGrxHvhvKU8Rv1HjfWwb069dRxWlpyhXwYMwWJxAxSnYZmXowu/+hIus36cZret4qLV3IHSrvKD3A7kOBbEiOmfrxVrHLdqWs44ZTGP2XZIqAM=
+	t=1764699043; cv=none; b=Y7D6kV/5BLQtXWTebNmZLZ5S6P6Aopc3tCJ0iCi8Wg2+riAyTT6XkrKP0sDx6fww/6lQOsLR2lY14JJszSW/8ECy5/qvXPS6xd/Vnn+O5xFBDS8/sT1sT4WTZapOvzQj5g+Cw/3QeXeog8wtvnQdDImR1bPFncrLIi/HRai4AMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764698167; c=relaxed/simple;
-	bh=NNJZa3lYs1HsOUBIuFpcTtIqAcyjGiny7NhOTTEAIgw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mfC/EWdQ9VyerAoe3+h3qoK/N046ByEIsFfTduC9V5NH+xeaS8k5neVAsjh4CzdiC5s+6R0Kf7xZC3LqxW5OsldQHQAUCCMPAb27lTUlClZPAlflTc1xerDjJqAH37+7M9tdjbkEbj2cQnbTi/Xql82TI7RrxQO9wHbMyvuefH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XRwRv8Kl; arc=none smtp.client-ip=74.125.224.46
+	s=arc-20240116; t=1764699043; c=relaxed/simple;
+	bh=VxZLTvVizJzJap1+YiPVMWVXJUFU88RsVJRpSIPd9UM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d7TyVB1nsdjDrBaiHIQ8KJ7mvRpZiVEzt5tmMX8hPVKaBFIGmnokqLccerggpYrEZuCoYSmJQLYQ2alTVwJXOGIJsRwTQPqG0LLcxA8A8Xg+en1FlxA06z0EhhAwiML5CPttptmESkjSZndl/b/PNzgXEBjXrVMnEFA7OBDhfdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qed2Yl5h; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-63fc8c337f2so5593796d50.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 09:56:05 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4779ce2a624so59625885e9.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 10:10:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764698165; x=1765302965; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b7vZxiysLlSxuLZX46Kvfy9pEAECDucG1jVAjFchGcE=;
-        b=XRwRv8KlmaJlBPlhqUFkbjskUF5WrV8FeOEy1IxpCGffkFi/pklXwjpG42fh0KIXqC
-         vUspX7/shG/IQ0WVnGi9kBGqcJyyDdtW/GJRr2D0GzlwFJsWr0mlwPZdAohokAFY9odZ
-         1dG3q4K2goovUfzhKRBfmze3TLBVDn8Pr02jQJ9tJgqO/ypvbOOzM5kZypfuBUnjsnP5
-         KpG/kkus9RoUiYe+Uiu2YdhgVhJbsVmCby4tQ6ZL0W85P5HerTpq0YtRyW039ncxzeo3
-         p5BXQUO7CufalHChUP6xQSWKVM3J6A6T36VjdM2MUsIQxGb8aHJ3tSjbBrkjxiVAS5fD
-         am+w==
+        d=gmail.com; s=20230601; t=1764699040; x=1765303840; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9zQ9S8GjJihhSkjyJGVqGv5zPPyHBC1OeTo6aMqxHdk=;
+        b=Qed2Yl5hhdCAHM9EuJm3ZBQ5hpwZePTI4JcIz0drdZzt9CPPxkJWhUIeox7FWA8y5o
+         LKt8Vl8iSrYxdRj5W3FPOSp5NK7Z6gRO0LIthcW5w2g+Huu/sejGbeBTRlpTDAiZsI8m
+         AYWafeJUcYWOugWY6eXSTVj3//fcSTPjCMY5z+GjEcAt0Kmr+5Kc5T60a7wGVV//Kgf0
+         AvwLWTjhMdvXALT4EHG47kfMTC7WFK3iPcd1ubw6uI/tRkCn3Ux17ZpzIgQDVz0T2UMI
+         AWH038ti0hjdQucLQYo2WxCPTim1yjGKuVmOTRgJysY2KjdyqZaZBkWU+USc9Ml1lwei
+         1AyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764698165; x=1765302965;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b7vZxiysLlSxuLZX46Kvfy9pEAECDucG1jVAjFchGcE=;
-        b=pgG+jvHO5z3/JFVp+PDeKgtndb6TMPR5m0n29QlDbaoxGf7Xf0pzQPZplNClXEorWO
-         FYgKSR6OXMyaA+cJFsPAk0b//CCNs4//uhgGyIcLz5Q1YiKXxFItFp9Cbk1lY0BCN+LZ
-         OMugTkILyv9LQPJR5RCNkJS3X5/+SMOQC9zWLLRnEkwfQBaRXGEl3LDHzL8wBbte4Rf0
-         061yZAK2Ak181L4KplLkaIa6H1TwraI7GI1y7U/2inFHKORL4XNhZ1YYjEwl2ibGK+Cr
-         z659sqzPd3yxlkOO8+CCjWdqCHWVrdUx/aTd51JBP3EBrSSCp1J9RihBYWzTuvj5gZ0Q
-         yo0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVMqCDg8RPvxcusioLRfpCNl/aptnCb/s76lz6md/Ju0ganTqDU3rabITwCL0+SWkKFq212XlF1pLKyRGDC4cE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDtTEQfHPjbun8J9Kr/tkP/IOBdEc1A8kVoF9kAN621e99jiOc
-	u3u9O+CkorlqGg1SkjOeSBKC+3uOBguSfH/9FMMvQVHSN8AtYGUTu1gJ
-X-Gm-Gg: ASbGncuGHSN8IPPLzMrmFsMLJj2vGwG4ZbmHUAUaMiez/VX1fUQ9ulx2IU7AW1Yvw6Q
-	asd1nLFB1rUomTflDXnyqZh2RcpeADEnjFE3yJpQ75uX4bIbIe9BbSAC3LrXegLlEnJyq2Qob9V
-	CWRVRjGPwlIWMbZRtSxpg423mIiqmnMQpe2ZUMZ2xWCuN3ksTY8ZRZnRjAjXv2kEima1uOSNDsk
-	fnj6GcAUAo3WEhNg2UjAs/YMNTWkrKomk6WV4eHXRw+Ub2KLEGbz8lNwHrlcnQAiI63PQXoHV1V
-	cq9TYzjgch4uvdQPzn8BofPX4QRdAdl5hJaRbt5M1i/3ygrkDaF+kSieuDrTE7J9hs591NLF5Oo
-	Qk32/JJi7IA9ZtoVLjyg55yuAxJ3JDBMfXQRSeHZFoDhd58c0ayO7fuKGd/B2AifoNrOVVFzY5F
-	gwwlmWR8WpZV3nMT4oZ7/xlrtw25wmEgy9SMg3OIEUOmnzN3s=
-X-Google-Smtp-Source: AGHT+IEnSlAlHDUf120qJOiOHTcx8J+isqzg/5s1dw3tbZ5v6cDlgU/zp4/SXX2g9a81U9jTgGEZ/A==
-X-Received: by 2002:a05:690c:3601:b0:78a:6a6b:cced with SMTP id 00721157ae682-78ab6fb335fmr452183477b3.64.1764698164723;
-        Tue, 02 Dec 2025 09:56:04 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:41::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad0d3f5a1sm65198027b3.12.2025.12.02.09.56.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Dec 2025 09:56:04 -0800 (PST)
-Date: Tue, 2 Dec 2025 09:56:02 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, berrange@redhat.com,
-	Sargun Dhillon <sargun@sargun.me>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v12 04/12] vsock: add netns support to virtio
- transports
-Message-ID: <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
-References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
- <20251126-vsock-vmtest-v12-4-257ee21cd5de@meta.com>
- <6cef5a68-375a-4bb6-84f8-fccc00cf7162@redhat.com>
+        d=1e100.net; s=20230601; t=1764699040; x=1765303840;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9zQ9S8GjJihhSkjyJGVqGv5zPPyHBC1OeTo6aMqxHdk=;
+        b=IZOmqV6wLCMZ0kG8KBvyb1ATmQFQnbuxD8jryY5rIQSoYA6gOVk+6U11oz3F5mtVEl
+         FLIrBasMtPLAJHBaZku+AGXTzWZ2XxXuBNrkmI1bFSXv/SecO4IDwVm6X52FmfoJU60E
+         1kLyba8htqikvc0XSVJdhaZCnWAaFnqW+OqcL0YKIecXNn2pBwG1uAx+X11LgBTzpHxC
+         xzJWtq79qU9zLeRuw/L4RMkWsbi4VW/s4dSAQpjHWM48uXKDTLBeGCr/mGZaEb+uzUmF
+         G0bMByeaKu4clUubK0g3VL7x83NNj5ttWPTV281D4SFVaolP96PCUvn5BzDtI8jnOFjj
+         whrQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUEHTPAMkFCp69zn+h+7guR9y0qG0swgF1a7cF38Dsxal7JJfEdPtTvNK/KZfq5h6oYcXHizf1GbxT4rj3uzVI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPJ2619dNT9VmIis5w64ajPeaR5SUKkL8hRJZMYI5FGM6nnGK1
+	5/NkZHQxxEJSg16Ob8eDWCdcsDCdtCT1Z9xTirkCBcRAsIZVUsn0b6gsaFiXDKAt1KLebVrIrEP
+	XCxgvbZq8TSRyR1O/Z5gHhgapheb0Ksw=
+X-Gm-Gg: ASbGncu7fxdF6jWWfYpudkLki+AlkJptZD3Eb6+BVU398YvanF9SmQQdiKP6WZQyXF5
+	cXv5tQkxHdhR4xYDkg9YFXT2pY6SzQpD1SuNxtejoat0A+Egbn+B6IwjiB3+iLmspDYrKx8aOu7
+	pdo0HyYROvpzl/kCZKfqmUKZ0JlURxxcLMH6KlEedbDXUeIJ2u5PpU7nNnQxK+m+75b/YZmiFV/
+	c4uqbdCqhwuYrSbcxPX/rWrFHhvq4vcRhrfunFLFnBSc52rNmJhsHMTvTaFdSGfzhApNgyYtEQj
+	k28baxH1HOk+r1t5Q034F1DwBBG5
+X-Google-Smtp-Source: AGHT+IGmDtLnJKQFaF8xzPjXK2P568G6lE89uAl5uGpADSt7HpTFHnRZBJn5SJKWegqVu0Veh5Q2gsTPy35UnnzwJl8=
+X-Received: by 2002:a05:6000:2508:b0:42b:32f5:ad18 with SMTP id
+ ffacd0b85a97d-42e0f1d59bamr31271636f8f.9.1764699039852; Tue, 02 Dec 2025
+ 10:10:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6cef5a68-375a-4bb6-84f8-fccc00cf7162@redhat.com>
+References: <20251202153032.10118-1-leon.hwang@linux.dev> <20251202153032.10118-2-leon.hwang@linux.dev>
+In-Reply-To: <20251202153032.10118-2-leon.hwang@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 2 Dec 2025 10:10:28 -0800
+X-Gm-Features: AWmQ_bmp0KkYlQV48oluSytqF-nJ2NcrUFwqTfZotzXIVOWFqiw0XL5HFHmpBg4
+Message-ID: <CAADnVQKrxz6Fa-rT6466U_HjE4TDDrJ9kdU_h28=Av+L92NBgA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/3] bpf: Avoid unintended eviction when updating
+ lru_hash maps
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Saket Kumar Bhaskar <skb99@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 02, 2025 at 11:18:14AM +0100, Paolo Abeni wrote:
-> On 11/27/25 8:47 AM, Bobby Eshleman wrote:
-> > @@ -674,6 +689,17 @@ static int vhost_vsock_dev_open(struct inode *inode, struct file *file)
-> >  		goto out;
-> >  	}
-> >  
-> > +	net = current->nsproxy->net_ns;
-> > +	vsock->net = get_net_track(net, &vsock->ns_tracker, GFP_KERNEL);
-> > +
-> > +	/* Store the mode of the namespace at the time of creation. If this
-> > +	 * namespace later changes from "global" to "local", we want this vsock
-> > +	 * to continue operating normally and not suddenly break. For that
-> > +	 * reason, we save the mode here and later use it when performing
-> > +	 * socket lookups with vsock_net_check_mode() (see vhost_vsock_get()).
-> > +	 */
-> > +	vsock->net_mode = vsock_net_mode(net);
-> 
-> I'm sorry for the very late feedback. I think that at very least the
-> user-space needs a way to query if the given transport is in local or
-> global mode, as AFAICS there is no way to tell that when socket creation
-> races with mode change.
+On Tue, Dec 2, 2025 at 7:31=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
+ote:
+>
+> When updating an existing element in lru_hash maps, the current
+> implementation always calls prealloc_lru_pop() to get a new node before
+> checking if the key already exists. If the map is full, this triggers
+> LRU eviction and removes an existing element, even though the update
+> operation only needs to modify the value of an existing key in-place.
+>
+> This is problematic because:
+> 1. Users may unexpectedly lose entries when doing simple value updates
+> 2. The eviction overhead is unnecessary for existing key updates
+>
+> Fix this by first checking if the key exists before allocating a new
+> node. If the key is found, update the value in-place, refresh the LRU
+> reference, and return immediately without triggering any eviction.
+>
+> Fixes: 29ba732acbee ("bpf: Add BPF_MAP_TYPE_LRU_HASH")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  kernel/bpf/hashtab.c | 21 +++++++++++++++++++++
+>  1 file changed, 21 insertions(+)
+>
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index c8a9b27f8663..fb624aa76573 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -1207,6 +1207,27 @@ static long htab_lru_map_update_elem(struct bpf_ma=
+p *map, void *key, void *value
+>         b =3D __select_bucket(htab, hash);
+>         head =3D &b->head;
+>
+> +       ret =3D htab_lock_bucket(b, &flags);
+> +       if (ret)
+> +               goto err_lock_bucket;
+> +
+> +       l_old =3D lookup_elem_raw(head, hash, key, key_size);
+> +
+> +       ret =3D check_flags(htab, l_old, map_flags);
+> +       if (ret)
+> +               goto err;
+> +
+> +       if (l_old) {
+> +               bpf_lru_node_set_ref(&l_old->lru_node);
+> +               copy_map_value(&htab->map, htab_elem_value(l_old, map->ke=
+y_size), value);
+> +               check_and_free_fields(htab, l_old);
+> +       }
 
-Are you thinking something along the lines of sockopt?
+We cannot do this. It breaks the atomicity of the update.
+We added htab_map_update_elem_in_place() for a very specific case.
+See
+https://lore.kernel.org/all/20250401062250.543403-1-houtao@huaweicloud.com/
+and discussion in v1,v2.
 
-> 
-> Also I'm a bit uneasy with the model implemented here, as 'local' socket
-> may cross netns boundaris and connect to 'local' socket in other netns
-> (if I read correctly patch 2/12). That in turns AFAICS break the netns
-> isolation.
+We cannot do in-place updates for other map types.
+It will break user expectations.
 
-Local mode sockets are unable to communicate with local mode (and global
-mode too) sockets that are in other namespaces. The key piece of code
-for that is vsock_net_check_mode(), where if either modes is local the
-namespaces must be the same.
-
-> 
-> Have you considered instead a slightly different model, where the
-> local/global model is set in stone at netns creation time - alike what
-> /proc/sys/net/ipv4/tcp_child_ehash_entries is doing[1] - and
-> inter-netns connectivity is explicitly granted by the admin (I guess
-> you will need new transport operations for that)?
-> 
-> /P
-> 
-> [1] tcp allows using per-netns established socket lookup tables - as
-> opposed to the default global lookup table (even if match always takes
-> in account the netns obviously). The mentioned sysctl specify such
-> configuration for the children namespaces, if any.
-> 
-
-I'll save this discussion if the above doesn't resolve your concerns.
-
-Best,
-Bobby
+pw-bot: cr
 
