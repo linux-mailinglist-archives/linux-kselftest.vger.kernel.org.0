@@ -1,129 +1,184 @@
-Return-Path: <linux-kselftest+bounces-46910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09981C9CD06
-	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 20:45:44 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4633DC9CD9F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 02 Dec 2025 21:00:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 280B03AA41F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 19:43:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 29D884E1318
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Dec 2025 20:00:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B3C2F6160;
-	Tue,  2 Dec 2025 19:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5053A2F12D4;
+	Tue,  2 Dec 2025 20:00:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WrzA+pEp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MmT9H0ga"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584E12F39C4
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 19:38:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDB92F12A5
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Dec 2025 20:00:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764704300; cv=none; b=tx1yMJ94peybUipWGUBgjeEaw5rfw8G1RKrbnsFJMca5TdN51lvjxUSWzciss6b4Ac+hUrxRUfUCKrxtXHOzma8RsnW7y6+pQWIrQNEzJuLfTCprS1BxzIXCBrl/va6K3yECLxSzcb1hpmuhUonLGGKt04zhc0CW9kWjfyak6fs=
+	t=1764705638; cv=none; b=CapD62DtcuejBRsrkJLFcSlTxJqVHOJ/HZoA2P8cBjpJfG1y8sAADNMsnrYIxBY+UIeGGC8C9DXv9NvaOZrWuOCtdl5g9kbeAm7ehk0GBE5UylQ7rcoVzXyA06bMd0GnkldIjpyGGywW6Bg7PpDAE/j1sY62X7JTXZNmdqV2B0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764704300; c=relaxed/simple;
-	bh=b4hkmeC+wFUlheAh0FzFDJuK+/w3bz7OF5SAt7uxYag=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=K8SM014ilgJ1HjwFkJ7o3MtCn/7Cd+zA+jykiROJO99ZJoSVzyXXlD8Zsu1FsuO/jvLzaLaQQFO04z/sS+ouetP3FEEhJVOTCuKELvVGInm3Pg1xClJmIADNh1RTj1CIhvJKiOfa1YvCNgzw55laAcHeMspsbQ1pmcEcGducDc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WrzA+pEp; arc=none smtp.client-ip=209.85.221.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-42b56125e77so3131104f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 11:38:17 -0800 (PST)
+	s=arc-20240116; t=1764705638; c=relaxed/simple;
+	bh=te4N56NzYz6/dMTrZam+d7syXgjYPyZteJDV4l74esI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u5TY+lxrp3epv8z12wXsXRhRsdY+dFcbq0YthxERhsHNeWK12FQSl/pH2R+MOOFbEHgyaAs6WanuT0RlIqGSBVJr+hGAgYt4GNCxutzSxK5LTYhmw/rkwfpFrBvTvpW78fv8WEijlGg26iWbODDX1E9Umw1ihNBytHeO6wDKNNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MmT9H0ga; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-787eb2d8663so3689797b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 12:00:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764704296; x=1765309096; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9I4jS+CkOD8WcMHOPpX2Laq2znDkJHzIQe6va7xDus=;
-        b=WrzA+pEphUfmU3Vlzk8uqm0dnUCGcqEtQbymBc3+xfZWXuRoqkIGsQywNgAuSjwaDI
-         l01Jb1Z7nFyPnb1YEoBYGCjgo/XvQgbNF2uVNky6SzF2aUsPc+xFrflxpxgO+4GbIIXH
-         gs00R+mU7oXG7bl6x+9sUC5vp/c72H6YalIc9dGY4TmivGAAncHxKQBECVlAY3pWgNQq
-         kuy47TzdDVBhv6u1xAC29wSdtp0+mUB/0Jh6LXT+aKIDHwXqjikFukOXutQ2Hig4hKKf
-         iwhgrirAWLhd/0nDmkiuZHY3m9Wfm00bsLr6XpXFqJezDJQLPDtssMFasmfJf9xReVcb
-         dKEg==
+        d=gmail.com; s=20230601; t=1764705635; x=1765310435; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XOvq7zGQWlXv7Qg5p/lBCK450NxRsWzSuFDUvE6KnLY=;
+        b=MmT9H0gaq8kLBlZN/aw6Y1DlkgBy0mjjl0jZbbLaI9n7BdNLQ8IVlwQg1AtkCOJ/9F
+         a05VpwiGBaanzwEWOoEQ1RVZG2w2oIzo9Fm8fpY8kAbXgGvJEFFKFan9lMQnGBWt1VyY
+         /NerLbaKXj9smz+1DNxNcksCl4RSCu8znN+PSUBtojYbybTT1otIMWz/tyum0kR42PNH
+         5eStF56e+nBzkfyPGNDGDnspvxa0tIMr5D6iQzvZViTRVDZKXaL+YurftOOX3Prl5S/x
+         1heeFZ6+BTUm5PqlwIdWVxa4kU12wOKaF+JPebmgHgcdgdhKYE2+Q90mgYCKRwIj7bAo
+         Epjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764704296; x=1765309096;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j9I4jS+CkOD8WcMHOPpX2Laq2znDkJHzIQe6va7xDus=;
-        b=XTWofkPB9WgmAlNFua41KuR5l0JL6V8PfvULkoo+zmnaKCRkltlePOePBLw+dZatk7
-         yZ1PCg9Qz7inUSAicQzLhm39CgP4vmXYxtyiCpcyUbU3ZJ2RcySuzzg2K8tWkUYl7+OW
-         Rka+TDPDfBZYEetrcwKPf5nE03XxKlDWhKfHkgWTVOq7NCAQ347XjjhBgroD00fYJSxY
-         4saJaOd2T+nVB3PSSYRF48K01Fu2Nwt8ml/Vj6bEev+B8fkCzeihQ0kwi9EgKFBK1V8U
-         kRHu7LB/VcKyjzDuDhdahrI/eJiT++vtaYWSvTa06jWLgC0UEP4wnS/NgxsSEvRg9If0
-         g65w==
-X-Forwarded-Encrypted: i=1; AJvYcCVfG+sJ3jtElnxUFjbbGqPui+rMHvy+KCOAdwEX+zXcSjZb6ruC9wQZUNjO+nK5qbhbas65dJDS0qBgcFJ8z30=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywbw1yhoV9RrQQm9puMrwcFkY1ADbjb/QKfXQjb+b3gjD5AxAOY
-	rcz/ett6ZULK2Mx3mdrrlEPSsP0SHMUO4XdrtpYNpiWoEwBGWhctmM2gZUhdblN6TqH+st0lgCP
-	Mg0g625JkWf2ZXDGclw==
-X-Google-Smtp-Source: AGHT+IFafOW37ZpmXOGIJbp/0M7mmCXdck1lXQ8qYTVq025nRVZmT5HEkDQlb5GS0Sbcn6sHCWPrq/xZgSglm7c=
-X-Received: from wrpc7.prod.google.com ([2002:adf:ef47:0:b0:429:c1fd:61fe])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6000:2410:b0:42b:36f4:cd22 with SMTP id ffacd0b85a97d-42e0f344714mr34472907f8f.38.1764704295819;
- Tue, 02 Dec 2025 11:38:15 -0800 (PST)
-Date: Tue, 02 Dec 2025 19:37:46 +0000
-In-Reply-To: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
+        d=1e100.net; s=20230601; t=1764705635; x=1765310435;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XOvq7zGQWlXv7Qg5p/lBCK450NxRsWzSuFDUvE6KnLY=;
+        b=OPyhZGKoyNr+hDzN4OndOAyCXENX66FpjnklWZxznY3TbebH+3Exm5mX0qixc3Lu9D
+         3+ljMPXSvccHT2jcBpokGm+OMaQ5uSHoJmgzx+sKRP2n+Kg8ukifBpaRzq7BJH2Yxdwv
+         mEBZUu0EXS4Z6Ls0YfD1gNuoLGLHNrHHfhBW9lO/AowUnmZEkWCOrwXV+OiJ3G9vEtfy
+         EchCX0G4VsHBejA9bjOZjse1uu7YN72qpvg+yqaY8Tc13d207VpUI3GGEfHil7n8nT/8
+         nJ+ov4kUOtofpVfajLfZn3MpHMA3QWMoFK4Baea43ggKMtq+CePWP/jGuug3xHdEORON
+         RSGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX4IBN6ZuD1JESv/1nhNdGw5odCh+2hxsRA6eogzNGCU1LC3K9wnMSMGm6b1eHzgWwFIZHQNWBt1GMrrTRG2uI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkNq6HfWTw7sMkMdTZcQfLxwOnlejgXX5AHbdBGIb81HnExtyV
+	efCwTQbiz7+OqDEaObwNgmUWgUmqUbwoJNt/LdZ19dr081A83KLm+Bnt
+X-Gm-Gg: ASbGncsYRl38k/gCxvWqBvzat56C5e+DRWAGYlTonI/2ndeEQgmBWQTxgIPNG2tpH9/
+	jkBfP9PYmyd6m9o6Mpk6yCE7iAcXLEqk+rK+cOaRamSogDlsEi9eOpfGGERU+5trsdznliE+9tS
+	Bmq1wVz9YdiiI5WWuq/U0aOaOimplz4M+DuFASJPURHWlVh5bULZQxGBQKu4iLjD+jOCYR+7PXA
+	qpxUkXiKvm3rdH/gQH76+frXnps2AxnoaPQcug95sTaxu0xrjGUdPuvYQiVH5tyHTcVoDR6rUuN
+	pA9F+E2FZ8VjuMcXTA3cherEby2uQC1UQI1kD5rDZ03GOUzTuYCEVfx1iNTLBWlvALYsw6m7Z1H
+	Dkcq5StaukIpGybRRwo+q11/MwCanUkJTEtSVgic6pjWtXUES4B1bDzILuA8FxTyVUnyQEhGJ21
+	En+O1YaVyakrD4Ep5x5R65l7WKDdAek6CbfDHmWiw1jEHyPg==
+X-Google-Smtp-Source: AGHT+IE4Lw0nvXL8yqBtDuOK7QrlnTetNDoVmfVcyfoTP8VgYdTEu+GudPd/2RaoWo8nWv4q3HA7Cw==
+X-Received: by 2002:a53:b10b:0:b0:63f:a6e9:4048 with SMTP id 956f58d0204a3-6442f16a1a9mr2475593d50.26.1764705635271;
+        Tue, 02 Dec 2025 12:00:35 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:a::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78ad0d5f4c5sm65824697b3.13.2025.12.02.12.00.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Dec 2025 12:00:34 -0800 (PST)
+Date: Tue, 2 Dec 2025 12:00:33 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Paolo Abeni <pabeni@redhat.com>, g@nha0.facebook.com
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, berrange@redhat.com,
+	Sargun Dhillon <sargun@sargun.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v12 04/12] vsock: add netns support to virtio
+ transports
+Message-ID: <aS9FYWd3SDYu6U1v@devvm11784.nha0.facebook.com>
+References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
+ <20251126-vsock-vmtest-v12-4-257ee21cd5de@meta.com>
+ <6cef5a68-375a-4bb6-84f8-fccc00cf7162@redhat.com>
+ <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
-X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=826; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=b4hkmeC+wFUlheAh0FzFDJuK+/w3bz7OF5SAt7uxYag=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBpL0AJBMbP/V8F4ca/e7BxIHaBBhe7jbhS/93kZ
- 23C/DV/phqJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaS9ACQAKCRAEWL7uWMY5
- RiTQEACcavWxpeD7XyNzmd9xA3CRvW0Gkngtveouc4E0U9uCwR7rKcVHB1yAAzYqnbsCbLgeHMP
- twUdVG7qDGJy0WYD5pf4m1ITBQTdQ1dlw1Kl+K0MSVEuwpuaE0TOyoaHF2fNZ4okPQoqAi3eF1r
- 5RwBQjJ1WjzQSo/wLXB3AyWkARC8rJcTYLESNiEs//zLaf+dx6gTrXsgyMUofoAfiM6gDl5sU8o
- 3pB3iU4PfIzPYQd1iAbngPilPm1o8KUkYHQX7AI8vv5Fu9P5qDeDcfmNLoiI/CP9pxCQgyUhtPB
- sZ+RSFnM6Aw6FDvmpN2x/RpePJ/fnvuva55OGCTxwexo4zD3EWjkDxu+w04bWFWfdAYnZry3F8v
- hNWa9DuAqZ6RormLBfN6/BPuzoX6smAGPLzC1yVKlP7YqymgEkm3W2/4e/wBxiF9BXFDJYWtN7c
- Mg1sI5bVQnpTlMwA2dMcodkCbCkiLLMaU2NFMB4LFIWdQXDTmdHt63nZiHMBRbOa4ah1O3lmjd9
- e2/T+8DI8iit9jF3eYiZgICWpHEm19947slxtTGzd3rrc+ThYMBLgKMfkULezQfTXCHGmnhdSWW
- 77TfecTGBNYxVrhFqww9fnhQNTP/7k35F0rm9wWmkkzhwldmf8QbjnZTjY0m56Rc7hf3d19NfVO e5N26Dt80LxNLHw==
-X-Mailer: b4 0.14.2
-Message-ID: <20251202-define-rust-helper-v1-22-a2e13cbc17a6@google.com>
-Subject: [PATCH 22/46] rust: kunit: add __rust_helper to helpers
-From: Alice Ryhl <aliceryhl@google.com>
-To: rust-for-linux@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Alice Ryhl <aliceryhl@google.com>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
 
-This is needed to inline these helpers into Rust code.
+On Tue, Dec 02, 2025 at 09:56:02AM -0800, Bobby Eshleman wrote:
+> On Tue, Dec 02, 2025 at 11:18:14AM +0100, Paolo Abeni wrote:
+> > On 11/27/25 8:47 AM, Bobby Eshleman wrote:
+> > > @@ -674,6 +689,17 @@ static int vhost_vsock_dev_open(struct inode *inode, struct file *file)
+> > >  		goto out;
+> > >  	}
+> > >  
+> > > +	net = current->nsproxy->net_ns;
+> > > +	vsock->net = get_net_track(net, &vsock->ns_tracker, GFP_KERNEL);
+> > > +
+> > > +	/* Store the mode of the namespace at the time of creation. If this
+> > > +	 * namespace later changes from "global" to "local", we want this vsock
+> > > +	 * to continue operating normally and not suddenly break. For that
+> > > +	 * reason, we save the mode here and later use it when performing
+> > > +	 * socket lookups with vsock_net_check_mode() (see vhost_vsock_get()).
+> > > +	 */
+> > > +	vsock->net_mode = vsock_net_mode(net);
+> > 
+> > I'm sorry for the very late feedback. I think that at very least the
+> > user-space needs a way to query if the given transport is in local or
+> > global mode, as AFAICS there is no way to tell that when socket creation
+> > races with mode change.
+> 
+> Are you thinking something along the lines of sockopt?
+> 
 
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
----
-Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <davidgow@google.com>
-Cc: Rae Moar <rmoar@google.com>
-Cc: linux-kselftest@vger.kernel.org
----
- rust/helpers/kunit.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+To clarify... do we want the user to be able to query the socket for
+which namespace mode it is in (so the results of the race can be
+queried), or are you looking for a way for the user to query if the
+transport supports local mode (maybe via /dev/vsock ioctl).
 
-diff --git a/rust/helpers/kunit.c b/rust/helpers/kunit.c
-index b85a4d394c118906d35ffef85221cf1a8b3c6fe3..cafb94b6776c07fe505e1749de71f91125006131 100644
---- a/rust/helpers/kunit.c
-+++ b/rust/helpers/kunit.c
-@@ -2,7 +2,7 @@
- 
- #include <kunit/test-bug.h>
- 
--struct kunit *rust_helper_kunit_get_current_test(void)
-+__rust_helper struct kunit *rust_helper_kunit_get_current_test(void)
- {
- 	return kunit_get_current_test();
- }
+I'm not sure we can attach a namespace to a transport per-se, as
+different namespaces in different modes can use the same transport.
 
--- 
-2.52.0.158.g65b55ccf14-goog
+Best,
+Bobby
 
+> > 
+> > Also I'm a bit uneasy with the model implemented here, as 'local' socket
+> > may cross netns boundaris and connect to 'local' socket in other netns
+> > (if I read correctly patch 2/12). That in turns AFAICS break the netns
+> > isolation.
+> 
+> Local mode sockets are unable to communicate with local mode (and global
+> mode too) sockets that are in other namespaces. The key piece of code
+> for that is vsock_net_check_mode(), where if either modes is local the
+> namespaces must be the same.
+> 
+> > 
+> > Have you considered instead a slightly different model, where the
+> > local/global model is set in stone at netns creation time - alike what
+> > /proc/sys/net/ipv4/tcp_child_ehash_entries is doing[1] - and
+> > inter-netns connectivity is explicitly granted by the admin (I guess
+> > you will need new transport operations for that)?
+> > 
+> > /P
+> > 
+> > [1] tcp allows using per-netns established socket lookup tables - as
+> > opposed to the default global lookup table (even if match always takes
+> > in account the netns obviously). The mentioned sysctl specify such
+> > configuration for the children namespaces, if any.
+> > 
+> 
+> I'll save this discussion if the above doesn't resolve your concerns.
+> 
+> Best,
+> Bobby
 
