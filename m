@@ -1,158 +1,115 @@
-Return-Path: <linux-kselftest+bounces-46929-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 048AFC9DCAF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 06:20:49 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4CD5C9DD01
+	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 06:44:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80EFD3A6B32
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 05:20:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8194F4E06DD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 05:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7302274B32;
-	Wed,  3 Dec 2025 05:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WyMhIH3H"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43571284B36;
+	Wed,  3 Dec 2025 05:44:40 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD361A285
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 05:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D86D2765C0;
+	Wed,  3 Dec 2025 05:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764739244; cv=none; b=l0y4GpIV7wDU+DCdl/KYDjMxzu/txaKoU+6xlO7qYkybBbGrJZ2z8bI7g7aGp9YpdObAv3j/F76wz/f12gNlOTuGEeHA32m0/2U4wCyUrdmz0hrl7P/QLYFaLS02lKG6SIiFrh5ZivwNt4GFBSIYJHAKVeY75XVzRtLOrbUzGic=
+	t=1764740680; cv=none; b=FI0jQVHWZjUjNtaPLCRSF/z7mqFhwrRXft/Vi0uBreqGQ08YWeLT2N89CemQswyvOAE5z+jopdZoFyl/n5SRb1ZxrEhSB6DW/pBFEsWpQwjJqr1cdVCZnIijsNaOIkPXGVj5D9d0xtGoHkGK7YKmjqHDGDkL6snfS98oUWkH5i8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764739244; c=relaxed/simple;
-	bh=KnwIDdcXunqaoPgZQredHZwy4TkDSumVaNxjL6+L2lI=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=gNVP7HlIqwV2JKSdUp5S6NJ1VK5LttpkaOYC0nwY+oBtIcXWq88gOskFEtLLrLZxDqqDV0HmJ+hO5Of5OZj5T3Yrxd04/Y2Zh6zcx++sUzCePpYumXOSgFUw7D8jsM4+V0wUkJGw5dpYG4cjfKdagbcIZvQFWn5nR5vyfYIJnQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WyMhIH3H; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b98983baeacso3004975a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Dec 2025 21:20:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764739242; x=1765344042; darn=vger.kernel.org;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KnwIDdcXunqaoPgZQredHZwy4TkDSumVaNxjL6+L2lI=;
-        b=WyMhIH3H9vIQTdYsLfpWwg7mtcsMAGSUXeiLxgr91yt3+0xhNTYHYJYxO2J0cOhVMW
-         YjZ10O+YehSiusOWWnXs0U2Jvs4mhwlC6aaXxYqm7igTNkYCxJc0el4fYc06ImT6669q
-         /sXwt2U1oubH9UBIDbuRIf34J59dx1HqnSBnoH5rAiucwoemu4IFmdSYt/N4pKuC6iLz
-         jNTToswQ/cVavxKZPfBi6VDd7h8xCq/vLIQtfL2cbsxs+p5U8q7cq8tS6MlS3yHuzodT
-         EM8rj0TawBwdNsUq6GhKr5hFhNg9AJyz2aBVuqbVUk77PTfBTAwcId9xuP99Lie2AYty
-         a97Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764739242; x=1765344042;
-        h=content-transfer-encoding:autocrypt:subject:from:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KnwIDdcXunqaoPgZQredHZwy4TkDSumVaNxjL6+L2lI=;
-        b=Nj/8knfqTNEVgH7xjM0XRyA3o3XoKNfK8IBEmQ0iO6PpHa5hajoEi+w6BwnPj99jNi
-         Idgawey8Yg80DWD8I3AL2CD81WshURAevemvCoy+dkuOMX5pVqQLqckZ8uR7Nx55NW5n
-         sjFIOhJu54cIaqByrRDmXfvy9JUp1QIkzuZLDM6fMNzhla0kj1oOM+DJC0BLYe8a4hE/
-         eOW4hNHA+tp5UzTNAmDGV2B5LvFTeD6VSVTgU249ICTDO1Veh5oJ3FH9ts4gAD1d6my7
-         4JEECQC4FGWEL/qZKdNzCfK//DW+gWiVMOKhySBpMbynebuDiP/nGCaRUuMig31CIdF/
-         WbUg==
-X-Gm-Message-State: AOJu0Yzv9BSjtkorwFxqP52x5eFB+0ukLH0/xj57jR8KqqYguBVrTcpx
-	GnTWwismsyYxqP8JKyEjulbo9360O7/l4OZ8hZT3hLHL7cSBJMLwQ+SH9pP51g==
-X-Gm-Gg: ASbGncuRThvmwbYHUM+YFeta0H+BiPPTg+YmZ/SbM0gcuW0vU09eZyYG4rVAJmZEXwS
-	ed3PmLhs0hQeksMAsPS/GsnRZAqZOQKRcZuYQfEpJot9BHGrtnlY5eAVVpCa6ItdF6mO2AHmc8n
-	TJskqwxXTkEJMx1UCvX4ECz2fIul+yyTD7yUAE9LdDh2UEooEAPc+gAF/tb2MdEEtqo1KTBBFnh
-	zZoXASbAesUMZKt8PT/WZgFU/Nl/KdliJPm/WdgUWvJOl8vABA/0of6wA/cMKpKXKAYZI+0CvFC
-	NKr+bQK2N68cOB/qY3ZsolxvylMDsDSUJ/rIdqO83FsWbjrVIa3xJqWzh1z3NgJl3yzxegl54c8
-	5iyjIZxhjP70jSRO25pR/+wryHh4pVpq8XwDAxLt0iQ8Jl1jfsG2agi7H58ii7xk6cO+8ys13JN
-	/aYj98foZjyE2yDaC/NO6vw7Q8JuWjc5fSOp6uqTKJkJJZWPUz2SaAge4hoAE=
-X-Google-Smtp-Source: AGHT+IGkVmPam72WvRuNDcgiJMXqmVLwjRz2h+n1Dvg9oQ0O0lfA4kU93aNlZZRsYLTwsB/rURFpBg==
-X-Received: by 2002:a05:7300:f590:b0:2a4:5c3b:e2bc with SMTP id 5a478bee46e88-2ab92e20626mr630770eec.19.1764739241936;
-        Tue, 02 Dec 2025 21:20:41 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2a96560986csm92218769eec.2.2025.12.02.21.20.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Dec 2025 21:20:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <44e08e2f-7f22-4106-b581-56150cafb048@roeck-us.net>
-Date: Tue, 2 Dec 2025 21:20:40 -0800
+	s=arc-20240116; t=1764740680; c=relaxed/simple;
+	bh=i8GA9MGKyu5KlGw7/hRpTII7Pz2+m+XaC8ABn6+xGkA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K71KPoBwC2HA3xq8b0+TzgjMTkzQ7hJq72M8M6rkvjJj7hXJhashZYs5jbtkuqG8bj1m4DMySlAifLmhpIujBC/BerLJwomfAcHU0zINSI8SYzK+1wW/WBTyN7/MInbbDzmGAfhcPuMjI1+W7NFOHEAx5puYtPPqTf40/PPiZiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384
+	 client-signature ECDSA (secp384r1) client-digest SHA384)
+	(Client CN "*.hostsharing.net", Issuer "GlobalSign GCC R6 AlphaSSL CA 2025" (verified OK))
+	by bmailout2.hostsharing.net (Postfix) with ESMTPS id E10B42007F8C;
+	Wed,  3 Dec 2025 06:44:34 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id BF3A61E6E2; Wed,  3 Dec 2025 06:44:34 +0100 (CET)
+Date: Wed, 3 Dec 2025 06:44:34 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Chris Li <chrisl@kernel.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, David Matlack <dmatlack@google.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	Alex Williamson <alex@shazbot.org>,
+	Adithya Jayachandran <ajayachandra@nvidia.com>,
+	Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	David Rientjes <rientjes@google.com>,
+	Jacob Pan <jacob.pan@linux.microsoft.com>,
+	Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
+	kvm@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-pci@vger.kernel.org, Mike Rapoport <rppt@kernel.org>,
+	Parav Pandit <parav@nvidia.com>,
+	Philipp Stanner <pstanner@redhat.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Shuah Khan <shuah@kernel.org>, Tomita Moeko <tomitamoeko@gmail.com>,
+	Vipin Sharma <vipinsh@google.com>, William Tu <witu@nvidia.com>,
+	Yi Liu <yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>,
+	Zhu Yanjun <yanjun.zhu@linux.dev>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH 02/21] PCI: Add API to track PCI devices preserved across
+ Live Update
+Message-ID: <aS_OQoYKmFBaOHSx@wunner.de>
+References: <20251126193608.2678510-1-dmatlack@google.com>
+ <20251126193608.2678510-3-dmatlack@google.com>
+ <aSrMSRd8RJn2IKF4@wunner.de>
+ <20251130005113.GB760268@nvidia.com>
+ <CA+CK2bB0V9jdmrcNjgsmWHmSFQpSpxdVahf1pb3Bz2WA3rKcng@mail.gmail.com>
+ <20251201132934.GA1075897@nvidia.com>
+ <aS3kUwlVV_WGT66w@google.com>
+ <aS6FJz0725VRLF00@wunner.de>
+ <20251202145925.GC1075897@nvidia.com>
+ <CACePvbVDqc+DN+=9m1qScw6vYEMYbLvfBPwFVsZwMhd71Db2=A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-From: Guenter Roeck <linux@roeck-us.net>
-Subject: Problems when trying to build tools/testing/selftests
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACePvbVDqc+DN+=9m1qScw6vYEMYbLvfBPwFVsZwMhd71Db2=A@mail.gmail.com>
 
-Hi,
+On Tue, Dec 02, 2025 at 08:36:53PM +0400, Chris Li wrote:
+> On Tue, Dec 2, 2025 at 6:59 PM Jason Gunthorpe <jgg@nvidia.com> wrote:
+> > The device is active
+> > during KHO, you CAN NOT do any resource reassignment, not bus numbers,
+> > not mmio. It must be fully disabled.
+> 
+> I agree with Jason. The bus number is used in the low level hardware
+> to do the DMA transfer. The bus number can not change for a device
+> during livedupate with pending DMA transfer. The BDF MUST remain the
+> same as the liveupdate with DMA transfer requirement.
 
-when trying to build tools/testing/selftests, I get a lot of warnings such as
+Thank you both for the explanation.
 
-mount-notify_test.c: In function ‘fanotify_fsmount’:
-mount-notify_test.c:360:14: warning: implicit declaration of function ‘fsopen’; did you mean ‘fdopen’?
+> Another point is that, on the same machine it can have multiple PCI
+> host bridges. Each PCI host bridge bus number is acquired from the
+> ACPI table walk. I am not aware of any way to get the slot number of
+> the PCI host bridge. Lukas, do you know how to get the PCI host bridge
+> slot number to form a path?
 
-and subsequent build errors.
-
-testing/selftests/filesystems/mount-notify/mount-notify_test.c:360: undefined reference to `fsopen'
-/usr/bin/ld: tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c:363: undefined reference to `fsconfig'
-/usr/bin/ld:tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c:366: undefined reference to `fsmount'
-/usr/bin/ld: tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c:371: undefined reference to `move_mount'
-
-This does not just affect a single file, but several of them.
-
-What am I missing ? Is there some magic needed to build the selftests ?
+Host bridges are identified by the segment number.  On ACPI-based systems,
+it's retrieved by acpi_pci_root_add() through invocation of the _SEG method.
 
 Thanks,
-Guenter
 
+Lukas
 
