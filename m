@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-46935-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46934-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCA91C9EE98
-	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 12:57:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4543C9EE92
+	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 12:57:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A4EBB34ACA8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 11:57:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 92DA94E05A0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 11:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD8AB2F6162;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ED9A2F5A37;
 	Wed,  3 Dec 2025 11:57:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF37C2F1FD3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E602EAD1C;
 	Wed,  3 Dec 2025 11:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764763045; cv=none; b=gRbFNj+vaUnKwAg5PposSOqKb91b/TK6qP1HdgJF2tNf/OgA6ir1UpJor3teH1TIUYCzFxo4BefrXwCT8sUxuXG/YhcOyC3qQWDMbTIhAvZVHmjaesHsrFWL6F9I4M8C+yXsf1Ju9CwsNlKyRod9YrLhvJckdTjYn7XB86U0Voc=
+	t=1764763045; cv=none; b=DWwumlPHskCbU5CfwD4Jy6z7fVcgPxg/dzECLdmB4y68vsoutznLdjELZMAwINZU0UQXXCxRFgI/QM7MjoCIZ1wo7E0FFO+sTXlQK+akpPm3ZR1wtXdEcORETfi0ul110UJu9lbYEKkSjtzxkt1SHF6Ix5B4S27juRBmTEpBUdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764763045; c=relaxed/simple;
-	bh=t5tVRa58eTUEv31wXUb5KqA4duBG0xhFhUj0ZwnvVMY=;
+	bh=vHFhsN1z65S4yF9h15xEZU3+N5nmbj5r6iQmlkHNtqo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hZEs/8mP3uhVk8kbK680YKy2KsimdT64wfb6Ml1xS7nQdY3RequUxDJWGH9WwGNw1S3WexfS7/Yfb8MAzmtbFZrr0ezkKqDCxHxSYAG+Htm4Xrgd8xwXw9gHYYXqgHQHxctCiJCtMPxgGSwfeLWmVtE1cl97mOqb9ULZhRtrJKk=
+	 MIME-Version; b=GDOjpB538nCrm93VC6r4cE0IzOSXCz2HiXxCXF8MNCebbSau45gpikBZeDvO7iL7g87egGstEyfzal/T/hXhQj5+kdElAksMRs6hIzacY6vwehp66wpMVR39NqxgQbiSCLgJh6gvhA/LJlc2bhu5qa3CvGzm9fFbBrIpWc8kjrQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 32c2b594d03f11f0a38c85956e01ac42-20251203
+X-UUID: 3665849cd03f11f0a38c85956e01ac42-20251203
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
 	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
 	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
 	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
@@ -40,27 +40,27 @@ X-CTIC-Tags:
 	DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
 	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:9b517952-cf82-42c9-8929-cfe76af86642,IP:10,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:0
-X-CID-INFO: VERSION:1.3.6,REQID:9b517952-cf82-42c9-8929-cfe76af86642,IP:10,URL
-	:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:2c81f6f184124145c3e33436ac1623b1,BulkI
-	D:2512031957120TJFA92I,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
-	2|127|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bu
-	lk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
-	0,BRE:0,ARC:0
+X-CID-O-INFO: VERSION:1.3.6,REQID:c995dedf-cabc-4d30-abc7-55e8c8c4e227,IP:10,U
+	RL:0,TC:0,Content:-5,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACT
+	ION:release,TS:-25
+X-CID-INFO: VERSION:1.3.6,REQID:c995dedf-cabc-4d30-abc7-55e8c8c4e227,IP:10,URL
+	:0,TC:0,Content:-5,EDM:-25,RT:0,SF:-5,FILE:0,BULK:0,RULE:EDM_GN8D19FE,ACTI
+	ON:release,TS:-25
+X-CID-META: VersionHash:a9d874c,CLOUDID:1b0a6ce63477a4ad80ab5a2913a00bf8,BulkI
+	D:251203195718L07431EA,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
+	2|127|850|898,TC:nil,Content:0|15|50,EDM:2,IP:-2,URL:0,File:nil,RT:nil,Bul
+	k:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0
+	,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-CID-FACTOR: TF_CID_SPAM_AEC,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 32c2b594d03f11f0a38c85956e01ac42-20251203
+X-UUID: 3665849cd03f11f0a38c85956e01ac42-20251203
 X-User: zhangguopeng@kylinos.cn
 Received: from localhost.localdomain [(223.70.160.239)] by mailgw.kylinos.cn
 	(envelope-from <zhangguopeng@kylinos.cn>)
 	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 404167327; Wed, 03 Dec 2025 19:57:10 +0800
+	with ESMTP id 112629151; Wed, 03 Dec 2025 19:57:16 +0800
 From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 To: tj@kernel.org,
 	hannes@cmpxchg.org,
@@ -74,9 +74,9 @@ Cc: muchun.song@linux.dev,
 	linux-mm@kvack.org,
 	linux-kernel@vger.kernel.org,
 	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH v5 1/3] selftests: cgroup: Add cg_read_key_long_poll() to poll a cgroup key with retries
-Date: Wed,  3 Dec 2025 19:56:29 +0800
-Message-Id: <20251203115631.947908-2-zhangguopeng@kylinos.cn>
+Subject: [PATCH v5 2/3] selftests: cgroup: make test_memcg_sock robust against delayed sock stats
+Date: Wed,  3 Dec 2025 19:56:30 +0800
+Message-Id: <20251203115631.947908-3-zhangguopeng@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20251203115631.947908-1-zhangguopeng@kylinos.cn>
 References: <20251203115631.947908-1-zhangguopeng@kylinos.cn>
@@ -86,82 +86,84 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Introduce a new helper function `cg_read_key_long_poll()` in
-cgroup_util.h. This function polls the specified key in a cgroup file
-until it matches the expected value or the retry limit is reached,
-with configurable wait intervals between retries.
+test_memcg_sock() currently requires that memory.stat's "sock " counter
+is exactly zero immediately after the TCP server exits. On a busy system
+this assumption is too strict:
 
-This helper is particularly useful for handling asynchronously updated
-cgroup statistics (e.g., memory.stat), where immediate reads may
-observe stale values, especially on busy systems. It allows tests and
-other utilities to handle such cases more flexibly.
+  - Socket memory may be freed with a small delay (e.g. RCU callbacks).
+  - memcg statistics are updated asynchronously via the rstat flushing
+    worker, so the "sock " value in memory.stat can stay non-zero for a
+    short period of time even after all socket memory has been uncharged.
+
+As a result, test_memcg_sock() can intermittently fail even though socket
+memory accounting is working correctly.
+
+Make the test more robust by polling memory.stat for the "sock "
+counter and allowing it some time to drop to zero instead of checking
+it only once. The timeout is set to 3 seconds to cover the periodic
+rstat flush interval (FLUSH_TIME = 2*HZ by default) plus some
+scheduling slack. If the counter does not become zero within the
+timeout, the test still fails as before.
+
+On my test system, running test_memcontrol 50 times produced:
+
+  - Before this patch:  6/50 runs passed.
+  - After this patch:  50/50 runs passed.
 
 Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Suggested-by: Michal Koutný <mkoutny@suse.com>
+Suggested-by: Lance Yang <lance.yang@linux.dev>
 Reviewed-by: Shakeel Butt <shakeel.butt@linux.dev>
 ---
- .../selftests/cgroup/lib/cgroup_util.c        | 21 +++++++++++++++++++
- .../cgroup/lib/include/cgroup_util.h          |  5 +++++
- 2 files changed, 26 insertions(+)
+ .../selftests/cgroup/test_memcontrol.c        | 20 ++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/cgroup/lib/cgroup_util.c b/tools/testing/selftests/cgroup/lib/cgroup_util.c
-index 44c52f620fda..ce6c2642fd9b 100644
---- a/tools/testing/selftests/cgroup/lib/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/lib/cgroup_util.c
-@@ -168,6 +168,27 @@ long cg_read_key_long(const char *cgroup, const char *control, const char *key)
- 	return atol(ptr + strlen(key));
- }
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 4e1647568c5b..2fb096a2a9f9 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -21,6 +21,8 @@
+ #include "kselftest.h"
+ #include "cgroup_util.h"
  
-+long cg_read_key_long_poll(const char *cgroup, const char *control,
-+			   const char *key, long expected, int retries,
-+			   useconds_t wait_interval_us)
-+{
-+	long val = -1;
-+	int i;
++#define MEMCG_SOCKSTAT_WAIT_RETRIES        30
 +
-+	for (i = 0; i < retries; i++) {
-+		val = cg_read_key_long(cgroup, control, key);
-+		if (val < 0)
-+			return val;
-+
-+		if (val == expected)
-+			break;
-+
-+		usleep(wait_interval_us);
-+	}
-+
-+	return val;
-+}
-+
- long cg_read_lc(const char *cgroup, const char *control)
- {
- 	char buf[PAGE_SIZE];
-diff --git a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-index 7ab2824ed7b5..77f386dab5e8 100644
---- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-@@ -17,6 +17,8 @@
- #define CG_NAMED_NAME "selftest"
- #define CG_PATH_FORMAT (!cg_test_v1_named ? "0::%s" : (":name=" CG_NAMED_NAME ":%s"))
+ static bool has_localevents;
+ static bool has_recursiveprot;
  
-+#define DEFAULT_WAIT_INTERVAL_US (100 * 1000) /* 100 ms */
-+
- /*
-  * Checks if two given values differ by less than err% of their sum.
-  */
-@@ -64,6 +66,9 @@ extern int cg_read_strstr(const char *cgroup, const char *control,
- extern long cg_read_long(const char *cgroup, const char *control);
- extern long cg_read_long_fd(int fd);
- long cg_read_key_long(const char *cgroup, const char *control, const char *key);
-+long cg_read_key_long_poll(const char *cgroup, const char *control,
-+			   const char *key, long expected, int retries,
-+			   useconds_t wait_interval_us);
- extern long cg_read_lc(const char *cgroup, const char *control);
- extern int cg_write(const char *cgroup, const char *control, char *buf);
- extern int cg_open(const char *cgroup, const char *control, int flags);
+@@ -1384,6 +1386,7 @@ static int test_memcg_sock(const char *root)
+ 	int bind_retries = 5, ret = KSFT_FAIL, pid, err;
+ 	unsigned short port;
+ 	char *memcg;
++	long sock_post = -1;
+ 
+ 	memcg = cg_name(root, "memcg_test");
+ 	if (!memcg)
+@@ -1432,7 +1435,22 @@ static int test_memcg_sock(const char *root)
+ 	if (cg_read_long(memcg, "memory.current") < 0)
+ 		goto cleanup;
+ 
+-	if (cg_read_key_long(memcg, "memory.stat", "sock "))
++	/*
++	 * memory.stat is updated asynchronously via the memcg rstat
++	 * flushing worker, which runs periodically (every 2 seconds,
++	 * see FLUSH_TIME). On a busy system, the "sock " counter may
++	 * stay non-zero for a short period of time after the TCP
++	 * connection is closed and all socket memory has been
++	 * uncharged.
++	 *
++	 * Poll memory.stat for up to 3 seconds (~FLUSH_TIME plus some
++	 * scheduling slack) and require that the "sock " counter
++	 * eventually drops to zero.
++	 */
++	sock_post = cg_read_key_long_poll(memcg, "memory.stat", "sock ", 0,
++					 MEMCG_SOCKSTAT_WAIT_RETRIES,
++					 DEFAULT_WAIT_INTERVAL_US);
++	if (sock_post)
+ 		goto cleanup;
+ 
+ 	ret = KSFT_PASS;
 -- 
 2.25.1
 
