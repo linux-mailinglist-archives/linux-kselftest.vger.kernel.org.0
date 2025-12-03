@@ -1,14 +1,14 @@
-Return-Path: <linux-kselftest+bounces-46960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FDCCCA1FEA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 00:54:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7910CA1FE7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 00:54:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D82323028FE0
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7A89530285FC
 	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 23:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 635982F3C31;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 634702ED159;
 	Wed,  3 Dec 2025 23:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
 	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjuYgXSC"
@@ -16,17 +16,17 @@ X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E952E9EDD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F5B2EA14E;
 	Wed,  3 Dec 2025 23:53:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764806005; cv=none; b=gTR4S6Qpxamof9iijW7NeoF06B9HT6F9/08AYMuTXVdg7akpdi9vxOSsWhhgwUKbi2EdO7uGx1xUKyUW+/zItpYy8g1EGgVNaaexwxW3yAjQl+rXdBNGp9TeDMxOvGsb5r94Cf3djhnbe8xRG+F5XQEbukyNer0W5+hYAZ5B/K4=
+	t=1764806005; cv=none; b=vGuMav0iN6ob+0h3BykdXcR8xEiEBftS19xNm/IVnhxPbUgF1+ZUkaYVQkQjTE8SgYZc+SSFWeFWcwvmBjHRjxcx0MRsPSqwc0QTABNXtjZqPrhEKRQAAZQYeVhKk4J2wSw4n8RcNr+RUaFgAZVmfHK+E8JBD6sB1pGZCjkydF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1764806005; c=relaxed/simple;
 	bh=hzS1to0Wojcl7X2iDqaf0+D8BzHcNYu2AqdMgvjwKrY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=XfBNFn1Hy2iYtWucnxU7LaTXzdNhPdoe5WOG0VVB5CLRBi/4zgt3ozwTlmYI6aPMZ+mnttPB0n8xSAkGabnAQhkQHoPrFkA/NVKBi/N/rcpRhI3dHudGyl0gunN/2NiyznNBfJafmktPIk5n1+YL9OXbuo6BtO2b0s3wnhk4w3U=
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=DXL2AYkkSx+9cjSb/shtjA3ANqVvouSHg/oN8OPAgHK615gkHXnlVqIWHue3Mrahjxe5Y/90W5OPezK/GypAK+j1pCUAq0dl926ilqAWvf7tISIQXHt97v5riBIb/reVo69NCw7Y+s0LnajYxzsQv9jAHYOZpUsgdqsWJngpHK0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjuYgXSC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1001EC116B1;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A699C4CEF5;
 	Wed,  3 Dec 2025 23:53:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1764806005;
@@ -39,7 +39,7 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	 3bcAvCwkFPlAtvnQx+CfVAKqaDa+b3moq5V61sjIf/D3mKS1HaJjqhHNpQUF+P7LOW
 	 VVg9WpyAijjJw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F29383AA9A82;
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F290C3AA9A81;
 	Wed,  3 Dec 2025 23:50:24 +0000 (UTC)
 Subject: Re: [GIT PULL] kselftest next update for Linux 6.19-rc1
 From: pr-tracker-bot@kernel.org
@@ -52,7 +52,7 @@ X-PR-Tracked-Commit-Id: a2f7990d330937a204b86b9cafbfef82f87a8693
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
 X-PR-Merge-Commit-Id: 2488655b2f6b9d7d4afc19ecc1e7b1dccd67b13c
-Message-Id: <176480582382.130841.17491521018566604442.pr-tracker-bot@kernel.org>
+Message-Id: <176480582377.130731.494240999446657783.pr-tracker-bot@kernel.org>
 Date: Wed, 03 Dec 2025 23:50:23 +0000
 To: Shuah Khan <skhan@linuxfoundation.org>
 Cc: Linus Torvalds <torvalds@linux-foundation.org>, shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
