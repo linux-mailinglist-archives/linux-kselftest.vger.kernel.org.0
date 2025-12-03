@@ -1,185 +1,158 @@
-Return-Path: <linux-kselftest+bounces-46944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8F03C9FA34
-	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 16:47:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41F85C9FF64
+	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 17:28:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4313E30004F4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 15:47:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6262A3024E73
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 16:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77982318157;
-	Wed,  3 Dec 2025 15:46:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A0E3277B1;
+	Wed,  3 Dec 2025 15:59:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="RPuBiTOs"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KjmL/NCZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F03F3148DA
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 15:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D805326D77
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 15:59:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764776799; cv=none; b=EUA8cOqi2awvd2kKSUusdTJhYylW40qWlqloPWN+gZsGr2rxDSTHe6fblc5eWfBTV2ZRrbMThiJgUSWRZf1XwrXkuYrx1I8AX6jlTjgWC2dIGf95Y9/p/xDz5cxoFU7PWsar3ZI2uc+0ABRevOaLdIm3sqMCD4JH8R2v6ngs2YI=
+	t=1764777562; cv=none; b=AyV5x+BmlSCxaI/biO3UuSkJDeq7u8zGzYxl6vvClGIuixxFKi3v6NgP9+qytEtwYtoQ1wZfMblxoOhy3qcoSAl9wUCAY9fRvcq4Rioptn8w/UeMSQfKZtdkrywohMvuV43sQyWKPgtbEWOIrQCp59K/DvzxQ47IwmwoR+uXqSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764776799; c=relaxed/simple;
-	bh=9uir/666rpQjmBYhCBNN8Z50ojDfoysJShMBhMIvQsE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sO5ba8w/+epAN6V83f5g/HZCMbI3yLP7ONz3AOi7cCZoNr+dMueKO1E7jmQMw3rfNoxBvnNMrfW1Azln0j30DzIxIgVmrr3+B2cMIWOBMvZozrrkaSo+tfe02bFfeYt62rBstsBUVaivslKAfnBkzLSzyIAfhvfMZ4QJqK23XBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=RPuBiTOs; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-640c6577120so12068367a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 07:46:37 -0800 (PST)
+	s=arc-20240116; t=1764777562; c=relaxed/simple;
+	bh=iakk/Jr76m1kJL5Np9IbPtoAP3+T1JvteiA3kLHZ94M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SYKDMguguSCL1qqLxY46s4HQcQiYYnsI4tPq2DxpvKg2mS1cOunLdxmUAxkH+NBR7asksAI+n6Z3ymlheYdiYpj3a6BzrG7GFJ1Dk5JSrZWAOkLjhOVKCpC+3vlb1TGxufChPPPHO6PCZNUfdtbVWil9qdvGdSz0T5l+IxNWZXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=fail smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KjmL/NCZ; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linuxfoundation.org
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7c75fd8067fso4135640a34.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 07:59:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1764776795; x=1765381595; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+9+8lbWW7UfBnkxY4lDzkEZXob5kb6NM+epeeBGpeEM=;
-        b=RPuBiTOs7KpiqRqrubW5HNI3+bOkiKAnnuJpRV3yNivcQTEdTmVhe6fJg0QZfny5zX
-         9qp9LYCMEPxmeju79QkWQmUakbmG3IS3sGH/lVW6L5xRF30gugTy+lnhbUkOvk3Rzb6F
-         IGcZOZEOrR/yRkSpUSqh0C++3bdYvXnfu7AXPrrpmTXxysi1kKuO/tLtf653xnH1x43Y
-         jcLQda1JQewqC3+vTGyU0Uc2FXoiPStx5Q7849+LvARff60NxnmpNq8t5uLCsRAO5Jsy
-         /QXENCbg2YloU2FcYk/sKGqNb9A5yrrLuBZ3DVc0YArIUC0+xrbor0jH34nN2hPKM4UE
-         gfMg==
+        d=linuxfoundation.org; s=google; t=1764777560; x=1765382360; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V34xiYHMBhlRprMCQ3/uOloSz9kB9mYUn7HTGoE0360=;
+        b=KjmL/NCZGhpvD+wNtHg6HyH1dhoO5OjQului2xmbn701FQHz574G2PSvbHravx8WsS
+         tBT8pqcGZj9+2yIRo7qIG84OD6bRvmEFA57ellbKmSPKhM+NJi8/bMjnFpxWJBKqbAAN
+         C6MumKEWg8+DzZ6g2gpIU0O/S2C4UzHOVPdEE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764776796; x=1765381596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+9+8lbWW7UfBnkxY4lDzkEZXob5kb6NM+epeeBGpeEM=;
-        b=SO4MFruV9y+MjOlvBarDbxGaUGDJoF86/fYypkffpddJgukwR+xLRwJal9r0YItWXr
-         x7p/71vfr5z0xNJm7GsLuXtwAN6fQstipf3pSpoKcqd5lONwqXnAFP4D2UtF5XzvbPc0
-         nUseZMtxc+gZ98NSDcTUhZES4Ck6sv9nkWDVaN4t8NhM0nYRZGRhbTb5p9Uam6cBSQfb
-         PBGujbMHIB2qtcSy46suUgWw2N28vv5O2ZfRspSvYsetjqHa17RS6bGvGFe8xcM8gJhm
-         Jfuuwt+9VE51BKwkld6DoNBa9zHM1q50HxA6U917ry4hopLuPNuH7igeqZBjQfM9glJ2
-         vZ/A==
-X-Forwarded-Encrypted: i=1; AJvYcCVVyaK3e04EFIF0CXPXL5ZP8XfqDeTyVX1PLLYE1DpjAKPMezkahNSjMuoBpy72umPV4d7x8xflYf4xyy47yIg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzgp53CAouZSZM13xVaPJ1nr8IMPaJK8Aus2LfoFsaM5gJm48gO
-	pBtMfmFlWzl0y1eHKUXw33HivAOlYWR1blFm2Hy/fkJJkvfTo0MKlmvq60SRUPy2UMh8q6UI+mT
-	ZIoL9MiFvr0sTrekY8wNcw3hMSBZz5ueySJtKt8XRYg==
-X-Gm-Gg: ASbGncvbMDgtIb1qp5ypvAXHPfEEDbZeiS5hkRq3Cb8xkjZUM6zXBEoBBccbmJT6GKi
-	BOTdi8m/w7PKzuup2wZgKRz8ma48aDiJ+04Q5AGUTn+aMPlzg4SADQVDNlM48/pzUziOJHXr/ia
-	gnDVf0RWu+Ts0eu8IDh/683UnBJqWpqwugV3MfPqdDgtETPC7JsuuxsMsYImO4LBsmZ+h4TAmdi
-	txEBNlsailHl+CaK+F7z1QR5K4xyiueV0PXHQG+TB5f2Cvvi/00pifTpxEMFbtD7Pd8b4IJhdqb
-	5mo=
-X-Google-Smtp-Source: AGHT+IGyn0ZoI8pnyfMT3Hgwa/ZmVlJuxPqhedn0kEIs7IARp51p1LPogEX5qh/GHEMfhaPEnDrEDUE80IOGohrR3b4=
-X-Received: by 2002:a05:6402:35d4:b0:647:7bfe:da8f with SMTP id
- 4fb4d7f45d1cf-6479c2fdc7cmr2790012a12.0.1764776795508; Wed, 03 Dec 2025
- 07:46:35 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764777560; x=1765382360;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V34xiYHMBhlRprMCQ3/uOloSz9kB9mYUn7HTGoE0360=;
+        b=evCl7UXQvlPsPUEogL5Y6lSH4yLwsfqbg/YtdZhKvuLXofrWLi0l1581/j2HwBAmow
+         iGHBa+eaXWRFkqs41bggT3zO7m0DyLTy7nh6mVsSUPmku9GjjbMQSFCrTKsAYXQeKxZ7
+         8ghT9//t1fKMB+MBUWoZ5u7d8pXpXUU5Ozkj+Xdevp0FLGN/BhM2nY2GaJUoXsslRzXE
+         xUO0SsF/538pQj+XXktRR8SjxVPE4zyWfIteYwcKJV7lQt/19rJLX+FbqYm2/Bm05DfL
+         S94PEjB45eMjeqKjWICD1+5Aue3hiHGX3hKjbe3ETweHYnSkzM7cl+xiDezo1Cebcqpo
+         mW1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVtvn3S2/KA1/ZGt9rf/p/yAjiydHF77E4uLWX24k9wCdYL3Sq6UpenNKO/YJV3QPq45kjzkpWbZ7QtfrQVNVM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRZK2lE+HV6XnCdDzbjwoRqpD9V3OiRH3Zw7WRg5FmmjZTvxtC
+	uOj+7d45+Sv3BfuorXCN87SwzBts6KCoszTmaWNWCwLGDYpRjmAckVrZFYWiOwJHwgQ=
+X-Gm-Gg: ASbGncsgiTSFyhpHZs+LNtpl8L+2UZ4p1mrCU5YNZamipOGfAfbdy3lOCMSTiY52DeH
+	EPxLUD75O0VfKg+UoryyoNtyaebjBHZUdrpnOU3IsWrIRdnclZZjF5+YHULiVyfO8ld2HjbkZ+M
+	mH9EhFc1bBm/PFdLXv/OUx7j6HW/NISY7C/TYqE3pPAILB91e8dMVyFAh9HiZ4e3OlV2m1RFZCU
+	QAZggTd30fZYeOXZpGwhLl6fauxMC+ceS4SWTKJH2Nnf+p//llRgJjeOs1RyfATD3TXVwR3ZSsi
+	UshNmif373c9IJf/CM+YaJ1pIY5UCwEhY/kwPmAh2Nci3YzQ21Ou3t41yU6yT0OsvhHeYAXuZmB
+	PpZEs2mWQ1lXi520snpY/Fb+OVghDK7uJlltlHBpxMieO0UhJUSHM9OS9aZHfQ0buxa06cLU8/M
+	hjyqtRF065tRGGuaXqFU3wn6k=
+X-Google-Smtp-Source: AGHT+IHZKqU6OwoL05VlFhrm59ANsB5LDQOaT2yu73WegIU0kb05V6z7peIr7y7gMgvG/jBK7FYjzQ==
+X-Received: by 2002:a05:6830:4389:b0:7bc:6cc3:a624 with SMTP id 46e09a7af769-7c94dd09ab0mr1682360a34.32.1764777560172;
+        Wed, 03 Dec 2025 07:59:20 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.187.108])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c90f5fedbbsm8945257a34.10.2025.12.03.07.59.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Dec 2025 07:59:19 -0800 (PST)
+Message-ID: <a5a1d7bf-04b0-43fb-8f93-781c3534d8fd@linuxfoundation.org>
+Date: Wed, 3 Dec 2025 08:59:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126193608.2678510-1-dmatlack@google.com> <20251126193608.2678510-7-dmatlack@google.com>
- <aTAzMUa7Gcm+7j9D@devgpu015.cco6.facebook.com>
-In-Reply-To: <aTAzMUa7Gcm+7j9D@devgpu015.cco6.facebook.com>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Wed, 3 Dec 2025 10:45:58 -0500
-X-Gm-Features: AWmQ_blDyRfBySet4UyQnBKlT3DfSfdMfA_YKiXzQts7qaw09jP9-UbQNlazg68
-Message-ID: <CA+CK2bDbOQ=aGPZVP4L-eYobUyR0bQA0Ro6Q7pwQ_84UxVHnEw@mail.gmail.com>
-Subject: Re: [PATCH 06/21] vfio/pci: Retrieve preserved device files after
- Live Update
-To: Alex Mastro <amastro@fb.com>
-Cc: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Alistair Popple <apopple@nvidia.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, 
-	kvm@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org, 
-	Lukas Wunner <lukas@wunner.de>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Philipp Stanner <pstanner@redhat.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, William Tu <witu@nvidia.com>, 
-	Yi Liu <yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/seccomp: fix pointer type mismatch in UPROBE
+ test
+To: Nirbhay Sharma <nirbhay.lkd@gmail.com>, Kees Cook <kees@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, llvm@lists.linux.dev, khalid@kernel.org,
+ david.hunter.linux@gmail.com, Jiri Olsa <olsajiri@gmail.com>,
+ sam@gentoo.org, shuah <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <aP0-k3vlEEWNUtF8@krava>
+ <20251026091232.166638-2-nirbhay.lkd@gmail.com>
+ <8e1ff2f1-b45e-4b1f-b545-d433e277607f@gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <8e1ff2f1-b45e-4b1f-b545-d433e277607f@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 3, 2025 at 7:55=E2=80=AFAM Alex Mastro <amastro@fb.com> wrote:
->
-> On Wed, Nov 26, 2025 at 07:35:53PM +0000, David Matlack wrote:
-> > From: Vipin Sharma <vipinsh@google.com>
-> >  static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args=
- *args)
-> >  {
-> > -     return -EOPNOTSUPP;
-> > +     struct vfio_pci_core_device_ser *ser;
-> > +     struct vfio_device *device;
-> > +     struct folio *folio;
-> > +     struct file *file;
-> > +     int ret;
-> > +
-> > +     folio =3D kho_restore_folio(args->serialized_data);
-> > +     if (!folio)
-> > +             return -ENOENT;
->
-> Should this be consistent with the behavior of pci_flb_retrieve() which p=
-anics
-> on failure? The short circuit failure paths which follow leak the folio,
-> which seems like a hygiene issue, but the practical significance is moot =
-if
-> vfio_pci_liveupdate_retrieve() failure is catastrophic anyways?
+On 11/25/25 04:20, Nirbhay Sharma wrote:
+> 
+> 
+> On 10/26/25 2:42 PM, Nirbhay Sharma wrote:
+>> Fix compilation error in UPROBE_setup caused by pointer type mismatch
+>> in the ternary expression when compiled with -fcf-protection. The
+>> probed_uprobe function pointer has the __attribute__((nocf_check))
+>> attribute, which causes the conditional operator to fail when combined
+>> with the regular probed_uretprobe function pointer:
+>>
+>>    seccomp_bpf.c:5175:74: error: pointer type mismatch in conditional
+>>    expression [-Wincompatible-pointer-types]
+>>
+>> Cast both function pointers to 'const void *' to match the expected
+>> parameter type of get_uprobe_offset(), resolving the type mismatch
+>> while preserving the function selection logic.
+>>
+>> This error appears with compilers that enable Control Flow Integrity
+>> (CFI) protection via -fcf-protection, such as Clang 19.1.2 (default
+>> on Fedora).
+>>
+>> Signed-off-by: Nirbhay Sharma <nirbhay.lkd@gmail.com>
+>> ---
+>>   tools/testing/selftests/seccomp/seccomp_bpf.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> index 874f17763536..e13ffe18ef95 100644
+>> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> @@ -5172,7 +5172,8 @@ FIXTURE_SETUP(UPROBE)
+>>           ASSERT_GE(bit, 0);
+>>       }
+>> -    offset = get_uprobe_offset(variant->uretprobe ? probed_uretprobe : probed_uprobe);
+>> +    offset = get_uprobe_offset(variant->uretprobe ?
+>> +        (const void *)probed_uretprobe : (const void *)probed_uprobe);
+>>       ASSERT_GE(offset, 0);
+>>       if (variant->uretprobe)
+> 
+> Hi all,
+> 
+> I'm following up on this patch that fixes the pointer type mismatch in
+> UPROBE_setup when building with -fcf-protection. It resolves the
+> incompatible-pointer-types error seen with Clang 19.
+> 
+> Please let me know if there are any comments or some changes needed.
+> 
 
-pci_flb_retrieve() is used during boot. If it fails, we risk DMA
-corrupting any memory region, so a panic makes sense. In contrast,
-this retrieval happens once we are already in userspace, allowing the
-user to decide how to handle the failure to recover the preserved
-cdev.
+Hi Kees,
 
-Pasha
+Is it okay to take this patch through my tree?
 
->
-> > +
-> > +     ser =3D folio_address(folio);
-> > +
-> > +     device =3D vfio_find_device(ser, match_device);
-> > +     if (!device)
-> > +             return -ENODEV;
-> > +
-> > +     /*
-> > +      * During a Live Update userspace retrieves preserved VFIO cdev f=
-iles by
-> > +      * issuing an ioctl on /dev/liveupdate rather than by opening VFI=
-O
-> > +      * character devices.
-> > +      *
-> > +      * To handle that scenario, this routine simulates opening the VF=
-IO
-> > +      * character device for userspace with an anonymous inode. The re=
-turned
-> > +      * file has the same properties as a cdev file (e.g. operations a=
-re
-> > +      * blocked until BIND_IOMMUFD is called), aside from the inode
-> > +      * association.
-> > +      */
-> > +     file =3D anon_inode_getfile_fmode("[vfio-device-liveupdate]",
-> > +                                     &vfio_device_fops, NULL,
-> > +                                     O_RDWR, FMODE_PREAD | FMODE_PWRIT=
-E);
-> > +
-> > +     if (IS_ERR(file)) {
-> > +             ret =3D PTR_ERR(file);
-> > +             goto out;
-> > +     }
-> > +
-> > +     ret =3D __vfio_device_fops_cdev_open(device, file);
-> > +     if (ret) {
-> > +             fput(file);
-> > +             goto out;
-> > +     }
-> > +
-> > +     args->file =3D file;
-> > +
-> > +out:
-> > +     /* Drop the reference from vfio_find_device() */
-> > +     put_device(&device->device);
-> > +
-> > +     return ret;
-> > +}
+thanks,
+-- Shuah
+
 
