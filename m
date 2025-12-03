@@ -1,209 +1,208 @@
-Return-Path: <linux-kselftest+bounces-46932-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15986C9EA05
-	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 11:03:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67E93C9EB72
+	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 11:32:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B47E64E0262
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 10:03:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 921E43A6C35
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 10:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17AE72E6CC5;
-	Wed,  3 Dec 2025 10:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F35662EDD78;
+	Wed,  3 Dec 2025 10:32:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="LH1lhcmq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DIXlDOcE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com [18.156.205.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89CE72E11BC;
-	Wed,  3 Dec 2025 10:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.156.205.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8B12EC56F
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 10:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764756218; cv=none; b=hpoBs4q/Ze43JhbPQ1bfxRpEWURW7CZRt9zbPVYlHXI9sxvu30CSCchw3WBuw6rDeEPewTi03Cp/TzphqP+YwkLBfOcPS2aF8EaoelsnL5LcOmJC44GKHgwzjq6gRIwaygjV4zTzlEzY0HEKiXNccSEE714aMaac44zYkVnbaiU=
+	t=1764757938; cv=none; b=KqufBgBZvN0luOH/ut7NGpWekJ6teytKOSyuhVPqh0b6FatSvMDRcLpyrhqhc1xNfsqgESWl4tPUGc2K5gDLBkl7MFHvSE6zJmLLmzNoJvI6GOMZ2Hv2n6bqKFBRQSjFS5TLRovWx25XYEE46b4QlDs4plxwToKQXXDHE5D7cHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764756218; c=relaxed/simple;
-	bh=WkESfGO5MviN8fnvT23ujzkSPr3QHo9ZG/Z45XTcDio=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=erWJ8g/Ahx8GDReJH6q75Q2NZwnogoSDJip2xEK8hI9crAZkSaxSagyU64SKBW7OXQTH7F7Qf8/GwXIQdglDmb/mjTdqh3Q0aLGQd5R3pSjNit4A5vTQ5FbWDGyz74g/oWv5F8rIwFk+9H7ajmhmRKW7m2hwZ/KAePJJi9JnapU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=LH1lhcmq; arc=none smtp.client-ip=18.156.205.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1764757938; c=relaxed/simple;
+	bh=2aOcCjl3M0B1t8QPIlt4/5AQoGR7I2VJ4KYXHNVnF9A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s2wM8sXg/g2xOMJzgysKrkLUXy1uTeTYgvRJzPp6B7iRyhjMAkDVZA0Bk3H85ekEsFOnJX9zOL7Da6fDMe49QQJZLzmJ4g4rp+n9lGOnYkoeAZAis2ttcDxGzzpA4IGndHCNm5ytmOrL2EEXN+Hj4QNT5Wg0Sg3iDNHwfFv14LI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DIXlDOcE; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-640d0ec9651so11613602a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 02:32:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1764756217; x=1796292217;
-  h=message-id:date:mime-version:reply-to:subject:to:cc:
-   references:from:in-reply-to:content-transfer-encoding;
-  bh=s7odRi39//eUzQHPeI9r1ot7neXJJbQK2cDuxp8n8TI=;
-  b=LH1lhcmqF2M17HU4+PzuIW3/m/rYzi3seBaSCa7K91ezROB56szRgJKK
-   SCeZKbW9HrCUucKghTu1rIz5R6GA2JBMjphCAZwrGvDhxwCnPaasutQH0
-   VpOsVV8J5GlcvQ+ct1hYDjG/+2QAbl+pdMB25+awUPJftZ5Bx/Ke2rqJp
-   mVieiWh+D9FZW3HY6uliO3jk2g9V924ohVpvEq8UBlYN5c78hSQS03HJb
-   tlqZemYqFmLIEe1kltKKWolXEEH3YZOcKqHT8idAkcLrPKps3Dclj16kP
-   ebTi8oghD0wvvsBjd7EJAhBpc8cDmc6XR6p3FPEfi6qq07xCHSjQQRcvB
-   Q==;
-X-CSE-ConnectionGUID: y+zHd3gVTkuBmjeZewQSHw==
-X-CSE-MsgGUID: co2givXqS36NxzqAzRiVyg==
-X-IronPort-AV: E=Sophos;i="6.20,245,1758585600"; 
-   d="scan'208";a="5853166"
-Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
-  by internal-fra-out-001.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 10:03:19 +0000
-Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:6533]
- by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.44.247:2525] with esmtp (Farcaster)
- id 082a07bd-3f7a-43be-a7c1-2fe7936d9f9f; Wed, 3 Dec 2025 10:03:19 +0000 (UTC)
-X-Farcaster-Flow-ID: 082a07bd-3f7a-43be-a7c1-2fe7936d9f9f
-Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
- EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Wed, 3 Dec 2025 10:03:18 +0000
-Received: from [192.168.6.49] (10.106.82.29) by EX19D005EUB003.ant.amazon.com
- (10.252.51.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29; Wed, 3 Dec 2025
- 10:03:17 +0000
-Message-ID: <6b21d20c-447f-4059-8cbd-76a8eeebe834@amazon.com>
-Date: Wed, 3 Dec 2025 10:03:16 +0000
+        d=google.com; s=20230601; t=1764757935; x=1765362735; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UcqkI9Xd4pMaIL7B+Xnf+RODe2LidpZwWFDHvB1Tt0o=;
+        b=DIXlDOcE5HQbNqxjV4C6idorUyGEk13TCgo0TGRCxPjivECC8edEMe088iirAZxzyM
+         sCkYRq06Eam5CaFltpP+Puz1Vv5odDAZOT/+RdIgW6r7bWaV3bU/UXiRN/0WblnUizv4
+         OdhJMbyod0Nexs3Mutz+33KbOj6aIM6PgD0R9Pz0JoFzeNFXGMlDXcPM3c3soSAMZnH2
+         v7QoRhFHimHqF6C+I+pUU/j3tjc8NWQ9HQev554/WkdOzXXOISB/CJTrB8ud1udUF48C
+         ejj0SuZh1/3+ybjcFmxroHaQPSwqebPaKz5f41VDj/y+WJEukmSaK1F4TBE4NyTr4JXc
+         yU1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764757935; x=1765362735;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UcqkI9Xd4pMaIL7B+Xnf+RODe2LidpZwWFDHvB1Tt0o=;
+        b=FTRMtRqnKYdlN4Jg+ZW3q/Q3D5mBV9cfv9AIq2Q2tsndxsf1sD9xUIVV/3QQRFfzkN
+         LE0uye5BMTS+FLW6h+aggGhdgKRyErSaJWt6givJ9EAkBJ9/V9EXKrHFQ1WfXoYO+e+B
+         +e0vdKRn5YKSv3HMhlUplpPGxM7VhLPcs+m+zYevQGzGffA4ovivm9tD1VoafbQ4pUyO
+         bF6U4/ojEwEaAqiuarg4lJVBN+SOX5YpQFmtZfm0CPnZVlIp2uMHKwO02UW89wWw+6SI
+         o2qz8wfh4mdzCp6LV8vFez18fS0db8AWMtuk3fa3aFm+yQFKEQvg3MPOyEnExunRvCWm
+         +9dQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXBLZOTsd4xNGzYlhu+4iHlvRITdeqtPjpl9eUBY1KgZdcvnz3nxAtZe+fTtjphnXMqmGA6WC+lKkt8w66DOQE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznfqcmWNUge7OKU8Ds9T7+CNQjNH2BkFAVP0YWZ3I6F813Otle
+	wKqF1SAQxy3CIoGBgMfVvfYHUr3leX4QBTHMXMLJT17gH7O+o0Y7o1VAi8OIbeJByA==
+X-Gm-Gg: ASbGncs8QjzZDbN1a5/Hr3bI7E9NuI9LaFIEFWRzxng6Mi94F8AqupBOub2UEZ6hRqJ
+	YWj1G7LEDMofgvoT91UNeizcqztP6TADMe/p0auyQQR2nfspCvpi6MJJvsMy/oiZZ+klMwfakkg
+	DvG4dk2CElTUQykOPPXzCWFRtimse2NuArlXbdT6ITKdqm9sGGQdLppklKB0bMAhv3PRVd4M1T6
+	8/Oxkvgt/Kw4pD7kHR+7H1g3fXIkfMqmPOl1keu6QOFouL68NpSvkWJjqBSn6buIx63iF3tds++
+	rS6XQiTwHsIvKQWGmJQzTUKcPZTOhPz7IZhNtlv4QPR3UBWLtwXa9eqPc0WuZCBirIM2yhUgkTz
+	feqDOZjazR4iE8+D/My2OyVFfnKhkPfp6IJ18i+bBXctRs/Dbo89GgNxscTxI3eVuzAWSwlFs7V
+	+OpVABB+L7POzalWaGLz2g3TLMoym3fX7FYBFjN8dfABpChEvPLRRoNLBd
+X-Google-Smtp-Source: AGHT+IEAY85Pq3Z+N4w3Oj4K17isL6Bl9lnWw+LXYqAqN863wp8c0ApWNgbwOUam/wsgef5nVp4zjQ==
+X-Received: by 2002:a05:6402:1472:b0:640:80f4:3914 with SMTP id 4fb4d7f45d1cf-6479c4f6ff8mr1426286a12.19.1764757934636;
+        Wed, 03 Dec 2025 02:32:14 -0800 (PST)
+Received: from google.com (49.185.141.34.bc.googleusercontent.com. [34.141.185.49])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64751062261sm20113764a12.33.2025.12.03.02.32.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Dec 2025 02:32:14 -0800 (PST)
+Date: Wed, 3 Dec 2025 10:32:10 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Shuran Liu <electronlsr@gmail.com>, Song Liu <song@kernel.org>,
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+	Daniel Xu <dxu@dxuuu.xyz>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	Shuah Khan <shuah@kernel.org>, Zesen Liu <ftyg@live.com>,
+	Peili Gao <gplhust955@gmail.com>,
+	Haoran Ni <haoran.ni.cs@gmail.com>
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: fix and consolidate d_path LSM
+ regression test
+Message-ID: <aTARqrMyC36CXa_L@google.com>
+References: <20251202141944.2209-1-electronlsr@gmail.com>
+ <20251202141944.2209-3-electronlsr@gmail.com>
+ <CAADnVQJQj=mdFbPf7nmc0+qZVC4RCK5AbJvNQv2W--tvGyzzVA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: <kalyazin@amazon.com>
-Subject: Re: [PATCH v3 4/5] guest_memfd: add support for userfaultfd minor
- mode
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>, Peter Xu
-	<peterx@redhat.com>
-CC: Mike Rapoport <rppt@kernel.org>, <linux-mm@kvack.org>, Andrea Arcangeli
-	<aarcange@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, "Axel
- Rasmussen" <axelrasmussen@google.com>, Baolin Wang
-	<baolin.wang@linux.alibaba.com>, Hugh Dickins <hughd@google.com>, "James
- Houghton" <jthoughton@google.com>, "Liam R. Howlett"
-	<Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Michal Hocko <mhocko@suse.com>, Paolo Bonzini <pbonzini@redhat.com>, "Sean
- Christopherson" <seanjc@google.com>, Shuah Khan <shuah@kernel.org>, "Suren
- Baghdasaryan" <surenb@google.com>, Vlastimil Babka <vbabka@suse.cz>,
-	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-References: <20251130111812.699259-1-rppt@kernel.org>
- <20251130111812.699259-5-rppt@kernel.org>
- <652578cc-eeff-4996-8c80-e26682a57e6d@amazon.com>
- <2d98c597-0789-4251-843d-bfe36de25bd2@kernel.org>
- <553c64e8-d224-4764-9057-84289257cac9@amazon.com> <aS3f_PlxWLb-6NmR@x1.local>
- <76e3d5bf-df73-4293-84f6-0d6ddabd0fd7@amazon.com> <aS4BVC42JiUT51rS@x1.local>
- <415a5956-1dec-4f10-be36-85f6d4d8f4b4@amazon.com>
- <69bfdffd-8aa3-4375-9caf-b3311ff72448@kernel.org>
-Content-Language: en-US
-From: Nikita Kalyazin <kalyazin@amazon.com>
-Autocrypt: addr=kalyazin@amazon.com; keydata=
- xjMEY+ZIvRYJKwYBBAHaRw8BAQdA9FwYskD/5BFmiiTgktstviS9svHeszG2JfIkUqjxf+/N
- JU5pa2l0YSBLYWx5YXppbiA8a2FseWF6aW5AYW1hem9uLmNvbT7CjwQTFggANxYhBGhhGDEy
- BjLQwD9FsK+SyiCpmmTzBQJnrNfABQkFps9DAhsDBAsJCAcFFQgJCgsFFgIDAQAACgkQr5LK
- IKmaZPOpfgD/exazh4C2Z8fNEz54YLJ6tuFEgQrVQPX6nQ/PfQi2+dwBAMGTpZcj9Z9NvSe1
- CmmKYnYjhzGxzjBs8itSUvWIcMsFzjgEY+ZIvRIKKwYBBAGXVQEFAQEHQCqd7/nb2tb36vZt
- ubg1iBLCSDctMlKHsQTp7wCnEc4RAwEIB8J+BBgWCAAmFiEEaGEYMTIGMtDAP0Wwr5LKIKma
- ZPMFAmes18AFCQWmz0MCGwwACgkQr5LKIKmaZPNTlQEA+q+rGFn7273rOAg+rxPty0M8lJbT
- i2kGo8RmPPLu650A/1kWgz1AnenQUYzTAFnZrKSsXAw5WoHaDLBz9kiO5pAK
-In-Reply-To: <69bfdffd-8aa3-4375-9caf-b3311ff72448@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: EX19D001EUB003.ant.amazon.com (10.252.51.38) To
- EX19D005EUB003.ant.amazon.com (10.252.51.31)
+In-Reply-To: <CAADnVQJQj=mdFbPf7nmc0+qZVC4RCK5AbJvNQv2W--tvGyzzVA@mail.gmail.com>
 
-
-
-On 03/12/2025 09:23, David Hildenbrand (Red Hat) wrote:
-> On 12/2/25 12:50, Nikita Kalyazin wrote:
->>
->>
->> On 01/12/2025 20:57, Peter Xu wrote:
->>> On Mon, Dec 01, 2025 at 08:12:38PM +0000, Nikita Kalyazin wrote:
->>>>
->>>>
->>>> On 01/12/2025 18:35, Peter Xu wrote:
->>>>> On Mon, Dec 01, 2025 at 04:48:22PM +0000, Nikita Kalyazin wrote:
->>>>>> I believe I found the precise point where we convinced ourselves 
->>>>>> that minor
->>>>>> support was sufficient: [1].  If at this moment we don't find that 
->>>>>> reasoning
->>>>>> valid anymore, then indeed implementing missing is the only option.
->>>>>>
->>>>>> [1] https://lore.kernel.org/kvm/Z9GsIDVYWoV8d8-C@x1.local
->>>>>
->>>>> Now after I re-read the discussion, I may have made a wrong statement
->>>>> there, sorry.  I could have got slightly confused on when the write()
->>>>> syscall can be involved.
->>>>>
->>>>> I agree if you want to get an event when cache missed with the 
->>>>> current uffd
->>>>> definitions and when pre-population is forbidden, then MISSING trap is
->>>>> required.  That is, with/without the need of UFFDIO_COPY being 
->>>>> available.
->>>>>
->>>>> Do I understand it right that UFFDIO_COPY is not allowed in your 
->>>>> case, but
->>>>> only write()?
->>>>
->>>> No, UFFDIO_COPY would work perfectly fine.  We will still use write()
->>>> whenever we resolve stage-2 faults as they aren't visible to UFFD.  
->>>> When a
->>>> userfault occurs at an offset that already has a page in the cache, 
->>>> we will
->>>> have to keep using UFFDIO_CONTINUE so it looks like both will be 
->>>> required:
->>>>
->>>>    - user mapping major fault -> UFFDIO_COPY (fills the cache and 
->>>> sets up
->>>> userspace PT)
->>>>    - user mapping minor fault -> UFFDIO_CONTINUE (only sets up 
->>>> userspace PT)
->>>>    - stage-2 fault -> write() (only fills the cache)
->>>
->>> Is stage-2 fault about KVM_MEMORY_EXIT_FLAG_USERFAULT, per James's 
->>> series?
->>
->> Yes, that's the one ([1]).
->>
->> [1]
->> https://lore.kernel.org/kvm/20250618042424.330664-1-jthoughton@google.com
->>
->>>
->>> It looks fine indeed, but it looks slightly weird then, as you'll 
->>> have two
->>> ways to populate the page cache.  Logically here atomicity is indeed not
->>> needed when you trap both MISSING + MINOR.
->>
->> I reran the test based on the UFFDIO_COPY prototype I had using your
->> series [2], and UFFDIO_COPY is slower than write() to populate 512 MiB:
->> 237 vs 202 ms (+17%).  Even though UFFDIO_COPY alone is functionally
->> sufficient, I would prefer to have an option to use write() where
->> possible and only falling back to UFFDIO_COPY for userspace faults to
->> have better performance.
+On Tue, Dec 02, 2025 at 05:21:59PM -0800, Alexei Starovoitov wrote:
+> On Tue, Dec 2, 2025 at 6:20 AM Shuran Liu <electronlsr@gmail.com> wrote:
+> >
+> > Add a regression test for bpf_d_path() when invoked from an LSM program.
+> > The test attaches to the bprm_check_security hook, calls bpf_d_path() on
+> > the binary being executed, and verifies that a simple prefix comparison on
+> > the returned pathname behaves correctly after the fix in patch 1.
+> >
+> > To avoid nondeterminism, the LSM program now filters based on the
+> > expected PID, which is populated from userspace before the test binary is
+> > executed. This prevents unrelated processes that also trigger the
+> > bprm_check_security LSM hook from overwriting test results. Parent and
+> > child processes are synchronized through a pipe to ensure the PID is set
+> > before the child execs the test binary.
+> >
+> > Per review feedback, the new LSM coverage is merged into the existing
+> > d_path selftest rather than adding new prog_tests/ or progs/ files. The
+> > loop that checks the pathname prefix now uses bpf_for(), which is a
+> > verifier-friendly way to express a small, fixed-iteration loop, and the
+> > temporary /tmp/bpf_d_path_test binary is removed in the test cleanup
+> > path.
+> >
+> > Co-developed-by: Zesen Liu <ftyg@live.com>
+> > Signed-off-by: Zesen Liu <ftyg@live.com>
+> > Co-developed-by: Peili Gao <gplhust955@gmail.com>
+> > Signed-off-by: Peili Gao <gplhust955@gmail.com>
+> > Co-developed-by: Haoran Ni <haoran.ni.cs@gmail.com>
+> > Signed-off-by: Haoran Ni <haoran.ni.cs@gmail.com>
+> > Signed-off-by: Shuran Liu <electronlsr@gmail.com>
+> > Reviewed-by: Matt Bobrowski <mattbobrowski@google.com>
+> > ---
+> >  .../testing/selftests/bpf/prog_tests/d_path.c | 65 +++++++++++++++++++
+> >  .../testing/selftests/bpf/progs/test_d_path.c | 33 ++++++++++
+> >  2 files changed, 98 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/d_path.c b/tools/testing/selftests/bpf/prog_tests/d_path.c
+> > index ccc768592e66..202b44e6f482 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/d_path.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/d_path.c
+> > @@ -195,6 +195,68 @@ static void test_d_path_check_types(void)
+> >         test_d_path_check_types__destroy(skel);
+> >  }
+> >
+> > +static void test_d_path_lsm(void)
+> > +{
+> > +       struct test_d_path *skel;
+> > +       int err;
+> > +       int pipefd[2];
+> > +       pid_t pid;
+> > +
+> > +       skel = test_d_path__open_and_load();
+> > +       if (!ASSERT_OK_PTR(skel, "d_path skeleton failed"))
+> > +               return;
+> > +
+> > +       err = test_d_path__attach(skel);
+> > +       if (!ASSERT_OK(err, "attach failed"))
+> > +               goto cleanup;
+> > +
+> > +       /* Prepare the test binary */
+> > +       system("cp /bin/true /tmp/bpf_d_path_test 2>/dev/null || :");
+> > +
+> > +       if (!ASSERT_OK(pipe(pipefd), "pipe failed"))
+> > +               goto cleanup;
+> > +
+> > +       pid = fork();
+> > +       if (!ASSERT_GE(pid, 0, "fork failed")) {
+> > +               close(pipefd[0]);
+> > +               close(pipefd[1]);
+> > +               goto cleanup;
+> > +       }
+> > +
+> > +       if (pid == 0) {
+> > +               /* Child */
+> > +               char buf;
+> > +
+> > +               close(pipefd[1]);
+> > +               /* Wait for parent to set PID in BPF map */
+> > +               if (read(pipefd[0], &buf, 1) != 1)
+> > +                       exit(1);
+> > +               close(pipefd[0]);
+> > +               execl("/tmp/bpf_d_path_test", "/tmp/bpf_d_path_test", NULL);
+> > +               exit(1);
+> > +       }
 > 
-> Just so I understand correctly: we could even do without UFFDIO_COPY for
-> that scenario by using write() + minor faults?
+> No forks please. They often make selftest to be flaky.
+> Use simples possible way to test it.
+> Without forks and pipes.
 
-We still need major fault notifications as well (which we were 
-accidentally generating until this version).  But we can resolve them 
-with write() + UFFDIO_CONTINUE instead of UFFDIO_COPY.
+Yeah, I was also a little hesistant about letting this slide.
 
-> 
-> But what you are saying is that there might be a performance benefit in
-> using UFFDIO_COPY for userspace faults, to avoid the write()+minor fault
-> overhead?
-
-UFFDIO_COPY _may_ be faster to resolve userspace faults because it's a 
-single syscall instead of two, but the amount of userspace faults, at 
-least in our scenario, is negligible compared to the amount of stage-2 
-faults, so I wouldn't use it as an argument for supporting UFFDIO_COPY 
-if it can be avoided.
-
-> 
-> -- 
-> Cheers
-> 
-> David
-
+Shuran, change your BPF program such that you're attached to file_open
+instead. That'll make testing from your test runnner far simpler.
 
