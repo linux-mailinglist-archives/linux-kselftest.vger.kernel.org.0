@@ -1,153 +1,98 @@
-Return-Path: <linux-kselftest+bounces-46950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35F9BCA0803
-	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 18:34:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84973CA0AFC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 18:55:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0F64A3009C30
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 17:34:22 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DA4D93000B21
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 17:55:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49E862FB962;
-	Wed,  3 Dec 2025 17:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52D0301460;
+	Wed,  3 Dec 2025 17:55:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="e05Yi1Na"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cyLnQYbJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940F130C373
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 17:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA5533D6E7
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 17:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764783001; cv=none; b=JWxCCrHe2oLUgz8FlEMKD29z0AhTnzh7wJ81Yu2BywZEDMx/y1vrbZZ2eifuDlwXk9oLYX0azMG/cMttw12ibqX/+FD3pgFwgrLAitacU9vpWwYR+AFkuHyY0TPjONf3bAS9lNqcD3fM1kMtVnlVtBbqRQrPdFtePO6Rbye7Bpw=
+	t=1764784555; cv=none; b=s0c0uNGyZ6MQYvrNS2BGIseVegtwCj3UE4NMcOAl2xRhLTcKExufrl2bU/PZARNLgt4pyAX6WNtUTyrV3MHgxdt0zaEKj1J4SDj9Z8bA9gCN7LUYQEFjsxoL4norVtKMW/CJSbyTl2fT8dDzXBrLYfFakdpivX8b6zt2CDLxnio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764783001; c=relaxed/simple;
-	bh=yhp8ueLBj5nMHyuDgH/VoEo8DFq7np5eB5KjSi/CnnE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IWwnaC6H2aCft/nF/ZRStQ8UFUSvP5oXcsnfhC34Id7ZyBGChkn4bEyE06q46hANDIPiKaBSKVA68ixRSkTVEEFkN232o1uyglv+oAdS7e0EUPVue2Pcm+nvVuN5a30p5SgY0qHrJsUOof7zHFc4GAt7akap1qIZfb+mJeRaHGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=e05Yi1Na; arc=none smtp.client-ip=209.85.217.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5de23ddba5eso28338137.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 09:29:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764782998; x=1765387798; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0ymOu3D/5TCeHMIJLeG6oQI7EFVuJhBKpf9gV9hN/6k=;
-        b=e05Yi1NaNRV8feWkf1J/QH59rCYoZQ6JkcAy9gnt899o6YqCHo5nSZelPOvenVle9X
-         UIsyKuPLD+6BQkm1vr2+9GH3MooHpBxU+avgmntqcW/XZqF1KBFjvkGTts7mQqEwZT8Y
-         QZQfx8rTTAM9ZJwbXpSNjt2pgocSxD29eG83aKeappBCinu50F2x3L5nzhK33JfQ0JKh
-         dWtAn6t6o0RKDdmDUkYtpJI9xO69c892LrgsCFI3oJKgTLTQ9pXauxKpzbnt4uozrzOu
-         EMML3pzMNu9unwBx7P4KfxAZeRhrjA/xMAEbImSWDPuBoYBr0PipXWXD8iOievzLFFBp
-         5JXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764782998; x=1765387798;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0ymOu3D/5TCeHMIJLeG6oQI7EFVuJhBKpf9gV9hN/6k=;
-        b=B1U46xaUqPyaK751xhWYPVNvXs91jBYtxVF2ADU9VgUhLSX2twabAusvfZcqCRHL0o
-         4UOUztkdJXt6gIRnAGPQv3srTb015tJV21xA1O0slkrJ2aGUaL43WqIEE734HNyQPHD1
-         HeTTFEXv2i0HBPxq9kQ4Q7VAlolexM4m7vslBlR28rQQ0QahhnXVRWcHsGn8ywInsWuQ
-         kURmem3OOJp8AgmWRDyxtMbb65h1lotamnNcfcLB7Y6wjSRD49FMkvpIUe9yz6V38PKw
-         rZ4pOnBAt3QYJWtzCQqnmca70Go3CTSWOeXbOZFz0pUWn1vwMvAUs4NbRKt1DnFH6oEk
-         SrYA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5JzS0y6cLRBOxb4wy3+bBEHptF4MRwPSsvmcnb/nQ7sb3FVHTN5LVzGS5QArRpUovhvpXJ+XpxFBizI4O8xA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxmku0vr1NN9Ud6C3xC3dgWZI3i5P9vXM+1TmD+HfVrKehv1K5M
-	SbapPVjdAl5g/lxrir4MtZOhy1hDQEPWKOVp/sFyz/2QDGkehU7IZxOFxpNw+Ghy68A8aRafX1X
-	5Q9lBA3QlubvW2SgOArFEUVeCXP2uEQLz5GhxjZ+R
-X-Gm-Gg: ASbGncutPS394VgZ9pnsiWKpoXpCIQ6wCGtj7UtZGdoVXrnyBJ0rE8BMtNOHhG7uLUO
-	IdZ89SKr20dtpm0GBfwVwnWFSRtgWMw3qPN7wOr4/AgZiDbS6Cic5lD7El2JZ8GgW7ZlcQjMPpo
-	J5n9Qq2flUOY3rpowzTXHRC6nYWESYHtjKWvfPUUSOmXI8glAZZjdAbNQhvVEKJYNANsP5NSzau
-	U2JhIsgt1wZJ650my2Zc363hQ4XM+fqJH4ThZVK23k3o39Wr8PyWKXgZFiunlv2pK+ADjJa
-X-Google-Smtp-Source: AGHT+IEKqmK3kDwhNospqoV4M7zNXECVKB1pEuoEfSUxYUNClHBKew01QVDNB+pfOa2oWX8T4XdL5cKkx6qlappJfPQ=
-X-Received: by 2002:a05:6102:162a:b0:5db:f5d1:5799 with SMTP id
- ada2fe7eead31-5e48e36e069mr1205132137.33.1764782998176; Wed, 03 Dec 2025
- 09:29:58 -0800 (PST)
+	s=arc-20240116; t=1764784555; c=relaxed/simple;
+	bh=Dr7RVSChi264JkWMxljiajI/KNWq3tCHcnXKxd7kvC0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=dH2xmXIY+0wSx13xqUbOdvlbuuxr3vY0mUTecyYqePPngX0ASGP/SS4o2kRUtXSmOIlNVcO6EzGTKRQaxw4VWZXNt0TtMhAIgG0N+PKeCeJSrE9Pnuh3S+dTyaGZIMDIxYgAkkrzOZTvlSRLhe1AmH5ArjDSjA8bPH0Y6ZHLN4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cyLnQYbJ; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+	bh=fr2EenPbT7TXJb49mjpOSUZdfls6BWCvS5ammf3zUkY=; b=cyLnQYbJRUYOic3uyOm6p3FalE
+	IRtTtupN1FQzLSQxssZHo6/2W34XBwXiOCXGLmKg0HGzNBn4uVAELQoowc3tko5IvwS7HaXKPFMGf
+	mA8qLkjfHWMfrGl/n5wFGpwR7H+SfPsWQfS3869Oc4TcN1dJUfilN8g/jYcnw/ShurNH4MIPh6jv3
+	QM2kCTa9Sjli+DyZPCOLUQWdtJ8igpScLzeDXf3vM2rBui5w49BFDaHKIv2OsCRCNtuVgH4xZUpW/
+	+/DhRuHgvf6Ot4xQhJIHOk190l8+4n2wVwiUJuaFL5pbtIm7lfCP9Piv2WS8fktnUaMj48k8saPcX
+	aA/kHTzQ==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vQr4y-00000006tF6-0i8D;
+	Wed, 03 Dec 2025 17:55:52 +0000
+Message-ID: <d64e84ca-8a3a-4ddd-bbef-feebb17ff283@infradead.org>
+Date: Wed, 3 Dec 2025 09:55:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126193608.2678510-1-dmatlack@google.com> <20251126193608.2678510-7-dmatlack@google.com>
- <aTAzMUa7Gcm+7j9D@devgpu015.cco6.facebook.com> <CA+CK2bDbOQ=aGPZVP4L-eYobUyR0bQA0Ro6Q7pwQ_84UxVHnEw@mail.gmail.com>
-In-Reply-To: <CA+CK2bDbOQ=aGPZVP4L-eYobUyR0bQA0Ro6Q7pwQ_84UxVHnEw@mail.gmail.com>
-From: David Matlack <dmatlack@google.com>
-Date: Wed, 3 Dec 2025 09:29:27 -0800
-X-Gm-Features: AWmQ_blKPsDeMnCOujpZmsX70hbna-86oi6Hxpla3VI0D7Ue5d4-IEmochk7nSM
-Message-ID: <CALzav=ciz4kV+u3B5bMzZzVY+cMs-G=q9c5O-jKPz+E4LUdx7g@mail.gmail.com>
-Subject: Re: [PATCH 06/21] vfio/pci: Retrieve preserved device files after
- Live Update
-To: Pasha Tatashin <pasha.tatashin@soleen.com>
-Cc: Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>, 
-	Adithya Jayachandran <ajayachandra@nvidia.com>, Alistair Popple <apopple@nvidia.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Chris Li <chrisl@kernel.org>, David Rientjes <rientjes@google.com>, 
-	Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Josh Hilke <jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>, 
-	kvm@vger.kernel.org, Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org, 
-	Lukas Wunner <lukas@wunner.de>, Mike Rapoport <rppt@kernel.org>, Parav Pandit <parav@nvidia.com>, 
-	Philipp Stanner <pstanner@redhat.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Tomita Moeko <tomitamoeko@gmail.com>, Vipin Sharma <vipinsh@google.com>, William Tu <witu@nvidia.com>, 
-	Yi Liu <yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>, 
-	Zhu Yanjun <yanjun.zhu@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: Problems when trying to build tools/testing/selftests
+To: Shuah <shuah@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <44e08e2f-7f22-4106-b581-56150cafb048@roeck-us.net>
+ <bb2426dd-3c29-4c94-ac77-aaa0b422b2e7@kernel.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <bb2426dd-3c29-4c94-ac77-aaa0b422b2e7@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 3, 2025 at 7:46=E2=80=AFAM Pasha Tatashin <pasha.tatashin@solee=
-n.com> wrote:
->
-> On Wed, Dec 3, 2025 at 7:55=E2=80=AFAM Alex Mastro <amastro@fb.com> wrote=
-:
-> >
-> > On Wed, Nov 26, 2025 at 07:35:53PM +0000, David Matlack wrote:
-> > > From: Vipin Sharma <vipinsh@google.com>
-> > >  static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_ar=
-gs *args)
-> > >  {
-> > > -     return -EOPNOTSUPP;
-> > > +     struct vfio_pci_core_device_ser *ser;
-> > > +     struct vfio_device *device;
-> > > +     struct folio *folio;
-> > > +     struct file *file;
-> > > +     int ret;
-> > > +
-> > > +     folio =3D kho_restore_folio(args->serialized_data);
-> > > +     if (!folio)
-> > > +             return -ENOENT;
-> >
-> > Should this be consistent with the behavior of pci_flb_retrieve() which=
- panics
-> > on failure? The short circuit failure paths which follow leak the folio=
-,
 
-Thanks for catching the leaked folio. I'll fix that in the next version.
 
-> > which seems like a hygiene issue, but the practical significance is moo=
-t if
-> > vfio_pci_liveupdate_retrieve() failure is catastrophic anyways?
->
-> pci_flb_retrieve() is used during boot. If it fails, we risk DMA
-> corrupting any memory region, so a panic makes sense. In contrast,
-> this retrieval happens once we are already in userspace, allowing the
-> user to decide how to handle the failure to recover the preserved
-> cdev.
+On 12/3/25 9:25 AM, Shuah wrote:
+> On 12/2/25 22:20, Guenter Roeck wrote:
+>> Hi,
+>>
+>> when trying to build tools/testing/selftests, I get a lot of warnings such as
+>>
+>> mount-notify_test.c: In function ‘fanotify_fsmount’:
+>> mount-notify_test.c:360:14: warning: implicit declaration of function ‘fsopen’; did you mean ‘fdopen’?
+>>
+>> and subsequent build errors.
+>>
+>> testing/selftests/filesystems/mount-notify/mount-notify_test.c:360: undefined reference to `fsopen'
+>> /usr/bin/ld: tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c:363: undefined reference to `fsconfig'
+>> /usr/bin/ld:tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c:366: undefined reference to `fsmount'
+>> /usr/bin/ld: tools/testing/selftests/filesystems/mount-notify/mount-notify_test.c:371: undefined reference to `move_mount'
+>>
+>> This does not just affect a single file, but several of them.
+>>
+>> What am I missing ? Is there some magic needed to build the selftests ?
+> 
+> Not sure. It built fine for me on Linux 6.18 latest. Are you missing
+> a library possibly?
 
-This is what I was thinking as well. vfio_pci_liveupdate_retrieve()
-runs in the context of the ioctl LIVEUPDATE_SESSION_RETRIEVE_FD, so we
-can just return an error up to userspace if anything goes wrong and
-let userspace initiate the reboot to recover the device if/when it's
-ready.
+Guenter, did you follow Documentation/dev-tools/kselftest.rst?
 
-OTOH, pci_flb_retrieve() gets called by the kernel during early boot
-to determine what devices the previous kernel preserved. If the kernel
-can't determine which devices were preserved by the previous kernel
-and once the kernel starts preserving I/O page tables, that could lead
-to corruption, so panicking is warranted.
+Shuah, is that document what you recommend?
+
+-- 
+~Randy
+
 
