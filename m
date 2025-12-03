@@ -1,131 +1,141 @@
-Return-Path: <linux-kselftest+bounces-46947-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46948-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1252CA0452
-	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 18:08:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9236ECA0D75
+	for <lists+linux-kselftest@lfdr.de>; Wed, 03 Dec 2025 19:14:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8FE4230E0B5D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 16:57:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D35C7331EFD9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Dec 2025 17:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64D2136C0B3;
-	Wed,  3 Dec 2025 16:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E8FE398F91;
+	Wed,  3 Dec 2025 16:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="kTxOzvQF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HeJ8XFDw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57E436BCF4
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 16:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B45A398F9A
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 16:58:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764779503; cv=none; b=XMZjELFJIqX2zXMD6Psok0i/JcYy8Uy95GZEXQulZIembla/sK2Vywxga++Heor4Jhp7NSIRHeWgv5k2uQ8yp94rK9elxZI9LpJzwORC241sXcQzhljB3syZiuj00/DhIA41hMv+2wWRWWXDJgr7C7yuxy1Jgds1Kj7gOpRVNLs=
+	t=1764781139; cv=none; b=h4eT1qTF5P+irnJ05vaAZyxHgjzk1cK1hDW/Gh4/G0zuB+H0kotBPiWtlMxDU9UNCZnjd2gS49tvwa82JDUdbQ+LiwaZct2DAccGd3Lgo2kUpwcmQzJaf1mG4hgrglPG87NRZRSGR6RyJLh8Wl7v9Cs85BuYoqxFgOP75PZFi90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764779503; c=relaxed/simple;
-	bh=l0gnY/UzSbFUAuDU1KntIMiLjASuWWo0nEVW8bui9Tk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=r+T3JtKz4JPZkvupMPQsP4Gpwzl81JZdEUb/HtiT/0sFTTe+FvnVvTGRsTzYlVsn6byv6VQR93gUKTIHuqBnOVFML1V2pA/aw0rlPgUe3mMnqBXZB+ju19CxYdQ8Qc8963OHDerajBi5kLds4lQTKhUSBPS6oSIVtpG5luDdrbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=kTxOzvQF; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id CF28340401
-	for <linux-kselftest@vger.kernel.org>; Wed,  3 Dec 2025 16:31:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1764779484;
-	bh=l0gnY/UzSbFUAuDU1KntIMiLjASuWWo0nEVW8bui9Tk=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type;
-	b=kTxOzvQFwwFYahBIdvD+Q0qvBMRKooVbSEzIrDSyXsjQkiDbMfEgzbj+Rxi7qzl++
-	 xF/Wwgk9KQee0ysVwVocI/GSM3WUsz49OKtsfE/lrt57IvQDjgLBNvnTGnpsYBEbIp
-	 wOw3Hz3YdRNrLvNTnsrZv4SfeX7Iv845zLaRTRy9M32rN/AwmX63DwJVz3U/x/mH8Q
-	 u32+jM7yWmESVEAErzupgYKp9rBPWKT021itDBARXMGaJvCHrNZfU2aTpRumLDYvCs
-	 m1qEvW9eBCiECNJq6YiqjMmwqjPZt4qsjVpn7NVDopCvOkV0t0FwT2kQtzJzsAVtRX
-	 Q5Fq6os9nM39CxdXxXL5W1QwrPwzn5CAp6d383j6ZJvNrhcuceCnTvh4LJmErcOnh1
-	 6EGU7X6zBpYgPv9qkK0TaoeJCcnDnvXdrvF1XEacCVv0l+YmU4srBUDFvWYUghfd3J
-	 Ukl71JUqpPq2aCcun0ujg9IGf9MHd0U0SDMARUs3gBBn4df87hSnd35X3D+7gq7VHf
-	 Kp4ITOUFahfiCNSOTHivj/9twGRY9VYNv48hAKI7hely2r/Ql7TrjFn8mq1ADko22q
-	 D1D4M7p5BNDOIspBJzOIhN1bGkrKfui59V8YZ8rv3feVbzdqVQf6nx0jzVwMiy4ouo
-	 PPkiOJm+7TGV62FmfkacNBWI=
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4775e00b16fso45912725e9.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 08:31:24 -0800 (PST)
+	s=arc-20240116; t=1764781139; c=relaxed/simple;
+	bh=+w1fh0CLrnEXL5kEY/A4dLuPSBwVUZezWvTx+H8HRaI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g+Kf54AEkgw4dHf7e3QenZ16n0uKL+owVj9Ib08NaZDLK6T3gcSwmQmOUntpn98p8ViKijyoHgQPRkVk/P3Uceos8DfcLNMq4tdCK3O1/JL4ABxJeZJPeu9tRnLxwEzs6Pj2e7VS9qgYmFhQEJrVrqbZUdNlq506jtnBB4YtXRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HeJ8XFDw; arc=none smtp.client-ip=209.85.160.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-4ed67a143c5so629271cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 08:58:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764781131; x=1765385931; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aWXC9hyoBsRhxJFVF8r6pSxMVZV+OmkuKYv5ee8pQww=;
+        b=HeJ8XFDwdWekDq9V1b9WJsNTFib2PsBhNTiX2rmGrMIcmsVSCkVMDiqiuq9OlqQg9a
+         Ay7EDzHuaOQu3QWfs6/m7Q3KMm4YOTY7Q1RHirjo+KH3AjM+4I020XQpQqigcDGHeMA5
+         PmEoJtrAlSkb4bPPDYI2xhaMFa5a1Z5YCZmmaw3ge5rK/YsJOBM73EXxmtTsMDcTbWKj
+         GhPpH+p7RnOvYWP7fPkg+bOA9V4xqBf7JUrmaPLD9D/VnJExi/NMadW+EEKnZwG6UqP1
+         QzihSSd3ARliBhugxPMbyqOjwJ/r+6UaBuNwML+v7GS1ZWXmBv2jivFhYvOBCflqqwQ4
+         nOfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764779476; x=1765384276;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l0gnY/UzSbFUAuDU1KntIMiLjASuWWo0nEVW8bui9Tk=;
-        b=sAy/gKbNgtYe5De/8ZTxquB+pmorgjXOpzUw0RYAIixQ6y53MhMc4CEMiLm8YoFg8P
-         9F4685Wx59dtvqusHnQSCMyz3gAW1L74yfU9HmEEqLumOjnBh/B1DMC7/SjBoPWBIgh2
-         7HqMIl2NGGxAAUGU+V8xgDwFFKITegJ7EVsT4ELePOrVNALggjUuoylLHtM+un9VgpAf
-         pkG6fTtXLNZGJDajiL5Gd+T3trIgaHF+NpmKPzPpmBsvnDO38tfY7BRUhQwWmKWbbBj9
-         9vJ0zDwGiTCYDyiSdN1Ka5ESdtNrqKxGoLscf4WIP4IRE0M7u57s2VUHxkYIoaihwJKF
-         klGA==
-X-Forwarded-Encrypted: i=1; AJvYcCWnLv+OL+R2XHtfVIICISsoFDuTkApcBZXNZsXf5GV89TMqD52rsMXEhFak/J7u4j1KBjK8cS+GQiVHKnQt0lQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPXFKza/tGz+1iFGscuJEr2KwF5Xld4b+XOe8B24pcOepLwJBO
-	AZrfDW6HsPx4L0HqWeUS1ohRKrG97c/UzeCZd63kbAiUa5wGKa/rXaykR8J6f8YReiDEPE2N6Mg
-	PuEgKBcGzOddeRmaemH3fsTvsH5NRm1CmLmZkOlbB47zxIHpTwAzuKrquXAQiEbUm42h5eCH0PE
-	kdznD1kPnFLA==
-X-Gm-Gg: ASbGnctfp7W70Nh4sWkqJaQ9kiJ4YbM0HMCBP1i2QXWVw7zi0a2SsrxHeCsWkS6dkwA
-	6p58cJbgp/MvfQPhbAXU8V4qQqCQQYzwG+dl49ho6UhyElzJ+R8NJjn0/RJRdVoFx3SzoPgc5LT
-	ymJDHIblpLJP6EewuRNYIfjzJyyZpgD7X7JxFCBpFw8ACcgqPuF2f7nQ9a2XMBU3EjaAph9+MvH
-	4mE6ss1wKR6LLU3nWz8KMJkOBV0q42BREmC8qJw8ygwo2DeDKoSCGAx6Tu2DTDWu2vHXJEGDHE+
-	hVP7iTJ9sE94kYV0Mzj9a9sOP7MnMErBoVI8uK7ElNUiGRQ2h0D2GfReYImzcG5b7TOmO7XhQ15
-	AqIiudOY22gCv2bhI0jUr7VpY/1ORZOcLJB5KmHI7F5MDRth6hnOFS6+SS7Ef8iWxvKYnLzHBH2
-	A=
-X-Received: by 2002:a05:600c:a41:b0:46e:74cc:42b8 with SMTP id 5b1f17b1804b1-4792af327dfmr27911265e9.17.1764779476110;
-        Wed, 03 Dec 2025 08:31:16 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHCKejq/2U+1EN5UAB8CezRHOHJDvwMZzcFVGMZ1T1ZB5XD8pg1afh59Y/Z4iwxgxyD87hFlQ==
-X-Received: by 2002:a05:600c:a41:b0:46e:74cc:42b8 with SMTP id 5b1f17b1804b1-4792af327dfmr27910815e9.17.1764779475621;
-        Wed, 03 Dec 2025 08:31:15 -0800 (PST)
-Received: from [10.1.1.222] (atoulon-257-1-167-49.w83-113.abo.wanadoo.fr. [83.113.30.49])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42e1c5c30c4sm40900310f8f.9.2025.12.03.08.31.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Dec 2025 08:31:15 -0800 (PST)
-Message-ID: <6b25515b-c364-47f1-bd75-8b7dc16e3701@canonical.com>
-Date: Wed, 3 Dec 2025 17:31:13 +0100
+        d=1e100.net; s=20230601; t=1764781131; x=1765385931;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=aWXC9hyoBsRhxJFVF8r6pSxMVZV+OmkuKYv5ee8pQww=;
+        b=dNOyXz4w1I9DStbjSB/JdKXeD0lJsqzCo8c1ADAOV/Qf54bP4e8oh556VQ9/chc/2q
+         L3oL2m+3d9s6jdASpkaAD8Ip8HdTfeUl9xJS1Bdxbd8UBG3qpvKZCHmfBl124t/aslb9
+         +jSCIEjQYzl2c5Uh3M2YLXXTALRpioEvFy0A+ndkHUR1Mf0jm/F+qtsLWyLyQHjV5DWj
+         OC/xKcZ4VP19mrUXAh5rTPaNum8A6u4cZvK9Mj25Otx555mgd1lBDp6IrzORiaJP9KES
+         eHpnWQ1JCs2npezj1jcT2nbpQ3RiGINedfCTRUAIdzL4k7h43Umd0Q8KIdUUDTG6YSTh
+         y6ug==
+X-Forwarded-Encrypted: i=1; AJvYcCVmXyt9Pp/eLV4/v9eXR0s/aJaMccZueHq4nkyeyiEzu975bWerOG77X8oUWz3U2yib81931d35uGkULmq2nlU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyV+3Mw45WBAomqWH4ws2nrvy1r0PDal7cxfiQD7VoeafUGbdT2
+	eC/TzWR3L//Iu/dp/KBYQZx2qnyivO86JWcT+xlNP3iPpY01yK6SNZ4hMaiaHM6UVgq/UKlaUOL
+	LV/QuqbhslYqh3tnEaRXbnlefmlNqkbdIGSssSwT1
+X-Gm-Gg: ASbGncuidVe/JxPjifmo3NsHAbbnMGYrdykHg5/gwx68nzztmfsSqog1kX4Sef6Xvon
+	763SaloMrlms4cdpm2XY3tjtHoYn4e9BMF5pkN0+Q8BbJJ3kYjXUBOwoEQqcUBUdr5lnH8RIrW+
+	EbNxMCnDz0vwDBCFdMn4UirQhigc1geTewmR3DTjGPUXsCN1cSpun/zNJzhPhzW0o95I1i+M++R
+	B8J4oViseNlM248WphjAlscjuXSM9RrDyvImBj0HYbXqgLBJ6aIVIN/l7jBz40OoBPLC6rqMLBF
+	HhK+r4sC+adA8exzeqqnvRPGgTtMhrVAuhb5yQyFwBxKBZQksvaEv9/R6mji
+X-Google-Smtp-Source: AGHT+IEwQDGOVT8Lgzi1wTqV6Us8oL3zoJ/xquBSspLWs/EEWhA+DJcMaq/DF7hunAbCMnNSctvo80o0agoxsFagOgY=
+X-Received: by 2002:a05:622a:15ce:b0:4ed:8103:8c37 with SMTP id
+ d75a77b69052e-4f015798fffmr13757201cf.12.1764781131112; Wed, 03 Dec 2025
+ 08:58:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: devnull+debug.rivosinc.com@kernel.org
-Cc: Liam.Howlett@oracle.com, a.hindborg@kernel.org,
- akpm@linux-foundation.org, alex.gaynor@gmail.com, alexghiti@rivosinc.com,
- aliceryhl@google.com, alistair.francis@wdc.com, andybnac@gmail.com,
- aou@eecs.berkeley.edu, arnd@arndb.de, atishp@rivosinc.com,
- bjorn3_gh@protonmail.com, boqun.feng@gmail.com, bp@alien8.de,
- brauner@kernel.org, broonie@kernel.org, charlie@rivosinc.com,
- cleger@rivosinc.com, cmirabil@redhat.com, conor+dt@kernel.org,
- conor@kernel.org, corbet@lwn.net, dave.hansen@linux.intel.com,
- david@redhat.com, debug@rivosinc.com, devicetree@vger.kernel.org,
- ebiederm@xmission.com, evan@rivosinc.com, gary@garyguo.net, hpa@zytor.com,
- jannh@google.com, jim.shu@sifive.com, kees@kernel.org,
- kito.cheng@sifive.com, krzk+dt@kernel.org, linux-arch@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-riscv@lists.infradead.org,
- lorenzo.stoakes@oracle.com, lossin@kernel.org, mingo@redhat.com,
- ojeda@kernel.org, oleg@redhat.com, palmer@dabbelt.com,
- paul.walmsley@sifive.com, peterz@infradead.org,
- richard.henderson@linaro.org, rick.p.edgecombe@intel.com, robh@kernel.org,
- rust-for-linux@vger.kernel.org, samitolvanen@google.com, shuah@kernel.org,
- tglx@linutronix.de, tmgross@umich.edu, vbabka@suse.cz, x86@kernel.org,
- zong.li@sifive.com
-References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
-Subject: Re: [PATCH v23 00/28] riscv control-flow integrity for usermode
-Content-Language: en-US
-From: Valentin Haudiquet <valentin.haudiquet@canonical.com>
-In-Reply-To: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20251201163800.3965-1-chia-yu.chang@nokia-bell-labs.com> <20251201150509.6cd9fefc@kernel.org>
+In-Reply-To: <20251201150509.6cd9fefc@kernel.org>
+From: Neal Cardwell <ncardwell@google.com>
+Date: Wed, 3 Dec 2025 11:58:34 -0500
+X-Gm-Features: AWmQ_bmmK0qcQ0MMg8A5oddcgrqcwdNw6rP5OvhiWOfo_lx74r4d17hh5ndUNnw
+Message-ID: <CADVnQynFTrWf_waxGPH6VVPSZapSuxUb6LFdFUGj0NfiADAa7Q@mail.gmail.com>
+Subject: Re: [PATCH v7 net-next 00/13] AccECN protocol case handling series
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: chia-yu.chang@nokia-bell-labs.com, pabeni@redhat.com, edumazet@google.com, 
+	parav@nvidia.com, linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org, 
+	dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com, 
+	stephen@networkplumber.org, xiyou.wangcong@gmail.com, jiri@resnulli.us, 
+	davem@davemloft.net, andrew+netdev@lunn.ch, donald.hunter@gmail.com, 
+	ast@fiberby.net, liuhangbin@gmail.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org, ij@kernel.org, 
+	koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com, 
+	ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com, 
+	cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com, 
+	vidhi_goel@apple.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Valentin Haudiquet <valentin.haudiquet@canonical.com>
+On Mon, Dec 1, 2025 at 6:05=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
+te:
+>
+> On Mon,  1 Dec 2025 17:37:47 +0100 chia-yu.chang@nokia-bell-labs.com
+> wrote:
+> > Plesae find the v7 AccECN case handling patch series, which covers
+> > several excpetional case handling of Accurate ECN spec (RFC9768),
+> > adds new identifiers to be used by CC modules, adds ecn_delta into
+> > rate_sample, and keeps the ACE counter for computation, etc.
+> >
+> > This patch series is part of the full AccECN patch series, which is ava=
+ilable at
+> > https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
 
+Hi Chia-Yu,
+
+My understanding is that you still have a set of packetdrill tests you
+have been using to test this AccECN patch series. For the Linux
+networking stack, the recent best practice for a significant patch
+series like this is to add packetdrill tests to the
+tools/testing/selftests/net/packetdrill/ directory as a separate
+commit in the patch series.
+
+For a recent example, see:
+
+  selftest: packetdrill: Add max RTO test for SYN+ACK.
+  https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/commi=
+t/?id=3Dffc56c90819e86d3a8c4eff6f831317d1c1476b6
+
+When you next post the AccECN patch series for review, can you please
+include a patch at the end of the series that posts your packetdrill
+tests in the tools/testing/selftests/net/packetdrill/ directory? In
+the commit description for that patch, please include a mention of the
+packetdrill SHA1 you are using and a link to the packetdrill branch
+you are using, somewhere on github or similar. Then I will look into
+merging any packetdrill tool changes that you are depending on, if
+there are packetdrill commits that you depend on that I have not
+merged into packetdrill yet.
+
+Thanks!
+neal
 
