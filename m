@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-47049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE6D2CA4CAE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 18:43:27 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2377CCA4D0F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 18:54:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9CA9B3096CC2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 17:41:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4F540307483F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 17:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE39A34F47B;
-	Thu,  4 Dec 2025 17:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48192352F8B;
+	Thu,  4 Dec 2025 17:43:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aaxeh+yv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gc6eJyU1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C340C34F46F;
-	Thu,  4 Dec 2025 17:40:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9D8352F83;
+	Thu,  4 Dec 2025 17:43:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764870055; cv=none; b=A8RpjsYd+sQAbfgU2670bc1yiKBwlImsDr8VuOTXHWrMRCcVmRYZgktumcURyQXdE1pFCNCF+JcSsoOwJhWtxo5bnAmIE1uo9MitNHBWMcsY8w80Q64bxhyVztEfLQJd7DxntH6Xp9QEcp/vcg/o0qwK0H3eEb91AozojKRdezs=
+	t=1764870202; cv=none; b=Rw9CUqzjogpVSFGvSTCCXPqA9ONM1LSUrqVXtNmQBmtr9fgCoBP7KWngwp0VyS9je651g+ujEAJYiVOKXMje0QLl8rkEs3yaST5Lri+dy4u6d8t0h3GD5Ur0ZTrV2m205rPIAe1zoCHTFWYsQIwxKkcqZ64xmuyL1ByMheXbBdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764870055; c=relaxed/simple;
-	bh=SHLURkCQA5LDGPwldqVRxNVG4mULPP3GUZqavXAzURY=;
+	s=arc-20240116; t=1764870202; c=relaxed/simple;
+	bh=mYZIOOq06mjq+T/sWW3LlEpqFe/2OwghAQwEPkmaWqk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=snQCk3teqx+9T8rnii86PQHhQV3Rh3XSnvJGdzuaff31PNT83IrH8/OhLmJ3Zgv+aH8+bc+LhOo8NHjzA5slKX36j8HMhV8N8uH08uSlzu1PWoMZ4omTlpANK2WCplYtaIxJWt54E9Ra7sqP1cxd6pZNMRgVI9K004rJ3jMB6dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aaxeh+yv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E8FEC116B1;
-	Thu,  4 Dec 2025 17:40:55 +0000 (UTC)
+	 MIME-Version:Content-Type; b=GXIhpW9XZUOVZ0bZqNMZClbE3S64RbWlK/fQnAPjBG86KV51iR+vVAQgkj4U5Eg4nI/E9w5PtLVkjJ92cFkjUAAZh30wVtyxkR5cFB7Fsd4N76ZGJIx0PA/fiaZb+W0izp5ymfAsCQ6Z2qPm+jNtlL5o878wbDTKNfdh9PvYfP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gc6eJyU1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5035DC4CEFB;
+	Thu,  4 Dec 2025 17:43:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764870055;
-	bh=SHLURkCQA5LDGPwldqVRxNVG4mULPP3GUZqavXAzURY=;
+	s=k20201202; t=1764870201;
+	bh=mYZIOOq06mjq+T/sWW3LlEpqFe/2OwghAQwEPkmaWqk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Aaxeh+yvpDLK/23YxWSFxLfvI2ivEtFe4M9t3VSR8sJRm1uf04sWmylcO/C8cPlRk
-	 E7Cud+paQaf/O2rZ8PgDUYUbrpSRzzI1K+Bn0wvNs9TV/8mXVJXXeg6bVV4dwwXoBL
-	 buXYiEQjyoBlxC5V5ZGU4M35Ekqv55TumwlWlMjt+iWI2IgulR8gpBX8hPySIH0YHo
-	 amQdGaqF7P0YCTeWGbuNhWVafG0j0qvnta6IPS1ZQcJPhfURba9Lfa/ECoC8Ave+qc
-	 Kn3uJooz5VwnU/SYiVN3HHKbQCc/NFH8HI7B6E6I3jwD/Jmuwom9hpi+BMEzbAtq5T
-	 +/ANllDhIaA0A==
-Date: Thu, 4 Dec 2025 09:40:54 -0800
+	b=gc6eJyU1ONak02uBUpRuZhsZGy3ns3OboWyZB1YYbMRvkHX7mDkeBCSvq+n/AuZPh
+	 9pSTAd8/OacTbj4V1OU1DzaS78vf64d4OFhN3Z7ykKYD5Gr57fM+wus4PQjgRXsudk
+	 xoGTMhwJD9SEBkgClZDzPb9q28DDf6JBWunYiqL5AiN3f1pOKY1PRV19dP37MPQYjr
+	 UqxSdSU1xMLBMrLkEXSpdEw4nmhT/qf1BbYrRV77NBYgG2hvumZMK5OdsukMcH+GKP
+	 OV0Xhtxk9GojI1SVbIlY9QIWomwkVzN9XkM676BpQF9IGKYOlyTAKRIi9J1JAOZnsc
+	 +zrrqyztfseCA==
+Date: Thu, 4 Dec 2025 09:43:20 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: Guenter Roeck <linux@roeck-us.net>
 Cc: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
@@ -47,14 +47,14 @@ Cc: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
  <tglx@linutronix.de>, Eric Dumazet <edumazet@google.com>, Kees Cook
  <kees@kernel.org>, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, wine-devel@winehq.org,
- netdev@vger.kernel.org, bpf@vger.kernel.org, Kuniyuki Iwashima
- <kuniyu@google.com>
-Subject: Re: [PATCH 06/13] selftest: af_unix: Support compilers without
- flex-array-member-not-at-end support
-Message-ID: <20251204094054.01c15d1e@kernel.org>
-In-Reply-To: <20251204161729.2448052-7-linux@roeck-us.net>
+ netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 00/13] selftests: Fix problems seen when building with
+ -Werror
+Message-ID: <20251204094320.7d4429d1@kernel.org>
+In-Reply-To: <536d47f4-25b1-430a-820d-c22eb8a92c80@roeck-us.net>
 References: <20251204161729.2448052-1-linux@roeck-us.net>
-	<20251204161729.2448052-7-linux@roeck-us.net>
+	<20251204082754.66daa1c3@kernel.org>
+	<536d47f4-25b1-430a-820d-c22eb8a92c80@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,33 +64,32 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu,  4 Dec 2025 08:17:20 -0800 Guenter Roeck wrote:
-> -CFLAGS += $(KHDR_INCLUDES) -Wall -Wflex-array-member-not-at-end
-> +CFLAGS += $(KHDR_INCLUDES) -Wall $(call cc-option,-Wflex-array-member-not-at-end)
+On Thu, 4 Dec 2025 09:16:16 -0800 Guenter Roeck wrote:
+> On Thu, Dec 04, 2025 at 08:27:54AM -0800, Jakub Kicinski wrote:
+> > On Thu,  4 Dec 2025 08:17:14 -0800 Guenter Roeck wrote:  
+> > > This series fixes build errors observed when trying to build selftests
+> > > with -Werror.  
+> > 
+> > If your intention is to make -Werror the default please stop.
+> > Defaulting WERROR to enabled is one of the silliest things we have done
+> > in recent past.
+> 
+> No, that is not the idea, and not the intention.
+> 
+> The Google infrastructure builds the kernel, including selftests, with
+> -Werror enabled. This triggers a number of build errors when trying to
+> build selftests with the 6.18 kernel. That means I have three options:
+> 1) Disable -Werror in selftest builds and accept that some real problems
+>    will slip through. Not really a good option, and not acceptable.
+> 2) Fix the problems in the upstream kernel and backport.
+> 3) Fix the problems downstream only. Not really a good option but I guess
+>    we'll have to do it if this series (and/or follow-up patches needed to
+>    support glibc older than 2.36) is rejected.
+> 
+> We'll have to carry the patches downstream if 2) is rejected, but at
+> the very least I wanted to give it a try.
 
-Hm, the Claude code review we have hooked up to patchwork says:
-
-  Is cc-option available in the selftest build environment? Looking at
-  tools/testing/selftests/lib.mk (included at line 14), it doesn't include
-  scripts/Makefile.compiler where cc-option is defined. When cc-option is
-  undefined, $(call cc-option,...) expands to an empty string, which means
-  the -Wflex-array-member-not-at-end flag won't be added even on compilers
-  that support it.
-
-  This defeats the purpose of commit 1838731f1072c which added the warning
-  flag to catch flexible array issues.
-
-  For comparison, tools/testing/selftests/nolibc/Makefile explicitly
-  includes scripts/Makefile.compiler before using cc-option.
-
-Testing it:
-
-$ make -C tools/testing/selftests/ TARGETS=net/af_unix Q= V=1
-make: Entering directory '/home/kicinski/devel/linux/tools/testing/selftests'
-make[1]: Entering directory '/home/kicinski/devel/linux/tools/testing/selftests/net/af_unix'
-gcc -isystem /home/kicinski/devel/linux/usr/include -Wall  -D_GNU_SOURCE=     diag_uid.c  -o /home/kicinski/devel/linux/tools/testing/selftests/net/af_unix/diag_uid
-
-looks like the flag just disappears. Even tho:
-
-gcc version 15.2.1 
+Understood, of course we should fix the warnings!
+If we're fixing warnings, tho, I wouldn't have mentioned -Werror in 
+the _subject_. It doesn't affect which warnings are enabled, AFAIK?
 
