@@ -1,127 +1,131 @@
-Return-Path: <linux-kselftest+bounces-46972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46973-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA10ECA2532
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 05:39:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7DF9CA26BF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 06:49:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 571BC300503D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 04:39:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 491643027CFC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 05:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7259E2853F1;
-	Thu,  4 Dec 2025 04:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C94E2FD1BE;
+	Thu,  4 Dec 2025 05:49:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LN8zRAcM"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="nXmoy3q7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93E61A9F8C
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 04:39:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEAE33EC;
+	Thu,  4 Dec 2025 05:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764823186; cv=none; b=Ns1BLLrf9/YfwKfKUU/HJYGT2vN86jl8cVrSULSLIZ4pBq1G/nAH95wWzMAQ4mwh7G2J/OBh1E+q7KQQgoxrlbKE+Qvc7E2lbRlHKaBCSmfO7EzID5Ur8Y6qlyavT6bJvFyRNZKhO/fPpshZUA3owRLdhyzEjtJyaGa8n6Ndu7c=
+	t=1764827382; cv=none; b=IsvmIOshhgREtyKjQAAVF00719pCsFYy5xZzpeI7cAIxTEQkxI//GfIUVmqo0cePydV6vteue+DqzjiVcHxn4kukIZfp7JzqsT9/arTmlU5JXD1uz9Jiqgh6JBLTVikeZ7EY3Dm70WzAf4jdbAkRVMas2uPipn8NWCRhS6bXpVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764823186; c=relaxed/simple;
-	bh=1v+obDT5FL5UYD781R+2FxUuick0foS9CSHwDNJndVM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MMdc1hv6PdBsy4L5DcrD6UG/yWjRIhWCrvgyJEudsERg5FYKRL1UGQv0dlQgfTkCnygAqR0BXxp/MV92hjFM7Y666mzLxXwcL4JDqAFPtY0uAcSelkEeqzuafpZT2tqw2UOuUD6qQNC/yQjp7Oz6mvvZraBF325P/uJt7RAdaY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LN8zRAcM; arc=none smtp.client-ip=74.125.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-640d8b78608so369813d50.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 20:39:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764823184; x=1765427984; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1v+obDT5FL5UYD781R+2FxUuick0foS9CSHwDNJndVM=;
-        b=LN8zRAcM6ZWMijDqaTN14taBIPCf1WTSVN1h/+zQRsBpt0JL+HSLRnE/8L2pm7JP6G
-         HD9TC0Y/zoHNYLEeBvCJHuRkWSikOSeDPLo77egmdohX0hhF97DyoWtt6gA1xZJkowv0
-         /TMPxCMev9PaduTtV6gow1Tpi+z3osZgRmZ2UqZqjPCi65JErICpNHW3Ys1Q1szFMS9Z
-         HbIq7QCqw0GB9EnYRACRHp7KFa0YqOjZ89Hv/g0D27wS3lN9T++2W1giRryk9DIC4yYA
-         W93s4T+cZ1FA2UUt4FPMCvi26Ik7JaLek0HQEFUhJqRgL7mckEFtN7WSBcDrO79J+jOg
-         c/Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764823184; x=1765427984;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1v+obDT5FL5UYD781R+2FxUuick0foS9CSHwDNJndVM=;
-        b=ieGwt1M219WqCozWMfexQyKF4McZGFrznJs3z91xZ6xmd3mt20ik4SkfQUSRwAktfh
-         ut6hkFcQwwlS9hl6wbAWAhYqz0bVbKHidMpE42vyRHhs4+Z2eKvAQ7gHDyV6H4XfbFqH
-         PY2uo6JeChmYvmAh8F7DdhO/JPJkBLrsyGO3X7oEg/2PJcATmcsx2P52RMw4lVjQwaVH
-         zdc2JNTEYqkVMS+Rl4/mUCY2NY0x31eAgvnRDpYEGZEQgc34BpeolWaqainmhbsopLHa
-         yxTt4lRgoatl1GA984gSubo63NuuHOZvNvmz4aRHSLveY+T0jJIbe/ytdYBwdlFjNdHB
-         jlGg==
-X-Forwarded-Encrypted: i=1; AJvYcCWQ3EvEtRZ04akJL+HpOI7fuPmJ5atpm76aBpb4Zf/aCFPi/pxKnF2xAzd1Hrgs1c0TX7ZQ8Kl1EGbj3Df58Vc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxP6NAHMvYeTHVAoi8jTLFOweM+30EyJui7m9/M/E8TbOBHPGGk
-	5KhP0u5p4i2YHahgaF84hbOJHdpqu2YnonvItDWcNhoxuD5fGYVpGDly
-X-Gm-Gg: ASbGncsYANn3G7Rnx7VCN/JAWXLFHOHGTZxo7DH7R9yb0w1t/Z/+NEeOu0yg2VnYLxE
-	XXmVl8np0r2Xq5BtB5CpNRCKTZIlcGZ1xUoe8K+YY945bO6rltnTpV0wj2ah2OU3eCflZ09lC4I
-	12+vDWpeZJJRkXhQwlcMpGwJKMWE52ZEn5ykb6NSA1Jur0DkNibRMAiXgl+nsquX8O5DlH0vzUY
-	vYaLuHPFa9WcENoe5T+//RQy/irKIGdL5LShq/Fcwod3XFd9lkaFaXMzD1OZjzwIL800e787awY
-	u98rHkYM9MZ6LTPlimahtU2+aA0Z5X0HwMkHz3tmLa2/LHk59NKYTcXCAhad6yFzIKSDfETPXkC
-	Y2acEcFtX7r1IZtAu9QVzBigbwiHv3e0K1tL7vkcvVDvAksxPjUVG6+7UxrYhow0wlLHnEWLSIM
-	nBIdlKYzDmaklnNPYR7c3LVcQhV+ILley97KTxobPfgLXUUMIUqQY=
-X-Google-Smtp-Source: AGHT+IH+6A/k1eBrqPWGoOLVGIDgsAJpEnT7ttLjvCmZkGA+Win1vr4rqv9Mub3s+PQhK4zSBz7kWA==
-X-Received: by 2002:a05:690e:128e:b0:63e:350c:aea4 with SMTP id 956f58d0204a3-64436fe779fmr3579945d50.32.1764823183787;
-        Wed, 03 Dec 2025 20:39:43 -0800 (PST)
-Received: from localhost.localdomain (45.62.117.175.16clouds.com. [45.62.117.175])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6443f5a3e81sm246719d50.16.2025.12.03.20.39.38
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 03 Dec 2025 20:39:43 -0800 (PST)
-From: Shuran Liu <electronlsr@gmail.com>
-To: mattbobrowski@google.com,
-	alexei.starovoitov@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	dxu@dxuuu.xyz,
-	eddyz87@gmail.com,
-	electronlsr@gmail.com,
-	ftyg@live.com,
-	gplhust955@gmail.com,
-	haoluo@google.com,
-	haoran.ni.cs@gmail.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	mathieu.desnoyers@efficios.com,
-	mhiramat@kernel.org,
-	rostedt@goodmis.org,
-	sdf@fomichev.me,
-	shuah@kernel.org,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: fix and consolidate d_path LSM regression test
-Date: Thu,  4 Dec 2025 12:39:14 +0800
-Message-ID: <20251204043914.7580-1-electronlsr@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <aTARqrMyC36CXa_L@google.com>
-References: <aTARqrMyC36CXa_L@google.com>
+	s=arc-20240116; t=1764827382; c=relaxed/simple;
+	bh=1/qVzHTq0dl3bm/fJdmBkkGZRpToC5uG2LWdRmGkX5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cQILZj2FaHCHYACJS8T9xmLrWbx0WlmKpkJhnneN01TKcAJ5Ut0AH73/FiK8+iGRsE8YOWY2MbCgQJKT8AkW+kizwfaNLS3lXEeBUPONRoX5CW71LVSsBGSP6DZ1btl18aHFiwvYLyB9jCvOG9d26RY5fKugts6tWe4GB6I3fGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=nXmoy3q7; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=s6+X3uAjfnbMKEn6Xkh/hO+HnZ24JeUWApwybKJc010=; b=nXmoy3q7PEPpF5abxhwxO3qXvd
+	TkOCDMpiiUph/GGfD1WSJSK6FPE7975gCK4ZlbwYerMAlQ+aDVWKI0+zdSP+F0KjPdtQh7MNS982p
+	z3URRnIZyusnvBJZ0tu+Gk9YMZthTHw6do/oReTtyIYkuoIlZyFmFoCJSyIVZsPmb/mEgU5ADU4bK
+	UpeFaQlqNn8cm5F7j27o7aJ9XMA+VckFrpslNClucgYUn+qf2Q0VjoEWhwaITyMRS1yfk5eRiK27k
+	h1+uW0AsswtW89hBcY65p1OQhlSrI4BenMrX6NTWbeIfKYv8oym8o/6VjEDkCnb89R955AmHDd024
+	le4n+XBg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vR2DL-00000008t6s-2eTQ;
+	Thu, 04 Dec 2025 05:49:15 +0000
+Date: Thu, 4 Dec 2025 05:49:15 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Bernd Edlinger <bernd.edlinger@hotmail.de>
+Cc: "Eric W. Biederman" <ebiederm@xmission.com>,
+	Roberto Sassu <roberto.sassu@huaweicloud.com>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	Oleg Nesterov <oleg@redhat.com>, Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Michal Hocko <mhocko@suse.com>, Serge Hallyn <serge@hallyn.com>,
+	James Morris <jamorris@linux.microsoft.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Yafang Shao <laoar.shao@gmail.com>, Helge Deller <deller@gmx.de>,
+	Adrian Reber <areber@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
+	Alexei Starovoitov <ast@kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-security-module@vger.kernel.org,
+	tiozhang <tiozhang@didiglobal.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	"Paulo Alcantara (SUSE)" <pc@manguebit.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	YueHaibing <yuehaibing@huawei.com>,
+	Paul Moore <paul@paul-moore.com>, Aleksa Sarai <cyphar@cyphar.com>,
+	Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
+	xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
+	Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
+	Dave Chinner <dchinner@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Elena Reshetova <elena.reshetova@intel.com>,
+	David Windsor <dwindsor@gmail.com>,
+	Mateusz Guzik <mjguzik@gmail.com>, Ard Biesheuvel <ardb@kernel.org>,
+	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	Hans Liljestrand <ishkamiel@gmail.com>,
+	Penglei Jiang <superman.xpt@gmail.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Adrian Ratiu <adrian.ratiu@collabora.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	Cyrill Gorcunov <gorcunov@gmail.com>,
+	Eric Dumazet <edumazet@google.com>, zohar@linux.ibm.com,
+	linux-integrity@vger.kernel.org, Ryan Lee <ryan.lee@canonical.com>,
+	apparmor <apparmor@lists.ubuntu.com>
+Subject: Re: Are setuid shell scripts safe? (Implied by
+ security_bprm_creds_for_exec)
+Message-ID: <20251204054915.GI1712166@ZenIV>
+References: <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+ <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
+ <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
+ <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
+ <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
+ <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
+ <dca0f01500f9d6705dccf3b3ef616468b1f53f57.camel@huaweicloud.com>
+ <87ms42rq3t.fsf@email.froward.int.ebiederm.org>
+ <GV2PPF74270EBEE90CDCD964F69E806EF58E4D9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <GV2PPF74270EBEE90CDCD964F69E806EF58E4D9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi Matt and Alexei,
+On Wed, Dec 03, 2025 at 02:16:29PM +0100, Bernd Edlinger wrote:
 
-Thanks for the feedback.
+> Hmm, yes, that looks like an issue.
+> 
+> I would have expected the security engine to look at bprm->filenanme
+> especially in the case, when bprm->interp != bprm->filename,
+> and check that it is not a sym-link with write-access for the
+> current user and of course also that the bprm->file is not a regular file
+> which is writable by the current user, if that is the case I would have expected
+> the secuity engine to enforce non-new-privs on a SUID executable somehow.
 
-I have updated the test to use fallocate instead, which is in the allowlist of the d_path helper. I also minimized the test case while retaining the ability to reproduce the issue.
-
-I will send the updated patch shortly. Thanks again for the review.
-
-Best regards,
-Shuran Liu
+Check that _what_ is not a symlink?  And while we are at it, what do write
+permissions to any symlinks have to do with anything whatsoever?
 
