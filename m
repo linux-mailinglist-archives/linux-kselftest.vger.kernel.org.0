@@ -1,211 +1,121 @@
-Return-Path: <linux-kselftest+bounces-47043-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47044-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D54E5CA4A2C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 17:59:34 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9E6DCA49E4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 17:56:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3E89B308C3AC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 16:52:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3D3E63006E30
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 16:56:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1972FFF9F;
-	Thu,  4 Dec 2025 16:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB5F92F39DE;
+	Thu,  4 Dec 2025 16:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h4+G0yu8"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="2rWkL1Xy";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fx0jXRJ2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD942FD7AC
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 16:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F3928507B;
+	Thu,  4 Dec 2025 16:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764866717; cv=none; b=LT82rCgpU10e9exJhYP5J8wNK5ZU6IIrRWmrqBwZGf+1QRkmaNXsmE31eiI6tdGxov72vEAGZh5iW01PrO2re4lXlesH6fuE7gHUnJRgEkFoOv7IYQa5lrPFDtcfRAjkM59qd1EF5oZDL6HzK2dfgjCu4d9jL3nkKNe99f4gvNE=
+	t=1764867385; cv=none; b=odVAH7rXmfE8Uu3CF/Tbf/3tfHAy/Mul1QW8Fou3XTpnqRNypRe6mUffFf8aePEPLnC6gjemBIaWwcgxWuAMLiowgTk0Hhy1Vs3rklI3YHQhjac3nAWtDNOQpezo1qqSPiBnxobMHQmvdDgRNgBSjK+gd4Mp2Zh0vjm+eu08Fio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764866717; c=relaxed/simple;
-	bh=c3ezqcDqU/SvIrFCM+Nr0gLUzPc4tq7ZG8H0xdUNAd0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BmZejPViZS6ptADBE5r9NG9xzwm/iV6Zd4SxgJ7exrdwZgrwLjSaKcXtGjM/ewHMsBMhWvokxiAcWmka4dPkQ7ToKNd9HtahOinrzvNzrEuAKU6EcZxrVHLydWFHwIilsjkvQ8y32cEKOGp+Mn6p8Y+A81u2N/9qrIC8GbeckgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h4+G0yu8; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4779a4fb9bfso73115e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Dec 2025 08:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764866712; x=1765471512; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0CyQocRCpW9wkr09JiCgFa32QuaN7pvC+ueWitNv43g=;
-        b=h4+G0yu8ODixk01zt5PQP1HApNvNDjASxvJzOwRzDKhXVC/K/slR2z7tzqMn3ZC0iN
-         IUwyMGOq+5UWwhQRjwZXNdomRQkz6ExnY42BsmLgMuLNK7rZDSKWuiWEtldaOrj13vLV
-         TT41V5CY8Ue9gY1lXtfCpBLsDtHsT4THaBPfE9fUrL/JMbv5nLQlxA8n5h8hulQKvIUW
-         PsrwLEq9QKWU5kwCHjhp6H9glTVMVBwwkMSFeizONfOW7ocNLXtXXevmcvJ++yTAqAAF
-         RN3PE9YGrD0cT2Un0KjqAFPtiS07RpO4CTyc/Y103Sb7Pz+jvDf1bocIB40qtril6HYz
-         Rr9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764866712; x=1765471512;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0CyQocRCpW9wkr09JiCgFa32QuaN7pvC+ueWitNv43g=;
-        b=oKjPPIkERADw/y3WVFLaWfQ75gsw2MmBtNKnC5k8QUsVX/Z7C0s6Y3QsPS8RRuevAL
-         7UCbINHMERtwUJiQzTEfpdixutvpYR5RexBYW/Lzse5Erw5nDcNgoS5pWhMu90H3CXj5
-         4QqfRwBBDrDXgzAKwtbOkJIuJA7mdYSMhnIFCHtG0xKbY+gUeHcCRlgmA7/l2Kon2v0E
-         D9NTEh+cLLwnq8J6j9WQtbelYvPSDL8bUokW52TQntKpqBm1IlsSlrcnxO6WM+19ClFz
-         O1AQRQB4Q07PUf4mf8OwgpSNyAtvzNDp0WNLuJKV8SFjXevs3hx4G7gLu8n3KHgbF6no
-         n3MA==
-X-Forwarded-Encrypted: i=1; AJvYcCWWlOsoERmoucZ+c9dnZcXELupF65R6SK6wqFKFtfNUAZF/vQ6HSNLdVPaNNSaPZmBQo56hzBXoC49vJbKT/1k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAiZ5HGDUuGcA+XlLclfxiCRYHQSFWvYq5BFFLzz7ck1pgsHmr
-	Ab24Qc39WgqyQ+DKpfRXw5u+O83bM8I+d/mDEfTq007kfP0+PYYxXgPvzs21RtHaOCtBCvo/Pr2
-	YvHKfiNFhVLdMEmHdEkqP+1jcrD1sPtwZejRLy/rB
-X-Gm-Gg: ASbGncup77beZtVZy/8xNlPPeZpGz6U9P03fnby2JOGHMteSm2du6lMHTqfoPWIRWYO
-	ZirT3BCKhRE8efAXALbSKfY47WkXZ65O85XFKv6K/KdQyOmA/ezUGYehsS+49JZbt5erDFn339i
-	YBsvS5nYS/WDN8uk2hMEdeswfMv3tV4d51wZ+yhVQ7IedkAxY5wR3kwwugjEB1UgVvC5CI+WZVQ
-	V8qRrs2ivwJS+MY2Z36CGOoyKpEFGv1Y9dMeU8xV6GuiAEqxUwGbL8x/9qB2iA+roTy17L3GrO6
-	CuFzo9peGZLpXYT0eQQ5TceFy2k9pN1TBHNNk/XCBE/MhEZQDw3pQ4uSy62lUA==
-X-Google-Smtp-Source: AGHT+IE0KMhH3k7qWdeBVVuAP+IUq1UipXwO7m3nwOYJmd54XwgIknZR5FukbGSdeibG3Qv+NPqrhPE4p5p9ITMRKrU=
-X-Received: by 2002:a05:600c:581a:b0:477:86fd:fb18 with SMTP id
- 5b1f17b1804b1-47932e04338mr205795e9.8.1764866712062; Thu, 04 Dec 2025
- 08:45:12 -0800 (PST)
+	s=arc-20240116; t=1764867385; c=relaxed/simple;
+	bh=oVcBQiFZcKRVuwvSyvgfomBoopJQhYg989rFbF09SvI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nBqLLQ82k5jNfHKL89wxy7MZvF3hB+muHunN+fAs1p6viWoQ6SdkDfb8OgCyWUviYbr7fQpp7ZKFUrCUzi+plwi/GFwryKmo66rXrrB3jPBda84ZmnrqDreC9SxPTH/r6I7ekkNZQQ9E8TQZtHV5Ypx+8FmrAWODQMnilXcZlQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=2rWkL1Xy; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fx0jXRJ2; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Thu, 4 Dec 2025 17:56:19 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1764867381;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c9+6XlmLlKbjUhjn7O7UGpoRgL/0BI1e50erzPzpDlQ=;
+	b=2rWkL1XyAhcgyqrW14MMF3qaUQSr8YYDNiCKry0x0QBsV4l5x3+Ycw5+Jmi0h0i54S8RRK
+	E+E1i9Sf249ovLQIsdHJYJbyeELFizphpxVyW0iv3gMQVsNLZQNI3+0uo8gMM5+J8gdwAU
+	TQlFxaGVQAKpquAo5xJmu7Sg3eUNUg0oqHbXewl81F1jiHSx62cUQYCc3/lDBDD9nZaXUb
+	D0kNhjyLt3Lx6Iynot+ksQqb9CYSPxpgVVg03P7IjPAK3p6UMbKbdvfL0mIG0Mr+TozaUc
+	Idwaz543w+GDt5FHrMnfh8wFNTyTtt6ss8MbiHwTTQI9/sWdQYGNRLif/kaz1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1764867381;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=c9+6XlmLlKbjUhjn7O7UGpoRgL/0BI1e50erzPzpDlQ=;
+	b=fx0jXRJ2uwCZoiAF6TP+4b8/8ynViDEX2+cIYHls3j9u/NOxevNN3FgjINA/To4UgHgvMH
+	l2OPXdUE9HBBQkCw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
+	Kees Cook <kees@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
+	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, broonie@kernel.org, rick.p.edgecombe@intel.com, 
+	rust-for-linux@vger.kernel.org, Charles Mirabile <cmirabil@redhat.com>
+Subject: Re: [PATCH v23 24/28] arch/riscv: dual vdso creation logic and
+ select vdso based on hw
+Message-ID: <20251204175055-fefb76ff-2ff2-48b8-b92c-3d3ce33ec9f5@linutronix.de>
+References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
+ <20251112-v5_user_cfi_series-v23-24-b55691eacf4f@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251204000348.1413593-1-tjmercier@google.com> <20251204000348.1413593-2-tjmercier@google.com>
-In-Reply-To: <20251204000348.1413593-2-tjmercier@google.com>
-From: "T.J. Mercier" <tjmercier@google.com>
-Date: Thu, 4 Dec 2025 08:44:59 -0800
-X-Gm-Features: AWmQ_bnxDs0Em9c_P-3hJ2uCc6BRD7h1aEC-DbAd-yhfuFNLkrr8DTNbaj0gPCw
-Message-ID: <CABdmKX0LxoPJPA755bzN8vRjUOQ0c4XucGhDX8QgbxqYXdB1pA@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add test for truncated dmabuf_iter reads
-To: yonghong.song@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
-	haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	android-mm@google.com
-Cc: christian.koenig@amd.com, sumit.semwal@linaro.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linaro-mm-sig@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251112-v5_user_cfi_series-v23-24-b55691eacf4f@rivosinc.com>
 
-On Wed, Dec 3, 2025 at 4:05=E2=80=AFPM T.J. Mercier <tjmercier@google.com> =
-wrote:
->
-> If many dmabufs are present, reads of the dmabuf iterator can be
-> truncated at PAGE_SIZE or user buffer size boundaries before the fix in
-> "selftests/bpf: Add test for open coded dmabuf_iter".
+On Wed, Nov 12, 2025 at 04:43:22PM -0800, Deepak Gupta via B4 Relay wrote:
+> From: Deepak Gupta <debug@rivosinc.com>
+> 
+> Shadow stack instructions are taken from zimop (mandated on RVA23).
+> Any hardware prior to RVA23 profile will fault on shadow stack instruction.
+> Any userspace with shadow stack instruction in it will fault on such
+> hardware. Thus such userspace can't be brought onto such a hardware.
+> 
+> It's not known how userspace will respond to such binary fragmentation.
+> However in order to keep kernel portable across such different hardware,
+> `arch/riscv/kernel/vdso_cfi` is created which has logic (Makefile) to
+> compile `arch/riscv/kernel/vdso` sources with cfi flags and then changes
+> in `arch/riscv/kernel/vdso.c` for selecting appropriate vdso depending
+> on whether underlying hardware(cpu) implements zimop extension. Offset
+> of vdso symbols will change due to having two different vdso binaries,
+> there is added logic to include new generated vdso offset header and
+> dynamically select offset (like for rt_sigreturn).
 
-Copy/paste error here. This should be "bpf: Fix truncated dmabuf
-iterator reads" from the previous commit in patch 1. I didn't include
-the sha because I don't think they're guaranteed to be stable at this
-point.
+If the used vDSO variant only depends on the hardware and nothing else,
+why not use alternative patching and avoid the complexity?
+I see that RISCV_ALTERNATIVE depends on !XIP_KERNEL but the vDSO code is
+moved to dynamically allocated memory in any case, so it is patchable.
 
-I also saw the warning from CI about the extra newline before
-subtest_dmabuf_iter_check_open_coded, but the current CI failures look
-unrelated to this change.
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> Acked-by: Charles Mirabile <cmirabil@redhat.com>
 
-Add a test to
-> confirm truncation does not occur.
->
-> Signed-off-by: T.J. Mercier <tjmercier@google.com>
-> ---
->  .../selftests/bpf/prog_tests/dmabuf_iter.c    | 47 +++++++++++++++++--
->  1 file changed, 42 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c b/tools=
-/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> index 6c2b0c3dbcd8..e442be9dde7e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
-> @@ -73,12 +73,10 @@ static int create_udmabuf(void)
->         return -1;
->  }
->
-> -static int create_sys_heap_dmabuf(void)
-> +static int create_sys_heap_dmabuf(size_t bytes)
->  {
-> -       sysheap_test_buffer_size =3D 20 * getpagesize();
-> -
->         struct dma_heap_allocation_data data =3D {
-> -               .len =3D sysheap_test_buffer_size,
-> +               .len =3D bytes,
->                 .fd =3D 0,
->                 .fd_flags =3D O_RDWR | O_CLOEXEC,
->                 .heap_flags =3D 0,
-> @@ -110,7 +108,9 @@ static int create_sys_heap_dmabuf(void)
->  static int create_test_buffers(void)
->  {
->         udmabuf =3D create_udmabuf();
-> -       sysheap_dmabuf =3D create_sys_heap_dmabuf();
-> +
-> +       sysheap_test_buffer_size =3D 20 * getpagesize();
-> +       sysheap_dmabuf =3D create_sys_heap_dmabuf(sysheap_test_buffer_siz=
-e);
->
->         if (udmabuf < 0 || sysheap_dmabuf < 0)
->                 return -1;
-> @@ -219,6 +219,26 @@ static void subtest_dmabuf_iter_check_default_iter(s=
-truct dmabuf_iter *skel)
->         close(iter_fd);
->  }
->
-> +static void subtest_dmabuf_iter_check_lots_of_buffers(struct dmabuf_iter=
- *skel)
-> +{
-> +       int iter_fd;
-> +       char buf[1024];
-> +       size_t total_bytes_read =3D 0;
-> +       ssize_t bytes_read;
-> +
-> +       iter_fd =3D bpf_iter_create(bpf_link__fd(skel->links.dmabuf_colle=
-ctor));
-> +       if (!ASSERT_OK_FD(iter_fd, "iter_create"))
-> +               return;
-> +
-> +       while ((bytes_read =3D read(iter_fd, buf, sizeof(buf))) > 0)
-> +               total_bytes_read +=3D bytes_read;
-> +
-> +       ASSERT_GT(total_bytes_read, getpagesize(), "total_bytes_read");
-> +
-> +       close(iter_fd);
-> +}
-> +
-> +
->  static void subtest_dmabuf_iter_check_open_coded(struct dmabuf_iter *ske=
-l, int map_fd)
->  {
->         LIBBPF_OPTS(bpf_test_run_opts, topts);
-> @@ -275,6 +295,23 @@ void test_dmabuf_iter(void)
->                 subtest_dmabuf_iter_check_no_infinite_reads(skel);
->         if (test__start_subtest("default_iter"))
->                 subtest_dmabuf_iter_check_default_iter(skel);
-> +       if (test__start_subtest("lots_of_buffers")) {
-> +               size_t NUM_BUFS =3D 100;
-> +               int buffers[NUM_BUFS];
-> +               int i;
-> +
-> +               for (i =3D 0; i < NUM_BUFS; ++i) {
-> +                       buffers[i] =3D create_sys_heap_dmabuf(getpagesize=
-());
-> +                       if (!ASSERT_OK_FD(buffers[i], "dmabuf_fd"))
-> +                               goto cleanup_bufs;
-> +               }
-> +
-> +               subtest_dmabuf_iter_check_lots_of_buffers(skel);
-> +
-> +cleanup_bufs:
-> +               for (--i; i >=3D 0; --i)
-> +                       close(buffers[i]);
-> +       }
->         if (test__start_subtest("open_coded"))
->                 subtest_dmabuf_iter_check_open_coded(skel, map_fd);
->
-> --
-> 2.52.0.177.g9f829587af-goog
->
+(...)
 
