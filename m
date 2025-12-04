@@ -1,105 +1,125 @@
-Return-Path: <linux-kselftest+bounces-47085-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E075DCA5880
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 22:42:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A373CA597E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 23:14:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AEDD830AC99E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 21:41:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E756330FD4DE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 22:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CFDE328258;
-	Thu,  4 Dec 2025 21:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2103093B5;
+	Thu,  4 Dec 2025 22:14:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTbdRvc/"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CMRJdK+Z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC36532720C
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 21:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F1027FD75;
+	Thu,  4 Dec 2025 22:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764884512; cv=none; b=Ztsw8MjsYGgwKewY+S+ESz5ondfOpjdSUqio5vz7cgjLVyAyn8KPfdEjSVUwoi5dhDZbXmkVK/pfRRMLpMaAtPU1tFCm2yEouHbt1oUPQBjkMhTtVwPKqPrxpZeQZNnozfkNPzPEmjVunfGZ/otahY8ZQriqnzYzc5D9LheIo34=
+	t=1764886455; cv=none; b=n0Ghik6G9PBOB/OW5d3c5ORxWdZQMz90WRWicOT3+jMJiAVbyiGwZrd931PnZcd82EKc57rsrem0cwSEePLxZy2vA2j4dKcMJGvu67YZzYoP6lXlH6BamhOPI+k52JKnyAbQZiWKNf5JMaC98pLD1nb2KBexZBGSSvwYp0PsVBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764884512; c=relaxed/simple;
-	bh=/QrZLSAfGYWyne6W/7vTkqoE2kr+Wpspna1gd9MCcdk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kCccHbGigfNivqAHHVHnDzljvTnbzlv4PvmW5CEQGM1SelybgkZxhuVNg79/IKw5epQoRxsQyF+oSQnysdAe2ZWsZ/E9nyQEnpsafvqusLQkT8bS5ER/bXQUl811uXMFUihlxJq8hfcjXOOCpHzWvhj+DnZWS1bYIIy4NKBSukI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTbdRvc/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E8B2C19422
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 21:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764884512;
-	bh=/QrZLSAfGYWyne6W/7vTkqoE2kr+Wpspna1gd9MCcdk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=iTbdRvc/cJT6k+jAS1BGvX3Va0l2xZexmseYY29wYc3iA1JwjW9hrNGCVX5ySeb6D
-	 WRtWp58Z6AxQ2j/dH/69DlfA7//W7DRb5Kg/RcDLJUYRJSj28aU4PT8I41HBspvKCx
-	 DilV//p5tO5sadJD2OO18CKOD6aRuO51Hc3U4/U+6p6rjRFNTqMCU4yQCZDWooSYwv
-	 u+L2LtMBKFzbbJgPLBEq+vIYALvKME1svCb1m0H+CHBwv7v1/MVYNXLP0Ccs/IMe01
-	 H35/KOy+xw7o0260w5nPEeiiV9mPIa8HOTW6Vw2y1S0YLOEC4Bf45gaD/Xm3C6xI6s
-	 4M/N9b7NyWK8g==
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-880503ab181so15310616d6.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Dec 2025 13:41:52 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUZPw7coCETv7XfhqIE9KvZvCbbHtpbmUWT3lMS+E8UUOR5wZbg8FUr57vNfDWUwjhpdWyV96A2SmWGshq9ml8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRYCGI7oqT/WHiUSbSJgBJFD1ujkYNgNqvQKGLVhaRRLfFVq9M
-	NvrYYi4yzXPbbb6cXlSUncrvbf/YHM4f80DtHe95RGiagWlGPOjK9GA/rfccrTnvid/GZ3LIQsi
-	l6aUZcOT/oZzRlLDq2u7YVw6YlVSOfIE=
-X-Google-Smtp-Source: AGHT+IE3nGx3czh5EurAK81pcc0J/Tbx/Ct8OP0As9YwgQkp/TrCSORZBNFtGCBDPpl8ekVfi5rdexTv1y5JopcyZ1U=
-X-Received: by 2002:a05:620a:4016:b0:8b2:e5da:d316 with SMTP id
- af79cd13be357-8b5e7452418mr1102586885a.87.1764884511579; Thu, 04 Dec 2025
- 13:41:51 -0800 (PST)
+	s=arc-20240116; t=1764886455; c=relaxed/simple;
+	bh=68UC/IyVsq69i1+OhDAGB4vLxZ2LdUjORIUKMRnrbng=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RlsrdkUCWer1xA+5DRXysn84vMAj63z4IZim/AM5Qfsy7BXjp/Ib44VAKgTrYDyexXT1KvK20EklGG2V1PyC5Xk9tRN42uEXV69h/piWFUdiLPDDeEVp68beJGzRP7euKlzQbAMAIrnfleyvr9NZLMhdW4AsGQ97d460PG0lPNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CMRJdK+Z; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=n2/i6tqDCIVXBXVD8CTjzLJznCHaAsCezf47hvRHxGY=; b=CMRJdK+ZbcmgHBQ2EDY6oHHSbY
+	Vcxx1NBq/NHUPSj3amS4gy/mnNqsVjAVAiP2Xo+/+PRhk5oesoF+8pe1dAxtPtmyHO0kn1L8zIX0Q
+	zCZGdTwC0ahwCBkezecb2Q4vJFW1PT1teeDqzoRFRwAd3I9XasOn7nQNnRRBJlQuC4kGO2Ei0bd6O
+	0sWlChNbHYSiVtAXkCcN5LMsw9sWnhBNXRaEcsQVGXi3+o1Qb+oPZ+AZHeiTSqI7UQ3oh/T9J96VY
+	HxWneyPkoyeYCPWDWNUkV+5IatmZV6+3reL8rjpoIIcV5isbAd8MxmHPCYN6exczwum+SsfqSzavk
+	ukhmiAjg==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vRHaB-00000008iId-3UjH;
+	Thu, 04 Dec 2025 22:13:51 +0000
+Message-ID: <20273cd5-afbc-4208-aa2a-11ac04256c38@infradead.org>
+Date: Thu, 4 Dec 2025 14:13:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAPhsuW6hmKjJF5gYvp=9Jue2N6oW8-Mj-LdFbGnQVwW1bTB=qg@mail.gmail.com>
- <20251204043424.7512-1-electronlsr@gmail.com>
-In-Reply-To: <20251204043424.7512-1-electronlsr@gmail.com>
-From: Song Liu <song@kernel.org>
-Date: Thu, 4 Dec 2025 13:41:39 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW75em0udAv2kuL04wPfDD2AKeSCkcsHjfPSh6nuTjNqtw@mail.gmail.com>
-X-Gm-Features: AWmQ_bm-31Dq2P5DA_rZrXN-sRpJgLoHODZOKBk2Ms6J77ek6UmcwUcpYGfI0J0
-Message-ID: <CAPhsuW75em0udAv2kuL04wPfDD2AKeSCkcsHjfPSh6nuTjNqtw@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: fix and consolidate d_path LSM
- regression test
-To: Shuran Liu <electronlsr@gmail.com>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, dxu@dxuuu.xyz, eddyz87@gmail.com, ftyg@live.com, 
-	gplhust955@gmail.com, haoluo@google.com, haoran.ni.cs@gmail.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	mathieu.desnoyers@efficios.com, mattbobrowski@google.com, mhiramat@kernel.org, 
-	rostedt@goodmis.org, sdf@fomichev.me, shuah@kernel.org, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v24 21/28] riscv: kernel command line option to opt out of
+ user cfi
+To: Deepak Gupta <debug@rivosinc.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Christian Brauner <brauner@kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+ Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
+ rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
+ Paul Walmsley <pjw@kernel.org>,
+ Valentin Haudiquet <valentin.haudiquet@canonical.com>
+References: <20251204-v5_user_cfi_series-v24-0-ada7a3ba14dc@rivosinc.com>
+ <20251204-v5_user_cfi_series-v24-21-ada7a3ba14dc@rivosinc.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20251204-v5_user_cfi_series-v24-21-ada7a3ba14dc@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Dec 3, 2025 at 8:34=E2=80=AFPM Shuran Liu <electronlsr@gmail.com> w=
-rote:
->
-> Hi Song,
->
-> Thanks for the review.
->
-> > I don't get why we add this selftest here. It doesn't appear to be rela=
-ted to
-> > patch 1/2.
->
-> The regression that patch 1/2 fixes was originally hit by an LSM program
-> calling bpf_d_path() from the bprm_check_security hook. The new subtest i=
-s a
-> minimal reproducer for that scenario: without patch 1/2 the string compar=
-ison
-> never matches due to verifier's faulty optimization, and with patch 1/2 i=
-t
-> behaves correctly.
 
-I somehow didn't reproduce this in my local tests. Thanks for the explanati=
-on.
 
-Song
+On 12/4/25 12:04 PM, Deepak Gupta wrote:
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 6c42061ca20e..453127ef8746 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -6453,6 +6453,14 @@
+>  			replacement properties are not found. See the Kconfig
+>  			entry for RISCV_ISA_FALLBACK.
+>  
+> +	riscv_nousercfi=
+> +		all	Disable user cfi ABI to userspace even if cpu extension
+
+			                                              extensions
+
+> +			are available.
+> +		bcfi	Disable user backward cfi ABI to userspace even if
+> +			shadow stack extension is available.
+> +		fcfi	Disable user forward cfi ABI to userspace even if landing
+> +			pad extension is available.
+> +
+>  	ro		[KNL] Mount root device read-only on boot
+>  
+>  	rodata=		[KNL,EARLY]
+
+-- 
+~Randy
+
 
