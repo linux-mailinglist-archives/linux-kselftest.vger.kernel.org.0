@@ -1,88 +1,90 @@
-Return-Path: <linux-kselftest+bounces-47022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6AECA432C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 16:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 842C2CA430D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 16:15:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3CA403170F2A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 15:05:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2F39831A978A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 15:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80DE52D6639;
-	Thu,  4 Dec 2025 15:04:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D08772D8390;
+	Thu,  4 Dec 2025 15:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WaeKVD4n"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AZt/Wrlw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF14D2D1F64
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 15:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D881F2D6E70
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 15:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764860689; cv=none; b=BDrKhcK0p1HZxs3OBV0bBQu4ML8fxskiPO28KXG0l8Nl973V9Th8x5HZy9nGsjpD1W6JnV73/FKpjm3NRFpuH8s9Xbp6gw6lRjqd40cqWXE8Bx9C9DAxHuWTnHmZGPcrnU1p7HzqeMPElId6jW4Ale1C/D5A8DmMx5O22gNvhZU=
+	t=1764860852; cv=none; b=LRqV+oh2SxTuJxVpqW1gvB+v7RtRdg1sPXURefsCxzXAJ/UK5BnR9xyNR0Xp6cQWR2i12gKzPNBjcR4DphjWDZ2vbtrWTeXgBv+EFN5Wg99kV9abRD/Qb3QhGShUy0I1hLBs2ekW+yRixqIiAju6QhxLkNfP1FG0JVuGMnDNQZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764860689; c=relaxed/simple;
-	bh=z0sISq1eXiAzaQp/iLGCP1tqREDNFziuTkdLtskF5bA=;
+	s=arc-20240116; t=1764860852; c=relaxed/simple;
+	bh=FQvfDdkjjrLfAU24ywC3NvSVagFmvkVgdCf4tPwhv94=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pl5ajFbxWSD8RsJkESuHozRE70NMu/ETwhhbVTcQBZKbmkdeNhQiYfruGcMgDwhBKAYZHI1olDazc/18g5qeLqcUcRdkJz58wgkae+KflpR1NQeOSfU2bN4dom3mP5sDdjydRgvoNB717qzpJFDjY0C5NnRqZr2C9340GtvkyIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WaeKVD4n; arc=none smtp.client-ip=209.85.128.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=cdKU0+MiE0Y0ztpQpC23aUKLjZLF+I2TWUnYF3slu4KwTI+vGKvgxcnhMK9Xr0ojqVE0Tn+jbvHUvvu+T4s9MeiDd2g37f4KHilWVQsVLQdJrXTGusi08RGFeZl1PBCIAGdA07NLfbT/d1evTN1zREu6q3jn3UrLxfYHIuNAerg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AZt/Wrlw; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-477b91680f8so10495575e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Dec 2025 07:04:45 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-47798ded6fcso8588085e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Dec 2025 07:07:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1764860684; x=1765465484; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1764860849; x=1765465649; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LX7F8EnGPs4lEcXvyS5uWsAw+PN9HNPUTl46be39l9s=;
-        b=WaeKVD4ny9Xf8dy/LYVVpXepPWUnRon0EqHT1N0JK19M9vy6tBq24Lb8uNqJcgidy9
-         guUT6z+OrYoYLAAxR+QTpFnP/S2XgU+jtruC08/JKkD+YHW9v4DW5mPK3Z2m0ACH8xF2
-         2qyElLmgglMg101H/l9Vl2C+HAEMje7jWMll2f5iAxgifBRPDip2+3lHRO9zJOkiaHPv
-         otY9DBDu8u8RoOMVMX2ith8hvuXkImw3Qaqz290aXNRZ9X0NVZByVTaVD73XdLGh8b7D
-         s2N1zMNjR7ASd6VAfkxxmpG3z25q9onAVkEJKj4FNT82WF5zsf/RqFeBxyEK9BbiaDs6
-         idbg==
+        bh=4LV+NgISCgSwq4CsmAo0crFfEsNkEPc+BvKvvHIanIM=;
+        b=AZt/WrlwfBawSkHPQ0q1QnjXTft24AHKFQJ7K6hxZtZl4n3YiEfx2UN0ivvDssZwIL
+         Nx8GysgHVMBXA4b3cMD6j+BiqvZJ57JQw6nIY7oWysLk1YKuc5D/2u96KdAJ7Y3+y+Wr
+         SmQq6Xkf/SjUvQfy+uAUYQsC29qoQFN/tHLk2y3hZY9/aEuAANg+Ys7qPJNK8B7ql8tL
+         bTM4yXJ1u9McAnIJigUbPSuxd78CAgqIL7zGYkCUNV5gMzR8yjN7/fQwz1+TG6XV31OZ
+         /84PFnOR/qfI4KARjyDqRDI3ZpVdERW6OGFD9BL8n3Ifk7gFOaA0948O+yp49n4NqDS7
+         CvIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764860684; x=1765465484;
+        d=1e100.net; s=20230601; t=1764860849; x=1765465649;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LX7F8EnGPs4lEcXvyS5uWsAw+PN9HNPUTl46be39l9s=;
-        b=Ig+iGiXnWVfBRSV4WQlWaBpgD9KiIok5DVNl7oFx8MuvdhsGWk4kW8XW6SUcFmrVot
-         0OuGfZRPpAch492i2Lf+tnsgahnT+64tc+BG8sNw8XQwlmv3dQnC9eFTDSFkpCxeEWjB
-         7mXsTobZ2A/CcfDEm7s/teROZ2Oma/W9D4HG1JCogEwQGoKCg5CBH/8QdI5nLAO6s00I
-         BfSt13fkSBMwxpSu/eVIdksRkKwWcNeIXY66SnFpVRmZeYus+Yoo8EJP/MHe/69Bntjw
-         ppeXXnu2dJK9DwHKSqvdQkNHYb0du3wwhVB5rB2vlfrgKy6WhWaowPJxEeQPHISdct4H
-         G9SQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVYGm58lYYTTS0gmv7XZMKdus+vt3guUf3dJHqyBgwpQHE3d2QFliZ3VMg1HYWAJpephp5AxNITp4sUDxABeYs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSNPVa3r4UWJ80ozzgrjyqPdxKBfq7VudBbOEuR3bVw3ZyO92h
-	VGG91qSSEBNCwDckfNve3czmDEz70WnRGUNCUPcol65RdWd+tDbeJTHA5Ha2fhVZk+Q=
-X-Gm-Gg: ASbGncs5Wy2kWageVHE+Ns5qOx+ZTiKfgvQjcBXoInIwwJl0ZwTuWd/as3PycNgiMcQ
-	SnECoELk6ayORRuqWLwuZVJZD46FL4uj+RYBDnf0tDUnIjayVbK0M/ygCp2EdgB+mnWLxMIaBZz
-	r7w/ny7BQVJwUMCYrYpbbIULX+/8a6aI24r3WUwz8XSyppWNR/QYOjm0up+PvDvbjYKT+/MqDht
-	Gw7vHY7E8f2kUhRDq58Dn1qW9T49J3tao+jtBhaCimGrP/hxIaJ6avsusFB971ktghkdo95M3yO
-	Q9PKbfntBDiheQxELDtuYFkDP7p42o+FEJGc5KLm7fPN8Ab7gMjNXoNRhIMS7DN2YKJtL/b9lq2
-	lxA95gEphxJgsrXy0IQJACgjyT5dFRR3kJiaAJ47cxZ+XGoligGQEdj+xi2DVbjx3rsrDfWnbAe
-	DRm5+ojZ14PeuaJ4vis9laMibggOY7d/g=
-X-Google-Smtp-Source: AGHT+IFnyscrwkzl65AaAi4UQZiDJKmqiyXsvifrqrv/e75ucjpUSFJYwRcAP12w9MJC6xJxQ7PXLQ==
-X-Received: by 2002:a05:600c:1907:b0:471:131f:85b7 with SMTP id 5b1f17b1804b1-4792aef70bbmr86623265e9.15.1764860683713;
-        Thu, 04 Dec 2025 07:04:43 -0800 (PST)
+        bh=4LV+NgISCgSwq4CsmAo0crFfEsNkEPc+BvKvvHIanIM=;
+        b=YZaFuukdXxln19zxzLw8SyEaICbHiqKPP/ZNHEquk4YtBq2Zx6Aw2ePlEgKDsLKiiF
+         IEz20Xu3hmJ9EzDHofiHFIMS3DzPc9R9HGZJMXm1z1VQivYUV3+12cZ2Pza/BQWKTe0Z
+         07/5Bd7aeSSDjb8qcVkzzJi2EhlrdZiQ8eik5EZHR5XVUEi0aqQSxjxAmeP3YNoPdict
+         XP0qT6CxDd0VDADh7cQAORteWFU17iXeJ3LpQsvQMnzGjDLB7FbkcgyGeztSm17zPrhm
+         R1oPaU2LO8crmcnvho4rOPfRP0XskdyGDNTBaxh+fDhQBiAT0w7Qx3Tx6xAPmiKqLmIb
+         /Flw==
+X-Forwarded-Encrypted: i=1; AJvYcCWwYk+TlcSJoqUw9OxYritjwluCJJfOH+9EF5Nd/deNu1H9eKasK9J2wFEmx7mmZnY5Vq9WMKbCr8kPfNiPpek=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJwhK5ep5A0TqMbdatG+1T2xWt56FiNl8qXk0J6Vctj0Gc8iNx
+	DZKoAO8Yefvh+wHMNr3AUsnYtWV35WPHmmOC+UV72Q2/gA+2Q5b5wbpHtKcoGLgURZ8=
+X-Gm-Gg: ASbGncvEU6laGYXLZddXxJrbWMwdVOg0D4UZ07zyegDItYmmRoQCz2h7cQ7k3QcMZjx
+	yTyGpeqJDaWflXnATVTKUu1UYQ5DJ0GNaED24gvluyJL7vT744/6b7PIRhxLTYOyt3hidK4BRdy
+	+fLOepX3FxuzxndpXli2xqFO4NgS0g7/w4nDx3858EKO+DWZEe9dsYe9iMKOrVDr805XlzDG1Sn
+	CTfndqPABu1zVAiIFkt3fMqOWpdUU6GNoDLvwzYyl8fp2hqV9g2Zl4tswI1hcnlUYaCxwgbuVQU
+	W+5/w/7Es31la90Vf/n7jvMpD7DxRkx7361TFs9B90ewb43kYvzH5BsK+Nj9ofvAaHqwjiV6R/P
+	l9ETCB1VKd/lgx12E0TiCS/Rxo3gRp0ZKwEf+RKH7oF4WaRSvTHyyWFvoHPLTDJVS4mYtLU0iXB
+	xqbSpXEulBRMwM0/NogHE+6brtyRGV9/c=
+X-Google-Smtp-Source: AGHT+IEgegdBeJe5UDZpUgbKF1HYqW837uojM+NO07aLzwRyc14WjPBXJbR8fQgrSzPjg7+ikvCL3w==
+X-Received: by 2002:a05:600c:46c4:b0:45c:4470:271c with SMTP id 5b1f17b1804b1-4792af1b19dmr68170455e9.18.1764860849081;
+        Thu, 04 Dec 2025 07:07:29 -0800 (PST)
 Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4792b152a68sm38677005e9.15.2025.12.04.07.04.42
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479311ee44csm34364715e9.14.2025.12.04.07.07.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Dec 2025 07:04:42 -0800 (PST)
-Date: Thu, 4 Dec 2025 16:04:41 +0100
+        Thu, 04 Dec 2025 07:07:28 -0800 (PST)
+Date: Thu, 4 Dec 2025 16:07:27 +0100
 From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
 To: Guopeng Zhang <zhangguopeng@kylinos.cn>
-Cc: tj@kernel.org, hannes@cmpxchg.org, shuah@kernel.org, 
-	roman.gushchin@linux.dev, lance.yang@linux.dev, shakeel.butt@linux.dev, 
-	muchun.song@linux.dev, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] selftests: cgroup: Replace sleep with
- cg_read_key_long_poll() for waiting on nr_dying_descendants
-Message-ID: <ud6wzhszf5jwg23c7wtq2wfhwann2c3uuib2bsx2ty7sd6x6ym@3admzvaukqq4>
-References: <20251203115631.947908-1-zhangguopeng@kylinos.cn>
- <20251203115631.947908-4-zhangguopeng@kylinos.cn>
+Cc: tj@kernel.org, hannes@cmpxchg.org, mhocko@kernel.org, 
+	roman.gushchin@linux.dev, shakeel.butt@linux.dev, muchun.song@linux.dev, 
+	lance.yang@linux.dev, shuah@kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] selftests: cgroup: make test_memcg_sock robust
+ against delayed sock stats
+Message-ID: <tjs4ai55xpqmmq3t7drwor44xz2vdcsjrpfbl2lnddxwnkqw6b@i5f3vknfxeg4>
+References: <20251120060406.2846257-1-zhangguopeng@kylinos.cn>
+ <p655qedqjaakrnqpytc6dltejfluxo6jrffcltfz2ivonmk6lb@bxf5xlgo4iw2>
+ <f7553219-e19d-4172-90da-a2077cb574cc@kylinos.cn>
+ <440f6a44-5d1a-44d6-b776-ec58e6c79f37@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -90,63 +92,51 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="254t2h75sguwzjq3"
+	protocol="application/pgp-signature"; boundary="iitwagde47fsnofu"
 Content-Disposition: inline
-In-Reply-To: <20251203115631.947908-4-zhangguopeng@kylinos.cn>
+In-Reply-To: <440f6a44-5d1a-44d6-b776-ec58e6c79f37@kylinos.cn>
 
 
---254t2h75sguwzjq3
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+--iitwagde47fsnofu
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 3/3] selftests: cgroup: Replace sleep with
- cg_read_key_long_poll() for waiting on nr_dying_descendants
+Subject: Re: [PATCH v3] selftests: cgroup: make test_memcg_sock robust
+ against delayed sock stats
 MIME-Version: 1.0
 
-On Wed, Dec 03, 2025 at 07:56:31PM +0800, Guopeng Zhang <zhangguopeng@kylin=
+On Wed, Dec 03, 2025 at 07:59:46PM +0800, Guopeng Zhang <zhangguopeng@kylin=
 os.cn> wrote:
-> Replace the manual sleep-and-retry logic in test_kmem_dead_cgroups()
-> with the new helper `cg_read_key_long_poll()`. This change improves
-> the robustness of the test by polling the "nr_dying_descendants"
-> counter in `cgroup.stat` until it reaches 0 or the timeout is exceeded.
+> In v5 I tried to follow that direction by introducing a generic helper
+> function:
 >=20
-> Additionally, increase the retry timeout to 8 seconds (from 5 seconds)
-> based on testing results:
->   - With 5-second timeout: 4/20 runs passed.
->   - With 8-second timeout: 20/20 runs passed.
+>     cg_read_key_long_poll()
 >=20
-> The 8 second timeout is based on stress testing of test_kmem_dead_cgroups=
-()
-> under load: 5 seconds was occasionally not enough for reclaim of dying
-> descendants to complete, whereas 8 seconds consistently covered the obser=
-ved
-> latencies. This value is intended as a generous upper bound for the
-> asynchronous reclaim and is not tied to any specific kernel constant, so =
-it
-> can be adjusted in the future if reclaim behavior changes.
-
-Great!
-
+> in cgroup_util.[ch]. This helper encapsulates the "poll with retries"
+> logic and returns the final value, while leaving the actual assertion
+> to the callers. Tests like test_memcg_sock() and test_kmem_dead_cgroups()
+> then decide what condition they want to check (e.g. =3D=3D 0, > 0, etc.),
+> which seemed a bit more flexible and reusable for other cgroup stats.
 >=20
-> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
-> Reviewed-by: Shakeel Butt <shakeel.butt@linux.dev>
-> ---
->  tools/testing/selftests/cgroup/test_kmem.c | 33 ++++++++++------------
->  1 file changed, 15 insertions(+), 18 deletions(-)
+> Please let me know if you think this direction makes sense or if you have
+> any further suggestions.
 
-Acked-by: Michal Koutn=FD <mkoutny@suse.com>
+Thanks, I think this is ideal for the current tests. (I skimmed through
+the v5 and I have no more remarks.)
 
---254t2h75sguwzjq3
+Michal
+
+--iitwagde47fsnofu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaTGjBhsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+Ag4/AEA8vnYZURHlpYUdZIwoG6K
-cj1NLOcwOwt2c17lJN9cY3gBAOy6FJ7n6hKdI/nDTvB65mNiVjVrKrmHDFdRgBX1
-GTQL
-=2g5W
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaTGjrRsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+AgQ3AEAsJsktpUy+qq0NNw0kbSh
+vDI4eyB0KxjD+vhI9+63j70BAPdrUD/EGfHNf7Dpruu+CFaGuoHmujIDaazi+7dv
+FigO
+=MDvm
 -----END PGP SIGNATURE-----
 
---254t2h75sguwzjq3--
+--iitwagde47fsnofu--
 
