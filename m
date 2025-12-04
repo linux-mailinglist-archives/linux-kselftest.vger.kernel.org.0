@@ -1,95 +1,84 @@
-Return-Path: <linux-kselftest+bounces-47083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E44DBCA54A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 21:27:06 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7482BCA572A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 22:23:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6D1713075A1F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 20:26:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A4296300C51F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 21:23:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019FF35E523;
-	Thu,  4 Dec 2025 20:07:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4337A2FB978;
+	Thu,  4 Dec 2025 21:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N62e52w7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dFgkzPaL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C7C35CBD5
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 20:07:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B11A2C1590;
+	Thu,  4 Dec 2025 21:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764878855; cv=none; b=ZKo0w8pS7ZUY/8ZhLOknfKjs8QzRZAqiQ3PjZ57MXb3xzL+JnATHpYWgpK17sOIbUqGXm0R2Csj0+eDN1xL85sY3VPepmvZKTnXQ2of03a0fP8Sx9BfmFxlVNJ2stnLoQpV7YMoQYXmjVqX9QV7OM4cO45wvQeE/bZsylcEjp9I=
+	t=1764883422; cv=none; b=jKDBR+/WFqXQoqAn/e4W2aYD2HOeCNoJi5ey6kwog+20x0ihsSb92T8L5usnh/1lpEqvvI8M1lhWQjRca+V4G8Iour9CPgeRRecv2i7mlXZln0jCM5Qf4FtfQMmJWqSil8cdejYx/nk8fnAYgcQioumf7fFLvCh6+1A6FvpRwZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764878855; c=relaxed/simple;
-	bh=t9dWGhzFN9RsOEfXcG7dxUErpgknpFW7IobkU4qVlBo=;
+	s=arc-20240116; t=1764883422; c=relaxed/simple;
+	bh=f8zykM/Rnt7oC2pBaaK6ZmJG2g3hu+6GYv5id9tdyZw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mHTvXg6Vy1C+CaM1cUKyPIbFha8tvtgERP2CcBKFcsyUganVLYzxWH813l4AVRAo4f2HcIEyFsXVcUUlO3L78CNiOURiw3fFKPoxA1d9y+ez1dN8Ue2AvA8sgrLLZcc1QLIL/xslITb8RbuOcDs5fNquYyHKGk3g+vivgNs2Ga4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N62e52w7; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-297d4a56f97so18388245ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Dec 2025 12:07:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764878854; x=1765483654; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vwQDJvoYGc3nz2GzVMDge8eRjx46D+CfeX3mSjr8SeE=;
-        b=N62e52w7nqEmdnMJG6OiIt5p9OqhHolPDi1no5b7NSSIJdFmcjWdzSnitjS07UCRPw
-         SA+9nHA6jhM7THjX5+ErqQLZ0vdhFQnR8wSMrytxY9OVe8K0p8vH5qW3pYgdsSFcPnry
-         wnTIcNPwX5IJkJtbZh5KNkRt/tl1NaX1bVRoJihIlnM7FsuQ4CMCEwWA76N0rOUmT1ma
-         99xeZVXzEU1yuaaPYbjxbMH457PXUVHIA89Y5i1U8S8a4lDN3vPDKqvCErVXcck27NEM
-         ZfDMuID7PauRhnq2oj3FxtPG9bnitXYF2fFL2W4GMljLxhtbfkFICWhDPse2zpnhL+k+
-         CaNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764878854; x=1765483654;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vwQDJvoYGc3nz2GzVMDge8eRjx46D+CfeX3mSjr8SeE=;
-        b=RLgZbsP+EC9yUSPbr0SJGx5FzQjMEbbynU7FPP/RypeF4XyAdyAFypPunweIPYgPHq
-         2sy536r0QPr3d189fBctmsm8bJzH/5Vtxf5BGXbE84gav2R4vqD4PAaU3KpY/fSUundV
-         mmUEarGjmAyXzudheJHnkB/AclmLgRrZYqEIdDKkBif5W3vMDoS5JA2ELzHY+dA8ilhX
-         xn7+ZxMGAfXUGaX77iYSfDlkT0FcC6OLmejt0ROw0uQRDz4TuHLpPHOK8jRce2c5/9Yq
-         eISrGIwwPx5V/9u+6jIqNxSNuanVJD939r3LQlfJ8DKOJpo0DBOTnid/jSqqT2SlDrXF
-         51LQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWPhGjFx/f4DXEBjNTyXBvtiF0i8jHrsEVIQaqPu2mF5G5rcB4JE9n+m6rJVAPa6ZnQUmeJSpt7sq8I5p1arOM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6zWGzyns/VfpH9bItfNbN6XZ3f2frs7sX3UJPXWJlmwqh+CVG
-	P79L8CoxVUekibj3QaLPzUoLjRdLa2r4scEW7Sa+ELriVIWD5LzdLfouHNu6YA==
-X-Gm-Gg: ASbGncsNfSt7xPgcUjcjR3tJbJ0GXhEnbIoNAYhHSc/fkelFQZGSJip4JIDKbns0QNr
-	jDwnrL2bjUurqCAz1tlgzGWe6yphYEC4LQJIOy60IvY6wFfXMC4GTFaRhbPRpf1ELwxGn4hadR/
-	/9Pd7LOIulXUqDABW0mfj/253ux2ioWIEH1zeIPtgqV4Oe8O+AHRgZgoOnd841v1KaD7QpFJoNp
-	RYwHK2wRkb/qN4lYU+hF9z+PJzkX8Bm6uXXpYD4Dw4hDj/fNCNY3uellWB6McmeR0+x2qzvJHJe
-	wFbfTkKct/+o/2WTtDyvI7ujR3GbywElaDgSKUPfIX1/g031gCBgNkj308KEETtEMv6wzkgpV4V
-	zPxXhk45OiQJkWxYjRUWcsVY4CqAtDWUblZfgdM2Qu9f+OqObIIOG5sZjyCsH6dxVBD/LOxNbdR
-	gTDWntV8OY6TpszaiYOBrD6qs=
-X-Google-Smtp-Source: AGHT+IG9RhYAdYFpkikbhLyKLRnmTqvWGyuDRO7QxR1lVaPfukVM+lNdimabKudFcB5i2SDvSqWrXw==
-X-Received: by 2002:a17:902:e807:b0:299:d5a5:3f7b with SMTP id d9443c01a7336-29d684764b1mr90997395ad.53.1764878853433;
-        Thu, 04 Dec 2025 12:07:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29dae99f006sm27567195ad.50.2025.12.04.12.07.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Dec 2025 12:07:32 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 4 Dec 2025 12:07:31 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Kees Cook <kees@kernel.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Elizabeth Figura <zfigura@codeweavers.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Eric Dumazet <edumazet@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, wine-devel@winehq.org,
-	netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 00/13] selftests: Fix problems seen when building with
- -Werror
-Message-ID: <0b4dd065-4f96-48e8-a44c-24d891c68a68@roeck-us.net>
-References: <20251204161729.2448052-1-linux@roeck-us.net>
- <20251204082754.66daa1c3@kernel.org>
- <536d47f4-25b1-430a-820d-c22eb8a92c80@roeck-us.net>
- <202512041201.EBE3BF03F5@keescook>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HPeSEV6o/op0YJlMksJTUzstqEobTRh1gS5599ckmgPBm3yiQD1WP/2yuzLlzFXcnn8y9p1r1S5d2JGZtx0qwx+Z+c3QaqdiXmD7QejvH6ZUEe5Ly+F5sKUkJ+gxOpVyNfre1iJdv+U3Nea4I/rKPc9bkRi/CdrtwHHvaDOMMU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dFgkzPaL; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764883421; x=1796419421;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f8zykM/Rnt7oC2pBaaK6ZmJG2g3hu+6GYv5id9tdyZw=;
+  b=dFgkzPaLAuT+R+55xMdstLgLs9lU/d4GtX3WGNsU2EySaC6z8rhaFQx3
+   FmK5h4zfweNMP4KZnHXqop73NGkpVjKVWADGYy+61/CctZuiXM92GQSM4
+   VZgCL50v5Wqi50dpNgDkU4AA4eHQivzFj6q8iFvLigWQSUPX+JJ9luEwC
+   NMMQDd3MmJp41hqWTD71RqrFVYOIfmRgxG1leMXcCRMLf2sw3+shkQMnn
+   QOi4EHN+z0dtSX2i0eXYWhgOf9vp4qNzTE767mwLvFLzASwAAotoHy7ZS
+   n69+yVekds1awcb8B705OpnXty6TfpZ6w+tpeq6t0JWfgCZK+i9fxwQ6z
+   w==;
+X-CSE-ConnectionGUID: 0LGoSitTQ/ydlsWyginHdw==
+X-CSE-MsgGUID: VHrclE1kRWyhW7c/i0S1WQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="84321237"
+X-IronPort-AV: E=Sophos;i="6.20,250,1758610800"; 
+   d="scan'208";a="84321237"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 13:23:40 -0800
+X-CSE-ConnectionGUID: ST9W6LWcQlS5c84SBrxJ6w==
+X-CSE-MsgGUID: jOxocdD6QjKJyvMUsHJx0w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,250,1758610800"; 
+   d="scan'208";a="195515697"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 04 Dec 2025 13:23:35 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vRGnU-00000000EEz-2BZK;
+	Thu, 04 Dec 2025 21:23:32 +0000
+Date: Fri, 5 Dec 2025 05:23:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Samuel Wu <wusamuel@google.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev, rafael.j.wysocki@intel.com,
+	Samuel Wu <wusamuel@google.com>, kernel-team@android.com,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] bpf: Add wakeup_source iterator
+Message-ID: <202512050548.YLgRm659-lkp@intel.com>
+References: <20251204025003.3162056-2-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,35 +87,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202512041201.EBE3BF03F5@keescook>
+In-Reply-To: <20251204025003.3162056-2-wusamuel@google.com>
 
-On Thu, Dec 04, 2025 at 12:03:29PM -0800, Kees Cook wrote:
-> On Thu, Dec 04, 2025 at 09:16:16AM -0800, Guenter Roeck wrote:
-> > On Thu, Dec 04, 2025 at 08:27:54AM -0800, Jakub Kicinski wrote:
-> > > On Thu,  4 Dec 2025 08:17:14 -0800 Guenter Roeck wrote:
-> > > > This series fixes build errors observed when trying to build selftests
-> > > > with -Werror.
-> > > 
-> > > If your intention is to make -Werror the default please stop.
-> > > Defaulting WERROR to enabled is one of the silliest things we have done
-> > > in recent past.
-> > > 
-> > 
-> > No, that is not the idea, and not the intention.
-> > 
-> > The Google infrastructure builds the kernel, including selftests, with
-> > -Werror enabled. This triggers a number of build errors when trying to
-> > build selftests with the 6.18 kernel. That means I have three options:
-> > 1) Disable -Werror in selftest builds and accept that some real problems
-> >    will slip through. Not really a good option, and not acceptable.
-> > 2) Fix the problems in the upstream kernel and backport.
-> 
-> The series fixes build warnings that appear regardless of -Werror,
-> yes? That on its face is an improvement, so maybe just adjust the
-> Subject/changelogs?
-> 
-Yes, I'll do that.
+Hi Samuel,
 
-Thanks,
-Guenter
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+[also build test ERROR on bpf/master shuah-kselftest/next shuah-kselftest/fixes linus/master v6.18 next-20251204]
+[cannot apply to bpf-next/net]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Samuel-Wu/bpf-Add-wakeup_source-iterator/20251204-111108
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20251204025003.3162056-2-wusamuel%40google.com
+patch subject: [PATCH v1 1/4] bpf: Add wakeup_source iterator
+config: um-randconfig-001-20251205 (https://download.01.org/0day-ci/archive/20251205/202512050548.YLgRm659-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251205/202512050548.YLgRm659-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512050548.YLgRm659-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   kernel/bpf/wakeup_source_iter.c: In function 'wakeup_source_iter_seq_start':
+   kernel/bpf/wakeup_source_iter.c:20:20: error: implicit declaration of function 'wakeup_sources_read_lock'; did you mean 'wakeup_source_register'? [-Wimplicit-function-declaration]
+      20 |         *srcuidx = wakeup_sources_read_lock();
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~~
+         |                    wakeup_source_register
+   kernel/bpf/wakeup_source_iter.c:22:14: error: implicit declaration of function 'wakeup_sources_walk_start'; did you mean 'wakeup_source_register'? [-Wimplicit-function-declaration]
+      22 |         ws = wakeup_sources_walk_start();
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~
+         |              wakeup_source_register
+>> kernel/bpf/wakeup_source_iter.c:22:12: error: assignment to 'struct wakeup_source *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+      22 |         ws = wakeup_sources_walk_start();
+         |            ^
+   kernel/bpf/wakeup_source_iter.c:24:22: error: implicit declaration of function 'wakeup_sources_walk_next' [-Wimplicit-function-declaration]
+      24 |                 ws = wakeup_sources_walk_next(ws);
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/wakeup_source_iter.c:24:20: error: assignment to 'struct wakeup_source *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+      24 |                 ws = wakeup_sources_walk_next(ws);
+         |                    ^
+   kernel/bpf/wakeup_source_iter.c: In function 'wakeup_source_iter_seq_next':
+>> kernel/bpf/wakeup_source_iter.c:35:16: error: returning 'int' from a function with return type 'void *' makes pointer from integer without a cast [-Wint-conversion]
+      35 |         return wakeup_sources_walk_next(ws);
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/bpf/wakeup_source_iter.c: In function 'wakeup_source_iter_seq_stop':
+   kernel/bpf/wakeup_source_iter.c:43:17: error: implicit declaration of function 'wakeup_sources_read_unlock' [-Wimplicit-function-declaration]
+      43 |                 wakeup_sources_read_unlock(*srcuidx);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +22 kernel/bpf/wakeup_source_iter.c
+
+    13	
+    14	static void *wakeup_source_iter_seq_start(struct seq_file *seq, loff_t *pos)
+    15	{
+    16		int *srcuidx = seq->private;
+    17		struct wakeup_source *ws;
+    18		loff_t i;
+    19	
+    20		*srcuidx = wakeup_sources_read_lock();
+    21	
+  > 22		ws = wakeup_sources_walk_start();
+    23		for (i = 0; ws && i < *pos; i++)
+    24			ws = wakeup_sources_walk_next(ws);
+    25	
+    26		return ws;
+    27	}
+    28	
+    29	static void *wakeup_source_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
+    30	{
+    31		struct wakeup_source *ws = v;
+    32	
+    33		++*pos;
+    34	
+  > 35		return wakeup_sources_walk_next(ws);
+    36	}
+    37	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
