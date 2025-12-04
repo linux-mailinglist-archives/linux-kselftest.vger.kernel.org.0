@@ -1,76 +1,79 @@
-Return-Path: <linux-kselftest+bounces-46963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A7FCA203E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 01:05:37 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29507CA2038
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 01:05:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5791E300ACC5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 00:05:24 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 76FDD3004997
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 00:05:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6B008834;
-	Thu,  4 Dec 2025 00:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E3664A32;
+	Thu,  4 Dec 2025 00:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fJrWGvgF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wHdH588s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AFF2125B2
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 00:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A95D13FFD
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 00:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764806722; cv=none; b=nAwBhl/7dPcfBBpXxLJTdLtQjBl69jNYeDb+vj3JBpCsyjUwP0OqEWkJo095V00B/SpA6JjuopUa4m0bP3fDi2aPnVjcD2q4fgAg95fu6LpXTCByeqehcdlBsCIvc4GHT84Myd9QxuOCZnYz7Y3KT09KoI6pnKP4ydplSjGp0+Y=
+	t=1764806729; cv=none; b=lOzl0hn/xStUELl/oGP4r+ramLyvVaBcgnm/KnR1cRib5mtoy7p6jZcWCYQJEZJ7ICD8bEGrHIeMRK4Q1YiKiPOFj77ioSKeKsCUWEz5jf443J37hRZjruy8XM9ROQ1795x6MboaQaRU/ZlHCFki5BA1Qq9wMXjroTImn/U65wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764806722; c=relaxed/simple;
-	bh=Ng2mAL+3jbbmbK2kdWqTVXksLagXb5kbG5DAQ3Lamwo=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=NhkNaYxXAyZ3WxrmRmiawuvSCitubY+9JUUivdPh0VVPxi6Z793yBKpkxArGJIJ7gG+TnrmcOnhW9qqumKOJoEP92UPWNvGZf2xt2aPIC990ixb1rNUiW3Y/AcqgMHDBn+xlTIL+bBd6TWnsH3qeM0uwZpc2QbBJA/W6zk0DMws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fJrWGvgF; arc=none smtp.client-ip=209.85.214.201
+	s=arc-20240116; t=1764806729; c=relaxed/simple;
+	bh=/5/SUf84x79x0zxuYBMGAtCjge8lcuDz6hz4jtqQGQ4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=CcnQdY2PkrSTdDyIU4GPmzZ0iaR4YNmtPrkgn2rCgfp7D+LxR8i64M5/7YlgAunwkC+Ac21oECnV6sGPMRstAoffRieFeJI3YiN+MeyUk/awmyed8BJw5NYjjKQi//kYOPoGX7cDlD9SIxVYRvHsq50L0lUfnxJKfklDzfbRlOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wHdH588s; arc=none smtp.client-ip=209.85.210.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-29b760316a8so4651755ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 16:05:21 -0800 (PST)
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-7b9321b9312so667977b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Dec 2025 16:05:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764806720; x=1765411520; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tG99E2G74NBlCqMFEbuJyuFU682bdGjo6IlyusySJck=;
-        b=fJrWGvgFndxNAVZtqHcyVqORi0lZgFmg2RoMxlGwmkVMrZQdthVaYR1hFC6Ly5dzQP
-         /O334Uc9hzQbXTaBJBDQpxUV8fClAuQyV+mSvhXft49O5xvrscyOD0tIVtaeER892oz/
-         bCrMwusGyc1YxMFNHWfEpA9kvAeVWAG+8WlcWq+/ksmsqkeTuAVDfFQDRKFGmuzsJBvL
-         e9UvbzJE/bDfImjPR7c25dS1Wf0t60WB+zUp053+8sdPqxIeXAnUJRwMDmfuuPRk9kh4
-         GnB/l58IokpUZO1K7nsuloIUNbGVR2Ys4IGebn4jXvNZI9iXbbkOpBftOM93oV8woYmW
-         ZBfA==
+        d=google.com; s=20230601; t=1764806727; x=1765411527; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ntEJ7gGn1a+C6xdaOK38Dw1hgtUSvuAfJEVchxv0EQk=;
+        b=wHdH588sUB3ALxFMf+UHldiRgFA4+P223jZj4mLPo6xC5UidV5nHUibVgkoW5LAlV6
+         0vS6InmlF/ZchuY3aF2yQFGIVZKImWdljrDH642QCvPSbteI4/4v9+UEb9tbwuki3OtZ
+         EOcpkVKlksOVUL2zjjSlRR+3oSY2bM1uxAjz4cvdm9uAl18+ycuU4PmVV83k/6S1JsjE
+         UmDBOuor+F3E1czaLE7g6qKIro6XcQiYFqht3TedMQL48a71oPphPXghyCttWaXDdAsM
+         zLCXSMtPRZOhMHc8ZFdV3IafjpnxLAL5K3JeVLvA6NpZ67wVGnk7vAo/H8VQjr+dkVMS
+         eWMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764806720; x=1765411520;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tG99E2G74NBlCqMFEbuJyuFU682bdGjo6IlyusySJck=;
-        b=UFRCxslI0lxfrHkTQ/quzDcME3M23rU8RrmtLOql3ov73oEZpYV0j5hXuAaU0hKli+
-         aaeqYXRYgY8bBDzeoNvgC9ou0rDxGgqjsfv4YR2HOQUS9ormMsc3tSJnWg6cPjMeF9bS
-         00k3Of1E19sMFbM4tvDrRYG6D0B07dBndYIKOlO8TBPGXksvu44wUTSLZKLTu1lDCB4F
-         gnEOzVaaEuebc59jujxzY/f477TWcASz9JxTd3kIG8Ru6T9AknRFOhHJSjiqaUwqcsj1
-         tLDhPGyrhrg3WVCbVuMBSNIgczYEVYmgTopupMnA14IbX7swuyB01jg2TSlIQf+rsH7f
-         7J5A==
-X-Forwarded-Encrypted: i=1; AJvYcCV9+eEfE/takS4wLt0Q5LEgqrdb7BSc0fNe6BCW1G6/wgGlk5DLO4tmXmwAv/0G/G502Lyf26L1Os49M/Bi8yY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDFlIgvU+x3RwYJr4cYzZBXY1ST4T1lvNf/4xeJXCiTPtzS8Kr
-	ibLHam2s67RglZdPp6l6Tq7o4A525doOHRTrNuGns+XZHW0OSCHAwb7PsL2Re3xnl0G/w0l/3L8
-	e0OOUc2klAvExooOkrA==
-X-Google-Smtp-Source: AGHT+IGeC714EhBu/T29Z7FIKq0MljnotPa6j758d1YJabmaYRlvO/lv9fc69gFjzEtkHLe56aPYXjQBQYBtJtQ=
-X-Received: from plbbb9.prod.google.com ([2002:a17:902:bc89:b0:29d:5afa:2c4])
+        d=1e100.net; s=20230601; t=1764806727; x=1765411527;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ntEJ7gGn1a+C6xdaOK38Dw1hgtUSvuAfJEVchxv0EQk=;
+        b=Ffl9p6xgfzKbITWx8DZLNy1hQNSbBhgMFA4dCX7eiy8B8NgrjrBdtG0H6u1Cf9GCrk
+         oiaHO2xtA3sZmTNtze+0XmK0GboKDcSaF6xfMg3YK8aYMyQevcl/N+imYXHb9fUvmoij
+         jRF2VWWgOPM9ZR/97nNlS/J4zmSasFZFGt5IZhgC/8xtZzCavttiw/TYPfvTKJKgV9ui
+         RQlc1tyLXZ7qXS9i9UgY23tAdmy2GioYbgegv9ai7PoOSkGfhhvyHvemYmUlBzEwW04o
+         VbZlA78qx+moBKRe9w+mxp8Dtz1N3tqDYfqMztlaSYGoSQRFs/cJRmgCag0ZoJDwasEj
+         UUug==
+X-Forwarded-Encrypted: i=1; AJvYcCVWFzfiLoTmAThtJi4qYG19Zg9pLsfwpDLpRQ0xsEs1/ceOkD/bkqX56MUmN3B6koojTNNCp9XtInPN4QsKeoQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YztnyWLMRYBwGvQFO+j5bDPDwrvmUhLfKXjcb+nwKVkvdbP0DzI
+	FHWyI8KPxebXAvs3bvsxkP67Zg1d6r3d641ZJ+1uBRqDZzJo16D9jaE+6T58cuGw6Dbz9GEMv4c
+	jHKllIKjJ5eGrlEF+2w==
+X-Google-Smtp-Source: AGHT+IGanVIDs+7Y69ywHMHsNbcI0LEOaWi2CkaERYx1M22ypSftKd5oK/BkZTdgl+fJSBjubibGBoyAYRxfcc8=
+X-Received: from pffa10.prod.google.com ([2002:a62:bd0a:0:b0:7dd:8bba:63ab])
  (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:e943:b0:296:5ea8:ed7c with SMTP id d9443c01a7336-29d68344bf3mr55170825ad.17.1764806720435;
- Wed, 03 Dec 2025 16:05:20 -0800 (PST)
-Date: Wed,  3 Dec 2025 16:03:47 -0800
+ 2002:a05:6a00:4615:b0:7aa:4f1d:c458 with SMTP id d2e1a72fcca58-7e00d236c39mr4941316b3a.19.1764806726792;
+ Wed, 03 Dec 2025 16:05:26 -0800 (PST)
+Date: Wed,  3 Dec 2025 16:03:48 -0800
+In-Reply-To: <20251204000348.1413593-1-tjmercier@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20251204000348.1413593-1-tjmercier@google.com>
 X-Mailer: git-send-email 2.52.0.177.g9f829587af-goog
-Message-ID: <20251204000348.1413593-1-tjmercier@google.com>
-Subject: [PATCH bpf 1/2] bpf: Fix truncated dmabuf iterator reads
+Message-ID: <20251204000348.1413593-2-tjmercier@google.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Add test for truncated dmabuf_iter reads
 From: "T.J. Mercier" <tjmercier@google.com>
 To: yonghong.song@linux.dev, ast@kernel.org, daniel@iogearbox.net, 
 	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
@@ -83,114 +86,97 @@ Cc: christian.koenig@amd.com, sumit.semwal@linaro.org,
 	linaro-mm-sig@lists.linaro.org, "T.J. Mercier" <tjmercier@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-If there is a large number (hundreds) of dmabufs allocated, the text
-output generated from dmabuf_iter_seq_show can exceed common user buffer
-sizes (e.g. PAGE_SIZE) necessitating multiple start/stop cycles to
-iterate through all dmabufs. However the dmabuf iterator currently
-returns NULL in dmabuf_iter_seq_start for all non-zero pos values, which
-results in the truncation of the output before all dmabufs are handled.
+If many dmabufs are present, reads of the dmabuf iterator can be
+truncated at PAGE_SIZE or user buffer size boundaries before the fix in
+"selftests/bpf: Add test for open coded dmabuf_iter". Add a test to
+confirm truncation does not occur.
 
-After dma_buf_iter_begin / dma_buf_iter_next, the refcount of the buffer
-is elevated so that the BPF iterator program can run without holding any
-locks. When a stop occurs, instead of immediately dropping the reference
-on the buffer, stash a pointer to the buffer in seq->priv until
-either start is called or the iterator is released. This also enables
-the resumption of iteration without first walking through the list of
-dmabufs based on the pos value.
-
-Fixes: 76ea95534995 ("bpf: Add dmabuf iterator")
 Signed-off-by: T.J. Mercier <tjmercier@google.com>
 ---
- kernel/bpf/dmabuf_iter.c | 56 +++++++++++++++++++++++++++++++++++-----
- 1 file changed, 49 insertions(+), 7 deletions(-)
+ .../selftests/bpf/prog_tests/dmabuf_iter.c    | 47 +++++++++++++++++--
+ 1 file changed, 42 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/bpf/dmabuf_iter.c b/kernel/bpf/dmabuf_iter.c
-index 4dd7ef7c145c..cd500248abd9 100644
---- a/kernel/bpf/dmabuf_iter.c
-+++ b/kernel/bpf/dmabuf_iter.c
-@@ -6,10 +6,33 @@
- #include <linux/kernel.h>
- #include <linux/seq_file.h>
+diff --git a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
+index 6c2b0c3dbcd8..e442be9dde7e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c
+@@ -73,12 +73,10 @@ static int create_udmabuf(void)
+ 	return -1;
+ }
  
-+struct dmabuf_iter_priv {
-+	/*
-+	 * If this pointer is non-NULL, the buffer's refcount is elevated to
-+	 * prevent destruction between stop/start. If reading is not resumed and
-+	 * start is never called again, then dmabuf_iter_seq_fini drops the
-+	 * reference when the iterator is released.
-+	 */
-+	struct dma_buf *dmabuf;
-+};
-+
- static void *dmabuf_iter_seq_start(struct seq_file *seq, loff_t *pos)
+-static int create_sys_heap_dmabuf(void)
++static int create_sys_heap_dmabuf(size_t bytes)
  {
--	if (*pos)
--		return NULL;
-+	struct dmabuf_iter_priv *p = seq->private;
-+
-+	if (*pos) {
-+		struct dma_buf *dmabuf = p->dmabuf;
-+
-+		if (!dmabuf)
-+			return NULL;
-+
-+		/*
-+		 * Always resume from where we stopped, regardless of the value
-+		 * of pos.
-+		 */
-+		p->dmabuf = NULL;
-+		return dmabuf;
-+	}
- 
- 	return dma_buf_iter_begin();
- }
-@@ -54,8 +77,11 @@ static void dmabuf_iter_seq_stop(struct seq_file *seq, void *v)
+-	sysheap_test_buffer_size = 20 * getpagesize();
+-
+ 	struct dma_heap_allocation_data data = {
+-		.len = sysheap_test_buffer_size,
++		.len = bytes,
+ 		.fd = 0,
+ 		.fd_flags = O_RDWR | O_CLOEXEC,
+ 		.heap_flags = 0,
+@@ -110,7 +108,9 @@ static int create_sys_heap_dmabuf(void)
+ static int create_test_buffers(void)
  {
- 	struct dma_buf *dmabuf = v;
- 
--	if (dmabuf)
--		dma_buf_put(dmabuf);
-+	if (dmabuf) {
-+		struct dmabuf_iter_priv *p = seq->private;
+ 	udmabuf = create_udmabuf();
+-	sysheap_dmabuf = create_sys_heap_dmabuf();
 +
-+		p->dmabuf = dmabuf;
-+	}
++	sysheap_test_buffer_size = 20 * getpagesize();
++	sysheap_dmabuf = create_sys_heap_dmabuf(sysheap_test_buffer_size);
+ 
+ 	if (udmabuf < 0 || sysheap_dmabuf < 0)
+ 		return -1;
+@@ -219,6 +219,26 @@ static void subtest_dmabuf_iter_check_default_iter(struct dmabuf_iter *skel)
+ 	close(iter_fd);
  }
  
- static const struct seq_operations dmabuf_iter_seq_ops = {
-@@ -71,11 +97,27 @@ static void bpf_iter_dmabuf_show_fdinfo(const struct bpf_iter_aux_info *aux,
- 	seq_puts(seq, "dmabuf iter\n");
- }
- 
-+static int dmabuf_iter_seq_init(void *priv, struct bpf_iter_aux_info *aux)
++static void subtest_dmabuf_iter_check_lots_of_buffers(struct dmabuf_iter *skel)
 +{
-+	struct dmabuf_iter_priv *p = (struct dmabuf_iter_priv *)priv;
++	int iter_fd;
++	char buf[1024];
++	size_t total_bytes_read = 0;
++	ssize_t bytes_read;
 +
-+	p->dmabuf = NULL;
-+	return 0;
++	iter_fd = bpf_iter_create(bpf_link__fd(skel->links.dmabuf_collector));
++	if (!ASSERT_OK_FD(iter_fd, "iter_create"))
++		return;
++
++	while ((bytes_read = read(iter_fd, buf, sizeof(buf))) > 0)
++		total_bytes_read += bytes_read;
++
++	ASSERT_GT(total_bytes_read, getpagesize(), "total_bytes_read");
++
++	close(iter_fd);
 +}
 +
-+static void dmabuf_iter_seq_fini(void *priv)
-+{
-+	struct dmabuf_iter_priv *p = (struct dmabuf_iter_priv *)priv;
 +
-+	if (p->dmabuf)
-+		dma_buf_put(p->dmabuf);
-+}
+ static void subtest_dmabuf_iter_check_open_coded(struct dmabuf_iter *skel, int map_fd)
+ {
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts);
+@@ -275,6 +295,23 @@ void test_dmabuf_iter(void)
+ 		subtest_dmabuf_iter_check_no_infinite_reads(skel);
+ 	if (test__start_subtest("default_iter"))
+ 		subtest_dmabuf_iter_check_default_iter(skel);
++	if (test__start_subtest("lots_of_buffers")) {
++		size_t NUM_BUFS = 100;
++		int buffers[NUM_BUFS];
++		int i;
 +
- static const struct bpf_iter_seq_info dmabuf_iter_seq_info = {
- 	.seq_ops		= &dmabuf_iter_seq_ops,
--	.init_seq_private	= NULL,
--	.fini_seq_private	= NULL,
--	.seq_priv_size		= 0,
-+	.init_seq_private	= dmabuf_iter_seq_init,
-+	.fini_seq_private	= dmabuf_iter_seq_fini,
-+	.seq_priv_size		= sizeof(struct dmabuf_iter_priv),
- };
++		for (i = 0; i < NUM_BUFS; ++i) {
++			buffers[i] = create_sys_heap_dmabuf(getpagesize());
++			if (!ASSERT_OK_FD(buffers[i], "dmabuf_fd"))
++				goto cleanup_bufs;
++		}
++
++		subtest_dmabuf_iter_check_lots_of_buffers(skel);
++
++cleanup_bufs:
++		for (--i; i >= 0; --i)
++			close(buffers[i]);
++	}
+ 	if (test__start_subtest("open_coded"))
+ 		subtest_dmabuf_iter_check_open_coded(skel, map_fd);
  
- static struct bpf_iter_reg bpf_dmabuf_reg_info = {
-
-base-commit: 30f09200cc4aefbd8385b01e41bde2e4565a6f0e
 -- 
 2.52.0.177.g9f829587af-goog
 
