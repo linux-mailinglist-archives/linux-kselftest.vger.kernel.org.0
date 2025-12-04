@@ -1,177 +1,121 @@
-Return-Path: <linux-kselftest+bounces-47000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 592F8CA351B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 11:54:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E4BECA3A24
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 13:39:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 83DD5312FDB6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 10:52:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 41E3E300FFA5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 12:39:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A392330D28;
-	Thu,  4 Dec 2025 10:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1569033FE08;
+	Thu,  4 Dec 2025 12:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="YMvxTj7T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HsrNw45S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD28A329E6D
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 10:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8D033EAFF
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 12:39:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764845526; cv=none; b=IiSAmpTEcg6RgvwfgWvHlzFI5xWOIvRXuROO6aQxTAHqy4QrfVqdXzX7fodJQbdCXOeGlPDWF33r7hhRQfLvuPk3ycIKpTWLXc4O4PrEjVXVRP29/51St1c0hvNylGjP9WOp7u0WemeGBKiUiytdAZvuHXF5cDehCvYfChCou+w=
+	t=1764851948; cv=none; b=u1ngnQtNgWTK0Rb3L7eZEfyaIZOfwmMt5cCcZDnGt2UHW4YMoN1cmR0bxtuIgeGA0/Du/0TLmzaP8Sg28oASTAI2eKgV/pkxpgEeKIMfisNSiIk+fXy9rvTwU3b33SHfGiamCuOaAAwnwBCH5xVC/mU4Wxd4bX2OgD/5Q7/Rn1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764845526; c=relaxed/simple;
-	bh=G2VymRjHZXe3qyNYINHvi9WbRT5j4d1zO0m+NFNgafE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bVeYH1UVVoiOZ+0I2lTzLgPeyWelpqGB0WYJd3oq0cLwWkoHa6mUtqU/GAJUr13zpLQOdYAtDT2lF4ByE3si52Z6W7nZbFXr8rV+NO7xkWQXT+t1/2J4ccKwBDAjafpIn8r8FSFp0nUZjeEMF+TXcNs/bgJGQ8GmapuaG0r1Nmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=YMvxTj7T; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-42e2b78d45bso379200f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Dec 2025 02:52:03 -0800 (PST)
+	s=arc-20240116; t=1764851948; c=relaxed/simple;
+	bh=ij8EL0R6UwB8ZDBVRFMV/z/L2JKiW7wDSAk4ODpKtjs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=t3a5sFf+xelrHuKF6m5Tn4BWTgRN4omBawst/G62DPbE6oPyBoOz5lnfYm9w1NvOxcgWqh2KizyTiJH2FYlMlhUqwGJAfkApEgAcfqBjiI1zt5/l3CLh7+IUMm9Le+z/PF3z/bIcnb9pAZB1Bjl+sUu7vZHmhU6eiNvc5l5vzwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HsrNw45S; arc=none smtp.client-ip=74.125.224.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-640e065991dso619512d50.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Dec 2025 04:39:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1764845522; x=1765450322; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ikuUYmMKKHVhIQyzeW7NNfRK3UsPxb6hcXRzMAgnkDE=;
-        b=YMvxTj7T2MxpxtNAfN8rLMK6eKt9NARsPxcRqKPbthMnh+aO3y1s9uYxw4Q4c20l0D
-         Jj0fGEZ4ZU34JiOifqtMAhiFvy4tOt9kw0LnIljiKX5xDcaSEjbH067p3yIeK0j38RKX
-         NwTXUjHPLlfrBKzQDnmVTO82kxjxbutnmmqPbM5Rik/jT54886szWH0DrBYXYMHKvBL0
-         eB6kvFMh8VBos5UMo/e34kLcWqn5Re/CofGFHyW1eMu/ZE/SCe0n63Sf+QFo6bqyXEv5
-         PzKcCvU26/i2ueIuH6R48ml1e3lGrA/5wBd7el/IQV2wzyQfnY2I/pcXolKkI1bPrT80
-         8cQA==
+        d=gmail.com; s=20230601; t=1764851946; x=1765456746; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ij8EL0R6UwB8ZDBVRFMV/z/L2JKiW7wDSAk4ODpKtjs=;
+        b=HsrNw45Sw0qZhJpdlG/WgjH3nlhIEkm4EdpLNBUykie9ug5/9q1aG+EeLU1bc02nPm
+         UUnXoFh601CHrbCpbStdpXOf05pyoBCWDH6ZTSXL8c2GpO7HhfpSfARkqY4JIp9biDRT
+         vXJIOWL+UiwXR1H30L26SUeflgcBWUIrq7O7yyp4aATGa4XRwgnrgPDkqHs0ZpreNd5V
+         lrjyjh5Etk6qNfx6sKk35SWiaTe3rMa12Is0CUBafm+EVb67M/LRBMFg+z17zwK1ucUk
+         WXuTyC03Lvidk+CMPHud+2ANe7LjLj8rYyagl3TFQ+4wi5oQaMF/tDPKSm5EbweUzY9w
+         BRQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764845522; x=1765450322;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ikuUYmMKKHVhIQyzeW7NNfRK3UsPxb6hcXRzMAgnkDE=;
-        b=mulSp8fI5B4zS/Pb07OLxlT+5lSV6JvLuvc/UK/hHmvcFP64ZUO91dcwlw9xY88FrL
-         /q+At2q5Z4GTczBwKcPGC3I/+u0VqW7KIuPO/gqytn/68OsgihHxAvKuyqZLLphk3BOT
-         MsafHOWYbDRCMsQP2f7NENphbIB/jmjHlBh0RT7ismRWq5Q0TVnMNY7W+XkqTeVMPrIS
-         4AGQeZKiZO7kSsQE5YFsPTiV94E8wcUAsxOO4Usw7uu2r7Ioisn93BrKQ7Q+J1oLFOgb
-         nVnZqIUmc18w+cAe7jFYdqlYhadDjfbteboB5EUSxaG1pBrFKHWgV/192faBanDmlinq
-         zK4A==
-X-Forwarded-Encrypted: i=1; AJvYcCVV6HHk0ZSVZb3IwkJIFMPjf5cFtyV3ceAOYx+rz0zJwSCQE0WEGqlmiEulyVTBS7mrVC/HEw4rt/y+fQzYhoA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7fXRpCr4Xebr8q+FdGfJZQAvBvqLwMid4bEud9XOo2diVTM0s
-	3Cy8d2jMFp34XfrxQyy1lwKYNIwxBXZ7DxgD7vyqG7Zn5OXv+V1EtTN19rnpGuasmbs=
-X-Gm-Gg: ASbGncsdPXdKissyoIN48Qdly+03a5Bi/b8PawcsGvIiDQkGzgCtFiXZ2KIaAA86pGT
-	YxdVzO1QDag7bQ3oKJXN/DXWYHhAv+a/SvQoomqO8xYM9Bn+SlpFQ6cdHVQErvQbEY47UtSQ7IC
-	9tNe+qRyjdgm+9PA57PHqfRpoQlghYltTnJNn0UCK3MuDPjumcwqs1QSw3neJ+9xY/XbYgne9pB
-	fnvwHf+chBOjlUKEqiWK/9WiWuic0ihglTInhIx4fOc0UNtN4xQo5n+n7mEfY4kibT9qc3l4g50
-	24GuuaVrmUUiwYPx4BC3GGb70TicXRm2wpQx31323SmwOrJAHk5RcsUEy8Rdk7XBFQstQeMWbq7
-	RGFTnZK6s8WD7J5X/15e7kT16erY0soxsSLwNvOvQy279QZWaNaqiI0PJsHgFH/yxnig3AP831w
-	dS6U1IyRvx6Ej2uw==
-X-Google-Smtp-Source: AGHT+IFg5ESd2o+IvztcBtJ0/wOI4aSHSZlOftAJV5K+ufU+HQ3XjtFJaAZBBsA/B0v7OSUnyh7DWw==
-X-Received: by 2002:a05:6000:430a:b0:429:c711:22d8 with SMTP id ffacd0b85a97d-42f7317d13emr5968584f8f.15.1764845521589;
-        Thu, 04 Dec 2025 02:52:01 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7ca4f219sm2565843f8f.0.2025.12.04.02.52.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Dec 2025 02:52:01 -0800 (PST)
-Date: Thu, 4 Dec 2025 11:51:58 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org, gustavold@gmail.com, asantostc@gmail.com,
-	calvin@wbinvd.org, kernel-team@meta.com
-Subject: Re: [PATCH net-next 0/4] (no cover subject)
-Message-ID: <aTFnzmc0ZtBvGg4y@pathway.suse.cz>
-References: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
- <20251201163622.4e50bf53@kernel.org>
- <4oybtunobxtemenpg2lg7jv4cyl3xoaxrjlqivbhs6zo72hxpu@fqp6estf5mpc>
- <20251202102442.568f91a7@kernel.org>
- <aTFmew5trILX3RpO@pathway.suse.cz>
+        d=1e100.net; s=20230601; t=1764851946; x=1765456746;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ij8EL0R6UwB8ZDBVRFMV/z/L2JKiW7wDSAk4ODpKtjs=;
+        b=BFxuAuyssOe/X/xcztMTjsWZSfqN97EBmJ8OqONZGq9GRGgC382sT1LbfnIGYJEcwl
+         hCTInG9YNn5qRWzijwmKMgP3EC3YJsZEYQtv/970q4WtbMk4jkU/Hzpx1pGz1GSMsm0P
+         zfEhNF4H0GHIhmLUW0qEAUPvrfMi8sjNGs99i78W3ocBP529iFlUhJ8d8LZvqMoVQtHx
+         1eSP69aY4/MgppOBh54BTHxCxuLd5YSKmYRplpdS6+d/OxwoI0+3lGiY4x0Hp656K8Fh
+         /1bKcWh5zVRseZCi1bAyHcIFoT2e59/IHH0H0Gb58+MIGnLE+QV9J9pJjmWtbldwdMDU
+         DdmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXmPRNqpuKwYkjuTv0ObfxCM682P8JRu4F07WxyeZjW4AvKpte2Hx9uZFML5pY6OeUDrezD/JlLiee/qCOrOnA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOA5WxgKu4Ms1/Q+mp77UAe60CDAafLh7GCu5UCtmbl/fMhDXC
+	wraXe/QxtmCtttkTLjRZIjPXgzkDtBJrYCADbRHHhWefGV6eO1fsAKu1
+X-Gm-Gg: ASbGncvhXEbrjRptKECieh9QNB2e9ICLgWnhjv3TE/aajE/Y7RtUKPBaadk044FQ/O7
+	yOOv2o7KqvJnsF9bBT92huydT3OxhZTB6UGzfn9+n+bSz+Xi3UGo0BtmhoMXDUKKpHhKVBKKbvI
+	Na2JmqK/Nhl8uZflK9215ky4Y1gSGgGvcXY9GcEMEJpROQTuwgnrJ9Pexw76XUOSkv3mSAAtSIN
+	aAE8StP1aHjnHRnfVI3odXvC4xAP8+m8/cl0FBbCwTPnr3yX0U11ga6qXm0+SkbL99FIpUKF6BO
+	HmjhAvhitSH8ChnPXYUKWcMAS9D983VeO1XFr+vaR6bKnP6SL/ynR6hiQ+jP7nAMQ5tkCNtpFew
+	JKFyQi+jfSxu6btFqUZSZ3E19T/v9D6gRTYkPHxZdc1GtzbkofEG2OcNo9zdmvih7OONrsvxlMl
+	BLHpkSD3sXDI2Yu0Aikcd05qGJWUS2bfhnXr6OZlF/9Qw6QQ++/nY=
+X-Google-Smtp-Source: AGHT+IGxKuUtlyaX8PN+PqMbMQ7N09I5gYeGDl8pe/k/jby/JuQK+UYr3WKkNen2o5yTwoJekvFxYg==
+X-Received: by 2002:a05:690e:1908:b0:63f:b0ca:dc9e with SMTP id 956f58d0204a3-64436f6bea5mr4880835d50.10.1764851946376;
+        Thu, 04 Dec 2025 04:39:06 -0800 (PST)
+Received: from localhost.localdomain (45.62.117.175.16clouds.com. [45.62.117.175])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78c1b78e892sm4766667b3.44.2025.12.04.04.39.01
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 04 Dec 2025 04:39:06 -0800 (PST)
+From: Shuran Liu <electronlsr@gmail.com>
+To: song@kernel.org,
+	mattbobrowski@google.com,
+	bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	dxu@dxuuu.xyz,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	electronlsr@gmail.com
+Subject: Re: [PATCH bpf v4 2/2] selftests/bpf: add regression test for bpf_d_path()
+Date: Thu,  4 Dec 2025 20:38:52 +0800
+Message-ID: <20251204123853.1235-1-electronlsr@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20251204074632.8562-3-electronlsr@gmail.com>
+References: <20251204074632.8562-3-electronlsr@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aTFmew5trILX3RpO@pathway.suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Ah, I have sent it prematurely.
+Hi,
 
-On Thu 2025-12-04 11:46:21, Petr Mladek wrote:
-> On Tue 2025-12-02 10:24:42, Jakub Kicinski wrote:
-> > On Tue, 2 Dec 2025 02:18:44 -0800 Breno Leitao wrote:
-> > > On Mon, Dec 01, 2025 at 04:36:22PM -0800, Jakub Kicinski wrote:
-> > > > On Fri, 28 Nov 2025 06:20:45 -0800 Breno Leitao wrote:  
-> > > > > This patch series introduces a new configfs attribute that enables sending
-> > > > > messages directly through netconsole without going through the kernel's logging
-> > > > > infrastructure.
-> > > > > 
-> > > > > This feature allows users to send custom messages, alerts, or status updates
-> > > > > directly to netconsole receivers by writing to
-> > > > > /sys/kernel/config/netconsole/<target>/send_msg, without poluting kernel
-> > > > > buffers, and sending msgs to the serial, which could be slow.
-> > > > > 
-> > > > > At Meta this is currently used in two cases right now (through printk by
-> > > > > now):
-> > > > > 
-> > > > >   a) When a new workload enters or leave the machine.
-> > > > >   b) From time to time, as a "ping" to make sure the netconsole/machine
-> > > > >   is alive.
-> > > > > 
-> > > > > The implementation reuses the existing message transmission functions
-> > > > > (send_msg_udp() and send_ext_msg_udp()) to handle both basic and extended
-> > > > > message formats.
-> > > > > 
-> > > This feature (in this patchset) is just one step ahead, giving some more
-> > > power to netconsole, where extra information could be sent beyond what
-> > > is in dmesg.
-> > 
-> > Having extra metadata makes sense, since the interpretation happens in
-> > a different environment. But here we're talking about having extra
-> > messages, not extra metadata.
-> > 
-> > > > The 2nd point is trivial, the first one is what really gives me pause.
-> > > > Why do we not care about the logs on host? If the serial is very slow
-> > > > presumably it impacts a lot of things, certainly boot speed, so...  
-> > > 
-> > > This is spot-on - slow serial definitely impacts things like boot speed.
-> > > 
-> > > See my constant complains here, about slow boot
-> > > 
-> > > 	https://lore.kernel.org/all/aGVn%2FSnOvwWewkOW@gmail.com/
-> > > 
-> > > And the something similar in reboot/kexec path:
-> > > 
-> > > 	https://lore.kernel.org/all/sqwajvt7utnt463tzxgwu2yctyn5m6bjwrslsnupfexeml6hkd@v6sqmpbu3vvu/
-> > > 
-> > > > perhaps it should be configured to only log messages at a high level?  
-> > > 
-> > > Chris is actually working on per-console log levels to solve exactly
-> > > this problem, so we could filter serial console messages while keeping
-> > > everything in other consoles (aka netconsole):
-> > > 
-> > > 	https://lore.kernel.org/all/cover.1764272407.git.chris@chrisdown.name/
-> > 
-> > Excellent! Unless I'm missing more context Chris does seem to be
-> > attacking the problem at a more suitable layer.
-> 
-> This would help to bypass slow serial consoles. But the extra messages
-> would still get stored into the kernel ring buffer and passed back
-> to user space logs, for example journalctl.
-
-It might actually make sense for the "workload enters or leaves" messages.
-But I am not sure about the "ping" messages.
-
-> I do not have strong opinion whether adding the
-> /sys/kernel/config/netconsole/<target>/send_msg is a good idea or not.
-
-I just wanted to point out that it is not only about slow serial
-consoles.
-
-Best Regards,
-Petr
+I looked into the CI failure and it’s caused by the test assuming
+/tmp is on tmpfs, which is not true in the CI environment, so
+fallocate() fails there. Since /dev/shm is mounted as tmpfs on that
+setup, would it be acceptable to change the test to use a file under
+/dev/shm instead of /tmp?
 
