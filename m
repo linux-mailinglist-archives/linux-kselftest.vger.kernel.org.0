@@ -1,174 +1,165 @@
-Return-Path: <linux-kselftest+bounces-46998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-46999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0F01CA33A4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 11:30:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80A32CA34BE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 11:49:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EE95F302771D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 10:30:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 38B31310E88F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 10:46:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFF7E2DAFBE;
-	Thu,  4 Dec 2025 10:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9292C33343F;
+	Thu,  4 Dec 2025 10:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="pEWGGucE"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="E9ncN5L6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B72F2EDD6B;
-	Thu,  4 Dec 2025 10:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B506274B55
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Dec 2025 10:46:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764844237; cv=none; b=If0r2ujWlhan71/JW3LvTDVi2j8PalhMIRc+doTfyHrAmtXHoecVnEZsrdWDbbpDWNMSNXPSbqQbt+aavsDa2ZWdZbX0NXajfDBHtToGXTm8M5WZUycLBqNWV/D4fCkR8vmE+IkYtRXqBTpYD5nD0JWIgqs4H/yX/AwNgDV4V0E=
+	t=1764845185; cv=none; b=Ix8uK4jYLUUK6HLJNRSJBTCgxAuXiWOPlsbRlcmStIOHdbfSWakJZt74C4RoAHf+UqTgdKTJg0SeuZO5uRA3z7SThZKAUSmeMsIb0JilIslTBL3EUtzfiKdsFKf29WB5oDBcwGwO59Co+s8ebcsdlkeJVLIyKtaq1J2MoBjs9W0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764844237; c=relaxed/simple;
-	bh=ysf94GMNybiLAZWcFcB1EF1Url6FvxYvZ/M/8JdfLsA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OMLujLDQAYhD19wB5hDA87KAQfDomtz13XDS9OAmu9spBuv25O5wQ4nRGpmGOBncjyBbv9TzpKf1qoyEAGQAs0WvV5k6avWKuLxE4fmfW69+o+gMsNbBUXV9Xm6tdSG1rYFdUuX+DlZcZXfSxW8S2NVSHzJVaq/GYLohxW90EpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=pEWGGucE; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B40FYer3422550;
-	Thu, 4 Dec 2025 02:30:13 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2025-q2;
-	 bh=Z0FeDaJvPNNP9cJoyQRzGhFjjDU/oP6BWMa5kNfSnOU=; b=pEWGGucEUU/u
-	UgEn4Iuu39OVbxPlPS81jIwk1zXu0nGmT5QW/ejw4fhVcfHZgnzz63x/o/lHsfPa
-	U/DIw/EWOEfhUpwJb8jukEBX2qdDHtPYcEN0fTQYkj4vvcHf1FuJA1DLAjeVgKVL
-	n+6M89pR0w9kCl4/ViGqHpZeucAGrBPfsTSLU7GKPDmt4tVQ81aCSy778tmCAgLk
-	NcLrD7NtUU63+cyqeovzbvPW4gk1gtbnQHqcX5806Bd6Lgdv/Oly9PChPU+ada8N
-	a3W3gPXvQfRPYhDF3SrjfJkaLjvJJ1HdpXXjtjc0BUPzpO3VxKpp7Du5fxksy2ru
-	IS0/HVhWRQ==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4atykrtw3n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Thu, 04 Dec 2025 02:30:13 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Thu, 4 Dec 2025 10:30:10 +0000
-Date: Thu, 4 Dec 2025 02:30:05 -0800
-From: Alex Mastro <amastro@fb.com>
-To: David Matlack <dmatlack@google.com>
-CC: Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Alex Williamson
-	<alex@shazbot.org>,
-        Adithya Jayachandran <ajayachandra@nvidia.com>,
-        Alistair
- Popple <apopple@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bjorn
- Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
-        David Rientjes
-	<rientjes@google.com>,
-        Jacob Pan <jacob.pan@linux.microsoft.com>,
-        Jason
- Gunthorpe <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Josh Hilke
-	<jrhilke@google.com>, Kevin Tian <kevin.tian@intel.com>,
-        <kvm@vger.kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, Lukas Wunner <lukas@wunner.de>,
-        Mike Rapoport
-	<rppt@kernel.org>, Parav Pandit <parav@nvidia.com>,
-        Philipp Stanner
-	<pstanner@redhat.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Saeed Mahameed
-	<saeedm@nvidia.com>,
-        Samiullah Khawaja <skhawaja@google.com>,
-        Shuah Khan
-	<shuah@kernel.org>, Tomita Moeko <tomitamoeko@gmail.com>,
-        Vipin Sharma
-	<vipinsh@google.com>, William Tu <witu@nvidia.com>,
-        Yi Liu
-	<yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>,
-        Zhu Yanjun
-	<yanjun.zhu@linux.dev>
-Subject: Re: [PATCH 06/21] vfio/pci: Retrieve preserved device files after
- Live Update
-Message-ID: <aTFirYPI5vlIhvCK@devgpu015.cco6.facebook.com>
-References: <20251126193608.2678510-1-dmatlack@google.com>
- <20251126193608.2678510-7-dmatlack@google.com>
- <aTAzMUa7Gcm+7j9D@devgpu015.cco6.facebook.com>
- <CA+CK2bDbOQ=aGPZVP4L-eYobUyR0bQA0Ro6Q7pwQ_84UxVHnEw@mail.gmail.com>
- <CALzav=ciz4kV+u3B5bMzZzVY+cMs-G=q9c5O-jKPz+E4LUdx7g@mail.gmail.com>
+	s=arc-20240116; t=1764845185; c=relaxed/simple;
+	bh=FrbGLv+F0gzsFKrnZ3OWHoRncChf1UxHba8noKPDClE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dNSNd9JUvFar1sBtpqI4j0UtEH1SE6NOcRkwYEMy5wl3vsPhpru1kMPeqEp8FB0epF/5e66wA813/i8/ZCdK2GAfVYcmoUdjKPoviwdwH8RjeWRYADlQ8Hd7SNa3x6Ll1PdGw38LdzPVSsFZY/Gqn8UVrvpqiH+6A/tQOsohYvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=E9ncN5L6; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so6593155e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Dec 2025 02:46:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1764845182; x=1765449982; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I25txm5sVJExHNkl83s3lOJ0pwVYA1Itpf3THdriA+I=;
+        b=E9ncN5L6Y6P9bkyoeGwqP7NHYghUwSy7tLeLMzOK/3WmAJYMAp2L5ORUa0v1/05htI
+         9/eML7QzVbh7zjgAHSO52VHcd3yRcl7d70fGUYxPGyDS7cm2pmMqbSC/h3IFa0ej6fOa
+         U3z6Sk30ybDjSgQ8HHIgwksAJourwglXKUSJE/OjNyLC50fbvCjtQse7Ju6gaM5KCo/E
+         KXpxR3zd5lKsvek7AgS1nFYgsPPp1PgeH2ZU/3DaFXx/uQD63UW8BwYa3h4iG2fbQ7AL
+         +bHKSt1jDhE/S2t84+A7fOgipoFBYqSDb/SH062OZX+WTziyYMrK94/fLLXWDPwK8MeC
+         rMaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764845182; x=1765449982;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I25txm5sVJExHNkl83s3lOJ0pwVYA1Itpf3THdriA+I=;
+        b=ZHIBMsftikFT3deCW1IqiimXB8IBPyLvvuj7ZeMLwysmu6ziC4jf/3bMlD/4/Y8pIH
+         hOhUwJALGVThvWeZknaHzjzhaaTTcQU66+jPvD3gvMZ1PGDbV4Rg/FFwiOq5H+yvyjbH
+         9wg7cyS3eguEKsnzn55Ep+gJWKTKddgx5Ky0ug8PeQI3FX6R2DXC+BlEihHDYMBqfPGB
+         qb4SovxVvqKay1Chtncgpjq7sPweYE/o2FctwSCj6QhsaXcqhcQTjB09ZKib2Xh7z/ID
+         fUgj+eakt4l05n2JOy4IxSk8VEy3txuD2aytX0ycaU90sPkMIGOXKwtGz3/VQFr2fMcI
+         QAhw==
+X-Forwarded-Encrypted: i=1; AJvYcCVlJUYgtO3emGzObpVCZyweUsJ1CLE4AKCcbSpBhxcEstAvYqx9pQd/cXSjVAzsC+TxAn2DruF/fwj0OsqYpQk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl9a+na7VcLA9gLitnsvxPck+AXxCnWfcQ7DxxSaQumFqEVuDN
+	dTU5fl8+YUIBIGQZRaO/Oy1Gg3mP4MDhk3hN7hcGDN5eRUZCVjExP9ETuvWFn/DxREU=
+X-Gm-Gg: ASbGnctqc3ibTNSubwEGEPgh11uzkJaP4mjC4hHIBmKZVsB/tWGK5iqol2dUxaDQDVE
+	AA6GJ0baKFtM9zEKm9HSBDvnAlYzHqN/I7eVh6SpueD7QT/Ok//y71SvE10EZ5cyXZpkgpjkqt+
+	BN/VKoLfElWkR0DO/sIV5koVK6xEWmOg6lB/SJwE1Ai8Dq6BSFQyS91N3167jvRaf08fYwEKMj3
+	KXyYVTOkvG8mwHsVrTuXX/8K1i9raFdE/zze614bCCwA6X2dZ+cnbPg7yKWl1uDZG+F15Uq33F3
+	EsoJyxhHVg1Ny6R7Hv/P2w1pLdfQHRAXe7Q03NzQpKM2UfAQHlbweJOykTsUedo6tagrJ6Qs/10
+	KWM6qCfXdh9y2BmLCnawFQEfqfVBNSaYnBx9QTotFX4IkrHG1rHhExWqyNFCRNnCtO1dqGBJvdz
+	Ippm9Y/LC8LOllquAzDF8dI6kW
+X-Google-Smtp-Source: AGHT+IHsO7lvt5Ss20b5pix2R/jr/E2Ef5Zq97My82ARiw2BH/h2CLSdatJZT3/30ySC6bVyoLOZHA==
+X-Received: by 2002:a05:6000:144c:b0:42b:3bc4:16dc with SMTP id ffacd0b85a97d-42f7980cc8dmr2648512f8f.21.1764845181638;
+        Thu, 04 Dec 2025 02:46:21 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7cbfee50sm2565501f8f.14.2025.12.04.02.46.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Dec 2025 02:46:21 -0800 (PST)
+Date: Thu, 4 Dec 2025 11:46:19 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org, gustavold@gmail.com, asantostc@gmail.com,
+	calvin@wbinvd.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next 0/4] (no cover subject)
+Message-ID: <aTFmew5trILX3RpO@pathway.suse.cz>
+References: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
+ <20251201163622.4e50bf53@kernel.org>
+ <4oybtunobxtemenpg2lg7jv4cyl3xoaxrjlqivbhs6zo72hxpu@fqp6estf5mpc>
+ <20251202102442.568f91a7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALzav=ciz4kV+u3B5bMzZzVY+cMs-G=q9c5O-jKPz+E4LUdx7g@mail.gmail.com>
-X-Authority-Analysis: v=2.4 cv=SNxPlevH c=1 sm=1 tr=0 ts=693162b5 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=7ipKWUHlAAAA:8 a=FOH2dFAWAAAA:8 a=1XWaLZrsAAAA:8 a=ixZimci8kvJ5QYfzRTQA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=gpc5p9EgBqZVLdJeV_V1:22
-X-Proofpoint-GUID: n8n5PTxlXRsZxiZfi3xHEEXHsmaBKvmP
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjA0MDA4NSBTYWx0ZWRfX5SzhQcWn8aro
- 2JPwHDOspOxJcOs9K7vSq+5jKWdbKxbqhtR3PVxczlXamIH1/EQFRaZRhc2LhtLXgtb98zMKKHV
- 4+BT4+dRGSK+hpEOf5G5mQHQOIIUEZVTu4apA3OX0+zM3v5lXU14yG+EH5bt28CaOc3wu0mDqp3
- 7X0UamN+ToNLaLqfBIhlCg9c7QYB9s52wJYyNhEo8+mReQLvrcdFS7LKjZ24YrosV9i6xluloiU
- EhR8GCEiFjvYHVhuYrJ/YC9xLlyO4CX78b7ELLkS4t2uPp/nmJhGx0LxIWXPHUddpx6odf7Io1a
- ktCdVZHmD7Lek0GKjNg0iiq4PA/TuMrRqIKGveVB5ByEt1ybzDvuRTXWO/atckU1W5oHkxaQQ83
- ZV4I/Go6ATIT5C+EpsxogAG5jU7q/g==
-X-Proofpoint-ORIG-GUID: n8n5PTxlXRsZxiZfi3xHEEXHsmaBKvmP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-04_02,2025-12-03_02,2025-10-01_01
+In-Reply-To: <20251202102442.568f91a7@kernel.org>
 
-On Wed, Dec 03, 2025 at 09:29:27AM -0800, David Matlack wrote:
-> On Wed, Dec 3, 2025 at 7:46 AM Pasha Tatashin <pasha.tatashin@soleen.com> wrote:
-> >
-> > On Wed, Dec 3, 2025 at 7:55 AM Alex Mastro <amastro@fb.com> wrote:
-> > >
-> > > On Wed, Nov 26, 2025 at 07:35:53PM +0000, David Matlack wrote:
-> > > > From: Vipin Sharma <vipinsh@google.com>
-> > > >  static int vfio_pci_liveupdate_retrieve(struct liveupdate_file_op_args *args)
-> > > >  {
-> > > > -     return -EOPNOTSUPP;
-> > > > +     struct vfio_pci_core_device_ser *ser;
-> > > > +     struct vfio_device *device;
-> > > > +     struct folio *folio;
-> > > > +     struct file *file;
-> > > > +     int ret;
-> > > > +
-> > > > +     folio = kho_restore_folio(args->serialized_data);
-> > > > +     if (!folio)
-> > > > +             return -ENOENT;
-> > >
-> > > Should this be consistent with the behavior of pci_flb_retrieve() which panics
-> > > on failure? The short circuit failure paths which follow leak the folio,
+On Tue 2025-12-02 10:24:42, Jakub Kicinski wrote:
+> On Tue, 2 Dec 2025 02:18:44 -0800 Breno Leitao wrote:
+> > On Mon, Dec 01, 2025 at 04:36:22PM -0800, Jakub Kicinski wrote:
+> > > On Fri, 28 Nov 2025 06:20:45 -0800 Breno Leitao wrote:  
+> > > > This patch series introduces a new configfs attribute that enables sending
+> > > > messages directly through netconsole without going through the kernel's logging
+> > > > infrastructure.
+> > > > 
+> > > > This feature allows users to send custom messages, alerts, or status updates
+> > > > directly to netconsole receivers by writing to
+> > > > /sys/kernel/config/netconsole/<target>/send_msg, without poluting kernel
+> > > > buffers, and sending msgs to the serial, which could be slow.
+> > > > 
+> > > > At Meta this is currently used in two cases right now (through printk by
+> > > > now):
+> > > > 
+> > > >   a) When a new workload enters or leave the machine.
+> > > >   b) From time to time, as a "ping" to make sure the netconsole/machine
+> > > >   is alive.
+> > > > 
+> > > > The implementation reuses the existing message transmission functions
+> > > > (send_msg_udp() and send_ext_msg_udp()) to handle both basic and extended
+> > > > message formats.
+> > > > 
+> > This feature (in this patchset) is just one step ahead, giving some more
+> > power to netconsole, where extra information could be sent beyond what
+> > is in dmesg.
 > 
-> Thanks for catching the leaked folio. I'll fix that in the next version.
+> Having extra metadata makes sense, since the interpretation happens in
+> a different environment. But here we're talking about having extra
+> messages, not extra metadata.
 > 
-> > > which seems like a hygiene issue, but the practical significance is moot if
-> > > vfio_pci_liveupdate_retrieve() failure is catastrophic anyways?
-> >
-> > pci_flb_retrieve() is used during boot. If it fails, we risk DMA
-> > corrupting any memory region, so a panic makes sense. In contrast,
-> > this retrieval happens once we are already in userspace, allowing the
-> > user to decide how to handle the failure to recover the preserved
-> > cdev.
+> > > The 2nd point is trivial, the first one is what really gives me pause.
+> > > Why do we not care about the logs on host? If the serial is very slow
+> > > presumably it impacts a lot of things, certainly boot speed, so...  
+> > 
+> > This is spot-on - slow serial definitely impacts things like boot speed.
+> > 
+> > See my constant complains here, about slow boot
+> > 
+> > 	https://lore.kernel.org/all/aGVn%2FSnOvwWewkOW@gmail.com/
+> > 
+> > And the something similar in reboot/kexec path:
+> > 
+> > 	https://lore.kernel.org/all/sqwajvt7utnt463tzxgwu2yctyn5m6bjwrslsnupfexeml6hkd@v6sqmpbu3vvu/
+> > 
+> > > perhaps it should be configured to only log messages at a high level?  
+> > 
+> > Chris is actually working on per-console log levels to solve exactly
+> > this problem, so we could filter serial console messages while keeping
+> > everything in other consoles (aka netconsole):
+> > 
+> > 	https://lore.kernel.org/all/cover.1764272407.git.chris@chrisdown.name/
 > 
-> This is what I was thinking as well. vfio_pci_liveupdate_retrieve()
-> runs in the context of the ioctl LIVEUPDATE_SESSION_RETRIEVE_FD, so we
-> can just return an error up to userspace if anything goes wrong and
-> let userspace initiate the reboot to recover the device if/when it's
-> ready.
-> 
-> OTOH, pci_flb_retrieve() gets called by the kernel during early boot
-> to determine what devices the previous kernel preserved. If the kernel
-> can't determine which devices were preserved by the previous kernel
-> and once the kernel starts preserving I/O page tables, that could lead
-> to corruption, so panicking is warranted.
+> Excellent! Unless I'm missing more context Chris does seem to be
+> attacking the problem at a more suitable layer.
 
-Make sense, thanks for elaborating David and Pasha. 
+This would help to bypass slow serial consoles. But the extra messages
+would still get stored into the kernel ring buffer and passed back
+to user space logs, for example journalctl.
+
+I do not have strong opinion whether adding the
+/sys/kernel/config/netconsole/<target>/send_msg is a good idea or not.
+
 
