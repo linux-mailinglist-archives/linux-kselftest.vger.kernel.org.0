@@ -1,247 +1,306 @@
-Return-Path: <linux-kselftest+bounces-47002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 189C6CA3B5A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 14:05:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9570FCA3F9E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 04 Dec 2025 15:17:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2FE1D3062906
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 13:03:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CBEE5306FDCB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Dec 2025 14:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9EAB34250E;
-	Thu,  4 Dec 2025 13:03:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B8A340A7A;
+	Thu,  4 Dec 2025 14:11:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=HOTMAIL.DE header.i=@HOTMAIL.DE header.b="AfTXpEds"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tm70lfgF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazolkn19013087.outbound.protection.outlook.com [52.103.51.87])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97034340A47;
-	Thu,  4 Dec 2025 13:03:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.51.87
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764853407; cv=fail; b=gXJxEA4JJCwCs21WxFi7lmBKwYgr8BYQT9nBhMx4p+rA3JClKPISBbxVeVOtcn5zh1ty75cHz1yFq8S35LAfCPeXUmvrq1CytZB04VMnJlPX899krF4LoQBINGi0AAJLLDWoY7xB5bEjr8bzlFrauib/TtOAg4qJonpCN+YAsfg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764853407; c=relaxed/simple;
-	bh=rDAzkSAmbBsEqvPkuOabjO4edwuKBq+3JCR7xAgOThM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=AeP4e+/T9xhdfCdjyTzkWVnPJ+do7qOgVhUlRcHpgxqkXE1tgWqp/743ZRFo7449zqzuPxWIgNsq2jAGOv7uLndXAjjCU+wPdHvrVzyrXARHhjdzyX8ae3TSukEEdeX2MCzWzrwFG6jDjsTVx01nzP0K+Hxg7TptTP6qyVmj1kY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.de; spf=pass smtp.mailfrom=hotmail.de; dkim=pass (2048-bit key) header.d=HOTMAIL.DE header.i=@HOTMAIL.DE header.b=AfTXpEds; arc=fail smtp.client-ip=52.103.51.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=aQwcAejHuY8Xa85/4KvTDv5gneYhlzp6wxWXcIX8g1oy3YkL84ieHejIKjb5bjWicSfJBP7bIb4AiMzcKF7UfcrJbI2U+0jOUJxXiqAe7Us1qQvX6GKn4wNn7/6UQR1U+oI14+LWgBpsvXv36nXirhRLn4VMjsYXoL+ZgnrjnRyaRrSoaiYAAlDfEsDjXGjj+JID7k079oFxW6uTv1HhtdyC5lmvqFmrChk+UuJrSv4GjRvpZERbyCSi6okkyQourJGvLmcf/NZGyfJqhdMcQeLA6zroYZROVejCKmMNX5dh3PRpc1el9hIn9UZ7h9LeOdeHUphnnqfYcmbEpJz8Kw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FfLQ8ERO31JC65yQjD9THg9jlyeHDYx4InrsaHOtEfo=;
- b=fPIcRHMHLU/oakofHymYo7obkSQoL47dcukx5ZFABfTGgMZxooGOvJNuT4f/bTxWdIN51ZA/DCxPW70RBPUi77X7LcipQjffanhdrvMTdAofCIWJ1/GcP2jMEDSZGSydeQa9J4W+An6IrYdwKulp2vro7OkUOgNVS3zAXMsuBkKnfNmeGrkNOICWwikn9PQxQk4Z31X7hCTEQjIjEHCdzGaOJ4a9SstsHpnAY1+/psBLZu9hxBlRwo5InjmMXHB4N29N5cTTwo/dajnJUU5OV5e3InJhb1cqhANzlWsOZZDecovLR7niZcjNU2/IZa2GYKwbwgAnKUq1OY6eZj78rw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=HOTMAIL.DE;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FfLQ8ERO31JC65yQjD9THg9jlyeHDYx4InrsaHOtEfo=;
- b=AfTXpEdsSzodZQOGz2YnXmbLZljdb466MPXH6oa+ZI+x2RWbD/r0tFOqsm/TV+uuJRUFSF/dPOjzlqmIMY42vme9prsY6WnL4rsU3Yw2Muh9/5rgXg7T/xbuN8lj8h3qJP6onuBKVtU6/s1Ya94WN2miBZIdAxUrYrY9UlQpx8H3aiy2JaI/VANxi6QJn7bFp5ActHTR/r1yYuzSWTWWtQC9N2FFgo61w9/QZjBXOMdlbeHJsd+MPp6kgqucj3jJmMd7S03k/TfQkHVMTcLtSjnKmLbpPUE8PNshphm42RGc6PPfT0a8SYrfCbcz1aMIxnUXpLag9GD3DNsrCMr4Pw==
-Received: from GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:158:401::8d4) by DB5P195MB2377.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:10:488::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Thu, 4 Dec
- 2025 13:03:21 +0000
-Received: from GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
- ([fe80::dde:411d:b5f2:49]) by GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
- ([fe80::dde:411d:b5f2:49%8]) with mapi id 15.20.9366.012; Thu, 4 Dec 2025
- 13:03:20 +0000
-Message-ID:
- <GV2PPF74270EBEE0AAAE2EB22B668EE21A7E4A6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
-Date: Thu, 4 Dec 2025 14:03:27 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: Are setuid shell scripts safe? (Implied by
- security_bprm_creds_for_exec)
-Content-Language: en-US
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>,
- Roberto Sassu <roberto.sassu@huaweicloud.com>,
- Alexey Dobriyan <adobriyan@gmail.com>, Oleg Nesterov <oleg@redhat.com>,
- Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
- Will Drewry <wad@chromium.org>, Christian Brauner <brauner@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Michal Hocko <mhocko@suse.com>,
- Serge Hallyn <serge@hallyn.com>, James Morris
- <jamorris@linux.microsoft.com>, Randy Dunlap <rdunlap@infradead.org>,
- Suren Baghdasaryan <surenb@google.com>, Yafang Shao <laoar.shao@gmail.com>,
- Helge Deller <deller@gmx.de>, Adrian Reber <areber@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>, Jens Axboe <axboe@kernel.dk>,
- Alexei Starovoitov <ast@kernel.org>,
- "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-security-module@vger.kernel.org, tiozhang <tiozhang@didiglobal.com>,
- Luis Chamberlain <mcgrof@kernel.org>,
- "Paulo Alcantara (SUSE)" <pc@manguebit.com>,
- Sergey Senozhatsky <senozhatsky@chromium.org>,
- Frederic Weisbecker <frederic@kernel.org>, YueHaibing
- <yuehaibing@huawei.com>, Paul Moore <paul@paul-moore.com>,
- Aleksa Sarai <cyphar@cyphar.com>, Stefan Roesch <shr@devkernel.io>,
- Chao Yu <chao@kernel.org>, xu xin <xu.xin16@zte.com.cn>,
- Jeff Layton <jlayton@kernel.org>, Jan Kara <jack@suse.cz>,
- David Hildenbrand <david@redhat.com>, Dave Chinner <dchinner@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Elena Reshetova <elena.reshetova@intel.com>,
- David Windsor <dwindsor@gmail.com>, Mateusz Guzik <mjguzik@gmail.com>,
- Ard Biesheuvel <ardb@kernel.org>,
- "Joel Fernandes (Google)" <joel@joelfernandes.org>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>,
- Hans Liljestrand <ishkamiel@gmail.com>,
- Penglei Jiang <superman.xpt@gmail.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Adrian Ratiu <adrian.ratiu@collabora.com>, Ingo Molnar <mingo@kernel.org>,
- "Peter Zijlstra (Intel)" <peterz@infradead.org>,
- Cyrill Gorcunov <gorcunov@gmail.com>, Eric Dumazet <edumazet@google.com>,
- zohar@linux.ibm.com, linux-integrity@vger.kernel.org,
- Ryan Lee <ryan.lee@canonical.com>, apparmor <apparmor@lists.ubuntu.com>
-References: <GV2PPF74270EBEE9EF78827D73D3D7212F7E432A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <GV2PPF74270EBEEE807D016A79FE7A2F463E4D6A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <87tsyozqdu.fsf@email.froward.int.ebiederm.org>
- <87wm3ky5n9.fsf@email.froward.int.ebiederm.org>
- <87h5uoxw06.fsf_-_@email.froward.int.ebiederm.org>
- <6dc556a0a93c18fffec71322bf97441c74b3134e.camel@huaweicloud.com>
- <87v7iqtcev.fsf_-_@email.froward.int.ebiederm.org>
- <dca0f01500f9d6705dccf3b3ef616468b1f53f57.camel@huaweicloud.com>
- <87ms42rq3t.fsf@email.froward.int.ebiederm.org>
- <GV2PPF74270EBEE90CDCD964F69E806EF58E4D9A@GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM>
- <20251204054915.GI1712166@ZenIV>
-From: Bernd Edlinger <bernd.edlinger@hotmail.de>
-In-Reply-To: <20251204054915.GI1712166@ZenIV>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0422.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:d1::16) To GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:158:401::8d4)
-X-Microsoft-Original-Message-ID:
- <cfe4ef32-dd26-4777-88dc-4f2f1b2fa6e8@hotmail.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 053F633F8A8;
+	Thu,  4 Dec 2025 14:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764857488; cv=none; b=ao8U/SHUaEJMvH28qrc1TERp6jZ6rb78aPwQpY7m42mdj648B0ilCZ+K7Z3BYnhwBWbyo49Ursw5QW0yKB1+dwCU2c89uLsqQHltdLn/qi29oR5Cyo+hR/yxBbquBUP3O+9KXaeaSa4d4OdCIMzhTJhrt2PfhVTd4touo6l5nSg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764857488; c=relaxed/simple;
+	bh=m3H/3ioNp9U4j7DEHrzqol59bKijaqgK49gOb72xL0M=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZuQeDGl/gA+LTa1ZsFU/DjuMWeKUPT5sR62hfNp9/sif9t0ykBqVXwzt4tkKd+5UUi/QwxuwjgY7kZ8GFIiWvTE/NXk6UQC09GieFcVg9deuh8+iyvevedcd6+tIDvp/13IxMMsmFrtBnrBDgRC4oAv1R5W3XIYLYQP7edzUvTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tm70lfgF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1572EC116D0;
+	Thu,  4 Dec 2025 14:11:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764857487;
+	bh=m3H/3ioNp9U4j7DEHrzqol59bKijaqgK49gOb72xL0M=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=tm70lfgFyib2UED/ePDToCcQsDnLXjzfwjRX99vC2YxT5gzG/ZLZj4cPGybJXqrId
+	 iSWaNx9HfMsvNN32luCQh6Si5GuSr2OU0q4+KGNtyaZEPasaolyMWRRL6FHDS1er8d
+	 mApW7+4L6zWRv0pNVTqT1iM3IklHtMBPgznpvij8n0QoU15RjHFw45lYl8ZpFkfUaF
+	 wNU6kuH19ha45AhKDKp3UZ6jIYZOQFWD1Ck8rnUcHhpPfVNh6heVST1W2zHaYYutdT
+	 eiABNhMO2t0av1i0rXL6yq1cdRYmm9T5ninVzrbZMoTOBztvQe8wBcrTNwa3pxqmnw
+	 rHnr5TXZRG5jw==
+Message-ID: <37d39ff38dfef8bae73c5bc6a8593784bb2d3774.camel@kernel.org>
+Subject: Re: [PATCH v7 0/3] statmount: accept fd as a parameter
+From: Jeff Layton <jlayton@kernel.org>
+To: Bhavik Sachdev <b.sachdev1904@gmail.com>, Alexander Viro	
+ <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Shuah
+ Khan	 <shuah@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, criu@lists.linux.dev, Jan Kara
+ <jack@suse.cz>,  Aleksa Sarai <cyphar@cyphar.com>, Miklos Szeredi
+ <miklos@szeredi.hu>, Pavel Tikhomirov	 <ptikhomirov@virtuozzo.com>, Andrei
+ Vagin <avagin@gmail.com>, Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+ John Hubbard <jhubbard@nvidia.com>, Amir Goldstein	 <amir73il@gmail.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,  Andrew Donnellan	
+ <ajd@linux.ibm.com>
+Date: Thu, 04 Dec 2025 09:11:24 -0500
+In-Reply-To: <20251129091455.757724-1-b.sachdev1904@gmail.com>
+References: <20251129091455.757724-1-b.sachdev1904@gmail.com>
+Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
+ keydata=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
+ QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV2PPF74270EBEE:EE_|DB5P195MB2377:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb352ac1-afa8-42b2-f63c-08de33357fb0
-X-MS-Exchange-SLBlob-MailProps:
-	dx7TrgQSB6cF2LXCYaYySNJkazjXzT0W6dI2EvZNId9LCZCpVWYpywxz0+YXNOfUkrsFpc0ZuSwIV7Z5JRtJSHc+80d/GHB40BPWqGNMRZMLRvfsqcGZZVKhRvOXwlT+hU2ku9waROpqbAFl+ug1RyctFHWMPkTDadNb9tLLU9B6bGJKUygYmut6GvLsBHjIIthjgeCf3GTl1nQVZ/ybX9qAgDUz8IEy7UPTrUG/A/Uoy09vCW+LCOyhp3h5EYxavBswvGPfhxs3ikIp925Z1UVg/FewWXEoqEucjhFxhPdQacvPDP0b7qqenbw+L3qxWfOTAycrjO4cLdkUoYDKCUyzgR9i3QABrDjBc8DuxiMX1yZkr5Wdl75waQFi5KGsnEssPmnMQgKhmhHwJ1AZIUlNNMOv+ZvLD3/60BTzqU3w4whoqcYehT9iXiy+DhuZYdXcI+sxSAmo6hrKh+ye6cR5KpkzYKGQPuHhHql1iefEHBf1Q5Ppm8RK6uTamPXjE17tbnOXKRMconPd8lwDHdlBwJ85rbKHovqjqrODPYhfVUNYAUEhMAQjogdJ9sLH9gEbqIuwN+0WEMwt40IypgMp7ppqPF3pNrqSZcOyXbEPtQMa/qiI9FRTmVNgTaJwwZRwBbfncf7HMtuqcZ1kTyYk5GQK+ztS+hLxaPC+oVhoEor3z6V9jdoZChG+DYBAHZWhT6AvTkmEP0otDXMNaAfiY6By2AF19pCnKeCRUdHPBuUlyUwZTmRKCSifgFHlowuXMSo1HtU=
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|6090799003|51005399006|461199028|8060799015|19110799012|23021999003|12121999013|5072599009|21061999006|10092599007|15080799012|3412199025|440099028|40105399003;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YmlvL1FYeGxxaTg4SjdqVkpzbGNaa09jUCs1MWNkUkgxc3BuUlpCSjdRbytl?=
- =?utf-8?B?VXdUUXNBQ1RpcG5LTG4yZHFOTVQwOVZ3cU00bTdkRmdRc2ZXWDFkM0FTTlhq?=
- =?utf-8?B?OWM5TExSVWZqanBTQncyYi9IQUZobEhGOS9TNW1ndHBlVHVPdHFZTEFxME9q?=
- =?utf-8?B?aHFlcXRWM1NhejI5YWJyb00wSnNPeld3bHpuelFVSUpXTGN1YVRWYUxKWDZ4?=
- =?utf-8?B?dll2SElNV1p0QVlBeEw3c0hVeTRFY0szQmdEYnpxcFB1NmFxMEltbm5QQVNa?=
- =?utf-8?B?SGNDVFZXenVyT1BsK2huQml5K1lPTG9ZNGkzUktPOG0zWHdwREJaOCtPSDZB?=
- =?utf-8?B?UUdkVVovZTlwSElyOUNJU0dCMnNYR0VrcmtqNlp4eStyRVJ6OGkwNEc3UG1Y?=
- =?utf-8?B?Z2hvMTJJN0hjcmRNb0hOaTEwbHlocitWbGFXbCt5L3EwMlRLZG5xOVA2VGZ2?=
- =?utf-8?B?RzlrZHEwTDVMMTlIZlZaT3VrNHUyeG1WS1dGNFJNRG8yblI2Q1R2MWdJenJ5?=
- =?utf-8?B?aGZscjdKVDR1cTY4akhNL243bXpHM1ZYenpJbTdVOXdVaVZ2STd3Um9iVkdB?=
- =?utf-8?B?cy9xL3NOWG5pOCtzekJwNXBEcGozcFpDRVFRNE9od0NDK0gzbGhmUGpNY2J3?=
- =?utf-8?B?VGlGM0VKbTRFbUdLaHFMR0JBQWtKREcySHBpekhsUmRqcDBTNDZ6TmQwKzZy?=
- =?utf-8?B?cVZTakw4czFRSEpHWUFhRTRZSWVnRjliZE5FdWRuRGpqeEZkUCtIZDE2V05s?=
- =?utf-8?B?WGV2RWt1K3ljN2FIdkZRck5BL29FS2VjWTRYbTZkZzR3RDl1Z1p4VVZiYnYv?=
- =?utf-8?B?WUpzaHB6Zm0xL0gybmZqb0p6RkhCeE16QVRobEdRbE16eGNZUG5pMFJ3d0ZW?=
- =?utf-8?B?TEJoTnpnYy9rWHlPU0RxRFlEMVJjMm12ci8rbGdOR3BubFI5dEJFazdtcWZ5?=
- =?utf-8?B?OG51dnpkTDFyWnJSYlZ6V0kyWGlxRERNRGRYNDdwcE1kL003MGJUdklrVE1I?=
- =?utf-8?B?eGdMMUhYelNxa3VHdFZYWFkzazF1c3VkbXF1U2RGajlpYVlCV1EyWEZXb1FB?=
- =?utf-8?B?V205NDFSWHczSXM2WWVKUk56cHFkVjhTdVBERy9oVWRHQ0F5YTlMdCsxb3VK?=
- =?utf-8?B?bG1rNE5IWXRRWGdHaUg5Z1VJWmJ4dmtMSEg1UFp0WmNVVWdNRVYydEVsMnRm?=
- =?utf-8?B?UGt6dDA4NGxzUGJVSUhxd0FNVzMwbC8yMTFnb09RbTJYb0VWZGpsaDFYTHlI?=
- =?utf-8?B?dWxick14eS90bEtvdXBqc0pDUCs2RFdRbUJLd1A4MUh5V0RQTWl5M2lVWHc4?=
- =?utf-8?B?NWdGSDJTYmtlSmdsMnBqK0pKNGw1eDg0WFJTR0ZVZ3hJYWdRc0F3Qy94dGpU?=
- =?utf-8?B?ODBuMUtDUW1yeHdMUkJBeDNRd3dYVDAwcUtJQm41M1FqRlZPNE96SjlXTmlL?=
- =?utf-8?B?RGlqUkgwL3I5SSt0Mm5mWE81NWdJbDB2NllRa3dqdnR5QWV0NzcrSmkrWmFu?=
- =?utf-8?B?YXQ3SXo4L2ZDSzJoMDUvVk5mdW1vTTB1allhSmdiQWdpWHhTclI3aStwazB2?=
- =?utf-8?B?ei9ZRnJCVlJrV20rWXZJWnM3VDZPRVFXblR6enZSd3g0QkgwQ0QxaGZYSVVM?=
- =?utf-8?B?ZlpKcDF3eEx4UDBnQ3JRWi9TNUQxYkt2MUZtdzBtWnQ1WTJseXpTTGdLZk1i?=
- =?utf-8?B?TTVmcS9JUEl6cXo4U0JDVy9ZeDc2aVJsUGZQK0tBUXAzdXhaYVpJbFpnOTk4?=
- =?utf-8?Q?kJ/loB1bc/BHbV8Phg=3D?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZWp4SWxKUWFIaTMycWlvVlFJZHV0dFBYUERZbkFBWC8rM05CcFZZL2hxVEsx?=
- =?utf-8?B?SkkvSW5LTmthcS9veTVXS0YzMnlIbnkvNzJjNHQ2OGlkcTV4elFQRmN6UUhz?=
- =?utf-8?B?eisxS1pMQjdTV2RIZFFkUjc0MExBS1A5bGs0K0VFa29mcFlxbDd4ZTE2N3dR?=
- =?utf-8?B?MEs3d1JYQ3FjVVVaVkxoRVR0RGI1U2k4Z3ZpWktHOGxkVTN0eEx0Y1FONi81?=
- =?utf-8?B?bHVaVCtwNEFTQkZ6aEZIWXpoYVBDRm1CZFZpMXVlRy83V0oyNTZsODdkbGJh?=
- =?utf-8?B?clZPME4zN1o1NzhoVTVqekJQTFRUNFNXVEh4bUExRWRjeUlwRXZYMW9nUmMw?=
- =?utf-8?B?MDM5V0hpNWp0SEdIc3lDeldXZnd3YXlnZWJmMDdWelhGdHlQMXl0OHhsRmxl?=
- =?utf-8?B?QXZuZTVNTHo3alI1VWdhVXUveHh0ajRjQXovNkhUc2lVci9nV1lzelZtaWZr?=
- =?utf-8?B?TXlJMmM2cFZUVjVBNWx0U2NxNjUvVXRSYW1jSkloN1Y4a21Ud0xiYW8xYnVR?=
- =?utf-8?B?ZlVJQjlxRys2NllpSlpEOFhrbzJsS0dyZ0hGbWVUVmJRRW9IR01uZ0RVRVdN?=
- =?utf-8?B?b3V6ajlTcnZmd1Z0dVZXaEpwUFhZOVdmMjdxYkhDcDkvS3ZQWUJTTC9GYzUz?=
- =?utf-8?B?Qjl3YWR5OGpZVERyait6QndIK3JMOFBibllkUzlWdmtwaEpzUm56WHI3RGJo?=
- =?utf-8?B?Z3FaTVRJL2tyMnMxVThKUVNsR2tGcnJENDdqSS9yTEtTdStkMnBRKytMSTJ0?=
- =?utf-8?B?eXo1VFNQQ09NNk5aWGhTYnNOU0JiQkkzU2dRdnNhTEY5Zi8vek1tSm1aUmtp?=
- =?utf-8?B?b0Q4ZG4waFNreHFUcitROGlzTUlRU0p2enJKYmtDYm5qbGtjeVRnSFFFRWNs?=
- =?utf-8?B?WUE2K1FqQXlOZCtCeXpsUUNnTGtBVFNLWkxyemFyQTlnN2ViS3doS3ZRSFhv?=
- =?utf-8?B?WVdibTltZ0dtVzFaMWJMU1Fkb0l4cUdpalNQdGRGbUxUcjBZK0ZSTWRnaTZz?=
- =?utf-8?B?TkJTSjNpVSswU2hQZkRVK1c5dFhrQUo5Q0xzNlIzdXloTGNUbWJYM3BzZENh?=
- =?utf-8?B?RmV0dGJXc0lrZVF3SlRzTmlobjI0dkxxbWZnWFhsUG1TVEZzaGZPbDlwTVp2?=
- =?utf-8?B?SVRwbTlzRTFldGxjaHYwdnV3aWRqc0Mxa3d3Rm5EWDVNODBhaGhVYmszYmpx?=
- =?utf-8?B?SkJ1akQ4cERFVWpjYWprTEV1OVg4a3RKckJQNGVtbHlReFo3U1paMWRnZTlo?=
- =?utf-8?B?QXZZS3M4N0hNTmNuZmFXN0tibGhTYXpCamJobHpFMSs0U1BlUDNPODdFWW1B?=
- =?utf-8?B?b0RXa2NkMzM5UkZiSVJ0Tk9aMEJYR1ZkZGxOU083RkxXcWY0T2ZTaGlUTW5l?=
- =?utf-8?B?cFhsSVR3b1ZBbElvaVQ2blJhNFh4eGVISU5NOUxIbUhDbmtFNm9oYXExREJJ?=
- =?utf-8?B?bVZhbURvbUNwcW1JbVpGTVE4MUF5QkhQL3NtQ1Zwc0dEd1RLMExXQzRhcnQ3?=
- =?utf-8?B?bjZLNTZmZ2FOV2hBRVRUZzB3c3Jwb0hjOVVHMzFXSHpMb2kxbGxvNUlRNENP?=
- =?utf-8?B?Yys4VFkza0dOUEYvOTBVU25UdXN1OTBUNjhTSHRmSGg5UndYcmNMK050SFYy?=
- =?utf-8?B?ZmNJcDdSRjhEbVh5RTZUK0lUZSt6SkxLVlJ3dDdmQnlueFZXUENpRm9xelRj?=
- =?utf-8?B?Wjh6Zm41SlE3Yng0L0taeHZqMnhkcE9GVEZFUzUwUGZtb3MvK1JsZE1RNnkv?=
- =?utf-8?Q?uBwkX0DCE7SuSOzYfd1xadnRIr3Cdj5xZ+lLp+B?=
-X-OriginatorOrg: sct-15-20-8534-20-msonline-outlook-87dd8.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb352ac1-afa8-42b2-f63c-08de33357fb0
-X-MS-Exchange-CrossTenant-AuthSource: GV2PPF74270EBEE.EURP195.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2025 13:03:20.5836
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5P195MB2377
 
-On 12/4/25 06:49, Al Viro wrote:
-> On Wed, Dec 03, 2025 at 02:16:29PM +0100, Bernd Edlinger wrote:
-> 
->> Hmm, yes, that looks like an issue.
->>
->> I would have expected the security engine to look at bprm->filenanme
->> especially in the case, when bprm->interp != bprm->filename,
->> and check that it is not a sym-link with write-access for the
->> current user and of course also that the bprm->file is not a regular file
->> which is writable by the current user, if that is the case I would have expected
->> the secuity engine to enforce non-new-privs on a SUID executable somehow.
-> 
-> Check that _what_ is not a symlink?  And while we are at it, what do write
-> permissions to any symlinks have to do with anything whatsoever?
+On Sat, 2025-11-29 at 14:41 +0530, Bhavik Sachdev wrote:
+> We would like to add support for checkpoint/restoring file descriptors
+> open on these "unmounted" mounts to CRIU (Checkpoint/Restore in
+> Userspace) [1].
+>=20
+> Currently, we have no way to get mount info for these "unmounted" mounts
+> since they do appear in /proc/<pid>/mountinfo and statmount does not
+> work on them, since they do not belong to any mount namespace.
+>=20
+> This patch helps us by providing a way to get mountinfo for these
+> "unmounted" mounts by using a fd on the mount.
+>=20
+> Changes from v6 [2] to v7:
+> * Add kselftests for STATMOUNT_BY_FD flag.
+>=20
+> * Instead of renaming mnt_id_req.mnt_ns_fd to mnt_id_req.fd introduce a
+> union so struct mnt_id_req looks like this:
+>=20
+>     struct mnt_id_req {
+>             __u32 size;
+>             union {
+>                     __u32 mnt_ns_fd;
+>                     __u32 mnt_fd;
+>             };
+>             __u64 mnt_id;
+>             __u64 param;
+>             __u64 mnt_ns_id;
+>     };
+>=20
+> * In case of STATMOUNT_BY_FD grab mnt_ns inside of do_statmount(),
+> since we get mnt_ns from mnt, which should happen under namespace lock.
+>=20
+> * Remove the modifications made to grab_requested_mnt_ns, those were
+> never needed.
+>=20
+> Changes from v5 [3] to v6:
+> * Instead of returning "[unmounted]" as the mount point for "unmounted"
+> mounts, we unset the STATMOUNT_MNT_POINT flag in statmount.mask.
+>=20
+> * Instead of returning 0 as the mnt_ns_id for "unmounted" mounts, we
+> unset the STATMOUNT_MNT_NS_ID flag in statmount.mask.
+>=20
+> * Added comment in `do_statmount` clarifying that the caller sets s->mnt
+> in case of STATMOUNT_BY_FD.
+>=20
+> * In `do_statmount` move the mnt_ns_id and mnt_ns_empty() check just
+> before lookup_mnt_in_ns().
+>=20
+> * We took another look at the capability checks for getting information
+> for "unmounted" mounts using an fd and decided to remove them for the
+> following reasons:
+>=20
+>   - All fs related information is available via fstatfs() without any
+>     capability check.
+>=20
+>   - Mount information is also available via /proc/pid/mountinfo (without
+>     any capability check).
+>=20
+>   - Given that we have access to a fd on the mount which tells us that
+>     we had access to the mount at some point (or someone that had access
+>     gave us the fd). So, we should be able to access mount info.
+>=20
+> Changes from v4 [4] to v5:
+> Check only for s->root.mnt to be NULL instead of checking for both
+> s->root.mnt and s->root.dentry (I did not find a case where only one of
+> them would be NULL).
+>=20
+> * Only allow system root (CAP_SYS_ADMIN in init_user_ns) to call
+> statmount() on fd's on "unmounted" mounts. We (mostly Pavel) spent some
+> time thinking about how our previous approach (of checking the opener's
+> file credentials) caused problems.
+>=20
+> Please take a look at the linked pictures they describe everything more
+> clearly.
+>=20
+> Case 1: A fd is on a normal mount (Link to Picture: [5])
+> Consider, a situation where we have two processes P1 and P2 and a file
+> F1. F1 is opened on mount ns M1 by P1. P1 is nested inside user
+> namespace U1 and U2. P2 is also in U1. P2 is also in a pid namespace and
+> mount namespace separate from M1.
+>=20
+> P1 sends F1 to P2 (using a unix socket). But, P2 is unable to call
+> statmount() on F1 because since it is a separate pid and mount
+> namespace. This is good and expected.
+>=20
+> Case 2: A fd is on a "unmounted" mount (Link to Picture: [6])
+> Consider a similar situation as Case 1. But now F1 is on a mounted that
+> has been "unmounted". Now, since we used openers credentials to check
+> for permissions P2 ends up having the ability call statmount() and get
+> mount info for this "unmounted" mount.
+>=20
+> Hence, It is better to restrict the ability to call statmount() on fds
+> on "unmounted" mounts to system root only (There could also be other
+> cases than the one described above).
+>=20
+> Changes from v3 [7] to v4:
+> * Change the string returned when there is no mountpoint to be
+> "[unmounted]" instead of "[detached]".
+> * Remove the new DEFINE_FREE put_file and use the one already present in
+> include/linux/file.h (fput) [8].
+> * Inside listmount consistently pass 0 in flags to copy_mnt_id_req and
+> prepare_klistmount()->grab_requested_mnt_ns() and remove flags from the
+> prepare_klistmount prototype.
+> * If STATMOUNT_BY_FD is set, check for mnt_ns_id =3D=3D 0 && mnt_id =3D=
+=3D 0.
+>=20
+> Changes from v2 [9] to v3:
+> * Rename STATMOUNT_FD flag to STATMOUNT_BY_FD.
+> * Fixed UAF bug caused by the reference to fd_mount being bound by scope
+> of CLASS(fd_raw, f)(kreq.fd) by using fget_raw instead.
+> * Reused @spare parameter in mnt_id_req instead of adding new fields to
+> the struct.
+>=20
+> Changes from v1 [10] to v2:
+> v1 of this patchset, took a different approach and introduced a new
+> umount_mnt_ns, to which "unmounted" mounts would be moved to (instead of
+> their namespace being NULL) thus allowing them to be still available via
+> statmount.
+>=20
+> Introducing umount_mnt_ns complicated namespace locking and modified
+> performance sensitive code [11] and it was agreed upon that fd-based
+> statmount would be better.
+>=20
+> This code is also available on github [12].
+>=20
+> [1]: https://github.com/checkpoint-restore/criu/pull/2754
+> [2]: https://lore.kernel.org/all/20251118084836.2114503-1-b.sachdev1904@g=
+mail.com/
+> [3]: https://lore.kernel.org/criu/20251109053921.1320977-2-b.sachdev1904@=
+gmail.com/T/#u
+> [4]: https://lore.kernel.org/all/20251029052037.506273-2-b.sachdev1904@gm=
+ail.com/
+> [5]: https://github.com/bsach64/linux/blob/statmount-fd-v5/fd_on_normal_m=
+ount.png
+> [6]: https://github.com/bsach64/linux/blob/statmount-fd-v5/file_on_unmoun=
+ted_mount.png
+> [7]: https://lore.kernel.org/all/20251024181443.786363-1-b.sachdev1904@gm=
+ail.com/
+> [8]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
+ree/include/linux/file.h#n97
+> [9]: https://lore.kernel.org/linux-fsdevel/20251011124753.1820802-1-b.sac=
+hdev1904@gmail.com/
+> [10]: https://lore.kernel.org/linux-fsdevel/20251002125422.203598-1-b.sac=
+hdev1904@gmail.com/
+> [11]: https://lore.kernel.org/linux-fsdevel/7e4d9eb5-6dde-4c59-8ee3-35823=
+3f082d0@virtuozzo.com/
+> [12]: https://github.com/bsach64/linux/tree/statmount-fd-v7
+>=20
+> Bhavik Sachdev (3):
+>   statmount: permission check should return EPERM
+>   statmount: accept fd as a parameter
+>   selftests: statmount: tests for STATMOUNT_BY_FD
+>=20
+>  fs/namespace.c                                | 102 ++++---
+>  include/uapi/linux/mount.h                    |  10 +-
+>  .../filesystems/statmount/statmount.h         |  15 +-
+>  .../filesystems/statmount/statmount_test.c    | 261 +++++++++++++++++-
+>  .../filesystems/statmount/statmount_test_ns.c | 101 ++++++-
+>  5 files changed, 430 insertions(+), 59 deletions(-)
 
-When we execve a normal executable, we do open the binary file with deny_write_access
-so this might allow the security engine to inspaect the binary, before it is used.
-However this behavior has changed recently, now it has some exceptions, where even
-this behavior is no longer guaranteed for binary executables, due to
-commit 0357ef03c94ef835bd44a0658b8edb672a9dbf51, but why?  I have no idea...
+This looks useful.
 
-But with shell scripts an attack is possible, where a sym-link is executed,
-and the SUID bit of the target file is used but a race condition might allow
-the attacker to replace the script that is used by the shell:
-
-Consider this:
-
-ln -s /usr/bin/legitimate-suid-sctipt.sh
-where legitimate-suid-sctipt.sh starts with "#! /bin/bash -"
-
-and the attack works this way:
-./legitmate-suid-script.sh &
-ln -f -s do-what-i-want.sh legitimate-suid-script.sh
-
-
-Bernd.
-
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
 
