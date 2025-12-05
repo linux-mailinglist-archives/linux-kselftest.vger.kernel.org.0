@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-47092-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47093-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 755F4CA77AB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 12:57:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19B28CA6EAC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 10:30:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8DFBB35AACC6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 09:26:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 26B75318C129
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 09:27:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AEBE330B18;
-	Fri,  5 Dec 2025 09:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861D032825A;
+	Fri,  5 Dec 2025 09:26:58 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out28-4.mail.aliyun.com (out28-4.mail.aliyun.com [115.124.28.4])
+Received: from out198-22.us.a.mail.aliyun.com (out198-22.us.a.mail.aliyun.com [47.90.198.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D07B3043CF;
-	Fri,  5 Dec 2025 09:26:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05F631E0F2;
+	Fri,  5 Dec 2025 09:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764926804; cv=none; b=NMKSJ7Nh8lDkkoHmCWiePMUZiTZ/UkzDfSjJhb9YAx35PaealkSsyPJGTuSgdxwdI1XFAIIQhFX/aVo8BdH5w5Zb+wlMA5jpatO8dtLiaDFu98Id0HUHJhzRmWh0gvfPZ3nJxOn5RpiqD4a/G5c2u6SVQMrVp5yXztwmFp0gH3U=
+	t=1764926816; cv=none; b=t/YWVuhe117Untn0IuTLcfzCj7xmrkbmO789hTn9TRdSUAYfQMFt5j/VDBCG4EG3gtJwJxP7zwTe233+jKajU8KQCnMmf8SPC+A6rCeA9hvTFM4qHKuklfjZqnntOAUjRsjoo1vdZoQRWbJ3AcpEJ6JLmy19BeEStACWP1QPaNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764926804; c=relaxed/simple;
-	bh=WseTNk88/NYojYS1ySl2tLjv9eX/PweY/wlISWR/G8Y=;
+	s=arc-20240116; t=1764926816; c=relaxed/simple;
+	bh=4Au5rdmQLVAEduwB6+M3lpqu37MV3Hl5yGpAXcNfPis=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HjZiwh2F8DYSi9p0/Nhu/vHit6mUqAVJh2/DekRFgrd8GB2W8T95dN0SRSkMjzPQDVwSxgqN8Zq+3eAlMH6o7zbspzX/bBpv5/tbHqVLR3zfC9h320fnM3jnopNb0Mtmi7o4+mZJDhaQuIDpRiQ2ZcxCeaOTMR/q7JyW00xvFVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.4
+	 MIME-Version; b=XEEw9Kmoc6Mhg//8bsoyswbx+gE1E3KnnEqsKODrauQbzowXx7l423CyTQtf4q8z/E2rpzM4pfEC7kCi0xDYKj6xEnl4C/hHAPuCI4AfDJfqY2RaCf0PUzKvCTl9OP267kFOs6V2RTB2iBhFphW97py7zWMm+1C5YbgpalzIC2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fdWs0Y2_1764926787 cluster:ay29)
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fdWs0cR_1764926790 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Fri, 05 Dec 2025 17:26:30 +0800
+          Fri, 05 Dec 2025 17:26:34 +0800
 From: Xiaochen Shen <shenxiaochen@open-hieco.net>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -44,9 +44,9 @@ Cc: babu.moger@amd.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	shenxiaochen@open-hieco.net
-Subject: [PATCH v2 2/3] selftests/resctrl: Fix a division by zero error on Hygon
-Date: Fri,  5 Dec 2025 17:25:43 +0800
-Message-ID: <20251205092544.2685728-3-shenxiaochen@open-hieco.net>
+Subject: [PATCH v2 3/3] selftests/resctrl: Fix non-contiguous CBM check for Hygon
+Date: Fri,  5 Dec 2025 17:25:44 +0800
+Message-ID: <20251205092544.2685728-4-shenxiaochen@open-hieco.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251205092544.2685728-1-shenxiaochen@open-hieco.net>
 References: <20251205092544.2685728-1-shenxiaochen@open-hieco.net>
@@ -58,57 +58,44 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit
+The resctrl selftest currently fails on Hygon CPUs that always supports
+non-contiguous CBM, printing the error:
 
-  a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
+  "# Hardware and kernel differ on non-contiguous CBM support!"
 
-introduced the snc_nodes_per_l3_cache() function to detect the Intel
-Sub-NUMA Clustering (SNC) feature by comparing #CPUs in node0 with #CPUs
-sharing LLC with CPU0. The function was designed to return:
-  (1) >1: SNC mode is enabled.
-  (2)  1: SNC mode is not enabled or not supported.
+This occurs because the arch_supports_noncont_cat() function lacks
+vendor detection for Hygon CPUs, preventing proper identification of
+their non-contiguous CBM capability.
 
-However, on certain Hygon CPUs, #CPUs sharing LLC with CPU0 is actually
-less than #CPUs in node0. This results in snc_nodes_per_l3_cache()
-returning 0 (calculated as cache_cpus / node_cpus).
+Fix this by adding Hygon vendor ID detection to
+arch_supports_noncont_cat().
 
-This leads to a division by zero error in get_cache_size():
-  *cache_size /= snc_nodes_per_l3_cache();
-
-Causing the resctrl selftest to fail with:
-  "Floating point exception (core dumped)"
-
-Fix the issue by ensuring snc_nodes_per_l3_cache() returns 1 when SNC
-mode is not supported on the platform.
-
-Fixes: a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
 Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- tools/testing/selftests/resctrl/resctrlfs.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Maintainer note:
+Even though this is a fix it is not a candidate for backport since it is
+based on another patch series (x86/resctrl: Fix Platform QoS issues for
+Hygon) which is in process of being added to resctrl.
 
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 195f04c4d158..2b075e7334bf 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -243,6 +243,16 @@ int snc_nodes_per_l3_cache(void)
- 		}
- 		snc_mode = cache_cpus / node_cpus;
+ tools/testing/selftests/resctrl/cat_test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 94cfdba5308d..59a0f80fdc5a 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -290,8 +290,8 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
  
-+		/*
-+		 * On certain Hygon platforms:
-+		 * cache_cpus < node_cpus, the calculated snc_mode is 0.
-+		 *
-+		 * Set snc_mode = 1 to indicate that SNC mode is not
-+		 * supported on the platform.
-+		 */
-+		if (!snc_mode)
-+			snc_mode = 1;
-+
- 		if (snc_mode > 1)
- 			ksft_print_msg("SNC-%d mode discovered.\n", snc_mode);
- 	}
+ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+ {
+-	/* AMD always supports non-contiguous CBM. */
+-	if (get_vendor() == ARCH_AMD)
++	/* AMD and Hygon always supports non-contiguous CBM. */
++	if (get_vendor() == ARCH_AMD || get_vendor() == ARCH_HYGON)
+ 		return true;
+ 
+ #if defined(__i386__) || defined(__x86_64__) /* arch */
 -- 
 2.47.3
 
