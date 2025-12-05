@@ -1,205 +1,191 @@
-Return-Path: <linux-kselftest+bounces-47141-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47142-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40FC8CA8CDD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 19:33:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09C54CA8CC1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 19:30:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4251E30021CE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 18:33:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 636C43036586
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 18:26:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC293344022;
-	Fri,  5 Dec 2025 18:24:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CD1F3451B0;
+	Fri,  5 Dec 2025 18:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b="N4VXFbW5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g+9ly+Gf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 878AE325724
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Dec 2025 18:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF537342C95
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Dec 2025 18:26:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764959057; cv=none; b=YgEMEU3+hOFD5FgIlEP1ZCijpelWHme/W83h9Xv7mfHlxkuhH9HaWTuyhPEG6dWAcnom+4SI+F4PxN0GzBzPqL9nibRrj8Ra019WnXifRsuYzGxTyoHFZ0yfcxrfx6Eo704tnjB2UOLKaxK997I+4AMsSJ9GXGHDJl8d089LBns=
+	t=1764959182; cv=none; b=dse4E3AKlXx/yrOF9ZNg7PyGTnhljks6cq0LMpIOjyRCxq3cnUBLJE61R+d3GWIINqAhE0pkXFpnIf9Yxm2IlfVycYA7a3Wj5GwuQr2m18vDAkJyGwCaT91IUmnMDsHMx4OTCXke2orGr5jTB30H5T0j6GkpkdNjcHBpe4DFy48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764959057; c=relaxed/simple;
-	bh=NVR+U3jG2tQbxbWsFur6YJo3TCvjT6tp/C+uJQCGLEE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A/T2EL7vbXgIHt6PIuudKs029lz2s3mPO3CJcyCDPkRtvRQ/AyUUoVtxWVCN/bgLk2UC/OeEN9CpF1UJepZoK5RXQu3Cdntd71kWBSs2qDbfhC6bsKa2PnuDLOQvsEsJOB1FDf2fvXy3LeEn0oOOLTbhZpa1tABJH2HQBWeFmYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc.com header.i=@rivosinc.com header.b=N4VXFbW5; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-298250d7769so19794005ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Dec 2025 10:24:15 -0800 (PST)
+	s=arc-20240116; t=1764959182; c=relaxed/simple;
+	bh=14pKhhOlwj8VADM1+dgCRevwqsL8vEKUg7vlX+BXq44=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IN1zY7+SZOsugXcFlXiAPt64JQMnDs5rTckGNoyg7pkVTAPEwSIaEmTO5cePJ6mhkzB39T2nvgShWvNKPSoh33r3f8BpxayV9oP9g2YkYfJeuaAh1t6QaBzEFugWhJ+DSjNhvN+GAe3GIb+itPSgoqHTj025ooXKIBPaAzXJUf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g+9ly+Gf; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7b22ffa2a88so2572066b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Dec 2025 10:26:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc.com; s=google; t=1764959055; x=1765563855; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R8W7GJchcQ4zk/poJ1GR6L1BtfcBrmnZJJRAQLqexSM=;
-        b=N4VXFbW52VVrQmp8Uuu7vQuE1a3Et5buPSLuzNdHCCAyg7nc/qiIyWzT8/SreCHd5S
-         m8VQNza1Guld4QsxgE3GrczagDJcSuWWeQ/2mWhbjmn7++weUnqqNo1n8CIPoNy1Qif6
-         4L3ziOogGMN9AGdDD/RYVMmXac8LKMIteAt1x+OMzUjs8gPaR3BFeL8IThAdRuNWstj3
-         /rLT1VOsaqQSz1ShQ95wQqfwHOxvvfHHzQoUx+sWJ6mPNChCC3203ZiSATfR0xVX7FoA
-         hXPF8SUy7ib/7ttMhHa3XBA9PP+00NUiIQqPm3gIR5mtdm1EWNKPmjUW2PK3S42VtL5I
-         Uo4w==
+        d=gmail.com; s=20230601; t=1764959180; x=1765563980; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=2RphoGA2uusC7kx+DPM5UoX7pwzwpNu3a5kRUrklWW8=;
+        b=g+9ly+Gf8f4XxyrvceI4SfpPxkF1R+gWTPMcWrNKRdxiQsS1KTKe/zkUnI5LsjSf9A
+         72E3lFkzV+EnH1uirghCJUnWbk4y4UBP5C7OAs6OMU9OAMCQGzf8U1nQvKYjurRbZaY+
+         t7npyVlWc2p+PRWslxOoCFlADX2zipbFDWBuJLMEX/VQK85Ti5HNkIWMxE3Vz8FgcGY3
+         i7zTFmcB4AeKU+K8Hfu+Chcd2ibBfRpM1gI/ADYAMfrTpofjH8imEaOP3cZS2Eg+3eK8
+         R5XNSH2UnK4B3rxRVBxZWIS1kmk06h0g1/bcXACzeospjj1MauH3S2i1Q4eoILFjhfnq
+         s8Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764959055; x=1765563855;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1764959180; x=1765563980;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R8W7GJchcQ4zk/poJ1GR6L1BtfcBrmnZJJRAQLqexSM=;
-        b=koctcv2C2Vq/Pa8XG+eWRm8sQXgxLkmQmC1Tpm8k/PM37OtIiHE0vboStVB9Zvf32v
-         l5XUj3tkgtZlP/WPetGA7PmE7totD8kobW1O9xjK39Zl6wWXZ9CeS5lNAIbeLk+6CfBf
-         S8C1IWNWCWdceB1jLN44amkMZjfwaD5ArUv6fKpHDqVF2AzDmqnZM9LQBLRCdEZANECn
-         8Yn0KvF+Eb496ITwCAA9WjyFD642G0qM8+W6B434v9vHihTWyrJHBBXxae4YetDaOHTM
-         fGAi3rTR9XTnIur8eaJK6wyhokW5Fk7+WiuR2jcieXtlHWKJohJ1zmYjY37n2GRxnEpW
-         xg4w==
-X-Forwarded-Encrypted: i=1; AJvYcCWwAmrwnUTO6JfDLAyBRXqaIbAf+PHohcjLF5AVIoVsaB95dM8EevWjRrt2rhtBlNn7a5Tdds6NPKb5O8uP8mQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrjdEwjIDMiVmI6K9zdRWtaNIF6XLD7BlWfZ7M3R7nQ6Rphi9G
-	ZjH948cT2JQLN+S4n2A9Hspr0khqf6Cgr3G5liLrejgW+mtBxS/VacsZQpr/CYkKtYA=
-X-Gm-Gg: ASbGncuqU+2NY5eIGxAXr8xRWGr3B3/f80S0arpkcpZZJO+K6G1lHR6OraWRoAALMeP
-	6FGQ4zaeuey3Qzz1/H28S5fZ/gQ7eJWUsHjq1AQg7CCXajYNtqNvSD0B1bLwFHyO5nGm1UdnNs2
-	MxGObZPRPMguhkzyG7KvqFplGccN6AXx0siH7xNbzVny0k/pwyVsOaAdhfP0Ge/cL44xw0RA/vk
-	+ERDGGFurAXto7tohv1OYUiKhSzeVoaDy9/jX9Nd5l0rSTd/7FaX3qrNIlmDWzgIvZPViYYBhiP
-	V3YFPQOc3cE9pAmT0cqsLyvqXopv/NNCbQlqx+YDsI2BkArPtBPhcKTKdNCF5SGIv9kpD09f3wk
-	VkY7xQPrWPbLc4nQVt9Y788q4y9yyKC/cFb3D1m3ySRyH8whJsTYchBbHsWrSpuNoJup2eAyOyp
-	G6KiszBgUW54wVQGPGukKT
-X-Google-Smtp-Source: AGHT+IHZMCsXUTCjOVQ3AFVu8onlvt7po3LO4OEVVdk3jTNgtLDl44M+FmDz1C3tnLg32Vfv9eEpZQ==
-X-Received: by 2002:a17:903:11c8:b0:269:4759:904b with SMTP id d9443c01a7336-29d6848df81mr135161565ad.58.1764959054851;
-        Fri, 05 Dec 2025 10:24:14 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29dae4a13d2sm54863235ad.9.2025.12.05.10.24.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Dec 2025 10:24:14 -0800 (PST)
-Date: Fri, 5 Dec 2025 10:24:11 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com,
-	richard.henderson@linaro.org, jim.shu@sifive.com,
-	andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
-	atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
-	alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
-	Zong Li <zong.li@sifive.com>,
-	Andreas Korb <andreas.korb@aisec.fraunhofer.de>,
-	Valentin Haudiquet <valentin.haudiquet@canonical.com>
-Subject: Re: [PATCH v24 25/28] riscv: create a config for shadow stack and
- landing pad instr support
-Message-ID: <aTMjS-Ok-DrJJjQY@debug.ba.rivosinc.com>
-References: <20251204-v5_user_cfi_series-v24-0-ada7a3ba14dc@rivosinc.com>
- <20251204-v5_user_cfi_series-v24-25-ada7a3ba14dc@rivosinc.com>
- <b5feba48-7e7c-4ab9-a193-072f3980f525@infradead.org>
+        bh=2RphoGA2uusC7kx+DPM5UoX7pwzwpNu3a5kRUrklWW8=;
+        b=OonZjgbJqEckfrhBpcS7iXvx2Dkyuotd3F5POdaH+N0WcwqVWkp5braQKV0q91UV8C
+         t/o7FzJJmH1u9OmHR5carlrUkQ0y7sl8SWopaj3lH6EYY41Fb5FOooZzKiCEOJq4pott
+         JBH4fySB6EE84owCNdLe7GCE6k0dLE2CYBZk3KOvdojVZd9MJ9W3nJd1VkT9W62eDvh0
+         wcKj8rC4pIYFEDEtXwG7JOD2ikkRweG+1RSPSQ7sza6e8kJGdwjLyK8JZgrk6hhKOM3H
+         nobqL75BEnh/f8p0oHC4P2ZAD6OQVDNtj4sn+Dclk3mgYrTS/etHwlaANgAdrfRl5zjp
+         NYUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUQrXuqhhmBUJfVKFmM5veZR0q2jOOTQnoZLxwumkSl+jrdNbLzsTozFPb/EDSo8VGpycQfC/KChheXVvJs80Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt9rQePKmz21fpRn9DWdHZ5mXrx5GZcYM57oXC6WkLuWpokAop
+	ORyNj/BjxwupBC3SUCQFBCAYSoPsTL4kINOlW/z6AE/OX6pwrWTwXURWoqtu4Q==
+X-Gm-Gg: ASbGncswKI5BivCQFASju9x+HKD9GrrUuOXTK/1qbpS9DXDrCqwXhRntx5ipUg9+G6p
+	eYphFdVHA8OcB6atic7fmPjP7p8zWsjRw6fNEiWigT4788dUerv0TJ0HcaDKmj2XS3DjBaw0KEd
+	IMCQJ5dvJfgFw2h1a0eglM8ECSr+iUesi/XtJxullzkkV2H4NRy9XFhLPm8Cdj8s1KQERZJNoGD
+	vfxvtItERqrlpt2NKeQ0g2DfStbXVPV3wlYwh+Xb+avey+7rcLIZQZD9wXvKpIORdD65ijgI+w0
+	hq/rDz41O8s7IF1o+psjBjCSCI95AtVG8OLbLLEXbjE/7x3xB809V53TTJ1BZFgs9zOaZ6YhbJ+
+	EIJgJ6cIxJLESwGoIom4bEsv5lpOYGsbXq2/KSuBrkIPG71xtYpJMsJldTsiuD3YD9fsIZIxBEI
+	KCt9Uqg5GNyK995Mgq4rmXib5pQQTNSJCxqYc9uvlD4WUOYgBSzbbiA6ZF6PY=
+X-Google-Smtp-Source: AGHT+IF/2HBcUoNJyjKNnXsznND3RFIaBMXPKVdkGa4Dn73CbWeP3Yzvc7zghMTC/YOYSecM+Hp+wQ==
+X-Received: by 2002:a05:6a20:7488:b0:366:14ac:8c6d with SMTP id adf61e73a8af0-3661801eeb9mr188408637.67.1764959180023;
+        Fri, 05 Dec 2025 10:26:20 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bf6a14f5d0fsm5270110a12.23.2025.12.05.10.26.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 05 Dec 2025 10:26:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <45c3161a-0c57-40b0-9561-6e9d71f00049@roeck-us.net>
+Date: Fri, 5 Dec 2025 10:26:18 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <b5feba48-7e7c-4ab9-a193-072f3980f525@infradead.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 12/13] selftests/fs/mount-notify-ns: Fix build warning
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+ Christian Brauner <brauner@kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Eric Dumazet <edumazet@google.com>, Kees Cook <kees@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ wine-devel@winehq.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20251205171010.515236-1-linux@roeck-us.net>
+ <20251205171010.515236-13-linux@roeck-us.net>
+ <CAOQ4uxiqK6Hj2ggtcD-c7BAtuBcm+LrKVkQOxi93OXhwSE98Dw@mail.gmail.com>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
+ RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
+ nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
+ 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
+ gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
+ IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
+ kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
+ VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
+ jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
+ BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
+ ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
+ CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
+ oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
+ VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
+ 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
+ onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
+ DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
+ rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
+ WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
+ qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
+ 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
+ qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
+ 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
+ pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
+ J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
+ pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
+ 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
+ ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
+ I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
+ nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
+ HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
+ JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
+ H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
+ njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
+ dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
+ j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
+ scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
+ zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
+ RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
+ F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
+ FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <CAOQ4uxiqK6Hj2ggtcD-c7BAtuBcm+LrKVkQOxi93OXhwSE98Dw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 04, 2025 at 02:17:27PM -0800, Randy Dunlap wrote:
->
->
->On 12/4/25 12:04 PM, Deepak Gupta wrote:
->> This patch creates a config for shadow stack support and landing pad instr
->> support. Shadow stack support and landing instr support can be enabled by
->> selecting `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wires
->> up path to enumerate CPU support and if cpu support exists, kernel will
->> support cpu assisted user mode cfi.
+On 12/5/25 09:31, Amir Goldstein wrote:
+> On Fri, Dec 5, 2025 at 6:12 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >>
->> If CONFIG_RISCV_USER_CFI is selected, select `ARCH_USES_HIGH_VMA_FLAGS`,
->> `ARCH_HAS_USER_SHADOW_STACK` and DYNAMIC_SIGFRAME for riscv.
+>> Fix
 >>
->> Reviewed-by: Zong Li <zong.li@sifive.com>
->> Tested-by: Andreas Korb <andreas.korb@aisec.fraunhofer.de>
->> Tested-by: Valentin Haudiquet <valentin.haudiquet@canonical.com>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> mount-notify_test_ns.c: In function ‘fanotify_rmdir’:
+>> mount-notify_test_ns.c:494:17: warning:
+>>          ignoring return value of ‘chdir’ declared with attribute ‘warn_unused_result’
+>>
+>> by checking the return value of chdir() and displaying an error message
+>> if it returns an error.
+>>
+>> Fixes: 781091f3f5945 ("selftests/fs/mount-notify: add a test variant running inside userns")
+>> Cc: Amir Goldstein <amir73il@gmail.com>
+>> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 >> ---
->>  arch/riscv/Kconfig                  | 22 ++++++++++++++++++++++
->>  arch/riscv/configs/hardening.config |  4 ++++
->>  2 files changed, 26 insertions(+)
+>> v2: Update subject and description to reflect that the patch fixes a build
+>>      warning.
+>>      Use perror() to display an error message if chdir() returns an error.
 >>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 0c6038dc5dfd..f5574c6f66d8 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -1146,6 +1146,28 @@ config RANDOMIZE_BASE
+>>   .../selftests/filesystems/mount-notify/mount-notify_test_ns.c  | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
 >>
->>            If unsure, say N.
+>> diff --git a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_ns.c b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_ns.c
+>> index 9f57ca46e3af..90bec6faf64e 100644
+>> --- a/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_ns.c
+>> +++ b/tools/testing/selftests/filesystems/mount-notify/mount-notify_test_ns.c
+>> @@ -491,7 +491,8 @@ TEST_F(fanotify, rmdir)
+>>          ASSERT_GE(ret, 0);
 >>
->> +config RISCV_USER_CFI
->> +	def_bool y
->> +	bool "riscv userspace control flow integrity"
->> +	depends on 64BIT && \
->> +		$(cc-option,-mabi=lp64 -march=rv64ima_zicfiss_zicfilp -fcf-protection=full)
->> +	depends on RISCV_ALTERNATIVE
->> +	select RISCV_SBI
->> +	select ARCH_HAS_USER_SHADOW_STACK
->> +	select ARCH_USES_HIGH_VMA_FLAGS
->> +	select DYNAMIC_SIGFRAME
->> +	help
->> +	  Provides CPU assisted control flow integrity to userspace tasks.
->
->	           CPU-assisted
->
->> +	  Control flow integrity is provided by implementing shadow stack for
->> +	  backward edge and indirect branch tracking for forward edge in program.
->> +	  Shadow stack protection is a hardware feature that detects function
->> +	  return address corruption. This helps mitigate ROP attacks.
->> +	  Indirect branch tracking enforces that all indirect branches must land
->> +	  on a landing pad instruction else CPU will fault. This mitigates against
->> +	  JOP / COP attacks. Applications must be enabled to use it, and old user-
->> +	  space does not get protection "for free".
->> +	  default y.
->
->	  Default is y if hardware supports it.
->?
+>>          if (ret == 0) {
+>> -               chdir("/");
+>> +               if (chdir("/"))
+>> +                       perror("chdir()");
+> 
+> ASSERT_EQ(0, chdir("/"));
+> 
+> and there is another one like this in mount-notify_test.c
+> 
 
-No default Y means support is built in the kernel for cfi.
-If hardware doesn't support CFI instructions, then kernel will do following
+Done.
 
-- prctls to manage shadow stack/landing pad enable/disable will fail.
-- vDSO will not have shadow stack instructions in it.
+Thanks,
+Guenter
 
-
->
->> +
->>  endmenu # "Kernel features"
->
->
->-- 
->~Randy
->
 
