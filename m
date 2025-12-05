@@ -1,158 +1,180 @@
-Return-Path: <linux-kselftest+bounces-47131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E5B0CA8A0B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 18:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CFECCA8AC5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 18:49:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 911663021AB7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 17:33:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 684793014C3E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 17:48:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5902D7DCE;
-	Fri,  5 Dec 2025 17:33:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60085347FC0;
+	Fri,  5 Dec 2025 17:40:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xdFUrQpE"
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="TWpwCyzg";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="xZsXrtD5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C872D7812
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Dec 2025 17:33:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE9433F368;
+	Fri,  5 Dec 2025 17:40:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764956009; cv=none; b=mUXLGE5sXOTLGAj4KRKlUVEvYcZXDlGLK+YI3RxSLt4NnBebJSHESuYes6MzWyXKTO99rWFQPQ0354pGpu5LbRH11uyCwRpsJzSmljO0Q4U4m0l2V6y2aZxwx0HZI6URynavjhOh0a5BbpKAL/JlRIqocLcP/DyradLUz8gBTbw=
+	t=1764956411; cv=none; b=kFaaVbwh4RXMI5B32bc6buz0KF0gposs1yf/3J2iNpuWQhARS1IVz4ylAuF2ZpG2ofA0WGl1eBSmop7CHQgzrJPF00TRYVyJ2+GIS+hQ5LdvLPhUqcGB5Jypn0VDmrT6ejFLsJYFY+506ImbN890Ih/o4TvvewOcIRrLPFVkoMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764956009; c=relaxed/simple;
-	bh=eB9+/Eym8/sl6sVLo+TtE0s7XKYj4AnzHDQpqXfgiDA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fc7t8/yWohiao1bxc74tOdR2bOEAv1EqWfVEQZfo45nmhGsigGS6GqnIzNwuIQszegIrJsmOBfAaOWvHJujkc2a6YMwhL4NFx9jtAhxf1XqRlFbaPa+ITy4aVZFsUd9zJBuJ3k8htgqPXyvHGYsIkdmmeLzBtaBsCvsPFjEg22o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xdFUrQpE; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42b3c965cc4so1168265f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Dec 2025 09:33:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764956005; x=1765560805; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=amtNQuwco1BO2PnhLkDFqIyQgPKVg/vOsmaYbePwmG4=;
-        b=xdFUrQpEygW9kfCFezSYsTLHAgyOhGlvJzf0GuG1tHvN0OS3w2IkkGNJFuFRz9IrKX
-         6bUIy/YBVP3wg+oa2BWbEmP0uvk3Auu+1VOtgY6UtJx3yxzi29uH8D5oCVIBX+pgTq1+
-         UwfoPTQMx+yx7/W7hpiTkzV1WXwHwKVi5V+iWurbSUZnra+H6ZrRJ7ldVEr2LZV2qSdb
-         oVX+fdRZ3LKF1PoftqN8oPBTxhVZNViBqLn85vN58rm4phKKPhUCF7m6OtQogtabvsot
-         rgx6GjHujpCfWK2DAWi+fTS1jUeNdFbpRapgFzs0lleQc7MPXf9AqET2gSogEKpwcw3w
-         ejqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764956005; x=1765560805;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=amtNQuwco1BO2PnhLkDFqIyQgPKVg/vOsmaYbePwmG4=;
-        b=UsEvWWf8ab+CZ/DBww0aF9qs7iIcR8qBUHLUM16UfA/zgy1+JtyluQbCmR/zMbBbvG
-         O++qig8olhRjWON2ptdmSaCphAMTdpgTT+D/0tG850GgNoC6kem8q4XxhZtaRDnif/oc
-         iH74kdZOnwng1K4K9mZM5qBlQ1k/n8dkx7in5rjXU39KkFHitasnjzlo0iKXaLwX+nWz
-         3FFxooL2HmQiS70cZLqJZkWdXx9ZtDRG+1WCZzlI2SCWRC3bvH7oiBVNynM6Xm8Mkr4q
-         eTta9RG1lqBj9Kkk8w/c8fT7QupczI7WOTqqG02WbeYpf04LY2rQDCUwEPCLQp8FvJU1
-         306A==
-X-Forwarded-Encrypted: i=1; AJvYcCXmw48k52M0PulKjIhMuoU3fpmOjPOBHxJ55Z69d2RCFnzfl/OFAQXjw6eSil7bS8NAPmQV3u1e12VSl2JX95M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGzC+Vs8vmgptKqX3k60d6YD+fhVHbjo8kjsAncnAcRdqdTWA9
-	//B8ewLUNQNTuo3Zf2Yr2FXsFXr46OSoHhR40RDh3COJ10FZklTaIYjOJYiBjdiXTg==
-X-Gm-Gg: ASbGncsY8DNPHDHaK3lTbS1eVisQR99ufzVowEqhE2fEQftLmOPG3ALJ3i1Ka/S7sQn
-	OrWvRreXkksiacEvmBthg8XYxEDwTp8X3RJl/AZi+s1SqhbkzrLNOasZ36H5gP41WGKizIYO+br
-	nOIy4OkfFIgi7RaN7HacZiQwETmojSLMyOMUi3/8VK38/RW5azHuVXVpEaSDnB5Iyv5U5J0qRYE
-	lBy0LXYfNEezv5YUu8UNr9TJ4USffoBtuRcQG031F5rAdihG4++jaOrh3vuVHzJbE0WkwDYMj9h
-	XavZ9KwzxtZectzd87uSjqZVwkO70E0Yg2ZNOigddUFLTNT1kunIehPHEhwvZWZfpQMb1njvNv7
-	JzWGj/ztU04tWZduDsugIU/haht4kZXUIvH9HNdALASwlJ3y8RAqxBo2C5aQm+IqbVdRhGKvHLv
-	NkflYPmf0eaF8W47lcplB+R2vHGxMEYWuut1Hq2/DKFegTmuk0Wg==
-X-Google-Smtp-Source: AGHT+IG7GHbywu/ls/wVemuOmr6xVx9MQPax08/Ei7Uq0ye9NoSzMgiNsTxCLJQTc1fcXLx9fTdYtw==
-X-Received: by 2002:a5d:64e3:0:b0:429:cf03:8b2e with SMTP id ffacd0b85a97d-42f89ecee3fmr43760f8f.13.1764956004866;
-        Fri, 05 Dec 2025 09:33:24 -0800 (PST)
-Received: from google.com (120.54.38.34.bc.googleusercontent.com. [34.38.54.120])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7d2226d0sm9793222f8f.21.2025.12.05.09.33.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Dec 2025 09:33:24 -0800 (PST)
-Date: Fri, 5 Dec 2025 17:33:21 +0000
-From: Vincent Donnefort <vdonnefort@google.com>
-To: Jack Thomson <jackabt.amazon@gmail.com>
-Cc: maz@kernel.org, oliver.upton@linux.dev, pbonzini@redhat.com,
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com,
-	catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	isaku.yamahata@intel.com, xmarcalx@amazon.co.uk,
-	kalyazin@amazon.co.uk, jackabt@amazon.com
-Subject: Re: [PATCH v3 2/3] KVM: selftests: Enable pre_fault_memory_test for
- arm64
-Message-ID: <aTMXYZgZM3QvZP2i@google.com>
-References: <20251119154910.97716-1-jackabt.amazon@gmail.com>
- <20251119154910.97716-3-jackabt.amazon@gmail.com>
+	s=arc-20240116; t=1764956411; c=relaxed/simple;
+	bh=8uchhBNj6BK/KhFDe8mYfRWRhb+wBNysW5VCuQdG9fU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JBV4GlA1FURRkFX1ae+IGdwKzXREZ872MTJhsxJ947yEBTCELio7ZltEew7hl9W3eRpG5KXFPGQD0ZEroUfl9DL2GN8moVI4Cif0p/XCD+K80lOVxB62sfFkb82DQPiZ4VchuGm3hmGrWfMBqIrp332mIBRu0yDqAPMYlkierfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=TWpwCyzg; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=xZsXrtD5; arc=none smtp.client-ip=135.148.138.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
+DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1764956364; bh=weK/aS7u/TYhdycr7iNp9dK
+	H2X/8olqegVmxJ3UYEh0=; b=TWpwCyzgmjzOhKNoTqftKQSRtAWxOw2iAR7GO71aL42dHSqyR0
+	Huxwib6OcovyRPSYHYR9WP6pcqWhb8AWcjL+Iiq/ev6BOfNEUfsxckNtKXGeIOUDVmv33c4S0Fn
+	VTVH7FFi2H6VA1Wa/tykMp4RpOeqUzJLzFXZ+UBjUTp8jRcllkgrKR+Tfv6uvl7xfTjyXS6oLvq
+	TL5JcIKed5YgQ3CRd1G7oTuhbAsI0EZTILCF8RfQcca6B+HnI9stTDTldxYWqxvpR7S8zb0qWvZ
+	ZC64K2tebcKA9EqVy7FlFyOoksdgYQpimrM4F/ybF0CACQaGwheXDPh8fjEw9MyKNYA==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1764956364; bh=weK/aS7u/TYhdycr7iNp9dK
+	H2X/8olqegVmxJ3UYEh0=; b=xZsXrtD5JaadNjtoFKD56YlPIzrXmOpT/KAwG1yJQJzQtg3ozW
+	TktA6hmcde2fI9Sb9MB8D+ZVRxpuZz9OqVBQ==;
+From: Daniel Hodges <git@danielhodges.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	vadim.fedorenko@linux.dev
+Cc: martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	shuah@kernel.org,
+	bpf@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Daniel Hodges <git@danielhodges.dev>
+Subject: [PATCH bpf-next v2 0/5] Add cryptographic hash and signature verification kfuncs to BPF
+Date: Fri,  5 Dec 2025 12:39:18 -0500
+Message-ID: <20251205173923.31740-1-git@danielhodges.dev>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251119154910.97716-3-jackabt.amazon@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Nov 19, 2025 at 03:49:09PM +0000, Jack Thomson wrote:
-> From: Jack Thomson <jackabt@amazon.com>
-> 
-> Enable the pre_fault_memory_test to run on arm64 by making it work with
-> different guest page sizes and testing multiple guest configurations.
-> 
-> Update the test_assert to compare against the UCALL_EXIT_REASON, for
-> portability, as arm64 exits with KVM_EXIT_MMIO while x86 uses
-> KVM_EXIT_IO.
-> 
-> Signed-off-by: Jack Thomson <jackabt@amazon.com>
-> ---
->  tools/testing/selftests/kvm/Makefile.kvm      |  1 +
->  .../selftests/kvm/pre_fault_memory_test.c     | 78 ++++++++++++++-----
->  2 files changed, 58 insertions(+), 21 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index 148d427ff24b..0ddd8db60197 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -183,6 +183,7 @@ TEST_GEN_PROGS_arm64 += memslot_perf_test
->  TEST_GEN_PROGS_arm64 += mmu_stress_test
->  TEST_GEN_PROGS_arm64 += rseq_test
->  TEST_GEN_PROGS_arm64 += steal_time
-> +TEST_GEN_PROGS_arm64 += pre_fault_memory_test
->  
->  TEST_GEN_PROGS_s390 = $(TEST_GEN_PROGS_COMMON)
->  TEST_GEN_PROGS_s390 += s390/memop
-> diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-> index f04768c1d2e4..674931e7bb3a 100644
-> --- a/tools/testing/selftests/kvm/pre_fault_memory_test.c
-> +++ b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-> @@ -11,19 +11,29 @@
->  #include <kvm_util.h>
->  #include <processor.h>
->  #include <pthread.h>
-> +#include <guest_modes.h>
->  
->  /* Arbitrarily chosen values */
-> -#define TEST_SIZE		(SZ_2M + PAGE_SIZE)
-> -#define TEST_NPAGES		(TEST_SIZE / PAGE_SIZE)
+This series extends BPF's cryptographic capabilities by adding kfuncs for
+SHA hashing and ECDSA signature verification. These functions enable BPF
+programs to perform cryptographic operations for use cases such as content
+verification, integrity checking, and data authentication.
 
-After applying on top of the base commit
-8a4821412cf2c1429fffa07c012dd150f2edf78c, it does not build.
+BPF programs increasingly need to verify data integrity and authenticity in
+networking, security, and observability contexts. While BPF already supports
+symmetric encryption/decryption, it lacks support for:
 
-That TEST_NPAGES seems to still be used in delete_slot_worker(). I believe
-that's because of
+1. Cryptographic hashing - needed for content verification, fingerprinting,
+   and preparing message digests for signature operations
+2. Asymmetric signature verification - needed to verify signed data without
+   requiring the signing key in the datapath
 
-  "KVM: selftests: Test prefault memory during concurrent memslot removal"
+These capabilities enable use cases such as:
+- Verifying signed network packets or application data in XDP/TC programs
+- Implementing integrity checks in tracing and security monitoring
+- Building zero-trust security models where BPF programs verify credentials
+- Content-addressed storage and deduplication in BPF-based filesystems
 
-Related issues with the pre_fault_memory() prototype.
+Implementation:
 
-Is that the correct base-commit or shall I use something else?
+The implementation follows BPF's existing crypto patterns:
+1. Uses bpf_dynptr for safe memory access without page fault risks
+2. Leverages the kernel's existing crypto library (lib/crypto/sha256.c and
+   crypto/ecdsa.c) rather than reimplementing algorithms
+3. Provides context-based API for ECDSA to enable key reuse and support
+   multiple program types (syscall, XDP, TC)
+4. Includes comprehensive selftests with NIST test vectors
 
-> +#define TEST_BASE_SIZE		SZ_2M
->  #define TEST_SLOT		10
->
+Patch 1: crypto: Add BPF hash algorithm type registration module
+  - Adds bpf_crypto_shash module in crypto/ subsystem
+  - Registers hash type with BPF crypto infrastructure
+  - Enables hash algorithm access through unified bpf_crypto_type interface
+  - Implements callbacks: alloc_tfm, free_tfm, hash, digestsize, get_flags
+  - Manages shash_desc lifecycle internally
 
-[...]
+Patch 2: bpf: Add SHA hash kfunc for cryptographic hashing
+  - Adds bpf_crypto_hash() kfunc for SHA-256/384/512
+  - Extends bpf_crypto_type structure with hash operations
+  - Updates bpf_crypto_ctx_create() to support keyless operations
+  - Protected by CONFIG_CRYPTO_HASH2 guards
+  - Uses kernel's crypto library implementations
+
+Patch 3: selftests/bpf: Add tests for bpf_crypto_hash kfunc
+  - Tests basic functionality with NIST "abc" test vectors
+  - Validates error handling for invalid parameters (zero-length input)
+  - Ensures correct hash output for SHA-256, SHA-384, and SHA-512
+  - Adds CONFIG_CRYPTO_HASH2 and CONFIG_CRYPTO_SHA512 to selftest config
+
+Patch 4: bpf: Add ECDSA signature verification kfuncs
+  - Context-based API: bpf_ecdsa_ctx_create/acquire/release pattern
+  - Supports NIST curves (P-256, P-384, P-521)
+  - Adds bpf_ecdsa_verify() for signature verification
+  - Includes size query functions: keysize, digestsize, maxsize
+  - Enables use in non-sleepable contexts via pre-allocated contexts
+  - Uses crypto_sig API with p1363 format (r || s signatures)
+
+Patch 5: selftests/bpf: Add tests for ECDSA signature verification
+  - Tests valid signature acceptance with RFC 6979 test vectors for P-256
+  - Tests invalid signature rejection
+  - Tests size query functions (keysize, digestsize, maxsize)
+  - Uses well-known NIST test vectors with "sample" message
+
+v2:
+
+- Fixed redundant __bpf_dynptr_is_rdonly() checks (Vadim)
+- Added BPF hash algorithm type registration module in crypto/ subsystem
+- Added CONFIG_CRYPTO_HASH2 guards around bpf_crypto_hash() kfunc and its
+  BTF registration, matching the pattern used for CONFIG_CRYPTO_ECDSA
+- Added mandatory digestsize validation for hash operations
+
+Test Results
+============
+
+All tests pass on x86_64 for both crypto_hash and ecdsa_verify test suites.
+
+Daniel Hodges (5):
+  crypto: Add BPF hash algorithm type registration module
+  bpf: Add SHA hash kfunc for cryptographic hashing
+  selftests/bpf: Add tests for bpf_crypto_hash kfunc
+  bpf: Add ECDSA signature verification kfuncs
+  selftests/bpf: Add tests for ECDSA signature verification kfuncs
+
+ crypto/Makefile                               |   3 +
+ crypto/bpf_crypto_shash.c                     |  94 ++++++
+ include/linux/bpf_crypto.h                    |   2 +
+ kernel/bpf/crypto.c                                | 306 ++++++++++++++++++++-
+ tools/testing/selftests/bpf/config                 |   2 +
+ .../testing/selftests/bpf/prog_tests/crypto_hash.c | 158 +++++++++++
+ .../selftests/bpf/prog_tests/ecdsa_verify.c        |  74 +++++
+ tools/testing/selftests/bpf/progs/crypto_hash.c    | 141 ++++++++++
+ tools/testing/selftests/bpf/progs/ecdsa_verify.c   | 159 +++++++++++
+ 9 files changed, 931 insertions(+), 8 deletions(-)
+ create mode 100644 crypto/bpf_crypto_shash.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/crypto_hash.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ecdsa_verify.c
+ create mode 100644 tools/testing/selftests/bpf/progs/crypto_hash.c
+ create mode 100644 tools/testing/selftests/bpf/progs/ecdsa_verify.c
+
+-- 
+2.51.0
+
 
