@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-47200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4E29CA8FE1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 20:08:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E3BBCA8F96
+	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 20:04:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 590923131450
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 19:03:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 200FB3029A16
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 19:03:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A7A38D3C5;
-	Fri,  5 Dec 2025 18:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2376393DCA;
+	Fri,  5 Dec 2025 18:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="evAwOiv8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uXCDpVrA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B18D38A8BF;
-	Fri,  5 Dec 2025 18:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815FC393DC3;
+	Fri,  5 Dec 2025 18:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764960930; cv=none; b=aPvDieZ0nSJFvfVsAo4CRJuIpth+BhdYPURn5G35qmEaAbYDk9XU7qKaeYSK02hWuvmBu4fzLVHs0mnPrQBS4lsCpIvc5kem7FEZ+H5OitIxDsisfJ/8+Eme2RFBkMA9/4P73kkPZbfWHg2geJkHZyyiwSGMOP5PSaeowcZKLLk=
+	t=1764960933; cv=none; b=HOpJnSwa4T4OrR+OW/c4y+gU45mYOI8sdi8sJGpaJGo+sKOpOtxApRiTu8dzHrTaSgNCNMy/uYfcYt8uGZXBtan7psq3AE4d46HlxgXz2Kt+3nbghGM7Fy16DwxauEdsbzMQVzYkjlcZ0NwQUix+J9ALLObl0xYrcOzpj3PUTMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764960930; c=relaxed/simple;
-	bh=udUijXuETKnIGzHe+MmBVFZg8mzS9bLLknKz5JyqiE8=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QAJAHQEyD8C3McpHwNsHK8UdyAmLIQySkkVKbf7+F4AT7027Bj/hGz1qCX4wLKazFRnH/XOJeXoAY2ySFVj1kn4le+24PkCbyJYZadZQ8anOVJ/a6u0X80fGySngF6lNMpmnpthR2gzUAaRSQKBBXk2wJi8n0vdcK4Gqdcu+bQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=evAwOiv8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6459DC4CEF1;
-	Fri,  5 Dec 2025 18:55:27 +0000 (UTC)
+	s=arc-20240116; t=1764960933; c=relaxed/simple;
+	bh=DYcgUyRPCbhHVUeeLI22n/mljYVmmFnZoPtgjphW1Bs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=dIYlnqWDZ7Z7CaojfCy6uhff1O5gf6YGKkp6QaOpSMgKgjPqKGBlxFMn+7Qz3Sp3rhUsPZfnZ0ix9TtUze3bPohWju4Tvaezc7qDIc4gbhe+pZoSBF8qV06+dzy4wB3DyHsMP3sPzqcBkSaSgEmj34XBoxpxJJgmmq805BgBl0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uXCDpVrA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 731F8C116B1;
+	Fri,  5 Dec 2025 18:55:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764960930;
-	bh=udUijXuETKnIGzHe+MmBVFZg8mzS9bLLknKz5JyqiE8=;
-	h=From:Subject:Date:To:Cc:From;
-	b=evAwOiv8AEvRaQnfrhNimPz7tKJe3nJrPCOJPlWRc61/O3OSPLYyUL0SbxxblJSWX
-	 JLwIRqQuO75MSJYSvX+3gt3stjV261ADmkL+wMzbOjTbwtJJS9/ccJHanpJN6UCmYw
-	 7rBS5s85rwaqRf8CByBYiyVmbM4G6vpEhcA9/MTLiWcTRnIE8hpf8c8MU0GP5uli0V
-	 GB+57baNPnE76lxD7+sb5MSzls3gl9mqZDKmd9DYy5cltOCF933BsQ2/mTaivz6JDX
-	 F5aWGkoHBFJygQ2lzotgfunGGOizmlueCbd303RpK7cg6JEEXgL02dmG8dVPtLCE7U
-	 msdq5Z/1N49zA==
+	s=k20201202; t=1764960933;
+	bh=DYcgUyRPCbhHVUeeLI22n/mljYVmmFnZoPtgjphW1Bs=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=uXCDpVrAt5NtmcjwQh1FVMt+l7vt22Mkq5JU7Oc3pufEJvM/Wcw62dyS1QqHi27cn
+	 NqYEeemURKKC+knz6qGST+EEtcUr3AF4Qyyv8dQ6B34v52VXOIuOB1tWL/9Xh4g3JD
+	 I1XBkCpovGZdVNCwl+N/d6kSTCK+AcrxcuuH3JUHguYLmbeG3dRRFYJpzgl/RHJvZS
+	 bGJWRWmB6YVV5u3DZls55iPLPlf6lzNfj//drheEcWFJ8V53yQmCCxuw1mxVAa+uLI
+	 +RTv2O/7L0iJOJ+noUkQiNS8VqVXKp18RTTfyb7SMBr9hLhx15oRiW5Mvu+e+x0lH+
+	 IEppz/NW7RnXw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net 0/4] mptcp: misc fixes for v6.19-rc1
-Date: Fri, 05 Dec 2025 19:55:13 +0100
-Message-Id: <20251205-net-mptcp-misc-fixes-6-19-rc1-v1-0-9e4781a6c1b8@kernel.org>
+Date: Fri, 05 Dec 2025 19:55:14 +0100
+Subject: [PATCH net 1/4] mptcp: pm: ignore unknown endpoint flags
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,10 +50,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAJEqM2kC/x2MwQrCMBAFf6Xs2QfdaNT6K+KhJlvdQ2PIFhFK/
- 72Lx4GZWcmkqRjdupWafNX0Uxz40FF6j+Ul0OxMoQ+RQx9RZMFcl1QxqyVM+hPDGTygJUbky+m
- Zj3karkz+qE3+hi/u5Ck9tm0HltN0uHQAAAA=
-X-Change-ID: 20251205-net-mptcp-misc-fixes-6-19-rc1-5174bd3df981
+Message-Id: <20251205-net-mptcp-misc-fixes-6-19-rc1-v1-1-9e4781a6c1b8@kernel.org>
+References: <20251205-net-mptcp-misc-fixes-6-19-rc1-v1-0-9e4781a6c1b8@kernel.org>
+In-Reply-To: <20251205-net-mptcp-misc-fixes-6-19-rc1-v1-0-9e4781a6c1b8@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -63,48 +62,72 @@ Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1247; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=udUijXuETKnIGzHe+MmBVFZg8mzS9bLLknKz5JyqiE8=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKNtWauO9947ZrY08PyRZZ5pTEOm+QerE5T9TRQ/b0z9
- ke1ffrhjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIloTWD4zR7Beywj5tc6v8Ot
- cyboKQmFrDH3XrbS9NZ/bdcrti9WWzL8D+a1O7/1UcTO7tu70w9/6ruZZpay7oG3wvO8j997Q7l
- 82AE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2373; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=DYcgUyRPCbhHVUeeLI22n/mljYVmmFnZoPtgjphW1Bs=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKNtWadbZi2p0l1894fT6rNRDhuiAjN/ucYepk9cfO8a
+ 9t9O680dpSyMIhxMciKKbJIt0Xmz3xexVvi5WcBM4eVCWQIAxenAExEhJ+RodvhxHwLgW7PWYcv
+ XpY3YDJ3qxOcXHzxYf6ZCWftFXcz5DEy/PFdkzZbZHt5m6RfhW+y4i6BW9Jmny7UTtn7XKPc07e
+ IHQA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Here are various unrelated fixes:
+Before this patch, the kernel was saving any flags set by the userspace,
+even unknown ones. This doesn't cause critical issues because the kernel
+is only looking at specific ones. But on the other hand, endpoints dumps
+could tell the userspace some recent flags seem to be supported on older
+kernel versions.
 
-- Patches 1-2: ignore unknown in-kernel PM endpoint flags instead of
-  pretending they are supported. A fix for v5.7.
+Instead, ignore all unknown flags when parsing them. By doing that, the
+userspace can continue to set unsupported flags, but it has a way to
+verify what is supported by the kernel.
 
-- Patch 3: avoid potential unnecessary rtx timer expiration. A fix for
-  v5.15.
+Note that it sounds better to continue accepting unsupported flags not
+to change the behaviour, but also that eases things on the userspace
+side by adding "optional" endpoint types only supported by newer kernel
+versions without having to deal with the different kernel versions.
 
-- Patch 4: avoid a deadlock on fallback in case of SKB creation failure
-  while re-injecting.
+A note for the backports: there will be conflicts in mptcp.h on older
+versions not having the mentioned flags, the new line should still be
+added last, and the '5' needs to be adapted to have the same value as
+the last entry.
 
+Fixes: 01cacb00b35c ("mptcp: add netlink-based PM")
+Cc: stable@vger.kernel.org
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Matthieu Baerts (NGI0) (2):
-      mptcp: pm: ignore unknown endpoint flags
-      selftests: mptcp: pm: ensure unknown flags are ignored
+ include/uapi/linux/mptcp.h | 1 +
+ net/mptcp/pm_netlink.c     | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Paolo Abeni (2):
-      mptcp: schedule rtx timer only after pushing data
-      mptcp: avoid deadlock on fallback while reinjecting
+diff --git a/include/uapi/linux/mptcp.h b/include/uapi/linux/mptcp.h
+index 04eea6d1d0a9..72a5d030154e 100644
+--- a/include/uapi/linux/mptcp.h
++++ b/include/uapi/linux/mptcp.h
+@@ -40,6 +40,7 @@
+ #define MPTCP_PM_ADDR_FLAG_FULLMESH		_BITUL(3)
+ #define MPTCP_PM_ADDR_FLAG_IMPLICIT		_BITUL(4)
+ #define MPTCP_PM_ADDR_FLAG_LAMINAR		_BITUL(5)
++#define MPTCP_PM_ADDR_FLAGS_MASK		GENMASK(5, 0)
+ 
+ struct mptcp_info {
+ 	__u8	mptcpi_subflows;
+diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
+index d5b383870f79..7aa42de9c47b 100644
+--- a/net/mptcp/pm_netlink.c
++++ b/net/mptcp/pm_netlink.c
+@@ -119,7 +119,8 @@ int mptcp_pm_parse_entry(struct nlattr *attr, struct genl_info *info,
+ 	}
+ 
+ 	if (tb[MPTCP_PM_ADDR_ATTR_FLAGS])
+-		entry->flags = nla_get_u32(tb[MPTCP_PM_ADDR_ATTR_FLAGS]);
++		entry->flags = nla_get_u32(tb[MPTCP_PM_ADDR_ATTR_FLAGS]) &
++			       MPTCP_PM_ADDR_FLAGS_MASK;
+ 
+ 	if (tb[MPTCP_PM_ADDR_ATTR_PORT])
+ 		entry->addr.port = htons(nla_get_u16(tb[MPTCP_PM_ADDR_ATTR_PORT]));
 
- include/uapi/linux/mptcp.h                      |  1 +
- net/mptcp/pm_netlink.c                          |  3 ++-
- net/mptcp/protocol.c                            | 22 ++++++++++++++--------
- tools/testing/selftests/net/mptcp/pm_netlink.sh |  4 ++++
- tools/testing/selftests/net/mptcp/pm_nl_ctl.c   | 11 +++++++++++
- 5 files changed, 32 insertions(+), 9 deletions(-)
----
-base-commit: 0373d5c387f24de749cc22e694a14b3a7c7eb515
-change-id: 20251205-net-mptcp-misc-fixes-6-19-rc1-5174bd3df981
-
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.51.0
 
 
