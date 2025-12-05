@@ -1,84 +1,93 @@
-Return-Path: <linux-kselftest+bounces-47091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47095-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BFF1CA658B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 08:15:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9B56CA6F7B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 10:43:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2EDAC304C985
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 07:15:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ECC8E303F4E1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 09:42:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C142E8B6C;
-	Fri,  5 Dec 2025 07:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08476318130;
+	Fri,  5 Dec 2025 09:42:37 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out28-73.mail.aliyun.com (out28-73.mail.aliyun.com [115.124.28.73])
+Received: from out198-5.us.a.mail.aliyun.com (out198-5.us.a.mail.aliyun.com [47.90.198.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3D2926C3B0;
-	Fri,  5 Dec 2025 07:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F17D315D20;
+	Fri,  5 Dec 2025 09:42:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764918929; cv=none; b=bWOr2JN/IzVMXjtGYFFauJgUcUw4YD8q9YltR+UNWKjuaG0VBc5/0sTn48fEg8QiZw70OPiVseQETgakssNWFa3dYlfqnl1P7B8+O10nHQZzf9hhoIK3jcNVUsqBFtupRm0/4QClf2SXZjcd83SrD7+qG/XzNxgiKlBj5BsVr94=
+	t=1764927755; cv=none; b=OshvjCN4IUbty88+kvomF2Ij+8ie600eZZsHXga+lXk7QYC55BjlmPIloOlbn6qkMLoHmPYCAQBrhGdw6Vd4Zh+3mjmTfLMpxUu8hN0nqyKJ64kjyQ4pOcF/Vy3VIe/NNOVd3GLzYokUJY8H0PyNTcM64e/m6eQNfvHLC67fXUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764918929; c=relaxed/simple;
-	bh=JF0R2KKNXnghqbJLNnzi14kmoLvvAZflarM4SvoCNyo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DMqnA2QgdN5sStaUm+VpnEoi173wTKHDiGDJ6bUW1JrctMNiYn8NMmayBGJukNUDrV+7q+W+is2/o0O0+I+pfwuoI2GGeCxbl1xCzR86kE2spCi/jxaQshNmrOwMLBpkHcAPsbbxbgFiPHKjCYX6MxnUHOmw/6JzlLLIcs159PQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.73
+	s=arc-20240116; t=1764927755; c=relaxed/simple;
+	bh=mv/Kol/eDqyLXT9Hh00djJMssipKymq0dyuQnS5n+4E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rU9SmRcPIiiAWUXNjPdudaYCOrUNy3ls+Pgut7VTv4VZUGE4Msj6Px0VlaDOn6jvCLewN4AJDiwK+fJ+MBfueRovMpdh4rUoL80aWNrpUgudDmUkaMeP91l62vm8GYAc/g7elfVJC57NzyftMJFBbFTVto6WyJIeJbQKK6hR5lE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from 172.18.26.4(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fdRjYRY_1764918911 cluster:ay29)
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fdWs0Ib_1764926776 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Fri, 05 Dec 2025 15:15:15 +0800
-Message-ID: <7fa13af7-48d1-4cb8-a42a-5ccf58baed4f@open-hieco.net>
-Date: Fri, 5 Dec 2025 15:15:10 +0800
+          Fri, 05 Dec 2025 17:26:23 +0800
+From: Xiaochen Shen <shenxiaochen@open-hieco.net>
+To: tony.luck@intel.com,
+	reinette.chatre@intel.com,
+	bp@alien8.de,
+	fenghuay@nvidia.com,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org
+Cc: babu.moger@amd.com,
+	james.morse@arm.com,
+	Dave.Martin@arm.com,
+	x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	shenxiaochen@open-hieco.net
+Subject: [PATCH v2 0/3] selftests/resctrl: Add Hygon CPUs support and bug fixes
+Date: Fri,  5 Dec 2025 17:25:41 +0800
+Message-ID: <20251205092544.2685728-1-shenxiaochen@open-hieco.net>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] selftests/resctrl: Fix non-contiguous CBM check for
- Hygon
-To: Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
- bp@alien8.de, fenghuay@nvidia.com, shuah@kernel.org,
- skhan@linuxfoundation.org
-Cc: babu.moger@amd.com, james.morse@arm.com, Dave.Martin@arm.com,
- x86@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shenxiaochen@open-hieco.net
-References: <20251204123816.2802393-1-shenxiaochen@open-hieco.net>
- <20251204123816.2802393-4-shenxiaochen@open-hieco.net>
- <87eb3a3d-854d-4c3c-a075-9096ca67c89d@intel.com>
-Content-Language: en-US
-From: Xiaochen Shen <shenxiaochen@open-hieco.net>
-In-Reply-To: <87eb3a3d-854d-4c3c-a075-9096ca67c89d@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Reinette,
+The resctrl selftest currently exhibits several failures on Hygon CPUs
+due to missing vendor detection and edge-case handling specific to
+Hygon's architecture.
 
-On 12/5/2025 8:55 AM, Reinette Chatre wrote:
->> Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
->> ---
-> I think it may help to add a maintainer note here to highlight even though this
-> is a fix it is not a candidate for backport since, based on your other series,
-> support for Hygon is in process of being added to resctrl.
->
+This patch series addresses three distinct issues:
+1. Missing CPU vendor detection, causing the test to fail with
+   "# Can not get vendor info..." on Hygon CPUs.
+2. A division-by-zero crash in SNC detection on Hygon CPUs.
+3. Incorrect handling of non-contiguous CBM support on Hygon CPUs.
 
-Great suggestion.
-I will add a maintainer note as you suggested in v2 patch series.
+These changes enable resctrl selftest to run successfully on
+Hygon CPUs that support Platform QoS features.
 
- 
->>  tools/testing/selftests/resctrl/cat_test.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> 
-> Reinette
+Changelog:
+v2:
+- Patch 1: switch all of the vendor id bitmasks to use BIT() (Reinette)
+- Patch 2: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+- Patch 3: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+           add a maintainer note to highlight it is not a candidate for
+	   backport (Reinette)
 
-Thank you very much for code review!
+Xiaochen Shen (3):
+  selftests/resctrl: Add CPU vendor detection for Hygon
+  selftests/resctrl: Fix a division by zero error on Hygon
+  selftests/resctrl: Fix non-contiguous CBM check for Hygon
 
+ tools/testing/selftests/resctrl/cat_test.c      |  4 ++--
+ tools/testing/selftests/resctrl/resctrl.h       |  6 ++++--
+ tools/testing/selftests/resctrl/resctrl_tests.c |  2 ++
+ tools/testing/selftests/resctrl/resctrlfs.c     | 10 ++++++++++
+ 4 files changed, 18 insertions(+), 4 deletions(-)
 
-Best regards,
-Xiaochen Shen
+-- 
+2.47.3
+
 
