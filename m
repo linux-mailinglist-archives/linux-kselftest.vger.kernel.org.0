@@ -1,175 +1,206 @@
-Return-Path: <linux-kselftest+bounces-47208-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1F5ECA9219
-	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 20:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D00ACA9291
+	for <lists+linux-kselftest@lfdr.de>; Fri, 05 Dec 2025 20:55:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 04B6E300FE1B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 19:42:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 27743305D3A8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Dec 2025 19:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88D712F25FA;
-	Fri,  5 Dec 2025 19:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64E6329C48;
+	Fri,  5 Dec 2025 19:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="a/bdHesi"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NNfAB/da"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011065.outbound.protection.outlook.com [40.93.194.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197D923957D;
-	Fri,  5 Dec 2025 19:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764963749; cv=none; b=JixxQdme50sYwIsO05L3XQnYb9/FssZza42QIygruu8uKXn0qUfOTvPSBLX+fT+SOwLybd3xCMcTAewoBgjziF4mTlIaBSEDVVLUDQ3xJ2TJycIudGdMXVe8QbxdgWhrqhledJVl4JNg4UW4cIhTLnVFm5T0+tAVeTKMEQsn6Sc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764963749; c=relaxed/simple;
-	bh=vUEQfFLArJqRXieg64Trw9f6nQK2lpl/JLVzJLe8ibk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wc7QwFMWk6b5loMNlhuoxyC6LEBFjj+XQ4B3WjpuUG0y979EDGh62K4dXaNRTtBlBpxqoriTnzvBDk46Bw/IIXBX1VHfBE4/31ySTJafRwuoCRnIpNlpivdvzh5bs5t91rV4miNWB/IvZAJGCcoRtO6/9nrUbxivuPspsf8nuUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=a/bdHesi; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=Mgm/FMtyke96+ZxY7cquZNmO3PwSewNHSLs9FqvP1Zw=; b=a/bdHesi5AkSwr4bQh57WNPXRe
-	W2wtAQOpBBAlcZei2JB8AuobRhAdof+Qt5iT4owdX6N6cKp4zyn9WbDfOpYDzT6a4wbMcbjERRy12
-	McbStsV5v73E52GB9/rc7S90e6eUxLj64tT9+irQrOTaQqWZC/e24LUKJPnvZBFZ6HvkTS9kfLgk4
-	Pft2YbM1xe5fEaecIe9i1HJXvh21A4BCViEf/hLCVvRBGqzj+HUfRCyR4xP1fBOPLQV+0o6tbuEqE
-	xZi5nZP2QCYLNLhZyw+9MD/Hgr3yKlIa1Am5XQ4AxoIaqDMNKJHO+dzWI+21eiR+BiXKZooCBdUzn
-	3TV/HJlQ==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vRbgm-00000009yBh-3a3v;
-	Fri, 05 Dec 2025 19:42:00 +0000
-Message-ID: <14afa916-565e-4c25-8e19-ddb87644ae8b@infradead.org>
-Date: Fri, 5 Dec 2025 11:41:58 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C128325494;
+	Fri,  5 Dec 2025 19:46:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764963995; cv=fail; b=rkimANnQbDvCvfnOiJim0xxJl5SM53ScN8lm2qDPP2urecmr9PTVF1iu7Idcjm5a91xuLi5rgf2pjCgdZU9mUpb5gflHWWkobaUY9S4uNP3j8jmTmw3lmU/wCkyPwQNcQEbD0A8s1MYEpOOWEep8l3VYKnAdatptXhIpXFleL4E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764963995; c=relaxed/simple;
+	bh=o4B3D2WvYuh/r/u5yYX/bqoBEITP7vPTjspB6Nq58RE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bUns7Cmfa2X+HgmpHOIvyUMnegF51j+mgIpqPJ1crPCIPMIlsjo6vn/gSu5wBRO61y8BH6mYtFpbR3uieCTbRjxZ5Twi6MsdIiDovc48oNNy8b5/oxV8Bk7tORj1J6ObeWjmgYwQLG1OXlGVhV0ZSBP+KL7ZNzFyWwXaAsVjKp0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NNfAB/da; arc=fail smtp.client-ip=40.93.194.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yPKrFE9uxZNUF9XffVoJUkzYit262B5y9ypWDzampYa5DSyzz1Cij/vd88q2t6DcivYL6Xjxixp2oTGjn9cx5dh7GkBI3xUTAR8+vTPwcgq1ZV3vvtvf50g8IhLuFxkho/CFTflPU5I4ZgPK20MrXalXAY1sxXN4VWagp4+w+6LzEntUpcsrriAGfQA+yLWcJOC44kX6AZVZciDyK3eUMBILO9NkWrqd+VngcT925icpjec647lWsmtGuGDcKT5dy0XiKq+eDMJo5pqk/+EQc7CY3Ilaeq2+nLrtBXXl9L/HWEp54gybHF4i/ZjhgFrRn4BzeH16H1btDHj9rWQ1/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9fR1oB6PQPaVuw2PREXNtVVjDcozg6+Wpt5oG1lfe0o=;
+ b=AGEBzMZjVOQZ5PJ0//ZCLg7t5af2wyQ+jFcu2fHIhfJjV//9KgjFUpWRCQNOXV9ZC7gTkgU2qZeHhwqo6YYmjfsE1l7ZEroK0eYORcwBWTji7+sq6EAzzPFq92Ox4aSQx6N3z3d5MNz5eYkOjLSVa3fhkjoUfTBeoe6BR57RiKwzudty4UTGEUkW5yCYYcu5c3Km/PnwATUh3lnaLrdPq3YSLbaQcvXEJ0JINwjPIgE9SymKAR63VTUxVuXR6qHxD5Re+yhlyEJHuAqUfjWiXOXUUvHUS2AuH2UFF43Ad4C24g0zxVPGZpRDlIrOCaz1imZQP2iyBtZyBLhJdqOvHA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9fR1oB6PQPaVuw2PREXNtVVjDcozg6+Wpt5oG1lfe0o=;
+ b=NNfAB/daOFfRO9gQSM4xdCpzrtLoHjpnhHvdppcbxdpcGwpULv+WRGuj0MxsBznHOBEb6/6A/75vLBptxLDAJADLWSgtGdK/9Zbx9WC469J2Nh0DpDXn0sqFdMJ2OL3D1VJgIFyOM/oZttJT2qgA23X+kIK/VLjNvhW755eipW3ydDt1rB/yo3VlnWOkxd+nW/M0TI9MQWOOVJ8a9f8YvpZ48xihC0ZDZUueQAqAXrX341JufoniaIxHwk1VbKBGHjXJpipXsKA6baP5hAPGokhHAPWuKjXLdUA94+1NUWV/DSzp7mlXg5fiNtnKePSDf7Awz9wry1hvFrh8MfAMbw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
+ by IA1PR12MB6210.namprd12.prod.outlook.com (2603:10b6:208:3e6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Fri, 5 Dec
+ 2025 19:46:31 +0000
+Received: from MN2PR12MB3613.namprd12.prod.outlook.com
+ ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
+ ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9388.003; Fri, 5 Dec 2025
+ 19:46:31 +0000
+Date: Fri, 5 Dec 2025 15:46:30 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: "Lai, Yi" <yi1.lai@linux.intel.com>
+Cc: Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
+	Albert Ou <aou@eecs.berkeley.edu>, Jonathan Corbet <corbet@lwn.net>,
+	iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+	Justin Stitt <justinstitt@google.com>, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Will Deacon <will@kernel.org>, Alexey Kardashevskiy <aik@amd.com>,
+	Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+	James Gowans <jgowans@amazon.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Michael Roth <michael.roth@amd.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>, patches@lists.linux.dev,
+	Samiullah Khawaja <skhawaja@google.com>,
+	Vasant Hegde <vasant.hegde@amd.com>, yi1.lai@intel.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH v8 13/15] iommu/amd: Use the generic iommu page table
+Message-ID: <20251205194630.GC1219718@nvidia.com>
+References: <0-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+ <13-v8-d50aeee4481d+55efb-iommu_pt_jgg@nvidia.com>
+ <aTJGMaqwQK0ASj0G@ly-workstation>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aTJGMaqwQK0ASj0G@ly-workstation>
+X-ClientProxiedBy: BN9PR03CA0597.namprd03.prod.outlook.com
+ (2603:10b6:408:10d::32) To MN2PR12MB3613.namprd12.prod.outlook.com
+ (2603:10b6:208:c1::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v24 25/28] riscv: create a config for shadow stack and
- landing pad instr support
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Christian Brauner <brauner@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>,
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-riscv@lists.infradead.org,
- devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com,
- andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com,
- atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
- alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org,
- rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org,
- Zong Li <zong.li@sifive.com>, Andreas Korb
- <andreas.korb@aisec.fraunhofer.de>,
- Valentin Haudiquet <valentin.haudiquet@canonical.com>
-References: <20251204-v5_user_cfi_series-v24-0-ada7a3ba14dc@rivosinc.com>
- <20251204-v5_user_cfi_series-v24-25-ada7a3ba14dc@rivosinc.com>
- <b5feba48-7e7c-4ab9-a193-072f3980f525@infradead.org>
- <aTMjS-Ok-DrJJjQY@debug.ba.rivosinc.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <aTMjS-Ok-DrJJjQY@debug.ba.rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|IA1PR12MB6210:EE_
+X-MS-Office365-Filtering-Correlation-Id: f6475958-d1b5-441a-46af-08de3436fd24
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?EV3h4WDarpi2qgk9+SW8Mbugk3VbZY2Ps+fLso3tTl6MM821w9Jk6LeJ1djw?=
+ =?us-ascii?Q?Lhjvr28zy7wFDSbN+DoWoOQKVasgf9PrrCRYsCEFmK5g//9UQaCYXm2R4+aE?=
+ =?us-ascii?Q?cBwkjxcWmEltmJ862zbmNtZcFk4vNgLzY7pS5EJ9t5Aw12Pv79+eG9Kd7SSe?=
+ =?us-ascii?Q?WbC+d/iIQRn/x33TYj4N9Do0v62j5//a13vTL2whK7pVQJ5VF3gOjEsJtaxf?=
+ =?us-ascii?Q?7r7GBYnDrm1Zu7laK9SkXYx3Cufwh5lkKIy5GZckmcQqnVH8NB2fsvVc0S1r?=
+ =?us-ascii?Q?zilHkVbSpYtbFoBeUSsCWyyhKV//Efe9JCkmkgvi3852abyus1wkG2Yn//Ya?=
+ =?us-ascii?Q?cFrqcGy/QslVLbTNSySgsVUh4mdGhgaI545AHVhL0eNln4gsnldFZCX/satB?=
+ =?us-ascii?Q?IQ0ATYKiQ5LtQOv3w3EKZNZLKfydmDFfTpA7bWP3oUIv5qdefMFDpSWB9whS?=
+ =?us-ascii?Q?+6qA1NleIdEs2ryVCEDp0BO+cUXk9Uh957p5e7gZJLXHDDRVW4wco92BvYdj?=
+ =?us-ascii?Q?COQckILuSIyKJn3J4kZUmhJ3OrFCUYOzajMpk/FfWAldP12OxYHsBRgNHWdg?=
+ =?us-ascii?Q?bBV+Ksdt8Hz/N8dq0pKvIVh5luNTE5hh0DDXTXkXhs5alOwtNNsbiAcuPwzb?=
+ =?us-ascii?Q?xHIhTqMd4PGvqiWTFm6uEJ27SkIbopkQyYy8qXI8P+X00AgJ3tRcZAayBaID?=
+ =?us-ascii?Q?rD5KHcTggaNSNTJOCksMqcA6xJFLCWP5RYXrwwjb/DoEj+Cwy6iX2G0NUYDE?=
+ =?us-ascii?Q?uG2CTyhYI2luEr3T6yeLs2GmocUXwBj/r7k+r8EFoayxMpsHs+WDo7+GLxsM?=
+ =?us-ascii?Q?3/SG6mR1ASbfNTB8wyPtt3aibBqW58HECLCIs9YMH9UouWUQyT70I6rjQARI?=
+ =?us-ascii?Q?az4M/q/EYOVeZ1FqvPut47j/NYRUdoeKg209/B8wU9vo/EjFI2Qb/sOg9Kbq?=
+ =?us-ascii?Q?Iz72yPz3BVD4eYH/z80D3SYxb+g+fHLEBfU5VupeCk2emQ70337eqLjbz73Z?=
+ =?us-ascii?Q?o5/L9HvIcboQDpLXlDrTSwWMR8JzSPulqkDm4CghkDn8v6MDWw+d9z6jXjN5?=
+ =?us-ascii?Q?r2zToTFOZZ25xKP7kpc+w7bSXt/hBiJXrvulvjGdAbFwECPdLwCpCikiJVPI?=
+ =?us-ascii?Q?nnuqML7iOy0+7Rylp2Sdr/VUPUPjxtDL26Clw3PpDGOkotGRY4YPQ/LywqaA?=
+ =?us-ascii?Q?+ec1X7KU8teOtVn/Inhtz4odx1KeT8D0BXTFqLwnDNhHMXUlw9epkcWKX5kv?=
+ =?us-ascii?Q?OVEmYs3U7F5HepTlvQoGSzbUwq/Qyzxa+EWW2mLMvk2kmS5/BSqs3TNDj6nk?=
+ =?us-ascii?Q?F5SRqgYy8hLThy22yFui1CDF2Z15UfvHB4dpjKDMd88UHPnKlY2mqoOymcsi?=
+ =?us-ascii?Q?cWgpb4CsV1bdQ0/mFYZmWT5UoX0DOFd8eioAR6MYslrRCw2XDZO5tqGpkgdY?=
+ =?us-ascii?Q?h1ZX3gFekIi+dGdfJqrv4bEMZI0QnURm?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?AD92K9YLrFaRuSyQFxXGanMAXjVBuGFVzUqPbwT566xXH85fxOYv2Igk1mp0?=
+ =?us-ascii?Q?okwga5t5igjgU3Zc8HZUA5nGkkLCIdA1NdzeEm28JMOHSC9oVhjkdEiBwSDa?=
+ =?us-ascii?Q?noAenUdv4nf4Iq8UwZs50NnAG0izcvtWk4RHfztEUBp4fZl1rFPztzCIZZcQ?=
+ =?us-ascii?Q?+v4j1yNO9sLO6eX2o3OtzEWVYULLW3/LJu6hn27kcTCQjaj4vETkSPDMhYo3?=
+ =?us-ascii?Q?kpdsxGgZVIOhEkHKOsnHxEQ+75eXct2axTqQPyAcPXi4TtlNiDQw3EPSQosO?=
+ =?us-ascii?Q?TA9+zYOUXbNVHK9fd3m7MP0/jf55E4tu5mvVNn+I1ukZgC4Z9SPCPQ471S3f?=
+ =?us-ascii?Q?24HFVs9Zcj21TmAHRTkJ7XpWSX1O4xo/SCvahlxvhlZJqK/Szz4SDgzlD3nn?=
+ =?us-ascii?Q?g9w8dZt07McLIRgyKxbEjauvTTZTjvvUSOnmwZUPtydADZcaysFfSjYRB/fl?=
+ =?us-ascii?Q?qb80edoJd3AQVrOzor8Ucc2O2xIpLrPBWvQzdd0CEyrI6UibLf1tp8QkMgHa?=
+ =?us-ascii?Q?mDfmwGtgq/pGGmLl+lkaC8eWej4RkNN3/VU7VUYnO+ydF4QKdXUXrbI8aDWD?=
+ =?us-ascii?Q?k4L8JzMLxm0NZxbuElNKJBvuU0TqRJEMD8k8GMom9uDj0yKYY68T8qh1z6a7?=
+ =?us-ascii?Q?/x45e0N1jSRwjn6J9PVA9Cc4p7kqH2OoG15XRXAj75d8bBnjvLns5Wyi9o5j?=
+ =?us-ascii?Q?fJPJVoWtAgyLgfi1bM1S29aqB4mm3upHkAKTJuydL+kTxw5OjQ2tFBb3UbiP?=
+ =?us-ascii?Q?LS78tgxE5pAw8tQw9ShYfTw2dDbEgcO+dNfN4QGp2BGVouZ/G8IoEtBir5KH?=
+ =?us-ascii?Q?tOP3lJWlPjrihhGoU6eD+aMqRawZxN2CxnkGeJhOFXC+zy2DfBSmp8W/Iud9?=
+ =?us-ascii?Q?1LhM7VJXLt0ukjBTDLo6kO52jI3pmNYLvr+wpNBv4vwMk4/rhZI8myIj2YKa?=
+ =?us-ascii?Q?CkTTS2Q4GEPmEXwEVGDBUoPZonTtNewNhFHZSci9R1ThSzDNq96KTwSDX3xq?=
+ =?us-ascii?Q?ZUJWAwg38EWWAKFqYY6v9YWTeL5FQ1QtSHsdYh7lM2A3mWWcEIqXO9GwtFlF?=
+ =?us-ascii?Q?0QYKyXBxqYgROugseaRsnqfI47m1tm4XWsQTYhplWLueKiS0CaepRqR4mO0c?=
+ =?us-ascii?Q?tbPNw6hzV5U/kMfW9jc4eUaUjQjU34rzYB5hCZlU0xpqu7YKTXOu8K1YxeAt?=
+ =?us-ascii?Q?rPl4rgm5LvBJF2QxQDi5+Cwr+PHi5aOY5jXqttMeyN25tqnD8eElpkjY+Cfi?=
+ =?us-ascii?Q?m3Xm0MmiwjJAnrgyKfuZUvdIRZIReXh+zPzIBXrBMPaHsGSO4SVzpNHypxda?=
+ =?us-ascii?Q?FmNgqjyJNhpXxO8ZVkjLzd3pNO0zoYrp79jPh8xWggDQZx/i3fd8yaiLKtOc?=
+ =?us-ascii?Q?iVImmlvzefWZRJWdh8lqpt/tBvBW6v+U4wFhqjDplrVPqvAgIvAvR1janZmi?=
+ =?us-ascii?Q?m7jfLQAk/d+/5+4o1NAbjeINTKQub7TVkCr1pjWxN5aJgcq/08LmUo435/1B?=
+ =?us-ascii?Q?vUvas1MidCc3NuDp3qin5YQo6HT+BePtCPPVQOe1Wk12mBUHhPMsWoDFXjhj?=
+ =?us-ascii?Q?kwoz5hTbnafOjp83wqU=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6475958-d1b5-441a-46af-08de3436fd24
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2025 19:46:31.4961
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QIzWYyAYWJCzn7GM6nUODef5IomQz4gPyoS66eVtLuvld+9UBcDd/+7XZeNtWi4G
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6210
 
-
-
-On 12/5/25 10:24 AM, Deepak Gupta wrote:
-> On Thu, Dec 04, 2025 at 02:17:27PM -0800, Randy Dunlap wrote:
->>
->>
->> On 12/4/25 12:04 PM, Deepak Gupta wrote:
->>> This patch creates a config for shadow stack support and landing pad instr
->>> support. Shadow stack support and landing instr support can be enabled by
->>> selecting `CONFIG_RISCV_USER_CFI`. Selecting `CONFIG_RISCV_USER_CFI` wires
->>> up path to enumerate CPU support and if cpu support exists, kernel will
->>> support cpu assisted user mode cfi.
->>>
->>> If CONFIG_RISCV_USER_CFI is selected, select `ARCH_USES_HIGH_VMA_FLAGS`,
->>> `ARCH_HAS_USER_SHADOW_STACK` and DYNAMIC_SIGFRAME for riscv.
->>>
->>> Reviewed-by: Zong Li <zong.li@sifive.com>
->>> Tested-by: Andreas Korb <andreas.korb@aisec.fraunhofer.de>
->>> Tested-by: Valentin Haudiquet <valentin.haudiquet@canonical.com>
->>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->>> ---
->>>  arch/riscv/Kconfig                  | 22 ++++++++++++++++++++++
->>>  arch/riscv/configs/hardening.config |  4 ++++
->>>  2 files changed, 26 insertions(+)
->>>
->>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->>> index 0c6038dc5dfd..f5574c6f66d8 100644
->>> --- a/arch/riscv/Kconfig
->>> +++ b/arch/riscv/Kconfig
->>> @@ -1146,6 +1146,28 @@ config RANDOMIZE_BASE
->>>
->>>            If unsure, say N.
->>>
->>> +config RISCV_USER_CFI
->>> +    def_bool y
->>> +    bool "riscv userspace control flow integrity"
->>> +    depends on 64BIT && \
->>> +        $(cc-option,-mabi=lp64 -march=rv64ima_zicfiss_zicfilp -fcf-protection=full)
->>> +    depends on RISCV_ALTERNATIVE
->>> +    select RISCV_SBI
->>> +    select ARCH_HAS_USER_SHADOW_STACK
->>> +    select ARCH_USES_HIGH_VMA_FLAGS
->>> +    select DYNAMIC_SIGFRAME
->>> +    help
->>> +      Provides CPU assisted control flow integrity to userspace tasks.
->>
->>                CPU-assisted
->>
->>> +      Control flow integrity is provided by implementing shadow stack for
->>> +      backward edge and indirect branch tracking for forward edge in program.
->>> +      Shadow stack protection is a hardware feature that detects function
->>> +      return address corruption. This helps mitigate ROP attacks.
->>> +      Indirect branch tracking enforces that all indirect branches must land
->>> +      on a landing pad instruction else CPU will fault. This mitigates against
->>> +      JOP / COP attacks. Applications must be enabled to use it, and old user-
->>> +      space does not get protection "for free".
->>> +      default y.
->>
->>       Default is y if hardware supports it.
->> ?
+On Fri, Dec 05, 2025 at 10:40:49AM +0800, Lai, Yi wrote:
+> Hi Alejandro Jimenez,
 > 
-> No default Y means support is built in the kernel for cfi.
-
-  (if the compiler supports it?)
-
-> If hardware doesn't support CFI instructions, then kernel will do following
+> Greetings!
 > 
-> - prctls to manage shadow stack/landing pad enable/disable will fail.
-> - vDSO will not have shadow stack instructions in it.
+> I used Syzkaller and found that there is WARNING in iommufd_fops_release in linux-next next-20251203.
+> 
+> After bisection and the first bad commit is:
+> "
+> 789a5913b29c iommu/amd: Use the generic iommu page table
+> "
 
-Thanks for the info.
+This bisect didn't work out, it is close, but the commit is
 
--- 
-~Randy
+e93d5945ed5b ("iommufd: Change the selftest to use iommupt instead of xarray")
 
+It is a refcount leak:
+
+@@ -1215,8 +1215,10 @@ static int iommufd_test_md_check_pa(struct iommufd_ucmd *ucmd,
+        page_size = 1 << __ffs(mock->domain.pgsize_bitmap);
+        if (iova % page_size || length % page_size ||
+            (uintptr_t)uptr % page_size ||
+-           check_add_overflow((uintptr_t)uptr, (uintptr_t)length, &end))
+-               return -EINVAL;
++           check_add_overflow((uintptr_t)uptr, (uintptr_t)length, &end)) {
++               rc = -EINVAL;
++               goto out_put;
++       }
+
+I'll send a patch, thanks
+
+Jason
 
