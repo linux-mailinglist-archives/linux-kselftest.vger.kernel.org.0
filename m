@@ -1,86 +1,86 @@
-Return-Path: <linux-kselftest+bounces-47275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5DFCADA32
-	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 16:47:34 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EA76CADA4C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 16:49:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 245B53009575
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 15:47:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8AD9B30136EF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 15:49:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8238B54654;
-	Mon,  8 Dec 2025 15:47:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E9B51DA60D;
+	Mon,  8 Dec 2025 15:49:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h3j438Sx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NXSu19+P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F813B8D59
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Dec 2025 15:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4301DE3B7
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Dec 2025 15:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765208850; cv=none; b=Jf1b4kDgNEaQ14vGLaZiNos5ESmaTesFQjqJ+zmteISU4fs5y2IIbqBTF65puokKgva6Rl0Oy6bP81xNJwu/Gpt8HKE2E9vzK/+6Yit0hUPASW4qcMg5BpEmIvYbg+yVxmJah9ISDBSixSpx5CEzwHaAQ3JmlhDxrZT21PcAk5o=
+	t=1765208948; cv=none; b=eChNkzXblaz7ntL5H273Amv/RKx2wbz/MinwRi6ZmyT7MwZHkGdNnAB30hVnJ7KIgiZ8VAwY0ocXHXPkJhzT4KdWGTAYqgYmziycv+ruiwdU6pl2hj70GV0G3nT4ui7KrsNfXvT3/SnrNu5Y3FI3yMyDHP4A4husmOWGecXAy7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765208850; c=relaxed/simple;
-	bh=4fnOMgjetkJF3HKmZRMVlyn3xnBGJbVQAXJ3bmTzB3M=;
+	s=arc-20240116; t=1765208948; c=relaxed/simple;
+	bh=lZKT4ZLOit7vD2jIF65c8Sdfo43EtScwRoyP0UL7FGE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NahxPKStMmyxSVPxe3RMLXa97MlCJ82xJpJ7FMK3F2P5DCp7KBt05XnjHOt65u1IsiDdRBHJqiYZswBtLZPEUHi/2vd+lB6Q0DCcKm9izQROE4kDPsOxKHVagK7mehLyowKTaa5kN26pSxvAx0iq1O+Y9HZj0IW7p6Zn6VOVWXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h3j438Sx; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=jSPwI6mE4zPBJjV2JQAtFneOUHo4h3AVWTLCUFItF+S1rslMm/v2gqkkLicL4shkcf6lY88uw9IZC0J/pgaHFOufK251RgEH4raUlRp7lluOq9QoM3dX/4Vixo3tIf8bHHwUwhhY+ugO3GaSLLE1lHr/+W5Rquj1RpGWomyMfB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NXSu19+P; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765208847;
+	s=mimecast20190719; t=1765208944;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=kgJIxL0CX5OTd128INGYaD4p8fQ/cO5lOBgWZ/PrYF8=;
-	b=h3j438SxYBPT2oEXiykiq/BWQJUFyah94lo0KZRRe65LVcaB7/0F1/2Zk/L43FFpL81Jb8
-	TSZJCha+hc3fmtucV7aaEUYdVE8Z9q1qXBHbe4pznM3p5g92Q66Z0XSMqJ0kp1jBSiAttN
-	YnxAHou3L7OE+PzHKbj8rLuc7ZfCEn0=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=JhyQmCNeRAwE6U6BA2EWgkizTxmpe6QSDSUOhKlflR4=;
+	b=NXSu19+PEyA/FJJgfGc3/pzliAvkhn9lqrQIpI0zZ12a9a0b/cQDgB2yQnMNKQh03NMOrn
+	YgSHLCjfZ7lO5vKHRYpha32r1xqFKtqNcgBi0iPlqGHgxbgR8MPDR5JIlI+0woec3eJk8T
+	lM1eUQap4WkWPfPi9iX1pzFm8yXL2jU=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-22-ya1-2uPvOJykZte3adrVoQ-1; Mon, 08 Dec 2025 10:47:26 -0500
-X-MC-Unique: ya1-2uPvOJykZte3adrVoQ-1
-X-Mimecast-MFC-AGG-ID: ya1-2uPvOJykZte3adrVoQ_1765208845
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2958a134514so22905665ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Dec 2025 07:47:26 -0800 (PST)
+ us-mta-453-vZUw9Fb1PlS4fiQJJzNhrQ-1; Mon, 08 Dec 2025 10:48:57 -0500
+X-MC-Unique: vZUw9Fb1PlS4fiQJJzNhrQ-1
+X-Mimecast-MFC-AGG-ID: vZUw9Fb1PlS4fiQJJzNhrQ_1765208937
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-34943d156e4so12314698a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Dec 2025 07:48:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765208845; x=1765813645;
+        d=1e100.net; s=20230601; t=1765208936; x=1765813736;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kgJIxL0CX5OTd128INGYaD4p8fQ/cO5lOBgWZ/PrYF8=;
-        b=vpntetUWZOhtIQlD46VPn4FHr/8/AJl5j4KrFO5pRTeUiJWDVz7wqwfYsTEsSAALlw
-         J/oaUWvUk8fjrggBkpDekA53VuP/vE1k0vEgD1YwbOmtQdx65NfM3xY/5Nn5ypde9iV8
-         WPhURm0GqDiQFJOc6AKOpXlkRz17xVjd/HzWDiWiUA3jOv3ydFd+SWYW0+dsDqNXy7dK
-         ZKq/00i4P2hWeizxf6enzA0IiMwcDq5F9qQ6k6AwYDkO75UZenKEdQqyRqrrIypeNJv4
-         Gup5t78t9Ikf+55f4IcN/38rO52PERynkfNk+bjGnfpPPYHjakL13iUfKOfo4PBurdeE
-         qxng==
-X-Gm-Message-State: AOJu0Yy+iI64MIXl3ZkRsE0MzmzbB3vUyGNNNuxeKehveE9STvAfnLJW
-	HK2hMlT885AgXddZ6+oMbWT0xCCnPeeTelnPuQ8AhbE2NEjW2CIjjCOd7Ur2+x0Cc3BtopnqgFj
-	aKk2Awcljr5qdGblZozWkSuhuOye7gAkrFC2VB/gVE9ltwsOtUZs9IgUOgaFjio7AgFwcmA==
-X-Gm-Gg: ASbGncuZgOYOZj+lgYl3r5puZh4FjK0drPu9nPwMXuHa333edJQsWREult1d/3BmK27
-	7t39QEaqGQ8Iaw8pNsBiCA41VlPv5lM4NI/XV+lSwvwT0/bsKx4lEigqK7kMNw4h8G14gLCAu4o
-	xZ5sA+YvmgyddEMd11/SDYW5dxMPownyQQP20THfRl6lONsaWp5KmrYBqiyECXJkUlkq3umMbYk
-	99VYzjm+bFskz7izD22UAlzPff/q9wrOy8TLrPZ7S56DR00E2V2pfGCKVzaFYlj5kzpt3ybd5m5
-	WdE3PvlPjwCcS9CQO0+aM+5hVV4keMkX3oOtPwb8HuiAQsauFrER+qLFKwZe55/xf9kPvtq48By
-	SAg3/ef5aRJGjExPNU2Nedh4JMx3lEV6z3ATA6M/7RhZuWFVsF1ISFUANQh0ak31t7tsQ/SA5lQ
+        bh=JhyQmCNeRAwE6U6BA2EWgkizTxmpe6QSDSUOhKlflR4=;
+        b=orMPHKptTTCCqC9n/xdM0XRPcLxYtjCBNiqSS4U3naAVSFE2HOR4jBNU5uUKfT1Zui
+         s9IXv7RZUz5n9fozBImELaqvEyzkWWEPzkIEG6oJewTidx5Jlxzh3GgRrTHWAjxQo+ZM
+         MaDlmiafL3AGzynJnMwwLf8pm1h/7N6QHM5NesMryfO598ffLxrEg29bRhG/UIcV4fty
+         p4nA+noLXrbd7a05xOakFVz89GKq4Q76vN50SZ4aiJwDITEZHt/trST2RtXFPTZPyjye
+         dxcZw+ncw4kBX1h5bmgcxBDSaXYuTrnbhiGTVvTHEj8JO7PBYhCFJA2ToK8XYFqKC47a
+         YDbQ==
+X-Gm-Message-State: AOJu0YyixT9FN3kskKMKj5ebxXkKVNOUJuLWxpIZRaH1APGNB0Pm9xAH
+	69rNfmJ9kQHYO9t0ZUc0CAxCS6+SLaxNoFbXYwsq0pv/DjiyuZG5CjZrRyOqRf0y/oEPYo9UJIm
+	RuEjBbaTtYTaxVVO4RDEjr6NzdVxIl0LuHSZQcJGjq/b1eKEgpAatYHOCpVXAWxgqLXnkMQ==
+X-Gm-Gg: ASbGncuo/vjagZuwdDPdzixe8X3v76zq6+glhK9AXUAS4OeNhpS/d0MCpJF5LWjlJtd
+	aF0KWazbUO4fbqsREE1OwVWUdyVFO4YAjZRLRO7AwiZYh6N/oE3Gje4fyusSrSzP/ix8vZmI0bG
+	LiKRJrKmZOh/VRbmTDVsqWB6tmlfC3yngmSg4DH6P1mFbQ2vXGo4rFJbQJ6ZgvN9bbOtu8KHbOr
+	rZcjebAztatRyf9n0xpp7PVY+ETlamskWTZ4PsegmKl1omlCa9FpnmhEDNSSmxRr8d8wze6aT17
+	Vw0/zDLtZ6vLMvFnMxrZJxT4NnauvW+OUMyxqYX7Qw4AEWpNPbFgwm8zCzKdt9S/8iQLcl0htCh
+	ZNN1/z1yN3EFuKD3hrvtVomWT9Llflw1MfHJzNSiXCkyCqVwC2lyqxpK8z9l5Hl+DdExMUknySw
 	==
-X-Received: by 2002:a05:7022:e0d:b0:11b:ca88:c50f with SMTP id a92af1059eb24-11e032ae38cmr5385604c88.40.1765208845340;
-        Mon, 08 Dec 2025 07:47:25 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGcI88OCdHn0429dQauXa74FPpbQ0zI+AbQVlLrbOvpfEmA7o1JoeSaFNGOnyv86keP6Q29fw==
-X-Received: by 2002:a05:7022:e0d:b0:11b:ca88:c50f with SMTP id a92af1059eb24-11e032ae38cmr5385574c88.40.1765208844810;
-        Mon, 08 Dec 2025 07:47:24 -0800 (PST)
+X-Received: by 2002:a05:7022:3885:b0:119:e56b:c749 with SMTP id a92af1059eb24-11e0315a389mr5832012c88.14.1765208936636;
+        Mon, 08 Dec 2025 07:48:56 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE2lGw6J4rXoBC0qYrZWnyNE9vY/xTzaJH9ksV8ZOu8KN7rKkS8AprfXcNKR4rpLa/DSIhIfw==
+X-Received: by 2002:a05:7022:3885:b0:119:e56b:c749 with SMTP id a92af1059eb24-11e0315a389mr5831983c88.14.1765208936210;
+        Mon, 08 Dec 2025 07:48:56 -0800 (PST)
 Received: from [192.168.2.110] (bras-base-aylmpq0104w-grc-48-76-65-77-217.dsl.bell.ca. [76.65.77.217])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7552defsm56899085c88.2.2025.12.08.07.47.20
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df76edd4fsm54746101c88.8.2025.12.08.07.48.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Dec 2025 07:47:24 -0800 (PST)
-Message-ID: <efdd610d-a56f-4f3f-ab5c-9b0da1762ab6@redhat.com>
-Date: Mon, 8 Dec 2025 10:47:19 -0500
+        Mon, 08 Dec 2025 07:48:55 -0800 (PST)
+Message-ID: <8b67305a-9057-49fd-92b2-343d237890cb@redhat.com>
+Date: Mon, 8 Dec 2025 10:48:50 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,8 +88,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/3] selftests/mm: allocate 6 hugepages in
- va_high_addr_switch.sh
+Subject: Re: [PATCH v1 3/3] selftests/mm: remove arm64 nr_hugepages setup for
+ va_high_addr_switch test
 To: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org,
  david@kernel.org, shuah@kernel.org, linux-mm@kvack.org
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -97,52 +97,47 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  rppt@kernel.org, surenb@google.com, mhocko@suse.com
 References: <20251207122239.3228920-1-chuhu@redhat.com>
  <20251207122239.3228920-2-chuhu@redhat.com>
+ <20251207122239.3228920-3-chuhu@redhat.com>
 Content-Language: en-US, en-CA
 From: Luiz Capitulino <luizcap@redhat.com>
-In-Reply-To: <20251207122239.3228920-2-chuhu@redhat.com>
+In-Reply-To: <20251207122239.3228920-3-chuhu@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 2025-12-07 07:22, Chunyu Hu wrote:
-> The va_high_addr_switch test requires 6 hugepages, not 5. If running the
-> test directly by: ./va_high_addr_switch.sh, the test will hit a mmap 'FAIL'
-> caused by not enough hugepages:
->    ```
->    mmap(addr_switch_hint - hugepagesize, 2*hugepagesize, MAP_HUGETLB): 0x7f330f800000 - OK
->    mmap(addr_switch_hint , 2*hugepagesize, MAP_FIXED | MAP_HUGETLB): 0xffffffffffffffff - FAILED
->    ```
-> The failure can't be hit if run the tests by running 'run_vmtests.sh -t
-> hugevm' because the nr_hugepages is set to 128 at the beginning of
-> run_vmtests.sh and va_high_addr_switch.sh skip the setup of nr_hugepages
-> because already enough.
+> arm64 and x86_64 has the same nr_hugepages requriement for running the
+> va_high_addr_switch test. Since commit d9d957bd7b61 ("selftests/mm: alloc
+> hugepages in va_high_addr_switch test"), the setup can be done in
+> va_high_addr_switch.sh. So remove the duplicated setup.
 > 
 > CC: Luiz Capitulino <luizcap@redhat.com>
-> Fixes: d9d957bd7b61 ("selftests/mm: alloc hugepages in va_high_addr_switch test")
 > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+
+Reviewed-by: Luiz Capitulino <luizcap@redhat.com>
+
 > ---
->   tools/testing/selftests/mm/va_high_addr_switch.sh | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
+>   tools/testing/selftests/mm/run_vmtests.sh | 8 --------
+>   1 file changed, 8 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/mm/va_high_addr_switch.sh b/tools/testing/selftests/mm/va_high_addr_switch.sh
-> index f89fe078a8e6..98f3dfab62c5 100755
-> --- a/tools/testing/selftests/mm/va_high_addr_switch.sh
-> +++ b/tools/testing/selftests/mm/va_high_addr_switch.sh
-> @@ -111,8 +111,10 @@ setup_nr_hugepages()
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index d9173f2312b7..2dadbfc6e535 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -412,15 +412,7 @@ if [ $VADDR64 -ne 0 ]; then
+>   	fi
 >   
->   check_test_requirements
->   save_nr_hugepages
-> -# 4 keep_mapped pages, and one for tmp usage
-> -setup_nr_hugepages 5
-> +# 5 keep_mapped hugepages are reserved in the first testings, and the last test
-> +# requires two hugepages, with one verlaped with the last second test, so one
-> +# extra, totally 6 hugepages
-
-IMHO, I'd just say "The HugeTLB tests require 6 pages", otherwise the
-fix look good to me.
-
-> +setup_nr_hugepages 6
->   ./va_high_addr_switch --run-hugetlb
->   retcode=$?
->   restore_nr_hugepages
+>   	# va high address boundary switch test
+> -	ARCH_ARM64="arm64"
+> -	prev_nr_hugepages=$(cat /proc/sys/vm/nr_hugepages)
+> -	if [ "$ARCH" == "$ARCH_ARM64" ]; then
+> -		echo 6 > /proc/sys/vm/nr_hugepages
+> -	fi
+>   	CATEGORY="hugevm" run_test bash ./va_high_addr_switch.sh
+> -	if [ "$ARCH" == "$ARCH_ARM64" ]; then
+> -		echo $prev_nr_hugepages > /proc/sys/vm/nr_hugepages
+> -	fi
+>   fi # VADDR64
+>   
+>   # vmalloc stability smoke test
 
 
