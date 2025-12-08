@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-47252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4BADCABEA2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 04:05:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71FC1CABE9C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 04:05:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 284B3301A34B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 03:04:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 04CD13013EB0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 03:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE722E2DD2;
-	Mon,  8 Dec 2025 03:04:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EED92E765E;
+	Mon,  8 Dec 2025 03:04:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="W64enURy";
-	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="KjuYF8ul"
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="pEeqIsqf";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="YqfWEdp4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84F3D1C5D57;
-	Mon,  8 Dec 2025 03:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3A6288C24;
+	Mon,  8 Dec 2025 03:04:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765163063; cv=none; b=PU3C9FHsCfNdN85iahbeavLkHDsV+3rL0x5Ud/8cbCe/fOroGzHihUXmZw0LwO78Z3VhUw0DLk0EYkrPdUZq1q40swBACxhl9HxjFzdoClbnbZmsiFvkBJ6iPVCmY7FcJCzdBa5a0mQi74M2iv4Q+lAKo7VQV2/BIud6w2wKN3M=
+	t=1765163049; cv=none; b=DAHl6BYhbrRiABX/aCQGn0VfHWMRR6XL93ri3Bs3+GCd1jUySdG8zN5tic/Q8QPQtzTR4i+dZOydwRzz6Oo2vAMBg8c+kmbKR6rKkccUZ/qBVejOTmX2xnk2Jq+DCiFlFnzznIDxUFqwCTdXUYppwnYCywvQguIu6JwwNReCL8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765163063; c=relaxed/simple;
-	bh=n/6Ij5wpcMBoeeRl+pQHtqgU6qo0CnrWCwQwPDxpMPI=;
+	s=arc-20240116; t=1765163049; c=relaxed/simple;
+	bh=gQSrJ6sLZR0UgasAXOI6aGw7bjQJLmMSnSI/FV6E+24=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Rjq3lwTcj461RHEqh25cmV/YUx2HZKD+WosQYLNslVA0S9FIJ573CKJlIcq0k/AMhSmhl9/B+pJpRRABGrab1h3gda8NdxbeqsotJpzQBtINlklxlg19Hg9f3OpC2iM60Qt+v+7ch1C84kczVGMPl4vtbpECYBOfkdqJz6J/Yc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=W64enURy; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=KjuYF8ul; arc=none smtp.client-ip=135.148.138.8
+	 MIME-Version; b=GWx3OMgi40G91aUjOG1cRZU64qP21BtQfxHdjzyZoM4U9bMe8hklrDmLTeIH9hJi5Cl2whOaLG2YyAOgNg1p0+j+ai9PQub8hbbH44ZB8teCTD5LI7ZySdxKrUSLaRKU91VYnMsNLM0N13UxqDfqExUamJCKRKPIcRNLi/69GhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=pEeqIsqf; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=YqfWEdp4; arc=none smtp.client-ip=135.148.138.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
 DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1765162878; bh=T6p27ig63eCdRe1ACpmWrHV
-	14KHrG/tKLWuIaAZSrIk=; b=W64enURypkwIcJp/oBE5gqx2UVQaPrt9mf6LgWSLqG5SmtYUWV
-	NP8wo/ZbylnGhTN4nGK5TLWEsnSH1QkGgzH90nJXZfwQ3fYY6Qhpp3URF5jXEpdXl2SsqTFudYT
-	Bz12kxR4dM0Dvq1xYCMX11ZtHETJF2i0wy1iNIzws04s90pi9FCQEsL/iwq/N+kAK0MdmuzTuPG
-	xX+byUIF+Q1tj79fE0dHArxQ6HnumpM9R/gsGTgL/Hnk2txsIPlYh4BBjGL2hqE4pAyBpZNLpZd
-	sEFbWOLAgd5lMrV7oKws0NmSsldOKk9dxuYkxaz9VyY9fDueV/4nvEdI/U6DIKAF+Jg==;
+	h=Message-ID:Date:Subject:To:From; t=1765162878; bh=lhHuv3JHJ5ECsH2LZI0gvI2
+	/2V1KyyLs/oMt1+jySa4=; b=pEeqIsqfCJxF73WuXHU4EQCRtKb4Fqo2A7uKR8gu+pjxDfdWcf
+	Ab9hLS3cTcYmrBnv6V9S3AbwQduskOs7bkZ2XonykUEpCuI4qdk7WLEM5tZrKvUH4ezXih/mDz0
+	xyM+yrE1UykswLuAL2/zxZouqSEmGcs0/+JR4BavQBjriJJztICUcwWeaRp7T5f+/8WsBKFQ/aa
+	+2+rk6IedhhLBdRrmvtOpbyz8IHSfpMbpHR0yWt1j75OH4lu+3w5BlfguuI83muDuhWRES00BkJ
+	6OEYCK+UuLfsaxDO/DXCTpgIdUZo374e0a6sxsNs0zPfudsRQID9REKYJRzIKWn+m5g==;
 DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
-	h=Message-ID:Date:Subject:To:From; t=1765162878; bh=T6p27ig63eCdRe1ACpmWrHV
-	14KHrG/tKLWuIaAZSrIk=; b=KjuYF8ulHMhpsh9PpsQb7QiU3kS3MoP1vCJCzqQtC7zsD/XvfJ
-	bIRs/k+GfAhx08PvTIICyHStUJsW/rcPUOAA==;
+	h=Message-ID:Date:Subject:To:From; t=1765162878; bh=lhHuv3JHJ5ECsH2LZI0gvI2
+	/2V1KyyLs/oMt1+jySa4=; b=YqfWEdp4f/mMP756r/IuzD489o8vUEUD7HEq9FE4bUNv7pzVQv
+	ZXMzEaazMdiaTSOZhAv9/Y1Z+fbdjVKJ1ZAA==;
 From: Daniel Hodges <git@danielhodges.dev>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -63,9 +63,9 @@ Cc: ast@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Daniel Hodges <git@danielhodges.dev>
-Subject: [PATCH bpf-next v3 2/6] crypto: Add BPF hash algorithm type registration module
-Date: Sun,  7 Dec 2025 22:01:13 -0500
-Message-ID: <20251208030117.18892-3-git@danielhodges.dev>
+Subject: [PATCH bpf-next v3 3/6] bpf: Add SHA hash kfunc for cryptographic hashing
+Date: Sun,  7 Dec 2025 22:01:14 -0500
+Message-ID: <20251208030117.18892-4-git@danielhodges.dev>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251208030117.18892-1-git@danielhodges.dev>
 References: <20251208030117.18892-1-git@danielhodges.dev>
@@ -77,143 +77,144 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add bpf_crypto_shash module that registers a hash type with the BPF
-crypto infrastructure, enabling BPF programs to access kernel hash
-algorithms through a unified interface.
+Extend bpf_crypto_type structure with hash operations:
+ - hash(): Performs hashing operation
+ - digestsize(): Returns hash output size
 
-Update the bpf_crypto_type interface with hash-specific callbacks:
-   - alloc_tfm: Allocates crypto_shash context with proper descriptor size
-   - free_tfm: Releases hash transform and context memory
-   - has_algo: Checks algorithm availability via crypto_has_shash()
-   - hash: Performs single-shot hashing via crypto_shash_digest()
-   - digestsize: Returns the output size for the hash algorithm
-   - get_flags: Exposes transform flags to BPF programs
+Update bpf_crypto_ctx_create() to support keyless operations:
+ - Hash algorithms don't require keys, unlike ciphers
+ - Only validates key presence if type->setkey is defined
+ - Conditionally sets IV/state length for cipher operations only
 
-Update bpf_shash_ctx to contain crypto_shash transform and shash_desc
-descriptor to accommodate algorithm-specific descriptor requirements.
+Add bpf_crypto_hash() kfunc that works with any hash algorithm
+registered in the kernel's crypto API through the BPF crypto type
+system. This enables BPF programs to compute cryptographic hashes for
+use cases such as content verification, integrity checking, and data
+authentication.
 
 Signed-off-by: Daniel Hodges <git@danielhodges.dev>
 ---
- crypto/Makefile           |  3 ++
- crypto/bpf_crypto_shash.c | 95 +++++++++++++++++++++++++++++++++++++++
- 2 files changed, 98 insertions(+)
- create mode 100644 crypto/bpf_crypto_shash.c
+ kernel/bpf/crypto.c | 76 ++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 68 insertions(+), 8 deletions(-)
 
-diff --git a/crypto/Makefile b/crypto/Makefile
-index 16a35649dd91..853dff375906 100644
---- a/crypto/Makefile
-+++ b/crypto/Makefile
-@@ -30,6 +30,9 @@ obj-$(CONFIG_CRYPTO_ECHAINIV) += echainiv.o
- crypto_hash-y += ahash.o
- crypto_hash-y += shash.o
- obj-$(CONFIG_CRYPTO_HASH2) += crypto_hash.o
-+ifeq ($(CONFIG_BPF_SYSCALL),y)
-+obj-$(CONFIG_CRYPTO_HASH2) += bpf_crypto_shash.o
-+endif
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 83c4d9943084..47e6a43a46d4 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -171,7 +171,12 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 		goto err_module_put;
+ 	}
  
- obj-$(CONFIG_CRYPTO_AKCIPHER2) += akcipher.o
- obj-$(CONFIG_CRYPTO_SIG2) += sig.o
-diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
-new file mode 100644
-index 000000000000..95c178ec0ce8
---- /dev/null
-+++ b/crypto/bpf_crypto_shash.c
-@@ -0,0 +1,95 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#include <linux/types.h>
-+#include <linux/module.h>
-+#include <linux/bpf_crypto.h>
-+#include <crypto/hash.h>
-+
-+struct bpf_shash_ctx {
-+	struct crypto_shash *tfm;
-+	struct shash_desc desc;
-+};
-+
-+static void *bpf_crypto_shash_alloc_tfm(const char *algo)
-+{
-+	struct bpf_shash_ctx *ctx;
-+	struct crypto_shash *tfm;
-+
-+	tfm = crypto_alloc_shash(algo, 0, 0);
-+	if (IS_ERR(tfm))
-+		return tfm;
-+
-+	ctx = kzalloc(sizeof(*ctx) + crypto_shash_descsize(tfm), GFP_KERNEL);
-+	if (!ctx) {
-+		crypto_free_shash(tfm);
-+		return ERR_PTR(-ENOMEM);
+-	if (!params->key_len || params->key_len > sizeof(params->key)) {
++	/* Hash operations don't require a key, but cipher operations do */
++	if (params->key_len > sizeof(params->key)) {
++		*err = -EINVAL;
++		goto err_module_put;
 +	}
-+
-+	ctx->tfm = tfm;
-+	ctx->desc.tfm = tfm;
-+
-+	return ctx;
-+}
-+
-+static void bpf_crypto_shash_free_tfm(void *tfm)
++	if (!params->key_len && type->setkey) {
+ 		*err = -EINVAL;
+ 		goto err_module_put;
+ 	}
+@@ -195,16 +200,19 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 			goto err_free_tfm;
+ 	}
+ 
+-	*err = type->setkey(ctx->tfm, params->key, params->key_len);
+-	if (*err)
+-		goto err_free_tfm;
++	if (params->key_len) {
++		*err = type->setkey(ctx->tfm, params->key, params->key_len);
++		if (*err)
++			goto err_free_tfm;
+ 
+-	if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
+-		*err = -EINVAL;
+-		goto err_free_tfm;
++		if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
++			*err = -EINVAL;
++			goto err_free_tfm;
++		}
+ 	}
+ 
+-	ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
++	if (type->ivsize && type->statesize)
++		ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
+ 
+ 	refcount_set(&ctx->usage, 1);
+ 
+@@ -343,6 +351,54 @@ __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
+ 	return bpf_crypto_crypt(ctx, src_kern, dst_kern, siv_kern, false);
+ }
+ 
++#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
++/**
++ * bpf_crypto_hash() - Compute hash using configured context
++ * @ctx:	The crypto context being used. The ctx must be a trusted pointer.
++ * @data:	bpf_dynptr to the input data to hash. Must be a trusted pointer.
++ * @out:	bpf_dynptr to the output buffer. Must be a trusted pointer.
++ *
++ * Computes hash of the input data using the crypto context. The output buffer
++ * must be at least as large as the digest size of the hash algorithm.
++ */
++__bpf_kfunc int bpf_crypto_hash(struct bpf_crypto_ctx *ctx,
++				const struct bpf_dynptr *data,
++				const struct bpf_dynptr *out)
 +{
-+	struct bpf_shash_ctx *ctx = tfm;
++	const struct bpf_dynptr_kern *data_kern = (struct bpf_dynptr_kern *)data;
++	const struct bpf_dynptr_kern *out_kern = (struct bpf_dynptr_kern *)out;
++	u64 data_len, out_len;
++	const u8 *data_ptr;
++	u8 *out_ptr;
 +
-+	crypto_free_shash(ctx->tfm);
-+	kfree(ctx);
++	if (!ctx->type->hash)
++		return -EOPNOTSUPP;
++
++	data_len = __bpf_dynptr_size(data_kern);
++	out_len = __bpf_dynptr_size(out_kern);
++
++	if (data_len == 0)
++		return -EINVAL;
++
++	if (!ctx->type->digestsize)
++		return -EOPNOTSUPP;
++
++	unsigned int digestsize = ctx->type->digestsize(ctx->tfm);
++	if (out_len < digestsize)
++		return -EINVAL;
++
++	data_ptr = __bpf_dynptr_data(data_kern, data_len);
++	if (!data_ptr)
++		return -EINVAL;
++
++	out_ptr = __bpf_dynptr_data_rw(out_kern, out_len);
++	if (!out_ptr)
++		return -EINVAL;
++
++	return ctx->type->hash(ctx->tfm, data_ptr, out_ptr, data_len);
 +}
++#endif /* CONFIG_CRYPTO_HASH2 */
 +
-+static int bpf_crypto_shash_has_algo(const char *algo)
-+{
-+	return crypto_has_shash(algo, 0, 0);
-+}
-+
-+static int bpf_crypto_shash_hash(void *tfm, const u8 *data, u8 *out,
-+				 unsigned int len)
-+{
-+	struct bpf_shash_ctx *ctx = tfm;
-+
-+	return crypto_shash_digest(&ctx->desc, data, len, out);
-+}
-+
-+static unsigned int bpf_crypto_shash_digestsize(void *tfm)
-+{
-+	struct bpf_shash_ctx *ctx = tfm;
-+
-+	return crypto_shash_digestsize(ctx->tfm);
-+}
-+
-+static u32 bpf_crypto_shash_get_flags(void *tfm)
-+{
-+	struct bpf_shash_ctx *ctx = tfm;
-+
-+	return crypto_shash_get_flags(ctx->tfm);
-+}
-+
-+static const struct bpf_crypto_type bpf_crypto_shash_type = {
-+	.alloc_tfm	= bpf_crypto_shash_alloc_tfm,
-+	.free_tfm	= bpf_crypto_shash_free_tfm,
-+	.has_algo	= bpf_crypto_shash_has_algo,
-+	.hash		= bpf_crypto_shash_hash,
-+	.digestsize	= bpf_crypto_shash_digestsize,
-+	.get_flags	= bpf_crypto_shash_get_flags,
-+	.owner		= THIS_MODULE,
-+	.name		= "hash",
-+};
-+
-+static int __init bpf_crypto_shash_init(void)
-+{
-+	return bpf_crypto_register_type(&bpf_crypto_shash_type);
-+}
-+
-+static void __exit bpf_crypto_shash_exit(void)
-+{
-+	int err = bpf_crypto_unregister_type(&bpf_crypto_shash_type);
-+
-+	WARN_ON_ONCE(err);
-+}
-+
-+module_init(bpf_crypto_shash_init);
-+module_exit(bpf_crypto_shash_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("Hash algorithm support for BPF");
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(crypt_init_kfunc_btf_ids)
+@@ -359,6 +415,9 @@ static const struct btf_kfunc_id_set crypt_init_kfunc_set = {
+ BTF_KFUNCS_START(crypt_kfunc_btf_ids)
+ BTF_ID_FLAGS(func, bpf_crypto_decrypt, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_crypto_encrypt, KF_RCU)
++#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
++BTF_ID_FLAGS(func, bpf_crypto_hash, KF_RCU)
++#endif
+ BTF_KFUNCS_END(crypt_kfunc_btf_ids)
+ 
+ static const struct btf_kfunc_id_set crypt_kfunc_set = {
+@@ -383,6 +442,7 @@ static int __init crypto_kfunc_init(void)
+ 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &crypt_kfunc_set);
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+ 					       &crypt_init_kfunc_set);
+ 	return  ret ?: register_btf_id_dtor_kfuncs(bpf_crypto_dtors,
 -- 
 2.51.0
 
