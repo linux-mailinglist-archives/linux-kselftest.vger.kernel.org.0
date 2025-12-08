@@ -1,143 +1,92 @@
-Return-Path: <linux-kselftest+bounces-47253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47254-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8261CABF54
-	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 04:25:26 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F18FCAC07D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 05:42:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7BDE23009AA3
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 03:25:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 71AEF300A9F4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 04:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32FA726B971;
-	Mon,  8 Dec 2025 03:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hAznC93n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6102023C505;
+	Mon,  8 Dec 2025 04:42:25 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CCB243954;
-	Mon,  8 Dec 2025 03:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60861EBA14;
+	Mon,  8 Dec 2025 04:42:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765164317; cv=none; b=Ge9c82oxVMArWUtd9B+Vi8GfZx0G5fIQ56kz98uJuEBeoYfxWVVSmIWtOi3ek9IMEv8I29q32uCrLC9QkOqdMVAxn8UA+1Br/Bqjipcw3TeOi2CSobxC9skWt/evCq54lz8+3/CDpPsWLR+BMNnV/o6LoTkd5K9khhP/XS5IsT0=
+	t=1765168945; cv=none; b=KhYDf/wtX31CZx7eJpHoc9e3EvXqfFCGDeEHwqzmcCa/dwjRqcFjobPomevkFbBqch3ePQumqLrHzuT8CubaL1tTD8eP/YZakkrHHPSSirBwaGw8sWQrfMwHzsXHtd5JdSqFjenCnuuiKQ2sE78Jh7G+NTcNkCz1iKjnRIgNe6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765164317; c=relaxed/simple;
-	bh=Vq7i7B29h2fqjR1umiBSo715h0HUytMRKH9Hte+65Cc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=eCTBj5derpoaIwOrdwb6cremb1JFK9aKCd9/FDNx4myMmKmXd5Fa8grW84xSN3RVrDYIWS3j4ylFPleQev9sTm97WnP371k3Bd9tXN57c8zXMOGORYgCQ/EKxsnAM7JPfJdJZ7te0GBai8+VVIMCKV2VtrpZzUwXmEWSUfKV5bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hAznC93n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A07FC4CEFB;
-	Mon,  8 Dec 2025 03:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765164316;
-	bh=Vq7i7B29h2fqjR1umiBSo715h0HUytMRKH9Hte+65Cc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=hAznC93nEn6Au+T/cUOsz4mGRFMeziQbD1srfPVVyuS5/0aDuFBxKgH3qSEHFYGu/
-	 1zcP4QsxJFpehMrYaoPFTSguevY/hxUnPar2oePJNQCBcNsQQYo3HGPjkDSbjvApN3
-	 h/YakyERkF+Goh7cXjT8rlsxBKEtbxTDh52qPeTLlmKHAWMhbv0becF6UtQpf0LIc5
-	 K0Vyspypqto2GF0ee5wN1rYTFda2/W8hNL7hdTjmVv1yj+HCFuZFkeG5rDdrFPYk16
-	 kWxuF5iVBguGrLpOU8rzInmgy2sPtcXn9totqLnhHCX3qHVlC8bKO3aPXpPTI4ZM5D
-	 qNHGDkhfSEq/g==
-Content-Type: multipart/mixed; boundary="===============3683707251524056621=="
+	s=arc-20240116; t=1765168945; c=relaxed/simple;
+	bh=PSAmC3jcN8WM6FvrgAQ1voS/UeQHZ3Qh2u3ZB8OGsR0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=boiIL3//t51SMlYvPt/khdXuB7mRsR1g2wX+mXGAFZ2Q7cyEaKV2JbRAFNQTk+A3n8YCNxpoTwuyc91hDlwGmztXr08/DqpOysoZeET1Ft/mRV83MpHIj7wMhWNtOQwLPfes7z1msxU8bbN20zFQGhqGXOe1Wl0SrzvIwNp2kH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D00F3497;
+	Sun,  7 Dec 2025 20:42:08 -0800 (PST)
+Received: from [10.164.18.52] (unknown [10.164.18.52])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 954C43F740;
+	Sun,  7 Dec 2025 20:42:09 -0800 (PST)
+Message-ID: <b88a2a99-44c5-41bf-b986-fb3ca996e580@arm.com>
+Date: Mon, 8 Dec 2025 10:12:06 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <28c5b46387e15838028ba57a9d548a5ab066084a8eb7838a2bdeb32677dec11d@mail.kernel.org>
-In-Reply-To: <20251208030117.18892-3-git@danielhodges.dev>
-References: <20251208030117.18892-3-git@danielhodges.dev>
-Subject: Re: [PATCH bpf-next v3 2/6] crypto: Add BPF hash algorithm type registration module
-From: bot+bpf-ci@kernel.org
-To: git@danielhodges.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,vadim.fedorenko@linux.dev,song@kernel.org,yatsenko@meta.com,martin.lau@linux.dev,eddyz87@gmail.com,haoluo@google.com,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,yonghong.song@linux.dev,herbert@gondor.apana.org.au,davem@davemloft.net,linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,git@danielhodges.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  8 Dec 2025 03:25:14 +0000 (UTC)
-
---===============3683707251524056621==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 01/16] arm64: Remove unused _TIF_WORK_MASK
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
+ luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
+ deller@gmx.de, macro@orcam.me.uk, charlie@rivosinc.com,
+ kevin.brodsky@arm.com, ldv@strace.io, mark.rutland@arm.com, song@kernel.org,
+ ryan.roberts@arm.com, ada.coupriediaz@arm.com, broonie@kernel.org,
+ pengcan@kylinos.cn, dvyukov@google.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251204082123.2792067-1-ruanjinjie@huawei.com>
+ <20251204082123.2792067-2-ruanjinjie@huawei.com>
+Content-Language: en-US
+From: Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20251204082123.2792067-2-ruanjinjie@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
-> new file mode 100644
-> index 000000000000..95c178ec0ce8
-> --- /dev/null
-> +++ b/crypto/bpf_crypto_shash.c
-> @@ -0,0 +1,95 @@
-[ ... ]
-> +
-> +static const struct bpf_crypto_type bpf_crypto_shash_type = {
-> +	.alloc_tfm	= bpf_crypto_shash_alloc_tfm,
-> +	.free_tfm	= bpf_crypto_shash_free_tfm,
-> +	.has_algo	= bpf_crypto_shash_has_algo,
-> +	.hash		= bpf_crypto_shash_hash,
-> +	.digestsize	= bpf_crypto_shash_digestsize,
-> +	.get_flags	= bpf_crypto_shash_get_flags,
-> +	.owner		= THIS_MODULE,
-> +	.name		= "hash",
-> +};
+On 04/12/25 1:51 PM, Jinjie Ruan wrote:
+> Since commit b3cf07851b6c ("arm64: entry: Switch to generic IRQ
+> entry"), _TIF_WORK_MASK is never used, so remove it.
+> 
+> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> ---
+>  arch/arm64/include/asm/thread_info.h | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
+> index f241b8601ebd..ff4998fa1844 100644
+> --- a/arch/arm64/include/asm/thread_info.h
+> +++ b/arch/arm64/include/asm/thread_info.h
+> @@ -106,12 +106,6 @@ void arch_setup_new_exec(void);
+>  #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
+>  #define _TIF_TSC_SIGSEGV	(1 << TIF_TSC_SIGSEGV)
+>  
+> -#define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY | \
+> -				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
+> -				 _TIF_UPROBE | _TIF_MTE_ASYNC_FAULT | \
+> -				 _TIF_NOTIFY_SIGNAL | _TIF_SIGPENDING | \
+> -				 _TIF_PATCH_PENDING)
+> -
+>  #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
+>  				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
+>  				 _TIF_SYSCALL_EMU)
 
-The bpf_crypto_type implementation leaves several function pointers as
-NULL (setkey, setauthsize, encrypt, decrypt, ivsize, statesize), which is
-appropriate for plain hash algorithms. However, this creates an interface
-contract mismatch with bpf_crypto_ctx_create() in kernel/bpf/crypto.c.
-
-Looking at the caller bpf_crypto_ctx_create():
-
-  Line 174-177:
-    if (!params->key_len || params->key_len > sizeof(params->key)) {
-        *err = -EINVAL;
-        goto err_module_put;
-    }
-
-Can hash contexts be created? This check requires key_len to be non-zero,
-but plain hash algorithms like SHA256 don't use keys. This prevents
-creating hash contexts entirely.
-
-  Line 186-189:
-    ctx->tfm = type->alloc_tfm(params->algo);
-    if (IS_ERR(ctx->tfm)) {
-        *err = PTR_ERR(ctx->tfm);
-        goto err_free_tfm;
-
-Can bpf_crypto_shash_free_tfm handle ERR_PTR? When alloc_tfm fails and
-returns ERR_PTR, the code stores it in ctx->tfm then jumps to err_free_tfm
-which calls type->free_tfm(ctx->tfm). In bpf_crypto_shash_free_tfm(), the
-code dereferences ctx->tfm without checking for ERR_PTR, which will crash:
-
-    static void bpf_crypto_shash_free_tfm(void *tfm)
-    {
-        struct bpf_shash_ctx *ctx = tfm;
-        crypto_free_shash(ctx->tfm);  /* dereferences ctx */
-        kfree(ctx);
-    }
-
-  Line 198:
-    *err = type->setkey(ctx->tfm, params->key, params->key_len);
-
-Does this dereference NULL? The hash implementation doesn't provide setkey
-(it's NULL in bpf_crypto_shash_type), but this line calls it
-unconditionally.
-
-  Line 207:
-    ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
-
-Do these dereference NULL? The hash implementation doesn't provide ivsize
-or statesize (both NULL), but this line calls them unconditionally.
-
-Note: These issues are fixed in commit 14cc32f873e0 ("bpf: Add SHA hash
-kfunc for cryptographic hashing") which makes the setkey, ivsize, and
-statesize calls conditional, and fixes the ERR_PTR handling by changing
-the error path from "goto err_free_tfm" to "goto err_free_ctx".
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20015426139
-
---===============3683707251524056621==--
+There are no more _TIF_WORK_MASK users left on arm64 platform.
+ 
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
