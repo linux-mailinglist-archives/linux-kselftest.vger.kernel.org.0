@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-47254-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F18FCAC07D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 05:42:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBB53CAC0AB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 06:02:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 71AEF300A9F4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 04:42:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0F1E3301D666
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 05:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6102023C505;
-	Mon,  8 Dec 2025 04:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8809022CBD9;
+	Mon,  8 Dec 2025 05:02:24 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60861EBA14;
-	Mon,  8 Dec 2025 04:42:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 718D53B8D40;
+	Mon,  8 Dec 2025 05:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765168945; cv=none; b=KhYDf/wtX31CZx7eJpHoc9e3EvXqfFCGDeEHwqzmcCa/dwjRqcFjobPomevkFbBqch3ePQumqLrHzuT8CubaL1tTD8eP/YZakkrHHPSSirBwaGw8sWQrfMwHzsXHtd5JdSqFjenCnuuiKQ2sE78Jh7G+NTcNkCz1iKjnRIgNe6E=
+	t=1765170144; cv=none; b=NS0HdW4as5AIEGiTGKL0W8UKOaM2PXQ2rjIqLlxeKY2HI8Vw9KW8VumkE8rPKqCQcf3plNqusSZtiqbhKA6dKZvUlIn3utnHxqd9NXCi8mcpN9VoypRg+CHCRuv3m/ftYTql+aEgsUvXLXAWBk+scd5WimoZxwDUHzgJLPdml3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765168945; c=relaxed/simple;
-	bh=PSAmC3jcN8WM6FvrgAQ1voS/UeQHZ3Qh2u3ZB8OGsR0=;
+	s=arc-20240116; t=1765170144; c=relaxed/simple;
+	bh=GrCW6lpytmdvhHsWDAir1hb/VLeBay0nv50dDkC6kqU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=boiIL3//t51SMlYvPt/khdXuB7mRsR1g2wX+mXGAFZ2Q7cyEaKV2JbRAFNQTk+A3n8YCNxpoTwuyc91hDlwGmztXr08/DqpOysoZeET1Ft/mRV83MpHIj7wMhWNtOQwLPfes7z1msxU8bbN20zFQGhqGXOe1Wl0SrzvIwNp2kH4=
+	 In-Reply-To:Content-Type; b=MiZqk00umsk1tFwROGDCJJ70HmZbOquPXAkaWm8+21GSsvktUUD9d8P9StSvKecNYjYtLptqeCPSxN0+yoTLDQC0X/+lbmnATF/plE6s2g98jza54e2feXVuwDz/VcIjA2YH910uyDCpgCmgwvEgrl9cD11nd1Bfse157nllenA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D00F3497;
-	Sun,  7 Dec 2025 20:42:08 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CC1C1595;
+	Sun,  7 Dec 2025 21:02:14 -0800 (PST)
 Received: from [10.164.18.52] (unknown [10.164.18.52])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 954C43F740;
-	Sun,  7 Dec 2025 20:42:09 -0800 (PST)
-Message-ID: <b88a2a99-44c5-41bf-b986-fb3ca996e580@arm.com>
-Date: Mon, 8 Dec 2025 10:12:06 +0530
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC3033F762;
+	Sun,  7 Dec 2025 21:02:14 -0800 (PST)
+Message-ID: <b66f285f-20d8-4c29-ad0d-1ab0857b38b0@arm.com>
+Date: Mon, 8 Dec 2025 10:32:12 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 01/16] arm64: Remove unused _TIF_WORK_MASK
+Subject: Re: [PATCH v9 02/16] arm64/ptrace: Split report_syscall()
 To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
  will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
  luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
@@ -51,42 +51,123 @@ To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20251204082123.2792067-1-ruanjinjie@huawei.com>
- <20251204082123.2792067-2-ruanjinjie@huawei.com>
+ <20251204082123.2792067-3-ruanjinjie@huawei.com>
 Content-Language: en-US
 From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20251204082123.2792067-2-ruanjinjie@huawei.com>
+In-Reply-To: <20251204082123.2792067-3-ruanjinjie@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 04/12/25 1:51 PM, Jinjie Ruan wrote:
-> Since commit b3cf07851b6c ("arm64: entry: Switch to generic IRQ
-> entry"), _TIF_WORK_MASK is never used, so remove it.
+> The generic syscall entry code has the form:
+> 
+> | syscall_trace_enter()
+> | {
+> |	ptrace_report_syscall_entry()
+> | }
+> |
+> | syscall_exit_work()
+> | {
+> |	ptrace_report_syscall_exit()
+> | }
+> 
+> In preparation for moving arm64 over to the generic entry code, split
+> report_syscall() to two separate enter and exit functions to align
+> the structure of the arm64 code with syscall_trace_enter() and
+> syscall_exit_work() from the generic entry code.
+> 
+> No functional changes.
 > 
 > Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> Suggested-by: Mark Rutland <mark.rutland@arm.com>
 > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> ---
->  arch/arm64/include/asm/thread_info.h | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-> index f241b8601ebd..ff4998fa1844 100644
-> --- a/arch/arm64/include/asm/thread_info.h
-> +++ b/arch/arm64/include/asm/thread_info.h
-> @@ -106,12 +106,6 @@ void arch_setup_new_exec(void);
->  #define _TIF_NOTIFY_SIGNAL	(1 << TIF_NOTIFY_SIGNAL)
->  #define _TIF_TSC_SIGSEGV	(1 << TIF_TSC_SIGSEGV)
->  
-> -#define _TIF_WORK_MASK		(_TIF_NEED_RESCHED | _TIF_NEED_RESCHED_LAZY | \
-> -				 _TIF_NOTIFY_RESUME | _TIF_FOREIGN_FPSTATE | \
-> -				 _TIF_UPROBE | _TIF_MTE_ASYNC_FAULT | \
-> -				 _TIF_NOTIFY_SIGNAL | _TIF_SIGPENDING | \
-> -				 _TIF_PATCH_PENDING)
-> -
->  #define _TIF_SYSCALL_WORK	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_AUDIT | \
->  				 _TIF_SYSCALL_TRACEPOINT | _TIF_SECCOMP | \
->  				 _TIF_SYSCALL_EMU)
 
-There are no more _TIF_WORK_MASK users left on arm64 platform.
- 
+LGTM.
+
 Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+
+> ---
+> v8:
+> - report_syscall_enter() -> report_syscall_entry().
+> - Add ptrace_save_reg() helper.
+> ---
+>  arch/arm64/kernel/ptrace.c | 41 +++++++++++++++++++++++++++-----------
+>  1 file changed, 29 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
+> index 4b001121c72d..4532e9831856 100644
+> --- a/arch/arm64/kernel/ptrace.c
+> +++ b/arch/arm64/kernel/ptrace.c
+> @@ -2317,9 +2317,10 @@ enum ptrace_syscall_dir {
+>  	PTRACE_SYSCALL_EXIT,
+>  };
+>  
+> -static void report_syscall(struct pt_regs *regs, enum ptrace_syscall_dir dir)
+> +static __always_inline unsigned long ptrace_save_reg(struct pt_regs *regs,
+> +						     enum ptrace_syscall_dir dir,
+> +						     int *regno)
+>  {
+> -	int regno;
+>  	unsigned long saved_reg;
+>  
+>  	/*
+> @@ -2338,15 +2339,31 @@ static void report_syscall(struct pt_regs *regs, enum ptrace_syscall_dir dir)
+>  	 * - Syscall stops behave differently to seccomp and pseudo-step traps
+>  	 *   (the latter do not nobble any registers).
+>  	 */
+> -	regno = (is_compat_task() ? 12 : 7);
+> -	saved_reg = regs->regs[regno];
+> -	regs->regs[regno] = dir;
+> +	*regno = (is_compat_task() ? 12 : 7);
+> +	saved_reg = regs->regs[*regno];
+> +	regs->regs[*regno] = dir;
+>  
+> -	if (dir == PTRACE_SYSCALL_ENTER) {
+> -		if (ptrace_report_syscall_entry(regs))
+> -			forget_syscall(regs);
+> -		regs->regs[regno] = saved_reg;
+> -	} else if (!test_thread_flag(TIF_SINGLESTEP)) {
+> +	return saved_reg;
+> +}
+> +
+> +static void report_syscall_entry(struct pt_regs *regs)
+> +{
+> +	unsigned long saved_reg;
+> +	int regno;
+> +
+> +	saved_reg = ptrace_save_reg(regs, PTRACE_SYSCALL_ENTER, &regno);
+> +	if (ptrace_report_syscall_entry(regs))
+> +		forget_syscall(regs);
+> +	regs->regs[regno] = saved_reg;
+> +}
+> +
+> +static void report_syscall_exit(struct pt_regs *regs)
+> +{
+> +	unsigned long saved_reg;
+> +	int regno;
+> +
+> +	saved_reg = ptrace_save_reg(regs, PTRACE_SYSCALL_EXIT, &regno);
+> +	if (!test_thread_flag(TIF_SINGLESTEP)) {
+>  		ptrace_report_syscall_exit(regs, 0);
+>  		regs->regs[regno] = saved_reg;
+>  	} else {
+> @@ -2366,7 +2383,7 @@ int syscall_trace_enter(struct pt_regs *regs)
+>  	unsigned long flags = read_thread_flags();
+>  
+>  	if (flags & (_TIF_SYSCALL_EMU | _TIF_SYSCALL_TRACE)) {
+> -		report_syscall(regs, PTRACE_SYSCALL_ENTER);
+> +		report_syscall_entry(regs);
+>  		if (flags & _TIF_SYSCALL_EMU)
+>  			return NO_SYSCALL;
+>  	}
+> @@ -2394,7 +2411,7 @@ void syscall_trace_exit(struct pt_regs *regs)
+>  		trace_sys_exit(regs, syscall_get_return_value(current, regs));
+>  
+>  	if (flags & (_TIF_SYSCALL_TRACE | _TIF_SINGLESTEP))
+> -		report_syscall(regs, PTRACE_SYSCALL_EXIT);
+> +		report_syscall_exit(regs);
+>  
+>  	rseq_syscall(regs);
+>  }
+
 
