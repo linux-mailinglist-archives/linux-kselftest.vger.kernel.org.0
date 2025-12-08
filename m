@@ -1,250 +1,177 @@
-Return-Path: <linux-kselftest+bounces-47273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE4ABCAD7FE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 15:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C2FBFCADA23
+	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 16:45:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2ABB530542E6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 14:52:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B3D3630595AB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 15:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2593E2D3EDC;
-	Mon,  8 Dec 2025 14:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37812DC77A;
+	Mon,  8 Dec 2025 15:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="gENVV1Nl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hZMEdh7J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD150285073
-	for <linux-kselftest@vger.kernel.org>; Mon,  8 Dec 2025 14:52:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0E6C2C159C
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Dec 2025 15:44:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765205564; cv=none; b=UdI2YTgRs+XOejJv3i2KtlNMVNAIX2rbUZOL2P1x0oAudlKctpDSGICQhYAtsJjTXXFuwIJC3+mdEt3vL7MshfrAXePVRuXwVa3RbcFnbx/Q1mxMOpolEZNsSUIHTfwlKXrI9HgVqV0sp40dtMF7BmyImYrdkzkqTf7CCRU9NDc=
+	t=1765208698; cv=none; b=UqsDgrIUwC/5EpexlIwr/7hGKoaNUIGhxKmStDzWYVjPzsWyBfqc5j1qRTbPklo7eJ/B4Um8qMYdgXt73ynt3Q9EQc4d+RZbrswPkVDi1E/wejwQnrYgnqa9TaPhWGZGr6vyUksmWiZSBPe9KQNs+Py6ZjXYQXL9ZOMsBg8zYpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765205564; c=relaxed/simple;
-	bh=nWYvcuxh+/OUCF+kUOaYMcU6xa+E+OgBk319NfCP2kY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TX9GmQyhOQlpwApMYLbsMsWrBgsazd4Ew3BFMVMZW0xV+YzgZo93/mCchKCdLzgFSTBl3VuMx/A5aQFDe5YGwOkJrtcQyNBlbOPqyvQdt031N/dqIyYX4poa61ROn7aCCOFkmsi/zP2UaYwbntesclrb+opiXreOqrBBUjcyW6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=gENVV1Nl; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-47796a837c7so40155185e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Dec 2025 06:52:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1765205560; x=1765810360; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lc7vh9/1MW0ercfPSZaOiADdk8flNIR0dxHdxBVjOzo=;
-        b=gENVV1NleFZMGwJ7z7341i/s5/vr8tmkNwrac2ik0RDD67WOGJaufg97BkzwohPs9Y
-         5sqEXM/w/RTlJx+cRi43ZroIo5EeTP5iEOYh4KNmdl+QhkvcEeuhCpzHFhVrvozKerCL
-         cpVN/ATsQ8OVwcIPaV/xDW70W44ZWJcK/Mco5QQIorLY0GiCnPrLhDuun5uRVhrdSpRH
-         cULP78wB3xd41d1V0rDXGmC6A8ZL88bWZMbKA0NYrI0WxI/y+tAMg1E9jXuhuCoAetQT
-         lYC/47eJqkuvTMxPDLrcLetru5XrYGclWHmyWUvRE4EYITtY2m/kN2/QfQN99woi3C29
-         mwyA==
+	s=arc-20240116; t=1765208698; c=relaxed/simple;
+	bh=z6fXEQqvGKi4O2zkZhxy65l+Ky23ibWbRx+dFpzFMb4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P3NWZLu0lnCyg59CpKqGHgucaa3UNBw/o70LuTfoqQVwKfIza5cKGO3HvmZ3JZcA3Kj355N/rIrFbyQQxM8j/u8x2e531Soxt+k8t19/xroSoVgBEtIIXZFODIpSMBSR9K9uZlcseV2/brZFBQ/+9h8oUvFoP8jnbAltu8gxyqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hZMEdh7J; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1765208694;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=+ZA8EtJ/Yb3hDRtk61pdFksnnDW88iHKAyV8Vf/m1G0=;
+	b=hZMEdh7JeC2yGOR8gelUNXqUcCrOQre/qo1MsdtVT+ASdCxi/beKwM2clf+mSRcFU7BXKE
+	MBt7hUaoPcyNvYybNFo1xJRYZOrlmrk/QXspghcgLDM9O95FIQPprAQ+Wd045pg5Jhz3cJ
+	dMprupf4r0dqUJHSYp6zk7kqFdYZ3A0=
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com
+ [209.85.215.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-428-gRFp1J3FNnSfDYkSJe0bkQ-1; Mon, 08 Dec 2025 10:44:53 -0500
+X-MC-Unique: gRFp1J3FNnSfDYkSJe0bkQ-1
+X-Mimecast-MFC-AGG-ID: gRFp1J3FNnSfDYkSJe0bkQ_1765208692
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-b6097ca315bso7394517a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Dec 2025 07:44:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765205560; x=1765810360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lc7vh9/1MW0ercfPSZaOiADdk8flNIR0dxHdxBVjOzo=;
-        b=G54zk//7THk4o+MlYHzajg88ayo5mL3Mtc8eu/O3h5Ll9t6XfIH5PnZjfW2D+rwF4g
-         vwfkoxj6kGcjj+1+ltt2SOmsFOWSL43CCydFKL7UDEHUndNCoLncEf+/uJI0E/adAsAb
-         JTKCUSMqCXbzNKupZ8Blr8C1Q5Xm7Z5oF5eV73cvtb+9RLLRWeQO1UdToEEBIG+P6zeB
-         DrjmHhv90tJagS2ps4MAL84uuDbapcK8WOAj3H2GyKwnf1NwgvIWdual9HzvEo348i80
-         Bdgpydh6uNFC2QrMehNoFcMWTYDvymyfsoiOr7E/Hn6DAzpW45Jh9X//ln9rsxHjjnYh
-         SjVQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUqzKmTmkgAKiTjWSiM9bjQ/7nOTRZ0xdA03Q5GzBMzuHx5CQ7x7utw0kHGR5WNTxK+oxRVdMYkI6D6m/Warao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgbIKPbHTbTGVBNRyF/LJFtFWIem0sncXnvq+8a8H3Dxm9sasj
-	I1lpeYCX+GAnNOh/4zmCpm0/ZZTbc+17rWPXrXnelFqyqcMgH8+q1HFErpERoLLEfdk=
-X-Gm-Gg: ASbGnct6mRihZ+QPoQq7oZDX/z11yyuy9FDUe+Dh3uhYtrzoZtWLfekYaubEy4P7AZK
-	u4s+oNkIKIR+iddyjO9gmhWrCqf2aVINqiYHcej5UA8+T5+6nx9b9Fh6gpWhOCCu50C6s2dc0Br
-	VLBj+lb6onUGqF9HWa5czbhVizSthhJx9dqXdBsdolhFUTvRUMHb+g9jZjObrivhPT1ciHtbf9E
-	qUyp1mLJ9JKGghA02wA3/irM+yBzQTNmeeC2u1ZM3QmZyfONTlmZAWU0H8QN9R3i15tLiz10hX1
-	WLkrtHIPL3DY2BXZ5vhaffpD7t3w5I2kiPrWMu+ETcwsHJOryNo5uj1vurt/gAuNk7hd1IEgSsF
-	NZZG1ynD8GDH5tMaNAqThoQk2aPqe9OKVZepr6E4HqyXYYRRtXZlr3sSMKmXf4epELK7LLBMJdU
-	GdXPc=
-X-Google-Smtp-Source: AGHT+IGPqGF0PL/yzGyxsLLi0EbdeViTJA32Dxo2JhBeeDK3ixfFVxZQLIPBNdNJ+8OuoujtL4YFhQ==
-X-Received: by 2002:a05:600c:3b08:b0:46e:32dd:1b1a with SMTP id 5b1f17b1804b1-47939ded20fmr100247175e9.7.1765205560087;
-        Mon, 08 Dec 2025 06:52:40 -0800 (PST)
-Received: from pathway ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479311ed466sm242094905e9.13.2025.12.08.06.52.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Dec 2025 06:52:39 -0800 (PST)
-Date: Mon, 8 Dec 2025 15:52:37 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: kuba@kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org, gustavold@gmail.com, asantostc@gmail.com,
-	calvin@wbinvd.org, kernel-team@meta.com, davej@codemonkey.org.uk
-Subject: Re: [PATCH net-next 0/4] (no cover subject)
-Message-ID: <aTbmNdilvUq78bjc@pathway>
-References: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
- <20251201163622.4e50bf53@kernel.org>
- <4oybtunobxtemenpg2lg7jv4cyl3xoaxrjlqivbhs6zo72hxpu@fqp6estf5mpc>
- <20251202102442.568f91a7@kernel.org>
- <aTFmew5trILX3RpO@pathway.suse.cz>
- <aTFnzmc0ZtBvGg4y@pathway.suse.cz>
- <7jdruzcpkeyhuudwi6uzg2vsc5mhgpq7qz4ym7vqqmgs7j3524@cvtnzneddg2d>
+        d=1e100.net; s=20230601; t=1765208692; x=1765813492;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+ZA8EtJ/Yb3hDRtk61pdFksnnDW88iHKAyV8Vf/m1G0=;
+        b=MLhixmF5sw9I5pkQMTEkauYBfQvHoK34k8DB1b8tyU2Sf4tBovaD4SDutuEgeJXeFF
+         +HecA3vHh+fi2gsN2Vx4F2g4waIcvc0SE8UYZUVduP4TTrKmbtDGROcVHmBZCOcnnATR
+         mgEJ0JPhUVXbAHeaCekL8NyDwUKX6fpa4Szg2WLl1Vit/DjUi/8PZ9BLnJsUobwb79vw
+         9GCfmhPB04P5YCoH/SReaCOyjX76HE71/qGvCRDOdwOoYRYJHo7vbl+cMUEYwINwkSlH
+         QehIWGHz9xcsWkH7em+aGBThta0arw1aWnz9yJbSrIvy0U8W4gyAj6bMoBysB8BfJ1rS
+         CONg==
+X-Gm-Message-State: AOJu0YzB2A88Eqy0T1vsvlgwN75zyJBLo7BOJjurpDXioDD+6D5HTd6N
+	uMYtzIp8bQph/46K0x1YybmCKnzIDW/1vEnZzsaemLS5i8WpRt5s/DkbhZNee15pMlyj7TtMwqj
+	jFs4dloZOFU/l7Puoi7UtQlfBrKQ5m11myGjWASM0sHWqrajQ6SaNBQc6TQc9A3LyPSrFIQ==
+X-Gm-Gg: ASbGnctwxpteGO0+W/t5hWKG8jn8nRPOspb1v0wApQjFsGYlcdBloyX+B2miW/JYNXN
+	MXgZhvF2mKUxwL4wWblgwWja7ETRT1D2l6eGJLgQ5AsZQjX1cubdp2oCzHPl1YZhiCCkss/+Udb
+	qCmx4HKHGI/XU5yfs+9lgMn5TqN8UGvTq7uyMH5TzHY289KH/J2ojJC5GlJKObCNvqUKq/vhMoI
+	tbl2xhH2wz05D1Dj2Bki4quU/GJjarVJGhfg3TfzKE5tai6UelNY7C/2y5pNxAmB6zOIuOMiRvP
+	qzQThteDiVW0gl/8BYMvSg5Chvgm1yo8Af1EjW83CYF4RX9nxEXd7gEBz78EFxN+YXJLOFSXfn1
+	/ExLFxOZGHRkzvSDW9PFnnmGIUVppW0DSJbvE0e07NPZrvqathBpOhImQCM3LqZFeg1aY627iKQ
+	==
+X-Received: by 2002:a05:7022:ec0c:b0:11d:f44d:1863 with SMTP id a92af1059eb24-11e0326b11fmr5785270c88.11.1765208692259;
+        Mon, 08 Dec 2025 07:44:52 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEAjO/iQcpglYWmyAUY5NhlLp8TjzTsbzOXCBjpFZBwT6DwAEkwKSVISxY8b2i+m6RPHCfxhQ==
+X-Received: by 2002:a05:7022:ec0c:b0:11d:f44d:1863 with SMTP id a92af1059eb24-11e0326b11fmr5785242c88.11.1765208691771;
+        Mon, 08 Dec 2025 07:44:51 -0800 (PST)
+Received: from [192.168.2.110] (bras-base-aylmpq0104w-grc-48-76-65-77-217.dsl.bell.ca. [76.65.77.217])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11df7552defsm56860378c88.2.2025.12.08.07.44.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Dec 2025 07:44:51 -0800 (PST)
+Message-ID: <f8d1e504-2009-4bd6-b1b7-c98c1f49374a@redhat.com>
+Date: Mon, 8 Dec 2025 10:44:45 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7jdruzcpkeyhuudwi6uzg2vsc5mhgpq7qz4ym7vqqmgs7j3524@cvtnzneddg2d>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/3] selftests/mm: fix va_high_addr_switch.sh return
+ value
+To: Chunyu Hu <chuhu@redhat.com>, akpm@linux-foundation.org,
+ david@kernel.org, shuah@kernel.org, linux-mm@kvack.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, vbabka@suse.cz,
+ rppt@kernel.org, surenb@google.com, mhocko@suse.com
+References: <20251207122239.3228920-1-chuhu@redhat.com>
+Content-Language: en-US, en-CA
+From: Luiz Capitulino <luizcap@redhat.com>
+In-Reply-To: <20251207122239.3228920-1-chuhu@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri 2025-12-05 02:21:08, Breno Leitao wrote:
-> On Thu, Dec 04, 2025 at 11:51:58AM +0100, Petr Mladek wrote:
-> > > > > > perhaps it should be configured to only log messages at a high level?  
-> > > > > 
-> > > > > Chris is actually working on per-console log levels to solve exactly
-> > > > > this problem, so we could filter serial console messages while keeping
-> > > > > everything in other consoles (aka netconsole):
-> > > > > 
-> > > > > 	https://lore.kernel.org/all/cover.1764272407.git.chris@chrisdown.name/
-> > > > 
-> > > > Excellent! Unless I'm missing more context Chris does seem to be
-> > > > attacking the problem at a more suitable layer.
-> > > 
-> > > This would help to bypass slow serial consoles. But the extra messages
-> > > would still get stored into the kernel ring buffer and passed back
-> > > to user space logs, for example journalctl.
-> > 
-> > It might actually make sense for the "workload enters or leaves" messages.
-> > But I am not sure about the "ping" messages.
+On 2025-12-07 07:22, Chunyu Hu wrote:
+> Patch series "Fix va_high_addr_switch.sh test failure - again", v1.
 > 
-> Agree. Let me back up and explain my "ping" messages better, which
-> I think might add more information about this topic.
+> There are two issues exist for the  va_high_addr_switch test. One issue is
+> the test return value is ignored in va_high_addr_switch.sh. The second is
+> the va_high_addr_switch requires 6 hugepages but it requires 5.
 > 
-> Meta has millions of servers, and all of them must have netconsole
-> running 100% of the time.
+> Besides that, the nr_hugepages setup in run_vmtests.sh for arm64 can be
+> done in va_high_addr_switch.sh too.
 > 
-> Of course that this is not reality, and problems happen for different
-> reasons, the ones that interest me here are:
+> This patch: (of 3)
 > 
-> 1) Top of the rack switch MAC address changes (mostly associated with
->    network hardware (top of the rack switches and gateway) replacement)
->     a) Keep in mind that netconsole target has the destination MAC as
->        part of its configuration.
+> The return value should be return value of va_high_addr_switch, otherwise
+> a test failure would be silently ignored.
 > 
-> 2) Netconsole got associated with the wrong network port, which comes in
->    two different flavors.
->    a) The machine got provisioned wrongly since day one (Most common
->       case)
->    b) The machine NIC changed and: 
->       i) The target doesn't bind correctly anymore (if netconsole
->          target is bound by mac address)
->       	   * This is easier to detect, given the target will never be
-> 	     enabled.
-> 
-> 3) Netconsd (the daemon that listen to netconsole packets) is buggy or
->    dead
-> 
-> 4) Network failures across the route
-> 
-> 
-> Possible Solutions
-> ==================
-> 
-> In order to detect those issues above, I think the best (or only) way is
-> to send messages from the host, and check if they got received. If not,
-> raise an alarm (in the common distributed way).
-> 
-> This could be done in very different ways, tho. Such as:
-> 
-> 1) Have a binary in each machine:
-> 	a) This binary reads the netconsole target that is configured,
-> 	   and mimics "ping" UDP netconsole packet.
-> 
-> 	Pro: 
-> 	     * It doesn't need any kernel change
-> 	Cons:
-> 	     * It needs to reimplement the netconsole logic in userspace
-> 	     * This needs also a widely distributed binary on all
-> 	       machines
-> 
-> 2) Send a ping directly to the console
-> 	a) Something as 'echo ping from $hostname" > /dev/kmsg')
-> 
-> 	Pro:
-> 		* No kernel changes
-> 	Cons:
-> 		* These debug messages will be sent to journalctl and to
-> 		  the console, polluting both
->
-> 3) Using per-loglevel patchset.
-> 	a) Same as above, but, setting netconsole loglevel to DEBUG, while
-> 	   all other consoles to INFO.
-> 
-> 	Pro:
-> 		* No changes on netconsole
-> 		* Netconsole "buffers" continues to be synchronized with
-> 		  kernel buffers. Everything in the same page, but,
-> 		  netconsole data has one loglevel higher.
-> 		* Sending a message to netconsole-only message is not
-> 		  special at all. It uses the same workflow we have
-> 		  today, through `/dev/kmsg'
-> 	Cons:
-> 		* Needs to change printk/console code (Chris' patch)
-> 		  that is on review for years now. Will it ever get
-> 		  accepted?
-> 		* These "ping" message will be in kernel buffers and
-> 		  journalctl, and are useless in there (!?)
-> 		* It is not possible to send a message to a single
-> 		  netconsole target.
+> Fixes: d9d957bd7b61 ("selftests/mm: alloc hugepages in va_high_addr_switch test")
+> CC: Luiz Capitulino <luizcap@redhat.com>
+> Signed-off-by: Chunyu Hu <chuhu@redhat.com>
 
-JFYI, I am going to review the last version of the per-console
-loglevel patchset later this week. IMHO, we are very close to
-get it merged.
+This fix is good, but there are two additional issues that need fixing
+(maybe in separate patches):
 
-BTW: How often do you ping the netconsole, please?
+1. In main() we do:
 
-     IMHO, adding a short message once-per-hour might be bearable,
-     once-per-minute might be questionable for the kernel buffer
-     but still fine for journalctl.
+"""
+         ret = run_test(testcases, sz_testcases);
+         if (argc == 2 && !strcmp(argv[1], "--run-hugetlb"))
+                 ret = run_test(hugetlb_testcases, sz_hugetlb_testcases);
+"""
 
-     Also it depends on the size of the kernel buffer and whether
-     you use a crash dump. I mean that it might be handy to have
-     some useful messages in the kernel buffer when the crash dump
-     is generated and used for debugging. Otherwise, the only
-     important thing is whether they get stored externally either
-     via console or journalctl.
+The second run_test() overwrites the return code of the first one, so if
+the first fails and the second one succeeds, the test will report
+success.
+
+2. The following comment in va_high_addr_switch.sh is wrong in two
+counts: there's an eligibility check for powerpc64 and the test doesn't
+reject other architectures as it runs on arm64 as well.
+
+"""
+     # The test supports x86_64 and powerpc64. We currently have no useful
+     # eligibility check for powerpc64, and the test itself will reject other
+     # architectures.
+"""
+
+For this fix:
+
+Reviewed-by: Luiz Capitulino <luizcap@redhat.com>
+
+> ---
+>   tools/testing/selftests/mm/va_high_addr_switch.sh | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/mm/va_high_addr_switch.sh b/tools/testing/selftests/mm/va_high_addr_switch.sh
+> index a7d4b02b21dd..f89fe078a8e6 100755
+> --- a/tools/testing/selftests/mm/va_high_addr_switch.sh
+> +++ b/tools/testing/selftests/mm/va_high_addr_switch.sh
+> @@ -114,4 +114,6 @@ save_nr_hugepages
+>   # 4 keep_mapped pages, and one for tmp usage
+>   setup_nr_hugepages 5
+>   ./va_high_addr_switch --run-hugetlb
+> +retcode=$?
+>   restore_nr_hugepages
+> +exit $retcode
 
 
-> 4) send messages only to netconsole (this patchset)
-> 	Pro:
-> 		* It is easy to test netconsole connective (problem above),
-> 		  without kernel buffers/journal pollution
-> 		* It doesn't depend on the per-loglevel patchset
-> 		* Adds flexibility to netconsole targets.
-> 			- only certain netconsole targets receive
-> 			  certain messages
-> 	Cons:
-> 		* Messages sent to netconsole is a superset of messages in the
-> 		  kernel buffer. In other words, "dmesg" and machine
-> 		  logs/journal will not be able to see messages that
-> 		  were sent directly to netconsole.
-> 			- It might be seen as a back channel (!?)
-> 		* Different netconsole targets may receive different
-> 		  messages. Too much flexibility might be bad (!?)
 
-I do not have strong opinion about this.
 
-That said, the location /sys/kernel/config/netconsole/<target>/send_msg
-looks a bit weird to me. I would rather expect /dev/netconsole_msg
-or so. But I do not have strong opinion. It might be an overkill.
 
-How important is it to trigger the ping from userspace, please?
-It might be sent by an existing watchdog.
 
-Best Regards,
-Petr
+
+
+
 
