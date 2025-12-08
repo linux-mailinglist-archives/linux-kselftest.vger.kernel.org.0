@@ -1,146 +1,149 @@
-Return-Path: <linux-kselftest+bounces-47268-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47269-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE732CAD395
-	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 14:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D200CAD836
+	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 16:00:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 67C08302C4DC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 13:16:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1C3FC308F23E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 14:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F33313535;
-	Mon,  8 Dec 2025 13:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13EED32939C;
+	Mon,  8 Dec 2025 14:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="plP4iKYD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I1H4I+M/";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ka5YX4f5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9D42EA172;
-	Mon,  8 Dec 2025 13:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.1.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50064329390
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Dec 2025 14:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765199772; cv=none; b=QAbeOblYzt6Up9DAxECkejyPWQh5WHWQhGutbr8YsgndzuL12b3ZcYPHF65OTc1Je8HsC//kXIyeBkSPOTTvaIsLX6L6lIpITpycLQaAMWovpfyw3bISLeGlyX9yxI+VRiesOH8WN7y20QlmoSEXxyVOuNPcH7DULoo6fQKkx+Y=
+	t=1765203609; cv=none; b=WrZHgI33IfEyPTI1OkKtbY+Ys4E1CPCeimoTl7dZYxkEWhFAGpofchjhAzQ7qazgk9B2HsxiE7WDPtw3+QAHl5lkPqDuSYdiykSp+S5ETU22BMSg8RnKGOhDpI9cUcxdPFyk35zPZVq2FCNszpchk42T2LatqKVBk9X9c9IEAJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765199772; c=relaxed/simple;
-	bh=k8krsWT/x0GUv66MZcxXLZX2sPNCof4Ugeu0Wu3by4Q=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DzTor4gIEZQS0G4Lj1XOseXtsp2alS8QZlmtEn+04bEONMdw/1HMtL78ImjcTx7jIB+o0e2m/u4jAgOf+AO4NItlvn2Qqs33BGYltytQN8NeAKTXMJ2A9/Ir4XU/5VUCrni1IaielPS/uOSjuzU4NGjc8fRHrG6Oo2L6wMuLBmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=plP4iKYD; arc=none smtp.client-ip=44.246.1.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+	s=arc-20240116; t=1765203609; c=relaxed/simple;
+	bh=PljNOTo0RHMKF0uIJ0F72Ecs4jdxizKa+DxYB7R6n6g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=g6OA31lXqYLEwxFSW2m7y1eK/Xs2mQdrQgMay7m1L4LdpQtQinrClvBWGG3bUpVVF3/r7U+QstRHTxJ22UCpiHEv3HBTFdk7N7iBptIvWoCUDnjogXA8UURjqujxDYJ+ie2eQ1wMmPp7T430GRKX2lxE2rRWPxGpKnmy4TUWIKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I1H4I+M/; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ka5YX4f5; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1765203605;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OqFvwLojx2/mzRD8U0g4XVY3xgE3qb7B+paToqsc4uA=;
+	b=I1H4I+M/rg9ml3UjfRNYBln3qid+RWyNvFeu8pd26PnPmt+etW9RpyNPxoGGVmAQtmHfvG
+	z0fOEm/7E5NBC6hL+yHosAiSmEly+blc2Y1SgCmT7Mjm1lxk2GYP4EuQY0CvV9FAmSZmbo
+	VzUr11VTWgdkKV+qCCLoPd8Lq2X7Djc=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-655-maA82T9CNGyUQKFevgXDhg-1; Mon, 08 Dec 2025 09:19:58 -0500
+X-MC-Unique: maA82T9CNGyUQKFevgXDhg-1
+X-Mimecast-MFC-AGG-ID: maA82T9CNGyUQKFevgXDhg_1765203598
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-647a2c3df89so4167577a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Dec 2025 06:19:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1765199771; x=1796735771;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=I9rd1qnxgT5n1V9dbFcwzJdspGNvNKAJ3jsGytQQ6BM=;
-  b=plP4iKYD3mMlIMec5HsQ4/dLire32azSwoYC7PuWwQR3NN9JcGTng5n3
-   JewgfaoxZQ2+bgNKwaIaLeUsDNkk/hbJ4XGnOhpB69kTjtDH+LHu2Yvhm
-   2fL+/3Tgq95YOxdnrUGu3IKPYpSkIwsqvWQqPUNCEjnWkTQOKZPuNusOB
-   NoRQ6RmfUtp90gdq2ADJy+9B7acAsiMjS4MDp6N/05xC+l913XeWSruDN
-   lBzCjsvWF1Vx+bSojgWYLE1BAsOSlSEApXXUjVIiJNxGKVP9GcLm60i5z
-   /T3DFW63bD3EmzKzevzy320Hmoe1fG100za1mq9FCjcfZW01OJ2EVnjQ3
-   g==;
-X-CSE-ConnectionGUID: rrhCpM48TZi2aJTlBbfWyw==
-X-CSE-MsgGUID: asNdWjQPT3WkkxwJKju5cQ==
-X-IronPort-AV: E=Sophos;i="6.20,258,1758585600"; 
-   d="scan'208";a="8652624"
-Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 13:16:08 +0000
-Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.51:8667]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.51.201:2525] with esmtp (Farcaster)
- id 87279090-16cc-4b35-b6f3-e6a1687c057e; Mon, 8 Dec 2025 13:16:08 +0000 (UTC)
-X-Farcaster-Flow-ID: 87279090-16cc-4b35-b6f3-e6a1687c057e
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Mon, 8 Dec 2025 13:16:04 +0000
-Received: from b0be8375a521.amazon.com (10.37.245.7) by
- EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Mon, 8 Dec 2025 13:16:01 +0000
-From: Kohei Enju <enjuk@amazon.com>
-To: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, "Jakub
- Kicinski" <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
-	<shuah@kernel.org>, =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=
-	<toke@kernel.org>, <kohei.enju@gmail.com>, Kohei Enju <enjuk@amazon.com>
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add tests for attaching invalid fd
-Date: Mon, 8 Dec 2025 22:14:32 +0900
-Message-ID: <20251208131449.73036-3-enjuk@amazon.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20251208131449.73036-1-enjuk@amazon.com>
+        d=redhat.com; s=google; t=1765203597; x=1765808397; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OqFvwLojx2/mzRD8U0g4XVY3xgE3qb7B+paToqsc4uA=;
+        b=Ka5YX4f5jfrNDRzG2rT3gy2GzK7QDEveOuGHagrZ6jMxKwTBQC8+esc6+hk18f9E12
+         fs/etNazPU2/ptkw2NyGTbH5mYH64CiVYbUMkbEH7qJTdjGSECv+hNHLqlTfGFKzxuiP
+         wZ5gvzNtYPZ5F+Gtc2hce0LVpWg4jQZ1PM2erjx5UQkqN38ZJm5z20cUkUbbZY/SyCFQ
+         KZS4jTZgK0dwymK47zTrTH8DcxLhKcJulOaofR+bNaC2b7HxioUXHDGpq7oJRVQPFS4m
+         Kveb5ri7HTiJ7zZueRQwM7skdCLxW9p4jpcImfClRMWUhjFngiH44gdy399eRE1Ph61w
+         5Bvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765203597; x=1765808397;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OqFvwLojx2/mzRD8U0g4XVY3xgE3qb7B+paToqsc4uA=;
+        b=BAo603PTUMrgLVSFqI0USuf7KFTPOjAqs/GBsfC+32hyrn/DXYfkNsNGH+z1qZZ6aN
+         3YCIcbVpwyhtoq8v7QtO2tavxOJ/0sJGFzUGi+F2oBrhq7yPIddKUdRGoZo3qkoJGQeR
+         9YLd9TRGN3hoB7wFR1uKnSAem05xmODJKvkLIaOvUINosFewqxiZ/1Hq80K+wbSiSJEL
+         r5L3cSsICMDNRo9G3UKDDg8s8SFWjliFce+RMj/eoIKcWcEJxE8e9Zoqc8AdxWC2RmuG
+         AFp9YDSv9v7B4KlYyVUHbEzQt0glm1BLOWnQFUcRwVoQC61F2uDhHLLuQNWKCS8ZdonI
+         Rsbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUDw3Qk38Hm3SzFByWcTUZn7dUgle09IFc4Qgvtor25NUbL1K0LFDWFjffIh/HQOKB4jNprKOznUMO20ABtaZ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YweXmEgdbqANk8w7CDYv5qtL2ytk8/I+K5kCCpL98jwmL8EmMzY
+	VjHuN1+n4CTt1uVlUdF7VlQ7XKgmw7NmcQ9QPIPKUTUZ1NDZyaZzrglTljUwrRqPX3OjStcFSFE
+	R6e+NxZ6nataIMhai7IWBrTku6/hcPcF0H66FzW/oUhVjzEJ/rsO9Xab9EVH643o1LNUWqA==
+X-Gm-Gg: ASbGncsCdu44n526KfPhPvNlb58s52uHVhDtLIKTdr2YAemJQMpRJtiOGGfDB3/736h
+	IIAEUYg9OiSGpJ7J7YbArmuaE0AQMEe6/GftTlj6DpaLrP/1PtebLFAtYKrGz2D5jMtwIkeEdYT
+	bdwpIgC/HtlzHS18UjorIeVGQX7w6go4PXl5MVvUnAOl5kKc6M1MjH9LomCkOnjpQ9gMpeucNPD
+	uonkCzgDQZ/IEd/Ezt5H4kZPcH2w+Ia6WXBptAM2/oAT17m5KZQjZzFOzJUbEdYLHWAPHZ6Gnde
+	1Idkg/mOacZ8IFB2MbK7f0H2Ae5JL9vu0tb8EffqFbdLyFnoVE1/mjExi8I8ozenhwGJT26mVtD
+	Ik68WA/vEDGgYu+5yarQKt7HlJubYzr0R8pxz
+X-Received: by 2002:a05:6402:2552:b0:640:aae4:b84e with SMTP id 4fb4d7f45d1cf-64919c200afmr7274275a12.13.1765203597584;
+        Mon, 08 Dec 2025 06:19:57 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHlwGmklZz9ErsAvsYahFym+NTtrfrXS3XeSEv/0e+lK+B3wopu8o0DAiRcNsRnntzTB46a4Q==
+X-Received: by 2002:a05:6402:2552:b0:640:aae4:b84e with SMTP id 4fb4d7f45d1cf-64919c200afmr7274253a12.13.1765203597191;
+        Mon, 08 Dec 2025 06:19:57 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-647b368de06sm11276090a12.22.2025.12.08.06.19.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Dec 2025 06:19:56 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id C3E5A3B25D7; Mon, 08 Dec 2025 15:19:55 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Kohei Enju <enjuk@amazon.com>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
+ <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kohei.enju@gmail.com,
+ Kohei Enju <enjuk@amazon.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: cpumap: propagate underlying error
+ in cpu_map_update_elem()
+In-Reply-To: <20251208131449.73036-2-enjuk@amazon.com>
 References: <20251208131449.73036-1-enjuk@amazon.com>
+ <20251208131449.73036-2-enjuk@amazon.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Mon, 08 Dec 2025 15:19:55 +0100
+Message-ID: <87o6o96ook.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Add test cases for situations where adding the following types of file
-descriptors to a cpumap entry should fail:
-- Non-BPF file descriptor (expect -EINVAL)
-- Nonexistent file descriptor (expect -EBADF)
+Kohei Enju <enjuk@amazon.com> writes:
 
-Also tighten the assertion for the expected error when adding a
-non-BPF_XDP_CPUMAP program to a cpumap entry.
+> After commit 9216477449f3 ("bpf: cpumap: Add the possibility to attach
+> an eBPF program to cpumap"), __cpu_map_entry_alloc() may fail with
+> errors other than -ENOMEM, such as -EBADF or -EINVAL.
+>
+> However, __cpu_map_entry_alloc() returns NULL on all failures, and
+> cpu_map_update_elem() unconditionally converts this NULL into -ENOMEM.
+> As a result, user space always receives -ENOMEM regardless of the actual
+> underlying error.
+>
+> Examples of unexpected behavior:
+>   - Nonexistent fd  : -ENOMEM (should be -EBADF)
+>   - Non-BPF fd      : -ENOMEM (should be -EINVAL)
+>   - Bad attach type : -ENOMEM (should be -EINVAL)
+>
+> Change __cpu_map_entry_alloc() to return ERR_PTR(err) instead of NULL
+> and have cpu_map_update_elem() propagate this error.
+>
+> Signed-off-by: Kohei Enju <enjuk@amazon.com>
 
-Signed-off-by: Kohei Enju <enjuk@amazon.com>
----
- .../bpf/prog_tests/xdp_cpumap_attach.c        | 19 +++++++++++++++++--
- 1 file changed, 17 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-index df27535995af..ad56e4370ce3 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-@@ -18,7 +18,7 @@ static void test_xdp_with_cpumap_helpers(void)
- 	struct bpf_cpumap_val val = {
- 		.qsize = 192,
- 	};
--	int err, prog_fd, prog_redir_fd, map_fd;
-+	int err, prog_fd, prog_redir_fd, map_fd, bad_fd;
- 	struct nstoken *nstoken = NULL;
- 	__u32 idx = 0;
- 
-@@ -79,7 +79,22 @@ static void test_xdp_with_cpumap_helpers(void)
- 	val.qsize = 192;
- 	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
- 	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
--	ASSERT_NEQ(err, 0, "Add non-BPF_XDP_CPUMAP program to cpumap entry");
-+	ASSERT_EQ(err, -EINVAL, "Add non-BPF_XDP_CPUMAP program to cpumap entry");
-+
-+	/* Try to attach non-BPF file descriptor */
-+	bad_fd = open("/dev/null", O_RDONLY);
-+	ASSERT_GE(bad_fd, 0, "Open /dev/null for non-BPF fd");
-+
-+	val.bpf_prog.fd = bad_fd;
-+	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
-+	ASSERT_EQ(err, -EINVAL, "Add non-BPF fd to cpumap entry");
-+
-+	/* Try to attach nonexistent file descriptor */
-+	err = close(bad_fd);
-+	ASSERT_EQ(err, 0, "Close non-BPF fd for nonexistent fd");
-+
-+	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
-+	ASSERT_EQ(err, -EBADF, "Add nonexistent fd to cpumap entry");
- 
- 	/* Try to attach BPF_XDP program with frags to cpumap when we have
- 	 * already loaded a BPF_XDP program on the map
--- 
-2.51.0
+Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
 
