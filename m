@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-47267-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47268-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA2E3CAD38C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 14:15:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE732CAD395
+	for <lists+linux-kselftest@lfdr.de>; Mon, 08 Dec 2025 14:16:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id ABD0030039CC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 13:15:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 67C08302C4DC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Dec 2025 13:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51B80313E28;
-	Mon,  8 Dec 2025 13:15:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F33313535;
+	Mon,  8 Dec 2025 13:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="D+RXTaFh"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="plP4iKYD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com [50.112.246.219])
+Received: from pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.1.125])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE76B2E1722;
-	Mon,  8 Dec 2025 13:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=50.112.246.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9D42EA172;
+	Mon,  8 Dec 2025 13:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.1.125
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765199742; cv=none; b=S5yBpPJfPDDvMbqz4iUJMsB/WSBNVJp0dgzWe5GQ6rXGvmiw2yb1sNc8zTPqb9lQAc10p0XsOWrA2e/fwG8bK3wdwnTzskhN9rKaJPuJHXonT9tkklqjHaxBbA2WSGZa1plCAx2+XWhfcDoz7l1FZvNod3zcu9goVLD3AmahlGE=
+	t=1765199772; cv=none; b=QAbeOblYzt6Up9DAxECkejyPWQh5WHWQhGutbr8YsgndzuL12b3ZcYPHF65OTc1Je8HsC//kXIyeBkSPOTTvaIsLX6L6lIpITpycLQaAMWovpfyw3bISLeGlyX9yxI+VRiesOH8WN7y20QlmoSEXxyVOuNPcH7DULoo6fQKkx+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765199742; c=relaxed/simple;
-	bh=i61VCGgct7ZbnxoPAen6qRvQuOw9UcE0ULJvROFG/2g=;
+	s=arc-20240116; t=1765199772; c=relaxed/simple;
+	bh=k8krsWT/x0GUv66MZcxXLZX2sPNCof4Ugeu0Wu3by4Q=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uqt9PX41zjZM6Ag1NDutNtd91HrbAglmGsOxEE6YdNd7XWlgSzTk61b3vEBWfJi76bb3TUhwS3SUsEX+tIi+kDCZe86cEnyYPZmqSqRgZO0gO8zOq/xvaMVE9YTqyytuG2pyFMuf7+K3ZZDwddT1MMffHwFdEFuGlXHHwHdRL9Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=D+RXTaFh; arc=none smtp.client-ip=50.112.246.219
+	 MIME-Version:Content-Type; b=DzTor4gIEZQS0G4Lj1XOseXtsp2alS8QZlmtEn+04bEONMdw/1HMtL78ImjcTx7jIB+o0e2m/u4jAgOf+AO4NItlvn2Qqs33BGYltytQN8NeAKTXMJ2A9/Ir4XU/5VUCrni1IaielPS/uOSjuzU4NGjc8fRHrG6Oo2L6wMuLBmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=plP4iKYD; arc=none smtp.client-ip=44.246.1.125
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1765199740; x=1796735740;
+  t=1765199771; x=1796735771;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=M1qic90YMioVVvvIfa4uHb6lYGZ/O4MS55qijIHvW2M=;
-  b=D+RXTaFhD1oIOK/0ItG9FefTZpTL3up0qJuxM6qEV6BaPy4/JZUwbVLH
-   fhgTJb4XIiVsvTuFmJyG+ivzahgx/0Zb/wTVCK2W/hQYebJ17g1O0lF0B
-   RPnSqGuoUtDGQ+68S+9h9G2j0N2EV12PBP0wbJ29vTQ+VzWIRQ0YW0WET
-   R2Q9mpF7wXk1f0H6ATAwrmRt5XYSaIcssUkx5APdnxiP7n2oV00NpztX5
-   xiIR2OUd4NOfyfWEwPDyPrAlVpIGuHTT9zGxq6yTydkPObOiVjzjGqkCf
-   6LF9FO0avqJMztwdtp29uBkeldwDI8mGvrQ7q6mC5swgQlIm3KMwuxhX7
+  bh=I9rd1qnxgT5n1V9dbFcwzJdspGNvNKAJ3jsGytQQ6BM=;
+  b=plP4iKYD3mMlIMec5HsQ4/dLire32azSwoYC7PuWwQR3NN9JcGTng5n3
+   JewgfaoxZQ2+bgNKwaIaLeUsDNkk/hbJ4XGnOhpB69kTjtDH+LHu2Yvhm
+   2fL+/3Tgq95YOxdnrUGu3IKPYpSkIwsqvWQqPUNCEjnWkTQOKZPuNusOB
+   NoRQ6RmfUtp90gdq2ADJy+9B7acAsiMjS4MDp6N/05xC+l913XeWSruDN
+   lBzCjsvWF1Vx+bSojgWYLE1BAsOSlSEApXXUjVIiJNxGKVP9GcLm60i5z
+   /T3DFW63bD3EmzKzevzy320Hmoe1fG100za1mq9FCjcfZW01OJ2EVnjQ3
    g==;
-X-CSE-ConnectionGUID: AEbruf8dSLGzAG/3dCCSgw==
-X-CSE-MsgGUID: GRDWGqg6Q/u4XOP0B9/5qg==
+X-CSE-ConnectionGUID: rrhCpM48TZi2aJTlBbfWyw==
+X-CSE-MsgGUID: asNdWjQPT3WkkxwJKju5cQ==
 X-IronPort-AV: E=Sophos;i="6.20,258,1758585600"; 
-   d="scan'208";a="8474291"
+   d="scan'208";a="8652624"
 Received: from ip-10-5-0-115.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.0.115])
-  by internal-pdx-out-015.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 13:15:40 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [205.251.233.234:5110]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.38.243:2525] with esmtp (Farcaster)
- id b3644f35-7ab6-489b-827a-62f171c9b93f; Mon, 8 Dec 2025 13:15:40 +0000 (UTC)
-X-Farcaster-Flow-ID: b3644f35-7ab6-489b-827a-62f171c9b93f
+  by internal-pdx-out-002.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2025 13:16:08 +0000
+Received: from EX19MTAUWB001.ant.amazon.com [205.251.233.51:8667]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.51.201:2525] with esmtp (Farcaster)
+ id 87279090-16cc-4b35-b6f3-e6a1687c057e; Mon, 8 Dec 2025 13:16:08 +0000 (UTC)
+X-Farcaster-Flow-ID: 87279090-16cc-4b35-b6f3-e6a1687c057e
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
+ EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Mon, 8 Dec 2025 13:15:39 +0000
+ Mon, 8 Dec 2025 13:16:04 +0000
 Received: from b0be8375a521.amazon.com (10.37.245.7) by
  EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
- Mon, 8 Dec 2025 13:15:36 +0000
+ Mon, 8 Dec 2025 13:16:01 +0000
 From: Kohei Enju <enjuk@amazon.com>
 To: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>,
 	<linux-kselftest@vger.kernel.org>
@@ -73,9 +73,9 @@ CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
 	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
 	<shuah@kernel.org>, =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?=
 	<toke@kernel.org>, <kohei.enju@gmail.com>, Kohei Enju <enjuk@amazon.com>
-Subject: [PATCH bpf-next v2 1/2] bpf: cpumap: propagate underlying error in cpu_map_update_elem()
-Date: Mon, 8 Dec 2025 22:14:31 +0900
-Message-ID: <20251208131449.73036-2-enjuk@amazon.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: add tests for attaching invalid fd
+Date: Mon, 8 Dec 2025 22:14:32 +0900
+Message-ID: <20251208131449.73036-3-enjuk@amazon.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20251208131449.73036-1-enjuk@amazon.com>
 References: <20251208131449.73036-1-enjuk@amazon.com>
@@ -87,98 +87,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D045UWC001.ant.amazon.com (10.13.139.223) To
+X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-After commit 9216477449f3 ("bpf: cpumap: Add the possibility to attach
-an eBPF program to cpumap"), __cpu_map_entry_alloc() may fail with
-errors other than -ENOMEM, such as -EBADF or -EINVAL.
+Add test cases for situations where adding the following types of file
+descriptors to a cpumap entry should fail:
+- Non-BPF file descriptor (expect -EINVAL)
+- Nonexistent file descriptor (expect -EBADF)
 
-However, __cpu_map_entry_alloc() returns NULL on all failures, and
-cpu_map_update_elem() unconditionally converts this NULL into -ENOMEM.
-As a result, user space always receives -ENOMEM regardless of the actual
-underlying error.
-
-Examples of unexpected behavior:
-  - Nonexistent fd  : -ENOMEM (should be -EBADF)
-  - Non-BPF fd      : -ENOMEM (should be -EINVAL)
-  - Bad attach type : -ENOMEM (should be -EINVAL)
-
-Change __cpu_map_entry_alloc() to return ERR_PTR(err) instead of NULL
-and have cpu_map_update_elem() propagate this error.
+Also tighten the assertion for the expected error when adding a
+non-BPF_XDP_CPUMAP program to a cpumap entry.
 
 Signed-off-by: Kohei Enju <enjuk@amazon.com>
 ---
- kernel/bpf/cpumap.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ .../bpf/prog_tests/xdp_cpumap_attach.c        | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 703e5df1f4ef..04171fbc39cb 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -430,7 +430,7 @@ static struct bpf_cpu_map_entry *
- __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
- 		      u32 cpu)
- {
--	int numa, err, i, fd = value->bpf_prog.fd;
-+	int numa, err = -ENOMEM, i, fd = value->bpf_prog.fd;
- 	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;
- 	struct bpf_cpu_map_entry *rcpu;
- 	struct xdp_bulk_queue *bq;
-@@ -440,7 +440,7 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+index df27535995af..ad56e4370ce3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+@@ -18,7 +18,7 @@ static void test_xdp_with_cpumap_helpers(void)
+ 	struct bpf_cpumap_val val = {
+ 		.qsize = 192,
+ 	};
+-	int err, prog_fd, prog_redir_fd, map_fd;
++	int err, prog_fd, prog_redir_fd, map_fd, bad_fd;
+ 	struct nstoken *nstoken = NULL;
+ 	__u32 idx = 0;
  
- 	rcpu = bpf_map_kmalloc_node(map, sizeof(*rcpu), gfp | __GFP_ZERO, numa);
- 	if (!rcpu)
--		return NULL;
-+		return ERR_PTR(err);
+@@ -79,7 +79,22 @@ static void test_xdp_with_cpumap_helpers(void)
+ 	val.qsize = 192;
+ 	val.bpf_prog.fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
+ 	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
+-	ASSERT_NEQ(err, 0, "Add non-BPF_XDP_CPUMAP program to cpumap entry");
++	ASSERT_EQ(err, -EINVAL, "Add non-BPF_XDP_CPUMAP program to cpumap entry");
++
++	/* Try to attach non-BPF file descriptor */
++	bad_fd = open("/dev/null", O_RDONLY);
++	ASSERT_GE(bad_fd, 0, "Open /dev/null for non-BPF fd");
++
++	val.bpf_prog.fd = bad_fd;
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_EQ(err, -EINVAL, "Add non-BPF fd to cpumap entry");
++
++	/* Try to attach nonexistent file descriptor */
++	err = close(bad_fd);
++	ASSERT_EQ(err, 0, "Close non-BPF fd for nonexistent fd");
++
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_EQ(err, -EBADF, "Add nonexistent fd to cpumap entry");
  
- 	/* Alloc percpu bulkq */
- 	rcpu->bulkq = bpf_map_alloc_percpu(map, sizeof(*rcpu->bulkq),
-@@ -468,16 +468,21 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
- 	rcpu->value.qsize  = value->qsize;
- 	gro_init(&rcpu->gro);
- 
--	if (fd > 0 && __cpu_map_load_bpf_program(rcpu, map, fd))
--		goto free_ptr_ring;
-+	if (fd > 0) {
-+		err = __cpu_map_load_bpf_program(rcpu, map, fd);
-+		if (err)
-+			goto free_ptr_ring;
-+	}
- 
- 	/* Setup kthread */
- 	init_completion(&rcpu->kthread_running);
- 	rcpu->kthread = kthread_create_on_node(cpu_map_kthread_run, rcpu, numa,
- 					       "cpumap/%d/map:%d", cpu,
- 					       map->id);
--	if (IS_ERR(rcpu->kthread))
-+	if (IS_ERR(rcpu->kthread)) {
-+		err = PTR_ERR(rcpu->kthread);
- 		goto free_prog;
-+	}
- 
- 	/* Make sure kthread runs on a single CPU */
- 	kthread_bind(rcpu->kthread, cpu);
-@@ -503,7 +508,7 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
- 	free_percpu(rcpu->bulkq);
- free_rcu:
- 	kfree(rcpu);
--	return NULL;
-+	return ERR_PTR(err);
- }
- 
- static void __cpu_map_entry_free(struct work_struct *work)
-@@ -596,8 +601,8 @@ static long cpu_map_update_elem(struct bpf_map *map, void *key, void *value,
- 	} else {
- 		/* Updating qsize cause re-allocation of bpf_cpu_map_entry */
- 		rcpu = __cpu_map_entry_alloc(map, &cpumap_value, key_cpu);
--		if (!rcpu)
--			return -ENOMEM;
-+		if (IS_ERR(rcpu))
-+			return PTR_ERR(rcpu);
- 	}
- 	rcu_read_lock();
- 	__cpu_map_entry_replace(cmap, key_cpu, rcpu);
+ 	/* Try to attach BPF_XDP program with frags to cpumap when we have
+ 	 * already loaded a BPF_XDP program on the map
 -- 
 2.51.0
 
