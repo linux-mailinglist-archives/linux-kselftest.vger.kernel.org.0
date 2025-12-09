@@ -1,68 +1,99 @@
-Return-Path: <linux-kselftest+bounces-47308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70F77CB0C53
-	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 18:47:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00657CB0F75
+	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 20:52:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4949930191A1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 17:47:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E83773015949
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 19:52:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02C523B60A;
-	Tue,  9 Dec 2025 17:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96CC3081AF;
+	Tue,  9 Dec 2025 19:52:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="cgdOOaPO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JYS/YKwB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0656E1DF248;
-	Tue,  9 Dec 2025 17:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48503307AE7
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Dec 2025 19:52:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765302428; cv=none; b=EgXBIg0sRF86khrD+3oIprvxzvsDKs2Y89G90318gG+YK407/3EGnu2/86O1/0HqMJtBLQGx8xnwkvU7fqVss1E+b6XEf3OKjdMA1cRN36b8ZBWoHuTDsPkksO/10+yEdewEwXBlBLWkyeijpGPn+ILziIzD7DI+3WDMlk593E8=
+	t=1765309956; cv=none; b=YfZhoKOx/IF0p1GeA5ttIkWxfZMd9f+vWt/EpS1eLdTiKTjWeUDHmAPhGo0CoIypacuOOLnmqZDgVO6id65wtR0UiuLO0keZBDymUsD17fCeEX0cJaTPmgUGkYq5csAQ6hDNSqmMLoNKcTIDSu+vqPkFfzkVwQV23X6ChJdSwCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765302428; c=relaxed/simple;
-	bh=xz+3QBGORDWc4nUGQFkFWzRbLLJ+ECCdKFkHKqqRVsc=;
+	s=arc-20240116; t=1765309956; c=relaxed/simple;
+	bh=XHL/L/FSKYOnQq3SetiqQKZ3ve52BsUb+UjL14KbL8c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f0C9xI0//V27xYbgND+pryoxrriE/PZwU2OHHMjIiqZ4MEiDtkAaIfXNrdgH2bgltqssOsgKix9xwit7rUod78RW4OPN7ZH40R7SpC6YJvEahB894mC4etfGQ8ywvWH99m1twtLnA00ZkWEEKkJHIBHtq2KtsZjN57jqZpI/o50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=cgdOOaPO; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=nDbkCvbumVt/JXuMSApvso7Kk+anWI/zeUGcDxpNtLQ=; b=cgdOOaPOV8oGOVGnlgWghLZBIC
-	8pBhHRnKzJ9XWZXwTxExGR0uicxsCEj41Qt7nz2JZci4C1ZhMB/wZ6p1+OmKUU5vmOna4z79LK9dk
-	+RUHm0H2ve5ITTwBBpxR2lwr5eTnGKM63S2e6Lp07u3nWQpa9z/QtE+t1nxkO90RRXUsOSiTuf+on
-	rfggwHvisD4qGGjeZSpTW6HrlOa7l9U0H/IBlMhBtmLl0ShIfZI6057uuHVshl/hSOk4ebydbo89U
-	e1ocX21DC5RyWjXfEkdOD4QNG8grWEGgKizrTSsJsYVOSPD46+TKjYcNYG9bB3xYJpcsxZCk2C2Pr
-	CrkwYoTw==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vT1nd-007IZV-5l; Tue, 09 Dec 2025 17:46:57 +0000
-Date: Tue, 9 Dec 2025 09:46:51 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Petr Mladek <pmladek@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, gustavold@gmail.com, 
-	asantostc@gmail.com, calvin@wbinvd.org, kernel-team@meta.com, davej@codemonkey.org.uk
-Subject: Re: [PATCH net-next 0/4] (no cover subject)
-Message-ID: <snoxl67npkzfi63l4ndh3d6qvx2lyxthtrwhfnharhf5llrv4j@zhyzxm3tegia>
-References: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
- <20251201163622.4e50bf53@kernel.org>
- <4oybtunobxtemenpg2lg7jv4cyl3xoaxrjlqivbhs6zo72hxpu@fqp6estf5mpc>
- <20251202102442.568f91a7@kernel.org>
- <aTFmew5trILX3RpO@pathway.suse.cz>
- <aTFnzmc0ZtBvGg4y@pathway.suse.cz>
- <7jdruzcpkeyhuudwi6uzg2vsc5mhgpq7qz4ym7vqqmgs7j3524@cvtnzneddg2d>
- <20251209163745.3d0fcdfe@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=S3mqlUjLooXQ9FONMJIhZhdUFHVcOnAbPg5GQmDS3/SW5ResAHh2j31Zbjt7Ty2qSG0FXBCVtOHDV6IKr0oQ6MBf5MdvRd496WTipxFbxg2qzZLXNWq377oiok3NUewX8Z+k+R/9Tt4NwN41ZZJg86opZlo3wnRkcnr5zzruBO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JYS/YKwB; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-6433f99eb15so5424130d50.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Dec 2025 11:52:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765309953; x=1765914753; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+S3XRmIfY6Nu+N2ZLCSjBdZjpwngwmUECGmLCvjDHC4=;
+        b=JYS/YKwBT9uINGJs0YtoEei+BcWgPlR28O3aqTc7ELWu4ak8jt96qj9N1A6rFEx97y
+         UoKYSu15kAi67xNZxzfPs0wRq0bWRh92qZx9kk+Jgy9tw31yGR3fmzJqAjwg4A4MOX7P
+         9bL7jbxmonzsi+LHrD7vqtHI1W98N7C8byFw44IVvhL3FBZdJoGQW/pzSoMHW+eGOB9f
+         X+g9AEgJDlsgG1Nz1WhPlCaPKHJTvHM68ooA71V4Gw6wC/FqskNUvUrASYlSq6ek7QQQ
+         zROMwFssQ7rk32CJwEQmETzhC6q1KpDga/wfeAkXudp4GV0SMqOZ2uQZvhD9Fb7CDd7N
+         sydA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765309953; x=1765914753;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+S3XRmIfY6Nu+N2ZLCSjBdZjpwngwmUECGmLCvjDHC4=;
+        b=lDFQKIekHr8gKtLN1SmGu5ckOv7BeI3mX1nNAaOp3AqOdwd02kgyz1RJWmmsYGEyCE
+         5J1ms6IBKgi/w/cgf2XVMeq3Dj8oJW1lBEd5qf8fnFaJvdLPGj2+TOAe0iW/+6nqXHce
+         xkH03evrOQ/hh1PiGp3Yuh3Ca8n4GMUcCqZ+WkKWCvAx1QQJSWzbEXsCSFGTyAyPOrLN
+         w9H+PmH1qyc8W1xcAWqWJyqDYFFaJacpHZt9P7QxmbtWw9vnfspQyPdZYUKayqVvElFN
+         2tQuqBwlCSyKrKzNuVgkRXBbSUcM2f2E/D3JFB0V5NhAWxHit88Agj0WfzZjFkcnPi2T
+         zBxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWqkBKm+PwdXmI0bjVsOfag4nSzg2+qCVMzR3Ts5yiB9+sY1ZKXLKZiY7fLXFaG1w/u+dZxxP1UEKeLXpFC5Bw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwW9EglDdrIRKZ2lqIOnYsLiQCoM6A0CQCNGr9/1XXdtTA11rn
+	eLOvcVWKfdF208EOFESq6C3rab604PvEjlUvQLoIgSZKPCsPjBK9xWRc
+X-Gm-Gg: AY/fxX4UuN2EnYkBI/YtEdM7U22Ad5bD1K3QWzSTcDN8UaJH1apSrSn+p/6Ssa+9y8Q
+	holXUEiJHNXR50Dn7YVa1GK+NzcpX2ESg1rjwv19tBTYsx7dyQeQsjwDVuK5uM6eFfoXQVOFG1v
+	ZAqa2qnhSf0Qw/zYqUNAxKP85fOdoG1TubSyAE+NBe4uAoorfLEGjpKA2cxm0X8bv6tLpNgGrff
+	11qsrY/x6R5byjlScBDuPr5Dn87eUCx9YtpUW1CMSo79GNYeGVqVky6PxXFIRk1WLqokm0GwBkJ
+	uyzjmY2jRjH54q2XLwhCQakw9ZarqZqnP1ZfhU2dKF3IYKErDM1OZzSPtI7WunBCl+xhNVcY83D
+	UK0UD2+inNQo6iKzdkyO774kS6BrpFfTJ1AmGXdSboqtmmLp3wMgQm67ludKzj/zGcirnaCCxwD
+	ZaGR1r9gRV2Kg0wn4buGXHPlVVPr9vmhYiauvFfFUr+fJUpJE=
+X-Google-Smtp-Source: AGHT+IGVa6r0iFDuAtcL6wIkP8nbDpeCfCQK9vF2pnYiCLEjTySXlHVWrlq2gK/PVPin4gJW60wg5g==
+X-Received: by 2002:a05:690e:2543:b0:640:d255:2d6f with SMTP id 956f58d0204a3-6446e93f952mr78609d50.34.1765309953244;
+        Tue, 09 Dec 2025 11:52:33 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:54::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78c1b4ae638sm63277367b3.4.2025.12.09.11.52.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Dec 2025 11:52:32 -0800 (PST)
+Date: Tue, 9 Dec 2025 11:52:31 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>, Shuah Khan <shuah@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v7 0/5] net: devmem: improve cpu cost of RX
+ token management
+Message-ID: <aTh9/waV23uRZc9E@devvm11784.nha0.facebook.com>
+References: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,53 +102,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251209163745.3d0fcdfe@kernel.org>
-X-Debian-User: leitao
+In-Reply-To: <20251119-scratch-bobbyeshleman-devmem-tcp-token-upstream-v7-0-1abc8467354c@meta.com>
 
-Hello Jakub,
-
-On Tue, Dec 09, 2025 at 04:37:45PM +0900, Jakub Kicinski wrote:
-> On Fri, 5 Dec 2025 02:21:08 -0800 Breno Leitao wrote:
-> > 1) Have a binary in each machine:
+On Wed, Nov 19, 2025 at 07:37:07PM -0800, Bobby Eshleman wrote:
+> This series improves the CPU cost of RX token management by adding an
+> attribute to NETDEV_CMD_BIND_RX that configures sockets using the
+> binding to avoid the xarray allocator and instead use a per-binding niov
+> array and a uref field in niov.
 > 
-> > 2) Send a ping directly to the console
+> Improvement is ~13% cpu util per RX user thread.
+>     
+> Using kperf, the following results were observed:
 > 
-> > 3) Using per-loglevel patchset.
+> Before:
+> 	Average RX worker idle %: 13.13, flows 4, test runs 11
+> After:
+> 	Average RX worker idle %: 26.32, flows 4, test runs 11
 > 
-> > 4) send messages only to netconsole (this patchset)
+> Two other approaches were tested, but with no improvement. Namely, 1)
+> using a hashmap for tokens and 2) keeping an xarray of atomic counters
+> but using RCU so that the hotpath could be mostly lockless. Neither of
+> these approaches proved better than the simple array in terms of CPU.
 > 
-> I think I was alluding that another option (not saying that it's the
-> best but IIUC your requirements it'd be the best fit)):
+> The attribute NETDEV_A_DMABUF_AUTORELEASE is added to toggle the
+> optimization. It is an optional attribute and defaults to 0 (i.e.,
+> optimization on).
 > 
-> 5) Add a keepalive configfs knob, if set to a non-zero value netconsole
-> will send an empty (?) message at given interval
+
+[...]
 > 
->   Pros:
->    - truly does not require a user binary to run periodically, netcons
->      would set a timer in the kernel
->   Cons:
->    - does not provide the arbitrary "console bypass" message
->      functionality
+> Changes in v7:
+> - use netlink instead of sockopt (Stan)
+> - restrict system to only one mode, dmabuf bindings can not co-exist
+>   with different modes (Stan)
+> - use static branching to enforce single system-wide mode (Stan)
+> - Link to v6: https://lore.kernel.org/r/20251104-scratch-bobbyeshleman-devmem-tcp-token-upstream-v6-0-ea98cf4d40b3@meta.com
+> 
 
-This is a good idea if we change it slightly. What about a "ping"
-configfs item that send sit when I touch it?
+Mina, I was wondering if you had any feedback on this approach?
 
-Something as:
-
-	# echo 1 > /sys/kernel/configs/<target>/ping
-	
-And it would ping the host with a predefined "ping" message, and nothing
-else.
-
-That would work, for my current problem, honestly.
-
-One drawback compared to a more flexible "send_msg" is that I don't have
-complete flexibility on the message format. Thus, if I want to pass
-extra information such as a Nonce, timestamp, host state, interface
-name, health state, it will not be possible, which is fine for now,
-given I am NOT planning to use it at this stage.
-
-Thanks for the idea and discussion,
---breno
-
+Best,
+Bobby
 
