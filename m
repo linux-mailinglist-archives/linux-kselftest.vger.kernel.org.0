@@ -1,151 +1,130 @@
-Return-Path: <linux-kselftest+bounces-47304-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47305-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD607CB01A6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 14:54:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D3C5CB054A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 15:48:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1A3B730CFA99
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 13:49:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7CF3E3016374
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 14:48:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3445D248896;
-	Tue,  9 Dec 2025 13:49:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483192FE061;
+	Tue,  9 Dec 2025 14:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YI9xfupN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85AAE2248A0;
-	Tue,  9 Dec 2025 13:48:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07B272602
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Dec 2025 14:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765288141; cv=none; b=BH6BJ9MqMIEZXR/UIosLl99IOF7hxHAa4g00BvMyg67EJlNjYQC5EHnzNV/3MzMK3RMpMwuT+ngrqgsdzExXVccjON+B6/ILPHYEavQeCNAjkuzUIyhR5hR3NECZWmzukdYOify4y7QAXxKN6qPscUg3JPSqXYOyLNImhKZxVeo=
+	t=1765291708; cv=none; b=hgReywQ+ZIAA3a21RqjzMs69Zvb9H7urqG2+W1jQb9TzZExzBv7Ahr/CmFMh3A3yk2aiqVQkU3SCf6PmMpHlMVWSG44rEQXb8Q7y74bA2xfT2H2VKSMWEM58uyW9jPos1wxNdm0/WLzylfcR0jzQJTOhZ8bYnrTbYHRCWyDOK2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765288141; c=relaxed/simple;
-	bh=FVuQRujYf++BNgQ6+PI/6/zZw0Q2ZkUFz3N/E8zTCx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=hI411ngCLBvzPzqKKY7urU/senu5V2p7UqYQ46jUIjb853R6kaz3dj2Y0TYFqEazFP4AfGyDzIoccfqECzgv/Nir3mPRHvr96PuAlWaI2MLV16P38WLszsJKz8nLpj3PWiEScrXPodm3Cm8WnTOIN4a6mbPLSzxp/z1XT/pLTzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99A52175A;
-	Tue,  9 Dec 2025 05:48:51 -0800 (PST)
-Received: from [10.57.45.100] (unknown [10.57.45.100])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B3343F762;
-	Tue,  9 Dec 2025 05:48:54 -0800 (PST)
-Message-ID: <b382cc8a-3ce9-4fb1-bc0a-a3d9796251d1@arm.com>
-Date: Tue, 9 Dec 2025 14:48:51 +0100
+	s=arc-20240116; t=1765291708; c=relaxed/simple;
+	bh=tNDDMglzHZagLUdfNEkHNyHOtmXBIdiz/eXvcMePmKU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dppu2fAj36pSPWeff+2+c2pACe7KY+D5QY7co5qZnefKEjVeH2PQMmo5FfIazbc544lIpnd+vqk0AawE88TVvS//WnU1Poy2p73lXSqAaTnxKZf1ncLPF52bdNLX/rim5/w+Nfzh3l9eZMHmPq5VC5NTs+8FUPFp3WJMZY81aM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YI9xfupN; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1765291705;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=HJh7H5GiF2qQLzN/OqZxU2ve8RhVtZeC3ROh/2CUAvo=;
+	b=YI9xfupN6e3VNc6kSK2EDqfActCCONX74Mjh3BZrEnfF6RM/f0EsQ6R9MFKhsOh43H2wdj
+	V2xNDRfM//ceqmTPOEWbWHO8cw5LxowuGbVjefIinqTPF3Z38n/53hnWbdg40XMl+VumW0
+	Vi+7dFQsDbVXgLckeTb4h0YH9OrnQ60=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-583-U8a79uIlOLi4R1dHwdGDSQ-1; Tue,
+ 09 Dec 2025 09:48:16 -0500
+X-MC-Unique: U8a79uIlOLi4R1dHwdGDSQ-1
+X-Mimecast-MFC-AGG-ID: U8a79uIlOLi4R1dHwdGDSQ_1765291694
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BB8DB1956080;
+	Tue,  9 Dec 2025 14:48:13 +0000 (UTC)
+Received: from gmail.com (unknown [10.72.112.49])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9843419560AD;
+	Tue,  9 Dec 2025 14:48:00 +0000 (UTC)
+Date: Tue, 9 Dec 2025 22:47:52 +0800
+From: Chunyu Hu <chuhu@redhat.com>
+To: Luiz Capitulino <luizcap@redhat.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com
+Subject: Re: [PATCH v1 2/3] selftests/mm: allocate 6 hugepages in
+ va_high_addr_switch.sh
+Message-ID: <aTg2mKHKyq9ibFoU@gmail.com>
+References: <20251207122239.3228920-1-chuhu@redhat.com>
+ <20251207122239.3228920-2-chuhu@redhat.com>
+ <efdd610d-a56f-4f3f-ab5c-9b0da1762ab6@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 15/16] entry: Inline syscall_exit_work()
-To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
- will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
- luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
- deller@gmx.de, macro@orcam.me.uk, charlie@rivosinc.com, ldv@strace.io,
- mark.rutland@arm.com, song@kernel.org, ryan.roberts@arm.com,
- ada.coupriediaz@arm.com, anshuman.khandual@arm.com, broonie@kernel.org,
- pengcan@kylinos.cn, dvyukov@google.com,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20251204082123.2792067-1-ruanjinjie@huawei.com>
- <20251204082123.2792067-16-ruanjinjie@huawei.com>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <20251204082123.2792067-16-ruanjinjie@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <efdd610d-a56f-4f3f-ab5c-9b0da1762ab6@redhat.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 04/12/2025 09:21, Jinjie Ruan wrote:
-> After switch arm64 to Generic Entry, a new hotspot syscall_exit_work()
-> appeared because syscall_exit_work() is no longer inlined. so inline
+On Mon, Dec 08, 2025 at 10:47:19AM -0500, Luiz Capitulino wrote:
+> On 2025-12-07 07:22, Chunyu Hu wrote:
+> > The va_high_addr_switch test requires 6 hugepages, not 5. If running the
+> > test directly by: ./va_high_addr_switch.sh, the test will hit a mmap 'FAIL'
+> > caused by not enough hugepages:
+> >    ```
+> >    mmap(addr_switch_hint - hugepagesize, 2*hugepagesize, MAP_HUGETLB): 0x7f330f800000 - OK
+> >    mmap(addr_switch_hint , 2*hugepagesize, MAP_FIXED | MAP_HUGETLB): 0xffffffffffffffff - FAILED
+> >    ```
+> > The failure can't be hit if run the tests by running 'run_vmtests.sh -t
+> > hugevm' because the nr_hugepages is set to 128 at the beginning of
+> > run_vmtests.sh and va_high_addr_switch.sh skip the setup of nr_hugepages
+> > because already enough.
+> > 
+> > CC: Luiz Capitulino <luizcap@redhat.com>
+> > Fixes: d9d957bd7b61 ("selftests/mm: alloc hugepages in va_high_addr_switch test")
+> > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+> > ---
+> >   tools/testing/selftests/mm/va_high_addr_switch.sh | 6 ++++--
+> >   1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/mm/va_high_addr_switch.sh b/tools/testing/selftests/mm/va_high_addr_switch.sh
+> > index f89fe078a8e6..98f3dfab62c5 100755
+> > --- a/tools/testing/selftests/mm/va_high_addr_switch.sh
+> > +++ b/tools/testing/selftests/mm/va_high_addr_switch.sh
+> > @@ -111,8 +111,10 @@ setup_nr_hugepages()
+> >   check_test_requirements
+> >   save_nr_hugepages
+> > -# 4 keep_mapped pages, and one for tmp usage
+> > -setup_nr_hugepages 5
+> > +# 5 keep_mapped hugepages are reserved in the first testings, and the last test
+> > +# requires two hugepages, with one verlaped with the last second test, so one
+> > +# extra, totally 6 hugepages
+> 
+> IMHO, I'd just say "The HugeTLB tests require 6 pages", otherwise the
+> fix look good to me.
 
-Before this series the call to syscall_trace_exit() in el0_svc_common()
-could not be inlined, so "no longer inlined" doesn't seem to be accurate.
+Thank you for the review. Let me update a v2 to shorten this comment as
+your suggested. And change the title to 'require 6 hugepages in
+va_high_addr_switch hugetlb test.
 
-> syscall_exit_work(), and it has 2.6% performance uplift on perf bench
-> basic syscall on kunpeng920 as below.
+> 
+> > +setup_nr_hugepages 6
+> >   ./va_high_addr_switch --run-hugetlb
+> >   retcode=$?
+> >   restore_nr_hugepages
+> 
 
-That seems strange. syscall_exit_work() is only called if some flag in
-SYSCALL_WORK_EXIT is set, which means that we're doing something special
-like tracing. That shouldn't be the case when running a simple perf
-bench syscall.
-
-Also worth nothing that its counterpart (syscall_trace_enter())) is not
-currently inlined, the asymmetry would have to be justified.
-
->     | Metric     | W/O this patch | With this patch | Change    |
->     | ---------- | -------------- | --------------- | --------- |
->     | Total time | 2.171 [sec]    | 2.114 [sec]     |  ↓2.6%    |
->     | usecs/op   | 0.217192       | 0.211453        |  ↓2.6%    |
->     | ops/sec    | 4,604,225      | 4,729,178       |  ↑2.7%    |
->
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> ---
->  include/linux/entry-common.h  | 63 ++++++++++++++++++++++++++++++++++-
->  kernel/entry/syscall-common.c | 59 ++------------------------------
-
-These changes are purely generic, surely all architectures using
-GENERIC_ENTRY should get similar benefits (assuming LTO isn't used)?
-
->  2 files changed, 64 insertions(+), 58 deletions(-)
->
-> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
-> index cd6dacb2d8bf..2f84377fb016 100644
-> --- a/include/linux/entry-common.h
-> +++ b/include/linux/entry-common.h
-> @@ -2,6 +2,7 @@
->  #ifndef __LINUX_ENTRYCOMMON_H
->  #define __LINUX_ENTRYCOMMON_H
->  
-> +#include <linux/audit.h>
->  #include <linux/irq-entry-common.h>
->  #include <linux/ptrace.h>
->  #include <linux/seccomp.h>
-> @@ -128,6 +129,41 @@ static __always_inline long syscall_enter_from_user_mode(struct pt_regs *regs, l
->  	return ret;
->  }
->  
-> +/*
-> + * If SYSCALL_EMU is set, then the only reason to report is when
-> + * SINGLESTEP is set (i.e. PTRACE_SYSEMU_SINGLESTEP).  This syscall
-> + * instruction has been already reported in syscall_enter_from_user_mode().
-> + */
-> +static __always_inline bool report_single_step(unsigned long work)
-> +{
-> +	if (work & SYSCALL_WORK_SYSCALL_EMU)
-> +		return false;
-> +
-> +	return work & SYSCALL_WORK_SYSCALL_EXIT_TRAP;
-> +}
-> +
-> +/**
-> + * arch_ptrace_report_syscall_exit - Architecture specific
-> + *				     ptrace_report_syscall_exit.
-> + *
-> + * Invoked from syscall_exit_work() to wrap ptrace_report_syscall_exit().
-> + *
-> + * The main purpose is to support arch-specific ptrace_report_syscall_exit
-> + * implementation.
-> + */
-> +static __always_inline void arch_ptrace_report_syscall_exit(struct pt_regs *regs,
-> +							    int step);
-> +
-> +#ifndef arch_ptrace_report_syscall_exit
-> +static __always_inline void arch_ptrace_report_syscall_exit(struct pt_regs *regs,
-> +							    int step)
-> +{
-> +	ptrace_report_syscall_exit(regs, step);
-> +}
-> +#endif
-
-If we want syscall_exit_work() to be inline, then why would we define
-this hook in syscall-common.c in patch 12? Might as well define both
-hooks in entry-common.h right away and avoid some noise here.
-
-- Kevin
-
-> [...]
 
