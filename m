@@ -1,311 +1,219 @@
-Return-Path: <linux-kselftest+bounces-47336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 019D4CB11B1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 22:06:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60387CB126C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 22:18:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9D94A307DF57
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 21:03:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EA8923125FAA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 21:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08577308F1B;
-	Tue,  9 Dec 2025 20:53:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1776B3168E5;
+	Tue,  9 Dec 2025 21:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yAWJT6PZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcJKGa4g"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f202.google.com (mail-oi1-f202.google.com [209.85.167.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253F93090DD
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Dec 2025 20:52:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE8B72602;
+	Tue,  9 Dec 2025 21:08:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765313582; cv=none; b=ot8E7NBsmGoVUpccAn5HKeGZ+3xyFnVRi5TtarMcQg5+wd8zMr2kms8sa2cE9e2DhDhgP7sbeICDAZOVQ3BahluVxGaW4JJCFwwPL5udR7BcuU3YZFNAx+mxAEkjAl36hhqzgRFSQu9K6T+4FMjWhpGxcIVxc5MShQgtNSHtOpg=
+	t=1765314495; cv=none; b=RpfLoGVYV/fG1Phj2k1GQr1vNuxPlTcqhwmtGMilK1ggrnb01wEJZn1Hg7fRJhhRNTzbZwSYYwJ01TkxND61Z3cjZyIHc/hbEisiUzc3wm4gx+vYp7/mutUzlJbCPMgmwfjXH9ajbgErWyzCeMiuAKPabJfBRv+HO9ZK97ni33M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765313582; c=relaxed/simple;
-	bh=Ovdb4lVvItfJ3Rv6cYdLAQWvS+U6STJuj9GjRFXJ9SM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=JXL+aeuZnYOoWiXnDLm5aH2GkpOYoIomVc7r48yeHBnQNamXKHuCJPUQiYO/W/RG2YWsxL4Gp2pRrzxctNt8GeUGBzcWOd2fJskvwwiKczNt9TEcy24YbKIRHKvYAPbBB8VlBnxDdiN/cq48Hkf5EdFQfRxEbIQP9Q2xaMTJ1Dk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yAWJT6PZ; arc=none smtp.client-ip=209.85.167.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-oi1-f202.google.com with SMTP id 5614622812f47-453799e65bbso7447152b6e.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Dec 2025 12:52:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765313571; x=1765918371; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9TQM9hbEKY4h1TXZBEY6y+aDCak1RQ1iwoKxBpJfd80=;
-        b=yAWJT6PZveoEuxpuw/wbE6bdSgUhYlE/RHpx+Qkm+CTLqiO6OAoVBLuHGO4tc9jQNf
-         8FDHVNFxGatyTy0kPGTec1hUnzme3gy5E5Ox8i6NsGHQ9+4GHDNSmGcH2MOnXcx2bx5M
-         md0+qkUcWQ8fzmnnvje+LB8CewIbLKJ2u8tOWAzwvCEGeLxl5U4/j/38Bur2GR1g3VD7
-         Rxd1bDIZD4nXnwBt/ooOhohOV8G7cM93yH3PKyA9e4V75mfwsrff+7EPyfRl4MBzDYpI
-         zgESOslgCv+3vx60p7ARs7/LLCsXrU0G00PxAwqzSOtNaZph9vnNid3gjdCRY0RrO1C9
-         WckQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765313571; x=1765918371;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9TQM9hbEKY4h1TXZBEY6y+aDCak1RQ1iwoKxBpJfd80=;
-        b=Nd6wHUs1RfVOlRyzeuCR9KvJn/bo/yXyviG5qXF5hKx+pq9sYTzavTOSO0fTN7Nct0
-         l7tPgqkx8DjPOeBqqQOfB9n9OcTYGdrOe8c7YsoChj3Orp/8Rn8Ze6WpceAac2x90D5k
-         sYM69QRQaZGnsi74ye16yX6xdd9VhzNfR8SwKCHtWWuZOl5HHJRzssFAzUt5OWr/V3MN
-         BLMzJ4l1ZKThVzC7Jxj3R9c+Jj4hps0l8JjHZKL2hq9lzSgxotl1W2hiiQ5n8O6YYxpx
-         pY3dnfrj4bR3K8FGlLe0ZroR3UsFRq7WIEkr4YeGLABvRFETYhkAyrqp6eLgOyYRrV45
-         XYYA==
-X-Forwarded-Encrypted: i=1; AJvYcCXh5ep5PKHIZdCUTBF96bJhQcjhTpt18Y4yEulj+j2rwSps0zuYy1xLzz74i3MZOMNaZCEkUYJiEG2L3LzGC8U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMmh90JbWuJAk6LjvZRxdifEtXXlOSHQP/3M0RmJaXzI9ssPno
-	eoOwqEW0D8QWvBG2Q4m8sgxRfMWWmYOwMVM5elNMSd+qGCRyCG0K6vvF7ZMSGt1A3jbOsXOds5D
-	wuNX6w4R/V2BK81sOaDoNEk7MyA==
-X-Google-Smtp-Source: AGHT+IHWcIE4lg0T6ePDVQb/sbhJCa/b57rBLjAAg31xKxOUUm8LB/AXhfBedLziDTfhcJmhpwXWgmPZUFcO0YaxEw==
-X-Received: from oifn25-n1.prod.google.com ([2002:a05:6808:8859:10b0:450:63b:b0dd])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:1441:b0:44f:6a32:5364 with SMTP id 5614622812f47-455865ceac4mr180351b6e.24.1765313570670;
- Tue, 09 Dec 2025 12:52:50 -0800 (PST)
-Date: Tue,  9 Dec 2025 20:51:21 +0000
-In-Reply-To: <20251209205121.1871534-1-coltonlewis@google.com>
+	s=arc-20240116; t=1765314495; c=relaxed/simple;
+	bh=DqNP2ZCx6Exn3ynjV4hjZkY7WNN/Z9M7pZg9j1AEmV4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cf3AoXZk0uFLcC9sy8Sc/tYwhRmf9kSX6CDP+EFWZ9aUjVmA98HF0BswwVXUABsFUGWJS4ulrItPwa0feYY/0tNMwWT2K4P/IgVe09anGI9OZsBir3B02KXMZTIbiT/kbV9LXeW1sugZqp/lKKSVSGCGsApsmBz7OO3ILie9g/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jcJKGa4g; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4EFC4CEF5;
+	Tue,  9 Dec 2025 21:08:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765314494;
+	bh=DqNP2ZCx6Exn3ynjV4hjZkY7WNN/Z9M7pZg9j1AEmV4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jcJKGa4grfV5rmRdbJ+05xu9XobUVOs1q4rjQGrhAuF8dsjIA8V9sGSMWRvhme6G9
+	 OW7OVrhB2fcwSa0S9f0BuIls+G6fdtmpHcKWKfZa0UGWnfKEmsEHy0GK65Oj14m9sC
+	 2E06h09rOq/PcVLYyqKW2HfrbrmcPb3RGIiQYMuaSu3QGCZeqptcs17Gz4HHB9l2aF
+	 DVLsN05fDKG82bKLjUcHB80RL9LrbqtHv57rwD+z5m/b1Vttnipx3edbA/lCJvYgwR
+	 RD5RUzbB5cNbXsCQItAe5ghU7v+Lgw7tWY62G/ppYqffIy/ddaXpeWpC0YAT90VrIo
+	 jSMG9q7P1DnzQ==
+Date: Tue, 9 Dec 2025 13:08:13 -0800
+From: Oliver Upton <oupton@kernel.org>
+To: Colton Lewis <coltonlewis@google.com>
+Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 10/24] KVM: arm64: Set up FGT for Partitioned PMU
+Message-ID: <aTiPvS49uMOJEBrf@kernel.org>
+References: <20251209205121.1871534-1-coltonlewis@google.com>
+ <20251209205121.1871534-11-coltonlewis@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251209205121.1871534-1-coltonlewis@google.com>
-X-Mailer: git-send-email 2.52.0.239.gd5f0c6e74e-goog
-Message-ID: <20251209205121.1871534-25-coltonlewis@google.com>
-Subject: [PATCH v5 24/24] KVM: arm64: selftests: Add test case for partitioned PMU
-From: Colton Lewis <coltonlewis@google.com>
-To: kvm@vger.kernel.org
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>, 
-	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Colton Lewis <coltonlewis@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251209205121.1871534-11-coltonlewis@google.com>
 
-Rerun all tests for a partitioned PMU in vpmu_counter_access.
+Hi Colton,
 
-Create an enum specifying whether we are testing the emulated or
-partitioned PMU and all the test functions are modified to take the
-implementation as an argument and make the difference in setup
-appropriately.
+On Tue, Dec 09, 2025 at 08:51:07PM +0000, Colton Lewis wrote:
+> In order to gain the best performance benefit from partitioning the
+> PMU, utilize fine grain traps (FEAT_FGT and FEAT_FGT2) to avoid
+> trapping common PMU register accesses by the guest to remove that
+> overhead.
+> 
+> Untrapped:
+> * PMCR_EL0
+> * PMUSERENR_EL0
+> * PMSELR_EL0
+> * PMCCNTR_EL0
+> * PMCNTEN_EL0
+> * PMINTEN_EL1
+> * PMEVCNTRn_EL0
+> 
+> These are safe to untrap because writing MDCR_EL2.HPMN as this series
+> will do limits the effect of writes to any of these registers to the
+> partition of counters 0..HPMN-1. Reads from these registers will not
+> leak information from between guests as all these registers are
+> context swapped by a later patch in this series. Reads from these
+> registers also do not leak any information about the host's hardware
+> beyond what is promised by PMUv3.
+> 
+> Trapped:
+> * PMOVS_EL0
+> * PMEVTYPERn_EL0
+> * PMCCFILTR_EL0
+> * PMICNTR_EL0
+> * PMICFILTR_EL0
+> * PMCEIDn_EL0
+> * PMMIR_EL1
+> 
+> PMOVS remains trapped so KVM can track overflow IRQs that will need to
+> be injected into the guest.
+> 
+> PMICNTR and PMIFILTR remain trapped because KVM is not handling them
+> yet.
+> 
+> PMEVTYPERn remains trapped so KVM can limit which events guests can
+> count, such as disallowing counting at EL2. PMCCFILTR and PMCIFILTR
+> are special cases of the same.
+> 
+> PMCEIDn and PMMIR remain trapped because they can leak information
+> specific to the host hardware implementation.
+> 
+> NOTE: This patch temporarily forces kvm_vcpu_pmu_is_partitioned() to
+> be false to prevent partial feature activation for easier debugging.
+> 
+> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+> ---
+>  arch/arm64/include/asm/kvm_pmu.h | 33 ++++++++++++++++++++++
+>  arch/arm64/kvm/config.c          | 34 ++++++++++++++++++++--
+>  arch/arm64/kvm/pmu-direct.c      | 48 ++++++++++++++++++++++++++++++++
+>  3 files changed, 112 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/kvm_pmu.h b/arch/arm64/include/asm/kvm_pmu.h
+> index 8887f39c25e60..7297a697a4a62 100644
+> --- a/arch/arm64/include/asm/kvm_pmu.h
+> +++ b/arch/arm64/include/asm/kvm_pmu.h
+> @@ -96,6 +96,23 @@ u64 kvm_pmu_guest_counter_mask(struct arm_pmu *pmu);
+>  void kvm_pmu_host_counters_enable(void);
+>  void kvm_pmu_host_counters_disable(void);
+>  
+> +#if !defined(__KVM_NVHE_HYPERVISOR__)
+> +bool kvm_vcpu_pmu_is_partitioned(struct kvm_vcpu *vcpu);
+> +bool kvm_vcpu_pmu_use_fgt(struct kvm_vcpu *vcpu);
+> +#else
+> +static inline bool kvm_vcpu_pmu_is_partitioned(struct kvm_vcpu *vcpu)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline bool kvm_vcpu_pmu_use_fgt(struct kvm_vcpu *vcpu)
+> +{
+> +	return false;
+> +}
+> +#endif
+> +u64 kvm_pmu_fgt_bits(void);
+> +u64 kvm_pmu_fgt2_bits(void);
+> +
+>  /*
+>   * Updates the vcpu's view of the pmu events for this cpu.
+>   * Must be called before every vcpu run after disabling interrupts, to ensure
+> @@ -135,6 +152,22 @@ static inline u64 kvm_pmu_get_counter_value(struct kvm_vcpu *vcpu,
+>  {
+>  	return 0;
+>  }
+> +static inline bool kvm_vcpu_pmu_is_partitioned(struct kvm_vcpu *vcpu)
+> +{
+> +	return false;
+> +}
+> +static inline bool kvm_vcpu_pmu_use_fgt(struct kvm_vcpu *vcpu)
+> +{
+> +	return false;
+> +}
+> +static inline u64 kvm_pmu_fgt_bits(void)
+> +{
+> +	return 0;
+> +}
+> +static inline u64 kvm_pmu_fgt2_bits(void)
+> +{
+> +	return 0;
+> +}
+>  static inline void kvm_pmu_set_counter_value(struct kvm_vcpu *vcpu,
+>  					     u64 select_idx, u64 val) {}
+>  static inline void kvm_pmu_set_counter_value_user(struct kvm_vcpu *vcpu,
+> diff --git a/arch/arm64/kvm/config.c b/arch/arm64/kvm/config.c
+> index 24bb3f36e9d59..064dc6aa06f76 100644
+> --- a/arch/arm64/kvm/config.c
+> +++ b/arch/arm64/kvm/config.c
+> @@ -6,6 +6,7 @@
+>  
+>  #include <linux/kvm_host.h>
+>  #include <asm/kvm_emulate.h>
+> +#include <asm/kvm_pmu.h>
+>  #include <asm/kvm_nested.h>
+>  #include <asm/sysreg.h>
+>  
+> @@ -1489,12 +1490,39 @@ static void __compute_hfgwtr(struct kvm_vcpu *vcpu)
+>  		*vcpu_fgt(vcpu, HFGWTR_EL2) |= HFGWTR_EL2_TCR_EL1;
+>  }
+>  
+> +static void __compute_hdfgrtr(struct kvm_vcpu *vcpu)
+> +{
+> +	__compute_fgt(vcpu, HDFGRTR_EL2);
+> +
+> +	if (kvm_vcpu_pmu_use_fgt(vcpu))
+> +		*vcpu_fgt(vcpu, HDFGRTR_EL2) |= kvm_pmu_fgt_bits();
 
-Signed-off-by: Colton Lewis <coltonlewis@google.com>
----
- tools/include/uapi/linux/kvm.h                |  1 +
- .../selftests/kvm/arm64/vpmu_counter_access.c | 77 ++++++++++++++-----
- 2 files changed, 57 insertions(+), 21 deletions(-)
+Couple of suggestions. I'd rather see this conditioned on
+kvm_vcpu_pmu_is_partitioned() and get rid of the FGT predicate. After
+all, kvm_vcpu_load_fgt() already checks for the presence of FEAT_FGT
+first.
 
-diff --git a/tools/include/uapi/linux/kvm.h b/tools/include/uapi/linux/kvm.h
-index 52f6000ab0208..2bb2f234df0e6 100644
---- a/tools/include/uapi/linux/kvm.h
-+++ b/tools/include/uapi/linux/kvm.h
-@@ -963,6 +963,7 @@ struct kvm_enable_cap {
- #define KVM_CAP_RISCV_MP_STATE_RESET 242
- #define KVM_CAP_ARM_CACHEABLE_PFNMAP_SUPPORTED 243
- #define KVM_CAP_GUEST_MEMFD_FLAGS 244
-+#define KVM_CAP_ARM_PARTITION_PMU 245
- 
- struct kvm_irq_routing_irqchip {
- 	__u32 irqchip;
-diff --git a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-index ae36325c022fb..e68072e3e1326 100644
---- a/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-+++ b/tools/testing/selftests/kvm/arm64/vpmu_counter_access.c
-@@ -25,9 +25,20 @@
- /* The cycle counter bit position that's common among the PMU registers */
- #define ARMV8_PMU_CYCLE_IDX		31
- 
-+enum pmu_impl {
-+	EMULATED,
-+	PARTITIONED
-+};
-+
-+const char *pmu_impl_str[] = {
-+	"Emulated",
-+	"Partitioned"
-+};
-+
- struct vpmu_vm {
- 	struct kvm_vm *vm;
- 	struct kvm_vcpu *vcpu;
-+	bool pmu_partitioned;
- };
- 
- static struct vpmu_vm vpmu_vm;
-@@ -399,7 +410,7 @@ static void guest_code(uint64_t expected_pmcr_n)
- }
- 
- /* Create a VM that has one vCPU with PMUv3 configured. */
--static void create_vpmu_vm(void *guest_code)
-+static void create_vpmu_vm(void *guest_code, enum pmu_impl impl)
- {
- 	struct kvm_vcpu_init init;
- 	uint8_t pmuver, ec;
-@@ -409,6 +420,11 @@ static void create_vpmu_vm(void *guest_code)
- 		.attr = KVM_ARM_VCPU_PMU_V3_IRQ,
- 		.addr = (uint64_t)&irq,
- 	};
-+	bool partition = (impl == PARTITIONED);
-+	struct kvm_enable_cap partition_cap = {
-+		.cap = KVM_CAP_ARM_PARTITION_PMU,
-+		.args[0] = partition,
-+	};
- 
- 	/* The test creates the vpmu_vm multiple times. Ensure a clean state */
- 	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
-@@ -420,6 +436,12 @@ static void create_vpmu_vm(void *guest_code)
- 					guest_sync_handler);
- 	}
- 
-+	if (kvm_has_cap(KVM_CAP_ARM_PARTITION_PMU)) {
-+		vm_ioctl(vpmu_vm.vm, KVM_ENABLE_CAP, &partition_cap);
-+		vpmu_vm.pmu_partitioned = partition;
-+		pr_debug("Set PMU partitioning: %d\n", partition);
-+	}
-+
- 	/* Create vCPU with PMUv3 */
- 	kvm_get_default_vcpu_target(vpmu_vm.vm, &init);
- 	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
-@@ -461,13 +483,14 @@ static void run_vcpu(struct kvm_vcpu *vcpu, uint64_t pmcr_n)
- 	}
- }
- 
--static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters, bool expect_fail)
-+static void test_create_vpmu_vm_with_nr_counters(
-+	unsigned int nr_counters, enum pmu_impl impl, bool expect_fail)
- {
- 	struct kvm_vcpu *vcpu;
- 	unsigned int prev;
- 	int ret;
- 
--	create_vpmu_vm(guest_code);
-+	create_vpmu_vm(guest_code, impl);
- 	vcpu = vpmu_vm.vcpu;
- 
- 	prev = get_pmcr_n(vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0)));
-@@ -489,7 +512,7 @@ static void test_create_vpmu_vm_with_nr_counters(unsigned int nr_counters, bool
-  * Create a guest with one vCPU, set the PMCR_EL0.N for the vCPU to @pmcr_n,
-  * and run the test.
-  */
--static void run_access_test(uint64_t pmcr_n)
-+static void run_access_test(uint64_t pmcr_n, enum pmu_impl impl)
- {
- 	uint64_t sp;
- 	struct kvm_vcpu *vcpu;
-@@ -497,7 +520,7 @@ static void run_access_test(uint64_t pmcr_n)
- 
- 	pr_debug("Test with pmcr_n %lu\n", pmcr_n);
- 
--	test_create_vpmu_vm_with_nr_counters(pmcr_n, false);
-+	test_create_vpmu_vm_with_nr_counters(pmcr_n, impl, false);
- 	vcpu = vpmu_vm.vcpu;
- 
- 	/* Save the initial sp to restore them later to run the guest again */
-@@ -531,14 +554,14 @@ static struct pmreg_sets validity_check_reg_sets[] = {
-  * Create a VM, and check if KVM handles the userspace accesses of
-  * the PMU register sets in @validity_check_reg_sets[] correctly.
-  */
--static void run_pmregs_validity_test(uint64_t pmcr_n)
-+static void run_pmregs_validity_test(uint64_t pmcr_n, enum pmu_impl impl)
- {
- 	int i;
- 	struct kvm_vcpu *vcpu;
- 	uint64_t set_reg_id, clr_reg_id, reg_val;
- 	uint64_t valid_counters_mask, max_counters_mask;
- 
--	test_create_vpmu_vm_with_nr_counters(pmcr_n, false);
-+	test_create_vpmu_vm_with_nr_counters(pmcr_n, impl, false);
- 	vcpu = vpmu_vm.vcpu;
- 
- 	valid_counters_mask = get_counters_mask(pmcr_n);
-@@ -588,11 +611,11 @@ static void run_pmregs_validity_test(uint64_t pmcr_n)
-  * the vCPU to @pmcr_n, which is larger than the host value.
-  * The attempt should fail as @pmcr_n is too big to set for the vCPU.
-  */
--static void run_error_test(uint64_t pmcr_n)
-+static void run_error_test(uint64_t pmcr_n, enum pmu_impl impl)
- {
--	pr_debug("Error test with pmcr_n %lu (larger than the host)\n", pmcr_n);
-+	pr_debug("Error test with pmcr_n %lu (larger than the host allows)\n", pmcr_n);
- 
--	test_create_vpmu_vm_with_nr_counters(pmcr_n, true);
-+	test_create_vpmu_vm_with_nr_counters(pmcr_n, impl, true);
- 	destroy_vpmu_vm();
- }
- 
-@@ -600,11 +623,11 @@ static void run_error_test(uint64_t pmcr_n)
-  * Return the default number of implemented PMU event counters excluding
-  * the cycle counter (i.e. PMCR_EL0.N value) for the guest.
-  */
--static uint64_t get_pmcr_n_limit(void)
-+static uint64_t get_pmcr_n_limit(enum pmu_impl impl)
- {
- 	uint64_t pmcr;
- 
--	create_vpmu_vm(guest_code);
-+	create_vpmu_vm(guest_code, impl);
- 	pmcr = vcpu_get_reg(vpmu_vm.vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0));
- 	destroy_vpmu_vm();
- 	return get_pmcr_n(pmcr);
-@@ -614,7 +637,7 @@ static bool kvm_supports_nr_counters_attr(void)
- {
- 	bool supported;
- 
--	create_vpmu_vm(NULL);
-+	create_vpmu_vm(NULL, EMULATED);
- 	supported = !__vcpu_has_device_attr(vpmu_vm.vcpu, KVM_ARM_VCPU_PMU_V3_CTRL,
- 					    KVM_ARM_VCPU_PMU_V3_SET_NR_COUNTERS);
- 	destroy_vpmu_vm();
-@@ -622,22 +645,34 @@ static bool kvm_supports_nr_counters_attr(void)
- 	return supported;
- }
- 
--int main(void)
-+void test_pmu(enum pmu_impl impl)
- {
- 	uint64_t i, pmcr_n;
- 
--	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
--	TEST_REQUIRE(kvm_supports_vgic_v3());
--	TEST_REQUIRE(kvm_supports_nr_counters_attr());
-+	pr_info("Testing PMU: Implementation = %s\n", pmu_impl_str[impl]);
-+
-+	pmcr_n = get_pmcr_n_limit(impl);
-+	pr_debug("PMCR_EL0.N: Limit = %lu\n", pmcr_n);
- 
--	pmcr_n = get_pmcr_n_limit();
- 	for (i = 0; i <= pmcr_n; i++) {
--		run_access_test(i);
--		run_pmregs_validity_test(i);
-+		run_access_test(i, impl);
-+		run_pmregs_validity_test(i, impl);
- 	}
- 
- 	for (i = pmcr_n + 1; i < ARMV8_PMU_MAX_COUNTERS; i++)
--		run_error_test(i);
-+		run_error_test(i, impl);
-+}
-+
-+int main(void)
-+{
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
-+	TEST_REQUIRE(kvm_supports_vgic_v3());
-+	TEST_REQUIRE(kvm_supports_nr_counters_attr());
-+
-+	test_pmu(EMULATED);
-+
-+	if (kvm_has_cap(KVM_CAP_ARM_PARTITION_PMU))
-+		test_pmu(PARTITIONED);
- 
- 	return 0;
- }
--- 
-2.52.0.239.gd5f0c6e74e-goog
+Additionally, I'd prefer that the trap configuration is inline instead
+of done in a helper in some other file. Centralizing the FGT
+configuration here was very much intentional.
 
+The other reason for doing this is kvm_pmu_fgt_bits() assumes a
+'positive' trap polarity, even though there are several cases where FGTs
+have a 'negative' priority (i.e. 0 => trap).
+
+Thanks,
+Oliver
 
