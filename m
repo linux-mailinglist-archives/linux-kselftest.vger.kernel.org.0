@@ -1,195 +1,136 @@
-Return-Path: <linux-kselftest+bounces-47289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ACA2CAF004
-	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 07:10:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED375CAF24D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 08:32:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D172E3004463
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 06:10:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D95CE3009C26
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 07:32:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0A553203BC;
-	Tue,  9 Dec 2025 06:10:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A742121C16A;
+	Tue,  9 Dec 2025 07:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="MbjYCADh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out28-49.mail.aliyun.com (out28-49.mail.aliyun.com [115.124.28.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C8D3203A9;
-	Tue,  9 Dec 2025 06:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF711F4C8E
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Dec 2025 07:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765260619; cv=none; b=oZyV4xlmeezORDsVzX5vYg6VZxt4CKaENksTUTj3uVy8zowJa5l/zmSRCpS6zI37kNsds03Rfx0VgaNGzKXyGfJeOTf/5yAG4mUz7Y2Iuo09aA8Q47IoSKcRWcPLgD47kfPGa473EPIlRbcYvRvCFGEZP0G73mdaSDEvHk1KExQ=
+	t=1765265576; cv=none; b=iF1n0XY7Msz9rsj06PdoTWV8CMYy3ICsrxoeEkcwFyULOChXYwwJl3wxhSG4SLvhTsxZkE9sG/gfA7gZelq/F6wJ0umKSMrNtSQ4PWCLsmOjZugzbYVlJay5NEzWyHSiCIwg5/1cKcjDzMqoHmBMSW1Pfdm5fMWSS1WEoT1gU30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765260619; c=relaxed/simple;
-	bh=wOJ9ca123sgJPd0zieyNSsFm4IRXy89/xqmc1NxqHBw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nr2XFncKhHPUwvYZHh6greE13PO5+ZHY1iXCxt/m0yWlCCAfokAOWfHGluxAnS6NW9lh2idaMYpM/rXs9IT5O82XOlc0IrhooS34NnhJG8Ud3844sGnQQuxomwadLGhk1vUWHGIQZ1mLgmIzhKWsTlgHbx38GYFBMSsqM3GG004=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from 172.18.26.4(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fg1-TZO_1765260602 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Tue, 09 Dec 2025 14:10:06 +0800
-Message-ID: <1ce7ea26-6e97-4640-86df-c8dd3e623002@open-hieco.net>
-Date: Tue, 9 Dec 2025 14:10:02 +0800
+	s=arc-20240116; t=1765265576; c=relaxed/simple;
+	bh=8nT8939qWUoJYlT2R7sKtRouAfpezWZVT5T0CEHq2FI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=k0G+dHgJzyqMZJMLuVenmQfQdOOBMXJGCl4WqCxvjFZVveGSFkYuwQw0sp/OWvdOLd0eHmVS2yIfYq6fjNy/gYIbo1zyaycEiHt5ppAdUIiQuBLV/HehfLZ36yuuQHIV+au68JyZKKfR1EldOPpDXlsLYyPyJRWDDe6pDzs19Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=MbjYCADh; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6431b0a1948so9028019a12.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Dec 2025 23:32:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1765265573; x=1765870373; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=7QhMUSo0zLDlINi8GAqDQeQHdxTHsyz1r33NHLku5hM=;
+        b=MbjYCADhgfbS1x2TvvOLLtOmzz8tpcASJtSAl+aVRWhDYIdTRDzEZ9nZafLiIC2PiK
+         aCVqLCGIiqmYFrmxk0ckl2hFtpLUREwDZm7wBNCHZu3rdLLdUbyR1ogguIBD8OOWomj0
+         w8He1HUckMDDHYj1MJFIXr0tbmtp3uaAT8NRI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765265573; x=1765870373;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7QhMUSo0zLDlINi8GAqDQeQHdxTHsyz1r33NHLku5hM=;
+        b=XQ1ecP8r7PBkaf9cF6AQXRj7yzbmD6edfOP3cW9ez70W7vGVznSyYGoK48PEfVU9kw
+         yMQK4/rdyM0OLOCRglIfgzPWsk6b5zDDIcbeNmiqr4l99QL+E7+InEPYprRfCerI2+xS
+         2qaVIBLqZeR5kPHQvalISj6ClqG0EeAJ0qT7kYSqj0klYaednx6UfPsRaNEY2jmC0Ou9
+         7czQQzGsTx6sOu8NKwQ9aQsAYTrNq0J3wFfom3SDjrCH2yhyp7rD90+56tpldb9Ax8eu
+         1rJXuSqJCKFZ82ex/1fCTqffY2yF763xTtBrgVMGMcbbPxlF2dLftEbqFGO1mGM8LOfH
+         l1dA==
+X-Forwarded-Encrypted: i=1; AJvYcCUi/RRZpCxG/n/8eQacoO+gimA5x9UcIAQpQmakeuU1gu3rwdD9oR6iNxfOZVnoS35vL6ab0FSheNSgdTdK5vY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCTZzIUZ6ORyqx0UhDZwWhlOpMEV9crYGaO3jDZ5jUe9gyq4y+
+	cFRkj4TdCyPDTaUZ15O8sFrEZlDhU682b8QLV99C80HhxV5IOSL4y+2bUpBz0+8gXclP+GLRUJw
+	cMtU2mXqpEQ==
+X-Gm-Gg: ASbGnct/QxuCDkvVXlJwGTy6Cm3w9hQaz81PYN+rYqAjuQ6ZgZ/J/panf1wc9+/GS4K
+	DmwyYtgLAya6Esg+3zPpTsJYtRn1aASy5dHLMDpqxQjr/npxYW/3evrEre2Ivh+NMUN1OpaI0up
+	85DN8I4ArxMxCZus6UwIJCBEwhMu/WcRLeD/Is9pBNiwSCKu/Nw7VXjy7DnIQC1d24owaNFmMhr
+	nJ4/QvCnrDVeJU4NxABP5TFh3w9jE0RvXn8x8KvL2C+yRMghsKHuRepCQWTjdlD6zQOhlQw7Zuz
+	WoDhznk4ZyR7E6IGCp9jCW1x9dF1k6S1qvSusvQ3UHyDeYIa866Rf6VC8rN9YbUne3R9Drhg5h5
+	47xfD1HDUTnjtpVXNt0+jJyVY4R1DFmS6XFhH+N09oQV6muTp5hq3vQXdgrBq2A1xnJ8PhJWrJG
+	Eo+xWexxkKinwnLZMn/UdcrB/E9JdcmyAswZirzYHXqVDXStJk4nJKUJRimMJBklQyRg3TErE=
+X-Google-Smtp-Source: AGHT+IHFXI6m0R05+uRKHt7y3gUYpfvnfaPtMBTE+pWKu9sa+nTw2xL/te7zdvb2+FFBl/Yi0qsZhQ==
+X-Received: by 2002:a05:6402:1d55:b0:649:64d3:1559 with SMTP id 4fb4d7f45d1cf-64964d3196cmr415540a12.18.1765265572542;
+        Mon, 08 Dec 2025 23:32:52 -0800 (PST)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-647b41219c1sm14140838a12.27.2025.12.08.23.32.52
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Dec 2025 23:32:52 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-640a0812658so9054215a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Dec 2025 23:32:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVcX+5Fk9QTEwkxNf9tGCuAmxDBNE+UvzjZU9A/vAv1kIVdc4rXo4fvDN77DLvkYovfssZN1T/TAP78fdkHyKE=@vger.kernel.org
+X-Received: by 2002:a05:6402:350b:b0:643:883a:2668 with SMTP id
+ 4fb4d7f45d1cf-6491a430019mr7384754a12.21.1765265177527; Mon, 08 Dec 2025
+ 23:26:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] selftests/resctrl: Add CPU vendor detection for
- Hygon
-To: Reinette Chatre <reinette.chatre@intel.com>,
- Fenghua Yu <fenghuay@nvidia.com>, tony.luck@intel.com, bp@alien8.de,
- shuah@kernel.org, skhan@linuxfoundation.org
-Cc: babu.moger@amd.com, james.morse@arm.com, Dave.Martin@arm.com,
- x86@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shenxiaochen@open-hieco.net
-References: <20251205092544.2685728-1-shenxiaochen@open-hieco.net>
- <20251205092544.2685728-2-shenxiaochen@open-hieco.net>
- <6d68f2c5-4011-4188-bdb4-27f0e6a4d13e@nvidia.com>
- <f2e30c0b-018f-4988-a1ad-9ead6af7994d@open-hieco.net>
- <ca161ef9-c9e3-498a-9e6a-aefcfec46dea@intel.com>
-Content-Language: en-US
-From: Xiaochen Shen <shenxiaochen@open-hieco.net>
-In-Reply-To: <ca161ef9-c9e3-498a-9e6a-aefcfec46dea@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251208235528.3670800-1-hpa@zytor.com>
+In-Reply-To: <20251208235528.3670800-1-hpa@zytor.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 9 Dec 2025 16:26:00 +0900
+X-Gmail-Original-Message-ID: <CAHk-=wiNMD7tCkYvVQMs1=omU9=J=zw_ryvtZ+A-sNR7MN2iuw@mail.gmail.com>
+X-Gm-Features: AQt7F2pU3mtSVlk8xXoOHi4ywQ2NpA8rkmyzrskk-X7c-Gbp__mUx8NnR72v7NM
+Message-ID: <CAHk-=wiNMD7tCkYvVQMs1=omU9=J=zw_ryvtZ+A-sNR7MN2iuw@mail.gmail.com>
+Subject: Re: [GIT PULL] __auto_type conversion for v6.19-rc1
+To: "H. Peter Anvin" <hpa@zytor.com>
+Cc: =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>, 
+	Alexei Starovoitov <ast@kernel.org>, Alexey Dobriyan <adobriyan@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Arnd Bergmann <arnd@kernel.org>, Borislav Petkov <bp@alien8.de>, Dan Williams <dan.j.williams@intel.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Laight <David.Laight@aculab.com>, David Lechner <dlechner@baylibre.com>, 
+	Dinh Nguyen <dinguyen@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Gatlin Newhouse <gatlin.newhouse@gmail.com>, Hao Luo <haoluo@google.com>, 
+	Ingo Molnar <mingo@redhat.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
+	Jan Hendrik Farr <kernel@jfarr.cc>, Jason Wang <jasowang@redhat.com>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, Marc Herbert <Marc.Herbert@linux.intel.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Mateusz Guzik <mjguzik@gmail.com>, Michal Luczaj <mhal@rbox.co>, 
+	Miguel Ojeda <ojeda@kernel.org>, Mykola Lysenko <mykolal@fb.com>, NeilBrown <neil@brown.name>, 
+	Peter Zijlstra <peterz@infradead.org>, Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+	Sami Tolvanen <samitolvanen@google.com>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Thomas Gleixner <tglx@linutronix.de>, 
+	Thorsten Blum <thorsten.blum@linux.dev>, Uros Bizjak <ubizjak@gmail.com>, 
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Yafang Shao <laoar.shao@gmail.com>, 
+	Ye Bin <yebin10@huawei.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	Yufeng Wang <wangyufeng@kylinos.cn>, bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-sparse@vger.kernel.org, virtualization@lists.linux.dev, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Reinette,
+On Tue, 9 Dec 2025 at 08:57, H. Peter Anvin <hpa@zytor.com> wrote:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/hpa/linux-auto.git
+>
+> for you to fetch changes up to branch auto-type-for-6.19
 
-On 12/9/2025 1:57 AM, Reinette Chatre wrote:
->> Thank you for the suggestion. How about using BIT_U8() instead of BIT()?
->> In my opinion, 8-bits type "unsigned int" is enough for "vendor id".
-> BIT() is fine here. I prefer that types used by selftests are consistent, that is, not
-> a mix of user space and kernel types. 
-> There may be good motivation to switch to kernel types but then it needs to be
-> throughout the resctrl selftests, which is not something this work needs to take on.
+Oh, and as I was going to merge this, I noticed it's not signed.
 
-Thank you. I will keep BIT() here.
+Let's not break our perfect recent record of using proper signed tags.
+when I know you have a pgp key and I even have it on my keyring.
 
+Please?
 
->> Should I split the code changes (using BIT_xx(), updates of type 'unsigned int') into a separate patch?	
-> I agree this would be better as a separate patch.
-
-Sure. I will add a prerequisite patch in this series.
-
-
->> The patch may look like:
->> -----------------------------
->> commit baaabb7bd3a3e45a8093422b576383da20488aca
->> Author: Xiaochen Shen <shenxiaochen@open-hieco.net>
->> Date:   Mon Dec 8 14:26:45 2025 +0800
->>
->>     selftests/resctrl: Improve type definitions of CPU vendor IDs
-> Instead of a generic "Improve" it can just be specific about what it does:
-> "selftests/resctrl: Define CPU vendor IDs as bits to match usage"
-
-Thank you for the suggestion. The subject of the patch looks much better.
-
-
->>   In file resctrl.h:
->>     -----------------
->>       /*
->>        * CPU vendor IDs
->>        *
->>        * Define as bits because they're used for vendor_specific bitmask in
->>        * the struct resctrl_test.
->>        */
->>       #define ARCH_INTEL     1
->>       #define ARCH_AMD       2
->>     -----------------
->>
->>     The comment before the CPU vendor IDs defines attempts to provide
->>     guidance but it is clearly still quite subtle that these values are
-> I wrote "clearly" in response to the earlier  patch that did not follow the quoted
-> documentation, implying that the documentation was not sufficient. I do not
-> think "clearly" applies here. This can just be specific about how these values
-> are used ... which this paragraph duplicates from the quoted comment so either this
-> paragraph or the code quote could be dropped?
-
-Thank you for the suggestion.
-The revised patch description as below:
---------------------------------------
-    The CPU vendor IDs are required to be unique bits because they're used
-    for vendor_specific bitmask in the struct resctrl_test.
-    Consider for example their usage in test_vendor_specific_check():
-            return get_vendor() & test->vendor_specific
-
-    However, the definitions of CPU vendor IDs in file resctrl.h is quite
-    subtle as a bitmask value:
-      #define ARCH_INTEL     1
-      #define ARCH_AMD       2
-
-    A clearer and more maintainable approach is to define these CPU vendor
-    IDs using BIT(). This ensures each vendor corresponds to a distinct bit
-    and makes it obvious when adding new vendor IDs.
-    ...
---------------------------------------
-
-> 
->>     required to be unique bits. Consider for example their usage in
->>     test_vendor_specific_check():
->>             return get_vendor() & test->vendor_specific
->> -int get_vendor(void)
->> +unsigned int get_vendor(void)
->>  {
->> -       static int vendor = -1;
->> +       static unsigned int vendor;
->>
->> -       if (vendor == -1)
->> +       if (vendor == 0)
->>                 vendor = detect_vendor();
->> +
->> +       /* detect_vendor() returns invalid vendor id */
->>         if (vendor == 0)
->>                 ksft_print_msg("Can not get vendor info...\n");
-> detect_vendor() returns 0 if it cannot detect the vendor. Using "0" as well as
-> return value of detect_vendor() to indicate that detect_vendor() should be run will
-> thus cause detect_vendor() to always be called on failure even though it will keep
-> failing.
-
-Thank you.
-I got it. In original code, "static int vendor = -1;" does it intentionally.
-
-
-> 
-> Can vendor be kept as int and just cast it on return? This may be introducing the
-> risky type conversion that the changelog claims to avoid though .... 
-
-This is really a dilemma.
-I could keep vendor as int, even thought the code doesn't look graceful. I will try to add a comment for it.
-The code changes may look like:
--------------------------------
--int get_vendor(void)
-+unsigned int get_vendor(void)
- {
-        static int vendor = -1;
-
-+       /*
-+        * Notes on vendor:
-+        *  -1: initial value, detect_vendor() is not called yet.
-+        *   0: detect_vendor() returns 0 if it cannot detect the vendor.
-+        * > 0: detect_vendor() returns valid vendor id.
-+        *
-+        * The return type of detect_vendor() is 'unsigned int'.
-+        * Cast vendor from 'int' to 'unsigned int' on return.
-+        */
-        if (vendor == -1)
-                vendor = detect_vendor();
-+
-        if (vendor == 0)
-                ksft_print_msg("Can not get vendor info...\n");
-
--       return vendor;
-+       return (unsigned int) vendor;
- }
--------------------------------
-
-Thank you!
-
-Best regards,
-Xiaochen Shen
+              Linus
 
