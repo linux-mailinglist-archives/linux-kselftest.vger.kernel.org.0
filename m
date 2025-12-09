@@ -1,130 +1,137 @@
-Return-Path: <linux-kselftest+bounces-47305-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47306-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D3C5CB054A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 15:48:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EBA9CB0B6B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 18:23:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7CF3E3016374
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 14:48:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 108A130E4BA5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 17:21:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483192FE061;
-	Tue,  9 Dec 2025 14:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38CD732ABEF;
+	Tue,  9 Dec 2025 17:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YI9xfupN"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Psg4CKLA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B07B272602
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Dec 2025 14:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E395032ABC3;
+	Tue,  9 Dec 2025 17:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765291708; cv=none; b=hgReywQ+ZIAA3a21RqjzMs69Zvb9H7urqG2+W1jQb9TzZExzBv7Ahr/CmFMh3A3yk2aiqVQkU3SCf6PmMpHlMVWSG44rEQXb8Q7y74bA2xfT2H2VKSMWEM58uyW9jPos1wxNdm0/WLzylfcR0jzQJTOhZ8bYnrTbYHRCWyDOK2Q=
+	t=1765300912; cv=none; b=eVrYze2QhhtAHKpC6wYBP2QKwLLw2/PaiSmlfWg1UoF1QPNXFo3bxFiu8ZEejGHsVOfDAXEz954AOXqXccgs8XK+K4wXOSjjp24PpW5l6GMgOWqtyLPANMXjJz/T9hi47o3/UX5VeO83vcj5sSNGobJetZdqEWNmf1Z8Ti3C630=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765291708; c=relaxed/simple;
-	bh=tNDDMglzHZagLUdfNEkHNyHOtmXBIdiz/eXvcMePmKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dppu2fAj36pSPWeff+2+c2pACe7KY+D5QY7co5qZnefKEjVeH2PQMmo5FfIazbc544lIpnd+vqk0AawE88TVvS//WnU1Poy2p73lXSqAaTnxKZf1ncLPF52bdNLX/rim5/w+Nfzh3l9eZMHmPq5VC5NTs+8FUPFp3WJMZY81aM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YI9xfupN; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765291705;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HJh7H5GiF2qQLzN/OqZxU2ve8RhVtZeC3ROh/2CUAvo=;
-	b=YI9xfupN6e3VNc6kSK2EDqfActCCONX74Mjh3BZrEnfF6RM/f0EsQ6R9MFKhsOh43H2wdj
-	V2xNDRfM//ceqmTPOEWbWHO8cw5LxowuGbVjefIinqTPF3Z38n/53hnWbdg40XMl+VumW0
-	Vi+7dFQsDbVXgLckeTb4h0YH9OrnQ60=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-583-U8a79uIlOLi4R1dHwdGDSQ-1; Tue,
- 09 Dec 2025 09:48:16 -0500
-X-MC-Unique: U8a79uIlOLi4R1dHwdGDSQ-1
-X-Mimecast-MFC-AGG-ID: U8a79uIlOLi4R1dHwdGDSQ_1765291694
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BB8DB1956080;
-	Tue,  9 Dec 2025 14:48:13 +0000 (UTC)
-Received: from gmail.com (unknown [10.72.112.49])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9843419560AD;
-	Tue,  9 Dec 2025 14:48:00 +0000 (UTC)
-Date: Tue, 9 Dec 2025 22:47:52 +0800
-From: Chunyu Hu <chuhu@redhat.com>
-To: Luiz Capitulino <luizcap@redhat.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
-	surenb@google.com, mhocko@suse.com
-Subject: Re: [PATCH v1 2/3] selftests/mm: allocate 6 hugepages in
- va_high_addr_switch.sh
-Message-ID: <aTg2mKHKyq9ibFoU@gmail.com>
-References: <20251207122239.3228920-1-chuhu@redhat.com>
- <20251207122239.3228920-2-chuhu@redhat.com>
- <efdd610d-a56f-4f3f-ab5c-9b0da1762ab6@redhat.com>
+	s=arc-20240116; t=1765300912; c=relaxed/simple;
+	bh=6JzHwVMsw3oVBaLB929QEwdcMxFilfqVMX3zcgp6eKA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=F98BbZstw/BUnQwJ2Q7C9Yh/xOrXxfgvLXTT1PRS8oOSrvNXgWbruTf74F7F51R6UgaI49dJ0k9c2lVi8g9+wJx5BtJs1BNqO2m8d01t+BOGr3GK1ghAKER1w7++DlPStu++Ac9lV/0RGM5fatvcTisKk9RFhne4aPPsbya21CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Psg4CKLA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73601C4CEFB;
+	Tue,  9 Dec 2025 17:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765300911;
+	bh=6JzHwVMsw3oVBaLB929QEwdcMxFilfqVMX3zcgp6eKA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Psg4CKLAi9h/A9vrvljHnRqp9p5yz8B5YCapKgSBCEr6kmloaOVwmNaYxp96nI0Jm
+	 E1pbyJ1ln1w7L+cwykG7ZYqv4qRzAcWJFrrDoVllnAKtP9kV9HNNc0yvVFDPPFwIkZ
+	 zlIrgsKzfz9N31t7zC7ENkzXvNMPaNLtaoUlwGSCq0lbSmlyoP3LMxcO1rKyc+86dE
+	 NNhWUd3A/NHLJln9jL7sW0vI/gKw88UtIG56vYvOYlGCOJt2PmPeBPQ+WVB8pAbtZB
+	 YUlzouJwNa/r7jfn9C9CtIGicL5PvCAPTPMpQEpILvgU65s/m796Uhb97EubDbNHcQ
+	 BLbAhrtl11WCQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B591F3808200;
+	Tue,  9 Dec 2025 17:18:47 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efdd610d-a56f-4f3f-ab5c-9b0da1762ab6@redhat.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Transfer-Encoding: 8bit
+Subject: Re: [f2fs-dev] [PATCH kvm-next V11 0/7] Add NUMA mempolicy support
+ for
+ KVM guest-memfd
+From: patchwork-bot+f2fs@kernel.org
+Message-Id: 
+ <176530072652.4018985.15391772848132749035.git-patchwork-notify@kernel.org>
+Date: Tue, 09 Dec 2025 17:18:46 +0000
+References: <20250827175247.83322-2-shivankg@amd.com>
+In-Reply-To: <20250827175247.83322-2-shivankg@amd.com>
+To: Garg@codeaurora.org, Shivank <shivankg@amd.com>
+Cc: willy@infradead.org, akpm@linux-foundation.org, david@redhat.com,
+ pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com, vbabka@suse.cz,
+ jgowans@amazon.com, mhocko@suse.com, jack@suse.cz, kvm@vger.kernel.org,
+ dhavale@google.com, linux-btrfs@vger.kernel.org, aik@amd.com,
+ papaluri@amd.com, kalyazin@amazon.com, peterx@redhat.com, linux-mm@kvack.org,
+ clm@fb.com, ddutile@redhat.com, linux-kselftest@vger.kernel.org,
+ shdhiman@amd.com, gshan@redhat.com, ying.huang@linux.alibaba.com,
+ ira.weiny@intel.com, roypat@amazon.co.uk, matthew.brost@intel.com,
+ linux-coco@lists.linux.dev, zbestahu@gmail.com, lorenzo.stoakes@oracle.com,
+ linux-bcachefs@vger.kernel.org, apopple@nvidia.com, jmorris@namei.org,
+ hch@infradead.org, chao.gao@intel.com, cgzones@googlemail.com,
+ ziy@nvidia.com, rientjes@google.com, yuzhao@google.com, xiang@kernel.org,
+ nikunj@amd.com, gourry@gourry.net, serge@hallyn.com, thomas.lendacky@amd.com,
+ ashish.kalra@amd.com, chao.p.peng@intel.com, yan.y.zhao@intel.com,
+ byungchul@sk.com, michael.day@amd.com, Neeraj.Upadhyay@amd.com,
+ michael.roth@amd.com, bfoster@redhat.com, bharata@amd.com,
+ josef@toxicpanda.com, Liam.Howlett@oracle.com, ackerleytng@google.com,
+ dsterba@suse.com, viro@zeniv.linux.org.uk, jefflexu@linux.alibaba.com,
+ jaegeuk@kernel.org, dan.j.williams@intel.com, surenb@google.com,
+ tabba@google.com, paul@paul-moore.com, joshua.hahnjy@gmail.com,
+ brauner@kernel.org, quic_eberman@quicinc.com, rakie.kim@sk.com,
+ pvorel@suse.cz, linux-erofs@lists.ozlabs.org, kent.overstreet@linux.dev,
+ linux-kernel@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+ pankaj.gupta@amd.com, linux-security-module@vger.kernel.org,
+ lihongbo22@huawei.com, amit@infradead.org, linux-fsdevel@vger.kernel.org,
+ vannapurve@google.com, suzuki.poulose@arm.com, rppt@kernel.org,
+ jgg@nvidia.com
 
-On Mon, Dec 08, 2025 at 10:47:19AM -0500, Luiz Capitulino wrote:
-> On 2025-12-07 07:22, Chunyu Hu wrote:
-> > The va_high_addr_switch test requires 6 hugepages, not 5. If running the
-> > test directly by: ./va_high_addr_switch.sh, the test will hit a mmap 'FAIL'
-> > caused by not enough hugepages:
-> >    ```
-> >    mmap(addr_switch_hint - hugepagesize, 2*hugepagesize, MAP_HUGETLB): 0x7f330f800000 - OK
-> >    mmap(addr_switch_hint , 2*hugepagesize, MAP_FIXED | MAP_HUGETLB): 0xffffffffffffffff - FAILED
-> >    ```
-> > The failure can't be hit if run the tests by running 'run_vmtests.sh -t
-> > hugevm' because the nr_hugepages is set to 128 at the beginning of
-> > run_vmtests.sh and va_high_addr_switch.sh skip the setup of nr_hugepages
-> > because already enough.
-> > 
-> > CC: Luiz Capitulino <luizcap@redhat.com>
-> > Fixes: d9d957bd7b61 ("selftests/mm: alloc hugepages in va_high_addr_switch test")
-> > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
-> > ---
-> >   tools/testing/selftests/mm/va_high_addr_switch.sh | 6 ++++--
-> >   1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/mm/va_high_addr_switch.sh b/tools/testing/selftests/mm/va_high_addr_switch.sh
-> > index f89fe078a8e6..98f3dfab62c5 100755
-> > --- a/tools/testing/selftests/mm/va_high_addr_switch.sh
-> > +++ b/tools/testing/selftests/mm/va_high_addr_switch.sh
-> > @@ -111,8 +111,10 @@ setup_nr_hugepages()
-> >   check_test_requirements
-> >   save_nr_hugepages
-> > -# 4 keep_mapped pages, and one for tmp usage
-> > -setup_nr_hugepages 5
-> > +# 5 keep_mapped hugepages are reserved in the first testings, and the last test
-> > +# requires two hugepages, with one verlaped with the last second test, so one
-> > +# extra, totally 6 hugepages
-> 
-> IMHO, I'd just say "The HugeTLB tests require 6 pages", otherwise the
-> fix look good to me.
+Hello:
 
-Thank you for the review. Let me update a v2 to shorten this comment as
-your suggested. And change the title to 'require 6 hugepages in
-va_high_addr_switch hugetlb test.
+This series was applied to jaegeuk/f2fs.git (dev)
+by Sean Christopherson <seanjc@google.com>:
 
+On Wed, 27 Aug 2025 17:52:41 +0000 you wrote:
+> This series introduces NUMA-aware memory placement support for KVM guests
+> with guest_memfd memory backends. It builds upon Fuad Tabba's work (V17)
+> that enabled host-mapping for guest_memfd memory [1] and can be applied
+> directly applied on KVM tree [2] (branch kvm-next, base commit: a6ad5413,
+> Merge branch 'guest-memfd-mmap' into HEAD)
 > 
-> > +setup_nr_hugepages 6
-> >   ./va_high_addr_switch --run-hugetlb
-> >   retcode=$?
-> >   restore_nr_hugepages
+> == Background ==
+> KVM's guest-memfd memory backend currently lacks support for NUMA policy
+> enforcement, causing guest memory allocations to be distributed across host
+> nodes  according to kernel's default behavior, irrespective of any policy
+> specified by the VMM. This limitation arises because conventional userspace
+> NUMA control mechanisms like mbind(2) don't work since the memory isn't
+> directly mapped to userspace when allocations occur.
+> Fuad's work [1] provides the necessary mmap capability, and this series
+> leverages it to enable mbind(2).
 > 
+> [...]
+
+Here is the summary with links:
+  - [f2fs-dev,kvm-next,V11,1/7] mm/filemap: Add NUMA mempolicy support to filemap_alloc_folio()
+    (no matching commit)
+  - [f2fs-dev,kvm-next,V11,2/7] mm/filemap: Extend __filemap_get_folio() to support NUMA memory policies
+    https://git.kernel.org/jaegeuk/f2fs/c/16a542e22339
+  - [f2fs-dev,kvm-next,V11,3/7] mm/mempolicy: Export memory policy symbols
+    https://git.kernel.org/jaegeuk/f2fs/c/f634f10809ec
+  - [f2fs-dev,kvm-next,V11,4/7] KVM: guest_memfd: Use guest mem inodes instead of anonymous inodes
+    (no matching commit)
+  - [f2fs-dev,kvm-next,V11,5/7] KVM: guest_memfd: Add slab-allocated inode cache
+    (no matching commit)
+  - [f2fs-dev,kvm-next,V11,6/7] KVM: guest_memfd: Enforce NUMA mempolicy using shared policy
+    (no matching commit)
+  - [f2fs-dev,kvm-next,V11,7/7] KVM: guest_memfd: selftests: Add tests for mmap and NUMA policy support
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
