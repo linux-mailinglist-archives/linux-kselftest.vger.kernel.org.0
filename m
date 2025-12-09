@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-47302-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47303-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12A3CCB019A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 14:53:25 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C801CB0173
+	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 14:49:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A117C30A7A5D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 13:47:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 32068300AFDC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 13:48:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE53B223702;
-	Tue,  9 Dec 2025 13:47:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A5B2749E0;
+	Tue,  9 Dec 2025 13:48:22 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5B822256B;
-	Tue,  9 Dec 2025 13:47:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBBDE2517B9;
+	Tue,  9 Dec 2025 13:48:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765288065; cv=none; b=ckWBHeNQgh3Nkd6RmDjXO9nuL2mFD7xSSP8HyLPgLEXP+u3OllYMr9O7sGqD56kynaKGki7TjE605L8ybHYi/2/WcM/M3PJWA+wQ6bRPWiKB385dKE1vckwCxei2XvrrJZa9NVD99NnRB1xsxrdus2bsskOtpcIwKyN0SNF9JMY=
+	t=1765288101; cv=none; b=SXhgx4zCKouY43S7J/xP546lSw/6LBfr9gKb4NiNiu1xERSw4wH9u8MbQIHEduZJQooXQLpZE0fAbMyTFGoNqUXg0VAkGTzMCmaLE9KhIDvvGJphaUCAhO2jDvpJZyT14vV9dfAMw/Lw0m5EKbp2UwBHMPTW25iLVNglGdhv2o8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765288065; c=relaxed/simple;
-	bh=jtdvN7RDdnCBoLfZQzAedGkR7NZsuSNQGjL9ybT3Ntc=;
+	s=arc-20240116; t=1765288101; c=relaxed/simple;
+	bh=gddq2R5cK/VQ8vWmoB6iTMgNXT3j1CoVNdciN8Yj6E0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=qVSZrgi0p6q8pc/bD/MxYAA9+45FJS066mFJknuwniIgxyP7QUDSy9Z1fBtAS2mTXcxGd0ZgZQexySLx+oUOnfsBHBr2zkpDw9oU4/Aq25zXCXnXihXdnkcxzE85nbYfPeaN/gwh+iqvvICB13QPKIXJ48xaJ6GWYQqg1c7ghCY=
+	 In-Reply-To:Content-Type; b=hz5lj94ASZ0/yjaOiBFLKeCLR2E13/tp0afRyCMmiWX5vgYyXtvbrHvIEwpVIV+sgdTJbvsfwLPyP++vtTh1RJmRKYpQ0/VqS2qEOXrUQCTu/Jrbsz5QdqSkmiGA3rvjSIFxwT5Wt/xKcN+zqpIW2qtz2UM0T5cTcrM7wHqtWSc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29CFE169C;
-	Tue,  9 Dec 2025 05:47:36 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 774D21758;
+	Tue,  9 Dec 2025 05:48:10 -0800 (PST)
 Received: from [10.57.45.100] (unknown [10.57.45.100])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8289D3F762;
-	Tue,  9 Dec 2025 05:47:38 -0800 (PST)
-Message-ID: <ec404a91-2e24-4198-975b-e26c6a8330f8@arm.com>
-Date: Tue, 9 Dec 2025 14:47:35 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C94C3F762;
+	Tue,  9 Dec 2025 05:48:12 -0800 (PST)
+Message-ID: <746211f0-74b7-4935-a036-48a00bb5701b@arm.com>
+Date: Tue, 9 Dec 2025 14:48:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,7 +40,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 13/16] arm64: entry: Convert to generic entry
+Subject: Re: [PATCH v9 14/16] arm64: Inline el0_svc_common()
 To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
  will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
  luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
@@ -51,54 +51,54 @@ To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20251204082123.2792067-1-ruanjinjie@huawei.com>
- <20251204082123.2792067-14-ruanjinjie@huawei.com>
+ <20251204082123.2792067-15-ruanjinjie@huawei.com>
 From: Kevin Brodsky <kevin.brodsky@arm.com>
 Content-Language: en-GB
-In-Reply-To: <20251204082123.2792067-14-ruanjinjie@huawei.com>
+In-Reply-To: <20251204082123.2792067-15-ruanjinjie@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 On 04/12/2025 09:21, Jinjie Ruan wrote:
-> Currently, x86, Riscv, Loongarch use the generic entry which makes
-> maintainers' work easier and codes more elegant. arm64 has already
-> switched to the generic IRQ entry, so completely convert arm64 to use
-> the generic entry infrastructure from kernel/entry/*.
+> After switch arm64 to Generic Entry, the compiler no longer inlines
+
+Did it inline it before this series?
+
+> el0_svc_common() into do_el0_svc(). So inline el0_svc_common() and it
+> has 1% performance uplift on perf bench basic syscall on kunpeng920
+> as below.
 >
-> The changes are below:
->  - Remove TIF_SYSCALL_* flag.
+> | Metric     | W/O this patch | With this patch | Change    |
+> | ---------- | -------------- | --------------- | --------- |
+> | Total time | 2.195 [sec]    | 2.171 [sec]     |  ↓1.1%   |
+> | usecs/op   | 0.219575       | 0.217192        |  ↓1.1%   |
+> | ops/sec    | 4,554,260      | 4,604,225       |  ↑1.1%    |
 >
->  - Remove _TIF_SYSCALL_WORK and has_syscall_work(), as _TIF_SYSCALL_WORK
->    is equal with SYSCALL_WORK_ENTER.
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 
-Should be updated considering patch 7 (has_syscall_work() no longer
-exists and there is also _TIF_SYSCALL_EXIT_WORK).
-
->  - Implement arch_ptrace_report_syscall_entry/exit() with
->    report_syscall_entry/exit() to do arm64-specific save/restore
->    during syscall entry/exit.
->
->  - Add "ARCH_SYSCALL_WORK_EXIT" to be defined as "_TIF_SECCOMP |
->    _TIF_SYSCALL_EMU" to keep the arm64 behaviour unchanged.
-
-No longer the case.
-
->  - Remove arm64 syscall_trace_enter(), syscall_exit_to_user_mode_prepare(),
->    and related sub-functions including syscall_exit_work() and
->    syscall_enter_audit(), by calling generic entry's functions with similar
->    functionality.
-
-Would be good to talk about SYSCALL_EXIT_TRAP as well.
-
-Otherwise:
+I think this is sensible - do_el0_svc() is clearly hot and the small
+increase in code size is completely justified. It also removes a
+performance regression when enabling CONFIG_COMPAT (without it
+el0_svc_common() has only one caller so it should be inlined regardless).
 
 Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
 
-> - Implement arch_syscall_is_vdso_sigreturn() to support "Syscall User
->   Dispatch".
+> ---
+>  arch/arm64/kernel/syscall.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> Suggested-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> Suggested-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
->
-> [...]
+> diff --git a/arch/arm64/kernel/syscall.c b/arch/arm64/kernel/syscall.c
+> index 47e193a1cfff..5aa51da9ec25 100644
+> --- a/arch/arm64/kernel/syscall.c
+> +++ b/arch/arm64/kernel/syscall.c
+> @@ -66,8 +66,8 @@ static void invoke_syscall(struct pt_regs *regs, unsigned int scno,
+>  	choose_random_kstack_offset(get_random_u16());
+>  }
+>  
+> -static void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+> -			   const syscall_fn_t syscall_table[])
+> +static __always_inline void el0_svc_common(struct pt_regs *regs, int scno, int sc_nr,
+> +					   const syscall_fn_t syscall_table[])
+>  {
+>  	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
+>  	unsigned long flags = read_thread_flags();
 
