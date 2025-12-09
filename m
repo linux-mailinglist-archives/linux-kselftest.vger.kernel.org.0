@@ -1,137 +1,127 @@
-Return-Path: <linux-kselftest+bounces-47306-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EBA9CB0B6B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 18:23:19 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 725ACCB0BF9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 09 Dec 2025 18:36:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 108A130E4BA5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 17:21:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 733C030185F4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Dec 2025 17:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38CD732ABEF;
-	Tue,  9 Dec 2025 17:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDCC32ABC3;
+	Tue,  9 Dec 2025 17:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Psg4CKLA"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="OA8fOHnh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E395032ABC3;
-	Tue,  9 Dec 2025 17:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753E22FFF94;
+	Tue,  9 Dec 2025 17:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765300912; cv=none; b=eVrYze2QhhtAHKpC6wYBP2QKwLLw2/PaiSmlfWg1UoF1QPNXFo3bxFiu8ZEejGHsVOfDAXEz954AOXqXccgs8XK+K4wXOSjjp24PpW5l6GMgOWqtyLPANMXjJz/T9hi47o3/UX5VeO83vcj5sSNGobJetZdqEWNmf1Z8Ti3C630=
+	t=1765301806; cv=none; b=gjnWLuatlCkP/osyDBVPp4PlggPpq9eGBT6PQFE2pl+W8PNt9YfCAT+UR9NqHP1dcktXJztr3fBT3pSp+2gcUwmC548dSUqYbF+ljVMhsWDd8gAsZAKsQs3MeZlCQECL+Cs6YSxjstCavAul30BBxVbkf8EbP8O2+3tVBxT62cY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765300912; c=relaxed/simple;
-	bh=6JzHwVMsw3oVBaLB929QEwdcMxFilfqVMX3zcgp6eKA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=F98BbZstw/BUnQwJ2Q7C9Yh/xOrXxfgvLXTT1PRS8oOSrvNXgWbruTf74F7F51R6UgaI49dJ0k9c2lVi8g9+wJx5BtJs1BNqO2m8d01t+BOGr3GK1ghAKER1w7++DlPStu++Ac9lV/0RGM5fatvcTisKk9RFhne4aPPsbya21CA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Psg4CKLA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73601C4CEFB;
-	Tue,  9 Dec 2025 17:21:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765300911;
-	bh=6JzHwVMsw3oVBaLB929QEwdcMxFilfqVMX3zcgp6eKA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Psg4CKLAi9h/A9vrvljHnRqp9p5yz8B5YCapKgSBCEr6kmloaOVwmNaYxp96nI0Jm
-	 E1pbyJ1ln1w7L+cwykG7ZYqv4qRzAcWJFrrDoVllnAKtP9kV9HNNc0yvVFDPPFwIkZ
-	 zlIrgsKzfz9N31t7zC7ENkzXvNMPaNLtaoUlwGSCq0lbSmlyoP3LMxcO1rKyc+86dE
-	 NNhWUd3A/NHLJln9jL7sW0vI/gKw88UtIG56vYvOYlGCOJt2PmPeBPQ+WVB8pAbtZB
-	 YUlzouJwNa/r7jfn9C9CtIGicL5PvCAPTPMpQEpILvgU65s/m796Uhb97EubDbNHcQ
-	 BLbAhrtl11WCQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B591F3808200;
-	Tue,  9 Dec 2025 17:18:47 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1765301806; c=relaxed/simple;
+	bh=uEs8g4lbBl16nCil/0VaFZ8Tx3FTjw6JajWYkKa785g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V+FFmG/zf/09g6ZTeV065ysSptPUvbux5NKfEN4NlteYqD3WlnwLM00Zg6EU6aw9h4pIVNysdZ706bo5d3uwhH5R68iIr7jtq7M7LD7pv6S8B2udrsmgxQjtFVryHW6/2/EKFFl2vP9EvRNbj6KxZaa99zDPTOHZsMjFp3PLS6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=OA8fOHnh; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=f68wF7OB69BukyOPMGR2VjCj4FHQhmjsFLJjVz2yiQE=; b=OA8fOHnhyh1PN9DS8V+gPOLbhx
+	mFfoZuG3RlIN8/yWbt1EmHpkSUFI0NqHEleMHM4ii5OfKa52jYLJyFAlWBbQ+tfPA/E9pQZ8W7hgu
+	vYRo9As8dyI8KHoAm5kct5+nFhsr0yrvof/0maXZ0xkpUwj1Qmf2eUPSiRv8/2lvRW7PU0j4al+vm
+	fdDCTdXaaxA1+MrTCzapnjMCIVsF/6sKIoZ1qKygZ+JG/ClQGX8fq35DaotIbrScKasMlQJl6B9tp
+	3tCMaAMa9/1uIqHIY6Abxejbj8luJkyGTaaAapHc2wtvy2+CjlvivKo1XgBMxYHnMZcfBizQsdIwg
+	kei7kJvA==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.94.2)
+	(envelope-from <leitao@debian.org>)
+	id 1vT1dO-007IDs-UM; Tue, 09 Dec 2025 17:36:23 +0000
+Date: Tue, 9 Dec 2025 09:36:16 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Petr Mladek <pmladek@suse.com>
+Cc: kuba@kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, gustavold@gmail.com, 
+	asantostc@gmail.com, calvin@wbinvd.org, kernel-team@meta.com, davej@codemonkey.org.uk
+Subject: Re: [PATCH net-next 0/4] (no cover subject)
+Message-ID: <qepvadqfuskb6d6q6rkxvxhwo4lsjgvbygdav6wtp24pdranjc@ou6gadd6iohy>
+References: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
+ <20251201163622.4e50bf53@kernel.org>
+ <4oybtunobxtemenpg2lg7jv4cyl3xoaxrjlqivbhs6zo72hxpu@fqp6estf5mpc>
+ <20251202102442.568f91a7@kernel.org>
+ <aTFmew5trILX3RpO@pathway.suse.cz>
+ <aTFnzmc0ZtBvGg4y@pathway.suse.cz>
+ <7jdruzcpkeyhuudwi6uzg2vsc5mhgpq7qz4ym7vqqmgs7j3524@cvtnzneddg2d>
+ <aTbmNdilvUq78bjc@pathway>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [f2fs-dev] [PATCH kvm-next V11 0/7] Add NUMA mempolicy support
- for
- KVM guest-memfd
-From: patchwork-bot+f2fs@kernel.org
-Message-Id: 
- <176530072652.4018985.15391772848132749035.git-patchwork-notify@kernel.org>
-Date: Tue, 09 Dec 2025 17:18:46 +0000
-References: <20250827175247.83322-2-shivankg@amd.com>
-In-Reply-To: <20250827175247.83322-2-shivankg@amd.com>
-To: Garg@codeaurora.org, Shivank <shivankg@amd.com>
-Cc: willy@infradead.org, akpm@linux-foundation.org, david@redhat.com,
- pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com, vbabka@suse.cz,
- jgowans@amazon.com, mhocko@suse.com, jack@suse.cz, kvm@vger.kernel.org,
- dhavale@google.com, linux-btrfs@vger.kernel.org, aik@amd.com,
- papaluri@amd.com, kalyazin@amazon.com, peterx@redhat.com, linux-mm@kvack.org,
- clm@fb.com, ddutile@redhat.com, linux-kselftest@vger.kernel.org,
- shdhiman@amd.com, gshan@redhat.com, ying.huang@linux.alibaba.com,
- ira.weiny@intel.com, roypat@amazon.co.uk, matthew.brost@intel.com,
- linux-coco@lists.linux.dev, zbestahu@gmail.com, lorenzo.stoakes@oracle.com,
- linux-bcachefs@vger.kernel.org, apopple@nvidia.com, jmorris@namei.org,
- hch@infradead.org, chao.gao@intel.com, cgzones@googlemail.com,
- ziy@nvidia.com, rientjes@google.com, yuzhao@google.com, xiang@kernel.org,
- nikunj@amd.com, gourry@gourry.net, serge@hallyn.com, thomas.lendacky@amd.com,
- ashish.kalra@amd.com, chao.p.peng@intel.com, yan.y.zhao@intel.com,
- byungchul@sk.com, michael.day@amd.com, Neeraj.Upadhyay@amd.com,
- michael.roth@amd.com, bfoster@redhat.com, bharata@amd.com,
- josef@toxicpanda.com, Liam.Howlett@oracle.com, ackerleytng@google.com,
- dsterba@suse.com, viro@zeniv.linux.org.uk, jefflexu@linux.alibaba.com,
- jaegeuk@kernel.org, dan.j.williams@intel.com, surenb@google.com,
- tabba@google.com, paul@paul-moore.com, joshua.hahnjy@gmail.com,
- brauner@kernel.org, quic_eberman@quicinc.com, rakie.kim@sk.com,
- pvorel@suse.cz, linux-erofs@lists.ozlabs.org, kent.overstreet@linux.dev,
- linux-kernel@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
- pankaj.gupta@amd.com, linux-security-module@vger.kernel.org,
- lihongbo22@huawei.com, amit@infradead.org, linux-fsdevel@vger.kernel.org,
- vannapurve@google.com, suzuki.poulose@arm.com, rppt@kernel.org,
- jgg@nvidia.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aTbmNdilvUq78bjc@pathway>
+X-Debian-User: leitao
 
-Hello:
+Hello Petr,
 
-This series was applied to jaegeuk/f2fs.git (dev)
-by Sean Christopherson <seanjc@google.com>:
+On Mon, Dec 08, 2025 at 03:52:37PM +0100, Petr Mladek wrote:
+> On Fri 2025-12-05 02:21:08, Breno Leitao wrote:
 
-On Wed, 27 Aug 2025 17:52:41 +0000 you wrote:
-> This series introduces NUMA-aware memory placement support for KVM guests
-> with guest_memfd memory backends. It builds upon Fuad Tabba's work (V17)
-> that enabled host-mapping for guest_memfd memory [1] and can be applied
-> directly applied on KVM tree [2] (branch kvm-next, base commit: a6ad5413,
-> Merge branch 'guest-memfd-mmap' into HEAD)
+> JFYI, I am going to review the last version of the per-console
+> loglevel patchset later this week. IMHO, we are very close to
+> get it merged.
 > 
-> == Background ==
-> KVM's guest-memfd memory backend currently lacks support for NUMA policy
-> enforcement, causing guest memory allocations to be distributed across host
-> nodes  according to kernel's default behavior, irrespective of any policy
-> specified by the VMM. This limitation arises because conventional userspace
-> NUMA control mechanisms like mbind(2) don't work since the memory isn't
-> directly mapped to userspace when allocations occur.
-> Fuad's work [1] provides the necessary mmap capability, and this series
-> leverages it to enable mbind(2).
+> BTW: How often do you ping the netconsole, please?
+>      IMHO, adding a short message once-per-hour might be bearable,
+>      once-per-minute might be questionable for the kernel buffer
+>      but still fine for journalctl.
+
+It is not very often today, about once a week. This is mostly due to the
+pollution of kernel buffers.
+
+Ideally we can set it to multiple times a day, but less than hourly.
+
+> > 4) send messages only to netconsole (this patchset)
 > 
-> [...]
+> I do not have strong opinion about this.
+> 
+> That said, the location /sys/kernel/config/netconsole/<target>/send_msg
+> looks a bit weird to me. I would rather expect /dev/netconsole_msg
+> or so. But I do not have strong opinion. It might be an overkill.
+> 
+> How important is it to trigger the ping from userspace, please?
+> It might be sent by an existing watchdog.
 
-Here is the summary with links:
-  - [f2fs-dev,kvm-next,V11,1/7] mm/filemap: Add NUMA mempolicy support to filemap_alloc_folio()
-    (no matching commit)
-  - [f2fs-dev,kvm-next,V11,2/7] mm/filemap: Extend __filemap_get_folio() to support NUMA memory policies
-    https://git.kernel.org/jaegeuk/f2fs/c/16a542e22339
-  - [f2fs-dev,kvm-next,V11,3/7] mm/mempolicy: Export memory policy symbols
-    https://git.kernel.org/jaegeuk/f2fs/c/f634f10809ec
-  - [f2fs-dev,kvm-next,V11,4/7] KVM: guest_memfd: Use guest mem inodes instead of anonymous inodes
-    (no matching commit)
-  - [f2fs-dev,kvm-next,V11,5/7] KVM: guest_memfd: Add slab-allocated inode cache
-    (no matching commit)
-  - [f2fs-dev,kvm-next,V11,6/7] KVM: guest_memfd: Enforce NUMA mempolicy using shared policy
-    (no matching commit)
-  - [f2fs-dev,kvm-next,V11,7/7] KVM: guest_memfd: selftests: Add tests for mmap and NUMA policy support
-    (no matching commit)
+Medium importance, I would say. I am inclined to distributed design,
+where each machine detects broken netconsole and report itself. Instead
+of something else (a service) finding broken-netconsole hosts in the
+"fleet".
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Something as:
+
+	1. Machine boots
+	2. userspace sends the ping (or knows that the ping was already
+	   sent)
+	3. the configuration management (chef, ansible, etc) makes sure
+	   that the message got received.
 
 
+So, step number 3 needs to be executed only after step 2. Initiating the
+ping (step 2) from userspace is the easiest way, to control when the
+machine can go to step 3.
+
+Thanks
+--breno
 
