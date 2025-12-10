@@ -1,161 +1,170 @@
-Return-Path: <linux-kselftest+bounces-47369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47370-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58CCECB3C41
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 19:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8587DCB3D49
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 20:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 128F33043F5B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 18:31:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C976030DB83A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 19:09:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A398B2FD665;
-	Wed, 10 Dec 2025 18:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F1230594E;
+	Wed, 10 Dec 2025 19:09:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jy1rgSyC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OdseGsrC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07D6F225403;
-	Wed, 10 Dec 2025 18:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4350E2E8B8F
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 19:09:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765391512; cv=none; b=FZJggwn19I+0CFnsSUMlBeuC1CX5lrHl/ZD41K8q00aLtErXYui1/ypW/wSfzY3hbkopsQz+SzVfdjPjCXdt+2w7BDLLlT/HFkXVJz9bXlqTObOgBIli/DSPfTjI4opGhiH/vYOaRObI5oTRQAnjrLmtptd/QETCp6zYhB/DICs=
+	t=1765393745; cv=none; b=HaGV435YLlPK5TWlWoeiDD3A5kNGejw3zxkAsGBFgOYlq6FEHItjzzR8DD/Dd45kqY6CUY4UNSTIzvyVI62DFus8f5K83guQRwaCUL0R6FDxzempTfs8+SB1DCmwZfo9kk8+UQfagpPAYmTMdXH04HQFPjdGQ+l70wMpeSP7ab8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765391512; c=relaxed/simple;
-	bh=VNHdDxfKQZYeoMNw23AefvwVyxFS9n8FzpKeC+FIJog=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mLPchjzDd/e0VG7wYV7Mxi8+VPl19Z5yTOw+yUGq0E3eADZCVBot/0OeKfC6PtSG47mLsFKHEHaVRZJ84l1rQ7e+5CWuJJejm275xd9ix7cKF1AJ2UMRsZ8Ddy1lETlh7zhIgFkeQk8aLxOM5TJhipJs9xDj+1f6lCfsJcxf+fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jy1rgSyC; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765391511; x=1796927511;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VNHdDxfKQZYeoMNw23AefvwVyxFS9n8FzpKeC+FIJog=;
-  b=Jy1rgSyCZha4H1BTf9dwUO0uL/kNooxr8ZRvRF+HzlUpTtHl35A6t5/9
-   LifIO3wxJWr45nL9tNgs/vhTvYBGHCWEcDSiFmtmdR4DttnR06Um+kgiG
-   PSOimi40/50qAisQbvuUWb3rehkRgKHVnZ90L5J+h3rYues8H0Ewr+WjO
-   HKOMlV5HM8oYgS3lbes8iG4VNy03IOfAL21rKHeeBrqLA3Wa+Qum+9DIG
-   PZon80T7Z64KBffV2ZUgYZnYmG+Czg9W1BON9zr1UdoTjiwfL8WtHKu84
-   u6lFTToC9ZqxXhOwVsIvSg0Z9fKx28lcGeT1kXqe7GvRAu4CuoaDFyx2P
-   Q==;
-X-CSE-ConnectionGUID: HmTV0pyNRjCVD0hKNgbcHg==
-X-CSE-MsgGUID: 0w/+hcOyTUC3kFBEU+pbBQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11638"; a="92847894"
-X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
-   d="scan'208";a="92847894"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2025 10:31:50 -0800
-X-CSE-ConnectionGUID: sjzEvg3oQTG3/3GQD9wleA==
-X-CSE-MsgGUID: hyVtDifxTlaUirZgxJqxuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,264,1758610800"; 
-   d="scan'208";a="196647077"
-Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 10 Dec 2025 10:31:45 -0800
-Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vTOyU-000000003dR-1S1d;
-	Wed, 10 Dec 2025 18:31:42 +0000
-Date: Thu, 11 Dec 2025 02:31:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Colton Lewis <coltonlewis@google.com>
-Subject: Re: [PATCH v5 11/24] KVM: arm64: Writethrough trapped PMEVTYPER
- register
-Message-ID: <202512110209.GjVZa9ti-lkp@intel.com>
-References: <20251209205121.1871534-12-coltonlewis@google.com>
+	s=arc-20240116; t=1765393745; c=relaxed/simple;
+	bh=calyCJn7HCzDIZJYHFyyjL6bDhg5HBlqUnJKtZ4SEy8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Dp570GU0QziXJDXWbu1iobhyPqVPA2Ljjw7RbrmVYlkvYMOcGpKwX1/8ZxK3zNyEw5qSjKCctqVdLxq9wgK0U3/p5kO18k3WlWeQBMZ5hg6hEviY1WZUQak7Ah6obmxmleiK4iC2HocqcxWUUiVtMqCjBdOkpLuCerPTaTkbHyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OdseGsrC; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7b80fed1505so120594b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 11:09:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765393743; x=1765998543; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ALnH7xZXyoaaX5d2lzICEZFSc7BpSTyBsbMHtfdCwVg=;
+        b=OdseGsrCSDM17b91kRYpWg7MASTMjNySzWplWVxy8WXB3GCDlgd4rQ/LuFxo0i+xH4
+         ySZXvvGhSgL4ndMO+kzoWwT3DuYz/e3Gdlr5wAn2PhHdA0fkKO6uTH3toxOH8+ZFK5Bj
+         SP+I0NaqGoBIHmwixgLgrzwL8DVlBFxq0IXThbONLUOGvdDelPgA5Tl19P6UIvMV32YS
+         +hv0cbteRuuZ4WslZLi7iq8u54GooPSuGXktig7kGMrO7pVZmp7LWqzs9gJhUBHZjcAt
+         GS3uckjv8FSjnJAStA/3Bmeco8HPMw1f5I7+HsTus34SfmQ1vCmAZsk1g5OjFtApTdoB
+         npTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765393743; x=1765998543;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ALnH7xZXyoaaX5d2lzICEZFSc7BpSTyBsbMHtfdCwVg=;
+        b=GCRt1R/ogXACwC2fSrCSKRLhMsKxMSTE+UG/4v5QncNoEUl0fNHEgi+DxBwVPipnvA
+         jsEryEgTbZOjZssNsmVjqXxwd9diO9AR6btr0XAC0uJiKjshvR+Gtj2ahbBUtfsVEQqt
+         cbGBPQ49Yr+VAmY9shX0aBKsuOibwkbmWQ1ZjPh/2XVX+9DjfskE45olgPQ9vMFiwyuE
+         vBKothCrcl3DHF4xoqWPty4h1JZ0Qd74ZBB4afhaadgTOVulcew72zJnOMBHBVUWKvWP
+         JUDk0py+uAzifTpSTXovZAyvzTy2+UYpTOJUsk+szjRfk4rQHMRnf0gSrbMICIphQV2G
+         +EZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvcbLN/a1EOFfSZ88uCN1FogkF+joB2U1i/RXEfUkFTCkUBJGlj6/t6Cs1iRk0R8N3XNoWiueP312m8PTg23Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+J49yP9+jNpv2fqFJqfmTkJ4v4CuHmyu3jV46auUxhZ0DiLEC
+	FBYm9rNSuY+vW/2FN2GDsiVmfNrtCHI6WdTL49kYOcxHB8i0d7POADuX
+X-Gm-Gg: ASbGncuBTYaNvPooiKX00XVSW6cj8bdeePaTXghCOfqqoI/x59u/nHCPm6Hu8Q1Ier9
+	3TIAFLr2TSPiOeIbEZYEMjaYLVoAtEX9vC/Z2tEDiX3+tAVhGqFmkb3Fk8fiZZLFmipDJAGni+c
+	v47QW+bWaNddKWsw1PzlDo7yJK13Y7TerKefCNBSfPIwWip8Yoa9Sg/ABxadrabxn26o2EIjLMx
+	S9MxO+Mh5AVkBK+NtO2PC2ADOZXJnOt5T3YFbeKFKPPV+LT3ZD+kI8RTLiAm2ife+xSSJd9brbf
+	bGhp/gNDyHc/NgVwEC2BLs3HA2Uia3vqxV95DOIaU0yptW+o9FwVU+Aj479o50HR8dVdrA5Fp9e
+	fH3MyFMVRbd8SBvUqSFLQfM23RU89DSNos2oMtkZCT80hK4A430bCD67IlzcQhykHZduKc4J8Hh
+	kYIrO8FjFrUBTKJFV3zGkpoY7qzY3Dm8s6e5D+Zi/NxrpihR5ZyF8GUwYruHQ=
+X-Google-Smtp-Source: AGHT+IFkBdc4L7W2yURiGuumsGT4dEWPci/s+wZEabce7HtaPIrwKqnYk/48B/cwUZ1Bk5R/h+PAYg==
+X-Received: by 2002:a05:6a20:3d82:b0:304:313a:4bcd with SMTP id adf61e73a8af0-366e120ef6fmr3658096637.30.1765393743391;
+        Wed, 10 Dec 2025 11:09:03 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c0c25b7d59dsm248321a12.6.2025.12.10.11.09.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Dec 2025 11:09:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3682159f-05ff-417c-95e9-976f0a504c09@roeck-us.net>
+Date: Wed, 10 Dec 2025 11:09:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251209205121.1871534-12-coltonlewis@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 08/13] selftests: net: netlink-dumps: Avoid
+ uninitialized variable warning
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Eric Dumazet <edumazet@google.com>, Kees Cook <kees@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ wine-devel@winehq.org, netdev@vger.kernel.org, bpf@vger.kernel.org
+References: <20251205171010.515236-1-linux@roeck-us.net>
+ <20251205171010.515236-9-linux@roeck-us.net>
+ <20251210181318.73075886@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
+In-Reply-To: <20251210181318.73075886@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Colton,
+On 12/10/25 01:13, Jakub Kicinski wrote:
+> On Fri,  5 Dec 2025 09:10:02 -0800 Guenter Roeck wrote:
+>> The following warning is seen when building netlink-dumps.
+>>
+>> netlink-dumps.c: In function ‘dump_extack’:
+>> ../kselftest_harness.h:788:35: warning: ‘ret’ may be used uninitialized
+>>
+>> Problem is that the loop which initializes 'ret' may exit early without
+>> initializing the variable if recv() returns an error. Always initialize
+>> 'ret' to solve the problem.
+> 
+> Are you sure you're working off the latest tree? I think this should
+> already be fixed by 13cb6ac5b50
+> 
 
-kernel test robot noticed the following build errors:
+Sorry for missing the fix. I was working off v6.18, which was the tip of
+the tree when I wrote the patch.
 
-[auto build test ERROR on ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d]
+> I applied the other 3 networking changes.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Colton-Lewis/arm64-cpufeature-Add-cpucap-for-HPMN0/20251210-055309
-base:   ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
-patch link:    https://lore.kernel.org/r/20251209205121.1871534-12-coltonlewis%40google.com
-patch subject: [PATCH v5 11/24] KVM: arm64: Writethrough trapped PMEVTYPER register
-config: arm64-randconfig-001-20251210 (https://download.01.org/0day-ci/archive/20251211/202512110209.GjVZa9ti-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 14.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251211/202512110209.GjVZa9ti-lkp@intel.com/reproduce)
+Thanks a lot!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512110209.GjVZa9ti-lkp@intel.com/
+Guenter
 
-All errors (new ones prefixed by >>):
-
-   arch/arm64/kvm/sys_regs.c: In function 'writethrough_pmevtyper':
->> arch/arm64/kvm/sys_regs.c:1183:34: error: implicit declaration of function 'kvm_pmu_event_mask'; did you mean 'kvm_pmu_evtyper_mask'? [-Wimplicit-function-declaration]
-    1183 |                 eventsel = val & kvm_pmu_event_mask(vcpu->kvm);
-         |                                  ^~~~~~~~~~~~~~~~~~
-         |                                  kvm_pmu_evtyper_mask
-
-
-vim +1183 arch/arm64/kvm/sys_regs.c
-
-  1168	
-  1169	static bool writethrough_pmevtyper(struct kvm_vcpu *vcpu, struct sys_reg_params *p,
-  1170					   u64 reg, u64 idx)
-  1171	{
-  1172		u64 eventsel;
-  1173		u64 val = p->regval;
-  1174		u64 evtyper_set = ARMV8_PMU_EXCLUDE_EL0 |
-  1175			ARMV8_PMU_EXCLUDE_EL1;
-  1176		u64 evtyper_clr = ARMV8_PMU_INCLUDE_EL2;
-  1177	
-  1178		__vcpu_assign_sys_reg(vcpu, reg, val);
-  1179	
-  1180		if (idx == ARMV8_PMU_CYCLE_IDX)
-  1181			eventsel = ARMV8_PMUV3_PERFCTR_CPU_CYCLES;
-  1182		else
-> 1183			eventsel = val & kvm_pmu_event_mask(vcpu->kvm);
-  1184	
-  1185		if (vcpu->kvm->arch.pmu_filter &&
-  1186		    !test_bit(eventsel, vcpu->kvm->arch.pmu_filter))
-  1187			val |= evtyper_set;
-  1188	
-  1189		val &= ~evtyper_clr;
-  1190	
-  1191		if (idx == ARMV8_PMU_CYCLE_IDX)
-  1192			write_pmccfiltr(val);
-  1193		else
-  1194			write_pmevtypern(idx, val);
-  1195	
-  1196		return true;
-  1197	}
-  1198	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
