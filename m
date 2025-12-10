@@ -1,109 +1,131 @@
-Return-Path: <linux-kselftest+bounces-47353-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 898E7CB1DDF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 05:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 391BBCB1EB7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 05:47:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4816E30E2B52
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 04:05:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AB8C83063873
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 04:47:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7171C30E0D8;
-	Wed, 10 Dec 2025 04:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSLSiwyv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EAB1DDC28;
+	Wed, 10 Dec 2025 04:47:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out28-149.mail.aliyun.com (out28-149.mail.aliyun.com [115.124.28.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CAED27280C;
-	Wed, 10 Dec 2025 04:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621BBC148;
+	Wed, 10 Dec 2025 04:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765339544; cv=none; b=eYTERtarWFbuKd7Oy06VaVWpWm7W3YxgU0CdLRnTVDLLQiSYCHEbjpMEZelx2sBNYQE+bOooOssS8DB2Feq7XpxzKg9NzHdXeO6aZ9x4RqWvx4zgL/FDD3lCe8qQ6nwIFLqP8pO5Wof6QaNF2KDZ3H/jyk0qHy0RRJ2z+NmtsLI=
+	t=1765342025; cv=none; b=Kb+9epr5npt8hk/nQSbXd0pgN9VhU0/7ua0huhDXTYJbwuREii/f/pX3voWCpvXAIxXgdiQ5I7j6TVAT8ZScjGfndLehC1meoaVcFns0Qy4mKg4x1eof2AMCj6vD4HtsfM138DReVoK9xx82X/HLYNeR5F3W9E2tHl8vEu+wT0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765339544; c=relaxed/simple;
-	bh=/pgtDdbLyzsiBNrvqE8WGvAHGF6R2MHfkVKuKRhOpDc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q2CjiLLNPj/wJSwfx4hJAQsUpIqm10NBjzQYZTSxodAX12sPa83QucOLG+zM4nX5BtkwjH69aoEIb3zRX/lJ6TWmhAbokYWJjK5BV4uc4A6cYEw9UU25Q4/8zxuVc3970QP4iG6oreeltmURgvYTocymeQp+7n1nwyVeBqHSPKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSLSiwyv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6086C4CEF1;
-	Wed, 10 Dec 2025 04:05:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765339543;
-	bh=/pgtDdbLyzsiBNrvqE8WGvAHGF6R2MHfkVKuKRhOpDc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=eSLSiwyvvuk2jVCHEVC5WEOrgjc26SOeByQu0BTaa5gTYpoDNrwoOKjsAKXt1u6xP
-	 19gPkArZ4u8HzbtaHd7vGEyZH9NlJ+U9w4eKqFpmiVb8saoD+ACIiRQJh9jNJ/4i9/
-	 EKuw9iECrtFHmxqFpGn2/7p8/pPX3HSRRs0f7/IefUjD0DfwjoJVCwCn2amfqXXZtl
-	 dxLFEamLg/VOyAUlFVq2VNuMwA6opUgYlVjtSUW3P/PuWdnKGd7nYNIAMRTbQvNFz4
-	 Tve9+KsRJb0B+fDnZK0+yrtQ0qUOmgVt/W2OY8ven4sEmcMGgVyy8cEx9rmQ+erVAN
-	 zq1/PIOVKmH0A==
-Date: Wed, 10 Dec 2025 13:05:38 +0900
-From: Jakub Kicinski <kuba@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Petr Mladek <pmladek@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, Simon Horman <horms@kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- gustavold@gmail.com, asantostc@gmail.com, calvin@wbinvd.org,
- kernel-team@meta.com, davej@codemonkey.org.uk
-Subject: Re: [PATCH net-next 0/4] (no cover subject)
-Message-ID: <20251210130538.38374707@kernel.org>
-In-Reply-To: <snoxl67npkzfi63l4ndh3d6qvx2lyxthtrwhfnharhf5llrv4j@zhyzxm3tegia>
-References: <20251128-netconsole_send_msg-v1-0-8cca4bbce9bc@debian.org>
-	<20251201163622.4e50bf53@kernel.org>
-	<4oybtunobxtemenpg2lg7jv4cyl3xoaxrjlqivbhs6zo72hxpu@fqp6estf5mpc>
-	<20251202102442.568f91a7@kernel.org>
-	<aTFmew5trILX3RpO@pathway.suse.cz>
-	<aTFnzmc0ZtBvGg4y@pathway.suse.cz>
-	<7jdruzcpkeyhuudwi6uzg2vsc5mhgpq7qz4ym7vqqmgs7j3524@cvtnzneddg2d>
-	<20251209163745.3d0fcdfe@kernel.org>
-	<snoxl67npkzfi63l4ndh3d6qvx2lyxthtrwhfnharhf5llrv4j@zhyzxm3tegia>
+	s=arc-20240116; t=1765342025; c=relaxed/simple;
+	bh=WhBwMpnNITrc6HpUVSdkhFjKuWlDyPs2ko+iJDx1bsU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rm+oc8NMSFjrmXEtCbmf9hvsSI8uugkvrDdENA0AF8go0VH3iB7NZrI/6D80wmdLRHTylmSXP1s/N1lNVS0/rJcrEtxtrE5Fum+HJGhequ70BKnGB4Q6iYeZarujvv8PKUz2CUcx2ydoClO9gZrXOMMy9JQ2NMQN+A1eIFj0uZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+Received: from 172.18.26.4(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fgwqYvh_1765342008 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Wed, 10 Dec 2025 12:46:51 +0800
+Message-ID: <d28d3e39-3f09-4187-934a-19b71ce188cc@open-hieco.net>
+Date: Wed, 10 Dec 2025 12:46:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] selftests/resctrl: Add CPU vendor detection for
+ Hygon
+To: Reinette Chatre <reinette.chatre@intel.com>,
+ Fenghua Yu <fenghuay@nvidia.com>, tony.luck@intel.com, bp@alien8.de,
+ shuah@kernel.org, skhan@linuxfoundation.org
+Cc: babu.moger@amd.com, james.morse@arm.com, Dave.Martin@arm.com,
+ x86@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shenxiaochen@open-hieco.net
+References: <20251205092544.2685728-1-shenxiaochen@open-hieco.net>
+ <20251205092544.2685728-2-shenxiaochen@open-hieco.net>
+ <6d68f2c5-4011-4188-bdb4-27f0e6a4d13e@nvidia.com>
+ <f2e30c0b-018f-4988-a1ad-9ead6af7994d@open-hieco.net>
+ <ca161ef9-c9e3-498a-9e6a-aefcfec46dea@intel.com>
+ <1ce7ea26-6e97-4640-86df-c8dd3e623002@open-hieco.net>
+ <d713c903-b8fd-4909-a520-6426fabc003a@intel.com>
+Content-Language: en-US
+From: Xiaochen Shen <shenxiaochen@open-hieco.net>
+In-Reply-To: <d713c903-b8fd-4909-a520-6426fabc003a@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Tue, 9 Dec 2025 09:46:51 -0800 Breno Leitao wrote:
-> > I think I was alluding that another option (not saying that it's the
-> > best but IIUC your requirements it'd be the best fit)):
-> > 
-> > 5) Add a keepalive configfs knob, if set to a non-zero value netconsole
-> > will send an empty (?) message at given interval
-> > 
-> >   Pros:
-> >    - truly does not require a user binary to run periodically, netcons
-> >      would set a timer in the kernel
-> >   Cons:
-> >    - does not provide the arbitrary "console bypass" message
-> >      functionality  
-> 
-> This is a good idea if we change it slightly. What about a "ping"
-> configfs item that send sit when I touch it?
-> 
-> Something as:
-> 
-> 	# echo 1 > /sys/kernel/configs/<target>/ping
->
-> And it would ping the host with a predefined "ping" message, and nothing
-> else.
-> 
-> That would work, for my current problem, honestly.
-> 
-> One drawback compared to a more flexible "send_msg" is that I don't have
-> complete flexibility on the message format. Thus, if I want to pass
-> extra information such as a Nonce, timestamp, host state, interface
-> name, health state, it will not be possible, which is fine for now,
-> given I am NOT planning to use it at this stage.
+Hi Reinette,
 
-If you still want to tickle it from user space periodically, I guess
-send_msg is more flexible. I think the main advantage of keepalive
-would be to remove the need for periodic userspace work.
+On 12/10/2025 7:02 AM, Reinette Chatre wrote:
+> I suggest this be simplified to not have the vendor ID be used both as a value and as a state.
+> Here is some pseudo-code that should be able to accomplish this:
+> 
+> 
+> 	unsigned int detect_vendor(void)
+> 	{
+> 		static bool initialized = false;
+> 		static unsigned int vendor_id;
+> 		...
+> 		FILE *inf;
+> 
+> 
+> 		if (initialized)
+> 			return vendor_id;
+> 
+> 		inf = fopen("/proc/cpuinfo", "r");
+> 		if (!inf) {
+> 			vendor_id = 0;
+> 			initialized = true;
+> 			return vendor_id;
+> 		}
+> 
+> 		/* initialize vendor_id from /proc/cpuinfo */
+> 
+> 		initialized = true;
+> 		return vendor_id;
+> 	}
+> 
+> 	unsigned int get_vendor(void)
+> 	{
+> 		unsigned int vendor;
+> 		
+> 		vendor = detect_vendor();
+> 
+> 		if (vendor == 0)
+> 			ksft_print_msg(...);
+> 
+> 		return vendor;
+> 	}
+> 
+> Reinette
+
+
+Thank you very much! I will make the change in v3 patch series.
+
+Could you help review the revised patch description for the change?
+--------------------------------
+    ...
+    and makes it obvious when adding new vendor IDs.
+
+    Accordingly, update the return types of detect_vendor() and get_vendor()
+    from 'int' to 'unsigned int' to align with their usage as bitmask values
+    and to prevent potentially risky type conversions.
+
+    Furthermore, introduce a bool flag 'initialized' to simplify the
+    get_vendor() -> detect_vendor() logic. This ensures the vendor ID is
+    detected only once and resolves the ambiguity of using the same variable
+    'vendor' both as a value and as a state.
+
+--------------------------------
+
+Thank you!
+ 
+Best regards,
+Xiaochen Shen
 
