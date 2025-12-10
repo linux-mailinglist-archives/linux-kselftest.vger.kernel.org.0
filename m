@@ -1,151 +1,161 @@
-Return-Path: <linux-kselftest+bounces-47358-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47359-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 218C0CB2608
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 09:18:15 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A348CB26DD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 09:34:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B6AA3310775E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 08:16:44 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9A5AB302C6FB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 08:34:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49EB52F6929;
-	Wed, 10 Dec 2025 08:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1113064BC;
+	Wed, 10 Dec 2025 08:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ub0yfOCZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SResvsgU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FFC71CAA79
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 08:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A025305E33
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 08:34:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765354604; cv=none; b=gkWXJKTd0nUPFRbnTQb9ZH7aYX7qtnCRUB9TByeP2aax9tL3o6z3tNBe3Ul2XNNJevz9eYmXGYilM6gIVmQlC7UoOFUGBpRcsD3xfPXjp1m4PIqwOkpxOOe71VG4BHgRKHZMFM9xv/F5eJ+/gjljcjxAfNnbernrcAffTfdXpe0=
+	t=1765355681; cv=none; b=GruRDINfnLzz4udr5mgipvxivOaCXG+G0lkxz5jiI6pCobm+mQtkH3gSrDAfDpdLTssk7RsHxnmtGz6EXAg45h14vfUQerVMaHV7bg6bK306774D4cEdvZM3H+z9jDILsl2dFbC2++ahRw8wnMXPe3C+F/PYcS30GFkuWedn9Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765354604; c=relaxed/simple;
-	bh=V2//ytG3Cwp2ls9ZjuwE2VtSd21LkdDgwsTl1xUbM0o=;
+	s=arc-20240116; t=1765355681; c=relaxed/simple;
+	bh=RHvrsrWcyylwe+xLqnVAmjnYchzZgXCNoS2iZU6aQto=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DAa8JA8ChaB3nWkIg2dlnlcLQngdrczO83kLKzw/NG6K/g7e3ikidBHfjFNwrMXJTr0JQBeNCXuo9pO+4qiAZVPBG+Ddr8W2oA5oi0rcVZvi48+aO6XIo6SWV9msk+G3w3bDr2bmSn9hCR0GJBA3LvVsNVoExlC1R9TsdXWDdyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ub0yfOCZ; arc=none smtp.client-ip=209.85.221.48
+	 To:Cc:Content-Type; b=UDhkJdwGLBW6alrV1HUWdMjo0LsG2NGz9qYMQJlP2UUVGF8r/1FHGYupoP/cVKT7fPg5re78QNTKGjuDzHO4c0sZO7nQsVhN7EktQzq4Am9B/FhFKK73R3vvMYxDu8arD8Y8qYU2SP/a2mdx/o4aDJPa+/KEeogGgXLqouoUPo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SResvsgU; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42e2d5e119fso2727044f8f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 00:16:41 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-42b3c965cc4so245685f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 00:34:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765354600; x=1765959400; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1765355678; x=1765960478; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zZ/m3BJUKbHBBuxsoCxrEjyrPjXuXZ4jT+lwzS9/qfk=;
-        b=Ub0yfOCZT2g6kCgzP2pqyG5/56HVCF1zZt9dwA/JW8jC2DPSpvjG5pai0BO1OEhvqp
-         4urD2N+T3ZdXDjXaxUh4A5FdG2NQUGQtG6yS1bHFpfL3PDCnBT1r6BnD80pGv23WgLwQ
-         br1HXBs7tIB0x8rup5RxDLMMWq0270zimyvtNgSkCBwt2BZ016PFCL2ikwJCt6n0rxI3
-         FZTbS4ocyQbMYondfRtIGwIenyumDQUWr0HHNtGxGztIN3F9CqQjQHDNW0KcHsc8gu26
-         XCd3UEMKNbV2tad+tfPOKZEo5xmyrun5xn1rFMqUyX8sIbC5Xf85AMBI/wuG+QH2F80w
-         vqRA==
+        bh=ecDQP5UFpSNvoyJTbQpPTI2PfL6urIbtvtsJ5wdzHQI=;
+        b=SResvsgU5M/qDn6GWbux5FOQ4e6ujb6jXvIrRrEqMea4b6WOJLtzjLA6H9fQugw8/5
+         KUvywoyzaLYkQPNjflSUuVSZvGEsNoLny8+MPjakYy3dYSmKhYgGzVRczYDw2vqlgrpO
+         FAqQ/a8i8DRbSVQam2lJc97Fdziq5a9u1/h+3wQZTWmSsaI4o0b8u9cs3ABY1flf9X9j
+         DJP3CnHymFlkCt3w/9izj7KEL3jsDFfzt+VYp34nPcMGtcfYegnMG/RWql8yrmPf6ZlW
+         4SfpzzhsUtS8rJJUVhgynKGLyi6bw0EsBJOZ3xK2ewdbwOnjYC6TbKzJDtlnTPIqP6mW
+         CUSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765354600; x=1765959400;
+        d=1e100.net; s=20230601; t=1765355678; x=1765960478;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zZ/m3BJUKbHBBuxsoCxrEjyrPjXuXZ4jT+lwzS9/qfk=;
-        b=vYKYe1Q/ZnMmgkwtLjqC5j6VvQaqNcK5Ijn16GofFWtqHESonRrM9eGUBqya06YRh9
-         7QKUdFcVHVMc0M5hTxk494/ATGYr+4Pd9vprcMuFIatFMrwxwxhmR/gPJcXYYMnnaV38
-         +RnSdB9Ha5nmc1sVJmVKCoQTaqzM6dSz9dthiaEQx89x5ooBcJGIHdRsed9/tnFSxdg5
-         L7Rexn7wkSVcnFIbvTVaUjR6J9MtfQci22Um4fDVmbgVDTendWmxksiKdKtDiVEVklvy
-         2y9X35/VL1g7X9Jq4dQTkkNVb4/HneZODYbKMvUq+CouSgyQWjMK7N4lKvpW+0F74xK7
-         CdDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ9MRWL//xYGQF2TscZLbfjdOxvyegMQy5XBeiDA5uUDi5A+yBes6gNyrGioPOj392+UoMRQ4CHBcDz+cCl8s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM/64a2MaLKvI86iIpidHBLkpyDUkj/awyd3PfvmKMNC9GL0NJ
-	DCO5xFuiMrB3zoXnPc+D/a8gTeDAUA+Uvgjp0QUEiu4B4W8+PuH+acRNPnVjdns2rTYwDXSMwCp
-	Vx3xQPXpa7zhTzEDKskUTnL/29CxheBR7qZQECb3G
-X-Gm-Gg: AY/fxX7i85Clnek5zBYRtlIfpopSKaq4axesLofS7tkSyxSCwFhdsPu1SZ8J6Sus38R
-	+NkFu6Nkkdg7Bpd7DmFJOLhECTyogtzlEwWkrI/gysjmVxc9Cdkk4KQ450TOUN/IpDhGwGZ2rSN
-	+xE2Zzxrj13It46fxuewqwhdKEny8OBwF+DR1qbJgooaaY7fn7xTz96i6/AnzSi1P6SHufmtHvF
-	d3R8er8nli7RahIm8zvTn2Bxu1twga0zOstvmCpCNo8WAm7ONqyZ+P+uGaRey5Rv6VnGw==
-X-Google-Smtp-Source: AGHT+IGHTfR6FJzxh4u1KiikW2gylhAqcPko2jrRdkbVRz0rvoIeLXPXOnXPm4MF/urTeZLPFpZFndb9zCgKv6wkv38=
-X-Received: by 2002:a05:6000:4282:b0:42b:47da:c318 with SMTP id
- ffacd0b85a97d-42fa3b18a0fmr1448855f8f.52.1765354599388; Wed, 10 Dec 2025
- 00:16:39 -0800 (PST)
+        bh=ecDQP5UFpSNvoyJTbQpPTI2PfL6urIbtvtsJ5wdzHQI=;
+        b=vWb1F0iInyYWIRvD+o+x0GgW5L4gycrNhA2bfo6KWqm3DveZ+EY2KMypPVYWv0klgZ
+         +/d3ZnUhGMA4Q5FVhuMC9EO5SAzpp/d3vno8rAnXErOBQAQP1gnoi0wt7QWZHRxSyUas
+         tkrYNaCGCuzZoXBxdGmRvHiXQ3RvTZ2L+qtpDGYTC5maJpyWTRP3PuUEckQaVhYsXjNn
+         p0EV67ew5q335grvPyPMldFU1TIjE+CVchkW1MT2Ok++po6FtdvlV04mWW4r2SM2W3Kq
+         CmmPseYOkb77qGBqR/Zi+JTqgWOysABnQveMkWqY77tUNv1DL+UGdLdtIeiuIAIrAhQb
+         Qxgw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpRhfhNAuHXirh+CnWZQalk+eoWNVt+EiU19oxFGJVG4D8pVOjVLMaL+voDI6Ppp/yZ+UMLt4bO0N0niOIssc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywh0k/fGcVUnJBj3TXGw8kngP1UwujJFgxfIOCyFLFi5AvPCGS6
+	1WU9sZGBiGNMLY/qPUGHw8DkucHYOfrCwLY+txSJZ/S0tdXO0JlG2ZLrI+kuXfiOskxEKMUEKJ1
+	UbtVrsENL8SQGWsLkdQBt6HD3M29iHnfIxliqvb4Y
+X-Gm-Gg: AY/fxX6jGl1ZXivlvRjMuWwpYD0tQhsdewOlwhzYzAAzYoYJzxga7p/MzSiUUhn6iLS
+	YM/EjBsNJpVwYZGeiVBknbWb7b2FhS5cp9D4x1v7rU30njcSiUcjA/Rl7Qzq1lYKJqgqBgvI9L4
+	LY3mbwlx3HGl9h+ogNSdnZplPi/c5sL26TuDqu2Ttm2Z6WVaAtqV0oN7wcSuuYpmkIVdUlpHVk9
+	kMz3C00PKvLq9peF6OPqVXoIu75HAhWbTEu14Krxyj1iZHXxBWDftwxxTzuUTkatcRW9w==
+X-Google-Smtp-Source: AGHT+IGPnCjgUlSUSVFTyqvj23OqOfsm6WT+NtcKqtAXKlXxOR0kV7W5zfkTcHu/JZmp+56NdVX+0khJ7VPUsYIABlA=
+X-Received: by 2002:a5d:5885:0:b0:42b:48bc:498f with SMTP id
+ ffacd0b85a97d-42fa39d88c6mr1398358f8f.14.1765355677549; Wed, 10 Dec 2025
+ 00:34:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251207-kunit-fault-no-panic-v1-1-2ac932f26864@google.com>
-In-Reply-To: <20251207-kunit-fault-no-panic-v1-1-2ac932f26864@google.com>
+References: <20251210065839.482608-2-u.kleine-koenig@baylibre.com>
+In-Reply-To: <20251210065839.482608-2-u.kleine-koenig@baylibre.com>
 From: David Gow <davidgow@google.com>
-Date: Wed, 10 Dec 2025 16:16:26 +0800
-X-Gm-Features: AQt7F2owZGiC2ba9U6BEily85xRK6mWJ01rUgF8Ya6xSZV9hbWuIbKvBfYUCQm8
-Message-ID: <CABVgOSk4bBLXsB455u-2gBhDKuU=czVNLax0ep2gHw_ajVbE=Q@mail.gmail.com>
-Subject: Re: [PATCH] kunit: make FAULT_TEST default to n when PANIC_ON_OOPS
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
+Date: Wed, 10 Dec 2025 16:34:25 +0800
+X-Gm-Features: AQt7F2ooG0JQlzhD3AAcO5ZOQr8VcHPRywPf3z9GphVo6rwB3e8xgP2zsPTpn-I
+Message-ID: <CABVgOSkvCHAGUoU1EuT+_v=cjGkb22nqNrPbZ2a8EyUGePbVvQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Drop unused parameter from kunit_device_register_internal
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000d6a217064594a5b0"
+	boundary="00000000000018ed6c064594e6fa"
 
---000000000000d6a217064594a5b0
+--00000000000018ed6c064594e6fa
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 7 Dec 2025 at 10:17, Brendan Jackman <jackmanb@google.com> wrote:
+On Wed, 10 Dec 2025 at 14:58, Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@baylibre.com> wrote:
 >
-> As describe in the help string, the user might want to disable these
-> tests if they don't like to see stacktraces/BUG etc in their kernel log.
+> The passed driver isn't used, so just drop this parameter.
 >
-> However, if they enable PANIC_ON_OOPS, these tests also crash the
-> machine, which it's safe to assume _almost_ nobody wants.
->
-> One might argue that _absolutely_ nobody ever wants their kernel to
-> crash so this should just be a hard dependency instead of a default.
-> However, since this is rather special code that's anyway concerned with
-> deliberately doing "bad" things, the normal rules don't seem to apply,
-> hence prefer flexibility and allow users to set up a crashing Kconfig if
-> they so choose.
->
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
 > ---
 
-I like this compromise: I think there are still some cases where we
-would want PANIC_ON_OOPS + faulting tests, particularly if you're
-splitting the test execution over several boots (e.g. --run_isolated),
-but it's got to be vanishingly rare.
-
-So this is an excellent default.
+Nice catch, thanks!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  lib/kunit/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  lib/kunit/device.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
 >
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index 50ecf55d2b9c8a82f2aff7a0b4156bd6179b0a2f..498cc51e493dc9a819e012b8082fb765f25512b9 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -28,7 +28,7 @@ config KUNIT_FAULT_TEST
->         bool "Enable KUnit tests which print BUG stacktraces"
->         depends on KUNIT_TEST
->         depends on !UML
-> -       default y
-> +       default !PANIC_ON_OOPS
->         help
->           Enables fault handling tests for the KUnit framework. These tests may
->           trigger a kernel BUG(), and the associated stack trace, even when they
+> diff --git a/lib/kunit/device.c b/lib/kunit/device.c
+> index 520c1fccee8a..f201aaacd4cf 100644
+> --- a/lib/kunit/device.c
+> +++ b/lib/kunit/device.c
+> @@ -106,8 +106,7 @@ EXPORT_SYMBOL_GPL(kunit_driver_create);
 >
-> ---
-> base-commit: 7bc16e72ddb993d706f698c2f6cee694e485f557
-> change-id: 20251207-kunit-fault-no-panic-e9bdce848031
+>  /* Helper which creates a kunit_device, attaches it to the kunit_bus*/
+>  static struct kunit_device *kunit_device_register_internal(struct kunit =
+*test,
+> -                                                          const char *na=
+me,
+> -                                                          const struct d=
+evice_driver *drv)
+> +                                                          const char *na=
+me)
+>  {
+>         struct kunit_device *kunit_dev;
+>         int err =3D -ENOMEM;
+> @@ -150,7 +149,7 @@ struct device *kunit_device_register_with_driver(stru=
+ct kunit *test,
+>                                                  const char *name,
+>                                                  const struct device_driv=
+er *drv)
+>  {
+> -       struct kunit_device *kunit_dev =3D kunit_device_register_internal=
+(test, name, drv);
+> +       struct kunit_device *kunit_dev =3D kunit_device_register_internal=
+(test, name);
 >
-> Best regards,
+>         if (IS_ERR_OR_NULL(kunit_dev))
+>                 return ERR_CAST(kunit_dev);
+> @@ -172,7 +171,7 @@ struct device *kunit_device_register(struct kunit *te=
+st, const char *name)
+>         if (IS_ERR(drv))
+>                 return ERR_CAST(drv);
+>
+> -       dev =3D kunit_device_register_internal(test, name, drv);
+> +       dev =3D kunit_device_register_internal(test, name);
+>         if (IS_ERR(dev)) {
+>                 kunit_release_action(test, driver_unregister_wrapper, (vo=
+id *)drv);
+>                 return ERR_CAST(dev);
+>
+> base-commit: 7d0a66e4bb9081d75c82ec4957c50034cb0ea449
 > --
-> Brendan Jackman <jackmanb@google.com>
+> 2.47.3
 >
 
---000000000000d6a217064594a5b0
+--00000000000018ed6c064594e6fa
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -235,14 +245,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgrFSa18vg/9gRKbnMYpKRJ5/CHM/Q
-g+xRmig4N1FitfQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
-MjEwMDgxNjQwWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgHRMWskDMZWWRAkPVzjQCb54TfhWS
+WK8KPoqgIGwpMfQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
+MjEwMDgzNDM4WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAVOXwzlxmGZkOSwjjV465xVsjpM8lGhUhcjs8CNVHR5hXo7NqEVzYtEMnvhn6wtD3
-ItvgAK2HwABH2MXYy41AY9NMM9eprvijZJ7xgBXbQtmGbCzpueMIhJjwdC/OTlHHncoOy+5wiMBp
-7ralPXA2RTOo/6R7pWIk0Q7PXuB5U6fAHvKAuJ/FvQlC3adSlDPpsmJeApgF2eyPuZoW5kCB8EQK
-gPbBTnW20l1BfCmdxqeOhhDXtak3704pXYxvCgcN3OZItckgnaVapis+07Lvo/doZS8T3AhBwlCw
-BQu99TE3jmxSwNvAauoH/15YTinLPlnBHtan7lz8h1bp628evQ==
---000000000000d6a217064594a5b0--
+AQEBBQAEggEAPAf7HZ7dwCq+u2gnOGNddVhBQMT/kIOvwgTjYXZE8tCFFGnb+AxVNddoxi6bcFDR
+0ChhXU5ZYnuKDNUqtw8b5ggcZ5gKMIvZ0tPzwPgufRrWlcnPowGRRdWasMyMXFmAhO3FsKIuxuMr
+uPTJ7tLuF0RT0HJ+ASfGAGkX/9R1mwhv2mXMZVw9cKtdmpWknw0ATkq0EFYIDQmb0XQsyo1vJm2g
+qo3vaD1hcwnFkoHrStR8snxeJo+Y+S8XZjqN5orRglpdleftaIoZZ4IujpQnVwmPTUyZcYsw3suv
+Fo9iX34AoImpydGfc6nmt107IFyw7KZazN4rd9RfUvTGRM77fg==
+--00000000000018ed6c064594e6fa--
 
