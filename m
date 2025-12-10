@@ -1,170 +1,184 @@
-Return-Path: <linux-kselftest+bounces-47370-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8587DCB3D49
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 20:11:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04542CB3E56
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 20:52:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C976030DB83A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 19:09:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 99B7930456D5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Dec 2025 19:51:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F1230594E;
-	Wed, 10 Dec 2025 19:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5310C32693E;
+	Wed, 10 Dec 2025 19:51:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OdseGsrC"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="YxtSgj4C";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lug72cTy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4350E2E8B8F
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 19:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B10692EB5C4
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 19:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765393745; cv=none; b=HaGV435YLlPK5TWlWoeiDD3A5kNGejw3zxkAsGBFgOYlq6FEHItjzzR8DD/Dd45kqY6CUY4UNSTIzvyVI62DFus8f5K83guQRwaCUL0R6FDxzempTfs8+SB1DCmwZfo9kk8+UQfagpPAYmTMdXH04HQFPjdGQ+l70wMpeSP7ab8=
+	t=1765396315; cv=none; b=Yh1eYMbxaHjreYSUaPHL5PZgjjgXSMajw3kvwH0RomrKc1RH9dESSP+JGtPEKZ95/mwwCX46prA4klR/3+8IerBHbuXVQr9zsEnXvFqEcAFr3JRKvvVDxK9J33M24Nu7kHwAbjB7lv1YfGmMLP8xR7lKv+w4Mb2CZs29P1pa1sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765393745; c=relaxed/simple;
-	bh=calyCJn7HCzDIZJYHFyyjL6bDhg5HBlqUnJKtZ4SEy8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dp570GU0QziXJDXWbu1iobhyPqVPA2Ljjw7RbrmVYlkvYMOcGpKwX1/8ZxK3zNyEw5qSjKCctqVdLxq9wgK0U3/p5kO18k3WlWeQBMZ5hg6hEviY1WZUQak7Ah6obmxmleiK4iC2HocqcxWUUiVtMqCjBdOkpLuCerPTaTkbHyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OdseGsrC; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7b80fed1505so120594b3a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 11:09:03 -0800 (PST)
+	s=arc-20240116; t=1765396315; c=relaxed/simple;
+	bh=bVuknIZ9II+t7Y3vHavpbYMhqsjqBVWHocKRkXQCVXU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gvq8gFpuf8u4TkVrHnlto8dcYRDVH2DugP1GwpxHiehAnHximrZzdQWlDx4CwX8JcYnJroFz0rbJ39F08xJaZaCKtTmbRcNIISn+x8WdSbzmBEmiNJqCcvzMAQ/aEhcC25mTs/7KhLQ+Z/1JIUrYJUDgFv+ijyJVBKzUnWKX65Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=YxtSgj4C; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lug72cTy; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1765396312;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AgTacFvON8EG6QFjOtITInXZzOpTjY+dV5wDUO7hRQw=;
+	b=YxtSgj4CT1m5uN4dGJE9OKPqc7UpwI2+6QY4OrektUNtzy/FaVIZJ/g4fsEhtprJHtrS8Z
+	BXKR8DA/R6wvCjQPnK+HuVW+ZKRwwQblXXYAOs7cm5yU38gbmZB/iOtrKmrUFzIvTjKLyx
+	qS0WxC30StuVtXzkhryQ/VYx+CLsB0Q=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-656-8isVOFJVPby96SCTExBCHA-1; Wed, 10 Dec 2025 14:51:49 -0500
+X-MC-Unique: 8isVOFJVPby96SCTExBCHA-1
+X-Mimecast-MFC-AGG-ID: 8isVOFJVPby96SCTExBCHA_1765396309
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8b6963d163eso50011985a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Dec 2025 11:51:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765393743; x=1765998543; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=ALnH7xZXyoaaX5d2lzICEZFSc7BpSTyBsbMHtfdCwVg=;
-        b=OdseGsrCSDM17b91kRYpWg7MASTMjNySzWplWVxy8WXB3GCDlgd4rQ/LuFxo0i+xH4
-         ySZXvvGhSgL4ndMO+kzoWwT3DuYz/e3Gdlr5wAn2PhHdA0fkKO6uTH3toxOH8+ZFK5Bj
-         SP+I0NaqGoBIHmwixgLgrzwL8DVlBFxq0IXThbONLUOGvdDelPgA5Tl19P6UIvMV32YS
-         +hv0cbteRuuZ4WslZLi7iq8u54GooPSuGXktig7kGMrO7pVZmp7LWqzs9gJhUBHZjcAt
-         GS3uckjv8FSjnJAStA/3Bmeco8HPMw1f5I7+HsTus34SfmQ1vCmAZsk1g5OjFtApTdoB
-         npTw==
+        d=redhat.com; s=google; t=1765396309; x=1766001109; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AgTacFvON8EG6QFjOtITInXZzOpTjY+dV5wDUO7hRQw=;
+        b=Lug72cTyHSz4JnF+dPIBbaIF53LxiOFDCqjNiZCRki8vQyfS9FxC4FB9yWepQK6VtA
+         u5axksvxI/a8wmXtrn0dS5dX2Fdns1OraduUhm/0LRrkJNWce4VijolKyavS4GEAYWAS
+         fKNDTPTRYJbq7bj36PjYxsPeQmlbFUAgIAlwUaD3H+JhzGsm9GXwsRhkU6HpaVGrf63x
+         rjCoLSD1mfMCY1xEr9s1pt9Ns1KnQJ8J3JLMZslekUh6II769xJZvsYHIzIh+RtdeQXM
+         45UUdIDyry58D/Jt730lVXq2f3wCCqP/8ZqHCVtgWEGr+35xLuppzOvYWV1zOgQVoqJe
+         /nDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765393743; x=1765998543;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1765396309; x=1766001109;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ALnH7xZXyoaaX5d2lzICEZFSc7BpSTyBsbMHtfdCwVg=;
-        b=GCRt1R/ogXACwC2fSrCSKRLhMsKxMSTE+UG/4v5QncNoEUl0fNHEgi+DxBwVPipnvA
-         jsEryEgTbZOjZssNsmVjqXxwd9diO9AR6btr0XAC0uJiKjshvR+Gtj2ahbBUtfsVEQqt
-         cbGBPQ49Yr+VAmY9shX0aBKsuOibwkbmWQ1ZjPh/2XVX+9DjfskE45olgPQ9vMFiwyuE
-         vBKothCrcl3DHF4xoqWPty4h1JZ0Qd74ZBB4afhaadgTOVulcew72zJnOMBHBVUWKvWP
-         JUDk0py+uAzifTpSTXovZAyvzTy2+UYpTOJUsk+szjRfk4rQHMRnf0gSrbMICIphQV2G
-         +EZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXvcbLN/a1EOFfSZ88uCN1FogkF+joB2U1i/RXEfUkFTCkUBJGlj6/t6Cs1iRk0R8N3XNoWiueP312m8PTg23Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+J49yP9+jNpv2fqFJqfmTkJ4v4CuHmyu3jV46auUxhZ0DiLEC
-	FBYm9rNSuY+vW/2FN2GDsiVmfNrtCHI6WdTL49kYOcxHB8i0d7POADuX
-X-Gm-Gg: ASbGncuBTYaNvPooiKX00XVSW6cj8bdeePaTXghCOfqqoI/x59u/nHCPm6Hu8Q1Ier9
-	3TIAFLr2TSPiOeIbEZYEMjaYLVoAtEX9vC/Z2tEDiX3+tAVhGqFmkb3Fk8fiZZLFmipDJAGni+c
-	v47QW+bWaNddKWsw1PzlDo7yJK13Y7TerKefCNBSfPIwWip8Yoa9Sg/ABxadrabxn26o2EIjLMx
-	S9MxO+Mh5AVkBK+NtO2PC2ADOZXJnOt5T3YFbeKFKPPV+LT3ZD+kI8RTLiAm2ife+xSSJd9brbf
-	bGhp/gNDyHc/NgVwEC2BLs3HA2Uia3vqxV95DOIaU0yptW+o9FwVU+Aj479o50HR8dVdrA5Fp9e
-	fH3MyFMVRbd8SBvUqSFLQfM23RU89DSNos2oMtkZCT80hK4A430bCD67IlzcQhykHZduKc4J8Hh
-	kYIrO8FjFrUBTKJFV3zGkpoY7qzY3Dm8s6e5D+Zi/NxrpihR5ZyF8GUwYruHQ=
-X-Google-Smtp-Source: AGHT+IFkBdc4L7W2yURiGuumsGT4dEWPci/s+wZEabce7HtaPIrwKqnYk/48B/cwUZ1Bk5R/h+PAYg==
-X-Received: by 2002:a05:6a20:3d82:b0:304:313a:4bcd with SMTP id adf61e73a8af0-366e120ef6fmr3658096637.30.1765393743391;
-        Wed, 10 Dec 2025 11:09:03 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c0c25b7d59dsm248321a12.6.2025.12.10.11.09.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Dec 2025 11:09:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <3682159f-05ff-417c-95e9-976f0a504c09@roeck-us.net>
-Date: Wed, 10 Dec 2025 11:09:01 -0800
+        bh=AgTacFvON8EG6QFjOtITInXZzOpTjY+dV5wDUO7hRQw=;
+        b=wDWtdQcyuUji7dH0sJQ3GRipL0hllIZTnz43bn+mmoQWbMYFVLsISQOTCJdNn6zSok
+         dkimZyMt6h2LS6z2d6eVWP9fYArCfxqPGoFOduqOEPh2+kQiMioBILURoBGMVItxeF72
+         8/LgwsEnpdvzXuQXisocLbhRuGq+mXafyjMD5tpNeMsfuq+RVBHlzsUib+kNgsYL6BE7
+         LoK4ax/ONJdrf1AkA8lRBjs1pwdx+HJUbg4/iVvBeP946iX8nwlOxHgqPh/h6359EkIj
+         h9LlwWZecqIPdVH4R9XDScs3AX8cApEZ+8hEaRG0IMfms6+Y/iKZ1HDFNuvHYe2703kb
+         G4fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOK8nJJYznMlkHJCiy1SpCNPoZPtW9ldMDbRH3F4Ma81helmh5lMkBAJRvM8zFDVPGxOMCQzJ+2DcLwntvlmU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/GiZpctDMrDoa1TbWVAZUTdnyeDiwP21c452cIWmeHxZ+lmhJ
+	hVXKExE7L4EcGFMe9U5l23x0e38s4FMh4dtYXkLJXfzWiadn8gaAjxZeoHL4TZ2X42gP3bSPQTe
+	fXAXm+1/PUPZKFTeyc+lsYl28H6QQ33R08iNY8LHZ/LFqfqiVp1z1wpfOKqoa8lfy83tILg==
+X-Gm-Gg: ASbGncsk87nL5sQReBO6nexGO5YP9oUTb47w+XHj4CR0IH+n2ahKGbVilUElOak19Ff
+	ywtrVZE2P8d6h+wR7f8m/LmnEBAWolWmOhB8DHeqGAVVyWFgRKkkIx9f408yXBFype9XIqo347+
+	AE+95ZN9pWoG9QRFVz47tXYmORgtbDRBdeGTMmhmapcxE0P0k2yKSt3+IYqMxFPp7OYx1xbRR4q
+	faVdgwtUNzUq8GBPERsrUxWHKrBKTHWDXOOMr1D4sZdEDKiayfNqRv+zLnalf7K5cD8hTNJBG9J
+	NQ6nHYODT68rOeatp4Xd9Eh7AkGyw58V/A2UUDL/54K9/FkL016xlC+8ZjXVx13AjXCYaK3r+iW
+	nsT8=
+X-Received: by 2002:a05:620a:298e:b0:8b2:faa3:4c77 with SMTP id af79cd13be357-8ba38319803mr555738485a.0.1765396308642;
+        Wed, 10 Dec 2025 11:51:48 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE8yx8A+CBHx6Z8LCFOIAJuCthOtds6H4ec7oH3JAGsNI6sRNuSA+X8f8s93mX3FffFUDJBGw==
+X-Received: by 2002:a05:620a:298e:b0:8b2:faa3:4c77 with SMTP id af79cd13be357-8ba38319803mr555734385a.0.1765396308095;
+        Wed, 10 Dec 2025 11:51:48 -0800 (PST)
+Received: from x1.local ([142.188.210.156])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8886ef16adcsm4356536d6.46.2025.12.10.11.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Dec 2025 11:51:47 -0800 (PST)
+Date: Wed, 10 Dec 2025 14:51:46 -0500
+From: Peter Xu <peterx@redhat.com>
+To: Wake Liu <wakel@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests/mm: Fix thread state check in uffd-unit-tests
+Message-ID: <aTnPUmEMwymsWHyV@x1.local>
+References: <20251210091408.3781445-1-wakel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 08/13] selftests: net: netlink-dumps: Avoid
- uninitialized variable warning
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Eric Dumazet <edumazet@google.com>, Kees Cook <kees@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- wine-devel@winehq.org, netdev@vger.kernel.org, bpf@vger.kernel.org
-References: <20251205171010.515236-1-linux@roeck-us.net>
- <20251205171010.515236-9-linux@roeck-us.net>
- <20251210181318.73075886@kernel.org>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20251210181318.73075886@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251210091408.3781445-1-wakel@google.com>
 
-On 12/10/25 01:13, Jakub Kicinski wrote:
-> On Fri,  5 Dec 2025 09:10:02 -0800 Guenter Roeck wrote:
->> The following warning is seen when building netlink-dumps.
->>
->> netlink-dumps.c: In function ‘dump_extack’:
->> ../kselftest_harness.h:788:35: warning: ‘ret’ may be used uninitialized
->>
->> Problem is that the loop which initializes 'ret' may exit early without
->> initializing the variable if recv() returns an error. Always initialize
->> 'ret' to solve the problem.
+On Wed, Dec 10, 2025 at 05:14:08PM +0800, Wake Liu wrote:
+> In the thread_state_get() function, the logic to find the thread's state
+> character was using `sizeof(header) - 1` to calculate the offset from
+> the "State:\t" string.
 > 
-> Are you sure you're working off the latest tree? I think this should
-> already be fixed by 13cb6ac5b50
+> The `header` variable is a `const char *` pointer. `sizeof()` on a
+> pointer returns the size of the pointer itself, not the length of the
+> string literal it points to. This makes the code's behavior dependent
+> on the architecture's pointer size.
+> 
+> This bug was identified on a 32-bit ARM build (`gsi_tv_arm`) for
+> Android, running on an ARMv8-based device, compiled with Clang 19.0.1.
+> 
+> On this 32-bit architecture, `sizeof(char *)` is 4. The expression
+> `sizeof(header) - 1` resulted in an incorrect offset of 3, causing the
+> test to read the wrong character from `/proc/[tid]/status` and fail.
+> 
+> On 64-bit architectures, `sizeof(char *)` is 8, so the expression
+> coincidentally evaluates to 7, which matches the length of "State:\t".
+> This is why the bug likely remained hidden on 64-bit builds.
+> 
+> To fix this and make the code portable and correct across all
+> architectures, this patch replaces `sizeof(header) - 1` with
+> `strlen(header)`. The `strlen()` function correctly calculates the
+> string's length, ensuring the correct offset is always used.
+> 
+> Signed-off-by: Wake Liu <wakel@google.com>
+
+Oops, thanks for spotting it.  It was an accident the size of array is 8
+here.. What I should have meant was:
+
+	const char header[] = "State:\t";
+
+That should also work with sizeof().  But your fix works, so it's all fine.
+
+Acked-by: Peter Xu <peterx@redhat.com>
+
+Thanks,
+
+> ---
+>  tools/testing/selftests/mm/uffd-unit-tests.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+> index f4807242c5b2..6f5e404a446c 100644
+> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+> @@ -1317,7 +1317,7 @@ static thread_state thread_state_get(pid_t tid)
+>  		p = strstr(tmp, header);
+>  		if (p) {
+>  			/* For example, "State:\tD (disk sleep)" */
+> -			c = *(p + sizeof(header) - 1);
+> +			c = *(p + strlen(header));
+>  			return c == 'D' ?
+>  			    THR_STATE_UNINTERRUPTIBLE : THR_STATE_UNKNOWN;
+>  		}
+> -- 
+> 2.52.0.223.gf5cc29aaa4-goog
 > 
 
-Sorry for missing the fix. I was working off v6.18, which was the tip of
-the tree when I wrote the patch.
-
-> I applied the other 3 networking changes.
-
-Thanks a lot!
-
-Guenter
+-- 
+Peter Xu
 
 
