@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-47389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47388-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E7D4CB4E97
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 07:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A3A7CCB4E94
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 07:47:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 46D5530081BA
+	by sea.lore.kernel.org (Postfix) with ESMTP id 33CC63007EDC
 	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 06:47:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15EF329B8C7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07FB1299928;
 	Thu, 11 Dec 2025 06:47:17 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out28-50.mail.aliyun.com (out28-50.mail.aliyun.com [115.124.28.50])
+Received: from out28-194.mail.aliyun.com (out28-194.mail.aliyun.com [115.124.28.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9C83B8D4B;
-	Thu, 11 Dec 2025 06:47:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B8027E7EC;
+	Thu, 11 Dec 2025 06:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765435637; cv=none; b=suXQ5x4GLTTJAeUKOXspWEfnuKYw7S5dgHsRh3Hp6sz2/pu6k/1VsvH6QC53Y898MjWjO1UGqwz/wAtnTX5ROzq0hiKuIJ2/A9kghBp7gPwavDiht423y/mLxFNndt9UfkIGSziWzrbd+WVgSLOibhn3LGzoJMHksoOEV+B/Sgg=
+	t=1765435636; cv=none; b=WdJaBoMaRrE6C2tewkMDxYoPV133zzJhyg9RbnhakL6P3+52rU+IXDS471sT3JPQY+bIZhiIUCKOuCqkUF4RmrgAKOGLn+1+sfXJ3FYu4jYa9WAGOVpU9s1jG0E4LR0ZMuEWsEZCnD2rV9PT+cUSm+H5tkCXtIyMdxX6CR/eG3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765435637; c=relaxed/simple;
-	bh=0o3JGfptk2ckHJcnm8xaASvg3+sqPLjA9Kk3vCuyNOc=;
+	s=arc-20240116; t=1765435636; c=relaxed/simple;
+	bh=2YEoP/WBSLku9O3QwMjDqy7IlRvGoIPXUKxMPvaCe1s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OaSEIEyLY0PTbNFuwHOFsInHdARBFI2825ams7H4v1tnRWoFUHf2gOWy1M2aVxpn7A9nJQUj6sXzjoA293O1Qdewbg9EoWtqKxsuXWMdkw40VGmbWBV5VpKy6T22eGKbjmm9NCaN66ypY2S8RQv17pLXaQQUC/8VGeBz40CGglo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.50
+	 MIME-Version; b=DgxkaDAOjYnQWaj569zJw+l1IKdvfo3NDp8xmwihqkM7XzDVF1vS6uZSoxYjPny6B/NMFrkTDhT0c9RzL3WnlUMNYmQUAvhmpDU6FzYXPFjU/AEYIGICi/lRWWz5AWv0ShZa/j3zhfGblQu2ggliZBj47QCeSEnWGVz7dHh1KzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fhodoTV_1765435622 cluster:ay29)
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fhodoUl_1765435623 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Thu, 11 Dec 2025 14:47:03 +0800
+          Thu, 11 Dec 2025 14:47:04 +0800
 From: Xiaochen Shen <shenxiaochen@open-hieco.net>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -44,9 +44,9 @@ Cc: babu.moger@amd.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	shenxiaochen@open-hieco.net
-Subject: [PATCH v3 1/4] selftests/resctrl: Define CPU vendor IDs as bits to match usage
-Date: Thu, 11 Dec 2025 14:46:29 +0800
-Message-ID: <20251211064632.2344393-2-shenxiaochen@open-hieco.net>
+Subject: [PATCH v3 2/4] selftests/resctrl: Add CPU vendor detection for Hygon
+Date: Thu, 11 Dec 2025 14:46:30 +0800
+Message-ID: <20251211064632.2344393-3-shenxiaochen@open-hieco.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251211064632.2344393-1-shenxiaochen@open-hieco.net>
 References: <20251211064632.2344393-1-shenxiaochen@open-hieco.net>
@@ -58,124 +58,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The CPU vendor IDs are required to be unique bits because they're used
-for vendor_specific bitmask in the struct resctrl_test.
-Consider for example their usage in test_vendor_specific_check():
-	return get_vendor() & test->vendor_specific
+The resctrl selftest currently fails on Hygon CPUs that support Platform
+QoS features, printing the error:
 
-However, the definitions of CPU vendor IDs in file resctrl.h is quite
-subtle as a bitmask value:
-  #define ARCH_INTEL     1
-  #define ARCH_AMD       2
+  "# Can not get vendor info..."
 
-A clearer and more maintainable approach is to define these CPU vendor
-IDs using BIT(). This ensures each vendor corresponds to a distinct bit
-and makes it obvious when adding new vendor IDs.
+This occurs because vendor detection is missing for Hygon CPUs.
 
-Accordingly, update the return types of detect_vendor() and get_vendor()
-from 'int' to 'unsigned int' to align with their usage as bitmask values
-and to prevent potentially risky type conversions.
+Fix this by extending the CPU vendor detection logic to include
+Hygon's vendor ID.
 
-Furthermore, introduce a bool flag 'initialized' to simplify the
-get_vendor() -> detect_vendor() logic. This ensures the vendor ID is
-detected only once and resolves the ambiguity of using the same variable
-'vendor' both as a value and as a state.
-
-Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
-Suggested-by: Fenghua Yu <fenghuay@nvidia.com>
 Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
 ---
- tools/testing/selftests/resctrl/resctrl.h     |  7 ++---
- .../testing/selftests/resctrl/resctrl_tests.c | 26 +++++++++++++------
- 2 files changed, 22 insertions(+), 11 deletions(-)
+ tools/testing/selftests/resctrl/resctrl.h       | 1 +
+ tools/testing/selftests/resctrl/resctrl_tests.c | 2 ++
+ 2 files changed, 3 insertions(+)
 
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index cd3adfc14969..d0f094360e6f 100644
+index d0f094360e6f..2817c9e41797 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -23,6 +23,7 @@
- #include <asm/unistd.h>
- #include <linux/perf_event.h>
- #include <linux/compiler.h>
-+#include <linux/bits.h>
- #include "../kselftest.h"
- 
- #define MB			(1024 * 1024)
-@@ -36,8 +37,8 @@
-  * Define as bits because they're used for vendor_specific bitmask in
-  * the struct resctrl_test.
+@@ -39,6 +39,7 @@
   */
--#define ARCH_INTEL     1
--#define ARCH_AMD       2
-+#define ARCH_INTEL	BIT(0)
-+#define ARCH_AMD	BIT(1)
+ #define ARCH_INTEL	BIT(0)
+ #define ARCH_AMD	BIT(1)
++#define ARCH_HYGON	BIT(2)
  
  #define END_OF_TESTS	1
  
-@@ -163,7 +164,7 @@ extern int snc_unreliable;
- extern char llc_occup_path[1024];
- 
- int snc_nodes_per_l3_cache(void);
--int get_vendor(void);
-+unsigned int get_vendor(void);
- bool check_resctrlfs_support(void);
- int filter_dmesg(void);
- int get_domain_id(const char *resource, int cpu_no, int *domain_id);
 diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 5154ffd821c4..08cbd094e936 100644
+index 08cbd094e936..92cc6aaef338 100644
 --- a/tools/testing/selftests/resctrl/resctrl_tests.c
 +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -23,16 +23,24 @@ static struct resctrl_test *resctrl_tests[] = {
- 	&l2_noncont_cat_test,
- };
- 
--static int detect_vendor(void)
-+static unsigned int detect_vendor(void)
- {
--	FILE *inf = fopen("/proc/cpuinfo", "r");
--	int vendor_id = 0;
-+	static bool initialized;
-+	static unsigned int vendor_id;
-+	FILE *inf;
- 	char *s = NULL;
- 	char *res;
- 
--	if (!inf)
-+	if (initialized)
- 		return vendor_id;
- 
-+	inf = fopen("/proc/cpuinfo", "r");
-+	if (!inf) {
-+		vendor_id = 0;
-+		initialized = true;
-+		return vendor_id;
-+	}
-+
- 	res = fgrep(inf, "vendor_id");
- 
- 	if (res)
-@@ -45,15 +53,17 @@ static int detect_vendor(void)
+@@ -50,6 +50,8 @@ static unsigned int detect_vendor(void)
+ 		vendor_id = ARCH_INTEL;
+ 	else if (s && !strcmp(s, ": AuthenticAMD\n"))
+ 		vendor_id = ARCH_AMD;
++	else if (s && !strcmp(s, ": HygonGenuine\n"))
++		vendor_id = ARCH_HYGON;
  
  	fclose(inf);
  	free(res);
-+
-+	initialized = true;
- 	return vendor_id;
- }
- 
--int get_vendor(void)
-+unsigned int get_vendor(void)
- {
--	static int vendor = -1;
-+	unsigned int vendor;
-+
-+	vendor = detect_vendor();
- 
--	if (vendor == -1)
--		vendor = detect_vendor();
- 	if (vendor == 0)
- 		ksft_print_msg("Can not get vendor info...\n");
- 
 -- 
 2.47.3
 
