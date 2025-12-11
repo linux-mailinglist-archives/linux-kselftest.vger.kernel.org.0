@@ -1,148 +1,111 @@
-Return-Path: <linux-kselftest+bounces-47413-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFEACCB600E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 14:22:42 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05C60CB6128
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 14:43:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0295F3014DA5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 13:21:39 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id DC0C33001BE1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 13:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF1D43128BF;
-	Thu, 11 Dec 2025 13:21:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27142FF156;
+	Thu, 11 Dec 2025 13:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antgroup.com header.i=@antgroup.com header.b="ScsMBP9W"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="dbFMSp1A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out198-11.us.a.mail.aliyun.com (out198-11.us.a.mail.aliyun.com [47.90.198.11])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F01A3093C7;
-	Thu, 11 Dec 2025 13:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50AC9286418;
+	Thu, 11 Dec 2025 13:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765459297; cv=none; b=aOUb1jbahpAQ7ukpdVvUQutfdWmo1Ovl9bLGHcQrxkP+o1brdRPDFLTN16qpqpuifiDJOHBZVdXlHHNdkDBBmDYLJs+7JbeiaGWf4W3TA7FeUGrViEXCFjMCgU42OP7uNuBl0F0pODlGOSkmpyrKGpdiJX295AK0xM+rK6KLzG0=
+	t=1765460614; cv=none; b=b5AkHbjUhxM56qJYWXaoyJNgb03jiuXRwFIK9rM+H4dwOcsuiUXUo16zciG1O1j56uMam6tZ5v18I9JV7iWgicXeCl7jB/pA3jUF1IM2dHJs3vfccHe03J86RE0XipIueYtG8jUixzwSAxeE9yR1jCDeHsAKxE9T3kbOqVFxdyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765459297; c=relaxed/simple;
-	bh=lRedtGdX4oCKhlRiAdGUm00EDRog+3H1AUISYTZhVzA=;
+	s=arc-20240116; t=1765460614; c=relaxed/simple;
+	bh=GHYEhlkvcFeFuGWpDaxnbBTjKdxg8bMF0QV/AkgQAig=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZzTIQcMK4TbyueewyUNLGkijYMjeXAECvMeGGU6aZQNBY+yKKFX4Ul+qabzeEzvFXeiYqIgm2pZlYRVrzA7Obz6hrIuFo3Jc1lcFq4f7/50BULoApQPiBiQk5aMrvDLDIAhaK8hCRjNIgQi7GCS+P5cevub+55H/sGQ/PlelVXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com; spf=pass smtp.mailfrom=antgroup.com; dkim=pass (1024-bit key) header.d=antgroup.com header.i=@antgroup.com header.b=ScsMBP9W; arc=none smtp.client-ip=47.90.198.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=antgroup.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antgroup.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=antgroup.com; s=default;
-	t=1765459274; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-	bh=gG6kBFbKarBbNXFT04fWyvoXcVfKMmK5lJ3VuYLbu5o=;
-	b=ScsMBP9Wg9KiOl9qoHhHc8AUauYKFwXKtglW6dEHo/Hpzctk+v6nVvF94xDwGjAoV5DK8PAaUKdU+uGJ672lDVpzhtA/y/ExHfTQ/ZWOrTqWoeiRcr6oMSnNCvxJ54TWg3ctb7PbUS5izxrAdlmvVBh3Jiq1rTl1husy+xTaz4k=
-Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.fi26fM-_1765459273 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Thu, 11 Dec 2025 21:21:13 +0800
-Date: Thu, 11 Dec 2025 21:21:13 +0800
-From: Hou Wenlong <houwenlong.hwl@antgroup.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] KVM: selftests: Verify 'BS' bit checking in pending
- debug exception during VM entry
-Message-ID: <20251211132113.GA42509@k08j02272.eu95sqa>
-References: <cover.1757416809.git.houwenlong.hwl@antgroup.com>
- <3c0686934fc33ebb484aa5cc71443a22504df7ca.1757416809.git.houwenlong.hwl@antgroup.com>
- <aTMjLkW2h_FWjfxe@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jTWkOc4a0w8Cm8f6d0fr2IB8H7jjubqDTedoioMF0Pfavk+9XkBJOVdnOcJ5Xon++d57UF1pOKePzvpFb8fPVmDw3CNAUoTrn/UywHgPhCEzWNj78DFqVQ1ItI8O6Or5QWluOA4mYufLsg/OqOyIQL2ieIeoDOusYFXA6dY3f78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=dbFMSp1A; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (p7838222-ipoefx.ipoe.ocn.ne.jp [123.225.39.221])
+	by perceval.ideasonboard.com (Postfix) with UTF8SMTPSA id 66639667;
+	Thu, 11 Dec 2025 14:43:25 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1765460606;
+	bh=GHYEhlkvcFeFuGWpDaxnbBTjKdxg8bMF0QV/AkgQAig=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dbFMSp1AqU3bnnjDdUEE3/kzX7SQCG+yy/mGts/WuUB8P6bmdsDyZhiHFzl7Zlp5L
+	 tqvjaY5Hsb9siuSBgzclY6Vkx8Gl+3UFhTp58xxCaoXCrabR5oon/mrGpx1+29fHXJ
+	 VQSM65zvmVFFXqnxZp10sqjVbdMJIQQrolZDmuro=
+Date: Thu, 11 Dec 2025 22:43:06 +0900
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	Benson Leung <bleung@chromium.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
+Message-ID: <20251211134306.GC28411@pendragon.ideasonboard.com>
+References: <20251020115734.GH316284@nvidia.com>
+ <aPcQ99MZse5zmv3o@google.com>
+ <20251021121536.GG316284@nvidia.com>
+ <aPo6CZyT_IGWmu-O@tzungbi-laptop>
+ <20251023145131.GI262900@nvidia.com>
+ <2025102321-struggle-fraying-52ff@gregkh>
+ <20251211032306.GO28860@pendragon.ideasonboard.com>
+ <aTo-xErTTiJcribR@shikoro>
+ <20251211080517.GA28411@pendragon.ideasonboard.com>
+ <aTqCqab1pGB9LNZy@shikoro>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aTMjLkW2h_FWjfxe@google.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <aTqCqab1pGB9LNZy@shikoro>
 
-On Fri, Dec 05, 2025 at 10:23:42AM -0800, Sean Christopherson wrote:
-> On Wed, Sep 10, 2025, Hou Wenlong wrote:
-> >  #define IRQ_VECTOR 0xAA
-> >  
-> > +#define  CAST_TO_RIP(v)  ((unsigned long long)&(v))
-> > +
-> >  /* For testing data access debug BP */
-> >  uint32_t guest_value;
-> >  
-> >  extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
-> > -extern unsigned char fep_bd_start;
-> > +extern unsigned char fep_bd_start, fep_sti_start, fep_sti_end;
-> > +
-> > +static void guest_db_handler(struct ex_regs *regs)
-> > +{
-> > +	static int count;
-> > +	unsigned long target_rips[2] = {
-> > +		CAST_TO_RIP(fep_sti_start),
-> > +		CAST_TO_RIP(fep_sti_end),
-> > +	};
-> > +
-> > +	__GUEST_ASSERT(regs->rip == target_rips[count], "STI: unexpected rip 0x%lx (should be 0x%lx)",
-> > +		       regs->rip, target_rips[count]);
-> > +	regs->rflags &= ~X86_EFLAGS_TF;
-> > +	count++;
-> > +}
-> > +
-> > +static void guest_irq_handler(struct ex_regs *regs)
-> > +{
-> > +}
-> >  
-> >  static void guest_code(void)
-> >  {
-> > @@ -69,13 +89,25 @@ static void guest_code(void)
-> >  	if (is_forced_emulation_enabled) {
-> >  		/* DR6.BD test for emulation */
-> >  		asm volatile(KVM_FEP "fep_bd_start: mov %%dr0, %%rax" : : : "rax");
-> > +
-> > +		/* pending debug exceptions for emulation */
-> > +		asm volatile("pushf\n\t"
-> > +			     "orq $" __stringify(X86_EFLAGS_TF) ", (%rsp)\n\t"
-> > +			     "popf\n\t"
-> > +			     "sti\n\t"
-> > +			     "fep_sti_start:"
-> > +			     "cli\n\t"
-> > +			     "pushf\n\t"
-> > +			     "orq $" __stringify(X86_EFLAGS_TF) ", (%rsp)\n\t"
-> > +			     "popf\n\t"
-> > +			     KVM_FEP "sti\n\t"
-> > +			     "fep_sti_end:"
-> > +			     "cli\n\t");
-> >  	}
-> >  
-> >  	GUEST_DONE();
-> >  }
-> >  
-> > -#define  CAST_TO_RIP(v)  ((unsigned long long)&(v))
-> > -
-> >  static void vcpu_skip_insn(struct kvm_vcpu *vcpu, int insn_len)
-> >  {
-> >  	struct kvm_regs regs;
-> > @@ -110,6 +142,9 @@ int main(void)
-> >  	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-> >  	run = vcpu->run;
-> >  
-> > +	vm_install_exception_handler(vm, DB_VECTOR, guest_db_handler);
-> > +	vm_install_exception_handler(vm, IRQ_VECTOR, guest_irq_handler);
+On Thu, Dec 11, 2025 at 05:36:57PM +0900, Wolfram Sang wrote:
 > 
-> But the IRQ should never be taken thanks to the CLI in the STI shadow.  I.e.
-> installing a dummy handler could mask failures, no?
->
-Yes, this also breaks the testcase regarding KVM_GUESTDBG_BLOCKIRQ.
-Sorry, I forgot why I added this, as you said there should be no IRQ
-delivered due to the STI shadow. :(
-I'll remove it in the next version.
- 
-Thanks!
-
-> > +
-> >  	/* Test software BPs - int3 */
-> >  	memset(&debug, 0, sizeof(debug));
-> >  	debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_SW_BP;
-> > -- 
-> > 2.31.1
+> > > Isn't there even prototype code from Dan Williams?
+> > > 
+> > > "[PATCH 1/3] cdev: Finish the cdev api with queued mode support"
+> > > 
+> > > https://lkml.org/lkml/2021/1/20/997
 > > 
+> > I mentioned that in my LPC talk in 2022 :-) I think we should merge that
+> > (or a rebased, possibly improved version of it). I've meant to try
+> > plumbing that series in V4L2 but couldn't find the time so far.
+> 
+> Yes, you mentioned it in 2022 but maybe not everyone in this thread is
+> right now aware of it ;) The patch above got changes requested. I talked
+> to Dan very briefly about it at Maintainers Summit 2023 and he was also
+> open (back then) to pick it up again.
+
+After discussing with Tzung-Bi today after his presentation (thank you
+Tzung-Bi for your time, it helped me understand the problem you're
+facing better), I wonder if this series is fixing the issue in the right
+place.
+
+At the core of the problem is a devm_kzalloc() call to allocate
+driver-specific data. That data structure is then referenced from a
+cdev, which can dereference is after it gets freed. It seems that
+reference-counting the data structure instead of using devm_kzalloc()
+could be a better solution.
+
+-- 
+Regards,
+
+Laurent Pinchart
 
