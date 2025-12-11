@@ -1,98 +1,101 @@
-Return-Path: <linux-kselftest+bounces-47449-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 265F4CB6E27
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 19:20:02 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEA54CB6E48
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 19:22:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B01DD300F888
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 18:20:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D1F2D300AC71
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 18:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED5582D640A;
-	Thu, 11 Dec 2025 18:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00F13191D8;
+	Thu, 11 Dec 2025 18:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KtMcVwDI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJhroV1Q"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35AB1F03EF;
-	Thu, 11 Dec 2025 18:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B374F212FB9;
+	Thu, 11 Dec 2025 18:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765477196; cv=none; b=qVxGH+P9SvbSDSpfMA4GWXWYAOELv0Dk2fL25eH1C9iurNT1/4z+MXgQf9z38JniULXqa+W1Fu9/2mSqa0Mkh2sYHmhjqJRfartTmwXFEE9a3PlydI5v8o/2tGEMFhA/FC18eKw/8AJKDJ/rvUXqqgSBqRlJqrpXsrQy6bSCDJU=
+	t=1765477366; cv=none; b=pHc87jaiVVX+OdP4MyIQuzQ6g5WgZ+iqe0pMR7VAjEzZP0woNgNjJmj3+KgWnv3SjZpN7WNhG9pd7PiEtEPI5FN+wNyGDH+/W74V+HGYGhl2C1KXjlp4JrnrOYYE5auYgVohUftVee20xGeEvh6edz4KI1ylOUtVmgTr6Ffjd8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765477196; c=relaxed/simple;
-	bh=cDoWRb1naHE4Ryx+XC989ua85Uil7TKbOUUh1tQetps=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KKwMxd1JfKD3o4gn4s7wqwFHHszcWuK5EMnzdxrvISuvnpdmEuvg9cBoL1Bbu39JSwjuR0NQ5HRWEdZlBUrG/4z978Mqrgsex3ozD5Mf3Hg7LAnWCaBvBlTfEChhJMk+T3oa6ibO/aDY8uQxwQD1ohDUYT6yaoVPoJMUi5D2Ggc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KtMcVwDI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AA69C4CEF7;
-	Thu, 11 Dec 2025 18:19:56 +0000 (UTC)
+	s=arc-20240116; t=1765477366; c=relaxed/simple;
+	bh=iBQjv3NyRtOjmLtefM8m6iGDiD1Mh1LPOFF6RcjDQW8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Uq9WbUvo+kTNww3sMoHdgj9IL8pfaKxRoP/5B7RinkC+raHt71smemygIVUsK38VpYz+f6rpyWYoDfka4q3+8FO5Qj/RyfyYydL8QCRa3M8v4qgMyr140kOarHnIiTNeX+EVLGqjDLdbPjFpV5+85ou/JUbLG12ThO2nmO9RkmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZJhroV1Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5407BC4CEF7;
+	Thu, 11 Dec 2025 18:22:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765477196;
-	bh=cDoWRb1naHE4Ryx+XC989ua85Uil7TKbOUUh1tQetps=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=KtMcVwDI9SHPPHvynngkrw2iOicfwqQ1vpXclRwp9PkJyclAslf8qDofgrpOB+2+d
-	 rp/TgpfyqkpTWck9bpxKGRHoKoMnd3T1KzEmjn+FfL9hca3znLUz+xhgZp4m6mms/I
-	 WIg0KmgBL45cPLPglxPJA7byQBDLQeAYY1SPRAph5d+maUDX/QCuiZ2Vj6DMuRAwPF
-	 wdKlDBqiQfn5p1Q7EoS7rzJ3x8ldzUHtJiEYcx3VsPvqwB72snSsb1twhmp2JfWNme
-	 Tno6Z86ZdhUNzeaXWwvhcjHqvl0J5EguLjKM4YGevphopfc3Oqvzy/2wRJw5Aa8hED
-	 C0TfjH8yhnO+Q==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vTlGb-0000000C4Ps-3FpS;
-	Thu, 11 Dec 2025 18:19:53 +0000
-Date: Thu, 11 Dec 2025 18:19:53 +0000
-Message-ID: <86sedgop86.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Jiaqi Yan <jiaqiyan@google.com>
-Cc: Sebastian Ott <sebott@redhat.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	Zenghui Yu <zenghui.yu@linux.dev>
-Subject: Re: sea_to_user sefltest failure
-In-Reply-To: <CACw3F52i_Yr+8Gd1=H=EMi7NnVJ8WCgMkaG1dSe8FD7PvOsW8w@mail.gmail.com>
-References: <1478ac09-8134-5551-13b6-c7be096262af@redhat.com>
-	<CACw3F52i_Yr+8Gd1=H=EMi7NnVJ8WCgMkaG1dSe8FD7PvOsW8w@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20201202; t=1765477366;
+	bh=iBQjv3NyRtOjmLtefM8m6iGDiD1Mh1LPOFF6RcjDQW8=;
+	h=From:To:Cc:Subject:Date:Reply-To:From;
+	b=ZJhroV1QaoQ2yInEmrI7Tqff7LFfOckTnWcyiahfVwo5bppagQpREI1PTHTx6Njvy
+	 5XGU0b/2WAGwInMPljQVHDuMMTM6xlKWHqjKG7ecX2usJxDugxU3APbcgU4aXQO2Ny
+	 x+clncd3fZehdb19Pq5vNqLLpu5PODx1BYqrVRzI+9PWJ2eCFX7jQuqWvxlHVPR21Q
+	 NjuUNlify6sgCJkDBlhctMw6a8/RquLj+hGWCIrNIjvW18/LcWWpj031wW7Rms7Hdt
+	 Z516tNgC8jPWyhe6WLSCOncqvfshei6jvN8sTXbeGIg1q0KxW3Tf3OzLUpg02DmPAR
+	 3AhDMMl5URBYQ==
+From: Gary Guo <gary@kernel.org>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <raemoar63@gmail.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] rust: fix off-by-one line number in rustdoc tests
+Date: Thu, 11 Dec 2025 18:22:07 +0000
+Message-ID: <20251211182208.2791025-1-gary@kernel.org>
+X-Mailer: git-send-email 2.51.2
+Reply-To: Gary Guo <gary@garyguo.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: jiaqiyan@google.com, sebott@redhat.com, oupton@kernel.org, shuah@kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, zenghui.yu@linux.dev
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, 11 Dec 2025 18:04:48 +0000,
-Jiaqi Yan <jiaqiyan@google.com> wrote:
-> 
-> [1  <text/plain; UTF-8 (quoted-printable)>]
-> Hi Sebastian,
-> 
-> CONFIGs seem alright to me. Do you boot kernel with cmdline options like
-> "default_hugepagesz=1G hugepagesz=1G hugepages=64", or dynamically set up
-> huge pages via "echo 64 >
-> /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages"?
+From: Gary Guo <gary@garyguo.net>
 
-I don't think this is irrelevant. The whole thing seems to have some
-logic flaws, see the extensive report from Zenghui[1] as a reply to
-your series.
+When the `#![allow]` line was added, the doctest line number anchor
+isn't updated which causes the line number printed in kunit test to be
+off-by-one.
 
-	M.
+Fixes: ab844cf32058 ("rust: allow `unreachable_pub` for doctests")
+Signed-off-by: Gary Guo <gary@garyguo.net>
+---
+ scripts/rustdoc_test_gen.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[1] https://lore.kernel.org/r/3061f5f8-cef0-b7b1-c4de-f2ceea29af9a@huawei.com
+diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
+index be05610496605..6fd9f5c84e2e4 100644
+--- a/scripts/rustdoc_test_gen.rs
++++ b/scripts/rustdoc_test_gen.rs
+@@ -206,7 +206,7 @@ macro_rules! assert_eq {{
+ 
+     /// The anchor where the test code body starts.
+     #[allow(unused)]
+-    static __DOCTEST_ANCHOR: i32 = ::core::line!() as i32 + {body_offset} + 1;
++    static __DOCTEST_ANCHOR: i32 = ::core::line!() as i32 + {body_offset} + 2;
+     {{
+         #![allow(unreachable_pub, clippy::disallowed_names)]
+         {body}
 
+base-commit: 559e608c46553c107dbba19dae0854af7b219400
 -- 
-Without deviation from the norm, progress is not possible.
+2.51.2
+
 
