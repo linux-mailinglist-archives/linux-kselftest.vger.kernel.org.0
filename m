@@ -1,463 +1,310 @@
-Return-Path: <linux-kselftest+bounces-47411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D875FCB5EEB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 13:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC21ACB5F8F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 14:06:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 049313058463
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 12:47:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 012283020C5D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Dec 2025 13:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3AA2311C05;
-	Thu, 11 Dec 2025 12:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AC3D3126BE;
+	Thu, 11 Dec 2025 13:02:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="otMlMM+/"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="xHbr3R2W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66E1303A30
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Dec 2025 12:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A362234973;
+	Thu, 11 Dec 2025 13:02:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765457249; cv=none; b=D1FercSiFlY4rwo6jygRKLHIbBuGN5tTNqO0yNU2IJrQkyRcVU8eOOClcEWbYs04fJu1Kg7xdAD1pAaxV6A1GWLsQNelLP9WQtTLGOaSsR6EPlzhcW5RbwUrm/pAdvu8i4qq5/TVgEFl6krbHKlUFpoA11+IEnBCYIR6LpKhLF8=
+	t=1765458169; cv=none; b=p3bUUih9ThP/r4sDBLWB3ntA4fVK53eMk+XZHGs8k8BsgPZMA5JSg3Buv2Z0q8p58dfWdbU4nTidDzdcbGWNRZT8No8HvzXL5tNtYgkQRi0rpp5xuvbkiqtS4T8/dGyresInobGtCGUo0jf5uot4VflIG+Z9pqQS4SfSbKps1I4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765457249; c=relaxed/simple;
-	bh=b+UeohnzvJw40pZRvhPeSZT8bb9n/7OIH7LnvbfILaw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GUyNVVFbFCmXSOfE195VD5jpBxv46HIWh+rRYyIXcH+oiPhsj8WNBex4SWCUa53ir+a+WZoBOEZaVcsc8eJS26/A6CnfeIl+cyv4L9b6CXU/S58hZeb/zFe1mOvd0DmbR+K4aUJ9aH0HkOWeHyR2bTkRZqa66dGOkiRtjlG1zLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=otMlMM+/; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com [209.85.128.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C5C793FCA1
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Dec 2025 12:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1765457222;
-	bh=V8hzy0OifNSQ9pCWZiF7fYz+AMk1VUw+02NG8nsswDQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type;
-	b=otMlMM+/+1MMLFY/m8HFwmwVetK7ylzwycGz7xvvYvnanZvjJObjb5EX0PDxuQPDt
-	 BNc9Exepa5HRRHXpg3JHFAfh2F8hJ5AUVjJ47j6vxFt7cXlUFwvPlQ2PX4FsXyrKsZ
-	 6ft20O/7SI3CCb0KOefnWdHMtinmEYqXZUaNjn30uNe9MLGyhhEc7P1HOJel9lKz1O
-	 M0l4BkI/2y96dWZQDaThDn0SSBNERRTr/KsTRqeu9CZBzJLQoj4f75mpKa94OtsxmQ
-	 wTtNPi9qFKU6yiY1nW0k2UxSvXwOhedklhavhPQhuP6ZVgdWkC6+TL1iHtkVXVU3vb
-	 HGrVzyxBrwXkW3aM7QW+O83N3KBja0XyUXjO6aKyA8PqWFhGbfXqnPBJiaCi0RV2EG
-	 DHGbdSlWhl/mlGmOM6yYk/l9s7lv60ptoj6Uyo4QtEwllKCM7yz7orlGoipDa9A+oE
-	 /dskCqqviKByrhsCLmG3FSiy2rvbtI7k9WzSRapHkzcQacGUq2Q1wFDEQNN88H4B9l
-	 8w3LzpI0EV+HdJJNQG0i+s0NJwCh/vj0dMEh6AmbzCGEKbctMbfAFuaD1gDrODt7pR
-	 KqO3yXr/dp2NWHCpAjsYyrsVpSEI9vukNOnKTOm0ewcx8/kboiHOVsD+xRWUFadvDb
-	 eJZQZ7Qj6UA0JNZIdgBFClz8=
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4775d8428e8so468655e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Dec 2025 04:47:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765457203; x=1766062003;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=V8hzy0OifNSQ9pCWZiF7fYz+AMk1VUw+02NG8nsswDQ=;
-        b=rpXEHju7G3eWlItbFEgGoje3FBKbaV/SZiuq720ZpWcTjEIIJFeR6KjmvAPnzY6Kum
-         2XjSGwPkyd1vYNDbS4UbgOXgsB2hh1oFqYYBgKVQppH7MpojTA5/n6kz+TBIn6YxkyAf
-         SLpfPhQZFDUPevoMWUFFCbkgN+740eel71ryMlXAM7r/BK8lU/VdRew+kP5aeFjdPYZZ
-         86OwBVCOhHx/f+8e9Hcddecyi78U+D3qu9AIZWIpYOw+PsWaDAlkfkzx27VHc5X2Eq0C
-         i6H+MvK3czJdX0PPqb+oDvqEqrub0v0eUe5dhitcvXskmLmZsZaSGOhadZG7Gair0uPd
-         RzOw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmGQkNThr1tGxMUF9pZtwHa6j4G5jlVLVcSIRFT+ZtWaEaAw+f7P6+bpK2BPCJE3x5YOKU/UNr8TJwCaBKx1w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuuakZL716wL0S3QSQgQiKSkM8GUtrRdndzI12X4M1K8sFfwNy
-	elr4YXFf19/Z+DrAwLT6Z8k9DHwAOPCA7IHV591D6jI5Li4ZPAmFJo1iPZXwdlDrNFmktRvvf7C
-	6RHn9+TiE2EOcoo9rccSyo0gFPAaX3mLb2VEUfEeZ9WX5XFwtcRjZn/EYv1UpqHgHY5ppyVJLB6
-	q4FW63jHagJA==
-X-Gm-Gg: AY/fxX7euL5a/9vo20rVvo/QzQL5lS+yC/vfb3OkkIbqZwlYhYtBvhfZxy//5lLLWhi
-	WcgPXyral9nA+5l7Tfwn5tXtKsyLUoAw9hDPzdhZINakygVmM6QdRtNcRVDemTOw7fx2ngLO8fn
-	kbJUWf88d0noFtmLdHO4qQFWmaWrGM0eZNhqkUtzj1/H4MSSWCJ3IrnFoL3zk9GGAMpfEqEHXD9
-	V6ADarwJUhBqbQGSVcQphGabrL/ZMbkYCTfsJXmgjhN45f6A3DOzOaBEL5R1QV6l9kMFh46BLjq
-	WAbn5evf1O8nJQ3XGokyV89r0YXGSDiwJVBokoI3n1n+rUk+k4bQPXJCPOHkorNlQ0Y4uEaMy2X
-	mz1qYvpywLqz+Sasfz5xi7p3roeB+DEdFJRo8GKG/PQ+ouQ1IeqefVrLaCzDzH2zwtrWBK/lYJ8
-	vb0t0L2puyv7z7XfKC/DSgyeQ=
-X-Received: by 2002:a05:600c:3512:b0:471:21:554a with SMTP id 5b1f17b1804b1-47a83814519mr56357575e9.13.1765457203031;
-        Thu, 11 Dec 2025 04:46:43 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH+YNZ87WlXoAKJkxUjyMWYi8/OgaJF+UVLnKhVQzL+tkHO1XIRTcZi1teyC6sg/WSN/QxzHw==
-X-Received: by 2002:a05:600c:3512:b0:471:21:554a with SMTP id 5b1f17b1804b1-47a83814519mr56357355e9.13.1765457202560;
-        Thu, 11 Dec 2025 04:46:42 -0800 (PST)
-Received: from amikhalitsyn.lan (p200300cf57022000e6219d5798620e30.dip0.t-ipconnect.de. [2003:cf:5702:2000:e621:9d57:9862:e30])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47a89f0d6f2sm32075905e9.13.2025.12.11.04.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Dec 2025 04:46:42 -0800 (PST)
-From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To: kees@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	Aleksa Sarai <cyphar@cyphar.com>,
-	Tycho Andersen <tycho@tycho.pizza>,
-	Andrei Vagin <avagin@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	=?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@stgraber.org>,
-	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Subject: [PATCH v3 7/7] tools/testing/selftests/seccomp: test nested listeners
-Date: Thu, 11 Dec 2025 13:46:11 +0100
-Message-ID: <20251211124614.161900-8-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251211124614.161900-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20251211124614.161900-1-aleksandr.mikhalitsyn@canonical.com>
+	s=arc-20240116; t=1765458169; c=relaxed/simple;
+	bh=wMqefMX8Mc38mruoomh45hwibeRJ0H2QBBT3xydpibQ=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=uUhn0S0fghcuJpDyimhuNFl7j6gFRyCKtTjOtOZS4/XTDB1+Tk5gwvKwQYvCxuTguW3BL+CEuambGw5yZUPJ5Kj5hHGVv1mRhAbdnHVgMCBDQ4BD3BnR+wVXCj845f7Eo3JvqlDPGxsoFhNMg6JVEZm6PvgAQrPUY1/ypgMJgPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=xHbr3R2W; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=yXjDj2LopgEdejBPveRLTL1bCofz4US84PT1q1wUrQg=;
+	b=xHbr3R2WIFp5oR9Nco7g8uQM7yu4h8Y+nnBWfQSXyrUxZxY18Qw54d2p1AsZz3jxGzQ4smao0
+	Zufh6YL+19aoxIC2d0F0j8hIcQYrDe0NKCEwe1hsGqQ+OwBnstutzZsIFz65/ezT/vDsDImfl1I
+	7irz7iJCvnjq1YPX3iwjrnI=
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4dRt3k0kTVz12LCr;
+	Thu, 11 Dec 2025 21:00:18 +0800 (CST)
+Received: from kwepemk200017.china.huawei.com (unknown [7.202.194.83])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2E13418047B;
+	Thu, 11 Dec 2025 21:02:35 +0800 (CST)
+Received: from [10.174.178.219] (10.174.178.219) by
+ kwepemk200017.china.huawei.com (7.202.194.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 11 Dec 2025 21:02:33 +0800
+Subject: Re: [PATCH v4 2/3] KVM: selftests: Test for KVM_EXIT_ARM_SEA
+To: Jiaqi Yan <jiaqiyan@google.com>
+CC: <maz@kernel.org>, <oliver.upton@linux.dev>, <duenwen@google.com>,
+	<rananta@google.com>, <jthoughton@google.com>, <vsethi@nvidia.com>,
+	<jgg@nvidia.com>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <pbonzini@redhat.com>,
+	<corbet@lwn.net>, <shuah@kernel.org>, <kvm@vger.kernel.org>,
+	<kvmarm@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20251013185903.1372553-1-jiaqiyan@google.com>
+ <20251013185903.1372553-3-jiaqiyan@google.com>
+From: Zenghui Yu <yuzenghui@huawei.com>
+Message-ID: <3061f5f8-cef0-b7b1-c4de-f2ceea29af9a@huawei.com>
+Date: Thu, 11 Dec 2025 21:02:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251013185903.1372553-3-jiaqiyan@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemk200017.china.huawei.com (7.202.194.83)
 
-Add some basic tests for nested listeners.
+Hi Jiaqi,
 
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>
-Cc: Andy Lutomirski <luto@amacapital.net>
-Cc: Will Drewry <wad@chromium.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Tycho Andersen <tycho@tycho.pizza>
-Cc: Andrei Vagin <avagin@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Stéphane Graber <stgraber@stgraber.org>
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 303 ++++++++++++++++++
- 1 file changed, 303 insertions(+)
+I had run into several problems when testing it on different servers. I
+haven't figured them out yet but post it early for discussion.
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 874f17763536..bbf3ef58ad07 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -301,6 +301,10 @@ struct seccomp_notif_addfd_big {
- #define SECCOMP_FILTER_FLAG_WAIT_KILLABLE_RECV (1UL << 5)
- #endif
- 
-+#ifndef SECCOMP_FILTER_FLAG_ALLOW_NESTED_LISTENERS
-+#define SECCOMP_FILTER_FLAG_ALLOW_NESTED_LISTENERS (1UL << 6)
-+#endif
-+
- #ifndef seccomp
- int seccomp(unsigned int op, unsigned int flags, void *args)
- {
-@@ -4416,6 +4420,305 @@ TEST(user_notification_sync)
- 	ASSERT_EQ(status, 0);
- }
- 
-+/*
-+ * This test is here to ensure that seccomp() behavior before
-+ * introducing nested listeners is preserved.
-+ */
-+TEST(user_notification_many_ret_notif_old_behavior)
-+{
-+	pid_t pid, ppid;
-+	long ret;
-+	int status, listener;
-+	struct seccomp_notif req = {};
-+	struct seccomp_notif_resp resp = {};
-+
-+	struct sock_filter filter[] = {
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+	struct sock_fprog prog = {
-+		.len = (unsigned short)ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	/* Add some no-op filters for grins. */
-+	EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
-+
-+	/* Install a filter that returns SECCOMP_RET_USER_NOTIF, but has no listener. */
-+	ASSERT_GE(user_notif_syscall(__NR_getppid, 0), 0);
-+
-+	/* Install a filter that returns SECCOMP_RET_USER_NOTIF, and then close listener. */
-+	listener = user_notif_syscall(__NR_getppid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+	ASSERT_GE(listener, 0);
-+	close(listener);
-+
-+	/*
-+	 * Note, that we can install another listener now (without nesting enabled!),
-+	 * because notify fd of the previous filter has been closed.
-+	 */
-+	listener = user_notif_syscall(__NR_getppid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+	ASSERT_GE(listener, 0);
-+
-+	/* Add some no-op filters for grins. */
-+	EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
-+
-+	ppid = getpid();
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		ret = syscall(__NR_getppid);
-+		exit(ret != ppid);
-+	}
-+
-+	memset(&req, 0, sizeof(req));
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-+	EXPECT_EQ(req.pid, pid);
-+	EXPECT_EQ(req.data.nr,  __NR_getppid);
-+
-+	memset(&resp, 0, sizeof(resp));
-+	resp.id = req.id;
-+
-+	/* tell kernel to continue syscall and expect that upper-level filters are ignored */
-+	resp.flags = SECCOMP_USER_NOTIF_FLAG_CONTINUE;
-+
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
-+
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+
-+	close(listener);
-+}
-+
-+TEST(user_notification_many_ret_notif_closed_listener_nested)
-+{
-+	pid_t pid;
-+	long ret;
-+	int status, listener, closed_listener;
-+	struct seccomp_notif req = {};
-+	struct seccomp_notif_resp resp = {};
-+
-+	struct sock_filter filter[] = {
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+	struct sock_fprog prog = {
-+		.len = (unsigned short)ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	/* Add some no-op filters for grins. */
-+	EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
-+
-+	closed_listener = user_notif_syscall(__NR_getppid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER |
-+				      SECCOMP_FILTER_FLAG_ALLOW_NESTED_LISTENERS);
-+	ASSERT_GE(closed_listener, 0);
-+
-+	/*
-+	 * Note, that we can install another listener now (without nesting enabled!),
-+	 * because notify fd of the previous filter has been closed.
-+	 */
-+	listener = user_notif_syscall(__NR_getppid,
-+				      SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+	ASSERT_GE(listener, 0);
-+
-+	/* Now, once we installed a nested listener, close the previous one. */
-+	close(closed_listener);
-+
-+	/* Add some no-op filters for grins. */
-+	EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		ret = syscall(__NR_getppid);
-+		exit(ret >= 0 || errno != ENOSYS);
-+	}
-+
-+	memset(&req, 0, sizeof(req));
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-+	EXPECT_EQ(req.pid, pid);
-+	EXPECT_EQ(req.data.nr,  __NR_getppid);
-+
-+	memset(&resp, 0, sizeof(resp));
-+	resp.id = req.id;
-+
-+	/*
-+	 * Tell kernel to continue syscall and expect ENOSYS,
-+	 * because upper filter's notify fd has been closed.
-+	 */
-+	resp.flags = SECCOMP_USER_NOTIF_FLAG_CONTINUE;
-+
-+	EXPECT_EQ(ioctl(listener, SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
-+
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+
-+	close(listener);
-+}
-+
-+/*
-+ * Ensure that EBUSY is returned on attempt to
-+ * install a nested listener without nesting being allowed.
-+ */
-+TEST(user_notification_nested_limits)
-+{
-+	pid_t pid;
-+	long ret;
-+	int i, status, listeners[8];
-+
-+	struct sock_filter filter[] = {
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+	struct sock_fprog prog = {
-+		.len = (unsigned short)ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	/* Install 6 levels of listeners and allow nesting. */
-+	for (i = 0; i < 6; i++) {
-+		listeners[i] = user_notif_syscall(__NR_getppid,
-+						  SECCOMP_FILTER_FLAG_NEW_LISTENER |
-+						  SECCOMP_FILTER_FLAG_ALLOW_NESTED_LISTENERS);
-+		ASSERT_GE(listeners[i], 0);
-+
-+		/* Add some no-op filters for grins. */
-+		EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
-+	}
-+
-+	/* Check behavior when nesting is not allowed. */
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0) {
-+		/* Install a next listener in the chain without nesting allowed. */
-+		listeners[6] = user_notif_syscall(__NR_getppid,
-+						 SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+		if (listeners[6] < 0)
-+			exit(1);
-+
-+		/* Add some no-op filters for grins. */
-+		ret = seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog);
-+		if (ret != 0)
-+			exit(2);
-+
-+		ret = user_notif_syscall(__NR_getppid,
-+					 SECCOMP_FILTER_FLAG_NEW_LISTENER);
-+		/* Installing a next listener in the chain should result in EBUSY. */
-+		exit((ret >= 0 || errno != EBUSY) ? 3 : 0);
-+	}
-+
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+}
-+
-+TEST(user_notification_nested)
-+{
-+	pid_t pid;
-+	long ret;
-+	int i, status, listeners[6];
-+	struct seccomp_notif req = {};
-+	struct seccomp_notif_resp resp = {};
-+
-+	struct sock_filter filter[] = {
-+		BPF_STMT(BPF_RET|BPF_K, SECCOMP_RET_ALLOW),
-+	};
-+	struct sock_fprog prog = {
-+		.len = (unsigned short)ARRAY_SIZE(filter),
-+		.filter = filter,
-+	};
-+
-+	ret = prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0);
-+	ASSERT_EQ(0, ret) {
-+		TH_LOG("Kernel does not support PR_SET_NO_NEW_PRIVS!");
-+	}
-+
-+	/* Install 6 levels of listeners and allow nesting. */
-+	for (i = 0; i < 6; i++) {
-+		/*
-+		 * Install a filter that returns SECCOMP_RET_USER_NOTIF, but has no listener.
-+		 * We expect that these filters are not affecting the end result.
-+		 */
-+		ASSERT_GE(user_notif_syscall(__NR_getppid, 0), 0);
-+
-+		listeners[i] = user_notif_syscall(__NR_getppid,
-+						  SECCOMP_FILTER_FLAG_NEW_LISTENER |
-+						  SECCOMP_FILTER_FLAG_ALLOW_NESTED_LISTENERS);
-+		ASSERT_GE(listeners[i], 0);
-+
-+		/* Add some no-op filters for grins. */
-+		EXPECT_EQ(seccomp(SECCOMP_SET_MODE_FILTER, 0, &prog), 0);
-+	}
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+
-+	if (pid == 0) {
-+		ret = syscall(__NR_getppid);
-+		exit(ret != (USER_NOTIF_MAGIC-3));
-+	}
-+
-+	/*
-+	 * We want to have the following picture:
-+	 *
-+	 * | Listener level (i) | Listener decision |
-+	 * |--------------------|-------------------|
-+	 * |	     0		|      WHATEVER     |
-+	 * |	     1		|      WHATEVER     |
-+	 * |	     2		|      WHATEVER     |
-+	 * |	     3		|       RETURN      | <-- stop here
-+	 * |	     4		|  CONTINUE SYSCALL |
-+	 * |	     5		|  CONTINUE SYSCALL | <- start here (current->seccomp.filter)
-+	 *
-+	 * First listener who receives a notification is level 5, then 4,
-+	 * then we expect to stop on level 3 and return from syscall with
-+	 * (USER_NOTIF_MAGIC - 3) return value.
-+	 */
-+	for (i = 6 - 1; i >= 3; i--) {
-+		memset(&req, 0, sizeof(req));
-+		EXPECT_EQ(ioctl(listeners[i], SECCOMP_IOCTL_NOTIF_RECV, &req), 0);
-+		EXPECT_EQ(req.pid, pid);
-+		EXPECT_EQ(req.data.nr,  __NR_getppid);
-+
-+		memset(&resp, 0, sizeof(resp));
-+		resp.id = req.id;
-+
-+		if (i == 5 || i == 4) {
-+			resp.flags = SECCOMP_USER_NOTIF_FLAG_CONTINUE;
-+		} else {
-+			resp.error = 0;
-+			resp.val = USER_NOTIF_MAGIC - i;
-+		}
-+
-+		EXPECT_EQ(ioctl(listeners[i], SECCOMP_IOCTL_NOTIF_SEND, &resp), 0);
-+	}
-+
-+	EXPECT_EQ(waitpid(pid, &status, 0), pid);
-+	EXPECT_EQ(true, WIFEXITED(status));
-+	EXPECT_EQ(0, WEXITSTATUS(status));
-+
-+	for (i = 0; i < 6; i++)
-+		close(listeners[i]);
-+}
- 
- /* Make sure PTRACE_O_SUSPEND_SECCOMP requires CAP_SYS_ADMIN. */
- FIXTURE(O_SUSPEND_SECCOMP) {
--- 
-2.43.0
+On 2025/10/14 2:59, Jiaqi Yan wrote:
+> Test how KVM handles guest SEA when APEI is unable to claim it, and
+> KVM_CAP_ARM_SEA_TO_USER is enabled.
+> 
+> The behavior is triggered by consuming recoverable memory error (UER)
+> injected via EINJ. The test asserts two major things:
+> 1. KVM returns to userspace with KVM_EXIT_ARM_SEA exit reason, and
+>    has provided expected fault information, e.g. esr, flags, gva, gpa.
+> 2. Userspace is able to handle KVM_EXIT_ARM_SEA by injecting SEA to
+>    guest and KVM injects expected SEA into the VCPU.
+> 
+> Tested on a data center server running Siryn AmpereOne processor
+> that has RAS support.
+> 
+> Several things to notice before attempting to run this selftest:
+> - The test relies on EINJ support in both firmware and kernel to
+>   inject UER. Otherwise the test will be skipped.
+> - The under-test platform's APEI should be unable to claim the SEA.
+>   Otherwise the test will be skipped.
+> - Some platform doesn't support notrigger in EINJ, which may cause
+>   APEI and GHES to offline the memory before guest can consume
+>   injected UER, and making test unable to trigger SEA.
+> 
+> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
 
+[...]
+
+> +static void inject_uer(uint64_t paddr)
+> +{
+> +	if (access("/sys/firmware/acpi/tables/EINJ", R_OK) == -1)
+> +		ksft_test_result_skip("EINJ table no available in firmware");
+
+Missing '\n'.
+
+We should return early (to actually skip the test) if the file can not
+be accessed, right?
+
+> +
+> +	if (access(EINJ_ETYPE, R_OK | W_OK) == -1)
+> +		ksft_test_result_skip("EINJ module probably not loaded?");
+> +
+> +	write_einj_entry(EINJ_ETYPE, ERROR_TYPE_MEMORY_UER);
+> +	write_einj_entry(EINJ_FLAGS, MASK_MEMORY_UER);
+> +	write_einj_entry(EINJ_ADDR, paddr);
+> +	write_einj_entry(EINJ_MASK, ~0x0UL);
+> +	write_einj_entry(EINJ_NOTRIGGER, 1);
+> +	write_einj_entry(EINJ_DOIT, 1);
+> +}
+> +
+> +/*
+> + * When host APEI successfully claims the SEA caused by guest_code, kernel
+> + * will send SIGBUS signal with BUS_MCEERR_AR to test thread.
+> + *
+> + * We set up this SIGBUS handler to skip the test for that case.
+> + */
+> +static void sigbus_signal_handler(int sig, siginfo_t *si, void *v)
+> +{
+> +	ksft_print_msg("SIGBUS (%d) received, dumping siginfo...\n", sig);
+> +	ksft_print_msg("si_signo=%d, si_errno=%d, si_code=%d, si_addr=%p\n",
+> +		       si->si_signo, si->si_errno, si->si_code, si->si_addr);
+> +	if (si->si_code == BUS_MCEERR_AR)
+> +		ksft_test_result_skip("SEA is claimed by host APEI\n");
+> +	else
+> +		ksft_test_result_fail("Exit with signal unhandled\n");
+> +
+> +	exit(0);
+> +}
+> +
+> +static void setup_sigbus_handler(void)
+> +{
+> +	struct sigaction act;
+> +
+> +	memset(&act, 0, sizeof(act));
+> +	sigemptyset(&act.sa_mask);
+> +	act.sa_sigaction = sigbus_signal_handler;
+> +	act.sa_flags = SA_SIGINFO;
+> +	TEST_ASSERT(sigaction(SIGBUS, &act, NULL) == 0,
+> +		    "Failed to setup SIGBUS handler");
+> +}
+> +
+> +static void guest_code(void)
+> +{
+> +	uint64_t guest_data;
+> +
+> +	/* Consumes error will cause a SEA. */
+> +	guest_data = *(uint64_t *)EINJ_GVA;
+> +
+> +	GUEST_FAIL("Poison not protected by SEA: gva=%#lx, guest_data=%#lx\n",
+> +		   EINJ_GVA, guest_data);
+> +}
+> +
+> +static void expect_sea_handler(struct ex_regs *regs)
+> +{
+> +	u64 esr = read_sysreg(esr_el1);
+> +	u64 far = read_sysreg(far_el1);
+> +	bool expect_far_invalid = far_invalid;
+> +
+> +	GUEST_PRINTF("Handling Guest SEA\n");
+> +	GUEST_PRINTF("ESR_EL1=%#lx, FAR_EL1=%#lx\n", esr, far);
+> +
+> +	GUEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_DABT_CUR);
+> +	GUEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
+> +
+> +	if (expect_far_invalid) {
+> +		GUEST_ASSERT_EQ(esr & ESR_ELx_FnV, ESR_ELx_FnV);
+
+I hit this ASSERT with:
+
+# Mapped 0x40000 pages: gva=0x80000000 to gpa=0xff80000000
+# Before EINJect: data=0xbaadcafe
+# EINJ_GVA=0x81234bad, einj_gpa=0xff81234bad, einj_hva=0xffff41234bad,
+einj_hpa=0x202841234bad
+# echo 0x10 > /sys/kernel/debug/apei/einj/error_type - done
+# echo 0x2 > /sys/kernel/debug/apei/einj/flags - done
+# echo 0x202841234bad > /sys/kernel/debug/apei/einj/param1 - done
+# echo 0xffffffffffffffff > /sys/kernel/debug/apei/einj/param2 - done
+# echo 0x1 > /sys/kernel/debug/apei/einj/notrigger - done
+# echo 0x1 > /sys/kernel/debug/apei/einj/error_inject - done
+# Memory UER EINJected
+# Dump kvm_run info about KVM_EXIT_ARM_SEA
+# kvm_run.arm_sea: esr=0x92000610, flags=0
+# kvm_run.arm_sea: gva=0, gpa=0
+# From guest: Handling Guest SEA
+# From guest: ESR_EL1=0x96000010, FAR_EL1=0xaaaadf254828
+# Guest aborted!
+==== Test Assertion Failure ====
+  arm64/sea_to_user.c:172: esr & ESR_ELx_FnV == ESR_ELx_FnV
+  pid=38112 tid=38112 errno=4 - Interrupted system call
+     1	0x0000000000402f9b: run_vm at sea_to_user.c:246
+     2	0x0000000000402467: main at sea_to_user.c:330
+     3	0x0000ffff8e22b03f: ?? ??:0
+     4	0x0000ffff8e22b117: ?? ??:0
+     5	0x00000000004026ef: _start at ??:?
+  0x0 != 0x400 (esr & ESR_ELx_FnV != ESR_ELx_FnV)
+
+It seems that KVM doesn't emulate FnV when injecting an abort.
+
+> +		GUEST_PRINTF("Guest observed garbage value in FAR\n");
+> +	} else {
+> +		GUEST_ASSERT_EQ(esr & ESR_ELx_FnV, 0);
+> +		GUEST_ASSERT_EQ(far, EINJ_GVA);
+> +	}
+> +
+> +	GUEST_DONE();
+> +}
+> +
+> +static void vcpu_inject_sea(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_vcpu_events events = {};
+> +
+> +	events.exception.ext_dabt_pending = true;
+> +	vcpu_events_set(vcpu, &events);
+> +}
+> +
+> +static void run_vm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	struct ucall uc;
+> +	bool guest_done = false;
+> +	struct kvm_run *run = vcpu->run;
+> +	u64 esr;
+> +
+> +	/* Resume the vCPU after error injection to consume the error. */
+> +	vcpu_run(vcpu);
+> +
+> +	ksft_print_msg("Dump kvm_run info about KVM_EXIT_%s\n",
+> +		       exit_reason_str(run->exit_reason));
+> +	ksft_print_msg("kvm_run.arm_sea: esr=%#llx, flags=%#llx\n",
+> +		       run->arm_sea.esr, run->arm_sea.flags);
+> +	ksft_print_msg("kvm_run.arm_sea: gva=%#llx, gpa=%#llx\n",
+> +		       run->arm_sea.gva, run->arm_sea.gpa);
+> +
+> +	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_ARM_SEA);
+
+I can also hit this ASSERT with:
+
+Random seed: 0x6b8b4567
+# Mapped 0x40000 pages: gva=0x80000000 to gpa=0xff80000000
+# Before EINJect: data=0xbaadcafe
+# EINJ_GVA=0x81234bad, einj_gpa=0xff81234bad, einj_hva=0xffff41234bad,
+einj_hpa=0x2841234bad
+# echo 0x10 > /sys/kernel/debug/apei/einj/error_type - done
+# echo 0x2 > /sys/kernel/debug/apei/einj/flags - done
+# echo 0x2841234bad > /sys/kernel/debug/apei/einj/param1 - done
+# echo 0xffffffffffffffff > /sys/kernel/debug/apei/einj/param2 - done
+# echo 0x1 > /sys/kernel/debug/apei/einj/notrigger - done
+# echo 0x1 > /sys/kernel/debug/apei/einj/error_inject - done
+# Memory UER EINJected
+# Dump kvm_run info about KVM_EXIT_MMIO
+# kvm_run.arm_sea: esr=0xffff90ba0040, flags=0x691000
+# kvm_run.arm_sea: gva=0x100000008, gpa=0
+==== Test Assertion Failure ====
+  arm64/sea_to_user.c:207: exit_reason == (41)
+  pid=38023 tid=38023 errno=4 - Interrupted system call
+     1	0x0000000000402d1b: run_vm at sea_to_user.c:207
+     2	0x0000000000402467: main at sea_to_user.c:330
+     3	0x0000ffff9122b03f: ?? ??:0
+     4	0x0000ffff9122b117: ?? ??:0
+     5	0x00000000004026ef: _start at ??:?
+  Wanted KVM exit reason: 41 (ARM_SEA), got: 6 (MMIO)
+
+Not sure what's wrong it..
+
+> +
+> +	esr = run->arm_sea.esr;
+> +	TEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_DABT_LOW);
+> +	TEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
+> +	TEST_ASSERT_EQ(ESR_ELx_ISS2(esr), 0);
+> +	TEST_ASSERT_EQ((esr & ESR_ELx_INST_SYNDROME), 0);
+> +	TEST_ASSERT_EQ(esr & ESR_ELx_VNCR, 0);
+> +
+> +	if (!(esr & ESR_ELx_FnV)) {
+> +		ksft_print_msg("Expect gva to match given FnV bit is 0\n");
+> +		TEST_ASSERT_EQ(run->arm_sea.gva, EINJ_GVA);
+> +	}
+> +
+> +	if (run->arm_sea.flags & KVM_EXIT_ARM_SEA_FLAG_GPA_VALID) {
+> +		ksft_print_msg("Expect gpa to match given KVM_EXIT_ARM_SEA_FLAG_GPA_VALID is set\n");
+> +		TEST_ASSERT_EQ(run->arm_sea.gpa, einj_gpa & PAGE_ADDR_MASK);
+> +	}
+> +
+> +	far_invalid = esr & ESR_ELx_FnV;
+
+Missing sync_global_to_guest()?
+
+Thanks,
+Zenghui
 
