@@ -1,120 +1,219 @@
-Return-Path: <linux-kselftest+bounces-47498-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47499-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD465CB84A4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 09:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C69BCCB84B9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 09:35:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6F26A3045A70
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 08:30:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C37FA301F5D5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 08:32:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97659310763;
-	Fri, 12 Dec 2025 08:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4112D47E1;
+	Fri, 12 Dec 2025 08:32:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dcBuqNIl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+J2Rgc/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569083101DC;
-	Fri, 12 Dec 2025 08:30:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E013C1F8AC8;
+	Fri, 12 Dec 2025 08:32:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765528246; cv=none; b=lIwJVHXdL2gQfkg2Yz9Myns+o8ac/yoOp1vO8G5UIynGXnOBcF/VTy+rKAld2wUWdUmiPfI59llDD+cY8KveLVPJPNEzuV5AaD+M8h6G3GbekqO9nzC75KJkyD4kvfZFx/r5HPT4122NYqLGtvL4Wro6JL2Hh4+F/fyaD+rRdMI=
+	t=1765528372; cv=none; b=EeX/rvrZr9yRxzuzaaIRRQ9kvcLzKupXE93lwhEfkr8oh2WmAM5ur4HGriEMqKzAa2vZdMlV3iDS/DLQHrTaERUyJNszkrpRPcItI2P6zpim9A1KymW4BlM3N+94SYTnvZY1SZSrx3TkaziyCMWykeKZzBari1WtsFcoD00pwi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765528246; c=relaxed/simple;
-	bh=DRPzZm8wRyj4mY54tq0jM/zwgD0vFMbcEQzT/w8zFyM=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=dqTsHnQ8isNxzGpI+bZxC0VPxJoihKyUZZqPqZ7QQSOUcNVL5q2OJWUDmo2LhQt5THR1TaJ+bBKWOZfBnktcVaeXgp7DB5YPqMNYUedoBaPcRO7ZLuTfguYvmlQ72BbMSShmloUqDrn2vNXmlaSzgOjQNSspfWrMrkIuYwEPeYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dcBuqNIl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36FF1C4CEF1;
-	Fri, 12 Dec 2025 08:30:35 +0000 (UTC)
+	s=arc-20240116; t=1765528372; c=relaxed/simple;
+	bh=SjBoF0HIch0XftTYs0vg5B8YNbR6ts9W+wUQ5MqOR1M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Os/GNW1AxYOp/asdqqADnqG7AKKw2Xb0q9REfxkGkNyozUMfTN5MBYEPUxe78EiKivLjupThPfJwcAs1BDLeS8NRokCg5k/ojMgoRz95sqrc3wwZOnffLgom8+dN0Kg+58MXlmL1zZz2lMOrIdbsGFAmTVKm2cSmbwY5Qij5lek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+J2Rgc/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E071C4CEF1;
+	Fri, 12 Dec 2025 08:32:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765528245;
-	bh=DRPzZm8wRyj4mY54tq0jM/zwgD0vFMbcEQzT/w8zFyM=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=dcBuqNIldXTL6nxc9vHRFmJK1q+pCEpPXDnMynSxTcTE0f5CMeYb1YC/QYimK7HvL
-	 yW9ZIAMunbbNR/XddaD+W2WBzK9ITEOc9Jpd/WF/oFxZGqgMxWJaYnhPdWS/2ZndYV
-	 QvTcZ2zk/8XusiG2mEKWiyswaxnlL8kucMpgGRGKUFvBmh6HToRFzmjdMzC8iFklZ7
-	 C/w/rAiweFwaGnDV+0vs7+eq/kMNQh7nLuDIAH4TZjY2J30aoCpasEx9IT9zYH+9Ck
-	 kNK9eY7wcDmJuvc2ytWrBRu1KTkw/s4QBwSvxfmd6ToD+GB5v6srhdPSZeTpE9iyRE
-	 95/u2RrgtAxkA==
-Date: Fri, 12 Dec 2025 01:30:29 -0700 (MST)
-From: Paul Walmsley <pjw@kernel.org>
-To: Deepak Gupta <debug@rivosinc.com>
-cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-    Andrew Morton <akpm@linux-foundation.org>, 
-    "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-    Vlastimil Babka <vbabka@suse.cz>, 
-    Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-    Paul Walmsley <paul.walmsley@sifive.com>, 
-    Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-    Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
-    Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-    Christian Brauner <brauner@kernel.org>, 
-    Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
-    Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
-    Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-    Jann Horn <jannh@google.com>, Conor Dooley <conor+dt@kernel.org>, 
-    Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-    Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-    =?ISO-8859-15?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-    Andreas Hindborg <a.hindborg@kernel.org>, 
-    Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-    Benno Lossin <lossin@kernel.org>, linux-kernel@vger.kernel.org, 
-    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-    linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-    linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
-    linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
-    richard.henderson@linaro.org, jim.shu@sifive.com, 
-    Andy Chiu <andybnac@gmail.com>, kito.cheng@sifive.com, 
-    charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com, 
-    cleger@rivosinc.com, alexghiti@rivosinc.com, samitolvanen@google.com, 
-    broonie@kernel.org, rick.p.edgecombe@intel.com, 
-    rust-for-linux@vger.kernel.org, Zong Li <zong.li@sifive.com>, 
-    David Hildenbrand <david@redhat.com>, 
-    Andreas Korb <andreas.korb@aisec.fraunhofer.de>, 
-    Valentin Haudiquet <valentin.haudiquet@canonical.com>, 
-    Charles Mirabile <cmirabil@redhat.com>, Andy Chiu <andybnac@gmail.com>
-Subject: Re: [PATCH v26 00/28] riscv control-flow integrity for usermode
-In-Reply-To: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com>
-Message-ID: <e052745b-6bf0-c2a3-21b2-5ecd8b04ec70@kernel.org>
-References: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com>
+	s=k20201202; t=1765528371;
+	bh=SjBoF0HIch0XftTYs0vg5B8YNbR6ts9W+wUQ5MqOR1M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=G+J2Rgc/LbZvf9enzhCCutocoEdO4ih1ULjjE2eAAcUZH+pHeV6Np3mbwlV4MVsz8
+	 0zKEZrzUl5GcMbip+IsmT5r51TydxMYoSULOj6WNoNiF5USR91y3tZfIP6CVSEhZvj
+	 6tpvrANhD1qRFDOm4NV2RfDp74C1i3xUpTXmlabMfpl1EbNqzx2uJAAGp/MvW45TYf
+	 OWY/mYAqxd2EcTiksbvz0zVg7qt0jhom/iAEtyjghsOJZleRh0PE4XflVVIpmrQujU
+	 G4CHPrgAXn+W6sfTII3S+nCT8dlXz3Y9DbzOnwVHVKTd2ExvkvvtktVc/92O+uAp7t
+	 ZjaqPrWAEE8CA==
+Date: Fri, 12 Dec 2025 08:32:46 +0000
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Benson Leung <bleung@chromium.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
+Message-ID: <aTvTLpFmyVxanvYC@google.com>
+References: <20251021121536.GG316284@nvidia.com>
+ <aPo6CZyT_IGWmu-O@tzungbi-laptop>
+ <20251023145131.GI262900@nvidia.com>
+ <2025102321-struggle-fraying-52ff@gregkh>
+ <20251211032306.GO28860@pendragon.ideasonboard.com>
+ <aTo-xErTTiJcribR@shikoro>
+ <20251211080517.GA28411@pendragon.ideasonboard.com>
+ <aTqCqab1pGB9LNZy@shikoro>
+ <20251211134306.GC28411@pendragon.ideasonboard.com>
+ <aTrZMJ8R6zybFNHR@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aTrZMJ8R6zybFNHR@google.com>
 
-On Thu, 11 Dec 2025, Deepak Gupta via B4 Relay wrote:
+On Thu, Dec 11, 2025 at 02:46:08PM +0000, Tzung-Bi Shih wrote:
+> On Thu, Dec 11, 2025 at 10:43:06PM +0900, Laurent Pinchart wrote:
+> > On Thu, Dec 11, 2025 at 05:36:57PM +0900, Wolfram Sang wrote:
+> > > 
+> > > > > Isn't there even prototype code from Dan Williams?
+> > > > > 
+> > > > > "[PATCH 1/3] cdev: Finish the cdev api with queued mode support"
+> > > > > 
+> > > > > https://lkml.org/lkml/2021/1/20/997
+> > > > 
+> > > > I mentioned that in my LPC talk in 2022 :-) I think we should merge that
+> > > > (or a rebased, possibly improved version of it). I've meant to try
+> > > > plumbing that series in V4L2 but couldn't find the time so far.
+> > > 
+> > > Yes, you mentioned it in 2022 but maybe not everyone in this thread is
+> > > right now aware of it ;) The patch above got changes requested. I talked
+> > > to Dan very briefly about it at Maintainers Summit 2023 and he was also
+> > > open (back then) to pick it up again.
+> > 
+> > After discussing with Tzung-Bi today after his presentation (thank you
+> > Tzung-Bi for your time, it helped me understand the problem you're
+> > facing better), I wonder if this series is fixing the issue in the right
+> > place.
+> 
+> Thank you for your time too for providing me some more context.
+> 
+> > At the core of the problem is a devm_kzalloc() call to allocate
+> > driver-specific data. That data structure is then referenced from a
+> > cdev, which can dereference is after it gets freed. It seems that
+> > reference-counting the data structure instead of using devm_kzalloc()
+> > could be a better solution.
+> 
+> After discussing with you, I recalled this was one of my previous attempts.
+> See the series [1] and Greg's feedback [2].
+> 
+> I want to provide some more context about the cdev level solution.  I failed
+> to do so for misc device [3] mainly because all misc devices share a same
+> cdev [4].  If one of the misc device drivers "revoke" the cdev, all other
+> drivers stop working.
+> 
+> I'm not saying we shouldn't seek for cdev level solution.  But at least it
+> doesn't work for misc device.  Still need some other ways for misc devices.
+> 
+> [1] https://lore.kernel.org/chrome-platform/20250721044456.2736300-8-tzungbi@kernel.org/
+> [2] https://lore.kernel.org/chrome-platform/2025072114-unifier-screen-1594@gregkh/
+> [3] https://lore.kernel.org/chrome-platform/aQ1xfHuyg1y8eJQ_@google.com/
+> [4] https://elixir.bootlin.com/linux/v6.17/source/drivers/char/misc.c#L299
 
-> v26: CONFIG_RISCV_USER_CFI depends on CONFIG_MMU (dependency of shadow stack
-> on MMU). Used b4 to pick tags, apparantly it messed up some tag picks. Fixing it
+Continuing the context, the subsystem level solution for misc device without
+revocable could be more or less like the following patch.  Observed 2 main
+issues of it:
 
-Deepak: I'm now (at least) the third person to tell you to stop resending 
-this entire series over and over again.
+1. Because it tries to synchronize the misc device and open files, it has a
+   big lock between them.  misc_deregister() needs to wait for all open files.
+   I think this is a common issue shared by "replacing file operations"
+   approaches.  All file operations are considered as critical sections.
 
-First, a modified version of the CFI v23 series was ALREADY SITTING IN 
-LINUX-NEXT.  So there's no reason you should be resending the entire 
-series, UNLESS your intention for me is to drop the entire existing series 
-and wait for another merge window.
+2. It doesn't stop existing open files.  UAF still happens when the dangling
+   FD tries to access the miscdevice (which should have been freed).
 
-Second: when someone asks you questions about an individual patch, and you 
-want to answer those questions, it's NOT GOOD for you to resend the entire 
-28 series as the response!  You are DDOSing a bunch of lists and E-mail 
-inboxes.  Just answer the question in a single E-mail.  If you want to 
-update a single patch, just send that one patch.
+diff --git a/drivers/char/misc.c b/drivers/char/misc.c
+index 726516fb0a3b..0ce415da10c2 100644
+--- a/drivers/char/misc.c
++++ b/drivers/char/misc.c
+@@ -115,6 +116,89 @@ static const struct seq_operations misc_seq_ops = {
+ };
+ #endif
 
-If you don't start paying attention to these rules then people are going 
-to start ignoring you -- at best! -- and it's going to give the entire 
-community a bad reputation.
++static struct miscdevice *find_miscdevice(int minor)
++{
++	struct miscdevice *c;
++
++	list_for_each_entry(c, &misc_list, list)
++		if (c->minor == minor)
++			return c;
++	return NULL;
++}
++
++static __poll_t misc_some_poll(struct file *filp, poll_table *wait)
++{
++	struct miscdevice *c;
++
++	c = find_miscdevice(iminor(filp->f_inode));
++	if (!c)
++		return -ENODEV;
++	if (!c->fops->poll)
++		return 0;
++
++	guard(mutex)(&c->some_lock);
++	if (!c->registered)
++		return -ENODEV;
++	return c->fops->poll(filp, wait);
++}
++
++static const struct file_operations misc_some_fops = {
++	.poll = misc_some_poll,
++	.read = misc_some_read,
++	.unlocked_ioctl = misc_some_ioctl,
++	.release = misc_some_release,
++};
 
-Please acknowledge that you understand this,
+@@ -161,6 +245,7 @@ static int misc_open(struct inode *inode, struct file *file)
+ 	replace_fops(file, new_fops);
+ 	if (file->f_op->open)
+ 		err = file->f_op->open(inode, file);
++	file->f_op = &misc_some_fops;
+ fail:
+ 	mutex_unlock(&misc_mtx);
+ 	return err;
+@@ -262,6 +347,8 @@ int misc_register(struct miscdevice *misc)
+ 		goto out;
+ 	}
+ 
++	mutex_init(&misc->some_lock);
++	misc->registered = true;
+ 	/*
+ 	 * Add it to the front, so that later devices can "override"
+ 	 * earlier defaults
+@@ -283,6 +370,9 @@ EXPORT_SYMBOL(misc_register);
+ 
+ void misc_deregister(struct miscdevice *misc)
+ {
++	scoped_guard(mutex, &misc->some_lock)
++		misc->registered = false;
++
+ 	mutex_lock(&misc_mtx);
+ 	list_del_init(&misc->list);
+ 	device_destroy(&misc_class, MKDEV(MISC_MAJOR, misc->minor));
 
-
-- Paul
+diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
+index 7d0aa718499c..3b42cf273f97 100644
+--- a/include/linux/miscdevice.h
++++ b/include/linux/miscdevice.h
+@@ -92,6 +92,8 @@ struct miscdevice {
+ 	const struct attribute_group **groups;
+ 	const char *nodename;
+ 	umode_t mode;
++	struct mutex some_lock;
++	bool registered;
+ };
 
