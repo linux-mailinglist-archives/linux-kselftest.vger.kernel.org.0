@@ -1,219 +1,124 @@
-Return-Path: <linux-kselftest+bounces-47499-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47500-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C69BCCB84B9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 09:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7467CCB8737
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 10:27:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C37FA301F5D5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 08:32:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0077A3048080
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 09:22:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4112D47E1;
-	Fri, 12 Dec 2025 08:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64B9E311C3D;
+	Fri, 12 Dec 2025 09:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G+J2Rgc/"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="eBZ7zu2o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E013C1F8AC8;
-	Fri, 12 Dec 2025 08:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D665299952;
+	Fri, 12 Dec 2025 09:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765528372; cv=none; b=EeX/rvrZr9yRxzuzaaIRRQ9kvcLzKupXE93lwhEfkr8oh2WmAM5ur4HGriEMqKzAa2vZdMlV3iDS/DLQHrTaERUyJNszkrpRPcItI2P6zpim9A1KymW4BlM3N+94SYTnvZY1SZSrx3TkaziyCMWykeKZzBari1WtsFcoD00pwi4=
+	t=1765531332; cv=none; b=ERj9rAS4Jd8fqjnEbVqCDjwYbOEL4ZtPjumqA//vcUWLwTlSo9b5B0WRQsoaKXBkz8tc7cv5XZyCqT9obUO/eaerVVeA4zbRkq+TXcLdFvJiR8WaDySBSdM+C7OL8pmO2z1MnsK8zUYN2K4JdpbFavp02UqT4gBtvGVFAbbpqtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765528372; c=relaxed/simple;
-	bh=SjBoF0HIch0XftTYs0vg5B8YNbR6ts9W+wUQ5MqOR1M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Os/GNW1AxYOp/asdqqADnqG7AKKw2Xb0q9REfxkGkNyozUMfTN5MBYEPUxe78EiKivLjupThPfJwcAs1BDLeS8NRokCg5k/ojMgoRz95sqrc3wwZOnffLgom8+dN0Kg+58MXlmL1zZz2lMOrIdbsGFAmTVKm2cSmbwY5Qij5lek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G+J2Rgc/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E071C4CEF1;
-	Fri, 12 Dec 2025 08:32:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765528371;
-	bh=SjBoF0HIch0XftTYs0vg5B8YNbR6ts9W+wUQ5MqOR1M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G+J2Rgc/LbZvf9enzhCCutocoEdO4ih1ULjjE2eAAcUZH+pHeV6Np3mbwlV4MVsz8
-	 0zKEZrzUl5GcMbip+IsmT5r51TydxMYoSULOj6WNoNiF5USR91y3tZfIP6CVSEhZvj
-	 6tpvrANhD1qRFDOm4NV2RfDp74C1i3xUpTXmlabMfpl1EbNqzx2uJAAGp/MvW45TYf
-	 OWY/mYAqxd2EcTiksbvz0zVg7qt0jhom/iAEtyjghsOJZleRh0PE4XflVVIpmrQujU
-	 G4CHPrgAXn+W6sfTII3S+nCT8dlXz3Y9DbzOnwVHVKTd2ExvkvvtktVc/92O+uAp7t
-	 ZjaqPrWAEE8CA==
-Date: Fri, 12 Dec 2025 08:32:46 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	Benson Leung <bleung@chromium.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	chrome-platform@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH v5 5/7] revocable: Add fops replacement
-Message-ID: <aTvTLpFmyVxanvYC@google.com>
-References: <20251021121536.GG316284@nvidia.com>
- <aPo6CZyT_IGWmu-O@tzungbi-laptop>
- <20251023145131.GI262900@nvidia.com>
- <2025102321-struggle-fraying-52ff@gregkh>
- <20251211032306.GO28860@pendragon.ideasonboard.com>
- <aTo-xErTTiJcribR@shikoro>
- <20251211080517.GA28411@pendragon.ideasonboard.com>
- <aTqCqab1pGB9LNZy@shikoro>
- <20251211134306.GC28411@pendragon.ideasonboard.com>
- <aTrZMJ8R6zybFNHR@google.com>
+	s=arc-20240116; t=1765531332; c=relaxed/simple;
+	bh=04tB4MdBbE3k8czrCSAhdUggbwlMaR9/T03/le8K7gY=;
+	h=Subject:To:CC:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=gMGYrgG+z0omjYDxbfUaLN64AUvVbiDh1tcUfBM6ttFwVR3tUpju8kAGDisIWTQrD4mhaKsITrefCwiTRRIRgyA1RMwTGL2lstvOe6b8SIQhyGwcMiVM0Q/Wg+qfUPFomBlyayrkt7YZp0sbfnAGLiHwEEz9wZVnw49P2jVbu30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=eBZ7zu2o; arc=none smtp.client-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=z4vPaiUk9n/GpIxutnAk0NTSeMO9iODdip7MeYu98yA=;
+	b=eBZ7zu2ox8ryH+r6AugMOCYGdskTgvt4HVyTB0sNWJZuu6AwqpHtUJ674NWi8oVHhZqLLb8Fe
+	9+6XJ13bHSi7juapcNkdSCOlj5bwH+XCJogKs9+MppIMgyb9nZajKcNlh/7ZzT71idEJ7zWb7e1
+	gwacD2hwUuyP493g1H7y+vg=
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4dSP686k3Dzcb0J;
+	Fri, 12 Dec 2025 17:19:12 +0800 (CST)
+Received: from kwepemk200017.china.huawei.com (unknown [7.202.194.83])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3634E180BD0;
+	Fri, 12 Dec 2025 17:21:57 +0800 (CST)
+Received: from [10.174.178.219] (10.174.178.219) by
+ kwepemk200017.china.huawei.com (7.202.194.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 12 Dec 2025 17:21:55 +0800
+Subject: Re: [PATCH v4 2/3] KVM: selftests: Test for KVM_EXIT_ARM_SEA
+To: Jiaqi Yan <jiaqiyan@google.com>
+CC: <maz@kernel.org>, <oliver.upton@linux.dev>, <duenwen@google.com>,
+	<rananta@google.com>, <jthoughton@google.com>, <vsethi@nvidia.com>,
+	<jgg@nvidia.com>, <joey.gouly@arm.com>, <suzuki.poulose@arm.com>,
+	<catalin.marinas@arm.com>, <will@kernel.org>, <pbonzini@redhat.com>,
+	<corbet@lwn.net>, <shuah@kernel.org>, <kvm@vger.kernel.org>,
+	<kvmarm@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+References: <20251013185903.1372553-1-jiaqiyan@google.com>
+ <20251013185903.1372553-3-jiaqiyan@google.com>
+ <3061f5f8-cef0-b7b1-c4de-f2ceea29af9a@huawei.com>
+ <CACw3F51mRXCDz7Hd4Vve98NoskhB2cSc88zAGfd6Hwr4uCBxPA@mail.gmail.com>
+From: Zenghui Yu <yuzenghui@huawei.com>
+Message-ID: <dbcfb853-5853-5967-1bf9-76c6b3839717@huawei.com>
+Date: Fri, 12 Dec 2025 17:21:55 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aTrZMJ8R6zybFNHR@google.com>
+In-Reply-To: <CACw3F51mRXCDz7Hd4Vve98NoskhB2cSc88zAGfd6Hwr4uCBxPA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemk200017.china.huawei.com (7.202.194.83)
 
-On Thu, Dec 11, 2025 at 02:46:08PM +0000, Tzung-Bi Shih wrote:
-> On Thu, Dec 11, 2025 at 10:43:06PM +0900, Laurent Pinchart wrote:
-> > On Thu, Dec 11, 2025 at 05:36:57PM +0900, Wolfram Sang wrote:
-> > > 
-> > > > > Isn't there even prototype code from Dan Williams?
-> > > > > 
-> > > > > "[PATCH 1/3] cdev: Finish the cdev api with queued mode support"
-> > > > > 
-> > > > > https://lkml.org/lkml/2021/1/20/997
-> > > > 
-> > > > I mentioned that in my LPC talk in 2022 :-) I think we should merge that
-> > > > (or a rebased, possibly improved version of it). I've meant to try
-> > > > plumbing that series in V4L2 but couldn't find the time so far.
-> > > 
-> > > Yes, you mentioned it in 2022 but maybe not everyone in this thread is
-> > > right now aware of it ;) The patch above got changes requested. I talked
-> > > to Dan very briefly about it at Maintainers Summit 2023 and he was also
-> > > open (back then) to pick it up again.
-> > 
-> > After discussing with Tzung-Bi today after his presentation (thank you
-> > Tzung-Bi for your time, it helped me understand the problem you're
-> > facing better), I wonder if this series is fixing the issue in the right
-> > place.
+On 2025/12/12 9:53, Jiaqi Yan wrote:
+> On Thu, Dec 11, 2025 at 5:02 AM Zenghui Yu <yuzenghui@huawei.com> wrote:
+> >
+> > I can also hit this ASSERT with:
+> >
+> > Random seed: 0x6b8b4567
+> > # Mapped 0x40000 pages: gva=0x80000000 to gpa=0xff80000000
+> > # Before EINJect: data=0xbaadcafe
+> > # EINJ_GVA=0x81234bad, einj_gpa=0xff81234bad, einj_hva=0xffff41234bad,
+> > einj_hpa=0x2841234bad
+> > # echo 0x10 > /sys/kernel/debug/apei/einj/error_type - done
+> > # echo 0x2 > /sys/kernel/debug/apei/einj/flags - done
+> > # echo 0x2841234bad > /sys/kernel/debug/apei/einj/param1 - done
+> > # echo 0xffffffffffffffff > /sys/kernel/debug/apei/einj/param2 - done
+> > # echo 0x1 > /sys/kernel/debug/apei/einj/notrigger - done
+> > # echo 0x1 > /sys/kernel/debug/apei/einj/error_inject - done
+> > # Memory UER EINJected
+> > # Dump kvm_run info about KVM_EXIT_MMIO
+> > # kvm_run.arm_sea: esr=0xffff90ba0040, flags=0x691000
+> > # kvm_run.arm_sea: gva=0x100000008, gpa=0
+> > ==== Test Assertion Failure ====
+> >   arm64/sea_to_user.c:207: exit_reason == (41)
+> >   pid=38023 tid=38023 errno=4 - Interrupted system call
+> >      1  0x0000000000402d1b: run_vm at sea_to_user.c:207
+> >      2  0x0000000000402467: main at sea_to_user.c:330
+> >      3  0x0000ffff9122b03f: ?? ??:0
+> >      4  0x0000ffff9122b117: ?? ??:0
+> >      5  0x00000000004026ef: _start at ??:?
+> >   Wanted KVM exit reason: 41 (ARM_SEA), got: 6 (MMIO)
+> >
+> > Not sure what's wrong it..
 > 
-> Thank you for your time too for providing me some more context.
-> 
-> > At the core of the problem is a devm_kzalloc() call to allocate
-> > driver-specific data. That data structure is then referenced from a
-> > cdev, which can dereference is after it gets freed. It seems that
-> > reference-counting the data structure instead of using devm_kzalloc()
-> > could be a better solution.
-> 
-> After discussing with you, I recalled this was one of my previous attempts.
-> See the series [1] and Greg's feedback [2].
-> 
-> I want to provide some more context about the cdev level solution.  I failed
-> to do so for misc device [3] mainly because all misc devices share a same
-> cdev [4].  If one of the misc device drivers "revoke" the cdev, all other
-> drivers stop working.
-> 
-> I'm not saying we shouldn't seek for cdev level solution.  But at least it
-> doesn't work for misc device.  Still need some other ways for misc devices.
-> 
-> [1] https://lore.kernel.org/chrome-platform/20250721044456.2736300-8-tzungbi@kernel.org/
-> [2] https://lore.kernel.org/chrome-platform/2025072114-unifier-screen-1594@gregkh/
-> [3] https://lore.kernel.org/chrome-platform/aQ1xfHuyg1y8eJQ_@google.com/
-> [4] https://elixir.bootlin.com/linux/v6.17/source/drivers/char/misc.c#L299
+> Does your test machine have SDEI or SCI enabled for host APEI? Do you
+> see any kernel log from "Memory failure:" saying hugetlb page
+> recovered, and recovered significant earlier than the KVM exit here.
+> It maybe the kernel has already unmapped hugepage in response to SDEI
+> or SCI before this test actually consumes memory error, so no SEA is
+> actually triggered.
 
-Continuing the context, the subsystem level solution for misc device without
-revocable could be more or less like the following patch.  Observed 2 main
-issues of it:
+No kernel log was printed when I saw this failure.
 
-1. Because it tries to synchronize the misc device and open files, it has a
-   big lock between them.  misc_deregister() needs to wait for all open files.
-   I think this is a common issue shared by "replacing file operations"
-   approaches.  All file operations are considered as critical sections.
-
-2. It doesn't stop existing open files.  UAF still happens when the dangling
-   FD tries to access the miscdevice (which should have been freed).
-
-diff --git a/drivers/char/misc.c b/drivers/char/misc.c
-index 726516fb0a3b..0ce415da10c2 100644
---- a/drivers/char/misc.c
-+++ b/drivers/char/misc.c
-@@ -115,6 +116,89 @@ static const struct seq_operations misc_seq_ops = {
- };
- #endif
-
-+static struct miscdevice *find_miscdevice(int minor)
-+{
-+	struct miscdevice *c;
-+
-+	list_for_each_entry(c, &misc_list, list)
-+		if (c->minor == minor)
-+			return c;
-+	return NULL;
-+}
-+
-+static __poll_t misc_some_poll(struct file *filp, poll_table *wait)
-+{
-+	struct miscdevice *c;
-+
-+	c = find_miscdevice(iminor(filp->f_inode));
-+	if (!c)
-+		return -ENODEV;
-+	if (!c->fops->poll)
-+		return 0;
-+
-+	guard(mutex)(&c->some_lock);
-+	if (!c->registered)
-+		return -ENODEV;
-+	return c->fops->poll(filp, wait);
-+}
-+
-+static const struct file_operations misc_some_fops = {
-+	.poll = misc_some_poll,
-+	.read = misc_some_read,
-+	.unlocked_ioctl = misc_some_ioctl,
-+	.release = misc_some_release,
-+};
-
-@@ -161,6 +245,7 @@ static int misc_open(struct inode *inode, struct file *file)
- 	replace_fops(file, new_fops);
- 	if (file->f_op->open)
- 		err = file->f_op->open(inode, file);
-+	file->f_op = &misc_some_fops;
- fail:
- 	mutex_unlock(&misc_mtx);
- 	return err;
-@@ -262,6 +347,8 @@ int misc_register(struct miscdevice *misc)
- 		goto out;
- 	}
- 
-+	mutex_init(&misc->some_lock);
-+	misc->registered = true;
- 	/*
- 	 * Add it to the front, so that later devices can "override"
- 	 * earlier defaults
-@@ -283,6 +370,9 @@ EXPORT_SYMBOL(misc_register);
- 
- void misc_deregister(struct miscdevice *misc)
- {
-+	scoped_guard(mutex, &misc->some_lock)
-+		misc->registered = false;
-+
- 	mutex_lock(&misc_mtx);
- 	list_del_init(&misc->list);
- 	device_destroy(&misc_class, MKDEV(MISC_MAJOR, misc->minor));
-
-diff --git a/include/linux/miscdevice.h b/include/linux/miscdevice.h
-index 7d0aa718499c..3b42cf273f97 100644
---- a/include/linux/miscdevice.h
-+++ b/include/linux/miscdevice.h
-@@ -92,6 +92,8 @@ struct miscdevice {
- 	const struct attribute_group **groups;
- 	const char *nodename;
- 	umode_t mode;
-+	struct mutex some_lock;
-+	bool registered;
- };
+Thanks,
+Zenghui
 
