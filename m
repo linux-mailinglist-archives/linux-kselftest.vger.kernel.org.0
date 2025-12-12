@@ -1,143 +1,94 @@
-Return-Path: <linux-kselftest+bounces-47541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF0CCBA00C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 23:59:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C327CBA132
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Dec 2025 00:57:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 50955306385F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 22:59:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D8F3430542C2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 23:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F2730BF62;
-	Fri, 12 Dec 2025 22:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CCB528DF2D;
+	Fri, 12 Dec 2025 23:57:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jVYH8cYG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wy6WXOEQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f73.google.com (mail-oo1-f73.google.com [209.85.161.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CF32F28F5
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 22:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA96418C2C;
+	Fri, 12 Dec 2025 23:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765580346; cv=none; b=R226Qolt3PSs/qmj63e0Hn5NH+Mcm3lFXGbjuraERX6V+wp06GmSBcAjR3xuZKGHZyyJSLOeDj8s7a+K//F0Ytacd2JOkTFYKsMHrRdgUq/OWqh6Ezq4GnXQ8+Yx4/ZL4EkIzOfT3T7iukV8fd2O2DHJbtOrbN59Ax9zY78FLTk=
+	t=1765583841; cv=none; b=XBGVhkT8FcJrgQq34UvV/mnv+vOVC8X2uHP+Bdf8cyF6eOiQ2d+99Y80yTb+n4jqSFhcrZUi42jQiX7iYTakLrBXgXHN+fsjx0GzSuHjbr46lsXBM3VSFHBp96L1gLavuQowuns8yw+lYxq4+YwBbgi2WA99XKh/PrjdfFRlcxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765580346; c=relaxed/simple;
-	bh=7bslInIBLJIoLn/9TutWUpr69eWhQhXaLvHEGWAesY0=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=KBGIxPM7pd0jrnp2FOgfqfYC0f97laLgaV6Gpx3Sjb87oSM8fMZFcyimaTzvHJtCbHVUdPZA4HAuBI0MUjEWdj+4ZZKgSA58dd6OCAScgZVrUCYoh1fdUzL1vo4zuZ2lCyc/7JXNcEuYzIjTZfw7DLELHRJ9+Yc2tqrBP0ZeRYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jVYH8cYG; arc=none smtp.client-ip=209.85.161.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-oo1-f73.google.com with SMTP id 006d021491bc7-65744e10b91so1391711eaf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 14:59:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765580343; x=1766185143; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=tBFcNzGChK01MBl7aRFxeqVQzmaQvoTyGJMrwZXP/1Q=;
-        b=jVYH8cYGDRhUhxifgajdZOsToCsIevvKQcPuHJqgeqiyM6J4bSKk0BbDSMvTeavxYF
-         46v35BE3mzyUckBVDyX+t6bFc8DQNE8G+5vaX9HSWEXgmXpuLsMilxVI5KQw7r1PUo0p
-         4+LO92YfEjdn8YqVDLcsrUATartyXsX/jv/3ZD6lOzAevAUxCE+EVLg7QWkenEan6MqD
-         9t4HbQyC7yg2YTsc7Kx2uww4W4M1PUdkSL33bN6hRwFbPnAzU5dNB3wCeu+7UftOKj4A
-         /YGInhe8GfSUS4xpKoTEb36c4TvW1doFr4iEHeC3nMEiTR0zqs7zcsAXaYloao3f7CPH
-         W6hA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765580343; x=1766185143;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tBFcNzGChK01MBl7aRFxeqVQzmaQvoTyGJMrwZXP/1Q=;
-        b=p+gpXVtAMTGoG6aKkahjsmzIOtJW2q8YBB49w6ChfflSDypCclbtK7hsyAVUD5eyW4
-         //4l5ZXbEl7sNgFpS9zYvVjBkpfRSF5mZYTn2M5Jig+qCp3Hn48ORzVKCgUO85pHVR4b
-         AFZx/g8JsWSLEx74+rAETqP99dqw6gZAUx14qFQBpy3xcxDNyqaSd7/D6kdOFsQ/oj4y
-         EsJ8KKQ1J9UKkllzdNWMdmbyeeHrGHuKVYj7RmZ4e1xWkwWi2AFpf3lBUmfIYVBg1XFa
-         KYn777BONgb086If/6GmtvRNzwSsBTjIkvua3AZGIooLhrf0lvncDnh6y5iBZPXMVjBJ
-         nvtw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/p7LXZ6gp3jjAlV8PNNRG2tvyPVXPgmqWpTMIJRV+s97nGUMaPYmX9j/i7+3gqC4oQPRVNxE1CGZrAZ9AD6U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZhAoappy6gwg9gZukXI57nWIcxrt5JSgt219m1D5zqt0JVqq3
-	ZfOE5kEhbj4f9BVctpXYcB08ln201Z5Zhn73/SOSQV0QFekZUYxb6AOCdwsotMBzpyuGNc4xT5M
-	tU+s2WUQrl2WGH+vvX6XmNROygg==
-X-Google-Smtp-Source: AGHT+IErW9ttpylPAKTVb6sUEZwG4YGY35EKiSdiqsCWGntNWnLEEqDhx+071F1DfXt8IYeJCob+cCIIDVfcvHekjQ==
-X-Received: from ilbbc25.prod.google.com ([2002:a05:6e02:99:b0:434:972f:bf92])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6820:1886:b0:65b:35a2:7a8b with SMTP id 006d021491bc7-65b4523911emr1339446eaf.82.1765580342788;
- Fri, 12 Dec 2025 14:59:02 -0800 (PST)
-Date: Fri, 12 Dec 2025 22:59:01 +0000
-In-Reply-To: <aTipeb2fAmUtSzzX@kernel.org> (message from Oliver Upton on Tue,
- 9 Dec 2025 14:58:01 -0800)
+	s=arc-20240116; t=1765583841; c=relaxed/simple;
+	bh=PZVjRldkunoNGINIT/nt2MXiPRPv7k8noqm6t1X0Bv8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fdX1gzI5hi19iYen4Aim7CafpGjeZToVS+XVw7Y2FjJMUzjSGX7t42o469PPZTICGvh6MkUccq1AwBWTfG0l/bdQzaljtigz0/fisulg00BS3QngJQ1FrnNhpF2u0KJSsSKuUKPNGz2HmyxdsZdRkytYL/1v8zS+2VWlY4JXy6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wy6WXOEQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A180BC4CEF1;
+	Fri, 12 Dec 2025 23:57:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765583840;
+	bh=PZVjRldkunoNGINIT/nt2MXiPRPv7k8noqm6t1X0Bv8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Wy6WXOEQSdT9WD4jekzMMRAh4PKNWPnLUkfe57ABEqRtLbSdgmF5HALwXec7/4K2Y
+	 TC9qVEp+y/MJJRQI5YnCXBh1rHxzpjf9Bv9/pgIaufZZamgYE/qaLCd0ThvWoMM5sG
+	 NajAAli6ha662QrbjCnX+2R9cZ9ISw7OyWe6x+GTrs1BxpfZyQ1hIEdOcq5WX7SQ8L
+	 zYqfdNgc73lP8AHaRtnxaXHLDijlBLSA8Uh7HkyRaQ9oqaW7ObRaAq/QfCb6P4PA6e
+	 A1fHflxzc6/XH2NIhZAw1gdWwn5R1fIZLMIosB+cX1weBWTusEeQqJYdeYwm9NhI+r
+	 n816fVzEar3qA==
+Date: Sat, 13 Dec 2025 08:57:13 +0900
+From: Jakub Kicinski <kuba@kernel.org>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
+ Corbet <corbet@lwn.net>, Michael Chan <michael.chan@broadcom.com>, Pavan
+ Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, Shuah Khan <shuah@kernel.org>, Mina Almasry
+ <almasrymina@google.com>, Stanislav Fomichev <sdf@fomichev.me>, Yue Haibing
+ <yuehaibing@huawei.com>, David Wei <dw@davidwei.uk>, Haiyue Wang
+ <haiyuewa@163.com>, Jens Axboe <axboe@kernel.dk>, Joe Damato
+ <jdamato@fastly.com>, Simon Horman <horms@kernel.org>, Vishwanath Seshagiri
+ <vishs@fb.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ io-uring@vger.kernel.org, dtatulea@nvidia.com
+Subject: Re: [PATCH net-next v7 4/9] net: let pp memory provider to specify
+ rx buf len
+Message-ID: <20251213085713.087c028e@kernel.org>
+In-Reply-To: <878759ec-f630-4961-a17f-6355df26507f@gmail.com>
+References: <cover.1764542851.git.asml.silence@gmail.com>
+	<0364ec97cc65b7b7b7376b98438c2630fa2e003c.1764542851.git.asml.silence@gmail.com>
+	<20251202110431.376dc793@kernel.org>
+	<878759ec-f630-4961-a17f-6355df26507f@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsnt5xab2toq.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v5 22/24] KVM: arm64: Add KVM_CAP to partition the PMU
-From: Colton Lewis <coltonlewis@google.com>
-To: Oliver Upton <oupton@kernel.org>
-Cc: kvm@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
-	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
-	maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Oliver Upton <oupton@kernel.org> writes:
+On Thu, 11 Dec 2025 01:31:09 +0000 Pavel Begunkov wrote:
+> > Also RX_PAGE_SIZE is a better name for the fields? RX_BUF_SIZE
+> > is easy to confuse with RX_BUF_LEN which we are no longer trying
+> > to modify.  
+> 
+> It's not "page" because there are no struct page's, and those are
+> just buffers. Maybe it's also some net/driver specific term?
+> I don't get the difference here b/w "size" and "len" either, but
+> in any case I don't really have any real opinion about the name,
+> and it can always be changed later.
 
-> On Tue, Dec 09, 2025 at 08:51:19PM +0000, Colton Lewis wrote:
->> +
->> +7.245 KVM_CAP_ARM_PARTITION_PMU
->> +-------------------------------------
->> +
-
-> Why can't this be a vCPU attribute similar to the other vPMU controls?
-> Making the UAPI consistent will make it easier for userspace to reason
-> about it.
-
-I'm confused by the inconsistency of using a vCPU attribute for
-something we want to affect the whole VM.
-
-But I'll do a vCPU attribute if you want.
-
-> Better yet, we could make the UAPI such that userspace selects a PMU
-> implementation and the partitioned-ness of the PMU at the same time.
-
-Sounds good.
-
->> @@ -132,6 +134,16 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->>   		}
->>   		mutex_unlock(&kvm->lock);
->>   		break;
->> +	case KVM_CAP_ARM_PARTITION_PMU:
->> +		if (kvm->created_vcpus) {
->> +			r = -EBUSY;
->> +		} else if (!kvm_pmu_partition_ready()) {
->> +			r = -EPERM;
->> +		} else {
->> +			r = 0;
->> +			kvm_pmu_partition_enable(kvm, cap->args[0]);
->> +		}
->> +		break;
->>   	default:
->>   		break;
->>   	}
->> @@ -388,6 +400,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,  
->> long ext)
->>   	case KVM_CAP_ARM_PMU_V3:
->>   		r = kvm_supports_guest_pmuv3();
->>   		break;
->> +	case KVM_CAP_ARM_PARTITION_PMU:
->> +		r = kvm_pmu_partition_ready();
-
-> "ready" is very confusing in this context, as KVM will never be ready to
-> support the feature on a system w/o the prerequisites.
-
-That was a last minute addition. I'll change the name to something
-better.
-
-> Thanks,
-> Oliver
+RX_BUF_LEN is the existing config options which we were trying to use
+initially. We're not following that approach any more. The thinking
+about page is that we're replacing the device pages (rather than host
+struct page), in bnxt we're replacing a define called
+BNXT_RX_PAGE_SIZE. I suspect we'd be doing a similar replacement
+in most drivers, replace some define / math they have based on PAGE_SIZE
 
