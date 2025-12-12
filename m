@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-47472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47473-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69558CB7C23
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 04:26:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEA4BCB7C2C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 04:27:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2D4D230133AF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 03:25:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 26A8A3044859
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 03:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4F22FFDFF;
-	Fri, 12 Dec 2025 03:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8D83002B5;
+	Fri, 12 Dec 2025 03:25:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="FLmOI9Vk"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="QqQ3t8OE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-210.mail.qq.com (out203-205-221-210.mail.qq.com [203.205.221.210])
+Received: from out203-205-221-236.mail.qq.com (out203-205-221-236.mail.qq.com [203.205.221.236])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE542F8BC8;
-	Fri, 12 Dec 2025 03:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 993402BDC33;
+	Fri, 12 Dec 2025 03:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.236
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765509933; cv=none; b=KmaQQc8FfaYlBK4DfetQVaC6nAjzzYXN5i+WZzaAQt9ATUpjiT3UdDSNf8OkUoDNaKqbKwQvdNs/Suf+qiYAEC7R6VLr983KqZDKe0isrtvXlpKoN9EaWGwHLOPMhstysBNxiYSI/eskh9QZv5vUbNymusc/P6ftv9jKIi6GruA=
+	t=1765509940; cv=none; b=CMbn4W3GUiIAlXarOO6GrHkqeOkEL9TUMmpvB7d8EEMaSDjbuXlnnGXoE9XxzFGTnmoUFr02o+3vF3ElfckTHnMAsfPrtvuCn5cDcZCIKJv56LnzfmiONmxJyWNA81KFXKOcPhuYu9k8waFfbFBGwnowVtXh6uzWXwixcqh9yso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765509933; c=relaxed/simple;
-	bh=Q9Dt8zcXiFFbcg9AaMquAPxodgc5EtsCma0SZrxjPgg=;
+	s=arc-20240116; t=1765509940; c=relaxed/simple;
+	bh=rnpDRseKuu1oN8cp3YcqKaQfXZngEhiYuWq2pbqtt18=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=LybRF8bCLzPUtsUDN3VGniGausJFNVds/sPQxEOrN1OwQlwrxr0Qjrjg0dZ/+k/x/pg33bpSyJY/dUNMk4QgWuEE2jXC1jsHIcuXJ26qrft8Ev8TQ0ymjbjGZcz7PIbTJPVnARpP2lBnaWnfo1eSh35Kzjzz7SNq6oISaz+1Qms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=FLmOI9Vk; arc=none smtp.client-ip=203.205.221.210
+	 MIME-Version; b=hBBMRxWpAwfV0EW822vDubBgSV8KDeYEDhl4Yooz1wxCRZO8Fmty1zrG5e1f+MueikDZKTd3xMpLRpJanKOZg9SlD+NTPNAiZ7uTDl5wNIUPvZe1Ji8tNB7Kqk66wQav1z4SDuM5wA5tYjwXRvkKmngvA/7LnKi5Z29XWPKQnyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=QqQ3t8OE; arc=none smtp.client-ip=203.205.221.236
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1765509912;
-	bh=PfKTM9YgO72StMOXeVof7To4faRXvcAqJFGn8si/NpE=;
+	s=s201512; t=1765509925;
+	bh=t1EEodWpGoWnLWEjGc4KI0PlVkqXQi/P4R9mrlY7TsA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=FLmOI9VkUrXlDGCd63Ktut57BvK0+vhMYcI+dF/R3cfciL3YgXtqbVRVJCyx9glR3
-	 xZUY8Y+mnV97fJxByPNMTR74VDGDcEmTcLex/sl4DJkJMTdtJKGjPat+//xuL4OWju
-	 QKmPLNsLVvK6bjyGEo3G/WXy7MsyTDTZFYFJO8Iw=
+	b=QqQ3t8OECn3YJJlfe/idNW6IM0P/opHeUJZjyZe3fz7qlfoHkeHpXo4CwobfRft6S
+	 omu0auBudUgGj7mC5KPxyqPsPo2YA6RmHBkq+bJ/EcsgGF9QVBVZMYTJepGQOvkTcS
+	 yBF7metCq/RC/yH6nWegd2VY4i4CnUizhVUeG+jU=
 Received: from meizu-Precision-3660.meizu.com ([14.21.33.152])
-	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
-	id 6490C8D9; Fri, 12 Dec 2025 11:25:09 +0800
-X-QQ-mid: xmsmtpt1765509909tn6u96rrw
-Message-ID: <tencent_7DA95D2C454DDCF1E381AE2EE7F7793A5F08@qq.com>
-X-QQ-XMAILINFO: OIJV+wUmQOUAdhwvCmJC9UnurEtbtGWLtP5D3BlrF7Y9xZghT1i/8wHWvswme0
-	 OgLdlXUTzS25H2js3MegDq25De3v5okQsUIRWZBOuKT5zv8rSjuh8bj7c4fuu+DTw9E/ygH67EkX
-	 4CJbO6w4z786Bdvgv2uGue5GMkMtvjZ0xOuzA9aWyGFisZd8HlLnRfRir2Ej+SVoT4Y9lSwRSVLv
-	 t9VNQ3cWXXjBd4IdwVxTLYEv+pG3gB2cxDIRi93LIOqqDyQFemWLAnZeNaozi5/u9WZua9KQoJpW
-	 JdzSoEgCUVa9TdAlK8RUKGw7Mxnyih+TvNRNXSEjtYsXs1IhgMEJ5jo3KDIJ679T4iq7YLKt3fT9
-	 n5tF5nlKdDKb/jadXbgFXYGdgAvQFiGwrgm+JL5wmXsWh6PuRuQPK5H/++wTEfv7XCtwRQh3xBZy
-	 0E6za12iLvMHAeyBSRy4ivn/UKn2G4RVeHZWnEAYn5+hlwnz3pxKO4HmpXgBWrIH/TxqN3liTZZv
-	 FlsxcV+Ii9AdZF2iHSN7lott32hvfsNIjUSN2oCEuLjNi3gAyo4jt7Onl4fZlOSSYYNcTKmR3LfU
-	 ZIgLF0433PE5hRhFPDWC/rBcHD+UnZ3uq9DI99yDjrBWmLdjRJf9Olk1JR1BfY5OJHlCX3iaR49D
-	 0dGeaj217wXPfi21e6U2DJIR8cQyYQwpEKEdqcLaV6ylwGGD8XL8h0TRXxakLo8L0nFf31JDqUQ+
-	 y5LeTFQcokykcELu/6xBTZJ+W9tO/2MAhVaJmZuK6uR14644szUjmj0tXFrpGvL3o/mM2dndEty9
-	 AJH+56Nl8xY2KTGerQT9muQczJBaXcxmDn03op8vegXGw6G+3/Ezs+WjYyx6Iv2toww6XuKnpC1Y
-	 xi9AkW/vwFZvOWNRQF0l3G5G08ztTteqH15WV/ZrXNP/DeZZRoPoDq6WsX1chsPy7WNvvQwZxl2D
-	 yKPIK6kffB4mIDCdY2z3cnRSBlHXC0LzpF4wEPOC/3+EplQ+QWkV4Lgpdg1L70Su4jZpVheY+xSH
-	 v6bILJuPa5C9cmSuHh9gGb4qjIEh5SuBA5kFyHULzmtsbN6j0dcy9yhbhsVRC66asH2BElPlz4tm
-	 pKehwZ
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
+	id 6550C291; Fri, 12 Dec 2025 11:25:21 +0800
+X-QQ-mid: xmsmtpt1765509921tyekpd4jx
+Message-ID: <tencent_FD541759D11337DCF8B2EBCE79435EF21706@qq.com>
+X-QQ-XMAILINFO: NsQpel/Jbc8WVc6udj2FQ5rYW7aNg1fLRhgfjUiq26lolWIRdGhDwwv4VWoq7/
+	 jIOt+q9kFAhManen0WnriHXYXfSk6tegRfh98AIEmGSoQVaqFylM01A7jUjJCVKfsIT3wTb/BHV+
+	 0Rz6Zw35ULVauyB5LHvKo7MQX+Xt1jlvcR0BYGVu9aquzRRn5kRDPv/mA6lBeZFXc5F5RU11QqTn
+	 hXZlvVZeD5PjPG5sDZ5bo6flizX9XyFEjVX5Bot2DTTAN0Sxj9TkpIobaR3KMBVCg20oM9mmAkaf
+	 zueNjLFTr3rtcbuBQpnR5lT7QN9r4/lvSY3ikwrcKpUFYt6gNZLOZfRvsKzjvEkhx50Mkh1fd2pU
+	 kTk9D3pq8qY7rIi37bK0+CcnMNYiK5BQW+2qIy4FWCw+7dwKC/t9sNmNx5ZSidS72mq6Augd60sj
+	 zG4vOeUPRGG5u6mE96BEMhjt9pTlAlLNhP0g4dphBSMTbgSloaQGOfEDX8eTiJ25tsZDbShGMyVq
+	 jQkOYPyP/040niqlLIqnOK4/powCvyv14/jfpQwxzXQ0H437iKaR8PojG3qO8tYL6P4/xRpGJ7NT
+	 MnJ3HTzBBEcBtRUrl8/baUuNGNCmhkA4IZYJsiA083uyz0uaD2YaU0JPH6M0c14zr38kO1cXUpE/
+	 Ex7Yc2izU1Ph3+S5BSzUqe2vxngcjx05ANbQehCeHDX2hvNyKx54OMYJfaL5DnC178k95dTARgI1
+	 0wUdLjDRPTqepokD2gPCZ40AEsIluONnzx4OfzVVFWx+k9XkJgkohRUa4Cr2fFY5T0lUZOsI9n+C
+	 RqIMFjxLVeaXjMVLXCnQcwCaoN6rtKm9NoLpHcUEKP8elGWgii3dJs/8/9PkPSAaSz4NEMju/QjW
+	 FC9obwZfV3BgXltwDZEtdDm6T/lb59bvAS3SCibsPHxOk+xEJHJYN1iEg2HqjtbzU271clB0lI0b
+	 P9y2UabTWqjL+GOkEZylgpEBAlVE1WuWQRaoKjO79ETfcCAGvEaLaKL9B5+dy/uTnNUh7nKafXK4
+	 4vVpeBVON2cdL29xcJ7ZOj1PBCVNyZ7ZUtA1gRWP/PGLV8brpRp4pPM7uUnhAedJFqssQZoIAR+1
+	 UKc4UnpqW1lGwVHgomsLuTpas9kD/TUwegA9Mj
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
 From: Yuwen Chen <ywen.chen@foxmail.com>
 To: ywen.chen@foxmail.com
 Cc: andrealmeid@igalia.com,
@@ -77,10 +77,11 @@ Cc: andrealmeid@igalia.com,
 	peterz@infradead.org,
 	shuah@kernel.org,
 	tglx@linutronix.de,
-	usama.anjum@collabora.com
-Subject: [PATCH v2 3/5] selftests/futex: read atomic variable value with atomic_read
-Date: Fri, 12 Dec 2025 11:25:07 +0800
-X-OQ-MSGID: <20251212032507.1842436-1-ywen.chen@foxmail.com>
+	usama.anjum@collabora.com,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 4/5] selftests/futex: introduce the declaration of atomic_t from types.h
+Date: Fri, 12 Dec 2025 11:25:19 +0800
+X-OQ-MSGID: <20251212032519.1842463-1-ywen.chen@foxmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <tencent_E8629E1FE67D7F457479179170238F07B90A@qq.com>
 References: <tencent_E8629E1FE67D7F457479179170238F07B90A@qq.com>
@@ -92,107 +93,120 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Directly reading the internal value of atomic_t externally does
-not meet the encapsulation requirements. A new function
-atomic_read is added to obtain the value of an atomic variable.
+Introduce the header files specifically prepared for test programs
+from the tools/include directory. And solve the problem that
+atomic_read and atomic_set may not be safe in a multi - threaded
+environment.
 
 Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202512112344.gsyPl2ag-lkp@intel.com/
 ---
- .../selftests/futex/functional/futex_requeue_pi.c    | 12 ++++++------
- .../functional/futex_requeue_pi_signal_restart.c     |  4 ++--
- tools/testing/selftests/futex/include/atomic.h       | 12 ++++++++++++
- 3 files changed, 20 insertions(+), 8 deletions(-)
+ .../selftests/futex/functional/Makefile       |  2 +-
+ .../testing/selftests/futex/include/atomic.h  | 25 +++++++++----------
+ 2 files changed, 13 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi.c b/tools/testing/selftests/futex/functional/futex_requeue_pi.c
-index f299d75848cd4..5d845b052891b 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue_pi.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue_pi.c
-@@ -201,7 +201,7 @@ void *broadcast_wakerfn(void *arg)
- 	int i = 0;
+diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
+index 490ace1f017e8..8589917a4b126 100644
+--- a/tools/testing/selftests/futex/functional/Makefile
++++ b/tools/testing/selftests/futex/functional/Makefile
+@@ -2,7 +2,7 @@
+ PKG_CONFIG ?= pkg-config
+ LIBNUMA_TEST = $(shell sh -c "$(PKG_CONFIG) numa --atleast-version 2.0.16 > /dev/null 2>&1 && echo SUFFICIENT || echo NO")
  
- 	ksft_print_dbg_msg("Waker: waiting for waiters to block\n");
--	while (waiters_blocked.val < THREAD_MAX)
-+	while (atomic_read(&waiters_blocked) < THREAD_MAX)
- 		usleep(1000);
- 	usleep(1000);
+-INCLUDES := -I../include -I../../ $(KHDR_INCLUDES)
++INCLUDES := -I../include -I../../ $(KHDR_INCLUDES) -I../../../../include
+ CFLAGS := $(CFLAGS) -g -O2 -Wall -pthread -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64 $(INCLUDES) $(KHDR_INCLUDES) -DLIBNUMA_VER_$(LIBNUMA_TEST)=1
+ LDLIBS := -lpthread -lrt -lnuma
  
-@@ -218,7 +218,7 @@ void *broadcast_wakerfn(void *arg)
- 		ksft_exit_fail_msg("FUTEX_CMP_REQUEUE_PI failed\n");
- 	} else if (++i < MAX_WAKE_ITERS) {
- 		task_count += args->ret;
--		if (task_count < THREAD_MAX - waiters_woken.val)
-+		if (task_count < THREAD_MAX - atomic_read(&waiters_woken))
- 			goto continue_requeue;
- 	} else {
- 		ksft_exit_fail_msg("max broadcast iterations (%d) reached with %d/%d tasks woken or requeued\n",
-@@ -247,13 +247,13 @@ void *signal_wakerfn(void *arg)
- 	int i = 0;
- 
- 	ksft_print_dbg_msg("Waker: waiting for waiters to block\n");
--	while (waiters_blocked.val < THREAD_MAX)
-+	while (atomic_read(&waiters_blocked) < THREAD_MAX)
- 		usleep(1000);
- 	usleep(1000);
- 
--	while (task_count < THREAD_MAX && waiters_woken.val < THREAD_MAX) {
-+	while (task_count < THREAD_MAX && atomic_read(&waiters_woken) < THREAD_MAX) {
- 		ksft_print_dbg_msg("task_count: %d, waiters_woken: %d\n",
--		     task_count, waiters_woken.val);
-+		     task_count, atomic_read(&waiters_woken));
- 		if (args->lock) {
- 			ksft_print_dbg_msg("Calling FUTEX_LOCK_PI on mutex=%x @ %p\n",
- 			    f2, &f2);
-@@ -293,7 +293,7 @@ void *signal_wakerfn(void *arg)
- 		args->ret = task_count;
- 
- 	ksft_print_dbg_msg("Waker: exiting with %d\n", args->ret);
--	ksft_print_dbg_msg("Waker: waiters_woken: %d\n", waiters_woken.val);
-+	ksft_print_dbg_msg("Waker: waiters_woken: %d\n", atomic_read(&waiters_woken));
- 	pthread_exit((void *)&args->ret);
- }
- 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-index e34ee0f9ebccd..29f93916b46da 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue_pi_signal_restart.c
-@@ -70,7 +70,7 @@ int create_rt_thread(pthread_t *pth, void*(*func)(void *), void *arg,
- void handle_signal(int signo)
- {
- 	ksft_print_dbg_msg("signal received %s requeue\n",
--	     requeued.val ? "after" : "prior to");
-+	     atomic_read(&requeued) ? "after" : "prior to");
- }
- 
- void *waiterfn(void *arg)
-@@ -83,7 +83,7 @@ void *waiterfn(void *arg)
- 	old_val = f1;
- 	res = futex_wait_requeue_pi(&f1, old_val, &(f2), NULL,
- 				    FUTEX_PRIVATE_FLAG);
--	if (!requeued.val || errno != EWOULDBLOCK) {
-+	if (!atomic_read(&requeued) || errno != EWOULDBLOCK) {
- 		ksft_test_result_fail("unexpected return from futex_wait_requeue_pi: %d (%s)\n",
- 		     res, strerror(errno));
- 		ksft_print_dbg_msg("w2:futex: %x\n", f2);
 diff --git a/tools/testing/selftests/futex/include/atomic.h b/tools/testing/selftests/futex/include/atomic.h
-index 428bcd921bb53..c0dccb1b966ba 100644
+index c0dccb1b966ba..b23e1a50949a7 100644
 --- a/tools/testing/selftests/futex/include/atomic.h
 +++ b/tools/testing/selftests/futex/include/atomic.h
-@@ -76,4 +76,16 @@ atomic_set(atomic_t *addr, int newval)
+@@ -18,9 +18,8 @@
+ #ifndef _ATOMIC_H
+ #define _ATOMIC_H
+ 
+-typedef struct {
+-	volatile int val;
+-} atomic_t;
++#include <linux/types.h>
++#include <linux/compiler.h>
+ 
+ #define ATOMIC_INITIALIZER { 0 }
+ 
+@@ -30,36 +29,36 @@ typedef struct {
+  * @oldval:	The expected value of the futex
+  * @newval:	The new value to try and assign the futex
+  *
+- * Return the old value of addr->val.
++ * Return the old value of addr->counter.
+  */
+ static inline int
+ atomic_cmpxchg(atomic_t *addr, int oldval, int newval)
+ {
+-	return __sync_val_compare_and_swap(&addr->val, oldval, newval);
++	return __sync_val_compare_and_swap(&addr->counter, oldval, newval);
+ }
+ 
+ /**
+  * atomic_inc() - Atomic incrememnt
+  * @addr:	Address of the variable to increment
+  *
+- * Return the new value of addr->val.
++ * Return the new value of addr->counter.
+  */
+ static inline int
+ atomic_inc(atomic_t *addr)
+ {
+-	return __sync_add_and_fetch(&addr->val, 1);
++	return __sync_add_and_fetch(&addr->counter, 1);
+ }
+ 
+ /**
+  * atomic_dec() - Atomic decrement
+  * @addr:	Address of the variable to decrement
+  *
+- * Return the new value of addr-val.
++ * Return the new value of addr-counter.
+  */
+ static inline int
+ atomic_dec(atomic_t *addr)
+ {
+-	return __sync_sub_and_fetch(&addr->val, 1);
++	return __sync_sub_and_fetch(&addr->counter, 1);
+ }
+ 
+ /**
+@@ -67,12 +66,12 @@ atomic_dec(atomic_t *addr)
+  * @addr:	Address of the variable to set
+  * @newval:	New value for the atomic_t
+  *
+- * Return the new value of addr->val.
++ * Return the new value of addr->counter.
+  */
+ static inline int
+ atomic_set(atomic_t *addr, int newval)
+ {
+-	addr->val = newval;
++	WRITE_ONCE(addr->counter, newval);
  	return newval;
  }
  
-+/**
-+ * atomic_read() - Atomic read
-+ * @addr:	Address of the variable to read
-+ *
-+ * Return the value of addr->val.
-+ */
-+static inline int
-+atomic_read(atomic_t *addr)
-+{
-+	return addr->val;
-+}
-+
+@@ -80,12 +79,12 @@ atomic_set(atomic_t *addr, int newval)
+  * atomic_read() - Atomic read
+  * @addr:	Address of the variable to read
+  *
+- * Return the value of addr->val.
++ * Return the value of addr->counter.
+  */
+ static inline int
+ atomic_read(atomic_t *addr)
+ {
+-	return addr->val;
++	return READ_ONCE(addr->counter);
+ }
+ 
  #endif
 -- 
 2.34.1
