@@ -1,248 +1,187 @@
-Return-Path: <linux-kselftest+bounces-47474-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21707CB7C38
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 04:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B66D7CB7CBC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 04:50:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B59B5305F321
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 03:26:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9F8683015AA7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 03:50:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 770FD3009E3;
-	Fri, 12 Dec 2025 03:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D3D21C9EA;
+	Fri, 12 Dec 2025 03:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="rABEoZXS"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OBFwxoTJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E24D2D0C85;
-	Fri, 12 Dec 2025 03:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.192
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FB22AD3D;
+	Fri, 12 Dec 2025 03:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765509946; cv=none; b=pIa3N6NIMNpVJncRNMhMU5D0RpKnSKeo+JNsHbjQogmtgIep2jyq+eW4NPH5xxM7YAKB0ZY8j1nxQduBYUd/HJWa0rN8Rivum6EpNLQcgLDsczgXnnji8F0mNslrn3HrLo2NH6knk0PC6CuWn9ukw/7Lq4oQkbRJTJArip0wFBM=
+	t=1765511400; cv=none; b=WXlpw6FS92OQPHcuhmc2IaGU0/d2DJgeAoOH7VkAcj0SlKn8y9UMDeiAraPC8cLC64rLxQYlYg4cwf5XMS5yoO6V/fM6qndBLD52jWMbkwKetOJLQ3f69FakoU13JXBA0KsETW41KiBRQEPCuImsgk9o+6egGsJbiCMJThieMlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765509946; c=relaxed/simple;
-	bh=Nex/oon8j7jao0rAiMT18+Qlahb70pnvBFyuLcCfMtc=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=sakZeuWhjIAKVcVNVetoScdonIwMWqxDDGX3vVTiV7LX5cZhcHMSsdbOnvMNZcQ6QnsojT8sICziX69uDO/hw3aqNsBJF8w6c+gveYNr+RajolAMj9uL0VjCmbD1hFPXcxIWsqROLLe6egQpzZMqB8pfFqm//Rf37NZKg2lR6yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=rABEoZXS; arc=none smtp.client-ip=203.205.221.192
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1765509937;
-	bh=QK3nE1ne7aea/LyPtdjql3srPWIhxJ56KdqwzowyUvM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=rABEoZXS/iZZ06TQXz4JRJIS0v4lmJ013Ah+Dq5Xk5vZkeVYEziugQGsK4zDDgfwA
-	 Mr+NWac/qywBu12QmmNZVUD0iE+uRmctIyyUchq81Pu9jSFqwSj0wa6iwdcLGhddC4
-	 jKkFWxoG8viWksuGDmGAJ/QYoEKwVSf2XJBhedpA=
-Received: from meizu-Precision-3660.meizu.com ([112.91.84.72])
-	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
-	id 661906EA; Fri, 12 Dec 2025 11:25:33 +0800
-X-QQ-mid: xmsmtpt1765509933tfdq12r78
-Message-ID: <tencent_52B929C6A35C2BCE33F3F2BEF4BAA48A4409@qq.com>
-X-QQ-XMAILINFO: NXu+3P8uW1MUEv+H/F6HGCU2EvaME7SX3ol31+NZMZH5H4z0YN4PGf25oh3DZP
-	 qrNoEwRPgOlym9OY1dfS961s6R5w7Zc8hdK9rzHqGG10GUZ9M18BWLmdDnTr3UkvZO8zn3zr86Se
-	 nWMMAKEBTKtTxudBghmBhVgh1g6ZXPOS0l77MByfLs+Dlq3qARshcyIWCztzaKzQ//BTMahSrF+K
-	 YXln1qWRQVDJZxCh9ONnnCaRGZmDvkADBg+oz2x0xNd+hNedDHgyq5iGB0fXST8vbty0vRnY4mgv
-	 Z+qxnzT6WIrHp9WTAL7bcjl6bo2YMmG4ZyoCUnSBL114LWE5T9zhBs0kp7+mnkyJ/iAjhC8Q4ss5
-	 D7dSVFyNmxj680so1bNAjU6p2LTJBTd9geG4WgEQxR+q+uFdKKfI6S2PK5T4qcbisp44Bud2KZo5
-	 MPlqlsKbRXa0SF5Du6z65Hz8wBoF6v+TFnIzSqSmrKmDisTAJq/wEaK1By0oherpXGkJaWD8vDTq
-	 /FdBLnOku2LYXh3IdkK/KO9PczU6+zNN720QtEfnQGjXpceDbrCdvdRYoG0vY9SBKNWngEB/bAre
-	 H4gCDnlLtOrpS/XdXihaDEbb30xXBSYZtJIKPo0pKUjOtlP0gFtHNtVLkke4ctY1vRFU4VaTzQU5
-	 M8DgxZEVWnHnmfMEfuqlf+MXXsvyVEkNmb0EcgcaZQs+++c+OzjCNEb9I4Pq74kAgUUBMPcT7ONA
-	 0s7Bo0Xebb7a50vKsjEHkMVtebGU1/G4Ks8IEcJBDgGtYS/68FEnTKkgWRoye5RlzCsYFSZw8kgR
-	 wznkj0FPHM5WY0GvToPg41Ny9b5iiLbim48TGClsCn2gzmsERi7HVO5CeY1Jjo7eELWQ6Gn4wupS
-	 BR5Wfw07NNqVNMrEiqV+Z722jw0vT5VP3e4MAIEu1ZDiWIE2FkmFBLzCfyx50rQOlkezWgQrSRed
-	 J8w176cqLr6u9WEYmUiO8pg0ZjbnIIuxFISYifJWNk6blquIFTU0EeU55Tem6GlGfgfHZXPIhxw5
-	 BrsD5MTAJFTBg1SEF3ecy/G0RpsLVQnwOVV5b4q7qcgxXakkjcS/o52qWt13nujifeo/xJJQKYSw
-	 fMB0t+etVp7s013dKT2e2ovx8RIGk84fPupPBrq3B2mukF4skq54mv4bEUzQ==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-From: Yuwen Chen <ywen.chen@foxmail.com>
-To: ywen.chen@foxmail.com
-Cc: andrealmeid@igalia.com,
-	bigeasy@linutronix.de,
-	colin.i.king@gmail.com,
-	dave@stgolabs.net,
-	dvhart@infradead.org,
-	justinstitt@google.com,
-	kernel-team@android.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	luto@mit.edu,
-	mingo@redhat.com,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	peterz@infradead.org,
-	shuah@kernel.org,
-	tglx@linutronix.de,
-	usama.anjum@collabora.com,
-	Edward Liaw <edliaw@google.com>
-Subject: [PATCH v2 5/5] selftests/futex: fix the issue of abnormal test results caused by thread timing
-Date: Fri, 12 Dec 2025 11:25:32 +0800
-X-OQ-MSGID: <20251212032532.1842495-1-ywen.chen@foxmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <tencent_E8629E1FE67D7F457479179170238F07B90A@qq.com>
-References: <tencent_E8629E1FE67D7F457479179170238F07B90A@qq.com>
+	s=arc-20240116; t=1765511400; c=relaxed/simple;
+	bh=ntiFQNQaLEga0eSCtIXQwm+/h+9N7FOjVstpvUWYh5Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=YeCFFGZKSd8pnF2RAJ7bomQnhg+1WijZzswoyFQxGhXShNA8VV0z7fVV2D5KR0Z796yYx84Y5LFDn0QdnrDcfp+TOMoVtOEKQ9Bi3Q3vbaunSmNsqAOrd5uiwz9xq9V1llKQvCXXnqSC/6nEPkXt28RZ7Ke788BthUdNxGuDTBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OBFwxoTJ; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=17neSuUulugcx8bb872dAEvFlSNItM7OQrFcbN6jUX4=;
+	b=OBFwxoTJd4TDeWlSgtScS0GBINrd13JRUcxwUbsu433KlFvKzBX2a8LlxV3m8yHxsVbTXLkS2
+	iyZ9Dbpej4TqOa0i+eeAIjrsDyapu8BDIWOOy84bqINzxS4FwI1xXE8wvUDdHvQT9AtGDCVL8BF
+	Tn9Qex/IGLwCTEkC/9e8s38=
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4dSFlY1YM9znTXC;
+	Fri, 12 Dec 2025 11:47:37 +0800 (CST)
+Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
+	by mail.maildlp.com (Postfix) with ESMTPS id A8E2A180043;
+	Fri, 12 Dec 2025 11:49:53 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 12 Dec 2025 11:49:52 +0800
+Message-ID: <4f71fa6e-3026-7921-7da5-3c917c6e956d@huawei.com>
+Date: Fri, 12 Dec 2025 11:49:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v9 15/16] entry: Inline syscall_exit_work()
+Content-Language: en-US
+To: Kevin Brodsky <kevin.brodsky@arm.com>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <oleg@redhat.com>, <tglx@linutronix.de>,
+	<peterz@infradead.org>, <luto@kernel.org>, <shuah@kernel.org>,
+	<kees@kernel.org>, <wad@chromium.org>, <deller@gmx.de>, <macro@orcam.me.uk>,
+	<charlie@rivosinc.com>, <ldv@strace.io>, <mark.rutland@arm.com>,
+	<song@kernel.org>, <ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
+	<anshuman.khandual@arm.com>, <broonie@kernel.org>, <pengcan@kylinos.cn>,
+	<dvyukov@google.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+References: <20251204082123.2792067-1-ruanjinjie@huawei.com>
+ <20251204082123.2792067-16-ruanjinjie@huawei.com>
+ <b382cc8a-3ce9-4fb1-bc0a-a3d9796251d1@arm.com>
+From: Jinjie Ruan <ruanjinjie@huawei.com>
+In-Reply-To: <b382cc8a-3ce9-4fb1-bc0a-a3d9796251d1@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ dggpemf500011.china.huawei.com (7.185.36.131)
 
-Fixes a race between parent and child threads in futex_requeue.
 
-Similar to commit fbf4dec70277 ("selftests/futex: Order calls to
-futex_lock_pi"), which fixed a flake in futex_lock_pi due to racing
-between the parent and child threads.
 
-The same issue can occur in the futex_requeue test, because it expects
-waiterfn to make progress to futex_wait before the parent starts to
-requeue. This is mitigated by the parent sleeping for WAKE_WAIT_US, but
-it still fails occasionally. This can be reproduced by adding a sleep in
-the waiterfn before futex_wait:
+On 2025/12/9 21:48, Kevin Brodsky wrote:
+> On 04/12/2025 09:21, Jinjie Ruan wrote:
+>> After switch arm64 to Generic Entry, a new hotspot syscall_exit_work()
+>> appeared because syscall_exit_work() is no longer inlined. so inline
+> 
+> Before this series the call to syscall_trace_exit() in el0_svc_common()
+> could not be inlined, so "no longer inlined" doesn't seem to be accurate.
 
-TAP version 13
-1..2
-not ok 1 futex_requeue simple returned: 0
-not ok 2 futex_requeue simple returned: 0
-not ok 3 futex_requeue many returned: 0
-not ok 4 futex_requeue many returned: 0
+I think the original "syscall_trace_exit()" is on an equal footing with
+new introduced syscall_exit_to_user_mode_prepare() which is now inlined.
 
-This issue can be resolved by checking whether the child thread is in a
-sleeping state. This is because when the child thread goes to sleep, it
-indicates that it is waiting for the futex lock.
+> 
+>> syscall_exit_work(), and it has 2.6% performance uplift on perf bench
+>> basic syscall on kunpeng920 as below.
+> 
+> That seems strange. syscall_exit_work() is only called if some flag in
+> SYSCALL_WORK_EXIT is set, which means that we're doing something special
+> like tracing. That shouldn't be the case when running a simple perf
+> bench syscall.
+> 
+> Also worth nothing that its counterpart (syscall_trace_enter())) is not
+> currently inlined, the asymmetry would have to be justified.
 
-Fixes: 7cb5dd8e2c8c ("selftests: futex: Add futex compare requeue test")
-Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
-Co-developed-by: Edward Liaw <edliaw@google.com>
-Signed-off-by: Edward Liaw <edliaw@google.com>
----
- .../futex/functional/futex_requeue.c          | 58 ++++++++++++++++---
- 1 file changed, 51 insertions(+), 7 deletions(-)
+Will check the "syscall_trace_enter" inline performance impact.
 
-diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
-index 7a22458c7fc96..994295fac6972 100644
---- a/tools/testing/selftests/futex/functional/futex_requeue.c
-+++ b/tools/testing/selftests/futex/functional/futex_requeue.c
-@@ -7,6 +7,7 @@
- 
- #include <pthread.h>
- #include <limits.h>
-+#include <linux/compiler.h>
- 
- #include "futextest.h"
- #include "../../kselftest_harness.h"
-@@ -15,6 +16,7 @@
- #define WAKE_WAIT_US 10000
- 
- volatile futex_t *f1;
-+static pthread_barrier_t barrier;
- 
- void *waiterfn(void *arg)
- {
-@@ -23,28 +25,59 @@ void *waiterfn(void *arg)
- 	to.tv_sec = 0;
- 	to.tv_nsec = timeout_ns;
- 
-+	WRITE_ONCE(*((pid_t *)arg), gettid());
-+	pthread_barrier_wait(&barrier);
-+
- 	if (futex_wait(f1, *f1, &to, 0))
- 		printf("waiter failed errno %d\n", errno);
- 
- 	return NULL;
- }
- 
-+static int get_thread_state(pid_t pid)
-+{
-+	FILE *fp;
-+	char buf[80], tag[80];
-+	char val = 0;
-+
-+	snprintf(buf, sizeof(buf), "/proc/%d/status", pid);
-+	fp = fopen(buf, "r");
-+	if (!fp)
-+		return -1;
-+
-+	while (fgets(buf, sizeof(buf), fp))
-+		if (fscanf(fp, "%s %c\n", tag, &val) == 2 && !strcmp(tag, "State:"))
-+			break;
-+
-+	fclose(fp);
-+	return val;
-+}
-+
- TEST(requeue_single)
- {
- 	volatile futex_t _f1 = 0;
- 	volatile futex_t f2 = 0;
- 	pthread_t waiter;
--	int res;
-+	pid_t tids;
-+	int res, state;
- 
- 	f1 = &_f1;
-+	pthread_barrier_init(&barrier, NULL, 2);
- 
- 	/*
- 	 * Requeue a waiter from f1 to f2, and wake f2.
- 	 */
--	if (pthread_create(&waiter, NULL, waiterfn, NULL))
-+	if (pthread_create(&waiter, NULL, waiterfn, &tids))
- 		ksft_exit_fail_msg("pthread_create failed\n");
- 
--	usleep(WAKE_WAIT_US);
-+	pthread_barrier_wait(&barrier);
-+	pthread_barrier_destroy(&barrier);
-+	while ((state = get_thread_state(READ_ONCE(tids))) != 'S') {
-+		usleep(WAKE_WAIT_US);
-+
-+		if (state < 0)
-+			break;
-+	}
- 
- 	ksft_print_dbg_msg("Requeuing 1 futex from f1 to f2\n");
- 	res = futex_cmp_requeue(f1, 0, &f2, 0, 1, 0);
-@@ -71,7 +104,8 @@ TEST(requeue_multiple)
- 	volatile futex_t _f1 = 0;
- 	volatile futex_t f2 = 0;
- 	pthread_t waiter[10];
--	int res, i;
-+	pid_t tids[10];
-+	int res, i, state;
- 
- 	f1 = &_f1;
- 
-@@ -80,11 +114,21 @@ TEST(requeue_multiple)
- 	 * At futex_wake, wake INT_MAX (should be exactly 7).
- 	 */
- 	for (i = 0; i < 10; i++) {
--		if (pthread_create(&waiter[i], NULL, waiterfn, NULL))
-+		pthread_barrier_init(&barrier, NULL, 2);
-+
-+		if (pthread_create(&waiter[i], NULL, waiterfn, &tids[i]))
- 			ksft_exit_fail_msg("pthread_create failed\n");
--	}
- 
--	usleep(WAKE_WAIT_US);
-+		pthread_barrier_wait(&barrier);
-+		pthread_barrier_destroy(&barrier);
-+
-+		while ((state = get_thread_state(READ_ONCE(tids[i]))) != 'S') {
-+			usleep(WAKE_WAIT_US);
-+
-+			if (state < 0)
-+				break;
-+		}
-+	}
- 
- 	ksft_print_dbg_msg("Waking 3 futexes at f1 and requeuing 7 futexes from f1 to f2\n");
- 	res = futex_cmp_requeue(f1, 0, &f2, 3, 7, 0);
--- 
-2.34.1
+> 
+>>     | Metric     | W/O this patch | With this patch | Change    |
+>>     | ---------- | -------------- | --------------- | --------- |
+>>     | Total time | 2.171 [sec]    | 2.114 [sec]     |  ↓2.6%    |
+>>     | usecs/op   | 0.217192       | 0.211453        |  ↓2.6%    |
+>>     | ops/sec    | 4,604,225      | 4,729,178       |  ↑2.7%    |
+>>
+>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+>> ---
+>>  include/linux/entry-common.h  | 63 ++++++++++++++++++++++++++++++++++-
+>>  kernel/entry/syscall-common.c | 59 ++------------------------------
+> 
+> These changes are purely generic, surely all architectures using
+> GENERIC_ENTRY should get similar benefits (assuming LTO isn't used)?
 
+It would be great if someone could help test the performance differences.
+
+> 
+>>  2 files changed, 64 insertions(+), 58 deletions(-)
+>>
+>> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+>> index cd6dacb2d8bf..2f84377fb016 100644
+>> --- a/include/linux/entry-common.h
+>> +++ b/include/linux/entry-common.h
+>> @@ -2,6 +2,7 @@
+>>  #ifndef __LINUX_ENTRYCOMMON_H
+>>  #define __LINUX_ENTRYCOMMON_H
+>>  
+>> +#include <linux/audit.h>
+>>  #include <linux/irq-entry-common.h>
+>>  #include <linux/ptrace.h>
+>>  #include <linux/seccomp.h>
+>> @@ -128,6 +129,41 @@ static __always_inline long syscall_enter_from_user_mode(struct pt_regs *regs, l
+>>  	return ret;
+>>  }
+>>  
+>> +/*
+>> + * If SYSCALL_EMU is set, then the only reason to report is when
+>> + * SINGLESTEP is set (i.e. PTRACE_SYSEMU_SINGLESTEP).  This syscall
+>> + * instruction has been already reported in syscall_enter_from_user_mode().
+>> + */
+>> +static __always_inline bool report_single_step(unsigned long work)
+>> +{
+>> +	if (work & SYSCALL_WORK_SYSCALL_EMU)
+>> +		return false;
+>> +
+>> +	return work & SYSCALL_WORK_SYSCALL_EXIT_TRAP;
+>> +}
+>> +
+>> +/**
+>> + * arch_ptrace_report_syscall_exit - Architecture specific
+>> + *				     ptrace_report_syscall_exit.
+>> + *
+>> + * Invoked from syscall_exit_work() to wrap ptrace_report_syscall_exit().
+>> + *
+>> + * The main purpose is to support arch-specific ptrace_report_syscall_exit
+>> + * implementation.
+>> + */
+>> +static __always_inline void arch_ptrace_report_syscall_exit(struct pt_regs *regs,
+>> +							    int step);
+>> +
+>> +#ifndef arch_ptrace_report_syscall_exit
+>> +static __always_inline void arch_ptrace_report_syscall_exit(struct pt_regs *regs,
+>> +							    int step)
+>> +{
+>> +	ptrace_report_syscall_exit(regs, step);
+>> +}
+>> +#endif
+> 
+> If we want syscall_exit_work() to be inline, then why would we define
+> this hook in syscall-common.c in patch 12? Might as well define both
+> hooks in entry-common.h right away and avoid some noise here.
+
+Make sense.
+
+> 
+> - Kevin
+> 
+>> [...]
+> 
 
