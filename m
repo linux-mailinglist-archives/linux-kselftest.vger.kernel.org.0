@@ -1,78 +1,78 @@
-Return-Path: <linux-kselftest+bounces-47536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47537-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9339CB9E5A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 22:59:36 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43373CB9EB6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 23:25:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 834EF307DC5C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 21:59:35 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D63BF3003102
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 22:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D3D03002AE;
-	Fri, 12 Dec 2025 21:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAB9F30BBA5;
+	Fri, 12 Dec 2025 22:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xsvorybJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4AJ7w4St"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f74.google.com (mail-oo1-f74.google.com [209.85.161.74])
+Received: from mail-oo1-f73.google.com (mail-oo1-f73.google.com [209.85.161.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848D8277C8D
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 21:59:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9CA2288C30
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 22:25:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765576774; cv=none; b=qG0T9MoS1MUMFj/Kmhfxi2PRDEInXIpOKaJMnb+rWYDBVtgHdp4KIzkzIifbaRgprL/qE4Q+EmU7glUST0yGkkYlUWvgOhVa1yQxcbjoXQ/BgLw6u1KPJ16Qg7DrTjXlr8gPgGQC0zi3kGgukzFhS3P0k8g4kZykwfAQDuXGW4Y=
+	t=1765578348; cv=none; b=mljmBx/xSRP8j2VYTtLl3joP/T6REGpzn6JuAAQ28dzCMEiHxyomsy8En+JOhDUM4uMjrj01FwSc72pR835ReX5NzQweRg+Ll8ZQMf1hRDYqUKujO3hj6Dm7E7ARy9SriQKS4Nl3PrhgjZzyEV8xUwX7QQFyLiU4pzRzBTI6+Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765576774; c=relaxed/simple;
-	bh=dIXE6EkR1BlYhVhmpJFqTLCIYmzsu4/lYU6SszEwHes=;
+	s=arc-20240116; t=1765578348; c=relaxed/simple;
+	bh=kbOpl9/EBS6WJQv34DS3/RORKeG4Tpro9hVI1b+Wo+Q=;
 	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=iXjnNK90S6xa9E1eTCXU1ciFTdoIA8436mO/q4d8YCEcAdy5Aa88XU3bB3qjo/DHIEqHfH92OrzLHUmdruRVff9M0GUgSPsj3GGrinhHOFyLg1g8rJ2AFUcJ1L77t7/WOpQgQ3rpex0egmAdUn2vD4NFbeR7Wp8WdbO81op8KAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xsvorybJ; arc=none smtp.client-ip=209.85.161.74
+	 Content-Type; b=sCyuTMUKVnZ/4xlOtn+L6TL8NBpEmJ8mf7ouvyd+XCKgnRfOvB6y4hpIV8WthXhtmvgaNuMFdhwYJeSBLyflif1oPqSZF4mprq4Wz69NZlH1CaaT95yupQ08yB/ttS0KIFAukO3q3LpaL089T9LixGn14fzN6+HeOs8Ptw/P2Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4AJ7w4St; arc=none smtp.client-ip=209.85.161.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-oo1-f74.google.com with SMTP id 006d021491bc7-65b32d52186so2256325eaf.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 13:59:32 -0800 (PST)
+Received: by mail-oo1-f73.google.com with SMTP id 006d021491bc7-65b325457e5so1435969eaf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 14:25:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765576772; x=1766181572; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1765578345; x=1766183145; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=N/EpAY/5dCiD3IjULhAafgPlfUZK5B6r3caqhqftDLw=;
-        b=xsvorybJM9BL8PaAAEZ0jlZyiZG/jvXTHVg6NMHr/Ji6XlAShGhD8GZeK/vCzU1nnR
-         Vsdt0ifiexoujyr8mUxwBXs1dZMj/bm9qQw32LBNU6vugNuWsUhT/AScNLhdPd/YY/SR
-         dm2g8X2zxAnng0RNnLtxkjIgjjVvtD90LoAou/l0upBdFuoMyqxG1ezOR/W57Dx5rkBK
-         TK93KLplvqsDVqX9kGOJJd7tf5kjXyulZGnM5e3xJZXweBv68ArzB8FyqbI7SzP8FuTc
-         gIfbk7bV2uQfyoUYjbXiYZerwX9oJtgdFdQPiM5eP/A3zMyZmVUUfIF/IdWuwIm48RXm
-         LRgg==
+        bh=kTtJNntNErDibGFF1qkwnsYLDpE8m9agPY4m5XiEmeI=;
+        b=4AJ7w4Stxn4zo4pMPqrbCVRQNLPO1IoxYFNjdYOIEhv/GaUdKFB5aPLyWzUZmClVBA
+         Movgeh+WEAiAcvYylPxGti1NOiF9oJ9TAY85B4Vj42dcTmafBIvwVxebcc7a2jCRaY+G
+         Uurdw5KNm7dVA4Yfh0m2pGPgdIoD+dcd/L2DlAghJ57t4WvmjZwTYuNo1akbwnFVQtiM
+         DeJcWsNiJh3Ju+JpAw7MRN5/xUtXF30gohcgNOEOhHwLYOow1m23qVddchK9+unhrlna
+         JxJ/nGLSLEIo+XilhFyO+u+9V9Q+sV5ueIjSuK7crWiz9X+SBPostV7bCk91W8SaHCvS
+         ImzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765576772; x=1766181572;
+        d=1e100.net; s=20230601; t=1765578345; x=1766183145;
         h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N/EpAY/5dCiD3IjULhAafgPlfUZK5B6r3caqhqftDLw=;
-        b=V5+UxHDS36+lXTnPhjZLIsZ6bpsp20tx39ssosC1lg6BKRjK2O1X3ytawrkNAm06vG
-         kYgN63XTE+77kkoUDh+YoSjEm2VEd+hStEfFNIJipHXYKem6TZqe1B6BKNcR296rjZoh
-         7goBdIqMS+9OU3amNDjcJ0yhtgwjNaUFknYWeXZo1tEo7EHUQTS7jq9nW+DcMzhI4JFc
-         q+MNZZG037ha1p0aSq8S/3cJz6TmM8dr7IR/ZyASqFSgEAYjGX4vXomd4oAjIIR0HLCS
-         ixHNOrN5tBF9fGIyaISSfvtPlCeq1d3GJvDO8gT3KSSY59UiJV2622EXoZeXThJmkUZl
-         ymNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJIK1GDxNjsiZO8Hq5BKKRe+89hZczaEDJEQQ0yKQRo3VF8stBDsUrj7RVOxhnXwIhGEuZ9fV3rzG7Pkml2mM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfnSreLysHfvEy8G63DlLLXZjkiHJY1o2RvvRrWF2DmXP3E+8H
-	WvLebxwUoZW016qsvWhsORTWHPDcGdEBFT7RGGmn6Dfg5qsDp4rrrfM31C4fcfKML8KBqH0F5/y
-	ljPBKVPoCFaxy3ByE+VmW7FrdNQ==
-X-Google-Smtp-Source: AGHT+IF0CbQ2D3A1j2krEFoQZv301Z7CiO1P+3KpILDRxaeGjkRt5qjZ/Vujtj48CE91VIyGHYcc/uN+dXFfoTP2HA==
-X-Received: from ilbee24.prod.google.com ([2002:a05:6e02:4918:b0:438:237b:ed42])
+        bh=kTtJNntNErDibGFF1qkwnsYLDpE8m9agPY4m5XiEmeI=;
+        b=UAdTWjRjdDJZUd/xD6N9JJ+LUvWSCmRct+cUh/AOa2yoXhvysCh3MsbJhFIPxfCIqc
+         hUQeX6bWJ0fywso2OoFl1ejIu2PZLrcF46blSji118L9jxmP91wzRWftl0seV+7ngcvp
+         u6zko0oRow24eblEzi8hmHTr/XJakruF71cpcDlzSew5AdAIqZ6XkXts3tYel3wSxkUV
+         4VtGgAXXzzfcKnEZxrkNwXDyy6PpwTzbpFk48KsOlmACMlC+5Aj3sPPn48VNYr4NutOU
+         EOY0pXczyxrrPsiDnta+/tCRN+ED7A1PJgX4KZF4hdA5lljH424uiWDqJYeg1t7UGlKr
+         Grew==
+X-Forwarded-Encrypted: i=1; AJvYcCUInjzlk+pPglxWYcAHlp5NSXFOyJclPGd7mqn2fPa7Zkx+bJpHWc87kzl5Zw8JDW3ZmlMXasH6i6HDAE2sV38=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6sZXgQQ8tW5h9w9/sFt3kUEveSAqL60DDELqmYGmMleQiLdtd
+	W5/xOqrwdiWyERZGtvFcDd1xPubB1HCbRR2dEgRLVb7Ops34mTreSIspRn7RiKs9OarXpz0tGFW
+	xo8xSEfYJC9h/tS12SgirFvOOhA==
+X-Google-Smtp-Source: AGHT+IGhwhSlHWOdHiYNzV9FksIu24P3urR9RfAnI9PHJHO/oofMWeWBwj21tpDMdRbsZ5qCySgnl+QY1Z9IQMTNWA==
+X-Received: from ioyp8.prod.google.com ([2002:a05:6602:3048:b0:948:6160:f5b])
  (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6820:1344:b0:659:9a49:8eb6 with SMTP id 006d021491bc7-65b4525d320mr1663961eaf.58.1765576771672;
- Fri, 12 Dec 2025 13:59:31 -0800 (PST)
-Date: Fri, 12 Dec 2025 21:59:30 +0000
-In-Reply-To: <aTicD5hlKhZ3rkIn@kernel.org> (message from Oliver Upton on Tue,
- 9 Dec 2025 14:00:47 -0800)
+ 2002:a05:6820:a05:b0:659:9a49:8e64 with SMTP id 006d021491bc7-65b45253071mr1578654eaf.52.1765578344930;
+ Fri, 12 Dec 2025 14:25:44 -0800 (PST)
+Date: Fri, 12 Dec 2025 22:25:44 +0000
+In-Reply-To: <aTidfRwYLYwTfmK_@kernel.org> (message from Oliver Upton on Tue,
+ 9 Dec 2025 14:06:53 -0800)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Message-ID: <gsnth5tv2wfx.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v5 18/24] KVM: arm64: Enforce PMU event filter at vcpu_load()
+Message-ID: <gsntecoz2v87.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH v5 19/24] KVM: arm64: Implement lazy PMU context swaps
 From: Colton Lewis <coltonlewis@google.com>
 To: Oliver Upton <oupton@kernel.org>
 Cc: kvm@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
@@ -87,79 +87,135 @@ Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
 Oliver Upton <oupton@kernel.org> writes:
 
-> On Tue, Dec 09, 2025 at 08:51:15PM +0000, Colton Lewis wrote:
->> The KVM API for event filtering says that counters do not count when
->> blocked by the event filter. To enforce that, the event filter must be
->> rechecked on every load since it might have changed since the last
->> time the guest wrote a value. If the event is filtered, exclude
->> counting at all exception levels before writing the hardware.
+> On Tue, Dec 09, 2025 at 08:51:16PM +0000, Colton Lewis wrote:
+>> +enum vcpu_pmu_register_access {
+>> +	VCPU_PMU_ACCESS_UNSET,
+>> +	VCPU_PMU_ACCESS_VIRTUAL,
+>> +	VCPU_PMU_ACCESS_PHYSICAL,
+>> +};
 
->> Signed-off-by: Colton Lewis <coltonlewis@google.com>
->> ---
->>   arch/arm64/kvm/pmu-direct.c | 44 +++++++++++++++++++++++++++++++++++++
->>   1 file changed, 44 insertions(+)
+> This is confusing. Even when the guest is accessing registers directly
+> on the CPU I'd still call that "hardware assisted virtualization" and
+> not "physical".
+
+It was what I thought described the access pattern. Do you have another
+naming suggestion?
+
+>> +#endif /* _ASM_ARM64_KVM_TYPES_H */
+>> diff --git a/arch/arm64/kvm/debug.c b/arch/arm64/kvm/debug.c
+>> index 0ab89c91e19cb..c2cf6b308ec60 100644
+>> --- a/arch/arm64/kvm/debug.c
+>> +++ b/arch/arm64/kvm/debug.c
+>> @@ -34,7 +34,7 @@ static int cpu_has_spe(u64 dfr0)
+>>    *  - Self-hosted Trace Filter controls (MDCR_EL2_TTRF)
+>>    *  - Self-hosted Trace (MDCR_EL2_TTRF/MDCR_EL2_E2TB)
+>>    */
+>> -static void kvm_arm_setup_mdcr_el2(struct kvm_vcpu *vcpu)
+>> +void kvm_arm_setup_mdcr_el2(struct kvm_vcpu *vcpu)
+>>   {
+>>   	int hpmn = kvm_pmu_hpmn(vcpu);
+
+>> diff --git a/arch/arm64/kvm/hyp/include/hyp/switch.h  
+>> b/arch/arm64/kvm/hyp/include/hyp/switch.h
+>> index bde79ec1a1836..ea288a712bb5d 100644
+>> --- a/arch/arm64/kvm/hyp/include/hyp/switch.h
+>> +++ b/arch/arm64/kvm/hyp/include/hyp/switch.h
+>> @@ -963,6 +963,8 @@ static bool kvm_hyp_handle_pmu_regs(struct kvm_vcpu  
+>> *vcpu)
+>>   	if (ret)
+>>   		__kvm_skip_instr(vcpu);
+
+>> +	kvm_pmu_set_physical_access(vcpu);
+>> +
+>>   	return ret;
+>>   }
 
 >> diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
->> index 71977d24f489a..8d0d6d1a0d851 100644
+>> index 8d0d6d1a0d851..c5767e2ebc651 100644
 >> --- a/arch/arm64/kvm/pmu-direct.c
 >> +++ b/arch/arm64/kvm/pmu-direct.c
->> @@ -221,6 +221,49 @@ u8 kvm_pmu_hpmn(struct kvm_vcpu *vcpu)
->>   	return nr_host_cnt_max;
+>> @@ -73,6 +73,7 @@ bool kvm_vcpu_pmu_use_fgt(struct kvm_vcpu *vcpu)
+>>   	u8 hpmn = vcpu->kvm->arch.nr_pmu_counters;
+
+>>   	return kvm_vcpu_pmu_is_partitioned(vcpu) &&
+>> +		vcpu->arch.pmu.access == VCPU_PMU_ACCESS_PHYSICAL &&
+>>   		cpus_have_final_cap(ARM64_HAS_FGT) &&
+>>   		(hpmn != 0 || cpus_have_final_cap(ARM64_HAS_HPMN0));
+>>   }
+>> @@ -92,6 +93,26 @@ u64 kvm_pmu_fgt2_bits(void)
+>>   		| HDFGRTR2_EL2_nPMICNTR_EL0;
 >>   }
 
 >> +/**
->> + * kvm_pmu_apply_event_filter()
+>> + * kvm_pmu_set_physical_access()
 >> + * @vcpu: Pointer to vcpu struct
 >> + *
->> + * To uphold the guarantee of the KVM PMU event filter, we must ensure
->> + * no counter counts if the event is filtered. Accomplish this by
->> + * filtering all exception levels if the event is filtered.
+>> + * Reconfigure the guest for physical access of PMU hardware if
+>> + * allowed. This means reconfiguring mdcr_el2 and loading the vCPU
+>> + * state onto hardware.
+>> + *
 >> + */
->> +static void kvm_pmu_apply_event_filter(struct kvm_vcpu *vcpu)
+>> +
+>> +void kvm_pmu_set_physical_access(struct kvm_vcpu *vcpu)
 >> +{
->> +	struct arm_pmu *pmu = vcpu->kvm->arch.arm_pmu;
->> +	u64 evtyper_set = ARMV8_PMU_EXCLUDE_EL0 |
->> +		ARMV8_PMU_EXCLUDE_EL1;
->> +	u64 evtyper_clr = ARMV8_PMU_INCLUDE_EL2;
->> +	u8 i;
->> +	u64 val;
->> +	u64 evsel;
->> +
->> +	if (!pmu)
->> +		return;
->> +
->> +	for (i = 0; i < pmu->hpmn_max; i++) {
->> +		val = __vcpu_sys_reg(vcpu, PMEVTYPER0_EL0 + i);
->> +		evsel = val & kvm_pmu_event_mask(vcpu->kvm);
->> +
->> +		if (vcpu->kvm->arch.pmu_filter &&
->> +		    !test_bit(evsel, vcpu->kvm->arch.pmu_filter))
->> +			val |= evtyper_set;
->> +
->> +		val &= ~evtyper_clr;
->> +		write_pmevtypern(i, val);
+>> +	if (kvm_vcpu_pmu_is_partitioned(vcpu)
+>> +	    && vcpu->arch.pmu.access == VCPU_PMU_ACCESS_VIRTUAL) {
+>> +		vcpu->arch.pmu.access = VCPU_PMU_ACCESS_PHYSICAL;
+>> +		kvm_arm_setup_mdcr_el2(vcpu);
+>> +		kvm_pmu_load(vcpu);
 >> +	}
+
+> It isn't immediately obvious how this guards against preemption.
+
+> Also, the general approach for these context-loading situations is to do
+> a full load/put on the vCPU rather than a directed load.
+
+Understood. Will fix.
+
+>> +static void kvm_pmu_register_init(struct kvm_vcpu *vcpu)
+>> +{
+>> +	if (vcpu->arch.pmu.access == VCPU_PMU_ACCESS_UNSET)
+>> +		vcpu->arch.pmu.access = VCPU_PMU_ACCESS_VIRTUAL;
+
+> This is confusing. The zero value of the enum should be consistent with
+> the "unloaded" state.
+
+That's the way I initially wrote it but it had a problem on a different
+kernel. I forget the exact issue, but I never saw the problem on
+upstream so I'm happy to go back to it.
+
+>> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
+>> index f2ae761625a66..d73218706b834 100644
+>> --- a/arch/arm64/kvm/sys_regs.c
+>> +++ b/arch/arm64/kvm/sys_regs.c
+>> @@ -1197,6 +1197,8 @@ static bool access_pmu_evtyper(struct kvm_vcpu  
+>> *vcpu, struct sys_reg_params *p,
+>>   		p->regval = __vcpu_sys_reg(vcpu, reg);
+>>   	}
+
+>> +	kvm_pmu_set_physical_access(vcpu);
 >> +
->> +	val = __vcpu_sys_reg(vcpu, PMCCFILTR_EL0);
+>>   	return true;
+>>   }
+
+>> @@ -1302,6 +1304,8 @@ static bool access_pmovs(struct kvm_vcpu *vcpu,  
+>> struct sys_reg_params *p,
+>>   		p->regval = __vcpu_sys_reg(vcpu, PMOVSSET_EL0);
+>>   	}
+
+>> +	kvm_pmu_set_physical_access(vcpu);
 >> +
->> +	if (vcpu->kvm->arch.pmu_filter &&
->> +	    !test_bit(ARMV8_PMUV3_PERFCTR_CPU_CYCLES,  
->> vcpu->kvm->arch.pmu_filter))
->> +		val |= evtyper_set;
->> +
->> +	val &= ~evtyper_clr;
->> +	write_pmccfiltr(val);
->> +}
+>>   	return true;
+>>   }
 
-> This doesn't work for nested. I agree that the hardware value of
-> PMEVTYPERn_EL0 needs to be under KVM control, but depending on whether
-> or not we're in a hyp context the meaning of the EL1 filtering bit
-> changes. Have a look at kvm_pmu_create_perf_event().
+> Aren't there a ton of other registers the guest may access before
+> these two? Having generic PMU register accessors would allow you to
+> manage residence of PMU registers from a single spot.
 
-That's where I got the ideas for this code. I'll look at the handling
-for hyp context too.
+Yes but these are the only two that use the old trap handlers. I also
+call set_physical_access from my fast path handler that handles all the
+other registers when partitioned.
 
-
-> Thanks,
-> Oliver
+Agree on having some generic accessors which you mention in an earlier
+patch.
 
