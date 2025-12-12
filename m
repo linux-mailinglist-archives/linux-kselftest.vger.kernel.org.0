@@ -1,85 +1,89 @@
-Return-Path: <linux-kselftest+bounces-47469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C693CCB7BF0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 04:22:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D309CB7C14
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 04:25:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 31D1A30463A9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 03:22:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 22DD9300F8BE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 03:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193C52C3768;
-	Fri, 12 Dec 2025 03:22:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C84022FF665;
+	Fri, 12 Dec 2025 03:25:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="IfNTW9fa"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ujb6hVgg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-245.mail.qq.com (out203-205-221-245.mail.qq.com [203.205.221.245])
+Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DC92C21E5;
-	Fri, 12 Dec 2025 03:21:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510A42D249E;
+	Fri, 12 Dec 2025 03:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765509731; cv=none; b=PhyT60vb8S4lJiX4F117ix6BrdRekGxyFNhxrb2sZ7A6DRjaqTdfUhBLmAvJyGaWOyeYgWeU2QSHLxP2i3gP0VPrbm4MvlGo5xbeYtkyTzJNUAG6u5sY6i3Q3XJ5PtG2RWbAdjze+L2Q/wD/si9zppjGw4Gb4I7akY27tSqT5iE=
+	t=1765509917; cv=none; b=snG7EToE44sAdEdXcWWTGyk8aFL8G/gAXCvCzYt5IF+/Yn6SoIydlZxjd33ZICLzdmteM66ad4Wxk50GtkyzgRS3W9of43K0qiIniOo97n5o6J6DTSJITw1qinQWdt7SvDYRKA3tUmdUGFyEuZ22bGUkX3CRlP8OzMu4G1IjfOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765509731; c=relaxed/simple;
-	bh=bKjybBAXhUv/QDpNkd0XmMP5Clj1iN4b+ENaUp2XUsM=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=Oh/R+FIfF4na2WlrkPR3nkE9amGC3zbkYK8CiN2lbvDWK0gNC2jDCl0eW+O+U2uWktpoYAujXXUGdriPU3WlP7OSi9yxqs+JdY0rm3WejUAIiNYhWpzU3tBjoFi1lch3zwi/yJa10E1bGYmt55+cLPWKeW/55xveCzO5OeXYhBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=IfNTW9fa; arc=none smtp.client-ip=203.205.221.245
+	s=arc-20240116; t=1765509917; c=relaxed/simple;
+	bh=86jM6/8ayfHPNKCYQQ/v+Gxswje4pbMb7uGQHheHd4c=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=j8saPZQ6vUSuvcu/p8VO3ArwceUS7pnrIwT2jwRarqtfXJmgpSHJFa0FrSWcc6FlRWXlktVHtb2/sNEaLLw+rFYkN0xbfC150OP2plJaeE3A5UqYSm2Bve20xoqcVURU2bXWiFm9YnTN87B/MSJ3RO1zR9r+IgnQqwWnApXn9ec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=ujb6hVgg; arc=none smtp.client-ip=203.205.221.235
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1765509708;
-	bh=hVN0VEpngBbBvYk5u4NWA0726Jm8BFMS/FLpCH/DGDY=;
-	h=From:To:Cc:Subject:Date;
-	b=IfNTW9faameQtv9vGhb/AJnlB+Ya88MN6tSkpORF4aa2/Ct6+7J0YbILzQG8EL0tr
-	 LtyyNhtOiealkxdXXwWxypHcADrcmNE+IXG/XpEO10pWNvlwC2J7sk/GFAYgmJvbsT
-	 XhOTQPND+nS2Q3sdzbnyRTy0MJQ5PvMt2nDaN7gw=
-Received: from meizu-Precision-3660.meizu.com ([112.91.84.72])
-	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
-	id 56DB9EAB; Fri, 12 Dec 2025 11:21:45 +0800
-X-QQ-mid: xmsmtpt1765509705tvyjk2aeh
-Message-ID: <tencent_E8629E1FE67D7F457479179170238F07B90A@qq.com>
-X-QQ-XMAILINFO: MZtEYADUG4Ag7myerlRVic0Q/0tF8YJFQRzjJ0B9qY/ETSTAjbl43yWIYgTd36
-	 uW5id0ucud9wU7nIxGAq1Qg5hoUUjSn7yy+HKk2uMSmkNaNmNenARGjXFGL0pzR5rf0BLbV6WUWr
-	 8MaZpHRddGBGDejYYKsJD+pi65VKVlGu0zZHMeO2f8G0tdpvmq4ZLLv3dI9Th40cyPj8kg732rev
-	 DSKa7mz9YuKSR8H21v2vc/vUh9OBVRYuVA+iSd+kUjpAZKY7LE1d6JBwnW/z2AsuyJNj+glvyvSy
-	 P8NWZZ8+6Pv6PCbjr6y5Wv9vuL4wzuLU5Vq3mc404KZe3PM7wdVmsByi4jEpjjVm1XHsWTe1HRDz
-	 +pyH2eU7iSfkvEmx0qgcpa9UZqHJGp70OnV/DoXJJP5KvrHolEIvjDxG4NZn7V+XvEUkB/q8Re9T
-	 ii9iXYzbXiAi3ehXoHwULH83XieLICO0jqXuHi64GT82fCMYtXgE7cwkVxFQMZHJwqF/lo+Ri5lN
-	 REbmmX+jvrlLY7jH+Fu4gyG7WxL8appFdstZeYmz/BoRFeQttYFQ7qICYx1SN6T3yqZSQfR7O+s6
-	 knFpPuTfHS5ylrAeWkLV12DPVNUZu+Ru5lx4gT55qpJlyG7XlqfBKQSKQA6RRrCmiXYEmC6J/wPj
-	 VQ02iaCYelOIe9h2WqWkGKDw13djEPxp35SFcbI3OtwkFNavpCWAAnHb2xoGDZPZEoryQTfa2V00
-	 H/3GW85Q+y+YWE13UOBIb5i9MHvPkHeG964zUrklbkt9geS70lEy/m8rLCu977woJvj2s8C+NV2w
-	 mW7BrPmO/AcHVqhQliS847By1R39roONQ5gSAbnPmdqevqTlyG5jzEjyAJu8ZdAS7pYTg3cOhrXB
-	 /2f0HDXZZzTvjxHEQN/NGrWyLtilKX6hJ4Am8h0cGr/PT1VAMmzq3gR1T+SGxhvoXZ4eRd8KQESW
-	 cKNDkt/sQpmuqofnnqfAjgnDbz+Fa6lP9dMc+/126ceHAqFAeoj5cA8OySobiQxGIoFu5dj8bXWH
-	 4wWBIPy2mpwI2qwQWp27C2sEFSytHzVZ7csd1X947+xPCcZo4+qks/SVujq/INmirCC9mr1PjFGS
-	 hKoZVW/gQWOzniLVi0plSKGQBd+QjIGMEdsDFf
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+	s=s201512; t=1765509889;
+	bh=zDJ4Agqgm0IgPliNwt9ogn6DK+Rs7gCySxS9/AzULK8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=ujb6hVggTY2nHKlqqid8hfyCRlDAu+Sgzkr8INUDXFe7lDIbvipprvemNoK1ExX/y
+	 0NMlFJJEkGxiTy5o5/QK8WES2yT7k+JFcK3h+pV7jE8o34PGVzR9nS7dP4YzixFw1D
+	 JxUpYOyo8pIm+ArM+BgQCHEB0+doRoXVDXBvE3ZM=
+Received: from meizu-Precision-3660.meizu.com ([14.21.33.152])
+	by newxmesmtplogicsvrsza56-0.qq.com (NewEsmtp) with SMTP
+	id 62D0A691; Fri, 12 Dec 2025 11:24:45 +0800
+X-QQ-mid: xmsmtpt1765509885tx9osn5q6
+Message-ID: <tencent_A4A4E388AEB0E748796A5FF75DB44514DC08@qq.com>
+X-QQ-XMAILINFO: NC4p7XQIBeahNutEhg7U/YbeXwgFTuUg16/TPFrcGtq4DET8roumfz4m93Nei4
+	 bKhb/WEsn2kFahhSIdFLM1dn4AXOmSy89BqyC45ht4rZqjm0e7KfbzLo9Jop29D/zWe28lXkFTh1
+	 PG+i+G35qgh67IjKsEK2Y+zn4f55kuVTB3Bp2EhVD7szzEpLwRO9vkmD5zIeDedSDbiEzDAwMogF
+	 uZswScFJwbvxY6tyRbZ73RW/83RgIeELKpIhmEo/d+ymsJmiHXKVHhIXJ4HD6WwRwAuK1l+6I9Xe
+	 tPBQmlC2saOGq/bq8KAXQewaLGyFsLFrH3Wp1Qswh1CwEQS3F8+9lMOlawqsxTWH7G5GX4Vo/WNL
+	 XUAwYU3dQcTRsAfmQN8JmgNf6u5ofs0wTTUdmMSd5mNQiAGPMyJmzNKUJCuKkRomT8md+SAYJGnJ
+	 4nXVHhHOSKESVNqV/EudODj0ueKFRBHBc6hLjpawdw1wxvyERoEHEw95/4yZBisMoSfk1PaC9U9B
+	 Hms6HSEtXX8wRnPCM+0St+p1lq8z2u7k0dafnU1n3yx+TW4UNyh3MKbI2cSuzfZ8I8bvE2gagZbk
+	 GqYSiRWeSZW83CWdWieNsER62trw03bbvgNeanLwov+BiMm+dMhn1lNmnh+7nQ4RfYNADFpB0TO2
+	 zhQ8FIYExLPPWqr2Lf1gcaWiXkKeOls/ObyrWsN0qgzaWITAL3IUTvHUzrirYEwLgspvNy3s3us7
+	 xdSHryApLOPl5MkrjtErLWhzH6Y8IKc8WLSUu4fVTFNuMYff8QFZtCw4YL9sHY+T+KYlx85bTokT
+	 74Wf5bPv1+ktxn4Ix8R0NRXES7dmS1FBmgVTc4PwBLKEEJqt+DsFP+ucSJODOk+lUb8hvRIVKbC8
+	 sVBazZ/YSTTV2BKnrvMsc/kD7uhcMTYAOIjJZMQznGRs4YWw+xnvIhNJX62ipyck0YkrNYHgGsX7
+	 bhB8kFvCugbHZLIDNPJvBfYLthjueioYW438fYVTxpvmotXIpX5Tm1aJc+9djf02a8dQbQkvQvtQ
+	 caKFuwGmTFQmK4yvzBiaL07gLqZL2tS9+FmFn3dbhvMsLl9r4tOfoinle6fXtIqI1G9dHPfDFO0T
+	 8758hoT27DjtcdnNo8uq8pHw7Z6A==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
 From: Yuwen Chen <ywen.chen@foxmail.com>
-To: tglx@linutronix.de,
-	mingo@redhat.com
-Cc: peterz@infradead.org,
-	dvhart@infradead.org,
+To: ywen.chen@foxmail.com
+Cc: andrealmeid@igalia.com,
+	bigeasy@linutronix.de,
+	colin.i.king@gmail.com,
 	dave@stgolabs.net,
-	andrealmeid@igalia.com,
+	dvhart@infradead.org,
 	justinstitt@google.com,
 	kernel-team@android.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	luto@mit.edu,
+	mingo@redhat.com,
 	morbo@google.com,
 	nathan@kernel.org,
 	ndesaulniers@google.com,
+	peterz@infradead.org,
 	shuah@kernel.org,
-	bigeasy@linutronix.de,
-	usama.anjum@collabora.com,
-	colin.i.king@gmail.com
-Subject: [PATCH v2 0/5] selftests/futex: fix the issue of abnormal test results caused by thread timing
-Date: Fri, 12 Dec 2025 11:21:45 +0800
-X-OQ-MSGID: <20251212032145.1842158-1-ywen.chen@foxmail.com>
+	tglx@linutronix.de,
+	usama.anjum@collabora.com
+Subject: [PATCH v2 1/5] selftests/futex: reduce array declarations in the requeue_single
+Date: Fri, 12 Dec 2025 11:24:43 +0800
+X-OQ-MSGID: <20251212032443.1842375-1-ywen.chen@foxmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <tencent_E8629E1FE67D7F457479179170238F07B90A@qq.com>
+References: <tencent_E8629E1FE67D7F457479179170238F07B90A@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,20 +92,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On the Android arm32 platform, when performing the futex_requeue test, it will
-most likely return a failure. The specific reason is detailed in a commit[1]
-previously submitted by Edward Liaw. However, this commit cannot perfectly
-solve the problem. This is because using a barrier does not guarantee that
-the child thread will wait on futex_wait.
+In the requeue_single function, the variable "waits" only uses
+one element. There is no need to use an array.
 
-This series of patches attempts to solve this problem by checking whether
-the child thread is in a sleeping state. This is because when the child thread
-goes to sleep, it indicates that it is waiting for the futex lock.
+Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
+---
+ tools/testing/selftests/futex/functional/futex_requeue.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v1->v2:
-    - Solve the compilation problems found by the kernel test robot
-    - Cleanup the atomic library code for futex test
-
-Link: https://lore.kernel.org/all/20240918231102.234253-1-edliaw@google.com/
+diff --git a/tools/testing/selftests/futex/functional/futex_requeue.c b/tools/testing/selftests/futex/functional/futex_requeue.c
+index 69e2555b60399..1807465de2144 100644
+--- a/tools/testing/selftests/futex/functional/futex_requeue.c
++++ b/tools/testing/selftests/futex/functional/futex_requeue.c
+@@ -33,7 +33,7 @@ TEST(requeue_single)
+ {
+ 	volatile futex_t _f1 = 0;
+ 	volatile futex_t f2 = 0;
+-	pthread_t waiter[10];
++	pthread_t waiter;
+ 	int res;
+ 
+ 	f1 = &_f1;
+@@ -41,7 +41,7 @@ TEST(requeue_single)
+ 	/*
+ 	 * Requeue a waiter from f1 to f2, and wake f2.
+ 	 */
+-	if (pthread_create(&waiter[0], NULL, waiterfn, NULL))
++	if (pthread_create(&waiter, NULL, waiterfn, NULL))
+ 		ksft_exit_fail_msg("pthread_create failed\n");
+ 
+ 	usleep(WAKE_WAIT_US);
+-- 
+2.34.1
 
 
