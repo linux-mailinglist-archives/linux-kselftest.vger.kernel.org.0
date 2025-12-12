@@ -1,165 +1,219 @@
-Return-Path: <linux-kselftest+bounces-47510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC78ACB9057
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 15:58:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED38ACB91C0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 16:26:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 259853050CD9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 14:58:35 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3F3633007E75
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 15:26:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9379B2E8DE2;
-	Fri, 12 Dec 2025 14:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB8C313285;
+	Fri, 12 Dec 2025 15:26:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="k1O/WETs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FnNSwg4J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCDB26CE33
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 14:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1069F30F52D
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 15:26:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765551513; cv=none; b=dtHppvPykN+xbVoGnB+NhiReXMv2apYzcjtdjvCmcAyOD3rxJyL7FgvKnQtWZFT4/sMinaabDGgEYdaXvxo/Swy2qsANZ7OHjkGmrVVJGI0q3xedJywU+6OWzyu9UitmseLbHwnpgBITmTphPPjnSrevIUc9NjE9CQXdLnqTHXI=
+	t=1765553184; cv=none; b=UheYzmrGQXSh87HV0xEA2/m/gC2OFZQ65Z5ODv+R8npXB1tSzcJFqPyy8bu1mwJyy/4hJUnARxx/LYNvhA03SmQg2pIT19KlUDGD2z8o+NLBMkxdOstYG/bkppD982lQjBi+YAP1i5LHtxwpFVdMNix+JoHh5nHS2OXT4MS7tuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765551513; c=relaxed/simple;
-	bh=lEOPbLZ8iK9A4EcSY6GtElHcm2Z2lNDMRR0j2H3qVSs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IxCQMvg7lPCG7HSAXnl2ihTk3r/vv3UzO7PnNTXYnG9e6SgaZFxcT14ZqqlCD4bMYxKnANzw1ZKYKxcaCKvw0h8GJylwa6uIlK/o0QfNEX7fN2GQdmFTW2IDm7LjR9f4Yw1FMW2cBtf4XrencJTsbkqZx02Aj2dSpmkM55Ucam8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=k1O/WETs; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8BCC73FB53
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 14:49:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1765550985;
-	bh=EoivPywf7QXsLeTHC8lXLQ+O9tet6+0xD7qUCbPDZtM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
-	b=k1O/WETss1W1yE0mVYBu1vv2xO6Cor2Jei/t/Uyk9GXHVmXwsyDX/sWT65+Q4ttTP
-	 FXCKmJ5wIZFi9sVQey88GDU/16M2wkScI3ceLvzNWLznSELLRzbFR23sHRdCIxZyzp
-	 UrQi7sh3l88UMvHcgda3kACec188TDgkW7JKR7yIRj8rCvxvZUC1vTn/iV3pylTqvs
-	 oFmvl3Z23NHEdPSR3503joz1QsXu2HX0zTzj6dkV6haccck/3mtVlEDUhgZioFhG0D
-	 gpR6KZr07qSLI2a5miuvoyWO8mp/G9g5+uylnLyEMSkPMMsW76stt0Od9Fu/CQq+Zg
-	 IwjGDA7lawRaI+Jj0iCZJ/ti4+v0+gZAW0BQUdV6JsPcdnzi6fXp2mUJlEsie+N13n
-	 l1xVHru+BHJ/INJHrZ3V9m2oiBhLeRybKbykgZd0L2D/ufaR9A/5IQkAKc5Del5wdU
-	 81yfuBuv+CqA5KFxuhAp7QVlQnl72WHGjOR02phakgPHlv9qTSx5mG19ABfj0AHZis
-	 g0wb/k1aznfEAYHSjOE9131xynZA7fqmv8vp515Ghah45U5XxYDXCTJwCodv2u3q/k
-	 g4gqmFNG6AHBZ0qi6YXVZqg9zCcodmJ0bmGc7hop5CjbKNl65DaGeFFQtzcqbFMyOe
-	 CC+VZM8kJ5yHRyfmya3FowBk=
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-8824d5b11easo23596756d6.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 06:49:45 -0800 (PST)
+	s=arc-20240116; t=1765553184; c=relaxed/simple;
+	bh=260eGi6QkxDk8QQfOLsKhm09EI+KZGuf0yseurtGq/Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k8ORZP87sZuhNVM8r8eeTUZGZacxeyUKQn5W+s5CAZDV9qcq2sR9C8G9XD8RYfwgl4Rj7vrkoToGG9Cn0O+/LuYvx/DnLY+rb8hfsiBZlPBRu/WpiTbS+X48PRlJmUyExLhY48Nh+Oj7+dGM8g9zPf05b8y3HjZCCXm7e0QON7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FnNSwg4J; arc=none smtp.client-ip=74.125.224.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-641e9422473so1192478d50.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 07:26:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765553182; x=1766157982; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IK+CEXtkA15N8VNwOIEfZTiLVNxEPNXHwf9eEh9q2mY=;
+        b=FnNSwg4JbGsXkFe2tJ+5wJjgau4I9z1jnEAOZjvIh8PXvGDoAjUCWWLmSpFH/N82gY
+         ks3SKSB4ltqh8wZT6J060+2vd396uQqB/mO7viVGUwRYaszMJ3Hs6XWWew9C1RTByoDk
+         5gAKq9Hcy3WSv2OAoMdqu5h+mhp/7kKMJ+Ot6eKE20kHrCmNFPOOEaRjLiAjdxc4tCKl
+         kfbybaS35zpMVppWtd2/nNOPqkFAWdxc0v6WvqBYIbQnAB8I1wYx4DrxpzSR5mjaBMHE
+         sNCze75T+kVtEK1ywH0wbBsBhtSfD4w9BT9W/Jsl9MB7+W8JOgLk8x3JKGd0P7qBom7b
+         w//g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765550984; x=1766155784;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EoivPywf7QXsLeTHC8lXLQ+O9tet6+0xD7qUCbPDZtM=;
-        b=GdGEC1O0cNvulrtThhoJbXkO5txCJVSAAYHnkUFtqo4tKhFW5GtSwn5Qa4vmEOo0QC
-         uCFpYL3y1PmglxhII9u+c7WS4XqjRtF92eV6kf/keS27dG8JSbrPAIr1zaJYPXanZ8NG
-         c5NFQTdfnZxaK56femrTTz3h2rLqS4ViHKvKbdbfMs37AEjIaevAMkMaYdY2dDT9D6e9
-         dj1STXk2rMGcu6oIiBcS6bEK37Jj7aZcKfZW496866oJ7l6vpm1dBul0ilfUnlqKJS9U
-         fCXt6Qn1bXoIB6thtOmGpZ298GViYlrrFgACgwhxjcEJdGQXw5qVQRkuSMQwL117EHkP
-         rPQw==
-X-Gm-Message-State: AOJu0YziF4eRgyD1XeQb9QsYYcQESVgy0I+UZ/ON80WVVA2TBXXbtEam
-	Wmvky3BSRffEuMKE4RmWL7HMAGzOAdezGSyOCFy3fdo/tLdmOAcryjOQsKPNyNgil9/j2qtC7VW
-	IDPwhylR33aGPX+AhxXDKDB8CFYG5KPvlCWEWMUbdIocJ6dvDkpMKTiP04EFDaMO9IClRQbWntn
-	xBL5Fmux6yeE2pDzbgYw==
-X-Gm-Gg: AY/fxX5OElb8LOeYJ2ChyUaqX5odSwDlrZf+8eqLAfEhVAqtvp06AnLBTfLOweRoy+8
-	xUe1qGC7zi7INSyBOqFS+S+9SzLQ4hj/Rmeq7ByGT/BUe32lp+kqIfSiZvt9VdhOcdD0hmJSNLQ
-	pfwud0FNtfNxv7ZDPAhUmS30OLp4C+B0hnJCza4fsshPQtLGa0hgxKCDtQT4pTbkHgPWaCr8k0K
-	jA9fCm5KHj2CcQd1c9YTT4iJtap00MJDAOb1Ik7JBUPkcFlkz9XsZUQEw7fLPfZj6Yqcn21YF3z
-	n6ASjyvNF5r6nQbV8JQiTvgg/8ESly2uRRNexVW70ec7kRd4Mcy8OmFC3ppMDIOmbGXFoifLTUH
-	Ks0X4SsfICjDbr1wX+Pdm6zDlRa9c11zJ+VGk6xGgRGWdDIZP5gd8VrZa3cx++KRp
-X-Received: by 2002:a05:6214:5b89:b0:888:633f:391e with SMTP id 6a1803df08f44-8887e46e988mr31021176d6.67.1765550983617;
-        Fri, 12 Dec 2025 06:49:43 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH9wmfgV3BJqpriF+99pAJs5NZio3o6jMd/99nKRfDWX1FmNlTIdtjSoVnEpsZJII6jI8LPjQ==
-X-Received: by 2002:a05:6214:5b89:b0:888:633f:391e with SMTP id 6a1803df08f44-8887e46e988mr31020866d6.67.1765550983276;
-        Fri, 12 Dec 2025 06:49:43 -0800 (PST)
-Received: from localhost (modemcable137.35-177-173.mc.videotron.ca. [173.177.35.137])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-888818cd87asm12157646d6.30.2025.12.12.06.49.42
+        d=1e100.net; s=20230601; t=1765553182; x=1766157982;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IK+CEXtkA15N8VNwOIEfZTiLVNxEPNXHwf9eEh9q2mY=;
+        b=VLTFkCScqEIqLES4kOZw+dENgfC3lP+/YHeX77hhWEApvnU9gks+ofkeZXvqFQxgfI
+         O778N/SgQA30eOZLrACS2+Lz637UcuySjWdlPhFM8gCaeHSTeM/sCQdFOwLf4Up/evbx
+         9tfnTlM5kuVWz4vs4iFMTNGFahrcspU54i0D2SynaR0UTSNkj0BPXHuhdJpC5IbX3t1n
+         RKRC262tWb4k88E37DFodgEJ3syjD6XOPVqTNMQa5OxXMfiUyewD9hW0TlMAn0S23iHm
+         ySnvVxFyJX/oI9jPf/Qd9s4XBy7ehTQZZmuiAuuROKKkJ9zH1YeCA35T1l6xAG3rer8a
+         Fu2w==
+X-Forwarded-Encrypted: i=1; AJvYcCXese4e4krp8MGKo4MWWftlWaQIthUPGIE/XxHMVO8JVzwJZJGxHKvXCu7udbzoC+okOT63tP4a+imf1v9odkg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5gadvNojRNE2tmJX+cirFNzUL9jsRk7BZCYLyNDZWVC5blwWy
+	uIEFPY4UxgBFtd/owQi0pl8gmTMqvaRUMEfsmsibgIXwEv3mbn6SKvzw
+X-Gm-Gg: AY/fxX6GNTP++NlmHb/02wX1cQ0W/DgWJ+O7reqNhiQhI0K1OgMIEIBODTVOf8bIaRX
+	ha8at77RKQtp5Wgky2aipACtswZz++5Yj7jeR3L+zJSN6QO2sme6rcttJWl9LeG9/MEhxj2kuwj
+	ikHF0enkv2/YDKK8FB4i/GWfiLdzaDJibvChpf4nm5aolbsr1EO/VyC1kmEV2+Y2t+gOvydugXc
+	V0a1du8dkVs8JjrSon8cxtnOqaJxhI2ZK9urGA1TsIxphD4FDpE25TOQglhaF8cbD6LcOcE9NSs
+	EvTCSSs4lthltmOw36LAWkZDfVwPO1VqLDR/0YV5ia9wz+iSj8js8cY0qeaFsNvYNRz/KlQWMeg
+	m4hY2GJJRsoyK9ewMTyYggvW0YWUciggYKbd3gA3bZrVzKgQ2AV+azEIOw+Gn7/gqC17iqk2tj5
+	7g/zZQlSfg4Xol5zqEAnywS3dh0HLJo3tY864Ouoiqi0TIskUkNU1EKQ8Ye08snJNBZdo=
+X-Google-Smtp-Source: AGHT+IHPDxMRz+sSHQa8GJSWOVqErHefuxKsetCMbgKHq77F9IKQFOzGirnG2+UwGG15ipBxTc+SEQ==
+X-Received: by 2002:a05:690c:7402:b0:789:61ca:88f6 with SMTP id 00721157ae682-78e66cab887mr39877247b3.4.1765553181789;
+        Fri, 12 Dec 2025 07:26:21 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:3::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64477d3a32bsm2613584d50.5.2025.12.12.07.26.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Dec 2025 06:49:42 -0800 (PST)
-From: "Alice C. Munduruca" <alice.munduruca@canonical.com>
-To: netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	"Alice C. Munduruca" <alice.munduruca@canonical.com>,
+        Fri, 12 Dec 2025 07:26:21 -0800 (PST)
+Date: Fri, 12 Dec 2025 07:26:15 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net v2] selftests: net: fix "buffer overflow detected" for tap.c
-Date: Fri, 12 Dec 2025 09:49:21 -0500
-Message-ID: <20251212144921.16915-1-alice.munduruca@canonical.com>
-X-Mailer: git-send-email 2.48.1
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, berrange@redhat.com,
+	Sargun Dhillon <sargun@sargun.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v12 04/12] vsock: add netns support to virtio
+ transports
+Message-ID: <aTw0F6lufR/nT7OY@devvm11784.nha0.facebook.com>
+References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
+ <20251126-vsock-vmtest-v12-4-257ee21cd5de@meta.com>
+ <6cef5a68-375a-4bb6-84f8-fccc00cf7162@redhat.com>
+ <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
+ <06b7cfea-d366-44f7-943e-087ead2f25c2@redhat.com>
+ <aS9hoOKb7yA5Qgod@devvm11784.nha0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aS9hoOKb7yA5Qgod@devvm11784.nha0.facebook.com>
 
-When the selftest 'tap.c' is compiled with '-D_FORTIFY_SOURCE=3', the
-strcpy() in rtattr_add_strsz() is replaced with a checked version which
-causes the test to consistently fail when compiled with toolchains for
-which this option is enabled by default.
+On Tue, Dec 02, 2025 at 02:01:04PM -0800, Bobby Eshleman wrote:
+> On Tue, Dec 02, 2025 at 09:47:19PM +0100, Paolo Abeni wrote:
+> > On 12/2/25 6:56 PM, Bobby Eshleman wrote:
+> > > On Tue, Dec 02, 2025 at 11:18:14AM +0100, Paolo Abeni wrote:
+> > >> On 11/27/25 8:47 AM, Bobby Eshleman wrote:
+> > >>> @@ -674,6 +689,17 @@ static int vhost_vsock_dev_open(struct inode *inode, struct file *file)
+> > >>>  		goto out;
+> > >>>  	}
+> > >>>  
+> > >>> +	net = current->nsproxy->net_ns;
+> > >>> +	vsock->net = get_net_track(net, &vsock->ns_tracker, GFP_KERNEL);
+> > >>> +
+> > >>> +	/* Store the mode of the namespace at the time of creation. If this
+> > >>> +	 * namespace later changes from "global" to "local", we want this vsock
+> > >>> +	 * to continue operating normally and not suddenly break. For that
+> > >>> +	 * reason, we save the mode here and later use it when performing
+> > >>> +	 * socket lookups with vsock_net_check_mode() (see vhost_vsock_get()).
+> > >>> +	 */
+> > >>> +	vsock->net_mode = vsock_net_mode(net);
+> > >>
+> > >> I'm sorry for the very late feedback. I think that at very least the
+> > >> user-space needs a way to query if the given transport is in local or
+> > >> global mode, as AFAICS there is no way to tell that when socket creation
+> > >> races with mode change.
+> > > 
+> > > Are you thinking something along the lines of sockopt?
+> > 
+> > I'd like to see a way for the user-space to query the socket 'namespace
+> > mode'.
+> > 
+> > sockopt could be an option; a possibly better one could be sock_diag. Or
+> > you could do both using dumping the info with a shared helper invoked by
+> > both code paths, alike what TCP is doing.
+> > >> Also I'm a bit uneasy with the model implemented here, as 'local' socket
+> > >> may cross netns boundaris and connect to 'local' socket in other netns
+> > >> (if I read correctly patch 2/12). That in turns AFAICS break the netns
+> > >> isolation.
+> > > 
+> > > Local mode sockets are unable to communicate with local mode (and global
+> > > mode too) sockets that are in other namespaces. The key piece of code
+> > > for that is vsock_net_check_mode(), where if either modes is local the
+> > > namespaces must be the same.
+> > 
+> > Sorry, I likely misread the large comment in patch 2:
+> > 
+> > https://lore.kernel.org/netdev/20251126-vsock-vmtest-v12-2-257ee21cd5de@meta.com/
+> > 
+> > >> Have you considered instead a slightly different model, where the
+> > >> local/global model is set in stone at netns creation time - alike what
+> > >> /proc/sys/net/ipv4/tcp_child_ehash_entries is doing[1] - and
+> > >> inter-netns connectivity is explicitly granted by the admin (I guess
+> > >> you will need new transport operations for that)?
+> > >>
+> > >> /P
+> > >>
+> > >> [1] tcp allows using per-netns established socket lookup tables - as
+> > >> opposed to the default global lookup table (even if match always takes
+> > >> in account the netns obviously). The mentioned sysctl specify such
+> > >> configuration for the children namespaces, if any.
+> > > 
+> > > I'll save this discussion if the above doesn't resolve your concerns.
+> > I still have some concern WRT the dynamic mode change after netns
+> > creation. I fear some 'unsolvable' (or very hard to solve) race I can't
+> > see now. A tcp_child_ehash_entries-like model will avoid completely the
+> > issue, but I understand it would be a significant change over the
+> > current status.
+> > 
+> > "Luckily" the merge window is on us and we have some time to discuss. Do
+> > you have a specific use-case for the ability to change the netns mode
+> > after creation?
+> > 
+> > /P
+> 
+> I don't think there is a hard requirement that the mode be change-able
+> after creation. Though I'd love to avoid such a big change... or at
+> least leave unchanged as much of what we've already reviewed as
+> possible.
+> 
+> In the scheme of defining the mode at creation and following the
+> tcp_child_ehash_entries-ish model, what I'm imagining is:
+> - /proc/sys/net/vsock/child_ns_mode can be set to "local" or "global"
+> - /proc/sys/net/vsock/child_ns_mode is not immutable, can change any
+>   number of times
+> 
+> - when a netns is created, the new netns mode is inherited from
+>   child_ns_mode, being assigned using something like:
+> 
+> 	  net->vsock.ns_mode =
+> 		get_net_ns_by_pid(current->pid)->child_ns_mode
+> 
+> - /proc/sys/net/vsock/ns_mode queries the current mode, returning
+>   "local" or "global", returning value of net->vsock.ns_mode
+> - /proc/sys/net/vsock/ns_mode and net->vsock.ns_mode are immutable and
+>   reject writes
+> 
+> Does that align with what you have in mind?
 
- TAP version 13
- 1..3
- # Starting 3 tests from 1 test cases.
- #  RUN           tap.test_packet_valid_udp_gso ...
- *** buffer overflow detected ***: terminated
- # test_packet_valid_udp_gso: Test terminated by assertion
- #          FAIL  tap.test_packet_valid_udp_gso
- not ok 1 tap.test_packet_valid_udp_gso
- #  RUN           tap.test_packet_valid_udp_csum ...
- *** buffer overflow detected ***: terminated
- # test_packet_valid_udp_csum: Test terminated by assertion
- #          FAIL  tap.test_packet_valid_udp_csum
- not ok 2 tap.test_packet_valid_udp_csum
- #  RUN           tap.test_packet_crash_tap_invalid_eth_proto ...
- *** buffer overflow detected ***: terminated
- # test_packet_crash_tap_invalid_eth_proto: Test terminated by assertion
- #          FAIL  tap.test_packet_crash_tap_invalid_eth_proto
- not ok 3 tap.test_packet_crash_tap_invalid_eth_proto
- # FAILED: 0 / 3 tests passed.
- # Totals: pass:0 fail:3 xfail:0 xpass:0 skip:0 error:0
+Hey Paolo, I just wanted to sync up on this one. Does the above align
+with what you envision?
 
-A buffer overflow is detected by the fortified glibc __strcpy_chk()
-since the __builtin_object_size() of `RTA_DATA(rta)` is incorrectly
-reported as 1, even though there is ample space in its bounding buffer
-`req`.
-
-Using the unchecked function memcpy() here instead allows us to match
-the way rtattr_add_str() is written while avoiding the spurious test
-failure.
-
-Fixes: 2e64fe4624d1 ("selftests: add few test cases for tap driver")
-Signed-off-by: Alice C. Munduruca <alice.munduruca@canonical.com>
----
- tools/testing/selftests/net/tap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/tap.c b/tools/testing/selftests/net/tap.c
-index 247c3b3ac1c9..dd961b629295 100644
---- a/tools/testing/selftests/net/tap.c
-+++ b/tools/testing/selftests/net/tap.c
-@@ -67,7 +67,7 @@ static struct rtattr *rtattr_add_strsz(struct nlmsghdr *nh, unsigned short type,
- {
- 	struct rtattr *rta = rtattr_add(nh, type, strlen(s) + 1);
- 
--	strcpy(RTA_DATA(rta), s);
-+	memcpy(RTA_DATA(rta), s, strlen(s) + 1);
- 	return rta;
- }
- 
--- 
-2.48.1
-
+Best,
+Bobby
 
