@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-47504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CE41CB8ABF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 12:10:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C41EECB8AEC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 12:14:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 80BC2308696D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 11:10:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8B406306636B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 11:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0EA331AF1F;
-	Fri, 12 Dec 2025 11:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30C9A31064E;
+	Fri, 12 Dec 2025 11:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hnpUj8zn"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Nn4c8Lm3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3913331AA97
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 11:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5278830ACEB
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 11:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765537795; cv=none; b=szLGiJ4C0LACDwK28qlSFOjWE5FQ0WjqUyWa6nplx9RUUkuPsNWzPvKyMxsXw7TyQ/oXtCV4a3wTp5vkAz0R+oL6xJVI86gOyn1OdFCUgEzfGusVwjX+oOCnerOrMGSvKsixpBe4c4cW/V9jCa+NKFLkfaSBuqPoH+4xUtQT+xU=
+	t=1765538056; cv=none; b=nSnRwsUeVhIqK3on+Utg08D6RlzGail1ZTpcLt05fzsXbWr9c8FrCPnMbEsOF0ggf60R7Oi1kigTV94SMAhf9Fxe52H6H2jI66wnTrxhjHmVFKWP8WXvcKVEUWR4P9JhYo0gykd7j/by2WgamqndKE8nwZKm1UvNg/BV2sHyOlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765537795; c=relaxed/simple;
+	s=arc-20240116; t=1765538056; c=relaxed/simple;
 	bh=599F0iN8VoHAMcBk9hlUnhzqpKfM9wcRmEpKwX2fypw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uXF2KJS/s4wvnlu2My/rs0+J44P24cufbp2+LiVWvmVlrgVZkO1Ye7K5S8fWFwcizfJHRB41+ZejzIvzuJCfgdZ19E2yzaAcY1Il4LYB4WL2Jk3Rf79yRutaXm2wkjZRoeqm0uRktge7Ofj5yH4Kg7x3J+J6MW46HQngUTyrGSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hnpUj8zn; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=G8amKweCAI9stvUD4UlsYdXIwkuSlxnB1uyFGLNXGWiNkSTI3z0VOmgIbd8t73TdOWuBzBRhkbC6OFaSVtnoZV+LWRI5oc6N6LwlUnLl6tT4zAIac+XBCIM1V3Ltoi8WzvXwApC220iV6Y4eT10NuxjuOcEG/CJMAx/nxPtAYlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Nn4c8Lm3; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765537793;
+	s=mimecast20190719; t=1765538053;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
 	bh=FeH2q0RH17mtsW9nUPh5TVnCObfHE1KFZdVHyBk5l4k=;
-	b=hnpUj8znpsSL3V5FVjnK326RgiXKF4m9vcQw1cK92wE8473BZEthFgKs7kJYLmUR00p4nB
-	KR6UIfObjXfXKsO8SUA4GURoegMqNcai8YfjXXVxllk2tq0MOaLE7NGxrmfSqrsR13cWie
-	OdCwXkY3nvcGw/pQcl1XaF8ATEietmQ=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	b=Nn4c8Lm3tWJX0ES601Stmtoopk5MqupJ9rWq7AkX6/3ykwds/ZKDm84nZDYl8wK3KlIv7g
+	CgQGFINj0e9GwugF1ItxBQXagnc0vIxS96pZYF7CLFZBBGGLvpmpZGz4npuBW1ORWNhW+T
+	J240XT2V141UwabrH/u6G7J/Mv0bOuE=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-695-cc8hxSgeMFOSD6lxj6rfvg-1; Fri,
- 12 Dec 2025 06:09:50 -0500
-X-MC-Unique: cc8hxSgeMFOSD6lxj6rfvg-1
-X-Mimecast-MFC-AGG-ID: cc8hxSgeMFOSD6lxj6rfvg_1765537789
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-102-RbRQ-7iWMRqa-CUX7uIwng-1; Fri,
+ 12 Dec 2025 06:14:07 -0500
+X-MC-Unique: RbRQ-7iWMRqa-CUX7uIwng-1
+X-Mimecast-MFC-AGG-ID: RbRQ-7iWMRqa-CUX7uIwng_1765538046
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 024FF195608E;
-	Fri, 12 Dec 2025 11:09:49 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D50EF180035A;
+	Fri, 12 Dec 2025 11:14:05 +0000 (UTC)
 Received: from fedora (unknown [10.72.116.48])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9020A30001A2;
-	Fri, 12 Dec 2025 11:09:45 +0000 (UTC)
-Date: Fri, 12 Dec 2025 19:09:40 +0800
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7EB6F19540DF;
+	Fri, 12 Dec 2025 11:14:02 +0000 (UTC)
+Date: Fri, 12 Dec 2025 19:13:57 +0800
 From: Ming Lei <ming.lei@redhat.com>
 To: Caleb Sander Mateos <csander@purestorage.com>
 Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 6/8] selftests: ublk: forbid multiple data copy modes
-Message-ID: <aTv39DmuRbhXXekG@fedora>
+Message-ID: <aTv49eVEicH9EHWg@fedora>
 References: <20251212051658.1618543-1-csander@purestorage.com>
  <20251212051658.1618543-7-csander@purestorage.com>
 Precedence: bulk
@@ -72,7 +72,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20251212051658.1618543-7-csander@purestorage.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
 On Thu, Dec 11, 2025 at 10:16:56PM -0700, Caleb Sander Mateos wrote:
 > The kublk mock ublk server allows multiple data copy mode arguments to
