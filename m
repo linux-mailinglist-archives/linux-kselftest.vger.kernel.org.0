@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-47521-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3ACACB96DD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 18:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 79813CB96EF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 18:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 18A5C30C44D4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 17:17:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 97EF630DF7EB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 17:17:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC63D2E7BC0;
-	Fri, 12 Dec 2025 17:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6D292E8E13;
+	Fri, 12 Dec 2025 17:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="TdjZ4mrZ"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="M39/LGVY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f227.google.com (mail-pl1-f227.google.com [209.85.214.227])
+Received: from mail-yw1-f228.google.com (mail-yw1-f228.google.com [209.85.128.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52022D7D27
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 17:17:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542712D94B3
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 17:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765559835; cv=none; b=uGLLgeQ7YxctO6apm1FazzXunjTZtHBdoSlvniCwJTYEjPkoUYWuUtMxg9sLe+06JpUPbAYtnZQ8xWKcvkPXq+EBYlaBsKROOwY2udwuolPb7RTUy6OJU/77XfDkLOncjNweWTrT3XhzTF2aPMgmO1F2lSxEYwSENP3WstvWbd8=
+	t=1765559836; cv=none; b=rQ4fPtUvt6xJ+ePye46m151pL82CKvDTYmhVSPZO5y8SlhK/XPAc+3XAFmOyaXK7WGXcX7bva4/tk3VDBrhhd2+KfKqxmaH4ZGfZtlOFzJPMxHMWTSxeqq7R7+saQ9mYICppoFCM5EjAr+2gkasAQw1wgIyRzdwyjQEAlrXZCwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765559835; c=relaxed/simple;
-	bh=caTAQpgh+X4ZpNyyMAM/TEMWro2kQrWFU3FikG62sB8=;
+	s=arc-20240116; t=1765559836; c=relaxed/simple;
+	bh=llE0JIIYQL634M/3G9F8RQU6/HFxWG9VLOlfnehN3hE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qy8o2gwxfSqJtJcL6HpKTiavVZkYVJLVCMOfxd+o0itbs53U6tHmKKwtB3SA2uLRPCRKVQ6K8b3w6FNqKZT4FurTtTWhGiyzjWUznqQL5V3XvMh+KzsJfikmArI+6xxcRn+CaGgwtWo0a4ZIG1VTTDZx4KYxaOlNv3O8Qh5PkwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=TdjZ4mrZ; arc=none smtp.client-ip=209.85.214.227
+	 MIME-Version; b=PnF/ZtfQWTrsjixYcYqdUpgLXpP2Ty9yr0vKAo91McRODKmcaRN05VvRxCBTubvmaU1yVFexRWRKQv1aXzK8P1pBITX3QA06vRJFJqdHFK+zfiE1/uZFLzSFt00QnxR4InwSRrtQtVwr3+YMyjuZ/UCm693nRheejZByWyJVqfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=M39/LGVY; arc=none smtp.client-ip=209.85.128.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-pl1-f227.google.com with SMTP id d9443c01a7336-29f2d829667so1270055ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 09:17:11 -0800 (PST)
+Received: by mail-yw1-f228.google.com with SMTP id 00721157ae682-78d64196795so688477b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 09:17:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1765559831; x=1766164631; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wJkrjtWt8tg1UlZG0whiJ8Js6OX17UUxfoijWx05xpE=;
-        b=TdjZ4mrZIWtRMezCKrNMZ1r0/7kMfQBpIXccCEzT2k3dF5Gqc6fi1ND4GZQpnERPnG
-         JvdDkTirwc0eY8PSDRU+icS2zyK3MCfYsc7V6xZKmX71aUkQyAtw9qB1JsFI0tMGKzIF
-         I1apcOV10A5YkQP1TiQ5J+c4lSQAwqzouaFuligoMeQ2gV0e1Zq6eew/iyI9S8mqhGZb
-         22sw0O5+Ong7lTKl55hXtaVHWjmT019yT5nqgyZj8Q5rM55T0NcgrAB2DbHH29V3b4PW
-         z9AVJZLdMmNH4UfzHbypJygbGd5fDfmOXAaBIUhVIL7ZlsxZeuU3s6CTp6QQNuW8u6vs
-         iOag==
+        bh=h/Z7l/OOLX/8k3+ZI1rZl85RyeDw72L7I7CsxK9Jg5s=;
+        b=M39/LGVYJ49W0pdxmb3P/w7FgVpmVMgCqrnjChFNxSlnXy2eKKNkoHlf20yX9yhDE+
+         00NPMUBAjscifX/rSfWzjuRf/zkHHefhOKw7w50AhSYifePOqfL+OYJ4J+jY+swZq0Bv
+         idZ+ORze8iECWfs1RpZ1b+U+bUiNvAjlu0/9RL+wS0JMY3frj2m8ut6q1greuki0pBWY
+         uJJk3RiA594C8m3n+u9grIHOuTeWlUhLY89Dhl/uyPpcqGG7yCSbNTSQ1HTvFyFDeZRz
+         05SY8O5KDn4AKubne/LyHk+ww4ITFObjTxotpgECUm3DxiAn9tOXswFanzPHFWOy6sjF
+         Oyhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1765559831; x=1766164631;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=wJkrjtWt8tg1UlZG0whiJ8Js6OX17UUxfoijWx05xpE=;
-        b=MNLJStDDw2xT1/Fp/KtFQjoxYAfDZWzooJEfmXRL/Bl5q2e373ICE7UIc5+3HJRhbV
-         NZdiDhpQDlD7l2sAbdkxJhMYcZ7wp3rp0nsVxaAm/oOreS4OQ+VRQ/ymK1UPW3/YU+Rd
-         USMyhA/ch8R6l/bWsYTWFeR1fXsUWh5eSAGKWNkuhTCLZD3geOfB69ICeFreKrpQpBaS
-         JvaR3yxRTTPEZm1dDkz0jjaC4+BMKPzfV2JaJK0DRYDk9qWvUI8fbPSYaYhQ6JSSD40w
-         oQd1VoLnG8CawB0j9QP5/WzR9lQL7koOh5ci9TlUS7lGSVP3uiFz2UJUcVBemSzuFwhP
-         /36Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXtx3GD71Ru9tSVFalWs2pzz6jWv6qJmHLs1w97tqtbizWUVptgX67gRSAc6WvO8WBf8FiQ1IkyQZAo80q9d3c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPIcRyF5oEd1VdlO49LPTtSDiwnt9VtSfwAujLHeHoelmqMpXB
-	HemueoRXJVpcFkIH9MJh6lCch6CKTeVz8ZlHS735F8iuHPRjg5BoKUCmgpunACWfcm+fmH0HK4w
-	Zc1ErEnJeXbFvmJipxv/xWDnCkp9qSKATXzaIY+xHmpzx0TOlvaxW
-X-Gm-Gg: AY/fxX71WRkgqEBzUyJn2HJ6ODFj7FaQ3e9j63QSUR4+skiNz3QByGcI6RBvMVaqElq
-	4uCi3531EKLFO0VYB+nIZTDdKC2sEVitLw+LtIGTgqxEZEq67T5ZZQvIzlWnmy9DlHHPSPYrmAl
-	PA3L8X43BW6fP1wgFg5Akx7UvmXi9hpR/0yU9Ofs/B/jAtqF9sHpMQeWcAqqgDERl74S1IuzxDH
-	o4OhqvXjxGTbH141OX8BOFE1j28rzdyvtVrIOUy0h6jxvk4ud5DQVXu5SuMBzXMFdHjMYy9if3l
-	KVWBlJGExfygDmbjc3M2QDzVKDhqmE6RtV/CoaPq5BlQHamwqvHDeWI+j7FwZkQLLwQ329/baJN
-	nMOSnwZ1Pf3J7Tkd5ps0wx+UtrIU=
-X-Google-Smtp-Source: AGHT+IFJ1GUZ3zmhMWmiVdh2barweJoIDrDdZVhEKQI9IfIoy3Skf6Q+Q0nnC05JxyFRtimaqOYT2cExBqPx
-X-Received: by 2002:a05:7022:ec0b:b0:11a:c044:ec44 with SMTP id a92af1059eb24-11f34873681mr1111693c88.0.1765559830571;
-        Fri, 12 Dec 2025 09:17:10 -0800 (PST)
+        bh=h/Z7l/OOLX/8k3+ZI1rZl85RyeDw72L7I7CsxK9Jg5s=;
+        b=p+JNQ+pYCS2WYhKdSn4uATuLQzzPcYp6bhK2duszbRHbFMFrVO8hAq7XHQ3zWXy9Vd
+         OpZq9KtQFH8zpKmOmQylv7tElnGf3d0Juiii/dEUxAAFax2Ojhe1fJWdjaURqrCmBQdU
+         vlQSJZa6UBa14jWHterrSNXHzzpCVxUbNJ4KVP6Pof0Vm8ecqG6rv8NmebDE031nKtbG
+         1hNhfH4FV8oHgEis3kFIA021Lb2fSYwH2LvimgSgpKJtp/mUt/kgdBvNRa5q7Kp7SP2x
+         UqfdqZOjHuHd3Fonv12wmzDCIeDfwgATOHk/ok8WOV606iona9C26+JnNB616tL9+Nc8
+         M7PA==
+X-Forwarded-Encrypted: i=1; AJvYcCXf+2EuhijLwVfIczh0dGdHQgIjGbBKbulatVXij44YAhJPn9VIHvzBNXMsWR8uKUGvCaOcSyxtNpwSzP1FRZA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrJYRCU6ZS6Whrhia5g4VkSy9Gym6/9CjGG5XUo6dZjGAVoOKv
+	SZd3mLGC1iDry8oHP+osMYR9enFGt1yBK8gK1dzzjPg2zxBlctWhYqqj+vFJWl9h+vpY1j07c4G
+	P35hQyT4tbsZHfJdR/I1C7UrEDSLxi+Os3tropS27CeXIynp12B4W
+X-Gm-Gg: AY/fxX6qOwhkQndioMbVLuGYLMo31PvXK55fLC/cpbGBnq7LJP8q0IvKnilsSys8CZu
+	zdYF/Co0tSCwyX220aBTe+S37RDJjhra04brgk11jAxXh6qkGkNvOgNNyWVvtzG3iBo2lNXfPvp
+	oLJlG3wTfnH5P1Rr0uu5ztdb8mnFscJa8WSYlps+hB9oobuo2L5Np7xYgDPRFwShFLhZdFfGsYI
+	jfsXOh8BSAts1ToenWrWjy2Oo+lSsxnfXAPRut6gPd9tPK/cCFQ8RboEeDplK1EPNGm70RiF7sg
+	bRwHuZ5XnUVkYVKignvYw5Ved0CbY+Lgmg/L54PZo/lm75Er/A3bn2FcjMtc7kPQIXjiyREBJA4
+	ygdOtj91FZNRthn4g+3Eeu7CkJCo=
+X-Google-Smtp-Source: AGHT+IHd+TXPCBhv1un/V2ZO13vV3k8hqTYx5RW3Ne144DrJv+wbC283WrsghZHKDveVuWX1ysPPuwCEM8xZ
+X-Received: by 2002:a05:690c:10:b0:78c:d4ce:4138 with SMTP id 00721157ae682-78e66e670dfmr21156037b3.8.1765559831034;
+        Fri, 12 Dec 2025 09:17:11 -0800 (PST)
 Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id a92af1059eb24-11f2e2fe356sm1027197c88.5.2025.12.12.09.17.10
+        by smtp-relay.gmail.com with ESMTPS id 00721157ae682-78e6a454ad8sm2171307b3.29.2025.12.12.09.17.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Dec 2025 09:17:10 -0800 (PST)
+        Fri, 12 Dec 2025 09:17:11 -0800 (PST)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 0BAAD3404B4;
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 2A9FF34027F;
 	Fri, 12 Dec 2025 10:17:10 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 096E9E4232B; Fri, 12 Dec 2025 10:17:10 -0700 (MST)
+	id 28B4FE4232B; Fri, 12 Dec 2025 10:17:10 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Shuah Khan <shuah@kernel.org>
@@ -85,9 +85,9 @@ Cc: linux-block@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v3 8/9] selftests: ublk: add support for user copy to kublk
-Date: Fri, 12 Dec 2025 10:17:06 -0700
-Message-ID: <20251212171707.1876250-9-csander@purestorage.com>
+Subject: [PATCH v3 9/9] selftests: ublk: add user copy test cases
+Date: Fri, 12 Dec 2025 10:17:07 -0700
+Message-ID: <20251212171707.1876250-10-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251212171707.1876250-1-csander@purestorage.com>
 References: <20251212171707.1876250-1-csander@purestorage.com>
@@ -99,268 +99,369 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ublk selftests mock ublk server kublk supports every data copy mode
-except user copy. Add support for user copy to kublk, enabled via the
---user_copy (-u) command line argument. On writes, issue pread() calls
-to copy the write data into the ublk_io's buffer before dispatching the
-write to the target implementation. On reads, issue pwrite() calls to
-copy read data from the ublk_io's buffer before committing the request.
-Copy in 2 KB chunks to provide some coverage of the offseting logic.
+The ublk selftests cover every data copy mode except user copy. Add
+tests for user copy based on the existing test suite:
+- generic_14 ("basic recover function verification (user copy)") based
+  on generic_04 and generic_05
+- null_03 ("basic IO test with user copy") based on null_01 and null_02
+- loop_06 ("write and verify over user copy") based on loop_01 and
+  loop_03
+- loop_07 ("mkfs & mount & umount with user copy") based on loop_02 and
+  loop_04
+- stripe_05 ("write and verify test on user copy") based on stripe_03
+- stripe_06 ("mkfs & mount & umount on user copy") based on stripe_02
+  and stripe_04
+- stress_06 ("run IO and remove device (user copy)") based on stress_01
+  and stress_03
+- stress_07 ("run IO and kill ublk server (user copy)") based on
+  stress_02 and stress_04
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 Reviewed-by: Ming Lei <ming.lei@redhat.com>
 ---
- tools/testing/selftests/ublk/file_backed.c |  7 +--
- tools/testing/selftests/ublk/kublk.c       | 53 ++++++++++++++++++++--
- tools/testing/selftests/ublk/kublk.h       | 11 +++++
- tools/testing/selftests/ublk/stripe.c      |  2 +-
- 4 files changed, 64 insertions(+), 9 deletions(-)
+ tools/testing/selftests/ublk/Makefile         |  8 ++++
+ .../testing/selftests/ublk/test_generic_14.sh | 40 +++++++++++++++++++
+ tools/testing/selftests/ublk/test_loop_06.sh  | 25 ++++++++++++
+ tools/testing/selftests/ublk/test_loop_07.sh  | 21 ++++++++++
+ tools/testing/selftests/ublk/test_null_03.sh  | 24 +++++++++++
+ .../testing/selftests/ublk/test_stress_06.sh  | 39 ++++++++++++++++++
+ .../testing/selftests/ublk/test_stress_07.sh  | 39 ++++++++++++++++++
+ .../testing/selftests/ublk/test_stripe_05.sh  | 26 ++++++++++++
+ .../testing/selftests/ublk/test_stripe_06.sh  | 21 ++++++++++
+ 9 files changed, 243 insertions(+)
+ create mode 100755 tools/testing/selftests/ublk/test_generic_14.sh
+ create mode 100755 tools/testing/selftests/ublk/test_loop_06.sh
+ create mode 100755 tools/testing/selftests/ublk/test_loop_07.sh
+ create mode 100755 tools/testing/selftests/ublk/test_null_03.sh
+ create mode 100755 tools/testing/selftests/ublk/test_stress_06.sh
+ create mode 100755 tools/testing/selftests/ublk/test_stress_07.sh
+ create mode 100755 tools/testing/selftests/ublk/test_stripe_05.sh
+ create mode 100755 tools/testing/selftests/ublk/test_stripe_06.sh
 
-diff --git a/tools/testing/selftests/ublk/file_backed.c b/tools/testing/selftests/ublk/file_backed.c
-index cd9fe69ecce2..269d5f124e06 100644
---- a/tools/testing/selftests/ublk/file_backed.c
-+++ b/tools/testing/selftests/ublk/file_backed.c
-@@ -32,12 +32,13 @@ static int loop_queue_tgt_rw_io(struct ublk_thread *t, struct ublk_queue *q,
- {
- 	unsigned ublk_op = ublksrv_get_op(iod);
- 	unsigned zc = ublk_queue_use_zc(q);
- 	unsigned auto_zc = ublk_queue_use_auto_zc(q);
- 	enum io_uring_op op = ublk_to_uring_op(iod, zc | auto_zc);
-+	struct ublk_io *io = ublk_get_io(q, tag);
- 	struct io_uring_sqe *sqe[3];
--	void *addr = (zc | auto_zc) ? NULL : (void *)iod->addr;
-+	void *addr = io->buf_addr;
+diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
+index 770269efe42a..837977b62417 100644
+--- a/tools/testing/selftests/ublk/Makefile
++++ b/tools/testing/selftests/ublk/Makefile
+@@ -19,28 +19,36 @@ TEST_PROGS += test_generic_08.sh
+ TEST_PROGS += test_generic_09.sh
+ TEST_PROGS += test_generic_10.sh
+ TEST_PROGS += test_generic_11.sh
+ TEST_PROGS += test_generic_12.sh
+ TEST_PROGS += test_generic_13.sh
++TEST_PROGS += test_generic_14.sh
  
- 	if (!zc || auto_zc) {
- 		ublk_io_alloc_sqes(t, sqe, 1);
- 		if (!sqe[0])
- 			return -ENOMEM;
-@@ -54,11 +55,11 @@ static int loop_queue_tgt_rw_io(struct ublk_thread *t, struct ublk_queue *q,
- 		return 1;
- 	}
+ TEST_PROGS += test_null_01.sh
+ TEST_PROGS += test_null_02.sh
++TEST_PROGS += test_null_03.sh
+ TEST_PROGS += test_loop_01.sh
+ TEST_PROGS += test_loop_02.sh
+ TEST_PROGS += test_loop_03.sh
+ TEST_PROGS += test_loop_04.sh
+ TEST_PROGS += test_loop_05.sh
++TEST_PROGS += test_loop_06.sh
++TEST_PROGS += test_loop_07.sh
+ TEST_PROGS += test_stripe_01.sh
+ TEST_PROGS += test_stripe_02.sh
+ TEST_PROGS += test_stripe_03.sh
+ TEST_PROGS += test_stripe_04.sh
++TEST_PROGS += test_stripe_05.sh
++TEST_PROGS += test_stripe_06.sh
  
- 	ublk_io_alloc_sqes(t, sqe, 3);
+ TEST_PROGS += test_stress_01.sh
+ TEST_PROGS += test_stress_02.sh
+ TEST_PROGS += test_stress_03.sh
+ TEST_PROGS += test_stress_04.sh
+ TEST_PROGS += test_stress_05.sh
++TEST_PROGS += test_stress_06.sh
++TEST_PROGS += test_stress_07.sh
  
--	io_uring_prep_buf_register(sqe[0], q, tag, q->q_id, ublk_get_io(q, tag)->buf_index);
-+	io_uring_prep_buf_register(sqe[0], q, tag, q->q_id, io->buf_index);
- 	sqe[0]->flags |= IOSQE_CQE_SKIP_SUCCESS | IOSQE_IO_HARDLINK;
- 	sqe[0]->user_data = build_user_data(tag,
- 			ublk_cmd_op_nr(sqe[0]->cmd_op), 0, q->q_id, 1);
+ TEST_GEN_PROGS_EXTENDED = kublk
  
- 	io_uring_prep_rw(op, sqe[1], ublk_get_registered_fd(q, 1) /*fds[1]*/, 0,
-@@ -66,11 +67,11 @@ static int loop_queue_tgt_rw_io(struct ublk_thread *t, struct ublk_queue *q,
- 		iod->start_sector << 9);
- 	sqe[1]->buf_index = tag;
- 	sqe[1]->flags |= IOSQE_FIXED_FILE | IOSQE_IO_HARDLINK;
- 	sqe[1]->user_data = build_user_data(tag, ublk_op, 0, q->q_id, 1);
+ include ../lib.mk
  
--	io_uring_prep_buf_unregister(sqe[2], q, tag, q->q_id, ublk_get_io(q, tag)->buf_index);
-+	io_uring_prep_buf_unregister(sqe[2], q, tag, q->q_id, io->buf_index);
- 	sqe[2]->user_data = build_user_data(tag, ublk_cmd_op_nr(sqe[2]->cmd_op), 0, q->q_id, 1);
- 
- 	return 2;
- }
- 
-diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/selftests/ublk/kublk.c
-index 4dd02cb083ba..185ba553686a 100644
---- a/tools/testing/selftests/ublk/kublk.c
-+++ b/tools/testing/selftests/ublk/kublk.c
-@@ -594,10 +594,42 @@ static void ublk_set_auto_buf_reg(const struct ublk_queue *q,
- 		buf.flags = UBLK_AUTO_BUF_REG_FALLBACK;
- 
- 	sqe->addr = ublk_auto_buf_reg_to_sqe_addr(&buf);
- }
- 
-+/* Copy in pieces to test the buffer offset logic */
-+#define UBLK_USER_COPY_LEN 2048
+diff --git a/tools/testing/selftests/ublk/test_generic_14.sh b/tools/testing/selftests/ublk/test_generic_14.sh
+new file mode 100755
+index 000000000000..cd9b44b97c24
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_generic_14.sh
+@@ -0,0 +1,40 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +
-+static void ublk_user_copy(const struct ublk_io *io, __u8 match_ublk_op)
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++
++TID="generic_14"
++ERR_CODE=0
++
++ublk_run_recover_test()
 +{
-+	const struct ublk_queue *q = ublk_io_to_queue(io);
-+	const struct ublksrv_io_desc *iod = ublk_get_iod(q, io->tag);
-+	__u64 off = ublk_user_copy_offset(q->q_id, io->tag);
-+	__u8 ublk_op = ublksrv_get_op(iod);
-+	__u32 len = iod->nr_sectors << 9;
-+	void *addr = io->buf_addr;
-+
-+	if (ublk_op != match_ublk_op)
-+		return;
-+
-+	while (len) {
-+		__u32 copy_len = min(len, UBLK_USER_COPY_LEN);
-+		ssize_t copied;
-+
-+		if (ublk_op == UBLK_IO_OP_WRITE)
-+			copied = pread(q->ublk_fd, addr, copy_len, off);
-+		else if (ublk_op == UBLK_IO_OP_READ)
-+			copied = pwrite(q->ublk_fd, addr, copy_len, off);
-+		else
-+			assert(0);
-+		assert(copied == (ssize_t)copy_len);
-+		addr += copy_len;
-+		off += copy_len;
-+		len -= copy_len;
-+	}
++	run_io_and_recover 256M "kill_daemon" "$@"
++	ERR_CODE=$?
++	if [ ${ERR_CODE} -ne 0 ]; then
++		echo "$TID failure: $*"
++		_show_result $TID $ERR_CODE
++	fi
 +}
 +
- int ublk_queue_io_cmd(struct ublk_thread *t, struct ublk_io *io)
- {
- 	struct ublk_queue *q = ublk_io_to_queue(io);
- 	struct ublksrv_io_cmd *cmd;
- 	struct io_uring_sqe *sqe[1];
-@@ -616,13 +648,16 @@ int ublk_queue_io_cmd(struct ublk_thread *t, struct ublk_io *io)
- 		(UBLKS_IO_NEED_FETCH_RQ | UBLKS_IO_NEED_COMMIT_RQ_COMP | UBLKS_IO_NEED_GET_DATA)))
- 		return 0;
- 
- 	if (io->flags & UBLKS_IO_NEED_GET_DATA)
- 		cmd_op = UBLK_U_IO_NEED_GET_DATA;
--	else if (io->flags & UBLKS_IO_NEED_COMMIT_RQ_COMP)
-+	else if (io->flags & UBLKS_IO_NEED_COMMIT_RQ_COMP) {
-+		if (ublk_queue_use_user_copy(q))
-+			ublk_user_copy(io, UBLK_IO_OP_READ);
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
 +
- 		cmd_op = UBLK_U_IO_COMMIT_AND_FETCH_REQ;
--	else if (io->flags & UBLKS_IO_NEED_FETCH_RQ)
-+	} else if (io->flags & UBLKS_IO_NEED_FETCH_RQ)
- 		cmd_op = UBLK_U_IO_FETCH_REQ;
- 
- 	if (io_uring_sq_space_left(&t->ring) < 1)
- 		io_uring_submit(&t->ring);
- 
-@@ -647,11 +682,11 @@ int ublk_queue_io_cmd(struct ublk_thread *t, struct ublk_io *io)
- 	else
- 		sqe[0]->flags	= IOSQE_FIXED_FILE;
- 	sqe[0]->rw_flags	= 0;
- 	cmd->tag	= io->tag;
- 	cmd->q_id	= q->q_id;
--	if (!ublk_queue_no_buf(q))
-+	if (!ublk_queue_no_buf(q) && !ublk_queue_use_user_copy(q))
- 		cmd->addr	= (__u64) (uintptr_t) io->buf_addr;
- 	else
- 		cmd->addr	= 0;
- 
- 	if (ublk_queue_use_auto_zc(q))
-@@ -749,10 +784,14 @@ static void ublk_handle_uring_cmd(struct ublk_thread *t,
- 		io->flags &= ~UBLKS_IO_NEED_FETCH_RQ;
- 	}
- 
- 	if (cqe->res == UBLK_IO_RES_OK) {
- 		assert(tag < q->q_depth);
++_prep_test "recover" "basic recover function verification (user copy)"
 +
-+		if (ublk_queue_use_user_copy(q))
-+			ublk_user_copy(io, UBLK_IO_OP_WRITE);
++_create_backfile 0 256M
++_create_backfile 1 128M
++_create_backfile 2 128M
 +
- 		if (q->tgt_ops->queue_io)
- 			q->tgt_ops->queue_io(t, q, tag);
- 	} else if (cqe->res == UBLK_IO_RES_NEED_GET_DATA) {
- 		io->flags |= UBLKS_IO_NEED_GET_DATA | UBLKS_IO_FREE;
- 		ublk_queue_io_cmd(t, io);
-@@ -1505,11 +1544,11 @@ static void __cmd_create_help(char *exe, bool recovery)
- {
- 	int i;
- 
- 	printf("%s %s -t [null|loop|stripe|fault_inject] [-q nr_queues] [-d depth] [-n dev_id]\n",
- 			exe, recovery ? "recover" : "add");
--	printf("\t[--foreground] [--quiet] [-z] [--auto_zc] [--auto_zc_fallback] [--debug_mask mask] [-r 0|1 ] [-g]\n");
-+	printf("\t[--foreground] [--quiet] [-z] [--auto_zc] [--auto_zc_fallback] [--debug_mask mask] [-r 0|1] [-g] [-u]\n");
- 	printf("\t[-e 0|1 ] [-i 0|1] [--no_ublk_fixed_fd]\n");
- 	printf("\t[--nthreads threads] [--per_io_tasks]\n");
- 	printf("\t[target options] [backfile1] [backfile2] ...\n");
- 	printf("\tdefault: nr_queues=2(max 32), depth=128(max 1024), dev_id=-1(auto allocation)\n");
- 	printf("\tdefault: nthreads=nr_queues");
-@@ -1566,10 +1605,11 @@ int main(int argc, char *argv[])
- 		{ "recovery_fail_io",	1,	NULL, 'e'},
- 		{ "recovery_reissue",	1,	NULL, 'i'},
- 		{ "get_data",		1,	NULL, 'g'},
- 		{ "auto_zc",		0,	NULL,  0 },
- 		{ "auto_zc_fallback", 	0,	NULL,  0 },
-+		{ "user_copy",		0,	NULL, 'u'},
- 		{ "size",		1,	NULL, 's'},
- 		{ "nthreads",		1,	NULL,  0 },
- 		{ "per_io_tasks",	0,	NULL,  0 },
- 		{ "no_ublk_fixed_fd",	0,	NULL,  0 },
- 		{ 0, 0, 0, 0 }
-@@ -1591,11 +1631,11 @@ int main(int argc, char *argv[])
- 	if (argc == 1)
- 		return ret;
- 
- 	opterr = 0;
- 	optind = 2;
--	while ((opt = getopt_long(argc, argv, "t:n:d:q:r:e:i:s:gaz",
-+	while ((opt = getopt_long(argc, argv, "t:n:d:q:r:e:i:s:gazu",
- 				  longopts, &option_idx)) != -1) {
- 		switch (opt) {
- 		case 'a':
- 			ctx.all = 1;
- 			break;
-@@ -1631,10 +1671,13 @@ int main(int argc, char *argv[])
- 				ctx.flags |= UBLK_F_USER_RECOVERY | UBLK_F_USER_RECOVERY_REISSUE;
- 			break;
- 		case 'g':
- 			ctx.flags |= UBLK_F_NEED_GET_DATA;
- 			break;
-+		case 'u':
-+			ctx.flags |= UBLK_F_USER_COPY;
-+			break;
- 		case 's':
- 			ctx.size = strtoull(optarg, NULL, 10);
- 			break;
- 		case 0:
- 			if (!strcmp(longopts[option_idx].name, "debug_mask"))
-diff --git a/tools/testing/selftests/ublk/kublk.h b/tools/testing/selftests/ublk/kublk.h
-index 6e8f381f3481..8a83b90ec603 100644
---- a/tools/testing/selftests/ublk/kublk.h
-+++ b/tools/testing/selftests/ublk/kublk.h
-@@ -206,10 +206,16 @@ extern int ublk_queue_io_cmd(struct ublk_thread *t, struct ublk_io *io);
- static inline int ublk_io_auto_zc_fallback(const struct ublksrv_io_desc *iod)
- {
- 	return !!(iod->op_flags & UBLK_IO_F_NEED_REG_BUF);
- }
- 
-+static inline __u64 ublk_user_copy_offset(unsigned q_id, unsigned tag)
++ublk_run_recover_test -t null -q 2 -r 1 -u &
++ublk_run_recover_test -t loop -q 2 -r 1 -u "${UBLK_BACKFILES[0]}" &
++ublk_run_recover_test -t stripe -q 2 -r 1 -u "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
++wait
++
++ublk_run_recover_test -t null -q 2 -r 1 -u -i 1 &
++ublk_run_recover_test -t loop -q 2 -r 1 -u -i 1 "${UBLK_BACKFILES[0]}" &
++ublk_run_recover_test -t stripe -q 2 -r 1 -u -i 1 "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
++wait
++
++_cleanup_test "recover"
++_show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_loop_06.sh b/tools/testing/selftests/ublk/test_loop_06.sh
+new file mode 100755
+index 000000000000..1d1a8a725502
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_loop_06.sh
+@@ -0,0 +1,25 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++
++TID="loop_06"
++ERR_CODE=0
++
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
++
++_prep_test "loop" "write and verify over user copy"
++
++_create_backfile 0 256M
++dev_id=$(_add_ublk_dev -t loop -u "${UBLK_BACKFILES[0]}")
++_check_add_dev $TID $?
++
++# run fio over the ublk disk
++_run_fio_verify_io --filename=/dev/ublkb"${dev_id}" --size=256M
++ERR_CODE=$?
++
++_cleanup_test "loop"
++
++_show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_loop_07.sh b/tools/testing/selftests/ublk/test_loop_07.sh
+new file mode 100755
+index 000000000000..493f3fb611a5
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_loop_07.sh
+@@ -0,0 +1,21 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++
++TID="loop_07"
++ERR_CODE=0
++
++_prep_test "loop" "mkfs & mount & umount with user copy"
++
++_create_backfile 0 256M
++
++dev_id=$(_add_ublk_dev -t loop -u "${UBLK_BACKFILES[0]}")
++_check_add_dev $TID $?
++
++_mkfs_mount_test /dev/ublkb"${dev_id}"
++ERR_CODE=$?
++
++_cleanup_test "loop"
++
++_show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_null_03.sh b/tools/testing/selftests/ublk/test_null_03.sh
+new file mode 100755
+index 000000000000..0051067b4686
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_null_03.sh
+@@ -0,0 +1,24 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++
++TID="null_03"
++ERR_CODE=0
++
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
++
++_prep_test "null" "basic IO test with user copy"
++
++dev_id=$(_add_ublk_dev -t null -u)
++_check_add_dev $TID $?
++
++# run fio over the two disks
++fio --name=job1 --filename=/dev/ublkb"${dev_id}" --ioengine=libaio --rw=readwrite --iodepth=32 --size=256M > /dev/null 2>&1
++ERR_CODE=$?
++
++_cleanup_test "null"
++
++_show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_stress_06.sh b/tools/testing/selftests/ublk/test_stress_06.sh
+new file mode 100755
+index 000000000000..37188ec2e1f7
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_stress_06.sh
+@@ -0,0 +1,39 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++TID="stress_06"
++ERR_CODE=0
++
++ublk_io_and_remove()
 +{
-+	return UBLKSRV_IO_BUF_OFFSET +
-+	       ((__u64)q_id << UBLK_QID_OFF | (__u64)tag << UBLK_TAG_OFF);
++	run_io_and_remove "$@"
++	ERR_CODE=$?
++	if [ ${ERR_CODE} -ne 0 ]; then
++		echo "$TID failure: $*"
++		_show_result $TID $ERR_CODE
++	fi
 +}
 +
- static inline int is_target_io(__u64 user_data)
- {
- 	return (user_data & (1ULL << 63)) != 0;
- }
- 
-@@ -403,10 +409,15 @@ static inline bool ublk_queue_use_auto_zc(const struct ublk_queue *q)
- static inline bool ublk_queue_auto_zc_fallback(const struct ublk_queue *q)
- {
- 	return !!(q->flags & UBLKS_Q_AUTO_BUF_REG_FALLBACK);
- }
- 
-+static inline bool ublk_queue_use_user_copy(const struct ublk_queue *q)
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
++
++_prep_test "stress" "run IO and remove device (user copy)"
++
++_create_backfile 0 256M
++_create_backfile 1 128M
++_create_backfile 2 128M
++
++ublk_io_and_remove 8G -t null -q 4 -u &
++ublk_io_and_remove 256M -t loop -q 4 -u "${UBLK_BACKFILES[0]}" &
++ublk_io_and_remove 256M -t stripe -q 4 -u "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
++wait
++
++ublk_io_and_remove 8G -t null -q 4 -u --nthreads 8 --per_io_tasks &
++ublk_io_and_remove 256M -t loop -q 4 -u --nthreads 8 --per_io_tasks "${UBLK_BACKFILES[0]}" &
++ublk_io_and_remove 256M -t stripe -q 4 -u --nthreads 8 --per_io_tasks "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
++wait
++
++_cleanup_test "stress"
++_show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_stress_07.sh b/tools/testing/selftests/ublk/test_stress_07.sh
+new file mode 100755
+index 000000000000..fb061fc26d36
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_stress_07.sh
+@@ -0,0 +1,39 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++TID="stress_07"
++ERR_CODE=0
++
++ublk_io_and_kill_daemon()
 +{
-+	return !!(q->flags & UBLK_F_USER_COPY);
++	run_io_and_kill_daemon "$@"
++	ERR_CODE=$?
++	if [ ${ERR_CODE} -ne 0 ]; then
++		echo "$TID failure: $*"
++		_show_result $TID $ERR_CODE
++	fi
 +}
 +
- static inline int ublk_queue_no_buf(const struct ublk_queue *q)
- {
- 	return ublk_queue_use_zc(q) || ublk_queue_use_auto_zc(q);
- }
- 
-diff --git a/tools/testing/selftests/ublk/stripe.c b/tools/testing/selftests/ublk/stripe.c
-index 791fa8dc1651..fd412e1f01c0 100644
---- a/tools/testing/selftests/ublk/stripe.c
-+++ b/tools/testing/selftests/ublk/stripe.c
-@@ -132,11 +132,11 @@ static int stripe_queue_tgt_rw_io(struct ublk_thread *t, struct ublk_queue *q,
- 	enum io_uring_op op = stripe_to_uring_op(iod, zc | auto_zc);
- 	struct io_uring_sqe *sqe[NR_STRIPE];
- 	struct stripe_array *s = alloc_stripe_array(conf, iod);
- 	struct ublk_io *io = ublk_get_io(q, tag);
- 	int i, extra = zc ? 2 : 0;
--	void *base = (zc | auto_zc) ? NULL : (void *)iod->addr;
-+	void *base = io->buf_addr;
- 
- 	io->private_data = s;
- 	calculate_stripe_array(conf, iod, s, base);
- 
- 	ublk_io_alloc_sqes(t, sqe, s->nr + extra);
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
++
++_prep_test "stress" "run IO and kill ublk server (user copy)"
++
++_create_backfile 0 256M
++_create_backfile 1 128M
++_create_backfile 2 128M
++
++ublk_io_and_kill_daemon 8G -t null -q 4 -u --no_ublk_fixed_fd &
++ublk_io_and_kill_daemon 256M -t loop -q 4 -u --no_ublk_fixed_fd "${UBLK_BACKFILES[0]}" &
++ublk_io_and_kill_daemon 256M -t stripe -q 4 -u "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
++wait
++
++ublk_io_and_kill_daemon 8G -t null -q 4 -u --nthreads 8 --per_io_tasks &
++ublk_io_and_kill_daemon 256M -t loop -q 4 -u --nthreads 8 --per_io_tasks "${UBLK_BACKFILES[0]}" &
++ublk_io_and_kill_daemon 256M -t stripe -q 4 -u --nthreads 8 --per_io_tasks "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
++wait
++
++_cleanup_test "stress"
++_show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_stripe_05.sh b/tools/testing/selftests/ublk/test_stripe_05.sh
+new file mode 100755
+index 000000000000..05d71951d710
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_stripe_05.sh
+@@ -0,0 +1,26 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++
++TID="stripe_05"
++ERR_CODE=0
++
++if ! _have_program fio; then
++	exit "$UBLK_SKIP_CODE"
++fi
++
++_prep_test "stripe" "write and verify test on user copy"
++
++_create_backfile 0 256M
++_create_backfile 1 256M
++
++dev_id=$(_add_ublk_dev -t stripe -q 2 -u "${UBLK_BACKFILES[0]}" "${UBLK_BACKFILES[1]}")
++_check_add_dev $TID $?
++
++# run fio over the ublk disk
++_run_fio_verify_io --filename=/dev/ublkb"${dev_id}" --size=512M
++ERR_CODE=$?
++
++_cleanup_test "stripe"
++_show_result $TID $ERR_CODE
+diff --git a/tools/testing/selftests/ublk/test_stripe_06.sh b/tools/testing/selftests/ublk/test_stripe_06.sh
+new file mode 100755
+index 000000000000..d06cac7626e2
+--- /dev/null
++++ b/tools/testing/selftests/ublk/test_stripe_06.sh
+@@ -0,0 +1,21 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
++
++TID="stripe_06"
++ERR_CODE=0
++
++_prep_test "stripe" "mkfs & mount & umount on user copy"
++
++_create_backfile 0 256M
++_create_backfile 1 256M
++
++dev_id=$(_add_ublk_dev -t stripe -u -q 2 "${UBLK_BACKFILES[0]}" "${UBLK_BACKFILES[1]}")
++_check_add_dev $TID $?
++
++_mkfs_mount_test /dev/ublkb"${dev_id}"
++ERR_CODE=$?
++
++_cleanup_test "stripe"
++_show_result $TID $ERR_CODE
 -- 
 2.45.2
 
