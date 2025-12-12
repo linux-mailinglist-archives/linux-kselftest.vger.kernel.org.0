@@ -1,101 +1,100 @@
-Return-Path: <linux-kselftest+bounces-47496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47497-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 275B6CB8200
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 08:38:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C21C8CB8389
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 09:16:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A6C863009114
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 07:38:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 619163063865
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 08:15:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 736442DFA32;
-	Fri, 12 Dec 2025 07:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF1B430F7EB;
+	Fri, 12 Dec 2025 08:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nFeJPvAg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out28-149.mail.aliyun.com (out28-149.mail.aliyun.com [115.124.28.149])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BDC7262D;
-	Fri, 12 Dec 2025 07:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 647C630E0E7;
+	Fri, 12 Dec 2025 08:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765525108; cv=none; b=dQ9Q1JIwTU83b76BuM7yGIbvCJJJWjzzPgOt3qTBhAtR0igXwsxIvd1iltoM0Z3UfhnuE4mOAx3imNW0NTL4lqrAa135/kIsGRq558ItAWKBBzwR2GVDqncaKqj4pwzPxbnIxMHgQnkScutxtDRzk+VONYANFlPJK951cPK+s+Y=
+	t=1765527333; cv=none; b=CtFwKedGccDO8hj/1g3m4QoUBjR4sxg8/SG1R51i4Lmmcj97k3LDWKI5SSiEiEyar5DiMYdhTFGjACrPDQEHoM59tyOCcEcn9TWAvFfpuuN8kb0g48keO+rwNCu6q9ApGN7b+5AfDEhj85DPs/zf0Hwtir0bLiC/nxfSFTX+oRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765525108; c=relaxed/simple;
-	bh=amhWS4B1Pe5krfQ+MRhfCNFzZwanR2YugHVFAYyA+QQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bo/EDfM1/784rPl9q41kuRl5Dhc4RG+90nblsoZW/ovd3Ev3GOENenU85oEToXLHcCD4XgGE4+DId0i8jO/7Iw8pw8xi8b2Qdy5cWVpvr2V6ylyOpA2z+d9gnjBNjLVlRnVFGaTIi45gd+13B/fcPMyPArGLj0j4RfsPXZwUNTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from 172.18.26.4(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fiddta7_1765525093 cluster:ay29)
-          by smtp.aliyun-inc.com;
-          Fri, 12 Dec 2025 15:38:14 +0800
-Message-ID: <f2c7ec38-f0e6-470d-b40b-c6abecfc6334@open-hieco.net>
-Date: Fri, 12 Dec 2025 15:38:12 +0800
+	s=arc-20240116; t=1765527333; c=relaxed/simple;
+	bh=/hrrCjWB7RCTyEWEeMlOdi0WwTl2Sn/DGE23XvsAA1U=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=SJoCLG+JLozlFKeYZYems+icK32n+OkfybtPTjrYbr4mEKA9teDNHq+lBVwPnrAXlJYY/nwiBz1sm2QqIMc11QEacRY/RiKJiQQ76C9XvmwPKQ/i5czEsTtXcDTJkTuIbFk/Vq0/Lpl0rPcc68MgLMH4BSJnkNQMxu4ApLxyqTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nFeJPvAg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D38DDC4CEF1;
+	Fri, 12 Dec 2025 08:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765527331;
+	bh=/hrrCjWB7RCTyEWEeMlOdi0WwTl2Sn/DGE23XvsAA1U=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=nFeJPvAgpE2u+HqSBX8PIxPmMSQ17wJNJelCCJFq1uX7BJ4kkZTE58a4A/8W62uDv
+	 8dCoi9GTVmIMujcz+AOuXNHyzOpNdkqYb0DKCTnbVN5TLfcAkHHk4X5GkOY53+fRgD
+	 H2vRj24tmoDmCl8w/eVYpZl4Jls0dlJuEvEZknT2PTiKXaOtE9hzu2MBmaeM6kr1j/
+	 ogHmwcJaqT9Ixl5mvdquTPY2dsBps1wEREysFISYUzN+OM8KsbYw3C3l1ZIxq/kU5p
+	 WRGZq7FJYPTT9l34JbOAyhRb6Au3e9WpMLWJE01Ek738rPu9oBt8WFwFmkHSBIxHo9
+	 YRpD801VkVqYw==
+Date: Fri, 12 Dec 2025 01:15:11 -0700 (MST)
+From: Paul Walmsley <pjw@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+cc: linux-riscv@lists.infradead.org, tglx@linutronix.de, mingo@redhat.com, 
+    bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+    akpm@linux-foundation.org, Liam.Howlett@oracle.com, vbabka@suse.cz, 
+    lorenzo.stoakes@oracle.com, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+    aou@eecs.berkeley.edu, conor@kernel.org, robh@kernel.org, 
+    krzk+dt@kernel.org, arnd@arndb.de, brauner@kernel.org, 
+    peterz@infradead.org, oleg@redhat.com, ebiederm@xmission.com, 
+    kees@kernel.org, corbet@lwn.net, shuah@kernel.org, jannh@google.com, 
+    conor+dt@kernel.org, ojeda@kernel.org, alex.gaynor@gmail.com, 
+    boqun.feng@gmail.com, gary@garyguo.net, bjorn3_gh@protonmail.com, 
+    a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
+    lossin@kernel.org, linux-kernel@vger.kernel.org, 
+    linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+    devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
+    linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+    alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
+    andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
+    atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
+    alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
+    rick.p.edgecombe@intel.com, rust-for-linux@vger.kernel.org, 
+    zong.li@sifive.com, david@redhat.com, andreas.korb@aisec.fraunhofer.de, 
+    valentin.haudiquet@canonical.com, cmirabil@redhat.com
+Subject: Re: [PATCH v26 00/28] riscv control-flow integrity for usermode
+In-Reply-To: <176551861579.2032148.13920544388182691102.git-patchwork-notify@kernel.org>
+Message-ID: <b9991702-44d9-1f0d-e5c8-677c404e2522@kernel.org>
+References: <20251211-v5_user_cfi_series-v26-0-f0f419e81ac0@rivosinc.com> <176551861579.2032148.13920544388182691102.git-patchwork-notify@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/4] selftests/resctrl: Add CPU vendor detection for
- Hygon
-To: Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
- bp@alien8.de, fenghuay@nvidia.com, shuah@kernel.org,
- skhan@linuxfoundation.org
-Cc: babu.moger@amd.com, james.morse@arm.com, Dave.Martin@arm.com,
- x86@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shenxiaochen@open-hieco.net
-References: <20251211064632.2344393-1-shenxiaochen@open-hieco.net>
- <20251211064632.2344393-3-shenxiaochen@open-hieco.net>
- <43b8ec69-3a19-48c0-93cf-48f3142b091c@intel.com>
-Content-Language: en-US
-From: Xiaochen Shen <shenxiaochen@open-hieco.net>
-In-Reply-To: <43b8ec69-3a19-48c0-93cf-48f3142b091c@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
-Hi Reinette,
+On Fri, 12 Dec 2025, patchwork-bot+linux-riscv@kernel.org wrote:
 
-On 12/12/2025 1:23 PM, Reinette Chatre wrote:
-> Hi Xiaochen,
+> This series was applied to riscv/linux.git (for-next)
+> by Paul Walmsley <pjw@kernel.org>:
 > 
-> On 12/10/25 10:46 PM, Xiaochen Shen wrote:
->> The resctrl selftest currently fails on Hygon CPUs that support Platform
->> QoS features, printing the error:
->>
->>   "# Can not get vendor info..."
->>
->> This occurs because vendor detection is missing for Hygon CPUs.
->>
->> Fix this by extending the CPU vendor detection logic to include
->> Hygon's vendor ID.
->>
->> Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
->> ---
-> 
-> Changelog is clear this is a fix, does patch need backport?
+> On Thu, 11 Dec 2025 09:20:33 -0800 you wrote:
+> > v26: CONFIG_RISCV_USER_CFI depends on CONFIG_MMU (dependency of shadow stack
+> > on MMU). Used b4 to pick tags, apparantly it messed up some tag picks. Fixing it
 
-Thank you for pointing out this issue.
-This patch is not a candidate for backport. I will add a maintainer note:
----------------------------
-Maintainer note:
-Even though this is a fix it is not a candidate for backport since it is
-based on another patch series (x86/resctrl: Fix Platform QoS issues for
-Hygon) which is in process of being added to resctrl.
----------------------------
+This is the Patchwork bot getting things wrong, again.  
 
-> 
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+What got repushed was a slightly modified version of the v23 series -- 
+with the non-code changes described here:
 
-Thank you very much!
+   https://lore.kernel.org/linux-riscv/176551861579.2032148.13920544388182691102.git-patchwork-notify@kernel.org/T/#t
+
+Deepak: as others have pointed out, you shouldn't be sending patch series 
+during merge windows.
 
 
-> 
-> Reinette
-
-
-Best regards,
-Xiaochen Shen
+- Paul
 
