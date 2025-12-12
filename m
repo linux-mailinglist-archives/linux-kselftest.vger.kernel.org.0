@@ -1,116 +1,144 @@
-Return-Path: <linux-kselftest+bounces-47494-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47495-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C853CB808B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 07:31:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC944CB81F1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 08:33:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id ABA69300A573
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 06:31:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ABE7330275FA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 07:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2BF30E852;
-	Fri, 12 Dec 2025 06:31:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="eqq1yAh2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 355AB2874FB;
+	Fri, 12 Dec 2025 07:33:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out28-147.mail.aliyun.com (out28-147.mail.aliyun.com [115.124.28.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3941E487
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 06:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF71C274671;
+	Fri, 12 Dec 2025 07:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765521071; cv=none; b=KihURsqn5cWi9KQ0wxCP6hMy/7m2RtszQ7mHFL7yeXqiFwChkzdDU1ec7HPTbLflZrpV1KHAOgWQyW39RYVnWzT1w8RkBc5f6/NOkWuRy21AsXdvGtXdwjtJt5WqObb5cTSL45WxxuAA/pNWq4QZ/LzSHEVQ6BQGHKKP0UXQ7ao=
+	t=1765524787; cv=none; b=KRExI8k1lr5bNFksmYeZ6gidhCm5rqgBbjAccnRaq92wQfjW9sjvpHtk5ArIey5Qch8RrLm5LhBXowuCapzECR/1ciqhzVX0heTXFiUJrSKfhP7OYIS/TGRsEn30VDGghSw4Jcp3KwTYN7mDzRUvcGdLXc0lo+kV1Co2upfLxfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765521071; c=relaxed/simple;
-	bh=WHfjJAKVkIUXIYSx6rWIPbnGvhEHiZRS2sMWHC3xBHE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YPmhORZtPntUJiPq2Ai6NZiWZgTuJZej+uau7jDSwf2es4+IpZB1p1U4a9y6KXDGnxq53nONKdZ8FFUJPTj4gNq9bnHFShJxCYOWeCZ9SzUOOamYZWcNZ+0CP8ynjeG+PfhJoJIyMdUDpXPnqDidLRDncni0Rot7Ppx4jBz4biQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=eqq1yAh2; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7aa9be9f03aso745269b3a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Dec 2025 22:31:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1765521067; x=1766125867; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BU9rsCRRgIidE7+HdxiRFrmvgyo9gOWJIixuizT3mjw=;
-        b=eqq1yAh2typbZCt9Cac2k41yuJx63OB7KJeQW2P431JY4tdSetAPM19BcIOVU+1yBD
-         COf+KCjXlRSFS2ugY2rczB7ICFW4yHGDo9VftJGNLhjQn0JAbV2rqptaoWgFe42yTRpD
-         Qe6lFCtdKDjGB8UnF1CxHHtFiQ28W4z2hFox5Phg0HpIej1Gtou9kDBCx4OOga+hVbKK
-         dASqQkW1uEw2LOk7mCFI3FfTZfSfvboLPEFWqr01PBJNmRvmIXE294yUSLhaj5OXuDM/
-         GM5BLVamLUmUWpRVzTWY3fHIF+qcxFgFi2HiZQs1+efUcNNtD4oUi+IZEXkfOSDHVifG
-         2Sfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765521067; x=1766125867;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BU9rsCRRgIidE7+HdxiRFrmvgyo9gOWJIixuizT3mjw=;
-        b=fEmeQm5u7Ui5DvvnALQUMw3RGLhVE/b/SS+9bu9oyJiw+7pF05WNrRcVkuaT0vb87D
-         7zpxjKvachYjzSQTDaojjrjt40GXz3K6d2PZKfYMVJa5td9lDOxinGsh5xIGWAisVLG4
-         o/O6pPp/3cwBh60JBm7Cf4ZrT1Jl2D5UQGsg/bX7Zm5Z7cLGzOC3ucP64xvsFf/gGvNf
-         C3HZfdFqY75vnwYIO6GE0i3y2Waq9Z9zkiUfwv2KEIhetH2y5WtJVDBI5G1MqJGM/kmB
-         KdO6gPBb6sGDD0f6KbMXNxASV5Z0aRTUg2DK9MPW+rAhkqwrxbPRoCVzepBiOJh7LZKw
-         bJYg==
-X-Forwarded-Encrypted: i=1; AJvYcCW21aXaIqI+poIwDOIYfjaXN5a/MV/BuAbtx/H/UdJDnUPLFeY1gI4fBYUy0xrMFueSSgo6OEB1/5gk+3uJtjg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBVjQ8XPlnWEm8m9cZRj7dxjxGKNCATyJ+lrKL6/lu4HbiJ5U8
-	1rX8/rN/lB9Fn5NhGhys/De463rMyaA7dq6ch9qkzbG19RBuqxSFKqxtZ8e2VrFPIyavqzwWVuB
-	qy4nFPzQ=
-X-Gm-Gg: AY/fxX6Oxjd/vwmR8ewirVu2sAFGsJcWEWJir12vq5qmEmhvg/rfY6KtAg5X919QVe/
-	EzVwiQ1XV8uDm9EQ6xFERS7VXyrmnJ6XXM6j2f/qohrNinmPeOmlCiuzxfLTxWeQ5cs4/U/53+M
-	l3Gmca7ZSXdW48e7gzc5vXOk0RJBYTzd4NMPprViJe6WAjpMZNvj3lWSZ7DMc+BmaxlqUjIHb7u
-	VHSXQ9nD2a3t3usy1x32BOB+qFKLS69qSnfjhcIsJRlnKYwxZXxZViGtpIJjsK5dVPo6jTyzsa7
-	UeyHExmYuBm6l3jF7XvVPPi9hKk9rVY6r30g+ADtc2pvUsL88Voeu/+4WnPMrHlsvIR4BXlGcYa
-	JnOLYjr9nC2S2lgn5IzMHXTMAB6B50BDEf/NSPLJ+IqvtlGcG8mgHUYj6paRDGdrXyZhipBVIt4
-	QHJN8Rl7E8
-X-Google-Smtp-Source: AGHT+IH+qDNBAAjjvzDFg6yVuXzSvyQ8clec2E1T7VYOcntr6/9AB25tUSNDsi4QD0DIx45+xLR/mg==
-X-Received: by 2002:a05:6a20:1584:b0:361:3bda:7155 with SMTP id adf61e73a8af0-369ad3fc3eemr1099607637.7.1765521066910;
-        Thu, 11 Dec 2025 22:31:06 -0800 (PST)
-Received: from ziepe.ca (p99249-ipoefx.ipoe.ocn.ne.jp. [153.246.134.248])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7f4c2284da4sm4138329b3a.2.2025.12.11.22.31.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Dec 2025 22:31:05 -0800 (PST)
-Received: from jgg by jggl with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1vTwgA-0001rC-Tw;
-	Fri, 12 Dec 2025 02:31:02 -0400
-Date: Fri, 12 Dec 2025 02:31:02 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Kathara Sasikumar <katharasasikumar007@gmail.com>
-Cc: kevin.tian@intel.com, shuah@kernel.org, iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	yi.l.liu@intel.com, nicolinc@nvidia.com, alex.williamson@redhat.com,
-	katharaasasikumar007@gmail.com
-Subject: Re: [PATCH] selftests: iommu: fix Warray-bounds in get_hw_info test
-Message-ID: <aTu2pgId9mRPPIRj@ziepe.ca>
-References: <20251210211342.989850-1-katharasasikumar007@gmail.com>
+	s=arc-20240116; t=1765524787; c=relaxed/simple;
+	bh=ep+I5nY5hzqGdlCe10OSsnk+G+zFar7irdaDsPWowEM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=or2icCBCGIjQFHV2CJA2d5QXfyD66mL2/G5aw5AmC6k0eKJllcOnpqZaQXh81zMhXDT911VOiFXLpGFxP6if6SUH/WUypI5P3fqW4Wkcs8biFgdbxt5v5B2I84LR4+OiG2Ggly8O28ewx1Ern6jA3Ew1vNIV42Rzj++F+gYl+t8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+Received: from 172.18.26.4(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fiddmFT_1765524768 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Fri, 12 Dec 2025 15:32:51 +0800
+Message-ID: <182c2515-3658-423c-8521-4dddbd5e16b8@open-hieco.net>
+Date: Fri, 12 Dec 2025 15:32:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251210211342.989850-1-katharasasikumar007@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/4] selftests/resctrl: Define CPU vendor IDs as bits
+ to match usage
+To: Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
+ bp@alien8.de, fenghuay@nvidia.com, shuah@kernel.org,
+ skhan@linuxfoundation.org
+Cc: babu.moger@amd.com, james.morse@arm.com, Dave.Martin@arm.com,
+ x86@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shenxiaochen@open-hieco.net
+References: <20251211064632.2344393-1-shenxiaochen@open-hieco.net>
+ <20251211064632.2344393-2-shenxiaochen@open-hieco.net>
+ <075748c3-a82b-4e7e-b7e9-6f8900ba2020@intel.com>
+Content-Language: en-US
+From: Xiaochen Shen <shenxiaochen@open-hieco.net>
+In-Reply-To: <075748c3-a82b-4e7e-b7e9-6f8900ba2020@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Dec 10, 2025 at 09:13:42PM +0000, Kathara Sasikumar wrote:
-> The get_hw_info uses a smaller user buffer on purpose to check how
-> the kernel updates only the fields that fit in the buffer. The test
-> created a custom smaller struct for this, but the helper function later
-> treats the buffer as struct iommu_test_hw_info. This makes the compiler
-> warn about a possible out-of-bounds access (-Warray-bounds).
+Hi Reinette,
+
+On 12/12/2025 1:22 PM, Reinette Chatre wrote:
+> I tried this series against latest upstream kernel and found a conflict with some recent kselftest
+> refactoring via commit e6fbd1759c9e ("selftests: complete kselftest include centralization").
+
+Thank you for pointing out this issue.
+I will rebase on top of the latest upstream kernel.
+
+
 > 
-> This keeps the test behavior the same and removes the warning.
+> Usually the strategy for resctrl tests is to base them on "next" branch of
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git ... but I notice that the
+> conflicting change was routed differently and thus difficult to have anticipated.
+
+Thank you for the information.
+
+
 > 
-> Signed-off-by: Kathara Sasikumar <katharasasikumar007@gmail.com>
-> ---
->  tools/testing/selftests/iommu/iommufd.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> Since we are in merge window the maintainer repos are not ready for new features yet.
+> Until the repo is ready, could you please base on latest upstream?
 
-This breaks the test, I already posted a fix, it should be in linux-next.
+No problem. Thank you.
+I will rebase on top of the latest upstream kernel, and then send out v4 patch series.
 
-Jason
+
+> 
+> Looking at the series it is not obvious how you want these patches handled though. Patch #3
+> is the only one with a "Fixes:" tag (and thus candidate for automatic backport) but it is in
+> the middle of the series. It is usually best to have fixes at beginning of series to 
+> simplify their handling. Even so, all patches are fixes but only patch #4 has a note
+
+Thank you. I will re-organize the patch series to move patch #3 to the beginning of series.
+
+
+> not to consider for backport. Could you please consider how you want these patches handled,
+> communicate that clearly in cover letter, and re-organize the series to have the ones needing
+> backport to be at beginning of series?
+
+Thank you for your great suggestions.
+
+I plan to add the maintainer notes in patch #1, patch #2, patch #4 (in original patch ordering in v3) and cover letter:
+
+Patch #1 (this patch):
+In my opinion, it is an improvement (to these two commits) rather than a real fix:
+   commit 6220f69e72a5 ("selftests/resctrl: Extend CPU vendor detection")
+   commit c603ff5bb830 ("selftests/resctrl: Introduce generalized test framework")
+
+What do you think?
+If you agree with me, I plan to add a maintainer note that it is not a candidate for backport in v4 patch series.
+
+Patch #2:
+This patch is not a candidate for backport. I will add a maintainer note in v4 patch series:
+---------------------------
+Maintainer note:
+Even though this is a fix it is not a candidate for backport since it is
+based on another patch series (x86/resctrl: Fix Platform QoS issues for
+Hygon) which is in process of being added to resctrl.
+---------------------------
+
+Patch #3:
+A candidate for backport with "Fixes:" tag. I will move this patch to the beginning of series.
+
+Patch #4:
+Already has a maintainer note. Keep no change.
+
+Cover letter:
+I plan to add a maintainer note outlining how I'd like these patches to be handled.
+
+
+>> -static int detect_vendor(void)
+>> +static unsigned int detect_vendor(void)
+>>  {
+>> -	FILE *inf = fopen("/proc/cpuinfo", "r");
+>> -	int vendor_id = 0;
+>> +	static bool initialized;
+>> +	static unsigned int vendor_id;
+>> +	FILE *inf;
+> Please maintain the reverse fir ordering.
+
+Thank you. I will fix this issue.
+
+
+Best regards,
+Xiaochen Shen
 
