@@ -1,396 +1,342 @@
-Return-Path: <linux-kselftest+bounces-47462-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D985FCB7951
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 02:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F707CB79F6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 03:08:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 854FE303C828
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 01:53:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 69A853032AAF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Dec 2025 02:07:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A5E5289358;
-	Fri, 12 Dec 2025 01:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B5A528850E;
+	Fri, 12 Dec 2025 02:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QaxuaJ6F"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="QeEaFZeG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965C52874E9
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 01:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765504423; cv=pass; b=kPOQAnRtA/5y1WSvmf6qoftIVA5kX7O9vy1odpOuPBYfX2A6lApI084COjBPj/mhZVZ4eF7V4GC4UaZ17B/KMrWmVcaIGg5srf2akkU6lTD0J9E1y2eKh8MJ06L4IRZ5TpucnKVTjqqP8oV6tSc6LKd4x/cvai053xmDvi4akrA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765504423; c=relaxed/simple;
-	bh=CtnrD2J63dCxI3UoL3AtPmDSp/FjRGF6ovFEvF9WcKc=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710D820E00B
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Dec 2025 02:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765505229; cv=none; b=YggZ3JjZ+BStVT4/K3GHjEgOo7Rh9YBgLeh0t7Fhc/VU7NsOn4V/YFyfuVkWtM9ca15NJ8OCVac57QrlFjJ/AhD+5RU6bLhixquDtS5EbSCdlOdLs+g/J5cLTbJLPwqRQPsvO4OonCD4lMq3Lis3l3IB+jJGgY4cRDDPmpWDoJU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765505229; c=relaxed/simple;
+	bh=Xg6Bg1tijGMJKkMlYTloVpchtjGMtzHq4gPBwCRSrhQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S6W7ywYMuNOMIsHyfWPgdlSTjfncCj37zveo/MUCQYzCAsZ6b0nThl4U4VU6HnaHpR+hcnBE2rRdELuIa9k2GefiEuhxsQiDv89ZGokz6dw4r+r3DfWhMj1VxPILzJY/zoaNjVgZ3U/+0c0Fuxj4XQmSmwRpRJZP7IPn8nJqqIc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QaxuaJ6F; arc=pass smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-477a1c8cc47so128545e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Dec 2025 17:53:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1765504418; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aafFSIw237GtAa6GEkLDndWoOWLx12U6luo1cr7nqrYNM2DU6YzzCCu4JOJBYK/UOB
-         /hho7pwU8RSl4n0t5tTLDPFY5lhi/KW2hn/6FFCIdIWQCOcdfa5A4NUXiXSETjVP43NY
-         r95bwdcdLUL8FQysic/VhZkccvhMf2ooF2ZVjHWsQamebjz9KWWNFInCaiQzx80Vm9f5
-         dplpFMljKqDfhe5NFs3YpZxIYIHXTXtvUx64PrvR3ZLTNqxMGYRe3ZepvT/ARFoHJ/Ue
-         OzXZAk+fb00GxRSrG/SECfIBQ/DVoquGg0SvOIGIq6F4UeiUPxZjsQOdCdDM+v9kP2R6
-         ZmZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Rd1kWl+e0QkfeVDmjwKDiRL6KWrbfO8Cm6aCDNo3pTc=;
-        fh=V1gsSfuonNnL7DVKYWgYlWWRyOVUUQLdEipggCC5wEI=;
-        b=bN0w2DnGNeoMZQ3zgREy4pifwatjS00vxmewzky2hoLhSiEf546nWiyIuPUg+thbZ1
-         tBy6AekBUbRF1N0svWZ4UKDRrsed57KB2irsALAVOPdcnZIzlZWHdIYfIxjiDQqjrb6g
-         K0eKJEYcyRKREEqfwXnQN8QD/gyYeHE2H2Sv0PdfFicCG36vaSANKprv38iOLjlqWBPp
-         I0QbBjGl1HoQGFl3yiZ2wytVe1525MjTMO0BkTVjWwknSjjrpajxoLlWrrP1+s7YGLkM
-         GfEKIJmidq/PuSt9MAByx01+4PqFk9Zrq8RdVZ4exxPTeCy2wuJpQ6kU8ZWCAnC5Z7Th
-         P4UA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	 To:Cc:Content-Type; b=YXaikTrBa8ckR5MpNdpDCJ+7bufnp/3zugUPvSJm5XAQkbJCn9X/mp98GzyU5LvKxyRzFElIGjNhW1UqaEzULDe7c5p7tHpbXodU6F1a2aFywns2H9JIBf8izo2AqtGcDxcGX57OwKHPZ305/J9J+zWLG0wvgkbb9VFJ2lOTYIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=QeEaFZeG; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-297ea4c2933so889065ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Dec 2025 18:07:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1765504418; x=1766109218; darn=vger.kernel.org;
+        d=purestorage.com; s=google2022; t=1765505224; x=1766110024; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rd1kWl+e0QkfeVDmjwKDiRL6KWrbfO8Cm6aCDNo3pTc=;
-        b=QaxuaJ6FY+mMHgyUMmOhGCr6Yy753r5bsyXEhR014PgVhSLNgPmtkCPCGtsAh+bd5L
-         6bPfi2j8hh80vsf4ZoqxN2SK2WOhCS80nJW8Sosk8IAl/a59bmYwILUiXSCEmkLeLPvA
-         o+xSmgZloqwcL11rprgIzZ8cWlr0bzXpJDQB22hSUSCeLSrp7s5Y+mxFR+Qb7hJY4nfl
-         Wxhp404brUG1OlaxOHpcyLdhabhtduIGCRNgJK2/3rty7UMHr+O7PhxicHWHd5PSO2Ij
-         9joSHArlEQXROdkHSw3VmGVtlOscRd2UM1f5PgcLITT50zkQaa6uEx4YkkckYVqaQSVF
-         i0Ig==
+        bh=2NmU0hq/0XF2uCs/LWIOasykeL5nY7LRRU3b2g+YUuI=;
+        b=QeEaFZeG2JPLfxw46QzcWDH1MnBnOwvG4rnSdswytqd9neno6KQ3oV/HFisLHAW2zt
+         CBe40Le97coaHqEKXeMoSDE9MR9p9IXpqtsglUvY0z8rd9OzGv1isuYBoFyGYdxZZm/m
+         xxd2/JmRP6cM76CeSWRYJE8+6wXSMRHdDhx2XF1BaIESqG/fUu5PMuyVfbEXfmat9fDb
+         Dnhcgr/UsNXe7zsBzrmVX2EJHmWWW4SoJJPc4/2nkPZh8DF7SReL5u4iiVHMt+0vK7iq
+         a1EslJVLLBSIDEJ/c6lHnowPG4kTE4GLe5Mn5LejOJZALnnkiMPO9ci9x6caVx+6gkU3
+         Bg9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765504418; x=1766109218;
+        d=1e100.net; s=20230601; t=1765505224; x=1766110024;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Rd1kWl+e0QkfeVDmjwKDiRL6KWrbfO8Cm6aCDNo3pTc=;
-        b=rHH+KEB9pJX81/7yNMsX13GT8RcQO9n6M5RQY5c70xTlmkGUnvAXElQyBRBCR0U8Ue
-         eLT/8kx7LOov/mzYYU5j4HBANyH0wE4JYJeSDJwGw/hKDzFeykLmj2g/i4VJ+72beqng
-         rfEM5rY7jXEA6YXB/0NWHsvTMBThmlWvZLIslhU2nEVz41Cuu7ksL+/yvFy+j5HstDON
-         Bn5xpOhWaTNO9DC3M2JOo820AbbRupwvttS8Y76T5opmNhZUUOgKdtpL17qej3g/hwaR
-         U1yvy1TuZ5qwPWYpC9Mfxk80mxOxU9/y8wMnf47RMZSlgzU4HlrYANY4hZUUP1TJk1xo
-         wiZA==
-X-Forwarded-Encrypted: i=1; AJvYcCX02xB5x64r+HW5+78nmUiCi/hUAT/P0k/DXttemgKpUrNzPeP3BJTs5sDc2E6vR3L06+E9cjICJdn8xkQoEZM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy05WVuFd2Qam4gjmQIcoxCBZdvEleFxF2wgT/foHlFUdPS/bw4
-	4ioInWBmOMtB6vWZL623uWKPNByVQUlFx2stZOwqWA/8furvj0lNfSm3wpS7SlRn/7AqfksaPRy
-	KAidhdofmpHjsAxJ0Cl3SJrRZq/S9E/1hKv5H6j9w
-X-Gm-Gg: AY/fxX65uLFheOzfNJEcLCfgKc5s0qyAZSaRJ44hc7xZxbJKzn/aLQKhrIGbf4+mRDJ
-	ziW+x6T15Q4kviRBc5WmdqBFccvQVeqEdLzPfpLA9vSta4beEUDHrPXnINH6z+PFduXnAVnFl0I
-	LFcCvbS5DjqKN87F0smeuC/RWnRzV6WIYyvaX7xM/ek45unC5iK0Q9+/Rnh9Atp35ehFr4QzZAX
-	O1MlztXqFWe/9sVrMk36nZ6Piho4B5ZzEtP4IInVNVmfN2hDgdf2zKOZSovDHGnXKlVDJqAfKBF
-	itsbXvtUVrkRKXQ6mC3HlPYnC20i
-X-Google-Smtp-Source: AGHT+IELyZ67Mh/WAPeTceCN8jbRYqNn7LfXokCBfkoubbVjvqqfzZOlYxJtEOZmuwbdnCZhp2hA4fTZEV/raHqViWM=
-X-Received: by 2002:a05:600d:3:b0:477:86fd:fb49 with SMTP id
- 5b1f17b1804b1-47a88c5c13dmr1386955e9.10.1765504417716; Thu, 11 Dec 2025
- 17:53:37 -0800 (PST)
+        bh=2NmU0hq/0XF2uCs/LWIOasykeL5nY7LRRU3b2g+YUuI=;
+        b=GxKHwLHTNtpqO3ymH+3LoPYdGqtIHUFBPOFX3j9CZh4YssHB6RbZvNyzaaUp1gFdDN
+         WCKv4/xeSfsPYNwHC0YQ6i1m/eU0+DIofi7SqACmMoogO1In+w6Yj9K24wZKPMatJvwn
+         5ERXfu/ipQ924A5eWrLoMv7uiSQj7U1AIQwX12yMlyvWfV5zfRVcML6lI4VMiB/WesJp
+         mw49F1KBFdQik6DohTiNuWEGjjSVQH2mFjbQ4E48etZZ7Ab7bo/3HwZJHbWpSUxBby0b
+         kAm46pjkOH7e1KLdC0DePTMZ6fdJGVT6gY0VgkxaEe5rEvm4T9TYyygpid/lTyrn02VN
+         wGJA==
+X-Forwarded-Encrypted: i=1; AJvYcCW7Zrng5fiwUlHeR9rXZ9uGPSYxuAUq0n/YvucwYfnb4vrCXu9xHXspSdcYxVkpUx0Vxuxzj5YYK4WbFGgKjOE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxFy8ir4oUHoy5rjpG33zwduShdQbcUtxXl6MlehOcJE0jlKoG
+	mcE3NW5Yb7knh3ZF2W/MzbN0yvW1bRtEZlvUHMaQusZVjpyEYfoIgqLtbAfuDJTeDUxqhkErpj8
+	4sgFx5nEXyDdprCAJheUdPtKuyjDFV8g/FLgPlGHJbQ==
+X-Gm-Gg: AY/fxX7voia8X8992nYghraOUMlsPXR75xo2uz4lbwONMD/ePkFN8ghFvM5sxPiDUsU
+	EGPG76tqxGubM29nBJN1xYx19VcnedIHsjF9d76wHticuhkwsZx27jXb4was0pVNgPkEkgms6Mc
+	d12gpCbEr5NHFsDeAk53Os6jkKDt2V6K6YGodySwLWp1ByIpIX5pKWxD3U1PdZc0/NuHEQ5OaGz
+	IdBlFmEfgRLcbYyq0phUMO3slQ4s/QmMrVh7IdRrIeMfMvF552uK+jEWYRgVG5QhjCLG/Y1lGWI
+	kPnE+3E=
+X-Google-Smtp-Source: AGHT+IH5cKGMFyYlSmHE/xkt8ih+6WEXHoOq4B5+ghUK0Gb78U+AIuai0rPqovbUd8m2VjS6bN1g9JWzPZC/41wHSLk=
+X-Received: by 2002:a05:7022:b92:b0:119:e56a:4ffb with SMTP id
+ a92af1059eb24-11f3486364fmr285043c88.0.1765505223349; Thu, 11 Dec 2025
+ 18:07:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251013185903.1372553-1-jiaqiyan@google.com> <20251013185903.1372553-3-jiaqiyan@google.com>
- <3061f5f8-cef0-b7b1-c4de-f2ceea29af9a@huawei.com>
-In-Reply-To: <3061f5f8-cef0-b7b1-c4de-f2ceea29af9a@huawei.com>
-From: Jiaqi Yan <jiaqiyan@google.com>
-Date: Thu, 11 Dec 2025 17:53:26 -0800
-X-Gm-Features: AQt7F2rTGmuQE0DHKTuWqG307odD2vjHJLASzh2BvequPFTSz6j2Q6CLsqIFn98
-Message-ID: <CACw3F51mRXCDz7Hd4Vve98NoskhB2cSc88zAGfd6Hwr4uCBxPA@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] KVM: selftests: Test for KVM_EXIT_ARM_SEA
-To: Zenghui Yu <yuzenghui@huawei.com>, maz@kernel.org, oliver.upton@linux.dev
-Cc: duenwen@google.com, rananta@google.com, jthoughton@google.com, 
-	vsethi@nvidia.com, jgg@nvidia.com, joey.gouly@arm.com, suzuki.poulose@arm.com, 
-	catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
-	shuah@kernel.org, kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20251211051603.1154841-1-csander@purestorage.com>
+ <20251211051603.1154841-7-csander@purestorage.com> <aTqKLSbpQN26XLNq@fedora>
+ <CADUfDZpX3RTu4m5WZ1LrjnFRxg96qpeM0fMtw1-c=7Qn_5gKQQ@mail.gmail.com> <aTtOGmEeYBZLozO8@fedora>
+In-Reply-To: <aTtOGmEeYBZLozO8@fedora>
+From: Caleb Sander Mateos <csander@purestorage.com>
+Date: Thu, 11 Dec 2025 18:06:51 -0800
+X-Gm-Features: AQt7F2pIO_qiv_NdO3mmxm1RsGcKFok9cL4Q2LY-yzpZrILVu0Irzcp4iud6RJI
+Message-ID: <CADUfDZpzZ16vsWhMm6-tYfdj7EBBE_iUaLTmhyiZeR1CxT5d_g@mail.gmail.com>
+Subject: Re: [PATCH 6/8] selftests: ublk: forbid multiple data copy modes
+To: Ming Lei <ming.lei@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 11, 2025 at 5:02=E2=80=AFAM Zenghui Yu <yuzenghui@huawei.com> w=
-rote:
+On Thu, Dec 11, 2025 at 3:05=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wrot=
+e:
 >
-> Hi Jiaqi,
->
-> I had run into several problems when testing it on different servers. I
-> haven't figured them out yet but post it early for discussion.
-
-Thanks for testing, and I will be happy to work with you to improve
-this test code.
-
->
-> On 2025/10/14 2:59, Jiaqi Yan wrote:
-> > Test how KVM handles guest SEA when APEI is unable to claim it, and
-> > KVM_CAP_ARM_SEA_TO_USER is enabled.
+> On Thu, Dec 11, 2025 at 10:45:36AM -0800, Caleb Sander Mateos wrote:
+> > On Thu, Dec 11, 2025 at 1:09=E2=80=AFAM Ming Lei <ming.lei@redhat.com> =
+wrote:
+> > >
+> > > On Wed, Dec 10, 2025 at 10:16:01PM -0700, Caleb Sander Mateos wrote:
+> > > > The kublk mock ublk server allows multiple data copy mode arguments=
+ to
+> > > > be passed on the command line (--zero_copy, --get_data, and --auto_=
+zc).
+> > > > The ublk device will be created with all the requested feature flag=
+s,
+> > > > however kublk will only use one of the modes to interact with reque=
+st
+> > > > data (arbitrarily preferring auto_zc over zero_copy over get_data).=
+ To
+> > > > clarify the intent of the test, don't allow multiple data copy mode=
+s to
+> > > > be specified. Don't set UBLK_F_USER_COPY for zero_copy, as it's an
+> > > > independent feature. Don't require zero_copy for auto_zc_fallback, =
+as
+> > > > only auto_zc is needed. Fix the test cases passing multiple data co=
+py
+> > > > mode arguments.
+> > > >
+> > > > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+> > > > ---
+> > > >  tools/testing/selftests/ublk/kublk.c          | 21 ++++++++++++---=
+----
+> > > >  .../testing/selftests/ublk/test_generic_09.sh |  2 +-
+> > > >  .../testing/selftests/ublk/test_stress_03.sh  |  4 ++--
+> > > >  .../testing/selftests/ublk/test_stress_04.sh  |  2 +-
+> > > >  .../testing/selftests/ublk/test_stress_05.sh  | 10 ++++-----
+> > > >  5 files changed, 22 insertions(+), 17 deletions(-)
+> > > >
+> > > > diff --git a/tools/testing/selftests/ublk/kublk.c b/tools/testing/s=
+elftests/ublk/kublk.c
+> > > > index f8fa102a627f..1765c4806523 100644
+> > > > --- a/tools/testing/selftests/ublk/kublk.c
+> > > > +++ b/tools/testing/selftests/ublk/kublk.c
+> > > > @@ -1611,11 +1611,11 @@ int main(int argc, char *argv[])
+> > > >                       break;
+> > > >               case 'd':
+> > > >                       ctx.queue_depth =3D strtol(optarg, NULL, 10);
+> > > >                       break;
+> > > >               case 'z':
+> > > > -                     ctx.flags |=3D UBLK_F_SUPPORT_ZERO_COPY | UBL=
+K_F_USER_COPY;
+> > > > +                     ctx.flags |=3D UBLK_F_SUPPORT_ZERO_COPY;
+> > > >                       break;
+> > > >               case 'r':
+> > > >                       value =3D strtol(optarg, NULL, 10);
+> > > >                       if (value)
+> > > >                               ctx.flags |=3D UBLK_F_USER_RECOVERY;
+> > > > @@ -1674,17 +1674,22 @@ int main(int argc, char *argv[])
+> > > >                       optind +=3D 1;
+> > > >                       break;
+> > > >               }
+> > > >       }
+> > > >
+> > > > -     /* auto_zc_fallback depends on F_AUTO_BUF_REG & F_SUPPORT_ZER=
+O_COPY */
+> > > > -     if (ctx.auto_zc_fallback &&
+> > > > -         !((ctx.flags & UBLK_F_AUTO_BUF_REG) &&
+> > > > -                 (ctx.flags & UBLK_F_SUPPORT_ZERO_COPY))) {
+> > > > -             ublk_err("%s: auto_zc_fallback is set but neither "
+> > > > -                             "F_AUTO_BUF_REG nor F_SUPPORT_ZERO_CO=
+PY is enabled\n",
+> > > > -                                     __func__);
+> > > > +     /* auto_zc_fallback depends on F_AUTO_BUF_REG */
+> > > > +     if (ctx.auto_zc_fallback && !(ctx.flags & UBLK_F_AUTO_BUF_REG=
+)) {
+> > > > +             ublk_err("%s: auto_zc_fallback is set but F_AUTO_BUF_=
+REG is disabled\n",
+> > > > +                      __func__);
+> > > > +             return -EINVAL;
+> > > > +     }
+> > > > +
+> > > > +     if (!!(ctx.flags & UBLK_F_SUPPORT_ZERO_COPY) +
+> > > > +         !!(ctx.flags & UBLK_F_NEED_GET_DATA) +
+> > > > +         !!(ctx.flags & UBLK_F_USER_COPY) +
+> > > > +         !!(ctx.flags & UBLK_F_AUTO_BUF_REG) > 1) {
+> > > > +             fprintf(stderr, "too many data copy modes specified\n=
+");
+> > > >               return -EINVAL;
+> > > >       }
+> > >
+> > > Actually most of them are allowed to co-exist, such as -z/--auto_zc/-=
+u.
 > >
-> > The behavior is triggered by consuming recoverable memory error (UER)
-> > injected via EINJ. The test asserts two major things:
-> > 1. KVM returns to userspace with KVM_EXIT_ARM_SEA exit reason, and
-> >    has provided expected fault information, e.g. esr, flags, gva, gpa.
-> > 2. Userspace is able to handle KVM_EXIT_ARM_SEA by injecting SEA to
-> >    guest and KVM injects expected SEA into the VCPU.
+> > Yes, I know the ublk driver allows multiple copy mode flags to be set
+> > (though it will clear UBLK_F_NEED_GET_DATA if any of the others are
+> > set). However, kublk will only actually use one of the modes. For
+> > example, --get_data --zero_copy will use zero copy for the data
+> > transfer, not get data. And --zero_copy --auto_zc will only use auto
+> > buffer registration. So I think it's confusing to allow multiple of
+> > these parameters to be passed to kublk. Or do you think there is value
+> > in testing ublk device creation with multiple data copy mode flags
+> > set, but only one of the modes actually used?
 > >
-> > Tested on a data center server running Siryn AmpereOne processor
-> > that has RAS support.
+> > >
+> > > >
+> > > >       i =3D optind;
+> > > >       while (i < argc && ctx.nr_files < MAX_BACK_FILES) {
+> > > > diff --git a/tools/testing/selftests/ublk/test_generic_09.sh b/tool=
+s/testing/selftests/ublk/test_generic_09.sh
+> > > > index bb6f77ca5522..145e17b3d2b0 100755
+> > > > --- a/tools/testing/selftests/ublk/test_generic_09.sh
+> > > > +++ b/tools/testing/selftests/ublk/test_generic_09.sh
+> > > > @@ -14,11 +14,11 @@ if ! _have_program fio; then
+> > > >       exit "$UBLK_SKIP_CODE"
+> > > >  fi
+> > > >
+> > > >  _prep_test "null" "basic IO test"
+> > > >
+> > > > -dev_id=3D$(_add_ublk_dev -t null -z --auto_zc --auto_zc_fallback)
+> > > > +dev_id=3D$(_add_ublk_dev -t null --auto_zc --auto_zc_fallback)
+> > > >  _check_add_dev $TID $?
+> > > >
+> > > >  # run fio over the two disks
+> > > >  fio --name=3Djob1 --filename=3D/dev/ublkb"${dev_id}" --ioengine=3D=
+libaio --rw=3Dreadwrite --iodepth=3D32 --size=3D256M > /dev/null 2>&1
+> > > >  ERR_CODE=3D$?
+> > > > diff --git a/tools/testing/selftests/ublk/test_stress_03.sh b/tools=
+/testing/selftests/ublk/test_stress_03.sh
+> > > > index 3ed4c9b2d8c0..8e9f2786ef9c 100755
+> > > > --- a/tools/testing/selftests/ublk/test_stress_03.sh
+> > > > +++ b/tools/testing/selftests/ublk/test_stress_03.sh
+> > > > @@ -36,19 +36,19 @@ wait
+> > > >
+> > > >  if _have_feature "AUTO_BUF_REG"; then
+> > > >       ublk_io_and_remove 8G -t null -q 4 --auto_zc &
+> > > >       ublk_io_and_remove 256M -t loop -q 4 --auto_zc "${UBLK_BACKFI=
+LES[0]}" &
+> > > >       ublk_io_and_remove 256M -t stripe -q 4 --auto_zc "${UBLK_BACK=
+FILES[1]}" "${UBLK_BACKFILES[2]}" &
+> > > > -     ublk_io_and_remove 8G -t null -q 4 -z --auto_zc --auto_zc_fal=
+lback &
+> > > > +     ublk_io_and_remove 8G -t null -q 4 --auto_zc --auto_zc_fallba=
+ck &
+> > > >       wait
+> > > >  fi
+> > > >
+> > > >  if _have_feature "PER_IO_DAEMON"; then
+> > > >       ublk_io_and_remove 8G -t null -q 4 --auto_zc --nthreads 8 --p=
+er_io_tasks &
+> > > >       ublk_io_and_remove 256M -t loop -q 4 --auto_zc --nthreads 8 -=
+-per_io_tasks "${UBLK_BACKFILES[0]}" &
+> > > >       ublk_io_and_remove 256M -t stripe -q 4 --auto_zc --nthreads 8=
+ --per_io_tasks "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+> > > > -     ublk_io_and_remove 8G -t null -q 4 -z --auto_zc --auto_zc_fal=
+lback --nthreads 8 --per_io_tasks &
+> > > > +     ublk_io_and_remove 8G -t null -q 4 --auto_zc --auto_zc_fallba=
+ck --nthreads 8 --per_io_tasks &
+> > > >       wait
+> > > >  fi
+> > > >
+> > > >  _cleanup_test "stress"
+> > > >  _show_result $TID $ERR_CODE
+> > > > diff --git a/tools/testing/selftests/ublk/test_stress_04.sh b/tools=
+/testing/selftests/ublk/test_stress_04.sh
+> > > > index c7220723b537..6e165a1f90b4 100755
+> > > > --- a/tools/testing/selftests/ublk/test_stress_04.sh
+> > > > +++ b/tools/testing/selftests/ublk/test_stress_04.sh
+> > > > @@ -35,11 +35,11 @@ wait
+> > > >
+> > > >  if _have_feature "AUTO_BUF_REG"; then
+> > > >       ublk_io_and_kill_daemon 8G -t null -q 4 --auto_zc &
+> > > >       ublk_io_and_kill_daemon 256M -t loop -q 4 --auto_zc "${UBLK_B=
+ACKFILES[0]}" &
+> > > >       ublk_io_and_kill_daemon 256M -t stripe -q 4 --auto_zc --no_ub=
+lk_fixed_fd "${UBLK_BACKFILES[1]}" "${UBLK_BACKFILES[2]}" &
+> > > > -     ublk_io_and_kill_daemon 8G -t null -q 4 -z --auto_zc --auto_z=
+c_fallback &
+> > > > +     ublk_io_and_kill_daemon 8G -t null -q 4 --auto_zc --auto_zc_f=
+allback &
+> > > >       wait
+> > > >  fi
+> > > >
+> > > >  if _have_feature "PER_IO_DAEMON"; then
+> > > >       ublk_io_and_kill_daemon 8G -t null -q 4 --auto_zc --nthreads =
+8 --per_io_tasks &
+> > > > diff --git a/tools/testing/selftests/ublk/test_stress_05.sh b/tools=
+/testing/selftests/ublk/test_stress_05.sh
+> > > > index 274295061042..09b94c36f2ba 100755
+> > > > --- a/tools/testing/selftests/ublk/test_stress_05.sh
+> > > > +++ b/tools/testing/selftests/ublk/test_stress_05.sh
+> > > > @@ -56,21 +56,21 @@ for reissue in $(seq 0 1); do
+> > > >       wait
+> > > >  done
+> > > >
+> > > >  if _have_feature "ZERO_COPY"; then
+> > > >       for reissue in $(seq 0 1); do
+> > > > -             ublk_io_and_remove 8G -t null -q 4 -g -z -r 1 -i "$re=
+issue" &
+> > > > -             ublk_io_and_remove 256M -t loop -q 4 -g -z -r 1 -i "$=
+reissue" "${UBLK_BACKFILES[1]}" &
+> > > > +             ublk_io_and_remove 8G -t null -q 4 -z -r 1 -i "$reiss=
+ue" &
+> > > > +             ublk_io_and_remove 256M -t loop -q 4 -z -r 1 -i "$rei=
+ssue" "${UBLK_BACKFILES[1]}" &
+> > > >               wait
+> > > >       done
+> > > >  fi
+> > > >
+> > > >  if _have_feature "AUTO_BUF_REG"; then
+> > > >       for reissue in $(seq 0 1); do
+> > > > -             ublk_io_and_remove 8G -t null -q 4 -g --auto_zc -r 1 =
+-i "$reissue" &
+> > > > -             ublk_io_and_remove 256M -t loop -q 4 -g --auto_zc -r =
+1 -i "$reissue" "${UBLK_BACKFILES[1]}" &
+> > > > -             ublk_io_and_remove 8G -t null -q 4 -g -z --auto_zc --=
+auto_zc_fallback -r 1 -i "$reissue" &
+> > > > +             ublk_io_and_remove 8G -t null -q 4 --auto_zc -r 1 -i =
+"$reissue" &
+> > > > +             ublk_io_and_remove 256M -t loop -q 4 --auto_zc -r 1 -=
+i "$reissue" "${UBLK_BACKFILES[1]}" &
+> > > > +             ublk_io_and_remove 8G -t null -q 4 --auto_zc --auto_z=
+c_fallback -r 1 -i "$reissue" &
+> > >
+> > > --auto_zc_fallback requires both -z and --auto_zc.
 > >
-> > Several things to notice before attempting to run this selftest:
-> > - The test relies on EINJ support in both firmware and kernel to
-> >   inject UER. Otherwise the test will be skipped.
-> > - The under-test platform's APEI should be unable to claim the SEA.
-> >   Otherwise the test will be skipped.
-> > - Some platform doesn't support notrigger in EINJ, which may cause
-> >   APEI and GHES to offline the memory before guest can consume
-> >   injected UER, and making test unable to trigger SEA.
-> >
-> > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> > Ah, right, I forgot that the fallback path relies on normal zero copy
+> > buffer registration. I guess we are missing coverage of that, then,
+> > since the tests still passed with --zero_copy disabled.
 >
-> [...]
->
-> > +static void inject_uer(uint64_t paddr)
-> > +{
-> > +     if (access("/sys/firmware/acpi/tables/EINJ", R_OK) =3D=3D -1)
-> > +             ksft_test_result_skip("EINJ table no available in firmwar=
-e");
->
-> Missing '\n'.
+> Looks one regression from commit 0a9beafa7c63 ("ublk: refactor auto buffe=
+r register in ublk_dispatch_req()")
 
-Thanks.
+Is there a particular issue you see in that commit? I think the issue
+is that if UBLK_IO_F_NEED_REG_BUF is set in the ublksrv_io_desc but zc
+isn't enabled, the null ublk server will just complete the I/O
+immediately. And --auto_zc_fallback isn't supported by any of the
+other ublk servers.
 
->
-> We should return early (to actually skip the test) if the file can not
-> be accessed, right?
+if (auto_zc && !ublk_io_auto_zc_fallback(iod))
+        queued =3D null_queue_auto_zc_io(t, q, tag);
+else if (zc)
+        queued =3D null_queue_zc_io(t, q, tag);
+else {
+        ublk_complete_io(t, q, tag, iod->nr_sectors << 9);
+        return 0;
+}
 
-Oh you mean I missed exit(KSFT_SKIP), right? Agreed.
+So it looks to me to just be an issue with my kublk change.
 
->
-> > +
-> > +     if (access(EINJ_ETYPE, R_OK | W_OK) =3D=3D -1)
-> > +             ksft_test_result_skip("EINJ module probably not loaded?")=
-;
-> > +
-> > +     write_einj_entry(EINJ_ETYPE, ERROR_TYPE_MEMORY_UER);
-> > +     write_einj_entry(EINJ_FLAGS, MASK_MEMORY_UER);
-> > +     write_einj_entry(EINJ_ADDR, paddr);
-> > +     write_einj_entry(EINJ_MASK, ~0x0UL);
-> > +     write_einj_entry(EINJ_NOTRIGGER, 1);
-> > +     write_einj_entry(EINJ_DOIT, 1);
-> > +}
-> > +
-> > +/*
-> > + * When host APEI successfully claims the SEA caused by guest_code, ke=
-rnel
-> > + * will send SIGBUS signal with BUS_MCEERR_AR to test thread.
-> > + *
-> > + * We set up this SIGBUS handler to skip the test for that case.
-> > + */
-> > +static void sigbus_signal_handler(int sig, siginfo_t *si, void *v)
-> > +{
-> > +     ksft_print_msg("SIGBUS (%d) received, dumping siginfo...\n", sig)=
-;
-> > +     ksft_print_msg("si_signo=3D%d, si_errno=3D%d, si_code=3D%d, si_ad=
-dr=3D%p\n",
-> > +                    si->si_signo, si->si_errno, si->si_code, si->si_ad=
-dr);
-> > +     if (si->si_code =3D=3D BUS_MCEERR_AR)
-> > +             ksft_test_result_skip("SEA is claimed by host APEI\n");
-> > +     else
-> > +             ksft_test_result_fail("Exit with signal unhandled\n");
-> > +
-> > +     exit(0);
-> > +}
-> > +
-> > +static void setup_sigbus_handler(void)
-> > +{
-> > +     struct sigaction act;
-> > +
-> > +     memset(&act, 0, sizeof(act));
-> > +     sigemptyset(&act.sa_mask);
-> > +     act.sa_sigaction =3D sigbus_signal_handler;
-> > +     act.sa_flags =3D SA_SIGINFO;
-> > +     TEST_ASSERT(sigaction(SIGBUS, &act, NULL) =3D=3D 0,
-> > +                 "Failed to setup SIGBUS handler");
-> > +}
-> > +
-> > +static void guest_code(void)
-> > +{
-> > +     uint64_t guest_data;
-> > +
-> > +     /* Consumes error will cause a SEA. */
-> > +     guest_data =3D *(uint64_t *)EINJ_GVA;
-> > +
-> > +     GUEST_FAIL("Poison not protected by SEA: gva=3D%#lx, guest_data=
-=3D%#lx\n",
-> > +                EINJ_GVA, guest_data);
-> > +}
-> > +
-> > +static void expect_sea_handler(struct ex_regs *regs)
-> > +{
-> > +     u64 esr =3D read_sysreg(esr_el1);
-> > +     u64 far =3D read_sysreg(far_el1);
-> > +     bool expect_far_invalid =3D far_invalid;
-> > +
-> > +     GUEST_PRINTF("Handling Guest SEA\n");
-> > +     GUEST_PRINTF("ESR_EL1=3D%#lx, FAR_EL1=3D%#lx\n", esr, far);
-> > +
-> > +     GUEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_DABT_CUR);
-> > +     GUEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
-> > +
-> > +     if (expect_far_invalid) {
-> > +             GUEST_ASSERT_EQ(esr & ESR_ELx_FnV, ESR_ELx_FnV);
->
-> I hit this ASSERT with:
->
-> # Mapped 0x40000 pages: gva=3D0x80000000 to gpa=3D0xff80000000
-> # Before EINJect: data=3D0xbaadcafe
-> # EINJ_GVA=3D0x81234bad, einj_gpa=3D0xff81234bad, einj_hva=3D0xffff41234b=
-ad,
-> einj_hpa=3D0x202841234bad
-> # echo 0x10 > /sys/kernel/debug/apei/einj/error_type - done
-> # echo 0x2 > /sys/kernel/debug/apei/einj/flags - done
-> # echo 0x202841234bad > /sys/kernel/debug/apei/einj/param1 - done
-> # echo 0xffffffffffffffff > /sys/kernel/debug/apei/einj/param2 - done
-> # echo 0x1 > /sys/kernel/debug/apei/einj/notrigger - done
-> # echo 0x1 > /sys/kernel/debug/apei/einj/error_inject - done
-> # Memory UER EINJected
-> # Dump kvm_run info about KVM_EXIT_ARM_SEA
-> # kvm_run.arm_sea: esr=3D0x92000610, flags=3D0
-> # kvm_run.arm_sea: gva=3D0, gpa=3D0
-> # From guest: Handling Guest SEA
-> # From guest: ESR_EL1=3D0x96000010, FAR_EL1=3D0xaaaadf254828
-> # Guest aborted!
-> =3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
->   arm64/sea_to_user.c:172: esr & ESR_ELx_FnV =3D=3D ESR_ELx_FnV
->   pid=3D38112 tid=3D38112 errno=3D4 - Interrupted system call
->      1  0x0000000000402f9b: run_vm at sea_to_user.c:246
->      2  0x0000000000402467: main at sea_to_user.c:330
->      3  0x0000ffff8e22b03f: ?? ??:0
->      4  0x0000ffff8e22b117: ?? ??:0
->      5  0x00000000004026ef: _start at ??:?
->   0x0 !=3D 0x400 (esr & ESR_ELx_FnV !=3D ESR_ELx_FnV)
->
-> It seems that KVM doesn't emulate FnV when injecting an abort.
-
-I believe so; this happened to me when I tested on an architecture
-that doesn't provide valid FAR. I tried to fix this in [1] in the
-past, but didn't get any traction and somehow escaped my attention...
-
-Oliver and Marc, what do you think about [1]? If it sounds like a
-valid fix, I can re-send it out as an individual patch.
-
-[1] https://lore.kernel.org/kvmarm/20250604050902.3944054-3-jiaqiyan@google=
-.com
-
-
->
-> > +             GUEST_PRINTF("Guest observed garbage value in FAR\n");
-> > +     } else {
-> > +             GUEST_ASSERT_EQ(esr & ESR_ELx_FnV, 0);
-> > +             GUEST_ASSERT_EQ(far, EINJ_GVA);
-> > +     }
-> > +
-> > +     GUEST_DONE();
-> > +}
-> > +
-> > +static void vcpu_inject_sea(struct kvm_vcpu *vcpu)
-> > +{
-> > +     struct kvm_vcpu_events events =3D {};
-> > +
-> > +     events.exception.ext_dabt_pending =3D true;
-> > +     vcpu_events_set(vcpu, &events);
-> > +}
-> > +
-> > +static void run_vm(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
-> > +{
-> > +     struct ucall uc;
-> > +     bool guest_done =3D false;
-> > +     struct kvm_run *run =3D vcpu->run;
-> > +     u64 esr;
-> > +
-> > +     /* Resume the vCPU after error injection to consume the error. */
-> > +     vcpu_run(vcpu);
-> > +
-> > +     ksft_print_msg("Dump kvm_run info about KVM_EXIT_%s\n",
-> > +                    exit_reason_str(run->exit_reason));
-> > +     ksft_print_msg("kvm_run.arm_sea: esr=3D%#llx, flags=3D%#llx\n",
-> > +                    run->arm_sea.esr, run->arm_sea.flags);
-> > +     ksft_print_msg("kvm_run.arm_sea: gva=3D%#llx, gpa=3D%#llx\n",
-> > +                    run->arm_sea.gva, run->arm_sea.gpa);
-> > +
-> > +     TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_ARM_SEA);
->
-> I can also hit this ASSERT with:
->
-> Random seed: 0x6b8b4567
-> # Mapped 0x40000 pages: gva=3D0x80000000 to gpa=3D0xff80000000
-> # Before EINJect: data=3D0xbaadcafe
-> # EINJ_GVA=3D0x81234bad, einj_gpa=3D0xff81234bad, einj_hva=3D0xffff41234b=
-ad,
-> einj_hpa=3D0x2841234bad
-> # echo 0x10 > /sys/kernel/debug/apei/einj/error_type - done
-> # echo 0x2 > /sys/kernel/debug/apei/einj/flags - done
-> # echo 0x2841234bad > /sys/kernel/debug/apei/einj/param1 - done
-> # echo 0xffffffffffffffff > /sys/kernel/debug/apei/einj/param2 - done
-> # echo 0x1 > /sys/kernel/debug/apei/einj/notrigger - done
-> # echo 0x1 > /sys/kernel/debug/apei/einj/error_inject - done
-> # Memory UER EINJected
-> # Dump kvm_run info about KVM_EXIT_MMIO
-> # kvm_run.arm_sea: esr=3D0xffff90ba0040, flags=3D0x691000
-> # kvm_run.arm_sea: gva=3D0x100000008, gpa=3D0
-> =3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
->   arm64/sea_to_user.c:207: exit_reason =3D=3D (41)
->   pid=3D38023 tid=3D38023 errno=3D4 - Interrupted system call
->      1  0x0000000000402d1b: run_vm at sea_to_user.c:207
->      2  0x0000000000402467: main at sea_to_user.c:330
->      3  0x0000ffff9122b03f: ?? ??:0
->      4  0x0000ffff9122b117: ?? ??:0
->      5  0x00000000004026ef: _start at ??:?
->   Wanted KVM exit reason: 41 (ARM_SEA), got: 6 (MMIO)
->
-> Not sure what's wrong it..
-
-Does your test machine have SDEI or SCI enabled for host APEI? Do you
-see any kernel log from "Memory failure:" saying hugetlb page
-recovered, and recovered significant earlier than the KVM exit here.
-It maybe the kernel has already unmapped hugepage in response to SDEI
-or SCI before this test actually consumes memory error, so no SEA is
-actually triggered.
-
->
-> > +
-> > +     esr =3D run->arm_sea.esr;
-> > +     TEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_DABT_LOW);
-> > +     TEST_ASSERT_EQ(esr & ESR_ELx_FSC_TYPE, ESR_ELx_FSC_EXTABT);
-> > +     TEST_ASSERT_EQ(ESR_ELx_ISS2(esr), 0);
-> > +     TEST_ASSERT_EQ((esr & ESR_ELx_INST_SYNDROME), 0);
-> > +     TEST_ASSERT_EQ(esr & ESR_ELx_VNCR, 0);
-> > +
-> > +     if (!(esr & ESR_ELx_FnV)) {
-> > +             ksft_print_msg("Expect gva to match given FnV bit is 0\n"=
-);
-> > +             TEST_ASSERT_EQ(run->arm_sea.gva, EINJ_GVA);
-> > +     }
-> > +
-> > +     if (run->arm_sea.flags & KVM_EXIT_ARM_SEA_FLAG_GPA_VALID) {
-> > +             ksft_print_msg("Expect gpa to match given KVM_EXIT_ARM_SE=
-A_FLAG_GPA_VALID is set\n");
-> > +             TEST_ASSERT_EQ(run->arm_sea.gpa, einj_gpa & PAGE_ADDR_MAS=
-K);
-> > +     }
-> > +
-> > +     far_invalid =3D esr & ESR_ELx_FnV;
->
-> Missing sync_global_to_guest()?
-
-Ah, yes, and I can add sync_global_to_guest and get rid of
-expect_far_invalid in expect_sea_handler.
-
->
-> Thanks,
-> Zenghui
+Thanks,
+Caleb
 
