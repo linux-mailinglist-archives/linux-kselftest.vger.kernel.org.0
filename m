@@ -1,113 +1,154 @@
-Return-Path: <linux-kselftest+bounces-47543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3F69CBA163
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Dec 2025 01:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD9BDCBA218
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Dec 2025 01:52:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E799D30A7A7B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Dec 2025 00:04:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7C68E307F8D1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Dec 2025 00:52:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C38A1F92E;
-	Sat, 13 Dec 2025 00:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOBfyOCi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C0A2253EF;
+	Sat, 13 Dec 2025 00:52:19 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1745FDF6C;
-	Sat, 13 Dec 2025 00:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7FC1DF748;
+	Sat, 13 Dec 2025 00:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765584255; cv=none; b=I9jKBrdUSKMWA/xDpsk7NuB+VAr1Dauevq8U70L3NIzAbI01GbgI7xS48KOoC40mWlgRyM7scTUFAT6wmtcC2pGZz5MtHUfBPmuyBbg4lSCBEfxLRbijm6mN0O1r0HZiR6vzed10L3lLlPpMXKNBt7Qi1sPZZvTCCxidrxMqrk0=
+	t=1765587139; cv=none; b=cBR+oJlmnO5RflFtieBxkGLX1G/+c6TtDgJ5N9zxwByC2UGrzxB1Ym/4m72GPuRziVCcN88IF5w1KOI0aTHTAhtZ0DUJAg1QlMrEaAHJWK4jC23ryGzoHPmnfF3kE35fuKJ1Rl4VQRKl4xVbs1x4KW8sWkyyJrSygudBMYqd62s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765584255; c=relaxed/simple;
-	bh=9ON0BsqUdHPuKooEwOAYhec1H4nQqHimI1tGEkaJO24=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fT0Fn6ZBjhIX7ZwVXSF5TYQCdScGr2aO1wmr0J2AdQyaoYRoGxgKIhcSf7pp7Y202CdAc/JiMxEvHuvrvVwbU0ZMu33QDImwUs5cQMoTUWrKnEecXHjPx3rzYZCTdGglrb/qPvhKLAIZdRwjqOEVk3EYW6HAqdBZtg5jlLiy/lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOBfyOCi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E33BC4CEF1;
-	Sat, 13 Dec 2025 00:04:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765584254;
-	bh=9ON0BsqUdHPuKooEwOAYhec1H4nQqHimI1tGEkaJO24=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bOBfyOCiVijuc8pYCEFzqgUszZYPT+BswDG6MX3gqzGPo2n1Lt28KE6rf4X7ORfZt
-	 6s9Kr8lsTdBadLvGSFAGPRGWUJGOZqnVrENL81iURcZvwucaE8C5w34HHZe6IAbLD+
-	 M7RNKJ9AL0E1v15XxZrKaQehEtHvbRDdkOEBUXr8qbntz/pu5mAo4AuId2LocjKBYT
-	 2+NTFSrdb0hSOexDJM08KB1GySrqXNOHdf+F1H8DpHzempFBSekxVn7LZoKZ12JbAn
-	 KqADfNiu5RqdcLkqAyR9DZ/OwyIPpjzb/+PG90FfbMrxxdnu+MTKD17DC/7ZED9X2u
-	 gaODwKaWfXPAg==
-Date: Sat, 13 Dec 2025 09:04:07 +0900
-From: Jakub Kicinski <kuba@kernel.org>
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: netdev@vger.kernel.org, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
- Corbet <corbet@lwn.net>, Michael Chan <michael.chan@broadcom.com>, Pavan
- Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Ilias Apalodimas
- <ilias.apalodimas@linaro.org>, Shuah Khan <shuah@kernel.org>, Mina Almasry
- <almasrymina@google.com>, Stanislav Fomichev <sdf@fomichev.me>, Yue Haibing
- <yuehaibing@huawei.com>, David Wei <dw@davidwei.uk>, Haiyue Wang
- <haiyuewa@163.com>, Jens Axboe <axboe@kernel.dk>, Joe Damato
- <jdamato@fastly.com>, Simon Horman <horms@kernel.org>, Vishwanath Seshagiri
- <vishs@fb.com>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- io-uring@vger.kernel.org, dtatulea@nvidia.com
-Subject: Re: [PATCH net-next v7 7/9] eth: bnxt: allow providers to set rx
- buf size
-Message-ID: <20251213090407.3de8dd86@kernel.org>
-In-Reply-To: <c97d2c95-31c5-4bf6-b58f-552e85314056@gmail.com>
-References: <cover.1764542851.git.asml.silence@gmail.com>
-	<95566e5d1b75abcaefe3dca9a52015c2b5f04933.1764542851.git.asml.silence@gmail.com>
-	<20251202105820.14d6de99@kernel.org>
-	<c97d2c95-31c5-4bf6-b58f-552e85314056@gmail.com>
+	s=arc-20240116; t=1765587139; c=relaxed/simple;
+	bh=hSf6OhBwSO5bj3V01S56t7c+MIR2jA5g6auz6Bl3sUs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QZ4Vex6SOwwN0bQCNNOiHYfwGPJq+LhfoqNmBnnD6XE/XbpbrIMKB7DkkycZ4hlmCqtH9z3jMulxPyA5MegiqcBKzEvQQE0k5qdG56wh31auv/u7RDVFK5toYgaBtyIvLuJMnP+tyO+DO/QHlwUEfHRC8Mn2zwRMev46BH+09Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.93.142])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dSnpL270VzYQtlK;
+	Sat, 13 Dec 2025 08:51:54 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 991CF1A07BD;
+	Sat, 13 Dec 2025 08:52:13 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP2 (Coremail) with SMTP id Syh0CgAH51C8uDxpYxE0Bg--.5936S2;
+	Sat, 13 Dec 2025 08:52:13 +0800 (CST)
+Message-ID: <4ab8a086-4200-45c0-9583-abf6e52a354a@huaweicloud.com>
+Date: Sat, 13 Dec 2025 08:52:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] cpuset: Avoid invalidating sibling partitions on
+ cpuset.cpus conflict.
+To: Sun Shaojie <sunshaojie@kylinos.cn>
+Cc: cgroups@vger.kernel.org, hannes@cmpxchg.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llong@redhat.com, mkoutny@suse.com, shuah@kernel.org, tj@kernel.org
+References: <45f5e2c6-42ec-4d77-9c2d-0e00472a05de@huaweicloud.com>
+ <20251201094447.108278-1-sunshaojie@kylinos.cn>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20251201094447.108278-1-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgAH51C8uDxpYxE0Bg--.5936S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3WrW8Ar17XryfuF1UGFg_yoW8trWUpF
+	yxK3WDta90qr1rCws2qr4qvF1Fqa4kuF17JFs8GryxGrs5JF1vy3W7CrnxurZ8Xr95Gr1j
+	v3y5uws3CF4DXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUymb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+	xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+	cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+	AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
+	14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07UAwIDUUUUU=
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-On Thu, 11 Dec 2025 01:39:25 +0000 Pavel Begunkov wrote:
-> On 12/2/25 18:58, Jakub Kicinski wrote:
-> > On Sun, 30 Nov 2025 23:35:22 +0000 Pavel Begunkov wrote:  
-> >> +static ssize_t bnxt_get_rx_buf_size(struct bnxt *bp, int rxq_idx)
-> >> +{
-> >> +	struct netdev_rx_queue *rxq = __netif_get_rx_queue(bp->dev, rxq_idx);
-> >> +	size_t rx_buf_size;
-> >> +
-> >> +	rx_buf_size = rxq->mp_params.rx_buf_len;
-> >> +	if (!rx_buf_size)
-> >> +		return BNXT_RX_PAGE_SIZE;  
-> > 
-> > I'd like to retain my cfg objects in the queue API, if you don't mind.
-> > I guess we just need the way for drivers to fill in the defaults and
-> > then plumb them into the ops.  
-> 
-> It was problematic, I wanted to split it into more digestible chunks.
-> My main problem is that it was not really optional and could break
-> drivers that don't even care about this qcfg len option but allow
-> setting it device-wise via ethtool, and I won't even have a way to
-> test them.
-> 
-> Maybe there is a way to strip down qcfg and only apply it to marked
-> queue api enabled drivers for now, and then extend the idea it in
-> the future. E.g.
 
-Yes, I mean a stripped down version, since we're not shadowing the
-ethtool knob any more the full set of changes I had will be too much.
-Off the top of my head I think we'd need to retain:
- - the qcfg struct passed as an argument to the queue callbacks
-   (drivers other than bnxt won't use it which is okay since they don't
-   set .supported_params)
- - the ability to conjure the qcfg struct for any given queue by the
-   driver at any time (netdev_queue_config())
- - probably the callback to fill in the defaults so that the driver
-   doesn't have to check "is the value set by the user" explicitly
+
+On 2025/12/1 17:44, Sun Shaojie wrote:
+> Hi, Ridong,
+> 
+> On Thu, 27 Nov 2025 09:55:21, Chen Ridong wrote:
+>> I have to admit that I prefer the current implementation.
+>>
+>> At the very least, it ensures that all partitions are treated fairly[1]. Relaxing this rule would
+>> make it more difficult for users to understand why the cpuset.cpus they configured do not match the
+>> effective CPUs in use, and why different operation orders yield different results.
+> 
+> As for "different operation orders yield different results", Below is an
+> example that is not a corner case.
+> 
+>     root cgroup
+>       /    \
+>      A1    B1
+> 
+>  #1> echo "0" > A1/cpuset.cpus
+>  #2> echo "0-1" > B1/cpuset.cpus.exclusive --> return error
+> 
+>  #1> echo "0-1" > B1/cpuset.cpus.exclusive
+>  #2> echo "0" > A1/cpuset.cpus
+> 
+
+You're looking at one rule, but there's another one—Longman pointed out that setting cpuset.cpu
+should never fail.
+
+>>
+>> In another scenario, if we do not invalidate the siblings, new leaf cpusets (marked as member)
+>> created under A1 will end up with empty effective CPUs—and this is not a desired behavior.
+>>
+>>   root cgroup
+>>        |
+>>       A1
+>>      /  \
+>>    A2    A3...
+>>
+>> #1> echo "0-1" > A1/cpuset.cpus
+>> #2> echo "root" > A1/cpuset.cpus.partition
+>> #3> echo "0-1" > A2/cpuset.cpus
+>> #4> echo "root" > A2/cpuset.cpus.partition
+>> mkdir A4
+>> mkdir A5
+>> echo "0" > A4/cpuset.cpus
+>> echo $$ > A4/cgroup.procs
+>> echo "1" > A5/cpuset.cpus
+>> echo $$ > A5/cgroup.procs
+>>
+> 
+> If A2...A5 all belong to the same user, and that user wants both A4 and A5 
+> to have effective CPUs, then the user should also understand that A2 needs
+> to be adjusted to "member" instead of "root".
+> 
+> if A2...A5 belong to different users, must satisfying user A4’s requirement
+> come at the expense of user A2’s requirement? That is not fair.
+> 
+
+Regarding cpuset usage with Docker: when binding CPUs at container startup, do you check the sibling
+CPUs in use? Without this check, A2 will not be invalidated.
+
+Your patch has been discussed for a while. It seems to make the rules more complex.
+
+>>
+>> [1]: "B1 is a second-class partition only because it starts later or why is it OK to not fulfill its
+>> requirement?" --Michal.
+> 
+> Thanks,
+> Sun Shaojie
+
+-- 
+Best regards,
+Ridong
+
 
