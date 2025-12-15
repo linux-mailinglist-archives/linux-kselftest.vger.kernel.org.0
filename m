@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-47587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A1AACBF4AF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Dec 2025 18:50:28 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57DE2CBF593
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Dec 2025 19:06:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2E783300FA29
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Dec 2025 17:50:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C16C03001BDD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Dec 2025 18:06:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07834322B6E;
-	Mon, 15 Dec 2025 17:50:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7334A33891A;
+	Mon, 15 Dec 2025 18:06:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CEVe02Iu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4dXhe81"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE9B5322547;
-	Mon, 15 Dec 2025 17:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36CF8338582;
+	Mon, 15 Dec 2025 18:06:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765821025; cv=none; b=aIx9gD7pt0EN7uJKC6PbbMHg/RwZ2QhgzihQyDbVtowbf4dnOAtHg6Ojqtsw4m2Vnds10LdJN6jgXRXSwl/Jzp67AdzvUzadddim1yR83DAK/2CkzVsikQnIX45YrHwEn3C8zxhhqED2MdAsv+lpbCgSznyrpCsANMXSMKxTkXQ=
+	t=1765821984; cv=none; b=hbVgF++851Uwwd83vfYD0Oig+i95ATTkLHc5XmhUWvU1QpHvZJoAJlTpS3y6FS6fhPwpUfr3ICrNDqjtY9L9+3Fp96vd8sSmyyE/KxcM0+tJUZepmK92UvNPN2SuNew1R3AjkpenCALMWuM1b/+aY5+w8IY5kvxk1FmmdXnelek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765821025; c=relaxed/simple;
-	bh=YrTHPSx4341UHi+jq+akqh9qZcSw7dvO2ic7YUiWbg0=;
+	s=arc-20240116; t=1765821984; c=relaxed/simple;
+	bh=rJKmpgwGt+PHS/ree1WrcDO5XiHWvRcZqNyAmcIy9es=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dPxMdgL6eyKVGKDYS1C52GQCuY33tp/ZJ2QkAy/5VKQ9nmZa+raQS1PHQJoPrTRcqwQXe2jxrRW22gG9+peOW9kIyAayfXwYyaDDl7Gx1xFvSL5XPDfexmcZekVDjfovhysdF88VqKtj+5J+3tQ0cOpSMQ3dD0okuXGxfaLV6Tc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CEVe02Iu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132FCC4CEF5;
-	Mon, 15 Dec 2025 17:50:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LD2BRIfKwFYBHPHirmE7CYP+vR59cGqi58ZfCOTq0gD/ml+Rqr0VBLZnXIXKwxJytVKbidHyop8vDEyeJP2joxrT6O9qAEedAhmbyy6zCz19qEHr+RHviNv2xWlnxVMEy8ExbV8Sl346SyMafMD97lpfGiKuO26zaw+pn/jY/9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4dXhe81; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 815FCC4CEF5;
+	Mon, 15 Dec 2025 18:06:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765821025;
-	bh=YrTHPSx4341UHi+jq+akqh9qZcSw7dvO2ic7YUiWbg0=;
+	s=k20201202; t=1765821983;
+	bh=rJKmpgwGt+PHS/ree1WrcDO5XiHWvRcZqNyAmcIy9es=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CEVe02IunMd7oRHFksHEuNX1ZGXmcKIUYs9D3rfyToXy2S9a/vJIReRvxn0hSyuHq
-	 ZYiHE+ofGwyMAJmluKhkQYrdZH/sUMKtertR6dDwxTG+iRRnl/gjKIqHFfSgnoV8Fk
-	 /L9lVyXu1WUxeBFv8WZU9ewBj0Uk7MrThe65m2SeSzSV5CJ1IHPADfw7Bhajy5exxg
-	 f29m8+hYKOCCh9kjItC7brKVPTJ8NfuY+VapVLoxSo3SCPlFZTTXHGejcN362IY5CC
-	 x0KbRMlW7m0lhBWnhBDb71H/F/MBsH1wSUTLQinohrsqHRnKc3HV6K4mEP6ckdb691
-	 4ezHrJtnERipQ==
-Date: Mon, 15 Dec 2025 09:50:23 -0800
+	b=X4dXhe815EGINN9+D1XDn9JYU912TK9FP4PyD9foSopSle3q6dYCpVr7jyRI+DWhV
+	 i6Kl7yfrDQ4oeU9p4NFbKlHcZcHLCJnJKJW94SSYYy2027yh6oiX0HK+vlP/mFkgUK
+	 mdZ1j/FEb2u77rv4Czi+cnB6TX/3tPXeEf921FoIY1kP8zucob8vquXGqRRwH5blGu
+	 xe7Yqqh6OPmRYcD0CODaZO0GScRbWURp5ofAw6wIEfevB9DzZdxup/JiUjV7dz0lu4
+	 al90hyz2mGYTARGtQoXeQzQHL243qPui+pkwqiXgqGkCb0e324FpssFbB2tPlaUd/9
+	 po/4NT+SEhi5Q==
+Date: Mon, 15 Dec 2025 10:06:22 -0800
 From: Oliver Upton <oupton@kernel.org>
 To: Colton Lewis <coltonlewis@google.com>
 Cc: kvm@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net,
@@ -51,10 +51,10 @@ Cc: kvm@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net,
 	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 21/24] KVM: arm64: Inject recorded guest interrupts
-Message-ID: <aUBKX8iqsptyTb4S@kernel.org>
-References: <aTioEWHu0ZbFCjR6@kernel.org>
- <gsnt8qf72tv9.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH v5 19/24] KVM: arm64: Implement lazy PMU context swaps
+Message-ID: <aUBOHnT1whwR3vbo@kernel.org>
+References: <aTidfRwYLYwTfmK_@kernel.org>
+ <gsntecoz2v87.fsf@coltonlewis-kvm.c.googlers.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,48 +63,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <gsnt8qf72tv9.fsf@coltonlewis-kvm.c.googlers.com>
+In-Reply-To: <gsntecoz2v87.fsf@coltonlewis-kvm.c.googlers.com>
 
-On Fri, Dec 12, 2025 at 10:55:06PM +0000, Colton Lewis wrote:
+On Fri, Dec 12, 2025 at 10:25:44PM +0000, Colton Lewis wrote:
 > Oliver Upton <oupton@kernel.org> writes:
 > 
-> > In no situation should KVM be injecting a "recorded" IRQ. The overflow
-> > condition of the PMU is well defined in the architecture and we should
-> > implement *exactly* that.
+> > On Tue, Dec 09, 2025 at 08:51:16PM +0000, Colton Lewis wrote:
+> > > +enum vcpu_pmu_register_access {
+> > > +	VCPU_PMU_ACCESS_UNSET,
+> > > +	VCPU_PMU_ACCESS_VIRTUAL,
+> > > +	VCPU_PMU_ACCESS_PHYSICAL,
+> > > +};
 > 
-> When I say "record" I just meant "updating the virtual overflow register
-> to reflect an overflow".
-
-Right, consider changing the shortlog to read more along the lines of
-"detect overflows for partitioned PMU" or similar.
-
-> > On Tue, Dec 09, 2025 at 08:51:18PM +0000, Colton Lewis wrote:
-> > > +/**
-> > > + * kvm_pmu_part_overflow_status() - Determine if any guest counters
-> > > have overflowed
-> > > + * @vcpu: Ponter to struct kvm_vcpu
-> > > + *
-> > > + * Determine if any guest counters have overflowed and therefore an
-> > > + * IRQ needs to be injected into the guest.
-> > > + *
-> > > + * Return: True if there was an overflow, false otherwise
-> > > + */
-> > > +bool kvm_pmu_part_overflow_status(struct kvm_vcpu *vcpu)
-> > > +{
-> > > +	struct arm_pmu *pmu = vcpu->kvm->arch.arm_pmu;
-> > > +	u64 mask = kvm_pmu_guest_counter_mask(pmu);
-> > > +	u64 pmovs = __vcpu_sys_reg(vcpu, PMOVSSET_EL0);
-> > > +	u64 pmint = read_pmintenset();
-> > > +	u64 pmcr = read_pmcr();
+> > This is confusing. Even when the guest is accessing registers directly
+> > on the CPU I'd still call that "hardware assisted virtualization" and
+> > not "physical".
 > 
-> > How do we know that the vPMU has been loaded on the CPU at this point?
-> 
-> Because this is only called by kvm_pmu_update_state which is only called
-> by kvm_pmu_update_state <- kvm_pmu_{flush,sync}_hwstate <-
-> kvm_arch_vcpu_ioctl_run after a vcpu_load.
+> It was what I thought described the access pattern. Do you have another
+> naming suggestion?
 
-That's assuming the PMU is loaded eagerly which I thought we agreed it
-would not be.
+	PMU_STATE_FREE,
+	PMU_STATE_GUEST_OWNED,
+
+> > > +	kvm_pmu_set_physical_access(vcpu);
+> > > +
+> > >   	return true;
+> > >   }
+> 
+> > Aren't there a ton of other registers the guest may access before
+> > these two? Having generic PMU register accessors would allow you to
+> > manage residence of PMU registers from a single spot.
+> 
+> Yes but these are the only two that use the old trap handlers. I also
+> call set_physical_access from my fast path handler that handles all the
+> other registers when partitioned.
+
+The fast path accessors should only be accessing state already loaded
+on the CPU. If the guest's PMU context isn't loaded on the CPU then it
+should return to a kernel context and do a full put/load on the vCPU.
+
+I'm not seeing how this all fits together but for lazy loading to work
+correctly you need to evaluate the state of the vPMU at vcpu_load(). If
+there exists an enabled PMC, set PMU_STATE_GUEST_OWNED and load it
+upfront.
+
+Otherwise, default to PMU_STATE_FREE until the next register access and
+this whole thing resets when the vCPU is scheduled out. I had suggested
+to you a while back that you should follow a similar model to the debug
+registers, this is how they behave.
 
 Thanks,
 Oliver
