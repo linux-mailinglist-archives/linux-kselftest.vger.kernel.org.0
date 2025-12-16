@@ -1,80 +1,81 @@
-Return-Path: <linux-kselftest+bounces-47603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95482CC384E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 15:21:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE50CC38BD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 15:26:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id C70B53006D9A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 14:21:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ED739305DCCE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 14:21:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8C6A341AD0;
-	Tue, 16 Dec 2025 14:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D790734405C;
+	Tue, 16 Dec 2025 14:21:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a/gSau6p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HERlvNf/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277AF341043
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 14:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 556F12D641C
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 14:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765894900; cv=none; b=FNtPZrfGnzywHhDqjEz4K0wVtdjeZDRG+qiLpGHB4aQ0abW3mgT8MYKTJjALwv/TcCwXbe6AFOfJBHs5xuFgKe6elloDSTVgf5ziYycZqI7gAg4ptYbkYjk1Z0otwcT4MBOgjliYiRpGZRH6t/rn2dLpv5moc3eB0lBiXHwS4Gk=
+	t=1765894902; cv=none; b=p6ltFidzWvdF2N9vT1VYshX+zjUW3L7bDf3+1EQyBseVCn3AXjtd4QPa6tBkn9A83hHnXPhCw3wG3eONNhiHxuudh3ZPrKbTeVQjnnfay9y9x5ucs41aR1DPqXBWDbqLhr8iNpZM4zbHFRNT5wa00Obka0++3dfzKSFrYPzJSl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765894900; c=relaxed/simple;
-	bh=rRg1rU7RdBd7Gq/Vczw/5nedpV2H6E5sTzFYSK2TRDk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XthVsP02OeA2pzMNPJU6GqBwT1jY78xChMOX2yCGSMFCGKfpCi0ZMzB/1hQH2jT/VXpja5i1cDmWHczFOFTDHX6+M25x91oj4+eXYm27MoOF2okAQYGa+nC4RAyCN9Z9qnEpeZYWvO40X6qxxrZWgDHbGopSIQCVW3amokvZhxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a/gSau6p; arc=none smtp.client-ip=209.85.128.172
+	s=arc-20240116; t=1765894902; c=relaxed/simple;
+	bh=xk4akIQ4zkMZwyNu5en5aAFYUYM6zO5HsLOJvD66TMU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gtKGTZ312LP5JDtAQ0u48XC87eBjhCApP90gohyLNlLgaOyEc//Cb/Tx2H48RgJ7+7NAluLbgF4f9KllwgATHIBzgP5eFzwHip+KwwaFb7bgCH2POPJ+1yfepn3fMt6MiSJqRT2sQfqLmz0t7A3BZnRDekLi7RRZpQG1bx3Htgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HERlvNf/; arc=none smtp.client-ip=74.125.224.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-78c5b5c1eccso62486077b3.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 06:21:38 -0800 (PST)
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-64475c16a11so5317860d50.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 06:21:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765894898; x=1766499698; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=N0mup+HLlOmrVWqFXbyf+MzotU/km+jMX39WXot6KIA=;
-        b=a/gSau6pK/u1fIeU4zuETqT0VmX0W0tfKs7peZ9Fauug8kh0UZGSyaxxrvyeFJst21
-         4gy1SWA3wp9Zx7sHocCCp2Z3af95NwabA02wFYIStJkCoI8p57dTfyb9vqwSIKQN8So7
-         6KWpnx03+pQ4K9l1NK95ILFRge3F7ntylo5SGzfLbTyDrOfu5swJ4A1GMeFg/tVA4BDA
-         1Ta/VUIHtKBg/aonSOOa9GOyZmitqo1baKkHEiHm0m3kVKC21snSh5pRA8NkL8AZLCH3
-         tkpevNRRh8bHcHNpU+N9uyBiIa4n6vYbA+zOXY8spnqs8ug20uX7MU4npDjTGPUMaV+o
-         o/eg==
+        d=gmail.com; s=20230601; t=1765894899; x=1766499699; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h1nOmunptNy3oemoV4rUx/DnbH6DXevdS7AhcMbpo7U=;
+        b=HERlvNf/OOXZN7T7CHl/m8v5LKf//+2Bg3jEqISnK7TuDjomY9VjXHhtqFoMxn8rjw
+         OqJu++veyBtKqjVkO9Z8EFW4/lyxA7hGlAorrUQN3Q6GCUvfxCBxvssVfMht10ZzMPfw
+         JcMhfnyq82mAqjxGUe2t4Qa87bcqP6Pyw4Z7bzMY0q1T1NiEACTPRqr+uON2BOBjkc+h
+         5hhGA1HqWH86IUyF7DEZeU1CkIUjMcaVfJd+ljW3YfJO1vYmwMBdCmuBlbaXEw757ptY
+         HJIi/1tePBX6dA0acIYyrYraaU4QzC64m/LYRhGFZshTALKwwhGIc0Z2qtRHiwoxgYTK
+         dO+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765894898; x=1766499698;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N0mup+HLlOmrVWqFXbyf+MzotU/km+jMX39WXot6KIA=;
-        b=CX+BLocUc96TL905HJkUW6SbsSIzULZRjjA2eiWd7v77aljqGiF2EkbxQOpLarQ3sh
-         k2H+03RAmbwRTSNedW5ROipIbQ+X/+yjKtzS0b13H4H5VcauhSMaB7EQyVAhF/npUq84
-         v8xCixBFmY02o3LdrwOt7h2XeLCwfewEVvtLKkOgqzfzv4BfG5NsmI0H8Iq5ket1AKwj
-         +r0c7sftzA96MW8lTy9MAxghaZMrQOiK0kUdf3/BrUwyxiBaGdTtVOZYnALU/tOCbwqW
-         6ySKpufvWztDoyweE+LLjOAXtvzpTZji+1yWjE20bz+f6FqOKezVg0HNny2bugUkk1PY
-         TGng==
-X-Forwarded-Encrypted: i=1; AJvYcCUVjyEW/sWqQUL3pEzawaAUPAiXgxYqenpSycaYfKl7IscBK/ItxfGDX1gRzuuLNaZfVrF2kpadg6HwSTOEXI0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwC5O9/NV5kyVNEgKHPQ9Gpss07jCK+zOYmENWfNUqraBr7sB1y
-	gnJUkPE6SRzZt/vef0JRDqNtwM8tPStXXmhYWVM3qze3poJ1z5fjB+vE5WoAUw==
-X-Gm-Gg: AY/fxX7IoWOFlZrqYWu69mcM5XSpIjpfT+vguZlFlpOEQnnAxEPa13LWfdTAM6quDY5
-	3/BFZPvUAbwRvChF8G6UtwN94QVj9MSP5E+Az+i0fG14xAXyG1zBkZu8bP/7h6eOMbxxoxR5XNw
-	xPaEk0u21Tv1N1O1YQ6HqvjmOG5Ouost1LE7bE6NxgaqlsuMceaJM3s+t8//FuP1da0g3/0JGkW
-	S0bHZv7qBduB2audl+l1bd40U/2oWm/32DHTJr5LAR8J9mq6pA+hZNmDP3JmSQTHTzzBTjPokdr
-	o6lI+8pZ7/Qb70ighG3NZPslcVGoqQe4S+zD9A3jrraJlRO8R5bKsCpnGVnCazQbfgPz0CKG6O7
-	IZDTMjfgNzDg4NvhCndKcRoZ/QqZRq6R0dZmxaHramn+x0ZtQPv0PYf4ZdANbHd3bdddN/q3PfC
-	PfL7E2oRXoKIT6KM//32hP/F3J1xfuZBg=
-X-Google-Smtp-Source: AGHT+IGejGVDSZX+7LKGxziOgzMccisD2YOnvJr92J3v9iAv92NOwjPH5YZx0F1XbU1v7gDjsWQY9A==
-X-Received: by 2002:a05:690c:4c0a:b0:786:8410:31f6 with SMTP id 00721157ae682-78e67155d6amr106126917b3.22.1765894897917;
-        Tue, 16 Dec 2025 06:21:37 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:58::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-78e749e5bccsm39322147b3.26.2025.12.16.06.21.37
+        d=1e100.net; s=20230601; t=1765894899; x=1766499699;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=h1nOmunptNy3oemoV4rUx/DnbH6DXevdS7AhcMbpo7U=;
+        b=kdWYhM4/SZcxRLte5IzKSjtxa3/TBZ24typpoHVO409ovGhLcbX+8NaYmISYRgVGfh
+         bUm/xJdXHv37UhJ/rPUqPW6TVQ+zzGPVj69Xj3RyS7aUaIaPieKI5cttrRCBJjxaE3/v
+         CGf3X/vcKgmZo2pJ0mNl/qUO0Dp3OsrHWIu1hRNDSLoriJ4cYAgyQJnsh77b3k3gBKy8
+         ro/JqooOE7mb7P/mBUQ6yr3gMpXFk5K1ilpdEe1QyIwds+mmTYi3V1FOYJNhIOKKv60q
+         NFp+qvxgnEHGhVwSk4JnRqG4a/4rLArWjlrElxnnmQBM7Xi9fXl7j4nP79KyvmNiennC
+         7/ew==
+X-Forwarded-Encrypted: i=1; AJvYcCX7ePoI2BzPqVxGAuE4vn8AYieMNKbQFJgwikg4d+slHDhcI06Er2BThVQeiQ0WBA7s/6XsSTzCm8CU7NjnZxM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHgE3+JSsYoH4b8s/VnYA37CVxE8jv5/rl47xhyILzs32F+06Q
+	hdcowveRUPfbzN6HlOb/aYiE3vP4x8B3XEx9glALJIe/m0sH0+t1advH
+X-Gm-Gg: AY/fxX5+KnTAQaM/vTMUsitoyMIzfFE+cFjPD5fgfaTyDvNIiNR0hHn87UkbJGYLqFI
+	4L2ajpTb0eKyJDnpZ52MuBXa9XWqIiaiKx6qe9tkMvNLn0UYtdeCs5mwXAX5UctoxhasNsZeAVI
+	08AfB07waiuIjXe2klAztFQ3aQoq5/U2gV2xiNBk83BwPIvaHf7NrpW4ET2CWZHlI5gQsniVOlC
+	3poDx8BQRTnPnlXf00gWGZ2tInKurtQZbvQUPlEums03eMHI3ia0QBA/hk+rs4dRjz7kzxZB8Z0
+	J2bbWbXITCLdsmQcTSG1xWj/9LG9WiwJ8BhtF/fFF+B3dbWFqV3CfOPvlcwcyOxnScxKL4rs+Ry
+	9Blcgn3ChNhD/7OjYiH/cCPl5Sta6BjJnEYBT2oAaA8f67aL5S9GYNGHS3zRvLHcgw96j5kkUNV
+	CsMFNl50R0VFCcoj3+EIU=
+X-Google-Smtp-Source: AGHT+IFEQrF+xExK5KQL1vPJpilA4DpXFZueEXCvaSd+rgtVfZpJUrEjgFisTuNBxOinrGlRuRt+ag==
+X-Received: by 2002:a05:690e:118a:b0:646:518b:b179 with SMTP id 956f58d0204a3-646518bb635mr1685481d50.15.1765894899145;
+        Tue, 16 Dec 2025 06:21:39 -0800 (PST)
+Received: from localhost ([2a03:2880:25ff:e::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78e74a42aeasm39297997b3.52.2025.12.16.06.21.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 06:21:37 -0800 (PST)
+        Tue, 16 Dec 2025 06:21:38 -0800 (PST)
 From: Daniel Zahka <daniel.zahka@gmail.com>
-Subject: [PATCH net 0/2] selftests: drv-net: psp: fix templated test names
- in psp.py
-Date: Tue, 16 Dec 2025 06:21:34 -0800
-Message-Id: <20251216-psp-test-fix-v1-0-3b5a6dde186f@gmail.com>
+Date: Tue, 16 Dec 2025 06:21:35 -0800
+Subject: [PATCH net 1/2] selftests: drv-net: psp: fix templated test names
+ in psp_ip_ver_test_builder()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,9 +84,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAO9qQWkC/x2MQQqAMAzAviI9W1iLivgV8SCz017mWIcI4t8dH
- hNIHjDJKgZT80CWS03PWIHaBvyxxl1Qt8rAjntiYkyWsIgVDHpjcCMNvnMre4KapCxV/7sZohR
- Y3vcDi6GTbWMAAAA=
+Message-Id: <20251216-psp-test-fix-v1-1-3b5a6dde186f@gmail.com>
+References: <20251216-psp-test-fix-v1-0-3b5a6dde186f@gmail.com>
+In-Reply-To: <20251216-psp-test-fix-v1-0-3b5a6dde186f@gmail.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -94,79 +95,33 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, Daniel Zahka <daniel.zahka@gmail.com>
 X-Mailer: b4 0.13.0
 
-The templated test names in psp.py had a bug that was not exposed
-until 80970e0fc07e ("selftests: net: py: extract the case generation
-logic") changed the order of test case evaluation and test case name
-extraction.
+test_case will only take on its formatted name after it is called by
+the test runner. Move the assignment to test_case.__name__ to when the
+test_case is constructed, not called.
 
-The test cases created in psp_ip_ver_test_builder() and
-ipver_test_builder() were only assigning formatted names to the test
-cases they returned, when the test itself was run. This series moves
-the test case naming to the point where the test function is created.
-
-Using netdevsim psp:
-Before:
-./tools/testing/selftests/drivers/net/psp.py
-  TAP version 13
-  1..28
-  ok 1 psp.test_case
-  ok 2 psp.test_case
-  ok 3 psp.test_case
-  ok 4 psp.test_case
-  ok 5 psp.test_case
-  ok 6 psp.test_case
-  ok 7 psp.test_case
-  ok 8 psp.test_case
-  ok 9 psp.test_case
-  ok 10 psp.test_case
-  ok 11 psp.dev_list_devices
-  ...
-  ok 28 psp.removal_device_bi
-  # Totals: pass:28 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # 
-  # Responder logs (0):
-  # STDERR:
-  #  Set PSP enable on device 3 to 0xf
-  #  Set PSP enable on device 3 to 0x0
-
-After:
-./tools/testing/selftests/drivers/net/psp.py
-  TAP version 13
-  1..28
-  ok 1 psp.data_basic_send_v0_ip4
-  ok 2 psp.data_basic_send_v0_ip6
-  ok 3 psp.data_basic_send_v1_ip4
-  ok 4 psp.data_basic_send_v1_ip6
-  ok 5 psp.data_basic_send_v2_ip4
-  ok 6 psp.data_basic_send_v2_ip6
-  ok 7 psp.data_basic_send_v3_ip4
-  ok 8 psp.data_basic_send_v3_ip6
-  ok 9 psp.data_mss_adjust_ip4
-  ok 10 psp.data_mss_adjust_ip6
-  ok 11 psp.dev_list_devices
-  ...
-  ok 28 psp.removal_device_bi
-  # Totals: pass:28 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # 
-  # Responder logs (0):
-  # STDERR:
-  #  Set PSP enable on device 3 to 0xf
-  #  Set PSP enable on device 3 to 0x0
-
+Fixes: 8f90dc6e417a ("selftests: drv-net: psp: add basic data transfer and key rotation tests")
 Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
-Daniel Zahka (2):
-      selftests: drv-net: psp: fix templated test names in psp_ip_ver_test_builder()
-      selftests: drv-net: psp: fix test names in ipver_test_builder()
+ tools/testing/selftests/drivers/net/psp.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- tools/testing/selftests/drivers/net/psp.py | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
----
-base-commit: 885bebac9909994050bbbeed0829c727e42bd1b7
-change-id: 20251212-psp-test-fix-f0816c40a2c1
+diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+index 06559ef49b9a..56dee824bb4c 100755
+--- a/tools/testing/selftests/drivers/net/psp.py
++++ b/tools/testing/selftests/drivers/net/psp.py
+@@ -573,8 +573,9 @@ def psp_ip_ver_test_builder(name, test_func, psp_ver, ipver):
+     """Build test cases for each combo of PSP version and IP version"""
+     def test_case(cfg):
+         cfg.require_ipver(ipver)
+-        test_case.__name__ = f"{name}_v{psp_ver}_ip{ipver}"
+         test_func(cfg, psp_ver, ipver)
++
++    test_case.__name__ = f"{name}_v{psp_ver}_ip{ipver}"
+     return test_case
+ 
+ 
 
-Best regards,
 -- 
-Daniel Zahka <daniel.zahka@gmail.com>
+2.47.3
 
 
