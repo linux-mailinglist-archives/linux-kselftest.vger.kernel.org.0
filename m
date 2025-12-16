@@ -1,63 +1,64 @@
-Return-Path: <linux-kselftest+bounces-47595-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 898EECC1BD0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 10:22:16 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 005BECC1BCA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 10:22:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DC783303A0A0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 09:16:24 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4425F30378B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 09:21:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79C6D30CDB3;
-	Tue, 16 Dec 2025 09:16:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86DC8335092;
+	Tue, 16 Dec 2025 09:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="VIvtucJH"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="sA7EkLrl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out162-62-57-252.mail.qq.com (out162-62-57-252.mail.qq.com [162.62.57.252])
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBE3C3093BC;
-	Tue, 16 Dec 2025 09:16:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.252
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6953F337107;
+	Tue, 16 Dec 2025 09:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765876584; cv=none; b=J8SOnoWawVFfgJ4CG6X/ovYADxOhUaI8YBUK2GqeU2e5Vyp+RlruAp7krinBQRhimauN38ZFjivaCd/n6M/Jc4TWpssAdpDs0pWH2EtbtesStgaj5LAUGg7msBhVeYlSYYeaonSOIW9tu1DbmCgeVgXTDoGs/qbCfwpv73GyxIM=
+	t=1765876882; cv=none; b=Q8ztc0SGf991Xgj3pluJ8LaUD2ZrFrbjbvbJhQ/zbvd9kWZIbKosywmlpUZ8daMUhUfvNNQbIi0EIPM147SkoEKxgyZeftRd0uboJR9EoWkkE+ibhx4YAo0AlDsmAhhPW2gyBSteoXlGC9yoF+61Wex4ZWrP9HZ7y51iD/UQ28c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765876584; c=relaxed/simple;
-	bh=hE6yKZM5VFUU9g5Ut7vj8ciu3CM9YnXgymPPny04Ff8=;
+	s=arc-20240116; t=1765876882; c=relaxed/simple;
+	bh=24X0pCanVmHg/e8NWL/h05dZphB3R/9I6hDgIHF8gVI=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=ASgIzxXh5h8EtXn5XrfqYHk1kJhumMZJ9sx/tUtpcNB94nuCJoyDkzeRH/o0Xyomsla6MFmo9qOB73C8t2Lg1wA3Jz++q01FtdyJOC3+spvlkcTlIgzBS21rzeEr5M/UcuZ6pkBmI0XgfWWDl2zSpkh3pV8w7jIZJpcquNqt9Fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=VIvtucJH; arc=none smtp.client-ip=162.62.57.252
+	 MIME-Version; b=OENSvcQF4hLRcf8tq4jI0p0qY4ym4+hTY4Kgze5xSR0wxsx39DpdjWmsZVIEJjUzOzMtJjsc02lhVNTNvcZ6Q80lqud6M8MjqMRHQrTeXUoWgcI4xG/zmAMu+pA3go1CUHIivEpYGbdJYnOBWvH3/FcK/h9UquWIc0xoD2yVIa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=sA7EkLrl; arc=none smtp.client-ip=162.62.57.210
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1765876569;
-	bh=Gbc9bPnrfRPoaB2OYtkgeu+e8NHYthlmb9JGZ43dfM4=;
+	s=s201512; t=1765876869;
+	bh=1/tbd4ER+o2pakzMMr3AiSitqIosqgXH+5+uC3PcEQ4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=VIvtucJHcBsxu4vqvUG+7b5F+acsNHz0w8IxzxhHTXIOub+jbkk2fREyTfe8X9i5I
-	 HtM3GA2MHpzlJ6efpd7oQ/DwU75cVXtyUWrznjUsL4bbdCQQfHXvI6IGwvDGNsN5VR
-	 EDovvXCrzqHoGm/CV+8qS/wkpJQgQ/ZUdsmJAsXo=
+	b=sA7EkLrlVeWQB0bOThaS0NWUtTXI0QFRFT4TmzZuiydvbaMlb4N0KpXLZr4A+ED1b
+	 e52onWyIGol9cV2fygjWK9ztFx1T27Ax5tBDxSgvE99UnYGnHy00G0XAowCkGMZL0A
+	 KLNR9j/6FZBWVQsJHjLtbLaTbM/ohHrproKooU9Q=
 Received: from meizu-Precision-3660-casey.meizu.com ([14.21.33.152])
 	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
-	id 3FA2C669; Tue, 16 Dec 2025 17:15:58 +0800
-X-QQ-mid: xmsmtpt1765876558tva5lblfr
-Message-ID: <tencent_920541146CD237CFA8AF04A9F09DF4D4A907@qq.com>
-X-QQ-XMAILINFO: MqG4KXyEKpQyVBcIPT9lZXmwY9ecNJW60MCq8VlPRGwmk//cmFs/bCuup94ZOY
-	 GnXbBbt3oOO3wuHG/LaTlx9O8f8v0Vym2tX+HlJwUPpwRN796mjDM+WhIbAQrmIxmco83T9cMFKr
-	 CpocAnDfY4z500DZyK3CWyMySxW7gkamlzbRPiogC/qInHrh2UQWNKYnWJf98hZ/qDB6BFTfnqot
-	 Sm1GhzJnu1YpC/2Dq9nOM3vFBozXliu807o3FDhtfbWb4ueCXdGEswqAQFQmWwbsEUOzDxSoCE5r
-	 5mqcdf/rVeAP75ulsRPcqaTHwKok+zkJqnOejA6CHfexLo8nDcd2gpoIp7mV/jr2af4ofvW3CvRF
-	 JTZKt7dn/385LuX88XWHtZH1wEzTDWD6I3ry6v1Sp1EcPrKcBbrEkN9RkzaGwx5Aftt4R2oE87kh
-	 Y0QzONO5IcFu+2232uvRd/7ve2HY5gBCYTOlMb+RZpcBX5dNncPxSxSwTT31YwAcUJ2wKP1SSKO9
-	 Dk0XJZef3Be2f5R8zIFag77h173YbMjD123gLARLrRteLTihWgzxDGAnUihIqCecM2NxozMYHrQr
-	 VWIYcQDrQKB5G1LfMUhQs6IRuSDfkCBJ+l8io6A2RI+GKECWj7d9Zdh4kHxsN6wsgcHBxDDGH9TC
-	 i/D3uOYJJXSgrYsGHVXnHG6AOUUOgYdFDmkcZP4ffP9drpRSipUXNn22HHx1VcJHBmj1fT9XSjLT
-	 Peh3gT6eGT8AG8owSY/SAEByjb2Ff2sHsqJ7nd7I6ikUEvWKs4csD+rJNu4ifaAWWWVGeKDoeekl
-	 VaAIzP1RNGk7KAQ8b2EKqRYNwzoar3A3Wah8/LymLxhSKac3JVpvpUTaGyiratYihhLmRmbGVkfw
-	 MM2UVDK5jNJ/niqrbEFwBWt8r2/JyiqWaDie2mrl8dl6CJHtULTHBg1ykqmMXJ9dAWST7Qg+5ZCo
-	 eU82WGfRGiapwIlb2xyKPvo9DZsxAwvfbhIqx83SBx5iW1cY7YsyQtQ/b95T85GJHJBw5miLDPHq
-	 UxItxkaHhG24hp6VwTCa0DPvtz/g6jc31AlFZuTowD7OuylO5GuNUlGBqeUDDronTbCYaxbMkaOo
-	 +swF2a+yyUU7dK79ja9IixfUxvZxfuj3rJLnzN83xnwhTbrcl5U0D/VAbfvg==
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+	id 469BF85B; Tue, 16 Dec 2025 17:17:41 +0800
+X-QQ-mid: xmsmtpt1765876661t5be4z1z0
+Message-ID: <tencent_2C2E29CB9D86D4B80511944952524FB02F07@qq.com>
+X-QQ-XMAILINFO: OHjCcgV/l7buJZeFN618Uk1LELNQDRq6fBm25ruCbKZNqobg/5qz1I+4cD/Cso
+	 Ac4WHh3AvKTOkK5+PWcDPImKbQVKdyZGMYXY4zvhc1xBkBFrlEHY3TIxP3ahY/9r5zPAKSQNWgPt
+	 ZVZa5g/ApHeEYcj3NQsuNN5PfBL8IzJehtF1JMG7epj245cwrz1xRBV2MdJehCky7ot4vs4xGxdR
+	 7FdONpS1JvdthamhBdlaYaH+fRwCOJqbFszR65GesmJqnrk/FMIbCFMgvna3L59GOL3FfsQhIfCL
+	 a0UgyGXQ8oG+uEMC+5ig01rgYOPBVCSHASI2PYPRZA+Azg8gg/7Tlx8l/TK4LfbijUvGYfbWU3AX
+	 r9M7jLNCOFwvLFLATibPVnenapoueuawkFF2v8IUZ9HhGstmOFmUv7JHqMbv/bCoqIVhB+U51ke1
+	 I/PEL1by33BduzYY2jXbnLdC4hubvsvUzeZYO+2azx7L1N9Rrp5XgcqXkpeaRMECBOkJreatmmSR
+	 rBAiEhuL5F/doZ1MxMVCU/Ngi/n0vCxk5WSvn6q3ZoIGBcm/7rfoF7XSo1fiJxW/dRPZe3P90CLK
+	 Ydufftd6iZnRakouSr9rVr81AYSpfL+9rjKrxkO3WSo+pd7lH8sUJfPee3kk58WU0y75LF5fKJRv
+	 7r2Lv5mocghrp5PtT6adeWUNUjpVVf40Yog1o1iHXQUIcl1C1vNmLqVv/zXEb5m1rTN+Cbd1G3rw
+	 wwjNCaAT3zb8QTKIHkQYpZfL8oPRR6FW0GFLCSfKtZDIdeozoAO8H51KKGUuChveYCQGFKWf3zVz
+	 YuA4IyLTfub1Urvi6KA54nHBFzZJP3/hpsNHefC/2lj5s8tx0rM4lP2c3VCmM+ZcAW/F8WKr2AdZ
+	 jZPV28FYK/Rg3MkojwxcqcbHowipCRtVqShFeOauoNguIOVXnemeufYCz7HGAUuuSnkouK+4I10K
+	 MmVq9VAgPsJ9sWzgLZOwCpYIhWMjEOyPv+/xd1Q8EKOcS5Ng8QWQhX2JIEan5XIFO6NFivzM0lAj
+	 vS2f9LCqm27hznHRXNYaJ89b0tkChcXW7ZKM7DJF/yZpl6KVoguN7oe5SgyIR8k+AnSWskqB9n0/
+	 4zIR785INyvqXHePRhuIxl5bqPMlXE2uXrbhZs6aIe1Yy+SsQd8vXUo4ycR3lN1NaHter3Ux6Ukf
+	 KQPrx7ufFHEziHBA==
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
 From: Licay <licayy@foxmail.com>
 To: ywen.chen@foxmail.com,
 	akpm@linux-foundation.org
@@ -80,12 +81,12 @@ Cc: andrealmeid@igalia.com,
 	tglx@linutronix.de,
 	usama.anjum@collabora.com,
 	Licay <licayy@foxmail.com>
-Subject: [PATCH v2 3/5] selftests/futex: read atomic variable value with atomic_read
-Date: Tue, 16 Dec 2025 17:14:05 +0800
-X-OQ-MSGID: <20251216091405.421289-1-licayy@foxmail.com>
+Subject: [PATCH v2 4/5] selftests/futex: introduce the declaration of atomic_t from types.h
+Date: Tue, 16 Dec 2025 17:17:37 +0800
+X-OQ-MSGID: <20251216091737.426531-1-licayy@foxmail.com>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <tencent_7DA95D2C454DDCF1E381AE2EE7F7793A5F08@qq.com>
-References: <tencent_7DA95D2C454DDCF1E381AE2EE7F7793A5F08@qq.com>
+In-Reply-To: <tencent_FD541759D11337DCF8B2EBCE79435EF21706@qq.com>
+References: <tencent_FD541759D11337DCF8B2EBCE79435EF21706@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,16 +95,18 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-> Directly reading the internal value of atomic_t externally does
-> not meet the encapsulation requirements. A new function
-> atomic_read is added to obtain the value of an atomic variable.
+> Introduce the header files specifically prepared for test programs
+> from the tools/include directory. And solve the problem that
+> atomic_read and atomic_set may not be safe in a multi - threaded
+> environment.
 >
 > Signed-off-by: Yuwen Chen <ywen.chen@foxmail.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202512112344.gsyPl2ag-lkp@intel.com/
 > ---
->  .../selftests/futex/functional/futex_requeue_pi.c    | 12 ++++++------
->  .../functional/futex_requeue_pi_signal_restart.c     |  4 ++--
->  tools/testing/selftests/futex/include/atomic.h       | 12 ++++++++++++
->  3 files changed, 20 insertions(+), 8 deletions(-)
+>  .../selftests/futex/functional/Makefile       |  2 +-
+>  .../testing/selftests/futex/include/atomic.h  | 25 +++++++++----------
+>  2 files changed, 13 insertions(+), 14 deletions(-)
 Reviewed-by: Licay <licayy@foxmail.com>
 
 
