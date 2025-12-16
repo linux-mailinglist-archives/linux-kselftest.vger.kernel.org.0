@@ -1,98 +1,148 @@
-Return-Path: <linux-kselftest+bounces-47599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 565A5CC1EC5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 11:15:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C24FCC2535
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 12:37:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 355A5302C5FB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 10:15:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 10FFE308BB27
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 11:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2173336ED4;
-	Tue, 16 Dec 2025 10:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2B7341066;
+	Tue, 16 Dec 2025 11:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M3JOCTE0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cbIDB6Au"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA7F3346B1
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 10:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CDA340DA4
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 11:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765880129; cv=none; b=u4QtrKOXThKNA1Zu6Y5HLRDQ9na05wNJXD8+zhQtym1MAPFDd6JYMBJtEkRDa6ru49T/vxqRNj2coX0CH+nhmwIYjv+pf/iFVFhF5blSvmStNvr2PU7awe4xnHl9Y2SYmexZsBhiCbArusvld3B91vieyHWQq2onFAghaIJ8hLU=
+	t=1765884696; cv=none; b=U3iagnoGA/IZ6c8CI+sHbbxJa7LDIjU7Mj/c3as5dxAp+Ll+Cu9wU6sOSpK61mFROYtN+Fsfrh0y5D9BIB1fRoav4pLb7G2sxU6jQ9nr8EyCVG7+8HYiIA1T2zfJontAzbPYV1F9URjUfhETrvcnTTYEEubE6mW+ouKEeoeKe2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765880129; c=relaxed/simple;
-	bh=cA2hUBGWGe7TtiYJoouOp5tOunrd6L/AfwtK5Ym9Ceg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KRJ85niiYannUxZlZM7qrnYn5W3SrABGjPyRNFbCcjeavBHyfexKwX+oNl7jdvGZpsnXGFRnFCjwpHwvmk0fzeXPBDayuSQnt98kbScv4weVdZLeKiCSyYPr8B7vVICEPztzJsfkephZqIxRVLAa1IoWkJd/ftKRqELihNW7F9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M3JOCTE0; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1765880126;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=h471FGNIc2IuNt6ZxKT5WLDjfkpWMH0oarvYV9MqPK4=;
-	b=M3JOCTE096zpHR/xEhTQ7JLnvQsU8BZL96pE6ADc2cRBSEUoEwZIqUtoUoat/5J43XPvtb
-	9YiZv6rRNtrRMPa96My4+wfIMIHsc8iVfL0BpNLsY0p8tdGQmYH25nM5YCvkEdenfwFj/z
-	f/k3C5bmSw9aeqwCOcYkEF4OYkflSpI=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-428-Ell0bgi6PZeWBVsbc6N4Ng-1; Tue,
- 16 Dec 2025 05:15:22 -0500
-X-MC-Unique: Ell0bgi6PZeWBVsbc6N4Ng-1
-X-Mimecast-MFC-AGG-ID: Ell0bgi6PZeWBVsbc6N4Ng_1765880120
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8FC9F18002C9;
-	Tue, 16 Dec 2025 10:15:20 +0000 (UTC)
-Received: from fedora (unknown [10.72.116.190])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 397511956056;
-	Tue, 16 Dec 2025 10:15:15 +0000 (UTC)
-Date: Tue, 16 Dec 2025 18:15:11 +0800
-From: Ming Lei <ming.lei@redhat.com>
-To: Clint George <clintbgeorge@gmail.com>
-Cc: skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, david.hunter.linux@gmail.com,
-	linux-kernel-mentees@lists.linux.dev, khalid@kernel.org
-Subject: Re: [PATCH] kselftest/kublk: include message in _Static_assert for
- C11 compatibility
-Message-ID: <aUExL6cvFqpgx52G@fedora>
-References: <20251215085022.7642-1-clintbgeorge@gmail.com>
+	s=arc-20240116; t=1765884696; c=relaxed/simple;
+	bh=ntbk0Qg64mB+eRdow45mqcltJofKTd87yIfqFj6CdOc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uICABlMFxoT20aLOQrSh9CuizOYyrfWRSiDQks87dXDniRf0UXarMTiomx97efUM75DU0nvExNYF5m0LAyhsRTjprDiFDHcUbj39icBvfOAnKNhr1uli4yJKrU9LmgFgqZPXHSsIgliNps6E9neRcwxTLK2MB8qI1Ewz2+5fRag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cbIDB6Au; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a0d67f1877so26675725ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 03:31:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765884693; x=1766489493; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KPjuXZ4/6Ll8iE3Rz28AaFI0svhctDC7vgBQffR8h0U=;
+        b=cbIDB6Aurdo6Qg7jy2rnK0HXpv01qQ+S0FkbLynBIJOAZBf4yQT6qtsiWqe2LcQwqX
+         jDlwmyMXYjhdlwLZ1avjPiSBPEpel9b7dG4cjcsk7BmVrAKaXo3fr4XHczCx+JaO8t5j
+         m4k8fc2oE/Zjn+t+m+wDDXWdD3q6WB9fre4WKsBA7i0Xuq3IxzbEOXj56CViDdiJe4ms
+         N/XU3CtT2WW+20AelN1iXrm0Xtd+0d6AQ9rXNxVOcNx88lZh4dRf2p0uxB+YeDHHln4K
+         mltZ2r4LfEJxxBUUcjwcycnncptdQjUduMqw506STKED0pH+5t5wdrA2ZRWqFvzlwx18
+         mFbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765884693; x=1766489493;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KPjuXZ4/6Ll8iE3Rz28AaFI0svhctDC7vgBQffR8h0U=;
+        b=Cco/0pvQptRvHhqPn95eYPS1fHEUdMjtJDSItDposKTQMTBo/fQpxSzbH+wFat9xyA
+         s42HOh7mpv/d1hn5ifO8Dght7zetkhSJOC+TxcoG5PLWxuK3/JlwGBooqn2LkTkK5O6p
+         nHODxVPO6HpuYNAxEANsYAkItFmin7kK/UUqj1oI0Xrzkrs7pbZSk6G5/qozjyRAxDYU
+         1t6EBfoyYOoPgD3wZc9z7gSvCnZctU8vlQ3QE/5orafnBhcDBPl4BaAZKuPHwZnGZOkD
+         54+rBZI4ZXJA9D3wnwB5ZiecmOq5blZnMn1CIU6Wv3EZz/rAEpa01sQR30g7tS7Xa29n
+         NptQ==
+X-Gm-Message-State: AOJu0YxiYvFxstP/S/FtUWmJW/FnudNSvlx3z1A0EK8iCClf5JTVkaNu
+	0wZHqWFL2l5tJFwe3/dQf5iFncRU44VYtiGqg8vMS7Z7E+ikeI0+aPam
+X-Gm-Gg: AY/fxX6lb1LMTSkXeXspMW21/yI4LJ3ggnPCdh2MggWjetr7MAZ3mmk5nFvyf6nTC17
+	Urh8NzZN15CyWtE8mUW8/BauIZ/bIjirKLaisrkmEEuk+za4lF2UqL1EDFMzubYehTBHSpXZpK1
+	qXQxF1LcyEc2d913jsyoynDCwxYfNNpRfSVTlZjmCGsaa2vS+5nuVyg+B+LMHHzB0foM+vTzhX9
+	7mFumKzO7Oy0zpmDuaCqUum5CB2HQ50o11ywL7eR8rWPb9WNkcyibFFWIcr3cRW85carxqdP3YH
+	Dkgqt+DtWAbZz5KQIm36G6taOt0CSiPbVpkTrwqOBSg+9a8IRFX8GMs4zzWKqldFyvgsEecd0CQ
+	2LblTWB993YAarPK1s62FBpuC48qcUPM2GFBql1/SEgXh/ZeuQAZrtRVBD7j44ynDb1RcAAEUFT
+	tItl/np4WAfllWHJjAE9uva0dN2xlZVTnu8+s=
+X-Google-Smtp-Source: AGHT+IErSHd7LCl7veNUggNMiOy8RjvXrn1zvEt+0F4+GSG9YkcBPanzUna8QSO4lmk0MrToIVu23w==
+X-Received: by 2002:a17:903:3b87:b0:2a0:97be:61a5 with SMTP id d9443c01a7336-2a097be6581mr101276985ad.3.1765884692481;
+        Tue, 16 Dec 2025 03:31:32 -0800 (PST)
+Received: from clint-ThinkPad-L14-Gen-2.. ([110.226.180.190])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7f7f6900949sm8620678b3a.29.2025.12.16.03.31.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Dec 2025 03:31:32 -0800 (PST)
+From: Clint George <clintbgeorge@gmail.com>
+To: shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	david.hunter.linux@gmail.com,
+	linux-kernel-mentees@lists.linux.dev,
+	skhan@linuxfoundation.org,
+	khalid@kernel.org,
+	Clint George <clintbgeorge@gmail.com>
+Subject: [PATCH] kselftest/coredump: use __builtin_trap() instead of null pointer
+Date: Tue, 16 Dec 2025 17:01:24 +0530
+Message-ID: <20251216113124.4150-1-clintbgeorge@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251215085022.7642-1-clintbgeorge@gmail.com>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 15, 2025 at 02:20:22PM +0530, Clint George wrote:
-> Add descriptive message in the _Static_assert to comply with the C11
-> standard requirement to prevent compiler from throwing out error. The
-> compiler throws an error when _Static_assert is used without a message as
-> that is a C23 extension.
-> 
-> Signed-off-by: Clint George <clintbgeorge@gmail.com>
-> ---
-> 
-> [] Testing:
-> The diff between before and after of running the kselftest test of the
-> module shows no regression on system with x86 architecture
+Use __builtin_trap() to truly crash the program instead of dereferencing
+null pointer which may be optimized by the compiler preventing the crash
+from occurring
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Signed-off-by: Clint George <clintbgeorge@gmail.com>
+---
+
+[] Testing:
+The diff between before and after of running the kselftest test of the
+module shows no regression on system with x86 architecture
+
+Let me know if any more testing is needed to be done
 
 
+[] Error log:
+~/Desktop/kernel-dev/linux-v1/tools/testing/selftests/coredump$ make LLVM=1 W=1
+  CC       stackdump_test
+coredump_test_helpers.c:59:6: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+   59 |         i = *(int *)NULL;
+      |             ^~~~~~~~~~~~
+coredump_test_helpers.c:59:6: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+1 warning generated.
+  CC       coredump_socket_test
+coredump_test_helpers.c:59:6: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+   59 |         i = *(int *)NULL;
+      |             ^~~~~~~~~~~~
+coredump_test_helpers.c:59:6: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+1 warning generated.
+  CC       coredump_socket_protocol_test
+coredump_test_helpers.c:59:6: warning: indirection of non-volatile null pointer will be deleted, not trap [-Wnull-dereference]
+   59 |         i = *(int *)NULL;
+      |             ^~~~~~~~~~~~
+coredump_test_helpers.c:59:6: note: consider using __builtin_trap() or qualifying pointer with 'volatile'
+1 warning generated.
 
-Thanks,
-Ming
+
+ tools/testing/selftests/coredump/coredump_test_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.c b/tools/testing/selftests/coredump/coredump_test_helpers.c
+index a6f6d5f2a..5c8adee63 100644
+--- a/tools/testing/selftests/coredump/coredump_test_helpers.c
++++ b/tools/testing/selftests/coredump/coredump_test_helpers.c
+@@ -56,7 +56,7 @@ void crashing_child(void)
+ 		pthread_create(&thread, NULL, do_nothing, NULL);
+ 
+ 	/* crash on purpose */
+-	i = *(int *)NULL;
++	__builtin_trap();
+ }
+ 
+ int create_detached_tmpfs(void)
+-- 
+2.43.0
 
 
