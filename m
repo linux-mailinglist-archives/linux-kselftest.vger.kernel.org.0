@@ -1,200 +1,164 @@
-Return-Path: <linux-kselftest+bounces-47615-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82039CC50BC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 20:55:08 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11B6DCC53F4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 22:45:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E29F33008EFB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 19:55:07 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 465A5300248E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Dec 2025 21:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD813358BE;
-	Tue, 16 Dec 2025 19:55:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 418FC338926;
+	Tue, 16 Dec 2025 21:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AYfJABa4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p45BaK7p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0720032F765
-	for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 19:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEDB337BB0
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 21:45:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765914903; cv=none; b=XUoW8mgKDoOcLiQj3cRtM3LdfJi/Zd3Y6pSAWhMWdg1dD4llvC1A5bp/+Pm5uGsRj1eAwcJiesRvaEU8J7xXu9M/zZmJX8CjuvJ9YLb6ckc0D3Q2pJEfTOa1ohLp5oAEPrEkSfVv0ffprVs8jsYlGYKOUbgagAogmn74iLSYjdA=
+	t=1765921527; cv=none; b=Qut+BDnAAGaxgvdxlJKKMwv+80KnFmQ2aYUky2t6T8v95s/T4VMzQu/PG+F2TapR9Y4waEejCNPVymADn83eR8hYrKxd2DqS+phhBFPILYw7p3K9QScS2F0jeWdEzn8Cxv9at7hf5ZeHEtgwX6PFway55jIhA07w+vlWcsVzXNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765914903; c=relaxed/simple;
-	bh=MfqDH4/O8KDzWjnyDBeFxR8tAnjUXaceNmNX3aeJYhE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=uV+KQpVMel6MU3aVA6sRbzvLxOBbqmBrazXD5vHJcIIxOz0Ch3AIyPcCk5wNGTae93CDuChwIoOy2ztfaZKPlSjIHN3EA5oJdrtHf2DiGi4LyJKDgmHxNZwEesQzoTZD5ibKib1qb/AdQDbiHFQMBRFULssn7bLO/M88CwAdJsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AYfJABa4; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-787da30c50fso49758657b3.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 11:54:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765914899; x=1766519699; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=be7JUAAiM3hDUesPFCNkuJpo8VlqDg0Gc+p9llIp0js=;
-        b=AYfJABa48t0H317KhfFy5O3tHj6oi+LPM9OYatXKr2FGi/O4RgNokgbSm1m4dI6XzR
-         e2EUa6RTUxjexvT0W37OKnJ3mw064PSkj/87dbCRNm7qJIlUi7gg9V0mGLX2AGHhiz1P
-         E7hwZYT6H+1v2jHCG04vyEBv4X+1/IlpZDXeZKS2pvq9Dp8EQqh+iLxOu22cN7qBy6Ra
-         UDHeTZMDY2hHspiASXoVovMLg27UcSm037cGxVX+5OzQKrcz3NGGx/v86r2rFjU67lZR
-         nmifE+L2FVDE0TVySD/vOvmrbf8izbi6wOO32HKpdCeBWCgnfuVz0KAcROMbbSn92Sri
-         KuNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765914899; x=1766519699;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=be7JUAAiM3hDUesPFCNkuJpo8VlqDg0Gc+p9llIp0js=;
-        b=YaUCLcd68DljFu9fdHNgG/gHAOUFb+m+1lWpbYHFcvN7f4Rvs54RV8tWOF46NSxKVY
-         heoVBMD6Le5gRytQQPz4NBRaj6KFVMliOeceofvd48UNxg9l3kDl95V7NP2lUnybhpiz
-         c498o25aWhYYAlB6oo6VU3fRomnPeq5nsC6vs16ytP0A4Ag4KPFJQawonZgmYEt0lL+Q
-         YpcyfL7Ii4zLifJQHlP9z6sicrQd9YsQoNti2VCQ4S5VSv1UWMQo5Fs3tEB3A3epTGUX
-         /ExIxur2HAfn681OobZ4AQ8412blzjjoaB/SQ/ztlqs4GS78krtnE9LPYjO1TVs7XD+k
-         b+yg==
-X-Gm-Message-State: AOJu0Ywxmt3F8AkLuu46lsHIb6XK3/8DnKVaye35AvLwNbnCazIurooQ
-	fB5ANHRcLp5+5XNCOT0KuQ0the8brW707q/HyGsLWGPk5R7em8bUVqL3
-X-Gm-Gg: AY/fxX7wVg/zqfu2SzAgV9p9ooGIKTuILZBaMeNFo52ALQ0+ZkrTEmZl7GOexpUxREl
-	2uszyaVieAB519mb7XhwbhWdHBST0V8HDe+p+E6EY0Vnodb/0eD3oaZ37Ssqd9xvuYNU3wiAM17
-	GmGC0jwIXPkNLiISDvmthjRwpsSnXQc+h017kHPq9WS4X5ytazglXoTnVeR4I5ou42G4GJOlIw+
-	jmBp5qoqX4YpQD+mwxSnAFISDBpvV0jcqi8Nr1YivW+5SMbOmqV7Ws0iDfb38iSTWAU1S8PlksO
-	0DBZrfMlteiqfO+LzTogAOd5mcEuoiwdv++Vvhe3Lkuns43f/QK4Tyxz4DvKifZRuVOdMDqzZxV
-	+ajeSvtEr3so53uvzy68Ht8TmVTptXGnaSRpV2UNmfL+rIWp/SZRKok7upr/4gM7cIO0TSx3EWg
-	yKg3cv+RfOP5Aa0JhXp8Lf2B37eBgbLaS/pLhoDwqEET64g/QWNWGgfV0ThoXKjhfs6mkluRTCp
-	Q1MbA==
-X-Google-Smtp-Source: AGHT+IEuqpeuP1UDy+6XnjcNYN1ogGOeKRu57NupIJPcHrmfdc0of+efEM03iL2q5TAnMgXbrad84Q==
-X-Received: by 2002:a05:690c:3581:b0:78e:1aa5:e98a with SMTP id 00721157ae682-78e66dc9157mr271655907b3.37.1765914898696;
-        Tue, 16 Dec 2025 11:54:58 -0800 (PST)
-Received: from gmail.com (141.139.145.34.bc.googleusercontent.com. [34.145.139.141])
-        by smtp.gmail.com with UTF8SMTPSA id 956f58d0204a3-64477dab686sm8053046d50.16.2025.12.16.11.54.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 11:54:58 -0800 (PST)
-Date: Tue, 16 Dec 2025 14:54:57 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: "Alice C. Munduruca" <alice.munduruca@canonical.com>, 
- netdev@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, 
- "Alice C. Munduruca" <alice.munduruca@canonical.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Willem de Bruijn <willemb@google.com>, 
- Cengiz Can <cengiz.can@canonical.com>, 
- cbulinaru@gmail.com
-Message-ID: <willemdebruijn.kernel.311f094b4d393@gmail.com>
-In-Reply-To: <20251216170641.250494-1-alice.munduruca@canonical.com>
-References: <20251216170641.250494-1-alice.munduruca@canonical.com>
-Subject: Re: [PATCH net v3] selftests: net: fix "buffer overflow detected" for
- tap.c
+	s=arc-20240116; t=1765921527; c=relaxed/simple;
+	bh=VSn5YG7d9ytZps+YVHnKVfK0Ui+200nONyoEN3WADwU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jSHPC6to7aP6dlOq8rkhvIdYw0lRBw+dUvVmpG6UdDKsQqFDR9l0i3XkjP6VXWgqHt/zz78lrTM14mK4Q7C2nrO1IQMY4WmzyWREJQr7xeJ8Cyhk4Yb26hB+HxEBmwJgP4OuCAFK/Y9bU85nvCSdjksycc/EzY9eLEkmMTDYjYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p45BaK7p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02214C4CEF5
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 21:45:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765921527;
+	bh=VSn5YG7d9ytZps+YVHnKVfK0Ui+200nONyoEN3WADwU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=p45BaK7p89M9MUB4NmqFrKOMkA8y40ngWxeRYJj9OZz9hcSzpPtfMRwqy+eDqYHv+
+	 FStVd/rr0IbpZb71x3Dp+r6k1OGlZOZftk2Is/VcSbNEutmMoZo3iMEHyM67t/Ob0F
+	 UlAJoiibf4G/q+N8JQj6Mby7YNxzlbfwS7EISsvQmYZKHOk8SD6/cb6Gy1JSgRGwes
+	 M+rV2hPMsIDYEUdvpYqV3mkX6iQSbiYF4Bo7UeWmiensCTHUXD2e5Yr+ZJosm0ogzv
+	 xO7hEBUH4AyAgsEfZnYLRJGrp9MJSF4PA0VaJqO392lhPyLIj9EMAKlWxfd12QFdAr
+	 g6boOWWpCJZUQ==
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-88a367a1db0so40698906d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 13:45:26 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVMhE1Xb8dAYKwHtWrn/cVt6iDrXg391o7TNw91raB/7N+5fJF/3ODPr3PidLsrDUXm8bM+vgtDZN5DvJFs0rI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykyklY2OrBUPVjfVa0VAoyRHjT9LOSiNQkAIQ0BevMBShKokEy
+	42Y1sXvW4orZw4SVC/KWnXjwMeHlxGnFOheO+rtRaucrCXuIKs0GDHgu7DYEO/qIpSLkxW3iqey
+	ST1iD6T+zzxtL37z+uItL4ykv70YLUHE=
+X-Google-Smtp-Source: AGHT+IGpiLALaVjL7tyGWaMRlls90DvvPiovsVSUg+k0/mjln3cJpBCT97sQ7Mze/906fNU3JYXecT8Kzf0E8JMjlG4=
+X-Received: by 2002:a05:6214:5788:b0:880:4ec0:4183 with SMTP id
+ 6a1803df08f44-8887e13f010mr224073886d6.46.1765921525920; Tue, 16 Dec 2025
+ 13:45:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20251208030117.18892-1-git@danielhodges.dev> <20251208030117.18892-3-git@danielhodges.dev>
+In-Reply-To: <20251208030117.18892-3-git@danielhodges.dev>
+From: Song Liu <song@kernel.org>
+Date: Wed, 17 Dec 2025 06:45:14 +0900
+X-Gmail-Original-Message-ID: <CAPhsuW7c7cPatiRzwvZ=d_43m5XwPqfmphvNyyUu52G6rgbsQA@mail.gmail.com>
+X-Gm-Features: AQt7F2q1-y313JcILakG9UK_RrCFUQ6dp-8PBV5qPpicFyajKWsZYKW-0lgEBCU
+Message-ID: <CAPhsuW7c7cPatiRzwvZ=d_43m5XwPqfmphvNyyUu52G6rgbsQA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/6] crypto: Add BPF hash algorithm type
+ registration module
+To: Daniel Hodges <git@danielhodges.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, vadim.fedorenko@linux.dev, yatsenko@meta.com, 
+	martin.lau@linux.dev, eddyz87@gmail.com, haoluo@google.com, jolsa@kernel.org, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me, 
+	yonghong.song@linux.dev, herbert@gondor.apana.org.au, davem@davemloft.net, 
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Alice C. Munduruca wrote:
-> When the selftest 'tap.c' is compiled with '-D_FORTIFY_SOURCE=3',
-> the strcpy() in rtattr_add_strsz() is replaced with a checked
-> version which causes the test to consistently fail when compiled
-> with toolchains for which this option is enabled by default.
-> 
->  TAP version 13
->  1..3
->  # Starting 3 tests from 1 test cases.
->  #  RUN           tap.test_packet_valid_udp_gso ...
->  *** buffer overflow detected ***: terminated
->  # test_packet_valid_udp_gso: Test terminated by assertion
->  #          FAIL  tap.test_packet_valid_udp_gso
->  not ok 1 tap.test_packet_valid_udp_gso
->  #  RUN           tap.test_packet_valid_udp_csum ...
->  *** buffer overflow detected ***: terminated
->  # test_packet_valid_udp_csum: Test terminated by assertion
->  #          FAIL  tap.test_packet_valid_udp_csum
->  not ok 2 tap.test_packet_valid_udp_csum
->  #  RUN           tap.test_packet_crash_tap_invalid_eth_proto ...
->  *** buffer overflow detected ***: terminated
->  # test_packet_crash_tap_invalid_eth_proto: Test terminated by assertion
->  #          FAIL  tap.test_packet_crash_tap_invalid_eth_proto
->  not ok 3 tap.test_packet_crash_tap_invalid_eth_proto
->  # FAILED: 0 / 3 tests passed.
->  # Totals: pass:0 fail:3 xfail:0 xpass:0 skip:0 error:0
-> 
-> A buffer overflow is detected by the fortified glibc __strcpy_chk()
-> since the __builtin_object_size() of `RTA_DATA(rta)` is incorrectly
-> reported as 1, even though there is ample space in its bounding
-> buffer `req`.
-> 
-> Additionally, given that IFLA_IFNAME also expects a null-terminated
-> string, callers of rtaddr_add_str{,sz}() could simply use the
-> rtaddr_add_strsz() variant. (which has been renamed to remove the
-> trailing `sz`) memset() has been used for this function since it
-> is unchecked and thus circumvents the issue discussed in the
-> previous paragraph.
-> 
-> Fixes: 2e64fe4624d1 ("selftests: add few test cases for tap driver")
-> Signed-off-by: Alice C. Munduruca <alice.munduruca@canonical.com>
-> Reviewed-by: Cengiz Can <cengiz.can@canonical.com>
-
-Reviewed-by: Willem de Bruijn <willemb@google.com>
-
-Cc: original author cbulinaru@gmail.com in case we're overlooking a
-reason for the split between rtattr_add_str and rtattr_add_strsz.
-
-the first avoids the \0 and is used for IFLA_NAME. Device names are
-guaranteed to fit into IFNAMSIZ, including the terminating \0.
+On Sun, Dec 7, 2025 at 7:01=E2=80=AFPM Daniel Hodges <git@danielhodges.dev>=
+ wrote:
+>
+> Add bpf_crypto_shash module that registers a hash type with the BPF
+> crypto infrastructure, enabling BPF programs to access kernel hash
+> algorithms through a unified interface.
+>
+> Update the bpf_crypto_type interface with hash-specific callbacks:
+>    - alloc_tfm: Allocates crypto_shash context with proper descriptor siz=
+e
+>    - free_tfm: Releases hash transform and context memory
+>    - has_algo: Checks algorithm availability via crypto_has_shash()
+>    - hash: Performs single-shot hashing via crypto_shash_digest()
+>    - digestsize: Returns the output size for the hash algorithm
+>    - get_flags: Exposes transform flags to BPF programs
+>
+> Update bpf_shash_ctx to contain crypto_shash transform and shash_desc
+> descriptor to accommodate algorithm-specific descriptor requirements.
+>
+> Signed-off-by: Daniel Hodges <git@danielhodges.dev>
 > ---
->  tools/testing/selftests/net/tap.c | 16 +++++-----------
->  1 file changed, 5 insertions(+), 11 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/tap.c b/tools/testing/selftests/net/tap.c
-> index 247c3b3ac1c9..51a209014f1c 100644
-> --- a/tools/testing/selftests/net/tap.c
-> +++ b/tools/testing/selftests/net/tap.c
-> @@ -56,18 +56,12 @@ static void rtattr_end(struct nlmsghdr *nh, struct rtattr *attr)
->  static struct rtattr *rtattr_add_str(struct nlmsghdr *nh, unsigned short type,
->  				     const char *s)
->  {
-> -	struct rtattr *rta = rtattr_add(nh, type, strlen(s));
-> +	unsigned int strsz = strlen(s) + 1;
-> +	struct rtattr *rta;
->  
-> -	memcpy(RTA_DATA(rta), s, strlen(s));
-> -	return rta;
-> -}
-> -
-> -static struct rtattr *rtattr_add_strsz(struct nlmsghdr *nh, unsigned short type,
-> -				       const char *s)
-> -{
-> -	struct rtattr *rta = rtattr_add(nh, type, strlen(s) + 1);
-> +	rta = rtattr_add(nh, type, strsz);
->  
-> -	strcpy(RTA_DATA(rta), s);
-> +	memcpy(RTA_DATA(rta), s, strsz);
->  	return rta;
->  }
->  
-> @@ -119,7 +113,7 @@ static int dev_create(const char *dev, const char *link_type,
->  
->  	link_info = rtattr_begin(&req.nh, IFLA_LINKINFO);
->  
-> -	rtattr_add_strsz(&req.nh, IFLA_INFO_KIND, link_type);
-> +	rtattr_add_str(&req.nh, IFLA_INFO_KIND, link_type);
->  
->  	if (fill_info_data) {
->  		info_data = rtattr_begin(&req.nh, IFLA_INFO_DATA);
-> -- 
-> 2.48.1
-> 
+>  crypto/Makefile           |  3 ++
+>  crypto/bpf_crypto_shash.c | 95 +++++++++++++++++++++++++++++++++++++++
+>  2 files changed, 98 insertions(+)
+>  create mode 100644 crypto/bpf_crypto_shash.c
+>
+> diff --git a/crypto/Makefile b/crypto/Makefile
+> index 16a35649dd91..853dff375906 100644
+> --- a/crypto/Makefile
+> +++ b/crypto/Makefile
+> @@ -30,6 +30,9 @@ obj-$(CONFIG_CRYPTO_ECHAINIV) +=3D echainiv.o
+>  crypto_hash-y +=3D ahash.o
+>  crypto_hash-y +=3D shash.o
+>  obj-$(CONFIG_CRYPTO_HASH2) +=3D crypto_hash.o
+> +ifeq ($(CONFIG_BPF_SYSCALL),y)
+> +obj-$(CONFIG_CRYPTO_HASH2) +=3D bpf_crypto_shash.o
+> +endif
+>
+>  obj-$(CONFIG_CRYPTO_AKCIPHER2) +=3D akcipher.o
+>  obj-$(CONFIG_CRYPTO_SIG2) +=3D sig.o
+> diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
+> new file mode 100644
+> index 000000000000..95c178ec0ce8
+> --- /dev/null
+> +++ b/crypto/bpf_crypto_shash.c
+> @@ -0,0 +1,95 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
+> +#include <linux/types.h>
+> +#include <linux/module.h>
+> +#include <linux/bpf_crypto.h>
+> +#include <crypto/hash.h>
+> +
+> +struct bpf_shash_ctx {
+> +       struct crypto_shash *tfm;
+> +       struct shash_desc desc;
+> +};
+> +
+> +static void *bpf_crypto_shash_alloc_tfm(const char *algo)
+> +{
+> +       struct bpf_shash_ctx *ctx;
+> +       struct crypto_shash *tfm;
+> +
+> +       tfm =3D crypto_alloc_shash(algo, 0, 0);
+> +       if (IS_ERR(tfm))
+> +               return tfm;
+> +
+> +       ctx =3D kzalloc(sizeof(*ctx) + crypto_shash_descsize(tfm), GFP_KE=
+RNEL);
+> +       if (!ctx) {
+> +               crypto_free_shash(tfm);
+> +               return ERR_PTR(-ENOMEM);
+> +       }
+> +
+> +       ctx->tfm =3D tfm;
+> +       ctx->desc.tfm =3D tfm;
+> +
+> +       return ctx;
+> +}
 
+What if we let bpf_crypto_shash_alloc_tfm() return a "struct shash_desc"?
+shash_desc->tfm is already struct crypto_shash. This way, we don't need
+bpf_shash_ctx any more. Would this work?
 
+Thanks,
+Song
 
