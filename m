@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-47637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47634-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23437CC60FF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 06:35:53 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1B8CC60B8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 06:35:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4A72130424AC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 05:35:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C99553025F83
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 05:35:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4175029BD8C;
-	Wed, 17 Dec 2025 05:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A2827E04C;
+	Wed, 17 Dec 2025 05:35:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="IHdg87Ke"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="AOhkokyO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f225.google.com (mail-qk1-f225.google.com [209.85.222.225])
+Received: from mail-pj1-f100.google.com (mail-pj1-f100.google.com [209.85.216.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A980238D22
-	for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 05:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F44421772A
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 05:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765949716; cv=none; b=PVGKc7Ia6AuTHxYTDTa23r5/8Lcq1kD563pTiKFe5y8XbhzE7v34k7peTF7mhDxLi5f4FkZV/iamn1TDRN8v1InOsBi/BJ3SSXDAu+jLiUiT423CvbAkmevJ3k6U5NvIjpv+r+OgO+4e386mU/01lExDOEYPscdxnxEDwXWxSSY=
+	t=1765949715; cv=none; b=R04hxOCgqTWfL4MLlxSjINpGRMWldkrpcSF1PsR+UjB/raqgDHr7o1MKsk6OOt02seOROYAYfwrdLI7UTXR2s3gMEoseVBgaxUfAfaNLWhpD27g8GhjAl2/HIGRLjWCcQwN4mgxp/g4wAVCzIs7GMBQlZ/skOkc0gp2wb7ESWxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765949716; c=relaxed/simple;
-	bh=Pyh2W1i8IZlUeBaqc00BgLkYCHlkSrQShsXZSzjfZ7c=;
+	s=arc-20240116; t=1765949715; c=relaxed/simple;
+	bh=xUW+aJ0AIyUBNjUOSWrr/v9kRnK+74dQ2K/T8dlAGQM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZGmLMtnl/TrT44s4h1cyH7k8K6k4mWvkvDAnJFw47eQznjltGYBc7nI7LJuEBnYbKsmOjPeGCIgHOExTEQ5l16AiA1V9jjtshtheqDh2zJyIhYeyGKuOYjypPKiBUEfTbN5RcMAiXSCKbnG5QXm+RkNjjJpPZQ+/eE6MKvdlp4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=IHdg87Ke; arc=none smtp.client-ip=209.85.222.225
+	 MIME-Version; b=Pp2KKDB7hkJ7QHkl4QzWZmCmxQVcpao/aWkkhHdF35CzvzSD7DD4Q8/PQhXDExhzEFSMoKrt32hLlpTWhDTHX+PglX2Ma4/vXyu8PmEUwQVrJPQV/XyBjQAWOUMHCLexaEl/nCAucS6DUC1PG3QU4oCYDFB58cWPV2Stl5FzZbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=AOhkokyO; arc=none smtp.client-ip=209.85.216.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-qk1-f225.google.com with SMTP id af79cd13be357-8b29aebdf3cso74284385a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 21:35:13 -0800 (PST)
+Received: by mail-pj1-f100.google.com with SMTP id 98e67ed59e1d1-34c567db0a9so448947a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 16 Dec 2025 21:35:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=purestorage.com; s=google2022; t=1765949712; x=1766554512; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R2Q4EUjN96I8JLsrl8Thk8/d3aPnxYAXF44AaVOt3uI=;
-        b=IHdg87KeUrILc8yIhZahuIqFXNHWECMj4wnXxIkZRn67g0x3QwyZyWmlnzAA71n95A
-         dUTQnW9vfnJgTAJn0D36rCoU+m7WDw8MLVaf0ZPVwQR4KS6yqIujaVHadXEW8WoLqG7I
-         i7tPzy820mLTMw37aeu/ETOvuN5npxNhPXD/LylpgQkGoFXpTGl7yQsCKRAi9N0XnP/9
-         s98Yju4OZGFpZ2fKB2/Qsq9CLKDaqjCl0ovOz3U49zU6/XT2O9g3nnV3ROZOP1CAihqv
-         jcfp8qcClLkXqewm4yVPmH9Odc4baYsQQPu2nVPV5CyYcVzDlSpNXRDRdrQkjzvQO4RS
-         xgMg==
+        bh=1W7GaZySinPtNdu/28BmiINfjaLT2swubxXUIgi/0VI=;
+        b=AOhkokyOhY9siyDVCEeIP+oj1r0bQGZMWzqEPujYTrRJnJ4dW2mtnDCwnirHJIHtyn
+         orVNLqgxOJxiraV60BhgGG8rq6fIuSo3mzP1C5js9b4mxwDZhk42SnnVapxTieKd6sEK
+         6Urp8hE7Yw8gMYgIUd9caOLXhimSFDr6pCseArUgrFfuarWSndCfG0DJlqWc3pQ8YDiO
+         DABMbI2yN4hIjzHC9pUfDULLhEiqr47sSNtWtL5Ly2nkkxq/o45Q+MYI0uLmzQrsaOUd
+         QVbPNjMYLTQpKEhvVsHTw5laGwEjyVvkzJSyCaXyk0JI9Ioxf4xtuoKUP1iozhmVBaEC
+         JC7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1765949712; x=1766554512;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=R2Q4EUjN96I8JLsrl8Thk8/d3aPnxYAXF44AaVOt3uI=;
-        b=UHFWcIwjllW5VwE27GYY26fv3aE+GtAuBa7YQZR8tNX7Zsnr8dTvpa6bWxqhyGdvDW
-         nXFMxEHCz74+86q55mGtALcJUsrlVEZEevuSlRlpYbJfME/grghFwRHxLlK/8vDtlNRf
-         A3l9fuY6nH6GvkdEprWZ5PcWhZq2IgLWtJQZZfMOXpyyqPy7YF1OoPXf4OQuHWisKUvW
-         E0I5UijM3F8OblLrF1vb65e7IVONDULhjCz6Fx8lAHdDhHJbwk46U2iHHKt3iBaAbTM9
-         8zMRNsD0ongfrDPe1/Rqy+tbgyqPBlAG6gSmqXUq12/f/0m6+E5j7cukRZ4kCKHnZgNw
-         zhlw==
-X-Forwarded-Encrypted: i=1; AJvYcCWhCRBaDqgk00R3JrIKJK39LOQ9QbOg8GcbkKzocXk0s9W95BJASA85FMGGcWyJXWgE8pMdjfeDtn5BIfAFB8E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmOesURgAJKhjov4488r4zjeg9Gy3ioD7dz7o6RHPQlKHMhrKf
-	saqhDlVuYiff3Xus2fRD/n3lKWLMFoJoekKcvBvPfSseCtCqsWIhuEG5ojcPJOyliAieo7aqPIT
-	KmLXWlCDWIheNyYC40BrsDJAs03gjbdTXIZVg
-X-Gm-Gg: AY/fxX7acgTEtNUUccllmOFOwzTVbOZWM0fVNHCHps6chlYmT2wVnlFglxn0NkrLErT
-	dwRxCxcqGjimJR2HqAL6mc/gjay+FFLOiOGgzTm3/jBDXnirJyPku5hnseD3RnfY/6wYdTdu85O
-	3HlXfVigdwnQYGXQA/BvtkTKTHn1/2bW5kq0Fci0UdUM0lULKOMSFOGw1TDpDXolXF3RqGMGHDY
-	e6v009m1wEdYaiZg9AN19vYmZ3uBEhCN3VFmDlT0NZisrjwxudLlOWNR1z2uazg0ZFRrNp8B8vE
-	0sf9ANl8QA3ZG9bEUVOTWrs015Hf55Ju/WBtJKIiO9qNOT9Bph6Ly+8ov33YeDJLNrAj8zFQUxj
-	+Ouph+qlPcE6yz9r2h2Kt+CRA4MlFP0t6an00M1fr6Q==
-X-Google-Smtp-Source: AGHT+IEwQVVahKTBzODwZ9LCNp7ytSuh2rRQqS2AIb4ql60egeJB6RRbKK8HEAJwdh0Tw0BDMeZ7L4T+UOA8
-X-Received: by 2002:a05:622a:610:b0:4ec:f9c2:c200 with SMTP id d75a77b69052e-4f1d0655504mr181608401cf.11.1765949712259;
+        bh=1W7GaZySinPtNdu/28BmiINfjaLT2swubxXUIgi/0VI=;
+        b=hrwLQEK6jPuKCW+2fMIyU6u3ge76ES+UNEdrHGI/k/C0KjwWKM0+TMw0KmHIu87R5S
+         acnWKG01Z+Eug8MT9hpVIjWRwWYChzAG0I9pj/abhSoii21QvkivlEzggVuI0wgW9fOR
+         cXSqlHoOwf5UBGsXSH+TkXI6wMigao/vzpw8cpPIRHp/wfgXNpL7Vsv3BJ4je6N91Tvu
+         qFYHcqRi7Yh0+QxKSHtku703LEJ1/JZUCQMb0w8d53aLGzx1pkrqWvL0AV7+EKkPOM9T
+         XN+8NnrePhHFKMEhIGBLMNRxVtqVgNruffIOM8KE6SanpAp6H3lHmj+xM4ltBv5Tt4im
+         WoSg==
+X-Forwarded-Encrypted: i=1; AJvYcCWC5hcCMey2/+svQ0B2bk6cRhcV6+Vo8bp5iE7SfOgM5YV1HABhXtFPRK/XDKPBpjFNIbkqYEV18NTuoAG5rlU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYVONU8jgacNs+PF/8X4yEyOBQ/gQAt0QzOfQD40AgCUdXGsK3
+	y3Gy5z9S5cmpZeoptEv7IASAT3sxqxVrZIaJDJOl/c+6pq1bZCliX9gQ6PaZQspHvSQusBr3ulq
+	0iJl3fpWPhPU7VEObUuH4/WWMhox2C+ye2AJkz90NrtdihpJV++07
+X-Gm-Gg: AY/fxX7N5nkt1vg8SkbxkWH/vNg5qVZpPphfmRHCFnsgP2vggpocHHvWKYKNylGj4Gx
+	Y6plqIj7LO/GbCK9hQnYQvkqaz7ZBgzWwvULquNVRcNTHtZWOZKv7xnkDcUKa89KiFWc4d/sN2b
+	Yqq68QD2Qu714Egsdwc3sYrJW03H16ZhGWTUEPJlLI/ZThO9785DOgoWVl6AmZEaF46SQzcTIC7
+	Q36nRIuT9wtGxjobu2piuGxgy/XKEmQDYzsYo+n0T56Qzq3JG75wnJ9jWPY/klUQNDS3qCbilcT
+	3pXgxWsE1jvnXaR8axD7n5UXYgyeaD3pxyzptZyljbdqnErJEGC0F8tThxqnGRH7aVq1Zc6hv3J
+	3T17//1579GpNFuf4Zs+s0inSPIs=
+X-Google-Smtp-Source: AGHT+IGmD0xzmGqowX1/sZtnUry9Hv+YVc2UPf0PBiv6bJ1WS1oGm9qgaFTZtLXdzHr346yX/lPuywp6sUBH
+X-Received: by 2002:a17:90b:2749:b0:340:e8e4:1166 with SMTP id 98e67ed59e1d1-34abd898fa3mr11743788a91.5.1765949712251;
         Tue, 16 Dec 2025 21:35:12 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-8899dc07525sm19327636d6.15.2025.12.16.21.35.12
+Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
+        by smtp-relay.gmail.com with ESMTPS id 98e67ed59e1d1-34cfce259ebsm224226a91.0.2025.12.16.21.35.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 16 Dec 2025 21:35:12 -0800 (PST)
 X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (unknown [IPv6:2620:125:9007:640:ffff::1199])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 6A40F3404B4;
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.7.70.37])
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 8B8103420C0;
 	Tue, 16 Dec 2025 22:35:11 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 67759E41A08; Tue, 16 Dec 2025 22:35:11 -0700 (MST)
+	id 89402E41A08; Tue, 16 Dec 2025 22:35:11 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -88,9 +88,9 @@ Cc: linux-block@vger.kernel.org,
 	Stanley Zhang <stazhang@purestorage.com>,
 	Uday Shankar <ushankar@purestorage.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH 01/20] block: validate pi_offset integrity limit
-Date: Tue, 16 Dec 2025 22:34:35 -0700
-Message-ID: <20251217053455.281509-2-csander@purestorage.com>
+Subject: [PATCH 02/20] block: validate interval_exp integrity limit
+Date: Tue, 16 Dec 2025 22:34:36 -0700
+Message-ID: <20251217053455.281509-3-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20251217053455.281509-1-csander@purestorage.com>
 References: <20251217053455.281509-1-csander@purestorage.com>
@@ -102,37 +102,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The PI tuple must be contained within the metadata value, so validate
-that pi_offset + pi_tuple_size <= metadata_size. This guards against
-block drivers that report invalid pi_offset values.
+Various code assumes that the integrity interval is at least 1 sector
+and evenly divides the logical block size. Add these checks to
+blk_validate_integrity_limits(). This guards against block drivers that
+report invalid interval_exp values.
 
 Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
 ---
- block/blk-settings.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ block/blk-settings.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/block/blk-settings.c b/block/blk-settings.c
-index 51401f08ce05..d138abc973bb 100644
+index d138abc973bb..a9e65dc090da 100644
 --- a/block/blk-settings.c
 +++ b/block/blk-settings.c
-@@ -159,14 +159,13 @@ static int blk_validate_integrity_limits(struct queue_limits *lim)
- 	    (bi->flags & BLK_INTEGRITY_REF_TAG)) {
- 		pr_warn("ref tag not support without checksum.\n");
- 		return -EINVAL;
+@@ -191,12 +191,17 @@ static int blk_validate_integrity_limits(struct queue_limits *lim)
+ 			return -EINVAL;
+ 		}
+ 		break;
  	}
  
--	if (bi->pi_tuple_size > bi->metadata_size) {
--		pr_warn("pi_tuple_size (%u) exceeds metadata_size (%u)\n",
--			 bi->pi_tuple_size,
--			 bi->metadata_size);
-+	if (bi->pi_offset + bi->pi_tuple_size > bi->metadata_size) {
-+		pr_warn("pi_offset (%u) + pi_tuple_size (%u) exceeds metadata_size (%u)\n",
-+			bi->pi_offset, bi->pi_tuple_size, bi->metadata_size);
- 		return -EINVAL;
- 	}
+-	if (!bi->interval_exp)
++	if (!bi->interval_exp) {
+ 		bi->interval_exp = ilog2(lim->logical_block_size);
++	} else if (bi->interval_exp < SECTOR_SHIFT ||
++		   bi->interval_exp > ilog2(lim->logical_block_size)) {
++		pr_warn("invalid interval_exp %u\n", bi->interval_exp);
++		return -EINVAL;
++	}
  
- 	switch (bi->csum_type) {
- 	case BLK_INTEGRITY_CSUM_NONE:
+ 	/*
+ 	 * The PI generation / validation helpers do not expect intervals to
+ 	 * straddle multiple bio_vecs.  Enforce alignment so that those are
+ 	 * never generated, and that each buffer is aligned as expected.
 -- 
 2.45.2
 
