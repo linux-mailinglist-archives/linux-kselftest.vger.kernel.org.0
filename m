@@ -1,122 +1,95 @@
-Return-Path: <linux-kselftest+bounces-47625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F6A3CC5A5A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 01:57:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CAECCC5CC7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 03:43:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1EB363002D38
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 00:57:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2DA9A3049B17
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 02:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D7562236FD;
-	Wed, 17 Dec 2025 00:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CRrc1Bgy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DBDF27FB3C;
+	Wed, 17 Dec 2025 02:42:22 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out198-2.us.a.mail.aliyun.com (out198-2.us.a.mail.aliyun.com [47.90.198.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580341D5CF2;
-	Wed, 17 Dec 2025 00:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC7228134C;
+	Wed, 17 Dec 2025 02:42:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=47.90.198.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765933042; cv=none; b=UPxtd6O2ZfkzflmiHVCWDahmWx7tNa8TmROSjbPByocYrTm4CqiKyTTTui35EK5AEitFFrOPBqtG7udNBWb7kZrPfSk/4V/X+A+7ZfQzALLtxuk60rT2/G582aLX9d9myy/Md5VszMe+SnBvWg78dZmNGj/1ZCbIKVqWgIFXPBY=
+	t=1765939341; cv=none; b=aq609+PADpYEiewwZ3SlKjDWwsdLoiKMkV1DaljPodS3AZzmaVUXatqLr91xaxO+wTN90rLJkr25pfihBFdRGFO6FYbVcrpW9MCVjPw9qbQmjybUjL9vh+Xm4Wd6iqT6YSE5hMRVehLZM3zGUK9VSiupXoKLGhl71PNPmFbXxTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765933042; c=relaxed/simple;
-	bh=z/6R4VG7TSlEesI3ViMverTeFsRJZ0O4JC2zjpfP2Qk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WpcXxrjWhpdLJigrMsiKeEDcT+PU4Xhrx734YDay95Vi3SuBTRYDNyK67B0wxiAb/tj0tc5u8lXfe0p7dL1edGNyA154CkMK0P4y4Ss7WGqrEnAiAjh+T4W9y2IZUEw5+MnzhuWEror/NTlSSxLsNq7/aN6DTsbMfM2WO8FAN/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CRrc1Bgy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54E8BC4CEF1;
-	Wed, 17 Dec 2025 00:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765933041;
-	bh=z/6R4VG7TSlEesI3ViMverTeFsRJZ0O4JC2zjpfP2Qk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CRrc1Bgy2SxAbkikgt/whkMk/lJo1AAfKhN2dGFMCLOJ3YBkBoz4vh5jprB7HPVhh
-	 k3rgpO5yQu48UDdQFC6U+yUh1g1eDYQpMDVqIahRxzZn7W3Dn388xnfFvvvqgeeXQL
-	 36Dl/4m5zU/b36HkromCRw+KNtP/7MRpLe6HbO3smygG3aAbShDZLRGUHmRURzge4N
-	 LWD/8M0g+HPPzo7ok5wbyTPiBOKp8QrB1kjaaDMjuIlUDSudc9rZU4A39wMrIz2euG
-	 Z5oJUkxEKac3d6wMFieFYAsyWkzVWhRTDF+7HeMhA9zuCdByVavMEOp5Q2NnLwK5bH
-	 ybv1b3lbSRRnA==
-Date: Tue, 16 Dec 2025 16:57:19 -0800
-From: Oliver Upton <oupton@kernel.org>
-To: Colton Lewis <coltonlewis@google.com>
-Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 18/24] KVM: arm64: Enforce PMU event filter at
- vcpu_load()
-Message-ID: <aUH_7yYZsmFlRvEc@kernel.org>
-References: <20251209205121.1871534-1-coltonlewis@google.com>
- <20251209205121.1871534-19-coltonlewis@google.com>
+	s=arc-20240116; t=1765939341; c=relaxed/simple;
+	bh=fMXlZjXqeSuObXD4pta6kFcNkMtYvxqnAvn6Cn1iM2E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ezfMQxFbYaAuNpo8hr9+b09R7Dcp/0ASfDBaJU99MNcddrsXfR8T24ufptGydjafsVhdQm14Mg2ITJ1+SsyTwr/2TOsNsOEzvCoaJLLh5uVrGTrTYJrgzrvH4OwzCywPemMD2JTDFOk9LWO9MEkSI+1eYL6ciePwNdSi40Yq7hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=47.90.198.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+Received: from 172.18.26.4(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmIw6LS_1765938994 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Wed, 17 Dec 2025 10:36:36 +0800
+Message-ID: <619c0a29-7c98-4b2d-93ad-c5576796480d@open-hieco.net>
+Date: Wed, 17 Dec 2025 10:36:33 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251209205121.1871534-19-coltonlewis@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/4] selftests/resctrl: Define CPU vendor IDs as bits
+ to match usage
+To: Reinette Chatre <reinette.chatre@intel.com>, tony.luck@intel.com,
+ bp@alien8.de, fenghuay@nvidia.com, shuah@kernel.org,
+ skhan@linuxfoundation.org
+Cc: babu.moger@amd.com, james.morse@arm.com, Dave.Martin@arm.com,
+ x86@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shenxiaochen@open-hieco.net
+References: <20251213073811.3016864-1-shenxiaochen@open-hieco.net>
+ <20251213073811.3016864-3-shenxiaochen@open-hieco.net>
+ <928c9107-22a9-47de-ba4b-bd1fffa749cb@intel.com>
+Content-Language: en-US
+From: Xiaochen Shen <shenxiaochen@open-hieco.net>
+In-Reply-To: <928c9107-22a9-47de-ba4b-bd1fffa749cb@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Re-reading this patch...
+Hi Reinette,
 
-On Tue, Dec 09, 2025 at 08:51:15PM +0000, Colton Lewis wrote:
-> The KVM API for event filtering says that counters do not count when
-> blocked by the event filter. To enforce that, the event filter must be
-> rechecked on every load since it might have changed since the last
-> time the guest wrote a value.
+On 12/17/2025 7:26 AM, Reinette Chatre wrote:
+>> -static int detect_vendor(void)
+>> +static unsigned int detect_vendor(void)
+>>  {
+>> -	FILE *inf = fopen("/proc/cpuinfo", "r");
+>> -	int vendor_id = 0;
+>> +	FILE *inf;
+>> +	static unsigned int vendor_id;
+>>  	char *s = NULL;
+>>  	char *res;
+>> +	static bool initialized;
+>>  
+> The changelog incorrectly claims that this should now match reverse fir ordering.
+> To be "reverse fir" ordered the declarations should look like:
+> 
+> 	static unsigned int vendor_id;                                          
+> 	static bool initialized;                                                
+> 	char *s = NULL;                                                         
+> 	FILE *inf;                                                              
+> 	char *res;             
 
-Just directly state that this is guarding against userspace programming
-an unsupported event ID.
+Thank you! I will fix it on v5 patch.
 
-> +static void kvm_pmu_apply_event_filter(struct kvm_vcpu *vcpu)
-> +{
-> +	struct arm_pmu *pmu = vcpu->kvm->arch.arm_pmu;
-> +	u64 evtyper_set = ARMV8_PMU_EXCLUDE_EL0 |
-> +		ARMV8_PMU_EXCLUDE_EL1;
-> +	u64 evtyper_clr = ARMV8_PMU_INCLUDE_EL2;
-> +	u8 i;
-> +	u64 val;
-> +	u64 evsel;
-> +
-> +	if (!pmu)
-> +		return;
-> +
-> +	for (i = 0; i < pmu->hpmn_max; i++) {
 
-Iterate the bitmask of counters and you'll handle the cycle counter 'for
-free'.
+> 
+> 
+> With this fixed:
+> | Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 
-<snip>
+Thank you!
 
-> +		val = __vcpu_sys_reg(vcpu, PMEVTYPER0_EL0 + i);
-> +		evsel = val & kvm_pmu_event_mask(vcpu->kvm);
-> +
-> +		if (vcpu->kvm->arch.pmu_filter &&
-> +		    !test_bit(evsel, vcpu->kvm->arch.pmu_filter))
-> +			val |= evtyper_set;
-> +
-> +		val &= ~evtyper_clr;
-> +		write_pmevtypern(i, val);
 
-</snip>
-
-This all needs to be shared with writethrough_pmevtyper() instead of
-open-coding the same thing.
-
-Thanks,
-Oliver
+Best regards,
+Xiaochen Shen
 
