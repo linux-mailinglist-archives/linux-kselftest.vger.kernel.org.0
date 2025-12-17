@@ -1,137 +1,100 @@
-Return-Path: <linux-kselftest+bounces-47661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B28DBCC7A4C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 13:37:56 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3581BCC8086
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 15:00:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1162E304EB64
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 12:33:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6D8B73006722
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 14:00:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9694341678;
-	Wed, 17 Dec 2025 12:32:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD2C385CD4;
+	Wed, 17 Dec 2025 13:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oqWW01Bs"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yLJzYCjI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f74.google.com (mail-ej1-f74.google.com [209.85.218.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F5D33A024;
-	Wed, 17 Dec 2025 12:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D52387B07
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 13:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765974779; cv=none; b=ueYm8TgCvidM5ZIDzUeERt3o8aeDkzwW/pNa8vhB9vjxseJLLhxEYYKyCQmJD5T6eQjgP2BwWKaJ/rlkRBt/1FpmHefkptSY0beMttlfGH/w2FsUsyQtyd9ttlaWwEtLzDwFqNMIB5z9h/bVbdHAWe8GfOCAz3RkV85VmAv4L/k=
+	t=1765979979; cv=none; b=T+6Lr2tW2rLDE/Epw99HBcFj5EMVCu7oWQs5K+eyDb2JQaHYHELb8oKjWkW7nnlbUQoPLaSeM88AcEcX0C0YvR17UJI1MrPU5FUh6TcU/IPYTwCUqE8ygdIwGS5D+W7OnwnZ77b+EoH7nzgL6VKq5/EsZkkh/AWbwZ4Y9wt4s6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765974779; c=relaxed/simple;
-	bh=F3aGY/l+aPlQDl6uuo1M6/psy7KF4msQt5nicN3re/M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uLMImDDiC+e8keC0J5s12SQXdDWpU77SSpCH6oAKHzD0T/b33aViJ8UPZ6IWyq60+Vv2IsWsxywG44XCXoA1s8ygr+L92zY+tOy98Rx/Ueh2IP8WWAbtSILkFi6VKcjJrbc4sF+ERXdnuuLiPqVUoDt0r2CAxPlStIP2bHE58SE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oqWW01Bs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB9BCC4CEF5;
-	Wed, 17 Dec 2025 12:32:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1765974779;
-	bh=F3aGY/l+aPlQDl6uuo1M6/psy7KF4msQt5nicN3re/M=;
-	h=From:To:Cc:Subject:Date:From;
-	b=oqWW01BstCNczuzqpK7H2q3z5aXxuFM2w8MsjCzmS4Nyr4sqkjGZwW5wgq70U5CO0
-	 oytAzZExDRE++V/LJQNxO8y4WIH/aTquyWRQy7PrKkjS1ZaqYv4RlSwmfhAzRP8Jsb
-	 wvuVM+1UwcqipJ+zM21THiel2TYYtoIzb5dc2COU=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: brendan.higgins@linux.dev,
-	davidgow@google.com
-Cc: linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rae Moar <raemoar63@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: [PATCH] kunit: fix up const mis-match in many assert functions
-Date: Wed, 17 Dec 2025 13:32:47 +0100
-Message-ID: <2025121746-result-staleness-5a68@gregkh>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1765979979; c=relaxed/simple;
+	bh=fvKxH/XdJpR1VGlJrGJwhcWm0/GHxvf3rLmcaDAVhrY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Q27hCOFqYZiHFrRpyC74+mTSPfHzY1m/ADgsMXISWVqCesyGLkGomqGIHYJX7NeDXgUMcIqkRR4976qNdgitRVCFW7FN5iNneZQKsDUa4CK5ngaEP3Y8tdpES/t9IWF5wt5N1224dY9Rm4bPd7ucUmlXMLfl949I2ZtNRPOLEow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--srosek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yLJzYCjI; arc=none smtp.client-ip=209.85.218.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--srosek.bounces.google.com
+Received: by mail-ej1-f74.google.com with SMTP id a640c23a62f3a-b70b2a89c22so98628466b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 05:59:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1765979975; x=1766584775; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=4m+/p9DwVtvLw/ZoRn7BCKgyTf8N+JbFKUU8HCxN+OY=;
+        b=yLJzYCjIu6w2bZxDTkXHuGOoKJmOruE+uC5/B3UK0BPMAIueubtBhcmsuTP/N+miJz
+         H3xhvPj34yjtDN3f7ti5CsyyD6PsZZSCMIga6kHnGj9jqGjgs1vfwiVy5oeBdyhp7e3U
+         9q7yFbFvUfbN/YhNgoi9B4ZJVZeuW/tnB/IPrPYRCmmfUo61+xEZAsdRg7MOzDiWtwHL
+         g5WuXzpY0qANQ1i+KDPohsJkjaOSKU/QHwzMXkioHDBJzOQB/cUqG1d5JQjGHhOpxwkI
+         TltqZWFYkzqKSKq9ylGSM9YXmHWHFA7B3R6xoGXSWUCrbx2eRMp+SS8aVnXZhwLV9CEu
+         wxnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765979975; x=1766584775;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4m+/p9DwVtvLw/ZoRn7BCKgyTf8N+JbFKUU8HCxN+OY=;
+        b=fFOzLJgr+R8p0A/BDqE1jvxL6mk7iwJ7DYtf3Jco+TvlpW+MlOhtycVEFyiCxpXPlD
+         CT7qEvkjgjqvGrEBX8XvjfXgHG5odXM67tLitnySAfpAMc9XIq0cdCHWrDDQeTk99tBq
+         Ed5dMDD4Fk1xckPPKJQueRZOCfi5pYWkCbKNBgnQdQ4amvGukNMR7kANI3TTo/ktzQB5
+         dFBOCWUyOvx1MePWIjvOZjpnHAPbAnNm1KyO3+t5GFUunNy/mNUXbuXH9ukR/Tt5uu/6
+         ngElYjxGoUqk2TQU0K+DOnlH+ptH+8uy9refUm35xfs9H7zWKIFL12hiPoR+qAlqECwV
+         Vcjw==
+X-Forwarded-Encrypted: i=1; AJvYcCWNOpSzLQ6v7FvRNdAS593JAMbZSBIPsmt6ahQ7qC+wWTGiVACvMMLXe+/adOlsRAIg3y1elsboTwiCBnufU7w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAFaysTCfwnq1c/nfQbV7sPiPxNpad2tEHvBf1MYc1T4Pl/ArJ
+	LVQGpeC9LtNYkfe+ZwWDt4eeNbQx7jlKUUyCBpz4SAkRXUPcONunowMniAB6l/c5HWtHbJEnSFd
+	JW7ZuRQ==
+X-Google-Smtp-Source: AGHT+IGlfC96a8lTJuPCH59OXIoH1D0B7xe7e0QAvxhlBK7+O2j2um1O4VcwMtHmDJY0096GVUCeTt/hFIk=
+X-Received: from edqz16.prod.google.com ([2002:aa7:d410:0:b0:649:906c:d248])
+ (user=srosek job=prod-delivery.src-stubby-dispatcher) by 2002:a17:907:3da6:b0:b3f:f6d:1d9e
+ with SMTP id a640c23a62f3a-b7d02138442mr2503373666b.6.1765979975028; Wed, 17
+ Dec 2025 05:59:35 -0800 (PST)
+Date: Wed, 17 Dec 2025 13:59:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Lines: 75
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2946; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=F3aGY/l+aPlQDl6uuo1M6/psy7KF4msQt5nicN3re/M=; b=owGbwMvMwCRo6H6F97bub03G02pJDJlOi96lar1f9m1X/QIrNuv0N+nJIn0394g7uJfs/trx7 eUR//KNHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRb7cZFszi3PPtnelaUY9J fVrNV/Zvfbs/15phnu7NgqDTYT06ZXFtTx46LbnOZ9ksAAA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.305.g3fc767764a-goog
+Message-ID: <20251217135932.3153847-1-srosek@google.com>
+Subject: [PATCH v1 0/2] selftests/x86: Skip int80 if not supported
+From: Slawomir Rosek <srosek@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>
+Cc: Betty Zhou <bettyzhou@google.com>, Wake Liu <wakel@google.com>, 
+	Kazuhiro Inaba <kinaba@google.com>, Jeff Xu <jeffxu@google.com>, 
+	Alistair Delva <adelva@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Slawomir Rosek <srosek@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-In many kunit assert functions a const pointer is passed to
-container_of() and out pops a non-const pointer, which really isn't the
-correct thing to do at all.  Fix this up by correctly marking the
-casted-to pointer as const to preserve the marking.
+The IA32 Emulation support can be either removed from the kernel,
+disabled by default or disabled at runtime. Some of x86 selftests
+are crashing for all of above thus is_32bit_syscall_supported()
+helper is added to skip int80 syscalls if they are not supported.
 
-Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <davidgow@google.com>
-Cc: Rae Moar <raemoar63@gmail.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- lib/kunit/assert.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Slawomir Rosek (2):
+  selftests/x86/ldt_gdt: Skip int80 if not supported
+  selftests/x86/ptrace_syscall: Skip int80 if not supported
 
-diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-index 867aa5c4bccf..4c751ad8506a 100644
---- a/lib/kunit/assert.c
-+++ b/lib/kunit/assert.c
-@@ -51,7 +51,7 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
- 			       const struct va_format *message,
- 			       struct string_stream *stream)
- {
--	struct kunit_unary_assert *unary_assert;
-+	const struct kunit_unary_assert *unary_assert;
- 
- 	unary_assert = container_of(assert, struct kunit_unary_assert, assert);
- 
-@@ -71,7 +71,7 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
- 				     const struct va_format *message,
- 				     struct string_stream *stream)
- {
--	struct kunit_ptr_not_err_assert *ptr_assert;
-+	const struct kunit_ptr_not_err_assert *ptr_assert;
- 
- 	ptr_assert = container_of(assert, struct kunit_ptr_not_err_assert,
- 				  assert);
-@@ -117,7 +117,7 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
- 				const struct va_format *message,
- 				struct string_stream *stream)
- {
--	struct kunit_binary_assert *binary_assert;
-+	const struct kunit_binary_assert *binary_assert;
- 
- 	binary_assert = container_of(assert, struct kunit_binary_assert,
- 				     assert);
-@@ -145,7 +145,7 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
- 				    const struct va_format *message,
- 				    struct string_stream *stream)
- {
--	struct kunit_binary_ptr_assert *binary_assert;
-+	const struct kunit_binary_ptr_assert *binary_assert;
- 
- 	binary_assert = container_of(assert, struct kunit_binary_ptr_assert,
- 				     assert);
-@@ -185,7 +185,7 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
- 				    const struct va_format *message,
- 				    struct string_stream *stream)
- {
--	struct kunit_binary_str_assert *binary_assert;
-+	const struct kunit_binary_str_assert *binary_assert;
- 
- 	binary_assert = container_of(assert, struct kunit_binary_str_assert,
- 				     assert);
-@@ -237,7 +237,7 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
- 			     const struct va_format *message,
- 			     struct string_stream *stream)
- {
--	struct kunit_mem_assert *mem_assert;
-+	const struct kunit_mem_assert *mem_assert;
- 
- 	mem_assert = container_of(assert, struct kunit_mem_assert,
- 				  assert);
+ tools/testing/selftests/x86/ldt_gdt.c        | 21 +++++++++++++++++++-
+ tools/testing/selftests/x86/ptrace_syscall.c | 20 +++++++++++++++++--
+ 2 files changed, 38 insertions(+), 3 deletions(-)
+
 -- 
-2.52.0
+2.52.0.305.g3fc767764a-goog
 
 
