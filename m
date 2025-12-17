@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-47669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BADEDCC8BB5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 17:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 95A98CC8A2C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 17:00:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AEF5730A0987
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 16:12:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 66EF63113374
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 15:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4380A328B6C;
-	Wed, 17 Dec 2025 16:12:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F950352947;
+	Wed, 17 Dec 2025 15:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="eRtOx6UN"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="pU/8u59n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010070.outbound.protection.outlook.com [52.101.61.70])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012001.outbound.protection.outlook.com [40.93.195.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9FEE337113;
-	Wed, 17 Dec 2025 16:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9A6347FD0;
+	Wed, 17 Dec 2025 15:48:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.1
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765987956; cv=fail; b=AJEM45psgtJXS2xbNj2VrOVIfF2n9v66Jmihg40GAyylHXBPa4XkSgnyGeAjYPnJH+v9fyswt5x1rCW+WKCSd3MD45GW5IOtktm3lFG+FUqYZEHya0fPnL5/gWGz8eZYSm4q/m1F32kGRYGcGP9XdlUZMxitL6fb2bZKgn+mecs=
+	t=1765986526; cv=fail; b=Y2B+kakoqBlJ89K6JwLnk+F+ibIJJZvnF5YMt0W4C0RIAfBoQ1SH2mUIWW1IWkBbIp+CrIiq/ghnSphS6glg3mZrKHDIqyGINUFVZGhdjyVJYYFpMO6di4bt3drqJVGzaFpxUcyV7hB6Haw1AqCucxCYPtRKw6HNhZkJ/aElOKs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765987956; c=relaxed/simple;
-	bh=n86omlfVDr5NGOdqIU3p9hgCCgSUlN2AdCvKQDnA1EU=;
+	s=arc-20240116; t=1765986526; c=relaxed/simple;
+	bh=stDKbYKVwN4NtS+nDYp/LzxQ9AaOF2DoTl/2wWA0srs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oDEtyK0DBZ5qK8Gk3fLaOv9C3scXTi8fYej6FGgE/oIN6mTbOlR3vbtl8Xs1+o5dM/AEIJ6cr9y4H1XLav6pgQAwQ0z666scHwNkHyWjsQf0tT35VkUilarJqlEKrAXWj0e4GqXJqpQfs44KG1VEmcbzAdyMvuw0gtrotlQ+Emw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=eRtOx6UN; arc=fail smtp.client-ip=52.101.61.70
+	 Content-Type:MIME-Version; b=KTrADVC7XtMGDNarzoqtYunbBmzrRrdLvChtkgYD5Dq0Ns/uIKVq8rgAyqqiKA+K9tTpY8Dl2dzHelQg/zyf8Kgzb+LcCAClirIx8tlnk2HDXTZYQ1eDSE08uddCi0ZQnpkvx3YhT16V3MZVf0ER0nUMdzcPlsJofOOY46geiVM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=pU/8u59n; arc=fail smtp.client-ip=40.93.195.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=e5WxAstIFDQ5BWqdqIaIBmjt/x8Rh4t31e4ERnz4pSDzXg+uclu8MTw2swCnZEHSLF7sfIK3i8MzTPEf50bxVEY5sGJvUjLh3zXXFRhluy3MhSZWb9VU/m0GVwRo/9InFZX5mXevd2+SkH0LJk8/rE2VlP1eDPpfYvxxuVDO7B3xw1ItYnBh74AzB0PM6WvANYVQJ0l8exASt3FUy/Fq+KhYC+1wHd5u/rz1xbfWY41wKbXddHsC4b7szTXun5yg426TMSjRoaHgLHgubmZGv5VoC0e0HUwOGF2zPJhUx9lGNTPpcGuusXLw9EmrXwjzAaPXXyToyQ5UotsZO/TKjQ==
+ b=a1zQkF23x+gI89hsIsv+LPFQpoJLQE66E3be/quxYvGrFNq2M3r3Yd23z9HWhtzCUoDIsTys1GB3DoB9xyQXU/X2Y4Q35sy+HmGRR8zs/Hizxgxc1wMfxyJKeiHjURByDXGpDk0hGZUfpU+qBMVfJzlX6OLwlgDHvcr44aw0oo2LPTYuwBsB46St8O/glc7yauM4zKtiLZZf7i7sNYmgytydQeC2rcecDqMBB3yfQbbUl/5Z2cnWG7+bI+ZBXVpIH5ffhH7CrAveMHHt5DsLXH6Wi2NUUrvtgBw+ccNUR2Rc0D7z+xVKxBf2thEwfM++R+6jhhcesLUsrC/Jnybt0A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rvHn0OqsDct1kPu3YlxzC2IxvwnaS8m9PLjrfPLC2+0=;
- b=FaSYavOHxRMHvKyxORtwIu6xl5ExS4LYu+wWOfKjyfr0bik/qj2mVJL3bZj7BgrafbcVq89L4WVA6po+IMV59yFptVNWXJu2mePkHrKiAm94XFhQL9dqTn810b/l0F43qYSpv7jekAddJbYhIyvZBquEF0bKJiWcayEBZ6+e+1K6+DEHzC0Ga7tMYdtwIYNNeXPzAzE9lF5/vczWVzD0t/ArlcYbQBSU2HOrHTCbQzg7z6Wh/zP4hk0HXiag+0U8rmQjRFUvk7VOhR0A+pYGEiWZzvHb8HCiNkn2MrMGLOujwt5weP6Xdk18gkE/vHgbPQzu518aFG1NXGRvLyv1Pg==
+ bh=bERVX6r8RiMygm7pWo2rsnY3ZsQqMHll8P/O3hASjRs=;
+ b=FEp3hkH7fmtfz/1BvhN+bcU0LEliSX3G6jgHanXfxMgfAlL06G59icHmN9qxpov3nLaSsixtRSWDUcKY2Wq3MYQwKBYJ0zb20VWJJTRu2sVtp0F5hNFRfsxOG2pmo/lrlRL91GK9kaLtlNvH130/V7k/WVLPxbPzPVkQWx8lfiByDJMkyo0/CIuXlpNtynxRM2bMNBopCe2XXXSET0P+J/sEvkMyo+VEWNJazamA+nXIX+TaUmss2EPu2IERTg8+hr8sue930twCwN9MzDcsLnBaHIUFj2dndrJSKyEpKLc/izwA7Ey2XtEXpJpEzwrR3HDgYgZlbrNrOsStYorzMw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rvHn0OqsDct1kPu3YlxzC2IxvwnaS8m9PLjrfPLC2+0=;
- b=eRtOx6UN0n9JQfxcNotBDncf/5ZEONad1aLFSv5N0iFvf3Vyf+zYwOuclQPhSffwER+aWBM1oZxhm7cdd+RWNiaD7P3td+zkpvWWq0SocgcotAakipwn4DXArm/q8KRYh0lNgXddI54PDjy7Ks0ev3Y/uY3FxxjjZ3cDMKwhAFGFFNSeNQOzAsjDbdFmT4oDgnM6M2VM9sU2qcL0Fy2NTME82Rs1xL+EOYQPabdPSHMQyVRJS/oeMHApQTLjdJaqRW7Dou1JanfVSuuNKs+A0gSgtCNG+aJmbP1/hQYD2obLOgo6n/DKFeX9it+7WzUinz/Hx9UTtwieZO2x8Ee5cw==
+ bh=bERVX6r8RiMygm7pWo2rsnY3ZsQqMHll8P/O3hASjRs=;
+ b=pU/8u59n8r7FIdory9Kr6dgZpO5Z81ocVSPZMBRJYWOr0deKV5WHCDq+pw8u1yCKMA4ecSusXchF+cVpKA9pdALrMGYTJhZP+0SzaxFkBHBv1tlcYSGMDuMWGIagJuc9Q9slYTRjYeLSyC4/jo2mmiQ0XBGkyS8yjqLfPxcXvChO/6PLvrN7FxbedI14Zw3TLL6NXaSGP53LlOp4a9sCCBZ0ZqGNPp5UIWAgJcDmJbUhMsgg0utwhRAO2yIPc5eQdAX/AQAQv3HBfF1Vo6aTlT/KGtgwnXBkt+dC4qkr4XvBBTgCTEfTJTzMi314+ZpcHXyX8Mmd6qz0R2VcA83OjQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
  by DS0PR12MB6413.namprd12.prod.outlook.com (2603:10b6:8:ce::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.6; Wed, 17 Dec
- 2025 09:39:55 +0000
+ 2025 09:39:59 +0000
 Received: from LV8PR12MB9620.namprd12.prod.outlook.com
  ([fe80::1b59:c8a2:4c00:8a2c]) by LV8PR12MB9620.namprd12.prod.outlook.com
  ([fe80::1b59:c8a2:4c00:8a2c%3]) with mapi id 15.20.9434.001; Wed, 17 Dec 2025
- 09:39:55 +0000
+ 09:39:59 +0000
 From: Andrea Righi <arighi@nvidia.com>
 To: Ingo Molnar <mingo@redhat.com>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -76,16 +76,16 @@ Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/7] sched/debug: Stop and start server based on if it was active
-Date: Wed, 17 Dec 2025 10:35:41 +0100
-Message-ID: <20251217093923.1556187-4-arighi@nvidia.com>
+Subject: [PATCH 4/7] sched_ext: Add a DL server for sched_ext tasks
+Date: Wed, 17 Dec 2025 10:35:42 +0100
+Message-ID: <20251217093923.1556187-5-arighi@nvidia.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20251217093923.1556187-1-arighi@nvidia.com>
 References: <20251217093923.1556187-1-arighi@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: MI0P293CA0006.ITAP293.PROD.OUTLOOK.COM
- (2603:10a6:290:44::17) To LV8PR12MB9620.namprd12.prod.outlook.com
+X-ClientProxiedBy: MI2P293CA0009.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:45::6) To LV8PR12MB9620.namprd12.prod.outlook.com
  (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -95,135 +95,457 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|DS0PR12MB6413:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50219048-901b-4bb3-ccfe-08de3d503c64
+X-MS-Office365-Filtering-Correlation-Id: a3434b4a-d7b1-43c3-9747-08de3d503e89
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?jOIqU942Myb4XQ7md8HsOd6aKNUdFT3Xb0RZbtq/GbSIK/SH6Qj+Hrfhxhxe?=
- =?us-ascii?Q?QVaUO7SvKy4gU5h5k3llHBUOblH2GySSVIWlT/QkT6Npi33NrhWr68kvkiK7?=
- =?us-ascii?Q?3hMPI2lWup0xYidYWCEkN4Pv0+mQw4J5jpSZk6Puf79M11o3m3+y7FI+HMc8?=
- =?us-ascii?Q?n8vR6MULK90bcrx7CCoR81trWozXaRP/ayuovL5ntSvTsTdOQCtO9opdq9N/?=
- =?us-ascii?Q?87b3ci5/7Y/XbiPSoEEyrbGTJgEXZ/DdluMp2cEYiD/BlnG4/5BbiyY0Jd7v?=
- =?us-ascii?Q?9MeKVjUwQ4P55gVdjyuPiOiDObB4P6eisl4YajdA2GDni2YV785QNhhyiOKq?=
- =?us-ascii?Q?5RiaXp2UgNtFhv5Bfq4mK91m9qC5CcIv1r10DawOSrQgbl4pObBMfhYpbQud?=
- =?us-ascii?Q?l9qVbf08niddXsDOtQmQaH+c4ybYCGnLUsdhbVjEOf4f591vn64Liq4sfQFO?=
- =?us-ascii?Q?L5c7E5FYSS7qb9beE6Cedv5eDdiH+VRehqXa7t7YIC7aCsAufajYIWDiuFyM?=
- =?us-ascii?Q?aIzxKDQEWeD9X746d/eFRLQwtbEPPLzrgXqp+3trAo11K0Rb8nOcGL4JfNqH?=
- =?us-ascii?Q?dQMrLuXNfKgvXoMoEuUazMGCUJd8hq5V/P3kBKf48YnSgXK7gFm8+DgDk+nL?=
- =?us-ascii?Q?qwmy4WuNlyaGXSw2A3rm6iGQwjfKETuboPkFu6CZqba593cfq8c8OpGQ1gRL?=
- =?us-ascii?Q?UOvtNyBJZf0l2/MFZMt2VzXh7ZL8PY1zglNrMM4mqqpD1EUPyHvgO8eG/YCd?=
- =?us-ascii?Q?w64zsHo8OnRwiMGPVu3Wk0WucwLKQpFPBd+kRFNOOfg1uvFt69s46iYA5kam?=
- =?us-ascii?Q?XhwvTdazUebiSErf81Ue4TjndXmaHeMyadcYkykzsO+Sht8dUL96xvOYE58l?=
- =?us-ascii?Q?zLjybiUcbMRd5FtvmflVRE0MEijjM0yMHj4DCrxhWUq4inmyv0UuOY5U0l5p?=
- =?us-ascii?Q?QnlQhJOuUZT5S4Y6jt2TMSdk3PNiBgb9boUy+Nsscfs8uZA57WVHya8s7GDf?=
- =?us-ascii?Q?hJvyax/iRTwl14cjH4xpg3ttKdgBgATTluMWzHqoJuGlMaRQX3ohfeFuImpp?=
- =?us-ascii?Q?vZfxotvSWFH5Zjch6KlnqR2xY0BLoU7nntZIJCGU8/8u5LJI5y+fmQx1aZRx?=
- =?us-ascii?Q?haVCEw4aOiqCKlaT9Tr8C7s18gk/+ShFzMNNc1YQ3Of8Q2VTCf8QL7Zz/rcT?=
- =?us-ascii?Q?t+bBWA82eYegR6edX11ApLePQaXEi3c5LSY/GHMauBO7kBZxqW7sOOTPJoHk?=
- =?us-ascii?Q?L8QzKozVN5Ico9PYabTWUoGBqvqtP3Zj7zwFv/fRP2QTq9Y5GR+BZFfuJ6PV?=
- =?us-ascii?Q?UU9OzCrXXNkPjLEn8Rsjf4G8A6jsW9ZHPQSzI8pYVDuCOYJWHIaSrj8a/2X4?=
- =?us-ascii?Q?uPZ5Zwl5cn/iE1LuQ2xlQCmzZ5jj03jyuDhWd4LFNRXU5jgxWK2Cf2la3p7q?=
- =?us-ascii?Q?LIxR0+EONLxKX+P/eBMzeXR1GhswqGvD?=
+	=?us-ascii?Q?Nd5oJJFAO/Cy/78GVHGAB8AUhazKL5rkjsl3VxTJh5YbgjU9cWfzLuwmv/RS?=
+ =?us-ascii?Q?HMnj6OJcGnvSEKXLJxZkqh04g2qkX+HmZo8pgG+qLM4Rx/+O3v6sj/lTIx1i?=
+ =?us-ascii?Q?045jY+l7dfqTmou1yq0lvSeGLAAEVozMVPVBu+Ec2Yms9F2ONwfFn++l11Ml?=
+ =?us-ascii?Q?tJeMO0RTCRVWftOBEDyrfyUJ8CFVxaePD9miMCEG2paWuzvOYqcJuyB9ivas?=
+ =?us-ascii?Q?L8nlfjCgvk3pI/gNgptHtdcuOIa+42i8VASAdQbnPnYrdhJ0Pi5ifh+rrYBb?=
+ =?us-ascii?Q?F2JS/U73f7FecH0duCr+U8wevq6pMKzVaOxcG6dK+WrIVxMBpuXAA7Yr0Xz/?=
+ =?us-ascii?Q?uqfCecPSmqHae+Kjqy0ziZBteHBtsngeWwKylxuOKPSMKzebgLao4tCR4Fcc?=
+ =?us-ascii?Q?6/wZZdJh6iS2PIcbONEIdRUOtmycsyfVTeFdH7Fde3kpSMAP5sUvzsAreU/4?=
+ =?us-ascii?Q?ab1Czc5kU0IS/gUnrV1RTIi4IGGGZkX47Tlj02oNVwu1jn4dQ3Xi0VzYXWzZ?=
+ =?us-ascii?Q?CzZ5Ezw0mgs/h5AB6FiRQ2aZXaFbNPk0eWu5vdQeN5tYkK259JvqCD2TLERJ?=
+ =?us-ascii?Q?7DU9KCFBMoqL6RVDy9i0mzt3m/CKAyD3Y1di0vZC+aV96EaDDK3vZ7yEOnVN?=
+ =?us-ascii?Q?/lopTO6noRA2lFx8RGQLaYzmjWNc4DcoA1K/kmhfOaP6/d0s0cWSwss+/QbO?=
+ =?us-ascii?Q?bXieic+ZNFj97tVH+465ywewOtgFntYANFZP0kZyMzzvIAvPqLsDoMzYwMUM?=
+ =?us-ascii?Q?mMMTtP+am6iQKOj6lsOYlXifYyfmanJWS5YUAav0cvAeebRiypzDRAugaHjN?=
+ =?us-ascii?Q?0zx1OorQ04rFHl+qsHir6JW93brA+ehbjEgwCcVVZNQjzpLx3Rc0QBmCB7SK?=
+ =?us-ascii?Q?lYVT2H7cmrKlkF0sUuIAhD0oZOlr3TADcb/AdiDdZNVf8MNhXCs58gIp6Jd2?=
+ =?us-ascii?Q?+p2A1GEnIK+4TuNdPe27XzL6bfN4SCjBQEHQVZ3wSGHh8k7ewOV7oiYMtPdm?=
+ =?us-ascii?Q?uv2CF9pSJRnupZw57TOhcTgbTDWy1cExvaOQK3jJPXIdx7/pfAw9acwBVSok?=
+ =?us-ascii?Q?Kd/8Tdd0VkZQ7ynMPEdxq+NxXr2R0YVVxrsD5uV85YwuF4ZAlvJeMgyr/u35?=
+ =?us-ascii?Q?qcwGLlUgvTpteNcg4bub/daVli6cSzD4tzNbLRiXaD2V74tg5TUY1wP6ChWU?=
+ =?us-ascii?Q?SkP10hwIwMv3IzRUzmn3Y1gTyCBtX3bi9+RYiOgJyEXIAkiVNcvFn03uKijF?=
+ =?us-ascii?Q?/GhzG9LlUc1mHOKb0ra/d7m9l1uGycAR+Yj3N5HhzGF/idbAChXtaG7YiGJ3?=
+ =?us-ascii?Q?br9tP++Sw7TaDuYBcDhcSCCf0LcHy/1wyfxpuUv4nWYL+6gGPTFI93Eo5o/r?=
+ =?us-ascii?Q?1oNlOUAsTsRFKtMFFHeKBS2e5+nh0i5G37EFkYYU5hPo0TVQb+VoNuwuKkoZ?=
+ =?us-ascii?Q?ONsV7yOi8s+QFEULo9SCFdxcepzleGkX?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?0h8k55ELLjPpSr9X9VMlWqqBcJdkJ+W852NqzKbyduLsUqDbd+XsJXh+H1pW?=
- =?us-ascii?Q?9NHYbdVx1vYrw2Pg2XAGg0dAVecVRKw/Lcd5Iv5ustGT2s5zsK1gRJLMU1Z7?=
- =?us-ascii?Q?7OE21a9djq/nHM6pbR+GHTRJCFXdL3Js1wp537r51ARGyk01E+HRPSW6puDy?=
- =?us-ascii?Q?Lr//1EdKAoCB39iU0OhKpgJdXtYN8w6F2npNCXQfdY1Sm/PDTTDfZZ203XLF?=
- =?us-ascii?Q?IJhfKFIjUWtg/a5EDJDkFDxlxBpM7ub6eJFb27sck5i0zcWQAS9IWfJewI5F?=
- =?us-ascii?Q?IS5u9Wm76QCpKiJJF+olssLlKpk1R+xdkFtTU+KcT89C+GUMPw+NCHNwkueP?=
- =?us-ascii?Q?iccF/+9aiPr2Hr8U0w+zc/85B0ocUrRsX15NcBTMCVROLQ4N2pyvRUeRv9pI?=
- =?us-ascii?Q?UAlDIvHGkQYtTp8RPJsFlcVwWuquCH/hy28PkIMBBqVLgIxOdgEYl4idHzw1?=
- =?us-ascii?Q?BIiB5kIORk6oDaQTGmOSNbUFBFbXi/ACtYvNKYJRo9rkLEPg8He1v3nPAlSG?=
- =?us-ascii?Q?BD2M4DD7+MXzUZ0ynqfNMNaEfGlBjXdomuP7ZReDcT/uiCwDCaLO1hE8N6Bt?=
- =?us-ascii?Q?DOB0imx9TK9Fhvc9BLSEf9KG6ppSbrVOyM/QuN+mbefOpMEDzABQ7oPtEZuG?=
- =?us-ascii?Q?5F0AGr6noDKZw3jp8H57+1lFMEhmDYcPn5ZmiuhsKjRvHji2v1hDK4Zx9Ive?=
- =?us-ascii?Q?hQs1AsFfJOQAiUbbQbSI9IV4RolzTb2pw3Z+vQzdkBaO5TY9aIWk4OKuXVz/?=
- =?us-ascii?Q?8VFIjAsEnKiuODWPxM6opmdHvIN1Aa6Puts9xLDF0tLkGMqaH6Trz5//d66f?=
- =?us-ascii?Q?wa/b8HGUfEbTy3wtYhewVH+hdc1RztAABP0cv513St5oKltjDH9e9SXIbUbP?=
- =?us-ascii?Q?05g7PSz6sH6GLGeaj90PhIDVZdeVyrRFUMu1HQp5bawlCU74pFqXY6d1fwzJ?=
- =?us-ascii?Q?rnKdBvf6ywBg3UWDS2HFLXEiANZBE6FdrdtS7qSxd/4pdPT88zz+2S50ZynS?=
- =?us-ascii?Q?ljckYhUR62RfWYaI+2o8vF8jvzI13OdfriJSMfKh9KIP+6UvTORB8Ydcys8a?=
- =?us-ascii?Q?UaCrKs4C+3gjtPfqOko9x8ocG8iNQfu3c+2DiRi/GAJ+TpNrgvdtE9QiqBco?=
- =?us-ascii?Q?CC2EPUf8XPGZ4Q6qsAkvH6uWpWELkx34byjYm7d7ceLbCkY1bxIhCxciiy9q?=
- =?us-ascii?Q?GlspgL4UNLVQ9CxSRCQNMQJlCjR0sA7AMQw9ruT/5jLSVb3asSfuGg9O9FHp?=
- =?us-ascii?Q?JqKgjxh7kpvMC5i/HwXzeRZfXY7yy8mI1PnVqQCv1dMYyS6Hp8hThXbtB7AW?=
- =?us-ascii?Q?zcnw16Q582G13JLYu8mrsXNho2pKF9ycDcN17WTjpeM6W0rYWOv1nmKa175w?=
- =?us-ascii?Q?F/CxzIAKPKCSj7Z4SIIMo41wTz25CClQLaeAlJ/tuvyW5zlyKyjCxU2EfrEE?=
- =?us-ascii?Q?pi9oGwoWKuKEVLLBV+S8D0qmqzaVE9ytLyyGdWh0cl0ALqaZ1CgAIpZy8dOm?=
- =?us-ascii?Q?rcHKUDe5BWsKuOAmOIbJVWUXNNACwPkzajIDaZ4nVwHWaPNCP7VL/ms8hyZ+?=
- =?us-ascii?Q?zweOpozH6fkMj4h1cT0to090LOUOyJW2+C4H0CKX?=
+	=?us-ascii?Q?VvbqmaSoPU5ylw+iyvCfNodTBDSKLatnA6ywHl2c2JVwPQybYH0ccJyFdBZd?=
+ =?us-ascii?Q?P4iBpPxWMp4Qc4y7SWr/5DqrtRqIqTzviuZT9t/FmEQdHdU8yHU9yGsqkTMz?=
+ =?us-ascii?Q?nWXDkTspHbHiqBRmIfosjuOp/GDq4uPakX1z+3FTuG6yfgV6/gOZ86ScEjJW?=
+ =?us-ascii?Q?nUBmQfgMT1RwtWnxv1QsErc5AgKufsMNw1WwO/NHi2Oic2p3BOyB4dBwhJKJ?=
+ =?us-ascii?Q?wfU4lWmrElMkzsRKPqDYIIj14VbxBcckpWddaA5P5wJQZmqA4SkndBirGsYl?=
+ =?us-ascii?Q?3dy4WwDic4uQl8WbKealRSBY2QuhGVfYDwt6ZHhdGG0FMhqgjr310CuKkSFK?=
+ =?us-ascii?Q?5XIKFAVMshRZ1bBjTt3VsLFC3v+97fuYZzS2aDEm/BIQ3AtzX3njBVue1ojT?=
+ =?us-ascii?Q?2yP5JKrDWzHbc8r8pNX7+S+MmHOPYe414e1aXdGx1E4fZx+gvHyUwL/pD1hK?=
+ =?us-ascii?Q?OmBIfFe3ZENGnN5ajZmdJaqjDTadAfAIlwVhAVF28AnvGh7VdGNtyFWWLFWV?=
+ =?us-ascii?Q?C/dajER4NQ+XfVXytyTSJt6PsacI4QomyIKITB031ix2DRbWMxo5iGgBwW+c?=
+ =?us-ascii?Q?6uslWDbuma30nKhcnN/JMk0ngGVuVANUYytW1rMsHSaBDtSjWJpzpnKRhSnh?=
+ =?us-ascii?Q?yLXJyJyQ9FsfmzqY5xzIxtCYS0FaahbdPzuSDXs/L0NdvZ/ghVvC5nRE98Rp?=
+ =?us-ascii?Q?LZ3HzV8y7Pwnbz9eQlSeM+DjTqsQ/bhu0r3k6QAbSxTJOyC/gqHpWMkzKqBl?=
+ =?us-ascii?Q?dTbg+GBzxXLan9+cbfboJqsCzoY4Qkyv/jjy+MiULRpAVG96Jtlmcut1tc6h?=
+ =?us-ascii?Q?E8i4GX6Mt7V7dsOh9UnL+nMDarvCFjHm0L87CSnR2jod61xcCZk63BOsGBsP?=
+ =?us-ascii?Q?BX4VfgXJ0eeYi1h47k8UiaLrxBlUxH5njh9Cik9FO8xikOr8nmJOO75pEkyT?=
+ =?us-ascii?Q?xtVx1THUUBA+PVEPQ0E2K/aqz6D3GQDi5Eub7N2sQV1vovzeEVLYffCdcrjB?=
+ =?us-ascii?Q?FbkluoqsIabmB39tZOL4US2jrn+QaoZ9FflDGgOZJRAVkQMRqNBzxjwTTKsx?=
+ =?us-ascii?Q?lhmMX4oDpHYiNttusFfpfx+hpXB2J1O1saUI91ODwBAgHtxOdoqfiQPIAcCB?=
+ =?us-ascii?Q?FFvxs523UHXSImbdDoZAL/n6TFG10Gz0koXJ0Dc7BxCual0icjLA3i0EuUVK?=
+ =?us-ascii?Q?Efw+oYbypjbqabX0tYNPIHWFUHnBygbxYENcNIoIVdJnTQsT/EDw9ElJDg04?=
+ =?us-ascii?Q?XCGscpeBvbiAmHMFYZaC8J+IJw2kpylB2doN98PEqpI88154Bx2LjI/Vya3n?=
+ =?us-ascii?Q?MPJzDyqzDqZKhQv5TeKxA8R5u/O4VL7MxNjxStZ1ZZUU0PNQWS/MT/+rPOVF?=
+ =?us-ascii?Q?8rx1Niovq3CubiizpjLpldVbH9hyM6i7DblohVZHgaF9uItMX1G7z5ZNkFlT?=
+ =?us-ascii?Q?kUchiQVIVQiVa8eWv3wCYgW5JslCaZXixWg/7cD7SUjsQw4wMCy80EhmQoSh?=
+ =?us-ascii?Q?tIz7VfnwsqkRtE+TTzeKOSTPqE38u1JlgYAas5xSnCASJ73+8VVLab6i2M1A?=
+ =?us-ascii?Q?4uplmunkuCoc3Dx011dWUM8fwTlpqGYNuBhMzKXG?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50219048-901b-4bb3-ccfe-08de3d503c64
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3434b4a-d7b1-43c3-9747-08de3d503e89
 X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 09:39:55.4416
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2025 09:39:59.0400
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UJOUMwXYLHCdUJ+jo98m3zWNf5gdSqJVb30J9g12CDtecqDkjXN7sysZjFn0U9MLZ7J0BPYSdoOak8ZCZFiMhQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ndnyjDDguSwf6ilmZnU25ltXqJ1D0RMn7dqRQBtu3GP8hUdrCVan82YTDnT7IwRabl4aCfZOcEi/YZJik7+V+g==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6413
 
-From: Joel Fernandes <joelagnelf@nvidia.com>
+sched_ext currently suffers starvation due to RT. The same workload when
+converted to EXT can get zero runtime if RT is 100% running, causing EXT
+processes to stall. Fix it by adding a DL server for EXT.
 
-Currently the DL server interface for applying parameters checks
-CFS-internals to identify if the server is active. This is error-prone
-and makes it difficult when adding new servers in the future.
+A kselftest is also included later to confirm that both DL servers are
+functioning correctly:
 
-Fix it, by using dl_server_active() which is also used by the DL server
-code to determine if the DL server was started.
+ # ./runner -t rt_stall
+ ===== START =====
+ TEST: rt_stall
+ DESCRIPTION: Verify that RT tasks cannot stall SCHED_EXT tasks
+ OUTPUT:
+ TAP version 13
+ 1..1
+ # Runtime of FAIR task (PID 1511) is 0.250000 seconds
+ # Runtime of RT task (PID 1512) is 4.750000 seconds
+ # FAIR task got 5.00% of total runtime
+ ok 1 PASS: FAIR task got more than 4.00% of runtime
+ TAP version 13
+ 1..1
+ # Runtime of EXT task (PID 1514) is 0.250000 seconds
+ # Runtime of RT task (PID 1515) is 4.750000 seconds
+ # EXT task got 5.00% of total runtime
+ ok 2 PASS: EXT task got more than 4.00% of runtime
+ TAP version 13
+ 1..1
+ # Runtime of FAIR task (PID 1517) is 0.250000 seconds
+ # Runtime of RT task (PID 1518) is 4.750000 seconds
+ # FAIR task got 5.00% of total runtime
+ ok 3 PASS: FAIR task got more than 4.00% of runtime
+ TAP version 13
+ 1..1
+ # Runtime of EXT task (PID 1521) is 0.250000 seconds
+ # Runtime of RT task (PID 1522) is 4.750000 seconds
+ # EXT task got 5.00% of total runtime
+ ok 4 PASS: EXT task got more than 4.00% of runtime
+ ok 1 rt_stall #
+ =====  END  =====
 
-v2: do not start the server if runtime is zero (Juri Lelli)
+v4: - initialize EXT server bandwidth reservation at init time and
+      always keep it active (Andrea Righi)
+    - check for rq->nr_running == 1 to determine when to account idle
+      time (Juri Lelli)
+v3: - clarify that fair is not the only dl_server (Juri Lelli)
+    - remove explicit stop to reduce timer reprogramming overhead
+      (Juri Lelli)
+    - do not restart pick_task() when it's invoked by the dl_server
+      (Tejun Heo)
+    - depend on CONFIG_SCHED_CLASS_EXT (Andrea Righi)
+v2: - drop ->balance() now that pick_task() has an rf argument
+      (Andrea Righi)
 
 Tested-by: Christian Loehle <christian.loehle@arm.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
-Reviewed-by: Andrea Righi <arighi@nvidia.com>
+Co-developed-by: Joel Fernandes <joelagnelf@nvidia.com>
 Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+Signed-off-by: Andrea Righi <arighi@nvidia.com>
 ---
- kernel/sched/debug.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ kernel/sched/core.c     |  6 +++
+ kernel/sched/deadline.c | 84 ++++++++++++++++++++++++++++++-----------
+ kernel/sched/ext.c      | 42 +++++++++++++++++++++
+ kernel/sched/idle.c     |  3 ++
+ kernel/sched/sched.h    |  2 +
+ kernel/sched/topology.c |  5 +++
+ 6 files changed, 119 insertions(+), 23 deletions(-)
 
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index 93f009e1076d8..dd793f8f3858a 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -354,6 +354,8 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
- 		return err;
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 41ba0be169117..a2400ee33a356 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -8475,6 +8475,9 @@ int sched_cpu_dying(unsigned int cpu)
+ 		dump_rq_tasks(rq, KERN_WARNING);
+ 	}
+ 	dl_server_stop(&rq->fair_server);
++#ifdef CONFIG_SCHED_CLASS_EXT
++	dl_server_stop(&rq->ext_server);
++#endif
+ 	rq_unlock_irqrestore(rq, &rf);
  
- 	scoped_guard (rq_lock_irqsave, rq) {
-+		bool is_active;
+ 	calc_load_migrate(rq);
+@@ -8678,6 +8681,9 @@ void __init sched_init(void)
+ 		hrtick_rq_init(rq);
+ 		atomic_set(&rq->nr_iowait, 0);
+ 		fair_server_init(rq);
++#ifdef CONFIG_SCHED_CLASS_EXT
++		ext_server_init(rq);
++#endif
+ 
+ #ifdef CONFIG_SCHED_CORE
+ 		rq->core = rq;
+diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+index 2789db5217cd4..88f2b5ed5678a 100644
+--- a/kernel/sched/deadline.c
++++ b/kernel/sched/deadline.c
+@@ -1445,8 +1445,8 @@ static void update_curr_dl_se(struct rq *rq, struct sched_dl_entity *dl_se, s64
+ 		dl_se->dl_defer_idle = 0;
+ 
+ 	/*
+-	 * The fair server can consume its runtime while throttled (not queued/
+-	 * running as regular CFS).
++	 * The DL server can consume its runtime while throttled (not
++	 * queued / running as regular CFS).
+ 	 *
+ 	 * If the server consumes its entire runtime in this state. The server
+ 	 * is not required for the current period. Thus, reset the server by
+@@ -1531,10 +1531,10 @@ static void update_curr_dl_se(struct rq *rq, struct sched_dl_entity *dl_se, s64
+ 	}
+ 
+ 	/*
+-	 * The fair server (sole dl_server) does not account for real-time
+-	 * workload because it is running fair work.
++	 * The dl_server does not account for real-time workload because it
++	 * is running fair work.
+ 	 */
+-	if (dl_se == &rq->fair_server)
++	if (dl_se->dl_server)
+ 		return;
+ 
+ #ifdef CONFIG_RT_GROUP_SCHED
+@@ -1569,9 +1569,9 @@ static void update_curr_dl_se(struct rq *rq, struct sched_dl_entity *dl_se, s64
+  * In the non-defer mode, the idle time is not accounted, as the
+  * server provides a guarantee.
+  *
+- * If the dl_server is in defer mode, the idle time is also considered
+- * as time available for the fair server, avoiding a penalty for the
+- * rt scheduler that did not consumed that time.
++ * If the dl_server is in defer mode, the idle time is also considered as
++ * time available for the dl_server, avoiding a penalty for the rt
++ * scheduler that did not consumed that time.
+  */
+ void dl_server_update_idle(struct sched_dl_entity *dl_se, s64 delta_exec)
+ {
+@@ -1810,6 +1810,7 @@ void dl_server_stop(struct sched_dl_entity *dl_se)
+ 	hrtimer_try_to_cancel(&dl_se->dl_timer);
+ 	dl_se->dl_defer_armed = 0;
+ 	dl_se->dl_throttled = 0;
++	dl_se->dl_defer_running = 0;
+ 	dl_se->dl_defer_idle = 0;
+ 	dl_se->dl_server_active = 0;
+ }
+@@ -1844,6 +1845,18 @@ void sched_init_dl_servers(void)
+ 		dl_se->dl_server = 1;
+ 		dl_se->dl_defer = 1;
+ 		setup_new_dl_entity(dl_se);
 +
- 		runtime  = rq->fair_server.dl_runtime;
- 		period = rq->fair_server.dl_period;
++#ifdef CONFIG_SCHED_CLASS_EXT
++		dl_se = &rq->ext_server;
++
++		WARN_ON(dl_server(dl_se));
++
++		dl_server_apply_params(dl_se, runtime, period, 1);
++
++		dl_se->dl_server = 1;
++		dl_se->dl_defer = 1;
++		setup_new_dl_entity(dl_se);
++#endif
+ 	}
+ }
  
-@@ -376,8 +378,11 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
- 			return  -EINVAL;
+@@ -3183,6 +3196,36 @@ void dl_add_task_root_domain(struct task_struct *p)
+ 	raw_spin_unlock_irqrestore(&p->pi_lock, rf.flags);
+ }
+ 
++static void dl_server_add_bw(struct root_domain *rd, int cpu)
++{
++	struct sched_dl_entity *dl_se;
++
++	dl_se = &cpu_rq(cpu)->fair_server;
++	if (dl_server(dl_se) && cpu_active(cpu))
++		__dl_add(&rd->dl_bw, dl_se->dl_bw, dl_bw_cpus(cpu));
++
++#ifdef CONFIG_SCHED_CLASS_EXT
++	dl_se = &cpu_rq(cpu)->ext_server;
++	if (dl_server(dl_se) && cpu_active(cpu))
++		__dl_add(&rd->dl_bw, dl_se->dl_bw, dl_bw_cpus(cpu));
++#endif
++}
++
++static u64 dl_server_read_bw(int cpu)
++{
++	u64 dl_bw = 0;
++
++	if (cpu_rq(cpu)->fair_server.dl_server)
++		dl_bw += cpu_rq(cpu)->fair_server.dl_bw;
++
++#ifdef CONFIG_SCHED_CLASS_EXT
++	if (cpu_rq(cpu)->ext_server.dl_server)
++		dl_bw += cpu_rq(cpu)->ext_server.dl_bw;
++#endif
++
++	return dl_bw;
++}
++
+ void dl_clear_root_domain(struct root_domain *rd)
+ {
+ 	int i;
+@@ -3201,12 +3244,8 @@ void dl_clear_root_domain(struct root_domain *rd)
+ 	 * dl_servers are not tasks. Since dl_add_task_root_domain ignores
+ 	 * them, we need to account for them here explicitly.
+ 	 */
+-	for_each_cpu(i, rd->span) {
+-		struct sched_dl_entity *dl_se = &cpu_rq(i)->fair_server;
+-
+-		if (dl_server(dl_se) && cpu_active(i))
+-			__dl_add(&rd->dl_bw, dl_se->dl_bw, dl_bw_cpus(i));
+-	}
++	for_each_cpu(i, rd->span)
++		dl_server_add_bw(rd, i);
+ }
+ 
+ void dl_clear_root_domain_cpu(int cpu)
+@@ -3702,7 +3741,7 @@ static int dl_bw_manage(enum dl_bw_request req, int cpu, u64 dl_bw)
+ 	unsigned long flags, cap;
+ 	struct dl_bw *dl_b;
+ 	bool overflow = 0;
+-	u64 fair_server_bw = 0;
++	u64 dl_server_bw = 0;
+ 
+ 	rcu_read_lock_sched();
+ 	dl_b = dl_bw_of(cpu);
+@@ -3735,27 +3774,26 @@ static int dl_bw_manage(enum dl_bw_request req, int cpu, u64 dl_bw)
+ 		cap -= arch_scale_cpu_capacity(cpu);
+ 
+ 		/*
+-		 * cpu is going offline and NORMAL tasks will be moved away
+-		 * from it. We can thus discount dl_server bandwidth
+-		 * contribution as it won't need to be servicing tasks after
+-		 * the cpu is off.
++		 * cpu is going offline and NORMAL and EXT tasks will be
++		 * moved away from it. We can thus discount dl_server
++		 * bandwidth contribution as it won't need to be servicing
++		 * tasks after the cpu is off.
+ 		 */
+-		if (cpu_rq(cpu)->fair_server.dl_server)
+-			fair_server_bw = cpu_rq(cpu)->fair_server.dl_bw;
++		dl_server_bw = dl_server_read_bw(cpu);
+ 
+ 		/*
+ 		 * Not much to check if no DEADLINE bandwidth is present.
+ 		 * dl_servers we can discount, as tasks will be moved out the
+ 		 * offlined CPUs anyway.
+ 		 */
+-		if (dl_b->total_bw - fair_server_bw > 0) {
++		if (dl_b->total_bw - dl_server_bw > 0) {
+ 			/*
+ 			 * Leaving at least one CPU for DEADLINE tasks seems a
+ 			 * wise thing to do. As said above, cpu is not offline
+ 			 * yet, so account for that.
+ 			 */
+ 			if (dl_bw_cpus(cpu) - 1)
+-				overflow = __dl_overflow(dl_b, cap, fair_server_bw, 0);
++				overflow = __dl_overflow(dl_b, cap, dl_server_bw, 0);
+ 			else
+ 				overflow = 1;
  		}
+diff --git a/kernel/sched/ext.c b/kernel/sched/ext.c
+index 94164f2dec6dc..04daaac74f514 100644
+--- a/kernel/sched/ext.c
++++ b/kernel/sched/ext.c
+@@ -957,6 +957,8 @@ static void update_curr_scx(struct rq *rq)
+ 		if (!curr->scx.slice)
+ 			touch_core_sched(rq, curr);
+ 	}
++
++	dl_server_update(&rq->ext_server, delta_exec);
+ }
  
--		update_rq_clock(rq);
--		dl_server_stop(&rq->fair_server);
-+		is_active = dl_server_active(&rq->fair_server);
-+		if (is_active) {
-+			update_rq_clock(rq);
-+			dl_server_stop(&rq->fair_server);
-+		}
+ static bool scx_dsq_priq_less(struct rb_node *node_a,
+@@ -1500,6 +1502,10 @@ static void enqueue_task_scx(struct rq *rq, struct task_struct *p, int enq_flags
+ 	if (enq_flags & SCX_ENQ_WAKEUP)
+ 		touch_core_sched(rq, p);
  
- 		retval = dl_server_apply_params(&rq->fair_server, runtime, period, 0);
++	/* Start dl_server if this is the first task being enqueued */
++	if (rq->scx.nr_running == 1)
++		dl_server_start(&rq->ext_server);
++
+ 	do_enqueue_task(rq, p, enq_flags, sticky_cpu);
+ out:
+ 	rq->scx.flags &= ~SCX_RQ_IN_WAKEUP;
+@@ -2511,6 +2517,33 @@ static struct task_struct *pick_task_scx(struct rq *rq, struct rq_flags *rf)
+ 	return do_pick_task_scx(rq, rf, false);
+ }
  
-@@ -385,7 +390,7 @@ static ssize_t sched_fair_server_write(struct file *filp, const char __user *ubu
- 			printk_deferred("Fair server disabled in CPU %d, system may crash due to starvation.\n",
- 					cpu_of(rq));
++/*
++ * Select the next task to run from the ext scheduling class.
++ *
++ * Use do_pick_task_scx() directly with @force_scx enabled, since the
++ * dl_server must always select a sched_ext task.
++ */
++static struct task_struct *
++ext_server_pick_task(struct sched_dl_entity *dl_se, struct rq_flags *rf)
++{
++	if (!scx_enabled())
++		return NULL;
++
++	return do_pick_task_scx(dl_se->rq, rf, true);
++}
++
++/*
++ * Initialize the ext server deadline entity.
++ */
++void ext_server_init(struct rq *rq)
++{
++	struct sched_dl_entity *dl_se = &rq->ext_server;
++
++	init_dl_entity(dl_se);
++
++	dl_server_init(dl_se, rq, ext_server_pick_task);
++}
++
+ #ifdef CONFIG_SCHED_CORE
+ /**
+  * scx_prio_less - Task ordering for core-sched
+@@ -3090,6 +3123,15 @@ static void switching_to_scx(struct rq *rq, struct task_struct *p)
+ static void switched_from_scx(struct rq *rq, struct task_struct *p)
+ {
+ 	scx_disable_task(p);
++
++	/*
++	 * After class switch, if the DL server is still active, restart it so
++	 * that DL timers will be queued, in case SCX switched to higher class.
++	 */
++	if (dl_server_active(&rq->ext_server)) {
++		dl_server_stop(&rq->ext_server);
++		dl_server_start(&rq->ext_server);
++	}
+ }
  
--		if (rq->cfs.h_nr_queued)
-+		if (is_active && runtime)
- 			dl_server_start(&rq->fair_server);
+ static void wakeup_preempt_scx(struct rq *rq, struct task_struct *p,int wake_flags) {}
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index c174afe1dd177..53793b9a04185 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -530,6 +530,9 @@ static void update_curr_idle(struct rq *rq)
+ 	se->exec_start = now;
  
- 		if (retval < 0)
+ 	dl_server_update_idle(&rq->fair_server, delta_exec);
++#ifdef CONFIG_SCHED_CLASS_EXT
++	dl_server_update_idle(&rq->ext_server, delta_exec);
++#endif
+ }
+ 
+ /*
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index d30cca6870f5f..28c24cda1c3ce 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -414,6 +414,7 @@ extern void dl_server_init(struct sched_dl_entity *dl_se, struct rq *rq,
+ extern void sched_init_dl_servers(void);
+ 
+ extern void fair_server_init(struct rq *rq);
++extern void ext_server_init(struct rq *rq);
+ extern void __dl_server_attach_root(struct sched_dl_entity *dl_se, struct rq *rq);
+ extern int dl_server_apply_params(struct sched_dl_entity *dl_se,
+ 		    u64 runtime, u64 period, bool init);
+@@ -1151,6 +1152,7 @@ struct rq {
+ 	struct dl_rq		dl;
+ #ifdef CONFIG_SCHED_CLASS_EXT
+ 	struct scx_rq		scx;
++	struct sched_dl_entity	ext_server;
+ #endif
+ 
+ 	struct sched_dl_entity	fair_server;
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index cf643a5ddedd2..ac268da917781 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -508,6 +508,11 @@ void rq_attach_root(struct rq *rq, struct root_domain *rd)
+ 	if (rq->fair_server.dl_server)
+ 		__dl_server_attach_root(&rq->fair_server, rq);
+ 
++#ifdef CONFIG_SCHED_CLASS_EXT
++	if (rq->ext_server.dl_server)
++		__dl_server_attach_root(&rq->ext_server, rq);
++#endif
++
+ 	rq_unlock_irqrestore(rq, &rf);
+ 
+ 	if (old_rd)
 -- 
 2.52.0
 
