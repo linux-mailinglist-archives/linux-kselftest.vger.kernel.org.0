@@ -1,86 +1,114 @@
-Return-Path: <linux-kselftest+bounces-47666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FA71CC88CF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 16:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4780CC8A7F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 17:05:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 09D23318F812
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 15:38:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 95A5131B7CFC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 15:49:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D43F36C59F;
-	Wed, 17 Dec 2025 15:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7B934FF6A;
+	Wed, 17 Dec 2025 15:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="j4yDUKSm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ca2NqY2Z";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="spwPvRAV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AD436C59D;
-	Wed, 17 Dec 2025 15:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F99355030
+	for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 15:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765984694; cv=none; b=f1SKfmxpqHsZaNn53j5vFfcmNGOeYHOKsROxQkV9M/mkju+bPQKESgNDVIItOl5w4RD6PmC5sUM+3yJpM08AfhSRdPfidqdy8jq5q1AGdtb/DDI8lUGaloKjW1pfmqMnkxz8eFnWKck7Y8ZkQeDH5OBROXF2jJ8J/yViLfh03KQ=
+	t=1765986556; cv=none; b=dCYv0Pbpr/+NHSIASYKMOKjVf3qZS1wpjwf4ZV8D2c4yy6wHm+uCNREg4HHCnSCiPZ39umw4K2tiPSXKwWhm+E1wWRP5ZPFWoRlU8l2uabunUdedawZb5J1K27cQXIrbF1b4b5GLz5HIDsizferEyFGChsWPHhG135YvD8WEC8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765984694; c=relaxed/simple;
-	bh=7igAGa1tiKnz7brDkA0WSEn4Ad3/hqkq63Fr/o7OGp8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NywHieC4gtXggaBTroVFvqnJEEbD9j00Hm57lw3YEGkRkxxSxbMcwxGlt1fo3CmXaeRE6GSTKBXoNWs4Kr901u7JzhZc/HE9gztCdpMo6sEzo4Y+XAF2l94fLTkKicmtdM4VqO2wghcdMIPg9DgnapqCAK+xqawuVMEEzIBcJKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=j4yDUKSm; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BHDjAaf003416;
-	Wed, 17 Dec 2025 15:18:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:message-id:mime-version:subject:to; s=
-	pp1; bh=Ruy4JEfcflMSGCDnLg6/LqOSGGM9Bf8oNAFy4r+v8Iw=; b=j4yDUKSm
-	n03qtjAbwL2M/QljaiPaFW4MjoQYW40IHFX8J4iaTF3VmE+E5udCEhtWgp36RYDd
-	2Iezumj6FBM6thyJFcaGP2uFnmvcGiWIfJYA4vaiJIMEWGZppdGzwNxNDoppxETA
-	qKwgJf4Os43wd2NHMqn2iv6s9+V8jO6mdyBuNjyn9J2f4ZrGQs41Afv+NOKi9/TV
-	N8ymePYjacGfc+GZL0+/S5SqElQEtjhb2IYwzvotdcf6naYYO22Q9ZsyXog3/RBU
-	151HT7QrmysDoEXJJRzm7hsmQASvFyRwvP4mpNjgp0XxSm3FRzK33xnfCiiFPWQe
-	4JfrxEujB8Pkrw==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0yt1mpyg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 15:18:04 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BHF5xvS024790;
-	Wed, 17 Dec 2025 15:18:03 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0yt1mpyc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 15:18:03 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BHEA3m3002863;
-	Wed, 17 Dec 2025 15:18:03 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4b1kfnawu3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Dec 2025 15:18:02 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BHFI1pF52167032
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 17 Dec 2025 15:18:01 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E712120043;
-	Wed, 17 Dec 2025 15:18:00 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8AE7620040;
-	Wed, 17 Dec 2025 15:17:59 +0000 (GMT)
-Received: from li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com (unknown [9.39.20.161])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 17 Dec 2025 15:17:59 +0000 (GMT)
-Date: Wed, 17 Dec 2025 20:47:57 +0530
-From: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>
-Cc: linux-kernel@vger.kernel.org
-Subject: Issue in parsing of tests that use KUNIT_CASE_PARAM
-Message-ID: <aULJpTvJDw9ctUDe@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
+	s=arc-20240116; t=1765986556; c=relaxed/simple;
+	bh=ej7TTVTeGnBUqaRwlQnvTPhYft8GTVTgUYErJC5s1Bk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B+fV4+rbozDdwvnpjS6a2YHtGYxicloLKhrQTFOHpNSPLmKjVWwDd01TGoIB1O1GVS7EssFi4NqHAedv3T+DvIgj1SqtdKaUvudHMtDwebXtEcWEwjsBkSUo2/m1iarbINW0WaK38d9roXd/ImKXthKn+tkDyVPwg+465medRzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ca2NqY2Z; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=spwPvRAV; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1765986553;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9bJTbj2QHR/bxiaOEFbouYE+C6nf3xnn/6jMSMVKkAk=;
+	b=ca2NqY2Z+LsZs1Ai3rL7BxhuR0P9r0LDGgzf1c3lMXkjAipVXBAT0tgEFSBvOJqaI9639N
+	ug+UWYM8582plrwrTWTejdI/rxBcIdDwgy+LeD1e3g43HCBPzvvDxnPdnW9UgWnAN8nswh
+	uiA7vbyLDBnF5M7Yg52yn1M1rgmYeoI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-201-ls-5XNMiP-GsRl-bSXBJ6w-1; Wed, 17 Dec 2025 10:49:12 -0500
+X-MC-Unique: ls-5XNMiP-GsRl-bSXBJ6w-1
+X-Mimecast-MFC-AGG-ID: ls-5XNMiP-GsRl-bSXBJ6w_1765986551
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4788112ec09so43475965e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 07:49:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1765986551; x=1766591351; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9bJTbj2QHR/bxiaOEFbouYE+C6nf3xnn/6jMSMVKkAk=;
+        b=spwPvRAVjPd8bAiYboWPfTfdFQRAGJ15XAMwYEoFXDhSZefh54e7XdccsV5Llc7Uwn
+         2Cd4aUsk59IcNoYtlvXaU1Mi6aoRLHZ6uAPodYzH5JRhyfmUM8GEM4l0xNB9+tAy0zub
+         9SZNiNhKId5RxSxLB6gIRe5xfrR4+KiqLBLzKPse1zd9s95n51KT6b8aIR/UGNVPf9Kn
+         qmT2ZrxAaWp6fQhFzYdNQuC8YE+2Tqtl8upLZ+fN/gbKh/DUqQXaAP9Kqtpts0PYOwHq
+         uEJvmQTonCLkfKmsTyfZODQI1KNnPHzW0oRFGVH2haIcbyNlOlIV8Fu6orjabELdfyFz
+         FX+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765986551; x=1766591351;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9bJTbj2QHR/bxiaOEFbouYE+C6nf3xnn/6jMSMVKkAk=;
+        b=e4OKWlyNDjUPOyUjwoCbO3yDcA3Pr3F051cEagMq0dadi1Guq4TDjGNSfzJ6YqClyH
+         3hmHbmZZh18zpLcVUyrSBPmgo8oXKmOkvyNqlABS9dAMYWch76jkOLO71X2y2Sc9R6qA
+         nrxNuH8SyKdgdCrvoVgC9brclmQC1pK3LS9j9B9RBaxKtt0thFrf+lxpIxy6rhIvucrB
+         irlvtwGjh5iHpsmskBJ8vRIGusFSgyD8yRodsH70Z+h5WiPPRljnrufR5nt4FJGVSpc7
+         FqJT0K1zVsDVwjdiCACLd4r7Clr1eaUXPsvFbQPMwQwnGQij03Sdra/3G9u4PKwb7Ecg
+         wU4w==
+X-Forwarded-Encrypted: i=1; AJvYcCU8IWlDwK628ap6kn1CRnCV+0vFpVk6w/INSZZauTdk3EkW91EU7WwS/LZ9lh7DnKq+472DjCIGQOuVnvDDbOI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy09JT4jNQl9hrKen/lUCDJQ4KrCQO+tOPznOTSs0b3MosycJOu
+	f3dGrXr6s+/Rn9A+UJBS/UUCl0lSyhQesoq36AioxQgel+woGvDMoty62YLJjuohGzb5ln29Faz
+	lMGiAeT/pBCwahD4qf8W0pg/Gvzu+rDjLFn/BYnsl+OwOyzf8Lf3BciCulncxcA1F5W8zpw==
+X-Gm-Gg: AY/fxX5wElPsyYjeVEFjmYjIQD9ZeJgB77f8XJ2s5DAmc0uSnBJvG48Cc8kUF4CNf33
+	GOIB/UA/PEPdBhGq4ad3TCpXNeJsFiAXNxBX53e4K7gWy0WUvEm4jMQIMP8xV0Vx8GtleoJmCJb
+	w/sU/WACK5idAIHECOjmMfqINIBWBg/1zl0KS83g+oUlTltoKwG6kiPoXpiBQbzOmYiO1YsSz5U
+	R4C+bLMJtQ4S/sQZdlALhYzP0Zahkae9Pv1inLmNHBhTbfWkYqCCu++Aon4BNpeHAIJ52n6EoHO
+	XLvVkF/HkWzXjVbsZfgCj3A/t7zsk0L0yNsBLinQ+hT5ljGjFoyZHzSNP1JAOFXaqtmJ0zM5V4J
+	Ftk1AEO4XQouGhcej4aqVF4l4ZGWskV9OM2iUxGmh
+X-Received: by 2002:a05:600c:1c88:b0:477:8a29:582c with SMTP id 5b1f17b1804b1-47a8f917533mr206283905e9.34.1765986550779;
+        Wed, 17 Dec 2025 07:49:10 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGJ+ughGVWwzvXsaWm1dblcs5eRzcKirhAt+kak2tJQKEnBlZisL9+a1O+Ahuhxi1HwalxGKQ==
+X-Received: by 2002:a05:600c:1c88:b0:477:8a29:582c with SMTP id 5b1f17b1804b1-47a8f917533mr206283615e9.34.1765986550400;
+        Wed, 17 Dec 2025 07:49:10 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.129.40])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47bd911a9bcsm32202995e9.6.2025.12.17.07.49.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Dec 2025 07:49:09 -0800 (PST)
+Date: Wed, 17 Dec 2025 16:49:02 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Andrea Righi <arighi@nvidia.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] sched_ext: Add a DL server for sched_ext tasks
+Message-ID: <aULQ7kPm-RqHWGDL@jlelli-thinkpadt14gen4.remote.csb>
+References: <20251217093923.1556187-1-arighi@nvidia.com>
+ <20251217093923.1556187-5-arighi@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,118 +117,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: iYNUA6JLpR3S6cF8hARwwCYw_LtPTrMn
-X-Proofpoint-ORIG-GUID: sgE7OsxrWqiSMG5lo2X-Yf2in7whwbHT
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAyMyBTYWx0ZWRfX0nmSBlMiBS5E
- 2m6iwcg45iDfL1DxMw5IJU/8+Sj82WHtFc5XvhQ6sOass29RHjmuzsELLgx+AFjiJk4j/NgVniq
- DLHoYzg81cTabvv5NTCx9hfm47zVhDkwqlaZS44t/gIGSyYrqy/KhubHkMsy29VfrDTOBfxXVRe
- eK6e+Lu2K4jNDx8nuN7GR5AmLymLcX9uZloaSUOcINDcZPbtK10WAAeE/Uc+rF68AQCV+655Dgq
- WoKbd55SZpFRYbm3DWvZ3iUxurJHP4zmvoJ1zOCOletoP8qqIuSy1SZYjKpQQ4xJayZDXSLpSTu
- Eyt9CllYgQEMI+zAvhEKCUAooIfsGduZ9xBM0jLRtXmMOpgmJz6pk7hVof9WD1P17NMNdhwPaZP
- MSNisEqX+SbW5pD0Wp+qa7ioOzMuJg==
-X-Authority-Analysis: v=2.4 cv=L/MQguT8 c=1 sm=1 tr=0 ts=6942c9ac cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=kj9zAlcOel0A:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=AI-MSd0SjKFp4D8ZOU8A:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-17_02,2025-12-16_05,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 phishscore=0 malwarescore=0 adultscore=0 priorityscore=1501
- clxscore=1011 lowpriorityscore=0 bulkscore=0 spamscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512130023
+In-Reply-To: <20251217093923.1556187-5-arighi@nvidia.com>
 
-Hello,
+Hi!
 
-While writing some Kunit tests for ext4 filesystem, I'm encountering an
-issue in the way we display the diagnostic logs upon failures, when
-using KUNIT_CASE_PARAM() to write the tests.
+On 17/12/25 10:35, Andrea Righi wrote:
+> sched_ext currently suffers starvation due to RT. The same workload when
+> converted to EXT can get zero runtime if RT is 100% running, causing EXT
+> processes to stall. Fix it by adding a DL server for EXT.
 
-This can be observed by patching fs/ext4/mballoc-test.c to fail
-and print one of the params:
+...
 
---- a/fs/ext4/mballoc-test.c
-+++ b/fs/ext4/mballoc-test.c
-@@ -350,6 +350,8 @@ static int mbt_kunit_init(struct kunit *test)
-        struct super_block *sb;
-        int ret;
+> v4: - initialize EXT server bandwidth reservation at init time and
+>       always keep it active (Andrea Righi)
+>     - check for rq->nr_running == 1 to determine when to account idle
+>       time (Juri Lelli)
+> v3: - clarify that fair is not the only dl_server (Juri Lelli)
+>     - remove explicit stop to reduce timer reprogramming overhead
+>       (Juri Lelli)
+>     - do not restart pick_task() when it's invoked by the dl_server
+>       (Tejun Heo)
+>     - depend on CONFIG_SCHED_CLASS_EXT (Andrea Righi)
+> v2: - drop ->balance() now that pick_task() has an rf argument
+>       (Andrea Righi)
+> 
+> Tested-by: Christian Loehle <christian.loehle@arm.com>
+> Co-developed-by: Joel Fernandes <joelagnelf@nvidia.com>
+> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> Signed-off-by: Andrea Righi <arighi@nvidia.com>
+> ---
 
-+       KUNIT_FAIL(test, "Failed: blocksize_bits=%d", layout->blocksize_bits);
-+
-        sb = mbt_ext4_alloc_super_block();
-        if (sb == NULL)
-                return -ENOMEM;
+...
 
-With the above change, we can observe the following output (snipped):
+> @@ -3090,6 +3123,15 @@ static void switching_to_scx(struct rq *rq, struct task_struct *p)
+>  static void switched_from_scx(struct rq *rq, struct task_struct *p)
+>  {
+>  	scx_disable_task(p);
+> +
+> +	/*
+> +	 * After class switch, if the DL server is still active, restart it so
+> +	 * that DL timers will be queued, in case SCX switched to higher class.
+> +	 */
+> +	if (dl_server_active(&rq->ext_server)) {
+> +		dl_server_stop(&rq->ext_server);
+> +		dl_server_start(&rq->ext_server);
+> +	}
+>  }
 
-[18:50:25] ============== ext4_mballoc_test (7 subtests) ==============
-[18:50:25] ================= test_new_blocks_simple  ==================
-[18:50:25] [FAILED] block_bits=10 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-[18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-[18:50:25] Failed: blocksize_bits=12
-[18:50:25] [FAILED] block_bits=12 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-[18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-[18:50:25] Failed: blocksize_bits=16
-[18:50:25] [FAILED] block_bits=16 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-[18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-[18:50:25] Failed: blocksize_bits=10
-[18:50:25]     # test_new_blocks_simple: pass:0 fail:3 skip:0 total:3
-[18:50:25] ============= [FAILED] test_new_blocks_simple ==============
-<snip>
-
-Note that the diagnostic logs don't show up correctly. Ideally they
-should be before test result but here the first [FAILED] test has no
-logs printed above whereas the last "Failed: blocksize_bits=10" print
-comes after the last subtest, when it actually corresponds to the first
-subtest.
-
-The KTAP file itself seems to have diagnostic logs in the right place:
-
-KTAP version 1
-1..2
-    KTAP version 1
-    # Subtest: ext4_mballoc_test
-    # module: ext4
-    1..7
-        KTAP version 1
-        # Subtest: test_new_blocks_simple
-    # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-Failed: blocksize_bits=10
-        not ok 1 block_bits=10 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-    # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-Failed: blocksize_bits=12
-        not ok 2 block_bits=12 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-    # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-Failed: blocksize_bits=16
-        not ok 3 block_bits=16 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-    # test_new_blocks_simple: pass:0 fail:3 skip:0 total:3
-    not ok 1 test_new_blocks_simple
-    <snip>
-
-By tracing kunit_parser.py script, I could see the issue here is in the
-parsing of the "Subtest: test_new_blocks_simple". We end up associating
-everything below the subtest till "not ok 1 block_bits=10..." as
-diagnostic logs of the subtest, while these lons actually belong to the
-first of the 3 subtests under this test.
-
-I tired to figure out a way to fix the parsing but fixing one thing
-broke something else. Im starting to think that the issue is that there
-are 3 subtests under test_new_block_simple (array of 3 params passed to
-KUNIT_CASE_PARAM), but instead of creating 3 structured subtests, the
-KTAP output dumps the results of all 3 directly under
-subtest:test_new_blocks_simple. Which makes it tricky to determine where
-the diagnostic log/attributes of test_new_blocks_simple ends and that of its
-children begins.
-
-I'm not very familiar with KUnit framework so I though I'd reach out
-here for some pointers. I can dedicate some time fixing this but I'd
-like to know if this is something we need to somehow fix in parsing or
-during generation of the KTAP file itself? Any pointers would be
-appreciated.
+We might have discussed this already, in that case I forgot, sorry. But,
+why we do need to start the server again if switched from scx? Couldn't
+make sense of the comment that is already present.
 
 Thanks,
-Ojaswin
+Juri
 
 
