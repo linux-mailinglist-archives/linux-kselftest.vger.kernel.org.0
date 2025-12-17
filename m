@@ -1,34 +1,35 @@
-Return-Path: <linux-kselftest+bounces-47631-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E230CCC5E41
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 04:21:36 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77B87CC5DCB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 04:05:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E8F70301F5E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 03:21:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 29B823002D08
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Dec 2025 03:05:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF5E24468C;
-	Wed, 17 Dec 2025 03:21:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DB4D28C035;
+	Wed, 17 Dec 2025 03:05:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out28-76.mail.aliyun.com (out28-76.mail.aliyun.com [115.124.28.76])
+Received: from out28-194.mail.aliyun.com (out28-194.mail.aliyun.com [115.124.28.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92BAD256D;
-	Wed, 17 Dec 2025 03:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 227241E9915;
+	Wed, 17 Dec 2025 03:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765941684; cv=none; b=ocbdCe9j/dBjATrMco9rMVVt0YAc83HvTCbHr8xBkcoDooxZCT6xk5BVGZ4wbbiJdrlWd85oCuQxJzHxxdtL90Rp8wsYmU4pCqNQr0LCHwUmdHOT9CzKKjSnPi03CNCXgwW8y2pPkL/xhjk+YRZAnj6IDKNIzxNtEswD7Emx7wY=
+	t=1765940748; cv=none; b=a4u0TnNrH7J55cMv6JoHC+drnuePdqNu8IINfkXixK9Kd9vNESTlbPni85FFTeBZ1VXANsH9IDKvk5YvzNMRZ7X+lSi0F8iKs0gNwBVzswbD0eSseYGem5chjZ7C4S1/MivWhd7sGweDhRoSa/c0pE1E7Xhqz0kMZAxo1d3oMrA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765941684; c=relaxed/simple;
-	bh=BJYLY8Cl3VIqPm0/E/s987RAJ8gV7KIHLNAVJdCfeVQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A1jlM6XFcRxs1gqT8zTKj+xNlWFY/6Zy6htx4msTCYn5yMSUrnLQriPJSCrYnT5ZUBJ7qZjWouILKw5N6+twRJBWb0Rkka/9l+6Y0irgtVa4Odx50OI2BhnaADRMJBHOs5gQMf4+frYqE1ubJIDzxLPkQYXmDdR044hT8LCxBmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.76
+	s=arc-20240116; t=1765940748; c=relaxed/simple;
+	bh=PWVX4P/C70Eb5WxPZWLOS8flK6NgL+KCQmC97/5fE7U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Q7HgMIDclr0KZ53yn4KT6kkerbEG6FCoVQggvRXfspsSgXC0k2CXvdbfkAyHTgo+HP95wwGtUv4IcSIInJCZj9pxKz9dPULlIvmtGBCrtxFwHUpWwKFSYug/8szyaXoiYxV9TIrwNY+m/R15uXg4C1wz+N2aM04NElGr5gLM8u4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
-Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmLmlwM_1765940724 cluster:ay29)
+Received: from localhost.localdomain(mailfrom:shenxiaochen@open-hieco.net fp:SMTPD_---.fmLmm3Q_1765940732 cluster:ay29)
           by smtp.aliyun-inc.com;
-          Wed, 17 Dec 2025 11:05:31 +0800
+          Wed, 17 Dec 2025 11:05:36 +0800
 From: Xiaochen Shen <shenxiaochen@open-hieco.net>
 To: tony.luck@intel.com,
 	reinette.chatre@intel.com,
@@ -43,10 +44,12 @@ Cc: babu.moger@amd.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	shenxiaochen@open-hieco.net
-Subject: [PATCH v5 0/4] selftests/resctrl: Add Hygon CPUs support and bug fixes
-Date: Wed, 17 Dec 2025 11:04:52 +0800
-Message-ID: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
+Subject: [PATCH v5 1/4] selftests/resctrl: Fix a division by zero error on Hygon
+Date: Wed, 17 Dec 2025 11:04:53 +0800
+Message-ID: <20251217030456.3834956-2-shenxiaochen@open-hieco.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
+References: <20251217030456.3834956-1-shenxiaochen@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,100 +58,58 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The resctrl selftest currently exhibits several failures on Hygon CPUs
-due to missing vendor detection and edge-case handling specific to
-Hygon's architecture.
+Commit
 
-This patch series addresses three distinct issues:
-1. A division-by-zero crash in SNC detection on some platforms (e.g.,
-   Hygon).
-2. Missing CPU vendor detection, causing the test to fail with
-   "# Can not get vendor info..." on Hygon CPUs.
-3. Incorrect handling of non-contiguous CBM support on Hygon CPUs.
+  a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
 
-These changes enable resctrl selftest to run successfully on
-Hygon CPUs that support Platform QoS features.
+introduced the snc_nodes_per_l3_cache() function to detect the Intel
+Sub-NUMA Clustering (SNC) feature by comparing #CPUs in node0 with #CPUs
+sharing LLC with CPU0. The function was designed to return:
+  (1) >1: SNC mode is enabled.
+  (2)  1: SNC mode is not enabled or not supported.
 
-Maintainer notes:
------------------
-Patch 1: selftests/resctrl: Fix a division by zero error on Hygon
- - This is a candidate for backport with "Fixes:" tag.
+However, on certain Hygon CPUs, #CPUs sharing LLC with CPU0 is actually
+less than #CPUs in node0. This results in snc_nodes_per_l3_cache()
+returning 0 (calculated as cache_cpus / node_cpus).
 
-Patch 2: selftests/resctrl: Define CPU vendor IDs as bits to match usage
- - This is *not* a candidate for backport since it is an enhancement and
-   preparatory patch for patch 3.
+This leads to a division by zero error in get_cache_size():
+  *cache_size /= snc_nodes_per_l3_cache();
 
-Patch 3: selftests/resctrl: Add CPU vendor detection for Hygon
-Patch 4: selftests/resctrl: Fix non-contiguous CBM check for Hygon
- - Even though they are fixes they are *not* candidates for backport
-   since they are based on another patch series (x86/resctrl: Fix
-   Platform QoS issues for Hygon) which is in process of being added to
-   resctrl.
------------------
+Causing the resctrl selftest to fail with:
+  "Floating point exception (core dumped)"
 
-Changelog:
-v5:
-- Patch 2:
-  1. Fix a nit of "reverse fir ordering" of the variable declarations in
-     detect_vendor() in v4 patch series (Reinette).
-  2. Add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>.
+Fix the issue by ensuring snc_nodes_per_l3_cache() returns 1 when SNC
+mode is not supported on the platform.
 
-v4:
-- Cover letter: add maintainer notes outlining how these patches to be
-  handled (Reinette).
-- Re-organize the patch series to move original patch 3 to the beginning
-  of series. The patch order has changed between v3 and v4 (Reinette):
-     v3    ->    v4
-  patch #3 -> patch #1
-  patch #1 -> patch #2
-  patch #2 -> patch #3
-  patch #4 -> patch #4
-- Patch 2:
-  1. Resolve a conflict against latest upstream kernel (Reinette).
-  2. Fix a nit to maintain the reverse fir ordering of variables in
-     detect_vendor() (Reinette).
-- Patch 3: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-- Patch 4: move the maintainer note into the cover letter (Reinette).
+Fixes: a1cd99e700ec ("selftests/resctrl: Adjust effective L3 cache size with SNC enabled")
+Signed-off-by: Xiaochen Shen <shenxiaochen@open-hieco.net>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>
+---
+ tools/testing/selftests/resctrl/resctrlfs.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-v3:
-- Patch 1:
-  1. Update the return types of detect_vendor() and get_vendor() from
-     'int' to 'unsigned int' to align with their usage as bitmask values
-     and to prevent potentially risky type conversions (Fenghua).
-  2. Split the code changes of "define CPU vendor IDs as bits to match
-     usage" from original patch 1 into a separate patch (this patch,
-     suggested by Fenghua and Reinette).
-  3. Introduce the flag 'initialized' to simplify the get_vendor() ->
-     detect_vendor() logic (Reinette).
-- Patch 2 (original patch 1):
-  1. Move the code changes of "define CPU vendor IDs as bits to match
-     usage" into patch 1.
-- Patch 3 (original patch 2): 
-  1. Fix a nit of code comment for affected platforms (Fenghua).
-  2. Add Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>.
-- Patch 4 (original patch 3): 
-  1. Fix a nit to avoid calling get_vendor() twice (Fenghua).
-  2. Add Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>.
-
-v2:
-- Patch 1: switch all of the vendor id bitmasks to use BIT() (Reinette)
-- Patch 2: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-- Patch 3: add Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-           add a maintainer note to highlight it is not a candidate for
-	   backport (Reinette)
-
-Xiaochen Shen (4):
-  selftests/resctrl: Fix a division by zero error on Hygon
-  selftests/resctrl: Define CPU vendor IDs as bits to match usage
-  selftests/resctrl: Add CPU vendor detection for Hygon
-  selftests/resctrl: Fix non-contiguous CBM check for Hygon
-
- tools/testing/selftests/resctrl/cat_test.c    |  6 ++--
- tools/testing/selftests/resctrl/resctrl.h     |  8 ++++--
- .../testing/selftests/resctrl/resctrl_tests.c | 28 +++++++++++++------
- tools/testing/selftests/resctrl/resctrlfs.c   | 10 +++++++
- 4 files changed, 39 insertions(+), 13 deletions(-)
-
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 195f04c4d158..b9c1bfb6cc02 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -243,6 +243,16 @@ int snc_nodes_per_l3_cache(void)
+ 		}
+ 		snc_mode = cache_cpus / node_cpus;
+ 
++		/*
++		 * On some platforms (e.g. Hygon),
++		 * cache_cpus < node_cpus, the calculated snc_mode is 0.
++		 *
++		 * Set snc_mode = 1 to indicate that SNC mode is not
++		 * supported on the platform.
++		 */
++		if (!snc_mode)
++			snc_mode = 1;
++
+ 		if (snc_mode > 1)
+ 			ksft_print_msg("SNC-%d mode discovered.\n", snc_mode);
+ 	}
 -- 
 2.47.3
 
