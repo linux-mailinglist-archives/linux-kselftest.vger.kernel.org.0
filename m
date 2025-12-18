@@ -1,257 +1,105 @@
-Return-Path: <linux-kselftest+bounces-47701-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47702-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33CAFCCB7E3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 11:52:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CAEDCCB95C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 12:21:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 005153014D81
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 10:47:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6FCB6305A80B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 11:18:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A073128CC;
-	Thu, 18 Dec 2025 10:47:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 860F129B766;
+	Thu, 18 Dec 2025 11:18:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GdZKhxKP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="suPfyznc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251012E9733;
-	Thu, 18 Dec 2025 10:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3BA184;
+	Thu, 18 Dec 2025 11:18:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766054847; cv=none; b=gce5RPQz06Qw8U+HkPKdZE063ostJdZ+4DB7dgQElkP+t2KrFN8u7ubZGijr+pOzbKdj5PC85WzEO6NzRQVWMXd/yBoxAmcCqs//pKkf0daAiz6T7GAEajV6H+UHP2h9y+/Q6q94f9fJSW9NR4tgEbN+2LbNbl4TIPvloASRgWA=
+	t=1766056692; cv=none; b=F0ZGfeQzqNyW6LJZJsOiYNEazEV1QxZTSWBBdQc5M9nvrEKcFdTsGDCk8PsQEbRdv+894XvlWJfUPG5ROrEpVxothgDuPyw/uUKMo+295qen+rW3vMCrjZmFyPQsm00xX45IrawP4dcdVAKrVDHnMxmKxaYEB32VIhrZqRe7rOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766054847; c=relaxed/simple;
-	bh=+J6VrrKvxzlI0Qhs/yCUMpA1jxf2mJiO5nM2Rzsh4mM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XtnYJC/SVbhPSqEW9Uqosc3cH4N3i5WN8iSwcroaoBJv9WGxzMRaawBtvM4Wxk5vx3n0Sy8MLL7sIdJB8z03C9v7L9n8CI2QTgtBouZtggR6SFCowKnCFmEPtX9T3Po6/YRRNYdnjgnirpHzPpYxkUOlekH68UVIxzL3YRZwuQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GdZKhxKP; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BI8mRkW022697;
-	Thu, 18 Dec 2025 10:46:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=h7nffq
-	VuISrVST5s4ERHAccrCz5obk5Y06TTgoLbaBo=; b=GdZKhxKP9dGMPRXuZUXYfi
-	Z+7XtdiuV+0fumLxedbt3dz7XPCQv3Xm3Fg80Atlz0TFrLxc5oNYaxbXYcXlGU/2
-	EjLCi/XvVXd5gOya+7x+zhY5Gv6mBi5TEFg7yrZo/MUZmgtBD1yMciNBUNkV0ezN
-	FddF0jmz3sPOe5cZBWRENhSomWIKexGm9kt22r0xnkXnCvvpYgYcT2IyHItyKon/
-	xWea1oDTtHXk54u+c8nTE6OHqhcsUdUc7z5dhKdtimxYOKaszYNaKtn3GI+68y4q
-	LzRUuyO11nCkjRxjoq/0ISka2elDqhdEi+4VGD4XXXB0wSd4QaTyLXi114wD++/A
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0ytvj3a3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Dec 2025 10:46:07 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BIAk6qq025324;
-	Thu, 18 Dec 2025 10:46:06 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0ytvj3a0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Dec 2025 10:46:06 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BI7X9BG003064;
-	Thu, 18 Dec 2025 10:46:05 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4b1kykypup-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 18 Dec 2025 10:46:05 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BIAk3Wo55247348
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 18 Dec 2025 10:46:03 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9167E2004B;
-	Thu, 18 Dec 2025 10:46:03 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3AA2A20043;
-	Thu, 18 Dec 2025 10:46:02 +0000 (GMT)
-Received: from li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com (unknown [9.124.210.77])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 18 Dec 2025 10:46:02 +0000 (GMT)
-Date: Thu, 18 Dec 2025 16:16:00 +0530
-From: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-To: David Gow <davidgow@google.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <raemoar63@gmail.com>, linux-kernel@vger.kernel.org
-Subject: Re: Issue in parsing of tests that use KUNIT_CASE_PARAM
-Message-ID: <aUPbaCU-w_SI5ezq@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
-References: <aULJpTvJDw9ctUDe@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
- <aUOrH1iapKnOaZEj@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
- <CABVgOSk5UJf00=uEsk4chEJpKoPeYqXbk+czM7ipoD_0eWiedg@mail.gmail.com>
- <aUPNpGgj3hmA3aZL@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
- <CABVgOSkmd2K83WqvRZePzVEbB4kZmBdLO-yTuqoZjz-+YdmaAg@mail.gmail.com>
+	s=arc-20240116; t=1766056692; c=relaxed/simple;
+	bh=sl+2QZ3wnll/UsCDTfkEWXHpVidEQ52naoIGPmwEE6s=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WPnH5wfJ574IhOUA7UOwiLorr0LumG9g6cZjH5QIUp98vuUx4YsZGfrU6qLOBCjboA5PB5DcBsbAZ/4HH7grDERAn/OavdwfcABC0CPGd6yw3Xq3WuNP6LEPHe84m1NeWKgdyjnv0/QTqVHbWfdISMXAeqKwbVME1LXhdnclMK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=suPfyznc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0ADDC4CEFB;
+	Thu, 18 Dec 2025 11:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766056691;
+	bh=sl+2QZ3wnll/UsCDTfkEWXHpVidEQ52naoIGPmwEE6s=;
+	h=From:Subject:Date:To:Cc:From;
+	b=suPfyzncV4U7Magq7xXnHpUAbRFyNJ7ra6AjDQOYApxP2etTiHoXcgTMhZkEpQW1f
+	 fE9asDTF0H/kC09ZufZyPsAdwpLEWp4/q6tpVxkYFTUbLeFe8YD2hLwpadkSlMSVdi
+	 W79ilLceJjkX+TDIh8B6nVOmiZRE9vWHlr8FcBLoMloLuvxwaFeLqmttRb/Ec+txV7
+	 PI+GHoYcC6Eke5ejNiRXZNoUTPGrsxoPDOXAr6dkJAq4razsTwxJ2UuobM+v1ZP0+e
+	 PGHU5pLQLnVSyN7JvIyGoMtA0+Ztzi2D9cT3VB4GgMVF5uWuRqABiO3uQHvY7BYi1I
+	 x/Y3xbZs7GcLg==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v3 0/3] selftests/filelock: Make output more kselftestish
+Date: Thu, 18 Dec 2025 11:17:59 +0000
+Message-Id: <20251218-selftest-filelock-ktap-v3-0-62acfea940dd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABVgOSkmd2K83WqvRZePzVEbB4kZmBdLO-yTuqoZjz-+YdmaAg@mail.gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAyMyBTYWx0ZWRfX1T8QRE7DGkqK
- iNYOP+sMH41Xa6kDCfSuEApakRCHPK29vi9khOMmdmEIDm/Q/HSO9/4vXtQKma+A4WU2rfREFkB
- fljof1xdihn3dPhESmGVDmyvPQb2GZMX9fb81Rf4PgY/sEbWGFjVWgVaSuN6qLwvyfBW5FDEFN3
- wWCOpzOdXTpPLyXsNRc01Ii6fkc7vmTcpW6R+zJrNVmduvcdcLSCx715jqnDysJ5j4zCaiiP9Iw
- EbNJUzjO4kcDGn76P/XDzKc2AMat8QRplrYInSAintzpyvaAYXoh5MuMznDL7dbv3dhuzLpCrE7
- VqQtcKP1KBY1wJ10OYQ7I9g9GLpP14uIY4fVith3VWoQp2HVqky5b+zy3NRWCGl3YqjNNAILAda
- cjtHUKCMjnDSFzxfnyvqxKo610Y6zQ==
-X-Proofpoint-ORIG-GUID: 9CaPX65IyzPF-U35H22hZfpirz_tTcMi
-X-Authority-Analysis: v=2.4 cv=QtRTHFyd c=1 sm=1 tr=0 ts=6943db6f cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=1XWaLZrsAAAA:8 a=07d9gI8wAAAA:8 a=VnNF1IyMAAAA:8
- a=ERvZ9_xW7u35jqeY_7oA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=e2CUPOnPG4QKp8I52DXD:22
-X-Proofpoint-GUID: k8zU0rXM6PreY7IbafpXsSNvuX16m-Kd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-18_01,2025-12-17_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 impostorscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2512130023
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOfiQ2kC/3XNTQrDIBCG4asU17U4Juanq96jdGHjmEgkBhVpC
+ bl7TQqFLrJ8P5hnFhLQGwzkelqIx2SCcVOO4nwi3SCnHqlRuQlnXLCKlTSg1RFDpNpYtK4b6Rj
+ lTDWX2LaNZAoZycezR21eO3x/5B5MiM6/9z8JtvVLNtAckQkoo6oEqetaQ9FWtxH9hPbifE82M
+ /GfAwzEocOzo4VWHJ616Ar556zr+gFN8/dtBQEAAA==
+X-Change-ID: 20250604-selftest-filelock-ktap-f2ae998a0de0
+To: Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1040; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=sl+2QZ3wnll/UsCDTfkEWXHpVidEQ52naoIGPmwEE6s=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpQ+Lv3PP/391tKLfyXmA7XHOAiQAOInvh/tP70
+ 92CcWpECceJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUPi7wAKCRAk1otyXVSH
+ 0JCRB/wNkQfzS/8Vq2fnMeSjuL2kiE/Baa/qXVtEWwucpn1OtYcu5g9iix8omp7dK+nZF0Rr0x5
+ 6Wziu3F3TqLyEFF4IB8tbAkle/kKZWgC1b/w/Wrx/VCWp8jxlT94oKsI/x2Xd8argNlK51IDEL8
+ uEUS21CJYNV+PAKrKdAGJXR837pvvPsNAnrRR8xeIJ98qScoMWyzKEM5q+qY7Fs/5Bnfs9nwvqB
+ L9GBy4sLZZzOZipd95L1GLsnBjYsYaAFkaob6XEU+ZyYXvsDNXg6094Kt1LTozLZaDpD/JjsFpd
+ MHeVrNTAtNwBVMID9Vj8OpQ63YOByVPeOQXVbMpJa4E6U1H6
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Thu, Dec 18, 2025 at 06:15:31PM +0800, David Gow wrote:
-> On Thu, 18 Dec 2025 at 17:47, Ojaswin Mujoo <ojaswin@linux.ibm.com> wrote:
-> >
-> > On Thu, Dec 18, 2025 at 04:58:33PM +0800, David Gow wrote:
-> > > On Thu, 18 Dec 2025 at 15:20, Ojaswin Mujoo <ojaswin@linux.ibm.com> wrote:
-> > > >
-> > > > On Wed, Dec 17, 2025 at 08:47:57PM +0530, Ojaswin Mujoo wrote:
-> > > > > Hello,
-> > > > >
-> > > > > While writing some Kunit tests for ext4 filesystem, I'm encountering an
-> > > > > issue in the way we display the diagnostic logs upon failures, when
-> > > > > using KUNIT_CASE_PARAM() to write the tests.
-> > > > >
-> > > > > This can be observed by patching fs/ext4/mballoc-test.c to fail
-> > > > > and print one of the params:
-> > > > >
-> > > > > --- a/fs/ext4/mballoc-test.c
-> > > > > +++ b/fs/ext4/mballoc-test.c
-> > > > > @@ -350,6 +350,8 @@ static int mbt_kunit_init(struct kunit *test)
-> > > > >         struct super_block *sb;
-> > > > >         int ret;
-> > > > >
-> > > > > +       KUNIT_FAIL(test, "Failed: blocksize_bits=%d", layout->blocksize_bits);
-> > > > > +
-> > > > >         sb = mbt_ext4_alloc_super_block();
-> > > > >         if (sb == NULL)
-> > > > >                 return -ENOMEM;
-> > > > >
-> > > > > With the above change, we can observe the following output (snipped):
-> > > > >
-> > > > > [18:50:25] ============== ext4_mballoc_test (7 subtests) ==============
-> > > > > [18:50:25] ================= test_new_blocks_simple  ==================
-> > > > > [18:50:25] [FAILED] block_bits=10 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-> > > > > [18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-> > > > > [18:50:25] Failed: blocksize_bits=12
-> > > > > [18:50:25] [FAILED] block_bits=12 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-> > > > > [18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-> > > > > [18:50:25] Failed: blocksize_bits=16
-> > > > > [18:50:25] [FAILED] block_bits=16 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
-> > > > > [18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
-> > > > > [18:50:25] Failed: blocksize_bits=10
-> > > > > [18:50:25]     # test_new_blocks_simple: pass:0 fail:3 skip:0 total:3
-> > > > > [18:50:25] ============= [FAILED] test_new_blocks_simple ==============
-> > > > > <snip>
-> > > > >
-> > > > > Note that the diagnostic logs don't show up correctly. Ideally they
-> > > > > should be before test result but here the first [FAILED] test has no
-> > > > > logs printed above whereas the last "Failed: blocksize_bits=10" print
-> > > > > comes after the last subtest, when it actually corresponds to the first
-> > > > > subtest.
-> > > > >
-> > > > > The KTAP file itself seems to have diagnostic logs in the right place:
-> > > > >
-> > > > > KTAP version 1
-> > > > > 1..2
-> > > > >     KTAP version 1
-> > > > >     # Subtest: ext4_mballoc_test
-> > > > >     # module: ext4
-> > > > >     1..7
-> > > > >         KTAP version 1
-> > > > >         # Subtest: test_new_blocks_simple
-> > > >
-> > > > So looking into this a bit more and comparing the parameterized output
-> > > > with non parameterized output, I'm seeing that the difference is that
-> > > > output via KUNIT_CASE_PARAM is not printing the test plan line right
-> > > > here. This plan sort of serves as divider between the parent and the 3
-> > > > children's logs and without it our parsing logic gets confused. When I
-> > > > manually added a "1..3" test plan I could see the parsing work correctly
-> > > > without any changes to kunit_parser.py.
-> > > >
-> > >
-> > > Thanks for looking into this!
-> > >
-> > > There's been a bit of back-and-forth on how to include the test plan
-> > > line for the parameterised tests: it's not always possible to know how
-> > > many times a test will run in advance if the gen_params function is
-> > > particularly complicated.
-> > >
-> > > We did have a workaround where array parameters would record the array
-> > > size, but there were a couple of tests which were wrapping the
-> > > gen_params function to skip / add entries which weren't in the array.
-> > >
-> > > One "fix" would be to use KUNIT_CASE_PARAM_WITH_INIT() and have an
-> > > init function which calls kunit_register_params_array(), and then use
-> > > kunit_array_gen_params() as the generator function: this has an escape
-> > > hatch which will print the test plan.
-> > >
-> > > Otherwise, as a hack, you could effectively revert
-> > > https://lore.kernel.org/linux-kselftest/20250821135447.1618942-2-davidgow@google.com/
-> > > — which would fix the issue (but break some other tests).
-> > >
-> > > Going through and fixing this properly has been on my to-do list; with
-> > > some combination of fixing tests which modify the gen_params function
-> > > and improving the parsing to better handle cases without the test
-> > > plan.
-> > >
-> > > Cheers,
-> > > -- David
-> >
-> > Hi David,
-> >
-> > Thanks for the workaround, KUNIT_CASE_PARAM_WITH_INIT() did the trick!
-> >
-> > So I'm just wondering if it makes sense to still have a placeholder test
-> > plan line in cases we can't determine the number of tests. I think something
-> > like 1..X should be enough to not throw off the parsing. (Although I
-> > think this might not be exactly compliant to KTAP).
-> >
-> Hmm… that could be a good idea as something to add to KTAPv2.
-> 
-> One other option might be to use the proposed KTAP metadata's
-> :ktap_test: line as a way of delimiting tests in the parser:
-> https://lwn.net/ml/all/20251107052926.3403265-4-rmoar@google.com/
+This series makes the output from the ofdlocks test a bit easier for
+tooling to work with, and also ignores the generated file while we're
+here.
 
-Ohh, nice that can also be a good idea.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v3:
+- Rebase onto v6.19-rc1.
+- Link to v2: https://lore.kernel.org/r/20251015-selftest-filelock-ktap-v2-0-f5fd21b75c3a@kernel.org
 
-> 
-> In the meantime, I'm going to look into if we can update all of the
-> tests using KUNIT_ARRAY_PARAM() with modified gen_params, so we can
-> get the correct test plan in most cases.
+Changes in v2:
+- Rebase onto v6.18-rc1.
+- Link to v1: https://lore.kernel.org/r/20250818-selftest-filelock-ktap-v1-0-d41af77f1396@kernel.org
 
-Sure, thanks for looking into this issue and providing a quick
-workaround!
+---
+Mark Brown (3):
+      kselftest/filelock: Use ksft_perror()
+      kselftest/filelock: Report each test in oftlocks separately
+      kselftest/filelock: Add a .gitignore file
 
-Regards,
-ojaswin
+ tools/testing/selftests/filelock/.gitignore |  1 +
+ tools/testing/selftests/filelock/ofdlocks.c | 94 +++++++++++++----------------
+ 2 files changed, 42 insertions(+), 53 deletions(-)
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20250604-selftest-filelock-ktap-f2ae998a0de0
 
-> 
-> Cheers,
-> -- David
-
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
 
