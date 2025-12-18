@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-47702-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CAEDCCB95C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 12:21:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F946CCB95F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 12:21:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6FCB6305A80B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 11:18:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 760793065E20
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 11:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 860F129B766;
-	Thu, 18 Dec 2025 11:18:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8465D3164B4;
+	Thu, 18 Dec 2025 11:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="suPfyznc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s4jQESNo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3BA184;
-	Thu, 18 Dec 2025 11:18:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6E03164A5;
+	Thu, 18 Dec 2025 11:18:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766056692; cv=none; b=F0ZGfeQzqNyW6LJZJsOiYNEazEV1QxZTSWBBdQc5M9nvrEKcFdTsGDCk8PsQEbRdv+894XvlWJfUPG5ROrEpVxothgDuPyw/uUKMo+295qen+rW3vMCrjZmFyPQsm00xX45IrawP4dcdVAKrVDHnMxmKxaYEB32VIhrZqRe7rOg=
+	t=1766056693; cv=none; b=lgWpWjZxFz8oMp+JxxsDHCcs7ANzVuHLEXbipttmitipeo0AvUaZlPuU9p9sLelb/XpHR510akG0hULIWEc77YUSrq3HIC9vJfd7LBMH7Q1pvA7VBis2D5r5gkO6kxMfL2s9oWhUSx6OmmIJPA84q00HaEdXclMSwF46/tIwbOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766056692; c=relaxed/simple;
-	bh=sl+2QZ3wnll/UsCDTfkEWXHpVidEQ52naoIGPmwEE6s=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WPnH5wfJ574IhOUA7UOwiLorr0LumG9g6cZjH5QIUp98vuUx4YsZGfrU6qLOBCjboA5PB5DcBsbAZ/4HH7grDERAn/OavdwfcABC0CPGd6yw3Xq3WuNP6LEPHe84m1NeWKgdyjnv0/QTqVHbWfdISMXAeqKwbVME1LXhdnclMK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=suPfyznc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0ADDC4CEFB;
-	Thu, 18 Dec 2025 11:18:10 +0000 (UTC)
+	s=arc-20240116; t=1766056693; c=relaxed/simple;
+	bh=Fd1XevUti5siz39tfguTapy38Yaj6svZHWG+xHmOHVE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jS7T94jSwCPLJi/G3z9XrjrVu/xRh9Jd55Jfo8hb+atp6+/djt+0MmtzB1UpOnXJIfyBIQR+tsYtvjeZ6pvUy7qfGPaHp2vJzzREca8G/llKyPsVbUZP+c/NCkfXuz5Q3b66DG2Z3jgMLrz3PQcw4vUXh0uyNdmJ+0r1jAOKa00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s4jQESNo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C2DC116C6;
+	Thu, 18 Dec 2025 11:18:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766056691;
-	bh=sl+2QZ3wnll/UsCDTfkEWXHpVidEQ52naoIGPmwEE6s=;
-	h=From:Subject:Date:To:Cc:From;
-	b=suPfyzncV4U7Magq7xXnHpUAbRFyNJ7ra6AjDQOYApxP2etTiHoXcgTMhZkEpQW1f
-	 fE9asDTF0H/kC09ZufZyPsAdwpLEWp4/q6tpVxkYFTUbLeFe8YD2hLwpadkSlMSVdi
-	 W79ilLceJjkX+TDIh8B6nVOmiZRE9vWHlr8FcBLoMloLuvxwaFeLqmttRb/Ec+txV7
-	 PI+GHoYcC6Eke5ejNiRXZNoUTPGrsxoPDOXAr6dkJAq4razsTwxJ2UuobM+v1ZP0+e
-	 PGHU5pLQLnVSyN7JvIyGoMtA0+Ztzi2D9cT3VB4GgMVF5uWuRqABiO3uQHvY7BYi1I
-	 x/Y3xbZs7GcLg==
+	s=k20201202; t=1766056693;
+	bh=Fd1XevUti5siz39tfguTapy38Yaj6svZHWG+xHmOHVE=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=s4jQESNokWgJgTx2FJb55al/IKWoLgCjwM1bqgJJQsdf3znID+jQtiA3ZII4I7Wlk
+	 7MQr56QrVgiMXRj5wxNHWJn3aPNyafcy0zr0nMlFQ2X8B0Rzd7KuSl3nI0io64zIeW
+	 UrR1TFACN6E4Hch5iyYHA4Xm6RynQRw/7dxu3FOQmEGwKW9/L/kS+865TYePmFiXdL
+	 kqhpDdTtEohLtRviP1djjj++sthRcIiuJ0NKTrDRvdaLlcsoC2iLnl0pAgg1v+a7om
+	 TeII2nxaem+CbS4qDiuH0aF/nDrzP/kHBQEPxSYljYCenLnsZ3YsSyzGUs9ss0P+W2
+	 rdRiW+9BdpdrQ==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH v3 0/3] selftests/filelock: Make output more kselftestish
-Date: Thu, 18 Dec 2025 11:17:59 +0000
-Message-Id: <20251218-selftest-filelock-ktap-v3-0-62acfea940dd@kernel.org>
+Date: Thu, 18 Dec 2025 11:18:00 +0000
+Subject: [PATCH v3 1/3] kselftest/filelock: Use ksft_perror()
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,56 +50,57 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOfiQ2kC/3XNTQrDIBCG4asU17U4Juanq96jdGHjmEgkBhVpC
- bl7TQqFLrJ8P5hnFhLQGwzkelqIx2SCcVOO4nwi3SCnHqlRuQlnXLCKlTSg1RFDpNpYtK4b6Rj
- lTDWX2LaNZAoZycezR21eO3x/5B5MiM6/9z8JtvVLNtAckQkoo6oEqetaQ9FWtxH9hPbifE82M
- /GfAwzEocOzo4VWHJ616Ar556zr+gFN8/dtBQEAAA==
-X-Change-ID: 20250604-selftest-filelock-ktap-f2ae998a0de0
+Message-Id: <20251218-selftest-filelock-ktap-v3-1-62acfea940dd@kernel.org>
+References: <20251218-selftest-filelock-ktap-v3-0-62acfea940dd@kernel.org>
+In-Reply-To: <20251218-selftest-filelock-ktap-v3-0-62acfea940dd@kernel.org>
 To: Shuah Khan <shuah@kernel.org>, Jeff Layton <jlayton@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1040; i=broonie@kernel.org;
- h=from:subject:message-id; bh=sl+2QZ3wnll/UsCDTfkEWXHpVidEQ52naoIGPmwEE6s=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpQ+Lv3PP/391tKLfyXmA7XHOAiQAOInvh/tP70
- 92CcWpECceJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUPi7wAKCRAk1otyXVSH
- 0JCRB/wNkQfzS/8Vq2fnMeSjuL2kiE/Baa/qXVtEWwucpn1OtYcu5g9iix8omp7dK+nZF0Rr0x5
- 6Wziu3F3TqLyEFF4IB8tbAkle/kKZWgC1b/w/Wrx/VCWp8jxlT94oKsI/x2Xd8argNlK51IDEL8
- uEUS21CJYNV+PAKrKdAGJXR837pvvPsNAnrRR8xeIJ98qScoMWyzKEM5q+qY7Fs/5Bnfs9nwvqB
- L9GBy4sLZZzOZipd95L1GLsnBjYsYaAFkaob6XEU+ZyYXvsDNXg6094Kt1LTozLZaDpD/JjsFpd
- MHeVrNTAtNwBVMID9Vj8OpQ63YOByVPeOQXVbMpJa4E6U1H6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=980; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=Fd1XevUti5siz39tfguTapy38Yaj6svZHWG+xHmOHVE=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpQ+Lw5le3NghYKb0VoezuYR5Mfyi210r3+HrCX
+ rB2fsjw61SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUPi8AAKCRAk1otyXVSH
+ 0HtrCACF8ls903dx4oQlZAwSuDP2jYi0vKDFOl5JJMdKVriROawm4ASM8SvOwHuqRDL1MEa/GCg
+ vo0MxSNY02KlJ31rsg8tYU9QIBoM2KtG+cbd57UnCDBeK2r2MYU3e9YbmG5SRPd0azCuaDy/g70
+ Q0qwcl/Ekhue6hE23Af8ELs9+jStNyCND2yur0mXDHAc9x7ZB511kLcTwarhsA3T1jsWmuOIoKk
+ loJa+ExWmy+MLvRge3clcDT2cVWUvYUcOg9tp/9hzgQIJNZpWdIfqHoLQASlrxHdmY285XmgidI
+ Fu2cw930r8zRiRP4TvqrsM4pMjwFw0u02/K+pqBggpZwESTS
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-This series makes the output from the ofdlocks test a bit easier for
-tooling to work with, and also ignores the generated file while we're
-here.
+The ofdlocks test reports some errors via perror() which does not produce
+KTAP output, convert to ksft_perror() which does.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Changes in v3:
-- Rebase onto v6.19-rc1.
-- Link to v2: https://lore.kernel.org/r/20251015-selftest-filelock-ktap-v2-0-f5fd21b75c3a@kernel.org
+ tools/testing/selftests/filelock/ofdlocks.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changes in v2:
-- Rebase onto v6.18-rc1.
-- Link to v1: https://lore.kernel.org/r/20250818-selftest-filelock-ktap-v1-0-d41af77f1396@kernel.org
+diff --git a/tools/testing/selftests/filelock/ofdlocks.c b/tools/testing/selftests/filelock/ofdlocks.c
+index ff8d47fc373a..2d3b06ce5e5e 100644
+--- a/tools/testing/selftests/filelock/ofdlocks.c
++++ b/tools/testing/selftests/filelock/ofdlocks.c
+@@ -16,7 +16,7 @@ static int lock_set(int fd, struct flock *fl)
+ 	fl->l_whence = SEEK_SET;
+ 	ret = fcntl(fd, F_OFD_SETLK, fl);
+ 	if (ret)
+-		perror("fcntl()");
++		ksft_perror("fcntl()");
+ 	return ret;
+ }
+ 
+@@ -28,7 +28,7 @@ static int lock_get(int fd, struct flock *fl)
+ 	fl->l_whence = SEEK_SET;
+ 	ret = fcntl(fd, F_OFD_GETLK, fl);
+ 	if (ret)
+-		perror("fcntl()");
++		ksft_perror("fcntl()");
+ 	return ret;
+ }
+ 
 
----
-Mark Brown (3):
-      kselftest/filelock: Use ksft_perror()
-      kselftest/filelock: Report each test in oftlocks separately
-      kselftest/filelock: Add a .gitignore file
-
- tools/testing/selftests/filelock/.gitignore |  1 +
- tools/testing/selftests/filelock/ofdlocks.c | 94 +++++++++++++----------------
- 2 files changed, 42 insertions(+), 53 deletions(-)
----
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20250604-selftest-filelock-ktap-f2ae998a0de0
-
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+-- 
+2.47.3
 
 
