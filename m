@@ -1,281 +1,193 @@
-Return-Path: <linux-kselftest+bounces-47679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB34CCA6A0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 07:12:47 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25AA7CCA996
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 08:14:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id F1838300F655
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 06:12:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B707530140F0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 07:14:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E2031064A;
-	Thu, 18 Dec 2025 06:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B8C238C16;
+	Thu, 18 Dec 2025 07:14:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W4ovaAjq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UtWQgTcB";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="kD6QzC6G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385E929DB64
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Dec 2025 06:12:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E07271448
+	for <linux-kselftest@vger.kernel.org>; Thu, 18 Dec 2025 07:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766038362; cv=none; b=psvwkVDFwbDzP8mwv2DvI+IWocfNxldeRobhiSOxXHV7DXzgIk87zzRH0lFZ9iPQu+vS3gjXgIwwqXPdwMgU8ES+M9vNP7tb0ck7KHN3tJjq4Dxq+Zd/E6K+TO+LlTog1MjILqSLB7XaTYThpMiA7TucmQXUObGhggbbNqck62A=
+	t=1766042061; cv=none; b=HvnO09zD9bG3QJw52oKR7hO2LseCBDfduaEvCvldSCjunww/hFrrVmP536bXFg/gqE14Vv+dzc+eT6U6gSM97EDvXaGDlPEQALHoJMlNZvP5bEHl0k+P0159CM9BCxCjIwgKzocuDC6F/iUiCExQI9aqt4n6yU4IEPfVqnKXhrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766038362; c=relaxed/simple;
-	bh=wEbNfvFLSgpoDTa2CXI6lDz/SA/cQzbA1OpeKCNHwYw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KUMlOOHTYN8cEvRvUskQZvirc+MP1Ex5v+9iCE5GF3q/H7QXwjKc6xrqonottKnchc/XbNJ1o1UBfo2fMSvdNxIvciPZPrR3+sePD/ya8FYqO79+xa7RdlIhKFSAKtCe4kzmF4JZWaEel2Q/7zxoqzIS837qgpQ4WfeZs1WcKBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W4ovaAjq; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-430f5ecaa08so80423f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 22:12:39 -0800 (PST)
+	s=arc-20240116; t=1766042061; c=relaxed/simple;
+	bh=pdMUtduMXCj5whENGA9N7DnLbY+JEMVMPlaas2KdqgI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zgfj1n5gb/FvIt1cByRPBTvcxjS6/QEXTCzen5eyWYqsiUjcY2peiKfHN0S5MHe4A9FuBqxsFmvNgiWY368SiILCfwpcWsiZLLB9wKcx8QHhzfkf+l7x9kWB0M+sg2mRYNDM4e31qnd4MnbRVg2k3G9IPXGquZs0stkepW3NzW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UtWQgTcB; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=kD6QzC6G; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766042059;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
+	b=UtWQgTcBr3AZWEy1jhWAP0bDuaGCQJTMMT+/p6cmNv+M1uKaMgTdBPkIyWMqpCA5mM18As
+	v/9Ym2hI8MvDZQXWBHIaiNrP18TtjDwSkCXXG+HoEcaw8F34EWgBWSpAaPprX9rcSvKg2q
+	7V0BPshHNlmEzjZxVNeK9Mx1Ee7g9PI=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-304-NPO1NmuiMHGwOIjMrysd0w-1; Thu, 18 Dec 2025 02:14:17 -0500
+X-MC-Unique: NPO1NmuiMHGwOIjMrysd0w-1
+X-Mimecast-MFC-AGG-ID: NPO1NmuiMHGwOIjMrysd0w_1766042056
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-430f5dcd4d3so155121f8f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 23:14:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766038358; x=1766643158; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V4PmGHGys0uk8qtztMxfH3kYm2JHZBgw1rSPx0Wsx0Y=;
-        b=W4ovaAjqw554jEX/P3eHKQ2o2+5N9tIexkhq6M2Pq1ck3s9YskaS2zWwpzvP/v5O5k
-         vhCchuHzqgwQ1j+6NpfXNw9uiw4jMpZ2BYL70LgvZahaFMBsWrnEo4DcewiTVOufQgDS
-         LpmkExvGmqiK7dxV8Dm1LSHVPqAUUQXv5jSqUgzfpfaUX6DibK+GqbfmOZieP3ZANUuo
-         MZY56CUJOUsyY4UY2kZpkjKXSTAmLepp8OaUoLBSS2VYDX0mdzu8Fo4n/8aTx32u9fhJ
-         2gBNKaBKahrxjNczJdCVc0mvq8/r/YZHhnDzDGwi6pQK+lVmcOUcEPD7z26IxbbE5652
-         TyNA==
+        d=redhat.com; s=google; t=1766042056; x=1766646856; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
+        b=kD6QzC6GiQmYrdH4YxH7W2Gj77eHBrbcWvGvJrulBJpYs+ya+7f8fIv2uGgQ/O0B8m
+         Fz5DMDxstvMDHrBdM9GMU7QwEwy3bf5WMX+/P6PwdEyqeYwxl/GWkR07iF9RrfU0o7lB
+         3MPWhG8+PXQ7wScmUJ4OdtSas1SCuLGgmlcBJmnZnOVGOFO61pjbyxw0EKpdH8OQPT0E
+         cR+jwyalByW5W7wGf55tLF07tR3HUrgxRmANRCgN9sr/UxY3IqtHidQgJLpgKs59WYJF
+         b7aDvWN3u+6BOPkN/pKUbKUzmhkFmb2XRgZNpQFjxFFt27qUHL2OByawW7JVhtbUUAG+
+         l33g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766038358; x=1766643158;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V4PmGHGys0uk8qtztMxfH3kYm2JHZBgw1rSPx0Wsx0Y=;
-        b=dDwfAc062U3XvOf8u3PQqVV+dagy55rjXyqOd+blbaaZqo5i9dUIjs2+LZLwhvcJEf
-         Xb1K7Hg3dL/Uq65g6Tdien1EZv/Q3CsP/mQD440W2u1EoHugYgt/szMpv5/s7jSyLDMA
-         piw3qgQllYDIxxoolExs6ERxchV9uKfgAopsLWcF7wXZzxIbRpqQJd61KBqrmj/pN8Gd
-         2oMl6V3Se6H7Mb5GZzPwhbPziWgNxnWQ5mpNjOWDsTNKaGtJUMugvSunjEJms/OGPudn
-         v9uek5QqRjV7YNwHkShrrIECFNh6FWFs44IPNk8sj9TfLjC0p+1I+VkFQoaQSYdDujtk
-         rF9A==
-X-Forwarded-Encrypted: i=1; AJvYcCVVQsMQHRXAn42FyHSJMVJTZ4T1DPYTyzrxqurQm9z6RFEiHUqPhXhB0jPlrMi0qq5pYc/j6zXHGvj1926b680=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwujFCpxFyIK+/SJ3UiejXlKTIjVYHuOAjgmOlDYmjY2eXWigq
-	Rn7+p5oNM4FDJG4bAmeO9cb/Wa/JECXzwtucFjIPKfpQNEAbR2Fl8kh9W7+cxN40+t44RkmN50T
-	CyupGp7ujyQLiV4dRWXMZ5gyzLhgccqR3cYodZ07m
-X-Gm-Gg: AY/fxX6ImuJokg6kJdImIziUBddQOPCr2aSYaVf9W7elKKPFnLKjoRPgxQiVrf5WZWR
-	QdUebFqFl2hYl//9SAUEKjnwjngRLkcUPKsvh1toYags+YChiEFHoQW54EnTOB+7fSbSq0DlxW6
-	uBd2T2MbZyQzwhEPx7cTqFG0Sn2XF+q+IbyHmIFNWg+XnCDunXOpqy++uOTZapfLstFqoVcd4rN
-	iz1zCKsQM4DPRBs6Aup1CgGd/IedfG4lCAAqPuRqBIvEX4PeG0JBVXflVu+9zFzOhUSIA==
-X-Google-Smtp-Source: AGHT+IEi3WgRpHjL9ia8DcHC8LluJMFP1eF0pFyzzGcebFkpHnDeBDsCdiiT2MpuHsGYeeU9uzxtkmeIXo/3vb2puEA=
-X-Received: by 2002:a5d:5d09:0:b0:42f:9e75:8605 with SMTP id
- ffacd0b85a97d-42fb42c1a55mr19581627f8f.0.1766038358352; Wed, 17 Dec 2025
- 22:12:38 -0800 (PST)
+        d=1e100.net; s=20230601; t=1766042056; x=1766646856;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
+        b=V0INKff90WySqR+uJMzmnBOjiHd+83/1alLB6dOQBl++hS4BBC6UdKQbfSko0qspNb
+         5WhzvKdnb7G5wS4G2VySlZ3TKexDUGmVi2vwb9YdKemTlh608+wqVrKoOL7WXwstQpr+
+         16ecRf3Fobg23heZYWszQvcb2i6h0x9DxnYO3QzYyaxhD5FVV33B6JTboqK7JYdOPI9Y
+         ZVNeGYf8oFP0MrtJQVZGoIftQLmMw73EkTNVka5bg/u3RRxdCH+nUlBmacP2SAvsulWU
+         53MQN/80MqWEnFi/bDaGASSPijik6lZPd/Rxtac5dCfd0LXufjgg3F1WxeZLhWbAbt5L
+         z7dQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUVHgIMVqaaLkqh5VrhWLcNBR9W/Of+7VJY0Qj5Z9EYu879ua/MT5nbHTsRnqBj+WcqCr5IMQlFtj4A+90NT0k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1er6ufxeXWeCD7keLmO4Bf+1rBeyFPfaHIi1dLmK30LS4AqbV
+	wEPsrqESMgLd3GccYGlnAafox/PTBa1AtHKxN8GDJdtCEg8LsnyhxNAY/4vp0NU51E3FAnz/m5/
+	zMujOpbZAbuvwblvglaxUhAsyvBuvGtCjk07h6Q7sFurPa1IwW/vBPdHQR4fQHfZ3UlgzfA==
+X-Gm-Gg: AY/fxX7qqHvD723Gzir6DHN4BMNdZoIBlSkzQ9crhuLQ0MhjORnbrqAMxylce93j0l1
+	8O8BjBAJKUg0U4RNiHCYISxwYecqft5J9FP5eVsbnd2dixUsddOZstNhgfKBNbh3DjmD8oAPJbU
+	hJDNI9upnx6GFse60KRpWJC5XEvSWXN8U6S5VSuma9MMKctkwynmpriM1zukg8F0b1lNyQKBdUH
+	F8GrUBZm8wa5pCJ7U0geKzfKbzS3cPiqiolUlgd+RIbjN+Uy/ZJ44E+F+BDWZsFYSuarZw3dbXi
+	dOU/Ekj/CQ8tQH1cxrZvE0A4eKl1w0Gz2OfNG1lU8Iefg5OJ6ogI5XZBNv/PEQo6uiJHqSEu/pC
+	D8oc8KWYhtWWu4QfbJ/WPMmzGqi9fnbEc9AMq5wLE
+X-Received: by 2002:a05:6000:3113:b0:430:fbce:458a with SMTP id ffacd0b85a97d-432448b7f11mr2026715f8f.18.1766042056125;
+        Wed, 17 Dec 2025 23:14:16 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHmwvfPARt5/oktdF01vTTh+pbj0DvIQNLkJ0QsqlEvJKz7q81ZhZQ2a/z1plKZxslmFO/O2g==
+X-Received: by 2002:a05:6000:3113:b0:430:fbce:458a with SMTP id ffacd0b85a97d-432448b7f11mr2026688f8f.18.1766042055684;
+        Wed, 17 Dec 2025 23:14:15 -0800 (PST)
+Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.129.40])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324493fe27sm3248198f8f.12.2025.12.17.23.14.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Dec 2025 23:14:15 -0800 (PST)
+Date: Thu, 18 Dec 2025 08:14:13 +0100
+From: Juri Lelli <juri.lelli@redhat.com>
+To: Andrea Righi <arighi@nvidia.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/7] sched_ext: Add a DL server for sched_ext tasks
+Message-ID: <aUOpxVIQieTOMifV@jlelli-thinkpadt14gen4.remote.csb>
+References: <20251217093923.1556187-1-arighi@nvidia.com>
+ <20251217093923.1556187-5-arighi@nvidia.com>
+ <aULQ7kPm-RqHWGDL@jlelli-thinkpadt14gen4.remote.csb>
+ <aUMmuRI-ZljfDuh9@gpd4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2025121746-result-staleness-5a68@gregkh>
-In-Reply-To: <2025121746-result-staleness-5a68@gregkh>
-From: David Gow <davidgow@google.com>
-Date: Thu, 18 Dec 2025 14:12:25 +0800
-X-Gm-Features: AQt7F2rWWSJG6XdNK4n-eCok4GMh893akEyYh2zfEGV0-X4OhWYfyw3u6WJPRgA
-Message-ID: <CABVgOSmVk3Jo=fXh4M+vM3KOPqWW6vqxfj_=-NhkbSutc_Spcg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix up const mis-match in many assert functions
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: brendan.higgins@linux.dev, linux-kernel@vger.kernel.org, 
-	Rae Moar <raemoar63@gmail.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000000a8f2e064633d989"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aUMmuRI-ZljfDuh9@gpd4>
 
---0000000000000a8f2e064633d989
-Content-Type: text/plain; charset="UTF-8"
+Hi!
 
-On Wed, 17 Dec 2025 at 20:33, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> In many kunit assert functions a const pointer is passed to
-> container_of() and out pops a non-const pointer, which really isn't the
-> correct thing to do at all.  Fix this up by correctly marking the
-> casted-to pointer as const to preserve the marking.
->
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <davidgow@google.com>
-> Cc: Rae Moar <raemoar63@gmail.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+On 17/12/25 22:55, Andrea Righi wrote:
+> sched_ext currently suffers starvation due to RT. The same workload when
+> converted to EXT can get zero runtime if RT is 100% running, causing EXT
+> processes to stall. Fix it by adding a DL server for EXT.
+> 
+> A kselftest is also included later to confirm that both DL servers are
+> functioning correctly:
+> 
+>  # ./runner -t rt_stall
+>  ===== START =====
+>  TEST: rt_stall
+>  DESCRIPTION: Verify that RT tasks cannot stall SCHED_EXT tasks
+>  OUTPUT:
+>  TAP version 13
+>  1..1
+>  # Runtime of FAIR task (PID 1511) is 0.250000 seconds
+>  # Runtime of RT task (PID 1512) is 4.750000 seconds
+>  # FAIR task got 5.00% of total runtime
+>  ok 1 PASS: FAIR task got more than 4.00% of runtime
+>  TAP version 13
+>  1..1
+>  # Runtime of EXT task (PID 1514) is 0.250000 seconds
+>  # Runtime of RT task (PID 1515) is 4.750000 seconds
+>  # EXT task got 5.00% of total runtime
+>  ok 2 PASS: EXT task got more than 4.00% of runtime
+>  TAP version 13
+>  1..1
+>  # Runtime of FAIR task (PID 1517) is 0.250000 seconds
+>  # Runtime of RT task (PID 1518) is 4.750000 seconds
+>  # FAIR task got 5.00% of total runtime
+>  ok 3 PASS: FAIR task got more than 4.00% of runtime
+>  TAP version 13
+>  1..1
+>  # Runtime of EXT task (PID 1521) is 0.250000 seconds
+>  # Runtime of RT task (PID 1522) is 4.750000 seconds
+>  # EXT task got 5.00% of total runtime
+>  ok 4 PASS: EXT task got more than 4.00% of runtime
+>  ok 1 rt_stall #
+>  =====  END  =====
+> 
+> v5: - do not restart the EXT server on switch_class() (Juri Lelli)
+> v4: - initialize EXT server bandwidth reservation at init time and
+>       always keep it active (Andrea Righi)
+>     - check for rq->nr_running == 1 to determine when to account idle
+>       time (Juri Lelli)
+> v3: - clarify that fair is not the only dl_server (Juri Lelli)
+>     - remove explicit stop to reduce timer reprogramming overhead
+>       (Juri Lelli)
+>     - do not restart pick_task() when it's invoked by the dl_server
+>       (Tejun Heo)
+>     - depend on CONFIG_SCHED_CLASS_EXT (Andrea Righi)
+> v2: - drop ->balance() now that pick_task() has an rf argument
+>       (Andrea Righi)
+> 
+> Tested-by: Christian Loehle <christian.loehle@arm.com>
+> Co-developed-by: Joel Fernandes <joelagnelf@nvidia.com>
+> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> Signed-off-by: Andrea Righi <arighi@nvidia.com>
 > ---
 
-Nice catch, thanks!
+This new version looks good to me, thanks!
 
-Reviewed-by: David Gow <davidgow@google.com>
+Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
 
-Cheers,
--- David
+Best,
+Juri
 
-
->  lib/kunit/assert.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-> index 867aa5c4bccf..4c751ad8506a 100644
-> --- a/lib/kunit/assert.c
-> +++ b/lib/kunit/assert.c
-> @@ -51,7 +51,7 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
->                                const struct va_format *message,
->                                struct string_stream *stream)
->  {
-> -       struct kunit_unary_assert *unary_assert;
-> +       const struct kunit_unary_assert *unary_assert;
->
->         unary_assert = container_of(assert, struct kunit_unary_assert, assert);
->
-> @@ -71,7 +71,7 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
->                                      const struct va_format *message,
->                                      struct string_stream *stream)
->  {
-> -       struct kunit_ptr_not_err_assert *ptr_assert;
-> +       const struct kunit_ptr_not_err_assert *ptr_assert;
->
->         ptr_assert = container_of(assert, struct kunit_ptr_not_err_assert,
->                                   assert);
-> @@ -117,7 +117,7 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
->                                 const struct va_format *message,
->                                 struct string_stream *stream)
->  {
-> -       struct kunit_binary_assert *binary_assert;
-> +       const struct kunit_binary_assert *binary_assert;
->
->         binary_assert = container_of(assert, struct kunit_binary_assert,
->                                      assert);
-> @@ -145,7 +145,7 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
->                                     const struct va_format *message,
->                                     struct string_stream *stream)
->  {
-> -       struct kunit_binary_ptr_assert *binary_assert;
-> +       const struct kunit_binary_ptr_assert *binary_assert;
->
->         binary_assert = container_of(assert, struct kunit_binary_ptr_assert,
->                                      assert);
-> @@ -185,7 +185,7 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
->                                     const struct va_format *message,
->                                     struct string_stream *stream)
->  {
-> -       struct kunit_binary_str_assert *binary_assert;
-> +       const struct kunit_binary_str_assert *binary_assert;
->
->         binary_assert = container_of(assert, struct kunit_binary_str_assert,
->                                      assert);
-> @@ -237,7 +237,7 @@ void kunit_mem_assert_format(const struct kunit_assert *assert,
->                              const struct va_format *message,
->                              struct string_stream *stream)
->  {
-> -       struct kunit_mem_assert *mem_assert;
-> +       const struct kunit_mem_assert *mem_assert;
->
->         mem_assert = container_of(assert, struct kunit_mem_assert,
->                                   assert);
-> --
-> 2.52.0
->
-
---0000000000000a8f2e064633d989
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIUnQYJKoZIhvcNAQcCoIIUjjCCFIoCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-Dxz3AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFHZtY3XkWtC2
-e2Idfk+0JyK7BLzzMFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBo
-hqjbVaHxZoT6HHUuwQcTlbgXpuVi59bQPrSwb/6Pn1t3h3SLeuUCvOYpoQjxlWy/FexsPW+nWS0I
-PUmWpt6sxbIRTKPfb7cPk32XezfnA0jexucybiXzkZKTrbI7zoMOzDIWpTKYZAonB9Zzi7Dso4An
-ZOtz/E3yhdR/q1MK30d5fiCS0vorEd0Oy8Jzcc7TJ2HGMzEEXiFFvVrJYJHvfYOeXE4ywAG6YWO0
-x78+bXeB9vkeWHhOYKyYXuAXrnHASddEICg1QlJCHDAISMC1Wn/tjqTMTt3sDAe+dhi9V1FEGTbG
-g9PxPVP4huJEMIBu/MWNMzHfiW4E7eCHVPrmtX7CFDlMik7qsgQBbO5h6EcxBamhIflfMgoISsRJ
-Vyll2E5BNVwkNstMgU3WMg5yIaQcuGFgFnMTrQcaLEEFPV3cCP9pgXovYDirnB7FKNdCZNHfeBY1
-HEXJ2jIPDP6nWSbYoRry0TvPgxh5ZeM5+sc1L7kY75C8U4FV3t4qdC+p7rgqfAggdvDPa5BJbTRg
-KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
-IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
-Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgv07WhlbLRfJqKKNgPtLaYcmofG7r
-viZhXGLSnToUhi4wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
-MjE4MDYxMjM4WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAKUmL92rHQzTm8/iBYIDmzoGhLEA6WyJmH8xr8SmRqOHG6tN4FOOT6uzBpmi1aP6v
-1ZcfbKzm5R0lH4A/lGC27Pzg5OUXwechSdcxMM6hlSLZZri5iG44LR9pjmnCPSVY9Ge3G/AGc+CM
-yF0gU3mYjFNlvu9mjOEe4BpxNcRDI3RAzJxCXR5JHUlx6R1G2GOiauLmypbru+G5zMwjBqaimR0k
-+Iqp0UZFJWK+W9jGllq4NqY0Eqftwrauu1NpK0sbsOtCLq8CrWP1h3Yjz1WYChWrLpirkOIVQd0e
-5ASYX0EO0xNJtl8eHxGXuWTy9DLXrOEJuOJZ2lJRw3QAUbhXxA==
---0000000000000a8f2e064633d989--
 
