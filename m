@@ -1,116 +1,87 @@
-Return-Path: <linux-kselftest+bounces-47680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47681-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25AA7CCA996
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 08:14:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EEAECCAA99
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 08:32:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B707530140F0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 07:14:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5083C3022182
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Dec 2025 07:30:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B8C238C16;
-	Thu, 18 Dec 2025 07:14:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A30330651;
+	Thu, 18 Dec 2025 07:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UtWQgTcB";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="kD6QzC6G"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XUg9jNOS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E07271448
-	for <linux-kselftest@vger.kernel.org>; Thu, 18 Dec 2025 07:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9530333064B;
+	Thu, 18 Dec 2025 07:20:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766042061; cv=none; b=HvnO09zD9bG3QJw52oKR7hO2LseCBDfduaEvCvldSCjunww/hFrrVmP536bXFg/gqE14Vv+dzc+eT6U6gSM97EDvXaGDlPEQALHoJMlNZvP5bEHl0k+P0159CM9BCxCjIwgKzocuDC6F/iUiCExQI9aqt4n6yU4IEPfVqnKXhrY=
+	t=1766042429; cv=none; b=cOxxvfgew0P6semKv9YGY8zc8EAaKxNBBtc38T+fv6qudLhh3Yn5K/0lGp0qcVIYF8PMTsIQIfVViYnheJkFa+/y7fHAoFqv6RMXtdLzXxvjIqs3ufRqpHGNvg8k8ScYtMfWLRMs6zvJmOTN/OTmgpnqWSu7g6/4ZlhPAYBi+7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766042061; c=relaxed/simple;
-	bh=pdMUtduMXCj5whENGA9N7DnLbY+JEMVMPlaas2KdqgI=;
+	s=arc-20240116; t=1766042429; c=relaxed/simple;
+	bh=n/4hzjJ+5DiQQZLxNqiFaBQ2BoW86ezVZJzRJDbCCJE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zgfj1n5gb/FvIt1cByRPBTvcxjS6/QEXTCzen5eyWYqsiUjcY2peiKfHN0S5MHe4A9FuBqxsFmvNgiWY368SiILCfwpcWsiZLLB9wKcx8QHhzfkf+l7x9kWB0M+sg2mRYNDM4e31qnd4MnbRVg2k3G9IPXGquZs0stkepW3NzW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UtWQgTcB; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=kD6QzC6G; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766042059;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
-	b=UtWQgTcBr3AZWEy1jhWAP0bDuaGCQJTMMT+/p6cmNv+M1uKaMgTdBPkIyWMqpCA5mM18As
-	v/9Ym2hI8MvDZQXWBHIaiNrP18TtjDwSkCXXG+HoEcaw8F34EWgBWSpAaPprX9rcSvKg2q
-	7V0BPshHNlmEzjZxVNeK9Mx1Ee7g9PI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-304-NPO1NmuiMHGwOIjMrysd0w-1; Thu, 18 Dec 2025 02:14:17 -0500
-X-MC-Unique: NPO1NmuiMHGwOIjMrysd0w-1
-X-Mimecast-MFC-AGG-ID: NPO1NmuiMHGwOIjMrysd0w_1766042056
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-430f5dcd4d3so155121f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Dec 2025 23:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1766042056; x=1766646856; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
-        b=kD6QzC6GiQmYrdH4YxH7W2Gj77eHBrbcWvGvJrulBJpYs+ya+7f8fIv2uGgQ/O0B8m
-         Fz5DMDxstvMDHrBdM9GMU7QwEwy3bf5WMX+/P6PwdEyqeYwxl/GWkR07iF9RrfU0o7lB
-         3MPWhG8+PXQ7wScmUJ4OdtSas1SCuLGgmlcBJmnZnOVGOFO61pjbyxw0EKpdH8OQPT0E
-         cR+jwyalByW5W7wGf55tLF07tR3HUrgxRmANRCgN9sr/UxY3IqtHidQgJLpgKs59WYJF
-         b7aDvWN3u+6BOPkN/pKUbKUzmhkFmb2XRgZNpQFjxFFt27qUHL2OByawW7JVhtbUUAG+
-         l33g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766042056; x=1766646856;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oNBsiLM1lI5WSv0gDo/xxnKGXTG+8RkXyoth8Hg52dk=;
-        b=V0INKff90WySqR+uJMzmnBOjiHd+83/1alLB6dOQBl++hS4BBC6UdKQbfSko0qspNb
-         5WhzvKdnb7G5wS4G2VySlZ3TKexDUGmVi2vwb9YdKemTlh608+wqVrKoOL7WXwstQpr+
-         16ecRf3Fobg23heZYWszQvcb2i6h0x9DxnYO3QzYyaxhD5FVV33B6JTboqK7JYdOPI9Y
-         ZVNeGYf8oFP0MrtJQVZGoIftQLmMw73EkTNVka5bg/u3RRxdCH+nUlBmacP2SAvsulWU
-         53MQN/80MqWEnFi/bDaGASSPijik6lZPd/Rxtac5dCfd0LXufjgg3F1WxeZLhWbAbt5L
-         z7dQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUVHgIMVqaaLkqh5VrhWLcNBR9W/Of+7VJY0Qj5Z9EYu879ua/MT5nbHTsRnqBj+WcqCr5IMQlFtj4A+90NT0k=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1er6ufxeXWeCD7keLmO4Bf+1rBeyFPfaHIi1dLmK30LS4AqbV
-	wEPsrqESMgLd3GccYGlnAafox/PTBa1AtHKxN8GDJdtCEg8LsnyhxNAY/4vp0NU51E3FAnz/m5/
-	zMujOpbZAbuvwblvglaxUhAsyvBuvGtCjk07h6Q7sFurPa1IwW/vBPdHQR4fQHfZ3UlgzfA==
-X-Gm-Gg: AY/fxX7qqHvD723Gzir6DHN4BMNdZoIBlSkzQ9crhuLQ0MhjORnbrqAMxylce93j0l1
-	8O8BjBAJKUg0U4RNiHCYISxwYecqft5J9FP5eVsbnd2dixUsddOZstNhgfKBNbh3DjmD8oAPJbU
-	hJDNI9upnx6GFse60KRpWJC5XEvSWXN8U6S5VSuma9MMKctkwynmpriM1zukg8F0b1lNyQKBdUH
-	F8GrUBZm8wa5pCJ7U0geKzfKbzS3cPiqiolUlgd+RIbjN+Uy/ZJ44E+F+BDWZsFYSuarZw3dbXi
-	dOU/Ekj/CQ8tQH1cxrZvE0A4eKl1w0Gz2OfNG1lU8Iefg5OJ6ogI5XZBNv/PEQo6uiJHqSEu/pC
-	D8oc8KWYhtWWu4QfbJ/WPMmzGqi9fnbEc9AMq5wLE
-X-Received: by 2002:a05:6000:3113:b0:430:fbce:458a with SMTP id ffacd0b85a97d-432448b7f11mr2026715f8f.18.1766042056125;
-        Wed, 17 Dec 2025 23:14:16 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHmwvfPARt5/oktdF01vTTh+pbj0DvIQNLkJ0QsqlEvJKz7q81ZhZQ2a/z1plKZxslmFO/O2g==
-X-Received: by 2002:a05:6000:3113:b0:430:fbce:458a with SMTP id ffacd0b85a97d-432448b7f11mr2026688f8f.18.1766042055684;
-        Wed, 17 Dec 2025 23:14:15 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb ([151.29.129.40])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324493fe27sm3248198f8f.12.2025.12.17.23.14.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Dec 2025 23:14:15 -0800 (PST)
-Date: Thu, 18 Dec 2025 08:14:13 +0100
-From: Juri Lelli <juri.lelli@redhat.com>
-To: Andrea Righi <arighi@nvidia.com>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>, Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Changwoo Min <changwoo@igalia.com>, Shuah Khan <shuah@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>, sched-ext@lists.linux.dev,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/7] sched_ext: Add a DL server for sched_ext tasks
-Message-ID: <aUOpxVIQieTOMifV@jlelli-thinkpadt14gen4.remote.csb>
-References: <20251217093923.1556187-1-arighi@nvidia.com>
- <20251217093923.1556187-5-arighi@nvidia.com>
- <aULQ7kPm-RqHWGDL@jlelli-thinkpadt14gen4.remote.csb>
- <aUMmuRI-ZljfDuh9@gpd4>
+	 Content-Type:Content-Disposition:In-Reply-To; b=norLP/5Mg5KPKURajnpPYWf/OqY8Xhq1hspYFdN/2b+2yBYW1QE5sBi8fFc1RG0Td9sWpXFzKwe8BNy6F5s5kdNNGdn1q4w1gtxymZRQoCm1XvrT6uwcXcp+gqq2jVW5K/+7pqXEzI4f6JBeXghFzRYN0DKIvFhH3OxD4B77jxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XUg9jNOS; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BI67fJo009648;
+	Thu, 18 Dec 2025 07:20:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=TLWi3nrcsGDB818pqoBYohfAmJ3T7j
+	IB7ZTB+6E2JUU=; b=XUg9jNOShKsCXJlNwaU5ewV5FcxSeioy1KVnCmNlgjb3FH
+	/Z9C1JHKDOz1AMS7w9nVzeVY0dMU0t7jGjbQyIR+JNpYp2NwGQ/3Uh0ILUgiAIM5
+	NoWQZgOmj4RU3wRdC6DQp2S1LYXA4rlB+HznI3hz5qx3j+NAFFoMQNnCv0Sq5QK7
+	g6SrndgpPZwkgFFiU89OAU7E0+AYsgGXG9/WlkH87WuehXJEt4ktNMP9jyqR8h3K
+	nZtKknuhklqyFClvBNe3EA1BhuuPbWHMtqwmxcjvx7QGXXAdywWhUJyFoXwwxXou
+	WzzcgCRmDSwI4vEd4L2KZ9JeAA10S53+kMwN0s6A==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0yn8sc1e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Dec 2025 07:20:07 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BI7K6Fc019392;
+	Thu, 18 Dec 2025 07:20:07 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4b0yn8sc19-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Dec 2025 07:20:06 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BI5qOvJ012835;
+	Thu, 18 Dec 2025 07:20:05 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4b1juyf6ey-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 18 Dec 2025 07:20:05 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BI7K3d060686598
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 18 Dec 2025 07:20:03 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B4B4320043;
+	Thu, 18 Dec 2025 07:20:03 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EC8AE20040;
+	Thu, 18 Dec 2025 07:20:01 +0000 (GMT)
+Received: from li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com (unknown [9.124.210.77])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu, 18 Dec 2025 07:20:01 +0000 (GMT)
+Date: Thu, 18 Dec 2025 12:49:59 +0530
+From: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+Subject: Re: Issue in parsing of tests that use KUNIT_CASE_PARAM
+Message-ID: <aUOrH1iapKnOaZEj@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
+References: <aULJpTvJDw9ctUDe@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -119,75 +90,115 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aUMmuRI-ZljfDuh9@gpd4>
+In-Reply-To: <aULJpTvJDw9ctUDe@li-dc0c254c-257c-11b2-a85c-98b6c1322444.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjEzMDAxOCBTYWx0ZWRfX1ET7jvOYM1cS
+ 5YBd9661+Xw/0t1y17XPN/br5khxidZHrzs7d8OrFGqEZUXU9b1oY8DU6nQcfsYOX8otI6amw36
+ /QR+is69w26euZYYTxxGmkMhvY5vkWcmCMhrjiCUiyq8CBoU/HocBENc9bbLfFr/P0/Y33T3sv1
+ g77ckHkQ1fCd/ZNzYg1PXTOQVzUBRkyYkkfh8bDDTrcCPdRxgdxTk/N8LXjEv0yJxxeraC1oqP2
+ 3MaaGMBmLYU/ZKjn/sMm4teLXpm8eL3KIiZcfj49hcdTS8JX+heRQ5d1SS+VSSSUAMaTktKQiCs
+ CoT70SXJGMN+3mfCjnTgXr0W9hQAtUdNCghKeQ2KvoY0dH5ZQRKGxwHd4KrU/BM6IKC3g5HGn+S
+ DpkpO+YevjuVNJdgkBuYHZteFuc0Cw==
+X-Proofpoint-GUID: g1z2H3Xot4sBDR1x_I0liZtfkVmUEbMm
+X-Proofpoint-ORIG-GUID: SGRQkEJWG2CGRzFh_kv1QS1SnQq8zfqQ
+X-Authority-Analysis: v=2.4 cv=LbYxKzfi c=1 sm=1 tr=0 ts=6943ab27 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=kj9zAlcOel0A:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=fBP9zgGPufsLqfDVMpYA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-18_01,2025-12-17_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 spamscore=0 phishscore=0 clxscore=1015 suspectscore=0
+ adultscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
+ definitions=main-2512130018
 
-Hi!
-
-On 17/12/25 22:55, Andrea Righi wrote:
-> sched_ext currently suffers starvation due to RT. The same workload when
-> converted to EXT can get zero runtime if RT is 100% running, causing EXT
-> processes to stall. Fix it by adding a DL server for EXT.
+On Wed, Dec 17, 2025 at 08:47:57PM +0530, Ojaswin Mujoo wrote:
+> Hello,
 > 
-> A kselftest is also included later to confirm that both DL servers are
-> functioning correctly:
+> While writing some Kunit tests for ext4 filesystem, I'm encountering an
+> issue in the way we display the diagnostic logs upon failures, when
+> using KUNIT_CASE_PARAM() to write the tests.
 > 
->  # ./runner -t rt_stall
->  ===== START =====
->  TEST: rt_stall
->  DESCRIPTION: Verify that RT tasks cannot stall SCHED_EXT tasks
->  OUTPUT:
->  TAP version 13
->  1..1
->  # Runtime of FAIR task (PID 1511) is 0.250000 seconds
->  # Runtime of RT task (PID 1512) is 4.750000 seconds
->  # FAIR task got 5.00% of total runtime
->  ok 1 PASS: FAIR task got more than 4.00% of runtime
->  TAP version 13
->  1..1
->  # Runtime of EXT task (PID 1514) is 0.250000 seconds
->  # Runtime of RT task (PID 1515) is 4.750000 seconds
->  # EXT task got 5.00% of total runtime
->  ok 2 PASS: EXT task got more than 4.00% of runtime
->  TAP version 13
->  1..1
->  # Runtime of FAIR task (PID 1517) is 0.250000 seconds
->  # Runtime of RT task (PID 1518) is 4.750000 seconds
->  # FAIR task got 5.00% of total runtime
->  ok 3 PASS: FAIR task got more than 4.00% of runtime
->  TAP version 13
->  1..1
->  # Runtime of EXT task (PID 1521) is 0.250000 seconds
->  # Runtime of RT task (PID 1522) is 4.750000 seconds
->  # EXT task got 5.00% of total runtime
->  ok 4 PASS: EXT task got more than 4.00% of runtime
->  ok 1 rt_stall #
->  =====  END  =====
+> This can be observed by patching fs/ext4/mballoc-test.c to fail
+> and print one of the params:
 > 
-> v5: - do not restart the EXT server on switch_class() (Juri Lelli)
-> v4: - initialize EXT server bandwidth reservation at init time and
->       always keep it active (Andrea Righi)
->     - check for rq->nr_running == 1 to determine when to account idle
->       time (Juri Lelli)
-> v3: - clarify that fair is not the only dl_server (Juri Lelli)
->     - remove explicit stop to reduce timer reprogramming overhead
->       (Juri Lelli)
->     - do not restart pick_task() when it's invoked by the dl_server
->       (Tejun Heo)
->     - depend on CONFIG_SCHED_CLASS_EXT (Andrea Righi)
-> v2: - drop ->balance() now that pick_task() has an rf argument
->       (Andrea Righi)
+> --- a/fs/ext4/mballoc-test.c
+> +++ b/fs/ext4/mballoc-test.c
+> @@ -350,6 +350,8 @@ static int mbt_kunit_init(struct kunit *test)
+>         struct super_block *sb;
+>         int ret;
 > 
-> Tested-by: Christian Loehle <christian.loehle@arm.com>
-> Co-developed-by: Joel Fernandes <joelagnelf@nvidia.com>
-> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
-> Signed-off-by: Andrea Righi <arighi@nvidia.com>
-> ---
+> +       KUNIT_FAIL(test, "Failed: blocksize_bits=%d", layout->blocksize_bits);
+> +
+>         sb = mbt_ext4_alloc_super_block();
+>         if (sb == NULL)
+>                 return -ENOMEM;
+> 
+> With the above change, we can observe the following output (snipped):
+> 
+> [18:50:25] ============== ext4_mballoc_test (7 subtests) ==============
+> [18:50:25] ================= test_new_blocks_simple  ==================
+> [18:50:25] [FAILED] block_bits=10 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
+> [18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
+> [18:50:25] Failed: blocksize_bits=12
+> [18:50:25] [FAILED] block_bits=12 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
+> [18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
+> [18:50:25] Failed: blocksize_bits=16
+> [18:50:25] [FAILED] block_bits=16 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
+> [18:50:25]     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
+> [18:50:25] Failed: blocksize_bits=10
+> [18:50:25]     # test_new_blocks_simple: pass:0 fail:3 skip:0 total:3
+> [18:50:25] ============= [FAILED] test_new_blocks_simple ==============
+> <snip>
+> 
+> Note that the diagnostic logs don't show up correctly. Ideally they
+> should be before test result but here the first [FAILED] test has no
+> logs printed above whereas the last "Failed: blocksize_bits=10" print
+> comes after the last subtest, when it actually corresponds to the first
+> subtest.
+> 
+> The KTAP file itself seems to have diagnostic logs in the right place:
+> 
+> KTAP version 1
+> 1..2
+>     KTAP version 1
+>     # Subtest: ext4_mballoc_test
+>     # module: ext4
+>     1..7
+>         KTAP version 1
+>         # Subtest: test_new_blocks_simple
 
-This new version looks good to me, thanks!
+So looking into this a bit more and comparing the parameterized output
+with non parameterized output, I'm seeing that the difference is that
+output via KUNIT_CASE_PARAM is not printing the test plan line right
+here. This plan sort of serves as divider between the parent and the 3
+children's logs and without it our parsing logic gets confused. When I
+manually added a "1..3" test plan I could see the parsing work correctly
+without any changes to kunit_parser.py.
 
-Reviewed-by: Juri Lelli <juri.lelli@redhat.com>
+Regards,
+ojaswin
 
-Best,
-Juri
-
+>     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
+> Failed: blocksize_bits=10
+>         not ok 1 block_bits=10 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
+>     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
+> Failed: blocksize_bits=12
+>         not ok 2 block_bits=12 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
+>     # test_new_blocks_simple: EXPECTATION FAILED at fs/ext4/mballoc-test.c:364
+> Failed: blocksize_bits=16
+>         not ok 3 block_bits=16 cluster_bits=3 blocks_per_group=8192 group_count=4 desc_size=64
+>     # test_new_blocks_simple: pass:0 fail:3 skip:0 total:3
+>     not ok 1 test_new_blocks_simple
+>     <snip>
+> 
+> By tracing kunit_parser.py script, I could see the issue here is in the
+> parsing of the "Subtest: test_new_blocks_simple". We end up associating
+> everything below the subtest till "not ok 1 block_bits=10..." as
+> diagnostic logs of the subtest, while these lons actually belong to the
+> first of the 3 subtests under this test.
+> 
 
