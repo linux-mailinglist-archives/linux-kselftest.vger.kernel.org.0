@@ -1,154 +1,146 @@
-Return-Path: <linux-kselftest+bounces-47729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC40DCCF1E9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Dec 2025 10:25:55 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EC2DCCF449
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Dec 2025 11:04:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8964C301A1E7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Dec 2025 09:25:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7620C300766F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Dec 2025 10:04:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E9C2EFDBA;
-	Fri, 19 Dec 2025 09:25:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4AF2EC561;
+	Fri, 19 Dec 2025 10:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PTbGSqIn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JK1vGGt6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534D921578D
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Dec 2025 09:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFD127280F
+	for <linux-kselftest@vger.kernel.org>; Fri, 19 Dec 2025 10:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766136353; cv=none; b=HMCRoOIdGH/LFN8Ae3l0ELwDelo3mLPILU9k9EepxvaSiShyNWq0ifkGv19Tfkktv8t/m+oQU9PnPYXhI0yvM7C7OyHvrH51ouFB0xI4EiKD6LWHUJS1+EwZj/xsHJexiJkRStoE5v2icjx97DfMxUxOpuvL2vwTCXbzhb919ug=
+	t=1766138680; cv=none; b=cRFBjnsHIYIAauEuFYlYTPwu22OEDZk18OU1AE8JkqeyEHxUabZtzJe08adTDr+s4muiDASLGy8n+PU4AclPBo1nkcSIPUZlBbwKifORz0EKck+XS6OlbhJYnmHrby4Dcz92le0khys3LVoiFY78emY+Hjl+xCsZqDW1ZRkbULI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766136353; c=relaxed/simple;
-	bh=eAL3LC+2dHh9zMBn+hXpoAz7Jvm8uTTfKLQguRTeU5c=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Tl6KilCzgcMH0wA89wxoF/aHcPA2EG4QS0VqfMI/ViR+odLkNZ8dEjrQpF4L56H9uQaVCaiYz6FJRd9/lmOaX1PjW0By0BZLYKvvh5LAJz6ub48bR9YQl80wL7bphe+a4ceJXwH4MbI4FAhF4dWN6UT+RHGOuDOVsP44uDB1wHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PTbGSqIn; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-29e6b269686so31008155ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Dec 2025 01:25:52 -0800 (PST)
+	s=arc-20240116; t=1766138680; c=relaxed/simple;
+	bh=ihMVyDllurToHeLiN93dhlOh8p/bZUYBfmk1fHtLRA0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bPqKeGkhpzH6VxKYeowG4bJZi77nXc2Bz6tFNpioUFzUgCucWiOv8s28W5Og7RTnhAknzLn8ANy4dXMYvCELb1ttfE3YCzStVvfgwZFU4+WZRhmWhtHc7f8qrVMFAbn1EWo2IjyDqq4jbayYhw+FHqQmp1Rm0cDLk9HlT6sGqgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JK1vGGt6; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a110548f10so4388045ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Dec 2025 02:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766136352; x=1766741152; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FDiA9++PSC1lAnu943IjFuSz/gL1rZEi0ur8htsl9Kk=;
-        b=PTbGSqInE0e+O9rKa6U8v1gh+FYYaKgeE1N8wmN77PpVzeqQ1NyVNLL4QnGRuOgoHq
-         cPy6HG/w63N69+VpkbhrfzpR+4o2w774obOJ6A/z/q+EGtij67+ocs6YI9VfJyFqC6Xy
-         QBkRLkQ6JVdgjQ2fjnKg+Inr8Kh1oWlHgPg2Fj4WHJrmKZMYariHHBBwsNCK1zzF4iLC
-         Xetunopi/P3F2KLisosEwlhN5L3cH1tmai4wWQQtItSsFBRx2/SqLIqSJVlD44/vkWEO
-         VzDkG9LRNvPJz+ISbOq7B2yxhg11HBJJaI5YQoDbLPBCwy85xk6bmy0CfCJbvBx5xHkJ
-         /Q2A==
+        d=gmail.com; s=20230601; t=1766138678; x=1766743478; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q1VrxEK+gDnV8ugE5t26U+jWY1Ysmnza3WwUpdmSU7o=;
+        b=JK1vGGt6H73ZX0imlh38isbvIAthLBakm1IXpjITZKLC4B8dNL8OlIg8ImxNH3lzO6
+         OC+1sGyiUKxWr+CIj2t8+oVaE2TUlpg9XyIPAt8mGlizqHUrobpl9IzHTzywb4qRwzo4
+         oD0AkWERaIHnduAXqYnrt5kGgzvGUfqTvnjTaeHl5aNw6sFCSCMsWU/6ixziOrFEBSov
+         tX+fKXljIVG3DX2Z+Mh8PVyFh0nJQqZyyVJuxnc1YAC5J9BL1fA1Od4BsDJHus2zXIfq
+         cJcwB3OMPR9n26YU1kx54gvEXAWm4TClRg+E1S0a6vUY9r8K++mf797qtNJnOgnW4f3S
+         ASNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766136352; x=1766741152;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FDiA9++PSC1lAnu943IjFuSz/gL1rZEi0ur8htsl9Kk=;
-        b=bJrfbkwDPGJuX4f/rsCVrNz/mvyh6kYatjGcUSZZgnAtU3oBOT9RQ70IvbGcnTgd5r
-         acQweO58Bnf7WAR93zbgdExgmDG0Pu4WA5ArlWPthdPbfc0W/SV8KfzIZyk9gMIivc6s
-         wPafOiQqPCLtq+jiZR5dW2StsmrXQXa17FJ29E7O2VcSeXzqv2iIIHeS2EGwHOrucDBT
-         pqYHtAO9P/JAceu2/MrBoi3AmXq/iw1eB2+H+ce8SOtdoDy+T9lLIgSj9YpgjCw/AdlA
-         Cul97eA+4QTdJ0ZuCgEufvG7XmmO3nyKTEzsyEk4vTzYnX9hogwjAzwEJ2aZzAObiPWU
-         HwFw==
-X-Forwarded-Encrypted: i=1; AJvYcCVACYC4m/cDnVFSjFebHueHJw5Sk3ERz7Pp46qBMZ3ik+Zrb4kTRjvGZqlxwKTgOGg6tfQnnhtLXvnfF6b3/I4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytyDGsqlKhrLwqvsuZZOs9q50IwaOI5jW5GeyiNX1N7j0OvIbs
-	Un0Ajdb4eCKXL122Jvm/Csp2QFqve9gRLYr6vmALpaOyrYe89o3wK4vaUjhLf3JVoAjcm+lPCM4
-	cBTBOQJTXmyRxGA==
-X-Google-Smtp-Source: AGHT+IFESw50RYH9ypgSn2SiV5z0LY9j1QZK87YYocisEWy4PFUqcOeZorDnuMip9BneY5uX4han6LJmRN+G/A==
-X-Received: from pjboh15.prod.google.com ([2002:a17:90b:3a4f:b0:34c:d212:cb7f])
- (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:ce11:b0:2a0:c5b6:67de with SMTP id d9443c01a7336-2a2f2a3d5b0mr23777415ad.52.1766136351586;
- Fri, 19 Dec 2025 01:25:51 -0800 (PST)
-Date: Fri, 19 Dec 2025 17:25:36 +0800
+        d=1e100.net; s=20230601; t=1766138678; x=1766743478;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=q1VrxEK+gDnV8ugE5t26U+jWY1Ysmnza3WwUpdmSU7o=;
+        b=CWH2dazmGHoKMTC9bqNOh0mYG0ENN15n+k060CS78hc7TfjxXO3Rr6ZNiOAJBUPrkp
+         x6R4twBeyzzvmFYExmEn+iYvh1hm2ic35IRBm3mECj62bNqQ44bBYOL4m5Pe5eXLQL7P
+         hpuDpjKY4FBPW7zTuNYZYvwWm/hmWX5jI34Lg66UNKZrHkNrDHSaV5z1uRU+4PuCCCEM
+         2Zo7MHIQU2a3VY3HrWK+f11fySMjoy1hQk/AGx9g0KesxICFEkCdEEAnNCKx0fkWPKpa
+         lPNpQ6u3rmD7Uy0YfApeQP1iCa8QkxM8g563YPhmRJan1Tqk87lY6PFpuVMwB0KRoUmA
+         DNwg==
+X-Forwarded-Encrypted: i=1; AJvYcCWn+rRRKBG1cYTSMpPTpKYCkL2z4MIGcvGhmngTw6b9gM3hqAo/0JuLJrE7GAtNuFv/rNLi1rKTJcPFXSmUrkM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMY7tI3UimIv4wwGW5mhe3S4oM/pK7ltgqkE5OYskhgFwPMsV8
+	DJl6tcO8hDFgEw8uspeH11ANOGUVO6k5BA3kT7iu3lH7happkOTOBIh3SsIevjMxlXdMFP+nBfG
+	2wQdjJldNVKi0bRZSh/gQaE5r6rai8TQ=
+X-Gm-Gg: AY/fxX7ItOFA4mzqnaedwPUFtcQnLAJ8Ai2PIqlSK/v1E4eohyZGr8ilI21i7JQjBCB
+	3a91fLUwdCDZYHv4vtsINacOskzDh/lsyztwPLuCOPOWsHK94gmlRodyHHNcaLc2+o5pSkzDcqF
+	e0Ir3wDD2qnj+Qan+eefj1frpqeP4pReOJ9sCGmYe6937nsThXB6hmJ/FR2XPD6X93rVeThYsd2
+	w2R72R7kqFQ/7Vb3OP0+XxrAGnK8kDLD2tUiZ+yMlZaGvYlcqoUbq6R4gFA5pwNoijvr8tDfbki
+	JFxKv0jMaKBRv7ua3tvbsI9I4JdFZSk75Djyo3sKVhJb/0nEVHAx2EnskxF8TdiPNHh17QcrL9V
+	ZEGPJRDUgYlJoHA==
+X-Google-Smtp-Source: AGHT+IHtUE602FvgMsT8GOtnJov33zxYYov4x3dhU+tYUl3Bs4Jcfe4thjZtl5QPHbP1Vrw5LKSSxaJg77FzcCaSzio=
+X-Received: by 2002:a05:7022:6294:b0:11b:98e8:624e with SMTP id
+ a92af1059eb24-121722e11famr1344359c88.4.1766138677829; Fri, 19 Dec 2025
+ 02:04:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.52.0.322.g1dd061c0dc-goog
-Message-ID: <20251219092537.1227513-1-davidgow@google.com>
-Subject: [RFC PATCH] rust: doctests: Number tests by line numerically, not lexicographically.
-From: David Gow <davidgow@google.com>
-To: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
+MIME-Version: 1.0
+References: <20251219092537.1227513-1-davidgow@google.com>
+In-Reply-To: <20251219092537.1227513-1-davidgow@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 19 Dec 2025 11:04:23 +0100
+X-Gm-Features: AQt7F2oEuGq9y_76Xm5CdUbTK6H7VwI7P-ClCTr86yLdf4auZUg3tY0uCinYqK0
+Message-ID: <CANiq72=ZKGXpsmvKHGsX9=tr9Tbdkd-7baJ-RN4crBdXkcB6Yw@mail.gmail.com>
+Subject: Re: [RFC PATCH] rust: doctests: Number tests by line numerically, not lexicographically.
+To: David Gow <davidgow@google.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
 	Gary Guo <gary@garyguo.net>, Miguel Ojeda <ojeda@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Guillaume Gomez <guillaume1.gomez@gmail.com>
-Cc: David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+	Shuah Khan <skhan@linuxfoundation.org>, Guillaume Gomez <guillaume1.gomez@gmail.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The rust doctests are numbered -- instead of named with the line number
--- in order to keep them moderately consistent even as the source file
-changes.
+On Fri, Dec 19, 2025 at 10:25=E2=80=AFAM David Gow <davidgow@google.com> wr=
+ote:
+>
+> 1. Is it worth renumbering all of the tests (hopefully just once), or
+> would that break too many people's test histories?
 
-However, the test numbers are generated by sorting the file/line
-strings, and so the line numbers were sorted as strings, not integers.
-So, for instance, a test on line 7 would sort in-between one on line 65
-and one on line 75.
+Personally I don't have such histories just yet (and anyway the tests
+generally work), and even if someone does, it may be best to pay the
+price sooner rather than later.
 
-Instead, parse the numbers as an integer, and sort based on that. This
-is a bit slower, uglier, and will break things once, but I suspect is
-worth it (at least until we have a better solution).
+> 2. Is there a better way of doing this in Rust? I can think of ways
+> which might be nicer if the whole thing is refactored somewhat
+> seriously, but if there's an easy numeric sort on strings, that'd be
+> much easier.
 
-Signed-off-by: David Gow <davidgow@google.com>
----
+We do essentially the same in the main loop (which is where I suppose
+you picked it up), so it isn't too bad:
 
-This is a pretty unpolished, likely-unidiomatic patch to work around the
-test numbering being horrible.
+        // The `name` follows the `{file}_{line}_{number}` pattern
+(see description in
+        // `scripts/rustdoc_test_builder.rs`). Discard the `number`.
+        let name =3D path.file_name().unwrap().to_str().unwrap().to_string(=
+);
 
-I have three questions before I decide if this is worth continuing with:
+        // Extract the `file` and the `line`, discarding the `number`.
+        let (file, line) =3D
+name.rsplit_once('_').unwrap().0.rsplit_once('_').unwrap();
 
-1. Is it worth renumbering all of the tests (hopefully just once), or
-would that break too many people's test histories?
+However, we could perhaps save the information so that the main loop
+is cleaner instead of redoing it.
 
-2. Is there a better way of doing this in Rust? I can think of ways
-which might be nicer if the whole thing is refactored somewhat
-seriously, but if there's an easy numeric sort on strings, that'd be
-much easier.
+Having said that, given we are migrating anyway, this patch may be
+simpler to avoid reworking this code. So I am happy either way.
 
-3. Should we wait until after all or some of the changes to the test
-generation? Does the new --output-format=doctest option make this
-easier/harder/different?
+> 3. Should we wait until after all or some of the changes to the test
+> generation? Does the new --output-format=3Ddoctest option make this
+> easier/harder/different?
 
-Does anyone have opinions/advice on those (or, indeed, on anything
-else)?
+We could do it there -- it would be easier in the sense that we have
+the proper data already with the proper types etc.
+
+On the other hand, it may be best to define the order we want to
+follow (independently of the approaches), and then the migration would
+be a smaller change conceptually, i.e. one less thing to decide then.
+
+(I have to send the version to finally integrate the migration soon,
+by the way -- I would like to put it in this cycle if possible).
+
+Thanks!
 
 Cheers,
--- David
-
----
- scripts/rustdoc_test_gen.rs | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
-index be0561049660..60b0bbfb1896 100644
---- a/scripts/rustdoc_test_gen.rs
-+++ b/scripts/rustdoc_test_gen.rs
-@@ -116,7 +116,19 @@ fn main() {
-         .collect::<Vec<_>>();
- 
-     // Sort paths.
--    paths.sort();
-+    paths.sort_by(|a, b|{
-+        let a_name = a.file_name().unwrap().to_str().unwrap().to_string();
-+        let (a_file, a_line) = a_name.rsplit_once('_').unwrap().0.rsplit_once('_').unwrap();
-+        let a_line_no = a_line.parse::<u64>().unwrap();
-+        let b_name = b.file_name().unwrap().to_str().unwrap().to_string();
-+        let (b_file, b_line) = b_name.rsplit_once('_').unwrap().0.rsplit_once('_').unwrap();
-+        let b_line_no = b_line.parse::<u64>().unwrap();
-+
-+        match a_file.cmp(b_file) {
-+            std::cmp::Ordering::Equal => a_line_no.cmp(&b_line_no),
-+            order => order,
-+        }
-+    });
- 
-     let mut rust_tests = String::new();
-     let mut c_test_declarations = String::new();
--- 
-2.52.0.322.g1dd061c0dc-goog
-
+Miguel
 
