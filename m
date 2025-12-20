@@ -1,155 +1,145 @@
-Return-Path: <linux-kselftest+bounces-47751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47752-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 475EDCD28D2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 07:37:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D97ECD297A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 07:59:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CD528301A34F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 06:37:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2E503300DC80
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 06:59:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B772EC569;
-	Sat, 20 Dec 2025 06:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC282C0293;
+	Sat, 20 Dec 2025 06:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F0inZ2wn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="It1Y46Tt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 771892BD58C
-	for <linux-kselftest@vger.kernel.org>; Sat, 20 Dec 2025 06:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1FF29DB6E
+	for <linux-kselftest@vger.kernel.org>; Sat, 20 Dec 2025 06:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766212660; cv=none; b=kxevXTMm47H05yp2DhBvpF+qlDaqfWWL+FyIp7HlWWo3TUatkxkBG94MxUiQzbF4zlnIdwSRU4U+HPh2z18fEJ+YKfwf/axpDuUlLrlrb+73TAeQKAuM4DMHcUjSQI/huj4FkBDRlF0xEz+YN69S63L7MAEWPZdqclUiwKURkjU=
+	t=1766213971; cv=none; b=XH47Rh+4JbA7VDSvMI16WpKqqfk1rY5N/nn6NpbovHfwKOKBiQstvq0g9B9id6DquLWZPgfcwfavG2v1bNWSi/GORBSbQ5vgEV6pb/R6MoSPEXntNjbkBRf9ZXg+GUwFHywl5QemuWf+I+OuFml3NZJz1xwLZCIE98lRIbW3eb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766212660; c=relaxed/simple;
-	bh=FAg48bnoNmMUdF2JlXjWwWPa7oe4AbYxSDTtMpnY/NM=;
+	s=arc-20240116; t=1766213971; c=relaxed/simple;
+	bh=gI5f7kfPJiqCVUddek4rmCDEZFUx5zqtcK54Qpa5FYs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a76B6I+mmd1ILIuzOcK/A2evIIYdE4cdDsnzYgNh+SaDOX/YnW1cP16auLtUwjl0acOVAj3RqGmlv+N5sudQBeIrQ8bFrDqEuNcHGqPNpiit2rRvaCDfZSw4sGet09nYHHsoqpQ5rk/QXheRU7ltLViHTemGcpSu8BLLonqmtp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F0inZ2wn; arc=none smtp.client-ip=209.85.221.54
+	 To:Cc:Content-Type; b=e1bCe2NMyg6j95yVN01q1/WmG2bSRMjpEH6UD+vnIl6t4wkqfh9IIQ+FLxxNM5bb3c/hYLRvkVBehqyvDiPrkJ4MilCf1G//4a9jzZYPivzKVpp29gZJie+1qThx2KnBw2Z+CxlGYDZg4Mi2nqGQfMu7ttMX7Q7ydrfzOMEX0k0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=It1Y46Tt; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-42fb2314f52so1437783f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Dec 2025 22:37:36 -0800 (PST)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42fbc544b09so1732867f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 19 Dec 2025 22:59:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766212654; x=1766817454; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1766213968; x=1766818768; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HjHBcsemDs+pmc8CdiEu0GIO7urS3gfyD3u2Z0DIGe4=;
-        b=F0inZ2wn0Cb6mU/SPdVl7qaEDq1z4XASnxetopQZAB4psPQa2+0E10VzfwfiIaIaHC
-         Ix2ZkqYabgou8R+8K74wX7BOtBRvFgva8TTFHHlk2E3Of8vnVsQM9HWf0hkYnPdDW3in
-         CWniqoMb4YkdzRLJZq4q7/Yn7DACUaBuqUnZCyPPdRW3x3yclSmUBmV+LgbAZw+c8Zi8
-         8RHnEH7tVYIvfSVZgaX81whdWOoUxJp923ZdVdpD+GQurOz9WI0ni1PuAAo/acEwagZe
-         jzD0QelN6DjIJ0q+DNvSVlAGUrT/G95sQIHetnX5SOGLGpUNrEQQ0cI0ssNqXK5AL073
-         Gkhw==
+        bh=ggr1CKvV/ue4dNFX3uJWs6Va/ctcKaKrP3vFkJMZfr8=;
+        b=It1Y46Tt7AiHLp1EG3Clp3pGiXPO1TWSoSyq74Cv0B1hwjazGwvjAvYMyFtUdUV+6A
+         joQu5XM+ebYdqGNfKWQ4xJwQAZI1wdYXbKeddXfDZapm6hJuxB1Zfl1/AIIutiIfWR51
+         PHBnnnTR+I+D2bKklPMnSnX/7YHU9Cyw5uU73psjC2SPi3T3SiFPyF+xlADKCilrZyEn
+         WU7jG+fUszMLR5CrB90lO37g/Gbw+NISqLc33wazUNVWnS4/MomC/1L6rXC8JqLv+iYP
+         3H8opjei/nxRHCc2jeCCZqCTbRfe9qe0c+AJE/EjPoicrVhD12pkgaD4SSyydcIiQ7ir
+         kbqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766212654; x=1766817454;
+        d=1e100.net; s=20230601; t=1766213968; x=1766818768;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HjHBcsemDs+pmc8CdiEu0GIO7urS3gfyD3u2Z0DIGe4=;
-        b=BAo/9GYpdB6aHh8QC1SHmHTeUBKtkGVA48o75Vo5zBBjqDlP/XXlm/52N5tPxvBUzu
-         mvHS8HYUnSyu2hU0lbAxzwQYIXHPkN5RsCgmIh5M4KsoZvBl5lg+7pyaLIxQjOl9F+F+
-         hVkeEeDrmrzUtj1hG0JN1n9S+1B7iQy5C4Ip3d0EAjmVoSUQrWvLkV5idJ85j6Szh3l9
-         elK1T6L7auqz5EQ9FP8y8Yfxz9ZcX6hADqhAY5HAaMC12UMSieROOrGUyku1P5DE3lra
-         vEgxH5i4i7Y3wFHFHJwZtmSamKK980kb7gZe5Cof4aQ+EH3oihNmyvWSU+jO0NiAtIik
-         USQg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxHSTU29b2wEhYw8VlNeM6Wq1EILSN/kkdctagEKtqc4gqssbfnvHFny0liveh2iP8u+dG2LOJj76HVhhQQ/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5DqnKck5IaDB+mOtIGaDQcFZ6WUYnG75AqUUk+3fE6SM/Sj9y
-	N6AA5sb7imF0HBiyfZaIYLcolIdCgmunQLlK4kDdbpiQ4oET/YaflEtT2RFIN6aa53lWt4/D0M0
-	4KiQ1/dF5jpEYBNYfIbkHL7y1USOjj4zrjtjFQA/h
-X-Gm-Gg: AY/fxX6wmkhVA0rnK/vG9ZXVJa6P1VAl4Gbl4yoITl63W7e+Z2/VtNHveoMwQl7aVk2
-	43qxlRcpS6/UmX782v8ElII5LklRzsRKuJIEcP49BS7p73UwdwngkwFmTHBbzKfhM5tPU0u3Uku
-	JEjbPqCjvab2myQVDIcBAeZSxuC0omOUj1tWBlrH7rBIuhzzLmMhYJW9Rcwf2dl88WQTrWH2Pjb
-	hRgBAYR87eZ+m6Dz9zH5cuWF63tYXJ7kW+AIrdYrFU3pdFPa572iOxIEi+Y4INqaZvUwg==
-X-Google-Smtp-Source: AGHT+IGTpyc7b4bivJRNGFE/mdSRx8SZKpEnTqJ//u9kSEgiVDljS6wsx7qNKsqizRofJeABeiwWOUE+HHMEyzPJNMs=
-X-Received: by 2002:a5d:5f85:0:b0:431:6ba:38bd with SMTP id
- ffacd0b85a97d-4324e4c715fmr5926274f8f.10.1766212654200; Fri, 19 Dec 2025
- 22:37:34 -0800 (PST)
+        bh=ggr1CKvV/ue4dNFX3uJWs6Va/ctcKaKrP3vFkJMZfr8=;
+        b=X4Ys9td6X3DaCUQzh8yaBYpwzAvdjXXcv8DoNYDXIPtuB/+g0U5MtmwGTtjwftRKHQ
+         c9SPKR9olMFa0yPe05517FeVyFc8z9dNY5bqB8hJjDMbGH2y0am0lxP1KjAapZPrwfnO
+         m8nWvujLr59U/Pyv0Dupns8RNlpM7igoOygMUa3HtfuinR+XlUlYQ0A+kU5kErnT0aNT
+         9zZ0hFBVc6qDg+D/PhPDPMeIYalHYJNw3SAa40BlsGhOe52xwIMWne5Yv6+AUxfLt87n
+         05s2NGU8hyqBmd4U457gRBGRGA2jqQWd9gI4nptB51x5YE61cBIZwG+OGH0ZzNuWgqtM
+         o7mQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVnLxHMfu0sP3/HUAmYO1M6l0KbIOIi1dMOZPLO6uWr2tZ1OXEObW6KLChvCIBAVeVzUw5/zc6m8NepE9LRmgw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaZas1wXPYG35tjUnKBgm9YB/khD+ZZaspXrW9eVV6Ma7B/SeT
+	DOKvykRWJTxPY/U+Nkyw+I/zV+NxVeFMdeMRwZ5F4v/B1SHLsneAg+DiqbHsge/lPuKH+YrLA3t
+	wy5VgLibMuSQbRBX14YmId5tMwWJVZbApt3HeRi1huaALyO0quS11u4rGS04=
+X-Gm-Gg: AY/fxX4NYa6Vl2EEtCPMbLDqq74UG15xoAjr684X3yjbIVR5rRs3/fSWETra37NTfmZ
+	YlIcQ++TDZh4JpUBrxtJxS5qOn7gaiRhjx8pSxZv+My+Zsz4Aq0aVSTRW6mCjXSWvQbmXmRrXES
+	hfC7/IWSe13ih4AimrotxWbGBhEqocEDvvFhC18sLNVJXUShrmWhwkRy/VXe8Vh6izgbJdXbDS4
+	+suhe0WDYRsW+xB+Z/cHnXteidYS5njdCBUpy/68lLs4MEOYNt2aFdSQJmGD5RF5M6mgg==
+X-Google-Smtp-Source: AGHT+IHODH3wfzjGmpYAWaFi4tRAxKBsUViU9x2Sgtx2bOEhQPbHO4g64YHi1ItfrTFoxlSesslq4LKz5vwPPWBMmjw=
+X-Received: by 2002:a05:6000:24c7:b0:42f:bc6d:e46c with SMTP id
+ ffacd0b85a97d-4324e4d1032mr5923331f8f.26.1766213967692; Fri, 19 Dec 2025
+ 22:59:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251219085259.1163048-1-davidgow@google.com> <20251219190547.GB1602@sol>
-In-Reply-To: <20251219190547.GB1602@sol>
+References: <20251219161212.1648076-1-rf@opensource.cirrus.com>
+In-Reply-To: <20251219161212.1648076-1-rf@opensource.cirrus.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 20 Dec 2025 14:37:22 +0800
-X-Gm-Features: AQt7F2pgc0DEQR1SRH_TTdLlzBsMrnx4w5dJ3-8glT6qrK039PqEJlm_6V9iSSY
-Message-ID: <CABVgOSmr4HEbOVKs1FZEmP_xwDExDxB8JZjFy0gfZWj01fqByQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: Enforce task execution in {soft,hard}irq contexts
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
-	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org
+Date: Sat, 20 Dec 2025 14:59:15 +0800
+X-Gm-Features: AQt7F2qecbmaeVSCSVATHOGbqvUTZVMh1bdmtkEhg4tv7y1Z-hyiTHHNQIuk8DU
+Message-ID: <CABVgOSkn1EW6kCocBb6GUyk4h0qQHkDUYmLMs7F9Ja8ii_gOVQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Protect KUNIT_BINARY_STR_ASSERTION against ERR_PTR values
+To: Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc: brendan.higgins@linux.dev, raemoar63@gmail.com, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000e2e6c406465c6dbb"
+	boundary="0000000000002c3bba06465cbc45"
 
---000000000000e2e6c406465c6dbb
+--0000000000002c3bba06465cbc45
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 20 Dec 2025 at 03:05, Eric Biggers <ebiggers@kernel.org> wrote:
+On Sat, 20 Dec 2025 at 00:12, Richard Fitzgerald
+<rf@opensource.cirrus.com> wrote:
 >
-> On Fri, Dec 19, 2025 at 04:52:58PM +0800, David Gow wrote:
-> > The kunit_run_irq_test() helper allows a function to be run in hardirq
-> > and softirq contexts (in addition to the task context). It does this by
-> > running the user-provided function concurrently in the three contexts,
-> > until either a timeout has expired or a number of iterations have
-> > completed in the normal task context.
-> >
-> > However, on setups where the initialisation of the hardirq and softirq
-> > contexts (or, indeed, the scheduling of those tasks) is significantly
-> > slower than the function execution, it's possible for that number of
-> > iterations to be exceeded before any runs in irq contexts actually
-> > occur. This occurs with the polyval.test_polyval_preparekey_in_irqs
-> > test, which runs 20000 iterations of the relatively fast preparekey
-> > function, and therefore fails often under many UML, 32-bit arm, m68k and
-> > other environments.
-> >
-> > Instead, ensure that the max_iterations limit counts executions in all
-> > three contexts, and requires at least one of each. This will cause the
-> > test to continue iterating until at least the irq contexts have been
-> > tested, or the 1s wall-clock limit has been exceeded. This causes the
-> > test to pass in all of my environments.
-> >
-> > In so doing, we also update the task counters to atomic ints, to better
-> > match both the 'int' max_iterations input, and to ensure they are
-> > correctly updated across contexts.
-> >
-> > Finally, we also fix a few potential assertion messages to be
-> > less-specific to the original crypto usecases.
-> >
-> > Fixes: b41dc83f0790 ("kunit, lib/crypto: Move run_irq_test() to common header")
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > ---
-> >
-> > Changes since v1:
-> > https://lore.kernel.org/all/20251219080850.921416-1-davidgow@google.com/
-> > - Remove a leftover debug line which forced max_iterations to 1.
+> Replace the NULL checks with IS_ERR_OR_NULL() in
+> KUNIT_BINARY_STR_ASSERTION() to prevent the strcmp() faulting if a
+> passed pointer is an ERR_PTR.
 >
-> Thanks!  I'd like to take this through libcrypto-fixes, if that's okay
-> with the KUnit folks (acks would be appreciated).  kunit_run_irq_test()
-> is a recently-added helper function used by the crypto and CRC tests.
-
-No worries: I don't think there are any other tests using this at the
-moment; certainly nothing that needs the fix.
-
-> For the Fixes commit, we should use the initial addition of this code:
+> Commit 7ece381aa72d4 ("kunit: Protect string comparisons against NULL")
+> added the checks for NULL on both pointers so that asserts would fail,
+> instead of faulting, if either pointer is NULL. But either pointer
+> could hold an ERR_PTR value.
 >
->     Fixes: 950a81224e8b ("lib/crypto: tests: Add hash-test-template.h and gen-hash-testvecs.py")
+> This assumes that the assertion is expecting both strings to be valid,
+> and is asserting the equality of their _content_.
+>
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> ---
 
-Sounds good: I'm sure it'll be a tiny bit trickier to backport this
-(and, e.g, the changes to the error messages aren't useful) to older
-branches (and certainly I never saw any issues prior to the polyval
-tests), but it is technically more correct, which is the best kind of
-correct. :-)
+This looks good to me, though I do acknowledge the general hate for
+IS_ERR_OR_NULL()[1], and particularly how it can annoy things like
+smatch. For an assertion, though, where we're really asserting that
+both are valid strings which are equal, I think this is okay.
+
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
---000000000000e2e6c406465c6dbb
+[1]: https://staticthinking.wordpress.com/2022/08/01/mixing-error-pointers-and-null/
+>  include/kunit/test.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 5ec5182b5e57..9cd1594ab697 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -906,7 +906,8 @@ do {                                                                               \
+>         };                                                                     \
+>                                                                                \
+>         _KUNIT_SAVE_LOC(test);                                                 \
+> -       if (likely((__left) && (__right) && (strcmp(__left, __right) op 0)))   \
+> +       if (likely(!IS_ERR_OR_NULL(__left) && !IS_ERR_OR_NULL(__right) &&      \
+> +           (strcmp(__left, __right) op 0)))                                   \
+>                 break;                                                         \
+>                                                                                \
+>                                                                                \
+> --
+> 2.47.3
+>
+
+--0000000000002c3bba06465cbc45
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -239,14 +229,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg+LV6I9zFI9+K/+x/6NCBsZQ7UwQb
-cu0Ra+Cqg80RCJ8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
-MjIwMDYzNzM0WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQggPWHlGO8w35vnRXnuI2wpfEpF5aH
+87fp0Z90YRGRVkYwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjUx
+MjIwMDY1OTI4WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAXR37J1Eyc8xHn4trxn91FBtHdyO7tp33FwLFOeJKA/2Hjye4fwmWnBeKpqRmUmPc
-7fMYn57gz0wrCYM/YBjV9XxO0F1YI9iNTpmNN6qSowdzQYFuhwDRIIMv1r4ICQddk/11qBk7CpnV
-19hjWgNEdLjjaFhsasPB3v2fXgQwaixHXB4pw2I9J/TwohTGxGcRMtP/caLflPhxeXwcHFFU7WAS
-Lp/TT3cM99xPzoyfi8p/whZVGM9dy8LIbyafMrisuVs+6Ha+OOre8MAlOaZfkNGt8mrrd2EbsLhl
-Jyzb5frjcHAu0/nlE5nje6avoOZfDLrxRn3/YCQ8zTGdRe9mwA==
---000000000000e2e6c406465c6dbb--
+AQEBBQAEggEABAdqJLk+v1sqdZXa0oR4gsFdAOldGEnPmmEotvPbZry7v+K9iK1bu7rffSAnQEjr
+oDQpnTVho7GG4rAmRutKsKS3/VfPU0bqJoXm5voBYhloEq1Iw5vSJpBAks1wTROZqYbwveuyvtRD
+SW/maeb74dqCFdqQoE2ht2/0b9zbWqQUVcazYH17Wv+co9osWbqFZ4FYSjBK2jHDAyFOA76RIK+Q
+TQVusd2eMx5XZ2NG7SMLlmzJSVr3WfWbFr0gb+t4X6N7R6SVbA+sP7kslCYtRA5P3CEY+flV2sFp
+5BpW35nJOKH4Q8OEDGn/Pr5RA6YNcJ+r47tyqIHL4ENbFsMwsA==
+--0000000000002c3bba06465cbc45--
 
