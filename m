@@ -1,160 +1,77 @@
-Return-Path: <linux-kselftest+bounces-47777-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5327CD35CC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 19:58:16 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4E37CD3689
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 21:14:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 759C0300C6CF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 18:58:14 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 660613001E09
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 20:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C5030F957;
-	Sat, 20 Dec 2025 18:58:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011CF3101AA;
+	Sat, 20 Dec 2025 20:14:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="08/+s6Qc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bB6wtsV5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B3530F549;
-	Sat, 20 Dec 2025 18:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBC98248B;
+	Sat, 20 Dec 2025 20:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766257093; cv=none; b=S164pwYFET5eioHUPhcZVB5SlQJL/7nEUTlWRAqbS1usRRlHRSWVpV6aog/j9qDXlEmBAun5il2Zrz1KkIWFUYLqzAYFKzHsUKZAARumc2mDWaRBJQK9At+7NQJr7AnHxkdohymEDxksgEK9ITWMdafB5m+baXL8CJdEcI1q/IQ=
+	t=1766261674; cv=none; b=aYk+B8GUPUwSocePOmB4xdxxL9638aEchxBd5RqLsK3LsR2y6UrW7h7bzHCFL6q8Xgfo3rZ0bHB4xcjDLyfTaCW3jwdYIxrbm1NGhCYs57SHz3ghizA7SIY9CwcrN2LyWtrXEXt7kogVEAvgWMSvztQd8Jt+FVNht1EPr/sPLJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766257093; c=relaxed/simple;
-	bh=hNYk6WvWY18rpSMRepWtGWSsWj/pCn+KqXDaxv4oSAU=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=b9YqjwyWZehV4PVQqMJVq8nHZ7mZPrztmzgR8zvUpDTPU0Bxz1c96jKV62SNZd/P7zeGpgS/iXHTVd5oaGDiXp2wxcwkJWmUwbUkTD8dCqo8sDhGbpiuf3CM7vV43ErAS72+mc3XSWYvgx/tykGperLC32BQtUCCYrM+7wqpwpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=08/+s6Qc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1B0C4CEF5;
-	Sat, 20 Dec 2025 18:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1766257092;
-	bh=hNYk6WvWY18rpSMRepWtGWSsWj/pCn+KqXDaxv4oSAU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=08/+s6Qcq4HVi/H4W3MD2fJtmg7A9T0b0dpAdF6cTj998kxZ05Wn5oTdiktIwlApz
-	 0EchykW636s6Lpq0OHCtMt0h4Wp27k4JHqqKiipg8mEBrTJZ4AeuriGkskTQYloVrd
-	 Mo7nYwxl7wCG5hi5yvisMSx9xRVdadUMOkYeiQ0s=
-Date: Sat, 20 Dec 2025 10:58:11 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Li Wang <liwang@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, David Hildenbrand <david@kernel.org>, Mark Brown
- <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>, Waiman Long
- <longman@redhat.com>
-Subject: Re: [PATCH 1/3] selftests/mm/write_to_hugetlbfs: parse -s with
- strtoull and use size_t
-Message-Id: <20251220105811.3516167661cd696f464cc3b0@linux-foundation.org>
-In-Reply-To: <20251220111645.2246009-2-liwang@redhat.com>
-References: <20251220111645.2246009-1-liwang@redhat.com>
-	<20251220111645.2246009-2-liwang@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1766261674; c=relaxed/simple;
+	bh=nkyvNROWJoXN3FlboOHRnSmcV4s7SfZA/xZ+q0jQ0Jk=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=MFuxWtIE7Eq6Zyx3kIltIrAMGBsv77wFLiXOYvuE7hahxkDOZHoPZkhInXA9sR0kdvo6yLofNEoTd5lZXQpIJmiMe88c7ZFyQNM7uSYV5l6uI1OqxUAgqqd9FN57Nqd7ieN3L/nSV5jrQ00366v1BL0FG+ivjjUVgfTNx5+EUK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bB6wtsV5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A99D1C4CEF5;
+	Sat, 20 Dec 2025 20:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766261674;
+	bh=nkyvNROWJoXN3FlboOHRnSmcV4s7SfZA/xZ+q0jQ0Jk=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=bB6wtsV578hyX1ZwUyBOnn3pIb0o4kAEugmLRqPx8KsDztsAPMI9wlMSh7bxCgc80
+	 X+hXxKG9wwvr0kE4MJgj9W8Dg9A7QrUs1wR0iWlkNMrV81ElThn4Nir+W83oHmU9Bk
+	 I4cd3rl/3oRjxkPXCjfLHUn1pZI6pYwJ4qgGNV0QcILYBTlclE43a6DHlcKh/ptT+d
+	 su1lNFvo8rxZ2fTTfNbbXTZ62DY6rFnBaTCrFoU3n1/CHz8F9j+frOhD3DjZPkBFmo
+	 u7p+gNYEtzwH5/9kKk7Ih+buyGA8qsBOsJjankuNF6v+KJ2AV5NbkFkIym/yzsh/1W
+	 RN7/QhpaDSbig==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2FB83809A05;
+	Sat, 20 Dec 2025 20:11:23 +0000 (UTC)
+Subject: Re: [GIT PULL] kunit fixes update for Linux 6.19-rc3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <11a7c86a-459d-46c2-bfe5-9237fb586584@linuxfoundation.org>
+References: <11a7c86a-459d-46c2-bfe5-9237fb586584@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <11a7c86a-459d-46c2-bfe5-9237fb586584@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-6.19-rc3
+X-PR-Tracked-Commit-Id: c33b68801fbe9d5ee8a9178beb5747ec65873530
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: fa084c35afa13ab07a860ef0936cd987f9aa0460
+Message-Id: <176626148242.129879.13353522451801964160.pr-tracker-bot@kernel.org>
+Date: Sat, 20 Dec 2025 20:11:22 +0000
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, shuah <shuah@kernel.org>, skhan@linuxfoundation.org, David Gow <davidgow@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, raemoar63@gmail.com, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Sat, 20 Dec 2025 19:16:43 +0800 Li Wang <liwang@redhat.com> wrote:
+The pull request you sent on Sat, 20 Dec 2025 01:40:40 -0700:
 
-> write_to_hugetlbfs currently parses the -s size argument with atoi()
-> into an int. This silently accepts malformed input, cannot report overflow,
-> and can truncate large sizes.
-> 
-> --- Error log ---
->  # uname -r
->  6.12.0-xxx.el10.aarch64+64k
-> 
->  # ls /sys/kernel/mm/hugepages/hugepages-*
->  hugepages-16777216kB/  hugepages-2048kB/  hugepages-524288kB/
-> 
->  #./charge_reserved_hugetlb.sh -cgroup-v2
->  # -----------------------------------------
->  ...
->  # nr hugepages = 10
->  # writing cgroup limit: 5368709120
->  # writing reseravation limit: 5368709120
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-fixes-6.19-rc3
 
-Can we fix that typo while we're in there?  "reservation".
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/fa084c35afa13ab07a860ef0936cd987f9aa0460
 
->  ...
->  # Writing to this path: /mnt/huge/test
->  # Writing this size: -1610612736        <--------
-> 
-> Switch size to size_t and parse -s using strtoull() with proper validation.
-> Also print the size using %zu.
-> 
-> This makes the test utility more robust and avoids undefined/incorrect
-> behavior with large or invalid -s values.
-> 
-> ...
->
-> --- a/tools/testing/selftests/mm/write_to_hugetlbfs.c
-> +++ b/tools/testing/selftests/mm/write_to_hugetlbfs.c
-> @@ -68,7 +68,7 @@ int main(int argc, char **argv)
->  	int key = 0;
->  	int *ptr = NULL;
->  	int c = 0;
-> -	int size = 0;
-> +	size_t size = 0;
->  	char path[256] = "";
->  	enum method method = MAX_METHOD;
->  	int want_sleep = 0, private = 0;
-> @@ -86,7 +86,20 @@ int main(int argc, char **argv)
->  	while ((c = getopt(argc, argv, "s:p:m:owlrn")) != -1) {
->  		switch (c) {
->  		case 's':
-> -			size = atoi(optarg);
-> +			errno = 0;
-> +			char *end = NULL;
-> +			unsigned long long tmp = strtoull(optarg, &end, 10);
+Thank you!
 
-Coding-style nits: we do accept c99-style definitions nowadays but I do
-think our eyes prefer the less surprising "definitions come before
-code" style.  So the above could be
-
-			char *end = NULL;
-			unsigned long long tmp = strtoull(optarg, &end, 10);
-
-			errno = 0;
-
-Also, `errno' belongs to libc.  It seems wrong to be altering it from
-within our client code.
-
-> +			if (errno || end == optarg || *end != '\0') {
-> +				errno = EINVAL;
-> +				perror("Invalid -s size");
-> +				exit_usage();
-> +			}
-> +			if (tmp == 0) {
-> +				errno = EINVAL;
-> +				perror("size not found");
-> +				exit_usage();
-> +			}
-> +			size = (size_t)tmp;
->  			break;
-
-I'm not really clear on what problems we're trying to solve here, but
-this all seems like a lot of fuss.  Can we just do
-
-	if (sscanf(optarg, "%zu", &size) != 1)
-
-?
-
->  		case 'p':
->  			strncpy(path, optarg, sizeof(path) - 1);
-> @@ -131,7 +144,7 @@ int main(int argc, char **argv)
->  	}
->  
->  	if (size != 0) {
-> -		printf("Writing this size: %d\n", size);
-> +		printf("Writing this size: %zu\n", size);
->  	} else {
->  		errno = EINVAL;
->  		perror("size not found");
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
