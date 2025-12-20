@@ -1,180 +1,140 @@
-Return-Path: <linux-kselftest+bounces-47749-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 927D3CD232D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 00:39:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E5ABCD2592
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 03:11:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF194307316E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 19 Dec 2025 23:38:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E3C4A30184D4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Dec 2025 02:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D83BB2F1FE7;
-	Fri, 19 Dec 2025 23:38:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB16C2EA749;
+	Sat, 20 Dec 2025 02:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mlfNE4gW"
+	dkim=pass (2048-bit key) header.d=pooladkhay.com header.i=@pooladkhay.com header.b="AYDiKpyM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound.qs.icloud.com (p-east3-cluster6-host6-snip4-1.eps.apple.com [57.103.85.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC6C2EDD40
-	for <linux-kselftest@vger.kernel.org>; Fri, 19 Dec 2025 23:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A3F2E0926
+	for <linux-kselftest@vger.kernel.org>; Sat, 20 Dec 2025 02:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.85.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766187511; cv=none; b=j07btadrpGNJlhvJZTbIhwZETIL97ozKCJBQymSaa+0GDdTzw7DMnrwI6Mh7JjDKIJTa8pdFSkf/O4nxoEw3OVgqpWHtoeeDQcQKkht/w4wP6aD3/JWI6ycmVkvKmZJqqgosL9AhGhxpXtISkGaf6dQE/6afSN+gMVIcW/0F7+E=
+	t=1766196677; cv=none; b=uRM/gcohr7tXy6COWFhGWbNVfOMJSfFcRIBYdGMMZb0ZJ+iJs5oR+uZ8r/8PcGBQHNg1ZTLB9Sg2yUkb11Qdi7XXtqGweP4zMcdwJdmRnLydTbfILHJickYRw+Wv1+qDVZH7lAlNxieHse/Zy03Ir+Wcg5pkD8TX7YTjgGGWIG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766187511; c=relaxed/simple;
-	bh=JyC9eo530M5ljalMP8uuCAafPZED6nTNfGN1kJNfXdE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=rncBP4Z+OzYuKeHSKnwGppSaXalbiy4l0tBJP2r/I3HI5sl+UXhJDQhd3B6GCQ1SyggH0H1f+hofTMfK4Q4ricLJ/a8gabUwp/HbaiOwNcmY+kooPiR7EbjCc+VZlIiXg9ibixrM+JCMf2OGifKMf0et1NJDdRlPsjnuuRkyCzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mlfNE4gW; arc=none smtp.client-ip=209.85.210.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
-Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7a99a5f77e0so3545181b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 19 Dec 2025 15:38:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766187509; x=1766792309; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYrEUFHHSrWSjApG9MRx026qZB/VzRtJqC7WAFxS0uY=;
-        b=mlfNE4gWkMVLCavOHNJvzXBoNZqjNweEDxlHLW//oNNSLlw8B170gL71o4v4WbROYt
-         DbrxwA4b0PFsqPXmc7q8j4IP9/pXoBoDwENSgboW3gyfa5dWXCa+kEITM20M/irBGkIP
-         RsnqPKI+5cDzOPsQUi56ZEj8U8mRPfTNz9Qwc4FDFJsPcxurJFnsrGCK441xZEe6W4dP
-         WxI9p5c+fzwslqR7e9gFAkDQZHV8DUSuOD4OlpRVC+dGyCzLhZ7CHhagnZWQZKLtq/XW
-         kLnsJCS79qe3uyO/60kFSaA2u5hjGIGDM1BCeVDF22VOvLCChNDrR5ZqGv+o/nF5hICQ
-         FhNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766187509; x=1766792309;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYrEUFHHSrWSjApG9MRx026qZB/VzRtJqC7WAFxS0uY=;
-        b=lUf0C8iSrx7v/DyB3w/AAFod6P9TeopGCl1w6eOdg0tta9bYLD5cHO8ssbrS5odMVW
-         LAmV0SOumSVFysUx4GuVY8y/cnIdv30CnyBlacz9wAxsiQkHfB8VKg4E97iDEiCN4OGI
-         ueTw6YkE0GE54aiMs2Rk7zFvPXzvkxk8p1qqBAF3KDp/BphBbw0qNdU5//r2dZrP2IvG
-         1tx11uk1BaWkWshy04IirMiIw3S9h6+seYaDnTZoZz5XFv4e+2EhmYy06Da8pe4PnKyM
-         TLm+jRCBntDXHonGk9Cy7pDoPptPJ3LX5Dh51TABXF8BIW0OEO/IDj3jwWgaQmFVw2Ta
-         wKsA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGCxEPVg+WtzBCsHAZyH6KwULBbGOZYEMQNaR0L4v0CqkH6nh4BcRqjimQxqh5MsQem9AcTrL/KfvYM2G/J8U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvFNGaipQ505rrceum2molSdyWQyo4V3Nsa6aOXLrVZ3spBvLl
-	EjQB8ZvByczuFwkyq75IUhjn3RvBUCBpEl/bhaQT2EEAa8SoSFEkdelosD2zjStZxmwHPdtCnr6
-	3ex9voGOwvWa7jg==
-X-Google-Smtp-Source: AGHT+IFdwBcyxhazmcoTlALhwwLvbQZw8lpAuq+J+NHXrsmB1i51VsdgscFDGcvBfCw/ezW9ut9mRL7qW+KWSQ==
-X-Received: from pfbcu6.prod.google.com ([2002:a05:6a00:4486:b0:7fb:bab5:e6e1])
- (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:278b:b0:782:7052:5167 with SMTP id d2e1a72fcca58-7ff650c7fe1mr4234814b3a.6.1766187509445;
- Fri, 19 Dec 2025 15:38:29 -0800 (PST)
-Date: Fri, 19 Dec 2025 23:38:18 +0000
-In-Reply-To: <20251219233818.1965306-1-dmatlack@google.com>
+	s=arc-20240116; t=1766196677; c=relaxed/simple;
+	bh=M5zIZxyX3vJfnlru/qogq4ie/BJBDwXUAUKpVTyat1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=idKaTcSYoUM1eDnqJzQvlzuPloBihmkE9WvVkO5r0Mb54ze+wemjDa0JvLVHxTm9sWCOZJFz+4Gpr1xegydRMAYzLbtvhsZR0VSKfruCM4ztuzIIeRy2H9zk506InCqZmsEegD1ryasy51kPSEsdOtHIIuaziIWuVrnv4aEbWHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pooladkhay.com; spf=pass smtp.mailfrom=pooladkhay.com; dkim=pass (2048-bit key) header.d=pooladkhay.com header.i=@pooladkhay.com header.b=AYDiKpyM; arc=none smtp.client-ip=57.103.85.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pooladkhay.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pooladkhay.com
+Received: from outbound.qs.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-east-2d-60-percent-4 (Postfix) with ESMTPS id 666B418000A6;
+	Sat, 20 Dec 2025 02:11:12 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pooladkhay.com; s=sig1; bh=vKcDOVLwTHpYjAOxbDjZNRdPCGR97CruclmfjlgLv3I=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=AYDiKpyMk/KFzWe2+6e9rx/qiseyqgvpTo1HMdCso53VkRHhXGgCXHfu/GScuqAe7zOmJ2fPKB5qZBPHzMw0xCRwRgrvSVBsUIglxFsu0+nmeDSXh7DUYsYLNVkQAHYMl1ZI1pFCLuavUwORQY4/PfHxcFp+k3capvrHkrBS9VfW0CgsrIK2ejZihJ8M0iPr0KsdBdTYOK+neu9wWRA2hiNOubTXuIiFS3uCNT/tpT4WELlHtdGU/YJW4pH9Jxc+QJRmN2opr8ZUo0uXzGELuvZ98XEY8cwdNY2puZ0tXbrKv82JRkf7dHm6IK2HCygk7faHOfvDTAXwWPHsOZG9mA==
+mail-alias-created-date: 1721833214903
+Received: from fedora (unknown [17.57.155.37])
+	by p00-icloudmta-asmtp-us-east-2d-60-percent-4 (Postfix) with ESMTPSA id 7DC6F1800132;
+	Sat, 20 Dec 2025 02:11:10 +0000 (UTC)
+From: MJ Pooladkhay <mj@pooladkhay.com>
+To: seanjc@google.com,
+	pbonzini@redhat.com
+Cc: shuah@kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	MJ Pooladkhay <mj@pooladkhay.com>
+Subject: [PATCH] KVM: selftests: Fix sign extension bug in get_desc64_base()
+Date: Sat, 20 Dec 2025 02:10:50 +0000
+Message-ID: <20251220021050.88490-1-mj@pooladkhay.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251219233818.1965306-1-dmatlack@google.com>
-X-Mailer: git-send-email 2.52.0.322.g1dd061c0dc-goog
-Message-ID: <20251219233818.1965306-3-dmatlack@google.com>
-Subject: [PATCH 2/2] vfio: selftests: Drop <uapi/linux/types.h> includes
-From: David Matlack <dmatlack@google.com>
-To: Alex Williamson <alex@shazbot.org>
-Cc: Alex Mastro <amastro@fb.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Matlack <dmatlack@google.com>, Josh Hilke <jrhilke@google.com>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Raghavendra Rao Ananta <rananta@google.com>, Shuah Khan <shuah@kernel.org>, 
-	Wei Yang <richard.weiyang@gmail.com>, Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Authority-Info: v=2.4 cv=EvjfbCcA c=1 sm=1 tr=0 ts=694605c1 cx=c_apl:c_pps
+ a=bsP7O+dXZ5uKcj+dsLqiMw==:117 a=bsP7O+dXZ5uKcj+dsLqiMw==:17
+ a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Zm6OpU2aAAAA:8
+ a=LkGu3Il3C3kqsxVw9RAA:9 a=7OHkOZIn_5tYZgECawIR:22
+X-Proofpoint-GUID: -i5TUfmSSksG7sSoaynImRLKo7Q41z3E
+X-Proofpoint-ORIG-GUID: -i5TUfmSSksG7sSoaynImRLKo7Q41z3E
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIwMDAxNiBTYWx0ZWRfXxscVuSWhNrkR
+ FoE0ydymLVyCBB9jTIYAx+iHgqRABb1yOFa/k/quC+C89w6Ss5Uz/a4sm7D5/vWX3WxGcA9Bmxx
+ AlPxSA9rE05ZkxJLINJIba2RePuGZnTZcqXXssAewC03+mg0isxb/ArvnCMYtOoXi1cHSrp5ukv
+ HEKwKqhLnOelFhr3z30ePoOx7KdVBuMF6SVpmfcJ45IN4V6z4FSpxcesY9h6eoTcZNsTM5x9dpM
+ fT9CRGA3EKpFEIwjkRgFtrrVRe4axG3atSsNz+OFOD/tIaVvnPNQyTRAb18Ay5truQEc7v6wkzv
+ KzS5Xad6yijxc8bneFX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-19_08,2025-12-19_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1030
+ malwarescore=0 spamscore=0 adultscore=0 mlxscore=0 mlxlogscore=843
+ bulkscore=0 phishscore=0 suspectscore=0 classifier=spam authscore=0 adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512200016
+X-JNJ: AAAAAAABpW5oZWeKHJ+Gckjv9yi0Nrl7aIWU8LNKPg80BZ0UDO3G4zT9gUlkfxSm0O7xuuaccKOIvsTu4JoEfJbvNvEVgtcT8HXtf8Kugq24lm4vba78Ofur/7BdzhkFFf5RcbvmoIBZK7dzIUYLEQ+4yePpGIUZHcbKdyFKUzhZ4Lk3nzr5zuin4bKzsjAecOXeJ7k121asQyYICUtVpx9lwK4CSLNaUrcdgryec7+bp+j2MSspm/AbrgWDKQe+vzCm9VkQCwOcxXZmp1DtFrfnqc5B1oKjqd1XFgAzzplhrVzhM+H1luv6UdcaZzRxcI7FY9FrA+hOPmUM3HjiaSytpfiEPUNlSLqFMNlUbBVSo1yvS/b9lJZdnozZUpEZpnX948wQfpPlCU5Kt/vNLwQngSrb63TIKUpnVtDK4sD+gz+Lt7Hun10m3OpcxCW9s/1ZcvfeFVQFWZG9hEgafTWlfICV4gEDGtatooLFbEMLoOck87M+AG1mfObkQG1095Jj1vT/U147fqqXfE8wifPK9eLyudeiVUXr/hZAYnh5VbokZ/b5ETJSJrGm+q487PffQu6+a7rYKF0wHP2G8wGZg7CqTunTkRXS4dPPcUwU9hW7u1PwF/sylNwWNrh/Z2nNUcdXTAv6fRMhCRTyr7RCra8Nw1lHygN4NIdAvbT3AgR/GJiPjR+N5kA=
 
-Drop the <uapi/linux/types.h> includes now that <linux/types.h>
-(tools/include/linux/types.h) has a definition for __aligned_le64, which
-is needed by <linux/iommufd.h>.
+The function get_desc64_base() performs a series of bitwise left shifts on
+fields of various sizes. More specifically, when performing '<< 24' on
+'desc->base2' (which is a u8), 'base2' is promoted to a signed integer
+before shifting.
 
-Including <uapi/linux/types.h> is harmless but causes benign typedef
-redifitions. This is not a problem for VFIO selftests but be an issue
-when the VFIO selftests library is built into KVM selftests, since they
-are built with -std=gnu99 which does not allow typedef redifitions.
+In a scenario where base2 >= 0x80, the shift places a 1 into bit 31,
+causing the 32-bit intermediate value to become negative. When this
+result is cast to uint64_t or ORed into the return value, sign extension
+occurs, corrupting the upper 32 bits of the address (base3).
 
-No functional change intended.
+Example:
+Given:
+  base0 = 0x5000
+  base1 = 0xd6
+  base2 = 0xf8
+  base3 = 0xfffffe7c
 
-Signed-off-by: David Matlack <dmatlack@google.com>
+Expected return: 0xfffffe7cf8d65000
+Actual return:   0xfffffffff8d65000
+
+Fix this by explicitly casting the fields to 'uint64_t' before shifting
+to prevent sign extension.
+
+Signed-off-by: MJ Pooladkhay <mj@pooladkhay.com>
 ---
- .../testing/selftests/vfio/lib/include/libvfio/iova_allocator.h  | 1 -
- tools/testing/selftests/vfio/lib/iommu.c                         | 1 -
- tools/testing/selftests/vfio/lib/iova_allocator.c                | 1 -
- tools/testing/selftests/vfio/lib/vfio_pci_device.c               | 1 -
- tools/testing/selftests/vfio/vfio_dma_mapping_test.c             | 1 -
- tools/testing/selftests/vfio/vfio_iommufd_setup_test.c           | 1 -
- 6 files changed, 6 deletions(-)
+While using get_desc64_base() to set the HOST_TR_BASE value for a custom 
+educational hypervisor, I observed system freezes, either immediately or
+after migrating the guest to a new core. I eventually realized that KVM
+uses get_cpu_entry_area() for the TR base. Switching to that fixed my
+freezes (which were triple faults on one core followed by soft lockups 
+on others, waiting on smp_call_function_many_cond) and helped me identify
+the sign-extension bug in this helper function that was corrupting the
+HOST_TR_BASE value.
 
-diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/iova_allocator.h b/tools/testing/selftests/vfio/lib/include/libvfio/iova_allocator.h
-index 8f1d994e9ea2..c7c0796a757f 100644
---- a/tools/testing/selftests/vfio/lib/include/libvfio/iova_allocator.h
-+++ b/tools/testing/selftests/vfio/lib/include/libvfio/iova_allocator.h
-@@ -2,7 +2,6 @@
- #ifndef SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_IOVA_ALLOCATOR_H
- #define SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_IOVA_ALLOCATOR_H
+Thanks,
+MJ Pooladkhay
+
+ tools/testing/selftests/kvm/include/x86/processor.h | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+index 57d62a425..cc2f8fb6f 100644
+--- a/tools/testing/selftests/kvm/include/x86/processor.h
++++ b/tools/testing/selftests/kvm/include/x86/processor.h
+@@ -436,8 +436,11 @@ struct kvm_x86_state {
  
--#include <uapi/linux/types.h>
- #include <linux/list.h>
- #include <linux/types.h>
- #include <linux/iommufd.h>
-diff --git a/tools/testing/selftests/vfio/lib/iommu.c b/tools/testing/selftests/vfio/lib/iommu.c
-index 8079d43523f3..58b7fb7430d4 100644
---- a/tools/testing/selftests/vfio/lib/iommu.c
-+++ b/tools/testing/selftests/vfio/lib/iommu.c
-@@ -11,7 +11,6 @@
- #include <sys/ioctl.h>
- #include <sys/mman.h>
+ static inline uint64_t get_desc64_base(const struct desc64 *desc)
+ {
+-	return ((uint64_t)desc->base3 << 32) |
+-		(desc->base0 | ((desc->base1) << 16) | ((desc->base2) << 24));
++	uint64_t low = (uint64_t)desc->base0 |
++		       ((uint64_t)desc->base1 << 16) |
++		       ((uint64_t)desc->base2 << 24);
++
++	return (uint64_t)desc->base3 << 32 | low;
+ }
  
--#include <uapi/linux/types.h>
- #include <linux/limits.h>
- #include <linux/mman.h>
- #include <linux/types.h>
-diff --git a/tools/testing/selftests/vfio/lib/iova_allocator.c b/tools/testing/selftests/vfio/lib/iova_allocator.c
-index a12b0a51e9e6..8c1cc86b70cd 100644
---- a/tools/testing/selftests/vfio/lib/iova_allocator.c
-+++ b/tools/testing/selftests/vfio/lib/iova_allocator.c
-@@ -11,7 +11,6 @@
- #include <sys/ioctl.h>
- #include <sys/mman.h>
- 
--#include <uapi/linux/types.h>
- #include <linux/iommufd.h>
- #include <linux/limits.h>
- #include <linux/mman.h>
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 13fdb4b0b10f..0b335e4e0435 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -11,7 +11,6 @@
- #include <sys/ioctl.h>
- #include <sys/mman.h>
- 
--#include <uapi/linux/types.h>
- #include <linux/iommufd.h>
- #include <linux/limits.h>
- #include <linux/mman.h>
-diff --git a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-index 5397822c3dd4..41b8cae7a6ae 100644
---- a/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-+++ b/tools/testing/selftests/vfio/vfio_dma_mapping_test.c
-@@ -3,7 +3,6 @@
- #include <sys/mman.h>
- #include <unistd.h>
- 
--#include <uapi/linux/types.h>
- #include <linux/iommufd.h>
- #include <linux/limits.h>
- #include <linux/mman.h>
-diff --git a/tools/testing/selftests/vfio/vfio_iommufd_setup_test.c b/tools/testing/selftests/vfio/vfio_iommufd_setup_test.c
-index caf1c6291f3d..5d980b148d83 100644
---- a/tools/testing/selftests/vfio/vfio_iommufd_setup_test.c
-+++ b/tools/testing/selftests/vfio/vfio_iommufd_setup_test.c
-@@ -1,5 +1,4 @@
- // SPDX-License-Identifier: GPL-2.0
--#include <uapi/linux/types.h>
- #include <linux/limits.h>
- #include <linux/sizes.h>
- #include <linux/vfio.h>
+ static inline uint64_t rdtsc(void)
 -- 
-2.52.0.322.g1dd061c0dc-goog
+2.52.0
 
 
