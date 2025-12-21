@@ -1,66 +1,74 @@
-Return-Path: <linux-kselftest+bounces-47799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51845CD4017
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Dec 2025 13:26:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57E15CD401D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Dec 2025 13:27:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 36E09300647A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Dec 2025 12:26:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 88AE1300D41E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Dec 2025 12:26:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD3CB28468E;
-	Sun, 21 Dec 2025 12:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA9B28468E;
+	Sun, 21 Dec 2025 12:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="D1oisUgH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cI+9ZXDL"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65D2277035
-	for <linux-kselftest@vger.kernel.org>; Sun, 21 Dec 2025 12:26:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733A8221282
+	for <linux-kselftest@vger.kernel.org>; Sun, 21 Dec 2025 12:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766320017; cv=none; b=qNPYRd4OTiEN0GoBcnCft8lOSWVw2e9ystLB6dVEYfbgBly0NGEtvBvTizXHTE0hCukHUgSCvTiRf+/E0uMLq3bkI016HnpVclVUBR9UqYTQYOm/7V0dtuJ29QZqD1S1qnbWAnJMmByVkCebR6aLyFex0SSn+JVdSoDMDfS1Z4A=
+	t=1766320019; cv=none; b=Z8rXv8nwFnpy1HYMuwf4F4ogmJRAgaaVdH+ACC5MNgAN5Rib0KOPH7PNSeMnpolkkze7+iziTV/r2N/4l2lzNk9sC34hKsgSgngFlCZlOI5hYTsYOxYCshZrZXL2mf7kiGOyKB2N+jUmQmNxRp8al24m1t/sDlH9Z9lZJMeoGq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766320017; c=relaxed/simple;
-	bh=yEaoKw66qN9NsIxBN+HvU6x1mhh4PRbcMoN1eowIHyc=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Ea91vnM9VSpO0I1Ol/OyI+AWjC1qqq4b2q2WbHCq8++FBMcCkylCsj/JW0U974Bi/NFIbcbfthTMD86IudA6TwgA/nUzx1TVwx/C5OyWpJdmUIGcHj162x/txkXSZ7og+miRPnqyNhB5rQcHzKQwhceb2gByePEF5RJ20tsEbeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=D1oisUgH; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1766320019; c=relaxed/simple;
+	bh=B4sZdJG1t9EctDBIEt1ugcR+phuCjNoMUoxASwFgC4c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lIwqiLoIXuQD38TIE7YSUDU3TMpOjACayDi9KE4pBw3Il46ZKlj88UtB9Ja6Mjod6CIgGbJfaY8XRJGcGQL9wtkfa4z5yTuPO8PMVCBpLBqlZfq/HoMgZ2jNbGg+QvgTVYN+I15I7aQG0Q9L4DlwcHb0aYuRSCaa1oX7uLJF0yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cI+9ZXDL; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766320014;
+	s=mimecast20190719; t=1766320016;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wR6RJvO5q829q98KcHX2afv2FHKgdC2z2h5jm0IRqMc=;
-	b=D1oisUgHRe1Avh2qPVV/NRIETTlmIgSzuCQzwnTnpxNdlXW0S7KU2tpucnIN+md1PJBkae
-	X8AO/4vMAJhDE4L7Wj7bTZ1TNIzEVz2GVYRqcuI83itoJU9tpegf32+eZ9/BfS9H1ivoFf
-	9FtaQucjGyZdqug8YK9tX6tHzgFoLVE=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q/oaz55RIgwHHbP5HbFfkXnPCuvWreBFUWRc63qZ0WQ=;
+	b=cI+9ZXDL4NxJbMWCOV0ORfnBzj6rpBjjwM50NcApDvg1IYbwheGn0pRoAHOD3hgmuGwDtr
+	/5eUTEHlkQOT9udmOuyf5sA+LatyIKr38fFfMOyNplkeQTdIhkCLtXFZ8vMNwNPj6F7l0L
+	vhGYGg7PiiXYaXzHVR6m4aD0ic5U+Jw=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-479-s3nKjBC4P-a7eJnzjnbJqQ-1; Sun,
- 21 Dec 2025 07:26:48 -0500
-X-MC-Unique: s3nKjBC4P-a7eJnzjnbJqQ-1
-X-Mimecast-MFC-AGG-ID: s3nKjBC4P-a7eJnzjnbJqQ_1766320007
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-683-K90Ry8O3Os-k_MrDsuatRA-1; Sun,
+ 21 Dec 2025 07:26:53 -0500
+X-MC-Unique: K90Ry8O3Os-k_MrDsuatRA-1
+X-Mimecast-MFC-AGG-ID: K90Ry8O3Os-k_MrDsuatRA_1766320011
 Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id F11461956080;
-	Sun, 21 Dec 2025 12:26:46 +0000 (UTC)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7DC6D1800358;
+	Sun, 21 Dec 2025 12:26:51 +0000 (UTC)
 Received: from dell-per7425-02.rhts.eng.pek2.redhat.com (dell-per7425-02.rhts.eng.pek2.redhat.com [10.73.116.18])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BD36D19560B4;
-	Sun, 21 Dec 2025 12:26:44 +0000 (UTC)
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9EFE119560B4;
+	Sun, 21 Dec 2025 12:26:47 +0000 (UTC)
 From: Li Wang <liwang@redhat.com>
 To: akpm@linux-foundation.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH v3 0/3] selftests/mm: hugetlb cgroup charging: robustness fixes
-Date: Sun, 21 Dec 2025 20:26:36 +0800
-Message-ID: <20251221122639.3168038-1-liwang@redhat.com>
+Cc: David Hildenbrand <david@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH v3 1/3] selftests/mm/write_to_hugetlbfs: parse -s as size_t
+Date: Sun, 21 Dec 2025 20:26:37 +0800
+Message-ID: <20251221122639.3168038-2-liwang@redhat.com>
+In-Reply-To: <20251221122639.3168038-1-liwang@redhat.com>
+References: <20251221122639.3168038-1-liwang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,47 +78,77 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Changes in v3:
-  - 1/3: no changes.
-  - 2/3: reorder with 3/3, and drop the 'size=' mount args.
-  - 3/3: add $path check, improve varible declaration, sleep 1s for 60 tryies.
+write_to_hugetlbfs currently parses the -s size argument with atoi()
+into an int. This silently accepts malformed input, cannot report overflow,
+and can truncate large sizes.
 
-Changes in v2:
-  - 1/3: Parse -s using sscanf("%zu", ...) instead of strtoull().
-  - 2/3: Fix typo in charge_reserved_hugetlb.sh ("reseravation" -> "reservation").
-  - 3/3: No changes.
+--- Error log ---
+ # uname -r
+ 6.12.0-xxx.el10.aarch64+64k
 
-This series fixes a few issues in the hugetlb cgroup charging selftests
-(write_to_hugetlbfs.c + charge_reserved_hugetlb.sh) that show up on systems
-with large hugepages (e.g. 512MB) and when failures cause the test to wait
-indefinitely.
+ # ls /sys/kernel/mm/hugepages/hugepages-*
+ hugepages-16777216kB/  hugepages-2048kB/  hugepages-524288kB/
 
-On an aarch64 64k page kernel with 512MB hugepages, the test consistently
-fails in write_to_hugetlbfs with ENOMEM and then hangs waiting for the
-expected usage values. The root cause is that charge_reserved_hugetlb.sh
-mounts hugetlbfs with a fixed size=256M, which is smaller than a single
-hugepage, resulting in a mount with size=0 capacity.
+ #./charge_reserved_hugetlb.sh -cgroup-v2
+ # -----------------------------------------
+ ...
+ # nr hugepages = 10
+ # writing cgroup limit: 5368709120
+ # writing reseravation limit: 5368709120
+ ...
+ # Writing to this path: /mnt/huge/test
+ # Writing this size: -1610612736        <--------
 
-In addition, write_to_hugetlbfs previously parsed -s via atoi() into an
-int, which can overflow and print negative sizes.
+Switch the size variable to size_t and parse -s with sscanf("%zu", ...).
+Also print the size using %zu.
 
-Reproducer / environment:
-  - Kernel: 6.12.0-xxx.el10.aarch64+64k
-  - Hugepagesize: 524288 kB (512MB)
-  - ./charge_reserved_hugetlb.sh -cgroup-v2
-  - Observed mount: pagesize=512M,size=0 before this series
+This avoids incorrect behavior with large -s values and makes the utility
+more robust.
 
-After applying the series, the test completes successfully on the above setup.
+Signed-off-by: Li Wang <liwang@redhat.com>
+Cc: David Hildenbrand <david@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Waiman Long <longman@redhat.com>
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
+---
+ tools/testing/selftests/mm/write_to_hugetlbfs.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Li Wang (3):
-  selftests/mm/write_to_hugetlbfs: parse -s as size_t
-  selftests/mm/charge_reserved_hugetlb: drop mount size for hugetlbfs
-  selftests/mm/charge_reserved_hugetlb.sh: add waits with timeout helper
-
- .../selftests/mm/charge_reserved_hugetlb.sh   | 55 +++++++++++--------
- .../testing/selftests/mm/write_to_hugetlbfs.c |  9 ++-
- 2 files changed, 38 insertions(+), 26 deletions(-)
-
+diff --git a/tools/testing/selftests/mm/write_to_hugetlbfs.c b/tools/testing/selftests/mm/write_to_hugetlbfs.c
+index 34c91f7e6128..ecb5f7619960 100644
+--- a/tools/testing/selftests/mm/write_to_hugetlbfs.c
++++ b/tools/testing/selftests/mm/write_to_hugetlbfs.c
+@@ -68,7 +68,7 @@ int main(int argc, char **argv)
+ 	int key = 0;
+ 	int *ptr = NULL;
+ 	int c = 0;
+-	int size = 0;
++	size_t size = 0;
+ 	char path[256] = "";
+ 	enum method method = MAX_METHOD;
+ 	int want_sleep = 0, private = 0;
+@@ -86,7 +86,10 @@ int main(int argc, char **argv)
+ 	while ((c = getopt(argc, argv, "s:p:m:owlrn")) != -1) {
+ 		switch (c) {
+ 		case 's':
+-			size = atoi(optarg);
++			if (sscanf(optarg, "%zu", &size) != 1) {
++				perror("Invalid -s.");
++				exit_usage();
++			}
+ 			break;
+ 		case 'p':
+ 			strncpy(path, optarg, sizeof(path) - 1);
+@@ -131,7 +134,7 @@ int main(int argc, char **argv)
+ 	}
+ 
+ 	if (size != 0) {
+-		printf("Writing this size: %d\n", size);
++		printf("Writing this size: %zu\n", size);
+ 	} else {
+ 		errno = EINVAL;
+ 		perror("size not found");
 -- 
 2.49.0
 
