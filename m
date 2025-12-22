@@ -1,157 +1,100 @@
-Return-Path: <linux-kselftest+bounces-47858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AD23CD6A38
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 17:12:38 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDF4ECD6D6C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 18:36:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9B5693011034
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 16:12:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DAAEB30049C2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 17:36:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4C7532FA2C;
-	Mon, 22 Dec 2025 16:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD7133D6E6;
+	Mon, 22 Dec 2025 17:27:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ssLCO+tu"
+	dkim=pass (2048-bit key) header.d=pooladkhay.com header.i=@pooladkhay.com header.b="QY1bWC8h"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound.ms.icloud.com (p-west3-cluster4-host6-snip4-10.eps.apple.com [57.103.74.211])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D3532F74C
-	for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 16:12:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CCA233D6C9
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 17:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.74.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766419944; cv=none; b=ZdsHU2mbnNSoD6MvNYWMGa+klulMRzQQOFduUzAecfYBrovUY8vNzSjX7/TxT7T1KYt+HXhNQKhWha6jZ4DsEVP+8UI9US4V1uHQIXcJrSF6cER6QXxrNOlQXnXKvJrl4tCsAChJlt/kJezoPGYUEkyrPrH5aSx7b2TJm2fR+aM=
+	t=1766424436; cv=none; b=Nyz61zhgwzjpA20G8dMqP2kmYFkbzGggw8BvFYUWhfCFkETm5+crMAsy2QL7aPLUmYAf1rs8U8FrN+6OaCbLIZ8QHQlDXozkA05912rICf5Gir4ojYvDokIQZYsc3C4W4InOo8SUuaCKztIKCRXn0XBUjXbCf8Z+nmlrl89h6X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766419944; c=relaxed/simple;
-	bh=m9D8dhT6jwO+9CbGh4I5smZkGRQ3OP+5tO7RqWKlpq4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Tn8hIADUsK3vWOT8Ezcc/D9IDcGeDnzNpdM5bXb5ZrKXX+HkgAU3z6XoxfpbLfe5ss1+Vc7dh9g9pQD7mGInPhhe+mJ/t8SEoHdUd+P7iLor+CsdxbZY4mDEJizolMWMfFLyfIQUk8sNVra5vvET0S4ggIkevLmRAP+XNAUVSWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ssLCO+tu; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-29f25a008dbso37921495ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 08:12:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1766419941; x=1767024741; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zeYdP9feRFRwQqDGc83ZSxaNa29m5lhAcRNghOQgnIo=;
-        b=ssLCO+tuLAtqCLeeRDIfoThPiDJXbCIMTviI1sS74VnICPujI2uhEsYFnO4WkfWJoU
-         +PXglr1OcIiYj92b/UJiWrRctzO6d64uxOM4GabZ/fW1IEBofIJZd48nyc430QFX7eOW
-         w6PnIfy8BmcZV3gihHwgCH7FTISV0Cptaip8cssI2VVhjVDlHUKeRopPpd1hcts4X51K
-         N+zqqwmqTVRyLwwXip3+CQoAnkClakJu/1a120xkUuwuKi4a15PbjJJiQ0Fx1Z3gkRiL
-         TAE00bBZ9Dnd2stPkHMRbRHKeWJwQc+jDiNRTo73NH+s9HrlYPl4L4xTfP58EiFQogAs
-         rCfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766419941; x=1767024741;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zeYdP9feRFRwQqDGc83ZSxaNa29m5lhAcRNghOQgnIo=;
-        b=wRbJpJsC4Ka63olqZmZK4GaqkZ80Xwisum85p85/ulCI3PSzwIjStrqTM7W1C6Pa7P
-         YW9NDThNCirtBm5gBpFnmPAK5bd/dT6CBYayuhYQX5aLfR3Ihk8o6FvyvP36e0K2u4OZ
-         ioFRuC5keeO7cMUgAnRL2eLgFFfUR/5ZUEugcAkJ8UG8z3QqpW4uvcZ7lxJA7pG9qP3s
-         j3PgRrX6L3J4sVflP+UazMwIqQZL63n4DvM6L0lJRgFVslETg7j3UedQlE40b0IoUCxp
-         Q1qoP0zfDSwmt50JTv8SrRrkNfBR24rltMHmT6q1mxxXPWGmtkBMTrL6Ck6AjPS2Uk5Z
-         oZ+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU13w7sWjGvUa2HEW2R4lNiieVYbGrSJPpErqI3EqjeeVyxXW9Qk4M3G3mYs+2rPRh4yKHdderr2dAhJgxQN18=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3GwoukWxu71pDJ8MtJqt5+03gOx34bNtsyGLNNzz4CTJu5nrq
-	2wnTzGcIevcIG8UrD5ivWqGbpJL+zA40K+4EYEMs4qNqLOISfhlT7bqMJc7+0AfAsCE3GmCM7uC
-	CotLk9g==
-X-Google-Smtp-Source: AGHT+IEJL9Vfq6Wmz0MCy1Ld56C/u08Z98hnfT98iTqRveIwPblpzVC3uzolI5BF1B6/fRSKSSYznuB51mQ=
-X-Received: from plyw20.prod.google.com ([2002:a17:902:d714:b0:2a1:5235:1502])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ef0a:b0:295:ceaf:8d76
- with SMTP id d9443c01a7336-2a2f2840085mr105799715ad.47.1766419941196; Mon, 22
- Dec 2025 08:12:21 -0800 (PST)
-Date: Mon, 22 Dec 2025 08:12:19 -0800
-In-Reply-To: <20251220021050.88490-1-mj@pooladkhay.com>
+	s=arc-20240116; t=1766424436; c=relaxed/simple;
+	bh=b30wTRdphI7VfWN2pv1ewBN4/YxpnmW2vwgGHjMKnms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ncfdYjj3FTLfh6MX59mnFQVun0YjeapBFGiUs1SBHM4Oe1zAmDMurfifVUhW1IvpLV8L1I2r8Ocy3AC0EWIAV9lvUVmXeRooc23q/xdFssuTaV0SFvSGNCuLNLZSf5N1c2UNM1pO3XhuPkbxyGadi/XPbFp5+1BaxZ9HnPYIiwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pooladkhay.com; spf=pass smtp.mailfrom=pooladkhay.com; dkim=pass (2048-bit key) header.d=pooladkhay.com header.i=@pooladkhay.com header.b=QY1bWC8h; arc=none smtp.client-ip=57.103.74.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pooladkhay.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pooladkhay.com
+Received: from outbound.ms.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-west-3a-60-percent-7 (Postfix) with ESMTPS id CA7C01800B58;
+	Mon, 22 Dec 2025 17:27:13 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pooladkhay.com; s=sig1; bh=TNqeP4jt6qTJRqZPAZSjH3QpkPsxCwi4JkvYPIRvm+U=; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme; b=QY1bWC8hUJSakIfvJCoc2I1koI98j/yOw+4kl9Wis/yeGLLbEyVQV7To3KjTgpLE77szBmxwTWtKV+5RSL0ryh/ttY3aD24w/1FZZoErNvNy5M010ZfJZx2fGqUjnvwRHZaX7dMp7wruWsFscvMU/WB9ffJsUqoe7jgBxh+DffHLv29EYNuzLHzyoqEaROo6Jko3fONheWOsc0jBZtGpSaTQEt2OXWWlHVW8FZ9kHN7WrZ2A/8yiRRLuXTG+MskWLSutFY4YKxruYOAuemvUwx07w7VmFDFCiyZGEeZycCXQtbXyuFz8yyOHouG4r29WVebVfWMppeqfv8l9fWpuQw==
+mail-alias-created-date: 1721833214903
+Received: from [192.168.1.131] (unknown [17.57.154.37])
+	by p00-icloudmta-asmtp-us-west-3a-60-percent-7 (Postfix) with ESMTPSA id 0EE231800377;
+	Mon, 22 Dec 2025 17:27:11 +0000 (UTC)
+Message-ID: <c70edd09-f8fe-4266-abc6-5911c13c9159@pooladkhay.com>
+Date: Mon, 22 Dec 2025 17:27:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] KVM: selftests: Fix sign extension bug in
+ get_desc64_base()
+To: Sean Christopherson <seanjc@google.com>
+Cc: pbonzini@redhat.com, shuah@kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20251220021050.88490-1-mj@pooladkhay.com>
-Message-ID: <aUlt4zOuyQ2WNiRe@google.com>
-Subject: Re: [PATCH] KVM: selftests: Fix sign extension bug in get_desc64_base()
-From: Sean Christopherson <seanjc@google.com>
-To: MJ Pooladkhay <mj@pooladkhay.com>
-Cc: pbonzini@redhat.com, shuah@kernel.org, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+ <aUlt4zOuyQ2WNiRe@google.com>
+Content-Language: en-US
+From: MJ Pooladkhay <mj@pooladkhay.com>
+In-Reply-To: <aUlt4zOuyQ2WNiRe@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: Ld0Pq_sLSRqnMJCUKbWtCoC8eSwLIoX6
+X-Proofpoint-ORIG-GUID: Ld0Pq_sLSRqnMJCUKbWtCoC8eSwLIoX6
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIyMDE2MCBTYWx0ZWRfXwyNcpu1p122y
+ H23OtJTn5ZMQt2ATh9voGPlpYAf8k7vSLFQkU1SJoaApgbt1yGBQxfY/w3wh+jCeinH8Povwxev
+ qgXIrX3DWjOBGDfM/ZLayOPUJtOI1iRHVAlVudOBxym9UpVXPzOdr/p3MBDYHJcsWp15kEOWbmN
+ Evq70bll1fT0YJHX6CtgcQZR4yP1vhh5+4iGolnWAxU4Usca7ESpkDqPgKZk62P7Ybz3IiZHuF3
+ 4kooMFGIWKOzG9azOju1Q0u7lyLQsUXYUn+BK8DTvitKrpWLsZJPJd+QBc3DjyUIsw70bFk6VLi
+ 5C66QZOumwyonTq1k8S
+X-Authority-Info: v=2.4 cv=PcbyRyhd c=1 sm=1 tr=0 ts=69497f72 cx=c_apl:c_pps
+ a=qkKslKyYc0ctBTeLUVfTFg==:117 a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=7lkYn2qxqkAejb1e7jUA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-22_02,2025-12-22_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1030
+ phishscore=0 suspectscore=0 mlxscore=0 adultscore=0 malwarescore=0
+ mlxlogscore=664 spamscore=0 bulkscore=0 classifier=spam authscore=0 adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512220160
+X-JNJ: AAAAAAAB5MssJdbbQ0322a/+hmY15+Mp/oZwGeciArMLj3hLM7uKkE8a30+LZjTIcx8LoWSK3r85wxzd/qa5F9oFdftSVijhkOWG/uj2vO2COuXn1kvLGgKcqW2h9Y/d7yj/+NrYur+JewBeu57a8pCUuMONQ4KjKXov5s4be2x3MJfOqpWFIR4hiL8+aA5gf1un0Z/fKcCmKizam80GWYj2kJLtcGaO9Vh7fU+UzOeuIJ5SfEqg5B0zQw7+9BF0vyQ1HXGAWdaurzghQX9X67fPeushhaWxFkze+3l2r2gVvD5MP1uRYuczNVGJHgzJmw7xd5XlIAJ9+d6GMXjUPzvgyOhTrayJyRQnjzRNj0aTxDzw6u16gVvOM2Xsv2K9UZF1Z8keNaRcpgwvMe5bzVODWV23LtuljPOFaNxdFThojleaFkHYi7nC709O7LQpkJGkqhnSyEkSKq6pfaRj7cboAmoIofv+D9nBjBXIaWb0g4BJ7fKuDlfmFs6ot79LY1SbYLGLrzLS4dHz9JLniPd6eS32zKE62HwE5m2k4AYxdh0d5LmgNhah4CryuWwe+ccw+M17wPEzC6S7GoDM/AdHpi6DPF0mSJUV/4d0VA9cSypAi1Gbiytp88RRg60n7gfyIzSitMnDU74n3DrKxBNcUs9FYIItS0Jp4R9dADfWi1Mkb3Bfx9g=
 
-On Sat, Dec 20, 2025, MJ Pooladkhay wrote:
-> The function get_desc64_base() performs a series of bitwise left shifts on
-> fields of various sizes. More specifically, when performing '<< 24' on
-> 'desc->base2' (which is a u8), 'base2' is promoted to a signed integer
+On Mon, Dec 22, 2025, Sean Christopherson wrote:
 
-Ugh, I hate integer promotion rules.  I wish there was a more useful version of
--Wconversion :-/
+> Ugh, I hate integer promotion rules.  I wish there was a more useful version of
+> -Wconversion :-/
+True! It caused me weeks of grief tracking down these triple faults!
+> I don't see any reason to have an intermediate "low", it just makes it harder
+> to piece the entire thing together.  My vote is for:
+>
+> 	return (uint64_t)desc->base3 << 32 |
+> 	       (uint64_t)desc->base2 << 24 |
+> 	       (uint64_t)desc->base1 << 16 |
+> 	       (uint64_t)desc->base0;
 
-> before shifting.
-> 
-> In a scenario where base2 >= 0x80, the shift places a 1 into bit 31,
-> causing the 32-bit intermediate value to become negative. When this
-> result is cast to uint64_t or ORed into the return value, sign extension
-> occurs, corrupting the upper 32 bits of the address (base3).
-> 
-> Example:
-> Given:
->   base0 = 0x5000
->   base1 = 0xd6
->   base2 = 0xf8
->   base3 = 0xfffffe7c
-> 
-> Expected return: 0xfffffe7cf8d65000
-> Actual return:   0xfffffffff8d65000
-> 
-> Fix this by explicitly casting the fields to 'uint64_t' before shifting
-> to prevent sign extension.
-> 
-> Signed-off-by: MJ Pooladkhay <mj@pooladkhay.com>
-> ---
-> While using get_desc64_base() to set the HOST_TR_BASE value for a custom 
-> educational hypervisor, I observed system freezes, either immediately or
-> after migrating the guest to a new core. I eventually realized that KVM
-> uses get_cpu_entry_area() for the TR base. Switching to that fixed my
-> freezes (which were triple faults on one core followed by soft lockups 
-> on others, waiting on smp_call_function_many_cond) and helped me identify
-> the sign-extension bug in this helper function that was corrupting the
-> HOST_TR_BASE value.
-> 
-> Thanks,
-> MJ Pooladkhay
-> 
->  tools/testing/selftests/kvm/include/x86/processor.h | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-> index 57d62a425..cc2f8fb6f 100644
-> --- a/tools/testing/selftests/kvm/include/x86/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86/processor.h
-> @@ -436,8 +436,11 @@ struct kvm_x86_state {
->  
->  static inline uint64_t get_desc64_base(const struct desc64 *desc)
->  {
-> -	return ((uint64_t)desc->base3 << 32) |
-> -		(desc->base0 | ((desc->base1) << 16) | ((desc->base2) << 24));
-> +	uint64_t low = (uint64_t)desc->base0 |
-> +		       ((uint64_t)desc->base1 << 16) |
-> +		       ((uint64_t)desc->base2 << 24);
-> +
-> +	return (uint64_t)desc->base3 << 32 | low;
+Thanks for the review. I agree, your version is much cleaner. I will 
+send a v2 with this change shortly.
 
-I don't see any reason to have an intermediate "low", it just makes it harder
-to piece the entire thing together.  My vote is for:
+Best,
+MJ Pooladkhay
 
-	return (uint64_t)desc->base3 << 32 |
-	       (uint64_t)desc->base2 << 24 |
-	       (uint64_t)desc->base1 << 16 |
-	       (uint64_t)desc->base0;
-
->  }
->  
->  static inline uint64_t rdtsc(void)
-> -- 
-> 2.52.0
-> 
 
