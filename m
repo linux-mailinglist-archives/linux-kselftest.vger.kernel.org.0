@@ -1,167 +1,321 @@
-Return-Path: <linux-kselftest+bounces-47813-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C16BDCD4777
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 00:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 510FCCD47F8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 01:56:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3CF6F301F5DC
-	for <lists+linux-kselftest@lfdr.de>; Sun, 21 Dec 2025 23:43:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1BB0430056C9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 00:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A109320A04;
-	Sun, 21 Dec 2025 23:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8754C21ADA4;
+	Mon, 22 Dec 2025 00:56:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cMRicV4R"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZplUHLtO";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="N+ZNDEQg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3E53074B1;
-	Sun, 21 Dec 2025 23:43:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D771DF72C
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 00:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766360623; cv=none; b=Cj9CM+QdSDt2iVHwwxOzyYL+UXeN1ijzi3J7HM3Bt07M3AD2TRqeh9UtowOUVQannhZDDjaD/EBQS7PA7M/Lu1v9FyOJf6dQy2zj+qUgzkw/YwPT0jMVYgktTkeXesfAzh01sLZ3R7SXd3SQAIAJgaeLONCKNt/iARa8lX5mXOo=
+	t=1766364979; cv=none; b=CC06pdHFrhZMNsnRzduVXHaw/bpMkcQyVOGLEvxcbD4o8KWSfXTQyoIjC/zG92S4etI+GBAZiyja4OhoB/KH17t7ShKLcHO1HWiS7Lo7wcUIzsBF/XctXS6kJhjJOQLba0zjy1jzY7IhybbmwaN1SiXSN7Bmvr+YmcBZLuR+Jo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766360623; c=relaxed/simple;
-	bh=s19SV6BEo5VXqWPb8hRIefa7q2CeFinOU9Rrk+C+LCk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hRV9tJuwyD69DWY7miVljzDYk56VF9d/jqWcnUccfcFkkR/oWe+zVAjJEbt2fnFATP6XhueY0HhiZk9Y4GXuvHPtaTwVZTSLE8xzRIp2bXPLxa27sMhYyZnCQ68AFuwBi2h4Pf6sRekULbBYSjhqES4u2/R6GpcL6ne8qMHFNHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cMRicV4R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C6488C2BC87;
-	Sun, 21 Dec 2025 23:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766360622;
-	bh=s19SV6BEo5VXqWPb8hRIefa7q2CeFinOU9Rrk+C+LCk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=cMRicV4RM2drbaB3Fp930I87ScLRZAKq6zvlI6Ru8RKQ1OEIYJ1WgQH0h3WW9GciH
-	 CiXT5t8zROajzuzmpB9uokI8g49rnYUFGpoWYryTvf/GmjCX2wDr1px62PD9A/Prp5
-	 82TCTTl4TlldvnD4yowz1VfkPoBbnlkaca7MzLKLlg+K6JS7eXdlq6Onz8y+Xv6CM9
-	 3VRBilZcU3KPfA4PodwM5hZ9GlOgMla/778O503oDH1ogcnI04/uyeoBUYifBt0XJZ
-	 2zqdAZ30BNb9r3+sdlkuEKWviJB2nqG+C7QT5mZWWX0RXbzdGCJOn1hbBxZVWuNXha
-	 r6htr60sZl/sA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE2B3E67498;
-	Sun, 21 Dec 2025 23:43:42 +0000 (UTC)
-From: Peter Hutterer via B4 Relay <devnull+peter.hutterer.who-t.net@kernel.org>
-Date: Mon, 22 Dec 2025 09:43:37 +1000
-Subject: [PATCH v2 4/4] selftests/hid: add a test for the Digitizer/Button
- Type pressurepad
+	s=arc-20240116; t=1766364979; c=relaxed/simple;
+	bh=nY91Zttno0jSUiM+WJgv7O4FZUHX8c9T+2RmZlYD8yU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rkFQpkkIw/mg/etf2082q/v7T8Dr1lRDEmsfQi4TeOIy7uskFrJ7g3+iUtKm3OjKUn+OBYsNxBUgwViNclLi+ZSrUJ43llgvemuKoPyw/b/iVQbV055FEAZEd1prH5hQhvCvlw7Sh1sqjFDsyzkF791Gt+VwENDjTJf/65INre8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZplUHLtO; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=N+ZNDEQg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766364976;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/NMCIq06x6X5N8QIPqgKY8o8XY7IL1HTrfa4Xt9yLJw=;
+	b=ZplUHLtOqNNDaUIAHbuAzTvd/p9PPiJmtwW+J3gMDt0UALkMeo8vymbHYwqAK73sXVdw2Z
+	tevkHerQDnRs8FTb2XrOqNL0E1qX82kKz2VCSX84UtOWgRlRKY88qjJy7x8WOCrOdlrVkp
+	LcjbHQC5QRY9FAb9Xw/N47CLFZP77Xk=
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
+ [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-235-V2AkjYLzNE2AMRCI9l-K6A-1; Sun, 21 Dec 2025 19:56:15 -0500
+X-MC-Unique: V2AkjYLzNE2AMRCI9l-K6A-1
+X-Mimecast-MFC-AGG-ID: V2AkjYLzNE2AMRCI9l-K6A_1766364974
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-c1290abb178so6460367a12.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 21 Dec 2025 16:56:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1766364974; x=1766969774; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/NMCIq06x6X5N8QIPqgKY8o8XY7IL1HTrfa4Xt9yLJw=;
+        b=N+ZNDEQgdN592NI0zmgRc5DwKcruNMbi0AiNuOf+v8Y+shTLnUbdzdtJHHXgKVatq3
+         fnZ7aLYIv1g8z7+FNRFK65jon9Q/2fGNlrvoOpLyVDJUWjZtKMXu6R+Xd/tBhapB6//n
+         AbYKbpguzogOGgmZ1fBLBaXEQLf/+uMvSfFf+RPmmq3DUnb2zHjDxv2163CCd3AWzwaj
+         VsPrq6brrSlClHsgXOJ8ULskvXsbxYPvTEatu4rBD+VHevOM1eA6fX9asI2rX4O60kGK
+         nNzS6mzPhVSwCXC7AbL6m80yY2T+R1JFZGUm1If+5HsE5PHPSuDQbAs4PAd/c6AdJ4km
+         9jvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766364974; x=1766969774;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/NMCIq06x6X5N8QIPqgKY8o8XY7IL1HTrfa4Xt9yLJw=;
+        b=Xuu1jkxSr0DokyCMKBtJ487m55mvG93swd67g/93uo+Dk1uC4FEU7pw2ivmtZDMFZg
+         LSnw85etUAjtLM8YCgpsnfkxz7jDvNFzgJQLZkG3aSGcGGZASXr3Qld4nMDAhv9ekSOi
+         kIphP6JX4azBuV7IDzQwRvfG5IfCcQP2UDO+ryRtCRprQW8N+TQIp4azwYRAIAjIn6qP
+         gLv71by4MoNBZRR6k+PERyYtz2gzhAsVXChB2qA/ym+8nOZCtDopTaWHwB35lYlN+bTx
+         74KdPU8d1yawWcYNJwAFvVeVvU+BJIqJ8pozD661sb1mGw6kqkm0D7Za/qXyHaqQ2Smp
+         zjcA==
+X-Forwarded-Encrypted: i=1; AJvYcCWt5FNXwGxXHv9t3X359elPIsiG/ajX8iPdCr0n/uQCWdO2h2iXug9rFRkgz/vySSDGXaUoXKuBFi2b0KUjnXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeHiEc9CEbdbzjPxLpofqMpLRTbu2VxcuxAdiO+svZqBcsOjQu
+	qXNLwrsNfBAK9j8DtLPV+9faPh7EHTQjnXHE42HmC4RUJKty9Kn3SBwSf/Sod5Jno/wfjXxpoPB
+	Hdybq9bmu1nz3fXHbD/PnI+a97ghWAKBbFuCFQtGa4kyh07y1Gum9kwSiSXh9Hw+XDR2JTAia6X
+	lRqHN64g7kcWc5e0Min3I6wfPUNcv3/bIyATUEjfjCGEjO
+X-Gm-Gg: AY/fxX5eeSE1evEJwBbmKlcgJGxOerVvJZeiAcJS7jWj0Kol4RRegghTIQZkab/i2nt
+	zxPf1972EX9zV7JAhiGXmu1DCZIVjinuaK5J3MBnNqPgonV3p5GMQOOkk/R1rhxebkyLRTd+tRx
+	kVdEXJcoWNrp3PRzNb50LinsQzts1Yh5VsDux1/ldw8PgOnLSm4HROrQhUhZrFvp8fcYA=
+X-Received: by 2002:a05:7301:fc12:b0:2ae:5fb4:c5f1 with SMTP id 5a478bee46e88-2b05ec8580fmr8756379eec.22.1766364973906;
+        Sun, 21 Dec 2025 16:56:13 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF0029GFn24iMMCw3XfWWVMPRTwXTkFaymfwbymZKK/ZbqfRE+pohNx1p4BX0tdPi90xo3sUbGz84BHevp2vwo=
+X-Received: by 2002:a05:7301:fc12:b0:2ae:5fb4:c5f1 with SMTP id
+ 5a478bee46e88-2b05ec8580fmr8756369eec.22.1766364973450; Sun, 21 Dec 2025
+ 16:56:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251222-wip-hid-pressurepad-v2-4-054ac9689bb7@who-t.net>
-References: <20251222-wip-hid-pressurepad-v2-0-054ac9689bb7@who-t.net>
-In-Reply-To: <20251222-wip-hid-pressurepad-v2-0-054ac9689bb7@who-t.net>
-To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Vadim Klishko <vadim@cirque.com>, 
- Peter Hutterer <peter.hutterer@who-t.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1766360621; l=5561;
- i=peter.hutterer@who-t.net; s=20251222; h=from:subject:message-id;
- bh=j0qjZKwtNCCu5/YF3Pfm0aG8auUBK2LU4XnpWcX86SM=;
- b=5HPb77NTJCuJUrI8Fn6q1CovxvLMLMCWKWTaQuOhX9nyCuXuNpmTatCt7dBkrl+27MnoWp84z
- izgIrMvovXrADD6mRLuf++19y000n5mtL5vYvVZ6NGNFbintzIjNIol
-X-Developer-Key: i=peter.hutterer@who-t.net; a=ed25519;
- pk=QoL66HDbFudb9Xt36p2XxsSohZSHVHesRR9c0pI28a4=
-X-Endpoint-Received: by B4 Relay for peter.hutterer@who-t.net/20251222 with
- auth_id=582
-X-Original-From: Peter Hutterer <peter.hutterer@who-t.net>
-Reply-To: peter.hutterer@who-t.net
+References: <20251221122639.3168038-1-liwang@redhat.com> <20251221122639.3168038-4-liwang@redhat.com>
+ <33d5bdc7-0fde-4a97-aa1a-f8565e196ccd@redhat.com>
+In-Reply-To: <33d5bdc7-0fde-4a97-aa1a-f8565e196ccd@redhat.com>
+From: Li Wang <liwang@redhat.com>
+Date: Mon, 22 Dec 2025 08:56:01 +0800
+X-Gm-Features: AQt7F2o8rt4dEdkF8DAco4IG4TTUWxg7AyWZZTuM29XF18apL6ox-9F2z5tlIYs
+Message-ID: <CAEemH2ehOUyDqHhn5+Mu2B31dCpOhDv6AL7sEFU5Vt7nSST=Tw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests/mm/charge_reserved_hugetlb.sh: add waits
+ with timeout helper
+To: Waiman Long <llong@redhat.com>
+Cc: akpm@linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	David Hildenbrand <david@kernel.org>, Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Peter Hutterer <peter.hutterer@who-t.net>
+On Mon, Dec 22, 2025 at 4:30=E2=80=AFAM Waiman Long <llong@redhat.com> wrot=
+e:
+>
+>
+> On 12/21/25 7:26 AM, Li Wang wrote:
+> > The hugetlb cgroup usage wait loops in charge_reserved_hugetlb.sh were
+> > unbounded and could hang forever if the expected cgroup file value neve=
+r
+> > appears (e.g. due to write_to_hugetlbfs in Error mapping).
+> >
+> > --- Error log ---
+> >    # uname -r
+> >    6.12.0-xxx.el10.aarch64+64k
+> >
+> >    # ls /sys/kernel/mm/hugepages/hugepages-*
+> >    hugepages-16777216kB/  hugepages-2048kB/  hugepages-524288kB/
+> >
+> >    #./charge_reserved_hugetlb.sh -cgroup-v2
+> >    # -----------------------------------------
+> >    ...
+> >    # nr hugepages =3D 10
+> >    # writing cgroup limit: 5368709120
+> >    # writing reseravation limit: 5368709120
+> >    ...
+> >    # write_to_hugetlbfs: Error mapping the file: Cannot allocate memory
+> >    # Waiting for hugetlb memory reservation to reach size 2684354560.
+> >    # 0
+> >    # Waiting for hugetlb memory reservation to reach size 2684354560.
+> >    # 0
+> >    # Waiting for hugetlb memory reservation to reach size 2684354560.
+> >    # 0
+> >    # Waiting for hugetlb memory reservation to reach size 2684354560.
+> >    # 0
+> >    # Waiting for hugetlb memory reservation to reach size 2684354560.
+> >    # 0
+> >    # Waiting for hugetlb memory reservation to reach size 2684354560.
+> >    # 0
+> >    ...
+> >
+> > Introduce a small helper, wait_for_file_value(), and use it for:
+> >    - waiting for reservation usage to drop to 0,
+> >    - waiting for reservation usage to reach a given size,
+> >    - waiting for fault usage to reach a given size.
+> >
+> > This makes the waits consistent and adds a hard timeout (60 tries with
+> > 1s sleep) so the test fails instead of stalling indefinitely.
+> >
+> > Signed-off-by: Li Wang <liwang@redhat.com>
+> > Cc: David Hildenbrand <david@kernel.org>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Shuah Khan <shuah@kernel.org>
+> > Cc: Waiman Long <longman@redhat.com>
+> > ---
+> >   .../selftests/mm/charge_reserved_hugetlb.sh   | 51 +++++++++++-------=
+-
+> >   1 file changed, 30 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/to=
+ols/testing/selftests/mm/charge_reserved_hugetlb.sh
+> > index fa6713892d82..447769657634 100755
+> > --- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+> > +++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
+> > @@ -100,7 +100,7 @@ function setup_cgroup() {
+> >     echo writing cgroup limit: "$cgroup_limit"
+> >     echo "$cgroup_limit" >$cgroup_path/$name/hugetlb.${MB}MB.$fault_lim=
+it_file
+> >
+> > -  echo writing reseravation limit: "$reservation_limit"
+> > +  echo writing reservation limit: "$reservation_limit"
+> >     echo "$reservation_limit" > \
+> >       $cgroup_path/$name/hugetlb.${MB}MB.$reservation_limit_file
+> >
+> > @@ -112,41 +112,50 @@ function setup_cgroup() {
+> >     fi
+> >   }
+> >
+> > +function wait_for_file_value() {
+> > +  local path=3D"$1"
+> > +  local expect=3D"$2"
+> > +  local max_tries=3D60
+> > +
+> > +  if [[ ! -r "$path" ]]; then
+> > +    echo "ERROR: cannot read '$path', missing or permission denied"
+> > +    return 1
+> > +  fi
+> > +
+> > +  for ((i=3D1; i<=3Dmax_tries; i++)); do
+> > +    local cur=3D"$(cat "$path")"
+> > +    if [[ "$cur" =3D=3D "$expect" ]]; then
+> > +      return 0
+> > +    fi
+> > +    echo "Waiting for $path to become '$expect' (current: '$cur') (try=
+ $i/$max_tries)"
+> > +    sleep 1
+> > +  done
+> > +
+> > +  echo "ERROR: timeout waiting for $path to become '$expect'"
+> > +  return 1
+> > +}
+> > +
+> >   function wait_for_hugetlb_memory_to_get_depleted() {
+> >     local cgroup=3D"$1"
+> >     local path=3D"$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usa=
+ge_file"
+> > -  # Wait for hugetlbfs memory to get depleted.
+> > -  while [ $(cat $path) !=3D 0 ]; do
+> > -    echo Waiting for hugetlb memory to get depleted.
+> > -    cat $path
+> > -    sleep 0.5
+> > -  done
+> > +
+> > +  wait_for_file_value "$path" "0"
+> >   }
+> >
+> >   function wait_for_hugetlb_memory_to_get_reserved() {
+> >     local cgroup=3D"$1"
+> >     local size=3D"$2"
+> > -
+> >     local path=3D"$cgroup_path/$cgroup/hugetlb.${MB}MB.$reservation_usa=
+ge_file"
+> > -  # Wait for hugetlbfs memory to get written.
+> > -  while [ $(cat $path) !=3D $size ]; do
+> > -    echo Waiting for hugetlb memory reservation to reach size $size.
+> > -    cat $path
+> > -    sleep 0.5
+> > -  done
+> > +
+> > +  wait_for_file_value "$path" "$size"
+> >   }
+> >
+> >   function wait_for_hugetlb_memory_to_get_written() {
+> >     local cgroup=3D"$1"
+> >     local size=3D"$2"
+> > -
+> >     local path=3D"$cgroup_path/$cgroup/hugetlb.${MB}MB.$fault_usage_fil=
+e"
+> > -  # Wait for hugetlbfs memory to get written.
+> > -  while [ $(cat $path) !=3D $size ]; do
+> > -    echo Waiting for hugetlb memory to reach size $size.
+> > -    cat $path
+> > -    sleep 0.5
+> > -  done
+> > +
+> > +  wait_for_file_value "$path" "$size"
+> >   }
+> >
+> >   function write_hugetlbfs_and_get_usage() {
+>
+> wait_for_file_value() now return 0 onr success and 1 on timeout.
+> However, none of the callers of the wait_for_hugetlb_memory* are
+> checking their return values and acting accordingly. Are we expecting
+> that the test will show failure because the waiting isn't completed or
+> should we explicitly exit with ksft_fail (1) value?
 
-We have to resort to a bit of a hack: python-libevdev gets the
-properties from libevdev at module init time. If libevdev hasn't been
-rebuilt with the new property it won't be automatically populated. So we
-hack around this by constructing the property manually.
+Hmm, it seems the test shouldn't exit too early.
 
-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
----
- .../testing/selftests/hid/tests/test_multitouch.py | 39 +++++++++++++++++++---
- 1 file changed, 35 insertions(+), 4 deletions(-)
+As the wait_for_hugetlb_memory* is only trying 60s to examine the file
+value, if timeouted, we still need to keep going because the test requires
+CLEANUP work and exit/report from there.
 
-diff --git a/tools/testing/selftests/hid/tests/test_multitouch.py b/tools/testing/selftests/hid/tests/test_multitouch.py
-index a06a087f00b6991f7514adf7f8c713bef1a43563..fa4fb2054bd4febb1d2497f2787944f538b27889 100644
---- a/tools/testing/selftests/hid/tests/test_multitouch.py
-+++ b/tools/testing/selftests/hid/tests/test_multitouch.py
-@@ -979,15 +979,36 @@ class BaseTest:
-             assert libevdev.InputEvent(libevdev.EV_ABS.ABS_MT_ORIENTATION, 90) in events
- 
-     class TestPTP(TestWin8Multitouch):
-+        def test_buttontype(self):
-+            """Check for the right ButtonType."""
-+            uhdev = self.uhdev
-+            assert uhdev is not None
-+            evdev = uhdev.get_evdev()
-+
-+            # If libevdev.so is not yet compiled with INPUT_PROP_PRESSUREPAD
-+            # python-libevdev won't have it either, let's fake it
-+            if not getattr(libevdev, "INPUT_PROP_PRESSUREPAD", None):
-+                prop = libevdev.InputProperty(name="INPUT_PROP_PRESSUREPAD", value=0x7)
-+                libevdev.INPUT_PROP_PRESSUREPAD = prop
-+                libevdev.props.append(prop)
-+
-+            if uhdev.buttontype == HIDButtonType.CLICKPAD:
-+                assert libevdev.INPUT_PROP_BUTTONPAD in evdev.properties
-+            elif uhdev.buttontype == HIDButtonType.PRESSUREPAD:
-+                assert libevdev.INPUT_PROP_PRESSUREPAD in evdev.properties
-+            else:
-+                assert libevdev.INPUT_PROP_PRESSUREPAD not in evdev.properties
-+                assert libevdev.INPUT_PROP_BUTTONPAD not in evdev.properties
-+
-         def test_ptp_buttons(self):
-             """check for button reliability.
--            There are 2 types of touchpads: the click pads and the pressure pads.
--            Each should reliably report the BTN_LEFT events.
-+            There are 3 types of touchpads: click pads + pressure pads and
-+            those with discrete buttons. Each should reliably report the BTN_LEFT events.
-             """
-             uhdev = self.uhdev
-             evdev = uhdev.get_evdev()
- 
--            if uhdev.buttontype == HIDButtonType.CLICKPAD:
-+            if uhdev.buttontype in [HIDButtonType.CLICKPAD, HIDButtonType.PRESSUREPAD]:
-                 r = uhdev.event(click=True)
-                 events = uhdev.next_sync_events()
-                 self.debug_reports(r, uhdev, events)
-@@ -999,7 +1020,7 @@ class BaseTest:
-                 self.debug_reports(r, uhdev, events)
-                 assert libevdev.InputEvent(libevdev.EV_KEY.BTN_LEFT, 0) in events
-                 assert evdev.value[libevdev.EV_KEY.BTN_LEFT] == 0
--            else:
-+            elif uhdev.buttontype == HIDButtonType.DISCRETE_BUTTONS:
-                 r = uhdev.event(left=True)
-                 events = uhdev.next_sync_events()
-                 self.debug_reports(r, uhdev, events)
-@@ -2062,6 +2083,16 @@ class Testite_06cb_2968(BaseTest.TestPTP):
-         )
- 
- 
-+class Testven_0488_108c(BaseTest.TestPTP):
-+    def create_device(self):
-+        return PTP(
-+            "uhid test ven_0488_108c",
-+            rdesc="05 01 09 02 a1 01 85 06 09 01 a1 00 05 09 19 01 29 03 15 00 25 01 95 03 75 01 81 02 95 01 75 05 81 03 05 01 09 30 09 31 09 38 15 81 25 7f 75 08 95 03 81 06 c0 c0 05 0d 09 05 a1 01 85 01 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 81 03 05 01 15 00 26 ba 0d 75 10 55 0e 65 11 09 30 35 00 46 d0 05 95 01 81 02 26 d0 06 46 bb 02 09 31 81 02 05 0d 95 01 75 10 26 ff 7f 46 ff 7f 09 30 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 81 03 05 01 15 00 26 ba 0d 75 10 55 0e 65 11 09 30 35 00 46 d0 05 95 01 81 02 26 d0 06 46 bb 02 09 31 81 02 05 0d 95 01 75 10 26 ff 7f 46 ff 7f 09 30 81 02 c0 05 0d 09 22 a1 02 15 00 25 01 09 47 09 42 95 02 75 01 81 02 95 01 75 03 25 05 09 51 81 02 81 03 05 01 15 00 26 ba 0d 75 10 55 0e 65 11 09 30 35 00 46 d0 05 95 01 81 02 26 d0 06 46 bb 02 09 31 81 02 05 0d 95 01 75 10 26 ff 7f 46 ff 7f 09 30 81 02 c0 55 0c 66 01 10 47 ff ff 00 00 27 ff ff 00 00 
- 75 10 95 01 05 0d 09 56 81 02 09 54 25 05 95 01 75 08 81 02 05 09 09 01 25 01 75 01 95 01 81 02 95 07 81 03 05 0d 85 02 09 55 75 08 95 01 25 05 b1 02 09 59 b1 02 06 00 ff 85 03 09 c5 15 00 26 ff 00 75 08 96 00 01 b1 02 05 0e 09 01 a1 02 85 13 09 23 15 00 25 64 75 08 95 01 b1 02 c0 c0 05 0d 09 0e a1 01 85 04 09 22 a1 02 09 52 15 00 25 0a 75 08 95 01 b1 02 c0 09 22 a1 00 85 05 09 57 09 58 75 01 95 02 25 01 b1 02 95 06 b1 03 c0 c0 06 01 ff 09 02 a1 01 09 00 85 07 15 00 26 ff 00 75 08 96 12 02 b1 02 c0 06 00 ff 09 01 a1 01 85 0d 15 00 26 ff 00 75 08 95 11 09 01 81 02 09 01 91 02 c0 05 0e 09 01 a1 01 85 11 09 35 15 00 26 ff 00 75 08 95 17 b1 02 c0 06 81 ff 09 01 a1 01 09 20 85 17 15 00 26 ff 00 75 08 95 3f 09 01 81 02 09 01 91 02 c0",
-+            input_info=(0x18, 0x0488, 0x108C),
-+            buttontype=HIDButtonType.PRESSUREPAD,
-+        )
-+
-+
- class Testn_trig_1b96_0c01(BaseTest.TestWin8Multitouch):
-     def create_device(self):
-         return Digitizer(
+The key point of each subtest is to save the '$write_result' value and
+examine it
+which controls the whole test to exit.
 
--- 
-2.51.1
+e.g.
 
+This is an intentional error test:
+
+# ./charge_reserved_hugetlb.sh -cgroup-v2
+CLEANUP DONE
+...
+Writing to this path: /mnt/huge/test
+Writing this size: 2684354560
+Not populating.
+Not writing to memory.
+Using method=3D0
+Shared mapping.
+RESERVE mapping.
+Allocating using HUGETLBFS.
+write_to_hugetlbfs: Error mapping the file: Cannot allocate memory
+Waiting for /sys/fs/cgroup/hugetlb_cgroup_test/hugetlb.512MB.rsvd.current
+to become '2684354560' (current: '0') (try 1/60)
+Waiting for /sys/fs/cgroup/hugetlb_cgroup_test/hugetlb.512MB.rsvd.current
+to become '2684354560' (current: '0') (try 2/60)
+Waiting for /sys/fs/cgroup/hugetlb_cgroup_test/hugetlb.512MB.rsvd.current
+to become '2684354560' (current: '0') (try 3/60)
+Waiting for /sys/fs/cgroup/hugetlb_cgroup_test/hugetlb.512MB.rsvd.current
+to become '2684354560' (current: '0') (try 4/60)
+...
+Waiting for /sys/fs/cgroup/hugetlb_cgroup_test/hugetlb.512MB.rsvd.current
+to become '2684354560' (current: '0') (try 60/60)
+ERROR: timeout waiting for
+/sys/fs/cgroup/hugetlb_cgroup_test/hugetlb.512MB.rsvd.current to
+become '2684354560'
+After write:
+hugetlb_usage=3D0
+reserved_usage=3D0
+0
+0
+Memory charged to hugtlb=3D0
+Memory charged to reservation=3D0
+expected (2684354560) !=3D actual (0): Reserved memory not charged to
+reservation usage.
+CLEANUP DONE
+
+
+--=20
+Regards,
+Li Wang
 
 
