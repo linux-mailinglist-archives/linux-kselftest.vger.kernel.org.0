@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-47834-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47837-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39A3ACD5E49
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 12:58:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 174D6CD5E37
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 12:57:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4F32D307A5A1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 11:56:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5C1EF3053B2B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 11:56:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B2DC31B838;
-	Mon, 22 Dec 2025 11:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFCDD329E69;
+	Mon, 22 Dec 2025 11:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Q9Q2GMi3"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="yuCEvVky"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2769327BE4;
-	Mon, 22 Dec 2025 11:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6EE731E0F2;
+	Mon, 22 Dec 2025 11:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766404111; cv=none; b=HR2m9MA/PkHmjFv3TgL+JZbYtiqafW8TbGLSRsJPIY4Wj9JQr4hfnieoA/RkHOWA9Gb7kWzTNKE1jlVgaP3UHxJqybais8sdOmoEWT7mb8wan49fQg4D7vd4h9Ifh/BHdGAIxR66AWwVj0GrI6947jmYen+Mn1w3vHkVz0fe73I=
+	t=1766404116; cv=none; b=SBh+vQhMiSfADEPtZNWMXZgXCn2mk/gs1943eRPoqjr+6jDluGNq9IjSeZLXwPR4I6hm0E6GFl469EE1LzriDqfPM2d3bx3SSnzJuS0UtH9qLfvJd1cc3Vxd+401XUMfRZYGC3Aqfv8wLHoHTQV1zrwYKbFeI8AEss4YVslJX30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766404111; c=relaxed/simple;
-	bh=1uIykU9r2fskMeJKXwCSG4StHhzWzl81M6MMS4AzZX0=;
+	s=arc-20240116; t=1766404116; c=relaxed/simple;
+	bh=XIa4OdxYwiMnsFqS6guEHGiJWxCxujFLYiqMPPn3iX0=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JuE5bSYkzdRX17NM4MBQARyOXZLedGRfPMFTrCp9Fw5OVuUS3Xn3dK+MUYAfWTc2TIaAg7Jy9DcIIxWC0+Rz5VIp8FRWzz+FgtXLeQ272ma5e0fYnoy3itkH1GMzP678EyoX/HS7bI+2hAKVKUMO0oAz4Un0+YR/NQe6ayK4wqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Q9Q2GMi3; arc=none smtp.client-ip=113.46.200.219
+	 MIME-Version:Content-Type; b=j7YQE19r8sG9y+HTsRMwEJdqLBs7AHfkhMgvTC+9JjPy7l2UAtR+oDkyO+BUD0YkzIryJd/hqsaoDGv27E+NRujzWThaIGswC1Fudv4k7IJ66LwBZSHYrhp4SzZYGK00V0AJEFLWlQ5QUl4RKswLAx2EVoIrMQiMKWsAWtTneYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=yuCEvVky; arc=none smtp.client-ip=113.46.200.223
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
 	c=relaxed/relaxed; q=dns/txt;
 	h=From;
-	bh=iXHtd/oRJPuc/FpfHkoWFgTNZ+mBvJ/hdvChQnBvkN4=;
-	b=Q9Q2GMi3ghaCtAtJPr7sFhx7TXo6us/eyjxGxztr8InTqGIDfmcwXBKMGkxfF5vuEzXs0y2Xz
-	d+Sh6m6bzedmSN4+WeNsks5qM1j6R55pfrpzt73s86/rjKdHiGeayggIFeOBT+Rxl97q4nHCBc6
-	27nEIydbWKZOITE9Tv8CtIg=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4dZbt56ZDNz1prKB;
-	Mon, 22 Dec 2025 19:45:17 +0800 (CST)
+	bh=8fKGogfif+HoCc3kIHvnvF0L83fYROr/QiADL9niEfU=;
+	b=yuCEvVkyfc05tkT4jKX7cVdfIsnF2cOHQsg2SnhRSGWdEk+Ht4711wBNARx7ofXrYY5PajHwc
+	mdilYBz98ektLNmkeD2/cPrkKDS6Q3/ANBbxt5e5f1KHYkuZRSSQkPIvHNq/jUdHaYrCeW+SzID
+	if3uDh86yDbFcaEmaZGeXJs=
+Received: from mail.maildlp.com (unknown [172.19.163.163])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4dZbt86Y6jzmV6t;
+	Mon, 22 Dec 2025 19:45:20 +0800 (CST)
 Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id BE0B140562;
-	Mon, 22 Dec 2025 19:48:25 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 5280D4056B;
+	Mon, 22 Dec 2025 19:48:27 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
  (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 22 Dec
- 2025 19:48:24 +0800
+ 2025 19:48:25 +0800
 From: Jinjie Ruan <ruanjinjie@huawei.com>
 To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
@@ -58,9 +58,9 @@ To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
 	<kmal@cock.li>, <dvyukov@google.com>, <richard.weiyang@gmail.com>,
 	<reddybalavignesh9979@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v10 09/16] arm64/ptrace: Expand secure_computing() in place
-Date: Mon, 22 Dec 2025 19:47:30 +0800
-Message-ID: <20251222114737.1334364-10-ruanjinjie@huawei.com>
+Subject: [PATCH v10 10/16] arm64/ptrace: Use syscall_get_arguments() helper
+Date: Mon, 22 Dec 2025 19:47:31 +0800
+Message-ID: <20251222114737.1334364-11-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20251222114737.1334364-1-ruanjinjie@huawei.com>
 References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
@@ -75,47 +75,61 @@ Content-Type: text/plain
 X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
  dggpemf500011.china.huawei.com (7.185.36.131)
 
-The generic entry expand secure_computing() in place and call
-__secure_computing() directly.
+The generic entry check audit context first and use
+syscall_get_arguments() helper.
 
-In order to switch to the generic entry for arm64, refactor
-secure_computing() for syscall_trace_enter().
+In order to switch to the generic entry for arm64,
+
+- Also use syscall_get_arguments() to get audit_syscall_entry()'s
+  last four parameters.
+
+- Extract the syscall_enter_audit() helper to make it clear.
+
+- Check audit context first, which saves an unnecessary memcpy when
+  current process's audit_context is NULL.
+
+Overall these changes make syscall_enter_audit() exactly equivalent
+to the generic one.
 
 No functional changes.
 
 Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 ---
- arch/arm64/kernel/ptrace.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/arm64/kernel/ptrace.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/kernel/ptrace.c b/arch/arm64/kernel/ptrace.c
-index 558d5553fd6b..a1922e4a6437 100644
+index a1922e4a6437..2645ddf77369 100644
 --- a/arch/arm64/kernel/ptrace.c
 +++ b/arch/arm64/kernel/ptrace.c
-@@ -2418,8 +2418,11 @@ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
+@@ -2407,6 +2407,16 @@ static void report_syscall_exit(struct pt_regs *regs)
  	}
- 
- 	/* Do the secure computing after ptrace; failures should be fast. */
--	if (secure_computing() == -1)
--		return NO_SYSCALL;
-+	if (flags & _TIF_SECCOMP) {
-+		ret = __secure_computing();
-+		if (ret == -1)
-+			return NO_SYSCALL;
-+	}
- 
- 	/* Either of the above might have changed the syscall number */
- 	syscall = syscall_get_nr(current, regs);
-@@ -2437,7 +2440,7 @@ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
- 	audit_syscall_entry(syscall, regs->orig_x0, regs->regs[1],
- 			    regs->regs[2], regs->regs[3]);
- 
--	return syscall;
-+	return ret ? : syscall;
  }
  
- static inline bool report_single_step(unsigned long flags)
++static inline void syscall_enter_audit(struct pt_regs *regs, long syscall)
++{
++	if (unlikely(audit_context())) {
++		unsigned long args[6];
++
++		syscall_get_arguments(current, regs, args);
++		audit_syscall_entry(syscall, args[0], args[1], args[2], args[3]);
++	}
++}
++
+ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
+ {
+ 	int ret;
+@@ -2437,8 +2447,7 @@ int syscall_trace_enter(struct pt_regs *regs, long syscall, unsigned long flags)
+ 		 syscall = syscall_get_nr(current, regs);
+ 	}
+ 
+-	audit_syscall_entry(syscall, regs->orig_x0, regs->regs[1],
+-			    regs->regs[2], regs->regs[3]);
++	syscall_enter_audit(regs, syscall);
+ 
+ 	return ret ? : syscall;
+ }
 -- 
 2.34.1
 
