@@ -1,120 +1,218 @@
-Return-Path: <linux-kselftest+bounces-47840-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47842-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D050CD5DC5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 12:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 03414CD5FAA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 13:28:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EB8BC3049B20
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 11:50:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B102A30038D5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 12:28:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E2432B996;
-	Mon, 22 Dec 2025 11:48:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8BE723A9BD;
+	Mon, 22 Dec 2025 12:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="pzn12l3+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4tw116O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D726632AAB4;
-	Mon, 22 Dec 2025 11:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B53B1C84A2;
+	Mon, 22 Dec 2025 12:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766404122; cv=none; b=GXPE0odtq0131s5yf0vO0hm5NHrWs4Ez6baTUBlCRS8TLTTyYWjnALPpQHPV+HyiYl4v9U2f0crbXv14qlJQNvnXCC8kV6LWqPWMVSRXAuhiJFRRzFAmv2/Q/SlOBKyRuFar2hEBfSoklz4VsO4yYxb4BheY8SX6AxsEkpfSU4w=
+	t=1766406515; cv=none; b=bmcicKEYuDWt7TTg9SrrGKfJLQGxuEADr44SKOXB+euZM5isUTtIp/tAv0low5ydhAouXUiYttsxRSyWOvwPR6rfqddXREJpU800NNFd9HQS046KoM/6LpEcopmx80RCqa27LjeqdPnLkMG4EKa9wEiuBdmRh1+chDghwuVTwKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766404122; c=relaxed/simple;
-	bh=pasMR4Ygz9qFZaIQ1r+gvgo/O4vK/SWhOSegJiBFM+s=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W7IhU+kF/vxEC9Ek+JnxfI7phEAJrtwhO5+BGO1t1jh00pXWZTdpLmeU+0IpVPiwigpe82m+VnG3rNRY5E7Ah9G3hVb/yL8YRLAkhL9IJIybEKdz6WjXp6+0FBCZquqlKiqRRvgezXDWabAiH+9m94BkC6TcOcf1dyIpPuZoInY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=pzn12l3+; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=OD26JToyDDl5Sgwi12v/k4z4U3Ry0aaK+EFkcVoSzl0=;
-	b=pzn12l3+8i2u0VdW8ObsjpHBUYiRi5QgiY9/e9Ff2NU9gMiDOJb6ykZehU1P2/eldejwciE1Q
-	4ilwISyzTFydBUQAtNmC1IpmPAkEpUypzMGzoAp5lBtKuPSrq/kNRlK1uAA2mrgvhVgZ0SfvnwL
-	nEkQP9EhdJ/amGMMMnpDTGI=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4dZbtP0pmXz1K96V;
-	Mon, 22 Dec 2025 19:45:33 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id D16E740539;
-	Mon, 22 Dec 2025 19:48:36 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by dggpemf500011.china.huawei.com
- (7.185.36.131) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 22 Dec
- 2025 19:48:35 +0800
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <oleg@redhat.com>,
-	<tglx@linutronix.de>, <peterz@infradead.org>, <luto@kernel.org>,
-	<shuah@kernel.org>, <kees@kernel.org>, <wad@chromium.org>,
-	<ruanjinjie@huawei.com>, <kevin.brodsky@arm.com>, <macro@orcam.me.uk>,
-	<charlie@rivosinc.com>, <akpm@linux-foundation.org>, <ldv@strace.io>,
-	<anshuman.khandual@arm.com>, <mark.rutland@arm.com>, <thuth@redhat.com>,
-	<song@kernel.org>, <ryan.roberts@arm.com>, <ada.coupriediaz@arm.com>,
-	<broonie@kernel.org>, <liqiang01@kylinos.cn>, <pengcan@kylinos.cn>,
-	<kmal@cock.li>, <dvyukov@google.com>, <richard.weiyang@gmail.com>,
-	<reddybalavignesh9979@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v10 16/16] selftests: sud_test: Support aarch64
-Date: Mon, 22 Dec 2025 19:47:37 +0800
-Message-ID: <20251222114737.1334364-17-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251222114737.1334364-1-ruanjinjie@huawei.com>
-References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+	s=arc-20240116; t=1766406515; c=relaxed/simple;
+	bh=jOwV7nUJ5dOaWvUO6114YDd2fspA3/2foFpNPnjb0x4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=FqrKmVRzsZvPoIbuQef3U6U69pxcNdZQkfzNUJy1LYJ7GvbTuE9AiGnRjI8Cx2T/HyN++SiUtC6VLNyk1eUAnvkmoql2m0UFMRic20tO08eFUmX9SYbYdaWqxRRLkgVL0sWlHJH6kMAl5Dpxw3N/+wxvT7IHHE9gcZ0yG7diDS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4tw116O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE8E4C113D0;
+	Mon, 22 Dec 2025 12:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766406515;
+	bh=jOwV7nUJ5dOaWvUO6114YDd2fspA3/2foFpNPnjb0x4=;
+	h=From:Date:Subject:To:Cc:From;
+	b=F4tw116OuitRQxfvc/ZKQIX5IB/+wFDkqQBm6H9rdU/jUU0fhk29Z7r7YfOGjdW0T
+	 V+ea/cd+Tv71m2EuTyN0cmqo/IXf5rSdaeUShCbewpwmmMwYDvnduaLlDPh/MQwEL+
+	 LX+0WcovE5Dj8HAvHduBgPnyefid66SEA265TeSHzh3mayhXj2+LPDEQ9E+W8ufPQf
+	 vjkZTey0/QiZWt9L+GZInXF06kq2wZfZTYVWwb4S2nvGfE7EOay2roVljsOtoo+Ust
+	 4qRzwe5wRC+yYKtnTg0uJ0FUccVgRH9C2m7tYQ0Sp0+YYFfMJBWjDp99QhaVEiOwv+
+	 LyyRUHBh8D86w==
+From: Tamir Duberstein <tamird@kernel.org>
+Date: Mon, 22 Dec 2025 13:28:27 +0100
+Subject: [PATCH] rust: kunit: replace `kernel::c_str!` with C-Strings
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251222-cstr-kunit-v1-1-39d999672f35@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ5AMBBA0avIrDVhkoq4ilhoOxiSkk6JRNxds
+ XyL/y8QCkwCTXZBoIOFV59Q5hnYqfcjKXbJgAXqEhGVlRjUsnuOylBVO1fbwTgNKdgCDXx+s7b
+ 7LbuZycb3APf9ABtIlkJuAAAA
+X-Change-ID: 20251222-cstr-kunit-be68dd8cfbd5
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Tamir Duberstein <tamird@gmail.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openssh-sha256; t=1766406510; l=5424;
+ i=tamird@gmail.com; h=from:subject:message-id;
+ bh=pwc3vGXHK+ibZCWjh3w0zYv5qhibNAV50Z6yzjPg+KU=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgtYz36g7iDMSkY5K7Ab51ksGX7hJgs
+ MRt+XVZTrIzMVIAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QPHR7xsCCwONVpfA7DwG98VZ4PJ6knRY06MAhx0lsZjwcogcRr81hLQJQl62oeN9LPaVvD5Dv9R
+ k8fM1IjR1ag4=
+X-Developer-Key: i=tamird@gmail.com; a=openssh;
+ fpr=SHA256:264rPmnnrb+ERkS7DDS3tuwqcJss/zevJRzoylqMsbc
 
-From: kemal <kmal@cock.li>
+From: Tamir Duberstein <tamird@gmail.com>
 
-Support aarch64 to test "Syscall User Dispatch" with sud_test
-selftest testcase.
+C-String literals were added in Rust 1.77. Replace instances of
+`kernel::c_str!` with C-String literals where possible.
 
-Signed-off-by: kemal <kmal@cock.li>
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+Reviewed-by: Benno Lossin <lossin@kernel.org>
+Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 ---
- tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c | 2 +-
- tools/testing/selftests/syscall_user_dispatch/sud_test.c      | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ rust/kernel/kunit.rs        | 11 ++++-------
+ rust/macros/kunit.rs        | 10 +++++-----
+ scripts/rustdoc_test_gen.rs |  4 ++--
+ 3 files changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c b/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-index 073a03702ff5..6059abe75cb3 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_benchmark.c
-@@ -41,7 +41,7 @@
-  * out of the box, but don't enable them until they support syscall user
-  * dispatch.
-  */
--#if defined(__x86_64__) || defined(__i386__)
-+#if defined(__x86_64__) || defined(__i386__) || defined(__aarch64__)
- #define TEST_BLOCKED_RETURN
- #endif
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index 79436509dd73..21aef6c97325 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -9,9 +9,6 @@
+ use crate::fmt;
+ use crate::prelude::*;
  
-diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-index b855c6000287..3ffea2f4a66d 100644
---- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-+++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-@@ -192,6 +192,10 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
- 	((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A0] =
- 			((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A7];
- #endif
-+#ifdef __aarch64__
-+	((ucontext_t *)ucontext)->uc_mcontext.regs[0] = (unsigned int)
-+			((ucontext_t *)ucontext)->uc_mcontext.regs[8];
-+#endif
- }
+-#[cfg(CONFIG_PRINTK)]
+-use crate::c_str;
+-
+ /// Prints a KUnit error-level message.
+ ///
+ /// Public but hidden since it should only be used from KUnit generated code.
+@@ -22,7 +19,7 @@ pub fn err(args: fmt::Arguments<'_>) {
+     #[cfg(CONFIG_PRINTK)]
+     unsafe {
+         bindings::_printk(
+-            c_str!("\x013%pA").as_char_ptr(),
++            c"\x013%pA".as_char_ptr(),
+             core::ptr::from_ref(&args).cast::<c_void>(),
+         );
+     }
+@@ -38,7 +35,7 @@ pub fn info(args: fmt::Arguments<'_>) {
+     #[cfg(CONFIG_PRINTK)]
+     unsafe {
+         bindings::_printk(
+-            c_str!("\x016%pA").as_char_ptr(),
++            c"\x016%pA".as_char_ptr(),
+             core::ptr::from_ref(&args).cast::<c_void>(),
+         );
+     }
+@@ -60,7 +57,7 @@ macro_rules! kunit_assert {
+                 break 'out;
+             }
  
- int setup_sigsys_handler(void)
--- 
-2.34.1
+-            static FILE: &'static $crate::str::CStr = $crate::c_str!($file);
++            static FILE: &'static $crate::str::CStr = $file;
+             static LINE: i32 = ::core::line!() as i32 - $diff;
+             static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
+ 
+@@ -253,7 +250,7 @@ pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
+ /// }
+ ///
+ /// static mut KUNIT_TEST_CASES: [kernel::bindings::kunit_case; 2] = [
+-///     kernel::kunit::kunit_case(kernel::c_str!("name"), test_fn),
++///     kernel::kunit::kunit_case(c"name", test_fn),
+ ///     kernel::kunit::kunit_case_null(),
+ /// ];
+ /// kernel::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASES);
+diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
+index b395bb053695..3d7724b35c0f 100644
+--- a/rust/macros/kunit.rs
++++ b/rust/macros/kunit.rs
+@@ -102,8 +102,8 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+     // unsafe extern "C" fn kunit_rust_wrapper_bar(_test: *mut ::kernel::bindings::kunit) { bar(); }
+     //
+     // static mut TEST_CASES: [::kernel::bindings::kunit_case; 3] = [
+-    //     ::kernel::kunit::kunit_case(::kernel::c_str!("foo"), kunit_rust_wrapper_foo),
+-    //     ::kernel::kunit::kunit_case(::kernel::c_str!("bar"), kunit_rust_wrapper_bar),
++    //     ::kernel::kunit::kunit_case(c"foo", kunit_rust_wrapper_foo),
++    //     ::kernel::kunit::kunit_case(c"bar", kunit_rust_wrapper_bar),
+     //     ::kernel::kunit::kunit_case_null(),
+     // ];
+     //
+@@ -133,7 +133,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+         writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
+         writeln!(
+             test_cases,
+-            "    ::kernel::kunit::kunit_case(::kernel::c_str!(\"{test}\"), {kunit_wrapper_fn_name}),"
++            "    ::kernel::kunit::kunit_case(c\"{test}\", {kunit_wrapper_fn_name}),"
+         )
+         .unwrap();
+         writeln!(
+@@ -143,7 +143,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+ #[allow(unused)]
+ macro_rules! assert {{
+     ($cond:expr $(,)?) => {{{{
+-        kernel::kunit_assert!("{test}", "{path}", 0, $cond);
++        kernel::kunit_assert!("{test}", c"{path}", 0, $cond);
+     }}}}
+ }}
+ 
+@@ -151,7 +151,7 @@ macro_rules! assert {{
+ #[allow(unused)]
+ macro_rules! assert_eq {{
+     ($left:expr, $right:expr $(,)?) => {{{{
+-        kernel::kunit_assert_eq!("{test}", "{path}", 0, $left, $right);
++        kernel::kunit_assert_eq!("{test}", c"{path}", 0, $left, $right);
+     }}}}
+ }}
+         "#
+diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
+index be0561049660..967064ebd391 100644
+--- a/scripts/rustdoc_test_gen.rs
++++ b/scripts/rustdoc_test_gen.rs
+@@ -174,7 +174,7 @@ pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
+     macro_rules! assert {{
+         ($cond:expr $(,)?) => {{{{
+             ::kernel::kunit_assert!(
+-                "{kunit_name}", "{real_path}", __DOCTEST_ANCHOR - {line}, $cond
++                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $cond
+             );
+         }}}}
+     }}
+@@ -184,7 +184,7 @@ macro_rules! assert {{
+     macro_rules! assert_eq {{
+         ($left:expr, $right:expr $(,)?) => {{{{
+             ::kernel::kunit_assert_eq!(
+-                "{kunit_name}", "{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
++                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
+             );
+         }}}}
+     }}
+
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251222-cstr-kunit-be68dd8cfbd5
+
+Best regards,
+--  
+Tamir Duberstein <tamird@gmail.com>
 
 
