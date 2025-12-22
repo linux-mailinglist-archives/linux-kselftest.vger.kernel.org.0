@@ -1,125 +1,147 @@
-Return-Path: <linux-kselftest+bounces-47820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F28CD55AB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 10:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 79BC9CD569A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 10:54:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 950393015ED2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 09:39:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BFE1A3014DAB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Dec 2025 09:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88CF8311957;
-	Mon, 22 Dec 2025 09:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9135E30BB9E;
+	Mon, 22 Dec 2025 09:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="oQdXcezJ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="HtVO8f0f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F/CE8az6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD6D30DEC6;
-	Mon, 22 Dec 2025 09:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC2730ACFB
+	for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 09:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766396396; cv=none; b=NPE+eUczbsnpN2ZmbOyrqP9pladJV6Dfz9etV+MRdbUBMij15Cjo/nS5WSEvnbigFzV15LueI2FlOdR2ZHIPDfVo9OatcaTKT1LFIYYmiv4W0QCsawu5ZxaJNE7IY4/v6N2ArNVl35aJUW48Bf8v/kOUhO/axcZsenb1iMaqC+o=
+	t=1766396917; cv=none; b=NPcTebBbAI3/U26o8TMQFwpxBDMKuHpqnrN8ZKbGx5QjLSRGTycczElyZDz/VJK37PaIJ3THmhOCZthBjDOY8KXZktvnq9xupbNevY8wDsN0mMBSY52UQpq7ovjqwUhfCI5n/GWIwAstE6m+kWRK39pUoNbEtQ4GBTp/SU8Yrtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766396396; c=relaxed/simple;
-	bh=LOwz/BZEk04kj7tjjFjFVyQHbvFbugLoCeA5MPX5Uu8=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=QGuLOau2+bd1UCav9v2edIcyJDr0KGIYr8FI4zKYsClXUtO2NZcc0qgwdqyMbjC+frLdaTizjSO4CuTIVlE7qFRkBRCILkyinxDqPinVcV/5/VARyzmoOmvuDrPQERgsw+Mz8b+7+PsRYibGZuxcdVBf6s/Hzwpbilj4y7ledU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=oQdXcezJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=HtVO8f0f; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.stl.internal (Postfix) with ESMTP id 289451D00098;
-	Mon, 22 Dec 2025 04:39:54 -0500 (EST)
-Received: from phl-imap-17 ([10.202.2.105])
-  by phl-compute-04.internal (MEProxy); Mon, 22 Dec 2025 04:39:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1766396394;
-	 x=1766482794; bh=LOwz/BZEk04kj7tjjFjFVyQHbvFbugLoCeA5MPX5Uu8=; b=
-	oQdXcezJepvKmaqmaVydM1CBdga5kpHADJ2cAzeA9QyKOU+BsuGLUmd/LwX4kZDB
-	CRYXJacB++LGDYzm0wMldsq2GnnRkekryA8mpoZh+qH9WdSDuZw8pZJ5AeK6xRE/
-	BuAibOekZ3XoTE/GHE9kqfqJh1TMEs4Od+JDAVcMltsIBbm50/ZLYjLYi1ayMErf
-	o7EtXa1yWrJ9HqJNfjsX6rXI/AqF/LtFS3mCXB8BpsURFAurAbxEghBhnRgcyuY/
-	sAIztqZkmX6I/cTHQw4ZHmXcuuIl8UDdtOyrlTx+7v5AuD0sOpi007IfSWYIs32p
-	n/CwepxI5jMSYBXP+Db2Jw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1766396394; x=
-	1766482794; bh=LOwz/BZEk04kj7tjjFjFVyQHbvFbugLoCeA5MPX5Uu8=; b=H
-	tVO8f0fFqz72cfxa3zCNc9OI1iHuWxIPwap4+3Y/T7fa04p2n6kejXQuvgIrEAvL
-	Odkw3phlrTGByWO9KdUiVFyC5srvX2BEQXSSGmYDD8Q/aHrmh8I4VKcsYDXgGvgq
-	6oeqvx4NtUq761Gb9EgcB8MtK1wbZ+KVkt7Y3MSfNSP8NhiG+5eSQ/LYdJFbdQFg
-	w9Cm4ASQPE0dwI1suKHBQtSPslTeu36fJ5bV7zNEUkEEzTwl+sP6jVqGVahhSis+
-	clh2imaKMrarrLM/i5/+ieO8+34sQFYbdNok9AbTWTiv4J/yR25gPHVQn8ed2cLe
-	/qpvHLVUq/O8DKG7YNrSQ==
-X-ME-Sender: <xms:6RFJaWre4-W1m94CxiY1RvThJTKPgitQKdrKCRHWcqDUcNG4oRe_kw>
-    <xme:6RFJaffCH20yJamMSRw2ejjd1JCaWhDvS0AsVB9wujcuXis8tXExfmZH9lQ0_5X0_
-    7JY2dsB3nu_z9PCvcSoCHRRTmhdHa_PqC1LVpGn_rXrClcxwkWSHA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdehieeiudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecunecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertd
-    ertdejnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhn
-    uggsrdguvgeqnecuggftrfgrthhtvghrnhepkedvuefhiedtueeijeevtdeiieejfeelve
-    fffeelkeeiteejffdvkefgteeuhffgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeehpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopeifsedufihtrdgvuhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugiesfigvihhsshhstghhuhhhrdhn
-    vght
-X-ME-Proxy: <xmx:6RFJaX3JRyatx7QtLxz8Ewzr8sjjJOiphKgCmxD35AoyBajpO_BIrQ>
-    <xmx:6RFJafBxz_RWHNcxQVuturO9mwoY2kGnlJvGtP9uqRYih_rOZbGTiw>
-    <xmx:6RFJaTdrKhxvrp272m4_xj8MCoXMHVyRgzUJv4w3O9ICw5fJVoejYw>
-    <xmx:6RFJac5RiJopx-_F5UtWpPaD0385lux7G0hOlGjZHWR6oAnSo2vE1A>
-    <xmx:6hFJaWY8IST6yj6gITLmm-YpxyQWDPs25wpAHKuK2DJjgMWZStF3CvpI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id AF234C40054; Mon, 22 Dec 2025 04:39:53 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1766396917; c=relaxed/simple;
+	bh=BFWeRYpk582Dj1H10KmnL6ohapHXluTPgBRd3PojY9k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WjAI/K5iFYqPczcFdU1Iw+Xi5uxD11B9U7uMPFx9wont3uuwBvqxovKnrcQ89F7l0B5yVo/8owSeGQKVlv5tNIU8doU3qrYf3GK4vSNOeFETaSxULiNtulZB1/T0bhrqUTlZgXcAn9sK9loicpkbyXvTmfENNGvyFkqp9dni8qQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F/CE8az6; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-477b198f4bcso24137855e9.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 01:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766396914; x=1767001714; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cpp2j64eyQIDdIrB75XVaxQv4OqlhELwCC5ZDUyvq6Q=;
+        b=F/CE8az61xc32bEpCmnEN1yiWwVC/pxbbuDzDyELf8esdG/d8JCdmeZP1mR1np4DxX
+         Rct6ktFeFKBF6ePvxoLfGTaJgv1YbMWqDTjRuFRGUGXwfLRFFDuB91HfujfLRvUm/aKm
+         R8q2zVdAwA/nJ+4l5EBt2hCP2TA1sV4c8vjEZs7l6yKb970ZAiM6P+cr5M9sJm9Cghmw
+         FXQXJ9d4P0BWk+LF/uAlHLdZsV0uMMDhxrpjoV0yQSo41y6mdzHbzXXCBSRRB705s3mv
+         OBIkXCkatYnxsNcbI+kbkFrGWppk6Ei5BC3K0BOhymxg2Nwbi6oIB0JmDatAEm175f9D
+         WpeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766396914; x=1767001714;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Cpp2j64eyQIDdIrB75XVaxQv4OqlhELwCC5ZDUyvq6Q=;
+        b=G5dWvVWOJM8OaGz23PQPWZyNoLrKdCXAM9emduvOqfr/s1sBVLJcJWN+m/HSqVUIYq
+         81n8mWhuAjtK3ZkTC/srz1L3LI49TsQTIDf/9SWRJG7OCJFcGIRWyhdBjYmSOqTFQGuX
+         BvJOtwk+3JBR90AX9/y/i/Y9+yVGP1ciHECbVcTxZvCLj4NsA46UloN8CSNZ+n21dyKD
+         REociTjuLJI8qywWBwHqFRG/QYVn2DO8kxdLPOtQtHf+99e65z4NKJsl16O0hZVltIlz
+         UM6moyHtUcb+xTkYK1V6Cob6IvhFB/1/hIzCtCHswBOJ9WO53LTrHlqkHDEUltVOHnMp
+         8cnw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYkprWC9Kmot5qGkz0mSsNapwQRCkuyQRP5o2ZuPRYtN+xHusFrNnDXmUiyruQxwYir7rQEveSLu0FjJ0PDEc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfFz8eDSuGgZLimnGqASuSa6vkmeyLCMD6CjSE8oJqdjH4jGVM
+	kGPamNFvlgfmCvnMJAU5jVBvuYbvf3ZV0lIv+uWHYeZuLiP7kUPGNoX1
+X-Gm-Gg: AY/fxX68ej+mTzCNu6iU6jKszhW4bjx9J8jswk5v/0phyyViYOKtj3bzCcq7NPZVLpJ
+	xvgfQvQTsPUwreyV+Zl26xNh7+GWjZnhHAbwY946wNBtf/FtFzH9O0+sdds6I1/vo6bB+uh49dL
+	bJQffizKiav8iKWwgYU4+idwYsJmXHOGfkigSSGCE4VnPiDfYk5iXAA51LRNTUuhVBF1wFtMkV8
+	UU8d3oxPccsOUhAUmoZcm89GNYX7PhgA6ug0tIBWnPVgefldz3Gum6fYL6Zpftne+t5Hq5gZUTs
+	sD5QIcxeShjsZ57CT7WoVJ1HCTadzS+bCgoY2L4WGoG52w1HgqIKUrsCC0d6d+OfGdHq7EDsjWd
+	I91vGUCxZ41rnG1IAsHCw+VJZ4JDamvfZdm1Dhb4p52wB/V7NlbywjxjSfr/LmIVYn+TG7Hkyc2
+	oxZ5KrOAnNcBgWeA/+JAK6/6+dDmgfWa8Sh7m+wnl+RrV95cqYAys=
+X-Google-Smtp-Source: AGHT+IF6jYkceDSxr0q7W5Uf/me1u68y0/0ia7Af2JYTdBnbk2BDeEsYBndbKG1YGF/M4co0yuY0Mg==
+X-Received: by 2002:a05:600c:4506:b0:477:9392:8557 with SMTP id 5b1f17b1804b1-47d1957711fmr98592555e9.18.1766396913629;
+        Mon, 22 Dec 2025 01:48:33 -0800 (PST)
+Received: from pumpkin (host-2-103-239-165.as13285.net. [2.103.239.165])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be272e46fsm231821355e9.4.2025.12.22.01.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Dec 2025 01:48:33 -0800 (PST)
+Date: Mon, 22 Dec 2025 09:48:28 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Li Wang <liwang@redhat.com>
+Cc: akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, David Hildenbrand
+ <david@kernel.org>, Mark Brown <broonie@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3 1/3] selftests/mm/write_to_hugetlbfs: parse -s as
+ size_t
+Message-ID: <20251222094828.2783d9e5@pumpkin>
+In-Reply-To: <CAEemH2f40t+4SsjL3Y=8Gid-CBMtf3eL1egsPKT1J_7LDbdWPQ@mail.gmail.com>
+References: <20251221122639.3168038-1-liwang@redhat.com>
+	<20251221122639.3168038-2-liwang@redhat.com>
+	<20251221221052.3b769fc2@pumpkin>
+	<CAEemH2f40t+4SsjL3Y=8Gid-CBMtf3eL1egsPKT1J_7LDbdWPQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AGyFxRjKuRl7
-Date: Mon, 22 Dec 2025 10:39:33 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- "Willy Tarreau" <w@1wt.eu>, shuah <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Message-Id: <098abb99-bfa7-43c5-8a54-556ccd4f3448@app.fastmail.com>
-In-Reply-To: <20251220-nolibc-uapi-types-v3-0-c662992f75d7@weissschuh.net>
-References: <20251220-nolibc-uapi-types-v3-0-c662992f75d7@weissschuh.net>
-Subject: Re: [PATCH v3 00/14] tools/nolibc: always use 64-bit time-related types
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 20, 2025, at 14:55, Thomas Wei=C3=9Fschuh wrote:
-> nolibc currently uses 32-bit types for various APIs. These are
-> problematic as their reduced value range can lead to truncated values.
->
-> Intended for 6.19.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> ---
-> Changes in v3:
-> - Only use _Static_assert() where available
-> - Link to v2:=20
-> https://lore.kernel.org/r/20251122-nolibc-uapi-types-v2-0-b814a43654f5=
-@weissschuh.net
+On Mon, 22 Dec 2025 09:45:41 +0800
+Li Wang <liwang@redhat.com> wrote:
 
-I looked at each patch again, and I this looks great to me!
+> On Mon, Dec 22, 2025 at 6:11=E2=80=AFAM David Laight <david.laight.linux@=
+gmail.com>
+> wrote:
+>=20
+> > On Sun, 21 Dec 2025 20:26:37 +0800
+> > Li Wang <liwang@redhat.com> wrote:
+> > =20
+> > > write_to_hugetlbfs currently parses the -s size argument with atoi()
+> > > into an int. This silently accepts malformed input, cannot report =20
+> > overflow, =20
+> > > and can truncate large sizes. =20
+> >
+> > And sscanf() will just ignore invalid trailing characters.
+> > Probably much the same as atoi() apart from a leading '-'.
+> >
+> > Maybe you could use "%zu%c" and check the count is 1 - but I bet
+> > some static checker won't like that.
+> > =20
+>=20
+> Yes, that would be stronger, since it would reject trailing garbage.
+> But for a selftest this is probably sufficient: switching to size_t and
+> parsing with "%zu" already avoids the int truncation issue.
 
-Whole series
+Have you checked at what does sscanf() does with an overlong digit string?
+I'd guess that it just processes all the digits and then masks the result
+to fix (like the kernel one does).
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+It reality scanf() is 'not the function you are lookign for'.
+
+IIRC the 'SUS' (used to) say that this was absolutely fine for command
+line parsing for 'standard utilities'.
+
+It is best to use strtoul() and check the 'end' character is '\0'.
+
+	David
+
+>=20
+> @Andrew Morton <akpm@linux-foundation.org>,
+>=20
+> Hi Andrew, I noticed you have addedthe patches to your mm-new branch,
+> Let me know if you prefer the "%zu%c" enhancement in a new version.
+>=20
+>=20
+
 
