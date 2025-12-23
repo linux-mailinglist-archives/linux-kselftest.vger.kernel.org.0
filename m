@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-47894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47895-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B014CD7C6D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 02:59:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4ADE7CD7ADB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 02:35:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D42F430F92E6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 01:53:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D6DB331270D5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 01:32:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A8233C520;
-	Tue, 23 Dec 2025 01:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C57933F8B1;
+	Tue, 23 Dec 2025 01:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="paagAQx7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdctPKNJ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4073533BBBD;
-	Tue, 23 Dec 2025 01:23:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264C533F397;
+	Tue, 23 Dec 2025 01:23:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766452999; cv=none; b=b12z+sxi0qCkWBhJTNq81wbbW/Hjz31oY2WVUK/PlS0cvOYVgClsiWW9+AqWehG48Grx4q6X4Z/M/674hJSZ3IgQcljxwambezudlvBYNdIlmVwjiqr/cVNvAISd55LR2l36NtvvKBYx9t9O4nwiALWrelHfEPdcFPiP6PxuN5w=
+	t=1766453003; cv=none; b=XZQlPuZTpnF/nl+WGSL+byHy2/o0x5Aj1HOyTUvqmnT6+CZ3fmJY6b3NxUtedJXcCRK4WsyFqnX/ok8pEaVEWvekOAQ67kRgsa6+jsQxLqOUJ1DNJFmPIhBSq9n2BozA2BMWRV5nODn05VEBIvhMfJx4PdbLGWT3nM5f2zcrzCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766452999; c=relaxed/simple;
-	bh=OMYDhkHK0uSmrb5MCtocsFGAxnEKImTpr9foZYZOt40=;
+	s=arc-20240116; t=1766453003; c=relaxed/simple;
+	bh=FzRi1bctv9rrqNEWwOJp3F+K+iFD0wwTwXRP36rhp+Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=obG3HgxSjwHJCUAO32I8bsvWwmZeo9SdPlotbkBePUNb2vA2DeiAlKQtn2BCgkM4O7c0Wk6B5q94BrWZRT4Phz3MSR/nm4O8f5Mu/VFjRDWK0IFCqJft9Cv4RpevP0dYb00Jhb0A0dBvnVuhp+hVO3j5QUvE5qunPUKa3kAI1S4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=paagAQx7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E33F9C16AAE;
-	Tue, 23 Dec 2025 01:23:14 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=CM1gz3Xxm4U7G6rWmVWS0YDseQWqUotvnxgIaTM7OeQPP0oxwnEysru5V8qZOmzZ93UU4/9eEiWxtEtHuoKXRmtzdnxFyMTUHdUrrqg9n5EgaDjcEn+HoI5YqBR27VWMefEASDE17iRsk6OuEgtxJ82SbXWoiTO2vQMppSp9GR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdctPKNJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E997C4CEF1;
+	Tue, 23 Dec 2025 01:23:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766452998;
-	bh=OMYDhkHK0uSmrb5MCtocsFGAxnEKImTpr9foZYZOt40=;
+	s=k20201202; t=1766453003;
+	bh=FzRi1bctv9rrqNEWwOJp3F+K+iFD0wwTwXRP36rhp+Y=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=paagAQx7DR6OQLYiKBAyUmfJRqlLlWo0B/WqnSJp4UaOnSVTpvnrpUs9rcihKjl4p
-	 ogMcwM5pPsv/N9M33qjhe6cKUTe342MSgPkdFwJpdTym2v4trsvEbHhy95LD360o3R
-	 qLBV2NftYFVYZx+uE0s4Ssjtb8ibMpKk4S5S/8wlfAjQ/xO49jLR7ibxWsahklWyeQ
-	 No0fZBXZCr2JE8NV+rqTfIEy0M8VaCR2TzaqJ2ZLsTAEjFPwp7UVrzTdwBEwKB3OBz
-	 2Caq0zVLjO5ggXaRtoVNOUcy3BrUbxnGbtNFsIZGfYwCdkudTZyWdqOYV+qx3y/1g8
-	 KyVynz/qGHrnA==
+	b=OdctPKNJwOjWJ5tecGrza74VtWHJA9rrjCwOhN2FX4CdIo9tRikRy644wetxVooIN
+	 IxOkRdl83h6vyyS401NfoF9BJGXc4LHcF2cIdR7OwPJOKDb9vjzS+WsXCW7zC+yp/b
+	 hemm1WLXEpOfp2qa/Ww+RBfYFNVM70aWmqZ3E056kOqKWXvtAd6u9RbgjtC7wV3aR1
+	 SLV6QBFuJ5owkYy8Mqr6cOv5j5OP1hsKqei9pm95vSiB908pvlkD48lgeEOgV3KJdQ
+	 emF/QSPj6QoZAB4EkayZIKNkYwuIHcf0Z/83lALqupB9Lrew7oh2NnBKgsw/h5DCUQ
+	 OnkhLeKZi411A==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 23 Dec 2025 01:21:18 +0000
-Subject: [PATCH v9 24/30] KVM: arm64: Handle SME exceptions
+Date: Tue, 23 Dec 2025 01:21:19 +0000
+Subject: [PATCH v9 25/30] KVM: arm64: Expose SME to nested guests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251223-kvm-arm64-sme-v9-24-8be3867cb883@kernel.org>
+Message-Id: <20251223-kvm-arm64-sme-v9-25-8be3867cb883@kernel.org>
 References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
 In-Reply-To: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
@@ -66,176 +66,57 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  Peter Maydell <peter.maydell@linaro.org>, 
  Eric Auger <eric.auger@redhat.com>, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6175; i=broonie@kernel.org;
- h=from:subject:message-id; bh=OMYDhkHK0uSmrb5MCtocsFGAxnEKImTpr9foZYZOt40=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpSe6VqS1KxXhksu/eI5v73oOXVDUthEn9H58Vo
- YU6O35PgUmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUnulQAKCRAk1otyXVSH
- 0L1tB/wLo9tdtbFcIkmIi1HKbhc864xEQx6SfbiiClSarEelE69s8aYGZLnVomleYwO9ihwJ/db
- VG0WTa4bvoXtF6vvC9ofVeHdrQJZtvEoByhdb7keq06H9phc40haHz6hM2srQPizn567WOlYnuE
- +FyxthfbZuW+gRWHGhpKqX/AK1EiSZuLY56NHNtDnUhOd/0RUvzc+RoVt2nKIqJfQ1vUfY16/85
- YfOmduvBlsRgsmKKUikWxth3cxX671UNztDNAqr9QyanllLBVD+4IiLeNzvIrlhQXB26F6/cftB
- xvjMa3/76Jp6tLql+8q+RNXbXvn8fGwBz+NufDvtf3cEz9PE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1408; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=FzRi1bctv9rrqNEWwOJp3F+K+iFD0wwTwXRP36rhp+Y=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpSe6Vf+MTqYjq4kXe4kbr9Zy9gweDKTkN/+6I+
+ 2AscH+hGPOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUnulQAKCRAk1otyXVSH
+ 0K47B/46AKQNCiAhn5hTkguKHo5oVF1pbyCaBey9vSjyQIbzDbvhCfKZqmL6Sdu/DMwtf98exB1
+ RD1+t4wd3yU5XYMsyE8z5/zhRYyKKnOpz97jMwjJwkZ1YS7TYLQ4WmUhvaSV+WkLPEJkbCsSXIi
+ y59GMQwrVxyom7Wui2mpYgm2JkqomZOW10XLIPBi8G60NgFjH6q7LGsUDBe7lucid92uDTvCkGe
+ bh5+0qgM2Bf0ecCA5VCfMKhgCY6yAj7SPuzOWWApXTABtJHLH7MPC/b6EWv6h9PpwbdWQy8YHTf
+ ezKax5T3S18GNdYUmZZdkUApkD2VmxucgyzJ6bwLrmqesJhe
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The access control for SME follows the same structure as for the base FP
-and SVE extensions, with control being via CPACR_ELx.SMEN and CPTR_EL2.TSM
-mirroring the equivalent FPSIMD and SVE controls in those registers. Add
-handling for these controls and exceptions mirroring the existing handling
-for FPSIMD and SVE.
+With support for context switching SME state in place allow access to SME
+in nested guests.
+
+The SME floating point state is handled along with all the other floating
+point state, SME specific floating point exceptions are directed into the
+same handlers as other floating point exceptions with NV specific handling
+for the vector lengths already in place.
+
+TPIDR2_EL0 is context switched along with the other TPIDRs as part of the
+main guest register context switch.
+
+SME priority support is currently masked from all guests including nested
+ones.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kvm/handle_exit.c            | 14 ++++++++++++++
- arch/arm64/kvm/hyp/include/hyp/switch.h | 11 ++++++-----
- arch/arm64/kvm/hyp/nvhe/switch.c        |  4 +++-
- arch/arm64/kvm/hyp/vhe/switch.c         | 17 ++++++++++++-----
- 4 files changed, 35 insertions(+), 11 deletions(-)
+ arch/arm64/kvm/nested.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kvm/handle_exit.c b/arch/arm64/kvm/handle_exit.c
-index cc7d5d1709cb..1e54d5d722e4 100644
---- a/arch/arm64/kvm/handle_exit.c
-+++ b/arch/arm64/kvm/handle_exit.c
-@@ -237,6 +237,19 @@ static int handle_sve(struct kvm_vcpu *vcpu)
- 	return 1;
- }
+diff --git a/arch/arm64/kvm/nested.c b/arch/arm64/kvm/nested.c
+index cdeeb8f09e72..a0967ca8c61e 100644
+--- a/arch/arm64/kvm/nested.c
++++ b/arch/arm64/kvm/nested.c
+@@ -1534,14 +1534,13 @@ u64 limit_nv_id_reg(struct kvm *kvm, u32 reg, u64 val)
+ 		break;
  
-+/*
-+ * Guest access to SME registers should be routed to this handler only
-+ * when the system doesn't support SME.
-+ */
-+static int handle_sme(struct kvm_vcpu *vcpu)
-+{
-+	if (guest_hyp_sme_traps_enabled(vcpu))
-+		return kvm_inject_nested_sync(vcpu, kvm_vcpu_get_esr(vcpu));
-+
-+	kvm_inject_undefined(vcpu);
-+	return 1;
-+}
-+
- /*
-  * Two possibilities to handle a trapping ptrauth instruction:
-  *
-@@ -390,6 +403,7 @@ static exit_handle_fn arm_exit_handlers[] = {
- 	[ESR_ELx_EC_SVC64]	= handle_svc,
- 	[ESR_ELx_EC_SYS64]	= kvm_handle_sys_reg,
- 	[ESR_ELx_EC_SVE]	= handle_sve,
-+	[ESR_ELx_EC_SME]	= handle_sme,
- 	[ESR_ELx_EC_ERET]	= kvm_handle_eret,
- 	[ESR_ELx_EC_IABT_LOW]	= kvm_handle_guest_abort,
- 	[ESR_ELx_EC_DABT_LOW]	= kvm_handle_guest_abort,
-diff --git a/arch/arm64/kvm/hyp/include/hyp/switch.h b/arch/arm64/kvm/hyp/include/hyp/switch.h
-index 5bcc72ae48ff..ad88cc7bd5d3 100644
---- a/arch/arm64/kvm/hyp/include/hyp/switch.h
-+++ b/arch/arm64/kvm/hyp/include/hyp/switch.h
-@@ -69,11 +69,8 @@ static inline void __activate_cptr_traps_nvhe(struct kvm_vcpu *vcpu)
- {
- 	u64 val = CPTR_NVHE_EL2_RES1 | CPTR_EL2_TAM | CPTR_EL2_TTA;
- 
--	/*
--	 * Always trap SME since it's not supported in KVM.
--	 * TSM is RES1 if SME isn't implemented.
--	 */
--	val |= CPTR_EL2_TSM;
-+	if (!vcpu_has_sme(vcpu) || !guest_owns_fp_regs())
-+		val |= CPTR_EL2_TSM;
- 
- 	if (!vcpu_has_sve(vcpu) || !guest_owns_fp_regs())
- 		val |= CPTR_EL2_TZ;
-@@ -101,6 +98,8 @@ static inline void __activate_cptr_traps_vhe(struct kvm_vcpu *vcpu)
- 		val |= CPACR_EL1_FPEN;
- 		if (vcpu_has_sve(vcpu))
- 			val |= CPACR_EL1_ZEN;
-+		if (vcpu_has_sme(vcpu))
-+			val |= CPACR_EL1_SMEN;
- 	}
- 
- 	if (!vcpu_has_nv(vcpu))
-@@ -142,6 +141,8 @@ static inline void __activate_cptr_traps_vhe(struct kvm_vcpu *vcpu)
- 		val &= ~CPACR_EL1_FPEN;
- 	if (!(SYS_FIELD_GET(CPACR_EL1, ZEN, cptr) & BIT(0)))
- 		val &= ~CPACR_EL1_ZEN;
-+	if (!(SYS_FIELD_GET(CPACR_EL1, SMEN, cptr) & BIT(0)))
-+		val &= ~CPACR_EL1_SMEN;
- 
- 	if (kvm_has_feat(vcpu->kvm, ID_AA64MMFR3_EL1, S2POE, IMP))
- 		val |= cptr & CPACR_EL1_E0POE;
-diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
-index d3b9ec8a7c28..b2cba7c92b0f 100644
---- a/arch/arm64/kvm/hyp/nvhe/switch.c
-+++ b/arch/arm64/kvm/hyp/nvhe/switch.c
-@@ -181,6 +181,7 @@ static const exit_handler_fn hyp_exit_handlers[] = {
- 	[ESR_ELx_EC_CP15_32]		= kvm_hyp_handle_cp15_32,
- 	[ESR_ELx_EC_SYS64]		= kvm_hyp_handle_sysreg,
- 	[ESR_ELx_EC_SVE]		= kvm_hyp_handle_fpsimd,
-+	[ESR_ELx_EC_SME]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_FP_ASIMD]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_IABT_LOW]		= kvm_hyp_handle_iabt_low,
- 	[ESR_ELx_EC_DABT_LOW]		= kvm_hyp_handle_dabt_low,
-@@ -192,7 +193,8 @@ static const exit_handler_fn pvm_exit_handlers[] = {
- 	[0 ... ESR_ELx_EC_MAX]		= NULL,
- 	[ESR_ELx_EC_SYS64]		= kvm_handle_pvm_sys64,
- 	[ESR_ELx_EC_SVE]		= kvm_handle_pvm_restricted,
--	[ESR_ELx_EC_FP_ASIMD]		= kvm_hyp_handle_fpsimd,
-+	[ESR_ELx_EC_SME]		= kvm_handle_pvm_restricted,
-+	[ESR_ELx_EC_FP_ASIMD]		= kvm_handle_pvm_restricted,
- 	[ESR_ELx_EC_IABT_LOW]		= kvm_hyp_handle_iabt_low,
- 	[ESR_ELx_EC_DABT_LOW]		= kvm_hyp_handle_dabt_low,
- 	[ESR_ELx_EC_WATCHPT_LOW]	= kvm_hyp_handle_watchpt_low,
-diff --git a/arch/arm64/kvm/hyp/vhe/switch.c b/arch/arm64/kvm/hyp/vhe/switch.c
-index 9984c492305a..8449004bc24e 100644
---- a/arch/arm64/kvm/hyp/vhe/switch.c
-+++ b/arch/arm64/kvm/hyp/vhe/switch.c
-@@ -458,22 +458,28 @@ static bool kvm_hyp_handle_cpacr_el1(struct kvm_vcpu *vcpu, u64 *exit_code)
- 	return true;
- }
- 
--static bool kvm_hyp_handle_zcr_el2(struct kvm_vcpu *vcpu, u64 *exit_code)
-+static bool kvm_hyp_handle_vec_cr_el2(struct kvm_vcpu *vcpu, u64 *exit_code)
- {
- 	u32 sysreg = esr_sys64_to_sysreg(kvm_vcpu_get_esr(vcpu));
- 
- 	if (!vcpu_has_nv(vcpu))
- 		return false;
- 
--	if (sysreg != SYS_ZCR_EL2)
-+	switch (sysreg) {
-+	case SYS_ZCR_EL2:
-+	case SYS_SMCR_EL2:
-+		break;
-+	default:
- 		return false;
-+	}
- 
- 	if (guest_owns_fp_regs())
- 		return false;
- 
- 	/*
--	 * ZCR_EL2 traps are handled in the slow path, with the expectation
--	 * that the guest's FP context has already been loaded onto the CPU.
-+	 * ZCR_EL2 and SMCR_EL2 traps are handled in the slow path,
-+	 * with the expectation that the guest's FP context has
-+	 * already been loaded onto the CPU.
- 	 *
- 	 * Load the guest's FP context and unconditionally forward to the
- 	 * slow path for handling (i.e. return false).
-@@ -493,7 +499,7 @@ static bool kvm_hyp_handle_sysreg_vhe(struct kvm_vcpu *vcpu, u64 *exit_code)
- 	if (kvm_hyp_handle_cpacr_el1(vcpu, exit_code))
- 		return true;
- 
--	if (kvm_hyp_handle_zcr_el2(vcpu, exit_code))
-+	if (kvm_hyp_handle_vec_cr_el2(vcpu, exit_code))
- 		return true;
- 
- 	return kvm_hyp_handle_sysreg(vcpu, exit_code);
-@@ -522,6 +528,7 @@ static const exit_handler_fn hyp_exit_handlers[] = {
- 	[0 ... ESR_ELx_EC_MAX]		= NULL,
- 	[ESR_ELx_EC_CP15_32]		= kvm_hyp_handle_cp15_32,
- 	[ESR_ELx_EC_SYS64]		= kvm_hyp_handle_sysreg_vhe,
-+	[ESR_ELx_EC_SME]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_SVE]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_FP_ASIMD]		= kvm_hyp_handle_fpsimd,
- 	[ESR_ELx_EC_IABT_LOW]		= kvm_hyp_handle_iabt_low,
+ 	case SYS_ID_AA64PFR1_EL1:
+-		/* Only support BTI, SSBS, CSV2_frac */
++		/* Only support BTI, SME, SSBS, CSV2_frac */
+ 		val &= ~(ID_AA64PFR1_EL1_PFAR		|
+ 			 ID_AA64PFR1_EL1_MTEX		|
+ 			 ID_AA64PFR1_EL1_THE		|
+ 			 ID_AA64PFR1_EL1_GCS		|
+ 			 ID_AA64PFR1_EL1_MTE_frac	|
+ 			 ID_AA64PFR1_EL1_NMI		|
+-			 ID_AA64PFR1_EL1_SME		|
+ 			 ID_AA64PFR1_EL1_RES0		|
+ 			 ID_AA64PFR1_EL1_MPAM_frac	|
+ 			 ID_AA64PFR1_EL1_MTE);
 
 -- 
 2.47.3
