@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-47873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47874-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCF38CD7C8E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 03:02:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 649C1CD7C91
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 03:02:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7DA4F30FDAA8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 01:57:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5490330FDA87
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 01:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F322C265623;
-	Tue, 23 Dec 2025 01:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20D52737EB;
+	Tue, 23 Dec 2025 01:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z9DIaYE6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NCRgEV4K"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E47C25F7BF;
-	Tue, 23 Dec 2025 01:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1C52580FB;
+	Tue, 23 Dec 2025 01:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766452908; cv=none; b=YophfO+CTNovH/wZzgHMLyfpd5C+kZfMnqbb+9TboABA2i26YVl+nXMb9sJdoMxkaM3PK5hUNE6LRusaySxzYpbkuDkWepPmDQFlrGw+BgC/9OAeIIu+dX/MbAuvCRbPayjdIMJNGcvPNau4RIe+H1L5Uset5Xg3oqRL7Lv2DuE=
+	t=1766452912; cv=none; b=Uoo2q3WWIQf1o3gpTMX57wQwfviHLKGCLPYyrIAHTe2BfSYatZsbx5cnv1PSDLi2KW7MzOAXjUUJGP+YmdpfhW5qjaGeIbvIxZ9jlW6mg/bzD2+1FFdTmoDPqclPFYX5oKM0oLzHhbwVj6RgAWZG623tN8BDg8oF01rxzC1RwUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766452908; c=relaxed/simple;
-	bh=AMoEF0nrqU26LQooV0kBfxDCIBukvmAs571HQFetjbk=;
+	s=arc-20240116; t=1766452912; c=relaxed/simple;
+	bh=wS/Sr3h3O9OGRzttKyfjnEZ56/U90EAT24zyvgc9Crs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dDedFHLWMfQdJSKvjdYHssjdersIk+vvUiLwDbWpoyYHOaSMJQnZGvtGa7S1o4wNR95N50JDtRV3KlxgvOGVd06fe+vGiaJXKFxfCyZ3jY+f7wyIpuJhbVVxT+uyFOmwPSer6P4F6VanmI5AaZU4AExz5vLiqVqejF9u/LGXy9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z9DIaYE6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD117C19425;
-	Tue, 23 Dec 2025 01:21:43 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=qeLly3uwPQoxwFmJL/lGebNxuPc4a2D054mNjiJh62zkC2UoD4k5k2SKlvQIzvUlJsc3TJRq6UBnYcHOLCF8XmEHzJZ9dYqusUZLFzxWKcAZd3fycPC9xl2A1Hr574b0dYZc41nJCa4JAYt4TgB8Obgqi34wdqqZTLYuktNppzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NCRgEV4K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275FDC19422;
+	Tue, 23 Dec 2025 01:21:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766452907;
-	bh=AMoEF0nrqU26LQooV0kBfxDCIBukvmAs571HQFetjbk=;
+	s=k20201202; t=1766452912;
+	bh=wS/Sr3h3O9OGRzttKyfjnEZ56/U90EAT24zyvgc9Crs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Z9DIaYE67tRSltM+1hG5us1paTYsOBt6mnBkbXS7Ha8VkxAoThUi82GMOF31urORP
-	 dCqVhrLmjHvjRB3jvX9i8W7jFTTAx0Z/F0CECVBMwoxzD+Pjp8lfERPTPrJ2rDTia/
-	 HRYJ84LW6XpiN8NOnHdTBUoGsygC6xcprc7ec4bcHu7mnSjv9pyJIrb3xxVdOrJLgG
-	 GEKnqYOPYnJkK+S1WZegocC5Q6ur1AfKvBvIwjCElqDrMMa80D4PZfJBuK0Yh3qP4T
-	 cOzl3QQNz6ehDR4vzLX3m2HwQEwAHA3KuYTHTDrni9AINCDPVuF/86euOo6gTGdUCd
-	 5eWNNh2ySeReA==
+	b=NCRgEV4Kpsov+E9xvN2oqiENZrZmI3cK1QfAEGgL+6TEdEaBRQ+TkqvIlNkmt0tMY
+	 M4pFTGj4mkpfXqyEEmGM3vZt87+ZXH4YJK78gh1Vfhh1mAu1Q10GeOEXQHoV8+2YZg
+	 sxJfXBikOufoBdkliAIb4aueDqZ3Ca5A1HM4OT0opWQieykAM3gtVQ4sQOjLFhcVZx
+	 uPW/Rqh/USCV/wi7OaDPbm0vmA8DzbLzp/QJ4mLnlysI86abk2NMsBcMG0dQ3xJI+W
+	 PITJ6HsijJbh0QLe/hwLWKWLQyeZpy1l5gfg2zDoD3Fatc+K5AEPWfnuAowM4AVvYU
+	 JULYuYvv9MeSw==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 23 Dec 2025 01:20:57 +0000
-Subject: [PATCH v9 03/30] arm64/fpsimd: Decide to save ZT0 and streaming
- mode FFR at bind time
+Date: Tue, 23 Dec 2025 01:20:58 +0000
+Subject: [PATCH v9 04/30] arm64/fpsimd: Check enable bit for FA64 when
+ saving EFI state
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,7 +51,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251223-kvm-arm64-sme-v9-3-8be3867cb883@kernel.org>
+Message-Id: <20251223-kvm-arm64-sme-v9-4-8be3867cb883@kernel.org>
 References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
 In-Reply-To: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
@@ -67,99 +67,62 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  Peter Maydell <peter.maydell@linaro.org>, 
  Eric Auger <eric.auger@redhat.com>, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3253; i=broonie@kernel.org;
- h=from:subject:message-id; bh=AMoEF0nrqU26LQooV0kBfxDCIBukvmAs571HQFetjbk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpSe6EqgzzsT+BP4JPJTNb7yndoTQdPD2m7a+nK
- 80LYt1smamJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUnuhAAKCRAk1otyXVSH
- 0CpxB/wMQFXj7q5Ry0rGSuTXXxCQ4zusY5Q91V6JpRdifOT+ybfhMl2E+fqzmSSQuaI/45E1rsR
- OG8TOpMjDJhmbPCNxkJCSE2+WiDzyT82rYDLJW2cxop5mXseS2pAIEbVs+gnexyXT+m6R7svl0k
- uYtnStqc2N4XIeG9iULMb0Cwbb1Wl+E6jjhS13OeUCyQ+maFDk7neI9dODsg5ZLttSa/oXGaBNV
- vWDXQLHK41Tyxzn0HLEkcqcKwyarx0Nfknsv7bUJOBlNseiIjNM/oWKj3WeRlJO7wMO1Gg0rseN
- FqkImvbppiz42Cssne1b4FoYpH8iwuE7PT+Pwi6M8jtH5mJY
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1451; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=wS/Sr3h3O9OGRzttKyfjnEZ56/U90EAT24zyvgc9Crs=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpSe6FOp/yeFdQmWsIDTjuHRv8lf47vDI2UyZQS
+ cSy5dLq5y+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUnuhQAKCRAk1otyXVSH
+ 0FcjB/9jxj9yHS7RtIqKmD88+ux1RuhFty0fPQPxGsOatiYtfDitIClUYiqlQe5PczTHfVw8vw0
+ fEldJX5Zh5i77R8pJL4zR2DJ6LSqoWkxYToLw8aAw2nrhlSAWNsdGBOIRzb6YKgkzCsfr37KC1c
+ ELgf+8Fitx4EJcFcUwPObrAWPiC7C0gMdHZob6hrtLeH1xZSDZhMoJUk0eo5jDIob/nzvG1G3Sa
+ rOvHSqywKra3AIdZQJc0P6OsyrEGzptWIr03M5+tLzNBCkknJ8IDDf/ijO6tvgTWpim6574o0em
+ cks9cs0ZBC42gOiUFnMZMa7WG3dn6eVmIOS4H4Lfk/zaUClB
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Some parts of the SME state are optional, enabled by additional features
-on top of the base FEAT_SME and controlled with enable bits in SMCR_ELx. We
-unconditionally enable these for the host but for KVM we will allow the
-feature set exposed to guests to be restricted by the VMM. These are the
-FFR register (FEAT_SME_FA64) and ZT0 (FEAT_SME2).
-
-We defer saving of guest floating point state for non-protected guests to
-the host kernel. We also want to avoid having to reconfigure the guest
-floating point state if nothing used the floating point state while running
-the host. If the guest was running with the optional features disabled then
-traps will be enabled for them so the host kernel will need to skip
-accessing that state when saving state for the guest.
-
-Support this by moving the decision about saving this state to the point
-where we bind floating point state to the CPU, adding a new variable to
-the cpu_fp_state which uses the enable bits in SMCR_ELx to flag which
-features are enabled.
+Currently when deciding if we need to save FFR when in streaming mode prior
+to EFI calls we check if FA64 is supported by the system. Since KVM guest
+support will mean that FA64 might be enabled and disabled at runtime switch
+to checking if traps for FA64 are enabled in SMCR_EL1 instead.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/fpsimd.h |  1 +
- arch/arm64/kernel/fpsimd.c      | 10 ++++++++--
- arch/arm64/kvm/fpsimd.c         |  1 +
- 3 files changed, 10 insertions(+), 2 deletions(-)
+ arch/arm64/kernel/fpsimd.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/include/asm/fpsimd.h b/arch/arm64/include/asm/fpsimd.h
-index ece65061dea0..146c1af55e22 100644
---- a/arch/arm64/include/asm/fpsimd.h
-+++ b/arch/arm64/include/asm/fpsimd.h
-@@ -87,6 +87,7 @@ struct cpu_fp_state {
- 	void *sme_state;
- 	u64 *svcr;
- 	u64 *fpmr;
-+	u64 sme_features;
- 	unsigned int sve_vl;
- 	unsigned int sme_vl;
- 	enum fp_type *fp_type;
 diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index be4499ff6498..887fce177c92 100644
+index 887fce177c92..f4e8cee00198 100644
 --- a/arch/arm64/kernel/fpsimd.c
 +++ b/arch/arm64/kernel/fpsimd.c
-@@ -490,12 +490,12 @@ static void fpsimd_save_user_state(void)
+@@ -1948,6 +1948,11 @@ static bool efi_sm_state;
+  * either doing something wrong or you need to propose some refactoring.
+  */
  
- 		if (*svcr & SVCR_ZA_MASK)
- 			sme_save_state(last->sme_state,
--				       system_supports_sme2());
-+				       last->sme_features & SMCR_ELx_EZT0);
- 
- 		/* If we are in streaming mode override regular SVE. */
- 		if (*svcr & SVCR_SM_MASK) {
- 			save_sve_regs = true;
--			save_ffr = system_supports_fa64();
-+			save_ffr = last->sme_features & SMCR_ELx_FA64;
- 			vl = last->sme_vl;
- 		}
- 	}
-@@ -1671,6 +1671,12 @@ static void fpsimd_bind_task_to_cpu(void)
- 	last->to_save = FP_STATE_CURRENT;
- 	current->thread.fpsimd_cpu = smp_processor_id();
- 
-+	last->sme_features = 0;
-+	if (system_supports_fa64())
-+		last->sme_features |= SMCR_ELx_FA64;
-+	if (system_supports_sme2())
-+		last->sme_features |= SMCR_ELx_EZT0;
++static bool fa64_enabled(void)
++{
++	return read_sysreg_s(SYS_SMCR_EL1) & SMCR_ELx_FA64;
++}
 +
- 	/*
- 	 * Toggle SVE and SME trapping for userspace if needed, these
- 	 * are serialsied by ret_to_user().
-diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
-index 15e17aca1dec..9158353d8be3 100644
---- a/arch/arm64/kvm/fpsimd.c
-+++ b/arch/arm64/kvm/fpsimd.c
-@@ -80,6 +80,7 @@ void kvm_arch_vcpu_ctxsync_fp(struct kvm_vcpu *vcpu)
- 		fp_state.svcr = __ctxt_sys_reg(&vcpu->arch.ctxt, SVCR);
- 		fp_state.fpmr = __ctxt_sys_reg(&vcpu->arch.ctxt, FPMR);
- 		fp_state.fp_type = &vcpu->arch.fp_type;
-+		fp_state.sme_features = 0;
+ /*
+  * __efi_fpsimd_begin(): prepare FPSIMD for making an EFI runtime services call
+  */
+@@ -1980,7 +1985,7 @@ void __efi_fpsimd_begin(void)
+ 				 * Unless we have FA64 FFR does not
+ 				 * exist in streaming mode.
+ 				 */
+-				if (!system_supports_fa64())
++				if (!fa64_enabled())
+ 					ffr = !(svcr & SVCR_SM_MASK);
+ 			}
  
- 		if (vcpu_has_sve(vcpu))
- 			fp_state.to_save = FP_STATE_SVE;
+@@ -2028,7 +2033,7 @@ void __efi_fpsimd_end(void)
+ 					 * Unless we have FA64 FFR does not
+ 					 * exist in streaming mode.
+ 					 */
+-					if (!system_supports_fa64())
++					if (!fa64_enabled())
+ 						ffr = false;
+ 				}
+ 			}
 
 -- 
 2.47.3
