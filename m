@@ -1,139 +1,223 @@
-Return-Path: <linux-kselftest+bounces-47911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47912-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D976CD7F5C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 04:23:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 723A4CD83AA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 07:03:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E09E8303A084
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 03:22:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 717FC300CA3C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 06:03:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96512D47F6;
-	Tue, 23 Dec 2025 03:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E67B2FB97D;
+	Tue, 23 Dec 2025 06:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OOJs8TTA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SRUvdaAx";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y1KAFwpb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C7A2882A7
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 03:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F5252F747D
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 06:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766460169; cv=none; b=upkaMISHyANLY7oxRkpUwtQ6NrS6aZ2YBuATcTBoID5z+sWwDAAE9JJZObsfBQR5t20XJBfBAHhHa/3QraQhzU3ozx9czK6Zo1ZVO0LPXZCAYZwnRBS7uPP1ULznDkjaiQ/6XK1NRenpOw6GN/BfLSxufCJA4v4yxabZMJyDUJA=
+	t=1766469831; cv=none; b=T3UHunr0J+Q0IzM1HMb6vZ08I6IwonnGupWKQmkKV1sxnnyTLjt2o747zFBPlB+Xn6XYoVD5b4z/xdpxeBOYA61OLP0Us0LE5AObkTL5NrO4wA0KQb/DwLFamX28msgJHGgUuvjL2hKmvdbIx2ivdA4iQOtZyzxfYIfHE/wQwGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766460169; c=relaxed/simple;
-	bh=nXx4iU/G89xerhbNe+u8rqRV/ooGUpUr+zBdOwqNUIk=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=WuSTggxN5yHVNbzPfc9wFc/j2NZCV2HojnQEEHvanSzrEnFKmLPPLG+uIUUc4NxtoXPypAz+/IW0BFPuhpVZWXpPWQaBC/kcFVs7lCQS7px2SO03K2sDHdSHll3dnEs6fu0JDJlCvuGpcCgl7ME3lfB5kEeNqKDD+uITTRwUwV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OOJs8TTA; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7b9c17dd591so4005872b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 19:22:46 -0800 (PST)
+	s=arc-20240116; t=1766469831; c=relaxed/simple;
+	bh=NNwShANLzZHeR0+zW/LDypRMNDkvH2iAcTxFUK0ZcwA=;
+	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=W5ayKLS97QMDRKUqf0c0W2xXnj2zNyw0BLfEEI8VFcKtRPmYrO12w6kVRYrPVLfL/i+N9/SAbkgwU9aemaOKw4BTDoDhSfB56+vDnrYdNatcKC8U1BBQMFUuMU++EgXOfv1tM7/OvotB0uo3rRvrASqvirUl5RuSqSwKBLpJHKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SRUvdaAx; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y1KAFwpb; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766469828;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oeVrkGERtMPfZaI1nLVf2/F59VBQAfSYytPZrBMMIfs=;
+	b=SRUvdaAxvNlG/1ZXI4bfKq4GVIxAzVvrYIt4c9FCUsWbvN6GRMeR5G8No9YEM8BIC+XVE8
+	CZg5ihcS5i4HCfx3ME5VLnfIvvEitKNLFpNQefyE9isEJxwWyvv1jJjVnrMOlcCanjX+Mr
+	4YsoajKlCKJ+9o3X4rbWrpTbHmicdkQ=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-122-CBew_HtVPe-oGqkUAh3Nfw-1; Tue, 23 Dec 2025 01:03:46 -0500
+X-MC-Unique: CBew_HtVPe-oGqkUAh3Nfw-1
+X-Mimecast-MFC-AGG-ID: CBew_HtVPe-oGqkUAh3Nfw_1766469826
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-88a2cc5b548so127611706d6.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 22:03:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766460166; x=1767064966; darn=vger.kernel.org;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BIaw2BBgy4X6/8TUgYX4ddYdgedGRr8vnnHyY6AzWWg=;
-        b=OOJs8TTA9zmASvFlalfZRRHcw7yjthb+sktasAWSRJyLbmTTDv1yaZ7LIbgFhJYnZT
-         nfUzuSnWLKv2q1ygvKeNTVKLf2wR5OBafiWucKTrG2UYbw8+y0peq9wZxuPrhDKLvptO
-         gnnmC/8tur1l8TywRFHit5z2BnmOEzuCgYE8TtrdChDS9mqecZrUwIdOxWT1U5vyKSMW
-         kTResLiGzZJtxMkhmWAILe55gGIXsVFEvuiBNWDV00YqEnySMmjDxKIFhcCPF6IBJXqb
-         /0cDYRXtyIIq5GKcd4JK9xw7mCGR/WvmKV0LRzKwaGQ6xZ8IOUYVhuxEAIMj8Yk4mIIp
-         8/cA==
+        d=redhat.com; s=google; t=1766469825; x=1767074625; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oeVrkGERtMPfZaI1nLVf2/F59VBQAfSYytPZrBMMIfs=;
+        b=Y1KAFwpbXqwhPkxlXlYdMTQtpoxTrXJuEUP9bprnChweqa8KanCK048aMxaV2yU5cc
+         RZiEUTQcrd3qH2oLT1OiiAMRfs2fiyRr0K21sSRya5KzzuC/zSOPMnL8YGoyOXyG8G+G
+         TcDzAR/tx7gkuKIa0KWFpFofvar5f5lDA/1goDavrmcvELn684aPNqAMXtz1FjgOHYjq
+         FosY9T7V/Daqr8tUFf803RwsN1+51FIRurhz9DwZWbEtdlPDhTIphWO9S9LX8y3qtko5
+         OD2Z5198wyTpBOGLJs1lWftpT6EZ1Hum5H0OhKHvuqV/u6ThLXK0eB472nfPVcwS/n87
+         +/Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766460166; x=1767064966;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BIaw2BBgy4X6/8TUgYX4ddYdgedGRr8vnnHyY6AzWWg=;
-        b=ZqCGndTGL2QcgBh5T3AyAJkO1idzey0ewItUXTkuCwNhXJaf32wOGiowxVXnJHsO/k
-         J2q/8aTgEWwqCy9Z122QrQai1toh1nEXgiZ16HPvXUfFBRmngXLK4cBJEzDWiR4Ncrsk
-         zEtbwYmViTdbE8WvvOmmAP1qzDcS9TEFyRf3vdniez+gOiIaX5Y0OmMNVY6kc0FCx8Q7
-         jkPkvHBeq+qeBVzKizfRi8PjcFIuXQwrupK2SeMCwJ5xlVED+cUSV6swFEJ9QYjEPGBo
-         9Gd+3RZZesPsTnCg7yngLS9tbZ2LoPy+3mBJD33wY6/6G7+KNq+N7eYLrfE4V4uFckkh
-         eG1w==
-X-Forwarded-Encrypted: i=1; AJvYcCUCtXBHJrlJ0127BFRfWvRXKkZ8hnD1umf/3OMvTg+jwGzf6dVSHGOPzqrXiFbKBHP0BuwgWjxSmMwrnmHJYCk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyit9dCKSkfFSozGnLMBiZ44d+Xr8/B64iEud6sm6joKUVy6OZC
-	Rg1flusB5MwXwXJfvaLdUxH/nnpOOTvmoL5iIenn2qEb/bp63/mHwCov
-X-Gm-Gg: AY/fxX6GhwXUApoO/QAmcs1+Nc4Yr+vKenu4CquBuSWZ87zwKIvkrNARmTOnELDfqP7
-	/kzQrHpd5K1t+zcbK/F9oXTu78fds0rVR2nFt2IHN0bC6SIvx4ZL6s/DmEbMuPrrgVn//SQdbmI
-	w/GFFGXrZJevD4j8Ds0s1k9Eaz101pI+UXti5uDJ+G3xb9sbhdj6FAQf/TYlSsUAQOTmNNutb2g
-	Yryp3rC+YprP1BeLg+hlSzEUGU8rpVpvYYmfDbYqPyTPx60IMtew+TTfJ3MJY7tbkyUc22kaGhH
-	imAE6mGD/yqbHnx7XuzVCa/WLwNpmax0sOfZT1f/o8Ju34abv65EJ70CE/COhpwnGUkfLuzRg/G
-	Pny9kDkLm0CBBvtwprZm0Xm9Y3A52G8tji4TaP4dTBEZwXzyWGCcXsPr/xhmnIJ3XsqAahIL7K5
-	a6jJAIKqYm60RPNDtS7g==
-X-Google-Smtp-Source: AGHT+IGyFG9HgVkid7kCIt03WV3OP+yzvzYv8vgTEUV5lnnwd8VTxqHvW5riW9AUU8KdGUm/0KVsJA==
-X-Received: by 2002:a05:6a20:7291:b0:35d:d477:a7ea with SMTP id adf61e73a8af0-376a7af69f6mr12887207637.19.1766460166103;
-        Mon, 22 Dec 2025 19:22:46 -0800 (PST)
-Received: from smtpclient.apple ([188.253.121.152])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e79a13f95sm10355774a12.9.2025.12.22.19.22.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 Dec 2025 19:22:45 -0800 (PST)
-Content-Type: text/plain;
-	charset=us-ascii
+        d=1e100.net; s=20230601; t=1766469825; x=1767074625;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oeVrkGERtMPfZaI1nLVf2/F59VBQAfSYytPZrBMMIfs=;
+        b=jEJh7arF4qQPEfUDf4aUA5e9i5KSme8Y9QJ4/9LXJQn1WJYVfsinvZrePifhWDMwSQ
+         6FKTPTCJWGJ+/WBajKU5QvJFCnbdHMcfZN6B8vdPmxmTSJcbt82bGIA5A2gmjhbUHy+P
+         x1J/hr1h5a+f1cZWSs4UvEIaHCd4ARsVBKCjnrR4JdhvmC1s+uscJtOfFFqMVz7K8DFO
+         1sCrXjAAA20CrQTH/kZdVDw9iKb5a1tLWJq6aWR8z6ZWINI7puxZwBnR6HVP7CKvedg4
+         r2P1JXer5eGpzZUBs/JnVOK1WiMBQI7D+kU4dLLkTfONiqbwJevNLs6FePlzaO9Bsvxm
+         IObg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4H91N0nNVRbkoS+Mv5PgKkbfp3BLK3htR8OJ+6K8eCpB1UuZKPiLeSAL/M7h8AFR+k9nCCO1WEQn4eT6q2fw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4KRYXhxgxC0Re1cAfLmREpI/4+sLC8LttCPq8gKzKdkYl1yce
+	9GtuXvyG4CVt+69+EO8iWF9X/9icN/wuH34lqdx0ocj7vS6ZVNPX8jM8xuX02k4YDOhe9038UAy
+	2xv91BABljJpP7vd81qMY3JwPtMFt/NYrh/0Xcs3omf+9jTIRCmTZlyccAqncMCPWYnQjn38Zzs
+	lbGg==
+X-Gm-Gg: AY/fxX6IiXqtH9zfZ7RYwJsJzsKebiIubwyLKJqHgo3c5AotbkXUUBESKqTyaI2Q6au
+	Pku+YTQLT01pu0ZISW5fdhLuSRwJiUSuTF2yLyl+FuZrVNd3vofbyla0+IgPmCQPm2JUtxb9mJK
+	8PqWAiePhayxVbXzmOx3sbGkCNYO20PRgXb9DH7hFYKNSOprOINTWEJHMsVT8jRoMrU1S545Rez
+	KgyLcpp/SsaYZy9fUzOlUMUaJh+VVM8WlOY+h0iM6dX6nkm4HkLIihl3wgtfQwyIRlYTuUc8d5J
+	VfvQuva4BAiqY77UuvCzqVD96L+aZ1Z4ZWw2uEWslNnc4MLnHGtpeQXVzoye8wYU3twzE4A+6F9
+	QX3FDkN3aEvulL4MI7b+E7eMLPKRGTz16gpjZSRzBY2tGW+VwzmHwntWv
+X-Received: by 2002:a05:6214:451d:b0:70f:b03d:2e85 with SMTP id 6a1803df08f44-88d83a7a462mr202581556d6.24.1766469825390;
+        Mon, 22 Dec 2025 22:03:45 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHv9gp6u6flV/YZxebl3MA6wauUNt9K1q2F4ABkv4Vi+T7RhJnKZ/tT3PCi1wcobmGERYY8ug==
+X-Received: by 2002:a05:6214:451d:b0:70f:b03d:2e85 with SMTP id 6a1803df08f44-88d83a7a462mr202581376d6.24.1766469824940;
+        Mon, 22 Dec 2025 22:03:44 -0800 (PST)
+Received: from ?IPV6:2601:600:947f:f020:85dc:d2b2:c5ee:e3c4? ([2601:600:947f:f020:85dc:d2b2:c5ee:e3c4])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88d9a54485asm94803926d6.51.2025.12.22.22.03.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Dec 2025 22:03:44 -0800 (PST)
+From: Waiman Long <llong@redhat.com>
+X-Google-Original-From: Waiman Long <longman@redhat.com>
+Message-ID: <5b53f9ec-ebd5-4bea-b6a3-ef35a467e96c@redhat.com>
+Date: Tue, 23 Dec 2025 01:03:42 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.4\))
-Subject: Re: [RFC PATCH bpf 1/2] bpf: Fix memory access tags in helper
- prototypes
-From: Zesen Liu <ftyghome@gmail.com>
-In-Reply-To: <CAMB2axPcJ=U69xyyyY_7og8OALRCbOgeppQv416k9yvMiD9CvQ@mail.gmail.com>
-Date: Tue, 23 Dec 2025 11:22:26 +0800
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>,
- Matt Bobrowski <mattbobrowski@google.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>,
- Daniel Xu <dxu@dxuuu.xyz>,
- Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org,
- Shuran Liu <electronlsr@gmail.com>,
- Peili Gao <gplhust955@gmail.com>,
- Haoran Ni <haoran.ni.cs@gmail.com>
-Content-Transfer-Encoding: 7bit
-Message-Id: <0C2A0E4A-F35B-4247-B0C4-42C52C6786B7@gmail.com>
-References: <20251220-helper_proto-v1-0-2206e0d9422d@gmail.com>
- <20251220-helper_proto-v1-1-2206e0d9422d@gmail.com>
- <CAMB2axPcJ=U69xyyyY_7og8OALRCbOgeppQv416k9yvMiD9CvQ@mail.gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-X-Mailer: Apple Mail (2.3826.700.81.1.4)
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6] cpuset: Avoid invalidating sibling partitions on
+ cpuset.cpus conflict.
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Sun Shaojie <sunshaojie@kylinos.cn>
+Cc: llong@redhat.com, cgroups@vger.kernel.org, chenridong@huaweicloud.com,
+ hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, tj@kernel.org
+References: <cae7a3ef-9808-47ac-a061-ab40d3c61020@redhat.com>
+ <20251201093806.107157-1-sunshaojie@kylinos.cn>
+ <bzu7va4de6ylaww2xbq67hztyokpui7qm2zcqtiwjlniyvx7dt@wf47lg6etmas>
+Content-Language: en-US
+In-Reply-To: <bzu7va4de6ylaww2xbq67hztyokpui7qm2zcqtiwjlniyvx7dt@wf47lg6etmas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 12/22/25 10:26 AM, Michal Koutný wrote:
+> Hello Shaojie.
+>
+> On Mon, Dec 01, 2025 at 05:38:06PM +0800, Sun Shaojie <sunshaojie@kylinos.cn> wrote:
+>> Currently, when setting a cpuset's cpuset.cpus to a value that conflicts
+>> with its sibling partition, the sibling's partition state becomes invalid.
+>> However, this invalidation is often unnecessary.
+>>
+>> For example: On a machine with 128 CPUs, there are m (m < 128) cpusets
+>> under the root cgroup. Each cpuset is used by a single user(user-1 use
+>> A1, ... , user-m use Am), and the partition states of these cpusets are
+>> configured as follows:
+>>
+>>                             root cgroup
+>>          /             /                  \                 \
+>>         A1            A2        ...       An                Am
+>>       (root)        (root)      ...     (root) (root/root invalid/member)
+>>
+>> Assume that A1 through Am have not set cpuset.cpus.exclusive. When
+>> user-m modifies Am's cpuset.cpus to "0-127", it will cause all partition
+>> states from A1 to An to change from root to root invalid, as shown
+>> below.
+>>
+>>                             root cgroup
+>>          /              /                 \                 \
+>>         A1             A2       ...       An                Am
+>>   (root invalid) (root invalid) ... (root invalid) (root invalid/member)
+>>
+>> This outcome is entirely undeserved for all users from A1 to An.
+> s/cpuset.cpus/memory.max/
+>
+> When the permissions are such that the last (any) sibling can come and
+> claim so much to cause overcommit, then it can set up large limit and
+> (potentially) reclaim from others.
+>
+> s/cpuset.cpus/memory.min/
+>
+> Here is the overcommit approached by recalculating effective values of
+> memory.min, again one sibling can skew toward itself and reduce every
+> other's effective value.
+>
+> Above are not exact analogies because first of them is Limits, the
+> second is Protections and cpusets are Allocations (refering to Resource
+> Distribution Models from Documentation/admin-guide/cgroup-v2.rst).
+>
+> But the advice to get some guarantees would be same in all cases -- if
+> some guarantees are expected, the permissions (of respective cgroup
+> attributes) should be configured so that it decouples the owner of the
+> cgroup from the owner of the resource (i.e. Ai/cpuset.cpus belongs to
+> root or there's a middle level cgroup that'd cap each of the siblings
+> individually).
+>
+ From sibling point of view, CPUs in partitions are exclusive. A cpuset 
+either have all the requested CPUs to form a partition (assuming that at 
+least one can be granted from the parent cpuset) or it doesn't have all 
+of them and fails to form a valid partition. It is different from memory 
+that a cgroup can have a reduced amount of memory than requested and can 
+still work fine.
 
-> On Dec 23, 2025, at 03:29, Amery Hung <ameryhung@gmail.com> wrote:
-> 
-> I did a quick search and there is one helper slipping. We should also
-> annotate arg1_type of bpf_kallsyms_lookup_name with MEM_RDONLY.
+Anyway, I consider using cpuset.cpus to form a partition is legacy and 
+is supported for backward compatibility reason. Now the proper way to 
+form a partition is to use cpuset.cpus.exclusive, the setting of it can 
+fail if it conflicts with siblings.
 
+By using cpuset.cpus only to form partitions, the cpuset.cpus value will 
+be treated the same as cpuset.cpus.exclusive if a valid partition is 
+formed. In that sense, the examples listed in the patch will have the 
+same result if cpuset.cpu.exclusive is used instead of cpuset.cpus. The 
+difference is that writing to the cpuset.cpus.exclusive will fail 
+instead of forming an invalid partition in the case of cpust.cpus.
 
-Good catch, thanks! I will address this once we reach a conclusion
-on the ARG_PTR_TO_MEM semantics.
+>> After applying this patch, the first party to set "root" will maintain
+>> its exclusive validity. As follows:
+>>
+>>   Step                                       | A1's prstate | B1's prstate |
+>>   #1> echo "0-1" > A1/cpuset.cpus            | member       | member       |
+>>   #2> echo "root" > A1/cpuset.cpus.partition | root         | member       |
+>>   #3> echo "1-2" > B1/cpuset.cpus            | root         | member       |
+>>   #4> echo "root" > B1/cpuset.cpus.partition | root         | root invalid |
+>>
+>>   Step                                       | A1's prstate | B1's prstate |
+>>   #1> echo "0-1" > B1/cpuset.cpus            | member       | member       |
+>>   #2> echo "root" > B1/cpuset.cpus.partition | member       | root         |
+>>   #3> echo "1-2" > A1/cpuset.cpus            | member       | root         |
+>>   #4> echo "root" > A1/cpuset.cpus.partition | root invalid | root         |
+> I'm worried that the ordering dependency would lead to situations where
+> users may not be immediately aware their config is overcommitting the system.
+> Consider that CPUs are vital for A1 but B1 can somehow survive the
+> degraded state, depending on the starting order the system may either
+> run fine (A1 valid) or fail because of A1.
+>
+> I'm curious about Waiman's take.
 
-Thanks,
-Zesen Liu
+That is why I will recommend users to use cpuset.cpus.exclusive to form 
+partition as they can get early feedback if they are overcommitting. Of 
+course, setting cpuset.cpus.exclusive without failure still doesn't 
+guarantee the formation of a valid partition if none of the exclusive 
+CPUs can be granted from the parent.
+
+Cheers,
+Longman
+
 
