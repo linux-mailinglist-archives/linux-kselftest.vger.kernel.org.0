@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-47881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47882-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0E87CD7C8B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 03:02:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03C76CD7C61
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 02:59:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C6CB531452E1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 01:57:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 02FB6309C300
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 01:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A042D3EC1;
-	Tue, 23 Dec 2025 01:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31BA72D6E6B;
+	Tue, 23 Dec 2025 01:22:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qyZ69Kcb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O16FGqKT"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330982D3A75;
-	Tue, 23 Dec 2025 01:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19252D5C83;
+	Tue, 23 Dec 2025 01:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766452943; cv=none; b=bZ2GP4gLSwYZ8U9vCXaTKXmNweGkKdwKZT5wYSQS4zzilYN16n/k7xBmQ94o702jmmfGuT5D3K8F36yFQkmArursi8aIS3hOqIj5y0ujK3ItcvnhbdEEqZARvqhJf+4IXrs9K8ueYeUk/pUb8Owj7YOBFed/3XXRnbZ2l1WVz7g=
+	t=1766452948; cv=none; b=tb4d+QZbBi9vJSTmE2PBMQ1gyAfnnLah5BpBr+xOFMWoEokI3INgbBsjcQtfc8mtJnwqL+kmYdA3JKfBALaUuL2x1W9tcRBuLWSwkwLM4TdBd1DTK2cYg1az23AVx1GBcSPagejj2Dxvi0V9GM902iZ53nA5NqWyQi622SsM4YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766452943; c=relaxed/simple;
-	bh=A4NZGrg+TEz6932+zi/k6JqFarqVN/v9J+9+Wy94BBA=;
+	s=arc-20240116; t=1766452948; c=relaxed/simple;
+	bh=gfp0s8vq4GgXX2OhDBoI78/711AOqvXjX/EjV4hM7Ew=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=L0Ip4xCl5lrFYgEo7NwdXU4EyvdzyZVtyLJL3XGTNQOKPXB+IhV3LzN+IjlBkErZ6bgEzSrts9zQHvxAIIrhM6dv4cC8pMgsyF5RzBGOV8x5FGXFt4z+q4dzUuOwme7IyUIp7nsRC32EQebBtv/5ldEzK5dYSFrG/CKyt4rXdTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qyZ69Kcb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1E3CC4CEF1;
-	Tue, 23 Dec 2025 01:22:17 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=D0dsCLg3nS0p3FEA9HgHwL3h9aEVdU06UNwubGIktqZ+MtxNiD8pWrxDXBvykp0XInjgBWHjYwHFEW+4sjFh9cvk4952hhcqfmvLXklR6NdlJUPRKzfNKhGQouIVF6V7V/VCUOoyKNdF/HRqXXvw/VjohyIHJM2OKaHRS1iSBiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O16FGqKT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A7D9C116C6;
+	Tue, 23 Dec 2025 01:22:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766452941;
-	bh=A4NZGrg+TEz6932+zi/k6JqFarqVN/v9J+9+Wy94BBA=;
+	s=k20201202; t=1766452947;
+	bh=gfp0s8vq4GgXX2OhDBoI78/711AOqvXjX/EjV4hM7Ew=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=qyZ69Kcb0JMVMtJ9LiFOsKQ4MTUhDH6m8LY2vS1rmL+JXQcp2UKibKlIMV5kH6Jeq
-	 pd5oTKhoCeVlE/+OBJgaYQFdml3cpRaqH1tupEiu1ix3Otz/UwIO3xvAOPm8FnsdB1
-	 ++SlGSHV/8OvucH8cMLUz2xok6ikXjV7/sI8AYVezlAmpyNdkWhaXHOiYHbAfj6ksU
-	 Eh/lynQWiBt61kJOuFvVt5bDUTUyuyojXHMlCyawMRJ9CibwA7j7a2nYQ17B2PhGiF
-	 ruF9fcBPBIEOcjmnt4oYwnl9XJ7yDp7lrgOu4pBuk0mbGlxHh4UfhXVNzqSPJry/3C
-	 Zw+8iOPms44kg==
+	b=O16FGqKTNdczc4/lSuwlD8138gQJMp4jx7y/Ez2gACQQQQOeVbrimke1N8wcOMoWW
+	 HJa+cUenUXOtb977SVm42D9WFm96+Sc0R334clTxAw/YhFxqtOaRJ3S8Z8kNKYCi8W
+	 OmqdKB56h413grtXnz5KyTp3nwAhp1i5J/DYilqmE+LfPjR/VhQsnOp6rFO7R2Jbxp
+	 e4CEOaiE0NIR05xpxYTSFn1euO6OCZl2p99U8vTpA5+59WKBpXlieg+c6p7czbqaSL
+	 UYOF6Oetl4xHRptAo1TRRwilN6T5dgCMcCynUTzohRWk0E9OHzfSNtKIqPKbybMjmN
+	 /29wPbOYOaVlQ==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 23 Dec 2025 01:21:05 +0000
-Subject: [PATCH v9 11/30] KVM: arm64: Define internal features for SME
+Date: Tue, 23 Dec 2025 01:21:06 +0000
+Subject: [PATCH v9 12/30] KVM: arm64: Rename sve_state_reg_region
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251223-kvm-arm64-sme-v9-11-8be3867cb883@kernel.org>
+Message-Id: <20251223-kvm-arm64-sme-v9-12-8be3867cb883@kernel.org>
 References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
 In-Reply-To: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
@@ -66,106 +66,73 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  Peter Maydell <peter.maydell@linaro.org>, 
  Eric Auger <eric.auger@redhat.com>, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3264; i=broonie@kernel.org;
- h=from:subject:message-id; bh=A4NZGrg+TEz6932+zi/k6JqFarqVN/v9J+9+Wy94BBA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpSe6LFCe39WIuuDEtOO/K4RmDUXHyHJaBm6U/x
- 0hrqF0DjneJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUnuiwAKCRAk1otyXVSH
- 0G/5B/9YxeU6cxwTbk61Pby5uUM1Mk4lRYZ+QxXUVDvTuKJSTgNEp1Y9UfPhG1kE+ynnpYcX1pm
- 3jXPtAU01yEgKY6dIwtN88EGpYQmkUhvw8WhmGxzYGhJcgSjznOarreIeeRdz6FF3Lj9BLu2iZo
- prBeSHs5RDFzNjovnKJtV+UK8dokaCRfWVy7KfbV9WGY0UCHped1ZH4RoFy2gtgH8D8fWX0U1QX
- 8Sk2f1DUUmvsu+fX7/VPyIzCfILM83mnRNMn4tGp0LQsIvbKQmNQ47xmBHOjnHqRDSVK/qvBMaC
- wZP9w+ezCgGRlpqCCXkWsbeJHEuAaZxsLRK1d8InmdtIjwwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2352; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=gfp0s8vq4GgXX2OhDBoI78/711AOqvXjX/EjV4hM7Ew=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpSe6LyU2hP4tGR98SafeORWHn3VqVtWLVYEDpd
+ 9CqFj8boKKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUnuiwAKCRAk1otyXVSH
+ 0NW2CACHCG80SVmspz99x7BNFLI22yJy0+S+koe679BIRDvbUunQDWWrfFfutWGJd1iIEAvK3lz
+ 1/JEhESq4l3slRuO6tHz7i6C+wTnYkKCKwZhkqAD9Nc8KvxlT+cAp6VjMNREnKwIdDel2kGMJRb
+ Bs59xm00prmh90JqAMmJiVM0+fcJrZLjkLgqhgUaAY68qq/8OkCTTBRk8lztbdxCa5tzsR/7nfE
+ 2j6l3m3lLniNnkryNJ3tkDJpxhNmvuY3aL29KG4pGElJZ+Qo7dV6o2Gt3vkukCSzLR9wNrDBZ8s
+ ff2/OUBH70tHxthXBek5qXQtyI4+QLubkHoYa19SIqi8gyuw
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-In order to simplify interdependencies in the rest of the series define
-the feature detection for SME and it's subfeatures.  Due to the need for
-vector length configuration we define a flag for SME like for SVE.  We
-also have two subfeatures which add architectural state, FA64 and SME2,
-which are configured via the normal ID register scheme.
+As for SVE we will need to pull parts of dynamically sized registers out of
+a block of memory for SME so we will use a similar code pattern for this.
+Rename the current struct sve_state_reg_region in preparation for this.
 
-Also provide helpers which check if the vCPU is in streaming mode or has
-ZA enabled.
+No functional change.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/kvm_host.h | 35 ++++++++++++++++++++++++++++++++++-
- arch/arm64/kvm/sys_regs.c         |  2 +-
- 2 files changed, 35 insertions(+), 2 deletions(-)
+ arch/arm64/kvm/guest.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 0f3d26467bf0..0816180dc551 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -353,6 +353,8 @@ struct kvm_arch {
- #define KVM_ARCH_FLAG_WRITABLE_IMP_ID_REGS		10
- 	/* Unhandled SEAs are taken to userspace */
- #define KVM_ARCH_FLAG_EXIT_SEA				11
-+	/* SME exposed to guest */
-+#define KVM_ARCH_FLAG_GUEST_HAS_SME			12
- 	unsigned long flags;
+diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+index d15aa2da1891..8c3405b5d7b1 100644
+--- a/arch/arm64/kvm/guest.c
++++ b/arch/arm64/kvm/guest.c
+@@ -404,9 +404,9 @@ static int set_sve_vls(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+  */
+ #define vcpu_sve_slices(vcpu) 1
  
- 	/* VM-wide vCPU feature set */
-@@ -1062,7 +1064,16 @@ struct kvm_vcpu_arch {
- #define vcpu_has_sve(vcpu)	kvm_has_sve((vcpu)->kvm)
- #endif
- 
--#define vcpu_has_vec(vcpu) vcpu_has_sve(vcpu)
-+#define kvm_has_sme(kvm)	(system_supports_sme() &&		\
-+				 test_bit(KVM_ARCH_FLAG_GUEST_HAS_SME, &(kvm)->arch.flags))
-+
-+#ifdef __KVM_NVHE_HYPERVISOR__
-+#define vcpu_has_sme(vcpu)	kvm_has_sme(kern_hyp_va((vcpu)->kvm))
-+#else
-+#define vcpu_has_sme(vcpu)	kvm_has_sme((vcpu)->kvm)
-+#endif
-+
-+#define vcpu_has_vec(vcpu) (vcpu_has_sve(vcpu) || vcpu_has_sme(vcpu))
- 
- #ifdef CONFIG_ARM64_PTR_AUTH
- #define vcpu_has_ptrauth(vcpu)						\
-@@ -1602,6 +1613,28 @@ void kvm_set_vm_id_reg(struct kvm *kvm, u32 reg, u64 val);
- #define kvm_has_sctlr2(k)				\
- 	(kvm_has_feat((k), ID_AA64MMFR3_EL1, SCTLRX, IMP))
- 
-+#define kvm_has_fa64(k)					\
-+	(system_supports_fa64() &&			\
-+	 kvm_has_feat((k), ID_AA64SMFR0_EL1, FA64, IMP))
-+
-+#define kvm_has_sme2(k)					\
-+	(system_supports_sme2() &&			\
-+	 kvm_has_feat((k), ID_AA64PFR1_EL1, SME, SME2))
-+
-+#ifdef __KVM_NVHE_HYPERVISOR__
-+#define vcpu_has_sme2(vcpu)	kvm_has_sme2(kern_hyp_va((vcpu)->kvm))
-+#define vcpu_has_fa64(vcpu)	kvm_has_fa64(kern_hyp_va((vcpu)->kvm))
-+#else
-+#define vcpu_has_sme2(vcpu)	kvm_has_sme2((vcpu)->kvm)
-+#define vcpu_has_fa64(vcpu)	kvm_has_fa64((vcpu)->kvm)
-+#endif
-+
-+#define vcpu_in_streaming_mode(vcpu) \
-+	(__vcpu_sys_reg(vcpu, SVCR) & SVCR_SM_MASK)
-+
-+#define vcpu_za_enabled(vcpu) \
-+	(__vcpu_sys_reg(vcpu, SVCR) & SVCR_ZA_MASK)
-+
- static inline bool kvm_arch_has_irq_bypass(void)
+-/* Bounds of a single SVE register slice within vcpu->arch.sve_state */
+-struct sve_state_reg_region {
+-	unsigned int koffset;	/* offset into sve_state in kernel memory */
++/* Bounds of a single register slice within vcpu->arch.s[mv]e_state */
++struct vec_state_reg_region {
++	unsigned int koffset;	/* offset into s[mv]e_state in kernel memory */
+ 	unsigned int klen;	/* length in kernel memory */
+ 	unsigned int upad;	/* extra trailing padding in user memory */
+ };
+@@ -415,7 +415,7 @@ struct sve_state_reg_region {
+  * Validate SVE register ID and get sanitised bounds for user/kernel SVE
+  * register copy
+  */
+-static int sve_reg_to_region(struct sve_state_reg_region *region,
++static int sve_reg_to_region(struct vec_state_reg_region *region,
+ 			     struct kvm_vcpu *vcpu,
+ 			     const struct kvm_one_reg *reg)
  {
- 	return true;
-diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-index c8fd7c6a12a1..3576e69468db 100644
---- a/arch/arm64/kvm/sys_regs.c
-+++ b/arch/arm64/kvm/sys_regs.c
-@@ -1945,7 +1945,7 @@ static unsigned int sve_visibility(const struct kvm_vcpu *vcpu,
- static unsigned int sme_visibility(const struct kvm_vcpu *vcpu,
- 				   const struct sys_reg_desc *rd)
+@@ -485,7 +485,7 @@ static int sve_reg_to_region(struct sve_state_reg_region *region,
+ static int get_sve_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
  {
--	if (kvm_has_feat(vcpu->kvm, ID_AA64PFR1_EL1, SME, IMP))
-+	if (vcpu_has_sme(vcpu))
- 		return 0;
+ 	int ret;
+-	struct sve_state_reg_region region;
++	struct vec_state_reg_region region;
+ 	char __user *uptr = (char __user *)reg->addr;
  
- 	return REG_HIDDEN;
+ 	/* Handle the KVM_REG_ARM64_SVE_VLS pseudo-reg as a special case: */
+@@ -511,7 +511,7 @@ static int get_sve_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+ static int set_sve_reg(struct kvm_vcpu *vcpu, const struct kvm_one_reg *reg)
+ {
+ 	int ret;
+-	struct sve_state_reg_region region;
++	struct vec_state_reg_region region;
+ 	const char __user *uptr = (const char __user *)reg->addr;
+ 
+ 	/* Handle the KVM_REG_ARM64_SVE_VLS pseudo-reg as a special case: */
 
 -- 
 2.47.3
