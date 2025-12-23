@@ -1,151 +1,125 @@
-Return-Path: <linux-kselftest+bounces-47928-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47929-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2DCECD9980
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 15:19:31 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF978CD9EB0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 17:18:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6E6493001BDB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 14:19:31 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E6F93301F7F9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 16:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5612332ED51;
-	Tue, 23 Dec 2025 14:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847A230F537;
+	Tue, 23 Dec 2025 16:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="imrFSS0M"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a6ei8ziB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C0C482EB;
-	Tue, 23 Dec 2025 14:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A37381C4
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 16:18:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766499570; cv=none; b=XrIqsXBwmGgdakeFOgXyWBEUk3FtmfY0f+2RTBM/uxsX9+qzPkLFGnX3ed3XOtzGXB9CM5fZEhiMBcDznWI++5t1tDi4XIPvrGu7WbPqPhzK9nqfqF2I/pAp9G+gNDoBg8qXaflClVsvnip9sqmaZY/fo/xNmnxnnffTlxQDY7Y=
+	t=1766506706; cv=none; b=a0I62hWguBQBZP00f4n/X8dXJWUm08zbS5J/yZSq7G/jexfVFmpKKVDkhgjODLOSJnXfHhjVJ38gF8vLy1tmsCyWf9/WHORBDwRkh5z3LIAEt6FCgxY8zE/QRDTCZDCsnSxNw/NBPrU5FrsjasxQJc6J9DYxzqKB5g9KzgjT9K0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766499570; c=relaxed/simple;
-	bh=ZZQg8s4/nNF1ZlkzREeuw4bYSFY91iLUDaAHPJx09QE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nl8VpylmDGQ892qe8j+zo5wtFOACqpFfmERMmvQ6vQVICTusYTVrQ+wHKhEIgSropxKaSlp16tpFfFVh/sJHKYz0rJ+PSmnhrVYsULXI+jS/SFAmSKDCyn4pNY2ABMOLC4c7BNQjrBt4QpVK1hCwZRq3PGaj3olGyIQ1njLVgaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=imrFSS0M; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766499568; x=1798035568;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZZQg8s4/nNF1ZlkzREeuw4bYSFY91iLUDaAHPJx09QE=;
-  b=imrFSS0MkgdlisaLcn8jnrmqhsbVRfM8yyGnFaYf7sT68ooCcsrJJBxp
-   qTAhAWuOT7lhdBvSVpHYN3kmaJ15bwgV6m/vjg8NnBEuBhCjk1PcKJHks
-   HIBU8vF13oia1q6CMcVsABdKSy6znjnoIfVwv7Ms6PCzfQ3PN4rU9VDcw
-   2DnheXXYEJw9R075TphvkBX1xyONpnk7h72qVjyDMewo1LLzizziOU4DU
-   +6qOpe7bwmutM5e2iRSZjyPIojbveNrPMVPBFEarlFvoEaY3usJNYKrrv
-   M4jxCSqGjBiE4h4U5uTY6t8PBm8UB1670Ab74ztuaEHlIkq54CMttSBJZ
-   Q==;
-X-CSE-ConnectionGUID: QFrkT55pS6mZe5Hg/7jcBA==
-X-CSE-MsgGUID: eBzanp+0SUS5EchGFucOBg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="79463739"
-X-IronPort-AV: E=Sophos;i="6.21,171,1763452800"; 
-   d="scan'208";a="79463739"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 06:19:27 -0800
-X-CSE-ConnectionGUID: Vg9Iuvx1SiG+8Rwxb+2JDA==
-X-CSE-MsgGUID: nMqDeak8TR2g8NmJnysUGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,171,1763452800"; 
-   d="scan'208";a="230813594"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 23 Dec 2025 06:19:23 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vY3EO-00000000217-3Qms;
-	Tue, 23 Dec 2025 14:19:20 +0000
-Date: Tue, 23 Dec 2025 22:18:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tamir Duberstein <tamird@kernel.org>, David Gow <davidgow@google.com>,
-	John Hubbard <jhubbard@nvidia.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
-	Christophe Leroy <chleroy@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-	Tamir Duberstein <tamird@gmail.com>
-Subject: Re: [PATCH v2 3/3] bitmap: break kunit into test cases
-Message-ID: <202512232235.vUHmJH7T-lkp@intel.com>
-References: <20251222-bitmap-kunit-convert-v2-3-6a61a5330eff@gmail.com>
+	s=arc-20240116; t=1766506706; c=relaxed/simple;
+	bh=4ikesTTr3gH957w8Rz5esRmJyY+21//TWoL1liu9TsI=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jw8gYkW0ipq8H1ERZY0hn1R5nx36vQD0jDx+qrjcg19tRxTHGMm9jvk1k8HjIrBzzLxzKVKM929Cu2czs2eR/ouw92XWlIoBvFhgApn/rDQXiLI3M50RrtuUMKCSX9TeZAv88R9rHzFlgpX08kKOJnP2wnbTDrIduIpNS5qcoy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a6ei8ziB; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jackmanb.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-477a0ddd1d4so46738555e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 08:18:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1766506703; x=1767111503; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Gp9XbXDpsLxRfCX6IDYmiMiyLFvCv3BI5tK1fIK0sqc=;
+        b=a6ei8ziBJuNDsz54qm/d+mRhr26lLt+3hV/set14heK9QEgt4erLBiGigU5PkW0aQ9
+         5vhalN8DHnhs16X/0CVZLyPFGc3c3XRQH1olqqFyqYAi0uTFIuDrR7+GiVJwyBn9TL8j
+         3rW8ULL1bM89gVu8FYiROwCpcpHrGgj//wIxWqrG5qcDPnrYqpp885uBnOS8UubiEFyM
+         NNCFjUzoJLBaL9fvtX/lcP0foHWapKP/ZIo/63ACVtiFkLlUh2eHJ/XCvn08k4Dyonw5
+         3h3FN6gyHFlxSU9CwWQnoWM4DujL7UiLXTed5NB1WgupRyaoYweAlk/X37gKtRIIY9hi
+         J/Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766506703; x=1767111503;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gp9XbXDpsLxRfCX6IDYmiMiyLFvCv3BI5tK1fIK0sqc=;
+        b=s/G0wmW0b6RybEb0zMVHWjBELPIws5ZV3e3vVNbh8R8wbjKVSjhj+yJw0mrlF4Ie2j
+         tv6aymHQvKlc243E7tl4WGDT4iGAnKlnBukgpNeGh+dd2DbDVzRR1ZTxxMN8DSKaN+n8
+         ze8DV3Y201DQcvPXTJ5X1/k+Q7AmiZ/1EDFFtU8eZo0j2M2Ld5EymVJl0jhUWYIq4/3p
+         Hwvr6oiLoYfds1WJBRvtgGHDnDo1/G4TSHQ6Mg6UpL2WPn1mRkOXoa4mhs8NqZrBGAUB
+         qeyzCdJV02A5ORVO/oIPInmNUl3pTXtGpojsVa0i/nZWe7Dcsn1VKoCR8pCT+9Ewi6T+
+         YUCA==
+X-Gm-Message-State: AOJu0YwWM6Mm3eJv8nqTf6yJbN5gR2tJlpzRvUh0ZzZSuG9oNLIz/XUK
+	EFw+mPCxHgVrS7m4A5bQQGktrzvytfm6TpA0IFCLoIEXJQltqeeXwdPbxrak7OWCcBpWHth4/o6
+	pc5UUqXg/8N8Mrw==
+X-Google-Smtp-Source: AGHT+IGPr3MNh9Y63iLCh43jSDD1otDWg2upubHvHKONp3Z/jU8xumFyRt2FzEbY0GIFeXDVV9+gjwkh4PeGrQ==
+X-Received: from wrs12.prod.google.com ([2002:a05:6000:64c:b0:42f:bb46:77bd])
+ (user=jackmanb job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600d:115:b0:46e:37fe:f0e6 with SMTP id 5b1f17b1804b1-47d1997e733mr103467595e9.30.1766506703258;
+ Tue, 23 Dec 2025 08:18:23 -0800 (PST)
+Date: Tue, 23 Dec 2025 16:18:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251222-bitmap-kunit-convert-v2-3-6a61a5330eff@gmail.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAMHASmkC/x3MTQ5AMBBA4avIrE3C+AmuIhbFlAkpaVUk0rtrL
+ N/iey84tsIOuuQFy7c4OUyMPE1gWpVZGGWODZRRlRMVOJa4eSMX+ihR7fsxYa24mXU2NqoliPK 0rOX5r/0QwgcV4GlIZQAAAA==
+X-Change-Id: 20251223-b4-kunit-user-alloc-6ae8df0b8a92
+X-Mailer: b4 0.14.3
+Message-ID: <20251223-b4-kunit-user-alloc-v1-0-fb910ae0e50c@google.com>
+Subject: [PATCH 0/3] EDITME: cover title for b4/kunit-user-alloc
+From: Brendan Jackman <jackmanb@google.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <raemoar63@gmail.com>, Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Brendan Jackman <jackmanb@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Tamir,
+kunit_attach_mm() leaks an mm_struct (verified with dumb printf
+debugging). Fix that. In the process, add a new kthread mm operation,
+and clean up some nearby cleanup code in the KUnit lib.
 
-kernel test robot noticed the following build warnings:
+---
+Here's how I understand mm refcounts:
 
-[auto build test WARNING on 8f0b4cce4481fb22653697cced8d0d04027cb1e8]
+  funcs             | counter  | manages lifecycle of...
+  --------------------------------------------------------
+  mmgrab()/mmdrop() | mm_count | mm_struct and PGD
+  --------------------------------------------------------
+  mmget()/mmput()   | mm_users | userspace address space
+  
+  All mm_users references share a single reference to the mm_struct.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/test_bitmap-extract-benchmark-module/20251222-214306
-base:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
-patch link:    https://lore.kernel.org/r/20251222-bitmap-kunit-convert-v2-3-6a61a5330eff%40gmail.com
-patch subject: [PATCH v2 3/3] bitmap: break kunit into test cases
-config: arm64-randconfig-004-20251223 (https://download.01.org/0day-ci/archive/20251223/202512232235.vUHmJH7T-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 9.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512232235.vUHmJH7T-lkp@intel.com/reproduce)
+---
+Brendan Jackman (3):
+      kunit: test: Delete pointless resource API usage
+      kthread: Add kthread_take_mm()
+      kunit: test: fix mm_struct leak in kunit_attach_mm()
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512232235.vUHmJH7T-lkp@intel.com/
+ include/linux/kthread.h |  1 +
+ kernel/fork.c           |  3 +-
+ kernel/kthread.c        | 36 +++++++++++++++++------
+ lib/kunit/user_alloc.c  | 78 +++++--------------------------------------------
+ 4 files changed, 37 insertions(+), 81 deletions(-)
+---
+base-commit: 9448598b22c50c8a5bb77a9103e2d49f134c9578
+change-id: 20251223-b4-kunit-user-alloc-6ae8df0b8a92
 
-All warnings (new ones prefixed by >>):
-
-   lib/bitmap_kunit.c: In function 'test_bitmap_printlist':
->> lib/bitmap_kunit.c:468:2: warning: 'memset' used with length equal to number of elements without multiplication by element size [-Wmemset-elt-size]
-     468 |  memset(bmap, -1, PAGE_SIZE);
-         |  ^~~~~~
-
-
-vim +/memset +468 lib/bitmap_kunit.c
-
-6ea86bdfc169ba lib/test_bitmap.c  Yury Norov       2019-05-14  459  
-8ef3340af7139f lib/bitmap_kunit.c Tamir Duberstein 2025-12-22  460  static void test_bitmap_printlist(struct kunit *kunittest)
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  461  {
-8ef3340af7139f lib/bitmap_kunit.c Tamir Duberstein 2025-12-22  462  	static long bmap[PAGE_SIZE];
-8ef3340af7139f lib/bitmap_kunit.c Tamir Duberstein 2025-12-22  463  	static char buf[PAGE_SIZE];
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  464  	char expected[256];
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  465  	int ret, slen;
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  466  	ktime_t time;
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  467  
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14 @468  	memset(bmap, -1, PAGE_SIZE);
-8ef3340af7139f lib/bitmap_kunit.c Tamir Duberstein 2025-12-22  469  	slen = snprintf(expected, sizeof(expected), "0-%ld\n", PAGE_SIZE * 8 - 1);
-8ef3340af7139f lib/bitmap_kunit.c Tamir Duberstein 2025-12-22  470  	KUNIT_ASSERT_GT(kunittest, slen, 0);
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  471  
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  472  	time = ktime_get();
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  473  	ret = bitmap_print_to_pagebuf(true, buf, bmap, PAGE_SIZE * 8);
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  474  	time = ktime_get() - time;
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  475  
-8ef3340af7139f lib/bitmap_kunit.c Tamir Duberstein 2025-12-22  476  	KUNIT_ASSERT_EQ(kunittest, ret, slen);
-8ef3340af7139f lib/bitmap_kunit.c Tamir Duberstein 2025-12-22  477  	KUNIT_ASSERT_STREQ(kunittest, buf, expected);
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  478  
-8ef3340af7139f lib/bitmap_kunit.c Tamir Duberstein 2025-12-22  479  	kunit_info(kunittest, "Time: %llu", time);
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  480  }
-db7313005e9c2d lib/test_bitmap.c  Yury Norov       2021-08-14  481  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Brendan Jackman <jackmanb@google.com>
+
 
