@@ -1,156 +1,143 @@
-Return-Path: <linux-kselftest+bounces-47905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A58CD7E4C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 03:42:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6E9CCD7E6A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 03:47:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B1E133009ABC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 02:41:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 71981303AEA4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 02:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DCEA28E571;
-	Tue, 23 Dec 2025 02:41:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 354EE2BF3CC;
+	Tue, 23 Dec 2025 02:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NCiW6rT1";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="XM28tmVy"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="erjsvEJg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CB528E579
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 02:41:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB312BDC34
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 02:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766457703; cv=none; b=ieo0LxSPxDJVbHpvNWI2jqWP9CN5vfbYlNCnd3K14Vn5qUipZaP+Z3C/bafHCJFQvax7GnngR/sW06Fx3HCggm4DqlopyhKAyXPd3DJ4XkZjTqcgS5MHxTrhEzA6BmJvSq/Iq859tI0luhMMdufO84MegDp3agl8879YYl4U/6M=
+	t=1766458001; cv=none; b=KXynthu4MEqmxKCYmYmh0+0BUTPj+XpYSUvjnht9LVLpiMDMMO9VNGXEQZcoTZ8ewGJJ8CNW4+Ofi5O8sS7yTVNy2aO62rxWEkTOOq5iEoOnMYs5TvNyJhjZBRAC9m2uHqr40vFIwp/WuZIoGCVwGo/DyQgvob10vJr49d4n9xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766457703; c=relaxed/simple;
-	bh=Gmya7MOyeIzE5/3xV8vvshsHCkPHOLGZJa602Z9foTo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EIFc9+8QbSKGHqL31JtVrA+WAv5QodwNopWJCGBTsXEz7iQAqFiVsvnqXQyh3Bdy6iUAHgPNvpkI+9kXwQrxxWMvEDmgZLwSgjQX+Wu/iznGRW/cmqs5tWHsbeOKLrXlPL/q5yPV7j1teWyJqfyut+78RHGpzim8AH1HDeUVKsg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NCiW6rT1; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=XM28tmVy; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1766458001; c=relaxed/simple;
+	bh=IM1xzLkv6LgWXr1XssXs5AKy95MkU3QFzZbuRWqJbVw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c6ITW+ccDxR15TJAyaqCtrfY3mE7xWko+KW8kSFf9UODs1xxPAVNWSGhNxfpyW+pm4w8wHH0Bu3nJXsg35x6SEsE9LZt17PlS3/YksYriR2dF8pjmOoEDU+RZmm46DEZ8Xx9+aBadKkSL2nh3ctOen0GkN8Kfbt+9PfPb2x9WiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=erjsvEJg; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766457697;
+	s=mimecast20190719; t=1766457998;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=X76OLfq9JWE8CxaMPmo7L22pFIXt692o1JOaTWhrH84=;
-	b=NCiW6rT1FKmyHfrosGDoIQA9lneQPOwGTzUrIUuj7krZsP5ndyFvM9CzQL1AvRfAuNpGBV
-	6SirpR3rXUELZjE53tvFVrZ4Shyrtpom53ZztHE9XfeTnDgAH4wgKB83FAtFVumBbxDwfB
-	rsWJbnzpk6otdYT6wats6Zm9ttDsj6I=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-688-pJM0o8wEO9OS1MEKEtZvkA-1; Mon, 22 Dec 2025 21:41:35 -0500
-X-MC-Unique: pJM0o8wEO9OS1MEKEtZvkA-1
-X-Mimecast-MFC-AGG-ID: pJM0o8wEO9OS1MEKEtZvkA_1766457695
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-bce224720d8so8551337a12.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 22 Dec 2025 18:41:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1766457694; x=1767062494; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X76OLfq9JWE8CxaMPmo7L22pFIXt692o1JOaTWhrH84=;
-        b=XM28tmVyZBwAYjHbG4XjpWuSAU3kYNkuI8emH3IKWS3OQ0FZAXsUzw5wJndH+mFObZ
-         oGEOSAK/dXKjETl3ZMxUAA3LWYDvD767DOuF4CyhiX/AbWTFwFQvAbqAp91R8vL+7Qvn
-         yRLCAI1GZDJDLXmL12PzpfUq+hVRVkfmdXb6aplKHR96TdDR4E3pN+RrmPln/2Laetcm
-         d86JGCAyRgMCOM2ZtVhFLP99czr9BXlBWsPS1kQhSxjzP10JTpHZZXV4B/7rJ31h2lPF
-         C1ZEiXHjzGLYxxsnTqwJ78J0GBbIqyxJr4Ra9MjIjan3hnYDFo+3fexdmjpaCBFC4P3w
-         2AUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766457694; x=1767062494;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X76OLfq9JWE8CxaMPmo7L22pFIXt692o1JOaTWhrH84=;
-        b=P9YzTepquSWj5B2T9bhb9ZOWDslGvvclCKAGjTPxP3fxFzw3xTRr3IVFedWKJmUUoz
-         CxB78a8bVfj9kavcmNTCQzP8wuVw9Eq2oe1VgV1lkUUgS0z59J/YCpAn5PxfTtxt+Z3W
-         Ih2MFDXmubxTswHH79BBq76wFCgEKXMQJad9qe0cIVY7YORsJ2ctSvjKDo9zLAl5aSMc
-         YChwA865d45vriwFF1+Zqvq72r9qt55VCNWp+hCpH2BGReNgGnl68CHsBagGtIl7neah
-         jy+D6oAHkIOve809O5bOQCVqo+VfGpgbuZwjdd1ZtS/fRZ7zxybZT+kanGoMjk9rO0kz
-         B2HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW88FT39DsZi2o6dTwJyGfaOfUrsTk9zYEUjd3MZMNnCdvHPwbJ8yeMUNUUAauLh/u59gZM7qrS2g8vvkGzIyY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdMugQGI/NwPDA+g8NWwM02HhDSKlVnC20wzMhUbYkRg9gUpkA
-	sguxY0I2BVgiv/eQFE1Ohc0C/sUN8iEWqA7eaPsSGFSsfdUTcJUVyBuHeY5vx/K572h3Gdovsid
-	1J3HzCuurlw+DpcHiOUtMJTwBzVqFKVHLY34T1qtKMz5scGT/T5QzjYaFl7iVv6TT9J3BoL7ABW
-	YFxPZpgESm9qo2JGtELM8deO6+uctrCiNBYantL13Oo5Kx
-X-Gm-Gg: AY/fxX4y7HSN6Dcvj0UHZNpo1TB0SKOEeKpSUCaKYSZSIc8v9Nk6+oQlyyqQ0MSmSV1
-	/IrTKO+u/pEzSOxvxhUKgNru/cpW3zOvUE+tXKYfaAabECFiNienN7bYe7u82fZ27owbihioVQb
-	zrP3cbkokfyZDMqBZ4hqOKiVf99sjwl+JQOso8TQ+8bPShqW/vNSDbn+ljG2CWhwBxYHE=
-X-Received: by 2002:a05:7300:de4b:b0:2a4:3593:6453 with SMTP id 5a478bee46e88-2b05ebd8d92mr9946618eec.3.1766457694562;
-        Mon, 22 Dec 2025 18:41:34 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGpUovhZE5pBphm6qlEdgCz7WwEpmZEiTUnA6F9yN+mMZoFbFB7iUAcmRN4ioegFjm3mJuEAs51apuu9znPHw0=
-X-Received: by 2002:a05:7300:de4b:b0:2a4:3593:6453 with SMTP id
- 5a478bee46e88-2b05ebd8d92mr9946600eec.3.1766457694139; Mon, 22 Dec 2025
- 18:41:34 -0800 (PST)
+	bh=P2Rlf4OXs36AH80vjIKvAiM7VqatDlbcrhnjVYLo8N0=;
+	b=erjsvEJgJ4qU5kP8zSOznlIkJEI0m+N+9aVOB/EwdLSkY6h/nZVy01w1VEgpKxZKF9YQbj
+	S70CGyh3KRIxKVRpS/d+AqLgXEdSIvcvc8BkNOrNh5IKPnc+Vrw9sq+AAT9Kkqt5hCHeOf
+	NHoR555sYBVDiXLqynwvHdduVcPE7m4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-126-ca8xmKuzNReQJJjUDgZbCQ-1; Mon,
+ 22 Dec 2025 21:46:33 -0500
+X-MC-Unique: ca8xmKuzNReQJJjUDgZbCQ-1
+X-Mimecast-MFC-AGG-ID: ca8xmKuzNReQJJjUDgZbCQ_1766457992
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 112291800365;
+	Tue, 23 Dec 2025 02:46:32 +0000 (UTC)
+Received: from gmail.com (unknown [10.72.112.13])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B3ECE30001A8;
+	Tue, 23 Dec 2025 02:46:23 +0000 (UTC)
+Date: Tue, 23 Dec 2025 10:46:18 +0800
+From: Chunyu Hu <chuhu@redhat.com>
+To: Luiz Capitulino <luizcap@redhat.com>, akpm@linux-foundation.org
+Cc: akpm@linux-foundation.org, david@kernel.org, shuah@kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lorenzo.stoakes@oracle.com,
+	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com
+Subject: Re: [PATCH v2 4/5] selftests/mm: va_high_addr_switch return fail
+ when either test failed
+Message-ID: <aUoCepcpRjuMKoNW@gmail.com>
+References: <20251221040025.3159990-1-chuhu@redhat.com>
+ <20251221040025.3159990-2-chuhu@redhat.com>
+ <20251221040025.3159990-3-chuhu@redhat.com>
+ <20251221040025.3159990-4-chuhu@redhat.com>
+ <469acbcf-22f2-4774-8cf3-7f68c7095c0a@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251221122639.3168038-1-liwang@redhat.com> <20251221122639.3168038-2-liwang@redhat.com>
- <20251221221052.3b769fc2@pumpkin> <CAEemH2f40t+4SsjL3Y=8Gid-CBMtf3eL1egsPKT1J_7LDbdWPQ@mail.gmail.com>
- <20251222094828.2783d9e5@pumpkin> <CAEemH2fsAmhAkGAQb9rtD2WLUc7QMb9Q5dusG3S8LsJbNKsO_Q@mail.gmail.com>
- <20251222180509.b12684e112195ac3f7ee9389@linux-foundation.org>
-In-Reply-To: <20251222180509.b12684e112195ac3f7ee9389@linux-foundation.org>
-From: Li Wang <liwang@redhat.com>
-Date: Tue, 23 Dec 2025 10:41:22 +0800
-X-Gm-Features: AQt7F2qOIZm0BvL9DLtEgZtZpeJWcVubMomV_2ll-92wfg8FBEaptjEpncVydpM
-Message-ID: <CAEemH2dZ3DxDPWuV1Uze213CqoFHec9kK+MeteigGANYTUzbqA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/3] selftests/mm/write_to_hugetlbfs: parse -s as size_t
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: David Laight <david.laight.linux@gmail.com>, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	David Hildenbrand <david@kernel.org>, Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Waiman Long <longman@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <469acbcf-22f2-4774-8cf3-7f68c7095c0a@redhat.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Andrew Morton <akpm@linux-foundation.org> wrote:
+On Mon, Dec 22, 2025 at 02:36:18PM -0500, Luiz Capitulino wrote:
+> On 2025-12-20 23:00, Chunyu Hu wrote:
+> > When the first test failed, and the hugetlb test passed, the result would
+> > be pass, but we expect a fail. Fix this issue by returning fail if either
+> > is not KSFT_PASS.
+> > 
+> > CC: Luiz Capitulino <luizcap@redhat.com>
+> > Signed-off-by: Chunyu Hu <chuhu@redhat.com>
+> > ---
+> >   tools/testing/selftests/mm/va_high_addr_switch.c | 10 +++++++---
+> >   1 file changed, 7 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/mm/va_high_addr_switch.c b/tools/testing/selftests/mm/va_high_addr_switch.c
+> > index 02f290a69132..51401e081b20 100644
+> > --- a/tools/testing/selftests/mm/va_high_addr_switch.c
+> > +++ b/tools/testing/selftests/mm/va_high_addr_switch.c
+> > @@ -322,7 +322,7 @@ static int supported_arch(void)
+> >   int main(int argc, char **argv)
+> >   {
+> > -	int ret;
+> > +	int ret, hugetlb_ret = KSFT_PASS;
+> >   	if (!supported_arch())
+> >   		return KSFT_SKIP;
+> > @@ -331,6 +331,10 @@ int main(int argc, char **argv)
+> >   	ret = run_test(testcases, sz_testcases);
+> >   	if (argc == 2 && !strcmp(argv[1], "--run-hugetlb"))
+> > -		ret = run_test(hugetlb_testcases, sz_hugetlb_testcases);
+> 
+> Maybe you could just have used:
+> 
+> 		ret |= run_test(hugetlb_testcases, sz_hugetlb_testcases);
 
-> > > It is best to use strtoul() and check the 'end' character is '\0'.
-> >
-> > Hmm, that sounds like we need to go back to the patch V1 [1] method.
-> > But I am not sure, @Andrew Morton, do you think so?
-> >
-> > --- a/tools/testing/selftests/mm/write_to_hugetlbfs.c
-> > +++ b/tools/testing/selftests/mm/write_to_hugetlbfs.c
-> > @@ -86,10 +86,17 @@ int main(int argc, char **argv)
-> >         while ((c = getopt(argc, argv, "s:p:m:owlrn")) != -1) {
-> >                 switch (c) {
-> >                 case 's':
-> > -                       if (sscanf(optarg, "%zu", &size) != 1) {
-> > -                               perror("Invalid -s.");
-> > +                       char *end = NULL;
-> > +                       unsigned long tmp = strtoul(optarg, &end, 10);
-> > +                       if (errno || end == optarg || *end != '\0') {
-> > +                               perror("Invalid -s size");
-> >                                 exit_usage();
-> >                         }
-> > +                       if (tmp == 0) {
-> > +                               perror("size not found");
-> > +                               exit_usage();
-> > +                       }
-> > +                       size = (size_t)tmp;
-> >                         break;
-> >                 case 'p':
->
-> Geeze guys, it's just a selftest.
->
-> hp2:/usr/src/linux-6.19-rc1> grep -r scanf tools/testing/selftests | wc -l
-> 177
->
-> if your command line breaks the selftest, fix your command line?
+Good point. I thought the result code is not encoded by bit, but for
+KSFT_PASS and KSFT_FAIL, and KSFT_SKIP, they are per bit.
 
-Yes, I am ok with sscanf() :-).
+   85 #define KSFT_PASS  0
+   86 #define KSFT_FAIL  1
+   87 #define KSFT_XFAIL 2
+   88 #define KSFT_XPASS 3
+   89 #define KSFT_SKIP  4
 
-In fact, write_to hugetlbfs currently only accepts arguments from
-charge_reserved_hugetlb.sh, and the way the '-s' is used is not
-very diverse.
+@Andrew, do you think I need to send a v3 for using the simpified way?
+if so, send the whole series or the single patch?
 
---
-Regards,
-Li Wang
+> 
+> But anyways, as this is just testing code:
+> 
+> Reviewed-by: Luiz Capitulino <luizcap@redhat.com>
+> 
+> > -	return ret;
+> > +		hugetlb_ret = run_test(hugetlb_testcases, sz_hugetlb_testcases);
+> > +
+> > +	if (ret == KSFT_PASS && hugetlb_ret == KSFT_PASS)
+> > +		return KSFT_PASS;
+> > +	else
+> > +		return KSFT_FAIL;
+> >   }
+> 
 
 
