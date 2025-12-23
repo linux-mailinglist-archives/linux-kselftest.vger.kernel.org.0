@@ -1,136 +1,144 @@
-Return-Path: <linux-kselftest+bounces-47926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB017CD92DB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 13:11:23 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E568CCD96DA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 14:23:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BF1EA300CBB8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 12:11:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9BF1F3002FC6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 13:23:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A62A3314AB;
-	Tue, 23 Dec 2025 12:11:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F69E33DEE5;
+	Tue, 23 Dec 2025 13:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DlPWO9Qx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f/P/0Moe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635FC2D2496
-	for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 12:11:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6EA33CE95;
+	Tue, 23 Dec 2025 13:23:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766491870; cv=none; b=iuTudHXZDXxi3+926fH05FDdyaQj4bOMkaMvbCMWkuwS8Iq6wO2FZliGqsllXbiM6lW6KIwY8AtGmqZSNLFjqsDAYYkXqV1l/cMURtmfKqnUwfM0gQJeF7qem5aVCYOtk4mrzs757+ggp20dks0Hxo7Szk2bygl4igEBm4dwQgQ=
+	t=1766496207; cv=none; b=AIxDz8t3wf5nS+XedDsq5wWjcFzWOkjwWoMpSy2WbE4LWHuMSROGh/4b5Qz4+zhM5+6NaPjGlkRPzUK61pnd6CE9lOcNWk79xP/h755/fmS3Nfhm2VJby1chOyfAN2AYiOylwp7TDJrE22G8Z3WjXG4+Aj3EF3HaaOdvlmTl18Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766491870; c=relaxed/simple;
-	bh=LBZbirKjMcmopBpuSPX0NMZdd5FQ/yKjOijYhvNcls0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SZy2zZxsuA7cLbP+CX6/GPkftA8yOJTDds4ORJyo/SF7+/EsdcNKwIYYnhuvpHyJ89Dy8459QHMk7KscNPPFbihamizzdSf9/lFXeTd9Iu+LohByi3LicsLJ6WOb20SeG1cS5ckNiXXOBH7dzyY+L1/DN2vfCDweaIWyGOEGn2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DlPWO9Qx; arc=none smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-477770019e4so41439805e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 04:11:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766491867; x=1767096667; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u/wET59k4s2dAKSrBriEQvD/zKuN/8Hb0OllkRrq6ng=;
-        b=DlPWO9QxQDsFwGqXyl6//2CPXP37yxoHpQ0N6tbe6YuhshVln7j2GHSdTOlcNvVA5l
-         pfKCQ1eFyeg2I+CpswEUFfc+tLVVNJe71KLCpxX1cLWYxovUfhJGi13DmquvnqEp7u/Z
-         mOUiKgBlK902YaolcA+qsp/m/JvuLORct66Y09dMEz1EVWDHKr4GRACMd80eMg/6TXL/
-         x4okTI+4MjwFnkKKROKtEkT+vIqb3Ff1rIkvyYxtm7RJM2Se5sOHA7g1/vdtgVrPYj0s
-         QWAiLK4DaMsTgc/9DUWTF99tBy9xLzYPIlXu3TGl6pkimIjNVTLgJNrnnezGDnmiP0/u
-         bD8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766491867; x=1767096667;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=u/wET59k4s2dAKSrBriEQvD/zKuN/8Hb0OllkRrq6ng=;
-        b=ujRDreFBTtmMtP18jPeGl+6CzlrQ6sKu90WH11QmROurcPUg3OR195xKSf5gx18LhG
-         i7hXZH7k+SLBU0bqhXi2YBfWGKK2c/NiY+C8FA34rhatzC8nvDl0dLg5XezozDWTOoVp
-         P6TeJXAwCX6qqy66SrO6rMGdqSafVVAZWZNhlQ0GTotpgUIUacTD/YeY9VdKiVV3O/hT
-         DaKH7sH/4gd4C/g70ZSHekknMA0nCrm6BDaZI8K3aJptIgLt13gaS39zLoZC8FMFWBqJ
-         p+KvUqCG8Yw/l3VdKWr40HxMBfEkJsg4M04opuIf0HBMcDxsJUvdbK+6XILkHOS3d/61
-         mWGA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9UlzAZqkV0Zsyoysd6N27MlU8Gypn1X8WdtpDRrc7hSSevsaJaXGXhI9fXF9I12Rr1/e8QsvRZLYgpjQXG00=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlVng+J/kZ2Clm10Qu5MGMzVVqkfcJG6oBI9Zq6iFvyHEQt04T
-	eWEPbyRpw/mTY3I1a5a5A/IIltJC3Ci+Fdx1Xo2B91iSOmVife3ELLly
-X-Gm-Gg: AY/fxX7gcfYBHWrfIepopt8rO4nuPPjT6vDKy+Ae5xcFVgpnxutdV56cXoyLXHRLvT8
-	6bSjeM99NxwlU0dP0/TxKvedEOJALnvBheLi6NAPU13MdlS9yBsjiuyFaRpgNpKyvrqHphIEru7
-	KTSnep9SP1PMp7XS/Hf2j08nywMhLna0tiTcDrLrwjkY9u1rEJEuP1wQAikndeBtEnj5qQ4rJqI
-	1Zu+m+vKb6UkVmQCZICIRL7nK1alb6wWOF2m6/fj1hFnQuhIE2UINDdiS4kvLkfxsQxsxmALc9p
-	jsvl6jtkEcKCj+cdLKiHk6tP6oU/IGmh2/9XhaPvUBNaYGopOqvYAUjP+IGUBFKAl7hgRQtP5Xb
-	BI7P+T37SB4Q/wyHx7vx9d6JHBsrb86AmE+BgJHgtua5+N++1VCFiv5vws/3IRKEkF6BLoPirmV
-	pukN5Swbi4OP0JD2OyerX4VheV88aDxxnmMLuukbe/W4adXhcTD/4=
-X-Google-Smtp-Source: AGHT+IFpoVFVoGdds3xWS4nCVuXAsQ9kuPwMMvakRoZvNm0Y5y6VuK7Us5eEf+GT7UsIy7axfy9yIg==
-X-Received: by 2002:a05:600c:4e49:b0:471:13dd:bae7 with SMTP id 5b1f17b1804b1-47d195911b8mr125877655e9.30.1766491866369;
-        Tue, 23 Dec 2025 04:11:06 -0800 (PST)
-Received: from pumpkin (host-2-103-239-165.as13285.net. [2.103.239.165])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d193e329asm239696985e9.15.2025.12.23.04.11.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Dec 2025 04:11:05 -0800 (PST)
-Date: Tue, 23 Dec 2025 12:11:04 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Li Wang <liwang@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, David Hildenbrand <david@kernel.org>, Mark Brown
- <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>, Waiman Long
- <longman@redhat.com>
-Subject: Re: [PATCH v3 1/3] selftests/mm/write_to_hugetlbfs: parse -s as
- size_t
-Message-ID: <20251223121104.6614c1e3@pumpkin>
-In-Reply-To: <CAEemH2e3C_oor-CK3_35m-gAp6uU5+75up7sL0wfX1MZdh3+jQ@mail.gmail.com>
-References: <20251221122639.3168038-1-liwang@redhat.com>
-	<20251221122639.3168038-2-liwang@redhat.com>
-	<20251221221052.3b769fc2@pumpkin>
-	<CAEemH2f40t+4SsjL3Y=8Gid-CBMtf3eL1egsPKT1J_7LDbdWPQ@mail.gmail.com>
-	<20251222094828.2783d9e5@pumpkin>
-	<CAEemH2fsAmhAkGAQb9rtD2WLUc7QMb9Q5dusG3S8LsJbNKsO_Q@mail.gmail.com>
-	<20251222180509.b12684e112195ac3f7ee9389@linux-foundation.org>
-	<CAEemH2dZ3DxDPWuV1Uze213CqoFHec9kK+MeteigGANYTUzbqA@mail.gmail.com>
-	<20251223084035.67ba1b76@pumpkin>
-	<CAEemH2e3C_oor-CK3_35m-gAp6uU5+75up7sL0wfX1MZdh3+jQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1766496207; c=relaxed/simple;
+	bh=sVjyIGQrrpkyBkTFumzOYIT7xsfvu4X4mrPIwnTXsuo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D3PtwOekwbap79B9y3rB77tDr5kuv6qLpdmIwWkIAW7tiP3K9yLLGEjVYWldsiDdRmmAno1yaBSleNAKayWYI/+a5GcpzkcnDxdX/I0zltWw93qhv1CcBk5x/K3624B5vUatsujrqhEoabjSkScs0/ke2WFzRhjw3Nz3xUIEdBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f/P/0Moe; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766496206; x=1798032206;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sVjyIGQrrpkyBkTFumzOYIT7xsfvu4X4mrPIwnTXsuo=;
+  b=f/P/0Moepvb7BnAMUboIJSl1RnjRacL07LzIuYcQPkII/cFfZSceKxmU
+   UMoxIIC8zHCDFFBRsjsz9Qn0WmgaKZ7d07WOLwSHHTUQSPHLGPmwd6mGG
+   KB5ZZJ98zPzGpjTb5im3AwQnJqi/KLWy9CXBoj3XmuWg0XqI4702MDxWQ
+   B1jjFsGFRaXsoBaFMZTAZpA8PyLC8GofIcNcntTZhxMMMpJGqYN2WZqif
+   0ka/7DAWsHwf57ZO9WVPeGR2s0vlQ5sDvRRnGSVyXQLKbpXB37hl9ZV22
+   vZikZcj8/axlwGarXH7dvXpVekroxdCjMJDkPL2xnjOEMAb+XAj/+TxMc
+   A==;
+X-CSE-ConnectionGUID: BAkJ7ThNTSGAsBKDLcIv9Q==
+X-CSE-MsgGUID: P9hdgKp3T9qR8kMWHpY7wg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="68226172"
+X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
+   d="scan'208";a="68226172"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 05:23:25 -0800
+X-CSE-ConnectionGUID: trY28Fj2ScOhqzvD2TJVPw==
+X-CSE-MsgGUID: pablz/scS8mrJb7R/PPP9Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
+   d="scan'208";a="199691761"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 23 Dec 2025 05:23:21 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vY2MA-000000001xh-2Udu;
+	Tue, 23 Dec 2025 13:23:18 +0000
+Date: Tue, 23 Dec 2025 21:22:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tamir Duberstein <tamird@kernel.org>, David Gow <davidgow@google.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Shuah Khan <skhan@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
+	Christophe Leroy <chleroy@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+	Tamir Duberstein <tamird@gmail.com>
+Subject: Re: [PATCH v2 3/3] bitmap: break kunit into test cases
+Message-ID: <202512232124.O36Ud5C2-lkp@intel.com>
+References: <20251222-bitmap-kunit-convert-v2-3-6a61a5330eff@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251222-bitmap-kunit-convert-v2-3-6a61a5330eff@gmail.com>
 
-On Tue, 23 Dec 2025 17:29:38 +0800
-Li Wang <liwang@redhat.com> wrote:
+Hi Tamir,
 
-> David Laight <david.laight.linux@gmail.com> wrote:
-> 
+kernel test robot noticed the following build warnings:
 
-> > What was wrong with atoi() ?  
-> 
-> As the patch summary described, write_to_hugetlbfs previously parsed -s via
-> atoi() into an int, which can overflow and print negative sizes. This
-> problem was
-> found on our kernel-64k platform and
-> 
->  #./charge_reserved_hugetlb.sh -cgroup-v2
->  # -----------------------------------------
->  ...
->  # nr hugepages = 10
->  # writing cgroup limit: 5368709120
->  # writing reseravation limit: 5368709120
->  ...
->  # Writing to this path: /mnt/huge/test
->  # Writing this size: -1610612736        <--------
+[auto build test WARNING on 8f0b4cce4481fb22653697cced8d0d04027cb1e8]
 
-So the problem was that atoi() doesn't let you specify valid values
-over 2GB.
-That isn't how I read the patch summary.
-It read as though you were worried about detecting invalid input.
+url:    https://github.com/intel-lab-lkp/linux/commits/Tamir-Duberstein/test_bitmap-extract-benchmark-module/20251222-214306
+base:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
+patch link:    https://lore.kernel.org/r/20251222-bitmap-kunit-convert-v2-3-6a61a5330eff%40gmail.com
+patch subject: [PATCH v2 3/3] bitmap: break kunit into test cases
+config: sparc-randconfig-001-20251223 (https://download.01.org/0day-ci/archive/20251223/202512232124.O36Ud5C2-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251223/202512232124.O36Ud5C2-lkp@intel.com/reproduce)
 
-	David
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512232124.O36Ud5C2-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/string.h:65,
+                    from include/linux/bitmap.h:13,
+                    from include/linux/cpumask.h:11,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:63,
+                    from include/linux/kref.h:16,
+                    from include/kunit/test.h:22,
+                    from lib/bitmap_kunit.c:6:
+   lib/bitmap_kunit.c: In function 'test_bitmap_printlist':
+>> arch/sparc/include/asm/string.h:18:29: warning: 'memset' used with length equal to number of elements without multiplication by element size [-Wmemset-elt-size]
+      18 | #define memset(s, c, count) __builtin_memset(s, c, count)
+         |                             ^~~~~~~~~~~~~~~~
+   lib/bitmap_kunit.c:468:9: note: in expansion of macro 'memset'
+     468 |         memset(bmap, -1, PAGE_SIZE);
+         |         ^~~~~~
+
+
+vim +/memset +18 arch/sparc/include/asm/string.h
+
+70a6fcf3283a0a Al Viro 2016-01-17  16  
+70a6fcf3283a0a Al Viro 2016-01-17  17  #define __HAVE_ARCH_MEMSET
+70a6fcf3283a0a Al Viro 2016-01-17 @18  #define memset(s, c, count) __builtin_memset(s, c, count)
+70a6fcf3283a0a Al Viro 2016-01-17  19  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
