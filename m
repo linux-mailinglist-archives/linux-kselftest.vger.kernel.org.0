@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-47874-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47875-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 649C1CD7C91
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 03:02:18 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 539D2CD7C22
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 02:55:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5490330FDA87
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 01:57:13 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 05295300928B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 01:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F20D52737EB;
-	Tue, 23 Dec 2025 01:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A429227AC57;
+	Tue, 23 Dec 2025 01:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NCRgEV4K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bI+mGMvr"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1C52580FB;
-	Tue, 23 Dec 2025 01:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDF52777F9;
+	Tue, 23 Dec 2025 01:21:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766452912; cv=none; b=Uoo2q3WWIQf1o3gpTMX57wQwfviHLKGCLPYyrIAHTe2BfSYatZsbx5cnv1PSDLi2KW7MzOAXjUUJGP+YmdpfhW5qjaGeIbvIxZ9jlW6mg/bzD2+1FFdTmoDPqclPFYX5oKM0oLzHhbwVj6RgAWZG623tN8BDg8oF01rxzC1RwUQ=
+	t=1766452917; cv=none; b=Y2B3gBYt8vkypLLOpz6ALaq4NbWePwy5Z1qYXJopHygKCYM4qHUKwAzqAOwkiN8fzvn5q1A3/d/RonViEq9YEGytDrdluhZB5bznyO/2yKzGSGhloZRhRdwsEkMhIHWgHd3x2mwpgpqNqVYEXcfa90cxRHSaVFpCxhZl3eNtUeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766452912; c=relaxed/simple;
-	bh=wS/Sr3h3O9OGRzttKyfjnEZ56/U90EAT24zyvgc9Crs=;
+	s=arc-20240116; t=1766452917; c=relaxed/simple;
+	bh=4+FJ7+9SNzMFsLU/lZOfnlAHMAOz0MdKHDvJ4fcVrRk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qeLly3uwPQoxwFmJL/lGebNxuPc4a2D054mNjiJh62zkC2UoD4k5k2SKlvQIzvUlJsc3TJRq6UBnYcHOLCF8XmEHzJZ9dYqusUZLFzxWKcAZd3fycPC9xl2A1Hr574b0dYZc41nJCa4JAYt4TgB8Obgqi34wdqqZTLYuktNppzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NCRgEV4K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275FDC19422;
-	Tue, 23 Dec 2025 01:21:47 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=uFrCVdacrvoqJoOxtGLaMZeRc0pG5AdCV/ajrt6mObnZvXg3/1UeCYquq6NMHkPH61SsW3tQB9tokFMQ8jSYOvx26p27Wp1ohxBm+lbXXxoTgPCiL9+/ksyhOUhMd42ZEl8zsMwWEXeqDDDuc61n5QFFG6LX3srjGKkwaMTSd7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bI+mGMvr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6453EC4CEF1;
+	Tue, 23 Dec 2025 01:21:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766452912;
-	bh=wS/Sr3h3O9OGRzttKyfjnEZ56/U90EAT24zyvgc9Crs=;
+	s=k20201202; t=1766452916;
+	bh=4+FJ7+9SNzMFsLU/lZOfnlAHMAOz0MdKHDvJ4fcVrRk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=NCRgEV4Kpsov+E9xvN2oqiENZrZmI3cK1QfAEGgL+6TEdEaBRQ+TkqvIlNkmt0tMY
-	 M4pFTGj4mkpfXqyEEmGM3vZt87+ZXH4YJK78gh1Vfhh1mAu1Q10GeOEXQHoV8+2YZg
-	 sxJfXBikOufoBdkliAIb4aueDqZ3Ca5A1HM4OT0opWQieykAM3gtVQ4sQOjLFhcVZx
-	 uPW/Rqh/USCV/wi7OaDPbm0vmA8DzbLzp/QJ4mLnlysI86abk2NMsBcMG0dQ3xJI+W
-	 PITJ6HsijJbh0QLe/hwLWKWLQyeZpy1l5gfg2zDoD3Fatc+K5AEPWfnuAowM4AVvYU
-	 JULYuYvv9MeSw==
+	b=bI+mGMvr6H4pr6+RIaS0/WHsc0UELxttOk8dVJWS5Nj5KiDQ5QjlDUbESX/gqp37i
+	 nn4gaNLTaNR/L3s4rttanfzayaZj+zjOeQMmrVRqhkbA5FFjBIf16Hju+lRhHDuBWu
+	 mJmgFDdqBNMFab5QkSlKI/drSfNEeAgnDfMOVmeNsPJp++6JAMWSlkeePFCC5uM/86
+	 jLicmnJIJmaveoG79JK8Nwzi+NCyC6+q38SkZT3spDsVITMSbtXvCmQqEbAzBWemnp
+	 c5SKFyLNjMlNiQLJHADQJUz5clv/LEy83QyshgnoiANMBt7JCrekEOVycqDSSBftrr
+	 XgoHwImiQIDiA==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 23 Dec 2025 01:20:58 +0000
-Subject: [PATCH v9 04/30] arm64/fpsimd: Check enable bit for FA64 when
- saving EFI state
+Date: Tue, 23 Dec 2025 01:20:59 +0000
+Subject: [PATCH v9 05/30] arm64/fpsimd: Determine maximum virtualisable SME
+ vector length
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,7 +51,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251223-kvm-arm64-sme-v9-4-8be3867cb883@kernel.org>
+Message-Id: <20251223-kvm-arm64-sme-v9-5-8be3867cb883@kernel.org>
 References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
 In-Reply-To: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
@@ -67,62 +67,76 @@ Cc: Dave Martin <Dave.Martin@arm.com>, Fuad Tabba <tabba@google.com>,
  Peter Maydell <peter.maydell@linaro.org>, 
  Eric Auger <eric.auger@redhat.com>, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1451; i=broonie@kernel.org;
- h=from:subject:message-id; bh=wS/Sr3h3O9OGRzttKyfjnEZ56/U90EAT24zyvgc9Crs=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpSe6FOp/yeFdQmWsIDTjuHRv8lf47vDI2UyZQS
- cSy5dLq5y+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUnuhQAKCRAk1otyXVSH
- 0FcjB/9jxj9yHS7RtIqKmD88+ux1RuhFty0fPQPxGsOatiYtfDitIClUYiqlQe5PczTHfVw8vw0
- fEldJX5Zh5i77R8pJL4zR2DJ6LSqoWkxYToLw8aAw2nrhlSAWNsdGBOIRzb6YKgkzCsfr37KC1c
- ELgf+8Fitx4EJcFcUwPObrAWPiC7C0gMdHZob6hrtLeH1xZSDZhMoJUk0eo5jDIob/nzvG1G3Sa
- rOvHSqywKra3AIdZQJc0P6OsyrEGzptWIr03M5+tLzNBCkknJ8IDDf/ijO6tvgTWpim6574o0em
- cks9cs0ZBC42gOiUFnMZMa7WG3dn6eVmIOS4H4Lfk/zaUClB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2177; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=4+FJ7+9SNzMFsLU/lZOfnlAHMAOz0MdKHDvJ4fcVrRk=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBpSe6G94IqpPKtBF6i+APEEZA50ZuCkXbJI1Xmp
+ pNNMT4DhmeJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaUnuhgAKCRAk1otyXVSH
+ 0HaOB/9t0imWZqpN/qCLBUFVBTic1DgibgESyXd44hvr7rrNUUATGfqFo7hScqgfof9CTCj8b0T
+ 0HC0+QtAtf3fPAeEJskjJ3iHr5P/Y7Gjspj8/s5XFxnb36iDbMmfWIqmciRJrA+fxvgL4MWnUXj
+ 6R7artS98h2mfiYUmUiTI6DbVtuOdvf/JuC/keSkmAq2fUvOPCDfoau1lQaBGjg0cL6q13SL5MY
+ 3mXBUVldRK31z4cr7dYMuRrjBh5jmOQsr4vZuunAniObziCOLEVnATLq8yeznT7qLKczgEbtV10
+ Tg2LzX5o6dP/i+kzgBmU66U2x3YWTqPeEsjj3Nh1Htyls4z9
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Currently when deciding if we need to save FFR when in streaming mode prior
-to EFI calls we check if FA64 is supported by the system. Since KVM guest
-support will mean that FA64 might be enabled and disabled at runtime switch
-to checking if traps for FA64 are enabled in SMCR_EL1 instead.
+As with SVE we can only virtualise SME vector lengths that are supported by
+all CPUs in the system, implement similar checks to those for SVE. Since
+unlike SVE there are no specific vector lengths that are architecturally
+required the handling is subtly different, we report a system where this
+happens with a maximum vector length of -1.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/kernel/fpsimd.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/arm64/kernel/fpsimd.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
-index 887fce177c92..f4e8cee00198 100644
+index f4e8cee00198..22f8397c67f0 100644
 --- a/arch/arm64/kernel/fpsimd.c
 +++ b/arch/arm64/kernel/fpsimd.c
-@@ -1948,6 +1948,11 @@ static bool efi_sm_state;
-  * either doing something wrong or you need to propose some refactoring.
-  */
+@@ -1257,7 +1257,8 @@ void cpu_enable_sme(const struct arm64_cpu_capabilities *__always_unused p)
+ void __init sme_setup(void)
+ {
+ 	struct vl_info *info = &vl_info[ARM64_VEC_SME];
+-	int min_bit, max_bit;
++	DECLARE_BITMAP(tmp_map, SVE_VQ_MAX);
++	int min_bit, max_bit, b;
  
-+static bool fa64_enabled(void)
-+{
-+	return read_sysreg_s(SYS_SMCR_EL1) & SMCR_ELx_FA64;
-+}
+ 	if (!system_supports_sme())
+ 		return;
+@@ -1288,12 +1289,32 @@ void __init sme_setup(void)
+ 	 */
+ 	set_sme_default_vl(find_supported_vector_length(ARM64_VEC_SME, 32));
+ 
++	bitmap_andnot(tmp_map, info->vq_partial_map, info->vq_map,
++		      SVE_VQ_MAX);
 +
- /*
-  * __efi_fpsimd_begin(): prepare FPSIMD for making an EFI runtime services call
-  */
-@@ -1980,7 +1985,7 @@ void __efi_fpsimd_begin(void)
- 				 * Unless we have FA64 FFR does not
- 				 * exist in streaming mode.
- 				 */
--				if (!system_supports_fa64())
-+				if (!fa64_enabled())
- 					ffr = !(svcr & SVCR_SM_MASK);
- 			}
++	b = find_last_bit(tmp_map, SVE_VQ_MAX);
++	if (b >= SVE_VQ_MAX)
++		/* All VLs virtualisable */
++		info->max_virtualisable_vl = SVE_VQ_MAX;
++	else if (b == SVE_VQ_MAX - 1)
++		/* No virtualisable VLs */
++		info->max_virtualisable_vl = -1;
++	else
++		info->max_virtualisable_vl = sve_vl_from_vq(__bit_to_vq(b +  1));
++
++	if (info->max_virtualisable_vl > info->max_vl)
++		info->max_virtualisable_vl = info->max_vl;
++
+ 	pr_info("SME: minimum available vector length %u bytes per vector\n",
+ 		info->min_vl);
+ 	pr_info("SME: maximum available vector length %u bytes per vector\n",
+ 		info->max_vl);
+ 	pr_info("SME: default vector length %u bytes per vector\n",
+ 		get_sme_default_vl());
++
++	/* KVM decides whether to support mismatched systems. Just warn here: */
++	if (info->max_virtualisable_vl < info->max_vl)
++		pr_warn("SME: unvirtualisable vector lengths present\n");
+ }
  
-@@ -2028,7 +2033,7 @@ void __efi_fpsimd_end(void)
- 					 * Unless we have FA64 FFR does not
- 					 * exist in streaming mode.
- 					 */
--					if (!system_supports_fa64())
-+					if (!fa64_enabled())
- 						ffr = false;
- 				}
- 			}
+ void sme_suspend_exit(void)
 
 -- 
 2.47.3
