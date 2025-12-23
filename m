@@ -1,133 +1,176 @@
-Return-Path: <linux-kselftest+bounces-47923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6078CD853E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 08:00:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD258CD877A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 09:40:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2E18B3021E9A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 06:59:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7432430184CB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Dec 2025 08:40:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B514130E838;
-	Tue, 23 Dec 2025 06:59:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C997831DD96;
+	Tue, 23 Dec 2025 08:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XC+dlZEx";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aQcdd4oK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HVCLiS3+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFAD30B524;
-	Tue, 23 Dec 2025 06:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CDB731E11C
+	for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 08:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766473172; cv=none; b=m9s3bfrWQLTmOTu3sggrRoD1dQuE28FItByfkElHh+i7FE6zZn/IL/ZiWlSZt5vfIZbRjXUrVh6slkQn4fvoeGBWE2mi+gKUP3YD6v8wt3LVWg+bJYiY2g0c9dlO7Ter8gjWS25UMTtyvgVbs0labMum/jH1ccEYbzDSgvynaFo=
+	t=1766479240; cv=none; b=HqzNs1Bnf9cVqDKmioSvZvVx1lHJoEZ+Ack/Qp+AFOpckrQkTvNfXRTtLCFC14ZcTinCkTAfRoYxre+yBHVEM2WTx+P7iNF+Ak0/1uSufaJd0FItc9iMEjiSUP0A1mXDDOxWaOmqQ4AR4P8nbJzY0qfwlNyMdxcoE7V+1ZJPoNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766473172; c=relaxed/simple;
-	bh=RMI5k+F7krRakVS3hHkFucei6uZny6MTPLu5777RVD0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=V1hT3Ym3SK1iqeLgzw7VKcc9mN+HFQknMjFrVGD8pNZKbfse9Nn3OUMTF+WE7kKOzfg9i8SzHrC4uo/BNZE2nMpbAITbsBgHMBlWvEtkBaa7tZISJtqL5Yo0WllWsd5sxyR1fLuCteTfVCuulQQR9FuDbJwdsehmqze1avPpU8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XC+dlZEx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aQcdd4oK; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1766473169;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mM2FUnSVD45WvsERcA4Tj2tAAZnWuUSteOTQa2M4nbc=;
-	b=XC+dlZEx0hOWtTVhdiY1gIT200+4orY4OLW8hMT+k7m18wWJVaCcoQKTHEKQyuIyAF+rzr
-	ykEATKYYMNDUSqd1YHXYZsTw45sBhGZ5hwPRiRygEq1bjNb9SHg2hyUe1OYZDmD0UM60wG
-	+bsmBC5tDjIhvyl0fRDM5G6kvu7hbC7xLuw08kzbrP+Es9gCB9ZlXUpk9jebL/E1JvQbot
-	B+Ma3layleeKbj0lFMowyi4gWvp09XSOQHKDgcN8/+9SzauRdohUwdlMf3bcPlOWgxXNp2
-	2ZR1xfSYHw2BNUHOXBrF/fCOqJ6vGlkitwtnwi0+HZwvoPHjKUEaIvI6h8fMEw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1766473169;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mM2FUnSVD45WvsERcA4Tj2tAAZnWuUSteOTQa2M4nbc=;
-	b=aQcdd4oK6OqxKV0iUCrlWPMUZ5iWlq0R4haZuSns4MDs+JY4k89d4sUXTdM13mP8NgkUja
-	f74MfFbCgkiLkaBg==
-Date: Tue, 23 Dec 2025 07:59:20 +0100
-Subject: [PATCH 9/9] MIPS: vdso: Provide getres_time64() for 32-bit ABIs
+	s=arc-20240116; t=1766479240; c=relaxed/simple;
+	bh=wrmq4RenFXzbX3r+9dnxq68WYSe7YlZUwq3pD+h3bX4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Uy4RhGgwE/59uwNYNDV7RUxfxonzhM6G6rx9JwDUnjo153OR4USkDAyS6u/vvkiDSQxaQkYZfFE4VWsMoeWVpTRR+YHPLMEqGjRA/yWW1CIvRB9o3uo4uO0RrO03ULLh8LUqchRC37ttJmLnPf5gKGxv5QjyfuugLMBiVvE3bFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HVCLiS3+; arc=none smtp.client-ip=209.85.128.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-47755de027eso27655825e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 00:40:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766479237; x=1767084037; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qUwtgrMapZPA5zIKs3/MUFaPRl4dU3pm9b/uTBHe6g4=;
+        b=HVCLiS3++41fZNlJ20zlGkOeaMvSxC3AEpBNwuk79fRZNAp3XHZvGyGbp427rKSziO
+         w8KG28vPMvTFoLjNS4PFhn0KfshL+Ovx5400bv9ZmIRZKujkLCWANCBoOa2VHcfsuvJN
+         kQsXdAPELfw9vJK/irvhgHbJ1W/bhrGSwO1na/haiz20OMPaDoDlB4RzGp1S5vW1rXDM
+         +bs/Cl6Ll6VYBIatd2xbtuyw/VbSTzmGdyDAfbIOCK+0eTW++EBUwTWNwe27OXC06/Us
+         UC+IN0fMnZYOHeUKB8O55hoiJMI3RHkc9baErOAWaujFSA9PHgoyNekozKix6TAHqcG+
+         TmdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766479237; x=1767084037;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qUwtgrMapZPA5zIKs3/MUFaPRl4dU3pm9b/uTBHe6g4=;
+        b=qFmB6cdU0vU3TCF2SPdHR45N7NubAjSwXy/QArkgRdkzAjqBHeXSdvvrL4jLucTzmK
+         t/ap3q0k7GUlM+KZRvVtyqBMKCncloDaOqLV44o+YR+QLB3eczwGmpmrq1NFEPWaEZqV
+         MEDxVIyt3Jvyff9T4wpqt8tVKhgiaVACi3sS8qc3G84dN4+nwUdLghwRO6TA9PMJBXA0
+         7VqG0MWkHFKErBoRYwa9Xx6YwkxPNUFu7s5CPb9ScjVgXKncKNhqMZjB6vxANWsdr7U3
+         V7LcK5M4BWfrVu8MW8iyPF2A7cu4Ri4yyAMI/vco+aOq3qKz/kZmLXzTK4fhrmMZx7mA
+         ywcw==
+X-Forwarded-Encrypted: i=1; AJvYcCX62S8E9mpliv1/Q5qYFWPyQzruT5mRbIpQQwLRSyJj4EWkyDf+pTdkJxvWtMUsucCexDrT2QLVH4JnTwfqahE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLxE/r3rAEtz/plDxWCu8IpN+XfgsNCOOFBMXnHTE66vrnEDb5
+	tKUTzh1iT7heelrGaS6siFhztljy4IE6NkhhAwdiiYj9HQRK/brmWwZk
+X-Gm-Gg: AY/fxX4EQKXuQCj4eJawSCKT1OTknsRxDhbj8c1H5vNdn7ED4hpYUxGY9W/DV3+9YMd
+	Bw/K4F1q55G1EgIYP20szO/B+wmRwpaxfcZr67gtsGQIN50vMRBuzpWokETsGGXm9ZpLdr5AGiv
+	r66Vh7FzSrOU3TzcUuVMVxW5PTHovNRsJnXZT1icX9Eu4Da1J/+ITryX8Yj3JyMldraOBFHhz2i
+	qyuj5Q0Cbt41wgeQiFLLtI3l2E+EwpKG7pAVz6ipplHWaXm3vRyRZUU9PF5kCIhcJuNuJOZ51SI
+	TsWfUodbs5qzEiQPBOvq/Vkw99EQGuA4ha6Ghl/G5w9y9RpaDIDVhnJYHL3M6O5qUsJcLonIQM9
+	o0YbVkE1iFbKfLBfnLRkp2LVVqbqJwKTRwG42xLbaIWPunra2N1XQTR5ENwlm40h9B76lJ5oXJj
+	L6VCxlyJ1l5CCn0gJmu01tdmIb7xsS0rC135LC19b4gVPq042aAbU=
+X-Google-Smtp-Source: AGHT+IEpteUBeVyvK/GkVobHH5hYn/GMx0SLjKyrRDaOqelnxJtOqBWZOo0NwrW+rNFfDjpy5x73Jw==
+X-Received: by 2002:a05:600c:5246:b0:477:54cd:2030 with SMTP id 5b1f17b1804b1-47d1957f707mr151767255e9.21.1766479237056;
+        Tue, 23 Dec 2025 00:40:37 -0800 (PST)
+Received: from pumpkin (host-2-103-239-165.as13285.net. [2.103.239.165])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea2278dsm26831637f8f.18.2025.12.23.00.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Dec 2025 00:40:36 -0800 (PST)
+Date: Tue, 23 Dec 2025 08:40:35 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Li Wang <liwang@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, David Hildenbrand <david@kernel.org>, Mark Brown
+ <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>, Waiman Long
+ <longman@redhat.com>
+Subject: Re: [PATCH v3 1/3] selftests/mm/write_to_hugetlbfs: parse -s as
+ size_t
+Message-ID: <20251223084035.67ba1b76@pumpkin>
+In-Reply-To: <CAEemH2dZ3DxDPWuV1Uze213CqoFHec9kK+MeteigGANYTUzbqA@mail.gmail.com>
+References: <20251221122639.3168038-1-liwang@redhat.com>
+	<20251221122639.3168038-2-liwang@redhat.com>
+	<20251221221052.3b769fc2@pumpkin>
+	<CAEemH2f40t+4SsjL3Y=8Gid-CBMtf3eL1egsPKT1J_7LDbdWPQ@mail.gmail.com>
+	<20251222094828.2783d9e5@pumpkin>
+	<CAEemH2fsAmhAkGAQb9rtD2WLUc7QMb9Q5dusG3S8LsJbNKsO_Q@mail.gmail.com>
+	<20251222180509.b12684e112195ac3f7ee9389@linux-foundation.org>
+	<CAEemH2dZ3DxDPWuV1Uze213CqoFHec9kK+MeteigGANYTUzbqA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251223-vdso-compat-time32-v1-9-97ea7a06a543@linutronix.de>
-References: <20251223-vdso-compat-time32-v1-0-97ea7a06a543@linutronix.de>
-In-Reply-To: <20251223-vdso-compat-time32-v1-0-97ea7a06a543@linutronix.de>
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Russell King <linux@armlinux.org.uk>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Russell King <rmk+kernel@armlinux.org.uk>, 
- linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
- Arnd Bergmann <arnd@arndb.de>, linux-api@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1766473161; l=1324;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=RMI5k+F7krRakVS3hHkFucei6uZny6MTPLu5777RVD0=;
- b=FByXLnZDtqFeAsI04xGLObUsOOvjQRML1ATRv1MT5GgR20btjHvIoffIcSRS07gaXJejOb1Ou
- U7yhvSnzbP0AqwbnejJr7AWQjsKwDDviO1gh3dDeEK9TMplIHHd665C
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-For consistency with __vdso_clock_gettime64() there should also be a
-64-bit variant of clock_getres(). This will allow the extension of
-CONFIG_COMPAT_32BIT_TIME to the vDSO and finally the removal of 32-bit
-time types from the kernel and UAPI.
+On Tue, 23 Dec 2025 10:41:22 +0800
+Li Wang <liwang@redhat.com> wrote:
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
- arch/mips/vdso/vdso.lds.S      | 1 +
- arch/mips/vdso/vgettimeofday.c | 6 ++++++
- 2 files changed, 7 insertions(+)
+> Andrew Morton <akpm@linux-foundation.org> wrote:
+> 
+> > > > It is best to use strtoul() and check the 'end' character is '\0'.  
+> > >
+> > > Hmm, that sounds like we need to go back to the patch V1 [1] method.
+> > > But I am not sure, @Andrew Morton, do you think so?
+> > >
+> > > --- a/tools/testing/selftests/mm/write_to_hugetlbfs.c
+> > > +++ b/tools/testing/selftests/mm/write_to_hugetlbfs.c
+> > > @@ -86,10 +86,17 @@ int main(int argc, char **argv)
+> > >         while ((c = getopt(argc, argv, "s:p:m:owlrn")) != -1) {
+> > >                 switch (c) {
+> > >                 case 's':
+> > > -                       if (sscanf(optarg, "%zu", &size) != 1) {
+> > > -                               perror("Invalid -s.");
+> > > +                       char *end = NULL;
 
-diff --git a/arch/mips/vdso/vdso.lds.S b/arch/mips/vdso/vdso.lds.S
-index c8bbe56d89cb..5d08be3a6b85 100644
---- a/arch/mips/vdso/vdso.lds.S
-+++ b/arch/mips/vdso/vdso.lds.S
-@@ -103,6 +103,7 @@ VERSION
- 		__vdso_clock_getres;
- #if _MIPS_SIM != _MIPS_SIM_ABI64
- 		__vdso_clock_gettime64;
-+		__vdso_clock_getres_time64;
- #endif
- #endif
- 	local: *;
-diff --git a/arch/mips/vdso/vgettimeofday.c b/arch/mips/vdso/vgettimeofday.c
-index 604afea3f336..59627f2f51b7 100644
---- a/arch/mips/vdso/vgettimeofday.c
-+++ b/arch/mips/vdso/vgettimeofday.c
-@@ -46,6 +46,12 @@ int __vdso_clock_gettime64(clockid_t clock,
- 	return __cvdso_clock_gettime(clock, ts);
- }
- 
-+int __vdso_clock_getres_time64(clockid_t clock,
-+			       struct __kernel_timespec *ts)
-+{
-+	return __cvdso_clock_getres(clock, ts);
-+}
-+
- #else
- 
- int __vdso_clock_gettime(clockid_t clock,
+Initialiser not needed.
 
--- 
-2.52.0
+> > > +                       unsigned long tmp = strtoul(optarg, &end, 10);
+> > > +                       if (errno || end == optarg || *end != '\0') {
+
+I doubt that use of errno is correct.
+Library functions that set errno on error don't set it to zero.
+The only test needed there is *end != '\'.
+(end == optarg will be picked up by size == 0 later - if that is actually
+needed to stop things breaking.)
+
+> > > +                               perror("Invalid -s size");
+> > >                                 exit_usage();
+> > >                         }
+> > > +                       if (tmp == 0) {
+
+No point checking for zero before the assigning the 'unsigned long' to 'size_t'.
+So the result of strtoul() can just be just assigned to 'size'.
+(Ignoring the fact that size_t will be unsigned long.)
+
+> > > +                               perror("size not found");
+> > > +                               exit_usage();
+> > > +                       }
+> > > +                       size = (size_t)tmp;
+> > >                         break;
+> > >                 case 'p':  
+> >
+> > Geeze guys, it's just a selftest.
+> >
+> > hp2:/usr/src/linux-6.19-rc1> grep -r scanf tools/testing/selftests | wc -l
+> > 177
+> >
+> > if your command line breaks the selftest, fix your command line?  
+> 
+> Yes, I am ok with sscanf() :-).
+
+What was wrong with atoi() ?
+Or, at most, strtoul() with a check that *end == 0.
+
+	David
+
+> 
+> In fact, write_to hugetlbfs currently only accepts arguments from
+> charge_reserved_hugetlb.sh, and the way the '-s' is used is not
+> very diverse.
+> 
+> --
+> Regards,
+> Li Wang
+> 
 
 
