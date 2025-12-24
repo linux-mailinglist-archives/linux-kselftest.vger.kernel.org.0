@@ -1,253 +1,239 @@
-Return-Path: <linux-kselftest+bounces-47946-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FBFACDAED4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Dec 2025 01:36:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1107BCDB2DB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Dec 2025 03:30:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D3F7A3005F0E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Dec 2025 00:36:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 95122300BDBC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Dec 2025 02:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 439002C2363;
-	Wed, 24 Dec 2025 00:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E992B2765FF;
+	Wed, 24 Dec 2025 02:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCkClzuW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MSRTvEQT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28755274B30
-	for <linux-kselftest@vger.kernel.org>; Wed, 24 Dec 2025 00:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D101F9F7A
+	for <linux-kselftest@vger.kernel.org>; Wed, 24 Dec 2025 02:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766536159; cv=none; b=T4VurdRzlZMkVGisUTzaaBvUN4yrlux93rVIX6LqvlN4lNVrn9AQr6KlltMZAGwkRhxh9Ym5QSgU+YBx0fp0TOiyn+AtTXVgv39BJrH7IKuxbnNzOXI7W9JU6y2z7kOWS0vwfs24n+mo/V0k2tnjB6GCXKO3S1xew5gy9N98dek=
+	t=1766543400; cv=none; b=Z8/xwt6rhRWqbD7wZtdKainSqmKRO1yMUqWb27p/rnHTu++Og1IpT1mY7zQvlWDpAXA63pNG+6YpG1oOLroC+8aPbS7yqkKhX32StFf2sSTu6No6NMeEe9NkS1ewRjgVz9OyTa+Yp/gYBV9N6YSj6tKiaCkzQXOwPSLyQwVpS+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766536159; c=relaxed/simple;
-	bh=ucIpPosqEiSMdZEyChVr+4AmgFcQlUgInXBmbAzH57o=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HUtN3I7M0+7pnlcUusyooSlWJyqJrGq5/WWXy8BxurwLYuCU7djhu9/iwfWXDMTF1Id0K3cC/vixw/Uyqrmml+sdThx7xrc4G49evS66GrSHD1TOyxHLLTez8w3UAeYyu8cYKav1X9mZwYOajNCq2bta7T9PmkHaVuNhPKIkX74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCkClzuW; arc=none smtp.client-ip=209.85.210.181
+	s=arc-20240116; t=1766543400; c=relaxed/simple;
+	bh=fag3FxlJG3ZXO56Q4uis4IXo7o2vEhpJMwuQCgBCfc8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G1mLO6XinJxTqOk3WLd06yOBpaCQj6P2jNvt4nXfGfp2nqpGpIoOm4s+TVti7F3N7qTqODfGVzRgUjBxc3OdspIyWjxyW2e0qXzbUODLXHrbXxS7DOKTUvPZiEiMsY5tANjg79teBNDODU1i35HDHMjwqX47kmTdpgyReWtJfac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MSRTvEQT; arc=none smtp.client-ip=209.85.160.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-7f121c00dedso7350521b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 16:29:11 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-3f0ec55ce57so3805134fac.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 23 Dec 2025 18:29:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766536150; x=1767140950; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sNxNvDBVFHGq590i7LC9o7diq8A3tmTtfQIAa+Qj48w=;
-        b=YCkClzuWa0dohbxJhDpKDpGU2nayGLYWt65Q1nq1mCRXFmqaSICDMPkK79PQLZNxyQ
-         XgD9fTSB9Y2xXyP7j2B6VeWey7Vy8+ntwCChKmB/WaenrUiN0pPORSBbZaWVW0s7dC88
-         aDc+mOIDxd4GAzcqGRuy9pC8IXd/oJ02p1v1wGkr/wBcwtcpMsZcZ38u6BxbJ1L+SpmE
-         ZctlakSEVjYfduvH7lXnWh7+1vIWxNBkW9j0jIV+1KBoyk4+7GquI3y/uXIDVLB1Mw1S
-         ZVPeWHwRAATxDT80pWTY3r8E+Qdu3PHhn3Q7bOcWOdPTv1/fAX2MKQzR/PAupqiWW3X7
-         SuJw==
+        d=gmail.com; s=20230601; t=1766543398; x=1767148198; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mn5gdOJNVLCgqxTAZaOj5KghlS4vIZEHYcNf0bwJm28=;
+        b=MSRTvEQTyNqrZ0qCE0J5ABy2scbUV73XPWASHcFnr2zba2EAjY1uIwUNDzrurRO4J9
+         qfhsX0Xo5jKP+VjHT29fC4L/4NRwklxNVXaGDvbpQz4VYxfMS5Xry9O22NYaRBoL4hd1
+         hgQlS+M+3M0GfkIXRHQ96MwDlNc1CsV1zNNlw2aXXmWIORhWyoLlR1G1HBG40x25ArAX
+         pAs/JxKzhoTPrWQhfncuJrfU5GcajYOsdTsmeDCxPEWfuOUR2dsRXNSDLAyHsJ6/8y/Z
+         aP7gr+kKuLwv+SQjG4m8DWb9YpyrBw1eP69X+qvGd86qEaM3r8SJt+nl45H1fZBEjBn+
+         1REw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766536150; x=1767140950;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=sNxNvDBVFHGq590i7LC9o7diq8A3tmTtfQIAa+Qj48w=;
-        b=WsWwYFuTqODVTCo+RFIrEf3EJ3oNWEeNTQSYbsO+hRbASUONKqB2jl91g6K0X+qDUP
-         8jE8ksL4seZyB/NQNktXdTbdvr7+pwKJnyO/6htBlL/CgUbQ9HcoxPUbw6xTK/YbMdEQ
-         Oc7BigZVtKVnK2xd3HfKlwzqd4nerjODlP6K4c0Amr2PXv7VrUrile4S9S3Lc+e//WD8
-         OkB6I1YhfV7x9ZU0TR6+kE1Ozc1yOtwGzwag2jl1FmXDtC5c6qCtPtfgE0qKqOIjXCDU
-         uwwNDJ1s9se7DXcpow3nm3DA3cBLlFZRWNLIcRT/vKpacQ91C5QNOwGL3h2/D6FRpU4f
-         xVvw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0r4U/O3GvLSr1rbwj0iEK860JRLDlykxNnSxKWjt5sBnUY2TuY3+4EFuxqme67d2xSVJPXpjMHXYcFsmimsY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5cXDBFGhXSots7Ya48zx7Bf662i29GOoH5ya4TJnDwi3JXutk
-	Fa0FAkGt7LEYluDzZ3xXHGhU5ZJVM9QpE97bWqm2+uYylo7owY3EaUpM
-X-Gm-Gg: AY/fxX6ADV3cg5/eAlLG+M5MufpQVES0Uip5s2Q8vlVSzjezPt7HYcwvPdREsWKy82A
-	dnoFe/fFEaynN3ZSkGZvvGWTvZPwjldegJ/9snfcd8NxNs4lJ1w8gg+2ZC2YhDzTBxdNTBex39w
-	ffeyL0IYdZ9b6EtPMAGw+gvbRRaoccZ9T6OI+AoEqFxXKBxngn4o1RBJ+w9tNTRJV8kTIsgnMxz
-	7naqGDvx+mQRbHfhuOF3FCOErHkgrT7l358TFPtzT310KbK5yXkgFkD5KDst/E7kXyAbbVJ7kIT
-	JdWOXhEEDQsx2P05suwNDfgguVaLSa2IS3Y5GxPMbWQGIGMt2UaVFeudE3eKUuITcoUJGK0y5yH
-	8sbe1WadRDNPN3WZjdicoYj8lyXn30Eq8Dx2zpGcqqal/tWxYdBa9/6M0+D5/NeZAurjeKsCE2R
-	FDTqGFzJ3bv+NqaW9ovyrw
-X-Google-Smtp-Source: AGHT+IGKtnBjY8qVMQri7rK2UM9kYsU1JWM0jsDUq4zxMWO7Sx0v5+rbDtIzGBXE3bX4EOFk1Fr9Zg==
-X-Received: by 2002:a05:6a00:e11:b0:7b8:ac7f:5969 with SMTP id d2e1a72fcca58-7ff646f92f6mr15898637b3a.4.1766536149791;
-        Tue, 23 Dec 2025 16:29:09 -0800 (PST)
-Received: from localhost ([2a03:2880:2ff:71::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7ff7e48cea1sm15118831b3a.45.2025.12.23.16.29.09
+        d=1e100.net; s=20230601; t=1766543398; x=1767148198;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Mn5gdOJNVLCgqxTAZaOj5KghlS4vIZEHYcNf0bwJm28=;
+        b=wBeN3X5+SjnKD8UHQC62qzGf0vygBJzvp8lD4T6wgyFEYvnr0/pzx2aHP7WjeaSOE+
+         y4t+G/i6Jkt7X8m5WrWWrLDoxOqbdXeQJqOn57QG7riJ7T1TuGA6oXERTJmlNZJ+OZce
+         gn/rak7K8vji74B2WXMFnDlRGx5G4Y2zr2yOttbWPM1vj4WYmolAL32Uz0a5ubU4POkw
+         m5eknT7X/cIZXeu8y1Oqyl1tEMJ06DqNubf7BepuLYJMD1sL97JO3ZOENQNDlx888TFJ
+         V5nlIEYLR6U4JkS/RxjwwGkirMJ41Y5NLh+3F4222UGsNMuqAJPKL4S4TMDtEt7VX+TD
+         Uvtw==
+X-Forwarded-Encrypted: i=1; AJvYcCVOpJ7OQIIA2ZFsnfsUVBcZppR+1h72PBWkYHYQQ6b3He1odD+mFXE/ZOg2RPjVP1g2Cc6N/7pNMiNikrtBO3Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLFu0leYGBIho9p3Y6Mn7iEDHXyNq8/+A9AMzkhnQJqyCPK5+D
+	gI2VbMK776VZStXNjJMBM7AMyvObwbPi0QW2E+JSre9dNyRiUjyB8wxoKtP1xQ==
+X-Gm-Gg: AY/fxX77I3rT6lkWgmjDf5ICad+9uKNbRzJU26QAxawmJT0lUxIZJMTS5o5mAvKaGoM
+	nGGfelCSO4oApGCwvSnxuEWiIMhR2bU4gP8iqCBRWC+IL5ijJnKbQMEXfK28teh1y1kBj44hNvd
+	PbLWJBy2w/iU68WJrhexfw7FAsyFgguH4d4ST2BK+KAG5HopZPqen3wQIXxfKyv9HECuZUYCZLj
+	umjrkVT9jbvQ9AhUMy9ga8WEhksxDg12OXfx4QtNFKrC/+5KklxQu5sn5SeG9Rjr+OlQm+oOPT6
+	yhXSw/v6ogztCd12zjx733o39FGs4S+TtJDgWNFOXW1+zae8qCcQ8T1qzE0dxDY4aYNAonYo+V1
+	bWJOVb2kSkoku3tcrddlEpvupV9nzMlfTG1vKFvdAvcM2QaJCASq6YDKh5eBpxsSQzxgnqbbqO1
+	YHe6VcfUFo6KlMCMBlBUIae7k8+CYoRtwn9od4qslPdNJLyrs=
+X-Google-Smtp-Source: AGHT+IGl4lY3C5uaIhAdAeU51l9QnKvRP/mJp5bbTNMXCgmCDrIGHmPARt/rlh3H/cQnB4TIEc9mUg==
+X-Received: by 2002:a05:690c:d96:b0:78f:aa6d:48cd with SMTP id 00721157ae682-78fb3d52b45mr134838347b3.0.1766536355576;
+        Tue, 23 Dec 2025 16:32:35 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:5f::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-78fb4378372sm59887097b3.12.2025.12.23.16.32.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Dec 2025 16:29:09 -0800 (PST)
+        Tue, 23 Dec 2025 16:32:35 -0800 (PST)
+Date: Tue, 23 Dec 2025 16:32:30 -0800
 From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Tue, 23 Dec 2025 16:28:47 -0800
-Subject: [PATCH RFC net-next v13 13/13] selftests/vsock: add tests for
- namespace deletion
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: Paolo Abeni <pabeni@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowang@redhat.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+	Bryan Tan <bryan-bt.tan@broadcom.com>,
+	Vishnu Dasa <vishnu.dasa@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	virtualization@lists.linux.dev, netdev@vger.kernel.org,
+	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, berrange@redhat.com,
+	Sargun Dhillon <sargun@sargun.me>,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v12 04/12] vsock: add netns support to virtio
+ transports
+Message-ID: <aUs0no+ni8/R8/1N@devvm11784.nha0.facebook.com>
+References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
+ <20251126-vsock-vmtest-v12-4-257ee21cd5de@meta.com>
+ <6cef5a68-375a-4bb6-84f8-fccc00cf7162@redhat.com>
+ <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
+ <06b7cfea-d366-44f7-943e-087ead2f25c2@redhat.com>
+ <aS9hoOKb7yA5Qgod@devvm11784.nha0.facebook.com>
+ <aTw0F6lufR/nT7OY@devvm11784.nha0.facebook.com>
+ <uidarlot7opjsuozylevyrlgdpjd32tsi7mwll2lsvce226v24@75sq4jdo5tgv>
+ <aUC0Op2trtt3z405@devvm11784.nha0.facebook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251223-vsock-vmtest-v13-13-9d6db8e7c80b@meta.com>
-References: <20251223-vsock-vmtest-v13-0-9d6db8e7c80b@meta.com>
-In-Reply-To: <20251223-vsock-vmtest-v13-0-9d6db8e7c80b@meta.com>
-To: Stefano Garzarella <sgarzare@redhat.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Stefan Hajnoczi <stefanha@redhat.com>, 
- "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang <jasowang@redhat.com>, 
- =?utf-8?q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
- "K. Y. Srinivasan" <kys@microsoft.com>, 
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
- Dexuan Cui <decui@microsoft.com>, Bryan Tan <bryan-bt.tan@broadcom.com>, 
- Vishnu Dasa <vishnu.dasa@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Shuah Khan <shuah@kernel.org>, Long Li <longli@microsoft.com>
-Cc: linux-kernel@vger.kernel.org, virtualization@lists.linux.dev, 
- netdev@vger.kernel.org, kvm@vger.kernel.org, linux-hyperv@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, berrange@redhat.com, 
- Sargun Dhillon <sargun@sargun.me>, Bobby Eshleman <bobbyeshleman@gmail.com>, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aUC0Op2trtt3z405@devvm11784.nha0.facebook.com>
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
+On Mon, Dec 15, 2025 at 05:22:02PM -0800, Bobby Eshleman wrote:
+> On Mon, Dec 15, 2025 at 03:11:22PM +0100, Stefano Garzarella wrote:
+> > On Fri, Dec 12, 2025 at 07:26:15AM -0800, Bobby Eshleman wrote:
+> > > On Tue, Dec 02, 2025 at 02:01:04PM -0800, Bobby Eshleman wrote:
+> > > > On Tue, Dec 02, 2025 at 09:47:19PM +0100, Paolo Abeni wrote:
+> > > > > On 12/2/25 6:56 PM, Bobby Eshleman wrote:
+> > > > > > On Tue, Dec 02, 2025 at 11:18:14AM +0100, Paolo Abeni wrote:
+> > > > > >> On 11/27/25 8:47 AM, Bobby Eshleman wrote:
+> > > > > >>> @@ -674,6 +689,17 @@ static int vhost_vsock_dev_open(struct inode *inode, struct file *file)
+> > > > > >>>  		goto out;
+> > > > > >>>  	}
+> > > > > >>>
+> > > > > >>> +	net = current->nsproxy->net_ns;
+> > > > > >>> +	vsock->net = get_net_track(net, &vsock->ns_tracker, GFP_KERNEL);
+> > > > > >>> +
+> > > > > >>> +	/* Store the mode of the namespace at the time of creation. If this
+> > > > > >>> +	 * namespace later changes from "global" to "local", we want this vsock
+> > > > > >>> +	 * to continue operating normally and not suddenly break. For that
+> > > > > >>> +	 * reason, we save the mode here and later use it when performing
+> > > > > >>> +	 * socket lookups with vsock_net_check_mode() (see vhost_vsock_get()).
+> > > > > >>> +	 */
+> > > > > >>> +	vsock->net_mode = vsock_net_mode(net);
+> > > > > >>
+> > > > > >> I'm sorry for the very late feedback. I think that at very least the
+> > > > > >> user-space needs a way to query if the given transport is in local or
+> > > > > >> global mode, as AFAICS there is no way to tell that when socket creation
+> > > > > >> races with mode change.
+> > > > > >
+> > > > > > Are you thinking something along the lines of sockopt?
+> > > > >
+> > > > > I'd like to see a way for the user-space to query the socket 'namespace
+> > > > > mode'.
+> > > > >
+> > > > > sockopt could be an option; a possibly better one could be sock_diag. Or
+> > > > > you could do both using dumping the info with a shared helper invoked by
+> > > > > both code paths, alike what TCP is doing.
+> > > > > >> Also I'm a bit uneasy with the model implemented here, as 'local' socket
+> > > > > >> may cross netns boundaris and connect to 'local' socket in other netns
+> > > > > >> (if I read correctly patch 2/12). That in turns AFAICS break the netns
+> > > > > >> isolation.
+> > > > > >
+> > > > > > Local mode sockets are unable to communicate with local mode (and global
+> > > > > > mode too) sockets that are in other namespaces. The key piece of code
+> > > > > > for that is vsock_net_check_mode(), where if either modes is local the
+> > > > > > namespaces must be the same.
+> > > > >
+> > > > > Sorry, I likely misread the large comment in patch 2:
+> > > > >
+> > > > > https://lore.kernel.org/netdev/20251126-vsock-vmtest-v12-2-257ee21cd5de@meta.com/
+> > > > >
+> > > > > >> Have you considered instead a slightly different model, where the
+> > > > > >> local/global model is set in stone at netns creation time - alike what
+> > > > > >> /proc/sys/net/ipv4/tcp_child_ehash_entries is doing[1] - and
+> > > > > >> inter-netns connectivity is explicitly granted by the admin (I guess
+> > > > > >> you will need new transport operations for that)?
+> > > > > >>
+> > > > > >> /P
+> > > > > >>
+> > > > > >> [1] tcp allows using per-netns established socket lookup tables - as
+> > > > > >> opposed to the default global lookup table (even if match always takes
+> > > > > >> in account the netns obviously). The mentioned sysctl specify such
+> > > > > >> configuration for the children namespaces, if any.
+> > > > > >
+> > > > > > I'll save this discussion if the above doesn't resolve your concerns.
+> > > > > I still have some concern WRT the dynamic mode change after netns
+> > > > > creation. I fear some 'unsolvable' (or very hard to solve) race I can't
+> > > > > see now. A tcp_child_ehash_entries-like model will avoid completely the
+> > > > > issue, but I understand it would be a significant change over the
+> > > > > current status.
+> > > > >
+> > > > > "Luckily" the merge window is on us and we have some time to discuss. Do
+> > > > > you have a specific use-case for the ability to change the netns >
+> > > > mode
+> > > > > after creation?
+> > > > >
+> > > > > /P
+> > > > 
+> > > > I don't think there is a hard requirement that the mode be change-able
+> > > > after creation. Though I'd love to avoid such a big change... or at
+> > > > least leave unchanged as much of what we've already reviewed as
+> > > > possible.
+> > > > 
+> > > > In the scheme of defining the mode at creation and following the
+> > > > tcp_child_ehash_entries-ish model, what I'm imagining is:
+> > > > - /proc/sys/net/vsock/child_ns_mode can be set to "local" or "global"
+> > > > - /proc/sys/net/vsock/child_ns_mode is not immutable, can change any
+> > > >   number of times
+> > > > 
+> > > > - when a netns is created, the new netns mode is inherited from
+> > > >   child_ns_mode, being assigned using something like:
+> > > > 
+> > > > 	  net->vsock.ns_mode =
+> > > > 		get_net_ns_by_pid(current->pid)->child_ns_mode
+> > > > 
+> > > > - /proc/sys/net/vsock/ns_mode queries the current mode, returning
+> > > >   "local" or "global", returning value of net->vsock.ns_mode
+> > > > - /proc/sys/net/vsock/ns_mode and net->vsock.ns_mode are immutable and
+> > > >   reject writes
+> > > > 
+> > > > Does that align with what you have in mind?
+> > > 
+> > > Hey Paolo, I just wanted to sync up on this one. Does the above align
+> > > with what you envision?
+> > 
+> > Hi Bobby, AFAIK Paolo was at LPC, so there could be some delay.
+> > 
+> > FYI I'll be off from Dec 25 to Jan 6, so if we want to do an RFC in the
+> > middle, I'll do my best to take a look before my time off.
+> > 
+> > Thanks,
+> > Stefano
 
-Add tests that validate vsock sockets are resilient to deleting
-namespaces. The vsock sockets should still function normally.
+Just sent this out, though I acknowledge its pretty last minute WRT
+your time off.
 
-The function check_ns_delete_doesnt_break_connection() is added to
-re-use the step-by-step logic of 1) setup connections, 2) delete ns,
-3) check that the connections are still ok.
+If I don't hear from you before then, have a good holiday!
 
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
-Changes in v13:
-- remove tests that change the mode after socket creation (this is not
-  supported behavior now and the immutability property is tested in other
-  tests)
-- remove "change_mode" behavior of
-  check_ns_changes_dont_break_connection() and rename to
-  check_ns_delete_doesnt_break_connection() because we only need to test
-  namespace deletion (other tests confirm that the mode cannot change)
-
-Changes in v11:
-- remove pipefile (Stefano)
-
-Changes in v9:
-- more consistent shell style
-- clarify -u usage comment for pipefile
----
- tools/testing/selftests/vsock/vmtest.sh | 84 +++++++++++++++++++++++++++++++++
- 1 file changed, 84 insertions(+)
-
-diff --git a/tools/testing/selftests/vsock/vmtest.sh b/tools/testing/selftests/vsock/vmtest.sh
-index a9eaf37bc31b..dc8dbe74a6d0 100755
---- a/tools/testing/selftests/vsock/vmtest.sh
-+++ b/tools/testing/selftests/vsock/vmtest.sh
-@@ -68,6 +68,9 @@ readonly TEST_NAMES=(
- 	ns_same_local_loopback_ok
- 	ns_same_local_host_connect_to_local_vm_ok
- 	ns_same_local_vm_connect_to_local_host_ok
-+	ns_delete_vm_ok
-+	ns_delete_host_ok
-+	ns_delete_both_ok
- )
- readonly TEST_DESCS=(
- 	# vm_server_host_client
-@@ -135,6 +138,15 @@ readonly TEST_DESCS=(
- 
- 	# ns_same_local_vm_connect_to_local_host_ok
- 	"Run vsock_test client in VM in a local ns with server in same ns."
-+
-+	# ns_delete_vm_ok
-+	"Check that deleting the VM's namespace does not break the socket connection"
-+
-+	# ns_delete_host_ok
-+	"Check that deleting the host's namespace does not break the socket connection"
-+
-+	# ns_delete_both_ok
-+	"Check that deleting the VM and host's namespaces does not break the socket connection"
- )
- 
- readonly USE_SHARED_VM=(
-@@ -1287,6 +1299,78 @@ test_vm_loopback() {
- 	return "${KSFT_PASS}"
- }
- 
-+check_ns_delete_doesnt_break_connection() {
-+	local pipefile pidfile outfile
-+	local ns0="global0"
-+	local ns1="global1"
-+	local port=12345
-+	local pids=()
-+	local rc=0
-+
-+	init_namespaces
-+
-+	pidfile="$(create_pidfile)"
-+	if ! vm_start "${pidfile}" "${ns0}"; then
-+		return "${KSFT_FAIL}"
-+	fi
-+	vm_wait_for_ssh "${ns0}"
-+
-+	outfile=$(mktemp)
-+	vm_ssh "${ns0}" -- \
-+		socat VSOCK-LISTEN:"${port}",fork STDOUT > "${outfile}" 2>/dev/null &
-+	pids+=($!)
-+	vm_wait_for_listener "${ns0}" "${port}" "vsock"
-+
-+	# We use a pipe here so that we can echo into the pipe instead of using
-+	# socat and a unix socket file. We just need a name for the pipe (not a
-+	# regular file) so use -u.
-+	pipefile=$(mktemp -u /tmp/vmtest_pipe_XXXX)
-+	ip netns exec "${ns1}" \
-+		socat PIPE:"${pipefile}" VSOCK-CONNECT:"${VSOCK_CID}":"${port}" &
-+	pids+=($!)
-+
-+	timeout "${WAIT_PERIOD}" \
-+		bash -c 'while [[ ! -e '"${pipefile}"' ]]; do sleep 1; done; exit 0'
-+
-+	if [[ "$1" == "vm" ]]; then
-+		ip netns del "${ns0}"
-+	elif [[ "$1" == "host" ]]; then
-+		ip netns del "${ns1}"
-+	elif [[ "$1" == "both" ]]; then
-+		ip netns del "${ns0}"
-+		ip netns del "${ns1}"
-+	fi
-+
-+	echo "TEST" > "${pipefile}"
-+
-+	timeout "${WAIT_PERIOD}" \
-+		bash -c 'while [[ ! -s '"${outfile}"' ]]; do sleep 1; done; exit 0'
-+
-+	if grep -q "TEST" "${outfile}"; then
-+		rc="${KSFT_PASS}"
-+	else
-+		rc="${KSFT_FAIL}"
-+	fi
-+
-+	terminate_pidfiles "${pidfile}"
-+	terminate_pids "${pids[@]}"
-+	rm -f "${outfile}" "${pipefile}"
-+
-+	return "${rc}"
-+}
-+
-+test_ns_delete_vm_ok() {
-+	check_ns_delete_doesnt_break_connection "vm"
-+}
-+
-+test_ns_delete_host_ok() {
-+	check_ns_delete_doesnt_break_connection "host"
-+}
-+
-+test_ns_delete_both_ok() {
-+	check_ns_delete_doesnt_break_connection "both"
-+}
-+
- shared_vm_test() {
- 	local tname
- 
-
--- 
-2.47.3
-
+Best,
+Bobby
 
