@@ -1,131 +1,111 @@
-Return-Path: <linux-kselftest+bounces-47967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47968-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81C1ACDE85F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Dec 2025 10:13:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57123CDEDDB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Dec 2025 18:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 686233006477
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Dec 2025 09:13:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 005B430056F2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Dec 2025 17:52:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B4527CCE0;
-	Fri, 26 Dec 2025 09:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4CD0246798;
+	Fri, 26 Dec 2025 17:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FHtAA0Ay"
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="Nqo4D4t2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E9825771;
-	Fri, 26 Dec 2025 09:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC24A1917F0
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Dec 2025 17:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766740380; cv=none; b=SuwzhH1pYHffVM82A/fYRTA1LO8HE1aY6qEf0HzYoJwWPNBss0Eek0W1D0/v8OcOvlcj54yws9T2Rh9Wj3GIwi7cG4Tp5DnfAplpzncNc2FJaqff6kdXrsFj3c4EidIetOPVmldKhIvpLFcqNa/JWJ8BXcBgEr0N6Y+7XPFl774=
+	t=1766771565; cv=none; b=O7Fb89g+vE76arKTmEgvp0Yk1FO3GiFxTb61cXdgIZoJx5kWUoFS6i01wKeAcORcUyNAZtXFBywQsGIKoJ7v9yTTWjaG7D9SoE1X3/wNzxeS/Hok+yMvZSZY59n/5BEcbt6gJVlm1fDBcJjJr/Cap2b/X1ay1SqX4ep6+QJcuoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766740380; c=relaxed/simple;
-	bh=AtrdlCV+YHjlWykxoRGGwakWl+iiQcP8jaoqVooxEL8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fXipdWJfPMTzgZ6D/Z71AHGzfAq8ocmjAi3XXo9dlbaGlSAEXgh8F+QKbEtRLByF4eDKMbRoiYdTbCVCMC35io1Hj0VG2Bj4g4A+QcbGgQ1NcA9t7EemHVDvEDQQ1EPHve4Q4XENMMPWH72WK3Kl1EENzz22y+tVMxBlpxfe5pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FHtAA0Ay; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766740366;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tP79jUlxQqteTlJTZcbdsCyV2FTopmoHAhDCb8dWps8=;
-	b=FHtAA0AyeDgP27abECFFsD0xufv6Uz1tCV9vAo8IJQorB1yhc6vmNBlsR1eVvDPMAnGHOZ
-	wi87nDFwA2RzqGP6drknNEGYQxmeVC1xS/o8n9y7ZosrXA7wgTqu8WVk1rmV/5LwMW3rO7
-	ly3jzJr4dxLEUjdINfaRPrTtXdMyw1Q=
-From: Fushuai Wang <fushuai.wang@linux.dev>
-To: rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	shuah@kernel.org,
-	wangfushuai@baidu.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Fushuai Wang <fushuai.wang@linux.dev>
-Subject: [PATCH] selftests/tracing: Fix test_multiple_writes stall
-Date: Fri, 26 Dec 2025 17:12:17 +0800
-Message-Id: <20251226091217.58992-1-fushuai.wang@linux.dev>
+	s=arc-20240116; t=1766771565; c=relaxed/simple;
+	bh=J7yAO4lFXm6K+rXFTcP/uAXwqHL11KjIbvKMYMwMxn4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pxXXz3zfSSOZ7PlrpePqrmDJYeJbDFZCzo9BRWQKlTQL9nCfyZUX1m7j7mcJ3bjt6BMJ0KIg09AqIGdHZDcAFd3l5xU3wOAKVQoZzu7LvV0fwhGtzyJ6PI5uFNi/abTY2tq50WpdDPgFvOm0n5AmD3xGUc/Yt+hrlcYAJs2lhNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=Nqo4D4t2; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-64d0d41404cso7994167a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Dec 2025 09:52:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1766771562; x=1767376362; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mdj5zNgj5bjD1gSpn1iNNZ/jecnQOp8FiE5wDqLIxEs=;
+        b=Nqo4D4t2yPCHn6Ymqa9/uNooc/I5WP44c15HUjIhUiArl1LXIxQvr1BoFlxD7o9kp7
+         xNOrBdffhEoQW42JqAWVX3p+9qOqeTMF4rrRFu81WbojhGKl1aSUH0zX/LG1IRcNWaNw
+         D4i7kSyxCIYwhKCLb34gJbQ3n4naglihjj/t/hozWY+/V96NoDccE2RdaG8jNpqucfbP
+         zwgHl1WbhU3eA+pMiZuJxaSwzh2Q/6q+VRspM3Omrf2OZiTCM1aPqOIzItn3GBZdAbpF
+         kbfshu6sHWi2iMj15HfByTrFd3B2KfghIl4VEP04YFMIAowj6AUHLuGtzDjRuYieTO/6
+         LoGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766771562; x=1767376362;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Mdj5zNgj5bjD1gSpn1iNNZ/jecnQOp8FiE5wDqLIxEs=;
+        b=KYGDWwwvUS7uXNdLJ6Bav/lVw4JQGMsVHi6GYLv8VhcpsMQBSdmlZIPTl9BDqWoUoO
+         pb/HlUxIGd3YlU5UPcyMB2Wt9neDdtuRK+cqTMOKmdnUOZnu9fv8k+mwiSDpPUys4zbo
+         7L3wTTgqGuuWWiDugObRJ6sTm6Bllc2MXLBotnK/Y1gtQ9R5LoXf07owqpogqRqDXuNe
+         kKbRJXIpWQp22WxSAwZne5h9c0x2TgaBDpgEhkjTLAU//Pht47ZgZXiXu1opiRx53yXC
+         sYEoAtX3dfPRUaxFzNQiEhmtjIRopE8lJK36FCMzxDD8yUw9fgg8M1moPloQrhPTkMdO
+         Gl3w==
+X-Forwarded-Encrypted: i=1; AJvYcCUpr0T/N6+5DRQY+gXieF6Rx2RmtqAkeP+ouAf7Bz0BfYxntupwMA75Xg/oPUYiAd2taK59siDF69fLx2NyfjA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyk5HXNM+4VF3uL6RlENg2dr64cb8HuwFr6Lo3rd4Pr7ug7RmfZ
+	DEqSz97NGZkha3nZXBGHkMCqqjv82E0dubw5izBrP4BgOAjsv9dxu7086+ndCnjnSMQ=
+X-Gm-Gg: AY/fxX6Bf1WI50RqJLaJ/sYK8LMZLUisQ44kkrYZ03seKnvY/XtAvwXvqP47tqtmvuS
+	EKC6dFz3F1+gvgzfitjmWEe9AiAjK7KQTQs4VRKd7msz41FyG/spN+T2K7Y/8u3hyNePROtMtjN
+	8QbnKFyZLnpXzdwVOcTF/yngWuvTmNRsAIdXO4+2/L8PM1BDSpmPaSXmoI+HZ3yloW0dDGniCqx
+	wFVOMFMDg5YKeJaKpGanKwBbCUjVoPgusoJjIWdXI/+4L2ASjlFSpqsFeDBm7ht4nqGG5++lGDM
+	R74VkNfJe2OqxvFncTdP9Bkopmultrrb+ZM/omdC1PEPpye9UvRkX6kfZ4ki8rwHr7aXEusrl3l
+	+1iNFFZler9dqYpi56se9Msoy74Yz7kB+wCX/Sxmy14t/pvu8EX7u415GFQV4PKiU9SE6MYo+5s
+	kT3+4xBKmXjFOzCYDkNG48LeHWOCM7kbD3D7necSsbgMmmpfPlrq/V
+X-Google-Smtp-Source: AGHT+IH/n4TYPHu4FypFJ2XvHhAplETATqLQQDyjaZRds0v5zrYYx+SkSlb3Kb/t1PUX6M4JlkgoWA==
+X-Received: by 2002:a05:6402:35c8:b0:64d:2889:cf50 with SMTP id 4fb4d7f45d1cf-64d2889d1e4mr16238859a12.23.1766771562389;
+        Fri, 26 Dec 2025 09:52:42 -0800 (PST)
+Received: from phoenix.local (204-195-96-226.wavecable.com. [204.195.96.226])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-64de4798077sm9279546a12.7.2025.12.26.09.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Dec 2025 09:52:42 -0800 (PST)
+Date: Fri, 26 Dec 2025 09:52:35 -0800
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: Dmitry Skorodumov <dskr99@gmail.com>
+Cc: netdev@vger.kernel.org, Simon Horman <horms@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Dmitry
+ Skorodumov <skorodumov.dmitry@huawei.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+ <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>
+Subject: Re: [PATCH net 2/2] selftests: net: simple selftest for ipvtap
+Message-ID: <20251226095235.219f3017@phoenix.local>
+In-Reply-To: <20251225185543.1459044-3-skorodumov.dmitry@huawei.com>
+References: <20251225185543.1459044-1-skorodumov.dmitry@huawei.com>
+	<20251225185543.1459044-3-skorodumov.dmitry@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-When /sys/kernel/tracing/buffer_size_kb is less than 12KB,
-the test_multiple_writes test will stall and wait for more
-input due to insufficient buffer space.
+On Thu, 25 Dec 2025 21:55:34 +0300
+Dmitry Skorodumov <dskr99@gmail.com> wrote:
 
-This patch check current buffer_size_kb value before the test.
-If it is less than 12KB, it temporarily increase the buffer to
-12KB, and restore the original value after the tests are completed.
+> +test_ip_set() {
+> +	RET=0
+> +
+> +	modprobe -q tap
+> +	modprobe -q ipvlan
+> +	modprobe -q ipvtap
+> +
 
-Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
-Signed-off-by: Fushuai Wang <wangfushuai@baidu.com>
----
- .../ftrace/test.d/00basic/trace_marker_raw.tc    | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-index 7daf7292209e..216f87d89c3f 100644
---- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-@@ -58,7 +58,7 @@ test_multiple_writes() {
- 	echo stop > trace_marker
- 
- 	# Check to make sure the number of entries is the id (rounded up by 4)
--	awk '/.*: # [0-9a-f]* / {
-+	awk -v ORIG="${ORIG}" '/.*: # [0-9a-f]* / {
- 			print;
- 			cnt = -1;
- 			for (i = 0; i < NF; i++) {
-@@ -70,6 +70,7 @@ test_multiple_writes() {
- 					# The number of items is always rounded up by 4
- 					cnt2 = int((cnt + 3) / 4) * 4;
- 					if (cnt2 != num) {
-+						system("echo \""ORIG"\" > buffer_size_kb");
- 						exit 1;
- 					}
- 					break;
-@@ -89,6 +90,7 @@ test_buffer() {
- 	# The id must be four bytes, test that 3 bytes fails a write
- 	if echo -n abc > ./trace_marker_raw ; then
- 		echo "Too small of write expected to fail but did not"
-+		echo $ORIG > buffer_size_kb
- 		exit_fail
- 	fi
- 
-@@ -99,9 +101,21 @@ test_buffer() {
- 
- 	if write_buffer 0xdeadbeef $size ; then
- 		echo "Too big of write expected to fail but did not"
-+		echo $ORIG > buffer_size_kb
- 		exit_fail
- 	fi
- }
- 
-+ORIG=`cat buffer_size_kb`
-+
-+# test_multiple_writes test needs at least 12KB buffer
-+NEW_SIZE=12
-+
-+if [ ${ORIG} -lt ${NEW_SIZE} ]; then
-+	echo ${NEW_SIZE} > buffer_size_kb
-+fi
-+
- test_buffer
- test_multiple_writes
-+
-+echo $ORIG > buffer_size_kb
--- 
-2.36.1
-
+Did you know that kernel will auto load the module when device is created
+so in most cases modprobe is not needed.
 
