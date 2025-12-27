@@ -1,121 +1,133 @@
-Return-Path: <linux-kselftest+bounces-47971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08088CDF3E5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Dec 2025 05:19:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CFEFCDF418
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Dec 2025 05:25:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 909013009437
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Dec 2025 04:19:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A35C33008896
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Dec 2025 04:24:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A35233D9E;
-	Sat, 27 Dec 2025 04:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A752224DCF9;
+	Sat, 27 Dec 2025 04:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YzmOIgM/"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="P5OaCtnk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC370A55
-	for <linux-kselftest@vger.kernel.org>; Sat, 27 Dec 2025 04:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ABE6239E63;
+	Sat, 27 Dec 2025 04:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766809140; cv=none; b=R4PDN5+lj34WCc+DZ5yVQfm89V7evcpuKDpmqz7NxqmMwwlRTH+o8xXljRp2sTK8MCY2KhYQ+pAyZPGPu6ZZhc/KZCrwRgCwS4RK96EBjnsMceJB6iSgvbyCPbm5yllcMer+XQhUJqOhyfXG186aZXf+OdqNB30A59pp8HxjW+g=
+	t=1766809472; cv=none; b=TDwxZNOX3gnpOBrotxYLS8T63jKD99YcNz3Svh0MdlRdDKiZ68+RnnyZio25lRkazzXgd06KXyaqn+T84vb1h0M7gJsNK8x6Z/GH5ZrC2BN+S+YTvlX12YjIv46+5KKChCdIvnNsiB62biwI5Xj7ysd7Df3168FV6CQ5Ktjiu9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766809140; c=relaxed/simple;
-	bh=o1RUad+aZ9UVL6/6FlfP2EK+BgGs8Pl//NkdOKeXrPo=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Dabnz03aMnO6/ykg8p48Yj+pZOzF+kti+bjwFhIUfj5mkXznBl3w1JrgppiukaCeBqy/0phTmCCP5vwG/Yur1lS0NJbYzk00VfzNfTe0bCvxJYULmISnh69rGxLaKAzm+tahymiqHbfxR5ptlGwpcFb8mSr2Vj4oNwt+iLqnntU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YzmOIgM/; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766809125;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=sv5/q9tNo6t2sWaapaRofb8WIXYpEQOeZK5xAp6YEHU=;
-	b=YzmOIgM/P/DmFO2KIV529BvkFdMK20ks1BJlwYYAetNG0SqX34x0vHMdF9wN92KyKo8TJR
-	orK1m31l63FMLIN0c7q80m5o5ctHhujMSIbO2i8yJMFUyhO6vV6TyUCtdHYBBx10BZyFQa
-	rPdfRbtjtwHVdb0VSEA1msA0cAWbNw0=
-From: Fushuai Wang <fushuai.wang@linux.dev>
-To: rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mathieu.desnoyers@efficios.com,
-	shuah@kernel.org,
-	wangfushuai@baidu.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Fushuai Wang <fushuai.wang@linux.dev>
-Subject: [PATCH v2] selftests/tracing: Fix test_multiple_writes stall
-Date: Sat, 27 Dec 2025 12:18:21 +0800
-Message-Id: <20251227041821.75504-1-fushuai.wang@linux.dev>
+	s=arc-20240116; t=1766809472; c=relaxed/simple;
+	bh=0m0IUyh1qgdS2/DqcwxcLXWiO3+eicNUWxovMIf4IQU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cGhBDVkOxRcZFvpuusxiHHaTXWJZUy4SxpljKFg7Q3nqJNCqhV3kHxlPwr66BjsvA1dEf5nzhRzgcjvFe0lqgxIOwWO+flD2+6dZ4YBI94B61WQgzsk1CI57zdOjQVqdvufdjL9ovPZqKKuOL5MhgNh96P/2OMrplVB90zkOYOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=P5OaCtnk; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BR2upmV010535;
+	Sat, 27 Dec 2025 04:24:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Uc3XXm
+	uzw+rGlrmHsoHoZKbq47rkIBsTmwgWoQtDbPg=; b=P5OaCtnkURd8VndWJ5qBeq
+	pRuOJHtQTA0RZytQ4FmJ2iH0KEoAvtE64MJ1qSZYPPH5Uzx/Yr2lRB3torh/nYDy
+	kddBDHdHBt2xNxUXWKBSu+I5p/po235JCaQUUbRSl3KWDOa5+cD+U66VzRnxu5DU
+	4nLqttrh/ktnlj8DR7ybgFFL469NtsWb9I5SMwy8bEZmERyCBgaNnOFrbu6dJJYG
+	PfDhF0dmO471+g4jGrxfcksVywhJbbBkm8z7zEPbzesGaMb3t/A4xQ9O45F4E31j
+	hg6ILcVf6No4fUnP3lGpYR+rOt8xRyufjJ+Yhgg4zBqSpvCK0UOltvTfPh5jYjpw
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ba73vg4r7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 27 Dec 2025 04:24:09 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5BR4O8vX027333;
+	Sat, 27 Dec 2025 04:24:08 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ba73vg4r6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 27 Dec 2025 04:24:08 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5BQMjMa1005249;
+	Sat, 27 Dec 2025 04:24:08 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4b67mkjgr0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 27 Dec 2025 04:24:08 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5BR4O6Zl37945646
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 27 Dec 2025 04:24:06 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1C29220043;
+	Sat, 27 Dec 2025 04:24:06 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6E4EE20040;
+	Sat, 27 Dec 2025 04:24:03 +0000 (GMT)
+Received: from Linuxdev.ibmuc.com (unknown [9.124.212.100])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Sat, 27 Dec 2025 04:24:03 +0000 (GMT)
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+To: mpe@ellerman.id.au, npiggin@gmail.com, shuah@kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kernel-mentees@lists.linux.dev,
+        skhan@linuxfoundation.org, Christophe Leroy <chleroy@kernel.org>,
+        Gopi Krishna Menon <krishnagopi487@gmail.com>
+Subject: Re: [PATCH RESEND] selftests/powerpc/pmu/: Add check_extended_reg_test to .gitignore
+Date: Sat, 27 Dec 2025 09:54:02 +0530
+Message-ID: <176680916366.22434.4135136741244197220.b4-ty@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20250922004439.2395-1-krishnagopi487@gmail.com>
+References: <20250922004439.2395-1-krishnagopi487@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 8MdMPsW4acrGCwy_kz-BY5H7ayiMWajr
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI3MDAzNSBTYWx0ZWRfX55K3sAyBWSj6
+ ZmwLqmLCSUIz+0Ph5k/UARba5NwHuhK6fgXzvRy4FKqk/c+IXpTzzsc+EIe2EK3E1Apx6xsHCmA
+ JB+FBOYyXw8YTU45ZERwDkeIV6Vpudipuhfu9coDGA30K9wFgXUyYmPzZ4epKdcCUI7Gs6zXwwU
+ DweuEpNTVcMfqijchhGpBFjPnS551Wgro7TaQL/SLKFRC0pUkMtAwtc90yyiVsi0QiZIfQzRwBj
+ J75mq870VoC28rnr7U+MEcETq6XVTSEkC/kqKBgjMcqhy5rlMAKXrzWLRgka0UOgPcnaCubEGw5
+ c2GrNJvf8NYb8tGKvoFRoOnVi9X4WtZOkih2HGh5kK7dItO2KLAY0zxvSR4LZYW8PYr03fOYS2S
+ jl5Oyf7Wg/bDS9vtzpvpFwk0zSozQe8yO4frchSNbLZFSD8yej+fCb64/pZIMjtg5iFad0ZSJws
+ WTJKhQVhvsu1YReW7jg==
+X-Authority-Analysis: v=2.4 cv=fobRpV4f c=1 sm=1 tr=0 ts=694f5f69 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=gLboIuWc-4I6dfgw9HwA:9 a=QEXdDO2ut3YA:10 a=UzISIztuOb4A:10
+ a=zZCYzV9kfG8A:10
+X-Proofpoint-GUID: FmnG9omquVb8lvckOcda3mYZmBSOh5VN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-27_02,2025-12-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 suspectscore=0 phishscore=0 adultscore=0 malwarescore=0
+ spamscore=0 bulkscore=0 impostorscore=0 priorityscore=1501 clxscore=1011
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2512270035
 
-When /sys/kernel/tracing/buffer_size_kb is less than 12KB,
-the test_multiple_writes test will stall and wait for more
-input due to insufficient buffer space.
+On Mon, 22 Sep 2025 06:11:23 +0530, Gopi Krishna Menon wrote:
+> Add the check_extended_reg_test binary to .gitignore to avoid accidentally
+> staging the build artifact.
+> 
+> 
 
-Check current buffer_size_kb value before the test. If it is
-less than 12KB, it temporarily increase the buffer to 12KB,
-and restore the original value after the tests are completed.
+Applied to powerpc/fixes.
 
-Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Fushuai Wang <wangfushuai@baidu.com>
----
-V1 -> V2: Restore buffer_size_kb outside of awk script.
+[1/1] selftests/powerpc/pmu/: Add check_extended_reg_test to .gitignore
+      https://git.kernel.org/powerpc/c/42f53b39004f45a6091109176c62ba33cc52ff96
 
- .../ftrace/test.d/00basic/trace_marker_raw.tc  | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-index 7daf7292209e..a2c42e13f614 100644
---- a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker_raw.tc
-@@ -89,6 +89,7 @@ test_buffer() {
- 	# The id must be four bytes, test that 3 bytes fails a write
- 	if echo -n abc > ./trace_marker_raw ; then
- 		echo "Too small of write expected to fail but did not"
-+		echo ${ORIG} > buffer_size_kb
- 		exit_fail
- 	fi
- 
-@@ -99,9 +100,24 @@ test_buffer() {
- 
- 	if write_buffer 0xdeadbeef $size ; then
- 		echo "Too big of write expected to fail but did not"
-+		echo ${ORIG} > buffer_size_kb
- 		exit_fail
- 	fi
- }
- 
-+ORIG=`cat buffer_size_kb`
-+
-+# test_multiple_writes test needs at least 12KB buffer
-+NEW_SIZE=12
-+
-+if [ ${ORIG} -lt ${NEW_SIZE} ]; then
-+	echo ${NEW_SIZE} > buffer_size_kb
-+fi
-+
- test_buffer
--test_multiple_writes
-+if ! test_multiple_writes; then
-+	echo ${ORIG} > buffer_size_kb
-+	exit_fail
-+fi
-+
-+echo ${ORIG} > buffer_size_kb
--- 
-2.36.1
-
+cheers
 
