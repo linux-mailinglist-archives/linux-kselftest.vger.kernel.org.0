@@ -1,177 +1,266 @@
-Return-Path: <linux-kselftest+bounces-47980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0EBBCE4A13
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 08:57:27 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91915CE4B87
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 13:14:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 84BA03004F6F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 07:57:26 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D40F53004E32
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 12:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B20F228CF77;
-	Sun, 28 Dec 2025 07:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CC9D26ED28;
+	Sun, 28 Dec 2025 12:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="csITLKjq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T6Hpm5WT";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ojd+fYAW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2547927A91D
-	for <linux-kselftest@vger.kernel.org>; Sun, 28 Dec 2025 07:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EB72C11F5
+	for <linux-kselftest@vger.kernel.org>; Sun, 28 Dec 2025 12:14:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766908645; cv=none; b=ZLNPYYkvffvEsF/Dt+xw1MeIld4yJ377jylq9cHmXB6lVgFeblyNL3hsVlc/T4JHz7VE1eNVENP/5AlANZ+0/FXl5s4vVhvx2q7m52qRu6cWqusiy5PAnCqEMZhuD54O6YNhuf5Wpej0t8gLYOPzWz6IqkwHRNtzIAUKP7wpaSM=
+	t=1766924069; cv=none; b=nFxnc/v43P9t4pBFsYItk9V/94Zmr1d2dh/p5V+ZOXbBqlWu9q2FHXn3KlaOHgATf6ZwVqqHto2hGfEvA3tXyj4ph85ppxolXeAYqi9vqYot/bgu5ZJP5go6/pZ0W1vJxll66cg1j0UNdh/kqw34OacaNr3qZbXwp9iy9Orq/yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766908645; c=relaxed/simple;
-	bh=29CsS8jUPXfxnqDG52zqX8oAaxTCHMIVUG84xalQVuo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YT2cBDexRyCK0aLCggeiP8VhOlfagdi8fjnF9/26YvfLJnEc00d1iVvqi/NSjhw67QFAwhSySyOdcwSivkpmx7LfEP8d6RAeoicjuoo8iFvrfWqGDHqVxDQERpDLGyejOg0SH93PaQVp0nDqykba3y8BPu86BBjKRl3E57UBkok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=csITLKjq; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7d26a7e5639so9251787b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 27 Dec 2025 23:57:23 -0800 (PST)
+	s=arc-20240116; t=1766924069; c=relaxed/simple;
+	bh=FtVcvjSqO79VVhAexiQ8Tk6eQRe2bnLHlHrLLXC2qLQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mBtM/kAOIn4FdCGOaQOm+DTiXaPbe1M/EJ1RxHkMpsPZ2uBpNzXgHlC+5/4x9Kozl4x5OLJUR1tCWSTEmnI731nabxk0WO47EqfsXQ/IMxZ16FBmtTsxpXl7FV4ZcDqlzsovKN7GM+v4pyvHjS0nh1gBYxGmo3PfSzmqcqNtfiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T6Hpm5WT; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ojd+fYAW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766924063;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Hb94p/3fW6d+zrjNPqtXlJMQflYVyrGPy+23bPGAbt4=;
+	b=T6Hpm5WTRHY7hHYTdBIPiypwSh5zdmRY6iIvFOJ0nxR2M/3a0XqlAwTw9/oAv0iCup2eBz
+	cOBsHWE4/lpuk3EFBlt54MirvGsUJWeQaXGZ+pWCOO3hdWz9Ux6Q/ZTO9G+AuaZbidSnI3
+	c0kFtaRWNL3mIcPxLIsR3eczlKkH/mo=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-543-CkIqG_UkMdqBuPiFfhST7g-1; Sun, 28 Dec 2025 07:14:13 -0500
+X-MC-Unique: CkIqG_UkMdqBuPiFfhST7g-1
+X-Mimecast-MFC-AGG-ID: CkIqG_UkMdqBuPiFfhST7g_1766924052
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-430f8866932so6757220f8f.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Dec 2025 04:14:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766908643; x=1767513443; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sH/mQxpGQvHgNSDd7bXpPUMJDojJ2SOxK5UAXsSsuAA=;
-        b=csITLKjqEMk5tPgwRoOIgzRywYFe3xEKpLvnza+NXjd+7bwMkeFTGM9lu5BbRv3gD6
-         ZShv3VsbFYWwrRYScvvvgvNSRae4C7p1NoByBld/sgPTYaaDDInoh+CY19GZ3rAZfSyd
-         fDlJTVehQfqcW5doCAA8uk26NChAHeoTlhLAcbkOjSq9NoIYryy9sRXOy2ULeNtJmP7k
-         A+x/DIPjdvbQNC8v7W5YyF9iT1HSQ9kfaGXZatt96YuTx7AiIURu7xMWjj2/atB1+qb1
-         pcsxf3wonjrxwLTkt4XmeQIPbxEcjw7pjoUZs5k7+9rs1StGEm9iU5Dcns6D8INg7iiX
-         7huA==
+        d=redhat.com; s=google; t=1766924052; x=1767528852; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Hb94p/3fW6d+zrjNPqtXlJMQflYVyrGPy+23bPGAbt4=;
+        b=ojd+fYAWW18I3d/0CJqUhGSxyzzvsReXbb7acrRNDj24AO18YJ1dIa/8akDyNkwc+9
+         neaRI2S1oYkvDXygWJ2Kpjp2NfPlea8UczGg/ZDhhGN26w4x0HQQpVHO7Ip71NqfrBLF
+         fCaSG6lVak9PGwnb6wfGV1MwismkuhjpIp3Kv5OY7y/GybW0X0ZupAku02tJwdLeJGMQ
+         Efqb0aumCgoXOrtLRNMH07R/WAj4Wobl/IDyL3l2dikGKSr5cNfQKzXwlO+/I6PXkxkT
+         C04y/7svEuimzDg+ODpyym5bHMx2pqK06dXoHjQjCFYXCLBIMkS3N3xdERbgx7HTnJoi
+         KRIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766908643; x=1767513443;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sH/mQxpGQvHgNSDd7bXpPUMJDojJ2SOxK5UAXsSsuAA=;
-        b=oVpHBL1Rc8ZX7El5JO9QJzkzzUrLM+ool9X1t4puD0n9sEmW0oamrGFrz1HFJibIYb
-         C5tnnzznYsIZcz7ezaSbTGWkaW0i0j8iTvwabeRZw57n+YU0QXMWErqOaT3bnJjfU5Ce
-         1+zpVzTtmwpprXDVzkET18szO/muSDXf/k2DteUEw9Po0HYgEm/95q+/D3CYoB+r+K/m
-         q8Q5n4zkm6m8jI0ki+stnFCtAaySJT7uwm80xF7Dx+H2lFlL9pO3yAT2U5HT98X5OmTA
-         aFWItNOpng5Xm8ANqnVw/5O0AvafEguHA7WOkKg92LSJkIZ4ZptBe7ZZqM7UShQwdxj4
-         9F/w==
-X-Gm-Message-State: AOJu0Yx7+eDHaZy7oTgPQuoErZpAqsPZPiJjpl5+HV7m66fFaWllbF64
-	g+A4unhmyYm96wjKbqKtnvknHRs4f7uuRJcljylJEHwsxc0Tj/AVEeiJxJJ4urca
-X-Gm-Gg: AY/fxX6Y0fsRPBJrDbf5jJSe/fzx0vTwLRRRlLBxTs0AtODbu+a91Fee7b7tdhcPZtq
-	ymoswo/c1s+WSasshoJMaxabCd9SYjBZJJQgUvY3GWtumXlTenhaX7cyFoNyftLpd8e/tShKztV
-	Ch19usOlUCHmkezG/tvf1NtSPVkEwatTza4qCM2g7lLkZWL4cF0OpLfwYn5H6lTuiAAeKWwEDcs
-	AI2Yte1YMesE3FHWiwulEEBjN42CxDDsWtQgsHwJVG66KhZwgfhp1+Q340leNP5horwsqCGg33L
-	av7h0t/F8jDqKTdufgxiYRkkWeyo6Ii1BWvX8GaUT24JbQMQqQsx9v2kAYYagBFZiemdC5VI8aI
-	MlAFtHEkGE2COQTCJFj44DaId3SIIaQlpy79MPCB2tzWgE7lZOHjb2SDvkSfs0eEqEWTf1MSoK8
-	ItYPOY8rFGVH7qh8qHEpc=
-X-Google-Smtp-Source: AGHT+IEG1fi8JdvUOklOm4ZBYm40p24T/KBfn4xEROwDBzEt48vaxSZxhJoFgs/MPre7m5jHI6WlxA==
-X-Received: by 2002:a05:6a00:4c0e:b0:7e8:450c:61bb with SMTP id d2e1a72fcca58-7ff6607e24amr22824991b3a.43.1766908643406;
-        Sat, 27 Dec 2025 23:57:23 -0800 (PST)
-Received: from [172.16.80.107] ([210.228.119.9])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-80d8d93f7f0sm140936b3a.22.2025.12.27.23.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 27 Dec 2025 23:57:22 -0800 (PST)
-From: Ryota Sakamoto <sakamo.ryota@gmail.com>
-Date: Sun, 28 Dec 2025 16:55:19 +0900
-Subject: [PATCH RFC] kunit: respect KBUILD_OUTPUT env variable by default
+        d=1e100.net; s=20230601; t=1766924052; x=1767528852;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Hb94p/3fW6d+zrjNPqtXlJMQflYVyrGPy+23bPGAbt4=;
+        b=oGs3aH/I5G07RqL9Hk0v57ajH1xARXXX5CwvzusmSgdERhpMqEd4++753ty796Q13s
+         IPKquwcL9KUBj44OfR9tVk5bDptgnHrQiQg3sdeK+dK6swY7sdPFZsXWZryGseVtZaq0
+         zxNRzIAIG0PbjG0Y/Vsxfmb3FriErHOg0PeiU61dET6/xnb/zGqeJkdkTtr7DLmuy663
+         rmJtvDnS+hIjWCE1HzjHL/04E0cKjyt6HwtvJw6rM6qfatOzvL8/+5J3Bzsh6IgZXcLe
+         aOUDbK0GV1O9xcDJoqop1gmtOjP7FNEaOgScDvDxxj8a34GC7MU2A6QTTHkY0U8CLsoa
+         2J3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV/BYwPBx/QuJoiDvEmWugMqrPBRHmwBrA6w0qRSWmIoKfENYdlaejKgnFAlE5m8JJ77/kW8u99kzJDBj4k2+M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzP9MGpvSixgeA5gtDwxOzUfiyOIPxwSI3pP6Fcyz3X50I5BBFl
+	IJzp+JiZyzeWrmmloDKqo00b3l4KkRLL3wplOEIaujkjrC+A/1vaH5jQLKcHc9aJe8/ADwFGFy3
+	XM7D1KlzMeEmFwNN9Nr0QNnubzwQY39F1OkR/xfdeeePiIQg67osZ8duEyzxqWkMLxzZK+g==
+X-Gm-Gg: AY/fxX6989WHUtjhK8io5smHRN5Wi4xF8OhoZfWNiHZpmxsaDuDcmDq2SelWLZKXcO4
+	POIhhQ8/yz5zFO3Tw8eea8psz+cqrGFN066uJsN5DSQF79vY30/sGUKZHt0+6SLVn6tN8z12HU2
+	jV87O1wz8E7ZeetNasN9WwvphcvmqATlsjN1Ktu6te4K+7TRvQ1n2qBVLftDJAJhV4/xipd/nZX
+	vyw5XI1fPvCmjvZGT5IcfEVq4KzlMpvDBbkdfEh+zvQHssL4WHCPsldvL75lUZNgBVMw27QIWis
+	PX3ocWvmXQu8rFOypt3XibDbuikZNQk0kluJLpZrjpYQTN1SM8FB+Gaj4enC9rN1AKicZ+Fu8o9
+	3LflrBEC+YpZjrw==
+X-Received: by 2002:a05:6000:40ce:b0:42f:bad7:af76 with SMTP id ffacd0b85a97d-4324e4cc00amr39273453f8f.15.1766924051785;
+        Sun, 28 Dec 2025 04:14:11 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE9s6P8gOpSpbWlos80FLDLxQgg0IlYWd5InaHc47tKRrvQ/Asn43slk7o17Wv+jnvFEa+z9Q==
+X-Received: by 2002:a05:6000:40ce:b0:42f:bad7:af76 with SMTP id ffacd0b85a97d-4324e4cc00amr39273422f8f.15.1766924051343;
+        Sun, 28 Dec 2025 04:14:11 -0800 (PST)
+Received: from [192.168.88.32] ([169.155.232.231])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324eaa4749sm57106837f8f.37.2025.12.28.04.14.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Dec 2025 04:14:10 -0800 (PST)
+Message-ID: <16fa929d-db04-48f5-a350-a31d23f8327c@redhat.com>
+Date: Sun, 28 Dec 2025 13:14:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 2/2] selftests: net: simple selftest for ipvtap
+To: Dmitry Skorodumov <dskr99@gmail.com>, netdev@vger.kernel.org,
+ Simon Horman <horms@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: Dmitry Skorodumov <skorodumov.dmitry@huawei.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20251225185543.1459044-1-skorodumov.dmitry@huawei.com>
+ <20251225185543.1459044-3-skorodumov.dmitry@huawei.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20251225185543.1459044-3-skorodumov.dmitry@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251228-kunit-kbuild_output-v1-1-f1fb30fe060f@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDIyML3ezSvMwS3eyk0syclPj80pKC0hJd0xQjw0QLy7REMwNjJaDOgqL
- UtMwKsKnRSkFuzkqxtbUAa9bXlmoAAAA=
-X-Change-ID: 20251228-kunit-kbuild_output-5d21a89fa603
-To: Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- linux-kernel@vger.kernel.org, Ryota Sakamoto <sakamo.ryota@gmail.com>
-X-Mailer: b4 0.14.2
 
-Currently, kunit.py ignores the KBUILD_OUTPUT env variable and always
-defaults to .kunit in the working directory. This behavior is inconsistent
-with standard Kbuild behavior, where KBUILD_OUTPUT defines the build
-artifact location.
+On 12/25/25 7:55 PM, Dmitry Skorodumov wrote:
+> diff --git a/tools/testing/selftests/net/ipvtap_test.sh b/tools/testing/selftests/net/ipvtap_test.sh
+> new file mode 100755
+> index 000000000000..751793f26fed
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/ipvtap_test.sh
+> @@ -0,0 +1,168 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Simple tests for ipvtap
+> +
+> +
+> +#
+> +# The testing environment looks this way:
+> +#
+> +# |------HOST------|     |------PHY-------|
+> +# |      veth<----------------->veth      |
+> +# |------|--|------|     |----------------|
+> +#        |  |
+> +#        |  |            |-----TST0-------|
+> +#        |  |------------|----ipvlan      |
+> +#        |               |----------------|
+> +#        |
+> +#        |               |-----TST1-------|
+> +#        |---------------|----ipvlan      |
+> +#                        |----------------|
+> +#
+> +
+> +ALL_TESTS="
+> +	test_ip_set
+> +"
+> +
+> +source lib.sh
+> +
+> +DEBUG=0
+> +
+> +VETH_HOST=vethtst.h
+> +VETH_PHY=vethtst.p
+> +
+> +NS_COUNT=32
+> +IP_ITERATIONS=1024
+> +
+> +ns_run() {
+> +	ns=$1
+> +	shift
+> +	if [[ "$ns" == "global" ]]; then
+> +		"$@" >/dev/null
+> +	else
+> +		ip netns exec "$ns" "$@" >/dev/null
+> +	fi
+> +}
+> +
+> +test_ip_setup_env() {
+> +	modprobe -q tap
+> +	modprobe -q ipvlan
+> +	modprobe -q ipvtap
+> +
+> +	setup_ns NS_PHY
+> +
+> +	# setup simulated other-host (phy) and host itself
+> +	ip link add $VETH_HOST type veth peer name $VETH_PHY \
+> +		netns "$NS_PHY" >/dev/null
 
-This patch modifies kunit.py to respect KBUILD_OUTPUT if set.  A .kunit
-subdirectory is created inside KBUILD_OUTPUT to avoid polluting the build
-directory.
+It would be better to avoid creating devices in the main netns.
 
-Signed-off-by: Ryota Sakamoto <sakamo.ryota@gmail.com>
----
- tools/testing/kunit/kunit.py           |  7 ++++++-
- tools/testing/kunit/kunit_tool_test.py | 19 +++++++++++++++++++
- 2 files changed, 25 insertions(+), 1 deletion(-)
+> +	ip link set $VETH_HOST up
+> +	ns_run "$NS_PHY" ip link set $VETH_PHY up
+> +
+> +	for ((i=0; i<NS_COUNT; i++)); do
+> +		setup_ns ipvlan_ns_$i
+> +		ns="ipvlan_ns_$i"
+> +		if [ "$DEBUG" = "1" ]; then
+> +			echo "created NS ${!ns}"
+> +		fi
+> +		if ! ip link add netns ${!ns} ipvlan0 link $VETH_HOST \
+> +		    type ipvtap mode l2 bridge; then
+> +			exit_error "FAIL: Failed to configure ipvlan link."
+> +		fi
+> +	done
+> +}
+> +
+> +test_ip_cleanup_env() {
+> +	ip link del $VETH_HOST
+> +	cleanup_all_ns
+> +}
+> +
+> +exit_error() {
+> +	echo "$1"
+> +	exit $ksft_fail
+> +}
+> +
+> +rnd() {
+> +	echo $(( RANDOM % 32 + 16 ))
+> +}
+> +
+> +test_ip_set_thread() {
+> +	ip link set ipvlan0 up
+> +	for ((i=0; i<IP_ITERATIONS; i++)); do
+> +		v=$(rnd)
+> +		ip a a "172.25.0.$v/24" dev ipvlan0 2>/dev/null
+> +		ip a a "fc00::$v/64" dev ipvlan0 2>/dev/null
+> +		v=$(rnd)
+> +		ip a d "172.25.0.$v/24" dev ipvlan0 2>/dev/null
+> +		ip a d "fc00::$v/64" dev ipvlan0 2>/dev/null
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index cd99c1956331dbbfb06cf4ddf130db3dcf2a7c31..e3d82a038f93df0e86952da92461bc2e02f69ed1 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -323,11 +323,16 @@ def get_default_jobs() -> int:
- 		return ncpu
- 	raise RuntimeError("os.cpu_count() returned None")
- 
-+def get_default_build_dir() -> str:
-+	if 'KBUILD_OUTPUT' in os.environ:
-+		return os.path.join(os.environ['KBUILD_OUTPUT'], '.kunit')
-+	return '.kunit'
-+
- def add_common_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--build_dir',
- 			    help='As in the make command, it specifies the build '
- 			    'directory.',
--			    type=str, default='.kunit', metavar='DIR')
-+			    type=str, default=get_default_build_dir(), metavar='DIR')
- 	parser.add_argument('--make_options',
- 			    help='X=Y make option, can be repeated.',
- 			    action='append', metavar='X=Y')
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index bbba921e0eacb18663abfcabb2bccf330d8666f5..a55b5085310d1bc54a549d3f36a83f7697fb8881 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -601,6 +601,7 @@ class KUnitMainTest(unittest.TestCase):
- 			all_passed_log = file.readlines()
- 
- 		self.print_mock = mock.patch('kunit_printer.Printer.print').start()
-+		mock.patch.dict(os.environ, clear=True).start()
- 		self.addCleanup(mock.patch.stopall)
- 
- 		self.mock_linux_init = mock.patch.object(kunit_kernel, 'LinuxSourceTree').start()
-@@ -723,6 +724,24 @@ class KUnitMainTest(unittest.TestCase):
- 			args=None, build_dir=build_dir, filter_glob='', filter='', filter_action=None, timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
-+	@mock.patch.dict(os.environ, {'KBUILD_OUTPUT': '/tmp'})
-+	def test_run_builddir_from_env(self):
-+		build_dir = '/tmp/.kunit'
-+		kunit.main(['run'])
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(
-+			args=None, build_dir=build_dir, filter_glob='', filter='', filter_action=None, timeout=300)
-+		self.print_mock.assert_any_call(StrContains('Testing complete.'))
-+
-+	@mock.patch.dict(os.environ, {'KBUILD_OUTPUT': '/tmp'})
-+	def test_run_builddir_override(self):
-+		build_dir = '.kunit'
-+		kunit.main(['run', '--build_dir=.kunit'])
-+		self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-+		self.linux_source_mock.run_kernel.assert_called_once_with(
-+			args=None, build_dir=build_dir, filter_glob='', filter='', filter_action=None, timeout=300)
-+		self.print_mock.assert_any_call(StrContains('Testing complete.'))
-+
- 	def test_config_builddir(self):
- 		build_dir = '.kunit'
- 		kunit.main(['config', '--build_dir', build_dir])
+It's unclear to me why the above tries to remove random addresses
+different from the ones just added (possibly not existing)
 
----
-base-commit: ccd1cdca5cd433c8a5dff78b69a79b31d9b77ee1
-change-id: 20251228-kunit-kbuild_output-5d21a89fa603
+> +	done
+> +}
+> +
+> +test_ip_set() {
+> +	RET=0
+> +
+> +	modprobe -q tap
+> +	modprobe -q ipvlan
+> +	modprobe -q ipvtap
+> +
+> +	trap test_ip_cleanup_env EXIT
+> +
+> +	test_ip_setup_env
+> +
+> +	declare -A ns_pids
+> +	for ((i=0; i<NS_COUNT; i++)); do
+> +		ns="ipvlan_ns_$i"
+> +		ns_run ${!ns} bash -c "$0 test_ip_set_thread"&
+> +		ns_pids[$i]=$!
+> +	done
+> +
+> +	for ((i=0; i<NS_COUNT; i++)); do
+> +		wait "${ns_pids[$i]}"
+> +	done
 
-Best regards,
--- 
-Ryota Sakamoto <sakamo.ryota@gmail.com>
+This tests fails quite often in debug build due to timeout, see:
+
+https://netdev.bots.linux.dev/flakes.html?tn-needle=ipvtap
+
+and i.e.
+
+https://netdev-ctrl.bots.linux.dev/logs/vmksft/net-dbg/results/447821/5-ipvtap-test-sh/
+
+You should likely decrease the thread and/or iterations count, at least
+for debug builds
+
+/P
 
 
