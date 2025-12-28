@@ -1,160 +1,202 @@
-Return-Path: <linux-kselftest+bounces-47977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CE6CCDF797
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Dec 2025 11:15:00 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB2BFCE4923
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 05:04:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 644903005E8A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Dec 2025 10:14:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5FA2D3001632
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 04:04:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D76E26B2DA;
-	Sat, 27 Dec 2025 10:14:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F2E22F77B;
+	Sun, 28 Dec 2025 04:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b32o8bxz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63E4E25A2CF;
-	Sat, 27 Dec 2025 10:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693072AD0C
+	for <linux-kselftest@vger.kernel.org>; Sun, 28 Dec 2025 04:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766830497; cv=none; b=lJVTPD3r6SyWzqcvI0uQOdPv/NZvi1SUKoW6vDB8DlwtmLiP3BWLoWjpUDOQqvxTZugZeSTCCdsnzLKpAI7Pd4KpfHXvoSfiryh5wM8B5lZ1bfZqleY3UM7eEGXpsEccdj99TTE4skJ3kzGqfv2j24tCN0UUiQPLSU9r9KgM5DY=
+	t=1766894677; cv=none; b=oso4HMwknnh+BAG07eES8nFO1fbvpRaAuBKBE9UeljZHQJGgoHL0pcmcp71lWoNIRFXQttuhpHlSLPDFH6Sj0iz//aFMrNYngNbivKSvRCc4dzMXsledtlMqXyZjrNy4S1FYALRl9PU/7OxBWFKkEA5LI6lXoiWT2m/6ceR9OUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766830497; c=relaxed/simple;
-	bh=dl/roo0i2xyt/iOyKTKybnbd+5Mmd/DxmCh+Fdod6wY=;
+	s=arc-20240116; t=1766894677; c=relaxed/simple;
+	bh=rwso1IvqVHcmC0OFBZ+qtFY1RlZNlcFe2TJYNy85Vu0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LJrVsVNxmldA6GVy9s8rO9JUei4DYos4kaYvSIIjCGSsVtTw+Ozboh1VVnYi62sBDRnfR1kxCmhVzrFkYmU/RT44Kl93jmXCmHl5t09slk50OQ1lfEqwPT64902nZX0EWv3Ggv4KDKUlKhoxnX4nkj9ANOML2RgiNuccRLMTJjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dddcc140xzYQtjk;
-	Sat, 27 Dec 2025 18:14:08 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id A64114056F;
-	Sat, 27 Dec 2025 18:14:51 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP4 (Coremail) with SMTP id gCh0CgCnB_ibsU9pNSmiBg--.63721S2;
-	Sat, 27 Dec 2025 18:14:51 +0800 (CST)
-Message-ID: <11f4e2ca-955e-45a6-adc5-d1d8c85e4579@huaweicloud.com>
-Date: Sat, 27 Dec 2025 18:14:50 +0800
+	 In-Reply-To:Content-Type; b=NbS3hm7mG8DoC6uQRFRQ4Qvt1ZC1Af6RZvb6KrCuYiSsyWGQHucYu/kPNrqKOlzO057q9FJBmI0wy0ZiWwiYsWv3tLCaflByEsY36+tBWK3hSdwqgy1hyALouJ/VdcX9jmVQkaWfdpZAvobzPir5U84zGtZAKmwoEdQVFx7Qkgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b32o8bxz; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <f0439348-dca7-4f1b-9d96-b5a596c9407d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1766894668;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=R92CBy0/1nAfk4g7pT7vyN8U+OvLxgWMegNQkEwQja0=;
+	b=b32o8bxzsyw4dCZSx+bpqNAJk7/PyR2MGYbTDMgtJY2V/pQjv+E38m1RzAfzoUM1Re4Wkf
+	Z+jePIFQK/tqmJseD59D3NVigjbFNUHxiwqMb316IIyKeXtCQP2nPzZH7nTDmOYAhIjzp3
+	TzIB8uV16gjSj0XMpIIlMnkJxUNWmjc=
+Date: Sat, 27 Dec 2025 20:03:44 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [cgroup/for-6.20 PATCH 1/4] cgroup/cpuset: Streamline
- rm_siblings_excl_cpus()
-To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Sun Shaojie <sunshaojie@kylinos.cn>
-References: <20251225073056.30789-1-longman@redhat.com>
- <20251225073056.30789-2-longman@redhat.com>
- <c75025d3-17cd-47bb-a222-bde3a156bbbb@huaweicloud.com>
- <2988a9d5-fe25-4668-93e3-8335360fcbec@redhat.com>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <2988a9d5-fe25-4668-93e3-8335360fcbec@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH 19/21] vfio: selftests: Expose low-level helper routines
+ for setting up struct vfio_pci_device
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
+Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
+ Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
+ David Rientjes <rientjes@google.com>,
+ Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Josh Hilke <jrhilke@google.com>,
+ Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org,
+ Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
+ Lukas Wunner <lukas@wunner.de>, Mike Rapoport <rppt@kernel.org>,
+ Parav Pandit <parav@nvidia.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Philipp Stanner <pstanner@redhat.com>, Pratyush Yadav <pratyush@kernel.org>,
+ Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>,
+ Shuah Khan <shuah@kernel.org>, Tomita Moeko <tomitamoeko@gmail.com>,
+ Vipin Sharma <vipinsh@google.com>, William Tu <witu@nvidia.com>,
+ Yi Liu <yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>
+References: <20251126193608.2678510-1-dmatlack@google.com>
+ <20251126193608.2678510-20-dmatlack@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Zhu Yanjun <yanjun.zhu@linux.dev>
+In-Reply-To: <20251126193608.2678510-20-dmatlack@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCnB_ibsU9pNSmiBg--.63721S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFyrGr4fZF1rtFW7Cw1DGFg_yoW5Cr4fpF
-	1kJFWUJFWUKFy8G34Yqr1qgryrKw4UX3WDJw4DJF1rJFy7GF1jgr1DXwn0gr1UGw4kGr15
-	JryaqrZIvFy5Jr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUyGb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-	xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-	jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-	0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
-	67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbmii3UUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+X-Migadu-Flow: FLOW_OUT
 
 
+在 2025/11/26 11:36, David Matlack 写道:
+> Expose a few low-level helper routings for setting up vfio_pci_device
+> structs. These routines will be used in a subsequent commit to assert
+> that VFIO_GROUP_GET_DEVICE_FD fails under certain conditions.
+>
+> Signed-off-by: David Matlack <dmatlack@google.com>
+> ---
+>   .../lib/include/libvfio/vfio_pci_device.h     |  5 +++
+>   .../selftests/vfio/lib/vfio_pci_device.c      | 33 +++++++++++++------
+>   2 files changed, 28 insertions(+), 10 deletions(-)
+>
+> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+> index 896dfde88118..2389c7698335 100644
+> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+> @@ -125,4 +125,9 @@ static inline bool vfio_pci_device_match(struct vfio_pci_device *device,
+>   
+>   const char *vfio_pci_get_cdev_path(const char *bdf);
+>   
+> +/* Low-level routines for setting up a struct vfio_pci_device */
+> +struct vfio_pci_device *vfio_pci_device_alloc(const char *bdf, struct iommu *iommu);
+> +void vfio_pci_group_setup(struct vfio_pci_device *device);
+> +void vfio_pci_iommu_setup(struct vfio_pci_device *device);
+> +
+>   #endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_VFIO_PCI_DEVICE_H */
+> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> index e9423dc3864a..c1a3886dee30 100644
+> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+> @@ -199,7 +199,7 @@ static unsigned int vfio_pci_get_group_from_dev(const char *bdf)
+>   	return group;
+>   }
+>   
+> -static void vfio_pci_group_setup(struct vfio_pci_device *device, const char *bdf)
+> +void vfio_pci_group_setup(struct vfio_pci_device *device)
+>   {
+>   	struct vfio_group_status group_status = {
+>   		.argsz = sizeof(group_status),
+> @@ -207,7 +207,7 @@ static void vfio_pci_group_setup(struct vfio_pci_device *device, const char *bdf
+>   	char group_path[32];
+>   	int group;
+>   
+> -	group = vfio_pci_get_group_from_dev(bdf);
+> +	group = vfio_pci_get_group_from_dev(device->bdf);
+>   	snprintf(group_path, sizeof(group_path), "/dev/vfio/%d", group);
+>   
+>   	device->group_fd = open(group_path, O_RDWR);
+> @@ -219,14 +219,12 @@ static void vfio_pci_group_setup(struct vfio_pci_device *device, const char *bdf
+>   	ioctl_assert(device->group_fd, VFIO_GROUP_SET_CONTAINER, &device->iommu->container_fd);
+>   }
+>   
+> -static void vfio_pci_container_setup(struct vfio_pci_device *device, const char *bdf)
+> +void vfio_pci_iommu_setup(struct vfio_pci_device *device)
+>   {
+>   	struct iommu *iommu = device->iommu;
+>   	unsigned long iommu_type = iommu->mode->iommu_type;
+>   	int ret;
+>   
+> -	vfio_pci_group_setup(device, bdf);
+> -
+>   	ret = ioctl(iommu->container_fd, VFIO_CHECK_EXTENSION, iommu_type);
+>   	VFIO_ASSERT_GT(ret, 0, "VFIO IOMMU type %lu not supported\n", iommu_type);
+>   
+> @@ -236,8 +234,14 @@ static void vfio_pci_container_setup(struct vfio_pci_device *device, const char
+>   	 * because the IOMMU type is already set.
+>   	 */
+>   	(void)ioctl(iommu->container_fd, VFIO_SET_IOMMU, (void *)iommu_type);
+> +}
+>   
+> -	device->fd = ioctl(device->group_fd, VFIO_GROUP_GET_DEVICE_FD, bdf);
+> +static void vfio_pci_container_setup(struct vfio_pci_device *device)
+> +{
+> +	vfio_pci_group_setup(device);
+> +	vfio_pci_iommu_setup(device);
+> +
+> +	device->fd = ioctl(device->group_fd, VFIO_GROUP_GET_DEVICE_FD, device->bdf);
+>   	VFIO_ASSERT_GE(device->fd, 0);
+>   }
+>   
+> @@ -337,9 +341,7 @@ static void vfio_pci_iommufd_setup(struct vfio_pci_device *device,
+>   	vfio_device_attach_iommufd_pt(device->fd, device->iommu->ioas_id);
+>   }
+>   
+> -struct vfio_pci_device *__vfio_pci_device_init(const char *bdf,
+> -					       struct iommu *iommu,
+> -					       int device_fd)
+> +struct vfio_pci_device *vfio_pci_device_alloc(const char *bdf, struct iommu *iommu)
+>   {
+>   	struct vfio_pci_device *device;
+>   
+> @@ -349,9 +351,20 @@ struct vfio_pci_device *__vfio_pci_device_init(const char *bdf,
+>   	device->bdf = bdf;
+>   	device->iommu = iommu;
+>   
+> +	return device;
+> +}
+> +
 
-On 2025/12/27 15:40, Waiman Long wrote:
-> On 12/25/25 4:27 AM, Chen Ridong wrote:
->>
->> On 2025/12/25 15:30, Waiman Long wrote:
->>> If exclusive_cpus is set, effective_xcpus must be a subset of
->>> exclusive_cpus. Currently, rm_siblings_excl_cpus() checks both
->>> exclusive_cpus and effective_xcpus connectively. It is simpler
->>> to check only exclusive_cpus if non-empty or just effective_xcpus
->>> otherwise.
->>>
->>> No functional change is expected.
->>>
->>> Signed-off-by: Waiman Long <longman@redhat.com>
->>> ---
->>>   kernel/cgroup/cpuset.c | 17 +++++++++--------
->>>   1 file changed, 9 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>> index 221da921b4f9..3d2d28f0fd03 100644
->>> --- a/kernel/cgroup/cpuset.c
->>> +++ b/kernel/cgroup/cpuset.c
->>> @@ -1355,23 +1355,24 @@ static int rm_siblings_excl_cpus(struct cpuset *parent, struct cpuset *cs,
->>>       int retval = 0;
->>>         if (cpumask_empty(excpus))
->>> -        return retval;
->>> +        return 0;
->>>         /*
->>>        * Exclude exclusive CPUs from siblings
->>>        */
->>>       rcu_read_lock();
->>>       cpuset_for_each_child(sibling, css, parent) {
->>> +        struct cpumask *sibling_xcpus;
->>> +
->>>           if (sibling == cs)
->>>               continue;
->>>   -        if (cpumask_intersects(excpus, sibling->exclusive_cpus)) {
->>> -            cpumask_andnot(excpus, excpus, sibling->exclusive_cpus);
->>> -            retval++;
->>> -            continue;
->>> -        }
->>> -        if (cpumask_intersects(excpus, sibling->effective_xcpus)) {
->>> -            cpumask_andnot(excpus, excpus, sibling->effective_xcpus);
->>> +        sibling_xcpus = cpumask_empty(sibling->exclusive_cpus)
->>> +                  ? sibling->effective_xcpus
->>> +                  : sibling->exclusive_cpus;
->>> +
->> I'm wondering if this is sufficient?
->>
->> sibling_xcpus = sibling->effective_xcpus
->>
->>        p(exclusive_cpus = 1)
->>     /      \
->>   a    b(root, exclusive_cpus=1-7, effective_xcpus=1)
->>
->> What the sibling's effective exclusive CPUs actually should be is not CPUs 1-7 but CPU 1. So, do we
->> need to remove CPUs 2-7?
-> 
-> By definition, exclusive_cpus have to be exclusive within the same child cpuset level even if some
-> of the CPUs cannot be granted from the parent. So other siblings cannot use any of the CPUs 1-7 in
-> its exclusive_cpus list or the writing will fail. In the case of cpuset.cpus defined partitions,
-> those CPUs will be removed from its effective_xcpus list.
-> 
-> Cheers,
-> Longman
-> 
+In the latest kernel, this part changes too much.
 
-Thank you for the clarification.
+Yanjun.Zhu
 
-Looks good to me.
-
-Reviewed-by: Chen Ridong <chenridong@huawei.com>
+> +struct vfio_pci_device *__vfio_pci_device_init(const char *bdf,
+> +					       struct iommu *iommu,
+> +					       int device_fd)
+> +{
+> +	struct vfio_pci_device *device;
+> +
+> +	device = vfio_pci_device_alloc(bdf, iommu);
+> +
+>   	if (device->iommu->mode->container_path) {
+>   		VFIO_ASSERT_EQ(device_fd, -1);
+> -		vfio_pci_container_setup(device, bdf);
+> +		vfio_pci_container_setup(device);
+>   	} else {
+>   		vfio_pci_iommufd_setup(device, bdf, device_fd);
+>   	}
 
 -- 
-Best regards,
-Ridong
+Best Regards,
+Yanjun.Zhu
 
 
