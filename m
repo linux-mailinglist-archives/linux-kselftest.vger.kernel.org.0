@@ -1,202 +1,141 @@
-Return-Path: <linux-kselftest+bounces-47978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB2BFCE4923
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 05:04:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A154ECE4959
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 06:48:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5FA2D3001632
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 04:04:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 148B2300D42D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Dec 2025 05:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F2E22F77B;
-	Sun, 28 Dec 2025 04:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C0C8259CAF;
+	Sun, 28 Dec 2025 05:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b32o8bxz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JbfKqeV1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693072AD0C
-	for <linux-kselftest@vger.kernel.org>; Sun, 28 Dec 2025 04:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D13257824
+	for <linux-kselftest@vger.kernel.org>; Sun, 28 Dec 2025 05:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766894677; cv=none; b=oso4HMwknnh+BAG07eES8nFO1fbvpRaAuBKBE9UeljZHQJGgoHL0pcmcp71lWoNIRFXQttuhpHlSLPDFH6Sj0iz//aFMrNYngNbivKSvRCc4dzMXsledtlMqXyZjrNy4S1FYALRl9PU/7OxBWFKkEA5LI6lXoiWT2m/6ceR9OUA=
+	t=1766900911; cv=none; b=Oo6x7/qzal1ndKOXrpmKMIq3BEarV7L1F1bVTtQlLN/jxQUpf8D/otcTlvg6k+XfBgXLfgefmYbg+XCpXq6ZiroFPmsOTT1Lrrw2y7IpIqenC5xGUVmp56GqvJgFMzXOobvFIQFgQ3/HjdkwgA3Uj1vMf6ZnxFAlVFXdoYDiQL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766894677; c=relaxed/simple;
-	bh=rwso1IvqVHcmC0OFBZ+qtFY1RlZNlcFe2TJYNy85Vu0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NbS3hm7mG8DoC6uQRFRQ4Qvt1ZC1Af6RZvb6KrCuYiSsyWGQHucYu/kPNrqKOlzO057q9FJBmI0wy0ZiWwiYsWv3tLCaflByEsY36+tBWK3hSdwqgy1hyALouJ/VdcX9jmVQkaWfdpZAvobzPir5U84zGtZAKmwoEdQVFx7Qkgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b32o8bxz; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <f0439348-dca7-4f1b-9d96-b5a596c9407d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766894668;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=R92CBy0/1nAfk4g7pT7vyN8U+OvLxgWMegNQkEwQja0=;
-	b=b32o8bxzsyw4dCZSx+bpqNAJk7/PyR2MGYbTDMgtJY2V/pQjv+E38m1RzAfzoUM1Re4Wkf
-	Z+jePIFQK/tqmJseD59D3NVigjbFNUHxiwqMb316IIyKeXtCQP2nPzZH7nTDmOYAhIjzp3
-	TzIB8uV16gjSj0XMpIIlMnkJxUNWmjc=
-Date: Sat, 27 Dec 2025 20:03:44 -0800
+	s=arc-20240116; t=1766900911; c=relaxed/simple;
+	bh=1pJCobo7skl3IqJjut1/aoDj5JGv6MK8u9FvD8pNb2M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Xv3y8S+zKS/iC8FLYwR+JkUK+XRX2YyvClE7hq7WD/pVlDpEx7hj9R7pOwHkvyQFrsR9ZclzHhxzUxMU61iDoKlFoaAnbbA+AW0copBAkFOTs/5drCX7uh13cttncv3JVr+rqw5CqI9p5pT1c5I7Ei22cWM5bobmV7LxPlog6ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JbfKqeV1; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59584301f0cso8687218e87.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 27 Dec 2025 21:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766900908; x=1767505708; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gpbqpIsug6MH33BRSdVEMnAsF4zSM1dpRpn6fI+y1V8=;
+        b=JbfKqeV1R/D9PDEPPrpO1wYpIfzCnjYN8WzGCDsrD7n0KnJV0u3PDx7jcRD+sYwnIA
+         eVLB3CpQB849HOmn+7qyvDAGHdjogV/RbhTM5RC3nhmHCZ0TyW6xK3JNdZNaqYQmvrUg
+         cdF2N3n6AHfVPNdJ1ryI3wA2QGNWbPVUL4Yf3rtoYhAqO0T+o3WymyughkijcxLCR87V
+         +fnF79OAU7EfREe3nNHWZEso4Y17g0IgnlTErD8PjLZJPzIMAvaP5vrtBPD9WVBks/2a
+         8UcdzNEASY5xEWPA2yfKwUq+h/WI08DI0xTyf9s2SAxgEpPfJCz/aEfymR47u8T5Gj3+
+         bs5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766900908; x=1767505708;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=gpbqpIsug6MH33BRSdVEMnAsF4zSM1dpRpn6fI+y1V8=;
+        b=JT/Df2Y2BgDAWKVsB72t9kmvvo5/QGKOIdpW00UHTfAG/KPrCCLHuV+7XSqJGYMfwy
+         PeUalIRZlMGh2+G7qTuZQGqEyYSxKpOCWwv7mUa44KNpsk31vn2NzA/epHDIAYhWN6LU
+         aVnAZZZUL+d2YLzwUi10qE/SSpOavshcn3kLNV3uHTi24DX6PUmGThJ5C6OmhbFhm2wa
+         JzFs1BKoD9qowv8XJbZACbXi1BvP2aUSHt9bOm2FqLOzOLq9sWGV62pQiUyM0/R//wDg
+         BiM1JWhG7wGLO0x6viyxM45ysU+opPvgMQo8i/JjIbrgjsM0wk/7S61Nr9QMOGcbneL1
+         XNCw==
+X-Forwarded-Encrypted: i=1; AJvYcCX19/uIDIJ3JCZ1bKyJSIfNiVlmGgNT7QMUaKwsZBFbkljLWoMOmM4KsOeqAOAdJNqeqhubEMdRXXPm2vZ1hmk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPmCn2Cmr7QSvZmEbYMfXcJeoOxiqO84fySrBhrcSuIn5+E3EC
+	LbFPpUalSuzpFHXQJy1h3p/ZB1ZOTUfgd1dn7C9GUrtV+G8LJDvENWlV
+X-Gm-Gg: AY/fxX7ykjPqGfd7LbKpzKOpBTCLufetliPUPXdMRQCwq8kAD0R6DnusRqX+V0OqvtT
+	zZrWY9SMPu0iVHRC6+1lhVyg2tcpCntvcSWNwtt9dRWyhSszTdVL5c3hiVSBJqEvETGukbgs+D4
+	yPItadD5NUZpqpT6gcsKQDVksmR+jkHSF7FQlGq3yqCFfAr7iEFpQIlSObtujxxv3WkYuwj6PCp
+	tVEreHryYU1ffqyc14RlI53YGKvafJEk2ew9VJe1OznDM05oMVFdAqAEAK6zgMb4/kvWYWl7ByR
+	ql7OyWVWhh8Q9H0XXsXxC7OIM6sNE918sZJ6Gy6iyHEYQ28713IwQPZNGlLgzwx5bvB5bb8z63Y
+	nhHWEoY/fzHFD0GRH6bhLqk9JXtHxqGs/C8tgSRO0G7mQETNaxeuz8yMEn6DdNnR8ojGR37zubD
+	wek+zjlMqOjy1tT2/17mM=
+X-Google-Smtp-Source: AGHT+IHbwDkZ0ZrkYZSKb3xcvqlBhmZdaEoQdezjtjNsk1jz3+5apfKEePyLYdpuFJXN8OT07eFG0Q==
+X-Received: by 2002:a05:6512:3b9f:b0:595:7cb9:8e51 with SMTP id 2adb3069b0e04-59a17d1fa1dmr9400930e87.12.1766900907593;
+        Sat, 27 Dec 2025 21:48:27 -0800 (PST)
+Received: from localhost ([194.190.17.114])
+        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-59a185d5ee4sm8077427e87.17.2025.12.27.21.48.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 27 Dec 2025 21:48:27 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: nfraprado@collabora.com
+Cc: Tim.Bird@sony.com,
+	bhelgaas@google.com,
+	dan.carpenter@linaro.org,
+	davidgow@google.com,
+	devicetree@vger.kernel.org,
+	dianders@chromium.org,
+	gregkh@linuxfoundation.org,
+	groeck@chromium.org,
+	kernel@collabora.com,
+	kernelci@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	robh+dt@kernel.org,
+	saravanak@google.com,
+	shuah@kernel.org
+Subject: Re: [PATCH v4 3/3] kselftest: devices: Add sample board file for XPS 13 9300
+Date: Sun, 28 Dec 2025 08:47:42 +0300
+Message-ID: <20251228054804.2515185-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
+References: <20240122-discoverable-devs-ksft-v4-3-d602e1df4aa2@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 19/21] vfio: selftests: Expose low-level helper routines
- for setting up struct vfio_pci_device
-To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
-Cc: Adithya Jayachandran <ajayachandra@nvidia.com>,
- Alex Mastro <amastro@fb.com>, Alistair Popple <apopple@nvidia.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Chris Li <chrisl@kernel.org>,
- David Rientjes <rientjes@google.com>,
- Jacob Pan <jacob.pan@linux.microsoft.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Josh Hilke <jrhilke@google.com>,
- Kevin Tian <kevin.tian@intel.com>, kvm@vger.kernel.org,
- Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-pci@vger.kernel.org,
- Lukas Wunner <lukas@wunner.de>, Mike Rapoport <rppt@kernel.org>,
- Parav Pandit <parav@nvidia.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
- Philipp Stanner <pstanner@redhat.com>, Pratyush Yadav <pratyush@kernel.org>,
- Saeed Mahameed <saeedm@nvidia.com>, Samiullah Khawaja <skhawaja@google.com>,
- Shuah Khan <shuah@kernel.org>, Tomita Moeko <tomitamoeko@gmail.com>,
- Vipin Sharma <vipinsh@google.com>, William Tu <witu@nvidia.com>,
- Yi Liu <yi.l.liu@intel.com>, Yunxiang Li <Yunxiang.Li@amd.com>
-References: <20251126193608.2678510-1-dmatlack@google.com>
- <20251126193608.2678510-20-dmatlack@google.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Zhu Yanjun <yanjun.zhu@linux.dev>
-In-Reply-To: <20251126193608.2678510-20-dmatlack@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
+"Nícolas F. R. A. Prado" <nfraprado@collabora.com>:
+> Add a sample board file describing the file's format and with the list
+> of devices expected to be probed on the XPS 13 9300 machine as an
+> example x86 platform.
 
-在 2025/11/26 11:36, David Matlack 写道:
-> Expose a few low-level helper routings for setting up vfio_pci_device
-> structs. These routines will be used in a subsequent commit to assert
-> that VFIO_GROUP_GET_DEVICE_FD fails under certain conditions.
->
-> Signed-off-by: David Matlack <dmatlack@google.com>
-> ---
->   .../lib/include/libvfio/vfio_pci_device.h     |  5 +++
->   .../selftests/vfio/lib/vfio_pci_device.c      | 33 +++++++++++++------
->   2 files changed, 28 insertions(+), 10 deletions(-)
->
-> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> index 896dfde88118..2389c7698335 100644
-> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-> @@ -125,4 +125,9 @@ static inline bool vfio_pci_device_match(struct vfio_pci_device *device,
->   
->   const char *vfio_pci_get_cdev_path(const char *bdf);
->   
-> +/* Low-level routines for setting up a struct vfio_pci_device */
-> +struct vfio_pci_device *vfio_pci_device_alloc(const char *bdf, struct iommu *iommu);
-> +void vfio_pci_group_setup(struct vfio_pci_device *device);
-> +void vfio_pci_iommu_setup(struct vfio_pci_device *device);
-> +
->   #endif /* SELFTESTS_VFIO_LIB_INCLUDE_LIBVFIO_VFIO_PCI_DEVICE_H */
-> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> index e9423dc3864a..c1a3886dee30 100644
-> --- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-> @@ -199,7 +199,7 @@ static unsigned int vfio_pci_get_group_from_dev(const char *bdf)
->   	return group;
->   }
->   
-> -static void vfio_pci_group_setup(struct vfio_pci_device *device, const char *bdf)
-> +void vfio_pci_group_setup(struct vfio_pci_device *device)
->   {
->   	struct vfio_group_status group_status = {
->   		.argsz = sizeof(group_status),
-> @@ -207,7 +207,7 @@ static void vfio_pci_group_setup(struct vfio_pci_device *device, const char *bdf
->   	char group_path[32];
->   	int group;
->   
-> -	group = vfio_pci_get_group_from_dev(bdf);
-> +	group = vfio_pci_get_group_from_dev(device->bdf);
->   	snprintf(group_path, sizeof(group_path), "/dev/vfio/%d", group);
->   
->   	device->group_fd = open(group_path, O_RDWR);
-> @@ -219,14 +219,12 @@ static void vfio_pci_group_setup(struct vfio_pci_device *device, const char *bdf
->   	ioctl_assert(device->group_fd, VFIO_GROUP_SET_CONTAINER, &device->iommu->container_fd);
->   }
->   
-> -static void vfio_pci_container_setup(struct vfio_pci_device *device, const char *bdf)
-> +void vfio_pci_iommu_setup(struct vfio_pci_device *device)
->   {
->   	struct iommu *iommu = device->iommu;
->   	unsigned long iommu_type = iommu->mode->iommu_type;
->   	int ret;
->   
-> -	vfio_pci_group_setup(device, bdf);
-> -
->   	ret = ioctl(iommu->container_fd, VFIO_CHECK_EXTENSION, iommu_type);
->   	VFIO_ASSERT_GT(ret, 0, "VFIO IOMMU type %lu not supported\n", iommu_type);
->   
-> @@ -236,8 +234,14 @@ static void vfio_pci_container_setup(struct vfio_pci_device *device, const char
->   	 * because the IOMMU type is already set.
->   	 */
->   	(void)ioctl(iommu->container_fd, VFIO_SET_IOMMU, (void *)iommu_type);
-> +}
->   
-> -	device->fd = ioctl(device->group_fd, VFIO_GROUP_GET_DEVICE_FD, bdf);
-> +static void vfio_pci_container_setup(struct vfio_pci_device *device)
-> +{
-> +	vfio_pci_group_setup(device);
-> +	vfio_pci_iommu_setup(device);
-> +
-> +	device->fd = ioctl(device->group_fd, VFIO_GROUP_GET_DEVICE_FD, device->bdf);
->   	VFIO_ASSERT_GE(device->fd, 0);
->   }
->   
-> @@ -337,9 +341,7 @@ static void vfio_pci_iommufd_setup(struct vfio_pci_device *device,
->   	vfio_device_attach_iommufd_pt(device->fd, device->iommu->ioas_id);
->   }
->   
-> -struct vfio_pci_device *__vfio_pci_device_init(const char *bdf,
-> -					       struct iommu *iommu,
-> -					       int device_fd)
-> +struct vfio_pci_device *vfio_pci_device_alloc(const char *bdf, struct iommu *iommu)
->   {
->   	struct vfio_pci_device *device;
->   
-> @@ -349,9 +351,20 @@ struct vfio_pci_device *__vfio_pci_device_init(const char *bdf,
->   	device->bdf = bdf;
->   	device->iommu = iommu;
->   
-> +	return device;
-> +}
-> +
+And now "Dell Inc.,XPS 13 9300.yaml" became the only file in the repository,
+which has space in its name:
 
-In the latest kernel, this part changes too much.
+$ find . -name '* *'
+./tools/testing/selftests/devices/probe/boards/Dell Inc.,XPS 13 9300.yaml
 
-Yanjun.Zhu
+I kindly ask you to rename file. New name should not contain space or comma
+in it.
 
-> +struct vfio_pci_device *__vfio_pci_device_init(const char *bdf,
-> +					       struct iommu *iommu,
-> +					       int device_fd)
-> +{
-> +	struct vfio_pci_device *device;
-> +
-> +	device = vfio_pci_device_alloc(bdf, iommu);
-> +
->   	if (device->iommu->mode->container_path) {
->   		VFIO_ASSERT_EQ(device_fd, -1);
-> -		vfio_pci_container_setup(device, bdf);
-> +		vfio_pci_container_setup(device);
->   	} else {
->   		vfio_pci_iommufd_setup(device, bdf, device_fd);
->   	}
+The file name in its current form breaks tools. For example, it breaks
+"xargs".
+
+For example, the following will work in "fs" directory:
+
+stable/fs$ find . | xargs chmod -w
+
+But it will not work in root of source tree because of this
+"Dell Inc.,XPS 13 9300.yaml" file:
+
+stable$ find . | xargs chmod -w
+chmod: cannot access './tools/testing/selftests/devices/probe/boards/Dell': No such file or directory
+chmod: cannot access 'Inc.,XPS': No such file or directory
+chmod: cannot access '13': No such file or directory
+chmod: cannot access '9300.yaml': No such file or directory
 
 -- 
-Best Regards,
-Yanjun.Zhu
-
+Askar Safin
 
