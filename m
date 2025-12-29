@@ -1,105 +1,90 @@
-Return-Path: <linux-kselftest+bounces-47992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CF91CE73D3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 16:41:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEE9FCE7A66
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 17:42:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EED45302BD08
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 15:40:37 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B1CD830087B2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 16:39:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB4C329E4C;
-	Mon, 29 Dec 2025 15:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55A96212FB9;
+	Mon, 29 Dec 2025 16:39:24 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F51B2FB093;
-	Mon, 29 Dec 2025 15:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E53145B27;
+	Mon, 29 Dec 2025 16:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767022834; cv=none; b=cf0FUGzqwBKWCq1KVdJwj4MvcCRcNbM22DfbAEeM1Eba9sohbTUi0XTjZDnlq0MHbdNat0ngOTofaQteHZduEwG5FdaTsUYNk32k1eTLnBHrZoOaw7FF3mLM6PKpUUDQHPySsp04sOe8qXC+9GVx02n3WRS9Wcjp8lczXYbsnEk=
+	t=1767026364; cv=none; b=oSggwiNLl2/NtS8Q7pNuScZfbAA2IH5JER/7b3W9JwvjF76sd/N6eEoluhBFuKESiqr1onYTs9RQLRU3lUac8A6F4be+r9548lG84RiAn7SUpe2cnkqxVSvIaVSYa8fXGKRNlmWMfgbvBOnnZyH5ldfCQat2UXp8lwnt9U6CLPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767022834; c=relaxed/simple;
-	bh=cmb/2mPKVT+NXGQPjmCUwLkIrh+sh+1dgDr17I29+YQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gtx75HKVCvSr5RPfK90cqCs1DC0EGhSfdTrF5pmXbWVbYjlCBIzu8fKsQDlFFJUCePLtq6fO35umPUpdZdIoedlLdVNRsv1c9q2mmE3tucyOZKpT+wWKzoJOgqINziN4qverMw+4jX/tzH+727DSaD3HNAq6oiZ5pKaw+yIEym0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A886339;
-	Mon, 29 Dec 2025 07:40:24 -0800 (PST)
-Received: from [10.57.45.222] (unknown [10.57.45.222])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DBE13F5A1;
-	Mon, 29 Dec 2025 07:40:29 -0800 (PST)
-Message-ID: <9c97ac9c-b0df-42e7-84fc-7e0d986c7324@arm.com>
-Date: Mon, 29 Dec 2025 16:40:26 +0100
+	s=arc-20240116; t=1767026364; c=relaxed/simple;
+	bh=rYXUNxDIW/DguEmwYF0Mt5Ud1Jj6zP1xSCqlFnWGzm4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=q8nB1CnESgS4F+yLr+e5DCEdTY2NXdrERwN+CROHPUEslErUrTv0z8di6+aPOx8syvzmJ+kn58SQnzWuIVr6+cmmIswOVN+/Ay8L6CL0vq6ntXl5X3ARSwRuS8DY0QZ99wPP1owNRW6YLVaH61t0unElGuyK38qxm68jfyfgLPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay10.hostedemail.com (Postfix) with ESMTP id 67689C1591;
+	Mon, 29 Dec 2025 16:39:14 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id 3E10120029;
+	Mon, 29 Dec 2025 16:39:12 +0000 (UTC)
+Date: Mon, 29 Dec 2025 11:39:17 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: Randy Dunlap <rdunlap@infradead.org>, "Paul E . McKenney"
+ <paulmck@kernel.org>, Josh Triplett <josh@joshtriplett.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 1/2] rcutorture: Prevent concurrent kvm.sh runs on
+ same source tree
+Message-ID: <20251229113917.1c9568c4@gandalf.local.home>
+In-Reply-To: <3a6bfd87-570d-49fa-854f-8d5802549f6a@nvidia.com>
+References: <20251228220519.150179-1-joelagnelf@nvidia.com>
+	<24f4df13-0875-49bd-95d1-4bf1a400ff15@infradead.org>
+	<3a6bfd87-570d-49fa-854f-8d5802549f6a@nvidia.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] selftests/mm: remove flaky header check
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Yunsheng Lin <linyunsheng@huawei.com>
-References: <20251216142633.2401447-1-kevin.brodsky@arm.com>
- <20251216142633.2401447-2-kevin.brodsky@arm.com>
- <5f866c1a-c8cd-4dc6-b312-9017cef89920@sirena.org.uk>
- <e971e44e-5539-4fc4-8128-0ce9c3d10a38@arm.com>
- <682f64d0-353c-47bb-808b-eacc2d4d6c00@sirena.org.uk>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <682f64d0-353c-47bb-808b-eacc2d4d6c00@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Stat-Signature: iweuhg8w6knq7dxzyeqfepefy6b6n911
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 3E10120029
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18OjaLolaVaSJvuOjp5++Z2MOKRGTCa+m4=
+X-HE-Tag: 1767026352-752526
+X-HE-Meta: U2FsdGVkX1+kT7wZgEt9v6MbkEf/3gGZSSTzLmIne2VYubMHzdI8165prhdMxEF8HMofNmrWcCJv8rEVZm1QPpszlvPC+v7zPSe/NiICzgPBKTpvlwCQkPvQl/Yjz85Q763Ht76L4BDFzCwq63F1tkoH+kefNQhvtocyMVUuJlHBxvOeoPXpdEWkA9wJzoiWB5ewgCLrXVICoCh2pXoSTu84hsVIfsKrPAU2GdByCJhFg0/+eVIWHSDQ3hBBtV2l7PwD9Al0+tpBe45z9JJmqNloBK4wgoqlU6R0ukE1KJ4cwQIZIDw5DtOMEEJSAB2v4Y/tBhQf5zWseFeNJymRvuwSkquIQALC
 
-On 18/12/2025 15:25, Mark Brown wrote:
-> On Thu, Dec 18, 2025 at 02:24:10PM +0100, Kevin Brodsky wrote:
->> On 17/12/2025 11:04, Mark Brown wrote:
->>> More generally building selftests with random older kernel versions
->>> isn't really something that's expected to be robust:
->> I suppose that Documentation/dev-tools/kselftest.rst talks about
->> *running* against older kernels, not *building* against them. That said,
-> Yeah, running is fairly normal but huge swathes of the selftests won't
-> build without current kernel headers and it's not an especially useful
-> use of time to support that.
->
->> we are dealing with an out-of-tree kernel module here, so the two are
->> essentially the same... Yunsheng suggested an updated check that I think
->> is reasonable, maybe it is a reasonable compromise?
-> Well, there's also the selection of KDIR which for some reason defaults
-> to the installed kernel so we get:
+On Sun, 28 Dec 2025 17:37:33 -0500
+Joel Fernandes <joelagnelf@nvidia.com> wrote:
 
-Overall the kselftests tend to assume that we're building on the same
-machine we'll run them, so at least that feels consistent. The same
-default is used for most other out-of-tree kselftests modules
-(livepatch, net/bench).
+> >> base-commit: 0ff41df1cb268fc69e703a08a57ee14ae967d0ca
+> >> prerequisite-patch-id: 912adecf969d167ddd35b26844249c809a2d4664
+> >> prerequisite-patch-id: 95ca224b0870cebb545ddaf313691fd18dfd04e1
+> >> prerequisite-patch-id: 68a218b9aaada53aa85cf33fcf4afe1592fe160f
+> >> prerequisite-patch-id: e40912ee9655a8abef17413a1bb9b05d2d4520de
+> >> prerequisite-patch-id: c0511755626728abcbed2f76e9a0b1d2f15e7c9e
+> >> prerequisite-patch-id: 0a8814cf3965ce3d5fb30d18db3daf2b96c3db74
+> >> prerequisite-patch-id: 450827b1f88e4ab714a63a24a66bd209f8c332af  
+> > 
+> > Are all 54K of these required?  
+> 
+> Ouch, this looks like a case of git format-patch scripting gone bad. Anyway, the
+> patches applies cleanly to Linus's master branch. I'll go look into the
+> scripting issue.
 
->   $ make -C tools/testing/selftests LLVM=1 ARCH=arm64 TARGETS=mm
->
->   Warning: missing page_frag_cache.h, please use a newer kernel. page_frag test will be skipped.
+That base-commit is 6.15. Seems you likely made every commit from 6.15 to
+now a prerequisite ;-)
 
-But yes if cross-compiling the default makes no sense and KDIR has to be
-set explicitly.
-
-> Your changelog says it'll work for an in tree build but I can't figure
-> out how to do that (using the top level Makefile to recurse doesn't seem
-> to DTRT either).  Having looked at this more I think the problem here is
-> that the selection of KDIR is wrong, not the check.
-
-I use KBUILD_OUTPUT=out and KDIR needs to be absolute, so:
-KDIR=$PWD/out. I suppose for an in-tree build KDIR=$PWD would do the
-right thing. But yes it's all very wonky.
-
-Maybe the documentation should be updated to recommend setting KDIR
-explicitly? Or maybe it could default to KDIR=$PWD or $(abspath
-$(KBUILD_OUTPUT)) when cross-compiling?
-
-- Kevin
+-- Steve
 
