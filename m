@@ -1,116 +1,105 @@
-Return-Path: <linux-kselftest+bounces-47991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E847CE6FCA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 15:16:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CF91CE73D3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 16:41:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4F6E4300C5DA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 14:16:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EED45302BD08
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 15:40:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E1A1A2C11;
-	Mon, 29 Dec 2025 14:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nfraprado@collabora.com header.b="Nw5xg1z3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB4C329E4C;
+	Mon, 29 Dec 2025 15:40:34 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3575C8BEC;
-	Mon, 29 Dec 2025 14:16:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767017781; cv=pass; b=m9wjC2Km/FgsBn9QX21A8pJyjDAdW2mUHabZB3k252fvajV6ABI/qwsJQzKt/3SNMjZ4sPfHPyPDfuCfAG0bK8iUBcgKMj3whuFcwGRFFFTh5uSjFylybncYi0b30DvG+eDc+skPb8kQJ8Pf+m1tHjMvXCSJOS2gDmeq23MT0oM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767017781; c=relaxed/simple;
-	bh=gcGoEnrtXDIB7GOHQw70PHm1fFbRAHrLIr2ZLda2Sbo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uwhH5G7K8yCk9XplTSRnajPfA3E5xkNOsmrDKCYOcvvN66JYfhFSpK4YS+IwxWuuW82sVdDmyXsRpv3f0FgoZtzN547CaQeRa9YRVZOw8gh24cJS3xqzbCUFrfttdPNA3VI0w+5gCiY6K2N9nl2SLNZGvHbhQiAlGqzFxc/hniA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nfraprado@collabora.com header.b=Nw5xg1z3; arc=pass smtp.client-ip=136.143.188.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1767017706; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=c132D8Q3MEQnj5rQMTMNFyDLvy0qPgMPOnZFF6uXrKqrOFvOuLUxaxJrTk8oZVx+zbWusYPdz1g5cXYskX82leIo4qnkaCZi8gWWtNCaZ7KrBeCrEj8J+X8ku2vddzZznHZkon/31rhzfOG0xfqvJjKDLj7wgZa3o5rWZXZAHYo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1767017706; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=gcGoEnrtXDIB7GOHQw70PHm1fFbRAHrLIr2ZLda2Sbo=; 
-	b=JhuqOJfKnmx3A9WVjIxKVMMWNjnDyjI01DYzYK0gQkWvTka0Qr9UB45AC3+R4hJNAl20YAPM0tmLkABCS1jh+ehrxmcsaH4ljpo9K73B5rqEpmeFl5Nr6/0yDa3LmT3SGJyJeNHtUN7ISAC3wO4GJoxA63UxQWQrKD3cmETF5kM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=nfraprado@collabora.com;
-	dmarc=pass header.from=<nfraprado@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767017706;
-	s=zohomail; d=collabora.com; i=nfraprado@collabora.com;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=gcGoEnrtXDIB7GOHQw70PHm1fFbRAHrLIr2ZLda2Sbo=;
-	b=Nw5xg1z3cLP9VkYemFCEQnqUxQv87FIyfwExUfFBbW16Efglq8oL6Ap19gxrpL6K
-	xKRbcDf0GPyPD/FM63TQJaq/1vZSOXRL+p+gIpSwEHmNUF79r4ko21rz8ymMR5GB8Rr
-	CH6VE0CvnupjDedRSQa/XHi30VA2XJuY9SAC9fNo=
-Received: by mx.zohomail.com with SMTPS id 1767017705278437.0577963304597;
-	Mon, 29 Dec 2025 06:15:05 -0800 (PST)
-Message-ID: <8caf35529d2825ba98a8f7ea63ce03d23007292a.camel@collabora.com>
-Subject: Re: [PATCH v4 1/3] kselftest: Add test to verify probe of devices
- from discoverable buses
-From: =?ISO-8859-1?Q?N=EDcolas?= "F. R. A. Prado" <nfraprado@collabora.com>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Shuah Khan <shuah@kernel.org>, Greg Kroah-Hartman	
- <gregkh@linuxfoundation.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	kernelci@lists.linux.dev, kernel@collabora.com, Tim Bird
- <Tim.Bird@sony.com>, 	linux-pci@vger.kernel.org, David Gow
- <davidgow@google.com>, 	linux-kselftest@vger.kernel.org, Rob Herring
- <robh+dt@kernel.org>, Doug Anderson	 <dianders@chromium.org>,
- linux-usb@vger.kernel.org, Saravana Kannan	 <saravanak@google.com>, Dan
- Carpenter <dan.carpenter@linaro.org>, Guenter Roeck	 <groeck@chromium.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 29 Dec 2025 11:14:59 -0300
-In-Reply-To: <20251229145542-059157e7-1864-4407-8734-0a32589f9b0b@linutronix.de>
-References: 
-	<20240122-discoverable-devs-ksft-v4-0-d602e1df4aa2@collabora.com>
-	 <20240122-discoverable-devs-ksft-v4-1-d602e1df4aa2@collabora.com>
-	 <20251229145542-059157e7-1864-4407-8734-0a32589f9b0b@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-7 
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F51B2FB093;
+	Mon, 29 Dec 2025 15:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767022834; cv=none; b=cf0FUGzqwBKWCq1KVdJwj4MvcCRcNbM22DfbAEeM1Eba9sohbTUi0XTjZDnlq0MHbdNat0ngOTofaQteHZduEwG5FdaTsUYNk32k1eTLnBHrZoOaw7FF3mLM6PKpUUDQHPySsp04sOe8qXC+9GVx02n3WRS9Wcjp8lczXYbsnEk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767022834; c=relaxed/simple;
+	bh=cmb/2mPKVT+NXGQPjmCUwLkIrh+sh+1dgDr17I29+YQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gtx75HKVCvSr5RPfK90cqCs1DC0EGhSfdTrF5pmXbWVbYjlCBIzu8fKsQDlFFJUCePLtq6fO35umPUpdZdIoedlLdVNRsv1c9q2mmE3tucyOZKpT+wWKzoJOgqINziN4qverMw+4jX/tzH+727DSaD3HNAq6oiZ5pKaw+yIEym0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A886339;
+	Mon, 29 Dec 2025 07:40:24 -0800 (PST)
+Received: from [10.57.45.222] (unknown [10.57.45.222])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DBE13F5A1;
+	Mon, 29 Dec 2025 07:40:29 -0800 (PST)
+Message-ID: <9c97ac9c-b0df-42e7-84fc-7e0d986c7324@arm.com>
+Date: Mon, 29 Dec 2025 16:40:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] selftests/mm: remove flaky header check
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Yunsheng Lin <linyunsheng@huawei.com>
+References: <20251216142633.2401447-1-kevin.brodsky@arm.com>
+ <20251216142633.2401447-2-kevin.brodsky@arm.com>
+ <5f866c1a-c8cd-4dc6-b312-9017cef89920@sirena.org.uk>
+ <e971e44e-5539-4fc4-8128-0ce9c3d10a38@arm.com>
+ <682f64d0-353c-47bb-808b-eacc2d4d6c00@sirena.org.uk>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <682f64d0-353c-47bb-808b-eacc2d4d6c00@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2025-12-29 at 14:57 +0100, Thomas Wei=C3=9Fschuh wrote:
-> On Mon, Jan 22, 2024 at 03:53:21PM -0300, N=C3=ADcolas F. R. A. Prado
-> wrote:
-> > Add a new test to verify that a list of expected devices from
-> > discoverable buses (ie USB, PCI) have been successfully
-> > instantiated and
-> > probed by a driver.
-> >=20
-> > The per-platform list of expected devices is selected from the ones
-> > under the boards/ directory based on the DT compatible or the DMI
-> > IDs.
-> >=20
-> > Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> > ---
-> > =C2=A0tools/testing/selftests/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0=C2=A0 1 +
-> > =C2=A0tools/testing/selftests/devices/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 4 +
->=20
-> > =C2=A0tools/testing/selftests/devices/ksft.py=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 90 ++++++
->=20
-> This seems to be a copy of tools/testing/selftests/kselftest/ksft.py.
-> Instead of copying the file, try to use it from the standard
-> location.
+On 18/12/2025 15:25, Mark Brown wrote:
+> On Thu, Dec 18, 2025 at 02:24:10PM +0100, Kevin Brodsky wrote:
+>> On 17/12/2025 11:04, Mark Brown wrote:
+>>> More generally building selftests with random older kernel versions
+>>> isn't really something that's expected to be robust:
+>> I suppose that Documentation/dev-tools/kselftest.rst talks about
+>> *running* against older kernels, not *building* against them. That said,
+> Yeah, running is fairly normal but huge swathes of the selftests won't
+> build without current kernel headers and it's not an especially useful
+> use of time to support that.
+>
+>> we are dealing with an out-of-tree kernel module here, so the two are
+>> essentially the same... Yunsheng suggested an updated check that I think
+>> is reasonable, maybe it is a reasonable compromise?
+> Well, there's also the selection of KDIR which for some reason defaults
+> to the installed kernel so we get:
 
-This series is almost 1 year old and has long ago been merged :)
+Overall the kselftests tend to assume that we're building on the same
+machine we'll run them, so at least that feels consistent. The same
+default is used for most other out-of-tree kselftests modules
+(livepatch, net/bench).
 
---=20
-Thanks,
+>   $ make -C tools/testing/selftests LLVM=1 ARCH=arm64 TARGETS=mm
+>
+>   Warning: missing page_frag_cache.h, please use a newer kernel. page_frag test will be skipped.
 
-N=C3=ADcolas
+But yes if cross-compiling the default makes no sense and KDIR has to be
+set explicitly.
+
+> Your changelog says it'll work for an in tree build but I can't figure
+> out how to do that (using the top level Makefile to recurse doesn't seem
+> to DTRT either).  Having looked at this more I think the problem here is
+> that the selection of KDIR is wrong, not the check.
+
+I use KBUILD_OUTPUT=out and KDIR needs to be absolute, so:
+KDIR=$PWD/out. I suppose for an in-tree build KDIR=$PWD would do the
+right thing. But yes it's all very wonky.
+
+Maybe the documentation should be updated to recommend setting KDIR
+explicitly? Or maybe it could default to KDIR=$PWD or $(abspath
+$(KBUILD_OUTPUT)) when cross-compiling?
+
+- Kevin
 
