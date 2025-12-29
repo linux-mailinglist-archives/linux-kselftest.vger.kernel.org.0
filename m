@@ -1,90 +1,169 @@
-Return-Path: <linux-kselftest+bounces-47993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEE9FCE7A66
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 17:42:31 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8A44CE7CAA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 19:03:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B1CD830087B2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 16:39:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id AAE193009FE9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 18:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55A96212FB9;
-	Mon, 29 Dec 2025 16:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9797255E43;
+	Mon, 29 Dec 2025 18:03:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E53145B27;
-	Mon, 29 Dec 2025 16:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E9A17A31C;
+	Mon, 29 Dec 2025 18:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767026364; cv=none; b=oSggwiNLl2/NtS8Q7pNuScZfbAA2IH5JER/7b3W9JwvjF76sd/N6eEoluhBFuKESiqr1onYTs9RQLRU3lUac8A6F4be+r9548lG84RiAn7SUpe2cnkqxVSvIaVSYa8fXGKRNlmWMfgbvBOnnZyH5ldfCQat2UXp8lwnt9U6CLPU=
+	t=1767031428; cv=none; b=feyYlWHzu6khx/zNV3jNWzLMhsK9wUDB3NezUDIJg3L4xAcEHgULLI+rjH0I/hcRlXxp1x4/sDrRDzEro20SSR4w7LzJM4/akcaNbWyzJkENlzicnS8JZbNgU4iXbIFDArKabaNC0/ZpWrCKmG7UAYQvM4hPiWu0Xd6baUjv/Cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767026364; c=relaxed/simple;
-	bh=rYXUNxDIW/DguEmwYF0Mt5Ud1Jj6zP1xSCqlFnWGzm4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q8nB1CnESgS4F+yLr+e5DCEdTY2NXdrERwN+CROHPUEslErUrTv0z8di6+aPOx8syvzmJ+kn58SQnzWuIVr6+cmmIswOVN+/Ay8L6CL0vq6ntXl5X3ARSwRuS8DY0QZ99wPP1owNRW6YLVaH61t0unElGuyK38qxm68jfyfgLPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 67689C1591;
-	Mon, 29 Dec 2025 16:39:14 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id 3E10120029;
-	Mon, 29 Dec 2025 16:39:12 +0000 (UTC)
-Date: Mon, 29 Dec 2025 11:39:17 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Joel Fernandes <joelagnelf@nvidia.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>, "Paul E . McKenney"
- <paulmck@kernel.org>, Josh Triplett <josh@joshtriplett.org>, Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
- <jiangshanlai@gmail.com>, Shuah Khan <shuah@kernel.org>,
- rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 1/2] rcutorture: Prevent concurrent kvm.sh runs on
- same source tree
-Message-ID: <20251229113917.1c9568c4@gandalf.local.home>
-In-Reply-To: <3a6bfd87-570d-49fa-854f-8d5802549f6a@nvidia.com>
-References: <20251228220519.150179-1-joelagnelf@nvidia.com>
-	<24f4df13-0875-49bd-95d1-4bf1a400ff15@infradead.org>
-	<3a6bfd87-570d-49fa-854f-8d5802549f6a@nvidia.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1767031428; c=relaxed/simple;
+	bh=g2hyGGgNqSybhF2MCdRktIBVlI3xXl1ThAGj8G3gxek=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=shznMHiduPILrv/41E4RLYoUeMWyDljxiKcBd2zg4a0Sw4EiKrvfVWRcG5L/G83lPYTkGLtyIIpy7alAMrbEjiDr/+MaGBdLqY6sUq4WiSmSfkFbmXpioaEWcwVvBmTBbPdK4uliDDrnR3bFePiCsiFVBMe+APei8IS9jzfx++o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2877339;
+	Mon, 29 Dec 2025 10:03:37 -0800 (PST)
+Received: from [10.57.45.222] (unknown [10.57.45.222])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3994E3F694;
+	Mon, 29 Dec 2025 10:03:39 -0800 (PST)
+Message-ID: <f3c32e7f-f940-4cb0-941c-cb7f7f628d88@arm.com>
+Date: Mon, 29 Dec 2025 19:03:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: iweuhg8w6knq7dxzyeqfepefy6b6n911
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 3E10120029
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18OjaLolaVaSJvuOjp5++Z2MOKRGTCa+m4=
-X-HE-Tag: 1767026352-752526
-X-HE-Meta: U2FsdGVkX1+kT7wZgEt9v6MbkEf/3gGZSSTzLmIne2VYubMHzdI8165prhdMxEF8HMofNmrWcCJv8rEVZm1QPpszlvPC+v7zPSe/NiICzgPBKTpvlwCQkPvQl/Yjz85Q763Ht76L4BDFzCwq63F1tkoH+kefNQhvtocyMVUuJlHBxvOeoPXpdEWkA9wJzoiWB5ewgCLrXVICoCh2pXoSTu84hsVIfsKrPAU2GdByCJhFg0/+eVIWHSDQ3hBBtV2l7PwD9Al0+tpBe45z9JJmqNloBK4wgoqlU6R0ukE1KJ4cwQIZIDw5DtOMEEJSAB2v4Y/tBhQf5zWseFeNJymRvuwSkquIQALC
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 11/16] entry: Split syscall_exit_to_user_mode_work()
+ for arch reuse
+To: Jinjie Ruan <ruanjinjie@huawei.com>, catalin.marinas@arm.com,
+ will@kernel.org, oleg@redhat.com, tglx@linutronix.de, peterz@infradead.org,
+ luto@kernel.org, shuah@kernel.org, kees@kernel.org, wad@chromium.org,
+ macro@orcam.me.uk, charlie@rivosinc.com, akpm@linux-foundation.org,
+ ldv@strace.io, anshuman.khandual@arm.com, mark.rutland@arm.com,
+ thuth@redhat.com, song@kernel.org, ryan.roberts@arm.com,
+ ada.coupriediaz@arm.com, broonie@kernel.org, liqiang01@kylinos.cn,
+ pengcan@kylinos.cn, kmal@cock.li, dvyukov@google.com,
+ richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20251222114737.1334364-1-ruanjinjie@huawei.com>
+ <20251222114737.1334364-12-ruanjinjie@huawei.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20251222114737.1334364-12-ruanjinjie@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, 28 Dec 2025 17:37:33 -0500
-Joel Fernandes <joelagnelf@nvidia.com> wrote:
+On 22/12/2025 12:47, Jinjie Ruan wrote:
+> In the generic entry code, the beginning of
+> syscall_exit_to_user_mode_work() can be reused on arm64 so it makes
+> sense to split it.
+>
+> In preparation for moving arm64 over to the generic entry
+> code, split out syscall_exit_to_user_mode_work_prepare() helper from
+> syscall_exit_to_user_mode_work().
+>
+> No functional changes.
+>
+> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> ---
+>  include/linux/entry-common.h | 35 ++++++++++++++++++++++-------------
+>  1 file changed, 22 insertions(+), 13 deletions(-)
+>
+> diff --git a/include/linux/entry-common.h b/include/linux/entry-common.h
+> index 87efb38b7081..0de0e60630e1 100644
+> --- a/include/linux/entry-common.h
+> +++ b/include/linux/entry-common.h
+> @@ -121,20 +121,11 @@ static __always_inline long syscall_enter_from_user_mode(struct pt_regs *regs, l
+>   */
+>  void syscall_exit_work(struct pt_regs *regs, unsigned long work);
+>  
+> -/**
+> - * syscall_exit_to_user_mode_work - Handle work before returning to user mode
+> - * @regs:	Pointer to currents pt_regs
+> - *
+> - * Same as step 1 and 2 of syscall_exit_to_user_mode() but without calling
+> - * exit_to_user_mode() to perform the final transition to user mode.
+> - *
+> - * Calling convention is the same as for syscall_exit_to_user_mode() and it
+> - * returns with all work handled and interrupts disabled. The caller must
+> - * invoke exit_to_user_mode() before actually switching to user mode to
+> - * make the final state transitions. Interrupts must stay disabled between
+> - * return from this function and the invocation of exit_to_user_mode().
+> +/*
+> + * Syscall specific exit to user mode preparation. Runs with interrupts
+> + * enabled.
+>   */
+> -static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
+> +static __always_inline void syscall_exit_to_user_mode_work_prepare(struct pt_regs *regs)
+>  {
+>  	unsigned long work = READ_ONCE(current_thread_info()->syscall_work);
+>  	unsigned long nr = syscall_get_nr(current, regs);
+> @@ -155,6 +146,24 @@ static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
+>  	 */
+>  	if (unlikely(work & SYSCALL_WORK_EXIT))
+>  		syscall_exit_work(regs, work);
+> +}
+> +
+> +/**
+> + * syscall_exit_to_user_mode_work - Handle work before returning to user mode
+> + * @regs:	Pointer to currents pt_regs
+> + *
+> + * Same as step 1 and 2 of syscall_exit_to_user_mode() but without calling
+> + * exit_to_user_mode() to perform the final transition to user mode.
+> + *
+> + * Calling convention is the same as for syscall_exit_to_user_mode() and it
+> + * returns with all work handled and interrupts disabled. The caller must
+> + * invoke exit_to_user_mode() before actually switching to user mode to
+> + * make the final state transitions. Interrupts must stay disabled between
+> + * return from this function and the invocation of exit_to_user_mode().
+> + */
+> +static __always_inline void syscall_exit_to_user_mode_work(struct pt_regs *regs)
+> +{
+> +	syscall_exit_to_user_mode_work_prepare(regs);
 
-> >> base-commit: 0ff41df1cb268fc69e703a08a57ee14ae967d0ca
-> >> prerequisite-patch-id: 912adecf969d167ddd35b26844249c809a2d4664
-> >> prerequisite-patch-id: 95ca224b0870cebb545ddaf313691fd18dfd04e1
-> >> prerequisite-patch-id: 68a218b9aaada53aa85cf33fcf4afe1592fe160f
-> >> prerequisite-patch-id: e40912ee9655a8abef17413a1bb9b05d2d4520de
-> >> prerequisite-patch-id: c0511755626728abcbed2f76e9a0b1d2f15e7c9e
-> >> prerequisite-patch-id: 0a8814cf3965ce3d5fb30d18db3daf2b96c3db74
-> >> prerequisite-patch-id: 450827b1f88e4ab714a63a24a66bd209f8c332af  
-> > 
-> > Are all 54K of these required?  
-> 
-> Ouch, this looks like a case of git format-patch scripting gone bad. Anyway, the
-> patches applies cleanly to Linus's master branch. I'll go look into the
-> scripting issue.
+The naming is getting awfully confusing, with the separate introduction
+of syscall_exit_to_user_mode_prepare().
 
-That base-commit is 6.15. Seems you likely made every commit from 6.15 to
-now a prerequisite ;-)
+Having had a closer look, do we really need
+syscall_exit_to_user_mode_work() as it currently stands? Nothing calls
+it except the generic syscall_exit_to_user_mode(). Which makes me think:
+how about moving the two lines below into syscall_exit_to_user_mode()
+instead of creating a new helper? IOW:
 
--- Steve
+@@ -155,8 +155,6 @@ static __always_inline void
+syscall_exit_to_user_mode_work(struct pt_regs *regs)
+      */
+     if (unlikely(work & SYSCALL_WORK_EXIT))
+         syscall_exit_work(regs, work);
+-    local_irq_disable_exit_to_user();
+-    syscall_exit_to_user_mode_prepare(regs);
+ }
+ 
+ /**
+@@ -192,6 +190,8 @@ static __always_inline void
+syscall_exit_to_user_mode(struct pt_regs *regs)
+ {
+     instrumentation_begin();
+     syscall_exit_to_user_mode_work(regs);
++    local_irq_disable_exit_to_user();
++    syscall_exit_to_user_mode_prepare(regs);
+     instrumentation_end();
+     exit_to_user_mode();
+ }
+
+- Kevin
+
+>  	local_irq_disable_exit_to_user();
+>  	syscall_exit_to_user_mode_prepare(regs);
+>  }
 
