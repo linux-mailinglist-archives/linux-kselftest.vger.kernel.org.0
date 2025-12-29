@@ -1,128 +1,100 @@
-Return-Path: <linux-kselftest+bounces-47987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-47988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9570FCE6987
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 12:49:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8870DCE6BE6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 13:43:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 997C730038FC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 11:46:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0F32930094B9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 12:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0182C0273;
-	Mon, 29 Dec 2025 11:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EED83115B5;
+	Mon, 29 Dec 2025 12:43:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84A922BEC41;
-	Mon, 29 Dec 2025 11:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C453115B0;
+	Mon, 29 Dec 2025 12:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767008815; cv=none; b=Ab57ler7g7pgj+e0D+DHnFx26WWFeYqoaMz8DWIAVm/nS/08p8mrW59+kCcA8wzZYwkqW8bATFXZyLII/oNNp/cVJp1iGFEVnmpA7ztjor6dAVg3dY8WzciTGVc8644ZVwknflrIYXUnB7SK3Tsl6uDKO+1U2ASsKbHYy6H/C/M=
+	t=1767012215; cv=none; b=JAe6041CM4/PmZx+3wVQmllLujDD11MNvvKzjDDZa5/A9pu4Hb9tKMK/q+WzWDCNUdu1bj9MKFQHr/UMeCeQCgfHHZWL28ineRlZ0HEWr6Rl8Ammn6jiNyeLLizz+Nxcltze3E1cxTcsbBAX8Y7gp+crAkhI0RSQHt/AkKlBtOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767008815; c=relaxed/simple;
-	bh=55HigBlQHbzxhusODOnJSc5MeYRZFy/kHhQUkZrIBNE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s3BZPFmpzFEM+nSTXXWj4S3tJmYEZ4GoISx1pLRSjtrivy+HFV/02MSsmDRm2EGdfhjtO0n6quH6pSlD6u+LmYmRjBxKxO4HbdZ5/6+odB+uOIsM2qylF4F7IDrZEbfb6/GkoRP1lyqtmoQP2IqOZsWd3ECe8d81ql0wGdRFMjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C4A93339;
-	Mon, 29 Dec 2025 03:46:42 -0800 (PST)
-Received: from [10.57.45.222] (unknown [10.57.45.222])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9303B3F5A1;
-	Mon, 29 Dec 2025 03:46:47 -0800 (PST)
-Message-ID: <7f0ac47d-1eff-4b79-b260-7812bf3ebc80@arm.com>
-Date: Mon, 29 Dec 2025 12:46:45 +0100
+	s=arc-20240116; t=1767012215; c=relaxed/simple;
+	bh=7iVcfZVwYE4+COVE20kwEf4UXswQ2x3ADqrQJI72Aws=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=pJ+XjxiMKUtqV4pGC2g6Q0YZiivGPgtci4xkOQvPItDhzinGLndp9iO3aoAILDledUWcjz/YWRbeYqRov0XHv3eL+YQ+Clqw4712LAkdklLU6BLsvhig6fOmjIYK1aWEE3EvvxfAH0h74twiFDph+8iH0NKM46oYF7+lQLTsqxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f3760484e4b311f0a38c85956e01ac42-20251229
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, DN_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO
+	GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:fda32ff5-ca34-48eb-a841-f96540ae7366,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:5
+X-CID-INFO: VERSION:1.3.6,REQID:fda32ff5-ca34-48eb-a841-f96540ae7366,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:5
+X-CID-META: VersionHash:a9d874c,CLOUDID:7c10afaa05ef2f72d0b16370eff7b87c,BulkI
+	D:251229204321PH03D0T5,BulkQuantity:0,Recheck:0,SF:17|19|64|66|78|80|81|82
+	|83|102|127|841|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil
+	,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,
+	DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: f3760484e4b311f0a38c85956e01ac42-20251229
+X-User: sunshaojie@kylinos.cn
+Received: from localhost.localdomain [(183.242.174.20)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1768079757; Mon, 29 Dec 2025 20:43:18 +0800
+From: Sun Shaojie <sunshaojie@kylinos.cn>
+To: longman@redhat.com
+Cc: cgroups@vger.kernel.org,
+	chenridong@huaweicloud.com,
+	hannes@cmpxchg.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	mkoutny@suse.com,
+	shuah@kernel.org,
+	sunshaojie@kylinos.cn,
+	tj@kernel.org
+Subject: Re: [cgroup/for-6.20 PATCH 0/4] cgroup/cpuset: Don't invalidate sibling partitions on cpuset.cpus conflict
+Date: Mon, 29 Dec 2025 20:42:51 +0800
+Message-Id: <20251229124251.261697-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20251225073056.30789-1-longman@redhat.com>
+References: <20251225073056.30789-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] selftests/mm: fix faulting-in code in pagemap_ioctl
- test
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>,
- Ryan Roberts <ryan.roberts@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Mark Brown
- <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Usama Anjum <Usama.Anjum@arm.com>
-References: <20251216142633.2401447-1-kevin.brodsky@arm.com>
- <20251216142633.2401447-4-kevin.brodsky@arm.com>
- <37210500-6f6e-46ac-ac2f-ac996308590d@arm.com>
- <6aa47cdb-d2e7-4977-929b-7019b6f991c1@kernel.org>
- <0575bcf6-c1a3-4ebf-a199-3113758fbdc5@arm.com>
- <a3ca6293-8f85-4489-a48e-eb8d0d3792c5@kernel.org>
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-Content-Language: en-GB
-In-Reply-To: <a3ca6293-8f85-4489-a48e-eb8d0d3792c5@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 19/12/2025 09:29, David Hildenbrand (Red Hat) wrote:
-> On 12/18/25 14:18, Kevin Brodsky wrote:
->> On 18/12/2025 09:05, David Hildenbrand (Red Hat) wrote:
->>> On 12/16/25 15:56, Ryan Roberts wrote:
->>>> On 16/12/2025 14:26, Kevin Brodsky wrote:
->>>>> One of the pagemap_ioctl tests attempts to fault in pages by
->>>>> memcpy()'ing them to an unused buffer. This probably worked
->>>>> originally, but since commit 46036188ea1f ("selftests/mm: build with
->>>>> -O2") the compiler is free to optimise away that unused buffer and
->>>>> the memcpy() with it. As a result there might not be any resident
->>>>> page in the mapping and the test may fail.
->>>>>
->>>>> We don't need to copy all that memory anyway. Just fault in every
->>>>> page by forcing the compiler to read the first byte.
->>>>>
->>>>> Cc: Usama Anjum <Usama.Anjum@arm.com>
->>>>> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
->>>>> ---
->>>>>    tools/testing/selftests/mm/pagemap_ioctl.c | 6 +++---
->>>>>    1 file changed, 3 insertions(+), 3 deletions(-)
->>>>>
->>>>> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c
->>>>> b/tools/testing/selftests/mm/pagemap_ioctl.c
->>>>> index 2cb5441f29c7..67a7a3705604 100644
->>>>> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
->>>>> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
->>>>> @@ -1056,7 +1056,6 @@ int sanity_tests(void)
->>>>>        struct page_region *vec;
->>>>>        char *mem, *fmem;
->>>>>        struct stat sbuf;
->>>>> -    char *tmp_buf;
->>>>>          /* 1. wrong operation */
->>>>>        mem_size = 10 * page_size;
->>>>> @@ -1167,8 +1166,9 @@ int sanity_tests(void)
->>>>>        if (fmem == MAP_FAILED)
->>>>>            ksft_exit_fail_msg("error nomem %d %s\n", errno,
->>>>> strerror(errno));
->>>>>    -    tmp_buf = malloc(sbuf.st_size);
->>>>> -    memcpy(tmp_buf, fmem, sbuf.st_size);
->>>>> +    /* Fault in every page by reading the first byte */
->>>>> +    for (i = 0; i < sbuf.st_size; i += page_size)
->>>>> +        (void)*(volatile char *)(fmem + i);
->>>>
->>>> We have FORCE_READ() in vm_util.h for this. Perhaps that would be
->>>> better?
->>>
->>> Agreed, and if we have multiple patterns where we want to force_read a
->>> bigger area, maybe we should provide a helper for that?
->>
->> I've found just a couple of cases where FORCE_READ() is used for a
->> larger area (in hugetlb-madvise.c and split_huge_page_test.c). The step
->> size isn't the same in any of these cases though. We could have
->> something like fault_area(addr, size, step) but maybe the loops are
->> clear enough already?
->
-> Note that even for hugtlb we can read page-per-page, no need to
-> hugetlb-page-per-hugetlb-page. Not sure if the performance change
-> would make any real performance difference in this testing code.
+Hi, Waiman,
 
-Fair point. In fact in split_huge_page_test.c we're reading every byte
-but that's unnecessary. I'll add a helper that reads page-by-page and
-use that in all 3 cases.
+On Thu, 25 Dec 2025 02:30:52, Waiman Long wrote:
+>This patch series is inspired by the cpuset patch sent by Sun Shaojie [1].
+>The idea is to avoid invalidating sibling partitions when there is a
+>cpuset.cpus conflict. However this patch series does it in a slightly
+>different way to make its behavior more consistent with other cpuset
+>properties.
 
-- Kevin
+Thank you for implementing and enriching my idea.
+
+Thanks,
+Sun Shaojie
 
