@@ -1,314 +1,180 @@
-Return-Path: <linux-kselftest+bounces-48004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC91ECE8D9E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 08:08:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BB7BCE9427
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 10:49:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D2A95300E17E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 07:08:51 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 198C03011AB7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 09:49:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B72312DCF70;
-	Tue, 30 Dec 2025 07:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 888562D7394;
+	Tue, 30 Dec 2025 09:49:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hbSXx+ct";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cpa+StPU"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZQAma2nr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F9B13957E;
-	Tue, 30 Dec 2025 07:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6117527B4E8
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Dec 2025 09:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767078529; cv=none; b=kBQ50h8FyxdWwaYAHlBuhARR7WMCAWXLH5HGZvuz/S/rDif+LEaKmE45y4KPn+pNiUgAi7UMr4cn6j94wHCOMQyVTIFdJHarcFpUTdJ0BvuK14zLrwl+SBs3L9Q9SNABe1cJfi5HfTVil4Escd7y18dGbZAE4fPX54Ypb1BhJPE=
+	t=1767088172; cv=none; b=cXwSF2TSmPIIUDvAVEhiUkxBfGMN6uziyvFJLFNQ3efaSsf5Yn2Elnf5aUTWAly55dDoSQlnl8xllOK4aQwAYwVl7HuXOr1p0rZNNzfVg/2c3ENiRbCyi1wFqWql6ZZFVi8bJD//TkgTE1Ry37/FTtJAmP2M5vfmwgIOdpqIMbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767078529; c=relaxed/simple;
-	bh=psbRv4/BzsjXAHvYF9kNmUhvkyV7GOIlg/7MADMvZOg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rtqK1chgzmCw/rBMpG56pc8MNDxFVHFPk44qdJT4SoKMWdl2u0ne97AC+b1h369/+xcB3QjTp9oSTqLLDifLAKMwzeZmdgikURlhh4e/gcg3rPMvFIxP+ZGoG1XTIsMui2GOyJnLT9Guthri+m0BuLzBEyfSU8na/u766Y09LSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hbSXx+ct; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cpa+StPU; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1767078526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=vXA8bfIazvy8HGJCSAI6zsjcs5XRieIDjOVpIGo8jXI=;
-	b=hbSXx+cty+AYz08PzNOpdbthvKGmek2wj+rvU2FPNz0UksNiy16xoOzAPVOhMyQ2eXhl4R
-	7XFL5nkeXQxO6MkObpRF0msNlejUAAsYvSiZ+SxCVUzNwmnzztvSsGMbjs6wKXJc2S9907
-	KmC5VQneO1+BLYztjXAujoToAu1i95KzmbJ33TGn+OyQDrTbbk/+cSco8Ac7WMC0T2QFkk
-	Ahv3Ly9hD8qVtlssPufaDKmjjiXLTfn4mkFsneHPpbRrCT/wZyPv6tW2h62qlCHwF81gNV
-	OpiNpKrfQXqFUsxUdZ9YhTgY5DDFkGTbRPlSe+kKqBDk3cXUqPc0uPLUvOm6fA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1767078526;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=vXA8bfIazvy8HGJCSAI6zsjcs5XRieIDjOVpIGo8jXI=;
-	b=cpa+StPUh28SS7vTDty5NACA5hWraBr7JfqdWwV+rwHtEON+5p8YgBIy1mxcaCxqQYMr6Q
-	cadVyCAsw43+iUCA==
-Date: Tue, 30 Dec 2025 08:08:44 +0100
-Subject: [PATCH v3] vdso: Remove struct getcpu_cache
+	s=arc-20240116; t=1767088172; c=relaxed/simple;
+	bh=4eaz+1wTZP7cgGZagXDHTekg6d8pOXeESnOgAUpsxzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mdmi53hNMm5rAS7d7cMJczNxDl74LsEesY/hBdlNpEUW3aF0QLbSqFL9hKg8ppV7E2cpB/OBfaVgXTXNPKvuVT8W1KLaoQf03r0ccGfe2VA1+HBTpuK1XwPxs1pieR/U1vGvJc2tH24b9uK8qD0VIvftitLfh8AqFqxIW+8JUjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ZQAma2nr; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47d1d8a49f5so46863445e9.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Dec 2025 01:49:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1767088169; x=1767692969; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4eaz+1wTZP7cgGZagXDHTekg6d8pOXeESnOgAUpsxzY=;
+        b=ZQAma2nr5pZ0Tm9NvnkydNlm2b+C0Iq5FbZGwJHmDZbAe8V8u0gO3Kf+09VffzAWtQ
+         tnaV71XLrdiHOOx67n0CE/xBYYQuHg0+zhSBMHHUFVX6ZTeEc40P5sbQrcdmgJ2lb7i7
+         kmjgxNbSDKx0QucmBhXyxKa50pSC5IXcmN6KiOxw5H3msVrJpVUdM0Lv5jxB8haRHcE+
+         hUUobucRpA7sAGfOYiKOmb2+5MQmo404KQJ3R8NEQHEPur+vNzS5M4KJfEk5gg4JYSjA
+         /ZR/41OLus4cVLISqulvTT1fLrTWsFF1W7Q1l3XtwYggtSIbcKl7i0oRJlP7D3kcTH0w
+         P8Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767088169; x=1767692969;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4eaz+1wTZP7cgGZagXDHTekg6d8pOXeESnOgAUpsxzY=;
+        b=nDMbyuR7WpIQxm7Bjz62lLM/PBag0a+TFxX0o5Bqw5+F9lh27A3WgulWRiTLdrVmZn
+         Ks2Ap/XdyuxbSFeo6Q9YfE2K9ugdAz8MFiuB2nw3lpvQq+XFKHHcyqTNWKQBubyg0ZYg
+         r8vV+c3VDxj/8PLYgrublE9YqE0ywXuzZawkAduzf5ZjR3nEn7Tazhlq87AZbYJ9VoYf
+         6/DUtyWG7NQTtt1pdiVuZXUmoXrV7g1Tn73SG6M0Za5qoOV/U6eKMMBJq+oQkX6eUZCQ
+         985e58OFxzTA61sByD4dGBbpTWIfbCSARnFvLC5hPXFy4JNqb8gHYGMA6h10L87XqStP
+         ohyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5XXFqfCkS3dHbsS2KWKDwAzMwVw0VoXXkoJ/PSPk5iKR8cv5566fSpDYbmuGdISdWTIz8wKNZ+SxVw3v1Fqo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yye9sJDlWzoZRM0Ff35ZD0CVIurhQtL/mipH+DSzLKTlPDiFyzg
+	bW+tIOr/csJCADzyG1nW4sNwbJXJWpjUH0opLaNV2Iuua8CdmhoaKJaapWVJ6O5LaY4=
+X-Gm-Gg: AY/fxX6DrTTHrZAuFEGvKIvdiYup3z4eFQbenOLDLYlvTTdzhBg4y71ykq4nLbff1Bn
+	+5155v170fyGi90v1Pdz9V6LQlk6VLGThgOsWh1APULvfs03TiD/gWg4UjEphclLN14HIU22a28
+	Yis3G6Jr+5u519f7O9v+U2n2KnazynlYiRv6ymBsREL3FHrm5ujVRGoROTGkesX3Jgzpn7p1687
+	1Vg4TaubHDcmNW85iTWr13UL81pUVTie3L5aqJW2syVJhtv5G5eeuwQ3L0CCpnqcfrOM1Y7kV+U
+	NcaCc37+5NfXrJWTjYfjN3l1ROkdhgBVadxqQ6weLDOyVw4qKLBLSxAdVuZX94/+q5NvqjBFOZS
+	QOhZAI076XSDh1yFS5XKE9slBd7z0qGyCyVDy74HXHwFo5Gwa6lshL1LRvgObXeS0sIywdVKdHF
+	KqB/69NvxAk7PLLFgwEU1Sl1JiAun0kyhbdnghJR2fRA==
+X-Google-Smtp-Source: AGHT+IEN/UHYtedJC5gNScUIjciAIBz4WtImq8j9JAVWa7kOqzOpjNxabiVdwQI/0HAatQaCg3ghcQ==
+X-Received: by 2002:a05:600c:1d0b:b0:479:2a0b:180d with SMTP id 5b1f17b1804b1-47d1954a5f7mr386619925e9.11.1767088168725;
+        Tue, 30 Dec 2025 01:49:28 -0800 (PST)
+Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47be26a81b6sm657711035e9.0.2025.12.30.01.49.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Dec 2025 01:49:28 -0800 (PST)
+Date: Tue, 30 Dec 2025 10:49:25 +0100
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Jeff Xu <jeffxu@chromium.org>, Jan Hendrik Farr <kernel@jfarr.cc>, 
+	Christian Brauner <brauner@kernel.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Brian Gerst <brgerst@gmail.com>, Masahiro Yamada <masahiroy@kernel.org>, davem@davemloft.net, 
+	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [RFC PATCH v2 0/3] Memory Controller eBPF support
+Message-ID: <enlefo5mmoha2htsrvv76tdmj6yum4jan6hgym76adtpxuhvrp@aug6qh3ocde5>
+References: <cover.1767012332.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251230-getcpu_cache-v3-1-fb9c5f880ebe@linutronix.de>
-X-B4-Tracking: v=1; b=H4sIAHt6U2kC/13MywqDMBCF4VcpWTclk3gJXfU9SikxTnSgqCQaL
- OK7Nwot1OV/4HwLC+gJA7ueFuYxUqC+S6HOJ2Zb0zXIqU7NpJC50DLnDY52mJ7W2Ba5MpWtJRZ
- 5pkqWLoNHR/PO3R+pWwpj79+7HmFbv1DxD0XgwHWZaQXaFZDB7UXdNPq+o/lSI9uwKH8ACFAHQ
- G6AFq5yRlWltUdgXdcP9BrP5e0AAAA=
-X-Change-ID: 20250825-getcpu_cache-3abcd2e65437
-To: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Andy Lutomirski <luto@kernel.org>, 
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev, 
- linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
- linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767078525; l=8287;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=psbRv4/BzsjXAHvYF9kNmUhvkyV7GOIlg/7MADMvZOg=;
- b=BVKcoXP2BGcToxxDIO9G6B/hNSvzMKXWiDvCE3tm0ubOfZnXnVRbVrmyRdwM1XBNC7X9GBXtV
- eumqqBww/XbCIWh15mdA3R5StG4o0qU/+ZVcE3b7OxxuqTxHQyiPZo2
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="nav7xplzwe6tizdp"
+Content-Disposition: inline
+In-Reply-To: <cover.1767012332.git.zhuhui@kylinos.cn>
 
-The cache parameter of getcpu() is useless nowadays for various reasons.
-* It is never passed by userspace for either the vDSO or syscalls.
-* It is never used by the kernel.
-* It could not be made to work on the current vDSO architecture.
-* The structure definition is not part of the UAPI headers.
-* vdso_getcpu() is superseded by restartable sequences in any case.
 
-Remove the struct and its header.
+--nav7xplzwe6tizdp
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [RFC PATCH v2 0/3] Memory Controller eBPF support
+MIME-Version: 1.0
 
-As a side-effect we get rid of an unwanted inclusion of the linux/
-header namespace from vDSO code.
+Hi Hui.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
----
-Changes in v3:
-- Rebase on v6.19-rc1
-  - Fix conflict with UML vdso_getcpu() removal
-- Flesh out commit message
-- Link to v2: https://lore.kernel.org/r/20251013-getcpu_cache-v2-1-880fbfa3b7cc@linutronix.de
+On Tue, Dec 30, 2025 at 11:01:58AM +0800, Hui Zhu <hui.zhu@linux.dev> wrote:
+> This allows administrators to suppress low-priority cgroups' memory
+> usage based on custom policies implemented in BPF programs.
 
-Changes in v2:
-- Rebase on v6.18-rc1
-- Link to v1: https://lore.kernel.org/r/20250826-getcpu_cache-v1-1-8748318f6141@linutronix.de
----
-We could also completely remove the parameter, but I am not sure if
-that is a good idea for syscalls and vDSO entrypoints.
----
- arch/loongarch/vdso/vgetcpu.c                   |  5 ++---
- arch/s390/kernel/vdso/getcpu.c                  |  3 +--
- arch/s390/kernel/vdso/vdso.h                    |  4 +---
- arch/x86/entry/vdso/vgetcpu.c                   |  5 ++---
- arch/x86/include/asm/vdso/processor.h           |  4 +---
- include/linux/getcpu.h                          | 19 -------------------
- include/linux/syscalls.h                        |  3 +--
- kernel/sys.c                                    |  4 +---
- tools/testing/selftests/vDSO/vdso_test_getcpu.c |  4 +---
- 9 files changed, 10 insertions(+), 41 deletions(-)
+BTW memory.low was conceived as a work-conserving mechanism for
+prioritization of different workloads. Have you tried that? No need to
+go directly to (high) limits. (<- Main question, below are some
+secondary implementation questions/remarks.)
 
-diff --git a/arch/loongarch/vdso/vgetcpu.c b/arch/loongarch/vdso/vgetcpu.c
-index 73af49242ecd..6f054ec898c7 100644
---- a/arch/loongarch/vdso/vgetcpu.c
-+++ b/arch/loongarch/vdso/vgetcpu.c
-@@ -4,7 +4,6 @@
-  */
- 
- #include <asm/vdso.h>
--#include <linux/getcpu.h>
- 
- static __always_inline int read_cpu_id(void)
- {
-@@ -28,8 +27,8 @@ static __always_inline int read_cpu_id(void)
- }
- 
- extern
--int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused);
--int __vdso_getcpu(unsigned int *cpu, unsigned int *node, struct getcpu_cache *unused)
-+int __vdso_getcpu(unsigned int *cpu, unsigned int *node, void *unused);
-+int __vdso_getcpu(unsigned int *cpu, unsigned int *node, void *unused)
- {
- 	int cpu_id;
- 
-diff --git a/arch/s390/kernel/vdso/getcpu.c b/arch/s390/kernel/vdso/getcpu.c
-index 5c5d4a848b76..1e17665616c5 100644
---- a/arch/s390/kernel/vdso/getcpu.c
-+++ b/arch/s390/kernel/vdso/getcpu.c
-@@ -2,11 +2,10 @@
- /* Copyright IBM Corp. 2020 */
- 
- #include <linux/compiler.h>
--#include <linux/getcpu.h>
- #include <asm/timex.h>
- #include "vdso.h"
- 
--int __s390_vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
-+int __s390_vdso_getcpu(unsigned *cpu, unsigned *node, void *unused)
- {
- 	union tod_clock clk;
- 
-diff --git a/arch/s390/kernel/vdso/vdso.h b/arch/s390/kernel/vdso/vdso.h
-index 8cff033dd854..1fe52a6f5a56 100644
---- a/arch/s390/kernel/vdso/vdso.h
-+++ b/arch/s390/kernel/vdso/vdso.h
-@@ -4,9 +4,7 @@
- 
- #include <vdso/datapage.h>
- 
--struct getcpu_cache;
--
--int __s390_vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused);
-+int __s390_vdso_getcpu(unsigned *cpu, unsigned *node, void *unused);
- int __s390_vdso_gettimeofday(struct __kernel_old_timeval *tv, struct timezone *tz);
- int __s390_vdso_clock_gettime(clockid_t clock, struct __kernel_timespec *ts);
- int __s390_vdso_clock_getres(clockid_t clock, struct __kernel_timespec *ts);
-diff --git a/arch/x86/entry/vdso/vgetcpu.c b/arch/x86/entry/vdso/vgetcpu.c
-index e4640306b2e3..6381b472b7c5 100644
---- a/arch/x86/entry/vdso/vgetcpu.c
-+++ b/arch/x86/entry/vdso/vgetcpu.c
-@@ -6,17 +6,16 @@
-  */
- 
- #include <linux/kernel.h>
--#include <linux/getcpu.h>
- #include <asm/segment.h>
- #include <vdso/processor.h>
- 
- notrace long
--__vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused)
-+__vdso_getcpu(unsigned *cpu, unsigned *node, void *unused)
- {
- 	vdso_read_cpunode(cpu, node);
- 
- 	return 0;
- }
- 
--long getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *tcache)
-+long getcpu(unsigned *cpu, unsigned *node, void *tcache)
- 	__attribute__((weak, alias("__vdso_getcpu")));
-diff --git a/arch/x86/include/asm/vdso/processor.h b/arch/x86/include/asm/vdso/processor.h
-index 7000aeb59aa2..93e0e24e5cb4 100644
---- a/arch/x86/include/asm/vdso/processor.h
-+++ b/arch/x86/include/asm/vdso/processor.h
-@@ -18,9 +18,7 @@ static __always_inline void cpu_relax(void)
- 	native_pause();
- }
- 
--struct getcpu_cache;
--
--notrace long __vdso_getcpu(unsigned *cpu, unsigned *node, struct getcpu_cache *unused);
-+notrace long __vdso_getcpu(unsigned *cpu, unsigned *node, void *unused);
- 
- #endif /* __ASSEMBLER__ */
- 
-diff --git a/include/linux/getcpu.h b/include/linux/getcpu.h
-deleted file mode 100644
-index c304dcdb4eac..000000000000
---- a/include/linux/getcpu.h
-+++ /dev/null
-@@ -1,19 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _LINUX_GETCPU_H
--#define _LINUX_GETCPU_H 1
--
--/* Cache for getcpu() to speed it up. Results might be a short time
--   out of date, but will be faster.
--
--   User programs should not refer to the contents of this structure.
--   I repeat they should not refer to it. If they do they will break
--   in future kernels.
--
--   It is only a private cache for vgetcpu(). It will change in future kernels.
--   The user program must store this information per thread (__thread)
--   If you want 100% accurate information pass NULL instead. */
--struct getcpu_cache {
--	unsigned long blob[128 / sizeof(long)];
--};
--
--#endif
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index cf84d98964b2..23704e006afd 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -59,7 +59,6 @@ struct compat_stat;
- struct old_timeval32;
- struct robust_list_head;
- struct futex_waitv;
--struct getcpu_cache;
- struct old_linux_dirent;
- struct perf_event_attr;
- struct file_handle;
-@@ -718,7 +717,7 @@ asmlinkage long sys_getrusage(int who, struct rusage __user *ru);
- asmlinkage long sys_umask(int mask);
- asmlinkage long sys_prctl(int option, unsigned long arg2, unsigned long arg3,
- 			unsigned long arg4, unsigned long arg5);
--asmlinkage long sys_getcpu(unsigned __user *cpu, unsigned __user *node, struct getcpu_cache __user *cache);
-+asmlinkage long sys_getcpu(unsigned __user *cpu, unsigned __user *node, void __user *cache);
- asmlinkage long sys_gettimeofday(struct __kernel_old_timeval __user *tv,
- 				struct timezone __user *tz);
- asmlinkage long sys_settimeofday(struct __kernel_old_timeval __user *tv,
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 8b58eece4e58..f1780ab132a3 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -31,7 +31,6 @@
- #include <linux/tty.h>
- #include <linux/signal.h>
- #include <linux/cn_proc.h>
--#include <linux/getcpu.h>
- #include <linux/task_io_accounting_ops.h>
- #include <linux/seccomp.h>
- #include <linux/cpu.h>
-@@ -2876,8 +2875,7 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 	return error;
- }
- 
--SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user *, nodep,
--		struct getcpu_cache __user *, unused)
-+SYSCALL_DEFINE3(getcpu, unsigned __user *, cpup, unsigned __user *, nodep, void __user *, unused)
- {
- 	int err = 0;
- 	int cpu = raw_smp_processor_id();
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-index bea8ad54da11..3fe49cbdae98 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-@@ -16,9 +16,7 @@
- #include "vdso_config.h"
- #include "vdso_call.h"
- 
--struct getcpu_cache;
--typedef long (*getcpu_t)(unsigned int *, unsigned int *,
--			 struct getcpu_cache *);
-+typedef long (*getcpu_t)(unsigned int *, unsigned int *, void *);
- 
- int main(int argc, char **argv)
- {
+=2E..
+> This series introduces a BPF hook that allows reporting
+> additional "pages over high" for specific cgroups, effectively
+> increasing memory pressure and throttling for lower-priority
+> workloads when higher-priority cgroups need resources.
 
----
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20250825-getcpu_cache-3abcd2e65437
+Have you considered hooking into calculate_high_delay() instead? (That
+function has undergone some evolution so it'd seem like the candidate
+for BPFication.)
 
-Best regards,
--- 
-Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+=2E..
+> 3. Cgroup hierarchy management (inheritance during online/offline)
 
+I see you're copying the program upon memcg creation.
+Configuration copies aren't such a good way to properly handle
+hierarchical behavior.
+I wonder if this could follow the more generic pattern of how BPF progs
+are evaluated in hierarchies, see BPF_F_ALLOW_OVERRIDE and
+BPF_F_ALLOW_MULTI.
+
+
+> Example Results
+=2E..
+> Results show the low-priority cgroup (/sys/fs/cgroup/low) was
+> significantly throttled:
+> - High-priority cgroup: 21,033,377 bogo ops at 347,825 ops/s
+> - Low-priority cgroup: 11,568 bogo ops at 177 ops/s
+>=20
+> The stress-ng process in the low-priority cgroup experienced a
+> ~99.9% slowdown in memory operations compared to the
+> high-priority cgroup, demonstrating effective priority
+> enforcement through BPF-controlled memory pressure.
+
+As a demonstrator, it'd be good to compare this with a baseline without
+any extra progs, e.g. show that high-prio performed better and low-prio
+wasn't throttled for nothing.
+
+Thanks,
+Michal
+
+--nav7xplzwe6tizdp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaVOgEhsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+AjqkwEAsnaDJnUrbpBZvRNgWKP5
+6Sa4JrRHis7FmRcVhJPNvUUA/1AnWVzTnXOrXQlAm2C1hsfhl2QuvaTzWc6hD0j/
+y5wD
+=OLWl
+-----END PGP SIGNATURE-----
+
+--nav7xplzwe6tizdp--
 
