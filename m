@@ -1,188 +1,137 @@
-Return-Path: <linux-kselftest+bounces-48017-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48018-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969D9CEA203
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 17:04:20 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26FE3CEAB68
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 22:24:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9F8EB300B686
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 16:04:19 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8D972300699E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 21:24:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98DFD284684;
-	Tue, 30 Dec 2025 16:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90B8223F40D;
+	Tue, 30 Dec 2025 21:24:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="IMpeeOfK"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="p4H65R3a";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bLUvyc0+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outbound.st.icloud.com (p-east2-cluster1-host5-snip4-1.eps.apple.com [57.103.76.84])
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C1531D726
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Dec 2025 16:04:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.76.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C083A1E81;
+	Tue, 30 Dec 2025 21:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767110658; cv=none; b=PqFEWyRsQ0tRpXcYhcCXJHMLNio31O+BeWdCdit2XhS3S9HcIsNA23eII54IEKioxw/nIy/cfttlj+oRvYYKRyKi4sxrU9gA57ujXcFy4A6et94VkQb90EnMaR1Bj9eNzwS/QRWdGN7cuL/OXDaB56CYlKSnT6w+HGpiPZgDDhU=
+	t=1767129840; cv=none; b=PJoxV3p/aABJmvEdy0QIcUVxIxHEoTovAHuEMNxId7gA9ciQvXooREHzDfcIzlfyydKMzKmLhTXVy6z7vBd5vn57rncSl1jrTlZ+K0GoGliQVn2Lh8JOVKoZdvuh9XwbAEWKWpQbMT+Fp3UKZ3GW7QrRWN8SjsR0lOqcZxdzLE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767110658; c=relaxed/simple;
-	bh=MkTv3QKFQS2K4w87Zd6z6dxuBD0mi5/2F9cxHWGpcJA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LRA/iz1BHNSDpNcf5uzVxxL9d/eq05KjXlFKURPzgklXVijdp445DvZLuYbnyKjxCvqz1C8WJAi8lkEzRgNra0XtEpesgqZs8eaWDLRRlHl4mhEGsLdS+mvzHXuMGxbRSCWpozlyorkRc5g4zMXChS2eA5GdEjdcfwSzhrWXx24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=IMpeeOfK reason="key not found in DNS"; arc=none smtp.client-ip=57.103.76.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-60-percent-7 (Postfix) with ESMTPS id 41E4C1800BE6;
-	Tue, 30 Dec 2025 16:04:12 +0000 (UTC)
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=GpF4ogiw53fTzVzp0SobYz28m0uHRxcdyzlZ3lDUN/s=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=IMpeeOfKB3ijUuhWl6PyzttfdQ4JSorNfoh5qqjnFAFymexs3QlPrX9qG5v3fycHd9VHIlygqnbSdfMb59a6vZ0doRF2TPg45UBnqeRFM3biLUf7pHv7rl0TpvIsqclw2BOoLJmgKC46+FruBvTfaSv7J7gqSU9i3q8rBTJkvR+t7KRtblOV1GXy3aDIexKG+1cAS4qY4ldyG0T47dG/2d02g9lXpkDudHo9ms3gl494IjFndlKwbClvNqn2Xxt2WTcp0QEKaex5cN3oRVpO9pqvlR3QWUEXQlDkhpjX3IEfX9fWXmHqEzYkaDAksxkwc7HUTbi4mrDR7Rx0RalbYg==
-mail-alias-created-date: 1719758601013
-Received: from desktop.tail809fd.ts.net (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-60-percent-7 (Postfix) with ESMTPSA id 417F41800BE9;
-	Tue, 30 Dec 2025 16:04:08 +0000 (UTC)
-From: yk@y-koj.net
-To: Jakub Kicinski <kuba@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Yohei Kojima <yk@y-koj.net>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 2/2] selftests: netdevsim: add carrier state consistency test
-Date: Wed, 31 Dec 2025 01:03:30 +0900
-Message-ID: <fb83c44f5194213fc9503ab2f66eefa0eeda8acd.1767108538.git.yk@y-koj.net>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <cover.1767108538.git.yk@y-koj.net>
-References: <cover.1767108538.git.yk@y-koj.net>
+	s=arc-20240116; t=1767129840; c=relaxed/simple;
+	bh=B0ckIWnp3yESlLOmyabv81FO28IAPWS6FyBnhf/gFu4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=sr4yb7HWxSRcGghIwzkIv0hB+l0KOt0Q6UTzFrh0Vhy40wNHnyJLn/n/+/PLpnvU6aGrR2Eepnv85VC9cdU1SvU464F4WvsZXUpUiZQeCa96LYolb30F2wMLi/5TR61OGnCM78cTBmUKrKHkjud9MudijMLwlTdUh+27zWKUK9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=p4H65R3a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bLUvyc0+; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 1C5F81400085;
+	Tue, 30 Dec 2025 16:23:58 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 30 Dec 2025 16:23:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1767129838;
+	 x=1767216238; bh=B0ckIWnp3yESlLOmyabv81FO28IAPWS6FyBnhf/gFu4=; b=
+	p4H65R3aBxgWEvEChftFpx5WWT6LMxaT4bz0Tk+Nc5LZWcS2nebHs/sZT4Oi8Etb
+	NGGqsgprTmkmGkrwLcHzDygt25mwWHpzQ4OsvMNy/PSmYtOR+YL61N1O+JvNllRa
+	ol/H6+34cgwtFFuxWbR60rSkDrq6rhU00Sn4nvb99oktxslrbm3QLl8/cCOW5SQh
+	1AZ/hF09Z6gqFzQVzAYH5RuK1ehiapZNibo5Q0zv92WlemUNGcqa9RvgUNRMOvlv
+	sZQkqCHiWIdGv8ogscAAc+pf5Sq3OSbGIfL6XgQ7bw1Y/x+ldRa1ZxG/+Ay2w592
+	lM75Lh/qgnnWQ9ja+bLHrg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1767129838; x=
+	1767216238; bh=B0ckIWnp3yESlLOmyabv81FO28IAPWS6FyBnhf/gFu4=; b=b
+	LUvyc0+c5k7XkGskDRpp0yt8Oo4lDgrJPAXw/1XwyvyZE9G15ZoUqHU+3Er/Ob1E
+	N2j5hjIxZW38Wx+7mgR9sySZVPZFkE1ObJuTNO3p5K++4SO7j3sdFeKqd857iuCR
+	W7vsXSnghObX5EiOamxwHwmxrTS5GueLZ0ZDf7IMsbczcBh26bmAgD+6fnp0RO/Q
+	02Vt+PeAB30L4ky/2v8wK2CEqjxvQZSV0UgY5v9KiFXcgARNsTK1p9DSG08qiVQp
+	DIr8cHV9hfH+x9CF/FWFUH59or69vOFhtO7+dJdG8qI4KQvKONx37LNKDtZHUjcV
+	MsQ/Tr4RFRHgPuCCzw70A==
+X-ME-Sender: <xms:7EJUaZlixzN0UyHjRfCRhotwlKDpIKysNl-YR6ID5HKMTygc6b6VTQ>
+    <xme:7EJUafpEFZ0pFPM42ezylH7rhq1a4btpwDFvhtR1GeCFl_hAzw4-nJuuBjj6_xwAL
+    asLBka-CbEhMbKj2gnV057ISHU1gh3S-soYvBxRqzp8HbCE5dKP7m4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdekuddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
+    ucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedvvddpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpthhtohepvhhinhgtvghnii
+    hordhfrhgrshgtihhnohesrghrmhdrtghomhdprhgtphhtthhopegthhgvnhhhuhgrtggr
+    iheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhuthhosehkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeigkeei
+    sehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrd
+    guvgdprhgtphhtthhopehthhhomhgrshdrfigvihhsshhstghhuhhhsehlihhnuhhtrhho
+    nhhigidruggvpdhrtghpthhtoheprghgohhruggvvghvsehlihhnuhigrdhisghmrdgtoh
+    hm
+X-ME-Proxy: <xmx:7EJUadtBvY635gejtgGX47cKPAWpsRUe0VPlemKpNR1p2AyzQLBh2w>
+    <xmx:7EJUaR7e7G5eZb-MP2g0obta-MBzFM1Y6E3lISsTd8IXx-RW7H06FQ>
+    <xmx:7EJUafesAiIO6FOKNkSSivltaHgE0yQVHhN2On3A5GWohr6k9fpQmg>
+    <xmx:7EJUaRW-3-DeC7Qw4zpZ8_dd4B2p2ShAb03a1ifzk0uuIscfkqJh9Q>
+    <xmx:7kJUaUHBl7Nf_j2U_4tAhK7sLsJpoR-E5cnP0yFvhA0pL5XM4PDtEV_4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id AF806700065; Tue, 30 Dec 2025 16:23:56 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjMwMDE0NSBTYWx0ZWRfX0CN0h5c+3lYo
- Xpi6UzO+z3kSVpKPJifuKDKg+fVZYSem2BLG5tmIs+fRIKknJQftNvoDLNPNbbv6dxRunwtkGWH
- mUbARlFeaoO1sWNoX2dbLPp0nmwtLEYe3WDpbES2v+H64a+//VJAkC74RwgO+js7gbGGPfR/onL
- y2MFd4cg5svJIydFQZ2Z8QpDHJ8eX1v1omtM2+sFd0eeW17s7PIJMDE9ay5duqHOXKmN7DNVceb
- OinpcJyrdQFdY0ZuERLyZiLNWGQtFQl/mVkQntUXRoZ7aqHyWKmVnpUAPFlA//KPJpzdmcqC09O
- lpU2pG/AxjtW4ewe3UX
-X-Proofpoint-ORIG-GUID: S9HOWODBr4o_5uWp_s1_cektw52tRKGv
-X-Authority-Info: v=2.4 cv=EfrFgfmC c=1 sm=1 tr=0 ts=6953f7fd cx=c_apl:c_pps
- a=YrL12D//S6tul8v/L+6tKg==:117 a=YrL12D//S6tul8v/L+6tKg==:17
- a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=jnl5ZKOAAAAA:8
- a=dxafgm9mWqSCDGKd2yIA:9 a=RNrZ5ZR47oNZP8zBN2PD:22
-X-Proofpoint-GUID: S9HOWODBr4o_5uWp_s1_cektw52tRKGv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-30_02,2025-12-30_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
- phishscore=0 adultscore=0 clxscore=1030 malwarescore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 mlxscore=0 classifier=spam authscore=0 adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512300145
-X-JNJ: AAAAAAABQna/sCR3AEVgrarNS9gmppod68NjbQdDT1rhtV8HD1UVi69nEhDTzNIMdnVAgvplYYHnUTEpheagzaS37o2shg5D95C8zNQjrLHcGSPG+KXUhm/4Xdl0NPylmQrERJVbepOND/i1Fd3jjlLIXwEyQ0LaUYcYVHO+RG3HqmLkjV1A7oeZCgkEEOMsafVmGHcO2CwWR0GZalIPbKzZ+X5otiJRAeW3GCjM/uLWMtMo4XL7d9og+kkN48/ZflwDQb5WpLOHkdoy70Hy4RQKV64UMd7M5Vc+LOlyAS+v0xW75yKyXxkCEkqN+wnjTNQzBv0SWJC42rWVSx5sZuKvOxN4WEDeWDaZMZF1WoUOS+uNyRArQkUTtSO4EX/40PrgOyMTO7bMQF7dcpVPmRF9FsmWAbQxGBWQ/rq6e7wZpRwcarcukQAbE7fIo7u9nV2roJMYbFIe3cW1HTRKY6elMV/eJMn+L0MkVqWz/1rugzFpvQ9aMAEXrqw7jdBnQXRel/Pgbh5aapUekq8pnFVmOoX4A3DSGFG60ToCUb0rZqjmt2Qntxuy35IKwhLBAeg1yFPAJxe3sdtfeVl9nmmgaupr9keFt1tHIDSYoZ0hh8xnsDSVMm8OshWlbunpvdpGvihFN+pUk179oZz+InMHSWfNG2vj1Mt5jcKc+Rz2+2gj/Url451cHEzIpDsbDx3hHPmfc+SFgr/6A6BoxvnqtaSlPGpEoRoXT8kTPVLtpuckofET7Yk=
+X-ThreadId: Ag1fLqAFCLhc
+Date: Tue, 30 Dec 2025 22:23:36 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
+ "Heiko Carstens" <hca@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>, "Andy Lutomirski" <luto@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Message-Id: <324be2f3-092c-4796-a7ae-4cddbc65ec00@app.fastmail.com>
+In-Reply-To: <20251230-getcpu_cache-v3-1-fb9c5f880ebe@linutronix.de>
+References: <20251230-getcpu_cache-v3-1-fb9c5f880ebe@linutronix.de>
+Subject: Re: [PATCH v3] vdso: Remove struct getcpu_cache
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Yohei Kojima <yk@y-koj.net>
+On Tue, Dec 30, 2025, at 08:08, Thomas Wei=C3=9Fschuh wrote:
+> The cache parameter of getcpu() is useless nowadays for various reason=
+s.
+> * It is never passed by userspace for either the vDSO or syscalls.
+> * It is never used by the kernel.
+> * It could not be made to work on the current vDSO architecture.
+> * The structure definition is not part of the UAPI headers.
+> * vdso_getcpu() is superseded by restartable sequences in any case.
+>
+> Remove the struct and its header.
+>
+> As a side-effect we get rid of an unwanted inclusion of the linux/
+> header namespace from vDSO code.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
 
-This commit adds a test case for netdevsim carrier state consistency.
-Specifically, the added test verifies the carrier state during the
-following operations:
-
-1. Unlink two netdevsims
-2. ifdown one netdevsim, then ifup again
-3. Link the netdevsims again
-4. ifdown one netdevsim, then ifup again
-
-These steps verifies that the carrier is UP iff two netdevsims are
-linked and ifuped.
-
-Signed-off-by: Yohei Kojima <yk@y-koj.net>
----
- .../selftests/drivers/net/netdevsim/peer.sh   | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/netdevsim/peer.sh b/tools/testing/selftests/drivers/net/netdevsim/peer.sh
-index 7f32b5600925..4ca994d2aa31 100755
---- a/tools/testing/selftests/drivers/net/netdevsim/peer.sh
-+++ b/tools/testing/selftests/drivers/net/netdevsim/peer.sh
-@@ -52,6 +52,43 @@ cleanup_ns()
- 	ip netns del nssv
- }
- 
-+is_carrier_up()
-+{
-+	local netns="$1"
-+	local nsim_dev="$2"
-+
-+	# 0: DOWN
-+	# 1: UP
-+	local is_up=$(ip netns exec "$netns"	\
-+		cat /sys/class/net/"$nsim_dev"/carrier 2>/dev/null)
-+
-+	test "$is_up" -eq 1
-+}
-+
-+assert_carrier_up()
-+{
-+	local netns="$1"
-+	local nsim_dev="$2"
-+
-+	if ! is_carrier_up "$netns" "$nsim_dev"; then
-+		echo "$nsim_dev's carrier should be UP, but it isn't"
-+		cleanup_ns
-+		exit 1
-+	fi
-+}
-+
-+assert_carrier_down()
-+{
-+	local netns="$1"
-+	local nsim_dev="$2"
-+
-+	if is_carrier_up "$netns" "$nsim_dev"; then
-+		echo "$nsim_dev's carrier should be DOWN, but it isn't"
-+		cleanup_ns
-+		exit 1
-+	fi
-+}
-+
- ###
- ### Code start
- ###
-@@ -113,6 +150,32 @@ if [ $? -eq 0 ]; then
- 	exit 1
- fi
- 
-+# netdevsim carrier state consistency checking
-+assert_carrier_up nssv "$NSIM_DEV_1_NAME"
-+assert_carrier_up nscl "$NSIM_DEV_2_NAME"
-+
-+echo "$NSIM_DEV_1_FD:$NSIM_DEV_1_IFIDX" > $NSIM_DEV_SYS_UNLINK
-+
-+assert_carrier_down nssv "$NSIM_DEV_1_NAME"
-+assert_carrier_down nscl "$NSIM_DEV_2_NAME"
-+
-+ip netns exec nssv ip link set dev "$NSIM_DEV_1_NAME" down
-+ip netns exec nssv ip link set dev "$NSIM_DEV_1_NAME" up
-+
-+assert_carrier_down nssv "$NSIM_DEV_1_NAME"
-+assert_carrier_down nscl "$NSIM_DEV_2_NAME"
-+
-+echo "$NSIM_DEV_1_FD:$NSIM_DEV_1_IFIDX $NSIM_DEV_2_FD:$NSIM_DEV_2_IFIDX" > $NSIM_DEV_SYS_LINK
-+
-+assert_carrier_up nssv "$NSIM_DEV_1_NAME"
-+assert_carrier_up nscl "$NSIM_DEV_2_NAME"
-+
-+ip netns exec nssv ip link set dev "$NSIM_DEV_1_NAME" down
-+ip netns exec nssv ip link set dev "$NSIM_DEV_1_NAME" up
-+
-+assert_carrier_up nssv "$NSIM_DEV_1_NAME"
-+assert_carrier_up nscl "$NSIM_DEV_2_NAME"
-+
- # send/recv packets
- 
- tmp_file=$(mktemp)
--- 
-2.51.2
-
+Acked-by: Arnd Bergmann <arnd@arndb.de>
 
