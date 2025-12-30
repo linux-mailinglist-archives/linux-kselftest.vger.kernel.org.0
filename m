@@ -1,59 +1,87 @@
-Return-Path: <linux-kselftest+bounces-47999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 639ECCE7D36
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 19:37:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20119CE89B4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 04:02:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 53E17303092C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Dec 2025 18:35:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DD560300EE7C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 03:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37A153314C2;
-	Mon, 29 Dec 2025 18:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A1F288D6;
+	Tue, 30 Dec 2025 03:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="Z1grI7E+"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MdVuWYHU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outbound.st.icloud.com (p-east2-cluster3-host9-snip4-5.eps.apple.com [57.103.77.136])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9333B33032A
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Dec 2025 18:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.77.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BE9EEC0
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Dec 2025 03:02:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767033252; cv=none; b=St2FZu3xQHwx01waUTt16fm/2bxaUjukI1HjWul3QqNusBl1IOvKYjDbv1CwAAC4IZA2iXRuK0qopP5pSr6d4t8f+GKnR261pLbb4VGCZDv8VQBk9N5IbTKJ3t9mvjNOH0kz6LbHfJIwbeWBfcriE4TpyskX4PxEsqsIDf9GvZI=
+	t=1767063773; cv=none; b=nP6KhSKLMRikasSDkcx1IAgqapqg/QmP1z3l2BD/rKiEVI5VYkjFAKUoz4eOSbffE6HGaK5eIQhgoFPemf0kTJjFWsXdkbVdtjgwiqA4TKJhdTu4Eof5o2EPs3j5kYrv/wo1MkYuszQc/ZZeaBk7Hu2Qi9YfAp3a+328O52n02g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767033252; c=relaxed/simple;
-	bh=Mi130XGYCHec4OXzL+gxRDI9DMokNqaQL0EQ6yw0ngM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KZjuVpyhPRN+meD8wd6RPW+OFw9MX6O3N6qfGvmI2hJYSP/MhOMD7/w2x5lXo3RjwKTAwLANhmSyDyCSdzqdKBXv+4vhD74oau8PCWOlnJg7vwj0uiBNCYP/cKtCZGxyR5jBagOR4ZfwMQrhSwZDI49tN6CJET9cVQVRLKWkPN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=Z1grI7E+ reason="key not found in DNS"; arc=none smtp.client-ip=57.103.77.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
-Received: from outbound.st.icloud.com (unknown [127.0.0.2])
-	by p00-icloudmta-asmtp-us-east-1a-60-percent-6 (Postfix) with ESMTPS id 8E80718005EA;
-	Mon, 29 Dec 2025 18:34:08 +0000 (UTC)
-Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=cV2EwEWsfYK4Aqz7v9TjiRD2mRX34Z/MplIFfUXaEsc=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=Z1grI7E+EQcIOGcg+LAGj5ShSSBosgR3KZfXb0F/BhoWpFcDHKj4kX4Ww+VokN21QLuudilj1G7wZOHGzRQWQ43T06Qd0T4caR5sajU0F7xlRGEsibNqaPmu3I/xlN/qIgZeOgjSGFba8DSF9AgYak99pDsSDIwBwn41XPJHd+4IXwjW71SPev9Amn3qGmC7BiJQMAHthJkp78d8uioSSwT9W4ZYOrECHtSofs7aJB3TdXaOEM7ahZfkEr+E7BNw+t2YOUNHt3Cc8qAytt/It3dAmRLMujd4QDfh5hz7mHI/U+938D+D1lVjqse0tzeDSBuGvd2u7H0v7eLMXdbvTQ==
-mail-alias-created-date: 1719758601013
-Received: from desktop.tail809fd.ts.net (unknown [17.42.251.67])
-	by p00-icloudmta-asmtp-us-east-1a-60-percent-6 (Postfix) with ESMTPSA id 0F1EF18000AD;
-	Mon, 29 Dec 2025 18:34:05 +0000 (UTC)
-From: yk@y-koj.net
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
+	s=arc-20240116; t=1767063773; c=relaxed/simple;
+	bh=SZuLog+8zVtTBnqpgJMZKh/MPhflPf1t+4j6HdwPIsk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bygDKJ8KMHMGt/iRFVQnm5hQm+k+jID7Ctt0hM7BC/4tolsqyZqpnvkaUhRxwOiEYDwF5S/2NteJfUywXJpJMUpdZFjLRfEfTWw1RsZLIoRFlhUk0lKLNO7ZNe68LiygKhUWB9y72215S98IJ6KUBNp3mAnztsHKKBpKa3fKQcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MdVuWYHU; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767063766;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=pqmSOMk9I68wh+LqBe0FNnFTYilwTyQt9JRYBSNWNew=;
+	b=MdVuWYHUfUZCtXsZAm8CRBrdIlaKOT4mDyDHc51JD6524QDnJeyfeqkA3Zf2SZG1UtScCq
+	Bxxm34bHC5rkGc6V2irbKX8oxW37xLEQx/2Dm5juxHCbnGCgnSsflj/kfmthSa/qCCZ0KC
+	kikuQG26m+J2OfUehSfDfBIp3vOEGuI=
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	davem@davemloft.net,
 	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Yohei Kojima <yk@y-koj.net>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH net 5/5] selftests: net: report SKIP if TFO test processes timed out
-Date: Tue, 30 Dec 2025 03:32:38 +0900
-Message-ID: <a4b42beade5730803bdee9c2631b1f4e1364c3f6.1767032397.git.yk@y-koj.net>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <cover.1767032397.git.yk@y-koj.net>
-References: <cover.1767032397.git.yk@y-koj.net>
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [RFC PATCH v2 0/3] Memory Controller eBPF support
+Date: Tue, 30 Dec 2025 11:01:58 +0800
+Message-ID: <cover.1767012332.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,89 +89,151 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Authority-Info: v=2.4 cv=ALPFdfBd c=1 sm=1 tr=0 ts=6952c9a1 cx=c_apl:c_pps
- a=YrL12D//S6tul8v/L+6tKg==:117 a=YrL12D//S6tul8v/L+6tKg==:17
- a=wP3pNCr1ah4A:10 a=VkNPw1HP01LnGYTKEx00:22 a=jnl5ZKOAAAAA:8
- a=wXUYcULF-yfjjPYjaGEA:9 a=RNrZ5ZR47oNZP8zBN2PD:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI5MDE3MCBTYWx0ZWRfX8XIWiNzE9coh
- gNKgFdgDEPbBr/KAy5PCfXJNUNVdigB/BFVxof17xRgAwIHiDRFTFImTN4sVMd1TJT2/KUcMzN1
- LPg4JUf6UR2JJZhRZsFLSvdfn3thjOncNqTz0z9suvvJzbZZbz1QeKKoR/v0ChXHtPptCHilkqK
- c7hmmQ/dZhF8zQGdmxqpVOeJObGdVbSKOjS2Y9shoHBgOw8jydlC/6/0tfGzIGrdRjiILU42pMV
- 1wGoUd85YiHAPAG5suTTIe0gru8oHhutfFGEMcJLGuGNpdC0S8R1UBnDiCVgf80ChIijuITJ3wM
- uFy9plcnel08m5ISkhn
-X-Proofpoint-ORIG-GUID: sHOBAgfL0sHsPGdOQuD2Gi6xE1gBmejO
-X-Proofpoint-GUID: sHOBAgfL0sHsPGdOQuD2Gi6xE1gBmejO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-29_06,2025-12-29_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- mlxscore=0 phishscore=0 mlxlogscore=853 adultscore=0 clxscore=1030
- malwarescore=0 spamscore=0 bulkscore=0 classifier=spam authscore=0 adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512290170
-X-JNJ: AAAAAAABIHpUnPxyaBlu0UN7W1AkFKyQaI67vP7qv/bn+r4h+oBdm62Fh4Wl1HDnQp5WO4f+4GkDElNQbvf2VlFbmP01ou1qOrjm/hpoDJVetUZM6NnxSwkRxorjmp17YcK/ngAdGjVzmgtJRKnE428HD+F5spMYwBC2wjHH9FDlncILAkj9U680Ok3a1ArJyYNl80h26TyhK1m1aBX4/79Li2jjHJaw/B9gzS3PC2ALQEv6jWjvnKy5uuXsYvwacCESAuOttoFm25Lrha4AmwaQOvM7ySHAXylbVyEXn1NhVHRSBUITeMSDLXGDxZbZeCOF7PYVeR4NDlXTt9L3/vu97CnPASQrBL53OmC3US2dYsBhhkw30eclMfgoEUGSJDb3zG2gppN0/IQtEzeEjcaZgnLqz6NcBEy8LGi/qXc0KWpxDz7B9sW3LR1UR79jWQvNXNTZKAn9Akdskac3OlCyfQIPlbsmp2mCY2GMYuZBdYV8iZq/PY6ZR7V12t55nUqxel5eucbwdY0e1+dwKdywLFoG9j3pfde3Ppk9YWrGjNQaYccNmy9BuqnObfBjnbJtOjaAUKdPBBJCDjpS8dswRwPpw/D/IW69edmF+v4vOSWYkgYojmwnKPamJvkEN6RgRpJWSfdwbxkOJEqqoO5S5x3HzfVLO9tZrONpetqTtwMnJ9p7S5ZbjFT9ahs8YK954QaFve+e/ac93V9d5ZgER5/NzC1KgIQ=
+X-Migadu-Flow: FLOW_OUT
 
-From: Yohei Kojima <yk@y-koj.net>
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-This patch improves the TCP Fast Open (TFO) test to report the timeout
-events and client/server error events by introducing better process
-management.
+This series adds BPF struct_ops support to the memory controller,
+enabling dynamic control over memory pressure through the
+memcg_nr_pages_over_high mechanism. This allows administrators to
+suppress low-priority cgroups' memory usage based on custom
+policies implemented in BPF programs.
 
-Previously, TFO test didn't provide any information about the test
-client/server processes' exit status, and just reported "ok". This
-behavior is sometimes misleading in case TFO is unsupported by the
-kernel, or there was a bug in the backing network devices (netdevsim).
+Background and Motivation
 
-Signed-off-by: Yohei Kojima <yk@y-koj.net>
----
- tools/testing/selftests/net/tfo_passive.sh | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+The memory controller provides memory.high limits to throttle
+cgroups exceeding their soft limit. However, the current
+implementation applies the same policy across all cgroups
+without considering priority or workload characteristics.
 
-diff --git a/tools/testing/selftests/net/tfo_passive.sh b/tools/testing/selftests/net/tfo_passive.sh
-index a4550511830a..1e89f1006c42 100755
---- a/tools/testing/selftests/net/tfo_passive.sh
-+++ b/tools/testing/selftests/net/tfo_passive.sh
-@@ -76,7 +76,7 @@ echo "$NSIM_SV_FD:$NSIM_SV_IFIDX $NSIM_CL_FD:$NSIM_CL_IFIDX" > \
- if [ $? -ne 0 ]; then
- 	echo "linking netdevsim1 with netdevsim2 should succeed"
- 	cleanup_ns
--	exit 1
-+	exit "$ksft_fail"
- fi
- 
- out_file=$(mktemp)
-@@ -85,12 +85,15 @@ timeout -k 1s 30s ip netns exec nssv ./tfo        \
- 				-s                \
- 				-p ${SERVER_PORT} \
- 				-o ${out_file}&
-+server_pid="$!"
- 
- wait_local_port_listen nssv ${SERVER_PORT} tcp
- 
- ip netns exec nscl ./tfo -c -h ${SERVER_IP} -p ${SERVER_PORT}
-+client_exit_status="$?"
- 
--wait
-+wait "$server_pid"
-+server_exit_status="$?"
- 
- res=$(cat $out_file)
- rm $out_file
-@@ -101,6 +104,14 @@ if [ "$res" = "0" ]; then
- 	exit 1
- fi
- 
-+if [ "$client_exit_status" -ne 0 ] || [ "$server_exit_status" -ne 0 ]; then
-+	# Note: timeout(1) exits with 124 if it timed out
-+	echo "client exited with ${client_exit_status}"
-+	echo "server exited with ${server_exit_status}"
-+	cleanup_ns
-+	exit "$ksft_skip"
-+fi
-+
- echo "$NSIM_SV_FD:$NSIM_SV_IFIDX" > $NSIM_DEV_SYS_UNLINK
- 
- echo $NSIM_CL_ID > $NSIM_DEV_SYS_DEL
+This series introduces a BPF hook that allows reporting
+additional "pages over high" for specific cgroups, effectively
+increasing memory pressure and throttling for lower-priority
+workloads when higher-priority cgroups need resources.
+
+Use Case: Priority-Based Memory Management
+
+Consider a system running both latency-sensitive services and
+batch processing workloads. When the high-priority service
+experiences memory pressure (detected via page scan events),
+the BPF program can artificially inflate the "over high" count
+for low-priority cgroups, causing them to be throttled more
+aggressively and freeing up memory for the critical workload.
+
+Implementation
+
+This series builds upon Roman Gushchin's BPF OOM patch series in [1].
+
+The implementation adds:
+1. A memcg_bpf_ops struct_ops type with memcg_nr_pages_over_high
+   hook
+2. Integration into memory pressure calculation paths
+3. Cgroup hierarchy management (inheritance during online/offline)
+4. SRCU protection for safe concurrent access
+
+Why Not PSI?
+
+This implementation does not use PSI for triggering, as discussed
+in [2].
+Instead, the sample code monitors PGSCAN events via tracepoints,
+which provides more direct feedback on memory pressure.
+
+Example Results
+
+Testing on x86_64 QEMU (10 CPU, 4GB RAM, cache=none swap):
+root@ubuntu:~# cat /proc/sys/vm/swappiness
+60
+root@ubuntu:~# mkdir /sys/fs/cgroup/high
+root@ubuntu:~# mkdir /sys/fs/cgroup/low
+root@ubuntu:~# ./memcg /sys/fs/cgroup/low /sys/fs/cgroup/high 100 1024
+Successfully attached!
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes 80% \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high stress-ng --vm 4 --vm-keep --vm-bytes 80% \
+--vm-method all --seed 2025 --metrics -t 60
+[1] 1075
+stress-ng: info:  [1075] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1076] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1075] dispatching hogs: 4 vm
+stress-ng: info:  [1076] dispatching hogs: 4 vm
+stress-ng: metrc: [1076] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1076]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1076] vm             21033377     60.47    158.04      3.66    347825.55      130076.67        66.85        834836
+stress-ng: info:  [1076] skipped: 0
+stress-ng: info:  [1076] passed: 4: vm (4)
+stress-ng: info:  [1076] failed: 0
+stress-ng: info:  [1076] metrics untrustworthy: 0
+stress-ng: info:  [1076] successful run completed in 1 min, 0.72 secs
+root@ubuntu:~# stress-ng: metrc: [1075] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1075]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1075] vm                11568     65.05      0.00      0.21       177.83       56123.74         0.08          3200
+stress-ng: info:  [1075] skipped: 0
+stress-ng: info:  [1075] passed: 4: vm (4)
+stress-ng: info:  [1075] failed: 0
+stress-ng: info:  [1075] metrics untrustworthy: 0
+stress-ng: info:  [1075] successful run completed in 1 min, 5.06 secs
+
+Results show the low-priority cgroup (/sys/fs/cgroup/low) was
+significantly throttled:
+- High-priority cgroup: 21,033,377 bogo ops at 347,825 ops/s
+- Low-priority cgroup: 11,568 bogo ops at 177 ops/s
+
+The stress-ng process in the low-priority cgroup experienced a
+~99.9% slowdown in memory operations compared to the
+high-priority cgroup, demonstrating effective priority
+enforcement through BPF-controlled memory pressure.
+
+Patch Overview
+
+PATCH 1/3: Core kernel implementation
+  - Adds memcg_bpf_ops struct_ops support
+  - Implements cgroup lifecycle management
+  - Integrates hook into pressure calculation
+
+PATCH 2/3: Selftest suite
+  - Validates attach/detach behavior
+  - Tests hierarchy inheritance
+  - Verifies throttling effectiveness
+
+PATCH 3/3: Sample programs
+  - Demonstrates PGSCAN-based triggering
+  - Shows priority-based throttling
+  - Provides reference implementation
+
+Changelog:
+v2:
+According to the comments of Tejun Heo, rebased on Roman Gushchin's BPF
+OOM patch series [1] and added hierarchical delegation support.
+According to the comments of Roman Gushchin and Michal Hocko, Designed
+concrete use case scenarios and provided test results.
+
+[1] https://lore.kernel.org/lkml/20251027231727.472628-1-roman.gushchin@linux.dev/
+[2] https://lore.kernel.org/lkml/1d9a162605a3f32ac215430131f7745488deaa34@linux.dev/
+
+Hui Zhu (3):
+  mm: memcontrol: Add BPF struct_ops for memory  pressure control
+  selftests/bpf: Add tests for memcg_bpf_ops
+  samples/bpf: Add memcg priority control example
+
+ MAINTAINERS                                   |   5 +
+ include/linux/memcontrol.h                    |   2 +
+ mm/bpf_memcontrol.c                           | 241 ++++++++++++-
+ mm/bpf_memcontrol.h                           |  73 ++++
+ mm/memcontrol.c                               |  27 +-
+ samples/bpf/.gitignore                        |   1 +
+ samples/bpf/Makefile                          |   9 +-
+ samples/bpf/memcg.bpf.c                       |  95 +++++
+ samples/bpf/memcg.c                           | 204 +++++++++++
+ .../selftests/bpf/prog_tests/memcg_ops.c      | 340 ++++++++++++++++++
+ .../selftests/bpf/progs/memcg_ops_over_high.c |  95 +++++
+ 11 files changed, 1082 insertions(+), 10 deletions(-)
+ create mode 100644 mm/bpf_memcontrol.h
+ create mode 100644 samples/bpf/memcg.bpf.c
+ create mode 100644 samples/bpf/memcg.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops_over_high.c
+
 -- 
-2.51.2
+2.43.0
 
 
