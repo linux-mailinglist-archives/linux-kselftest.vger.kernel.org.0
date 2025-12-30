@@ -1,60 +1,57 @@
-Return-Path: <linux-kselftest+bounces-48010-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9231DCE9A76
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 13:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 97C07CE9B66
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 13:57:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 60DC2304248B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 12:26:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9CDEC300A864
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Dec 2025 12:56:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3199A2EFDAD;
-	Tue, 30 Dec 2025 12:26:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E02A1C1F02;
+	Tue, 30 Dec 2025 12:56:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="g0ml8lfH";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yYwy9JQw"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3wnYeceQ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UM+xIc5z"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C7152EBDC0;
-	Tue, 30 Dec 2025 12:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C373A1AAE28;
+	Tue, 30 Dec 2025 12:56:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767097609; cv=none; b=rjyFQREDfnF0UPo5okiL25oIqZcYaVC3PbdqkorDAG8dA2IbKPBqPe4llYMaC60oB8n439rrft+XJ1zJbAR4Kk5zAZe8JgaaUAThSCdZkVGaqsQUMSBZb2ej3UpokLQYLeFzOePvVcOsfP77TkFn4wkD+cUJFgqpQ8r9wsJ2Drw=
+	t=1767099408; cv=none; b=ViJC2iYSql/x9jVpoInpNk8hedLAbifCUzvWbdPNREqT+F6j/7krIt9YYgeymXGyWOcZ1kNE0UI9lW31nAa1mQpxPO/1O/jrnNuZiW/oHING7yd49K67taF19zX9MTcz7nAeP5JbJivP76xCgqgP5zF7AQ79r4sPGo6ZD6bIRxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767097609; c=relaxed/simple;
-	bh=L2zjGW5l7ZMPlC5yZ8Bim6bC0+WpdGuMq6bHHK7bPcU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BD2MXbbvL8VBCCiuCjsGNg8w21y3QShd7zhNxpGzdwQm31GfnOUESCtiyDjc04p5jrHx7z1lo1ytSQeG4rdvi/Q80ot5qsGgYZSH7DSKGZoO3+evY3159Zv2aoW2fPiK4tpwM2H88YmhtG1l2t00tZIafDUXg4WkfINthrBOUjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=g0ml8lfH; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yYwy9JQw; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1767099408; c=relaxed/simple;
+	bh=LWg74/0hOx9JOV7tzEkr44kxmU95zPD51h88xTm0Ls0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=s71mItCLgPUgzyNL+4yBVWoNN9nMu9XTkqEC29A8jDHtmvbruMYnNhjVS4x1AVHI2hE8EWRBWZbeuQ2SaxLfHAfzbbbHjl/bAWAON7E31AX7bAZlCRrGLkr6VHS6PjaVyUtkbjnZLXKsKi7FUk3hhMpUhPOP6UO+KZ3VPpK05tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3wnYeceQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=UM+xIc5z; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1767097604;
+	s=2020; t=1767099404;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SUER9XFccQJK1WQYTH3/B0/Lr1N/zdpvMEIN1uy6dQE=;
-	b=g0ml8lfHcRdFcuujyE9717UZyVg4//9o4533oUlCXKu1PPV3y1ghQala2qmFAy0VpcGoJM
-	FwPLQoSdUvX1Uj5sF497jBQlVC8DYuI7/Ggea3/BmI30wUQMMSU4sIq2m2XRthtgvVd/4O
-	G+qLtxi7csHCHrMYWHA7dbQqOT9ZGnPjwJV0AV0k8wBfayL8JRwHw2U4fGTyfV08HHvKVF
-	7izqHccra8ENUADQOCNBkmFgluK43eBOqm6aeSVaGRCxrrG5sAxBQuTA/rUEJ5nK8j6gvo
-	9CmSGFtv/2BHZD4knbm1Hrg3yIn4i8cSaHUK9WPsxVVIEnBsBcziv8rygT5Lig==
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/DqRODIPg8sD2YgjYU3acxkGuKIemzJeFDXDkj8860c=;
+	b=3wnYeceQcE4BHsUzWTBEEI5R/Khsj7UjQDhCaMQxe9rOoUpsihYguPm2KJwunnWvZADsRX
+	k/SE8ZCoe7sMCQWkiXG3Tj25sBdGv/I+jMZAgX30shoMT8DnitEMaHBY62j886KFl+m10A
+	hguZ2FAWSb0nEPD2zLsVuac1d2qGThl73mRT1FAOoxebqaXbGBDipgcEEmB6dDKrMuxtfW
+	IAWrsvdq7GLwe6havJ6oSjxrKS9Ox/FMPmRS8TpbzcuiUzjNMU7wWj65S18giKFDY9wJKp
+	pwaPcyHm2c8Jse+xvCqODf0RpIrarqVz1WNewe8zf2Cqx0b5+7hYO/nV7gHc5g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1767097604;
+	s=2020e; t=1767099404;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SUER9XFccQJK1WQYTH3/B0/Lr1N/zdpvMEIN1uy6dQE=;
-	b=yYwy9JQwdDlsWc3nKssK7Y1tUrPPnwmqdJov4thnwV5Isfqntsy/IJWGbRWgE/v9/7s3BE
-	6VKV7CVG2OlrBjAw==
-Date: Tue, 30 Dec 2025 13:26:36 +0100
-Subject: [PATCH 2/2] kunit: tool: Don't overwrite test status based on
- subtest counts
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/DqRODIPg8sD2YgjYU3acxkGuKIemzJeFDXDkj8860c=;
+	b=UM+xIc5zCf/VBrkYWsu/fC/5AbrJztuSYC0YyXk7lyMl1SgqjHUx/gahMPjNuZxBDSLylS
+	NBLLN2gg56rg9eAg==
+Subject: [PATCH 0/2] kunit: tool: test: Allow running with pytest
+Date: Tue, 30 Dec 2025 13:56:41 +0100
+Message-Id: <20251230-kunit-pytest-v1-0-e2dae0dae200@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,77 +60,43 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251230-kunit-nested-failure-v1-2-98cfbeb87823@linutronix.de>
-References: <20251230-kunit-nested-failure-v1-0-98cfbeb87823@linutronix.de>
-In-Reply-To: <20251230-kunit-nested-failure-v1-0-98cfbeb87823@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAAnMU2kC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDI2MD3ezSvMwS3YLKktTiEl0jU8tEw9QkY7NEEyMloJaCotS0zAqwcdG
+ xtbUAP5dG7V4AAAA=
+X-Change-ID: 20251230-kunit-pytest-259a1eb36a42
 To: Brendan Higgins <brendan.higgins@linux.dev>, 
  David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, 
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767097602; l=2661;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767099404; l=779;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=L2zjGW5l7ZMPlC5yZ8Bim6bC0+WpdGuMq6bHHK7bPcU=;
- b=PxVnXMVfjO/budpsu/UuSbKZi2VD6fmlgBp3mLHT7t5ll4uSlBLLSqJw1LkK0tRjWzLB1JQCM
- E6iRuGaqjF4DNxLLmaY+Tt5thbzW6V3ksU2HtJdOsGqdgdXLDiUfR0J
+ bh=LWg74/0hOx9JOV7tzEkr44kxmU95zPD51h88xTm0Ls0=;
+ b=6wM9IZLE5/aSr4uI2d3RotrzQp7sHl7uEDQ8MPB3ju2hIAEA/BZe1lOVEOFHxpvusyJSWa5PX
+ FhBPgeaizHJDLeaKatNM58f2F9mHeY9Nj6YhyDb1nGETAsqG4XujXEB
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-If a subtest itself reports success, but the outer testcase fails,
-the whole testcase should be reported as a failure. However the status
-is recalculated based on the test counts, overwriting the outer test
-result. Synthesize a failed test in this case to make sure the failure
-is not swallowed.
+pytest can run unittest-based testsuites, like kunit_tool_test.py.
+It has a more features than the standard runner.
+Unfortunately a few minor issues currently break this.
+
+Adapt the testsuite to work with pytest.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Reviewed-by: David Gow <davidgow@google.com>
 ---
- tools/testing/kunit/kunit_parser.py                                  | 3 +++
- tools/testing/kunit/kunit_tool_test.py                               | 1 +
- tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log | 3 +++
- 3 files changed, 7 insertions(+)
+Thomas Weißschuh (2):
+      kunit: tool: test: Rename test_data_path() to _test_data_path()
+      kunit: tool: test: Don't rely on implicit working directory change
 
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 333cd3a4a56b..5338489dcbe4 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -689,6 +689,9 @@ def bubble_up_test_results(test: Test) -> None:
- 	elif test.counts.get_status() == TestStatus.TEST_CRASHED:
- 		test.status = TestStatus.TEST_CRASHED
- 
-+	if status == TestStatus.FAILURE and test.counts.get_status() == TestStatus.SUCCESS:
-+		counts.add_status(status)
-+
- def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest: bool, printer: Printer) -> Test:
- 	"""
- 	Finds next test to parse in LineStream, creates new Test object,
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index b74dc05fc2fe..d5bbcb95ab6a 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -172,6 +172,7 @@ class KUnitParserTest(unittest.TestCase):
- 		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
- 		self.assertEqual(result.counts.failed, 2)
- 		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.subtests[0].status)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.subtests[0].subtests[0].status)
- 		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.subtests[1].status)
- 		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.subtests[1].subtests[0].status)
- 
-diff --git a/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log
-index 2e528da39ab5..5498dfd0b0db 100644
---- a/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log
-+++ b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log
-@@ -1,5 +1,8 @@
- KTAP version 1
- 1..2
-+    KTAP version 1
-+    1..1
-+        ok 1 test 1
- not ok 1 subtest 1
-     KTAP version 1
-     1..1
+ tools/testing/kunit/kunit_tool_test.py | 59 +++++++++++++++++-----------------
+ 1 file changed, 30 insertions(+), 29 deletions(-)
+---
+base-commit: a77b19b747c8a53ac16289685b0f77085a2ad553
+change-id: 20251230-kunit-pytest-259a1eb36a42
 
+Best regards,
 -- 
-2.52.0
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
