@@ -1,158 +1,200 @@
-Return-Path: <linux-kselftest+bounces-48032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48033-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77135CEC741
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Dec 2025 19:14:21 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0535CEC7B4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Dec 2025 19:47:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CED64303091A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Dec 2025 18:14:05 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7071930039DA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Dec 2025 18:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 856F32FC024;
-	Wed, 31 Dec 2025 18:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C303C308F2A;
+	Wed, 31 Dec 2025 18:47:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OfLzlWNU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WZ2rJi2E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3892F9C39
-	for <linux-kselftest@vger.kernel.org>; Wed, 31 Dec 2025 18:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21347308F26
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Dec 2025 18:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767204843; cv=none; b=OgZNuI28EBEtwufIRO40aisKzSrNOdhITdHLpRvCGiHr15k/61QvjL7XssgZ5FrqRGzaDwQCMJDl6hXjAmRfTEN88G6ChhgzFOR6q5nRaaB4qtL7JNesp0b/+o0NgmjcMJrxecjg5uKY6/bC7IbXH2ZcHUeMBUXkWHpWTnAjihI=
+	t=1767206843; cv=none; b=irVLlBC1pV4H4Q+D3gAi4+ElhILkRqKh9MJVrc6rYoaUvuAvO4yhZYwXm+f2OE3colyU0CeH3tPWbjmOSXTkLrZGYeSmnE9xOA2ok1D96BoKikkdvZmr3NXdESoYDQNg8VTM8yUi4KxCfmgbACbq3mYGH4GlQD/bSnYPWw1ygE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767204843; c=relaxed/simple;
-	bh=l0LRvl1kqcmBpJ+oiXL+hUtJD8MnLQw7yRd+cy/68MI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CZC87ZB2YsBuFFXm/FAKxKhowgnO982o/QF9OP9YWMUHPDzDFxQnpf2wUubDxqsFHsS/xtLf4Z7Kpn51zaghJtMplfuzRaaS1SOiKUOrI9xec28JiFBJ8eTTmipiTWb5Aq+D9oPuyybTHbTT+1dLo4eebAFSVgTwrLiHc27nmZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OfLzlWNU; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1767206843; c=relaxed/simple;
+	bh=eHViu1se3YsldXmpx6sxgvswnK1NuLJRzANw/XVEnHU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HYd4UlIy1BUd3W3uCyu73l4Y+u6JP+prUzYH9ivtPQ0BMXgNzqhuVfwswFo5qYRQdNEp1r2a9C+gZg9Sm6eiGG77KajGBCrsqRJFTjZYb5IoahpAgDCpdGXSYdEexhsd9lSIsHYWi+r1SZwLjWe7mOO9G3yA2Km2R5g0uAWNoAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WZ2rJi2E; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4327555464cso2833702f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Dec 2025 10:14:00 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-78d6a3c3b77so115829557b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Dec 2025 10:47:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767204839; x=1767809639; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=80wuQlyFH/FTtp28IkHfYhaeWqE7rS7z6vp3Trh+jc4=;
-        b=OfLzlWNU9tNh19lSAgaTDAAozHeFHEju+uWNAjP9QTUwb8+5hd+Nq9C8dAiR0RPdYg
-         J2czUTeqjfPVMQ4ePBDiPsfUjuCNlI2iAxFhljFDCeoTJ5vDlXEsrqi8GN7n0iQKa483
-         YmLoaPgSHLGADSqNRv6rmSRSB+8oHnY6/hy3v82ss0yvfk6125AncvXKghhsQCzenEuJ
-         drtwjRNp8bU1+aDi+7jqdM8/bS5plGkyolcMmSD9xvY/2jhlaG5q+eyFZ71S98AHJlmE
-         uQwtrCw9PU9u8SsPUsfe7ZLdrwA1qQpB6YMJJPwY1HzSzWxPQ0CllxHFZ/sYcgwVaXVz
-         J4wg==
+        d=gmail.com; s=20230601; t=1767206841; x=1767811641; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TR8lxCkS4eDpppOQUREYlPdk8D1i+AlunKABWTpf3Pc=;
+        b=WZ2rJi2EuukMy7vmNMdi6EqPvhrmzqcNYNlvOAIrSQ1vhNgJuxhu3CwJv2hdfas+JB
+         gVsvjeLnYlVVl0aoUUbJBMxlO2bDbRJ3GACggCeQW3LpbxVh3IzxsXthrMpi32C/FeiD
+         DnrkKv46gKTw5HnMz8sN7QX4xO2ynPZF/IVI/5ZMJhm+rrt2ovLOqdxD4WAe80oPNa/G
+         bYZuFZqlZQwGSbdIVHweEKJWBb8jxnIRjK4XfuJStypySkehVoGLsET8X35W78pZ0hg1
+         pKHhGVstSQUyo7ivOPCB+OQsVzWbgvh4/92xlX93TBs7F6JU4RhpanIuedEmmcncc9kK
+         QUnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767204839; x=1767809639;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=80wuQlyFH/FTtp28IkHfYhaeWqE7rS7z6vp3Trh+jc4=;
-        b=hUYgBs+FLJ50U1bfhveQZigZbGNdcY2KktlVzzO1cf8/Hc/MCSSy8L+Mq+bqhTX7gc
-         7Qp90aGX3XFXe/p3X60g0xkN+w/bo91NDkYP+DSDDApKBcA2Yqa8cuaYgoUMkncKALm9
-         0Z4pVxMLAI0QtTjM/MmstBgeTwg6hz4r13uC21F0qClFLSa4oIgqX+WdBVno/KMqt4vH
-         tCZ6CKuOPyqaHBspUHAxTmYGcSWFSsabnPqBn/q7sKornThgFxkdnfVHSnyYkoZnadCy
-         KCK2unMiGZt0k+4IVNT4Ou2o+U3zWVZLER1A6ilrfcQLZ+Igp0x27GRGAtj+owXppS0Z
-         3zMA==
-X-Forwarded-Encrypted: i=1; AJvYcCWx9HXmEXgHwoalJN0m4+Gn8enB+ZrO7/Qapcp1OFK3fNODy+as9N7DCJWjWzoxP76CisHdt2CSIi6ii8D0hqY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+XuN37rQgihl9AZy1GZFuR9Arl3gukvW8QorDxm+caPWrQNsP
-	unwDKMF1uHTwt0e139S5ns6sJFlrplzXm056Kyp4u2SjnXBmfBeHwMd2yKQ9xD1Gi8L9eam7xlE
-	b3VZMkjMWTw6r0eGlIW3Nrg/ImAx3+d4=
-X-Gm-Gg: AY/fxX6bnvF0bOJ8rkUlJXTqGPjySRYLeufoQmzolJmGG3YdDbc5b0CQRXdyAlDqBfp
-	DpN3SNTAk+/v+IwqoWasuYjOHDAR/ZV0XNXewkWUAdGlDldtWjZzjPLu4D10kDP1n9+0Umii938
-	tQuf1OZnXV6+jzt9AukASJB5iHK3+OA7Gnsvug01m/l89nxYakHCKpfWamWgQdTfz//Nngx0VD1
-	+ys9iYi3a0Yiltj5LAuc8OBQINOhbZCnHZ6IeuHDx+XGstCH8yYI/TaxOpFh8luKLnRmHhM1DZv
-	q82XS7eppc1hL/p+/KKCIPBkNuOy
-X-Google-Smtp-Source: AGHT+IE7rn8UGO5FxmIqC7DPe8kHIdUtmNgCuEKioyalqiNjU4yifPpIQxEAl6/RRsYuU+/knbKXbX9dpW9nJ6ADD+Y=
-X-Received: by 2002:a05:6000:611:b0:431:3ba:1188 with SMTP id
- ffacd0b85a97d-4324e4c70e5mr40336157f8f.3.1767204838828; Wed, 31 Dec 2025
- 10:13:58 -0800 (PST)
+        d=1e100.net; s=20230601; t=1767206841; x=1767811641;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TR8lxCkS4eDpppOQUREYlPdk8D1i+AlunKABWTpf3Pc=;
+        b=H+xu2lysQlOjZGSqr/ArxCFaSbqXFcUE+tVRP0d9cLx/EcBZxG2ZCLLQPTjrxmZudL
+         hw4hsXYFhNKezQjxL7ifOj5ib6hWqkVcUFeEVaqsygVwIZsoVXUxEihr9Huc6BmCXbN8
+         3kwdoKv33akdrU5czTkRkxU8kjhHnqbkWz84qLPyK3p7/tEw8DsasikV3VomE96Ak4+a
+         HtA6v1vd600/se8Rlq1ebEn7sjMuqa1aZTvDIl3KiY/W2bWsnvdllk/rebyS0XBhobnl
+         XY6Vf6D+x2mnohOe+wMBfAQ/mvOdgWiAtlQ6MVom3jVEoYLycE/OGnz+IVo/hJmxuR8Q
+         TpkA==
+X-Forwarded-Encrypted: i=1; AJvYcCVL0qoAMq9ar/Nkh4N9kI9LDu2GMZjD03LlEUFjnpQ2LlXfhOmIuNyCmsTWl77pcJaNM0p3Fe88/6fAxbXvz0I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7QrMryt6ejtds0s9XJ8e9YDRsiZ/8CPFCxNcto9lfc9ggWWf5
+	HOFTy48zT/ZG8eFKH/V+VqnOPJqzhlcaQN2jIYQiMIj5W1Unf6UfS2IT
+X-Gm-Gg: AY/fxX67trwCaohUSHz2rf+uXV/UtRHV9gICxHlNxtofqjjDYUIgTwzeK5+v/yEV2Jy
+	9BIA+1ZMIB9QFAN8/T6YQTuAADfREtVWpNEaCl5Y3esqh/cGuS5y2Myw/nIzarK+QYCWsXMptfL
+	aDCT80VfYK0Scu4yUbrQeOYzIVpRHjZXYJsItCWQPW/+QsxGp/gdScaFJYy39pfdEeDIKq0H5w7
+	x82O7F53RaHwGw81Zc5fCJ1viE9hBS6E6+wZT+5TUqKX2jocKVLePQdp10gkLgMnIwhqHeGDyzr
+	1EOeCGK0vX8BnUxGGHwUAR5fuB9CDpNZNoNaU8/KaOP51J3bTgA8SvCp5e0PlYsfRTUbx5ZtrMr
+	25f8TNVlI2ACgNl707feG+WbG1sIFrbJcvSctm+b+yn01/T7HsyLBKKapPG8ST10TUHpZ2HJbw6
+	Sb5b6EpmVGGDD+x/S+OxLikk81+j/KAa9aE8VEhCLwV2a0Zb+sDVC7r8jfA2VaLbB/HqEnA1Qsw
+	X8XQUXYGw==
+X-Google-Smtp-Source: AGHT+IHEqCVRdOuzPfyY82vPKnN2kZ1OXtQIg2FDKVFLpbjMgQDZ7U+nzlNrk9xDlGuhRUgkzZ79yw==
+X-Received: by 2002:a05:690e:11cb:b0:646:5138:620c with SMTP id 956f58d0204a3-64669c44188mr27285576d50.0.1767206840973;
+        Wed, 31 Dec 2025 10:47:20 -0800 (PST)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6466a8bd6ffsm17896745d50.9.2025.12.31.10.47.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Dec 2025 10:47:20 -0800 (PST)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH] selftests/bpf: fix qdisc kfunc declarations
+Date: Thu,  1 Jan 2026 02:47:11 +0800
+Message-ID: <20251231184711.12163-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251231173633.3981832-6-csander@purestorage.com>
- <e9a1bd633fb4bb3d2820f63f41a8dd60d8c9c5e3c699fa56057ae393ef2f31d0@mail.kernel.org>
- <CADUfDZpSSikiZ8d8eWvfucj=Cvhc=k-sHN03EVExGBQ4Lx+23Q@mail.gmail.com>
-In-Reply-To: <CADUfDZpSSikiZ8d8eWvfucj=Cvhc=k-sHN03EVExGBQ4Lx+23Q@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 31 Dec 2025 10:13:47 -0800
-X-Gm-Features: AQt7F2oHF_qxr3_KPJ-VT5eeYhG4tvvvWKJxtIn11KSC3ODYIcBGmV1QpWm3ri0
-Message-ID: <CAADnVQKXUUNn=P=2-UECF1X7SR+oqm4xsr-2trpgTy1q+0c5FQ@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selftests/bpf: make cfi_stubs globals const
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: bot+bpf-ci@kernel.org, Jiri Kosina <jikos@kernel.org>, 
-	Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Benjamin Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>, 
-	Jiri Pirko <jiri@resnulli.us>, "D. Wythe" <alibuda@linux.alibaba.com>, 
-	Dust Li <dust.li@linux.alibaba.com>, sidraya@linux.ibm.com, wenjia@linux.ibm.com, 
-	mjambigi@linux.ibm.com, Tony Lu <tonylu@linux.alibaba.com>, guwen@linux.alibaba.com, 
-	Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, sched-ext@lists.linux.dev, 
-	linux-rdma@vger.kernel.org, linux-s390 <linux-s390@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 31, 2025 at 10:09=E2=80=AFAM Caleb Sander Mateos
-<csander@purestorage.com> wrote:
->
-> On Wed, Dec 31, 2025 at 10:04=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
-> >
-> > > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/t=
-ools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > index 90c4b1a51de6..5e460b1dbdb6 100644
-> > > --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> >
-> > [ ... ]
-> >
-> > > @@ -1275,7 +1275,7 @@ bpf_testmod_ops__test_return_ref_kptr(int dummy=
-, struct task_struct *task__ref,
-> > >       return NULL;
-> > >  }
-> > >
-> > > -static struct bpf_testmod_ops __bpf_testmod_ops =3D {
-> > > +static const struct bpf_testmod_ops __bpf_testmod_ops =3D {
-> > >       .test_1 =3D bpf_testmod_test_1,
-> > >       .test_2 =3D bpf_testmod_test_2,
-> >
-> > Is it safe to make __bpf_testmod_ops const here? In bpf_testmod_init(),
-> > this struct is modified at runtime:
-> >
-> >     tramp =3D (void **)&__bpf_testmod_ops.tramp_1;
-> >     while (tramp <=3D (void **)&__bpf_testmod_ops.tramp_40)
-> >         *tramp++ =3D bpf_testmod_tramp;
-> >
-> > Writing to a const-qualified object is undefined behavior and may cause=
- a
-> > protection fault when the compiler places this in read-only memory. Wou=
-ld
-> > the module fail to load on systems where .rodata is actually read-only?
->
-> Yup, that's indeed the bug caught by KASAN. Missed this mutation at
-> init time, I'll leave __bpf_testmod_ops as mutable.
+The qdisc BPF selftests fail to build because qdisc-related kfuncs are
+used without proper declarations, and struct bpf_sk_buff_ptr is only
+introduced in a function prototype scope, triggering -Wvisibility and
+type mismatch errors under -Werror.
 
-No. You're missing the point. The whole patch set is no go.
-The pointer to cfi stub can be updated just as well.
+Fix the build by:
+  - adding a file-scope forward declaration for struct bpf_sk_buff_ptr
+  - declaring qdisc kfuncs (bpf_qdisc_* and bpf_skb_get_hash/bpf_kfree_skb)
+    as __ksym in the shared header
+  - including required BPF headers in qdisc test progs
+
+Tested: make -C tools/testing/selftests/bpf OUTPUT=/tmp/selftests-bpf \
+/tmp/selftests-bpf/bpf_qdisc_fifo.bpf.o \
+/tmp/selftests-bpf/bpf_qdisc_fq.bpf.o \
+/tmp/selftests-bpf/bpf_qdisc_fail__incompl_ops.bpf.o
+
+Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+---
+ .../selftests/bpf/progs/bpf_qdisc_common.h      | 17 +++++++++++++++++
+ .../bpf/progs/bpf_qdisc_fail__incompl_ops.c     |  4 ++++
+ .../selftests/bpf/progs/bpf_qdisc_fifo.c        |  4 ++++
+ .../testing/selftests/bpf/progs/bpf_qdisc_fq.c  |  1 +
+ 4 files changed, 26 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
+index 3754f581b328..bed2294c35f9 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_common.h
+@@ -3,6 +3,9 @@
+ #ifndef _BPF_QDISC_COMMON_H
+ #define _BPF_QDISC_COMMON_H
+ 
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
+ #define NET_XMIT_SUCCESS        0x00
+ #define NET_XMIT_DROP           0x01    /* skb dropped                  */
+ #define NET_XMIT_CN             0x02    /* congestion notification      */
+@@ -14,6 +17,20 @@
+ 
+ struct bpf_sk_buff_ptr;
+ 
++/* kfunc declarations provided via vmlinux BTF */
++extern void bpf_qdisc_skb_drop(struct sk_buff *skb,
++			       struct bpf_sk_buff_ptr *to_free) __ksym;
++
++extern void bpf_qdisc_bstats_update(struct Qdisc *sch,
++				    const struct sk_buff *skb) __ksym;
++
++extern void bpf_qdisc_watchdog_schedule(struct Qdisc *sch,
++					u64 expire, u64 delta_ns) __ksym;
++
++extern __u32 bpf_skb_get_hash(struct sk_buff *skb) __ksym;
++
++extern void bpf_kfree_skb(struct sk_buff *skb) __ksym;
++
+ static struct qdisc_skb_cb *qdisc_skb_cb(const struct sk_buff *skb)
+ {
+ 	return (struct qdisc_skb_cb *)skb->cb;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__incompl_ops.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__incompl_ops.c
+index f188062ed730..8f9b2d2cb9a1 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__incompl_ops.c
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__incompl_ops.c
+@@ -1,6 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+ #include <vmlinux.h>
++
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
+ #include "bpf_experimental.h"
+ #include "bpf_qdisc_common.h"
+ 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
+index 1de2be3e370b..524d3ae2c9a1 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fifo.c
+@@ -1,6 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+ #include <vmlinux.h>
++
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
+ #include "bpf_experimental.h"
+ #include "bpf_qdisc_common.h"
+ 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
+index 1a3233a275c7..dd47820fa230 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
++++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fq.c
+@@ -35,6 +35,7 @@
+ #include <vmlinux.h>
+ #include <errno.h>
+ #include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
+ #include "bpf_experimental.h"
+ #include "bpf_qdisc_common.h"
+ 
+-- 
+2.43.0
+
 
