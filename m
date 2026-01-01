@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-48040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59064CECB4C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 01 Jan 2026 01:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA016CECC2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 01 Jan 2026 03:10:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 14D8C301FF66
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jan 2026 00:28:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0D21430057E8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jan 2026 02:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B119A207A32;
-	Thu,  1 Jan 2026 00:28:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16AD828FA9A;
+	Thu,  1 Jan 2026 02:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="GwHgbc9r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/OVexLt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1EB1F1932
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Jan 2026 00:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D6B28B3E7
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Jan 2026 02:10:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767227324; cv=none; b=nZKLIasr/e3nt864+YTNJpK9RPhDxFLLrQAQlmaec4tIGEv4400re+jPApdQQWUvK2PUWTI2y6XjhJ+oGCwu/MelcYEr5TnX+1Mzuf0u/rrzRfarAXunyoUgAYb9x9ruq/jf9uuGlgMeQQ6MuuhSeESeaW0x9mRasgasqaXOL2A=
+	t=1767233455; cv=none; b=j4V187h37FvKmoilo52GwLDZHlqi7kxCGn8AXVr2eUpFAe+h4eCRzAb6I+MjHZFM9F8HytLZKSHyk9zNjqJuHWg8ngshpqH/V/MwE2n9mch1oXsPx1Ed7VeHl8zr0WXEiij+J7SGZ3rJbDwglhdlfaWg9cVscK71R8coGTpobM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767227324; c=relaxed/simple;
-	bh=+kPcMSmk7R+Gdq2EzKirCklN8/HPtQfdcLKStyPOwlc=;
+	s=arc-20240116; t=1767233455; c=relaxed/simple;
+	bh=qqizFew/kTOzewLvL59xdtHtP4J/gkIe7g4rCO241Es=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bmSjB9gqQp4g2To0HSq/shXydE46b5gvERzAE6fZo4VvBO6pkXF9oPqOBF5LKM5x1ms+uzqw0sneCZd2Oajna8b9ZQieiBAjE4F7tUNqFMd7Idb4NS+vldKKP146+6LQA0+QSj4GQCd4BmhHlnQ2b2H5X7hojJMZwh9YK7ScwSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=GwHgbc9r; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a08cb5e30eso21811185ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Dec 2025 16:28:41 -0800 (PST)
+	 To:Cc:Content-Type; b=AnnmNkDQJt3o+8ygDrip12MXZ/4Fu82pmbOc6VFKormSvdjT8fMaFI/pcqnq3A1KJ2QvDJ2UjCqFGI0lZq7j2K0YtuyNQlJVC0Ogp5Dou+wwpwpquavYh06LaDk2szk/xgObTjD6dMvc5WmphhT116TxFG3VC2exXMRzOyWb5hI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P/OVexLt; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47bdbc90dcaso69809765e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Dec 2025 18:10:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767227321; x=1767832121; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767233451; x=1767838251; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S2uWD+3+uKcWSebatXzToxK0XPCm9Txe1uJXgdjEiEI=;
-        b=GwHgbc9r30Ug/mgssLkcZMbvvGVTEIKLD02ashIzCLtfm6ZCgTMRZW6nX+ldXWlhMO
-         18m0rs+7ZizGE9ulyqa78mVGaPbsUs1NhfftCftyPExezEdexRD0QEMN/R6W+QPvATWe
-         Ld+mCKpk1/dRRsnqU0CUEo8L0+UeSEJut4YtxkAKjlHDX7t5YB8e9fJTGEOdPjN3qGnR
-         acEcVh1hqQNbzHUgxw2BDa9fURZZwe+2M/IS9VEJRARrlxkPBM71IdWz/Mm9G/LnLuMx
-         tdl91nW0Ocdpir1EYE2CPjQhfsm0tT7hWQlQyQSVW9XVppr20DG1VRMUJjKQvTJXzAUt
-         ROLw==
+        bh=L2EkUzQ6sigBd+WWV5Hcl6Vcy/jBU7DTMqVQsenR/Xo=;
+        b=P/OVexLtkAJL/ji/IYpg+cnW6NzdWDUSRp8Pqik1QtPmS/aI9qBe63lt/ZK4hnmsth
+         FXIHJi77ybxplKrxGUFKykkq77JbH1CLGWJINYQ+wHQ45kpk2UwoCg3D1CHM4jOrfsBb
+         tkgj8W6Kqu8JZYCI8Dgvf/cg5pkF+tDwdIikC6sCJlyvD8VcAqiEqItzGtvZTCuYkYrb
+         yFBjPVXMljpbfsi/ZePaHGVG4gsHTS1l4+LCnA0pvQBhbkrYfU7JYIjAgmrNp7jVL+Sg
+         nRgdCYJ2nefi+pYDd2aREqonc+kT0rg0ZZInMTa9f9rZrTVxR1aFN89c/eiD13eRC/nD
+         wY4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767227321; x=1767832121;
+        d=1e100.net; s=20230601; t=1767233451; x=1767838251;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=S2uWD+3+uKcWSebatXzToxK0XPCm9Txe1uJXgdjEiEI=;
-        b=eGi8arTFTDOorEaTyLk21YbeJuInj0vZm29HVYLAifqSMVPCLeuVlQ1BbJT0ubXukW
-         +ynNUnqhObRyIVxUgnGQw44W6+4nJK8oM63/N0rI+mPOeOciumkyPikt9j9GF8co9yjd
-         Sbe5kzeqAYt9R5yGxjjG2lXo3kSuQZ1b1aFkab90rXLdQf76fABLxyAZtxz3Nv9KbYxY
-         16SkRj2vsBo0tm3ETW07pO8F/XkkO24pSaDAXkezBUsExA2qfRcMj6A4L+E38js9K1u5
-         LUHSn42j0msuuxisGypL9kmBHtU+2j+AGccHZcleckk1r0CP2II3fCtj6J2Jkx2gP20s
-         NCWw==
-X-Forwarded-Encrypted: i=1; AJvYcCVTbQ8CfzACnFhda1xnCSkTTmwhWSqLZueoXWVn4a5hPNsyWgfmPoeAeF/NLd71dgPiAuHRwQ1ffxlJXZhJ2wU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyW6P8S8dnJ5RtIijAdqPn7PN+7JDcO5iCd/EBF6g98xq+WXt+a
-	dN7S9oPoVTxCXSHZYgch36gn1SZ3cl2CwSDaDtAUoO/ms9NJ5TNeCaiVKRv7s54YuPQe1ebURZc
-	bltM3fsAOx3go8dPRWJ3Y6TfNR4BvVTkfWfsoz7OmcA==
-X-Gm-Gg: AY/fxX7RCXgdoBRKqpxR3QAP4NQcGzmiQ4go6Z9zhb1gbhcTc0MXbTDOjqBfAnpCtCg
-	EZ57KYzwhaE3U/f2rnkQ+UdZu3Gf8rsfw78/oSzUHfqccNVPzIExEhDf5ZEqmlpqkBueJTO3L9t
-	1SG5+TwFP7WwurUFPk5dS5alfzXbfFpIGB8wNJ9C0OXV8PU5ZcwfP246sCN4h7yDlEfeYEnWaDd
-	7bDSsk38anf0pYhW6gsefGoXv/KGT3T28edOoHpTVLooZN8D2r1oov9HQxVoWErriCXvJiIajLJ
-	ptJEERQ=
-X-Google-Smtp-Source: AGHT+IFdBMje3pnEFdkXLIfnRWJ5hysTabkkamtVS8bCSG8FnqVHfzLw8gfE0QdSc/2hoIrXIja460pqGNnL6T+duQk=
-X-Received: by 2002:a05:7022:f007:b0:11e:3e9:3e89 with SMTP id
- a92af1059eb24-12172312c16mr18360486c88.7.1767227320930; Wed, 31 Dec 2025
- 16:28:40 -0800 (PST)
+        bh=L2EkUzQ6sigBd+WWV5Hcl6Vcy/jBU7DTMqVQsenR/Xo=;
+        b=abDIuJVwpoS/cV2czJblxXIMcuuFgqINbFYzV8BUq9B1BvXTyhcFF6aR5YGPeGsIX9
+         NvXmFRwqW4UDJXvE+mUXQ7/dTa9pB5JYxlzWanN0ELyUvwVSEOMJx9+cSmTXI0TS8BUd
+         TYEIF5qbI/fwURLm0DqSnnPu3aj3DEyWwMWogS9pWW519vjlq4YqUDMekQcwJnGRyu0i
+         R6KJVPHfNuPhmlawomPS3R6IJ5botoaq5gSyZbfHU0zuxFOZGFUmt9zSA9N4LM3btV3W
+         QmF+50uuAuiC6OsmNgEeByKdA5CXSLt+pEnwnTuN1YFUluRO4Y86kRW/Sn69qXt4PI98
+         G+tg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3OuZcWqpWg7hXThrsda7cBdqAy3DGs6DI6eEX4yGBi/D7Uz/b4idLNEgEH3z38SLjG8VRDA/lMzHE8R+tjYc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw26Q4kQXtom/Go44ztvPGkb/9PXjGAxc8kr9XmJH/akLLg9EY4
+	AePFgTARsV2koaODmWOcXQ18XmnH++PWfCOZ8Qrwb8FNoCJknfUJS0V/Ew+tIh6OtL2KHV0BoWh
+	XuEnhJXndDPUHFGqjIIVVEEgtevvj+ww=
+X-Gm-Gg: AY/fxX7Mb49OKRkyJN1+JjOBtS3CnEisUlmpvv4J64uzGuMggsKiYBpjZbmdQ3NaKEK
+	EjuDOWteFe1WXBWP55QKcYnx2yVqCN/Opr/Enb/8j6Mjs0xBvbQItWUGzxJRGvl8YqF7S4YJTVJ
+	C5PAi7jOcNQpDjdukaX1lxIOSuU8qPZAR/VP/7GeUDxh3YppsunjkPvVA7ACy+1Vu/V2wp73RbF
+	he9zKM/jpo4eAItDl4sN38QNtpiOPtOx7AyrYHXRe/Z8p+j3+2gmdwBjWWUTex8Tt2s4eRF4OWm
+	6AhWJakPIhYxs0ki64qZmEzfNyNu
+X-Google-Smtp-Source: AGHT+IH5ZrzzFT5UNwTZptN+H56qkFUXA/Ygb+yPt8+WPgM1uThdV3rrZmNHjr6UFJLqBPNEBxHVHfwADBRcBM115zY=
+X-Received: by 2002:a05:600c:638d:b0:477:afc5:fb02 with SMTP id
+ 5b1f17b1804b1-47d4c8f4972mr206282295e9.21.1767233450902; Wed, 31 Dec 2025
+ 18:10:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,14 +76,15 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20251231173633.3981832-6-csander@purestorage.com>
  <e9a1bd633fb4bb3d2820f63f41a8dd60d8c9c5e3c699fa56057ae393ef2f31d0@mail.kernel.org>
- <CADUfDZpSSikiZ8d8eWvfucj=Cvhc=k-sHN03EVExGBQ4Lx+23Q@mail.gmail.com> <CAADnVQKXUUNn=P=2-UECF1X7SR+oqm4xsr-2trpgTy1q+0c5FQ@mail.gmail.com>
-In-Reply-To: <CAADnVQKXUUNn=P=2-UECF1X7SR+oqm4xsr-2trpgTy1q+0c5FQ@mail.gmail.com>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Wed, 31 Dec 2025 19:28:29 -0500
-X-Gm-Features: AQt7F2r4zx9aMRYNSaKUcm0Gdej6msD8c2I3CLYONDae3Dt0B2iooTor-dsXV_A
-Message-ID: <CADUfDZq5Bf8mVD9o=VHsUqYgqyMJx82_fhy73ZzkvawQi2Ko2g@mail.gmail.com>
+ <CADUfDZpSSikiZ8d8eWvfucj=Cvhc=k-sHN03EVExGBQ4Lx+23Q@mail.gmail.com>
+ <CAADnVQKXUUNn=P=2-UECF1X7SR+oqm4xsr-2trpgTy1q+0c5FQ@mail.gmail.com> <CADUfDZq5Bf8mVD9o=VHsUqYgqyMJx82_fhy73ZzkvawQi2Ko2g@mail.gmail.com>
+In-Reply-To: <CADUfDZq5Bf8mVD9o=VHsUqYgqyMJx82_fhy73ZzkvawQi2Ko2g@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 31 Dec 2025 18:10:39 -0800
+X-Gm-Features: AQt7F2qPTzBBxIXi7mSFxblwdWM4pyxfhqUHnmv1AUlo2Ajz8HPFxUtnTVbWXLM
+Message-ID: <CAADnVQJ0Xhmx0ZyTKbWqaiiX7QwghMznzjDL1CNmraXM4d+T7A@mail.gmail.com>
 Subject: Re: [PATCH 5/5] selftests/bpf: make cfi_stubs globals const
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: Caleb Sander Mateos <csander@purestorage.com>
 Cc: bot+bpf-ci@kernel.org, Jiri Kosina <jikos@kernel.org>, 
 	Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
@@ -114,66 +115,71 @@ Cc: bot+bpf-ci@kernel.org, Jiri Kosina <jikos@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 31, 2025 at 10:13=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Wed, Dec 31, 2025 at 4:28=E2=80=AFPM Caleb Sander Mateos
+<csander@purestorage.com> wrote:
 >
-> On Wed, Dec 31, 2025 at 10:09=E2=80=AFAM Caleb Sander Mateos
-> <csander@purestorage.com> wrote:
+> On Wed, Dec 31, 2025 at 10:13=E2=80=AFAM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
 > >
-> > On Wed, Dec 31, 2025 at 10:04=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
+> > On Wed, Dec 31, 2025 at 10:09=E2=80=AFAM Caleb Sander Mateos
+> > <csander@purestorage.com> wrote:
 > > >
-> > > > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b=
-/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > > index 90c4b1a51de6..5e460b1dbdb6 100644
-> > > > --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > >
-> > > [ ... ]
-> > >
-> > > > @@ -1275,7 +1275,7 @@ bpf_testmod_ops__test_return_ref_kptr(int dum=
-my, struct task_struct *task__ref,
-> > > >       return NULL;
-> > > >  }
+> > > On Wed, Dec 31, 2025 at 10:04=E2=80=AFAM <bot+bpf-ci@kernel.org> wrot=
+e:
 > > > >
-> > > > -static struct bpf_testmod_ops __bpf_testmod_ops =3D {
-> > > > +static const struct bpf_testmod_ops __bpf_testmod_ops =3D {
-> > > >       .test_1 =3D bpf_testmod_test_1,
-> > > >       .test_2 =3D bpf_testmod_test_2,
+> > > > > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c=
+ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > > > index 90c4b1a51de6..5e460b1dbdb6 100644
+> > > > > --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > > > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > >
+> > > > [ ... ]
+> > > >
+> > > > > @@ -1275,7 +1275,7 @@ bpf_testmod_ops__test_return_ref_kptr(int d=
+ummy, struct task_struct *task__ref,
+> > > > >       return NULL;
+> > > > >  }
+> > > > >
+> > > > > -static struct bpf_testmod_ops __bpf_testmod_ops =3D {
+> > > > > +static const struct bpf_testmod_ops __bpf_testmod_ops =3D {
+> > > > >       .test_1 =3D bpf_testmod_test_1,
+> > > > >       .test_2 =3D bpf_testmod_test_2,
+> > > >
+> > > > Is it safe to make __bpf_testmod_ops const here? In bpf_testmod_ini=
+t(),
+> > > > this struct is modified at runtime:
+> > > >
+> > > >     tramp =3D (void **)&__bpf_testmod_ops.tramp_1;
+> > > >     while (tramp <=3D (void **)&__bpf_testmod_ops.tramp_40)
+> > > >         *tramp++ =3D bpf_testmod_tramp;
+> > > >
+> > > > Writing to a const-qualified object is undefined behavior and may c=
+ause a
+> > > > protection fault when the compiler places this in read-only memory.=
+ Would
+> > > > the module fail to load on systems where .rodata is actually read-o=
+nly?
 > > >
-> > > Is it safe to make __bpf_testmod_ops const here? In bpf_testmod_init(=
-),
-> > > this struct is modified at runtime:
-> > >
-> > >     tramp =3D (void **)&__bpf_testmod_ops.tramp_1;
-> > >     while (tramp <=3D (void **)&__bpf_testmod_ops.tramp_40)
-> > >         *tramp++ =3D bpf_testmod_tramp;
-> > >
-> > > Writing to a const-qualified object is undefined behavior and may cau=
-se a
-> > > protection fault when the compiler places this in read-only memory. W=
-ould
-> > > the module fail to load on systems where .rodata is actually read-onl=
-y?
+> > > Yup, that's indeed the bug caught by KASAN. Missed this mutation at
+> > > init time, I'll leave __bpf_testmod_ops as mutable.
 > >
-> > Yup, that's indeed the bug caught by KASAN. Missed this mutation at
-> > init time, I'll leave __bpf_testmod_ops as mutable.
+> > No. You're missing the point. The whole patch set is no go.
+> > The pointer to cfi stub can be updated just as well.
 >
-> No. You're missing the point. The whole patch set is no go.
-> The pointer to cfi stub can be updated just as well.
+> Do you mean the BPF core code would modify the struct pointed to by
+> cfi_stubs? Or some BPF struct_ops implementation (like this one in
+> bpf_testmod.c) would modify it? If you're talking about the BPF core
+> code, could you point out where this happens? I couldn't find it when
+> looking through the handful of uses of cfi_stubs (see patch 1/5). Or
+> are you talking about some hypothetical future code that would write
+> through the cfi_stubs pointer? If you're talking about a struct_ops
+> implementation, I certainly agree it could modify the struct pointed
+> to by cfi_stubs (before calling register_bpf_struct_ops()). But then
+> the struct_ops implementation doesn't have to declare the global
+> variable as const. A non-const pointer is allowed anywhere a const
+> pointer is expected.
 
-Do you mean the BPF core code would modify the struct pointed to by
-cfi_stubs? Or some BPF struct_ops implementation (like this one in
-bpf_testmod.c) would modify it? If you're talking about the BPF core
-code, could you point out where this happens? I couldn't find it when
-looking through the handful of uses of cfi_stubs (see patch 1/5). Or
-are you talking about some hypothetical future code that would write
-through the cfi_stubs pointer? If you're talking about a struct_ops
-implementation, I certainly agree it could modify the struct pointed
-to by cfi_stubs (before calling register_bpf_struct_ops()). But then
-the struct_ops implementation doesn't have to declare the global
-variable as const. A non-const pointer is allowed anywhere a const
-pointer is expected.
-
-Thanks,
-Caleb
+You're saying that void const * cfi_stubs; pointing to non-const
+__bpf_testmod_ops is somehow ok? No. This right into undefined behavior.
+Not going to allow that.
 
