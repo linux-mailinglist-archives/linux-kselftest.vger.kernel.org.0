@@ -1,94 +1,74 @@
-Return-Path: <linux-kselftest+bounces-48051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48052-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9679ACED3A0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 01 Jan 2026 18:29:02 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5250CED4CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 01 Jan 2026 20:16:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BD8F43000970
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jan 2026 17:29:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4A8003006F57
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jan 2026 19:16:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A3612EFDA4;
-	Thu,  1 Jan 2026 17:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D4BE2F362D;
+	Thu,  1 Jan 2026 19:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wr10RnHs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H3mA7xaQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f194.google.com (mail-pg1-f194.google.com [209.85.215.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BF921B9E2
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Jan 2026 17:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 905E83A1E94
+	for <linux-kselftest@vger.kernel.org>; Thu,  1 Jan 2026 19:16:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767288540; cv=none; b=p/DGcxL/E7pgy8gLnB0Xi57gEiSGHYYdWoCzsc9A9NeWjPXAP1baVwFJ0kzjb6+jgmlHFeCR8xqB3o+ICs0ZOyN3rpshx0d7ML1f0qxNJT8mReT3vC2AnrU7V8W3AeMFgn+LNsBAmEHij0ZwPTl8O9vGAFWxdJSGihcQtILxbcc=
+	t=1767294977; cv=none; b=EoCxqrJ223VvQB3XVIVJplykAbPKQs7WsMsIHSvFqod6A1Gwts/A95EaaKKDAt6VcTmf114w8mPoZW1J+20MK91jpsXI07RVsd9DnEq5XtWRmFnzrdk4l5RwiMleroRJr1gA6nktE9TkET2mmdwa0fM/3lXbs70r5nXJqzdw1RI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767288540; c=relaxed/simple;
-	bh=MV5n72uyCXTGufdfs+Tp7/c9h3fB3MkOv24cXNNb7zA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YahKmQECHc2GOeeWyWHHHoAzuGGzAiPOVTN+iwSMNKtSMY76IqXih8K2H8+8OzIQTBbIh/cmrp8LbZCTXGSteZY2h8nd0ApSaFfoxVv0cRa5UFMtfzYOd4C3w6EOVq+q8FmMQuaD/wM40kbNFpa0oj6+gKtz5kzrDNhmH/zx4KM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wr10RnHs; arc=none smtp.client-ip=209.85.215.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f194.google.com with SMTP id 41be03b00d2f7-bcfd82f55ebso4222855a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 01 Jan 2026 09:28:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767288538; x=1767893338; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KrW3GbVAxBV1YYnSWttRqVD3T0zt7/uD6xCGh6+826Q=;
-        b=Wr10RnHsSBPVbzqfBwWSHlcnT17bzcG+lhsXgMZGTGJ9tfp7wJbHUQKlGO2Nn6+kKb
-         Zv2p3dKZHn/rtuOZiFa7y6GlbyW5ZDwm2RwWa5DBXuTXqQ/Ik85Ho0NnXw5qJwCpEwqZ
-         wZvGZAV00yZ45wA+7Po3ANq3aH5luFlpVj7sqTQ47VVs+BvioabY62W1Q//XSkWzrocP
-         TRMurknADCypauRmCLiZ1P0ly03jKtuHxREXuHmFXeEa8803QROuWyjG8ufwbBjFSgyY
-         MZQ2evJnpMFdGU1bNHSvQO6VIjVmGCeqf2g7bwykqEea/sk4DfdBfnQQwhVc5F6gK3Se
-         ds2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767288538; x=1767893338;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KrW3GbVAxBV1YYnSWttRqVD3T0zt7/uD6xCGh6+826Q=;
-        b=mqCijYJMtZ+pGii+/2DsvkPZy2y8JLzqwwop5//bOo4I2RXYhg7KXXdFoYhLVURhl7
-         fIyi6DjqhcOHgvkDg+AevmgLJ2oYdL64B1vF5+uSB3qiHGW59UmB/hugteVesacBEW0x
-         bzn6a6UvC63hCkKqQ5VwnW7Ml8v4WbZGDb0l8VzwZAOTL9aZuSpwQfoX1TVFY4udWIUW
-         FBzHn1TnzCHiwenT3iKNWgZkt872mtE/rjPU0FpC9HzLolATgCpRD7SWQXe24lAfnolh
-         W7KmULWavWjp7/LZfsNi//cvPpono41mumVXMWgSRaenbPrq/7gA8Nmxdy4K6AECRxCe
-         SuOg==
-X-Forwarded-Encrypted: i=1; AJvYcCUR++2bUUIdRWKj4mN7BZq27pFzHnVHo7dWvZB3mEbZNDPTqH7cOZq0epVqlpXI/K7ozmPmoYXrSZBD7n01q3o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuffNwlPIeTVMiuwPLB9K3kbcUNyyatxRRmoaFHQNxOd6v9n6F
-	avTGb8ZCGYWq3mUkA4XucLqdyHxbKyyybGGNedZ95w2rCzWvNoeVUtCu
-X-Gm-Gg: AY/fxX41ouE+cthw5BHkGHIU6A86EKnUUOIv5mlJd2HKnKQacZefzwynVNSbXUKr4aU
-	GUFSaePhPupCAbsZbBwvw3BekJ2qGHm8vgRYX64qxHVNh1gRQBI4XC/95kfC1i5twPiUEkFnI+H
-	GiRl0cM/FAI99Njx8Rjaktb5b0AHNF+ikGL7nG8tXz2DTOc+mjen+9RlVZ5zzBpCGvVJsYoi2Gj
-	jJIHRPcNQDkatqIsjJ/0BcuVwThd/EVeKVR1Oa0gcRm3V1Y2irzhkvAQAwonnTdJ7A4hZSxURXn
-	aQCJxeVvMvEgeZk7qhhCYpGpr+M9/ropX2G/LiQG6NvP77F7tE+OUgiIBTbOD6iTjKTgXZRwqJ3
-	EK6XnW49r4uD5XALBOqqYX0LF8LEZ02pnvBOKh9Hd13DJOzcN3tepV/jwh3WzzDHV7B1pAgAAz3
-	kH0qWrYawioTa27o62vKV/AllxGd+EpPFYAjcDd+mO
-X-Google-Smtp-Source: AGHT+IFq/e0ejvWVIghaAdB4wbXdz4r0A1x/pqGUvUQjwWFjrtqQuvmu8127TTkEaqjZBtPm+dNKzw==
-X-Received: by 2002:a05:6a20:3d0b:b0:366:14b0:4b1b with SMTP id adf61e73a8af0-3769ff1bb74mr38532914637.38.1767288537751;
-        Thu, 01 Jan 2026 09:28:57 -0800 (PST)
-Received: from fedora ([103.120.31.122])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e79e05712sm33360272a12.14.2026.01.01.09.28.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jan 2026 09:28:56 -0800 (PST)
-From: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-To: Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org,
-	mptcp@lists.linux.dev,
+	s=arc-20240116; t=1767294977; c=relaxed/simple;
+	bh=+Ur3OQ2uA7Dhu4O9kN3/n+FUyiLM8NlvL4vAtfDq2yc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mVhG/doskx/Tz8RRHG5zVQS+5BQqizKJTBQnK1eFw6bFoDM/7b+b/EyLjItY/h+NL+nAzdYnRqlDcfv2zUf7kcLiN5UrPU0HRf3uzVKo9xaett34dBKfCyGLabKqlknaPqWJAnAfcpZLztFCx6V4aj7yR60ZshzG35QR43yTX/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H3mA7xaQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767294973;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ktCKJUhVDTP21nLbbUxKPm+3NBHsCoD//O6BO0QpLh4=;
+	b=H3mA7xaQwrDGKq9CgbpL7XnINLIrFc4meB5wQ0zSFtiCmZh9huD4hqRN5CJSOpus1UfM0V
+	wCwD7CGhc4GY1xq3anOn39G0n3+hTEDyAIm0VW5wUr0CTWhFGUqCVm/wTnp/iCArS2hlOM
+	xhNKq11jTbMtAqBGPFL8j5LoIAq/5W4=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-92-nUOFuqiHPEiw337_vuufEQ-1; Thu,
+ 01 Jan 2026 14:16:10 -0500
+X-MC-Unique: nUOFuqiHPEiw337_vuufEQ-1
+X-Mimecast-MFC-AGG-ID: nUOFuqiHPEiw337_vuufEQ_1767294969
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 51BAF1800365;
+	Thu,  1 Jan 2026 19:16:08 +0000 (UTC)
+Received: from llong-thinkpadp16vgen1.westford.csb (unknown [10.22.88.71])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3426719560A7;
+	Thu,  1 Jan 2026 19:16:05 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
-Subject: [PATCH net v3] selftests: mptcp: Mark xerror and die_perror __noreturn
-Date: Thu,  1 Jan 2026 22:58:40 +0530
-Message-ID: <20260101172840.90186-1-ankitkhushwaha.linux@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	linux-doc@vger.kernel.org,
+	Sun Shaojie <sunshaojie@kylinos.cn>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Waiman Long <longman@redhat.com>
+Subject: [cgroup/for-6.20 PATCH v2 0/4] cgroup/cpuset: Don't invalidate sibling partitions on cpuset.cpus conflict
+Date: Thu,  1 Jan 2026 14:15:54 -0500
+Message-ID: <20260101191558.434446-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,157 +76,62 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Compiler reports potential uses of uninitialized variables in
-mptcp_connect.c when xerror() is called from failure paths.
+ v2:
+  - Patch 1: additional comment
+  - Patch 2: simplify the conditions for triggering call to
+    compute_excpus().
+  - Patch 3: update description of cpuset.cpus.exclusive in cgroup-v2.rst
+    to reflect the new behavior and change the name of the new
+    cpus_excl_conflict() parameter to xcpus_changed.
+  - Patch 4: update description of cpuset.cpus.partition in cgroup-v2.rst
+    to clarify what exclusive CPUs will be used when a partition is
+    created.
 
-mptcp_connect.c:1262:11: warning: variable 'raw_addr' is used
-      uninitialized whenever 'if' condition is false
-      [-Wsometimes-uninitialized]
+This patch series is inspired by the cpuset patch sent by Sun Shaojie [1].
+The idea is to avoid invalidating sibling partitions when there is a
+cpuset.cpus conflict. However this patch series does it in a slightly
+different way to make its behavior more consistent with other cpuset
+properties.
 
-xerror() terminates execution by calling exit(), but it is not visible
-to the compiler & assumes control flow may continue past the call.
+The first 3 patches are just some cleanup and minor bug fixes on
+issues found during the investigation process. The last one is
+the major patch that changes the way cpuset.cpus is being handled
+during the partition creation process. Instead of invalidating sibling
+partitions when there is a conflict, it will strip out the conflicting
+exclusive CPUs and assign the remaining non-conflicting exclusive
+CPUs to the new partition unless there is no more CPU left which will
+fail the partition creation process. It is similar to the idea that
+cpuset.cpus.effective may only contain a subset of CPUs specified in
+cpuset.cpus. So cpuset.cpus.exclusive.effective may contain only a
+subset of cpuset.cpus when a partition is created without setting
+cpuset.cpus.exclusive.
 
-Annotate xerror() with __noreturn so the compiler can correctly reason
-about control flow and avoid false-positive uninitialized variable
-warnings.
+Even setting cpuset.cpus.exclusive instead of cpuset.cpus may not
+guarantee all the requested CPUs can be granted if parent doesn't have
+access to some of those exclusive CPUs. The difference is that conflicts
+from siblings is not possible with cpuset.cpus.exclusive as long as it
+can be set successfully without failure.
 
-Signed-off-by: Ankit Khushwaha <ankitkhushwaha.linux@gmail.com>
----
-changelog:
-v3:
-- also annotate 'die_perror()' with __noreturn
-- add CFLAGS at top of makefile
-- target this patch to net instead of net-next as suggested by Matthieu
+[1] https://lore.kernel.org/lkml/20251117015708.977585-1-sunshaojie@kylinos.cn/
 
-v2: https://lore.kernel.org/all/20251129043808.16714-1-ankitkhushwaha.linux@gmail.com/
-- annotate 'xerror()' with __noreturn
-- remove defining 'raw_addr' to NULL
+Waiman Long (4):
+  cgroup/cpuset: Streamline rm_siblings_excl_cpus()
+  cgroup/cpuset: Consistently compute effective_xcpus in
+    update_cpumasks_hier()
+  cgroup/cpuset: Don't fail cpuset.cpus change in v2
+  cgroup/cpuset: Don't invalidate sibling partitions on cpuset.cpus
+    conflict
 
-v1: https://lore.kernel.org/all/20251126163046.58615-1-ankitkhushwaha.linux@gmail.com/
----
- tools/testing/selftests/net/mptcp/Makefile        | 1 +
- tools/testing/selftests/net/mptcp/mptcp_connect.c | 3 ++-
- tools/testing/selftests/net/mptcp/mptcp_diag.c    | 3 ++-
- tools/testing/selftests/net/mptcp/mptcp_inq.c     | 5 +++--
- tools/testing/selftests/net/mptcp/mptcp_sockopt.c | 5 +++--
- 5 files changed, 11 insertions(+), 6 deletions(-)
+ Documentation/admin-guide/cgroup-v2.rst       |  40 +++--
+ kernel/cgroup/cpuset-internal.h               |   3 +
+ kernel/cgroup/cpuset-v1.c                     |  19 +++
+ kernel/cgroup/cpuset.c                        | 141 +++++++-----------
+ .../selftests/cgroup/test_cpuset_prs.sh       |  26 +++-
+ 5 files changed, 125 insertions(+), 104 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
-index 15d144a25d82..4dd6278cd3dd 100644
---- a/tools/testing/selftests/net/mptcp/Makefile
-+++ b/tools/testing/selftests/net/mptcp/Makefile
-@@ -3,6 +3,7 @@
- top_srcdir = ../../../../..
-
- CFLAGS += -Wall -Wl,--no-as-needed -O2 -g -I$(top_srcdir)/usr/include $(KHDR_INCLUDES)
-+CFLAGS += -I$(top_srcdir)/tools/include
-
- TEST_PROGS := \
- 	diag.sh \
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-index 404a77bf366a..10f6f99cfd4e 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-@@ -33,6 +33,7 @@
- #include <linux/tcp.h>
- #include <linux/time_types.h>
- #include <linux/sockios.h>
-+#include <linux/compiler.h>
-
- extern int optind;
-
-@@ -140,7 +141,7 @@ static void die_usage(void)
- 	exit(1);
- }
-
--static void xerror(const char *fmt, ...)
-+static void __noreturn xerror(const char *fmt, ...)
- {
- 	va_list ap;
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_diag.c b/tools/testing/selftests/net/mptcp/mptcp_diag.c
-index e084796e804d..8e0b1b8d84b6 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_diag.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_diag.c
-@@ -5,6 +5,7 @@
- #include <linux/rtnetlink.h>
- #include <linux/inet_diag.h>
- #include <linux/netlink.h>
-+#include <linux/compiler.h>
- #include <sys/socket.h>
- #include <netinet/in.h>
- #include <linux/tcp.h>
-@@ -87,7 +88,7 @@ enum {
-
- #define rta_getattr(type, value)		(*(type *)RTA_DATA(value))
-
--static void die_perror(const char *msg)
-+static void __noreturn die_perror(const char *msg)
- {
- 	perror(msg);
- 	exit(1);
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_inq.c b/tools/testing/selftests/net/mptcp/mptcp_inq.c
-index 8e8f6441ad8b..5716998da192 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_inq.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_inq.c
-@@ -28,6 +28,7 @@
-
- #include <linux/tcp.h>
- #include <linux/sockios.h>
-+#include <linux/compiler.h>
-
- #ifndef IPPROTO_MPTCP
- #define IPPROTO_MPTCP 262
-@@ -40,7 +41,7 @@ static int pf = AF_INET;
- static int proto_tx = IPPROTO_MPTCP;
- static int proto_rx = IPPROTO_MPTCP;
-
--static void die_perror(const char *msg)
-+static void __noreturn die_perror(const char *msg)
- {
- 	perror(msg);
- 	exit(1);
-@@ -52,7 +53,7 @@ static void die_usage(int r)
- 	exit(r);
- }
-
--static void xerror(const char *fmt, ...)
-+static void __noreturn xerror(const char *fmt, ...)
- {
- 	va_list ap;
-
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-index 286164f7246e..b6e58d936ebe 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.c
-@@ -25,6 +25,7 @@
- #include <netinet/in.h>
-
- #include <linux/tcp.h>
-+#include <linux/compiler.h>
-
- static int pf = AF_INET;
-
-@@ -127,7 +128,7 @@ struct so_state {
- #define MIN(a, b) ((a) < (b) ? (a) : (b))
- #endif
-
--static void die_perror(const char *msg)
-+static void __noreturn die_perror(const char *msg)
- {
- 	perror(msg);
- 	exit(1);
-@@ -139,7 +140,7 @@ static void die_usage(int r)
- 	exit(r);
- }
-
--static void xerror(const char *fmt, ...)
-+static void __noreturn xerror(const char *fmt, ...)
- {
- 	va_list ap;
-
---
+-- 
 2.52.0
 
 
