@@ -1,185 +1,211 @@
-Return-Path: <linux-kselftest+bounces-48041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48042-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA016CECC2F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 01 Jan 2026 03:10:57 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DB99CED299
+	for <lists+linux-kselftest@lfdr.de>; Thu, 01 Jan 2026 17:34:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0D21430057E8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jan 2026 02:10:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 88E3D30047B6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Jan 2026 16:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16AD828FA9A;
-	Thu,  1 Jan 2026 02:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93635240611;
+	Thu,  1 Jan 2026 16:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/OVexLt"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tBH65+YW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011051.outbound.protection.outlook.com [40.93.194.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4D6B28B3E7
-	for <linux-kselftest@vger.kernel.org>; Thu,  1 Jan 2026 02:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767233455; cv=none; b=j4V187h37FvKmoilo52GwLDZHlqi7kxCGn8AXVr2eUpFAe+h4eCRzAb6I+MjHZFM9F8HytLZKSHyk9zNjqJuHWg8ngshpqH/V/MwE2n9mch1oXsPx1Ed7VeHl8zr0WXEiij+J7SGZ3rJbDwglhdlfaWg9cVscK71R8coGTpobM4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767233455; c=relaxed/simple;
-	bh=qqizFew/kTOzewLvL59xdtHtP4J/gkIe7g4rCO241Es=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AnnmNkDQJt3o+8ygDrip12MXZ/4Fu82pmbOc6VFKormSvdjT8fMaFI/pcqnq3A1KJ2QvDJ2UjCqFGI0lZq7j2K0YtuyNQlJVC0Ogp5Dou+wwpwpquavYh06LaDk2szk/xgObTjD6dMvc5WmphhT116TxFG3VC2exXMRzOyWb5hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P/OVexLt; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47bdbc90dcaso69809765e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Dec 2025 18:10:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767233451; x=1767838251; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L2EkUzQ6sigBd+WWV5Hcl6Vcy/jBU7DTMqVQsenR/Xo=;
-        b=P/OVexLtkAJL/ji/IYpg+cnW6NzdWDUSRp8Pqik1QtPmS/aI9qBe63lt/ZK4hnmsth
-         FXIHJi77ybxplKrxGUFKykkq77JbH1CLGWJINYQ+wHQ45kpk2UwoCg3D1CHM4jOrfsBb
-         tkgj8W6Kqu8JZYCI8Dgvf/cg5pkF+tDwdIikC6sCJlyvD8VcAqiEqItzGtvZTCuYkYrb
-         yFBjPVXMljpbfsi/ZePaHGVG4gsHTS1l4+LCnA0pvQBhbkrYfU7JYIjAgmrNp7jVL+Sg
-         nRgdCYJ2nefi+pYDd2aREqonc+kT0rg0ZZInMTa9f9rZrTVxR1aFN89c/eiD13eRC/nD
-         wY4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767233451; x=1767838251;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=L2EkUzQ6sigBd+WWV5Hcl6Vcy/jBU7DTMqVQsenR/Xo=;
-        b=abDIuJVwpoS/cV2czJblxXIMcuuFgqINbFYzV8BUq9B1BvXTyhcFF6aR5YGPeGsIX9
-         NvXmFRwqW4UDJXvE+mUXQ7/dTa9pB5JYxlzWanN0ELyUvwVSEOMJx9+cSmTXI0TS8BUd
-         TYEIF5qbI/fwURLm0DqSnnPu3aj3DEyWwMWogS9pWW519vjlq4YqUDMekQcwJnGRyu0i
-         R6KJVPHfNuPhmlawomPS3R6IJ5botoaq5gSyZbfHU0zuxFOZGFUmt9zSA9N4LM3btV3W
-         QmF+50uuAuiC6OsmNgEeByKdA5CXSLt+pEnwnTuN1YFUluRO4Y86kRW/Sn69qXt4PI98
-         G+tg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3OuZcWqpWg7hXThrsda7cBdqAy3DGs6DI6eEX4yGBi/D7Uz/b4idLNEgEH3z38SLjG8VRDA/lMzHE8R+tjYc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw26Q4kQXtom/Go44ztvPGkb/9PXjGAxc8kr9XmJH/akLLg9EY4
-	AePFgTARsV2koaODmWOcXQ18XmnH++PWfCOZ8Qrwb8FNoCJknfUJS0V/Ew+tIh6OtL2KHV0BoWh
-	XuEnhJXndDPUHFGqjIIVVEEgtevvj+ww=
-X-Gm-Gg: AY/fxX7Mb49OKRkyJN1+JjOBtS3CnEisUlmpvv4J64uzGuMggsKiYBpjZbmdQ3NaKEK
-	EjuDOWteFe1WXBWP55QKcYnx2yVqCN/Opr/Enb/8j6Mjs0xBvbQItWUGzxJRGvl8YqF7S4YJTVJ
-	C5PAi7jOcNQpDjdukaX1lxIOSuU8qPZAR/VP/7GeUDxh3YppsunjkPvVA7ACy+1Vu/V2wp73RbF
-	he9zKM/jpo4eAItDl4sN38QNtpiOPtOx7AyrYHXRe/Z8p+j3+2gmdwBjWWUTex8Tt2s4eRF4OWm
-	6AhWJakPIhYxs0ki64qZmEzfNyNu
-X-Google-Smtp-Source: AGHT+IH5ZrzzFT5UNwTZptN+H56qkFUXA/Ygb+yPt8+WPgM1uThdV3rrZmNHjr6UFJLqBPNEBxHVHfwADBRcBM115zY=
-X-Received: by 2002:a05:600c:638d:b0:477:afc5:fb02 with SMTP id
- 5b1f17b1804b1-47d4c8f4972mr206282295e9.21.1767233450902; Wed, 31 Dec 2025
- 18:10:50 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A5BA930;
+	Thu,  1 Jan 2026 16:34:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767285272; cv=fail; b=bmOzTKmykI9uix9xvzhkdGZLJcZd2cSRN0jUm4hAfo7CgYlmM5uvWom+J6KgssWQ7aOKTlHIp7yxmkoTf0Jm8XK0WbANm+0XI5CYqGzL0lOlgXzAppQC9mPI4jiMJK/h03hpdY9m3oAZpODBdB7DodERlSlRtxD4xgZenBvDDPE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767285272; c=relaxed/simple;
+	bh=M9KMZ8l+E4tP8WdxiSYNgNx/zmPuWFq/nAhJtA6mJHg=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=k9MIBcpSSSs7ok9Uie120XUJvNyMF7aJ9JFHihXXAn2RGXsb/uOaZJhl1XpisfAD/ocapQmL99cWxjiVRQRCuplMaqGjvHPDJUy2KqMIflDliaQ9Nae/GzuAyoQMTErWBgFebWHX+r0Xz0k5zA+PCXmnZlhK/AgrdJ9kr9LCzKk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tBH65+YW; arc=fail smtp.client-ip=40.93.194.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=B6RCSunYdOqLPvdY/9fGz5dDech9ub3lTm+67tXm2F+RcxxH4SvcySqJr3/t8/QWLSJlWeZVGxuXl+2ObJWEGbCvDpb/pOpbORxz2+kySerm2hrgduRi/n+Ox/r8uSV7KhSw293t6y0NYU5kZhkIBqMM/nW7Heq3bb80eA4gUck5sbD9uDcTk7DWuJhfV/iPYsU/KMFik+5B0nnRmovKmHweLLAeHVei1nDjlrlWQdRJS+L8X3vWyznvtbG1POuB41hIk/HLvK4Iuyn2qjENWFb2pyMpUH8q42b0rJdnXKR0RJorcJs7l7eaFvsbzvuiaj+nQ1QtZNJ0qHzWcd1Kjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ypTtMiQRTHAxZL8xq+XYYmcnwYWSsb2IHiqViS0OqLk=;
+ b=xM06Hzq1Tn42fD1BhAwLwpYG4Yl/qPmfoaXhLZpu7giaMHK2gYifn85aT7VZfZMLIHpxks3AbSJ6SH9DyTvuzORC1DaS/56Ip1xdjBjfl0eWeA1Ys0RQp5m/woOCcSP/ZZtxAgIjl0byfXfvtRVMZWJDCj6jlv1HE1b7UqSDc5WNzzv2sEWa4EyHI/+Wl75oc43BBkyxBlywKAHFhKuNy492A8jKoI+yS9LdDxDA0AO0FmwSv8e6TXzoCWYrI5EWJqlwxtbi0T9KAHCPpQ3L01RbDGuhICcJFwyXeDE13mdVBIyMkXbV33oRnWkPacfch3MUkKoAB2qWprGGhXKwiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ypTtMiQRTHAxZL8xq+XYYmcnwYWSsb2IHiqViS0OqLk=;
+ b=tBH65+YWjEdW4GQEZgbKflLqy/aS5AKqgcpE5MfIQNst6WU3Q2DV9J8NK5E6UDJuKdxVCtzi1yetBGPVeNej+vRKm+ed8aPUkKAkxT70O54EY6+iP3ZqC8JEUzfH6Wyd1qhQO+lTOxniG6qYe9YC/mg2KnbWgp3gA4eoITfBYZr80W6hC9LS1GDPdD41I0/WCVdMGTTakMHaulKAs4IUGm0I2eAl95kKPCz+IB+af5LPEW/xl92EA9hr4AO0ylMW+oXNSBUgavT1AUPtnb8oX0e8mzKDwbDvoQl56lEd+R7qk/xYUrhaVz1rHJAtpAoGqQwJudv2pZdv+JL0Oq4UAA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SN7PR12MB8059.namprd12.prod.outlook.com (2603:10b6:806:32b::7)
+ by SA3PR12MB7974.namprd12.prod.outlook.com (2603:10b6:806:307::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Thu, 1 Jan
+ 2026 16:34:28 +0000
+Received: from SN7PR12MB8059.namprd12.prod.outlook.com
+ ([fe80::4ee2:654e:1fe8:4b91]) by SN7PR12MB8059.namprd12.prod.outlook.com
+ ([fe80::4ee2:654e:1fe8:4b91%2]) with mapi id 15.20.9478.004; Thu, 1 Jan 2026
+ 16:34:28 +0000
+From: Joel Fernandes <joelagnelf@nvidia.com>
+To: "Paul E . McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	rcu@vger.kernel.org
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Joel Fernandes <joelagnelf@nvidia.com>
+Subject: [PATCH -next 0/8] RCU updates from me for next merge window
+Date: Thu,  1 Jan 2026 11:34:09 -0500
+Message-Id: <20260101163417.1065705-1-joelagnelf@nvidia.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1P222CA0019.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:208:2c7::24) To SN7PR12MB8059.namprd12.prod.outlook.com
+ (2603:10b6:806:32b::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251231173633.3981832-6-csander@purestorage.com>
- <e9a1bd633fb4bb3d2820f63f41a8dd60d8c9c5e3c699fa56057ae393ef2f31d0@mail.kernel.org>
- <CADUfDZpSSikiZ8d8eWvfucj=Cvhc=k-sHN03EVExGBQ4Lx+23Q@mail.gmail.com>
- <CAADnVQKXUUNn=P=2-UECF1X7SR+oqm4xsr-2trpgTy1q+0c5FQ@mail.gmail.com> <CADUfDZq5Bf8mVD9o=VHsUqYgqyMJx82_fhy73ZzkvawQi2Ko2g@mail.gmail.com>
-In-Reply-To: <CADUfDZq5Bf8mVD9o=VHsUqYgqyMJx82_fhy73ZzkvawQi2Ko2g@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 31 Dec 2025 18:10:39 -0800
-X-Gm-Features: AQt7F2qPTzBBxIXi7mSFxblwdWM4pyxfhqUHnmv1AUlo2Ajz8HPFxUtnTVbWXLM
-Message-ID: <CAADnVQJ0Xhmx0ZyTKbWqaiiX7QwghMznzjDL1CNmraXM4d+T7A@mail.gmail.com>
-Subject: Re: [PATCH 5/5] selftests/bpf: make cfi_stubs globals const
-To: Caleb Sander Mateos <csander@purestorage.com>
-Cc: bot+bpf-ci@kernel.org, Jiri Kosina <jikos@kernel.org>, 
-	Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
-	Changwoo Min <changwoo@igalia.com>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Benjamin Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, 
-	Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>, 
-	Jiri Pirko <jiri@resnulli.us>, "D. Wythe" <alibuda@linux.alibaba.com>, 
-	Dust Li <dust.li@linux.alibaba.com>, sidraya@linux.ibm.com, wenjia@linux.ibm.com, 
-	mjambigi@linux.ibm.com, Tony Lu <tonylu@linux.alibaba.com>, guwen@linux.alibaba.com, 
-	Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, sched-ext@lists.linux.dev, 
-	linux-rdma@vger.kernel.org, linux-s390 <linux-s390@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN7PR12MB8059:EE_|SA3PR12MB7974:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1e50fc0f-1cca-4d0d-a529-08de4953a204
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?WVGi0GDgUaWfb/TuJeI3KFesTRot3//M7dHWO2KIxI0AmXIjVoNg4cMEBlqp?=
+ =?us-ascii?Q?f6LMgj3aP+TXERjoeiUvHe4yMSVjcnkr/TC62s5KXFpgxE3b+Dkjr4SbfllN?=
+ =?us-ascii?Q?4suucwuEyh4cmocU1kUzit2CXbbZkllWrOje84mf7dWF/Y4G64C7+EtSO+1y?=
+ =?us-ascii?Q?IuJsVEK9G4kf+UuKqYM6WtGTomHrkC9NeuaYpwhozkya5MXxC4AttmDsZ/lO?=
+ =?us-ascii?Q?HYpMYgctsIk6pbaD9jJXL+RLwY/1c3uJ9EXpQrSN/eCmufTiIZFDkV2fAMHh?=
+ =?us-ascii?Q?NI5DGs53D9nMyDhikZ2ksINp/ZXaVNTD4hN/NJ0jr1DE68sduoKLhLfOH5n4?=
+ =?us-ascii?Q?OojO0tBRt6s6n/1ezOIIfqCGO9WyXRbTtVWWA2cYTavovjBOE/28uPIeuSqz?=
+ =?us-ascii?Q?gYOAGdzPD1zt5etJLZidG3Zn0GELKKSH808GTNKxAO7hg9iFC7ty+BzZJH2S?=
+ =?us-ascii?Q?Rz8JBGgLHEpCXhcKzwMKQm20Ok2lx9VWF96N+LNNQhJJ7zv51PLc9AIR6RyW?=
+ =?us-ascii?Q?XPVbsunKkczXwMy19udv12fvXlI0ozD1CgPVy+Ra0nNPHl+A2iZiNajSCRqZ?=
+ =?us-ascii?Q?E67B0lA1IiZzT27AD2tuEM5g4CGcJq80XcLn60Gh5d44jdhVM7VBCUGZYDgk?=
+ =?us-ascii?Q?RAyEQtoU39cUNFhwyckV381AUKBeLPmd2EXjSrbkWb5IiKcmLuFp32waeKmd?=
+ =?us-ascii?Q?J2ORBQ9UQJaM1tbB6UvVQDbiDGeqIeI3fMNvGDV8wznrRtdtLE9I5OjQiMUZ?=
+ =?us-ascii?Q?GEScR2aoWa+Eb0S7hS55zJEPrOpk22XGFYIOmSkOUB/2BovXAuolyTk6U9m6?=
+ =?us-ascii?Q?WZOqQU2Ld98CHuwXAO4u74foPgWuTYVMtA/clS5PeT9ikDNeQJwB5KZNinaA?=
+ =?us-ascii?Q?8yZRzVi81tQEURkPagkNuhcZfo5txpaRpLMtc12wGbuVjg1NF/N8RVuXlZ0z?=
+ =?us-ascii?Q?UH9VE/Yw/xYWP8o+SJq+IffDtuOht5SGrQU1q3LkESIKaDqGK4PksJi2NIbU?=
+ =?us-ascii?Q?pJ0AGIglXxAkTw/7JGzQigrERkqkD8LlgyJjF85G97fm7KWAUSPnFb157i36?=
+ =?us-ascii?Q?2kfEzWC/cvTZhRWx5Nxv7ZHzNUE1MUoLRwvKfYiRp3aiiSvsroi9danu6Gj4?=
+ =?us-ascii?Q?lfiEOPPFecuR73grtMxhqiI5sEP4E6a1d5rigI6Owe33CHidqS0kToM4l4r3?=
+ =?us-ascii?Q?/68Zq4EEkuMCxG9jld6H1Q2zNx1AYpmyZWCD7k6HtMFvJPAWlmuUKqY+TnNV?=
+ =?us-ascii?Q?AjZ+rxCjiMmYHnK8ADAaTdC1ODTaJ8StAL5/kWfzD9jFrdolgCa81f1Uty97?=
+ =?us-ascii?Q?zt/N+w0h3Wr8kr701vmbeNpsFjHkQG+lRem6KlT0xRSVvj0cUC/pNwHPCfTF?=
+ =?us-ascii?Q?uunmH68CkWlU3KWYmjnJ524e1nYGRtTXvz/hLcjs7ErXi7VmjL+CYNkVt47b?=
+ =?us-ascii?Q?DDJP0KF+LdsudkVzjujJlewgkrDHHvmej0i1G3xo10R599vzbDsN0w=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR12MB8059.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?bXDUnnjMn+cAR0GKQaMlt7lxCOoSh85DCbdxNlo8BNp+Of5qOuCnMDj0MYRw?=
+ =?us-ascii?Q?f79qKMoXD96rE8VkXOyjxVHixrw04Ygj6A0USkO95Px6wGh2pIW1AeFPv9fZ?=
+ =?us-ascii?Q?ZZZfP5eGQ6IDUHZiIiv75JhUuI593fimv7yyyycQpelYMFzJtTg8pIKRXrQL?=
+ =?us-ascii?Q?oCgEq0BlrjFR9X/r3NCxiZgaB9Nu8kMAnjsdBL2xSVzZ8/d2TcJsTqOkuP4K?=
+ =?us-ascii?Q?dIhiiNwta8JYftY0W9g96MFeFNjGQOUTbB2irtZNTiMdZSLP/qN0lWzWkvka?=
+ =?us-ascii?Q?bj6zjQ6z82V7pXJD0WFItsiQGiV4wXUQtHIDDZ2G4AddVl8Jh1JGbtGR3DV+?=
+ =?us-ascii?Q?gSZ6lmeAAg3bxYgfIekIlVPhktOzSTIssKQPBWQiH0xufY0WA4RYFyQQcPB6?=
+ =?us-ascii?Q?fcdEKBfSz/Xs4TPJFhIbdPFWHWmDztfNN8KzM4jkcnnITD6YANKtJzqP/16T?=
+ =?us-ascii?Q?qUKdi0cx5DYFMvs88zF/CoiVeNIxQDunDew6YlXOJ5DnHpbtUz6dHIWDx2c8?=
+ =?us-ascii?Q?meJdLccFS8tNMW0yDg5YAA7OcahW/cm+PTPQF2yJ5LZ9ozle644V5YUHH7GA?=
+ =?us-ascii?Q?N+HBDH2njPlIFrp39sGjGWL8K5NuDU7mpl2Yjaf/D7zntpTX5IloTvgzVYAY?=
+ =?us-ascii?Q?HcTXtE03i5UwlH+loXl59AghMKRsdHdC7ZJajq67O+Z0+/yUhi5WpXTH+zaV?=
+ =?us-ascii?Q?HslK6i/PmnAo1MU0B9bIt3afjrtoj1N8j888+5cNEfOLcOxhnAblU3lyJ3S5?=
+ =?us-ascii?Q?6Gq6JxIZA/xMwvPbix6GKRq+qwfYaUwyZGIWsbplouWm0Iww+xKLyraiPaZu?=
+ =?us-ascii?Q?kIz6sg1y/TAZgvqqUvE3DJOBh4ettFp1Gv/XyTjjia1NvTXhHe0TJfYdhuOm?=
+ =?us-ascii?Q?dpFXWf+VOYXTE0wIumWddYUUyNly9039Xy8nxR6YAa8qXu0TNkFlhqS9RUm/?=
+ =?us-ascii?Q?Abvvl3IY+rsMuZBR7K2ytESOvMAgZ3jAIWAKCFybgZX5I6awvZn7sWxAJpXK?=
+ =?us-ascii?Q?LGn+iR7w5vas791K560Wrx+k6VEfsU6oXcn6pFowyXvv4tvAnwRdQsVIN1yr?=
+ =?us-ascii?Q?3Ja0nE4zqVcLQ5hq8E7G70217K71Ii7Lrpd/txVr56LuPGP0HouzXsB2B/1Z?=
+ =?us-ascii?Q?uJzJLzCB/ve/grhKzPUnzrNy9N36W/rvbC4SWOrd4xLlrOg3JjPGKAKaaKCn?=
+ =?us-ascii?Q?v9bx/WOHuq74SmhCxCCb/YiA8OwyRaSaWeUnvZ8OV/71PJlGyWbTs8iLOuL/?=
+ =?us-ascii?Q?Ebt1QCXXn49fFN8fQOzjhiMYSx6cjxvtaC0pMajwuuide4ONagX3RrYlwSeI?=
+ =?us-ascii?Q?gLqD/2uGrSjZezALuKaLAhrln7v1rzwL1W1iWxQBgHIvc8Xm/tClJeTzUPJT?=
+ =?us-ascii?Q?Fhm737zxVqxdRcRREcpyyKgeWb654fVw46PBmYJMB6HXP2VA5is3sUsktk5v?=
+ =?us-ascii?Q?z5zH4EmG4HuyL4XLdx6/qq4gncpjG5gnzFUh+HFyZFou91q8DKeAlVMzz66U?=
+ =?us-ascii?Q?dz/DqDX4pn768hoTWVcvExunIPbsUFHQnnKIL9lTVrwtNmBQex/bRmEsDG5h?=
+ =?us-ascii?Q?O4KAJk0nb1vg523wX2aG6gq9+iOymr9yyXYj0sMDY0jHJSOJVbQB49AdMVfq?=
+ =?us-ascii?Q?oeVFIRgNdt7BKvBE6ssa/PpwnYHXtntupcs0DB/7t2yCbuoEoETN3/T2Ub6J?=
+ =?us-ascii?Q?5Bwo0iIDBrCgjD+GuR+Yrz2+u0RgCwJ/CQeuuhsoq05cjSW3xslNSBiqnEj1?=
+ =?us-ascii?Q?r3h86UWsSg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e50fc0f-1cca-4d0d-a529-08de4953a204
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR12MB8059.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jan 2026 16:34:28.3518
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z+wcHKBJGRgNQdS4FFBwzb2qQGMMb3bZ328pjhs8uy5ELZwMxRQLBhbEx4RkfFbvu+U3RPmjS4OUS7IA3Iziwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7974
 
-On Wed, Dec 31, 2025 at 4:28=E2=80=AFPM Caleb Sander Mateos
-<csander@purestorage.com> wrote:
->
-> On Wed, Dec 31, 2025 at 10:13=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Wed, Dec 31, 2025 at 10:09=E2=80=AFAM Caleb Sander Mateos
-> > <csander@purestorage.com> wrote:
-> > >
-> > > On Wed, Dec 31, 2025 at 10:04=E2=80=AFAM <bot+bpf-ci@kernel.org> wrot=
-e:
-> > > >
-> > > > > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c=
- b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > > > index 90c4b1a51de6..5e460b1dbdb6 100644
-> > > > > --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > > > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> > > >
-> > > > [ ... ]
-> > > >
-> > > > > @@ -1275,7 +1275,7 @@ bpf_testmod_ops__test_return_ref_kptr(int d=
-ummy, struct task_struct *task__ref,
-> > > > >       return NULL;
-> > > > >  }
-> > > > >
-> > > > > -static struct bpf_testmod_ops __bpf_testmod_ops =3D {
-> > > > > +static const struct bpf_testmod_ops __bpf_testmod_ops =3D {
-> > > > >       .test_1 =3D bpf_testmod_test_1,
-> > > > >       .test_2 =3D bpf_testmod_test_2,
-> > > >
-> > > > Is it safe to make __bpf_testmod_ops const here? In bpf_testmod_ini=
-t(),
-> > > > this struct is modified at runtime:
-> > > >
-> > > >     tramp =3D (void **)&__bpf_testmod_ops.tramp_1;
-> > > >     while (tramp <=3D (void **)&__bpf_testmod_ops.tramp_40)
-> > > >         *tramp++ =3D bpf_testmod_tramp;
-> > > >
-> > > > Writing to a const-qualified object is undefined behavior and may c=
-ause a
-> > > > protection fault when the compiler places this in read-only memory.=
- Would
-> > > > the module fail to load on systems where .rodata is actually read-o=
-nly?
-> > >
-> > > Yup, that's indeed the bug caught by KASAN. Missed this mutation at
-> > > init time, I'll leave __bpf_testmod_ops as mutable.
-> >
-> > No. You're missing the point. The whole patch set is no go.
-> > The pointer to cfi stub can be updated just as well.
->
-> Do you mean the BPF core code would modify the struct pointed to by
-> cfi_stubs? Or some BPF struct_ops implementation (like this one in
-> bpf_testmod.c) would modify it? If you're talking about the BPF core
-> code, could you point out where this happens? I couldn't find it when
-> looking through the handful of uses of cfi_stubs (see patch 1/5). Or
-> are you talking about some hypothetical future code that would write
-> through the cfi_stubs pointer? If you're talking about a struct_ops
-> implementation, I certainly agree it could modify the struct pointed
-> to by cfi_stubs (before calling register_bpf_struct_ops()). But then
-> the struct_ops implementation doesn't have to declare the global
-> variable as const. A non-const pointer is allowed anywhere a const
-> pointer is expected.
+This series contains RCU fixes and improvements intended for the next
+merge window. The nocb patches have had one round of review but still
+need review tags.
 
-You're saying that void const * cfi_stubs; pointing to non-const
-__bpf_testmod_ops is somehow ok? No. This right into undefined behavior.
-Not going to allow that.
+- Updated commit messages for clarity based on review feedback
+
+- Testing:
+ All rcutorture scenarios tested successfully for 2 hours on:
+  144-core ARM64 NVIDIA Grace (aarch64)
+  128-core AMD EPYC (x86_64)
+
+Link to tag:
+https://git.kernel.org/pub/scm/linux/kernel/git/jfern/linux.git/tag/?h=rcu-next-v1-20260101
+
+Joel Fernandes (6):
+  rcu/nocb: Remove unnecessary WakeOvfIsDeferred wake path
+  rcu/nocb: Add warning if no rcuog wake up attempt happened during
+    overload
+  rcu/nocb: Add warning to detect if overload advancement is ever useful
+  rcu: Reduce synchronize_rcu() latency by reporting GP kthread's CPU QS
+    early
+  rcutorture: Prevent concurrent kvm.sh runs on same source tree
+  rcutorture: Add --kill-previous option to terminate previous kvm.sh
+    runs
+
+Yao Kai (1):
+  rcu: Fix rcu_read_unlock() deadloop due to softirq
+
+Zqiang (1):
+  srcu: Use suitable gfp_flags for the init_srcu_struct_nodes()
+
+ kernel/rcu/srcutree.c                         |  2 +-
+ kernel/rcu/tree.c                             | 16 ++++++
+ kernel/rcu/tree.h                             |  4 +-
+ kernel/rcu/tree_nocb.h                        | 53 +++++++++----------
+ kernel/rcu/tree_plugin.h                      | 15 +++---
+ tools/testing/selftests/rcutorture/.gitignore |  1 +
+ tools/testing/selftests/rcutorture/bin/kvm.sh | 40 ++++++++++++++
+ 7 files changed, 95 insertions(+), 36 deletions(-)
+
+
+base-commit: d26143bb38e2546fe6f8c9860c13a88146ce5dd6
+-- 
+2.34.1
+
 
