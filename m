@@ -1,394 +1,224 @@
-Return-Path: <linux-kselftest+bounces-48075-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48076-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83BF5CEEE4E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 02 Jan 2026 16:40:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E354BCEEF42
+	for <lists+linux-kselftest@lfdr.de>; Fri, 02 Jan 2026 17:19:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EF8633011F97
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jan 2026 15:40:13 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 42475300A9E1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Jan 2026 16:19:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99EEC27B340;
-	Fri,  2 Jan 2026 15:40:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3EAD2BE639;
+	Fri,  2 Jan 2026 16:19:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XJcySGrB";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fKuusD/a"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="RC6OrM7O"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68AF0279792
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Jan 2026 15:40:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767368412; cv=none; b=cvUfEEDqaHHLSQq+4noTJFGQsiGpQEocyoLSiTqKB8qvlIWn6+z+zB0QHsjTzsfkJ8Oj6KH/M1j0SYxxVOetEXx4+RF6G9G1dBr7IU7HauhNO0FXbzXi0m72AhHjEmsE3z9NnhCsId8Z/C4kEUbrdIR2KvKz1Bk1o1Ub7bq/JJc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767368412; c=relaxed/simple;
-	bh=IBQ00UslAs5Lok7WESox5wn0+cSAkbMmOGLwasYuRRE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BoT3gZEDNUQ+WQkc1VK548lypRTd0R06XP73bn3OyfF25uB2Ixl8COzh7KPOSDFOtH9KkMAUNjBoaxKRGfyl0PCHoBg8Y32sw36jb8fzBxn2pqXYB9FGNHN+btKzX6yFYHyjvrjJwIXLwEmTJ0VvspELc9iEVNd0FsBgiEpwRd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XJcySGrB; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fKuusD/a; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767368409;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AAiayzJRY4ItQKaVQXIlfsuuXXNsffQ7Fc+1hVjxa0I=;
-	b=XJcySGrBhWXCyfffJGljTQ4DQx8E2MaWOsAp+xquBJlPtpRXoNCY6rvMBbIxYUzT0mcW4C
-	ivQ+lsTJ1EuHihh7Cc1vxYcuMe8YwhmIjrVbCk3eCnJDZY8RujxLVqvj5batW8FppMKi8Q
-	HzlY/HfKjdBj6gyI7rmF66xIkHeD1Xo=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-299-9A4ih7B5PzeMBaUZnDfYXw-1; Fri, 02 Jan 2026 10:40:06 -0500
-X-MC-Unique: 9A4ih7B5PzeMBaUZnDfYXw-1
-X-Mimecast-MFC-AGG-ID: 9A4ih7B5PzeMBaUZnDfYXw_1767368406
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-431026b6252so11275131f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 07:40:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF1F2BDC34
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Jan 2026 16:19:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767370759; cv=pass; b=hbbOJvWpRoOcOr4sIz344x7s3xbQgOfr+f+togIZvZR795iGrMY7/GUbA4Obn6oRbTxlkRqBylYTtQlXmUS8JqMjG89eLdBZXn/o1lxtaycq5mQX+Xc2fTjtQJZfnIkbLPxRlTkbtTGFtJVccjtKH2DHbE8cmsLybwqnv0Wh+pU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767370759; c=relaxed/simple;
+	bh=3zUPHsmFXLRLRWZxrqxoS8IggoZhxzhMACoAYfeLcu0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e7PVn9x4mR3Rt8m4aL54KpuQM5DDhMm+ofc7NwsP5jDN3UsZMZsbXMMqpR205wbexGdxrp73OYX9lDgggq0sJK4mcszCgbmumkiQbb1TMJ7U5GsOnPUy58swfQK4tf03mcLUS2dM5cFTQsc1JeEwqHX2+xre5adofc8WexvxAWg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=RC6OrM7O; arc=pass smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a2bff5f774so29533485ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 08:19:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1767370756; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kAEmxgD+HSoYjulft2ofsAySotdduOeK34EOjpm58+HiYC/WeCa5BQOLWtFZtDphUy
+         XgtjLaSSlJ0In9KF1Sy0YnWKI+lBKzu0yTSVfQFydvF5EsRfS7MmzWiTX+VIaRGDR3XX
+         uVtX4ecRY3EznNeNX5vC7DAmiBDinGDidMVl0lTyQJ7EUjEDA3UxgmMz4U5f+nsYHbLJ
+         iw5unh2zjUftSZjt4MIxj2dr3GrTu0yzbcv+6o4g91C86qfscGV3fHlQcRsLPA8qCbAe
+         OumC1hqStOBINhvzBWd2PO1U143aNq0aEvnNUWLe7dqYQn5Xm3rL+hb5NTxD2wlZFg7f
+         p23w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=FPr557U2HvOHmBjLr/Ni2LmdX/a30qSDiDUWeBgkK/Y=;
+        fh=TDONSuMPngq5Olg706vhJa9wcBiZOIEaT6gOOZqhDLQ=;
+        b=au7928JLl4CS4Vgszl62bOgJlRGTnZ1nGWYhJuVNpTa0q/letoLRgAb6L6fZdAA6n3
+         +yTwe52aqzXDr2p5/SNTecVDYhQdriDrvb7apI6H2gCtmESH7M7qRSiqHh0kKwbZURBO
+         C8HFATajg9MC4jcmnxA1WqGJSWBDYRjBATx9TSndVGffZJKALeLGuonG3q0QRuTdIggf
+         It+XBhVve0nmftHEYcqMr2P+1uAsNQPp6Tc6L+Mqiu6czdGJfZeg9tevlK1KvVPtsr6W
+         pfvgTGEDwIOiY4IVTZ19942pnyQ4qTuRGwf3gCEtnnAdVf6OU9SBUAkTcEAkCFNwW6ZE
+         WGcw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767368406; x=1767973206; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AAiayzJRY4ItQKaVQXIlfsuuXXNsffQ7Fc+1hVjxa0I=;
-        b=fKuusD/aQazL+PR0eVyaRdeMBTMgRo9o4Gnv2AIiHtCyFSXUZTCvh7Qy0m0vjE16vF
-         /TpTrj3y3W4D/Ug8sdVlKngTnkH781x8rUGx81hHmmRT/fk7hjm0X0x1sBuSVINpC/bv
-         qPoRjSZ1IZIF65udeS0uArU2vh2G3APsmvUGNUyx9vHaJhcTXsv0cVTU+98HyOCaOrMg
-         C/dXoMxtbj6Vnh6fJEOdMJUMF6lmhB4s9XEuPAqVoPVsRPpIUcoOBwSeo9lWlN8U87AJ
-         flOrd3Us6pHv++mEHMTxp/9lLH+7cI1PAF3WiCOb5TRVvE9EwJHj8deKmLzM4yd15uda
-         wvVQ==
+        d=purestorage.com; s=google2022; t=1767370756; x=1767975556; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FPr557U2HvOHmBjLr/Ni2LmdX/a30qSDiDUWeBgkK/Y=;
+        b=RC6OrM7O0cVMQCXffp7Y+tRu3KxyP//w1wjt29LedET926XUxE99AlK58/Y9l6s5RX
+         tfZhN08MGiYvxmwh7ivaAwr/YzDhtnOSkAeNdL4CpRI1iSnUREFY/qCii2U5MhE3U6ru
+         8SeY5SpByufn07hJLrwMSgQVqWkL4KElX6wcBt6NKYHHMK06eVR5NTpBfI3TrymzaqIZ
+         TX/S3suwPgQqMM8HrEE4oXLab9RgnrKSh2ZavkJY54tlvvtaBTWBqdGLB1zgUMhkQpds
+         fDs9neGR/7x+bttUhqouOuP+Jod6O3o+loQQ8FwuaPXetu6Xh6OJ+qnMLLq8RJXzSxy+
+         9Ofw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767368406; x=1767973206;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AAiayzJRY4ItQKaVQXIlfsuuXXNsffQ7Fc+1hVjxa0I=;
-        b=aJ1QJFgi2k2OpPzzggw2wAAHUCOMGa1qCj5mbMjkMjp4fde2HfbAI1uGaVrF+8kRtW
-         gEdmQ4Wi0tyTVz6gu7XdYy8EYth6jcMbjuqAgXi5iXW1LFh/A3c7SYneIBz5hWwG7i01
-         8mSBtoihhAHznBXkxAIH69j9vbw7gBjqVWvCIvxZ3wsoJfwSVtuu4dRWLmx/7z7Orypx
-         eFYMS17HFmDdYn9oVTjrEbUjRTixnO9JfwpWtXUTJKuDtvQXXsUCDhxhBvm6i5NQyIKa
-         HyWRDGN2WHcD4Ce2V7kqLRZhDYifRnfPLanMKb/jIY8G1kywzcECUfY79AxgC8h3iYp3
-         uERg==
-X-Forwarded-Encrypted: i=1; AJvYcCWzxmOtZcWcWgyWd0XVm5VkutfBrp7UF9jPc5hcqzJBYskkM3+eVU7lYHw6MzWa4FZG2O/fTk91ddmlCacurrk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtTyootk+RZzZ5qhfbjpD8xslFRPPJOXzlvVvZO1NZdtTHlSsF
-	5LKARgAPR3YfpWjxUgCLIZq+TSzzUEd+sbibc83KRfEH/UDLqj3aViG1y3rTw6et+gD3ghZDR5X
-	BI+ZldQCRhva47f4bf8Qk3WSFWHgXfSmQ6A61dxbBN+jN6h4iC/TSL4SwuEVciFSVgxZ1Zg==
-X-Gm-Gg: AY/fxX774LNG5yP1s2enIcIOHA4Tr/peAde5RHkeTIVZTark7BDFu92+4NdQhG5u8C0
-	VqsuVZtYk2TLFT7AttHRCyJGL8jzN8U7Q/9cI+gQQ+GVASULALo68nv+5qSSCSPD2g3dsuFdMfK
-	dXKIdzjwCWhHsLH6S/Ymx869kCYNK/Hr7GZtChReaM1B/gacZfMObZ+zDkHO3J0FL9nt+5TzaQN
-	AWs6tiDS+KVTr3ku0oMRSdSrOkKIxJREXq861k4IU501WNeGu/9V1/tocOk5fYBaVDAEIJ+pn+s
-	oZByoxwHK0X9MOrH9DMDQqH8dMHugfztqu/aX8jgGRP5dSiXE7oG89QuQY/C30YbJqySlN8ZvjN
-	7WFMSdQ==
-X-Received: by 2002:a05:6000:2509:b0:42f:9f4d:a490 with SMTP id ffacd0b85a97d-4324e4c73e8mr60757705f8f.12.1767368405511;
-        Fri, 02 Jan 2026 07:40:05 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEn5bxm6K3DZOY955faWJJP5hamKzqDm3+/kp9SotyMIyuzEKHtKcoLIsNhJV7Y4+/I3b/8rg==
-X-Received: by 2002:a05:6000:2509:b0:42f:9f4d:a490 with SMTP id ffacd0b85a97d-4324e4c73e8mr60757670f8f.12.1767368405030;
-        Fri, 02 Jan 2026 07:40:05 -0800 (PST)
-Received: from fedora (g3.ign.cz. [91.219.240.17])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324eaa2bdfsm86129275f8f.32.2026.01.02.07.40.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jan 2026 07:40:04 -0800 (PST)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: Fred Griffoul <griffoul@gmail.com>, kvm@vger.kernel.org
-Cc: seanjc@google.com, pbonzini@redhat.com, shuah@kernel.org,
- dwmw@amazon.co.uk, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Fred Griffoul <fgriffo@amazon.co.uk>
-Subject: Re: [PATCH v4 06/10] KVM: nVMX: Cache evmcs fields to ensure
- consistency during VM-entry
-In-Reply-To: <20260102142429.896101-7-griffoul@gmail.com>
-References: <20260102142429.896101-1-griffoul@gmail.com>
- <20260102142429.896101-7-griffoul@gmail.com>
-Date: Fri, 02 Jan 2026 16:40:03 +0100
-Message-ID: <87a4ywaur0.fsf@redhat.com>
+        d=1e100.net; s=20230601; t=1767370756; x=1767975556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=FPr557U2HvOHmBjLr/Ni2LmdX/a30qSDiDUWeBgkK/Y=;
+        b=D+1kVMjIt6EJJg7LQAZGGz+lDGCAWn+Uj1DX7dSWSLIF0Y8uos1OknSICdm/QHLM1P
+         8/zjLZyosv2B9AmWmWvD0sNV/46ATtYPaZKzv8hvebeCey2p8iWAquCqfKxPcQmHicwn
+         ClFKKjNDFKRHu+pkxk9j/AI/pj66GtLcZ4wDf0ozJmrCdOAj5gyP+ftz28x21rqHbTzr
+         z0QFo9NdUf9uU2raRbiJw8L86sxIEUZ7Igyz9aFQuBwHEs7PVSpnl0IQw2b5ID/dAYV8
+         iquVnt0I9Ytp924rsjcFnUmsMAipYXp4nd9/UXZGgOXzOuXSqRiFXQECpGIbBTwM5uNG
+         sM3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXkGs77yl2F5bzJbSHdbO1T12UqNW31hn2iq1in2s/KSVJILoK+9yxKLZ7G2G4VmmnhkNhp2VMRj9B+GC2628Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKog2ycP41E+4dvKuh/+2Kv4xG+kNwxdQFpuxqo1hh0USW3+eo
+	chbJEszwQJuoEVxmlhLqwR+hZYZQluFLofkwmJuxK7uchNf0/Hm05qYtfs9jhaxf1bUkaiO6b9e
+	/fM8c2yF3sTHSZayNDHJLoMI9EvH+tLgpFbe2cG6wNg==
+X-Gm-Gg: AY/fxX5uIA2R5FCpoJ4joMsPQEt29Bm132ATn9hKzIDs1U68/XzbT3xudLLJs5VDWQF
+	OqZIMdPUk1dGwj7QDFtADlKCfEvZBLuzxxyYirKPWfo6F9wxarJ+L6OhQpRhzPiWpQ0J/Eo9E+y
+	1Nk64ii3/UFH7AwnJUjVwTxpg3vLkBUvAs71K1CmCVJ2s4TlAHW8poQm/tD/8Ue5RIshOxjd8uW
+	AKqyVAyQwkHtZsc/NTUbT3BKljovbuLJjhBFAdejIaKYyD0HSj0LlflVZv+hz/O8asBR5Yh
+X-Google-Smtp-Source: AGHT+IF/IKaol6q06drc0jUZGfDObMCMgUc7sJGF0Pzcwx7Y3zyiL6BNsG9paslEQz3RmfOfMLaSPRZ7OEsv3ldvgtU=
+X-Received: by 2002:a05:7022:6194:b0:11d:faef:21c2 with SMTP id
+ a92af1059eb24-121722b44b3mr21225084c88.2.1767370755580; Fri, 02 Jan 2026
+ 08:19:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20251231173633.3981832-6-csander@purestorage.com>
+ <e9a1bd633fb4bb3d2820f63f41a8dd60d8c9c5e3c699fa56057ae393ef2f31d0@mail.kernel.org>
+ <CADUfDZpSSikiZ8d8eWvfucj=Cvhc=k-sHN03EVExGBQ4Lx+23Q@mail.gmail.com>
+ <CAADnVQKXUUNn=P=2-UECF1X7SR+oqm4xsr-2trpgTy1q+0c5FQ@mail.gmail.com>
+ <CADUfDZq5Bf8mVD9o=VHsUqYgqyMJx82_fhy73ZzkvawQi2Ko2g@mail.gmail.com> <CAADnVQJ0Xhmx0ZyTKbWqaiiX7QwghMznzjDL1CNmraXM4d+T7A@mail.gmail.com>
+In-Reply-To: <CAADnVQJ0Xhmx0ZyTKbWqaiiX7QwghMznzjDL1CNmraXM4d+T7A@mail.gmail.com>
+From: Caleb Sander Mateos <csander@purestorage.com>
+Date: Fri, 2 Jan 2026 11:19:02 -0500
+X-Gm-Features: AQt7F2oEXplVk5UGATVc_njCcDbZ0oTjVxxZL8Y_v3dZVS7iVDarJ5ogQAkD16Y
+Message-ID: <CADUfDZppy2CQjZ9La=RcBL5XeKY66Eq7Rr1JD6byuip_GPrMEg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] selftests/bpf: make cfi_stubs globals const
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bot+bpf-ci@kernel.org, Jiri Kosina <jikos@kernel.org>, 
+	Benjamin Tissoires <bentiss@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Andrea Righi <arighi@nvidia.com>, 
+	Changwoo Min <changwoo@igalia.com>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Benjamin Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, 
+	Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>, 
+	Jiri Pirko <jiri@resnulli.us>, "D. Wythe" <alibuda@linux.alibaba.com>, 
+	Dust Li <dust.li@linux.alibaba.com>, sidraya@linux.ibm.com, wenjia@linux.ibm.com, 
+	mjambigi@linux.ibm.com, Tony Lu <tonylu@linux.alibaba.com>, guwen@linux.alibaba.com, 
+	Shuah Khan <shuah@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>, sched-ext@lists.linux.dev, 
+	linux-rdma@vger.kernel.org, linux-s390 <linux-s390@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Chris Mason <clm@meta.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fred Griffoul <griffoul@gmail.com> writes:
-
-> From: Fred Griffoul <fgriffo@amazon.co.uk>
+On Wed, Dec 31, 2025 at 6:10=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Cache enlightened VMCS control fields to prevent TOCTOU races where the
-> guest could modify hv_clean_fields or hv_enlightenments_control between
-> multiple accesses during nested VM-entry.
+> On Wed, Dec 31, 2025 at 4:28=E2=80=AFPM Caleb Sander Mateos
+> <csander@purestorage.com> wrote:
+> >
+> > On Wed, Dec 31, 2025 at 10:13=E2=80=AFAM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Wed, Dec 31, 2025 at 10:09=E2=80=AFAM Caleb Sander Mateos
+> > > <csander@purestorage.com> wrote:
+> > > >
+> > > > On Wed, Dec 31, 2025 at 10:04=E2=80=AFAM <bot+bpf-ci@kernel.org> wr=
+ote:
+> > > > >
+> > > > > > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod=
+.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > > > > index 90c4b1a51de6..5e460b1dbdb6 100644
+> > > > > > --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > > > > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > > >
+> > > > > [ ... ]
+> > > > >
+> > > > > > @@ -1275,7 +1275,7 @@ bpf_testmod_ops__test_return_ref_kptr(int=
+ dummy, struct task_struct *task__ref,
+> > > > > >       return NULL;
+> > > > > >  }
+> > > > > >
+> > > > > > -static struct bpf_testmod_ops __bpf_testmod_ops =3D {
+> > > > > > +static const struct bpf_testmod_ops __bpf_testmod_ops =3D {
+> > > > > >       .test_1 =3D bpf_testmod_test_1,
+> > > > > >       .test_2 =3D bpf_testmod_test_2,
+> > > > >
+> > > > > Is it safe to make __bpf_testmod_ops const here? In bpf_testmod_i=
+nit(),
+> > > > > this struct is modified at runtime:
+> > > > >
+> > > > >     tramp =3D (void **)&__bpf_testmod_ops.tramp_1;
+> > > > >     while (tramp <=3D (void **)&__bpf_testmod_ops.tramp_40)
+> > > > >         *tramp++ =3D bpf_testmod_tramp;
+> > > > >
+> > > > > Writing to a const-qualified object is undefined behavior and may=
+ cause a
+> > > > > protection fault when the compiler places this in read-only memor=
+y. Would
+> > > > > the module fail to load on systems where .rodata is actually read=
+-only?
+> > > >
+> > > > Yup, that's indeed the bug caught by KASAN. Missed this mutation at
+> > > > init time, I'll leave __bpf_testmod_ops as mutable.
+> > >
+> > > No. You're missing the point. The whole patch set is no go.
+> > > The pointer to cfi stub can be updated just as well.
+> >
+> > Do you mean the BPF core code would modify the struct pointed to by
+> > cfi_stubs? Or some BPF struct_ops implementation (like this one in
+> > bpf_testmod.c) would modify it? If you're talking about the BPF core
+> > code, could you point out where this happens? I couldn't find it when
+> > looking through the handful of uses of cfi_stubs (see patch 1/5). Or
+> > are you talking about some hypothetical future code that would write
+> > through the cfi_stubs pointer? If you're talking about a struct_ops
+> > implementation, I certainly agree it could modify the struct pointed
+> > to by cfi_stubs (before calling register_bpf_struct_ops()). But then
+> > the struct_ops implementation doesn't have to declare the global
+> > variable as const. A non-const pointer is allowed anywhere a const
+> > pointer is expected.
 >
-> The cached values ensure consistent behavior across:
-> - The evmcs-to-vmcs12 copy operations
-> - MSR bitmap validation
-> - Clean field checks in prepare_vmcs02_rare()
->
-> This eliminates potential guest-induced inconsistencies in nested
-> virtualization state management.
+> You're saying that void const * cfi_stubs; pointing to non-const
+> __bpf_testmod_ops is somehow ok? No. This right into undefined behavior.
+> Not going to allow that.
 
-Could you please split the commit to simplify the review and bughunting
-if (when?) issues are discovered? In particular, I would've split this
-into at least:
+How is that undefined behavior? Wouldn't the following be UB by the
+same reasoning?
 
-- hv_flush_hypercall caching/handling
-- hv_msr_bitmap caching/handling
-- nested_vmx_is_evmptr12_valid() instead of vmx->nested.hv_evmcs checks
-- adding 'bool copy' argument to nested_vmx_handle_enlightened_vmptrld()
-and moving copy_enlightened_to_vmcs12() there from nested_vmx_run()
-- hv_clean_fields caching/handling.
+void takes_const(const int *x);
 
-I want to be extra careful with clean fields. I may had forgotten the
-details since I've implemented it but I still remember some pain over
-inconsistent state upon migrations, namely
+void f(void)
+{
+        int not_const =3D 123;
+        takes_const(&not_const);
+}
 
-commit d6bf71a18c74de61548ddad44ff95306fe85f829
-Author: Vitaly Kuznetsov <vkuznets@redhat.com>
-Date:   Wed May 26 15:20:22 2021 +0200
-
-    KVM: nVMX: Ignore 'hv_clean_fields' data when eVMCS data is copied in vmx_get_nested_state()
-
-Unfortunatelly, I don't think we have good test coverage for all this in
-'hyperv_evmcs' selftest :-( I've seen you added evmcs support to
-'vmx_l2_switch_test' in this series, thanks a lot for doing that!
-
->
-> Signed-off-by: Fred Griffoul <fgriffo@amazon.co.uk>
-> ---
->  arch/x86/kvm/vmx/hyperv.c |  5 ++--
->  arch/x86/kvm/vmx/hyperv.h | 20 +++++++++++++
->  arch/x86/kvm/vmx/nested.c | 62 ++++++++++++++++++++++++---------------
->  arch/x86/kvm/vmx/vmx.h    |  5 +++-
->  4 files changed, 65 insertions(+), 27 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/hyperv.c b/arch/x86/kvm/vmx/hyperv.c
-> index fa41d036acd4..961b91b9bd64 100644
-> --- a/arch/x86/kvm/vmx/hyperv.c
-> +++ b/arch/x86/kvm/vmx/hyperv.c
-> @@ -213,12 +213,11 @@ bool nested_evmcs_l2_tlb_flush_enabled(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
->  	struct vcpu_vmx *vmx = to_vmx(vcpu);
-> -	struct hv_enlightened_vmcs *evmcs = vmx->nested.hv_evmcs;
->  
-> -	if (!hv_vcpu || !evmcs)
-> +	if (!hv_vcpu || !nested_vmx_is_evmptr12_valid(vmx))
->  		return false;
->  
-> -	if (!evmcs->hv_enlightenments_control.nested_flush_hypercall)
-> +	if (!vmx->nested.hv_flush_hypercall)
->  		return false;
->  
->  	return hv_vcpu->vp_assist_page.nested_control.features.directhypercall;
-> diff --git a/arch/x86/kvm/vmx/hyperv.h b/arch/x86/kvm/vmx/hyperv.h
-> index 11a339009781..3c7fea501ca5 100644
-> --- a/arch/x86/kvm/vmx/hyperv.h
-> +++ b/arch/x86/kvm/vmx/hyperv.h
-> @@ -52,6 +52,16 @@ static inline bool guest_cpu_cap_has_evmcs(struct kvm_vcpu *vcpu)
->  	       to_vmx(vcpu)->nested.enlightened_vmcs_enabled;
->  }
->  
-> +static inline u32 nested_evmcs_clean_fields(struct vcpu_vmx *vmx)
-> +{
-> +	return vmx->nested.hv_clean_fields;
-> +}
-> +
-> +static inline bool nested_evmcs_msr_bitmap(struct vcpu_vmx *vmx)
-> +{
-> +	return vmx->nested.hv_msr_bitmap;
-> +}
-> +
->  u64 nested_get_evmptr(struct kvm_vcpu *vcpu);
->  uint16_t nested_get_evmcs_version(struct kvm_vcpu *vcpu);
->  int nested_enable_evmcs(struct kvm_vcpu *vcpu,
-> @@ -85,6 +95,16 @@ static inline struct hv_enlightened_vmcs *nested_vmx_evmcs(struct vcpu_vmx *vmx)
->  {
->  	return NULL;
->  }
-> +
-> +static inline u32 nested_evmcs_clean_fields(struct vcpu_vmx *vmx)
-> +{
-> +	return 0;
-> +}
-> +
-> +static inline bool nested_evmcs_msr_bitmap(struct vcpu_vmx *vmx)
-> +{
-> +	return false;
-> +}
->  #endif
->  
->  #endif /* __KVM_X86_VMX_HYPERV_H */
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index cb4b85edcb7a..5790e1a26456 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -236,6 +236,9 @@ static inline void nested_release_evmcs(struct kvm_vcpu *vcpu)
->  	kvm_vcpu_unmap(vcpu, &vmx->nested.hv_evmcs_map);
->  	vmx->nested.hv_evmcs = NULL;
->  	vmx->nested.hv_evmcs_vmptr = EVMPTR_INVALID;
-> +	vmx->nested.hv_clean_fields = 0;
-> +	vmx->nested.hv_msr_bitmap = false;
-> +	vmx->nested.hv_flush_hypercall = false;
->  
->  	if (hv_vcpu) {
->  		hv_vcpu->nested.pa_page_gpa = INVALID_GPA;
-> @@ -737,10 +740,10 @@ static inline bool nested_vmx_prepare_msr_bitmap(struct kvm_vcpu *vcpu,
->  	 *   and tells KVM (L0) there were no changes in MSR bitmap for L2.
->  	 */
->  	if (!vmx->nested.force_msr_bitmap_recalc) {
-> -		struct hv_enlightened_vmcs *evmcs = nested_vmx_evmcs(vmx);
-> -
-> -		if (evmcs && evmcs->hv_enlightenments_control.msr_bitmap &&
-> -		    evmcs->hv_clean_fields & HV_VMX_ENLIGHTENED_CLEAN_FIELD_MSR_BITMAP)
-> +		if (nested_vmx_is_evmptr12_valid(vmx) &&
-> +		    nested_evmcs_msr_bitmap(vmx) &&
-> +		    (nested_evmcs_clean_fields(vmx)
-> +		     & HV_VMX_ENLIGHTENED_CLEAN_FIELD_MSR_BITMAP))
->  			return true;
->  	}
->  
-> @@ -2214,10 +2217,11 @@ static void copy_vmcs12_to_enlightened(struct vcpu_vmx *vmx)
->   * instruction.
->   */
->  static enum nested_evmptrld_status nested_vmx_handle_enlightened_vmptrld(
-> -	struct kvm_vcpu *vcpu, bool from_launch)
-> +	struct kvm_vcpu *vcpu, bool from_launch, bool copy)
->  {
->  #ifdef CONFIG_KVM_HYPERV
->  	struct vcpu_vmx *vmx = to_vmx(vcpu);
-> +	struct hv_enlightened_vmcs *evmcs;
->  	bool evmcs_gpa_changed = false;
->  	u64 evmcs_gpa;
->  
-> @@ -2297,6 +2301,22 @@ static enum nested_evmptrld_status nested_vmx_handle_enlightened_vmptrld(
->  		vmx->nested.force_msr_bitmap_recalc = true;
->  	}
->  
-> +	/* Cache evmcs fields to avoid reading evmcs after copy to vmcs12 */
-> +	evmcs = vmx->nested.hv_evmcs;
-> +	vmx->nested.hv_clean_fields = evmcs->hv_clean_fields;
-> +	vmx->nested.hv_flush_hypercall = evmcs->hv_enlightenments_control.nested_flush_hypercall;
-> +	vmx->nested.hv_msr_bitmap = evmcs->hv_enlightenments_control.msr_bitmap;
-> +
-> +	if (copy) {
-> +		struct vmcs12 *vmcs12 = get_vmcs12(vcpu);
-> +
-> +		if (likely(!vmcs12->hdr.shadow_vmcs)) {
-> +			copy_enlightened_to_vmcs12(vmx, vmx->nested.hv_clean_fields);
-> +			/* Enlightened VMCS doesn't have launch state */
-> +			vmcs12->launch_state = !from_launch;
-> +		}
-> +	}
-> +
->  	return EVMPTRLD_SUCCEEDED;
->  #else
->  	return EVMPTRLD_DISABLED;
-> @@ -2655,10 +2675,12 @@ static void vmcs_write_cet_state(struct kvm_vcpu *vcpu, u64 s_cet,
->  
->  static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
->  {
-> -	struct hv_enlightened_vmcs *hv_evmcs = nested_vmx_evmcs(vmx);
-> +	u32 hv_clean_fields = 0;
->  
-> -	if (!hv_evmcs || !(hv_evmcs->hv_clean_fields &
-> -			   HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP2)) {
-> +	if (nested_vmx_is_evmptr12_valid(vmx))
-> +		hv_clean_fields = nested_evmcs_clean_fields(vmx);
-> +
-> +	if (!(hv_clean_fields & HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP2)) {
->  
->  		vmcs_write16(GUEST_ES_SELECTOR, vmcs12->guest_es_selector);
->  		vmcs_write16(GUEST_CS_SELECTOR, vmcs12->guest_cs_selector);
-> @@ -2700,8 +2722,7 @@ static void prepare_vmcs02_rare(struct vcpu_vmx *vmx, struct vmcs12 *vmcs12)
->  		vmx_segment_cache_clear(vmx);
->  	}
->  
-> -	if (!hv_evmcs || !(hv_evmcs->hv_clean_fields &
-> -			   HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1)) {
-> +	if (!(hv_clean_fields & HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1)) {
->  		vmcs_write32(GUEST_SYSENTER_CS, vmcs12->guest_sysenter_cs);
->  		vmcs_writel(GUEST_PENDING_DBG_EXCEPTIONS,
->  			    vmcs12->guest_pending_dbg_exceptions);
-> @@ -2792,7 +2813,7 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
->  			  enum vm_entry_failure_code *entry_failure_code)
->  {
->  	struct vcpu_vmx *vmx = to_vmx(vcpu);
-> -	struct hv_enlightened_vmcs *evmcs = nested_vmx_evmcs(vmx);
-> +	struct hv_enlightened_vmcs *evmcs;
->  	bool load_guest_pdptrs_vmcs12 = false;
->  
->  	if (vmx->nested.dirty_vmcs12 || nested_vmx_is_evmptr12_valid(vmx)) {
-> @@ -2800,7 +2821,8 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
->  		vmx->nested.dirty_vmcs12 = false;
->  
->  		load_guest_pdptrs_vmcs12 = !nested_vmx_is_evmptr12_valid(vmx) ||
-> -			!(evmcs->hv_clean_fields & HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1);
-> +			!(nested_evmcs_clean_fields(vmx)
-> +			  & HV_VMX_ENLIGHTENED_CLEAN_FIELD_GUEST_GRP1);
->  	}
->  
->  	if (vmx->nested.nested_run_pending &&
-> @@ -2929,7 +2951,8 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
->  	 * bits when it changes a field in eVMCS. Mark all fields as clean
->  	 * here.
->  	 */
-> -	if (nested_vmx_is_evmptr12_valid(vmx))
-> +	evmcs = nested_vmx_evmcs(vmx);
-> +	if (evmcs)
->  		evmcs->hv_clean_fields |= HV_VMX_ENLIGHTENED_CLEAN_FIELD_ALL;
->  
->  	return 0;
-> @@ -3477,7 +3500,7 @@ static bool nested_get_evmcs_page(struct kvm_vcpu *vcpu)
->  	if (guest_cpu_cap_has_evmcs(vcpu) &&
->  	    vmx->nested.hv_evmcs_vmptr == EVMPTR_MAP_PENDING) {
->  		enum nested_evmptrld_status evmptrld_status =
-> -			nested_vmx_handle_enlightened_vmptrld(vcpu, false);
-> +			nested_vmx_handle_enlightened_vmptrld(vcpu, false, false);
->  
->  		if (evmptrld_status == EVMPTRLD_VMFAIL ||
->  		    evmptrld_status == EVMPTRLD_ERROR)
-> @@ -3867,7 +3890,7 @@ static int nested_vmx_run(struct kvm_vcpu *vcpu, bool launch)
->  	if (!nested_vmx_check_permission(vcpu))
->  		return 1;
->  
-> -	evmptrld_status = nested_vmx_handle_enlightened_vmptrld(vcpu, launch);
-> +	evmptrld_status = nested_vmx_handle_enlightened_vmptrld(vcpu, launch, true);
->  	if (evmptrld_status == EVMPTRLD_ERROR) {
->  		kvm_queue_exception(vcpu, UD_VECTOR);
->  		return 1;
-> @@ -3893,15 +3916,8 @@ static int nested_vmx_run(struct kvm_vcpu *vcpu, bool launch)
->  	if (CC(vmcs12->hdr.shadow_vmcs))
->  		return nested_vmx_failInvalid(vcpu);
->  
-> -	if (nested_vmx_is_evmptr12_valid(vmx)) {
-> -		struct hv_enlightened_vmcs *evmcs = nested_vmx_evmcs(vmx);
-> -
-> -		copy_enlightened_to_vmcs12(vmx, evmcs->hv_clean_fields);
-> -		/* Enlightened VMCS doesn't have launch state */
-> -		vmcs12->launch_state = !launch;
-> -	} else if (enable_shadow_vmcs) {
-> +	if (!nested_vmx_is_evmptr12_valid(vmx) && enable_shadow_vmcs)
->  		copy_shadow_to_vmcs12(vmx);
-> -	}
->  
->  	/*
->  	 * The nested entry process starts with enforcing various prerequisites
-> diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-> index 90fdf130fd85..cda96196c56c 100644
-> --- a/arch/x86/kvm/vmx/vmx.h
-> +++ b/arch/x86/kvm/vmx/vmx.h
-> @@ -205,8 +205,11 @@ struct nested_vmx {
->  
->  #ifdef CONFIG_KVM_HYPERV
->  	gpa_t hv_evmcs_vmptr;
-> -	struct kvm_host_map hv_evmcs_map;
-> +	u32 hv_clean_fields;
-> +	bool hv_msr_bitmap;
-> +	bool hv_flush_hypercall;
->  	struct hv_enlightened_vmcs *hv_evmcs;
-> +	struct kvm_host_map hv_evmcs_map;
->  #endif
->  };
-
--- 
-Vitaly
-
+A const-qualified pointer type just prevents that pointer from being
+used to mutate the memory it points to. It doesn't guarantee that the
+memory it points to is marked readonly.
 
