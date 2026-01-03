@@ -1,256 +1,266 @@
-Return-Path: <linux-kselftest+bounces-48101-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10BEDCEF97A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 03 Jan 2026 01:47:04 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AE42CEFF5D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 03 Jan 2026 14:10:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB51E3032109
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jan 2026 00:46:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 766863008CAF
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jan 2026 13:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23275261B98;
-	Sat,  3 Jan 2026 00:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403BD2FDC40;
+	Sat,  3 Jan 2026 13:10:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Qn6JJXtt"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="L5WLxDmk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f228.google.com (mail-qt1-f228.google.com [209.85.160.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013021.outbound.protection.outlook.com [52.101.72.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462DB252292
-	for <linux-kselftest@vger.kernel.org>; Sat,  3 Jan 2026 00:45:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.228
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767401143; cv=none; b=V70uJXBCPn4rmQlqc87AhYZ3QFSDcXV1TB6nz6D7M4v8r0ZBzDjwtQmZhdSG9rJArXptAUndOx5ePD0uD6aNt+jZ9jrOFZsyWURe7vhFHSssZ1DtFlGMUqz8pLYbVCyLp6oyZFSjXurpKDD/LefUFE84DGRDhMqqojummebiyHY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767401143; c=relaxed/simple;
-	bh=Z1UdenNqomW1Gdmx86hqjdPqAqBfGOKQ/CBxjOYJH6g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hkR8pwbor+O+jx413CxeJTk27N7UagGw/WJ4G1c8KzswyhZW/PExRWsgF5yATt6RDFJcRCWPuDQXyBbPY295795VDZjET/tv7w5Ipcz6wzzoXN48glJaLZXNw86EVYdhA65Dksrc8l4FyupYF88RkL//NM8EAmFk64S5yK0Sfjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Qn6JJXtt; arc=none smtp.client-ip=209.85.160.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-qt1-f228.google.com with SMTP id d75a77b69052e-4ee1b13a0a5so8138191cf.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 16:45:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767401136; x=1768005936; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iWgbGYobkvaFSQnhmymI3uWpc8/0KXyANTacEmbRQf4=;
-        b=Qn6JJXttt4FJUNy446H4bvpPPLsg8ZOD8PE/kfjZZNzws6AUd0AMN5XUyaSau6FGam
-         CW31MudoRMD3Fuls1h//9ekl3/4/iW2M2mIsMHAg0r5Zfm7pLCiQYpu//plOxroM+zLy
-         kKN9dMkWAVz50pRgSH+oFctkZ4+tiwylEaVH45XWC6U3Wn3NC5W6UTYsCFDUYgoHb3Pi
-         PkBeLe/v1yj7SGfbOU7Fdnd/7Sw9pamtVq1MrnKKdwfB5mh/FQSQv1yS1oWwWbYyH0n5
-         fbls95vzKGLi+0ql1bi4QoQrtpIHgAUK9YiX84X7in7sfWOQIULFD5iHaw0EYLnI+eRI
-         CaTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767401136; x=1768005936;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iWgbGYobkvaFSQnhmymI3uWpc8/0KXyANTacEmbRQf4=;
-        b=VbaNA++bHYAqyqNea37L+ZyXnculGKQUdRyntjnEDFC8wJshirWIDi/tbpiMDPyaZh
-         +qEvfmAdmploRM9v5uUfNRjo0uyHj2ohVp0Aoxb1ucRmft/NOUsn64v+ke08pkszW+kb
-         7rxjvOJCnoA1/veMds6+Bbks5lS+wg6yQYFxmOdD+al1o4h+kI//hOyvL1UmmNfKvryA
-         C4zsxKKCjGcgY1efls1eLbG/HY11/hBszx4XjzPaBox1EQwFzrmHgON2ao3+EnC9vLlV
-         OaAw7hHhE2mLExP+Q8zPrL0r//PSVF7HofOiyPZ9XGWHV7B6rkyGlI35SzxTACNznRXe
-         498g==
-X-Forwarded-Encrypted: i=1; AJvYcCWce02/+UoAKKH4mFD2Joi/WMm98lqE1FN7XSNGR1tWBxjf4nQPexoJ5NjTwKQAm2EwUsu6QakZ2Dd1LLwvmAY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWSCxLsu0diRe0BOnukU2B2sCTKjVn5h3/4KoWaJ1o+AdvZ47l
-	y+LQpvDTdJ/qwJWnUkUwy3vJeyH66vCKYd3H09TJfJMZRIS6HLTiUV1Mh+82lbzehzN5syYefak
-	jPUnwnrBuZEreRe9mhuyVSjidrzhvqEHy9W+W
-X-Gm-Gg: AY/fxX78z76TsnTQiA79yD4AylvLvc/LHa00LdK0t1hgukV6ZsqnBT3mJp/EOrN5npE
-	MsLCAxWBSP2UuFNbVDSP6fWf7lzblAR0snowNPE1Nu4sk7F39EAz/XBlteKo2h8dlB+EDWUCN5F
-	2LSW/7k7B/aXY4eMBaeYm/QvY8ZtdHxnhSBvxvfcU+Et4HgsRMqfNIhrFGQE765ZkAYAGhYYJol
-	ZhrzOojR+ocd0xjm7QcHZVAWG5r7qUEuazaQRKRCBqEkIf98SDIegnRXNwam2/u3qiQ8DY9GM4K
-	r996DySoPyjEEGsupJGhCrvPCPYeG098wsTYjq4kPWmBeNzuIWtzWhs1nQEX8r5tvbSEquisXSA
-	zWf5wjKpaF6xoOgt6J7za35UfSqA2CDlyFWQTGbDG7g==
-X-Google-Smtp-Source: AGHT+IHZAEUm+/KeaPlAJWYHKmwK/cOEr0PXHOPV39yt/7DICLsrzO1LLXoP+OqMGQtK5PSI2eAnQ5E7NUpW
-X-Received: by 2002:a05:6214:2685:b0:88a:51ff:6054 with SMTP id 6a1803df08f44-88d82718069mr532303876d6.0.1767401135942;
-        Fri, 02 Jan 2026 16:45:35 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.129])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-88d94fcba36sm56013476d6.4.2026.01.02.16.45.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jan 2026 16:45:35 -0800 (PST)
-X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.49.34.222])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 1AF84341C73;
-	Fri,  2 Jan 2026 17:45:35 -0700 (MST)
-Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 198D3E4426F; Fri,  2 Jan 2026 17:45:35 -0700 (MST)
-From: Caleb Sander Mateos <csander@purestorage.com>
-To: Ming Lei <ming.lei@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-block@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1ED1917FB;
+	Sat,  3 Jan 2026 13:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.21
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767445839; cv=fail; b=g6SWbddjmwiEHPJqrD8IBJRAma7/khzXsd92JGiMeAXCn1V/KrDQ/QVlOUYl+QD8/nMHbrDwnggUhgdC2PD7Iu8uJgMEb6xdc5ir8zYFlw/mvkR5L0bnz8yMtKOki5gzDtw6TWfGtlMJfiFykWOot1g2bbisYMJN69gp7nyNS9Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767445839; c=relaxed/simple;
+	bh=aeBPg9ltrFu1FJWEjMpRiI+j7hiD271PNF8jRqCE2YI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ayNdPzLLEBSos5Nsu7J7SBNxi4EQm0EAWA80poZOZzzWsZ9e6uanO6UoHkU+zanfsv8prTp60mBZwqNPh1OHe+NldDX8qZLBPqiYb5kHEmIPGzuPkatlIqPkLgFjkdfWZGy1jYAAFqvEvqyQWKomuyUvWB0AwAAFUtqnxrFNMnI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=L5WLxDmk; arc=fail smtp.client-ip=52.101.72.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hGHfng8aZ5oXn4+F9mrzOvyrFBAqSus698NSkyixV7FFhMg3wJcPQKUnUNxILo0DC+V9kozBaToMxfeI4AiyLtxH0avdCN4Lj1VVvGvbUCA3Vv0VVa2pGdNtyCd3dfUahGiakYeFjbYifHh8KHMedNmqAWIptIUaK5/FN8Sou81aKxfUxwH+3gN1TNGUfudeBWokZf8qG728jAlUy+HOPtokEscBTnIsgN1dAx++cPG7xTkgad1D3dPQS+OZJkcHwOSY+Uxn3i/yWdV2HdDgpCvzGLKIG7o7lAIm6U/3J/6eLSaALoDKUgTgm3W2lN7zD9+QC9IqzFANt3oMCuhMEg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ohPmBs4RpLd/fHQDcFbtZ5Wn2JgePBoiPfZiiLKEZug=;
+ b=IWgu8Xh4Vr0kb7uEpZwCrePJ2gtJLDylZ4w+WFFuq+bZd+q88b4yjtraVwcDGDxeo8i9MTPuQ83NSapBNoQ5v7fg9OtN9a9wSmP3coSaeFZPgJaSCG8BgNj+T7BrXJoBhldqhATj8+1nfmexOQiOOGNyQKQFzkYaSAuXK8n5OqPkpUf+3va+oc5IwRFr7XrD96kr/H2J9LmhAT7l7x0L4V19xT9V5DxCMEaXDKqSWD0n6rJ9DTRUno0+wxVHkCU+QVcG8E46P2za902eKU62EPj9lsQ4KVgPbhBifmDFEZ+tqJjvLo35TNR1eg21hXVMEOLeli5c+IIMmCrC8nQOCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.101) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ohPmBs4RpLd/fHQDcFbtZ5Wn2JgePBoiPfZiiLKEZug=;
+ b=L5WLxDmkjWkYg1Kmp16SwXoyCP3CQ8h5Rr9nWUS3mYhH0T/FyL5uwiskJzZ+9zUchRW5wyelsAOIWK3w+gcI5Yno2YXa1ZKkOl7N1uoi5uq4VPFaCSod0ceS85ZTbCqPT/DCi9EJXZEibgK9H1ToOHjuuemTnliUWGTRCkXQf75vAHK7JIkcgnG0mmYf9g00ftq78o3e9ki3FFWH+on9xhhAAVyj7sm/ua8nYNuO1Y37Ir42KE7tlThqsdWGpIBNHE6+Qaurhon9vK34FB9GeiYigjO0hzQiHqAa1UG3SaoeUahhV8SlePgAl1gL9JcuAk6Ayk6LuzlIYmeGHGOilQ==
+Received: from AS4P191CA0009.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:5d5::16)
+ by DB9PR07MB9102.eurprd07.prod.outlook.com (2603:10a6:10:3d9::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Sat, 3 Jan
+ 2026 13:10:32 +0000
+Received: from AM4PEPF00027A6B.eurprd04.prod.outlook.com
+ (2603:10a6:20b:5d5:cafe::60) by AS4P191CA0009.outlook.office365.com
+ (2603:10a6:20b:5d5::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9478.4 via Frontend Transport; Sat, 3
+ Jan 2026 13:10:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.101)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.101 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.101;
+ helo=fr712usmtp1.zeu.alcatel-lucent.com; pr=C
+Received: from fr712usmtp1.zeu.alcatel-lucent.com (131.228.6.101) by
+ AM4PEPF00027A6B.mail.protection.outlook.com (10.167.16.89) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9499.1
+ via Frontend Transport; Sat, 3 Jan 2026 13:10:32 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr712usmtp1.zeu.alcatel-lucent.com (Postfix) with ESMTP id 9F9881C0030;
+	Sat,  3 Jan 2026 15:10:30 +0200 (EET)
+From: chia-yu.chang@nokia-bell-labs.com
+To: pabeni@redhat.com,
+	edumazet@google.com,
+	parav@nvidia.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Stanley Zhang <stazhang@purestorage.com>,
-	Uday Shankar <ushankar@purestorage.com>,
-	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v2 19/19] selftests: ublk: add end-to-end integrity test
-Date: Fri,  2 Jan 2026 17:45:29 -0700
-Message-ID: <20260103004529.1582405-20-csander@purestorage.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260103004529.1582405-1-csander@purestorage.com>
-References: <20260103004529.1582405-1-csander@purestorage.com>
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v7 net-next 00/13] AccECN protocol case handling series
+Date: Sat,  3 Jan 2026 14:10:15 +0100
+Message-Id: <20260103131028.10708-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM4PEPF00027A6B:EE_|DB9PR07MB9102:EE_
+X-MS-Office365-Filtering-Correlation-Id: dd476dff-dbc2-47b4-e3b3-08de4ac979a5
+X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|82310400026|376014|7416014|36860700013|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+ =?utf-8?B?THQxWnlnSm5kd3Y5cHJ0cUZJN3JwTTYzcEhHYlJSc1IrRDdCWHdUT2pCSVA5?=
+ =?utf-8?B?SmlHSG51ejJEZ0E4dytDb3A4YzJKSEl1ZGFkYjN2MUwrWFB2OXc5ZHJqT3VU?=
+ =?utf-8?B?bE54N0RJdFpWdWxqSDhtV2RlbE5Za1Y3WHNCMDlvcEoxbm13WU51d3U2M2xz?=
+ =?utf-8?B?WjZiTmc0eUtFOVNVOXcwSUdSRitWaGRPSjhFT3BvTzBUY3ZvUDE2MXhCUU0x?=
+ =?utf-8?B?ZTQ1QW5MWkgzbjZZaHNVck4vZWQvRm5QaUF2bFcrbHdYSEFqZVdsT3dFYVU2?=
+ =?utf-8?B?TkxwblVVWkorZ0RPY3UxTGxMeUhuNmYydXRnSEdhenVadnc2YWtoU1ZqaVo0?=
+ =?utf-8?B?RFNGYTMxZ09xM3F2cW9xanVjNnhqMGZwWGpKL3pnL25PSTN2cks2NkJMaEFa?=
+ =?utf-8?B?Wjk3N3BkNHRsOUI3VzNod3Z0Smg1QzQzTlowN3IwNHBkak05TVo2TXJqaTFI?=
+ =?utf-8?B?aksyS3dOYkRSQUorUDdZZU9aL3l2ZGZlZkJBUGNMbHI2RWVPb0NrWmVrTGZE?=
+ =?utf-8?B?dDdYZmhYVko2SmZhVkJPd2psanYyZGdGajZubE50bE52Qlc5alUzU3RtLzMr?=
+ =?utf-8?B?d2FSRnkwaVZqelg4by9RWkVNTWJOcTFjdld1VWMyVTZDWUlhanBreXlCK2lt?=
+ =?utf-8?B?TEM3cWZxWHRzd1dYbm5CcXphcFpiK3dEcDZJTkg2MGxFRFNldVZVQnpjd3JN?=
+ =?utf-8?B?dzIxS0pvWTRadDhSNkF4TlRrL3l6cHlORTg2N0Y4WTJvalRVaE5pL1lsV21q?=
+ =?utf-8?B?eE9rc2NYWXArOWMra2E3aU1QMVBQdXBJemdudzhFNlBwR0k0SUgxUU1PYUpa?=
+ =?utf-8?B?UDJyS3F0N2tvOENydUQwL2poK0M1MUs0Y0RLZTltQVZxRnNyVnEzeHZiTnFT?=
+ =?utf-8?B?OFNIalMwZkRBc04weTFuclFtMHhRTHdvMVQ3bmIrUjFlSFRNd1hUR25Lc3hT?=
+ =?utf-8?B?bGRaekpiSlNKa0E4eEwyTWlqYndnSTFTa1FzM1M1NkI0WTNiZjNEWlZoV1ZG?=
+ =?utf-8?B?SjFySzcvOHY3a0FzKy9NMzJFK1BVSk1vQ0NhdzFKejZhVDZKd1JScXcxeU9T?=
+ =?utf-8?B?d1ppUE5XSktOWWNHTkhBcGNqd0ZTaGtyZGFOY1UwMWIwQ1RvOXFIVzNQamcv?=
+ =?utf-8?B?dkhWRml0cjJXVmxEcGg4SFhxOE4xTURyM081TndQUUdPZWZpWkd4dHdXbDNp?=
+ =?utf-8?B?MzVpUFErZndBdndmcHJ4YmwyYjBENGtnbmtudW9DY3JqT1A4dkpzL255R0Yx?=
+ =?utf-8?B?a3NTbGRSWXk4TlJ2NUp2U1ZkeDFzVk5sTW9hQzNBQ3lrQkJHQmYvVGZEODJT?=
+ =?utf-8?B?R2RzdXJjWEZTRW5rRHhlSk9xRkFPZ2VFYWVXNmNkbUxYVGxuRDVlRlo2YUFO?=
+ =?utf-8?B?T2xwd0xYdTN6cll5dEhwU2NxNmQxYjdQZ1M0YmxqTTNDbjZjN0IvMC9GRDhG?=
+ =?utf-8?B?Z0FuZ2NabmY4T2dCWDFZYjBGM1hhTW5EckNDTG5RVEpzcnNKSWl4NVJyaVoz?=
+ =?utf-8?B?R1MyNUFVZkVTTEgxcW1ubXVqc1N2aTlqOXIycEtHSkphUlhoNUlsWHRHSkRV?=
+ =?utf-8?B?TEFLazVCTzFDWjB2NWdwUi9BbDMvdWZjY1BzZDFsbkt1UXpMbW1xZlBVYy9D?=
+ =?utf-8?B?Nmg5djRVcitZN01tVHhobWpZSzhNM01PQTlzWWYxdTQ1L1VTdFVQcmZyTjRy?=
+ =?utf-8?B?a0J3NFRuOTRUcGdJQXM2MDJaLzZxdWEzNVdzb04zMFFKVHk4MUk3SHVKcFBy?=
+ =?utf-8?B?Wm1ZTUVROUZIdU1VNnVGTXRWOTU4K2tZY2NVUURBNGhselVDS1cydTBDWVYz?=
+ =?utf-8?B?bVNGY29vRjc1bmwyQjJ0MzNsVkxXTkw5aEd3OFdPNlEySmVJVllodnh1dHNF?=
+ =?utf-8?B?dGg2NS9nSWRqVVlxRDZCaW5CRUoxV2JVYk1IVkhRMExscDFvbzBjRzhsdGNG?=
+ =?utf-8?B?QTVZWUd2aVk0VHdvclp3VVRYTUxnbDBKczFYdFVhNFI1eWpqQzg1VW4zbVVS?=
+ =?utf-8?B?Uno5MkJGWm16MHdVSEg0MDdCdW1YWkFidWpkQXhDNHJGSldqSklxOFZpbS9V?=
+ =?utf-8?B?RXJ0WjFSaXhiYnIzT0JjWlJqWWY2cE5IN3c1VXpNekU4T042SjkwaXVNMzUx?=
+ =?utf-8?Q?03hrxeaCpmPDIHWCff4oJ24wv?=
+X-Forefront-Antispam-Report:
+ CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700013)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2026 13:10:32.2294
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dd476dff-dbc2-47b4-e3b3-08de4ac979a5
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.101];Helo=[fr712usmtp1.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM4PEPF00027A6B.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR07MB9102
 
-Add test case loop_08 to verify the ublk integrity data flow. It uses
-the kublk loop target to create a ublk device with integrity on top of
-backing data and integrity files. It then writes to the whole device
-with fio configured to generate integrity data. Then it reads back the
-whole device with fio configured to verify the integrity data.
-It also verifies that injected guard, reftag, and apptag corruptions are
-correctly detected.
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+Hello,
+
+Plesae find the v7 AccECN case handling patch series, which covers
+several excpetional case handling of Accurate ECN spec (RFC9768),
+adds new identifiers to be used by CC modules, adds ecn_delta into
+rate_sample, and keeps the ACE counter for computation, etc.
+
+This patch series is part of the full AccECN patch series, which is available at
+https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
+
+Best regards,
+Chia-Yu
+
 ---
- tools/testing/selftests/ublk/Makefile        |   1 +
- tools/testing/selftests/ublk/test_loop_08.sh | 111 +++++++++++++++++++
- 2 files changed, 112 insertions(+)
- create mode 100755 tools/testing/selftests/ublk/test_loop_08.sh
+v7:
+- Update comments in #3 (Paolo Abeni <pabeni@redhat.com>)
+- Update comments and use synack_type TCP_SYNACK_RETRANS and num_timeout in #9. (Paolo Abeni <pabeni@redhat.com>)
 
-diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-index bfd68ae64142..ab745443fd58 100644
---- a/tools/testing/selftests/ublk/Makefile
-+++ b/tools/testing/selftests/ublk/Makefile
-@@ -33,10 +33,11 @@ TEST_PROGS += test_loop_02.sh
- TEST_PROGS += test_loop_03.sh
- TEST_PROGS += test_loop_04.sh
- TEST_PROGS += test_loop_05.sh
- TEST_PROGS += test_loop_06.sh
- TEST_PROGS += test_loop_07.sh
-+TEST_PROGS += test_loop_08.sh
- TEST_PROGS += test_stripe_01.sh
- TEST_PROGS += test_stripe_02.sh
- TEST_PROGS += test_stripe_03.sh
- TEST_PROGS += test_stripe_04.sh
- TEST_PROGS += test_stripe_05.sh
-diff --git a/tools/testing/selftests/ublk/test_loop_08.sh b/tools/testing/selftests/ublk/test_loop_08.sh
-new file mode 100755
-index 000000000000..ca289cfb2ad4
---- /dev/null
-+++ b/tools/testing/selftests/ublk/test_loop_08.sh
-@@ -0,0 +1,111 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
-+
-+if ! _have_program fio; then
-+	exit $UBLK_SKIP_CODE
-+fi
-+
-+fio_version=$(fio --version)
-+if [[ "$fio_version" =~ fio-[0-9]+\.[0-9]+$ ]]; then
-+	echo "Requires development fio version with https://github.com/axboe/fio/pull/1992"
-+	exit $UBLK_SKIP_CODE
-+fi
-+
-+TID=loop_08
-+
-+_prep_test "loop" "end-to-end integrity"
-+
-+_create_backfile 0 256M
-+_create_backfile 1 32M # 256M * (64 integrity bytes / 512 data bytes)
-+integrity_params="--integrity_capable --integrity_reftag
-+                  --metadata_size 64 --pi_offset 56 --csum_type t10dif"
-+dev_id=$(_add_ublk_dev -t loop -u $integrity_params "${UBLK_BACKFILES[@]}")
-+_check_add_dev $TID $?
-+
-+# 1M * (64 integrity bytes / 512 data bytes) = 128K
-+fio_args="--ioengine io_uring --direct 1 --bsrange 512-1M --iodepth 32
-+          --md_per_io_size 128K --pi_act 0 --pi_chk GUARD,REFTAG,APPTAG
-+          --filename /dev/ublkb$dev_id"
-+fio --name fill --rw randwrite $fio_args > /dev/null
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "fio fill failed"
-+	_show_result $TID $err
-+fi
-+
-+fio --name verify --rw randread $fio_args > /dev/null
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "fio verify failed"
-+	_show_result $TID $err
-+fi
-+
-+fio_err=$(mktemp fio_err_XXXXX)
-+
-+# Overwrite 4-byte reftag at offset 56 + 4 = 60
-+dd_reftag_args="bs=1 seek=60 count=4 oflag=dsync conv=notrunc status=none"
-+dd if=/dev/urandom "of=${UBLK_BACKFILES[1]}" $dd_reftag_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd corrupted_reftag failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+if fio --name corrupted_reftag --rw randread $fio_args > /dev/null 2> "$fio_err"; then
-+	echo "fio corrupted_reftag unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="REFTAG compare error: LBA: 0 Expected=0, Actual="
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio corrupted_reftag message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+# Reset to 0
-+dd if=/dev/zero "of=${UBLK_BACKFILES[1]}" $dd_reftag_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd restore corrupted_reftag failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+
-+dd_data_args="bs=512 count=1 oflag=direct,dsync conv=notrunc status=none"
-+dd if=/dev/zero "of=${UBLK_BACKFILES[0]}" $dd_data_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd corrupted_data failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+if fio --name corrupted_data --rw randread $fio_args > /dev/null 2> "$fio_err"; then
-+	echo "fio corrupted_data unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="Guard compare error: LBA: 0 Expected=0, Actual="
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio corrupted_data message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+
-+if fio --name bad_apptag --rw randread $fio_args --apptag 0x4321 > /dev/null 2> "$fio_err"; then
-+	echo "fio bad_apptag unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="APPTAG compare error: LBA: [0-9]* Expected=4321, Actual=1234"
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio bad_apptag message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+
-+rm -f "$fio_err"
-+
-+_cleanup_test
-+_show_result $TID 0
+v6:
+- Update comment in #3 to highlight RX path is only used for virtio-net (Paolo Abeni <pabeni@redhat.com>)
+- Rename TCP_CONG_WANTS_ECT_1 to TCP_CONG_ECT_1_NEGOTIATION to distiguish from TCP_CONG_ECT_1_ESTABLISH (Paolo Abeni <pabeni@redhat.com>)
+- Move TCP_CONG_ECT_1_ESTABLISH in #6 to latter patch series (Paolo Abeni <pabeni@redhat.com>)
+- Add new synack_type instead of moving the increment of num_retran in #9 (Paolo Abeni <pabeni@redhat.com>)
+- Use new synack_type TCP_SYNACK_RETRANS and num_retrans for SYN/ACK retx fallbackk for AccECN in #10 (Paolo Abeni <pabeni@redhat.com>)
+- Do not cast const struct into non-const in #11, and set AccECN fail mode after tcp_rtx_synack() (Paolo Abeni <pabeni@redhat.com>)
+
+v5:
+- Move previous #11 in v4 in latter patch after discussion with RFC author.
+- Add #3 to update the comments for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN. (Parav Pandit <parav@nvidia.com>)
+- Add gro self-test for TCP CWR flag in #4. (Eric Dumazet <edumazet@google.com>)
+- Add fixes: tag into #7 (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message of #8 and if condition check (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #13 (Paolo Abeni <pabeni@redhat.com>)
+
+v4:
+- Add previous #13 in v2 back after dicussion with the RFC author.
+- Add TCP_ACCECN_OPTION_PERSIST to tcp_ecn_option sysctl to ignore AccECN fallback policy on sending AccECN option.
+
+v3:
+- Add additional min() check if pkts_acked_ewma is not initialized in #1. (Paolo Abeni <pabeni@redhat.com>)
+- Change TCP_CONG_WANTS_ECT_1 into individual flag add helper function INET_ECN_xmit_wants_ect_1() in #3. (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #4. (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message to fix old AccECN commits in #5. (Paolo Abeni <pabeni@redhat.com>)
+- Remove unnecessary brackets in #10. (Paolo Abeni <pabeni@redhat.com>)
+- Move patch #3 in v2 to a later Prague patch serise and remove patch #13 in v2. (Paolo Abeni <pabeni@redhat.com>)
+
+---
+Chia-Yu Chang (11):
+  selftests/net: gro: add self-test for TCP CWR flag
+  tcp: ECT_1_NEGOTIATION and NEEDS_ACCECN identifiers
+  tcp: disable RFC3168 fallback identifier for CC modules
+  tcp: accecn: handle unexpected AccECN negotiation feedback
+  tcp: accecn: retransmit downgraded SYN in AccECN negotiation
+  tcp: add TCP_SYNACK_RETRANS synack_type
+  tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN
+    SYN/ACK
+  tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
+  tcp: accecn: fallback outgoing half link to non-AccECN
+  tcp: accecn: detect loss ACK w/ AccECN option and add
+    TCP_ACCECN_OPTION_PERSIST
+  tcp: accecn: enable AccECN
+
+Ilpo Järvinen (2):
+  tcp: try to avoid safer when ACKs are thinned
+  gro: flushing when CWR is set negatively affects AccECN
+
+ Documentation/networking/ip-sysctl.rst        |  4 +-
+ .../networking/net_cachelines/tcp_sock.rst    |  1 +
+ include/linux/tcp.h                           |  4 +-
+ include/net/inet_ecn.h                        | 20 +++-
+ include/net/tcp.h                             | 32 ++++++-
+ include/net/tcp_ecn.h                         | 92 ++++++++++++++-----
+ net/ipv4/inet_connection_sock.c               |  4 +
+ net/ipv4/sysctl_net_ipv4.c                    |  4 +-
+ net/ipv4/tcp.c                                |  2 +
+ net/ipv4/tcp_cong.c                           |  5 +-
+ net/ipv4/tcp_input.c                          | 37 +++++++-
+ net/ipv4/tcp_minisocks.c                      | 46 +++++++---
+ net/ipv4/tcp_offload.c                        |  3 +-
+ net/ipv4/tcp_output.c                         | 32 ++++---
+ net/ipv4/tcp_timer.c                          |  3 +
+ tools/testing/selftests/drivers/net/gro.c     | 81 +++++++++++-----
+ 16 files changed, 284 insertions(+), 86 deletions(-)
+
 -- 
-2.45.2
+2.34.1
 
 
