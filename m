@@ -1,81 +1,83 @@
-Return-Path: <linux-kselftest+bounces-48088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DABFCCEF923
-	for <lists+linux-kselftest@lfdr.de>; Sat, 03 Jan 2026 01:45:55 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EB8CCEF90E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 03 Jan 2026 01:45:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A73583015023
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jan 2026 00:45:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5D16430124F2
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Jan 2026 00:45:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7821B25B1D2;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E3C248F5A;
 	Sat,  3 Jan 2026 00:45:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="CvA2fnC+"
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="ffhtsnKb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f226.google.com (mail-yw1-f226.google.com [209.85.128.226])
+Received: from mail-qk1-f227.google.com (mail-qk1-f227.google.com [209.85.222.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 353962222C5
-	for <linux-kselftest@vger.kernel.org>; Sat,  3 Jan 2026 00:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0352264C0
+	for <linux-kselftest@vger.kernel.org>; Sat,  3 Jan 2026 00:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767401138; cv=none; b=tvCil56jqNV3nOkX05eV+njmFvSS2IwGdFmDXk8leGICg61g2egeCgeSAw+VlDWCbj/j4oIIJHMvEr051quYbisevovJj3A5LQuXvXcY1cqS1Y9VXpxE6wdCdXdY+ze9x6lt7Fb478sr8QC9S5vACS+OS+lziHO16yA4BcTDkRo=
+	t=1767401137; cv=none; b=LRRsv5hpLd/egdqzsm4fQjds7Rds7Yo+QB1kjkpi0frpk770KL1B1Mr+fl6avp46Zc99Yhg85PDjXL9c0b3+n3F/njQBJVkbhAkzFHqeN/fl8UsO+nme6k/5EGeKZUCnie4XfERmbAbiDT3lb/LPBqbJikSm0LZZM+d1E5tM7SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767401138; c=relaxed/simple;
-	bh=kDNBpWln3tss6/GnGFcYCJpi6GkixDu6za8dJ31Z50o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iVqjdAos0NzmrfIwy3hIm0l76nwtfo0gWEYHqnud6thUoTuar7qG35C5nlEh6XabsCG9OT0VbP5RAXBCAvxw+iMT9Ws/P9MEZ4kgSQJQO6rmJXKNVQOmmoJfF3tFu8vYTZy4KV1dxQKt4AiKeysY9r3Aoz/Vj0a2c9cvEOVy+IA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=CvA2fnC+; arc=none smtp.client-ip=209.85.128.226
+	s=arc-20240116; t=1767401137; c=relaxed/simple;
+	bh=OHCvRTYKVhIoqJ0IbwNbmP3S0pPDKsYwK9/NPEhFebY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VwGFag65GytxQQlcQRcuU2bB7+LWUuzVCg06bRUVT2dKyTAWS+2W2Q1mh+MRa61OBpY8jke0hdnAUvrg2PbwNwXf8Jw16LyXoZ22EwmuBM6LNYJfpdI1WVI9GTMWswn2PiSOvo2+NVKcpF9boSiVhtomQmtJnSuMExApiGgb/zY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=ffhtsnKb; arc=none smtp.client-ip=209.85.222.227
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-yw1-f226.google.com with SMTP id 00721157ae682-78f8fde809fso2944847b3.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 16:45:33 -0800 (PST)
+Received: by mail-qk1-f227.google.com with SMTP id af79cd13be357-8b6691baa33so166173685a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Jan 2026 16:45:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767401132; x=1768005932; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgWUPa6orN5QoP4AMyCwl9k4V9aiIUl9wXZJoJJf0Jo=;
-        b=CvA2fnC+97ZdMzsjUzXBbTtr6v22pYe7uHDVQ53j9QD+Eef9W8SyPXujsi7QNR0rtZ
-         JJJSAlOWnDuglV08T09NaFx4V5w9NVoett/uMfNPPLRlMnEzHeHX2rBSysQDSarV0ZQA
-         s0aUJEvOcBhq4Ii19SLlUJs+y6DhCfm7yQh2d56KjXb7Tv3rbwoyNAFePUDcBVLK+eHq
-         W7zNEsTXLd05E4l9L/o2hJdF64VWnEDedDgKZbXa4hc6lmhAIYFGiaeURjf4Rke7smLo
-         YjGRzt+SquZd16K/DXJWu2VahH2oepncmfwhX68BYkHsoP0HBjzRCp/HTS6G8/8fGAfx
-         BrCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767401132; x=1768005932;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=purestorage.com; s=google2022; t=1767401133; x=1768005933; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZgWUPa6orN5QoP4AMyCwl9k4V9aiIUl9wXZJoJJf0Jo=;
-        b=jdyJ9Sg+EDTZR/F6ZhjTFTSidFgkp0/EqwSYu7B5oDzSZUH/F5OdgaR6ITak9LKEsa
-         IZltaUJRp9TTNtdfmInc/OZT0vTkgOSSvCAjzPGWT7/PFwcUHk3odiahAjrLIyrixxlU
-         UKKpOniBZ4esAyVTJqd1Y3NJN8+ObpDm2T/EwzJE53XhgC0WYsiV8Uq0E9pTvnVJeLxm
-         RqiynSgrw7aUlsrxgWV4eAoAE0Nb+SPFKz8NzXiqhU2C/BkvRSGjegzLCJlUCkdEDzMg
-         sl5tQY7iKdCaUxiR8CGKMs97IbDNWiB1wWsp/3b9Q6FWRdxPDeAjJ7l5X6laqO8czhhZ
-         P4/g==
-X-Forwarded-Encrypted: i=1; AJvYcCWefFCMfEvsMLXCizC2cf1H5M/3QfvafVwVheylBlP1YhWpnvpV3NIV5GvCxF0+0zgwjeSZhXrkU/Ew011vPNs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIpcvXoB3N/UnXE8Bl8pX3hNL9JBW0m71Pb4s2V/vyYyVEPlOY
-	aBcWygi5XR8P4cclfMjeO9gjlYgeSYNzGjxN1/6gKs0OqYK+DYBG9cJ8jCpBbwDVSjuo1MKCLr1
-	AVZTuSwWgAPZ5I1dLUABKeRChGhm+lsGHqscgJ6UrE1g6MxaE4yD0
-X-Gm-Gg: AY/fxX6qyoxN4NpWISWHFzdABtyjvxP4HAiqxoqKDmSx5UvLYySh4Sv2ihdi99fLJn4
-	OcTuIe0ShFSndnQEvsMBAy5gsvsymHo34rlLW6XOdr5FkaqRmhvbkgIybK7/ehxW6jM2x2sriW3
-	wzkUlZHOIj7FRWdEzd/tLdlf3faxEDpwZmrLMq9WTWBo85fJWRIcyX/Broy7DStmRqQVHCmNmPp
-	wNYLECEgKyMqGFN42MZ6dh9jPyFocxXj9ATN8j55nCwQnJQuKwx00oIAiM3WDL1V0riGr681vP7
-	hy+ZLw86lccpsgvxDYdodnMuRF1l8d71d0iOaTqgUGiV1HjjTInTSZvNAv7aoWarSkizPsIF6Ac
-	7mwErqLtsCOhrkWNJGvnUtL7I/Fc=
-X-Google-Smtp-Source: AGHT+IE08Oyk7AKw0dONXxGMI2MnsTwQytJiVnGGfrOyte7cJ8GRAAloVoyv9LI4dr8MqA1SgEpfYp2R/pa3
-X-Received: by 2002:a05:690c:e3e8:b0:789:524e:4be1 with SMTP id 00721157ae682-78fb4015871mr306474087b3.2.1767401132579;
-        Fri, 02 Jan 2026 16:45:32 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([2620:125:9017:12:36:3:5:0])
-        by smtp-relay.gmail.com with ESMTPS id 00721157ae682-78fcdc7488csm19124737b3.2.2026.01.02.16.45.32
+        bh=59cCDgPfeatMIS2T54XZ5qKYRlkQDNaFxzaUv99tjXw=;
+        b=ffhtsnKbL0bACNDUCOPMTDm1xPo7TQsU9JOGSFTV4HstCVXXMejFVw0Hxz9PDrCEO8
+         Z5rsmYl1vtSJyk7lWOeJx2fZ66qj7PgAmm0aQ7Q1/zmI/MhKbxlQvmotWr+usUPMx7Xd
+         RaC/Q1YDSWvXFk7tstcoI8+ApoIDbjHFe0LzB/sGX8GTcVUdvboY1lrOa0cgx9pAoPZP
+         jBjMP20P0HQG2JWnf4kdIyB/3X4ci2s2Y450GI3HfSi21Oleu4xj19udCBrc8q5Edc67
+         K4C1jyrHp23RVTglh8J6q5VPicVrWnGNyHqK7d4to8UxoD99ov3LshW9CTsX3Uco0Utp
+         zBag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767401133; x=1768005933;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=59cCDgPfeatMIS2T54XZ5qKYRlkQDNaFxzaUv99tjXw=;
+        b=lZfzgfeGZIRIRgac0XBAIn6t3m6LssbtzCzdRr94Im8DAEvWHZbKvulu14bHvpVVuI
+         V6/1QNfV/oK5CNlQsPqgmP+fSlZd2LZjR5ieFubneowqKxiabc+OYZI4RKqSOK7QTg8d
+         yFBjALsmVUNkPhAiCR340/wS1qVApGHyau6QFQGfJbkgcPuJIH4O/SATa3zWaoSv8KWc
+         z0iDvDlGY7ImjlCpvMzkaanq9xP5QKBjoNlg9jKUQnO+L696q0k03XvovKG28YvqIovV
+         aEGZ0m9d6LZGBLebTJnOl9VXwb/opWJBlHPykm0AaqwtvwogaW7zkKYWprY40NnNM+ft
+         OB4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVVCLft4//6XXRDvXFy8BRGRwxz3GITH8FplwZuGFC6YMJjuUMx6l12KkrDfgnpGvEV4KuH/abyQG8ojWTKYKI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyr7y2y4jQkY68kiJlRSV/9dIEUUIeulKT8sQER2EBTvg72Lm+h
+	BCBCA+0+Vv5KlPVsXY9ql2qR+FlSseYx+hSnzY/+Bks9Bs8i2PZFsCv8zkzqLFbaHOsTmGDnRQZ
+	gqAU2milx8miZ7IAeN0UAkPkRsCpe2XTRmNH9
+X-Gm-Gg: AY/fxX5GNo3TRmTnQkiVvAx6pmZy6J8ltrLpV1fT+mftIz8icVJWKdEeIb/B9PC3Znb
+	l9j/Ci6DeTzVV0a/2AAd7tHVZCjKt8eQz3XGVkwpzQBOUYKYgl0a/GL/qgkYfG3KpJgx5ns7ZV+
+	0mwm7yE+dRfKOLqsrExcqou2dC7NCTFSRZXbtFT/uhXdOlDvnVp4V+gClVnv/6/m8ZXo+0j1iec
+	Ttu6voz3xGfvCVIfOC+VJWZCwfuLMDHCougSljCDVbd1//ZdXDapG8EDzTZXM4G3KW2kJ5EQe32
+	pB2tz1Xuhn8zqYcwoXxjFZcCJ0ND+jfcQaykUwYGJimNj9vR1YWGpnuJCQNMS9ozt8Rp6udHocs
+	vYs5vICzTmm40N7RwJI/NQARHo81qByFnnII3dVUC4A==
+X-Google-Smtp-Source: AGHT+IFqMJoRCOhorEZ1m5a1GSBNb1Nq8U5gwFI3EoZHHVIsX+lo7hsl8u2Cg5Ps5OOYvTTwO9tanO6Feto2
+X-Received: by 2002:a05:6214:415:b0:801:2595:d05d with SMTP id 6a1803df08f44-88d83797f60mr536526336d6.3.1767401133182;
+        Fri, 02 Jan 2026 16:45:33 -0800 (PST)
+Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
+        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-88d98050c97sm55962466d6.25.2026.01.02.16.45.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Jan 2026 16:45:32 -0800 (PST)
+        Fri, 02 Jan 2026 16:45:33 -0800 (PST)
 X-Relaying-Domain: purestorage.com
 Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.49.34.222])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id 73C353402DF;
+	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id E36283402EE;
 	Fri,  2 Jan 2026 17:45:31 -0700 (MST)
 Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id 69390E43D1D; Fri,  2 Jan 2026 17:45:31 -0700 (MST)
+	id DFE06E43D1D; Fri,  2 Jan 2026 17:45:31 -0700 (MST)
 From: Caleb Sander Mateos <csander@purestorage.com>
 To: Ming Lei <ming.lei@redhat.com>,
 	Jens Axboe <axboe@kernel.dk>,
@@ -86,10 +88,12 @@ Cc: linux-block@vger.kernel.org,
 	Stanley Zhang <stazhang@purestorage.com>,
 	Uday Shankar <ushankar@purestorage.com>,
 	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v2 00/19] ublk: add support for integrity data
-Date: Fri,  2 Jan 2026 17:45:10 -0700
-Message-ID: <20260103004529.1582405-1-csander@purestorage.com>
+Subject: [PATCH v2 01/19] blk-integrity: take const pointer in blk_integrity_rq()
+Date: Fri,  2 Jan 2026 17:45:11 -0700
+Message-ID: <20260103004529.1582405-2-csander@purestorage.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20260103004529.1582405-1-csander@purestorage.com>
+References: <20260103004529.1582405-1-csander@purestorage.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,88 +102,49 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Much work has recently gone into supporting block device integrity data
-(sometimes called "metadata") in Linux. Many NVMe devices these days
-support metadata transfers and/or automatic protection information
-generation and verification. However, ublk devices can't yet advertise
-integrity data capabilities. This patch series wires up support for
-integrity data in ublk. The ublk feature is referred to as "integrity"
-rather than "metadata" to match the block layer's name for it and to
-avoid confusion with the existing and unrelated UBLK_IO_F_META.
+blk_integrity_rq() doesn't modify the struct request passed in, so allow
+a const pointer to be passed. Use a matching signature for the
+!CONFIG_BLK_DEV_INTEGRITY version.
 
-To advertise support for integrity data, a ublk server fills out the
-struct ublk_params's integrity field and sets UBLK_PARAM_TYPE_INTEGRITY.
-The struct ublk_param_integrity flags and csum_type fields use the
-existing LBMD_PI_* constants from the linux/fs.h UAPI header. The ublk
-driver fills out a corresponding struct blk_integrity.
+Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+Reviewed-by: Ming Lei <ming.lei@redhat.com>
+---
+ include/linux/blk-integrity.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-When a request with integrity data is issued to the ublk device, the
-ublk driver sets UBLK_IO_F_INTEGRITY in struct ublksrv_io_desc's
-op_flags field. This is necessary for a ublk server for which
-bi_offload_capable() returns true to distinguish requests with integrity
-data from those without.
-
-Integrity data transfers can currently only be performed via the ublk
-user copy mechanism. The overhead of zero-copy buffer registration makes
-it less appealing for the small transfers typical of integrity data.
-Additionally, neither io_uring NVMe passthru nor IORING_RW_ATTR_FLAG_PI
-currently allow an io_uring registered buffer for the integrity data.
-The ki_pos field of the struct kiocb passed to the user copy
-->{read,write}_iter() callback gains a bit UBLKSRV_IO_INTEGRITY_FLAG for
-a ublk server to indicate whether to access the request's data or
-integrity data.
-
-v2:
-- Communicate BIP_CHECK_* flags and expected reftag seed and app tag to
-  ublk server
-- Add UBLK_F_INTEGRITY feature flag (Ming)
-- Don't change the definition of UBLKSRV_IO_BUF_TOTAL_BITS (Ming)
-- Drop patches already applied
-- Add Reviewed-by tags
-
-Caleb Sander Mateos (16):
-  blk-integrity: take const pointer in blk_integrity_rq()
-  ublk: move ublk flag check functions earlier
-  ublk: set request integrity params in ublksrv_io_desc
-  ublk: add ublk_copy_user_bvec() helper
-  ublk: split out ublk_user_copy() helper
-  ublk: inline ublk_check_and_get_req() into ublk_user_copy()
-  ublk: move offset check out of __ublk_check_and_get_req()
-  ublk: optimize ublk_user_copy() on daemon task
-  selftests: ublk: display UBLK_F_INTEGRITY support
-  selftests: ublk: add utility to get block device metadata size
-  selftests: ublk: add kublk support for integrity params
-  selftests: ublk: implement integrity user copy in kublk
-  selftests: ublk: support non-O_DIRECT backing files
-  selftests: ublk: add integrity data support to loop target
-  selftests: ublk: add integrity params test
-  selftests: ublk: add end-to-end integrity test
-
-Stanley Zhang (3):
-  ublk: support UBLK_PARAM_TYPE_INTEGRITY in device creation
-  ublk: implement integrity user copy
-  ublk: support UBLK_F_INTEGRITY
-
- drivers/block/ublk_drv.c                     | 387 ++++++++++++++-----
- include/linux/blk-integrity.h                |   6 +-
- include/uapi/linux/ublk_cmd.h                |  49 ++-
- tools/testing/selftests/ublk/Makefile        |   6 +-
- tools/testing/selftests/ublk/common.c        |   4 +-
- tools/testing/selftests/ublk/fault_inject.c  |   1 +
- tools/testing/selftests/ublk/file_backed.c   |  61 ++-
- tools/testing/selftests/ublk/kublk.c         |  90 ++++-
- tools/testing/selftests/ublk/kublk.h         |  37 +-
- tools/testing/selftests/ublk/metadata_size.c |  36 ++
- tools/testing/selftests/ublk/null.c          |   1 +
- tools/testing/selftests/ublk/stripe.c        |   6 +-
- tools/testing/selftests/ublk/test_common.sh  |  10 +
- tools/testing/selftests/ublk/test_loop_08.sh | 111 ++++++
- tools/testing/selftests/ublk/test_null_04.sh | 166 ++++++++
- 15 files changed, 833 insertions(+), 138 deletions(-)
- create mode 100644 tools/testing/selftests/ublk/metadata_size.c
- create mode 100755 tools/testing/selftests/ublk/test_loop_08.sh
- create mode 100755 tools/testing/selftests/ublk/test_null_04.sh
-
+diff --git a/include/linux/blk-integrity.h b/include/linux/blk-integrity.h
+index a6b84206eb94..c15b1ac62765 100644
+--- a/include/linux/blk-integrity.h
++++ b/include/linux/blk-integrity.h
+@@ -89,11 +89,11 @@ static inline unsigned int bio_integrity_bytes(struct blk_integrity *bi,
+ 					       unsigned int sectors)
+ {
+ 	return bio_integrity_intervals(bi, sectors) * bi->metadata_size;
+ }
+ 
+-static inline bool blk_integrity_rq(struct request *rq)
++static inline bool blk_integrity_rq(const struct request *rq)
+ {
+ 	return rq->cmd_flags & REQ_INTEGRITY;
+ }
+ 
+ /*
+@@ -166,13 +166,13 @@ static inline unsigned int bio_integrity_intervals(struct blk_integrity *bi,
+ static inline unsigned int bio_integrity_bytes(struct blk_integrity *bi,
+ 					       unsigned int sectors)
+ {
+ 	return 0;
+ }
+-static inline int blk_integrity_rq(struct request *rq)
++static inline bool blk_integrity_rq(const struct request *rq)
+ {
+-	return 0;
++	return false;
+ }
+ 
+ static inline struct bio_vec rq_integrity_vec(struct request *rq)
+ {
+ 	/* the optimizer will remove all calls to this function */
 -- 
 2.45.2
 
