@@ -1,188 +1,213 @@
-Return-Path: <linux-kselftest+bounces-48123-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 641B5CF094D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 04:24:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B79B2CF0B29
+	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 08:10:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 308C8300A358
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 03:24:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 05F4B302FA19
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 07:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19FB12BEFF6;
-	Sun,  4 Jan 2026 03:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fUBqoj4O"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912062EAB8E;
+	Sun,  4 Jan 2026 07:09:28 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8C929DB99
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Jan 2026 03:24:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4815A2EA156;
+	Sun,  4 Jan 2026 07:09:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767497057; cv=none; b=uMOdlt84pMPEHPPHv+DmMi8ZOqcmQA/GC5dazbBpqSKEuLtsefpRnLqgr+Dd3KoKcVTSHnXr2w9jX4zJWfHyMGL0ZAo3vQ7SSgsHjqFG0J2jDa0drephLXWEpttbHYgNq6gRMMK0dZlzIhLECDz0km3MxRhYr9sA4JL1FHcr+Ws=
+	t=1767510568; cv=none; b=F0SD2hap+WoApFxagaP2ddSmVtmMV3MdfGAb7hdiF5B48wf6r93rVXmlZURDSjSo3vPOIKVcu90zfK70MLX1PL7h2DKQk0n/tWSrfHWvOR6x/MFFIQIkvZmdszpf76+D6zvw8q7QOX+b/CjjzPEo55LcZu0I/Zq2kFUTlBCoRAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767497057; c=relaxed/simple;
-	bh=/lEI3/+J/BPnZOVKSfEgPgwaAZ3096zvgLIqg+pqJh8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JCtgGuhSmw9qWHXoQIvMGLTw0hlq54WIQNqkXtLw63DQsWEu6KQyeck0wtqxKTbPLlevfkE+GEc+Vg7Oemn0nZSeP2DQJ9atoVmc2gvgs9hbrZJzjczF4xqIvE7L5NQMyt1PQtlZcUNF1QXjfZ/wvtRZ84Qv2IpYE/rJ3vl0Vhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fUBqoj4O; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767497054;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ii8w9Sk0VGXA6EfYewOe7fg/XK65AlKb5PXLcHLgJRs=;
-	b=fUBqoj4OL6vGjlL6jPhmHkGBQoHYnBIkM8bNfGYx8f9HbUmeLbtOr4QICPxPpyzYAS0MZq
-	JDC+tPCy0OOLfTKpbOuTj04FHpm49PSGDo0bB+c6S3cF5jmvYqrrTDLz6pW2ndtwJOq9SQ
-	WWezm22+UgsS4ne+W1WEzeAqb198o28=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-168-xbALdIZ0PR-HKjuLWFJAQg-1; Sat,
- 03 Jan 2026 22:24:11 -0500
-X-MC-Unique: xbALdIZ0PR-HKjuLWFJAQg-1
-X-Mimecast-MFC-AGG-ID: xbALdIZ0PR-HKjuLWFJAQg_1767497049
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D621C18002ED;
-	Sun,  4 Jan 2026 03:24:08 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.72.116.49])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2BF2A19560AB;
-	Sun,  4 Jan 2026 03:24:00 +0000 (UTC)
-From: Yumei Huang <yuhuang@redhat.com>
-To: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: sbrivio@redhat.com,
-	david@gibson.dropbear.id.au,
-	yuhuang@redhat.com,
-	davem@davemloft.net,
-	dsahern@kernel.org,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	justin.iurman@uliege.be,
-	shuah@kernel.org
-Subject: [PATCH net-next v2] ipv6: preserve insertion order for same-scope addresses
-Date: Sun,  4 Jan 2026 11:23:57 +0800
-Message-ID: <20260104032357.38555-1-yuhuang@redhat.com>
+	s=arc-20240116; t=1767510568; c=relaxed/simple;
+	bh=1rvO9nvQyBBIZXorDMzRy48/5Rk1WSB5ytjsiXThWbs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RLOv2P+mRLoTZiJ8ge+N8jY+5vrB82xvwtTZXolBjsu3Hth9uxwWCoi1r7kRwe02q/+tw4t0/qd30bBF5XIY0nAevitSDCy+iH1zaIkQtHGpR0L2ppv6xGlA14HA4/dCP0Z8O1Hqb4JscnwDNBwytBznLHxDUmbX25BNZDPVKmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dkT6d2xk1zYQtn3;
+	Sun,  4 Jan 2026 15:08:25 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 2C5B040573;
+	Sun,  4 Jan 2026 15:09:22 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgAXefkgElpp98JPCg--.41053S2;
+	Sun, 04 Jan 2026 15:09:22 +0800 (CST)
+Message-ID: <efdcd90c-95ed-4cfc-af9a-3dc0e8f0a488@huaweicloud.com>
+Date: Sun, 4 Jan 2026 15:09:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+User-Agent: Mozilla Thunderbird
+Subject: Re: [cgroup/for-6.20 PATCH v2 3/4] cgroup/cpuset: Don't fail
+ cpuset.cpus change in v2
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ Sun Shaojie <sunshaojie@kylinos.cn>
+References: <20260101191558.434446-1-longman@redhat.com>
+ <20260101191558.434446-4-longman@redhat.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <20260101191558.434446-4-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgAXefkgElpp98JPCg--.41053S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Wr13WrWDXF48tw47Aw45GFg_yoW7Zw1rpF
+	WDC3W3KayYg3WUC3y5Kwn7WrsYgw40v3Zrtw15Jw1rZr9xGF1Iyrs5JwnxAFy3G3yfGa15
+	tFZ3trWfW3Z0yr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
-IPv6 addresses with the same scope are returned in reverse insertion
-order, unlike IPv4. For example, when adding a -> b -> c, the list is
-reported as c -> b -> a, while IPv4 preserves the original order.
 
-This behavior causes:
 
-a. When using `ip -6 a save` and `ip -6 a restore`, addresses are restored
-   in the opposite order from which they were saved. See example below
-   showing addresses added as 1::1, 1::2, 1::3 but displayed and saved
-   in reverse order.
+On 2026/1/2 3:15, Waiman Long wrote:
+> Commit fe8cd2736e75 ("cgroup/cpuset: Delay setting of CS_CPU_EXCLUSIVE
+> until valid partition") introduced a new check to disallow the setting
+> of a new cpuset.cpus.exclusive value that is a superset of a sibling's
+> cpuset.cpus value so that there will at least be one CPU left in the
+> sibling in case the cpuset becomes a valid partition root. This new
+> check does have the side effect of failing a cpuset.cpus change that
+> make it a subset of a sibling's cpuset.cpus.exclusive value.
+> 
+> With v2, users are supposed to be allowed to set whatever value they
+> want in cpuset.cpus without failure. To maintain this rule, the check
+> is now restricted to only when cpuset.cpus.exclusive is being changed
+> not when cpuset.cpus is changed.
+> 
 
-   # ip -6 a a 1::1 dev x
-   # ip -6 a a 1::2 dev x
-   # ip -6 a a 1::3 dev x
-   # ip -6 a s dev x
-   2: x: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
-       inet6 1::3/128 scope global tentative
-       valid_lft forever preferred_lft forever
-       inet6 1::2/128 scope global tentative
-       valid_lft forever preferred_lft forever
-       inet6 1::1/128 scope global tentative
-       valid_lft forever preferred_lft forever
-   # ip -6 a save > dump
-   # ip -6 a d 1::1 dev x
-   # ip -6 a d 1::2 dev x
-   # ip -6 a d 1::3 dev x
-   # ip a d ::1 dev lo
-   # ip a restore < dump
-   # ip -6 a s dev x
-   2: x: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
-       inet6 1::1/128 scope global tentative
-       valid_lft forever preferred_lft forever
-       inet6 1::2/128 scope global tentative
-       valid_lft forever preferred_lft forever
-       inet6 1::3/128 scope global tentative
-       valid_lft forever preferred_lft forever
-   # ip a showdump < dump
-    if1:
-        inet6 ::1/128 scope host proto kernel_lo
-        valid_lft forever preferred_lft forever
-    if2:
-        inet6 1::3/128 scope global tentative
-        valid_lft forever preferred_lft forever
-    if2:
-        inet6 1::2/128 scope global tentative
-        valid_lft forever preferred_lft forever
-    if2:
-        inet6 1::1/128 scope global tentative
-        valid_lft forever preferred_lft forever
+Hi, Longman,
 
-b. Addresses in pasta to appear in reversed order compared to host
-   addresses.
+You've emphasized that modifying cpuset.cpus should never fail. While I haven't found this
+explicitly documented. Should we add it?
 
-The ipv6 addresses were added in reverse order by commit e55ffac60117
-("[IPV6]: order addresses by scope"), then it was changed by commit
-502a2ffd7376 ("ipv6: convert idev_list to list macros"), and restored by
-commit b54c9b98bbfb ("ipv6: Preserve pervious behavior in
-ipv6_link_dev_addr()."). However, this reverse ordering within the same
-scope causes inconsistency with IPv4 and the issues described above.
+More importantly, does this mean the "never fail" rule has higher priority than the exclusive CPU
+constraints? This seems to be the underlying assumption in this patch.
 
-This patch aligns IPv6 address ordering with IPv4 for consistency
-by changing the comparison from >= to > when inserting addresses
-into the address list. Also updates the ioam6 selftest to reflect
-the new address ordering behavior. Combine these two changes into
-one patch for bisectability.
+On the implementation side, the patch looks good to me.
 
-Fixes: e55ffac60117 ("[IPV6]: order addresses by scope")
-Link: https://bugs.passt.top/show_bug.cgi?id=175
-Suggested-by: Stefano Brivio <sbrivio@redhat.com>
-Signed-off-by: Yumei Huang <yuhuang@redhat.com>
----
- net/ipv6/addrconf.c                  | 2 +-
- tools/testing/selftests/net/ioam6.sh | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> The cgroup-v2.rst doc file is also updated to reflect this change.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  Documentation/admin-guide/cgroup-v2.rst |  8 +++----
+>  kernel/cgroup/cpuset.c                  | 30 ++++++++++++-------------
+>  2 files changed, 19 insertions(+), 19 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+> index 7f5b59d95fce..510df2461aff 100644
+> --- a/Documentation/admin-guide/cgroup-v2.rst
+> +++ b/Documentation/admin-guide/cgroup-v2.rst
+> @@ -2561,10 +2561,10 @@ Cpuset Interface Files
+>  	Users can manually set it to a value that is different from
+>  	"cpuset.cpus".	One constraint in setting it is that the list of
+>  	CPUs must be exclusive with respect to "cpuset.cpus.exclusive"
+> -	of its sibling.  If "cpuset.cpus.exclusive" of a sibling cgroup
+> -	isn't set, its "cpuset.cpus" value, if set, cannot be a subset
+> -	of it to leave at least one CPU available when the exclusive
+> -	CPUs are taken away.
+> +	and "cpuset.cpus.exclusive.effective" of its siblings.	Another
+> +	constraint is that it cannot be a superset of "cpuset.cpus"
+> +	of its sibling in order to leave at least one CPU available to
+> +	that sibling when the exclusive CPUs are taken away.
+>  
+>  	For a parent cgroup, any one of its exclusive CPUs can only
+>  	be distributed to at most one of its child cgroups.  Having an
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 37d118a9ad4d..30e31fac4fe3 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -609,33 +609,31 @@ static inline bool cpusets_are_exclusive(struct cpuset *cs1, struct cpuset *cs2)
+>  
+>  /**
+>   * cpus_excl_conflict - Check if two cpusets have exclusive CPU conflicts
+> - * @cs1: first cpuset to check
+> - * @cs2: second cpuset to check
+> + * @trial:	the trial cpuset to be checked
+> + * @sibling:	a sibling cpuset to be checked against
+> + * @xcpus_changed: set if exclusive_cpus has been set
+>   *
+>   * Returns: true if CPU exclusivity conflict exists, false otherwise
+>   *
+>   * Conflict detection rules:
+>   * 1. If either cpuset is CPU exclusive, they must be mutually exclusive
+>   * 2. exclusive_cpus masks cannot intersect between cpusets
+> - * 3. The allowed CPUs of one cpuset cannot be a subset of another's exclusive CPUs
+> + * 3. The allowed CPUs of a sibling cpuset cannot be a subset of the new exclusive CPUs
+>   */
+> -static inline bool cpus_excl_conflict(struct cpuset *cs1, struct cpuset *cs2)
+> +static inline bool cpus_excl_conflict(struct cpuset *trial, struct cpuset *sibling,
+> +				      bool xcpus_changed)
+>  {
+>  	/* If either cpuset is exclusive, check if they are mutually exclusive */
+> -	if (is_cpu_exclusive(cs1) || is_cpu_exclusive(cs2))
+> -		return !cpusets_are_exclusive(cs1, cs2);
+> +	if (is_cpu_exclusive(trial) || is_cpu_exclusive(sibling))
+> +		return !cpusets_are_exclusive(trial, sibling);
+>  
+>  	/* Exclusive_cpus cannot intersect */
+> -	if (cpumask_intersects(cs1->exclusive_cpus, cs2->exclusive_cpus))
+> +	if (cpumask_intersects(trial->exclusive_cpus, sibling->exclusive_cpus))
+>  		return true;
+>  
+> -	/* The cpus_allowed of one cpuset cannot be a subset of another cpuset's exclusive_cpus */
+> -	if (!cpumask_empty(cs1->cpus_allowed) &&
+> -	    cpumask_subset(cs1->cpus_allowed, cs2->exclusive_cpus))
+> -		return true;
+> -
+> -	if (!cpumask_empty(cs2->cpus_allowed) &&
+> -	    cpumask_subset(cs2->cpus_allowed, cs1->exclusive_cpus))
+> +	/* The cpus_allowed of a sibling cpuset cannot be a subset of the new exclusive_cpus */
+> +	if (xcpus_changed && !cpumask_empty(sibling->cpus_allowed) &&
+> +	    cpumask_subset(sibling->cpus_allowed, trial->exclusive_cpus))
+>  		return true;
+>  
+>  	return false;
+> @@ -672,6 +670,7 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
+>  {
+>  	struct cgroup_subsys_state *css;
+>  	struct cpuset *c, *par;
+> +	bool xcpus_changed;
+>  	int ret = 0;
+>  
+>  	rcu_read_lock();
+> @@ -728,10 +727,11 @@ static int validate_change(struct cpuset *cur, struct cpuset *trial)
+>  	 * overlap. exclusive_cpus cannot overlap with each other if set.
+>  	 */
+>  	ret = -EINVAL;
+> +	xcpus_changed = !cpumask_equal(cur->exclusive_cpus, trial->exclusive_cpus);
+>  	cpuset_for_each_child(c, css, par) {
+>  		if (c == cur)
+>  			continue;
+> -		if (cpus_excl_conflict(trial, c))
+> +		if (cpus_excl_conflict(trial, c, xcpus_changed))
+>  			goto out;
+>  		if (mems_excl_conflict(trial, c))
+>  			goto out;
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 40e9c336f6c5..ca998bf46863 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -1013,7 +1013,7 @@ ipv6_link_dev_addr(struct inet6_dev *idev, struct inet6_ifaddr *ifp)
- 	list_for_each(p, &idev->addr_list) {
- 		struct inet6_ifaddr *ifa
- 			= list_entry(p, struct inet6_ifaddr, if_list);
--		if (ifp_scope >= ipv6_addr_src_scope(&ifa->addr))
-+		if (ifp_scope > ipv6_addr_src_scope(&ifa->addr))
- 			break;
- 	}
- 
-diff --git a/tools/testing/selftests/net/ioam6.sh b/tools/testing/selftests/net/ioam6.sh
-index 845c26dd01a9..b2b99889942f 100755
---- a/tools/testing/selftests/net/ioam6.sh
-+++ b/tools/testing/selftests/net/ioam6.sh
-@@ -273,8 +273,8 @@ setup()
-   ip -netns $ioam_node_beta link set ioam-veth-betaR name veth1 &>/dev/null
-   ip -netns $ioam_node_gamma link set ioam-veth-gamma name veth0 &>/dev/null
- 
--  ip -netns $ioam_node_alpha addr add 2001:db8:1::50/64 dev veth0 &>/dev/null
-   ip -netns $ioam_node_alpha addr add 2001:db8:1::2/64 dev veth0 &>/dev/null
-+  ip -netns $ioam_node_alpha addr add 2001:db8:1::50/64 dev veth0 &>/dev/null
-   ip -netns $ioam_node_alpha link set veth0 up &>/dev/null
-   ip -netns $ioam_node_alpha link set lo up &>/dev/null
-   ip -netns $ioam_node_alpha route add 2001:db8:2::/64 \
 -- 
-2.52.0
+Best regards,
+Ridong
 
 
