@@ -1,164 +1,112 @@
-Return-Path: <linux-kselftest+bounces-48147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3E58CF1698
-	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 23:26:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB697CF1704
+	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 23:55:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB164300F9D5
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 22:26:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 72C26300D43D
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 22:55:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA313161A2;
-	Sun,  4 Jan 2026 22:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E693D25F96D;
+	Sun,  4 Jan 2026 22:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BwIIUkdd";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="aLdtya1F"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzzVBXrJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDE227BF6C
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Jan 2026 22:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B0C52F88
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Jan 2026 22:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767565586; cv=none; b=hlaWd+gk7FQrSbPTrsGhNyq9unByhYBpRDc6mSLLDRTkzOudd+3mEZVFvMjO4v9Z/FBJ2tMYXXGjYyjvdjArWUSwFNwut9r4/VmHD5nEKFoVW39cgFW+kdlgbhD0EIugGXrFPYxsIcMldbPaUz+tSTaQ0dsovdHIBhNIJwYdkIE=
+	t=1767567301; cv=none; b=CWk8Z+EZdPr/K9PbAp5FDvruN2Z9hcy7V2h0dRt4hZQL0GQqJjBO+75sysXYsyhoizDXkOffjlQzASJBMk4Ra+0u6D06xEYRg7VZWUjP8nm/eWXr/P0rDv+pZeaBnlE1vBxyYrQSi1+rObKz6Mr++AckP3sJdLtB4LxhkT9uKJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767565586; c=relaxed/simple;
-	bh=18zqbZPHCZfC4IECcFh5Oo9n88sS/9RdXF1BYxgm8CY=;
-	h=From:Message-ID:Date:MIME-Version:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=OLYcp5S1XQqFQLt8ElJVNxcVIes2eKxWe725L9+suDNQOhdFT8+tpj6rP1d4qJ1069xO3iDgNRzp/lMWHR/daVnIYe3EZ6KL/g9QB3mwR8SVf8A4//k+vA7/ej8ZjqIRzpSYGgrmQIxZZv83J92JCaqN8hKb/Wtyl3LO/H0Cf3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BwIIUkdd; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=aLdtya1F; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767565584;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MX6wynQZFsiu7Tz4PLzaszcf/RQEoHul08Z9Zkyf+Is=;
-	b=BwIIUkddCDr5hUFJ2Wsua8AhMHRNdpvCU5+ETBb+P2Jd5ccUNlSLjH9dSv5Mh1X4Kq+nLN
-	xMe7W6FrLv+v+s4/Mot6l0OiSPs3JVqZWDrpwpBlHQx6tsFyRtPFI9OrdggKhmhj6Cn8ew
-	wbmEdj2ftNw7i+av4wEIgVDKtzjOB3k=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-505-O4R1o8JGNFG0S0DAMCMekw-1; Sun, 04 Jan 2026 17:26:21 -0500
-X-MC-Unique: O4R1o8JGNFG0S0DAMCMekw-1
-X-Mimecast-MFC-AGG-ID: O4R1o8JGNFG0S0DAMCMekw_1767565580
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8bbe16e0a34so463711385a.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Jan 2026 14:26:20 -0800 (PST)
+	s=arc-20240116; t=1767567301; c=relaxed/simple;
+	bh=RGfrK/i8CqdIsUAM6F5jajU+/3DORxQP/tQIjwYyhfI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WtzKwS6e4EMQpmsa8GRbBDwYRg7g0L9ZEOiYQVO0/hP/LZ43pGIK6Na9zSGRiVgm72+esCczcQDviqQei5J9MtVhEyKRB6Yykot1QSde9uyNhSFfAyuxDJWuD3raIfA6oUR3ELQTnsnewQQ6FFmfpO5QVNLU2UX3rP2hyhroHi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzzVBXrJ; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-bd5cf88d165so182896a12.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Jan 2026 14:55:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767565580; x=1768170380; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=MX6wynQZFsiu7Tz4PLzaszcf/RQEoHul08Z9Zkyf+Is=;
-        b=aLdtya1F1GDOdz1hTflB7L6wy3yPREOMaiqfJ5Ck8NYpDiRd8ZcLsqYNfzaQTMMJiL
-         ribdYnwTe2ri594qkNwlKANnEOWOFOoj9y52PShxpd0Ey7Dz9U7F4s782NF90lQGx3mw
-         KR8hqu0dEgW+etnTcevicCcqJVt9id8KN0ev38lFm4SlsZ1aKWVbTcKCWeLl7CgVm+tm
-         4zk8woOBUidyyBd9xHBvy5KGYGw06LrrIE7Ts6CG/yT7+2jtkU9yaZeUaY4pSa+TBFjK
-         09ajFFCoMgs2FAJ1+IlFjfHoJ4eyVAqjM0M26K4d5Ozc6noYunHULfApOySPqcLp6+iL
-         BrYw==
+        d=gmail.com; s=20230601; t=1767567300; x=1768172100; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RGfrK/i8CqdIsUAM6F5jajU+/3DORxQP/tQIjwYyhfI=;
+        b=gzzVBXrJF+a5wVtfPszObhKRfo/sEPKgSqF7n7qUqg/2BZBWl9sBqaj6TrhgSNmVGy
+         KTF7pKB+BT4U6yLig1K4bIsZUgPBKliviDu0AGvYjuSU021oBcweHIp9yA3B+UWHki9k
+         JOlZYvSHYLxS4eUlcmSo79YSeevEfox55Dpwuu2omz0MHXWeKXX3K7fW2uutjck0ACAr
+         EaGTs614kSA5hRjQ+WMiuk0bKMJQUL9yDXrlBQgGVSbSTUm1ZLpVvLjjuPxjvyPQ70hE
+         K8NAjUEUz+fv7c/in/sBgMKfyeMo/njE+DNnk8bwuX4ruWVpbxC8DYf0/F3emzGKAydx
+         XuZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767565580; x=1768170380;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:user-agent:mime-version:date:message-id:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MX6wynQZFsiu7Tz4PLzaszcf/RQEoHul08Z9Zkyf+Is=;
-        b=cUhlR/w62DKR0yMTo/ATb8nIFHl/c5I//lrpIuD8o9Ft9kLMfQeTyVXBlnhIX5UeLZ
-         x8AI47ANC7CPwz2fWweDJosEXSHylX4DG9sjmFdrAp2kLw5hGv55fr4tkcrwOI2oxJWG
-         UtLMX5ooy2V2NR4ZBrGZoujT0oPxxRBt+dEJPJsBIJvs0YKhUnqpTRIK6jsYZOBci7cd
-         ZDRYopHXsfQ9f4CJ0xyyTyWOENHKL4731XliyLWt/ZWaRSIsf6j9tJxWMjtmcq/zR3gO
-         eGRH1IuquUMrcodMosVHgCUN424wRCkGJok8KIpIV0zpgBUpTnWuTRea5ocs3ceNJ2LL
-         flag==
-X-Forwarded-Encrypted: i=1; AJvYcCWHYrTJS85AqHV2a2R9lTENmlKDWEIPkTQd3tL8bsK8D+ZiSmLr56MgegcTmmytaN0tgGEKg4lGzTl3FH0sYlM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4eOhphN+3lpomm3deCjS2V3LLI8ibE2N9VW2roIcSXmuCAZ3n
-	7q0P9LgFFjcPdCgIDynvXOpk3oXjdXRUv0RKfstc3TV0Jhxxk3oLTH2cZ8XfFU/uLksHpGCixqN
-	17jeSJ7DL6LjaaVVJj6Ipv8OJD96q8dhS+0vBcmT1vwEdBrI2LYNan8YxxGffSGE/maTk4Q==
-X-Gm-Gg: AY/fxX7BOj4VfCWjYJfPTfEeW5F/lxsAxd1hFsy5/gl33RIkwqlt64b6/k9TQBFJdKW
-	8UMlxwEILsAbmkk/q04d/CnN96iKcGukFcMbfl131i4TzatyTuHXEgS3mIaVDYvUSivlE87CyVv
-	MqwhyBxO2LLNtxc0Yh3zctY6vqngP1uSqKJFOLpCn+XfK+1aBHA8xIwbG761XmcnGTNm+eyGAaH
-	LaQ2HA45eZrdLxkuNsxsKx17vgGWymG5QZU1q2vYZ0U0oAT7CXBsSyF5IubH1IxdQy33zGkQW/+
-	puzdDUJJBCuhfoze90Bwkf/kcC2mvMCrybaqivU08tFVLLjTZpNUc3QDF7hgNxw+KoEU8kV0aJf
-	aYCzD3vQpxkByFSSC7Myk/U3cdeuFX0Q4rQkB+lyx2mzNl8Z5RlPszAKT
-X-Received: by 2002:a05:620a:2993:b0:88e:1be9:cf65 with SMTP id af79cd13be357-8c356f610f2mr826663285a.39.1767565580429;
-        Sun, 04 Jan 2026 14:26:20 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH1alN5adMavXwg0qoPb9OAbKBalJiqdid2PFcZ88dBnIGljKevyz4sWtBubRBFhtfzz1Bexw==
-X-Received: by 2002:a05:620a:2993:b0:88e:1be9:cf65 with SMTP id af79cd13be357-8c356f610f2mr826661785a.39.1767565580057;
-        Sun, 04 Jan 2026 14:26:20 -0800 (PST)
-Received: from ?IPV6:2601:188:c102:b180:1f8b:71d0:77b1:1f6e? ([2601:188:c102:b180:1f8b:71d0:77b1:1f6e])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88d9aa363e3sm337038506d6.57.2026.01.04.14.26.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Jan 2026 14:26:19 -0800 (PST)
-From: Waiman Long <llong@redhat.com>
-X-Google-Original-From: Waiman Long <longman@redhat.com>
-Message-ID: <5ed163d8-c229-4aed-bc8a-ae9cba9b78ec@redhat.com>
-Date: Sun, 4 Jan 2026 17:26:18 -0500
+        d=1e100.net; s=20230601; t=1767567300; x=1768172100;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=RGfrK/i8CqdIsUAM6F5jajU+/3DORxQP/tQIjwYyhfI=;
+        b=Dq1SCO7YijfxcZXd23dT12TTGTCC2/ahfMpgcFfrSWrUw2FFUfhIYI8111083ueue/
+         5YsYAssYhbnxsJex/kye3/QCVsJlHVTMhCXWVmp6jQgIKb3S3HMlPfzrvNhweq5HumlO
+         2mhiV5UX0nN/HjCJ4ww2HrOjqu8pqIq+gV5t1sUlgAtW5aYz35qUK0g0lRrqg6m8hH2T
+         oJoasOgH261qohjqcjYW1XAIACGEVXYNK8Nu785fGlMrDySxMBsrt5ZRHf68wFgJ0K/Y
+         pyLDIXzEuuuJPgVPq2BFDFZa7SWSiUwLZlTYURUpUGIsv2RRjFxNMPOLHQWLGJkvw2hz
+         HPsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV66qD2S7beYa2IqnkIHkomqceT9lFW0yFgg9tz0MLYxRH5mFPr9kCp4tr9Lf0Lz0vKFLeFuEHen978izvLgTI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOy6RkRebTcOUvxkENYUg8XJbaaBBCX1AYVp8otOT+cGhG5ye0
+	wv0J9BnkUIEk17ei0k7O75KpMpr22MVKCPFLSRbfj1iR9ziAj06XSq0cr3xxH5hbzZI8u2jW01M
+	wYuIMGaoAH94Qx5S8bq0O1VakGeuswH4z7AW5
+X-Gm-Gg: AY/fxX5qk7HToZDpTtpbjnNl2jPYbn5HQQUhiDp8ZZdqrUvo80i8fCgp8Y8vU7+e0Wn
+	9rakCnCnInYuxknMF4ciTKLq33ytQW6em6CTI+v1grULASDXFS6e/JPSxSBPwimJaeBU9dt/iZh
+	eoiCRq8233ENNmXQAtxtfIyijnSHL1f9aVVYNgKZqw7on9TXLtqk+IhkeBy6ug2nfJiJdt1IdAn
+	tnMSgxYSnnYCKfyQNMtDKRAQDDk9AUfYAKMVnw9QtNZbdJ5SGoCHtTlB7LtaKYW2a9F2T+Wrc2T
+	v6EDLC1oXuRbSTyFYekGrs/MdBPphw0VF9GZIpaa72wbh4JM768zlugEuLlIELW8oHkTpD/9Ysg
+	vHizq52TXNmCz
+X-Google-Smtp-Source: AGHT+IGfdV3n2immeToIA2HtCjHHk7VCHJdSyBxh60KZPa7f2BlaejcNt7HViaI/dg1w225H/hp/37Uwl1/GBo8Hpbs=
+X-Received: by 2002:a05:7300:724d:b0:2ae:5b23:1601 with SMTP id
+ 5a478bee46e88-2b05ea108fdmr23605192eec.0.1767567299771; Sun, 04 Jan 2026
+ 14:54:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [cgroup/for-6.20 PATCH v2 4/4] cgroup/cpuset: Don't invalidate
- sibling partitions on cpuset.cpus conflict
-To: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- Sun Shaojie <sunshaojie@kylinos.cn>
-References: <20260101191558.434446-1-longman@redhat.com>
- <20260101191558.434446-5-longman@redhat.com>
- <f561b413-7fdc-45d9-9d89-8bd55e960d51@huaweicloud.com>
-Content-Language: en-US
-In-Reply-To: <f561b413-7fdc-45d9-9d89-8bd55e960d51@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20251211182208.2791025-1-gary@kernel.org>
+In-Reply-To: <20251211182208.2791025-1-gary@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sun, 4 Jan 2026 23:54:47 +0100
+X-Gm-Features: AQt7F2oeBjY-zPeIIX8N3i0q9UZLwGEO153tgkFaokPfbh-tOwBHelwXkLfnOCE
+Message-ID: <CANiq72mUR8NkymK4ZLs1Ejy5Kk6ZxCRBLd=-3UCUGjWSnDfJ9A@mail.gmail.com>
+Subject: Re: [PATCH] rust: fix off-by-one line number in rustdoc tests
+To: Gary Guo <gary@garyguo.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/4/26 2:53 AM, Chen Ridong wrote:
+On Thu, Dec 11, 2025 at 7:22=E2=80=AFPM Gary Guo <gary@kernel.org> wrote:
 >
-> On 2026/1/2 3:15, Waiman Long wrote:
->> Currently, when setting a cpuset's cpuset.cpus to a value that conflicts
->> with the cpuset.cpus/cpuset.cpus.exclusive of a sibling partition,
->> the sibling's partition state becomes invalid. This is overly harsh and
->> is probably not necessary.
->>
->> The cpuset.cpus.exclusive control file, if set, will override the
->> cpuset.cpus of the same cpuset when creating a cpuset partition.
->> So cpuset.cpus has less priority than cpuset.cpus.exclusive in setting up
->> a partition.  However, it cannot override a conflicting cpuset.cpus file
->> in a sibling cpuset and the partition creation process will fail. This
->> is inconsistent.  That will also make using cpuset.cpus.exclusive less
->> valuable as a tool to set up cpuset partitions as the users have to
->> check if such a cpuset.cpus conflict exists or not.
->>
->> Fix these problems by strictly adhering to the setting of the
->> following control files in descending order of priority when setting
->> up a partition.
->>
->>   1. cpuset.cpus.exclusive.effective of a valid partition
->>   2. cpuset.cpus.exclusive
->>   3. cpuset.cpus
->>
-> Hi, Longman,
+> From: Gary Guo <gary@garyguo.net>
 >
-> This description is a bit confusing to me. cpuset.cpus.exclusive and cpuset.cpus are user-settable
-> control files, while cpuset.cpus.exclusive.effective is a read-only file that reflects the result of
-> applying cpuset.cpus.exclusive and cpuset.cpus after conflict resolution.
+> When the `#![allow]` line was added, the doctest line number anchor
+> isn't updated which causes the line number printed in kunit test to be
+> off-by-one.
 >
-> A partition can be established as long as cpuset.cpus.exclusive.effective is not empty. I believe
-> cpuset.cpus.exclusive.effective represents the final effective CPU mask used for the partition, so
-> it shouldn't be compared in priority with cpuset.cpus.exclusive or cpuset.cpus. Rather, the latter
-> two are inputs that determine the former.
+> Fixes: ab844cf32058 ("rust: allow `unreachable_pub` for doctests")
+> Signed-off-by: Gary Guo <gary@garyguo.net>
 
-Yes, that priority list can be somewhat confusing. I will take out this 
-paragraph. The next 2 paragraphs in the commit log should be good enough.
+Applied to `rust-fixes` -- thanks everyone!
 
-Thanks,
-Longman
-
+Cheers,
+Miguel
 
