@@ -1,43 +1,53 @@
-Return-Path: <linux-kselftest+bounces-48121-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48122-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79841CF08F7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 03:48:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FFC0CF0929
+	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 04:20:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1D7AB300EA12
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 02:48:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 92D2B300AB36
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 03:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41EA12BE05B;
-	Sun,  4 Jan 2026 02:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B835217A31E;
+	Sun,  4 Jan 2026 03:20:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="2DxekCI6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7A629992A;
-	Sun,  4 Jan 2026 02:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169094207A;
+	Sun,  4 Jan 2026 03:20:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767494905; cv=none; b=CJlUezPd0YUetzfsig94arDB6aBRWqgPcJteIDexssZiMDH185FIci7wrbPtIv3RKAyb9yv8PVYAMy0joOyJoy7fEgkt/FICeJbshT5cMKd2FihDO3G4c4rDJCIacfRLzCIlIy9Luk9gJh0Lm4bznirZbHWyMR7t6VZXjLIyCvQ=
+	t=1767496822; cv=none; b=UvSYCZARILBxuJY2kUrYRTZiBIZPjtTI7YQ2lRM/lUyBO1vE2FzDIP1+10QVA5AcXg+RL+cGP0B3XapiSWb+qNcbTZvaqqaOV0ZY92/WGgjcc8vKN8MMyOK0kxDShd0KQf5rdPhJ9wRoLl3DtNJ4lwnhLJLM6BBzbWNvVkyXUKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767494905; c=relaxed/simple;
-	bh=xLeIV1JsLSXR0Et0G5gFuUcVoEi9AZmb27l+J+Y+k8E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EWnR8kb2o9/dehUxizAMisqMKnNZ+Pc5y1ishb1Rt5oWWuYVVQAYzEAzUPtcXRX/H8KjDWaMpoiMfvITtyxlD/Z5R669qy4kjCQhtaDiO7zY7gELzbst5SIIO/eOWV3j5ZoEBDZalsd3HN15bjmAN+LQQLwWnYVuBdBQ2w1OEgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4dkMKj2qCczKHMKM;
-	Sun,  4 Jan 2026 10:47:37 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 6BAB840576;
-	Sun,  4 Jan 2026 10:48:13 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP4 (Coremail) with SMTP id gCh0CgCHNvfs1FlpShA6Cg--.24337S2;
-	Sun, 04 Jan 2026 10:48:13 +0800 (CST)
-Message-ID: <758f42df-52c2-4660-8ef7-1cbacb9323d2@huaweicloud.com>
-Date: Sun, 4 Jan 2026 10:48:11 +0800
+	s=arc-20240116; t=1767496822; c=relaxed/simple;
+	bh=deB/+QbuRhSdxPDzkCIe+IHLh6zQpP07rAYmgj93QXo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=kStiI/3yvJGtTItNtGhszp+v5+apFwThBVI05YCS8fsHfXaJcKJC2ICJwWSyog89jlvL2X6sOVbBEjsGWeXOKsYTOi0NM80gn+7hDBPwTGV5e2EXO20GEgokRSOnDSXJuLBCv4VOrjyoUAebgBBq2UmjyJAEzxCYuKmnT+gWW2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=2DxekCI6; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=QLL7bjv1BrNnYVbdl19Xciy9EaxpvUqn9pTDGtvKwFY=;
+	b=2DxekCI6xA0svzyz06lFYaIP0F3CctLtkVXsnWH6ooDabtuqxsGIBaIPCWzXVv+EB1633oOg8
+	y105HtpnGbgh7uL9vS0IV2c1GOlayzYBUu3OYYEuI3YPmvNi9xyXNWZFYLzFt9cKClQr6TcLoWM
+	Lrm0hxuDflZv2LqEviIf/vg=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4dkMzX15HfzRhRF;
+	Sun,  4 Jan 2026 11:16:56 +0800 (CST)
+Received: from dggpemr500006.china.huawei.com (unknown [7.185.36.185])
+	by mail.maildlp.com (Postfix) with ESMTPS id DCC674056E;
+	Sun,  4 Jan 2026 11:20:09 +0800 (CST)
+Received: from [100.103.109.15] (100.103.109.15) by
+ dggpemr500006.china.huawei.com (7.185.36.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Sun, 4 Jan 2026 11:20:08 +0800
+Message-ID: <34ff0ff6-217e-4574-a3b1-af74b2f40937@huawei.com>
+Date: Sun, 4 Jan 2026 11:20:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,98 +55,73 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [cgroup/for-6.20 PATCH v2 2/4] cgroup/cpuset: Consistently
- compute effective_xcpus in update_cpumasks_hier()
-To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- Sun Shaojie <sunshaojie@kylinos.cn>
-References: <20260101191558.434446-1-longman@redhat.com>
- <20260101191558.434446-3-longman@redhat.com>
+Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to
+ softirq
+To: Joel Fernandes <joelagnelf@nvidia.com>, <paulmck@kernel.org>, Steven
+ Rostedt <rostedt@goodmis.org>
+CC: Boqun Feng <boqun.feng@gmail.com>, <rcu@vger.kernel.org>, Frederic
+ Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
+	<neeraj.upadhyay@kernel.org>, Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, Tengda Wu
+	<wutengda2@huawei.com>, <liuyongqiang13@huawei.com>, <yujiacheng3@huawei.com>
+References: <20260101163417.1065705-1-joelagnelf@nvidia.com>
+ <20260101163417.1065705-2-joelagnelf@nvidia.com>
+ <20260102122807.7025fc87@gandalf.local.home>
+ <20260102123009.453dfb90@gandalf.local.home>
+ <68b5b122-036b-475a-85bb-e39830f99fbe@paulmck-laptop>
+ <252063db-ec72-42df-b9e0-b8dc0aa6bef9@nvidia.com>
 Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <20260101191558.434446-3-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+From: Yao Kai <yaokai34@huawei.com>
+In-Reply-To: <252063db-ec72-42df-b9e0-b8dc0aa6bef9@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgCHNvfs1FlpShA6Cg--.24337S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw4xtF18ur17GF1DJF17trb_yoW5JF48pF
-	ySkw4avayYqr1rC39xK3Z29r1Fga1vqF4qywn8Kr4fXFy3G3Wv9r1q9anIvr1UJF4DGw45
-	ZF98Xr4SqasIy37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ dggpemr500006.china.huawei.com (7.185.36.185)
 
 
 
-On 2026/1/2 3:15, Waiman Long wrote:
-> Since commit f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check()
-> & make update_cpumasks_hier() handle remote partition"), the
-> compute_effective_exclusive_cpumask() helper was extended to
-> strip exclusive CPUs from siblings when computing effective_xcpus
-> (cpuset.cpus.exclusive.effective). This helper was later renamed to
-> compute_excpus() in commit 86bbbd1f33ab ("cpuset: Refactor exclusive
-> CPU mask computation logic").
+On 1/3/2026 8:41 AM, Joel Fernandes wrote:
 > 
-> This helper is supposed to be used consistently to compute
-> effective_xcpus. However, there is an exception within the callback
-> critical section in update_cpumasks_hier() when exclusive_cpus of a
-> valid partition root is empty. This can cause effective_xcpus value to
-> differ depending on where exactly it is last computed. Fix this by using
-> compute_excpus() in this case to give a consistent result.
 > 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  kernel/cgroup/cpuset.c | 14 +++++---------
->  1 file changed, 5 insertions(+), 9 deletions(-)
+> On 1/2/2026 2:51 PM, Paul E. McKenney wrote:
+>> On Fri, Jan 02, 2026 at 12:30:09PM -0500, Steven Rostedt wrote:
+>>> On Fri, 2 Jan 2026 12:28:07 -0500
+>>> Steven Rostedt <rostedt@goodmis.org> wrote:
+>>>
+>>>> Stacktrace should have recursion protection too.
+>>>>
+>>>> Can you try this patch to see if it would have fixed the problem too?
+>>>
+>>> As I believe the recursion protection should be in the tracing
+>>> infrastructure more than in RCU. As RCU is used as an active participant in
+>>> the kernel whereas tracing is supposed to be only an observer.
+>>>
+>>> If tracing is the culprit, it should be the one that is fixed.
+>>
+>> Makes sense to me!  But then it would...  ;-)
+>>
+> Could we fix it in both? (RCU and tracing). The patch just adds 3 more net lines
+> to RCU code. It'd be good to have a guard rail against softirq recursion in RCU
+> read unlock path, as much as the existing guard rail we already have with
+> irq_work? After all, both paths attempt to do deferred work when it is safer to
+> do so.
 > 
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index da2b3b51630e..37d118a9ad4d 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -2168,17 +2168,13 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks *tmp,
->  		spin_lock_irq(&callback_lock);
->  		cpumask_copy(cp->effective_cpus, tmp->new_cpus);
->  		cp->partition_root_state = new_prs;
-> -		if (!cpumask_empty(cp->exclusive_cpus) && (cp != cs))
-> -			compute_excpus(cp, cp->effective_xcpus);
-> -
->  		/*
-> -		 * Make sure effective_xcpus is properly set for a valid
-> -		 * partition root.
-> +		 * Need to compute effective_xcpus if either exclusive_cpus
-> +		 * is non-empty or it is a valid partition root.
->  		 */
-> -		if ((new_prs > 0) && cpumask_empty(cp->exclusive_cpus))
-> -			cpumask_and(cp->effective_xcpus,
-> -				    cp->cpus_allowed, parent->effective_xcpus);
-> -		else if (new_prs < 0)
-> +		if ((new_prs > 0) || !cpumask_empty(cp->exclusive_cpus))
-> +			compute_excpus(cp, cp->effective_xcpus);
-> +		if (new_prs < 0)
->  			reset_partition_data(cp);
->  		spin_unlock_irq(&callback_lock);
->  
+> Yao, if you could test Steve's patch and reply whether it fixes it too?
+> 
+> thanks,
+> 
+>   - Joel
+> 
+> 
+> 
+> 
 
-The code resets partition data only for new_prs < 0. My understanding is that a partition is invalid
-when new_prs <= 0. Shouldn't reset_partition_data() also be called when new_prs = 0? Is there a
-specific reason to skip the reset in that case?
+Yes, I tested Steve's patch. It fixes the issue too.
 
--- 
-Best regards,
-Ridong
+Tested-by: Yao Kai <yaokai34@huawei.com>
 
+  - Yao
 
