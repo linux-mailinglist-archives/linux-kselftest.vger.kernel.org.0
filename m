@@ -1,255 +1,207 @@
-Return-Path: <linux-kselftest+bounces-48126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24872CF0CA1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 10:30:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92407CF0CC2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 11:00:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8E9E2300F9E6
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 09:30:55 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4D351300941F
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 10:00:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5124927A469;
-	Sun,  4 Jan 2026 09:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C08226CF1;
+	Sun,  4 Jan 2026 10:00:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nvW/V5ES"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hVS7uaJZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABD918DB35
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Jan 2026 09:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAD816DC28
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Jan 2026 10:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767519054; cv=none; b=Kvt6NT5PrBc4qdDOf0Jj2cFz97XO4F71cAOCygAQzeH4smiCvKgpO7odfHldmBo9FrbagPBYyLsSirE1Sy4MGoNZuyOdXwz7A7uGjnQjg4jFZznkGHuyknsSQU9GZSDF8T6sMJXop1bSyP4MNdUbhb9fz9czIIDo3fpAJf6SA1s=
+	t=1767520828; cv=none; b=DOh+AqsN2ZcZtTVnCdpEvgowmwY7NnDhfyCjRI341Tn51LMeneQ/maDjFXmyDOn0aj5TP5zkzDkzJx9zQbKZS0MXvKN9NTUdbMU2vX8pIJHIoAzwJ1h3BvTY+hmISA17zgdJyV208eCObFl76V1OiDx/sWWvreoUU6i36M3ZuJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767519054; c=relaxed/simple;
-	bh=lzSJURf3FpHYA4PkKC1xnAbqZ8zjtsvDpO+a0PvDcMw=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=FJKTbV9RgwtKTWJwqXsPXd8ThRvhheeMzrfWx5uD2+eAvOZMMknIpSSqCGouo+mAPTaqk+zqaF7RYYIb7su3qXTDofd2d/ndUxNsYATRGojjqg+9BWKE/ULURPsaX3HJKKKST3E/t08HxEpPa4bKFx0bYRrOPDfneFIVBgsiXz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nvW/V5ES; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1767520828; c=relaxed/simple;
+	bh=hm2Vu6mwK8ose4vlTQrhJAECyIb3UrX+nklaehpSdnQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AJUSNlpDYZQpRmVkT/EGACPxi6YTzR5zVgmyr9pJaWM0VqQQxNZyMfUun+apBe+qluXMCkpRm4084Z2fIMLovo+vjf024xEAZ+PoBsKvMsik4HCitxXFkH4532w+QI/0mmYH5I9CjLmbWUHBUNV3PgfMp22JHynzoSZ4DCsnuvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hVS7uaJZ; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-88a37cb5afdso12976826d6.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Jan 2026 02:00:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767520826; x=1768125626; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TXIS1FlRa7m6sjrl4aOMyrl1r1tGaaVPP5A/N8Whrjs=;
+        b=hVS7uaJZIbvIPhwEl2A8/DedVWlZyX5bTjAXmnnZhXc2/6NzURnh0qESW1bpdTq4d3
+         gK/v4a7+xBC/nNssx8MvbGJgrIWBbypzc4gi6Ngjw7nMl9TGGDkSnDjzELPMlRnBPQon
+         tfU2ujCTIrQ3E6J8rQfEJ2ZDvCagqHaKekgUwr+r6njq9KzKPKVBIIkbOIDTUUrFtEH5
+         4sEdbr/pX/NsCYSVtjD3KaLJg1mclOmsUoBiTYrjxC0GV8hrISnWEV0O8Grp2/48Z3S2
+         1wS6t7CW4vQ1m5SOPwgPvB+ZbQLwMGJNCKoZEJ2rfAwYtQW/k/yQt0KGq4pS7qSQBHg4
+         d5/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767520826; x=1768125626;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TXIS1FlRa7m6sjrl4aOMyrl1r1tGaaVPP5A/N8Whrjs=;
+        b=HqoEL4R6gsRCwK0tt9aIWbXX6eWCiZjEpRIakX4M43j2BhduvsF4rmTP45MrJo7BUw
+         7TOWiu8OFEqeA1uzM1cf9D0kumk0kXt1gcduAeXE5W7WTBSTxkbcobqO+fSSR1PIf9OE
+         qie7s/4usziWSKycojY469CrrH8Iz2Xg6sUR/V7kcfSMowgLxl8xlv0z1pA7WDFOfau+
+         Qbi7tBL4m0LZFr+AWSUEFqqRTnPKsWxKMLtM00j7e3sOqTWfCdoywtYEIgj/Ns0eFfGn
+         gZn0TUWwjHz34cnrJwBxK3euflfXhtwSEk+PCqnhtpw/tw6z/SaZOkMW8oGH0eCI+U7A
+         VNsg==
+X-Forwarded-Encrypted: i=1; AJvYcCVQlkqCBR1VUl1qtksMw/84NEILUBZGrybVRY2/j5fSyf/Y3KqsZNhudIXaF8SM7j9EO+v1EhjltzLk5/5BzG0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxluuRfB4sQzY08L/gQopIDGbFCu8gdp9o+2PT6kbJYlsq3fk1u
+	1KJmYuDw98oFzEMgO6tTpD2OeNMu1XU90Xcwjr6li1eTuVyhTyMLLp6p
+X-Gm-Gg: AY/fxX7ADlkszI3X420TGulA58Az1awlzrU18+FQkFMSxQoxoHU2HnuQQAiOkkSK36u
+	73K81XXpBe9dcplNv/XBdpsfV0jIT9glyVAs4d8dXZeESAsytRtrpERUe2ieWfCv/anSpBwdZAJ
+	sYPnNfU+KbWL76rw/rXfjmdg/wvtHjnuXZl1SaS1pBpzH/hk72vcdfmjdw9UY7MBYXWP2zg2kaT
+	eeCB/nmL5lhncBZQKndJKjenJG7ck70O+o3ZWxnvxCVpfk87jBEzO9sKV+pohfv0ka/p9hOMD8N
+	uhokmOqW3KEUFTRmc1yrx9IinxT3rci+Z8Kt3jY9t1tMCGxORLSglwCgNIocnXrx9gwL2gsyYSR
+	pSptAQgLtqKXa/pnFWg5g9lsxCtDql3JRogI8EzOD7wLkJ2TKj2/LE5QSo1NaCoTgv+OzLuy6+Y
+	yrFrFqiakzNJchWl9t3JPwEPl9ie7Tt2RMpe8b8U4R28K3wYjfpNT7mz2+hfA3NE8mMUkGyiXl5
+	OrYJUiLeK/fNJ8=
+X-Google-Smtp-Source: AGHT+IHJXK2R3WeiJJDevqNrbsHSETT3xDVTi+xQ7Wr58QUWUx24qWhAB1reKUvIp+0KiJ3U34Vsew==
+X-Received: by 2002:a05:6214:d0a:b0:88a:2867:981f with SMTP id 6a1803df08f44-890594fd07emr68826226d6.13.1767520825735;
+        Sun, 04 Jan 2026 02:00:25 -0800 (PST)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-88d9aa363e3sm329190836d6.57.2026.01.04.02.00.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Jan 2026 02:00:24 -0800 (PST)
+Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
+	by mailfauth.phl.internal (Postfix) with ESMTP id C6FCCF4006A;
+	Sun,  4 Jan 2026 05:00:23 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-11.internal (MEProxy); Sun, 04 Jan 2026 05:00:23 -0500
+X-ME-Sender: <xms:NzpaafCsE4OSVqTp0gAwqxPrnR2Y0EgXSaB77iVC2eoZCSPktsgMuw>
+    <xme:NzpaaWfAOEZ_Be3GyqqWz0ipj9WXKOVeG6ZePmaGceIPPk_PzFSWXlRhGuVDaEdLZ
+    D3SGZd1Bb4J-hxgH9iuno7gT8Bk1-sXQi_l8aeKB86URvJrhAjeZg>
+X-ME-Received: <xmr:Nzpaaa57p3LVRZm8ilDTBDVFEcEfYVE1cvLWC8_ZflP6CqO9VZnS-bSS>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdelgedufecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudffiedv
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
+    hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
+    jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
+    drnhgrmhgvpdhnsggprhgtphhtthhopedujedpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtohepjhhovghlrghgnhgvlhhfsehnvhhiughirgdrtghomhdprhgtphhtthhopehprg
+    hulhhmtghksehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohhsthgvughtsehgohho
+    ughmihhsrdhorhhgpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopehfrhgvuggvrhhitgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    nhgvvghrrghjrdhuphgrughhhigrhieskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjh
+    hoshhhsehjohhshhhtrhhiphhlvghtthdrohhrghdprhgtphhtthhopehurhgviihkihes
+    ghhmrghilhdrtghomhdprhgtphhtthhopehmrghthhhivghurdguvghsnhhohigvrhhsse
+    gvfhhfihgtihhoshdrtghomh
+X-ME-Proxy: <xmx:NzpaaQPHV-DEIWPJbRFcA3LfJNZ_JVixhfUFM3iyWJSj8CmKaLw3RA>
+    <xmx:NzpaabEQ5ixKJrC9oiUV5mwMNca-T1fwZ1nm2KcbACfsJtOKutlJrA>
+    <xmx:NzpaaUTgZPtN68zdx1eNT9g0kH6Wo-6n9epLQpJf_vjqeo23ev4QPw>
+    <xmx:NzpaaTQxAiUw7uKpbqpm2Tcq7jOVaQOEjvY4mNz9aqVkM4lFW1NHmw>
+    <xmx:NzpaafeDuVCrHAyCG47hrAWmVKuHyyL3wyPBroe6eJkpvefHuEV5Em79>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 4 Jan 2026 05:00:23 -0500 (EST)
+Date: Sun, 4 Jan 2026 18:00:21 +0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: paulmck@kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+	rcu@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Yao Kai <yaokai34@huawei.com>, Tengda Wu <wutengda2@huawei.com>
+Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to
+ softirq
+Message-ID: <aVo6NRYDhxlMUANZ@tardis-2.local>
+References: <20260101163417.1065705-1-joelagnelf@nvidia.com>
+ <20260101163417.1065705-2-joelagnelf@nvidia.com>
+ <20260102122807.7025fc87@gandalf.local.home>
+ <20260102123009.453dfb90@gandalf.local.home>
+ <68b5b122-036b-475a-85bb-e39830f99fbe@paulmck-laptop>
+ <252063db-ec72-42df-b9e0-b8dc0aa6bef9@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767519049;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FbFb4vZ8Kx6nmpMz19A349GuNGVDXKPfDjacOVYnMgo=;
-	b=nvW/V5ES2PyczNjvZpVF1t4am9BRAzUTJJ8Ripk0DAHp9pBEiaGEXddUhOWuwRRl16WYwf
-	FcLA1KDM4BywKQp7vaskve6uH79z18mGt5fj8gLWE8191p8slVi95gYjZwtGEqKTF0vinH
-	vWBB5y302lWNigXRCR1R+Fah5EtOfbo=
-Date: Sun, 04 Jan 2026 09:30:46 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: hui.zhu@linux.dev
-Message-ID: <a935563217affe85b2a6d0689914d7aba2ce127f@linux.dev>
-TLS-Required: No
-Subject: Re: [RFC PATCH v2 0/3] Memory Controller eBPF support
-To: "=?utf-8?B?TWljaGFsIEtvdXRuw70=?=" <mkoutny@suse.com>,
- chenridong@huaweicloud.com
-Cc: "Andrew Morton" <akpm@linux-foundation.org>, "Johannes Weiner"
- <hannes@cmpxchg.org>, "Michal Hocko" <mhocko@kernel.org>, "Roman  
- Gushchin" <roman.gushchin@linux.dev>, "Shakeel Butt"
- <shakeel.butt@linux.dev>, "Muchun Song" <muchun.song@linux.dev>, "Alexei 
-  Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>, "Song  
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "John 
-  Fastabend" <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Peter  
- Zijlstra" <peterz@infradead.org>, "Miguel Ojeda" <ojeda@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>,
- "Tejun Heo" <tj@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>, "Jan  
- Hendrik Farr" <kernel@jfarr.cc>, "Christian Brauner"
- <brauner@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>, "Brian  
- Gerst" <brgerst@gmail.com>, "Masahiro Yamada" <masahiroy@kernel.org>,
- davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
-   Brouer" <hawk@kernel.org>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, cgroups@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "Hui Zhu" <zhuhui@kylinos.cn>
-In-Reply-To: <enlefo5mmoha2htsrvv76tdmj6yum4jan6hgym76adtpxuhvrp@aug6qh3ocde5>
-References: <cover.1767012332.git.zhuhui@kylinos.cn>
- <enlefo5mmoha2htsrvv76tdmj6yum4jan6hgym76adtpxuhvrp@aug6qh3ocde5>
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <252063db-ec72-42df-b9e0-b8dc0aa6bef9@nvidia.com>
 
-2025=E5=B9=B412=E6=9C=8830=E6=97=A5 17:49, "Michal Koutn=C3=BD" <mkoutny@=
-suse.com mailto:mkoutny@suse.com?to=3D%22Michal%20Koutn%C3%BD%22%20%3Cmko=
-utny%40suse.com%3E > =E5=86=99=E5=88=B0:
+On Fri, Jan 02, 2026 at 07:41:38PM -0500, Joel Fernandes wrote:
+> 
+> 
+> On 1/2/2026 2:51 PM, Paul E. McKenney wrote:
+> > On Fri, Jan 02, 2026 at 12:30:09PM -0500, Steven Rostedt wrote:
+> >> On Fri, 2 Jan 2026 12:28:07 -0500
+> >> Steven Rostedt <rostedt@goodmis.org> wrote:
+> >>
+> >>> Stacktrace should have recursion protection too.
+> >>>
+> >>> Can you try this patch to see if it would have fixed the problem too?
+> >>
+> >> As I believe the recursion protection should be in the tracing
+> >> infrastructure more than in RCU. As RCU is used as an active participant in
+> >> the kernel whereas tracing is supposed to be only an observer.
+> >>
+> >> If tracing is the culprit, it should be the one that is fixed.
+> > 
+> > Makes sense to me!  But then it would...  ;-)
+> > 
+> Could we fix it in both? (RCU and tracing). The patch just adds 3 more net lines
+> to RCU code. It'd be good to have a guard rail against softirq recursion in RCU
+> read unlock path, as much as the existing guard rail we already have with
+> irq_work? After all, both paths attempt to do deferred work when it is safer to
+> do so.
+> 
 
+Agreed. First it's crucial that RCU itself can prevent indefinitely
+entering rcu_read_unlock_special(), because although unlikely, any RCU
+reader in raise_softirq_irqoff() would cause a similar infinite loop.
+Second, with solely the tracing fix, there still exists a call chain:
 
-Hi Michal and Ridong,
+	rcu_read_unlock_special():
+	  raise_softirq_irqoff():
+	    trace_softirq_raise():
+	      rcu_read_unlock_special():
+	        raise_softirq_irqoff():
+		  trace_softirq_raise(); // <- recursion ends here
 
->=20
->=20Hi Hui.
->=20
->=20On Tue, Dec 30, 2025 at 11:01:58AM +0800, Hui Zhu <hui.zhu@linux.dev>=
- wrote:
->=20
->=20>=20
->=20> This allows administrators to suppress low-priority cgroups' memory
-> >  usage based on custom policies implemented in BPF programs.
-> >=20
->=20BTW memory.low was conceived as a work-conserving mechanism for
-> prioritization of different workloads. Have you tried that? No need to
-> go directly to (high) limits. (<- Main question, below are some
-> secondary implementation questions/remarks.)
->=20
->=20...
->=20
+while with the RCU fix added, the call chain ends at the second
+rcu_read_unlock_special():
 
-memory.low=20is a helpful feature, but it can struggle to effectively
-throttle low-priority processes that continuously access their memory.
+	rcu_read_unlock_special():
+	  raise_softirq_irqoff():
+	    trace_softirq_raise():
+	      rcu_read_unlock_special(); // <- recursion ends here
 
-For instance, consider the following example I ran:
-root@ubuntu:~# echo $((4 * 1024 * 1024 * 1024)) > /sys/fs/cgroup/high/mem=
-ory.low
-root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes=
- 80% --vm-method all --seed 2025 --metrics -t 60 & cgexec -g memory:high =
-stress-ng --vm 4 --vm-keep --vm-bytes 80% --vm-method all --seed 2025 --m=
-etrics -t 60
-[1] 2011
-stress-ng: info:  [2011] setting to a 1 min, 0 secs run per stressor
-stress-ng: info:  [2012] setting to a 1 min, 0 secs run per stressor
-stress-ng: info:  [2011] dispatching hogs: 4 vm
-stress-ng: info:  [2012] dispatching hogs: 4 vm
-stress-ng: metrc: [2012] stressor       bogo ops real time  usr time  sys=
- time   bogo ops/s     bogo ops/s CPU used per       RSS Max
-stress-ng: metrc: [2012]                           (secs)    (secs)    (s=
-ecs)   (real time) (usr+sys time) instance (%)          (KB)
-stress-ng: metrc: [2012] vm                23584     60.21      2.75     =
-15.94       391.73        1262.07         7.76        649988
-stress-ng: info:  [2012] skipped: 0
-stress-ng: info:  [2012] passed: 4: vm (4)
-stress-ng: info:  [2012] failed: 0
-stress-ng: info:  [2012] metrics untrustworthy: 0
-stress-ng: info:  [2012] successful run completed in 1 min, 0.22 secs
-stress-ng: metrc: [2011] stressor       bogo ops real time  usr time  sys=
- time   bogo ops/s     bogo ops/s CPU used per       RSS Max
-stress-ng: metrc: [2011]                           (secs)    (secs)    (s=
-ecs)   (real time) (usr+sys time) instance (%)          (KB)
-stress-ng: metrc: [2011] vm                23584     60.22      3.06     =
-16.19       391.63        1224.97         7.99        688836
-stress-ng: info:  [2011] skipped: 0
-stress-ng: info:  [2011] passed: 4: vm (4)
-stress-ng: info:  [2011] failed: 0
-stress-ng: info:  [2011] metrics untrustworthy: 0
-stress-ng: info:  [2011] successful run completed in 1 min, 0.23 secs
+which would slightly improve the performance becasue of fewer calls.
 
-As the results show, setting memory.low on the cgroup with the
-high-priority workload did not improve its memory performance.
+I'm going to include this into the RCU PR for 7.0 if no one objects.
+Thanks!
 
-However, memory.low is beneficial in many other scenarios.
-Perhaps extending it with eBPF support could help address a wider
-range of issues.
+Regards,
+Boqun
 
-> >=20
->=20> This series introduces a BPF hook that allows reporting
-> >  additional "pages over high" for specific cgroups, effectively
-> >  increasing memory pressure and throttling for lower-priority
-> >  workloads when higher-priority cgroups need resources.
-> >=20
->=20Have you considered hooking into calculate_high_delay() instead? (Tha=
-t
-> function has undergone some evolution so it'd seem like the candidate
-> for BPFication.)
->=20
-
-It=20seems that try_charge_memcg will not reach
-__mem_cgroup_handle_over_high if it only hook calculate_high_delay
-without setting memory.high.
-
-What do you think about hooking try_charge_memcg as well,
-so that it ensures __mem_cgroup_handle_over_high is called?
-
-
-> ...
->=20
->=20>=20
->=20> 3. Cgroup hierarchy management (inheritance during online/offline)
-> >=20
->=20I see you're copying the program upon memcg creation.
-> Configuration copies aren't such a good way to properly handle
-> hierarchical behavior.
-> I wonder if this could follow the more generic pattern of how BPF progs
-> are evaluated in hierarchies, see BPF_F_ALLOW_OVERRIDE and
-> BPF_F_ALLOW_MULTI.
-
-I will support them in the next version.
-
->=20
->=20>=20
->=20> Example Results
-> >=20
->=20...
->=20
->=20>=20
->=20> Results show the low-priority cgroup (/sys/fs/cgroup/low) was
-> >  significantly throttled:
-> >  - High-priority cgroup: 21,033,377 bogo ops at 347,825 ops/s
-> >  - Low-priority cgroup: 11,568 bogo ops at 177 ops/s
-> >=20=20
->=20>  The stress-ng process in the low-priority cgroup experienced a
-> >  ~99.9% slowdown in memory operations compared to the
-> >  high-priority cgroup, demonstrating effective priority
-> >  enforcement through BPF-controlled memory pressure.
-> >=20
->=20As a demonstrator, it'd be good to compare this with a baseline witho=
-ut
-> any extra progs, e.g. show that high-prio performed better and low-prio
-> wasn't throttled for nothing.
-
-Thanks for your remind.
-This is a test log in the test environment without any extra progs:
-
-root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes=
- 80% \
---vm-method all --seed 2025 --metrics -t 60 \
-& cgexec -g memory:high stress-ng --vm 4 --vm-keep --vm-bytes 80% \
---vm-method all --seed 2025 --metrics -t 60
-[1] 982
-stress-ng: info:  [982] setting to a 1 min, 0 secs run per stressor
-stress-ng: info:  [983] setting to a 1 min, 0 secs run per stressor
-stress-ng: info:  [982] dispatching hogs: 4 vm
-stress-ng: info:  [983] dispatching hogs: 4 vm
-
-stress-ng: metrc: [982] stressor       bogo ops real time  usr time  sys =
-time   bogo ops/s     bogo ops/s CPU used per       RSS Max
-stress-ng: metrc: [982]                           (secs)    (secs)    (se=
-cs)   (real time) (usr+sys time) instance (%)          (KB)
-stress-ng: metrc: [982] vm                23544     60.08      2.90     1=
-5.74       391.85        1263.43         7.75        524708
-stress-ng: info:  [982] skipped: 0
-stress-ng: info:  [982] passed: 4: vm (4)
-stress-ng: info:  [982] failed: 0
-stress-ng: info:  [982] metrics untrustworthy: 0
-stress-ng: info:  [982] successful run completed in 1 min, 0.09 secs
-stress-ng: metrc: [983] stressor       bogo ops real time  usr time  sys =
-time   bogo ops/s     bogo ops/s CPU used per       RSS Max
-stress-ng: metrc: [983]                           (secs)    (secs)    (se=
-cs)   (real time) (usr+sys time) instance (%)          (KB)
-stress-ng: metrc: [983] vm                23544     60.09      3.12     1=
-5.91       391.81        1237.10         7.92        705076
-stress-ng: info:  [983] skipped: 0
-stress-ng: info:  [983] passed: 4: vm (4)
-stress-ng: info:  [983] failed: 0
-stress-ng: info:  [983] metrics untrustworthy: 0
-stress-ng: info:  [983] successful run completed in 1 min, 0.09 secs
-
-Best,
-Hui
-
-
->=20
->=20Thanks,
-> Michal
->
+> Yao, if you could test Steve's patch and reply whether it fixes it too?
+> 
+> thanks,
+> 
+>  - Joel
+> 
+> 
+> 
+> 
 
