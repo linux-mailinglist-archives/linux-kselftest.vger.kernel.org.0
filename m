@@ -1,112 +1,511 @@
-Return-Path: <linux-kselftest+bounces-48148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48149-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB697CF1704
-	for <lists+linux-kselftest@lfdr.de>; Sun, 04 Jan 2026 23:55:03 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E827CCF1740
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 00:39:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 72C26300D43D
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 22:55:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B86F03000908
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Jan 2026 23:39:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E693D25F96D;
-	Sun,  4 Jan 2026 22:55:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC0C2566F7;
+	Sun,  4 Jan 2026 23:39:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gzzVBXrJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BMY2VIrd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B0C52F88
-	for <linux-kselftest@vger.kernel.org>; Sun,  4 Jan 2026 22:55:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A9C23EABF
+	for <linux-kselftest@vger.kernel.org>; Sun,  4 Jan 2026 23:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767567301; cv=none; b=CWk8Z+EZdPr/K9PbAp5FDvruN2Z9hcy7V2h0dRt4hZQL0GQqJjBO+75sysXYsyhoizDXkOffjlQzASJBMk4Ra+0u6D06xEYRg7VZWUjP8nm/eWXr/P0rDv+pZeaBnlE1vBxyYrQSi1+rObKz6Mr++AckP3sJdLtB4LxhkT9uKJY=
+	t=1767569973; cv=none; b=rscaZdIuNa8V2sflIpuUrZu33/MlCR0bfEYpkY2KOZ41+koQc+67dT9cAd9yM+UerKTx9zEzm7amhJt5cCER3Gn8b6o3o+vLgQvcEBRcXyO3sy//8iWTznVX2ULCvE5JsuXKtCfx5K/uoQX41E+/JXpbR50CFtE0Uz2KsCBJOdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767567301; c=relaxed/simple;
-	bh=RGfrK/i8CqdIsUAM6F5jajU+/3DORxQP/tQIjwYyhfI=;
+	s=arc-20240116; t=1767569973; c=relaxed/simple;
+	bh=qGSGjZV/JsM9T+jR15Tx/ag1IUI1Dc2Eu07/NcdTEks=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WtzKwS6e4EMQpmsa8GRbBDwYRg7g0L9ZEOiYQVO0/hP/LZ43pGIK6Na9zSGRiVgm72+esCczcQDviqQei5J9MtVhEyKRB6Yykot1QSde9uyNhSFfAyuxDJWuD3raIfA6oUR3ELQTnsnewQQ6FFmfpO5QVNLU2UX3rP2hyhroHi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gzzVBXrJ; arc=none smtp.client-ip=209.85.215.179
+	 To:Cc:Content-Type; b=lWTkT9lrS2HpOYzVh1Lo2gfTiYV50CaDkIm6hqp6zdOJIMNYgMUmcRLTqnyrjy6ZzjV3KfXInz0AKcJNnv40Vtxxqip+2yhxKJ6nvXSTm+XfuX0eaTXkjsa2+oA4+jV7pqfq53EklMf/Ql8nkmbBFmHkVXbPcUXzl//lvfU6qrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BMY2VIrd; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-bd5cf88d165so182896a12.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 04 Jan 2026 14:55:00 -0800 (PST)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-595910c9178so11355144e87.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 04 Jan 2026 15:39:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767567300; x=1768172100; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1767569969; x=1768174769; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RGfrK/i8CqdIsUAM6F5jajU+/3DORxQP/tQIjwYyhfI=;
-        b=gzzVBXrJF+a5wVtfPszObhKRfo/sEPKgSqF7n7qUqg/2BZBWl9sBqaj6TrhgSNmVGy
-         KTF7pKB+BT4U6yLig1K4bIsZUgPBKliviDu0AGvYjuSU021oBcweHIp9yA3B+UWHki9k
-         JOlZYvSHYLxS4eUlcmSo79YSeevEfox55Dpwuu2omz0MHXWeKXX3K7fW2uutjck0ACAr
-         EaGTs614kSA5hRjQ+WMiuk0bKMJQUL9yDXrlBQgGVSbSTUm1ZLpVvLjjuPxjvyPQ70hE
-         K8NAjUEUz+fv7c/in/sBgMKfyeMo/njE+DNnk8bwuX4ruWVpbxC8DYf0/F3emzGKAydx
-         XuZQ==
+        bh=Nuc0gupqqV+4mISzaSB2/rmiN50dZ34TEkP8U/0Qf1I=;
+        b=BMY2VIrdMwgzEIZkD1nk3k5JJ9J9NMcN/xjK6c93QvQs9GdCwhVPMy1bMcq0l7zU50
+         rUk9hyatXdhtChm8iMNsJeYEd5Q3EwcSm3kv4Pu1sa9VT9AX0iKzfjD5uAAaW4PUmV77
+         4MBOmmDJu7aU/W8FvSDFqUhrZoXcdAxa1RHP+9bhphHnfusRCLGOjmIuAK3wzY6oEHQB
+         /ZxoGKR62gVxMhKul0eBHJ4bd5ZK6s9Uudl3kcp+9dWARXItZK2kTC0LQIvM8c6paPxg
+         IYgHrsvQonQrOQy2BSd/QzzKIyvk15l57GLrYRW5uOw6+qug9vsltOsBnH2EmVOuAzBo
+         Vnfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767567300; x=1768172100;
+        d=1e100.net; s=20230601; t=1767569969; x=1768174769;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=RGfrK/i8CqdIsUAM6F5jajU+/3DORxQP/tQIjwYyhfI=;
-        b=Dq1SCO7YijfxcZXd23dT12TTGTCC2/ahfMpgcFfrSWrUw2FFUfhIYI8111083ueue/
-         5YsYAssYhbnxsJex/kye3/QCVsJlHVTMhCXWVmp6jQgIKb3S3HMlPfzrvNhweq5HumlO
-         2mhiV5UX0nN/HjCJ4ww2HrOjqu8pqIq+gV5t1sUlgAtW5aYz35qUK0g0lRrqg6m8hH2T
-         oJoasOgH261qohjqcjYW1XAIACGEVXYNK8Nu785fGlMrDySxMBsrt5ZRHf68wFgJ0K/Y
-         pyLDIXzEuuuJPgVPq2BFDFZa7SWSiUwLZlTYURUpUGIsv2RRjFxNMPOLHQWLGJkvw2hz
-         HPsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV66qD2S7beYa2IqnkIHkomqceT9lFW0yFgg9tz0MLYxRH5mFPr9kCp4tr9Lf0Lz0vKFLeFuEHen978izvLgTI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOy6RkRebTcOUvxkENYUg8XJbaaBBCX1AYVp8otOT+cGhG5ye0
-	wv0J9BnkUIEk17ei0k7O75KpMpr22MVKCPFLSRbfj1iR9ziAj06XSq0cr3xxH5hbzZI8u2jW01M
-	wYuIMGaoAH94Qx5S8bq0O1VakGeuswH4z7AW5
-X-Gm-Gg: AY/fxX5qk7HToZDpTtpbjnNl2jPYbn5HQQUhiDp8ZZdqrUvo80i8fCgp8Y8vU7+e0Wn
-	9rakCnCnInYuxknMF4ciTKLq33ytQW6em6CTI+v1grULASDXFS6e/JPSxSBPwimJaeBU9dt/iZh
-	eoiCRq8233ENNmXQAtxtfIyijnSHL1f9aVVYNgKZqw7on9TXLtqk+IhkeBy6ug2nfJiJdt1IdAn
-	tnMSgxYSnnYCKfyQNMtDKRAQDDk9AUfYAKMVnw9QtNZbdJ5SGoCHtTlB7LtaKYW2a9F2T+Wrc2T
-	v6EDLC1oXuRbSTyFYekGrs/MdBPphw0VF9GZIpaa72wbh4JM768zlugEuLlIELW8oHkTpD/9Ysg
-	vHizq52TXNmCz
-X-Google-Smtp-Source: AGHT+IGfdV3n2immeToIA2HtCjHHk7VCHJdSyBxh60KZPa7f2BlaejcNt7HViaI/dg1w225H/hp/37Uwl1/GBo8Hpbs=
-X-Received: by 2002:a05:7300:724d:b0:2ae:5b23:1601 with SMTP id
- 5a478bee46e88-2b05ea108fdmr23605192eec.0.1767567299771; Sun, 04 Jan 2026
- 14:54:59 -0800 (PST)
+        bh=Nuc0gupqqV+4mISzaSB2/rmiN50dZ34TEkP8U/0Qf1I=;
+        b=Q5WjC1nw6gJ65j0cPnZ6MUgaxvemExZgGrX23jk6GrPircdV+AUEbGGOp44MVQz63M
+         6FsGMYxkOj98Pa5ACMdD/2q0wkMNAr5EHNlaiXuYl+iWbuHH5kKKQIvqZNbcA/OZR62q
+         OpmHLRqahF7kJyMu2tJFArhRIrF/MfxgW5xHPIQz3bG7bnc/Tze4WC79HoDDHg+OJ1wl
+         35m2EcQJss8cyjhxusIbg+b0A9cPQwQkobEYxuXMsweFN+/AqjUOEJ4KokbV7b3hhpwY
+         Mg+ie3uVmBXDbQHDdHtIjrvI75HyG1XVi2veEAIMj0Jke7Xbrpwjcz82h2NIfjFrZI5s
+         wsDA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZZPK7TWjK4RoMjFgIbHCarZGjkCvr5iSnim6J+2WuwZaA9fscjE73U3+VtusV3zgFIrVIbt9w/NRPkhXul/w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxSrfU5wQ/Hw0l8h4Slxgg0Ph1e8CIvJrwNbwhArSx1GPEdm9G
+	DQc82BMSq/BRmocOUaAc8bp1TG4rLHjWMYTX4VSb1ZJ173I4V+qzyL9bqOmXuqayRarO6FU3HWR
+	+hdxnvSB7f1Oa8Ml7of/pXaEa/3gjzPU=
+X-Gm-Gg: AY/fxX7qI5R+YykSpDd0v0d3D30Yl+tpNfTzgIBiY97g753o8JLYgPbBYcUtFtw7i6E
+	iKs8eocfl0O1G6bmqdW9+bsDBUN0TP9i9o3UmPc/u1dtfHpMjfSWu8Wdu2foSH09/MlW3Ox9YcN
+	MH8qaJor7QOlA2DMXaqkrDq2qsESgJxI5a2u87k5DE1+2SUy77LqreZz92Cku+xsdiialOB7gBP
+	drCEEZHVOM8a9s1FcB83E6eg6comINutHD+IIOlmsr/PtuRe5+CfQ3+SWwApbzBybaiF39wlXIo
+	6DGkxSnBZ0uiQ0klr460mVG7+1JI58fXft6Wl62NdUQqGxFEdqSQscH+qQZQA57fqT8Ou8OBWrt
+	5vBjwRObvNJ/TC61kWSxOgFttiKeI9Gav7li/rhW//n3V6CzJTExJ
+X-Google-Smtp-Source: AGHT+IG7ZOuBMhkNngrmxLoUFwwCshK0Bnbo1CEELL9CWRdXTkigXUFNuw9rnBmaemuKgLdxI1wSAFbAIsrfENSV+sc=
+X-Received: by 2002:a05:651c:30ca:b0:382:b559:8335 with SMTP id
+ 38308e7fff4ca-382b5598407mr29470801fa.36.1767569969146; Sun, 04 Jan 2026
+ 15:39:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251211182208.2791025-1-gary@kernel.org>
-In-Reply-To: <20251211182208.2791025-1-gary@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 4 Jan 2026 23:54:47 +0100
-X-Gm-Features: AQt7F2oeBjY-zPeIIX8N3i0q9UZLwGEO153tgkFaokPfbh-tOwBHelwXkLfnOCE
-Message-ID: <CANiq72mUR8NkymK4ZLs1Ejy5Kk6ZxCRBLd=-3UCUGjWSnDfJ9A@mail.gmail.com>
-Subject: Re: [PATCH] rust: fix off-by-one line number in rustdoc tests
+References: <20251211185805.2835633-1-gary@kernel.org> <20251211185805.2835633-9-gary@kernel.org>
+In-Reply-To: <20251211185805.2835633-9-gary@kernel.org>
+From: Tamir Duberstein <tamird@gmail.com>
+Date: Sun, 4 Jan 2026 18:38:53 -0500
+X-Gm-Features: AQt7F2qfYIxFnLeXTTu2IMuLhnVfHQnkSUbs3zAbPwTPJpGxvMWIMYJrcC-pGKE
+Message-ID: <CAJ-ks9mCivfa3kL6ep3QHYw_-p56qGeZn0ApLKo7qvsES-0ArQ@mail.gmail.com>
+Subject: Re: [PATCH 08/11] rust: macros: convert `#[kunit_tests]` macro to use `syn`
 To: Gary Guo <gary@garyguo.net>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
 	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
 	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+	Danilo Krummrich <dakr@kernel.org>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <raemoar63@gmail.com>, 
+	Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>, Patrick Miller <paddymills@proton.me>, 
+	=?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>, 
+	rust-for-linux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 11, 2025 at 7:22=E2=80=AFPM Gary Guo <gary@kernel.org> wrote:
+On Thu, Dec 11, 2025 at 2:30=E2=80=AFPM Gary Guo <gary@kernel.org> wrote:
 >
 > From: Gary Guo <gary@garyguo.net>
 >
-> When the `#![allow]` line was added, the doctest line number anchor
-> isn't updated which causes the line number printed in kunit test to be
-> off-by-one.
+> This allows significant cleanups.
 >
-> Fixes: ab844cf32058 ("rust: allow `unreachable_pub` for doctests")
 > Signed-off-by: Gary Guo <gary@garyguo.net>
+> ---
+>  rust/macros/kunit.rs | 274 +++++++++++++++++++------------------------
+>  rust/macros/lib.rs   |   6 +-
+>  2 files changed, 123 insertions(+), 157 deletions(-)
+>
+> diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
+> index 7427c17ee5f5c..516219f5b1356 100644
+> --- a/rust/macros/kunit.rs
+> +++ b/rust/macros/kunit.rs
+> @@ -4,81 +4,50 @@
+>  //!
+>  //! Copyright (c) 2023 Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.co=
+m>
+>
+> -use std::collections::HashMap;
+> -use std::fmt::Write;
+> -
+> -use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
+> -
+> -pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenSt=
+ream {
+> -    let attr =3D attr.to_string();
+> -
+> -    if attr.is_empty() {
+> -        panic!("Missing test name in `#[kunit_tests(test_name)]` macro")
+> -    }
+> -
+> -    if attr.len() > 255 {
+> -        panic!("The test suite name `{attr}` exceeds the maximum length =
+of 255 bytes")
+> +use std::ffi::CString;
+> +
+> +use proc_macro2::TokenStream;
+> +use quote::{
+> +    format_ident,
+> +    quote,
+> +    ToTokens, //
+> +};
+> +use syn::{
+> +    parse_quote,
+> +    Error,
+> +    Ident,
+> +    Item,
+> +    ItemMod,
+> +    LitCStr,
+> +    Result, //
+> +};
+> +
+> +pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Res=
+ult<TokenStream> {
+> +    if test_suite.to_string().len() > 255 {
+> +        return Err(Error::new_spanned(
+> +            test_suite,
+> +            "test suite names cannot exceed the maximum length of 255 by=
+tes",
+> +        ));
+>      }
+>
+> -    let mut tokens: Vec<_> =3D ts.into_iter().collect();
+> -
+> -    // Scan for the `mod` keyword.
+> -    tokens
+> -        .iter()
+> -        .find_map(|token| match token {
+> -            TokenTree::Ident(ident) =3D> match ident.to_string().as_str(=
+) {
+> -                "mod" =3D> Some(true),
+> -                _ =3D> None,
+> -            },
+> -            _ =3D> None,
+> -        })
+> -        .expect("`#[kunit_tests(test_name)]` attribute should only be ap=
+plied to modules");
+> -
+> -    // Retrieve the main body. The main body should be the last token tr=
+ee.
+> -    let body =3D match tokens.pop() {
+> -        Some(TokenTree::Group(group)) if group.delimiter() =3D=3D Delimi=
+ter::Brace =3D> group,
+> -        _ =3D> panic!("Cannot locate main body of module"),
+> +    // We cannot handle modules that defer to another file (e.g. `mod fo=
+o;`).
+> +    let Some((module_brace, module_items)) =3D module.content.take() els=
+e {
+> +        Err(Error::new_spanned(
+> +            module,
+> +            "`#[kunit_tests(test_name)]` attribute should only be applie=
+d to inline modules",
+> +        ))?
+>      };
+>
+> -    // Get the functions set as tests. Search for `[test]` -> `fn`.
+> -    let mut body_it =3D body.stream().into_iter();
+> -    let mut tests =3D Vec::new();
+> -    let mut attributes: HashMap<String, TokenStream> =3D HashMap::new();
+> -    while let Some(token) =3D body_it.next() {
+> -        match token {
+> -            TokenTree::Punct(ref p) if p.as_char() =3D=3D '#' =3D> match=
+ body_it.next() {
+> -                Some(TokenTree::Group(g)) if g.delimiter() =3D=3D Delimi=
+ter::Bracket =3D> {
+> -                    if let Some(TokenTree::Ident(name)) =3D g.stream().i=
+nto_iter().next() {
+> -                        // Collect attributes because we need to find wh=
+ich are tests. We also
+> -                        // need to copy `cfg` attributes so tests can be=
+ conditionally enabled.
+> -                        attributes
+> -                            .entry(name.to_string())
+> -                            .or_default()
+> -                            .extend([token, TokenTree::Group(g)]);
+> -                    }
+> -                    continue;
+> -                }
+> -                _ =3D> (),
+> -            },
+> -            TokenTree::Ident(i) if i.to_string() =3D=3D "fn" && attribut=
+es.contains_key("test") =3D> {
+> -                if let Some(TokenTree::Ident(test_name)) =3D body_it.nex=
+t() {
+> -                    tests.push((test_name, attributes.remove("cfg").unwr=
+ap_or_default()))
+> -                }
+> -            }
+> -
+> -            _ =3D> (),
+> -        }
+> -        attributes.clear();
+> -    }
+> +    // Make the entire module gated behind `CONFIG_KUNIT`.
+> +    module
+> +        .attrs
+> +        .insert(0, parse_quote!(#[cfg(CONFIG_KUNIT=3D"y")]));
 
-Applied to `rust-fixes` -- thanks everyone!
+Does this need to be the first attribute? I think it can just be
+pushed to the end.
 
-Cheers,
-Miguel
+
+>
+> -    // Add `#[cfg(CONFIG_KUNIT=3D"y")]` before the module declaration.
+> -    let config_kunit =3D "#[cfg(CONFIG_KUNIT=3D\"y\")]".to_owned().parse=
+().unwrap();
+> -    tokens.insert(
+> -        0,
+> -        TokenTree::Group(Group::new(Delimiter::None, config_kunit)),
+> -    );
+> +    let mut processed_items =3D Vec::new();
+> +    let mut test_cases =3D Vec::new();
+>
+>      // Generate the test KUnit test suite and a test case for each `#[te=
+st]`.
+> +    //
+>      // The code generated for the following test module:
+>      //
+>      // ```
+> @@ -110,98 +79,93 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: Tok=
+enStream) -> TokenStream {
+>      //
+>      // ::kernel::kunit_unsafe_test_suite!(kunit_test_suit_name, TEST_CAS=
+ES);
+>      // ```
+> -    let mut kunit_macros =3D "".to_owned();
+> -    let mut test_cases =3D "".to_owned();
+> -    let mut assert_macros =3D "".to_owned();
+> -    let path =3D crate::helpers::file();
+> -    let num_tests =3D tests.len();
+> -    for (test, cfg_attr) in tests {
+> -        let kunit_wrapper_fn_name =3D format!("kunit_rust_wrapper_{test}=
+");
+> -        // Append any `cfg` attributes the user might have written on th=
+eir tests so we don't
+> -        // attempt to call them when they are `cfg`'d out. An extra `use=
+` is used here to reduce
+> -        // the length of the assert message.
+> -        let kunit_wrapper =3D format!(
+> -            r#"unsafe extern "C" fn {kunit_wrapper_fn_name}(_test: *mut =
+::kernel::bindings::kunit)
+> -            {{
+> -                (*_test).status =3D ::kernel::bindings::kunit_status_KUN=
+IT_SKIPPED;
+> -                {cfg_attr} {{
+> -                    (*_test).status =3D ::kernel::bindings::kunit_status=
+_KUNIT_SUCCESS;
+> -                    use ::kernel::kunit::is_test_result_ok;
+> -                    assert!(is_test_result_ok({test}()));
+> +    //
+> +    // Non-function items (e.g. imports) are preserved.
+> +    for item in module_items {
+> +        let Item::Fn(mut f) =3D item else {
+> +            processed_items.push(item);
+> +            continue;
+> +        };
+> +
+> +        // TODO: Replace below with `extract_if` when MSRV is bumped abo=
+ve 1.85.
+> +        // Remove `#[test]` attributes applied on the function and count=
+ if any.
+
+What does "count if any" mean here?
+
+> +        if !f.attrs.iter().any(|attr| attr.path().is_ident("test")) {
+> +            processed_items.push(Item::Fn(f));
+> +            continue;
+> +        }
+> +        f.attrs.retain(|attr| !attr.path().is_ident("test"));
+
+Can this code be something like this:
+
+        let before =3D f.attrs.len();
+        f.attrs.retain(|attr| !attr.path().is_ident("test"));
+        let after =3D f.attrs.len();
+
+        if after =3D=3D before {
+            processed_items.push(Item::Fn(f));
+            continue;
+        }
+
+> +
+> +        let test =3D f.sig.ident.clone();
+> +
+> +        // Retrieve `#[cfg]` applied on the function which needs to be p=
+resent on derived items too.
+> +        let cfg_attrs: Vec<_> =3D f
+> +            .attrs
+> +            .iter()
+> +            .filter(|attr| attr.path().is_ident("cfg"))
+> +            .cloned()
+> +            .collect();
+> +
+> +        // Before the test, override usual `assert!` and `assert_eq!` ma=
+cros with ones that call
+> +        // KUnit instead.
+> +        let test_str =3D test.to_string();
+> +        let path =3D crate::helpers::file();
+> +        processed_items.push(parse_quote! {
+> +            #[allow(unused)]
+> +            macro_rules! assert {
+> +                ($cond:expr $(,)?) =3D> {{
+> +                    kernel::kunit_assert!(#test_str, #path, 0, $cond);
+> +                }}
+> +            }
+> +        });
+> +        processed_items.push(parse_quote! {
+> +            #[allow(unused)]
+> +            macro_rules! assert_eq {
+> +                ($left:expr, $right:expr $(,)?) =3D> {{
+> +                    kernel::kunit_assert_eq!(#test_str, #path, 0, $left,=
+ $right);
+>                  }}
+> -            }}"#,
+> +            }
+> +        });
+
+Am I reading this right that the macros will be repeatedly redefined
+before each test? Could we put them inside each test body instead?
+
+> +
+> +        // Add back the test item.
+> +        processed_items.push(Item::Fn(f));
+> +
+> +        let kunit_wrapper_fn_name =3D format_ident!("kunit_rust_wrapper_=
+{test}");
+> +        let test_cstr =3D LitCStr::new(
+> +            &CString::new(test_str.as_str()).expect("identifier cannot c=
+ontain NUL"),
+> +            test.span(),
+>          );
+> -        writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
+> -        writeln!(
+> -            test_cases,
+> -            "    ::kernel::kunit::kunit_case(::kernel::c_str!(\"{test}\"=
+), {kunit_wrapper_fn_name}),"
+> -        )
+> -        .unwrap();
+> -        writeln!(
+> -            assert_macros,
+> -            r#"
+> -/// Overrides the usual [`assert!`] macro with one that calls KUnit inst=
+ead.
+> -#[allow(unused)]
+> -macro_rules! assert {{
+> -    ($cond:expr $(,)?) =3D> {{{{
+> -        kernel::kunit_assert!("{test}", "{path}", 0, $cond);
+> -    }}}}
+> -}}
+> -
+> -/// Overrides the usual [`assert_eq!`] macro with one that calls KUnit i=
+nstead.
+> -#[allow(unused)]
+> -macro_rules! assert_eq {{
+> -    ($left:expr, $right:expr $(,)?) =3D> {{{{
+> -        kernel::kunit_assert_eq!("{test}", "{path}", 0, $left, $right);
+> -    }}}}
+> -}}
+> -        "#
+> -        )
+> -        .unwrap();
+> -    }
+> +        processed_items.push(parse_quote! {
+> +            unsafe extern "C" fn #kunit_wrapper_fn_name(_test: *mut ::ke=
+rnel::bindings::kunit) {
+> +                (*_test).status =3D ::kernel::bindings::kunit_status_KUN=
+IT_SKIPPED;
+>
+> -    writeln!(kunit_macros).unwrap();
+> -    writeln!(
+> -        kunit_macros,
+> -        "static mut TEST_CASES: [::kernel::bindings::kunit_case; {}] =3D=
+ [\n{test_cases}    ::kernel::kunit::kunit_case_null(),\n];",
+> -        num_tests + 1
+> -    )
+> -    .unwrap();
+> -
+> -    writeln!(
+> -        kunit_macros,
+> -        "::kernel::kunit_unsafe_test_suite!({attr}, TEST_CASES);"
+> -    )
+> -    .unwrap();
+> -
+> -    // Remove the `#[test]` macros.
+> -    // We do this at a token level, in order to preserve span informatio=
+n.
+> -    let mut new_body =3D vec![];
+> -    let mut body_it =3D body.stream().into_iter();
+> -
+> -    while let Some(token) =3D body_it.next() {
+> -        match token {
+> -            TokenTree::Punct(ref c) if c.as_char() =3D=3D '#' =3D> match=
+ body_it.next() {
+> -                Some(TokenTree::Group(group)) if group.to_string() =3D=
+=3D "[test]" =3D> (),
+> -                Some(next) =3D> {
+> -                    new_body.extend([token, next]);
+> -                }
+> -                _ =3D> {
+> -                    new_body.push(token);
+> +                // Append any `cfg` attributes the user might have writt=
+en on their tests so we
+> +                // don't attempt to call them when they are `cfg`'d out.=
+ An extra `use` is used
+> +                // here to reduce the length of the assert message.
+> +                #(#cfg_attrs)*
+> +                {
+> +                    (*_test).status =3D ::kernel::bindings::kunit_status=
+_KUNIT_SUCCESS;
+> +                    use ::kernel::kunit::is_test_result_ok;
+> +                    assert!(is_test_result_ok(#test()));
+>                  }
+> -            },
+> -            _ =3D> {
+> -                new_body.push(token);
+>              }
+> -        }
+> -    }
+> -
+> -    let mut final_body =3D TokenStream::new();
+> -    final_body.extend::<TokenStream>(assert_macros.parse().unwrap());
+> -    final_body.extend(new_body);
+> -    final_body.extend::<TokenStream>(kunit_macros.parse().unwrap());
+> +        });
+>
+> -    tokens.push(TokenTree::Group(Group::new(Delimiter::Brace, final_body=
+)));
+> +        test_cases.push(quote!(
+> +            ::kernel::kunit::kunit_case(#test_cstr, #kunit_wrapper_fn_na=
+me)
+> +        ));
+> +    }
+>
+> -    tokens.into_iter().collect()
+> +    let num_tests_plus_1 =3D test_cases.len() + 1;
+> +    processed_items.push(parse_quote! {
+> +        static mut TEST_CASES: [::kernel::bindings::kunit_case; #num_tes=
+ts_plus_1] =3D [
+> +            #(#test_cases,)*
+> +            ::kernel::kunit::kunit_case_null(),
+> +        ];
+> +    });
+> +    processed_items.push(parse_quote! {
+> +        ::kernel::kunit_unsafe_test_suite!(#test_suite, TEST_CASES);
+> +    });
+> +
+> +    module.content =3D Some((module_brace, processed_items));
+> +    Ok(module.to_token_stream())
+>  }
+> diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+> index bb2dfd4a4dafc..9cfac9fce0d36 100644
+> --- a/rust/macros/lib.rs
+> +++ b/rust/macros/lib.rs
+> @@ -453,6 +453,8 @@ pub fn paste(input: TokenStream) -> TokenStream {
+>  /// }
+>  /// ```
+>  #[proc_macro_attribute]
+> -pub fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+> -    kunit::kunit_tests(attr.into(), ts.into()).into()
+> +pub fn kunit_tests(attr: TokenStream, input: TokenStream) -> TokenStream=
+ {
+> +    kunit::kunit_tests(parse_macro_input!(attr), parse_macro_input!(inpu=
+t))
+> +        .unwrap_or_else(|e| e.into_compile_error())
+> +        .into()
+>  }
+> --
+> 2.51.2
+>
 
