@@ -1,140 +1,108 @@
-Return-Path: <linux-kselftest+bounces-48202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57206CF3391
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 12:23:32 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C9ADCF37E4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 13:21:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 37124301D630
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 11:22:22 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0A7AF300384D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 12:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F3F3375C5;
-	Mon,  5 Jan 2026 11:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D303358BF;
+	Mon,  5 Jan 2026 12:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IN3mASKs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XoiCfFp/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31EC9337118;
-	Mon,  5 Jan 2026 11:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D472286408;
+	Mon,  5 Jan 2026 12:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767611715; cv=none; b=Hc6SmqIEqGy1qX9lo5msHyALq1FCbN0QJpXv0Yww8ia+PtqMuSphxJRSKQyFX7HOCgIJ14TIZALyIWQ41DODFOQXNLPm3DoJz2Wev0kPanux5qEIjk4k/CnQNbQ6dVKfIoDscRucYDbc2p3TXSOkceEmOdnUt85f8l6aQxl5N7I=
+	t=1767615328; cv=none; b=JM01hh5qGZq2V3q43YRvSWi9xyj4lUTmrsIvHM74l0KcN7lzoLcxyebOPIpEKeF5otghm2mFOXgWvJJpQlJ9yyEhHwlTKRwJE4X4MeFI3m+2M+hkIEbUg5kTcD5Pw45SOZfSpIVC9pKNfZT18vqe7i0Ei2jTY//bOsUbUfeiQTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767611715; c=relaxed/simple;
-	bh=gOPFCv6XsvdNRFL2RgDvRLwWfshb/oHcO2mTVP7fwUc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=tYVJ9j3IaAiEhKrTVkZwkwoeheXs68bX59Wko4jtoEgzjNU34oHyiq2oUVI0blK9eHBTJdYFUK9yFhaJENHOyEhKCDQYSsfwkeB005tz1nRQnjr5BiWhmeM8xbyfcGKuHOfsqSV5CjTPqcfb+rh86o3HgQcbGsH3XQrMzu3iUHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IN3mASKs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40353C116D0;
-	Mon,  5 Jan 2026 11:15:14 +0000 (UTC)
+	s=arc-20240116; t=1767615328; c=relaxed/simple;
+	bh=g7riX2VqIGy0ZpqnkS1w4HiY4vb+qABQS3L7IQZHGDU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kWT7+gWtZh5U9piNfkol6FEObWieQhptxtNRGFTesHXRAILEsJhLxCIOvIy9bhxtqsi4ygyjadw6X48lZXbSrKYdvXQtnQjnL8lU/TytGrGVmqTgeBi6HkXh5hBIXZqN9ZtI/KZdOpMJtWQH6K42V9FUlR4MtTQj0CsEtddzIA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XoiCfFp/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C1DC116D0;
+	Mon,  5 Jan 2026 12:15:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767611714;
-	bh=gOPFCv6XsvdNRFL2RgDvRLwWfshb/oHcO2mTVP7fwUc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=IN3mASKs9ZOdY3UWX865ZG6aB6zxt/yT04bcUJ7cuxkRQCHiOoJYOHXltLVYGrWnX
-	 sLyyjN/mVfbdelfPtvuCgsuYc3e3xIs8WYSVdBfKfSdGRr7XCEYeoUVwx63W2eeyR1
-	 YsnFKsk5+hPaqSv1yzLkJ4S4OTgLG6rS3lu4D8KK2SlOY/0lKgXSRV11vvvL2rVqWI
-	 XcY69MIXG2csR5WWdunoLtYAYD6tqtRCAdOsZtO1xZXB2dLHSsAi9C2yiYDvkyXOqc
-	 f7mR+nylEUhtKx6jI6FOEwEfDTmGJ57eATPOxskUiFgXDTbQrewzUkLONqDGvjlsYT
-	 x269dn3xwSWxg==
-Content-Type: multipart/mixed; boundary="===============0721075218538269164=="
+	s=k20201202; t=1767615327;
+	bh=g7riX2VqIGy0ZpqnkS1w4HiY4vb+qABQS3L7IQZHGDU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XoiCfFp/wSyuhaeas9riVl/kkZRVQlQo3wXXez3u1chk5kYSGHx3E9eHqm3gR6THG
+	 hCMtU9LSDWhYB6/qVn99rx5gh5QMPIfK2CO7LayXgpbxTtOHRv17o8uiyZ7mED2F2Y
+	 Q1+gtk/oTdSZiAa3ZPbAtP9egWoBJiqA+F2Ga0lSrSZSlEDnfuEkTWWVlgGOcEiznQ
+	 n9D56FOxJP4oC/a596C1rKKD0xvP9QipYzPT8/c7NdcdFjRsSZVxhWCW6MwST14ByT
+	 dAcDgdLqdrmhAXk2u5fdHFxuGY9KO0Fh15Y+leLFBQd/RYLnDI6NmQzCAkgydnE59j
+	 rG9WuuQkWHk6Q==
+Date: Mon, 5 Jan 2026 12:15:22 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Ben Horgan <ben.horgan@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] KVM: selftests: arm64: Make set_id_regs bitfield
+ validatity checks non-fatal
+Message-ID: <0056f0ca-7f9a-4eb4-a16b-b1ba3eb21832@sirena.org.uk>
+References: <20251219-kvm-arm64-set-id-regs-aarch64-v3-0-bfa474ec3218@kernel.org>
+ <20251219-kvm-arm64-set-id-regs-aarch64-v3-3-bfa474ec3218@kernel.org>
+ <89fd9661-731c-4335-bee8-575a7c221390@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <655a960bb1b98cf56777481bd84ce53c2a17e527a8230edf9ad7523e98cce565@mail.kernel.org>
-In-Reply-To: <20260105105212.136645-3-adubey@linux.ibm.com>
-References: <20260105105212.136645-3-adubey@linux.ibm.com>
-Subject: Re: [PATCH 2/6] powerpc64/bpf: Tailcall handling with trampolines
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,mykolal@fb.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,naveen@kernel.org,maddy@linux.ibm.com,mpe@ellerman.id.au,npiggin@gmail.com,memxor@gmail.com,iii@linux.ibm.com,shuah@kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  5 Jan 2026 11:15:14 +0000 (UTC)
-
---===============0721075218538269164==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 069a8822c30d..4aaa0a287a45 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-
-[ ... ]
-
-> -static void bpf_trampoline_setup_tail_call_cnt(u32 *image, struct codegen_context *ctx,
-> -					       int func_frame_offset, int r4_off)
-> +static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_context *ctx,
-> +					       int func_frame_offset,
-> +					       int bpf_dummy_frame_size, int r4_off)
->  {
->  	if (IS_ENABLED(CONFIG_PPC64)) {
->  		/* See bpf_jit_stack_tailcallinfo_offset() */
-> -		int tailcallcnt_offset = 7 * 8;
-> +		int tailcallinfo_offset = BPF_PPC_STACK_SAVE + SZL;
-
-[ ... ]
-
-> +		EMIT(PPC_RAW_STL(_R3, _R1, func_frame_offset
-> +				- bpf_dummy_frame_size - tailcallinfo_offset));
-                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The new setup function stores tail_call_info at offset
-(func_frame_offset - bpf_dummy_frame_size - tailcallinfo_offset) from R1.
-Since func_frame_offset = bpf_dummy_frame_size + bpf_frame_size, this
-resolves to (bpf_frame_size - 56), which is a positive offset from R1.
-
-However, the corresponding bpf_trampoline_restore_tail_call_cnt() function
-was not updated. It still reads from (R1 - 56):
-
-    static void bpf_trampoline_restore_tail_call_cnt(...)
-    {
-        if (IS_ENABLED(CONFIG_PPC64)) {
-            int tailcallcnt_offset = 7 * 8;
-            EMIT(PPC_RAW_LL(_R3, _R1, -tailcallcnt_offset));
-                                      ^^^^^^^^^^^^^^^^^^
-            ...
-        }
-    }
-
-Is there an offset mismatch here? The setup function stores at
-R1 + (bpf_frame_size - 56) while restore reads from R1 - 56. These point
-to different memory locations since bpf_frame_size is a positive value
-(at minimum ~200 bytes given the frame contents).
-
-When BPF_TRAMP_F_TAIL_CALL_CTX is set, the restore function would read
-incorrect data after the traced function returns, potentially causing
-wrong tail call context to be propagated.
-
-> @@ -801,6 +830,12 @@ static int __arch_prepare_bpf_trampoline(...)
->  		}
->  	}
->
-> +	/* Room for 64-bit tail_call_cnt */
-> +	bpf_frame_size += SZL;
-> +
-> +	/* Room for nvr save area */
-> +	bpf_frame_size += BPF_PPC_STACK_SAVE;
-> +
->  	/* Padding to align stack frame, if any */
->  	bpf_frame_size = round_up(bpf_frame_size, SZL * 2);
-
-The frame size is increased by 56 bytes (SZL + BPF_PPC_STACK_SAVE = 8 + 48)
-for the tail_call_info and nvr save area. This affects all calculations
-using bpf_frame_size, including the store offset in the setup function,
-but the restore function continues to use a hardcoded negative offset.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BIDSB1JZrnBn413u"
+Content-Disposition: inline
+In-Reply-To: <89fd9661-731c-4335-bee8-575a7c221390@arm.com>
+X-Cookie: So many women
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+--BIDSB1JZrnBn413u
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20713322833
+On Fri, Jan 02, 2026 at 02:45:04PM +0000, Ben Horgan wrote:
+> On 12/19/25 19:28, Mark Brown wrote:
+> > Currently when set_id_regs encounters a problem checking validation of
+> > writes to feature registers it uses an immediately fatal assert to report
+> > the problem. This is not idiomatic for kselftest, and it is also not great
 
---===============0721075218538269164==--
+> This one also looks good to me. I'm not aware of why the asserts have
+> been favoured previously though.
+
+The older KVM selftests and the KVM specific selftest framework don't
+work with the kselftest framework inside the test programs and instead
+just run a single test within each test program and die immediately if
+there's some issue.  This is fine so long as each test only does one
+thing but falls apart when you've got multiple tests in a single program
+like this one, there the kselftest framework helps a lot.  It looks like
+the program is mixing the two idioms.
+
+--BIDSB1JZrnBn413u
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlbq1kACgkQJNaLcl1U
+h9CXRAf+NbYdUS/FF1ZammJpdArzKQFlNAuZaEcgy42dYSaeojFbLNsK2xVPCyab
+M8zhG1bcCF49wHDCiSMgW5HX7fL7uc6HTwlj1EQIi2QUFor+7s6LCeMv1C7sKNUF
+LlB/2sNtkI2Z1cRTbR73JvDg6MnNTrDakb6C4FV2J/Wc/7yB34GOHjoDY9GXWnS4
+93F6bRFd4QDUTuOR0t812tWsTzHOkOq3M6OiwcYHUUi8aFliUcPhzXvXV51LPEi9
++htiID3s/XHU7QamnYRmq1dgIXssqtXaqm6v5iaw3gDNfQtM6MDHIhB1R9H3vTBM
+VXLb/mySruiIfLCoWSe0ccqhEUWKlQ==
+=OyR8
+-----END PGP SIGNATURE-----
+
+--BIDSB1JZrnBn413u--
 
