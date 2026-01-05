@@ -1,88 +1,87 @@
-Return-Path: <linux-kselftest+bounces-48221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4447CCF4DFD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 18:02:25 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C3CECF4F2C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 18:16:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 29EEF3023D2F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 17:01:04 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5ECEB3004EE9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 17:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82F32F744C;
-	Mon,  5 Jan 2026 17:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E94B3385B5;
+	Mon,  5 Jan 2026 17:16:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D15E86348;
-	Mon,  5 Jan 2026 17:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A43F3358D2;
+	Mon,  5 Jan 2026 17:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767632460; cv=none; b=GVHOE9XvSczvGPGGx3n7Q3nXkmMelGbyVuArBwgXvv5LYNzS7vDmAFut7lZRT+3NAPKN0pPcz0FA/MRvxRPFd3ij8KQBmm+BC5jaN3OytrdGHGnSp5EwdXw+RH4O6GBQtAShkHQO8Mfw9dCCt0l/AetX4sY7tczR0ykTuh/ITsQ=
+	t=1767633370; cv=none; b=tj0NTHQTEAiR3zpYaj3Q7+ibFoDkXPoZEHsNP1i3qXz/SQQIOwhaWlgo+NhiRb1YNHRvq0Bqx1SzmHxcKI9WYo7ampOlQKfGehVJZ1baMNdIc27sYDkCXZOO3ib1rZ4Kyb9IXpdM3ULZGXXdlF9tNApqDniyypVs5hqX159t4oc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767632460; c=relaxed/simple;
-	bh=0cvCkZgkv3byI4MB7bl4Jg6Ok6oN4muj8yQqNgsTa4k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fnCscqI+Vr6z1QaaZgmUuTaWhrsy36ADDHMvpzedTcV/pJWaDXcggVILGEiqGRZUH8VDUZLmxu76E6i1+ql3+McMQA+GnWyHpCUMY8RlYuC1QFyhW8z7pqP/9QQP3aPeAlTSamf9tqAcf2AqB38VW0nCeZ4bDnIsSgxtGPSyc5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC344339;
-	Mon,  5 Jan 2026 09:00:51 -0800 (PST)
-Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C06A03F5A1;
-	Mon,  5 Jan 2026 09:00:56 -0800 (PST)
-Message-ID: <819a6bf5-438d-44ae-a730-77252e92080b@arm.com>
-Date: Mon, 5 Jan 2026 17:00:55 +0000
+	s=arc-20240116; t=1767633370; c=relaxed/simple;
+	bh=N34XKakxs6/O9rPTyYFJNREr00hdJWQFIAVMU1fqeZk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KLIKn8vGQO0fD5wlaM87J0askfMuGAwd14IiQ7MDMrsLIOUmqpWlIV18xaol5A8uHgQU6uorU9ZotH7l74KH/x8XD8OQS2klKmV9TBmHp2jqEfzC7c/pp10A6VgT1qCILk70x+xhha//WZZyqv4hpzYEWPYUtarvvzlmIzZj5+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay08.hostedemail.com (Postfix) with ESMTP id 32B71140220;
+	Mon,  5 Jan 2026 17:15:53 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf19.hostedemail.com (Postfix) with ESMTPA id 7A54F20027;
+	Mon,  5 Jan 2026 17:15:49 +0000 (UTC)
+Date: Mon, 5 Jan 2026 12:16:11 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Yao Kai <yaokai34@huawei.com>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>, <paulmck@kernel.org>, Boqun Feng
+ <boqun.feng@gmail.com>, <rcu@vger.kernel.org>, Frederic Weisbecker
+ <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Josh
+ Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, Shuah Khan
+ <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, Tengda Wu <wutengda2@huawei.com>,
+ <liuyongqiang13@huawei.com>, <yujiacheng3@huawei.com>
+Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to
+ softirq
+Message-ID: <20260105121611.470294d3@gandalf.local.home>
+In-Reply-To: <34ff0ff6-217e-4574-a3b1-af74b2f40937@huawei.com>
+References: <20260101163417.1065705-1-joelagnelf@nvidia.com>
+	<20260101163417.1065705-2-joelagnelf@nvidia.com>
+	<20260102122807.7025fc87@gandalf.local.home>
+	<20260102123009.453dfb90@gandalf.local.home>
+	<68b5b122-036b-475a-85bb-e39830f99fbe@paulmck-laptop>
+	<252063db-ec72-42df-b9e0-b8dc0aa6bef9@nvidia.com>
+	<34ff0ff6-217e-4574-a3b1-af74b2f40937@huawei.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] KVM: selftests: arm64: Skip all 32 bit IDs when
- set_id_regs is aarch64 only
-To: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Oliver Upton <oupton@kernel.org>, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251219-kvm-arm64-set-id-regs-aarch64-v3-0-bfa474ec3218@kernel.org>
- <20251219-kvm-arm64-set-id-regs-aarch64-v3-4-bfa474ec3218@kernel.org>
- <363e440d-4e29-4286-ade4-b4be2f856859@arm.com>
- <90fb25bd-fa79-4980-902b-497346a3e6d5@sirena.org.uk>
-From: Ben Horgan <ben.horgan@arm.com>
-Content-Language: en-US
-In-Reply-To: <90fb25bd-fa79-4980-902b-497346a3e6d5@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Stat-Signature: bojkfu6sef3sp1fn4ce1uayiebrkwyxn
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 7A54F20027
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX19fzIDrlSXVZ9QJZI5xu53yQ0GLhBXbUuw=
+X-HE-Tag: 1767633349-836369
+X-HE-Meta: U2FsdGVkX18IrKdZUeho2SOfke+R7g8EzvppcaKgp3oK21dmdorGJ939vVTAXb22/1UqSNTPYvftzQHeigSk1HLeGtPthSq9CXtIPiUMliELrwpDssomD8A1/H6Bq5Oy00V5CKHSfkfpzUOPXP4on2P3IcUy40ioCRiNIwTnaYKuFyXca7qeZMuXorKymLL2B0fP1B8QZUUh/QpOUI5WCc5U0wQVU8p922IxhUNrZw7g8tr4kodcKe7XK/VzKBlcf4sZ0iESM3bIviFElY5NSBBzqnDdJtC2ZdzSHbly5xonnXnxcCUyjH2smBz3rBHXpAnYlh958yQBQ6ILfJMwHTcq8EzK+mIz8O3vUkfhlP7l2kLTMXVenw==
 
-Hi Mark,
+On Sun, 4 Jan 2026 11:20:07 +0800
+Yao Kai <yaokai34@huawei.com> wrote:
 
-On 1/5/26 16:45, Mark Brown wrote:
-> On Fri, Jan 02, 2026 at 02:50:07PM +0000, Ben Horgan wrote:
->> On 12/19/25 19:28, Mark Brown wrote:
+> Yes, I tested Steve's patch. It fixes the issue too.
 > 
->>> +			if (aarch64_only && sys_reg_CRm(reg_id) < 4) {
->>> +				ksft_test_result_skip("%s value seen in guest\n",
->>> +						      get_reg_name(reg_id));
->>> +				break;
->>> +			}
->>> +
-> 
->> Unnecessary? The decision for which regs are testing is made in
->> guest_code().
-> 
-> The guest code has a fixed list of registers it reads blindly and we
-> skip the write for these so our expected value won't be something we
-> explicitly set.  The actual test is done here in the host code and it
-> seems both more maintainable to keep the skip adjacent to the live test
-> and clearer to be more explicit about nothing actually being tested.
+> Tested-by: Yao Kai <yaokai34@huawei.com>
 
-Thanks for the explanation, it seems like a sensible decision.
+Thanks for testing. I'll send out a formal patch.
 
-Ben
+And yes, I agree we should do both.
 
+-- Steve
 
