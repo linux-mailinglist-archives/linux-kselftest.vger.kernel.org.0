@@ -1,236 +1,118 @@
-Return-Path: <linux-kselftest+bounces-48219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFCB9CF4D87
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 17:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D3B1CF4D8A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 17:57:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 019A9327C1BB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 16:46:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DED5F3285F79
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 16:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B993733032E;
-	Mon,  5 Jan 2026 16:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F5F1314B87;
+	Mon,  5 Jan 2026 16:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="dgiBx5Bl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dPfguw5w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E672F9C3D
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 16:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABC330DEC1;
+	Mon,  5 Jan 2026 16:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767631503; cv=none; b=QJKG+J2Ks+zizpWb/ONxEk9beFqdlxIfltVlyug7757j+Ok4RS13XSI9nrnQ7wEOf6Lb393eBKjuGW/o2FlrH+Y3DxBnO3XQ/hZG1S+dqMXWD3v11e+Kt7h7D3vFOKtRji6SIgbKipmlrL54iC/PDJWC9CJNcbF7dJyUB+Aa9Qw=
+	t=1767631556; cv=none; b=rPy+npUcl7b0z0YlKfduPyD2VKOuYaNZiVye3kc5/rB92l7cVw3zAtIdveyuCZoxtLQyKS38503dPJA2oUPgkF0/pm1GxVQHhijgGj4Tv/IGzDpTjSBkrmX3lLuIclziIt6VTkmpQo6O+gvRQsB+Zz8tE8x5CANKF5bTS7rt5qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767631503; c=relaxed/simple;
-	bh=q3oBIJBCKsgETtCPP1VXg2X9fdRdjcqRRDj8EfShKmg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=st80FA/d03LecGVxdy8lCfNeiGi7lll/YPVA5/A1jW1qvSvOGb+PKEbszOuLSJhvCWYk8sPTLu6kjUk4cLbFn8dughPYPeZyjdnHVM6kQ4RKc1xIlC+JURS6gI+lbcsfcukZuYysu2Y8p+dOo81d8Yf/d/iPWa8d9ENuheZKpd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=dgiBx5Bl; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7f6bc8a4787so10137b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 08:45:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767631500; x=1768236300; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L6BL2qPpVVqiVwXY3IB51McHsnbFfXZf1WvJyfM78Xk=;
-        b=dgiBx5BlzLP/Ac9sW4gKVy6SEc1PSKMUt8WxGEEmLugL3iSMye3W/7CSXkyYzqn0YC
-         p3yszztnQy/B5FjrWkH121uWLhZJ4nE9SceH5Fh9WWaFS4TxYErtvLdCFTU5Oyj7pKi8
-         yvOJnYug0j0S3RD8axAMeu7Ayw7TP+onu9hJCu+cyPAJnzc+GgM/oNDl5gG8nVop9UOy
-         /4rQvsSZkmYGQIvXDzpYliVP/s88blwyxdQ4cv1CJPLuildY5bSa5AJLWiJJ6vJMkPJQ
-         aL87zu4SRfRAa9y/jw6fR2hbTqdom1XIyMo1zapI0cEddGYQo+u3bLguPcxYJ+xnoAgE
-         uxYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767631500; x=1768236300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=L6BL2qPpVVqiVwXY3IB51McHsnbFfXZf1WvJyfM78Xk=;
-        b=qCGRIie7g1IFExweQocOaSx7UHvONGrgber8ufdEthhM4LBx3s3RWFHtGtmV1AmZ7d
-         j0wq0AnREkjR9uyfeCwy6W2uCuypn5fkELdllH0D40JSSp5Roh1m273jabdAiG9lci0Q
-         xjfDk5UtmjzkXyEq1Q9UhZbJBH2Fc0MnoH/GEzLQwI4yT39X0safsi0eGP+6EuFpRXc2
-         d4INHj0fdp2Pf+GCRTmEJPw66PBaOIybMGq1cfCOH4gHZDxIGhHeN9iJtdWQ8FNTBqWS
-         9N4ApOeABWqBTNl+ZGXKeb80cuW8iu8MN29IhTwLCGVVDauJTDq+O23z8BBxbNwOY4U3
-         +WtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVWlHDxJilrsMRGkrzp1+hkAO9kQoNj8e45QMEcK53mv1bWMXfk15DAJmLvtG9ej1ggNp1R7B8BZ6Ql7X0z16s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOh9gy9+qgT8uAX25Mq0vuQBZBTqLysP1Snp6iosJaX4ghvq8d
-	69vzeFZvk2xkNg79+uyRDOFgBFlQUKobhj8igDxxogNLqxM8ISJw3l9PDCVpORg77J6/pkKEnZL
-	QLuWIdLOcsglHoVYJm6L+NlHYolfGFxYGoWfeHl5D0w==
-X-Gm-Gg: AY/fxX7jjqCunjJnTCe8jEqAj8yJ7B9sz64mHsJWZ9Omd6Lck99UNgGInTb+eh/f46K
-	xqL3aoA8gAb1lnA298Zav+Ipg/NjGu2NBR+kV+DrUvzNvITuHPXHi9l/DPR6hsJ8cc7+21Xr1fz
-	U0eDqbPbMyAkjXtC4A6AGdI+Koq+I7y876C/qjD3ED7XTwjpfwcyr9jcD/+uDKj4nssyXUnbOgQ
-	F3Wc2xc6CpS1k9KlP7rPlY7dCuksU/nCJY+RfODUqL5lu/jxxlBYgEX42xFTAPsf0DhhxmV
-X-Google-Smtp-Source: AGHT+IF8k9ZANyOFgf4uVHZiLOyEIYQd/42XmN4OjyQ1CnRUZ4eFH6gAsgBHijDU+QbTdIeIftviRS4WQOARay1ZyAA=
-X-Received: by 2002:a05:7022:4298:b0:11e:3e9:3e9b with SMTP id
- a92af1059eb24-121723088c9mr25211029c88.6.1767631499550; Mon, 05 Jan 2026
- 08:44:59 -0800 (PST)
+	s=arc-20240116; t=1767631556; c=relaxed/simple;
+	bh=hRalsOfosJADEMwrxolfPeTiI+tRS96R5nKkLXSFV/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IyYwDY8kHKAGltiEDCXX2vHHSaHeQT0vPUf5TlZEkhZIiQQU3F5H/NaT9NpQ9SjlwsolpRc0u+vdvGd8GdGyM2hBO9ZowKWJnQ+18b62Z50lmSiisgEU1mfqGlocXsaxwYAqjn3M43R/zFRvevNlYtm/GwrfYZRwNo53LUDobxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dPfguw5w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B224C116D0;
+	Mon,  5 Jan 2026 16:45:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767631555;
+	bh=hRalsOfosJADEMwrxolfPeTiI+tRS96R5nKkLXSFV/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dPfguw5wUf0G5rvgYSSC+g28McqYU8gqXVj8JYZ+U8ufWLR7fto+11FmxnlkVAxpl
+	 N7iSNf2UWBzRnGn+E1W12qH2/H+zIhgltq1o+HRYJA6RrIeL5Jyqv/WVux6VeBIM2j
+	 uTYiGXzfhMmrH2o7mFMzPfqVGZQgD/acDW0xD67Fy5HXACXJKk0PCRSJkfEAZ7vkdL
+	 BCDDhWuwbUSAnGqGGrgJpAIFoGeZ6aPJtbJeZwPKvP7KL2exfNnBx8jZ52jx1XNasD
+	 Ut3JWJH/qncBbGk9Tdbkd2sW1v+zKNwNRvPUnuM/jhFQAxKfXQv+6T59eyayyKb1py
+	 7Z/KNGAwnelPg==
+Date: Mon, 5 Jan 2026 16:45:50 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Ben Horgan <ben.horgan@arm.com>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/4] KVM: selftests: arm64: Skip all 32 bit IDs when
+ set_id_regs is aarch64 only
+Message-ID: <90fb25bd-fa79-4980-902b-497346a3e6d5@sirena.org.uk>
+References: <20251219-kvm-arm64-set-id-regs-aarch64-v3-0-bfa474ec3218@kernel.org>
+ <20251219-kvm-arm64-set-id-regs-aarch64-v3-4-bfa474ec3218@kernel.org>
+ <363e440d-4e29-4286-ade4-b4be2f856859@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260103004529.1582405-1-csander@purestorage.com>
- <20260103004529.1582405-5-csander@purestorage.com> <aVkkSxNNUBMz9E61@fedora>
-In-Reply-To: <aVkkSxNNUBMz9E61@fedora>
-From: Caleb Sander Mateos <csander@purestorage.com>
-Date: Mon, 5 Jan 2026 08:44:48 -0800
-X-Gm-Features: AQt7F2oLATeVcsBIU8okZcBk_MFEK1W5141SRB_Yq7_1i_fxRUD7vLCBZiqM1qY
-Message-ID: <CADUfDZqF2rWRQVptMjM7JedkkHfM-K+V65=odLcdrc3OM9jsJg@mail.gmail.com>
-Subject: Re: [PATCH v2 04/19] ublk: set request integrity params in ublksrv_io_desc
-To: Ming Lei <ming.lei@redhat.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>, linux-block@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Stanley Zhang <stazhang@purestorage.com>, Uday Shankar <ushankar@purestorage.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jUgQ9HrVrHCgvOyK"
+Content-Disposition: inline
+In-Reply-To: <363e440d-4e29-4286-ade4-b4be2f856859@arm.com>
+X-Cookie: So many women
 
-On Sat, Jan 3, 2026 at 6:14=E2=80=AFAM Ming Lei <ming.lei@redhat.com> wrote=
-:
->
-> On Fri, Jan 02, 2026 at 05:45:14PM -0700, Caleb Sander Mateos wrote:
-> > Indicate to the ublk server when an incoming request has integrity data
-> > by setting UBLK_IO_F_INTEGRITY in the ublksrv_io_desc's op_flags field.
-> > If the ublk device doesn't support integrity, the request will never
-> > provide integrity data. If the ublk device supports integrity, the
-> > request may omit the integrity buffer only if metadata_size matches the
-> > PI tuple size determined by csum_type. In this case, the ublk server
-> > should internally generate/verify the protection information from the
-> > data and sector offset.
-> > Set the UBLK_IO_F_CHECK_{GUARD,REFTAG,APPTAG} flags based on the
-> > request's BIP_CHECK_{GUARD,REFTAG,APPTAG} flags, indicating whether to
-> > verify the guard, reference, and app tags in the protection information=
-.
-> > The expected reference tag (32 or 48 bits) and app tag (16 bits) are
-> > indicated in ublksrv_io_desc's new struct ublksrv_io_integrity integrit=
-y
-> > field. This field is unioned with the addr field to avoid changing the
->
-> It might be fine to set per-rq app_tag, but bios in one request might hav=
-e
-> different app_tag in case of io merge actually.
 
-I based this logic largely on the code under if (ns->head->ms) in
-nvme_setup_rw(). That also assumes a single app_tag for the request.
-Sounds like an existing bug if bios with different app_tags can be
-merged together?
+--jUgQ9HrVrHCgvOyK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
->
-> Also block layer builds ref_tag for each internal, please see
+On Fri, Jan 02, 2026 at 02:50:07PM +0000, Ben Horgan wrote:
+> On 12/19/25 19:28, Mark Brown wrote:
 
-What do you mean by "internal"? "interval"?
-
-> t10_pi_generate() and ext_pi_crc64_generate().
-
-Yes, the reftag increases by 1 for each integrity interval. That's why
-it suffices for an NVMe command reading multiple blocks to specify
-only the expected reftag for the first block; the reftags for
-subsequent blocks are incremented accordingly.
-
-Actually, I think we probably don't need to communicate the reftag
-seed to the ublk server. NVMe doesn't use the reftag seed (which can
-be overridden by struct uio_meta's seed field). Instead,
-nvme_set_ref_tag() always uses the offset into the block device
-divided by the integrity interval size, as required by all the
-existing csum_type formats the kernel supports. So a ublk server could
-just use the start_sector field of struct ublksrv_io_desc to compute
-the expected reftags. And using start_sector as the reftag also means
-merging requests would preserve their expected reftags.
-
->
-> So looks this way is wrong.
->
-> More importantly reusing iod->addr for other purpose not related with IO
-> buffer is very unfriendly for adding new features, and one lesson is for =
-ZONED support
-> by reusing ublksrv_io_cmd->addr for zoned's append lba.
-
-That's a fair point.
-
->
-> For example, there is chance to support dma-buf based zero copy for ublk,=
- and
-> please see the io-uring dma-buf support[1], and iod->addr might carry IO =
-buffer info
-> in dma-buf format in future.
->
-> [1] https://lore.kernel.org/io-uring/cover.1763725387.git.asml.silence@gm=
-ail.com/#t
->
->
-> > size of struct ublksrv_io_desc. UBLK_F_INTEGRITY requires
-> > UBLK_F_USER_COPY and the addr field isn't used for UBLK_F_USER_COPY, so
-> > the two fields aren't needed simultaneously.
-> >
-> > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
-> > ---
-> >  drivers/block/ublk_drv.c      | 43 +++++++++++++++++++++++++++++++----
-> >  include/uapi/linux/ublk_cmd.h | 27 ++++++++++++++++++++--
-> >  2 files changed, 64 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-> > index 2f9316febf83..51469e0627ff 100644
-> > --- a/drivers/block/ublk_drv.c
-> > +++ b/drivers/block/ublk_drv.c
-> > @@ -316,10 +316,36 @@ static inline bool ublk_dev_is_zoned(const struct=
- ublk_device *ub)
-> >  static inline bool ublk_queue_is_zoned(const struct ublk_queue *ubq)
-> >  {
-> >       return ubq->flags & UBLK_F_ZONED;
-> >  }
-> >
-> > +static void ublk_setup_iod_buf(const struct ublk_queue *ubq,
-> > +                            const struct request *req,
-> > +                            struct ublksrv_io_desc *iod)
-> > +{
-> > +#ifdef CONFIG_BLK_DEV_INTEGRITY
-> > +     if (ubq->flags & UBLK_F_INTEGRITY) {
-> > +             struct bio_integrity_payload *bip;
-> > +             sector_t ref_tag_seed;
+> > +			if (aarch64_only && sys_reg_CRm(reg_id) < 4) {
+> > +				ksft_test_result_skip("%s value seen in guest\n",
+> > +						      get_reg_name(reg_id));
+> > +				break;
+> > +			}
 > > +
-> > +             if (!blk_integrity_rq(req))
-> > +                     return;
-> > +
-> > +             bip =3D bio_integrity(req->bio);
-> > +             ref_tag_seed =3D bip_get_seed(bip);
->
-> As mentioned, t10_pi_generate() and ext_pi_crc64_generate() builds
-> per-internal ref tag.
 
-As mentioned, the reftags for subsequent intervals can be computed by
-simply incrementing the seed. If the seed is assumed to always be
-start_sector >> (interval_exp - SECTOR_SHIFT), then it may not be
-necessary to communicate ref_tag_seed at all.
+> Unnecessary? The decision for which regs are testing is made in
+> guest_code().
 
->
->
-> > +             iod->integrity.ref_tag_lo =3D ref_tag_seed;
-> > +             iod->integrity.ref_tag_hi =3D ref_tag_seed >> 32;
-> > +             iod->integrity.app_tag =3D bip->app_tag;
->
-> In case of io merge, each bio may have different ->app_tag.
+The guest code has a fixed list of registers it reads blindly and we
+skip the write for these so our expected value won't be something we
+explicitly set.  The actual test is done here in the host code and it
+seems both more maintainable to keep the skip adjacent to the live test
+and clearer to be more explicit about nothing actually being tested.
 
-It seems like it would make more sense to prevent merging bios with
-different app_tags. In the common case where a request contains a
-single bio, which has a single app_tag, it would be much more
-efficient to communicate only the 1 app_tag instead of having to pass
-a separate app_tag for every logical block/integrity interval.
+> > +	if (aarch64_only && sys_reg_CRm(encoding) < 4) {
 
->
-> Given you have to copy meta data via user copy, I suggest to follow the P=
-I
-> standard and make it per-internal.
+> Doesn't this exclude more registers than needed? E.g. MIDR?
 
-How are you suggesting the ublk server access bip->app_tag and
-bip_get_seed(bip) (if overriding the reftag seed is supported)? Would
-the ublk server need to make another user copy syscall?
+Yes, I took this test from somewhere without thinking about it properly
+- it's been so long I can't remember but it was clearly wrong in this
+context.  I'll update.
 
-Or would you prefer I drop the BIP_CHECK_* flag support from this
-patch set for now?
+--jUgQ9HrVrHCgvOyK
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Caleb
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlb6r0ACgkQJNaLcl1U
+h9B3Wwf9Ei81DVRAliYp+f2cGXjW5ohJtH7FHEVkRHuPfeDT/8tWAFsmGjASwsQv
+4Xm4CiVybCEghpj+Ld9vTaF0LYm1yaNVkTPl0EuIWBxMXBxI2OaXhqZ2+N8tzhQ7
+vdBXg9vaumylp81y7RDEeaHySwWg7ZtydV4zNMoq6bRkq02iwcuuDuC6hYwUSOFR
+hpr3yKDBfZ/kDHzZ3IUFrKiGQQCKuHtZ0FZgBPP0syz9rMVmxBaAAyKPGNmEtuvv
+iH5iQy58lagYJfMrRFTxYnAg4w0jN9VIFjiSxabF213G+fIyx0qtpw6X2SiZBof9
+e6MtF7Jgpg4sNydpvFXSxryixWYU3A==
+=HcmY
+-----END PGP SIGNATURE-----
+
+--jUgQ9HrVrHCgvOyK--
 
