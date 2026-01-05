@@ -1,87 +1,156 @@
-Return-Path: <linux-kselftest+bounces-48222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C3CECF4F2C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 18:16:16 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8111BCF505B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 18:39:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5ECEB3004EE9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 17:16:13 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id ED31A30090F6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 17:39:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E94B3385B5;
-	Mon,  5 Jan 2026 17:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716CD31D380;
+	Mon,  5 Jan 2026 17:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="KeIJmOjl";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="ywIlBxqJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A43F3358D2;
-	Mon,  5 Jan 2026 17:16:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4981F14B96E;
+	Mon,  5 Jan 2026 17:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767633370; cv=none; b=tj0NTHQTEAiR3zpYaj3Q7+ibFoDkXPoZEHsNP1i3qXz/SQQIOwhaWlgo+NhiRb1YNHRvq0Bqx1SzmHxcKI9WYo7ampOlQKfGehVJZ1baMNdIc27sYDkCXZOO3ib1rZ4Kyb9IXpdM3ULZGXXdlF9tNApqDniyypVs5hqX159t4oc=
+	t=1767634778; cv=none; b=cYVzmy7M1Smhw1heVjJA8CRmaXkof1i08ex7jREphTzgobwmPMFXmrpNSLJtsJhnvp6DLctLvtFknn4LyGJbDeiUBYEPCtwBNCktKNuCmsq8GcQx9yJVJC6iEjUy1lXCvocjtSEZvfkP1C9uTqvrFoDsKCvSav5SvQj/fVTrvYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767633370; c=relaxed/simple;
-	bh=N34XKakxs6/O9rPTyYFJNREr00hdJWQFIAVMU1fqeZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KLIKn8vGQO0fD5wlaM87J0askfMuGAwd14IiQ7MDMrsLIOUmqpWlIV18xaol5A8uHgQU6uorU9ZotH7l74KH/x8XD8OQS2klKmV9TBmHp2jqEfzC7c/pp10A6VgT1qCILk70x+xhha//WZZyqv4hpzYEWPYUtarvvzlmIzZj5+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf19.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 32B71140220;
-	Mon,  5 Jan 2026 17:15:53 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf19.hostedemail.com (Postfix) with ESMTPA id 7A54F20027;
-	Mon,  5 Jan 2026 17:15:49 +0000 (UTC)
-Date: Mon, 5 Jan 2026 12:16:11 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Yao Kai <yaokai34@huawei.com>
-Cc: Joel Fernandes <joelagnelf@nvidia.com>, <paulmck@kernel.org>, Boqun Feng
- <boqun.feng@gmail.com>, <rcu@vger.kernel.org>, Frederic Weisbecker
- <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Josh
- Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Lai Jiangshan
- <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, Shuah Khan
- <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, Tengda Wu <wutengda2@huawei.com>,
- <liuyongqiang13@huawei.com>, <yujiacheng3@huawei.com>
-Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to
- softirq
-Message-ID: <20260105121611.470294d3@gandalf.local.home>
-In-Reply-To: <34ff0ff6-217e-4574-a3b1-af74b2f40937@huawei.com>
-References: <20260101163417.1065705-1-joelagnelf@nvidia.com>
-	<20260101163417.1065705-2-joelagnelf@nvidia.com>
-	<20260102122807.7025fc87@gandalf.local.home>
-	<20260102123009.453dfb90@gandalf.local.home>
-	<68b5b122-036b-475a-85bb-e39830f99fbe@paulmck-laptop>
-	<252063db-ec72-42df-b9e0-b8dc0aa6bef9@nvidia.com>
-	<34ff0ff6-217e-4574-a3b1-af74b2f40937@huawei.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1767634778; c=relaxed/simple;
+	bh=obs6thHji5iuQOiAZYiCgDDd+cav0QJu2vIzAWiiWJY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oATZFMNMCWQvNbCcEDby4ZJG8RCN/R613e6SgTwyRIM32meN4k/zGdrxBYy8nw3MdD3rEpJz5Ey7FwV7UH3eeqZdQ1HaiI6t64GWDHA/aEFBeX4qonOGGEF6nKVhPpJnUOc2EECtASjB73YEQWiE6dJduYiEYkK3enwLRYUI5l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=KeIJmOjl; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=ywIlBxqJ; arc=none smtp.client-ip=135.148.138.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
+DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1767634676; bh=7dDcV1YLkUsP3eAwr4dlK/7
+	tiXGtJ0DA2WX0a2C+Xi8=; b=KeIJmOjl/3Cp7si8p6HJrruyDQ3xwibsUDXakEthMMTLW5tr8e
+	oKoLmFHWVQXCIVsDQQtp46fSJdMsCUITJ9xGrQAN6r7yA4EPoy8pwfVkWgRaz1te1Ce+k1qPX2D
+	2At/0dZLjT3M2aCICdyd7yk8xk2jR5cJfyxsIeJKONg4C1ngtDEtDkG4SjT3Ft4GOwR25wyP1l0
+	mY+yLGsr5S/VqyimVeTfccA68FxvpJLMEtGPtw8XMu9/ezBEsz7XHg5s7/K9MpEfeQAc8WUWrJh
+	9W3q4PdnFLM5bHESZfdBBUk82YAsaLX7zQlISt9RlGYUD4t3c6k9L0qL8jMgzXmqeYg==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1767634676; bh=7dDcV1YLkUsP3eAwr4dlK/7
+	tiXGtJ0DA2WX0a2C+Xi8=; b=ywIlBxqJb6KQb6zoLxSEHboPEl9z1qM7o/ECmFo0x6f1aGeubK
+	SY8b8NMiBwgmI2J3NW/0RaniAUicVAh8J3Dg==;
+From: Daniel Hodges <git@danielhodges.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S . Miller" <davem@davemloft.net>,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Daniel Hodges <git@danielhodges.dev>
+Subject: [PATCH bpf-next v4 0/6] Add cryptographic hash and signature verification kfuncs to BPF
+Date: Mon,  5 Jan 2026 12:37:49 -0500
+Message-ID: <20260105173755.22515-1-git@danielhodges.dev>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: bojkfu6sef3sp1fn4ce1uayiebrkwyxn
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: 7A54F20027
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19fzIDrlSXVZ9QJZI5xu53yQ0GLhBXbUuw=
-X-HE-Tag: 1767633349-836369
-X-HE-Meta: U2FsdGVkX18IrKdZUeho2SOfke+R7g8EzvppcaKgp3oK21dmdorGJ939vVTAXb22/1UqSNTPYvftzQHeigSk1HLeGtPthSq9CXtIPiUMliELrwpDssomD8A1/H6Bq5Oy00V5CKHSfkfpzUOPXP4on2P3IcUy40ioCRiNIwTnaYKuFyXca7qeZMuXorKymLL2B0fP1B8QZUUh/QpOUI5WCc5U0wQVU8p922IxhUNrZw7g8tr4kodcKe7XK/VzKBlcf4sZ0iESM3bIviFElY5NSBBzqnDdJtC2ZdzSHbly5xonnXnxcCUyjH2smBz3rBHXpAnYlh958yQBQ6ILfJMwHTcq8EzK+mIz8O3vUkfhlP7l2kLTMXVenw==
+Content-Transfer-Encoding: 8bit
 
-On Sun, 4 Jan 2026 11:20:07 +0800
-Yao Kai <yaokai34@huawei.com> wrote:
+This patch series enhances BPF's cryptographic functionality by introducing
+kernel functions for SHA hashing and ECDSA signature verification. The changes
+enable BPF programs to verify data integrity and authenticity across
+networking, security, and observability use cases.
 
-> Yes, I tested Steve's patch. It fixes the issue too.
-> 
-> Tested-by: Yao Kai <yaokai34@huawei.com>
+The series addresses two gaps in BPF's cryptographic toolkit:
 
-Thanks for testing. I'll send out a formal patch.
+1. Cryptographic hashing - supports content verification and message digest
+   preparation
+2. Asymmetric signature verification - allows validation of signed data
+   without requiring private keys in the datapath
 
-And yes, I agree we should do both.
+Use cases include:
+- Verifying signed network packets or application data in XDP/TC programs
+- Integrity checks within tracing and security monitoring
+- Zero-trust security models with BPF-based credential verification
+- Content-addressed storage in BPF-based filesystems
 
--- Steve
+The implementation leverages existing BPF patterns: it uses bpf_dynptr for
+memory safety, reuses kernel crypto libraries (lib/crypto/sha256.c and
+crypto/ecdsa.c) rather than reimplementing algorithms, and provides
+context-based APIs supporting multiple program types.
+
+v2:
+- Fixed redundant __bpf_dynptr_is_rdonly() checks (Vadim)
+- Added BPF hash algorithm type registration module in crypto/ subsystem
+- Added CONFIG_CRYPTO_HASH2 guards around bpf_crypto_hash() kfunc and its
+  BTF registration, matching the pattern used for CONFIG_CRYPTO_ECDSA
+- Added mandatory digestsize validation for hash operations
+
+v3:
+- Fixed patch ordering - header changes now in separate first commit before
+  crypto module to ensure bisectability (bot+bpf-ci)
+- Fixed type mismatch - changed u32 to u64 for dynptr sizes in
+  bpf_crypto_hash() to match __bpf_dynptr_size() return type (Mykyta)
+- Added CONFIG_CRYPTO_ECDSA to selftest config (Song)
+- Refactored test code duplication with setup_skel() helper (Song)
+- Added copyright notices to all new files
+
+v4:
+- Reused common bpf_crypto_ctx structure for hash and signature operations
+  instead of separate context types (Song)
+- Fixed integer truncation in bpf_crypto_hash when data_len > UINT_MAX
+- Corrected KF_RCU flags for ECDSA kfuncs (only bpf_ecdsa_verify needs KF_RCU)
+- Updated MAINTAINERS file in test patches
+- Refactored selftests to use crypto_common.h for kfunc declarations
+
+Daniel Hodges (6):
+  crypto: Add BPF hash algorithm type registration module
+  crypto: Add BPF signature algorithm type registration module
+  bpf: Add hash kfunc for cryptographic hashing
+  selftests/bpf: Add tests for bpf_crypto_hash kfunc
+  bpf: Add ECDSA signature verification kfuncs
+  selftests/bpf: Add tests for ECDSA signature verification kfuncs
+
+ MAINTAINERS                                   |   6 +
+ crypto/Makefile                               |   6 +
+ crypto/bpf_crypto_shash.c                     |  96 +++++++++
+ crypto/bpf_crypto_sig.c                       |  60 ++++++
+ crypto/bpf_crypto_skcipher.c                  |   1 +
+ include/linux/bpf_crypto.h                    |   7 +
+ kernel/bpf/crypto.c                           | 193 +++++++++++++++++-
+ tools/testing/selftests/bpf/config            |   3 +
+ .../selftests/bpf/prog_tests/crypto_hash.c    | 147 +++++++++++++
+ .../selftests/bpf/prog_tests/ecdsa_verify.c   |  75 +++++++
+ .../selftests/bpf/progs/crypto_common.h       |   7 +
+ .../testing/selftests/bpf/progs/crypto_hash.c | 136 ++++++++++++
+ .../selftests/bpf/progs/ecdsa_verify.c        | 157 ++++++++++++++
+ 13 files changed, 886 insertions(+), 8 deletions(-)
+ create mode 100644 crypto/bpf_crypto_shash.c
+ create mode 100644 crypto/bpf_crypto_sig.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/crypto_hash.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/ecdsa_verify.c
+ create mode 100644 tools/testing/selftests/bpf/progs/crypto_hash.c
+ create mode 100644 tools/testing/selftests/bpf/progs/ecdsa_verify.c
+
+-- 
+2.51.0
+
 
