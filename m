@@ -1,60 +1,63 @@
-Return-Path: <linux-kselftest+bounces-48203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C9ADCF37E4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 13:21:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53600CF3ED5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 14:50:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0A7AF300384D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 12:21:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 993A4305D9AD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 13:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D303358BF;
-	Mon,  5 Jan 2026 12:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F753451B3;
+	Mon,  5 Jan 2026 12:46:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XoiCfFp/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hk1GyY8p"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D472286408;
-	Mon,  5 Jan 2026 12:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC6C3446D8;
+	Mon,  5 Jan 2026 12:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767615328; cv=none; b=JM01hh5qGZq2V3q43YRvSWi9xyj4lUTmrsIvHM74l0KcN7lzoLcxyebOPIpEKeF5otghm2mFOXgWvJJpQlJ9yyEhHwlTKRwJE4X4MeFI3m+2M+hkIEbUg5kTcD5Pw45SOZfSpIVC9pKNfZT18vqe7i0Ei2jTY//bOsUbUfeiQTk=
+	t=1767617169; cv=none; b=KlcQ4fKMXRFdnQktWEQMudxC7AMELqc1/vyC7LUV0dhwhoT7Xn1L2OGDtYM2vUJaB2kBLtJmO18nvhyIlyEHR3KgXKQFaUUn/4zuCJ/pUq2cTuk5tGi1UHn4Tu4qNbZEUaExa/jl5RX2yvytFMmYyyZ3UeeaXERKI51WlSlA2/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767615328; c=relaxed/simple;
-	bh=g7riX2VqIGy0ZpqnkS1w4HiY4vb+qABQS3L7IQZHGDU=;
+	s=arc-20240116; t=1767617169; c=relaxed/simple;
+	bh=ql8wdMN032MrP8xavsv4jPuanq1kV6VysEAcsIRbjMo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kWT7+gWtZh5U9piNfkol6FEObWieQhptxtNRGFTesHXRAILEsJhLxCIOvIy9bhxtqsi4ygyjadw6X48lZXbSrKYdvXQtnQjnL8lU/TytGrGVmqTgeBi6HkXh5hBIXZqN9ZtI/KZdOpMJtWQH6K42V9FUlR4MtTQj0CsEtddzIA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XoiCfFp/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C1DC116D0;
-	Mon,  5 Jan 2026 12:15:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lnvJ67x1rvBXx1tKwGQLSf+kXXBGuSyFo+fjTMOcE1Y/u56nBUYp4lw8t/W8TvS7FgQJkvkEv7cpMbID3Aw+dtjcrBzhfzThmN4P+wW8t1MoA7uwDO6Tv1+YjLhFqfPEoSxr1HLAR5l96EzcdysLP9i05H99T/HlYAXjqbgsgoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hk1GyY8p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A40C116D0;
+	Mon,  5 Jan 2026 12:46:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767615327;
-	bh=g7riX2VqIGy0ZpqnkS1w4HiY4vb+qABQS3L7IQZHGDU=;
+	s=k20201202; t=1767617168;
+	bh=ql8wdMN032MrP8xavsv4jPuanq1kV6VysEAcsIRbjMo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XoiCfFp/wSyuhaeas9riVl/kkZRVQlQo3wXXez3u1chk5kYSGHx3E9eHqm3gR6THG
-	 hCMtU9LSDWhYB6/qVn99rx5gh5QMPIfK2CO7LayXgpbxTtOHRv17o8uiyZ7mED2F2Y
-	 Q1+gtk/oTdSZiAa3ZPbAtP9egWoBJiqA+F2Ga0lSrSZSlEDnfuEkTWWVlgGOcEiznQ
-	 n9D56FOxJP4oC/a596C1rKKD0xvP9QipYzPT8/c7NdcdFjRsSZVxhWCW6MwST14ByT
-	 dAcDgdLqdrmhAXk2u5fdHFxuGY9KO0Fh15Y+leLFBQd/RYLnDI6NmQzCAkgydnE59j
-	 rG9WuuQkWHk6Q==
-Date: Mon, 5 Jan 2026 12:15:22 +0000
+	b=hk1GyY8poIzMwUg1Iu63Ub8SWVmdLS4TEm6OBkbOuil30njeic/+PyYniw19FvcfQ
+	 akkAIC2dCBZpjG7mL+5tlswp55YzpRjO/r2CQ2P2icCNfqjFIC/Axp/X+aI/Gzqy4t
+	 7DYXjBx4oQ4EWotSOuDKT6K/tdQ9CrmP4u6yeWgATKXWwyeKV/6HP+XIQFZP3kR2VX
+	 NoBcM97/reHliukWwJASK0Ivj7chaFY7MJki7jZWxQDQRiZY4fna4e4eISENd0VNRE
+	 ekfQvWw42zotZy6AniyKMrvCJuYsZOv9Hips04+ePO1QHQaYiSpIQx9Ygjpu4qQ03n
+	 XuW6wtoAVoZdg==
+Date: Mon, 5 Jan 2026 12:46:03 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Ben Horgan <ben.horgan@arm.com>
-Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] KVM: selftests: arm64: Make set_id_regs bitfield
- validatity checks non-fatal
-Message-ID: <0056f0ca-7f9a-4eb4-a16b-b1ba3eb21832@sirena.org.uk>
-References: <20251219-kvm-arm64-set-id-regs-aarch64-v3-0-bfa474ec3218@kernel.org>
- <20251219-kvm-arm64-set-id-regs-aarch64-v3-3-bfa474ec3218@kernel.org>
- <89fd9661-731c-4335-bee8-575a7c221390@arm.com>
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Yunsheng Lin <linyunsheng@huawei.com>
+Subject: Re: [PATCH 1/4] selftests/mm: remove flaky header check
+Message-ID: <2bc4e09a-045a-4d33-8857-1bdfe3281da2@sirena.org.uk>
+References: <20251216142633.2401447-1-kevin.brodsky@arm.com>
+ <20251216142633.2401447-2-kevin.brodsky@arm.com>
+ <5f866c1a-c8cd-4dc6-b312-9017cef89920@sirena.org.uk>
+ <e971e44e-5539-4fc4-8128-0ce9c3d10a38@arm.com>
+ <682f64d0-353c-47bb-808b-eacc2d4d6c00@sirena.org.uk>
+ <9c97ac9c-b0df-42e7-84fc-7e0d986c7324@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,47 +65,56 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BIDSB1JZrnBn413u"
+	protocol="application/pgp-signature"; boundary="ee3kU50VQDofGf6W"
 Content-Disposition: inline
-In-Reply-To: <89fd9661-731c-4335-bee8-575a7c221390@arm.com>
+In-Reply-To: <9c97ac9c-b0df-42e7-84fc-7e0d986c7324@arm.com>
 X-Cookie: So many women
 
 
---BIDSB1JZrnBn413u
+--ee3kU50VQDofGf6W
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Jan 02, 2026 at 02:45:04PM +0000, Ben Horgan wrote:
-> On 12/19/25 19:28, Mark Brown wrote:
-> > Currently when set_id_regs encounters a problem checking validation of
-> > writes to feature registers it uses an immediately fatal assert to report
-> > the problem. This is not idiomatic for kselftest, and it is also not great
+On Mon, Dec 29, 2025 at 04:40:26PM +0100, Kevin Brodsky wrote:
+> On 18/12/2025 15:25, Mark Brown wrote:
 
-> This one also looks good to me. I'm not aware of why the asserts have
-> been favoured previously though.
+> > Well, there's also the selection of KDIR which for some reason defaults
+> > to the installed kernel so we get:
 
-The older KVM selftests and the KVM specific selftest framework don't
-work with the kselftest framework inside the test programs and instead
-just run a single test within each test program and die immediately if
-there's some issue.  This is fine so long as each test only does one
-thing but falls apart when you've got multiple tests in a single program
-like this one, there the kselftest framework helps a lot.  It looks like
-the program is mixing the two idioms.
+> Overall the kselftests tend to assume that we're building on the same
+> machine we'll run them, so at least that feels consistent. The same
+> default is used for most other out-of-tree kselftests modules
+> (livepatch, net/bench).
 
---BIDSB1JZrnBn413u
+That's really not the expected usage pattern, I'd be surprised if a
+non-trivial propoprtion of kselftest builds were intended to be run on
+the system they're built on - a lot of people test interactively in VMs,
+or on some other target hardware, and automated systems are going to be
+building separately.  The two you've identified look like special
+snowflakes TBH (livepatch in particular has a bunch of other issues due
+to what it's trying to do).
+
+> Maybe the documentation should be updated to recommend setting KDIR
+> explicitly? Or maybe it could default to KDIR=$PWD or $(abspath
+> $(KBUILD_OUTPUT)) when cross-compiling?
+
+I think defaulting to something related to the current kernel build is
+more sensible here.
+
+--ee3kU50VQDofGf6W
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlbq1kACgkQJNaLcl1U
-h9CXRAf+NbYdUS/FF1ZammJpdArzKQFlNAuZaEcgy42dYSaeojFbLNsK2xVPCyab
-M8zhG1bcCF49wHDCiSMgW5HX7fL7uc6HTwlj1EQIi2QUFor+7s6LCeMv1C7sKNUF
-LlB/2sNtkI2Z1cRTbR73JvDg6MnNTrDakb6C4FV2J/Wc/7yB34GOHjoDY9GXWnS4
-93F6bRFd4QDUTuOR0t812tWsTzHOkOq3M6OiwcYHUUi8aFliUcPhzXvXV51LPEi9
-+htiID3s/XHU7QamnYRmq1dgIXssqtXaqm6v5iaw3gDNfQtM6MDHIhB1R9H3vTBM
-VXLb/mySruiIfLCoWSe0ccqhEUWKlQ==
-=OyR8
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlbsooACgkQJNaLcl1U
+h9AHxQf/Z8Nc97ZwGUewBQVLOCUmYjLOtU4B6nWHPdZgpoANTtvhZOi/lqyJS7gV
+WLscnoEUA266crkqIWb3oIoWkNERtD19h+s5H+IXm4Nz1V22lG6R5PDblt8YegSJ
+lFYuGvGeeBKESvTsg7PQDpjmLaV75LorK6X3t8GSjrEXtPKTJKIBxXfefrDHfDWh
+ZWCTb/j1DMDdBZ/hRcRYPtiti8f0mcsIDB0KfJ2RYP/9VpcaVMgnGSVA+8lYjOZZ
+flWs7KSCcOoMG8qZcqKmICyAewMgEvgjq4JTQkwJ8nnTHysXHnK558HZ01lydGFK
+lrN4yLX5KhvW7HkLN1/hjP0ihXbSkA==
+=jLkm
 -----END PGP SIGNATURE-----
 
---BIDSB1JZrnBn413u--
+--ee3kU50VQDofGf6W--
 
