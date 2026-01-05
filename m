@@ -1,199 +1,176 @@
-Return-Path: <linux-kselftest+bounces-48177-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48178-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8FA1CF2897
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 09:54:03 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47C8DCF28B2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 09:55:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 24EB330024C8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 08:54:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2F7A930024F1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 08:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB4FA32862F;
-	Mon,  5 Jan 2026 08:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FCA9328616;
+	Mon,  5 Jan 2026 08:55:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tD2OdBCA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r7sUbbp1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1144328625
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 08:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A8532860B
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 08:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767603241; cv=none; b=AQNx8wdLhUklFrjlnU/gCAlx8zBE0PFVTRoe0Y0xyAkYRAewQHhzeWbWYr3nesPlyD6G/ikXwZtjGYPTTUyW17gBBdLWNEMDGLZukKpmvqauMQFdzbXVqkqzrjBYySA0bPaczR2jiR9sHAHlypJjmMXuOP1zdTtDB1L3X9dyC78=
+	t=1767603338; cv=none; b=Ru4pjeN4WVaxHif17jUyvdtqRYd6ENBLTnrMf8QAM6TV2Jc6pIzK8ISfMtp2qgzSlg0v5L0IxuM+A0Fv2c5VtiL9n7yNzUWZRqWJnMe7jw/xMYxWA8BhDd0dmDEdwSQyXS3D4A3xVhmkIWfWd+U/ioilAtpJovs7toZWnA8D0Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767603241; c=relaxed/simple;
-	bh=3jlXz6tdQr0mWnUrAZOqy1sGT64PyRM/MLgiiXMnSkM=;
+	s=arc-20240116; t=1767603338; c=relaxed/simple;
+	bh=fTB0JN9IG8zIy59OnqWNjz+3Bb4F/jBz79IpXm1ciLU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eGEPZ6cgw+jRV6ROkNGX2zrBCmWH0vCdbOjy/OfneAF7QahXuI8PkItvDmvzZ1JWs1LpsXmigBlmoyCKlxH5YKaWgxoiWVn8uMlvUutK4uptjqyIdrqxMSw/5jiuGmhSYi9Mv7ye8l/DRyoU7nwJVFcbS6Gbfs2AOPADDwK3Hvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tD2OdBCA; arc=none smtp.client-ip=209.85.128.51
+	 To:Cc:Content-Type; b=P2tWzeueEEPnUyiwVSpvhJO45b5slkOHp9GOFGteKSqR2Q39/X9QQMNMQN4MiIEUg2dleN4AWzapSSP4HI7jSkvUfshPlIHPYIiwAl711ngGmigseFBVtk9hssteUBpUl+Ua2gc0+dNhJU7jS1mWxx07dFCRaboa8TyyIEHL1ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r7sUbbp1; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-47755de027eso82993585e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 00:53:58 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so149620725e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 00:55:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767603236; x=1768208036; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1767603335; x=1768208135; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bxRGeZvCpFhKm5kl5HKM2Isa7CqkT4Kj2F8+Oe2hpqw=;
-        b=tD2OdBCAvL1rceJwNixyQJtNJDxcZCI8ef3eGBcl9OBTSfBQX1km8eocHdcOgjwM1T
-         1DDR3qB1HhpWtnXgoqHUCwhhN5CgMwlJCE0yPoNTEriAgVp/1zpeUqpZHCl153QueU1F
-         hIQ87YmNXgEwElQB34c8mgq7aYAlVJW4B01F6QDnNjLHHa8+GYZDa3rzUGrWpu4e3F3G
-         sE35MYZWaT5a0p8Kuzg98byfM+eYGmWc/7Ki1ZXOwcwhrN4aIXfaWMTAOurf0o3GFl4X
-         u2JhuQtUu4L1wjbXcT0PgstqqbTYJW56t0mAEJhHYd5Z2P5JZdOqFThbU65z77zoOzNB
-         tHmw==
+        bh=n3Cc8C8TS9+ldpq3VzvbA6kP2Ny81Y8aYt2HdE8jqeY=;
+        b=r7sUbbp1BMU+z0gRA8RHKX/aquyurUuG9U/RWcRsoBIuPf+qf7qmzMwC2ejEzzm23+
+         Dl/UKNv4HgHeO21GgYoGKPSjhrcofKwjMCO2mY7kKnHVT6lV9uxK2RZuIy/CbW+N5QOy
+         5f1mAyBIHoHkUEzjuVBhsVzSGfsJELZEzzEFTq8uwOVzP+coMG3lNZlkDGHUMsiRXBUZ
+         HPq+PABzp/MBXKp0AhZgLRJONfrqZxIX1fOK8jaf3ToRTEsbSvAFd5ZOnOozed1qdWi5
+         w/ypL28MHg5P4gAF7i1OmA3wN/d1kdE7hq6J4GPwmmeuKYxSJpIdym0oRH+4+CnVMn/d
+         I+xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767603236; x=1768208036;
+        d=1e100.net; s=20230601; t=1767603335; x=1768208135;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bxRGeZvCpFhKm5kl5HKM2Isa7CqkT4Kj2F8+Oe2hpqw=;
-        b=p2Np5sT5vMDJWQ44tbYqDN2sB+7XkVqqSShAtwGwXHjqIEtVQRkEgfX1gbgh4tg0On
-         3/xixYnXXi6Xvj9PMyZ658SyZVJBifv2TPRY4WIYX8fe1WLNf83Ut0bYRcjRfb+tqduX
-         3duGhPjGtLzU04NKZCyXkm5Su3fcXAzpXhQt2kslgJhkkYGgwaREmpANu04toQh7/P1l
-         wxSR0/6Q28uMHcgOoHyJvPyIQoFmckT75JMxdqQoiefnNMFdBWjToYMKQJe51a+HyPzo
-         MXL69/Gaj9PcnI0I34h2gLEkXu1uR3nshxjaeVBp4ZOlHoeW/SxKsWOiy30wMC914MDB
-         xTXw==
-X-Forwarded-Encrypted: i=1; AJvYcCVIh/XjMjoYZL96hjf/NDXNsYli/LUoiWWFhLigUQ3r5aNAdoUu3bWYs4r9bnfQDSKGx34ihIpk/iqVo/NVSQA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7uwRC7Tis5cplKgQPWP8tO/RwDx1hiD0xVJ+rScfRtzwdHDJZ
-	dKjIXuEiKJSCBD98yPUus3UANqGteWIXgMfa6ms6GyOQ2QU3Ct2OhGoKeB7i7e/nMvwcfBA4tFL
-	Hx4ps1iwSgPwrZABQZDxRCC1NtX732K5YP4Z76OFt
-X-Gm-Gg: AY/fxX7Nb1Y3K/OPYOLPCPQd5NWG7KRP/8UZyD2K+yVMgURmvz8PYxqw6Wt2s1skufH
-	ZmnH3Koc2Ua+FYgMqgmBgHzarNZFBV01rD4TLqw+ktI7Lfhd8CR29qz5MRwEIGxlSbx/a+kuHmy
-	/5YgHdMHrgxMVxiP+bCFngjSd7N5sP8KAjW7wfKRNyOv+nFcoPVen4uL+BNt3qhQuOdXehehOYW
-	vvsMLTR7lP5pg2OuYLQ9uT5b6YBBo1kD0NaFelQDE0C9s/M8G+wdIvarUjXDD7AaIBvbg==
-X-Google-Smtp-Source: AGHT+IF81at/Znn9NZwx5Zc8SqYLegjBkIpqRxYHHhRsZZkX2LXTqaEjAaLVqXhboqBnjdXLQgD8L6O6z0kfjiwPR9A=
-X-Received: by 2002:a05:600c:444b:b0:477:9814:6882 with SMTP id
- 5b1f17b1804b1-47d1953b77fmr534160615e9.5.1767603236068; Mon, 05 Jan 2026
- 00:53:56 -0800 (PST)
+        bh=n3Cc8C8TS9+ldpq3VzvbA6kP2Ny81Y8aYt2HdE8jqeY=;
+        b=wbhf/He4kEsfAbdTnciLePoBtwoBzyQgoUSojEu7CyvexvipflNPU8SgefGv5nqZwo
+         6D53RzbwznvySW2fRC3tRExg2+Dxfx6h62LHh0UpI4Ag5UqgmJJWdgjlQUAtYmEtfY1z
+         LudupirhEAdy1srXjIUWBzYMZF5IOkHdtva9PuRAeaZ3SDl4dWtiKDQJ59lOq5aKfaQx
+         xxARZRMabQ7amNmaNLA5NQ+af12DCMZBbYZ+GgHaYxKx9i9pV4w++DG+4WLSSL4j+lda
+         BUQOoDMCwEHCJpUplczmRLMFTo2S0xLRraPLJ0d/JiSO9yJ9tCnqtwuqZ643c4iUcbJ6
+         1s6A==
+X-Forwarded-Encrypted: i=1; AJvYcCXJl75QuRO3RgFveSrqAh9ZdU3lf+0KOIXEm146d6GttUyslRheSBvYaRCpODOMgLoN1CI/ZW4f6HN/IKDuy3E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgIwOFBsRcJEe+AHovWE3STqEREtuInR8VjfsToQN8kGO9Y4Kz
+	7K7CTMihNRN2zBvuVjagJh25A1HMdYFaXW3AnFbsnUin373JH+SRnZbw+K4xC+nSjULtYCBCF2X
+	h9Ev2pjlZzZbyX2w0LR4EdHSEN1WDEiR2X4u5j2sA
+X-Gm-Gg: AY/fxX7FcZQsNIt/wTkSkudsCwsHeVo+CFlckSggUJmRiJEjOQR8IWjDXbDJFF+7r/Q
+	lbAxSCSR1Fu7Kklif42mwS9qK4CvzT/WHdJSFr2YUMPQc4AVaQUMlyq/86FSRjjwFX4LC2ftmTg
+	tgZgSWfPgN3RAOJnMxOSbYhMCY+LvGg3LM9hbh7teiiNwP/sl4oa6StMfwBPoSTKOBe9q2La/tq
+	8MgMcHKCAG9MBvzHqt6kTi6Bof18EcNaMvwlggZH6oCOLOErMBHcM6BRwneWa5j4qAVEA==
+X-Google-Smtp-Source: AGHT+IG822pxpghWP8Tnze0FPqAC9jalFIYMC57TS8/UL9u4a+QQ6aElcJ2W7VCjQvl6RHqssJweH0RNfa4NigA/0D0=
+X-Received: by 2002:a05:600c:314f:b0:47d:4fbe:e6cc with SMTP id
+ 5b1f17b1804b1-47d4fbee749mr339612815e9.13.1767603334846; Mon, 05 Jan 2026
+ 00:55:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251228-kunit-kbuild_output-v1-1-f1fb30fe060f@gmail.com>
-In-Reply-To: <20251228-kunit-kbuild_output-v1-1-f1fb30fe060f@gmail.com>
+References: <20251230-kunit-nested-failure-v1-0-98cfbeb87823@linutronix.de> <20251230-kunit-nested-failure-v1-1-98cfbeb87823@linutronix.de>
+In-Reply-To: <20251230-kunit-nested-failure-v1-1-98cfbeb87823@linutronix.de>
 From: David Gow <davidgow@google.com>
-Date: Mon, 5 Jan 2026 16:53:43 +0800
-X-Gm-Features: AQt7F2rexa4jHx9uumg6v8BRMwdM48Hk3S2iLP3OMLtTZQ1l18Zr63Z7BzKmpWE
-Message-ID: <CABVgOSkE1ndm+Mv0S5+XO3Ofd8eP5Ke7-ZbfVBc=-kOEDAkrYA@mail.gmail.com>
-Subject: Re: [PATCH RFC] kunit: respect KBUILD_OUTPUT env variable by default
-To: Ryota Sakamoto <sakamo.ryota@gmail.com>
+Date: Mon, 5 Jan 2026 16:55:22 +0800
+X-Gm-Features: AQt7F2qcA26Z5xXK9C5hdFSPyGmkHVJBjFzNseEzDnpGPKfn7Kkl19u1_Oi3sKQ
+Message-ID: <CABVgOSnuGL2+o12kpLN2qoZQZKMa9p=tSAkFPrzdFvEDRCoNrw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: Add test for nested test result reporting
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000006afe20647a0338a"
+	boundary="000000000000e8f9e60647a0385e"
 
---00000000000006afe20647a0338a
+--000000000000e8f9e60647a0385e
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 28 Dec 2025 at 15:57, Ryota Sakamoto <sakamo.ryota@gmail.com> wrote:
+On Tue, 30 Dec 2025 at 20:26, Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
 >
-> Currently, kunit.py ignores the KBUILD_OUTPUT env variable and always
-> defaults to .kunit in the working directory. This behavior is inconsistent
-> with standard Kbuild behavior, where KBUILD_OUTPUT defines the build
-> artifact location.
+> Currently there is a lack of tests validating the result reporting from
+> nested tests. Add one, it will also be used to validate upcoming changes
+> to the nested test parsing.
 >
-> This patch modifies kunit.py to respect KBUILD_OUTPUT if set.  A .kunit
-> subdirectory is created inside KBUILD_OUTPUT to avoid polluting the build
-> directory.
->
-> Signed-off-by: Ryota Sakamoto <sakamo.ryota@gmail.com>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> Reviewed-by: David Gow <davidgow@google.com>
+> Reviewed-by: Rae Moar <rmoar@google.com>
 > ---
 
-Thanks!
+Thanks for splitting these out.
 
-Two small thoughts:
-- Do we want to make KBUILD_OUTPUT the KUnit output directory
-directly, rather than nesting .kunit?
-- Do we want to make the --build_dir option relative to KBUILD_OUTPUT,
-instead of the current directory?
-
-Personally, I think the answer to both of those is probably no, so I'm
-happy to take this as-is.
-
+This is still:
 Reviewed-by: David Gow <davidgow@google.com>
+
+(Note, though, that it introduces another call to test_data_path(),
+which conflicts with your pytest patches.)
 
 Cheers,
 -- David
 
-
->  tools/testing/kunit/kunit.py           |  7 ++++++-
->  tools/testing/kunit/kunit_tool_test.py | 19 +++++++++++++++++++
->  2 files changed, 25 insertions(+), 1 deletion(-)
+>  tools/testing/kunit/kunit_tool_test.py                         | 10 ++++=
+++++++
+>  .../kunit/test_data/test_is_test_passed-failure-nested.log     |  7 ++++=
++++
+>  2 files changed, 17 insertions(+)
 >
-> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-> index cd99c1956331dbbfb06cf4ddf130db3dcf2a7c31..e3d82a038f93df0e86952da92461bc2e02f69ed1 100755
-> --- a/tools/testing/kunit/kunit.py
-> +++ b/tools/testing/kunit/kunit.py
-> @@ -323,11 +323,16 @@ def get_default_jobs() -> int:
->                 return ncpu
->         raise RuntimeError("os.cpu_count() returned None")
->
-> +def get_default_build_dir() -> str:
-> +       if 'KBUILD_OUTPUT' in os.environ:
-> +               return os.path.join(os.environ['KBUILD_OUTPUT'], '.kunit')
-> +       return '.kunit'
-> +
->  def add_common_opts(parser: argparse.ArgumentParser) -> None:
->         parser.add_argument('--build_dir',
->                             help='As in the make command, it specifies the build '
->                             'directory.',
-> -                           type=str, default='.kunit', metavar='DIR')
-> +                           type=str, default=get_default_build_dir(), metavar='DIR')
->         parser.add_argument('--make_options',
->                             help='X=Y make option, can be repeated.',
->                             action='append', metavar='X=Y')
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index bbba921e0eacb18663abfcabb2bccf330d8666f5..a55b5085310d1bc54a549d3f36a83f7697fb8881 100755
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit=
+/kunit_tool_test.py
+> index bbba921e0eac..b74dc05fc2fe 100755
 > --- a/tools/testing/kunit/kunit_tool_test.py
 > +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -601,6 +601,7 @@ class KUnitMainTest(unittest.TestCase):
->                         all_passed_log = file.readlines()
+> @@ -165,6 +165,16 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+status)
+>                 self.assertEqual(result.counts.errors, 0)
 >
->                 self.print_mock = mock.patch('kunit_printer.Printer.print').start()
-> +               mock.patch.dict(os.environ, clear=True).start()
->                 self.addCleanup(mock.patch.stopall)
->
->                 self.mock_linux_init = mock.patch.object(kunit_kernel, 'LinuxSourceTree').start()
-> @@ -723,6 +724,24 @@ class KUnitMainTest(unittest.TestCase):
->                         args=None, build_dir=build_dir, filter_glob='', filter='', filter_action=None, timeout=300)
->                 self.print_mock.assert_any_call(StrContains('Testing complete.'))
->
-> +       @mock.patch.dict(os.environ, {'KBUILD_OUTPUT': '/tmp'})
-> +       def test_run_builddir_from_env(self):
-> +               build_dir = '/tmp/.kunit'
-> +               kunit.main(['run'])
-> +               self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-> +               self.linux_source_mock.run_kernel.assert_called_once_with(
-> +                       args=None, build_dir=build_dir, filter_glob='', filter='', filter_action=None, timeout=300)
-> +               self.print_mock.assert_any_call(StrContains('Testing complete.'))
+> +       def test_parse_failed_nested_tests_log(self):
+> +               nested_log =3D test_data_path('test_is_test_passed-failur=
+e-nested.log')
+> +               with open(nested_log) as file:
+> +                       result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+> +               self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+status)
+> +               self.assertEqual(result.counts.failed, 2)
+> +               self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+subtests[0].status)
+> +               self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+subtests[1].status)
+> +               self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
+subtests[1].subtests[0].status)
 > +
-> +       @mock.patch.dict(os.environ, {'KBUILD_OUTPUT': '/tmp'})
-> +       def test_run_builddir_override(self):
-> +               build_dir = '.kunit'
-> +               kunit.main(['run', '--build_dir=.kunit'])
-> +               self.assertEqual(self.linux_source_mock.build_reconfig.call_count, 1)
-> +               self.linux_source_mock.run_kernel.assert_called_once_with(
-> +                       args=None, build_dir=build_dir, filter_glob='', filter='', filter_action=None, timeout=300)
-> +               self.print_mock.assert_any_call(StrContains('Testing complete.'))
-> +
->         def test_config_builddir(self):
->                 build_dir = '.kunit'
->                 kunit.main(['config', '--build_dir', build_dir])
+>         def test_no_header(self):
+>                 empty_log =3D test_data_path('test_is_test_passed-no_test=
+s_run_no_header.log')
+>                 with open(empty_log) as file:
+> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-failure-ne=
+sted.log b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested=
+.log
+> new file mode 100644
+> index 000000000000..2e528da39ab5
+> --- /dev/null
+> +++ b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.lo=
+g
+> @@ -0,0 +1,7 @@
+> +KTAP version 1
+> +1..2
+> +not ok 1 subtest 1
+> +    KTAP version 1
+> +    1..1
+> +        not ok 1 subsubtest 1
+> +not ok 2 subtest 2
 >
-> ---
-> base-commit: ccd1cdca5cd433c8a5dff78b69a79b31d9b77ee1
-> change-id: 20251228-kunit-kbuild_output-5d21a89fa603
->
-> Best regards,
 > --
-> Ryota Sakamoto <sakamo.ryota@gmail.com>
+> 2.52.0
 >
 
---00000000000006afe20647a0338a
+--000000000000e8f9e60647a0385e
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -283,14 +260,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg5G3CNqbDdzre9pt8nRdu4nEqWBBD
-iFhu75iBeA6+4TswGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
-MTA1MDg1MzU2WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg9DYylV6zWZjVNIS2swrZfOjGUuWZ
+pF9kW9fEi0sMav8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
+MTA1MDg1NTM1WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAZ0xf4lgsjJOEz1nYgWgN1VVCtSWZ77E/nf7Ejn3K/bkb4ldtjFfcWwIeSJW0Kc+/
-e7cCZd0WX0ZTrl2hDwHN1MHo9joK8k+bGlrvaxya0J9uyEXsTDLpAD0ODjxMo6pMzsP6pkOoNp8f
-eQg7dEoKkWHoHoFlLYQYp7L5Y2R+RhBU1JQVvJ0NGT4M9YiaqAYOgq60RaKxmUD7WdW3Btp+Za/n
-MN/PlLxTPCW1w12l9KOSLtgFP7sbWGgwUtCAJKnJOR93ggCfdwmMosmLPv0W7fbfoEfGNEdwb2+E
-/xpMG+aWjQtU1sHobqQVFzYYWU8Z4jryliIENT5rIIjRTOKHFg==
---00000000000006afe20647a0338a--
+AQEBBQAEggEARdGZkPyjAcccsH8Fx3YnMfjleoNpgkm/DC/3OLZfMHco5hJzDBg678mHtK+ycY6Y
+aJj/2ypL6T1vvB9ejI1CdvucAvRrD4cmahROANB+IyVf4T8qRQoRBdmOZfmcqog1ZyHi+TysgJBF
+BdtY3HYwso+a5KxKMiKZddoG/YYjU8nIMVLpdX1jcyy4+lN9GtxGIhsaDrgMnQtdWonqNT3otg1q
+p5GY8KvvQ8N2YEEhb+c3MDM7dxHOcvEIBHNMsRBep486pcl7xxA1Jfw7hJWd2HP2I8S/aDmANzCX
+uwtecVXtWtzRVFJrCuczJXco2XYGM3MCqVVCpLz6giStYG+v/A==
+--000000000000e8f9e60647a0385e--
 
