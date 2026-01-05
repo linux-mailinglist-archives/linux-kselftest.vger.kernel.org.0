@@ -1,210 +1,119 @@
-Return-Path: <linux-kselftest+bounces-48170-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D70BCF211E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 07:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EFAF1CF2166
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 07:38:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C736B300CBAD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 06:29:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 394D4300FE27
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 06:37:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D71A324B23;
-	Mon,  5 Jan 2026 06:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 042BE2BCF5;
+	Mon,  5 Jan 2026 06:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ahi4+sx0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA9526AAAB;
-	Mon,  5 Jan 2026 06:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF27F22097;
+	Mon,  5 Jan 2026 06:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767594560; cv=none; b=FzGxjBemXbseK0t1hzOJCoTpVDbDR8p7/6Sr4WB+dchsV6ZbPeIpmAk3clC1b/JCYEkXv/AYyMTCzWwr/XNGENADhVs5DWv+ixUAW53eusaTK0Kp0rM9M1RUOCxYTh4IgkJA7qeAOHrdl2Wx/aZtPQt/iMr3ND4CSlaPz1MqMlw=
+	t=1767595059; cv=none; b=uTP97coVDnsogJU/jTnKq6g2rT2i5KK0oT5b3ul5HH2CCc5ppTnSkpwpJ2Xujuy2+qR17rvLRUBPHAlbuxZeYHb2L0AdTuTooTWayQgoTxRwx53tdArtnuP+KIqv2aFu62G4EW/lHqNvp2rMiqf0/65JIw5uaqElGhVsHqRao2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767594560; c=relaxed/simple;
-	bh=fkaRtJ1GZG3uHElvewc8pbJAO2Zp61gs+kwI0wHz0MA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lGrzJyBtrO+jJCLiEKjtCLotjerRw2CF0Sf7AJGphFjpodRKDVBXhrnqcvh9vcqGYDFYZuU4mLGdWAM6Pi4niBdael+2NpipjqwwShGQ0pAPWDsmrxKN4xpRj528X/VHYJvJiR6SmC0R/aI+9579EduoqmSPmmocqSnI1snZtoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dl49q6QZnzYQtqv;
-	Mon,  5 Jan 2026 14:28:15 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 4B6FA4058C;
-	Mon,  5 Jan 2026 14:29:14 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP4 (Coremail) with SMTP id gCh0CgDnR_g5WltpqKXDCg--.33945S2;
-	Mon, 05 Jan 2026 14:29:14 +0800 (CST)
-Message-ID: <556672f7-b9b9-46a2-8a67-54ac615383d4@huaweicloud.com>
-Date: Mon, 5 Jan 2026 14:29:13 +0800
+	s=arc-20240116; t=1767595059; c=relaxed/simple;
+	bh=uKtCeE8JLza4obt2NU7Y+7OY8LjaSIfiEqzyaHz75lM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=amsvxz9jRGdICH6Zf6PtxRERS6kFAFuUPn/6Lylb+UjAMP6KGgihCuLpUgg+CY23Kx59ZqDpU+lMt88zEl95FiWbxOTTZolzOWV1D6Sn8sbG1GjFix4VhrG39T+cjOqyU+UbrlQTWwRm5ForeHwHqLQ6bQRwKp7rhVPJot6ZT4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ahi4+sx0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B49E5C116D0;
+	Mon,  5 Jan 2026 06:37:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1767595059;
+	bh=uKtCeE8JLza4obt2NU7Y+7OY8LjaSIfiEqzyaHz75lM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ahi4+sx0XG/Kpy6u5Y2lyeMGHWQjj7JaQwiY30PljjplShJWWQ/M6IvU6od6O9iTc
+	 Hgc7lgwMNTxSQ71jhFaiqq4F0RszUjEVPVH3qSZTjss4V2oFRR/JKFMp2wyxL3s/yx
+	 rA0jQDBuNS5aevytFGjyhc4z42yL1WbxlZcaRz94=
+Date: Mon, 5 Jan 2026 07:37:36 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: caojiaqiang 00593155 <caojiaqiang@huawei.com>
+Cc: davem@davemloft.net, kuba@kernel.org, shuah@kernel.org,
+	stable@vger.kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dsahern@kernel.org
+Subject: Re: [5.15.y BACKPORT] selftests: net: test_vxlan_under_vrf: fix HV
+ connectivity test
+Message-ID: <2026010521-removed-unclasp-f5cd@gregkh>
+References: <20260105063805.17044-1-caojiaqiang@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [cgroup/for-6.20 PATCH v2 2/4] cgroup/cpuset: Consistently
- compute effective_xcpus in update_cpumasks_hier()
-To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- Sun Shaojie <sunshaojie@kylinos.cn>
-References: <20260101191558.434446-1-longman@redhat.com>
- <20260101191558.434446-3-longman@redhat.com>
- <758f42df-52c2-4660-8ef7-1cbacb9323d2@huaweicloud.com>
- <f8539426-92b0-42f3-99c4-70962c2db96d@redhat.com>
- <c17051c3-82ac-4ca5-8823-33327cadd073@huaweicloud.com>
- <ec6e1ee4-b52e-417f-9413-3dfca0ec8eb3@redhat.com>
- <d49cc8af-509b-44b8-ada4-f8bbdbd37f89@huaweicloud.com>
- <f541b93b-7bbf-4530-bca6-dc5b5b1f481c@redhat.com>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <f541b93b-7bbf-4530-bca6-dc5b5b1f481c@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnR_g5WltpqKXDCg--.33945S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF15uF1rCFyxuw1rZr1xuFg_yoWxGFyUpr
-	y8JF4UJrWUtr1rC3yjgF17Xry8Kw4Dtw1DXw1DtF1rXFyDKF1jgr1jvws09r1UJr4kJr15
-	Zr1UXr4IvFn8AwUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUb
-	mii3UUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260105063805.17044-1-caojiaqiang@huawei.com>
 
-
-
-On 2026/1/5 12:06, Waiman Long wrote:
-> On 1/4/26 10:58 PM, Chen Ridong wrote:
->>
->> On 2026/1/5 11:50, Waiman Long wrote:
->>> On 1/4/26 8:15 PM, Chen Ridong wrote:
->>>> On 2026/1/5 5:25, Waiman Long wrote:
->>>>> On 1/3/26 9:48 PM, Chen Ridong wrote:
->>>>>> On 2026/1/2 3:15, Waiman Long wrote:
->>>>>>> Since commit f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check()
->>>>>>> & make update_cpumasks_hier() handle remote partition"), the
->>>>>>> compute_effective_exclusive_cpumask() helper was extended to
->>>>>>> strip exclusive CPUs from siblings when computing effective_xcpus
->>>>>>> (cpuset.cpus.exclusive.effective). This helper was later renamed to
->>>>>>> compute_excpus() in commit 86bbbd1f33ab ("cpuset: Refactor exclusive
->>>>>>> CPU mask computation logic").
->>>>>>>
->>>>>>> This helper is supposed to be used consistently to compute
->>>>>>> effective_xcpus. However, there is an exception within the callback
->>>>>>> critical section in update_cpumasks_hier() when exclusive_cpus of a
->>>>>>> valid partition root is empty. This can cause effective_xcpus value to
->>>>>>> differ depending on where exactly it is last computed. Fix this by using
->>>>>>> compute_excpus() in this case to give a consistent result.
->>>>>>>
->>>>>>> Signed-off-by: Waiman Long <longman@redhat.com>
->>>>>>> ---
->>>>>>>     kernel/cgroup/cpuset.c | 14 +++++---------
->>>>>>>     1 file changed, 5 insertions(+), 9 deletions(-)
->>>>>>>
->>>>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>>>>> index da2b3b51630e..37d118a9ad4d 100644
->>>>>>> --- a/kernel/cgroup/cpuset.c
->>>>>>> +++ b/kernel/cgroup/cpuset.c
->>>>>>> @@ -2168,17 +2168,13 @@ static void update_cpumasks_hier(struct cpuset *cs, struct tmpmasks
->>>>>>> *tmp,
->>>>>>>             spin_lock_irq(&callback_lock);
->>>>>>>             cpumask_copy(cp->effective_cpus, tmp->new_cpus);
->>>>>>>             cp->partition_root_state = new_prs;
->>>>>>> -        if (!cpumask_empty(cp->exclusive_cpus) && (cp != cs))
->>>>>>> -            compute_excpus(cp, cp->effective_xcpus);
->>>>>>> -
->>>>>>>             /*
->>>>>>> -         * Make sure effective_xcpus is properly set for a valid
->>>>>>> -         * partition root.
->>>>>>> +         * Need to compute effective_xcpus if either exclusive_cpus
->>>>>>> +         * is non-empty or it is a valid partition root.
->>>>>>>              */
->>>>>>> -        if ((new_prs > 0) && cpumask_empty(cp->exclusive_cpus))
->>>>>>> -            cpumask_and(cp->effective_xcpus,
->>>>>>> -                    cp->cpus_allowed, parent->effective_xcpus);
->>>>>>> -        else if (new_prs < 0)
->>>>>>> +        if ((new_prs > 0) || !cpumask_empty(cp->exclusive_cpus))
->>>>>>> +            compute_excpus(cp, cp->effective_xcpus);
->>>>>>> +        if (new_prs < 0)
->>>>>>>                 reset_partition_data(cp);
->>>>>>>             spin_unlock_irq(&callback_lock);
->>>>>>>     
->>>>>> The code resets partition data only for new_prs < 0. My understanding is that a partition is
->>>>>> invalid
->>>>>> when new_prs <= 0. Shouldn't reset_partition_data() also be called when new_prs = 0? Is there a
->>>>>> specific reason to skip the reset in that case?
->>>>> update_cpumasks_hier() is called when changes in a cpuset or hotplug affects other cpusets in the
->>>>> hierarchy. With respect to changes in partition state, it is either from valid to invalid or vice
->>>>> versa. It will not change from a valid partition to member. The only way new_prs = 0 is when
->>>>> old_prs
->>>>> = 0. Even if the affected cpuset is processed again in update_cpumask_hier(), any state change
->>>>> from
->>>>> valid partition to member (update_prstate()), reset_partition_data() should have been called
->>>>> there.
->>>>> That is why we only care about when new_prs != 0.
->>>>>
->>>> Thank you for your patience.
->>>>
->>>>> The code isn't wrong here. However I can change the condition to (new_prs <= 0) if it makes it
->>>>> easier to understand.
->>>>>
->>>> I agree there's nothing wrong with the current logic. However, for clarity, I suggest changing the
->>>> condition to (new_prs <= 0). This allows the function's logic to be fully self-consistent and
->>>> focused on a single responsibility. This approach would allow us to simplify the code to:
->>>>
->>>>      if (new_prs > 0)
->>>>          compute_excpus(cp, cp->effective_xcpus);
->>>>      else
->>>>          reset_partition_data(cp);
->>>>
->>>> Since reset_partition_data() already handles cases whether cp->exclusive_cpus is empty or not, this
->>>> implementation would be more concise while correctly covering all scenarios.
->>> effective_xcpus should be set when exclusive_cpus is not empty or when the cpuset is a valid
->>> partition root. So just checking new_prs for compute_excpus() is not enough.
->>>
->> If we change the condition to (new_prs <= 0), it will reset the partition data even when we call
->> compute_excpus (for !cpumask_empty(cp->exclusive_cpus)), so we should still get the same result,
->> right?
+On Mon, Jan 05, 2026 at 02:38:05PM +0800, caojiaqiang 00593155 wrote:
+> From: Andrea Righi <andrea.righi@canonical.com>
 > 
-> Changing the condition to (new_prs <= 0) won't affect the result except for a bit of wasted cpu
-> cycles. That is why I am planning to make the change in the next version to make it easier to
-> understand.
+> It looks like test_vxlan_under_vrf.sh is always failing to verify the
+> connectivity test during the ping between the two simulated VMs.
+> 
+> This is due to the fact that veth-hv in each VM should have a distinct
+> MAC address.
+> 
+> Fix by setting a unique MAC address on each simulated VM interface.
+> 
+> Without this fix:
+> 
+>  $ sudo ./tools/testing/selftests/net/test_vxlan_under_vrf.sh
+>  Checking HV connectivity                                           [ OK ]
+>  Check VM connectivity through VXLAN (underlay in the default VRF)  [FAIL]
+> 
+> With this fix applied:
+> 
+>  $ sudo ./tools/testing/selftests/net/test_vxlan_under_vrf.sh
+>  Checking HV connectivity                                           [ OK ]
+>  Check VM connectivity through VXLAN (underlay in the default VRF)  [ OK ]
+>  Check VM connectivity through VXLAN (underlay in a VRF)            [FAIL]
+> 
+> NOTE: the connectivity test with the underlay VRF is still failing; it
+> seems that ARP requests are blocked at the simulated hypervisor level,
+> probably due to some missing ARP forwarding rules. This requires more
+> investigation (in the meantime we may consider to set that test as
+> expected failure - XFAIL).
+> 
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> Signed-off-by: David S. Miller <davem@davemloft.net>
+> Signed-off-by: Cao Jiaqiang <caojiaqiang@huawei.com>
+> ---
+>  tools/testing/selftests/net/test_vxlan_under_vrf.sh | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/net/test_vxlan_under_vrf.sh b/tools/testing/selftests/net/test_vxlan_under_vrf.sh
+> index 6fadc8e2f116..1fd1250ebc66 100755
+> --- a/tools/testing/selftests/net/test_vxlan_under_vrf.sh
+> +++ b/tools/testing/selftests/net/test_vxlan_under_vrf.sh
+> @@ -101,6 +101,8 @@ setup-vm() {
+>      ip -netns hv-$id link set veth-tap master br0
+>      ip -netns hv-$id link set veth-tap up
+>  
+> +    ip link set veth-hv address 02:1d:8d:dd:0c:6$id
+> +
+>      ip link set veth-hv netns vm-$id
+>      ip -netns vm-$id addr add 10.0.0.$id/24 dev veth-hv
+>      ip -netns vm-$id link set veth-hv up
+> -- 
+> 2.22.0
+> 
 > 
 
-Sorry, I should have been clearer. If we change the condition, the code would essentially be:
+What is the git commit id of this change in Linus's tree?
 
-	if ((new_prs > 0) || !cpumask_empty(cp->exclusive_cpus))
-		compute_excpus(cp, cp->effective_xcpus);
-        if (new_prs <= 0)
-		reset_partition_data(cp);
-
-For cases where new_prs <= 0 && !cpumask_empty(cp->exclusive_cpus), both compute_excpus() and
-reset_partition_data() would be called.
-
-Is this functionally equivalent to:
-
-	if (new_prs > 0)
-		compute_excpus(cp, cp->effective_xcpus);
-        else (new_prs <= 0)
-		reset_partition_data(cp);
-
--- 
-Best regards,
-Ridong
-
+thanks,
+greg k-h
 
