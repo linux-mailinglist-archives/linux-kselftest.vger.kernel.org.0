@@ -1,182 +1,452 @@
-Return-Path: <linux-kselftest+bounces-48179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24C5BCF28BB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 09:57:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5628FCF28C1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 09:57:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3B39730053CA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 08:56:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 04B9030046CB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 08:56:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17DC314A64;
-	Mon,  5 Jan 2026 08:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B03330FF33;
+	Mon,  5 Jan 2026 08:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IHWftYsi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fKi+eGFC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29BD30FF33
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 08:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87B631ED72
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 08:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767603371; cv=none; b=hK6jRlhbQdeXAXNpR46FPVUtpHGfJcgH8yV2+inKxqcIKyMHkfX/yn6WzfgVDQCXqcwTpslOhKu99OYHBkd64NEfQ8+un2NPAhiJLeVSQr6ftyANJHSRbVUUSbaU3Km/p4qpb71SQtXaAIRDVdeGUDSjaCXJqWr/i4RKKPd2who=
+	t=1767603382; cv=none; b=EdQhIqD2uFiv398groG8ONi/AtcMOJDpOLQ02jRIQVlYbNdHgktW8nPi6QvbpySpvM4qMbkSQDkIYD2nJOnNxsxlRmBr2UUhhD1zU6RZJ4w3oeQW8N84rXUz6Ul49yNvVbArCL+ImuzTIEV7zKooLX7mG4yNsMFSPkn21jaaDms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767603371; c=relaxed/simple;
-	bh=06LpORmqk6gRMnxiGIykwTp8A+CRv1AnZKgdHaK1DvQ=;
+	s=arc-20240116; t=1767603382; c=relaxed/simple;
+	bh=BPmYXOEvB1XHDxQojthNv3MU1MQ8GiFGy2e986YxUl8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CEWwfAGWK1wUMp++gxHL05Oh2RzEIgF41nwJ90TdII4/DcY6h0rGKENyC95LD92QmzXZ0YZiofH7xIw5WQ+WQ/e9mPs3PSODDYg5KXO0tQdDZfCcHF/lC55irZdNlB4R6ynvdm35RlqBlEb9xHDBYmYbp6G6jAvTNF4cuRNGucE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IHWftYsi; arc=none smtp.client-ip=209.85.221.41
+	 To:Cc:Content-Type; b=lwhoOjrPZ63/jRziA2SDTQH6lVkGh0Y/VQyhXdN7/XD2GW/aGDo4uXE95YpPBTc4sfWQpxjuEAVdwwYu5x3Sv+RrTL+tW+RDD4s2rKtGnwH8qz2MZQt9Q8tVb9pJ4AAuWL4kDaxwIZh9InC3fbq6SLod4rBNkln9P3nTOYps3tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fKi+eGFC; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42fb5810d39so9116234f8f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 00:56:09 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-430f57cd471so6411384f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 00:56:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767603368; x=1768208168; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1767603378; x=1768208178; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xt2yCNxYYrtgsYuxX9VkCOUanoCIv+RePH9DAV9Zxik=;
-        b=IHWftYsidBIN60/52Ffv+sX1k8YzsXzwpw1Fv7lnYse7rJ3xrNbX/SReEUh2WO5F8t
-         83H/lvL7caTDDK4XTyRSfZFC/JmTDCuxSHSPblu1KyBm9RGCEPuBHFJMVJOr0jR13ZOU
-         DWI2izp31X2wDQ7VNvKdfhoaFiDg1Eo+uRymU9h+Q2nkubWxeh0mzddKKPQiX4UpwmrZ
-         H751mqx4UmniEFYZ784pl6cAX2uJX2x1oBV7IXhvXoo1jT5fjk9TcMehCGYge3kl+Clj
-         scf9lbdPxiwXf+h8hKkWtY7GRagoehi+OD0J27RIXNYE+gSL9hlUQZET+L+x7dMNx//Q
-         OIQw==
+        bh=AdpvOlkuDq2jqIRLS+OBhfhqvCxlOrHreAQrKu1DUQg=;
+        b=fKi+eGFC8Et5WWVB/G+Bs2+iFW0E21VJoBJYEAkdpoaYX20lg4r2spERZ7NfIJuzAu
+         Qs27etEj3NNyAV13oEDH10ODgTFPnbdnccZw9C99j6imrUgmKieWfs3EmCjjSnX98K6F
+         nRuO1CH0A74o967WDm63uE7U+skWYAhi6jIRaEnpVG4LNggznpXPkb1Ay2ubaEv1kjXb
+         xR2grmbKM7KD/ii2gnLnfgFcmpVphQ5hA8WJd/5TGOUBLBqejOB4bTwrYZoadNQ5Hgjg
+         0OYNVd5teF0ihqWxhYfzkaWcgNn62I+SoACzujuQMifKiCfHiiWxf7GIpIBIFwvg9CUL
+         FKkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767603368; x=1768208168;
+        d=1e100.net; s=20230601; t=1767603378; x=1768208178;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xt2yCNxYYrtgsYuxX9VkCOUanoCIv+RePH9DAV9Zxik=;
-        b=i+1M921+OaKPQAb2zpIxeCR2bwlAkPSLfcua1ZCOVgkcbSacVxkZD+O/HT5aYo2ZGy
-         dedJxp8Tqlkpt9lDWvDYY1AMEABxukRFi4i/frLlw5ZUgkdtD2n5aXoD6Eg1/aEGt01E
-         gO8LPX6NDYu01Xi46XAbg776Tc1gWxghR2+8QCsa7ZPE6sLQ+YPWPIDm2tth87dszW0P
-         /ye9tiFhKi7YTf3D/epv3XLyroq2aVM+XHLO7nlKs1Qbnkkh5ZMHYzYuyo4jh3M0zmnu
-         xgxDSgyTwiUz+8qA5RyZWfqf6ha7f23rBzmqtuFtQ4P/HqzAleGyoMKEuFQRTMABmRCG
-         E50A==
-X-Forwarded-Encrypted: i=1; AJvYcCUURnuzMSUb+ZKZ3YYvVrgjqprg5aIep2YObuy7uGKxfClnlLA+oVJ6F7AJmStLqbWHudP0+SB1ChaXInaLq70=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzE3EwzVPQj66rIExKPrzEOMMmED65hOBNo5yqKBb2F5xsbqP5c
-	y3ElY/CfmaLP8bTtS8+lxV6oQtEEacAuKoEmiTYbAM+VPKoEtrY3ppEuPmfGkxEfhDWe8mruqUm
-	Xre47eue09MyofAxsskG+NLwiiQKjeca/MTpJLPdq
-X-Gm-Gg: AY/fxX6o+bHAX3PDXgV3FLvEDpW+hrpQDsU4TGxLnKRHvLdOCovc6qA0weU9dJn0iZt
-	MN4MI/FuopQ2D639N8u1fhUVPoi3xMPrXvh99CGUVnx/e40Rsom26m8/ArKh4slF4cFbn+SNg87
-	mAew6dtlVN4gWycSF0YcT6GqVGc8Rx6DCpyQT9FO4GifJ4ohemA2y5s3Fs67+sjUqJP3FeS7irN
-	Bkg2Ok2FyJ8rCsyFk20kZzVx8QRaJBuT8ZothPWy0Q9EJyk476lvnvOZIgdeRt73ipubA==
-X-Google-Smtp-Source: AGHT+IHNQhr/02/ERLLd5DOa/ejVbgFa2w+3u6Sg1etAplMK6KGgCTvfrBufWyU9K6X6dTpTkgjSoIpTHR3/4PtfizU=
-X-Received: by 2002:a05:6000:2586:b0:430:f41f:bd42 with SMTP id
- ffacd0b85a97d-4324e704b75mr66079392f8f.57.1767603367790; Mon, 05 Jan 2026
- 00:56:07 -0800 (PST)
+        bh=AdpvOlkuDq2jqIRLS+OBhfhqvCxlOrHreAQrKu1DUQg=;
+        b=AA1cv51mQo5nE4BHBkPgiHs7IxBndthHpySMItvDIYVUEbEuRraF/N999nihPJPitl
+         /mEwkb5ycDTgMwjQufOvHY09luNun+EOVCcfJ12r63HWlEcny5oWRB7vDryjQdiV7l6Y
+         NkSYCKpefvllpYvRB6ehPQnkl7MFSB/whG/w7wds5g3E1v1tJGifXx8yKS1Zna+T6Grd
+         l/XqJzYxwriMxKev1k/3fPrrFRQ42MSkdz1WevHy6uinMuqBBGQkBJJOZWVxCwnMIzLF
+         lBtbHGPGFbpOHVCs10sRZ9IdMiK4d5ZPpasGVQV/ajoY8bXPIcd4hpYGUNI+rddzSHjR
+         rtDg==
+X-Forwarded-Encrypted: i=1; AJvYcCVXJeddYlF1ShSWV9bfKjZhNm+CNTWwJAeZ0EkNo5xjJXSNsdoqonpKfznuxs1te4rLrNYtIdHdtpLHA6hLsJE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKgItu3Foj7ONPy0Kn21Wj0umcCmkfwK6Sw06vRnGDMQL4nLGp
+	89SWvO+GXTN93ON68aAWa0maFim1P4eCDzaiQznndIMEWleLngnidQDNeReJrRlSY/RPGHAiPgp
+	Q3sYN2V3resQgGCA1AjxnNSF9rnPSPOSVuKCxaEAl
+X-Gm-Gg: AY/fxX56PlRR2Rl5Jue2A4KKZW5ghymNI4t0vk3N+KSlSHEZqR+k04y3LEhVb6CfXQe
+	Gf9nAZCoeTcZx/VZZcm5UhE606MPvsjvYWvYvlgOO6vS5TUmwAo/HFHYbLCZBcFWW1Zd7F/Tc0B
+	1ErjikYNnBKqaYa1FzSwiAw+enOYfxZh5O+rOvu301Kv44UvR62Qi0Mq+G98p0TrFlorCjTrplN
+	/Tm73C8QkOiZ19c/fi9iCFOhV2OWO92ZLevlrmBk0hdjs7l/OxEwOFD/vgp7xzzyEkJsg==
+X-Google-Smtp-Source: AGHT+IGy8/K/3vfcagno4C39MU5ReQDvwliLoVIXIOiPPekEgKBSG/3qGSHkVjkLj36865ExToPzhl3HDcr/lceWF+Q=
+X-Received: by 2002:a5d:64e9:0:b0:430:f58d:40da with SMTP id
+ ffacd0b85a97d-4324e4c68d6mr63873607f8f.10.1767603377622; Mon, 05 Jan 2026
+ 00:56:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251230-kunit-nested-failure-v1-0-98cfbeb87823@linutronix.de> <20251230-kunit-nested-failure-v1-2-98cfbeb87823@linutronix.de>
-In-Reply-To: <20251230-kunit-nested-failure-v1-2-98cfbeb87823@linutronix.de>
+References: <20251230-kunit-pytest-v1-0-e2dae0dae200@linutronix.de> <20251230-kunit-pytest-v1-1-e2dae0dae200@linutronix.de>
+In-Reply-To: <20251230-kunit-pytest-v1-1-e2dae0dae200@linutronix.de>
 From: David Gow <davidgow@google.com>
-Date: Mon, 5 Jan 2026 16:55:53 +0800
-X-Gm-Features: AQt7F2rYVGCuKYdNK3ulgo7G6pBXTsgjW3psXFHUMfeKpz17LCbg4gJQHMvi2ak
-Message-ID: <CABVgOS=1qPSmBYAuFzmKy+QNnmND4gmDGZgCfsodfRmU5VwpoQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: tool: Don't overwrite test status based on
- subtest counts
+Date: Mon, 5 Jan 2026 16:56:05 +0800
+X-Gm-Features: AQt7F2qgFWT74QrOy5aUtSYBQTlKfsUzehURu-zpw92h2RpIGciF1iwBcm2_sJE
+Message-ID: <CABVgOSnvZ3ruCj3ags0=hRfAhtG9d=Fz_fF=wEG6W3YhNQmN1w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: test: Rename test_data_path() to _test_data_path()
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000e101300647a03ac9"
+	boundary="00000000000077e0460647a03be8"
 
---000000000000e101300647a03ac9
+--00000000000077e0460647a03be8
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 30 Dec 2025 at 20:26, Thomas Wei=C3=9Fschuh
+On Tue, 30 Dec 2025 at 20:56, Thomas Wei=C3=9Fschuh
 <thomas.weissschuh@linutronix.de> wrote:
 >
-> If a subtest itself reports success, but the outer testcase fails,
-> the whole testcase should be reported as a failure. However the status
-> is recalculated based on the test counts, overwriting the outer test
-> result. Synthesize a failed test in this case to make sure the failure
-> is not swallowed.
+> Running the KUnit testsuite through pytest fails, as the function
+> test_data_path() is recognized as a test function. Its execution fails
+> as pytest tries to resolve the 'path' argument as a fixture which does
+> not exist.
+>
+> Rename the function, so the helper function is not incorrectly
+> recognized as a test function.
 >
 > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-> Reviewed-by: David Gow <davidgow@google.com>
 > ---
 
-Thanks. Still looking good!
+Thanks -- I'd never tried pytest, but it's working with this series.
+
+Although, it's worth noting that we add another call to
+test_data_path() in "kunit: tool: Add test for nested test result
+reporting", which conflicts here.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
->  tools/testing/kunit/kunit_parser.py                                  | 3=
- +++
->  tools/testing/kunit/kunit_tool_test.py                               | 1=
- +
->  tools/testing/kunit/test_data/test_is_test_passed-failure-nested.log | 3=
- +++
->  3 files changed, 7 insertions(+)
+
+
+
+>  tools/testing/kunit/kunit_tool_test.py | 54 +++++++++++++++++-----------=
+------
+>  1 file changed, 27 insertions(+), 27 deletions(-)
 >
-> diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/ku=
-nit_parser.py
-> index 333cd3a4a56b..5338489dcbe4 100644
-> --- a/tools/testing/kunit/kunit_parser.py
-> +++ b/tools/testing/kunit/kunit_parser.py
-> @@ -689,6 +689,9 @@ def bubble_up_test_results(test: Test) -> None:
->         elif test.counts.get_status() =3D=3D TestStatus.TEST_CRASHED:
->                 test.status =3D TestStatus.TEST_CRASHED
->
-> +       if status =3D=3D TestStatus.FAILURE and test.counts.get_status() =
-=3D=3D TestStatus.SUCCESS:
-> +               counts.add_status(status)
-> +
->  def parse_test(lines: LineStream, expected_num: int, log: List[str], is_=
-subtest: bool, printer: Printer) -> Test:
->         """
->         Finds next test to parse in LineStream, creates new Test object,
 > diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit=
 /kunit_tool_test.py
-> index b74dc05fc2fe..d5bbcb95ab6a 100755
+> index bbba921e0eac..fd7ca89596c0 100755
 > --- a/tools/testing/kunit/kunit_tool_test.py
 > +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -172,6 +172,7 @@ class KUnitParserTest(unittest.TestCase):
+> @@ -36,7 +36,7 @@ def setUpModule():
+>  def tearDownModule():
+>         shutil.rmtree(test_tmpdir)
+>
+> -def test_data_path(path):
+> +def _test_data_path(path):
+>         return os.path.join(abs_test_data_dir, path)
+>
+>  class KconfigTest(unittest.TestCase):
+> @@ -52,7 +52,7 @@ class KconfigTest(unittest.TestCase):
+>                 self.assertFalse(kconfig1.is_subset_of(kconfig0))
+>
+>         def test_read_from_file(self):
+> -               kconfig_path =3D test_data_path('test_read_from_file.kcon=
+fig')
+> +               kconfig_path =3D _test_data_path('test_read_from_file.kco=
+nfig')
+>
+>                 kconfig =3D kunit_config.parse_file(kconfig_path)
+>
+> @@ -98,7 +98,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 raise AssertionError(f'"{needle}" not found in {list(back=
+up)}!')
+>
+>         def test_output_isolated_correctly(self):
+> -               log_path =3D test_data_path('test_output_isolated_correct=
+ly.log')
+> +               log_path =3D _test_data_path('test_output_isolated_correc=
+tly.log')
+>                 with open(log_path) as file:
+>                         result =3D kunit_parser.extract_tap_lines(file.re=
+adlines())
+>                 self.assertContains('TAP version 14', result)
+> @@ -109,7 +109,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertContains('ok 1 - example', result)
+>
+>         def test_output_with_prefix_isolated_correctly(self):
+> -               log_path =3D test_data_path('test_pound_sign.log')
+> +               log_path =3D _test_data_path('test_pound_sign.log')
+>                 with open(log_path) as file:
+>                         result =3D kunit_parser.extract_tap_lines(file.re=
+adlines())
+>                 self.assertContains('TAP version 14', result)
+> @@ -138,35 +138,35 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertContains('ok 3 - string-stream-test', result)
+>
+>         def test_parse_successful_test_log(self):
+> -               all_passed_log =3D test_data_path('test_is_test_passed-al=
+l_passed.log')
+> +               all_passed_log =3D _test_data_path('test_is_test_passed-a=
+ll_passed.log')
+>                 with open(all_passed_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+>                 self.assertEqual(result.counts.errors, 0)
+>
+>         def test_parse_successful_nested_tests_log(self):
+> -               all_passed_log =3D test_data_path('test_is_test_passed-al=
+l_passed_nested.log')
+> +               all_passed_log =3D _test_data_path('test_is_test_passed-a=
+ll_passed_nested.log')
+>                 with open(all_passed_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+>                 self.assertEqual(result.counts.errors, 0)
+>
+>         def test_kselftest_nested(self):
+> -               kselftest_log =3D test_data_path('test_is_test_passed-kse=
+lftest.log')
+> +               kselftest_log =3D _test_data_path('test_is_test_passed-ks=
+elftest.log')
+>                 with open(kselftest_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+>                 self.assertEqual(result.counts.errors, 0)
+>
+>         def test_parse_failed_test_log(self):
+> -               failed_log =3D test_data_path('test_is_test_passed-failur=
+e.log')
+> +               failed_log =3D _test_data_path('test_is_test_passed-failu=
+re.log')
+>                 with open(failed_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
 >                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
 status)
->                 self.assertEqual(result.counts.failed, 2)
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[0].status)
-> +               self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
-subtests[0].subtests[0].status)
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[1].status)
->                 self.assertEqual(kunit_parser.TestStatus.FAILURE, result.=
-subtests[1].subtests[0].status)
+>                 self.assertEqual(result.counts.errors, 0)
 >
-> diff --git a/tools/testing/kunit/test_data/test_is_test_passed-failure-ne=
-sted.log b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested=
-.log
-> index 2e528da39ab5..5498dfd0b0db 100644
-> --- a/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.lo=
-g
-> +++ b/tools/testing/kunit/test_data/test_is_test_passed-failure-nested.lo=
-g
-> @@ -1,5 +1,8 @@
->  KTAP version 1
->  1..2
-> +    KTAP version 1
-> +    1..1
-> +        ok 1 test 1
->  not ok 1 subtest 1
->      KTAP version 1
->      1..1
+>         def test_no_header(self):
+> -               empty_log =3D test_data_path('test_is_test_passed-no_test=
+s_run_no_header.log')
+> +               empty_log =3D _test_data_path('test_is_test_passed-no_tes=
+ts_run_no_header.log')
+>                 with open(empty_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(
+>                                 kunit_parser.extract_tap_lines(file.readl=
+ines()), stdout)
+> @@ -175,7 +175,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts.errors, 1)
+>
+>         def test_missing_test_plan(self):
+> -               missing_plan_log =3D test_data_path('test_is_test_passed-=
+'
+> +               missing_plan_log =3D _test_data_path('test_is_test_passed=
+-'
+>                         'missing_plan.log')
+>                 with open(missing_plan_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(
+> @@ -186,7 +186,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+>
+>         def test_no_tests(self):
+> -               header_log =3D test_data_path('test_is_test_passed-no_tes=
+ts_run_with_header.log')
+> +               header_log =3D _test_data_path('test_is_test_passed-no_te=
+sts_run_with_header.log')
+>                 with open(header_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(
+>                                 kunit_parser.extract_tap_lines(file.readl=
+ines()), stdout)
+> @@ -195,7 +195,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts.errors, 1)
+>
+>         def test_no_tests_no_plan(self):
+> -               no_plan_log =3D test_data_path('test_is_test_passed-no_te=
+sts_no_plan.log')
+> +               no_plan_log =3D _test_data_path('test_is_test_passed-no_t=
+ests_no_plan.log')
+>                 with open(no_plan_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(
+>                                 kunit_parser.extract_tap_lines(file.readl=
+ines()), stdout)
+> @@ -207,7 +207,7 @@ class KUnitParserTest(unittest.TestCase):
+>
+>
+>         def test_no_kunit_output(self):
+> -               crash_log =3D test_data_path('test_insufficient_memory.lo=
+g')
+> +               crash_log =3D _test_data_path('test_insufficient_memory.l=
+og')
+>                 print_mock =3D mock.patch('kunit_printer.Printer.print').=
+start()
+>                 with open(crash_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(
+> @@ -218,7 +218,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts.errors, 1)
+>
+>         def test_skipped_test(self):
+> -               skipped_log =3D test_data_path('test_skip_tests.log')
+> +               skipped_log =3D _test_data_path('test_skip_tests.log')
+>                 with open(skipped_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>
+> @@ -227,7 +227,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts, kunit_parser.TestCounts(p=
+assed=3D4, skipped=3D1))
+>
+>         def test_skipped_all_tests(self):
+> -               skipped_log =3D test_data_path('test_skip_all_tests.log')
+> +               skipped_log =3D _test_data_path('test_skip_all_tests.log'=
+)
+>                 with open(skipped_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>
+> @@ -235,7 +235,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts, kunit_parser.TestCounts(s=
+kipped=3D5))
+>
+>         def test_ignores_hyphen(self):
+> -               hyphen_log =3D test_data_path('test_strip_hyphen.log')
+> +               hyphen_log =3D _test_data_path('test_strip_hyphen.log')
+>                 with open(hyphen_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>
+> @@ -249,7 +249,7 @@ class KUnitParserTest(unittest.TestCase):
+>                         result.subtests[1].name)
+>
+>         def test_ignores_prefix_printk_time(self):
+> -               prefix_log =3D test_data_path('test_config_printk_time.lo=
+g')
+> +               prefix_log =3D _test_data_path('test_config_printk_time.l=
+og')
+>                 with open(prefix_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+> @@ -257,7 +257,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts.errors, 0)
+>
+>         def test_ignores_multiple_prefixes(self):
+> -               prefix_log =3D test_data_path('test_multiple_prefixes.log=
+')
+> +               prefix_log =3D _test_data_path('test_multiple_prefixes.lo=
+g')
+>                 with open(prefix_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+> @@ -265,7 +265,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts.errors, 0)
+>
+>         def test_prefix_mixed_kernel_output(self):
+> -               mixed_prefix_log =3D test_data_path('test_interrupted_tap=
+_output.log')
+> +               mixed_prefix_log =3D _test_data_path('test_interrupted_ta=
+p_output.log')
+>                 with open(mixed_prefix_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+> @@ -273,7 +273,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts.errors, 0)
+>
+>         def test_prefix_poundsign(self):
+> -               pound_log =3D test_data_path('test_pound_sign.log')
+> +               pound_log =3D _test_data_path('test_pound_sign.log')
+>                 with open(pound_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+> @@ -281,7 +281,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(result.counts.errors, 0)
+>
+>         def test_kernel_panic_end(self):
+> -               panic_log =3D test_data_path('test_kernel_panic_interrupt=
+.log')
+> +               panic_log =3D _test_data_path('test_kernel_panic_interrup=
+t.log')
+>                 with open(panic_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.TEST_CRASHED, re=
+sult.status)
+> @@ -289,7 +289,7 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertGreaterEqual(result.counts.errors, 1)
+>
+>         def test_pound_no_prefix(self):
+> -               pound_log =3D test_data_path('test_pound_no_prefix.log')
+> +               pound_log =3D _test_data_path('test_pound_no_prefix.log')
+>                 with open(pound_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.=
+status)
+> @@ -318,7 +318,7 @@ class KUnitParserTest(unittest.TestCase):
+>                         'Failures: all_failed_suite, some_failed_suite.te=
+st2')
+>
+>         def test_ktap_format(self):
+> -               ktap_log =3D test_data_path('test_parse_ktap_output.log')
+> +               ktap_log =3D _test_data_path('test_parse_ktap_output.log'=
+)
+>                 with open(ktap_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>                 self.assertEqual(result.counts, kunit_parser.TestCounts(p=
+assed=3D3))
+> @@ -327,13 +327,13 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual('case_2', result.subtests[0].subtests[1]=
+.name)
+>
+>         def test_parse_subtest_header(self):
+> -               ktap_log =3D test_data_path('test_parse_subtest_header.lo=
+g')
+> +               ktap_log =3D _test_data_path('test_parse_subtest_header.l=
+og')
+>                 with open(ktap_log) as file:
+>                         kunit_parser.parse_run_tests(file.readlines(), st=
+dout)
+>                 self.print_mock.assert_any_call(StrContains('suite (1 sub=
+test)'))
+>
+>         def test_parse_attributes(self):
+> -               ktap_log =3D test_data_path('test_parse_attributes.log')
+> +               ktap_log =3D _test_data_path('test_parse_attributes.log')
+>                 with open(ktap_log) as file:
+>                         result =3D kunit_parser.parse_run_tests(file.read=
+lines(), stdout)
+>
+> @@ -555,7 +555,7 @@ class KUnitJsonTest(unittest.TestCase):
+>                 self.addCleanup(mock.patch.stopall)
+>
+>         def _json_for(self, log_file):
+> -               with open(test_data_path(log_file)) as file:
+> +               with open(_test_data_path(log_file)) as file:
+>                         test_result =3D kunit_parser.parse_run_tests(file=
+, stdout)
+>                         json_obj =3D kunit_json.get_json_result(
+>                                 test=3Dtest_result,
+> @@ -596,7 +596,7 @@ class StrContains(str):
+>
+>  class KUnitMainTest(unittest.TestCase):
+>         def setUp(self):
+> -               path =3D test_data_path('test_is_test_passed-all_passed.l=
+og')
+> +               path =3D _test_data_path('test_is_test_passed-all_passed.=
+log')
+>                 with open(path) as file:
+>                         all_passed_log =3D file.readlines()
+>
 >
 > --
 > 2.52.0
 >
 
---000000000000e101300647a03ac9
+--00000000000077e0460647a03be8
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -266,14 +536,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg8LPAM/gR2N3tgffLnMJZr6zaWFFv
-1VUMO0PTEe1qicQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
-MTA1MDg1NjA4WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQg8bcOHTRdfGNLqRA9DlC55OblssPX
+zgiUKt/eS1bhdE8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
+MTA1MDg1NjE4WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEASIBm0u29aUuBMC4NWKSB/J0aNBDlTPyrU/i5t0QfqIy3kzDnM8RqFjkhZYiwYIms
-YatYrUMt6OqZC3NtNxNcX00R5fD6bloDr7ot1h6+L1UWLYQUwrO8qYRi95UqLOOAtIYvXxzQXf8s
-wfh0So9JG/B0HxPBhthygZlWqm2gL/G1MXFQbr8SjY+3EMdMDrb03tCVbfRyNX7m1r9nPrQm2qUR
-e81v6yynKjPpqhSSHtKpyfMVgvUUINQ7qorrRkEeOZPC4jmsMEkmzI0WNbVGIV3gpqb/rmVD0r1r
-zmm2+MUKkgikkzGyrJK/zdIh+SBgOTga+pir1V+fR3rfSnHVIA==
---000000000000e101300647a03ac9--
+AQEBBQAEggEAOqfMssTFyn7izb8UJq21WJSywy5KJRpEZ32mtvQP0/vjo1MmlTaTwtYCYBqqRhzu
+g4u1OWWYzX9ZHZVnNyNMzvkW6Y5AEVqkRNlqpEvNJw0ZIRkLXruVv3hCsjy4S5O4dOiUNya/t1pW
+2beDgK2Uh4pFhxyl9ZjPMAYnr2oVsKYSgN7fW3UjXZxlwjtK8NwRqpCm0M3Hr0+xf7N9ILw0BCkK
+KLDA5qTsiGE0FFWCXUxxRabYTBE38biIS6fWzfonlDtwUgD/A1i7uYB2s74gYemVJ1ckZoPArcru
+pqmCZ8040BNXpRWl7p50zm0bAbuECjNz2ypPgCw+lgA7J/JYVw==
+--00000000000077e0460647a03be8--
 
