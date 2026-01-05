@@ -1,174 +1,115 @@
-Return-Path: <linux-kselftest+bounces-48187-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48188-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D892BCF2E3F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 11:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BAB6CF2E66
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 11:04:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 51EF6311F24A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 09:56:32 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6FC843027E0B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 10:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEBBD32ABF7;
-	Mon,  5 Jan 2026 09:56:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C71A22F12DB;
+	Mon,  5 Jan 2026 10:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ASCDSdgl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uhOqrRwr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAEAB31A551
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 09:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9445C2EFDBB
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 10:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767606990; cv=none; b=sgL6mNajxITCl8TAywthvmr3aZPguxOTUki6yC0pD/v4Tnx5u+HRTq4dY5kKCe5dZbTgO0ptLKTW0hxRXf2VTdy1WENbGGKKqvX1ydcGKbN7Xev0BkPiPfNSpCucnwkFc+VHN02Mu954zdk938IPz08nPHcq6ibWWcn4AxadCWk=
+	t=1767607247; cv=none; b=lFFMzTpReDaatVxVO2dyrM3YCqJFO0R7062IlzFcyxESvgzs1sEwZeSfYqE9ke2lise1JqAP70zE+npkhPL+vfxRlTb2vQx6jfOE/IO6YGsicF7f9Ie5jyK0hBPDqJsUT/q2YRYe0X/hy5nJNFcZWsHGnKqIuwcOGAnM60vp3Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767606990; c=relaxed/simple;
-	bh=Jm+KsQ16aLOIIQdAhkLr2lFXIUH7grOQWFJ1jy/VHPc=;
+	s=arc-20240116; t=1767607247; c=relaxed/simple;
+	bh=xuoc3ii5EAoDhMbcrIAPLegdaAyMLsa/JpgAoRZmOn4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qPMZtQQ3KsPBz+hYsL/icLlfZz4jOj/gocl2t2Ddu+dtNrFzA1CxEI9vXPxBZUaQwnAALvzZ0I+KfF6XOFunOLhqVY3kWaa/jFgZSrqAJDlwRjaA1T2Zp+dFAQLB20hyQJsaxSytR0cbe6eeQKCCgjE3C43jXqD40NIR+VrBAUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ASCDSdgl; arc=none smtp.client-ip=209.85.221.42
+	 To:Cc:Content-Type; b=DFURj/Ki/ku6ogc3PLQWvS7n9qUqZr01ALjY2I0WUacFDmARIluATeREQyCUfajLwSbkF4i6y9oOR5E6SI+AXxYUALnHhcrzAceeREqWRn2Ek1HMp0sntAr4kH7w6a3g+e+v+8RmRsf6gchQ0ncrKn0Mj05B+x8Ge54j82O3A48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uhOqrRwr; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-42fed090e5fso6335216f8f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 01:56:27 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so90434335e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 02:00:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767606985; x=1768211785; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1767607244; x=1768212044; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FSbYMAoG1WTKO5rcG6yq+jd/tSn/zv0qNQKj/JbFBzI=;
-        b=ASCDSdglCGzRlqDiStVB0rJ4Z2k00uW4QjKlBWhgag2YRh6whiA9kNznaTLFSMVrMU
-         bRDCaAvQjcjvIaTgu8BeR7z+mKVcSXpUgWRUgV/2iKvE891AyoBGLHZa8q5Zi04uJryi
-         5HYalycixKFrueqJ1kXoLa1VI6WdjMBZIJ1QTGsVzw9heQTjxVgNDeHucPjK3ml0JyKG
-         EGadKWYTFGaWag762kSirEeExHwwjlBgLySbKrMw4wIAxaifMzS/Vza3BsbQRjpJAk9O
-         t+YvwLwOxiAuiqc38pB+HGkU9X/SeSJKI4Ot8rEyAuBLNoZQ8+W/1+GfR16IjVWdeJ50
-         EaJQ==
+        bh=yWSDM5cHY8gEL4BYNcjccloAgaRUv2djhZKgGK6iTCo=;
+        b=uhOqrRwr5HyIXZiRZ/j73Qa+17omi2JF8ncaAqQw3zf/g4yd31qjYv2Vss0HD2J5dg
+         ZtgcQhtsp1lBI53VxrsPXgLuP5RqhHdWfdyBm+2c0cp6k15QSBPJeACOdt3+8OMl5ALO
+         K2nvYL5laB03hO7RXalPQCfFnDsa1eNQat84Al3eMwALjj3SskHyN39tfxrFuRoMjLnI
+         An7mK7v3b5RkuMz8qLqKhaNBZ0Gcscmz76JPSVYC5u3NJCnr6A9wi69sc5Yoftpaaabr
+         HVVC1lXDu3NOo0E8i1z8q61cWY+7l8vLHW6+VK2JuN5sNLZddyHEhBKYAoFxgYv/gjNv
+         rl4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767606985; x=1768211785;
+        d=1e100.net; s=20230601; t=1767607244; x=1768212044;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FSbYMAoG1WTKO5rcG6yq+jd/tSn/zv0qNQKj/JbFBzI=;
-        b=VgwafOCkQar9obcnrPvc6VmoFf2n2WtzTSBkwHVvH/2D4aITVeE3NW0Od/nk/dnwuY
-         9vW822pVpfsyezVXhgwpQ7vBZ+F5J6F6YPRV4J9JSnLFynQaoahI933wd0pzjkqJ8wk+
-         kbvWvo3IxIGlMroLXe3vqQ2whxpbO+g0uuOY9cbfPQ6PhDPbnTfNCxsFruWDqyX6h3HG
-         iEiGOsEWm1hU0ci1yy9WWPgxP0JaEAN0A2cnCyv97ahHTCKZFsp40sZfxos6sJOm68AT
-         tJ04KUhcVbKdDlKoXS3wK2OoUJlaZFrarhsCJLFjwa+WW+XoQH44TpXMHXIJZX+rzfs7
-         RoFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVaTbyFp9dFJtZNxB+3cQncoVpWqO1cNeJxGO3qX9QiRC+wVsbjbCLFiuY/Yx6DmnarmNjCon5n4CNF1Yj+qGM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnFLKQ3rMlaRcjZlxMFiRWH19Ay8DO/hPWP7c7Y2iTPUplifuV
-	fGhSVdouMafwJjgR723QEa+UhOxOBT/1ebCLjGnipb+JRGfSASCIxURudH6/aApUfHGusNGH7Ki
-	jj0QIW5UlrTHJyMvxMFm7gziMffAIhemTskXa3FYO
-X-Gm-Gg: AY/fxX6hvdt6QUVNWECaksK5dg+B0WU3490PNH49qxOHQtmJLT9GXKQt1WDfXQuYk4f
-	ANYb/tMs1lbnjeoDx5QfXFFfmUbsIatQGnpkdyGMUCa7RJo8EkarjTEVL/++yGKVKXx2lfa4jh0
-	G3VQh1VN3dSTrXocoECVVOMPlITsQV/dnty+SvOKPjsGfssQmx3IW9gCGfwwWlC2izCsW6oH6Bm
-	+ia5i9Zf2Xesl9L40iBF2uLGgreusA4RmGfZ5tXmHjxmMfng4ymrlotZAOtKW+OSg9/XxmB50+J
-	o5wg
-X-Google-Smtp-Source: AGHT+IGwwQUfDNp+vdSlrkiwzJXWM9K8ws1FUdgiERj8R7G2XmKien1SVaxnduxq+RIKu9VEsX6JxqLsnPJ4rVxMiNQ=
-X-Received: by 2002:a5d:5d87:0:b0:432:8651:4071 with SMTP id
- ffacd0b85a97d-4328651421amr32429445f8f.18.1767606985261; Mon, 05 Jan 2026
- 01:56:25 -0800 (PST)
+        bh=yWSDM5cHY8gEL4BYNcjccloAgaRUv2djhZKgGK6iTCo=;
+        b=EQgPmo4c6BCOGRh5K7VUfB/xcD+ohKF/XGb9zGW7m+BFpFkaKYAbZwJgEyWXwWztfP
+         yN8+EPTvP/ZxqVKFvvhGONeimKVNVFer8qJsSq07Mmjgxg1vEGG/Wh7D4KZBJDi1ySYX
+         I/4uGkaS6QM+v9UMmtfsxGvgGvUn2dVuKyukI4GL0LEMHAHW4pKD9XKQMamprDjUD8rV
+         nuOQYLU+BYKk6CBOmsNCVhUAyijSxVKD3se4mGKSSbtfGYG/lEYACKywbivEt6KNkjfZ
+         9cgLzeOmiY7K+yd+hgzH6wivj9Xx0jv87MWHRJJwcLT4WLBjkeJVYkrUk7a1fLqFaiSe
+         1Qdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxgGFr4PEEvart/Rb+m3nRTyFARPHSNR6ei9ejvQLFvmuQcOWPA5VsQ8/+dx9nbu3tHReZ3vunVNnT4PtHMv8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDwZSubTC2gglaxowCppErqy+JQKHtjLdALipLvOG8N8U+Mf7Z
+	HbGUgpz1dDC7B4FrusmWGSzVQHS5u0Cb7XWWit2Y8+bBl1B83UCMDJdtcZXee5DekKkfZn/bg05
+	SytTD7aD8Vzi7+9W16l2qsiT7WMz2QssgiYtcAR+u
+X-Gm-Gg: AY/fxX7N/ZsNTDvHdJB0o8N1vYAxQYUQtwrdwVgPz75N6rExYlGafQGtdaRNKVHFNme
+	XZddbLv8Pr3xQHK3g0c+e0hHcWQA9UstsQZNmpJDLQ0vnTFDJdajuPfx/SV3KfMkBu4U1SKzisP
+	009m+YNPmZ/WJ6ndrBpJYbAsAMLiTaD7Z652eEts2LrAY+rZp0oifux+1pwPfKTETXUmUgZAJRr
+	l6aJKKoYOmwEqawadZhz7UEaCKr2+j9DdS3k9SZCPWqVBsT5Ticc8DD8F//nT/LQMY2EuxPi9uS
+	N0iQ
+X-Google-Smtp-Source: AGHT+IEk/KbaNuOT0iuCyqwY9Pz+2sczSCzCJ1UhBNsAdo2TBn+/BTEAZanNkG8EVJUkxrv6mh56iqt8+7JgU0hnSS4=
+X-Received: by 2002:a5d:5f49:0:b0:42c:b8fd:21b4 with SMTP id
+ ffacd0b85a97d-4324e709d72mr66643775f8f.57.1767607243104; Mon, 05 Jan 2026
+ 02:00:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251223-b4-kunit-user-alloc-v1-0-fb910ae0e50c@google.com> <20251223-b4-kunit-user-alloc-v1-3-fb910ae0e50c@google.com>
-In-Reply-To: <20251223-b4-kunit-user-alloc-v1-3-fb910ae0e50c@google.com>
+References: <20251222-cstr-kunit-v1-1-39d999672f35@gmail.com>
+In-Reply-To: <20251222-cstr-kunit-v1-1-39d999672f35@gmail.com>
 From: David Gow <davidgow@google.com>
-Date: Mon, 5 Jan 2026 17:56:13 +0800
-X-Gm-Features: AQt7F2o3aJjc8pg9gpsN4beGFmZtGXKEZCUwLZWf7shEfxiNcIVw9dUD1NE-KYk
-Message-ID: <CABVgOSnGH=nvJPsww5KjeQmTpX46HE0PJ20uOWpcWDi11MyOgw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kunit: test: fix mm_struct leak in kunit_attach_mm()
-To: Brendan Jackman <jackmanb@google.com>
+Date: Mon, 5 Jan 2026 18:00:30 +0800
+X-Gm-Features: AQt7F2p5BSBpH94kbfHCYnx8HOFtX0dUS5b39-lEHnKudFaZabGIcBEkjGXYfO4
+Message-ID: <CABVgOSncpskFNk0LOd3ZsrYcj9yAWLaFowo_rSLcvwKiKME=aA@mail.gmail.com>
+Subject: Re: [PATCH] rust: kunit: replace `kernel::c_str!` with C-Strings
+To: Tamir Duberstein <tamird@kernel.org>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
-	Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Tamir Duberstein <tamird@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000008010dc0647a1129f"
+	boundary="000000000000e4f87a0647a12103"
 
---0000000000008010dc0647a1129f
+--000000000000e4f87a0647a12103
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 24 Dec 2025 at 00:18, Brendan Jackman <jackmanb@google.com> wrote:
+On Mon, 22 Dec 2025 at 20:28, Tamir Duberstein <tamird@kernel.org> wrote:
 >
-> Here's how I understand mm refcounts:
+> From: Tamir Duberstein <tamird@gmail.com>
 >
->   funcs             | counter  | manages lifecycle of...
->   --------------------------------------------------------
->   mmgrab()/mmdrop() | mm_count | mm_struct and PGD
->   --------------------------------------------------------
->   mmget()/mmput()   | mm_users | userspace address space
+> C-String literals were added in Rust 1.77. Replace instances of
+> `kernel::c_str!` with C-String literals where possible.
 >
->     All mm_users references share a single reference to the mm_struct.
->
-> mm_alloc() returns the mm with a single reference to the user address
-> space, i.e. with mm_users=1, mm_count=1.
->
-> kunit_attach_mm() then passes the mm to kthread_use_mm(). It does not
-> call kthread_unuse_mm(), instead it relies on the kthread exit path to
-> release the relevant resources. It does this because KUnit's resource
-> cleanup logic works by running cleanups in a different kthread from the
-> test. You can't have cleanups that operate on the kthread, because
-> the kthread is already gone by the time the cleanup is called.
->
-> The kthread exit path will indeed drop the reference to the address
-> space, i.e. it will call mmput(task->mm), decrementing mm_users.
-> However, it does not release the reference taken on the mm_struct when
-> kthread_use_mm() called mmgrab().
->
-> To fix this, use the new kthread_take_mm() which provides the API KUnit
-> needs.
->
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Reviewed-by: Benno Lossin <lossin@kernel.org>
+> Signed-off-by: Tamir Duberstein <tamird@gmail.com>
 > ---
 
-This seems right. We did have the ability to run cleanups on the test
-kthread, but we couldn't guarantee it (because the test thread could
-be aborted early, due to test failures, timeouts, etc).
-
-I'm assuming that we can't just throw an mmdrop() in a resource
-cleanup function (e.g. kunit_add_action()), since we can't do a full
-kthread_unuse_mm()? I gave it a quick try and nothing crashed, but
-that's not exactly a ringing endorsement that it's correct:
-
-diff --git a/lib/kunit/user_alloc.c b/lib/kunit/user_alloc.c
-index 3fca4ae223f6..5177537f592b 100644
---- a/lib/kunit/user_alloc.c
-+++ b/lib/kunit/user_alloc.c
-@@ -7,6 +7,8 @@
-#include <linux/kthread.h>
-#include <linux/mm.h>
-
-+KUNIT_DEFINE_ACTION_WRAPPER(kunit_mmdrop_action, mmdrop, struct mm_struct*);
-+
-int kunit_attach_mm(void)
-{
-       struct mm_struct *mm;
-@@ -29,7 +31,9 @@ int kunit_attach_mm(void)
-       arch_pick_mmap_layout(mm, &current->signal->rlim[RLIMIT_STACK]);
-
-       /* Attach the mm. It will be cleaned up when the process dies. */
--       kthread_take_mm(mm);
-+       kthread_use_mm(mm);
-+
-+       kunit_add_action(current->kunit_test, kunit_mmdrop_action, mm);
-
-       return 0;
-}
-
-
-That being said, if mm folks are okay with the kthread_take_mm()
-approach, that certainly makes things easier on our end, so I'm happy
-with this as an option.
+Sorry for the delay: this looks good to me.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -176,29 +117,136 @@ Cheers,
 -- David
 
 
-
->  lib/kunit/user_alloc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  rust/kernel/kunit.rs        | 11 ++++-------
+>  rust/macros/kunit.rs        | 10 +++++-----
+>  scripts/rustdoc_test_gen.rs |  4 ++--
+>  3 files changed, 11 insertions(+), 14 deletions(-)
 >
-> diff --git a/lib/kunit/user_alloc.c b/lib/kunit/user_alloc.c
-> index 564f5566641d5..3fca4ae223f67 100644
-> --- a/lib/kunit/user_alloc.c
-> +++ b/lib/kunit/user_alloc.c
-> @@ -29,7 +29,7 @@ int kunit_attach_mm(void)
->         arch_pick_mmap_layout(mm, &current->signal->rlim[RLIMIT_STACK]);
+> diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+> index 79436509dd73..21aef6c97325 100644
+> --- a/rust/kernel/kunit.rs
+> +++ b/rust/kernel/kunit.rs
+> @@ -9,9 +9,6 @@
+>  use crate::fmt;
+>  use crate::prelude::*;
 >
->         /* Attach the mm. It will be cleaned up when the process dies. */
-> -       kthread_use_mm(mm);
-> +       kthread_take_mm(mm);
+> -#[cfg(CONFIG_PRINTK)]
+> -use crate::c_str;
+> -
+>  /// Prints a KUnit error-level message.
+>  ///
+>  /// Public but hidden since it should only be used from KUnit generated code.
+> @@ -22,7 +19,7 @@ pub fn err(args: fmt::Arguments<'_>) {
+>      #[cfg(CONFIG_PRINTK)]
+>      unsafe {
+>          bindings::_printk(
+> -            c_str!("\x013%pA").as_char_ptr(),
+> +            c"\x013%pA".as_char_ptr(),
+>              core::ptr::from_ref(&args).cast::<c_void>(),
+>          );
+>      }
+> @@ -38,7 +35,7 @@ pub fn info(args: fmt::Arguments<'_>) {
+>      #[cfg(CONFIG_PRINTK)]
+>      unsafe {
+>          bindings::_printk(
+> -            c_str!("\x016%pA").as_char_ptr(),
+> +            c"\x016%pA".as_char_ptr(),
+>              core::ptr::from_ref(&args).cast::<c_void>(),
+>          );
+>      }
+> @@ -60,7 +57,7 @@ macro_rules! kunit_assert {
+>                  break 'out;
+>              }
 >
->         return 0;
->  }
+> -            static FILE: &'static $crate::str::CStr = $crate::c_str!($file);
+> +            static FILE: &'static $crate::str::CStr = $file;
+>              static LINE: i32 = ::core::line!() as i32 - $diff;
+>              static CONDITION: &'static $crate::str::CStr = $crate::c_str!(stringify!($condition));
 >
+> @@ -253,7 +250,7 @@ pub const fn kunit_case_null() -> kernel::bindings::kunit_case {
+>  /// }
+>  ///
+>  /// static mut KUNIT_TEST_CASES: [kernel::bindings::kunit_case; 2] = [
+> -///     kernel::kunit::kunit_case(kernel::c_str!("name"), test_fn),
+> +///     kernel::kunit::kunit_case(c"name", test_fn),
+>  ///     kernel::kunit::kunit_case_null(),
+>  /// ];
+>  /// kernel::kunit_unsafe_test_suite!(suite_name, KUNIT_TEST_CASES);
+> diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
+> index b395bb053695..3d7724b35c0f 100644
+> --- a/rust/macros/kunit.rs
+> +++ b/rust/macros/kunit.rs
+> @@ -102,8 +102,8 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+>      // unsafe extern "C" fn kunit_rust_wrapper_bar(_test: *mut ::kernel::bindings::kunit) { bar(); }
+>      //
+>      // static mut TEST_CASES: [::kernel::bindings::kunit_case; 3] = [
+> -    //     ::kernel::kunit::kunit_case(::kernel::c_str!("foo"), kunit_rust_wrapper_foo),
+> -    //     ::kernel::kunit::kunit_case(::kernel::c_str!("bar"), kunit_rust_wrapper_bar),
+> +    //     ::kernel::kunit::kunit_case(c"foo", kunit_rust_wrapper_foo),
+> +    //     ::kernel::kunit::kunit_case(c"bar", kunit_rust_wrapper_bar),
+>      //     ::kernel::kunit::kunit_case_null(),
+>      // ];
+>      //
+> @@ -133,7 +133,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+>          writeln!(kunit_macros, "{kunit_wrapper}").unwrap();
+>          writeln!(
+>              test_cases,
+> -            "    ::kernel::kunit::kunit_case(::kernel::c_str!(\"{test}\"), {kunit_wrapper_fn_name}),"
+> +            "    ::kernel::kunit::kunit_case(c\"{test}\", {kunit_wrapper_fn_name}),"
+>          )
+>          .unwrap();
+>          writeln!(
+> @@ -143,7 +143,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+>  #[allow(unused)]
+>  macro_rules! assert {{
+>      ($cond:expr $(,)?) => {{{{
+> -        kernel::kunit_assert!("{test}", "{path}", 0, $cond);
+> +        kernel::kunit_assert!("{test}", c"{path}", 0, $cond);
+>      }}}}
+>  }}
+>
+> @@ -151,7 +151,7 @@ macro_rules! assert {{
+>  #[allow(unused)]
+>  macro_rules! assert_eq {{
+>      ($left:expr, $right:expr $(,)?) => {{{{
+> -        kernel::kunit_assert_eq!("{test}", "{path}", 0, $left, $right);
+> +        kernel::kunit_assert_eq!("{test}", c"{path}", 0, $left, $right);
+>      }}}}
+>  }}
+>          "#
+> diff --git a/scripts/rustdoc_test_gen.rs b/scripts/rustdoc_test_gen.rs
+> index be0561049660..967064ebd391 100644
+> --- a/scripts/rustdoc_test_gen.rs
+> +++ b/scripts/rustdoc_test_gen.rs
+> @@ -174,7 +174,7 @@ pub extern "C" fn {kunit_name}(__kunit_test: *mut ::kernel::bindings::kunit) {{
+>      macro_rules! assert {{
+>          ($cond:expr $(,)?) => {{{{
+>              ::kernel::kunit_assert!(
+> -                "{kunit_name}", "{real_path}", __DOCTEST_ANCHOR - {line}, $cond
+> +                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $cond
+>              );
+>          }}}}
+>      }}
+> @@ -184,7 +184,7 @@ macro_rules! assert {{
+>      macro_rules! assert_eq {{
+>          ($left:expr, $right:expr $(,)?) => {{{{
+>              ::kernel::kunit_assert_eq!(
+> -                "{kunit_name}", "{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
+> +                "{kunit_name}", c"{real_path}", __DOCTEST_ANCHOR - {line}, $left, $right
+>              );
+>          }}}}
+>      }}
+>
+> ---
+> base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+> change-id: 20251222-cstr-kunit-be68dd8cfbd5
+>
+> Best regards,
 > --
-> 2.51.2
+> Tamir Duberstein <tamird@gmail.com>
 >
 
---0000000000008010dc0647a1129f
+--000000000000e4f87a0647a12103
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -288,14 +336,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgLfB9g5dxQP456c5R7sE3iT+VZ25y
-9QIOUJDByre+/oswGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
-MTA1MDk1NjI1WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgS2rxeX6xkmR/7N7bjCOz+McBXhlM
+NcVyvQHwXlgJ7w4wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
+MTA1MTAwMDQ0WjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEAuG41i9DkRai6gyhnNSHC29OprCu2rfiXgYBeTwRwcvS4MOR9/Ep7GHGlpPd3G+NC
-S00bHfKXiZD0Z9D16TDr3gDupFUgp7vR7RM8Q2neJBlH1rW3+3HzFHWpMc11oVRpj+tIePmVdVlX
-wrIG3gsDsHEyeWjZ1288rG4j4+F8KMHYc5v7FLBZH+ea6sVkhxLZPHtivJuM+tC1UyhbU3rDCpyQ
-1Ny6qYEHymwxFP5K9JGDVbWRyP3tF/CBtQSBjuCRPvD683Db9nwigVLSxdWqkgNIhov25UVU+B+0
-5DPlDDRE+hu6P6aSmYG4PairmGAWi9PrxkldZn7LzRHMz/zVsQ==
---0000000000008010dc0647a1129f--
+AQEBBQAEggEAMUrlAiVEJraKe1F76Hnmco+vHfucUuiLVbXrepBK57gOzPhbfnlkj6cS/FGaHyXy
+wNhpALObSi3jYXeYzmyKqfNpNEmbjDG7IRGuU+A04sN+1vWbBP6TaBni0sNbZHvlxJE1o7gwHuyv
+FSdKs+9sYf7jn33PPFExk/e8Bs4hp/kO0J3w/iWg65Tmh52lDTbyZENxur8o9jNQ5IiBwlKrKE7i
+Oq4Wwjnr75rCMuCs6+MkCd85QhTgZPzzjp2LAfqP1Tw+h4FYd2GN4wZf3dadbxdfpKUaOhPIo3sN
+plkSVDmtZGfCpEs8Vmc059YY01OlibLDyHyYzl/BjLaNVSwagQ==
+--000000000000e4f87a0647a12103--
 
