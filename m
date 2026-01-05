@@ -1,112 +1,113 @@
-Return-Path: <linux-kselftest+bounces-48181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42B05CF28C7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 09:57:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A683CF28D9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 09:58:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AFB24303803E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 08:56:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DD1613014AFF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 08:56:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6378E328B46;
-	Mon,  5 Jan 2026 08:56:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B7D2E62B5;
+	Mon,  5 Jan 2026 08:56:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DKJYSKcn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IIfduynE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64172314B69
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 08:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB972D060E
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 08:56:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767603384; cv=none; b=Id1sqx83hH6Q2fkAkc4XqCFt3T1xHhCEO/FreSI7kAJjwl18XNFRt0z0yTnQadPKid5blSqYgm1XkTdokwK0Jl026HL19suPaKHzTzgsc8dFDTyiS995b4W9H23P+bY0Twky/558TTDmCd9tpQIDFOmVkY7JAxAkieyFMOCh5S0=
+	t=1767603396; cv=none; b=JKRb7Pc32xtt9KEuxB6CB4BC2o8MCfwapQrUvKr2AML2y8L5qaXJvNoNIgzPUmFZ27pXQdA/C6IbMWxrSYJp25MEt5PAJ58PkboKE5Y8/LHelMY8U5A+Cd+KyKsjKn8s31/8Yl7vxgqaUjwZUvdQ425kz/gqmKn1c4FyV9Rx2rI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767603384; c=relaxed/simple;
-	bh=iTlGreV2w8SjHKl86xelDjC/ZW1j+XTSo7S5D75L4tU=;
+	s=arc-20240116; t=1767603396; c=relaxed/simple;
+	bh=XvELefyUPFRtNZ59Ma8IE8ylnRZfF+jSRwPTUINV9DY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CqSE2Bb2TGKb2ZSja6o1y/DdoYUg3OsAP7dSSirq+k0lv9Ve2T/BMDukahcosOkOBKhK3QWqTKy395VHS/RndSyOKHPC6DobMJ3/rbaLNmBfi6xwV+o7UfvtyLPfiyFNk5lihDrAjawAnACgj80LCppS9Kzbpl+/lATdNBs4ezg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DKJYSKcn; arc=none smtp.client-ip=209.85.221.45
+	 To:Cc:Content-Type; b=SZM1DkLwjBR3tC5oCiI6XLZ6xsfO/3A7cdRMbCwberc++q4uWYNUaA3vml6KAytui13xDS51IoATa6mzACs88JSwXsMIJuCG1lRDDk0Q2VYB91JQrrDNfbnejJ7aY5uvd82MWmiP+TxD1jJ+LF2eeFtQPDEGTKRovc4MxqtcGng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IIfduynE; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-430f5ecaa08so5620497f8f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 00:56:22 -0800 (PST)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-42fb4eeb482so6900017f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 00:56:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767603381; x=1768208181; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1767603392; x=1768208192; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qihe0EaKGLBEO/eRXXQkA9oA7nKyELGCzbs3Dp/akrc=;
-        b=DKJYSKcnuXOOyS044D2ODAOK7FtQzygaq4IUyRPmcs5KgPM7UgvlHV5/JfgO9DXpL4
-         CQBK/1MPEVGSPEpxooK3G3YwA/RWcB5FgF+6oWCJuXvdYAkkFUlvzMLsHax70w1vfpP1
-         ygcvEelJK4gT7T4gTBSRhBDBEV6kg7lCC1VF12qHZ6/TS9MJsyPxQwrQfFMydqmb2IEe
-         RHYN0aaqXXPTAPLmONZMDjo9UrBZw1KHN7Yktq0z90uwVik1bioulmfBnkAdIg42KlyQ
-         gt2jvzmNZmIkVik+7CGWLH2uSPDSl04nA5AIu24iPLgDbcoiiWUttceKyRhPkn+83PP4
-         6bLg==
+        bh=7WCZ9b0JAQBcRBQIiUYHjvh9zl0gsgJP/p1j83wck7I=;
+        b=IIfduynE1SpuzcvEe8H2JmWrfTduW2YgTUGfeadxsZDGt2iTzXS4wsG7tZ4a+B9osa
+         vNeGpvLPNZbxFQAmH/+rF6kkxYVDPftLRfUJmNSnUvGJEiU0i8zIGzVsGc7K0EQ4zRtu
+         AwVHT7ygNlsvI83mJiyFkv/LcQ4OC4Hu2i3WC8DH+NRk8tqdRKNnunxor4e42ieHMClm
+         lJwy+IsZd6K1p5SLWHCpweRU96E+POQShsj/n4eD86toBVL2l1jCIfsJe78xysr2Pbxk
+         +CqktdDoLM508uTI7qD9W5CXORvMTRMUnRF0HzRUqAL8IMRu/Ey1UDc48bAuUS7DUNob
+         9yQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767603381; x=1768208181;
+        d=1e100.net; s=20230601; t=1767603392; x=1768208192;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qihe0EaKGLBEO/eRXXQkA9oA7nKyELGCzbs3Dp/akrc=;
-        b=CWygprwJiFqLcSuC9LGPyfqNu72KVbI2AH6UdoKqvswoIMrqKsBpBDrudQJhFauIcE
-         fnOgHdSmTJukDnAV9DBAQB5QyL5kDEV8Qi09TTm9RQ1rRVRw7IvnSSiTqBc6HtLphCTS
-         baO3WEVj/I1MFNK8RS+KvjleYMc0wL0E6IJsD3SXZbZgxcKu1RoLRMnoP+1NUWFSF6YA
-         59CMIUQx9vRWDhZlEZ44QXKVFNHm8oyCLatGxah4cqrrOBaetVE6qza+hETIqXSCwz2s
-         kPummDtKrPE9VJNyMJzN2dQufi12FTZMOpagHTHQpthBTKciim4+PvolPMBHGWnl/SSU
-         hJDg==
-X-Forwarded-Encrypted: i=1; AJvYcCXADy9egFoq3h3hDfQwj0hyCmsZnyKuvYLRuORpytjqDrr57PXAN7BvSA6LpSVgG3Pa8pwYdrXBFM+a2Xd+2wU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdOb+86hg0Aj0hX1nqFTBfQIGNKa31yv54jq3jI0TbKzUJHPBu
-	QvlYZ78NOJeSo+uTusCxsN1WcHLioFpFChpT73sRhIP4QaAK59h5vMesA/UWSGrOwuvgH+XtmVF
-	ANDRsg9FCBbMDWrfbiTGj/fzwjcR4MX66JQTIGh2U
-X-Gm-Gg: AY/fxX4SZEqDZN2XRBHFYRuY6jwEP/cWXjX5c41OpAWsjf/YRaq1RUP22TtsTdU0wJJ
-	XpWOuMjIJoQ8LyEYu7jkw86Y4zlZt5wFdomjQstFxBUpTur8+OvqY9B5m0meKUHrw9WNpqH6jen
-	v9VEKkfz4VZwgrT5cSMyjTbtW0oDYt/XuzLgnj8s+Pf89o/VtzaLGVV3nhcx30uTWS7/V3aYFHj
-	SKuFvvTKhCKjPQUw9fENgQ23tPfeQtKISAakKrJMgDhIVuzFXJcodaxmneBzSX+YLNYK6llGSas
-	6iKs
-X-Google-Smtp-Source: AGHT+IERv3CsQkGfbsDRci9yRLrECICMOgPW3EyBxK6riZ2LYJzAOtZdaBZmlhrEwEnP9z4jwtt8jjN4EO75TABY+5o=
-X-Received: by 2002:a5d:5d88:0:b0:432:8537:85ca with SMTP id
- ffacd0b85a97d-432853785f1mr32422283f8f.50.1767603380521; Mon, 05 Jan 2026
- 00:56:20 -0800 (PST)
+        bh=7WCZ9b0JAQBcRBQIiUYHjvh9zl0gsgJP/p1j83wck7I=;
+        b=nm0FgGf7rSwLcnuCGVR4JZbpRQBiTaRCaOnb+QUHdO0rt3T0qp1Qjhydvj/sklZvHK
+         l7SbzjspVoXUk7glxwroEOLrC5so7w9zfhosTIyK5KTzgtYCGgByZNIrLU8RmPX6BFOA
+         dkamlShWQLxyYoIq/4CJ6AV2aENZM6nvXSwLfaD56NjVjs54Fnq2ZywPhdnP1VPBVIJU
+         bswQEtZe9n5pslXxU53UWj+gy+ysNBHgNuD7Dbc4IsEjnsRrd1wYiW+WgcRcCLdKehnx
+         FuU5BooJHNmdfhmOWg6Fc4OGDBS9etce6SEG+LVbevkLGRH4oqmxiN1FZTErnSRHg2Ej
+         At1A==
+X-Forwarded-Encrypted: i=1; AJvYcCW1JC1hgSdRgUhi/DQSUvf+k3ZQj5Ufc312aDLf9ICSNm5brIEWIpp3Fn+pOG3piUE2Cs6eOo89ah9X9Nor3Ac=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyoy2wHBtZs31CcadD6xTU95BOLkAHOGJbI5SqWTd+9tqceoG8h
+	GKjVpTLmFIi4aTuHOy9Pmz0Yof2lXRbp2OcKe7XiWl9WP9DSrcZU4UOnpu9mRtTEZ/2NvRe+PMx
+	FS4bzn1itAd9/NtWKfOHM9j1xSV6qtyEnd4QMn2LokLqiZNCnq8zr8YbT
+X-Gm-Gg: AY/fxX7DQgd+FBA/3ujRWMymrCVRBbEoZ7DYc4K3SGxeJ7LJQi5480vv9SdarM/c3r3
+	W7U90GnzxykmryUAhNRNwKvvNxSJ5irxA/N/xcn4nxydNPlP4AU1aFknbByG/m9KEAxpWZdYWhx
+	StZPRjo24Czb+UZ/E3+hRtpMFgO/0FVZvZLa4DDuL5GIjtrooV7Qru0SzueMOcCl6YgSY3k72F4
+	krtL/6S9aLi5a4DpY/C3SvoL4elG2Mz6ICxtrZ7YnBe49WX+0LPIc199qxNBD5PY1VRfxJP/jPq
+	pCB/
+X-Google-Smtp-Source: AGHT+IGGfteEOKg48MhPnTh3vb2Y6QcXSam3/ezf7TbpWB6Bubd5063lH74XU0br9AAL0fkhJyLV9UlwqM9bMrTpoOA=
+X-Received: by 2002:a5d:64e7:0:b0:430:f463:b6ae with SMTP id
+ ffacd0b85a97d-4324e50c890mr73374364f8f.53.1767603392175; Mon, 05 Jan 2026
+ 00:56:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251230-kunit-pytest-v1-0-e2dae0dae200@linutronix.de> <20251230-kunit-pytest-v1-2-e2dae0dae200@linutronix.de>
-In-Reply-To: <20251230-kunit-pytest-v1-2-e2dae0dae200@linutronix.de>
+References: <20260102-kunit-armeb-v1-1-e8e5475d735c@linutronix.de>
+In-Reply-To: <20260102-kunit-armeb-v1-1-e8e5475d735c@linutronix.de>
 From: David Gow <davidgow@google.com>
-Date: Mon, 5 Jan 2026 16:56:07 +0800
-X-Gm-Features: AQt7F2qsUKqLNkIiDkVToIFeEbFdUvyqYTUmPYNvnk6O-0DofwdM4lKe1jGRIa0
-Message-ID: <CABVgOS=gU1_GFN0yyA0MzF_QPY3ueLPvC0egZqP_n210q4LsGw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: tool: test: Don't rely on implicit working
- directory change
+Date: Mon, 5 Jan 2026 16:56:19 +0800
+X-Gm-Features: AQt7F2por-Wm-6k5G3PEW5Wkrj5FfPMM9Yp51mGVu_BBKUksvKW5awKAB7uOzN4
+Message-ID: <CABVgOSnGNd1n_yMuTLJj=fVHeoD3_+VvGxSw1ffV80B9CubRtw@mail.gmail.com>
+Subject: Re: [PATCH] kunit: qemu_configs: Add 32-bit big endian ARM configuration
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000a330ea0647a03bb8"
+	boundary="0000000000005539fb0647a03cba"
 
---000000000000a330ea0647a03bb8
+--0000000000005539fb0647a03cba
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 30 Dec 2025 at 20:56, Thomas Wei=C3=9Fschuh
+On Fri, 2 Jan 2026 at 15:20, Thomas Wei=C3=9Fschuh
 <thomas.weissschuh@linutronix.de> wrote:
 >
-> If no kunitconfig_paths are passed to LinuxSourceTree() it falls back to
-> DEFAULT_KUNITCONFIG_PATH. This resolution only works when the current
-> working directory is the root of the source tree. This works by chance
-> when running the full testsuite through the default unittest runner, as
-> some tests will change the current working directory as a side-effect of
-> 'kunit.main()'. When running a single testcase or using pytest, which
-> resets the working directory for each test, this assumption breaks.
->
-> Explicitly specify an empty kunitconfig for the affected tests.
+> Add a basic config to run kunit tests on 32-bit big endian ARM.
 >
 > Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
 > ---
+> The test string_test_memset64 currently fails. The fix is here:
+> https://lore.kernel.org/lkml/20260102-armeb-memset64-v1-1-9aa15fb8e820@li=
+nutronix.de/
+> ---
+
+Thanks! This works here with:
+./tools/testing/kunit/kunit.py run --arch armeb
+--cross_compile=3Darm-linux-gnueabi-
+
+(though big-endian arm isn't supported on LLVM=3D1 configs)
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -114,46 +115,43 @@ Cheers,
 -- David
 
 
->  tools/testing/kunit/kunit_tool_test.py | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  tools/testing/kunit/qemu_configs/armeb.py | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
 >
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit=
-/kunit_tool_test.py
-> index fd7ca89596c0..584275ce6ba6 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -466,7 +466,8 @@ class LinuxSourceTreeTest(unittest.TestCase):
->                 want_kconfig =3D kunit_config.Kconfig()
->                 want_kconfig.add_entry('NOT_REAL', 'y')
+> diff --git a/tools/testing/kunit/qemu_configs/armeb.py b/tools/testing/ku=
+nit/qemu_configs/armeb.py
+> new file mode 100644
+> index 000000000000..86d326651490
+> --- /dev/null
+> +++ b/tools/testing/kunit/qemu_configs/armeb.py
+> @@ -0,0 +1,16 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +from ..qemu_config import QemuArchParams
+> +
+> +QEMU_ARCH =3D QemuArchParams(linux_arch=3D'arm',
+> +                          kconfig=3D'''
+> +CONFIG_CPU_BIG_ENDIAN=3Dy
+> +CONFIG_ARCH_VIRT=3Dy
+> +CONFIG_SERIAL_AMBA_PL010=3Dy
+> +CONFIG_SERIAL_AMBA_PL010_CONSOLE=3Dy
+> +CONFIG_SERIAL_AMBA_PL011=3Dy
+> +CONFIG_SERIAL_AMBA_PL011_CONSOLE=3Dy''',
+> +                          qemu_arch=3D'arm',
+> +                          kernel_path=3D'arch/arm/boot/zImage',
+> +                          kernel_command_line=3D'console=3DttyAMA0',
+> +                          extra_qemu_params=3D['-machine', 'virt'])
 >
-> -               tree =3D kunit_kernel.LinuxSourceTree('', kconfig_add=3D[=
-'CONFIG_NOT_REAL=3Dy'])
-> +               tree =3D kunit_kernel.LinuxSourceTree('', kunitconfig_pat=
-hs=3D[os.devnull],
-> +                                                   kconfig_add=3D['CONFI=
-G_NOT_REAL=3Dy'])
->                 self.assertTrue(want_kconfig.is_subset_of(tree._kconfig),=
- msg=3Dtree._kconfig)
+> ---
+> base-commit: a77b19b747c8a53ac16289685b0f77085a2ad553
+> change-id: 20251230-kunit-armeb-b4ecff7d3cba
 >
->         def test_invalid_arch(self):
-> @@ -478,7 +479,7 @@ class LinuxSourceTreeTest(unittest.TestCase):
->                         return subprocess.Popen(['echo "hi\nbye"'], shell=
-=3DTrue, text=3DTrue, stdout=3Dsubprocess.PIPE)
->
->                 with tempfile.TemporaryDirectory('') as build_dir:
-> -                       tree =3D kunit_kernel.LinuxSourceTree(build_dir)
-> +                       tree =3D kunit_kernel.LinuxSourceTree(build_dir, =
-kunitconfig_paths=3D[os.devnull])
->                         mock.patch.object(tree._ops, 'start', side_effect=
-=3Dfake_start).start()
->
->                         with self.assertRaises(ValueError):
->
+> Best regards,
 > --
-> 2.52.0
+> Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
 >
 
---000000000000a330ea0647a03bb8
+--0000000000005539fb0647a03cba
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -243,14 +241,14 @@ KAzwyf3z7XUrYp38pXybmDnsEcRNBIOEqBXoiBxZXaKQqaY921nWAroMM/6I6CVpTnu6JEeQkoi4
 IgGIEaTFPcgAjvpDQ8waLJL84EP6rbLW6dop+97BXbeO9L/fFf40kBhve6IggpJSeU9RdCQ5czGC
 Al0wggJZAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAYQLf/BIzLow9kWqD8My
-PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQgcmmCYUHuSAl+Y30fo/Nf+Q8ItlF1
-EIi7/5hG/5VnweQwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
-MTA1MDg1NjIxWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+PzANBglghkgBZQMEAgEFAKCBxzAvBgkqhkiG9w0BCQQxIgQghgQFRc1tSxu9SpiDc9BcKi6h3yhz
+PnBds1Bd0IDLKSYwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjYw
+MTA1MDg1NjMyWjBcBgkqhkiG9w0BCQ8xTzBNMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcN
-AQEBBQAEggEACa/ZE6/Kn8+sEmLWb8MPQdJnfiPYAE8v1sAgh7c1GzcicqlAzIGrgXZMFp39D9Y2
-KTZNsxvZ0NO1we/jBS1znt+EKEXbDCHdRqlp0ATCDkV2wzaV0Nt1bgPIXDElcdTr10gRaii/Ps3F
-c4tEabZD6Mz1I6UaKl/oDWzVIM07YE1iDQBgn1WcX7RmkZbgq0ac+mxi753IkgJcYgJG3npMG81/
-PvJJYh+y3uH0xjx7gyizYm7bXKvg3I0T3/gUcoA8UILJriHwFqrr3VV3hwisBSywA980kQl0BdRD
-BRULtumcHuA+ADHUDh86skM1ZJ83pDTLdjgvhPzoPd4Ueb0Dpg==
---000000000000a330ea0647a03bb8--
+AQEBBQAEggEAo8Wk8F/tPT748+mjWfg5xljRRkHa19HYSRc8yiFkprHJp6MZxRvwFr/nFbDuTP4Y
+QPX9l4qFmwCfLbYQr7XSw/qAnmzp0TKAlp0eWqnzEtL3iSv6sXOQhFmNr1u+Tcr1hCfrgz9PFFZs
+Oyc+wFmt4PVDQIYgk/mjboU9cr6Sy8NsuYn/OAzsnbzAtoc5TwR0+fzrfNojnXhEe4D2rMT/0VIK
+qv1l1t3DPzid73loQZAu2Khk92zYppeWTA+/o2eiW/likoi204wQSNxEtT0qnMjKZwgX3S10dRHL
+cdslHnnj/CcyHeJcB0XUoNijb5Eyz/MaaBvwxV7Qgr1gMlQ52Q==
+--0000000000005539fb0647a03cba--
 
