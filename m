@@ -1,124 +1,140 @@
-Return-Path: <linux-kselftest+bounces-48192-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4796CF3074
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 11:42:39 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57206CF3391
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 12:23:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 854EC3053800
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 10:39:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 37124301D630
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 11:22:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11E4313E02;
-	Mon,  5 Jan 2026 10:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60F3F3375C5;
+	Mon,  5 Jan 2026 11:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Fz2JOjb4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IN3mASKs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29AB2D8382;
-	Mon,  5 Jan 2026 10:39:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31EC9337118;
+	Mon,  5 Jan 2026 11:15:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767609561; cv=none; b=i97XljJZhGKsRmxPXlaSKPaIZDMSDVSdDYmPnFoWXbXcYoLrL1t7FmNSDL4wYxD2JWo3y19xP15sVWJdaPfZ/AZ5m38w5Cf/KSjUpwB+jkbY6c/xLyVewA+vh49OT/BSk5H7BfgDfWAgyXIG22x83U2jBiGBxIUiGoyOOa543SA=
+	t=1767611715; cv=none; b=Hc6SmqIEqGy1qX9lo5msHyALq1FCbN0QJpXv0Yww8ia+PtqMuSphxJRSKQyFX7HOCgIJ14TIZALyIWQ41DODFOQXNLPm3DoJz2Wev0kPanux5qEIjk4k/CnQNbQ6dVKfIoDscRucYDbc2p3TXSOkceEmOdnUt85f8l6aQxl5N7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767609561; c=relaxed/simple;
-	bh=auaWrlklStGyGtxL5JgH4a3smEJfo2D0fNwKvm7SaKo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ci135+EovxVX8FBQ3t/LjMPi1QuX2fxxNVKaZVVJoDg4JTCTtSZuwI8lFGTW+b/bFYtlRmCTnDZ8LsQ0QDSO3aSoF/A8dejiMdp6MqcF3/uT1jIzsp1p/uAZmgFe6jeng4m4UwV9xBPLfoIEc6gPcp/y449hcwMkWQvUHafAdMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Fz2JOjb4; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=l3s7cX/ZeOHl9HnqSZY8U8DaJGP2WKlEP0TykuYXlbM=;
-	b=Fz2JOjb4Te8gnO7rj4dgrJ7j+hrcNBCFgX/jivMD93VAMHJGMXFOwHSVS4imda5hIQsfjhwCY
-	ZimlykASdKpWy8j/AGUGvXUPUaq5Iu5hmnLE+f9S5gPh7L5BQUjdwefwpb+HTSL8Iwl3jo/CjGF
-	Vt+tJckoOQUSnru8/0geYw0=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4dl9gL5NTDzcb14;
-	Mon,  5 Jan 2026 18:35:42 +0800 (CST)
-Received: from dggpemf100004.china.huawei.com (unknown [7.185.36.110])
-	by mail.maildlp.com (Postfix) with ESMTPS id 08AFD404AD;
-	Mon,  5 Jan 2026 18:39:11 +0800 (CST)
-Received: from huawei.com (10.175.121.217) by dggpemf100004.china.huawei.com
- (7.185.36.110) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 5 Jan
- 2026 18:39:09 +0800
-From: Cao Jiaqiang <caojiaqiang@huawei.com>
-To: <gregkh@linuxfoundation.org>, <davem@davemloft.net>, <kuba@kernel.org>,
-	<shuah@kernel.org>
-CC: <stable@vger.kernel.org>, <netdev@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<dsahern@kernel.org>, <vincent.wang@huawei.com>, <liujian56@huawei.com>,
-	<yi.zhang@huawei.com>, <caojiaqiang@huawei.com>
-Subject: [PATCH 5.15.y] selftests: net: test_vxlan_under_vrf: fix HV connectivity test
-Date: Mon, 5 Jan 2026 18:52:51 +0800
-Message-ID: <20260105105251.33854-1-caojiaqiang@huawei.com>
-X-Mailer: git-send-email 2.22.0
+	s=arc-20240116; t=1767611715; c=relaxed/simple;
+	bh=gOPFCv6XsvdNRFL2RgDvRLwWfshb/oHcO2mTVP7fwUc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=tYVJ9j3IaAiEhKrTVkZwkwoeheXs68bX59Wko4jtoEgzjNU34oHyiq2oUVI0blK9eHBTJdYFUK9yFhaJENHOyEhKCDQYSsfwkeB005tz1nRQnjr5BiWhmeM8xbyfcGKuHOfsqSV5CjTPqcfb+rh86o3HgQcbGsH3XQrMzu3iUHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IN3mASKs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40353C116D0;
+	Mon,  5 Jan 2026 11:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767611714;
+	bh=gOPFCv6XsvdNRFL2RgDvRLwWfshb/oHcO2mTVP7fwUc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=IN3mASKs9ZOdY3UWX865ZG6aB6zxt/yT04bcUJ7cuxkRQCHiOoJYOHXltLVYGrWnX
+	 sLyyjN/mVfbdelfPtvuCgsuYc3e3xIs8WYSVdBfKfSdGRr7XCEYeoUVwx63W2eeyR1
+	 YsnFKsk5+hPaqSv1yzLkJ4S4OTgLG6rS3lu4D8KK2SlOY/0lKgXSRV11vvvL2rVqWI
+	 XcY69MIXG2csR5WWdunoLtYAYD6tqtRCAdOsZtO1xZXB2dLHSsAi9C2yiYDvkyXOqc
+	 f7mR+nylEUhtKx6jI6FOEwEfDTmGJ57eATPOxskUiFgXDTbQrewzUkLONqDGvjlsYT
+	 x269dn3xwSWxg==
+Content-Type: multipart/mixed; boundary="===============0721075218538269164=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- dggpemf100004.china.huawei.com (7.185.36.110)
+Message-Id: <655a960bb1b98cf56777481bd84ce53c2a17e527a8230edf9ad7523e98cce565@mail.kernel.org>
+In-Reply-To: <20260105105212.136645-3-adubey@linux.ibm.com>
+References: <20260105105212.136645-3-adubey@linux.ibm.com>
+Subject: Re: [PATCH 2/6] powerpc64/bpf: Tailcall handling with trampolines
+From: bot+bpf-ci@kernel.org
+To: adubey@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
+Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,mykolal@fb.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,naveen@kernel.org,maddy@linux.ibm.com,mpe@ellerman.id.au,npiggin@gmail.com,memxor@gmail.com,iii@linux.ibm.com,shuah@kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  5 Jan 2026 11:15:14 +0000 (UTC)
 
-From: Andrea Righi <andrea.righi@canonical.com>
+--===============0721075218538269164==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-[ Upstream commit e7e4785fa30f9b5d1b60ed2d8e221891325dfc5f ]
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 069a8822c30d..4aaa0a287a45 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
 
-It looks like test_vxlan_under_vrf.sh is always failing to verify the
-connectivity test during the ping between the two simulated VMs.
+[ ... ]
 
-This is due to the fact that veth-hv in each VM should have a distinct
-MAC address.
+> -static void bpf_trampoline_setup_tail_call_cnt(u32 *image, struct codegen_context *ctx,
+> -					       int func_frame_offset, int r4_off)
+> +static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_context *ctx,
+> +					       int func_frame_offset,
+> +					       int bpf_dummy_frame_size, int r4_off)
+>  {
+>  	if (IS_ENABLED(CONFIG_PPC64)) {
+>  		/* See bpf_jit_stack_tailcallinfo_offset() */
+> -		int tailcallcnt_offset = 7 * 8;
+> +		int tailcallinfo_offset = BPF_PPC_STACK_SAVE + SZL;
 
-Fix by setting a unique MAC address on each simulated VM interface.
+[ ... ]
 
-Without this fix:
+> +		EMIT(PPC_RAW_STL(_R3, _R1, func_frame_offset
+> +				- bpf_dummy_frame_size - tailcallinfo_offset));
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
- $ sudo ./tools/testing/selftests/net/test_vxlan_under_vrf.sh
- Checking HV connectivity                                           [ OK ]
- Check VM connectivity through VXLAN (underlay in the default VRF)  [FAIL]
+The new setup function stores tail_call_info at offset
+(func_frame_offset - bpf_dummy_frame_size - tailcallinfo_offset) from R1.
+Since func_frame_offset = bpf_dummy_frame_size + bpf_frame_size, this
+resolves to (bpf_frame_size - 56), which is a positive offset from R1.
 
-With this fix applied:
+However, the corresponding bpf_trampoline_restore_tail_call_cnt() function
+was not updated. It still reads from (R1 - 56):
 
- $ sudo ./tools/testing/selftests/net/test_vxlan_under_vrf.sh
- Checking HV connectivity                                           [ OK ]
- Check VM connectivity through VXLAN (underlay in the default VRF)  [ OK ]
- Check VM connectivity through VXLAN (underlay in a VRF)            [FAIL]
+    static void bpf_trampoline_restore_tail_call_cnt(...)
+    {
+        if (IS_ENABLED(CONFIG_PPC64)) {
+            int tailcallcnt_offset = 7 * 8;
+            EMIT(PPC_RAW_LL(_R3, _R1, -tailcallcnt_offset));
+                                      ^^^^^^^^^^^^^^^^^^
+            ...
+        }
+    }
 
-NOTE: the connectivity test with the underlay VRF is still failing; it
-seems that ARP requests are blocked at the simulated hypervisor level,
-probably due to some missing ARP forwarding rules. This requires more
-investigation (in the meantime we may consider to set that test as
-expected failure - XFAIL).
+Is there an offset mismatch here? The setup function stores at
+R1 + (bpf_frame_size - 56) while restore reads from R1 - 56. These point
+to different memory locations since bpf_frame_size is a positive value
+(at minimum ~200 bytes given the frame contents).
 
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Cao Jiaqiang <caojiaqiang@huawei.com>
+When BPF_TRAMP_F_TAIL_CALL_CTX is set, the restore function would read
+incorrect data after the traced function returns, potentially causing
+wrong tail call context to be propagated.
+
+> @@ -801,6 +830,12 @@ static int __arch_prepare_bpf_trampoline(...)
+>  		}
+>  	}
+>
+> +	/* Room for 64-bit tail_call_cnt */
+> +	bpf_frame_size += SZL;
+> +
+> +	/* Room for nvr save area */
+> +	bpf_frame_size += BPF_PPC_STACK_SAVE;
+> +
+>  	/* Padding to align stack frame, if any */
+>  	bpf_frame_size = round_up(bpf_frame_size, SZL * 2);
+
+The frame size is increased by 56 bytes (SZL + BPF_PPC_STACK_SAVE = 8 + 48)
+for the tail_call_info and nvr save area. This affects all calculations
+using bpf_frame_size, including the store offset in the setup function,
+but the restore function continues to use a hardcoded negative offset.
+
+
 ---
- tools/testing/selftests/net/test_vxlan_under_vrf.sh | 2 ++
- 1 file changed, 2 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/net/test_vxlan_under_vrf.sh b/tools/testing/selftests/net/test_vxlan_under_vrf.sh
-index 6fadc8e2f116..1fd1250ebc66 100755
---- a/tools/testing/selftests/net/test_vxlan_under_vrf.sh
-+++ b/tools/testing/selftests/net/test_vxlan_under_vrf.sh
-@@ -101,6 +101,8 @@ setup-vm() {
-     ip -netns hv-$id link set veth-tap master br0
-     ip -netns hv-$id link set veth-tap up
- 
-+    ip link set veth-hv address 02:1d:8d:dd:0c:6$id
-+
-     ip link set veth-hv netns vm-$id
-     ip -netns vm-$id addr add 10.0.0.$id/24 dev veth-hv
-     ip -netns vm-$id link set veth-hv up
--- 
-2.22.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20713322833
 
+--===============0721075218538269164==--
 
