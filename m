@@ -1,104 +1,127 @@
-Return-Path: <linux-kselftest+bounces-48205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48206-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 769E5CF3C48
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 14:24:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 138D2CF4611
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 16:24:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 0BB323010515
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 13:24:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DEC5A303B7D7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 15:18:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DB533E356;
-	Mon,  5 Jan 2026 13:24:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C990A3090F5;
+	Mon,  5 Jan 2026 15:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fkhxWcw0"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b="C5cbtpCW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from outbound.ci.icloud.com (ci-2005e-snip4-6.eps.apple.com [57.103.89.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470A933E352
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 13:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72B7308F07
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 15:18:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=57.103.89.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767619459; cv=none; b=ba6Q/IzQnjz23ZGFca40wmTc1TlFe2Sw7ynYFZImXQCddVB+rsRFkxrTYeTaX63lRjICIpnH6a7Kgj0ByGLHmyWc2pJQOHESOaX80kxn5wT0hGRIbo0ByHKz57HGW5ILRxf27fhR62OU3NyHRk8H1gBYd05aDp1Sy8kEdW2edaQ=
+	t=1767626301; cv=none; b=dHzZZw60YhcK8gzVwFXa9tj8Hc35wLGktAqSV/LIiPIX5uv6t3KXS4EwX2Pl51ZShcAkDz1z2Qt/Z9AV8E3NB56dE9SWg7FIO3P3vuFrV/IAItmtQ12/dc8emDtN6XH7TMtD/7PaUFrRCMgihz/IUxXMtKwbA/wMJps3yce+n0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767619459; c=relaxed/simple;
-	bh=ME9tcwYyhEFkcAlT3lWouAPFCjBAMKMHb3ZkPMJxkaY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=u5axK4dzo4gi8kP8optuyBf3z2BaMSkTZtg3CleThq3yCyJPG63gnaIoxnOE5iaJu3ucTWdOpY+hvFcjoe6AtSfsyP0QKuFpyRTaqWGrv7AAoRL9MGHW5oJChuiakJcstgRzsV8qkecUOxfJLu9LTBQMuV0m5tzz/wuZ0ZZcZz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fkhxWcw0; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <38dd70d77f8207395206564063b0a1a07dd1c6e7.camel@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767619453;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ME9tcwYyhEFkcAlT3lWouAPFCjBAMKMHb3ZkPMJxkaY=;
-	b=fkhxWcw0ZntTKUjHRp4oOQZ92KF73o59A6whc0wPUZbFWMSAnJYPsWAU7UUScF6yUJaDlY
-	FmnEb2DaNumN4HYtM51JahqM1cjS+8/wiShD/lNXOaZCDolY8pbhSFdiREiqiaYYqa6dCY
-	91NKWF01xOVvYWmUB4crF2V5s8cj2AE=
-Subject: Re: [PATCH bpf-next 1/2] bpf, test_run: Fix user-memory-access
- vulnerability for LIVE_FRAMES
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Toke =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>, 
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev,  eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev,  john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com,  jolsa@kernel.org, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org,  pabeni@redhat.com, horms@kernel.org,
- hawk@kernel.org, shuah@kernel.org,  aleksander.lobakin@intel.com,
- bpf@vger.kernel.org, netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: Yinhao Hu <dddddd@hust.edu.cn>, Kaiyan Mei <M202472210@hust.edu.cn>, 
- Dongliang Mu <dzm91@hust.edu.cn>
-Date: Mon, 05 Jan 2026 21:22:54 +0800
-In-Reply-To: <87y0mc5obp.fsf@toke.dk>
-References: <fa2be179-bad7-4ee3-8668-4903d1853461@hust.edu.cn>
-	 <20260104162350.347403-1-kafai.wan@linux.dev>
-	 <20260104162350.347403-2-kafai.wan@linux.dev> <87y0mc5obp.fsf@toke.dk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1767626301; c=relaxed/simple;
+	bh=JzCs0jWEW0pYuqnBSWeriA+ITaAzlDRpPmhZSgq2b78=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HiR4dvAOeqQp1i9kpashvbkoeFGZ5XTlPCNbpoDdrTBI/Jo4U1TFUIRUE0Grd+lQCpgY61p3PLYPvw4sSZAFE3lruMNeF6LWS0A1veR3Sx/BBTlux7WWmSOVFW5pjPfmiK84gesKMkcDdI6/HRbD3dcXQKwLjcTUoILkXh8UWY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net; spf=pass smtp.mailfrom=y-koj.net; dkim=fail (0-bit key) header.d=y-koj.net header.i=@y-koj.net header.b=C5cbtpCW reason="key not found in DNS"; arc=none smtp.client-ip=57.103.89.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=y-koj.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=y-koj.net
+Received: from outbound.ci.icloud.com (unknown [127.0.0.2])
+	by p00-icloudmta-asmtp-us-central-1k-60-percent-8 (Postfix) with ESMTPS id 170E41801A75;
+	Mon,  5 Jan 2026 15:18:15 +0000 (UTC)
+Dkim-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=y-koj.net; s=sig1; bh=QpShK1c4dkolRjMh25jTYh5j2iiE9cxcjk95MxZSesI=; h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme; b=C5cbtpCWPre+qC53yMvbqkVlrs2x9pD9+CQwzTMrDkf9wB/g3eklyCX7X1ZCplx148kxjB0JvL+lm8aUxZAI9M3AHkZmBaj4BPYaT0SsDqDiczdAhDRjumKk39fpygD466uBLstlsnW9L2hX4+sYfwj/1bBXjxMOyO/WU3AIMBQu0j/BQakMTbBT/dvaOKYbkVV+kyRwxx+ULDrE5kx11HqeUEjOKsthAZ8+pMcwqSzp/uKQeLHKaxOw9y51FN9D0qs9vfSk0TA9vt0lGuB1vOVzuN/Etflz1frjxxmmeV7JaJCFL5FWrPY8cTefeVhbViXFsrNCAS4uUceVUs58Vw==
+mail-alias-created-date: 1719758601013
+Received: from desktop.tail809fd.ts.net (unknown [17.57.156.36])
+	by p00-icloudmta-asmtp-us-central-1k-60-percent-8 (Postfix) with ESMTPSA id 7E2241802807;
+	Mon,  5 Jan 2026 15:18:13 +0000 (UTC)
+From: Yohei Kojima <yk@y-koj.net>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Yohei Kojima <yk@y-koj.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Breno Leitao <leitao@debian.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v3 0/2] net: netdevsim: fix inconsistent carrier state after link/unlink
+Date: Tue,  6 Jan 2026 00:17:31 +0900
+Message-ID: <cover.1767624906.git.yk@y-koj.net>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA1MDEzNCBTYWx0ZWRfX70xciToO+b1f
+ QD84lGjRkGbgxmswZ2MinH5QVygy852XtEVvGpye7G6xownPbiG9RaoAlhsCbKv8dq4XPdio1zU
+ 3OyjTsga1WYD4Z76kZdtdtX4ytJekRnscWRKqxHHP9Dmydf9XONsBBdoWh9MAjwAm3eKTjuDLGk
+ Lt/YhgcCUr/9g3ozgmEzBmBXAPqnQLL0TEjnvdYfk129D/Kmoo6U5Rsx6GggI6bKNaUK4PXzRcO
+ 6s0Iy6GcYcg/3o19pdl2how2ON9lfzS69QQelylHeaiQMU/VUHPgx9ZNLVOkobkoGm+kX5r0O84
+ qhmARgMn2ZHAQni4Cil
+X-Proofpoint-GUID: zuNL9t4IOEnhb_p7BcvfWE-LDT6r9eQj
+X-Authority-Info: v=2.4 cv=ELwLElZC c=1 sm=1 tr=0 ts=695bd639 cx=c_apl:c_pps
+ a=2G65uMN5HjSv0sBfM2Yj2w==:117 a=2G65uMN5HjSv0sBfM2Yj2w==:17
+ a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=jnl5ZKOAAAAA:8
+ a=Kqt5MdZNGhIV_AAfnTgA:9 a=RNrZ5ZR47oNZP8zBN2PD:22
+X-Proofpoint-ORIG-GUID: zuNL9t4IOEnhb_p7BcvfWE-LDT6r9eQj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-05_01,2026-01-05_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ spamscore=0 malwarescore=0 mlxscore=0 suspectscore=0 phishscore=0
+ mlxlogscore=784 adultscore=0 clxscore=1030 classifier=spam authscore=0
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
+ definitions=main-2601050134
+X-JNJ: AAAAAAABk/uHvJ8pxrURK0vhQwrcCHH7lPMmEI6rEtv0aTvE4urmfH581lobVfUWsm2kG07SzMRv4qNOpSZYkdUTzcL8pYH8TULkPk+nnOUA9GzMZWiQmlNLCwbcGnCUR+w3BKh2sWgpK6afp7OoaBJcRRgHOCR6G33Yjpj1qjFxFN8NT/XD0u4Ow69tVzgMUFZuI/ZHg9fAV7eCXJW903xQ7T1i6DsS5/2aTH0fK4AeTXjH8/lLq5FR3X8mMGTisy2MFLPMFnXFAkeW2+FI6rf4P79aLvpkJnHZDiPctiQda0yU8XyVcPXGmLUmw/FKH4792qu8PhmSWLVfMxB3r3IXWV2rPNl/qdfzq0+FITMrIeczGDVLO7IFWxFcHckdJ42HYKZI0mqF0xU2GIILNewhtVDtHUPfJqf82dufjoKntSVOS76o9ACVc+zD9hba2F/1fqORNRKXYCJ/AdWhM8+CQUJKlLWf0Vr4MN6AzF6SaY38HsL4oj96LZb63ov0TchI+Y+2PasiZBJWIpx85LFnNV9C2I6te1IlxAPBs7LYRD47W5NJDvTFBXCwStQCkUNfjmOXt3gTq2Ugu9CFUNZOtCl8JrwVyHObmgN5ymTIHtdUeYcQGKW3tQO2cAw0pmEh26UkQBfuFLtCTFfvAAeOQTRvEqD1FCQTeAhiqn1VwJGFlLpEpODhNKgm0V5UDLqxZ05X2tvqs/UELmipNdRRK9afEkyOFc8fc5OzA2fffd4dEs0B3RynrDon6MRlvk/+FDkZMiPHFbk8Ig==
 
-On Mon, 2026-01-05 at 11:46 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> KaFai Wan <kafai.wan@linux.dev> writes:
->=20
-> > This fix reverts to the original version and ensures data_hard_start
-> > correctly points to the xdp_frame structure, eliminating the security
-> > risk.
->=20
-> This is wrong. We should just be checking the meta_len on input to
-> account for the size of xdp_frame. I'll send a patch.
+This series fixes netdevsim's inconsistent behavior between carrier
+and link/unlink state.
 
-Current version the actual limit of the max input meta_len for live frames =
-is=20
-XDP_PACKET_HEADROOM - sizeof(struct xdp_frame), not XDP_PACKET_HEADROOM.
+More specifically, this fixes a bug that the carrier goes DOWN although
+two netdevsim were peered, depending on the order of peering and ifup.
+Especially in a NetworkManager-enabled environment, netdevsim test fails
+because of this.
 
-The original version not set xdp_buff->data_hard_start with xdp_frame,=C2=
-=A0
-I set it with the correct position by adding the headroom, so there is no n=
-eed=C2=A0
-for user to reduce the max input meta_len.
+The first patch fixes the bug itself in netdevsim/bus.c by adding
+netif_carrier_on() into a proper function. The second patch adds a
+regression test for this bug.
 
-This patch is failed with the xdp_do_redirect test, I'll fix and send v2 if=
-=C2=A0
-you're ok with that.
-=20
->=20
-> -Toke
->=20
+Changelog
+=========
+v2 -> v3:
+- Rebase to the latest net/main
+- patch 1:
+  - Add Reviewed-by tag from Breno Leitao
+  - Address the review comments from Jakub Kicinski regarding the condition
+    to call netif_carrier_on()
+- patch 2:
+  - Solve the shellcheck warning in the test
+    - Line too long error is left as is for consistency with other test
+      cases
+- v2: https://lore.kernel.org/netdev/cover.1767108538.git.yk@y-koj.net/
 
---=20
-Thanks,
-KaFai
+v1 -> v2:
+- Rebase to the latest net/main
+- Separate TFO tests from this series
+- Separate netdevsim test improvement from this series
+- v1: https://lore.kernel.org/netdev/cover.1767032397.git.yk@y-koj.net/
+
+Yohei Kojima (2):
+  net: netdevsim: fix inconsistent carrier state after link/unlink
+  selftests: netdevsim: add carrier state consistency test
+
+ drivers/net/netdevsim/bus.c                   |  8 +++
+ .../selftests/drivers/net/netdevsim/peer.sh   | 59 +++++++++++++++++++
+ 2 files changed, 67 insertions(+)
+
+-- 
+2.51.2
+
 
