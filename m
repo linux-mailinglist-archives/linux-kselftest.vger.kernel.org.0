@@ -1,120 +1,104 @@
-Return-Path: <linux-kselftest+bounces-48204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53600CF3ED5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 14:50:01 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 769E5CF3C48
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 14:24:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 993A4305D9AD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 13:44:11 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0BB323010515
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 13:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F753451B3;
-	Mon,  5 Jan 2026 12:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DB533E356;
+	Mon,  5 Jan 2026 13:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hk1GyY8p"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fkhxWcw0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC6C3446D8;
-	Mon,  5 Jan 2026 12:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 470A933E352
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 13:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767617169; cv=none; b=KlcQ4fKMXRFdnQktWEQMudxC7AMELqc1/vyC7LUV0dhwhoT7Xn1L2OGDtYM2vUJaB2kBLtJmO18nvhyIlyEHR3KgXKQFaUUn/4zuCJ/pUq2cTuk5tGi1UHn4Tu4qNbZEUaExa/jl5RX2yvytFMmYyyZ3UeeaXERKI51WlSlA2/Q=
+	t=1767619459; cv=none; b=ba6Q/IzQnjz23ZGFca40wmTc1TlFe2Sw7ynYFZImXQCddVB+rsRFkxrTYeTaX63lRjICIpnH6a7Kgj0ByGLHmyWc2pJQOHESOaX80kxn5wT0hGRIbo0ByHKz57HGW5ILRxf27fhR62OU3NyHRk8H1gBYd05aDp1Sy8kEdW2edaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767617169; c=relaxed/simple;
-	bh=ql8wdMN032MrP8xavsv4jPuanq1kV6VysEAcsIRbjMo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lnvJ67x1rvBXx1tKwGQLSf+kXXBGuSyFo+fjTMOcE1Y/u56nBUYp4lw8t/W8TvS7FgQJkvkEv7cpMbID3Aw+dtjcrBzhfzThmN4P+wW8t1MoA7uwDO6Tv1+YjLhFqfPEoSxr1HLAR5l96EzcdysLP9i05H99T/HlYAXjqbgsgoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hk1GyY8p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43A40C116D0;
-	Mon,  5 Jan 2026 12:46:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767617168;
-	bh=ql8wdMN032MrP8xavsv4jPuanq1kV6VysEAcsIRbjMo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hk1GyY8poIzMwUg1Iu63Ub8SWVmdLS4TEm6OBkbOuil30njeic/+PyYniw19FvcfQ
-	 akkAIC2dCBZpjG7mL+5tlswp55YzpRjO/r2CQ2P2icCNfqjFIC/Axp/X+aI/Gzqy4t
-	 7DYXjBx4oQ4EWotSOuDKT6K/tdQ9CrmP4u6yeWgATKXWwyeKV/6HP+XIQFZP3kR2VX
-	 NoBcM97/reHliukWwJASK0Ivj7chaFY7MJki7jZWxQDQRiZY4fna4e4eISENd0VNRE
-	 ekfQvWw42zotZy6AniyKMrvCJuYsZOv9Hips04+ePO1QHQaYiSpIQx9Ygjpu4qQ03n
-	 XuW6wtoAVoZdg==
-Date: Mon, 5 Jan 2026 12:46:03 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Yunsheng Lin <linyunsheng@huawei.com>
-Subject: Re: [PATCH 1/4] selftests/mm: remove flaky header check
-Message-ID: <2bc4e09a-045a-4d33-8857-1bdfe3281da2@sirena.org.uk>
-References: <20251216142633.2401447-1-kevin.brodsky@arm.com>
- <20251216142633.2401447-2-kevin.brodsky@arm.com>
- <5f866c1a-c8cd-4dc6-b312-9017cef89920@sirena.org.uk>
- <e971e44e-5539-4fc4-8128-0ce9c3d10a38@arm.com>
- <682f64d0-353c-47bb-808b-eacc2d4d6c00@sirena.org.uk>
- <9c97ac9c-b0df-42e7-84fc-7e0d986c7324@arm.com>
+	s=arc-20240116; t=1767619459; c=relaxed/simple;
+	bh=ME9tcwYyhEFkcAlT3lWouAPFCjBAMKMHb3ZkPMJxkaY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=u5axK4dzo4gi8kP8optuyBf3z2BaMSkTZtg3CleThq3yCyJPG63gnaIoxnOE5iaJu3ucTWdOpY+hvFcjoe6AtSfsyP0QKuFpyRTaqWGrv7AAoRL9MGHW5oJChuiakJcstgRzsV8qkecUOxfJLu9LTBQMuV0m5tzz/wuZ0ZZcZz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fkhxWcw0; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <38dd70d77f8207395206564063b0a1a07dd1c6e7.camel@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767619453;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ME9tcwYyhEFkcAlT3lWouAPFCjBAMKMHb3ZkPMJxkaY=;
+	b=fkhxWcw0ZntTKUjHRp4oOQZ92KF73o59A6whc0wPUZbFWMSAnJYPsWAU7UUScF6yUJaDlY
+	FmnEb2DaNumN4HYtM51JahqM1cjS+8/wiShD/lNXOaZCDolY8pbhSFdiREiqiaYYqa6dCY
+	91NKWF01xOVvYWmUB4crF2V5s8cj2AE=
+Subject: Re: [PATCH bpf-next 1/2] bpf, test_run: Fix user-memory-access
+ vulnerability for LIVE_FRAMES
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Toke =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>, 
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev,  eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev,  john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com,  jolsa@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org,  pabeni@redhat.com, horms@kernel.org,
+ hawk@kernel.org, shuah@kernel.org,  aleksander.lobakin@intel.com,
+ bpf@vger.kernel.org, netdev@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Cc: Yinhao Hu <dddddd@hust.edu.cn>, Kaiyan Mei <M202472210@hust.edu.cn>, 
+ Dongliang Mu <dzm91@hust.edu.cn>
+Date: Mon, 05 Jan 2026 21:22:54 +0800
+In-Reply-To: <87y0mc5obp.fsf@toke.dk>
+References: <fa2be179-bad7-4ee3-8668-4903d1853461@hust.edu.cn>
+	 <20260104162350.347403-1-kafai.wan@linux.dev>
+	 <20260104162350.347403-2-kafai.wan@linux.dev> <87y0mc5obp.fsf@toke.dk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ee3kU50VQDofGf6W"
-Content-Disposition: inline
-In-Reply-To: <9c97ac9c-b0df-42e7-84fc-7e0d986c7324@arm.com>
-X-Cookie: So many women
+X-Migadu-Flow: FLOW_OUT
 
+On Mon, 2026-01-05 at 11:46 +0100, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> KaFai Wan <kafai.wan@linux.dev> writes:
+>=20
+> > This fix reverts to the original version and ensures data_hard_start
+> > correctly points to the xdp_frame structure, eliminating the security
+> > risk.
+>=20
+> This is wrong. We should just be checking the meta_len on input to
+> account for the size of xdp_frame. I'll send a patch.
 
---ee3kU50VQDofGf6W
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Current version the actual limit of the max input meta_len for live frames =
+is=20
+XDP_PACKET_HEADROOM - sizeof(struct xdp_frame), not XDP_PACKET_HEADROOM.
 
-On Mon, Dec 29, 2025 at 04:40:26PM +0100, Kevin Brodsky wrote:
-> On 18/12/2025 15:25, Mark Brown wrote:
+The original version not set xdp_buff->data_hard_start with xdp_frame,=C2=
+=A0
+I set it with the correct position by adding the headroom, so there is no n=
+eed=C2=A0
+for user to reduce the max input meta_len.
 
-> > Well, there's also the selection of KDIR which for some reason defaults
-> > to the installed kernel so we get:
+This patch is failed with the xdp_do_redirect test, I'll fix and send v2 if=
+=C2=A0
+you're ok with that.
+=20
+>=20
+> -Toke
+>=20
 
-> Overall the kselftests tend to assume that we're building on the same
-> machine we'll run them, so at least that feels consistent. The same
-> default is used for most other out-of-tree kselftests modules
-> (livepatch, net/bench).
-
-That's really not the expected usage pattern, I'd be surprised if a
-non-trivial propoprtion of kselftest builds were intended to be run on
-the system they're built on - a lot of people test interactively in VMs,
-or on some other target hardware, and automated systems are going to be
-building separately.  The two you've identified look like special
-snowflakes TBH (livepatch in particular has a bunch of other issues due
-to what it's trying to do).
-
-> Maybe the documentation should be updated to recommend setting KDIR
-> explicitly? Or maybe it could default to KDIR=$PWD or $(abspath
-> $(KBUILD_OUTPUT)) when cross-compiling?
-
-I think defaulting to something related to the current kernel build is
-more sensible here.
-
---ee3kU50VQDofGf6W
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlbsooACgkQJNaLcl1U
-h9AHxQf/Z8Nc97ZwGUewBQVLOCUmYjLOtU4B6nWHPdZgpoANTtvhZOi/lqyJS7gV
-WLscnoEUA266crkqIWb3oIoWkNERtD19h+s5H+IXm4Nz1V22lG6R5PDblt8YegSJ
-lFYuGvGeeBKESvTsg7PQDpjmLaV75LorK6X3t8GSjrEXtPKTJKIBxXfefrDHfDWh
-ZWCTb/j1DMDdBZ/hRcRYPtiti8f0mcsIDB0KfJ2RYP/9VpcaVMgnGSVA+8lYjOZZ
-flWs7KSCcOoMG8qZcqKmICyAewMgEvgjq4JTQkwJ8nnTHysXHnK558HZ01lydGFK
-lrN4yLX5KhvW7HkLN1/hjP0ihXbSkA==
-=jLkm
------END PGP SIGNATURE-----
-
---ee3kU50VQDofGf6W--
+--=20
+Thanks,
+KaFai
 
