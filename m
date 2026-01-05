@@ -1,164 +1,83 @@
-Return-Path: <linux-kselftest+bounces-48172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7435ECF21C1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 08:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5647FCF2407
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 08:46:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 903453010AAD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 07:00:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EDD7F3015141
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 07:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1D16229B18;
-	Mon,  5 Jan 2026 07:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483572D77EA;
+	Mon,  5 Jan 2026 07:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="SBMGwO0p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808DB191F94;
-	Mon,  5 Jan 2026 07:00:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2AF2D24B7;
+	Mon,  5 Jan 2026 07:44:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767596452; cv=none; b=Rn4CuWEnIgxBtAfah5Ut31HLatLQ2kWzJFDjCBqNZrBc8hDwlthD6c/fy39Rg+kDdG4E0vA5P7aZByHcPWMnzAGguL4D+MJI1aITR4mnGFlskChSCTSGDBtdqsrW23fmnFYRSMWsD/l4M+ieCh2P9NwaW+88uSRuHmp/TqLotjk=
+	t=1767599097; cv=none; b=YxaxQVxyq2eXYyZMFbspEvC9hRCR1eOTZGhWoWrSLgmSfOTzdEjFUmV/SpBdyvXCwuUAq7pb9xnVMatAVRHlNbyGndV+ahWSnzHXw0wzsSqhT/nM/Fa10D12LhP6CVNJ+88WX47YrS/K+U+/+n0Oz4SQR1+cvk8BMi8N90AtCrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767596452; c=relaxed/simple;
-	bh=6/o8N7wQPGK8BCmUOHYK6IQL+9v4BV8JPfOheD1LOHQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WnZbFUZsdENhQ/LjqtdlX54MW1PnQ10bXmKucFbHMjgt7QNCd9QqxfEkvTnYkLxjWMwg/p2ufiS+6Qt0uNh267BAF4I1Uu6hj8lg2N5JaW8PTCiv/kSo58EVtGp8YIglG/bKNTNJXjAQei1CLrQJcKPEi2HI3IUSXFzcWsY6A88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dl4tD1TZDzYQts0;
-	Mon,  5 Jan 2026 14:59:48 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 9E08C417F3;
-	Mon,  5 Jan 2026 15:00:46 +0800 (CST)
-Received: from [10.67.111.176] (unknown [10.67.111.176])
-	by APP4 (Coremail) with SMTP id gCh0CgCnB_idYVtpfUbGCg--.47880S2;
-	Mon, 05 Jan 2026 15:00:46 +0800 (CST)
-Message-ID: <38ab0503-3176-43a0-b6b5-09de0fd9eb75@huaweicloud.com>
-Date: Mon, 5 Jan 2026 15:00:44 +0800
+	s=arc-20240116; t=1767599097; c=relaxed/simple;
+	bh=Zr2aBtsyUcA7rmHP55HTRA28GFSHEepQ3UGXI7OYnUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ks7JYJw9TxmIot5EzkwSutIQQY+/jS2JhxM1gk2FVaH+qMaTi5fPsx1M8zQmwGS92FYrVI8NTF0n4ySTo9ob1YWp9wasQi3i1TWnQiXx+XjyOPu8RZdVwWBweXDx5tbbc4F4bKKKS5P493ln98BokFnXnyO0S9EsWXd8do5laDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=SBMGwO0p; arc=none smtp.client-ip=51.159.59.229
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
+	t=1767599091; bh=Zr2aBtsyUcA7rmHP55HTRA28GFSHEepQ3UGXI7OYnUM=;
+	h=From:Message-ID:From;
+	b=SBMGwO0p7DnRwaxOMTBHFlVRxxrkHIhqk0ClxkzHduCdCMFL9LUbZbmLDuOOigswB
+	 aNFSdF4FVm+GZ127PJ5quwtidmVqkP9Z2bN82yP/NpEhlrdsu1SE5VpwR3yjhw0lnl
+	 RR0Xg+GSUNmFInLPm7tNC09WEnqSotoaT7/OjGbc=
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by mta1.formilux.org (Postfix) with ESMTP id 53EC6C0943;
+	Mon, 05 Jan 2026 08:44:51 +0100 (CET)
+Date: Mon, 5 Jan 2026 08:44:50 +0100
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/nolibc: fix sparc32 tests with -mcpu=v9
+Message-ID: <aVtr8vJd_683mqUO@1wt.eu>
+References: <20260104-nolibc-sparc32-fix-v1-1-e341b06cbdb7@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [cgroup/for-6.20 PATCH v2 3/4] cgroup/cpuset: Don't fail
- cpuset.cpus change in v2
-To: Waiman Long <llong@redhat.com>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- Sun Shaojie <sunshaojie@kylinos.cn>
-References: <20260101191558.434446-1-longman@redhat.com>
- <20260101191558.434446-4-longman@redhat.com>
- <efdcd90c-95ed-4cfc-af9a-3dc0e8f0a488@huaweicloud.com>
- <6eedf67b-3538-4fd1-903b-b7d8db4ff43d@redhat.com>
- <7a3ec392-2e86-4693-aa9f-1e668a668b9c@huaweicloud.com>
- <85f4bca2-e355-49ce-81e9-3b8080082545@redhat.com>
-Content-Language: en-US
-From: Chen Ridong <chenridong@huaweicloud.com>
-In-Reply-To: <85f4bca2-e355-49ce-81e9-3b8080082545@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:gCh0CgCnB_idYVtpfUbGCg--.47880S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFWrAw15Zr1fCr1rGr1kGrg_yoW5Zr1fpF
-	yUK3W5trs5KFW7Cwn2q3WxXF1Fq3W2yF1UZFn8Jw1xA390gFnIyF4IyFs8u347Gw4fCa4j
-	v3yavryfXF1qv3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
-	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
-	7KsUUUUUU==
-X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260104-nolibc-sparc32-fix-v1-1-e341b06cbdb7@weissschuh.net>
 
+Hi Thomas,
 
+On Sun, Jan 04, 2026 at 11:14:13PM +0100, Thomas Weißschuh wrote:
+> Since LLVM commit 39e30508a7f6 ("[Driver][Sparc] Default to -mcpu=v9 for
+> 32-bit Linux/sparc64 (#109278)"), clang defaults to -mcpu=v9 for 32-bit
+> SPARC builds. -mcpu=v9 generates instructions which are not recognized
+> by qemu-sparc and qemu-system-sparc. Instead qemu-sparc32plus and
+> qemu-system-sparc64 with a 64-bit kernel and CONFIG_COMPAT are needed.
+>
+> Rework the test setup so that -mcpu=v9 also works correctly.
 
-On 2026/1/5 11:59, Waiman Long wrote:
-> On 1/4/26 8:35 PM, Chen Ridong wrote:
->>
->> On 2026/1/5 5:48, Waiman Long wrote:
->>> On 1/4/26 2:09 AM, Chen Ridong wrote:
->>>> On 2026/1/2 3:15, Waiman Long wrote:
->>>>> Commit fe8cd2736e75 ("cgroup/cpuset: Delay setting of CS_CPU_EXCLUSIVE
->>>>> until valid partition") introduced a new check to disallow the setting
->>>>> of a new cpuset.cpus.exclusive value that is a superset of a sibling's
->>>>> cpuset.cpus value so that there will at least be one CPU left in the
->>>>> sibling in case the cpuset becomes a valid partition root. This new
->>>>> check does have the side effect of failing a cpuset.cpus change that
->>>>> make it a subset of a sibling's cpuset.cpus.exclusive value.
->>>>>
->>>>> With v2, users are supposed to be allowed to set whatever value they
->>>>> want in cpuset.cpus without failure. To maintain this rule, the check
->>>>> is now restricted to only when cpuset.cpus.exclusive is being changed
->>>>> not when cpuset.cpus is changed.
->>>>>
->>>> Hi, Longman,
->>>>
->>>> You've emphasized that modifying cpuset.cpus should never fail. While I haven't found this
->>>> explicitly documented. Should we add it?
->>>>
->>>> More importantly, does this mean the "never fail" rule has higher priority than the exclusive CPU
->>>> constraints? This seems to be the underlying assumption in this patch.
->>> Before the introduction of cpuset partition, writing to cpuset.cpus will only fail if the cpu list
->>> is invalid like containing CPUs outside of the valid cpu range. What I mean by "never-fail" is that
->>> if the cpu list is valid, the write action should not fail. The rule is not explicitly stated in the
->>> documentation, but it is a pre-existing behavior which we should try to keep to avoid breaking
->>> existing applications.
->>>
->> There are two conditions that can cause a cpuset.cpus write operation to fail: ENOSPC (No space left
->> on device) and EBUSY.
->>
->> I just want to ensure the behavior aligns with our design intent.
->>
->> Consider this example:
->>
->> # cd /sys/fs/cgroup/
->> # mkdir test
->> # echo 1 > test/cpuset.cpus
->> # echo $$ > test/cgroup.procs
->> # echo 0 > /sys/devices/system/cpu/cpu1/online
->> # echo > test/cpuset.cpus
->> -bash: echo: write error: No space left on device
->>
->> In cgroups v2, if the test cgroup becomes empty, it could inherit the parent's effective CPUs. My
->> question is: Should we still fail to clear cpuset.cpus (returning an error) when the cgroup is
->> populated?
-> 
-> Good catch. This error is for v1. It shouldn't apply for v2. Yes, I think we should fix that for v2.
-> 
+Hmmm doesn't this mean that we're now unable to emit proper sparc32
+instructions with this compiler ? I don't know which CPUs the kernel
+still supports, but if it still supports these old SS-5, maybe we
+should instead pass the correct -mcpu to clang so that it emits the
+expected instructions, otherwise we're just hiding the regressing by
+upgrading the test machine beyond what the kernel supports ? Of course
+if they're no longer supported that's different, but I'm still seeing
+traces of SparcStation5 in the code so I don't know what to think about
+this.
 
-The EBUSY check (through cpuset_cpumask_can_shrink) is necessary, correct?
-
-Since the subsequent patch modifies exclusive checking for v1, should we consolidate all v1-related
-code into a separate function like cpuset1_validate_change() (maybe come duplicate code)?, it would
-allow us to isolate v1 logic and avoid having to account for v1 implementation details in future
-features.
-
-In other words:
-
-validate_change(...)
-{
-    if (!is_in_v2_mode())
-        return cpuset1_validate_change(cur, trial);
-    ...
-    // only v2 code here
-}
-
--- 
-Best regards,
-Ridong
-
+Thanks,
+Willy
 
