@@ -1,235 +1,173 @@
-Return-Path: <linux-kselftest+bounces-48213-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48214-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88CE6CF45D4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 16:21:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2736CF48AE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 05 Jan 2026 16:58:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 53862300EA28
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 15:20:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 29E3A31317BE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Jan 2026 15:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E44A532C921;
-	Mon,  5 Jan 2026 15:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1448B3093BC;
+	Mon,  5 Jan 2026 15:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="a0bIZEoW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="np88r4ts"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2425314D2E
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Jan 2026 15:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC91C3019D8;
+	Mon,  5 Jan 2026 15:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767626366; cv=none; b=nTs5Nmoaosaf+LFZ//Ud8Oc1paxlM84CLaz+BcmhUY/LTmgKz7CjIgyQ2pNapWOeihGnvA4t+kM8D/44e9E6q1O/Ovx+U6gxJfJK3Mbimvc3wNap1xiigvyc7C+0zFsXhrzYBD0+BzKtxBiB42GJRiQakfK6PnukuTN5SD+ul/g=
+	t=1767627792; cv=none; b=Hwzojdw2U7bwZL0xly5K9JqEjp9MOIJGKvkdakd0II5LAPUY44IXzF6aulXgReLLYti+JFN83JaJ4eRlGbUppb9rfOG+3bvKw4MFJheY1pXpjvsJ2u+Ts8NSfhAEinXvywpuSySZSsWSkRgSSE3fCJ5x1P9FLwwD3tN4mJ9EdMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767626366; c=relaxed/simple;
-	bh=lMJEaWB8f3Hg9RvJw5w+N2p4NV2VpqSAAdZbuwsiP80=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A5KOjj5nUUWeWAJqVmkw4ID7vM+vsNCLlVqHdhBX9WIQWv8fqAdnMhAgDkpMWOhmILbv3Bax8/Rz6p07eBIbX00LXguZvwosFsfGEWfej8WfKgU/yV+Ly4MXfuMydICLnGbzLdbJWpS47v7/hYRYsyRVhvDSVm1uULjpof0UTSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=a0bIZEoW; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767626362;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=hihqJCyk34Is6LN9qO5d1mtAMbuF5DLsZJ+b+PHXRnA=;
-	b=a0bIZEoWFCQCQ15o7y2TYtc8aqJ0F7KYUIaoUh3dg6eCtbqSbSjBm/S+QW2nKMKtBajier
-	POgLK0tMAus/7wpSTgDrUUbM/I5i2px1CmBoeo0eOFBHOawUqSvCkTnOSm2GHUPEby9Z3A
-	jUNtgMqaIL2AYComt7LQBC6/wWHfmYM=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 5/5] selftests/bpf: Add tests to verify no unintended eviction when updating lru_[percpu_,]hash maps
-Date: Mon,  5 Jan 2026 23:18:13 +0800
-Message-ID: <20260105151813.6968-6-leon.hwang@linux.dev>
-In-Reply-To: <20260105151813.6968-1-leon.hwang@linux.dev>
-References: <20260105151813.6968-1-leon.hwang@linux.dev>
+	s=arc-20240116; t=1767627792; c=relaxed/simple;
+	bh=/JKo3a+bEEV8RMt7G4yFVltWy0vo1NbwemAW3LYU+Dc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=UO2+xBeqI9r9Oh75XXvl8uEdwrcKUttGFEqap/id1f7evSYNxY8hIFhwFxBl+fblOoX2afxIPegF/OrVQKZkqsfmStAeJvCaaPHl74MZZPxupJ2eMvqi+gdrnylO4a1aXWRsk5u6si8jlhabFFZu+cp37pLCCbScTQ/EodpMhQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=np88r4ts; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F85C116D0;
+	Mon,  5 Jan 2026 15:43:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767627791;
+	bh=/JKo3a+bEEV8RMt7G4yFVltWy0vo1NbwemAW3LYU+Dc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=np88r4ts1nNRST4Jmu8WK/TlLk7RnTyxGnMDu2wQxVXj7EXN00M92llO7tClnXJ4P
+	 iozZ9gqjnEZZu8AQAaoZ1FHADsPEjhLV78GhA+IizN9EN4MWrOYUGJGTVUKDIzYEb1
+	 Q05Mu3r4h1iJQ/QgzsObTAL0Y+P01q+GOEEroV7BIpC4Fmk+06hmGbobnyp0HToz6t
+	 i20rzGy7N/Wctc9NhMuSuLZ/Ec6pUvfYnUiyE64Ix4RNj4RIBP01l2au9cdTYEA0X6
+	 fY7JtJsEQ0IhgQSyBDmZsFk2IThzXLWAHAs9AN7EdD/DirFjgjq7jPZy505xNbenQp
+	 nVZxkfSlfgjsQ==
+Content-Type: multipart/mixed; boundary="===============0955332525649677193=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <b9810ef33fea33c42cae606c6e3673147668f16b9e88303d47ceeeeea200712e@mail.kernel.org>
+In-Reply-To: <20260105151813.6968-5-leon.hwang@linux.dev>
+References: <20260105151813.6968-5-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v2 4/5] bpf: lru: Fix unintended eviction when updating lru hash maps
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,skb99@linux.ibm.com,davem@davemloft.net,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  5 Jan 2026 15:43:10 +0000 (UTC)
 
-Add four tests to verify that updating an existing element in LRU hash
-maps does not cause unintended eviction of other elements.
+--===============0955332525649677193==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The test creates lru_hash/lru_percpu_hash maps with max_entries slots and
-populates all of them. It then updates an existing key and verifies that:
-1. The update succeeds without error
-2. The updated key has the new value
-3. All other keys still exist with their original values
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index d029690246f8..8665eb6b8a7d 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
 
-This validates the fix that prevents unnecessary LRU eviction when
-updating existing elements in full LRU hash maps.
+[ ... ]
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> +static int htab_lru_map_update_elem_in_place(struct bpf_htab *htab, void *key, void *value,
+> +					     u64 map_flags, struct bucket *b,
+> +					     struct hlist_nulls_head *head, u32 hash,
+> +					     bool percpu, bool onallcpus)
+> +{
+> +	struct htab_elem *l_new, *l_old, *l_free;
+> +	struct bpf_map *map = &htab->map;
+> +	u32 key_size = map->key_size;
+> +	struct bpf_lru_node *node;
+> +	unsigned long flags;
+> +	void *l_val;
+> +	int ret;
+> +
+> +	node = bpf_lru_pop_extra(&htab->lru);
+> +	if (!node)
+> +		return -ENOENT;
+> +
+> +	l_new = container_of(node, struct htab_elem, lru_node);
+> +	l_new->hash = hash;
+> +	memcpy(l_new->key, key, key_size);
+> +	if (!percpu) {
+> +		l_val = htab_elem_value(l_new, map->key_size);
+> +		copy_map_value(map, l_val, value);
+> +		bpf_obj_free_fields(map->record, l_val);
+> +	}
+
+Should bpf_obj_free_fields() be called here on l_new? The value was just
+copied into l_new and l_new will be inserted into the hash table when
+l_old is found. Calling bpf_obj_free_fields() on l_new's value frees the
+special fields (kptr, bpf_list_head, etc.) that were just copied, then
+l_new is inserted with freed fields. This appears to be a use-after-free
+for maps with special fields.
+
+Looking at htab_lru_map_update_elem(), the pattern is to copy the value
+and NOT call bpf_obj_free_fields() on the new element. The fields are
+only freed when an element is removed from the hash table.
+
+> +
+> +	ret = htab_lock_bucket(b, &flags);
+> +	if (ret)
+> +		goto err_lock_bucket;
+> +
+> +	l_old = lookup_elem_raw(head, hash, key, key_size);
+> +
+> +	ret = check_flags(htab, l_old, map_flags);
+> +	if (ret)
+> +		goto err;
+> +
+> +	if (l_old) {
+> +		bpf_lru_node_set_ref(&l_new->lru_node);
+> +		if (percpu) {
+> +			/* per-cpu hash map can update value in-place.
+> +			 * Keep the same logic in __htab_lru_percpu_map_update_elem().
+> +			 */
+> +			pcpu_copy_value(htab, htab_elem_get_ptr(l_old, key_size),
+> +					value, onallcpus);
+> +			l_free = l_new;
+> +		} else {
+> +			hlist_nulls_add_head_rcu(&l_new->hash_node, head);
+> +			hlist_nulls_del_rcu(&l_old->hash_node);
+> +			l_free = l_old;
+> +		}
+> +	} else {
+> +		ret = -ENOENT;
+> +	}
+> +
+> +err:
+> +	htab_unlock_bucket(b, flags);
+> +
+> +err_lock_bucket:
+> +	bpf_lru_push_free(&htab->lru, ret ? node : &l_free->lru_node);
+                                              ^^^^^^^^^^^^^^^^^^
+
+When ret == 0 and !percpu, l_free points to l_old which is being removed
+from the hash table. The code calls bpf_lru_push_free() directly instead
+of htab_lru_push_free(). Looking at htab_lru_push_free():
+
+    static void htab_lru_push_free(struct bpf_htab *htab, struct htab_elem *elem)
+    {
+        check_and_free_fields(htab, elem);
+        bpf_map_dec_elem_count(&htab->map);
+        bpf_lru_push_free(&htab->lru, &elem->lru_node);
+    }
+
+It calls check_and_free_fields() to free special fields in the element
+before pushing to the free list. The code here bypasses that, which would
+leak special fields (kptr, etc.) in l_old when it has them.
+
+Should this use htab_lru_push_free() instead of bpf_lru_push_free() for
+the non-error path where l_old is being freed?
+
+> +
+> +	return ret;
+> +}
+
+
 ---
- .../selftests/bpf/prog_tests/htab_update.c    | 129 ++++++++++++++++++
- 1 file changed, 129 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c b/tools/testing/selftests/bpf/prog_tests/htab_update.c
-index d0b405eb2966..a0c93aae2b99 100644
---- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
-+++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
-@@ -143,3 +143,132 @@ void test_htab_update(void)
- 	if (test__start_subtest("concurrent_update"))
- 		test_concurrent_update();
- }
-+
-+static void __setaffinity(cpu_set_t *cpus, int cpu)
-+{
-+	CPU_ZERO(cpus);
-+	CPU_SET(cpu, cpus);
-+	pthread_setaffinity_np(pthread_self(), sizeof(*cpus), cpus);
-+}
-+
-+static void test_lru_hash_map_update_elem(enum bpf_map_type map_type, u64 map_flags)
-+{
-+	bool percpu = map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH;
-+	int err, map_fd, i, key, nr_cpus, max_entries = 128;
-+	u64 *values, value = 0xDEADC0DE;
-+	cpu_set_t cpus;
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = map_flags,
-+	);
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	values = calloc(nr_cpus, sizeof(u64));
-+	if (!ASSERT_OK_PTR(values, "calloc values"))
-+		return;
-+	for (i = 0; i < nr_cpus; i++)
-+		values[i] = value;
-+
-+	map_fd = bpf_map_create(map_type, "test_lru", sizeof(int), sizeof(u64), max_entries, &opts);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create")) {
-+		free(values);
-+		return;
-+	}
-+
-+	/* populate all slots */
-+	for (key = 0; key < max_entries; key++) {
-+		__setaffinity(&cpus, key%nr_cpus);
-+		err = bpf_map_update_elem(map_fd, &key, values, 0);
-+		if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+			goto out;
-+	}
-+
-+	/* LRU eviction should not happen */
-+
-+#define CHECK_OTHER_CPUS_VALUES(__val)							\
-+	do {										\
-+		if (!percpu)								\
-+			break;								\
-+		for (i = 1; i < nr_cpus; i++)						\
-+			if (!ASSERT_EQ(values[i], __val, "bpf_map_lookup_elem value"))	\
-+				goto out;						\
-+	} while (0)
-+
-+	__setaffinity(&cpus, 0);
-+	key = 0;
-+	memset(values, 0, nr_cpus * sizeof(u64));
-+	err = bpf_map_update_elem(map_fd, &key, values, 0);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto out;
-+
-+	err = bpf_map_lookup_elem(map_fd, &key, values);
-+	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
-+		goto out;
-+	if (!ASSERT_EQ(*values, 0, "bpf_map_lookup_elem value"))
-+		goto out;
-+	CHECK_OTHER_CPUS_VALUES(0);
-+
-+	for (key = 1; key < max_entries; key++) {
-+		err = bpf_map_lookup_elem(map_fd, &key, values);
-+		if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
-+			goto out;
-+		if (!ASSERT_EQ(*values, value, "bpf_map_lookup_elem value"))
-+			goto out;
-+		CHECK_OTHER_CPUS_VALUES(value);
-+	}
-+
-+	for (i = 0; i < nr_cpus; i++)
-+		values[i] = value;
-+
-+	key = max_entries;
-+	err = bpf_map_update_elem(map_fd, &key, values, 0);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto out;
-+
-+	err = bpf_map_lookup_elem(map_fd, &key, values);
-+	if (!ASSERT_OK(err, "bpf_map_lookup_elem"))
-+		goto out;
-+	if (!ASSERT_EQ(*values, value, "bpf_map_lookup_elem value"))
-+		goto out;
-+	CHECK_OTHER_CPUS_VALUES(value);
-+
-+#undef CHECK_OTHER_CPUS_VALUES
-+
-+out:
-+	close(map_fd);
-+	free(values);
-+}
-+
-+static void test_update_lru_hash_map_common_lru(void)
-+{
-+	test_lru_hash_map_update_elem(BPF_MAP_TYPE_LRU_HASH, 0);
-+}
-+
-+static void test_update_lru_hash_map_percpu_lru(void)
-+{
-+	test_lru_hash_map_update_elem(BPF_MAP_TYPE_LRU_HASH, BPF_F_NO_COMMON_LRU);
-+}
-+
-+static void test_update_lru_percpu_hash_map_common_lru(void)
-+{
-+	test_lru_hash_map_update_elem(BPF_MAP_TYPE_LRU_PERCPU_HASH, 0);
-+}
-+
-+static void test_update_lru_percpu_hash_map_percpu_lru(void)
-+{
-+	test_lru_hash_map_update_elem(BPF_MAP_TYPE_LRU_PERCPU_HASH, BPF_F_NO_COMMON_LRU);
-+}
-+
-+void test_update_lru_hash_maps(void)
-+{
-+	if (test__start_subtest("lru_hash/common_lru"))
-+		test_update_lru_hash_map_common_lru();
-+	if (test__start_subtest("lru_hash/percpu_lru"))
-+		test_update_lru_hash_map_percpu_lru();
-+	if (test__start_subtest("lru_percpu_hash/common_lru"))
-+		test_update_lru_percpu_hash_map_common_lru();
-+	if (test__start_subtest("lru_percpu_hash/percpu_lru"))
-+		test_update_lru_percpu_hash_map_percpu_lru();
-+}
--- 
-2.52.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20720201621
 
+--===============0955332525649677193==--
 
