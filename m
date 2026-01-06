@@ -1,141 +1,95 @@
-Return-Path: <linux-kselftest+bounces-48303-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48304-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F4F4CF8E5B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 15:54:51 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF42CCF9122
+	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 16:31:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9EA173012EB4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 14:54:36 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5C584300E417
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 15:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25DBC335541;
-	Tue,  6 Jan 2026 14:54:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92A3C1A5B9D;
+	Tue,  6 Jan 2026 15:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dpwwydRv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44943346AF
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 14:54:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57E1A495E5;
+	Tue,  6 Jan 2026 15:31:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767711270; cv=none; b=M560LwuaDZwP18yI/ZjcYI7WUsIMarQYqC7YxLRr7IAVnPXc8ZzZsGgMcZwiUSExijkyHsE89tmypNbUyTXuTdnVe6MEFWtS4I6/otNjYPm3UgoAO7xeX2tADoAu5VxrgMqKJt3qmiwRHQjAyq5tYDfZVvQIYFM+lSsOJnnGS38=
+	t=1767713460; cv=none; b=D6hqtFk9bmt4HeoeV2SyhugXfdQ40vQV2Si7T9iYhqgJvMS4J4ZCAsX8anSCCTS8EDZifkTmN1WOYHVsO0l/AveNy8U88c83nVH5JC/6xyNuNhrTGIWhDRxw6tnjwohDb16Mbt2p2o+mjiY9I6T5+AYktW5N2gJL8xSp92Lv0Xw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767711270; c=relaxed/simple;
-	bh=sYRieGQto2KwSzwN81wE9A2McStIgbAIirRtXy5Ob2Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I8A7UVj0NCDx8gOI9hqhznd3zCSspuOua33r3lNGjj5ONRnGtSBZk01fWMTfBbKQRsKCmg38XIipfrAcFfI/qF1sf760VrJxI2vMJuSWqJrA75o30btbXXFUOFf+x4J2CfRutTYJkqHS0cFPU0BK50Xw6vElb5zLeFIOGgaG3zA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f52.google.com with SMTP id ada2fe7eead31-5dfae681ff8so638042137.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jan 2026 06:54:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767711267; x=1768316067;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=giANTfOeo2lVpD/gNzwTvuXqWYxEAV5F7Z9I913/RqY=;
-        b=Ej9otWOROG6jRyerPV0qI8XFcTPJdse15bDuuDJ6DrqJRze/BPU0Kn70i+TNEuJcMS
-         6KUSfv4RL9I+VckJMTs13FIJgAOPvvb0ISHvBiL/oql20fdLODDJQoqgJLF//oxpGoKY
-         yl/nNaQ4INYtQtt0BILHgvj/4zek5kxNvyPuk9uLMZQiEyhg9c11QpyEFipjF05ORprh
-         c26cQO92PHksGvbd5bNRMyJdVDxyMB+LAbjdUgIsZcHzl8uhQnlf3xkiU4FVgHSWvtF2
-         RkIZqinAQtmeK+qleFn9paYqpBH2/S5Grc3Ghr3OA2e6NdelGeDXnhaCmDjGxxcGHqDl
-         yZTw==
-X-Forwarded-Encrypted: i=1; AJvYcCVU8nXn+43C5BJJXRULiV6mRyVJqgw1N6FvtiFQdfRroGUI1Bws8n6c/ip9BCOiQk+sHNma6fw0oEYVF6OOhJo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHIq9mxAB3v0rfvDYKfNjGVERBkXptarCUR+CSoUPI3PcbXgk0
-	eNvggR+xSjP2dJ78ApHWrudIe4EWu7jm0qky/FGZ0p6f8aLeYWTB0NZJoPylWHnL
-X-Gm-Gg: AY/fxX7MkOjd48R9DHos1yPtsTigPeG+kHTOAhzYFPH11Q4JczBYcAgc+4MNYBMqGoG
-	9baLHL8E3dOaVrERNOqUR7IL90xvhN68Ur1N7lGEEiuci0RTmDE3gyO++/7s8x5hVCQetikR+NV
-	8cv7xF36P5NcyM+or46UwaifKpPcs930WQYxcQVfKPmRaE5QfwNjgglB3t21XygTi8Rwcs+88Dg
-	KMSyrTkXhB8QewBgNjkqcmWIWSdCPKypVHCYo4Fm5ByaK+o4YtjnSSCZ043naB8EvxBtY/ENov2
-	C2NhIifPlQwpZVJvQj+EDlQ6wbM1yFIG6gvO7nAZ0aK9xs/ypQuICMgsqsNyAVPgQ1pcInGjGd1
-	U7vcgcFHoVuMSrwbOxgg/GMuIGc7C1jXDsAY/9ioxTgrTk7xOp9gaPhGYNzFhjkztdMpKOZVWVm
-	JE75TT6Cv1P5x3yQyY3W+8UNKy3FaJJsDYZ6Z8yUozYLg5zpB8
-X-Google-Smtp-Source: AGHT+IF6P+pZQMCoLxK0uPwGooPf5rVeAjlkUea6g/isQRMcsNBaOrmqIij5oyfL3PXEcEiL5qlztw==
-X-Received: by 2002:a05:6102:c52:b0:5dd:c568:d30d with SMTP id ada2fe7eead31-5ec744efdfemr1069055137.30.1767711266565;
-        Tue, 06 Jan 2026 06:54:26 -0800 (PST)
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ec772e0ce8sm650153137.12.2026.01.06.06.54.26
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jan 2026 06:54:26 -0800 (PST)
-Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-941063da73eso648984241.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jan 2026 06:54:26 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUbeDfIYhPsDkdduuALQiR4By7pD7m7wNH+AUlHAirS0GGgVX1EYhRAs9Ki8s8iEKYAiXOg2UyLmIHn0VA3gFo=@vger.kernel.org
-X-Received: by 2002:a05:6102:3591:b0:5db:ebb4:fded with SMTP id
- ada2fe7eead31-5ec744aa62emr1034929137.25.1767711265069; Tue, 06 Jan 2026
- 06:54:25 -0800 (PST)
+	s=arc-20240116; t=1767713460; c=relaxed/simple;
+	bh=Mw7nfQCHeUM3uDi0R20dEexIPwWV8BLFQ41kVZNMYwI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=h9i9jUUu7bawIUQB9xl4YrAatz4g2Nz0mb0yJ3d6y8oNNR0uek3RbEe+XJ3wupuv59rIrvsX8paV/SB3QHSgXx7iGtOd2iBnDGwCxu/6I7P/LaNUGDsQQ7otioJRqUTMBQfCQQ5lwB61f0Dht75fLEybVGdbMO47rAYkEslZzs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dpwwydRv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 664A1C116C6;
+	Tue,  6 Jan 2026 15:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767713459;
+	bh=Mw7nfQCHeUM3uDi0R20dEexIPwWV8BLFQ41kVZNMYwI=;
+	h=From:Subject:Date:To:Cc:From;
+	b=dpwwydRvgpZFKUzTTmDufq120UDCBnTfK7H8GM1ydxnkDDHfhXFWdHK/PdkoHwD1f
+	 qtoxqQFGlvJZCOoVMIZJahhqTXavqvuzD3axEaBypIdKglCUrBo5i2zGH3rH6g6TjR
+	 O5OrtiLgW/yc3vp2o51a7nhsAyJaWUKMWPWB/aEQRwUoj5yummP17X8EO7pwe40F5J
+	 mYbTumKBLGwx6xLgKkoYFxqwNT6C66IZ7NntiT/df+jOYs/12KVRAHLfFlz+d8D1N2
+	 rblRYza+/yP+82yH2Nos3JgLeiv+ZWfRzqocrfVzOpi3H/Zcb8W+tcg+Exa2VzCP5H
+	 mJoG2xDFmThnA==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH 0/2] HID: bpf: fix HID-BPF CI due to new compiler flags
+Date: Tue, 06 Jan 2026 16:30:53 +0100
+Message-Id: <20260106-wip-fix-bpf-compilation-v1-0-0b29c85f1157@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260106141057.91203-1-note351@hotmail.com>
-In-Reply-To: <20260106141057.91203-1-note351@hotmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 6 Jan 2026 15:54:14 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUDY0X1HWqNfLkihx4WcoxE8nwvYOt+E37YLNmmsW8B9A@mail.gmail.com>
-X-Gm-Features: AQt7F2re0fku5BmOhZUSkoRzcKAe0YdMSOn0y686idIMdV0IZPXwkIoUXr-BBlo
-Message-ID: <CAMuHMdUDY0X1HWqNfLkihx4WcoxE8nwvYOt+E37YLNmmsW8B9A@mail.gmail.com>
-Subject: Re: [PATCH v2] lib/glob: convert selftest to KUnit
-To: Kir Chou <note351@hotmail.com>
-Cc: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	davidgow@google.com, brendan.higgins@linux.dev, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	kirchou@google.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MSQqAMAwAvyI5G0hFKvgV8VBrqgGX0ooK4t8NH
+ gdm5oHMSThDWzyQ+JQs+6ZgygL87LaJUUZlqKiyZMjiJRGD3DjEgH5foyzu0Abrhhqm4JwfDGg
+ dE6v2n7v+fT9uzZnFaQAAAA==
+X-Change-ID: 20260106-wip-fix-bpf-compilation-4707e0faacb1
+To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767713457; l=793;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=Mw7nfQCHeUM3uDi0R20dEexIPwWV8BLFQ41kVZNMYwI=;
+ b=MbYPLEhUr8pYGRZLhFk5HldGIrNl86gko1KGYhfaUmAHlPUQ0kgSyjLlfZTOkfz5pfYcJXT3M
+ IIVrerHi+HoDRA0/mmVh/Q6JfH5f7U+sfUNVB+V2QOKq+OR6YD6NIvQ
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-On Tue, 6 Jan 2026 at 15:11, Kir Chou <note351@hotmail.com> wrote:
-> This patch converts the existing glob selftest (lib/globtest.c) to use
-> the KUnit framework (lib/glob_kunit.c).
->
-> The new test:
->
-> - Migrates all 64 test cases from the original test to the KUnit suite.
-> - Removes the custom 'verbose' module parameter as KUnit handles logging.
-> - Updates Kconfig.debug and Makefile to support the new KUnit test.
-> - Updates Kconfig and Makefile to remove the original selftest.
-> - Updates GLOB_SELFTEST to GLOB_KUNIT_TEST for arch/m68k/configs.
->
-> This commit is verified by `./tools/testing/kunit/kunit.py run`
-> with the .kunit/.kunitconfig:
->
-> ```
-> CONFIG_KUNIT=y
-> CONFIG_GLOB_KUNIT_TEST=y
-> ```
->
-> Signed-off-by: Kir Chou <note351@hotmail.com>
-> ---
-> v2:
->  - Remove CONFIG_GLOB_KUNIT_TEST from defconfigs as it's implicitly enabled
->    by CONFIG_KUNIT_ALL_TESTS. (Suggested by Geert)
-> ---
->  arch/m68k/configs/amiga_defconfig    |   1 -
->  arch/m68k/configs/apollo_defconfig   |   1 -
->  arch/m68k/configs/atari_defconfig    |   1 -
->  arch/m68k/configs/bvme6000_defconfig |   1 -
->  arch/m68k/configs/hp300_defconfig    |   1 -
->  arch/m68k/configs/mac_defconfig      |   1 -
->  arch/m68k/configs/multi_defconfig    |   1 -
->  arch/m68k/configs/mvme147_defconfig  |   1 -
->  arch/m68k/configs/mvme16x_defconfig  |   1 -
->  arch/m68k/configs/q40_defconfig      |   1 -
->  arch/m68k/configs/sun3_defconfig     |   1 -
->  arch/m68k/configs/sun3x_defconfig    |   1 -
+Since the merge with v6.19-rc my CI is broken because of the newly
+enabled -fms-extensions.
 
-For the m68k part:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Add the missing flags when generating the CFLAGS for bpf.o to solve this
+and continue running the tests while applying the patches.
 
-Gr{oetje,eeting}s,
+Cheers,
+Benjamin
 
-                        Geert
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+Benjamin Tissoires (2):
+      HID: bpf: fix bpf compilation with -fms-extensions
+      selftests/hid: fix bpf compilations due to -fms-extensions
 
+ drivers/hid/bpf/progs/Makefile       | 6 ++++--
+ tools/testing/selftests/hid/Makefile | 2 ++
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+---
+base-commit: fde4ce068d1bccacf1e2d6a28697a3847f28e0a6
+change-id: 20260106-wip-fix-bpf-compilation-4707e0faacb1
+
+Best regards,
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Benjamin Tissoires <bentiss@kernel.org>
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
