@@ -1,404 +1,263 @@
-Return-Path: <linux-kselftest+bounces-48280-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48281-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71DD7CF6C46
-	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 06:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59952CF723E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 08:51:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 02BAA30DF3FD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 05:16:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D891F30A427F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 07:46:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6245B2FF147;
-	Tue,  6 Jan 2026 05:16:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F0D30B53C;
+	Tue,  6 Jan 2026 07:46:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JAwFImgp"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="Fr0m8n6P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 386852FD68B
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 05:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143B52E65D;
+	Tue,  6 Jan 2026 07:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767676565; cv=none; b=i6mQ/cxMmzeYcjFrD9Lng+ad+aii14N11PJE4HPmHYt5peuBmpYpKABOFML66G/Ob9voyTmIWgt0hpKKl8vAnyupiALbVtNfTYGYEDbZWScu/cRBjaMvc8PQA18zKEIhHi4xzP1VxMLDFrnRsnk5g6xXHAplLeV/0lyF2Pwrr+0=
+	t=1767685615; cv=none; b=ufyj97q25Gxv2y7HL8EffCaaPolfpf/oXOnCx0CHulpMV8g3lsjgPSDReVyPDhxLSu10ZG14Lbp9XiV8k+oVcpJ8JqeTPkJOeT8S3kloI5g/PRiNX93HcbF5ohY/Efngok4Y8cUSzIZzGo/wwhJlW6D1Jx12nC/TKUaTL8MGZo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767676565; c=relaxed/simple;
-	bh=xKObvFRGKEYUrYnJ1OLH67LDan3vy2jvzeNj+IY+nlM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sTWYaypNjzrFYLrdvaL03fZ/aGLrnKNXUW2J0wSdgEUL4f+NlzHJ4kpCAaoRjH4qana3na7hApLS+WtjojtH3cZdYCDJ49QtbFDDwqLrgl7NTxd3So6t4TZWfxdP39Ygdcm14D/H2K5VHFYJGxOiJKgDgtua6116X1r2EpiWznE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JAwFImgp; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1767676561;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EEFMcG+L3uFXxQpXyYX+FcO5FT8RHAGQySVhVBJEZHY=;
-	b=JAwFImgpjzjSO7Usbzc5I1tIYZKeH3LAelvVBdH00Xy2PBeWWxKz0sWaaPbIAZnLWiP47q
-	7o1wvTMTKIUheH8YlaPQysckE/TlqK/6n5dJnj1svFFyC6GpNzXxeBSz3G+k2C6cKZtliZ
-	FSAtcKAiRzUBt2DqeqPpjOv4RMtlA/k=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Stefano Garzarella <sgarzare@redhat.com>,
-	Michal Luczaj <mhal@rbox.co>,
-	Cong Wang <cong.wang@bytedance.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 3/3] bpf, selftest: Add tests for FIONREAD and copied_seq
-Date: Tue,  6 Jan 2026 13:14:29 +0800
-Message-ID: <20260106051458.279151-4-jiayuan.chen@linux.dev>
-In-Reply-To: <20260106051458.279151-1-jiayuan.chen@linux.dev>
-References: <20260106051458.279151-1-jiayuan.chen@linux.dev>
+	s=arc-20240116; t=1767685615; c=relaxed/simple;
+	bh=pbwmhpckE/Bva8ZcgWJAR+eGRXjqU22E0YzLrCG/xVY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=KVK35a7YJuLOo+PsEJGS7YCCtkYKREU8RhoMBqoR9DAI4pMOrrlhjeCd177WCLjC0xbIpun/JmJpdDkSYvhthhH0vjCzoHzLfBeT9M1amPmjQMXQNujNRYNy4hycyBtiY0wq3C07WBHhP2u2il9RY50t7iJhbE1962Lf74lSAE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=pass smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=Fr0m8n6P; arc=none smtp.client-ip=162.62.58.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyyself.name
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1767685600; bh=zQXtyyI2PYr27yrlV0TQ/dcibbpe96U4emo5rjouWwE=;
+	h=Date:Subject:To:References:From:In-Reply-To;
+	b=Fr0m8n6PxFfgVesGwM8926jjAVuffLHLxTY4eUXQkGtAYtSd49S1alV1266SdZFgc
+	 6qcpQGyOL/4Fc9M06+Jewa63cYfKCs2V1KEhphVvAS3Zxz9ZfYj3GVQBVpV+IZQMCc
+	 fD080VCavA8XZtvxobI9jN+1KJpGREJbpiXVpnuc=
+Received: from [IPV6:2406:840:f992:3::a0c:323] ([240e:378:2201:1cd:d76:9bbc:bb82:5a0e])
+	by newxmesmtplogicsvrszb43-0.qq.com (NewEsmtp) with SMTP
+	id BA2A60FB; Tue, 06 Jan 2026 15:46:34 +0800
+X-QQ-mid: xmsmtpt1767685594t7zqkg8xe
+Message-ID: <tencent_5F1B1F8D209B3699631D6E6C4C668848E306@qq.com>
+X-QQ-XMAILINFO: MI0PymKx+wF7XlcnjzHNax13Eba/c2QZO2Rxz5Pk4OLqc6ja8DomkRGYkZpzyf
+	 7pSqJztSUXNuhy0NvFBjndXJfcyxQW2HpezLqSlCKF/NKYMhM0TjoKniet3O6gLq2mJmWFZANrRT
+	 euZkeHKaSMHjakNXM7NREXfkPT66sCaB+EezK4jCHPWE319m01XdxvMLtzPW8lYV2VoWC/vdyuap
+	 hjponQ+Odp4nteUJQALjjZafJrTJK8FO4tGkTBNHz5Ok8hw+M7QCmxAmur4qrVb6roTWX7OIfby8
+	 rh8WplPy7A2JUiTIB2ERJIiS7REcxaNLyuD7nYlFQGI3atwmIn08sJIAQTCtgtjSf7WWvfMAlWNb
+	 kqzvJFewiodoo3uZuTrKY7rssbOt+PaRa3dq2Mvy2hCChDCWyW9C99276g1x7a8C0m4rsciYURrD
+	 I6kZTVnFzuPnpg7cO8AOJOa8floxKSkYi/SxoagBdZqT2qHcQMlm/yqENKTPHs9AluGXtfzdz/tq
+	 jxqg2CG076cuPb6g3MPfRlwvI5UAMk2vWLeEJ+40wXZN7iC2Sze0+n5Fh7f0Myo2kH0sVZxN0ppp
+	 h9f8yWTC280m7B9GGEgK/itC00laHoy7bUXFrNFW1ie6iwDPw5sQTYa2AfP5kyHlXSOun5sKNoWR
+	 SwlP7bmcRDDJ+oXiKPlNNKvk/AZzJzmFlERsELS7P8F2y9ZHidNUibJtzLXeDpA1O0XeoKodSJf2
+	 do7bW82tlK/9yVoR6sv8vN1ZFfow8QlsbPnijQKyTId88Mof3Vbg9qe4kPQTS28V3jzuJuGZW2mv
+	 U3uGxlKNwKgKTSKsRdNqzJjjG/nyo9e+48zzMaJXwwbjIGby1EmcbqGKoOO9n60vG/U02q+3K1PD
+	 OvSlPjHXeZb2rInAvY+tKnn7N6A9rZtB3oYzSe3godlt4AzeVcl1ACNrLEtLaA1Z8A6EgTdxSDk9
+	 wVUqsJS1tpMHbMOhiZ0y3DLErQM6ChE4IzBIbADHOD9JPzPSkm5cmwfI2wQXfUjlA9EZsOx+hIX9
+	 lhRoRuxMvU7eAvz8ks
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+X-OQ-MSGID: <f80275c1-9093-4e6e-8d73-4bd6ca23e530@cyyself.name>
+Date: Tue, 6 Jan 2026 15:46:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 4/6] RISC-V: Implement prctl call to set/get the
+ memory consistency model
+To: =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
+ linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+ Peter Zijlstra <peterz@infradead.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Anup Patel <apatel@ventanamicro.com>,
+ Philipp Tomsich <philipp.tomsich@vrull.eu>,
+ Andrew Jones <ajones@ventanamicro.com>, Guo Ren <guoren@kernel.org>,
+ Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
+ Conor Dooley <conor.dooley@microchip.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@rivosinc.com>, Alan Stern <stern@rowland.harvard.edu>,
+ Will Deacon <will@kernel.org>, Daniel Lustig <dlustig@nvidia.com>,
+ Brendan Sweeney <turtwig@utexas.edu>, Andrew Waterman <andrew@sifive.com>,
+ Brendan Sweeney <brs@berkeley.edu>, Andrea Parri <parri.andrea@gmail.com>,
+ Hans Boehm <hboehm@google.com>
+References: <20240209064050.2746540-1-christoph.muellner@vrull.eu>
+ <20240209064050.2746540-5-christoph.muellner@vrull.eu>
+Content-Language: en-US
+From: Yangyu Chen <cyy@cyyself.name>
+In-Reply-To: <20240209064050.2746540-5-christoph.muellner@vrull.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-This commit adds two new test functions: one to reproduce the bug reported
-by syzkaller [1], and another to cover the calculation of copied_seq.
+Hi Mullner,
 
-The tests primarily involve installing  and uninstalling sockmap on
-sockets, then reading data to verify proper functionality.
+Thanks for this work, although it has already lasted for about 2 years.
 
-Additionally, extend the do_test_sockmap_skb_verdict_fionread() function
-to support UDP FIONREAD testing.
+On 9/2/2024 14:40, Christoph Müllner wrote:
+> We can use the PR_{S,G}ET_MEMORY_CONSISTENCY_MODEL prctl calls to change
+> the memory consistency model at run-time if we have Ssdtso.
+> This patch registers RISCV_WMO and RISCV_TSO as valid arguments
+> for these prctl calls and implements the glue code to switch
+> between these.
+> 
+> Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
+> ---
+>   .../mm/dynamic-memory-consistency-model.rst   | 12 +++-
+>   arch/riscv/include/asm/processor.h            |  7 ++
+>   arch/riscv/kernel/Makefile                    |  1 +
+>   arch/riscv/kernel/dtso.c                      | 67 +++++++++++++++++++
+>   include/uapi/linux/prctl.h                    |  2 +
+>   5 files changed, 88 insertions(+), 1 deletion(-)
+>   create mode 100644 arch/riscv/kernel/dtso.c
+> 
+> diff --git a/Documentation/mm/dynamic-memory-consistency-model.rst b/Documentation/mm/dynamic-memory-consistency-model.rst
+> index 1fce855a1fad..c8188c174e27 100644
+> --- a/Documentation/mm/dynamic-memory-consistency-model.rst
+> +++ b/Documentation/mm/dynamic-memory-consistency-model.rst
+> @@ -73,4 +73,14 @@ Supported memory consistency models
+>   This section defines the memory consistency models which are supported
+>   by the prctl interface.
+>   
+> -<none>
+> +RISC-V
+> +------
+> +
+> +RISC-V uses RVWMO (RISC-V weak memory ordering) as default memory consistency
+> +model. TSO (total store ordering) is another specified model and provides
+> +additional ordering guarantees. Switching user-mode processes from RVWMO to TSO
+> +is possible when the Ssdtso extension is available.
+> +
+> +* :c:macro:`PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO`: RISC-V weak memory ordering (default).
+> +
+> +* :c:macro:`PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO`: RISC-V total store ordering.
+> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+> index a8509cc31ab2..05e05fddc94d 100644
+> --- a/arch/riscv/include/asm/processor.h
+> +++ b/arch/riscv/include/asm/processor.h
+> @@ -184,6 +184,13 @@ extern int set_unalign_ctl(struct task_struct *tsk, unsigned int val);
+>   #define GET_UNALIGN_CTL(tsk, addr)	get_unalign_ctl((tsk), (addr))
+>   #define SET_UNALIGN_CTL(tsk, val)	set_unalign_ctl((tsk), (val))
+>   
+> +#ifdef CONFIG_RISCV_ISA_SSDTSO
+> +extern int dtso_set_memory_consistency_model(unsigned long arg);
+> +extern int dtso_get_memory_consistency_model(void);
+> +#define SET_MEMORY_CONSISTENCY_MODEL(arg)	dtso_set_memory_consistency_model(arg)
+> +#define GET_MEMORY_CONSISTENCY_MODEL()		dtso_get_memory_consistency_model()
+> +#endif /* CONIG_RISCV_ISA_SSDTSO */
+> +
+>   #endif /* __ASSEMBLY__ */
+>   
+>   #endif /* _ASM_RISCV_PROCESSOR_H */
+> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
+> index f71910718053..85f7291da498 100644
+> --- a/arch/riscv/kernel/Makefile
+> +++ b/arch/riscv/kernel/Makefile
+> @@ -65,6 +65,7 @@ obj-$(CONFIG_RISCV_MISALIGNED)	+= traps_misaligned.o
+>   obj-$(CONFIG_FPU)		+= fpu.o
+>   obj-$(CONFIG_RISCV_ISA_V)	+= vector.o
+>   obj-$(CONFIG_RISCV_ISA_V)	+= kernel_mode_vector.o
+> +obj-$(CONFIG_RISCV_ISA_SSDTSO)	+= dtso.o
+>   obj-$(CONFIG_SMP)		+= smpboot.o
+>   obj-$(CONFIG_SMP)		+= smp.o
+>   obj-$(CONFIG_SMP)		+= cpu_ops.o
+> diff --git a/arch/riscv/kernel/dtso.c b/arch/riscv/kernel/dtso.c
+> new file mode 100644
+> index 000000000000..591d5f9de0f5
+> --- /dev/null
+> +++ b/arch/riscv/kernel/dtso.c
+> @@ -0,0 +1,67 @@
+> +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> +/*
+> + * Copyright (c) 2024 Christoph Muellner <christoph.muellner@vrull.eu>
+> + */
+> +
+> +#include <linux/cpu.h>
+> +#include <linux/smp.h>
+> +#include <linux/prctl.h>
+> +
+> +#include <asm/cpu.h>
+> +#include <asm/dtso.h>
+> +
+> +#include <trace/events/ipi.h>
+> +
+> +int dtso_set_memory_consistency_model(unsigned long arg)
+> +{
+> +	int cpu;
+> +	unsigned long cur_model = get_memory_consistency_model(current);
+> +	unsigned long new_model;
+> +
+> +	switch (arg) {
+> +	case PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO:
+> +		new_model = RISCV_MEMORY_CONSISTENCY_MODEL_WMO;
+> +		break;
+> +	case PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO:
+> +		new_model = RISCV_MEMORY_CONSISTENCY_MODEL_TSO;
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* No change requested. */
+> +	if (cur_model == new_model)
+> +		return 0;
+> +
+> +	/* Enabling TSO only works if DTSO is available. */
+> +	if (new_model == PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO && !has_dtso())
+> +		return -EINVAL;
+> +
+> +	/* Switching TSO->WMO is not allowed. */
+> +	if (new_model == RISCV_MEMORY_CONSISTENCY_MODEL_WMO)
+> +		return -EINVAL;
+> +
+> +	/* Set the new model in the task struct. */
+> +	set_memory_consitency_model(current, new_model);
+> +
+> +	/*
+> +	 * We need to reschedule all threads of the current process.
+> +	 * Let's do this by rescheduling all CPUs.
+> +	 * This is stricter than necessary, but since this call is
+> +	 * not expected to happen frequently the impact is low.
+> +	 */
+> +	for_each_cpu(cpu, cpu_online_mask)
+> +		smp_send_reschedule(cpu);
+> +
+> +	return 0;
+> +}
+> +
+> +int dtso_get_memory_consistency_model(void)
+> +{
+> +	unsigned long cur_model = get_memory_consistency_model(current);
+> +
+> +	if (cur_model == RISCV_MEMORY_CONSISTENCY_MODEL_TSO)
+> +		return PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO;
+> +
+> +	return PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO;
+> +}
+> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
+> index 579662731eaa..20264bdc3092 100644
+> --- a/include/uapi/linux/prctl.h
+> +++ b/include/uapi/linux/prctl.h
+> @@ -308,5 +308,7 @@ struct prctl_mm_map {
+>   
+>   #define PR_SET_MEMORY_CONSISTENCY_MODEL		71
+>   #define PR_GET_MEMORY_CONSISTENCY_MODEL		72
+> +# define PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO	1
+> +# define PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO	2
 
-[1] https://syzkaller.appspot.com/bug?extid=06dbd397158ec0ea4983
+Should we replace "PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO" with 
+"PR_MEMORY_CONSISTENCY_MODEL_TSO", so that it can share the same key as 
+Apple's TSO implementation [1]? RISC-V Ssdtso would make such prctl more 
+likely to be accepted.
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 202 +++++++++++++++++-
- .../bpf/progs/test_sockmap_pass_prog.c        |  14 ++
- 2 files changed, 210 insertions(+), 6 deletions(-)
+[1] https://lore.kernel.org/lkml/20240411-tso-v1-0-754f11abfbff@marcan.st/
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 1e3e4392dcca..f15ccd51a765 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -1,7 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2020 Cloudflare
- #include <error.h>
--#include <netinet/tcp.h>
-+#include <linux/tcp.h>
-+#include <linux/socket.h>
- #include <sys/epoll.h>
- 
- #include "test_progs.h"
-@@ -22,6 +23,15 @@
- #define TCP_REPAIR_ON		1
- #define TCP_REPAIR_OFF_NO_WP	-1	/* Turn off without window probes */
- 
-+/**
-+ * SOL_TCP is defined in <netinet/tcp.h> (glibc), but the copybuf_address
-+ * field of tcp_zerocopy_receive is not yet included in older versions.
-+ * This workaround remains necessary until the glibc update propagates.
-+ */
-+#ifndef SOL_TCP
-+#define SOL_TCP 6
-+#endif
-+
- static int connected_socket_v4(void)
- {
- 	struct sockaddr_in addr = {
-@@ -536,13 +546,14 @@ static void test_sockmap_skb_verdict_shutdown(void)
- }
- 
- 
--static void test_sockmap_skb_verdict_fionread(bool pass_prog)
-+static void do_test_sockmap_skb_verdict_fionread(int sotype, bool pass_prog)
- {
- 	int err, map, verdict, c0 = -1, c1 = -1, p0 = -1, p1 = -1;
- 	int expected, zero = 0, sent, recvd, avail;
- 	struct test_sockmap_pass_prog *pass = NULL;
- 	struct test_sockmap_drop_prog *drop = NULL;
- 	char buf[256] = "0123456789";
-+	int split_len = sizeof(buf) / 2;
- 
- 	if (pass_prog) {
- 		pass = test_sockmap_pass_prog__open_and_load();
-@@ -550,7 +561,10 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 			return;
- 		verdict = bpf_program__fd(pass->progs.prog_skb_verdict);
- 		map = bpf_map__fd(pass->maps.sock_map_rx);
--		expected = sizeof(buf);
-+		if (sotype == SOCK_DGRAM)
-+			expected = split_len; /* FIONREAD for UDP is different from TCP */
-+		else
-+			expected = sizeof(buf);
- 	} else {
- 		drop = test_sockmap_drop_prog__open_and_load();
- 		if (!ASSERT_OK_PTR(drop, "open_and_load"))
-@@ -566,7 +580,7 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_prog_attach"))
- 		goto out;
- 
--	err = create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1);
-+	err = create_socket_pairs(AF_INET, sotype, &c0, &c1, &p0, &p1);
- 	if (!ASSERT_OK(err, "create_socket_pairs()"))
- 		goto out;
- 
-@@ -574,8 +588,9 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 	if (!ASSERT_OK(err, "bpf_map_update_elem(c1)"))
- 		goto out_close;
- 
--	sent = xsend(p1, &buf, sizeof(buf), 0);
--	ASSERT_EQ(sent, sizeof(buf), "xsend(p0)");
-+	sent = xsend(p1, &buf, split_len, 0);
-+	sent += xsend(p1, &buf, sizeof(buf) - split_len, 0);
-+	ASSERT_EQ(sent, sizeof(buf), "xsend(p1)");
- 	err = ioctl(c1, FIONREAD, &avail);
- 	ASSERT_OK(err, "ioctl(FIONREAD) error");
- 	ASSERT_EQ(avail, expected, "ioctl(FIONREAD)");
-@@ -597,6 +612,12 @@ static void test_sockmap_skb_verdict_fionread(bool pass_prog)
- 		test_sockmap_drop_prog__destroy(drop);
- }
- 
-+static void test_sockmap_skb_verdict_fionread(bool pass_prog)
-+{
-+	do_test_sockmap_skb_verdict_fionread(SOCK_STREAM, pass_prog);
-+	do_test_sockmap_skb_verdict_fionread(SOCK_DGRAM, pass_prog);
-+}
-+
- static void test_sockmap_skb_verdict_change_tail(void)
- {
- 	struct test_sockmap_change_tail *skel;
-@@ -1042,6 +1063,169 @@ static void test_sockmap_vsock_unconnected(void)
- 	xclose(map);
- }
- 
-+/* it is used to reproduce WARNING */
-+static void test_sockmap_zc(void)
-+{
-+	int map, err, sent, recvd, zero = 0, one = 1, on = 1;
-+	char buf[10] = "0123456789", rcv[11], addr[100];
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	struct tcp_zerocopy_receive zc;
-+	socklen_t zc_len = sizeof(zc);
-+	struct bpf_program *prog;
-+
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto end;
-+
-+	prog = skel->progs.prog_skb_verdict_ingress;
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem"))
-+		goto end;
-+
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend"))
-+		goto end;
-+
-+	/* trigger tcp_bpf_recvmsg_parser and inc copied_seq of p1 */
-+	recvd = recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1)"))
-+		goto end;
-+
-+	/* uninstall sockmap of p1 */
-+	bpf_map_delete_elem(map, &one);
-+
-+	/* trigger tcp stack and the rcv_nxt of p1 is less than copied_seq */
-+	sent = xsend(c1, buf, sizeof(buf) - 1, 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf) - 1, "xsend"))
-+		goto end;
-+
-+	err = setsockopt(p1, SOL_SOCKET, SO_ZEROCOPY, &on, sizeof(on));
-+	if (!ASSERT_OK(err, "setsockopt"))
-+		goto end;
-+
-+	memset(&zc, 0, sizeof(zc));
-+	zc.copybuf_address = (__u64)((unsigned long)addr);
-+	zc.copybuf_len = sizeof(addr);
-+
-+	err = getsockopt(p1, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE, &zc, &zc_len);
-+	if (!ASSERT_OK(err, "getsockopt"))
-+		goto end;
-+
-+end:
-+	if (c0 >= 0)
-+		close(c0);
-+	if (p0 >= 0)
-+		close(p0);
-+	if (c1 >= 0)
-+		close(c1);
-+	if (p1 >= 0)
-+		close(p1);
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
-+/* it is used to check whether copied_seq of sk is correct */
-+static void test_sockmap_copied_seq(bool strp)
-+{
-+	int i, map, err, sent, recvd, zero = 0, one = 1;
-+	struct test_sockmap_pass_prog *skel = NULL;
-+	int c0 = -1, p0 = -1, c1 = -1, p1 = -1;
-+	char buf[10] = "0123456789", rcv[11];
-+	struct bpf_program *prog;
-+
-+	skel = test_sockmap_pass_prog__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (create_socket_pairs(AF_INET, SOCK_STREAM, &c0, &c1, &p0, &p1))
-+		goto end;
-+
-+	prog = skel->progs.prog_skb_verdict_ingress;
-+	map = bpf_map__fd(skel->maps.sock_map_rx);
-+
-+	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
-+	if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
-+		goto end;
-+
-+	if (strp) {
-+		prog = skel->progs.prog_skb_verdict_ingress_strp;
-+		err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_PARSER, 0);
-+		if (!ASSERT_OK(err, "bpf_prog_attach parser"))
-+			goto end;
-+	}
-+
-+	err = bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
-+		goto end;
-+
-+	err = bpf_map_update_elem(map, &one, &p1, BPF_ANY);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem(p1)"))
-+		goto end;
-+
-+	/* just trigger sockamp: data sent by c0 will be received by p1 */
-+	sent = xsend(c0, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), bpf"))
-+		goto end;
-+
-+	recvd = recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
-+	if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), bpf"))
-+		goto end;
-+
-+	/* uninstall sockmap of p1 and p0 */
-+	err = bpf_map_delete_elem(map, &one);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem(1)"))
-+		goto end;
-+
-+	err = bpf_map_delete_elem(map, &zero);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem(0)"))
-+		goto end;
-+
-+	/* now all sockets become plain socket, they should still work */
-+	for (i = 0; i < 5; i++) {
-+		/* test copied_seq of p1 by running tcp native stack */
-+		sent = xsend(c1, buf, sizeof(buf), 0);
-+		if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c1), native"))
-+			goto end;
-+
-+		recvd = recv(p1, rcv, sizeof(rcv), MSG_DONTWAIT);
-+		if (!ASSERT_EQ(recvd, sent, "recv_timeout(p1), native"))
-+			goto end;
-+
-+		/* p0 previously redirected skb to p1, we also check copied_seq of p0 */
-+		sent = xsend(c0, buf, sizeof(buf), 0);
-+		if (!ASSERT_EQ(sent, sizeof(buf), "xsend(c0), native"))
-+			goto end;
-+
-+		recvd = recv(p0, rcv, sizeof(rcv), MSG_DONTWAIT);
-+		if (!ASSERT_EQ(recvd, sent, "recv_timeout(p0), native"))
-+			goto end;
-+	}
-+
-+end:
-+	if (c0 >= 0)
-+		close(c0);
-+	if (p0 >= 0)
-+		close(p0);
-+	if (c1 >= 0)
-+		close(c1);
-+	if (p1 >= 0)
-+		close(p1);
-+	test_sockmap_pass_prog__destroy(skel);
-+}
-+
- void test_sockmap_basic(void)
- {
- 	if (test__start_subtest("sockmap create_update_free"))
-@@ -1108,4 +1292,10 @@ void test_sockmap_basic(void)
- 		test_sockmap_skb_verdict_vsock_poll();
- 	if (test__start_subtest("sockmap vsock unconnected"))
- 		test_sockmap_vsock_unconnected();
-+	if (test__start_subtest("sockmap with zc"))
-+		test_sockmap_zc();
-+	if (test__start_subtest("sockmap recover"))
-+		test_sockmap_copied_seq(false);
-+	if (test__start_subtest("sockmap recover with strp"))
-+		test_sockmap_copied_seq(true);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-index 69aacc96db36..ef9edca184ea 100644
---- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-+++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
-@@ -44,4 +44,18 @@ int prog_skb_parser(struct __sk_buff *skb)
- 	return SK_PASS;
- }
- 
-+SEC("sk_skb/stream_verdict")
-+int prog_skb_verdict_ingress(struct __sk_buff *skb)
-+{
-+	int one = 1;
-+
-+	return bpf_sk_redirect_map(skb, &sock_map_rx, one, BPF_F_INGRESS);
-+}
-+
-+SEC("sk_skb/stream_parser")
-+int prog_skb_verdict_ingress_strp(struct __sk_buff *skb)
-+{
-+	return skb->len;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+Thanks,
+Yangyu Chen
+
+>   
+>   #endif /* _LINUX_PRCTL_H */
 
 
