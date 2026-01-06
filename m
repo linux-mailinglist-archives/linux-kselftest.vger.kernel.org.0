@@ -1,105 +1,148 @@
-Return-Path: <linux-kselftest+bounces-48334-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BF54CF9C08
-	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 18:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3830CF9E8A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 19:01:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 53EC3313605C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 17:30:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D640C32673D5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 17:47:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57EDE3559E9;
-	Tue,  6 Jan 2026 17:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E22033FE2A;
+	Tue,  6 Jan 2026 17:37:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4/ASQjj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kDzuaGP3"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E6943559DC;
-	Tue,  6 Jan 2026 17:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D517833DED6;
+	Tue,  6 Jan 2026 17:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767720597; cv=none; b=rjdKVeONH9eVyiNbSdG7mEhYPpdIOzsL6rcH+vaTPCnEH/xNktdDfQzpveDoqBBdhU+LSh+aIbNEUZ4vTVpWluaCDZDcYp+6JKQfezmeGG9jaRtcAazazR30mvKyfRy/8OvhWySjITttymt7eiEuSMy0cy6urS3kS7NJyQNyRYE=
+	t=1767721046; cv=none; b=NGhc24VxspF7giuQJmH2YbMBVGaW35TgnSIQsMOiT8BP117bpNeJYdbVCgnF3YAcMqy/e61OYm422xYWU/44rCYLfuHohmGuMr7VreZJpqfx5KEZnsQw3LlZdAhJMt1NL0PdTN2tkCCQnU1Azw6IsPenzpaYeEOEhHYOqYbs/TQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767720597; c=relaxed/simple;
-	bh=S59AIhszH1mltc6DfCoGlRJ+0/sPO1hMLyo8OSVvGME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ca+HH8Dw2GRmPGxi7VtGd/ERqhL8kz/rWrEH8SzWzGk3meOhsWAKOgH4Jz9yp2917gqflCT45jOxsiPwR4FurC88YseQiFL5TsSS4EfTP8gQnVGJLen8/aTwy0djkRg6yyxTNHL3XGgRbnJMnVsPHoEcp5Bz+WsRy8B16LSbqrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4/ASQjj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4802BC116C6;
-	Tue,  6 Jan 2026 17:29:54 +0000 (UTC)
+	s=arc-20240116; t=1767721046; c=relaxed/simple;
+	bh=6L1NGsoqeyNV1FiPbWbfXPTcb2cf8tJ1SfoR7IzsV6Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CoYiv0jnDBq4Q/XGk2crBdTZCUXV5Ws9A8kxD9xlbVPud6Rm1y4ltVlnfNTnpkwT0Cm0TSL6rkQsthrUww4NEIF4sb3GfgKqEcif7cQ5n3R26gzAR5nM8jnjWThNDk42J7fNf9qBE0UWTG6UIHSyKXpXLs/EYZlI7BPQcFsfabI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kDzuaGP3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22FEAC16AAE;
+	Tue,  6 Jan 2026 17:37:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767720597;
-	bh=S59AIhszH1mltc6DfCoGlRJ+0/sPO1hMLyo8OSVvGME=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G4/ASQjj9n5SEFj3Y3lei8PxO5TbigT6vEzGbkddPw5ppErLKA4dVT6q7harmTpUL
-	 SnDZvChCe4x+vEqiPm7N0qxANu2dxvIkT9otgrgBQKbOevxt7t+KWEr0UUUArr3vYx
-	 N30dZ6i3I3VEuIX1DaZ1xWvsbBDOxU9qCp/blaPJfLr6Ld5+9kPjM6CaDz14LRqLa9
-	 CWtIzL4h0gWCmdN9q3OV51jaVYxojvxYEnUQs2w8a7FyLRVi5q9EaYTFP6iSUinniD
-	 9gLrx/BKcecZwSHVQTa34oBOGj7h5TRy+NN1op7XH2HQRvYaPVwcdnciObu8xufofg
-	 /OWnL1pjedxFA==
-Date: Tue, 6 Jan 2026 17:29:51 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	David Hildenbrand <david@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-	Peter Xu <peterx@redhat.com>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/testing/selftests: fix gup_longterm for unknown fs
-Message-ID: <56b7d3e2-fcfa-42c2-988f-907086f031d1@sirena.org.uk>
-References: <20260106154547.214907-1-lorenzo.stoakes@oracle.com>
- <20260106092836.d6a4fa77b755bd989d1521b9@linux-foundation.org>
+	s=k20201202; t=1767721046;
+	bh=6L1NGsoqeyNV1FiPbWbfXPTcb2cf8tJ1SfoR7IzsV6Y=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kDzuaGP3f9OKEHCj1fXaVYTpGBXzJ/o5RavSNkBEGzB3Eanl9GUe2vyRVRbdQgzf0
+	 y6cd4pjA9XFkDPvduSabuPMrSP4gVkXDg9zjQXi7twPEWTmam+SS4oRaqNI/zINmgf
+	 obfj5gl+EiLbMymgGAMeGnZzSn9hwW+jTCNluyEAw9MUVF0Qjvu++DSd64OTHoq5to
+	 YoSkOLFUeYfJYeIAFIfKbCiC/OON2/FXK4wcZ8vf2z7ha69J72Z+bnGyFg+IXo8yA3
+	 P+QP8ddJYl6k1r+PWgEOafjCmFsAJ4Lez9T35OL65ACvzMkPYWUNsK4N4BAhXZdtAU
+	 76J3ASueB25rQ==
+Message-ID: <08eb450b-e644-4968-b83e-54364c449a5b@kernel.org>
+Date: Tue, 6 Jan 2026 10:37:25 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1m3/mpdwsBsKXyRx"
-Content-Disposition: inline
-In-Reply-To: <20260106092836.d6a4fa77b755bd989d1521b9@linux-foundation.org>
-X-Cookie: People respond to people who respond.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2] ipv6: preserve insertion order for same-scope
+ addresses
+Content-Language: en-US
+To: Yumei Huang <yuhuang@redhat.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: sbrivio@redhat.com, david@gibson.dropbear.id.au, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ justin.iurman@uliege.be, shuah@kernel.org
+References: <20260104032357.38555-1-yuhuang@redhat.com>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20260104032357.38555-1-yuhuang@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 1/3/26 8:23 PM, Yumei Huang wrote:
+> IPv6 addresses with the same scope are returned in reverse insertion
+> order, unlike IPv4. For example, when adding a -> b -> c, the list is
+> reported as c -> b -> a, while IPv4 preserves the original order.
+> 
+> This behavior causes:
+> 
+> a. When using `ip -6 a save` and `ip -6 a restore`, addresses are restored
+>    in the opposite order from which they were saved. See example below
+>    showing addresses added as 1::1, 1::2, 1::3 but displayed and saved
+>    in reverse order.
+> 
+>    # ip -6 a a 1::1 dev x
+>    # ip -6 a a 1::2 dev x
+>    # ip -6 a a 1::3 dev x
+>    # ip -6 a s dev x
+>    2: x: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+>        inet6 1::3/128 scope global tentative
+>        valid_lft forever preferred_lft forever
+>        inet6 1::2/128 scope global tentative
+>        valid_lft forever preferred_lft forever
+>        inet6 1::1/128 scope global tentative
+>        valid_lft forever preferred_lft forever
+>    # ip -6 a save > dump
+>    # ip -6 a d 1::1 dev x
+>    # ip -6 a d 1::2 dev x
+>    # ip -6 a d 1::3 dev x
+>    # ip a d ::1 dev lo
+>    # ip a restore < dump
+>    # ip -6 a s dev x
+>    2: x: <BROADCAST,MULTICAST> mtu 1500 qdisc noop state DOWN group default qlen 1000
+>        inet6 1::1/128 scope global tentative
+>        valid_lft forever preferred_lft forever
+>        inet6 1::2/128 scope global tentative
+>        valid_lft forever preferred_lft forever
+>        inet6 1::3/128 scope global tentative
+>        valid_lft forever preferred_lft forever
+>    # ip a showdump < dump
+>     if1:
+>         inet6 ::1/128 scope host proto kernel_lo
+>         valid_lft forever preferred_lft forever
+>     if2:
+>         inet6 1::3/128 scope global tentative
+>         valid_lft forever preferred_lft forever
+>     if2:
+>         inet6 1::2/128 scope global tentative
+>         valid_lft forever preferred_lft forever
+>     if2:
+>         inet6 1::1/128 scope global tentative
+>         valid_lft forever preferred_lft forever
+> 
+> b. Addresses in pasta to appear in reversed order compared to host
+>    addresses.
+> 
+> The ipv6 addresses were added in reverse order by commit e55ffac60117
+> ("[IPV6]: order addresses by scope"), then it was changed by commit
+> 502a2ffd7376 ("ipv6: convert idev_list to list macros"), and restored by
+> commit b54c9b98bbfb ("ipv6: Preserve pervious behavior in
+> ipv6_link_dev_addr()."). However, this reverse ordering within the same
+> scope causes inconsistency with IPv4 and the issues described above.
+> 
+> This patch aligns IPv6 address ordering with IPv4 for consistency
+> by changing the comparison from >= to > when inserting addresses
+> into the address list. Also updates the ioam6 selftest to reflect
+> the new address ordering behavior. Combine these two changes into
+> one patch for bisectability.
+> 
+> Fixes: e55ffac60117 ("[IPV6]: order addresses by scope")
+> Link: https://bugs.passt.top/show_bug.cgi?id=175
+> Suggested-by: Stefano Brivio <sbrivio@redhat.com>
+> Signed-off-by: Yumei Huang <yuhuang@redhat.com>
+> ---
+>  net/ipv6/addrconf.c                  | 2 +-
+>  tools/testing/selftests/net/ioam6.sh | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+>
 
---1m3/mpdwsBsKXyRx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I am ok with the change, but I will not be surprised if someone
+complains about a change in behavior.
 
-On Tue, Jan 06, 2026 at 09:28:36AM -0800, Andrew Morton wrote:
-> On Tue,  6 Jan 2026 15:45:47 +0000 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-> > Commit 66bce7afbaca ("selftests/mm: fix test result reporting in
-> > gup_longterm") introduced a small bug causing unknown filesystems to always
-> > result in a test failure.
-
-> > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> > Fixes: 66bce7afbaca ("selftests/mm: fix test result reporting in gup_longterm")
-
-> -stable users might want this?
-
-I think so.
-
---1m3/mpdwsBsKXyRx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmldRo4ACgkQJNaLcl1U
-h9CM0Qf/S33dckv3loTsZRKZjDP/+2/a4BY6PGpohLKe0w51tgiuLCxd1X/2jk6N
-ky7lf8dsYp0n3gH8X5qNqZkV6ORRUPjNFbnwjb4+uz/qboNv/tb71GeHU+hGKDDJ
-8gFFUMBBhgwP5sXymPeIx0x3zY6c9/exaja3RQJxAgu9aLw8MYID1LXhT4zfsh8z
-S0X+ifWgfr4qcUzuVwE0uOoBWP6OqM5cINm2oLf1Gj6QawsGJVn+J8bJU/masvJL
-uEfk+6nZyT9qFiquPddDzZokuSYPYOxyOPXYwuUTaedmgJ74xSNUhb2t5t0suwgb
-q3sLVMMrHap0GNb3DCnb794Bycr5gA==
-=gYNf
------END PGP SIGNATURE-----
-
---1m3/mpdwsBsKXyRx--
 
