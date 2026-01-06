@@ -1,148 +1,157 @@
-Return-Path: <linux-kselftest+bounces-48274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A024ACF675E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 03:26:54 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26866CF6B51
+	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 05:56:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 980AF3032AA2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 02:26:36 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C2ADF301144B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 04:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5515D258ECB;
-	Tue,  6 Jan 2026 02:17:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F8E29E0F8;
+	Tue,  6 Jan 2026 04:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AQBgRXrS";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="i4say1wM"
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="AdxepRR3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B585240611
-	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 02:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7C329BD81
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Jan 2026 04:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767665843; cv=none; b=REU+IPMFfheyyrKGoTR/I1U6+Ls8dRfEleZncSCcnb7ooxXfrIFTEo/8z4pWNGKTyC3kELhjPMlR/MD1PN/n68mYI11sf5MHUjrQ8wIsUr4edLeh3RWf8HpJPWDQarqMJ8bdB7QXevaALUJfOmArZ23+TjO2ZGCJx7wxAnu4H6I=
+	t=1767675403; cv=none; b=J6DLvd5jWHqUehN8UYZi+HU9OWXDfrwJQKqRWrBXLE8KSvOa/MzhuYWAiykNz1QzynIpXSKzIiFL6YwgiZy5Y+XVZiYmHA1JAu0j4g/38kif8C4tWxe7PPUkcQZf8gX7w2dpSq0GI0rMsHayJ5jFgb+VAZJChAxLC1l1SrRZY40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767665843; c=relaxed/simple;
-	bh=1YgllTBL+1iViT1gzw0aL6fOdOScWmVAQGM9pEnlsmU=;
+	s=arc-20240116; t=1767675403; c=relaxed/simple;
+	bh=fbOChfkZbXOq4bWAzF7RfS77y5AjBtfElT9+lVK8jhg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jh5PNRq5eUVfdlhsA8aSsncCWwWdIN3X9yWDHexMHAP3F8CG2RqwKuDkieX2MM+JVN56PcFUqog1kD3gCVVrBskewttOyJcQONjK+n/ZPUN8unRTABJRC62SraxeyfoaCn6ybTWTsJMW0QumXCbVLgJzAF5YPLk+cPNJcSf5e64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AQBgRXrS; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=i4say1wM; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767665840;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ppqIeQWJ2ZsPz/DX4aNgRg6SKOktRzCkfGgYgisHCjQ=;
-	b=AQBgRXrSWtYEPUAZY0A/J32vTTm4yHuHba6GJbX1RwiYM2rN4NeL36TXcxN00YKt728Z1O
-	JedCOicb8K+jfhTRjLvmsfsXHvbeouSKCtyUE/NI+mocyYlzocBkI5r4FCPj74b/7G7lqQ
-	PQUYBMP2mqAnt7KXyqW5+fF5abWLu5k=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-81-4ClF0UOsNhqtGJN_4dnTvw-1; Mon, 05 Jan 2026 21:17:19 -0500
-X-MC-Unique: 4ClF0UOsNhqtGJN_4dnTvw-1
-X-Mimecast-MFC-AGG-ID: 4ClF0UOsNhqtGJN_4dnTvw_1767665838
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-b763b24f223so55493766b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 18:17:18 -0800 (PST)
+	 To:Cc:Content-Type; b=JczFKz3btbLZWi7SWlBY7pAgKJ6tG7+jAfDMdRvZVPJvxy3ijxG6LWATrQ/lQdt3FaWMZJhyIXjimj3wh99TzoFcTySuaR07FCbwhaiAqNPpM/jCsBm6u3THycfAPYmrhCFwtS88GgZWiD2NPMFyYqvWfWc8hI/G0giRgAD6FMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=AdxepRR3; arc=none smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-457c1148a5bso252701b6e.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Jan 2026 20:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767665838; x=1768270638; darn=vger.kernel.org;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1767675401; x=1768280201; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ppqIeQWJ2ZsPz/DX4aNgRg6SKOktRzCkfGgYgisHCjQ=;
-        b=i4say1wM97rv+YvlAEA/Fg+eWLVQZBE0xFK0XbhxrjgS893Yr5LqtvOG+800zXWbup
-         ExnB6hkj85coXts5QqffJ991deGzMZoQvsDPtPz0S379kJH9rgM5qSVGq4jMp5LsOa5q
-         HQ8ad7XCBIKze210AODOIm5LfZVj2Zv2tW5j2rU1NHkMKaImc/4aEXmaOhtt6Qs0jfMe
-         KsEmsHYvhSmCsx2ZXvbE9zvUX4YDmPUaxSleJsjLJBhglgJHbOwX+bcEFojRT5FQFqIN
-         ukaZmt7HIOS8uD4st6SB4F+zi9eGWoNBMyv/K/QvpKfo/TYmUxloZen7G80k1gmv2Ob8
-         B18A==
+        bh=WA+vnv3FR+Z4SF0lY1aYTXYOVt37m8c4DjPEA2hxbj8=;
+        b=AdxepRR32ZRfNXuAeeUizo+CnwLitQ7zhXMGkWNX+ePYeR8Edb8n82yNZ0WtZmeyVn
+         RjGoMQ5RFebtp9D2clL1nAiKpmFEKNTAN3ui5gMmE0rD1LPLpiE+RLtRQH3jMzLAtVoM
+         fq8D4n7rM4Xj4pp4q6ZMji5Lw9yxCMk2R66PmNkxDKxUd5v6jV6U8uG9wtzY24vCk8ZF
+         Wn/Ntf3/VIShSc2WA6rOrmkZMmyJb4M73uaCM/KJbdRp2ap1VP4tKRc94YjTLJVGbp4N
+         j8R2wNdf42iuSkEuZAAGMlAQNr0F4ulHSiRscM8Qk9fVMd7VWslEpFA8Msf1eTODs3Ex
+         uqDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767665838; x=1768270638;
+        d=1e100.net; s=20230601; t=1767675401; x=1768280201;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ppqIeQWJ2ZsPz/DX4aNgRg6SKOktRzCkfGgYgisHCjQ=;
-        b=p2XJv1Gkqq9TNVhr4un8U+3PJeQdRIxhO4ZnPLNvFIi2nsLN3KdcFJL4PhxjVTq56Y
-         Lpg1TqepleTjlDk+gRbKMrx0YiD9woZ8Wwig+Sly3lcV1pxqizK/F4julReYv0S8znyN
-         6aoZ+YygQQ0zS53dqa6Ol0lZXeD803HVC9luBRBjwAm0dqeIAkfKpiv0YDBiCuVnDxKE
-         P/uY/EdbWEzUWyLHOnyhyXzwKjty6zT7jofwB5YDQEMhFj+UAMS3DEBa017/ZH0oBoq/
-         eLuTfWN3fBJ9LmBEnogOKcxe1hDIFV+iom3BzeUor8MrTnI8ruNoJk3z8rTzzjnjeyTW
-         vNzg==
-X-Forwarded-Encrypted: i=1; AJvYcCWkEX6N/JzdDVZsWEVIXI4DOkLXFHX+NHvLASPbMbvkjmnsKCDeoSo4oBIf/4blMew7IT4U20HVnlr2t/mtA+I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGYHw+0dGckBJW0ARyrchyLGPbbiP3sOfyV7gxcbhcr4mHTq9A
-	oHusR7k9qho3IsDSkDa+y/FxRSCIvfW0uPlVY0Od30xP/wVnvnSTnLfYs/LUst3XfP6gE0fprG3
-	SmydNM4JHgdl0/HN+AY1buV7ZuMNbmuE4CXOmM4460b8pbmBkcnd/XM6Sxll+fRx94a65H8Acnd
-	JR9Q5WZ8Rb4TToAsyRdC/RMZWRul7tli1vS0ix004BarTg
-X-Gm-Gg: AY/fxX4NczjKLW2J2TI0lY2w/cAT/G1tg9yYc6KWOAfiXWqHY+EnJP4PlLU42NX5OXK
-	uaYHgQuklvJN7KolO/oTdzDuGnBGVHlUzd4pzRBbzw8CP1LOTXjnyXsdbW6zAeHIj7YnLTxrMcv
-	PCTyrHD8LKLttELvnH2cLranAhxSGI2EofM4nEYE7K30e4380u/ix37yUkc2vBX0kQ0Ag=
-X-Received: by 2002:a17:907:6ea8:b0:b75:7b39:90c9 with SMTP id a640c23a62f3a-b8426c0d8c5mr182759266b.51.1767665837945;
-        Mon, 05 Jan 2026 18:17:17 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEZpG50fCpayB+gpP3wEA88rQP0JbYq5H+7aAiS8pjjgd05jGSbAaPR1ublGR+/mSAXJKa8nFxkktRJ13qufE8=
-X-Received: by 2002:a17:907:6ea8:b0:b75:7b39:90c9 with SMTP id
- a640c23a62f3a-b8426c0d8c5mr182758366b.51.1767665837572; Mon, 05 Jan 2026
- 18:17:17 -0800 (PST)
+        bh=WA+vnv3FR+Z4SF0lY1aYTXYOVt37m8c4DjPEA2hxbj8=;
+        b=ujVKy8iT1dugQBKKL0lczSGJLKQy/VBWyC39nw2PULRcKyqKuE7cpPOMfEn1ea5Dnc
+         fRmngC5xidzahxnuZ4kCg8x+Nw/nr7NbXJSsaroEfSVFOw+covA6FM7hSfbJ4wqjlIJm
+         odAP2hDV+OZHl0XHh6cQ4oaEGidroyTOjvUZFhYtDcQpFFhXQGckf3AwA+35ahVfbA/H
+         Fx4Ts3crmAP0inZnF5PfGFhk4Cty4CdvGjgwqLgMHmfUE0c1xweUjjR75wb1YhVzU23/
+         mMBcrLyFLhyD9RRoIZdvdrWEvhlxExAYXdhLRndx0uqwL1lR2FfYHnKMpQTQZ30Uq7Sp
+         u0Uw==
+X-Forwarded-Encrypted: i=1; AJvYcCXiNyazzEvMrQIELp7bpeTnbLqYM7AfnQYBeiZ0UpSIIw9uwAC1vzNzQR5h2a2yD0bq4Kf37yV+5LOAbBajB0s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxY10KlBUfWFAJkbjQMi1RKkQJag+TER/LL3TDtFOmYOeMIt90g
+	0MZckXjR14SLYjfAtQBK4YEf/QUfKqkMjzU3J6Px7/VHOO5FQpmWABUR3e1N8BI8B8FtwRyWQ97
+	XCJqWn6pjdDXHvOObouqGAJm0Xft85UXT70+wQlB9bw==
+X-Gm-Gg: AY/fxX5PpSUXQ9kGCZY0QV46LInxlZGyL2ejASTMgbInesHIXXIZg67azgpY0DltCcE
+	kS8eFR+KTv2waoeurG9yA75pGUEXoVkap/lso86IrK/gUnX/LH5ityKsgwhzGgP9jD75bZ2xxhB
+	RzGOc5dqu7w88/trxD6N8NdRRk0ehMnyLJnlxKdtl7BYA+0bMxKIx9V5xE+DV4iSWk+5uNVPoyC
+	3C08/Y+PY2FDkFgl+l+xUM0p0KLWNnV5GdtXZaTX0JQ9lkUMTGXlMyRsWVWnP5T48TcaMMA6BDx
+	y3YszgTzMEjH/jS/rVtKp8Q3rEZjjUDL8w9Yaxn2upXqN+pV1tEncOW5/w==
+X-Google-Smtp-Source: AGHT+IFYFZIDuKpjkDS72Ef6JCpoBzzGRuIzZj1eYSMd9ZLPsEbeYPPSGa4zpnzJp7w6utOo445xI/OFNWfh52Uwiq4=
+X-Received: by 2002:a05:6820:f006:b0:65d:a21:d1f9 with SMTP id
+ 006d021491bc7-65f4799cc06mr1525576eaf.5.1767675400701; Mon, 05 Jan 2026
+ 20:56:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1767597114.git.xudu@redhat.com> <20260105175705.598c8b0c@kernel.org>
-In-Reply-To: <20260105175705.598c8b0c@kernel.org>
-From: Xu Du <xudu@redhat.com>
-Date: Tue, 6 Jan 2026 10:17:05 +0800
-X-Gm-Features: AQt7F2qI23fgsuMf0a99Sv12MnkBvt4O2xUWTuNqwoXecH1KIcNn7bGOiu2261E
-Message-ID: <CAA92Kx=UXmsxL-2VUs6M7sVzZr9-Dj7Pz5NLU0st1KOGP-4b2A@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 0/8] selftest: Extend tun/virtio coverage for
- GSO over UDP tunnel
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, 
-	horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251020042457.30915-1-luxu.kernel@bytedance.com> <20251020042457.30915-5-luxu.kernel@bytedance.com>
+In-Reply-To: <20251020042457.30915-5-luxu.kernel@bytedance.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Tue, 6 Jan 2026 10:26:29 +0530
+X-Gm-Features: AQt7F2pAUL7KOytVD0mr7jwpoQ61NGCRNrXweF7HHu0OAcu7_RUK7gg5_B9FCMI
+Message-ID: <CAAhSdy3btmd-G_335XjJ6O_+WFNyrq5wWYSEtEQHUeP1yKmLog@mail.gmail.com>
+Subject: Re: [PATCH v4 09/10] RISC-V: KVM: Allow Zalasr extensions for Guest/VM
+To: Xu Lu <luxu.kernel@bytedance.com>
+Cc: corbet@lwn.net, paul.walmsley@sifive.com, palmer@dabbelt.com, 
+	aou@eecs.berkeley.edu, alex@ghiti.fr, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, will@kernel.org, peterz@infradead.org, 
+	boqun.feng@gmail.com, mark.rutland@arm.com, atish.patra@linux.dev, 
+	pbonzini@redhat.com, shuah@kernel.org, parri.andrea@gmail.com, 
+	ajones@ventanamicro.com, brs@rivosinc.com, guoren@kernel.org, 
+	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	apw@canonical.com, joe@perches.com, lukas.bulwahn@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub,
-
-I'm sorry for the trouble. I actually resent the patch before
-receiving your email.
-I will carefully review the maintainer-netdev documentation you
-provided and ensure that I adopt better practices moving forward.
-Thank you for your guidance.
-
-
-On Tue, Jan 6, 2026 at 9:57=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wro=
-te:
+On Mon, Oct 20, 2025 at 9:55=E2=80=AFAM Xu Lu <luxu.kernel@bytedance.com> w=
+rote:
 >
-> On Tue,  6 Jan 2026 09:35:13 +0800 Xu Du wrote:
-> > v3 -> v4:
-> >  - Rebase onto the latest net-next tree to resolve merge conflicts.
+> Extend the KVM ISA extension ONE_REG interface to allow KVM user space
+> to detect and enable Zalasr extensions for Guest/VM.
 >
-> I just told you not to repost in less than 24h.
-> As a punishment if there's a v5 please wait until the next week
-> with posting it.
+> Signed-off-by: Xu Lu <luxu.kernel@bytedance.com>
+
+LGTM.
+
+Reviewed-by: Anup Patel <anup@brainfault.org>
+
+Queued this patch for Linux-6.20
+
+Thanks,
+Anup
+
+> ---
+>  arch/riscv/include/uapi/asm/kvm.h | 1 +
+>  arch/riscv/kvm/vcpu_onereg.c      | 2 ++
+>  2 files changed, 3 insertions(+)
 >
-
-
---=20
-
-
-Regards,
-
-Xu
-
-
---
-
-Xu Du
-
-Quality Engineer, RHEL Network QE
-
-Raycom, Beijing, China
-
+> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/=
+asm/kvm.h
+> index ef27d4289da11..4fbc32ef888fa 100644
+> --- a/arch/riscv/include/uapi/asm/kvm.h
+> +++ b/arch/riscv/include/uapi/asm/kvm.h
+> @@ -185,6 +185,7 @@ enum KVM_RISCV_ISA_EXT_ID {
+>         KVM_RISCV_ISA_EXT_ZICCRSE,
+>         KVM_RISCV_ISA_EXT_ZAAMO,
+>         KVM_RISCV_ISA_EXT_ZALRSC,
+> +       KVM_RISCV_ISA_EXT_ZALASR,
+>         KVM_RISCV_ISA_EXT_MAX,
+>  };
+>
+> diff --git a/arch/riscv/kvm/vcpu_onereg.c b/arch/riscv/kvm/vcpu_onereg.c
+> index cce6a38ea54f2..6ae5f9859f25b 100644
+> --- a/arch/riscv/kvm/vcpu_onereg.c
+> +++ b/arch/riscv/kvm/vcpu_onereg.c
+> @@ -50,6 +50,7 @@ static const unsigned long kvm_isa_ext_arr[] =3D {
+>         KVM_ISA_EXT_ARR(ZAAMO),
+>         KVM_ISA_EXT_ARR(ZABHA),
+>         KVM_ISA_EXT_ARR(ZACAS),
+> +       KVM_ISA_EXT_ARR(ZALASR),
+>         KVM_ISA_EXT_ARR(ZALRSC),
+>         KVM_ISA_EXT_ARR(ZAWRS),
+>         KVM_ISA_EXT_ARR(ZBA),
+> @@ -184,6 +185,7 @@ static bool kvm_riscv_vcpu_isa_disable_allowed(unsign=
+ed long ext)
+>         case KVM_RISCV_ISA_EXT_ZAAMO:
+>         case KVM_RISCV_ISA_EXT_ZABHA:
+>         case KVM_RISCV_ISA_EXT_ZACAS:
+> +       case KVM_RISCV_ISA_EXT_ZALASR:
+>         case KVM_RISCV_ISA_EXT_ZALRSC:
+>         case KVM_RISCV_ISA_EXT_ZAWRS:
+>         case KVM_RISCV_ISA_EXT_ZBA:
+> --
+> 2.20.1
+>
 
