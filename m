@@ -1,45 +1,45 @@
-Return-Path: <linux-kselftest+bounces-48288-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0481CF81F9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 12:45:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1AE1CF8262
+	for <lists+linux-kselftest@lfdr.de>; Tue, 06 Jan 2026 12:51:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D3948300150D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 11:45:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 50AA83012770
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Jan 2026 11:45:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857B9329E61;
-	Tue,  6 Jan 2026 11:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42625328243;
+	Tue,  6 Jan 2026 11:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="kwBy0Gd6"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="KHU6zK7r"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7730C327C19;
-	Tue,  6 Jan 2026 11:45:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87421327C08;
+	Tue,  6 Jan 2026 11:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767699905; cv=none; b=L/dftE8FlQZWfBY/1MTENxvRTPcI04/a3kLGW9EQHVq6dBncsHUb0xJ5F5M/iDyxN7Qt8QUjOrxJ43S4V790N42YVCV7MrjwThGkrNNrzjNWYG7jmDuIjRLhJQvrs4hWR3NOE1ENcfI3ztjDFYw+dPSDmhRwevZC01Aq7bcuG+0=
+	t=1767699903; cv=none; b=VxOUFtnhDQF9rdQot5fgwwQCZ4R3MNinyXsFB/xCFTq/aTus/X2Q5FPYMzaTawj64DYGkoiDrV0L/NAYyX580zMFe/pRfueiG4Vq1J7E9oHZEgiOil3IEG14GpHVHzAJG273qREc0ybl874s1eTNvRLs3hpM0aMZVj92RRGI5EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767699905; c=relaxed/simple;
-	bh=zb9bN9rbR0iyuS4wR/xd9vkvuSwQkcd8PxRy3TtU9lM=;
+	s=arc-20240116; t=1767699903; c=relaxed/simple;
+	bh=RxxB6NV9if6awA3P4aQd3C0EaaKp6EItM45W9RNOxYs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=un1d3xHcc65Lzst4rYv8pxoQfjg4w/EXDZEdryG9rKBSOKGEw/ceHO0Qh4hZzPOTMHwap+A39oTZl5DRy8djDnp6TM+l362gaEI7XrwthCmZSDqRgv5/mnmORyWnfCqd/yF/zy8zJmwnxD9gR4/H62kBBbK3v8w4YZADRf58u1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=kwBy0Gd6; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=XIQuCMyux2oMTpiZN3rXb/+2Nu96wkJt7Kw4ejMaaankqn1lmlmFaQbzvfmYWTXtE1THiO1S/m26ZcyXJrzoW3UnwWFp6bNLRMJhE0DdpbrNeKL12EwlLJoRfiaaWbC/23BIMrLpfwqmBkGMpJQw69ns0LYL1Faz+YBBKSarNPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=KHU6zK7r; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1767699898;
-	bh=zb9bN9rbR0iyuS4wR/xd9vkvuSwQkcd8PxRy3TtU9lM=;
+	bh=RxxB6NV9if6awA3P4aQd3C0EaaKp6EItM45W9RNOxYs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kwBy0Gd607rp4Oi48SZZ7vvDiqOVw+Pk0rTD5wI/RVGgXFA5iPDNX9g32hcMNK5Ic
-	 Ka7fpBml4v3YvTHFzGCjKJWqIJQW7hZRdqCeJcaOjOaMeazYkBwCsKi+pSpk1OIk1f
-	 OOBKbL1IFokq9b6aUf3VkqKIUClecdBGu/o3z2GE=
+	b=KHU6zK7rg9vm0WqhR8Sc6Ts0ZRphdHSmg4kLNjlAL5d19xbiUnDRJhpmA8cmx3aq3
+	 +tnHRusVgyuGbvK7SifmmYPp2tBVoTskYTu871zLbGn0LoO3aeo2hmMMvjl5kHIJj+
+	 k20EVMiz5PYM/g9w3FprQ4H8M+2vbMIQaB876GbM=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 06 Jan 2026 12:44:57 +0100
-Subject: [PATCH 1/3] selftests/nolibc: try to read from stdin in readv_zero
- test
+Date: Tue, 06 Jan 2026 12:44:58 +0100
+Subject: [PATCH 2/3] selftests/nolibc: scope custom flags to the
+ nolibc-test target
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,48 +48,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260106-nolibc-selftests-v1-1-f82101c2c505@weissschuh.net>
+Message-Id: <20260106-nolibc-selftests-v1-2-f82101c2c505@weissschuh.net>
 References: <20260106-nolibc-selftests-v1-0-f82101c2c505@weissschuh.net>
 In-Reply-To: <20260106-nolibc-selftests-v1-0-f82101c2c505@weissschuh.net>
 To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767699897; l=1589;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767699897; l=1021;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=zb9bN9rbR0iyuS4wR/xd9vkvuSwQkcd8PxRy3TtU9lM=;
- b=I3DNnS/PbkWw8AnzLdnqiurqAVrlw1AzcoJkEdXUan3QxKwxkRm6rxyGmR1aSe1glgIDQxCec
- 1KjjUk5me+LDDIAtqQ+Xg2y6crtktkq0dzZM2Yos2iZJOMfMB/cYOiN
+ bh=RxxB6NV9if6awA3P4aQd3C0EaaKp6EItM45W9RNOxYs=;
+ b=nL5JUcNnomQNt3EK+oYGHT6f+IGwg+8M+nF3OXhkJ+SMywgPd0GbKEKJ9p1rXeLX79pbkRUXt
+ SVLneCL91okDwFutXqSDkzegRi42xexj2YlG2ArrRbrY2xPO+SIc1H4
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-When stdout is redirected to a file this test fails.
-This happens when running through the kselftest runner since
-commit d9e6269e3303 ("selftests/run_kselftest.sh: exit with
-error if tests fail").
-
-For consistency with other tests that read from a file descriptor,
-switch to stdin over stdout. The tests are still brittle against
-a redirected stdin, but at least they are now consistently so.
+A new target for 'libc-test' is going to be added which should not be
+affected by these options.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/nolibc/Makefile | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 3986d55a6ff6..e83c1e7e2beb 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1404,7 +1404,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
- 		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
- 		CASE_TEST(readv_badf);        EXPECT_SYSER(1, readv(-1, &iov_one, 1), -1, EBADF); break;
--		CASE_TEST(readv_zero);        EXPECT_SYSZR(1, readv(1, NULL, 0)); break;
-+		CASE_TEST(readv_zero);        EXPECT_SYSZR(1, readv(0, NULL, 0)); break;
- 		CASE_TEST(writev_badf);       EXPECT_SYSER(1, writev(-1, &iov_one, 1), -1, EBADF); break;
- 		CASE_TEST(writev_zero);       EXPECT_SYSZR(1, writev(1, NULL, 0)); break;
- 		CASE_TEST(ptrace);            EXPECT_SYSER(1, ptrace(PTRACE_CONT, getpid(), NULL, NULL), -1, ESRCH); break;
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 40f5c2908dda..43f0b608c796 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -9,14 +9,10 @@ cc-option = $(call __cc-option, $(CC),,$(1),$(2))
+ 
+ include Makefile.include
+ 
+-CFLAGS = -nostdlib -nostdinc -static \
++$(OUTPUT)/nolibc-test: CFLAGS = -nostdlib -nostdinc -static \
+ 	 -isystem $(top_srcdir)/tools/include/nolibc -isystem $(top_srcdir)/usr/include \
+ 	 $(CFLAGS_NOLIBC_TEST)
+-
+-ifeq ($(LLVM),)
+-LDLIBS := -lgcc
+-endif
+-
++$(OUTPUT)/nolibc-test: LDLIBS = $(if $(LLVM),,-lgcc)
+ $(OUTPUT)/nolibc-test: nolibc-test.c nolibc-test-linkage.c | headers
+ 
+ help:
 
 -- 
 2.52.0
