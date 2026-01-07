@@ -1,179 +1,135 @@
-Return-Path: <linux-kselftest+bounces-48403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42BB1CFE6E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 15:59:23 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00164CFE6F3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 15:59:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CFF64300BEFD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 14:59:21 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CD46D30069A1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 14:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1AD035CB9F;
-	Wed,  7 Jan 2026 14:59:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652F235CBDD;
+	Wed,  7 Jan 2026 14:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YziDo8/j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YMYUCLYq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-yx1-f51.google.com (mail-yx1-f51.google.com [74.125.224.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC92821ADC7
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 14:59:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85F6329C56
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 14:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767797960; cv=none; b=OkbY1arg4i07zyq6s0FzBoo7uV6n05y6duS6adaSM3u5ak+P9iHQoL07el2mMbm5zqm1opmS6GZYr3J03xtbuSRbmIJiVQuO5A5ete7yEvMsbE8dzrgW6lTwz7f4lHAZp6jzTqXgSq//pkydoJuOSrCiwU+T0lY4JbL+KHOvies=
+	t=1767797980; cv=none; b=ELEi8hAwonkqPchc36W6PcliyMZ871n5Y2EJosg9sXCRw15ldj44L+Wwz6Nn+NwPBgcNveeHjoaCfAB0gaKyExwdIE3+nskzUrWbSyZgjWqaycJquCITEFr10NVSwP5c16MIbutQBZHsJWqMEHPAJ91d5WZdCd9g8vc/QjYAhC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767797960; c=relaxed/simple;
-	bh=lZz8ZAu8vrs8Ru98ohAatnW1AHr7PhD4PTK1H1/KWrk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=anpnnHIbO5LrduDhGWX72/IeW7wiOBbAFXGRzs5gxEhJ4Pve79FFLggtf95rGE2a8eeZ6ANCBBm7phIAKPYy15m1YW6ubY1mo/nuo12SM8Gh2s+fGqdUDcFE0hYaJVsNlxo/nthiIBDr+A/k7bAIqKpYROSmQskCgbW7cNECKv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YziDo8/j; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1767797980; c=relaxed/simple;
+	bh=/g+VPdf5RLxM3FpCwylvaiin4nBnMP86FjrQ2QeZu2c=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=R+kddu12XYVwyoDFCiONFHLKyJZ5USK7lLurJ1UlWOvXFL7im83uJMeGl37ajmNlRYAmQ9aFXQi7CvkQJvvnfI7+mI+c3Zih2D09xf3qeJ6MURmLZ/8EdPcYPxEQ5IGpyYX56tG2B6OBowSrWYDzROIfOTsLHCU2X1iEXdCcyUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YMYUCLYq; arc=none smtp.client-ip=74.125.224.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-432755545fcso1252376f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 06:59:18 -0800 (PST)
+Received: by mail-yx1-f51.google.com with SMTP id 956f58d0204a3-64455a2a096so1818293d50.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 06:59:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767797957; x=1768402757; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SV1cZScFIWK8ylac8dKg4D7bUheGaqaRyP9KVJQ7iTw=;
-        b=YziDo8/jjXzxLszplOUg1Yx6muPbjxZOE7bZ4LgGXuDk12djjYrsTa/4ZKQv2OSYjo
-         /twTzpNbYWievfgD0Wy4NGc6q/mDd1YTJ4ljI7aPky8IscuhbuY35FVMA5m7sNnfGvnY
-         //zEpK9WlpsGVuIRrpA8YRrFKk2+dVeHA1ZfdB+s4vJygrojTPAwc3VQXyDwwOTuizuG
-         D4k2ytcIy0nkM/8iah+f+CR5+V+7KLkKA9JNyFEKwbsqJO4NbNpj4iYxrS5RnZc6yjov
-         Vkp/ppKjuvvo/xEQ3I5Tb2Ffmm46xG87x8hmdcQV0mBGBv7m+jV80sAF0RK4xv/pxSNH
-         8Nkg==
+        d=gmail.com; s=20230601; t=1767797977; x=1768402777; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ygEsBMOtQfOnd+ceAekCXMasHvVQy7UNaDcAc1PawvA=;
+        b=YMYUCLYq2dJWMCKoC+oWjv27yM2iCKeBsMMNIcYPVJ9aPbwlMM8WtvDtWj38GIOR7M
+         xIXoIb+anvUvL1HInj6BrdYuCF5TcEZ83PRLVED0/wPj8vrvYRE9dIWIUi+I5gXJ7wNJ
+         AViT+KEm/wB9VJrs+ov9E65HzNnRdlQ+og0eR2x7lyu8sqQL3yBzaUrIHb1r616fPO7x
+         oPDtFodb8sG1ZMTR1ERrrCuDDcGwr5h8NbNd2EFfakTSmajcIGGzWdIQ+e49NsF5kDel
+         9V8DXIIZVW1I+Dc2SGMPmO/uVJh8W8wGn+5gq8Rs8rMYPHfyt6KshxnKAgIs91C1d4d2
+         LJVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767797957; x=1768402757;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SV1cZScFIWK8ylac8dKg4D7bUheGaqaRyP9KVJQ7iTw=;
-        b=ml8z3LXmA2jqRHOhufN/Vb0CtCNySo0fHqTb7AGJama3qqek8aGUqY7GueUJzN59xk
-         eKP4cPfVy+WOVidEeDyiC7Wkfe8kAT4McU0h+oAjZfVH+VPZjNpf3I3/58WV904D7vWS
-         A0SERW8nRhCM2haGHd0V9o7Ufd200XFfuVgerYCUv1/Acak/jMIZaSfzBTvCjKeHZhWs
-         uOqaiGyJta5ahct62gPPd8qsU0Z7JoZgEMfIU4Rn++27lJFenRdjVmrSyxrCEBhX/PAr
-         QUabgEJ3xvDxYaBfxll22gmhMss4v4n19HTjobxL9w9kSCCXEePM0eXuwonXTsQ+/4bL
-         6kaA==
-X-Forwarded-Encrypted: i=1; AJvYcCX1wJS05haLvC1ETuxjDNJnK472xL4uMKLcCgSQ6QC6uJ9GrurLYePgtkDjbzAEwjmEbNuHtXDbnDq23CfjBuk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9ApfvNVtbu7PN5RdSK3UwX59AV6MlRcjX7ICA9/kC1AOPFy+J
-	F11/ueMTaQHFI9LcMeUROWRvcrUP3jHaNtyvBTBSYRHp2eG3agDQGGwQu4nKug==
-X-Gm-Gg: AY/fxX6C43xN4g4wipo32AN3/GE4aQ13jKZ57PQb1Gb80uQYSjghTpDBRD1LpDNhPpv
-	dSnZJqR/m7rQfV5eROU/gASiCTK9dE4Jd0f32wBREjQUmmu9Uc1Wk4Nfi3q6ghwEBgbBEenSXS+
-	u78capZ1dYUJaAay3xFbCv8ySt/nQdCkNe5QLFJ0pqOQKOm9a1CfcOZfvKPZhESt4Rm0al3p5yK
-	x9+Atgu1h5tSKTvvln5kLyAn2/BnDuRGNTWdaKv4k4WT4Ger7e8BbozSzD5r3OxJZh4IeLNnVU1
-	hHiYuXmUb5r/lYa/Is9k16faj8zgMcXWAPKFo4N6wdqTiqwDURqR4NTqmDQCqNXQzejJCKOHkdh
-	MnqHA5lfLXLGsomestwlPOQsmXfxUj3LPJEcjGNzTq+aF51R0IOncfm8kuuVvqN7r6iwBXGRgXe
-	v14dTRbtzKz8yMY0+6angviD5g2ceoJu8Vt2128OGdYY7EtbXKRlTy3PdX882n5MmtS70=
-X-Google-Smtp-Source: AGHT+IG1YououSj/EXDwxzVarDQZ72uogU8BTCNy+0HLyFRU+zonnThKVMk8YKlAXuXT6L0Z4fcuMQ==
-X-Received: by 2002:a5d:5d11:0:b0:432:c0e6:cfcd with SMTP id ffacd0b85a97d-432c3632bc5mr3400757f8f.22.1767797957100;
-        Wed, 07 Jan 2026 06:59:17 -0800 (PST)
-Received: from 0.1.2.1.2.0.a.2.dynamic.cust.swisscom.net ([2a02:1210:8642:2b00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ee243sm10690182f8f.31.2026.01.07.06.59.16
+        d=1e100.net; s=20230601; t=1767797977; x=1768402777;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ygEsBMOtQfOnd+ceAekCXMasHvVQy7UNaDcAc1PawvA=;
+        b=fJD2E6/j2AnqII8FrHOL0poiZOl5O7dy0DSt+WHiOZrEGrhCBAQ7yM6iqQ40z0T9E9
+         Rvm4U0oRCNJFdS825enecB16ysoXgPW+DkLizqzM4lRFNdKNVzm6KG/uB3XscYH4Powv
+         Vz5IzEbdp7NKJTCOewC0dXnQez4lfDLFpjj4iJUReytTivPnSLxP5eWxXYYg+xSMtBlW
+         S6yJ6Ac8k9DNgyeX1jw/WWJV6ZKBjYP7vl2DREpIWaiKr/9//Mf89KOeUue67UXBuXYk
+         Gd11fFpVgrPQIwM9vrfSlUjAn0n/Q7q33dxPTOCBUxtL8llpOSy2rCv2hDzZ5qmoLda1
+         5WRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVBOXWFZ5/sSDBlDLnLzoXYIpGj7bDbOnjSOMnlrz0rD55SI0Cr9/R8waO9nBvTcROEljSQT03va9diwYzPbkk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLXLXEozS6XMGzUDAAT+F6okcdXyFQtsmLOo0XHPLKP9qypKtI
+	KQFyvOjAEVtQuPEjx2I3omsv2MFtvTnuqRI31YUl2ZtFgq80MWXz4ZqK
+X-Gm-Gg: AY/fxX74JBi7mzBpJI94C2SXrT6jz6ElTS+SVJfmDc2NdldIJOyhUtqdgnr1EcV19sR
+	o1qEB6CZDOS+utbXbMgkEwdK0fjBnny6HURreKrkbCICAsVOBqnNAEEjJqAUJe1qMnvCXacHio6
+	aLB6Z0CRb/waHdakVOpE/1scSXm+AYHYvOfjpeyNLWg/ciWUYkCkwlHYWkTo1OoOqi/N79euUL1
+	YvCYI3heplFopnLV2J9YhrdSKdSRjLJCH9itTchHdskuCyDjbySAXwKLY+Af4887hCYGTmDI2fx
+	YxReWyEqZzc00wr+pZwpNrLwqUxiTzQJPvktKKLPwpUNzl3OSUQtuDwUf32XFzdPSjxCIlUFqSD
+	g9O0KbuUbx5fRqDJoO8ug//sMlW74e3SzyStTFh9iThT0MEoRX4nCVwZzAXCar1DvN9SR7WOoiB
+	9v7x48Yl7QN6a9Ae1NnA8zFfMkgl5KPrLGfwGY3e21A/xezltpOf8Wjp4+fS4=
+X-Google-Smtp-Source: AGHT+IHGckZa869lQuPtJPN6tXowxLF91dFKwcfoBAPflAsajZxCtT4RbtUWJmXlz8CVoUJtC1vKmA==
+X-Received: by 2002:a05:690c:315:b0:789:3166:25a7 with SMTP id 00721157ae682-790b5828b28mr57702757b3.46.1767797977574;
+        Wed, 07 Jan 2026 06:59:37 -0800 (PST)
+Received: from gmail.com (250.4.48.34.bc.googleusercontent.com. [34.48.4.250])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-790aa553750sm19318617b3.9.2026.01.07.06.59.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 06:59:16 -0800 (PST)
-Message-ID: <297860d547bb93b794e7b1cee4eb7b93b9e05e9d.camel@gmail.com>
-Subject: Re: [PATCH net-next] selftests: forwarding: update PTP tcpdump
- patterns
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Wed, 07 Jan 2026 15:59:17 +0100
-In-Reply-To: <20260107145320.1837464-1-kuba@kernel.org>
-References: <20260107145320.1837464-1-kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 
+        Wed, 07 Jan 2026 06:59:37 -0800 (PST)
+Date: Wed, 07 Jan 2026 09:59:36 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Xu Du <xudu@redhat.com>, 
+ Jakub Kicinski <kuba@kernel.org>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ horms@kernel.org, 
+ shuah@kernel.org, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.24d5d52e43030@gmail.com>
+In-Reply-To: <CAA92KxkOYKA9vsihvk0FR58m4zgM8-oZVWGsLDYycnk4UWmQAg@mail.gmail.com>
+References: <cover.1767597114.git.xudu@redhat.com>
+ <willemdebruijn.kernel.3ae0df5f36144@gmail.com>
+ <20260106145822.3cd9b317@kernel.org>
+ <CAA92KxkOYKA9vsihvk0FR58m4zgM8-oZVWGsLDYycnk4UWmQAg@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 0/8] selftest: Extend tun/virtio coverage for
+ GSO over UDP tunnel
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jakub,
+Xu Du wrote:
+> On Wed, Jan 7, 2026 at 6:58=E2=80=AFAM Jakub Kicinski <kuba@kernel.org>=
+ wrote:
+> >
+> > On Tue, 06 Jan 2026 17:14:05 -0500 Willem de Bruijn wrote:
+> > > For instance, can the new netlink code be replaced by YNL, whether =
+in
+> > > C or called from a script?
+> >
+> > +1 looks like YNL is already used in net/ tests, and it supports
+> > the operations in question, so that's a much better direction.
+> > Please let us (YNL maintainers) know if there's anything missing
+> > or not working, IDK how much use the rtnetlink support in YNL is
+> > getting.
+> >
+> =
 
-On Wed, 2026-01-07 at 06:53 -0800, Jakub Kicinski wrote:
-> Recent version of tcpdump (tcpdump-4.99.6-1.fc43.x86_64) seems to have
-> removed the spurious space after msg type in PTP info, e.g.:
->=20
-> =C2=A0before:=C2=A0 PTPv2, majorSdoId: 0x0, msg type : sync msg, length: =
-44
-> =C2=A0after:=C2=A0=C2=A0 PTPv2, majorSdoId: 0x0, msg type: sync msg, leng=
-th: 44
->=20
-> Update our patterns to match both.
->=20
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Thank you for the suggestion. I am looking into replacing the netlink
+> with YNL to reduce code. But after reviewing rt-link.rst, I found that
+> rt-link currently lacks support for VXLAN. Would more significant chang=
+es
+>  to the patch be acceptable if I switch to Geneve to leverage YNL?
 
-Reviewed-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+These are only changes to the new code in your series. SGTM. I assume
+it is not a significant burden as the two are fairly similar. Is that
+correct?
 
-> ---
-> CC: shuah@kernel.org
-> CC: vladimir.oltean@nxp.com
-> CC: alexander.sverdlin@gmail.com
-> CC: linux-kselftest@vger.kernel.org
-> ---
-> =C2=A0.../net/forwarding/local_termination.sh=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 | 18 +++++++++---------
-> =C2=A01 file changed, 9 insertions(+), 9 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/net/forwarding/local_termination.sh =
-b/tools/testing/selftests/net/forwarding/local_termination.sh
-> index 892895659c7e..1f2bf6e81847 100755
-> --- a/tools/testing/selftests/net/forwarding/local_termination.sh
-> +++ b/tools/testing/selftests/net/forwarding/local_termination.sh
-> @@ -306,39 +306,39 @@ run_test()
-> =C2=A0
-> =C2=A0	if [ $skip_ptp =3D false ]; then
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over L2 transport, Sync" \
-> -			"ethertype PTP (0x88f7).* PTPv2.* msg type : sync msg" \
-> +			"ethertype PTP (0x88f7).* PTPv2.* msg type *: sync msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over L2 transport, Follow-Up" \
-> -			"ethertype PTP (0x88f7).* PTPv2.* msg type : follow up msg" \
-> +			"ethertype PTP (0x88f7).* PTPv2.* msg type *: follow up msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over L2 transport, Peer Delay Requ=
-est" \
-> -			"ethertype PTP (0x88f7).* PTPv2.* msg type : peer delay req msg" \
-> +			"ethertype PTP (0x88f7).* PTPv2.* msg type *: peer delay req msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over IPv4, Sync" \
-> -			"ethertype IPv4 (0x0800).* PTPv2.* msg type : sync msg" \
-> +			"ethertype IPv4 (0x0800).* PTPv2.* msg type *: sync msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over IPv4, Follow-Up" \
-> -			"ethertype IPv4 (0x0800).* PTPv2.* msg type : follow up msg" \
-> +			"ethertype IPv4 (0x0800).* PTPv2.* msg type *: follow up msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over IPv4, Peer Delay Request" \
-> -			"ethertype IPv4 (0x0800).* PTPv2.* msg type : peer delay req msg" \
-> +			"ethertype IPv4 (0x0800).* PTPv2.* msg type *: peer delay req msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over IPv6, Sync" \
-> -			"ethertype IPv6 (0x86dd).* PTPv2.* msg type : sync msg" \
-> +			"ethertype IPv6 (0x86dd).* PTPv2.* msg type *: sync msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over IPv6, Follow-Up" \
-> -			"ethertype IPv6 (0x86dd).* PTPv2.* msg type : follow up msg" \
-> +			"ethertype IPv6 (0x86dd).* PTPv2.* msg type *: follow up msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0
-> =C2=A0		check_rcv $rcv_if_name "1588v2 over IPv6, Peer Delay Request" \
-> -			"ethertype IPv6 (0x86dd).* PTPv2.* msg type : peer delay req msg" \
-> +			"ethertype IPv6 (0x86dd).* PTPv2.* msg type *: peer delay req msg" \
-> =C2=A0			true "$test_name"
-> =C2=A0	fi
-> =C2=A0
-
---=20
-Alexander Sverdlin.
+Eventually it may be nice to have VXLAN support in YNL akin to Geneve
+support. But sounds like a separate goal.
 
