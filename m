@@ -1,99 +1,38 @@
-Return-Path: <linux-kselftest+bounces-48389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B032CFD09E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 10:58:22 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA5E9CFD03B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 10:55:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 756A53024F5E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 09:57:34 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A42173004621
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 09:55:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B5E7329E4E;
-	Wed,  7 Jan 2026 09:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DvOQnoPf";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="nrDO4YG6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C5D330642;
+	Wed,  7 Jan 2026 09:55:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883713254A6
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 09:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 973DE32FA2E;
+	Wed,  7 Jan 2026 09:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767779285; cv=none; b=pvvyZc8DmxvD81zcDLmf8gV7etRbJaL+b5vnV0ROYp52ICspGXOfc5N31hgTKCzB/Y/5OCsNJWCIwkNrFpViMRzqCgDfG69I0vr7Fh4c9/85LayJYaHdRwPAbOjaXZL0w0vLKvZtk3JJtjtR4xZ8l35MSfmcs4jdZjzICgOzKOI=
+	t=1767779705; cv=none; b=dnN9RX7wIKUQdr/aMLcMzXCcZgBGm7WgZYHRHahFQp2WR7jiT1+4ziTRRoFBv0kAJIi7JWcg6zGZhKpJ/f3jnIdnwu2bsD75pWNHnz3itHB5dt7DYBxqba3tCcFGPolJ1Jd7a4aCCAn+JR/d7V8Wd35cmmUqW+46DwkJSyqcaQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767779285; c=relaxed/simple;
-	bh=wnY5o/MC+2tKe4BqCdLjMx+OdS/yCXDDRqj+BryQq2k=;
+	s=arc-20240116; t=1767779705; c=relaxed/simple;
+	bh=vrkv7GDpiRHLHqapN5GYUcOnVs6hQ6GL4tGQ1fm+LNs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TJLV+4ZQD2WMiq6SPTG8Q0seUEFZZp/P0hy1W8SD1wUx4E3doiY3Pm/wCsrUpo+XRf/0Va2Qt+7RrjQS/IKpbE5fvBBXuanHixW/APSG4gMPcQsxcpS4oeqC+llzZQhU25lXdeAuLqTsr5kmrT9KzU2+PvU11S/Bfs4TQpX+BI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DvOQnoPf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=nrDO4YG6; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767779282;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ScDN5rAHIF+neP5c5OtPOLevrSkBcpaaU/NLEzKk+zA=;
-	b=DvOQnoPfrABYvoAb11LDQPpoMPDQtYeh/suMnfVgJmkREk7vsIQ2EVq7X+ilvffpUxXI6f
-	lL3Sfwx2Zy46x6s7xIlKND4GNc/12y3yFyviou9/BTYdsCXxkWwFqsVKAdT1nlUJeBC5d9
-	VENPAIFSCp7SgHjM9MR57PWC2fBuxtU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-163-iUYPO5gTPeq_lL5YgxpT7Q-1; Wed, 07 Jan 2026 04:48:00 -0500
-X-MC-Unique: iUYPO5gTPeq_lL5YgxpT7Q-1
-X-Mimecast-MFC-AGG-ID: iUYPO5gTPeq_lL5YgxpT7Q_1767779280
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4779d8fd4ecso3532465e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 01:48:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767779280; x=1768384080; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ScDN5rAHIF+neP5c5OtPOLevrSkBcpaaU/NLEzKk+zA=;
-        b=nrDO4YG6w0MA+JKrTncee5xr2L1/+ogL9H0+5crMCSElWuO0bj8ggy6t1F5xp5YERO
-         BjiPHA37Sb8SO1m6qCL++/BjTqEeAqJcgL7ehwDcaKMj/d96A9lFbeaJCTr5zoh5Fbdx
-         Dhe2AYFQj/wAHlxmjQcFrSKP2xNaVTnIdRHiB1EhulAnffUUuE3FfSIZnwwckdXvsqt2
-         W0GmoN+fJ8SmpcAsUHpUDQobu620Pps79MjlSL3aDuTsQ3jdWZhEBlmExIF2Gzbfy+or
-         f6sRTYeMrIi8Qx+qAlk9ANtfNGlM3T+9PZQTORZKuTtIvxY7CV5p/Kv1covmGkIm7Txk
-         l4NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767779280; x=1768384080;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ScDN5rAHIF+neP5c5OtPOLevrSkBcpaaU/NLEzKk+zA=;
-        b=eX7SBZQ1wd0Muu7EA/C5g6BsmhkXo8oRBiPItggLybU52pKy5DLP6LJ5oFcHvdAZRr
-         MoVgE7hHeoDG1QU/LJib0VDNw9438OBocNU6DLNsUzWqxASQpa4rzWicxq2DsfJvaWLX
-         xdT8U5UmeaU5TcMLscGBrjat8ZviZb6H8CjMCeVL3xiwhp7WAhtMsbqw5G2aJ7ibqdcg
-         VFG0Lc69xEA9zTvkA83tH2JRE2J19aQK9UjHuGpli9du5lKG0fxozqtDsw5km+DaMaIt
-         neGNNRaiHS/s/dajWBlXfkrLpMvL3H2DZSGZwmosm2OQDOV80kPupW2OWxKMxCLj23+W
-         DiDg==
-X-Forwarded-Encrypted: i=1; AJvYcCVK5fSpN4vrGzTHN+SI7DxBPlcFJ2BurXNIDfslSt0dyzUFu6hYNISBuonxTKp94VV/u/8+WCRGzyNADnciOws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhHegWpvnjljS+OkAETu6fEnZOJnRhvL8SCIL7uiKc8XRVDOXJ
-	iWD8K4bTVRii096+/4hdbNh1cS747HlHDZu6SuiPuUE8KRNmrWjAsNKzEUhEO+UfXibqsz/na2f
-	ZR1XdrevVybn4xSBBTwpBeTg3GdMoaOklWPgeAXYVVBizCd2xX1zavdhk5SkEntjPlIUxDw==
-X-Gm-Gg: AY/fxX6erLq2Upvux4Tju2Q7WxxpGrC3E7hXV7nG5k7+mwB1KkYOsUqzpGDa24Pgk2k
-	+yhuyW+L2vLE7RiIZ+9LoiklHAb84nF5NQ1jE6TQUooLs0coJi8gduivN23nAxXm/vwhRTq+qUI
-	CXJcPt1vaDW/ci/LB685be8F9sfai02no1l1cjTIGbeUxsf7/ghciu+UcktYYaRPVg93aYmvdNu
-	ZaL842hA+ezjTXSH7LE36H9LYAoIoUvq9xlx77R1sOROPvt/V3Ev8IBHTaBga+qmQW2Csdomy64
-	lZRQpf3Ea1V1pzkqKcEsn69O6hRhjr1ZHwSB1c7+IeNj1Ty78vOaM7MP9VrixZn90iX5EfKDHWk
-	9Ae4kf3Ql/SnOvQ==
-X-Received: by 2002:a05:600c:3ba9:b0:477:9d88:2da6 with SMTP id 5b1f17b1804b1-47d847d0f30mr23928845e9.0.1767779279689;
-        Wed, 07 Jan 2026 01:47:59 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGR14oCSs320qahGMCj2fpcjCaeoaq3gXPszOqvA9YkYZCVCcyOQTMHSiIeVJj9qvkiojdvAQ==
-X-Received: by 2002:a05:600c:3ba9:b0:477:9d88:2da6 with SMTP id 5b1f17b1804b1-47d847d0f30mr23928485e9.0.1767779279246;
-        Wed, 07 Jan 2026 01:47:59 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.155.208])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f69e13bsm86823385e9.7.2026.01.07.01.47.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jan 2026 01:47:58 -0800 (PST)
-Message-ID: <99b6f3f7-4130-436a-bfef-3ef35832e02c@redhat.com>
-Date: Wed, 7 Jan 2026 10:47:56 +0100
+	 In-Reply-To:Content-Type; b=EbTTX+rdN9zWeKxS4Q0XZkRK7x9DuX2fQMesalxKQoN9dLxqI6M1f5ZYMEC02uJK4SPMDbvobK2bdbOK9yb2J1Yym3TjNvvliRqM8+pLHLmlp6a/y/yvRY12jaU4DoQuRo0hN64mDQwhG5wV12VKU2mKFY05A+9B4CNoUyltZLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 398DB497;
+	Wed,  7 Jan 2026 01:54:55 -0800 (PST)
+Received: from [10.1.196.46] (e134344.arm.com [10.1.196.46])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 25C213F6A8;
+	Wed,  7 Jan 2026 01:55:00 -0800 (PST)
+Message-ID: <4cb1ad60-f8cc-4efd-9c9d-9ae52001e547@arm.com>
+Date: Wed, 7 Jan 2026 09:54:58 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -101,84 +40,75 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v12 04/12] vsock: add netns support to virtio
- transports
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
- Stefan Hajnoczi <stefanha@redhat.com>, "Michael S. Tsirkin"
- <mst@redhat.com>, Jason Wang <jasowang@redhat.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, "K. Y. Srinivasan"
- <kys@microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>,
- Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
- Bryan Tan <bryan-bt.tan@broadcom.com>, Vishnu Dasa
- <vishnu.dasa@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, virtualization@lists.linux.dev,
- netdev@vger.kernel.org, kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
- linux-kselftest@vger.kernel.org, berrange@redhat.com,
- Sargun Dhillon <sargun@sargun.me>, Bobby Eshleman <bobbyeshleman@meta.com>
-References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
- <20251126-vsock-vmtest-v12-4-257ee21cd5de@meta.com>
- <6cef5a68-375a-4bb6-84f8-fccc00cf7162@redhat.com>
- <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
- <06b7cfea-d366-44f7-943e-087ead2f25c2@redhat.com>
- <aS9hoOKb7yA5Qgod@devvm11784.nha0.facebook.com>
+Subject: Re: [PATCH v4 4/5] KVM: selftests: arm64: Skip all 32 bit IDs when
+ set_id_regs is aarch64 only
+To: Mark Brown <broonie@kernel.org>, Marc Zyngier <maz@kernel.org>,
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Oliver Upton <oupton@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260106-kvm-arm64-set-id-regs-aarch64-v4-0-c7ef4551afb3@kernel.org>
+ <20260106-kvm-arm64-set-id-regs-aarch64-v4-4-c7ef4551afb3@kernel.org>
+From: Ben Horgan <ben.horgan@arm.com>
 Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <aS9hoOKb7yA5Qgod@devvm11784.nha0.facebook.com>
+In-Reply-To: <20260106-kvm-arm64-set-id-regs-aarch64-v4-4-c7ef4551afb3@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi,
+Hi Mark,
 
-On 12/2/25 11:01 PM, Bobby Eshleman wrote:
-> On Tue, Dec 02, 2025 at 09:47:19PM +0100, Paolo Abeni wrote:
->> I still have some concern WRT the dynamic mode change after netns
->> creation. I fear some 'unsolvable' (or very hard to solve) race I can't
->> see now. A tcp_child_ehash_entries-like model will avoid completely the
->> issue, but I understand it would be a significant change over the
->> current status.
->>
->> "Luckily" the merge window is on us and we have some time to discuss. Do
->> you have a specific use-case for the ability to change the netns mode
->> after creation?
->>
->> /P
+On 1/6/26 16:35, Mark Brown wrote:
+> On an aarch64 only system the 32 bit ID registers have UNDEFINED values.
+> As a result set_id_regs skips tests for setting fields in these registers
+> when testing an aarch64 only guest. This has the side effect of meaning
+> that we don't record an expected value for these registers, meaning that
+> when the subsequent tests for values being visible in guests and preserved
+> over reset check the value they can spuriously fail. This can be seen by
+> running on an emulated system with both NV and 32 bit enabled, NV will
+> result in the guests created by the test program being 64 bit only but
+> the 32 bit ID registers will have values.
 > 
-> I don't think there is a hard requirement that the mode be change-able
-> after creation. Though I'd love to avoid such a big change... or at
-> least leave unchanged as much of what we've already reviewed as
-> possible.
+> Also skip those tests that use the values set in the field setting tests
+> for aarch64 only guests in order to avoid these spurious failures.
 > 
-> In the scheme of defining the mode at creation and following the
-> tcp_child_ehash_entries-ish model, what I'm imagining is:
-> - /proc/sys/net/vsock/child_ns_mode can be set to "local" or "global"
-> - /proc/sys/net/vsock/child_ns_mode is not immutable, can change any
->   number of times
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/kvm/arm64/set_id_regs.c | 49 ++++++++++++++++++-------
+>  1 file changed, 36 insertions(+), 13 deletions(-)
 > 
-> - when a netns is created, the new netns mode is inherited from
->   child_ns_mode, being assigned using something like:
-> 
-> 	  net->vsock.ns_mode =
-> 		get_net_ns_by_pid(current->pid)->child_ns_mode
-> 
-> - /proc/sys/net/vsock/ns_mode queries the current mode, returning
->   "local" or "global", returning value of net->vsock.ns_mode
-> - /proc/sys/net/vsock/ns_mode and net->vsock.ns_mode are immutable and
->   reject writes
-> 
-> Does that align with what you have in mind?
-Sorry for the latency. This fell of my radar while I still processed PW
-before EoY and afterwards I had some break.
+> diff --git a/tools/testing/selftests/kvm/arm64/set_id_regs.c b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+> index 5837da63e9b9..908b3c8947d9 100644
+> --- a/tools/testing/selftests/kvm/arm64/set_id_regs.c
+> +++ b/tools/testing/selftests/kvm/arm64/set_id_regs.c
+> @@ -295,6 +295,13 @@ static const char *get_reg_name(u64 id)
+>  	}
+>  }
+>  
+> +static inline bool is_aarch32_id_reg(u64 id)
+> +{
+> +	return (sys_reg_Op0(id) == 3 && sys_reg_Op1(id) == 0 &&
+> +		sys_reg_CRn(id) == 0 && sys_reg_CRm(id) >= 1 &&
+> +		sys_reg_CRm(id) <= 3);
+> +}
+> +
 
-Yes, the above aligns with what I suggested, and I think it should solve
-possible race-related concerns (but I haven't looked at the RFC).
+This check looks correct to me now.
 
-/P
+Not touched in this patch but the check for aarch64_only looks suspect to me.
 
+From main()
+val = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_ID_AA64PFR0_EL1));
+el0 = FIELD_GET(ID_AA64PFR0_EL1_EL0, val);
+aarch64_only = (el0 == ID_AA64PFR0_EL1_EL0_IMP);
+
+As we are concerned with system registers that are accessible from EL1 and higher
+should this not be checking ID_AA64PFR0_EL1_EL1 rather than ID_AA64PFR0_EL1_EL0?
+Not sure if it makes sense for the two to be different though.
+
+Thanks,
+
+Ben
 
 
