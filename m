@@ -1,182 +1,174 @@
-Return-Path: <linux-kselftest+bounces-48441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C130D005F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 00:14:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF957D00611
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 00:20:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 78D1B300387F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 23:14:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 594EA302F816
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 23:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1034D2F28EF;
-	Wed,  7 Jan 2026 23:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3387D2EA473;
+	Wed,  7 Jan 2026 23:19:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYoE6TV/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qP9qwocK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48942848A4;
-	Wed,  7 Jan 2026 23:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44492609E3
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 23:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767827683; cv=none; b=azDdQpoBiSUnH6wI9YcIQ8mEzVod/nbMOfXpackeSXJ2wpHIjfDFr214QKzNsz8bGVvq7HLcviI8l0y3Q5EoniKHCsB9uveR8zd0KL2uh2sHeLauj0LmOl8tqDaKb3jChFBs5a/zDsckuZ6bfDd3EGc3KFGsqd+2tPCh97Di7k4=
+	t=1767827993; cv=none; b=fqWT638uL0fSI+EQFvAJ6sA7V9am9YbbRFMuAnLTvjW1sR5PFvhFshOPst9xz5yymQwQSSNr4IQy4BasjyQd/TAHrAxu8QePJfdNR67Q4w5WNv9vjkLd0JBH+T/Swky2mRSN43F5Fkq7UZ6cZ8+hw9wwze1hm+FOCOFGdQ0GYhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767827683; c=relaxed/simple;
-	bh=jwzhuclUq0YEJ/+x35hSDia4E3O0OBPCGyLMt/QilZA=;
+	s=arc-20240116; t=1767827993; c=relaxed/simple;
+	bh=VBVlmTyDsmFzPanb+UWhVbw316hjKaMVO3k3rPdnwsk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B7lk8fNpvSAbcNWx45mdlOfshmbHYYAQNG3s2DJX09youFj4kFmYMCaMH9zM+1EXWAs58MOfs8lKNCD0HNshs/vfMpSl4880nb1YoQ+fIX0IMxptIpAPXj4Ys/VZpdGmKTYU02x+BA6GLJjUKsV72ZhJwj1HemSTuOwcJdGGBOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYoE6TV/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035FCC4CEF1;
-	Wed,  7 Jan 2026 23:14:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767827682;
-	bh=jwzhuclUq0YEJ/+x35hSDia4E3O0OBPCGyLMt/QilZA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uYoE6TV/IBrULNqgAljZll+qPP6A/lX0XX3P4heE4j9mZj4PcU04pCtB5xIvAgdan
-	 WqrQb5HrV+caAYi81gTGjQcLNcwhBxLUDtUwnu7Fq4Qf8lv5/VYTSEys3QtIMv1esT
-	 6iYOBpUGY02oUK4/tZemoTIpMv5+h7n4poOVZY+PWrjSzCY26naSik9mKHdb8Gxu9w
-	 bOuYFrwtW0ZRGGBsD0V9JHUCZNpzFDZHF2egknY6ulY4VynjBycaiSYS0rKfXBmjAS
-	 SjzCHaLcf6D2WpIUR4GbIj7KNNs78IsGk/2j2jds7dUJxHGI7viLYmmaCgVIsQ1J52
-	 6t2CxtADJch7Q==
-Date: Thu, 8 Jan 2026 00:14:39 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Joel Fernandes <joelagnelf@nvidia.com>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=eAHjXsaBB+VY4KSBCzGu2qUehKNaBGkhgKDw7rdk8B4MakMM1Eyk9yZ8C3TSXwBjrLMJIqiEn4GdUW+uyZhgliJBpXdomlrqy9e9TbQ7ux8RLGXRAVFKoGzxGVPosc2YGIuqduAAB0g22QW9ND5dgE3SpqZVdyQY0LcqrRKXtJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qP9qwocK; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-29f02651fccso130675ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 15:19:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1767827990; x=1768432790; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YrTegim1IGH1EM+qnfVQluY5KhY2cqE1cUaOvjCI5uc=;
+        b=qP9qwocKAK4V2EVXeoEr+Oc0dN8UYLKTSoDrnT9rke/iv669fzeObH5EB7bKDdsEP2
+         4HTpJCP+4HF0fXhWLLM3jUNVpr9RJFN2bO8LEDKjZ6/XXJzOfaJEDrgvggkztGjFhcZR
+         6eHhk6BCF6B7rj6Sl88YF4ffjAmBm2Xt00ya4JKA095+VL0RkObThgspUQVC7Q9sS7Uv
+         8BypPv45wjYedirNqZKfk8AuLnsyHvs0pwBsQ6Cs8WQli/kmecJ+JcIx55tCPEdGh0om
+         KqEELbRLoz7q3B4Wf3xeNBqeS20Vho6DudTBUxHGjL/mCC5vm9KfJXcI/APIMIfYKVaO
+         oaWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767827990; x=1768432790;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YrTegim1IGH1EM+qnfVQluY5KhY2cqE1cUaOvjCI5uc=;
+        b=KwTQHTTiCdqIN7gug2D4kuhcjDvVxFMJ6xlzfpnzMObB47iQTXlBDL4w5kIiQCQHpN
+         GizvMD0R2i1aJaCiK5RGClQXIWEtbp24BhZEDd5IcOkCyhLMruBXmpoij0S9IMPG1ttp
+         6J/jrhMradf1gR3OcWubIHwJh9Rn2fGcQewUtNK/y/l268c8mRwUY+xpuGmmDFTcsbqX
+         2w1rlfc7zpLZTEuubWdvApmOzGNMBaOCZ4vAi00RRgKLX4wwfBp3CMrjubn6lDlNEX1V
+         f6dA2I+O2UyzH2ILhf/t82uRiX2oBXtnrMXRE12vCUz+vm/nbwAXOBtPpI752dspnxKH
+         cBBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX6MR3PvOJJCwqlOu0bPMZ3ZDEZDsU5R+SyFvVouBEuI8Xj/7SLmteKXL864mUvCfk0+lhKXu/mO7vfbBbU/js=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCSBEVk8gX1h1oNtD3AqeU3LWczSQocItz8Tk5FSE3dTT4o514
+	4bVRVMvh1Ioh9Xg0/ri/PSOKgvG6+oe2fLHXpQTED0IH0W0/PUDo8cBYcEpiIX8rHA==
+X-Gm-Gg: AY/fxX7SOVDWP1BhIT+3FmWMd6TkzwdaOq10xRDq3HR5te7Lc5KrmyWnl+Ut/fTgUQW
+	YoYESM5n/vOhevR0u/8vKBb107SxKTAbif2Ob+TGoshDlzzNzFMq3tQdmyhd2l2C8eab0bIXI6h
+	VJST+JXK1vQZth72NwsJTfjgqpCIlyAOJDi+ORmBfiikfXjIbpU0pX0nrNpgf3XZSak4kilSy5n
+	z0D+flM9mtwMi9ao/EMHi4kX/CL9AuebTTjQpwvr4q8zLO54dVblR3zTddzzdQZeSipRhDz862w
+	4QWRLwmZ7O9SyWbSS16Y+sHJWXx9y8CquLTB2tzG6W2djGEDW8XeQ9Sms0N/Wf3MocBM6/sIuaL
+	1/FvOzT815Or0vlkUwWb2qEb64lkiC3mAE7h/cmXpMYehkYdanA4GB1OzLl4cXBWyw0kkMyD/8u
+	YD/nawqEra9pPbeFoWqxqVng0t3q6LSv+NuXhM6mC0sPN9P8piNA==
+X-Received: by 2002:a17:902:e786:b0:2a0:89b0:71d7 with SMTP id d9443c01a7336-2a3ff095070mr392195ad.13.1767827989556;
+        Wed, 07 Jan 2026 15:19:49 -0800 (PST)
+Received: from google.com (210.53.125.34.bc.googleusercontent.com. [34.125.53.210])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cc05cd9d9sm6402603a12.16.2026.01.07.15.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jan 2026 15:19:48 -0800 (PST)
+Date: Wed, 7 Jan 2026 23:19:44 +0000
+From: Carlos Llamas <cmllamas@google.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Wake Liu <wakel@google.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	John Stultz <jstultz@google.com>, Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Yao Kai <yaokai34@huawei.com>, Tengda Wu <wutengda2@huawei.com>
-Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to
- softirq
-Message-ID: <aV7o36CHTLc-tD41@pavilion.home>
-References: <20260101163417.1065705-1-joelagnelf@nvidia.com>
- <20260101163417.1065705-2-joelagnelf@nvidia.com>
+	Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v2] selftests/timers: Consolidate and fix 32-bit overflow
+ in timespec_sub
+Message-ID: <aV7qEM3nkcupAC2N@google.com>
+References: <fbb55063-ab03-40a9-80f4-4315d12239ba@t-8ch.de>
+ <20250915191944.9779-1-wakel@google.com>
+ <87qzw06y8t.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260101163417.1065705-2-joelagnelf@nvidia.com>
+In-Reply-To: <87qzw06y8t.ffs@tglx>
 
-Le Thu, Jan 01, 2026 at 11:34:10AM -0500, Joel Fernandes a écrit :
-> From: Yao Kai <yaokai34@huawei.com>
+On Sun, Sep 21, 2025 at 09:49:54AM +0200, Thomas Gleixner wrote:
+> On Tue, Sep 16 2025 at 03:19, Wake Liu wrote:
+> > The timespec_sub function, as implemented in several timer
 > 
-> Commit 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in
-> __rcu_read_unlock()") removes the recursion-protection code from
-> __rcu_read_unlock(). Therefore, we could invoke the deadloop in
-> raise_softirq_irqoff() with ftrace enabled as follows:
+> timespec_sub()
 > 
-> WARNING: CPU: 0 PID: 0 at kernel/trace/trace.c:3021 __ftrace_trace_stack.constprop.0+0x172/0x180
-> Modules linked in: my_irq_work(O)
-> CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G O 6.18.0-rc7-dirty #23 PREEMPT(full)
-> Tainted: [O]=OOT_MODULE
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
-> RIP: 0010:__ftrace_trace_stack.constprop.0+0x172/0x180
-> RSP: 0018:ffffc900000034a8 EFLAGS: 00010002
-> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000000
-> RDX: 0000000000000003 RSI: ffffffff826d7b87 RDI: ffffffff826e9329
-> RBP: 0000000000090009 R08: 0000000000000005 R09: ffffffff82afbc4c
-> R10: 0000000000000008 R11: 0000000000011d7a R12: 0000000000000000
-> R13: ffff888003874100 R14: 0000000000000003 R15: ffff8880038c1054
-> FS:  0000000000000000(0000) GS:ffff8880fa8ea000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000055b31fa7f540 CR3: 00000000078f4005 CR4: 0000000000770ef0
-> PKRU: 55555554
-> Call Trace:
->  <IRQ>
->  trace_buffer_unlock_commit_regs+0x6d/0x220
->  trace_event_buffer_commit+0x5c/0x260
->  trace_event_raw_event_softirq+0x47/0x80
->  raise_softirq_irqoff+0x6e/0xa0
->  rcu_read_unlock_special+0xb1/0x160
->  unwind_next_frame+0x203/0x9b0
->  __unwind_start+0x15d/0x1c0
->  arch_stack_walk+0x62/0xf0
->  stack_trace_save+0x48/0x70
->  __ftrace_trace_stack.constprop.0+0x144/0x180
->  trace_buffer_unlock_commit_regs+0x6d/0x220
->  trace_event_buffer_commit+0x5c/0x260
->  trace_event_raw_event_softirq+0x47/0x80
->  raise_softirq_irqoff+0x6e/0xa0
->  rcu_read_unlock_special+0xb1/0x160
->  unwind_next_frame+0x203/0x9b0
->  __unwind_start+0x15d/0x1c0
->  arch_stack_walk+0x62/0xf0
->  stack_trace_save+0x48/0x70
->  __ftrace_trace_stack.constprop.0+0x144/0x180
->  trace_buffer_unlock_commit_regs+0x6d/0x220
->  trace_event_buffer_commit+0x5c/0x260
->  trace_event_raw_event_softirq+0x47/0x80
->  raise_softirq_irqoff+0x6e/0xa0
->  rcu_read_unlock_special+0xb1/0x160
->  unwind_next_frame+0x203/0x9b0
->  __unwind_start+0x15d/0x1c0
->  arch_stack_walk+0x62/0xf0
->  stack_trace_save+0x48/0x70
->  __ftrace_trace_stack.constprop.0+0x144/0x180
->  trace_buffer_unlock_commit_regs+0x6d/0x220
->  trace_event_buffer_commit+0x5c/0x260
->  trace_event_raw_event_softirq+0x47/0x80
->  raise_softirq_irqoff+0x6e/0xa0
->  rcu_read_unlock_special+0xb1/0x160
->  __is_insn_slot_addr+0x54/0x70
->  kernel_text_address+0x48/0xc0
->  __kernel_text_address+0xd/0x40
->  unwind_get_return_address+0x1e/0x40
->  arch_stack_walk+0x9c/0xf0
->  stack_trace_save+0x48/0x70
->  __ftrace_trace_stack.constprop.0+0x144/0x180
->  trace_buffer_unlock_commit_regs+0x6d/0x220
->  trace_event_buffer_commit+0x5c/0x260
->  trace_event_raw_event_softirq+0x47/0x80
->  __raise_softirq_irqoff+0x61/0x80
->  __flush_smp_call_function_queue+0x115/0x420
->  __sysvec_call_function_single+0x17/0xb0
->  sysvec_call_function_single+0x8c/0xc0
->  </IRQ>
+> https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#function-references-in-changelogs
 > 
-> Commit b41642c87716 ("rcu: Fix rcu_read_unlock() deadloop due to IRQ work")
-> fixed the infinite loop in rcu_read_unlock_special() for IRQ work by
-> setting a flag before calling irq_work_queue_on(). We fix this issue by
-> setting the same flag before calling raise_softirq_irqoff() and rename the
-> flag to defer_qs_pending for more common.
+> > selftests, is prone to integer overflow on 32-bit systems.
+> >
+> > The calculation `NSEC_PER_SEC * b.tv_sec` is performed using
+> > 32-bit arithmetic, and the result overflows before being
+> > stored in the 64-bit `ret` variable. This leads to incorrect
+> > time delta calculations and test failures.
+> >
+> > As suggested by tglx, this patch fixes the issue by:
 > 
-> Fixes: 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in __rcu_read_unlock()")
-> Reported-by: Tengda Wu <wutengda2@huawei.com>
-> Signed-off-by: Yao Kai <yaokai34@huawei.com>
-> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
-> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+> s/this patch fixes/fix/
+> 
+> 
+> 
+> > 1. Creating a new `static inline` helper function,
+> >    `timespec_to_ns`, which safely converts a `timespec` to
+> >    nanoseconds by casting `tv_sec` to `long long` before
+> >    multiplying with `NSEC_PER_SEC`.
+> >
+> > 2. Placing the new helper and a rewritten `timespec_sub` into
+> >    a common header: tools/testing/selftests/timers/helpers.h.
+> >
+> > 3. Removing the duplicated, buggy implementations from all
+> >    timer selftests and replacing them with an #include of the
+> >    new header.
+> >
+> > This consolidates the code and ensures the calculation is
+> > correctly performed using 64-bit arithmetic across all tests.
+> 
+> This lacks a Signed-off-by.
+> 
+> > Changes in v2:
+> >   - Per tglx's feedback, instead of changing NSEC_PER_SEC globally,
+> >     this version consolidates the buggy timespec_sub() implementations
+> >     into a new 32-bit safe inline function in a shared header.
+> >   - Amended the commit message to be more descriptive.
+> 
+> change logs go behind the '---' separator as they are not part of the
+> commit message. It's documented how to format a change log properly.
+> 
+> > -#define UNREASONABLE_LAT (NSEC_PER_SEC * 5) /* hopefully we resume in 5 secs */
+> > +#define UNREASONABLE_LAT (NSEC_PER_SEC * 5LL) /* hopefully we resume in 5 secs */
+> 
+> How is this change and the pile of similar ones related to $subject and
+> why are they required in the first place?
+>   
+> > index 000000000000..652f20247091
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/timers/helpers.h
+> > @@ -0,0 +1,31 @@
+> 
+> Lacks a SPDX identifier.
+> 
+> scripts/checkpatch.pl exists for a reason.
+> 
+> Thanks,
+> 
+>         tglx
 
-Looks good but, BTW, what happens if rcu_qs() is called
-before rcu_preempt_deferred_qs() had a chance to be called?
+I also just stumbled into this. However, doing a little bit of research
+it seems this was introduced by commit 80fa614e2fbc ("selftests: timers:
+Remove local NSEC_PER_SEC and USEC_PER_SEC defines"), which explicitly
+changes the local definitions in favor of the internal kernel header,
+but that doesn't seem right.
 
-current->rcu_read_unlock_special.b.need_qs is reset by rcu_qs()
-so subsequent calls to rcu_read_unlock() won't issue rcu_read_unlock_special()
-(unless the task is blocked). And further calls to rcu_preempt_deferred_qs()
-through rcu_core() will be ignored as well.
+I think we should probably revert that commit instead?
 
-But rdp->defer_qs_pending will remain in the DEFER_QS_PENDING state until
-the next grace period. And if rcu_read_unlock_special() is called again
-during the next GP on unfortunate place needing deferred qs, the state machine
-will spuriously assume that either rcu_core or the irq_work are pending, when
-none are anymore.
-
-The state should be reset by rcu_qs().
-
-Thanks.
-
--- 
-Frederic Weisbecker
-SUSE Labs
+--
+Carlos Llamas
 
