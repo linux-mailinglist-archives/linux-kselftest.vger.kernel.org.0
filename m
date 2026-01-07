@@ -1,48 +1,60 @@
-Return-Path: <linux-kselftest+bounces-48373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D61F9CFBC04
-	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 03:36:48 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 826BACFBE4F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 04:49:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A5CD6301897A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 02:33:34 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 720D630019F3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 03:49:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1591221F39;
-	Wed,  7 Jan 2026 02:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 659772D0C98;
+	Wed,  7 Jan 2026 03:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kkr0cuF3"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pROKaz7k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42E83B2AA;
-	Wed,  7 Jan 2026 02:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC812C15A3
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 03:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767753213; cv=none; b=Sdah9G8kT2doNpiwQk1lmEErbBrjucAYc2Vwja93u3Yj6H7a2d7Ypcqcxy8MvzfPe6z180n46HxqKSX+OW2m90dBE7ybw1h/8QcZJmV3gUQ0b8VbZtEOdGbNy9Qu+Qp4UYS1/yPhfVWRttj2Xw4U4/VF8PtbA/OzyBwvu0xg9M4=
+	t=1767757787; cv=none; b=inWtE3zA7JxPCLBCq7Putkj7pdZBFRMT8vBxOlOQ3Cs8pr+LFezT89Fr5TBlzPP8K8HJqzOH75iyc7osl/Rs+1M9V0i6Q7W9VOomPJ1JgGKxtP0BIrU66gV2+iFP4Xsicv8yzRhzPBRs/ZX/0wip4QFSlkv5fVyyqWQ1hbg6S68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767753213; c=relaxed/simple;
-	bh=MCUUIdXCDhCt4LmsTYV2Uss60dFo7CxTbWBVPSNDhdo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=KxpGqu3eVcAfzzk7/I6/GjorQfSjSBaPDPN1jyU5Cdfb7gq++0OHMw9CtidGfwu/iaiy/lCGzSKlz+ErX1G1QiXDHDXnfYva4clUxVl2cpPCzBj9WKQ5vLH5HMId9g+QmCc0ZAwswrpMPlOCX9yRl7xQzpYsgPQbdY1oTpF2Qb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kkr0cuF3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F957C116C6;
-	Wed,  7 Jan 2026 02:33:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767753212;
-	bh=MCUUIdXCDhCt4LmsTYV2Uss60dFo7CxTbWBVPSNDhdo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Kkr0cuF31PJ4cqyvx1vPoHO0yf0hlMsG8CInERPQeSx37v1uQoTLLlBG3kL6/d7wp
-	 8J0PTsQpekCQ5iUMBvnX3Zz/CIFsc2qXz/LfWCgiYCmkTxuYSLdpvIIvL7pFgpQAH3
-	 V/xxhlOT2wBRYwkRuOUXCt+q5MbBui0q9vonaBW7Mk1LM8ztSAx4muIxEvF/6zEWmf
-	 IY5d49UnlzYvvkrsN76Olr5RfLYhWV4Gyerh7Ly6qDl5Cl5rU/eUZOc4t0MoV8CisW
-	 Nc3PSaDC2lkzXqfxTpScE/ZuwjEAhe4P2t6PiLQWPv8MAFs3EKT1IVzoX4xWdVQqkx
-	 NwSYQbZBzdlVQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B5AB3380CEF5;
-	Wed,  7 Jan 2026 02:30:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1767757787; c=relaxed/simple;
+	bh=GblSqByrnOyWARKVerxxmttj6WzbnJ0LUGnjdhyijzU=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=dhliqaLjUIKV7F38i6woMhq6LkAMSCjQK5l0QNlvGbcuOJ0GLdURCcbI8kEewyjcPNl3EsSWwH4KPNqd+h1+/j0zWz1CBWw8aQTbadChdLjPWCB/Df3R7fkSrl55hO67/0Q17id5gXSva3nRb5S1QG3JZ32GRZvovVonNPL2jws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pROKaz7k; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1767757772;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TZsXTVrwMS0dDeLUg9YyVb83Bpf4n/yK7h7JcyrhB0U=;
+	b=pROKaz7k9W2yQFZoeXw0bXp/kUCf8aFBj1bN/mqKhs9ncaqPQ7mPjCxIdSne1hW1GoZ8r9
+	ye67XXGc4F08YGhoGUywC2g1KNW5gQa6fTIo87Qfzx1xEFGFLB0M0rAZFSGd+2oAbXUbtT
+	nU+wo3MbsOcwP2pdKYoOy8ddHOcFkwc=
+From: Fushuai Wang <fushuai.wang@linux.dev>
+To: fushuai.wang@linux.dev
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	mathieu.desnoyers@efficios.com,
+	mhiramat@kernel.org,
+	rostedt@goodmis.org,
+	shuah@kernel.org,
+	wangfushuai@baidu.com
+Subject: Re: [PATCH v2] selftests/tracing: Fix test_multiple_writes stall
+Date: Wed,  7 Jan 2026 11:49:14 +0800
+Message-Id: <20260107034914.22315-1-fushuai.wang@linux.dev>
+In-Reply-To: <20251227041821.75504-1-fushuai.wang@linux.dev>
+References: <20251227041821.75504-1-fushuai.wang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,46 +62,23 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3 0/2] net: netdevsim: fix inconsistent carrier state
- after link/unlink
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176775300954.2206594.1826844025995318778.git-patchwork-notify@kernel.org>
-Date: Wed, 07 Jan 2026 02:30:09 +0000
-References: <cover.1767624906.git.yk@y-koj.net>
-In-Reply-To: <cover.1767624906.git.yk@y-koj.net>
-To: Yohei Kojima <yk@y-koj.net>
-Cc: kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, shuah@kernel.org, leitao@debian.org,
- andrew+netdev@lunn.ch, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue,  6 Jan 2026 00:17:31 +0900 you wrote:
-> This series fixes netdevsim's inconsistent behavior between carrier
-> and link/unlink state.
+> When /sys/kernel/tracing/buffer_size_kb is less than 12KB,
+> the test_multiple_writes test will stall and wait for more
+> input due to insufficient buffer space.
 > 
-> More specifically, this fixes a bug that the carrier goes DOWN although
-> two netdevsim were peered, depending on the order of peering and ifup.
-> Especially in a NetworkManager-enabled environment, netdevsim test fails
-> because of this.
+> Check current buffer_size_kb value before the test. If it is
+> less than 12KB, it temporarily increase the buffer to 12KB,
+> and restore the original value after the tests are completed.
 > 
-> [...]
+> Fixes: 37f46601383a ("selftests/tracing: Add basic test for trace_marker_raw file")
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Fushuai Wang <wangfushuai@baidu.com>
 
-Here is the summary with links:
-  - [net,v3,1/2] net: netdevsim: fix inconsistent carrier state after link/unlink
-    https://git.kernel.org/netdev/net/c/d83dddffe190
-  - [net,v3,2/2] selftests: netdevsim: add carrier state consistency test
-    https://git.kernel.org/netdev/net/c/75df712cddfd
+Gentle ping.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+---
+Regards,
+WANG
 
