@@ -1,431 +1,539 @@
-Return-Path: <linux-kselftest+bounces-48414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48415-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD985CFED56
-	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 17:22:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8606CFEF52
+	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 17:54:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 01C843000B59
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 16:22:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 54DC934A1AD2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 16:44:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE313A1A28;
-	Wed,  7 Jan 2026 15:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6968A39B4B9;
+	Wed,  7 Jan 2026 16:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Y0qmfyFY";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="lYpMtynK";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="HYRUP9K6";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="586rW2Iu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTYoc3MR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5CF3A35B4
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 15:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6F339B488;
+	Wed,  7 Jan 2026 16:30:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767800354; cv=none; b=co75rU6ff1D9XEsRIWMRbqEiTK7Vo5+lxqwCwUKy3/vyjZgV5Jx/3IHhzhwB/T2zdJtZERUEFeR+ZXyl62IwTjyopIAJsc1bgsiCr5bz/6E0hE1fEo6WKiLz6ynn0GeiCoPRsGJwSixqxHTUGIptZDUCgogY2QklheOkT+2r2hM=
+	t=1767803420; cv=none; b=BP9AodwF1GeIx5l17qYpTUatMBBzqmoFRmTTBvoxpB5imXwUVbj+PqId9yC02gSzbcjb+34DIZ3uYAYnMfCo2rad13NTFjKzOSxyrOgGXJtcB4PKBjoTkQwd+LRTI2LOv6F1LTJy6Ifq2PYSBdb10PqHJMLcpZZzpIjgbW3PkBI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767800354; c=relaxed/simple;
-	bh=6OON2BwgoW5r8OD1ktKGQbg4zg4fXkDB3egXWuCcs6w=;
+	s=arc-20240116; t=1767803420; c=relaxed/simple;
+	bh=g1xdWybaHzatWpQm2xyOQnEhqq5D9ySHbjOF55t+a0s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RyjDnfgGJr3b01/ooOP+MicadU1bJlbDJI0FKSe5etxj7kULQRj6IV68eA66A5QDCjgn3vXz/uGsyWy8maEO7RZakcyWaslgkwqFfRv8NFJ+lLBNtQtk5ydPtOkF5x4mz292oOZRJA/B8w0FNZ5RwyghjXbBS2I/BdPQlB4e8vM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Y0qmfyFY; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=lYpMtynK; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=HYRUP9K6; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=586rW2Iu; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 2A41E5C1FE;
-	Wed,  7 Jan 2026 15:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1767800340; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zQ0QCS3Fgqq7Cs7+suCwQnQWfuDnHC/54TkaNjVT/A4=;
-	b=Y0qmfyFYvRt56ts+ZiUkhLoSpSGL9twesU/Fw3WNI7ERPHPQMQSmp/ZUWsq6T/Ev9dQvmL
-	dz/+mJzzYIYpGdkrQO1AF1rigT+3vyyEKKUFYFutUarGXCy1ukg5EhuCWVn4PY0062OWqu
-	WgpoQ3uSXSQcAHjh0bxbkEewFeY5CgU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1767800340;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zQ0QCS3Fgqq7Cs7+suCwQnQWfuDnHC/54TkaNjVT/A4=;
-	b=lYpMtynKWm0Enzgwt+Bq7A2zXicDMuj/6tzEYxxnBBNcBlCqkfwASgkcMPj7xkWnl0K20G
-	+ysqE9pgpR7Z0jCA==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1767800339; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zQ0QCS3Fgqq7Cs7+suCwQnQWfuDnHC/54TkaNjVT/A4=;
-	b=HYRUP9K6YK/HKOkXG8yX6rJreJ7Dd1K7/JiB5/IWbjwLLsawCCoJhQniJw1Efg8wsGeIlg
-	fjTNNDqDstS+pOSQi2KgoXHskFjWZ6EH82POb+/pbByQNIJw9aeXCDjR9xn7RYNSLptGRQ
-	WUaq/DbLQAzmndpX1afG0QRxn75uJBk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1767800339;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zQ0QCS3Fgqq7Cs7+suCwQnQWfuDnHC/54TkaNjVT/A4=;
-	b=586rW2Iur31QHb2T+3e+5n0JT+0lBpG5a6h92DFzv9Vhu6a99hZkxkD5XDeRcNkADXTPtL
-	cpm8mSxNExUSkTCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 960EA3EA63;
-	Wed,  7 Jan 2026 15:38:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 4MOtIRJ+Xmn7CgAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Wed, 07 Jan 2026 15:38:58 +0000
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	dsahern@kernel.org,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
+	 MIME-Version:Content-Type; b=RB4V1bdTZJDaYUfrn4TgQj4aWNZewc5KKry6RiBuonrDKMIvRDNhEh7IDwxp80cnNmEoB36Jbl+yKllDDA7JGO2OBkeeG7rxT1/PZ1GqAF3G4kaWfCdbpbEPwNnlkXUZ+CNjIUGQxqyPvNV1nAOatpxBTmqt+fN6pLjXzcz5/i8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XTYoc3MR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AE7AC4CEF1;
+	Wed,  7 Jan 2026 16:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767803418;
+	bh=g1xdWybaHzatWpQm2xyOQnEhqq5D9ySHbjOF55t+a0s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
+	b=XTYoc3MRPEQZ9P6CYqxDhwUWgklKacTmua9Dem1TT72+kp0jsaZ1Odf9YNYrChTH9
+	 vvFrnH1rnQ5lm/okjWjYtYHMCOkq5dvnE1nHeZVuQX26hKmhltzLg2xN8Xnx/qneEw
+	 Bc6lay3HRJYcTkfE5jOcRchG6E/Hf2mRnIWnLNcZl7idaoCUm3pOPJhZZQZoDTS3bi
+	 MGu98b4gTNNbF5nGlKQ1aZLrV4VGW16nautruOdkQmOQxg37bYCuzq5fBHmL0MAbCw
+	 2uo79v3Wwnc+ZfhJ27lfdH/YT1sTAI7C9F8nFIu6DCZrJ/1d5T4Kkf05TQtnR2gKcJ
+	 a8+NvVZqrh2Sw==
+From: Gary Guo <gary@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <raemoar63@gmail.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Petr Pavlu <petr.pavlu@suse.com>,
+	Daniel Gomez <da.gomez@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Aaron Tomlin <atomlin@atomlin.com>,
+	Tamir Duberstein <tamird@gmail.com>,
+	Igor Korotin <igor.korotin.linux@gmail.com>,
+	=?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: rust-for-linux@vger.kernel.org,
+	Guilherme Giacomo Simoes <trintaeoitogc@gmail.com>,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Fernando Fernandez Mancera <fmancera@suse.de>
-Subject: [PATCH 2/2 net-next v2] selftests: ipv6_icmp: add tests for ICMPv6 handling
-Date: Wed,  7 Jan 2026 16:38:41 +0100
-Message-ID: <20260107153841.5030-2-fmancera@suse.de>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260107153841.5030-1-fmancera@suse.de>
-References: <20260107153841.5030-1-fmancera@suse.de>
+	kunit-dev@googlegroups.com,
+	linux-modules@vger.kernel.org
+Subject: [PATCH v2 02/11] rust: macros: use `quote!` from vendored crate
+Date: Wed,  7 Jan 2026 16:15:41 +0000
+Message-ID: <20260107161729.3855851-3-gary@kernel.org>
+X-Mailer: git-send-email 2.51.2
+In-Reply-To: <20260107161729.3855851-1-gary@kernel.org>
+References: <20260107161729.3855851-1-gary@kernel.org>
+Reply-To: Gary Guo <gary@garyguo.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-6.80 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.996];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_TWO(0.00)[2];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ipv6_icmp.sh:url,suse.de:mid,suse.de:email,lib.sh:url];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spam-Score: -6.80
 
-Test ICMPv6 to link local address and local address, also VRF based
-tests. In addition, this test set could be extended to cover more
-situations in the future.
+From: Gary Guo <gary@garyguo.net>
 
-ICMPv6 to local addresses
-    TEST: Ping to link local address                                    [OK]
-    TEST: Ping to link local address from ::1                           [OK]
-    TEST: Ping to local address                                         [OK]
-    TEST: Ping to local address from ::1                                [OK]
+With `quote` crate now vendored in the kernel, we can remove our custom
+`quote!` macro implementation and just rely on that crate instead.
 
-ICMPv6 to VRF based local address
-    TEST: Ping to link local address on VRF context                     [OK]
-    TEST: Ping to link local address from ::1 on VRF context            [OK]
-    TEST: Ping to local address on VRF context                          [OK]
-    TEST: Ping to local address from ::1 on VRF context                 [OK]
+The `quote` crate uses types from the `proc-macro2` library so we also
+update to use that, and perform conversion in the top-level lib.rs.
 
-Tests passed:   8
-Tests failed:   0
+Clippy complains about unnecessary `.to_string()` as `proc-macro2`
+provides additional `PartialEq` impl, so they are removed.
 
-Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
+Reviewed-by: Tamir Duberstein <tamird@gmail.com>
+Reviewed-by: Benno Lossin <lossin@kernel.org>
+Signed-off-by: Gary Guo <gary@garyguo.net>
 ---
-v2: shellcheck fixes, added VRF based tests and simplified linklocal
-address parsing
----
- tools/testing/selftests/net/Makefile     |   1 +
- tools/testing/selftests/net/ipv6_icmp.sh | 244 +++++++++++++++++++++++
- 2 files changed, 245 insertions(+)
- create mode 100755 tools/testing/selftests/net/ipv6_icmp.sh
+ rust/macros/concat_idents.rs |   2 +-
+ rust/macros/export.rs        |   4 +-
+ rust/macros/fmt.rs           |   4 +-
+ rust/macros/helpers.rs       |   4 +-
+ rust/macros/kunit.rs         |   5 +-
+ rust/macros/lib.rs           |  21 ++--
+ rust/macros/module.rs        |   6 +-
+ rust/macros/paste.rs         |   2 +-
+ rust/macros/quote.rs         | 182 -----------------------------------
+ rust/macros/vtable.rs        |   7 +-
+ 10 files changed, 32 insertions(+), 205 deletions(-)
+ delete mode 100644 rust/macros/quote.rs
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index b66ba04f19d9..4d29b47bb084 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -47,6 +47,7 @@ TEST_PROGS := \
- 	ip_local_port_range.sh \
- 	ipv6_flowlabel.sh \
- 	ipv6_force_forwarding.sh \
-+	ipv6_icmp.sh \
- 	ipv6_route_update_soft_lockup.sh \
- 	l2_tos_ttl_inherit.sh \
- 	l2tp.sh \
-diff --git a/tools/testing/selftests/net/ipv6_icmp.sh b/tools/testing/selftests/net/ipv6_icmp.sh
-new file mode 100755
-index 000000000000..4ac0954e2963
---- /dev/null
-+++ b/tools/testing/selftests/net/ipv6_icmp.sh
-@@ -0,0 +1,244 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/rust/macros/concat_idents.rs b/rust/macros/concat_idents.rs
+index 7e4b450f3a507..12cb231c3d715 100644
+--- a/rust/macros/concat_idents.rs
++++ b/rust/macros/concat_idents.rs
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-use proc_macro::{token_stream, Ident, TokenStream, TokenTree};
++use proc_macro2::{token_stream, Ident, TokenStream, TokenTree};
+ 
+ use crate::helpers::expect_punct;
+ 
+diff --git a/rust/macros/export.rs b/rust/macros/export.rs
+index a08f6337d5c8d..92d9b30971929 100644
+--- a/rust/macros/export.rs
++++ b/rust/macros/export.rs
+@@ -1,7 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
++use proc_macro2::TokenStream;
++use quote::quote;
 +
-+# This test is for checking IPv6 ICMP behavior in different situations.
-+source lib.sh
-+ret=0
-+nfail=0
+ use crate::helpers::function_name;
+-use proc_macro::TokenStream;
+ 
+ /// Please see [`crate::export`] for documentation.
+ pub(crate) fn export(_attr: TokenStream, ts: TokenStream) -> TokenStream {
+diff --git a/rust/macros/fmt.rs b/rust/macros/fmt.rs
+index 2f4b9f6e22110..19f709262552b 100644
+--- a/rust/macros/fmt.rs
++++ b/rust/macros/fmt.rs
+@@ -1,8 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-use proc_macro::{Ident, TokenStream, TokenTree};
+ use std::collections::BTreeSet;
+ 
++use proc_macro2::{Ident, TokenStream, TokenTree};
++use quote::quote_spanned;
 +
-+# all tests in this script, can be overridden with -t option
-+TESTS="icmpv6_to_local_address icmpv6_to_vrf_based_local_address"
+ /// Please see [`crate::fmt`] for documentation.
+ pub(crate) fn fmt(input: TokenStream) -> TokenStream {
+     let mut input = input.into_iter();
+diff --git a/rust/macros/helpers.rs b/rust/macros/helpers.rs
+index 365d7eb499c08..13fafaba12261 100644
+--- a/rust/macros/helpers.rs
++++ b/rust/macros/helpers.rs
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-use proc_macro::{token_stream, Group, Ident, TokenStream, TokenTree};
++use proc_macro2::{token_stream, Group, Ident, TokenStream, TokenTree};
+ 
+ pub(crate) fn try_ident(it: &mut token_stream::IntoIter) -> Option<String> {
+     if let Some(TokenTree::Ident(ident)) = it.next() {
+@@ -86,7 +86,7 @@ pub(crate) fn function_name(input: TokenStream) -> Option<Ident> {
+     let mut input = input.into_iter();
+     while let Some(token) = input.next() {
+         match token {
+-            TokenTree::Ident(i) if i.to_string() == "fn" => {
++            TokenTree::Ident(i) if i == "fn" => {
+                 if let Some(TokenTree::Ident(i)) = input.next() {
+                     return Some(i);
+                 }
+diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
+index b395bb0536959..5cd6aa5eef07d 100644
+--- a/rust/macros/kunit.rs
++++ b/rust/macros/kunit.rs
+@@ -4,10 +4,11 @@
+ //!
+ //! Copyright (c) 2023 José Expósito <jose.exposito89@gmail.com>
+ 
+-use proc_macro::{Delimiter, Group, TokenStream, TokenTree};
+ use std::collections::HashMap;
+ use std::fmt::Write;
+ 
++use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
 +
-+VERBOSE=0
-+PAUSE_ON_FAIL=no
-+PAUSE=no
+ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+     let attr = attr.to_string();
+ 
+@@ -59,7 +60,7 @@ pub(crate) fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+                 }
+                 _ => (),
+             },
+-            TokenTree::Ident(i) if i.to_string() == "fn" && attributes.contains_key("test") => {
++            TokenTree::Ident(i) if i == "fn" && attributes.contains_key("test") => {
+                 if let Some(TokenTree::Ident(test_name)) = body_it.next() {
+                     tests.push((test_name, attributes.remove("cfg").unwrap_or_default()))
+                 }
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index b38002151871a..945982c21f703 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -11,8 +11,6 @@
+ // to avoid depending on the full `proc_macro_span` on Rust >= 1.88.0.
+ #![cfg_attr(not(CONFIG_RUSTC_HAS_SPAN_FILE), feature(proc_macro_span))]
+ 
+-#[macro_use]
+-mod quote;
+ mod concat_idents;
+ mod export;
+ mod fmt;
+@@ -132,7 +130,7 @@
+ ///     the kernel module.
+ #[proc_macro]
+ pub fn module(ts: TokenStream) -> TokenStream {
+-    module::module(ts)
++    module::module(ts.into()).into()
+ }
+ 
+ /// Declares or implements a vtable trait.
+@@ -207,7 +205,7 @@ pub fn module(ts: TokenStream) -> TokenStream {
+ /// [`kernel::error::VTABLE_DEFAULT_ERROR`]: ../kernel/error/constant.VTABLE_DEFAULT_ERROR.html
+ #[proc_macro_attribute]
+ pub fn vtable(attr: TokenStream, ts: TokenStream) -> TokenStream {
+-    vtable::vtable(attr, ts)
++    vtable::vtable(attr.into(), ts.into()).into()
+ }
+ 
+ /// Export a function so that C code can call it via a header file.
+@@ -230,7 +228,7 @@ pub fn vtable(attr: TokenStream, ts: TokenStream) -> TokenStream {
+ /// automatically exported with `EXPORT_SYMBOL_GPL`.
+ #[proc_macro_attribute]
+ pub fn export(attr: TokenStream, ts: TokenStream) -> TokenStream {
+-    export::export(attr, ts)
++    export::export(attr.into(), ts.into()).into()
+ }
+ 
+ /// Like [`core::format_args!`], but automatically wraps arguments in [`kernel::fmt::Adapter`].
+@@ -248,7 +246,7 @@ pub fn export(attr: TokenStream, ts: TokenStream) -> TokenStream {
+ /// [`pr_info!`]: ../kernel/macro.pr_info.html
+ #[proc_macro]
+ pub fn fmt(input: TokenStream) -> TokenStream {
+-    fmt::fmt(input)
++    fmt::fmt(input.into()).into()
+ }
+ 
+ /// Concatenate two identifiers.
+@@ -306,7 +304,7 @@ pub fn fmt(input: TokenStream) -> TokenStream {
+ /// ```
+ #[proc_macro]
+ pub fn concat_idents(ts: TokenStream) -> TokenStream {
+-    concat_idents::concat_idents(ts)
++    concat_idents::concat_idents(ts.into()).into()
+ }
+ 
+ /// Paste identifiers together.
+@@ -444,9 +442,12 @@ pub fn concat_idents(ts: TokenStream) -> TokenStream {
+ /// [`paste`]: https://docs.rs/paste/
+ #[proc_macro]
+ pub fn paste(input: TokenStream) -> TokenStream {
+-    let mut tokens = input.into_iter().collect();
++    let mut tokens = proc_macro2::TokenStream::from(input).into_iter().collect();
+     paste::expand(&mut tokens);
+-    tokens.into_iter().collect()
++    tokens
++        .into_iter()
++        .collect::<proc_macro2::TokenStream>()
++        .into()
+ }
+ 
+ /// Registers a KUnit test suite and its test cases using a user-space like syntax.
+@@ -473,5 +474,5 @@ pub fn paste(input: TokenStream) -> TokenStream {
+ /// ```
+ #[proc_macro_attribute]
+ pub fn kunit_tests(attr: TokenStream, ts: TokenStream) -> TokenStream {
+-    kunit::kunit_tests(attr, ts)
++    kunit::kunit_tests(attr.into(), ts.into()).into()
+ }
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index 80cb9b16f5aaf..b855a2b586e18 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -1,9 +1,11 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-use crate::helpers::*;
+-use proc_macro::{token_stream, Delimiter, Literal, TokenStream, TokenTree};
+ use std::fmt::Write;
+ 
++use proc_macro2::{token_stream, Delimiter, Literal, TokenStream, TokenTree};
 +
-+which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
++use crate::helpers::*;
 +
-+log_test()
-+{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
+ fn expect_string_array(it: &mut token_stream::IntoIter) -> Vec<String> {
+     let group = expect_group(it);
+     assert_eq!(group.delimiter(), Delimiter::Bracket);
+diff --git a/rust/macros/paste.rs b/rust/macros/paste.rs
+index cce712d19855b..2181e312a7d32 100644
+--- a/rust/macros/paste.rs
++++ b/rust/macros/paste.rs
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-use proc_macro::{Delimiter, Group, Ident, Spacing, Span, TokenTree};
++use proc_macro2::{Delimiter, Group, Ident, Spacing, Span, TokenTree};
+ 
+ fn concat_helper(tokens: &[TokenTree]) -> Vec<(String, Span)> {
+     let mut tokens = tokens.iter();
+diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+deleted file mode 100644
+index ddfc21577539c..0000000000000
+--- a/rust/macros/quote.rs
++++ /dev/null
+@@ -1,182 +0,0 @@
+-// SPDX-License-Identifier: Apache-2.0 OR MIT
+-
+-use proc_macro::{TokenStream, TokenTree};
+-
+-pub(crate) trait ToTokens {
+-    fn to_tokens(&self, tokens: &mut TokenStream);
+-}
+-
+-impl<T: ToTokens> ToTokens for Option<T> {
+-    fn to_tokens(&self, tokens: &mut TokenStream) {
+-        if let Some(v) = self {
+-            v.to_tokens(tokens);
+-        }
+-    }
+-}
+-
+-impl ToTokens for proc_macro::Group {
+-    fn to_tokens(&self, tokens: &mut TokenStream) {
+-        tokens.extend([TokenTree::from(self.clone())]);
+-    }
+-}
+-
+-impl ToTokens for proc_macro::Ident {
+-    fn to_tokens(&self, tokens: &mut TokenStream) {
+-        tokens.extend([TokenTree::from(self.clone())]);
+-    }
+-}
+-
+-impl ToTokens for TokenTree {
+-    fn to_tokens(&self, tokens: &mut TokenStream) {
+-        tokens.extend([self.clone()]);
+-    }
+-}
+-
+-impl ToTokens for TokenStream {
+-    fn to_tokens(&self, tokens: &mut TokenStream) {
+-        tokens.extend(self.clone());
+-    }
+-}
+-
+-/// Converts tokens into [`proc_macro::TokenStream`] and performs variable interpolations with
+-/// the given span.
+-///
+-/// This is a similar to the
+-/// [`quote_spanned!`](https://docs.rs/quote/latest/quote/macro.quote_spanned.html) macro from the
+-/// `quote` crate but provides only just enough functionality needed by the current `macros` crate.
+-macro_rules! quote_spanned {
+-    ($span:expr => $($tt:tt)*) => {{
+-        let mut tokens = ::proc_macro::TokenStream::new();
+-        {
+-            #[allow(unused_variables)]
+-            let span = $span;
+-            quote_spanned!(@proc tokens span $($tt)*);
+-        }
+-        tokens
+-    }};
+-    (@proc $v:ident $span:ident) => {};
+-    (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) => {
+-        $crate::quote::ToTokens::to_tokens(&$id, &mut $v);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) => {
+-        for token in $id {
+-            $crate::quote::ToTokens::to_tokens(&token, &mut $v);
+-        }
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) => {
+-        #[allow(unused_mut)]
+-        let mut tokens = ::proc_macro::TokenStream::new();
+-        quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+-            ::proc_macro::Delimiter::Parenthesis,
+-            tokens,
+-        ))]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) => {
+-        let mut tokens = ::proc_macro::TokenStream::new();
+-        quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+-            ::proc_macro::Delimiter::Bracket,
+-            tokens,
+-        ))]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) => {
+-        let mut tokens = ::proc_macro::TokenStream::new();
+-        quote_spanned!(@proc tokens $span $($inner)*);
+-        $v.extend([::proc_macro::TokenTree::Group(::proc_macro::Group::new(
+-            ::proc_macro::Delimiter::Brace,
+-            tokens,
+-        ))]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident :: $($tt:tt)*) => {
+-        $v.extend([::proc_macro::Spacing::Joint, ::proc_macro::Spacing::Alone].map(|spacing| {
+-            ::proc_macro::TokenTree::Punct(::proc_macro::Punct::new(':', spacing))
+-        }));
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident : $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new(':', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident , $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new(',', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident @ $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new('@', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident ! $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new('!', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident ; $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new(';', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident + $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new('+', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident = $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new('=', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident # $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new('#', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident & $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Punct(
+-            ::proc_macro::Punct::new('&', ::proc_macro::Spacing::Alone),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident _ $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Ident(
+-            ::proc_macro::Ident::new("_", $span),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-    (@proc $v:ident $span:ident $id:ident $($tt:tt)*) => {
+-        $v.extend([::proc_macro::TokenTree::Ident(
+-            ::proc_macro::Ident::new(stringify!($id), $span),
+-        )]);
+-        quote_spanned!(@proc $v $span $($tt)*);
+-    };
+-}
+-
+-/// Converts tokens into [`proc_macro::TokenStream`] and performs variable interpolations with
+-/// mixed site span ([`Span::mixed_site()`]).
+-///
+-/// This is a similar to the [`quote!`](https://docs.rs/quote/latest/quote/macro.quote.html) macro
+-/// from the `quote` crate but provides only just enough functionality needed by the current
+-/// `macros` crate.
+-///
+-/// [`Span::mixed_site()`]: https://doc.rust-lang.org/proc_macro/struct.Span.html#method.mixed_site
+-macro_rules! quote {
+-    ($($tt:tt)*) => {
+-        quote_spanned!(::proc_macro::Span::mixed_site() => $($tt)*)
+-    }
+-}
+diff --git a/rust/macros/vtable.rs b/rust/macros/vtable.rs
+index ee06044fcd4f3..a67d1cc81a2d3 100644
+--- a/rust/macros/vtable.rs
++++ b/rust/macros/vtable.rs
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
+ 
+-use proc_macro::{Delimiter, Group, TokenStream, TokenTree};
+ use std::collections::HashSet;
+ use std::fmt::Write;
+ 
++use proc_macro2::{Delimiter, Group, TokenStream, TokenTree};
 +
-+	if [ "${rc}" -eq "${expected}" ]; then
-+		printf "    TEST: %-60s  [OK]\n" "${msg}"
-+		nsuccess=$((nsuccess+1))
-+	else
-+		ret=1
-+		nfail=$((nfail+1))
-+		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+		echo
-+			echo "hit enter to continue, 'q' to quit"
-+			read -r a
-+			[ "$a" = "q" ] && exit 1
-+		fi
-+	fi
-+
-+	if [ "${PAUSE}" = "yes" ]; then
-+		echo
-+		echo "hit enter to continue, 'q' to quit"
-+		read -r a
-+		[ "$a" = "q" ] && exit 1
-+	fi
-+}
-+
-+setup()
-+{
-+	set -e
-+	setup_ns ns1
-+	IP="$(which ip) -netns $ns1"
-+	NS_EXEC="$(which ip) netns exec $ns1"
-+
-+	$IP link add dummy0 type dummy
-+	$IP link set dev dummy0 up
-+	$IP -6 address add 2001:db8:1::1/64 dev dummy0 nodad
-+	set +e
-+}
-+
-+cleanup()
-+{
-+	$IP link del dev dummy0 &> /dev/null
-+	cleanup_ns "$ns1"
-+}
-+
-+get_linklocal()
-+{
-+	local dev=$1
-+	local addr
-+
-+	addr=$($IP -j -6 addr show dev "${dev}" scope link | jq -r '.[].addr_info[1].local')
-+
-+	[ -z "$addr" ] && return 1
-+
-+	echo "$addr"
-+
-+	return 0
-+}
-+
-+run_cmd()
-+{
-+	local cmd="$1"
-+	local out
-+	local stderr="2>/dev/null"
-+
-+	if [ "$VERBOSE" = "1" ]; then
-+		printf "    COMMAND: %s\n" "$cmd"
-+		stderr=
-+	fi
-+
-+	out=$(eval "$cmd" $stderr)
-+	rc=$?
-+	if [ "$VERBOSE" = "1" ] && [ -n "$out" ]; then
-+		echo "    $out"
-+	fi
-+
-+	[ "$VERBOSE" = "1" ] && echo
-+
-+	return $rc
-+}
-+
-+icmpv6_to_local_address()
-+{
-+	local rc
-+	local lldummy
-+
-+	echo
-+	echo "ICMPv6 to local addresses"
-+
-+	setup
-+
-+	lldummy=$(get_linklocal dummy0)
-+
-+	if [ -z "$lldummy" ]; then
-+		echo "Failed to get link local address for dummy0"
-+		return 1
-+	fi
-+
-+	# ping6 to link local address
-+	run_cmd "$NS_EXEC ${ping6} -c 3 $lldummy%dummy0"
-+	log_test $? 0 "Ping to link local address"
-+
-+	# ping6 to link local address from localhost (::1)
-+	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 $lldummy%dummy0"
-+	log_test $? 0 "Ping to link local address from ::1"
-+
-+	# ping6 to local address
-+	run_cmd "$NS_EXEC ${ping6} -c 3 2001:db8:1::1"
-+	log_test $? 0 "Ping to local address"
-+
-+	# ping6 to local address from localhost (::1)
-+	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 2001:db8:1::1"
-+	log_test $? 0 "Ping to local address from ::1"
-+}
-+
-+icmpv6_to_vrf_based_local_address()
-+{
-+	local rc
-+	local lldummy
-+
-+	echo
-+	echo "ICMPv6 to VRF based local address"
-+
-+	setup
-+
-+	lldummy=$(get_linklocal dummy0)
-+
-+	if [ -z "$lldummy" ]; then
-+		echo "Failed to get link local address for dummy0"
-+		return 1
-+	fi
-+
-+	run_cmd "$NS_EXEC sysctl -w net.ipv6.conf.all.keep_addr_on_down=1"
-+
-+	# create VRF and setup
-+	run_cmd "$IP link add vrf0 type vrf table 10"
-+	run_cmd "$IP link set vrf0 up"
-+	run_cmd "$IP link set dummy0 master vrf0"
-+
-+	# route to reach 2001:db8::1/128 on VRF device and back to ::1
-+	run_cmd "$IP -6 route add 2001:db8:1::1/64 dev vrf0"
-+	run_cmd "$IP -6 route add ::1/128 dev vrf0 table 10"
-+
-+	# ping6 to link local address
-+	run_cmd "$NS_EXEC ${ping6} -c 3 $lldummy%dummy0"
-+	log_test $? 0 "Ping to link local address on VRF context"
-+
-+	# ping6 to link local address from localhost (::1)
-+	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 $lldummy%dummy0"
-+	log_test $? 0 "Ping to link local address from ::1 on VRF context"
-+
-+	# ping6 to local address
-+	run_cmd "$NS_EXEC ${ping6} -c 3 2001:db8:1::1"
-+	log_test $? 0 "Ping to local address on VRF context"
-+
-+	# ping6 to local address from localhost (::1)
-+	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 2001:db8:1::1"
-+	log_test $? 0 "Ping to local address from ::1 on VRF context"
-+}
-+
-+################################################################################
-+# usage
-+
-+usage()
-+{
-+	cat <<EOF
-+usage: ${0##*/} OPTS
-+
-+    -t <test>   Test(s) to run (default: all)
-+                (options: $TESTS)
-+    -p          Pause on fail
-+    -P          Pause after each test before cleanup
-+    -v          Verbose mode (show commands and output)
-+EOF
-+}
-+
-+################################################################################
-+# main
-+
-+trap cleanup EXIT
-+
-+while getopts :t:pPhv o
-+do
-+	case $o in
-+		t) TESTS=$OPTARG;;
-+		p) PAUSE_ON_FAIL=yes;;
-+		P) PAUSE=yes;;
-+		v) VERBOSE=$((VERBOSE + 1));;
-+		h) usage; exit 0;;
-+		*) usage; exit 1;;
-+	esac
-+done
-+
-+[ "${PAUSE}" = "yes" ] && PAUSE_ON_FAIL=no
-+
-+if [ "$(id -u)" -ne 0 ];then
-+	echo "SKIP: Need root privileges"
-+	exit "$ksft_skip"
-+fi
-+
-+if [ ! -x "$(command -v ip)" ]; then
-+	echo "SKIP: Could not run test without ip tool"
-+	exit "$ksft_skip"
-+fi
-+
-+# start clean
-+cleanup &> /dev/null
-+
-+for t in $TESTS
-+do
-+	case $t in
-+	icmpv6_to_local_address)		icmpv6_to_local_address;;
-+	icmpv6_to_vrf_based_local_address)	icmpv6_to_vrf_based_local_address;;
-+
-+	help) echo "Test names: $TESTS"; exit 0;;
-+	esac
-+done
-+
-+if [ "$TESTS" != "none" ]; then
-+	printf "\nTests passed: %3d\n" "${nsuccess}"
-+	printf "Tests failed: %3d\n" "${nfail}"
-+fi
-+
-+exit $ret
+ pub(crate) fn vtable(_attr: TokenStream, ts: TokenStream) -> TokenStream {
+     let mut tokens: Vec<_> = ts.into_iter().collect();
+ 
+@@ -31,7 +32,7 @@ pub(crate) fn vtable(_attr: TokenStream, ts: TokenStream) -> TokenStream {
+     let mut consts = HashSet::new();
+     while let Some(token) = body_it.next() {
+         match token {
+-            TokenTree::Ident(ident) if ident.to_string() == "fn" => {
++            TokenTree::Ident(ident) if ident == "fn" => {
+                 let fn_name = match body_it.next() {
+                     Some(TokenTree::Ident(ident)) => ident.to_string(),
+                     // Possibly we've encountered a fn pointer type instead.
+@@ -39,7 +40,7 @@ pub(crate) fn vtable(_attr: TokenStream, ts: TokenStream) -> TokenStream {
+                 };
+                 functions.push(fn_name);
+             }
+-            TokenTree::Ident(ident) if ident.to_string() == "const" => {
++            TokenTree::Ident(ident) if ident == "const" => {
+                 let const_name = match body_it.next() {
+                     Some(TokenTree::Ident(ident)) => ident.to_string(),
+                     // Possibly we've encountered an inline const block instead.
 -- 
-2.52.0
+2.51.2
 
 
