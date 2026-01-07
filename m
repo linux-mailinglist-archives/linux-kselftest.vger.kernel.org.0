@@ -1,126 +1,115 @@
-Return-Path: <linux-kselftest+bounces-48418-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FAA2CFF50D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 19:11:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF78DCFF726
+	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 19:29:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4F2AE3439E8F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 17:03:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7B70633D64DE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 18:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 282A336656A;
-	Wed,  7 Jan 2026 16:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dbhou5KA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8423C34D4ED;
+	Wed,  7 Jan 2026 16:49:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F8310F2;
-	Wed,  7 Jan 2026 16:41:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E7BA34AB1D;
+	Wed,  7 Jan 2026 16:48:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767804068; cv=none; b=S9dQZsHakHS69fTwFaGJfreSsgeSqqrA1C4DTkARXEDWwOa+FsQ3LWW/4IKKjrAqppKG1cbi514Zm2s3GZxsDyHmi4XbvGFQN2ANO5zW5Dlg72zcrIiaMpV4fgfBNcoFcKGmqREvN0VUO2ddm9Q3d0qdwvAShEHQYVMuvYwZlGg=
+	t=1767804544; cv=none; b=dplN/9jxHHKiwh58SRDzmpRA0hNW5ivIwRFgNtao2GSoDZUKNC2Lmqai5xVZerXX0p8odbyFL6E5buUY0ZqG3z46RhFIFmDGD6ftsXWxvNd3UCXOT00auVQi1Qsnau5ICtPB6YCQOP3hpjhP4nCnqS81I8JRVUoiQbxvRvWN1gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767804068; c=relaxed/simple;
-	bh=Qz6Qqop0qFf7mBnylFBucLzsveOWJ8mTu7t3zWUscKg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J3WrVl8Fa27Tc6O8QnkTxf8Q8TrdjE6o98rCDmEJKGY4RiRjfTtLns0Yz6hDZOcvQxYF3+PWwmndyx8VrxZAIxewpU2boTzLeSkI8pb2q6A5CdMCLF9GObjEKeeD0+kOOFkHlAb4ZCaxMvEgYChJvKpEm8wOO9YCR1fYCI992bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dbhou5KA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB3F4C4CEF1;
-	Wed,  7 Jan 2026 16:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767804067;
-	bh=Qz6Qqop0qFf7mBnylFBucLzsveOWJ8mTu7t3zWUscKg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dbhou5KAEsZutI3zbeeEbloh39Fmr3YXZCB+kci6gEifI3kjOVBXvgl1H40kZsvSD
-	 YrSy5mXiffBvPmSOxWq6bivUTvAUJV0Jooy98xZMrteCJezRAip/WSnLMAFj2iu9SF
-	 1rBK6nnd8OuAk/lLfLK5y5oKrh9eHKV6M8QCm0sHv7qXVvpTem/XK62258Vzf4oLib
-	 DWrT+B+Gl/11LvgKll5DvisqeMI4Kseu6e5mfHoCvVTEzrIg3cLEaoX8+5LXvRmWYi
-	 Efn9yRpy/SUIbmJLqYygyOeAPcuB2cXXBVnCNWtRUqR8yotUU5fX7VMvoVflkVkP5C
-	 0SlMXgC/K/MRA==
-Message-ID: <72d45fe9-c058-4944-b7a2-260b7259096f@kernel.org>
-Date: Wed, 7 Jan 2026 09:41:05 -0700
+	s=arc-20240116; t=1767804544; c=relaxed/simple;
+	bh=I79DnR1ir8QZmj+udno1Mp43vB+3x3zTQdfEiIjBK0M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RjcSGBi6r2B1KQdSrduBI/P/x7wpI4iRDWXGmUMAZmGvc1to0EqjINmfPEHi60F5f2tY83xWRJODz5I+lhnngYUXa3pT6IXOLra2dYlkuovm7LxTjg9htlp3EkMGK+bU5mBuLQFkDFTIu0Kog4MH1xfAL/kiO6F/+bGowqLEAZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3409D497;
+	Wed,  7 Jan 2026 08:48:44 -0800 (PST)
+Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0F2A3F5A1;
+	Wed,  7 Jan 2026 08:48:49 -0800 (PST)
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+To: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Kevin Brodsky <kevin.brodsky@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Mark Brown <broonie@kernel.org>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v2 0/8] Various mm kselftests improvements/fixes
+Date: Wed,  7 Jan 2026 16:48:34 +0000
+Message-ID: <20260107164842.3289559-1-kevin.brodsky@arm.com>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2 net-next v2] selftests: ipv6_icmp: add tests for
- ICMPv6 handling
-Content-Language: en-US
-To: Fernando Fernandez Mancera <fmancera@suse.de>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
-References: <20260107153841.5030-1-fmancera@suse.de>
- <20260107153841.5030-2-fmancera@suse.de>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20260107153841.5030-2-fmancera@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 1/7/26 8:38 AM, Fernando Fernandez Mancera wrote:
-> +icmpv6_to_vrf_based_local_address()
-> +{
-> +	local rc
-> +	local lldummy
-> +
-> +	echo
-> +	echo "ICMPv6 to VRF based local address"
-> +
-> +	setup
-> +
-> +	lldummy=$(get_linklocal dummy0)
-> +
-> +	if [ -z "$lldummy" ]; then
-> +		echo "Failed to get link local address for dummy0"
-> +		return 1
-> +	fi
-> +
-> +	run_cmd "$NS_EXEC sysctl -w net.ipv6.conf.all.keep_addr_on_down=1"
-> +
-> +	# create VRF and setup
-> +	run_cmd "$IP link add vrf0 type vrf table 10"
-> +	run_cmd "$IP link set vrf0 up"
-> +	run_cmd "$IP link set dummy0 master vrf0"
+Various improvements/fixes for the mm kselftests:
 
-run_cmd "$IP -6 addr add ::1 dev vrf0 nodad"
+- Patch 1-3 extend support for more build configurations: out-of-tree
+  $KDIR, cross-compilation, etc.
 
-makes the VRF device the loopback.
+- Patch 4-6 fix issues related to faulting in pages, introducing a new
+  helper for that purpose.
 
-> +
-> +	# route to reach 2001:db8::1/128 on VRF device and back to ::1
-> +	run_cmd "$IP -6 route add 2001:db8:1::1/64 dev vrf0"
-> +	run_cmd "$IP -6 route add ::1/128 dev vrf0 table 10"
+- Patch 7 fixes the value returned by pagemap_ioctl (PASS was always
+  returned, which explains why the issue fixed in patch 6 went
+  unnoticed).
 
-and then this route add should not be needed. This is how fcnal-test.sh
-works.
+- Patch 8 improves the exit code of pfnmap.
 
-> +
-> +	# ping6 to link local address
-> +	run_cmd "$NS_EXEC ${ping6} -c 3 $lldummy%dummy0"
-> +	log_test $? 0 "Ping to link local address on VRF context"
-> +
-> +	# ping6 to link local address from localhost (::1)
-> +	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 $lldummy%dummy0"
+Net results:
+- 1 test no longer fails (patch 6)
+- 3 tests are no longer skipped (patch 4)
+- More accurate return values for whole suites (patch 7, 8)
+- Extra tests are more likely to be built (patch 1-3)
 
--I vrf0 should be needed for all VRF tests. I suspect your current
-passing tests are because you have a single setup step and then run
-non-VRF test followed by VRF test. Really you need to do the setup,
-run_test, cleanup for each test.
+---
+v1..v2:
+- New patches: 1, 4, 5, 8
 
-> +	log_test $? 0 "Ping to link local address from ::1 on VRF context"
-> +
-> +	# ping6 to local address
-> +	run_cmd "$NS_EXEC ${ping6} -c 3 2001:db8:1::1"
-> +	log_test $? 0 "Ping to local address on VRF context"
-> +
-> +	# ping6 to local address from localhost (::1)
-> +	run_cmd "$NS_EXEC ${ping6} -c 3 -I ::1 2001:db8:1::1"
-> +	log_test $? 0 "Ping to local address from ::1 on VRF context"
-> +}
-> +
+v1: https://lore.kernel.org/all/20251216142633.2401447-1-kevin.brodsky@arm.com/
+---
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: David Hildenbrand <david@kernel.org>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Ryan Roberts <ryan.roberts@arm.com>
+Cc: Shuah Khan <shuah@kernel.org>
+---
+Kevin Brodsky (8):
+  selftests/mm: default KDIR to build directory
+  selftests/mm: remove flaky header check
+  selftests/mm: pass down full CC and CFLAGS to check_config.sh
+  selftests/mm: fix usage of FORCE_READ() in cow tests
+  selftests/mm: introduce helper to read every page in range
+  selftests/mm: fix faulting-in code in pagemap_ioctl test
+  selftests/mm: fix exit code in pagemap_ioctl
+  selftests/mm: report SKIP in pfnmap if a check fails
+
+ tools/testing/selftests/mm/Makefile           |  8 +-
+ tools/testing/selftests/mm/check_config.sh    |  3 +-
+ tools/testing/selftests/mm/cow.c              | 16 ++--
+ tools/testing/selftests/mm/hugetlb-madvise.c  |  9 +-
+ tools/testing/selftests/mm/page_frag/Makefile |  2 +-
+ tools/testing/selftests/mm/pagemap_ioctl.c    | 10 +-
+ tools/testing/selftests/mm/pfnmap.c           | 95 ++++++++++++-------
+ .../selftests/mm/split_huge_page_test.c       |  6 +-
+ tools/testing/selftests/mm/vm_util.h          |  6 ++
+ 9 files changed, 84 insertions(+), 71 deletions(-)
+
+
+base-commit: 9ace4753a5202b02191d54e9fdf7f9e3d02b85eb
+-- 
+2.51.2
 
 
