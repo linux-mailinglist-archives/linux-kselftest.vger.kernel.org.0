@@ -1,177 +1,104 @@
-Return-Path: <linux-kselftest+bounces-48384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BD6CCFC3CF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 07:50:13 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F12BCFCE24
+	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 10:35:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2E3B23003840
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 06:49:49 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 97AD3300AC94
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 09:35:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB3A026E6E8;
-	Wed,  7 Jan 2026 06:49:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5815E30594E;
+	Wed,  7 Jan 2026 09:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WeXifGa0"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="CCMOprFU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519263B7A8
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Jan 2026 06:49:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A798304BDA;
+	Wed,  7 Jan 2026 09:26:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767768586; cv=none; b=P7xpF1xtachcqs7Agwd807/xYhwiKBxMj145K9KdC64Lh1GbkvuMzrgGprU5ERB+3zYlDgrCv26e4tdoLQuIPosnyXcTFYEqdWPUGlXhEHIDq8zupIQutIEx9bvMjinipfIDYqTsM0U02dZ8gvNJbFS+P6Wd77CwI4VEm5RLNCI=
+	t=1767777973; cv=none; b=PTS7GDQyav0AglqXNCzNiyGOSyg5i7Lj49/XppdYMwilNeqkVycP9/Y57mluOPxeYCSdx3OkQn++Ts1mFuGfD137lX2p39G+PgFQjmyMGY2lE/UT43mEaJ7vRtW3lrakbPXTXqTtDwULFIKW5Gb4UWErlZYKiAqDJbgCpnAW4F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767768586; c=relaxed/simple;
-	bh=7L1fp/yFv2n+QgakxNDrV8LOPjHs2ZknnnfG50O85ho=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LvaedBYDUyf/paPA1otQM5RLHm2glw+ruOloyeSyvKxDxQbSE9Cc3bjqIkx81OB3Mebnr53sgmL9lTI+k8pr5KkH2/PFj5JzxMtJwGNqHtoSQHcqlWJiPbLsV4d1YY8IHiKs/umUe96kL0460Sysw/TP/b7qcyAvYEWuXjXBcKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WeXifGa0; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-64ba9a00b5aso2403342a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 06 Jan 2026 22:49:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767768584; x=1768373384; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MruzDPuPyjqMG02vzzn+jTHVU5DsjGJw4xgCMw81cH0=;
-        b=WeXifGa05B9hoeRVWU81e5B2eJBRzsFD6awYpZ2id66mvDqsIJxdTBoYOSUySaCAcS
-         I4O2Up5EERtC9ElG8VbbkwWhRRuPbVspYuGon9wL31jp+9DCEYCd2tHBifsVkMVfPqh2
-         8e8OrVagcfyTcgprJ4MzRlR/abWJJ2M/79RrDoR2k+r58ZGdo6qObYA/uBBDe5H7dT5i
-         hWSwnoc9Y+liOwbyNub2PFAz/Ui/xQRX75MVVi1bicD2HImLHmZ4rdah6xysGp1Ki0Pj
-         F5bfixpp759O6x/xqyeo833op6TcqAyfh4NRwy8TbTduS1fohM0dRjjFAe0aLnhY2OZY
-         CTuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767768584; x=1768373384;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=MruzDPuPyjqMG02vzzn+jTHVU5DsjGJw4xgCMw81cH0=;
-        b=fIqX1eXJ4RiWtC3eqzVXiSnJp7S8GZxlrms12Vl8vpe8pZS1hTlePZ0DdoFQ9HUbEA
-         d7Mdpa6vyRc64/kkYzMyLPXGHqkvCzPt8dGeBV0ng7t+w/dpdv7HYi9Zojun1fPlAcso
-         NBCJXTNw/g03YMe+ToccFSNdLAuGf9NURpplsZ78JMyqHdA9x/Uul8gr8p+gy/fg9rD5
-         YxjgcQmR307mRNbc8731FaAQI3A/bjB9LKcAxH/M1HjOxyRH2w3G2io/T09awApH9YVx
-         quDXCVjGBeECS1J3CahKT00qvVrrgXUdT+W+GBO4/KnkVfkHWG7Rp5R/HqO14SYRnwM2
-         hM7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWd5rCKZT8vf7kGeB59o8lUMYGcJMyrL1sk/mvtdXsGmgLwgn15+fRxbprJyaVbfBa/afQNxPzCQzHZHVrb380=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9YFBbocwR3KjH+ZzHzHPHSCPw5YtNK6cdhH3Dc2I3WvZVHOhl
-	Zl+TJve2/bT+RJ9e19LwE5QxqshRcKpu8g4bUgOvL8Ks5mcXfarEsj890E9Ijj2yy7L0TeNQYb8
-	SipOjr7pqaYWzHtHRrpc+1HIXUHgJmVg=
-X-Gm-Gg: AY/fxX72OMV8gD727CpiB74tWcaKrq6WeRp+RXYkp2Th0mrnbI6wug0gIGafGYcV2JF
-	fj1XN6ZL1CIdns+PQJUQ9MD564jzn6qGgA66Jo1mIH42W8DYgqy8DWvjZM37QCIpBe3At1OAXcv
-	Hlk3bNOOsTX11wKpgfszysmCY4JEk5hBNBcISS4BmwrybR7N/d0//uUD3NnBVRjX93ad0QT2UT+
-	+2FluV+gln3fJRVOpidj23EVGOQODU8S3lxayTTqd5ArHSAV8BHyCBZ5usajSEBWxTwlSDsd+ED
-	Bvc=
-X-Google-Smtp-Source: AGHT+IGXtnZX3Swzs9B+00UHoAzzviOLssA0wkACNyEJ5yFA3/knUSfykJRhk38tEfAOVp6ApFlsUl5OhL93K4wP718=
-X-Received: by 2002:a17:907:72cf:b0:b73:9368:ad5e with SMTP id
- a640c23a62f3a-b8444f7084emr133346866b.34.1767768583459; Tue, 06 Jan 2026
- 22:49:43 -0800 (PST)
+	s=arc-20240116; t=1767777973; c=relaxed/simple;
+	bh=kagYsdrj2NYA3SiSuto7dDGq3C70YnCFspbbMVu5GJU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Y0FUkMXtGIN1wupvOm9JIW0Ygdj8FxO242cmnrQwJ2GQ5w8Jx5lsjZ9zjfAs2E/x/LNoW2JYi9AeZV9hIDfAsclSu518Swm6uEIgqq3CUdLBkMup4v5TtlOvwSmNeOOa9r1dWUHVj1J4bvSaABT/KzKn0ILHVGxm51hfGDAuJ3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=CCMOprFU; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=SbepdL8fPHry+zhsuV968bg0EkRiLpLMT1qSDyYCvVA=;
+	b=CCMOprFU8FCITCQZe4mbIl7plgbAUUxisTeoYgN4Cl7CoYSrUIeyk+PeKwsUGL07MFH411gAq
+	2qKPjBeWos4rcIyUZEKb2k0c7vJjs3xagg2HSvL3vClI0SpGR9cQTi4feFK+Geb0coWMKmwpi++
+	h6lCPx2oiw+E7T7lGHwQ7Lg=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4dmMyG2pN8zpStD;
+	Wed,  7 Jan 2026 17:22:46 +0800 (CST)
+Received: from dggemv712-chm.china.huawei.com (unknown [10.1.198.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9578B40363;
+	Wed,  7 Jan 2026 17:26:07 +0800 (CST)
+Received: from kwepemq500010.china.huawei.com (7.202.194.235) by
+ dggemv712-chm.china.huawei.com (10.1.198.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Wed, 7 Jan 2026 17:26:07 +0800
+Received: from huawei.com (10.173.125.37) by kwepemq500010.china.huawei.com
+ (7.202.194.235) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 7 Jan
+ 2026 17:26:06 +0800
+From: Miaohe Lin <linmiaohe@huawei.com>
+To: <akpm@linux-foundation.org>, <shuah@kernel.org>
+CC: <david@kernel.org>, <lorenzo.stoakes@oracle.com>,
+	<Liam.Howlett@oracle.com>, <vbabka@suse.cz>, <rppt@kernel.org>,
+	<surenb@google.com>, <mhocko@suse.com>, <nao.horiguchi@gmail.com>,
+	<linmiaohe@huawei.com>, <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH 0/3] selftests/mm: add memory failure selftests
+Date: Wed, 7 Jan 2026 17:37:07 +0800
+Message-ID: <20260107093710.3928374-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251214163537.1054292-1-geomatsi@gmail.com> <20251214163537.1054292-3-geomatsi@gmail.com>
-In-Reply-To: <20251214163537.1054292-3-geomatsi@gmail.com>
-From: Andy Chiu <andybnac@gmail.com>
-Date: Wed, 7 Jan 2026 00:49:31 -0600
-X-Gm-Features: AQt7F2ozAc5Va5NPuQD8aSTCr0IKOoMt4EUoI_SUlzkZUzaEwNcuXeVhPJX-CK4
-Message-ID: <CAFTtA3MdoL5XjcjTrNhZ27UXZe4Mxot-rttc8cQ-K=E-Mh164A@mail.gmail.com>
-Subject: Re: [PATCH v5 2/9] riscv: vector: init vector context with proper vlenb
-To: Sergey Matyukevich <geomatsi@gmail.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Thomas Huth <thuth@redhat.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Joel Granados <joel.granados@kernel.org>, Conor Dooley <conor.dooley@microchip.com>, 
-	Yong-Xuan Wang <yongxuan.wang@sifive.com>, Heiko Stuebner <heiko@sntech.de>, Guo Ren <guoren@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemq500010.china.huawei.com (7.202.194.235)
 
-On Sun, Dec 14, 2025 at 10:35=E2=80=AFAM Sergey Matyukevich <geomatsi@gmail=
-.com> wrote:
->
-> The vstate in thread_struct is zeroed when the vector context is
-> initialized. That includes read-only register vlenb, which holds
-> the vector register length in bytes. Zeroed state persists until
-> mstatus.VS becomes 'dirty' and a context switch saves the actual
-> hardware values.
->
-> This can expose the zero vlenb value to the user-space in early
-> debug scenarios, e.g. when ptrace attaches to a traced process
-> early, before any vector instruction except the first one was
-> executed.
->
-> Fix this by specifying proper vlenb on vector context init.
->
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Introduce selftests to validate the functionality of memory failure. 
+These tests help ensure that memory failure handling for anonymous
+pages, pagecaches pages works correctly, including proper SIGBUS
+delivery to user processes, page isolation, and recovery paths.
 
-Reviewed-by: Andy Chiu <andybnac@gmail.com>
+Currently madvise syscall is used to inject memory failures. And only
+anonymous pages and pagecaches are tested. More test scenarios, e.g.
+hugetlb, shmem, thp, will be added. Also more memory failure injecting
+methods will be supported, e.g. APEI Error INJection, if required.
 
-> ---
->  arch/riscv/kernel/vector.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/riscv/kernel/vector.c b/arch/riscv/kernel/vector.c
-> index 3ed071dab9d8..b112166d51e9 100644
-> --- a/arch/riscv/kernel/vector.c
-> +++ b/arch/riscv/kernel/vector.c
-> @@ -111,8 +111,8 @@ bool insn_is_vector(u32 insn_buf)
->         return false;
->  }
->
-> -static int riscv_v_thread_zalloc(struct kmem_cache *cache,
-> -                                struct __riscv_v_ext_state *ctx)
-> +static int riscv_v_thread_ctx_alloc(struct kmem_cache *cache,
-> +                                   struct __riscv_v_ext_state *ctx)
->  {
->         void *datap;
->
-> @@ -122,13 +122,15 @@ static int riscv_v_thread_zalloc(struct kmem_cache =
-*cache,
->
->         ctx->datap =3D datap;
->         memset(ctx, 0, offsetof(struct __riscv_v_ext_state, datap));
-> +       ctx->vlenb =3D riscv_v_vsize / 32;
-> +
->         return 0;
->  }
->
->  void riscv_v_thread_alloc(struct task_struct *tsk)
->  {
->  #ifdef CONFIG_RISCV_ISA_V_PREEMPTIVE
-> -       riscv_v_thread_zalloc(riscv_v_kernel_cachep, &tsk->thread.kernel_=
-vstate);
-> +       riscv_v_thread_ctx_alloc(riscv_v_kernel_cachep, &tsk->thread.kern=
-el_vstate);
->  #endif
->  }
->
-> @@ -214,12 +216,14 @@ bool riscv_v_first_use_handler(struct pt_regs *regs=
-)
->          * context where VS has been off. So, try to allocate the user's =
-V
->          * context and resume execution.
->          */
-> -       if (riscv_v_thread_zalloc(riscv_v_user_cachep, &current->thread.v=
-state)) {
-> +       if (riscv_v_thread_ctx_alloc(riscv_v_user_cachep, &current->threa=
-d.vstate)) {
->                 force_sig(SIGBUS);
->                 return true;
->         }
-> +
->         riscv_v_vstate_on(regs);
->         riscv_v_vstate_set_restore(current, regs);
-> +
->         return true;
->  }
->
-> --
-> 2.52.0
->
+Thanks!
+
+Miaohe Lin (3):
+  selftests/mm: add memory failure anonymous page test
+  selftests/mm: add memory failure clean pagecache test
+  selftests/mm: add memory failure dirty pagecache test
+
+ MAINTAINERS                                 |   1 +
+ tools/testing/selftests/mm/.gitignore       |   1 +
+ tools/testing/selftests/mm/Makefile         |   1 +
+ tools/testing/selftests/mm/memory-failure.c | 335 ++++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh   |  21 ++
+ tools/testing/selftests/mm/vm_util.c        |  41 +++
+ tools/testing/selftests/mm/vm_util.h        |   3 +
+ 7 files changed, 403 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/memory-failure.c
+
+-- 
+2.33.0
+
 
