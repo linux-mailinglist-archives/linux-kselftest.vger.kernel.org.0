@@ -1,217 +1,99 @@
-Return-Path: <linux-kselftest+bounces-48424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4296BCFF007
-	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 18:07:50 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0058CFF94A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 19:55:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8C687300A341
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 17:07:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D5A5D300463C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 18:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA180354AFC;
-	Wed,  7 Jan 2026 16:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B231F34D92A;
+	Wed,  7 Jan 2026 16:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SLtdKPjD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502E034DB47;
-	Wed,  7 Jan 2026 16:49:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44BA3A0B1E;
+	Wed,  7 Jan 2026 16:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767804553; cv=none; b=aPbhOj5TAidb43vtzAUTmuWrr0FHkmdAEpMklJ2g3yW3yT2CMzAYSpddWJMlgiNEuDGqD9/GjOMxB91ehcjM+clSRuSiWMpYP/BEG36yMCK83iG6LDGgiPO4s/jBGkkw5d057RuGjMO0yngNukCQ257cLryfpcy/hcK/JMNYsVM=
+	t=1767805175; cv=none; b=U5y+SJkC6b4gEBOOZTi22rz7W4hjo9YMHE1nUmgp9OKPkgC3KKchq7R4sRXn9mhRlxlXw1/bwuEDXIsmG2eYrQT+GfYT5pYXtET+kffhcnYgVlq9b0LamILCwRflUjekHjMMz6PnZ2sa1CeEbHoCaMammwf/FmLTqqgqJlBysW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767804553; c=relaxed/simple;
-	bh=vso8txYA5j9rF+IDmtRFs+v78bjUzSYPh0lwSQtU/Ic=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GNAKrHgHeoBnmdKZhakjjb4YdgEEO1aAxLUUqmhYytQ1Ululr90zW3vlvDweprUREC08+BSmwUzBoz7GhJPajMk0yCwWAAn5Hrx4uBB8/8J8H5jm8U/O/Q13u9mkcsPfSaYT2xiXXFUf/pdfMNE3gq+Wj/MlS/lem8VaY46b7tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A97021595;
-	Wed,  7 Jan 2026 08:48:56 -0800 (PST)
-Received: from e123572-lin.arm.com (e123572-lin.cambridge.arm.com [10.1.194.54])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43EA53F5A1;
-	Wed,  7 Jan 2026 08:49:02 -0800 (PST)
-From: Kevin Brodsky <kevin.brodsky@arm.com>
-To: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Kevin Brodsky <kevin.brodsky@arm.com>,
+	s=arc-20240116; t=1767805175; c=relaxed/simple;
+	bh=HwEX46v431f+sbGo5EqxgnUwfzroRLeV1erewYphpFo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t0Kfpi8qCvkhRU0jgzVN/wfJw3yF4vkUhqXvsXGQ21VrFRN7gU3DstaXo7IByHyJKCRkmObRWkJeo1hGbRWjcdLE1K2h0Z65/J6LxtbwRppq+XMb+kpdX+/lwLJjFcun2v+jdmGgT9siyUsz/RYMZibiGj0qTrVsQvQTBwuGt9o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SLtdKPjD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10FABC19422;
+	Wed,  7 Jan 2026 16:59:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767805174;
+	bh=HwEX46v431f+sbGo5EqxgnUwfzroRLeV1erewYphpFo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SLtdKPjDsjq3CIydu0nCMpF4xRX3a55iYS+c9WgEvIR/u6j3EKWGkGLeLWRiajwpS
+	 H6u1dCYqeZPV1/Ux2QI8IdGPfJuejyK9Mt0fTfD/JeNjo7JHyp3pzzLFeNN4ks5XZ5
+	 7vWfdHNcpXdGvYSU9u65pPhUzx1omRJREpdghlBG+Q25jcki5mYF0ytTjZrPFnEXtT
+	 FNW+qmTeHDbLxEgNbxQ6J/z53F1JwlmkXotfuFM2Wm1oTLUffAm4FwXJMd/QQYf5J8
+	 MLQYMW3L7Et0Rjy3GA2p/FA8V315OhSzmnnSFop+/ETv3A0XHAt8hIHXTGGO9EUGQk
+	 zCntVNjC0MKaA==
+Date: Wed, 7 Jan 2026 16:59:29 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>,
 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Mark Brown <broonie@kernel.org>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v2 8/8] selftests/mm: report SKIP in pfnmap if a check fails
-Date: Wed,  7 Jan 2026 16:48:42 +0000
-Message-ID: <20260107164842.3289559-9-kevin.brodsky@arm.com>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20260107164842.3289559-1-kevin.brodsky@arm.com>
+	Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v2 3/8] selftests/mm: pass down full CC and CFLAGS to
+ check_config.sh
+Message-ID: <b7458982-ec26-4057-bd4c-0609d177ae32@sirena.org.uk>
 References: <20260107164842.3289559-1-kevin.brodsky@arm.com>
+ <20260107164842.3289559-4-kevin.brodsky@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rXNMserVLWCKQhmh"
+Content-Disposition: inline
+In-Reply-To: <20260107164842.3289559-4-kevin.brodsky@arm.com>
+X-Cookie: Truth is free, but information costs.
 
-pfnmap currently checks the target file in FIXTURE_SETUP(pfnmap),
-meaning once for every test, and skips the test if any check fails.
 
-The target file is the same for every test so this is a little
-overkill. More importantly, this approach means that the whole suite
-will report PASS even if all the tests are skipped because kernel
-configuration (e.g. CONFIG_STRICT_DEVMEM=y) prevented /dev/mem from
-being mapped, for instance.
+--rXNMserVLWCKQhmh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Let's ensure that KSFT_SKIP is returned as exit code if any check
-fails by performing the checks in pfnmap_init(), run once. That
-function also takes care of finding the offset of the pages to be
-mapped and saves it in a global. The file is still mapped/unmapped
-for every test, as some of them modify the mapping.
+On Wed, Jan 07, 2026 at 04:48:37PM +0000, Kevin Brodsky wrote:
 
-Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
----
- tools/testing/selftests/mm/pfnmap.c | 81 ++++++++++++++++++++---------
- 1 file changed, 55 insertions(+), 26 deletions(-)
+> Remove these assumptions by passing down CC and CFLAGS as-is from
+> the Makefile, so that the same command line is used as when actually
+> building the tests.
 
-diff --git a/tools/testing/selftests/mm/pfnmap.c b/tools/testing/selftests/mm/pfnmap.c
-index 35b0e3ed54cd..e41d5464130b 100644
---- a/tools/testing/selftests/mm/pfnmap.c
-+++ b/tools/testing/selftests/mm/pfnmap.c
-@@ -25,8 +25,11 @@
- #include "kselftest_harness.h"
- #include "vm_util.h"
- 
-+#define DEV_MEM_NPAGES	2
-+
- static sigjmp_buf sigjmp_buf_env;
- static char *file = "/dev/mem";
-+static off_t file_offset;
- 
- static void signal_handler(int sig)
- {
-@@ -88,7 +91,7 @@ static int find_ram_target(off_t *offset,
- 			break;
- 
- 		/* We need two pages. */
--		if (end > start + 2 * pagesize) {
-+		if (end > start + DEV_MEM_NPAGES * pagesize) {
- 			fclose(file);
- 			*offset = start;
- 			return 0;
-@@ -97,9 +100,49 @@ static int find_ram_target(off_t *offset,
- 	return -ENOENT;
- }
- 
-+static void pfnmap_init(void)
-+{
-+	size_t pagesize = getpagesize();
-+	size_t size = DEV_MEM_NPAGES * pagesize;
-+	int fd;
-+	void *addr;
-+
-+	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
-+		int err = find_ram_target(&file_offset, pagesize);
-+
-+		if (err)
-+			ksft_exit_skip("Cannot find ram target in '/proc/iomem': %s\n",
-+				       strerror(-err));
-+	} else {
-+		file_offset = 0;
-+	}
-+
-+	/*
-+	 * Make sure we can open and map the file, and perform some basic
-+	 * checks; skip the whole suite if anything goes wrong.
-+	 * A fresh mapping is then created for every test case by
-+	 * FIXTURE_SETUP(pfnmap).
-+	 */
-+	fd = open(file, O_RDONLY);
-+	if (fd < 0)
-+		ksft_exit_skip("Cannot open '%s': %s\n", file, strerror(errno));
-+
-+	addr = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, file_offset);
-+	if (addr == MAP_FAILED)
-+		ksft_exit_skip("Cannot mmap '%s': %s\n", file, strerror(errno));
-+
-+	if (!check_vmflag_pfnmap(addr))
-+		ksft_exit_skip("Invalid file: '%s'. Not pfnmap'ed\n", file);
-+
-+	if (test_read_access(addr, size))
-+		ksft_exit_skip("Cannot read-access mmap'ed '%s'\n", file);
-+
-+	munmap(addr, size);
-+	close(fd);
-+}
-+
- FIXTURE(pfnmap)
- {
--	off_t offset;
- 	size_t pagesize;
- 	int dev_mem_fd;
- 	char *addr1;
-@@ -112,31 +155,13 @@ FIXTURE_SETUP(pfnmap)
- {
- 	self->pagesize = getpagesize();
- 
--	if (strncmp(file, "/dev/mem", strlen("/dev/mem")) == 0) {
--		/* We'll require two physical pages throughout our tests ... */
--		if (find_ram_target(&self->offset, self->pagesize))
--			SKIP(return,
--				   "Cannot find ram target in '/proc/iomem'\n");
--	} else {
--		self->offset = 0;
--	}
--
- 	self->dev_mem_fd = open(file, O_RDONLY);
--	if (self->dev_mem_fd < 0)
--		SKIP(return, "Cannot open '%s'\n", file);
-+	ASSERT_GE(self->dev_mem_fd, 0);
- 
--	self->size1 = self->pagesize * 2;
-+	self->size1 = DEV_MEM_NPAGES * self->pagesize;
- 	self->addr1 = mmap(NULL, self->size1, PROT_READ, MAP_SHARED,
--			   self->dev_mem_fd, self->offset);
--	if (self->addr1 == MAP_FAILED)
--		SKIP(return, "Cannot mmap '%s'\n", file);
--
--	if (!check_vmflag_pfnmap(self->addr1))
--		SKIP(return, "Invalid file: '%s'. Not pfnmap'ed\n", file);
--
--	/* ... and want to be able to read from them. */
--	if (test_read_access(self->addr1, self->size1))
--		SKIP(return, "Cannot read-access mmap'ed '%s'\n", file);
-+			   self->dev_mem_fd, file_offset);
-+	ASSERT_NE(self->addr1, MAP_FAILED);
- 
- 	self->size2 = 0;
- 	self->addr2 = MAP_FAILED;
-@@ -189,7 +214,7 @@ TEST_F(pfnmap, munmap_split)
- 	 */
- 	self->size2 = self->pagesize;
- 	self->addr2 = mmap(NULL, self->pagesize, PROT_READ, MAP_SHARED,
--			   self->dev_mem_fd, self->offset);
-+			   self->dev_mem_fd, file_offset);
- 	ASSERT_NE(self->addr2, MAP_FAILED);
- }
- 
-@@ -258,8 +283,12 @@ int main(int argc, char **argv)
- 		if (strcmp(argv[i], "--") == 0) {
- 			if (i + 1 < argc && strlen(argv[i + 1]) > 0)
- 				file = argv[i + 1];
--			return test_harness_run(i, argv);
-+			argc = i;
-+			break;
- 		}
- 	}
-+
-+	pfnmap_init();
-+
- 	return test_harness_run(argc, argv);
- }
--- 
-2.51.2
+Reviewed-by: Mark Brown <broonie@kernel.org>
 
+--rXNMserVLWCKQhmh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlekPAACgkQJNaLcl1U
+h9BHWwf+J+x1LLkKhs/euNG82nQXegO3caN5yRTlLIM1Nc8Kq0ZrA0Y6sBNrwZc5
+SlSYRizBioqJS1iLS47DopU7DG3+woAKh3opxwBfAk23aixyD2dLEqXFmgy0z0Un
+BwEVHQerLkh8Ogi2GAxr+sqPedN0WEr1GbSY3VfTG1qYiNW3SG5+0AJ6qtSiToIi
+830xiMgDyxn0GD+jS+sY3U+wgMfUF6T9Kwu3X/24LQTRKGUCjBMKxDK1j+5j4QuM
+I+23PU1qoMHlTDxAphGaXijY0owBT8rJZEy6pF+B81W+Ww0mFD7butnAUrubBePh
+JOG0zO8+G59kVsPNgqaeDi7Zt7UXRw==
+=PiEC
+-----END PGP SIGNATURE-----
+
+--rXNMserVLWCKQhmh--
 
