@@ -1,139 +1,182 @@
-Return-Path: <linux-kselftest+bounces-48440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7B03D0056C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 07 Jan 2026 23:37:51 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C130D005F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 00:14:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2821A301118D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 22:37:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 78D1B300387F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Jan 2026 23:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E14A296BB6;
-	Wed,  7 Jan 2026 22:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1034D2F28EF;
+	Wed,  7 Jan 2026 23:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="EV7VAM0E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYoE6TV/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEBDB16A956;
-	Wed,  7 Jan 2026 22:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.153.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48942848A4;
+	Wed,  7 Jan 2026 23:14:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767825455; cv=none; b=AKquinYHu1ulDbyoaz80ErQ4vSDNIXNuOUcRiXVcZeGxVMaC1AXDVS6vn44PBfCmOBoAvKBnw3OivUVqa3zl6kValL4B5au6EI4n26OsHZSQWIGVh2UjmfP36/2oJ2pS1tnB3IW6M1VK6Y0fpZZ3TXBlnH1pza5l2zmF3/7aTgM=
+	t=1767827683; cv=none; b=azDdQpoBiSUnH6wI9YcIQ8mEzVod/nbMOfXpackeSXJ2wpHIjfDFr214QKzNsz8bGVvq7HLcviI8l0y3Q5EoniKHCsB9uveR8zd0KL2uh2sHeLauj0LmOl8tqDaKb3jChFBs5a/zDsckuZ6bfDd3EGc3KFGsqd+2tPCh97Di7k4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767825455; c=relaxed/simple;
-	bh=n10CwoHtArvZ2hTXM8TJah2m11W8MXWUFoXDvfAUrts=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ac/QNZPwl8T0lKb8YLuAXxcDka2k5Ngv/QqWx/1AD6Kb774rwz9csq8FSlNuuD47qUk0WEB+En2/H0yZigB9tvnovEI/QiY6m6vRQ98uWcL43uuZlduZHJw1Y7rKh5i0rpVjCqGoFn5cl6yErBbsUfSb+KsATlNA7A90WkcjtxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=EV7VAM0E; arc=none smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 607GssKH1548720;
-	Wed, 7 Jan 2026 14:37:27 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=s2048-2025-q2; bh=oewil0Ls2jkYTlRSoFgc
-	0ChL5iI5pxNyY3WrmVaKcbY=; b=EV7VAM0EA/6C7oyFEgROCQYIi/ZyNaBpHOgy
-	0oUpJAi28GLOAP5S4EQYHitsuRop3P0mjHZVBKNrP/MYXxnsjU1ukfvaT4nJoNlw
-	4m48HHzYfEacjq7QkGI0DyqVX56Z++MI8uKN6aBOGDgh1jNNvXlVa2bX4ow2pcrj
-	ZPcTUjCIK2wjcXXAXp4GUaD42Fz8WFUzYwCUWbmbjvuXkCXWeqFsCP6Lf7yGnrZl
-	8eIOLwcsXAyAHpROqU72pIzK4Pyy0tMTyiGCpVAOIISZchkcx6eGzoJcxD8hCA5Z
-	tkk8XRDy1D5kMBy2aYqiHeg24UXtFF4Zs9oaGt9DWoeI8tVWRQ==
-Received: from maileast.thefacebook.com ([163.114.135.16])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bhue6kyrd-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Wed, 07 Jan 2026 14:37:27 -0800 (PST)
-Received: from devgpu015.cco6.facebook.com (2620:10d:c0a8:1b::2d) by
- mail.thefacebook.com (2620:10d:c0a9:6f::8fd4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.29; Wed, 7 Jan 2026 22:37:24 +0000
-Date: Wed, 7 Jan 2026 14:37:15 -0800
-From: Alex Mastro <amastro@fb.com>
-To: Alex Williamson <alex@shazbot.org>, David Matlack <dmatlack@google.com>,
-        Shuah Khan <shuah@kernel.org>
-CC: Peter Xu <peterx@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        Jason Gunthorpe
-	<jgg@ziepe.ca>
-Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
-Message-ID: <aV7gG5fWY84BtjNy@devgpu015.cco6.facebook.com>
-References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
+	s=arc-20240116; t=1767827683; c=relaxed/simple;
+	bh=jwzhuclUq0YEJ/+x35hSDia4E3O0OBPCGyLMt/QilZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B7lk8fNpvSAbcNWx45mdlOfshmbHYYAQNG3s2DJX09youFj4kFmYMCaMH9zM+1EXWAs58MOfs8lKNCD0HNshs/vfMpSl4880nb1YoQ+fIX0IMxptIpAPXj4Ys/VZpdGmKTYU02x+BA6GLJjUKsV72ZhJwj1HemSTuOwcJdGGBOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYoE6TV/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 035FCC4CEF1;
+	Wed,  7 Jan 2026 23:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767827682;
+	bh=jwzhuclUq0YEJ/+x35hSDia4E3O0OBPCGyLMt/QilZA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uYoE6TV/IBrULNqgAljZll+qPP6A/lX0XX3P4heE4j9mZj4PcU04pCtB5xIvAgdan
+	 WqrQb5HrV+caAYi81gTGjQcLNcwhBxLUDtUwnu7Fq4Qf8lv5/VYTSEys3QtIMv1esT
+	 6iYOBpUGY02oUK4/tZemoTIpMv5+h7n4poOVZY+PWrjSzCY26naSik9mKHdb8Gxu9w
+	 bOuYFrwtW0ZRGGBsD0V9JHUCZNpzFDZHF2egknY6ulY4VynjBycaiSYS0rKfXBmjAS
+	 SjzCHaLcf6D2WpIUR4GbIj7KNNs78IsGk/2j2jds7dUJxHGI7viLYmmaCgVIsQ1J52
+	 6t2CxtADJch7Q==
+Date: Thu, 8 Jan 2026 00:14:39 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Joel Fernandes <joelagnelf@nvidia.com>
+Cc: "Paul E . McKenney" <paulmck@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, rcu@vger.kernel.org,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Yao Kai <yaokai34@huawei.com>, Tengda Wu <wutengda2@huawei.com>
+Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to
+ softirq
+Message-ID: <aV7o36CHTLc-tD41@pavilion.home>
+References: <20260101163417.1065705-1-joelagnelf@nvidia.com>
+ <20260101163417.1065705-2-joelagnelf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
-X-Proofpoint-ORIG-GUID: FyT89PhjffIojNEfnnQdYQY7WqEv0od1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA3MDE3OSBTYWx0ZWRfX3suOmJW180EZ
- dwL8W2r0XDeau2OqsJKdpMfrjL8HlHydmxKEWRggTJJUKf+HWYWhSyIJqtgPHCk8Z0IGc/pN5Ni
- F2nchrxVuQDf4ddhY66t2DkqVCO/TJjyYKF4yPZRi33opY386Wb3HyKnz9E/QlYnEChtv9GWQrN
- zSO/J3fXP9o/BCUGox5BeOt5QuLlpLyAMsLlfkaQ3dYVk7RLzlAwnCwU+poVRSZ1GlJQmdNlCXp
- fpeuO1iUaIWgoVn73kPR5EckhdcPH2xIeFoITxg1fuuE7ln5o88FQAv4n3C9TDBtyQgKHXRhRvJ
- FEFcb+gGBDuPk0hDoc8Mr2+sH/TO+Mu0egaAC9jiEM88gY25J3dB6uwXPgiJ/GARuHZ5WKYsXIS
- J3oMFjNmNJmWBajnbGhYv8riwQ8dsJ0593Q4xSf8AVyIAwnZ7JXk/8VZUTvwJKm3SGVMcV4+4g+
- 0UfdvknlDC0xyb45+IQ==
-X-Proofpoint-GUID: FyT89PhjffIojNEfnnQdYQY7WqEv0od1
-X-Authority-Analysis: v=2.4 cv=BsmQAIX5 c=1 sm=1 tr=0 ts=695ee027 cx=c_pps
- a=MfjaFnPeirRr97d5FC5oHw==:117 a=MfjaFnPeirRr97d5FC5oHw==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=wyK08riV_XoCUqvJq0wA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-07_04,2026-01-07_03,2025-10-01_01
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260101163417.1065705-2-joelagnelf@nvidia.com>
 
-On Wed, Jan 07, 2026 at 02:13:28PM -0800, Alex Mastro wrote:
- 
-> @@ -124,20 +127,43 @@ static void vfio_pci_region_get(struct vfio_pci_device *device, int index,
->  static void vfio_pci_bar_map(struct vfio_pci_device *device, int index)
->  {
->  	struct vfio_pci_bar *bar = &device->bars[index];
-> +	size_t align, size;
-> +	void *map_base, *map_align;
->  	int prot = 0;
->  
->  	VFIO_ASSERT_LT(index, PCI_STD_NUM_BARS);
->  	VFIO_ASSERT_NULL(bar->vaddr);
->  	VFIO_ASSERT_TRUE(bar->info.flags & VFIO_REGION_INFO_FLAG_MMAP);
-> +	VFIO_ASSERT_GT(bar->info.size, 0);
->  
->  	if (bar->info.flags & VFIO_REGION_INFO_FLAG_READ)
->  		prot |= PROT_READ;
->  	if (bar->info.flags & VFIO_REGION_INFO_FLAG_WRITE)
->  		prot |= PROT_WRITE;
->  
-> -	bar->vaddr = mmap(NULL, bar->info.size, prot, MAP_FILE | MAP_SHARED,
-> +	/*
-> +	 * Align the mmap for more efficient IOMMU mapping.
-> +	 * The largest PUD size supporting huge pfnmap is 1GiB.
-> +	 */
-> +	size = bar->info.size;
-> +	align = min_t(u64, 1ULL << __builtin_ctzll(size), SZ_1G);
-> +
-> +	map_base = mmap(NULL, size + align, PROT_NONE,
-> +			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +	VFIO_ASSERT_NE(map_base, MAP_FAILED);
-> +
-> +	map_align = (void *)ALIGN((uintptr_t)map_base, align);
-> +
-> +	if (map_align > map_base)
-> +		munmap(map_base, map_align - map_base);
-> +	if (align > (size_t)(map_align - map_base))
+Le Thu, Jan 01, 2026 at 11:34:10AM -0500, Joel Fernandes a écrit :
+> From: Yao Kai <yaokai34@huawei.com>
+> 
+> Commit 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in
+> __rcu_read_unlock()") removes the recursion-protection code from
+> __rcu_read_unlock(). Therefore, we could invoke the deadloop in
+> raise_softirq_irqoff() with ftrace enabled as follows:
+> 
+> WARNING: CPU: 0 PID: 0 at kernel/trace/trace.c:3021 __ftrace_trace_stack.constprop.0+0x172/0x180
+> Modules linked in: my_irq_work(O)
+> CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G O 6.18.0-rc7-dirty #23 PREEMPT(full)
+> Tainted: [O]=OOT_MODULE
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+> RIP: 0010:__ftrace_trace_stack.constprop.0+0x172/0x180
+> RSP: 0018:ffffc900000034a8 EFLAGS: 00010002
+> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000000
+> RDX: 0000000000000003 RSI: ffffffff826d7b87 RDI: ffffffff826e9329
+> RBP: 0000000000090009 R08: 0000000000000005 R09: ffffffff82afbc4c
+> R10: 0000000000000008 R11: 0000000000011d7a R12: 0000000000000000
+> R13: ffff888003874100 R14: 0000000000000003 R15: ffff8880038c1054
+> FS:  0000000000000000(0000) GS:ffff8880fa8ea000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000055b31fa7f540 CR3: 00000000078f4005 CR4: 0000000000770ef0
+> PKRU: 55555554
+> Call Trace:
+>  <IRQ>
+>  trace_buffer_unlock_commit_regs+0x6d/0x220
+>  trace_event_buffer_commit+0x5c/0x260
+>  trace_event_raw_event_softirq+0x47/0x80
+>  raise_softirq_irqoff+0x6e/0xa0
+>  rcu_read_unlock_special+0xb1/0x160
+>  unwind_next_frame+0x203/0x9b0
+>  __unwind_start+0x15d/0x1c0
+>  arch_stack_walk+0x62/0xf0
+>  stack_trace_save+0x48/0x70
+>  __ftrace_trace_stack.constprop.0+0x144/0x180
+>  trace_buffer_unlock_commit_regs+0x6d/0x220
+>  trace_event_buffer_commit+0x5c/0x260
+>  trace_event_raw_event_softirq+0x47/0x80
+>  raise_softirq_irqoff+0x6e/0xa0
+>  rcu_read_unlock_special+0xb1/0x160
+>  unwind_next_frame+0x203/0x9b0
+>  __unwind_start+0x15d/0x1c0
+>  arch_stack_walk+0x62/0xf0
+>  stack_trace_save+0x48/0x70
+>  __ftrace_trace_stack.constprop.0+0x144/0x180
+>  trace_buffer_unlock_commit_regs+0x6d/0x220
+>  trace_event_buffer_commit+0x5c/0x260
+>  trace_event_raw_event_softirq+0x47/0x80
+>  raise_softirq_irqoff+0x6e/0xa0
+>  rcu_read_unlock_special+0xb1/0x160
+>  unwind_next_frame+0x203/0x9b0
+>  __unwind_start+0x15d/0x1c0
+>  arch_stack_walk+0x62/0xf0
+>  stack_trace_save+0x48/0x70
+>  __ftrace_trace_stack.constprop.0+0x144/0x180
+>  trace_buffer_unlock_commit_regs+0x6d/0x220
+>  trace_event_buffer_commit+0x5c/0x260
+>  trace_event_raw_event_softirq+0x47/0x80
+>  raise_softirq_irqoff+0x6e/0xa0
+>  rcu_read_unlock_special+0xb1/0x160
+>  __is_insn_slot_addr+0x54/0x70
+>  kernel_text_address+0x48/0xc0
+>  __kernel_text_address+0xd/0x40
+>  unwind_get_return_address+0x1e/0x40
+>  arch_stack_walk+0x9c/0xf0
+>  stack_trace_save+0x48/0x70
+>  __ftrace_trace_stack.constprop.0+0x144/0x180
+>  trace_buffer_unlock_commit_regs+0x6d/0x220
+>  trace_event_buffer_commit+0x5c/0x260
+>  trace_event_raw_event_softirq+0x47/0x80
+>  __raise_softirq_irqoff+0x61/0x80
+>  __flush_smp_call_function_queue+0x115/0x420
+>  __sysvec_call_function_single+0x17/0xb0
+>  sysvec_call_function_single+0x8c/0xc0
+>  </IRQ>
+> 
+> Commit b41642c87716 ("rcu: Fix rcu_read_unlock() deadloop due to IRQ work")
+> fixed the infinite loop in rcu_read_unlock_special() for IRQ work by
+> setting a flag before calling irq_work_queue_on(). We fix this issue by
+> setting the same flag before calling raise_softirq_irqoff() and rename the
+> flag to defer_qs_pending for more common.
+> 
+> Fixes: 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in __rcu_read_unlock()")
+> Reported-by: Tengda Wu <wutengda2@huawei.com>
+> Signed-off-by: Yao Kai <yaokai34@huawei.com>
+> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
+> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
 
-I realized that this is tautological. Will fix in v2.
+Looks good but, BTW, what happens if rcu_qs() is called
+before rcu_preempt_deferred_qs() had a chance to be called?
 
-> +		munmap(map_align + size, align - (map_align - map_base));
-> +
-> +	bar->vaddr = mmap(map_align, size, prot, MAP_SHARED | MAP_FIXED,
->  			  device->fd, bar->info.offset);
->  	VFIO_ASSERT_NE(bar->vaddr, MAP_FAILED);
-> +
-> +	madvise(bar->vaddr, size, MADV_HUGEPAGE);
->  }
- 
+current->rcu_read_unlock_special.b.need_qs is reset by rcu_qs()
+so subsequent calls to rcu_read_unlock() won't issue rcu_read_unlock_special()
+(unless the task is blocked). And further calls to rcu_preempt_deferred_qs()
+through rcu_core() will be ignored as well.
+
+But rdp->defer_qs_pending will remain in the DEFER_QS_PENDING state until
+the next grace period. And if rcu_read_unlock_special() is called again
+during the next GP on unfortunate place needing deferred qs, the state machine
+will spuriously assume that either rcu_core or the irq_work are pending, when
+none are anymore.
+
+The state should be reset by rcu_qs().
+
+Thanks.
+
+-- 
+Frederic Weisbecker
+SUSE Labs
 
