@@ -1,132 +1,122 @@
-Return-Path: <linux-kselftest+bounces-48532-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D94BD04060
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 16:49:44 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DADBD04291
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 17:07:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B9052301D310
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:46:45 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id E5FF131ABDEC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:47:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5042C326D;
-	Thu,  8 Jan 2026 15:42:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05D041E98EF;
+	Thu,  8 Jan 2026 15:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="JGioc7DD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="uWwDB2T4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHfmf0Qa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A912B2D0C9D;
-	Thu,  8 Jan 2026 15:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB801DE3B5
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 15:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767886935; cv=none; b=LdBIgN/4JefUkz3xojwEjbwsDN0dwt1fs9xXYMz179Cdwy4kYfHfIiUVEHA+hKH0vzxipjRe4KZjXZf18i6wdtneJY2dpWNY1gVfy4BPYulP/thgtTk7gaHFAAHv+2FKH+0QJj6Zeu5ZEh5PWAMAy0ZpRqV0G0XVrGfHGYPfa38=
+	t=1767886973; cv=none; b=MePuc0c+VUOnvuD1OS8czVQNicbezH5oQwRfX/3XLEOk/tsfi71FWey00qdlQokKJSHP/WMtSwvVdmb2lTRpn9S21+SjU1BlZEJUyMG9Cs9DRAl5EjGUcNjLvciM04dbZx9/bwTc03/I+doG9S4qvkAWybAr33+UMUApsM6bVmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767886935; c=relaxed/simple;
-	bh=/XbdBMAh/KdfaN38bteya/jfnG+4gYxuQ7/yARzs0EY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B1FxPzZ2teovMJPKhrLvuBtZviLAyrXttDhWL47+BBmuPQRbqBEL4m7ClU3hjbVF7xM610qMDdbot1SwCbTCMOxGKmeJp8qW+gDyuVqlnb8ZZLCPsFxuTdv+8HrRfyDn7tySaqewhk4twKS9wILjOfC16T9bA8Av03xDWscaRVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=JGioc7DD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=uWwDB2T4; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 9E3B87A004F;
-	Thu,  8 Jan 2026 10:42:10 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Thu, 08 Jan 2026 10:42:10 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1767886930;
-	 x=1767973330; bh=g/SZXRCpxe4gpZSJo2wKA9yO49l9ao+IpIcB5KG5aRo=; b=
-	JGioc7DD0IsJvDCyV+1t9dyyzHFRN0LSp/8ZosIAPpch7QAsDvoihN4MeAIIcpvO
-	rN86RCH9cExU7lRzuZ4gP9iD6mIfQ3ssD/1qI9DUkag46LwIl/OoL0U7wLbDUfRh
-	wq/ETq2TVb/atH8QpIkQ2hDDvJfYurtt/5ie90rQ23atM9KKs+REdq/lHuoT7w8n
-	ZVSy1rq5PTxplKc2rYi2tQGXsGJqMsqsCA7NvzK5pPkV1DSjzJWTWhBFwXVqzhxz
-	6HWGF6m0CBkRgvsVc4h1l+jWBVURrx9t4SnpTm/N7knzrQm+f1OeHUMJ1zsjLINs
-	7048WzGQ1yqzy2ZqspdHRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1767886930; x=
-	1767973330; bh=g/SZXRCpxe4gpZSJo2wKA9yO49l9ao+IpIcB5KG5aRo=; b=u
-	WwDB2T4YjvWg/gdV6Tvz5AyXkS9qTiJYtTcl+sPRY4FKD+IsLJ+p3fehd6fcpd6R
-	Sdy/1dTB64/9lmPNjfykuUbg50LsIZzIeHygUpntKZ1BSpQAiq1xc4tJ3VZ6AmiA
-	ZQHsvEWLDzZ0JHAb0BxeyVtTRm0q8T4D4216uT5KcdwX2fofsfBuz671exOsvm5Y
-	Y6qnUZR60a94Oy2jFLn/jcCPv/4NRXFw2jeG2ek3H+tcNUtuQqQKFgZqnCP4IInz
-	XHOMlAmUrU4RKuSvYx4e83dhv/Dd8dAJDbdQzbX75aDuc5OL9S14xPS4wYV3vNw6
-	exeoWGpHeWO7qPmZw4gzg==
-X-ME-Sender: <xms:UdBfaXZyUO64lJxIJN0oaAi3x4Q2iY5R7GsSerM8T2FkeW6JL5aqBg>
-    <xme:UdBfaSa-lniRvIWQzSd9v3HbE04zLhPacvlAtJCyXr0uYg37eRvXKdSuUNwEaFOq-
-    hvBFdYuah9jOjfe50_XSOBokhPa868WwpZ8DvrTPEOuxVEAgSPAYw>
-X-ME-Received: <xmr:UdBfacJq0IjjjWeVR3oWCIzyLtWXQ43C5auhK8j0PbW-SPk76qz1ehBZTXI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddutdeifeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
-    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
-    htthgvrhhnpedvkeefjeekvdduhfduhfetkedugfduieettedvueekvdehtedvkefgudeg
-    veeuueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepkedpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtoheprghmrghsthhrohesfhgsrdgtohhmpdhrtghpthhtoh
-    epughmrghtlhgrtghksehgohhoghhlvgdrtghomhdprhgtphhtthhopehshhhurghhsehk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghrgiesrhgvughhrghtrdgtohhmpd
-    hrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtohepkhhvmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    hlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohepjhhgghesiihivghpvgdrtggr
-X-ME-Proxy: <xmx:UdBfaeugM1oJwHwg8Um7Ba_BCgdDR6R92aZCHV_tLhDhC4zaXKkvjA>
-    <xmx:UdBfaQV7UHTZMK4rKbgYxfFJpUTOJVCPTRjugmpO5QCnefk8JkJLFg>
-    <xmx:UdBfaZiU86DKidgOiIVCJKeMCNNxrwVlmPqMIvd2NKTUhzIsZR5g5Q>
-    <xmx:UdBfaYoE16waTPAiXHfCJHbU-9oA6SLH6qnvKaD8HfY3WgfidKQjDw>
-    <xmx:UtBfaUsTDgPIRK9ig40y7IXC4EZ4QT7rgJ3zQahHQiz2gLsTeUzopbha>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Jan 2026 10:42:09 -0500 (EST)
-Date: Thu, 8 Jan 2026 08:42:08 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: Alex Mastro <amastro@fb.com>
-Cc: David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>,
- Peter Xu <peterx@redhat.com>, <linux-kernel@vger.kernel.org>,
- <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, Jason Gunthorpe
- <jgg@ziepe.ca>
-Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
-Message-ID: <20260108084208.30edd533@shazbot.org>
-In-Reply-To: <aV8mTHk/CUsyEEs1@devgpu015.cco6.facebook.com>
-References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
-	<aV7yIchrL3mzNyFO@google.com>
-	<aV8mTHk/CUsyEEs1@devgpu015.cco6.facebook.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1767886973; c=relaxed/simple;
+	bh=g+d6EAF+jEni92k0wW1XD6xAlIV9Ui78ossX5Z7tAl4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=feZLY3m0/1j9XYoEmfJw2Fk3AuEm7Or9q9kx0yEsLntnTQR3OgiC/766nQ3cqmR2JijHja/u5Bt2CbTG/jm5+zydlVbXb5wMa7g8sjsw5JRmHAg0bMHBuJwPzwXCi61sbxON9OqbjIhc44/kHxLhtXFO+2j/Y2pjFkF50TNIBXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHfmf0Qa; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2a3e76d0f64so9291005ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 07:42:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767886972; x=1768491772; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cbJF7mAe3Gtgg4xboSqF3jM/kOEzl6cEvHxPfOpVHqs=;
+        b=aHfmf0Qa6jVQDVJbkPU7//FYTrT3y0cOPOewRJgGTtuXvSgVcKv9ncR8UNYpBoPU8H
+         sLuslWiKENKsAtcxUL2C8z5/RcRY37zncg1FO6T3b27qAxxvscG4uVV87RAvaqf6YKSq
+         fYE+XXn6cbx5d8byAoujJ2jhorArZw5PloebQkX3qQjLgeEwWROcNg9ai3c2LG08kBdm
+         LmN3k52JBVGvEzPIszqIyBr95q6G7q/IcENvVg5I7Tz5eds0IMMC22wOnZO6VxyRwfhZ
+         0MtGab3muS7Mjfz5fxXMdvfON5MWXoTfewXxyrcz0HUX82f/GHvmDOKgOAGNZwKcSGTA
+         27qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767886972; x=1768491772;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cbJF7mAe3Gtgg4xboSqF3jM/kOEzl6cEvHxPfOpVHqs=;
+        b=SNM6VOP43EYob/l1gJb23wcbGE8+K2dbcv1vB31qS33pLyO5FHqOiOGE09oYBzvzEL
+         2Azo9hFchXeTfvuq+qngsE1BDjlMIcY0NwI/gt22WqhCnWw+K4FOB1fjRSqbqvkPvtmS
+         EqFWoBHl2iJW+amggsceng714g8XSoYmBZdqLtKvNhkoJJrqGXLW0O83x3oTTvMuLaJZ
+         qjnBXNEy091WuisDWJsTg/4pg0bB/LVOdnYWUA9MvP0RMpxlsaSVD7zP5pKYk1Rpxx9C
+         VL68TSRe/3RRzycZ/G2FXUUkkLj8EwWL+53QYWir32PRoOFRQU8LySYt4VzqKRAoFU5I
+         wQbg==
+X-Forwarded-Encrypted: i=1; AJvYcCVriX6OzSNQruGTCyPs5euMQRLzCuW5AUCJ0W4ZGqqAj5/ZSwgRpJuwLfd1WELcVVngMcbJV+JlEK/RQgfr6b8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSsLlDqfxlgZ3ZSkBy5NkhTIZXx64Y18KoUv8QF+CISyVIZxGV
+	Jv6HN99W7ELTuWeXK7vqk7VXb5vKCvPNhpbo57e1XuEVu+tqhCPNF1XX
+X-Gm-Gg: AY/fxX7ZN1Zlg7jMR7OT481YyHa2aVGwqp3FFLjtxNlsddtfKCvLh8tDB+8zHvKJX8w
+	VnNlSeDVP0Bcgf/12KszvMU1PXlYVeiPk5rszevTpD8bXJpnNv+0IQ3iJPOEaVl4ClUwWzj1TCY
+	0Yie9Ug+YQ98rEcxDG9NB7VqxYlqFND41IvbyCXRdHJOYCJoFvz+7u5Gu/kWBYiWQN+BVLOmPaT
+	RPBKqpi7aXZJMmsSRp4a0cKvUzKiaLXOQu13SeCf+K39d4q4oAAybk/OjDdqwhEliqvqCx/G5B/
+	yZaUxSMKRlTj+1hYNju7mNc8Icoa9DkeIEaYpAO4vNCoRcRBx7htZe8/hEnYRSmCDdaJJ+8NAAz
+	X6vn8Sk3JT+/S7W/xfAdJ4CwPzEN3i+5p4RgqCcXNCFR/Js+QD8SF4ROThIsXNJ3Fwz2QdwfY68
+	72GBQ1iJ5uKnszWmQjhE9rnCb6
+X-Google-Smtp-Source: AGHT+IH7/w0W9bkGI4njgtLzcbVZBbLTOIf1Mg2i2c9sF3zkMGAxBoeI01K12PWP17Lbv+KYdYV3lw==
+X-Received: by 2002:a17:903:388d:b0:2a3:ccf5:6691 with SMTP id d9443c01a7336-2a3edbbbb15mr76932475ad.30.1767886971822;
+        Thu, 08 Jan 2026 07:42:51 -0800 (PST)
+Received: from google.com ([2402:7500:577:2fcc:7f59:4ddd:9265:c9c6])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cc88cdsm82311515ad.73.2026.01.08.07.42.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 07:42:51 -0800 (PST)
+Date: Thu, 8 Jan 2026 23:42:47 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Kir Chou <note351@hotmail.com>
+Cc: akpm@linux-foundation.org, geert@linux-m68k.org,
+	linux-kernel@vger.kernel.org, davidgow@google.com,
+	brendan.higgins@linux.dev, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com, kirchou@google.com
+Subject: Re: [PATCH v4] lib/glob: convert selftest to KUnit
+Message-ID: <aV_Qd1bKb8hNqfYA@google.com>
+References: <20260108120753.27339-1-note351@hotmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260108120753.27339-1-note351@hotmail.com>
 
-On Wed, 7 Jan 2026 19:36:44 -0800
-Alex Mastro <amastro@fb.com> wrote:
-> On Wed, Jan 07, 2026 at 11:54:09PM +0000, David Matlack wrote:
-> > 
-> > Speaking of, maybe we can add a test that creating writable IOMMU
-> > mappings fails for read-only BARs?  
+On Thu, Jan 08, 2026 at 09:07:53PM +0900, Kir Chou wrote:
+> This patch converts the existing glob selftest (lib/globtest.c) to use
+> the KUnit framework (lib/tests/glob_kunit.c).
 > 
-> I think I'll have to look into this as a follow-on. I'm not sure how to validate
-> it yet without mocks or similar since I don't have such HW.
+> The new test:
+> 
+> - Migrates all 64 test cases from the original test to the KUnit suite.
+> - Removes the custom 'verbose' module parameter as KUnit handles logging.
+> - Updates Kconfig.debug and Makefile to support the new KUnit test.
+> - Updates Kconfig and Makefile to remove the original selftest.
+> - Updates GLOB_SELFTEST to GLOB_KUNIT_TEST for arch/m68k/configs.
+> 
+> This commit is verified by `./tools/testing/kunit/kunit.py run`
+> with the .kunit/.kunitconfig:
+> 
+> ```
+> CONFIG_KUNIT=y
+> CONFIG_GLOB_KUNIT_TEST=y
+> ```
+> 
+> Signed-off-by: Kir Chou <note351@hotmail.com>
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Reviewed-by: David Gow <davidgow@google.com>
 
-I think the read-only aspect would be in the mmap, not the BAR itself,
-ie. can we create a read-write DMA mapping to a read-only mmap.
+Reviewed-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 
-ROM BARs are the only BARs that are read-only, but they can share a
-decoder with the standard BARs and therefore have a separate enable in
-the BAR register itself.  Due to this, and their general usage, it's
-never been necessary to allow mmap of the ROM BAR, therefore we cannot
-actually DMA map the ROM BAR.  Thanks,
-
-Alex
+Regards,
+Kuan-Wei
 
