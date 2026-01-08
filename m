@@ -1,149 +1,136 @@
-Return-Path: <linux-kselftest+bounces-48535-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48537-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A9EFD042EE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 17:08:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E723D043EA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 17:15:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2FDA73096006
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:47:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B47303416EDA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:59:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF20C2F9D98;
-	Thu,  8 Jan 2026 15:45:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ECD22E092D;
+	Thu,  8 Jan 2026 15:57:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="FPoGqxK2";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tmyu2f8W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVqoIYbJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DA1261B70;
-	Thu,  8 Jan 2026 15:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B3C2E0418;
+	Thu,  8 Jan 2026 15:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767887118; cv=none; b=NqCCUD5zwzXc2u5dNn7/0CsDpY4+Lqyx0UVcgNdndsaSnnPUoj5ADMtdlvwdMmIRy+sPRWbAUld7qPdLG4Fc/pO6nxVE26U4CL8bexvo5qPrh/5lp63RkPfY1mU5TxjtIIkmLNg9XSvTapD9jMpaub00PS6GUlgHH7RFZn4Gqiw=
+	t=1767887856; cv=none; b=FLius49z4IQZVMM4wx8Evoxn3KKiPK1W9mHtyBB7l9ih2OnseajgM0D/Nk4z3dHpTTaabZ98smzPZYi15YU5dTzM53xs1JqqcEgoJiiHXNsNsSCXUebtrZbkff5TjALU1En1FUgvdJQqjUpMiUyh8Hj7qVKX4gd2dWpqZxau8aA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767887118; c=relaxed/simple;
-	bh=cAifuf60VaB009+/fjECv5OLFMBJMnmjJyrVeuq+Ufc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BO3HYTchiRjRzzL62Qy4rEuWq/mPw/wjp4clnoiw9fBzahIrA+wF0Xtc0Fe31FJTlDm+mKrZOToiP9O1EVWxblAzeL8hKykZ7SCvLjwQcKiF2DNKxozAYcrjO94I9AqTopdCGRdfSngAFoFP57aL+jEHEbv3r2huCkKVoGNBd+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=FPoGqxK2; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tmyu2f8W; arc=none smtp.client-ip=202.12.124.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 02A8C7A012A;
-	Thu,  8 Jan 2026 10:45:15 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Thu, 08 Jan 2026 10:45:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1767887115;
-	 x=1767973515; bh=P0QqQz8X1HAkcqldFqlq4mLu7Co2xScerhLdHuYGts4=; b=
-	FPoGqxK2sOHXMMmn16LA149TDWDmYiIwj8DtPrdORZthooH8lacl9CcIfJGPAf5b
-	Hk1g35sQ7yUshKwmzNW47f0jwMSnqOxbPqXYz9r9I2XfdV9+SjqjTUlqTMzutv9W
-	v7yBUxTYblWouPvipQ8D/GlBFpZcrUXy0O8eKxV9wNPpxxFDg97CrAwbULQ4fPe9
-	OcWCeWELdd4JJ+6MLpTbvB4nurQzjL4rglEMqxCboXEcsnySd4HbMIjPMTAwbZbs
-	RGoG+rQGgQvYaTxl7tC3XXHPGwzmNGlY6ph2XJQh9qg+wBzXdh8wNI22D7zkEU5T
-	rnpo8653dzT37XiYGWh62g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1767887115; x=
-	1767973515; bh=P0QqQz8X1HAkcqldFqlq4mLu7Co2xScerhLdHuYGts4=; b=t
-	myu2f8W8oYhg5gwf1+A5wtJzJ2IoV4GKw36Za3scc8OHnN7IQsp/qXpn0MvUxKwM
-	9niR2SeshqKgiq5x1xryPav8CgVKgiQNmwD5mJ3W4j/X5zt4xoUXbXPQrqbvT7mc
-	74rdJQXOvqu398QB+DaPXMNTQzfa7RESEgaS8AhsxldLwYGF+8QsiHoowBdkXynm
-	Qr3xi39vfsVv63AJcEp4kumWqcEIAeAw0xN10OKDVMva5u3YMDfzJe/60/K+umbY
-	I84ho2uu1Jw24IKAft9yrvIMvl38JXPWVBdH3BTMOOCrgnp1bjAWZVDnOx+isC+L
-	iEgprTfbXFhIMCfJy3aiQ==
-X-ME-Sender: <xms:C9FfaZnBcaJePHekY8vrQAzoDwfJjE5kBk2EKXDxlU6ClKai5aPcWw>
-    <xme:C9FfaQ3iImYSE7ubOrCOaRzKHungFEr1lB8w9APFvGVGdrcAIieGOxOLWCK6AIpDj
-    a79bxjgHvydI_Nu2THcnrGCAa8LTuAoQOBcUqsN0RAsci91HQl_>
-X-ME-Received: <xmr:C9FfaR0-sQC23k7tmFcvRt691nInzHbBG0abdcWo1acXBbi3WJk_iTtUYp4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddutdeifeehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkjghfofggtgfgsehtjeertdertddvnecuhfhrohhmpeetlhgvgicu
-    hghilhhlihgrmhhsohhnuceorghlvgigsehshhgriigsohhtrdhorhhgqeenucggtffrrg
-    htthgvrhhnpedvkeefjeekvdduhfduhfetkedugfduieettedvueekvdehtedvkefgudeg
-    veeuueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grlhgvgiesshhhrgiisghothdrohhrghdpnhgspghrtghpthhtohepkedpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtohepjhhgghesiihivghpvgdrtggrpdhrtghpthhtoheprg
-    hmrghsthhrohesfhgsrdgtohhmpdhrtghpthhtohepughmrghtlhgrtghksehgohhoghhl
-    vgdrtghomhdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehpvghtvghrgiesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgv
-    rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhvmhesvhhgvg
-    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshht
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:C9FfaapgtSQYbM_mfzpZJWcg1sqG3dNoWKHMjV-7-NlkHHwYPDGIZQ>
-    <xmx:C9FfaVi56KWE18zpTzg80Ct9DHblFoDI8U6ElSUhmTR30h4zekoC7g>
-    <xmx:C9Ffae-vSPUkuBz0xkh4xhmOW_KTSXX9fL63O6rxap5obkNfvkuJ7A>
-    <xmx:C9FfaZXS17G5DG5EO3bkBPKY3jv5Wctoo2uSlPPsa4fKCbLmLjkbnA>
-    <xmx:C9FfaRqzcTo_BzbE7bzhNUmSWy8napyKwXRNsbj_lYo_AJNKTA1C_Rpm>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Jan 2026 10:45:14 -0500 (EST)
-Date: Thu, 8 Jan 2026 08:45:14 -0700
-From: Alex Williamson <alex@shazbot.org>
-To: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: Alex Mastro <amastro@fb.com>, David Matlack <dmatlack@google.com>, Shuah
- Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
-Message-ID: <20260108084514.1d5e3ee3@shazbot.org>
-In-Reply-To: <20260108141044.GC545276@ziepe.ca>
-References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
-	<aV7yIchrL3mzNyFO@google.com>
-	<20260108005406.GA545276@ziepe.ca>
-	<aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com>
-	<20260108141044.GC545276@ziepe.ca>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1767887856; c=relaxed/simple;
+	bh=iQ8rrKAjkcgXBG7XLBNg/l9mT/9ufxiMSqzt1QWzGdc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DgvFqN/0zzM2HlHlAT8zY4HyPzAo/0hr9JdLkvGHLNFWbNnox+OfJiKusXYkZVi5RaXzslvJ0NvRES/UuTtVH6G8uO1n7ZSfqwb7KHxR6raAd2Kd6QK6eMnnLegPIMSX1tVrXB3odZPJ59UpohmFOoXbQXl2hnX9VWWWpn+Kgu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVqoIYbJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E3F9C116C6;
+	Thu,  8 Jan 2026 15:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767887856;
+	bh=iQ8rrKAjkcgXBG7XLBNg/l9mT/9ufxiMSqzt1QWzGdc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KVqoIYbJP02PJTKnx446NUd3M2a4Ep19Dg9tIX7oreQpKKsd0WMGyTFUJ1sDhiXWY
+	 0KtS2dh6VfgyUiSD3OiTxpJZuxbKYxR/1hBRHWLrheX8ST7mB39HkyvpUsmPfrqN88
+	 zi6iOhwIStpoif0an8L2fuMSf78ynLUxFwnTboH07mvxdH5xzvVP2Pa/PObcK+/jFt
+	 5f0Go3ejIGh1XNrnasudUdmrt3GrXSY1SW6VzhXuIQObithqCt61PeKuSTMW7jw8O3
+	 U/OdvxARLkNQXqgRv4AUcd1QcZtEXws/csV64jdEvNo1pOhtcobf51yh7jVdB467pq
+	 wLj1opru/g8eg==
+Date: Thu, 8 Jan 2026 15:57:24 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Fuad Tabba <tabba@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Oliver Upton <oupton@kernel.org>, Dave Martin <Dave.Martin@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Ben Horgan <ben.horgan@arm.com>,
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Eric Auger <eric.auger@redhat.com>
+Subject: Re: [PATCH v9 02/30] arm64/fpsimd: Update FA64 and ZT0 enables when
+ loading SME state
+Message-ID: <e50b4923-ee45-43de-9d4e-344546c635bb@sirena.org.uk>
+References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org>
+ <20251223-kvm-arm64-sme-v9-2-8be3867cb883@kernel.org>
+ <CA+EHjTxdSnpFHkm6o85EtjQjAWemBfcv9Oq6omWyrrMdkOuuVA@mail.gmail.com>
+ <3c8b4a5e-89f4-47e0-9a5d-24399407db0c@sirena.org.uk>
+ <CA+EHjTxLkLjPj=1vwDqROXOUXi2LhOQb90WP6dFaTiYG1nWovA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="KOrZZL+m63ovft+Q"
+Content-Disposition: inline
+In-Reply-To: <CA+EHjTxLkLjPj=1vwDqROXOUXi2LhOQb90WP6dFaTiYG1nWovA@mail.gmail.com>
+X-Cookie: If you suspect a man, don't employ him.
 
-On Thu, 8 Jan 2026 10:10:44 -0400
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
 
-> On Wed, Jan 07, 2026 at 06:41:10PM -0800, Alex Mastro wrote:
-> > On Wed, Jan 07, 2026 at 08:54:06PM -0400, Jason Gunthorpe wrote:  
-> > > On Wed, Jan 07, 2026 at 11:54:09PM +0000, David Matlack wrote:  
-> > > > On 2026-01-07 02:13 PM, Alex Mastro wrote:  
-> > > > > Test MMIO-backed DMA mappings by iommu_map()-ing mmap'ed BAR regions.  
-> > > > 
-> > > > Thanks for adding this!
-> > > >   
-> > > > > Also update vfio_pci_bar_map() to align BAR mmaps for efficient huge
-> > > > > page mappings.
-> > > > > 
-> > > > > Only vfio_type1 variants are tested; iommufd variants can be added
-> > > > > once kernel support lands.  
-> > > > 
-> > > > Are there plans to support mapping BARs via virtual address in iommufd?
-> > > > I thought the plan was only to support via dma-bufs. Maybe Jason can
-> > > > confirm.  
-> > > 
-> > > Only dmabuf.  
-> > 
-> > Ack. I got confused. I had thought iommufd's vfio container compatibility mode
-> > was going to support this, but realized that doesn't make sense given past
-> > discussions about the pitfalls of achieving these mappings the legacy way.  
-> 
-> Oh, I was thinking about a compatability only flow only in the type 1
-> emulation that internally magically converts a VMA to a dmabuf, but I
-> haven't written anything.. It is a bit tricky and the type 1 emulation
-> has not been as popular as I expected??
+--KOrZZL+m63ovft+Q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-In part because of this gap, I'd guess.  Thanks,
+On Thu, Jan 08, 2026 at 02:09:34PM +0000, Fuad Tabba wrote:
+> On Thu, 8 Jan 2026 at 11:54, Mark Brown <broonie@kernel.org> wrote:
+> > On Wed, Jan 07, 2026 at 07:25:04PM +0000, Fuad Tabba wrote:
+> > > On Tue, 23 Dec 2025 at 01:21, Mark Brown <broonie@kernel.org> wrote:
 
-Alex
+> > > Should we also preserve the remaining old bits from SMCR_EL1, i.e.,
+> > > copy over the bits that aren't
+> > > SMCR_ELx_LEN_MASK|SMCR_ELx_FA64|SMCR_ELx_EZT0? For now they are RES0,
+> > > but that could change.
+
+> > My thinking here is that any new bits are almost certainly going to need
+> > explicit support (like with the addition of ZT0) and that copying them
+> > forward without understanding is more likely to lead to a bug like
+> > exposing state we didn't mean to than clearing them will.
+
+> I understand the 'secure by default' intent for enable bits, but I'm
+> concerned that this implementation changes the current behavior of the
+> host kernel, which isn't mentioned in the commit message. Previously,
+> both the feature enablement code (cpu_enable_fa64) and the vector
+> length setting code (sme_set_vq/write_vl) performed a RMW, preserving
+> existing bits in SMCR_EL1. This new macro zeroes out any bits not
+> explicitly tracked here.
+
+The behaviour is unchanged since we're always choosing the same value in
+the end, it's just a question of rearranging when do it which is the
+explicit goal of the change.  There won't be a change in behaviour until
+later on in the series when we start potentially choosing other settings
+for KVM guests.
+
+> In terms of copying them over, if they were set from the beginning,
+> doesn't that mean that that explicit support was already added?
+
+That's a bit circular, with the new interface if someone updates the
+kernel to set some new bits they're going to have to update this code as
+part of that.  A part of the goal here is to make it harder to make a
+mistake with remembering what needs to be updatd when.
+
+--KOrZZL+m63ovft+Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlf0+QACgkQJNaLcl1U
+h9DQbgf/VzVntYNXV0km5HLDgB/SG9k64BqiNt0fbx3g83qjVtQuNw5OJfx/AI40
+3CRrW3Hr1lIspMdVhwa+8lv5cpSyGzWnLWbmRJBVb6v++Hsslg9O824KM1LtRJqZ
+herBG1MKR8P2+yGtEt2cxbABtHH3ONEEFdEIOiGDAH7jkRY36Gfwx6QwV8/QA+Ey
+81r9gsksZDexFnwMz51S8jMdplvo3wMaDOQnytnH3YzQ9vC0B3Gfre+cAjqF2b99
+xN9M8G1+jCOiBeLIDPIEXCC0RPPOJb+mEpy6yUcn7l3k4AaReGbGrqBPtboVRUFT
+dB+n4q24DpQwRk1kIs62RHkorXoV/A==
+=Ud9D
+-----END PGP SIGNATURE-----
+
+--KOrZZL+m63ovft+Q--
 
