@@ -1,93 +1,99 @@
-Return-Path: <linux-kselftest+bounces-48498-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48501-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AE72D040F9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 16:54:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38BCAD04961
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 17:57:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 9F9F03127DF2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:35:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 310603467E63
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 15:52:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88113806B8;
-	Thu,  8 Jan 2026 11:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF896497B01;
+	Thu,  8 Jan 2026 12:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ez5y9y1k";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="23j6UC6p";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ez5y9y1k";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="23j6UC6p"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hggHdqUf";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="P0EB5tUq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3A9469228
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 11:27:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07AA3B8D6E
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 12:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767871655; cv=none; b=sWiYO+UsI4Nj/c4tJTd4ggs1gED32JCL6zXRHpiqbZbSz9fYOJdNzfVoEZclIB/xYewrwdqGWv8jAuhEEqrDj84pWOOp2Q6XfYrIGB0TLigP0r770ZFPZqWH+hMjOFpJldcP4yc0BgmiKpeUoFqnzHWjWs0BnfKrDxHfwe9XcTQ=
+	t=1767873912; cv=none; b=BGRZaoCURl13eJ5I9Bq5K0vuRdjyqTC6AZHDiK1z4iwPeIbu0ZtboiMZBKBIoswmpWN6plpN/AG3xO9BuqMnwFrzXi3OT2TEf9adYiqWhLt7ZfRH+lL1j9T6soP2mNYfs2yHIEwap+BGlfwy+HBdx/EquTu0vzPyJfIw4u1v9a8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767871655; c=relaxed/simple;
-	bh=bzvOONiz/LrJGZ56bA5aDZ5W3+UC5VgEFzIfgk/o5sE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TVGED5JtnBloJra+pfVcE450wnL3UDJRUu9YmXUmhfLfTgOyLqanEQ+qBJjV8yctUVurcH8tMdBnTFXpgQcRRohFtjrbCj/u+lx4IPGSDl9dD+ftRzgWEnvk81JJUC448ww49GWdA5l5p3QFsFBPw7ClghU3SWd+NZWTNyGLqew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ez5y9y1k; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=23j6UC6p; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ez5y9y1k; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=23j6UC6p; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 689AA33E49;
-	Thu,  8 Jan 2026 11:27:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1767871648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
+	s=arc-20240116; t=1767873912; c=relaxed/simple;
+	bh=Flh5gm/FG6f2h7+d4LlYOxc+wsoA1WupGU+z5tvQXn4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=OSG2w5gyAMYXfrU0nTb+tPUpuuIilWuHkSfc0UamW0NojHmRGhlv3vLcsYphAZqwi2K4gINSaFg+GMcqtvN0eok52rN5XIURVQGRyGnb65w+TEagJbwpOHJDkdqFaOk9UHWo2gRxa5/8VJe6w6k0Y0HOXfHHG8zg0YBW3DX/1EA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hggHdqUf; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=P0EB5tUq; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767873906;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cutGezCPFxLrAaEBktBpDaecXovQqIp/68fyppzQVxY=;
-	b=ez5y9y1k5PJpJZBIY5kuWSSPaOP//kUTZfZU2haEA1oIegYrfsM78P2k/kTBcE9sfrPMos
-	TUP8LL6+M5QG2ljvmkCsQNXNxaDfGcJp9MH9WXL1sSmGH5hh3v54+wpQLRCEg21tj8hxxG
-	cksBCh3zF+NL2OQTOg2tjvdZ3GNMLWI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1767871648;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cutGezCPFxLrAaEBktBpDaecXovQqIp/68fyppzQVxY=;
-	b=23j6UC6p8Gs/hgAi7WwLy8z7JKeGgdbEyEv30gyXaW67k9/uTyL37/aODGuxGOGA8uY5NM
-	1pIHq517KItYaLBQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1767871648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cutGezCPFxLrAaEBktBpDaecXovQqIp/68fyppzQVxY=;
-	b=ez5y9y1k5PJpJZBIY5kuWSSPaOP//kUTZfZU2haEA1oIegYrfsM78P2k/kTBcE9sfrPMos
-	TUP8LL6+M5QG2ljvmkCsQNXNxaDfGcJp9MH9WXL1sSmGH5hh3v54+wpQLRCEg21tj8hxxG
-	cksBCh3zF+NL2OQTOg2tjvdZ3GNMLWI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1767871648;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cutGezCPFxLrAaEBktBpDaecXovQqIp/68fyppzQVxY=;
-	b=23j6UC6p8Gs/hgAi7WwLy8z7JKeGgdbEyEv30gyXaW67k9/uTyL37/aODGuxGOGA8uY5NM
-	1pIHq517KItYaLBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E01533EA63;
-	Thu,  8 Jan 2026 11:27:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id zdDNM5+UX2mKEAAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Thu, 08 Jan 2026 11:27:27 +0000
-Message-ID: <f308ff67-5de1-452a-999c-e9230fc31e35@suse.de>
-Date: Thu, 8 Jan 2026 12:27:23 +0100
+	bh=Flh5gm/FG6f2h7+d4LlYOxc+wsoA1WupGU+z5tvQXn4=;
+	b=hggHdqUfhOpfVf2+ddDxEWafFYAonVMZt55ZkKS+K+NWBwuRmoVAqyb56uItlm+e2dAtga
+	vsdrVhSimUqh99MhcpcSLGPomkfoaJQZcDV07ygDOEE7QRjXwVzuxLVkFo2nedNuVQQ4t1
+	mBnzXksN4AVH2SREEmIMa+cZ+Ml5X00=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-398-R3qR_uFFNQe013RuokXY0g-1; Thu, 08 Jan 2026 07:05:05 -0500
+X-MC-Unique: R3qR_uFFNQe013RuokXY0g-1
+X-Mimecast-MFC-AGG-ID: R3qR_uFFNQe013RuokXY0g_1767873904
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4779edba8f3so27105585e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 04:05:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1767873904; x=1768478704; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Flh5gm/FG6f2h7+d4LlYOxc+wsoA1WupGU+z5tvQXn4=;
+        b=P0EB5tUq4gEPbQC8HFtAZIwPhtjivVywhg5mmDspsKEbQaSC/gQpJyyKK5wFGyWw2L
+         07vwoad/3AOiZ2lVzMvR1pO1Neja3nunwK4QhIrY5bACcofo+d9Eyxn2fmH8i0rHhtr2
+         +gN9vbo0QEtstBCtwY0IhqDmtogQGYds4puZcBDlzJKio7HOz6i6sZkjbKiuZb2cCn+L
+         IVqVsjsrelFzg4txGT8ePwrN3yjM12kkjuzGqDrAyuvN15oRPreHd1yctO+wzW9dZk2k
+         pF3behY8G/tY4QmNO+DLPOvJMkczbM3RChQmEVECJPx63iSzS1diTlQOkRMT4uhlOCJw
+         M2IQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767873904; x=1768478704;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Flh5gm/FG6f2h7+d4LlYOxc+wsoA1WupGU+z5tvQXn4=;
+        b=R7gimg58jCOGq8ZHTin6OMCYgX4GRER7OZ7txu7IFEZvCCg2qL9Gkos0Z8IjmmwsQc
+         kr2k/Xak5+fzMlWMomR0S0j4t7rkz/lI5T8fUniVjUSmf0nLd2JJKhfu7+8xUT5IdykH
+         50Zi/jWIOPbXTYxwNrEg9nzDvmSW86SvFqkO/ou+al221yGRSmSsjoTNsqfhOCEOrcr6
+         1T1KLy2taqIKWfFkYQQUEWabpL1+Q1uSt60nqwU3W6p6OIHfHhLLiWg/OHO3U+FovEir
+         3kXzXb30WJeVtIE7i3OcWXW0+S/UPC7BwQVPZZsNpZh9o6ig5jyqnltBoAkYyqtR9U0A
+         evvg==
+X-Forwarded-Encrypted: i=1; AJvYcCW8gHY4738M2uOZeer404omePJsWZ5FpBELvX3IvQVrE38eOfPPFQDPNwrSIQ+Cc8rHLX4P30gYcnMM3hOaPWI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg9mhOe8aDNW+EiVh61Fb3SRCoQaqjr2JBO4fassGCjNqP1Iu8
+	50hernsqYA1C7QXCBVjeQkhcPWy4PnRZ+C1SU0FV/8yrKh33TKcjuiH3tY/M+/uDfZqlUdLqm/n
+	CCTmoTSCtByGg+raEkeSuyAu55GJVhjvGpuX7YYK/5src+QDdavHC2tNfwBFPMcFTQc15fw==
+X-Gm-Gg: AY/fxX7MEXdic2Tp/C2p/pNB2bA+Ogfmxmnf6UeAf7fSLkhpWnz8pwrLGJBFkCBFjWZ
+	uo+VXdYEQUn5HR3HdyvgQUyKvLsTIq+LRqqecD5F/aVn5UEDuTQUEsMlzTIAmxHNqdlJxLgWR0Q
+	1Qv27ZTzuMpf7j8uiVONFs2ET39N+7rO7KzTH8xfXG+huOw25fPWClFd5Ai5F4NIqkekV1g2U+6
+	aWATqqMBbD36wLAcv1oXcgj4QdDp1ZTDOT9b0wNj+dK2CqBjxfCNlkf6E8numqCemSUFFCAp9In
+	B4P8hhdNmu2+gcHSh7Zv82Ir+IT3wdyz49x0CeRCNRiXbSoregB+iOB6pDqP4W+oxQhroQTWMDf
+	GFl/kP16ftyjBvg==
+X-Received: by 2002:a05:600c:4447:b0:477:3e0b:c0e3 with SMTP id 5b1f17b1804b1-47d84b3b8b9mr66671895e9.32.1767873903873;
+        Thu, 08 Jan 2026 04:05:03 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGyd3EobR8+CtqNLr1SJNq4aJtqIFnG4hdPC4+x+J4mPj7mFR2jjmxPx+hGX2qRU6Jn66CAIQ==
+X-Received: by 2002:a05:600c:4447:b0:477:3e0b:c0e3 with SMTP id 5b1f17b1804b1-47d84b3b8b9mr66671435e9.32.1767873903307;
+        Thu, 08 Jan 2026 04:05:03 -0800 (PST)
+Received: from [192.168.88.32] ([212.105.149.145])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d8662ffaasm36179535e9.6.2026.01.08.04.05.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jan 2026 04:05:02 -0800 (PST)
+Message-ID: <9d64dd7e-273b-4627-ba0c-a3c8aab2dcb1@redhat.com>
+Date: Thu, 8 Jan 2026 13:05:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,101 +101,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2 net-next v2] ipv6: use the right ifindex when replying
- to icmpv6 from localhost
-To: Brian Haley <haleyb.dev@gmail.com>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260107153841.5030-1-fmancera@suse.de>
- <099019ee-05f4-457b-a82b-0fac55d8dd48@gmail.com>
+Subject: Re: [PATCH v7 net-next 00/13] AccECN protocol case handling series
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>,
+ "edumazet@google.com" <edumazet@google.com>,
+ "parav@nvidia.com" <parav@nvidia.com>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "corbet@lwn.net" <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>,
+ "dsahern@kernel.org" <dsahern@kernel.org>,
+ "kuniyu@google.com" <kuniyu@google.com>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "dave.taht@gmail.com" <dave.taht@gmail.com>,
+ "jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
+ "stephen@networkplumber.org" <stephen@networkplumber.org>,
+ "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
+ "jiri@resnulli.us" <jiri@resnulli.us>,
+ "davem@davemloft.net" <davem@davemloft.net>,
+ "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+ "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
+ "ast@fiberby.net" <ast@fiberby.net>,
+ "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+ "shuah@kernel.org" <shuah@kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
+ <ncardwell@google.com>,
+ "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>,
+ "g.white@cablelabs.com" <g.white@cablelabs.com>,
+ "ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
+ "mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
+ cheshire <cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
+ "Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>,
+ Vidhi Goel <vidhi_goel@apple.com>
+References: <20260103131028.10708-1-chia-yu.chang@nokia-bell-labs.com>
+ <56f6f3dd-14a8-44e9-a13d-eeb0a27d81d2@redhat.com>
+ <PAXPR07MB798456B62DBAC92A9F5915DAA385A@PAXPR07MB7984.eurprd07.prod.outlook.com>
 Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <099019ee-05f4-457b-a82b-0fac55d8dd48@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_TO(0.00)[gmail.com,vger.kernel.org];
-	TAGGED_RCPT(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid,suse.de:email]
-X-Spam-Level: 
-X-Spam-Flag: NO
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <PAXPR07MB798456B62DBAC92A9F5915DAA385A@PAXPR07MB7984.eurprd07.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 1/7/26 6:05 PM, Brian Haley wrote:
-> Hi Fernando,
-> 
-> On 1/7/26 10:38 AM, Fernando Fernandez Mancera wrote:
->> When replying to a ICMPv6 echo request that comes from localhost address
->> the right output ifindex is 1 (lo) and not rt6i_idev dev index. Use the
->> skb device ifindex instead. This fixes pinging to a local address from
->> localhost source address.
->>
->> $ ping6 -I ::1 2001:1:1::2 -c 3
->> PING 2001:1:1::2 (2001:1:1::2) from ::1 : 56 data bytes
->> 64 bytes from 2001:1:1::2: icmp_seq=1 ttl=64 time=0.037 ms
->> 64 bytes from 2001:1:1::2: icmp_seq=2 ttl=64 time=0.069 ms
->> 64 bytes from 2001:1:1::2: icmp_seq=3 ttl=64 time=0.122 ms
->>
->> 2001:1:1::2 ping statistics
->> 3 packets transmitted, 3 received, 0% packet loss, time 2032ms
->> rtt min/avg/max/mdev = 0.037/0.076/0.122/0.035 ms
->>
->> Fixes: 1b70d792cf67 ("ipv6: Use rt6i_idev index for echo replies to a 
->> local address")
->> Signed-off-by: Fernando Fernandez Mancera <fmancera@suse.de>
->> ---
->> v2: no changes
->> ---
->>   net/ipv6/icmp.c | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
->> index 5d2f90babaa5..5de254043133 100644
->> --- a/net/ipv6/icmp.c
->> +++ b/net/ipv6/icmp.c
->> @@ -965,7 +965,9 @@ static enum skb_drop_reason 
->> icmpv6_echo_reply(struct sk_buff *skb)
->>       fl6.daddr = ipv6_hdr(skb)->saddr;
->>       if (saddr)
->>           fl6.saddr = *saddr;
->> -    fl6.flowi6_oif = icmp6_iif(skb);
->> +    fl6.flowi6_oif = ipv6_addr_type(&fl6.daddr) & IPV6_ADDR_LOOPBACK ?
->> +             skb->dev->ifindex :
->> +             icmp6_iif(skb);
->>       fl6.fl6_icmp_type = type;
->>       fl6.flowi6_mark = mark;
->>       fl6.flowi6_uid = sock_net_uid(net, NULL);
-> 
-> Using ipv6_addr_loopback(&fl6.daddr) might be more efficient as it does 
-> a direct comparison of the address.
-> 
+On 1/8/26 9:47 AM, Chia-Yu Chang (Nokia) wrote:
+> Regarding the packetdrill cases for AccECN, shall I can include in this patch series (v8) or is it suggested to submit them in a standalone series?
 
-Yes, I think you are right.
+IMHO can be in a separate series, mainly because this one is already
+quite big.
 
-Thanks!
-Fernando.
-
-> -Brian
-> 
+/P
 
 
