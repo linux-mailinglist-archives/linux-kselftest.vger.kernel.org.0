@@ -1,127 +1,150 @@
-Return-Path: <linux-kselftest+bounces-48552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3499AD0595C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 19:35:53 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40BADD05B8F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 20:04:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D21E530499F5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 18:33:47 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 49B06300D920
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 19:04:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4549C31984E;
-	Thu,  8 Jan 2026 18:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED9B0318EDF;
+	Thu,  8 Jan 2026 19:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="mdplkM00"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ghFisv38"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A219E31326B
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 18:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A323002CF
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 19:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767897224; cv=none; b=CpsfO29WdoesQxbawz+/z6bEiVBSa4WezohqohX3fqe0UCR3UXLNlDZMba4ky58sAlfShAVxA6nOeUjX3yrURa4fHLks6sbZgZcPyBM9bGY/MMvGptNSzcgu/fTqBbG1hBsQSXdKnGUkegnHnT8Sk8zp/gM4QwPDqirYxeruBZE=
+	t=1767899037; cv=none; b=saOoAcj8FAgS8pNpPOSRF3+1mWAa3VuaLcL69wGSKisud5mzIQVt1uuZjKUtmTl2LoeLh5UEcAH8+zRRsxoD0SucdNzIKiB3GtrsNscesabCM9KyMGSvz/jxeNizAfUJgXOKwCMUbS5Q+D9GbKOnUm50ZGGHukCSqkrCDs32iE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767897224; c=relaxed/simple;
-	bh=friVe+ZjDGl0vJha3E5L94T8EUtcvl8xY3GpjIuxSMI=;
+	s=arc-20240116; t=1767899037; c=relaxed/simple;
+	bh=xhgT28dkad/D1y4uVnpRXe0VRSx18poyKWXduC4zXJ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vfm2zwDpHn6b0dmz5nnN3jzU1U1lo45jO7VaGnr7HDlB7zHre3uywk/g5CTq1Kae1zINkN8EqhS7lq5MwMpOdM/bGtRmcMyawkUUpuD6LDJqNPUrNx/GQxeljBSO4iJnZMns1s30NEvOrG5+ivp6cQ4HOrR+x6icP9cV0l2eqXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=mdplkM00; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8bb6a27d390so227430785a.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 10:33:42 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q/t8hBEmmjbJ1C2KZF3F0U3ZmpkSyxVjvjfB4ejPjis1fshLzhpERPZlQS0oYnTyCcaVwbfZNrlTPsxaLlzuJDJYHoFL18+MUrKLpjHlbskAtNxgt/71HxOH+D7dW/5YAacmuQTzoVgXDguW2xSBpHMJa7lI+gJn7MLMDa7hiE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ghFisv38; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47bdbc90dcaso26251515e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 11:03:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1767897221; x=1768502021; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1767899035; x=1768503835; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VeDbCR7Lw3XLjb0kHArZW/oJZIOc8ufadN9fvBnzpPw=;
-        b=mdplkM00FTtzMNdw4W2AhXt1dihAiMJcdr80l2u3xXrtq3Y4CchWzA5BaxDdIOnqvY
-         K4hFFDpqQ24zbZTGxM/h10hEKD76drJH80UZDwueq3aMhRvqZojt/NGa2noknnH2AKcM
-         2mwlIZqzjdH3K61O/z8S+42uXAG8aXOI0Q0LBAq+7up9Cf5qrsRqE3QPmP2MnSoOi06G
-         90QsytLCcTOQHKlHu7qVtShpakHPkvRFDqKgfr1vU1AXYj1X0l+Oqn2Sj/8P7ycyLggo
-         prymzqAdno/8te1S5QGeqp2O+SGBwTgK7u8asJj5lDObmZDYHkUulToO3wfy6A0ITz0G
-         LDtw==
+        bh=S2fxq2ALIuH1OtiNQCl1rhI7NjLzA8vs5p2zuiJ3iwA=;
+        b=ghFisv38O9Tzqk/aczTfr5DZ7S6uaoCSxAUpb4Olw6JbCyY22c70ZLkNV+LBHm+HS0
+         EPW3pdJCGqCie7cHWVyjIdAq0GUfvs8An0KaDQc8XwelpHsRg3ybj2UjNFMj8Zr7fKqD
+         kK8uZx8oqcQjgjjIHCHMYCeaNqWfUdnSd8X0eJ4gRy09Cy8AgCZ+OkVCBcCWYPaID8zP
+         HkR2lcb0xudlmuRI7toZmmDDP0ChJW3V8hr7yoLFBCWZzUoH2i7A51YNqz4yTw3Hzyg+
+         Ypt7HmZvS0tVJKV5GRGqX5LjSElTDsR+PvKYhqM+PmjhkadKn0R37/AlaUyPPXucflYb
+         4QVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767897221; x=1768502021;
+        d=1e100.net; s=20230601; t=1767899035; x=1768503835;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VeDbCR7Lw3XLjb0kHArZW/oJZIOc8ufadN9fvBnzpPw=;
-        b=BKjJwsZtBuk/BngbaG72k7FbSGd06Vwqxy3Akq0LzMPwNhPW/b6x2Dz5rzi3ifK7lT
-         WJ5DvVfM2Rc9jcc9VxZKTYmZ6EYzaUuTvpbkF+jyiZt8QQWHvP2XoB16U/iqqy+n0six
-         ijBb25NiXjQaqx0WVbV9UGtF6YltiPRn43IPIAJDxZwS6AKEZIaJ0ii/C1iVIFikb5MK
-         5n1aI4w0pllYCPBjKMbDdcIjS1WzmDhTHirh37/NlBtb/zI1zVEq7Md+KPVOoAiPJFke
-         REFRANyqCzUMSFBM6wkfO+cYUKEw+DWPifAICIksvLJQvDgtoRsCerPXBhu3u8yXLF8x
-         iC3w==
-X-Forwarded-Encrypted: i=1; AJvYcCV5t4BQWNc3VXrqi7L+90AmQD8kr2B5HDmWj4qValdjMuEN8nxqvmpb46EC0ActX+ryRWeugdnTfIrDdQevioU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLPL2GADfBvqQ9Q+ukmjoZKLpG6REO3W02yR1VjP9yf1eDvN0q
-	XCifZ/L6rMepw6kristaZTIaWMjfITRk2NCrv7XjJDeHKyX4ZY4O4+uIhac4H1C/oNQ=
-X-Gm-Gg: AY/fxX4tUtUai1IEaDwXML+bjK/asmRN8Pz6+IKr0DxY9CyjHqQ9SH7da1QaxgA6v12
-	SAdVTQ5gX7octbELLhmP0gaVwVWmkccYSqZ96Nx2nSecoU8mFPncb6jH/YoAm1loy8Se+lNFQeS
-	mv39hT3iDB00QYtqbtU8ybkjWfiHLgTuPRM+UQ6m73vzrQRxp66LQxi79QYzpZ25Cxp31kxg9TB
-	6KrYDzLY7PE/kAzZt/9x6h/UL9iq7vLEMwn0Nap2r7zLPBy3mrYUROcUCAGd5cuzTHAOH3VQhSu
-	tedheCAlOxLJpiv8T9cc9laJMO7EpnMXRoqFDyhkrHdRAmxUWO0x3qnSJXJqso3Q9SvXz6jCn3L
-	zPkIKm+I+3P66hvj5GxME3y6nNVSqApLEvQAZr8UVSj63BJmNVAwVos6DMQn/S40EaZapr5e35X
-	Ms0Zb3kFWIJs06kf0tgPp16aoJBQQMvFBB9ad4OY8D9sUmkMKVt6d+fayJYIsJAZ1Sew4=
-X-Google-Smtp-Source: AGHT+IFvxaAGa9/1YlHwiUC0+rcyB8Si3/CdOHpRzOHE2IQYwWhD7wqizXJ2yXbaQu7l341Mgk8JvQ==
-X-Received: by 2002:a05:620a:7001:b0:8b2:2607:83d5 with SMTP id af79cd13be357-8c3893fa385mr961645785a.75.1767897221473;
-        Thu, 08 Jan 2026 10:33:41 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c37f51cdcesm640455285a.26.2026.01.08.10.33.40
+        bh=S2fxq2ALIuH1OtiNQCl1rhI7NjLzA8vs5p2zuiJ3iwA=;
+        b=VZfgG6PxGih9H3CeqT6N4zL2TIOdyQmfinvAclxf7tfY7txdE9Y5vSgDP3LOj0fBpb
+         rx7cvckcXola72+Ruyhlf8GNM/dVu9XgXhMArZnKqcIcLtH3/0QbSFBjEYs8mfBHBMHo
+         XstSUCdRkLlpwMT08R4unpp31TXne/RsznRHiotYB8zAfCFVlHxSkCP5bor0q5Z3emHR
+         TqRYln2wqS9QuxxjCnBUOss2WwpLJuvYX0hsOZ4lAY8noZ88IQr2lnmv6zS+qDoGDpUY
+         Tg08L0ki/5BmqjZmkoIDa95xuJLnimCnsfwhgpKD5JAaWBN62sLHsvt0tLhAtUwV6yaJ
+         OooA==
+X-Forwarded-Encrypted: i=1; AJvYcCWWWx8frbCszhhOMDNyIL3kX0sO2kiqx2BUoKIvGe7StcaqJdePDgoLDIF42OaM5IjsMnA4J7ljZEpfb6MS3vM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi1GOoM1zpP0oDvPcIeKk/iIBoSp34A9+UiXMlGjK4yWU5+1cU
+	azbp+UHeFMgnqEnw8yA9nvllRw56PHbDnqukOxC4NsmxE/1sCw8c5Rx9mu0g4iO29zZogXV+fB3
+	VBuRJ
+X-Gm-Gg: AY/fxX6j9Nji95Jmopg18lgDJCjfR/SzhOXfZHwUkrQjzFK6KkfXTidmGxjhXMQzDLh
+	U3s/lpLOm2W0VLYPQet+TW7aZtAw/S7ioAvS7U/IlTJGHpjvoJoaEgb73eEx5IJOTmZU1HNbCCZ
+	2XKGLkRz97wcUq5+IsIVrFwQLiHWF7qpHi6xVnsDNS22jR6fSXj/3EMmwFMQwhSahhb11OrcyPf
+	+cDFptik6VLOtC6U1BG/IA3K/EHfn0AeiTM9cTUKSLGZwny19qr0o+fBKzbuyLR/iTQxHp/0aZ8
+	7GZ5ArIm/55IpBFHOKvbr28SNkbFHhSRBzxbAnj2X2GRD1awBiYm3b0P47ZNoZCEzw8gg9x/4X+
+	NVdDvWfpugRASthPvTuN4phGnubcHkwiUm0On+ziNB5a30twZnawvMOkpisOExIzCp0N1uAzimA
+	PBTtIDbFB7iTSPtZYuniMjUupnfuto1LI=
+X-Google-Smtp-Source: AGHT+IHKBn5HwApDCk9pjRfiuMOygdOPqiU/qGu+fBNW2y9CtjCYUhbtVuWgL2X2bFThHx0vI6yGeA==
+X-Received: by 2002:a05:600c:b86:b0:479:3a86:dc1e with SMTP id 5b1f17b1804b1-47d84b41007mr86003605e9.36.1767899034659;
+        Thu, 08 Jan 2026 11:03:54 -0800 (PST)
+Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d8916436bsm29433825e9.18.2026.01.08.11.03.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 10:33:40 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1vdupH-00000002n7A-3fMQ;
-	Thu, 08 Jan 2026 14:33:39 -0400
-Date: Thu, 8 Jan 2026 14:33:39 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: David Matlack <dmatlack@google.com>
-Cc: Alex Williamson <alex@shazbot.org>, Alex Mastro <amastro@fb.com>,
-	Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
-Message-ID: <20260108183339.GF545276@ziepe.ca>
-References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
- <aV7yIchrL3mzNyFO@google.com>
- <20260108005406.GA545276@ziepe.ca>
- <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com>
- <20260108141044.GC545276@ziepe.ca>
- <20260108084514.1d5e3ee3@shazbot.org>
- <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
+        Thu, 08 Jan 2026 11:03:54 -0800 (PST)
+Date: Thu, 8 Jan 2026 20:03:52 +0100
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Waiman Long <llong@redhat.com>
+Cc: Chen Ridong <chenridong@huaweicloud.com>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Sun Shaojie <sunshaojie@kylinos.cn>
+Subject: Re: [cgroup/for-6.20 PATCH v2 3/4] cgroup/cpuset: Don't fail
+ cpuset.cpus change in v2
+Message-ID: <gscfzr3lfd2gynec3ci6puz2cyvftrv35udrzzyfi4kjdicfcp@6vdgm645fmmj>
+References: <20260101191558.434446-1-longman@redhat.com>
+ <20260101191558.434446-4-longman@redhat.com>
+ <efdcd90c-95ed-4cfc-af9a-3dc0e8f0a488@huaweicloud.com>
+ <6eedf67b-3538-4fd1-903b-b7d8db4ff43d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="blzurjhfhk33az2p"
 Content-Disposition: inline
-In-Reply-To: <CALzav=eRa49+2wSqrDL1gSw8MpMwXVxb9bx4hvGU0x_bOXypuw@mail.gmail.com>
+In-Reply-To: <6eedf67b-3538-4fd1-903b-b7d8db4ff43d@redhat.com>
 
-On Thu, Jan 08, 2026 at 10:24:19AM -0800, David Matlack wrote:
-> > > Oh, I was thinking about a compatability only flow only in the type 1
-> > > emulation that internally magically converts a VMA to a dmabuf, but I
-> > > haven't written anything.. It is a bit tricky and the type 1 emulation
-> > > has not been as popular as I expected??
-> >
-> > In part because of this gap, I'd guess.  Thanks,
-> 
-> Lack of huge mappings in the IOMMU when using VFIO_TYPE1_IOMMU is
-> another gap I'm aware of.
-> vfio_dma_mapping_test.vfio_type1_iommu_anonymous_hugetlb_1gb.dma_map_unmap
-> fails when IOMMUFD_VFIO_CONTAINER is enabled.
 
-What is this? I'm not aware of it..
+--blzurjhfhk33az2p
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [cgroup/for-6.20 PATCH v2 3/4] cgroup/cpuset: Don't fail
+ cpuset.cpus change in v2
+MIME-Version: 1.0
 
-> Is the plan to address all the gaps so IOMMUFD_VFIO_CONTAINER can be
-> made the default and the type1 code can be dropped from the upstream
-> kernel?
+On Sun, Jan 04, 2026 at 04:48:06PM -0500, Waiman Long <llong@redhat.com> wrote:
+> Before the introduction of cpuset partition, writing to cpuset.cpus will
+> only fail if the cpu list is invalid like containing CPUs outside of the
+> valid cpu range. What I mean by "never-fail" is that if the cpu list is
+> valid, the write action should not fail. The rule is not explicitly stated
+> in the documentation, but it is a pre-existing behavior which we should try
+> to keep to avoid breaking existing applications.
 
-This was a dream for sure, distros can decide if they want to continue
-to support both or have an option to do just one.
+The justification for such behavior is that when the configuration
+cannot be satisfied immediately (insufficient resources in ancestors),
+the original user's intention should be stored somewhere and if the
+conditions higher up the hiearchy possibly change, the intended config
+is effected transparently (w/out the need to re-write values by user
+again).
 
-Jason
+So I appreciate that cpuset.cpus.exclusive writes fail early -- for
+sibling conflicts -- otherwise the order of creation would need to be
+evaluated post hoc.
+For illustration:
+	a1/cpuset.cpus.exclusive=0,1
+	a2/cpuset.cpus.exclusive=1,2
+	a3/cpuset.cpus.exclusive=1,3
+If this was allowed and a1 was rmdir'd, the (new) resolution of conflict
+between a2 and a3 would need to determine which of a2, a3 was created
+first.
+
+HTH,
+Michal
+
+--blzurjhfhk33az2p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaV//jhsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+Ag2EAEA1kVYbvQJlJ41fvGL47iG
+M8FIlLpc0GtmcjU3WMUkTlIA/j40WZ0IMgCmmmKhTn3BCHibQbXnnB6/V4tPlv50
+p1QO
+=Ngzr
+-----END PGP SIGNATURE-----
+
+--blzurjhfhk33az2p--
 
