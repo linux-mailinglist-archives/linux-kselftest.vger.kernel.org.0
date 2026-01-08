@@ -1,257 +1,151 @@
-Return-Path: <linux-kselftest+bounces-48492-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CF7DD01D5C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 10:30:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7764BD027A8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 12:45:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A04C3305B1D4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 09:26:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C862530E6301
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 11:31:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BAEE42CD61;
-	Thu,  8 Jan 2026 09:20:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACC43446B5;
+	Thu,  8 Jan 2026 08:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="cErvshYF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VBurWId2";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="H0ZaHClA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f98.google.com (mail-oa1-f98.google.com [209.85.160.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF4B142A821
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 09:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2157033EB02
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 08:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767864020; cv=none; b=CoIykkZB7Xa0/hNZVSqdkpMqoWZBAVaQ48B8RSaBBR1+VzRP3CCuYd2czg9IPK0jq9+4VrB80YNBGVOtRNHlne6afvQwn4CbHpMJMq36iFhDaNJfl5Rf+3F7pFhyGrUnQS1Vcca001nWPMAoCTQc2XTONjFNbVgq3X6Pt/h47+Y=
+	t=1767861716; cv=none; b=PJ6lIarnJo7zC95o+r0AVBWDf2r9EXClW8ePv9I6pV3WUCPVB/K/W9lOHkRIotlwEFNrkfqF4Jk595w8PUgpBh59F4a0xnFy70XdNO/qPYlv6vg6seqYqThTB3BHAhI2tz3BGTaiXjdUzWcSSnaliqocCxjW7kvU3fglzRg+NOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767864020; c=relaxed/simple;
-	bh=eWMcbdJYhFxvXFqjbBRedUH0jQ5siz6lFXcZN8bMrmc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i04zxGGTLVzFbU8X0EK61hIHIcjPVYmiad7rQq+jZD4pZ0PA84gSpTQn5GUEIjnrxBfNi7wUv//1DkCskVHlndNK1LszAM4O001T2v2+ClrOX1wQhX0X85P1cQR1SY12EamwB5dQMqhWj5FJwEe/+4E17FpcyyotQU3SsVUiQWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com; spf=fail smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=cErvshYF; arc=none smtp.client-ip=209.85.160.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=purestorage.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=purestorage.com
-Received: by mail-oa1-f98.google.com with SMTP id 586e51a60fabf-3f9fb53bea4so213363fac.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 01:20:03 -0800 (PST)
+	s=arc-20240116; t=1767861716; c=relaxed/simple;
+	bh=T3g1hkv59Wof+KEXGfr6rRK1rS6rPS46Y5/WRoZTizA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=auwxx/aMgMcY+xJ1671SZCHfXkQlXL+NZx89GgWlvVemdNIah9Ht3uQgHpNQDGx4I/SYk80FectZiC2Mu8mCuK+aa0IYMDcHAiKvf1z+Glhk6Uomaos7irg/U1sbrxJfniu94qPwSr95BzLkJv30bQ2SVY7HfJVwjsAGvHhiauA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VBurWId2; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=H0ZaHClA; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767861703;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5RGxvIn5fQFYR3/ngtCtv4UC6h+IZmTY0D3VzGMTF2k=;
+	b=VBurWId2HqDrerkVnZFpzr+u2oijSKw/y5AwinLgSSqHcGcgpuwRuA5rqmcZWF2crUSpTe
+	RgcDPzslfnlUj/2Hr/2KycWtH0/2yuS2lGUT6xY69D3DF84Za6K3U2G1Z4229diie6+XUQ
+	c2Y1jJGUlznxQPsD4sy68uJajZBycuA=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-618-U3XrNKBoPRetWvXfsNTyIA-1; Thu, 08 Jan 2026 03:41:42 -0500
+X-MC-Unique: U3XrNKBoPRetWvXfsNTyIA-1
+X-Mimecast-MFC-AGG-ID: U3XrNKBoPRetWvXfsNTyIA_1767861701
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-477964c22e0so14115345e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 00:41:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=purestorage.com; s=google2022; t=1767863999; x=1768468799; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eaU0XpTuR03wE6PGtvQP43RzD+KIxiTF9KOB8gOkl3o=;
-        b=cErvshYFo0xrcjBV6YGmWCaja9qhrTTLAEIuF/f0RGtWxmnmG8SsynQ0kDHUqYWhwz
-         yM4d/1RhdljDIOCu2y8CjgePkj18kenXtB6qEILqEfU7pYnWCqSTqQGF6+iik3PgPURs
-         VUxdos4Zwm6p7M8QXngrrZtrYXdI6rpkf0K2Wr87n7/SjOj40iIR0gm7Vx1uBj8gKk4Z
-         +FgUtIcqU2JxRNfwv+DXJJ9JFxk++u7yK/qB9o+DW6K1BFXqUTO0VC1m4pO4fUscfn7r
-         lLK6nVzDMLhunQgbW/z2n6S6Nk/a9oLMjaiipMGuikQAaWTDwn1ubQ/FvZLFv151Mr8M
-         Hx1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767863999; x=1768468799;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=redhat.com; s=google; t=1767861701; x=1768466501; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=eaU0XpTuR03wE6PGtvQP43RzD+KIxiTF9KOB8gOkl3o=;
-        b=NMrNbiPXST7cendjyC7n4MzvhKU54KRYiyhoD9eMGPavoCwmqnMzs8k3xopt+FYsYa
-         3g9InmRaMkHfq9lD4MYOsxbxC6yiaUm+V+For9eC9sHN79pUbZkw710KF6DYrLJERT+f
-         +3v7zrh2JzERgvN0Uc2a52BU7B+G+8ylwySqdT2ZCeAcYoErVfAUqLX2DnFRGXSC8hyd
-         qaZeXS9Wm2m7NwzCN/ORW5FO5Ph4Mcm0lHaTTJYdFf6Xdlob72rEUILoBXTDXYE5BM4H
-         d7wW2jhee0Q+Sdg+v1urLecRca64btdvdr3UYkmstB2yyOgz9xJJYTPv8vMaR6H5gN8R
-         8tjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXaOYhLZrPcbwd3oJj39DFfZONNDBgfRPokoXp4QWTGTSEdEJFXfn1A5SnMqHCSbsIPAHfjQDRub0UC1IUpgHw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwP1YJHr1OKhi5vzE+0yQlX4p87pVad2PPTx+JyzoEGgxVtz5Xp
-	CpY0/lb2FHiEjaE0G7D1LGTvJDuVoqVCPFmxMMtGxix+kiRzs0YsKD8kZ5X1qt0NStRNAnwkZpT
-	S/XfO9JX7pGXd3CpYRznBFiS12Q0PX6NYovvK
-X-Gm-Gg: AY/fxX7rDYwrgOGcLDayGPwiRzDnixjyP7IzoIjFzIU6zMiipPB3iFcM9GRDuIottw6
-	NOcdV8xwCMX629etRoDQIz/eRR3Wf2FNPZ5Lj7Lznp5LSRYp7WJrs2/De4lDZBxF5I+Y0H2SUKO
-	jFW1+NPfqVhh6yQyWUUHTZ/MaF7iGwSaJ1BKckRqurjlbsx8FCRj3JVYmKZEdufqycDm1durnLz
-	6Z7BV9rjkOALH4xdb9ipSdaXtw9MNFHG2duzJGIWg4rPpMAuFj5zvA1t8isY9YTuYa9mHssaCr0
-	cJRp6PyA11R20yvnxXz+1kd7GVv/WXkLoaUhyyJRkv/S+hpVK2CIlB9xOB6Rl5bRBUtIIBmjn38
-	aMs+Vnb3807SJw+tPutlBFRqLFPrMJRZZlONtT9X30w==
-X-Google-Smtp-Source: AGHT+IFYvl6fYndMLF80xvEQYCcAZV09cJSN26yC4MLZIkfZxRKtsAzFauxuHLBWb6KYs55Z1KkAiyisPKVS
-X-Received: by 2002:a05:6871:a003:b0:3d3:2fa6:e16e with SMTP id 586e51a60fabf-3ffc0c4ee00mr2082048fac.9.1767863998824;
-        Thu, 08 Jan 2026 01:19:58 -0800 (PST)
-Received: from c7-smtp-2023.dev.purestorage.com ([208.88.159.128])
-        by smtp-relay.gmail.com with ESMTPS id 586e51a60fabf-3ffa4e3e739sm837434fac.7.2026.01.08.01.19.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 01:19:58 -0800 (PST)
-X-Relaying-Domain: purestorage.com
-Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.6.120])
-	by c7-smtp-2023.dev.purestorage.com (Postfix) with ESMTP id C4CC4341DAF;
-	Thu,  8 Jan 2026 02:19:57 -0700 (MST)
-Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
-	id BC4DFE42F2C; Thu,  8 Jan 2026 02:19:57 -0700 (MST)
-From: Caleb Sander Mateos <csander@purestorage.com>
-To: Ming Lei <ming.lei@redhat.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-block@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Stanley Zhang <stazhang@purestorage.com>,
-	Uday Shankar <ushankar@purestorage.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Caleb Sander Mateos <csander@purestorage.com>
-Subject: [PATCH v4 19/19] selftests: ublk: add end-to-end integrity test
-Date: Thu,  8 Jan 2026 02:19:47 -0700
-Message-ID: <20260108091948.1099139-20-csander@purestorage.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260108091948.1099139-1-csander@purestorage.com>
-References: <20260108091948.1099139-1-csander@purestorage.com>
+        bh=5RGxvIn5fQFYR3/ngtCtv4UC6h+IZmTY0D3VzGMTF2k=;
+        b=H0ZaHClA6c3KoNXD+3tXrJmCoOMCR4qT4eAFmnf2dOeabJW5fsJqAWfno/Hnr6IrJF
+         PZsl7U0+3YU3OI4CFlEzjkH45/HO0+BSrGX9ycowVi6hz+rbrBz7lDIeSMLATjJQ8fpj
+         4bcunlq7X/5aKBSUWaT5w7dl3OVtHYcGXCexzwle5no4JMZ2LS/+MjdiFTy4ANdhEH/D
+         EyZTVPMJdL1rs56ukgozYGLyIfpVz8OLhjT6Pu9aHsf61+U5LHYQAbpy+Mb13jGJg28V
+         njkHf0BGhtJDYMe/xcmy1utfrDHkmj/67hrPfw1S16/xnMmMbWsfk3Xjx2at6abqluqP
+         Y8cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767861701; x=1768466501;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5RGxvIn5fQFYR3/ngtCtv4UC6h+IZmTY0D3VzGMTF2k=;
+        b=psr5gd1p7PVYXd+ZnTmHSI/z4zv+CWjYSq1eO0haI+16z8J80y28hWuUHohSmdlkTf
+         r6YiECurcESn4PiHkScSiLf9BdiKFy6Zft8FCq7pqjqGmBJjKACPPg7affQ9K8TJhmsB
+         wGpXPPbojTrL+dnIQu8fMi3OWCpLmr5o8+HdrDNIJRtyWz4JjDb2ULFgH4bH43ahByH0
+         F2gHz2kXh2t1xShgHBZP3ILX2BbIV+WSGAingmS2t1BvHq3xeA+tI8RkDjcK4eE6jW3m
+         oCY6B4HAMYWKUGGMJLVMPiC82wi0hqmArTbIGQuyO+soRmX6bwIgEoUX9P64uEXbaUKT
+         yIyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ509PC7P7uIm+16MLky59rICq7zQSZl9gDuYKBc5neK6CLriVxrZ9luaQb6+RBVAc2z8WlrbxFD2rD5CHgB4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyShPWqFFx4GJKhkt+fBmS9I+sNro48bDEq8cr+AygrgqxPofgl
+	UoTgmVpZ5d/MSLgJZBs9BYT/xqE6p8qllRDm1ZmIdTpWeCyhVqv0lRJFvzUNbD/rOoxs19oIBE2
+	al/JQC9i/Bpl8XzZ8d4ifAa4Pjv2RC3MS88tYm0hjKHqkbLiJpIC0pBf2Rqj5H+NzBMEZtw==
+X-Gm-Gg: AY/fxX7xXmGbjShcP4fexgtBrdXjSmfOKgo6INqtUEGl6JDrzCOn4vO/Dv3RcXDmXSu
+	oQ3zxv0yZgU0T0MCD/0Z5y9Y87BE4HUzthSXoq7WJUT+PjZS1Q/bGg61ida20wLak4WO8iDFtrt
+	G2yOA6ra6iXWOkxZx3AObEjoToNtg26f1Np9v+SxmZm3O6VZU5jnM1oT/MUnjf6eCFtRF4pqiC9
+	eYbjtm4gDtlfA84/cgknNxCc8zo5ou6wBNLnGwcLoaihLvzlbTwBA70mE0qaVLtE8epmXaJL42H
+	skA/wVitRvNWxBSIWU8F5uFYRg9n+h2WwUWX693s39b+2RQr1UxB1oPyUwAtzUF5zmtX6I+rdSj
+	C/E+fJUvt9RK5FA==
+X-Received: by 2002:a05:600c:6749:b0:471:5c0:94fc with SMTP id 5b1f17b1804b1-47d84849fb2mr69624155e9.6.1767861700983;
+        Thu, 08 Jan 2026 00:41:40 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHMRmXfUT8h/fx23p3HVnSIevvQ/xZpWdXJvjJswXBBTxuR8fZK2hfXFsrWgfe2gcekBcZ2PQ==
+X-Received: by 2002:a05:600c:6749:b0:471:5c0:94fc with SMTP id 5b1f17b1804b1-47d84849fb2mr69623615e9.6.1767861700621;
+        Thu, 08 Jan 2026 00:41:40 -0800 (PST)
+Received: from [192.168.88.32] ([212.105.149.145])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d7f703a8csm139970835e9.13.2026.01.08.00.41.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jan 2026 00:41:40 -0800 (PST)
+Message-ID: <56f6f3dd-14a8-44e9-a13d-eeb0a27d81d2@redhat.com>
+Date: Thu, 8 Jan 2026 09:41:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 net-next 00/13] AccECN protocol case handling series
+To: chia-yu.chang@nokia-bell-labs.com, edumazet@google.com, parav@nvidia.com,
+ linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+ dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
+ netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+ kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+References: <20260103131028.10708-1-chia-yu.chang@nokia-bell-labs.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260103131028.10708-1-chia-yu.chang@nokia-bell-labs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add test case loop_08 to verify the ublk integrity data flow. It uses
-the kublk loop target to create a ublk device with integrity on top of
-backing data and integrity files. It then writes to the whole device
-with fio configured to generate integrity data. Then it reads back the
-whole device with fio configured to verify the integrity data.
-It also verifies that injected guard, reftag, and apptag corruptions are
-correctly detected.
+On 1/3/26 2:10 PM, chia-yu.chang@nokia-bell-labs.com wrote:
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> 
+> Hello,
+> 
+> Plesae find the v7 AccECN case handling patch series, which covers
+> several excpetional case handling of Accurate ECN spec (RFC9768),
+> adds new identifiers to be used by CC modules, adds ecn_delta into
+> rate_sample, and keeps the ACE counter for computation, etc.
+> 
+> This patch series is part of the full AccECN patch series, which is available at
+> https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
+> 
+> Best regards,
+> Chia-Yu
 
-Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
----
- tools/testing/selftests/ublk/Makefile        |   1 +
- tools/testing/selftests/ublk/test_loop_08.sh | 111 +++++++++++++++++++
- 2 files changed, 112 insertions(+)
- create mode 100755 tools/testing/selftests/ublk/test_loop_08.sh
+I had just a minor comment on patch 11/13. I think this deserves
+explicit ack from Eric, Neal or Kuniyuki; please wait a little longer
+for them before resend.
 
-diff --git a/tools/testing/selftests/ublk/Makefile b/tools/testing/selftests/ublk/Makefile
-index 239ad1c741ef..036a9f01b464 100644
---- a/tools/testing/selftests/ublk/Makefile
-+++ b/tools/testing/selftests/ublk/Makefile
-@@ -33,10 +33,11 @@ TEST_PROGS += test_loop_02.sh
- TEST_PROGS += test_loop_03.sh
- TEST_PROGS += test_loop_04.sh
- TEST_PROGS += test_loop_05.sh
- TEST_PROGS += test_loop_06.sh
- TEST_PROGS += test_loop_07.sh
-+TEST_PROGS += test_loop_08.sh
- TEST_PROGS += test_stripe_01.sh
- TEST_PROGS += test_stripe_02.sh
- TEST_PROGS += test_stripe_03.sh
- TEST_PROGS += test_stripe_04.sh
- TEST_PROGS += test_stripe_05.sh
-diff --git a/tools/testing/selftests/ublk/test_loop_08.sh b/tools/testing/selftests/ublk/test_loop_08.sh
-new file mode 100755
-index 000000000000..ca289cfb2ad4
---- /dev/null
-+++ b/tools/testing/selftests/ublk/test_loop_08.sh
-@@ -0,0 +1,111 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+. "$(cd "$(dirname "$0")" && pwd)"/test_common.sh
-+
-+if ! _have_program fio; then
-+	exit $UBLK_SKIP_CODE
-+fi
-+
-+fio_version=$(fio --version)
-+if [[ "$fio_version" =~ fio-[0-9]+\.[0-9]+$ ]]; then
-+	echo "Requires development fio version with https://github.com/axboe/fio/pull/1992"
-+	exit $UBLK_SKIP_CODE
-+fi
-+
-+TID=loop_08
-+
-+_prep_test "loop" "end-to-end integrity"
-+
-+_create_backfile 0 256M
-+_create_backfile 1 32M # 256M * (64 integrity bytes / 512 data bytes)
-+integrity_params="--integrity_capable --integrity_reftag
-+                  --metadata_size 64 --pi_offset 56 --csum_type t10dif"
-+dev_id=$(_add_ublk_dev -t loop -u $integrity_params "${UBLK_BACKFILES[@]}")
-+_check_add_dev $TID $?
-+
-+# 1M * (64 integrity bytes / 512 data bytes) = 128K
-+fio_args="--ioengine io_uring --direct 1 --bsrange 512-1M --iodepth 32
-+          --md_per_io_size 128K --pi_act 0 --pi_chk GUARD,REFTAG,APPTAG
-+          --filename /dev/ublkb$dev_id"
-+fio --name fill --rw randwrite $fio_args > /dev/null
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "fio fill failed"
-+	_show_result $TID $err
-+fi
-+
-+fio --name verify --rw randread $fio_args > /dev/null
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "fio verify failed"
-+	_show_result $TID $err
-+fi
-+
-+fio_err=$(mktemp fio_err_XXXXX)
-+
-+# Overwrite 4-byte reftag at offset 56 + 4 = 60
-+dd_reftag_args="bs=1 seek=60 count=4 oflag=dsync conv=notrunc status=none"
-+dd if=/dev/urandom "of=${UBLK_BACKFILES[1]}" $dd_reftag_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd corrupted_reftag failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+if fio --name corrupted_reftag --rw randread $fio_args > /dev/null 2> "$fio_err"; then
-+	echo "fio corrupted_reftag unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="REFTAG compare error: LBA: 0 Expected=0, Actual="
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio corrupted_reftag message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+# Reset to 0
-+dd if=/dev/zero "of=${UBLK_BACKFILES[1]}" $dd_reftag_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd restore corrupted_reftag failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+
-+dd_data_args="bs=512 count=1 oflag=direct,dsync conv=notrunc status=none"
-+dd if=/dev/zero "of=${UBLK_BACKFILES[0]}" $dd_data_args
-+err=$?
-+if [ $err != 0 ]; then
-+	echo "dd corrupted_data failed"
-+	rm -f "$fio_err"
-+	_show_result $TID $err
-+fi
-+if fio --name corrupted_data --rw randread $fio_args > /dev/null 2> "$fio_err"; then
-+	echo "fio corrupted_data unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="Guard compare error: LBA: 0 Expected=0, Actual="
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio corrupted_data message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+
-+if fio --name bad_apptag --rw randread $fio_args --apptag 0x4321 > /dev/null 2> "$fio_err"; then
-+	echo "fio bad_apptag unexpectedly succeeded"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+expected_err="APPTAG compare error: LBA: [0-9]* Expected=4321, Actual=1234"
-+if ! grep -q "$expected_err" "$fio_err"; then
-+	echo "fio bad_apptag message not found: $expected_err"
-+	rm -f "$fio_err"
-+	_show_result $TID 255
-+fi
-+
-+rm -f "$fio_err"
-+
-+_cleanup_test
-+_show_result $TID 0
--- 
-2.45.2
+Side note: it would be great to pair the AccECN behaviours with some
+pktdrill tests, do you have plan for it?
+
+Thanks,
+
+Paolo
 
 
