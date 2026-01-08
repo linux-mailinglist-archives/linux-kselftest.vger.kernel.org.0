@@ -1,262 +1,303 @@
-Return-Path: <linux-kselftest+bounces-48453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 661C4D00870
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 02:02:53 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BD93D00876
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 02:03:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4F1AB3045380
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 00:59:07 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8C5503000509
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 01:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197BD2253B0;
-	Thu,  8 Jan 2026 00:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767AD212FB9;
+	Thu,  8 Jan 2026 01:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyTuC3E4"
+	dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b="CS7nN2RQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C123221254B
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 00:58:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A51812116E0
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 01:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767833928; cv=none; b=WcP98lZ33/ZnwimLhhCa12zowyO6adJUsjNT13GP+YnyjYoGnQI+Ubll8C8AkxkP7SH4WJd0jqBvJCtK2vpuoLApjqZhcGx0lhBHGi4A1pDC83wkr+8MVJmVXsZIv4cU9UQrRHW5HjF/qxvq6Px4zt1DjlvlCtqonYDo32AlmxM=
+	t=1767834178; cv=none; b=c8Sk5td1Ro6YhwPaebre/UMmXfdK5t7skVxit9r/luLxCTTZagq5OkCz6TPKG3D2LPzfHKZ8PNdq6CKm757avRiu1gPF3bbMJO4F5oGx6C/gJ7dotwucnBgtYEp0Mu/CsyX3N4iKU0sU6y39AFiCEgXeGqA3Nj/GgfNbHxEObns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767833928; c=relaxed/simple;
-	bh=9zuoNqEVnt8pH9cLp3BgUGvaCFtzCDZEoS7OzsXWbGc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nYwYua7j57oYBiSZiA712PbZzogojMLDoH9+/cf0SB87RULtGN9Nu0jRv87mL3weKLcoIyDAcBOWTyT3p0H4m7RZNKjYHJ+d/TWlISGCZUD8MqoFa42A/29kCxuaFNpftS2joVlwiEtZCbBOM02FT4VAVb/BnfJJyI7wKBys3tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyTuC3E4; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-78e7ba9fc29so31265707b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 16:58:44 -0800 (PST)
+	s=arc-20240116; t=1767834178; c=relaxed/simple;
+	bh=LaGEFk0u9Ah0SwBDYRhYdCc2dfVBPIXzJYYYHnjJjGo=;
+	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
+	 Cc:In-Reply-To:To; b=sx3hxatsVYAaBe6kThMeOnYnhOptB1NQnVILF8BjH4SWON6eXuJ3E4qfzw84YV05sVHtCzfnnbxlKtgnTR7jUvxu+9FffkBTbrof6YmQWxHxxzJ89/mLuaQH91Ru+FnaJh3cwLnjqcIMXEzc4Xy/8GE5qSz6NwLCCb6fgHD80gU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org; spf=pass smtp.mailfrom=joelfernandes.org; dkim=pass (1024-bit key) header.d=joelfernandes.org header.i=@joelfernandes.org header.b=CS7nN2RQ; arc=none smtp.client-ip=74.125.82.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=joelfernandes.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=joelfernandes.org
+Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-11f1fb91996so1686518c88.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 17:02:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767833923; x=1768438723; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+        d=joelfernandes.org; s=google; t=1767834175; x=1768438975; darn=vger.kernel.org;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=dJperMXwTkIXRHW5+8MJDDWuaQbzVhWP/yMQKYVBdM8=;
-        b=fyTuC3E4pezY9BYDbGJ1KJwuJzpO/0BJsMEn2b1waW5fV3U5gkWaQ9d8qluUr4S7yJ
-         5YjoCto2c2c+p0SGQJZ4zTZZx7j+ShCnw5mBUrXFg9fbcrOd04vViPPZjVZajz+ZgCss
-         tzQUi4nFVNhMbScvNgXlI7Y9iPCL0W7+z57FsDKzWCjPliNGT64dMBfqchGx7h/VfNQ+
-         2awR3xKwEGP3jY2EFCOa180o6qD4F1Kof4BYn8AKw24vIDKCWPzQcCeAE8LYpJ6jbJgD
-         /XVNguyt/7Yw4aIHoVeNInuF29U4sT7r07iqBswfm15aiSWTPKymT2PUjCTs/6Zf5Ryg
-         GSpw==
+        bh=Q+cibWmp2EIFIhU9pnQjoqNBSGOyWGbUTf6dJQy4Buk=;
+        b=CS7nN2RQF83JnNoz3OSR47ykWro/LfK6wd1OEgfj1DgA9rwo87BHtKEsgjkPpM/Ccf
+         maQViuUZfb+zVSv5O+l+zIV4i6i7Y3f0kF0+ZiczpiXiGJmUsa0d62IuI6ZURMETmrU0
+         Igsn2Qf9jH++YYentv0cb1RQscjoZS6U8SyN8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767833923; x=1768438723;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+        d=1e100.net; s=20230601; t=1767834175; x=1768438975;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=dJperMXwTkIXRHW5+8MJDDWuaQbzVhWP/yMQKYVBdM8=;
-        b=W1e8MQBlyHk9/bRyjqbbW5vp/J5FtOpmkmntie764lVJyFL5oycV0rqhlmASk86B1F
-         rLxZV2bAElJ72K8ClrgMA8SEryGA6QHHrmvre/hYbr0cWmaLBg3MizuUrMxGtWkpE4c/
-         uOUWzHfs0OrZJUp4i4SI0oZbLR5qjweCgiUT4+6nFA381cUelfN0LyVoPzt40KwknZX0
-         BRd/36usr39VTMWTUOavrE8aBGcZEyIOy6Q38W785y7FC4St5xecz4762SA5EvuGEDZm
-         jro2peiqfDBHzAdmcGkRPxpmi/2gdGy0IBe1zlfclKRYhoBNADFRqFIbrxouVb3c6zw1
-         dloQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXbIdupKd9uT5qrbawjRwAmErXcyWNvApUGuyyBy6y1LXLc1XscnUfKLvUQbTxEUoxdIwOju228XDdaQgZlLxA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyy6cEwiLS1tBw+C3fuQnSRIMS31mHwParIZrs0ZdRa6GYByqBs
-	7A9JxhqETXqN46tnX6p9UDm4H6MqMObRYVxBV+VhunRfXOb0k8own191
-X-Gm-Gg: AY/fxX5NFeaNnzyiC0AivN5QLizon8FDgmdgY7xoNSKgBS4cks8QdbZWrEfeUyMeDaM
-	iRAClxjWYbIp68gJKm/9mXRD8XYguTAbVnHms4mcDmmArqTfKZDNtD+8bjvGV6UbEIv4C27G1b+
-	m8DBoWVAEhOhMncc7GcI4TZLz+yRn9fFgvgLmATCRo7wFn8ZJZahLmNl96YptFREjjQ8kc0DyWB
-	sBWr1S2GDAdS0JDoOjopzh6x+LprdgjpEYAWVJxFivgz6ZQgeTxZno3ggVTW5m7pL0mv/vT22e1
-	aYuXlszY8uXp52NQL2k2m98mYYvENJ1+ANu5KdzRr/X0yPh5Hr/MCpZp9vC2ryQMsYEguSH9oaq
-	DhIRxdeMa6+DfIaJhraDeCsqm2X0azlCNJzEXMgp1FZao3SCWmRQfC9zbGH4vBmfjncgbD/wKCx
-	6g+Du09v9/OPA4EQLj9BOT
-X-Google-Smtp-Source: AGHT+IH/YnHPsvQ1x53oyPoX/9tw6AKgXdHarFn5R1WyPsLd/nAJHMzuOnxNXLvoQ3gkbQA3OMlgNg==
-X-Received: by 2002:a05:690c:630a:b0:78c:65e7:d226 with SMTP id 00721157ae682-790b567cda7mr46405997b3.32.1767833923479;
-        Wed, 07 Jan 2026 16:58:43 -0800 (PST)
-Received: from localhost ([2a03:2880:25ff:74::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-790aa55c77bsm24532427b3.3.2026.01.07.16.58.43
+        bh=Q+cibWmp2EIFIhU9pnQjoqNBSGOyWGbUTf6dJQy4Buk=;
+        b=XDQOxuCFjMj+W3qZHZHIUzLJc1h2uGVMGVBkKz8IK9KNw4h7JrXK6OhkFoxb3eT6J4
+         8Mn3qtXP8JHdko7XlSN05rWUrb9CuIULsu0uZldKc0KN1IyGVNrUNmEwRi0HkWrOpPCQ
+         MzxWWyzlElH8Dyubd0Rir2ja4ZpLew55pHP4LEZY3SfwfCCjCErQ+YDpDIiffhvPM+V1
+         +DXTb0d73UCH1EQWwHCknfGA+ykV/t+XdQPNNM8y5ubK1S9MEgDMKZ90OoAG7mpS8rv8
+         5IQw7rr6M4AIf4eg+iRD/5XaS0ryr7fruwcUKUTAp/IjP45sosrOdLBo5TtgK+TjD+Wx
+         bgHA==
+X-Forwarded-Encrypted: i=1; AJvYcCWYairzVSK1PSIHWH/fG+wGIUu5PG9By9h5tIDXsXv53i0qQTG1gJ0CnuWL2De970VtICBRIz0Psbvl+gR+y8Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpPB7sdFx0ICU0RkjrQiSDdAY/lGRJduOhcPPmCX0hweLbPpRe
+	YKcwfmDB9jfK14gc4tTvFD7XAPLRFkQR5LJMUsVN+z/D9lEUnNO8oVbEDVO3OIR5Q1U=
+X-Gm-Gg: AY/fxX5vNPSfdvs6s0suPEb1pyfMZWFmMSlTkShPBupnA8BJrp4A4cEAV9Qi1qPj1Yk
+	9zysstfGy3JW7CxF67/75IUel4J2H64V9hpULFWixATTXBS+Lf8TF5dw7RbYYsZ8EUQGwONadTy
+	QYun0GxsY+S61hZj1QmLEqGxQJy0UuJ9h4yy0jzMmwYZDauq5fkSW1yl/BlyOaPt6FPP82DmxlV
+	TqDIK3dem/+vJC2hywJXm88gOlGR7jyR/DYMX4Y0IohxcXCNqGhQca2CduWH1+JFsEOk/Zy9VJ8
+	03z0cpO+hC6cse9cGCOUkb+0Qh2Pkh0+Ohaaq3y3jhi7zbrLxtJ/ruAo6C5u1teNsSz4ma49ykj
+	GyUnFaw6bHSOcbhL5EjWUECTP5b73cPhAG+HxT/vAa+j6Lmqabujyii4qj3znneSJ6dHCZup1Ux
+	ro0NEteXZCYbYZBu9uUsL85NRt2h8p8oruEw==
+X-Google-Smtp-Source: AGHT+IFsjdNLf5/MXeBe5tI14o5USLs9twXkeilj2J1WPfUL0kxHF1JfAn20WArIDxKes/KZKqbLNw==
+X-Received: by 2002:a05:7022:248f:b0:119:fac9:cdb1 with SMTP id a92af1059eb24-121f8add5f5mr3973333c88.20.1767834175326;
+        Wed, 07 Jan 2026 17:02:55 -0800 (PST)
+Received: from smtpclient.apple ([71.219.3.177])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-121f248bb6esm11733743c88.12.2026.01.07.17.02.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 16:58:43 -0800 (PST)
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-Date: Wed, 07 Jan 2026 16:57:39 -0800
-Subject: [PATCH net-next v8 5/5] selftests: drv-net: devmem: add
- autorelease test
+        Wed, 07 Jan 2026 17:02:54 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: Joel Fernandes <joel@joelfernandes.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-5-92c968631496@meta.com>
-References: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com>
-In-Reply-To: <20260107-scratch-bobbyeshleman-devmem-tcp-token-upstream-v8-0-92c968631496@meta.com>
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- Willem de Bruijn <willemb@google.com>, Neal Cardwell <ncardwell@google.com>, 
- David Ahern <dsahern@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Jonathan Corbet <corbet@lwn.net>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Shuah Khan <shuah@kernel.org>, Donald Hunter <donald.hunter@gmail.com>, 
- Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Stanislav Fomichev <sdf@fomichev.me>, 
- asml.silence@gmail.com, matttbe@kernel.org, skhawaja@google.com, 
- Bobby Eshleman <bobbyeshleman@meta.com>
-X-Mailer: b4 0.14.3
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH -next 1/8] rcu: Fix rcu_read_unlock() deadloop due to softirq
+Date: Wed, 7 Jan 2026 20:02:43 -0500
+Message-Id: <A88C7853-504A-496E-93A2-C9FE7D80E0D5@joelfernandes.org>
+References: <aV7o36CHTLc-tD41@pavilion.home>
+Cc: Joel Fernandes <joelagnelf@nvidia.com>,
+ Paul E McKenney <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ rcu@vger.kernel.org, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Kai Yao <yaokai34@huawei.com>,
+ Tengda Wu <wutengda2@huawei.com>
+In-Reply-To: <aV7o36CHTLc-tD41@pavilion.home>
+To: Frederic Weisbecker <frederic@kernel.org>
+X-Mailer: iPhone Mail (23B85)
 
-From: Bobby Eshleman <bobbyeshleman@meta.com>
 
-Add test case for autorelease.
 
-THe test case is the same as the RX test, but enables autorelease.  The
-original RX test is changed to use the -a 0 flag to disable autorelease.
+> On Jan 7, 2026, at 6:15=E2=80=AFPM, Frederic Weisbecker <frederic@kernel.o=
+rg> wrote:
+>=20
+> =EF=BB=BFLe Thu, Jan 01, 2026 at 11:34:10AM -0500, Joel Fernandes a =C3=A9=
+crit :
+>> From: Yao Kai <yaokai34@huawei.com>
+>>=20
+>> Commit 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in
+>> __rcu_read_unlock()") removes the recursion-protection code from
+>> __rcu_read_unlock(). Therefore, we could invoke the deadloop in
+>> raise_softirq_irqoff() with ftrace enabled as follows:
+>>=20
+>> WARNING: CPU: 0 PID: 0 at kernel/trace/trace.c:3021 __ftrace_trace_stack.=
+constprop.0+0x172/0x180
+>> Modules linked in: my_irq_work(O)
+>> CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G O 6.18.0-rc7-dirty #23 PR=
+EEMPT(full)
+>> Tainted: [O]=3DOOT_MODULE
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/0=
+1/2014
+>> RIP: 0010:__ftrace_trace_stack.constprop.0+0x172/0x180
+>> RSP: 0018:ffffc900000034a8 EFLAGS: 00010002
+>> RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000000
+>> RDX: 0000000000000003 RSI: ffffffff826d7b87 RDI: ffffffff826e9329
+>> RBP: 0000000000090009 R08: 0000000000000005 R09: ffffffff82afbc4c
+>> R10: 0000000000000008 R11: 0000000000011d7a R12: 0000000000000000
+>> R13: ffff888003874100 R14: 0000000000000003 R15: ffff8880038c1054
+>> FS:  0000000000000000(0000) GS:ffff8880fa8ea000(0000) knlGS:0000000000000=
+000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 000055b31fa7f540 CR3: 00000000078f4005 CR4: 0000000000770ef0
+>> PKRU: 55555554
+>> Call Trace:
+>> <IRQ>
+>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>> trace_event_buffer_commit+0x5c/0x260
+>> trace_event_raw_event_softirq+0x47/0x80
+>> raise_softirq_irqoff+0x6e/0xa0
+>> rcu_read_unlock_special+0xb1/0x160
+>> unwind_next_frame+0x203/0x9b0
+>> __unwind_start+0x15d/0x1c0
+>> arch_stack_walk+0x62/0xf0
+>> stack_trace_save+0x48/0x70
+>> __ftrace_trace_stack.constprop.0+0x144/0x180
+>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>> trace_event_buffer_commit+0x5c/0x260
+>> trace_event_raw_event_softirq+0x47/0x80
+>> raise_softirq_irqoff+0x6e/0xa0
+>> rcu_read_unlock_special+0xb1/0x160
+>> unwind_next_frame+0x203/0x9b0
+>> __unwind_start+0x15d/0x1c0
+>> arch_stack_walk+0x62/0xf0
+>> stack_trace_save+0x48/0x70
+>> __ftrace_trace_stack.constprop.0+0x144/0x180
+>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>> trace_event_buffer_commit+0x5c/0x260
+>> trace_event_raw_event_softirq+0x47/0x80
+>> raise_softirq_irqoff+0x6e/0xa0
+>> rcu_read_unlock_special+0xb1/0x160
+>> unwind_next_frame+0x203/0x9b0
+>> __unwind_start+0x15d/0x1c0
+>> arch_stack_walk+0x62/0xf0
+>> stack_trace_save+0x48/0x70
+>> __ftrace_trace_stack.constprop.0+0x144/0x180
+>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>> trace_event_buffer_commit+0x5c/0x260
+>> trace_event_raw_event_softirq+0x47/0x80
+>> raise_softirq_irqoff+0x6e/0xa0
+>> rcu_read_unlock_special+0xb1/0x160
+>> __is_insn_slot_addr+0x54/0x70
+>> kernel_text_address+0x48/0xc0
+>> __kernel_text_address+0xd/0x40
+>> unwind_get_return_address+0x1e/0x40
+>> arch_stack_walk+0x9c/0xf0
+>> stack_trace_save+0x48/0x70
+>> __ftrace_trace_stack.constprop.0+0x144/0x180
+>> trace_buffer_unlock_commit_regs+0x6d/0x220
+>> trace_event_buffer_commit+0x5c/0x260
+>> trace_event_raw_event_softirq+0x47/0x80
+>> __raise_softirq_irqoff+0x61/0x80
+>> __flush_smp_call_function_queue+0x115/0x420
+>> __sysvec_call_function_single+0x17/0xb0
+>> sysvec_call_function_single+0x8c/0xc0
+>> </IRQ>
+>>=20
+>> Commit b41642c87716 ("rcu: Fix rcu_read_unlock() deadloop due to IRQ work=
+")
+>> fixed the infinite loop in rcu_read_unlock_special() for IRQ work by
+>> setting a flag before calling irq_work_queue_on(). We fix this issue by
+>> setting the same flag before calling raise_softirq_irqoff() and rename th=
+e
+>> flag to defer_qs_pending for more common.
+>>=20
+>> Fixes: 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in __rcu_read=
+_unlock()")
+>> Reported-by: Tengda Wu <wutengda2@huawei.com>
+>> Signed-off-by: Yao Kai <yaokai34@huawei.com>
+>> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
+>> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+>=20
+> Looks good but, BTW, what happens if rcu_qs() is called
+> before rcu_preempt_deferred_qs() had a chance to be called?
 
-TAP version 13
-1..4
-ok 1 devmem.check_rx
-ok 2 devmem.check_rx_autorelease
-ok 3 devmem.check_tx
-ok 4 devmem.check_tx_chunks
+Could you provide an example of when that can happen?=20
 
-Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
----
-Changes in v8:
-- removed stale/missing tests
+If rcu_qs() results in reporting of a quiescent state up the node tree befor=
+e the deferred reporting work had a chance to act, then indeed we should be c=
+learing the flag (after canceling the pending raise_softirq_irqoff()).
 
-Changes in v7:
-- use autorelease netlink
-- remove sockopt tests
----
- tools/testing/selftests/drivers/net/hw/devmem.py  | 21 +++++++++++++++++++--
- tools/testing/selftests/drivers/net/hw/ncdevmem.c | 19 +++++++++++++------
- 2 files changed, 32 insertions(+), 8 deletions(-)
+>> flag to defer_qs_pending for more common.
+>>=20
+>> Fixes: 5f5fa7ea89dc ("rcu: Don't use negative nesting depth in __rcu_read=
+_unlock()")
+>> Reported-by: Tengda Wu <wutengda2@huawei.com>
+>> Signed-off-by: Yao Kai <yaokai34@huawei.com>
+>> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
+>> Signed-off-by: Joel Fernandes <joelagnelf@nvidia.com>
+>=20
+> Looks good but, BTW, what happens if rcu_qs() is called
+> before rcu_preempt_deferred_qs() had a chance to be called?
 
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem.py b/tools/testing/selftests/drivers/net/hw/devmem.py
-index 45c2d49d55b6..dbe696a445bd 100755
---- a/tools/testing/selftests/drivers/net/hw/devmem.py
-+++ b/tools/testing/selftests/drivers/net/hw/devmem.py
-@@ -25,7 +25,24 @@ def check_rx(cfg) -> None:
- 
-     port = rand_port()
-     socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},bind={cfg.remote_baddr}:{port}"
--    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7"
-+    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} -c {cfg.remote_addr} -v 7 -a 0"
-+
-+    with bkg(listen_cmd, exit_wait=True) as ncdevmem:
-+        wait_port_listen(port)
-+        cmd(f"yes $(echo -e \x01\x02\x03\x04\x05\x06) | \
-+            head -c 1K | {socat}", host=cfg.remote, shell=True)
-+
-+    ksft_eq(ncdevmem.ret, 0)
-+
-+
-+@ksft_disruptive
-+def check_rx_autorelease(cfg) -> None:
-+    require_devmem(cfg)
-+
-+    port = rand_port()
-+    socat = f"socat -u - TCP{cfg.addr_ipver}:{cfg.baddr}:{port},bind={cfg.remote_baddr}:{port}"
-+    listen_cmd = f"{cfg.bin_local} -l -f {cfg.ifname} -s {cfg.addr} -p {port} \
-+                  -c {cfg.remote_addr} -v 7 -a 1"
- 
-     with bkg(listen_cmd, exit_wait=True) as ncdevmem:
-         wait_port_listen(port)
-@@ -68,7 +85,7 @@ def main() -> None:
-         cfg.bin_local = path.abspath(path.dirname(__file__) + "/ncdevmem")
-         cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
- 
--        ksft_run([check_rx, check_tx, check_tx_chunks],
-+        ksft_run([check_rx, check_rx_autorelease, check_tx, check_tx_chunks],
-                  args=(cfg, ))
-     ksft_exit()
- 
-diff --git a/tools/testing/selftests/drivers/net/hw/ncdevmem.c b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-index 3288ed04ce08..406f1771d9ec 100644
---- a/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-+++ b/tools/testing/selftests/drivers/net/hw/ncdevmem.c
-@@ -92,6 +92,7 @@ static char *port;
- static size_t do_validation;
- static int start_queue = -1;
- static int num_queues = -1;
-+static int devmem_autorelease;
- static char *ifname;
- static unsigned int ifindex;
- static unsigned int dmabuf_id;
-@@ -679,7 +680,8 @@ static int configure_flow_steering(struct sockaddr_in6 *server_sin)
- 
- static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
- 			 struct netdev_queue_id *queues,
--			 unsigned int n_queue_index, struct ynl_sock **ys)
-+			 unsigned int n_queue_index, struct ynl_sock **ys,
-+			 int autorelease)
- {
- 	struct netdev_bind_rx_req *req = NULL;
- 	struct netdev_bind_rx_rsp *rsp = NULL;
-@@ -695,6 +697,7 @@ static int bind_rx_queue(unsigned int ifindex, unsigned int dmabuf_fd,
- 	req = netdev_bind_rx_req_alloc();
- 	netdev_bind_rx_req_set_ifindex(req, ifindex);
- 	netdev_bind_rx_req_set_fd(req, dmabuf_fd);
-+	netdev_bind_rx_req_set_autorelease(req, autorelease);
- 	__netdev_bind_rx_req_set_queues(req, queues, n_queue_index);
- 
- 	rsp = netdev_bind_rx(*ys, req);
-@@ -872,7 +875,8 @@ static int do_server(struct memory_buffer *mem)
- 		goto err_reset_rss;
- 	}
- 
--	if (bind_rx_queue(ifindex, mem->fd, create_queues(), num_queues, &ys)) {
-+	if (bind_rx_queue(ifindex, mem->fd, create_queues(), num_queues, &ys,
-+			  devmem_autorelease)) {
- 		pr_err("Failed to bind");
- 		goto err_reset_flow_steering;
- 	}
-@@ -1092,7 +1096,7 @@ int run_devmem_tests(void)
- 		goto err_reset_headersplit;
- 	}
- 
--	if (!bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys)) {
-+	if (!bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys, 0)) {
- 		pr_err("Binding empty queues array should have failed");
- 		goto err_unbind;
- 	}
-@@ -1108,7 +1112,7 @@ int run_devmem_tests(void)
- 		goto err_reset_headersplit;
- 	}
- 
--	if (!bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys)) {
-+	if (!bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys, 0)) {
- 		pr_err("Configure dmabuf with header split off should have failed");
- 		goto err_unbind;
- 	}
-@@ -1124,7 +1128,7 @@ int run_devmem_tests(void)
- 		goto err_reset_headersplit;
- 	}
- 
--	if (bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys)) {
-+	if (bind_rx_queue(ifindex, mem->fd, queues, num_queues, &ys, 0)) {
- 		pr_err("Failed to bind");
- 		goto err_reset_headersplit;
- 	}
-@@ -1397,7 +1401,7 @@ int main(int argc, char *argv[])
- 	int is_server = 0, opt;
- 	int ret, err = 1;
- 
--	while ((opt = getopt(argc, argv, "ls:c:p:v:q:t:f:z:")) != -1) {
-+	while ((opt = getopt(argc, argv, "ls:c:p:v:q:t:f:z:a:")) != -1) {
- 		switch (opt) {
- 		case 'l':
- 			is_server = 1;
-@@ -1426,6 +1430,9 @@ int main(int argc, char *argv[])
- 		case 'z':
- 			max_chunk = atoi(optarg);
- 			break;
-+		case 'a':
-+			devmem_autorelease = atoi(optarg);
-+			break;
- 		case '?':
- 			fprintf(stderr, "unknown option: %c\n", optopt);
- 			break;
+Could you provide an example of when that can happen?=20
 
--- 
-2.47.3
+As far as I can see, even if that were to happen, which I think you are righ=
+t it can happen, we will still go through the path to report deferred quiesc=
+ent states and cancel the pending work (reset the flag).
 
+> current->rcu_read_unlock_special.b.need_qs is reset by rcu_qs()
+> so subsequent calls to rcu_read_unlock() won't issue rcu_read_unlock_speci=
+al()
+> (unless the task is blocked). And further calls to rcu_preempt_deferred_qs=
+()
+> through rcu_core() will be ignored as well.
+
+I am not sure if this implies that deferred quiescent state gets cancelled b=
+ecause we have already called unlock once. We have to go through the deferre=
+d quiescent state path on all subsequent quiescent state reporting, even if n=
+eed_qs reset. How else will the GP complete.
+>=20
+> But rdp->defer_qs_pending will remain in the DEFER_QS_PENDING state until
+> the next grace period. And if rcu_read_unlock_special() is called again
+> during the next GP on unfortunate place needing deferred qs, the state mac=
+hine
+> will spuriously assume that either rcu_core or the irq_work are pending, w=
+hen
+> none are anymore.
+>=20
+> The state should be reset by rcu_qs().
+
+In fact I would say if a deferred QS is pending, we should absolutely not re=
+set its state from rcu_qs..
+
+Maybe we should reset it from rcu_report_qs_rdp/rnp?
+
+Unfortunately, all of this is coming from me being on a phone and not at a c=
+omputer, so I will revise my response, but probably tomorrow, because today t=
+he human body is not cooperating.=20
+
+thanks,
+
+ - Joel
+
+
+> current->rcu_read_unlock_special.b.need_qs is reset by rcu_qs()
+> so subsequent calls to rcu_read_unlock() won't issue rcu_read_unlock_speci=
+al()
+> (unless the task is blocked). And further calls to rcu_preempt_deferred_qs=
+()
+> through rcu_core() will be ignored as well.
+
+I am not sure if this implies that deferred quiescent state gets cancelled b=
+ecause we have already called unlock once. We have to go through the deferre=
+d quiescent state path on all subsequent quiescent state reporting, even if n=
+eed_qs reset. How else will the GP complete.
+>=20
+> But rdp->defer_qs_pending will remain in the DEFER_QS_PENDING state until
+> the next grace period. And if rcu_read_unlock_special() is called again
+> during the next GP on unfortunate place needing deferred qs, the state mac=
+hine
+> will spuriously assume that either rcu_core or the irq_work are pending, w=
+hen
+> none are anymore.
+>=20
+> The state should be reset by rcu_qs().
+
+In fact I would say if a deferred QS is pending, we should absolutely not re=
+set its state from rcu_qs..
+
+Maybe we should reset it from rcu_report_qs_rdp/rnp?
+
+thanks,
+
+ - Joel
+
+
+>=20
+> Thanks.
+>=20
+> --
+> Frederic Weisbecker
+> SUSE Labs
+>=20
 
