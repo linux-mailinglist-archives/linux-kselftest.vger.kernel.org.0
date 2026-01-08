@@ -1,164 +1,248 @@
-Return-Path: <linux-kselftest+bounces-48461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48462-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65636D009BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 03:10:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30331D009D4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 03:12:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id EE42A3001FE5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 02:10:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1C521303EB89
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 02:11:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D9A227B94;
-	Thu,  8 Jan 2026 02:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E279E23ABA1;
+	Thu,  8 Jan 2026 02:11:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CQUi1qwK";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="EmLMkHKw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aUeG1z+u"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D67A2264A9
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 02:10:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5DEC237180
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 02:11:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767838215; cv=none; b=OgvhbpXCyj3KNTFgbFyydWiQzatuM/fY5FjhZQrnP/PhEsD2fjIk3KXehbq4ZGFTGlmDuG7ye9QTR6d0ogrzzSD61o5w75KJS4uUGTkanbShvGUsKS3zkJ8WG05AgLGHqhY0AetzxU7NQkNRoRGTAeOWaSkTUdimp5uBdI49C6Y=
+	t=1767838298; cv=none; b=pBLlzOn01r40C3yJcxbnAKhGOA1oG1HNjs66mexUzejiHFK9u2TWpYRTmaPOUq27czMbKVUToylctTMIqacAFn64nUSfAVP21by1og+nT+zg6h+ZSs3UNTZQOFq3fXMC2XdXCpxQ7wkKhYb/SHOlKfqg0HLMtsfVqLt+M+7lUjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767838215; c=relaxed/simple;
-	bh=kUnR9HX7lQUF5BwVYBBEbR1+bdzDdJhHY5QWbcNrgW0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WvZrGBCGPDnf7HsF61FlEs/Ur2FJtdfQBZ4BpeJiJ9y1ro0uynkq2f3NlQnlYgZF92CEXrBdgIB48kSlQqXXP3Mf4KCFh8zjBXztJ9boG4RjDmLIgeyUk3FDS75zcXB+szcZtsS6x+UqT0tlZO6/ZRVdSX+EB3jc4wISPmMNKpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CQUi1qwK; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=EmLMkHKw; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1767838298; c=relaxed/simple;
+	bh=049aThQQ0R4hiDA0tJLpuzFVU7KU0eDMVCiKqIRr0Ng=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ogdSW/u1GPRD5/kOrz14f6iDcLE7P1KQPKo/3y23RijHPmesGTFENQ/Onw0SwAg4hcp+abIbVMBQHXE79vdZz+mOh8xk64PxWaokDis8UsZsXLYZy9uJD9WyXpRVC40aZp9dStCfK8rfP62SOElbXhNsjvJJ+c7DI01U3NbD3Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aUeG1z+u; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767838213;
+	s=mimecast20190719; t=1767838296;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cbKKq3eWOpnN64kmqoe2MLI8jKxuF4NAAyTLOPJCk1c=;
-	b=CQUi1qwKM4sXN1Z8ApAKb4OvPUuvldw0WKEtGQJDRvmhBJpDHPl2irAu834Bw1l4Kkty2n
-	aZYbJpNp/i+f6iPs3Fd7jhf+eMc56SpijMhBmLxMSZ/o6ZyLrDvBJbHlGabjYiXDPhkQn2
-	LeiyBB8TQGa3+bAoVcv+pz9K7Ag/KeI=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-571--WxSBjkhO6ulTbY-sskdgA-1; Wed, 07 Jan 2026 21:10:11 -0500
-X-MC-Unique: -WxSBjkhO6ulTbY-sskdgA-1
-X-Mimecast-MFC-AGG-ID: -WxSBjkhO6ulTbY-sskdgA_1767838210
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-b841fc79f3eso263159766b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 18:10:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767838210; x=1768443010; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cbKKq3eWOpnN64kmqoe2MLI8jKxuF4NAAyTLOPJCk1c=;
-        b=EmLMkHKwb+chszaAXcv6XenU2lzvDyk86fkconPORvF7M0Sg5xcWHBu+F7KIYCjXtL
-         Hj9ttu/Y97+H8d0yAnT6RyoIDMKZyMVFQ2dbvnbbwCcJy45gP+IbEEYqCnxJGFQnSzFi
-         izbE7M6NopdSRdnoDIWxdaRs49L8erEPjKyuuMUHWFa517XI2zfyQLbI8yH+b3HRfmIL
-         iqdtwYAaHxcuvtTwrFAWWCCjvRhV+KMonrrjngc0I7/9HS6iFO4GkfKfzAjnf/p0DzxK
-         RLdp1RLlEOOUOQhw0sZTMFJzWMD/RAzS36YoYcD1LY7Dh72ATUUP/j6FgvtTl4rYio+2
-         s9+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767838210; x=1768443010;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cbKKq3eWOpnN64kmqoe2MLI8jKxuF4NAAyTLOPJCk1c=;
-        b=UIJBheW58k7+iuXNv3bkWFksryP1yCIIXNmcqNcs+AKCup/ab7RkHIn5q5MFqJ1Gz4
-         v6BDQbUX/VHxC15Zpk0fIUzKWO85pywSoPXHFuLhjRtSoPclesN8FR4bvSz8sFxIwOLO
-         z/G87nSO2XbQ90yU/OqvtFon5tqSMki2jy8FbcwC8YBgf3Lx78F90R7DQRGORCycXthh
-         VA9jzj0o/quwPUzeNA77+9/Iw3+4tDR6VKz386NXwzssuLjz/85HdsLbxdzIQzUsI3ag
-         0oZUl2axU0ZCczd3IOkBIZnXvJUssddW0hEEwnAAjAWzrT2vucy+Y/fYgFDHYk9/V19H
-         jqMA==
-X-Forwarded-Encrypted: i=1; AJvYcCWsLeh+IfpWbM+qNroCCCbaYuDuXIzJqFQU0n3hTecnJIXA5j6noG+jGZYJ7LK6tN8Hltw3QhNLJWoXLcnTIUg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPUCs7S9o7kJCLaDKGBxqErndOK9iYCGY4YO+2An89dIYxwKaX
-	kpmLeXiRG6M6gYneuRnZFEKn++ejywDiJFH5UYs6SLOjIk7PjKW+6dNBcpb4zWVAHLFHVOJvFbV
-	JEkvDqjDUCluXJVifnMQ/HBginOStmNPElWlOYndXWQ62yivXoceCtaPtE1tVj3rtrekkAUyzMZ
-	kXaZDaHEEv+z6BExujuzaExYPyDOxRXzg3gmy2dVjj6nNCNnHa6LCgbr0HeD36
-X-Gm-Gg: AY/fxX4BlSkx+7BJdEb+gTO3yHllJ5ucus+2fqOzWeMTMbHNPxur2Q+huqS6B9ZV+12
-	NyVGNOhrzFupgsCxtq5mPf7gwyJukiJpNCWUzJqQEI92DE6oNrnLxb/5kFTVa9/+TKqxVDbPTuB
-	dqRdNStPFlP3poUfyCY7l8/wEBhpodAvM9DEWkXqpvHyhS3pRaeIIjnanMWufkirHpNEI=
-X-Received: by 2002:a17:907:78b:b0:b83:15cb:d4cf with SMTP id a640c23a62f3a-b84451de1d5mr379482466b.29.1767838209696;
-        Wed, 07 Jan 2026 18:10:09 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFiLXyXs4mwJJvyTOueFeBS6umsNPGhSgTwLnU3w460hH3uJovgWV/0G4cRKqUFXnHXvK4EuWnp7J/QtTQ4YTk=
-X-Received: by 2002:a17:907:78b:b0:b83:15cb:d4cf with SMTP id
- a640c23a62f3a-b84451de1d5mr379481466b.29.1767838209270; Wed, 07 Jan 2026
- 18:10:09 -0800 (PST)
+	bh=rwTDfrrhXfxF0SpZgYiLTozrSeWG4M61kJgcHxQn5os=;
+	b=aUeG1z+uetZJrPipJwvtnypwjb/qqWE1LB76r/c9zit/KrYm6J9akMGDQBq+cnhEYd7OTe
+	JVjPZ1P/MaWo4Q8wZp9+QxSlNVXDDi0dv9/LKISTSSl9g8vvxEoGqjbzhOCNUi0UPxIXG5
+	PoFojjQqvYa1FNI1slCtLb3wGQ0i8+E=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-121-3yITyVF1Ogm3ZGARGrb3yw-1; Wed,
+ 07 Jan 2026 21:11:30 -0500
+X-MC-Unique: 3yITyVF1Ogm3ZGARGrb3yw-1
+X-Mimecast-MFC-AGG-ID: 3yITyVF1Ogm3ZGARGrb3yw_1767838289
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CFCB019560B2;
+	Thu,  8 Jan 2026 02:11:28 +0000 (UTC)
+Received: from fedora (unknown [10.72.116.164])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 633C91956053;
+	Thu,  8 Jan 2026 02:11:23 +0000 (UTC)
+Date: Thu, 8 Jan 2026 10:11:18 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Caleb Sander Mateos <csander@purestorage.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Shuah Khan <shuah@kernel.org>,
+	linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stanley Zhang <stazhang@purestorage.com>,
+	Uday Shankar <ushankar@purestorage.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Subject: Re: [PATCH v3 09/19] ublk: implement integrity user copy
+Message-ID: <aV8SRkTYU0NN2V6t@fedora>
+References: <20260106005752.3784925-1-csander@purestorage.com>
+ <20260106005752.3784925-10-csander@purestorage.com>
+ <aV0PauBTiqWVQ-26@fedora>
+ <CADUfDZryjLxVBFpk1c_NUp_GEWuWA=8UB6Vyx15tFUjQHGa_DQ@mail.gmail.com>
+ <aV2onjve8cFAkJrV@fedora>
+ <CADUfDZqxU+egMQh3ejZo4n3jHo7EwaTS7LXm2+G+RV3wpOzT9A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1767597114.git.xudu@redhat.com> <willemdebruijn.kernel.3ae0df5f36144@gmail.com>
- <20260106145822.3cd9b317@kernel.org> <CAA92KxkOYKA9vsihvk0FR58m4zgM8-oZVWGsLDYycnk4UWmQAg@mail.gmail.com>
- <willemdebruijn.kernel.24d5d52e43030@gmail.com>
-In-Reply-To: <willemdebruijn.kernel.24d5d52e43030@gmail.com>
-From: Xu Du <xudu@redhat.com>
-Date: Thu, 8 Jan 2026 10:09:58 +0800
-X-Gm-Features: AQt7F2pWAqMWev0KJxABViGC51S0adN36dKHz2g-w5Tu3XLOWV45XqO5Up36Tfg
-Message-ID: <CAA92Kxmdcc01B0p8jK3JM-ot+LzdnCwS8utAtFe7bBg1ymqT5w@mail.gmail.com>
-Subject: Re: [PATCH net-next v4 0/8] selftest: Extend tun/virtio coverage for
- GSO over UDP tunnel
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net, edumazet@google.com, 
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADUfDZqxU+egMQh3ejZo4n3jHo7EwaTS7LXm2+G+RV3wpOzT9A@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On Wed, Jan 7, 2026 at 10:59=E2=80=AFPM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
->
-> Xu Du wrote:
-> > On Wed, Jan 7, 2026 at 6:58=E2=80=AFAM Jakub Kicinski <kuba@kernel.org>=
- wrote:
-> > >
-> > > On Tue, 06 Jan 2026 17:14:05 -0500 Willem de Bruijn wrote:
-> > > > For instance, can the new netlink code be replaced by YNL, whether =
-in
-> > > > C or called from a script?
-> > >
-> > > +1 looks like YNL is already used in net/ tests, and it supports
-> > > the operations in question, so that's a much better direction.
-> > > Please let us (YNL maintainers) know if there's anything missing
-> > > or not working, IDK how much use the rtnetlink support in YNL is
-> > > getting.
-> > >
+On Wed, Jan 07, 2026 at 05:50:04PM -0800, Caleb Sander Mateos wrote:
+> On Tue, Jan 6, 2026 at 4:28 PM Ming Lei <ming.lei@redhat.com> wrote:
 > >
-> > Thank you for the suggestion. I am looking into replacing the netlink
-> > with YNL to reduce code. But after reviewing rt-link.rst, I found that
-> > rt-link currently lacks support for VXLAN. Would more significant chang=
-es
-> >  to the patch be acceptable if I switch to Geneve to leverage YNL?
->
-> These are only changes to the new code in your series. SGTM. I assume
-> it is not a significant burden as the two are fairly similar. Is that
-> correct?
->
-> Eventually it may be nice to have VXLAN support in YNL akin to Geneve
-> support. But sounds like a separate goal.
->
+> > On Tue, Jan 06, 2026 at 10:20:14AM -0800, Caleb Sander Mateos wrote:
+> > > On Tue, Jan 6, 2026 at 5:34 AM Ming Lei <ming.lei@redhat.com> wrote:
+> > > >
+> > > > On Mon, Jan 05, 2026 at 05:57:41PM -0700, Caleb Sander Mateos wrote:
+> > > > > From: Stanley Zhang <stazhang@purestorage.com>
+> > > > >
+> > > > > Add a function ublk_copy_user_integrity() to copy integrity information
+> > > > > between a request and a user iov_iter. This mirrors the existing
+> > > > > ublk_copy_user_pages() but operates on request integrity data instead of
+> > > > > regular data. Check UBLKSRV_IO_INTEGRITY_FLAG in iocb->ki_pos in
+> > > > > ublk_user_copy() to choose between copying data or integrity data.
+> > > > >
+> > > > > Signed-off-by: Stanley Zhang <stazhang@purestorage.com>
+> > > > > [csander: change offset units from data bytes to integrity data bytes,
+> > > > >  test UBLKSRV_IO_INTEGRITY_FLAG after subtracting UBLKSRV_IO_BUF_OFFSET,
+> > > > >  fix CONFIG_BLK_DEV_INTEGRITY=n build,
+> > > > >  rebase on ublk user copy refactor]
+> > > > > Signed-off-by: Caleb Sander Mateos <csander@purestorage.com>
+> > > > > ---
+> > > > >  drivers/block/ublk_drv.c      | 52 +++++++++++++++++++++++++++++++++--
+> > > > >  include/uapi/linux/ublk_cmd.h |  4 +++
+> > > > >  2 files changed, 53 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+> > > > > index e44ab9981ef4..9694a4c1caa7 100644
+> > > > > --- a/drivers/block/ublk_drv.c
+> > > > > +++ b/drivers/block/ublk_drv.c
+> > > > > @@ -621,10 +621,15 @@ static inline unsigned ublk_pos_to_tag(loff_t pos)
+> > > > >  {
+> > > > >       return ((pos - UBLKSRV_IO_BUF_OFFSET) >> UBLK_TAG_OFF) &
+> > > > >               UBLK_TAG_BITS_MASK;
+> > > > >  }
+> > > > >
+> > > > > +static inline bool ublk_pos_is_integrity(loff_t pos)
+> > > > > +{
+> > > > > +     return !!((pos - UBLKSRV_IO_BUF_OFFSET) & UBLKSRV_IO_INTEGRITY_FLAG);
+> > > > > +}
+> > > > > +
+> > > >
+> > > > It could be more readable to check UBLKSRV_IO_INTEGRITY_FLAG only.
+> > >
+> > > That's assuming that UBLK_TAG_BITS = 16 has more bits than are
+> > > strictly required by UBLK_MAX_QUEUE_DEPTH = 4096? Otherwise, adding
+> > > UBLKSRV_IO_BUF_OFFSET = 1 << 31 to tag << UBLK_TAG_OFF could overflow
+> > > into the QID bits, which could then overflow into
+> > > UBLKSRV_IO_INTEGRITY_FLAG. That seems like a very fragile assumption.
+> > > And if you want to rely on this assumption, why bother subtracting
+> > > UBLKSRV_IO_BUF_OFFSET in ublk_pos_to_hwq() either? The compiler should
+> > > easily be able to deduplicate the iocb->ki_pos - UBLKSRV_IO_BUF_OFFSET
+> > > computations, so I can't imagine it matters for performance.
+> >
+> > UBLKSRV_IO_INTEGRITY_FLAG should be defined as one flag starting from top
+> > bit(bit 62), then you will see it is just fine to check it directly.
+> >
+> > But it isn't a big deal to subtract UBLKSRV_IO_BUF_OFFSET or not here, I
+> > will leave it to you.
+> >
+> > >
+> > > >
+> > > > >  static void ublk_dev_param_basic_apply(struct ublk_device *ub)
+> > > > >  {
+> > > > >       const struct ublk_param_basic *p = &ub->params.basic;
+> > > > >
+> > > > >       if (p->attrs & UBLK_ATTR_READ_ONLY)
+> > > > > @@ -1047,10 +1052,37 @@ static size_t ublk_copy_user_pages(const struct request *req,
+> > > > >                       break;
+> > > > >       }
+> > > > >       return done;
+> > > > >  }
+> > > > >
+> > > > > +#ifdef CONFIG_BLK_DEV_INTEGRITY
+> > > > > +static size_t ublk_copy_user_integrity(const struct request *req,
+> > > > > +             unsigned offset, struct iov_iter *uiter, int dir)
+> > > > > +{
+> > > > > +     size_t done = 0;
+> > > > > +     struct bio *bio = req->bio;
+> > > > > +     struct bvec_iter iter;
+> > > > > +     struct bio_vec iv;
+> > > > > +
+> > > > > +     if (!blk_integrity_rq(req))
+> > > > > +             return 0;
+> > > > > +
+> > > > > +     bio_for_each_integrity_vec(iv, bio, iter) {
+> > > > > +             if (!ublk_copy_user_bvec(&iv, &offset, uiter, dir, &done))
+> > > > > +                     break;
+> > > > > +     }
+> > > > > +
+> > > > > +     return done;
+> > > > > +}
+> > > > > +#else /* #ifdef CONFIG_BLK_DEV_INTEGRITY */
+> > > > > +static size_t ublk_copy_user_integrity(const struct request *req,
+> > > > > +             unsigned offset, struct iov_iter *uiter, int dir)
+> > > > > +{
+> > > > > +     return 0;
+> > > > > +}
+> > > > > +#endif /* #ifdef CONFIG_BLK_DEV_INTEGRITY */
+> > > > > +
+> > > > >  static inline bool ublk_need_map_req(const struct request *req)
+> > > > >  {
+> > > > >       return ublk_rq_has_data(req) && req_op(req) == REQ_OP_WRITE;
+> > > > >  }
+> > > > >
+> > > > > @@ -2654,10 +2686,12 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
+> > > > >  {
+> > > > >       struct ublk_device *ub = iocb->ki_filp->private_data;
+> > > > >       struct ublk_queue *ubq;
+> > > > >       struct request *req;
+> > > > >       struct ublk_io *io;
+> > > > > +     unsigned data_len;
+> > > > > +     bool is_integrity;
+> > > > >       size_t buf_off;
+> > > > >       u16 tag, q_id;
+> > > > >       ssize_t ret;
+> > > > >
+> > > > >       if (!user_backed_iter(iter))
+> > > > > @@ -2667,10 +2701,11 @@ ublk_user_copy(struct kiocb *iocb, struct iov_iter *iter, int dir)
+> > > > >               return -EACCES;
+> > > > >
+> > > > >       tag = ublk_pos_to_tag(iocb->ki_pos);
+> > > > >       q_id = ublk_pos_to_hwq(iocb->ki_pos);
+> > > > >       buf_off = ublk_pos_to_buf_off(iocb->ki_pos);
+> > > > > +     is_integrity = ublk_pos_is_integrity(iocb->ki_pos);
+> > > >
+> > > > UBLKSRV_IO_INTEGRITY_FLAG can be set for device without UBLK_F_INTEGRITY,
+> > > > so UBLK_F_INTEGRITY need to be checked in case of `is_integrity`.
+> > >
+> > > If UBLK_F_INTEGRITY isn't set, then UBLK_PARAM_TYPE_INTEGRITY isn't
+> > > allowed, so the ublk device won't support integrity data. Therefore,
+> > > blk_integrity_rq() will return false and ublk_copy_user_integrity()
+> > > will just return 0. Do you think it's important to return some error
+> > > code value instead? I would rather avoid the additional checks in the
+> > > hot path.
+> >
+> > The check could be zero cost, but better to fail the wrong usage than
+> > returning 0 silently, which may often imply big issue.
+> 
+> Not sure what you mean by "the check could be zero cost". It's 2
+> branches to check for UBLK_F_INTEGRITY in the ublk_device flags and to
+> check is_integrity. Even if the branches are predictable (and the
+> is_integrity one might not be), there's still some cost for computing
+> the conditions and taking up space in the branch history table.
 
-I think it is not a significant burden. I will perform some internal
-testing first.
+ub->dev_info.nr_hw_queues is fetched for validating `q_id`, so
+ub->dev_info.flags is always hit from the same cache line.
 
---=20
+> A ublk server should already be checking that the return value from
+> the user copy syscall matches the passed in length. Otherwise, the
+> request's data was shorter than expected or a fault occurred while
+> accessing the userspace buffer. But if you feel strongly, I'll add an
+> explicit -EINVAL return code.
+
+It is absolutely userspace fault or bug, I think it is better to fast fail.
+Otherwise, it has to be documented clearly.
 
 
-Regards,
-
-Xu
-
-
---
-
-Xu Du
-
-Quality Engineer, RHEL Network QE
-
-Raycom, Beijing, China
+Thanks,
+Ming
 
 
