@@ -1,125 +1,128 @@
-Return-Path: <linux-kselftest+bounces-48463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 730CED00A1F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 03:16:52 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F4AFD00B44
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 03:41:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CDFAA30970AD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 02:13:13 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C6F133001FE5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 02:41:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC79824169D;
-	Thu,  8 Jan 2026 02:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 471AE1EA7CC;
+	Thu,  8 Jan 2026 02:41:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TJX1LB5D"
+	dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b="17evGVds"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DB6F238C1F
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 02:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB3AAFC0A;
+	Thu,  8 Jan 2026 02:41:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.145.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767838373; cv=none; b=rS+IC/C9yKU4Vrm7g9HOPMpghV38MocfC+08FuFHN6WCHhwlOKnMDNA2Dnx4DZTTXCMQ6WgW5LtbuNF5K+DUb48U5HG1W2WGLf0lLY0fgCOaM594bvgme66TRN0d9b40hdwdnYpzBQYsD28VJeP+abtMd9QKCy7SgwLKgScxxm8=
+	t=1767840085; cv=none; b=fd6cEv3QHg6AW7tp85Ybbhrn9StoCSqoQMA9BTOu4+TrCQd4yLYC3DmMEBkHUuZsfnxrPMa4U9FYJDWZ2wwpvde1lTouBQnxBp+BarNOMY5LQ2RqZDG57wxLwkjhF7cb8AqqeRGuAvL2Ml8l41j5wl8OSbVFCkyaSB5yUflg7GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767838373; c=relaxed/simple;
-	bh=hF9d2rhNnBS2loGttWlljpF0c8tw3NNkNXX8fEqJveU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=csd6tHMSyazGFflTWQtzPgi0mUCge/Vo2+0O+lrTrr7lAzvDlqsUcOy4nNEiwvdeXgKgD/EvBTWFrm7SzAi/O+Pp5CLXzOe7XFCLBkqh1qMOhzJOFgHTUo1RbTLWWZkQU1whxsvOq+8Jq+8O2Sv5alngmXRr0UB5z5uJuePcYbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TJX1LB5D; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1205a8718afso2522690c88.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 18:12:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767838370; x=1768443170; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dc8PyghtvdlRSO9tPpEj5myMC/2Orvga0lvG2eJ2slA=;
-        b=TJX1LB5DkLkOGVn+5vg3qW3o6Blgb81dMGtSQw94DVnf1QgpcIkkzHfYAuUJPsRTYg
-         hukuMEeqw5c860w3Fcd809mEWR2MStHmCxcftnurPBDiBoljfah0am6qRXPc76mNE6Hh
-         9cnRLNHxUZAPx16S5pSA03ICjx1q83ZWlhGvNmZLhF/92bU7X2KY9tGNS753VGOVru/R
-         z8SnbzACbO29SlA7BFeR5rgd+tQUDyfdDNhlHH1MDQEhUErhgGAYPIt9UrsnyD3JvTHg
-         AgXwQdjzU4VDmJSzvtw6F/xcEPg//2Eg+tx5qGMVp3Kl8sJxFYxSHk2YgYvlHFXdRy+n
-         gwYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767838370; x=1768443170;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dc8PyghtvdlRSO9tPpEj5myMC/2Orvga0lvG2eJ2slA=;
-        b=oX95QXBs9sGemE/y1H0f3xd3vsDWYOc+wI31Dt6gNBw6HHlV1idhy9cmMKwPYOuPti
-         jntsUHbgzUrlvi6gwiYZbL3bmGN46t/QDj4JAe8W953lEswP7kZ8tOnuLCeglBOu0cka
-         +JZSD0yAzxeI1xoTEocf+ypX5pRDC5FqwaFr+24FP5GVgj83p2OGJeCqttBfPrsEwBXa
-         Li0/b7BnBtlAOG9HsQEzO7dKDeLjL6fwODWf9HY3phkrPMqD+cneoS8Us5mfA0EFuTWN
-         xQoWIF1VCjTktwnSQbp/gHJkVML8hXx3eH0GYRZX9pbQ6i0UmiQ3welJX1zk29rJEG4h
-         eVrA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2Ezh3RzKlcvYMzZf9rdk+bHKj9DGgJxvx4BeDNLytknkdgkMZJmuCzSfGd8K0QsjShKBKKynK9LAuV4i7r+I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyobsvGnyVbVhwdTwXB4TaXy5z/JHBQu9UzzO1FZlWfGncrpcUh
-	sEi35QVqTeU/nMYr8drAGSge0FaopQry5TUrxDRfb+KXdrOj4iSHCPRE
-X-Gm-Gg: AY/fxX5SKizeCdlP0GN15ViuqNUwlPFkMbcEgESfK9EWqmFtygiyPJhE2r32M48gLdZ
-	56tbCuc8TW+kfMkcxKOQc8Gpq/qCeTZOX8N1UU0EEu222HZPZC5eG5pzxMex/3O9oqwjIHX+qMl
-	HQLMfod747UJtoHZGDDz+MgFe+QkBFGHjZekQlB44RXdehtCD0/1RjU+RHENBSbuoJ7isKB9xOZ
-	FvDgb5dL7NqoyXqDyE//batI5Bk+nrF4ETp1qw0XuAZ2E16qjPU/whtBvjDgJ0GDXjitB/NWXSe
-	kcFGL4tLGgVEiQXfB8zo3FNPgfqvNEeecZq8UoQK+utQE2nmMTe6K4MkcZBxUUE08eW5wDQQhtk
-	Lwn0y5AQor0llNhhovb2PvilQrgp8LWB+OAIYoV2wugycPZ86wNk2Xai/tZ6FLQ+ej9YWAESoWM
-	RU
-X-Google-Smtp-Source: AGHT+IGdu6VmZnIPKWkx6NXDLXAf5b71hWdgf0gteyqFBNplDYTNuYVytmH61SR9H9IGtnHEZB9O4g==
-X-Received: by 2002:a05:7300:fb09:b0:2a4:3593:466d with SMTP id 5a478bee46e88-2b17d226c06mr2746197eec.9.1767838370366;
-        Wed, 07 Jan 2026 18:12:50 -0800 (PST)
-Received: from localhost.localdomain ([2607:f130:0:11a::31])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17052dbc7sm7933292eec.0.2026.01.07.18.12.46
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 07 Jan 2026 18:12:50 -0800 (PST)
-From: wang lian <lianux.mm@gmail.com>
-To: kevin.brodsky@arm.com
-Cc: Usama.Anjum@arm.com,
-	akpm@linux-foundation.org,
-	broonie@kernel.org,
-	david@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	lorenzo.stoakes@oracle.com,
-	ryan.roberts@arm.com,
-	shuah@kernel.org,
-	wang lian <lianux.mm@gmail.com>
-Subject: Re: [PATCH v2 7/8] selftests/mm: fix exit code in pagemap_ioctl
-Date: Thu,  8 Jan 2026 10:12:37 +0800
-Message-ID: <20260108021238.46605-1-lianux.mm@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260107164842.3289559-8-kevin.brodsky@arm.com>
-References: <20260107164842.3289559-8-kevin.brodsky@arm.com>
+	s=arc-20240116; t=1767840085; c=relaxed/simple;
+	bh=9N7gtfek0CZSERE5rrudUqB6NRFeojNIful35p+BAlE=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X5/U+iWtDqVlO4EDiAxsz93E7Qv8Q/YnSJPh34+t01x5HCbH1Y/N+r3uvMtDJ8Ibqk/hjN2i4Y/PxuBgg7Up5YDhriVz0gqdK7wQvmoOB1JICwR7YWaQpNER+s/Sn0pZ5n2bGGdAyl5AqnT2TccvoyU5ihmnX7MjDHKU+pMRQI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=fb.com header.i=@fb.com header.b=17evGVds; arc=none smtp.client-ip=67.231.145.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fb.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6081mYQP2888993;
+	Wed, 7 Jan 2026 18:41:15 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=s2048-2025-q2; bh=5lRmE98vcvRhVI150GA9
+	NbrLj85CvVEHBjRpAZ3nKgY=; b=17evGVdsVshoa4BNelFRCtaBDUtIDV72yDoe
+	AO1Ho5lb1s4utMUJoUoiOdMZuKJawO3ZxLFfBSfoHOWMWvujULMAjrZ95i9sR+5x
+	sWfaEZIvG9c1Akoa8bPXs/uNBti24o6E4nDrkKCrF/sXFHRcH3vIanvH7t7ppNpl
+	78J+eMQfx3HRFPWx1n3JUqFa5dbhF8Q3nm0LV+dDD8dkiFf3NeGxmsGhCa3k0zp5
+	LXuiudPalgzIMN/zakGweXFO+OQ4t4sVlfiJr9OOQ3Ziiy2UJUH7YF/IHbMnmmb5
+	eRaEMDz2t2f5U6zstKzjWyCAwyHFgkaisAXbyAlRcQ33kCkgCQ==
+Received: from mail.thefacebook.com ([163.114.134.16])
+	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4bhv484mrj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Wed, 07 Jan 2026 18:41:15 -0800 (PST)
+Received: from devgpu015.cco6.facebook.com (2620:10d:c085:108::4) by
+ mail.thefacebook.com (2620:10d:c08b:78::c78f) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.29; Thu, 8 Jan 2026 02:41:14 +0000
+Date: Wed, 7 Jan 2026 18:41:10 -0800
+From: Alex Mastro <amastro@fb.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
+CC: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>,
+        Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
+Message-ID: <aV8ZRoDjKzjZaw5r@devgpu015.cco6.facebook.com>
+References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
+ <aV7yIchrL3mzNyFO@google.com>
+ <20260108005406.GA545276@ziepe.ca>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260108005406.GA545276@ziepe.ca>
+X-Proofpoint-GUID: ESBitpku9tgv-bgoB0v0gHTDKnIpx58Q
+X-Authority-Analysis: v=2.4 cv=H47WAuYi c=1 sm=1 tr=0 ts=695f194b cx=c_pps
+ a=CB4LiSf2rd0gKozIdrpkBw==:117 a=CB4LiSf2rd0gKozIdrpkBw==:17
+ a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=gxYtzChvB9cNzsRSEx4A:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA4MDAxOCBTYWx0ZWRfX9SN81BjLRUDZ
+ V/jVM1T+ZOjnO2VUGFUjvp8ApxKhDnhG0t9pT5hlB+jIQQEWJu9bFYV5Pbce1ZIe1DAI56o1j5T
+ yv3P9MranlLY3+HLIXiayWvj4ZPjNm1xlxHu0sHZGHPG1uYXzlN215e4lpkm0LRHUDznh90YKsO
+ cAOD58YAb+V3XNyvMLTKAbD/oY2lA0DMvSWfMes9YGU9u+tr4uALx2xKCXMPLW8MnZ+WDBGAGSF
+ Ko9PoiWkzbwQGZ6g1ebd8yMq1aDRbPZJXYiNiKgJeYUTaIpzZGx1S5jthMe815fauvF7YBd3qRG
+ 7WkTLZtY7RmfKKi4iT8DYdhip0S7YKG4N8WlCcuDHu8BOiNHlatJBoTLOdZeHJD565JBdJcgcjR
+ c3NgmiY2SxrtIJzeJd5ZGipCcFMglNR4Ogy/+RJ+98wEhSxVxfMtMNKZRkYu2BijdMR0tI9NuoH
+ vazL+rmlNOPrhM0Xnkg==
+X-Proofpoint-ORIG-GUID: ESBitpku9tgv-bgoB0v0gHTDKnIpx58Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-07_05,2026-01-07_03,2025-10-01_01
 
-> Make sure pagemap_ioctl exits with an appropriate value:
+On Wed, Jan 07, 2026 at 08:54:06PM -0400, Jason Gunthorpe wrote:
+> On Wed, Jan 07, 2026 at 11:54:09PM +0000, David Matlack wrote:
+> > On 2026-01-07 02:13 PM, Alex Mastro wrote:
+> > > Test MMIO-backed DMA mappings by iommu_map()-ing mmap'ed BAR regions.
+> > 
+> > Thanks for adding this!
+> > 
+> > > Also update vfio_pci_bar_map() to align BAR mmaps for efficient huge
+> > > page mappings.
+> > > 
+> > > Only vfio_type1 variants are tested; iommufd variants can be added
+> > > once kernel support lands.
+> > 
+> > Are there plans to support mapping BARs via virtual address in iommufd?
+> > I thought the plan was only to support via dma-bufs. Maybe Jason can
+> > confirm.
 > 
-> * If the tests are run, call ksft_finished() to report the right
->   status instead of reporting PASS unconditionally.
-> 
-> * Report SKIP if userfaultfd isn't available (in line with other
->   tests)
-> 
-> * Report FAIL if we failed to open /proc/self/pagemap, as this file
->   has been added a long time ago and doesn't depend on any CONFIG
->   option (returning -EINVAL from main() is meaningless)
-> 
-> Cc: Usama Anjum <Usama.Anjum@arm.com>
-> Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
-> Reviewed-by: Mark Brown <broonie@kernel.org>
-> Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>
-> Signed-off-by: Kevin Brodsky <kevin.brodsky@arm.com>
+> Only dmabuf.
 
-Reviewed-by: wang lian <lianux.mm@gmail.com>
+Ack. I got confused. I had thought iommufd's vfio container compatibility mode
+was going to support this, but realized that doesn't make sense given past
+discussions about the pitfalls of achieving these mappings the legacy way.
 
---
-Best Regards,
-wang lian
+> 
+> > Assuming not, should we add negative tests here to make sure iommufd
+> > does not allow mapping BARs?
+> 
+> Yes
+
+Will add.
+
+>  
+> > And then we can add dma-buf tests in a future commit.
+> 
+> Yes
+> 
+> Jason
 
