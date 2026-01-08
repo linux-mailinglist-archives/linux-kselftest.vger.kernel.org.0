@@ -1,110 +1,92 @@
-Return-Path: <linux-kselftest+bounces-48446-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8247ED007BE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 01:42:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9593D007FA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 01:54:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 58C7B3021748
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 00:41:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B7F2E3020C5C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 00:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41AF61D618A;
-	Thu,  8 Jan 2026 00:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2E4D1E3DF2;
+	Thu,  8 Jan 2026 00:54:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lh9AaWzp"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="l7eBb33+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828371AA7BF
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 00:41:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431351C3C1F
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 00:54:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767832897; cv=none; b=TYNMjL5z+u12y962m4RDYGHWht0GbdfHBzryM53ri9MU1vk/oyxmBlNIwiCLeVHrgZcK9L+lwyAviAReR8oE01KcMZGGeTJthK4MVwfWvVNp4IVivXrpmZsJd3pvbiNN7k2kCHTsfUjSNyOc2KoG89Nre3IXUpMG6fYg7fMjmxM=
+	t=1767833649; cv=none; b=gBNZOn21eo5bTzITVffeSEhig/wjFHNPYsWQf/zvp2Dgch33p93inpSm1SelWEyKhF9krdMJadiEgbkXtES3UeyUV+WiO6tBuwG2rribM1kuuU7bkJtE0H06WxbLWX3ME7FjhQAS2dLCeS3W9hnmyPxZuuEUk3NvJ1wS+1ubiCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767832897; c=relaxed/simple;
-	bh=9g0zStzKQeS3+N9tmIKzZx3owOLSnCnzmMh7XbFrzQk=;
+	s=arc-20240116; t=1767833649; c=relaxed/simple;
+	bh=qkl7DK3BpNF47DqlUVY8OBjoLVg1f80p3hzeztShHy0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LltaebGkNIrdQWW4+xfZp8YZ6siST89ze2MqnVHm+FzBj8K+5ILtMr/zXB4o6hj1R7dAEOAy81Y6Tpmyw0eu1HmQ5/Ed07z9Za30by9Prp5vy+z34YQ32GX8WODdtE1htz7CgwKRma4B4rY32ePJBNhLl0QMtq4vK8uNX8SKYw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lh9AaWzp; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-790abc54b24so25197667b3.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 16:41:35 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=iPl6aAQst2alQTDw26PLbVOF5kgAjXovSFR7p/l7u8Lb9BuSouwfsiuTSiEPRpHIJgcOigQOd03cS05ZDnLg50ikj9yZKRafCeEX0zbwMfw25+qz2GiQi6IwyyMu5dmebg/ju/ZgUAdUGTDbJrP9zfWewmhVyHhyZ3/GU5iquCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=l7eBb33+; arc=none smtp.client-ip=209.85.219.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-88a367a1dbbso39473636d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Jan 2026 16:54:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767832894; x=1768437694; darn=vger.kernel.org;
+        d=ziepe.ca; s=google; t=1767833647; x=1768438447; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jrenqTp8E4tDkOgXs7eMnB0GiU20rX+sxdLI3fByfBk=;
-        b=lh9AaWzpXnlVl9nZXhJnRo0Y8K1o7eo2v3zX9HTdB/EjYm4atY/VsyMe8GBBfbdxL1
-         MH0hMkuVOfYpgXKVnTBj6/tNewFC5wUaq7Y+9Z7k53yeBjrUkRjtqnV/qY11zl5ug2O7
-         wksu4fd3gdNwP2DyBS+s0qtIz23y537d3e48wcy0dIkAHfs1mWrl71c2BdRIOTnhlBM0
-         3LUvbvAQeGxsSW5jzPmATnyHTDyZ7308bcJtphsqX/8whzHOmvCwqK5YrxPR0t56ZApx
-         TNA2JYT8nFglk8yG3BOIo9fYFE+zk7fZdx1PBltKZpeEN8iCcJbzVO5VNZPmLfds9L97
-         uxnw==
+        bh=zl/wCLSFYxDTasNNIFB7qMIXn4ZfCjA7D6KoNe2mE2Q=;
+        b=l7eBb33+ErdcqaeYohuxsJyrZZWB/2cWlSnM4FMY8waLhQukyvymAgVgI21SKtvFEB
+         cH7ujbYmBeVbmYG4guQ0+FykwuOX192VG9+YrXo4XWMYPVdVxZ7COS7BNJ/Em9oqT+eT
+         JYLA73DI+UDDfeNEIW1j0+MtVTHIh6l95l78qzpGxCpirhzczCQMUk8PRLT70FLLgn2L
+         wUUQ13FrV1vliJkqVqkAkPcBLi6btuCWXeqZ+uZdgnvgw0IWPJJjBqwURxEfOD+hiGEf
+         GwV2uJGeHhHjf992b6V34cgvpEVJ0NzlJhpWuVegY12RkW74njUvx1M/4V7g9LJMCiUc
+         97+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767832894; x=1768437694;
+        d=1e100.net; s=20230601; t=1767833647; x=1768438447;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jrenqTp8E4tDkOgXs7eMnB0GiU20rX+sxdLI3fByfBk=;
-        b=fS89Viy2dEqZAqctS/XOXSGm8a+ZsU99eS3UzCdI1p4cs1FMl9+0wUYq9G9tn3XbuI
-         LRw361VA4CUlXfRSBGQCvuEoa4l0voyHzlfafwP94y9ONrJm2zfwc79RWPsa4F7e88/j
-         jpaR2DGDR01Wz8Jzx10qAxm5H0tTzzMaU+85W31v0H7mtROENmYLqgzs5raMAPxDz26J
-         3OJZlMFbl/C8/0sX+1rEy++fDO8u2vSf6P4fi48mMmeg/0QlqZVKRyDaPfjlObi7iIM7
-         M9G8A0+1PRE6FhMXgtyoab91BnJwn/CnHkjksIddtL/xOn7iIykODeuP3/E8qEpdbKmX
-         Utbg==
-X-Forwarded-Encrypted: i=1; AJvYcCVoO+0t61YkuXHG586vyyzjmzrEw0YiGyrlWMOE8E+jPEEwSNZmUrq9sz30FT/rZ5GuuE266HVPyBEKBGftCXo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBUS6QajxUpMLg97gtRE7Q7c8v6Ab9Ys4FbaIzgdD0BjAjT2lt
-	PIDf1APiJV8l+en3CP6b6WQvY5BYAzyYYgnlwyljKdBUh1wEt2/j1bLi
-X-Gm-Gg: AY/fxX5yzZZ2D6SABwJT+2fco3J3HhKVuhKPUQg3g3h9UMG9mqNvTqAVuDSqjCFM2EF
-	isgeWAzJPKLoJD4Gh5cM66+CBTcmy8yww3dLsdHnklAUWEtPppcxLXy9Gztd3PCEbDYLM/k5v8V
-	Thy2o6i6cTHrnNyq6UXtX9FYjX7C/laapo0jDZIZMg9lmxzimXl2TPuX9EpKazzfq/uDiiO6QTd
-	p7hAAbi35W1Q75hEUw3VOBvIhnsnWth9weKzfjRdlkHAUuygC14GHg3vI5ohpRRwHN3mKcEFCj5
-	280kTbGFKB0kxpoeJo3FlYShHZ9sz59rREBMPXE8+CNbrL7p20eV9t9JfB+5IPG7lI0ZzWKaEJP
-	u1DKUBjclZ2GcyXThRsd5Q5UjhTlwUMDkEAI8uhpbO2rzbPnn/UOaIexF8ynd1CWOLB9VleI0Sr
-	0HEysBiVsJYApO6sqx8A+HJhGrasI8uku3vLcDhHsxU96kGA==
-X-Google-Smtp-Source: AGHT+IEnrEIlaG9p2xZXsCNaxYstFtQuumuk05m95Q+1JCx1iT0A6+p+K9E6BdjxZvhkaj4OdW4EFA==
-X-Received: by 2002:a05:690e:1686:b0:644:60d9:8675 with SMTP id 956f58d0204a3-64716cbfa9fmr3525112d50.90.1767832894483;
-        Wed, 07 Jan 2026 16:41:34 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:42::])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d89d607sm2690822d50.12.2026.01.07.16.41.33
+        bh=zl/wCLSFYxDTasNNIFB7qMIXn4ZfCjA7D6KoNe2mE2Q=;
+        b=mGgcKQZCqxh7s/f41AFvIYFGC3NcbZKjnlU0gX3y5c6aiZ1Aw2lNOn55bLdw3XdmQB
+         ulculyuORhhdPuyefcg+qyMxxb/OQtB0oyv5M1cvZJZeoW5PbgYEKQzZgn95sC7iHnhU
+         iPBLC9BpOuwfYfszFqrnmSD1hpSdbsFGcf24nAVUv6npFGJ0cKZQXnhonXGmEIOoHfNV
+         uf63QG+vIJqLcbHUWH/439aWNqM9K3FIwqBpULuM3xgAGR2LLBSbbvZrPkz80JScps2j
+         woh2i9z0HcQtJv46DO5np6GhBYlFIc6GlqZQk9dN3wbDY8+GPUuf6JMWuxR5iKaTEbBy
+         9XRA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOYwIbL6x8/DasuRzCAqglM6RM8883DEBerF6yeej3YsP3UyYHO79FcG3jczzLAFEk1rwIacYCYF1LknlM1oE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtG+txjrMdsXtxkEKu1W35KbqEieY9mTRY9FYpvUZd78DffP8+
+	yFKrHQ2O9cmvgqleBMuFMW8mLDOmFtXyI/CEl1Q9tAEBg286GZU7FQDt4lfMm/LyA+Q=
+X-Gm-Gg: AY/fxX7SGqCtwzavAdMuFODSygEKDW+ei2fzQV1NH0phndeFBD8/DN128PMu2NjQNCO
+	gHrF91AeYjVrac/eL7OB7O56dKKDyg7InN7L/olwS0gBfXTCIb54/XVwC/UxW21tLBrsqhU1k4X
+	XMPcrChVi0JxyF1NL02O0QRFBmiO7Fz/ZTi6SsiJa8KH/cc+ZOZD6bB2fvCmfZJgs4cXP1lITet
+	+1F70IwLYWXS/daF0yR6fGn7kmv8Znceh1OcRVj1bQPZUcAJ9o1/ECEfnmdnLqnjN+E48Xs3+iD
+	UXzcn5yKfwv8eN7ELNf0y3+Ho86bkJZYxsUXsBSq3v+qprZyPVmYVeIf4j+uU94SK2s6g2THRSq
+	eC/rF02JXtCfKv6lyn3i6YKsY9UL01SUjqKUQtmwghC11yH/CdoSL4RTvxWIpl+ZIRE+QoUB3go
+	A/Xs2Ja894eZS1zt3S/d95HsC7Pm/cI1Qp5g9x+7HAXNs147N8i7P/R2PO7FazJAgvH0lzCR2eU
+	CKGEw==
+X-Google-Smtp-Source: AGHT+IFzwWFM1xm57ldcpfy5lJ/TQeABRvizVWmezixsdp8w652r/WsKLDXS4GvPiS9CZXAymOEobA==
+X-Received: by 2002:a05:6214:4a93:b0:88a:7617:6b8c with SMTP id 6a1803df08f44-890842a1684mr68378556d6.48.1767833647102;
+        Wed, 07 Jan 2026 16:54:07 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-162-112-119.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.112.119])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890770e217bsm42850346d6.13.2026.01.07.16.54.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jan 2026 16:41:33 -0800 (PST)
-Date: Wed, 7 Jan 2026 16:41:32 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: Stefano Garzarella <sgarzare@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
-	Stefan Hajnoczi <stefanha@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowang@redhat.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Bryan Tan <bryan-bt.tan@broadcom.com>,
-	Vishnu Dasa <vishnu.dasa@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	virtualization@lists.linux.dev, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, berrange@redhat.com,
-	Sargun Dhillon <sargun@sargun.me>,
-	Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v12 04/12] vsock: add netns support to virtio
- transports
-Message-ID: <aV79PDVBDEqxHlhK@devvm11784.nha0.facebook.com>
-References: <20251126-vsock-vmtest-v12-0-257ee21cd5de@meta.com>
- <20251126-vsock-vmtest-v12-4-257ee21cd5de@meta.com>
- <6cef5a68-375a-4bb6-84f8-fccc00cf7162@redhat.com>
- <aS8oMqafpJxkRKW5@devvm11784.nha0.facebook.com>
- <06b7cfea-d366-44f7-943e-087ead2f25c2@redhat.com>
- <aS9hoOKb7yA5Qgod@devvm11784.nha0.facebook.com>
- <99b6f3f7-4130-436a-bfef-3ef35832e02c@redhat.com>
+        Wed, 07 Jan 2026 16:54:06 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1vdeHu-00000002Hrc-0KPf;
+	Wed, 07 Jan 2026 20:54:06 -0400
+Date: Wed, 7 Jan 2026 20:54:06 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: David Matlack <dmatlack@google.com>
+Cc: Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>,
+	Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] vfio: selftests: Add vfio_dma_mapping_mmio_test
+Message-ID: <20260108005406.GA545276@ziepe.ca>
+References: <20260107-scratch-amastro-vfio-dma-mapping-mmio-test-v1-1-0cec5e9ec89b@fb.com>
+ <aV7yIchrL3mzNyFO@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -113,60 +95,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <99b6f3f7-4130-436a-bfef-3ef35832e02c@redhat.com>
+In-Reply-To: <aV7yIchrL3mzNyFO@google.com>
 
-On Wed, Jan 07, 2026 at 10:47:56AM +0100, Paolo Abeni wrote:
-> Hi,
+On Wed, Jan 07, 2026 at 11:54:09PM +0000, David Matlack wrote:
+> On 2026-01-07 02:13 PM, Alex Mastro wrote:
+> > Test MMIO-backed DMA mappings by iommu_map()-ing mmap'ed BAR regions.
 > 
-> On 12/2/25 11:01 PM, Bobby Eshleman wrote:
-> > On Tue, Dec 02, 2025 at 09:47:19PM +0100, Paolo Abeni wrote:
-> >> I still have some concern WRT the dynamic mode change after netns
-> >> creation. I fear some 'unsolvable' (or very hard to solve) race I can't
-> >> see now. A tcp_child_ehash_entries-like model will avoid completely the
-> >> issue, but I understand it would be a significant change over the
-> >> current status.
-> >>
-> >> "Luckily" the merge window is on us and we have some time to discuss. Do
-> >> you have a specific use-case for the ability to change the netns mode
-> >> after creation?
-> >>
-> >> /P
-> > 
-> > I don't think there is a hard requirement that the mode be change-able
-> > after creation. Though I'd love to avoid such a big change... or at
-> > least leave unchanged as much of what we've already reviewed as
-> > possible.
-> > 
-> > In the scheme of defining the mode at creation and following the
-> > tcp_child_ehash_entries-ish model, what I'm imagining is:
-> > - /proc/sys/net/vsock/child_ns_mode can be set to "local" or "global"
-> > - /proc/sys/net/vsock/child_ns_mode is not immutable, can change any
-> >   number of times
-> > 
-> > - when a netns is created, the new netns mode is inherited from
-> >   child_ns_mode, being assigned using something like:
-> > 
-> > 	  net->vsock.ns_mode =
-> > 		get_net_ns_by_pid(current->pid)->child_ns_mode
-> > 
-> > - /proc/sys/net/vsock/ns_mode queries the current mode, returning
-> >   "local" or "global", returning value of net->vsock.ns_mode
-> > - /proc/sys/net/vsock/ns_mode and net->vsock.ns_mode are immutable and
-> >   reject writes
-> > 
-> > Does that align with what you have in mind?
-> Sorry for the latency. This fell of my radar while I still processed PW
-> before EoY and afterwards I had some break.
+> Thanks for adding this!
 > 
-> Yes, the above aligns with what I suggested, and I think it should solve
-> possible race-related concerns (but I haven't looked at the RFC).
+> > Also update vfio_pci_bar_map() to align BAR mmaps for efficient huge
+> > page mappings.
+> > 
+> > Only vfio_type1 variants are tested; iommufd variants can be added
+> > once kernel support lands.
 > 
-> /P
-> 
-> 
+> Are there plans to support mapping BARs via virtual address in iommufd?
+> I thought the plan was only to support via dma-bufs. Maybe Jason can
+> confirm.
 
-No worries, understandable! Thanks for the confirmation.
+Only dmabuf.
 
-Best,
-Bobby
+> Assuming not, should we add negative tests here to make sure iommufd
+> does not allow mapping BARs?
+
+Yes
+ 
+> And then we can add dma-buf tests in a future commit.
+
+Yes
+
+Jason
 
