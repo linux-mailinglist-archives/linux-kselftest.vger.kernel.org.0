@@ -1,105 +1,104 @@
-Return-Path: <linux-kselftest+bounces-48514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-48515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6A1FD039BE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 15:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48BB5D036EB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 08 Jan 2026 15:42:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3C42832DE840
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 14:29:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ED66532A6A84
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Jan 2026 14:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EE0448C8D8;
-	Thu,  8 Jan 2026 14:10:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243644A8F74;
+	Thu,  8 Jan 2026 14:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NRz6DqXa"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EJehrLmG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AD948AE18
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 14:10:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1F54963C1
+	for <linux-kselftest@vger.kernel.org>; Thu,  8 Jan 2026 14:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767881421; cv=pass; b=ILe4aYj3SLMmb0pWo1qkHvqNoO30sV5iIIq2yfS0nsyi8iapzHXkvvfbq3vpQHSPjbrEMwhK6b4z2NIc7INFfjpFKm2ZvR6qMozVbFw5aQPPvSx5gHOaCYwiVVb4kh8bdygLv8agKDwux4hHaaWOzyS0Hm4bfxoJ9ffLUxaQe7w=
+	t=1767881427; cv=pass; b=nQMebocGK1Uu8GgG/A2dWaDpnJbl24LRGWikpqkjw1QZyuXjYMTbWg33TKfB/iGwZfAHvONXyZFGcVQyTx7mVRLcUq4qmp2939KggokhvLtJGaSCwr4D49HE1BO1q1IZdjvK9Ai0uWM4Imcp5p3CAgFpOwzBIijjuVqa8DLN9X8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767881421; c=relaxed/simple;
-	bh=nd9v6rOTsgtmeIcSOzUf+JTIDj5sX0xCl7dm1iZzN1U=;
+	s=arc-20240116; t=1767881427; c=relaxed/simple;
+	bh=fqIKEGVdrdDwWR5GKD0/DnIsXWNq4kTzHRbVfGW+jJo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bFQSCERJ46hF0WGDa3nbVGguPbAKvexjjU+D+MBEpsB3iNyzSHvOc9hUgEGIRL493B2VggEMUs4NLnSM9jEkVoFsRFRLsEzpwsFFonZBnPW8z7PjyGtMK1xFuR8WLFnqstc7sMjQjgo2bi1b7B1A255qNFZjDRy3XOMsz8LcuSs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NRz6DqXa; arc=pass smtp.client-ip=209.85.160.176
+	 To:Cc:Content-Type; b=jW+flRfwXaibhzLu8beBNWj0xLQzGBJhGXI5/KNF+tIq0TSvdGyOdD0Mi/rud0XTYEMP9Bq2AqZSO6HNIqNskzhGsjwJii6AyhJSXoY0b7CwJ+psc9IHJ+BrYWoa4LFjYwS+b23rCFxo5XDar3KRPfvc2IbJmrCIz065iH+Ck2k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=EJehrLmG; arc=pass smtp.client-ip=209.85.160.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-4ffbaaafac4so742931cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 06:10:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1767881418; cv=none;
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-4ee147baf7bso973321cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Jan 2026 06:10:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1767881423; cv=none;
         d=google.com; s=arc-20240605;
-        b=XpTCDZWRMxyPR2ZH+MZrToG18+hMSqX0X9fWV2P2T0cEBJH7KqHBr36bkQXBiPwhtR
-         Biqxo8YafMVhIBZW8xamtqGkvmWpd7KnZXAgzxTJsihF8EFfLXvhDcf/DwBtCpO48F8H
-         3LEPhMUFN7h2tXu8xcWDIiMIGBaVtJYVjLO+sjkIw9gZlkGm+TuWKYd1rxO6LeDuZ/Ow
-         qvC7Ubobl0C9vF+mgcjCWMds6PBQ9FpNqlBxi0cUlBdoswwqCbS6SxagHFW4ms28ANX1
-         6owblSqRub2Yg6N7jYKYRHy1kKoxhp86lUw8YlliglZg8bD2DTjyyqBdbJkj6VLTU+Z8
-         IYMA==
+        b=do9ZBeP25ZQ1f1ewp5NNjTu5RFkpUNNHiOPA4XUDBJn2wgB6bXUCet5FQo+85iwCJ5
+         ngOrdxChzqtaEApOat0NE50hq9laD8nhielCjoNbjV0X9UTC2XV0xYKPRImafx0AyJ+R
+         tw/Q0GMImvaQIX04YP+Hzjsk33mAl61tNRUY0l/MmjcygZidU/lOjOy4T2w/IRkGgbfq
+         TWyeRP9on5vGs9FN1fqhesce4X2J9FdhrEUDWZuQGkDYaDwY45iRq3nUmMFAT31cXPpZ
+         +XUqcKXPeruD11CiPfTy/fkjpNll1kN2rrKkz1YcxZo3z38JEBxU/NAN0L9Vc37eOKJu
+         IX9Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=M6v8yJzivCkGRPQD2RD9WlokTdTcLOTAtGeFegCEmXw=;
-        fh=g/EYUZujxXTnMrRRayERPUaUMP21tyISENkYJ8wcPcI=;
-        b=LtBrJtA0lOQQp5B8iLjaTYRa9jMb1UCVo2fRCLyopcMlyFXkh9WHjN4XDOFJ4iwwup
-         H3LWhKBJj+dqmQpR+3p23xBBml4Huu7I51BsxKO9K/RhaSGCS7bb2DXWDDUyQLFE0cMn
-         6QYWuKP4H00b0k9Mgg0P/Age+uouH/nOJ6/gZi9ARfQM00m6p4lQEUowHZDQg8uzuNHy
-         7RwysKeFzO2eIPFriPMhj0mUwR/cDgqu7nJwQYnSEj411T3MAXCS692PgtPqmOrIiTCi
-         Fj5ck47oSJxQ+TEgnHM4Q2XrhFt1Sg/vMZ2tZ95JPSx48cVtuqoyz3RydItRcxiYDlRy
-         +h/A==;
+        bh=NaZEGS72KLSqcxT/8N5H1mx02StcfqZHeuPXe2e7POg=;
+        fh=+Y6XPA2e2Pm8I5YEgSKxHQdihvu1B1RY6+cUL53w5qM=;
+        b=FvkyErWils6WEPtvdz74YJXEsl3w2BzkTfkJKmVHRpJ4j1fNzl3yssGi/4LBQoRsfS
+         apQYl6aQfOFhZfZaTxUvt9XX3PvfNuOoIz/nyexxSkdcQf+9x9Mlj7rdfssLB40sGXcA
+         /fuKAd143tmc4hFXkz+xeb8dWuwaGxX/fIceA3J0URzfh6PPI3+DJhL9XvbQTUb4lmh7
+         u7HaPbSA5RsHgWx+OTd/IWuUB3KNboSlbhYmereeYeTBTYWB9pcEpkOVWYXIUDCbdnbb
+         07wYPl8j1r0fZ9lcEPsC3Nr2/IdZ+AYS3QwinvgIveTU3tWxEI0MLC6weLvCpFLsqvkL
+         MsBg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767881418; x=1768486218; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1767881423; x=1768486223; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M6v8yJzivCkGRPQD2RD9WlokTdTcLOTAtGeFegCEmXw=;
-        b=NRz6DqXa4ClVdKehiDwldRMqmgo3ZwyGOugTTSKJGN7TMEzEW730F1zQwwvuFOPK/t
-         K+Ug2iifvUaf+MWX0jmC6f42mdd8oXTHeeZIxbypxamL9QvATvZO0EnRW0VHEhAo37MT
-         pOD9fdVkJyXCsMQ8pFWzPv/8to/m9zXiHo9y5X/nkzObA1dOfrsjuCR2bmepspAWt60r
-         huLuUEqGosGpeB0yBFBt9BYswxRdbBasEHIUJKLstIMjR3uktGB7D5fSPEtZWFXt5I5W
-         1miepmmRdpppRQCPv2/KLURU7U8bt+T3sb6stn9yUzAQNyy89j0yJ30leftE/x6kj2cm
-         LqAw==
+        bh=NaZEGS72KLSqcxT/8N5H1mx02StcfqZHeuPXe2e7POg=;
+        b=EJehrLmGVBdJ8xjO7wCBNPGGHCIDyqSfyF0nUdUeicZOzj4iIUUhfxqYt7RqrNWc1P
+         UPLloSiW1ZSpb/O4ugOsDWC+0FllVmFUSxHZNHmcKEgYPLwoGQdUYHaydqyWHPDVTP9l
+         J6Uu/D8sxBVp6JFHCq7ETy4GJ2xYEbaR39pF501c34iTfE3oSF1fYho3W1C6q0ZQGQga
+         j5mioPq1wxSs+taAMifaYy6tSHT5quBNSpWE9fNw59LkysIwR1z0YCkzg0vPGrYusTTS
+         CuzmgcE5OGX8Z6Vig5a8ovbiDJmjwTy0x3pxX3MHCdomtcME8TRLeYwfF2W9AWkNk1sD
+         /Qzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767881418; x=1768486218;
+        d=1e100.net; s=20230601; t=1767881423; x=1768486223;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M6v8yJzivCkGRPQD2RD9WlokTdTcLOTAtGeFegCEmXw=;
-        b=BZ1VK+iHeyiVXFnqibJhGr949XzIBA4lvwXNgftktWEINIGU+dYi9dcCRSUzUf/CYz
-         vvyL6rg6EnFPZuHlyk5PvLU5emzPGEHtAjDrW0uqoWGSBmpPBLZAttEbEsSFBHENM7Jy
-         yzinHqO7bvo+S40bux86ZljiD4r7O2317QaYQViILLoVvcrqElJ4x3Rhrqs5tJzup2bP
-         ublAi4y++P2HdCFJNkJhs33vpA6izAMri1gX3ds0IIgHgMv6HGmw+rkFiXgy+oVP1xqg
-         9yvbpiA5/bWYE2aZy3Dj2JcCrKOJNTuyUKjO2HEVNNfD8K173nlyWw38SNNW2/8HBZYG
-         zi/g==
-X-Forwarded-Encrypted: i=1; AJvYcCUMGYMehytW+sHpMGyNf+cBfN6A60n7NM9Zxv44/uUp/0f7TBj9LjXI1tmX7NYFZNDHBKqNhxBuQo3R2s88qvA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoHTm4xXn31DBGxLYSXYwIicdwvt8GKYvlZ2cpJb3Q/SN4aJDV
-	q+ld8ji+TsJMmS+XHycXhuS21zCnKQP8sFvJaAkzFOGE0kJDnnfwkeheAa8qbDhmu3yFpOiVzaF
-	oDnv/2XC2UbK9H54XcQsPZTt7wq78YC0acIftiNMU
-X-Gm-Gg: AY/fxX7PPAALc0FXWkSy8b63bOVWZPJzFceQIV69wXVDFndGMietzieqv/Uw0nYU3Cb
-	QTJgezxRuqGebCos7QRes3/bDiFzJJEnmtb09QyyKt1MqUXNXvnhUcdyu2Ai51Jpqhu52Ok5nK1
-	f4uIcsQAvDC+0SKnrhKVJWNRmT9N1jpkC7eYqWGfzrOS2FdQRpTaVjwgfnYJZWJ+/e9fdOk5Lze
-	/l1aloq5ncWFBmW9m5VL/hX+kW5Qceeqt7yKD6/sWIHhwwyoBa0FA99iT6QMSCzeZfMth/f
-X-Received: by 2002:a05:622a:1191:b0:4fb:e3b0:aae6 with SMTP id
- d75a77b69052e-4ffc0897ee3mr8604171cf.1.1767881418089; Thu, 08 Jan 2026
- 06:10:18 -0800 (PST)
+        bh=NaZEGS72KLSqcxT/8N5H1mx02StcfqZHeuPXe2e7POg=;
+        b=VbROPthIV4T+6E0ytJ7JjivN+oxeV8RNEPBUU/mPR46H3Bxz0dGldzGw4tlkEP+wJH
+         sd5mTUCh5rmSQBH69IeNnwnxGIMOjho0OaHQIadJzAqyMk4/xe4kuXS8CiMUma1IP03F
+         MCjvS1Rj9gaIoeTri0Zha+7brPWEL/uu7p9Z9qV1yqXT3UGh8m6yPNzI2KokO7Bz/P2O
+         LRtOCNG1XbZjAUp8LcR7XCwdOD09ZfvlAMf7YDiokY77cBACyjTTcsnyqMaXAvWTRmQQ
+         I24lZ+1zRX4Y9YTTdNaUt0HXokAdT+OE7L+33Vc9OAW3diTpMbjS2rwmYY3MVAf+blvu
+         pKow==
+X-Forwarded-Encrypted: i=1; AJvYcCUpFH7+Is4gOEGUB8qzGwEaADYC8ogBDugfLfY0UfOk4YS2rMzvIMXUnrWrLjBpQQccrWE1WOlvmH5fK6iMtmM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywe6s0Szr6KPpc3kNUy4ifc91HY3IGfwVAle3t2hNCDCSRBLQuz
+	mXafo8vvWznKHFT1JHQzAP8XNPdVi+HR4C1CQvcurjrFov87ufYNdn19MkHlrF8Q5IK1mWGtRZ9
+	EnhM3/K6Mkxz76hndWBl54nEFUdN+qSapRc/tbh9m
+X-Gm-Gg: AY/fxX73J2jztFzv5Pfj2FCnp+ksl3+pvk2VUfStiMThRatLsioELyK3d9JAULMrWg2
+	SKHcVoThBJyb1OHlx/J1heHmO1PqCxSWSX8dU5QyLbXvuR1vunjZKs1jcgacLmkruWayhumLmkj
+	MSIwtAenFA+TXBJhmUKyCml0RNSiBS7hLIzYs/ePIUT9MvV004jugz6pXTZhDMNEQJOmEzlIXCT
+	+CAkgyKcQokltJEp4ZznyVdsfFHCpwKgCgUxTntj2rNg7fclrAG9+Tht2zEKDi/YqTDjYaw
+X-Received: by 2002:ac8:574f:0:b0:4f1:9c6e:cf1c with SMTP id
+ d75a77b69052e-4ffc0997e9emr8640981cf.17.1767881422911; Thu, 08 Jan 2026
+ 06:10:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org> <20251223-kvm-arm64-sme-v9-6-8be3867cb883@kernel.org>
-In-Reply-To: <20251223-kvm-arm64-sme-v9-6-8be3867cb883@kernel.org>
+References: <20251223-kvm-arm64-sme-v9-0-8be3867cb883@kernel.org> <20251223-kvm-arm64-sme-v9-7-8be3867cb883@kernel.org>
+In-Reply-To: <20251223-kvm-arm64-sme-v9-7-8be3867cb883@kernel.org>
 From: Fuad Tabba <tabba@google.com>
-Date: Thu, 8 Jan 2026 14:09:41 +0000
-X-Gm-Features: AQt7F2rcFTpAi-WrxH-BJGuce-rrvqsGKbxHYZVaorpjl6SSauHiDAfYA3cghe4
-Message-ID: <CA+EHjTznG=6+bYW+mmmBs_QqZ2rXkKTzNxA5KSh3S67H_BBaHg@mail.gmail.com>
-Subject: Re: [PATCH v9 06/30] KVM: arm64: Pay attention to FFR parameter in
- SVE save and load
+Date: Thu, 8 Jan 2026 14:09:46 +0000
+X-Gm-Features: AQt7F2pJrrFIu8j-RnjtZsOw-SyaBAdPJA09Q8QxhF8SmvfGBU7bWTwW9oJJhUU
+Message-ID: <CA+EHjTzTjaZoGQzivOSd97Z9VzySOAM=Qvye0p-R5rzUDwrSFw@mail.gmail.com>
+Subject: Re: [PATCH v9 07/30] KVM: arm64: Pull ctxt_has_ helpers to start of sysreg-sr.h
 To: Mark Brown <broonie@kernel.org>
 Cc: Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
 	Catalin Marinas <catalin.marinas@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
@@ -114,13 +113,9 @@ Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 23 Dec 2025 at 01:22, Mark Brown <broonie@kernel.org> wrote:
 >
-> The hypervisor copies of the SVE save and load functions are prototyped
-> with third arguments specifying FFR should be accessed but the assembly
-> functions overwrite whatever is supplied to unconditionally access FFR.
-> Remove this and use the supplied parameter.
->
-> This has no effect currently since FFR is always present for SVE but will
-> be important for SME.
+> Rather than add earlier prototypes of specific ctxt_has_ helpers let's just
+> pull all their definitions to the top of sysreg-sr.h so they're all
+> available to all the individual save/restore functions.
 >
 > Signed-off-by: Mark Brown <broonie@kernel.org>
 
@@ -129,29 +124,119 @@ Reviewed-by: Fuad Tabba <tabba@google.com>
 Cheers,
 /fuad
 
-
 > ---
->  arch/arm64/kvm/hyp/fpsimd.S | 2 --
->  1 file changed, 2 deletions(-)
+>  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 84 +++++++++++++++---------------
+>  1 file changed, 41 insertions(+), 43 deletions(-)
 >
-> diff --git a/arch/arm64/kvm/hyp/fpsimd.S b/arch/arm64/kvm/hyp/fpsimd.S
-> index e950875e31ce..6e16cbfc5df2 100644
-> --- a/arch/arm64/kvm/hyp/fpsimd.S
-> +++ b/arch/arm64/kvm/hyp/fpsimd.S
-> @@ -21,13 +21,11 @@ SYM_FUNC_START(__fpsimd_restore_state)
->  SYM_FUNC_END(__fpsimd_restore_state)
+> diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> index a17cbe7582de..5624fd705ae3 100644
+> --- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> @@ -16,8 +16,6 @@
+>  #include <asm/kvm_hyp.h>
+>  #include <asm/kvm_mmu.h>
 >
->  SYM_FUNC_START(__sve_restore_state)
-> -       mov     x2, #1
->         sve_load 0, x1, x2, 3
->         ret
->  SYM_FUNC_END(__sve_restore_state)
+> -static inline bool ctxt_has_s1poe(struct kvm_cpu_context *ctxt);
+> -
+>  static inline struct kvm_vcpu *ctxt_to_vcpu(struct kvm_cpu_context *ctxt)
+>  {
+>         struct kvm_vcpu *vcpu = ctxt->__hyp_running_vcpu;
+> @@ -28,47 +26,6 @@ static inline struct kvm_vcpu *ctxt_to_vcpu(struct kvm_cpu_context *ctxt)
+>         return vcpu;
+>  }
 >
->  SYM_FUNC_START(__sve_save_state)
-> -       mov     x2, #1
->         sve_save 0, x1, x2, 3
->         ret
->  SYM_FUNC_END(__sve_save_state)
+> -static inline bool ctxt_is_guest(struct kvm_cpu_context *ctxt)
+> -{
+> -       return host_data_ptr(host_ctxt) != ctxt;
+> -}
+> -
+> -static inline u64 *ctxt_mdscr_el1(struct kvm_cpu_context *ctxt)
+> -{
+> -       struct kvm_vcpu *vcpu = ctxt_to_vcpu(ctxt);
+> -
+> -       if (ctxt_is_guest(ctxt) && kvm_host_owns_debug_regs(vcpu))
+> -               return &vcpu->arch.external_mdscr_el1;
+> -
+> -       return &ctxt_sys_reg(ctxt, MDSCR_EL1);
+> -}
+> -
+> -static inline u64 ctxt_midr_el1(struct kvm_cpu_context *ctxt)
+> -{
+> -       struct kvm *kvm = kern_hyp_va(ctxt_to_vcpu(ctxt)->kvm);
+> -
+> -       if (!(ctxt_is_guest(ctxt) &&
+> -             test_bit(KVM_ARCH_FLAG_WRITABLE_IMP_ID_REGS, &kvm->arch.flags)))
+> -               return read_cpuid_id();
+> -
+> -       return kvm_read_vm_id_reg(kvm, SYS_MIDR_EL1);
+> -}
+> -
+> -static inline void __sysreg_save_common_state(struct kvm_cpu_context *ctxt)
+> -{
+> -       *ctxt_mdscr_el1(ctxt)   = read_sysreg(mdscr_el1);
+> -
+> -       // POR_EL0 can affect uaccess, so must be saved/restored early.
+> -       if (ctxt_has_s1poe(ctxt))
+> -               ctxt_sys_reg(ctxt, POR_EL0)     = read_sysreg_s(SYS_POR_EL0);
+> -}
+> -
+> -static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+> -{
+> -       ctxt_sys_reg(ctxt, TPIDR_EL0)   = read_sysreg(tpidr_el0);
+> -       ctxt_sys_reg(ctxt, TPIDRRO_EL0) = read_sysreg(tpidrro_el0);
+> -}
+> -
+>  static inline bool ctxt_has_mte(struct kvm_cpu_context *ctxt)
+>  {
+>         struct kvm_vcpu *vcpu = ctxt_to_vcpu(ctxt);
+> @@ -131,6 +88,47 @@ static inline bool ctxt_has_sctlr2(struct kvm_cpu_context *ctxt)
+>         return kvm_has_sctlr2(kern_hyp_va(vcpu->kvm));
+>  }
+>
+> +static inline bool ctxt_is_guest(struct kvm_cpu_context *ctxt)
+> +{
+> +       return host_data_ptr(host_ctxt) != ctxt;
+> +}
+> +
+> +static inline u64 *ctxt_mdscr_el1(struct kvm_cpu_context *ctxt)
+> +{
+> +       struct kvm_vcpu *vcpu = ctxt_to_vcpu(ctxt);
+> +
+> +       if (ctxt_is_guest(ctxt) && kvm_host_owns_debug_regs(vcpu))
+> +               return &vcpu->arch.external_mdscr_el1;
+> +
+> +       return &ctxt_sys_reg(ctxt, MDSCR_EL1);
+> +}
+> +
+> +static inline u64 ctxt_midr_el1(struct kvm_cpu_context *ctxt)
+> +{
+> +       struct kvm *kvm = kern_hyp_va(ctxt_to_vcpu(ctxt)->kvm);
+> +
+> +       if (!(ctxt_is_guest(ctxt) &&
+> +             test_bit(KVM_ARCH_FLAG_WRITABLE_IMP_ID_REGS, &kvm->arch.flags)))
+> +               return read_cpuid_id();
+> +
+> +       return kvm_read_vm_id_reg(kvm, SYS_MIDR_EL1);
+> +}
+> +
+> +static inline void __sysreg_save_common_state(struct kvm_cpu_context *ctxt)
+> +{
+> +       *ctxt_mdscr_el1(ctxt)   = read_sysreg(mdscr_el1);
+> +
+> +       // POR_EL0 can affect uaccess, so must be saved/restored early.
+> +       if (ctxt_has_s1poe(ctxt))
+> +               ctxt_sys_reg(ctxt, POR_EL0)     = read_sysreg_s(SYS_POR_EL0);
+> +}
+> +
+> +static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+> +{
+> +       ctxt_sys_reg(ctxt, TPIDR_EL0)   = read_sysreg(tpidr_el0);
+> +       ctxt_sys_reg(ctxt, TPIDRRO_EL0) = read_sysreg(tpidrro_el0);
+> +}
+> +
+>  static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
+>  {
+>         ctxt_sys_reg(ctxt, SCTLR_EL1)   = read_sysreg_el1(SYS_SCTLR);
 >
 > --
 > 2.47.3
